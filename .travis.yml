@@ -1,0 +1,11 @@
+sudo: false
+language: rust
+
+rust:
+  - nightly
+  - beta
+  - stable
+  - 1.0.0
+
+script:
+  - find . -name "*.md" | xargs -I{} rustdoc --test {}
