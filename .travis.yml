@@ -8,4 +8,4 @@ rust:
   - 1.0.0
 
 script:
-  - find . -name "*.md" | xargs -I{} rustdoc --test {}
+  - make all

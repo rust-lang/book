@@ -22,7 +22,7 @@ $ cargo install mdbook
 To build the book, type:
 
 ```bash
-$ mdbook build
+$ make
 ```
 
 The output will be in the `book` subdirectory. To check it out, open it in
@@ -30,6 +30,18 @@ your web browser:
 
 ```bash
 $ firefox book/index.html
+```
+
+To run the tests:
+
+```bash
+$ make test
+```
+
+To do both:
+
+```bash
+$ make all
 ```
 
 ## Contributing
