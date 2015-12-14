@@ -7,6 +7,10 @@ book, you should check it out there or [on the web][prod].
 [src]: https://github.com/rust-lang/rust/tree/master/src/doc/book
 [prod]: https://doc.rust-lang.org/book/
 
+If you would like to see this verison rendered, it’s [on GitHub pages][html].
+
+[html]: http://rust-lang.github.io/book/
+
 ## Requirements
 
 Building the book requires [mdBook]. To get it:
