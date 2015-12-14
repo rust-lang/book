@@ -1,1 +1,0 @@
-# Associated Types

@@ -1,0 +1,112 @@
+<!DOCTYPE HTML>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title></title>
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="{% block description %}{% endblock %}">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <base href="">
+
+        <link rel="stylesheet" href="book.css">
+        <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+
+        <!-- MathJax -->
+        <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+        <!-- Fetch JQuery from CDN but have a local fallback -->
+        <script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
+        <script>
+            if (typeof jQuery == 'undefined') {
+                document.write(unescape("%3Cscript src='jquery.js'%3E%3C/script%3E"));
+            }
+        </script>
+    </head>
+    <body>
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme = localStorage.getItem('theme');
+            if (theme == null) { theme = 'light'; }
+            $('body').removeClass().addClass(theme);
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var sidebar = localStorage.getItem('sidebar');
+            if (sidebar === "hidden") { $("html").addClass("sidebar-hidden") }
+            else if (sidebar === "visible") { $("html").addClass("sidebar-visible") }
+        </script>
+
+        <div id="sidebar" class="sidebar">
+            <ul class="chapter"><li><a href="introduction.html"><strong>1.</strong> Introduction</a></li><li><ul class="section"><li><a href="design.html"><strong>1.1.</strong> The Design of Rust</a></li><li><a href="installation.html"><strong>1.2.</strong> Installation</a></li><li><a href="hello-world.html"><strong>1.3.</strong> Hello, World!</a></li></ul></li><li><a href="tutorial.html"><strong>2.</strong> Tutorial</a></li><li><a href="basics.html"><strong>3.</strong> The Basics</a></li><li><ul class="section"><li><a href="variable-bindings.html"><strong>3.1.</strong> Variable Bindings</a></li><li><a href="functions.html"><strong>3.2.</strong> Functions</a></li><li><a href="primitive-types.html"><strong>3.3.</strong> Primitive Types</a></li><li><a href="comments.html"><strong>3.4.</strong> Comments</a></li><li><a href="if.html"><strong>3.5.</strong> `if`</a></li><li><a href="loops.html"><strong>3.6.</strong> Loops</a></li></ul></li><li><a href="ownership-and-borrowing.html"><strong>4.</strong> Ownership & borrowing</a></li><li><ul class="section"><li><a href="ownership.html"><strong>4.1.</strong> Ownership</a></li><li><a href="references-and-borrowing.html"><strong>4.2.</strong> References & Borrowing</a></li><li><a href="lifetimes.html"><strong>4.3.</strong> Lifetimes</a></li></ul></li><li><a href="basic-data-types.html"><strong>5.</strong> Basic Data Types</a></li><li><ul class="section"><li><a href="structs.html"><strong>5.1.</strong> Structs</a></li><li><a href="enums.html"><strong>5.2.</strong> Enums</a></li></ul></li><li><a href="crates-and-modules.html"><strong>6.</strong> Crates & Modules</a></li><li><a href="error-handling.html"><strong>7.</strong> Error Handling</a></li><li><a href="basic-collections.html"><strong>8.</strong> Basic Collections</a></li><li><ul class="section"><li><a href="vectors.html" class="active"><strong>8.1.</strong> Vectors</a></li><li><a href="strings.html"><strong>8.2.</strong> Strings</a></li><li><a href="hashmap.html"><strong>8.3.</strong> `HashMap<K, V>`</a></li></ul></li><li><a href="traits.html"><strong>9.</strong> Traits</a></li><li><a href="closures.html"><strong>10.</strong> Closures</a></li><li><a href="iterators.html"><strong>11.</strong> Iterators</a></li><li><a href="io.html"><strong>12.</strong> I/O</a></li><li><ul class="section"><li><a href="read-and-write.html"><strong>12.1.</strong> `Read` & `Write`</a></li><li><a href="fs.html"><strong>12.2.</strong> `std::fs`</a></li><li><a href="path.html"><strong>12.3.</strong> `std::path`</a></li><li><a href="env.html"><strong>12.4.</strong> `std::env`</a></li></ul></li><li><a href="testing.html"><strong>13.</strong> Testing</a></li><li><a href="smart-pointers.html"><strong>14.</strong> Smart Pointers</a></li><li><ul class="section"><li><a href="deref.html"><strong>14.1.</strong> `Deref`</a></li><li><a href="deref-coercions.html"><strong>14.2.</strong> `Deref` coercions</a></li><li><a href="box.html"><strong>14.3.</strong> `Box<T>`</a></li><li><a href="rc.html"><strong>14.4.</strong> `Rc<T>`</a></li></ul></li><li><a href="concurrency.html"><strong>15.</strong> Concurrency</a></li><li><ul class="section"><li><a href="threads.html"><strong>15.1.</strong> Threads</a></li><li><a href="send-and-sync.html"><strong>15.2.</strong> `Send` & `Sync`</a></li><li><a href="arc.html"><strong>15.3.</strong> `Arc<T>`</a></li><li><a href="mutex.html"><strong>15.4.</strong> `Mutex<T>`</a></li><li><a href="channels.html"><strong>15.5.</strong> `Channels`</a></li></ul></li><li><a href="unsafe-rust.html"><strong>16.</strong> Unsafe Rust</a></li><li><ul class="section"><li><a href="raw-pointers.html"><strong>16.1.</strong> Raw Pointers</a></li><li><a href="transmute.html"><strong>16.2.</strong> transmute</a></li></ul></li><li><a href="ffi.html"><strong>17.</strong> FFI</a></li><li><ul class="section"><li><a href="conditional-compilation.html"><strong>17.1.</strong> Conditional Compilation</a></li><li><a href="bindings-to-c.html"><strong>17.2.</strong> Bindings to C</a></li><li><a href="using-rust-from-other-languages.html"><strong>17.3.</strong> Using Rust from Other Languages</a></li><li><a href="static.html"><strong>17.4.</strong> `static`</a></li></ul></li><li><a href="cargo.html"><strong>18.</strong> Cargo</a></li><li><ul class="section"><li><a href="cratesio.html"><strong>18.1.</strong> Crates.io</a></li></ul></li><li><a href="advanced-type-system-features.html"><strong>19.</strong> Advanced Type System Features</a></li><li><ul class="section"><li><a href="associated-types.html"><strong>19.1.</strong> Associated Types</a></li><li><a href="trait-objects.html"><strong>19.2.</strong> Trait Objects</a></li><li><a href="ufcs.html"><strong>19.3.</strong> UFCS</a></li><li><a href="coherence.html"><strong>19.4.</strong> Coherence</a></li></ul></li><li><a href="interior-mutability.html"><strong>20.</strong> Interior mutability</a></li><li><ul class="section"><li><a href="cell.html"><strong>20.1.</strong> `Cell<T>`</a></li><li><a href="refcell.html"><strong>20.2.</strong> `RefCell<T>`</a></li></ul></li><li><a href="macros.html"><strong>21.</strong> Macros</a></li><li><a href="nightly-rust.html"><strong>22.</strong> Nightly Rust</a></li></ul>
+        </div>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar" class="menu-bar">
+                    <div class="left-buttons">
+                        <i id="sidebar-toggle" class="fa fa-bars"></i>
+                        <i id="theme-toggle" class="fa fa-paint-brush"></i>
+                    </div>
+
+                    <h1 class="menu-title"></h1>
+
+                    <div class="right-buttons">
+                        <i id="print-button" class="fa fa-print" title="Print this book"></i>
+                    </div>
+                </div>
+
+                <div id="content" class="content">
+                    <h1>Vectors</h1>
+
+                </div>
+
+                <!-- Mobile navigation buttons -->
+                
+                    <a href="basic-collections.html" class="mobile-nav-chapters previous">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+                    <a href="strings.html" class="mobile-nav-chapters next">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                
+
+            </div>
+
+            
+                <a href="basic-collections.html" class="nav-chapters previous">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+            
+
+            
+                <a href="strings.html" class="nav-chapters next">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            
+
+        </div>
+
+
+        <!-- Local fallback for Font Awesome -->
+        <script>
+            if ($(".fa").css("font-family") !== "FontAwesome") {
+                $('<link rel="stylesheet" type="text/css" href="_FontAwesome/css/font-awesome.css">').prependTo('head');
+            }
+        </script>
+
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+    </body>
+</html>
