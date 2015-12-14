@@ -5,7 +5,9 @@ rust:
   - nightly
   - beta
   - stable
-  - 1.0.0
+  - 1.5.0
 
+before_script:
+  - cargo install mdbook
 script:
   - make all
