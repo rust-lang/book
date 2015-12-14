@@ -11,7 +11,7 @@ book, you should check it out there or [on the web][prod].
 
 Building the book requires [mdBook]. To get it:
 
-[mdBook]: https://doc.rust-lang.org/book/
+[mdBook]: https://github.com/azerupi/mdBook
 
 ```bash
 $ cargo install mdbook
