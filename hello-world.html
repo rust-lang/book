@@ -65,8 +65,287 @@
                 </div>
 
                 <div id="content" class="content">
-                    <h1>Hello, world</h1>
-<p>This will be a real book soon!</p>
+                    <h1>Hello, world!</h1>
+<p>Now that you have Rust installed, let’s write your first Rust program. It's
+traditional when learning a new language to write a little program to print the
+text “Hello, world!” to the screen, and in this section, we'll follow that
+tradition.</p>
+<p>The nice thing about starting with such a simple program is that you can
+quickly verify that your compiler is installed, and that it's working properly.
+Printing information to the screen is also just a pretty common thing to do, so
+practicing it early on is good.</p>
+<blockquote>
+<p>Note: This book assumes basic familiarity with the command line. Rust itself
+makes no specific demands about your editing, tooling, or where your code
+lives, so if you prefer an IDE to the command line, that's an option.</p>
+</blockquote>
+<h2>Creating a Project File</h2>
+<p>First, make a file to put your Rust code in. Rust doesn't care where your code
+lives, but for this book, I suggest making a <em>projects</em> directory in your home
+directory, and keeping all your projects there. Open a terminal and enter the
+following commands to make a directory for this particular project:</p>
+<pre><code class="language-bash">$ mkdir ~/projects
+$ cd ~/projects
+$ mkdir hello_world
+$ cd hello_world
+</code></pre>
+<blockquote>
+<p>Note: If you’re on Windows and not using PowerShell, the <code>~</code> may not work.
+Consult the documentation for your shell for more details.</p>
+</blockquote>
+<h2>Writing and Running a Rust Program</h2>
+<p>Next, make a new source file and call it <em>main.rs</em>. Rust files always end
+in a <em>.rs</em> extension. If you’re using more than one word in your filename, use
+an underscore to separate them; for example, you'd use <em>hello_world.rs</em> rather
+than <em>helloworld.rs</em>.</p>
+<p>Now open the <em>main.rs</em> file you just created, and type the following code:</p>
+<pre><code class="language-rust">fn main() {
+    println!(&quot;Hello, world!&quot;);
+}
+</code></pre>
+<p>Save the file, and go back to your terminal window. On Linux or OSX, enter the
+following commands:</p>
+<pre><code class="language-bash">$ rustc main.rs
+$ ./main 
+Hello, world!
+</code></pre>
+<p>In Windows, just replace <code>main</code> with <code>main.exe</code>. Regardless of your operating
+system, you should see the string <code>Hello, world!</code> print to the terminal. If you
+did, then congratulations! You've officially written a Rust program. That makes
+you a Rust programmer! Welcome.</p>
+<h2>Anatomy of a Rust Program</h2>
+<p>Now, let’s go over what just happened in your &quot;Hello, world!&quot; program in
+detail. Here's the first piece of the puzzle:</p>
+<pre><code class="language-rust">fn main() {
+
+}
+</code></pre>
+<p>These lines define a <em>function</em> in Rust. The <code>main</code> function is special: it's
+the beginning of every Rust program. The first line says, “I’m declaring a
+function named <code>main</code> that takes no arguments and returns nothing.” If there
+were arguments, they would go inside the parentheses (<code>(</code> and <code>)</code>), and because
+we aren’t returning anything from this function, we can omit the return type
+entirely.</p>
+<p>Also note that the function body is wrapped in curly braces (<code>{</code> and <code>}</code>). Rust
+requires these around all function bodies. It's considered good style to put
+the opening curly brace on the same line as the function declaration, with one
+space in between.</p>
+<p>Inside the <code>main()</code> function:</p>
+<pre><code class="language-rust">    println!(&quot;Hello, world!&quot;);
+</code></pre>
+<p>This line does all of the work in this little program: it prints text to the
+screen. There are a number of details that are important here. The first is
+that it’s indented with four spaces, not tabs.</p>
+<p>The second important part is the <code>println!()</code> line. This is calling a Rust
+<em><a href="macros.html">macro</a></em>, which is how metaprogramming is done in Rust. If it were calling a
+function instead, it would look like this: <code>println()</code> (without the !). We'll
+discuss Rust macros in more detail later, but for now you just need to
+know that when you see a <code>!</code> that means that you’re calling a macro instead of
+a normal function.</p>
+<p>Next is <code>&quot;Hello, world!&quot;</code> which is a <em>string</em>. We pass this string as an
+argument to <code>println!</code>, which prints the string to the screen. Easy enough!</p>
+<p>The line ends with a semicolon (<code>;</code>). Rust is an <em>expression oriented</em>
+language, which means that most things are expressions, rather than statements.
+The <code>;</code> indicates that this expression is over, and the next one is ready to
+begin. Most lines of Rust code end with a <code>;</code>.</p>
+<h2>Compiling and Running Are Separate Steps</h2>
+<p>In &quot;Writing and Running a Rust Program&quot;, we showed you how to run a newly
+created program. We'll break that process down and examine each step now.</p>
+<p>Before running a Rust program, you have to compile it. You can use the Rust
+compiler by entering the <code>rustc</code> command and passing it the name of your source
+file, like this:</p>
+<pre><code class="language-bash">$ rustc main.rs
+</code></pre>
+<p>If you come from a C or C++ background, you'll notice that this is similar to
+<code>gcc</code> or <code>clang</code>. After compiling successfully, Rust should output a binary
+executable, which you can see on Linux or OSX by entering the <code>ls</code> command in
+your shell as follows:</p>
+<pre><code class="language-bash">$ ls
+main  main.rs
+</code></pre>
+<p>On Windows, you'd enter:</p>
+<pre><code class="language-bash">$ dir
+main.exe  main.rs
+</code></pre>
+<p>This shows we have two files: the source code, with an <code>.rs</code> extension, and the
+executable (<code>main.exe</code> on Windows, <code>main</code> everywhere else). All that's left to
+do from here is run the <code>main</code> or <code>main.exe</code> file, like this:</p>
+<pre><code class="language-bash">$ ./main  # or main.exe on Windows
+</code></pre>
+<p>If <em>main.rs</em> were your &quot;Hello, world!&quot; program, this would print <code>Hello, world!</code> to your terminal.</p>
+<p>If you come from a dynamic language like Ruby, Python, or JavaScript, you may
+not be used to compiling and running a program being separate steps. Rust is an
+<em>ahead-of-time compiled</em> language, which means that you can compile a program,
+give it to someone else, and they can run it even without Rust installed. If
+you give someone a <code>.rb</code> or <code>.py</code> or <code>.js</code> file, on the other hand, they need
+to have a Ruby, Python, or JavaScript implementation installed (respectively),
+but you only need one command to both compile and run your program. Everything
+is a tradeoff in language design.</p>
+<p>Just compiling with <code>rustc</code> is fine for simple programs, but as your project
+grows, you'll want to be able to manage all of the options your project has,
+and make it easy to share your code with other people and projects. Next, I'll
+introduce you to a tool called Cargo, which will help you write real-world Rust
+programs.</p>
+<h1>Hello, Cargo!</h1>
+<p>Cargo is Rust’s build system and package manager, and Rustaceans use Cargo to
+manage their Rust projects. Cargo manages three things: building your code,
+downloading the libraries your code depends on, and building those libraries.
+We call libraries your code needs ‘dependencies’ since your code depends on
+them.</p>
+<p>The simplest Rust programs don’t have any dependencies, so right now, you'd
+only use the first part of its functionality. As you write more complex Rust
+programs, you’ll want to add dependencies, and if you start off using Cargo,
+that will be a lot easier to do.</p>
+<p>As the vast, vast majority of Rust projects use Cargo, we will assume that
+you’re using it for the rest of the book. Cargo comes installed with Rust
+itself, if you used the official installers. If you installed Rust through some
+other means, you can check if you have Cargo installed by typing:</p>
+<pre><code class="language-bash">$ cargo --version
+</code></pre>
+<p>Into a terminal. If you see a version number, great! If you see an error like
+‘<code>command not found</code>’, then you should look at the documentation for the system
+in which you installed Rust, to determine if Cargo is separate.</p>
+<h2>Converting to Cargo</h2>
+<p>Let’s convert the Hello World program to Cargo. To Cargo-fy a project, you need
+to do three things:</p>
+<ol>
+<li>Put your source file in the right directory.</li>
+<li>Get rid of the old executable (<code>main.exe</code> on Windows, <code>main</code> everywhere else)
+and make a new one.</li>
+<li>Make a Cargo configuration file.</li>
+</ol>
+<p>Let's get started!</p>
+<h3>Creating a new Executable and Source Directory</h3>
+<p>First, go back to your terminal, move to your <em>hello_world</em> directory, and
+enter the following commands:</p>
+<pre><code class="language-bash">$ mkdir src
+$ mv main.rs src/main.rs
+$ rm main  # or 'del main.exe' on Windows
+</code></pre>
+<p>Cargo expects your source files to live inside a <em>src</em> directory, so do that
+first. This leaves the top-level project directory (in this case,
+<em>hello_world</em>) for READMEs, license information, and anything else not related
+to your code. In this way, using Cargo helps you keep your projects nice and
+tidy. There's a place for everything, and everything is in its place.</p>
+<p>Now, copy <em>main.rs</em> to the <em>src</em> directory, and delete the compiled file you
+created with <code>rustc</code>. As usual, replace <code>main</code> with <code>main.exe</code> if you're on
+Windows.</p>
+<p>This example retains <code>main.rs</code> as the source filename because it's creating an
+executable. If you wanted to make a library instead, you'd name the file
+<code>lib.rs</code>. This convention is used by Cargo to successfully compile your
+projects, but it can be overridden if you wish.</p>
+<h3>Creating a Configuration File</h3>
+<p>Next, create a new file inside your <em>hello_world</em> directory, and call it
+<code>Cargo.toml</code>.</p>
+<p>Make sure to capitalize the <code>C</code> in <code>Cargo.toml</code>, or Cargo won't know what to do
+with the configuration file.</p>
+<p>This file is in the <em><a href="https://github.com/toml-lang/toml">TOML</a></em> (Tom's Obvious, Minimal Language) format. TOML is
+similar to INI, but has some extra goodies, and is used as Cargo’s
+configuration format.</p>
+<p>Inside this file, type the following information:</p>
+<pre><code class="language-toml">[package]
+
+name = &quot;hello_world&quot;
+version = &quot;0.0.1&quot;
+authors = [ &quot;Your name &lt;you@example.com&gt;&quot; ]
+</code></pre>
+<p>The first line, <code>[package]</code>, indicates that the following statements are
+configuring a package. As we add more information to this file, we’ll add other
+sections, but for now, we just have the package configuration.</p>
+<p>The other three lines set the three bits of configuration that Cargo needs to
+know to compile your program: its name, what version it is, and who wrote it.</p>
+<p>Once you've added this information to the <em>Cargo.toml</em> file, save it to finish
+creating the configuration file.</p>
+<h2>Building and Running a Cargo Project</h2>
+<p>With your <em>Cargo.toml</em> file in place in your project's root directory, you
+should be ready to build and run your Hello World program! To do so, enter the
+following commands:</p>
+<pre><code class="language-bash">$ cargo build
+   Compiling hello_world v0.0.1 (file:///home/yourname/projects/hello_world)
+$ ./target/debug/hello_world
+Hello, world!
+</code></pre>
+<p>Bam! If all goes well, <code>Hello, world!</code> should print to the terminal once more.</p>
+<p>You just built a project with <code>cargo build</code> and ran it with
+<code>./target/debug/hello_world</code>, but you can actually do both in one step with
+<code>cargo run</code> as follows:</p>
+<pre><code class="language-bash">$ cargo run
+     Running `target/debug/hello_world`
+Hello, world!
+</code></pre>
+<p>Notice that this example didn’t re-build the project. Cargo figured out that
+the file hasn’t changed, and so it just ran the binary. If you'd modified your
+source code, Cargo would have rebuilt the project before running it, and you
+would have seen something like this:</p>
+<pre><code class="language-bash">$ cargo run
+   Compiling hello_world v0.0.1 (file:///home/yourname/projects/hello_world)
+     Running `target/debug/hello_world`
+Hello, world!
+</code></pre>
+<p>Cargo checks to see if any of your project’s files have been modified, and only
+rebuilds your project if they’ve changed since the last time you built it.</p>
+<p>With simple projects, Cargo doesn't bring a whole lot over just using <code>rustc</code>,
+but it will become useful in future. With complex projects composed of multiple
+crates, it’s much easier to let Cargo coordinate the build. With Cargo, you can
+just run <code>cargo build</code>, and it should work the right way.</p>
+<h2>Building for Release</h2>
+<p>When your project is finally ready for release, you can use <code>cargo build --release</code> to compile your project with optimizations. These optimizations make
+your Rust code run faster, but turning them on makes your program take longer
+to compile. This is why there are two different profiles, one for development,
+and one for building the final program you’ll give to a user.</p>
+<p>Running this command also causes Cargo to create a new file called
+<em>Cargo.lock</em>, which looks like this:</p>
+<pre><code class="language-toml">[root]
+name = &quot;hello_world&quot;
+version = &quot;0.0.1&quot;
+</code></pre>
+<p>Cargo uses the <em>Cargo.lock</em> file to keep track of dependencies in your
+application. This is the Hello World project's <em>Cargo.lock</em> file. This project
+doesn't have dependencies, so the file is a bit sparse. Realistically, you
+won't ever need to touch this file yourself; just let Cargo handle it.</p>
+<p>That’s it! If you've been following along, you should have successfully built
+<code>hello_world</code> with Cargo.</p>
+<p>Even though the project is simple, it now uses much of the real tooling you’ll
+use for the rest of your Rust career. In fact, you can expect to start
+virtually all Rust projects with some variation on the following commands:</p>
+<pre><code class="language-bash">$ git clone someurl.com/foo
+$ cd foo
+$ cargo build
+</code></pre>
+<h2>Making A New Cargo Project the Easy Way</h2>
+<p>You don’t have to go through that previous process every time you want to start
+a new project! Cargo can quickly make a bare-bones project directory that you
+can start developing in right away.</p>
+<p>To start a new project with Cargo, enter <code>cargo new</code> at the command line:</p>
+<pre><code class="language-bash">$ cargo new hello_world --bin
+</code></pre>
+<p>This command passes <code>--bin</code> because the goal is to get straight to making an
+executable application, as opposed to a library. Executables are often called
+<em>binaries</em> (as in <code>/usr/bin</code>, if you’re on a Unix system).</p>
+<p>Cargo has generated two files and one directory for us: a <code>Cargo.toml</code> and a
+<em>src</em> directory with a <em>main.rs</em> file inside. These should look familliar,
+they’re exactly what we created by hand, above.</p>
+<p>This output is all you need to get started. First, open <code>Cargo.toml</code>. It should
+look something like this:</p>
+<pre><code class="language-toml">[package]
+
+name = &quot;hello_world&quot;
+version = &quot;0.1.0&quot;
+authors = [&quot;Your Name &lt;you@example.com&gt;&quot;]
+</code></pre>
+<p>Cargo has populated <em>Cargo.toml</em> with reasonable defaults based on the arguments
+you gave it and your <code>git</code> global configuration. You may notice that Cargo has
+also initialized the <code>hello_world</code> directory as a <code>git</code> repository.</p>
+<p>Here’s what should be in <code>src/main.rs</code>:</p>
+<pre><code class="language-rust">fn main() {
+    println!(&quot;Hello, world!&quot;);
+}
+</code></pre>
+<p>Cargo has generated a &quot;Hello World!&quot; for you, and you’re ready to start coding!</p>
+<blockquote>
+<p>Note: If you want to look at Cargo in more detail, check out the official <a href="http://doc.crates.io/guide.html">Cargo
+guide</a>, which covers all of its features.</p>
+</blockquote>
 
                 </div>
 

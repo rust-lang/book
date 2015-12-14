@@ -66,6 +66,62 @@
 
                 <div id="content" class="content">
                     <h1>Installation</h1>
+<p>The first step to using Rust is to install it. Generally speaking, you’ll need
+an Internet connection to run the commands in this chapter, as we’ll be
+downloading Rust from the internet.</p>
+<p>We’ll be showing off a number of commands using a terminal, and those lines all
+start with <code>$</code>. We don't need to type in the <code>$</code>s, they are there to indicate
+the start of each command. We’ll see many tutorials and examples around the web
+that follow this convention: <code>$</code> for commands run as our regular user, and <code>#</code>
+for commands we should be running as an administrator.</p>
+<h2>Installing on Linux or Mac</h2>
+<p>If we're on Linux or a Mac, all we need to do is open a terminal and type this:</p>
+<pre><code class="language-bash">$ curl -sSf https://static.rust-lang.org/rustup.sh | sh
+</code></pre>
+<p>This will download a script, and stat the installation. If it all goes well,
+you’ll see this appear:</p>
+<pre><code class="language-text">Welcome to Rust.
+
+This script will download the Rust compiler and its package manager, Cargo, and
+install them to /usr/local. You may install elsewhere by running this script
+with the --prefix=&lt;path&gt; option.
+
+The installer will run under ‘sudo’ and may ask you for your password. If you do
+not want the script to run ‘sudo’ then pass it the --disable-sudo flag.
+
+You may uninstall later by running /usr/local/lib/rustlib/uninstall.sh,
+or by running this script again with the --uninstall flag.
+
+Continue? (y/N) 
+</code></pre>
+<p>From here, press <code>y</code> for ‘yes’, and then follow the rest of the prompts.</p>
+<h2>Installing on Windows</h2>
+<p>If you're on Windows, please download the appropriate <a href="https://www.rust-lang.org/install.html">installer</a>.</p>
+<h2>Uninstalling</h2>
+<p>Uninstalling Rust is as easy as installing it. On Linux or Mac, just run
+the uninstall script:</p>
+<pre><code class="language-bash">$ sudo /usr/local/lib/rustlib/uninstall.sh
+</code></pre>
+<p>If we used the Windows installer, we can re-run the <code>.msi</code> and it will give us
+an uninstall option.</p>
+<h2>Troubleshooting</h2>
+<p>If we've got Rust installed, we can open up a shell, and type this:</p>
+<pre><code class="language-bash">$ rustc --version
+</code></pre>
+<p>You should see the version number, commit hash, and commit date.</p>
+<p>If you do, Rust has been installed successfully! Congrats!</p>
+<p>If you don't and you're on Windows, check that Rust is in your %PATH% system
+variable. If it isn't, run the installer again, select &quot;Change&quot; on the &quot;Change,
+repair, or remove installation&quot; page and ensure &quot;Add to PATH&quot; is checked.</p>
+<p>If not, there are a number of places where we can get help. The easiest is
+<a href="irc://irc.mozilla.org/#rust">the #rust IRC channel on irc.mozilla.org</a>, which we can access through
+<a href="http://chat.mibbit.com/?server=irc.mozilla.org&amp;channel=%23rust">Mibbit</a>. Click that link, and we'll be chatting with other Rustaceans
+(a silly nickname we call ourselves) who can help us out. Other great resources
+include <a href="https://users.rust-lang.org/">the user’s forum</a>, and <a href="http://stackoverflow.com/questions/tagged/rust">Stack Overflow</a>.</p>
+<p>This installer also installs a copy of the documentation locally, so we can
+read it offline. On UNIX systems, <code>/usr/local/share/doc/rust</code> is the location.
+On Windows, it's in a <code>share/doc</code> directory, inside the directory to which Rust
+was installed.</p>
 
                 </div>
 
