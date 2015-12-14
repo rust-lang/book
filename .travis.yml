@@ -10,4 +10,4 @@ rust:
 before_script:
   - cargo install mdbook
 script:
-  - make all
+  - PATH=$PATH:/home/travis/.cargo/bin make all
