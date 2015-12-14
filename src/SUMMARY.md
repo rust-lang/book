@@ -24,7 +24,7 @@
     - [Structs](structs.md)
     - [Enums](enums.md)
 
-- [Crates & Modules](crates-and-modules)
+- [Crates & Modules](crates-and-modules.md)
 
 - [Error Handling](error-handling.md)
 
