@@ -430,7 +430,7 @@ guide</a>, which covers all of its features.</p>
 <h1>The Design of Rust</h1>
 <h1>Tutorial</h1>
 <h1>The Basics</h1>
-<p>% Variable Bindings</p>
+<h1>Variable Bindings</h1>
 <p>Virtually every non-'Hello World’ Rust program uses <em>variable bindings</em>. They
 bind some value to a name, so it can be used later. <code>let</code> is
 used to introduce a binding, just like this:</p>
@@ -616,7 +616,7 @@ let x = x; // x is now immutable and is bound to 7
 let y = 4;
 let y = &quot;I can also be bound to text!&quot;; // y is now of a different type
 </code></pre>
-<p>% Functions</p>
+<h1>Functions</h1>
 <p>Every Rust program has at least one function, the <code>main</code> function:</p>
 <pre><code class="language-rust">fn main() {
 }
@@ -839,7 +839,7 @@ let f = plus_one;
 # let f = plus_one;
 let six = f(5);
 </code></pre>
-<p>% Primitive Types</p>
+<h1>Primitive Types</h1>
 <p>The Rust language has a number of types that are considered ‘primitive’. This
 means that they’re built-in to the language. Rust is structured in such a way
 that the standard library also provides a number of useful types built on top
@@ -1028,7 +1028,7 @@ let x: fn(i32) -&gt; i32 = foo;
 <p>In this case, <code>x</code> is a ‘function pointer’ to a function that takes an <code>i32</code> and
 returns an <code>i32</code>.</p>
 <h1>Comments</h1>
-<p>% if</p>
+<h1>if</h1>
 <p>Rust’s take on <code>if</code> is not particularly complex, but it’s much more like the
 <code>if</code> you’ll find in a dynamically typed language than in a more traditional
 systems language. So let’s talk about it, to make sure you grasp the nuances.</p>
@@ -1082,7 +1082,7 @@ let y = if x == 5 { 10 } else { 15 }; // y: i32
 <p>This works because <code>if</code> is an expression. The value of the expression is the
 value of the last expression in whichever branch was chosen. An <code>if</code> without an
 <code>else</code> always results in <code>()</code> as the value.</p>
-<p>% Loops</p>
+<h1>Loops</h1>
 <p>Rust currently provides three approaches to performing some kind of iterative activity. They are: <code>loop</code>, <code>while</code> and <code>for</code>. Each approach has its own set of uses.</p>
 <h2>loop</h2>
 <p>The infinite <code>loop</code> is the simplest form of loop available in Rust. Using the keyword <code>loop</code>, Rust provides a way to loop indefinitely until some terminating statement is reached. Rust's infinite <code>loop</code>s look like this:</p>
@@ -1230,7 +1230,7 @@ odd:</p>
 }
 </code></pre>
 <h1>Ownership &amp; borrowing</h1>
-<p>% Ownership</p>
+<h1>Ownership</h1>
 <p>This guide is one of three presenting Rust’s ownership system. This is one of
 Rust’s most unique and compelling features, with which Rust developers should
 become quite acquainted. Ownership is how Rust achieves its largest goal,
@@ -1402,7 +1402,7 @@ let (v1, v2, answer) = foo(v1, v2);
 complicated.</p>
 <p>Luckily, Rust offers a feature, borrowing, which helps us solve this problem.
 It’s the topic of the next section!</p>
-<p>% References and Borrowing</p>
+<h1>References and Borrowing</h1>
 <p>This guide is two of three presenting Rust’s ownership system. This is one of
 Rust’s most unique and compelling features, with which Rust developers should
 become quite acquainted. Ownership is how Rust achieves its largest goal,
@@ -1696,7 +1696,7 @@ statement 1 at 3:14
 </code></pre>
 <p>In the above example, <code>y</code> is declared before <code>x</code>, meaning that <code>y</code> lives longer
 than <code>x</code>, which is not allowed.</p>
-<p>% Lifetimes</p>
+<h1>Lifetimes</h1>
 <p>This guide is three of three presenting Rust’s ownership system. This is one of
 Rust’s most unique and compelling features, with which Rust developers should
 become quite acquainted. Ownership is how Rust achieves its largest goal,
@@ -1963,7 +1963,7 @@ fn new(buf: &amp;mut [u8]) -&gt; BufWriter; // elided
 fn new&lt;'a&gt;(buf: &amp;'a mut [u8]) -&gt; BufWriter&lt;'a&gt;; // expanded
 </code></pre>
 <h1>Basic Data Types</h1>
-<p>% Structs</p>
+<h1>Structs</h1>
 <p><code>struct</code>s are a way of creating more complex data types. For example, if we were
 doing calculations involving coordinates in 2D space, we would need both an <code>x</code>
 and a <code>y</code> value:</p>
@@ -2114,7 +2114,7 @@ useful. For instance, a library may ask you to create a structure that
 implements a certain <a href="traits.html">trait</a> to handle events. If you don’t have
 any data you need to store in the structure, you can just create a
 unit-like <code>struct</code>.</p>
-<p>% Enums</p>
+<h1>Enums</h1>
 <p>An <code>enum</code> in Rust is a type that represents data that is one of
 several possible variants. Each variant in the <code>enum</code> can optionally
 have data associated with it:</p>
@@ -2193,7 +2193,7 @@ let v = vec![&quot;Hello&quot;.to_string(), &quot;World&quot;.to_string()];
 
 let v1: Vec&lt;Message&gt; = v.into_iter().map(Message::Write).collect();
 </code></pre>
-<p>% Crates and Modules</p>
+<h1>Crates and Modules</h1>
 <p>When a project starts getting large, it’s considered good software
 engineering practice to split it up into a bunch of smaller pieces, and then
 fit them together. It’s also important to have a well-defined interface, so
@@ -2635,7 +2635,7 @@ under the same path, and in this context <code>self</code> just refers back to t
 Note: The curly brackets cannot be nested or mixed with star globbing.</p>
 <h1>Error Handling</h1>
 <h1>Basic Collections</h1>
-<p>% Vectors</p>
+<h1>Vectors</h1>
 <p>A ‘vector’ is a dynamic or ‘growable’ array, implemented as the standard
 library type [<code>Vec&lt;T&gt;</code>]<a href="../std/vec/index.html">vec</a>. The <code>T</code> means that we can have vectors
 of any type (see the chapter on <a href="generics.html">generics</a> for more).
@@ -2699,7 +2699,7 @@ for i in v {
 API documentation</a>.</p>
 <h1>Strings</h1>
 <h1><code>HashMap&lt;K, V&gt;</code></h1>
-<p>% Traits</p>
+<h1>Traits</h1>
 <p>A trait is a language feature that tells the Rust compiler about
 functionality a type must provide.</p>
 <p>Recall the <code>impl</code> keyword, used to call a function with <a href="method-syntax.html">method
@@ -3105,7 +3105,7 @@ fn main() {
 <li>[<code>PartialEq</code>](../core/cmp/trait.PartialEq.html)</li>
 <li>[<code>PartialOrd</code>](../core/cmp/trait.PartialOrd.html)</li>
 </ul>
-<p>% Closures</p>
+<h1>Closures</h1>
 <p>Sometimes it is useful to wrap up a function and <em>free variables</em> for better
 clarity and reuse. The free variables that can be used come from the
 enclosing scope and are ‘closed over’ when used in the function. From this, we
@@ -3494,7 +3494,7 @@ assert_eq!(6, answer);
 <p>By making the inner closure a <code>move Fn</code>, we create a new stack frame for our
 closure. By <code>Box</code>ing it up, we’ve given it a known size, and allowing it to
 escape our stack frame.</p>
-<p>% Iterators</p>
+<h1>Iterators</h1>
 <p>Let's talk about loops.</p>
 <p>Remember Rust's <code>for</code> loop? Here's an example:</p>
 <pre><code class="language-rust">for x in 0..10 {
@@ -3746,7 +3746,7 @@ consumers, check out the <a href="../std/iter/index.html">iterator module docume
 <h1><code>std::fs</code></h1>
 <h1><code>std::path</code></h1>
 <h1><code>std::env</code></h1>
-<p>% Testing</p>
+<h1>Testing</h1>
 <blockquote>
 <p>Program testing can be a very effective way to show the presence of bugs, but
 it is hopelessly inadequate for showing their absence.</p>
@@ -4160,7 +4160,7 @@ Modules</a> section.</p>
 <h1><code>Arc&lt;T&gt;</code></h1>
 <h1><code>Mutex&lt;T&gt;</code></h1>
 <h1><code>Channels</code></h1>
-<p>% Unsafe</p>
+<h1>Unsafe</h1>
 <p>Rust’s main draw is its powerful static guarantees about behavior. But safety
 checks are conservative by nature: there are some programs that are actually
 safe, but the compiler is not able to verify this is true. To write these kinds
@@ -4268,7 +4268,7 @@ safety checks, trading safety for speed.</p>
 <p>I’ll repeat again: even though you <em>can</em> do arbitrary things in unsafe blocks
 and functions doesn’t mean you should. The compiler will act as though you’re
 upholding its invariants, so be careful!</p>
-<p>% Raw Pointers</p>
+<h1>Raw Pointers</h1>
 <p>Rust has a number of different smart pointer types in its standard library, but
 there are two types that are extra-special. Much of Rust’s safety comes from
 compile-time checks, but raw pointers don’t have such guarantees, and are
@@ -4361,7 +4361,7 @@ harder to use incorrectly; for example, it requires that <code>x</code> is a poi
 (unlike <code>transmute</code>).</p>
 <h1>transmute</h1>
 <h1>FFI</h1>
-<p>% Conditional Compilation</p>
+<h1>Conditional Compilation</h1>
 <p>Rust has a special attribute, <code>#[cfg]</code>, which allows you to compile code
 based on a flag passed to the compiler. It has two forms:</p>
 <pre><code class="language-rust">#[cfg(foo)]
@@ -4421,7 +4421,7 @@ elsewhere in your code, too:</p>
 <p>These will be replaced by a <code>true</code> or <code>false</code> at compile-time, depending on the
 configuration settings.</p>
 <h1>Bindings to C</h1>
-<p>% Rust Inside Other Languages</p>
+<h1>Using Rust From Other Languages</h1>
 <p>For our third project, we’re going to choose something that shows off one of
 Rust’s greatest strengths: a lack of a substantial runtime.</p>
 <p>As organizations grow, they increasingly rely on a multitude of programming
@@ -4681,7 +4681,7 @@ chapter for more details.</p>
 <h1>Cargo</h1>
 <h1>Crates.io</h1>
 <h1>Advanced Type System Features</h1>
-<p>% Associated Types</p>
+<h1>Associated Types</h1>
 <p>Associated types are a powerful part of Rust’s type system. They’re related to
 the idea of a ‘type family’, in other words, grouping multiple types together. That
 description is a bit abstract, so let’s dive right into an example. If you want
@@ -4842,7 +4842,7 @@ let obj = Box::new(graph) as Box&lt;Graph&lt;N=Node, E=Edge&gt;&gt;;
 <p>The <code>N=Node</code> syntax allows us to provide a concrete type, <code>Node</code>, for the <code>N</code>
 type parameter. Same with <code>E=Edge</code>. If we didn’t provide this constraint, we
 couldn’t be sure which <code>impl</code> to match this trait object to.</p>
-<p>% Trait Objects</p>
+<h1>Trait Objects</h1>
 <p>When code involves polymorphism, there needs to be a mechanism to determine
 which specific version is actually run. This is called ‘dispatch’. There are
 two major forms of dispatch: static dispatch and dynamic dispatch. While Rust
@@ -5121,7 +5121,7 @@ or all of the following:</p>
 <p>Whew! As we can see, almost all of these rules talk about <code>Self</code>. A good intuition
 is “except in special circumstances, if your trait’s method uses <code>Self</code>, it is not
 object-safe.”</p>
-<p>% Universal Function Call Syntax</p>
+<h1>Universal Function Call Syntax</h1>
 <p>Sometimes, functions can have the same names. Consider this code:</p>
 <pre><code class="language-rust">trait Foo {
     fn f(&amp;self);
@@ -5231,7 +5231,7 @@ inherent one.</p>
 <h1>Interior mutability</h1>
 <h1><code>Cell&lt;T&gt;</code></h1>
 <h1><code>RefCell&lt;T&gt;</code></h1>
-<p>% Macros</p>
+<h1>Macros</h1>
 <p>By now you’ve learned about many of the tools Rust provides for abstracting and
 reusing code. These units of code reuse have a rich semantic structure. For
 example, functions have a type signature, type parameters have trait bounds,
