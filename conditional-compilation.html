@@ -65,7 +65,65 @@
                 </div>
 
                 <div id="content" class="content">
-                    <h1>Conditional Compilation</h1>
+                    <p>% Conditional Compilation</p>
+<p>Rust has a special attribute, <code>#[cfg]</code>, which allows you to compile code
+based on a flag passed to the compiler. It has two forms:</p>
+<pre><code class="language-rust">#[cfg(foo)]
+# fn foo() {}
+
+#[cfg(bar = &quot;baz&quot;)]
+# fn bar() {}
+</code></pre>
+<p>They also have some helpers:</p>
+<pre><code class="language-rust">#[cfg(any(unix, windows))]
+# fn foo() {}
+
+#[cfg(all(unix, target_pointer_width = &quot;32&quot;))]
+# fn bar() {}
+
+#[cfg(not(foo))]
+# fn not_foo() {}
+</code></pre>
+<p>These can nest arbitrarily:</p>
+<pre><code class="language-rust">#[cfg(any(not(unix), all(target_os=&quot;macos&quot;, target_arch = &quot;powerpc&quot;)))]
+# fn foo() {}
+</code></pre>
+<p>As for how to enable or disable these switches, if you’re using Cargo,
+they get set in the <a href="http://doc.crates.io/manifest.html#the-features-section"><code>[features]</code> section</a> of your <code>Cargo.toml</code>:</p>
+<pre><code class="language-toml">[features]
+# no features by default
+default = []
+
+# The “secure-password” feature depends on the bcrypt package.
+secure-password = [&quot;bcrypt&quot;]
+</code></pre>
+<p>When you do this, Cargo passes along a flag to <code>rustc</code>:</p>
+<pre><code class="language-text">--cfg feature=&quot;${feature_name}&quot;
+</code></pre>
+<p>The sum of these <code>cfg</code> flags will determine which ones get activated, and
+therefore, which code gets compiled. Let’s take this code:</p>
+<pre><code class="language-rust">#[cfg(feature = &quot;foo&quot;)]
+mod foo {
+}
+</code></pre>
+<p>If we compile it with <code>cargo build --features &quot;foo&quot;</code>, it will send the <code>--cfg feature=&quot;foo&quot;</code> flag to <code>rustc</code>, and the output will have the <code>mod foo</code> in it.
+If we compile it with a regular <code>cargo build</code>, no extra flags get passed on,
+and so, no <code>foo</code> module will exist.</p>
+<h1>cfg_attr</h1>
+<p>You can also set another attribute based on a <code>cfg</code> variable with <code>cfg_attr</code>:</p>
+<pre><code class="language-rust">#[cfg_attr(a, b)]
+# fn foo() {}
+</code></pre>
+<p>Will be the same as <code>#[b]</code> if <code>a</code> is set by <code>cfg</code> attribute, and nothing otherwise.</p>
+<h1>cfg!</h1>
+<p>The <code>cfg!</code> <a href="compiler-plugins.html">syntax extension</a> lets you use these kinds of flags
+elsewhere in your code, too:</p>
+<pre><code class="language-rust">if cfg!(target_os = &quot;macos&quot;) || cfg!(target_os = &quot;ios&quot;) {
+    println!(&quot;Think Different!&quot;);
+}
+</code></pre>
+<p>These will be replaced by a <code>true</code> or <code>false</code> at compile-time, depending on the
+configuration settings.</p>
 
                 </div>
 

@@ -65,7 +65,68 @@
                 </div>
 
                 <div id="content" class="content">
-                    <h1>Vectors</h1>
+                    <p>% Vectors</p>
+<p>A ‘vector’ is a dynamic or ‘growable’ array, implemented as the standard
+library type [<code>Vec&lt;T&gt;</code>]<a href="../std/vec/index.html">vec</a>. The <code>T</code> means that we can have vectors
+of any type (see the chapter on <a href="generics.html">generics</a> for more).
+Vectors always allocate their data on the heap.
+You can create them with the <code>vec!</code> macro:</p>
+<pre><code class="language-rust">let v = vec![1, 2, 3, 4, 5]; // v: Vec&lt;i32&gt;
+</code></pre>
+<p>(Notice that unlike the <code>println!</code> macro we’ve used in the past, we use square
+brackets <code>[]</code> with <code>vec!</code> macro. Rust allows you to use either in either situation,
+this is just convention.)</p>
+<p>There’s an alternate form of <code>vec!</code> for repeating an initial value:</p>
+<pre><code class="language-rust">let v = vec![0; 10]; // ten zeroes
+</code></pre>
+<h2>Accessing elements</h2>
+<p>To get the value at a particular index in the vector, we use <code>[]</code>s:</p>
+<pre><code class="language-rust">let v = vec![1, 2, 3, 4, 5];
+
+println!(&quot;The third element of v is {}&quot;, v[2]);
+</code></pre>
+<p>The indices count from <code>0</code>, so the third element is <code>v[2]</code>.</p>
+<p>It’s also important to note that you must index with the <code>usize</code> type:</p>
+<pre><code class="language-ignore">let v = vec![1, 2, 3, 4, 5];
+
+let i: usize = 0;
+let j: i32 = 0;
+
+// works
+v[i];
+
+// doesn’t
+v[j];
+</code></pre>
+<p>Indexing with a non-<code>usize</code> type gives an error that looks like this:</p>
+<pre><code class="language-text">error: the trait `core::ops::Index&lt;i32&gt;` is not implemented for the type
+`collections::vec::Vec&lt;_&gt;` [E0277]
+v[j];
+^~~~
+note: the type `collections::vec::Vec&lt;_&gt;` cannot be indexed by `i32`
+error: aborting due to previous error
+</code></pre>
+<p>There’s a lot of punctuation in that message, but the core of it makes sense:
+you cannot index with an <code>i32</code>.</p>
+<h2>Iterating</h2>
+<p>Once you have a vector, you can iterate through its elements with <code>for</code>. There
+are three versions:</p>
+<pre><code class="language-rust">let mut v = vec![1, 2, 3, 4, 5];
+
+for i in &amp;v {
+    println!(&quot;A reference to {}&quot;, i);
+}
+
+for i in &amp;mut v {
+    println!(&quot;A mutable reference to {}&quot;, i);
+}
+
+for i in v {
+    println!(&quot;Take ownership of the vector and its element {}&quot;, i);
+}
+</code></pre>
+<p>Vectors have many more useful methods, which you can read about in <a href="../std/vec/index.html">their
+API documentation</a>.</p>
 
                 </div>
 

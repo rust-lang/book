@@ -65,7 +65,167 @@
                 </div>
 
                 <div id="content" class="content">
-                    <h1>Associated Types</h1>
+                    <p>% Associated Types</p>
+<p>Associated types are a powerful part of Rust’s type system. They’re related to
+the idea of a ‘type family’, in other words, grouping multiple types together. That
+description is a bit abstract, so let’s dive right into an example. If you want
+to write a <code>Graph</code> trait, you have two types to be generic over: the node type
+and the edge type. So you might write a trait, <code>Graph&lt;N, E&gt;</code>, that looks like
+this:</p>
+<pre><code class="language-rust">trait Graph&lt;N, E&gt; {
+    fn has_edge(&amp;self, &amp;N, &amp;N) -&gt; bool;
+    fn edges(&amp;self, &amp;N) -&gt; Vec&lt;E&gt;;
+    // etc
+}
+</code></pre>
+<p>While this sort of works, it ends up being awkward. For example, any function
+that wants to take a <code>Graph</code> as a parameter now <em>also</em> needs to be generic over
+the <code>N</code>ode and <code>E</code>dge types too:</p>
+<pre><code class="language-rust,ignore">fn distance&lt;N, E, G: Graph&lt;N, E&gt;&gt;(graph: &amp;G, start: &amp;N, end: &amp;N) -&gt; u32 { ... }
+</code></pre>
+<p>Our distance calculation works regardless of our <code>Edge</code> type, so the <code>E</code> stuff in
+this signature is just a distraction.</p>
+<p>What we really want to say is that a certain <code>E</code>dge and <code>N</code>ode type come together
+to form each kind of <code>Graph</code>. We can do that with associated types:</p>
+<pre><code class="language-rust">trait Graph {
+    type N;
+    type E;
+
+    fn has_edge(&amp;self, &amp;Self::N, &amp;Self::N) -&gt; bool;
+    fn edges(&amp;self, &amp;Self::N) -&gt; Vec&lt;Self::E&gt;;
+    // etc
+}
+</code></pre>
+<p>Now, our clients can be abstract over a given <code>Graph</code>:</p>
+<pre><code class="language-rust,ignore">fn distance&lt;G: Graph&gt;(graph: &amp;G, start: &amp;G::N, end: &amp;G::N) -&gt; u32 { ... }
+</code></pre>
+<p>No need to deal with the <code>E</code>dge type here!</p>
+<p>Let’s go over all this in more detail.</p>
+<h2>Defining associated types</h2>
+<p>Let’s build that <code>Graph</code> trait. Here’s the definition:</p>
+<pre><code class="language-rust">trait Graph {
+    type N;
+    type E;
+
+    fn has_edge(&amp;self, &amp;Self::N, &amp;Self::N) -&gt; bool;
+    fn edges(&amp;self, &amp;Self::N) -&gt; Vec&lt;Self::E&gt;;
+}
+</code></pre>
+<p>Simple enough. Associated types use the <code>type</code> keyword, and go inside the body
+of the trait, with the functions.</p>
+<p>These <code>type</code> declarations can have all the same thing as functions do. For example,
+if we wanted our <code>N</code> type to implement <code>Display</code>, so we can print the nodes out,
+we could do this:</p>
+<pre><code class="language-rust">use std::fmt;
+
+trait Graph {
+    type N: fmt::Display;
+    type E;
+
+    fn has_edge(&amp;self, &amp;Self::N, &amp;Self::N) -&gt; bool;
+    fn edges(&amp;self, &amp;Self::N) -&gt; Vec&lt;Self::E&gt;;
+}
+</code></pre>
+<h2>Implementing associated types</h2>
+<p>Just like any trait, traits that use associated types use the <code>impl</code> keyword to
+provide implementations. Here’s a simple implementation of Graph:</p>
+<pre><code class="language-rust"># trait Graph {
+#     type N;
+#     type E;
+#     fn has_edge(&amp;self, &amp;Self::N, &amp;Self::N) -&gt; bool;
+#     fn edges(&amp;self, &amp;Self::N) -&gt; Vec&lt;Self::E&gt;;
+# }
+struct Node;
+
+struct Edge;
+
+struct MyGraph;
+
+impl Graph for MyGraph {
+    type N = Node;
+    type E = Edge;
+
+    fn has_edge(&amp;self, n1: &amp;Node, n2: &amp;Node) -&gt; bool {
+        true
+    }
+
+    fn edges(&amp;self, n: &amp;Node) -&gt; Vec&lt;Edge&gt; {
+        Vec::new()
+    }
+}
+</code></pre>
+<p>This silly implementation always returns <code>true</code> and an empty <code>Vec&lt;Edge&gt;</code>, but it
+gives you an idea of how to implement this kind of thing. We first need three
+<code>struct</code>s, one for the graph, one for the node, and one for the edge. If it made
+more sense to use a different type, that would work as well, we’re just going to
+use <code>struct</code>s for all three here.</p>
+<p>Next is the <code>impl</code> line, which is just like implementing any other trait.</p>
+<p>From here, we use <code>=</code> to define our associated types. The name the trait uses
+goes on the left of the <code>=</code>, and the concrete type we’re <code>impl</code>ementing this
+for goes on the right. Finally, we use the concrete types in our function
+declarations.</p>
+<h2>Trait objects with associated types</h2>
+<p>There’s one more bit of syntax we should talk about: trait objects. If you
+try to create a trait object from an associated type, like this:</p>
+<pre><code class="language-rust,ignore"># trait Graph {
+#     type N;
+#     type E;
+#     fn has_edge(&amp;self, &amp;Self::N, &amp;Self::N) -&gt; bool;
+#     fn edges(&amp;self, &amp;Self::N) -&gt; Vec&lt;Self::E&gt;;
+# }
+# struct Node;
+# struct Edge;
+# struct MyGraph;
+# impl Graph for MyGraph {
+#     type N = Node;
+#     type E = Edge;
+#     fn has_edge(&amp;self, n1: &amp;Node, n2: &amp;Node) -&gt; bool {
+#         true
+#     }
+#     fn edges(&amp;self, n: &amp;Node) -&gt; Vec&lt;Edge&gt; {
+#         Vec::new()
+#     }
+# }
+let graph = MyGraph;
+let obj = Box::new(graph) as Box&lt;Graph&gt;;
+</code></pre>
+<p>You’ll get two errors:</p>
+<pre><code class="language-text">error: the value of the associated type `E` (from the trait `main::Graph`) must
+be specified [E0191]
+let obj = Box::new(graph) as Box&lt;Graph&gt;;
+          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+24:44 error: the value of the associated type `N` (from the trait
+`main::Graph`) must be specified [E0191]
+let obj = Box::new(graph) as Box&lt;Graph&gt;;
+          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+</code></pre>
+<p>We can’t create a trait object like this, because we don’t know the associated
+types. Instead, we can write this:</p>
+<pre><code class="language-rust"># trait Graph {
+#     type N;
+#     type E;
+#     fn has_edge(&amp;self, &amp;Self::N, &amp;Self::N) -&gt; bool;
+#     fn edges(&amp;self, &amp;Self::N) -&gt; Vec&lt;Self::E&gt;;
+# }
+# struct Node;
+# struct Edge;
+# struct MyGraph;
+# impl Graph for MyGraph {
+#     type N = Node;
+#     type E = Edge;
+#     fn has_edge(&amp;self, n1: &amp;Node, n2: &amp;Node) -&gt; bool {
+#         true
+#     }
+#     fn edges(&amp;self, n: &amp;Node) -&gt; Vec&lt;Edge&gt; {
+#         Vec::new()
+#     }
+# }
+let graph = MyGraph;
+let obj = Box::new(graph) as Box&lt;Graph&lt;N=Node, E=Edge&gt;&gt;;
+</code></pre>
+<p>The <code>N=Node</code> syntax allows us to provide a concrete type, <code>Node</code>, for the <code>N</code>
+type parameter. Same with <code>E=Edge</code>. If we didn’t provide this constraint, we
+couldn’t be sure which <code>impl</code> to match this trait object to.</p>
 
                 </div>
 
