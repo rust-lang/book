@@ -1,9 +1,9 @@
 # The Rust Programming Language
 
 - [Introduction](introduction.md)
-    - [The Design of Rust](design.md)
     - [Installation](installation.md)
     - [Hello, World!](hello-world.md)
+    - [The Design of Rust](design.md)
 
 - [Tutorial](tutorial.md)
 
