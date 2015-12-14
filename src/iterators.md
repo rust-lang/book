@@ -1,4 +1,4 @@
-% Iterators
+# Iterators
 
 Let's talk about loops.
 

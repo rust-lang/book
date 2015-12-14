@@ -1,4 +1,4 @@
-% Rust Inside Other Languages
+# Using Rust From Other Languages
 
 For our third project, we’re going to choose something that shows off one of
 Rust’s greatest strengths: a lack of a substantial runtime.

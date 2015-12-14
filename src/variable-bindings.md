@@ -1,4 +1,4 @@
-% Variable Bindings
+# Variable Bindings
 
 Virtually every non-'Hello World’ Rust program uses *variable bindings*. They
 bind some value to a name, so it can be used later. `let` is

@@ -1,4 +1,4 @@
-% Universal Function Call Syntax
+# Universal Function Call Syntax
 
 Sometimes, functions can have the same names. Consider this code:
 

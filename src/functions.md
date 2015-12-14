@@ -1,4 +1,4 @@
-% Functions
+# Functions
 
 Every Rust program has at least one function, the `main` function:
 

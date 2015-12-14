@@ -1,4 +1,4 @@
-% Vectors
+# Vectors
 
 A ‘vector’ is a dynamic or ‘growable’ array, implemented as the standard
 library type [`Vec<T>`][vec]. The `T` means that we can have vectors

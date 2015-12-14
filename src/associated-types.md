@@ -1,4 +1,4 @@
-% Associated Types
+# Associated Types
 
 Associated types are a powerful part of Rust’s type system. They’re related to
 the idea of a ‘type family’, in other words, grouping multiple types together. That

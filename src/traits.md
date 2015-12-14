@@ -1,4 +1,4 @@
-% Traits
+# Traits
 
 A trait is a language feature that tells the Rust compiler about
 functionality a type must provide.

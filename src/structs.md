@@ -1,4 +1,4 @@
-% Structs
+# Structs
 
 `struct`s are a way of creating more complex data types. For example, if we were
 doing calculations involving coordinates in 2D space, we would need both an `x`

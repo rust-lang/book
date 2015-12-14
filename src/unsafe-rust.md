@@ -1,4 +1,4 @@
-% Unsafe
+# Unsafe
 
 Rust’s main draw is its powerful static guarantees about behavior. But safety
 checks are conservative by nature: there are some programs that are actually

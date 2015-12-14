@@ -1,4 +1,4 @@
-% Raw Pointers
+# Raw Pointers
 
 Rust has a number of different smart pointer types in its standard library, but
 there are two types that are extra-special. Much of Rust’s safety comes from

@@ -1,4 +1,4 @@
-% Primitive Types
+# Primitive Types
 
 The Rust language has a number of types that are considered ‘primitive’. This
 means that they’re built-in to the language. Rust is structured in such a way
