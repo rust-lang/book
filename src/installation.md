@@ -10,6 +10,13 @@ the start of each command. We’ll see many tutorials and examples around the we
 that follow this convention: `$` for commands run as our regular user, and `#`
 for commands we should be running as an administrator.
 
+## Mac dependencies (for package or source install)
+
+XCode command line developer tools have dependencies needed to run rust. You can 
+install XCode from the AppStore, and from there install the command line tools 
+with `xcode-select --install`. Alternatively, you can download XCode or just the 
+cli tools from developer.apple.com/resources with a developer account.
+
 ## Installing on Linux or Mac
 
 If we're on Linux or a Mac, all we need to do is open a terminal and type this:
