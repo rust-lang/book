@@ -430,805 +430,368 @@ guide</a>, which covers all of its features.</p>
 <h1>The Design of Rust</h1>
 <h1>Tutorial</h1>
 <h1>The Basics</h1>
+<p>We’ll start our journey with Rust by talking about the absolute basics.
+Many programming languages have lots in common at their core.
+Much of this may feel similar to other languages you’ve used, but some parts are different.
+If you want to skip this section, you can, but you may end up coming back later to find out small details.
+These foundations will be in every single useful Rust program, and learning them gives us a strong core to start from.</p>
 <h1>Variable Bindings</h1>
-<p>Virtually every non-'Hello World’ Rust program uses <em>variable bindings</em>. They
-bind some value to a name, so it can be used later. <code>let</code> is
-used to introduce a binding, just like this:</p>
+<p>The foundation of virtually every program is the ability to store and modify data.
+Rust programs are no different.
+Let’s start with a short example.</p>
+<h2>The basics of bindings</h2>
+<p>First, we’ll generate a new project with Cargo.
+Open a terminal, and navigate to the directory where you’d like to keep your projects.
+From there, let’s generate a new project:</p>
+<pre><code class="language-bash">$ cargo new --bin bindings
+$ cd bindings
+</code></pre>
+<p>This creates a new project, ‘bindings’, and sets up our <code>Cargo.toml</code> and <code>src/main.rs</code> files.
+As we saw in “Hello, World!”, Cargo will generate these files and create a little ‘hello world’ program for us:</p>
+<pre><code class="language-rust">fn main() {
+    println!(&quot;Hello, world!&quot;);
+}
+</code></pre>
+<p>Let’s replace that program with this one:</p>
 <pre><code class="language-rust">fn main() {
     let x = 5;
-}
-</code></pre>
-<p>Putting <code>fn main() {</code> in each example is a bit tedious, so we’ll leave that out
-in the future. If you’re following along, make sure to edit your <code>main()</code>
-function, rather than leaving it off. Otherwise, you’ll get an error.</p>
-<h1>Patterns</h1>
-<p>In many languages, a variable binding would be called a <em>variable</em>, but Rust’s
-variable bindings have a few tricks up their sleeves. For example the
-left-hand side of a <code>let</code> expression is a ‘<a href="patterns.html">pattern</a>’, not just a
-variable name. This means we can do things like:</p>
-<pre><code class="language-rust">let (x, y) = (1, 2);
-</code></pre>
-<p>After this expression is evaluated, <code>x</code> will be one, and <code>y</code> will be two.
-Patterns are really powerful, and have <a href="patterns.html">their own section</a> in the
-book. We don’t need those features for now, so we’ll just keep this in the back
-of our minds as we go forward.</p>
-<h1>Type annotations</h1>
-<p>Rust is a statically typed language, which means that we specify our types up
-front, and they’re checked at compile time. So why does our first example
-compile? Well, Rust has this thing called ‘type inference’. If it can figure
-out what the type of something is, Rust doesn’t require you to actually type it
-out.</p>
-<p>We can add the type if we want to, though. Types come after a colon (<code>:</code>):</p>
-<pre><code class="language-rust">let x: i32 = 5;
-</code></pre>
-<p>If I asked you to read this out loud to the rest of the class, you’d say “<code>x</code>
-is a binding with the type <code>i32</code> and the value <code>five</code>.”</p>
-<p>In this case we chose to represent <code>x</code> as a 32-bit signed integer. Rust has
-many different primitive integer types. They begin with <code>i</code> for signed integers
-and <code>u</code> for unsigned integers. The possible integer sizes are 8, 16, 32, and 64
-bits.</p>
-<p>In future examples, we may annotate the type in a comment. The examples will
-look like this:</p>
-<pre><code class="language-rust">fn main() {
-    let x = 5; // x: i32
-}
-</code></pre>
-<p>Note the similarities between this annotation and the syntax you use with
-<code>let</code>. Including these kinds of comments is not idiomatic Rust, but we'll
-occasionally include them to help you understand what the types that Rust
-infers are.</p>
-<h1>Mutability</h1>
-<p>By default, bindings are <em>immutable</em>. This code will not compile:</p>
-<pre><code class="language-rust,ignore">let x = 5;
-x = 10;
-</code></pre>
-<p>It will give you this error:</p>
-<pre><code class="language-text">error: re-assignment of immutable variable `x`
-     x = 10;
-     ^~~~~~~
-</code></pre>
-<p>If you want a binding to be mutable, you can use <code>mut</code>:</p>
-<pre><code class="language-rust">let mut x = 5; // mut x: i32
-x = 10;
-</code></pre>
-<p>There is no single reason that bindings are immutable by default, but we can
-think about it through one of Rust’s primary focuses: safety. If you forget to
-say <code>mut</code>, the compiler will catch it, and let you know that you have mutated
-something you may not have intended to mutate. If bindings were mutable by
-default, the compiler would not be able to tell you this. If you <em>did</em> intend
-mutation, then the solution is quite easy: add <code>mut</code>.</p>
-<p>There are other good reasons to avoid mutable state when possible, but they’re
-out of the scope of this guide. In general, you can often avoid explicit
-mutation, and so it is preferable in Rust. That said, sometimes, mutation is
-what you need, so it’s not verboten.</p>
-<h1>Initializing bindings</h1>
-<p>Rust variable bindings have one more aspect that differs from other languages:
-bindings are required to be initialized with a value before you're allowed to
-use them.</p>
-<p>Let’s try it out. Change your <code>src/main.rs</code> file to look like this:</p>
-<pre><code class="language-rust">fn main() {
-    let x: i32;
-
-    println!(&quot;Hello world!&quot;);
-}
-</code></pre>
-<p>You can use <code>cargo build</code> on the command line to build it. You’ll get a
-warning, but it will still print &quot;Hello, world!&quot;:</p>
-<pre><code class="language-text">   Compiling hello_world v0.0.1 (file:///home/you/projects/hello_world)
-src/main.rs:2:9: 2:10 warning: unused variable: `x`, #[warn(unused_variable)]
-   on by default
-src/main.rs:2     let x: i32;
-                      ^
-</code></pre>
-<p>Rust warns us that we never use the variable binding, but since we never use
-it, no harm, no foul. Things change if we try to actually use this <code>x</code>,
-however. Let’s do that. Change your program to look like this:</p>
-<pre><code class="language-rust,ignore">fn main() {
-    let x: i32;
 
     println!(&quot;The value of x is: {}&quot;, x);
 }
 </code></pre>
-<p>And try to build it. You’ll get an error:</p>
-<pre><code class="language-bash">$ cargo build
-   Compiling hello_world v0.0.1 (file:///home/you/projects/hello_world)
-src/main.rs:4:39: 4:40 error: use of possibly uninitialized variable: `x`
-src/main.rs:4     println!(&quot;The value of x is: {}&quot;, x);
-                                                    ^
-note: in expansion of format_args!
-&lt;std macros&gt;:2:23: 2:77 note: expansion site
-&lt;std macros&gt;:1:1: 3:2 note: in expansion of println!
-src/main.rs:4:5: 4:42 note: expansion site
-error: aborting due to previous error
-Could not compile `hello_world`.
+<p>And finally, run it:</p>
+<pre><code class="language-bash">$ cargo run
+   Compiling bindings v0.1.0 (file:///home/steve/tmp/bindings)
+     Running `target/debug/bindings`
+The value of x is: 5
 </code></pre>
-<p>Rust will not let us use a value that has not been initialized. Next, let’s
-talk about this stuff we've added to <code>println!</code>.</p>
-<p>If you include two curly braces (<code>{}</code>, some call them moustaches...) in your
-string to print, Rust will interpret this as a request to interpolate some sort
-of value. <em>String interpolation</em> is a computer science term that means &quot;stick
-in the middle of a string.&quot; We add a comma, and then <code>x</code>, to indicate that we
-want <code>x</code> to be the value we’re interpolating. The comma is used to separate
-arguments we pass to functions and macros, if you’re passing more than one.</p>
-<p>When you just use the curly braces, Rust will attempt to display the value in a
-meaningful way by checking out its type. If you want to specify the format in a
-more detailed manner, there are a <a href="../std/fmt/index.html">wide number of options available</a>.
-For now, we'll just stick to the default: integers aren't very complicated to
-print.</p>
-<h1>Scope and shadowing</h1>
-<p>Let’s get back to bindings. Variable bindings have a scope - they are
-constrained to live in a block they were defined in. A block is a collection
-of statements enclosed by <code>{</code> and <code>}</code>. Function definitions are also blocks!
-In the following example we define two variable bindings, <code>x</code> and <code>y</code>, which
-live in different blocks. <code>x</code> can be accessed from inside the <code>fn main() {}</code>
-block, while <code>y</code> can be accessed only from inside the inner block:</p>
+<p>If you see an error instead, double check that you have copied the program exactly as written.
+Let’s break this down, line by line.</p>
 <pre><code class="language-rust,ignore">fn main() {
-    let x: i32 = 17;
-    {
-        let y: i32 = 3;
-        println!(&quot;The value of x is {} and value of y is {}&quot;, x, y);
-    }
-    println!(&quot;The value of x is {} and value of y is {}&quot;, x, y); // This won't work
+</code></pre>
+<p>The <code>main()</code> function is the entry point of every Rust program.
+We’ll talk more about functions in the next section, but for now, all we need to know is that this is where our program begins.
+The opening curly brace, <code>{</code>, indicates the start of the function’s body.</p>
+<pre><code class="language-rust,ignore">    let x = 5;
+</code></pre>
+<p>This is our first ‘variable binding’.
+This looks like many languages, but there are some subtleties.
+We create variable bindings with a ‘<code>let</code> statement’, which looks like this:</p>
+<pre><code class="language-text">let PATTERN = VALUE;
+</code></pre>
+<p>In our example, the <code>PATTERN</code> is a humble <code>x</code>, and the <code>VALUE</code> is a simple <code>5</code>.
+The <code>let</code> statement takes the <code>VALUE</code>, and matches it to the <code>PATTERN</code>, creating new bindings.
+Therefore, our example creates a new binding, <code>x</code>, and gives it an initial value of <code>5</code>.
+Patterns are a big part of Rust, we will see them in many places.</p>
+<p>That seems like a lot of explanation for a basic assignment statement!
+The trick is that these patterns can become more complex, and have a lot of power.
+We’ll explore more complex patterns as we learn more.</p>
+<p>Before we do that, though, let’s finish investigating this example.
+Here’s the next line:</p>
+<pre><code class="language-rust,ignore">    println!(&quot;The value of x is: {}&quot;, x);
+</code></pre>
+<p>The <code>println!</code> macro prints text to the screen.
+We can tell that it’s a macro due to the <code>!</code>.
+We won’t learn how to write macros until much later in the book, but we’ll use macros provided by the standard library throughout.
+Every time you see a <code>!</code>, remember that it signifies a macro.
+Macros can add new syntax to the language, and the <code>!</code> is a reminder that things may look slightly unusual.</p>
+<p><code>println!</code>, specifically, has one required argument, a ‘format string’, and zero or more optional arguments.
+This is why it’s a macro; Rust does not support optional arguments for regular functions.
+The format string can contain the special text <code>{}</code>.
+If it does, it fills in that place in the string with the values of the other arguments.
+In this case, we’ve passed <code>x</code>.
+You can think of <code>{}</code> as little crab pincers, holding the value in place.
+This placeholder has a number of more advanced formatting options that we’ll discuss later.</p>
+<pre><code class="language-rust,ignore">}
+</code></pre>
+<p>Finally, a closing curly brace matches up with the opening curly brace that declared the <code>main()</code> function, and declares its end.</p>
+<p>This explains our output:</p>
+<pre><code class="language-text">The value of x is: 5
+</code></pre>
+<p>We assign <code>5</code> to a binding, <code>x</code>, and then print it to the screen with <code>println!</code>.</p>
+<h2>Multiple assignment</h2>
+<p>Let’s try a more complex pattern.
+Change our example program to this:</p>
+<pre><code class="language-rust">fn main() {
+    let (x, y) = (5, 6);
+
+    println!(&quot;The value of x is: {}&quot;, x);
+    println!(&quot;The value of y is: {}&quot;, y);
 }
 </code></pre>
-<p>The first <code>println!</code> would print &quot;The value of x is 17 and the value of y is
-3&quot;, but this example cannot be compiled successfully, because the second
-<code>println!</code> cannot access the value of <code>y</code>, since it is not in scope anymore.
-Instead we get this error:</p>
-<pre><code class="language-bash">$ cargo build
-   Compiling hello v0.1.0 (file:///home/you/projects/hello_world)
-main.rs:7:62: 7:63 error: unresolved name `y`. Did you mean `x`? [E0425]
-main.rs:7     println!(&quot;The value of x is {} and value of y is {}&quot;, x, y); // This won't work
-                                                                       ^
-note: in expansion of format_args!
-&lt;std macros&gt;:2:25: 2:56 note: expansion site
-&lt;std macros&gt;:1:1: 2:62 note: in expansion of print!
-&lt;std macros&gt;:3:1: 3:54 note: expansion site
-&lt;std macros&gt;:1:1: 3:58 note: in expansion of println!
-main.rs:7:5: 7:65 note: expansion site
-main.rs:7:62: 7:63 help: run `rustc --explain E0425` to see a detailed explanation
+<p>And run it with <code>cargo run</code>:</p>
+<pre><code class="language-text">$ cargo run
+   Compiling bindings v0.1.0 (file:///home/steve/tmp/bindings)
+     Running `target/debug/bindings`
+The value of x is: 5
+The value of y is: 6
+</code></pre>
+<p>We’ve created two bindings with one <code>let</code>!
+Here’s our pattern:</p>
+<pre><code class="language-text">(x, y)
+</code></pre>
+<p>And here’s the value:</p>
+<pre><code class="language-text">(5, 6)
+</code></pre>
+<p>As you can see, the two line up visually, and so <code>let</code> binds <code>5</code> to <code>x</code> and <code>6</code> to <code>y</code>.
+We could have used two <code>let</code> statements as well:</p>
+<pre><code class="language-rust">let x = 5;
+let y = 6;
+</code></pre>
+<p>In simple cases like this, two <code>let</code>s may be clearer, but in others, creating multiple bindings at once is nice.
+As we become more proficient in Rust, we’ll figure out which style is better, but it’s mostly a judgement call.</p>
+<h2>Initialization</h2>
+<p>We do not have to provide bindings with an initial value, and can assign it later. Try this program:</p>
+<pre><code class="language-rust">fn main() {
+    let x;
+
+    x = 5;
+
+    println!(&quot;The value of x is: {}&quot;, x);
+}
+</code></pre>
+<p>And run it with <code>cargo run</code>:</p>
+<pre><code class="language-text">$ cargo run
+   Compiling bindings v0.1.0 (file:///home/steve/tmp/bindings)
+     Running `target/debug/bindings`
+The value of x is: 5
+</code></pre>
+<p>It’s all good.
+This raises a question, though: what if we try to print out a binding before we declare a value?
+Here’s a program that demonstrates this question:</p>
+<pre><code class="language-rust,ignore">fn main() {
+    let x;
+
+    println!(&quot;The value of x is: {}&quot;, x);
+
+    x = 5;
+}
+</code></pre>
+<p>We can find out the answer with <code>cargo run</code>:</p>
+<pre><code class="language-text">   Compiling bindings v0.1.0 (file:///home/steve/tmp/bindings)
+src/main.rs:4:39: 4:40 error: use of possibly uninitialized variable: `x` [E0381]
+src/main.rs:4     println!(“The value of x is: {}”, x);
+                                                    ^
+&lt;std macros&gt;:2:25: 2:56 note: in this expansion of format_args!
+&lt;std macros&gt;:3:1: 3:54 note: in this expansion of print! (defined in &lt;std macros&gt;)
+src/main.rs:4:5: 4:42 note: in this expansion of println! (defined in &lt;std macros&gt;)
+src/main.rs:4:39: 4:40 help: run `rustc --explain E0381` to see a detailed explanation
 error: aborting due to previous error
-Could not compile `hello`.
+Could not compile `bindings`.
 
 To learn more, run the command again with --verbose.
 </code></pre>
-<p>Additionally, variable bindings can be shadowed. This means that a later
-variable binding with the same name as another binding, that's currently in
-scope, will override the previous binding.</p>
-<pre><code class="language-rust">let x: i32 = 8;
-{
-    println!(&quot;{}&quot;, x); // Prints &quot;8&quot;
-    let x = 12;
-    println!(&quot;{}&quot;, x); // Prints &quot;12&quot;
-}
-println!(&quot;{}&quot;, x); // Prints &quot;8&quot;
-let x =  42;
-println!(&quot;{}&quot;, x); // Prints &quot;42&quot;
+<p>An error!
+The compiler won’t let us write a program like this.
+This is our first example of the compiler helping us find an error in our program.
+Different programming languages have different ways of approaching this problem.
+Some languages always initialize values with some sort of default.
+Other languages leave the value uninitialized, and make no promises about what happens if you try to use something before initialization.
+Rust chooses something else: error and force the programmer to explain what they want.
+We must do some sort of initialization before we can use <code>x</code>.</p>
+<h3>Extended error explanations</h3>
+<p>There’s one more interesting part of this error message:</p>
+<pre><code class="language-text">src/main.rs:4:39: 4:40 help: run `rustc --explain E0381` to see a detailed explanation
 </code></pre>
-<p>Shadowing and mutable bindings may appear as two sides of the same coin, but
-they are two distinct concepts that can't always be used interchangeably. For
-one, shadowing enables us to rebind a name to a value of a different type. It
-is also possible to change the mutability of a binding.</p>
-<pre><code class="language-rust">let mut x: i32 = 1;
-x = 7;
-let x = x; // x is now immutable and is bound to 7
+<p>We can see an extended explanation by passing the <code>--explain</code> flag to <code>rustc</code>.
+Not every error has a longer explanation, but many of them do.
+These extended explanations try to show off common ways that the error occurs, and common solutions to the issue.
+Here’s <code>E0381</code>:</p>
+<pre><code class="language-bash">$ rustc --explain E0381
+It is not allowed to use or capture an uninitialized variable. For example:
 
-let y = 4;
-let y = &quot;I can also be bound to text!&quot;; // y is now of a different type
+fn main() {
+    let x: i32;
+    let y = x; // error, use of possibly uninitialized variable
+
+To fix this, ensure that any declared variables are initialized before being
+used.
 </code></pre>
+<p>These explanations can really help if you’re stuck on an error.
+The compiler is your friend, and is here to help.</p>
+<h2>Mutable bindings</h2>
+<p>What about changing the value of a binding? Here’s another sample program that asks this question:</p>
+<pre><code class="language-rust,ignore">fn main() {
+    let x = 5;
+
+    x = 6;
+
+    println!(&quot;The value of x is: {}&quot;, x);
+}
+</code></pre>
+<p><code>cargo run</code> has the answer for us:</p>
+<pre><code class="language-bash">$ cargo run
+   Compiling bindings v0.1.0 (file:///home/steve/tmp/bindings)
+src/main.rs:4:5: 4:10 error: re-assignment of immutable variable `x` [E0384]
+src/main.rs:4     x = 6;
+                  ^~~~~
+src/main.rs:4:5: 4:10 help: run `rustc --explain E0384` to see a detailed explanation
+src/main.rs:2:9: 2:10 note: prior assignment occurs here
+src/main.rs:2     let x = 5;
+                      ^
+</code></pre>
+<p>The error mentions <code>re-assigment of immutable variable</code>.
+That’s right: bindings are immutable.
+But they’re only immutable by default.
+In a pattern, when we’re creating a new name, we can add <code>mut</code> in front to make the binding a mutable one.
+Here’s an example:</p>
+<pre><code class="language-rust">fn main() {
+    let mut x = 5;
+
+    println!(&quot;The value of x is: {}&quot;, x);
+
+    x = 6;
+
+    println!(&quot;The value of x is: {}&quot;, x);
+}
+</code></pre>
+<p>Running this, we get:</p>
+<pre><code class="language-bash">$ cargo run
+   Compiling bindings v0.1.0 (file:///home/steve/tmp/bindings)
+     Running `target/debug/bindings`
+The value of x is: 5
+The value of x is: 6
+</code></pre>
+<p>We can now change the value that <code>x</code> binds to.
+Note that the syntax is not <code>let mut</code> exactly; it’s using <code>mut</code> in a pattern.
+This becomes more obvious with our <code>()</code> pattern:</p>
+<pre><code class="language-rust,ignore">fn main() {
+    let (mut x, y) = (5, 6);
+
+    x = 7;
+    y = 8;
+}
+</code></pre>
+<p>The compiler will complain about this program:</p>
+<pre><code class="language-bash">$ cargo build
+   Compiling bindings v0.1.0 (file:///home/steve/tmp/bindings)
+src/main.rs:5:5: 5:10 error: re-assignment of immutable variable `y` [E0384]
+src/main.rs:5     y = 8;
+                  ^~~~~
+src/main.rs:5:5: 5:10 help: run `rustc --explain E0384` to see a detailed explanation
+src/main.rs:2:17: 2:18 note: prior assignment occurs here
+src/main.rs:2     let (mut x, y) = (5, 6);
+                              ^
+</code></pre>
+<p>It’s fine with re-assigning <code>x</code>, but not <code>y</code>.
+The <code>mut</code> only applies to the name that follows it, not the whole pattern.</p>
+<h3>Reassignment, not mutation</h3>
+<p>There is one subtlety we haven’t covered yet: <code>mut</code> allows you to mutate <em>the binding</em>, but not <em>what the binding binds to</em>.
+In other words:</p>
+<pre><code class="language-rust">let mut x = 5;
+x = 6;
+</code></pre>
+<p>This is not changing the value that <code>x</code> is bound to, but creating a new value, <code>6</code>, and changing the binding to bind to it instead.
+It’s a subtle but important difference.
+Well, for now, it does not make a lot of difference, but when our programs get more complex, it will.
+Specifically, passing arguments to functions will illustrate the difference.
+We’ll talk about that in the next section, when we discuss functions.</p>
+<h2>Shadowing</h2>
+<p>A final thing about bindings: they can ‘shadow’ previous bindings with the same name.
+Here’s a sample program:</p>
+<pre><code class="language-rust">fn main() {
+    let x = 5;
+    let x = 6;
+
+    println!(&quot;The value of x is: {}&quot;, x);
+}  
+</code></pre>
+<p>Running it, we can see the shadowing in action:</p>
+<pre><code class="language-text">src/main.rs:2:9: 2:10 warning: unused variable: `x`, #[warn(unused_variables)] on by default
+src/main.rs:2     let x = 5;
+                      ^
+     Running `target/debug/bindings`
+The value of x is: 6
+</code></pre>
+<p>There are two interesting things in this output.
+First, Rust will compile and run this program, no problem.
+And as we can see, the value of <code>x</code> is <code>6</code>.
+But we didn’t declare <code>x</code> as mutable.
+Instead, we declared a <em>new</em> binding that is <em>also</em> named <code>x</code>, and gave it a new value.
+The older value that we bound <code>x</code> to is inaccessible as soon as the new <code>x</code> is declared.
+This can be useful if you’d like to perform a few transformations on a value, and leave it immutable.
+For example:</p>
+<pre><code class="language-rust">fn main() {
+    let x = 5;
+    let x = x + 1;
+    let x = x * 2;
+
+    println!(&quot;The value of x is: {}&quot;, x);
+}
+</code></pre>
+<p>This will print:</p>
+<pre><code class="language-bash">   Compiling bindings v0.1.0 (file:///home/steve/tmp/bindings)
+     Running `target/debug/bindings`
+The value of x is: 12
+</code></pre>
+<p>This lets us modify <code>x</code>, but not deal with mutation.
+This is nice because we know that the compiler will let us know if we try to modify it later.
+Let’s assume that after we calculate <code>12</code>, we don’t want to modify <code>x</code> again.
+If we had written this program in a mutable style, like this:</p>
+<pre><code>fn main() {
+    let mut x = 5;
+    x = x + 1;
+    x = x * 2;
+
+    println!(&quot;The value of x is: {}&quot;, x);
+
+    x = 15;
+
+    println!(&quot;The value of x is: {}&quot;, x);
+}
+</code></pre>
+<p>Rust is happy to let us mutate it again, to <code>15</code>.
+A similar program in our immutable style will let us know about that accidental mutation, however:</p>
+<pre><code class="language-rust,ignore">fn main() {
+    let x = 5;
+    let x = x + 1;
+    let x = x * 2;
+
+    println!(&quot;The value of x is: {}&quot;, x);
+
+    x = 15;
+
+    println!(&quot;The value of x is: {}&quot;, x);
+}
+</code></pre>
+<p>If we try to compile, we get an error:</p>
+<pre><code class="language-bash">$ cargo build
+   Compiling bindings v0.1.0 (file:///home/steve/tmp/bindings)
+src/main.rs:8:5: 8:11 error: re-assignment of immutable variable `x` [E0384]
+src/main.rs:8     x = 15;
+                  ^~~~~~
+src/main.rs:8:5: 8:11 help: run `rustc --explain E0384` to see a detailed explanation
+src/main.rs:4:9: 4:10 note: prior assignment occurs here
+src/main.rs:4     let x = x * 2;
+                      ^
+error: aborting due to previous error
+Could not compile `bindings`.
+</code></pre>
+<p>Exactly what we wanted.</p>
+<p>Shadowing can take some time to get used to, but it’s very powerful, and works well with immutability.</p>
+<p>There was one more thing we should talk about in the output from compiling our initial program.
+It’s this part:</p>
+<pre><code class="language-text">src/main.rs:2:9: 2:10 warning: unused variable: `x`, #[warn(unused_variables)] on by default
+</code></pre>
+<p>Here’s the two lines of relevant code:</p>
+<pre><code class="language-rust">let x = 5;
+let x = 6;
+</code></pre>
+<p>Rust knows that we shadowed <code>x</code>, but we never ended up using the initial value.
+This isn’t <em>wrong</em>, exactly, it just may not have been what we wanted.
+In this case, the compiler issues a ‘warning’, but still compiles our program.
+The <code>#[warn(unused_variables)]</code> syntax is called an ‘attribute’, which we’ll discuss in a later section.
+More specifically, a warning like this is called a ‘lint’, which is an old term for the bits of sheep’s wool that you wouldn’t want to put in cloth.
+Similarly, this lint is telling us that we may have an extra bit of code we don’t need.
+Our program would work just fine without it.
+It’s worth listening to these warnings, and fixing the problems they point out.
+They can be signs of a larger problem.
+In this case, we may not have realized that we were shadowing <code>x</code>.</p>
 <h1>Functions</h1>
-<p>Every Rust program has at least one function, the <code>main</code> function:</p>
-<pre><code class="language-rust">fn main() {
-}
-</code></pre>
-<p>This is the simplest possible function declaration. As we mentioned before,
-<code>fn</code> says ‘this is a function’, followed by the name, some parentheses because
-this function takes no arguments, and then some curly braces to indicate the
-body. Here’s a function named <code>foo</code>:</p>
-<pre><code class="language-rust">fn foo() {
-}
-</code></pre>
-<p>So, what about taking arguments? Here’s a function that prints a number:</p>
-<pre><code class="language-rust">fn print_number(x: i32) {
-    println!(&quot;x is: {}&quot;, x);
-}
-</code></pre>
-<p>Here’s a complete program that uses <code>print_number</code>:</p>
-<pre><code class="language-rust">fn main() {
-    print_number(5);
-}
-
-fn print_number(x: i32) {
-    println!(&quot;x is: {}&quot;, x);
-}
-</code></pre>
-<p>As you can see, function arguments work very similar to <code>let</code> declarations:
-you add a type to the argument name, after a colon.</p>
-<p>Here’s a complete program that adds two numbers together and prints them:</p>
-<pre><code class="language-rust">fn main() {
-    print_sum(5, 6);
-}
-
-fn print_sum(x: i32, y: i32) {
-    println!(&quot;sum is: {}&quot;, x + y);
-}
-</code></pre>
-<p>You separate arguments with a comma, both when you call the function, as well
-as when you declare it.</p>
-<p>Unlike <code>let</code>, you <em>must</em> declare the types of function arguments. This does
-not work:</p>
-<pre><code class="language-rust,ignore">fn print_sum(x, y) {
-    println!(&quot;sum is: {}&quot;, x + y);
-}
-</code></pre>
-<p>You get this error:</p>
-<pre><code class="language-text">expected one of `!`, `:`, or `@`, found `)`
-fn print_number(x, y) {
-</code></pre>
-<p>This is a deliberate design decision. While full-program inference is possible,
-languages which have it, like Haskell, often suggest that documenting your
-types explicitly is a best-practice. We agree that forcing functions to declare
-types while allowing for inference inside of function bodies is a wonderful
-sweet spot between full inference and no inference.</p>
-<p>What about returning a value? Here’s a function that adds one to an integer:</p>
-<pre><code class="language-rust">fn add_one(x: i32) -&gt; i32 {
-    x + 1
-}
-</code></pre>
-<p>Rust functions return exactly one value, and you declare the type after an
-‘arrow’, which is a dash (<code>-</code>) followed by a greater-than sign (<code>&gt;</code>). The last
-line of a function determines what it returns. You’ll note the lack of a
-semicolon here. If we added it in:</p>
-<pre><code class="language-rust,ignore">fn add_one(x: i32) -&gt; i32 {
-    x + 1;
-}
-</code></pre>
-<p>We would get an error:</p>
-<pre><code class="language-text">error: not all control paths return a value
-fn add_one(x: i32) -&gt; i32 {
-     x + 1;
-}
-
-help: consider removing this semicolon:
-     x + 1;
-          ^
-</code></pre>
-<p>This reveals two interesting things about Rust: it is an expression-based
-language, and semicolons are different from semicolons in other ‘curly brace
-and semicolon’-based languages. These two things are related.</p>
-<h2>Expressions vs. Statements</h2>
-<p>Rust is primarily an expression-based language. There are only two kinds of
-statements, and everything else is an expression.</p>
-<p>So what's the difference? Expressions return a value, and statements do not.
-That’s why we end up with ‘not all control paths return a value’ here: the
-statement <code>x + 1;</code> doesn’t return a value. There are two kinds of statements in
-Rust: ‘declaration statements’ and ‘expression statements’. Everything else is
-an expression. Let’s talk about declaration statements first.</p>
-<p>In some languages, variable bindings can be written as expressions, not just
-statements. Like Ruby:</p>
-<pre><code class="language-ruby">x = y = 5
-</code></pre>
-<p>In Rust, however, using <code>let</code> to introduce a binding is <em>not</em> an expression. The
-following will produce a compile-time error:</p>
-<pre><code class="language-ignore">let x = (let y = 5); // expected identifier, found keyword `let`
-</code></pre>
-<p>The compiler is telling us here that it was expecting to see the beginning of
-an expression, and a <code>let</code> can only begin a statement, not an expression.</p>
-<p>Note that assigning to an already-bound variable (e.g. <code>y = 5</code>) is still an
-expression, although its value is not particularly useful. Unlike other
-languages where an assignment evaluates to the assigned value (e.g. <code>5</code> in the
-previous example), in Rust the value of an assignment is an empty tuple <code>()</code>
-because the assigned value can have <a href="ownership.html">just one owner</a>, and any
-other returned value would be too surprising:</p>
-<pre><code class="language-rust">let mut y = 5;
-
-let x = (y = 6);  // x has the value `()`, not `6`
-</code></pre>
-<p>The second kind of statement in Rust is the <em>expression statement</em>. Its
-purpose is to turn any expression into a statement. In practical terms, Rust's
-grammar expects statements to follow other statements. This means that you use
-semicolons to separate expressions from each other. This means that Rust
-looks a lot like most other languages that require you to use semicolons
-at the end of every line, and you will see semicolons at the end of almost
-every line of Rust code you see.</p>
-<p>What is this exception that makes us say &quot;almost&quot;? You saw it already, in this
-code:</p>
-<pre><code class="language-rust">fn add_one(x: i32) -&gt; i32 {
-    x + 1
-}
-</code></pre>
-<p>Our function claims to return an <code>i32</code>, but with a semicolon, it would return
-<code>()</code> instead. Rust realizes this probably isn’t what we want, and suggests
-removing the semicolon in the error we saw before.</p>
-<h2>Early returns</h2>
-<p>But what about early returns? Rust does have a keyword for that, <code>return</code>:</p>
-<pre><code class="language-rust">fn foo(x: i32) -&gt; i32 {
-    return x;
-
-    // we never run this code!
-    x + 1
-}
-</code></pre>
-<p>Using a <code>return</code> as the last line of a function works, but is considered poor
-style:</p>
-<pre><code class="language-rust">fn foo(x: i32) -&gt; i32 {
-    return x + 1;
-}
-</code></pre>
-<p>The previous definition without <code>return</code> may look a bit strange if you haven’t
-worked in an expression-based language before, but it becomes intuitive over
-time.</p>
-<h2>Diverging functions</h2>
-<p>Rust has some special syntax for ‘diverging functions’, which are functions that
-do not return:</p>
-<pre><code class="language-rust">fn diverges() -&gt; ! {
-    panic!(&quot;This function never returns!&quot;);
-}
-</code></pre>
-<p><code>panic!</code> is a macro, similar to <code>println!()</code> that we’ve already seen. Unlike
-<code>println!()</code>, <code>panic!()</code> causes the current thread of execution to crash with
-the given message. Because this function will cause a crash, it will never
-return, and so it has the type ‘<code>!</code>’, which is read ‘diverges’.</p>
-<p>If you add a main function that calls <code>diverges()</code> and run it, you’ll get
-some output that looks like this:</p>
-<pre><code class="language-text">thread ‘&lt;main&gt;’ panicked at ‘This function never returns!’, hello.rs:2
-</code></pre>
-<p>If you want more information, you can get a backtrace by setting the
-<code>RUST_BACKTRACE</code> environment variable:</p>
-<pre><code class="language-text">$ RUST_BACKTRACE=1 ./diverges
-thread '&lt;main&gt;' panicked at 'This function never returns!', hello.rs:2
-stack backtrace:
-   1:     0x7f402773a829 - sys::backtrace::write::h0942de78b6c02817K8r
-   2:     0x7f402773d7fc - panicking::on_panic::h3f23f9d0b5f4c91bu9w
-   3:     0x7f402773960e - rt::unwind::begin_unwind_inner::h2844b8c5e81e79558Bw
-   4:     0x7f4027738893 - rt::unwind::begin_unwind::h4375279447423903650
-   5:     0x7f4027738809 - diverges::h2266b4c4b850236beaa
-   6:     0x7f40277389e5 - main::h19bb1149c2f00ecfBaa
-   7:     0x7f402773f514 - rt::unwind::try::try_fn::h13186883479104382231
-   8:     0x7f402773d1d8 - __rust_try
-   9:     0x7f402773f201 - rt::lang_start::ha172a3ce74bb453aK5w
-  10:     0x7f4027738a19 - main
-  11:     0x7f402694ab44 - __libc_start_main
-  12:     0x7f40277386c8 - &lt;unknown&gt;
-  13:                0x0 - &lt;unknown&gt;
-</code></pre>
-<p><code>RUST_BACKTRACE</code> also works with Cargo’s <code>run</code> command:</p>
-<pre><code class="language-text">$ RUST_BACKTRACE=1 cargo run
-     Running `target/debug/diverges`
-thread '&lt;main&gt;' panicked at 'This function never returns!', hello.rs:2
-stack backtrace:
-   1:     0x7f402773a829 - sys::backtrace::write::h0942de78b6c02817K8r
-   2:     0x7f402773d7fc - panicking::on_panic::h3f23f9d0b5f4c91bu9w
-   3:     0x7f402773960e - rt::unwind::begin_unwind_inner::h2844b8c5e81e79558Bw
-   4:     0x7f4027738893 - rt::unwind::begin_unwind::h4375279447423903650
-   5:     0x7f4027738809 - diverges::h2266b4c4b850236beaa
-   6:     0x7f40277389e5 - main::h19bb1149c2f00ecfBaa
-   7:     0x7f402773f514 - rt::unwind::try::try_fn::h13186883479104382231
-   8:     0x7f402773d1d8 - __rust_try
-   9:     0x7f402773f201 - rt::lang_start::ha172a3ce74bb453aK5w
-  10:     0x7f4027738a19 - main
-  11:     0x7f402694ab44 - __libc_start_main
-  12:     0x7f40277386c8 - &lt;unknown&gt;
-  13:                0x0 - &lt;unknown&gt;
-</code></pre>
-<p>A diverging function can be used as any type:</p>
-<pre><code class="language-should_panic"># fn diverges() -&gt; ! {
-#    panic!(&quot;This function never returns!&quot;);
-# }
-let x: i32 = diverges();
-let x: String = diverges();
-</code></pre>
-<h2>Function pointers</h2>
-<p>We can also create variable bindings which point to functions:</p>
-<pre><code class="language-rust">let f: fn(i32) -&gt; i32;
-</code></pre>
-<p><code>f</code> is a variable binding which points to a function that takes an <code>i32</code> as
-an argument and returns an <code>i32</code>. For example:</p>
-<pre><code class="language-rust">fn plus_one(i: i32) -&gt; i32 {
-    i + 1
-}
-
-// without type inference
-let f: fn(i32) -&gt; i32 = plus_one;
-
-// with type inference
-let f = plus_one;
-</code></pre>
-<p>We can then use <code>f</code> to call the function:</p>
-<pre><code class="language-rust"># fn plus_one(i: i32) -&gt; i32 { i + 1 }
-# let f = plus_one;
-let six = f(5);
-</code></pre>
 <h1>Primitive Types</h1>
-<p>The Rust language has a number of types that are considered ‘primitive’. This
-means that they’re built-in to the language. Rust is structured in such a way
-that the standard library also provides a number of useful types built on top
-of these ones, as well, but these are the most primitive.</p>
-<h1>Booleans</h1>
-<p>Rust has a built in boolean type, named <code>bool</code>. It has two values, <code>true</code> and <code>false</code>:</p>
-<pre><code class="language-rust">let x = true;
-
-let y: bool = false;
-</code></pre>
-<p>A common use of booleans is in <a href="if.html"><code>if</code> conditionals</a>.</p>
-<p>You can find more documentation for <code>bool</code>s <a href="../std/primitive.bool.html">in the standard library
-documentation</a>.</p>
-<h1><code>char</code></h1>
-<p>The <code>char</code> type represents a single Unicode scalar value. You can create <code>char</code>s
-with a single tick: (<code>'</code>)</p>
-<pre><code class="language-rust">let x = 'x';
-let two_hearts = '💕';
-</code></pre>
-<p>Unlike some other languages, this means that Rust’s <code>char</code> is not a single byte,
-but four.</p>
-<p>You can find more documentation for <code>char</code>s <a href="../std/primitive.char.html">in the standard library
-documentation</a>.</p>
-<h1>Numeric types</h1>
-<p>Rust has a variety of numeric types in a few categories: signed and unsigned,
-fixed and variable, floating-point and integer.</p>
-<p>These types consist of two parts: the category, and the size. For example,
-<code>u16</code> is an unsigned type with sixteen bits of size. More bits lets you have
-bigger numbers.</p>
-<p>If a number literal has nothing to cause its type to be inferred, it defaults:</p>
-<pre><code class="language-rust">let x = 42; // x has type i32
-
-let y = 1.0; // y has type f64
-</code></pre>
-<p>Here’s a list of the different numeric types, with links to their documentation
-in the standard library:</p>
-<ul>
-<li><a href="../std/primitive.i8.html">i8</a></li>
-<li><a href="../std/primitive.i16.html">i16</a></li>
-<li><a href="../std/primitive.i32.html">i32</a></li>
-<li><a href="../std/primitive.i64.html">i64</a></li>
-<li><a href="../std/primitive.u8.html">u8</a></li>
-<li><a href="../std/primitive.u16.html">u16</a></li>
-<li><a href="../std/primitive.u32.html">u32</a></li>
-<li><a href="../std/primitive.u64.html">u64</a></li>
-<li><a href="../std/primitive.isize.html">isize</a></li>
-<li><a href="../std/primitive.usize.html">usize</a></li>
-<li><a href="../std/primitive.f32.html">f32</a></li>
-<li><a href="../std/primitive.f64.html">f64</a></li>
-</ul>
-<p>Let’s go over them by category:</p>
-<h2>Signed and Unsigned</h2>
-<p>Integer types come in two varieties: signed and unsigned. To understand the
-difference, let’s consider a number with four bits of size. A signed, four-bit
-number would let you store numbers from <code>-8</code> to <code>+7</code>. Signed numbers use
-“two’s complement representation”. An unsigned four bit number, since it does
-not need to store negatives, can store values from <code>0</code> to <code>+15</code>.</p>
-<p>Unsigned types use a <code>u</code> for their category, and signed types use <code>i</code>. The <code>i</code>
-is for ‘integer’. So <code>u8</code> is an eight-bit unsigned number, and <code>i8</code> is an
-eight-bit signed number.</p>
-<h2>Fixed size types</h2>
-<p>Fixed size types have a specific number of bits in their representation. Valid
-bit sizes are <code>8</code>, <code>16</code>, <code>32</code>, and <code>64</code>. So, <code>u32</code> is an unsigned, 32-bit integer,
-and <code>i64</code> is a signed, 64-bit integer.</p>
-<h2>Variable sized types</h2>
-<p>Rust also provides types whose size depends on the size of a pointer of the
-underlying machine. These types have ‘size’ as the category, and come in signed
-and unsigned varieties. This makes for two types: <code>isize</code> and <code>usize</code>.</p>
-<h2>Floating-point types</h2>
-<p>Rust also has two floating point types: <code>f32</code> and <code>f64</code>. These correspond to
-IEEE-754 single and double precision numbers.</p>
-<h1>Arrays</h1>
-<p>Like many programming languages, Rust has list types to represent a sequence of
-things. The most basic is the <em>array</em>, a fixed-size list of elements of the
-same type. By default, arrays are immutable.</p>
-<pre><code class="language-rust">let a = [1, 2, 3]; // a: [i32; 3]
-let mut m = [1, 2, 3]; // m: [i32; 3]
-</code></pre>
-<p>Arrays have type <code>[T; N]</code>. We’ll talk about this <code>T</code> notation <a href="generics.html">in the generics
-section</a>. The <code>N</code> is a compile-time constant, for the length of the
-array.</p>
-<p>There’s a shorthand for initializing each element of an array to the same
-value. In this example, each element of <code>a</code> will be initialized to <code>0</code>:</p>
-<pre><code class="language-rust">let a = [0; 20]; // a: [i32; 20]
-</code></pre>
-<p>You can get the number of elements in an array <code>a</code> with <code>a.len()</code>:</p>
-<pre><code class="language-rust">let a = [1, 2, 3];
-
-println!(&quot;a has {} elements&quot;, a.len());
-</code></pre>
-<p>You can access a particular element of an array with <em>subscript notation</em>:</p>
-<pre><code class="language-rust">let names = [&quot;Graydon&quot;, &quot;Brian&quot;, &quot;Niko&quot;]; // names: [&amp;str; 3]
-
-println!(&quot;The second name is: {}&quot;, names[1]);
-</code></pre>
-<p>Subscripts start at zero, like in most programming languages, so the first name
-is <code>names[0]</code> and the second name is <code>names[1]</code>. The above example prints
-<code>The second name is: Brian</code>. If you try to use a subscript that is not in the
-array, you will get an error: array access is bounds-checked at run-time. Such
-errant access is the source of many bugs in other systems programming
-languages.</p>
-<p>You can find more documentation for <code>array</code>s <a href="../std/primitive.array.html">in the standard library
-documentation</a>.</p>
-<h1>Slices</h1>
-<p>A ‘slice’ is a reference to (or “view” into) another data structure. They are
-useful for allowing safe, efficient access to a portion of an array without
-copying. For example, you might want to reference just one line of a file read
-into memory. By nature, a slice is not created directly, but from an existing
-variable binding. Slices have a defined length, can be mutable or immutable.</p>
-<h2>Slicing syntax</h2>
-<p>You can use a combo of <code>&amp;</code> and <code>[]</code> to create a slice from various things. The
-<code>&amp;</code> indicates that slices are similar to references, and the <code>[]</code>s, with a
-range, let you define the length of the slice:</p>
-<pre><code class="language-rust">let a = [0, 1, 2, 3, 4];
-let complete = &amp;a[..]; // A slice containing all of the elements in a
-let middle = &amp;a[1..4]; // A slice of a: just the elements 1, 2, and 3
-</code></pre>
-<p>Slices have type <code>&amp;[T]</code>. We’ll talk about that <code>T</code> when we cover
-<a href="generics.html">generics</a>.</p>
-<p>You can find more documentation for slices <a href="../std/primitive.slice.html">in the standard library
-documentation</a>.</p>
-<h1><code>str</code></h1>
-<p>Rust’s <code>str</code> type is the most primitive string type. As an <a href="unsized-types.html">unsized type</a>,
-it’s not very useful by itself, but becomes useful when placed behind a reference,
-like [<code>&amp;str</code>]<a href="strings.html">strings</a>. As such, we’ll just leave it at that.</p>
-<p>You can find more documentation for <code>str</code> <a href="../std/primitive.str.html">in the standard library
-documentation</a>.</p>
-<h1>Tuples</h1>
-<p>A tuple is an ordered list of fixed size. Like this:</p>
-<pre><code class="language-rust">let x = (1, &quot;hello&quot;);
-</code></pre>
-<p>The parentheses and commas form this two-length tuple. Here’s the same code, but
-with the type annotated:</p>
-<pre><code class="language-rust">let x: (i32, &amp;str) = (1, &quot;hello&quot;);
-</code></pre>
-<p>As you can see, the type of a tuple looks just like the tuple, but with each
-position having a type name rather than the value. Careful readers will also
-note that tuples are heterogeneous: we have an <code>i32</code> and a <code>&amp;str</code> in this tuple.
-In systems programming languages, strings are a bit more complex than in other
-languages. For now, just read <code>&amp;str</code> as a <em>string slice</em>, and we’ll learn more
-soon.</p>
-<p>You can assign one tuple into another, if they have the same contained types
-and <a href="glossary.html#arity">arity</a>. Tuples have the same arity when they have the same length.</p>
-<pre><code class="language-rust">let mut x = (1, 2); // x: (i32, i32)
-let y = (2, 3); // y: (i32, i32)
-
-x = y;
-</code></pre>
-<p>You can access the fields in a tuple through a <em>destructuring let</em>. Here’s
-an example:</p>
-<pre><code class="language-rust">let (x, y, z) = (1, 2, 3);
-
-println!(&quot;x is {}&quot;, x);
-</code></pre>
-<p>Remember <a href="variable-bindings.html">before</a> when I said the left-hand side of a <code>let</code> statement was more
-powerful than just assigning a binding? Here we are. We can put a pattern on
-the left-hand side of the <code>let</code>, and if it matches up to the right-hand side,
-we can assign multiple bindings at once. In this case, <code>let</code> “destructures”
-or “breaks up” the tuple, and assigns the bits to three bindings.</p>
-<p>This pattern is very powerful, and we’ll see it repeated more later.</p>
-<p>You can disambiguate a single-element tuple from a value in parentheses with a
-comma:</p>
-<pre><code class="language-rust">(0,); // single-element tuple
-(0); // zero in parentheses
-</code></pre>
-<h2>Tuple Indexing</h2>
-<p>You can also access fields of a tuple with indexing syntax:</p>
-<pre><code class="language-rust">let tuple = (1, 2, 3);
-
-let x = tuple.0;
-let y = tuple.1;
-let z = tuple.2;
-
-println!(&quot;x is {}&quot;, x);
-</code></pre>
-<p>Like array indexing, it starts at zero, but unlike array indexing, it uses a
-<code>.</code>, rather than <code>[]</code>s.</p>
-<p>You can find more documentation for tuples <a href="../std/primitive.tuple.html">in the standard library
-documentation</a>.</p>
-<h1>Functions</h1>
-<p>Functions also have a type! They look like this:</p>
-<pre><code class="language-rust">fn foo(x: i32) -&gt; i32 { x }
-
-let x: fn(i32) -&gt; i32 = foo;
-</code></pre>
-<p>In this case, <code>x</code> is a ‘function pointer’ to a function that takes an <code>i32</code> and
-returns an <code>i32</code>.</p>
 <h1>Comments</h1>
 <h1>if</h1>
-<p>Rust’s take on <code>if</code> is not particularly complex, but it’s much more like the
-<code>if</code> you’ll find in a dynamically typed language than in a more traditional
-systems language. So let’s talk about it, to make sure you grasp the nuances.</p>
-<p><code>if</code> is a specific form of a more general concept, the ‘branch’. The name comes
-from a branch in a tree: a decision point, where depending on a choice,
-multiple paths can be taken.</p>
-<p>In the case of <code>if</code>, there is one choice that leads down two paths:</p>
-<pre><code class="language-rust">let x = 5;
-
-if x == 5 {
-    println!(&quot;x is five!&quot;);
-}
-</code></pre>
-<p>If we changed the value of <code>x</code> to something else, this line would not print.
-More specifically, if the expression after the <code>if</code> evaluates to <code>true</code>, then
-the block is executed. If it’s <code>false</code>, then it is not.</p>
-<p>If you want something to happen in the <code>false</code> case, use an <code>else</code>:</p>
-<pre><code class="language-rust">let x = 5;
-
-if x == 5 {
-    println!(&quot;x is five!&quot;);
-} else {
-    println!(&quot;x is not five :(&quot;);
-}
-</code></pre>
-<p>If there is more than one case, use an <code>else if</code>:</p>
-<pre><code class="language-rust">let x = 5;
-
-if x == 5 {
-    println!(&quot;x is five!&quot;);
-} else if x == 6 {
-    println!(&quot;x is six!&quot;);
-} else {
-    println!(&quot;x is not five or six :(&quot;);
-}
-</code></pre>
-<p>This is all pretty standard. However, you can also do this:</p>
-<pre><code class="language-rust">let x = 5;
-
-let y = if x == 5 {
-    10
-} else {
-    15
-}; // y: i32
-</code></pre>
-<p>Which we can (and probably should) write like this:</p>
-<pre><code class="language-rust">let x = 5;
-
-let y = if x == 5 { 10 } else { 15 }; // y: i32
-</code></pre>
-<p>This works because <code>if</code> is an expression. The value of the expression is the
-value of the last expression in whichever branch was chosen. An <code>if</code> without an
-<code>else</code> always results in <code>()</code> as the value.</p>
 <h1>Loops</h1>
-<p>Rust currently provides three approaches to performing some kind of iterative activity. They are: <code>loop</code>, <code>while</code> and <code>for</code>. Each approach has its own set of uses.</p>
-<h2>loop</h2>
-<p>The infinite <code>loop</code> is the simplest form of loop available in Rust. Using the keyword <code>loop</code>, Rust provides a way to loop indefinitely until some terminating statement is reached. Rust's infinite <code>loop</code>s look like this:</p>
-<pre><code class="language-rust,ignore">loop {
-    println!(&quot;Loop forever!&quot;);
-}
-</code></pre>
-<h2>while</h2>
-<p>Rust also has a <code>while</code> loop. It looks like this:</p>
-<pre><code class="language-rust">let mut x = 5; // mut x: i32
-let mut done = false; // mut done: bool
-
-while !done {
-    x += x - 3;
-
-    println!(&quot;{}&quot;, x);
-
-    if x % 5 == 0 {
-        done = true;
-    }
-}
-</code></pre>
-<p><code>while</code> loops are the correct choice when you’re not sure how many times
-you need to loop.</p>
-<p>If you need an infinite loop, you may be tempted to write this:</p>
-<pre><code class="language-rust,ignore">while true {
-</code></pre>
-<p>However, <code>loop</code> is far better suited to handle this case:</p>
-<pre><code class="language-rust,ignore">loop {
-</code></pre>
-<p>Rust’s control-flow analysis treats this construct differently than a <code>while true</code>, since we know that it will always loop. In general, the more information
-we can give to the compiler, the better it can do with safety and code
-generation, so you should always prefer <code>loop</code> when you plan to loop
-infinitely.</p>
-<h2>for</h2>
-<p>The <code>for</code> loop is used to loop a particular number of times. Rust’s <code>for</code> loops
-work a bit differently than in other systems languages, however. Rust’s <code>for</code>
-loop doesn’t look like this “C-style” <code>for</code> loop:</p>
-<pre><code class="language-c">for (x = 0; x &lt; 10; x++) {
-    printf( &quot;%d\n&quot;, x );
-}
-</code></pre>
-<p>Instead, it looks like this:</p>
-<pre><code class="language-rust">for x in 0..10 {
-    println!(&quot;{}&quot;, x); // x: i32
-}
-</code></pre>
-<p>In slightly more abstract terms,</p>
-<pre><code class="language-ignore">for var in expression {
-    code
-}
-</code></pre>
-<p>The expression is an item that can be converted into an <a href="iterators.html">iterator</a> using
-[<code>IntoIterator</code>]. The iterator gives back a series of elements. Each element is
-one iteration of the loop. That value is then bound to the name <code>var</code>, which is
-valid for the loop body. Once the body is over, the next value is fetched from
-the iterator, and we loop another time. When there are no more values, the <code>for</code>
-loop is over.</p>
-<p>[<code>IntoIterator</code>]: ../std/iter/trait.IntoIterator.html</p>
-<p>In our example, <code>0..10</code> is an expression that takes a start and an end position,
-and gives an iterator over those values. The upper bound is exclusive, though,
-so our loop will print <code>0</code> through <code>9</code>, not <code>10</code>.</p>
-<p>Rust does not have the “C-style” <code>for</code> loop on purpose. Manually controlling
-each element of the loop is complicated and error prone, even for experienced C
-developers.</p>
-<h3>Enumerate</h3>
-<p>When you need to keep track of how many times you already looped, you can use the <code>.enumerate()</code> function.</p>
-<h4>On ranges:</h4>
-<pre><code class="language-rust">for (i,j) in (5..10).enumerate() {
-    println!(&quot;i = {} and j = {}&quot;, i, j);
-}
-</code></pre>
-<p>Outputs:</p>
-<pre><code class="language-text">i = 0 and j = 5
-i = 1 and j = 6
-i = 2 and j = 7
-i = 3 and j = 8
-i = 4 and j = 9
-</code></pre>
-<p>Don't forget to add the parentheses around the range.</p>
-<h4>On iterators:</h4>
-<pre><code class="language-rust"># let lines = &quot;hello\nworld&quot;.lines();
-for (linenumber, line) in lines.enumerate() {
-    println!(&quot;{}: {}&quot;, linenumber, line);
-}
-</code></pre>
-<p>Outputs:</p>
-<pre><code class="language-text">0: Content of line one
-1: Content of line two
-2: Content of line three
-3: Content of line four
-</code></pre>
-<h2>Ending iteration early</h2>
-<p>Let’s take a look at that <code>while</code> loop we had earlier:</p>
-<pre><code class="language-rust">let mut x = 5;
-let mut done = false;
-
-while !done {
-    x += x - 3;
-
-    println!(&quot;{}&quot;, x);
-
-    if x % 5 == 0 {
-        done = true;
-    }
-}
-</code></pre>
-<p>We had to keep a dedicated <code>mut</code> boolean variable binding, <code>done</code>, to know
-when we should exit out of the loop. Rust has two keywords to help us with
-modifying iteration: <code>break</code> and <code>continue</code>.</p>
-<p>In this case, we can write the loop in a better way with <code>break</code>:</p>
-<pre><code class="language-rust">let mut x = 5;
-
-loop {
-    x += x - 3;
-
-    println!(&quot;{}&quot;, x);
-
-    if x % 5 == 0 { break; }
-}
-</code></pre>
-<p>We now loop forever with <code>loop</code> and use <code>break</code> to break out early. Issuing an explicit <code>return</code> statement will also serve to terminate the loop early.</p>
-<p><code>continue</code> is similar, but instead of ending the loop, goes to the next
-iteration. This will only print the odd numbers:</p>
-<pre><code class="language-rust">for x in 0..10 {
-    if x % 2 == 0 { continue; }
-
-    println!(&quot;{}&quot;, x);
-}
-</code></pre>
-<h2>Loop labels</h2>
-<p>You may also encounter situations where you have nested loops and need to
-specify which one your <code>break</code> or <code>continue</code> statement is for. Like most
-other languages, by default a <code>break</code> or <code>continue</code> will apply to innermost
-loop. In a situation where you would like to a <code>break</code> or <code>continue</code> for one
-of the outer loops, you can use labels to specify which loop the <code>break</code> or
-<code>continue</code> statement applies to. This will only print when both <code>x</code> and <code>y</code> are
-odd:</p>
-<pre><code class="language-rust">'outer: for x in 0..10 {
-    'inner: for y in 0..10 {
-        if x % 2 == 0 { continue 'outer; } // continues the loop over x
-        if y % 2 == 0 { continue 'inner; } // continues the loop over y
-        println!(&quot;x: {}, y: {}&quot;, x, y);
-    }
-}
-</code></pre>
 <h1>Ownership &amp; borrowing</h1>
 <h1>Ownership</h1>
 <p>This guide is one of three presenting Rust’s ownership system. This is one of
