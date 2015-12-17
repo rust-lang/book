@@ -151,8 +151,10 @@ As you can see, the two line up visually, and so `let` binds `5` to `x` and `6` 
 We could have used two `let` statements as well:
 
 ```rust
-let x = 5;
-let y = 6;
+fn main() {
+    let x = 5;
+    let y = 6;
+}
 ```
 
 In simple cases like this, two `let`s may be clearer, but in others, creating multiple bindings at once is nice.
@@ -388,8 +390,11 @@ There is one subtlety we haven’t covered yet: `mut` allows you to mutate _the 
 In other words:
 
 ```rust
-let mut x = 5;
-x = 6;
+fn main() {
+    let mut x = 5;
+
+    x = 6;
+}
 ```
 
 This is not changing the value that `x` is bound to, but creating a new value, `6`, and changing the binding to bind to it instead.
