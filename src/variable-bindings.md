@@ -403,6 +403,55 @@ Well, for now, it does not make a lot of difference, but when our programs get m
 Specifically, passing arguments to functions will illustrate the difference.
 We’ll talk about that in the next section, when we discuss functions.
 
+## Scope
+
+Variable bindings have a ‘scope’ in which they’re valid.
+That scope begins from the point at which the binding is declared, and ends at the end of the next block of code.
+We can only access bindings which are ‘in scope’.
+We cannot access them ‘before they come into scope’ or ‘after they go out of scope’.
+Here’s an example:
+
+```rust
+fn main() {
+    println!("x is not yet in scope");
+
+    let x = 5;
+    println!("x is now in scope");
+
+    println!("In real code, we’d now do a bunch of work."); 
+    
+    println!("x will go out of scope now! The next curly brace is ending the main function.");
+}
+```
+
+We can create arbitrary scopes through the use of `{` and `}`:
+
+```rust
+fn main() {
+    println!("x is not yet in scope");
+
+    let x = 5;
+    println!("x is now in scope");
+
+    println!("Let’s start a new scope!");
+
+    {
+        let y = 5;
+        println!("y is now in scope");
+        println!("x is also still in scope");
+
+        println!("y will go out of scope now!");
+        println!("The next curly brace is ending the scope we started.");
+    }
+
+    println!("x is still in scope, but y is now out of scope and is not usable");
+    
+    println!("x will go out of scope now! The next curly brace is ending the main function.");
+}
+```
+
+What bindings are in and out of scope will become much more important later, once we learn about ‘references’ and ‘traits’.
+
 ## Shadowing
 
 A final thing about bindings: they can ‘shadow’ previous bindings with the same name.
@@ -534,3 +583,35 @@ Our program would work just fine without it.
 It’s worth listening to these warnings, and fixing the problems they point out.
 They can be signs of a larger problem.
 In this case, we may not have realized that we were shadowing `x`.
+
+### Shadowing and scopes
+
+Like any binding, a binding that shadows another binding will go away at the end of a scope.
+Here’s an example program:
+
+```rust
+fn main() {
+    let x = 5;
+
+    println!("Before shadowing, x is: {}", x);
+
+    {
+        let x = 6;
+
+        println!("Now that x is shadowed, x is: {}", x);
+    }
+
+    println!("After shadowing, x is: {}", x);
+}
+```
+
+If we run this example, we can see the shadow appear and disappear:
+
+```bash
+$ cargo run
+   Compiling bindings v0.1.0 (file:///home/steve/tmp/bindings)
+     Running `target/debug/bindings`
+Before shadowing, x is: 5
+Now that x is shadowed, x is: 6
+After shadowing, x is: 5
+```
