@@ -158,6 +158,52 @@ let y = 6;
 In simple cases like this, two `let`s may be clearer, but in others, creating multiple bindings at once is nice.
 As we become more proficient in Rust, we’ll figure out which style is better, but it’s mostly a judgement call.
 
+## Type annotations
+
+You may have noticed that we didn’t declare the type of `x` or `y` in our previous examples.
+Rust is a *statically typed* language, which means that at compile time, we must know the types of all bindings.
+But annotating every single binding with a type can feel like busywork, and make code noisy.
+To solve this issue, Rust uses ‘type inference’, meaning that it attempts to infer the types of your bindings.
+
+The primary way that the type is inferred is by looking at how it is used.
+Let’s look at the example again:
+
+```rust
+fn main() {
+    let x = 5;
+}
+```
+
+When we bind `x` to `5`, the compiler knows that `x` should be a numeric type.
+Without any other information, it defaults to `i32`, a thirty-two bit integer type.
+We’ll talk more about Rust’s basic types in section 3.3.
+
+Here’s what a `let` statement with a ‘type annotation’ looks like:
+
+```rust
+fn main() {
+    let x: i32 = 5;
+}
+```
+
+We can add a colon, followed by the type name.
+Here’s the structure of a `let` statement with a type annotation:
+
+```text
+let PATTERN: TYPE = VALUE;
+```
+
+Note that the colon and the `TYPE` go _after_ the `PATTERN`, not in the pattern itself.
+As an example, here’s our more complex pattern with two bindings:
+
+```rust
+fn main() {
+    let (x, y): (i32, i32) = (5, 6);
+}
+```
+
+Just like we match up the `VALUE` with the `PATTERN`, we match up the `TYPE` with the `PATTERN`.
+
 ## Initialization
 
 We do not have to provide bindings with an initial value, and can assign it later. Try this program:
