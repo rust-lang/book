@@ -66,6 +66,179 @@
 
                 <div id="content" class="content">
                     <h1>Primitive Types</h1>
+<p>We’ve seen that every value in Rust has a type of some kind.
+There are a number of types which are built into the language itself.
+We call these types ‘primitive’ types, since you can’t re-create them yourself.
+There are, of course, many non-primitive types provided by the standard library as well.</p>
+<p>Remember, you can rely on type inference to figure out the type of a binding, or you can annotate it explicitly:</p>
+<pre><code class="language-rust">fn main() {
+    let x: i32 = 5;
+}
+</code></pre>
+<h2>Integers</h2>
+<p>You’ve already seen one primitive type: <code>i32</code>.
+There are a number of built-in number types in Rust.</p>
+<p>Here’s a chart of Rust’s integer types:</p>
+<p>|        | signed | unsigned |
+|--------|--------|----------|
+|  8-bit |  i8    |  u8      |
+| 16-bit | i16    | u16      |
+| 32-bit | i32    | u32      |
+| 64-bit | i64    | u64      |
+| arch   | isize  | usize    |</p>
+<p>We have both signed and unsigned variants of numbers, and each variant has an explicit size.
+Unsigned numbers are always positive, and signed numbers can be positive or negative.
+(Think ‘plus sign’ or ‘minus sign’: that’s a signed number.)
+Signed numbers are stored using ‘two’s compliment’ representation.</p>
+<p>Finally, <code>isize</code> and <code>usize</code> are different sizes based on the kind of computer your program is running on.
+If you are on a 64-bit architecture, they are 64 bits, and if you’re on a 32-bit one, they’re 32 bits.</p>
+<p>So how do you choose from all these options? Well, if you really don’t know, the defualts are a good choice:
+integer types default to <code>i32</code>.
+The primary use case for <code>isize</code>/<code>usize</code> is when indexing some sort of collection.
+We’ll talk more about our first collection, arrays, in just a moment.</p>
+<h2>Floating-point numbers</h2>
+<p>Rust also has two primitive floating-point numbers: <code>f32</code> and <code>f64</code>.
+They are 32 bits and 64 bits in size, respectively.
+The default is <code>f64</code>.</p>
+<pre><code class="language-rust">fn main() {
+    let x = 2.0; // f64
+
+    let y: f32 = 3.0; // f32
+}
+</code></pre>
+<p>Floating-point numbers are represented according to the IEEE-754 standard.
+<code>f32</code> is a single-precision float, <code>f64</code> is double-precision.</p>
+<h2>Tuples</h2>
+<p>The other type we’ve seen previously is the tuple type.
+Tuples have an ‘arity’, or size.
+We might say “that’s a 3-tuple” or “that’s a 5-tuple.”</p>
+<p>Each position in a tuple has a distinct type:</p>
+<pre><code class="language-rust">fn main() {
+    let x: (i32, f64, u8) = (500, 6.4, 1);
+}
+</code></pre>
+<p>Tuples are used sparingly in Rust code.
+This is because the elements of a tuple are anonymous, which can make code hard to read.</p>
+<h3>Tuple indexing</h3>
+<p>To access an element of a tuple, we use a <code>.</code> followed by the index we want to access:</p>
+<pre><code class="language-rust">fn main() {
+    let x: (i32, f64, u8) = (500, 6.4, 1);
+
+    let five_hundred = x.0;
+    let six_point_four = x.1;
+    let one = x.2;
+}
+</code></pre>
+<p>As you can see, the first index is <code>0</code>.</p>
+<h3>Single-element tuples</h3>
+<p>There’s one last trick with tuples: <code>(5)</code> is actually ambiguous: is it a tuple, or is it a <code>5</code> in parethesis?
+If you need to disambiguate, use a comma:</p>
+<pre><code class="language-rust">fn main() {
+    let x = (5); // x is an i32, no tuple. Think of it like (5 + 1) without the + 1, they’re for grouping.
+
+    let x = (5,); // x is a (i32), a tuple with one element.
+}
+</code></pre>
+<h2>Functions</h2>
+<p>There’s one more type that we’ve been using, but you haven’t seen written explicitly.
+Functions!
+Functions also have a type, and yes, you can even have variables which hold functions!
+Here’s an example:</p>
+<pre><code class="language-rust">fn plus_one(x: i32) -&gt; i32 {
+    x + 1
+}
+
+fn main() {
+    let f = plus_one;
+    let g: fn(i32) -&gt; i32 = plus_one; // with an explicit type annotation
+
+    let five = f(4);
+}
+</code></pre>
+<p>As you can see, the type is very similar to the declaration.
+Here, let’s put them side by side:</p>
+<pre><code class="language-rust,ignore">fn(i32) -&gt; i32 // type
+fn plus_one(x: i32) -&gt; i32 { // declaration
+</code></pre>
+<p>If we take the declaration, and drop the name...</p>
+<pre><code class="language-rust,ignore">fn(i32) -&gt; i32 // type
+fn(x: i32) -&gt; i32 {
+</code></pre>
+<p>And then drop the names of the arguments...</p>
+<pre><code class="language-rust,ignore">fn(i32) -&gt; i32 // type
+fn(i32) -&gt; i32 {
+</code></pre>
+<p>It’s the same! Well, we need to drop that <code>{</code> as well.</p>
+<p>Finally, if you’ll notice in that example, we can create a binding with a function in it:</p>
+<pre><code class="language-rust,ignore">fn main() {
+    let f = plus_one;
+
+    let five = f(4);
+}
+</code></pre>
+<p>... and call it with <code>()</code>s just like if we had used the original name.</p>
+<h3>Functions as arguments</h3>
+<p>So why not just use the original name?
+Well, we can pass functions as arguments to other functions!
+Check this out:</p>
+<pre><code class="language-rust">fn plus_one(x: i32) -&gt; i32 {
+    x + 1
+}
+
+fn plus_two(x: i32) -&gt; i32 {
+    x + 2
+}
+
+fn twice(x: i32, f: fn(i32) -&gt; i32) -&gt; i32 {
+    let mut result = x;
+
+    result = f(result);
+    result = f(result);
+
+    result 
+}
+
+fn main() {
+    let x = 5;
+
+    let y = twice(x, plus_one);
+    let z = twice(x, plus_two);
+
+    println!(&quot;The value of y is: {}&quot;, y);
+    println!(&quot;The value of z is: {}&quot;, z);
+}
+</code></pre>
+<p>If we compile and run this, we’ll get this output:</p>
+<pre><code class="language-text">The value of y is: 7
+The value of z is: 9
+</code></pre>
+<p>Let’s investigate in more detail.</p>
+<pre><code class="language-rust,ignore">fn twice(x: i32, f: fn(i32) -&gt; i32) -&gt; i32 {
+</code></pre>
+<p>This says “<code>twice()</code> is a function which takes two arguments.
+<code>x</code> is a thirty-two bit integer, and <code>f</code> is a function which takes an <code>i32</code> and returns an <code>i32</code>.”</p>
+<p>Inside of <code>twice()</code>, as you might imagine, we call the function <code>f</code> twice on <code>x</code>, and return the result.</p>
+<pre><code class="language-rust,ignore">let y = twice(x, plus_one);
+let z = twice(x, plus_two);
+</code></pre>
+<p>The first time we call <code>twice()</code>, we pass <code>plus_one()</code> as an argument.
+And <code>x</code> is <code>5</code>.
+So <code>5 + 1 + 1 == 7</code>, hence our first line of output.
+The second time, we pass <code>plus_two()</code> instead.
+<code>5 + 2 + 2</code> is <code>9</code>, and our second line checks out too.</p>
+<p>Passing functions to functions is very, very powerful.</p>
+<h2>Booleans</h2>
+<p>Somewhat fundamental to all computing, Rust has a boolean type, <code>bool</code>, with two possible values:</p>
+<pre><code class="language-rust">fn main() {
+    let t = true;
+    let f: bool = false; // with explict type annotation
+}
+</code></pre>
+<p>That’s really all there is to say about that!</p>
+<h2>Arrays</h2>
+<h2>Slices</h2>
+<h2>char</h2>
+<h2>str</h2>
 
                 </div>
 
