@@ -1,5 +1,31 @@
 # References and Borrowing
 
+
+## Slices
+
+We saw how to use indexing to get a single element out of an array.
+But we can also use indexing to get a reference to multiple elements:
+
+```rust
+fn main() {
+    let a = [1, 2, 3, 4, 5];
+
+    let s = &a[0..2];
+
+    println!("The value of s is: {:?}", s);
+}
+```
+
+Let’s try running it:
+
+```bash
+$ cargo run
+   Compiling functions v0.1.0 (file:///home/steve/tmp/functions)
+     Running `target/debug/functions`
+The value of s is: [1, 2]
+```
+
+
 This guide is two of three presenting Rust’s ownership system. This is one of
 Rust’s most unique and compelling features, with which Rust developers should
 become quite acquainted. Ownership is how Rust achieves its largest goal,

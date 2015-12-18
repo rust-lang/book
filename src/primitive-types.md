@@ -242,9 +242,217 @@ That’s really all there is to say about that!
 
 ## Arrays
 
-## Slices
+So far, we’ve only represented single values in a binding.
+Sometimes, though, it’s useful to have more than one value.
+These kinds of data structures are called ‘collections’, and arrays are the ones we’ll learn about first.
+Arrays look like this:
+
+```rust
+fn main() {
+    let a = [1, 2, 3, 4, 5];
+}
+```
+
+An array’s type consists of the type of the elements it contains, as well as the length:
+
+```rust
+fn main() {
+    let a: [i32; 5] = [1, 2, 3, 4, 5];
+}
+```
+
+An array is a single chunk of memory, allocated on the stack.
+
+We can access elements of an array using indexing:
+
+```rust
+fn main() {
+    let a = [1, 2, 3, 4, 5];
+
+    let first = a[0];
+    let second = a[1];
+}
+```
+
+In this example, `first` will hold the value `1`, and `second` will be bound to `2`.
+Note that these values are copied out of the array; if the array changes, these bindings will not.
+Here’s an example, which also shows us how we can modify elements of the array:
+
+```rust
+fn main() {
+    let mut a = [1, 2, 3, 4, 5];
+
+    let first = a[0];
+    
+    a[0] = 7;
+
+    println!("The value of first is: {}", first);
+}
+```
+
+Running this example will show that `first` is still `1`.
+If we didn’t want a copy, but instead wanted to refer to the first element, whatever its value was, we need a new concept.
+We’ll talk about ‘references’ in Section 4.
+
+One last thing: now that we are modifying the array, `a` needs to be declared `mut`.
+
+Arrays are our first real data structure, and so there’s a few other concepts that we haven’t covered in full yet.
+There are two: the `panic!` macro, and a new way of printing things: `Debug`.
+
+### Panic
+
+We showed what happens when you access elements of an array, but what if we give an invalid index?
+
+```rust,should_panic
+fn main() {
+    let a = [1, 2, 3, 4, 5];
+
+    let invalid = a[10];
+
+    println!("The value of invalid is: {}", invalid);
+}
+```
+
+If we run this example, we will get an error.
+Let’s re-use our `functions` project from before.
+Change your `src/main.rs` to look like the example, and run it:
+
+```bash
+$ cargo run
+   Compiling functions v0.1.0 (file:///home/steve/tmp/functions)
+     Running `target/debug/functions`
+thread ‘<main>’ panicked at ‘index out of bounds: the len is 5 but the index is 10’, src/main.rs:4
+Process didn’t exit successfully: `target/debug/functions` (exit code: 101)
+```
+
+It says that our thread panicked, and that our program didn’t exit successfully.
+There’s also a reason: we had a length of five, but an index of 10.
+
+A ‘panic’ can also be induced manually, with the `panic!` macro:
+
+```rust,should_panic
+fn main() {
+    panic!("Oh no!");
+}
+```
+
+When the `panic!` macro runs, it will cause a panic.
+When a Rust program panics, it starts a kind of controlled crash.
+The current thread of execution will stop entirely.
+As such, panics are reserved for serious, program-ending errors.
+They’re not a general error-handling mechanism.
+
+So why did this code panic?
+Well, arrays know how many elements they hold.
+When we access an element via indexing, Rust will check that the index is less than the length.
+If it’s greater, it will panic, as something is very wrong.
+This is our first example of Rust’s safety principles in action.
+In many low-level languages, this kind of check is not done.
+If you have an incorrect index, invalid memory can be accessed.
+Rust protects us against this kind of error.
+
+**Steve’s note: this next bit might be our first ‘advanced’ section, on get()?**
+
+### Debug
+
+So far, we’ve been printing values using `{}`.
+If we try that with an array, though...
+
+```ignore
+fn main() {
+    let a = [1, 2, 3, 4, 5];
+
+    println!("a is: {}", a);
+}
+```
+
+... we will get an error:
+
+```bash
+$ cargo run
+   Compiling functions v0.1.0 (file:///home/steve/tmp/functions)
+src/main.rs:4:25: 4:26 error: the trait `core::fmt::Display` is not implemented for the type `[_; 5]` [E0277]
+src/main.rs:4     println!(“a is {}”, a);
+                                      ^
+<std macros>:2:25: 2:56 note: in this expansion of format_args!
+<std macros>:3:1: 3:54 note: in this expansion of print! (defined in <std macros>)
+src/main.rs:4:5: 4:28 note: in this expansion of println! (defined in <std macros>)
+src/main.rs:4:25: 4:26 help: run `rustc --explain E0277` to see a detailed explanation
+src/main.rs:4:25: 4:26 note: `[_; 5]` cannot be formatted with the default formatter; try using `:?` instead if you are using a format string
+src/main.rs:4:25: 4:26 note: required by `core::fmt::Display::fmt`
+error: aborting due to previous error
+```
+
+Whew! The core of the error is this part: the trait `core::fmt::Display` is not implemented.
+We haven’t discussed traits yet, so this is bound to be confusing!
+Here’s all we need to know for now: `println!` can do many kinds of formatting.
+By default, `{}` implements a kind of formatting known as `Display`: output for end-users.
+The primitive types we’ve seen so far implement `Display`, as there’s only one way you’d show a `1` to a user.
+But with arrays, the output is less clear.
+Do you want commas or not?
+What about the `[]`s?
+
+Due to these questions, more complex types in the standard library do not implement `Display` formatting.
+There is another kind of formatting, `Deubg`, which is a bit different: output for programmers and debuggers.
+We can ask `println!` to use `Debug` formatting with `:?`:
+
+```rust
+fn main() {
+    let a = [1, 2, 3, 4, 5];
+
+    println!("a is {:?}", a);
+}
+```
+
+This will work:
+
+```bash
+$ cargo run
+   Compiling functions v0.1.0 (file:///home/steve/tmp/functions)
+     Running `target/debug/functions`
+a is [1, 2, 3, 4, 5]
+```
+
+You’ll see this repeated later, with other types.
+And we’ll cover traits fully later in the book, Section 9.
 
 ## char
 
+We’ve only worked with numbers so far, but what about letters?
+Rust’s most primitive alphabetic type is the `char`:
+
+```rust
+fn main() {
+   let c = 'z'; 
+   let z = 'ℤ'; 
+}
+```
+
+Rust’s `char` represents a [Unicode Scalar Value], which means that it can represent a lot more than just ASCII.
+“Character” isn’t really a concept in Unicode, however: your human intutition for what a ‘character’ is may not match up with a `char`.
+It also means that `char`s are four bytes each.
+
+[Unicode Scalar Value]: http://www.unicode.org/glossary/#unicode_scalar_value
+
+The single quotes are important: to define a literal single character, we use single quotes.
+If we used double quotes, we’d be defining a `&str`. Let’s talk about that next!
+
 ## str
+
+We can declare literal strings with `"`s. We’ve seen them already, with `println!`:
+
+```rust
+fn main() {
+    println!("println! takes a literal string as an argument.");
+
+    let s = "We can also create bindings to string literals.";
+
+    let s: &str = "Here’s one with a type annotation.";
+}
+```
+
+String literals are immutable, and of a fixed length.
+Rust has a second string type, `String`, that we’ll discuss in section 8.
+
+`&str`s are UTF-8 encoded.
 
