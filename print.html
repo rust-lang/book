@@ -906,6 +906,7 @@ After shadowing, x is: 5
 }
 </code></pre>
 <p>Rust code uses <code>snake_case</code> as a style for function names: all lower case, with underscores separating words.
+(It also uses them for variable names, too.)
 We can can call any function we’ve defined by using its name and some parenthesis:</p>
 <pre><code class="language-rust">fn main() {
     println!(&quot;Hello, world!&quot;);
@@ -952,7 +953,7 @@ The value of x is: 5
 <pre><code class="language-rust,ignore">fn another_function(x: i32) {
 </code></pre>
 <p>Declaring a function which takes a single argument looks like this:</p>
-<pre><code class="language-text">fn NAME(PATTERN) {
+<pre><code class="language-text">fn NAME(PATTERN: TYPE) {
 </code></pre>
 <p>That’s right, patterns appear again.
 Consider how the parameter declaration here looks like the <code>let</code> bindings we used earlier:</p>
@@ -1051,10 +1052,7 @@ Why not?</p>
 <p>We haven’t talked about expressions yet, so this definition doesn’t help a lot.
 Let’s go over that now.</p>
 <h2>Statements and Expressions</h2>
-<p>Rust is an ‘expression oriented’ language.
-This means that most language constructs are an expression.
-But what are expressions?
-Expressions are bits of code that evaluate to a value.
+<p>Expressions are bits of code that evaluate to a value.
 Consider some math operations, like this:</p>
 <pre><code class="language-rust,ignore">5 + 6
 </code></pre>
@@ -1067,7 +1065,8 @@ For example, calling a function is an expression:</p>
 <p>So why does this matter?
 Well, not everything is an expression.
 Some things are ‘statements’.
-Statements are like expressions, but do not evaluate to a value.
+Expressions <em>compute</em> something, but statements <em>bind</em> or <em>do</em> something.
+It’s a subtle difference.
 We’ve already seen two kinds of statements: <code>let</code> statements, and <code>fn</code> declarations.</p>
 <p>Because <code>let</code> is a statement, not an expression, you can’t assign it to another binding.
 Here’s an example that doesn’t work:</p>
@@ -1198,9 +1197,9 @@ Could not compile `functions`.
 </code></pre>
 <p>Rust has our back here: it even suggests removing the semicolon, which fixes the error.
 But the main error message is the core of the issue: statements don’t evaluate to a value, yet we want to return an <code>i32</code>.</p>
-<p>In practice, Rust programmers don’t often think about these rules at this level.
-Usually, you have a semicolon at the end of most lines, and maybe not at the end of blocks.
-When looking at the rules, they can seem a bit strange, but in practice, it works well.</p>
+<p>In practice, Rust programmers don’t often think about these rules at this
+level. Usually, you have a semicolon at the end of most lines, and maybe not at
+the end of blocks.</p>
 <h2>Multiple return values</h2>
 <p>Functions cannot directly return multiple values.
 There’s a trick, however. Remember the <code>()</code>s we used when showing off complex bindings?</p>
