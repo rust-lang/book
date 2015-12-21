@@ -17,6 +17,7 @@ fn another_function() {
 ```
 
 Rust code uses `snake_case` as a style for function names: all lower case, with underscores separating words.
+(It also uses them for variable names, too.)
 We can can call any function we’ve defined by using its name and some parenthesis:
 
 ```rust
@@ -85,7 +86,7 @@ fn another_function(x: i32) {
 Declaring a function which takes a single argument looks like this:
 
 ```text
-fn NAME(PATTERN) {
+fn NAME(PATTERN: TYPE) {
 ```
 
 That’s right, patterns appear again.
@@ -227,9 +228,6 @@ Let’s go over that now.
 
 ## Statements and Expressions
 
-Rust is an ‘expression oriented’ language.
-This means that most language constructs are an expression.
-But what are expressions?
 Expressions are bits of code that evaluate to a value.
 Consider some math operations, like this:
 
@@ -250,7 +248,8 @@ The value is equal to whatever the return value of `foo()` is.
 So why does this matter?
 Well, not everything is an expression.
 Some things are ‘statements’.
-Statements are like expressions, but do not evaluate to a value.
+Expressions _compute_ something, but statements _bind_ or _do_ something.
+It’s a subtle difference.
 We’ve already seen two kinds of statements: `let` statements, and `fn` declarations.
 
 Because `let` is a statement, not an expression, you can’t assign it to another binding.
@@ -429,9 +428,9 @@ Could not compile `functions`.
 Rust has our back here: it even suggests removing the semicolon, which fixes the error.
 But the main error message is the core of the issue: statements don’t evaluate to a value, yet we want to return an `i32`.
 
-In practice, Rust programmers don’t often think about these rules at this level.
-Usually, you have a semicolon at the end of most lines, and maybe not at the end of blocks.
-When looking at the rules, they can seem a bit strange, but in practice, it works well.
+In practice, Rust programmers don’t often think about these rules at this
+level. Usually, you have a semicolon at the end of most lines, and maybe not at
+the end of blocks.
 
 ## Multiple return values
 
