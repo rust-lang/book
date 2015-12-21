@@ -86,7 +86,7 @@ In this case, nothing is printed.
 It’s also worth noting that `condition` here _must_ be a `bool`. Let’s try an
 example with something else:
 
-```
+```rust,ignore
 fn main() {
     let condition = 5;
 
@@ -185,7 +185,7 @@ by themselves are also expressions. So in this case, the value of the whole
 There’s another small detail involved here: this means that if you use `if`
 in this way, both arms of the `if` must be the same type. This doesn’t work:
 
-```rust
+```rust,ignore
 fn main() {
     let condition = true;
 
