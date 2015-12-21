@@ -66,7 +66,7 @@ There are a number of labels on Issues:
   will import the text into their review system, and so changes made here will
   need to be upstreamed. This will track those.
 
-Finally, there’s the `S-` issues, which are for various ‘status’es:
+Finally, there’s the `S-` labels, which are for various ‘status’es:
 
 * `S-initial`: Steve has not done any work here yet.
 * `S-rough-draft`: Steve has worked up a rough draft of what this section will
