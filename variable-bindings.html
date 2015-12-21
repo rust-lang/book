@@ -104,18 +104,19 @@ We’ll talk more about functions in the next section, but for now, all we need 
 The opening curly brace, <code>{</code>, indicates the start of the function’s body.</p>
 <pre><code class="language-rust,ignore">    let x = 5;
 </code></pre>
-<p>This is our first ‘variable binding’.
-This looks like many languages, but there are some subtleties.
-We create variable bindings with a ‘<code>let</code> statement’, which looks like this:</p>
-<pre><code class="language-text">let PATTERN = VALUE;
+<p>This is our first ‘variable binding’, which we create with a ‘<code>let</code> statement’.</p>
+<p>This <code>let</code> statement has this form:</p>
+<pre><code class="language-text">let NAME = EXPRESSION;
 </code></pre>
-<p>In our example, the <code>PATTERN</code> is a humble <code>x</code>, and the <code>VALUE</code> is a simple <code>5</code>.
-The <code>let</code> statement takes the <code>VALUE</code>, and matches it to the <code>PATTERN</code>, creating new bindings.
-Therefore, our example creates a new binding, <code>x</code>, and gives it an initial value of <code>5</code>.
-Patterns are a big part of Rust, we will see them in many places.</p>
-<p>That seems like a lot of explanation for a basic assignment statement!
-The trick is that these patterns can become more complex, and have a lot of power.
-We’ll explore more complex patterns as we learn more.</p>
+<p>A <code>let</code> statement first evaluates the <code>EXPRESSION</code>, and then binds the
+resulting value to <code>NAME</code> so that it can be referred to later in the program. In
+our simple example, the expression was already a value, 5, but we could achieve
+the same effect with:</p>
+<pre><code class="language-rust">let x = 2 + 3;
+</code></pre>
+<p>In general, <code>let</code> statements work with patterns; a name is a particularly
+humble form of pattern. Patterns are a big part of Rust, we’ll see more complex
+and powerful patterns as we go along.</p>
 <p>Before we do that, though, let’s finish investigating this example.
 Here’s the next line:</p>
 <pre><code class="language-rust,ignore">    println!(&quot;The value of x is: {}&quot;, x);
@@ -126,11 +127,13 @@ We won’t learn how to write macros until much later in the book, but we’ll u
 Every time you see a <code>!</code>, remember that it signifies a macro.
 Macros can add new syntax to the language, and the <code>!</code> is a reminder that things may look slightly unusual.</p>
 <p><code>println!</code>, specifically, has one required argument, a ‘format string’, and zero or more optional arguments.
-This is why it’s a macro; Rust does not support optional arguments for regular functions.
 The format string can contain the special text <code>{}</code>.
-If it does, it fills in that place in the string with the values of the other arguments.
-In this case, we’ve passed <code>x</code>.
-You can think of <code>{}</code> as little crab pincers, holding the value in place.
+Each instance of <code>{}</code> corresponds to an additional argument. Here’s an example:</p>
+<pre><code class="language-rust">let x = 2 + 3;
+let y = x + 5;
+println!(&quot;The value of x is {}, and the value of y is {}&quot;, x, y);
+</code></pre>
+<p>You can think of <code>{}</code> as little crab pincers, holding the value in place.
 This placeholder has a number of more advanced formatting options that we’ll discuss later.</p>
 <pre><code class="language-rust,ignore">}
 </code></pre>
@@ -139,7 +142,7 @@ This placeholder has a number of more advanced formatting options that we’ll d
 <pre><code class="language-text">The value of x is: 5
 </code></pre>
 <p>We assign <code>5</code> to a binding, <code>x</code>, and then print it to the screen with <code>println!</code>.</p>
-<h2>Multiple assignment</h2>
+<h2>Multiple binding</h2>
 <p>Let’s try a more complex pattern.
 Change our example program to this:</p>
 <pre><code class="language-rust">fn main() {
@@ -202,7 +205,7 @@ As an example, here’s our more complex pattern with two bindings:</p>
 }
 </code></pre>
 <p>Just like we match up the <code>VALUE</code> with the <code>PATTERN</code>, we match up the <code>TYPE</code> with the <code>PATTERN</code>.</p>
-<h2>Initialization</h2>
+<h2>Delayed Initialization</h2>
 <p>We do not have to provide bindings with an initial value, and can assign it later. Try this program:</p>
 <pre><code class="language-rust">fn main() {
     let x;
