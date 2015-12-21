@@ -66,6 +66,178 @@
 
                 <div id="content" class="content">
                     <h1>if</h1>
+<blockquote>
+<p>Two roads diverged in a yellow wood,
+And sorry I could not travel both
+And be one traveler, long I stood
+And looked down one as far as I could
+To where it bent in the undergrowth;</p>
+<ul>
+<li>Robert Frost, “The Road Not Taken”</li>
+</ul>
+</blockquote>
+<p>One of the most primitive operations in computer programming is the ability to
+‘branch’ between two different code paths. A program can look at a value, and
+then decide: should I follow this path, or should I take the other? There’s
+actually two different metaphors here: a tree, whose branches come from the
+same, single trunk. And a road, which splits off into two, each going in a
+different direction.</p>
+<p>In Rust, there are a few ways to cause our code to branch. The most fundamental
+way is by using <code>if</code>. An <code>if</code> expression gives us two paths forward, and asks
+the question, “Which one should I take?”</p>
+<p>Let’s make a new project to explore <code>if</code>. Navigate to your projects directory,
+and use Cargo to make a new project called <code>branches</code>:</p>
+<pre><code class="language-bash">$ cargo new --bin branches
+$ cd branches
+</code></pre>
+<p>Here’s a sample program using <code>if</code>:</p>
+<pre><code class="language-rust">fn main() {
+    let condition = true;
+
+    if condition {
+        println!(&quot;condition was true&quot;);
+    } else {
+        println!(&quot;condition was false&quot;);
+    }
+}   
+</code></pre>
+<p>Let's try running it:</p>
+<pre><code class="language-bash">$ cargo run
+   Compiling branches v0.1.0 (file:///home/steve/tmp/branches)
+     Running `target/debug/branches`
+condition was true
+</code></pre>
+<p>We can change the value of <code>condition</code>:</p>
+<pre><code class="language-rust">    let condition = false;
+</code></pre>
+<p>And then run it again:</p>
+<pre><code class="language-bash">$ cargo run
+   Compiling branches v0.1.0 (file:///home/steve/tmp/branches)
+     Running `target/debug/branches`
+condition was false
+</code></pre>
+<p>This is the very basic structure of <code>if</code>: <em>if</em> the condition is true, then
+execute some code. If it’s not true, then execute some other code, after
+<code>else</code>.</p>
+<p>An <code>else</code> is not required:</p>
+<pre><code class="language-rust">fn main() {
+    let condition = false;
+
+    if condition {
+        println!(&quot;condition was true&quot;);
+    }
+}
+</code></pre>
+<p>In this case, nothing is printed.</p>
+<p>It’s also worth noting that <code>condition</code> here <em>must</em> be a <code>bool</code>. Let’s try an
+example with something else:</p>
+<pre><code class="language-rust,ignore">fn main() {
+    let condition = 5;
+
+    if condition {
+        println!(&quot;condition was five&quot;);
+    }
+}
+</code></pre>
+<p>If we try to run this program, Rust will complain:</p>
+<pre><code class="language-bash">   Compiling branches v0.1.0 (file:///home/steve/tmp/branches)
+src/main.rs:4:8: 4:17 error: mismatched types:
+ expected `bool`,
+    found `_`
+(expected bool,
+    found integral variable) [E0308]
+src/main.rs:4     if condition {
+                     ^~~~~~~~~
+src/main.rs:4:8: 4:17 help: run `rustc --explain E0308` to see a detailed explanation
+error: aborting due to previous error
+Could not compile `branches`.
+</code></pre>
+<p>We expected a <code>bool</code>, but got an integer. Rust will not automatically try to convert non-boolean types to a boolean here. We must be explicit.</p>
+<h2><code>else if</code></h2>
+<p>We can make multiple decisions by combining <code>if</code> and <code>else</code> in another way:</p>
+<pre><code class="language-rust">fn main() {
+    let number = 5;
+
+    if number == 3 {
+        println!(&quot;condition was 3&quot;);
+    } else if number == 4 {
+        println!(&quot;condition was 4&quot;);
+    } else if number == 5 {
+        println!(&quot;condition was 5&quot;);
+    } else {
+        println!(&quot;condition was something else&quot;);
+    }
+}
+</code></pre>
+<p>Let's try running it:</p>
+<pre><code class="language-bash">$ cargo run
+   Compiling branches v0.1.0 (file:///home/steve/tmp/branches)
+     Running `target/debug/branches`
+condition was 5
+</code></pre>
+<p>When this program executes, it will check each <code>if</code> in turn, and execute the
+first body for which the condition holds true.</p>
+<p>Using a single <code>else if</code> can be okay, but if you find yourself with more than one,
+you may want to refactor your code. Rust has a more powerful branching construct
+called <code>match</code> for these cases. We'll cover it later, when we talk about <code>enums</code>.</p>
+<h2><code>if</code> as an expression</h2>
+<p>There’s one last detail we need to learn about <code>if</code>: it’s an expression. That means
+that we can use it on the right hand side of a <code>let</code> binding, for instance:</p>
+<pre><code class="language-rust">fn main() {
+    let condition = true;
+
+    let number = if condition {
+        5
+    } else {
+        6
+    };
+
+    println!(&quot;The value of number is: {}&quot;, number);
+}
+</code></pre>
+<p>Let’s run this:</p>
+<pre><code class="language-bash">$ cargo run
+   Compiling branches v0.1.0 (file:///home/steve/tmp/branches)
+     Running `target/debug/branches`
+The value of number is: 5
+</code></pre>
+<p>Remember, blocks of code evaluate to the last expression in them. And numbers
+by themselves are also expressions. So in this case, the value of the whole
+<code>if</code> expression depends on which block of code executes.</p>
+<p>There’s another small detail involved here: this means that if you use <code>if</code>
+in this way, both arms of the <code>if</code> must be the same type. This doesn’t work:</p>
+<pre><code class="language-rust,ignore">fn main() {
+    let condition = true;
+
+    let number = if condition {
+        5
+    } else {
+        &quot;six&quot;
+    };
+
+    println!(&quot;The value of number is: {}&quot;, number);
+}
+</code></pre>
+<p>If we try to run this, we’ll get an error:</p>
+<pre><code class="language-bash">   Compiling branches v0.1.0 (file:///home/steve/tmp/branches)
+src/main.rs:4:18: 8:6 error: if and else have incompatible types:
+ expected `_`,
+    found `&amp;‘static str`
+(expected integral variable,
+    found &amp;-ptr) [E0308]
+src/main.rs:4     let number = if condition {
+src/main.rs:5         5
+src/main.rs:6     } else {
+src/main.rs:7         &quot;six&quot;
+src/main.rs:8     };
+src/main.rs:4:18: 8:6 help: run `rustc --explain E0308` to see a detailed explanation
+error: aborting due to previous error
+Could not compile `branches`.
+</code></pre>
+<p><code>if</code> and <code>else</code> have incompatible types. This can’t work. This also
+means that you almost certainly need an <code>else</code> when using <code>if</code> in
+this way. If you don’t, what would the value be if the condition was
+false?</p>
 
                 </div>
 

@@ -66,6 +66,151 @@
 
                 <div id="content" class="content">
                     <h1>Loops</h1>
+<p>It’s often quite useful to be able to execute a block of code more than one
+time. For this, we have several constructs, called ‘loops’.</p>
+<p>To try out loops, let’s make a new project. Navigate to your projects folder
+and use Cargo to make a new one:</p>
+<pre><code class="language-bash">$ cargo new --bin loops
+$ cd loops
+</code></pre>
+<p>There are three kinds of loops in Rust: <code>loop</code>, <code>while</code>, and <code>for</code>. Let’s dig
+in.</p>
+<h2><code>loop</code></h2>
+<p>The <code>loop</code> keyword is very straightforward: it executes a block of code over
+and over and over and over and over and over forever. Change your <code>src/main.rs</code>
+file to look like this:</p>
+<pre><code class="language-rust,ignore">fn main() {
+    loop {
+        println!(&quot;again!&quot;);
+    }
+}
+</code></pre>
+<p>If we run this program, we’ll see ‘<code>again!</code>’ printed over and over again. So
+how does our program end? It doesn’t, until we kill it. Most terminals support
+a keyboard shortcut, ‘control-c’, to stop a runaway program. Give it a try:</p>
+<pre><code class="language-bash">$ cargo run
+   Compiling loops v0.1.0 (file:///home/steve/tmp/loops)
+     Running `target/debug/loops`
+again!
+again!
+again!
+again!
+^Cagain!
+</code></pre>
+<p>That <code>^C</code> there is where I hit control-c.</p>
+<p>That’s a lot of trouble though! Luckily, there’s a way to break an infinite <code>loop</code>.</p>
+<h3>Breaking out of a loop</h3>
+<p>The <code>break</code> keyword will allow us to quit looping. Try this version out:</p>
+<pre><code class="language-rust">fn main() {
+    loop {
+        println!(&quot;once!&quot;);
+        break;
+    }
+}
+</code></pre>
+<p>If you run this program with <code>cargo run</code>, you’ll see that it only executes one
+time:</p>
+<pre><code class="language-bash">$ cargo run
+   Compiling loops v0.1.0 (file:///home/steve/tmp/loops)
+     Running `target/debug/loops`
+once!
+</code></pre>
+<p>When a Rust program hits a <code>break</code> statement, it will exit the current loop.</p>
+<h2><code>while</code></h2>
+<p>What if we took <code>loop</code>, <code>break</code>, and <code>if</code>, and put them together? Something
+like this:</p>
+<pre><code class="language-rust">fn main() {
+    let mut number = 3;
+
+    loop {
+        if number != 0 {
+            println!(&quot;{}!&quot;, number);
+
+            number = number - 1;
+        } else {
+            break;
+        }
+
+    }
+
+    println!(&quot;LIFTOFF!!!&quot;);
+}
+</code></pre>
+<p>If we run this, we’ll get some output:</p>
+<pre><code class="language-bash">   Compiling loops v0.1.0 (file:///home/steve/tmp/loops)
+     Running `target/debug/loops`
+3!
+2!
+1!
+LIFTOFF!!!
+</code></pre>
+<p>The core of this example is in the combination of these three constructs:</p>
+<pre><code class="language-rust,ignore">    loop {
+        if number != 0 {
+            // do stuff
+        } else {
+            break;
+        }
+</code></pre>
+<p>We want to <code>loop</code>, but only while some sort of condition is true. As soon as it
+isn't, we want to <code>break</code> out of the loop.</p>
+<p>This pattern is so common that we have a language construct for it: <code>while</code>.
+Here's the same example, but using <code>while</code> instead:</p>
+<pre><code class="language-rust">fn main() {
+    let mut number = 3;
+    while number != 0  {
+        println!(&quot;{}!&quot;, number);
+
+        number = number - 1;
+    }
+
+    println!(&quot;LIFTOFF!!!&quot;);
+}
+</code></pre>
+<p>This lets us get rid of a lot of nesting, and is more clear: while a condition holds,
+run this code.</p>
+<h2><code>for</code></h2>
+<p>We can use this <code>while</code> construct to loop over the elements of a collection, like an
+array:</p>
+<pre><code class="language-rust">fn main() {
+    let a = [1, 2, 3, 4, 5];
+    let mut index = 0;
+
+    while index &lt; 5 {
+        println!(&quot;the value is is: {}&quot;, a[index]);
+
+        index = index + 1;
+    }
+}
+</code></pre>
+<p>Running this will print out every element of the array:</p>
+<pre><code class="language-bash">$ cargo run
+   Compiling loops v0.1.0 (file:///home/steve/tmp/loops)
+     Running `target/debug/loops`
+the value is: 1
+the value is: 2
+the value is: 3
+the value is: 4
+the value is: 5
+</code></pre>
+<p>Here, we're counting up instead of down: we start at zero, then loop until we
+hit the final index of our array.</p>
+<p>This approach is error-prone, though. If we get the index length incorrect, we
+will end up causing a <code>panic!</code>. This is also slow, as the compiler needs to do
+that check on every element on every iteration through the loop.</p>
+<p>Instead, we can use our last kind of loop: the <code>for</code> loop. It looks like this:</p>
+<pre><code class="language-rust">fn main() {
+    let a = [1, 2, 3, 4, 5];
+    let mut index = 0;
+    
+    for element in a.iter() {
+        println!(&quot;the value is: {}&quot;, element);
+    }
+}
+</code></pre>
+<p>** NOTE: see <a href="https://github.com/rust-lang/rust/issues/25725#issuecomment-166365658">https://github.com/rust-lang/rust/issues/25725#issuecomment-166365658</a>, we may want to change this **</p>
+<p>If we run this, we'll see the same output as the previous example.</p>
+<p>** I'm going to leave it at this for now until we decide how we want to do it**</p>
 
                 </div>
 

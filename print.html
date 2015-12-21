@@ -1411,9 +1411,161 @@ The second time, we pass <code>plus_two()</code> instead.
 </code></pre>
 <p>That’s really all there is to say about that!</p>
 <h2>Arrays</h2>
-<h2>Slices</h2>
+<p>So far, we’ve only represented single values in a binding.
+Sometimes, though, it’s useful to have more than one value.
+These kinds of data structures are called ‘collections’, and arrays are the ones we’ll learn about first.
+Arrays look like this:</p>
+<pre><code class="language-rust">fn main() {
+    let a = [1, 2, 3, 4, 5];
+}
+</code></pre>
+<p>An array’s type consists of the type of the elements it contains, as well as the length:</p>
+<pre><code class="language-rust">fn main() {
+    let a: [i32; 5] = [1, 2, 3, 4, 5];
+}
+</code></pre>
+<p>An array is a single chunk of memory, allocated on the stack.</p>
+<p>We can access elements of an array using indexing:</p>
+<pre><code class="language-rust">fn main() {
+    let a = [1, 2, 3, 4, 5];
+
+    let first = a[0];
+    let second = a[1];
+}
+</code></pre>
+<p>In this example, <code>first</code> will hold the value <code>1</code>, and <code>second</code> will be bound to <code>2</code>.
+Note that these values are copied out of the array; if the array changes, these bindings will not.
+Here’s an example, which also shows us how we can modify elements of the array:</p>
+<pre><code class="language-rust">fn main() {
+    let mut a = [1, 2, 3, 4, 5];
+
+    let first = a[0];
+    
+    a[0] = 7;
+
+    println!(&quot;The value of first is: {}&quot;, first);
+}
+</code></pre>
+<p>Running this example will show that <code>first</code> is still <code>1</code>.
+If we didn’t want a copy, but instead wanted to refer to the first element, whatever its value was, we need a new concept.
+We’ll talk about ‘references’ in Section 4.</p>
+<p>One last thing: now that we are modifying the array, <code>a</code> needs to be declared <code>mut</code>.</p>
+<p>Arrays are our first real data structure, and so there’s a few other concepts that we haven’t covered in full yet.
+There are two: the <code>panic!</code> macro, and a new way of printing things: <code>Debug</code>.</p>
+<h3>Panic</h3>
+<p>We showed what happens when you access elements of an array, but what if we give an invalid index?</p>
+<pre><code class="language-rust,should_panic">fn main() {
+    let a = [1, 2, 3, 4, 5];
+
+    let invalid = a[10];
+
+    println!(&quot;The value of invalid is: {}&quot;, invalid);
+}
+</code></pre>
+<p>If we run this example, we will get an error.
+Let’s re-use our <code>functions</code> project from before.
+Change your <code>src/main.rs</code> to look like the example, and run it:</p>
+<pre><code class="language-bash">$ cargo run
+   Compiling functions v0.1.0 (file:///home/steve/tmp/functions)
+     Running `target/debug/functions`
+thread ‘&lt;main&gt;’ panicked at ‘index out of bounds: the len is 5 but the index is 10’, src/main.rs:4
+Process didn’t exit successfully: `target/debug/functions` (exit code: 101)
+</code></pre>
+<p>It says that our thread panicked, and that our program didn’t exit successfully.
+There’s also a reason: we had a length of five, but an index of 10.</p>
+<p>A ‘panic’ can also be induced manually, with the <code>panic!</code> macro:</p>
+<pre><code class="language-rust,should_panic">fn main() {
+    panic!(&quot;Oh no!&quot;);
+}
+</code></pre>
+<p>When the <code>panic!</code> macro runs, it will cause a panic.
+When a Rust program panics, it starts a kind of controlled crash.
+The current thread of execution will stop entirely.
+As such, panics are reserved for serious, program-ending errors.
+They’re not a general error-handling mechanism.</p>
+<p>So why did this code panic?
+Well, arrays know how many elements they hold.
+When we access an element via indexing, Rust will check that the index is less than the length.
+If it’s greater, it will panic, as something is very wrong.
+This is our first example of Rust’s safety principles in action.
+In many low-level languages, this kind of check is not done.
+If you have an incorrect index, invalid memory can be accessed.
+Rust protects us against this kind of error.</p>
+<p><strong>Steve’s note: this next bit might be our first ‘advanced’ section, on get()?</strong></p>
+<h3>Debug</h3>
+<p>So far, we’ve been printing values using <code>{}</code>.
+If we try that with an array, though...</p>
+<pre><code class="language-ignore">fn main() {
+    let a = [1, 2, 3, 4, 5];
+
+    println!(&quot;a is: {}&quot;, a);
+}
+</code></pre>
+<p>... we will get an error:</p>
+<pre><code class="language-bash">$ cargo run
+   Compiling functions v0.1.0 (file:///home/steve/tmp/functions)
+src/main.rs:4:25: 4:26 error: the trait `core::fmt::Display` is not implemented for the type `[_; 5]` [E0277]
+src/main.rs:4     println!(“a is {}”, a);
+                                      ^
+&lt;std macros&gt;:2:25: 2:56 note: in this expansion of format_args!
+&lt;std macros&gt;:3:1: 3:54 note: in this expansion of print! (defined in &lt;std macros&gt;)
+src/main.rs:4:5: 4:28 note: in this expansion of println! (defined in &lt;std macros&gt;)
+src/main.rs:4:25: 4:26 help: run `rustc --explain E0277` to see a detailed explanation
+src/main.rs:4:25: 4:26 note: `[_; 5]` cannot be formatted with the default formatter; try using `:?` instead if you are using a format string
+src/main.rs:4:25: 4:26 note: required by `core::fmt::Display::fmt`
+error: aborting due to previous error
+</code></pre>
+<p>Whew! The core of the error is this part: the trait <code>core::fmt::Display</code> is not implemented.
+We haven’t discussed traits yet, so this is bound to be confusing!
+Here’s all we need to know for now: <code>println!</code> can do many kinds of formatting.
+By default, <code>{}</code> implements a kind of formatting known as <code>Display</code>: output for end-users.
+The primitive types we’ve seen so far implement <code>Display</code>, as there’s only one way you’d show a <code>1</code> to a user.
+But with arrays, the output is less clear.
+Do you want commas or not?
+What about the <code>[]</code>s?</p>
+<p>Due to these questions, more complex types in the standard library do not implement <code>Display</code> formatting.
+There is another kind of formatting, <code>Deubg</code>, which is a bit different: output for programmers and debuggers.
+We can ask <code>println!</code> to use <code>Debug</code> formatting with <code>:?</code>:</p>
+<pre><code class="language-rust">fn main() {
+    let a = [1, 2, 3, 4, 5];
+
+    println!(&quot;a is {:?}&quot;, a);
+}
+</code></pre>
+<p>This will work:</p>
+<pre><code class="language-bash">$ cargo run
+   Compiling functions v0.1.0 (file:///home/steve/tmp/functions)
+     Running `target/debug/functions`
+a is [1, 2, 3, 4, 5]
+</code></pre>
+<p>You’ll see this repeated later, with other types.
+And we’ll cover traits fully later in the book, Section 9.</p>
 <h2>char</h2>
+<p>We’ve only worked with numbers so far, but what about letters?
+Rust’s most primitive alphabetic type is the <code>char</code>:</p>
+<pre><code class="language-rust">fn main() {
+   let c = 'z'; 
+   let z = 'ℤ'; 
+}
+</code></pre>
+<p>Rust’s <code>char</code> represents a <a href="http://www.unicode.org/glossary/#unicode_scalar_value">Unicode Scalar Value</a>, which means that it can represent a lot more than just ASCII.
+“Character” isn’t really a concept in Unicode, however: your human intutition for what a ‘character’ is may not match up with a <code>char</code>.
+It also means that <code>char</code>s are four bytes each.</p>
+<p>The single quotes are important: to define a literal single character, we use single quotes.
+If we used double quotes, we’d be defining a <code>&amp;str</code>. Let’s talk about that next!</p>
 <h2>str</h2>
+<p>We can declare literal strings with <code>&quot;</code>s. We’ve seen them already, with <code>println!</code>:</p>
+<pre><code class="language-rust">fn main() {
+    println!(&quot;println! takes a literal string as an argument.&quot;);
+
+    let s = &quot;We can also create bindings to string literals.&quot;;
+
+    let s: &amp;str = &quot;Here’s one with a type annotation.&quot;;
+}
+</code></pre>
+<p>String literals are immutable, and of a fixed length.
+Rust has a second string type, <code>String</code>, that we’ll discuss in section 8.</p>
+<p><code>&amp;str</code>s are UTF-8 encoded.</p>
 <h1>Comments</h1>
 <p>We strive to make our programs easy to understand, but sometimes, some extra explanation is warranted.
 We can leave notes in our source code that the compiler will ignore.
@@ -1470,7 +1622,324 @@ src/main.rs:1 /// What am I documenting?
 Inner documentation comments look like this: <code>//!</code>.
 They are only really used to document modules, however, and so we will talk about them in the modules section.</p>
 <h1>if</h1>
+<blockquote>
+<p>Two roads diverged in a yellow wood,
+And sorry I could not travel both
+And be one traveler, long I stood
+And looked down one as far as I could
+To where it bent in the undergrowth;</p>
+<ul>
+<li>Robert Frost, “The Road Not Taken”</li>
+</ul>
+</blockquote>
+<p>One of the most primitive operations in computer programming is the ability to
+‘branch’ between two different code paths. A program can look at a value, and
+then decide: should I follow this path, or should I take the other? There’s
+actually two different metaphors here: a tree, whose branches come from the
+same, single trunk. And a road, which splits off into two, each going in a
+different direction.</p>
+<p>In Rust, there are a few ways to cause our code to branch. The most fundamental
+way is by using <code>if</code>. An <code>if</code> expression gives us two paths forward, and asks
+the question, “Which one should I take?”</p>
+<p>Let’s make a new project to explore <code>if</code>. Navigate to your projects directory,
+and use Cargo to make a new project called <code>branches</code>:</p>
+<pre><code class="language-bash">$ cargo new --bin branches
+$ cd branches
+</code></pre>
+<p>Here’s a sample program using <code>if</code>:</p>
+<pre><code class="language-rust">fn main() {
+    let condition = true;
+
+    if condition {
+        println!(&quot;condition was true&quot;);
+    } else {
+        println!(&quot;condition was false&quot;);
+    }
+}   
+</code></pre>
+<p>Let's try running it:</p>
+<pre><code class="language-bash">$ cargo run
+   Compiling branches v0.1.0 (file:///home/steve/tmp/branches)
+     Running `target/debug/branches`
+condition was true
+</code></pre>
+<p>We can change the value of <code>condition</code>:</p>
+<pre><code class="language-rust">    let condition = false;
+</code></pre>
+<p>And then run it again:</p>
+<pre><code class="language-bash">$ cargo run
+   Compiling branches v0.1.0 (file:///home/steve/tmp/branches)
+     Running `target/debug/branches`
+condition was false
+</code></pre>
+<p>This is the very basic structure of <code>if</code>: <em>if</em> the condition is true, then
+execute some code. If it’s not true, then execute some other code, after
+<code>else</code>.</p>
+<p>An <code>else</code> is not required:</p>
+<pre><code class="language-rust">fn main() {
+    let condition = false;
+
+    if condition {
+        println!(&quot;condition was true&quot;);
+    }
+}
+</code></pre>
+<p>In this case, nothing is printed.</p>
+<p>It’s also worth noting that <code>condition</code> here <em>must</em> be a <code>bool</code>. Let’s try an
+example with something else:</p>
+<pre><code class="language-rust,ignore">fn main() {
+    let condition = 5;
+
+    if condition {
+        println!(&quot;condition was five&quot;);
+    }
+}
+</code></pre>
+<p>If we try to run this program, Rust will complain:</p>
+<pre><code class="language-bash">   Compiling branches v0.1.0 (file:///home/steve/tmp/branches)
+src/main.rs:4:8: 4:17 error: mismatched types:
+ expected `bool`,
+    found `_`
+(expected bool,
+    found integral variable) [E0308]
+src/main.rs:4     if condition {
+                     ^~~~~~~~~
+src/main.rs:4:8: 4:17 help: run `rustc --explain E0308` to see a detailed explanation
+error: aborting due to previous error
+Could not compile `branches`.
+</code></pre>
+<p>We expected a <code>bool</code>, but got an integer. Rust will not automatically try to convert non-boolean types to a boolean here. We must be explicit.</p>
+<h2><code>else if</code></h2>
+<p>We can make multiple decisions by combining <code>if</code> and <code>else</code> in another way:</p>
+<pre><code class="language-rust">fn main() {
+    let number = 5;
+
+    if number == 3 {
+        println!(&quot;condition was 3&quot;);
+    } else if number == 4 {
+        println!(&quot;condition was 4&quot;);
+    } else if number == 5 {
+        println!(&quot;condition was 5&quot;);
+    } else {
+        println!(&quot;condition was something else&quot;);
+    }
+}
+</code></pre>
+<p>Let's try running it:</p>
+<pre><code class="language-bash">$ cargo run
+   Compiling branches v0.1.0 (file:///home/steve/tmp/branches)
+     Running `target/debug/branches`
+condition was 5
+</code></pre>
+<p>When this program executes, it will check each <code>if</code> in turn, and execute the
+first body for which the condition holds true.</p>
+<p>Using a single <code>else if</code> can be okay, but if you find yourself with more than one,
+you may want to refactor your code. Rust has a more powerful branching construct
+called <code>match</code> for these cases. We'll cover it later, when we talk about <code>enums</code>.</p>
+<h2><code>if</code> as an expression</h2>
+<p>There’s one last detail we need to learn about <code>if</code>: it’s an expression. That means
+that we can use it on the right hand side of a <code>let</code> binding, for instance:</p>
+<pre><code class="language-rust">fn main() {
+    let condition = true;
+
+    let number = if condition {
+        5
+    } else {
+        6
+    };
+
+    println!(&quot;The value of number is: {}&quot;, number);
+}
+</code></pre>
+<p>Let’s run this:</p>
+<pre><code class="language-bash">$ cargo run
+   Compiling branches v0.1.0 (file:///home/steve/tmp/branches)
+     Running `target/debug/branches`
+The value of number is: 5
+</code></pre>
+<p>Remember, blocks of code evaluate to the last expression in them. And numbers
+by themselves are also expressions. So in this case, the value of the whole
+<code>if</code> expression depends on which block of code executes.</p>
+<p>There’s another small detail involved here: this means that if you use <code>if</code>
+in this way, both arms of the <code>if</code> must be the same type. This doesn’t work:</p>
+<pre><code class="language-rust,ignore">fn main() {
+    let condition = true;
+
+    let number = if condition {
+        5
+    } else {
+        &quot;six&quot;
+    };
+
+    println!(&quot;The value of number is: {}&quot;, number);
+}
+</code></pre>
+<p>If we try to run this, we’ll get an error:</p>
+<pre><code class="language-bash">   Compiling branches v0.1.0 (file:///home/steve/tmp/branches)
+src/main.rs:4:18: 8:6 error: if and else have incompatible types:
+ expected `_`,
+    found `&amp;‘static str`
+(expected integral variable,
+    found &amp;-ptr) [E0308]
+src/main.rs:4     let number = if condition {
+src/main.rs:5         5
+src/main.rs:6     } else {
+src/main.rs:7         &quot;six&quot;
+src/main.rs:8     };
+src/main.rs:4:18: 8:6 help: run `rustc --explain E0308` to see a detailed explanation
+error: aborting due to previous error
+Could not compile `branches`.
+</code></pre>
+<p><code>if</code> and <code>else</code> have incompatible types. This can’t work. This also
+means that you almost certainly need an <code>else</code> when using <code>if</code> in
+this way. If you don’t, what would the value be if the condition was
+false?</p>
 <h1>Loops</h1>
+<p>It’s often quite useful to be able to execute a block of code more than one
+time. For this, we have several constructs, called ‘loops’.</p>
+<p>To try out loops, let’s make a new project. Navigate to your projects folder
+and use Cargo to make a new one:</p>
+<pre><code class="language-bash">$ cargo new --bin loops
+$ cd loops
+</code></pre>
+<p>There are three kinds of loops in Rust: <code>loop</code>, <code>while</code>, and <code>for</code>. Let’s dig
+in.</p>
+<h2><code>loop</code></h2>
+<p>The <code>loop</code> keyword is very straightforward: it executes a block of code over
+and over and over and over and over and over forever. Change your <code>src/main.rs</code>
+file to look like this:</p>
+<pre><code class="language-rust,ignore">fn main() {
+    loop {
+        println!(&quot;again!&quot;);
+    }
+}
+</code></pre>
+<p>If we run this program, we’ll see ‘<code>again!</code>’ printed over and over again. So
+how does our program end? It doesn’t, until we kill it. Most terminals support
+a keyboard shortcut, ‘control-c’, to stop a runaway program. Give it a try:</p>
+<pre><code class="language-bash">$ cargo run
+   Compiling loops v0.1.0 (file:///home/steve/tmp/loops)
+     Running `target/debug/loops`
+again!
+again!
+again!
+again!
+^Cagain!
+</code></pre>
+<p>That <code>^C</code> there is where I hit control-c.</p>
+<p>That’s a lot of trouble though! Luckily, there’s a way to break an infinite <code>loop</code>.</p>
+<h3>Breaking out of a loop</h3>
+<p>The <code>break</code> keyword will allow us to quit looping. Try this version out:</p>
+<pre><code class="language-rust">fn main() {
+    loop {
+        println!(&quot;once!&quot;);
+        break;
+    }
+}
+</code></pre>
+<p>If you run this program with <code>cargo run</code>, you’ll see that it only executes one
+time:</p>
+<pre><code class="language-bash">$ cargo run
+   Compiling loops v0.1.0 (file:///home/steve/tmp/loops)
+     Running `target/debug/loops`
+once!
+</code></pre>
+<p>When a Rust program hits a <code>break</code> statement, it will exit the current loop.</p>
+<h2><code>while</code></h2>
+<p>What if we took <code>loop</code>, <code>break</code>, and <code>if</code>, and put them together? Something
+like this:</p>
+<pre><code class="language-rust">fn main() {
+    let mut number = 3;
+
+    loop {
+        if number != 0 {
+            println!(&quot;{}!&quot;, number);
+
+            number = number - 1;
+        } else {
+            break;
+        }
+
+    }
+
+    println!(&quot;LIFTOFF!!!&quot;);
+}
+</code></pre>
+<p>If we run this, we’ll get some output:</p>
+<pre><code class="language-bash">   Compiling loops v0.1.0 (file:///home/steve/tmp/loops)
+     Running `target/debug/loops`
+3!
+2!
+1!
+LIFTOFF!!!
+</code></pre>
+<p>The core of this example is in the combination of these three constructs:</p>
+<pre><code class="language-rust,ignore">    loop {
+        if number != 0 {
+            // do stuff
+        } else {
+            break;
+        }
+</code></pre>
+<p>We want to <code>loop</code>, but only while some sort of condition is true. As soon as it
+isn't, we want to <code>break</code> out of the loop.</p>
+<p>This pattern is so common that we have a language construct for it: <code>while</code>.
+Here's the same example, but using <code>while</code> instead:</p>
+<pre><code class="language-rust">fn main() {
+    let mut number = 3;
+    while number != 0  {
+        println!(&quot;{}!&quot;, number);
+
+        number = number - 1;
+    }
+
+    println!(&quot;LIFTOFF!!!&quot;);
+}
+</code></pre>
+<p>This lets us get rid of a lot of nesting, and is more clear: while a condition holds,
+run this code.</p>
+<h2><code>for</code></h2>
+<p>We can use this <code>while</code> construct to loop over the elements of a collection, like an
+array:</p>
+<pre><code class="language-rust">fn main() {
+    let a = [1, 2, 3, 4, 5];
+    let mut index = 0;
+
+    while index &lt; 5 {
+        println!(&quot;the value is is: {}&quot;, a[index]);
+
+        index = index + 1;
+    }
+}
+</code></pre>
+<p>Running this will print out every element of the array:</p>
+<pre><code class="language-bash">$ cargo run
+   Compiling loops v0.1.0 (file:///home/steve/tmp/loops)
+     Running `target/debug/loops`
+the value is: 1
+the value is: 2
+the value is: 3
+the value is: 4
+the value is: 5
+</code></pre>
+<p>Here, we're counting up instead of down: we start at zero, then loop until we
+hit the final index of our array.</p>
+<p>This approach is error-prone, though. If we get the index length incorrect, we
+will end up causing a <code>panic!</code>. This is also slow, as the compiler needs to do
+that check on every element on every iteration through the loop.</p>
+<p>Instead, we can use our last kind of loop: the <code>for</code> loop. It looks like this:</p>
+<pre><code class="language-rust">fn main() {
+    let a = [1, 2, 3, 4, 5];
+    let mut index = 0;
+    
+    for element in a.iter() {
+        println!(&quot;the value is: {}&quot;, element);
+    }
+}
+</code></pre>
+<p>** NOTE: see <a href="https://github.com/rust-lang/rust/issues/25725#issuecomment-166365658">https://github.com/rust-lang/rust/issues/25725#issuecomment-166365658</a>, we may want to change this **</p>
+<p>If we run this, we'll see the same output as the previous example.</p>
+<p>** I'm going to leave it at this for now until we decide how we want to do it**</p>
 <h1>Ownership &amp; borrowing</h1>
 <h1>Ownership</h1>
 <p>This guide is one of three presenting Rust’s ownership system. This is one of
@@ -1645,6 +2114,23 @@ complicated.</p>
 <p>Luckily, Rust offers a feature, borrowing, which helps us solve this problem.
 It’s the topic of the next section!</p>
 <h1>References and Borrowing</h1>
+<h2>Slices</h2>
+<p>We saw how to use indexing to get a single element out of an array.
+But we can also use indexing to get a reference to multiple elements:</p>
+<pre><code class="language-rust">fn main() {
+    let a = [1, 2, 3, 4, 5];
+
+    let s = &amp;a[0..2];
+
+    println!(&quot;The value of s is: {:?}&quot;, s);
+}
+</code></pre>
+<p>Let’s try running it:</p>
+<pre><code class="language-bash">$ cargo run
+   Compiling functions v0.1.0 (file:///home/steve/tmp/functions)
+     Running `target/debug/functions`
+The value of s is: [1, 2]
+</code></pre>
 <p>This guide is two of three presenting Rust’s ownership system. This is one of
 Rust’s most unique and compelling features, with which Rust developers should
 become quite acquainted. Ownership is how Rust achieves its largest goal,
