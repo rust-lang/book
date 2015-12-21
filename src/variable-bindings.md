@@ -58,22 +58,26 @@ The opening curly brace, `{`, indicates the start of the function’s body.
     let x = 5;
 ```
 
-This is our first ‘variable binding’.
-This looks like many languages, but there are some subtleties.
-We create variable bindings with a ‘`let` statement’, which looks like this:
+This is our first ‘variable binding’, which we create with a ‘`let` statement’.
+
+This `let` statement has this form:
 
 ```text
-let PATTERN = VALUE;
+let NAME = EXPRESSION;
 ```
 
-In our example, the `PATTERN` is a humble `x`, and the `VALUE` is a simple `5`.
-The `let` statement takes the `VALUE`, and matches it to the `PATTERN`, creating new bindings.
-Therefore, our example creates a new binding, `x`, and gives it an initial value of `5`.
-Patterns are a big part of Rust, we will see them in many places.
+A `let` statement first evaluates the `EXPRESSION`, and then binds the
+resulting value to `NAME` so that it can be referred to later in the program. In
+our simple example, the expression was already a value, 5, but we could achieve
+the same effect with:
 
-That seems like a lot of explanation for a basic assignment statement!
-The trick is that these patterns can become more complex, and have a lot of power.
-We’ll explore more complex patterns as we learn more.
+```rust
+let x = 2 + 3;
+```
+
+In general, `let` statements work with patterns; a name is a particularly
+humble form of pattern. Patterns are a big part of Rust, we’ll see more complex
+and powerful patterns as we go along.
 
 Before we do that, though, let’s finish investigating this example.
 Here’s the next line:
@@ -89,10 +93,15 @@ Every time you see a `!`, remember that it signifies a macro.
 Macros can add new syntax to the language, and the `!` is a reminder that things may look slightly unusual.
 
 `println!`, specifically, has one required argument, a ‘format string’, and zero or more optional arguments.
-This is why it’s a macro; Rust does not support optional arguments for regular functions.
 The format string can contain the special text `{}`.
-If it does, it fills in that place in the string with the values of the other arguments.
-In this case, we’ve passed `x`.
+Each instance of `{}` corresponds to an additional argument. Here’s an example:
+
+```rust
+let x = 2 + 3;
+let y = x + 5;
+println!("The value of x is {}, and the value of y is {}", x, y);
+```
+
 You can think of `{}` as little crab pincers, holding the value in place.
 This placeholder has a number of more advanced formatting options that we’ll discuss later.
 
@@ -110,7 +119,7 @@ The value of x is: 5
 
 We assign `5` to a binding, `x`, and then print it to the screen with `println!`.
 
-## Multiple assignment
+## Multiple binding
 
 Let’s try a more complex pattern.
 Change our example program to this:
@@ -206,7 +215,7 @@ fn main() {
 
 Just like we match up the `VALUE` with the `PATTERN`, we match up the `TYPE` with the `PATTERN`.
 
-## Initialization
+## Delayed Initialization
 
 We do not have to provide bindings with an initial value, and can assign it later. Try this program:
 
