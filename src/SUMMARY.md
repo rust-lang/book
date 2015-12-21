@@ -7,7 +7,7 @@
 
 - [Tutorial](tutorial.md)
 
-- [The Basics](basics.md)
+- [Primitive Rust](primitive-rust.md)
     - [Variable Bindings](variable-bindings.md)
     - [Functions](functions.md)
     - [Primitive Types](primitive-types.md)

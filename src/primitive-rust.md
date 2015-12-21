@@ -1,4 +1,4 @@
-# The Basics
+# Primitive Rust
 
 We’ll start our journey with Rust by talking about the absolute basics.
 Many programming languages have lots in common at their core.
