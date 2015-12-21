@@ -20,7 +20,7 @@ The `loop` keyword is very straightforward: it executes a block of code over
 and over and over and over and over and over forever. Change your `src/main.rs`
 file to look like this:
 
-```rust
+```rust,ignore
 fn main() {
     loop {
         println!("again!");
