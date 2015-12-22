@@ -84,6 +84,8 @@ include [the user’s forum][users], and [Stack Overflow][stackoverflow].
 [users]: https://users.rust-lang.org/
 [stackoverflow]: http://stackoverflow.com/questions/tagged/rust
 
+## Local documentation
+
 This installer also installs a copy of the documentation locally, so we can
 read it offline. On UNIX systems, `/usr/local/share/doc/rust` is the location.
 On Windows, it's in a `share/doc` directory, inside the directory to which Rust
