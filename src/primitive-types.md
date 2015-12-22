@@ -393,7 +393,7 @@ Do you want commas or not?
 What about the `[]`s?
 
 Due to these questions, more complex types in the standard library do not implement `Display` formatting.
-There is another kind of formatting, `Deubg`, which is a bit different: output for programmers and debuggers.
+There is another kind of formatting, `Debug`, which is a bit different: output for programmers and debuggers.
 We can ask `println!` to use `Debug` formatting with `:?`:
 
 ```rust
