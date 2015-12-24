@@ -36,7 +36,7 @@ Signed numbers are stored using ‘two’s compliment’ representation.
 Finally, `isize` and `usize` are different sizes based on the kind of computer your program is running on.
 If you are on a 64-bit architecture, they are 64 bits, and if you’re on a 32-bit one, they’re 32 bits.
 
-So how do you choose from all these options? Well, if you really don’t know, the defualts are a good choice:
+So how do you choose from all these options? Well, if you really don’t know, the defaults are a good choice:
 integer types default to `i32`.
 The primary use case for `isize`/`usize` is when indexing some sort of collection.
 We’ll talk more about our first collection, arrays, in just a moment.
