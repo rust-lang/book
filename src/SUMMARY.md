@@ -20,9 +20,16 @@
     - [References & Borrowing](references-and-borrowing.md)
     - [Lifetimes](lifetimes.md)
 
-- [Basic Data Types](basic-data-types.md)
-    - [Structs](structs.md)
-    - [Enums](enums.md)
+- [Structs](structs.md)
+    - [Method Syntax](method-syntax.md)
+    - [Generics](structs-generics.md)
+    - [Advanced](structs-advanced.md)
+
+- [Enums](enums.md)
+    - [Match](match.md)
+    - [Patterns](patterns.md)
+    - [Option](option.md)
+    - [if let](if-let.md)
 
 - [Crates & Modules](crates-and-modules.md)
 
