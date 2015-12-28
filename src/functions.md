@@ -1,6 +1,7 @@
 # Functions
 
-Functions are pervasive in Rust code. We’ve already seen the most important function, `main()`, in previous sections of the book:
+Functions are pervasive in Rust code. We’ve already seen the most important
+function, `main()`, in previous sections of the book:
 
 ```rust
 fn main() {
@@ -16,9 +17,9 @@ fn another_function() {
 }
 ```
 
-Rust code uses `snake_case` as a style for function names: all lower case, with underscores separating words.
-(It also uses them for variable names, too.)
-We can can call any function we’ve defined by using its name and some parentheses:
+Rust code uses `snake_case` as a style for function names: all lower case, with
+underscores separating words. (It also uses them for variable names, too.) We
+can can call any function we’ve defined by using its name and some parentheses:
 
 ```rust
 fn main() {
@@ -32,9 +33,9 @@ fn another_function() {
 }
 ```
 
-Let’s start a new project to explore functions.
-Open a terminal, and navigate to the directory where you’d like to keep your projects.
-From there, use Cargo to generate a new project:
+Let’s start a new project to explore functions. Open a terminal, and navigate
+to the directory where you’d like to keep your projects. From there, use Cargo
+to generate a new project:
 
 ```bash
 $ cargo new --bin functions
@@ -51,8 +52,9 @@ Hello, world!
 Another function.
 ```
 
-As we can see, the lines execute in order: first, we print out our “Hello, world!” message, and then `another_function()` is called.
-It then prints its message as well.
+As we can see, the lines execute in order: first, we print out our “Hello,
+world!” message, and then `another_function()` is called. It then prints its
+message as well.
 
 ## Function Arguments
 
@@ -89,16 +91,17 @@ Declaring a function which takes a single argument looks like this:
 fn NAME(PATTERN: TYPE) {
 ```
 
-That’s right, patterns appear again.
-Consider how the parameter declaration here looks like the `let` bindings we used earlier:
+That’s right, patterns appear again. Consider how the parameter declaration
+here looks like the `let` bindings we used earlier:
 
 ```rust,ignore
 let x: i32;
 fn another_function(x: i32) {
 ```
 
-There’s only one difference here: in function signatures, we _must_ declare the type.
-This is a deliberate decision; we find that requiring type annotations in functions means that you almost never need them anywhere else.
+There’s only one difference here: in function signatures, we _must_ declare the
+type. This is a deliberate decision; we find that requiring type annotations in
+functions means that you almost never need them anywhere else.
 
 You can separate multiple arguments with a comma:
 
@@ -155,9 +158,10 @@ The value of x is: 5
 The value of y is: 6
 ```
 
-Note that our bindings are called `a` and `b`, yet inside of the function, we refer to them by the names in the signature, `x` and `y`.
-Inside a function, only its parameters are in scope, so we need to use those names.
-Bindings passed as parameters don’t need to have the same name as the arguments.
+Note that our bindings are called `a` and `b`, yet inside of the function, we
+refer to them by the names in the signature, `x` and `y`. Inside a function,
+only its parameters are in scope, so we need to use those names. Bindings
+passed as parameters don’t need to have the same name as the arguments.
 
 ## Return values
 
@@ -167,8 +171,8 @@ Functions can also return values back to the function that called them:
 fn NAME(PATTERN, PATTERN, PATTERN, PATTERN...) -> TYPE {
 ```
 
-We don’t name return values, but we do declare their type, after an arrow: `->`.
-Here’s a sample program:
+We don’t name return values, but we do declare their type, after an arrow:
+`->`. Here’s a sample program:
 
 ```rust
 fn main() {
@@ -191,9 +195,8 @@ $ cargo run
 The value of x is: 5
 ```
 
-Let’s examine this in more detail.
-There are two important bits.
-First, we can use the return value of a function to initialize a binding:
+Let’s examine this in more detail. There are two important bits. First, we can
+use the return value of a function to initialize a binding:
 
 ```rust,ignore
 let x = five();
@@ -213,11 +216,10 @@ fn five() -> i32 {
 }
 ```
 
-We have no arguments, and our return type, `i32`.
-However, the body of this function is a lonely `5`.
-There’s a detail here that you may or may not have noticed: we’ve ended almost every line in our programs with a semicolon.
-There’s no semicolon here, though.
-Why not?
+We have no arguments, and our return type, `i32`. However, the body of this
+function is a lonely `5`. There’s a detail here that you may or may not have
+noticed: we’ve ended almost every line in our programs with a semicolon.
+There’s no semicolon here, though. Why not?
 
 The answer to this question is:
 
@@ -228,16 +230,15 @@ Let’s go over that now.
 
 ## Statements and Expressions
 
-Expressions are bits of code that evaluate to a value.
-Consider some math operations, like this:
+Expressions are bits of code that evaluate to a value. Consider some math
+operations, like this:
 
 ```rust,ignore
 5 + 6
 ```
 
-We can evaluate this expression, and come up with a value: `11`.
-In Rust, most bits of code are expressions.
-For example, calling a function is an expression:
+We can evaluate this expression, and come up with a value: `11`. In Rust, most
+bits of code are expressions. For example, calling a function is an expression:
 
 ```rust,ignore
 foo(5)
@@ -245,15 +246,13 @@ foo(5)
 
 The value is equal to whatever the return value of `foo()` is.
 
-So why does this matter?
-Well, not everything is an expression.
-Some things are ‘statements’.
-Expressions _compute_ something, but statements _bind_ or _do_ something.
-It’s a subtle difference.
-We’ve already seen two kinds of statements: `let` statements, and `fn` declarations.
+So why does this matter? Well, not everything is an expression. Some things are
+‘statements’. Expressions _compute_ something, but statements _bind_ or _do_
+something. It’s a subtle difference. We’ve already seen two kinds of
+statements: `let` statements, and `fn` declarations.
 
-Because `let` is a statement, not an expression, you can’t assign it to another binding.
-Here’s an example that doesn’t work:
+Because `let` is a statement, not an expression, you can’t assign it to another
+binding. Here’s an example that doesn’t work:
 
 ```rust,ignore
 fn main() {
@@ -277,10 +276,9 @@ Could not compile `functions`.
 
 We also cannot somehow assign a `fn` declaration to a binding, either.
 
-So what’s this have to do with return values?
-Well, `{}`, a ‘block’ that we used earlier to create new scopes, _is_ an expression.
-Let’s take a closer look at `{}`.
-It looks like this:
+So what’s this have to do with return values? Well, `{}`, a ‘block’ that we
+used earlier to create new scopes, _is_ an expression. Let’s take a closer look
+at `{}`. It looks like this:
 
 ```text
 {
@@ -289,9 +287,10 @@ It looks like this:
 }
 ```
 
-The `*` there means ‘zero or more’, so we can have any number of statements followed by an expression.
-Since blocks are expressions themselves, we can nest blocks inside of blocks.
-And since they return a value, we can use them in `let` statements:
+The `*` there means ‘zero or more’, so we can have any number of statements
+followed by an expression. Since blocks are expressions themselves, we can nest
+blocks inside of blocks. And since they return a value, we can use them in
+`let` statements:
 
 ```rust
 fn main() {
@@ -323,8 +322,9 @@ let y = {
 };
 ```
 
-Since the block can contain statements, we create a new variable binding, `z`, and give it a value.
-We then do some math for the final expression of the block:
+Since the block can contain statements, we create a new variable binding, `z`,
+and give it a value. We then do some math for the final expression of the
+block:
 
 ```rust,ignore
 {
@@ -334,8 +334,8 @@ We then do some math for the final expression of the block:
 }
 ```
 
-`5 + 1 + 5` is `11`, and so the value of the entire block is `11`.
-This gets substituted into our `let` statement for `y`:
+`5 + 1 + 5` is `11`, and so the value of the entire block is `11`. This gets
+substituted into our `let` statement for `y`:
 
 ```rust,ignore
 let y = 11;
@@ -343,8 +343,7 @@ let y = 11;
 
 Hence our output saying `y` is `11`.
 
-Where else do we use blocks? As the body of functions!
-They’re very similar:
+Where else do we use blocks? As the body of functions! They’re very similar:
 
 ```rust
 fn main() {
@@ -376,8 +375,8 @@ The value of y is: 6
 The value of y is: 6
 ```
 
-In both cases, we use a block to produce a value.
-In the first case, it’s assigning with `let`:
+In both cases, we use a block to produce a value. In the first case, it’s
+assigning with `let`:
 
 ```rust,ignore
 let y = {
@@ -391,8 +390,9 @@ fn plus_one(x: i32) -> i32 {
 
 ### Expression statements
 
-There’s one more detail about expressions and statements: a semicolon takes any expression, and turns it into a statement.
-Let’s accidentally cause an error with `plus_one()`:
+There’s one more detail about expressions and statements: a semicolon takes any
+expression, and turns it into a statement. Let’s accidentally cause an error
+with `plus_one()`:
 
 ```rust,ignore
 fn main() {
@@ -406,7 +406,8 @@ fn plus_one(x: i32) -> i32 {
 }
 ```
 
-Instead of an expression, `x + 1`, we’ve now turned it into a statement, `x + 1;`.
+Instead of an expression, `x + 1`, we’ve now turned it into a statement,
+`x + 1;`.
 
 Running this gives an error:
 
@@ -425,8 +426,9 @@ error: aborting due to previous error
 Could not compile `functions`.
 ```
 
-Rust has our back here: it even suggests removing the semicolon, which fixes the error.
-But the main error message is the core of the issue: statements don’t evaluate to a value, yet we want to return an `i32`.
+Rust has our back here: it even suggests removing the semicolon, which fixes
+the error. But the main error message is the core of the issue: statements
+don’t evaluate to a value, yet we want to return an `i32`.
 
 In practice, Rust programmers don’t often think about these rules at this
 level. Usually, you have a semicolon at the end of most lines, and maybe not at
@@ -434,8 +436,8 @@ the end of blocks.
 
 ## Multiple return values
 
-Functions cannot directly return multiple values.
-There’s a trick, however. Remember the `()`s we used when showing off complex bindings?
+Functions cannot directly return multiple values. There’s a trick, however.
+Remember the `()`s we used when showing off complex bindings?
 
 ```rust
 fn main() {
@@ -443,9 +445,9 @@ fn main() {
 }
 ```
 
-They form something called a ‘tuple’, one of Rust’s basic types.
-A tuple is an anonymous collection of elements.
-But since a tuple is a singular thing, we can use it as a way to return multiple values from functions:
+They form something called a ‘tuple’, one of Rust’s basic types. A tuple is an
+anonymous collection of elements. But since a tuple is a singular thing, we can
+use it as a way to return multiple values from functions:
 
 ```rust
 fn main() {
@@ -470,7 +472,8 @@ The value of x is: 5
 The value of y is: 6
 ```
 
-There are two interesting changes here: assigning the return value of `two_numbers()` to `x` and `y`, and the declaration of `two_numbers()` itself.
+There are two interesting changes here: assigning the return value of
+`two_numbers()` to `x` and `y`, and the declaration of `two_numbers()` itself.
 
 Let’s look at the declaration first:
 
@@ -480,15 +483,14 @@ fn two_numbers() -> (i32, i32) {
 }
 ```
 
-The `(i32, i32)` should look familiar.
-We saw it in `let` bindings earlier:
+The `(i32, i32)` should look familiar. We saw it in `let` bindings earlier:
 
 ```rust
 let (x, y): (i32, i32) = (5, 6);
 ```
 
-The `(i32, i32)` syntax says “a tuple with two `i32`s in it.”
-The `(5, 6)` syntax creates a new one, with `5` and `6`.
+The `(i32, i32)` syntax says “a tuple with two `i32`s in it.” The `(5, 6)`
+syntax creates a new one, with `5` and `6`.
 
 This tuple is then returned, and assigned to `x` and `y`:
 
@@ -498,4 +500,5 @@ let (x, y) = two_numbers();
 
 See how all these bits fit together?
 
-We call this behavior of `let` ‘destructuring’, because it takes the structure of the expression that comes after the `=` and takes it apart.
+We call this behavior of `let` ‘destructuring’, because it takes the structure
+of the expression that comes after the `=` and takes it apart.
