@@ -363,7 +363,7 @@ invalid memory can be accessed. Rust protects us against this kind of error.
 So far, we’ve been printing values using `{}`. If we try that with an array,
 though...
 
-```ignore
+```rust,ignore
 fn main() {
     let a = [1, 2, 3, 4, 5];
 
