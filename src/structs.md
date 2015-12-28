@@ -1,200 +1,228 @@
 # Structs
 
-`struct`s are a way of creating more complex data types. For example, if we were
-doing calculations involving coordinates in 2D space, we would need both an `x`
-and a `y` value:
+So far, all of the data types we’ve seen allow us to have a single value
+at a time. `struct`s give us the ability to package up multiple values and
+keep them in one related structure.
 
-```rust
-let origin_x = 0;
-let origin_y = 0;
+Let’s write a program which calculates the distance between two points.
+We’ll start off with single variable bindings, and then refactor it to
+use `struct`s instead.
+
+Let’s make a new project with Cargo:
+
+```bash
+$ cargo new --bin points
+$ cd points
 ```
 
-A `struct` lets us combine these two into a single, unified datatype with `x`
-and `y` as field labels:
+Here’s a short program which calcualtes the distance between two points. Put
+it into your `src/main.rs`:
 
 ```rust
-struct Point {
-    x: i32,
-    y: i32,
-}
-
 fn main() {
-    let origin = Point { x: 0, y: 0 }; // origin: Point
+    let x1 = 0.0;
+    let y1 = 5.0;
 
-    println!("The origin is at ({}, {})", origin.x, origin.y);
+    let x2 = 12.0; 
+    let y2 = 0.0;
+    
+    let answer = distance(x1, y1, x2, y2);
+    
+    println!("Point 1: ({}, {})", x1, y1);
+    println!("Point 2: ({}, {})", x2, y2);
+    println!("Distance: {}", answer);
+}
+
+fn distance(x1: f64, y1: f64, x2: f64, y2: f64) -> f64 {
+    let x_squared = f64::powi(x2 - x1, 2);
+    let y_squared = f64::powi(y2 - y1, 2);
+
+    f64::sqrt(x_squared + y_squared)
 }
 ```
 
-There’s a lot going on here, so let’s break it down. We declare a `struct` with
-the `struct` keyword, and then with a name. By convention, `struct`s begin with
-a capital letter and are camel cased: `PointInSpace`, not `Point_In_Space`.
+Let's try running this program with `cargo run`:
 
-We can create an instance of our `struct` via `let`, as usual, but we use a `key:
-value` style syntax to set each field. The order doesn’t need to be the same as
-in the original declaration.
+```bash
+$ cargo run
+   Compiling points v0.1.0 (file:///home/steve/tmp/points)
+     Running `target/debug/points`
+Point 1: (0, 5)
+Point 2: (12, 0)
+Distance: 13
+```
 
-Finally, because fields have names, we can access them through dot
-notation: `origin.x`.
-
-The values in `struct`s are immutable by default, like other bindings in Rust.
-Use `mut` to make them mutable:
+Let's take a quick look at `distance()` before we move forward:
 
 ```rust
-struct Point {
-    x: i32,
-    y: i32,
-}
+fn distance(x1: f64, y1: f64, x2: f64, y2: f64) -> f64 {
+    let x_squared = f64::powi(x2 - x1, 2);
+    let y_squared = f64::powi(y2 - y1, 2);
 
-fn main() {
-    let mut point = Point { x: 0, y: 0 };
-
-    point.x = 5;
-
-    println!("The point is at ({}, {})", point.x, point.y);
+    f64::sqrt(x_squared + y_squared)
 }
 ```
 
-This will print `The point is at (5, 0)`.
-
-Rust does not support field mutability at the language level, so you cannot
-write something like this:
+To find the distance between two points, we can use the Pythagorean Theorem.
+The theorem is named after Pythagoras, who was the first person to mathematically
+prove this formula. The details aren't that important, to be honest. There's a few
+things that we haven't discussed yet, though.
 
 ```rust,ignore
-struct Point {
-    mut x: i32,
-    y: i32,
+f64::powi(2.0, 3)
+```
+
+The double colon (`::`) here is a namespace operator. We haven’t talked about
+modules yet, but you can think of the `powi()` function as being scoped inside
+of another name. In this case, the name is `f64`, the same as the type. The
+`powi()` function takes two arguments: the first is a number, and the second is
+the power that it raises that number to. In this case, the second number is an
+integer, hence the ‘i’ in its name. Similarly, `sqrt()` is a function under the
+`f64` module, which takes the square root of its argument.
+
+## Why `struct`s?
+
+Our little program is okay, but we can do better. The key is in the signature
+of `distance()`:
+
+```rust,ignore
+fn distance(x1: f64, y1: f64, x2: f64, y2: f64) -> f64 {
+```
+
+The distance function is supposed to calculate the distance between two points.
+But our distance function calculates some distance between four numbers. The
+first two and last two arguments are related, but that’s not expressed anywhere
+in our program itself. We need a way to group `(x1, y1)` and `(x2, y2)`
+together.
+
+We’ve already discussed one way to do that: tuples. Here’s a version of our program
+which uses tuples:
+
+```rust
+fn main() {
+    let p1 = (0.0, 5.0);
+
+    let p2 = (12.0, 0.0);
+
+    let answer = distance(p1, p2);
+
+    println!("Point 1: {:?}", p1);
+    println!("Point 2: {:?}", p2);
+    println!("Distance: {}", answer);
+}
+
+fn distance(p1: (f64, f64), p2: (f64, f64)) -> f64 {
+    let x_squared = f64::powi(p2.0 - p1.0, 2);
+    let y_squared = f64::powi(p2.1 - p1.1, 2);
+
+    f64::sqrt(x_squared + y_squared)
 }
 ```
 
-Mutability is a property of the binding, not of the structure itself. If you’re
-used to field-level mutability, this may seem strange at first, but it
-significantly simplifies things. It even lets you make things mutable on a temporary
-basis:
+This is a little better, for sure. Tuples let us add a little bit of structure.
+We’re now passing two arguments, so that’s more clear. But it’s also worse.
+Tuples don’t give names to their elements, and so our calculation has gotten
+much more confusing:
 
 ```rust,ignore
+p2.0 - p1.0
+p2.1 - p1.1
+```
+
+When writing this example, your authors almost got it wrong themselves! Distance
+is all about `x` and `y` points, but now it’s all about `0` and `1`. This isn’t
+great.
+
+Enter `struct`s. We can transform our tuples into something with a name:
+
+```rust,ignore
+let p1 = (0.0, 5.0);
+
 struct Point {
-    x: i32,
-    y: i32,
+    x: f64,
+    y: f64,
+}
+
+let p1 = Point { x: 0.0, y: 0.0 };
+```
+
+Here’s what declaring a `struct` looks like:
+
+```text
+struct NAME {
+    NAME: TYPE,
+}
+```
+
+The `NAME: TYPE` bit is called a ‘field’, and we can have as many or as few of
+them as you’d like. If you have none of them, drop the `{}`s:
+
+```rust
+struct Foo;
+```
+
+`struct`s with no fields are called ‘unit structs’, and are used in certain
+advanced situations. We will just ignore them for now.
+
+You can access the field of a struct in the same way you access an element of
+a tuple, except you use its name:
+
+```rust,ignore
+let p1 = (0.0, 5.0);
+let x = p1.0;
+
+struct Point {
+    x: f64,
+    y: f64,
+}
+
+let p1 = Point { x: 0.0, y: 0.0 };
+let x = p1.x;
+```
+
+Let’s convert our program to use our `Point` `struct`. Here’s what it looks
+like now:
+
+```rust
+#[derive(Debug,Copy,Clone)]
+struct Point {
+    x: f64,
+    y: f64,
 }
 
 fn main() {
-    let mut point = Point { x: 0, y: 0 };
+    let p1 = Point { x: 0.0, y: 5.0};
 
-    point.x = 5;
+    let p2 = Point { x: 12.0, y: 0.0};
 
-    let point = point; // now immutable
+    let answer = distance(p1, p2);
 
-    point.y = 6; // this causes an error
+    println!("Point 1: {:?}", p1);
+    println!("Point 2: {:?}", p2);
+    println!("Distance: {}", answer);
+}
+
+fn distance(p1: Point, p2: Point) -> f64 {
+    let x_squared = f64::powi(p2.x - p1.x, 2);
+    let y_squared = f64::powi(p2.y - p1.y, 2);
+
+    f64::sqrt(x_squared + y_squared)
 }
 ```
 
-# Update syntax
+Our function signature for `distance()` now says exactly what we mean: it
+calculates the distance between two `Point`s. And rather than `0` and `1`,
+we’ve got back our `x` and `y`. This is a win for clarity.
 
-A `struct` can include `..` to indicate that you want to use a copy of some
-other `struct` for some of the values. For example:
+There’s one other thing that’s a bit strange here, this annotation on our
+`struct` declaration:
 
-```rust
-struct Point3d {
-    x: i32,
-    y: i32,
-    z: i32,
-}
-
-let mut point = Point3d { x: 0, y: 0, z: 0 };
-point = Point3d { y: 1, .. point };
 ```
-
-This gives `point` a new `y`, but keeps the old `x` and `z` values. It doesn’t
-have to be the same `struct` either, you can use this syntax when making new
-ones, and it will copy the values you don’t specify:
-
-```rust
-# struct Point3d {
-#     x: i32,
-#     y: i32,
-#     z: i32,
-# }
-let origin = Point3d { x: 0, y: 0, z: 0 };
-let point = Point3d { z: 1, x: 2, .. origin };
-```
-
-# Tuple structs
-
-Rust has another data type that’s like a hybrid between a [tuple][tuple] and a
-`struct`, called a ‘tuple struct’. Tuple structs have a name, but their fields
-don't. They are declared with the `struct` keyword, and then with a name
-followed by a tuple:
-
-[tuple]: primitive-types.html#tuples
-
-```rust
-struct Color(i32, i32, i32);
-struct Point(i32, i32, i32);
-
-let black = Color(0, 0, 0);
-let origin = Point(0, 0, 0);
-```
-Here, `black` and `origin` are not equal, even though they contain the same
-values.
-
-It is almost always better to use a `struct` than a tuple struct. We
-would write `Color` and `Point` like this instead:
-
-```rust
-struct Color {
-    red: i32,
-    blue: i32,
-    green: i32,
-}
-
+#[derive(Debug,Copy,Clone)]
 struct Point {
-    x: i32,
-    y: i32,
-    z: i32,
-}
 ```
 
-Good names are important, and while values in a tuple struct can be
-referenced with dot notation as well, a `struct` gives us actual names,
-rather than positions.
-
-There _is_ one case when a tuple struct is very useful, though, and that is when
-it has only one element. We call this the ‘newtype’ pattern, because
-it allows you to create a new type that is distinct from its contained value
-and also expresses its own semantic meaning:
-
-```rust
-struct Inches(i32);
-
-let length = Inches(10);
-
-let Inches(integer_length) = length;
-println!("length is {} inches", integer_length);
-```
-
-As you can see here, you can extract the inner integer type through a
-destructuring `let`, just as with regular tuples. In this case, the
-`let Inches(integer_length)` assigns `10` to `integer_length`.
-
-# Unit-like structs
-
-You can define a `struct` with no members at all:
-
-```rust
-struct Electron;
-
-let x = Electron;
-```
-
-Such a `struct` is called ‘unit-like’ because it resembles the empty
-tuple, `()`, sometimes called ‘unit’. Like a tuple struct, it defines a
-new type.
-
-This is rarely useful on its own (although sometimes it can serve as a
-marker type), but in combination with other features, it can become
-useful. For instance, a library may ask you to create a structure that
-implements a certain [trait][trait] to handle events. If you don’t have
-any data you need to store in the structure, you can just create a
-unit-like `struct`.
-
-[trait]: traits.html
+We haven’t yet talked about traits, but we did talk about `Debug` when we
+discussed arrays. This `derive` attribute allows us to tweak the behavior of
+our `Point`. In this case, we are opting into copy semantics, and everything
+that implements `Copy` must implement `Clone`.
