@@ -66,18 +66,19 @@
 
                 <div id="content" class="content">
                     <h1>Primitive Types</h1>
-<p>We’ve seen that every value in Rust has a type of some kind.
-There are a number of types which are built into the language itself.
-We call these types ‘primitive’ types, since you can’t re-create them yourself.
-There are, of course, many non-primitive types provided by the standard library as well.</p>
-<p>Remember, you can rely on type inference to figure out the type of a binding, or you can annotate it explicitly:</p>
+<p>We’ve seen that every value in Rust has a type of some kind. There are a number
+of types which are built into the language itself. We call these types
+‘primitive’ types, since you can’t re-create them yourself. There are, of
+course, many non-primitive types provided by the standard library as well.</p>
+<p>Remember, you can rely on type inference to figure out the type of a binding,
+or you can annotate it explicitly:</p>
 <pre><code class="language-rust">fn main() {
     let x: i32 = 5;
 }
 </code></pre>
 <h2>Integers</h2>
-<p>You’ve already seen one primitive type: <code>i32</code>.
-There are a number of built-in number types in Rust.</p>
+<p>You’ve already seen one primitive type: <code>i32</code>. There are a number of built-in
+number types in Rust.</p>
 <p>Here’s a chart of Rust’s integer types:</p>
 <p>|        | signed | unsigned |
 |--------|--------|----------|
@@ -86,20 +87,20 @@ There are a number of built-in number types in Rust.</p>
 | 32-bit | i32    | u32      |
 | 64-bit | i64    | u64      |
 | arch   | isize  | usize    |</p>
-<p>We have both signed and unsigned variants of numbers, and each variant has an explicit size.
-Unsigned numbers are always positive, and signed numbers can be positive or negative.
-(Think ‘plus sign’ or ‘minus sign’: that’s a signed number.)
-Signed numbers are stored using ‘two’s compliment’ representation.</p>
-<p>Finally, <code>isize</code> and <code>usize</code> are different sizes based on the kind of computer your program is running on.
-If you are on a 64-bit architecture, they are 64 bits, and if you’re on a 32-bit one, they’re 32 bits.</p>
-<p>So how do you choose from all these options? Well, if you really don’t know, the defaults are a good choice:
-integer types default to <code>i32</code>.
-The primary use case for <code>isize</code>/<code>usize</code> is when indexing some sort of collection.
-We’ll talk more about our first collection, arrays, in just a moment.</p>
+<p>We have both signed and unsigned variants of numbers, and each variant has an
+explicit size. Unsigned numbers are always positive, and signed numbers can be
+positive or negative. (Think ‘plus sign’ or ‘minus sign’: that’s a signed
+number.) Signed numbers are stored using ‘two’s compliment’ representation.</p>
+<p>Finally, <code>isize</code> and <code>usize</code> are different sizes based on the kind of computer
+your program is running on. If you are on a 64-bit architecture, they are 64
+bits, and if you’re on a 32-bit one, they’re 32 bits.</p>
+<p>So how do you choose from all these options? Well, if you really don’t know,
+the defaults are a good choice: integer types default to <code>i32</code>. The primary use
+case for <code>isize</code>/<code>usize</code> is when indexing some sort of collection. We’ll talk
+more about our first collection, arrays, in just a moment.</p>
 <h2>Floating-point numbers</h2>
-<p>Rust also has two primitive floating-point numbers: <code>f32</code> and <code>f64</code>.
-They are 32 bits and 64 bits in size, respectively.
-The default is <code>f64</code>.</p>
+<p>Rust also has two primitive floating-point numbers: <code>f32</code> and <code>f64</code>. They are
+32 bits and 64 bits in size, respectively. The default is <code>f64</code>.</p>
 <pre><code class="language-rust">fn main() {
     let x = 2.0; // f64
 
@@ -109,18 +110,18 @@ The default is <code>f64</code>.</p>
 <p>Floating-point numbers are represented according to the IEEE-754 standard.
 <code>f32</code> is a single-precision float, <code>f64</code> is double-precision.</p>
 <h2>Tuples</h2>
-<p>The other type we’ve seen previously is the tuple type.
-Tuples have an ‘arity’, or size.
-We might say “that’s a 3-tuple” or “that’s a 5-tuple.”</p>
+<p>The other type we’ve seen previously is the tuple type. Tuples have an ‘arity’,
+or size. We might say “that’s a 3-tuple” or “that’s a 5-tuple.”</p>
 <p>Each position in a tuple has a distinct type:</p>
 <pre><code class="language-rust">fn main() {
     let x: (i32, f64, u8) = (500, 6.4, 1);
 }
 </code></pre>
-<p>Tuples are used sparingly in Rust code.
-This is because the elements of a tuple are anonymous, which can make code hard to read.</p>
+<p>Tuples are used sparingly in Rust code. This is because the elements of a tuple
+are anonymous, which can make code hard to read.</p>
 <h3>Tuple indexing</h3>
-<p>To access an element of a tuple, we use a <code>.</code> followed by the index we want to access:</p>
+<p>To access an element of a tuple, we use a <code>.</code> followed by the index we want to
+access:</p>
 <pre><code class="language-rust">fn main() {
     let x: (i32, f64, u8) = (500, 6.4, 1);
 
@@ -131,8 +132,8 @@ This is because the elements of a tuple are anonymous, which can make code hard 
 </code></pre>
 <p>As you can see, the first index is <code>0</code>.</p>
 <h3>Single-element tuples</h3>
-<p>There’s one last trick with tuples: <code>(5)</code> is actually ambiguous: is it a tuple, or is it a <code>5</code> in parethesis?
-If you need to disambiguate, use a comma:</p>
+<p>There’s one last trick with tuples: <code>(5)</code> is actually ambiguous: is it a tuple,
+or is it a <code>5</code> in parethesis? If you need to disambiguate, use a comma:</p>
 <pre><code class="language-rust">fn main() {
     let x = (5); // x is an i32, no tuple. Think of it like (5 + 1) without the + 1, they’re for grouping.
 
@@ -140,10 +141,9 @@ If you need to disambiguate, use a comma:</p>
 }
 </code></pre>
 <h2>Functions</h2>
-<p>There’s one more type that we’ve been using, but you haven’t seen written explicitly.
-Functions!
-Functions also have a type, and yes, you can even have variables which hold functions!
-Here’s an example:</p>
+<p>There’s one more type that we’ve been using, but you haven’t seen written
+explicitly. Functions! Functions also have a type, and yes, you can even have
+variables which hold functions! Here’s an example:</p>
 <pre><code class="language-rust">fn plus_one(x: i32) -&gt; i32 {
     x + 1
 }
@@ -155,8 +155,8 @@ fn main() {
     let five = f(4);
 }
 </code></pre>
-<p>As you can see, the type is very similar to the declaration.
-Here, let’s put them side by side:</p>
+<p>As you can see, the type is very similar to the declaration. Here, let’s put
+them side by side:</p>
 <pre><code class="language-rust,ignore">fn(i32) -&gt; i32 // type
 fn plus_one(x: i32) -&gt; i32 { // declaration
 </code></pre>
@@ -169,7 +169,8 @@ fn(x: i32) -&gt; i32 {
 fn(i32) -&gt; i32 {
 </code></pre>
 <p>It’s the same! Well, we need to drop that <code>{</code> as well.</p>
-<p>Finally, if you’ll notice in that example, we can create a binding with a function in it:</p>
+<p>Finally, if you’ll notice in that example, we can create a binding with a
+function in it:</p>
 <pre><code class="language-rust,ignore">fn main() {
     let f = plus_one;
 
@@ -178,9 +179,8 @@ fn(i32) -&gt; i32 {
 </code></pre>
 <p>... and call it with <code>()</code>s just like if we had used the original name.</p>
 <h3>Functions as arguments</h3>
-<p>So why not just use the original name?
-Well, we can pass functions as arguments to other functions!
-Check this out:</p>
+<p>So why not just use the original name? Well, we can pass functions as arguments
+to other functions! Check this out:</p>
 <pre><code class="language-rust">fn plus_one(x: i32) -&gt; i32 {
     x + 1
 }
@@ -215,20 +215,22 @@ The value of z is: 9
 <p>Let’s investigate in more detail.</p>
 <pre><code class="language-rust,ignore">fn twice(x: i32, f: fn(i32) -&gt; i32) -&gt; i32 {
 </code></pre>
-<p>This says “<code>twice()</code> is a function which takes two arguments.
-<code>x</code> is a thirty-two bit integer, and <code>f</code> is a function which takes an <code>i32</code> and returns an <code>i32</code>.”</p>
-<p>Inside of <code>twice()</code>, as you might imagine, we call the function <code>f</code> twice on <code>x</code>, and return the result.</p>
+<p>This says “<code>twice()</code> is a function which takes two arguments. <code>x</code> is a
+thirty-two bit integer, and <code>f</code> is a function which takes an <code>i32</code> and returns
+an <code>i32</code>.”</p>
+<p>Inside of <code>twice()</code>, as you might imagine, we call the function <code>f</code> twice on
+<code>x</code>, and return the result.</p>
 <pre><code class="language-rust,ignore">let y = twice(x, plus_one);
 let z = twice(x, plus_two);
 </code></pre>
-<p>The first time we call <code>twice()</code>, we pass <code>plus_one()</code> as an argument.
-And <code>x</code> is <code>5</code>.
-So <code>5 + 1 + 1 == 7</code>, hence our first line of output.
-The second time, we pass <code>plus_two()</code> instead.
-<code>5 + 2 + 2</code> is <code>9</code>, and our second line checks out too.</p>
+<p>The first time we call <code>twice()</code>, we pass <code>plus_one()</code> as an argument. And <code>x</code>
+is <code>5</code>. So <code>5 + 1 + 1 == 7</code>, hence our first line of output. The second time,
+we pass <code>plus_two()</code> instead. <code>5 + 2 + 2</code> is <code>9</code>, and our second line checks
+out too.</p>
 <p>Passing functions to functions is very, very powerful.</p>
 <h2>Booleans</h2>
-<p>Somewhat fundamental to all computing, Rust has a boolean type, <code>bool</code>, with two possible values:</p>
+<p>Somewhat fundamental to all computing, Rust has a boolean type, <code>bool</code>, with
+two possible values:</p>
 <pre><code class="language-rust">fn main() {
     let t = true;
     let f: bool = false; // with explict type annotation
@@ -236,15 +238,16 @@ The second time, we pass <code>plus_two()</code> instead.
 </code></pre>
 <p>That’s really all there is to say about that!</p>
 <h2>Arrays</h2>
-<p>So far, we’ve only represented single values in a binding.
-Sometimes, though, it’s useful to have more than one value.
-These kinds of data structures are called ‘collections’, and arrays are the ones we’ll learn about first.
-Arrays look like this:</p>
+<p>So far, we’ve only represented single values in a binding. Sometimes, though,
+it’s useful to have more than one value. These kinds of data structures are
+called ‘collections’, and arrays are the ones we’ll learn about first. Arrays
+look like this:</p>
 <pre><code class="language-rust">fn main() {
     let a = [1, 2, 3, 4, 5];
 }
 </code></pre>
-<p>An array’s type consists of the type of the elements it contains, as well as the length:</p>
+<p>An array’s type consists of the type of the elements it contains, as well as
+the length:</p>
 <pre><code class="language-rust">fn main() {
     let a: [i32; 5] = [1, 2, 3, 4, 5];
 }
@@ -258,9 +261,10 @@ Arrays look like this:</p>
     let second = a[1];
 }
 </code></pre>
-<p>In this example, <code>first</code> will hold the value <code>1</code>, and <code>second</code> will be bound to <code>2</code>.
-Note that these values are copied out of the array; if the array changes, these bindings will not.
-Here’s an example, which also shows us how we can modify elements of the array:</p>
+<p>In this example, <code>first</code> will hold the value <code>1</code>, and <code>second</code> will be bound to
+<code>2</code>. Note that these values are copied out of the array; if the array changes,
+these bindings will not. Here’s an example, which also shows us how we can
+modify elements of the array:</p>
 <pre><code class="language-rust">fn main() {
     let mut a = [1, 2, 3, 4, 5];
 
@@ -271,14 +275,17 @@ Here’s an example, which also shows us how we can modify elements of the array
     println!(&quot;The value of first is: {}&quot;, first);
 }
 </code></pre>
-<p>Running this example will show that <code>first</code> is still <code>1</code>.
-If we didn’t want a copy, but instead wanted to refer to the first element, whatever its value was, we need a new concept.
-We’ll talk about ‘references’ in Section 4.</p>
-<p>One last thing: now that we are modifying the array, <code>a</code> needs to be declared <code>mut</code>.</p>
-<p>Arrays are our first real data structure, and so there’s a few other concepts that we haven’t covered in full yet.
-There are two: the <code>panic!</code> macro, and a new way of printing things: <code>Debug</code>.</p>
+<p>Running this example will show that <code>first</code> is still <code>1</code>. If we didn’t want a
+copy, but instead wanted to refer to the first element, whatever its value was,
+we need a new concept. We’ll talk about ‘references’ in Section 4.</p>
+<p>One last thing: now that we are modifying the array, <code>a</code> needs to be declared
+<code>mut</code>.</p>
+<p>Arrays are our first real data structure, and so there’s a few other concepts
+that we haven’t covered in full yet. There are two: the <code>panic!</code> macro, and a
+new way of printing things: <code>Debug</code>.</p>
 <h3>Panic</h3>
-<p>We showed what happens when you access elements of an array, but what if we give an invalid index?</p>
+<p>We showed what happens when you access elements of an array, but what if we
+give an invalid index?</p>
 <pre><code class="language-rust,should_panic">fn main() {
     let a = [1, 2, 3, 4, 5];
 
@@ -287,39 +294,39 @@ There are two: the <code>panic!</code> macro, and a new way of printing things: 
     println!(&quot;The value of invalid is: {}&quot;, invalid);
 }
 </code></pre>
-<p>If we run this example, we will get an error.
-Let’s re-use our <code>functions</code> project from before.
-Change your <code>src/main.rs</code> to look like the example, and run it:</p>
+<p>If we run this example, we will get an error. Let’s re-use our <code>functions</code>
+project from before. Change your <code>src/main.rs</code> to look like the example, and
+run it:</p>
 <pre><code class="language-bash">$ cargo run
    Compiling functions v0.1.0 (file:///home/steve/tmp/functions)
      Running `target/debug/functions`
 thread ‘&lt;main&gt;’ panicked at ‘index out of bounds: the len is 5 but the index is 10’, src/main.rs:4
 Process didn’t exit successfully: `target/debug/functions` (exit code: 101)
 </code></pre>
-<p>It says that our thread panicked, and that our program didn’t exit successfully.
-There’s also a reason: we had a length of five, but an index of 10.</p>
+<p>It says that our thread panicked, and that our program didn’t exit
+successfully. There’s also a reason: we had a length of five, but an index of</p>
+<ol start="10">
+<li></li>
+</ol>
 <p>A ‘panic’ can also be induced manually, with the <code>panic!</code> macro:</p>
 <pre><code class="language-rust,should_panic">fn main() {
     panic!(&quot;Oh no!&quot;);
 }
 </code></pre>
-<p>When the <code>panic!</code> macro runs, it will cause a panic.
-When a Rust program panics, it starts a kind of controlled crash.
-The current thread of execution will stop entirely.
-As such, panics are reserved for serious, program-ending errors.
-They’re not a general error-handling mechanism.</p>
-<p>So why did this code panic?
-Well, arrays know how many elements they hold.
-When we access an element via indexing, Rust will check that the index is less than the length.
-If it’s greater, it will panic, as something is very wrong.
-This is our first example of Rust’s safety principles in action.
-In many low-level languages, this kind of check is not done.
-If you have an incorrect index, invalid memory can be accessed.
-Rust protects us against this kind of error.</p>
+<p>When the <code>panic!</code> macro runs, it will cause a panic. When a Rust program
+panics, it starts a kind of controlled crash. The current thread of execution
+will stop entirely. As such, panics are reserved for serious, program-ending
+errors. They’re not a general error-handling mechanism.</p>
+<p>So why did this code panic? Well, arrays know how many elements they hold. When
+we access an element via indexing, Rust will check that the index is less than
+the length. If it’s greater, it will panic, as something is very wrong. This is
+our first example of Rust’s safety principles in action. In many low-level
+languages, this kind of check is not done. If you have an incorrect index,
+invalid memory can be accessed. Rust protects us against this kind of error.</p>
 <p><strong>Steve’s note: this next bit might be our first ‘advanced’ section, on get()?</strong></p>
 <h3>Debug</h3>
-<p>So far, we’ve been printing values using <code>{}</code>.
-If we try that with an array, though...</p>
+<p>So far, we’ve been printing values using <code>{}</code>. If we try that with an array,
+though...</p>
 <pre><code class="language-ignore">fn main() {
     let a = [1, 2, 3, 4, 5];
 
@@ -340,17 +347,17 @@ src/main.rs:4:25: 4:26 note: `[_; 5]` cannot be formatted with the default forma
 src/main.rs:4:25: 4:26 note: required by `core::fmt::Display::fmt`
 error: aborting due to previous error
 </code></pre>
-<p>Whew! The core of the error is this part: the trait <code>core::fmt::Display</code> is not implemented.
-We haven’t discussed traits yet, so this is bound to be confusing!
+<p>Whew! The core of the error is this part: the trait <code>core::fmt::Display</code> is not
+implemented. We haven’t discussed traits yet, so this is bound to be confusing!
 Here’s all we need to know for now: <code>println!</code> can do many kinds of formatting.
-By default, <code>{}</code> implements a kind of formatting known as <code>Display</code>: output for end-users.
-The primitive types we’ve seen so far implement <code>Display</code>, as there’s only one way you’d show a <code>1</code> to a user.
-But with arrays, the output is less clear.
-Do you want commas or not?
-What about the <code>[]</code>s?</p>
-<p>Due to these questions, more complex types in the standard library do not implement <code>Display</code> formatting.
-There is another kind of formatting, <code>Debug</code>, which is a bit different: output for programmers and debuggers.
-We can ask <code>println!</code> to use <code>Debug</code> formatting with <code>:?</code>:</p>
+By default, <code>{}</code> implements a kind of formatting known as <code>Display</code>: output for
+end-users. The primitive types we’ve seen so far implement <code>Display</code>, as
+there’s only one way you’d show a <code>1</code> to a user. But with arrays, the output is
+less clear. Do you want commas or not? What about the <code>[]</code>s?</p>
+<p>Due to these questions, more complex types in the standard library do not
+implement <code>Display</code> formatting. There is another kind of formatting, <code>Debug</code>,
+which is a bit different: output for programmers and debuggers. We can ask
+<code>println!</code> to use <code>Debug</code> formatting with <code>:?</code>:</p>
 <pre><code class="language-rust">fn main() {
     let a = [1, 2, 3, 4, 5];
 
@@ -363,23 +370,26 @@ We can ask <code>println!</code> to use <code>Debug</code> formatting with <code
      Running `target/debug/functions`
 a is [1, 2, 3, 4, 5]
 </code></pre>
-<p>You’ll see this repeated later, with other types.
-And we’ll cover traits fully later in the book, Section 9.</p>
+<p>You’ll see this repeated later, with other types. And we’ll cover traits fully
+later in the book, Section 9.</p>
 <h2>char</h2>
-<p>We’ve only worked with numbers so far, but what about letters?
-Rust’s most primitive alphabetic type is the <code>char</code>:</p>
+<p>We’ve only worked with numbers so far, but what about letters? Rust’s most
+primitive alphabetic type is the <code>char</code>:</p>
 <pre><code class="language-rust">fn main() {
    let c = 'z'; 
    let z = 'ℤ'; 
 }
 </code></pre>
-<p>Rust’s <code>char</code> represents a <a href="http://www.unicode.org/glossary/#unicode_scalar_value">Unicode Scalar Value</a>, which means that it can represent a lot more than just ASCII.
-“Character” isn’t really a concept in Unicode, however: your human intutition for what a ‘character’ is may not match up with a <code>char</code>.
-It also means that <code>char</code>s are four bytes each.</p>
-<p>The single quotes are important: to define a literal single character, we use single quotes.
-If we used double quotes, we’d be defining a <code>&amp;str</code>. Let’s talk about that next!</p>
+<p>Rust’s <code>char</code> represents a <a href="http://www.unicode.org/glossary/#unicode_scalar_value">Unicode Scalar Value</a>, which means that it can
+represent a lot more than just ASCII. “Character” isn’t really a concept in
+Unicode, however: your human intutition for what a ‘character’ is may not match
+up with a <code>char</code>. It also means that <code>char</code>s are four bytes each.</p>
+<p>The single quotes are important: to define a literal single character, we use
+single quotes. If we used double quotes, we’d be defining a <code>&amp;str</code>. Let’s talk
+about that next!</p>
 <h2>str</h2>
-<p>We can declare literal strings with <code>&quot;</code>s. We’ve seen them already, with <code>println!</code>:</p>
+<p>We can declare literal strings with <code>&quot;</code>s. We’ve seen them already, with
+<code>println!</code>:</p>
 <pre><code class="language-rust">fn main() {
     println!(&quot;println! takes a literal string as an argument.&quot;);
 
@@ -388,8 +398,8 @@ If we used double quotes, we’d be defining a <code>&amp;str</code>. Let’s ta
     let s: &amp;str = &quot;Here’s one with a type annotation.&quot;;
 }
 </code></pre>
-<p>String literals are immutable, and of a fixed length.
-Rust has a second string type, <code>String</code>, that we’ll discuss in section 8.</p>
+<p>String literals are immutable, and of a fixed length. Rust has a second string
+type, <code>String</code>, that we’ll discuss in section 8.</p>
 <p><code>&amp;str</code>s are UTF-8 encoded.</p>
 
                 </div>

@@ -440,18 +440,18 @@ these common concepts.</p>
 to find out small details. These foundations will be in every single useful
 Rust program, and learning them gives us a strong core to start from.</p>
 <h1>Variable Bindings</h1>
-<p>The foundation of virtually every program is the ability to store and modify data.
-Rust programs are no different.
-Let’s start with a short example.</p>
+<p>The foundation of virtually every program is the ability to store and modify
+data. Rust programs are no different. Let’s start with a short example.</p>
 <h2>The basics of bindings</h2>
-<p>First, we’ll generate a new project with Cargo.
-Open a terminal, and navigate to the directory where you’d like to keep your projects.
-From there, let’s generate a new project:</p>
+<p>First, we’ll generate a new project with Cargo. Open a terminal, and navigate
+to the directory where you’d like to keep your projects. From there, let’s
+generate a new project:</p>
 <pre><code class="language-bash">$ cargo new --bin bindings
 $ cd bindings
 </code></pre>
-<p>This creates a new project, ‘bindings’, and sets up our <code>Cargo.toml</code> and <code>src/main.rs</code> files.
-As we saw in “Hello, World!”, Cargo will generate these files and create a little ‘hello world’ program for us:</p>
+<p>This creates a new project, ‘bindings’, and sets up our <code>Cargo.toml</code> and
+<code>src/main.rs</code> files. As we saw in “Hello, World!”, Cargo will generate these
+files and create a little ‘hello world’ program for us:</p>
 <pre><code class="language-rust">fn main() {
     println!(&quot;Hello, world!&quot;);
 }
@@ -469,13 +469,14 @@ As we saw in “Hello, World!”, Cargo will generate these files and create a l
      Running `target/debug/bindings`
 The value of x is: 5
 </code></pre>
-<p>If you see an error instead, double check that you have copied the program exactly as written.
-Let’s break this down, line by line.</p>
+<p>If you see an error instead, double check that you have copied the program
+exactly as written. Let’s break this down, line by line.</p>
 <pre><code class="language-rust,ignore">fn main() {
 </code></pre>
-<p>The <code>main()</code> function is the entry point of every Rust program.
-We’ll talk more about functions in the next section, but for now, all we need to know is that this is where our program begins.
-The opening curly brace, <code>{</code>, indicates the start of the function’s body.</p>
+<p>The <code>main()</code> function is the entry point of every Rust program. We’ll talk more
+about functions in the next section, but for now, all we need to know is that
+this is where our program begins. The opening curly brace, <code>{</code>, indicates the
+start of the function’s body.</p>
 <pre><code class="language-rust,ignore">    let x = 5;
 </code></pre>
 <p>This is our first ‘variable binding’, which we create with a ‘<code>let</code> statement’.</p>
@@ -483,42 +484,46 @@ The opening curly brace, <code>{</code>, indicates the start of the function’s
 <pre><code class="language-text">let NAME = EXPRESSION;
 </code></pre>
 <p>A <code>let</code> statement first evaluates the <code>EXPRESSION</code>, and then binds the
-resulting value to <code>NAME</code> so that it can be referred to later in the program. In
-our simple example, the expression was already a value, 5, but we could achieve
-the same effect with:</p>
+resulting value to <code>NAME</code> so that it can be referred to later in the program.
+In our simple example, the expression was already a value, 5, but we could
+achieve the same effect with:</p>
 <pre><code class="language-rust">let x = 2 + 3;
 </code></pre>
 <p>In general, <code>let</code> statements work with patterns; a name is a particularly
 humble form of pattern. Patterns are a big part of Rust, we’ll see more complex
 and powerful patterns as we go along.</p>
-<p>Before we do that, though, let’s finish investigating this example.
-Here’s the next line:</p>
+<p>Before we do that, though, let’s finish investigating this example. Here’s the
+next line:</p>
 <pre><code class="language-rust,ignore">    println!(&quot;The value of x is: {}&quot;, x);
 </code></pre>
-<p>The <code>println!</code> macro prints text to the screen.
-We can tell that it’s a macro due to the <code>!</code>.
-We won’t learn how to write macros until much later in the book, but we’ll use macros provided by the standard library throughout.
-Every time you see a <code>!</code>, remember that it signifies a macro.
-Macros can add new syntax to the language, and the <code>!</code> is a reminder that things may look slightly unusual.</p>
-<p><code>println!</code>, specifically, has one required argument, a ‘format string’, and zero or more optional arguments.
-The format string can contain the special text <code>{}</code>.
-Each instance of <code>{}</code> corresponds to an additional argument. Here’s an example:</p>
+<p>The <code>println!</code> macro prints text to the screen. We can tell that it’s a macro
+due to the <code>!</code>. We won’t learn how to write macros until much later in the
+book, but we’ll use macros provided by the standard library throughout. Every
+time you see a <code>!</code>, remember that it signifies a macro. Macros can add new
+syntax to the language, and the <code>!</code> is a reminder that things may look slightly
+unusual.</p>
+<p><code>println!</code>, specifically, has one required argument, a ‘format string’, and
+zero or more optional arguments. The format string can contain the special text
+<code>{}</code>. Each instance of <code>{}</code> corresponds to an additional argument. Here’s an
+example:</p>
 <pre><code class="language-rust">let x = 2 + 3;
 let y = x + 5;
 println!(&quot;The value of x is {}, and the value of y is {}&quot;, x, y);
 </code></pre>
-<p>You can think of <code>{}</code> as little crab pincers, holding the value in place.
-This placeholder has a number of more advanced formatting options that we’ll discuss later.</p>
+<p>You can think of <code>{}</code> as little crab pincers, holding the value in place. This
+placeholder has a number of more advanced formatting options that we’ll discuss
+later.</p>
 <pre><code class="language-rust,ignore">}
 </code></pre>
-<p>Finally, a closing curly brace matches up with the opening curly brace that declared the <code>main()</code> function, and declares its end.</p>
+<p>Finally, a closing curly brace matches up with the opening curly brace that
+declared the <code>main()</code> function, and declares its end.</p>
 <p>This explains our output:</p>
 <pre><code class="language-text">The value of x is: 5
 </code></pre>
-<p>We assign <code>5</code> to a binding, <code>x</code>, and then print it to the screen with <code>println!</code>.</p>
+<p>We assign <code>5</code> to a binding, <code>x</code>, and then print it to the screen with
+<code>println!</code>.</p>
 <h2>Multiple binding</h2>
-<p>Let’s try a more complex pattern.
-Change our example program to this:</p>
+<p>Let’s try a more complex pattern. Change our example program to this:</p>
 <pre><code class="language-rust">fn main() {
     let (x, y) = (5, 6);
 
@@ -533,27 +538,29 @@ Change our example program to this:</p>
 The value of x is: 5
 The value of y is: 6
 </code></pre>
-<p>We’ve created two bindings with one <code>let</code>!
-Here’s our pattern:</p>
+<p>We’ve created two bindings with one <code>let</code>! Here’s our pattern:</p>
 <pre><code class="language-text">(x, y)
 </code></pre>
 <p>And here’s the value:</p>
 <pre><code class="language-text">(5, 6)
 </code></pre>
-<p>As you can see, the two line up visually, and so <code>let</code> binds <code>5</code> to <code>x</code> and <code>6</code> to <code>y</code>.
-We could have used two <code>let</code> statements as well:</p>
+<p>As you can see, the two line up visually, and so <code>let</code> binds <code>5</code> to <code>x</code> and <code>6</code>
+to <code>y</code>. We could have used two <code>let</code> statements as well:</p>
 <pre><code class="language-rust">fn main() {
     let x = 5;
     let y = 6;
 }
 </code></pre>
-<p>In simple cases like this, two <code>let</code>s may be clearer, but in others, creating multiple bindings at once is nice.
-As we become more proficient in Rust, we’ll figure out which style is better, but it’s mostly a judgement call.</p>
+<p>In simple cases like this, two <code>let</code>s may be clearer, but in others, creating
+multiple bindings at once is nice. As we become more proficient in Rust, we’ll
+figure out which style is better, but it’s mostly a judgement call.</p>
 <h2>Type annotations</h2>
-<p>You may have noticed that we didn’t declare the type of <code>x</code> or <code>y</code> in our previous examples.
-Rust is a <em>statically typed</em> language, which means that at compile time, we must know the types of all bindings.
-But annotating every single binding with a type can feel like busywork, and make code noisy.
-To solve this issue, Rust uses ‘type inference’, meaning that it attempts to infer the types of your bindings.</p>
+<p>You may have noticed that we didn’t declare the type of <code>x</code> or <code>y</code> in our
+previous examples. Rust is a <em>statically typed</em> language, which means that at
+compile time, we must know the types of all bindings. But annotating every
+single binding with a type can feel like busywork, and make code noisy. To
+solve this issue, Rust uses ‘type inference’, meaning that it attempts to infer
+the types of your bindings.</p>
 <p>The primary way that the type is inferred is by looking at how it is used.
 Let’s look at the example again:</p>
 <pre><code class="language-rust">fn main() {
@@ -561,26 +568,28 @@ Let’s look at the example again:</p>
 }
 </code></pre>
 <p>When we bind <code>x</code> to <code>5</code>, the compiler knows that <code>x</code> should be a numeric type.
-Without any other information, it defaults to <code>i32</code>, a thirty-two bit integer type.
-We’ll talk more about Rust’s basic types in section 3.3.</p>
+Without any other information, it defaults to <code>i32</code>, a thirty-two bit integer
+type. We’ll talk more about Rust’s basic types in section 3.3.</p>
 <p>Here’s what a <code>let</code> statement with a ‘type annotation’ looks like:</p>
 <pre><code class="language-rust">fn main() {
     let x: i32 = 5;
 }
 </code></pre>
-<p>We can add a colon, followed by the type name.
-Here’s the structure of a <code>let</code> statement with a type annotation:</p>
+<p>We can add a colon, followed by the type name. Here’s the structure of a <code>let</code>
+statement with a type annotation:</p>
 <pre><code class="language-text">let PATTERN: TYPE = VALUE;
 </code></pre>
-<p>Note that the colon and the <code>TYPE</code> go <em>after</em> the <code>PATTERN</code>, not in the pattern itself.
-As an example, here’s our more complex pattern with two bindings:</p>
+<p>Note that the colon and the <code>TYPE</code> go <em>after</em> the <code>PATTERN</code>, not in the pattern
+itself. As an example, here’s our more complex pattern with two bindings:</p>
 <pre><code class="language-rust">fn main() {
     let (x, y): (i32, i32) = (5, 6);
 }
 </code></pre>
-<p>Just like we match up the <code>VALUE</code> with the <code>PATTERN</code>, we match up the <code>TYPE</code> with the <code>PATTERN</code>.</p>
+<p>Just like we match up the <code>VALUE</code> with the <code>PATTERN</code>, we match up the <code>TYPE</code>
+with the <code>PATTERN</code>.</p>
 <h2>Delayed Initialization</h2>
-<p>We do not have to provide bindings with an initial value, and can assign it later. Try this program:</p>
+<p>We do not have to provide bindings with an initial value, and can assign it
+later. Try this program:</p>
 <pre><code class="language-rust">fn main() {
     let x;
 
@@ -595,9 +604,9 @@ As an example, here’s our more complex pattern with two bindings:</p>
      Running `target/debug/bindings`
 The value of x is: 5
 </code></pre>
-<p>It’s all good.
-This raises a question, though: what if we try to print out a binding before we declare a value?
-Here’s a program that demonstrates this question:</p>
+<p>It’s all good. This raises a question, though: what if we try to print out a
+binding before we declare a value? Here’s a program that demonstrates this
+question:</p>
 <pre><code class="language-rust,ignore">fn main() {
     let x;
 
@@ -620,22 +629,22 @@ Could not compile `bindings`.
 
 To learn more, run the command again with --verbose.
 </code></pre>
-<p>An error!
-The compiler won’t let us write a program like this.
-This is our first example of the compiler helping us find an error in our program.
-Different programming languages have different ways of approaching this problem.
-Some languages always initialize values with some sort of default.
-Other languages leave the value uninitialized, and make no promises about what happens if you try to use something before initialization.
-Rust chooses something else: error and force the programmer to explain what they want.
-We must do some sort of initialization before we can use <code>x</code>.</p>
+<p>An error! The compiler won’t let us write a program like this. This is our
+first example of the compiler helping us find an error in our program.
+Different programming languages have different ways of approaching this
+problem. Some languages always initialize values with some sort of default.
+Other languages leave the value uninitialized, and make no promises about what
+happens if you try to use something before initialization. Rust chooses
+something else: error and force the programmer to explain what they want. We
+must do some sort of initialization before we can use <code>x</code>.</p>
 <h3>Extended error explanations</h3>
 <p>There’s one more interesting part of this error message:</p>
 <pre><code class="language-text">src/main.rs:4:39: 4:40 help: run `rustc --explain E0381` to see a detailed explanation
 </code></pre>
 <p>We can see an extended explanation by passing the <code>--explain</code> flag to <code>rustc</code>.
-Not every error has a longer explanation, but many of them do.
-These extended explanations try to show off common ways that the error occurs, and common solutions to the issue.
-Here’s <code>E0381</code>:</p>
+Not every error has a longer explanation, but many of them do. These extended
+explanations try to show off common ways that the error occurs, and common
+solutions to the issue. Here’s <code>E0381</code>:</p>
 <pre><code class="language-bash">$ rustc --explain E0381
 It is not allowed to use or capture an uninitialized variable. For example:
 
@@ -646,10 +655,11 @@ fn main() {
 To fix this, ensure that any declared variables are initialized before being
 used.
 </code></pre>
-<p>These explanations can really help if you’re stuck on an error.
-The compiler is your friend, and is here to help.</p>
+<p>These explanations can really help if you’re stuck on an error. The compiler is
+your friend, and is here to help.</p>
 <h2>Mutable bindings</h2>
-<p>What about changing the value of a binding? Here’s another sample program that asks this question:</p>
+<p>What about changing the value of a binding? Here’s another sample program that
+asks this question:</p>
 <pre><code class="language-rust,ignore">fn main() {
     let x = 5;
 
@@ -669,11 +679,10 @@ src/main.rs:2:9: 2:10 note: prior assignment occurs here
 src/main.rs:2     let x = 5;
                       ^
 </code></pre>
-<p>The error mentions <code>re-assigment of immutable variable</code>.
-That’s right: bindings are immutable.
-But they’re only immutable by default.
-In a pattern, when we’re creating a new name, we can add <code>mut</code> in front to make the binding a mutable one.
-Here’s an example:</p>
+<p>The error mentions <code>re-assigment of immutable variable</code>. That’s right: bindings
+are immutable. But they’re only immutable by default. In a pattern, when we’re
+creating a new name, we can add <code>mut</code> in front to make the binding a mutable
+one. Here’s an example:</p>
 <pre><code class="language-rust">fn main() {
     let mut x = 5;
 
@@ -691,9 +700,8 @@ Here’s an example:</p>
 The value of x is: 5
 The value of x is: 6
 </code></pre>
-<p>We can now change the value that <code>x</code> binds to.
-Note that the syntax is not <code>let mut</code> exactly; it’s using <code>mut</code> in a pattern.
-This becomes more obvious with our <code>()</code> pattern:</p>
+<p>We can now change the value that <code>x</code> binds to. Note that the syntax is not <code>let mut</code> exactly; it’s using <code>mut</code> in a pattern. This becomes more obvious with our
+<code>()</code> pattern:</p>
 <pre><code class="language-rust,ignore">fn main() {
     let (mut x, y) = (5, 6);
 
@@ -712,27 +720,28 @@ src/main.rs:2:17: 2:18 note: prior assignment occurs here
 src/main.rs:2     let (mut x, y) = (5, 6);
                               ^
 </code></pre>
-<p>It’s fine with re-assigning <code>x</code>, but not <code>y</code>.
-The <code>mut</code> only applies to the name that follows it, not the whole pattern.</p>
+<p>It’s fine with re-assigning <code>x</code>, but not <code>y</code>. The <code>mut</code> only applies to the
+name that follows it, not the whole pattern.</p>
 <h3>Reassignment, not mutation</h3>
-<p>There is one subtlety we haven’t covered yet: <code>mut</code> allows you to mutate <em>the binding</em>, but not <em>what the binding binds to</em>.
-In other words:</p>
+<p>There is one subtlety we haven’t covered yet: <code>mut</code> allows you to mutate <em>the
+binding</em>, but not <em>what the binding binds to</em>. In other words:</p>
 <pre><code class="language-rust">fn main() {
     let mut x = 5;
 
     x = 6;
 }
 </code></pre>
-<p>This is not changing the value that <code>x</code> is bound to, but creating a new value, <code>6</code>, and changing the binding to bind to it instead.
-It’s a subtle but important difference.
-Well, for now, it does not make a lot of difference, but when our programs get more complex, it will.
-Specifically, passing arguments to functions will illustrate the difference.
-We’ll talk about that in the next section, when we discuss functions.</p>
+<p>This is not changing the value that <code>x</code> is bound to, but creating a new value,
+<code>6</code>, and changing the binding to bind to it instead. It’s a subtle but
+important difference. Well, for now, it does not make a lot of difference, but
+when our programs get more complex, it will. Specifically, passing arguments to
+functions will illustrate the difference. We’ll talk about that in the next
+section, when we discuss functions.</p>
 <h2>Scope</h2>
-<p>Variable bindings have a ‘scope’ in which they’re valid.
-That scope begins from the point at which the binding is declared, and ends at the end of the next block of code.
-We can only access bindings which are ‘in scope’.
-We cannot access them ‘before they come into scope’ or ‘after they go out of scope’.
+<p>Variable bindings have a ‘scope’ in which they’re valid. That scope begins from
+the point at which the binding is declared, and ends at the end of the next
+block of code. We can only access bindings which are ‘in scope’. We cannot
+access them ‘before they come into scope’ or ‘after they go out of scope’.
 Here’s an example:</p>
 <pre><code class="language-rust">fn main() {
     println!(&quot;x is not yet in scope&quot;);
@@ -768,10 +777,11 @@ Here’s an example:</p>
     println!(&quot;x will go out of scope now! The next curly brace is ending the main function.&quot;);
 }
 </code></pre>
-<p>What bindings are in and out of scope will become much more important later, once we learn about ‘references’ and ‘traits’.</p>
+<p>What bindings are in and out of scope will become much more important later,
+once we learn about ‘references’ and ‘traits’.</p>
 <h2>Shadowing</h2>
-<p>A final thing about bindings: they can ‘shadow’ previous bindings with the same name.
-Here’s a sample program:</p>
+<p>A final thing about bindings: they can ‘shadow’ previous bindings with the same
+name. Here’s a sample program:</p>
 <pre><code class="language-rust">fn main() {
     let x = 5;
     let x = 6;
@@ -786,14 +796,13 @@ src/main.rs:2     let x = 5;
      Running `target/debug/bindings`
 The value of x is: 6
 </code></pre>
-<p>There are two interesting things in this output.
-First, Rust will compile and run this program, no problem.
-And as we can see, the value of <code>x</code> is <code>6</code>.
-But we didn’t declare <code>x</code> as mutable.
-Instead, we declared a <em>new</em> binding that is <em>also</em> named <code>x</code>, and gave it a new value.
-The older value that we bound <code>x</code> to is inaccessible as soon as the new <code>x</code> is declared.
-This can be useful if you’d like to perform a few transformations on a value, and leave it immutable.
-For example:</p>
+<p>There are two interesting things in this output. First, Rust will compile and
+run this program, no problem. And as we can see, the value of <code>x</code> is <code>6</code>. But
+we didn’t declare <code>x</code> as mutable. Instead, we declared a <em>new</em> binding that is
+<em>also</em> named <code>x</code>, and gave it a new value. The older value that we bound <code>x</code> to
+is inaccessible as soon as the new <code>x</code> is declared. This can be useful if you’d
+like to perform a few transformations on a value, and leave it immutable. For
+example:</p>
 <pre><code class="language-rust">fn main() {
     let x = 5;
     let x = x + 1;
@@ -807,10 +816,10 @@ For example:</p>
      Running `target/debug/bindings`
 The value of x is: 12
 </code></pre>
-<p>This lets us modify <code>x</code>, but not deal with mutation.
-This is nice because we know that the compiler will let us know if we try to modify it later.
-Let’s assume that after we calculate <code>12</code>, we don’t want to modify <code>x</code> again.
-If we had written this program in a mutable style, like this:</p>
+<p>This lets us modify <code>x</code>, but not deal with mutation. This is nice because we
+know that the compiler will let us know if we try to modify it later. Let’s
+assume that after we calculate <code>12</code>, we don’t want to modify <code>x</code> again. If we
+had written this program in a mutable style, like this:</p>
 <pre><code>fn main() {
     let mut x = 5;
     x = x + 1;
@@ -823,8 +832,8 @@ If we had written this program in a mutable style, like this:</p>
     println!(&quot;The value of x is: {}&quot;, x);
 }
 </code></pre>
-<p>Rust is happy to let us mutate it again, to <code>15</code>.
-A similar program in our immutable style will let us know about that accidental mutation, however:</p>
+<p>Rust is happy to let us mutate it again, to <code>15</code>. A similar program in our
+immutable style will let us know about that accidental mutation, however:</p>
 <pre><code class="language-rust,ignore">fn main() {
     let x = 5;
     let x = x + 1;
@@ -851,9 +860,10 @@ error: aborting due to previous error
 Could not compile `bindings`.
 </code></pre>
 <p>Exactly what we wanted.</p>
-<p>Shadowing can take some time to get used to, but it’s very powerful, and works well with immutability.</p>
-<p>There was one more thing we should talk about in the output from compiling our initial program.
-It’s this part:</p>
+<p>Shadowing can take some time to get used to, but it’s very powerful, and works
+well with immutability.</p>
+<p>There was one more thing we should talk about in the output from compiling our
+initial program. It’s this part:</p>
 <pre><code class="language-text">src/main.rs:2:9: 2:10 warning: unused variable: `x`, #[warn(unused_variables)] on by default
 </code></pre>
 <p>Here’s the two lines of relevant code:</p>
@@ -861,18 +871,19 @@ It’s this part:</p>
 let x = 6;
 </code></pre>
 <p>Rust knows that we shadowed <code>x</code>, but we never ended up using the initial value.
-This isn’t <em>wrong</em>, exactly, it just may not have been what we wanted.
-In this case, the compiler issues a ‘warning’, but still compiles our program.
-The <code>#[warn(unused_variables)]</code> syntax is called an ‘attribute’, which we’ll discuss in a later section.
-More specifically, a warning like this is called a ‘lint’, which is an old term for the bits of sheep’s wool that you wouldn’t want to put in cloth.
-Similarly, this lint is telling us that we may have an extra bit of code we don’t need.
-Our program would work just fine without it.
+This isn’t <em>wrong</em>, exactly, it just may not have been what we wanted. In this
+case, the compiler issues a ‘warning’, but still compiles our program. The
+<code>#[warn(unused_variables)]</code> syntax is called an ‘attribute’, which we’ll
+discuss in a later section. More specifically, a warning like this is called a
+‘lint’, which is an old term for the bits of sheep’s wool that you wouldn’t
+want to put in cloth. Similarly, this lint is telling us that we may have an
+extra bit of code we don’t need. Our program would work just fine without it.
 It’s worth listening to these warnings, and fixing the problems they point out.
-They can be signs of a larger problem.
-In this case, we may not have realized that we were shadowing <code>x</code>.</p>
+They can be signs of a larger problem. In this case, we may not have realized
+that we were shadowing <code>x</code>.</p>
 <h3>Shadowing and scopes</h3>
-<p>Like any binding, a binding that shadows another binding will go away at the end of a scope.
-Here’s an example program:</p>
+<p>Like any binding, a binding that shadows another binding will go away at the
+end of a scope. Here’s an example program:</p>
 <pre><code class="language-rust">fn main() {
     let x = 5;
 
@@ -896,7 +907,8 @@ Now that x is shadowed, x is: 6
 After shadowing, x is: 5
 </code></pre>
 <h1>Functions</h1>
-<p>Functions are pervasive in Rust code. We’ve already seen the most important function, <code>main()</code>, in previous sections of the book:</p>
+<p>Functions are pervasive in Rust code. We’ve already seen the most important
+function, <code>main()</code>, in previous sections of the book:</p>
 <pre><code class="language-rust">fn main() {
     println!(&quot;Hello, world!&quot;);
 }
@@ -906,9 +918,9 @@ After shadowing, x is: 5
     println!(&quot;Another function.&quot;);
 }
 </code></pre>
-<p>Rust code uses <code>snake_case</code> as a style for function names: all lower case, with underscores separating words.
-(It also uses them for variable names, too.)
-We can can call any function we’ve defined by using its name and some parentheses:</p>
+<p>Rust code uses <code>snake_case</code> as a style for function names: all lower case, with
+underscores separating words. (It also uses them for variable names, too.) We
+can can call any function we’ve defined by using its name and some parentheses:</p>
 <pre><code class="language-rust">fn main() {
     println!(&quot;Hello, world!&quot;);
 
@@ -919,9 +931,9 @@ fn another_function() {
     println!(&quot;Another function.&quot;);
 }
 </code></pre>
-<p>Let’s start a new project to explore functions.
-Open a terminal, and navigate to the directory where you’d like to keep your projects.
-From there, use Cargo to generate a new project:</p>
+<p>Let’s start a new project to explore functions. Open a terminal, and navigate
+to the directory where you’d like to keep your projects. From there, use Cargo
+to generate a new project:</p>
 <pre><code class="language-bash">$ cargo new --bin functions
 $ cd functions
 </code></pre>
@@ -932,8 +944,9 @@ $ cd functions
 Hello, world!
 Another function.
 </code></pre>
-<p>As we can see, the lines execute in order: first, we print out our “Hello, world!” message, and then <code>another_function()</code> is called.
-It then prints its message as well.</p>
+<p>As we can see, the lines execute in order: first, we print out our “Hello,
+world!” message, and then <code>another_function()</code> is called. It then prints its
+message as well.</p>
 <h2>Function Arguments</h2>
 <p>Functions can also take arguments:</p>
 <pre><code class="language-rust">fn main() {
@@ -956,13 +969,14 @@ The value of x is: 5
 <p>Declaring a function which takes a single argument looks like this:</p>
 <pre><code class="language-text">fn NAME(PATTERN: TYPE) {
 </code></pre>
-<p>That’s right, patterns appear again.
-Consider how the parameter declaration here looks like the <code>let</code> bindings we used earlier:</p>
+<p>That’s right, patterns appear again. Consider how the parameter declaration
+here looks like the <code>let</code> bindings we used earlier:</p>
 <pre><code class="language-rust,ignore">let x: i32;
 fn another_function(x: i32) {
 </code></pre>
-<p>There’s only one difference here: in function signatures, we <em>must</em> declare the type.
-This is a deliberate decision; we find that requiring type annotations in functions means that you almost never need them anywhere else.</p>
+<p>There’s only one difference here: in function signatures, we <em>must</em> declare the
+type. This is a deliberate decision; we find that requiring type annotations in
+functions means that you almost never need them anywhere else.</p>
 <p>You can separate multiple arguments with a comma:</p>
 <pre><code class="language-text">fn NAME(PATTERN, PATTERN, PATTERN, PATTERN...) {
 </code></pre>
@@ -1003,15 +1017,16 @@ fn another_function(x: i32, y: i32) {
 The value of x is: 5
 The value of y is: 6
 </code></pre>
-<p>Note that our bindings are called <code>a</code> and <code>b</code>, yet inside of the function, we refer to them by the names in the signature, <code>x</code> and <code>y</code>.
-Inside a function, only its parameters are in scope, so we need to use those names.
-Bindings passed as parameters don’t need to have the same name as the arguments.</p>
+<p>Note that our bindings are called <code>a</code> and <code>b</code>, yet inside of the function, we
+refer to them by the names in the signature, <code>x</code> and <code>y</code>. Inside a function,
+only its parameters are in scope, so we need to use those names. Bindings
+passed as parameters don’t need to have the same name as the arguments.</p>
 <h2>Return values</h2>
 <p>Functions can also return values back to the function that called them:</p>
 <pre><code class="language-TEXT">fn NAME(PATTERN, PATTERN, PATTERN, PATTERN...) -&gt; TYPE {
 </code></pre>
-<p>We don’t name return values, but we do declare their type, after an arrow: <code>-&gt;</code>.
-Here’s a sample program:</p>
+<p>We don’t name return values, but we do declare their type, after an arrow:
+<code>-&gt;</code>. Here’s a sample program:</p>
 <pre><code class="language-rust">fn main() {
     let x = five();
 
@@ -1028,9 +1043,8 @@ fn five() -&gt; i32 {
      Running `target/debug/functions`
 The value of x is: 5
 </code></pre>
-<p>Let’s examine this in more detail.
-There are two important bits.
-First, we can use the return value of a function to initialize a binding:</p>
+<p>Let’s examine this in more detail. There are two important bits. First, we can
+use the return value of a function to initialize a binding:</p>
 <pre><code class="language-rust,ignore">let x = five();
 </code></pre>
 <p>Because <code>five()</code> returns a <code>5</code>, this is the same as:</p>
@@ -1041,11 +1055,10 @@ First, we can use the return value of a function to initialize a binding:</p>
     5
 }
 </code></pre>
-<p>We have no arguments, and our return type, <code>i32</code>.
-However, the body of this function is a lonely <code>5</code>.
-There’s a detail here that you may or may not have noticed: we’ve ended almost every line in our programs with a semicolon.
-There’s no semicolon here, though.
-Why not?</p>
+<p>We have no arguments, and our return type, <code>i32</code>. However, the body of this
+function is a lonely <code>5</code>. There’s a detail here that you may or may not have
+noticed: we’ve ended almost every line in our programs with a semicolon.
+There’s no semicolon here, though. Why not?</p>
 <p>The answer to this question is:</p>
 <blockquote>
 <p>The return value of a function is the value of its final expression.</p>
@@ -1053,24 +1066,21 @@ Why not?</p>
 <p>We haven’t talked about expressions yet, so this definition doesn’t help a lot.
 Let’s go over that now.</p>
 <h2>Statements and Expressions</h2>
-<p>Expressions are bits of code that evaluate to a value.
-Consider some math operations, like this:</p>
+<p>Expressions are bits of code that evaluate to a value. Consider some math
+operations, like this:</p>
 <pre><code class="language-rust,ignore">5 + 6
 </code></pre>
-<p>We can evaluate this expression, and come up with a value: <code>11</code>.
-In Rust, most bits of code are expressions.
-For example, calling a function is an expression:</p>
+<p>We can evaluate this expression, and come up with a value: <code>11</code>. In Rust, most
+bits of code are expressions. For example, calling a function is an expression:</p>
 <pre><code class="language-rust,ignore">foo(5)
 </code></pre>
 <p>The value is equal to whatever the return value of <code>foo()</code> is.</p>
-<p>So why does this matter?
-Well, not everything is an expression.
-Some things are ‘statements’.
-Expressions <em>compute</em> something, but statements <em>bind</em> or <em>do</em> something.
-It’s a subtle difference.
-We’ve already seen two kinds of statements: <code>let</code> statements, and <code>fn</code> declarations.</p>
-<p>Because <code>let</code> is a statement, not an expression, you can’t assign it to another binding.
-Here’s an example that doesn’t work:</p>
+<p>So why does this matter? Well, not everything is an expression. Some things are
+‘statements’. Expressions <em>compute</em> something, but statements <em>bind</em> or <em>do</em>
+something. It’s a subtle difference. We’ve already seen two kinds of
+statements: <code>let</code> statements, and <code>fn</code> declarations.</p>
+<p>Because <code>let</code> is a statement, not an expression, you can’t assign it to another
+binding. Here’s an example that doesn’t work:</p>
 <pre><code class="language-rust,ignore">fn main() {
     let x = (let y = 6);
 }
@@ -1087,18 +1097,18 @@ src/main.rs:2     let x = (let y = 6);
 Could not compile `functions`.
 </code></pre>
 <p>We also cannot somehow assign a <code>fn</code> declaration to a binding, either.</p>
-<p>So what’s this have to do with return values?
-Well, <code>{}</code>, a ‘block’ that we used earlier to create new scopes, <em>is</em> an expression.
-Let’s take a closer look at <code>{}</code>.
-It looks like this:</p>
+<p>So what’s this have to do with return values? Well, <code>{}</code>, a ‘block’ that we
+used earlier to create new scopes, <em>is</em> an expression. Let’s take a closer look
+at <code>{}</code>. It looks like this:</p>
 <pre><code class="language-text">{
     STATEMENT*
     EXPRESSION
 }
 </code></pre>
-<p>The <code>*</code> there means ‘zero or more’, so we can have any number of statements followed by an expression.
-Since blocks are expressions themselves, we can nest blocks inside of blocks.
-And since they return a value, we can use them in <code>let</code> statements:</p>
+<p>The <code>*</code> there means ‘zero or more’, so we can have any number of statements
+followed by an expression. Since blocks are expressions themselves, we can nest
+blocks inside of blocks. And since they return a value, we can use them in
+<code>let</code> statements:</p>
 <pre><code class="language-rust">fn main() {
     let x = 5;
 
@@ -1121,21 +1131,21 @@ The value of y is: 11
 
 };
 </code></pre>
-<p>Since the block can contain statements, we create a new variable binding, <code>z</code>, and give it a value.
-We then do some math for the final expression of the block:</p>
+<p>Since the block can contain statements, we create a new variable binding, <code>z</code>,
+and give it a value. We then do some math for the final expression of the
+block:</p>
 <pre><code class="language-rust,ignore">{
     let z = 1;
 
     x + z + 5
 }
 </code></pre>
-<p><code>5 + 1 + 5</code> is <code>11</code>, and so the value of the entire block is <code>11</code>.
-This gets substituted into our <code>let</code> statement for <code>y</code>:</p>
+<p><code>5 + 1 + 5</code> is <code>11</code>, and so the value of the entire block is <code>11</code>. This gets
+substituted into our <code>let</code> statement for <code>y</code>:</p>
 <pre><code class="language-rust,ignore">let y = 11;
 </code></pre>
 <p>Hence our output saying <code>y</code> is <code>11</code>.</p>
-<p>Where else do we use blocks? As the body of functions!
-They’re very similar:</p>
+<p>Where else do we use blocks? As the body of functions! They’re very similar:</p>
 <pre><code class="language-rust">fn main() {
     let x = 5;
 
@@ -1161,16 +1171,17 @@ fn plus_one(x: i32) -&gt; i32 {
 The value of y is: 6
 The value of y is: 6
 </code></pre>
-<p>In both cases, we use a block to produce a value.
-In the first case, it’s assigning with <code>let</code>:</p>
+<p>In both cases, we use a block to produce a value. In the first case, it’s
+assigning with <code>let</code>:</p>
 <pre><code class="language-rust,ignore">let y = {
 </code></pre>
 <p>In the second, it’s the return value of the function:</p>
 <pre><code class="language-rust,ignore">fn plus_one(x: i32) -&gt; i32 {
 </code></pre>
 <h3>Expression statements</h3>
-<p>There’s one more detail about expressions and statements: a semicolon takes any expression, and turns it into a statement.
-Let’s accidentally cause an error with <code>plus_one()</code>:</p>
+<p>There’s one more detail about expressions and statements: a semicolon takes any
+expression, and turns it into a statement. Let’s accidentally cause an error
+with <code>plus_one()</code>:</p>
 <pre><code class="language-rust,ignore">fn main() {
     let x = plus_one(5);
 
@@ -1181,7 +1192,8 @@ fn plus_one(x: i32) -&gt; i32 {
     x + 1;
 }
 </code></pre>
-<p>Instead of an expression, <code>x + 1</code>, we’ve now turned it into a statement, <code>x + 1;</code>.</p>
+<p>Instead of an expression, <code>x + 1</code>, we’ve now turned it into a statement,
+<code>x + 1;</code>.</p>
 <p>Running this gives an error:</p>
 <pre><code class="language-bash">$ cargo run
    Compiling functions v0.1.0 (file:///home/steve/tmp/functions)
@@ -1196,21 +1208,22 @@ src/main.rs:8     x + 1;
 error: aborting due to previous error
 Could not compile `functions`.
 </code></pre>
-<p>Rust has our back here: it even suggests removing the semicolon, which fixes the error.
-But the main error message is the core of the issue: statements don’t evaluate to a value, yet we want to return an <code>i32</code>.</p>
+<p>Rust has our back here: it even suggests removing the semicolon, which fixes
+the error. But the main error message is the core of the issue: statements
+don’t evaluate to a value, yet we want to return an <code>i32</code>.</p>
 <p>In practice, Rust programmers don’t often think about these rules at this
 level. Usually, you have a semicolon at the end of most lines, and maybe not at
 the end of blocks.</p>
 <h2>Multiple return values</h2>
-<p>Functions cannot directly return multiple values.
-There’s a trick, however. Remember the <code>()</code>s we used when showing off complex bindings?</p>
+<p>Functions cannot directly return multiple values. There’s a trick, however.
+Remember the <code>()</code>s we used when showing off complex bindings?</p>
 <pre><code class="language-rust">fn main() {
     let (x, y) = (5, 6);
 }
 </code></pre>
-<p>They form something called a ‘tuple’, one of Rust’s basic types.
-A tuple is an anonymous collection of elements.
-But since a tuple is a singular thing, we can use it as a way to return multiple values from functions:</p>
+<p>They form something called a ‘tuple’, one of Rust’s basic types. A tuple is an
+anonymous collection of elements. But since a tuple is a singular thing, we can
+use it as a way to return multiple values from functions:</p>
 <pre><code class="language-rust">fn main() {
     let (x, y) = two_numbers();
 
@@ -1229,36 +1242,38 @@ fn two_numbers() -&gt; (i32, i32) {
 The value of x is: 5
 The value of y is: 6
 </code></pre>
-<p>There are two interesting changes here: assigning the return value of <code>two_numbers()</code> to <code>x</code> and <code>y</code>, and the declaration of <code>two_numbers()</code> itself.</p>
+<p>There are two interesting changes here: assigning the return value of
+<code>two_numbers()</code> to <code>x</code> and <code>y</code>, and the declaration of <code>two_numbers()</code> itself.</p>
 <p>Let’s look at the declaration first:</p>
 <pre><code class="language-rust">fn two_numbers() -&gt; (i32, i32) {
     (5, 6)
 }
 </code></pre>
-<p>The <code>(i32, i32)</code> should look familiar.
-We saw it in <code>let</code> bindings earlier:</p>
+<p>The <code>(i32, i32)</code> should look familiar. We saw it in <code>let</code> bindings earlier:</p>
 <pre><code class="language-rust">let (x, y): (i32, i32) = (5, 6);
 </code></pre>
-<p>The <code>(i32, i32)</code> syntax says “a tuple with two <code>i32</code>s in it.”
-The <code>(5, 6)</code> syntax creates a new one, with <code>5</code> and <code>6</code>.</p>
+<p>The <code>(i32, i32)</code> syntax says “a tuple with two <code>i32</code>s in it.” The <code>(5, 6)</code>
+syntax creates a new one, with <code>5</code> and <code>6</code>.</p>
 <p>This tuple is then returned, and assigned to <code>x</code> and <code>y</code>:</p>
 <pre><code class="language-rust,ignore">let (x, y) = two_numbers();
 </code></pre>
 <p>See how all these bits fit together?</p>
-<p>We call this behavior of <code>let</code> ‘destructuring’, because it takes the structure of the expression that comes after the <code>=</code> and takes it apart.</p>
+<p>We call this behavior of <code>let</code> ‘destructuring’, because it takes the structure
+of the expression that comes after the <code>=</code> and takes it apart.</p>
 <h1>Primitive Types</h1>
-<p>We’ve seen that every value in Rust has a type of some kind.
-There are a number of types which are built into the language itself.
-We call these types ‘primitive’ types, since you can’t re-create them yourself.
-There are, of course, many non-primitive types provided by the standard library as well.</p>
-<p>Remember, you can rely on type inference to figure out the type of a binding, or you can annotate it explicitly:</p>
+<p>We’ve seen that every value in Rust has a type of some kind. There are a number
+of types which are built into the language itself. We call these types
+‘primitive’ types, since you can’t re-create them yourself. There are, of
+course, many non-primitive types provided by the standard library as well.</p>
+<p>Remember, you can rely on type inference to figure out the type of a binding,
+or you can annotate it explicitly:</p>
 <pre><code class="language-rust">fn main() {
     let x: i32 = 5;
 }
 </code></pre>
 <h2>Integers</h2>
-<p>You’ve already seen one primitive type: <code>i32</code>.
-There are a number of built-in number types in Rust.</p>
+<p>You’ve already seen one primitive type: <code>i32</code>. There are a number of built-in
+number types in Rust.</p>
 <p>Here’s a chart of Rust’s integer types:</p>
 <p>|        | signed | unsigned |
 |--------|--------|----------|
@@ -1267,20 +1282,20 @@ There are a number of built-in number types in Rust.</p>
 | 32-bit | i32    | u32      |
 | 64-bit | i64    | u64      |
 | arch   | isize  | usize    |</p>
-<p>We have both signed and unsigned variants of numbers, and each variant has an explicit size.
-Unsigned numbers are always positive, and signed numbers can be positive or negative.
-(Think ‘plus sign’ or ‘minus sign’: that’s a signed number.)
-Signed numbers are stored using ‘two’s compliment’ representation.</p>
-<p>Finally, <code>isize</code> and <code>usize</code> are different sizes based on the kind of computer your program is running on.
-If you are on a 64-bit architecture, they are 64 bits, and if you’re on a 32-bit one, they’re 32 bits.</p>
-<p>So how do you choose from all these options? Well, if you really don’t know, the defaults are a good choice:
-integer types default to <code>i32</code>.
-The primary use case for <code>isize</code>/<code>usize</code> is when indexing some sort of collection.
-We’ll talk more about our first collection, arrays, in just a moment.</p>
+<p>We have both signed and unsigned variants of numbers, and each variant has an
+explicit size. Unsigned numbers are always positive, and signed numbers can be
+positive or negative. (Think ‘plus sign’ or ‘minus sign’: that’s a signed
+number.) Signed numbers are stored using ‘two’s compliment’ representation.</p>
+<p>Finally, <code>isize</code> and <code>usize</code> are different sizes based on the kind of computer
+your program is running on. If you are on a 64-bit architecture, they are 64
+bits, and if you’re on a 32-bit one, they’re 32 bits.</p>
+<p>So how do you choose from all these options? Well, if you really don’t know,
+the defaults are a good choice: integer types default to <code>i32</code>. The primary use
+case for <code>isize</code>/<code>usize</code> is when indexing some sort of collection. We’ll talk
+more about our first collection, arrays, in just a moment.</p>
 <h2>Floating-point numbers</h2>
-<p>Rust also has two primitive floating-point numbers: <code>f32</code> and <code>f64</code>.
-They are 32 bits and 64 bits in size, respectively.
-The default is <code>f64</code>.</p>
+<p>Rust also has two primitive floating-point numbers: <code>f32</code> and <code>f64</code>. They are
+32 bits and 64 bits in size, respectively. The default is <code>f64</code>.</p>
 <pre><code class="language-rust">fn main() {
     let x = 2.0; // f64
 
@@ -1290,18 +1305,18 @@ The default is <code>f64</code>.</p>
 <p>Floating-point numbers are represented according to the IEEE-754 standard.
 <code>f32</code> is a single-precision float, <code>f64</code> is double-precision.</p>
 <h2>Tuples</h2>
-<p>The other type we’ve seen previously is the tuple type.
-Tuples have an ‘arity’, or size.
-We might say “that’s a 3-tuple” or “that’s a 5-tuple.”</p>
+<p>The other type we’ve seen previously is the tuple type. Tuples have an ‘arity’,
+or size. We might say “that’s a 3-tuple” or “that’s a 5-tuple.”</p>
 <p>Each position in a tuple has a distinct type:</p>
 <pre><code class="language-rust">fn main() {
     let x: (i32, f64, u8) = (500, 6.4, 1);
 }
 </code></pre>
-<p>Tuples are used sparingly in Rust code.
-This is because the elements of a tuple are anonymous, which can make code hard to read.</p>
+<p>Tuples are used sparingly in Rust code. This is because the elements of a tuple
+are anonymous, which can make code hard to read.</p>
 <h3>Tuple indexing</h3>
-<p>To access an element of a tuple, we use a <code>.</code> followed by the index we want to access:</p>
+<p>To access an element of a tuple, we use a <code>.</code> followed by the index we want to
+access:</p>
 <pre><code class="language-rust">fn main() {
     let x: (i32, f64, u8) = (500, 6.4, 1);
 
@@ -1312,8 +1327,8 @@ This is because the elements of a tuple are anonymous, which can make code hard 
 </code></pre>
 <p>As you can see, the first index is <code>0</code>.</p>
 <h3>Single-element tuples</h3>
-<p>There’s one last trick with tuples: <code>(5)</code> is actually ambiguous: is it a tuple, or is it a <code>5</code> in parethesis?
-If you need to disambiguate, use a comma:</p>
+<p>There’s one last trick with tuples: <code>(5)</code> is actually ambiguous: is it a tuple,
+or is it a <code>5</code> in parethesis? If you need to disambiguate, use a comma:</p>
 <pre><code class="language-rust">fn main() {
     let x = (5); // x is an i32, no tuple. Think of it like (5 + 1) without the + 1, they’re for grouping.
 
@@ -1321,10 +1336,9 @@ If you need to disambiguate, use a comma:</p>
 }
 </code></pre>
 <h2>Functions</h2>
-<p>There’s one more type that we’ve been using, but you haven’t seen written explicitly.
-Functions!
-Functions also have a type, and yes, you can even have variables which hold functions!
-Here’s an example:</p>
+<p>There’s one more type that we’ve been using, but you haven’t seen written
+explicitly. Functions! Functions also have a type, and yes, you can even have
+variables which hold functions! Here’s an example:</p>
 <pre><code class="language-rust">fn plus_one(x: i32) -&gt; i32 {
     x + 1
 }
@@ -1336,8 +1350,8 @@ fn main() {
     let five = f(4);
 }
 </code></pre>
-<p>As you can see, the type is very similar to the declaration.
-Here, let’s put them side by side:</p>
+<p>As you can see, the type is very similar to the declaration. Here, let’s put
+them side by side:</p>
 <pre><code class="language-rust,ignore">fn(i32) -&gt; i32 // type
 fn plus_one(x: i32) -&gt; i32 { // declaration
 </code></pre>
@@ -1350,7 +1364,8 @@ fn(x: i32) -&gt; i32 {
 fn(i32) -&gt; i32 {
 </code></pre>
 <p>It’s the same! Well, we need to drop that <code>{</code> as well.</p>
-<p>Finally, if you’ll notice in that example, we can create a binding with a function in it:</p>
+<p>Finally, if you’ll notice in that example, we can create a binding with a
+function in it:</p>
 <pre><code class="language-rust,ignore">fn main() {
     let f = plus_one;
 
@@ -1359,9 +1374,8 @@ fn(i32) -&gt; i32 {
 </code></pre>
 <p>... and call it with <code>()</code>s just like if we had used the original name.</p>
 <h3>Functions as arguments</h3>
-<p>So why not just use the original name?
-Well, we can pass functions as arguments to other functions!
-Check this out:</p>
+<p>So why not just use the original name? Well, we can pass functions as arguments
+to other functions! Check this out:</p>
 <pre><code class="language-rust">fn plus_one(x: i32) -&gt; i32 {
     x + 1
 }
@@ -1396,20 +1410,22 @@ The value of z is: 9
 <p>Let’s investigate in more detail.</p>
 <pre><code class="language-rust,ignore">fn twice(x: i32, f: fn(i32) -&gt; i32) -&gt; i32 {
 </code></pre>
-<p>This says “<code>twice()</code> is a function which takes two arguments.
-<code>x</code> is a thirty-two bit integer, and <code>f</code> is a function which takes an <code>i32</code> and returns an <code>i32</code>.”</p>
-<p>Inside of <code>twice()</code>, as you might imagine, we call the function <code>f</code> twice on <code>x</code>, and return the result.</p>
+<p>This says “<code>twice()</code> is a function which takes two arguments. <code>x</code> is a
+thirty-two bit integer, and <code>f</code> is a function which takes an <code>i32</code> and returns
+an <code>i32</code>.”</p>
+<p>Inside of <code>twice()</code>, as you might imagine, we call the function <code>f</code> twice on
+<code>x</code>, and return the result.</p>
 <pre><code class="language-rust,ignore">let y = twice(x, plus_one);
 let z = twice(x, plus_two);
 </code></pre>
-<p>The first time we call <code>twice()</code>, we pass <code>plus_one()</code> as an argument.
-And <code>x</code> is <code>5</code>.
-So <code>5 + 1 + 1 == 7</code>, hence our first line of output.
-The second time, we pass <code>plus_two()</code> instead.
-<code>5 + 2 + 2</code> is <code>9</code>, and our second line checks out too.</p>
+<p>The first time we call <code>twice()</code>, we pass <code>plus_one()</code> as an argument. And <code>x</code>
+is <code>5</code>. So <code>5 + 1 + 1 == 7</code>, hence our first line of output. The second time,
+we pass <code>plus_two()</code> instead. <code>5 + 2 + 2</code> is <code>9</code>, and our second line checks
+out too.</p>
 <p>Passing functions to functions is very, very powerful.</p>
 <h2>Booleans</h2>
-<p>Somewhat fundamental to all computing, Rust has a boolean type, <code>bool</code>, with two possible values:</p>
+<p>Somewhat fundamental to all computing, Rust has a boolean type, <code>bool</code>, with
+two possible values:</p>
 <pre><code class="language-rust">fn main() {
     let t = true;
     let f: bool = false; // with explict type annotation
@@ -1417,15 +1433,16 @@ The second time, we pass <code>plus_two()</code> instead.
 </code></pre>
 <p>That’s really all there is to say about that!</p>
 <h2>Arrays</h2>
-<p>So far, we’ve only represented single values in a binding.
-Sometimes, though, it’s useful to have more than one value.
-These kinds of data structures are called ‘collections’, and arrays are the ones we’ll learn about first.
-Arrays look like this:</p>
+<p>So far, we’ve only represented single values in a binding. Sometimes, though,
+it’s useful to have more than one value. These kinds of data structures are
+called ‘collections’, and arrays are the ones we’ll learn about first. Arrays
+look like this:</p>
 <pre><code class="language-rust">fn main() {
     let a = [1, 2, 3, 4, 5];
 }
 </code></pre>
-<p>An array’s type consists of the type of the elements it contains, as well as the length:</p>
+<p>An array’s type consists of the type of the elements it contains, as well as
+the length:</p>
 <pre><code class="language-rust">fn main() {
     let a: [i32; 5] = [1, 2, 3, 4, 5];
 }
@@ -1439,9 +1456,10 @@ Arrays look like this:</p>
     let second = a[1];
 }
 </code></pre>
-<p>In this example, <code>first</code> will hold the value <code>1</code>, and <code>second</code> will be bound to <code>2</code>.
-Note that these values are copied out of the array; if the array changes, these bindings will not.
-Here’s an example, which also shows us how we can modify elements of the array:</p>
+<p>In this example, <code>first</code> will hold the value <code>1</code>, and <code>second</code> will be bound to
+<code>2</code>. Note that these values are copied out of the array; if the array changes,
+these bindings will not. Here’s an example, which also shows us how we can
+modify elements of the array:</p>
 <pre><code class="language-rust">fn main() {
     let mut a = [1, 2, 3, 4, 5];
 
@@ -1452,14 +1470,17 @@ Here’s an example, which also shows us how we can modify elements of the array
     println!(&quot;The value of first is: {}&quot;, first);
 }
 </code></pre>
-<p>Running this example will show that <code>first</code> is still <code>1</code>.
-If we didn’t want a copy, but instead wanted to refer to the first element, whatever its value was, we need a new concept.
-We’ll talk about ‘references’ in Section 4.</p>
-<p>One last thing: now that we are modifying the array, <code>a</code> needs to be declared <code>mut</code>.</p>
-<p>Arrays are our first real data structure, and so there’s a few other concepts that we haven’t covered in full yet.
-There are two: the <code>panic!</code> macro, and a new way of printing things: <code>Debug</code>.</p>
+<p>Running this example will show that <code>first</code> is still <code>1</code>. If we didn’t want a
+copy, but instead wanted to refer to the first element, whatever its value was,
+we need a new concept. We’ll talk about ‘references’ in Section 4.</p>
+<p>One last thing: now that we are modifying the array, <code>a</code> needs to be declared
+<code>mut</code>.</p>
+<p>Arrays are our first real data structure, and so there’s a few other concepts
+that we haven’t covered in full yet. There are two: the <code>panic!</code> macro, and a
+new way of printing things: <code>Debug</code>.</p>
 <h3>Panic</h3>
-<p>We showed what happens when you access elements of an array, but what if we give an invalid index?</p>
+<p>We showed what happens when you access elements of an array, but what if we
+give an invalid index?</p>
 <pre><code class="language-rust,should_panic">fn main() {
     let a = [1, 2, 3, 4, 5];
 
@@ -1468,39 +1489,39 @@ There are two: the <code>panic!</code> macro, and a new way of printing things: 
     println!(&quot;The value of invalid is: {}&quot;, invalid);
 }
 </code></pre>
-<p>If we run this example, we will get an error.
-Let’s re-use our <code>functions</code> project from before.
-Change your <code>src/main.rs</code> to look like the example, and run it:</p>
+<p>If we run this example, we will get an error. Let’s re-use our <code>functions</code>
+project from before. Change your <code>src/main.rs</code> to look like the example, and
+run it:</p>
 <pre><code class="language-bash">$ cargo run
    Compiling functions v0.1.0 (file:///home/steve/tmp/functions)
      Running `target/debug/functions`
 thread ‘&lt;main&gt;’ panicked at ‘index out of bounds: the len is 5 but the index is 10’, src/main.rs:4
 Process didn’t exit successfully: `target/debug/functions` (exit code: 101)
 </code></pre>
-<p>It says that our thread panicked, and that our program didn’t exit successfully.
-There’s also a reason: we had a length of five, but an index of 10.</p>
+<p>It says that our thread panicked, and that our program didn’t exit
+successfully. There’s also a reason: we had a length of five, but an index of</p>
+<ol start="10">
+<li></li>
+</ol>
 <p>A ‘panic’ can also be induced manually, with the <code>panic!</code> macro:</p>
 <pre><code class="language-rust,should_panic">fn main() {
     panic!(&quot;Oh no!&quot;);
 }
 </code></pre>
-<p>When the <code>panic!</code> macro runs, it will cause a panic.
-When a Rust program panics, it starts a kind of controlled crash.
-The current thread of execution will stop entirely.
-As such, panics are reserved for serious, program-ending errors.
-They’re not a general error-handling mechanism.</p>
-<p>So why did this code panic?
-Well, arrays know how many elements they hold.
-When we access an element via indexing, Rust will check that the index is less than the length.
-If it’s greater, it will panic, as something is very wrong.
-This is our first example of Rust’s safety principles in action.
-In many low-level languages, this kind of check is not done.
-If you have an incorrect index, invalid memory can be accessed.
-Rust protects us against this kind of error.</p>
+<p>When the <code>panic!</code> macro runs, it will cause a panic. When a Rust program
+panics, it starts a kind of controlled crash. The current thread of execution
+will stop entirely. As such, panics are reserved for serious, program-ending
+errors. They’re not a general error-handling mechanism.</p>
+<p>So why did this code panic? Well, arrays know how many elements they hold. When
+we access an element via indexing, Rust will check that the index is less than
+the length. If it’s greater, it will panic, as something is very wrong. This is
+our first example of Rust’s safety principles in action. In many low-level
+languages, this kind of check is not done. If you have an incorrect index,
+invalid memory can be accessed. Rust protects us against this kind of error.</p>
 <p><strong>Steve’s note: this next bit might be our first ‘advanced’ section, on get()?</strong></p>
 <h3>Debug</h3>
-<p>So far, we’ve been printing values using <code>{}</code>.
-If we try that with an array, though...</p>
+<p>So far, we’ve been printing values using <code>{}</code>. If we try that with an array,
+though...</p>
 <pre><code class="language-ignore">fn main() {
     let a = [1, 2, 3, 4, 5];
 
@@ -1521,17 +1542,17 @@ src/main.rs:4:25: 4:26 note: `[_; 5]` cannot be formatted with the default forma
 src/main.rs:4:25: 4:26 note: required by `core::fmt::Display::fmt`
 error: aborting due to previous error
 </code></pre>
-<p>Whew! The core of the error is this part: the trait <code>core::fmt::Display</code> is not implemented.
-We haven’t discussed traits yet, so this is bound to be confusing!
+<p>Whew! The core of the error is this part: the trait <code>core::fmt::Display</code> is not
+implemented. We haven’t discussed traits yet, so this is bound to be confusing!
 Here’s all we need to know for now: <code>println!</code> can do many kinds of formatting.
-By default, <code>{}</code> implements a kind of formatting known as <code>Display</code>: output for end-users.
-The primitive types we’ve seen so far implement <code>Display</code>, as there’s only one way you’d show a <code>1</code> to a user.
-But with arrays, the output is less clear.
-Do you want commas or not?
-What about the <code>[]</code>s?</p>
-<p>Due to these questions, more complex types in the standard library do not implement <code>Display</code> formatting.
-There is another kind of formatting, <code>Debug</code>, which is a bit different: output for programmers and debuggers.
-We can ask <code>println!</code> to use <code>Debug</code> formatting with <code>:?</code>:</p>
+By default, <code>{}</code> implements a kind of formatting known as <code>Display</code>: output for
+end-users. The primitive types we’ve seen so far implement <code>Display</code>, as
+there’s only one way you’d show a <code>1</code> to a user. But with arrays, the output is
+less clear. Do you want commas or not? What about the <code>[]</code>s?</p>
+<p>Due to these questions, more complex types in the standard library do not
+implement <code>Display</code> formatting. There is another kind of formatting, <code>Debug</code>,
+which is a bit different: output for programmers and debuggers. We can ask
+<code>println!</code> to use <code>Debug</code> formatting with <code>:?</code>:</p>
 <pre><code class="language-rust">fn main() {
     let a = [1, 2, 3, 4, 5];
 
@@ -1544,23 +1565,26 @@ We can ask <code>println!</code> to use <code>Debug</code> formatting with <code
      Running `target/debug/functions`
 a is [1, 2, 3, 4, 5]
 </code></pre>
-<p>You’ll see this repeated later, with other types.
-And we’ll cover traits fully later in the book, Section 9.</p>
+<p>You’ll see this repeated later, with other types. And we’ll cover traits fully
+later in the book, Section 9.</p>
 <h2>char</h2>
-<p>We’ve only worked with numbers so far, but what about letters?
-Rust’s most primitive alphabetic type is the <code>char</code>:</p>
+<p>We’ve only worked with numbers so far, but what about letters? Rust’s most
+primitive alphabetic type is the <code>char</code>:</p>
 <pre><code class="language-rust">fn main() {
    let c = 'z'; 
    let z = 'ℤ'; 
 }
 </code></pre>
-<p>Rust’s <code>char</code> represents a <a href="http://www.unicode.org/glossary/#unicode_scalar_value">Unicode Scalar Value</a>, which means that it can represent a lot more than just ASCII.
-“Character” isn’t really a concept in Unicode, however: your human intutition for what a ‘character’ is may not match up with a <code>char</code>.
-It also means that <code>char</code>s are four bytes each.</p>
-<p>The single quotes are important: to define a literal single character, we use single quotes.
-If we used double quotes, we’d be defining a <code>&amp;str</code>. Let’s talk about that next!</p>
+<p>Rust’s <code>char</code> represents a <a href="http://www.unicode.org/glossary/#unicode_scalar_value">Unicode Scalar Value</a>, which means that it can
+represent a lot more than just ASCII. “Character” isn’t really a concept in
+Unicode, however: your human intutition for what a ‘character’ is may not match
+up with a <code>char</code>. It also means that <code>char</code>s are four bytes each.</p>
+<p>The single quotes are important: to define a literal single character, we use
+single quotes. If we used double quotes, we’d be defining a <code>&amp;str</code>. Let’s talk
+about that next!</p>
 <h2>str</h2>
-<p>We can declare literal strings with <code>&quot;</code>s. We’ve seen them already, with <code>println!</code>:</p>
+<p>We can declare literal strings with <code>&quot;</code>s. We’ve seen them already, with
+<code>println!</code>:</p>
 <pre><code class="language-rust">fn main() {
     println!(&quot;println! takes a literal string as an argument.&quot;);
 
@@ -1569,18 +1593,18 @@ If we used double quotes, we’d be defining a <code>&amp;str</code>. Let’s ta
     let s: &amp;str = &quot;Here’s one with a type annotation.&quot;;
 }
 </code></pre>
-<p>String literals are immutable, and of a fixed length.
-Rust has a second string type, <code>String</code>, that we’ll discuss in section 8.</p>
+<p>String literals are immutable, and of a fixed length. Rust has a second string
+type, <code>String</code>, that we’ll discuss in section 8.</p>
 <p><code>&amp;str</code>s are UTF-8 encoded.</p>
 <h1>Comments</h1>
-<p>We strive to make our programs easy to understand, but sometimes, some extra explanation is warranted.
-We can leave notes in our source code that the compiler will ignore.
-These notes are called ‘comments’.</p>
+<p>We strive to make our programs easy to understand, but sometimes, some extra
+explanation is warranted. We can leave notes in our source code that the
+compiler will ignore. These notes are called ‘comments’.</p>
 <p>Here’s a comment:</p>
 <pre><code class="language-rust">// Hello, world.
 </code></pre>
-<p>Comments start with two slashes, and last until the end of the line.
-Larger comments will need more lines:</p>
+<p>Comments start with two slashes, and last until the end of the line. Larger
+comments will need more lines:</p>
 <pre><code class="language-rust">// So we’re doing something complicated here, long enough that we need
 // multiple lines of comments to do it! Whew! Hopefully, this comment will
 // explain what’s going on.
@@ -1598,9 +1622,10 @@ Larger comments will need more lines:</p>
 </code></pre>
 <p>That’s all there is to it. Comments are not particularly complicated.</p>
 <h2>Documentation comments</h2>
-<p>However, Rust has another kind of comment: a documentation comment.
-These comments don’t affect the way that the code works, but they do work with Rust’s tools.
-More specifically, the <code>rustdoc</code> tool that comes with Rust reads documentation comments and produces HTML documentation from them.</p>
+<p>However, Rust has another kind of comment: a documentation comment. These
+comments don’t affect the way that the code works, but they do work with Rust’s
+tools. More specifically, the <code>rustdoc</code> tool that comes with Rust reads
+documentation comments and produces HTML documentation from them.</p>
 <p>Documentation comments use an extra slash:</p>
 <pre><code class="language-rust">/// The foo function doesn’t really do much.
 fn foo() {
@@ -1612,10 +1637,11 @@ fn foo() {
 fn bar() {
 }
 </code></pre>
-<p>This comment would then be interpreted by <code>rustdoc</code> as documenting the thing that follows it: <code>foo()</code> and <code>bar()</code>.</p>
-<p>Because documentation comments have semantic meaning to <code>rustdoc</code>, the compiler will pay attention to the placement
-of your documentation comments.
-For example, a program with only this:</p>
+<p>This comment would then be interpreted by <code>rustdoc</code> as documenting the thing
+that follows it: <code>foo()</code> and <code>bar()</code>.</p>
+<p>Because documentation comments have semantic meaning to <code>rustdoc</code>, the compiler
+will pay attention to the placement of your documentation comments. For
+example, a program with only this:</p>
 <pre><code class="language-rust,ignore">/// What am I documenting?
 </code></pre>
 <p>Will give a compiler error:</p>
@@ -1624,9 +1650,10 @@ src/main.rs:1 /// What am I documenting?
               ^~~~~~~~~~~~~~~~~~~~~~~~~~
 </code></pre>
 <h3>Inner documentation comments</h3>
-<p>There is a secondary form of a documentation comment, an ‘inner’ documentation comment.
-Inner documentation comments look like this: <code>//!</code>.
-They are only really used to document modules, however, and so we will talk about them in the modules section.</p>
+<p>There is a secondary form of a documentation comment, an ‘inner’ documentation
+comment. Inner documentation comments look like this: <code>//!</code>. They are only
+really used to document modules, however, and so we will talk about them in the
+modules section.</p>
 <h1>if</h1>
 <blockquote>
 <p>Two roads diverged in a yellow wood,

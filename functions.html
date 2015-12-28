@@ -66,7 +66,8 @@
 
                 <div id="content" class="content">
                     <h1>Functions</h1>
-<p>Functions are pervasive in Rust code. We’ve already seen the most important function, <code>main()</code>, in previous sections of the book:</p>
+<p>Functions are pervasive in Rust code. We’ve already seen the most important
+function, <code>main()</code>, in previous sections of the book:</p>
 <pre><code class="language-rust">fn main() {
     println!(&quot;Hello, world!&quot;);
 }
@@ -76,9 +77,9 @@
     println!(&quot;Another function.&quot;);
 }
 </code></pre>
-<p>Rust code uses <code>snake_case</code> as a style for function names: all lower case, with underscores separating words.
-(It also uses them for variable names, too.)
-We can can call any function we’ve defined by using its name and some parentheses:</p>
+<p>Rust code uses <code>snake_case</code> as a style for function names: all lower case, with
+underscores separating words. (It also uses them for variable names, too.) We
+can can call any function we’ve defined by using its name and some parentheses:</p>
 <pre><code class="language-rust">fn main() {
     println!(&quot;Hello, world!&quot;);
 
@@ -89,9 +90,9 @@ fn another_function() {
     println!(&quot;Another function.&quot;);
 }
 </code></pre>
-<p>Let’s start a new project to explore functions.
-Open a terminal, and navigate to the directory where you’d like to keep your projects.
-From there, use Cargo to generate a new project:</p>
+<p>Let’s start a new project to explore functions. Open a terminal, and navigate
+to the directory where you’d like to keep your projects. From there, use Cargo
+to generate a new project:</p>
 <pre><code class="language-bash">$ cargo new --bin functions
 $ cd functions
 </code></pre>
@@ -102,8 +103,9 @@ $ cd functions
 Hello, world!
 Another function.
 </code></pre>
-<p>As we can see, the lines execute in order: first, we print out our “Hello, world!” message, and then <code>another_function()</code> is called.
-It then prints its message as well.</p>
+<p>As we can see, the lines execute in order: first, we print out our “Hello,
+world!” message, and then <code>another_function()</code> is called. It then prints its
+message as well.</p>
 <h2>Function Arguments</h2>
 <p>Functions can also take arguments:</p>
 <pre><code class="language-rust">fn main() {
@@ -126,13 +128,14 @@ The value of x is: 5
 <p>Declaring a function which takes a single argument looks like this:</p>
 <pre><code class="language-text">fn NAME(PATTERN: TYPE) {
 </code></pre>
-<p>That’s right, patterns appear again.
-Consider how the parameter declaration here looks like the <code>let</code> bindings we used earlier:</p>
+<p>That’s right, patterns appear again. Consider how the parameter declaration
+here looks like the <code>let</code> bindings we used earlier:</p>
 <pre><code class="language-rust,ignore">let x: i32;
 fn another_function(x: i32) {
 </code></pre>
-<p>There’s only one difference here: in function signatures, we <em>must</em> declare the type.
-This is a deliberate decision; we find that requiring type annotations in functions means that you almost never need them anywhere else.</p>
+<p>There’s only one difference here: in function signatures, we <em>must</em> declare the
+type. This is a deliberate decision; we find that requiring type annotations in
+functions means that you almost never need them anywhere else.</p>
 <p>You can separate multiple arguments with a comma:</p>
 <pre><code class="language-text">fn NAME(PATTERN, PATTERN, PATTERN, PATTERN...) {
 </code></pre>
@@ -173,15 +176,16 @@ fn another_function(x: i32, y: i32) {
 The value of x is: 5
 The value of y is: 6
 </code></pre>
-<p>Note that our bindings are called <code>a</code> and <code>b</code>, yet inside of the function, we refer to them by the names in the signature, <code>x</code> and <code>y</code>.
-Inside a function, only its parameters are in scope, so we need to use those names.
-Bindings passed as parameters don’t need to have the same name as the arguments.</p>
+<p>Note that our bindings are called <code>a</code> and <code>b</code>, yet inside of the function, we
+refer to them by the names in the signature, <code>x</code> and <code>y</code>. Inside a function,
+only its parameters are in scope, so we need to use those names. Bindings
+passed as parameters don’t need to have the same name as the arguments.</p>
 <h2>Return values</h2>
 <p>Functions can also return values back to the function that called them:</p>
 <pre><code class="language-TEXT">fn NAME(PATTERN, PATTERN, PATTERN, PATTERN...) -&gt; TYPE {
 </code></pre>
-<p>We don’t name return values, but we do declare their type, after an arrow: <code>-&gt;</code>.
-Here’s a sample program:</p>
+<p>We don’t name return values, but we do declare their type, after an arrow:
+<code>-&gt;</code>. Here’s a sample program:</p>
 <pre><code class="language-rust">fn main() {
     let x = five();
 
@@ -198,9 +202,8 @@ fn five() -&gt; i32 {
      Running `target/debug/functions`
 The value of x is: 5
 </code></pre>
-<p>Let’s examine this in more detail.
-There are two important bits.
-First, we can use the return value of a function to initialize a binding:</p>
+<p>Let’s examine this in more detail. There are two important bits. First, we can
+use the return value of a function to initialize a binding:</p>
 <pre><code class="language-rust,ignore">let x = five();
 </code></pre>
 <p>Because <code>five()</code> returns a <code>5</code>, this is the same as:</p>
@@ -211,11 +214,10 @@ First, we can use the return value of a function to initialize a binding:</p>
     5
 }
 </code></pre>
-<p>We have no arguments, and our return type, <code>i32</code>.
-However, the body of this function is a lonely <code>5</code>.
-There’s a detail here that you may or may not have noticed: we’ve ended almost every line in our programs with a semicolon.
-There’s no semicolon here, though.
-Why not?</p>
+<p>We have no arguments, and our return type, <code>i32</code>. However, the body of this
+function is a lonely <code>5</code>. There’s a detail here that you may or may not have
+noticed: we’ve ended almost every line in our programs with a semicolon.
+There’s no semicolon here, though. Why not?</p>
 <p>The answer to this question is:</p>
 <blockquote>
 <p>The return value of a function is the value of its final expression.</p>
@@ -223,24 +225,21 @@ Why not?</p>
 <p>We haven’t talked about expressions yet, so this definition doesn’t help a lot.
 Let’s go over that now.</p>
 <h2>Statements and Expressions</h2>
-<p>Expressions are bits of code that evaluate to a value.
-Consider some math operations, like this:</p>
+<p>Expressions are bits of code that evaluate to a value. Consider some math
+operations, like this:</p>
 <pre><code class="language-rust,ignore">5 + 6
 </code></pre>
-<p>We can evaluate this expression, and come up with a value: <code>11</code>.
-In Rust, most bits of code are expressions.
-For example, calling a function is an expression:</p>
+<p>We can evaluate this expression, and come up with a value: <code>11</code>. In Rust, most
+bits of code are expressions. For example, calling a function is an expression:</p>
 <pre><code class="language-rust,ignore">foo(5)
 </code></pre>
 <p>The value is equal to whatever the return value of <code>foo()</code> is.</p>
-<p>So why does this matter?
-Well, not everything is an expression.
-Some things are ‘statements’.
-Expressions <em>compute</em> something, but statements <em>bind</em> or <em>do</em> something.
-It’s a subtle difference.
-We’ve already seen two kinds of statements: <code>let</code> statements, and <code>fn</code> declarations.</p>
-<p>Because <code>let</code> is a statement, not an expression, you can’t assign it to another binding.
-Here’s an example that doesn’t work:</p>
+<p>So why does this matter? Well, not everything is an expression. Some things are
+‘statements’. Expressions <em>compute</em> something, but statements <em>bind</em> or <em>do</em>
+something. It’s a subtle difference. We’ve already seen two kinds of
+statements: <code>let</code> statements, and <code>fn</code> declarations.</p>
+<p>Because <code>let</code> is a statement, not an expression, you can’t assign it to another
+binding. Here’s an example that doesn’t work:</p>
 <pre><code class="language-rust,ignore">fn main() {
     let x = (let y = 6);
 }
@@ -257,18 +256,18 @@ src/main.rs:2     let x = (let y = 6);
 Could not compile `functions`.
 </code></pre>
 <p>We also cannot somehow assign a <code>fn</code> declaration to a binding, either.</p>
-<p>So what’s this have to do with return values?
-Well, <code>{}</code>, a ‘block’ that we used earlier to create new scopes, <em>is</em> an expression.
-Let’s take a closer look at <code>{}</code>.
-It looks like this:</p>
+<p>So what’s this have to do with return values? Well, <code>{}</code>, a ‘block’ that we
+used earlier to create new scopes, <em>is</em> an expression. Let’s take a closer look
+at <code>{}</code>. It looks like this:</p>
 <pre><code class="language-text">{
     STATEMENT*
     EXPRESSION
 }
 </code></pre>
-<p>The <code>*</code> there means ‘zero or more’, so we can have any number of statements followed by an expression.
-Since blocks are expressions themselves, we can nest blocks inside of blocks.
-And since they return a value, we can use them in <code>let</code> statements:</p>
+<p>The <code>*</code> there means ‘zero or more’, so we can have any number of statements
+followed by an expression. Since blocks are expressions themselves, we can nest
+blocks inside of blocks. And since they return a value, we can use them in
+<code>let</code> statements:</p>
 <pre><code class="language-rust">fn main() {
     let x = 5;
 
@@ -291,21 +290,21 @@ The value of y is: 11
 
 };
 </code></pre>
-<p>Since the block can contain statements, we create a new variable binding, <code>z</code>, and give it a value.
-We then do some math for the final expression of the block:</p>
+<p>Since the block can contain statements, we create a new variable binding, <code>z</code>,
+and give it a value. We then do some math for the final expression of the
+block:</p>
 <pre><code class="language-rust,ignore">{
     let z = 1;
 
     x + z + 5
 }
 </code></pre>
-<p><code>5 + 1 + 5</code> is <code>11</code>, and so the value of the entire block is <code>11</code>.
-This gets substituted into our <code>let</code> statement for <code>y</code>:</p>
+<p><code>5 + 1 + 5</code> is <code>11</code>, and so the value of the entire block is <code>11</code>. This gets
+substituted into our <code>let</code> statement for <code>y</code>:</p>
 <pre><code class="language-rust,ignore">let y = 11;
 </code></pre>
 <p>Hence our output saying <code>y</code> is <code>11</code>.</p>
-<p>Where else do we use blocks? As the body of functions!
-They’re very similar:</p>
+<p>Where else do we use blocks? As the body of functions! They’re very similar:</p>
 <pre><code class="language-rust">fn main() {
     let x = 5;
 
@@ -331,16 +330,17 @@ fn plus_one(x: i32) -&gt; i32 {
 The value of y is: 6
 The value of y is: 6
 </code></pre>
-<p>In both cases, we use a block to produce a value.
-In the first case, it’s assigning with <code>let</code>:</p>
+<p>In both cases, we use a block to produce a value. In the first case, it’s
+assigning with <code>let</code>:</p>
 <pre><code class="language-rust,ignore">let y = {
 </code></pre>
 <p>In the second, it’s the return value of the function:</p>
 <pre><code class="language-rust,ignore">fn plus_one(x: i32) -&gt; i32 {
 </code></pre>
 <h3>Expression statements</h3>
-<p>There’s one more detail about expressions and statements: a semicolon takes any expression, and turns it into a statement.
-Let’s accidentally cause an error with <code>plus_one()</code>:</p>
+<p>There’s one more detail about expressions and statements: a semicolon takes any
+expression, and turns it into a statement. Let’s accidentally cause an error
+with <code>plus_one()</code>:</p>
 <pre><code class="language-rust,ignore">fn main() {
     let x = plus_one(5);
 
@@ -351,7 +351,8 @@ fn plus_one(x: i32) -&gt; i32 {
     x + 1;
 }
 </code></pre>
-<p>Instead of an expression, <code>x + 1</code>, we’ve now turned it into a statement, <code>x + 1;</code>.</p>
+<p>Instead of an expression, <code>x + 1</code>, we’ve now turned it into a statement,
+<code>x + 1;</code>.</p>
 <p>Running this gives an error:</p>
 <pre><code class="language-bash">$ cargo run
    Compiling functions v0.1.0 (file:///home/steve/tmp/functions)
@@ -366,21 +367,22 @@ src/main.rs:8     x + 1;
 error: aborting due to previous error
 Could not compile `functions`.
 </code></pre>
-<p>Rust has our back here: it even suggests removing the semicolon, which fixes the error.
-But the main error message is the core of the issue: statements don’t evaluate to a value, yet we want to return an <code>i32</code>.</p>
+<p>Rust has our back here: it even suggests removing the semicolon, which fixes
+the error. But the main error message is the core of the issue: statements
+don’t evaluate to a value, yet we want to return an <code>i32</code>.</p>
 <p>In practice, Rust programmers don’t often think about these rules at this
 level. Usually, you have a semicolon at the end of most lines, and maybe not at
 the end of blocks.</p>
 <h2>Multiple return values</h2>
-<p>Functions cannot directly return multiple values.
-There’s a trick, however. Remember the <code>()</code>s we used when showing off complex bindings?</p>
+<p>Functions cannot directly return multiple values. There’s a trick, however.
+Remember the <code>()</code>s we used when showing off complex bindings?</p>
 <pre><code class="language-rust">fn main() {
     let (x, y) = (5, 6);
 }
 </code></pre>
-<p>They form something called a ‘tuple’, one of Rust’s basic types.
-A tuple is an anonymous collection of elements.
-But since a tuple is a singular thing, we can use it as a way to return multiple values from functions:</p>
+<p>They form something called a ‘tuple’, one of Rust’s basic types. A tuple is an
+anonymous collection of elements. But since a tuple is a singular thing, we can
+use it as a way to return multiple values from functions:</p>
 <pre><code class="language-rust">fn main() {
     let (x, y) = two_numbers();
 
@@ -399,23 +401,24 @@ fn two_numbers() -&gt; (i32, i32) {
 The value of x is: 5
 The value of y is: 6
 </code></pre>
-<p>There are two interesting changes here: assigning the return value of <code>two_numbers()</code> to <code>x</code> and <code>y</code>, and the declaration of <code>two_numbers()</code> itself.</p>
+<p>There are two interesting changes here: assigning the return value of
+<code>two_numbers()</code> to <code>x</code> and <code>y</code>, and the declaration of <code>two_numbers()</code> itself.</p>
 <p>Let’s look at the declaration first:</p>
 <pre><code class="language-rust">fn two_numbers() -&gt; (i32, i32) {
     (5, 6)
 }
 </code></pre>
-<p>The <code>(i32, i32)</code> should look familiar.
-We saw it in <code>let</code> bindings earlier:</p>
+<p>The <code>(i32, i32)</code> should look familiar. We saw it in <code>let</code> bindings earlier:</p>
 <pre><code class="language-rust">let (x, y): (i32, i32) = (5, 6);
 </code></pre>
-<p>The <code>(i32, i32)</code> syntax says “a tuple with two <code>i32</code>s in it.”
-The <code>(5, 6)</code> syntax creates a new one, with <code>5</code> and <code>6</code>.</p>
+<p>The <code>(i32, i32)</code> syntax says “a tuple with two <code>i32</code>s in it.” The <code>(5, 6)</code>
+syntax creates a new one, with <code>5</code> and <code>6</code>.</p>
 <p>This tuple is then returned, and assigned to <code>x</code> and <code>y</code>:</p>
 <pre><code class="language-rust,ignore">let (x, y) = two_numbers();
 </code></pre>
 <p>See how all these bits fit together?</p>
-<p>We call this behavior of <code>let</code> ‘destructuring’, because it takes the structure of the expression that comes after the <code>=</code> and takes it apart.</p>
+<p>We call this behavior of <code>let</code> ‘destructuring’, because it takes the structure
+of the expression that comes after the <code>=</code> and takes it apart.</p>
 
                 </div>
 

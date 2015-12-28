@@ -66,14 +66,14 @@
 
                 <div id="content" class="content">
                     <h1>Comments</h1>
-<p>We strive to make our programs easy to understand, but sometimes, some extra explanation is warranted.
-We can leave notes in our source code that the compiler will ignore.
-These notes are called ‘comments’.</p>
+<p>We strive to make our programs easy to understand, but sometimes, some extra
+explanation is warranted. We can leave notes in our source code that the
+compiler will ignore. These notes are called ‘comments’.</p>
 <p>Here’s a comment:</p>
 <pre><code class="language-rust">// Hello, world.
 </code></pre>
-<p>Comments start with two slashes, and last until the end of the line.
-Larger comments will need more lines:</p>
+<p>Comments start with two slashes, and last until the end of the line. Larger
+comments will need more lines:</p>
 <pre><code class="language-rust">// So we’re doing something complicated here, long enough that we need
 // multiple lines of comments to do it! Whew! Hopefully, this comment will
 // explain what’s going on.
@@ -91,9 +91,10 @@ Larger comments will need more lines:</p>
 </code></pre>
 <p>That’s all there is to it. Comments are not particularly complicated.</p>
 <h2>Documentation comments</h2>
-<p>However, Rust has another kind of comment: a documentation comment.
-These comments don’t affect the way that the code works, but they do work with Rust’s tools.
-More specifically, the <code>rustdoc</code> tool that comes with Rust reads documentation comments and produces HTML documentation from them.</p>
+<p>However, Rust has another kind of comment: a documentation comment. These
+comments don’t affect the way that the code works, but they do work with Rust’s
+tools. More specifically, the <code>rustdoc</code> tool that comes with Rust reads
+documentation comments and produces HTML documentation from them.</p>
 <p>Documentation comments use an extra slash:</p>
 <pre><code class="language-rust">/// The foo function doesn’t really do much.
 fn foo() {
@@ -105,10 +106,11 @@ fn foo() {
 fn bar() {
 }
 </code></pre>
-<p>This comment would then be interpreted by <code>rustdoc</code> as documenting the thing that follows it: <code>foo()</code> and <code>bar()</code>.</p>
-<p>Because documentation comments have semantic meaning to <code>rustdoc</code>, the compiler will pay attention to the placement
-of your documentation comments.
-For example, a program with only this:</p>
+<p>This comment would then be interpreted by <code>rustdoc</code> as documenting the thing
+that follows it: <code>foo()</code> and <code>bar()</code>.</p>
+<p>Because documentation comments have semantic meaning to <code>rustdoc</code>, the compiler
+will pay attention to the placement of your documentation comments. For
+example, a program with only this:</p>
 <pre><code class="language-rust,ignore">/// What am I documenting?
 </code></pre>
 <p>Will give a compiler error:</p>
@@ -117,9 +119,10 @@ src/main.rs:1 /// What am I documenting?
               ^~~~~~~~~~~~~~~~~~~~~~~~~~
 </code></pre>
 <h3>Inner documentation comments</h3>
-<p>There is a secondary form of a documentation comment, an ‘inner’ documentation comment.
-Inner documentation comments look like this: <code>//!</code>.
-They are only really used to document modules, however, and so we will talk about them in the modules section.</p>
+<p>There is a secondary form of a documentation comment, an ‘inner’ documentation
+comment. Inner documentation comments look like this: <code>//!</code>. They are only
+really used to document modules, however, and so we will talk about them in the
+modules section.</p>
 
                 </div>
 
