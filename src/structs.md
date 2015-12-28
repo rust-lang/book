@@ -217,7 +217,7 @@ we’ve got back our `x` and `y`. This is a win for clarity.
 There’s one other thing that’s a bit strange here, this annotation on our
 `struct` declaration:
 
-```
+```rust,ignore
 #[derive(Debug,Copy,Clone)]
 struct Point {
 ```
