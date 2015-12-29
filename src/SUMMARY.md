@@ -13,7 +13,7 @@
     - [Scalar Types](scalar-types.md)
     - [Compound Types](compound-types.md)
     - [Comments](comments.md)
-    - [`if`](if.md)
+    - [Control flow with `if`](if.md)
     - [Loops](loops.md)
 
 - [Ownership & borrowing](ownership-and-borrowing.md)

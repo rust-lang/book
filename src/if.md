@@ -1,4 +1,4 @@
-# if
+# Control flow with `if`
 
 > Two roads diverged in a yellow wood,
 > And sorry I could not travel both
@@ -7,13 +7,6 @@
 > To where it bent in the undergrowth; 
 > 
 > - Robert Frost, “The Road Not Taken”
-
-One of the most primitive operations in computer programming is the ability to
-‘branch’ between two different code paths. A program can look at a value, and
-then decide: should I follow this path, or should I take the other? There’s
-actually two different metaphors here: a tree, whose branches come from the
-same, single trunk. And a road, which splits off into two, each going in a
-different direction.
 
 In Rust, there are a few ways to cause our code to branch. The most fundamental
 way is by using `if`. An `if` expression gives us two paths forward, and asks
@@ -218,7 +211,4 @@ error: aborting due to previous error
 Could not compile `branches`.
 ```
 
-`if` and `else` have incompatible types. This can’t work. This also
-means that you almost certainly need an `else` when using `if` in
-this way. If you don’t, what would the value be if the condition was
-false?
+`if` and `else` have incompatible types. This can’t work.
