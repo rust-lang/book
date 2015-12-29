@@ -29,9 +29,9 @@ Here’s a chart of Rust’s integer types:
 | arch   | isize  | usize    |
 
 We have both signed and unsigned variants of numbers, and each variant has an
-explicit size. Unsigned numbers are always positive, and signed numbers can be
+explicit size. Unsigned numbers are never negative, and signed numbers can be
 positive or negative. (Think ‘plus sign’ or ‘minus sign’: that’s a signed
-number.) Signed numbers are stored using ‘two’s compliment’ representation.
+number.) Signed numbers are stored using ‘two’s complement’ representation.
 
 Finally, `isize` and `usize` are different sizes based on the kind of computer
 your program is running on. If you are on a 64-bit architecture, they are 64
@@ -58,6 +58,29 @@ fn main() {
 Floating-point numbers are represented according to the IEEE-754 standard.
 `f32` is a single-precision float, `f64` is double-precision.
 
+## Numeric operations
+
+Rust supports the usual operations you’d expect on all of these number types:
+
+```rust
+fn main() {
+    // addition
+    let sum = 5 + 10;
+
+    // subtraction
+    let difference = 95.5 - 4.3;
+
+    // multiplication
+    let product = 4 * 30;
+
+    // division
+    let quotient = 56.7 / 32.2;
+
+    // modulus
+    let remainder = 43 % 5;
+}
+```
+
 ## Booleans
 
 Somewhat fundamental to all computing, Rust has a boolean type, `bool`, with
@@ -70,7 +93,8 @@ fn main() {
 }
 ```
 
-That’s really all there is to say about that!
+The main way to consume boolean values is through conditionals like `if`, which
+we’ll see later in the chapter.
 
 ## Characters
 
@@ -79,18 +103,14 @@ primitive alphabetic type is the `char`:
 
 ```rust
 fn main() {
-   let c = 'z'; 
-   let z = 'ℤ'; 
+   let c = 'z';
+   let z = 'ℤ';
 }
 ```
 
 Rust’s `char` represents a [Unicode Scalar Value], which means that it can
-represent a lot more than just ASCII. “Character” isn’t really a concept in
+represent a lot more than just ASCII. ‘Character’ isn’t really a concept in
 Unicode, however: your human intutition for what a ‘character’ is may not match
 up with a `char`. It also means that `char`s are four bytes each.
 
 [Unicode Scalar Value]: http://www.unicode.org/glossary/#unicode_scalar_value
-
-The single quotes are important: to define a literal single character, we use
-single quotes. If we used double quotes, we’d be defining a `&str`. Let’s talk
-about that next!

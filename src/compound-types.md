@@ -5,14 +5,30 @@ These types can group multiple values of scalar types into another type.
 
 ## Tuples
 
-We’ve previously seen our first compound type: tupes. Tuples have an ‘arity’,
-or size. We might say “that’s a 3-tuple” or “that’s a 5-tuple.”
+We’ve seen tuples before, in the guise of binding or returning multiple values
+at once. It turns out that there’s no magic here: tuples are a general way of
+making a compound value that groups some number of other values with distinct
+types. The number of values grouped is the ‘arity’ of the tuple.
 
-Each position in a tuple has a distinct type:
+We create a tuple by writing a comma-separated list of values inside
+parentheses; each position in the tuple has a distinct type:
 
 ```rust
 fn main() {
-    let x: (i32, f64, u8) = (500, 6.4, 1);
+    let tup: (i32, f64, u8) = (500, 6.4, 1);
+}
+```
+
+Note that, unlike the examples of multiple bindings, here we bound the
+single name `tup` to the entire tuple. We can then use pattern
+matching to destructure this tuple value:
+
+```rust
+fn main() {
+    let tup: (i32, f64, u8) = (500, 6.4, 1);
+    let (x, y, z) = tup;
+
+    println!("The value of y is: {}", y);
 }
 ```
 
@@ -21,8 +37,8 @@ are anonymous, which can make code hard to read.
 
 ### Tuple indexing
 
-To access an element of a tuple, we use a `.` followed by the index we want to
-access:
+In addition to destructuring through pattern matching, we can also access a
+tuple element directly using `.`, followed by the index we want to access:
 
 ```rust
 fn main() {
@@ -143,18 +159,8 @@ It says that our thread panicked, and that our program didn’t exit
 successfully. There’s also a reason: we had a length of five, but an index of
 10.
 
-A ‘panic’ can also be induced manually, with the `panic!` macro:
-
-```rust,should_panic
-fn main() {
-    panic!("Oh no!");
-}
-```
-
-When the `panic!` macro runs, it will cause a panic. When a Rust program
-panics, it starts a kind of controlled crash. The current thread of execution
-will stop entirely. As such, panics are reserved for serious, program-ending
-errors. They’re not a general error-handling mechanism.
+For now, all you need to know is that a panic will crash your program. Rust’s
+error handling story is described in full in a later chapter.
 
 So why did this code panic? Well, arrays know how many elements they hold. When
 we access an element via indexing, Rust will check that the index is less than
@@ -162,8 +168,6 @@ the length. If it’s greater, it will panic, as something is very wrong. This i
 our first example of Rust’s safety principles in action. In many low-level
 languages, this kind of check is not done. If you have an incorrect index,
 invalid memory can be accessed. Rust protects us against this kind of error.
-
-**Steve’s note: this next bit might be our first ‘advanced’ section, on get()?**
 
 ### Debug
 
@@ -198,14 +202,15 @@ error: aborting due to previous error
 Whew! The core of the error is this part: the trait `core::fmt::Display` is not
 implemented. We haven’t discussed traits yet, so this is bound to be confusing!
 Here’s all we need to know for now: `println!` can do many kinds of formatting.
-By default, `{}` implements a kind of formatting known as `Display`: output for
-end-users. The primitive types we’ve seen so far implement `Display`, as
-there’s only one way you’d show a `1` to a user. But with arrays, the output is
-less clear. Do you want commas or not? What about the `[]`s?
+By default, `{}` implements a kind of formatting known as `Display`: output
+intended for direct end-user consumption. The primitive types we’ve seen so far
+implement `Display`, as there’s only one way you’d show a `1` to a user. But
+with arrays, the output is less clear. Do you want commas or not? What about
+the `[]`s?
 
 Due to these questions, more complex types in the standard library do not
 implement `Display` formatting. There is another kind of formatting, `Debug`,
-which is a bit different: output for programmers and debuggers. We can ask
+which is a bit different: intended for programmer consumption. We can ask
 `println!` to use `Debug` formatting with `:?`:
 
 ```rust
