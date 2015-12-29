@@ -72,7 +72,7 @@ fn main() {
 
 That’s really all there is to say about that!
 
-## char
+## Characters
 
 We’ve only worked with numbers so far, but what about letters? Rust’s most
 primitive alphabetic type is the `char`:
