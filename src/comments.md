@@ -77,10 +77,3 @@ src/main.rs:1:1: 1:27 error: expected item after doc comment
 src/main.rs:1 /// What am I documenting?
               ^~~~~~~~~~~~~~~~~~~~~~~~~~
 ```
-
-### Inner documentation comments
-
-There is a secondary form of a documentation comment, an ‘inner’ documentation
-comment. Inner documentation comments look like this: `//!`. They are only
-really used to document modules, however, and so we will talk about them in the
-modules section.
