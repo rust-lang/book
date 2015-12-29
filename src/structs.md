@@ -15,7 +15,7 @@ $ cargo new --bin points
 $ cd points
 ```
 
-Here’s a short program which calcualtes the distance between two points. Put
+Here’s a short program which calculates the distance between two points. Put
 it into your `src/main.rs`:
 
 ```rust
