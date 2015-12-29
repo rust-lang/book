@@ -1,0 +1,204 @@
+<!DOCTYPE HTML>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>The Rust Programming Language</title>
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="{% block description %}{% endblock %}">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <base href="">
+
+        <link rel="stylesheet" href="book.css">
+        <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+
+        <!-- MathJax -->
+        <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+        <!-- Fetch JQuery from CDN but have a local fallback -->
+        <script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
+        <script>
+            if (typeof jQuery == 'undefined') {
+                document.write(unescape("%3Cscript src='jquery.js'%3E%3C/script%3E"));
+            }
+        </script>
+    </head>
+    <body>
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme = localStorage.getItem('theme');
+            if (theme == null) { theme = 'light'; }
+            $('body').removeClass().addClass(theme);
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var sidebar = localStorage.getItem('sidebar');
+            if (sidebar === "hidden") { $("html").addClass("sidebar-hidden") }
+            else if (sidebar === "visible") { $("html").addClass("sidebar-visible") }
+        </script>
+
+        <div id="sidebar" class="sidebar">
+            <ul class="chapter"><li><a href="introduction.html"><strong>1.</strong> Introduction</a></li><li><ul class="section"><li><a href="installation.html"><strong>1.1.</strong> Installation</a></li><li><a href="hello-world.html"><strong>1.2.</strong> Hello, World!</a></li><li><a href="design.html"><strong>1.3.</strong> The Design of Rust</a></li></ul></li><li><a href="tutorial.html"><strong>2.</strong> Tutorial</a></li><li><a href="primitive-rust.html"><strong>3.</strong> Primitive Rust</a></li><li><ul class="section"><li><a href="variable-bindings.html"><strong>3.1.</strong> Variable Bindings</a></li><li><a href="functions.html"><strong>3.2.</strong> Functions</a></li><li><a href="scalar-types.html" class="active"><strong>3.3.</strong> Scalar Types</a></li><li><a href="compound-types.html"><strong>3.4.</strong> Compound Types</a></li><li><a href="comments.html"><strong>3.5.</strong> Comments</a></li><li><a href="if.html"><strong>3.6.</strong> Control flow with `if`</a></li><li><a href="loops.html"><strong>3.7.</strong> Loops</a></li></ul></li><li><a href="ownership-and-borrowing.html"><strong>4.</strong> Ownership & borrowing</a></li><li><ul class="section"><li><a href="ownership.html"><strong>4.1.</strong> Ownership</a></li><li><a href="references-and-borrowing.html"><strong>4.2.</strong> References & Borrowing</a></li><li><a href="lifetimes.html"><strong>4.3.</strong> Lifetimes</a></li></ul></li><li><a href="structs.html"><strong>5.</strong> Structs</a></li><li><ul class="section"><li><a href="method-syntax.html"><strong>5.1.</strong> Method Syntax</a></li><li><a href="structs-generics.html"><strong>5.2.</strong> Generics</a></li><li><a href="structs-advanced.html"><strong>5.3.</strong> Advanced</a></li></ul></li><li><a href="enums.html"><strong>6.</strong> Enums</a></li><li><ul class="section"><li><a href="match.html"><strong>6.1.</strong> Match</a></li><li><a href="patterns.html"><strong>6.2.</strong> Patterns</a></li><li><a href="option.html"><strong>6.3.</strong> Option</a></li><li><a href="if-let.html"><strong>6.4.</strong> if let</a></li></ul></li><li><a href="crates-and-modules.html"><strong>7.</strong> Crates & Modules</a></li><li><a href="error-handling.html"><strong>8.</strong> Error Handling</a></li><li><a href="basic-collections.html"><strong>9.</strong> Basic Collections</a></li><li><ul class="section"><li><a href="vectors.html"><strong>9.1.</strong> Vectors</a></li><li><a href="strings.html"><strong>9.2.</strong> Strings</a></li><li><a href="hashmap.html"><strong>9.3.</strong> `HashMap<K, V>`</a></li></ul></li><li><a href="traits.html"><strong>10.</strong> Traits</a></li><li><a href="closures.html"><strong>11.</strong> Closures</a></li><li><a href="iterators.html"><strong>12.</strong> Iterators</a></li><li><a href="io.html"><strong>13.</strong> I/O</a></li><li><ul class="section"><li><a href="read-and-write.html"><strong>13.1.</strong> `Read` & `Write`</a></li><li><a href="fs.html"><strong>13.2.</strong> `std::fs`</a></li><li><a href="path.html"><strong>13.3.</strong> `std::path`</a></li><li><a href="env.html"><strong>13.4.</strong> `std::env`</a></li></ul></li><li><a href="testing.html"><strong>14.</strong> Testing</a></li><li><a href="smart-pointers.html"><strong>15.</strong> Smart Pointers</a></li><li><ul class="section"><li><a href="deref.html"><strong>15.1.</strong> `Deref`</a></li><li><a href="deref-coercions.html"><strong>15.2.</strong> `Deref` coercions</a></li><li><a href="box.html"><strong>15.3.</strong> `Box<T>`</a></li><li><a href="rc.html"><strong>15.4.</strong> `Rc<T>`</a></li></ul></li><li><a href="concurrency.html"><strong>16.</strong> Concurrency</a></li><li><ul class="section"><li><a href="threads.html"><strong>16.1.</strong> Threads</a></li><li><a href="send-and-sync.html"><strong>16.2.</strong> `Send` & `Sync`</a></li><li><a href="arc.html"><strong>16.3.</strong> `Arc<T>`</a></li><li><a href="mutex.html"><strong>16.4.</strong> `Mutex<T>`</a></li><li><a href="channels.html"><strong>16.5.</strong> `Channels`</a></li></ul></li><li><a href="unsafe-rust.html"><strong>17.</strong> Unsafe Rust</a></li><li><ul class="section"><li><a href="raw-pointers.html"><strong>17.1.</strong> Raw Pointers</a></li><li><a href="transmute.html"><strong>17.2.</strong> transmute</a></li></ul></li><li><a href="ffi.html"><strong>18.</strong> FFI</a></li><li><ul class="section"><li><a href="conditional-compilation.html"><strong>18.1.</strong> Conditional Compilation</a></li><li><a href="bindings-to-c.html"><strong>18.2.</strong> Bindings to C</a></li><li><a href="using-rust-from-other-languages.html"><strong>18.3.</strong> Using Rust from Other Languages</a></li><li><a href="static.html"><strong>18.4.</strong> `static`</a></li></ul></li><li><a href="cargo.html"><strong>19.</strong> Cargo</a></li><li><ul class="section"><li><a href="cratesio.html"><strong>19.1.</strong> Crates.io</a></li></ul></li><li><a href="advanced-type-system-features.html"><strong>20.</strong> Advanced Type System Features</a></li><li><ul class="section"><li><a href="associated-types.html"><strong>20.1.</strong> Associated Types</a></li><li><a href="trait-objects.html"><strong>20.2.</strong> Trait Objects</a></li><li><a href="ufcs.html"><strong>20.3.</strong> UFCS</a></li><li><a href="coherence.html"><strong>20.4.</strong> Coherence</a></li></ul></li><li><a href="interior-mutability.html"><strong>21.</strong> Interior mutability</a></li><li><ul class="section"><li><a href="cell.html"><strong>21.1.</strong> `Cell<T>`</a></li><li><a href="refcell.html"><strong>21.2.</strong> `RefCell<T>`</a></li></ul></li><li><a href="macros.html"><strong>22.</strong> Macros</a></li><li><a href="nightly-rust.html"><strong>23.</strong> Nightly Rust</a></li></ul>
+        </div>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar" class="menu-bar">
+                    <div class="left-buttons">
+                        <i id="sidebar-toggle" class="fa fa-bars"></i>
+                        <i id="theme-toggle" class="fa fa-paint-brush"></i>
+                    </div>
+
+                    <h1 class="menu-title">The Rust Programming Language</h1>
+
+                    <div class="right-buttons">
+                        <i id="print-button" class="fa fa-print" title="Print this book"></i>
+                    </div>
+                </div>
+
+                <div id="content" class="content">
+
+                    <div class="warning" style="border: 1px solid #aaaaaa; border-radius: 5px; padding: 20px;">
+                        <i class="fa fa-warning fa-2x" style="float: left; display: inline-block; color: #FFAA00;"></i>
+                        <div style="dislay: inline-block; padding-left: 50px;">
+                            This book is in the process of being rewritten. Some sections are in form of drafts and
+                            others haven't been rewritten yet. The stable version can be found <a href="https://doc.rust-lang.org/stable/book/">here</a>.
+                        </div>
+                    </div>
+
+                    <h1>Scalar Types</h1>
+<p>We’ve seen that every value in Rust has a type of some kind. There are a number
+of types which are built into the language itself. First, we’ll take a look at
+‘scalar’ types, that is, types which represent a single value.</p>
+<p>Remember, you can rely on type inference to figure out the type of a binding,
+or you can annotate it explicitly:</p>
+<pre><code class="language-rust">fn main() {
+    let x: i32 = 5;
+}
+</code></pre>
+<h2>Integers</h2>
+<p>You’ve already seen one primitive type: <code>i32</code>. There are a number of built-in
+number types in Rust.</p>
+<p>Here’s a chart of Rust’s integer types:</p>
+<p>|        | signed | unsigned |
+|--------|--------|----------|
+|  8-bit |  i8    |  u8      |
+| 16-bit | i16    | u16      |
+| 32-bit | i32    | u32      |
+| 64-bit | i64    | u64      |
+| arch   | isize  | usize    |</p>
+<p>We have both signed and unsigned variants of numbers, and each variant has an
+explicit size. Unsigned numbers are never negative, and signed numbers can be
+positive or negative. (Think ‘plus sign’ or ‘minus sign’: that’s a signed
+number.) Signed numbers are stored using ‘two’s complement’ representation.</p>
+<p>Finally, <code>isize</code> and <code>usize</code> are different sizes based on the kind of computer
+your program is running on. If you are on a 64-bit architecture, they are 64
+bits, and if you’re on a 32-bit one, they’re 32 bits.</p>
+<p>So how do you choose from all these options? Well, if you really don’t know,
+the defaults are a good choice: integer types default to <code>i32</code>. The primary use
+case for <code>isize</code>/<code>usize</code> is when indexing some sort of collection. We’ll talk
+more about our first collection, arrays, in just a moment.</p>
+<h2>Floating-point numbers</h2>
+<p>Rust also has two primitive floating-point numbers: <code>f32</code> and <code>f64</code>. They are
+32 bits and 64 bits in size, respectively. The default is <code>f64</code>.</p>
+<pre><code class="language-rust">fn main() {
+    let x = 2.0; // f64
+
+    let y: f32 = 3.0; // f32
+}
+</code></pre>
+<p>Floating-point numbers are represented according to the IEEE-754 standard.
+<code>f32</code> is a single-precision float, <code>f64</code> is double-precision.</p>
+<h2>Numeric operations</h2>
+<p>Rust supports the usual operations you’d expect on all of these number types:</p>
+<pre><code class="language-rust">fn main() {
+    // addition
+    let sum = 5 + 10;
+
+    // subtraction
+    let difference = 95.5 - 4.3;
+
+    // multiplication
+    let product = 4 * 30;
+
+    // division
+    let quotient = 56.7 / 32.2;
+
+    // modulus
+    let remainder = 43 % 5;
+}
+</code></pre>
+<h2>Booleans</h2>
+<p>Somewhat fundamental to all computing, Rust has a boolean type, <code>bool</code>, with
+two possible values:</p>
+<pre><code class="language-rust">fn main() {
+    let t = true;
+    let f: bool = false; // with explict type annotation
+}
+</code></pre>
+<p>The main way to consume boolean values is through conditionals like <code>if</code>, which
+we’ll see later in the chapter.</p>
+<h2>Characters</h2>
+<p>We’ve only worked with numbers so far, but what about letters? Rust’s most
+primitive alphabetic type is the <code>char</code>:</p>
+<pre><code class="language-rust">fn main() {
+   let c = 'z';
+   let z = 'ℤ';
+}
+</code></pre>
+<p>Rust’s <code>char</code> represents a <a href="http://www.unicode.org/glossary/#unicode_scalar_value">Unicode Scalar Value</a>, which means that it can
+represent a lot more than just ASCII. ‘Character’ isn’t really a concept in
+Unicode, however: your human intutition for what a ‘character’ is may not match
+up with a <code>char</code>. It also means that <code>char</code>s are four bytes each.</p>
+
+                </div>
+
+                <!-- Mobile navigation buttons -->
+                
+                    <a href="functions.html" class="mobile-nav-chapters previous">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+                    <a href="compound-types.html" class="mobile-nav-chapters next">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                
+
+            </div>
+
+            
+                <a href="functions.html" class="nav-chapters previous">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+            
+
+            
+                <a href="compound-types.html" class="nav-chapters next">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            
+
+        </div>
+
+
+        <!-- Local fallback for Font Awesome -->
+        <script>
+            if ($(".fa").css("font-family") !== "FontAwesome") {
+                $('<link rel="stylesheet" type="text/css" href="_FontAwesome/css/font-awesome.css">').prependTo('head');
+            }
+        </script>
+
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+    </body>
+</html>
