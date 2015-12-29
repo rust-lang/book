@@ -143,7 +143,7 @@ struct Point {
     y: f64,
 }
 
-let p1 = Point { x: 0.0, y: 0.0 };
+let p1 = Point { x: 0.0, y: 5.0 };
 ```
 
 Here’s what declaring a `struct` looks like:
@@ -176,7 +176,7 @@ struct Point {
     y: f64,
 }
 
-let p1 = Point { x: 0.0, y: 0.0 };
+let p1 = Point { x: 0.0, y: 5.0 };
 let x = p1.x;
 ```
 
