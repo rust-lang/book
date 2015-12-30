@@ -32,15 +32,11 @@ $( document ).ready(function() {
         switch (e.keyCode) {
             case KEY_CODES.NEXT_KEY:
                 e.preventDefault();
-                if($('.nav-chapters.next').length) {
-                    window.location.href = $('.nav-chapters.next').attr('href');
-                }
+                window.location.href = $('.nav-chapters.next').attr('href');
                 break;
             case KEY_CODES.PREVIOUS_KEY:
                 e.preventDefault();
-                if($('.nav-chapters.previous').length) {
-                    window.location.href = $('.nav-chapters.previous').attr('href');
-                }
+                window.location.href = $('.nav-chapters.previous').attr('href');
                 break;
         }
     });
