@@ -3,7 +3,7 @@
 Now that you have Rust installed, let’s write your first Rust program. It's
 traditional when learning a new language to write a little program to print the
 text “Hello, world!” to the screen, and in this section, we'll follow that
-tradition. 
+tradition.
 
 The nice thing about starting with such a simple program is that you can
 quickly verify that your compiler is installed, and that it's working properly.
@@ -51,14 +51,14 @@ following commands:
 
 ```bash
 $ rustc main.rs
-$ ./main 
+$ ./main
 Hello, world!
 ```
 
 In Windows, just replace `main` with `main.exe`. Regardless of your operating
 system, you should see the string `Hello, world!` print to the terminal. If you
 did, then congratulations! You've officially written a Rust program. That makes
-you a Rust programmer! Welcome. 
+you a Rust programmer! Welcome.
 
 ## Anatomy of a Rust Program
 
@@ -92,13 +92,13 @@ Inside the `main()` function:
 This line does all of the work in this little program: it prints text to the
 screen. There are a number of details that are important here. The first is
 that it’s indented with four spaces, not tabs.
- 
+
 The second important part is the `println!()` line. This is calling a Rust
 *[macro]*, which is how metaprogramming is done in Rust. If it were calling a
 function instead, it would look like this: `println()` (without the !). We'll
 discuss Rust macros in more detail later, but for now you just need to
 know that when you see a `!` that means that you’re calling a macro instead of
-a normal function. 
+a normal function.
 
 [macro]: macros.html
 
@@ -113,7 +113,7 @@ begin. Most lines of Rust code end with a `;`.
 ## Compiling and Running Are Separate Steps
 
 In "Writing and Running a Rust Program", we showed you how to run a newly
-created program. We'll break that process down and examine each step now. 
+created program. We'll break that process down and examine each step now.
 
 Before running a Rust program, you have to compile it. You can use the Rust
 compiler by entering the `rustc` command and passing it the name of your source
@@ -195,7 +195,7 @@ in which you installed Rust, to determine if Cargo is separate.
 ## Converting to Cargo
 
 Let’s convert the Hello World program to Cargo. To Cargo-fy a project, you need
-to do three things: 
+to do three things:
 
 1. Put your source file in the right directory.
 2. Get rid of the old executable (`main.exe` on Windows, `main` everywhere else)
@@ -219,7 +219,7 @@ Cargo expects your source files to live inside a *src* directory, so do that
 first. This leaves the top-level project directory (in this case,
 *hello_world*) for READMEs, license information, and anything else not related
 to your code. In this way, using Cargo helps you keep your projects nice and
-tidy. There's a place for everything, and everything is in its place. 
+tidy. There's a place for everything, and everything is in its place.
 
 Now, copy *main.rs* to the *src* directory, and delete the compiled file you
 created with `rustc`. As usual, replace `main` with `main.exe` if you're on
@@ -228,7 +228,7 @@ Windows.
 This example retains `main.rs` as the source filename because it's creating an
 executable. If you wanted to make a library instead, you'd name the file
 `lib.rs`. This convention is used by Cargo to successfully compile your
-projects, but it can be overridden if you wish. 
+projects, but it can be overridden if you wish.
 
 ### Creating a Configuration File
 
@@ -236,7 +236,7 @@ Next, create a new file inside your *hello_world* directory, and call it
 `Cargo.toml`.
 
 Make sure to capitalize the `C` in `Cargo.toml`, or Cargo won't know what to do
-with the configuration file. 
+with the configuration file.
 
 This file is in the *[TOML]* (Tom's Obvious, Minimal Language) format. TOML is
 similar to INI, but has some extra goodies, and is used as Cargo’s
@@ -264,7 +264,7 @@ know to compile your program: its name, what version it is, and who wrote it.
 Once you've added this information to the *Cargo.toml* file, save it to finish
 creating the configuration file.
 
-## Building and Running a Cargo Project 
+## Building and Running a Cargo Project
 
 With your *Cargo.toml* file in place in your project's root directory, you
 should be ready to build and run your Hello World program! To do so, enter the
@@ -277,7 +277,7 @@ $ ./target/debug/hello_world
 Hello, world!
 ```
 
-Bam! If all goes well, `Hello, world!` should print to the terminal once more. 
+Bam! If all goes well, `Hello, world!` should print to the terminal once more.
 
 You just built a project with `cargo build` and ran it with
 `./target/debug/hello_world`, but you can actually do both in one step with
@@ -305,7 +305,7 @@ Cargo checks to see if any of your project’s files have been modified, and onl
 rebuilds your project if they’ve changed since the last time you built it.
 
 With simple projects, Cargo doesn't bring a whole lot over just using `rustc`,
-but it will become useful in future. With complex projects composed of multiple
+but it will become useful in the future. With complex projects composed of multiple
 crates, it’s much easier to let Cargo coordinate the build. With Cargo, you can
 just run `cargo build`, and it should work the right way.
 
@@ -332,7 +332,7 @@ doesn't have dependencies, so the file is a bit sparse. Realistically, you
 won't ever need to touch this file yourself; just let Cargo handle it.
 
 That’s it! If you've been following along, you should have successfully built
-`hello_world` with Cargo. 
+`hello_world` with Cargo.
 
 Even though the project is simple, it now uses much of the real tooling you’ll
 use for the rest of your Rust career. In fact, you can expect to start
@@ -387,7 +387,7 @@ fn main() {
 }
 ```
 
-Cargo has generated a "Hello World!" for you, and you’re ready to start coding! 
+Cargo has generated a "Hello World!" for you, and you’re ready to start coding!
 
 > Note: If you want to look at Cargo in more detail, check out the official [Cargo
 guide], which covers all of its features.
