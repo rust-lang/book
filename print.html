@@ -75,7 +75,7 @@
                     </div>
 
                     <h1>Introduction</h1>
-<p>Welcome to “The Rust Programming Language,” an introductory book about Rust.
+<p>Welcome to “The Rust Programming Language”, an introductory book about Rust.
 Rust is a programming language that’s focused on safety, concurrency, and
 speed. It maintains these goals without having a garbage collector, making it a
 useful language for a number of use cases other languages aren’t good at:
@@ -197,7 +197,7 @@ than <em>helloworld.rs</em>.</p>
 <p>Save the file, and go back to your terminal window. On Linux or OSX, enter the
 following commands:</p>
 <pre><code class="language-bash">$ rustc main.rs
-$ ./main 
+$ ./main
 Hello, world!
 </code></pre>
 <p>In Windows, just replace <code>main</code> with <code>main.exe</code>. Regardless of your operating
@@ -376,7 +376,7 @@ Hello, world!
 <p>Cargo checks to see if any of your project’s files have been modified, and only
 rebuilds your project if they’ve changed since the last time you built it.</p>
 <p>With simple projects, Cargo doesn't bring a whole lot over just using <code>rustc</code>,
-but it will become useful in future. With complex projects composed of multiple
+but it will become useful in the future. With complex projects composed of multiple
 crates, it’s much easier to let Cargo coordinate the build. With Cargo, you can
 just run <code>cargo build</code>, and it should work the right way.</p>
 <h2>Building for Release</h2>
@@ -1282,13 +1282,13 @@ or you can annotate it explicitly:</p>
 <p>You’ve already seen one primitive type: <code>i32</code>. There are a number of built-in
 number types in Rust.</p>
 <p>Here’s a chart of Rust’s integer types:</p>
-<p>|        | signed | unsigned |
-|--------|--------|----------|
-|  8-bit |  i8    |  u8      |
-| 16-bit | i16    | u16      |
-| 32-bit | i32    | u32      |
-| 64-bit | i64    | u64      |
-| arch   | isize  | usize    |</p>
+<table><thead><tr><td>        </td><td> signed </td><td> unsigned </td></tr></thead>
+<tr><td>  8-bit </td><td>  i8    </td><td>  u8      </td></tr>
+<tr><td> 16-bit </td><td> i16    </td><td> u16      </td></tr>
+<tr><td> 32-bit </td><td> i32    </td><td> u32      </td></tr>
+<tr><td> 64-bit </td><td> i64    </td><td> u64      </td></tr>
+<tr><td> arch   </td><td> isize  </td><td> usize    </td></tr>
+</table>
 <p>We have both signed and unsigned variants of numbers, and each variant has an
 explicit size. Unsigned numbers are never negative, and signed numbers can be
 positive or negative. (Think ‘plus sign’ or ‘minus sign’: that’s a signed

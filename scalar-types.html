@@ -88,13 +88,13 @@ or you can annotate it explicitly:</p>
 <p>You’ve already seen one primitive type: <code>i32</code>. There are a number of built-in
 number types in Rust.</p>
 <p>Here’s a chart of Rust’s integer types:</p>
-<p>|        | signed | unsigned |
-|--------|--------|----------|
-|  8-bit |  i8    |  u8      |
-| 16-bit | i16    | u16      |
-| 32-bit | i32    | u32      |
-| 64-bit | i64    | u64      |
-| arch   | isize  | usize    |</p>
+<table><thead><tr><td>        </td><td> signed </td><td> unsigned </td></tr></thead>
+<tr><td>  8-bit </td><td>  i8    </td><td>  u8      </td></tr>
+<tr><td> 16-bit </td><td> i16    </td><td> u16      </td></tr>
+<tr><td> 32-bit </td><td> i32    </td><td> u32      </td></tr>
+<tr><td> 64-bit </td><td> i64    </td><td> u64      </td></tr>
+<tr><td> arch   </td><td> isize  </td><td> usize    </td></tr>
+</table>
 <p>We have both signed and unsigned variants of numbers, and each variant has an
 explicit size. Unsigned numbers are never negative, and signed numbers can be
 positive or negative. (Think ‘plus sign’ or ‘minus sign’: that’s a signed
