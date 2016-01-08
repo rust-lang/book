@@ -76,3 +76,10 @@ Finally, there’s the `S-` labels, which are for various ‘status’es:
 * `S-done`: imported into No Starch’s system. There may still be changes based
   on their feedback, even after a section is marked `S-done`.
 
+## No Starch
+
+As the book will be published by No Starch, we first iterate here, then ship the
+text off to No Starch. Then they do editing, and we fold it back in.
+
+As such, there’s a directory, `nostarch`, which corresponds to the `S-done`,
+and its current status in No Starch’s system.
