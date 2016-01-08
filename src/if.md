@@ -38,7 +38,7 @@ Let's try running it:
 
 ```bash
 $ cargo run
-   Compiling branches v0.1.0 (file:///home/steve/tmp/branches)
+   Compiling branches v0.1.0 (file:///projects/branches)
      Running `target/debug/branches`
 condition was true
 ```
@@ -53,7 +53,7 @@ And then run it again:
 
 ```bash
 $ cargo run
-   Compiling branches v0.1.0 (file:///home/steve/tmp/branches)
+   Compiling branches v0.1.0 (file:///projects/branches)
      Running `target/debug/branches`
 condition was false
 ```
@@ -92,7 +92,7 @@ fn main() {
 If we try to run this program, Rust will complain:
 
 ```bash
-   Compiling branches v0.1.0 (file:///home/steve/tmp/branches)
+   Compiling branches v0.1.0 (file:///projects/branches)
 src/main.rs:4:8: 4:17 error: mismatched types:
  expected `bool`,
     found `_`
@@ -131,7 +131,7 @@ Let's try running it:
 
 ```bash
 $ cargo run
-   Compiling branches v0.1.0 (file:///home/steve/tmp/branches)
+   Compiling branches v0.1.0 (file:///projects/branches)
      Running `target/debug/branches`
 condition was 5
 ```
@@ -166,7 +166,7 @@ Let’s run this:
 
 ```bash
 $ cargo run
-   Compiling branches v0.1.0 (file:///home/steve/tmp/branches)
+   Compiling branches v0.1.0 (file:///projects/branches)
      Running `target/debug/branches`
 The value of number is: 5
 ```
@@ -195,7 +195,7 @@ fn main() {
 If we try to run this, we’ll get an error:
 
 ```bash
-   Compiling branches v0.1.0 (file:///home/steve/tmp/branches)
+   Compiling branches v0.1.0 (file:///projects/branches)
 src/main.rs:4:18: 8:6 error: if and else have incompatible types:
  expected `_`,
     found `&‘static str`

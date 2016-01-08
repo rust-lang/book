@@ -45,7 +45,7 @@ Let's try running this program with `cargo run`:
 
 ```bash
 $ cargo run
-   Compiling points v0.1.0 (file:///home/steve/tmp/points)
+   Compiling points v0.1.0 (file:///projects/points)
      Running `target/debug/points`
 Point 1: (0, 5)
 Point 2: (12, 0)

@@ -20,7 +20,7 @@ Let’s try running it:
 
 ```bash
 $ cargo run
-   Compiling functions v0.1.0 (file:///home/steve/tmp/functions)
+   Compiling functions v0.1.0 (file:///projects/functions)
      Running `target/debug/functions`
 The value of s is: [1, 2]
 ```

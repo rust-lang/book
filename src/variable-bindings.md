@@ -38,7 +38,7 @@ And finally, run it:
 
 ```bash
 $ cargo run
-   Compiling bindings v0.1.0 (file:///home/steve/tmp/bindings)
+   Compiling bindings v0.1.0 (file:///projects/bindings)
      Running `target/debug/bindings`
 The value of x is: 5
 ```
@@ -142,7 +142,7 @@ And run it with `cargo run`:
 
 ```text
 $ cargo run
-   Compiling bindings v0.1.0 (file:///home/steve/tmp/bindings)
+   Compiling bindings v0.1.0 (file:///projects/bindings)
      Running `target/debug/bindings`
 The value of x is: 5
 The value of y is: 6
@@ -242,7 +242,7 @@ And run it with `cargo run`:
 
 ```text
 $ cargo run
-   Compiling bindings v0.1.0 (file:///home/steve/tmp/bindings)
+   Compiling bindings v0.1.0 (file:///projects/bindings)
      Running `target/debug/bindings`
 The value of x is: 5
 ```
@@ -264,7 +264,7 @@ fn main() {
 We can find out the answer with `cargo run`:
 
 ```text
-   Compiling bindings v0.1.0 (file:///home/steve/tmp/bindings)
+   Compiling bindings v0.1.0 (file:///projects/bindings)
 src/main.rs:4:39: 4:40 error: use of possibly uninitialized variable: `x` [E0381]
 src/main.rs:4     println!(“The value of x is: {}”, x);
                                                     ^
@@ -334,7 +334,7 @@ fn main() {
 
 ```bash
 $ cargo run
-   Compiling bindings v0.1.0 (file:///home/steve/tmp/bindings)
+   Compiling bindings v0.1.0 (file:///projects/bindings)
 src/main.rs:4:5: 4:10 error: re-assignment of immutable variable `x` [E0384]
 src/main.rs:4     x = 6;
                   ^~~~~
@@ -365,7 +365,7 @@ Running this, we get:
 
 ```bash
 $ cargo run
-   Compiling bindings v0.1.0 (file:///home/steve/tmp/bindings)
+   Compiling bindings v0.1.0 (file:///projects/bindings)
      Running `target/debug/bindings`
 The value of x is: 5
 The value of x is: 6
@@ -389,7 +389,7 @@ The compiler will complain about this program:
 
 ```bash
 $ cargo build
-   Compiling bindings v0.1.0 (file:///home/steve/tmp/bindings)
+   Compiling bindings v0.1.0 (file:///projects/bindings)
 src/main.rs:5:5: 5:10 error: re-assignment of immutable variable `y` [E0384]
 src/main.rs:5     y = 8;
                   ^~~~~
@@ -517,7 +517,7 @@ fn main() {
 This will print:
 
 ```bash
-   Compiling bindings v0.1.0 (file:///home/steve/tmp/bindings)
+   Compiling bindings v0.1.0 (file:///projects/bindings)
      Running `target/debug/bindings`
 The value of x is: 12
 ```
@@ -562,7 +562,7 @@ If we try to compile, we get an error:
 
 ```bash
 $ cargo build
-   Compiling bindings v0.1.0 (file:///home/steve/tmp/bindings)
+   Compiling bindings v0.1.0 (file:///projects/bindings)
 src/main.rs:8:5: 8:11 error: re-assignment of immutable variable `x` [E0384]
 src/main.rs:8     x = 15;
                   ^~~~~~
@@ -630,7 +630,7 @@ If we run this example, we can see the shadow appear and disappear:
 
 ```bash
 $ cargo run
-   Compiling bindings v0.1.0 (file:///home/steve/tmp/bindings)
+   Compiling bindings v0.1.0 (file:///projects/bindings)
      Running `target/debug/bindings`
 Before shadowing, x is: 5
 Now that x is shadowed, x is: 6

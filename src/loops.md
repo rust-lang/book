@@ -34,7 +34,7 @@ a keyboard shortcut, ‘control-c’, to stop a runaway program. Give it a try:
 
 ```bash
 $ cargo run
-   Compiling loops v0.1.0 (file:///home/steve/tmp/loops)
+   Compiling loops v0.1.0 (file:///projects/loops)
      Running `target/debug/loops`
 again!
 again!
@@ -65,7 +65,7 @@ time:
 
 ```bash
 $ cargo run
-   Compiling loops v0.1.0 (file:///home/steve/tmp/loops)
+   Compiling loops v0.1.0 (file:///projects/loops)
      Running `target/debug/loops`
 once!
 ```
@@ -99,7 +99,7 @@ fn main() {
 If we run this, we’ll get some output:
 
 ```bash
-   Compiling loops v0.1.0 (file:///home/steve/tmp/loops)
+   Compiling loops v0.1.0 (file:///projects/loops)
      Running `target/debug/loops`
 3!
 2!
@@ -162,7 +162,7 @@ Running this will print out every element of the array:
 
 ```bash
 $ cargo run
-   Compiling loops v0.1.0 (file:///home/steve/tmp/loops)
+   Compiling loops v0.1.0 (file:///projects/loops)
      Running `target/debug/loops`
 the value is: 1
 the value is: 2

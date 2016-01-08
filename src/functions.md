@@ -46,7 +46,7 @@ Place the new example in `src/main.rs`, and run it:
 
 ```bash
 $ cargo run
-   Compiling functions v0.1.0 (file:///home/steve/tmp/functions)
+   Compiling functions v0.1.0 (file:///projects/functions)
      Running `target/debug/functions`
 Hello, world!
 Another function.
@@ -74,7 +74,7 @@ Let’s try running it:
 
 ```bash
 $ cargo run
-   Compiling functions v0.1.0 (file:///home/steve/tmp/functions)
+   Compiling functions v0.1.0 (file:///projects/functions)
      Running `target/debug/functions`
 The value of x is: 5
 ```
@@ -126,7 +126,7 @@ Let’s try it:
 
 ```bash
 $ cargo run
-   Compiling functions v0.1.0 (file:///home/steve/tmp/functions)
+   Compiling functions v0.1.0 (file:///projects/functions)
      Running `target/debug/functions`
 The value of x is: 5
 The value of y is: 6
@@ -152,7 +152,7 @@ This has the same effect:
 
 ```bash
 $ cargo run
-   Compiling functions v0.1.0 (file:///home/steve/tmp/functions)
+   Compiling functions v0.1.0 (file:///projects/functions)
      Running `target/debug/functions`
 The value of x is: 5
 The value of y is: 6
@@ -190,7 +190,7 @@ Let’s try running it:
 
 ```bash
 $ cargo run
-   Compiling functions v0.1.0 (file:///home/steve/tmp/functions)
+   Compiling functions v0.1.0 (file:///projects/functions)
      Running `target/debug/functions`
 The value of x is: 5
 ```
@@ -264,7 +264,7 @@ If we try to run this program, we’ll get an error:
 
 ```bash
 $ cargo run
-   Compiling functions v0.1.0 (file:///home/steve/tmp/functions)
+   Compiling functions v0.1.0 (file:///projects/functions)
 src/main.rs:2:14: 2:17 error: expected identifier, found keyword `let`
 src/main.rs:2     let x = (let y = 6);
                            ^~~
@@ -309,7 +309,7 @@ fn main() {
 Let’s try running this program:
 
 ```bash
-   Compiling functions v0.1.0 (file:///home/steve/tmp/functions)
+   Compiling functions v0.1.0 (file:///projects/functions)
      Running `target/debug/functions`
 The value of y is: 11
 ```
@@ -369,7 +369,7 @@ Running this gives:
 
 ```bash
 $ cargo run
-   Compiling functions v0.1.0 (file:///home/steve/tmp/functions)
+   Compiling functions v0.1.0 (file:///projects/functions)
      Running `target/debug/functions`
 The value of y is: 6
 The value of y is: 6
@@ -413,7 +413,7 @@ Running this gives an error:
 
 ```bash
 $ cargo run
-   Compiling functions v0.1.0 (file:///home/steve/tmp/functions)
+   Compiling functions v0.1.0 (file:///projects/functions)
 src/main.rs:7:1: 9:2 error: not all control paths return a value [E0269]
 src/main.rs:7 fn plus_one(x: i32) -> i32 {
 src/main.rs:8     x + 1;
@@ -466,7 +466,7 @@ Running this will show us the values:
 
 ```bash
 $ cargo run
-   Compiling functions v0.1.0 (file:///home/steve/tmp/functions)
+   Compiling functions v0.1.0 (file:///projects/functions)
      Running `target/debug/functions`
 The value of x is: 5
 The value of y is: 6

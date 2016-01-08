@@ -163,7 +163,7 @@ Let’s build the project now:
 
 ```bash
 $ cargo build --release
-   Compiling embed v0.1.0 (file:///home/steve/src/embed)
+   Compiling embed v0.1.0 (file:///projects/embed)
 ```
 
 We’ve chosen `cargo build --release`, which builds with optimizations on. We

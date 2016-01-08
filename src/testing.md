@@ -96,7 +96,7 @@ test it_works ... FAILED
 failures:
 
 ---- it_works stdout ----
-        thread 'it_works' panicked at 'assertion failed: false', /home/steve/tmp/adder/src/lib.rs:3
+        thread 'it_works' panicked at 'assertion failed: false', /projects/adder/src/lib.rs:3
 
 
 
@@ -473,7 +473,7 @@ Let's run the tests again:
 
 ```bash
 $ cargo test
-   Compiling adder v0.0.1 (file:///home/steve/tmp/adder)
+   Compiling adder v0.0.1 (file:///projects/adder)
      Running target/adder-91b3e234d4ed382a
 
 running 1 test
