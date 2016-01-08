@@ -1,4 +1,4 @@
-# Primitive Rust
+# Up and Running
 
 We’ll start our journey with Rust by talking about the absolute basics —
 concepts that appear in almost every programming language. Many programming

@@ -7,7 +7,7 @@
 
 - [Tutorial]()
 
-- [Primitive Rust](primitive-rust.md)
+- [Up and Running](up-and-running.md)
     - [Variable Bindings](variable-bindings.md)
     - [Functions](functions.md)
     - [Scalar Types](scalar-types.md)
