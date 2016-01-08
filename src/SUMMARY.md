@@ -22,9 +22,9 @@
     - [Lifetimes]()
 
 - [Structs](structs.md)
-    - [Method Syntax](method-syntax.md)
-    - [Generics](structs-generics.md)
-    - [Advanced](structs-advanced.md)
+    - [Method Syntax]()
+    - [Generics]()
+    - [Advanced]()
 
 - [Enums]()
     - [Match]()
