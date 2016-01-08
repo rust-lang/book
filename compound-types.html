@@ -182,7 +182,7 @@ give an invalid index?</p>
 project from before. Change your <code>src/main.rs</code> to look like the example, and
 run it:</p>
 <pre><code class="language-bash">$ cargo run
-   Compiling functions v0.1.0 (file:///home/steve/tmp/functions)
+   Compiling functions v0.1.0 (file:///projects/functions)
      Running `target/debug/functions`
 thread ‘&lt;main&gt;’ panicked at ‘index out of bounds: the len is 5 but the index is 10’, src/main.rs:4
 Process didn’t exit successfully: `target/debug/functions` (exit code: 101)
@@ -211,7 +211,7 @@ though...</p>
 </code></pre>
 <p>... we will get an error:</p>
 <pre><code class="language-bash">$ cargo run
-   Compiling functions v0.1.0 (file:///home/steve/tmp/functions)
+   Compiling functions v0.1.0 (file:///projects/functions)
 src/main.rs:4:25: 4:26 error: the trait `core::fmt::Display` is not implemented for the type `[_; 5]` [E0277]
 src/main.rs:4     println!(“a is {}”, a);
                                       ^
@@ -243,7 +243,7 @@ which is a bit different: intended for programmer consumption. We can ask
 </code></pre>
 <p>This will work:</p>
 <pre><code class="language-bash">$ cargo run
-   Compiling functions v0.1.0 (file:///home/steve/tmp/functions)
+   Compiling functions v0.1.0 (file:///projects/functions)
      Running `target/debug/functions`
 a is [1, 2, 3, 4, 5]
 </code></pre>

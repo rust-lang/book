@@ -106,7 +106,7 @@ $ cd branches
 </code></pre>
 <p>Let's try running it:</p>
 <pre><code class="language-bash">$ cargo run
-   Compiling branches v0.1.0 (file:///home/steve/tmp/branches)
+   Compiling branches v0.1.0 (file:///projects/branches)
      Running `target/debug/branches`
 condition was true
 </code></pre>
@@ -115,7 +115,7 @@ condition was true
 </code></pre>
 <p>And then run it again:</p>
 <pre><code class="language-bash">$ cargo run
-   Compiling branches v0.1.0 (file:///home/steve/tmp/branches)
+   Compiling branches v0.1.0 (file:///projects/branches)
      Running `target/debug/branches`
 condition was false
 </code></pre>
@@ -143,7 +143,7 @@ example with something else:</p>
 }
 </code></pre>
 <p>If we try to run this program, Rust will complain:</p>
-<pre><code class="language-bash">   Compiling branches v0.1.0 (file:///home/steve/tmp/branches)
+<pre><code class="language-bash">   Compiling branches v0.1.0 (file:///projects/branches)
 src/main.rs:4:8: 4:17 error: mismatched types:
  expected `bool`,
     found `_`
@@ -174,7 +174,7 @@ Could not compile `branches`.
 </code></pre>
 <p>Let's try running it:</p>
 <pre><code class="language-bash">$ cargo run
-   Compiling branches v0.1.0 (file:///home/steve/tmp/branches)
+   Compiling branches v0.1.0 (file:///projects/branches)
      Running `target/debug/branches`
 condition was 5
 </code></pre>
@@ -200,7 +200,7 @@ that we can use it on the right hand side of a <code>let</code> binding, for ins
 </code></pre>
 <p>Let’s run this:</p>
 <pre><code class="language-bash">$ cargo run
-   Compiling branches v0.1.0 (file:///home/steve/tmp/branches)
+   Compiling branches v0.1.0 (file:///projects/branches)
      Running `target/debug/branches`
 The value of number is: 5
 </code></pre>
@@ -222,7 +222,7 @@ in this way, both arms of the <code>if</code> must be the same type. This doesn�
 }
 </code></pre>
 <p>If we try to run this, we’ll get an error:</p>
-<pre><code class="language-bash">   Compiling branches v0.1.0 (file:///home/steve/tmp/branches)
+<pre><code class="language-bash">   Compiling branches v0.1.0 (file:///projects/branches)
 src/main.rs:4:18: 8:6 error: if and else have incompatible types:
  expected `_`,
     found `&amp;‘static str`

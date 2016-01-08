@@ -107,7 +107,7 @@ $ cd functions
 </code></pre>
 <p>Place the new example in <code>src/main.rs</code>, and run it:</p>
 <pre><code class="language-bash">$ cargo run
-   Compiling functions v0.1.0 (file:///home/steve/tmp/functions)
+   Compiling functions v0.1.0 (file:///projects/functions)
      Running `target/debug/functions`
 Hello, world!
 Another function.
@@ -127,7 +127,7 @@ fn another_function(x: i32) {
 </code></pre>
 <p>Let’s try running it:</p>
 <pre><code class="language-bash">$ cargo run
-   Compiling functions v0.1.0 (file:///home/steve/tmp/functions)
+   Compiling functions v0.1.0 (file:///projects/functions)
      Running `target/debug/functions`
 The value of x is: 5
 </code></pre>
@@ -160,7 +160,7 @@ fn another_function(x: i32, y: i32) {
 </code></pre>
 <p>Let’s try it:</p>
 <pre><code class="language-bash">$ cargo run
-   Compiling functions v0.1.0 (file:///home/steve/tmp/functions)
+   Compiling functions v0.1.0 (file:///projects/functions)
      Running `target/debug/functions`
 The value of x is: 5
 The value of y is: 6
@@ -180,7 +180,7 @@ fn another_function(x: i32, y: i32) {
 </code></pre>
 <p>This has the same effect:</p>
 <pre><code class="language-bash">$ cargo run
-   Compiling functions v0.1.0 (file:///home/steve/tmp/functions)
+   Compiling functions v0.1.0 (file:///projects/functions)
      Running `target/debug/functions`
 The value of x is: 5
 The value of y is: 6
@@ -207,7 +207,7 @@ fn five() -&gt; i32 {
 </code></pre>
 <p>Let’s try running it:</p>
 <pre><code class="language-bash">$ cargo run
-   Compiling functions v0.1.0 (file:///home/steve/tmp/functions)
+   Compiling functions v0.1.0 (file:///projects/functions)
      Running `target/debug/functions`
 The value of x is: 5
 </code></pre>
@@ -255,7 +255,7 @@ binding. Here’s an example that doesn’t work:</p>
 </code></pre>
 <p>If we try to run this program, we’ll get an error:</p>
 <pre><code class="language-bash">$ cargo run
-   Compiling functions v0.1.0 (file:///home/steve/tmp/functions)
+   Compiling functions v0.1.0 (file:///projects/functions)
 src/main.rs:2:14: 2:17 error: expected identifier, found keyword `let`
 src/main.rs:2     let x = (let y = 6);
                            ^~~
@@ -290,7 +290,7 @@ blocks inside of blocks. And since they return a value, we can use them in
 }
 </code></pre>
 <p>Let’s try running this program:</p>
-<pre><code class="language-bash">   Compiling functions v0.1.0 (file:///home/steve/tmp/functions)
+<pre><code class="language-bash">   Compiling functions v0.1.0 (file:///projects/functions)
      Running `target/debug/functions`
 The value of y is: 11
 </code></pre>
@@ -334,7 +334,7 @@ fn plus_one(x: i32) -&gt; i32 {
 </code></pre>
 <p>Running this gives:</p>
 <pre><code class="language-bash">$ cargo run
-   Compiling functions v0.1.0 (file:///home/steve/tmp/functions)
+   Compiling functions v0.1.0 (file:///projects/functions)
      Running `target/debug/functions`
 The value of y is: 6
 The value of y is: 6
@@ -364,7 +364,7 @@ fn plus_one(x: i32) -&gt; i32 {
 <code>x + 1;</code>.</p>
 <p>Running this gives an error:</p>
 <pre><code class="language-bash">$ cargo run
-   Compiling functions v0.1.0 (file:///home/steve/tmp/functions)
+   Compiling functions v0.1.0 (file:///projects/functions)
 src/main.rs:7:1: 9:2 error: not all control paths return a value [E0269]
 src/main.rs:7 fn plus_one(x: i32) -&gt; i32 {
 src/main.rs:8     x + 1;
@@ -405,7 +405,7 @@ fn two_numbers() -&gt; (i32, i32) {
 </code></pre>
 <p>Running this will show us the values:</p>
 <pre><code class="language-bash">$ cargo run
-   Compiling functions v0.1.0 (file:///home/steve/tmp/functions)
+   Compiling functions v0.1.0 (file:///projects/functions)
      Running `target/debug/functions`
 The value of x is: 5
 The value of y is: 6

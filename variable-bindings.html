@@ -100,7 +100,7 @@ files and create a little ‘hello world’ program for us:</p>
 </code></pre>
 <p>And finally, run it:</p>
 <pre><code class="language-bash">$ cargo run
-   Compiling bindings v0.1.0 (file:///home/steve/tmp/bindings)
+   Compiling bindings v0.1.0 (file:///projects/bindings)
      Running `target/debug/bindings`
 The value of x is: 5
 </code></pre>
@@ -168,7 +168,7 @@ declared the <code>main()</code> function, and declares its end.</p>
 </code></pre>
 <p>And run it with <code>cargo run</code>:</p>
 <pre><code class="language-text">$ cargo run
-   Compiling bindings v0.1.0 (file:///home/steve/tmp/bindings)
+   Compiling bindings v0.1.0 (file:///projects/bindings)
      Running `target/debug/bindings`
 The value of x is: 5
 The value of y is: 6
@@ -235,7 +235,7 @@ later. Try this program:</p>
 </code></pre>
 <p>And run it with <code>cargo run</code>:</p>
 <pre><code class="language-text">$ cargo run
-   Compiling bindings v0.1.0 (file:///home/steve/tmp/bindings)
+   Compiling bindings v0.1.0 (file:///projects/bindings)
      Running `target/debug/bindings`
 The value of x is: 5
 </code></pre>
@@ -251,7 +251,7 @@ question:</p>
 }
 </code></pre>
 <p>We can find out the answer with <code>cargo run</code>:</p>
-<pre><code class="language-text">   Compiling bindings v0.1.0 (file:///home/steve/tmp/bindings)
+<pre><code class="language-text">   Compiling bindings v0.1.0 (file:///projects/bindings)
 src/main.rs:4:39: 4:40 error: use of possibly uninitialized variable: `x` [E0381]
 src/main.rs:4     println!(“The value of x is: {}”, x);
                                                     ^
@@ -305,7 +305,7 @@ asks this question:</p>
 </code></pre>
 <p><code>cargo run</code> has the answer for us:</p>
 <pre><code class="language-bash">$ cargo run
-   Compiling bindings v0.1.0 (file:///home/steve/tmp/bindings)
+   Compiling bindings v0.1.0 (file:///projects/bindings)
 src/main.rs:4:5: 4:10 error: re-assignment of immutable variable `x` [E0384]
 src/main.rs:4     x = 6;
                   ^~~~~
@@ -330,7 +330,7 @@ one. Here’s an example:</p>
 </code></pre>
 <p>Running this, we get:</p>
 <pre><code class="language-bash">$ cargo run
-   Compiling bindings v0.1.0 (file:///home/steve/tmp/bindings)
+   Compiling bindings v0.1.0 (file:///projects/bindings)
      Running `target/debug/bindings`
 The value of x is: 5
 The value of x is: 6
@@ -346,7 +346,7 @@ The value of x is: 6
 </code></pre>
 <p>The compiler will complain about this program:</p>
 <pre><code class="language-bash">$ cargo build
-   Compiling bindings v0.1.0 (file:///home/steve/tmp/bindings)
+   Compiling bindings v0.1.0 (file:///projects/bindings)
 src/main.rs:5:5: 5:10 error: re-assignment of immutable variable `y` [E0384]
 src/main.rs:5     y = 8;
                   ^~~~~
@@ -447,7 +447,7 @@ example:</p>
 }
 </code></pre>
 <p>This will print:</p>
-<pre><code class="language-bash">   Compiling bindings v0.1.0 (file:///home/steve/tmp/bindings)
+<pre><code class="language-bash">   Compiling bindings v0.1.0 (file:///projects/bindings)
      Running `target/debug/bindings`
 The value of x is: 12
 </code></pre>
@@ -483,7 +483,7 @@ immutable style will let us know about that accidental mutation, however:</p>
 </code></pre>
 <p>If we try to compile, we get an error:</p>
 <pre><code class="language-bash">$ cargo build
-   Compiling bindings v0.1.0 (file:///home/steve/tmp/bindings)
+   Compiling bindings v0.1.0 (file:///projects/bindings)
 src/main.rs:8:5: 8:11 error: re-assignment of immutable variable `x` [E0384]
 src/main.rs:8     x = 15;
                   ^~~~~~
@@ -535,7 +535,7 @@ end of a scope. Here’s an example program:</p>
 </code></pre>
 <p>If we run this example, we can see the shadow appear and disappear:</p>
 <pre><code class="language-bash">$ cargo run
-   Compiling bindings v0.1.0 (file:///home/steve/tmp/bindings)
+   Compiling bindings v0.1.0 (file:///projects/bindings)
      Running `target/debug/bindings`
 Before shadowing, x is: 5
 Now that x is shadowed, x is: 6

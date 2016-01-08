@@ -473,7 +473,7 @@ files and create a little ‘hello world’ program for us:</p>
 </code></pre>
 <p>And finally, run it:</p>
 <pre><code class="language-bash">$ cargo run
-   Compiling bindings v0.1.0 (file:///home/steve/tmp/bindings)
+   Compiling bindings v0.1.0 (file:///projects/bindings)
      Running `target/debug/bindings`
 The value of x is: 5
 </code></pre>
@@ -541,7 +541,7 @@ declared the <code>main()</code> function, and declares its end.</p>
 </code></pre>
 <p>And run it with <code>cargo run</code>:</p>
 <pre><code class="language-text">$ cargo run
-   Compiling bindings v0.1.0 (file:///home/steve/tmp/bindings)
+   Compiling bindings v0.1.0 (file:///projects/bindings)
      Running `target/debug/bindings`
 The value of x is: 5
 The value of y is: 6
@@ -608,7 +608,7 @@ later. Try this program:</p>
 </code></pre>
 <p>And run it with <code>cargo run</code>:</p>
 <pre><code class="language-text">$ cargo run
-   Compiling bindings v0.1.0 (file:///home/steve/tmp/bindings)
+   Compiling bindings v0.1.0 (file:///projects/bindings)
      Running `target/debug/bindings`
 The value of x is: 5
 </code></pre>
@@ -624,7 +624,7 @@ question:</p>
 }
 </code></pre>
 <p>We can find out the answer with <code>cargo run</code>:</p>
-<pre><code class="language-text">   Compiling bindings v0.1.0 (file:///home/steve/tmp/bindings)
+<pre><code class="language-text">   Compiling bindings v0.1.0 (file:///projects/bindings)
 src/main.rs:4:39: 4:40 error: use of possibly uninitialized variable: `x` [E0381]
 src/main.rs:4     println!(“The value of x is: {}”, x);
                                                     ^
@@ -678,7 +678,7 @@ asks this question:</p>
 </code></pre>
 <p><code>cargo run</code> has the answer for us:</p>
 <pre><code class="language-bash">$ cargo run
-   Compiling bindings v0.1.0 (file:///home/steve/tmp/bindings)
+   Compiling bindings v0.1.0 (file:///projects/bindings)
 src/main.rs:4:5: 4:10 error: re-assignment of immutable variable `x` [E0384]
 src/main.rs:4     x = 6;
                   ^~~~~
@@ -703,7 +703,7 @@ one. Here’s an example:</p>
 </code></pre>
 <p>Running this, we get:</p>
 <pre><code class="language-bash">$ cargo run
-   Compiling bindings v0.1.0 (file:///home/steve/tmp/bindings)
+   Compiling bindings v0.1.0 (file:///projects/bindings)
      Running `target/debug/bindings`
 The value of x is: 5
 The value of x is: 6
@@ -719,7 +719,7 @@ The value of x is: 6
 </code></pre>
 <p>The compiler will complain about this program:</p>
 <pre><code class="language-bash">$ cargo build
-   Compiling bindings v0.1.0 (file:///home/steve/tmp/bindings)
+   Compiling bindings v0.1.0 (file:///projects/bindings)
 src/main.rs:5:5: 5:10 error: re-assignment of immutable variable `y` [E0384]
 src/main.rs:5     y = 8;
                   ^~~~~
@@ -820,7 +820,7 @@ example:</p>
 }
 </code></pre>
 <p>This will print:</p>
-<pre><code class="language-bash">   Compiling bindings v0.1.0 (file:///home/steve/tmp/bindings)
+<pre><code class="language-bash">   Compiling bindings v0.1.0 (file:///projects/bindings)
      Running `target/debug/bindings`
 The value of x is: 12
 </code></pre>
@@ -856,7 +856,7 @@ immutable style will let us know about that accidental mutation, however:</p>
 </code></pre>
 <p>If we try to compile, we get an error:</p>
 <pre><code class="language-bash">$ cargo build
-   Compiling bindings v0.1.0 (file:///home/steve/tmp/bindings)
+   Compiling bindings v0.1.0 (file:///projects/bindings)
 src/main.rs:8:5: 8:11 error: re-assignment of immutable variable `x` [E0384]
 src/main.rs:8     x = 15;
                   ^~~~~~
@@ -908,7 +908,7 @@ end of a scope. Here’s an example program:</p>
 </code></pre>
 <p>If we run this example, we can see the shadow appear and disappear:</p>
 <pre><code class="language-bash">$ cargo run
-   Compiling bindings v0.1.0 (file:///home/steve/tmp/bindings)
+   Compiling bindings v0.1.0 (file:///projects/bindings)
      Running `target/debug/bindings`
 Before shadowing, x is: 5
 Now that x is shadowed, x is: 6
@@ -947,7 +947,7 @@ $ cd functions
 </code></pre>
 <p>Place the new example in <code>src/main.rs</code>, and run it:</p>
 <pre><code class="language-bash">$ cargo run
-   Compiling functions v0.1.0 (file:///home/steve/tmp/functions)
+   Compiling functions v0.1.0 (file:///projects/functions)
      Running `target/debug/functions`
 Hello, world!
 Another function.
@@ -967,7 +967,7 @@ fn another_function(x: i32) {
 </code></pre>
 <p>Let’s try running it:</p>
 <pre><code class="language-bash">$ cargo run
-   Compiling functions v0.1.0 (file:///home/steve/tmp/functions)
+   Compiling functions v0.1.0 (file:///projects/functions)
      Running `target/debug/functions`
 The value of x is: 5
 </code></pre>
@@ -1000,7 +1000,7 @@ fn another_function(x: i32, y: i32) {
 </code></pre>
 <p>Let’s try it:</p>
 <pre><code class="language-bash">$ cargo run
-   Compiling functions v0.1.0 (file:///home/steve/tmp/functions)
+   Compiling functions v0.1.0 (file:///projects/functions)
      Running `target/debug/functions`
 The value of x is: 5
 The value of y is: 6
@@ -1020,7 +1020,7 @@ fn another_function(x: i32, y: i32) {
 </code></pre>
 <p>This has the same effect:</p>
 <pre><code class="language-bash">$ cargo run
-   Compiling functions v0.1.0 (file:///home/steve/tmp/functions)
+   Compiling functions v0.1.0 (file:///projects/functions)
      Running `target/debug/functions`
 The value of x is: 5
 The value of y is: 6
@@ -1047,7 +1047,7 @@ fn five() -&gt; i32 {
 </code></pre>
 <p>Let’s try running it:</p>
 <pre><code class="language-bash">$ cargo run
-   Compiling functions v0.1.0 (file:///home/steve/tmp/functions)
+   Compiling functions v0.1.0 (file:///projects/functions)
      Running `target/debug/functions`
 The value of x is: 5
 </code></pre>
@@ -1095,7 +1095,7 @@ binding. Here’s an example that doesn’t work:</p>
 </code></pre>
 <p>If we try to run this program, we’ll get an error:</p>
 <pre><code class="language-bash">$ cargo run
-   Compiling functions v0.1.0 (file:///home/steve/tmp/functions)
+   Compiling functions v0.1.0 (file:///projects/functions)
 src/main.rs:2:14: 2:17 error: expected identifier, found keyword `let`
 src/main.rs:2     let x = (let y = 6);
                            ^~~
@@ -1130,7 +1130,7 @@ blocks inside of blocks. And since they return a value, we can use them in
 }
 </code></pre>
 <p>Let’s try running this program:</p>
-<pre><code class="language-bash">   Compiling functions v0.1.0 (file:///home/steve/tmp/functions)
+<pre><code class="language-bash">   Compiling functions v0.1.0 (file:///projects/functions)
      Running `target/debug/functions`
 The value of y is: 11
 </code></pre>
@@ -1174,7 +1174,7 @@ fn plus_one(x: i32) -&gt; i32 {
 </code></pre>
 <p>Running this gives:</p>
 <pre><code class="language-bash">$ cargo run
-   Compiling functions v0.1.0 (file:///home/steve/tmp/functions)
+   Compiling functions v0.1.0 (file:///projects/functions)
      Running `target/debug/functions`
 The value of y is: 6
 The value of y is: 6
@@ -1204,7 +1204,7 @@ fn plus_one(x: i32) -&gt; i32 {
 <code>x + 1;</code>.</p>
 <p>Running this gives an error:</p>
 <pre><code class="language-bash">$ cargo run
-   Compiling functions v0.1.0 (file:///home/steve/tmp/functions)
+   Compiling functions v0.1.0 (file:///projects/functions)
 src/main.rs:7:1: 9:2 error: not all control paths return a value [E0269]
 src/main.rs:7 fn plus_one(x: i32) -&gt; i32 {
 src/main.rs:8     x + 1;
@@ -1245,7 +1245,7 @@ fn two_numbers() -&gt; (i32, i32) {
 </code></pre>
 <p>Running this will show us the values:</p>
 <pre><code class="language-bash">$ cargo run
-   Compiling functions v0.1.0 (file:///home/steve/tmp/functions)
+   Compiling functions v0.1.0 (file:///projects/functions)
      Running `target/debug/functions`
 The value of x is: 5
 The value of y is: 6
@@ -1460,7 +1460,7 @@ give an invalid index?</p>
 project from before. Change your <code>src/main.rs</code> to look like the example, and
 run it:</p>
 <pre><code class="language-bash">$ cargo run
-   Compiling functions v0.1.0 (file:///home/steve/tmp/functions)
+   Compiling functions v0.1.0 (file:///projects/functions)
      Running `target/debug/functions`
 thread ‘&lt;main&gt;’ panicked at ‘index out of bounds: the len is 5 but the index is 10’, src/main.rs:4
 Process didn’t exit successfully: `target/debug/functions` (exit code: 101)
@@ -1489,7 +1489,7 @@ though...</p>
 </code></pre>
 <p>... we will get an error:</p>
 <pre><code class="language-bash">$ cargo run
-   Compiling functions v0.1.0 (file:///home/steve/tmp/functions)
+   Compiling functions v0.1.0 (file:///projects/functions)
 src/main.rs:4:25: 4:26 error: the trait `core::fmt::Display` is not implemented for the type `[_; 5]` [E0277]
 src/main.rs:4     println!(“a is {}”, a);
                                       ^
@@ -1521,7 +1521,7 @@ which is a bit different: intended for programmer consumption. We can ask
 </code></pre>
 <p>This will work:</p>
 <pre><code class="language-bash">$ cargo run
-   Compiling functions v0.1.0 (file:///home/steve/tmp/functions)
+   Compiling functions v0.1.0 (file:///projects/functions)
      Running `target/debug/functions`
 a is [1, 2, 3, 4, 5]
 </code></pre>
@@ -1612,7 +1612,7 @@ $ cd branches
 </code></pre>
 <p>Let's try running it:</p>
 <pre><code class="language-bash">$ cargo run
-   Compiling branches v0.1.0 (file:///home/steve/tmp/branches)
+   Compiling branches v0.1.0 (file:///projects/branches)
      Running `target/debug/branches`
 condition was true
 </code></pre>
@@ -1621,7 +1621,7 @@ condition was true
 </code></pre>
 <p>And then run it again:</p>
 <pre><code class="language-bash">$ cargo run
-   Compiling branches v0.1.0 (file:///home/steve/tmp/branches)
+   Compiling branches v0.1.0 (file:///projects/branches)
      Running `target/debug/branches`
 condition was false
 </code></pre>
@@ -1649,7 +1649,7 @@ example with something else:</p>
 }
 </code></pre>
 <p>If we try to run this program, Rust will complain:</p>
-<pre><code class="language-bash">   Compiling branches v0.1.0 (file:///home/steve/tmp/branches)
+<pre><code class="language-bash">   Compiling branches v0.1.0 (file:///projects/branches)
 src/main.rs:4:8: 4:17 error: mismatched types:
  expected `bool`,
     found `_`
@@ -1680,7 +1680,7 @@ Could not compile `branches`.
 </code></pre>
 <p>Let's try running it:</p>
 <pre><code class="language-bash">$ cargo run
-   Compiling branches v0.1.0 (file:///home/steve/tmp/branches)
+   Compiling branches v0.1.0 (file:///projects/branches)
      Running `target/debug/branches`
 condition was 5
 </code></pre>
@@ -1706,7 +1706,7 @@ that we can use it on the right hand side of a <code>let</code> binding, for ins
 </code></pre>
 <p>Let’s run this:</p>
 <pre><code class="language-bash">$ cargo run
-   Compiling branches v0.1.0 (file:///home/steve/tmp/branches)
+   Compiling branches v0.1.0 (file:///projects/branches)
      Running `target/debug/branches`
 The value of number is: 5
 </code></pre>
@@ -1728,7 +1728,7 @@ in this way, both arms of the <code>if</code> must be the same type. This doesn�
 }
 </code></pre>
 <p>If we try to run this, we’ll get an error:</p>
-<pre><code class="language-bash">   Compiling branches v0.1.0 (file:///home/steve/tmp/branches)
+<pre><code class="language-bash">   Compiling branches v0.1.0 (file:///projects/branches)
 src/main.rs:4:18: 8:6 error: if and else have incompatible types:
  expected `_`,
     found `&amp;‘static str`
@@ -1768,7 +1768,7 @@ file to look like this:</p>
 how does our program end? It doesn’t, until we kill it. Most terminals support
 a keyboard shortcut, ‘control-c’, to stop a runaway program. Give it a try:</p>
 <pre><code class="language-bash">$ cargo run
-   Compiling loops v0.1.0 (file:///home/steve/tmp/loops)
+   Compiling loops v0.1.0 (file:///projects/loops)
      Running `target/debug/loops`
 again!
 again!
@@ -1790,7 +1790,7 @@ again!
 <p>If you run this program with <code>cargo run</code>, you’ll see that it only executes one
 time:</p>
 <pre><code class="language-bash">$ cargo run
-   Compiling loops v0.1.0 (file:///home/steve/tmp/loops)
+   Compiling loops v0.1.0 (file:///projects/loops)
      Running `target/debug/loops`
 once!
 </code></pre>
@@ -1816,7 +1816,7 @@ like this:</p>
 }
 </code></pre>
 <p>If we run this, we’ll get some output:</p>
-<pre><code class="language-bash">   Compiling loops v0.1.0 (file:///home/steve/tmp/loops)
+<pre><code class="language-bash">   Compiling loops v0.1.0 (file:///projects/loops)
      Running `target/debug/loops`
 3!
 2!
@@ -1864,7 +1864,7 @@ array:</p>
 </code></pre>
 <p>Running this will print out every element of the array:</p>
 <pre><code class="language-bash">$ cargo run
-   Compiling loops v0.1.0 (file:///home/steve/tmp/loops)
+   Compiling loops v0.1.0 (file:///projects/loops)
      Running `target/debug/loops`
 the value is: 1
 the value is: 2
@@ -1926,7 +1926,7 @@ fn distance(x1: f64, y1: f64, x2: f64, y2: f64) -&gt; f64 {
 </code></pre>
 <p>Let's try running this program with <code>cargo run</code>:</p>
 <pre><code class="language-bash">$ cargo run
-   Compiling points v0.1.0 (file:///home/steve/tmp/points)
+   Compiling points v0.1.0 (file:///projects/points)
      Running `target/debug/points`
 Point 1: (0, 5)
 Point 2: (12, 0)
