@@ -16,10 +16,12 @@
     - [Control flow with `if`](if.md)
     - [Loops](loops.md)
 
-- [Ownership & borrowing]()
+- [Understanding Ownership](understanding-ownership.md)
     - [Ownership]()
     - [References & Borrowing]()
-    - [Lifetimes]()
+    - [Memory Layout]()
+    - [Slices]()
+    - [Advanced: Lifetimes]()
 
 - [Structs](structs.md)
     - [Method Syntax]()
