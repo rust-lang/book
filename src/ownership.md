@@ -1,238 +1,310 @@
 # Ownership
 
-This guide is one of three presenting Rust’s ownership system. This is one of
-Rust’s most unique and compelling features, with which Rust developers should
-become quite acquainted. Ownership is how Rust achieves its largest goal,
-memory safety. There are a few distinct concepts, each with its own
-chapter:
-
-* ownership, which you’re reading now
-* [borrowing][borrowing], and their associated feature ‘references’
-* [lifetimes][lifetimes], an advanced concept of borrowing
-
-These three chapters are related, and in order. You’ll need all three to fully
-understand the ownership system.
-
-[borrowing]: references-and-borrowing.html
-[lifetimes]: lifetimes.html
-
-# Meta
-
-Before we get to the details, two important notes about the ownership system.
+Rust’s central feature is called ‘ownership’. It is a feature that is
+straightforward to explain, but has deep implications for the rest of the
+language. 
 
 Rust has a focus on safety and speed. It accomplishes these goals through many
 ‘zero-cost abstractions’, which means that in Rust, abstractions cost as little
 as possible in order to make them work. The ownership system is a prime example
 of a zero-cost abstraction. All of the analysis we’ll talk about in this guide
-is _done at compile time_. You do not pay any run-time cost for any of these
+is done at compile time. You do not pay any run-time cost for any of these
 features.
 
-However, this system does have a certain cost: learning curve. Many new users
-to Rust experience something we like to call ‘fighting with the borrow
+However, this system does have a certain cost: learning curve. Many new
+Rustaceans experience something we like to call ‘fighting with the borrow
 checker’, where the Rust compiler refuses to compile a program that the author
 thinks is valid. This often happens because the programmer’s mental model of
 how ownership should work doesn’t match the actual rules that Rust implements.
 You probably will experience similar things at first. There is good news,
 however: more experienced Rust developers report that once they work with the
 rules of the ownership system for a period of time, they fight the borrow
-checker less and less.
+checker less and less. Keep at it!
 
-With that in mind, let’s learn about ownership.
+This chapter will give you a foundation for understanding the rest of the
+language. To do so, we’re going to learn through examples, focused around a
+very common data structure: strings.
 
-# Ownership
+## Variable binding scope
 
-[Variable bindings][bindings] have a property in Rust: they ‘have ownership’
-of what they’re bound to. This means that when a binding goes out of scope,
-Rust will free the bound resources. For example:
+Let’s take a step back and look at the very basics again. Now that we’re past
+basic syntax, we won’t include all of the `fn main() {` stuff in examples, so
+if you’re following along, you will have to add that yourself. It will be a bit
+more concise, letting us focus on the actual example.
 
-```rust
-fn foo() {
-    let v = vec![1, 2, 3];
-}
-```
-
-When `v` comes into scope, a new [`Vec<T>`][vect] is created. In this case, the
-vector also allocates space on [the heap][heap], for the three elements. When
-`v` goes out of scope at the end of `foo()`, Rust will clean up everything
-related to the vector, even the heap-allocated memory. This happens
-deterministically, at the end of the scope.
-
-[vect]: ../std/vec/struct.Vec.html
-[heap]: the-stack-and-the-heap.html
-[bindings]: variable-bindings.html
-
-# Move semantics
-
-There’s some more subtlety here, though: Rust ensures that there is _exactly
-one_ binding to any given resource. For example, if we have a vector, we can
-assign it to another binding:
+Anyway, here it is:
 
 ```rust
-let v = vec![1, 2, 3];
-
-let v2 = v;
+let s = "hello";
 ```
 
-But, if we try to use `v` afterwards, we get an error:
+This variable binding refers to a string. It’s valid from the point at which
+it’s declared, until the end of the current _scope_. That is:
+
+```rust
+{                      // s is not valid here, it’s not yet in scope
+    let s = "hello";   // s is valid from this point forward
+
+    // do stuff with s
+}                      // this scope is now over, and s is no longer valid
+```
+
+In other words, there are two important points here: when `s` comes ‘into scope’,
+it is valid, and remains so until it ‘goes out of scope’, the second point.
+
+At this point, things are similar to other programming languages. Let’s build
+on top of this understanding by introducing a new type: `String`.
+
+## Strings
+
+String literals are convenient, but they aren’t the only way that you use strings.
+For one thing, they’re immutable. This will not work:
 
 ```rust,ignore
-let v = vec![1, 2, 3];
+let mut s = "hello";
 
-let v2 = v;
-
-println!("v[0] is: {}", v[0]);
+s = s + ", world!";
 ```
 
-It looks like this:
+It gives us an error:
 
 ```text
-error: use of moved value: `v`
-println!("v[0] is: {}", v[0]);
-                        ^
+4:10 error: binary operation `+` cannot be applied to type `&str` [E0369]
+ s = s + ", world!";
+     ^
 ```
 
-A similar thing happens if we define a function which takes ownership, and
-try to use something after we’ve passed it as an argument:
+No dice. Also, not every string is literal: what about taking user input and
+storing it in a string?
+
+For this, Rust has a second string type, `String`. You can create a `String` from
+a string literal using the `from` function:
+
+```rust
+let s = String::from("hello");
+```
+
+The double colon (`::`) is a kind of scope operator, allowing us to namespace this
+particular `from()` function under the `String` type itself, rather than using
+some sort of name like `string_from()`.
+
+This kind of string can be mutated:
+
+```rust
+let mut s = String::from("hello");
+
+s = s + ", world!";
+```
+
+## Memory and allocation
+
+So, what’s the difference here? Why can `String` be mutated, but literals
+cannot? The difference comes down to how these two types deal with memory.
+
+In the case of a string literal, because we know the contents of the string at
+compile time, we can put the text of the string directly into the final
+executable. This means that string literals are quite fast and efficient. But
+these properties only come from its immutability; we can’t put an
+arbitrary-sized blob of memory into the binary for each string!
+
+With `String`, to support a mutable, growable string, we need to allocate an
+un-known chunk of memory to hold the contents. This means two things:
+
+1. The memory must be requested from the operating system at runtime.
+2. We need a way of giving this memory back to the operating system when we’re
+   done with our `String`.
+
+That first part is done by us: when we call `String::from()`, its
+implementation requests the memory it needs. This is pretty much universal in
+programming languages.
+
+The second case, however, is different. In languages with a garbage collector,
+the GC handles that second case, and we, as the programmer, don’t need to think
+about it. In languages without a garbage collector, they often force you to
+call a second function to give the memory back. Part of the difficulty of
+languages that work like this is knowing exactly when to do so. If we forget,
+we will leak memory. If we do it too early, we will have an invalid variable.
+If we do it twice, that’s a bug too. We need to pair exactly one ‘allocate’
+with exactly one ‘free’.
+
+Rust takes a different path. Remember our example? Here’s a version with
+`String`:
+
+```rust
+{
+    let s = String::from("hello"); // s is valid from this point forward
+
+    // do stuff with s
+}                                  // this scope is now over, and s is no longer valid
+```
+
+We have a natural point at which we can return the memory `String` needs back
+to the operating system: when it goes out of scope! When a variable goes out of
+scope, a special function is called. This function is called `drop()`, and it
+is where the author of `String` can put the code to return the memory.
+
+> Aside: This pattern is sometimes called “Resource Aquisition Is
+> Initialization” in C++, or “RAII” for short. While they are very similar,
+> Rust’s take on this concept has a number of differences, and so we don’t tend
+> to use the same term. If you’re familliar with this idea, keep in mind that it
+> is _roughly_ similar in Rust, but not identical.
+
+This pattern has a profound impact on the way that Rust code is written. It may
+seem obvious right now, but things can get tricky in more advanced situations!
+Let’s go over the first one of those right now.
+
+## Move
+
+What would you expect this code to do?
+
+```rust
+let x = 5;
+let y = x;
+```
+
+You might say “Make a copy of `5`.” That’d be correct! We now have two
+bindings, `x` and `y`, and both equal `5`.
+
+Now let’s look at `String`. What would you expect this code to do?
+
+```rust
+let s1 = String::from("hello");
+let s2 = s1;
+```
+
+You might say “copy the `String`!” This is both correct and incorrect at the
+same time. It does a _shallow_ copy of the `String`. What’s that mean? Well,
+let’s take a look at what `String` looks like under the covers:
+
+CHART GOES HERE: (data, len, capacity) with a pointer to the data
+
+A `String` is made up of three parts: a pointer to the memory that holds the
+contents of the string, a length, and a capacity. The length is how long the
+`String`’s contents currently are. The capacity is the total amount of memory
+the `String` has gotten from the operating system. The difference between
+length and capacity matters, but not in this context, so don’t worry about it
+too much if it doesn’t make sense, and just ignore the capacity.
+
+> We’ve talked about two kinds of composite types: arrays and tuples. `String`
+> is a third type: a `struct`, which we will cover the details of in the next
+> chapter of the book. For now, thinking about `String` as a tuple is close
+> enough.
+
+When  we assign `s1` to `s2`, the `String` itself is copied. In other words:
+
+CHART GOES HERE: two triples, data points to the same place
+
+There’s a problem here! Both `data` pointers are pointing to the same place.
+Why is this a problem? Well, when `s2` goes out of scope, it will free the
+memory that `data` points to. And then `s1` goes out of scope, and it will
+_also_ try to free the memory that `data` points to! That’s bad.
+
+So what’s the solution? Here, we stand at a crossroads. There are a few options
+here. One would be to declare that assignment will also copy out any data. This
+works, but is inefficient: what if our `String` contained a novel? Also, it
+only works for memory. What if, instead of a `String`, we had a
+`TcpConnection`? Opening and closing a network connection is very similar to
+allocating and freeing memory. The solution that we could use there is to
+create a callback, similar to `drop()`, that runs when we assign something.
+That would work, but now, an `=` can run arbitrary code. That’s also not good,
+and it doesn’t solve our efficiency concerns either.
+
+Let’s take a step back: the root of the problem is that `s1` and `s2` both
+think that they have control of the memory, and therefore, need to free it.
+Instead of trying to copy the memory, we could say that `s1` is no longer
+valid, and therefore, doesn’t need to free anything. This is in fact the
+choice that Rust makes. Check it out what happens when you try to use `s1`
+after `s2` is created:
 
 ```rust,ignore
-fn take(v: Vec<i32>) {
-    // what happens here isn’t important.
-}
+let s1 = String::from("hello");
+let s2 = s1;
 
-let v = vec![1, 2, 3];
-
-take(v);
-
-println!("v[0] is: {}", v[0]);
+println!("{}", s1);
 ```
 
-Same error: ‘use of moved value’. When we transfer ownership to something else,
-we say that we’ve ‘moved’ the thing we refer to. You don’t need some sort of
-special annotation here, it’s the default thing that Rust does.
-
-## The details
-
-The reason that we cannot use a binding after we’ve moved it is subtle, but
-important. When we write code like this:
-
-```rust
-let v = vec![1, 2, 3];
-
-let v2 = v;
-```
-
-The first line allocates memory for the vector object, `v`, and for the data it
-contains. The vector object is stored on the [stack][sh] and contains a pointer
-to the content (`[1, 2, 3]`) stored on the [heap][sh]. When we move `v` to `v2`,
-it creates a copy of that pointer, for `v2`. Which means that there would be two
-pointers to the content of the vector on the heap. It would violate Rust’s
-safety guarantees by introducing a data race. Therefore, Rust forbids using `v`
-after we’ve done the move.
-
-[sh]: the-stack-and-the-heap.html
-
-It’s also important to note that optimizations may remove the actual copy of
-the bytes on the stack, depending on circumstances. So it may not be as
-inefficient as it initially seems.
-
-## `Copy` types
-
-We’ve established that when ownership is transferred to another binding, you
-cannot use the original binding. However, there’s a [trait][traits] that changes this
-behavior, and it’s called `Copy`. We haven’t discussed traits yet, but for now,
-you can think of them as an annotation to a particular type that adds extra
-behavior. For example:
-
-```rust
-let v = 1;
-
-let v2 = v;
-
-println!("v is: {}", v);
-```
-
-In this case, `v` is an `i32`, which implements the `Copy` trait. This means
-that, just like a move, when we assign `v` to `v2`, a copy of the data is made.
-But, unlike a move, we can still use `v` afterward. This is because an `i32`
-has no pointers to data somewhere else, copying it is a full copy.
-
-All primitive types implement the `Copy` trait and their ownership is
-therefore not moved like one would assume, following the ´ownership rules´.
-To give an example, the two following snippets of code only compile because the
-`i32` and `bool` types implement the `Copy` trait.
-
-```rust
-fn main() {
-    let a = 5;
-
-    let _y = double(a);
-    println!("{}", a);
-}
-
-fn double(x: i32) -> i32 {
-    x * 2
-}
-```
-
-```rust
-fn main() {
-    let a = true;
-
-    let _y = change_truth(a);
-    println!("{}", a);
-}
-
-fn change_truth(x: bool) -> bool {
-    !x
-}
-```
-
-If we had used types that do not implement the `Copy` trait,
-we would have gotten a compile error because we tried to use a moved value.
+You’ll get an error like this:
 
 ```text
-error: use of moved value: `a`
-println!("{}", a);
-               ^
+5:22 error: use of moved value: `s1` [E0382]
+println!("{}", s1);
+               ^~
+5:24 note: in this expansion of println! (defined in <std macros>)
+3:11 note: `s1` moved here because it has type `collections::string::String`, which is moved by default
+ let s2 = s1;
+     ^~
 ```
 
-We will discuss how to make your own types `Copy` in the [traits][traits]
-section.
+We say that `s1` was _moved_ into `s2`. When a value moves, its data is copied,
+but the original variable binding is no longer usable. That solves our problem:
 
-[traits]: traits.html
+CHART GOES HERE: two triples, data points to the same place
 
-# More than ownership
+With only `s2` valid, when it goes out of scope, it will free the memory, and we’re done!
 
-Of course, if we had to hand ownership back with every function we wrote:
+## Ownership Rules
+
+This leads us to the Ownership Rules:
+
+> 1. Each value in Rust has a variable binding that’s called it’s ‘owner’.
+> 2. There can only be one owner at a time.
+> 3. When the owner goes out of scope, the value will be `drop()`ped.
+
+Furthermore, there’s a design choice that’s implied by this: Rust will never
+automatically create ‘deep’ copies of your data. Any automatic copying must be
+inexpensive.
+
+## Clone
+
+But what if we _do_ want to copy the `String`’s data? There’s a common method
+for that: `clone()`. Here’s an example of `clone()` in action:
 
 ```rust
-fn foo(v: Vec<i32>) -> Vec<i32> {
-    // do stuff with v
+let s1 = String::from("hello");
+let s2 = s1.clone();
 
-    // hand back ownership
-    v
-}
+println!("{}", s1);
 ```
 
-This would get very tedious. It gets worse the more things we want to take ownership of:
+This will work just fine:
+
+CHART GOES HERE: two triples, data points to two places
+
+When you see a call to `clone()`, you know that some arbitrary code is being
+executed, which may be expensive. It’s a visual indicator that something
+different is going on here.
+
+## Copy
+
+There’s one last wrinkle that we haven’t talked about yet. This code works:
 
 ```rust
-fn foo(v1: Vec<i32>, v2: Vec<i32>) -> (Vec<i32>, Vec<i32>, i32) {
-    // do stuff with v1 and v2
+let x = 5;
+let y = x;
 
-    // hand back ownership, and the result of our function
-    (v1, v2, 42)
-}
-
-let v1 = vec![1, 2, 3];
-let v2 = vec![1, 2, 3];
-
-let (v1, v2, answer) = foo(v1, v2);
+println!("{}", x);
 ```
 
-Ugh! The return type, return line, and calling the function gets way more
-complicated.
+But why? We don’t have a call to `clone()`. Why didn’t `x` get moved into `y`?
 
-Luckily, Rust offers a feature, borrowing, which helps us solve this problem.
-It’s the topic of the next section!
+For types that do not have any kind of complex storage requirements, like
+integers, typing `clone()` is busy work. There’s no reason we would ever want
+to prevent `x` from being valid here, as there’s no situation in which it’s
+incorrect. In other words, a call to `clone()` would do nothing special over
+copying the data directly.
 
+Rust has a special annotation that you can place on types, called `Copy`. If
+a type is `Copy`, an older binding is still usable after assignment. Integers
+are an example of such a type; most of the primitive types are `Copy`.
+
+While we haven’t talked about how to mark a type as `Copy` yet, you might ask
+yourself “what happens if we made `String` `Copy`?” The answer is, you cannot.
+Remember `drop()`? Rust will not let you mark any type which has `drop()`
+implemented as `Copy`. If you need to do something special when the value goes
+out of scope, being `Copy` will be an error.
+
+So what types are `Copy`? You can check the documentation for the given type
+to be sure, but as a rule of thumb, any simple value that only represents some
+memory can be `Copy`. Anything complicated will be the default, not-`Copy`.
+And you can’t get it wrong: the compiler will throw an error if you try to
+use a type that moves incorrectly, as we saw above.
