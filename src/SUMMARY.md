@@ -19,8 +19,7 @@
 - [Understanding Ownership](understanding-ownership.md)
     - [Ownership](ownership.md)
     - [References & Borrowing]()
-    - [Memory Layout]()
-    - [Slices]()
+    - [Slices](slices.md)
 
 - [Structs](structs.md)
     - [Method Syntax]()
