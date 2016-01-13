@@ -319,7 +319,7 @@ implemented as `Copy`. If you need to do something special when the value goes
 out of scope, being `Copy` will be an error.
 
 So what types are `Copy`? You can check the documentation for the given type to
-be sure, but as a rule of thumb, any any group of simple scalar values can be
+be sure, but as a rule of thumb, any group of simple scalar values can be
 Copy, but nothing that requires allocation or is some form of resource is copy.
 And you can’t get it wrong: the compiler will throw an error if you try to use
 a type that moves incorrectly, as we saw above.
