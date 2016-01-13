@@ -434,7 +434,7 @@ fn main() {
     println!("The length of '{}' is {}.", s2, len);
 }
 
-fn calculate_lengths(s: String) -> (String, i32) {
+fn calculate_length(s: String) -> (String, usize) {
     let length = s.len(); // len() returns the length of a String.
 
     (s, length)
