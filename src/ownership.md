@@ -176,7 +176,7 @@ You might say “copy the `String`!” This is both correct and incorrect at the
 same time. It does a _shallow_ copy of the `String`. What’s that mean? Well,
 let’s take a look at what `String` looks like under the covers:
 
-CHART GOES HERE: (data, len, capacity) with a pointer to the data
+<img alt="string" src="img/foo1.png" class="center" />
 
 A `String` is made up of three parts: a pointer to the memory that holds the
 contents of the string, a length, and a capacity. The length is how long the
@@ -192,7 +192,7 @@ too much if it doesn’t make sense, and just ignore the capacity.
 
 When  we assign `s1` to `s2`, the `String` itself is copied. In other words:
 
-CHART GOES HERE: two triples, data points to the same place
+<img alt="s1 and s2" src="img/foo2.png" class="center" />
 
 There’s a problem here! Both `data` pointers are pointing to the same place.
 Why is this a problem? Well, when `s2` goes out of scope, it will free the
@@ -238,7 +238,7 @@ println!("{}", s1);
 We say that `s1` was _moved_ into `s2`. When a value moves, its data is copied,
 but the original variable binding is no longer usable. That solves our problem:
 
-CHART GOES HERE: two triples, data points to the same place
+<img alt="s1 and s2 to the same place" src="img/foo3.png" class="center" />
 
 With only `s2` valid, when it goes out of scope, it will free the memory, and we’re done!
 
@@ -268,7 +268,7 @@ println!("{}", s1);
 
 This will work just fine:
 
-CHART GOES HERE: two triples, data points to two places
+<img alt="s1 and s2 to two places" src="img/foo4.png" class="center" />
 
 When you see a call to `clone()`, you know that some arbitrary code is being
 executed, which may be expensive. It’s a visual indicator that something
