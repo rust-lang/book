@@ -225,7 +225,7 @@ references are a pervasive problem in languages that support them.
 
 Let’s try to create a dangling reference:
 
-```rust
+```rust,ignore
 fn main() {
     let reference_to_nothing = dangle();
 }
