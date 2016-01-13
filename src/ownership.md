@@ -4,9 +4,9 @@ Rust’s central feature is called ‘ownership’. It is a feature that is
 straightforward to explain, but has deep implications for the rest of the
 language. 
 
-Rust has a focus on safety and speed. It accomplishes these goals through many
-‘zero-cost abstractions’, which means that in Rust, abstractions cost as little
-as possible in order to make them work. The ownership system is a prime example
+Rust is committed to both safety and speed. One of the key tools for balancing
+between them is “zero-cost abstractions”: the various abstractions in Rust do
+not pose a global performance penalty. The ownership system is a prime example
 of a zero-cost abstraction. All of the analysis we’ll talk about in this guide
 is done at compile time. You do not pay any run-time cost for any of these
 features.
@@ -14,12 +14,12 @@ features.
 However, this system does have a certain cost: learning curve. Many new
 Rustaceans experience something we like to call ‘fighting with the borrow
 checker’, where the Rust compiler refuses to compile a program that the author
-thinks is valid. This often happens because the programmer’s mental model of
-how ownership should work doesn’t match the actual rules that Rust implements.
-You probably will experience similar things at first. There is good news,
-however: more experienced Rust developers report that once they work with the
-rules of the ownership system for a period of time, they fight the borrow
-checker less and less. Keep at it!
+thinks is valid. This can happen because the programmer isn’t used to thinking
+carefully about ownership, or is thinking about it differently from the way
+that Rust does. You probably will experience similar things at first. There is
+good news, however: more experienced Rust developers report that once they work
+with the rules of the ownership system for a period of time, they fight the
+borrow checker less and less. Keep at it!
 
 This chapter will give you a foundation for understanding the rest of the
 language. To do so, we’re going to learn through examples, focused around a
@@ -38,8 +38,8 @@ Anyway, here it is:
 let s = "hello";
 ```
 
-This variable binding refers to a string. It’s valid from the point at which
-it’s declared, until the end of the current _scope_. That is:
+This variable binding refers to a string literal. It’s valid from the point at
+which it’s declared, until the end of the current _scope_. That is:
 
 ```rust
 {                      // s is not valid here, it’s not yet in scope
@@ -120,12 +120,12 @@ programming languages.
 
 The second case, however, is different. In languages with a garbage collector,
 the GC handles that second case, and we, as the programmer, don’t need to think
-about it. In languages without a garbage collector, they often force you to
-call a second function to give the memory back. Part of the difficulty of
-languages that work like this is knowing exactly when to do so. If we forget,
-we will leak memory. If we do it too early, we will have an invalid variable.
-If we do it twice, that’s a bug too. We need to pair exactly one ‘allocate’
-with exactly one ‘free’.
+about it. Languages without a garbage collector often force you to call a
+second function to give the memory back. Part of the difficulty of using such
+languages is knowing exactly when to do so. If we forget, we will leak memory.
+If we do it too early, we will have an invalid variable. If we do it twice,
+that’s a bug too. We need to pair exactly one ‘allocate’ with exactly one
+‘free’.
 
 Rust takes a different path. Remember our example? Here’s a version with
 `String`:
@@ -190,9 +190,21 @@ too much if it doesn’t make sense, and just ignore the capacity.
 > chapter of the book. For now, thinking about `String` as a tuple is close
 > enough.
 
-When  we assign `s1` to `s2`, the `String` itself is copied. In other words:
+When  we assign `s1` to `s2`, the `String` itself is copied. But not all kinds
+of copying are the same. Many people draw distinctions between ‘shallow
+copying’ and ‘deep copying’. We don’t use these terms in Rust. We instead say
+that something is ‘moved’ or ‘cloned’. Assignment in Rust causes a ‘move’. In
+other words, it looks like this:
 
 <img alt="s1 and s2" src="img/foo2.png" class="center" />
+
+_Not_ this:
+
+<img alt="s1 and s2 to two places" src="img/foo4.png" class="center" />
+
+When moving, Rust makes a copy of the data structure itself, the contents of
+`s1` are copied, but if `s1` contains a reference, like it does in this case,
+Rust will not copy the things that those references refer to.
 
 There’s a problem here! Both `data` pointers are pointing to the same place.
 Why is this a problem? Well, when `s2` goes out of scope, it will free the
@@ -256,8 +268,9 @@ inexpensive.
 
 ## Clone
 
-But what if we _do_ want to copy the `String`’s data? There’s a common method
-for that: `clone()`. Here’s an example of `clone()` in action:
+But what if we _do_ want to deeply copy the `String`’s data, and not just the
+`String` itself? There’s a common method for that: `clone()`. Here’s an example
+of `clone()` in action:
 
 ```rust
 let s1 = String::from("hello");
@@ -266,7 +279,8 @@ let s2 = s1.clone();
 println!("{}", s1);
 ```
 
-This will work just fine:
+This will work just fine. Remember our diagram from before? In this case,
+it _is_ doing this:
 
 <img alt="s1 and s2 to two places" src="img/foo4.png" class="center" />
 
@@ -290,8 +304,9 @@ But why? We don’t have a call to `clone()`. Why didn’t `x` get moved into `y
 For types that do not have any kind of complex storage requirements, like
 integers, typing `clone()` is busy work. There’s no reason we would ever want
 to prevent `x` from being valid here, as there’s no situation in which it’s
-incorrect. In other words, a call to `clone()` would do nothing special over
-copying the data directly.
+incorrect. In other words, there’s no difference between deep and shallow
+copying here, so calling `clone()` wouldn’t do anything differently from the
+usual shallow copying.
 
 Rust has a special annotation that you can place on types, called `Copy`. If
 a type is `Copy`, an older binding is still usable after assignment. Integers
@@ -303,11 +318,11 @@ Remember `drop()`? Rust will not let you mark any type which has `drop()`
 implemented as `Copy`. If you need to do something special when the value goes
 out of scope, being `Copy` will be an error.
 
-So what types are `Copy`? You can check the documentation for the given type
-to be sure, but as a rule of thumb, any simple value that only represents some
-memory can be `Copy`. Anything complicated will be the default, not-`Copy`.
-And you can’t get it wrong: the compiler will throw an error if you try to
-use a type that moves incorrectly, as we saw above.
+So what types are `Copy`? You can check the documentation for the given type to
+be sure, but as a rule of thumb, any any group of simple scalar values can be
+Copy, but nothing that requires allocation or is some form of resource is copy.
+And you can’t get it wrong: the compiler will throw an error if you try to use
+a type that moves incorrectly, as we saw above.
 
 ## Ownership and functions
 
@@ -361,6 +376,9 @@ fn makes_copy(some_integer: i32) { // some_integer comes into scope.
     println!("{}", some_integer);
 } // Here, some_integer goes out of scope.
 ```
+
+Remember: If we tried to use `s` after the call to `takes_ownership()`, Rust
+would throw a compile-time error! These static checks protect us from mistakes.
 
 Returning values can also transfer ownership:
 
