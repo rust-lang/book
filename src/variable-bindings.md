@@ -527,7 +527,7 @@ know that the compiler will let us know if we try to modify it later. Let’s
 assume that after we calculate `12`, we don’t want to modify `x` again. If we
 had written this program in a mutable style, like this:
 
-```
+```rust
 fn main() {
     let mut x = 5;
     x = x + 1;
