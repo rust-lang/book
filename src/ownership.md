@@ -227,7 +227,7 @@ Let’s take a step back: the root of the problem is that `s1` and `s2` both
 think that they have control of the memory, and therefore, need to free it.
 Instead of trying to copy the memory, we could say that `s1` is no longer
 valid, and therefore, doesn’t need to free anything. This is in fact the
-choice that Rust makes. Check it out what happens when you try to use `s1`
+choice that Rust makes. Check out what happens when you try to use `s1`
 after `s2` is created:
 
 ```rust,ignore
