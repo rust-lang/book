@@ -439,7 +439,7 @@ fn takes_and_gives_back(a_string: String) -> String { // a_string comes into sco
 It’s the same pattern, every time: assigning something moves it, and when an
 owner goes out of scope, if it hasn’t been moved, it will `drop()`.
 
-This might seem a bit tedius, and it is. What if I want to let a function use
+This might seem a bit tedious, and it is. What if I want to let a function use
 a value, but not take ownership? It’s quite annoying that anything I pass in
 also needs passed back. Look at this function:
 
