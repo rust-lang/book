@@ -49,8 +49,10 @@ which it’s declared, until the end of the current _scope_. That is:
 }                      // this scope is now over, and s is no longer valid
 ```
 
-In other words, there are two important points here: when `s` comes ‘into scope’,
-it is valid, and remains so until it ‘goes out of scope’, the second point.
+In other words, there are two important points in time here:
+
+- When `s` comes ‘into scope’, it is valid.
+- It remains so until it ‘goes out of scope’.
 
 At this point, things are similar to other programming languages. Let’s build
 on top of this understanding by introducing a new type: `String`.
