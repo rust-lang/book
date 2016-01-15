@@ -81,7 +81,7 @@ This kind of string can be mutated:
 ```rust
 let mut s = String::from("hello");
 
-s = s + ", world!";
+s.push_str(", world!");
 ```
 
 ## Memory and allocation
