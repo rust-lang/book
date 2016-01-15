@@ -16,21 +16,22 @@ Rustaceans experience something we like to call ‘fighting with the borrow
 checker’, where the Rust compiler refuses to compile a program that the author
 thinks is valid. This can happen because the programmer isn’t used to thinking
 carefully about ownership, or is thinking about it differently from the way
-that Rust does. You probably will experience similar things at first. There is
+that Rust does. You probably will experience something similar at first. There is
 good news, however: more experienced Rust developers report that once they work
 with the rules of the ownership system for a period of time, they fight the
 borrow checker less and less. Keep at it!
 
 This chapter will give you a foundation for understanding the rest of the
-language. To do so, we’re going to learn through examples, focused around a
-very common data structure: strings.
+language. To do so, we’re going to learn through examples, focusing on a very
+common data structure: strings.
 
 ## Variable binding scope
 
 Let’s take a step back and look at the very basics again. Now that we’re past
 basic syntax, we won’t include all of the `fn main() {` stuff in examples, so
-if you’re following along, you will have to add that yourself. It will be a bit
-more concise, letting us focus on the actual example.
+if you’re following along, you will have to put them inside of a `main()`
+function. This lets our examples be a bit more concise, letting us focus on the
+actual details, rather than boilerplate.
 
 Anyway, here it is:
 
@@ -60,24 +61,8 @@ on top of this understanding by introducing a new type: `String`.
 ## Strings
 
 String literals are convenient, but they aren’t the only way that you use strings.
-For one thing, they’re immutable. This will not work:
-
-```rust,ignore
-let mut s = "hello";
-
-s = s + ", world!";
-```
-
-It gives us an error:
-
-```text
-4:10 error: binary operation `+` cannot be applied to type `&str` [E0369]
- s = s + ", world!";
-     ^
-```
-
-No dice. Also, not every string is literal: what about taking user input and
-storing it in a string?
+For one thing, they’re immutable. For another, not every string is literal:
+what about taking user input and storing it in a string?
 
 For this, Rust has a second string type, `String`. You can create a `String` from
 a string literal using the `from` function:
@@ -86,9 +71,10 @@ a string literal using the `from` function:
 let s = String::from("hello");
 ```
 
-The double colon (`::`) is a kind of scope operator, allowing us to namespace this
-particular `from()` function under the `String` type itself, rather than using
-some sort of name like `string_from()`.
+We haven’t seen the double colon (`::`) syntax yet. It is a kind of scope
+operator, allowing us to namespace this particular `from()` function under the
+`String` type itself, rather than using some sort of name like `string_from()`.
+We’ll discuss this syntax more in the “Method Syntax” and “Modules” chapters.
 
 This kind of string can be mutated:
 
@@ -104,13 +90,13 @@ So, what’s the difference here? Why can `String` be mutated, but literals
 cannot? The difference comes down to how these two types deal with memory.
 
 In the case of a string literal, because we know the contents of the string at
-compile time, we can put the text of the string directly into the final
+compile time, we can hard-code the text of the string directly into the final
 executable. This means that string literals are quite fast and efficient. But
 these properties only come from its immutability; we can’t put an
 arbitrary-sized blob of memory into the binary for each string!
 
 With `String`, to support a mutable, growable string, we need to allocate an
-un-known chunk of memory to hold the contents. This means two things:
+unknown amount of memory to hold the contents. This means two things:
 
 1. The memory must be requested from the operating system at runtime.
 2. We need a way of giving this memory back to the operating system when we’re
@@ -120,14 +106,14 @@ That first part is done by us: when we call `String::from()`, its
 implementation requests the memory it needs. This is pretty much universal in
 programming languages.
 
-The second case, however, is different. In languages with a garbage collector,
-the GC handles that second case, and we, as the programmer, don’t need to think
-about it. Languages without a garbage collector often force you to call a
-second function to give the memory back. Part of the difficulty of using such
-languages is knowing exactly when to do so. If we forget, we will leak memory.
-If we do it too early, we will have an invalid variable. If we do it twice,
-that’s a bug too. We need to pair exactly one ‘allocate’ with exactly one
-‘free’.
+The second case, however, is different. In languages with a garbage collector
+(‘GC’), the GC handles that second case, and we, as the programmer, don’t need
+to think about it. Without GC, it’s the programmer’s responsibility to identify
+when memory is no longer being used, and explicitly return it, just as it was
+requested. Doing this correctly has historically been a difficult problem. If
+we forget, we will waste memory. If we do it too early, we will have an invalid
+variable. If we do it twice, that’s a bug too. We need to pair exactly one
+`allocate()` with exactly one `free()`.
 
 Rust takes a different path. Remember our example? Here’s a version with
 `String`:
@@ -140,7 +126,7 @@ Rust takes a different path. Remember our example? Here’s a version with
 }                                  // this scope is now over, and s is no longer valid
 ```
 
-We have a natural point at which we can return the memory `String` needs back
+We have a natural point at which we can return the memory our `String` needs back
 to the operating system: when it goes out of scope! When a variable goes out of
 scope, a special function is called. This function is called `drop()`, and it
 is where the author of `String` can put the code to return the memory.
@@ -181,18 +167,18 @@ let’s take a look at what `String` looks like under the covers:
 <img alt="string" src="img/foo1.png" class="center" />
 
 A `String` is made up of three parts: a pointer to the memory that holds the
-contents of the string, a length, and a capacity. The length is how long the
-`String`’s contents currently are. The capacity is the total amount of memory
-the `String` has gotten from the operating system. The difference between
-length and capacity matters, but not in this context, so don’t worry about it
-too much if it doesn’t make sense, and just ignore the capacity.
+contents of the string, a length, and a capacity. The length is how much memory
+the `String` is currently using. The capacity is the total amount of memory the
+`String` has gotten from the operating system. The difference between length
+and capacity matters, but not in this context, so don’t worry about it too much
+if it doesn’t make sense, and just ignore the capacity.
 
 > We’ve talked about two kinds of composite types: arrays and tuples. `String`
 > is a third type: a `struct`, which we will cover the details of in the next
 > chapter of the book. For now, thinking about `String` as a tuple is close
 > enough.
 
-When  we assign `s1` to `s2`, the `String` itself is copied. But not all kinds
+When we assign `s1` to `s2`, the `String` itself is copied. But not all kinds
 of copying are the same. Many people draw distinctions between ‘shallow
 copying’ and ‘deep copying’. We don’t use these terms in Rust. We instead say
 that something is ‘moved’ or ‘cloned’. Assignment in Rust causes a ‘move’. In
@@ -213,21 +199,21 @@ Why is this a problem? Well, when `s2` goes out of scope, it will free the
 memory that `data` points to. And then `s1` goes out of scope, and it will
 _also_ try to free the memory that `data` points to! That’s bad.
 
-So what’s the solution? Here, we stand at a crossroads. There are a few options
-here. One would be to declare that assignment will also copy out any data. This
-works, but is inefficient: what if our `String` contained a novel? Also, it
-only works for memory. What if, instead of a `String`, we had a
+So what’s the solution? Here, we stand at a crossroads. There are a few
+options. One would be to declare that assignment will also copy out any data.
+This works, but is inefficient: what if our `String` contained a novel? Also,
+it only works for memory. What if, instead of a `String`, we had a
 `TcpConnection`? Opening and closing a network connection is very similar to
-allocating and freeing memory. The solution that we could use there is to
-create a callback, similar to `drop()`, that runs when we assign something.
-That would work, but now, an `=` can run arbitrary code. That’s also not good,
-and it doesn’t solve our efficiency concerns either.
+allocating and freeing memory. The solution that we could use there is to allow
+the programmer to hook into the assignment, similar to `drop()`, and write code
+fix things up. That would work, but now, an `=` can run arbitrary code. That’s
+also not good, and it doesn’t solve our efficiency concerns either.
 
 Let’s take a step back: the root of the problem is that `s1` and `s2` both
-think that they have control of the memory, and therefore, need to free it.
-Instead of trying to copy the memory, we could say that `s1` is no longer
-valid, and therefore, doesn’t need to free anything. This is in fact the
-choice that Rust makes. Check out what happens when you try to use `s1`
+think that they have control of the memory, and therefore needs to free it.
+Instead of trying to copy the allocated memory, we could say that `s1` is no
+longer valid, and therefore, doesn’t need to free anything. This is in fact the
+choice that Rust makes. Check it out what happens when you try to use `s1`
 after `s2` is created:
 
 ```rust,ignore
@@ -316,15 +302,23 @@ are an example of such a type; most of the primitive types are `Copy`.
 
 While we haven’t talked about how to mark a type as `Copy` yet, you might ask
 yourself “what happens if we made `String` `Copy`?” The answer is, you cannot.
-Remember `drop()`? Rust will not let you mark any type which has `drop()`
-implemented as `Copy`. If you need to do something special when the value goes
+Remember `drop()`? Rust will not let you make something `Copy` if it has
+implemented `drop()`. If you need to do something special when the value goes
 out of scope, being `Copy` will be an error.
 
 So what types are `Copy`? You can check the documentation for the given type to
 be sure, but as a rule of thumb, any group of simple scalar values can be
-Copy, but nothing that requires allocation or is some form of resource is copy.
+Copy, but nothing that requires allocation or is some form of resource is `Copy`.
 And you can’t get it wrong: the compiler will throw an error if you try to use
 a type that moves incorrectly, as we saw above.
+
+Here’s some types that you’ve seen so far that are `Copy`:
+
+* All of the integer types, like `u32`.
+* The booleans, `true` and `false`.
+* All of the floating point types, like `f64`.
+* Tuples, but only if they contain types which are also `Copy`. `(i32, i32)`
+  is `Copy`, but `(i32, String)` is not!
 
 ## Ownership and functions
 
@@ -376,7 +370,7 @@ fn takes_ownership(some_string: String) { // some_string comes into scope.
 
 fn makes_copy(some_integer: i32) { // some_integer comes into scope.
     println!("{}", some_integer);
-} // Here, some_integer goes out of scope.
+} // Here, some_integer goes out of scope. Nothing special happens.
 ```
 
 Remember: If we tried to use `s` after the call to `takes_ownership()`, Rust
