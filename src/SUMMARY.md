@@ -17,7 +17,7 @@
     - [Loops](loops.md)
 
 - [Understanding Ownership](understanding-ownership.md)
-    - [Ownership]()
+    - [Ownership](ownership.md)
     - [References & Borrowing]()
     - [Memory Layout]()
     - [Slices]()
