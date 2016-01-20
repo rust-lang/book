@@ -49,39 +49,30 @@ without taking ownership of it. Here’s a diagram:
 
 DIAGRAM GOES HERE of a &String pointing at a String, with (ptr, len, capacity)
 
-Let’s take a step back from that example and examine references on their own,
-without all that function stuff:
+Let’s take a closer look at the function call here:
 
 ```rust
-{
-   let s = String::from("hello");
+let s1 = String::from("hello");
 
-   let r = &s;
-
-   // do stuff
-}
+let len = calculate_length(&s1);
 ```
 
-The `&` syntax lets us create a reference from the binding that follows it.
-This reference _refers_ to the value of some other binding, but does not own
-it. Because it does not own it, the value it points to will not be dropped
-when the reference goes out of scope.
+The `&s1` syntax lets us create a reference from `s1`. This reference _refers_
+to the value of `s1`, but does not own it. Because it does not own it, the
+value it points to will not be dropped when the reference goes out of scope.
+
+Likewise, the signature of the function uses `&` to indicate that it takes
+a reference as an argument:
 
 Let’s add some explanatory annotations:
 
 ```rust
-{
-   let s = String::from("hello");  // s comes into scope here.
+fn calculate_length(s: &String) -> usize { // s is a reference to a String
+    let length = s.len();
 
-   let r = &s;                     // r comes into scope here, and is a
-                                   // reference to s.
-
-   // do stuff
-
-} // Here, r goes out of scope. But since it does not have ownership of what it
-  // refers to, nothing happens.
-  //
-  // Next, s goes out of scope, and is dropped. Its memory is freed.
+    length
+} // Here, s goes out of scope. But since it does not have ownership of what
+  // it refers to, nothing happens.
 ```
 
 It’s the same process as before, except that because we don’t have ownership,
