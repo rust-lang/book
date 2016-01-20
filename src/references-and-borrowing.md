@@ -210,9 +210,11 @@ from under them! Multiple immutable references are okay, however.
 
 ## Dangling references
 
-Rust’s references must always be valid. In other words, if we have a reference
-to something, it must not go out of scope before the reference does. Dangling
-references are a pervasive problem in languages that support them.
+In languages with pointers, it’s easy to crate a “dangling pointer” by freeing
+some memory while keeping around a pointer to that memory. In Rust, by
+contrast, the compiler guarantees that references will never be dangling: if we
+have a reference the something, the compiler will ensure that it will not go
+out of scope before the reference does.
 
 Let’s try to create a dangling reference:
 
