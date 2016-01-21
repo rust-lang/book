@@ -52,6 +52,11 @@ DIAGRAM GOES HERE of a &String pointing at a String, with (ptr, len, capacity)
 Let’s take a closer look at the function call here:
 
 ```rust
+# fn calculate_length(s: &String) -> usize {
+#     let length = s.len();
+# 
+#     length
+# }
 let s1 = String::from("hello");
 
 let len = calculate_length(&s1);
