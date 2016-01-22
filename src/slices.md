@@ -156,7 +156,7 @@ let slice = &s[1..];
 
 With this in mind, let’s re-write `first_word()` to return a slice:
 
-```
+```rust
 fn first_word(s: &String) -> &str {
     let bytes = s.as_bytes();
 
@@ -234,7 +234,7 @@ Remember how we talked about string literals being stored inside of the binary
 itself? Now that we know about slices, we can now properly understand string
 literals.
 
-```
+```rust
 let s = "Hello, world!";
 ```
 
