@@ -21,7 +21,7 @@
     - [References & Borrowing]()
     - [Memory Layout]()
     - [Slices]()
-    - [Advanced: Lifetimes]()
+    - [Advanced: Lifetimes](lifetimes.md)
 
 - [Structs](structs.md)
     - [Method Syntax]()
