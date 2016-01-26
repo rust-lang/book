@@ -2,8 +2,8 @@
 
 So far, we’ve talked about types that have ownership, like `String`, and ones
 that don’t, like `&String`. There is a second kind of type which does not have
-ownership: slices. Slices let you take a reference to a particular series of
-elements in a collection, rather than the whole collection itself.
+ownership: slices. Slices let you reference a contiguous sequence of elements
+in a collection, rather than the whole collection itself.
 
 Here’s a small programming problem: write a function which takes a string,
 and returns the first word you find. If we don’t find a space in the string,
