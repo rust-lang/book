@@ -21,7 +21,6 @@
     - [References & Borrowing]()
     - [Memory Layout]()
     - [Slices]()
-    - [Advanced: Lifetimes](lifetimes.md)
 
 - [Structs](structs.md)
     - [Method Syntax]()
@@ -42,6 +41,8 @@
     - [Vectors]()
     - [Strings]()
     - [`HashMap<K, V>`]()
+
+- [Lifetimes]()
 
 - [Traits]()
 
