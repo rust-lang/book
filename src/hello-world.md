@@ -250,7 +250,7 @@ Inside this file, type the following information:
 [package]
 
 name = "hello_world"
-version = "0.0.1"
+version = "0.1.0"
 authors = [ "Your name <you@example.com>" ]
 ```
 
@@ -272,7 +272,7 @@ following commands:
 
 ```bash
 $ cargo build
-   Compiling hello_world v0.0.1 (file:///home/yourname/projects/hello_world)
+   Compiling hello_world v0.1.0 (file:///home/yourname/projects/hello_world)
 $ ./target/debug/hello_world
 Hello, world!
 ```
@@ -296,7 +296,7 @@ would have seen something like this:
 
 ```bash
 $ cargo run
-   Compiling hello_world v0.0.1 (file:///home/yourname/projects/hello_world)
+   Compiling hello_world v0.1.0 (file:///home/yourname/projects/hello_world)
      Running `target/debug/hello_world`
 Hello, world!
 ```
@@ -323,7 +323,7 @@ Running this command also causes Cargo to create a new file called
 ```toml
 [root]
 name = "hello_world"
-version = "0.0.1"
+version = "0.1.0"
 ```
 
 Cargo uses the *Cargo.lock* file to keep track of dependencies in your
