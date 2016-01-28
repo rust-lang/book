@@ -215,10 +215,10 @@ from under them! Multiple immutable references are okay, however.
 
 ## Dangling references
 
-In languages with pointers, it’s easy to crate a “dangling pointer” by freeing
+In languages with pointers, it’s easy to create a “dangling pointer” by freeing
 some memory while keeping around a pointer to that memory. In Rust, by
 contrast, the compiler guarantees that references will never be dangling: if we
-have a reference the something, the compiler will ensure that it will not go
+have a reference to something, the compiler will ensure that it will not go
 out of scope before the reference does.
 
 Let’s try to create a dangling reference:
