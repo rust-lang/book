@@ -22,7 +22,7 @@
     - [Slices](slices.md)
 
 - [Structs](structs.md)
-    - [Method Syntax]()
+    - [Method Syntax](method-syntax.md)
     - [Generics]()
     - [Advanced]()
 
