@@ -1,0 +1,344 @@
+<!DOCTYPE HTML>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>The Rust Programming Language</title>
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="{% block description %}{% endblock %}">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <base href="">
+
+        <link rel="stylesheet" href="book.css">
+        <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+
+        <!-- MathJax -->
+        <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+        <!-- Fetch JQuery from CDN but have a local fallback -->
+        <script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
+        <script>
+            if (typeof jQuery == 'undefined') {
+                document.write(unescape("%3Cscript src='jquery.js'%3E%3C/script%3E"));
+            }
+        </script>
+    </head>
+    <body>
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme = localStorage.getItem('theme');
+            if (theme == null) { theme = 'light'; }
+            $('body').removeClass().addClass(theme);
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var sidebar = localStorage.getItem('sidebar');
+            if (sidebar === "hidden") { $("html").addClass("sidebar-hidden") }
+            else if (sidebar === "visible") { $("html").addClass("sidebar-visible") }
+        </script>
+
+        <div id="sidebar" class="sidebar">
+            <ul class="chapter"><li><a href="introduction.html"><strong>1.</strong> Introduction</a></li><li><ul class="section"><li><a href="installation.html"><strong>1.1.</strong> Installation</a></li><li><a href="hello-world.html"><strong>1.2.</strong> Hello, World!</a></li><li><a href="design.html"><strong>1.3.</strong> The Design of Rust</a></li></ul></li><li><strong>2.</strong> Tutorial</li><li><a href="up-and-running.html"><strong>3.</strong> Up and Running</a></li><li><ul class="section"><li><a href="variable-bindings.html"><strong>3.1.</strong> Variable Bindings</a></li><li><a href="functions.html"><strong>3.2.</strong> Functions</a></li><li><a href="scalar-types.html"><strong>3.3.</strong> Scalar Types</a></li><li><a href="compound-types.html"><strong>3.4.</strong> Compound Types</a></li><li><a href="comments.html"><strong>3.5.</strong> Comments</a></li><li><a href="if.html"><strong>3.6.</strong> Control flow with <code>if</code></a></li><li><a href="loops.html"><strong>3.7.</strong> Loops</a></li></ul></li><li><a href="understanding-ownership.html"><strong>4.</strong> Understanding Ownership</a></li><li><ul class="section"><li><a href="ownership.html"><strong>4.1.</strong> Ownership</a></li><li><a href="references-and-borrowing.html" class="active"><strong>4.2.</strong> References &amp; Borrowing</a></li><li><a href="slices.html"><strong>4.3.</strong> Slices</a></li></ul></li><li><a href="structs.html"><strong>5.</strong> Structs</a></li><li><ul class="section"><li><strong>5.1.</strong> Method Syntax</li><li><strong>5.2.</strong> Generics</li><li><strong>5.3.</strong> Advanced</li></ul></li><li><strong>6.</strong> Enums</li><li><ul class="section"><li><strong>6.1.</strong> Match</li><li><strong>6.2.</strong> Patterns</li><li><strong>6.3.</strong> Option</li><li><strong>6.4.</strong> if let</li></ul></li><li><strong>7.</strong> Crates &amp; Modules</li><li><strong>8.</strong> Error Handling</li><li><strong>9.</strong> Basic Collections</li><li><ul class="section"><li><strong>9.1.</strong> Vectors</li><li><strong>9.2.</strong> Strings</li><li><strong>9.3.</strong> <code>HashMap&lt;K, V&gt;</code></li></ul></li><li><strong>10.</strong> Lifetimes</li><li><strong>11.</strong> Traits</li><li><strong>12.</strong> Closures</li><li><strong>13.</strong> Iterators</li><li><strong>14.</strong> I/O</li><li><ul class="section"><li><strong>14.1.</strong> <code>Read</code> &amp; <code>Write</code></li><li><strong>14.2.</strong> <code>std::fs</code></li><li><strong>14.3.</strong> <code>std::path</code></li><li><strong>14.4.</strong> <code>std::env</code></li></ul></li><li><strong>15.</strong> Testing</li><li><strong>16.</strong> Smart Pointers</li><li><ul class="section"><li><strong>16.1.</strong> <code>Deref</code></li><li><strong>16.2.</strong> <code>Deref</code> coercions</li><li><strong>16.3.</strong> <code>Box&lt;T&gt;</code></li><li><strong>16.4.</strong> <code>Rc&lt;T&gt;</code></li></ul></li><li><strong>17.</strong> Concurrency</li><li><ul class="section"><li><strong>17.1.</strong> Threads</li><li><strong>17.2.</strong> <code>Send</code> &amp; <code>Sync</code></li><li><strong>17.3.</strong> <code>Arc&lt;T&gt;</code></li><li><strong>17.4.</strong> <code>Mutex&lt;T&gt;</code></li><li><strong>17.5.</strong> <code>Channels</code></li></ul></li><li><strong>18.</strong> Unsafe Rust</li><li><ul class="section"><li><strong>18.1.</strong> Raw Pointers</li><li><strong>18.2.</strong> transmute</li></ul></li><li><strong>19.</strong> FFI</li><li><ul class="section"><li><strong>19.1.</strong> Conditional Compilation</li><li><strong>19.2.</strong> Bindings to C</li><li><strong>19.3.</strong> Using Rust from Other Languages</li><li><strong>19.4.</strong> <code>static</code></li></ul></li><li><strong>20.</strong> Cargo</li><li><ul class="section"><li><strong>20.1.</strong> Crates.io</li></ul></li><li><strong>21.</strong> Advanced Type System Features</li><li><ul class="section"><li><strong>21.1.</strong> Associated Types</li><li><strong>21.2.</strong> Trait Objects</li><li><strong>21.3.</strong> UFCS</li><li><strong>21.4.</strong> Coherence</li></ul></li><li><strong>22.</strong> Interior mutability</li><li><ul class="section"><li><strong>22.1.</strong> <code>Cell&lt;T&gt;</code></li><li><strong>22.2.</strong> <code>RefCell&lt;T&gt;</code></li></ul></li><li><strong>23.</strong> Macros</li><li><strong>24.</strong> Nightly Rust</li></ul>
+        </div>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar" class="menu-bar">
+                    <div class="left-buttons">
+                        <i id="sidebar-toggle" class="fa fa-bars"></i>
+                        <i id="theme-toggle" class="fa fa-paint-brush"></i>
+                    </div>
+
+                    <h1 class="menu-title">The Rust Programming Language</h1>
+
+                    <div class="right-buttons">
+                        <i id="print-button" class="fa fa-print" title="Print this book"></i>
+                    </div>
+                </div>
+
+                <div id="content" class="content">
+                    <h1>References and Borrowing</h1>
+<p>At the end of the last section, we had some example Rust that wasn’t very
+good. Here it is again:</p>
+<pre><code class="language-rust">fn main() {
+    let s1 = String::from(&quot;hello&quot;);
+
+    let (s2, len) = calculate_length(s1);
+
+    println!(&quot;The length of '{}' is {}.&quot;, s2, len);
+}
+
+fn calculate_length(s: String) -&gt; (String, usize) {
+    let length = s.len(); // len() returns the length of a String.
+
+    (s, length)
+}
+</code></pre>
+<p>The issue here is that we have to return the <code>String</code> back to the calling
+function so that it could still use it.</p>
+<p>There is a better way. It looks like this:</p>
+<pre><code class="language-rust">fn main() {
+    let s1 = String::from(&quot;hello&quot;);
+
+    let len = calculate_length(&amp;s1);
+
+    println!(&quot;The length of '{}' is {}.&quot;, s1, len);
+}
+
+fn calculate_length(s: &amp;String) -&gt; usize {
+    let length = s.len();
+
+    length
+}
+</code></pre>
+<p>First, you’ll notice all of the tuple stuff is gone. Next, that we pass <code>&amp;s1</code>
+into <code>calculate_lengths()</code>. And in its definition, we take <code>&amp;String</code> rather
+than <code>String</code>.</p>
+<p>These <code>&amp;s</code> are called ‘references’, and they allow you to refer to some value
+without taking ownership of it. Here’s a diagram:</p>
+<p>DIAGRAM GOES HERE of a &amp;String pointing at a String, with (ptr, len, capacity)</p>
+<p>Let’s take a closer look at the function call here:</p>
+<pre><code class="language-rust"># fn calculate_length(s: &amp;String) -&gt; usize {
+#     let length = s.len();
+# 
+#     length
+# }
+let s1 = String::from(&quot;hello&quot;);
+
+let len = calculate_length(&amp;s1);
+</code></pre>
+<p>The <code>&amp;s1</code> syntax lets us create a reference from <code>s1</code>. This reference <em>refers</em>
+to the value of <code>s1</code>, but does not own it. Because it does not own it, the
+value it points to will not be dropped when the reference goes out of scope.</p>
+<p>Likewise, the signature of the function uses <code>&amp;</code> to indicate that it takes
+a reference as an argument:</p>
+<p>Let’s add some explanatory annotations:</p>
+<pre><code class="language-rust">fn calculate_length(s: &amp;String) -&gt; usize { // s is a reference to a String
+    let length = s.len();
+
+    length
+} // Here, s goes out of scope. But since it does not have ownership of what
+  // it refers to, nothing happens.
+</code></pre>
+<p>It’s the same process as before, except that because we don’t have ownership,
+we don’t drop what a reference points to when the reference goes out of scope.
+This lets us write functions which take references as arguments instead of the
+values themselves, so that we won’t need to return them to give back ownership.</p>
+<p>There’s another word for what references do, and that’s ‘borrowing’. Just like
+with real life, if I own something, you can borrow it from me. When you’re done,
+you have to give it back.</p>
+<p>Speaking of which, what if you try to modify something you borrow from me? Try
+this code out. Spoiler alert: it doesn’t work:</p>
+<pre><code class="language-rust,ignore">fn main() {
+    let s = String::from(&quot;hello&quot;);
+
+    change(&amp;s);
+}
+
+fn change(some_string: &amp;String) {
+    some_string.push_str(&quot;, world&quot;);  // push_str() appends a literal to a String
+}
+</code></pre>
+<p>Here’s the error:</p>
+<pre><code class="language-text">8:16 error: cannot borrow immutable borrowed content `*some_string` as mutable
+ some_string.push_str(&quot;, world&quot;);  // push_str() appends a literal to a String
+ ^~~~~~~~~~~
+</code></pre>
+<p>Just like bindings are immutable by default, so are references. We’re not allowed
+to modify something we have a reference to.</p>
+<h2>Mutable references</h2>
+<p>We can fix this bug! Just a small tweak:</p>
+<pre><code class="language-rust">fn main() {
+    let mut s = String::from(&quot;hello&quot;);
+
+    change(&amp;mut s);
+}
+
+fn change(some_string: &amp;mut String) {
+    some_string.push_str(&quot;, world&quot;);  // push_str() appends a literal to a String
+}
+</code></pre>
+<p>First, we had to change <code>s</code> to be <code>mut</code>. Then, we had to create a mutable reference
+with <code>&amp;mut s</code> and accept a mutable reference with <code>some_string: &amp;mut String</code>.</p>
+<p>Mutable references have one big restriction, though. This code fails:</p>
+<pre><code class="language-rust,ignore">let mut s = String::from(&quot;hello&quot;);
+
+let r1 = &amp;mut s;
+let r2 = &amp;mut s;
+</code></pre>
+<p>Here’s the error:</p>
+<pre><code class="language-text">5:20 error: cannot borrow `s` as mutable more than once at a time [E0499]
+    let r2 = &amp;mut s;
+                  ^
+4:20 note: previous borrow of `s` occurs here; the mutable borrow prevents
+           subsequent moves, borrows, or modification of `s` until the borrow
+           ends
+    let r1 = &amp;mut s;
+                  ^
+7:2 note: previous borrow ends here
+fn main() {
+
+}
+^
+</code></pre>
+<p>The error is what it says on the tin: you cannot borrow something more than
+once at a time in a mutable fashion. This restriction allows for mutation, but
+in a very controlled fashion. It is something that new Rustaceans struggle
+with, because most languages let you mutate whenever you’d like.</p>
+<p>As always, we can use <code>{}</code>s to create a new scope, allowing for multiple mutable
+references. Just not <em>simultaneous</em> ones:</p>
+<pre><code class="language-rust">let mut s = String::from(&quot;hello&quot;);
+
+{
+    let r1 = &amp;mut s;
+
+} // r1 goes out of scope here, so we can make a new reference with no problems.
+
+let r2 = &amp;mut s;
+</code></pre>
+<p>There is a simlar rule for combining the two kinds of references. This code errors:</p>
+<pre><code class="language-rust,ignore">let mut s = String::from(&quot;hello&quot;);
+
+let r1 = &amp;s; // no problem
+let r2 = &amp;s; // no problem
+let r3 = &amp;mut s; // BIG PROBLEM
+</code></pre>
+<p>Here’s the error:</p>
+<pre><code class="language-text">19: 6:20 error: cannot borrow `s` as mutable because it is also borrowed as
+                immutable [E0502]
+    let r3 = &amp;mut s; // BIG PROBLEM
+                  ^
+15: 4:16 note: previous borrow of `s` occurs here; the immutable borrow
+               prevents subsequent moves or mutable borrows of `s` until the
+               borrow ends
+    let r1 = &amp;s; // no problem
+              ^
+8:2 note: previous borrow ends here
+fn main() {
+
+}
+^
+</code></pre>
+<p>Whew! We <em>also</em> cannot have a mutable reference while we have an immutable one.
+Users of an immutable reference don’t expect the values to suddenly change out
+from under them! Multiple immutable references are okay, however.</p>
+<h2>Dangling references</h2>
+<p>In languages with pointers, it’s easy to create a “dangling pointer” by freeing
+some memory while keeping around a pointer to that memory. In Rust, by
+contrast, the compiler guarantees that references will never be dangling: if we
+have a reference to something, the compiler will ensure that it will not go
+out of scope before the reference does.</p>
+<p>Let’s try to create a dangling reference:</p>
+<pre><code class="language-rust,ignore">fn main() {
+    let reference_to_nothing = dangle();
+}
+
+fn dangle() -&gt; &amp;String {
+    let s = String::from(&quot;hello&quot;);
+
+    &amp;s
+}
+</code></pre>
+<p>Here’s the error:</p>
+<pre><code class="language-text">error: missing lifetime specifier [E0106]
+fn dangle() -&gt; &amp;String {
+               ^~~~~~~
+help: this function’s return type contains a borrowed value, but there is no
+      value for it to be borrowed from
+help: consider giving it a ‘static lifetime
+</code></pre>
+<p>This error message refers to a feature we haven’t learned about yet,
+‘lifetimes’. The message does contain the key to why this code is a problem,
+though:</p>
+<pre><code class="language-text">this function’s return type contains a borrowed value, but there is no value
+for it to be borrowed from
+</code></pre>
+<p>Let’s examine exactly what happens with <code>dangle()</code>:</p>
+<pre><code class="language-rust,ignore">fn dangle() -&gt; &amp;String { // dangle returns a reference to a String
+
+    let s = String::from(&quot;hello&quot;); // s is a new String
+
+    &amp;s // we return a reference to the String, s
+} // Here, s goes out of scope, and is dropped. Its memory goes away.
+  // Danger!
+</code></pre>
+<p>Because <code>s</code> is created inside of <code>dangle()</code>, when the code of <code>dangle()</code> is
+finished, it will be deallocated. But we tried to return a reference to it.
+That means this reference would be pointing to an invalid <code>String</code>! That’s
+no good. Rust won’t let us do this.</p>
+<p>The correct code here is to return the <code>String</code> directly:</p>
+<pre><code class="language-rust">fn no_dangle() -&gt; String {
+    let s = String::from(&quot;hello&quot;);
+
+    s
+}
+</code></pre>
+<p>This works, no problem. Ownership is moved out, nothing is deallocated.</p>
+<h2>The Rules of References</h2>
+<p>Here’s a recap of what we’ve talked about. The Rules of References:</p>
+<ol>
+<li>At any given time, you may have <em>either</em>, but not both of:
+<ol>
+<li>One mutable reference.</li>
+<li>Any number of immutable references .</li>
+</ol>
+</li>
+<li>References must always be valid.</li>
+</ol>
+<p>While these rules are not complicated on their own, they can be tricky when
+applied to real code. Let’s work through a number of examples to help build
+our understanding.</p>
+<h2>More Examples</h2>
+<p>COMING SOON</p>
+
+                </div>
+
+                <!-- Mobile navigation buttons -->
+                
+                    <a href="ownership.html" class="mobile-nav-chapters previous">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+                    <a href="slices.html" class="mobile-nav-chapters next">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                
+
+            </div>
+
+            
+                <a href="ownership.html" class="nav-chapters previous" title="You can navigate through the chapters using the arrow keys">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+            
+
+            
+                <a href="slices.html" class="nav-chapters next" title="You can navigate through the chapters using the arrow keys">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            
+
+        </div>
+
+
+        <!-- Local fallback for Font Awesome -->
+        <script>
+            if ($(".fa").css("font-family") !== "FontAwesome") {
+                $('<link rel="stylesheet" type="text/css" href="_FontAwesome/css/font-awesome.css">').prependTo('head');
+            }
+        </script>
+
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+    </body>
+</html>
