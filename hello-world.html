@@ -246,7 +246,7 @@ configuration format.</p>
 <pre><code class="language-toml">[package]
 
 name = &quot;hello_world&quot;
-version = &quot;0.0.1&quot;
+version = &quot;0.1.0&quot;
 authors = [ &quot;Your name &lt;you@example.com&gt;&quot; ]
 </code></pre>
 <p>The first line, <code>[package]</code>, indicates that the following statements are
@@ -261,7 +261,7 @@ creating the configuration file.</p>
 should be ready to build and run your Hello World program! To do so, enter the
 following commands:</p>
 <pre><code class="language-bash">$ cargo build
-   Compiling hello_world v0.0.1 (file:///home/yourname/projects/hello_world)
+   Compiling hello_world v0.1.0 (file:///home/yourname/projects/hello_world)
 $ ./target/debug/hello_world
 Hello, world!
 </code></pre>
@@ -278,7 +278,7 @@ the file hasn’t changed, and so it just ran the binary. If you'd modified your
 source code, Cargo would have rebuilt the project before running it, and you
 would have seen something like this:</p>
 <pre><code class="language-bash">$ cargo run
-   Compiling hello_world v0.0.1 (file:///home/yourname/projects/hello_world)
+   Compiling hello_world v0.1.0 (file:///home/yourname/projects/hello_world)
      Running `target/debug/hello_world`
 Hello, world!
 </code></pre>
@@ -297,7 +297,7 @@ and one for building the final program you’ll give to a user.</p>
 <em>Cargo.lock</em>, which looks like this:</p>
 <pre><code class="language-toml">[root]
 name = &quot;hello_world&quot;
-version = &quot;0.0.1&quot;
+version = &quot;0.1.0&quot;
 </code></pre>
 <p>Cargo uses the <em>Cargo.lock</em> file to keep track of dependencies in your
 application. This is the Hello World project's <em>Cargo.lock</em> file. This project
