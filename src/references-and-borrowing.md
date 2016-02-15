@@ -286,7 +286,7 @@ This works, no problem. Ownership is moved out, nothing is deallocated.
 
 ## The Rules of References
 
-Here’s a recap of what we’ve talked about. The Rules of References:
+Here’s a recap of what we’ve talked about:
 
 1. At any given time, you may have _either_, but not both of:
     1. One mutable reference.
