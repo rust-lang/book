@@ -54,7 +54,7 @@ Let’s take a closer look at the function call here:
 ```rust
 # fn calculate_length(s: &String) -> usize {
 #     let length = s.len();
-# 
+#
 #     length
 # }
 let s1 = String::from("hello");

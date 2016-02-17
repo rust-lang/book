@@ -23,11 +23,11 @@ fn main() {
     let x1 = 0.0;
     let y1 = 5.0;
 
-    let x2 = 12.0; 
+    let x2 = 12.0;
     let y2 = 0.0;
-    
+
     let answer = distance(x1, y1, x2, y2);
-    
+
     println!("Point 1: ({}, {})", x1, y1);
     println!("Point 2: ({}, {})", x2, y2);
     println!("Distance: {}", answer);

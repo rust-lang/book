@@ -2,7 +2,7 @@
 
 Rust’s central feature is called ‘ownership’. It is a feature that is
 straightforward to explain, but has deep implications for the rest of the
-language. 
+language.
 
 Rust is committed to both safety and speed. One of the key tools for balancing
 between them is “zero-cost abstractions”: the various abstractions in Rust do

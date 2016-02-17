@@ -1,11 +1,11 @@
 # Control flow with `if`
 
-> Two roads diverged in a yellow wood,  
-> And sorry I could not travel both  
-> And be one traveler, long I stood  
-> And looked down one as far as I could  
-> To where it bent in the undergrowth;  
-> 
+> Two roads diverged in a yellow wood,
+> And sorry I could not travel both
+> And be one traveler, long I stood
+> And looked down one as far as I could
+> To where it bent in the undergrowth;
+>
 > - Robert Frost, “The Road Not Taken”
 
 In Rust, there are a few ways to cause our code to branch. The most fundamental
@@ -31,7 +31,7 @@ fn main() {
     } else {
         println!("condition was false");
     }
-}   
+}
 ```
 
 Let's try running it:
@@ -160,7 +160,7 @@ fn main() {
 
     println!("The value of number is: {}", number);
 }
-``` 
+```
 
 Let’s run this:
 

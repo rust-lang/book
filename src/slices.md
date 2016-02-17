@@ -78,13 +78,13 @@ that it will still be valid in the future. Consider this:
 ```rust
 # fn first_word(s: &String) -> usize {
 #     let bytes = s.as_bytes();
-# 
+#
 #     for (i, &byte) in bytes.iter().enumerate() {
 #         if byte == 32 {
 #             return i;
 #         }
 #     }
-# 
+#
 #     s.len()
 # }
 
@@ -186,13 +186,13 @@ the slice version of `first_word()` will throw an error:
 ```rust,ignore
 # fn first_word(s: &String) -> &str {
 #     let bytes = s.as_bytes();
-# 
+#
 #     for (i, &byte) in bytes.iter().enumerate() {
 #         if byte == 32 {
 #             return &s[0..i];
 #         }
 #     }
-# 
+#
 #     &s[..]
 # }
 fn main() {
@@ -266,13 +266,13 @@ with no loss of functionality:
 ```rust
 # fn first_word(s: &str) -> &str {
 #     let bytes = s.as_bytes();
-# 
+#
 #     for (i, &byte) in bytes.iter().enumerate() {
 #         if byte == 32 {
 #             return &s[0..i];
 #         }
 #     }
-# 
+#
 #     &s[..]
 # }
 fn main() {

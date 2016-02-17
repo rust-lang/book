@@ -110,7 +110,7 @@ fn main() {
     let mut a = [1, 2, 3, 4, 5];
 
     let first = a[0];
-    
+
     a[0] = 7;
 
     println!("The value of first is: {}", first);
