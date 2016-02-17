@@ -164,7 +164,7 @@ You might say “copy the `String`!” This is both correct and incorrect at the
 same time. It does a _shallow_ copy of the `String`. What’s that mean? Well,
 let’s take a look at what `String` looks like under the covers:
 
-<img alt="string" src="img/foo1.png" class="center" />
+<img alt="string" src="img/foo1.svg" class="center" onerror="this.src='img/foo1.png'" />
 
 A `String` is made up of three parts: a pointer to the memory that holds the
 contents of the string, a length, and a capacity. The length is how much memory
@@ -184,11 +184,11 @@ copying’ and ‘deep copying’. We don’t use these terms in Rust. We instea
 that something is ‘moved’ or ‘cloned’. Assignment in Rust causes a ‘move’. In
 other words, it looks like this:
 
-<img alt="s1 and s2" src="img/foo2.png" class="center" />
+<img alt="s1 and s2" src="img/foo2.svg" class="center" onerror="this.src='img/foo2.png'" />
 
 _Not_ this:
 
-<img alt="s1 and s2 to two places" src="img/foo4.png" class="center" />
+<img alt="s1 and s2 to two places" src="img/foo4.svg" class="center" onerror="this.src='img/foo4.png'" />
 
 When moving, Rust makes a copy of the data structure itself, the contents of
 `s1` are copied, but if `s1` contains a reference, like it does in this case,
@@ -238,7 +238,7 @@ println!("{}", s1);
 We say that `s1` was _moved_ into `s2`. When a value moves, its data is copied,
 but the original variable binding is no longer usable. That solves our problem:
 
-<img alt="s1 and s2 to the same place" src="img/foo3.png" class="center" />
+<img alt="s1 and s2 to the same place" src="img/foo3.svg" class="center" onerror="this.src='img/foo3.png'" />
 
 With only `s2` valid, when it goes out of scope, it will free the memory, and we’re done!
 
@@ -270,7 +270,7 @@ println!("{}", s1);
 This will work just fine. Remember our diagram from before? In this case,
 it _is_ doing this:
 
-<img alt="s1 and s2 to two places" src="img/foo4.png" class="center" />
+<img alt="s1 and s2 to two places" src="img/foo4.svg" class="center" onerror="this.src='img/foo4.png'" />
 
 When you see a call to `clone()`, you know that some arbitrary code is being
 executed, which may be expensive. It’s a visual indicator that something
