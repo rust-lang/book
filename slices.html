@@ -131,13 +131,13 @@ words, because it’s a separate value from the <code>String</code>, there’s n
 that it will still be valid in the future. Consider this:</p>
 <pre><code class="language-rust"># fn first_word(s: &amp;String) -&gt; usize {
 #     let bytes = s.as_bytes();
-# 
+#
 #     for (i, &amp;byte) in bytes.iter().enumerate() {
 #         if byte == 32 {
 #             return i;
 #         }
 #     }
-# 
+#
 #     s.len()
 # }
 
@@ -212,13 +212,13 @@ This would also work for a <code>second_word()</code>:</p>
 the slice version of <code>first_word()</code> will throw an error:</p>
 <pre><code class="language-rust,ignore"># fn first_word(s: &amp;String) -&gt; &amp;str {
 #     let bytes = s.as_bytes();
-# 
+#
 #     for (i, &amp;byte) in bytes.iter().enumerate() {
 #         if byte == 32 {
 #             return &amp;s[0..i];
 #         }
 #     }
-# 
+#
 #     &amp;s[..]
 # }
 fn main() {
@@ -273,13 +273,13 @@ string slices of string literals too, so this function is more useful, but
 with no loss of functionality:</p>
 <pre><code class="language-rust"># fn first_word(s: &amp;str) -&gt; &amp;str {
 #     let bytes = s.as_bytes();
-# 
+#
 #     for (i, &amp;byte) in bytes.iter().enumerate() {
 #         if byte == 32 {
 #             return &amp;s[0..i];
 #         }
 #     }
-# 
+#
 #     &amp;s[..]
 # }
 fn main() {

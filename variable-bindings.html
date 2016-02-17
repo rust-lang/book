@@ -375,8 +375,8 @@ Here’s an example:</p>
     let x = 5;
     println!(&quot;x is now in scope&quot;);
 
-    println!(&quot;In real code, we’d now do a bunch of work.&quot;); 
-    
+    println!(&quot;In real code, we’d now do a bunch of work.&quot;);
+
     println!(&quot;x will go out of scope now! The next curly brace is ending the main function.&quot;);
 }
 </code></pre>
@@ -399,7 +399,7 @@ Here’s an example:</p>
     }
 
     println!(&quot;x is still in scope, but y is now out of scope and is not usable&quot;);
-    
+
     println!(&quot;x will go out of scope now! The next curly brace is ending the main function.&quot;);
 }
 </code></pre>
@@ -413,7 +413,7 @@ name. Here’s a sample program:</p>
     let x = 6;
 
     println!(&quot;The value of x is: {}&quot;, x);
-}  
+}
 </code></pre>
 <p>Running it, we can see the shadowing in action:</p>
 <pre><code class="language-text">src/main.rs:2:9: 2:10 warning: unused variable: `x`, #[warn(unused_variables)] on by default

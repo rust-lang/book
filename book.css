@@ -27,12 +27,14 @@ h5 {
 }
 table {
   margin: 0 auto;
-}
-table thead td {
-  font-weight: 700;
+  border-collapse: collapse;
 }
 table td {
   padding: 3px 20px;
+  border: 1px solid;
+}
+table thead td {
+  font-weight: 700;
 }
 .sidebar {
   position: absolute;
@@ -249,8 +251,9 @@ table td {
   right: 15px;
 }
 .theme-popup {
-  position: fixed;
-  left: -40px;
+  position: relative;
+  left: 10px;
+  z-index: 1000;
   -webkit-border-radius: 4px;
   border-radius: 4px;
   font-size: 0.7em;
@@ -296,14 +299,6 @@ table td {
 .light {
   color: #333;
   background-color: #fff;
-/*
-    table {
-        thead td {
-            color: $table-header-fg;
-            backrgound: $table-header-bg;
-        }
-    }
-    */
 /* Inline code */
 }
 .light .content .header:link,
@@ -357,11 +352,15 @@ table td {
   color: #4183c4;
 }
 .light .theme-popup {
+  color: #333;
   background: #fafafa;
   border: 1px solid #ccc;
 }
 .light .theme-popup .theme:hover {
   background-color: #e6e6e6;
+}
+.light .theme-popup .default {
+  color: #ccc;
 }
 .light blockquote {
   margin: 20px 0;
@@ -370,6 +369,21 @@ table td {
   background-color: #f2f7f9;
   border-top: 0.1em solid #e1edf1;
   border-bottom: 0.1em solid #e1edf1;
+}
+.light table td {
+  border-color: #f2f2f2;
+}
+.light table tbody tr:nth-child(2n) {
+  background: #f7f7f7;
+}
+.light table thead {
+  background: #ccc;
+}
+.light table thead td {
+  border: none;
+}
+.light table thead tr {
+  border: 1px #ccc solid;
 }
 .light :not(pre) > .hljs {
   display: inline-block;
@@ -400,14 +414,6 @@ table td {
 .coal {
   color: #98a3ad;
   background-color: #141617;
-/*
-    table {
-        thead td {
-            color: $table-header-fg;
-            backrgound: $table-header-bg;
-        }
-    }
-    */
 /* Inline code */
 }
 .coal .content .header:link,
@@ -461,11 +467,15 @@ table td {
   color: #2b79a2;
 }
 .coal .theme-popup {
+  color: #98a3ad;
   background: #141617;
   border: 1px solid #43484d;
 }
 .coal .theme-popup .theme:hover {
   background-color: #1f2124;
+}
+.coal .theme-popup .default {
+  color: #43484d;
 }
 .coal blockquote {
   margin: 20px 0;
@@ -474,6 +484,21 @@ table td {
   background-color: #242637;
   border-top: 0.1em solid #2c2f44;
   border-bottom: 0.1em solid #2c2f44;
+}
+.coal table td {
+  border-color: #1f2223;
+}
+.coal table tbody tr:nth-child(2n) {
+  background: #1b1d1e;
+}
+.coal table thead {
+  background: #3f4649;
+}
+.coal table thead td {
+  border: none;
+}
+.coal table thead tr {
+  border: 1px #3f4649 solid;
 }
 .coal :not(pre) > .hljs {
   display: inline-block;
@@ -504,14 +529,6 @@ table td {
 .navy {
   color: #bcbdd0;
   background-color: #161923;
-/*
-    table {
-        thead td {
-            color: $table-header-fg;
-            backrgound: $table-header-bg;
-        }
-    }
-    */
 /* Inline code */
 }
 .navy .content .header:link,
@@ -565,11 +582,15 @@ table td {
   color: #2b79a2;
 }
 .navy .theme-popup {
+  color: #bcbdd0;
   background: #161923;
   border: 1px solid #737480;
 }
 .navy .theme-popup .theme:hover {
   background-color: #282e40;
+}
+.navy .theme-popup .default {
+  color: #737480;
 }
 .navy blockquote {
   margin: 20px 0;
@@ -578,6 +599,21 @@ table td {
   background-color: #262933;
   border-top: 0.1em solid #2f333f;
   border-bottom: 0.1em solid #2f333f;
+}
+.navy table td {
+  border-color: #1f2331;
+}
+.navy table tbody tr:nth-child(2n) {
+  background: #1b1f2b;
+}
+.navy table thead {
+  background: #39415b;
+}
+.navy table thead td {
+  border: none;
+}
+.navy table thead tr {
+  border: 1px #39415b solid;
 }
 .navy :not(pre) > .hljs {
   display: inline-block;
@@ -608,14 +644,6 @@ table td {
 .rust {
   color: #262625;
   background-color: #e1e1db;
-/*
-    table {
-        thead td {
-            color: $table-header-fg;
-            backrgound: $table-header-bg;
-        }
-    }
-    */
 /* Inline code */
 }
 .rust .content .header:link,
@@ -669,11 +697,15 @@ table td {
   color: #2b79a2;
 }
 .rust .theme-popup {
+  color: #262625;
   background: #e1e1db;
   border: 1px solid #b38f6b;
 }
 .rust .theme-popup .theme:hover {
   background-color: #99908a;
+}
+.rust .theme-popup .default {
+  color: #737480;
 }
 .rust blockquote {
   margin: 20px 0;
@@ -682,6 +714,21 @@ table td {
   background-color: #c1c1bb;
   border-top: 0.1em solid #b8b8b1;
   border-bottom: 0.1em solid #b8b8b1;
+}
+.rust table td {
+  border-color: #d7d7cf;
+}
+.rust table tbody tr:nth-child(2n) {
+  background: #dbdbd4;
+}
+.rust table thead {
+  background: #b3a497;
+}
+.rust table thead td {
+  border: none;
+}
+.rust table thead tr {
+  border: 1px #b3a497 solid;
 }
 .rust :not(pre) > .hljs {
   display: inline-block;

@@ -116,7 +116,7 @@ not want the script to run ‘sudo’ then pass it the --disable-sudo flag.
 You may uninstall later by running /usr/local/lib/rustlib/uninstall.sh,
 or by running this script again with the --uninstall flag.
 
-Continue? (y/N) 
+Continue? (y/N)
 </code></pre>
 <p>From here, press <code>y</code> for ‘yes’, and then follow the rest of the prompts.</p>
 <h2>Installing on Windows</h2>
@@ -748,8 +748,8 @@ Here’s an example:</p>
     let x = 5;
     println!(&quot;x is now in scope&quot;);
 
-    println!(&quot;In real code, we’d now do a bunch of work.&quot;); 
-    
+    println!(&quot;In real code, we’d now do a bunch of work.&quot;);
+
     println!(&quot;x will go out of scope now! The next curly brace is ending the main function.&quot;);
 }
 </code></pre>
@@ -772,7 +772,7 @@ Here’s an example:</p>
     }
 
     println!(&quot;x is still in scope, but y is now out of scope and is not usable&quot;);
-    
+
     println!(&quot;x will go out of scope now! The next curly brace is ending the main function.&quot;);
 }
 </code></pre>
@@ -786,7 +786,7 @@ name. Here’s a sample program:</p>
     let x = 6;
 
     println!(&quot;The value of x is: {}&quot;, x);
-}  
+}
 </code></pre>
 <p>Running it, we can see the shadowing in action:</p>
 <pre><code class="language-text">src/main.rs:2:9: 2:10 warning: unused variable: `x`, #[warn(unused_variables)] on by default
@@ -1113,7 +1113,7 @@ blocks inside of blocks. And since they return a value, we can use them in
 
     let y = {
         let z = 1;
-        
+
         x + z + 5
     };
 
@@ -1422,7 +1422,7 @@ modify elements of the array:</p>
     let mut a = [1, 2, 3, 4, 5];
 
     let first = a[0];
-    
+
     a[0] = 7;
 
     println!(&quot;The value of first is: {}&quot;, first);
@@ -1599,7 +1599,7 @@ $ cd branches
     } else {
         println!(&quot;condition was false&quot;);
     }
-}   
+}
 </code></pre>
 <p>Let's try running it:</p>
 <pre><code class="language-bash">$ cargo run
@@ -1872,7 +1872,7 @@ that check on every element on every iteration through the loop.</p>
 <pre><code class="language-rust">fn main() {
     let a = [1, 2, 3, 4, 5];
     let mut index = 0;
-    
+
     for element in a.iter() {
         println!(&quot;the value is: {}&quot;, element);
     }
@@ -2297,7 +2297,7 @@ without taking ownership of it. Here’s a diagram:</p>
 <p>Let’s take a closer look at the function call here:</p>
 <pre><code class="language-rust"># fn calculate_length(s: &amp;String) -&gt; usize {
 #     let length = s.len();
-# 
+#
 #     length
 # }
 let s1 = String::from(&quot;hello&quot;);
@@ -2553,13 +2553,13 @@ words, because it’s a separate value from the <code>String</code>, there’s n
 that it will still be valid in the future. Consider this:</p>
 <pre><code class="language-rust"># fn first_word(s: &amp;String) -&gt; usize {
 #     let bytes = s.as_bytes();
-# 
+#
 #     for (i, &amp;byte) in bytes.iter().enumerate() {
 #         if byte == 32 {
 #             return i;
 #         }
 #     }
-# 
+#
 #     s.len()
 # }
 
@@ -2634,13 +2634,13 @@ This would also work for a <code>second_word()</code>:</p>
 the slice version of <code>first_word()</code> will throw an error:</p>
 <pre><code class="language-rust,ignore"># fn first_word(s: &amp;String) -&gt; &amp;str {
 #     let bytes = s.as_bytes();
-# 
+#
 #     for (i, &amp;byte) in bytes.iter().enumerate() {
 #         if byte == 32 {
 #             return &amp;s[0..i];
 #         }
 #     }
-# 
+#
 #     &amp;s[..]
 # }
 fn main() {
@@ -2695,13 +2695,13 @@ string slices of string literals too, so this function is more useful, but
 with no loss of functionality:</p>
 <pre><code class="language-rust"># fn first_word(s: &amp;str) -&gt; &amp;str {
 #     let bytes = s.as_bytes();
-# 
+#
 #     for (i, &amp;byte) in bytes.iter().enumerate() {
 #         if byte == 32 {
 #             return &amp;s[0..i];
 #         }
 #     }
-# 
+#
 #     &amp;s[..]
 # }
 fn main() {
@@ -2746,11 +2746,11 @@ it into your <code>src/main.rs</code>:</p>
     let x1 = 0.0;
     let y1 = 5.0;
 
-    let x2 = 12.0; 
+    let x2 = 12.0;
     let y2 = 0.0;
-    
+
     let answer = distance(x1, y1, x2, y2);
-    
+
     println!(&quot;Point 1: ({}, {})&quot;, x1, y1);
     println!(&quot;Point 2: ({}, {})&quot;, x2, y2);
     println!(&quot;Distance: {}&quot;, answer);
