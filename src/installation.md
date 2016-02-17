@@ -34,7 +34,7 @@ not want the script to run ‘sudo’ then pass it the --disable-sudo flag.
 You may uninstall later by running /usr/local/lib/rustlib/uninstall.sh,
 or by running this script again with the --uninstall flag.
 
-Continue? (y/N) 
+Continue? (y/N)
 ```
 
 From here, press `y` for ‘yes’, and then follow the rest of the prompts.

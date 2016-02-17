@@ -437,8 +437,8 @@ fn main() {
     let x = 5;
     println!("x is now in scope");
 
-    println!("In real code, we’d now do a bunch of work."); 
-    
+    println!("In real code, we’d now do a bunch of work.");
+
     println!("x will go out of scope now! The next curly brace is ending the main function.");
 }
 ```
@@ -464,7 +464,7 @@ fn main() {
     }
 
     println!("x is still in scope, but y is now out of scope and is not usable");
-    
+
     println!("x will go out of scope now! The next curly brace is ending the main function.");
 }
 ```
@@ -483,7 +483,7 @@ fn main() {
     let x = 6;
 
     println!("The value of x is: {}", x);
-}  
+}
 ```
 
 Running it, we can see the shadowing in action:

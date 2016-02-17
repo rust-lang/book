@@ -31,7 +31,7 @@ fn main() {
     } else {
         println!("condition was false");
     }
-}   
+}
 ```
 
 Let's try running it:
@@ -160,7 +160,7 @@ fn main() {
 
     println!("The value of number is: {}", number);
 }
-``` 
+```
 
 Let’s run this:
 

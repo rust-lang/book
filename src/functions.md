@@ -298,7 +298,7 @@ fn main() {
 
     let y = {
         let z = 1;
-        
+
         x + z + 5
     };
 

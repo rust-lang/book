@@ -184,7 +184,7 @@ Instead, we can use our last kind of loop: the `for` loop. It looks like this:
 fn main() {
     let a = [1, 2, 3, 4, 5];
     let mut index = 0;
-    
+
     for element in a.iter() {
         println!("the value is: {}", element);
     }
@@ -193,6 +193,6 @@ fn main() {
 
 ** NOTE: see [https://github.com/rust-lang/rust/issues/25725#issuecomment-166365658](https://github.com/rust-lang/rust/issues/25725#issuecomment-166365658), we may want to change this **
 
-If we run this, we'll see the same output as the previous example. 
+If we run this, we'll see the same output as the previous example.
 
 ** I'm going to leave it at this for now until we decide how we want to do it**
