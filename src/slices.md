@@ -120,7 +120,7 @@ A string slice looks like this:
 let s = String::from("hello world");
 
 let hello = &s[0..5];
-let world = &s[5..9];
+let world = &s[6..11];
 ```
 
 This looks just like taking a reference to the whole `String`, but with the
