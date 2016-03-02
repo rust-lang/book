@@ -146,8 +146,8 @@ let slice = &s[0..2];
 let slice = &s[..2];
 ```
 
-By the same token, if you want to go to the maximum value, which for slices is
-the last element, you can drop the trailing number. In other words, these are
+By the same token, if your slice should include the last byte of the
+`String`, you can drop the trailing number. In other words, these are
 equal:
 
 ```rust
