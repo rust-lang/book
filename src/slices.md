@@ -131,6 +131,11 @@ it looks like this:
 
 DIAGRAM GOES HERE of s, hello, and world
 
+Note that the internal position is specified through byte-offsets, not
+characters.  The offset to the first byte of a `String` is 0 and the
+trailing number should point to the first byte that is _not_ included
+in the slice.
+
 With Rust’s `..` syntax, if you want to start at zero, you can drop the zero.
 In other words, these are equal:
 
