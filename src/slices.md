@@ -150,8 +150,8 @@ let s = String::from("hello");
 
 let len = s.len();
 
-let slice = &s[1..len];
-let slice = &s[1..];
+let slice = &s[0..len];
+let slice = &s[0..];
 ```
 
 With this in mind, let’s re-write `first_word()` to return a slice:
