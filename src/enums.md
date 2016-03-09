@@ -1,8 +1,11 @@
 # Enums
 
-Rust has a second kind of type that is similar to structures: enumerations.
-‘Enums’, as they’re more commonly known, allow you to have a data type which
-is one of several other types. Here’s an example:
+Rust has a second kind of type definition that is similar to structures:
+enumerations. ‘Enums’, as they’re more commonly known, a data type whose values
+are one of several variants, each of which carries different compound data
+inside.
+
+Here’s the simplest way to use enums:
 
 ```rust
 enum StopLight {
@@ -12,7 +15,7 @@ enum StopLight {
 }
 ```
 
-A value of type `StopLight` can be one of three types: `Red`, `Yellow`, or
+A value of type `StopLight` can be one of three variants: `Red`, `Yellow`, or
 `Green`. It cannot be multiple types at once. This is what makes enums
 different from structs: a struct must have a value for all of its members. An
 enum is a single value from the list of options.
@@ -30,7 +33,7 @@ impl StopLight {
     fn next_color(self) -> StopLight {
         if self == StopLight::Red {
             StopLight::Green
-        } else if self == StopLight:: Yellow {
+        } else if self == StopLight::Yellow {
             StopLight::Red
         } else {
             StopLight::Yellow
