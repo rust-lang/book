@@ -192,7 +192,7 @@ let s2 = s1;
 <p>You might say “copy the <code>String</code>!” This is both correct and incorrect at the
 same time. It does a <em>shallow</em> copy of the <code>String</code>. What’s that mean? Well,
 let’s take a look at what <code>String</code> looks like under the covers:</p>
-<p><img alt="string" src="img/foo1.png" class="center" /></p>
+<p><img alt="string" src="img/foo1.png" class="center" style="width: 50%;" /></p>
 <p>A <code>String</code> is made up of three parts: a pointer to the memory that holds the
 contents of the string, a length, and a capacity. The length is how much memory
 the <code>String</code> is currently using. The capacity is the total amount of memory the
@@ -210,9 +210,9 @@ of copying are the same. Many people draw distinctions between ‘shallow
 copying’ and ‘deep copying’. We don’t use these terms in Rust. We instead say
 that something is ‘moved’ or ‘cloned’. Assignment in Rust causes a ‘move’. In
 other words, it looks like this:</p>
-<p><img alt="s1 and s2" src="img/foo2.png" class="center" /></p>
+<p><img alt="s1 and s2" src="img/foo2.png" class="center" style="width: 50%;" /></p>
 <p><em>Not</em> this:</p>
-<p><img alt="s1 and s2 to two places" src="img/foo4.png" class="center" /></p>
+<p><img alt="s1 and s2 to two places" src="img/foo4.png" class="center" style="width: 50%;" /></p>
 <p>When moving, Rust makes a copy of the data structure itself, the contents of
 <code>s1</code> are copied, but if <code>s1</code> contains a reference, like it does in this case,
 Rust will not copy the things that those references refer to.</p>
@@ -251,7 +251,7 @@ println!(&quot;{}&quot;, s1);
 </code></pre>
 <p>We say that <code>s1</code> was <em>moved</em> into <code>s2</code>. When a value moves, its data is copied,
 but the original variable binding is no longer usable. That solves our problem:</p>
-<p><img alt="s1 and s2 to the same place" src="img/foo3.png" class="center" /></p>
+<p><img alt="s1 and s2 to the same place" src="img/foo3.png" class="center" style="width: 50%;" /></p>
 <p>With only <code>s2</code> valid, when it goes out of scope, it will free the memory, and we’re done!</p>
 <h2>Ownership Rules</h2>
 <p>This leads us to the Ownership Rules:</p>
@@ -276,7 +276,7 @@ println!(&quot;{}&quot;, s1);
 </code></pre>
 <p>This will work just fine. Remember our diagram from before? In this case,
 it <em>is</em> doing this:</p>
-<p><img alt="s1 and s2 to two places" src="img/foo4.png" class="center" /></p>
+<p><img alt="s1 and s2 to two places" src="img/foo4.png" class="center" style="width: 50%;" /></p>
 <p>When you see a call to <code>clone()</code>, you know that some arbitrary code is being
 executed, which may be expensive. It’s a visual indicator that something
 different is going on here.</p>
