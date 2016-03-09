@@ -1,6 +1,6 @@
 # Method Syntax
 
-In the last section on ownership, we made reference to several ‘methods’.
+In the last section on ownership, we made several references to ‘methods’.
 Methods look like this:
 
 ```rust
