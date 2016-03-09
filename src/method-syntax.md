@@ -5,6 +5,8 @@ Methods look like this:
 
 ```rust
 let s1 = String::from("hello");
+
+// call a method on our String
 let s2 = s1.clone();
 
 println!("{}", s1);
@@ -13,7 +15,8 @@ println!("{}", s1);
 The call to `clone()` is attatched to `s1` with a dot. This is called ‘method
 syntax’, and it’s a way to call certain functions with a different style.
 
-Why have two ways to call functions? One big reason is that methods look nicer
+Why have two ways to call functions? We’ll talk about some deeper reasons
+related to ownership in a moment, but one big reason is that methods look nicer
 when chained together:
 
 ```rust,ignore
@@ -186,7 +189,7 @@ reference. Yet, we needed a `&` for `p2` but not `p1`. What gives?
 This feature is called ‘automatic referencing’, and calling methods is one
 of the few places in Rust that has behavior like this. Here’s how it works:
 when you call a method with `self.(`, Rust will automatically add in `&`s
-or `&mut`s to match the signature. In other words, these two are the same:
+or `&mut`s to match the signature. In other words, these three are the same:
 
 ```rust
 # #[derive(Debug,Copy,Clone)]
@@ -207,6 +210,7 @@ or `&mut`s to match the signature. In other words, these two are the same:
 # let p2 = Point { x: 5.0, y: 6.5 };
 p1.distance(&p2);
 (&p1).distance(&p2);
+Point::distance(&p1, &p2);
 ```
 
 The first one looks much, much cleaner. Here’s another example:
@@ -229,6 +233,13 @@ fn push_str(&mut self, string: &str) {
 ```
 
 [`push_str()`]: http://doc.rust-lang.org/collections/string/struct.String.html#method.push_str
+
+This automatic referencing behavior works because methods have a clear receiver
+— the type of `self` — and in most cases it’s clear given the receiver and name
+of a method whether the method is just reading (so needs `&self`), mutating (so
+`&mut self`), or consuming (so `self`). The fact that Rust makes borrowing
+implicit for method receivers is a big part of making ownership ergonomic in
+practice.
 
 ## Methods can be called like functions
 
