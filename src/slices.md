@@ -120,7 +120,7 @@ A string slice looks like this:
 let s = String::from("hello world");
 
 let hello = &s[0..5];
-let world = &s[5..9];
+let world = &s[6..11];
 ```
 
 This looks just like taking a reference to the whole `String`, but with the
@@ -130,6 +130,11 @@ track of the number of elements that it refers to as well. In other words,
 it looks like this:
 
 DIAGRAM GOES HERE of s, hello, and world
+
+Note that the internal position is specified through byte-offsets, not
+characters.  The offset to the first byte of a `String` is 0 and the
+trailing number should point to the first byte that is _not_ included
+in the slice.
 
 With Rust’s `..` syntax, if you want to start at zero, you can drop the zero.
 In other words, these are equal:
@@ -141,8 +146,8 @@ let slice = &s[0..2];
 let slice = &s[..2];
 ```
 
-By the same token, if you want to go to the maximum value, which for slices is
-the last element, you can drop the trailing number. In other words, these are
+By the same token, if your slice should include the last byte of the
+`String`, you can drop the trailing number. In other words, these are
 equal:
 
 ```rust
@@ -150,8 +155,8 @@ let s = String::from("hello");
 
 let len = s.len();
 
-let slice = &s[1..len];
-let slice = &s[1..];
+let slice = &s[0..len];
+let slice = &s[0..];
 ```
 
 With this in mind, let’s re-write `first_word()` to return a slice:
