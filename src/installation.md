@@ -18,23 +18,11 @@ If we're on Linux or a Mac, all we need to do is open a terminal and type this:
 $ curl -sSf https://static.rust-lang.org/rustup.sh | sh
 ```
 
-This will download a script, and start the installation. If it all goes well,
-you’ll see this appear:
+This will download a script, and start the installation. You may be prompted for your password.
+If it all goes well, you’ll see this appear:
 
 ```text
-Welcome to Rust.
-
-This script will download the Rust compiler and its package manager, Cargo, and
-install them to /usr/local. You may install elsewhere by running this script
-with the --prefix=<path> option.
-
-The installer will run under ‘sudo’ and may ask you for your password. If you do
-not want the script to run ‘sudo’ then pass it the --disable-sudo flag.
-
-You may uninstall later by running /usr/local/lib/rustlib/uninstall.sh,
-or by running this script again with the --uninstall flag.
-
-Continue? (y/N)
+    Rust is ready to roll.
 ```
 
 From here, press `y` for ‘yes’, and then follow the rest of the prompts.
