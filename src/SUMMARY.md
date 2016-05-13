@@ -26,7 +26,7 @@
     - [Generics]()
     - [Advanced]()
 
-- [Enums]()
+- [Enums](enums.md)
     - [Match]()
     - [Patterns]()
     - [Option]()
