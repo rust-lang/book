@@ -183,7 +183,6 @@ Instead, we can use our last kind of loop: the `for` loop. It looks like this:
 ```rust
 fn main() {
     let a = [1, 2, 3, 4, 5];
-    let mut index = 0;
 
     for element in a.iter() {
         println!("the value is: {}", element);
