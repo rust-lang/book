@@ -27,10 +27,10 @@
     - [Advanced]()
 
 - [Enums](enums.md)
-    - [Match]()
-    - [Patterns]()
-    - [Option]()
-    - [if let]()
+    - [Option](option.md)
+    - [Match](match.md)
+    - [if let](if-let.md)
+    - [Patterns](patterns.md)
 
 - [Crates & Modules]()
 
