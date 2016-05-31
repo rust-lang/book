@@ -1,0 +1,194 @@
+<!DOCTYPE HTML>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>The Rust Programming Language</title>
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <base href="">
+
+        <link rel="stylesheet" href="book.css">
+        <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+        <link rel="shortcut icon" href="favicon.png">
+
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+
+        <!-- MathJax -->
+        <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+        <!-- Fetch JQuery from CDN but have a local fallback -->
+        <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+        <script>
+            if (typeof jQuery == 'undefined') {
+                document.write(unescape("%3Cscript src='jquery.js'%3E%3C/script%3E"));
+            }
+        </script>
+    </head>
+    <body>
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme = localStorage.getItem('theme');
+            if (theme == null) { theme = 'light'; }
+            $('body').removeClass().addClass(theme);
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var sidebar = localStorage.getItem('sidebar');
+            if (sidebar === "hidden") { $("html").addClass("sidebar-hidden") }
+            else if (sidebar === "visible") { $("html").addClass("sidebar-visible") }
+        </script>
+
+        <div id="sidebar" class="sidebar">
+            <ul class="chapter"><li><a href="introduction.html"><strong>1.</strong> Introduction</a></li><li><ul class="section"><li><a href="installation.html"><strong>1.1.</strong> Installation</a></li><li><a href="hello-world.html"><strong>1.2.</strong> Hello, World!</a></li><li><a href="design.html"><strong>1.3.</strong> The Design of Rust</a></li></ul></li><li><strong>2.</strong> Tutorial</li><li><a href="up-and-running.html"><strong>3.</strong> Up and Running</a></li><li><ul class="section"><li><a href="variable-bindings.html"><strong>3.1.</strong> Variable Bindings</a></li><li><a href="functions.html"><strong>3.2.</strong> Functions</a></li><li><a href="scalar-types.html"><strong>3.3.</strong> Scalar Types</a></li><li><a href="compound-types.html"><strong>3.4.</strong> Compound Types</a></li><li><a href="comments.html"><strong>3.5.</strong> Comments</a></li><li><a href="if.html"><strong>3.6.</strong> Control flow with <code>if</code></a></li><li><a href="loops.html"><strong>3.7.</strong> Loops</a></li></ul></li><li><a href="understanding-ownership.html"><strong>4.</strong> Understanding Ownership</a></li><li><ul class="section"><li><a href="ownership.html"><strong>4.1.</strong> Ownership</a></li><li><a href="references-and-borrowing.html"><strong>4.2.</strong> References &amp; Borrowing</a></li><li><a href="slices.html"><strong>4.3.</strong> Slices</a></li></ul></li><li><a href="structs.html"><strong>5.</strong> Structs</a></li><li><ul class="section"><li><a href="method-syntax.html"><strong>5.1.</strong> Method Syntax</a></li><li><a href="generics.html"><strong>5.2.</strong> Generics</a></li><li><strong>5.3.</strong> Advanced</li></ul></li><li><a href="enums.html"><strong>6.</strong> Enums</a></li><li><ul class="section"><li><a href="option.html" class="active"><strong>6.1.</strong> Option</a></li><li><a href="match.html"><strong>6.2.</strong> Match</a></li><li><a href="if-let.html"><strong>6.3.</strong> if let</a></li><li><a href="patterns.html"><strong>6.4.</strong> Patterns</a></li></ul></li><li><strong>7.</strong> Crates &amp; Modules</li><li><strong>8.</strong> Error Handling</li><li><strong>9.</strong> Basic Collections</li><li><ul class="section"><li><strong>9.1.</strong> Vectors</li><li><strong>9.2.</strong> Strings</li><li><strong>9.3.</strong> <code>HashMap&lt;K, V&gt;</code></li></ul></li><li><strong>10.</strong> Lifetimes</li><li><strong>11.</strong> Traits</li><li><strong>12.</strong> Closures</li><li><strong>13.</strong> Iterators</li><li><strong>14.</strong> I/O</li><li><ul class="section"><li><strong>14.1.</strong> <code>Read</code> &amp; <code>Write</code></li><li><strong>14.2.</strong> <code>std::fs</code></li><li><strong>14.3.</strong> <code>std::path</code></li><li><strong>14.4.</strong> <code>std::env</code></li></ul></li><li><strong>15.</strong> Testing</li><li><strong>16.</strong> Smart Pointers</li><li><ul class="section"><li><strong>16.1.</strong> <code>Deref</code></li><li><strong>16.2.</strong> <code>Deref</code> coercions</li><li><strong>16.3.</strong> <code>Box&lt;T&gt;</code></li><li><strong>16.4.</strong> <code>Rc&lt;T&gt;</code></li></ul></li><li><strong>17.</strong> Concurrency</li><li><ul class="section"><li><strong>17.1.</strong> Threads</li><li><strong>17.2.</strong> <code>Send</code> &amp; <code>Sync</code></li><li><strong>17.3.</strong> <code>Arc&lt;T&gt;</code></li><li><strong>17.4.</strong> <code>Mutex&lt;T&gt;</code></li><li><strong>17.5.</strong> <code>Channels</code></li></ul></li><li><strong>18.</strong> Unsafe Rust</li><li><ul class="section"><li><strong>18.1.</strong> Raw Pointers</li><li><strong>18.2.</strong> transmute</li></ul></li><li><strong>19.</strong> FFI</li><li><ul class="section"><li><strong>19.1.</strong> Conditional Compilation</li><li><strong>19.2.</strong> Bindings to C</li><li><strong>19.3.</strong> Using Rust from Other Languages</li><li><strong>19.4.</strong> <code>static</code></li></ul></li><li><strong>20.</strong> Cargo</li><li><ul class="section"><li><strong>20.1.</strong> Crates.io</li></ul></li><li><strong>21.</strong> Advanced Type System Features</li><li><ul class="section"><li><strong>21.1.</strong> Associated Types</li><li><strong>21.2.</strong> Trait Objects</li><li><strong>21.3.</strong> UFCS</li><li><strong>21.4.</strong> Coherence</li></ul></li><li><strong>22.</strong> Interior mutability</li><li><ul class="section"><li><strong>22.1.</strong> <code>Cell&lt;T&gt;</code></li><li><strong>22.2.</strong> <code>RefCell&lt;T&gt;</code></li></ul></li><li><strong>23.</strong> Macros</li><li><strong>24.</strong> Nightly Rust</li></ul>
+        </div>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar" class="menu-bar">
+                    <div class="left-buttons">
+                        <i id="sidebar-toggle" class="fa fa-bars"></i>
+                        <i id="theme-toggle" class="fa fa-paint-brush"></i>
+                    </div>
+
+                    <h1 class="menu-title">The Rust Programming Language</h1>
+
+                    <div class="right-buttons">
+                        <i id="print-button" class="fa fa-print" title="Print this book"></i>
+                    </div>
+                </div>
+
+                <div id="content" class="content">
+                    <h1>Option</h1>
+<p>Now that we have a handle on enums, let's combine them with a feature that we
+talked a little bit about in the previous chapter: generics.</p>
+<p>Programming language design is often though of as which features you include,
+but it's also about which features you leave out. Rust does not have a feature
+that is in many other languages: 'null'. In languages with this feature,
+variables can have two states: null or not-null.</p>
+<p>The inventor of this concept has this to say:</p>
+<blockquote>
+<p>I call it my billion-dollar mistake. At that time, I was designing the first
+comprehensive type system for references in an object-oriented language. My
+goal was to ensure that all use of references should be absolutely safe, with
+checking performed automatically by the compiler. But I couldn't resist the
+temptation to put in a null reference, simply because it was so easy to
+implement. This has led to innumerable errors, vulnerabilities, and system
+crashes, which have probably caused a billion dollars of pain and damage in
+the last forty years.</p>
+<ul>
+<li>Tony Hoare &quot;Null References: The Billion Dollar Mistake&quot;</li>
+</ul>
+</blockquote>
+<p>The problem with null values is twofold: first, a value can be null or not, at
+any time. The second is that if you try to use a value that's null, you'll get
+an error of some kind, depending on the language. Because this property is
+pervasive, it's extremely easy to make this kind of error.</p>
+<p>Even with these problems, the concept that null is trying to express is still a
+useful one: this is a value which is currently invalid or not present for some
+reason. The problem isn't with the concept itself, but with the particular
+implementation. As such, Rust does not have the concept of null, but we do have
+a type which can encode the concept of a value being present. We call this type
+<code>Option&lt;T&gt;</code>, and it looks like this:</p>
+<pre><code class="language-rust">enum Option&lt;T&gt; {
+    Some(T),
+    None,
+}
+</code></pre>
+<p>This type is <a href="../std/option/enum.Option.html">provided by the standard library</a>, and is so useful that
+it's even in the prelude; you don't need to import it explicitly. Furthermore,
+so are its variants: you can say <code>Some</code> and <code>None</code> directly, without prefixing
+them with <code>Option::</code>.</p>
+<p>Here's an example of using <code>Option&lt;T&gt;</code>:</p>
+<pre><code class="language-rust">let some_number = Some(5);
+let some_string = Some(&quot;a string&quot;);
+
+// If we only say None, we need to tell Rust what type of Option&lt;T&gt; we have.
+let absent_number: Option&lt;i32&gt; = None;
+</code></pre>
+<p>Let's dig in. First, you'll notice that we used the <code>&lt;T&gt;</code> syntax when defining
+<code>Option&lt;T&gt;</code>: it's a generic enum. <code>Option&lt;T&gt;</code> has two variants: <code>Some</code>, which
+contains a <code>T</code>, and <code>None</code>, which has no data associated with it. In some
+sense, <code>None</code> means 'null', and <code>Some</code> means 'not null'. So why is this any
+better than null?</p>
+<p>In short, because <code>Option&lt;T&gt;</code> and <code>T</code> are different types. That's a bit too
+short though. Here's an example:</p>
+<pre><code class="language-rust,ignore">let x = 5;
+let y = Some(5);
+
+let sum = x + y;
+</code></pre>
+<p>This will not compile. We get an error message like this:</p>
+<pre><code class="language-text">error: the trait `core::ops::Add&lt;core::option::Option&lt;_&gt;&gt;` is not implemented
+for the type `_` [E0277]
+
+let sum = x + y;
+          ^~~~~
+</code></pre>
+<p>Intense! What this error message is trying to say is that Rust does not
+understand how to add an <code>Option&lt;T&gt;</code> and a <code>T</code>. They're different types! This
+shows one of the big advantages of an <code>Option&lt;T&gt;</code> type: if you have a type that
+may or may not exist, you have to deal with that fact before you can assume it
+exists. In other words, you have to convert an <code>Option&lt;T&gt;</code> to a <code>T</code> before you
+can do <code>T</code> stuff with it. This helps catch one of the most common issues with
+null, generally: assuming that something isn't null, when it actually is.</p>
+<p>So, how <em>do</em> you get a <code>T</code> from an <code>Option&lt;T&gt;</code>?  The option type has a large
+number of methods that you can check out in <a href="../std/option/enum.Option.html">its documentation</a>, and becoming
+familiar with them will be extremely useful in your journey with Rust.</p>
+<p>But we want a deeper understanding than that. If we didn't have those methods
+defined for us already, what would we do? For that, we need a new feature: <code>match</code>.</p>
+
+                </div>
+
+                <!-- Mobile navigation buttons -->
+                
+                    <a href="enums.html" class="mobile-nav-chapters previous">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+                    <a href="match.html" class="mobile-nav-chapters next">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                
+
+            </div>
+
+            
+                <a href="enums.html" class="nav-chapters previous" title="You can navigate through the chapters using the arrow keys">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+            
+
+            
+                <a href="match.html" class="nav-chapters next" title="You can navigate through the chapters using the arrow keys">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            
+
+        </div>
+
+
+        <!-- Local fallback for Font Awesome -->
+        <script>
+            if ($(".fa").css("font-family") !== "FontAwesome") {
+                $('<link rel="stylesheet" type="text/css" href="_FontAwesome/css/font-awesome.css">').prependTo('head');
+            }
+        </script>
+
+        <!-- Livereload script (if served using the cli tool) -->
+        
+
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+    </body>
+</html>

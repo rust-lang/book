@@ -1,0 +1,285 @@
+<!DOCTYPE HTML>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>The Rust Programming Language</title>
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <base href="">
+
+        <link rel="stylesheet" href="book.css">
+        <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+        <link rel="shortcut icon" href="favicon.png">
+
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+
+        <!-- MathJax -->
+        <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+        <!-- Fetch JQuery from CDN but have a local fallback -->
+        <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+        <script>
+            if (typeof jQuery == 'undefined') {
+                document.write(unescape("%3Cscript src='jquery.js'%3E%3C/script%3E"));
+            }
+        </script>
+    </head>
+    <body>
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme = localStorage.getItem('theme');
+            if (theme == null) { theme = 'light'; }
+            $('body').removeClass().addClass(theme);
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var sidebar = localStorage.getItem('sidebar');
+            if (sidebar === "hidden") { $("html").addClass("sidebar-hidden") }
+            else if (sidebar === "visible") { $("html").addClass("sidebar-visible") }
+        </script>
+
+        <div id="sidebar" class="sidebar">
+            <ul class="chapter"><li><a href="introduction.html"><strong>1.</strong> Introduction</a></li><li><ul class="section"><li><a href="installation.html"><strong>1.1.</strong> Installation</a></li><li><a href="hello-world.html"><strong>1.2.</strong> Hello, World!</a></li><li><a href="design.html"><strong>1.3.</strong> The Design of Rust</a></li></ul></li><li><strong>2.</strong> Tutorial</li><li><a href="up-and-running.html"><strong>3.</strong> Up and Running</a></li><li><ul class="section"><li><a href="variable-bindings.html"><strong>3.1.</strong> Variable Bindings</a></li><li><a href="functions.html"><strong>3.2.</strong> Functions</a></li><li><a href="scalar-types.html"><strong>3.3.</strong> Scalar Types</a></li><li><a href="compound-types.html"><strong>3.4.</strong> Compound Types</a></li><li><a href="comments.html"><strong>3.5.</strong> Comments</a></li><li><a href="if.html"><strong>3.6.</strong> Control flow with <code>if</code></a></li><li><a href="loops.html"><strong>3.7.</strong> Loops</a></li></ul></li><li><a href="understanding-ownership.html"><strong>4.</strong> Understanding Ownership</a></li><li><ul class="section"><li><a href="ownership.html"><strong>4.1.</strong> Ownership</a></li><li><a href="references-and-borrowing.html"><strong>4.2.</strong> References &amp; Borrowing</a></li><li><a href="slices.html"><strong>4.3.</strong> Slices</a></li></ul></li><li><a href="structs.html"><strong>5.</strong> Structs</a></li><li><ul class="section"><li><a href="method-syntax.html"><strong>5.1.</strong> Method Syntax</a></li><li><a href="generics.html"><strong>5.2.</strong> Generics</a></li><li><strong>5.3.</strong> Advanced</li></ul></li><li><a href="enums.html"><strong>6.</strong> Enums</a></li><li><ul class="section"><li><a href="option.html"><strong>6.1.</strong> Option</a></li><li><a href="match.html"><strong>6.2.</strong> Match</a></li><li><a href="if-let.html"><strong>6.3.</strong> if let</a></li><li><a href="patterns.html" class="active"><strong>6.4.</strong> Patterns</a></li></ul></li><li><strong>7.</strong> Crates &amp; Modules</li><li><strong>8.</strong> Error Handling</li><li><strong>9.</strong> Basic Collections</li><li><ul class="section"><li><strong>9.1.</strong> Vectors</li><li><strong>9.2.</strong> Strings</li><li><strong>9.3.</strong> <code>HashMap&lt;K, V&gt;</code></li></ul></li><li><strong>10.</strong> Lifetimes</li><li><strong>11.</strong> Traits</li><li><strong>12.</strong> Closures</li><li><strong>13.</strong> Iterators</li><li><strong>14.</strong> I/O</li><li><ul class="section"><li><strong>14.1.</strong> <code>Read</code> &amp; <code>Write</code></li><li><strong>14.2.</strong> <code>std::fs</code></li><li><strong>14.3.</strong> <code>std::path</code></li><li><strong>14.4.</strong> <code>std::env</code></li></ul></li><li><strong>15.</strong> Testing</li><li><strong>16.</strong> Smart Pointers</li><li><ul class="section"><li><strong>16.1.</strong> <code>Deref</code></li><li><strong>16.2.</strong> <code>Deref</code> coercions</li><li><strong>16.3.</strong> <code>Box&lt;T&gt;</code></li><li><strong>16.4.</strong> <code>Rc&lt;T&gt;</code></li></ul></li><li><strong>17.</strong> Concurrency</li><li><ul class="section"><li><strong>17.1.</strong> Threads</li><li><strong>17.2.</strong> <code>Send</code> &amp; <code>Sync</code></li><li><strong>17.3.</strong> <code>Arc&lt;T&gt;</code></li><li><strong>17.4.</strong> <code>Mutex&lt;T&gt;</code></li><li><strong>17.5.</strong> <code>Channels</code></li></ul></li><li><strong>18.</strong> Unsafe Rust</li><li><ul class="section"><li><strong>18.1.</strong> Raw Pointers</li><li><strong>18.2.</strong> transmute</li></ul></li><li><strong>19.</strong> FFI</li><li><ul class="section"><li><strong>19.1.</strong> Conditional Compilation</li><li><strong>19.2.</strong> Bindings to C</li><li><strong>19.3.</strong> Using Rust from Other Languages</li><li><strong>19.4.</strong> <code>static</code></li></ul></li><li><strong>20.</strong> Cargo</li><li><ul class="section"><li><strong>20.1.</strong> Crates.io</li></ul></li><li><strong>21.</strong> Advanced Type System Features</li><li><ul class="section"><li><strong>21.1.</strong> Associated Types</li><li><strong>21.2.</strong> Trait Objects</li><li><strong>21.3.</strong> UFCS</li><li><strong>21.4.</strong> Coherence</li></ul></li><li><strong>22.</strong> Interior mutability</li><li><ul class="section"><li><strong>22.1.</strong> <code>Cell&lt;T&gt;</code></li><li><strong>22.2.</strong> <code>RefCell&lt;T&gt;</code></li></ul></li><li><strong>23.</strong> Macros</li><li><strong>24.</strong> Nightly Rust</li></ul>
+        </div>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar" class="menu-bar">
+                    <div class="left-buttons">
+                        <i id="sidebar-toggle" class="fa fa-bars"></i>
+                        <i id="theme-toggle" class="fa fa-paint-brush"></i>
+                    </div>
+
+                    <h1 class="menu-title">The Rust Programming Language</h1>
+
+                    <div class="right-buttons">
+                        <i id="print-button" class="fa fa-print" title="Print this book"></i>
+                    </div>
+                </div>
+
+                <div id="content" class="content">
+                    <h1>Patterns</h1>
+<p>We've mentioned 'patterns' a few times so far: they're used in <code>let</code> bindings,
+in function arguments, and in the <code>match</code> expression. Patterns have a lot of
+abilities, so in this section, we'll cover all of the different things they can
+do. Any of these abilities work in any place where a pattern is used.</p>
+<h2>Literals &amp; _</h2>
+<p>You can match against literals directly, and <code>_</code> acts as an any case:</p>
+<pre><code class="language-rust">let x = 1;
+
+match x {
+    1 =&gt; println!(&quot;one&quot;),
+    2 =&gt; println!(&quot;two&quot;),
+    3 =&gt; println!(&quot;three&quot;),
+    _ =&gt; println!(&quot;anything&quot;),
+}
+</code></pre>
+<p>This prints <code>one</code>.</p>
+<h1>Multiple patterns</h1>
+<p>You can match multiple patterns with <code>|</code>:</p>
+<pre><code class="language-rust">let x = 1;
+
+match x {
+    1 | 2 =&gt; println!(&quot;one or two&quot;),
+    3 =&gt; println!(&quot;three&quot;),
+    _ =&gt; println!(&quot;anything&quot;),
+}
+</code></pre>
+<p>This prints <code>one or two</code>.</p>
+<h2>ref and ref mut</h2>
+<p>Usually, when you match against a pattern, bindings are bound by value.
+This means you'll end up moving the value out:</p>
+<pre><code class="language-rust,ignore">let name = Some(String::from(&quot;Bors&quot;));
+
+match name {
+    Some(name) =&gt; println!(&quot;Found a name: {}&quot;, name),
+    None =&gt; (),
+}
+
+// name is moved here. This line will fail to compile:
+println!(&quot;name is: {:?}&quot;, name);
+</code></pre>
+<p>If you'd prefer to bind <code>name</code> by reference, use the <code>ref</code> keyword:</p>
+<pre><code class="language-rust">let name = Some(String::from(&quot;Bors&quot;));
+
+match name {
+    Some(ref name) =&gt; println!(&quot;Found a name: {}&quot;, name),
+    None =&gt; (),
+}
+
+// name is not moved here; the match only took a reference to its data rather
+// than moving it. This will work:
+println!(&quot;name is: {:?}&quot;, name);
+</code></pre>
+<p>And for a mutable reference, <code>ref mut</code>:</p>
+<pre><code class="language-rust">let mut name = Some(String::from(&quot;Bors&quot;));
+
+match name {
+    Some(ref mut name) =&gt; *name = String::from(&quot;Another name&quot;),
+    None =&gt; (),
+}
+
+// name is not moved here; the match only took a reference to its data rather
+// than moving it
+</code></pre>
+<h2>Destructuring</h2>
+<p>Patterns can be used to destructure structs and enums:</p>
+<pre><code class="language-rust">struct Point {
+    x: i32,
+    y: i32,
+}
+
+let origin = Point { x: 0, y: 0 };
+
+let Point { x, y } = origin;
+</code></pre>
+<p>This brings an <code>x</code> and <code>y</code> binding into scope, matching the <code>x</code> and <code>y</code> of
+<code>origin</code>. While it can be unusual in <code>let</code>, this is the same principle of
+patterns in <code>match</code>:</p>
+<pre><code class="language-rust">struct Point {
+    x: i32,
+    y: i32,
+}
+
+let origin = Point { x: 0, y: 0 };
+
+match origin {
+    Point { x, y } =&gt; { }, // x and y are bound here
+}
+</code></pre>
+<h2>Shadowing</h2>
+<p>As with all bindings, anything bound by a pattern will shadow bindings
+outside of the binding construct:</p>
+<pre><code class="language-rust">let x = Some(5);
+
+match x {
+    Some(x) =&gt; { }, // x is an i32 here, not an Option&lt;i32&gt;
+    None =&gt; (),
+}
+</code></pre>
+<h2>Ignoring bindings</h2>
+<p>We discussed using <code>_</code> as a whole pattern to ignore it above, but you can
+also use <code>_</code> inside of another pattern to ignore just part of it:</p>
+<pre><code class="language-rust">let x = Some(5);
+
+match x {
+    Some(_) =&gt; println!(&quot;got a Some and I don't care what's inside&quot;),
+    None =&gt; (),
+}
+</code></pre>
+<p>Or like this:</p>
+<pre><code class="language-rust">let numbers = (2, 4, 8, 16, 32);
+
+match numbers {
+    (first, _, third, _, fifth) =&gt; println!(&quot;Some numbers: {}, {}, {}&quot;, first, third, fifth),
+}
+</code></pre>
+<p>If you want, you can use <code>..</code> to ignore all of the parts you haven't defined:</p>
+<pre><code class="language-rust">struct Point {
+    x: i32,
+    y: i32,
+    z: i32,
+}
+
+let origin = Point { x: 0, y: 0, z: 0 };
+
+match origin {
+    Point { x, .. } =&gt; { }, // y and z are ignored
+}
+</code></pre>
+<h2>Ranges</h2>
+<p>You can match a range of values with <code>...</code>:</p>
+<pre><code class="language-rust">let x = 5;
+
+match x {
+    1 ... 5 =&gt; println!(&quot;one through five&quot;),
+    _ =&gt; println!(&quot;something else&quot;),
+}
+</code></pre>
+<p>Ranges are usually used with integers or <code>char</code>s:</p>
+<pre><code class="language-rust">fn main() {
+    let x = 'c';
+    
+    match x {
+        'a' ... 'j' =&gt; println!(&quot;early ASCII letter&quot;),
+        'k' ... 'z' =&gt; println!(&quot;late ASCII letter&quot;),
+        _ =&gt; println!(&quot;something else&quot;),
+    }
+}
+</code></pre>
+<h2>Guards</h2>
+<p>You can introduce match guards with <code>if</code>:</p>
+<pre><code class="language-rust">let x = Some(5);
+
+match x {
+    Some(x) if x &lt; 5 =&gt; println!(&quot;less than five: {}&quot;, x),
+    Some(x) =&gt; println!(&quot;{}&quot;, x),
+    None =&gt; (),
+}
+</code></pre>
+<p>If youre using if with multiple patterns, the if applies to both sides:</p>
+<pre><code class="language-rust">let x = 4;
+let y = false;
+
+match x {
+    4 | 5 if y =&gt; println!(&quot;yes&quot;),
+    _ =&gt; println!(&quot;no&quot;),
+}
+</code></pre>
+<p>This prints <code>no</code>, because the if applies to the whole of <code>4 | 5</code>, and not to only
+the <code>5</code>. In other words, the precedence of if behaves like this:</p>
+<pre><code class="language-text">(4 | 5) if y =&gt; ...
+</code></pre>
+<p>not this:</p>
+<pre><code class="language-text">4 | (5 if y) =&gt; ...
+</code></pre>
+<h2>Bindings</h2>
+<p>You can bind values to names with <code>@</code>:</p>
+
+                </div>
+
+                <!-- Mobile navigation buttons -->
+                
+                    <a href="if-let.html" class="mobile-nav-chapters previous">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+
+            </div>
+
+            
+                <a href="if-let.html" class="nav-chapters previous" title="You can navigate through the chapters using the arrow keys">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+            
+
+            
+
+        </div>
+
+
+        <!-- Local fallback for Font Awesome -->
+        <script>
+            if ($(".fa").css("font-family") !== "FontAwesome") {
+                $('<link rel="stylesheet" type="text/css" href="_FontAwesome/css/font-awesome.css">').prependTo('head');
+            }
+        </script>
+
+        <!-- Livereload script (if served using the cli tool) -->
+        
+
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+    </body>
+</html>

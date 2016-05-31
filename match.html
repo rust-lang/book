@@ -1,0 +1,254 @@
+<!DOCTYPE HTML>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>The Rust Programming Language</title>
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <base href="">
+
+        <link rel="stylesheet" href="book.css">
+        <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+        <link rel="shortcut icon" href="favicon.png">
+
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+
+        <!-- MathJax -->
+        <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+        <!-- Fetch JQuery from CDN but have a local fallback -->
+        <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+        <script>
+            if (typeof jQuery == 'undefined') {
+                document.write(unescape("%3Cscript src='jquery.js'%3E%3C/script%3E"));
+            }
+        </script>
+    </head>
+    <body>
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme = localStorage.getItem('theme');
+            if (theme == null) { theme = 'light'; }
+            $('body').removeClass().addClass(theme);
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var sidebar = localStorage.getItem('sidebar');
+            if (sidebar === "hidden") { $("html").addClass("sidebar-hidden") }
+            else if (sidebar === "visible") { $("html").addClass("sidebar-visible") }
+        </script>
+
+        <div id="sidebar" class="sidebar">
+            <ul class="chapter"><li><a href="introduction.html"><strong>1.</strong> Introduction</a></li><li><ul class="section"><li><a href="installation.html"><strong>1.1.</strong> Installation</a></li><li><a href="hello-world.html"><strong>1.2.</strong> Hello, World!</a></li><li><a href="design.html"><strong>1.3.</strong> The Design of Rust</a></li></ul></li><li><strong>2.</strong> Tutorial</li><li><a href="up-and-running.html"><strong>3.</strong> Up and Running</a></li><li><ul class="section"><li><a href="variable-bindings.html"><strong>3.1.</strong> Variable Bindings</a></li><li><a href="functions.html"><strong>3.2.</strong> Functions</a></li><li><a href="scalar-types.html"><strong>3.3.</strong> Scalar Types</a></li><li><a href="compound-types.html"><strong>3.4.</strong> Compound Types</a></li><li><a href="comments.html"><strong>3.5.</strong> Comments</a></li><li><a href="if.html"><strong>3.6.</strong> Control flow with <code>if</code></a></li><li><a href="loops.html"><strong>3.7.</strong> Loops</a></li></ul></li><li><a href="understanding-ownership.html"><strong>4.</strong> Understanding Ownership</a></li><li><ul class="section"><li><a href="ownership.html"><strong>4.1.</strong> Ownership</a></li><li><a href="references-and-borrowing.html"><strong>4.2.</strong> References &amp; Borrowing</a></li><li><a href="slices.html"><strong>4.3.</strong> Slices</a></li></ul></li><li><a href="structs.html"><strong>5.</strong> Structs</a></li><li><ul class="section"><li><a href="method-syntax.html"><strong>5.1.</strong> Method Syntax</a></li><li><a href="generics.html"><strong>5.2.</strong> Generics</a></li><li><strong>5.3.</strong> Advanced</li></ul></li><li><a href="enums.html"><strong>6.</strong> Enums</a></li><li><ul class="section"><li><a href="option.html"><strong>6.1.</strong> Option</a></li><li><a href="match.html" class="active"><strong>6.2.</strong> Match</a></li><li><a href="if-let.html"><strong>6.3.</strong> if let</a></li><li><a href="patterns.html"><strong>6.4.</strong> Patterns</a></li></ul></li><li><strong>7.</strong> Crates &amp; Modules</li><li><strong>8.</strong> Error Handling</li><li><strong>9.</strong> Basic Collections</li><li><ul class="section"><li><strong>9.1.</strong> Vectors</li><li><strong>9.2.</strong> Strings</li><li><strong>9.3.</strong> <code>HashMap&lt;K, V&gt;</code></li></ul></li><li><strong>10.</strong> Lifetimes</li><li><strong>11.</strong> Traits</li><li><strong>12.</strong> Closures</li><li><strong>13.</strong> Iterators</li><li><strong>14.</strong> I/O</li><li><ul class="section"><li><strong>14.1.</strong> <code>Read</code> &amp; <code>Write</code></li><li><strong>14.2.</strong> <code>std::fs</code></li><li><strong>14.3.</strong> <code>std::path</code></li><li><strong>14.4.</strong> <code>std::env</code></li></ul></li><li><strong>15.</strong> Testing</li><li><strong>16.</strong> Smart Pointers</li><li><ul class="section"><li><strong>16.1.</strong> <code>Deref</code></li><li><strong>16.2.</strong> <code>Deref</code> coercions</li><li><strong>16.3.</strong> <code>Box&lt;T&gt;</code></li><li><strong>16.4.</strong> <code>Rc&lt;T&gt;</code></li></ul></li><li><strong>17.</strong> Concurrency</li><li><ul class="section"><li><strong>17.1.</strong> Threads</li><li><strong>17.2.</strong> <code>Send</code> &amp; <code>Sync</code></li><li><strong>17.3.</strong> <code>Arc&lt;T&gt;</code></li><li><strong>17.4.</strong> <code>Mutex&lt;T&gt;</code></li><li><strong>17.5.</strong> <code>Channels</code></li></ul></li><li><strong>18.</strong> Unsafe Rust</li><li><ul class="section"><li><strong>18.1.</strong> Raw Pointers</li><li><strong>18.2.</strong> transmute</li></ul></li><li><strong>19.</strong> FFI</li><li><ul class="section"><li><strong>19.1.</strong> Conditional Compilation</li><li><strong>19.2.</strong> Bindings to C</li><li><strong>19.3.</strong> Using Rust from Other Languages</li><li><strong>19.4.</strong> <code>static</code></li></ul></li><li><strong>20.</strong> Cargo</li><li><ul class="section"><li><strong>20.1.</strong> Crates.io</li></ul></li><li><strong>21.</strong> Advanced Type System Features</li><li><ul class="section"><li><strong>21.1.</strong> Associated Types</li><li><strong>21.2.</strong> Trait Objects</li><li><strong>21.3.</strong> UFCS</li><li><strong>21.4.</strong> Coherence</li></ul></li><li><strong>22.</strong> Interior mutability</li><li><ul class="section"><li><strong>22.1.</strong> <code>Cell&lt;T&gt;</code></li><li><strong>22.2.</strong> <code>RefCell&lt;T&gt;</code></li></ul></li><li><strong>23.</strong> Macros</li><li><strong>24.</strong> Nightly Rust</li></ul>
+        </div>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar" class="menu-bar">
+                    <div class="left-buttons">
+                        <i id="sidebar-toggle" class="fa fa-bars"></i>
+                        <i id="theme-toggle" class="fa fa-paint-brush"></i>
+                    </div>
+
+                    <h1 class="menu-title">The Rust Programming Language</h1>
+
+                    <div class="right-buttons">
+                        <i id="print-button" class="fa fa-print" title="Print this book"></i>
+                    </div>
+                </div>
+
+                <div id="content" class="content">
+                    <h1>Match</h1>
+<p>Rust has an extremely powerful control-flow operator: <code>match</code>. It allows us to
+compare a value against a series of patterns, and then execute code based on
+how they compare. Remember the <code>Option&lt;T&gt;</code> type from the previous section?
+Let's say that we want to write a function that takes an <code>Option&lt;i32&gt;</code>, and
+if there's a value inside, add one to it.</p>
+<p>This function is very easy to write, thanks to <code>match</code>. It looks like this:</p>
+<pre><code class="language-rust">fn plus_one(x: Option&lt;i32&gt;) -&gt; Option&lt;i32&gt; {
+    match x {
+        None =&gt; None,
+        Some(i) =&gt; Some(i + 1),
+    }
+}
+
+let five = Some(5);
+let six = plus_one(five);
+let none = plus_one(None);
+</code></pre>
+<p>Let's break down the <code>match</code>! At a high-level, the <code>match</code> expression looks
+like this:</p>
+<pre><code class="language-text">match condition {
+    pattern =&gt; code,
+}
+</code></pre>
+<p>First, we have the <code>match</code> keyword. Next, we have a condition. This feels very
+similar to an <code>if</code> expression, but there's a big difference: with <code>if</code>, the
+condition needs to be a boolean. Here, it can be any type.</p>
+<p>Next, we have a &quot;match arm&quot;. That's the part that looks like <code>pattern =&gt; code,</code>.  We can have as many arms as we need to: our <code>match</code> above has two
+arms. An arm has two parts: a pattern, and some code. When the <code>match</code>
+expression executes, it compares the condition against the pattern of each arm,
+in turn. If the pattern matches the condition, the associated code is executed,
+and the rest of the patterns are not checked. If it doesn't match, execution
+continues to the next arm.</p>
+<p>Let's examine the first execution of <code>plus_one()</code> in more detail. In the above
+example, <code>x</code> will be <code>Some(5)</code>. Let's compare that against each arm:</p>
+<pre><code class="language-text">None =&gt; None,
+</code></pre>
+<p>Does <code>Some(5)</code> match <code>None</code>? No, it's the wrong variant. So let's continue.</p>
+<pre><code class="language-text">Some(i) =&gt; Some(i + 1),
+</code></pre>
+<p>Does <code>Some(5)</code> match <code>Some(i)</code>? Why yes it does! We have the same variant. But
+what about <code>i</code>? In a pattern like this, we can declare new bindings, similarly
+to what we did with <code>let</code>. So in this case, the code part of the match arm will
+have a binding, <code>i</code>, which corresponds to the <code>5</code>.</p>
+<p>With this arm, the code portion is <code>Some(i + 1)</code>. So we do exactly that: we
+take <code>i</code>, which is <code>5</code>, add one to it, and create a new <code>Some</code> value with our
+sum inside.</p>
+<p>Because <code>match</code> is an expression, the value of the overall expression becomes
+the value of the arm that executed. So the value of this <code>match</code> expression
+will be <code>Some(6)</code>. And since our <code>match</code> is the only expression in the
+function, the value of the <code>match</code> will be the value of the function, and so
+<code>Some(6)</code> is our return value as well, which is exactly what we were shooting
+for.</p>
+<p>Now let's consider the second call. In this case, <code>x</code> is <code>None</code>. We enter the
+<code>match</code>, and compare to the first arm:</p>
+<pre><code class="language-text">None =&gt; None,
+</code></pre>
+<p>Does <code>None</code> match <code>None</code>? Yup! And so we return <code>None</code>. There's no value to add
+to.</p>
+<p>Combining <code>match</code> and enums together is extremely powerful. You'll see this
+pattern a lot in Rust code: <code>match</code> against an enum, binding to the data
+inside, and then executing code based on it. It's a bit tricky at first, but
+once you get used to it, you'll wish you had it in languages that don't support
+it. It's consistently a user favorite.</p>
+<h2>Matches are exhaustive</h2>
+<p>There's one other aspect of <code>match</code> we didn't talk about. Consider this version
+of <code>plus_one()</code>:</p>
+<pre><code class="language-rust,ignore">fn plus_one(x: Option&lt;i32&gt;) -&gt; Option&lt;i32&gt; {
+    match x {
+        Some(i) =&gt; Some(i + 1),
+    }
+}
+</code></pre>
+<p>A bug! We didn't handle the <code>None</code> case. Luckily, it's a bug Rust knows how to catch.
+If we try to compile this code, we'll get an error:</p>
+<pre><code class="language-text">error: non-exhaustive patterns: `None` not covered [E0004]
+match x {
+    Some(i) =&gt; Some(i + 1),
+}
+</code></pre>
+<p>Rust knows that we did not cover every possible option, and even knows which
+pattern we forgot! This is referred to as being &quot;exhaustive&quot;, we must exhaust
+every last option possible in order to be valid!</p>
+<p>This analysis isn't perfect, however. This will also error:</p>
+<pre><code class="language-rust,ignore"># let some_u8_value = 0u8;
+match some_u8_value {
+    0 =&gt; println!(&quot;zero&quot;),
+    1 =&gt; println!(&quot;one&quot;),
+    2 =&gt; println!(&quot;two&quot;),
+    3 =&gt; println!(&quot;three&quot;),
+    4 =&gt; println!(&quot;four&quot;),
+    5 =&gt; println!(&quot;five&quot;),
+    6 =&gt; println!(&quot;six&quot;),
+    7 =&gt; println!(&quot;seven&quot;),
+    // We won't write out all of the arms here, but imagine that there are more
+    // arms corresponding to the rest of the numbers.
+    254 =&gt; println!(&quot;two-hundred and fifty-four&quot;),
+    255 =&gt; println!(&quot;two-hundred and fifty-five&quot;),
+}
+</code></pre>
+<p>Even though a <code>u8</code> can only have valid values of zero through 255, Rust isn't
+quite smart enough to understand we've covered all the cases. In order to fix
+this, we can use a special pattern, <code>_</code>:</p>
+<pre><code class="language-rust"># let some_u8_value = 0u8;
+match some_u8_value {
+    0 =&gt; println!(&quot;zero&quot;),
+    1 =&gt; println!(&quot;one&quot;),
+    2 =&gt; println!(&quot;two&quot;),
+    3 =&gt; println!(&quot;three&quot;),
+    4 =&gt; println!(&quot;four&quot;),
+    5 =&gt; println!(&quot;five&quot;),
+    6 =&gt; println!(&quot;six&quot;),
+    7 =&gt; println!(&quot;seven&quot;),
+    // ...
+    254 =&gt; println!(&quot;two-hundred and fifty-four&quot;),
+    255 =&gt; println!(&quot;two-hundred and fifty-five&quot;),
+    _ =&gt; panic!(&quot;can't ever happen&quot;),
+}
+</code></pre>
+<p>The <code>_</code> pattern matches anything at all, and so with it as the final pattern,
+Rust can understand that we have all our bases covered. It's not only used for
+this sort of exhastiveness issue, though. It's useful any time we don't want to
+deal with a number of cases. Consider this scenario: if we wanted to print out
+something one one, three, five, and seven:</p>
+<pre><code class="language-rust"># let some_u8_value = 0u8;
+match some_u8_value {
+    1 =&gt; println!(&quot;one&quot;),
+    3 =&gt; println!(&quot;three&quot;),
+    5 =&gt; println!(&quot;five&quot;),
+    7 =&gt; println!(&quot;seven&quot;),
+    _ =&gt; (),
+}
+</code></pre>
+<p>The <code>_</code> pattern will match all the other cases, and <code>()</code> will do nothing, it's
+the unit value.</p>
+<h2>More about patterns</h2>
+<p>As we've just seen, patterns are powerful, yet complex. Let's take a whole
+section to cover all of the things that they can do.</p>
+
+                </div>
+
+                <!-- Mobile navigation buttons -->
+                
+                    <a href="option.html" class="mobile-nav-chapters previous">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+                    <a href="if-let.html" class="mobile-nav-chapters next">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                
+
+            </div>
+
+            
+                <a href="option.html" class="nav-chapters previous" title="You can navigate through the chapters using the arrow keys">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+            
+
+            
+                <a href="if-let.html" class="nav-chapters next" title="You can navigate through the chapters using the arrow keys">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            
+
+        </div>
+
+
+        <!-- Local fallback for Font Awesome -->
+        <script>
+            if ($(".fa").css("font-family") !== "FontAwesome") {
+                $('<link rel="stylesheet" type="text/css" href="_FontAwesome/css/font-awesome.css">').prependTo('head');
+            }
+        </script>
+
+        <!-- Livereload script (if served using the cli tool) -->
+        
+
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+    </body>
+</html>
