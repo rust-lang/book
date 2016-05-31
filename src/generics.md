@@ -13,11 +13,15 @@ struct Point {
 But what if we didn't want to always use an `f64` here? What about an `f32` for
 when we need less precision? Or an `i32` if we only want integer coordinates?
 
+While our simple `Point` struct may be a bit too simple to bother making
+generic in a real application, we're going to stick with it to show you the
+syntax. Especially when building library code, generics allow for more code
+re-use, and unlock a lot of powerful techniques.
+
 ## Generic data types
 
-Rust has a feature that lets us define a structure like this. 'Generics' let us
-write code that allows for several different types, while letting us have one
-definition. A more generic `Point` would look like this:
+'Generics' let us write code that allows for several different types, while
+letting us have one definition. A more generic `Point` would look like this:
 
 ```rust
 #[derive(Debug,Copy,Clone)]
@@ -110,6 +114,21 @@ if you'd like. In this version of `Point`, we say that `x` has the type `T`,
 and `y` has the type `OtherT`. This lets us give them two different types, but
 they don't have to be.
 
+## Generic functions
+
+Regular old functions can also take generic parameters, with a syntax that looks
+very similar:
+
+```rust
+fn foo<T>(x: T) {
+    // ...
+}
+```
+
+This `foo()` function has one generic parameter, `T`, and takes one argument,
+`x`, which has the type `T`. Let's talk a little bit more about what this means.
+
+
 ## Generic methods
 
 We've seen how to define methods with the `impl` keyword. Our generic `Point`
@@ -135,68 +154,6 @@ one generic type `T`." In a sense, the `impl<T>` says "we will be using a type
 `T`" and the `Point<T>` says "that `T` is used for `Point`." In this simple
 case, this syntax can feel a bit redundant, but when we get into some of Rust's
 more advanced features later, this distinction will become more useful.
-
-## Generic functions
-
-Regular old functions can also take generic parameters, with a syntax that looks
-very similar:
-
-```rust
-fn foo<T>(x: T) {
-    // ...
-}
-```
-
-This `foo()` function has one generic parameter, `T`, and takes one argument,
-`x`, which has the type `T`. Let's talk a little bit more about what this means.
-
-### Monomorphization
-
-To give you an idea of how generics work, let's consider our `foo()` function,
-calling it with three different types of argument:
-
-```rust
-fn foo<T>(x: T) {
-    // ...
-}
-
-foo(5);
-foo(5.0);
-foo("bar");
-```
-
-How does this actually _work_, though? Rust uses a technique called
-"monomorphization" to implement this kind of generics. This is a fancy word for
-'copy and paste'. In other words, the compiler reads our code above, but generates
-code that looks like this:
-
-```rust
-fn foo_i32(x: i32) {
-    // ...
-}
-
-fn foo_f64(x: f64) {
-    // ...
-}
-
-fn foo_str(x: &str) {
-    // ...
-}
-
-foo_i32(5);
-foo_f64(5.0);
-foo_str("bar");
-```
-
-Rust generates three functions, and replaces the generic type with a specific
-one, one per type we called the function with. It then replaces each call to
-`foo()` with a call to the specific version.
-
-There's a tradeoff here: we pay no speed overhead for using generics. It's the
-same thing as calling a regular function. However, we pay for it in binary
-size: there are now three copies of the function in our binary, so it's a
-little bit bigger. We can make a different tradeoff instead, but that requires
-a feature we haven't talked about yet, 'trait objects'. We'll get there!
 
 ## There's more to the story
 
@@ -231,8 +188,5 @@ For now, the important bits to understand:
 * Generic type parameters are kind of like function parameters, but for types
   instead of values.
 * Type parameters go inside `<>`s and are usually named things like `T`.
-* Rust generates multiple copies of generic functions so that generics are
-  fast, but this comes at the cost of binary size. We will later learn how
-  to make the opposite tradeoff.
 
 With that, let's talk about another fundamental Rust data type: enums.
