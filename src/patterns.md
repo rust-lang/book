@@ -40,10 +40,10 @@ This prints `one or two`.
 
 ## ref and ref mut
 
-Usually, when you match against a pattern, bindings: are bound by value.
+Usually, when you match against a pattern, bindings are bound by value.
 This means you'll end up moving the value out:
 
-```rust
+```rust,ignore
 let name = Some(String::from("Bors"));
 
 match name {
@@ -51,7 +51,8 @@ match name {
     None => (),
 }
 
-// name is moved here
+// name is moved here. This line will fail to compile:
+println!("name is: {:?}", name);
 ```
 
 If you'd prefer to bind `name` by reference, use the `ref` keyword:
@@ -65,7 +66,8 @@ match name {
 }
 
 // name is not moved here; the match only took a reference to its data rather
-// than moving it
+// than moving it. This will work:
+println!("name is: {:?}", name);
 ```
 
 And for a mutable reference, `ref mut`:
@@ -204,6 +206,7 @@ let x = Some(5);
 
 match x {
     Some(x) if x < 5 => println!("less than five: {}", x),
+    Some(x) => println!("{}", x),
     None => (),
 }
 ```

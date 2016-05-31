@@ -8,7 +8,7 @@ but it's also about which features you leave out. Rust does not have a feature
 that is in many other languages: 'null'. In languages with this feature,
 variables can have two states: null or not-null.
 
-The inventor of this concept, Tony Hoare, has this to say:
+The inventor of this concept has this to say:
 
 > I call it my billion-dollar mistake. At that time, I was designing the first
 > comprehensive type system for references in an object-oriented language. My
@@ -18,6 +18,8 @@ The inventor of this concept, Tony Hoare, has this to say:
 > implement. This has led to innumerable errors, vulnerabilities, and system
 > crashes, which have probably caused a billion dollars of pain and damage in
 > the last forty years.
+> 
+> - Tony Hoare "Null References: The Billion Dollar Mistake"
 
 The problem with null values is twofold: first, a value can be null or not, at
 any time. The second is that if you try to use a value that's null, you'll get
@@ -38,7 +40,7 @@ enum Option<T> {
 }
 ```
 
-This type is [provided in the standard library][option], and is so useful that
+This type is [provided by the standard library][option], and is so useful that
 it's even in the prelude; you don't need to import it explicitly. Furthermore,
 so are its variants: you can say `Some` and `None` directly, without prefixing
 them with `Option::`.

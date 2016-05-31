@@ -38,8 +38,9 @@ Next, we have a "match arm". That's the part that looks like `pattern =>
 code,`.  We can have as many arms as we need to: our `match` above has two
 arms. An arm has two parts: a pattern, and some code. When the `match`
 expression executes, it compares the condition against the pattern of each arm,
-in turn. If the pattern matches the condition, it executes the associated code.
-If it doesn't match, it continues to the next arm.
+in turn. If the pattern matches the condition, the associated code is executed,
+and the rest of the patterns are not checked. If it doesn't match, execution
+continues to the next arm.
 
 Let's examine the first execution of `plus_one()` in more detail. In the above
 example, `x` will be `Some(5)`. Let's compare that against each arm:
@@ -54,7 +55,7 @@ Does `Some(5)` match `None`? No, it's the wrong variant. So let's continue.
 Some(i) => Some(i + 1),
 ```
 
-Does `Some(5)` match `Some(i)`. Why yes it does! We have the same variant.  But
+Does `Some(5)` match `Some(i)`? Why yes it does! We have the same variant. But
 what about `i`? In a pattern like this, we can declare new bindings, similarly
 to what we did with `let`. So in this case, the code part of the match arm will
 have a binding, `i`, which corresponds to the `5`.
@@ -126,10 +127,14 @@ match some_u8_value {
     5 => println!("five"),
     6 => println!("six"),
     7 => println!("seven"),
+    // We won't write out all of the arms here, but imagine that there are more
+    // arms corresponding to the rest of the numbers.
+    254 => println!("two-hundred and fifty-four"),
+    255 => println!("two-hundred and fifty-five"),
 }
 ```
 
-Even though a `u8` can only have valid values of zero through seven, Rust isn't
+Even though a `u8` can only have valid values of zero through 255, Rust isn't
 quite smart enough to understand we've covered all the cases. In order to fix
 this, we can use a special pattern, `_`:
 
@@ -144,6 +149,9 @@ match some_u8_value {
     5 => println!("five"),
     6 => println!("six"),
     7 => println!("seven"),
+    // ...
+    254 => println!("two-hundred and fifty-four"),
+    255 => println!("two-hundred and fifty-five"),
     _ => panic!("can't ever happen"),
 }
 ```

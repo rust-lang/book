@@ -31,7 +31,7 @@ if let Some(x) = some_option {
 ```
 
 `if let` takes a pattern and an expression, separated by an `=`. It works
-exactly like a `match`, where the expression is given to the `match`, and the
+exactly like a `match`, where the expression is given to the `match` and the
 pattern is its first arm. In other words, you can think of `if let` as syntax
 sugar:
 
@@ -46,7 +46,7 @@ match expression {
 }
 ```
 
-And in fact, we can include an `else`, too, and it becomes the body of the `_`
+And in fact, we can include an `else` and it becomes the body of the `_`
 case:
 
 ```rust,ignore
