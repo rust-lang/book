@@ -23,7 +23,7 @@
 
 - [Structs](structs.md)
     - [Method Syntax](method-syntax.md)
-    - [Generics]()
+    - [Generics](generics.md)
     - [Advanced]()
 
 - [Enums](enums.md)
