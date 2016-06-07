@@ -5,9 +5,10 @@ change gears a bit. Let's talk about the structure of larger Rust programs
 and libraries. This will also help you understand the standard library and
 its organization, as it is itself a large Rust library!
 
-Rust's system works a bit differently than other languages' that you may have
-used in the past. It's worth reading this section carefully; sometimes new
-Rustaceans have incorrect expectations based on previous experience.
+Rust's system works a bit differently than package management of other
+languages that you may have used in the past.It's worth reading this section
+carefully; sometimes new Rustaceans have incorrect expectations based on
+previous experience.
 
 ## Some terminology
 
@@ -17,8 +18,7 @@ First, let's talk about some vocabulary:
 * **Packages** are a collection of crates
 * **Modules** allow you to create namespaces within a crate
 
-Everything forms a tree-like hierarchy: a package contains one or more crates,
-and crates contain one or more modules.
+A package contains one or more crates, and crates contain one or more modules.
 
 We'll start in the middle, though, as in some sense, crates are what's
 fundamental here. We can't talk about a collection of crates without knowing
@@ -42,11 +42,10 @@ compile all of those dependencies in parallel, as they're separate crates.
 There's one more term related to crates: 'the crate root'. We'll talk about
 that more in the 'modules' section below.
 
-Let's make this a bit more concrete. Let's make a simple crate, and then, over
-the rest of this section, explore the package, crate, and module system by
-changing it. More specifically, let's make a crate that does basic math on
-some numbers: adds one or subtracts one. We want to focus on the structure
-rather than complicated functionality.
+Let's make this a bit more concrete. We'll make a simple crate, and then, over
+the rest of this section, explore the crate system by changing it. More
+specifically, we'll make a crate that does basic math on some numbers: adds one
+or subtracts one.
 
 Let's call our new crate `math`. Generate it with Cargo:
 
@@ -84,12 +83,12 @@ That's a lot of stuff! The first options are what we're concerned with here, tho
 rustc src/main.rs --crate-name math --crate-type bin
 ```
 
-To compile a crate, we path its path to `rustc`, `src/main.rs` here. More
-specifically, we pass the path of the file that contains its 'crate root'.
-We'll learn more about the details of this term in the modules section later in
-this chapter, but for now, consider this: a crate can be split into multiple
-files, but we don't pass them all to `rustc`, only the central one. That file
-is the 'crate root'.
+To compile a crate, `rustc` needs its path, `src/main.rs` here. More
+specifically, Cargo will pass the path of the file that contains its 'crate
+root'.  We'll learn more about the details of this term in the modules section
+later in this chapter, but for now, consider this: a crate can be split into
+multiple files, but we don't pass them all to `rustc`, only the central one.
+That file is the 'crate root'.
 
 The other two options describe the crate: `--crate-name` gives it a name, and
 `--crate-type` will describe its type, in this case, a binary. Cargo knows our
@@ -384,7 +383,7 @@ fn main() {
 }
 ```
 
-This won't quite compile yet. We get some an error when typing `cargo build`:
+This won't quite compile yet. We get an error when typing `cargo build`:
 
 ```text
 src/ops.rs:1:1: 3:2 warning: function is never used: `subtract_one`, #[warn(dead_code)] on by default
