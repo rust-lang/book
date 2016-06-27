@@ -68,6 +68,56 @@
 
                 <div id="content" class="content">
                     <h1>if let</h1>
+<p>There's one more advanced control flow structure we haven't discussed: <code>if let</code>. Imagine we're in a situation like this:</p>
+<pre><code class="language-rust"># let some_option = Some(5);
+match some_option {
+    Some(x) =&gt; {
+        // do something with x
+    },
+    None =&gt; {},
+}
+</code></pre>
+<p>We care about the <code>Some</code> case, but don't want to do anything with the <code>None</code>
+case. With an <code>Option</code>, this isn't <em>too</em> bad, but with a more complex enum,
+adding <code>_ =&gt; {}</code> after processing just one variant doesn't feel great. We have
+this boilerplate arm, and we have an extra level of indentation: the code that
+does something with <code>x</code> is indented twice, rather than just once. We really want
+a construct that says &quot;Do something with this one case, I don't care about the
+others.&quot;</p>
+<p>Enter <code>if let</code>:</p>
+<pre><code class="language-rust"># let some_option = Some(5);
+if let Some(x) = some_option {
+    // do something with x
+}
+</code></pre>
+<p><code>if let</code> takes a pattern and an expression, separated by an <code>=</code>. It works
+exactly like a <code>match</code>, where the expression is given to the <code>match</code> and the
+pattern is its first arm. In other words, you can think of <code>if let</code> as syntax
+sugar:</p>
+<pre><code class="language-rust,ignore">if let pattern = expression {
+    body
+}
+
+match expression {
+   pattern =&gt; body,
+   _ =&gt; {}
+}
+</code></pre>
+<p>And in fact, we can include an <code>else</code> and it becomes the body of the <code>_</code>
+case:</p>
+<pre><code class="language-rust,ignore">if let pattern = expression {
+    body
+} else {
+    else_body
+}
+
+match expression {
+   pattern =&gt; body,
+   _ =&gt; else_body,
+}
+</code></pre>
+<p>In other words, it's the high-level construct we were originally looking for:
+do something with a single pattern.</p>
 
                 </div>
 
