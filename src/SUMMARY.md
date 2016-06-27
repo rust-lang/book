@@ -32,7 +32,7 @@
     - [if let](if-let.md)
     - [Patterns](patterns.md)
 
-- [Crates & Modules]()
+- [Packages, Crates & Modules](packages-crates-and-modules.md)
 
 - [Error Handling]()
 
