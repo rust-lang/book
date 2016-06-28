@@ -82,12 +82,12 @@ We can attach data to each variant of the enum directly. No need for an extra
 struct. But beyond that, this approach is better than using a struct alongside
 our enum because we can attatch different kinds of data to each variant.
 Imagine that instead of a `String`, we would prefer to store a `V4` as its four
-individual components, while leaving the `V6` variant as a `String`. With our
+individual components while leaving the `V6` variant as a `String`. With our
 struct, we’d be stuck. But enums deal with this case with ease:
 
 ```rust
 enum IpAddr {
-    V4(u32, u32, u32, u32),
+    V4(u8, u8, u8, u8),
     V6(String),
 }
 
