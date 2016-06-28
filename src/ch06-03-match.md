@@ -156,7 +156,7 @@ match some_u8_value {
 }
 ```
 
-The `_` pattern matches anything at all, and so with it as the final pattern,
+The `_` pattern matches anything at all, so with it as the final pattern,
 Rust can understand that we have all our bases covered. It's not only used for
 this sort of exhastiveness issue, though. It's useful any time we don't want to
 deal with a number of cases. Consider this scenario: if we wanted to print out
@@ -178,5 +178,5 @@ the unit value.
 
 ## More about patterns
 
-As we've just seen, patterns are powerful, yet complex. Let's take a whole
-section to cover all of the things that they can do.
+As we've just seen, patterns are powerful. They can also get complex, so let's
+take a whole section to cover all of the things that they can do.

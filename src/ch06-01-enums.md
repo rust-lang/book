@@ -1,7 +1,7 @@
 # Enums
 
 Next, let’s look at a feature of Rust that’s similar to structs, but also
-different. Enumerations, or ‘enums’ as they’re more commonly referred to,
+different. Enumerations, or ‘enums’ as they’re more commonly called,
 are an extremely powerful feature of Rust. Enums are a feature that are in many
 languages, but what they can do is different per-language. Rust’s enums are
 most similar to enums in functional languages.
