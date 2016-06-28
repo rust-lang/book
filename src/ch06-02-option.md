@@ -3,7 +3,7 @@
 Now that we have a handle on enums, let's combine them with a feature that we
 talked a little bit about in the previous chapter: generics.
 
-Programming language design is often though of as which features you include,
+Programming language design is often thought of as which features you include,
 but it's also about which features you leave out. Rust does not have a feature
 that is in many other languages: 'null'. In languages with this feature,
 variables can have two states: null or not-null.
