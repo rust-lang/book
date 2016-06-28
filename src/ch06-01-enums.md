@@ -16,8 +16,8 @@ enum IpAddrKind {
 ```
 
 This enum represents the kind of an IP address. There are two major standards
-used for IP addresses: version four, and version six. Any IP address can be either
-a version four address, or a version six address. But it cannot be both kinds at
+used for IP addresses: version four and version six. Any IP address can be either
+a version four address or a version six address, but it cannot be both kinds at
 the same time. This is where enums get their name: they allow us to enumerate all
 of the possible kinds that our value can have.
 
@@ -37,7 +37,7 @@ Note that the variants of the enum are namespaced under its name, and we use
 the double colon to separate the two.
 
 Enums have more tricks up their sleeves, however. Thinking more about our IP
-address type, we don’t have a way to store the actual data of the IP address,
+address type, we don’t have a way to store the actual data of the IP address;
 we only know what kind it is. Given that you just learned about structs, you
 might tackle this problem like this:
 

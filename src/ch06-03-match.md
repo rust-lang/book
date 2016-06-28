@@ -1,7 +1,7 @@
 # Match
 
 Rust has an extremely powerful control-flow operator: `match`. It allows us to
-compare a value against a series of patterns, and then execute code based on
+compare a value against a series of patterns and then execute code based on
 how they compare. Remember the `Option<T>` type from the previous section?
 Let's say that we want to write a function that takes an `Option<i32>`, and
 if there's a value inside, add one to it.
@@ -66,10 +66,10 @@ sum inside.
 
 Because `match` is an expression, the value of the overall expression becomes
 the value of the arm that executed. So the value of this `match` expression
-will be `Some(6)`. And since our `match` is the only expression in the
-function, the value of the `match` will be the value of the function, and so
-`Some(6)` is our return value as well, which is exactly what we were shooting
-for.
+will be `Some(6)`, and since our `match` is the only expression in the
+function, the value of the `match` will be the value of the function. So
+`Some(6)` is our return value as well, which is exactly what we were trying
+to accomplish.
 
 Now let's consider the second call. In this case, `x` is `None`. We enter the
 `match`, and compare to the first arm:
@@ -111,7 +111,7 @@ match x {
 ```
 
 Rust knows that we did not cover every possible option, and even knows which
-pattern we forgot! This is referred to as being "exhaustive", we must exhaust
+pattern we forgot! This is referred to as being "exhaustive": we must exhaust
 every last option possible in order to be valid!
 
 This analysis isn't perfect, however. This will also error:

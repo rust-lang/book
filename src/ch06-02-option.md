@@ -89,7 +89,7 @@ shows one of the big advantages of an `Option<T>` type: if you have a type that
 may or may not exist, you have to deal with that fact before you can assume it
 exists. In other words, you have to convert an `Option<T>` to a `T` before you
 can do `T` stuff with it. This helps catch one of the most common issues with
-null, generally: assuming that something isn't null, when it actually is.
+null, generally: assuming that something isn't null when it actually is.
 
 So, how _do_ you get a `T` from an `Option<T>`?  The option type has a large
 number of methods that you can check out in [its documentation], and becoming

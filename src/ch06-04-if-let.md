@@ -18,7 +18,7 @@ case. With an `Option`, this isn't _too_ bad, but with a more complex enum,
 adding `_ => {}` after processing just one variant doesn't feel great. We have
 this boilerplate arm, and we have an extra level of indentation: the code that
 does something with `x` is indented twice, rather than just once. We really want
-a construct that says "Do something with this one case, I don't care about the
+a construct that says "Do something with this one case; I don't care about the
 others."
 
 Enter `if let`:
