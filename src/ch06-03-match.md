@@ -22,26 +22,26 @@ let six = plus_one(five);
 let none = plus_one(None);
 ```
 
-Let's break down the `match`! At a high-level, the `match` expression looks
-like this:
+Let's break down the `match`! At a high-level, using `match` looks like this:
 
 ```text
-match condition {
+match expression {
     pattern => code,
 }
 ```
 
-First, we have the `match` keyword. Next, we have a condition. This feels very
-similar to an `if` expression, but there's a big difference: with `if`, the
-condition needs to be a boolean. Here, it can be any type.
+First, we have the `match` keyword. Next, we have an expression. This feels
+very similar to an expression used with `if`, but there's a big difference:
+with `if`, the condition needs to return a boolean value. Here, it can be any
+type.
 
 Next, we have a "match arm". That's the part that looks like `pattern =>
 code,`.  We can have as many arms as we need to: our `match` above has two
-arms. An arm has two parts: a pattern, and some code. When the `match`
-expression executes, it compares the condition against the pattern of each arm,
-in turn. If the pattern matches the condition, the associated code is executed,
-and the rest of the patterns are not checked. If it doesn't match, execution
-continues to the next arm.
+arms. An arm has two parts: a pattern and some code. When the `match`
+expression executes, it compares the resulting value against the pattern of
+each arm, in order. If a pattern matches the value, the code associated
+with that pattern is executed, and the rest of the patterns are not checked.
+If that pattern doesn't match the value, execution continues to the next arm.
 
 Let's examine the first execution of `plus_one()` in more detail. In the above
 example, `x` will be `Some(5)`. Let's compare that against each arm:
