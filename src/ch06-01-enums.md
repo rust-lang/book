@@ -1,12 +1,13 @@
 # Enums
 
-Next, let’s look at a feature of Rust that’s similar to structs, but also
-different. Enumerations, or ‘enums’ as they’re more commonly called,
-are an extremely powerful feature of Rust. Enums are a feature that are in many
-languages, but what they can do is different per-language. Rust’s enums are
-most similar to enums in functional languages.
+Next, let’s look at *enumerations*, which allow you to define a type by
+enumerating its possible values. Commonly called "enums", these unlock a lot of
+power in Rust when combined with pattern matching. Enums are a feature that are
+in many languages, but what they can do is different per-language. Rust’s enums
+are most similar to "algebraic data types" in functional languages like F#,
+OCaml, or Haskell.
 
-Here’s an example of an enum:
+Here’s an example of an enum definition:
 
 ```rust
 enum IpAddrKind {
