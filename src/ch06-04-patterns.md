@@ -175,7 +175,8 @@ println!("name is: {:?}", name);
 
 ## Guards
 
-You can introduce match guards with `if`:
+You can introduce "match guards" with `if`. This adds an extra condition that
+often uses a value that the pattern has bound to:
 
 ```rust
 let x = Some(5);
@@ -187,30 +188,10 @@ match x {
 }
 ```
 
-If youre using if with multiple patterns, the if applies to both sides:
-
-```rust
-let x = 4;
-let y = false;
-
-match x {
-    4 | 5 if y => println!("yes"),
-    _ => println!("no"),
-}
-```
-
-This prints `no`, because the if applies to the whole of `4 | 5`, and not to only
-the `5`. In other words, the precedence of if behaves like this:
-
-```text
-(4 | 5) if y => ...
-```
-
-not this:
-
-```text
-4 | (5 if y) => ...
-```
+In this case, we bound the inner value of a `Some` to `x` and then "guarded" the
+first match arm with an additional condition that `x` must be less than 5. In
+this case, `Some(5)` does not have an inner value that is less than 5, so this
+code will just print out `5`.
 
 Whew! That’s a lot of different ways to match things. Let's cover one more place
 you can use your newfound knowledge of patterns: `if let`.
