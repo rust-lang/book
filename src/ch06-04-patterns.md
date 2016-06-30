@@ -98,41 +98,46 @@ This means you'll end up moving the value out:
 let name = Some(String::from("Bors"));
 
 match name {
-    Some(name) => println!("Found a name: {}", name),
+    // name is moved here because of the binding to the `Some` value.
+    Some(inner_name) => println!("Found a name: {}", inner_name),
     None => (),
 }
 
-// name is moved here. This line will fail to compile:
+// This line will fail to compile:
 println!("name is: {:?}", name);
 ```
 
-If you'd prefer to bind `name` by reference, use the `ref` keyword:
+If you'd prefer to bind `name` by reference, use the `ref` keyword in order to
+borrow the value instead:
 
 ```rust
 let name = Some(String::from("Bors"));
 
 match name {
-    Some(ref name) => println!("Found a name: {}", name),
+    // name is not moved here.
+    Some(ref inner_name) => println!("Found a name: {}", inner_name),
     None => (),
 }
 
-// name is not moved here; the match only took a reference to its data rather
-// than moving it. This will work:
+// The match only took a reference to its data rather than moving it.
+// This works:
 println!("name is: {:?}", name);
 ```
 
-And for a mutable reference, `ref mut`:
+And for a mutable reference, use `ref mut`:
 
 ```rust
 let mut name = Some(String::from("Bors"));
 
 match name {
-    Some(ref mut name) => *name = String::from("Another name"),
+    // name is not moved here.
+    Some(ref mut inner_name) => *inner_name = String::from("Another name"),
     None => (),
 }
 
-// name is not moved here; the match only took a reference to its data rather
-// than moving it
+// The match only took a reference to its data rather than moving it.
+// This works and prints the new value we gave it in the match statement:
+println!("name is: {:?}", name);
 ```
 
 ## Ignoring bindings
