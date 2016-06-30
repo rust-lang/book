@@ -1,9 +1,9 @@
 # Patterns
 
 We've mentioned 'patterns' a few times so far: they're used in `let` bindings,
-in function arguments, and in the `match` expression. Patterns have a lot of
-abilities, so in this section, we'll cover all of the different things they can
-do. Any of these abilities work in any place where a pattern is used.
+in function arguments, and in `match` expressions. Patterns have a lot of
+abilities, so in this section, we'll cover some of the most commonly used ones.
+Any of these abilities work in any place where a pattern is used.
 
 ## Literals & _
 
@@ -84,52 +84,6 @@ match name {
 // than moving it
 ```
 
-## Destructuring
-
-Patterns can be used to destructure structs and enums:
-
-```rust
-struct Point {
-    x: i32,
-    y: i32,
-}
-
-let origin = Point { x: 0, y: 0 };
-
-let Point { x, y } = origin;
-```
-
-This brings an `x` and `y` binding into scope, matching the `x` and `y` of
-`origin`. While it can be unusual in `let`, this is the same principle of
-patterns in `match`:
-
-```rust
-struct Point {
-    x: i32,
-    y: i32,
-}
-
-let origin = Point { x: 0, y: 0 };
-
-match origin {
-    Point { x, y } => { }, // x and y are bound here
-}
-```
-
-## Shadowing
-
-As with all bindings, anything bound by a pattern will shadow bindings
-outside of the binding construct:
-
-```rust
-let x = Some(5);
-
-match x {
-    Some(x) => { }, // x is an i32 here, not an Option<i32>
-    None => (),
-}
-```
-
 ## Ignoring bindings
 
 We discussed using `_` as a whole pattern to ignore it above, but you can
@@ -188,7 +142,7 @@ Ranges are usually used with integers or `char`s:
 ```rust
 fn main() {
     let x = 'c';
-    
+
     match x {
         'a' ... 'j' => println!("early ASCII letter"),
         'k' ... 'z' => println!("late ASCII letter"),
@@ -235,7 +189,3 @@ not this:
 ```text
 4 | (5 if y) => ...
 ```
-
-## Bindings
-
-You can bind values to names with `@`:
