@@ -878,7 +878,7 @@ The one difference is that in function signatures, we _must_ declare the type. T
 When you want a function to have multiple arguments, just separate them inside the function signature with commas, like this:
 
 ```text
-fn NAME(PATTERN, PATTERN, PATTERN, PATTERN...) {
+fn NAME(PATTERN: TYPE, PATTERN: TYPE, PATTERN: TYPE, PATTERN: TYPE...) {
 ```
 
 And just like a `let` declaration with multiple patterns, a type must be applied to each pattern separately. To demonstrate, here’s a full example of a function with multiple arguments:
@@ -956,7 +956,7 @@ Note that our bindings are called `a` and `b`, yet inside the function, we refer
 Functions can return values back to functions that call them. The signature for a function that returns a value looks like this:
 
 ```TEXT
-fn NAME(PATTERN, PATTERN, PATTERN, PATTERN...) -> TYPE {
+fn NAME(PATTERN: TYPE, PATTERN: TYPE, PATTERN: TYPE, PATTERN: TYPE...) -> TYPE {
 ```
 
 In Rust, we don’t name return values, but we do declare their type, after the arrow (`->`). Here’s a sample program to illustrate this concept:
