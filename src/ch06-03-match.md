@@ -4,7 +4,8 @@ Rust has an extremely powerful control-flow operator: `match`. It allows us to
 compare a value against a series of patterns and then execute code based on
 how they compare. Remember the `Option<T>` type from the previous section?
 Let's say that we want to write a function that takes an `Option<i32>`, and
-if there's a value inside, add one to it.
+if there's a value inside, add one to it. If there isn't a value inside, we
+want to return the `None` value and not attempt to add.
 
 This function is very easy to write, thanks to `match`. It looks like this:
 
@@ -71,15 +72,16 @@ function, the value of the `match` will be the value of the function. So
 `Some(6)` is our return value as well, which is exactly what we were trying
 to accomplish.
 
-Now let's consider the second call. In this case, `x` is `None`. We enter the
-`match`, and compare to the first arm:
+Now let's consider the second call of `plus_one()`. In this case, `x` is
+`None`. We enter the `match`, and compare to the first arm:
 
 ```text
 None => None,
 ```
 
-Does `None` match `None`? Yup! And so we return `None`. There's no value to add
-to.
+Does `None` match `None`? Yup! There's no value to add to. So we stop and
+return the `None` value that is on the right side of the `=>`. We don't
+check any other arms since we found one that matched.
 
 Combining `match` and enums together is extremely powerful. You'll see this
 pattern a lot in Rust code: `match` against an enum, binding to the data
@@ -160,7 +162,8 @@ The `_` pattern matches anything at all, so with it as the final pattern,
 Rust can understand that we have all our bases covered. It's not only used for
 this sort of exhastiveness issue, though. It's useful any time we don't want to
 deal with a number of cases. Consider this scenario: if we wanted to print out
-something one one, three, five, and seven:
+something for one, three, five, and seven but not print anything for any other
+number:
 
 ```rust
 # let some_u8_value = 0u8;
@@ -174,7 +177,8 @@ match some_u8_value {
 ```
 
 The `_` pattern will match all the other cases, and `()` will do nothing, it's
-the unit value.
+the unit value. This way, we don't have to list individual match arms for 2, 4,
+6, 8, 9, etc. in order to say that we want to do nothing for all of those.
 
 ## More about patterns
 
