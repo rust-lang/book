@@ -16,10 +16,10 @@ enum IpAddrKind {
 ```
 
 This enum represents the kind of an IP address. There are two major standards
-used for IP addresses: version four and version six. Any IP address can be either
-a version four address or a version six address, but it cannot be both kinds at
-the same time. This is where enums get their name: they allow us to enumerate all
-of the possible kinds that our value can have.
+used for IP addresses: version four and version six. Any IP address can be
+either a version four address or a version six address, but it cannot be both
+kinds at the same time. This is where enums get their name: they allow us to
+enumerate all of the possible kinds that our value can have.
 
 We can create values of `IpAddrKind` like this:
 
@@ -97,8 +97,8 @@ let loopback = IpAddr::V6(String::from("::1"));
 ```
 
 You can put any kind of data inside of an enum variant, including another enum!
-The `IpAddr` enum is [in the standard library][IpAddr], but it embeds two different
-structs inside of its variants:
+The `IpAddr` enum is [in the standard library][IpAddr], but it embeds two
+different structs inside of its variants:
 
 ```rust
 struct Ipv4Addr {
