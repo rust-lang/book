@@ -133,10 +133,8 @@ enum Message {
 * `Write` includes a single `String`.
 * `ChangeColor` includes three `i32`s.
 
-We haven’t talked a lot about how to access the data inside an enum variant,
-however. To do that, let’s move on to some new Rust syntax that’s especially
-useful with enums: `match`.
-
+Let's look at another enum in the standard library that is very common and
+useful: `Option`.
 
 
 
