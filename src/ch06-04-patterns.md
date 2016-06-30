@@ -5,38 +5,89 @@ in function arguments, and in `match` expressions. Patterns have a lot of
 abilities, so in this section, we'll cover some of the most commonly used ones.
 Any of these abilities work in any place where a pattern is used.
 
-## Literals & _
-
-You can match against literals directly, and `_` acts as an any case:
+Let's start with an example that is similar to the last example in the previous
+section:
 
 ```rust
 let x = 1;
 
 match x {
     1 => println!("one"),
-    2 => println!("two"),
     3 => println!("three"),
-    _ => println!("anything"),
+    5 => println!("five"),
+    7 => println!("seven"),
+    _ => println!("anything else"),
 }
 ```
 
-This prints `one`.
+This prints `one`. If we change `x` to have the value 4, this would print
+`anything else`.
 
 # Multiple patterns
 
-You can match multiple patterns with `|`:
+What if we wanted to print the same thing for 1, 3, and 5? We could do:
 
 ```rust
 let x = 1;
 
 match x {
-    1 | 2 => println!("one or two"),
-    3 => println!("three"),
-    _ => println!("anything"),
+    1 => println!("an odd number less than six"),
+    3 => println!("an odd number less than six"),
+    5 => println!("an odd number less than six"),
+    7 => println!("seven"),
+    _ => println!("anything else"),
 }
 ```
 
-This prints `one or two`.
+But that repeats the string "an odd number less than six" multiple times. If we
+had to change that string, it would be annoying to have to change it in three
+places to make 1, 3, and 5 still have the same behavior.
+
+Instead, we could match multiple patterns with `|`:
+
+```rust
+let x = 1;
+
+match x {
+    1 | 3 | 5 => println!("an odd number less than six"),
+    7 => println!("seven"),
+    _ => println!("anything else"),
+}
+```
+
+This match statement has the same functionality as the previous one, but we only
+had to write the common println! statement once!
+
+## Ranges
+
+Another way to have multiple values match the same arm is using a range. If,
+instead of the above where we treated 1, 3, and 5 the same, we wanted to treat
+any number from 1 to 5 the same, we could do:
+
+```rust
+let x = 5;
+
+match x {
+    1 ... 5 => println!("one through five"),
+    _ => println!("anything else"),
+}
+```
+
+This prints `one through five`: 5 is included in the range.
+
+Ranges are usually used with integers or `char`s:
+
+```rust
+let x = 'c';
+
+match x {
+    'a' ... 'j' => println!("early ASCII letter"),
+    'k' ... 'z' => println!("late ASCII letter"),
+    _ => println!("something else"),
+}
+```
+
+This prints `early ASCII letter`.
 
 ## ref and ref mut
 
@@ -121,33 +172,6 @@ let origin = Point { x: 0, y: 0, z: 0 };
 
 match origin {
     Point { x, .. } => { }, // y and z are ignored
-}
-```
-
-## Ranges
-
-You can match a range of values with `...`:
-
-```rust
-let x = 5;
-
-match x {
-    1 ... 5 => println!("one through five"),
-    _ => println!("something else"),
-}
-```
-
-Ranges are usually used with integers or `char`s:
-
-```rust
-fn main() {
-    let x = 'c';
-
-    match x {
-        'a' ... 'j' => println!("early ASCII letter"),
-        'k' ... 'z' => println!("late ASCII letter"),
-        _ => println!("something else"),
-    }
 }
 ```
 
