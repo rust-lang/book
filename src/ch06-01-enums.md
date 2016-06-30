@@ -65,8 +65,8 @@ let loopback = IpAddr {
 ```
 
 We’ve used a struct to bundle the two values together: now we keep the kind
-with the value itself. This design isn’t bad, exactly, but it wouldn’t be
-considered idiomatic Rust. We can represent the same thing with just an enum:
+with the value itself. We can represent the same thing in a different way with
+just an enum:
 
 ```rust
 enum IpAddr {
