@@ -67,8 +67,8 @@ In short, because `Option<T>` and `T` are different types. That's a bit too
 short though. Here's an example:
 
 ```rust,ignore
-let x = 5;
-let y = Some(5);
+let x: i8 = 5;
+let y: Option<i8> = Some(5);
 
 let sum = x + y;
 ```
@@ -76,8 +76,8 @@ let sum = x + y;
 This will not compile. We get an error message like this:
 
 ```text
-error: the trait `core::ops::Add<core::option::Option<_>>` is not implemented
-for the type `_` [E0277]
+error: the trait bound `i8: std::ops::Add<std::option::Option<i8>>` is not
+satisfied [E0277]
 
 let sum = x + y;
           ^~~~~
