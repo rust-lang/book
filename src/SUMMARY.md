@@ -29,8 +29,8 @@
 - [Chapter 6 - Enums](ch06-01-enums.md)
     - [Option](ch06-02-option.md)
     - [Match](ch06-03-match.md)
-    - [if let](ch06-04-if-let.md)
-    - [Patterns](ch06-05-patterns.md)
+    - [Patterns](ch06-04-patterns.md)
+    - [if let](ch06-05-if-let.md)
 
 - [Chapter 7 - Crates & Modules]()
 
