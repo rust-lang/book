@@ -189,3 +189,6 @@ not this:
 ```text
 4 | (5 if y) => ...
 ```
+
+Whew! That’s a lot of different ways to match things. Let's cover one more place
+you can use your newfound knowledge of patterns: `if let`.
