@@ -1,7 +1,7 @@
 # Option
 
-Now that we have a handle on enums, let's combine them with a feature that we
-talked a little bit about in the previous chapter: generics.
+Now that we have had an introduction to enums, let's combine them with a
+feature that we talked a little bit about in the previous chapter: generics.
 
 Programming language design is often thought of as which features you include,
 but it's also about which features you leave out. Rust does not have a feature
