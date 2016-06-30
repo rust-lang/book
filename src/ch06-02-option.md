@@ -98,4 +98,5 @@ becoming familiar with them will be extremely useful in your journey with Rust.
 [its documentation]: ../std/option/enum.Option.html
 
 But we want a deeper understanding than that. If we didn't have those methods
-defined for us already, what would we do? For that, we need a new feature: `match`.
+defined for us already, what would we do? And more generally, how do we get
+the inner values out of any enum variant? We need a new feature: `match`.
