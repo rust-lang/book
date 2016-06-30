@@ -84,8 +84,8 @@ return the `None` value that is on the right side of the `=>`. We don't
 check any other arms since we found one that matched.
 
 Combining `match` and enums together is extremely powerful. You'll see this
-pattern a lot in Rust code: `match` against an enum, binding to the data
-inside, and then executing code based on it. It's a bit tricky at first, but
+pattern a lot in Rust code: `match` against an enum, bind to the data
+inside, and then execute code based on it. It's a bit tricky at first, but
 once you get used to it, you'll wish you had it in languages that don't support
 it. It's consistently a user favorite.
 
