@@ -142,42 +142,35 @@ println!("name is: {:?}", name);
 
 ## Ignoring bindings
 
-We discussed using `_` as a whole pattern to ignore it above, but you can
-also use `_` inside of another pattern to ignore just part of it:
+We discussed using `_` as a whole pattern to ignore any value, but you can
+also use `_` inside of another pattern to ignore just part of a value. This
+usage of `_` will ignore the inner value of any `Some` value that is not a
+`Some` with a `6` inside:
 
 ```rust
 let x = Some(5);
 
 match x {
+    Some(6) => println!("got a Some(6)"),
     Some(_) => println!("got a Some and I don't care what's inside"),
     None => (),
 }
 ```
 
-Or like this:
+It’s worth noting that using `_` never binds to the value, which means that the
+value will not be moved:
 
 ```rust
-let numbers = (2, 4, 8, 16, 32);
+let name = Some(String::from("Bors"));
 
-match numbers {
-    (first, _, third, _, fifth) => println!("Some numbers: {}, {}, {}", first, third, fifth),
-}
-```
-
-If you want, you can use `..` to ignore all of the parts you haven't defined:
-
-```rust
-struct Point {
-    x: i32,
-    y: i32,
-    z: i32,
+match name {
+    // name is not moved here because the _ does not bind to the `Some` value.
+    Some(_) => println!("Found a name!"),
+    None => (),
 }
 
-let origin = Point { x: 0, y: 0, z: 0 };
-
-match origin {
-    Point { x, .. } => { }, // y and z are ignored
-}
+// This works:
+println!("name is: {:?}", name);
 ```
 
 ## Guards
