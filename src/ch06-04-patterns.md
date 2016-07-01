@@ -56,7 +56,7 @@ match x {
 ```
 
 This match statement has the same functionality as the previous one, but we only
-had to write the common println! statement once!
+had to write the common `println!` once!
 
 ## Ranges
 
