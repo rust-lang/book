@@ -154,7 +154,7 @@ list out 0, 2, 4, 6, 8, 9, all the way up through 255? Thankfully, no! We can
 use a special pattern, `_`:
 
 ```rust
-# let some_u8_value = 0u8;
+let some_u8_value = 0u8;
 match some_u8_value {
     1 => println!("one"),
     3 => println!("three"),
