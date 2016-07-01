@@ -116,54 +116,13 @@ Rust knows that we did not cover every possible option, and even knows which
 pattern we forgot! This is referred to as being "exhaustive": we must exhaust
 every last option possible in order to be valid!
 
-This analysis isn't perfect, however. This will also error:
+## The _ placeholder
 
-```rust,ignore
-# let some_u8_value = 0u8;
-match some_u8_value {
-    0 => println!("zero"),
-    1 => println!("one"),
-    2 => println!("two"),
-    3 => println!("three"),
-    4 => println!("four"),
-    5 => println!("five"),
-    6 => println!("six"),
-    7 => println!("seven"),
-    // We won't write out all of the arms here, but imagine that there are more
-    // arms corresponding to the rest of the numbers.
-    254 => println!("two-hundred and fifty-four"),
-    255 => println!("two-hundred and fifty-five"),
-}
-```
-
-Even though a `u8` can only have valid values of zero through 255, Rust isn't
-quite smart enough to understand we've covered all the cases. In order to fix
-this, we can use a special pattern, `_`:
-
-```rust
-# let some_u8_value = 0u8;
-match some_u8_value {
-    0 => println!("zero"),
-    1 => println!("one"),
-    2 => println!("two"),
-    3 => println!("three"),
-    4 => println!("four"),
-    5 => println!("five"),
-    6 => println!("six"),
-    7 => println!("seven"),
-    // ...
-    254 => println!("two-hundred and fifty-four"),
-    255 => println!("two-hundred and fifty-five"),
-    _ => panic!("can't ever happen"),
-}
-```
-
-The `_` pattern matches anything at all, so with it as the final pattern,
-Rust can understand that we have all our bases covered. It's not only used for
-this sort of exhastiveness issue, though. It's useful any time we don't want to
-deal with a number of cases. Consider this scenario: if we wanted to print out
-something for one, three, five, and seven but not print anything for any other
-number:
+What if we don't care about all of the possible values, though? Especially when
+there are a lot of possible values for a type: a `u8` can have valid values of
+zero through 255-- if we only care about 1, 3, 5, and 7, does this mean we must
+list out 0, 2, 4, 6, 8, 9, all the way up through 255? Thankfully, no! We can
+use a special pattern, `_`:
 
 ```rust
 # let some_u8_value = 0u8;
@@ -177,8 +136,9 @@ match some_u8_value {
 ```
 
 The `_` pattern will match all the other cases, and `()` will do nothing, it's
-the unit value. This way, we don't have to list individual match arms for 2, 4,
-6, 8, 9, etc. in order to say that we want to do nothing for all of those.
+the unit value. This way, we don't have to list individual match arms for all
+the other possible values in order to say that we want to do nothing for all of
+those-- the `_` is a placeholder for any value.
 
 ## More about patterns
 
