@@ -134,14 +134,21 @@ enum Message {
 * `Write` includes a single `String`.
 * `ChangeColor` includes three `i32`s.
 
+This might seem overwhelming, but another way to look at the different enum
+possibilities is that they are just like different kinds of struct definitions
+that you already know, except without the `struct` keyword and they are grouped
+together under the `Message` type. These structs could hold the same data that
+these enum variants hold:
+
+```
+struct QuitMessage; // unit struct
+struct MoveMessage {
+    x: i32,
+    y: i32,
+}
+struct WriteMessage(String); // tuple struct
+struct ChangeColorMessage(i32, i32, i32); // tuple struct
+```
+
 Let's look at another enum in the standard library that is very common and
 useful: `Option`.
-
-
-
-
-
-
-
-
-
