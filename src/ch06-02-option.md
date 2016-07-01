@@ -91,6 +91,14 @@ exists. In other words, you have to convert an `Option<T>` to a `T` before you
 can do `T` stuff with it. This helps catch one of the most common issues with
 null, generally: assuming that something isn't null when it actually is.
 
+This is pretty powerful: in order to have a value that can possibly be null,
+you have to explicitly opt in by making the type of that value an `Option<T>`.
+Then, when you use that value, you are required to explicitly handle the case
+when the value is null. Everywhere that a value has a type that isn't an
+`Option<T>`, you *can* safely assume that the value isn't null. This was a
+deliberate design decision for Rust to limit null's pervasiveness and increase
+the safety of Rust code.
+
 So, how _do_ you get a `T` from an `Option<T>`?  The `Option<T>` enum has a
 large number of methods that you can check out in [its documentation], and
 becoming familiar with them will be extremely useful in your journey with Rust.
