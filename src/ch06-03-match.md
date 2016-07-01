@@ -139,7 +139,11 @@ match x {
 
 Rust knows that we did not cover every possible option, and even knows which
 pattern we forgot! This is referred to as being "exhaustive": we must exhaust
-every last option possible in order to be valid!
+every last option possible in order to be valid. Especially in the case of
+`Option<T>`, when Rust prevents us from forgetting to explicitly handle the
+`None` case, it protects us from assuming that we have a value when we might
+have null and thus making the billion-dollar mistake we discussed in the
+previous section.
 
 ## The _ placeholder
 
