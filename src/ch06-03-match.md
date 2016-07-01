@@ -13,7 +13,10 @@ This function is very easy to write, thanks to `match`. It looks like this:
 fn plus_one(x: Option<i32>) -> Option<i32> {
     match x {
         None => None,
-        Some(i) => Some(i + 1),
+        Some(i) => {
+            let h = i + 1;
+            Some(h)
+        },
     }
 }
 
@@ -40,8 +43,15 @@ code,`.  We can have as many arms as we need to: our `match` above has two
 arms. An arm has two parts: a pattern and some code. When the `match`
 expression executes, it compares the resulting value against the pattern of
 each arm, in order. If a pattern matches the value, the code associated
-with that pattern is executed, and the rest of the patterns are not checked.
-If that pattern doesn't match the value, execution continues to the next arm.
+with that pattern is executed. If that pattern doesn't match the value,
+execution continues to the next arm.
+
+The code associated with each arm is an expression, and the resulting value of
+the code with the matching arm that gets executed is the value that gets
+returned for the entire `match` expression. If the match arm code is short, as
+in the `None` case above, curly braces typically aren't used. If you want to
+have multiple lines of code within a `match` arm, you can use curly braces as
+in the `Some` case.
 
 Let's examine the first execution of `plus_one()` in more detail. In the above
 example, `x` will be `Some(5)`. Let's compare that against each arm:
@@ -53,7 +63,10 @@ None => None,
 Does `Some(5)` match `None`? No, it's the wrong variant. So let's continue.
 
 ```text
-Some(i) => Some(i + 1),
+Some(i) => {
+    let h = i + 1;
+    Some(h)
+},
 ```
 
 Does `Some(5)` match `Some(i)`? Why yes it does! We have the same variant. But
@@ -61,9 +74,15 @@ what about `i`? In a pattern like this, we can declare new bindings, similarly
 to what we did with `let`. So in this case, the code part of the match arm will
 have a binding, `i`, which corresponds to the `5`.
 
-With this arm, the code portion is `Some(i + 1)`. So we do exactly that: we
-take `i`, which is `5`, add one to it, and create a new `Some` value with our
-sum inside.
+With this arm, the code portion is:
+
+```text
+let h = i + 1;
+Some(h)
+```
+
+So we do exactly that: we take `i`, which is `5`, add one to it and bind that
+to `h`, then create a new `Some` value with the value of `h` inside.
 
 Because `match` is an expression, the value of the overall expression becomes
 the value of the arm that executed. So the value of this `match` expression
@@ -97,7 +116,10 @@ of `plus_one()`:
 ```rust,ignore
 fn plus_one(x: Option<i32>) -> Option<i32> {
     match x {
-        Some(i) => Some(i + 1),
+        Some(i) => {
+            let h = i + 1;
+            Some(h)
+        },
     }
 }
 ```
@@ -108,7 +130,10 @@ catch. If we try to compile this code, we'll get an error:
 ```text
 error: non-exhaustive patterns: `None` not covered [E0004]
 match x {
-    Some(i) => Some(i + 1),
+    Some(i) => {
+        let h = i + 1;
+        Some(h)
+    },
 }
 ```
 
