@@ -63,4 +63,4 @@ match expression {
 ```
 
 In other words, it's the high-level construct we were originally looking for:
-do something with a single pattern.
+do something special with only one pattern.
