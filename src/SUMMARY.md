@@ -11,7 +11,7 @@
     - [Anatomy of a Rust Program](ch03-02-anatomy-of-a-rust-program.md)
     - [Variable Bindings in Detail](ch03-03-variable-bindings-in-detail.md)
     - [Data Types in Rust](ch03-04-data-types-in-rust.md)
-    - [Functions](ch03-03-functions.md)
+    - [How Functions Work in Rust](ch03-05-how-functions-work-in-rust.md)
     - [Comments](ch03-06-comments.md)
     - [Control flow with `if`](ch03-07-if.md)
     - [Loops](ch03-08-loops.md)
