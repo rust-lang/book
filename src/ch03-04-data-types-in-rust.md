@@ -1,21 +1,12 @@
 
 ## Data Types in Rust
 
-<!-- We’ve seen that e (I don't think we've really "seen" that yet /Carol)-->
 Every value in Rust is of a certain *type*, which tells Rust what kind of data
-is being given so it knows how to work with that data. <!--As described in the
-"Type Inference and Annotation" section, y-->You can rely on Rust's ability to
-infer types to figure out the type of a binding, or you can annotate it
-explicitly if needed. In this section, we'll look at a number of types built
-into the language itself split into two subsets of Rust data types: scalar and
-compound. First, let's look at how Rust deals with types.
-
-<!--TR: The following Type Inference and Annotation section was moved here
-after the chapter was written, please can you check this for flow, make sure it
-makes sense? Should we move the Type Inference... section to after the
-discussion on data types, do you think? /Liz -->
-<!-- I think this is a good place to explain why we haven't been seeing type
-declarations up til now. /Carol -->
+is being given so it knows how to work with that data. You can usually rely on
+Rust's ability to infer types to figure out the type of a binding, or you can
+annotate it explicitly if needed. In this section, we'll look at a number of
+types built into the language itself split into two subsets of Rust data types:
+scalar and compound. First, let's look at how Rust deals with types.
 
 ### Type Inference and Annotation
 
@@ -26,7 +17,7 @@ declare a type for `x` or `y` in our previous examples.
 This is because Rust can often tell the type of a binding without you having to
 declare it. Annotating every single binding with a type can take uneccesary
 time and make code noisy. To avoid this, Rust uses *type inference*, meaning
-that it attempts to infer the types of your bindings by looking at how the
+that it attempts to figure out the types of your bindings by looking at how the
 binding is used. Let’s look at the the first `let` statement you wrote again:
 
 ```rust
@@ -73,16 +64,11 @@ In the same way as we place the `VALUE` and the `PATTERN` in corresponding
 positions, we also match up the position of the `TYPE` with the `PATTERN` it
 corresponds to.
 
-<!-- TR: In what situations would you need to declare, rather than let Rust
-infer, a type? /Liz -->
-<!-- It's fairly rare, there are a few commonish cases but they wouldn't really
-make much sense right now. Collecting iterators is one place I can think of
-that I have to use type annotations a lot, so maybe when iterators are
-discussed. I tried to give a general explanation here for now... /Carol -->
 There are times when multiple types could be correct, and there is not enough
-information in the context for Rust to be able to tell which type you want to
-use. In those cases type annotations are required. We will look at some of
-those situations later, but for now, let's look at the types available in Rust.
+information in the surrounding context for Rust to be able to tell which type
+you want to use. In those cases type annotations are required. We will look at
+some of those situations later, but for now, let's look at the types available
+in Rust.
 
 ### Scalar Types
 
@@ -107,10 +93,10 @@ built-in integer types in Rust, shown in Table 3-1.
 | 64-bit | i64    | u64      |
 | arch   | isize  | usize    |
 
-*Table 3-1: Integer types in Rust. The code (for example, i32) is used to
-define a type in a function.*
+*Table 3-1: Integer types in Rust. Each code (for example, i32) can be used to
+declare the type of a value.*
 
-Each variant can be either signed or unsigned, and has an explicit size. Signed
+Each variant can be either signed or unsigned and has an explicit size. Signed
 and unsigned merely refers to whether it is possible for the number to be
 either negative or positive, meaning the number needs to have a sign with it
 ("signed"), or whether it will only ever be positive and can therefore be
@@ -136,18 +122,13 @@ collection, which we'll talk about in the "Arrays" section.
 Rust also has two primitive types for *floating-point numbers*, which are
 numbers with decimal points. Rust's floating-point types are `f32` and `f64`,
 which are 32 bits and 64 bits in size, respectively. The default type is `f64`,
-as it’s roughly the same speed as `f32`, but has a larger precision. Here's an
-example showing floating-point numbers in action:
+as it’s roughly the same speed as `f32`, but has a larger precision. It is
+possible to use an `f64` on 32 bit systems, but it will be slower than using an
+`f32` on those systems. Most of the time, trading potential worse performance
+for better precision is a reasonable initial choice, and you should benchmark
+your code if you suspect floating-point size is a problem in your case.
 
-<!--TR: So would you use f64 on 32 bit systems too? /Liz -->
-<!-- I had to look this up! It is possible to use i64 and f64 on 32 bit
-systems, but it will be slower than using i32/f32 on those systems. So there's
-a possibility that you'd want to make a trade off and choose improved speed
-even though it comes with a loss of precision, but in most cases the
-performance of your program is not going to be meaningfully impacted by the
-performance of f32 vs f64, so it's fine to just use f64. I'm not sure if that
-much detail is appropriate here, but feel free to incorporate this comment into
-the text if you think it is! /Carol -->
+Here's an example showing floating-point numbers in action:
 
 ```rust
 fn main() {
@@ -231,12 +212,6 @@ about Unicode Scalar Values at
 *http://www.unicode.org/glossary/#unicode_scalar_value* and find a chart for
 all unicode code points at *http://www.unicode.org/charts/*.
 
-<!-- Steve/TR: Can you explain this a little -- what do we mean when we say it
-represents more than just ASCII? Is there a list of what is considered a char
-in Rust somewhere? Can we help the reader out here at all? /Liz -->
-<!-- Gave it a shot. This is a much more complex topic than meets the eye
-though /Carol -->
-
 ### Compound Types
 
 *Compound types* can group multiple values of other types into one type. Rust
@@ -261,8 +236,8 @@ fn main() {
 
 Note that, unlike the examples of multiple bindings, here we bind the single
 name `tup` to the entire tuple, emphasizing the fact that a tuple is considered
-a single compound element. We can then use pattern matching to destructure this
-tuple value, like this:
+a single compound element. We could then use pattern matching to destructure
+this tuple value, like this:
 
 ```rust
 fn main() {
@@ -274,12 +249,12 @@ fn main() {
 }
 ```
 
-In this program, we first create a tuple, and bind it to the name `tup`. We
-then use a pattern with `let` to take `tup` and turn it into three separate
+In this program, we first create a tuple and bind it to the name `tup`. We then
+use a pattern with `let` to take `tup` and turn it into three separate
 bindings, `x`, `y`, and `z`. This is called ‘destructuring’, because it breaks
 the single tuple into three parts.
 
-Finally, we print the value of `x`, which is `6.4`.
+Finally, we print the value of `y`, which is `6.4`.
 
 #### Tuple Indexing
 
@@ -303,30 +278,12 @@ This program creates a tuple, `x`, and then makes new bindings to each element
 by using their index. As with most programming languages, the first index in a
 tuple is 0.
 
-#### Single-Element Tuples
-
-Not everything contained within parentheses is a tuple in Rust. For example, a
-`(5)` may be a tuple, or just a `5` in parentheses. To disambiguate, use a
-comma for single-element tuples, as in this example:
-
-```rust
-fn main() {
-    let x = (5);
-
-    let x = (5,);
-}
-```
-
-In the first `let` statement, because `(5)` has no comma, it's a simple i32 and
-not a tuple. In the second `let` example, `(5,)` is a tuple with only one
-element.
-
 ### Arrays
 
-So far, we’ve only represented single values in a binding. Sometimes, though,
-it’s useful to bind a name to more than one value. Data structures that contain
-multiple values are called *collections*, and arrays are the first type of Rust
-collection we’ll learn about.
+Another way to bind a name to a collection of multiple values is with an
+*array*. Unlike a tuple, every element of an array must have the same type.
+Arrays in Rust are different than arrays in some other languages because arrays
+in Rust have a fixed length-- once declared, they cannot grow or shrink in size.
 
 In Rust, arrays look like this:
 
@@ -337,8 +294,7 @@ fn main() {
 ```
 
 The values going into an array are written as a comma separated list inside
-square brackets. Unlike a tuple, every element of an array must have the same
-type.
+square brackets.
 
 #### Type Annotation for Arrays
 
@@ -375,9 +331,9 @@ running it produces the following output:
 ```bash
 $ cargo run
    Compiling arrays v0.1.0 (file:///projects/arrays)
-src/main.rs:4:25: 4:26 error: the trait `core::fmt::Display` is not implemented for the type `[_; 5]` [E0277]
-src/main.rs:4     println!(“a is: {}”, a);
-                                      ^
+src/main.rs:4:25: 4:26 error: the trait bound `[_; 5]: std::fmt::Display` is not satisfied [E0277]
+src/main.rs:4     println!("a is: {}", a);
+                                       ^
 <std macros>:2:25: 2:56 note: in this expansion of format_args!
 <std macros>:3:1: 3:54 note: in this expansion of print! (defined in <std macros>)
 src/main.rs:4:5: 4:28 note: in this expansion of println! (defined in <std macros>)
@@ -387,17 +343,17 @@ src/main.rs:4:25: 4:26 note: required by `core::fmt::Display::fmt`
 error: aborting due to previous error
 ```
 
-Whew! The core of the error is this part: *the trait `core::fmt::Display` is
-not implemented*. We haven’t discussed traits yet, so this is bound to be
-confusing! Here’s all we need to know for now: `println!` can do many kinds of
-formatting. By default, `{}` implements a kind of formatting known as
-`Display`: output intended for direct end-user consumption. The primitive types
-we’ve seen so far implement `Display`, as there’s only one way you’d show a `1`
-to a user. But with arrays, the output is less clear. Do you want commas or
-not? What about the `[]`s?
+Whew! The core of the error is this part: *the trait bound `[_; 5]:
+std::fmt::Display` is not satisfied*. We haven’t discussed traits yet, so this
+is bound to be confusing! Here’s all we need to know for now: `println!` can do
+many kinds of formatting. By default, `{}` implements a kind of formatting
+known as `Display`: output intended for direct end-user consumption. The
+primitive types we’ve seen so far implement `Display`, as there’s only one way
+you’d show a `1` to a user. But with arrays, the output is less clear. Do you
+want commas or not? What about the `[]`s?
 
 More complex types in the standard library do not automatically implement
-`Display` formatting. Instead, Rust implements another kind of formatting,
+`Display` formatting. Instead, Rust implements another kind of formatting
 intended for the programmer. This formatting type is called `Debug`. To ask
 `println!` to use `Debug` formatting, we include `:?` in the print string, like
 this:
@@ -419,7 +375,7 @@ $ cargo run
 a is [1, 2, 3, 4, 5]
 ```
 
-You’ll see this repeated later, with other types. We’ll cover traits fully in
+You’ll see this repeated later with other types. We’ll cover traits fully in
 Chapter XX.
 
 #### Accessing and Modifying Array Elements
@@ -456,10 +412,6 @@ fn main() {
 }
 ```
 
-<!-- If we talk about Debug just before this, then we can use Debug to show
-that the array in fact changed, which makes me happy, so that's why I put the
-Debug section where I did. /Carol -->
-
 First, notice the use of `mut` in the array declaration. We had to declare
 array `a` as `mut` to override Rust's default immutability. The line `a[0] =
 7;` modifies the element at index 0 in the array, changing its value to `7`.
@@ -486,7 +438,7 @@ fn main() {
 }
 ```
 
-If we use `cargo run` on a project named `arrays` containing this code:
+Running this code with `cargo run` produces:
 
 ```bash
 $ cargo run
@@ -507,4 +459,4 @@ This is our first example of Rust’s safety principles in action. In many
 low-level languages, this kind of check is not done, and when you provide an
 incorrect index, invalid memory can be accessed. Rust protects us against this
 kind of error by immediately exiting instead of allowing the memory access and
-continuing. We'll discuss more of Rust’s error handling in Chapter xx.
+continuing. We'll discuss more of Rust’s error handling in Chapter XX.
