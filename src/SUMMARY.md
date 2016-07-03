@@ -13,8 +13,8 @@
     - [Scalar Types](ch03-04-scalar-types.md)
     - [Compound Types](ch03-05-compound-types.md)
     - [Comments](ch03-06-comments.md)
-    - [Control flow with `if`](ch03-06-if.md)
-    - [Loops](ch03-07-loops.md)
+    - [Control flow with `if`](ch03-07-if.md)
+    - [Loops](ch03-08-loops.md)
 
 - [Chapter 4 - Understanding Ownership](ch04-01-understanding-ownership.md)
     - [Ownership](ch04-02-ownership.md)
