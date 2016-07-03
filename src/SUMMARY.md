@@ -8,6 +8,7 @@
 - [Tutorial]()
 
 - [Up and Running](ch03-01-up-and-running.md)
+    - [Anatomy of a Rust Program](ch03-02-anatomy-of-a-rust-program.md)
     - [Variable Bindings](ch03-02-variable-bindings.md)
     - [Functions](ch03-03-functions.md)
     - [Scalar Types](ch03-04-scalar-types.md)
