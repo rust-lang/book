@@ -11,9 +11,6 @@ The previous example program just bound one variable, but it's also possible to
 create multiple variable bindings in one go. Let’s try a more complex example,
 creating two variable bindings at once. Change your example program to this:
 
-<!-- Oh yeah, this is a much better place to have this example rather than the
-one I suggested above /Carol -->
-
 ```rust
 fn main() {
     let (x, y) = (5, 6);
@@ -46,7 +43,7 @@ fn main() {
 }
 ```
 
-In simple cases like this, where we are only binding two variables, two `let`
+In simple cases like this where we are only binding two variables, two `let`
 statements may be clearer in the code, but when you're creating many multiple
 bindings, it's useful to be able to do so all at once. Deciding which technique
 to use is mostly a judgement call, and as you become more proficient in Rust,
@@ -61,9 +58,7 @@ after the `let` statement. To try this out, write the following program:
 ```rust
 fn main() {
     let x;
-
     x = 5;
-
     println!("The value of x is: {}", x);
 }
 ```
@@ -77,7 +72,7 @@ $ cargo run
 The value of x is: 5
 ```
 
-As you can see, this works just like the previous program, in which we assigned
+As you can see, this works just like the previous program in which we assigned
 an initial value.
 
 This raises an interesting question: what happens if we try to print out a
@@ -87,9 +82,7 @@ like the following:
 ```rust,ignore
 fn main() {
     let x;
-
     println!("The value of x is: {}", x);
-
     x = 5;
 }
 ```
@@ -117,7 +110,7 @@ instead it requests that you assign a value to the variable `x`. This is our
 first example of the compiler helping us find an error in our program.
 Different programming languages have different ways of approaching this
 problem. Some languages will always initialize values with some sort of
-default. Other languages leave the value uninitialized, and make no promises
+default. Other languages leave the value uninitialized and make no promises
 about what happens if you try to use something before initialization. Rust
 responds with an error to prod the programmer to declare the value they want.
 We must initialize any variable before we can use it.
@@ -134,10 +127,10 @@ src/main.rs:4:39: 4:40 help: run `rustc --explain E0381` to see a detailed expla
 ```
 
 This tells us that if we pass the `--explain` flag to `rustc` with the provided
-error code, we can see an extended explanation, which will try to explain
-common causes of and solutions to that kind of error. Not every error has a
-longer explanation, but many do. Here’s the explanation for the `E0381` error
-we received previously:
+error code, we can see an extended explanation which will try to explain common
+causes of and solutions to that kind of error. Not every error has a longer
+explanation, but many do. Here’s the explanation for the `E0381` error we
+received previously:
 
 ```bash
 $ rustc --explain E0381
@@ -167,9 +160,7 @@ illustrate this:
 ```rust,ignore
 fn main() {
     let x = 5;
-
     x = 6;
-
     println!("The value of x is: {}", x);
 }
 ```
@@ -198,11 +189,8 @@ following:
 ```rust
 fn main() {
     let mut x = 5;
-
     println!("The value of x is: {}", x);
-
     x = 6;
-
     println!("The value of x is: {}", x);
 }
 ```
@@ -221,16 +209,10 @@ Using `mut`, we change the value that `x` binds to from `5` to `6`. Note,
 however, that `mut` is part of the pattern in the `let` statement. This becomes
 more obvious if we try to add mutability to a pattern that binds multiple
 variables in the same way as we did for a single variable, like this:
-<!--- Steve: regarding our previous note on avoiding negative examples -- if we
-do want to show a negative example, we ought to make it clear that that's
-what's going to happen, so the reader doesn't go through expecting their code
-to work and then gets a faceful of error. I've edited above slightly with this
-in mind /Liz -->
 
 ```rust,ignore
 fn main() {
     let (mut x, y) = (5, 6);
-
     x = 7;
     y = 8;
 }
@@ -251,58 +233,10 @@ src/main.rs:2     let (mut x, y) = (5, 6);
 ```
 
 The way `mut` is used here, the compiler is fine with reassigning the `x`
-variable, but not the `y` variable. That's because `mut` only applies to the
+variable but not the `y` variable. That's because `mut` only applies to the
 name that directly follows it, not the whole pattern. For the compiler to allow
 you to reassign the `y` variable, you'd need to write the pattern as `(mut x,
 mut y)` instead.
-
-<!-- If I change the example to have `(mut x, mut y)`, it compiles but gives me
-warnings about unused variables and assignments. Do we care about that? Could
-be easily solved by throwing in some println!s as in previous examples. /Carol
--->
-
-One thing to know about mutating bindings: `mut` allows you to mutate _the
-binding_, but not _what the name binds to_. In other words, the value is not
-what changes, but rather the path between the value and the name. For example:
-
-```rust
-fn main() {
-    let mut x = 5;
-
-    x = 6;
-}
-```
-
-This does not change the value that `x` is bound to, but creates a new value
-(`6`) and changes the binding so that it binds the name `x` to this new value
-instead. This subtle but important difference will become more important as
-your Rust programs get more complex.
-
-<!--
-I feel like this example doesn't make the concept of "mutating the binding, not
-the value" clear to me... what about this instead?
-
-```rust
-fn main() {
-    let mut x = 5;
-    let y = x;
-
-    x = x + 1;
-
-    println!("The value of x is {}. The value of y is {}.", x, y);
-}
-```
-
-which prints out "The value of x is 6. The value of y is 5.". The 5 is still
-around in y, where in the previous example I don't really have a way to *see*
-that. This example also has some subtlety around value vs reference that I'm
-not sure *I* understand precisely correctly, so perhaps this isn't really a
-good example of "mutating the binding, not the value" ;)
-
-I do feel like either this example could be more illustrative or this whole
-aside should be taken out to be addressed later, though.
-/Carol
--->
 
 ### Variable Binding Scope
 
@@ -312,25 +246,13 @@ binding is declared, and ends with the curly brace that closes the block of
 code containing that binding. We cannot access bindings "before they come into
 scope" or "after they go out of scope." Here’s an example to illustrate this:
 
-<!-- I feel like these examples don't really illustrate anything since the
-println!s don't *use* x or y. They're basically comments. What do you think
-about encouraging the reader to modify the println!s in order to use x and y,
-to see when the compiler errors or not?
-
-For example, the first println! in the next example that says `println!("x is
-not yet in scope");` could instead say `println!("x is not yet in scope. Try to
-print x in this statement to see the compiler error!");`. When x is in scope,
-the println!s could use it.
-
-/Carol -->
-
 ```rust
 fn main() {
-    println!("x is not yet in scope");
+    println!("x is not yet in scope. Try to print x in this statement to see the compiler error!");
 
     let x = 5;
 
-    println!("x is now in scope");
+    println!("x is now in scope and its value is {}.", x);
 
     println!("In real code, we’d now do a bunch of work.");
 
@@ -347,26 +269,27 @@ braces (we'll look at this more in the next chapter). For example:
 
 ```rust
 fn main() {
-
     println!("x is not yet in scope");
 
     let x = 5;
 
-    println!("x is now in scope");
-
+    println!("x is now in scope and its value is {}.", x);
+    println!("y is not yet in scope. Try to print y in this statement to see the compiler error!");
     println!("Let’s start a new scope!");
 
     {
-        let y = 5;
+        println!("y is still not yet in scope...");
+        let y = 8;
 
-        println!("y is now in scope");
-        println!("x is also still in scope");
+        println!("NOW y is in scope and its value is {}", y);
+        println!("x is also still in scope with value {}", x);
 
         println!("y will go out of scope now!");
         println!("The next curly brace is ending the scope we started.");
     }
 
-    println!("x is still in scope, but y is now out of scope and is not usable");
+    println!("x is still in scope: {}", x);
+    println!("y is now out of scope and is not usable. Try using it here!");
 
     println!("x will go out of scope now! The next curly brace is ending the main function.");
 }
@@ -379,22 +302,12 @@ much more important later as you learn about references in Chapter XX.
 
 ### Shadowing Earlier Bindings
 
-<!--- TR: Can you help add a definition of shadowing, to let the reader know
-what to look out for here? The shadowed value takes precedance over the
-original value? /Liz -->
-<!-- I wanted to make sure I got this correct, so I
-did some research-- the wikipedia page on variable shadowing
-(https://en.wikipedia.org/wiki/Variable_shadowing) says "This outer variable is
-said to be shadowed by the inner variable, while the inner identifier is said
-to mask the outer identifier." so I reworded the sentence needing the
-definition since it was backwards. /Carol -->
-One final thing about bindings: they can *shadow* previous bindings with the
-same name. Shadowing is what happens when you declare two bindings with the
-same name. We say that the first binding is ‘shadowed’ by the second, which
-means that the second binding's value is what you will see when you use the
-variable after the second binding. This can be useful if you’d like to perform
-a few transformations on a value, but still leave the binding immutable. For
-example:
+One final thing about bindings: they can *shadow* previous bindings. Shadowing
+is what happens when you declare two bindings with the same name. We say that
+the first binding is ‘shadowed’ by the second, which means that the second
+binding's value is what you will see when you use the variable after the second
+binding. This can be useful if you’d like to perform a few transformations on a
+value, but still leave the binding immutable. For example:
 
 ```rust
 fn main() {
@@ -408,11 +321,11 @@ fn main() {
 }
 ```
 
-This program first binds `x` to a value of `5`. Then, it shadows `x`, taking
-the original value and adding `1` so that the value of `x` is then `6`. The
-third `let` statement shadows `x` again, taking the previous value and
-multiplying it by `2` to give `x` a final value of `12`. If you run this, it
-will output:
+This program first binds `x` to a value of `5`. Then, it shadows `x` by saying
+`let x =` again, taking the original value and adding `1` so that the value of
+`x` is then `6`. The third `let` statement also shadows `x`, taking the
+previous value and multiplying it by `2` to give `x` a final value of `12`. If
+you run this, it will output:
 
 ```bash
 $ cargo run
@@ -422,8 +335,8 @@ The value of x is: 12
 ```
 
 Shadowing is useful because it lets us modify `x` without having to make the
-variable mutable. This means the compiler will still warn us if we accidentally
-try to mutate `x` directly later. For example, say after calculating `12` we
+variable mutable. This means the compiler will still keep us from accidentally
+trying to mutate `x` directly later. For example, say after calculating `12` we
 don’t want `x` to be modified again; if we write the program in a mutable
 style, like this:
 
@@ -443,8 +356,8 @@ fn main() {
 ```
 
 Rust is happy to let us mutate `x` again, to `15`. A similar program using the
-default immutable style, however, will let us know about that accidental
-mutation. Here's an example:
+default immutable style, however, will prevent us from mutating `x`. Here's an
+example:
 
 ```rust,ignore
 fn main() {
@@ -476,7 +389,8 @@ error: aborting due to previous error
 Could not compile `bindings`.
 ```
 
-Since we don't want the binding to be mutable, this exactly what should happen.
+Since we don't want the binding to be mutable, this is exactly what should
+happen.
 
 #### Shadowing Over Bindings
 
@@ -505,12 +419,12 @@ The value of x is: 6
 ```
 
 Rust gives the value of `x` as `6`, which is the value from the *second* `let`
-statement. There are a few interesting things in this output. First, that Rust
+statement. There are a few interesting things in this output. First, Rust
 will compile and run the program without issue. This is because we haven't
 mutated the value; instead, we declared a _new_ binding that is _also_ named
 `x`, and gave it a new value.
 
-The other interesting thing in this output is this error line:
+The other interesting thing in this output is this warning line:
 
 ```bash
 src/main.rs:2:9: 2:10 warning: unused variable: `x`, #[warn(unused_variables)] on by default
@@ -541,12 +455,10 @@ end of a scope. Here’s an example program to illustrate this:
 ```rust
 fn main() {
     let x = 5;
-
     println!("Before shadowing, x is: {}", x);
 
     {
         let x = 6;
-
         println!("Now that x is shadowed, x is: {}", x);
     }
 
@@ -555,7 +467,7 @@ fn main() {
 ```
 
 This code first creates the `x` variable and prints `x` to the terminal. Then,
-inside a new scope, it creates a new binding for `x` with a new value, and
+inside a new scope, it creates a new binding for `x` with a new value and
 prints that value. When the arbitrary scope ends, `x` is printed once more. If
 we run this example, we can see the shadow appear and disappear in the output:
 
