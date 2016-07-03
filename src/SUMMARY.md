@@ -13,8 +13,7 @@
     - [Data Types in Rust](ch03-04-data-types-in-rust.md)
     - [How Functions Work in Rust](ch03-05-how-functions-work-in-rust.md)
     - [Comments](ch03-06-comments.md)
-    - [Control flow with `if`](ch03-07-if.md)
-    - [Loops](ch03-08-loops.md)
+    - [Control flow](ch03-07-control-flow.md)
 
 - [Understanding Ownership](ch04-01-understanding-ownership.md)
     - [Ownership](ch04-02-ownership.md)
