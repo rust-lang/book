@@ -32,7 +32,7 @@
     - [if let](ch06-04-if-let.md)
     - [Patterns](ch06-05-patterns.md)
 
-- [Chapter 7 - Crates & Modules]()
+- [Chapter 7 - Packages, Crates & Modules](ch07-01-packages-crates-and-modules.md)
 
 - [Chapter 8 - Error Handling]()
 
