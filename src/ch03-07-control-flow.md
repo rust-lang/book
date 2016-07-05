@@ -1,9 +1,12 @@
 ## Control Flow
 
-<!--Au: Can you please add a general intro for control flow and the following
-if and loops sections here? /Liz -->
+Deciding whether or not to run some code depending on if a condition is true,
+or deciding to run some code repeatedly while a condition is true, are basic
+building blocks in most programming languages. The most common constructs that
+let us control the flow of execution of our Rust code are `if` expressions and
+loops.
 
-### `if` Statements
+### `if` Expressions
 
 > Two roads diverged in a yellow wood,
 > And sorry I could not travel both
@@ -13,10 +16,9 @@ if and loops sections here? /Liz -->
 >
 > - Robert Frost, “The Road Not Taken”
 
-In Rust, as in most programming languages, an `if` expression allows us to
-branch our code depending on conditions. We provide a condition, and then say,
-`if` this condition is met, then run this block of code. If the condition is
-not met, do not run this block of code.
+An `if` expression allows us to branch our code depending on conditions. We
+provide a condition and then say, "If this condition is met, then run this
+block of code. If the condition is not met, do not run this block of code."
 
 Let’s make a new project to explore `if`. Navigate to your projects directory,
 and use Cargo to make a new project called `branches`:
@@ -40,7 +42,7 @@ fn main() {
 ```
 
 The `condition` variable is a boolean; here, it's set to true. All `if`
-statements start with `if`, which is followed by a condition. The block of code
+expressions start with `if`, which is followed by a condition. The block of code
 we want to execute if the condition is true goes immediately after the
 condition, inside curly braces. These blocks are sometimes called ‘arms’.
 
@@ -98,17 +100,6 @@ condition was false
 This time, because `condition` was false and we have an `else` block, the
 `else` block was executed.
 
-<!-- TR: Do these examples make sense this way round, or would it be clearer to
-give the example using the if statement alone, and then the example giving the
-if and else statements? /Liz -->
-<!-- I think having just `if` first, then `if`+`else` would be better... this
-section also reads pretty repetitively to me, which I think would be great if
-the target audience was people who hadn't programmed before, but I think people
-who have used at least one other programming language should be pretty familiar
-with the concept of how an `if` statement works and just need to know the
-particulars of the syntax in Rust. I've given rearranging this section a try,
-see what you think! /Carol -->
-
 It’s also worth noting that `condition` here _must_ be a `bool`. To see what
 happens if the condition isn't a `bool`, try running this code:
 
@@ -142,10 +133,19 @@ Could not compile `branches`.
 The error tells us that Rust expected a `bool`, but got an integer. Rust will
 not automatically try to convert non-boolean types to a boolean here, unlike
 languages like Ruby or JavaScript. We must be explicit and always give `if` a
-`boolean` as its condition.
+`boolean` as its condition. If your intention is for the `if` code block to be run if a number is not equal to `0`, for example, we would change the `if` expression to read:
 
-<!--TR: What must we be explicit about? /Liz -->
-<!-- Expanded a bit /Carol -->
+```rust
+fn main() {
+    let condition = 5;
+
+    if condition != 0 {
+        println!("condition was something other than zero");
+    }
+}
+```
+
+Running this will print "condition was something other than zero".
 
 #### Multiple Conditions with `else if`
 
@@ -218,9 +218,9 @@ The value of number is: 5
 Remember, blocks of code evaluate to the last expression in them, and numbers
 by themselves are also expressions. In this case, the value of the whole `if`
 expression depends on which block of code executes. This means that the value
-in both arms of the `if` must be the same type; in the previous example, they
-were both `i32` integers. But what happens if the types are mismatched, as in
-the following example?
+that results from both arms of the `if` must be the same type; in the previous
+example, they were both `i32` integers. But what happens if the types are
+mismatched, as in the following example?
 
 ```rust,ignore
 fn main() {
@@ -236,9 +236,9 @@ fn main() {
 }
 ```
 
-The expression in one block of the `if` statement, is an integer and the
-expresion in the other block is a string. If we try to run this, we’ll get an
-error:
+The expression in the `if` block is an integer and the expresion in the `else`
+block is a string. This can’t work, because variable bindings must have a
+single type. If we try to run this, we’ll get an error:
 
 ```bash
    Compiling branches v0.1.0 (file:///projects/branches)
@@ -258,8 +258,7 @@ Could not compile `branches`.
 ```
 
 The `if` and `else` arms have value types that are incompatible, and Rust tells
-us exactly where to find the problem in our program. This can’t work, because
-variable bindings must have a single type.
+us exactly where to find the problem in our program.
 
 ### Repetition with Loops
 
@@ -279,12 +278,8 @@ in.
 
 #### Repeating Code with `loop`
 
-<!--TR: By "keyword" do we just mean a statement or function embedded in the
-Rust language, that can't be changed? /Liz -->
-<!-- Yup, see the keyword section I added at the beginning. /Carol -->
-
 The `loop` keyword tells Rust to execute a block of code over and over again
-forever, or until we explicitly tell it to stop.
+forever or until we explicitly tell it to stop.
 
 For an example, change the *src/main.rs* file in your *loops* directory to look
 like this:
@@ -311,15 +306,12 @@ again!
 again!
 ^Cagain!
 ```
-<!-- TR: Is this correct, it will print "again" one last time after hitting
-ctrl c? /Liz -->
-<!-- Sometimes it will-- it depends on where in the execution the program is at
-the exact instant you hit control-c. /Carol -->
 
-That `^C` there is where I hit `control-c`. Fortunately, Rust provides another,
-more reliable way to break out of a loop. We can place the `break` keyword
-within the loop to tell the program when to stop executing the loop. Try this
-version of the program out:
+That `^C` there is where I hit `control-c`. You may or may not see "again!" printed after the `^C`, depending on where the code was in the loop when it received the signal to halt.
+
+Fortunately, Rust provides another, more reliable way to break out of a loop.
+We can place the `break` keyword within the loop to tell the program when to
+stop executing the loop. Try this version of the program out:
 
 ```rust
 fn main() {
@@ -384,24 +376,10 @@ This program loops three times, counting down each time. Finally, after the
 loop, it prints another message, then exits.
 
 The core of this example is in the combination of `loop`, `if`, `else`, and
-`break`.
-
-<!--```rust,ignore
-    loop {
-        if number != 0 {
-            // do stuff
-        } else {
-            break;
-        }
-```-->
-<!--TR/au: I'm not sure we need to repeat this so close to its first appearance
-/Liz -->
-<!-- Agreed /Carol -->
-
-We want to `loop`, but only while some sort of condition is true. As soon as it
-isn't, we want to `break` out of the loop. This pattern is so common that Rust
-has a more efficient language construct for it, called a `while` loop. Here's
-the same example, but using `while` instead:
+`break`. We want to `loop`, but only while some sort of condition is true. As
+soon as it isn't, we want to `break` out of the loop. This pattern is so common
+that Rust has a more efficient language construct for it, called a `while`
+loop. Here's the same example, but using `while` instead:
 
 ```rust
 fn main() {
@@ -438,10 +416,6 @@ fn main() {
 }
 ```
 
-<!-- I changed the numbers in the array to be 10, etc just to avoid any
-possible confusion with 0-based and 1-based array indexing that some people
-might have. /Carol -->
-
 Here, we're counting up through the elements in the array. We start at index 0,
 then loop until we hit the final index of our array (that is, when `index < 5`
 is no longer true). Running this will print out every element of the array:
@@ -466,8 +440,8 @@ getting the index length incorrect. It's also slow, as the compiler needs to
 perform the conditional check on every element on every iteration through the
 loop.
 
-As a more efficient alternative, we can use a `for` loop. A `for` loop looks
-something like this:
+As a more efficient alternative, we can use a `for` loop and execute some code
+for each item in a collection. A `for` loop looks like this:
 
 ```rust
 fn main() {
@@ -479,25 +453,17 @@ fn main() {
 }
 ```
 
-** NOTE: see [https://github.com/rust-lang/rust/issues/25725#issuecomment-166365658](https://github.com/rust-lang/rust/issues/25725#issuecomment-166365658), we may want to change this **
+If we run this, we'll see the same output as the previous example. Importantly,
+though, we've now increased the safety of our code and eliminated the chance of
+bugs resulting from going beyond the end of the array or not going far enough
+and missing some items.
 
+For example, in the previous code that uses the `while` loop, if we removed an
+item from the `a` array but forgot to update the condition to be `while index <
+4`, our code would panic. Using the `for` loop means we would not need to
+remember to change any other code if we changed the the number of values in the
+array.
 
-If we run this, we'll see the same output as the previous example.
-
-<!--- Perhaps explain the difference, and how this handles the same operations
-differently to while -->
-
-<!-- Steve - so this needs wrapping up, and the chapter needs a general summary
-of some sort. Does this need to wait for long? -->
-
-** I'm going to leave it at this for now until we decide how we want to do it**
-
-<!-- Au/TR Has this issue been resolved? We'll need a chapter wrap up, do we
-need to come back to this at a later date? /Liz -->
-
-<!-- The issue has not been resolved... but I think it's ok to gloss over the
-details a bit, or point to the chapters where method syntax or vecs will be
-discussed? There are other issues that people will run into pretty quickly if
-they try to actually use arrays at this point, such as the fact that they have
-to be a fixed size known at compile time, so it's not like someone would be
-able to put down the book at this point and be productive in Rust. /Carol -->
+If you're wondering about the `.iter()` code in this example, keep reading! We
+will cover method syntax generally in Chapter XX and iterators specifically in
+Chapter XX. For now, though, let's get into the concept of ownership.
