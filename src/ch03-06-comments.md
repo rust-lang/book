@@ -1,8 +1,9 @@
 ## Comments
 
 All programmers strive to make their code easy to understand, but sometimes
-some extra explanation is warranted. In these cases, we leave notes in our
-source code that the compiler will ignore. These notes are called *comments*.
+extra explanation is warranted. In these cases, we leave notes in our source
+code that the compiler will ignore but people reading the source code may find
+useful. These notes are called *comments*.
 
 Here’s a simple comment:
 
@@ -10,9 +11,9 @@ Here’s a simple comment:
 // Hello, world.
 ```
 
-In Rust, comments must start with two slashes, and will last until the end of
-the line. For comments that extend beyond a single line, you'll need to include
-`//` on each line, like this:
+In Rust, comments must start with two slashes and will last until the end of
+the line. For comments that extend beyond a single line, you'll either need to
+include `//` on each line, like this:
 
 ```rust
 // So we’re doing something complicated here, long enough that we need
@@ -20,6 +21,14 @@ the line. For comments that extend beyond a single line, you'll need to include
 // explain what’s going on.
 ```
 
+Or use `/*` at the beginning of your comment and `*/` at the end:
+
+```rust
+/*
+Another style of multiline comment! Most Rust code uses the previous
+style, but you can use this if you prefer.
+*/
+```
 Comments can also be placed at the end of lines of code:
 
 ```rust
@@ -54,7 +63,7 @@ usually people who are using your code, so that they know how to interact with
 it. Regular comments won't be shown in `rustdoc` generated HTML, so their
 intended audience is people who are reading and editing your code.
 
-Documentation comments use an extra slash, like this:
+Documentation comments use an extra slash or an extra star, like this:
 
 ```rust
 /// The foo function doesn’t really do much.
@@ -68,11 +77,20 @@ fn foo() {
 fn bar() {
 
 }
+
+/**
+Multiple line documentation comments
+can also use this style.
+*/
+fn baz() {
+
+}
 ```
 
-The `rustdoc` tool would interpret each comment in this example as documenting
+The `rustdoc` tool will interpret each comment in this example as documenting
 the thing that follows it. The first comment would be used to document the
-`foo()` function, and the second comment would document the `bar()` function.
+`foo()` function, the second comment would document the `bar()` function, and
+so forth.
 
 Because documentation comments have semantic meaning to `rustdoc`, the compiler
 will pay attention to the placement of your documentation comments. For
@@ -94,8 +112,6 @@ This happens because Rust expects a document comment to be associated with
 whatever code comes directly after it, so it sees that a document comment alone
 must be a mistake.
 
-<!-- Steve-- since documenting free functions in a binary doesn't generate
-useful rustdoc, but that's all that has been covered so far, can this section
-end with a sentence that says something like "We'll cover generating
-documentation for your libraries in chapter XX" or similar? Wherever you talk
-about `cargo doc`? /Carol -->
+Providing documentation for libraries is a best practice that the Rust community
+strives to do to be helpful to each other. We'll cover how you can generate
+great API documentation for your library in more detail in Chapter XX.
