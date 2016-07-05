@@ -135,7 +135,7 @@ the function’s body.
 Inside the function body, we added the following:
 
 ```rust,ignore
-    let x = 5;
+let x = 5;
 ```
 
 This is a `let` statement, and it binds the value `5` to the variable `x`.
