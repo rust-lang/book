@@ -106,7 +106,7 @@ functions means that you almost never need them anywhere else.
 You can separate multiple arguments with a comma:
 
 ```text
-fn NAME(PATTERN, PATTERN, PATTERN, PATTERN...) {
+fn NAME(PATTERN: TYPE, PATTERN: TYPE, PATTERN: TYPE, PATTERN: TYPE...) {
 ```
 
 Here’s a full example:
@@ -168,7 +168,7 @@ passed as parameters don’t need to have the same name as the arguments.
 Functions can also return values back to the function that called them:
 
 ```TEXT
-fn NAME(PATTERN, PATTERN, PATTERN, PATTERN...) -> TYPE {
+fn NAME(PATTERN: TYPE, PATTERN: TYPE, PATTERN: TYPE, PATTERN: TYPE...) -> TYPE {
 ```
 
 We don’t name return values, but we do declare their type, after an arrow:
