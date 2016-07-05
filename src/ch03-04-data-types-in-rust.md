@@ -1,4 +1,3 @@
-
 ## Data Types in Rust
 
 Every value in Rust is of a certain *type*, which tells Rust what kind of data
