@@ -966,7 +966,7 @@ fn another_function(x: i32) {
 type. This is a deliberate decision; we find that requiring type annotations in
 functions means that you almost never need them anywhere else.</p>
 <p>You can separate multiple arguments with a comma:</p>
-<pre><code class="language-text">fn NAME(PATTERN, PATTERN, PATTERN, PATTERN...) {
+<pre><code class="language-text">fn NAME(PATTERN: TYPE, PATTERN: TYPE, PATTERN: TYPE, PATTERN: TYPE...) {
 </code></pre>
 <p>Here’s a full example:</p>
 <pre><code class="language-rust">fn main() {
@@ -1011,7 +1011,7 @@ only its parameters are in scope, so we need to use those names. Bindings
 passed as parameters don’t need to have the same name as the arguments.</p>
 <h2>Return values</h2>
 <p>Functions can also return values back to the function that called them:</p>
-<pre><code class="language-TEXT">fn NAME(PATTERN, PATTERN, PATTERN, PATTERN...) -&gt; TYPE {
+<pre><code class="language-TEXT">fn NAME(PATTERN: TYPE, PATTERN: TYPE, PATTERN: TYPE, PATTERN: TYPE...) -&gt; TYPE {
 </code></pre>
 <p>We don’t name return values, but we do declare their type, after an arrow:
 <code>-&gt;</code>. Here’s a sample program:</p>
