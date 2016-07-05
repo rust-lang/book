@@ -12,7 +12,7 @@ Here’s a simple comment:
 ```
 
 In Rust, comments must start with two slashes and will last until the end of
-the line. For comments that extend beyond a single line, you'll either need to
+the line. For comments that extend beyond a single line, you'll need to
 include `//` on each line, like this:
 
 ```rust
@@ -21,14 +21,6 @@ include `//` on each line, like this:
 // explain what’s going on.
 ```
 
-Or use `/*` at the beginning of your comment and `*/` at the end:
-
-```rust
-/*
-Another style of multiline comment! Most Rust code uses the previous
-style, but you can use this if you prefer.
-*/
-```
 Comments can also be placed at the end of lines of code:
 
 ```rust
@@ -63,7 +55,7 @@ usually people who are using your code, so that they know how to interact with
 it. Regular comments won't be shown in `rustdoc` generated HTML, so their
 intended audience is people who are reading and editing your code.
 
-Documentation comments use an extra slash or an extra star, like this:
+Documentation comments use an extra slash, like this:
 
 ```rust
 /// The foo function doesn’t really do much.
@@ -77,20 +69,11 @@ fn foo() {
 fn bar() {
 
 }
-
-/**
-Multiple line documentation comments
-can also use this style.
-*/
-fn baz() {
-
-}
 ```
 
 The `rustdoc` tool will interpret each comment in this example as documenting
 the thing that follows it. The first comment would be used to document the
-`foo()` function, the second comment would document the `bar()` function, and
-so forth.
+`foo()` function and the second comment would document the `bar()` function.
 
 Because documentation comments have semantic meaning to `rustdoc`, the compiler
 will pay attention to the placement of your documentation comments. For
