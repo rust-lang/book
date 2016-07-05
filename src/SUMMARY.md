@@ -1,13 +1,13 @@
 # The Rust Programming Language
 
-- [Chapter 1 - Introduction](ch01-01-introduction.md)
+- [Introduction](ch01-01-introduction.md)
     - [Installation](ch01-02-installation.md)
     - [Hello, World!](ch01-03-hello-world.md)
     - [The Design of Rust](ch01-04-design.md)
 
-- [Chapter 2 - Tutorial]()
+- [Tutorial]()
 
-- [Chapter 3 - Up and Running](ch03-01-up-and-running.md)
+- [Up and Running](ch03-01-up-and-running.md)
     - [Variable Bindings](ch03-02-variable-bindings.md)
     - [Functions](ch03-03-functions.md)
     - [Scalar Types](ch03-04-scalar-types.md)
@@ -16,83 +16,83 @@
     - [Control flow with `if`](ch03-07-if.md)
     - [Loops](ch03-08-loops.md)
 
-- [Chapter 4 - Understanding Ownership](ch04-01-understanding-ownership.md)
+- [Understanding Ownership](ch04-01-understanding-ownership.md)
     - [Ownership](ch04-02-ownership.md)
     - [References & Borrowing](ch04-03-references-and-borrowing.md)
     - [Slices](ch04-04-slices.md)
 
-- [Chapter 5 - Structs](ch05-01-structs.md)
+- [Structs](ch05-01-structs.md)
     - [Method Syntax](ch05-02-method-syntax.md)
     - [Generics](ch05-03-generics.md)
     - [Advanced]()
 
-- [Chapter 6 - Enums](ch06-01-enums.md)
+- [Enums](ch06-01-enums.md)
     - [Option](ch06-02-option.md)
     - [Match](ch06-03-match.md)
     - [if let](ch06-04-if-let.md)
     - [Patterns](ch06-05-patterns.md)
 
-- [Chapter 7 - Crates & Modules]()
+- [Crates & Modules]()
 
-- [Chapter 8 - Error Handling]()
+- [Error Handling]()
 
-- [Chapter 9 - Basic Collections]()
+- [Basic Collections]()
     - [Vectors]()
     - [Strings]()
     - [`HashMap<K, V>`]()
 
-- [Chapter 10 - Lifetimes]()
+- [Lifetimes]()
 
-- [Chapter 11 - Traits]()
+- [Traits]()
 
-- [Chapter 12 - Closures]()
+- [Closures]()
 
-- [Chapter 13 - Iterators]()
+- [Iterators]()
 
-- [Chapter 14 - I/O]()
+- [I/O]()
     - [`Read` & `Write`]()
     - [`std::fs`]()
     - [`std::path`]()
     - [`std::env`]()
 
-- [Chapter 15 - Testing]()
+- [Testing]()
 
-- [Chapter 16 - Smart Pointers]()
+- [Smart Pointers]()
     - [`Deref`]()
     - [`Deref` coercions]()
     - [`Box<T>`]()
     - [`Rc<T>`]()
 
-- [Chapter 17 - Concurrency]()
+- [Concurrency]()
     - [Threads]()
     - [`Send` & `Sync`]()
     - [`Arc<T>`]()
     - [`Mutex<T>`]()
     - [`Channels`]()
 
-- [Chapter 18 - Unsafe Rust]()
+- [Unsafe Rust]()
     - [Raw Pointers]()
     - [transmute]()
 
-- [Chapter 19 - FFI]()
+- [FFI]()
     - [Conditional Compilation]()
     - [Bindings to C]()
     - [Using Rust from Other Languages]()
     - [`static`]()
 
-- [Chapter 20 - Cargo]()
+- [Cargo]()
     - [Crates.io]()
 
-- [Chapter 21 - Advanced Type System Features]()
+- [Advanced Type System Features]()
     - [Associated Types]()
     - [Trait Objects]()
     - [UFCS]()
     - [Coherence]()
 
-- [Chapter 22 - Interior mutability]()
+- [Interior mutability]()
     - [`Cell<T>`]()
     - [`RefCell<T>`]()
 
-- [Chapter 23 - Macros]()
+- [Macros]()
 
-- [Chapter 24 - Nightly Rust]()
+- [Nightly Rust]()
