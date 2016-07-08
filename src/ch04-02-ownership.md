@@ -1,37 +1,30 @@
 # Ownership
 
-Rust’s central feature is called ‘ownership’. It is a feature that is
-straightforward to explain, but has deep implications for the rest of the
-language.
+Rust’s central feature is called ‘ownership’. It is a feature that is straightforward
+to explain, but has deep implications for the rest of the language.
 
-Rust is committed to both safety and speed. One of the key tools for balancing
-between them is “zero-cost abstractions”: the various abstractions in Rust do
-not pose a global performance penalty. The ownership system is a prime example
-of a zero-cost abstraction. All of the analysis we’ll talk about in this guide
-is done at compile time. You do not pay any run-time cost for any of these
-features.
+All programs have to manage the way they use a computer's memory while running. Some
+languages have garbage collection, while in others, the programmer has to explicitly
+allocate and free the memory. Rust takes a third approach: memory is managed through
+a system of ownership with a set of rules that the compiler checks at compile-time.
+You do not pay any run-time cost for any of these features.
 
-However, this system does have a certain cost: learning curve. Many new
-Rustaceans experience something we like to call ‘fighting with the borrow
-checker’, where the Rust compiler refuses to compile a program that the author
-thinks is valid. This can happen because the programmer isn’t used to thinking
-carefully about ownership, or is thinking about it differently from the way
-that Rust does. You probably will experience something similar at first. There is
-good news, however: more experienced Rust developers report that once they work
-with the rules of the ownership system for a period of time, they fight the
-borrow checker less and less. Keep at it!
+However, because ownership is a new concept for many programmers, it does take some
+time to get used to.  There is good news, however: the more experienced you become
+with Rust, and the rules of the ownership system, the more you'll be able to naturally
+develop code that is both safe and efficient. Keep at it!
 
-This chapter will give you a foundation for understanding the rest of the
-language. To do so, we’re going to learn through examples, focusing on a very
-common data structure: strings.
+Once you understand ownership, you have a good foundation for understanding the
+features that make Rust unique. Let's learn ownership by going through someexamples,
+focusing on a very common data structure: strings.
 
 ## Variable binding scope
 
-Let’s take a step back and look at the very basics again. Now that we’re past
-basic syntax, we won’t include all of the `fn main() {` stuff in examples, so
-if you’re following along, you will have to put them inside of a `main()`
-function. This lets our examples be a bit more concise, letting us focus on the
-actual details, rather than boilerplate.
+We've walked through an example of a Rust program already in the tutorial chapter.
+Now that we’re past basic syntax, we won’t include all of the fn main() { stuff in
+examples, so if you’re following along, you will have to put them inside of a main()
+function. This lets our examples be a bit more concise, letting us focus on the actual
+details rather than boilerplate.
 
 Anyway, here it is:
 
