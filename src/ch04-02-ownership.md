@@ -21,8 +21,8 @@ some examples, focusing on a very common data structure: strings.
 ## Variable binding scope
 
 We've walked through an example of a Rust program already in the tutorial chapter.
-Now that we’re past basic syntax, we won’t include all of the fn main() { stuff in
-examples, so if you’re following along, you will have to put them inside of a main()
+Now that we’re past basic syntax, we won’t include all of the `fn main() {` stuff in
+examples, so if you’re following along, you will have to put them inside of a `main()`
 function. This lets our examples be a bit more concise, letting us focus on the actual
 details rather than boilerplate.
 
