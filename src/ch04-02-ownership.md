@@ -15,8 +15,8 @@ with Rust, and the rules of the ownership system, the more you'll be able to nat
 develop code that is both safe and efficient. Keep at it!
 
 Once you understand ownership, you have a good foundation for understanding the
-features that make Rust unique. Let's learn ownership by going through someexamples,
-focusing on a very common data structure: strings.
+features that make Rust unique. In this chapter, we'll learn ownership by going through
+some examples, focusing on a very common data structure: strings.
 
 ## Variable binding scope
 
