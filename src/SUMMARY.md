@@ -5,7 +5,7 @@
     - [Hello, World!](ch01-03-hello-world.md)
     - [The Design of Rust](ch01-04-design.md)
 
-- [Tutorial]()
+- [Guessing Game Tutorial](ch02-01-guessing-game-tutorial.md)
 
 - [Up and Running](ch03-01-up-and-running.md)
     - [Anatomy of a Rust Program](ch03-02-anatomy-of-a-rust-program.md)
