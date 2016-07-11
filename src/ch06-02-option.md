@@ -1,9 +1,9 @@
 # Option
 
-Now that we have a handle on enums, let's combine them with a feature that we
-talked a little bit about in the previous chapter: generics.
+Now that we have had an introduction to enums, let's combine them with a
+feature that we talked a little bit about in the previous chapter: generics.
 
-Programming language design is often though of as which features you include,
+Programming language design is often thought of as which features you include,
 but it's also about which features you leave out. Rust does not have a feature
 that is in many other languages: 'null'. In languages with this feature,
 variables can have two states: null or not-null.
@@ -30,8 +30,8 @@ Even with these problems, the concept that null is trying to express is still a
 useful one: this is a value which is currently invalid or not present for some
 reason. The problem isn't with the concept itself, but with the particular
 implementation. As such, Rust does not have the concept of null, but we do have
-a type which can encode the concept of a value being present. We call this type
-`Option<T>`, and it looks like this:
+an enum which can encode the concept of a value being present or not present. We
+call this enum `Option<T>`, and it looks like this:
 
 ```rust
 enum Option<T> {
@@ -40,7 +40,7 @@ enum Option<T> {
 }
 ```
 
-This type is [provided by the standard library][option], and is so useful that
+This enum is [provided by the standard library][option], and is so useful that
 it's even in the prelude; you don't need to import it explicitly. Furthermore,
 so are its variants: you can say `Some` and `None` directly, without prefixing
 them with `Option::`.
@@ -67,8 +67,8 @@ In short, because `Option<T>` and `T` are different types. That's a bit too
 short though. Here's an example:
 
 ```rust,ignore
-let x = 5;
-let y = Some(5);
+let x: i8 = 5;
+let y: Option<i8> = Some(5);
 
 let sum = x + y;
 ```
@@ -76,8 +76,8 @@ let sum = x + y;
 This will not compile. We get an error message like this:
 
 ```text
-error: the trait `core::ops::Add<core::option::Option<_>>` is not implemented
-for the type `_` [E0277]
+error: the trait bound `i8: std::ops::Add<std::option::Option<i8>>` is not
+satisfied [E0277]
 
 let sum = x + y;
           ^~~~~
@@ -85,17 +85,26 @@ let sum = x + y;
 
 Intense! What this error message is trying to say is that Rust does not
 understand how to add an `Option<T>` and a `T`. They're different types! This
-shows one of the big advantages of an `Option<T>` type: if you have a type that
+shows one of the big advantages of an `Option<T>`: if you have a value that
 may or may not exist, you have to deal with that fact before you can assume it
 exists. In other words, you have to convert an `Option<T>` to a `T` before you
 can do `T` stuff with it. This helps catch one of the most common issues with
-null, generally: assuming that something isn't null, when it actually is.
+null, generally: assuming that something isn't null when it actually is.
 
-So, how _do_ you get a `T` from an `Option<T>`?  The option type has a large
-number of methods that you can check out in [its documentation], and becoming
-familiar with them will be extremely useful in your journey with Rust.
+This is pretty powerful: in order to have a value that can possibly be null,
+you have to explicitly opt in by making the type of that value an `Option<T>`.
+Then, when you use that value, you are required to explicitly handle the case
+when the value is null. Everywhere that a value has a type that isn't an
+`Option<T>`, you *can* safely assume that the value isn't null. This was a
+deliberate design decision for Rust to limit null's pervasiveness and increase
+the safety of Rust code.
+
+So, how _do_ you get a `T` from an `Option<T>`?  The `Option<T>` enum has a
+large number of methods that you can check out in [its documentation], and
+becoming familiar with them will be extremely useful in your journey with Rust.
 
 [its documentation]: ../std/option/enum.Option.html
 
 But we want a deeper understanding than that. If we didn't have those methods
-defined for us already, what would we do? For that, we need a new feature: `match`.
+defined for us already, what would we do? And more generally, how do we get
+the inner values out of any enum variant? We need a new feature: `match`.
