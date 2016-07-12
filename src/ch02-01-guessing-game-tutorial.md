@@ -7,14 +7,12 @@ prompt us to enter a guess. Upon entering our guess, it will tell us if we’re
 too low or too high. Once we guess correctly, it will congratulate us. Sound
 good?
 
-Along the way, we’ll learn a little bit about Rust. The next chapter, ‘Syntax
-and Semantics’, will dive deeper into each part.
 
 ## Set up
 
-Let’s set up a new project. Go to your projects directory. Remember how we had
-to create our directory structure and a `Cargo.toml` for `hello_world`? Cargo
-has a command that does that for us. Let’s give it a shot:
+Let’s set up a new project. Go to your projects directory. Remember the end of
+the `hello world` example that mentioned `cargo new` to create new cargo
+projects? Let’s give it a shot:
 
 ```bash
 $ cd ~/projects
@@ -114,7 +112,7 @@ you get a number of useful, `io`-related things, so that's what we've done here.
 fn main() {
 ```
 
-As you’ve seen before, the `main()` function is the entry point into your
+As you’ve seen in Chapter 1, the `main()` function is the entry point into the
 program. The `fn` syntax declares a new function, the `()`s indicate that
 there are no arguments, and `{` starts the body of the function. Because
 we didn’t include a return type, it’s assumed to be `()`, an empty
@@ -128,7 +126,7 @@ we didn’t include a return type, it’s assumed to be `()`, an empty
     println!("Please input your guess.");
 ```
 
-We previously learned that `println!()` is a [macro][macros] that
+We previously learned in Chapter 1 that `println!()` is a [macro][macros] that
 prints a [string][strings] to the screen.
 
 [macros]: macros.html
