@@ -353,18 +353,20 @@ rand = "0.3.14"
 ```
 
 The `[dependencies]` section of `Cargo.toml` is like the `[package]` section:
-everything that follows it is part of it, until the next section starts.
-Cargo uses the dependencies section to know what dependencies on external
-crates you have, and what versions you require. In this case, we’ve specified
-version `0.3.14`, which Cargo understands to be any release that’s compatible
-with this specific version. Cargo understands [Semantic Versioning][semver],
-which is a standard for writing versio numbers. A bare number like above is
-actually shorthand for `^0.3.14`, meaning "anything compatible with 0.3.14".
-If we wanted to use only `0.3.14` exactly, we could say `rand = "=0.3.14"`
-(note the equal sign within the version string). And if we wanted to use
-whatever the latest version currently is, we could use `*`. We could also use a
-range of versions. [Cargo’s documentation][cargodoc] contains more details
-about the different ways to specify dependencies.
+everything that follows the section heading is part of that section, until
+another section starts. Cargo uses the dependencies section to know what
+dependencies on external crates you have and what versions of those crates you
+require. In this case, we’ve specified the `rand` crate with the semantic
+version specifier `0.3.14`.
+
+Cargo understands [Semantic Versioning][semver], which is a standard for
+writing version numbers. A bare number like above is actually shorthand for
+`^0.3.14`, which means "any version that has a public API compatible with
+version 0.3.14". If we wanted to use only `0.3.14` exactly, we could say `rand
+= "=0.3.14"` (note the equal sign within the version string). And if we wanted
+to use whatever the latest version currently is, we could use `*`. [Cargo’s
+documentation][cargodoc] contains more details and other ways to specify
+dependencies.
 
 [semver]: http://semver.org
 [cargodoc]: http://doc.crates.io/crates-io.html
