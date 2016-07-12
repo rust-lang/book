@@ -624,13 +624,12 @@ I did mention that this won’t quite compile yet, though. Let’s try it:
 ```bash
 $ cargo build
    Compiling guessing_game v0.1.0 (file:///home/you/projects/guessing_game)
-src/main.rs:28:21: 28:35 error: mismatched types:
- expected `&collections::string::String`,
-    found `&_`
-(expected struct `collections::string::String`,
-    found integral variable) [E0308]
-src/main.rs:28     match guess.cmp(&secret_number) {
+src/main.rs:23:21: 23:35 error: mismatched types [E0308]
+src/main.rs:23     match guess.cmp(&secret_number) {
                                    ^~~~~~~~~~~~~~
+src/main.rs:23:21: 23:35 help: run `rustc --explain E0308` to see a detailed explanation
+src/main.rs:23:21: 23:35 note: expected type `&std::string::String`
+src/main.rs:23:21: 23:35 note:    found type `&_`
 error: aborting due to previous error
 Could not compile `guessing_game`.
 ```
@@ -812,7 +811,9 @@ You guessed: 59
 You win!
 Please input your guess.
 quit
-thread 'main' panicked at 'Please type a number!'
+thread 'main' panicked at 'Please type a number!: ParseIntError { kind: InvalidDigit }', src/libcore/result.rs:785
+note: Run with `RUST_BACKTRACE=1` for a backtrace.
+error: Process didn't exit successfully: `target/debug/guess` (exit code: 101)
 ```
 
 Ha! `quit` actually quits. As does any other non-number input. Well, this is
