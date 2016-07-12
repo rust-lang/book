@@ -116,9 +116,7 @@ As you’ve seen in Chapter 1, the `main()` function is the entry point into the
 program. The `fn` syntax declares a new function, the `()`s indicate that
 there are no arguments, and `{` starts the body of the function. Because
 we didn’t include a return type, it’s assumed to be `()`, an empty
-[tuple][tuples].
-
-[tuples]: primitive-types.html#tuples
+tuple. We will go over tuples in Chapter XX.
 
 ```rust,ignore
 println!("Guess the number!");
@@ -126,48 +124,36 @@ println!("Guess the number!");
 println!("Please input your guess.");
 ```
 
-We previously learned in Chapter 1 that `println!()` is a [macro][macros] that
-prints a [string][strings] to the screen.
-
-[macros]: macros.html
-[strings]: strings.html
+We previously learned in Chapter 1 that `println!()` is a macro that
+prints a string to the screen.
 
 ```rust,ignore
 let mut guess = String::new();
 ```
 
 Now we’re getting interesting! There’s a lot going on in this little line.
-The first thing to notice is that this is a [let statement][let], which is
-used to create ‘variable bindings’. They take this form:
+The first thing to notice is that this is a let statement, which is
+used to create ‘variable bindings’. Variable bindings will be covered in more
+detail in Chapter XX. Here's an example:
 
 ```rust,ignore
 let foo = bar;
 ```
 
-[let]: variable-bindings.html
-
 This will create a new binding named `foo`, and bind it to the value `bar`. In
 many languages, this is called a ‘variable’, but Rust’s variable bindings have
 a few tricks up their sleeves.
 
-For example, they’re [immutable][immutable] by default. That’s why our example
-uses `mut`: it makes a binding mutable, rather than immutable. Also, `let`
-doesn’t actually take a name on the left hand side of the assignment, it really
-accepts a ‘[pattern][patterns]’. We’ll use more complicated patterns later; for
-now, let's use only a name:
+For example, they’re immutable by default. That’s why our example
+uses `mut`: it makes a binding mutable, rather than immutable.
 
 ```rust
 let foo = 5; // immutable.
 let mut bar = 5; // mutable
 ```
 
-[immutable]: mutability.html
-[patterns]: patterns.html
-
 Oh, and `//` will start a comment, until the end of the line. Rust ignores
-everything in [comments][comments].
-
-[comments]: comments.html
+everything in comments.
 
 So now we know that `let mut guess` will introduce a mutable binding named
 `guess`, but we have to look at the other side of the `=` for what it’s
@@ -216,30 +202,28 @@ The next part will use this handle to get input from the user:
 .read_line(&mut guess)
 ```
 
-Here, we call the [`read_line()`][read_line] method on our handle.
-[Methods][method] are like associated functions but are only available on a
-particular instance of a type, rather than the type itself. We’re also passing
-one argument to `read_line()`: `&mut guess`.
+Here, we call the [`read_line()`][read_line] method on our handle. Methods are
+like associated functions but are only available on a particular instance of a
+type, rather than the type itself. We'll talk more about methods in Chapter XX.
+We’re also passing one argument to `read_line()`: `&mut guess`.
 
 [read_line]: ../std/io/struct.Stdin.html#method.read_line
-[method]: method-syntax.html
 
 Remember how we bound `guess` above? We said it was mutable. However,
 `read_line` doesn’t take a `String` as an argument: it takes a `&mut String`.
-Rust has a feature called ‘[references][references]’, which allows you to have
-multiple references to one piece of data, which can reduce copying. References
-are a complex feature, as one of Rust’s major selling points is how safe and
-easy it is to use references. We don’t need to know a lot of those details to
-finish our program right now, though. For now, all we need to know is that
-like `let` bindings, references are immutable by default. Hence, we need to
-write `&mut guess`, rather than `&guess`.
+The `&` is the feature of Rust called a ‘reference’, which allows you to have
+multiple ways to access one piece of data in order to reduce copying.
+References are a complex feature, as one of Rust’s major selling points is how
+safe and easy it is to use references. We don’t need to know a lot of those
+details to finish our program right now, though; Chapter XX will cover them in
+more detail. For now, all we need to know is that like `let` bindings,
+references are immutable by default. Hence, we need to write `&mut guess`,
+rather than `&guess`.
 
 Why does `read_line()` take a mutable reference to a string? Its job is
-to take what the user types into standard input, and place that into a
+to take what the user types into standard input and place that into a
 string. So it takes that string as an argument, and in order to add
-the input, it needs to be mutable.
-
-[references]: references-and-borrowing.html
+the input, that string needs to be mutable.
 
 But we’re not quite done with this line of code, though. While it’s
 a single line of text, it’s only the first part of the single logical line of
@@ -271,12 +255,11 @@ sub-libraries, like `io::Result`.
 The purpose of these `Result` types is to encode error handling information.
 Values of the `Result` type, like any type, have methods defined on them. In
 this case, `io::Result` has an [`expect()` method][expect] that takes a value
-it’s called on, and if it isn’t a successful one, [`panic!`][panic]s with a
+it’s called on, and if it isn’t a successful one, `panic!`s with a
 message you passed it. A `panic!` like this will cause our program to crash,
 displaying the message.
 
 [expect]: ../std/result/enum.Result.html#method.expect
-[panic]: error-handling.html
 
 If we don't call this method, our program will compile, but we’ll get a warning:
 
@@ -369,7 +352,7 @@ documentation][cargodoc] contains more details and other ways to specify
 dependencies.
 
 [semver]: http://semver.org
-[cargodoc]: http://doc.crates.io/crates-io.html
+[cargodoc]: http://doc.crates.io/specifying-dependencies.html
 
 Now, without changing any of our code, let’s build our project:
 
@@ -383,7 +366,8 @@ $ cargo build
    Compiling guessing_game v0.1.0 (file:///home/you/projects/guessing_game)
 ```
 
-(You may see different versions and the lines may be in a different order.)
+You may see different versions (but they will be compatible, thanks to semver!)
+and the lines may be in a different order.
 
 Lots of new output! Now that we have an external dependency, Cargo fetches the
 latest versions of everything from the *registry*, which is a copy of data from
@@ -439,9 +423,10 @@ do, the next time we `cargo build`, Cargo will update the index and re-evaluate
 our `rand` requirements.
 
 There’s a lot more to say about [Cargo][doccargo] and [its
-ecosystem][doccratesio], but for now, that’s all we need to know. Cargo makes
-it really easy to re-use libraries, so Rustaceans are able to write smaller
-projects which are assembled out of a number of sub-packages.
+ecosystem][doccratesio] that we will get into in Chapter XX, but for now,
+that’s all we need to know. Cargo makes it really easy to re-use libraries, so
+Rustaceans are able to write smaller projects which are assembled out of a
+number of sub-packages.
 
 [doccargo]: http://doc.crates.io
 [doccratesio]: http://doc.crates.io/crates-io.html
@@ -482,9 +467,7 @@ Next, we added another `use` line: `use rand::Rng`. We’re going to use a
 method in a moment, and it requires that `Rng` be in scope to work. The basic
 idea is this: methods are defined on something called ‘traits’, and for the
 method to work, it needs the trait to be in scope. For more about the
-details, read the [traits][traits] section.
-
-[traits]: traits.html
+details, read the traits section in Chapter XX.
 
 There are two other lines we added, in the middle:
 
@@ -495,14 +478,12 @@ println!("The secret number is: {}", secret_number);
 ```
 
 We use the `rand::thread_rng()` function to get a copy of the random number
-generator, which is local to the particular [thread][concurrency] of execution
+generator, which is local to the particular thread of execution
 we’re in. Because we put `use rand::Rng` above, the random number generator has
 a `gen_range()` method available. This method takes two numbers as arguments
 and generates a random number between them. It’s inclusive on the lower bound
 but exclusive on the upper bound, so we need `1` and `101` to ask for a number
 ranging from one to a hundred.
-
-[concurrency]: concurrency.html
 
 The second line prints out the secret number. This is useful while
 we’re developing our program to let us easily test it out, but we’ll be
@@ -714,12 +695,11 @@ The [`parse()` method on strings][parse] parses a string into some kind of
 number. Since it can parse a variety of numbers, we need to give Rust a hint as
 to the exact type of number we want. Hence, `let guess: u32`. The colon (`:`)
 after `guess` tells Rust we’re going to annotate its type. `u32` is an
-unsigned, thirty-two bit integer. Rust has [a number of built-in number
-types][number], but we’ve chosen `u32`. It’s a good default choice for a small
-positive number.
+unsigned, thirty-two bit integer. Rust has a number of built-in number
+types, but we’ve chosen `u32`. It’s a good default choice for a small
+positive number. You'll see the other number types in Chapter XX.
 
 [parse]: ../std/primitive.str.html#method.parse
-[number]: primitive-types.html#numeric-types
 
 Just like `read_line()`, our call to `parse()` could cause an error. What if
 our string contained `A👍%`? There’d be no way to convert that to a number. As
