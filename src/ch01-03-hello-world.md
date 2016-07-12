@@ -248,21 +248,26 @@ Inside this file, type the following information:
 
 ```toml
 [package]
-
 name = "hello_world"
 version = "0.1.0"
-authors = [ "Your name <you@example.com>" ]
+authors = ["Your name <you@example.com>"]
+
+[dependencies]
 ```
 
 The first line, `[package]`, indicates that the following statements are
 configuring a package. As we add more information to this file, we’ll add other
 sections, but for now, we just have the package configuration.
 
-The other three lines set the three bits of configuration that Cargo needs to
+The next three lines set the three bits of configuration that Cargo needs to
 know to compile your program: its name, what version it is, and who wrote it.
+Cargo gets this information from your environment. If it’s not correct, go ahead
+and fix that and save the file.
 
-Once you've added this information to the *Cargo.toml* file, save it to finish
-creating the configuration file.
+The last line, `[dependencies]`, is the start of a section for you to list any
+crates that your project will depend on, so that Cargo knows to download and
+compile those too. We won't need any other crates for this project, but we will
+in the guessing game tutorial in the next chapter.
 
 ## Building and Running a Cargo Project
 

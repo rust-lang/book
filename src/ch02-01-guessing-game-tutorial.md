@@ -29,10 +29,11 @@ Take a look at the generated `Cargo.toml`:
 
 ```toml
 [package]
-
 name = "guessing_game"
 version = "0.1.0"
 authors = ["Your Name <you@example.com>"]
+
+[dependencies]
 ```
 
 Cargo gets this information from your environment. If it’s not correct, go ahead
@@ -344,7 +345,8 @@ programs.
 
 Using external crates is where Cargo really shines. Before we can write
 the code using `rand`, we need to modify our `Cargo.toml`. Open it up, and
-add these few lines at the bottom:
+add this line at the bottom beneath the `[dependencies]` section header that
+Cargo created for you:
 
 ```toml
 [dependencies]
