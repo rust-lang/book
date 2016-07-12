@@ -349,22 +349,22 @@ Cargo created for you:
 ```toml
 [dependencies]
 
-rand="0.3.0"
+rand = "0.3.14"
 ```
 
 The `[dependencies]` section of `Cargo.toml` is like the `[package]` section:
 everything that follows it is part of it, until the next section starts.
 Cargo uses the dependencies section to know what dependencies on external
-crates you have, and what versions you require. In this case, we’ve specified version `0.3.0`,
-which Cargo understands to be any release that’s compatible with this specific version.
-Cargo understands [Semantic Versioning][semver], which is a standard for writing version
-numbers. A bare number like above is actually shorthand for `^0.3.0`,
-meaning "anything compatible with 0.3.0".
-If we wanted to use only `0.3.0` exactly, we could say `rand="=0.3.0"`
-(note the two equal signs).
-And if we wanted to use the latest version we could use `*`.
-We could also use a range of versions.
-[Cargo’s documentation][cargodoc] contains more details.
+crates you have, and what versions you require. In this case, we’ve specified
+version `0.3.14`, which Cargo understands to be any release that’s compatible
+with this specific version. Cargo understands [Semantic Versioning][semver],
+which is a standard for writing versio numbers. A bare number like above is
+actually shorthand for `^0.3.14`, meaning "anything compatible with 0.3.14".
+If we wanted to use only `0.3.14` exactly, we could say `rand = "=0.3.14"`
+(note the equal sign within the version string). And if we wanted to use
+whatever the latest version currently is, we could use `*`. We could also use a
+range of versions. [Cargo’s documentation][cargodoc] contains more details
+about the different ways to specify dependencies.
 
 [semver]: http://semver.org
 [cargodoc]: http://doc.crates.io/crates-io.html
@@ -374,10 +374,10 @@ Now, without changing any of our code, let’s build our project:
 ```bash
 $ cargo build
     Updating registry `https://github.com/rust-lang/crates.io-index`
- Downloading rand v0.3.8
- Downloading libc v0.1.6
-   Compiling libc v0.1.6
-   Compiling rand v0.3.8
+ Downloading rand v0.3.14
+ Downloading libc v0.2.14
+   Compiling libc v0.2.14
+   Compiling rand v0.3.14
    Compiling guessing_game v0.1.0 (file:///home/you/projects/guessing_game)
 ```
 
