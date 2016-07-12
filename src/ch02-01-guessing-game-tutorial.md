@@ -121,9 +121,9 @@ we didn’t include a return type, it’s assumed to be `()`, an empty
 [tuples]: primitive-types.html#tuples
 
 ```rust,ignore
-    println!("Guess the number!");
+println!("Guess the number!");
 
-    println!("Please input your guess.");
+println!("Please input your guess.");
 ```
 
 We previously learned in Chapter 1 that `println!()` is a [macro][macros] that
@@ -133,7 +133,7 @@ prints a [string][strings] to the screen.
 [strings]: strings.html
 
 ```rust,ignore
-    let mut guess = String::new();
+let mut guess = String::new();
 ```
 
 Now we’re getting interesting! There’s a lot going on in this little line.
@@ -190,8 +190,8 @@ a new value of some kind.
 Let’s move forward:
 
 ```rust,ignore
-    io::stdin().read_line(&mut guess)
-        .expect("Failed to read line");
+io::stdin().read_line(&mut guess)
+    .expect("Failed to read line");
 ```
 
 That’s a lot more! Let’s go bit-by-bit. The first line has two parts. Here’s
@@ -246,7 +246,7 @@ a single line of text, it’s only the first part of the single logical line of
 code. This is the second part of the line:
 
 ```rust,ignore
-        .expect("Failed to read line");
+.expect("Failed to read line");
 ```
 
 When you call a method with the `.foo()` syntax, you may introduce a newline
@@ -254,7 +254,7 @@ and other whitespace. This helps you split up long lines. We _could_ have
 written this code as:
 
 ```rust,ignore
-    io::stdin().read_line(&mut guess).expect("failed to read line");
+io::stdin().read_line(&mut guess).expect("failed to read line");
 ```
 
 But that gets hard to read. So we’ve split it up, two lines for two method
@@ -487,9 +487,9 @@ details, read the [traits][traits] section.
 There are two other lines we added, in the middle:
 
 ```rust,ignore
-    let secret_number = rand::thread_rng().gen_range(1, 101);
+let secret_number = rand::thread_rng().gen_range(1, 101);
 
-    println!("The secret number is: {}", secret_number);
+println!("The secret number is: {}", secret_number);
 ```
 
 We use the `rand::thread_rng()` function to get a copy of the random number
@@ -685,8 +685,8 @@ fn main() {
 The new two lines:
 
 ```rust,ignore
-    let guess: u32 = guess.trim().parse()
-        .expect("Please type a number!");
+let guess: u32 = guess.trim().parse()
+    .expect("Please type a number!");
 ```
 
 Wait a minute, I thought we already had a `guess`? We do, but Rust allows us
