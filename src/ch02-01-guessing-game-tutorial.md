@@ -330,7 +330,7 @@ You guessed: 6
 All right! Our first part is done: we can get input from the keyboard and then
 print it back out.
 
-# Generating a secret number
+## Generating a secret number
 
 Next, we need to generate a secret number. Rust does not yet include random
 number functionality in its standard library. The Rust team does, however,
@@ -532,7 +532,7 @@ You guessed: 5
 You should get different random numbers, and they should all be between 1 and
 100. Great job! Next up: comparing our guess to the secret number.
 
-# Comparing guesses
+## Comparing guesses
 
 Now that we’ve got user input, let’s compare our guess to the secret number.
 Here’s part of our next step. It won't quite compile yet though:
@@ -747,7 +747,7 @@ the secret number works, as well as guessing a number too small.
 Now we’ve got most of the game working, but we can only make one guess. Let’s
 change that by adding loops!
 
-# Looping
+## Looping
 
 The `loop` keyword gives us an infinite loop. Let’s add that in:
 
