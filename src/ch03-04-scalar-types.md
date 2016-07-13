@@ -89,7 +89,7 @@ two possible values:
 ```rust
 fn main() {
     let t = true;
-    let f: bool = false; // with explict type annotation
+    let f: bool = false; // with explicit type annotation
 }
 ```
 
@@ -110,7 +110,7 @@ fn main() {
 
 Rust’s `char` represents a [Unicode Scalar Value], which means that it can
 represent a lot more than just ASCII. ‘Character’ isn’t really a concept in
-Unicode, however: your human intutition for what a ‘character’ is may not match
+Unicode, however: your human intuition for what a ‘character’ is may not match
 up with a `char`. It also means that `char`s are four bytes each.
 
 [Unicode Scalar Value]: http://www.unicode.org/glossary/#unicode_scalar_value

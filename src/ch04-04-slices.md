@@ -110,7 +110,7 @@ Now we’re tracking both a start _and_ and ending index. Even more chances for
 things to go wrong. We now have three unrelated variable bindings floating
 around which need to be kept in sync.
 
-Luckily, Rust has a solution to this probem: string slices.
+Luckily, Rust has a solution to this problem: string slices.
 
 # String slices
 
