@@ -8,13 +8,12 @@
 - [Tutorial]()
 
 - [Up and Running](ch03-01-up-and-running.md)
-    - [Variable Bindings](ch03-02-variable-bindings.md)
-    - [Functions](ch03-03-functions.md)
-    - [Scalar Types](ch03-04-scalar-types.md)
-    - [Compound Types](ch03-05-compound-types.md)
+    - [Anatomy of a Rust Program](ch03-02-anatomy-of-a-rust-program.md)
+    - [Variable Bindings in Detail](ch03-03-variable-bindings-in-detail.md)
+    - [Data Types in Rust](ch03-04-data-types-in-rust.md)
+    - [How Functions Work in Rust](ch03-05-how-functions-work-in-rust.md)
     - [Comments](ch03-06-comments.md)
-    - [Control flow with `if`](ch03-07-if.md)
-    - [Loops](ch03-08-loops.md)
+    - [Control flow](ch03-07-control-flow.md)
 
 - [Understanding Ownership](ch04-01-understanding-ownership.md)
     - [Ownership](ch04-02-ownership.md)
