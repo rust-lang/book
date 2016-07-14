@@ -178,7 +178,7 @@ For example:
 fn main() {
     let t = true;
 
-    let f: bool = false; // with explict type annotation
+    let f: bool = false; // with explicit type annotation
 }
 ```
 
@@ -205,7 +205,7 @@ represent a lot more than just ASCII. Accented letters, Chinese/Japanese/Korean
 ideographs, emoji, and zero width spaces are all valid `char`s in Rust. Unicode
 Scalar Values range from `U+0000` to `U+D7FF` and `U+E000` to `U+10FFFF`
 inclusive. A "character" isn’t really a concept in Unicode, however, so your
-human intutition for what a "character" is may not match up with what a `char`
+human intuition for what a "character" is may not match up with what a `char`
 is in Rust. It also means that `char`s are four bytes each. You can learn more
 about Unicode Scalar Values at
 *http://www.unicode.org/glossary/#unicode_scalar_value* and find a chart for
