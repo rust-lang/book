@@ -12,8 +12,8 @@ checks at compile-time. You do not pay any run-time cost for any of these
 features.
 
 However, because ownership is a new concept for many programmers, it does take
-some time to get used to. There is good news, however: the more experienced you
-become with Rust, and the rules of the ownership system, the more you'll be
+some time to get used to. There is good news, though: the more experienced you
+become with Rust and the rules of the ownership system, the more you'll be
 able to naturally develop code that is both safe and efficient. Keep at it!
 
 Once you understand ownership, you have a good foundation for understanding the
@@ -28,17 +28,18 @@ main() {` stuff in examples, so if you’re following along, you will have to pu
 them inside of a `main()` function. This lets our examples be a bit more
 concise, letting us focus on the actual details rather than boilerplate.
 
-Anyway, here it is:
+Anyway, here is our first example:
 
 ```rust
 let s = "hello";
 ```
 
-This variable binding refers to a string literal. It’s valid from the point at
-which it’s declared, until the end of the current _scope_. That is:
+This variable binding refers to a string literal, where the value of the string
+is hard coded into the text of our program. The binding is valid from the point
+at which it’s declared until the end of the current _scope_. That is:
 
 ```rust
-{                      // s is not valid here, it’s not yet in scope
+{                      // s is not valid here, it’s not yet declared
     let s = "hello";   // s is valid from this point forward
 
     // do stuff with s
@@ -77,6 +78,8 @@ This kind of string can be mutated:
 let mut s = String::from("hello");
 
 s.push_str(", world!");
+
+println!("{}", s); // This will print `hello, world!`
 ```
 
 ## Memory and allocation
@@ -87,11 +90,13 @@ cannot? The difference comes down to how these two types deal with memory.
 In the case of a string literal, because we know the contents of the string at
 compile time, we can hard-code the text of the string directly into the final
 executable. This means that string literals are quite fast and efficient. But
-these properties only come from its immutability; we can’t put an
-arbitrary-sized blob of memory into the binary for each string!
+these properties only come from its immutability. We can’t put a blob of memory
+into the binary for each string whose size is unknown at compile time and whose
+size might change over the course of running the program!
 
-With `String`, to support a mutable, growable string, we need to allocate an
-unknown amount of memory to hold the contents. This means two things:
+With `String`, in order to support a mutable, growable string, we need to
+allocate an unknown amount of memory to hold the contents. This means two
+things:
 
 1. The memory must be requested from the operating system at runtime.
 2. We need a way of giving this memory back to the operating system when we’re
@@ -102,13 +107,15 @@ implementation requests the memory it needs. This is pretty much universal in
 programming languages.
 
 The second case, however, is different. In languages with a garbage collector
-(‘GC’), the GC handles that second case, and we, as the programmer, don’t need
-to think about it. Without GC, it’s the programmer’s responsibility to identify
-when memory is no longer being used, and explicitly return it, just as it was
-requested. Doing this correctly has historically been a difficult problem. If
-we forget, we will waste memory. If we do it too early, we will have an invalid
-variable. If we do it twice, that’s a bug too. We need to pair exactly one
-`allocate()` with exactly one `free()`.
+(‘GC’), the GC will keep track and clean up memory that isn't being used
+anymore, and we, as the programmer, don’t need to think about it. Without GC,
+it’s our responsibility to identify when memory is no longer being used and
+call code to explicitly return it, just as we did to request it. Doing this
+correctly has historically been a difficult problem. If we forget, we will
+waste memory. If we do it too early, we will have an invalid variable. If we do
+it twice, that’s a bug too. We need to pair exactly one `allocate()` with
+exactly one `free()`.
+
 
 Rust takes a different path. Remember our example? Here’s a version with
 `String`:
@@ -123,8 +130,9 @@ Rust takes a different path. Remember our example? Here’s a version with
 
 We have a natural point at which we can return the memory our `String` needs
 back to the operating system: when it goes out of scope! When a variable goes
-out of scope, a special function is called. This function is called `drop()`,
-and it is where the author of `String` can put the code to return the memory.
+out of scope, Rust calls a special function for us. This function is called
+`drop()`, and it is where the author of `String` can put the code to return the
+memory.
 
 > Aside: This pattern is sometimes called “Resource Acquisition Is
 > Initialization” in C++, or “RAII” for short. While they are very similar,
@@ -165,14 +173,15 @@ A `String` is made up of three parts: a pointer to the memory that holds the
 contents of the string, a length, and a capacity. The length is how much memory
 the `String` is currently using. The capacity is the total amount of memory the
 `String` has gotten from the operating system. The difference between length
-and capacity matters, but not in this context, so don’t worry about it too much
-if it doesn’t make sense, and just ignore the capacity.
+and capacity matters but not in this context, so don’t worry about it too much.
+For right now, it's fine to ignore the capacity.
 
-When we assign `s1` to `s2`, the `String` itself is copied. But not all kinds
-of copying are the same. Many people draw distinctions between ‘shallow
-copying’ and ‘deep copying’. We don’t use these terms in Rust. We instead say
-that something is ‘moved’ or ‘cloned’. Assignment in Rust causes a ‘move’. In
-other words, it looks like this:
+When we assign `s1` to `s2`, the `String` itself is copied, meaning we copy the
+pointer, the length, and the capacity. We do not copy the data that the
+`String`'s pointer refers to. Many people draw distinctions between ‘shallow
+copying’ and ‘deep copying’, and would call this a ‘shallow copy’. We don’t use
+these terms in Rust; we instead say that something is ‘moved’ or ‘cloned’.
+Assignment in Rust causes a ‘move’. In other words, it looks like this:
 
 <img alt="s1 and s2" src="img/foo2.png" class="center" style="width: 50%;" />
 
@@ -180,31 +189,34 @@ _Not_ this:
 
 <img alt="s1 and s2 to two places" src="img/foo4.png" class="center" style="width: 50%;" />
 
-When moving, Rust makes a copy of the data structure itself, the contents of
+When moving, Rust makes a copy of the data structure itself. The contents of
 `s1` are copied, but if `s1` contains a reference, like it does in this case,
 Rust will not copy the things that those references refer to.
 
-There’s a problem here! Both `data` pointers are pointing to the same place.
+There’s a problem here! Both data pointers are pointing to the same place.
 Why is this a problem? Well, when `s2` goes out of scope, it will free the
-memory that `data` points to. And then `s1` goes out of scope, and it will
-_also_ try to free the memory that `data` points to! That’s bad.
+memory that the pointer points to. And then `s1` goes out of scope, and it will
+_also_ try to free the memory that the pointer points to! That’s bad.
 
-So what’s the solution? Here, we stand at a crossroads. There are a few
-options. One would be to declare that assignment will also copy out any data.
-This works, but is inefficient: what if our `String` contained a novel? Also,
-it only works for memory. What if, instead of a `String`, we had a
-`TcpConnection`? Opening and closing a network connection is very similar to
-allocating and freeing memory. The solution that we could use there is to allow
-the programmer to hook into the assignment, similar to `drop()`, and write code
-fix things up. That would work, but now, an `=` can run arbitrary code. That’s
-also not good, and it doesn’t solve our efficiency concerns either.
+So what’s the solution? Here, we stand at a crossroads with a few options. One
+would be to declare that assignment will also copy out any data. This works,
+but is inefficient: what if our `String` contained a novel? Also, it only works
+for memory. What if, instead of a `String`, we had a `TcpConnection`? Opening
+and closing a network connection is very similar to allocating and freeing
+memory, so it would be nice to be able to use the same mechanism, but we can't
+because <!-- I don't know how to finish this sentence accurately... "we can't
+just copy a network connection, we have to request a new one from the thing
+we're connecting to"? /Carol -->. The solution that we could use there is to
+allow the programmer to hook into the assignment, similar to `drop()`, and
+write code to fix things up. That would work, but now, an `=` can run arbitrary
+code. That’s also not good, and it doesn’t solve our efficiency concerns either.
 
 Let’s take a step back: the root of the problem is that `s1` and `s2` both
-think that they have control of the memory, and therefore needs to free it.
+think that they have control of the memory and therefore need to free it.
 Instead of trying to copy the allocated memory, we could say that `s1` is no
-longer valid, and therefore, doesn’t need to free anything. This is in fact the
-choice that Rust makes. Check it out what happens when you try to use `s1`
-after `s2` is created:
+longer valid and, therefore, doesn’t need to free anything. This is in fact the
+choice that Rust makes. Check out what happens when you try to use `s1` after
+`s2` is created:
 
 ```rust,ignore
 let s1 = String::from("hello");
