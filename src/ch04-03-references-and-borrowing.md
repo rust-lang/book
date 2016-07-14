@@ -62,8 +62,8 @@ let s1 = String::from("hello");
 let len = calculate_length(&s1);
 ```
 
-The `&s1` syntax lets us create a reference from `s1`. This reference _refers_
-to the value of `s1`, but does not own it. Because it does not own it, the
+The `&s1` syntax lets us create a reference with `s1`. This reference _refers_
+to the value of `s1` but does not own it. Because it does not own it, the
 value it points to will not be dropped when the reference goes out of scope.
 
 Likewise, the signature of the function uses `&` to indicate that it takes
