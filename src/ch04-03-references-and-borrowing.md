@@ -180,7 +180,7 @@ let mut s = String::from("hello");
 let r2 = &mut s;
 ```
 
-There is a simlar rule for combining the two kinds of references. This code errors:
+There is a similar rule for combining the two kinds of references. This code errors:
 
 ```rust,ignore
 let mut s = String::from("hello");

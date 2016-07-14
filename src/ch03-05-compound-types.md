@@ -55,7 +55,7 @@ As you can see, the first index is `0`.
 ### Single-element tuples
 
 There’s one last trick with tuples: `(5)` is actually ambiguous: is it a tuple,
-or is it a `5` in parethesis? If you need to disambiguate, use a comma:
+or is it a `5` in parenthesis? If you need to disambiguate, use a comma:
 
 ```rust
 fn main() {

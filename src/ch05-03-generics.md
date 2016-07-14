@@ -176,7 +176,7 @@ println!("x is: {}", x);
 ```
 
 We can't print out `x`! The error messages reference something we talked about
-breifly before, the `Display` trait. In order to implement this function, we
+briefly before, the `Display` trait. In order to implement this function, we
 need to talk about traits. But we only need to talk about traits to implement
 our own generic functions; we don't need this understanding to use them. So
 rather than get into more details about this right now, let's talk about other

@@ -158,7 +158,7 @@ match some_u8_value {
 
 The `_` pattern matches anything at all, and so with it as the final pattern,
 Rust can understand that we have all our bases covered. It's not only used for
-this sort of exhastiveness issue, though. It's useful any time we don't want to
+this sort of exhaustiveness issue, though. It's useful any time we don't want to
 deal with a number of cases. Consider this scenario: if we wanted to print out
 something one one, three, five, and seven:
 

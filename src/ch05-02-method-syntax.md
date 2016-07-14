@@ -12,7 +12,7 @@ let s2 = s1.clone();
 println!("{}", s1);
 ```
 
-The call to `clone()` is attatched to `s1` with a dot. This is called ‘method
+The call to `clone()` is attached to `s1` with a dot. This is called ‘method
 syntax’, and it’s a way to call certain functions with a different style.
 
 Why have two ways to call functions? We’ll talk about some deeper reasons
@@ -127,7 +127,7 @@ fn distance(p1: Point, p2: Point) -> f64 {
 # }
 ```
 
-Other than this, the rest of the example is familliar: an implementation of
+Other than this, the rest of the example is familiar: an implementation of
 `distance()`, and using the method to find an answer.
 
 There are two differences. The first is in the first argument. Instead of a name
