@@ -77,7 +77,7 @@ This kind of string can be mutated:
 ```rust
 let mut s = String::from("hello");
 
-s.push_str(", world!");
+s.push_str(", world!"); // push_str() appends a literal to a String
 
 println!("{}", s); // This will print `hello, world!`
 ```

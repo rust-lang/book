@@ -100,7 +100,7 @@ fn main() {
 }
 
 fn change(some_string: &String) {
-    some_string.push_str(", world");  // push_str() appends a literal to a String
+    some_string.push_str(", world");
 }
 ```
 
@@ -108,7 +108,7 @@ Here’s the error:
 
 ```text
 8:16 error: cannot borrow immutable borrowed content `*some_string` as mutable
- some_string.push_str(", world");  // push_str() appends a literal to a String
+ some_string.push_str(", world");
  ^~~~~~~~~~~
 ```
 
@@ -127,7 +127,7 @@ fn main() {
 }
 
 fn change(some_string: &mut String) {
-    some_string.push_str(", world");  // push_str() appends a literal to a String
+    some_string.push_str(", world");
 }
 ```
 
