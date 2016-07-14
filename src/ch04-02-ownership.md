@@ -193,10 +193,11 @@ When moving, Rust makes a copy of the data structure itself. The contents of
 `s1` are copied, but if `s1` contains a reference, like it does in this case,
 Rust will not copy the things that those references refer to.
 
-There’s a problem here! Both data pointers are pointing to the same place.
-Why is this a problem? Well, when `s2` goes out of scope, it will free the
-memory that the pointer points to. And then `s1` goes out of scope, and it will
-_also_ try to free the memory that the pointer points to! That’s bad.
+There’s a problem here! Both data pointers are pointing to the same place. Why
+is this a problem? Well, when `s2` goes out of scope, it will free the memory
+that the pointer points to. And then `s1` goes out of scope, and it will _also_
+try to free the memory that the pointer points to! That’s bad, and is known as
+a "double free" error.
 
 So what’s the solution? Here, we stand at a crossroads with a few options. One
 would be to declare that assignment will also copy out any data. This works,
@@ -227,7 +228,7 @@ println!("{}", s1);
 
 You’ll get an error like this:
 
-```text
+```bash
 5:22 error: use of moved value: `s1` [E0382]
 println!("{}", s1);
                ^~
@@ -238,7 +239,8 @@ println!("{}", s1);
 ```
 
 We say that `s1` was _moved_ into `s2`. When a value moves, its data is copied,
-but the original variable binding is no longer usable. That solves our problem:
+but the original variable binding is no longer usable. That solves our problem,
+so what actually happens looks like this:
 
 <img alt="s1 and s2 to the same place" src="img/foo3.png" class="center" style="width: 50%;" />
 
@@ -249,17 +251,17 @@ we’re done!
 
 This leads us to the Ownership Rules:
 
-> 1. Each value in Rust has a variable binding that’s called it’s ‘owner’.
+> 1. Each value in Rust has a variable binding that’s called its ‘owner’.
 > 2. There can only be one owner at a time.
 > 3. When the owner goes out of scope, the value will be `drop()`ped.
 
 Furthermore, there’s a design choice that’s implied by this: Rust will never
-automatically create ‘deep’ copies of your data. Any automatic copying must be
-inexpensive.
+automatically create ‘deep’ copies of your data. Therefore, any _automatic_
+copying can be assumed to be inexpensive.
 
 ## Clone
 
-But what if we _do_ want to deeply copy the `String`’s data, and not just the
+But what if we _do_ want to deeply copy the `String`’s data and not just the
 `String` itself? There’s a common method for that: `clone()`. We will discuss
 methods in the next section on [`struct`]s, but they’re a common enough feature
 in many programming languages that you have probably seen them before.
@@ -281,7 +283,7 @@ it _is_ doing this:
 <img alt="s1 and s2 to two places" src="img/foo4.png" class="center" style="width: 50%;" />
 
 When you see a call to `clone()`, you know that some arbitrary code is being
-executed, which may be expensive. It’s a visual indicator that something
+executed, and that code may be expensive. It’s a visual indicator that something
 different is going on here.
 
 ## Copy
@@ -297,19 +299,21 @@ println!("{}", x);
 
 But why? We don’t have a call to `clone()`. Why didn’t `x` get moved into `y`?
 
-For types that do not have any kind of complex storage requirements, like
-integers, typing `clone()` is busy work. There’s no reason we would ever want
-to prevent `x` from being valid here, as there’s no situation in which it’s
-incorrect. In other words, there’s no difference between deep and shallow
-copying here, so calling `clone()` wouldn’t do anything differently from the
-usual shallow copying.
+Types like integers that have a known size at compile time do not ask for
+memory from the operating system and therefore do not need to be `drop()`ped
+when they go out of scope. That means there's no reason we would want to
+prevent `x` from being valid after we create the binding `y`. In other words,
+there’s no difference between deep and shallow copying here, so calling
+`clone()` wouldn’t do anything differently from the usual shallow copying and
+we can leave it out.
 
-Rust has a special annotation that you can place on types, called `Copy`. If
-a type is `Copy`, an older binding is still usable after assignment. Integers
-are an example of such a type; most of the primitive types are `Copy`.
+Rust has a special annotation that you can place on types like these, and that
+annotation is called `Copy`. If a type is `Copy`, an older binding is still
+usable after assignment. Integers are an example of such a type; most of the
+primitive types are `Copy`.
 
 While we haven’t talked about how to mark a type as `Copy` yet, you might ask
-yourself “what happens if we made `String` `Copy`?” The answer is, you cannot.
+yourself “what happens if we made `String` `Copy`?” The answer is you cannot.
 Remember `drop()`? Rust will not let you make something `Copy` if it has
 implemented `drop()`. If you need to do something special when the value goes
 out of scope, being `Copy` will be an error.
@@ -317,8 +321,8 @@ out of scope, being `Copy` will be an error.
 So what types are `Copy`? You can check the documentation for the given type to
 be sure, but as a rule of thumb, any group of simple scalar values can be Copy,
 but nothing that requires allocation or is some form of resource is `Copy`. And
-you can’t get it wrong: the compiler will throw an error if you try to use a
-type that moves incorrectly, as we saw above.
+you can’t get it wrong: the compiler will throw an error if you incorrectly try
+to use a type that moves, as we saw above.
 
 Here’s some types that you’ve seen so far that are `Copy`:
 
@@ -383,6 +387,8 @@ fn makes_copy(some_integer: i32) { // some_integer comes into scope.
 
 Remember: If we tried to use `s` after the call to `takes_ownership()`, Rust
 would throw a compile-time error! These static checks protect us from mistakes.
+Try adding code to `main` that uses `s` and `x` to see where you can use them
+and where the ownership rules prevent you from doing so.
 
 Returning values can also transfer ownership:
 
@@ -443,9 +449,9 @@ fn takes_and_gives_back(a_string: String) -> String { // a_string comes into sco
 It’s the same pattern, every time: assigning something moves it, and when an
 owner goes out of scope, if it hasn’t been moved, it will `drop()`.
 
-This might seem a bit tedious, and it is. What if I want to let a function use
-a value, but not take ownership? It’s quite annoying that anything I pass in
-also needs passed back. Look at this function:
+This might seem a bit tedious, and it is. What if we want to let a function use
+a value but not take ownership? It’s quite annoying that anything we pass in
+also needs to be passed back if we want to use it again. Like in this function:
 
 ```rust
 fn main() {
@@ -466,5 +472,5 @@ fn calculate_length(s: String) -> (String, usize) {
 This is too much ceremony: we have to use a tuple to give back the `String` as
 well as the length. It’s a lot of work for a pattern that should be common.
 
-Luckily for us, Rust has such a feature, and it’s what the next section is
-about.
+Luckily for us, Rust has a feature for this pattern, and it’s what the next
+section is about.
