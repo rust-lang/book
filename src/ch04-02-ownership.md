@@ -263,7 +263,7 @@ copying can be assumed to be inexpensive.
 
 But what if we _do_ want to deeply copy the `String`’s data and not just the
 `String` itself? There’s a common method for that: `clone()`. We will discuss
-methods in the next section on [`struct`]s, but they’re a common enough feature
+methods in the section on `struct`s, but they’re a common enough feature
 in many programming languages that you have probably seen them before.
 
 Here’s an example of the `clone()` method in action:
@@ -274,8 +274,6 @@ let s2 = s1.clone();
 
 println!("{}", s1);
 ```
-
-[`struct`]: structs.html
 
 This will work just fine. Remember our diagram from before? In this case,
 it _is_ doing this:
@@ -324,7 +322,7 @@ but nothing that requires allocation or is some form of resource is `Copy`. And
 you can’t get it wrong: the compiler will throw an error if you incorrectly try
 to use a type that moves, as we saw above.
 
-Here’s some types that you’ve seen so far that are `Copy`:
+Here’s some types that are `Copy`:
 
 * All of the integer types, like `u32`.
 * The booleans, `true` and `false`.
