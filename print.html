@@ -394,7 +394,7 @@ can start developing in right away.</p>
 executable application, as opposed to a library. Executables are often called
 <em>binaries</em> (as in <code>/usr/bin</code>, if you’re on a Unix system).</p>
 <p>Cargo has generated two files and one directory for us: a <code>Cargo.toml</code> and a
-<em>src</em> directory with a <em>main.rs</em> file inside. These should look familliar,
+<em>src</em> directory with a <em>main.rs</em> file inside. These should look familiar,
 they’re exactly what we created by hand, above.</p>
 <p>This output is all you need to get started. First, open <code>Cargo.toml</code>. It should
 look something like this:</p>
@@ -1315,7 +1315,7 @@ more about our first collection, arrays, in just a moment.</p>
 two possible values:</p>
 <pre><code class="language-rust">fn main() {
     let t = true;
-    let f: bool = false; // with explict type annotation
+    let f: bool = false; // with explicit type annotation
 }
 </code></pre>
 <p>The main way to consume boolean values is through conditionals like <code>if</code>, which
@@ -1330,7 +1330,7 @@ primitive alphabetic type is the <code>char</code>:</p>
 </code></pre>
 <p>Rust’s <code>char</code> represents a <a href="http://www.unicode.org/glossary/#unicode_scalar_value">Unicode Scalar Value</a>, which means that it can
 represent a lot more than just ASCII. ‘Character’ isn’t really a concept in
-Unicode, however: your human intutition for what a ‘character’ is may not match
+Unicode, however: your human intuition for what a ‘character’ is may not match
 up with a <code>char</code>. It also means that <code>char</code>s are four bytes each.</p>
 <h1>Compound Types</h1>
 <p>Now that we’ve discussed scalar types, let’s talk about compound types.
@@ -1372,7 +1372,7 @@ tuple element directly using <code>.</code>, followed by the index we want to ac
 <p>As you can see, the first index is <code>0</code>.</p>
 <h3>Single-element tuples</h3>
 <p>There’s one last trick with tuples: <code>(5)</code> is actually ambiguous: is it a tuple,
-or is it a <code>5</code> in parethesis? If you need to disambiguate, use a comma:</p>
+or is it a <code>5</code> in parenthesis? If you need to disambiguate, use a comma:</p>
 <pre><code class="language-rust">fn main() {
     let x = (5); // x is an i32, no tuple. Think of it like (5 + 1) without the + 1, they’re for grouping.
 
@@ -1976,10 +1976,10 @@ to the operating system: when it goes out of scope! When a variable goes out of
 scope, a special function is called. This function is called <code>drop()</code>, and it
 is where the author of <code>String</code> can put the code to return the memory.</p>
 <blockquote>
-<p>Aside: This pattern is sometimes called “Resource Aquisition Is
+<p>Aside: This pattern is sometimes called “Resource Acquisition Is
 Initialization” in C++, or “RAII” for short. While they are very similar,
 Rust’s take on this concept has a number of differences, and so we don’t tend
-to use the same term. If you’re familliar with this idea, keep in mind that it
+to use the same term. If you’re familiar with this idea, keep in mind that it
 is <em>roughly</em> similar in Rust, but not identical.</p>
 </blockquote>
 <p>This pattern has a profound impact on the way that Rust code is written. It may
@@ -2193,7 +2193,7 @@ fn takes_and_gives_back(a_string: String) -&gt; String {
     a_string
 }
 </code></pre>
-<p>With simililar annotations:</p>
+<p>With similiar annotations:</p>
 <pre><code class="language-rust">fn main() {
     let s1 = gives_ownership();         // gives_ownership moves its return
                                         // value into s1.
@@ -2384,7 +2384,7 @@ references. Just not <em>simultaneous</em> ones:</p>
 
 let r2 = &amp;mut s;
 </code></pre>
-<p>There is a simlar rule for combining the two kinds of references. This code errors:</p>
+<p>There is a similar rule for combining the two kinds of references. This code errors:</p>
 <pre><code class="language-rust,ignore">let mut s = String::from(&quot;hello&quot;);
 
 let r1 = &amp;s; // no problem
@@ -2571,7 +2571,7 @@ function. Its signature would have to look like this:</p>
 <p>Now we’re tracking both a start <em>and</em> and ending index. Even more chances for
 things to go wrong. We now have three unrelated variable bindings floating
 around which need to be kept in sync.</p>
-<p>Luckily, Rust has a solution to this probem: string slices.</p>
+<p>Luckily, Rust has a solution to this problem: string slices.</p>
 <h1>String slices</h1>
 <p>A string slice looks like this:</p>
 <pre><code class="language-rust">let s = String::from(&quot;hello world&quot;);
@@ -2911,7 +2911,7 @@ let s2 = s1.clone();
 
 println!(&quot;{}&quot;, s1);
 </code></pre>
-<p>The call to <code>clone()</code> is attatched to <code>s1</code> with a dot. This is called ‘method
+<p>The call to <code>clone()</code> is attached to <code>s1</code> with a dot. This is called ‘method
 syntax’, and it’s a way to call certain functions with a different style.</p>
 <p>Why have two ways to call functions? We’ll talk about some deeper reasons
 related to ownership in a moment, but one big reason is that methods look nicer
@@ -3007,7 +3007,7 @@ fn distance(p1: Point, p2: Point) -&gt; f64 {
 #     f64::sqrt(x_squared + y_squared)
 # }
 </code></pre>
-<p>Other than this, the rest of the example is familliar: an implementation of
+<p>Other than this, the rest of the example is familiar: an implementation of
 <code>distance()</code>, and using the method to find an answer.</p>
 <p>There are two differences. The first is in the first argument. Instead of a name
 and a type, we have written <code>&amp;self</code>. This is what distinguishes a method from a
@@ -3256,7 +3256,7 @@ println!(&quot;x is: {}&quot;, x);
                      ^
 </code></pre>
 <p>We can't print out <code>x</code>! The error messages reference something we talked about
-breifly before, the <code>Display</code> trait. In order to implement this function, we
+briefly before, the <code>Display</code> trait. In order to implement this function, we
 need to talk about traits. But we only need to talk about traits to implement
 our own generic functions; we don't need this understanding to use them. So
 rather than get into more details about this right now, let's talk about other
@@ -3580,7 +3580,7 @@ match some_u8_value {
 </code></pre>
 <p>The <code>_</code> pattern matches anything at all, and so with it as the final pattern,
 Rust can understand that we have all our bases covered. It's not only used for
-this sort of exhastiveness issue, though. It's useful any time we don't want to
+this sort of exhaustiveness issue, though. It's useful any time we don't want to
 deal with a number of cases. Consider this scenario: if we wanted to print out
 something one one, three, five, and seven:</p>
 <pre><code class="language-rust"># let some_u8_value = 0u8;

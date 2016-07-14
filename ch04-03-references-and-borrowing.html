@@ -206,7 +206,7 @@ references. Just not <em>simultaneous</em> ones:</p>
 
 let r2 = &amp;mut s;
 </code></pre>
-<p>There is a simlar rule for combining the two kinds of references. This code errors:</p>
+<p>There is a similar rule for combining the two kinds of references. This code errors:</p>
 <pre><code class="language-rust,ignore">let mut s = String::from(&quot;hello&quot;);
 
 let r1 = &amp;s; // no problem

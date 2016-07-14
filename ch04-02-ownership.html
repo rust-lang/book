@@ -169,10 +169,10 @@ to the operating system: when it goes out of scope! When a variable goes out of
 scope, a special function is called. This function is called <code>drop()</code>, and it
 is where the author of <code>String</code> can put the code to return the memory.</p>
 <blockquote>
-<p>Aside: This pattern is sometimes called “Resource Aquisition Is
+<p>Aside: This pattern is sometimes called “Resource Acquisition Is
 Initialization” in C++, or “RAII” for short. While they are very similar,
 Rust’s take on this concept has a number of differences, and so we don’t tend
-to use the same term. If you’re familliar with this idea, keep in mind that it
+to use the same term. If you’re familiar with this idea, keep in mind that it
 is <em>roughly</em> similar in Rust, but not identical.</p>
 </blockquote>
 <p>This pattern has a profound impact on the way that Rust code is written. It may
@@ -386,7 +386,7 @@ fn takes_and_gives_back(a_string: String) -&gt; String {
     a_string
 }
 </code></pre>
-<p>With simililar annotations:</p>
+<p>With similiar annotations:</p>
 <pre><code class="language-rust">fn main() {
     let s1 = gives_ownership();         // gives_ownership moves its return
                                         // value into s1.

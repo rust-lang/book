@@ -77,7 +77,7 @@ let s2 = s1.clone();
 
 println!(&quot;{}&quot;, s1);
 </code></pre>
-<p>The call to <code>clone()</code> is attatched to <code>s1</code> with a dot. This is called ‘method
+<p>The call to <code>clone()</code> is attached to <code>s1</code> with a dot. This is called ‘method
 syntax’, and it’s a way to call certain functions with a different style.</p>
 <p>Why have two ways to call functions? We’ll talk about some deeper reasons
 related to ownership in a moment, but one big reason is that methods look nicer
@@ -173,7 +173,7 @@ fn distance(p1: Point, p2: Point) -&gt; f64 {
 #     f64::sqrt(x_squared + y_squared)
 # }
 </code></pre>
-<p>Other than this, the rest of the example is familliar: an implementation of
+<p>Other than this, the rest of the example is familiar: an implementation of
 <code>distance()</code>, and using the method to find an answer.</p>
 <p>There are two differences. The first is in the first argument. Instead of a name
 and a type, we have written <code>&amp;self</code>. This is what distinguishes a method from a
