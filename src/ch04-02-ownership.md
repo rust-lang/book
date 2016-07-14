@@ -1,30 +1,32 @@
 # Ownership
 
-Rust’s central feature is called ‘ownership’. It is a feature that is straightforward
-to explain, but has deep implications for the rest of the language.
+Rust’s central feature is called ‘ownership’. It is a feature that is
+straightforward to explain, but has deep implications for the rest of the
+language.
 
-All programs have to manage the way they use a computer's memory while running. Some
-languages have garbage collection, while in others, the programmer has to explicitly
-allocate and free the memory. Rust takes a third approach: memory is managed through
-a system of ownership with a set of rules that the compiler checks at compile-time.
-You do not pay any run-time cost for any of these features.
+All programs have to manage the way they use a computer's memory while running.
+Some languages have garbage collection, while in others, the programmer has to
+explicitly allocate and free the memory. Rust takes a third approach: memory is
+managed through a system of ownership with a set of rules that the compiler
+checks at compile-time. You do not pay any run-time cost for any of these
+features.
 
-However, because ownership is a new concept for many programmers, it does take some
-time to get used to.  There is good news, however: the more experienced you become
-with Rust, and the rules of the ownership system, the more you'll be able to naturally
-develop code that is both safe and efficient. Keep at it!
+However, because ownership is a new concept for many programmers, it does take
+some time to get used to. There is good news, however: the more experienced you
+become with Rust, and the rules of the ownership system, the more you'll be
+able to naturally develop code that is both safe and efficient. Keep at it!
 
 Once you understand ownership, you have a good foundation for understanding the
-features that make Rust unique. In this chapter, we'll learn ownership by going through
-some examples, focusing on a very common data structure: strings.
+features that make Rust unique. In this chapter, we'll learn ownership by going
+through some examples, focusing on a very common data structure: strings.
 
 ## Variable binding scope
 
-We've walked through an example of a Rust program already in the tutorial chapter.
-Now that we’re past basic syntax, we won’t include all of the `fn main() {` stuff in
-examples, so if you’re following along, you will have to put them inside of a `main()`
-function. This lets our examples be a bit more concise, letting us focus on the actual
-details rather than boilerplate.
+We've walked through an example of a Rust program already in the tutorial
+chapter. Now that we’re past basic syntax, we won’t include all of the `fn
+main() {` stuff in examples, so if you’re following along, you will have to put
+them inside of a `main()` function. This lets our examples be a bit more
+concise, letting us focus on the actual details rather than boilerplate.
 
 Anyway, here it is:
 
@@ -53,12 +55,12 @@ on top of this understanding by introducing a new type: `String`.
 
 ## Strings
 
-String literals are convenient, but they aren’t the only way that you use strings.
-For one thing, they’re immutable. For another, not every string is literal:
-what about taking user input and storing it in a string?
+String literals are convenient, but they aren’t the only way that you use
+strings. For one thing, they’re immutable. For another, not every string is
+literal: what about taking user input and storing it in a string?
 
-For this, Rust has a second string type, `String`. You can create a `String` from
-a string literal using the `from` function:
+For this, Rust has a second string type, `String`. You can create a `String`
+from a string literal using the `from` function:
 
 ```rust
 let s = String::from("hello");
@@ -119,10 +121,10 @@ Rust takes a different path. Remember our example? Here’s a version with
 }                                  // this scope is now over, and s is no longer valid
 ```
 
-We have a natural point at which we can return the memory our `String` needs back
-to the operating system: when it goes out of scope! When a variable goes out of
-scope, a special function is called. This function is called `drop()`, and it
-is where the author of `String` can put the code to return the memory.
+We have a natural point at which we can return the memory our `String` needs
+back to the operating system: when it goes out of scope! When a variable goes
+out of scope, a special function is called. This function is called `drop()`,
+and it is where the author of `String` can put the code to return the memory.
 
 > Aside: This pattern is sometimes called “Resource Acquisition Is
 > Initialization” in C++, or “RAII” for short. While they are very similar,
@@ -233,7 +235,8 @@ but the original variable binding is no longer usable. That solves our problem:
 
 <img alt="s1 and s2 to the same place" src="img/foo3.png" class="center" style="width: 50%;" />
 
-With only `s2` valid, when it goes out of scope, it will free the memory, and we’re done!
+With only `s2` valid, when it goes out of scope, it will free the memory, and
+we’re done!
 
 ## Ownership Rules
 
@@ -305,10 +308,10 @@ implemented `drop()`. If you need to do something special when the value goes
 out of scope, being `Copy` will be an error.
 
 So what types are `Copy`? You can check the documentation for the given type to
-be sure, but as a rule of thumb, any group of simple scalar values can be
-Copy, but nothing that requires allocation or is some form of resource is `Copy`.
-And you can’t get it wrong: the compiler will throw an error if you try to use
-a type that moves incorrectly, as we saw above.
+be sure, but as a rule of thumb, any group of simple scalar values can be Copy,
+but nothing that requires allocation or is some form of resource is `Copy`. And
+you can’t get it wrong: the compiler will throw an error if you try to use a
+type that moves incorrectly, as we saw above.
 
 Here’s some types that you’ve seen so far that are `Copy`:
 
@@ -456,4 +459,5 @@ fn calculate_length(s: String) -> (String, usize) {
 This is too much ceremony: we have to use a tuple to give back the `String` as
 well as the length. It’s a lot of work for a pattern that should be common.
 
-Luckily for us, Rust has such a feature, and it’s what the next section is about.
+Luckily for us, Rust has such a feature, and it’s what the next section is
+about.

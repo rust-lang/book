@@ -112,8 +112,8 @@ Here’s the error:
  ^~~~~~~~~~~
 ```
 
-Just like bindings are immutable by default, so are references. We’re not allowed
-to modify something we have a reference to.
+Just like bindings are immutable by default, so are references. We’re not
+allowed to modify something we have a reference to.
 
 ## Mutable references
 
@@ -131,8 +131,9 @@ fn change(some_string: &mut String) {
 }
 ```
 
-First, we had to change `s` to be `mut`. Then, we had to create a mutable reference
-with `&mut s` and accept a mutable reference with `some_string: &mut String`.
+First, we had to change `s` to be `mut`. Then, we had to create a mutable
+reference with `&mut s` and accept a mutable reference with `some_string: &mut
+String`.
 
 Mutable references have one big restriction, though. This code fails:
 
@@ -180,7 +181,8 @@ let mut s = String::from("hello");
 let r2 = &mut s;
 ```
 
-There is a similar rule for combining the two kinds of references. This code errors:
+There is a similar rule for combining the two kinds of references. This code
+errors:
 
 ```rust,ignore
 let mut s = String::from("hello");
