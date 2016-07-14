@@ -168,11 +168,6 @@ the `String` is currently using. The capacity is the total amount of memory the
 and capacity matters, but not in this context, so don’t worry about it too much
 if it doesn’t make sense, and just ignore the capacity.
 
-> We’ve talked about two kinds of composite types: arrays and tuples. `String`
-> is a third type: a `struct`, which we will cover the details of in the next
-> chapter of the book. For now, thinking about `String` as a tuple is close
-> enough.
-
 When we assign `s1` to `s2`, the `String` itself is copied. But not all kinds
 of copying are the same. Many people draw distinctions between ‘shallow
 copying’ and ‘deep copying’. We don’t use these terms in Rust. We instead say
