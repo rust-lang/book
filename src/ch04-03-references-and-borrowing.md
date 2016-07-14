@@ -20,7 +20,8 @@ fn calculate_length(s: String) -> (String, usize) {
 ```
 
 The issue here is that we have to return the `String` back to the calling
-function so that it could still use it.
+function so that we can still use it there, since it was moved when we called
+`calculate_length()`.
 
 There is a better way. It looks like this:
 
@@ -40,11 +41,12 @@ fn calculate_length(s: &String) -> usize {
 }
 ```
 
-First, you’ll notice all of the tuple stuff is gone. Next, that we pass `&s1`
-into `calculate_lengths()`. And in its definition, we take `&String` rather
-than `String`.
+First, you’ll notice all of the tuple stuff in the binding declaration and the
+function return value is gone. Next, note that we pass `&s1` into
+`calculate_length()`, and in its definition, we take `&String` rather than
+`String`.
 
-These `&s` are called ‘references’, and they allow you to refer to some value
+These `&`s are called ‘references’, and they allow you to refer to some value
 without taking ownership of it. Here’s a diagram:
 
 DIAGRAM GOES HERE of a &String pointing at a String, with (ptr, len, capacity)
@@ -67,9 +69,7 @@ to the value of `s1` but does not own it. Because it does not own it, the
 value it points to will not be dropped when the reference goes out of scope.
 
 Likewise, the signature of the function uses `&` to indicate that it takes
-a reference as an argument:
-
-Let’s add some explanatory annotations:
+a reference as an argument. Let’s add some explanatory annotations:
 
 ```rust
 fn calculate_length(s: &String) -> usize { // s is a reference to a String
@@ -90,7 +90,7 @@ with real life, if I own something, you can borrow it from me. When you’re don
 you have to give it back.
 
 Speaking of which, what if you try to modify something you borrow from me? Try
-this code out. Spoiler alert: it doesn’t work:
+this code out. Spoiler alert: it doesn’t work!
 
 ```rust,ignore
 fn main() {
@@ -106,7 +106,7 @@ fn change(some_string: &String) {
 
 Here’s the error:
 
-```text
+```bash
 8:16 error: cannot borrow immutable borrowed content `*some_string` as mutable
  some_string.push_str(", world");
  ^~~~~~~~~~~
@@ -131,7 +131,7 @@ fn change(some_string: &mut String) {
 }
 ```
 
-First, we had to change `s` to be `mut`. Then, we had to create a mutable
+First, we had to change `s` to be `mut`. Then we had to create a mutable
 reference with `&mut s` and accept a mutable reference with `some_string: &mut
 String`.
 
@@ -146,7 +146,7 @@ let r2 = &mut s;
 
 Here’s the error:
 
-```text
+```bash
 5:20 error: cannot borrow `s` as mutable more than once at a time [E0499]
     let r2 = &mut s;
                   ^
@@ -162,13 +162,13 @@ fn main() {
 ^
 ```
 
-The error is what it says on the tin: you cannot borrow something more than
-once at a time in a mutable fashion. This restriction allows for mutation, but
-in a very controlled fashion. It is something that new Rustaceans struggle
-with, because most languages let you mutate whenever you’d like.
+The error is what it says: you cannot borrow something mutably more than once
+at a time. This restriction allows for mutation but in a very controlled
+fashion. It is something that new Rustaceans struggle with, because most
+languages let you mutate whenever you’d like.
 
 As always, we can use `{}`s to create a new scope, allowing for multiple mutable
-references. Just not _simultaneous_ ones:
+references, just not _simultaneous_ ones:
 
 ```rust
 let mut s = String::from("hello");
@@ -181,8 +181,8 @@ let mut s = String::from("hello");
 let r2 = &mut s;
 ```
 
-There is a similar rule for combining the two kinds of references. This code
-errors:
+There is a similar rule for combining mutable and immutable references. This
+code errors:
 
 ```rust,ignore
 let mut s = String::from("hello");
@@ -245,7 +245,7 @@ fn dangle() -> &String {
                ^~~~~~~
 help: this function’s return type contains a borrowed value, but there is no
       value for it to be borrowed from
-help: consider giving it a ‘static lifetime
+help: consider giving it a 'static lifetime
 ```
 
 This error message refers to a feature we haven’t learned about yet,
