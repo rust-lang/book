@@ -6,6 +6,7 @@
 
 - [Guessing Game Tutorial](ch02-00-guessing-game-tutorial.md)
 
+<<<<<<< a2bc57618340b6257b9a4dd7d4f3993c71cde2e4
 - [Common Programming Concepts in Rust](ch03-00-common-programming-concepts-in-rust.md)
     - [Variable Bindings and Mutability](ch03-01-variable-bindings-and-mutability.md)
     - [Data Types](ch03-02-data-types.md)
@@ -36,7 +37,9 @@
     - [Strings]()
     - [`HashMap<K, V>`]()
 
-- [Error Handling]()
+- [Error Handling](ch07-01-error-handling.md)
+    - [Unrecoverable errors with panic!](ch07-02-unrecoverable-errors-with-panic.md)
+    - [Recoverable errors with `Result<T, E>`](ch07-03-recoverable-errors-with-result.md)
 
 - [Lifetimes]()
 
