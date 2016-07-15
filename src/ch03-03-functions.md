@@ -19,7 +19,7 @@ fn another_function() {
 
 Rust code uses `snake_case` as a style for function names: all lower case, with
 underscores separating words. (It also uses them for variable names, too.) We
-can can call any function we’ve defined by using its name and some parentheses:
+can call any function we’ve defined by using its name and some parentheses:
 
 ```rust
 fn main() {
