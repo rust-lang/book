@@ -295,21 +295,4 @@ Here’s a recap of what we’ve talked about:
     2. Any number of immutable references .
 2. References must always be valid.
 
-While these rules are not complicated on their own, they can be tricky when
-applied to real code. Let’s work through a number of examples to help build
-our understanding.
-
-## More Examples
-
-COMING SOON
-
-
-
-
-
-
-
-
-
-
-
+Next, let's look at a different kind of reference: slices.
