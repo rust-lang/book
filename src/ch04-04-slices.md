@@ -1,11 +1,11 @@
 # Slices
 
 So far, we’ve talked about types that have ownership, like `String`, and ones
-that don’t, like `&String`. There is a second kind of type which does not have
+that don’t, like `&String`. There is another kind of type which does not have
 ownership: slices. Slices let you reference a contiguous sequence of elements
-in a collection, rather than the whole collection itself.
+in a collection rather than the whole collection itself.
 
-Here’s a small programming problem: write a function which takes a string,
+Here’s a small programming problem: write a function which takes a string
 and returns the first word you find. If we don’t find a space in the string,
 then the whole string is a word, so the whole thing should be returned.
 
@@ -39,9 +39,9 @@ Let’s break that down a bit:
 ```rust
 fn first_word(s: &String) -> usize {
 
-    // Since we need to go through the String element by element, and
+    // Since we need to go through the String element by element and
     // check if a value is a space, we will convert our String to an
-    // array of bytes, using the `.as_bytes()` method.
+    // array of bytes using the `.as_bytes()` method.
     let bytes = s.as_bytes();
 
     // We discussed using the iter() method with for in Chapter 3.7. Here,
@@ -52,26 +52,25 @@ fn first_word(s: &String) -> usize {
     // nicer than calculating the index ourselves.
     //
     // Since it’s a tuple, we can use patterns, just like elsewhere in Rust.
-    // So we match against the tuple with i for the index, and &byte for
+    // So we match against the tuple with i for the index and &byte for
     // the byte itself.
     for (i, &byte) in bytes.iter().enumerate() {
 
         // 32 is the value of a space in UTF-8
         if byte == 32 {
-
             // We found a space! Return this position.
             return i;
         }
     }
 
-    // If we got here, we didn’t find a space, so this whole thing must be a
-    // word. So return the length.
+    // If we got here, we didn’t find a space, so the whole string must be a
+    // word. Return the length.
     s.len()
 }
 ```
 
 This works, but there’s a problem. We’re returning a `usize` on its own, but
-it’s only a meaningful number in the context of the `&String` itself. In other
+it’s only a meaningful number in the context of the `&String`. In other
 words, because it’s a separate value from the `String`, there’s no guarantee
 that it will still be valid in the future. Consider this:
 
@@ -91,11 +90,12 @@ that it will still be valid in the future. Consider this:
 fn main() {
     let mut s = String::from("hello world");
 
-    let word = first_word(&s);
+    let word = first_word(&s); // word will get the value 5.
 
     s.clear(); // This empties the String, making it equal to "".
 
-    // word is now totally invalid! There’s no more word here.
+    // word still has the value 5 here, but there's no more string that
+    // we could meaningfully use the value 5 with. word is now totally invalid!
 }
 ```
 
@@ -106,7 +106,7 @@ function. Its signature would have to look like this:
 fn second_word(s: &String) -> (usize, usize) {
 ```
 
-Now we’re tracking both a start _and_ and ending index. Even more chances for
+Now we’re tracking both a start _and_ an ending index. Even more chances for
 things to go wrong. We now have three unrelated variable bindings floating
 around which need to be kept in sync.
 
@@ -136,8 +136,8 @@ characters.  The offset to the first byte of a `String` is 0 and the
 trailing number should point to the first byte that is _not_ included
 in the slice.
 
-With Rust’s `..` syntax, if you want to start at zero, you can drop the zero.
-In other words, these are equal:
+With Rust’s `..` range syntax, if you want to start at the first index (zero),
+you can drop the value before the `..`. In other words, these are equal:
 
 ```rust
 let s = String::from("hello");
@@ -147,7 +147,7 @@ let slice = &s[..2];
 ```
 
 By the same token, if your slice should include the last byte of the
-`String`, you can drop the trailing number. In other words, these are
+`String`, you can drop the trailing number. That means these are
 equal:
 
 ```rust
@@ -155,8 +155,20 @@ let s = String::from("hello");
 
 let len = s.len();
 
+let slice = &s[3..len];
+let slice = &s[3..];
+```
+
+You can also drop both values to take a slice of the entire string. So these
+are equal:
+
+```rust
+let s = String::from("hello");
+
+let len = s.len();
+
 let slice = &s[0..len];
-let slice = &s[0..];
+let slice = &s[..];
 ```
 
 With this in mind, let’s re-write `first_word()` to return a slice:
@@ -183,7 +195,7 @@ This would also work for a `second_word()`:
 fn second_word(s: &String) -> &str {
 ```
 
-Same deal. We now have a straightforward API, that’s much harder to mess up.
+Same deal. We now have a straightforward API that’s much harder to mess up.
 
 But what about our error condition from before? Slices also fix that. Using
 the slice version of `first_word()` will throw an error:
