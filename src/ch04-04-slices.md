@@ -44,10 +44,10 @@ fn first_word(s: &String) -> usize {
     // array of bytes using the `.as_bytes()` method.
     let bytes = s.as_bytes();
 
-    // We discussed using the iter() method with for in Chapter 3.7. Here,
-    // we’re adding another method: enumerate(). While iter() returns each
-    // element, enumerate() modifies the result of iter(), and returns a
-    // tuple instead. The first element of the tuple is the index, and the
+    // We will be discussing iterators in more detail in Chapter XX, but for
+    // now, know that `iter()` is a method that returns each element in a
+    // collection, and `enumerate()` modifies the result of `iter()` and returns
+    // a tuple instead. The first element of the tuple is the index, and the
     // second element is a reference to the element itself. This is a bit
     // nicer than calculating the index ourselves.
     //
@@ -322,6 +322,6 @@ let slice = &a[1..3];
 ```
 
 This slice has the type `&[i32]`. It works the exact same way as string slices
-do, with a reference to the first element, and a length. You’ll use this kind
-of slice for all sorts of other collections. We’ll discuss these other slices
-in detail when we talk about vectors, in Chapter 9.1.
+do, by storing a reference to the first element and a length. You’ll use this
+kind of slice for all sorts of other collections. We’ll discuss these in detail
+when we talk about vectors in Chapter XX.
