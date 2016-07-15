@@ -124,17 +124,18 @@ let world = &s[6..11];
 ```
 
 This looks just like taking a reference to the whole `String`, but with the
-extra `[0..5]` bit. Instead of being a reference to the entire `String`,
-it’s a reference to an internal position in the `String`, but it also keeps
-track of the number of elements that it refers to as well. In other words,
-it looks like this:
+extra `[0..5]` bit. Instead of being a reference to the entire `String`, it’s a
+reference to an internal position in the `String` and the number of elements
+that it refers to.
+
+We can create slices with a range of `[starting_index..ending_index]`, but the
+slice data structure actually stores the starting position and the length of the
+slice. So in the case of `let world = &s[6..11];`, `world` would be a slice that
+contains a pointer to the 6th byte of `s` and a length value of 5.
+
+In other words, it looks like this:
 
 DIAGRAM GOES HERE of s, hello, and world
-
-Note that the internal position is specified through byte-offsets, not
-characters.  The offset to the first byte of a `String` is 0 and the
-trailing number should point to the first byte that is _not_ included
-in the slice.
 
 With Rust’s `..` range syntax, if you want to start at the first index (zero),
 you can drop the value before the `..`. In other words, these are equal:
@@ -187,8 +188,10 @@ fn first_word(s: &String) -> &str {
 }
 ```
 
-Now, we have a single value, the `&str`. It contains both elements that we care
-about: a reference to the starting point, and the number of elements.
+Now we have a single value, the `&str`, pronounced "string slice". It stores
+both elements that we care about: a reference to the starting point of the
+slice and the number of elements in the slice.
+
 This would also work for a `second_word()`:
 
 ```rust,ignore
