@@ -3,7 +3,6 @@
 - [Introduction](ch01-01-introduction.md)
     - [Installation](ch01-02-installation.md)
     - [Hello, World!](ch01-03-hello-world.md)
-    - [The Design of Rust](ch01-04-design.md)
 
 - [Guessing Game Tutorial](ch02-01-guessing-game-tutorial.md)
 
@@ -23,7 +22,6 @@
 - [Structs](ch05-01-structs.md)
     - [Method Syntax](ch05-02-method-syntax.md)
     - [Generics](ch05-03-generics.md)
-    - [Advanced]()
 
 - [Enums](ch06-01-enums.md)
     - [Option](ch06-02-option.md)
