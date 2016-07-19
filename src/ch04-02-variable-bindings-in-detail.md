@@ -450,3 +450,5 @@ After shadowing, x is: 5
 
 In this case, the binding value reverts to the original value once the shadow
 binding goes out of scope.
+
+Now let's look at some of the types of values that we can bind variables to.
