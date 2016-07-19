@@ -73,7 +73,7 @@ fn main() {
 The `main()` function is the entry point of every executable Rust program. It
 doesn’t have to be at the very beginning of our source code, but it will be the
 first bit of code that runs when we execute our program. We’ll talk more about
-functions in the next section, but for now, just know that `main()` is
+functions in a later section, but for now, just know that `main()` is
 where our program begins. The opening curly brace (`{`) indicates the start of
 the function’s body.
 
