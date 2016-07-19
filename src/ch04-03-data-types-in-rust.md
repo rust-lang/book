@@ -92,7 +92,7 @@ built-in integer types in Rust, shown in Table 3-1.
 | 64-bit | i64    | u64      |
 | arch   | isize  | usize    |
 
-*Table 3-1: Integer types in Rust. Each code (for example, i32) can be used to
+*Table 4-1: Integer types in Rust. Each code (for example, i32) can be used to
 declare the type of a value.*
 
 Each variant can be either signed or unsigned and has an explicit size. Signed
