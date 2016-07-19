@@ -8,8 +8,8 @@ declare new functions.
 Rust code uses *snake case* as the conventional style for function names. In
 snake case, all letters are lower case, and there are underscores separating
 words. (Rust also uses snake case for the names of variable bindings; we just
-haven't used any variable bindings long enough to need underscores yet). Here's
-a program containing an example function definition:
+haven't used any variable bindings with enough letters to need underscores
+yet). Here's a program containing an example function definition:
 
 ```rust
 fn main() {
