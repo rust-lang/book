@@ -234,7 +234,7 @@ The variable binding for `x` goes out of scope with the last curly brace in the
 
 This example only has one scope, though. In Rust, it's possible to create
 arbitrary scopes within a scope by placing code within another pair of curly
-braces (we'll look at this more in the next chapter). For example:
+braces. For example:
 
 ```rust
 fn main() {
