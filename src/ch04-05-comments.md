@@ -42,11 +42,6 @@ That’s all there is to it. Comments are not particularly complicated.
 
 ### Documentation Comments
 
-<!--- TR: I'm not clear on the advantages of one over the other, can you help
-to clarify? Why would you need to use a normal comment, if this is better - are
-there disadvantages? /Liz -->
-<!-- Tried to add some clarification! /Carol -->
-
 Rust has another kind of comment: a *documentation comment*. These comments
 don’t affect the way that the code works, but they do work with Rust’s tools.
 More specifically, the `rustdoc` tool can read documentation comments and
