@@ -1,4 +1,4 @@
-# Up and Running
+# Common Programming Concepts in Rust
 
 We’ll start our Rust journey by talking about the absolute basics, concepts
 that appear in almost every programming language. Many programming languages

@@ -11,7 +11,7 @@
     - [References & Borrowing](ch03-02-references-and-borrowing.md)
     - [Slices](ch03-03-slices.md)
 
-- [Up and Running](ch04-00-up-and-running.md)
+- [Common Programming Concepts in Rust](ch04-00-common-programming-concepts-in-rust.md)
     - [Anatomy of a Rust Program](ch04-01-anatomy-of-a-rust-program.md)
     - [Variable Bindings in Detail](ch04-02-variable-bindings-in-detail.md)
     - [Data Types in Rust](ch04-03-data-types-in-rust.md)
