@@ -2,8 +2,8 @@
 
 So far, we’ve created the simplest kind of variable binding, but the `let`
 statement has some more tricks up its sleeve. Now we'll look at doing more
-complex things: creating multiple bindings at once, adding type annotations,
-creating mutating bindings, understanding shadowing, and more.
+complex things: creating multiple bindings at once, creating mutating bindings,
+understanding shadowing, and more.
 
 ### Creating Multiple Bindings
 
