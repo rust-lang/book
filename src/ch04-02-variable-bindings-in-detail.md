@@ -266,8 +266,7 @@ fn main() {
 
 The `y` variable is only in scope in the section of the code that's between the
 nested pair of curly braces, whereas `x` is in scope from the `let` statement
-that binds it until the final curly brace. The scope of bindings will become
-much more important later as you learn about references in Chapter XX.
+that binds it until the final curly brace.
 
 ### Shadowing Earlier Bindings
 
