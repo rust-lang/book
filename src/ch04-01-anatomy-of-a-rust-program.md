@@ -160,7 +160,7 @@ After the `println!` macro, we match the opening curly brace that declared the
 }
 ```
 
-And of course, when we run the program, our output is:
+And as we saw earlier, when we run the program, our output is:
 
 ```text
 The value of x is: 5
