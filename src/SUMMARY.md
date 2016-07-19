@@ -14,7 +14,7 @@
 - [Common Programming Concepts in Rust](ch04-00-common-programming-concepts-in-rust.md)
     - [Anatomy of a Rust Program](ch04-01-anatomy-of-a-rust-program.md)
     - [Variable Bindings in Detail](ch04-02-variable-bindings-in-detail.md)
-    - [Data Types in Rust](ch04-03-data-types-in-rust.md)
+    - [Data Types](ch04-03-data-types.md)
     - [How Functions Work](ch04-04-how-functions-work.md)
     - [Comments](ch04-05-comments.md)
     - [Control Flow](ch04-06-control-flow.md)
