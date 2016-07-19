@@ -143,7 +143,7 @@ Floating-point numbers are represented according to the IEEE-754 standard. The
 #### Numeric Operations
 
 Rust supports the usual basic mathematic operations you’d expect for all of
-these number types--addition, subtraction, multiplication, division, and
+these number types: addition, subtraction, multiplication, division, and
 modulo. This code shows how you'd use each one in a `let` statement:
 
 ```rust
