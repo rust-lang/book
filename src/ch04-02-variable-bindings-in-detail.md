@@ -209,9 +209,9 @@ Using `mut`, we change the value that `x` binds to from `5` to `6`.
 
 ### Variable Binding Scope
 
-Another important thing to know about variable bindings is that they are only
-valid as long as they are *in scope*. That scope begins at the point where the
-binding is declared, and ends with the curly brace that closes the block of
+As we discussed in the ownership section of Chapter XX, variable bindings are
+only valid as long as they are *in scope*. That scope begins at the point where
+the binding is declared and ends with the curly brace that closes the block of
 code containing that binding. We cannot access bindings "before they come into
 scope" or "after they go out of scope." Here’s an example to illustrate this:
 
