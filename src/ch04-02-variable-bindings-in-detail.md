@@ -205,38 +205,7 @@ The value of x is: 5
 The value of x is: 6
 ```
 
-Using `mut`, we change the value that `x` binds to from `5` to `6`. Note,
-however, that `mut` is part of the pattern in the `let` statement. This becomes
-more obvious if we try to add mutability to a pattern that binds multiple
-variables in the same way as we did for a single variable, like this:
-
-```rust,ignore
-fn main() {
-    let (mut x, y) = (5, 6);
-    x = 7;
-    y = 8;
-}
-```
-
-If you run this code, the compiler will output an error:
-
-```bash
-$ cargo run
-   Compiling bindings v0.1.0 (file:///projects/bindings)
-src/main.rs:5:5: 5:10 error: re-assignment of immutable variable `y` [E0384]
-src/main.rs:5     y = 8;
-                  ^~~~~
-src/main.rs:5:5: 5:10 help: run `rustc --explain E0384` to see a detailed explanation
-src/main.rs:2:17: 2:18 note: prior assignment occurs here
-src/main.rs:2     let (mut x, y) = (5, 6);
-                              ^
-```
-
-The way `mut` is used here, the compiler is fine with reassigning the `x`
-variable but not the `y` variable. That's because `mut` only applies to the
-name that directly follows it, not the whole pattern. For the compiler to allow
-you to reassign the `y` variable, you'd need to write the pattern as `(mut x,
-mut y)` instead.
+Using `mut`, we change the value that `x` binds to from `5` to `6`.
 
 ### Variable Binding Scope
 
