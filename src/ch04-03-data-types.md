@@ -214,8 +214,7 @@ all unicode code points at *http://www.unicode.org/charts/*.
 ### Compound Types
 
 *Compound types* can group multiple values of other types into one type. Rust
-has two primitive compound types: tuples and arrays. You can also put a
-compound type inside another compound type.
+has two primitive compound types: tuples and arrays.
 
 #### Grouping Values into Tuples
 
