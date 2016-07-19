@@ -107,19 +107,6 @@ let x = 2 + 3;
 The expression `2 + 3` would evaluate to `5`, which would in turn be stored in
 the `x` variable binding.
 
-More generally, `let` statements take the form:
-
-```text
-let PATTERN = EXPRESSION;
-```
-
-*Patterns* are part of the ‘pattern matching’ feature of Rust. If you have
-worked with regular expressions, you can think of patterns like a regular
-expression that works on values in your program instead of characters in text.
-A name like `x` is a particularly humble form of pattern; it will always match
-and gets all the parts of the expression as its value. Patterns are a big part
-of Rust, and we’ll see more complex and powerful patterns as we go along.
-
 #### Printing to the Screen with a Macro
 
 The next line of our program is:
@@ -164,8 +151,7 @@ The value of x is 5, and the value of y is 10
 
 Think of `{}` as little crab pincers, holding a value in place. The first `{}`
 holds the first value after the format string, the second set holds the second
-value, and so on. The `{}` placeholder has a number of more advanced formatting
-options that we’ll discuss later.
+value, and so on.
 
 After the `println!` macro, we match the opening curly brace that declared the
 `main()` function with a closing curly brace to declare the end of the function:
