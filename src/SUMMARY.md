@@ -28,3 +28,8 @@
     - [Match](ch06-02-match.md)
     - [Patterns](ch06-03-patterns.md)
     - [if let](ch06-04-if-let.md)
+
+- [MANY MORE CHAPTERS COMING SOON]()
+
+- [Appendix](appendix-00.md)
+    - [Keywords](appendix-01-keywords.md)

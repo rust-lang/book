@@ -5,69 +5,16 @@ data, but to create this data, you first have to create a program. Here, we'll
 write some code that demonstrates how to begin a Rust program, how to bind a
 variable, and how to print text to the terminal.
 
-### Keywords
+PROD: START BOX
 
-First, keep in mind that the Rust language has a set of *keywords* that have
+Keep in mind that the Rust language has a set of *keywords* that have
 been reserved for use by the language only. This means you cannot use these
 words as names of variables or functions, for example. Most of these have
 special meaning and we will be using them to do various things in our Rust
 programs; a few have no current functionality associated but have been reserved
-for functionality that might be in the Rust language in the future.
+for functionality that might be in the Rust language in the future. You can find a list of the keywords in Appendix XX.
 
-The keywords are:
-
-* `abstract`
-* `alignof`
-* `as`
-* `become`
-* `box`
-* `break`
-* `const`
-* `continue`
-* `crate`
-* `do`
-* `else`
-* `enum`
-* `extern`
-* `false`
-* `final`
-* `fn`
-* `for`
-* `if`
-* `impl`
-* `in`
-* `let`
-* `loop`
-* `macro`
-* `match`
-* `mod`
-* `move`
-* `mut`
-* `offsetof`
-* `override`
-* `priv`
-* `proc`
-* `pub`
-* `pure`
-* `ref`
-* `return`
-* `Self`
-* `self`
-* `sizeof`
-* `static`
-* `struct`
-* `super`
-* `trait`
-* `true`
-* `type`
-* `typeof`
-* `unsafe`
-* `unsized`
-* `use`
-* `virtual`
-* `where`
-* `while`
-* `yield`
+PROD: END BOX
 
 ### A Simple Program that Binds a Variable
 
