@@ -86,16 +86,19 @@ let x = 5;
 ```
 
 This is a `let` statement, and it binds the value `5` to the variable `x`.
-Basic `let` statements take the following form:
+`let` statements take the following form:
 
 ```text
-let NAME = EXPRESSION;
+let PATTERN = EXPRESSION;
 ```
 
 A `let` statement first evaluates the `EXPRESSION` and then binds the resulting
-value to `NAME` to give us a variable to use later in the program. Notice the
-semicolon at the end of the statement, too. As in many other programming
-languages, statements in Rust must end with a semicolon.
+value to `PATTERN` to give us a variable to use later in the program.
+*Patterns* are part of the *pattern matching* feature of Rust, which will be
+covered in more detail in Chapter XX. For now, know that a pattern made of one
+name is a simple pattern that matches the value of the entire expression.
+Notice the semicolon at the end of the statement, too. As in many other
+programming languages, statements in Rust must end with a semicolon.
 
 In this simple example, the expression already is a value, but we could achieve
 the same result like this:
