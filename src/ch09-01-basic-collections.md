@@ -3,7 +3,7 @@
 Rust's standard library includes a number of really useful data structures
 called 'collections'. Most types represent one specific value, but collections
 can contain multiple values inside of them. Each collection has different
-capabilities and costs, and chosing an appropriate one for the situation you're
+capabilities and costs, and choosing an appropriate one for the situation you're
 in is a skill you'll develop over time. In this chapter, we'll go over three
 collections which are used very often in Rust programs:
 
@@ -13,4 +13,4 @@ collections which are used very often in Rust programs:
 * *HashMap*s allow you to associate a value with a particular key.
 
 There are more specialized variants of each of these data structures for
-special situations, but these ones are the most fundamental.
+special situations, but these are the most fundamental.
