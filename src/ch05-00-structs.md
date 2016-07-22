@@ -1,7 +1,6 @@
 # Structs
 
-So far, all of the data types we’ve seen allow us to have a single value
-at a time. `struct`s give us the ability to package up multiple values and
+`struct`s give us the ability to package up multiple values and
 keep them in one related structure.
 
 Let’s write a program which calculates the distance between two points.
