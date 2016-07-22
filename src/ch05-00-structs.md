@@ -74,12 +74,13 @@ f64::powi(2.0, 3)
 ```
 
 The double colon (`::`) here is a namespace operator. We haven’t talked about
-modules yet, but you can think of the `powi()` function as being scoped inside
-of another name. In this case, the name is `f64`, the same as the type. The
-`powi()` function takes two arguments: the first is a number, and the second is
-the power that it raises that number to. In this case, the second number is an
-integer, hence the ‘i’ in its name. Similarly, `sqrt()` is a function under the
-`f64` module, which takes the square root of its argument.
+modules and namespaces in depth yet, but you can think of the `powi()` function
+as being scoped inside of another name. In this case, the name is `f64`, the
+same as the type. The `powi()` function takes two arguments: the first is a
+number, and the second is the power that it raises that number to. In this
+case, the second number is an integer, hence the ‘i’ in its name. Similarly,
+`sqrt()` is a function under the `f64` module, which takes the square root of
+its argument.
 
 ## Why `struct`s?
 
