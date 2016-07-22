@@ -56,21 +56,18 @@ Point 2: (12, 0)
 Distance: 13
 ```
 
-Let's take a quick look at `distance()` before we move forward:
+Let's take a quick look at `distance()` before we move forward. To find the
+distance between two points, we can use the Pythagorean Theorem. The theorem is
+named after Pythagoras, who was the first person to mathematically prove this
+formula. The details aren't that important; just know the theorem says that the
+formula for the distance between two points is equal to:
 
-```rust
-fn distance(x1: f64, y1: f64, x2: f64, y2: f64) -> f64 {
-    let x_squared = f64::powi(x2 - x1, 2);
-    let y_squared = f64::powi(y2 - y1, 2);
+- squaring the distance between the points horizontally (the "x" direction)
+- squaring the distance between the points vertically (the "y" direction)
+- adding those together
+- and taking the square root of that.
 
-    f64::sqrt(x_squared + y_squared)
-}
-```
-
-To find the distance between two points, we can use the Pythagorean Theorem.
-The theorem is named after Pythagoras, who was the first person to mathematically
-prove this formula. The details aren't that important, to be honest. There's a few
-things that we haven't discussed yet, though.
+So that's what we're implementing here.
 
 ```rust,ignore
 f64::powi(2.0, 3)
