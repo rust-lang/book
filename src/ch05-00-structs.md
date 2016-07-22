@@ -84,8 +84,8 @@ its argument.
 
 ## Why `struct`s?
 
-Our little program is okay, but we can do better. The key is in the signature
-of `distance()`:
+Our little program is okay, but we can do better. The key to seeing this is in
+the signature of `distance()`:
 
 ```rust,ignore
 fn distance(x1: f64, y1: f64, x2: f64, y2: f64) -> f64 {
@@ -94,11 +94,11 @@ fn distance(x1: f64, y1: f64, x2: f64, y2: f64) -> f64 {
 The distance function is supposed to calculate the distance between two points.
 But our distance function calculates some distance between four numbers. The
 first two and last two arguments are related, but that’s not expressed anywhere
-in our program itself. We need a way to group `(x1, y1)` and `(x2, y2)`
-together.
+in our program itself. It would be nicer if we had a way to group `(x1, y1)`
+and `(x2, y2)` together.
 
-We’ve already discussed one way to do that: tuples. Here’s a version of our program
-which uses tuples:
+We’ve already discussed one way to do that: tuples. Here’s a version of our
+program which uses tuples:
 
 ```rust
 fn main() {
@@ -122,9 +122,9 @@ fn distance(p1: (f64, f64), p2: (f64, f64)) -> f64 {
 ```
 
 This is a little better, for sure. Tuples let us add a little bit of structure.
-We’re now passing two arguments, so that’s more clear. But it’s also worse.
-Tuples don’t give names to their elements, and so our calculation has gotten
-much more confusing:
+We’re now passing two arguments, so that’s more clear. But it’s also worse:
+tuples don’t give names to their elements, so our calculation has gotten more
+confusing:
 
 ```rust,ignore
 p2.0 - p1.0
@@ -132,10 +132,11 @@ p2.1 - p1.1
 ```
 
 When writing this example, your authors almost got it wrong themselves! Distance
-is all about `x` and `y` points, but now it’s all about `0` and `1`. This isn’t
-great.
+is all about `x` and `y` points, but our code is talking about `0` and `1`.
+This isn’t great.
 
-Enter `struct`s. We can transform our tuples into something with a name:
+Enter `struct`s. We can transform our tuples into something with a name for the
+whole as well as names for the parts:
 
 ```rust,ignore
 let p1 = (0.0, 5.0);
@@ -148,7 +149,7 @@ struct Point {
 let p1 = Point { x: 0.0, y: 5.0 };
 ```
 
-Here’s what declaring a `struct` looks like:
+Here’s what declaring a `struct` looks like in general:
 
 ```text
 struct NAME {
