@@ -158,17 +158,10 @@ struct NAME {
 ```
 
 The `NAME: TYPE` bit is called a ‘field’, and we can have as many or as few of
-them as you’d like. If you have none of them, drop the `{}`s:
+them as we’d like.
 
-```rust
-struct Foo;
-```
-
-`struct`s with no fields are called ‘unit structs’, and are used in certain
-advanced situations. We will just ignore them for now.
-
-You can access the field of a struct in the same way you access an element of
-a tuple, except you use its name:
+We can access the field of a struct in the same way we access an element of
+a tuple, except we use its name:
 
 ```rust,ignore
 let p1 = (0.0, 5.0);
