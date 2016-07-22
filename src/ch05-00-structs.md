@@ -210,7 +210,7 @@ Our function signature for `distance()` now says exactly what we mean: it
 calculates the distance between two `Point`s. And rather than `0` and `1`,
 we’ve got back our `x` and `y`. This is a win for clarity.
 
-There’s one other thing that’s a bit strange here, this annotation on our
+There’s one other thing that’s a bit strange here, this stuff above the
 `struct` declaration:
 
 ```rust,ignore
@@ -218,7 +218,10 @@ There’s one other thing that’s a bit strange here, this annotation on our
 struct Point {
 ```
 
-We haven’t yet talked about traits, but we did talk about `Debug` when we
-discussed arrays. This `derive` attribute allows us to tweak the behavior of
-our `Point`. In this case, we are opting into copy semantics, and everything
-that implements `Copy` must implement `Clone`.
+This is an annotation that tells the compiler our struct should get some
+default behavior for the `Debug`, `Copy`, and `Clone` traits. We talked about
+`Debug` when we discussed arrays-- this lets us print out the `struct` and all
+its fields when we use an instance of the struct with `println!`'s `{:?}`. We
+talked about marking that types can be `Copy` and `Clone`-able in Chapter XX
+when we discussed ownership. We'll continue exploring annotations and the
+behaviors you can `derive` in Chapter XX.
