@@ -292,7 +292,7 @@ Here’s a recap of what we’ve talked about:
 
 1. At any given time, you may have _either_, but not both of:
     1. One mutable reference.
-    2. Any number of immutable references .
+    2. Any number of immutable references.
 2. References must always be valid.
 
 Next, let's look at a different kind of reference: slices.
