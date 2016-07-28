@@ -1,4 +1,4 @@
-## Data Types in Rust
+## Data Types
 
 Every value in Rust is of a certain *type*, which tells Rust what kind of data
 is being given so it knows how to work with that data. You can usually rely on

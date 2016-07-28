@@ -1,4 +1,4 @@
-## How Functions Work in Rust
+## How Functions Work
 
 Functions are pervasive in Rust code. We’ve already seen one of the most
 important functions in the language: the `main()` function that’s the entry
