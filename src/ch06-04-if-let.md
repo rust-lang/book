@@ -64,3 +64,24 @@ match expression {
 
 In other words, it's the high-level construct we were originally looking for:
 do something special with only one pattern.
+
+It's important to note that you can use the `if let` statement with `else if`:
+
+```rust,ignore
+enum Foo {
+    First(Option<u32>),
+    Second,
+}
+
+let x = Foo::First(None);
+
+if let Foo::First(Some(y)) = x {
+    // Do something.
+} else if let Foo::First(y) = x {
+    // `y` is `None` here.
+} else {
+    // `Foo::Second` here.
+}
+```
+
+However, it's generally better to directly use `match` in such cases to keep a code as clear as possible.
