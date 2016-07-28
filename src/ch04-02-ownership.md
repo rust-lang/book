@@ -206,7 +206,7 @@ it only works for memory. What if, instead of a `String`, we had a
 `TcpConnection`? Opening and closing a network connection is very similar to
 allocating and freeing memory. The solution that we could use there is to allow
 the programmer to hook into the assignment, similar to `drop()`, and write code
-fix things up. That would work, but now, an `=` can run arbitrary code. That’s
+to fix things up. That would work, but now, an `=` can run arbitrary code. That’s
 also not good, and it doesn’t solve our efficiency concerns either.
 
 Let’s take a step back: the root of the problem is that `s1` and `s2` both
@@ -258,7 +258,7 @@ inexpensive.
 
 But what if we _do_ want to deeply copy the `String`’s data, and not just the
 `String` itself? There’s a common method for that: `clone()`. We will discuss
-methods in the next section on [`struct`]s, but they’re a common enough feature
+methods in the next section on [structs][struct], but they’re a common enough feature
 in many programming languages that you have probably seen them before.
 
 Here’s an example of the `clone()` method in action:
@@ -270,7 +270,7 @@ let s2 = s1.clone();
 println!("{}", s1);
 ```
 
-[`struct`]: structs.html
+[struct]: structs.html
 
 This will work just fine. Remember our diagram from before? In this case,
 it _is_ doing this:
@@ -442,7 +442,7 @@ owner goes out of scope, if it hasn’t been moved, it will `drop()`.
 
 This might seem a bit tedious, and it is. What if I want to let a function use
 a value, but not take ownership? It’s quite annoying that anything I pass in
-also needs passed back. Look at this function:
+also needs to be passed back. Look at this function:
 
 ```rust
 fn main() {
