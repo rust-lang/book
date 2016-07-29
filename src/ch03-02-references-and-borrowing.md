@@ -106,10 +106,12 @@ fn change(some_string: &String) {
 
 Here’s the error:
 
-```bash
-8:16 error: cannot borrow immutable borrowed content `*some_string` as mutable
- some_string.push_str(", world");
- ^~~~~~~~~~~
+```text
+error: cannot borrow immutable borrowed content `*some_string` as mutable
+ --> error.rs:8:5
+  |
+8 |     some_string.push_str(", world");
+  |     ^^^^^^^^^^^
 ```
 
 Just like bindings are immutable by default, so are references. We’re not
@@ -146,20 +148,16 @@ let r2 = &mut s;
 
 Here’s the error:
 
-```bash
-5:20 error: cannot borrow `s` as mutable more than once at a time [E0499]
-    let r2 = &mut s;
-                  ^
-4:20 note: previous borrow of `s` occurs here; the mutable borrow prevents
-           subsequent moves, borrows, or modification of `s` until the borrow
-           ends
-    let r1 = &mut s;
-                  ^
-7:2 note: previous borrow ends here
-fn main() {
-
-}
-^
+```text
+error[E0499]: cannot borrow `s` as mutable more than once at a time
+ --> borrow_twice.rs:5:19
+  |
+4 |     let r1 = &mut s;
+  |                   - first mutable borrow occurs here
+5 |     let r2 = &mut s;
+  |                   ^ second mutable borrow occurs here
+6 | }
+  | - first borrow ends here
 ```
 
 The error is what it says: you cannot borrow something mutably more than once
@@ -195,20 +193,16 @@ let r3 = &mut s; // BIG PROBLEM
 Here’s the error:
 
 ```text
-19: 6:20 error: cannot borrow `s` as mutable because it is also borrowed as
-                immutable [E0502]
-    let r3 = &mut s; // BIG PROBLEM
-                  ^
-15: 4:16 note: previous borrow of `s` occurs here; the immutable borrow
-               prevents subsequent moves or mutable borrows of `s` until the
-               borrow ends
-    let r1 = &s; // no problem
-              ^
-8:2 note: previous borrow ends here
-fn main() {
-
-}
-^
+error[E0502]: cannot borrow `s` as mutable because it is also borrowed as immutable
+ --> borrow_thrice.rs:6:19
+  |
+4 |     let r1 = &s; // no problem
+  |               - immutable borrow occurs here
+5 |     let r2 = &s; // no problem
+6 |     let r3 = &mut s; // BIG PROBLEM
+  |                   ^ mutable borrow occurs here
+7 | }
+  | - immutable borrow ends here
 ```
 
 Whew! We _also_ cannot have a mutable reference while we have an immutable one.
@@ -240,12 +234,17 @@ fn dangle() -> &String {
 Here’s the error:
 
 ```text
-error: missing lifetime specifier [E0106]
-fn dangle() -> &String {
-               ^~~~~~~
-help: this function’s return type contains a borrowed value, but there is no
-      value for it to be borrowed from
-help: consider giving it a 'static lifetime
+error[E0106]: missing lifetime specifier
+ --> dangle.rs:5:16
+  |
+5 | fn dangle() -> &String {
+  |                ^^^^^^^
+  |
+  = help: this function's return type contains a borrowed value, but there is no 
+    value for it to be borrowed from
+  = help: consider giving it a 'static lifetime
+
+error: aborting due to previous error
 ```
 
 This error message refers to a feature we haven’t learned about yet,
