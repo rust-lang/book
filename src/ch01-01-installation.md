@@ -5,26 +5,26 @@ connection to run the commands in this chapter, as we’ll be downloading Rust
 from the internet.
 
 We’ll be showing off a number of commands using a terminal, and those lines all
-start with `$`. You don't need to type in the `$`s, they are there to indicate
+start with `$`. You don't need to type in the `$`s; they are there to indicate
 the start of each command. You’ll see many tutorials and examples around the web
 that follow this convention: `$` for commands run as a regular user, and `#`
 for commands you should be running as an administrator.
 
 ## Installing on Linux or Mac
 
-If you're on Linux or a Mac, all you need to do is open a terminal and type this:
+If you're on Linux or a Mac, all you need to do is open a terminal and type
+this:
 
 ```bash
 $ curl -sSf https://static.rust-lang.org/rustup.sh | sh
 ```
 
-This will download a script, and start the installation. You may be prompted for your password.
-If it all goes well, you’ll see this appear:
+This will download a script and start the installation. You may be prompted for
+your password. If it all goes well, you’ll see this appear:
 
 ```text
     Rust is ready to roll.
 ```
-
 
 ## Installing on Windows
 
@@ -41,8 +41,8 @@ the uninstall script:
 $ sudo /usr/local/lib/rustlib/uninstall.sh
 ```
 
-If you used the Windows installer, you can re-run the `.msi` and it will give you
-an uninstall option.
+If you used the Windows installer, you can re-run the `.msi` and it will give
+you an uninstall option.
 
 ## Troubleshooting
 
