@@ -23,7 +23,7 @@ $ curl https://sh.rustup.rs -sSf | sh
 This will download a script and start the installation. You may be prompted for
 your password. If it all goes well, you’ll see this appear:
 
-```text
+```bash
 Rust is installed now. Great!
 ```
 
