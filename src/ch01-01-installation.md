@@ -1,8 +1,8 @@
 # Installation
 
-The first step to using Rust is to install it. Generally speaking, you’ll need
-an internet connection to run the commands in this chapter, as we’ll be
-downloading Rust from the internet.
+The first step to using Rust is to install it. You’ll need an internet
+connection to run the commands in this chapter, as we’ll be downloading Rust
+from the internet.
 
 We’ll be showing off a number of commands using a terminal, and those lines all
 start with `$`. You don't need to type in the `$`s, they are there to indicate
