@@ -8,7 +8,8 @@ We’ll be showing off a number of commands using a terminal, and those lines al
 start with `$`. You don't need to type in the `$`s; they are there to indicate
 the start of each command. You’ll see many tutorials and examples around the web
 that follow this convention: `$` for commands run as a regular user, and `#`
-for commands you should be running as an administrator.
+for commands you should be running as an administrator. Lines that don't start
+with `$` are typically showing the output of the previous command.
 
 ## Installing on Linux or Mac
 
