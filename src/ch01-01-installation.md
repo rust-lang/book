@@ -52,9 +52,15 @@ If you've got Rust installed, you can open up a shell, and type this:
 $ rustc --version
 ```
 
-You should see the version number, commit hash, and commit date.
+You should see the version number, commit hash, and commit date in a format
+similar to this for the latest stable version at the time you install:
 
-If you do, Rust has been installed successfully! Congrats!
+```bash
+rustc x.y.z (abcabcabc yyyy-mm-dd)
+```
+
+If you see this, Rust has been installed successfully!
+Congrats!
 
 If you don't and you're on Windows, check that Rust is in your %PATH% system
 variable. If it isn't, run the installer again, select "Change" on the "Change,
