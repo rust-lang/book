@@ -2,26 +2,26 @@
 
 Welcome to “The Rust Programming Language”, an introductory book about Rust.
 Rust is a programming language that’s focused on safety, concurrency, and
-speed. It maintains these goals without having a garbage collector, making it a
-useful language for a number of use cases other languages aren’t good at:
-embedding in other languages, programs with specific space and time
-requirements, and writing low-level code, like device drivers and operating
-systems. It improves on current languages targeting this space by having a
-number of compile-time safety checks that produce no runtime overhead, while
-eliminating all data races. Rust also aims to achieve ‘zero-cost abstractions’
-even though some of these abstractions feel like those of a high-level
-language. Even then, Rust still allows precise control like a low-level
-language would.
+speed. Its design lets you create programs that have the speed and control of a
+low-level language, but with helpful abstractions that feel like a high-level
+language. The Rust community welcomes all programmers who have their experience
+in languages like C and are looking for a safer alternative, as well as
+programmers from languages like Ruby who are looking for ways to write more
+performant code without losing expressiveness.
+
+Rust provides the majority of its safety checks at compile time and without a
+garbage collector so that your program's runtime isn't impacted. This makes it
+useful in a number of use cases that other languages aren’t good at: embedding
+in other languages, programs with specific space and time requirements, and
+writing low-level code, like device drivers and operating systems. It's also
+great for web applications: it powers the Rust package registry site, crates.io!
+We're excited to see what _you_ create with Rust.
 
 This book is written for a reader who already knows how to program in at least
-one programming language. Which language that is does not matter very much,
-though you may have an easier time if you’ve programmed in a low-level language
-with manual memory allocation.
-
-After reading this book, you should be comfortable writing Rust programs. We’ll
-be learning Rust through small, focused examples that demonstrate each topic.
-The chapters build upon each other, so if you skip ahead, you may have to skip
-back to refer to a previous concept.
+one programming language. After reading this book, you should be comfortable
+writing Rust programs. We’ll be learning Rust through small, focused examples
+that build on each other to demonstrate how to use various features of Rust as
+well as how they work behind the scenes.
 
 ## Contributing to the book
 
