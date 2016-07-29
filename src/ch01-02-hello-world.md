@@ -1,4 +1,4 @@
-# Hello, world!
+# Hello, World!
 
 Now that you have Rust installed, let’s write your first Rust program. It's
 traditional when learning a new language to write a little program to print the
@@ -17,9 +17,9 @@ practicing it early on is good.
 ## Creating a Project File
 
 First, make a file to put your Rust code in. Rust doesn't care where your code
-lives, but for this book, I suggest making a *projects* directory in your home
-directory, and keeping all your projects there. Open a terminal and enter the
-following commands to make a directory for this particular project:
+lives, but for this book, we'd suggest making a *projects* directory in your
+home directory and keeping all your projects there. Open a terminal and enter
+the following commands to make a directory for this particular project:
 
 ```bash
 $ mkdir ~/projects
@@ -28,14 +28,15 @@ $ mkdir hello_world
 $ cd hello_world
 ```
 
-> Note: If you’re on Windows and not using PowerShell, the `~` may not work.
+> Note: If you’re on Windows and not using PowerShell, the `~` that represents
+> your home directory may not work.
 > Consult the documentation for your shell for more details.
 
 ## Writing and Running a Rust Program
 
 Next, make a new source file and call it *main.rs*. Rust files always end
 in a *.rs* extension. If you’re using more than one word in your filename, use
-an underscore to separate them; for example, you'd use *hello_world.rs* rather
+an underscore to separate them. For example, you'd use *hello_world.rs* rather
 than *helloworld.rs*.
 
 Now open the *main.rs* file you just created, and type the following code:
@@ -60,7 +61,7 @@ system, you should see the string `Hello, world!` print to the terminal. If you
 did, then congratulations! You've officially written a Rust program. That makes
 you a Rust programmer! Welcome.
 
-## Anatomy of a Rust Program
+## Hello, World Explained
 
 Now, let’s go over what just happened in your "Hello, world!" program in
 detail. Here's the first piece of the puzzle:
@@ -72,11 +73,11 @@ fn main() {
 ```
 
 These lines define a *function* in Rust. The `main` function is special: it's
-the beginning of every Rust program. The first line says, “I’m declaring a
-function named `main` that takes no arguments and returns nothing.” If there
-were arguments, they would go inside the parentheses (`(` and `)`), and because
-we aren’t returning anything from this function, we can omit the return type
-entirely.
+the first thing that is run for every executable Rust program. The first line
+says, “I’m declaring a function named `main` that takes no arguments and
+returns nothing.” If there were arguments, they would go inside the parentheses
+(`(` and `)`), because we aren’t returning anything from this function, we
+have omitted the return type entirely.
 
 Also note that the function body is wrapped in curly braces (`{` and `}`). Rust
 requires these around all function bodies. It's considered good style to put
@@ -94,13 +95,11 @@ screen. There are a number of details that are important here. The first is
 that it’s indented with four spaces, not tabs.
 
 The second important part is the `println!()` line. This is calling a Rust
-*[macro]*, which is how metaprogramming is done in Rust. If it were calling a
+*macro*, which is how metaprogramming is done in Rust. If it were calling a
 function instead, it would look like this: `println()` (without the !). We'll
-discuss Rust macros in more detail later, but for now you just need to
+discuss Rust macros in more detail in Chapter XX, but for now you just need to
 know that when you see a `!` that means that you’re calling a macro instead of
 a normal function.
-
-[macro]: macros.html
 
 Next is `"Hello, world!"` which is a *string*. We pass this string as an
 argument to `println!`, which prints the string to the screen. Easy enough!
@@ -154,15 +153,15 @@ world!` to your terminal.
 If you come from a dynamic language like Ruby, Python, or JavaScript, you may
 not be used to compiling and running a program being separate steps. Rust is an
 *ahead-of-time compiled* language, which means that you can compile a program,
-give it to someone else, and they can run it even without Rust installed. If
-you give someone a `.rb` or `.py` or `.js` file, on the other hand, they need
-to have a Ruby, Python, or JavaScript implementation installed (respectively),
-but you only need one command to both compile and run your program. Everything
-is a tradeoff in language design.
+give it to someone else, and they can run it even without having Rust
+installed. If you give someone a `.rb`, `.py`, or `.js` file, on the other
+hand, they need to have a Ruby, Python, or JavaScript implementation installed
+(respectively), but you only need one command to both compile and run your
+program. Everything is a tradeoff in language design.
 
 Just compiling with `rustc` is fine for simple programs, but as your project
-grows, you'll want to be able to manage all of the options your project has,
-and make it easy to share your code with other people and projects. Next, I'll
+grows, you'll want to be able to manage all of the options your project has
+and make it easy to share your code with other people and projects. Next, we'll
 introduce you to a tool called Cargo, which will help you write real-world Rust
 programs.
 
