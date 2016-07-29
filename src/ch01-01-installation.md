@@ -16,14 +16,14 @@ If you're on Linux or a Mac, all you need to do is open a terminal and type
 this:
 
 ```bash
-$ curl -sSf https://static.rust-lang.org/rustup.sh | sh
+$ curl https://sh.rustup.rs -sSf | sh
 ```
 
 This will download a script and start the installation. You may be prompted for
 your password. If it all goes well, you’ll see this appear:
 
 ```text
-    Rust is ready to roll.
+Rust is installed now. Great!
 ```
 
 ## Installing on Windows
@@ -38,7 +38,7 @@ Uninstalling Rust is as easy as installing it. On Linux or Mac, just run
 the uninstall script:
 
 ```bash
-$ sudo /usr/local/lib/rustlib/uninstall.sh
+$ rustup self uninstall
 ```
 
 If you used the Windows installer, you can re-run the `.msi` and it will give
@@ -64,7 +64,7 @@ If not, there are a number of places where you can get help. The easiest is
 [the #rust IRC channel on irc.mozilla.org][irc], which you can access through
 [Mibbit][mibbit]. Click that link, and you'll be chatting with other Rustaceans
 (a silly nickname we call ourselves) who can help you out. Other great resources
-include [the user’s forum][users], and [Stack Overflow][stackoverflow].
+include [the user’s forum][users] and [Stack Overflow][stackoverflow].
 
 [irc]: irc://irc.mozilla.org/#rust
 [mibbit]: http://chat.mibbit.com/?server=irc.mozilla.org&channel=%23rust
@@ -73,7 +73,7 @@ include [the user’s forum][users], and [Stack Overflow][stackoverflow].
 
 ## Local documentation
 
-This installer also installs a copy of the documentation locally, so you can
-read it offline. On UNIX systems, `/usr/local/share/doc/rust` is the location.
-On Windows, it's in a `share/doc` directory, inside the directory to which Rust
-was installed.
+The installer also includes a copy of the documentation locally, so you can
+read it offline. On Linux or Mac, run `rustup doc` to open the local
+documentation in your browser. On Windows, the documentation is in a
+`share/doc` directory inside the directory where Rust was installed.
