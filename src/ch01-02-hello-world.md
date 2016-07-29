@@ -5,11 +5,6 @@ traditional when learning a new language to write a little program to print the
 text “Hello, world!” to the screen, and in this section, we'll follow that
 tradition.
 
-The nice thing about starting with such a simple program is that you can
-quickly verify that your compiler is installed, and that it's working properly.
-Printing information to the screen is also just a pretty common thing to do, so
-practicing it early on is good.
-
 > Note: This book assumes basic familiarity with the command line. Rust itself
 > makes no specific demands about your editing, tooling, or where your code
 > lives, so if you prefer an IDE to the command line, that's an option.
@@ -104,10 +99,9 @@ a normal function.
 Next is `"Hello, world!"` which is a *string*. We pass this string as an
 argument to `println!`, which prints the string to the screen. Easy enough!
 
-The line ends with a semicolon (`;`). Rust is an *expression oriented*
-language, which means that most things are expressions, rather than statements.
-The `;` indicates that this expression is over, and the next one is ready to
-begin. Most lines of Rust code end with a `;`.
+The line ends with a semicolon (`;`). The `;` indicates that this expression is
+over, and the next one is ready to begin. Most lines of Rust code end with a
+`;`.
 
 ## Compiling and Running Are Separate Steps
 
