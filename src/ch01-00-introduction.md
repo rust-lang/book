@@ -1,12 +1,12 @@
 # Introduction
 
 Welcome to “The Rust Programming Language”, an introductory book about Rust.
-Rust is a programming language that’s focused on safety, concurrency, and
-speed. Its design lets you create programs that have the speed and control of a
-low-level language, but with helpful abstractions that feel like a high-level
-language. The Rust community welcomes all programmers who have their experience
-in languages like C and are looking for a safer alternative, as well as
-programmers from languages like Ruby who are looking for ways to write more
+Rust is a programming language that’s focused on safety, speed, and
+concurrency. Its design lets you create programs that have the performance and
+control of a low-level language, but with helpful abstractions that feel like a
+high-level language. The Rust community welcomes all programmers who have their
+experience in languages like C and are looking for a safer alternative, as well
+as programmers from languages like Ruby who are looking for ways to write more
 performant code without losing expressiveness.
 
 Rust provides the majority of its safety checks at compile time and without a
