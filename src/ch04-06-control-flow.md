@@ -25,18 +25,23 @@ Write this sample program using `if` and save it in the *branches* directory in
 
 ```rust
 fn main() {
-    let condition = true;
+    let number = 3;
 
-    if condition {
+    if number < 5 {
         println!("condition was true");
+    } else {
+        println!("condition was false");
     }
 }
 ```
 
-The `condition` variable is a boolean; here, it's set to true. All `if`
-expressions start with `if`, which is followed by a condition. The block of code
-we want to execute if the condition is true goes immediately after the
-condition, inside curly braces. These blocks are sometimes called ‘arms’.
+All `if` expressions start with `if`, which is followed by a condition. In this
+case, our condition is checking if our variable binding `number` has a value
+that is less than 5. The block of code we want to execute if the condition is
+true goes immediately after the condition, inside curly braces. These blocks
+are sometimes called ‘arms’. We can optionally also include an `else`
+statement, which we have chosen to do here. `else` gives the program a block of
+code to execute should `condition` evaluate to false.
 
 Try running this code, and you should see output like this:
 
@@ -47,11 +52,11 @@ $ cargo run
 condition was true
 ```
 
-Let’s try changing the value of `condition` to `false` as follows to see what
-happens:
+Let’s try changing the value of `number` to a value that makes the condition
+`false` to see what happens:
 
-```rust
-    let condition = false;
+```rust,ignore
+let number = 7;
 ```
 
 Run the program again, and look at the output:
@@ -60,64 +65,34 @@ Run the program again, and look at the output:
 $ cargo run
    Compiling branches v0.1.0 (file:///projects/branches)
      Running `target/debug/branches`
-```
-
-Nothing was output, because the condition was false and the `if` block was not
-run.
-
-We can optionally also include an `else` statement, which gives the program a
-block of code to execute should `condition` evaluate to false.
-
-```rust
-fn main() {
-    let condition = false;
-
-    if condition {
-        println!("condition was true");
-    } else {
-        println!("condition was false");
-    }
-}
-```
-
-If we run this program, the output will look like:
-
-```bash
-$ cargo run
-   Compiling branches v0.1.0 (file:///projects/branches)
-     Running `target/debug/branches`
 condition was false
 ```
-
-This time, because `condition` was false and we have an `else` block, the
-`else` block was executed.
 
 It’s also worth noting that `condition` here _must_ be a `bool`. To see what
 happens if the condition isn't a `bool`, try running this code:
 
 ```rust,ignore
 fn main() {
-    let condition = 5;
+    let number = 3;
 
-    if condition {
-        println!("condition was five");
+    if number {
+        println!("number was three");
     }
 }
 ```
 
-The `condition` variable is assigned a value of `5` this time, and Rust will
+The `if` condition evaluates to a value of `3` this time, and Rust will
 complain about it:
 
 ```bash
    Compiling branches v0.1.0 (file:///projects/branches)
-src/main.rs:4:8: 4:17 error: mismatched types:
- expected `bool`,
-    found `_`
-(expected bool,
-    found integral variable) [E0308]
-src/main.rs:4     if condition {
-                     ^~~~~~~~~
-src/main.rs:4:8: 4:17 help: run `rustc --explain E0308` to see a detailed explanation
+error: mismatched types [--explain E0308]
+ --> src/main.rs:4:8
+4 |>     if number {
+  |>        ^^^^^^ expected bool, found integral variable
+note: expected type `bool`
+note:    found type `_`
+
 error: aborting due to previous error
 Could not compile `branches`.
 ```
@@ -129,15 +104,15 @@ languages like Ruby or JavaScript. We must be explicit and always give `if` a
 
 ```rust
 fn main() {
-    let condition = 5;
+    let number = 3;
 
-    if condition != 0 {
-        println!("condition was something other than zero");
+    if number != 0 {
+        println!("number was something other than zero");
     }
 }
 ```
 
-Running this will print "condition was something other than zero".
+Running this will print "number was something other than zero".
 
 #### Multiple Conditions with `else if`
 
