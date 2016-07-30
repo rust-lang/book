@@ -210,6 +210,8 @@ Our function signature for `distance()` now says exactly what we mean: it
 calculates the distance between two `Point`s. And rather than `0` and `1`,
 we’ve got back our `x` and `y`. This is a win for clarity.
 
+## Derived Traits
+
 There’s one other thing that’s a bit strange here, this stuff above the
 `struct` declaration:
 
@@ -220,8 +222,82 @@ struct Point {
 
 This is an annotation that tells the compiler our struct should get some
 default behavior for the `Debug`, `Copy`, and `Clone` traits. We talked about
-`Debug` when we discussed arrays-- this lets us print out the `struct` and all
-its fields when we use an instance of the struct with `println!`'s `{:?}`. We
-talked about marking that types can be `Copy` and `Clone`-able in Chapter XX
-when we discussed ownership. We'll continue exploring annotations and the
-behaviors you can `derive` in Chapter XX.
+marking that types can be `Copy` and `Clone`-able in Chapter XX when we
+discussed ownership. `Debug` is the trait that enables us to print out our
+struct so that we can see its value while we are debugging our code.
+
+So far, we’ve been printing values using `{}` in a `println!` macro. If we try
+that with a struct, however, by default, we'll get an error. Say we have the
+following program:
+
+```rust,ignore
+struct Point {
+    x: f64,
+    y: f64,
+}
+
+fn main() {
+    let p1 = Point { x: 0.0, y: 5.0};
+    println!("Point 1: {}", p1);
+}
+```
+
+This code tries to print the `p1` point directly, which may seem innocuous. But
+running it produces the following output:
+
+```bash
+$ cargo run
+   Compiling points v0.1.0 (file:///projects/points)
+error: the trait bound `Point: std::fmt::Display` is not satisfied [--explain E0277]
+ --> src/main.rs:8:29
+8 |>     println!("Point 1: {}", p1);
+  |>                             ^^
+<std macros>:2:27: 2:58: note: in this expansion of format_args!
+<std macros>:3:1: 3:54: note: in this expansion of print! (defined in <std macros>)
+src/main.rs:8:5: 8:33: note: in this expansion of println! (defined in <std macros>)
+note: `Point` cannot be formatted with the default formatter; try using `:?` instead if you are using a format string
+note: required by `std::fmt::Display::fmt`
+```
+
+Whew! The core of the error is this part: *the trait bound `Point:
+std::fmt::Display` is not satisfied*. `println!` can do many kinds of
+formatting. By default, `{}` implements a kind of formatting known as
+`Display`: output intended for direct end-user consumption. The primitive types
+we’ve seen implement `Display`, as there’s only one way you’d show a `1` to a
+user. But with structs, the output is less clear. Do you want commas or not?
+What about the `{}`s? Should all the fields be shown?
+
+More complex types in the standard library and that are defined by the
+programmer do not automatically implement `Display` formatting. Standard
+library types implement `Debug` formatting, which is intended for the
+programmer to see. The `#[derive(Debug)]` annotation lets us use a default
+implementation of `Debug` formatting to easily get this ability for types we've
+defined. To ask `println!` to use `Debug` formatting with our `Point`, we add
+the annotation to derive the trait and include `:?` in the print string, like
+this:
+
+```rust
+#[derive(Debug)]
+struct Point {
+    x: f64,
+    y: f64,
+}
+
+fn main() {
+    let p1 = Point { x: 0.0, y: 5.0};
+    println!("Point 1: {:?}", p1);
+}
+```
+
+If you run this, it should print the values of each field in the `Point` struct
+as desired:
+
+```bash
+$ cargo run
+   Compiling points v0.1.0 (file:///projects/points)
+     Running `target/debug/points`
+Point 1: Point { x: 0, y: 5 }
+```
+
+You’ll see this repeated later with other types. We’ll cover traits fully in
+Chapter XX.
