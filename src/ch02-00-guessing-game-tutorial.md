@@ -287,9 +287,10 @@ brace:
 }
 ```
 
-This prints out the string we saved our input in. The `{}`s are a placeholder,
-and we pass `guess` as an argument to the macro. If we had multiple `{}`s, we
-would pass multiple arguments:
+This prints out the string we saved our input in. The `{}`s are a placeholder:
+think of `{}` as little crab pincers, holding a value in place. The first `{}`
+holds the first value after the format string, the second set holds the second
+value, and so on. Printing out multiple values in one call to `println!()` would then look like this:
 
 ```rust
 let x = 5;
@@ -298,7 +299,9 @@ let y = 10;
 println!("x and y: {} and {}", x, y);
 ```
 
-Anyway, that’s the tour. We can run what we have with `cargo run`:
+Which would print out "x and y: 5 and 10".
+
+Anyway, back to our guessing game. We can run what we have with `cargo run`:
 
 ```bash
 $ cargo run

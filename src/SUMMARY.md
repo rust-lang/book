@@ -12,7 +12,6 @@
     - [Slices](ch03-03-slices.md)
 
 - [Common Programming Concepts in Rust](ch04-00-common-programming-concepts-in-rust.md)
-    - [Anatomy of a Rust Program](ch04-01-anatomy-of-a-rust-program.md)
     - [Variable Bindings in Detail](ch04-02-variable-bindings-in-detail.md)
     - [Data Types](ch04-03-data-types.md)
     - [How Functions Work](ch04-04-how-functions-work.md)
