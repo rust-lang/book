@@ -36,16 +36,16 @@ fn first_word(s: &String) -> usize {
 
 Let’s break that down a bit:
 
-```rust
-    let bytes = s.as_bytes();
+```rust,ignore
+let bytes = s.as_bytes();
 ```
 
 Since we need to go through the String element by element and
 check if a value is a space, we will convert our String to an
 array of bytes using the `.as_bytes()` method.
 
-```rust
-    for (i, &byte) in bytes.iter().enumerate() {
+```rust,ignore
+for (i, &byte) in bytes.iter().enumerate() {
 ```
 
 We will be discussing iterators in more detail in Chapter XX, but for
@@ -59,12 +59,12 @@ Since it’s a tuple, we can use patterns, just like elsewhere in Rust.
 So we match against the tuple with i for the index and &byte for
 the byte itself.
 
-```rust
-        if byte == 32 {
-            return i;
-        }
+```rust,ignore
+    if byte == 32 {
+        return i;
     }
-    s.len()
+}
+s.len()
 ```
 
 We search for the value 32, which represents a space in UTF-8. If we find one, we return the
