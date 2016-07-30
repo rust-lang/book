@@ -12,7 +12,7 @@
     - [Slices](ch03-03-slices.md)
 
 - [Common Programming Concepts in Rust](ch04-00-common-programming-concepts-in-rust.md)
-    - [Variable Bindings in Detail](ch04-02-variable-bindings-in-detail.md)
+    - [Variable Bindings and Mutability](ch04-01-variable-bindings-and-mutability.md)
     - [Data Types](ch04-03-data-types.md)
     - [How Functions Work](ch04-04-how-functions-work.md)
     - [Comments](ch04-05-comments.md)

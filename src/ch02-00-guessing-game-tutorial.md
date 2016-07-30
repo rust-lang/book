@@ -133,8 +133,7 @@ let mut guess = String::new();
 
 Now we’re getting interesting! There’s a lot going on in this little line.
 The first thing to notice is that this is a let statement, which is
-used to create ‘variable bindings’. Variable bindings will be covered in more
-detail in Chapter XX. Here's an example:
+used to create what are called ‘variable bindings’. Here's an example:
 
 ```rust,ignore
 let foo = bar;
