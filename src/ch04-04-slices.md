@@ -25,7 +25,7 @@ fn first_word(s: &String) -> usize {
     let bytes = s.as_bytes();
 
     for (i, &byte) in bytes.iter().enumerate() {
-        if byte == 32 {
+        if byte == b' ' {
             return i;
         }
     }
@@ -55,9 +55,7 @@ fn first_word(s: &String) -> usize {
     // So we match against the tuple with i for the index, and &byte for
     // the byte itself.
     for (i, &byte) in bytes.iter().enumerate() {
-
-        // 32 is the value of a space in UTF-8
-        if byte == 32 {
+        if byte == b' ' {
 
             // We found a space! Return this position.
             return i;
@@ -80,7 +78,7 @@ that it will still be valid in the future. Consider this:
 #     let bytes = s.as_bytes();
 #
 #     for (i, &byte) in bytes.iter().enumerate() {
-#         if byte == 32 {
+#         if byte == b' ' {
 #             return i;
 #         }
 #     }
@@ -166,7 +164,7 @@ fn first_word(s: &String) -> &str {
     let bytes = s.as_bytes();
 
     for (i, &byte) in bytes.iter().enumerate() {
-        if byte == 32 {
+        if byte == b' ' {
             return &s[0..i];
         }
     }
@@ -193,7 +191,7 @@ the slice version of `first_word()` will throw an error:
 #     let bytes = s.as_bytes();
 #
 #     for (i, &byte) in bytes.iter().enumerate() {
-#         if byte == 32 {
+#         if byte == b' ' {
 #             return &s[0..i];
 #         }
 #     }
@@ -273,7 +271,7 @@ with no loss of functionality:
 #     let bytes = s.as_bytes();
 #
 #     for (i, &byte) in bytes.iter().enumerate() {
-#         if byte == 32 {
+#         if byte == b' ' {
 #             return &s[0..i];
 #         }
 #     }
