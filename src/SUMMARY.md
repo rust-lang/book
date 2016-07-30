@@ -6,17 +6,17 @@
 
 - [Guessing Game Tutorial](ch02-00-guessing-game-tutorial.md)
 
-- [Understanding Ownership](ch03-00-understanding-ownership.md)
-    - [Ownership](ch03-01-ownership.md)
-    - [References & Borrowing](ch03-02-references-and-borrowing.md)
-    - [Slices](ch03-03-slices.md)
+- [Common Programming Concepts in Rust](ch03-00-common-programming-concepts-in-rust.md)
+    - [Variable Bindings and Mutability](ch03-01-variable-bindings-and-mutability.md)
+    - [Data Types](ch03-02-data-types.md)
+    - [How Functions Work](ch03-03-how-functions-work.md)
+    - [Comments](ch03-04-comments.md)
+    - [Control Flow](ch03-05-control-flow.md)
 
-- [Common Programming Concepts in Rust](ch04-00-common-programming-concepts-in-rust.md)
-    - [Variable Bindings and Mutability](ch04-01-variable-bindings-and-mutability.md)
-    - [Data Types](ch04-03-data-types.md)
-    - [How Functions Work](ch04-04-how-functions-work.md)
-    - [Comments](ch04-05-comments.md)
-    - [Control Flow](ch04-06-control-flow.md)
+- [Understanding Ownership](ch04-00-understanding-ownership.md)
+    - [Ownership](ch04-01-ownership.md)
+    - [References & Borrowing](ch04-02-references-and-borrowing.md)
+    - [Slices](ch04-03-slices.md)
 
 - [Structs](ch05-00-structs.md)
     - [Method Syntax](ch05-01-method-syntax.md)
