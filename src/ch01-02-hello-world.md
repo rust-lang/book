@@ -56,7 +56,7 @@ system, you should see the string `Hello, world!` print to the terminal. If you
 did, then congratulations! You've officially written a Rust program. That makes
 you a Rust programmer! Welcome.
 
-## Hello, World Explained
+## Anatomy of a Rust Program
 
 Now, let’s go over what just happened in your "Hello, world!" program in
 detail. Here's the first piece of the puzzle:
