@@ -307,79 +307,27 @@ again!
 ^Cagain!
 ```
 
-That `^C` there is where I hit `control-c`. You may or may not see "again!" printed after the `^C`, depending on where the code was in the loop when it received the signal to halt.
+That `^C` there is where I hit `control-c`. You may or may not see "again!"
+printed after the `^C`, depending on where the code was in the loop when it
+received the signal to halt.
 
 Fortunately, Rust provides another, more reliable way to break out of a loop.
 We can place the `break` keyword within the loop to tell the program when to
-stop executing the loop. Try this version of the program out:
-
-```rust
-fn main() {
-    loop {
-        println!("once!");
-        break;
-    }
-}
-```
-
-If you run this program, you’ll see that it only executes one time:
-
-```bash
-$ cargo run
-   Compiling loops v0.1.0 (file:///projects/loops)
-     Running `target/debug/loops`
-once!
-```
-
-When a Rust program hits a `break` statement, it will exit the current loop.
-This on its own is not very useful; if we wanted to print somtheing just once,
-we wouldn't put it in a loop. This is where conditions come in again.
+stop executing the loop. Recall that we did this in the guessing game to exit
+the program when the user won the game by guessing the number correctly.
 
 #### Conditional Loops With `while`
 
-To make `break` useful, we need to give our program a condition. While the
-condition is true, the loop runs. When the condition ceases to be true, the
-`break` code runs, stopping the loop.
+A useful thing that many programs do is have a condition that can be evaluated
+within a loop. While the condition is true, the loop runs. When the condition
+ceases to be true, we call `break`, stopping the loop. This could be
+implemented with a combination of `loop`, `if`, `else`, and `break`; try to do
+that now if you'd like!
 
-Try this example:
-
-```rust
-fn main() {
-    let mut number = 3;
-
-    loop {
-        if number != 0 {
-            println!("{}!", number);
-
-            number = number - 1;
-        } else {
-            break;
-        }
-    }
-
-    println!("LIFTOFF!!!");
-}
-```
-
-If we run this, we’ll get:
-
-```bash
-   Compiling loops v0.1.0 (file:///projects/loops)
-     Running `target/debug/loops`
-3!
-2!
-1!
-LIFTOFF!!!
-```
-
-This program loops three times, counting down each time. Finally, after the
-loop, it prints another message, then exits.
-
-The core of this example is in the combination of `loop`, `if`, `else`, and
-`break`. We want to `loop`, but only while some sort of condition is true. As
-soon as it isn't, we want to `break` out of the loop. This pattern is so common
-that Rust has a more efficient language construct for it, called a `while`
-loop. Here's the same example, but using `while` instead:
+But this pattern is so common that Rust has a more efficient language construct
+for it, called a `while` loop. Here's an example using `while`: this program
+loops three times, counting down each time. Finally, after the loop, it prints
+another message, then exits:
 
 ```rust
 fn main() {
@@ -395,12 +343,13 @@ fn main() {
 }
 ```
 
-This gets rid of a lot of nesting, and it's more clear. While a condition
-holds, run this code; otherwise, do nothing.
+This gets rid of a lot of nesting that would be necessary if we used `loop`,
+`if`, `else`, and `break`, and it's more clear. While a condition holds, run
+this code; otherwise, exit the loop.
 
 #### Looping Though a Collection with `for`
 
-We can use this `while` construct to loop over the elements of a collection,
+We could use this `while` construct to loop over the elements of a collection,
 like an array. For example:
 
 ```rust
@@ -466,4 +415,27 @@ array.
 
 If you're wondering about the `.iter()` code in this example, keep reading! We
 will cover method syntax generally in Chapter XX and iterators specifically in
-Chapter XX. For now, though, let's get into the concept of ownership.
+Chapter XX.
+
+The safety and conciseness of `for` loops make them the most commonly used loop
+construct in Rust. Even in situations where you want to run some code a certain
+number of times, like our countdown example that used a `while` loop, most
+Rustaceans would use a `for` loop. The way to do that is using a `Range`, which
+is a type provided by the standard library that generates numbers starting from
+one number and ending before another number. Here's what the countdown would
+look like with a for loop, and using another method we haven't yet talked
+about, `.rev()`, to reverse the range:
+
+```rust
+fn main() {
+    for number in (1..4).rev() {
+        println!("{}!", number);
+    }
+    println!("LIFTOFF!!!");
+}
+```
+
+That's a bit nicer, isn't it?
+
+Now that you know how Rust does things that most other languages can do, let's
+talk about a concept that _doesn't_ commonly exist: ownership.
