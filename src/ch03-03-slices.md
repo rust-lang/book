@@ -37,37 +37,38 @@ fn first_word(s: &String) -> usize {
 Let’s break that down a bit:
 
 ```rust
-fn first_word(s: &String) -> usize {
-
-    // Since we need to go through the String element by element and
-    // check if a value is a space, we will convert our String to an
-    // array of bytes using the `.as_bytes()` method.
     let bytes = s.as_bytes();
+```
 
-    // We will be discussing iterators in more detail in Chapter XX, but for
-    // now, know that `iter()` is a method that returns each element in a
-    // collection, and `enumerate()` modifies the result of `iter()` and returns
-    // a tuple instead. The first element of the tuple is the index, and the
-    // second element is a reference to the element itself. This is a bit
-    // nicer than calculating the index ourselves.
-    //
-    // Since it’s a tuple, we can use patterns, just like elsewhere in Rust.
-    // So we match against the tuple with i for the index and &byte for
-    // the byte itself.
+Since we need to go through the String element by element and
+check if a value is a space, we will convert our String to an
+array of bytes using the `.as_bytes()` method.
+
+```rust
     for (i, &byte) in bytes.iter().enumerate() {
+```
 
-        // 32 is the value of a space in UTF-8
+We will be discussing iterators in more detail in Chapter XX, but for
+now, know that `iter()` is a method that returns each element in a
+collection, and `enumerate()` modifies the result of `iter()` and returns
+a tuple instead. The first element of the tuple is the index, and the
+second element is a reference to the element itself. This is a bit
+nicer than calculating the index ourselves.
+
+Since it’s a tuple, we can use patterns, just like elsewhere in Rust.
+So we match against the tuple with i for the index and &byte for
+the byte itself.
+
+```rust
         if byte == 32 {
-            // We found a space! Return this position.
             return i;
         }
     }
-
-    // If we got here, we didn’t find a space, so the whole string must be a
-    // word. Return the length.
     s.len()
-}
 ```
+
+We search for the value 32, which represents a space in UTF-8. If we find one, we return the
+position.  Otherwise, we return the length of the string, using `s.len()`.
 
 This works, but there’s a problem. We’re returning a `usize` on its own, but
 it’s only a meaningful number in the context of the `&String`. In other
