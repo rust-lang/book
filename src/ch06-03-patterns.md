@@ -1,8 +1,8 @@
 # Patterns
 
 We've mentioned 'patterns' a few times so far: they're used in `let` bindings,
-in function arguments, and in `match` expressions. Patterns have a lot of
-abilities, so in this section, we'll cover some of the most commonly used ones.
+in function arguments and in `match` expressions. Patterns have a lot of
+abilities, so we'll cover some of the most commonly used ones in this section.
 Any of these abilities work in any place where a pattern is used.
 
 Let's start with an example that is similar to the last example in the previous
