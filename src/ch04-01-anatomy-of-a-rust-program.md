@@ -5,17 +5,6 @@ data, but to create this data, you first have to create a program. Here, we'll
 write some code that demonstrates how to begin a Rust program, how to bind a
 variable, and how to print text to the terminal.
 
-PROD: START BOX
-
-Keep in mind that the Rust language has a set of *keywords* that have
-been reserved for use by the language only. This means you cannot use these
-words as names of variables or functions, for example. Most of these have
-special meaning and we will be using them to do various things in our Rust
-programs; a few have no current functionality associated but have been reserved
-for functionality that might be in the Rust language in the future. You can find a list of the keywords in Appendix XX.
-
-PROD: END BOX
-
 ### A Simple Program that Binds a Variable
 
 Let’s start with a short example that binds a value to a variable and then uses
