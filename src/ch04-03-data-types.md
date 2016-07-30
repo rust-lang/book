@@ -283,7 +283,8 @@ Another way to bind a name to a collection of multiple values is with an
 Arrays in Rust are different than arrays in some other languages because arrays
 in Rust have a fixed length-- once declared, they cannot grow or shrink in size.
 
-In Rust, arrays look like this:
+In Rust, the values going into an array are written as a comma separated list
+inside square brackets:
 
 ```rust
 fn main() {
@@ -291,23 +292,11 @@ fn main() {
 }
 ```
 
-The values going into an array are written as a comma separated list inside
-square brackets.
-
-#### Type Annotation for Arrays
-
-When you specify an array’s type, you'd do so as such:
-
-```rust
-fn main() {
-    let a: [i32; 5] = [1, 2, 3, 4, 5];
-}
-```
-
-Much like in a variable binding that uses type annotation, the array's type and
-length come after the pattern name and a colon. This array has `5` values,
-which are of the `i32` type. Unlike the values themselves, the type and array
-length are separated by a semicolon.
+While arrays can be useful since they are a primitive type, they aren't as
+flexible as the `Vec` (short for "vector"), a similar collection type provided
+by the standard library that _is_ allowed to grow or shrink in size. If you're
+unsure whether to use an array or a `Vec`, you should probably go with a `Vec`,
+and we'll discuss them in more detail in chapter XX.
 
 #### Accessing and Modifying Array Elements
 
@@ -328,31 +317,7 @@ array, and `second` will bind to `2` at index `[1]` in the array. Note that
 these values are copied out of the array and into `first` and `second` when the
 `let` statement is called. That means if the array changes after the `let`
 statements, these bindings will not, and the two variables should retain their
-values. For example, imagine you have the following code:
-
-```rust
-fn main() {
-    let mut a = [1, 2, 3, 4, 5];
-
-    let first = a[0];
-
-    a[0] = 7;
-
-    println!("The value of first is: {}", first);
-    println!("a is {:?}", a);
-}
-```
-
-First, notice the use of `mut` in the array declaration. We had to declare
-array `a` as `mut` to override Rust's default immutability. The line `a[0] =
-7;` modifies the element at index 0 in the array, changing its value to `7`.
-This happens after `first` is bound to the original value at index 0, so
-`first` should still be equal to `1`. Running the code will show this is true:
-
-```text
-The value of first is: 1
-a is [7, 2, 3, 4, 5]
-```
+values.
 
 #### Invalid array element access
 
