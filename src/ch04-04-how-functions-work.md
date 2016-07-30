@@ -359,38 +359,3 @@ says that it will return an `i32`, but statements don’t evaluate to a value.
 Therefore, nothing is returned, which contradicts the function definition and
 results in an error. In this output, Rust gives an option to rectify this: it
 suggests removing the semicolon, which would fix the error.
-
-#### Returning Multiple Values
-
-By default, functions can only return single values. There’s a trick, however,
-to get them to return multiple values: group them into a tuple!
-
-```rust
-fn main() {
-    let (x, y) = two_numbers();
-
-    println!("The value of x is: {}", x);
-    println!("The value of y is: {}", y);
-}
-
-fn two_numbers() -> (i32, i32) {
-    (5, 6)
-}
-```
-
-Running this will give us the values:
-
-```bash
-$ cargo run
-   Compiling functions v0.1.0 (file:///projects/functions)
-     Running `target/debug/functions`
-The value of x is: 5
-The value of y is: 6
-```
-
-Let's look at this more closely. First, we're assigning the return value of
-calling `two_numbers()` to `x` and `y`. In the function signature, we would say
-in plain English that the return type `(i32, i32)` translates to "a tuple with
-two `i32`s in it". These two types are then applied to the tuple to be returned
-by the function block. In this case, that tuple contains the values `5` and
-`6`. This tuple is returned, and we destructure the tuple and assign the individual values to `x` and `y`.

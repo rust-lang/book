@@ -451,7 +451,9 @@ owner goes out of scope, if it hasn’t been moved, it will `drop()`.
 
 This might seem a bit tedious, and it is. What if we want to let a function use
 a value but not take ownership? It’s quite annoying that anything we pass in
-also needs to be passed back if we want to use it again. Like in this function:
+also needs to be passed back if we want to use it again, in addition to any
+data resulting from the body of the function that we might want to return as
+well. It's _possible_ to return multiple values, using a tuple, like this:
 
 ```rust
 fn main() {
@@ -469,8 +471,6 @@ fn calculate_length(s: String) -> (String, usize) {
 }
 ```
 
-This is too much ceremony: we have to use a tuple to give back the `String` as
-well as the length. It’s a lot of work for a pattern that should be common.
-
-Luckily for us, Rust has a feature for this pattern, and it’s what the next
-section is about.
+But this is too much ceremony and a lot of work for a concept that should be
+common. Luckily for us, Rust has a feature for this concept, and it’s what the
+next section is about.
