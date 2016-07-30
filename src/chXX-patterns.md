@@ -1,9 +1,105 @@
 # Patterns
 
-We've mentioned 'patterns' a few times so far: they're used in `let` bindings,
-in function arguments, and in the `match` expression. Patterns have a lot of
-abilities, so in this section, we'll cover all of the different things they can
-do. Any of these abilities work in any place where a pattern is used.
+We've actually used patterns a few times so far: they're used in `let`
+bindings, in function arguments, and in the `match` expression. Patterns have a
+lot more abilities than we have demonstrated so far, so in this section, we'll
+cover all of the different things they can do. Any of these abilities work in
+any place where a pattern is used.
+
+## `let` statements
+
+A basic `let` statement has this form:
+
+```text
+let PATTERN = EXPRESSION;
+```
+
+We've seen bindings that have names in the `PATTERN` slot: a name is just a
+particularly humble form of pattern.
+
+## Multiple bindings
+
+Let’s try a more complex pattern. Change our example program to this:
+
+```rust
+fn main() {
+    let (x, y) = (5, 6);
+
+    println!("The value of x is: {}", x);
+    println!("The value of y is: {}", y);
+}
+```
+
+And run it with `cargo run`:
+
+```text
+$ cargo run
+   Compiling bindings v0.1.0 (file:///projects/bindings)
+     Running `target/debug/bindings`
+The value of x is: 5
+The value of y is: 6
+```
+
+We’ve created two bindings with one `let`! Here’s our pattern:
+
+```text
+(x, y)
+```
+
+And here’s the value:
+
+```text
+(5, 6)
+```
+
+As you can see, the two line up visually, and so `let` binds `5` to `x` and `6`
+to `y`. We could have used two `let` statements as well:
+
+```rust
+fn main() {
+    let x = 5;
+    let y = 6;
+}
+```
+
+In simple cases like this, two `let`s may be clearer, but in others, creating
+multiple bindings at once is nice. As we become more proficient in Rust, we’ll
+figure out which style is better, but it’s mostly a judgement call.
+
+## Type annotations
+
+Most of the time, Rust uses ‘type inference’, meaning that it attempts to infer
+the types of your bindings rather than you having to declare them explicitly
+even though Rust is a statically typed language. Occasionally, Rust won't have
+enough information to infer the type of your value, and you will need to add a
+type annotation in with the pattern.
+
+Here’s what a `let` statement with a ‘type annotation’ looks like:
+
+```rust
+fn main() {
+    let x: i32 = 5;
+}
+```
+
+We can add a colon, followed by the type name. Here’s the structure of a `let`
+statement with a type annotation:
+
+```text
+let PATTERN: TYPE = VALUE;
+```
+
+Note that the colon and the `TYPE` go _after_ the `PATTERN`, not in the pattern
+itself. As an example, here’s our more complex pattern with two bindings:
+
+```rust
+fn main() {
+    let (x, y): (i32, i32) = (5, 6);
+}
+```
+
+Just like we match up the `VALUE` with the `PATTERN`, we match up the `TYPE`
+with the `PATTERN`.
 
 ## Literals & _
 
@@ -188,7 +284,7 @@ Ranges are usually used with integers or `char`s:
 ```rust
 fn main() {
     let x = 'c';
-    
+
     match x {
         'a' ... 'j' => println!("early ASCII letter"),
         'k' ... 'z' => println!("late ASCII letter"),

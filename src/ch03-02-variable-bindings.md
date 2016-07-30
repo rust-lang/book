@@ -61,25 +61,6 @@ start of the function’s body.
 
 This is our first ‘variable binding’, which we create with a ‘`let` statement’.
 
-This `let` statement has this form:
-
-```text
-let NAME = EXPRESSION;
-```
-
-A `let` statement first evaluates the `EXPRESSION`, and then binds the
-resulting value to `NAME` so that it can be referred to later in the program.
-In our simple example, the expression was already a value, 5, but we could
-achieve the same effect with:
-
-```rust
-let x = 2 + 3;
-```
-
-In general, `let` statements work with patterns; a name is a particularly
-humble form of pattern. Patterns are a big part of Rust, we’ll see more complex
-and powerful patterns as we go along.
-
 Before we do that, though, let’s finish investigating this example. Here’s the
 next line:
 
@@ -125,103 +106,6 @@ The value of x is: 5
 We assign `5` to a binding, `x`, and then print it to the screen with
 `println!`.
 
-## Multiple binding
-
-Let’s try a more complex pattern. Change our example program to this:
-
-```rust
-fn main() {
-    let (x, y) = (5, 6);
-
-    println!("The value of x is: {}", x);
-    println!("The value of y is: {}", y);
-}
-```
-
-And run it with `cargo run`:
-
-```text
-$ cargo run
-   Compiling bindings v0.1.0 (file:///projects/bindings)
-     Running `target/debug/bindings`
-The value of x is: 5
-The value of y is: 6
-```
-
-We’ve created two bindings with one `let`! Here’s our pattern:
-
-```text
-(x, y)
-```
-
-And here’s the value:
-
-```text
-(5, 6)
-```
-
-As you can see, the two line up visually, and so `let` binds `5` to `x` and `6`
-to `y`. We could have used two `let` statements as well:
-
-```rust
-fn main() {
-    let x = 5;
-    let y = 6;
-}
-```
-
-In simple cases like this, two `let`s may be clearer, but in others, creating
-multiple bindings at once is nice. As we become more proficient in Rust, we’ll
-figure out which style is better, but it’s mostly a judgement call.
-
-## Type annotations
-
-You may have noticed that we didn’t declare the type of `x` or `y` in our
-previous examples. Rust is a *statically typed* language, which means that at
-compile time, we must know the types of all bindings. But annotating every
-single binding with a type can feel like busywork, and make code noisy. To
-solve this issue, Rust uses ‘type inference’, meaning that it attempts to infer
-the types of your bindings.
-
-The primary way that the type is inferred is by looking at how it is used.
-Let’s look at the example again:
-
-```rust
-fn main() {
-    let x = 5;
-}
-```
-
-When we bind `x` to `5`, the compiler knows that `x` should be a numeric type.
-Without any other information, it defaults to `i32`, a thirty-two bit integer
-type. We’ll talk more about Rust’s basic types in section 3.3.
-
-Here’s what a `let` statement with a ‘type annotation’ looks like:
-
-```rust
-fn main() {
-    let x: i32 = 5;
-}
-```
-
-We can add a colon, followed by the type name. Here’s the structure of a `let`
-statement with a type annotation:
-
-```text
-let PATTERN: TYPE = VALUE;
-```
-
-Note that the colon and the `TYPE` go _after_ the `PATTERN`, not in the pattern
-itself. As an example, here’s our more complex pattern with two bindings:
-
-```rust
-fn main() {
-    let (x, y): (i32, i32) = (5, 6);
-}
-```
-
-Just like we match up the `VALUE` with the `PATTERN`, we match up the `TYPE`
-with the `PATTERN`.
 
 ## Delayed Initialization
 

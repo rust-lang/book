@@ -30,7 +30,6 @@
     - [Option](ch06-02-option.md)
     - [Match](ch06-03-match.md)
     - [if let](ch06-04-if-let.md)
-    - [Patterns](ch06-05-patterns.md)
 
 - [Crates & Modules]()
 
@@ -48,6 +47,8 @@
 - [Closures]()
 
 - [Iterators]()
+
+- [Patterns](chXX-patterns.md)
 
 - [I/O]()
     - [`Read` & `Write`]()
