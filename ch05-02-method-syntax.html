@@ -222,7 +222,7 @@ reference. Yet, we needed a <code>&amp;</code> for <code>p2</code> but not <code
 <p>This feature is called ‘automatic referencing’, and calling methods is one
 of the few places in Rust that has behavior like this. Here’s how it works:
 when you call a method with <code>self.(</code>, Rust will automatically add in <code>&amp;</code>s
-or <code>&amp;mut</code>s to match the signature. In other words, these three are the same:</p>
+or <code>&amp;mut</code>s to match the signature. In other words, these are the same:</p>
 <pre><code class="language-rust"># #[derive(Debug,Copy,Clone)]
 # struct Point {
 #     x: f64,
@@ -241,7 +241,6 @@ or <code>&amp;mut</code>s to match the signature. In other words, these three ar
 # let p2 = Point { x: 5.0, y: 6.5 };
 p1.distance(&amp;p2);
 (&amp;p1).distance(&amp;p2);
-Point::distance(&amp;p1, &amp;p2);
 </code></pre>
 <p>The first one looks much, much cleaner. Here’s another example:</p>
 <pre><code class="language-rust">let mut s = String::from(&quot;Hello,&quot;);
