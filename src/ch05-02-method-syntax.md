@@ -189,7 +189,7 @@ reference. Yet, we needed a `&` for `p2` but not `p1`. What gives?
 This feature is called ‘automatic referencing’, and calling methods is one
 of the few places in Rust that has behavior like this. Here’s how it works:
 when you call a method with `self.(`, Rust will automatically add in `&`s
-or `&mut`s to match the signature. In other words, these three are the same:
+or `&mut`s to match the signature. In other words, these are the same:
 
 ```rust
 # #[derive(Debug,Copy,Clone)]
@@ -210,7 +210,6 @@ or `&mut`s to match the signature. In other words, these three are the same:
 # let p2 = Point { x: 5.0, y: 6.5 };
 p1.distance(&p2);
 (&p1).distance(&p2);
-Point::distance(&p1, &p2);
 ```
 
 The first one looks much, much cleaner. Here’s another example:
