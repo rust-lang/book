@@ -147,44 +147,6 @@ The value of y is: 6
 Since `5` is passed as the `x` argument and `6` is passed as the `y` argument,
 the two strings are printed with these values.
 
-### Variable Bindings as Arguments
-
-It's also possible to create bindings and pass them in as arguments in Rust.
-For example:
-
-```rust
-fn main() {
-    let a = 5;
-    let b = 6;
-
-    another_function(a, b);
-}
-
-fn another_function(x: i32, y: i32) {
-    println!("The value of x is: {}", x);
-    println!("The value of y is: {}", y);
-}
-```
-
-Instead of passing `5` and `6` directly, this first creates two bindings
-containing the values and passes those bindings instead. When you run this,
-you'll find that it has the same effect as just using integers:
-
-```bash
-$ cargo run
-   Compiling functions v0.1.0 (file:///projects/functions)
-     Running `target/debug/functions`
-The value of x is: 5
-The value of y is: 6
-```
-
-Note that our bindings are called `a` and `b`, yet inside the function, we
-refer to them by the names in the signature, `x` and `y`. Inside a function,
-its parameters are in scope but the names of the bindings we passed as
-parameters are not, so we need to use the parameter names within the function
-block. Bindings passed as parameters don’t need to have the same names as the
-arguments.
-
 ### Function Bodies
 
 Function bodies are made up of a series of statements ending in an optional
