@@ -22,6 +22,7 @@ Then open *src/main.rs* and replace its code with the following:
 ```rust,ignore
 fn main() {
     let x = 5;
+    println!("The value of x is: {}", x);
     x = 6;
     println!("The value of x is: {}", x);
 }
@@ -34,7 +35,7 @@ message, as in this output:
 $ cargo run
    Compiling bindings v0.0.1 (file:///projects/bindings)
 error: re-assignment of immutable variable `x` [--explain E0384]
- --> src/main.rs:3:5
+ --> src/main.rs:4:5
 3 |>     x = 6;
   |>     ^^^^^
 note: prior assignment occurs here
@@ -99,14 +100,26 @@ PROD: END BOX
 The error includes the message `re-assigment of immutable variable` because the
 program tried to assign a second value to the `x` variable.
 
+Getting compile-time errors when your code attempts to change a value that it
+previously said was immutable is important because this very situation can lead
+to bugs. If one part of your code operates on an assumption that a value it's
+operating on will never change, and another part of your code changes that
+value, it's possible that the first code won't do what it was designed to do.
+Especially when the second piece of code only changes the value _sometimes_,
+this cause of bugs can be difficult to track down after the fact.
 
-******* insert *why* immutability is desirable here *********
+In Rust, our code can know that a value our code assumes won't change really
+won't change, because the compiler is enforcing that guarantee for us. When
+reading and writing code, we don't have to keep track in our head how and where
+a value might change. This can make code easier to reason about.
 
+Mutability is really useful, though! Bindings are immutable only by default;
+you can make them mutable by adding `mut` in front of the variable name. In
+addition to telling the compiler it should allow this value to be changed, it
+conveys intent to future readers of the code and says that other parts of the
+code will be changing this value.
 
-But bindings are
-immutable only by default; you can make them mutable by adding `mut` in front
-of the variable name. For example, change the program you just wrote to the
-following:
+For example, change the program you just wrote to the following:
 
 ```rust
 fn main() {
@@ -127,20 +140,22 @@ The value of x is: 5
 The value of x is: 6
 ```
 
-Using `mut`, we change the value that `x` binds to from `5` to `6`.
+Using `mut`, we are allowed to change the value that `x` binds to from `5` to
+`6`. You might want to make a binding mutable because it makes the code easier
+to understand than an implementation that only uses immutable bindings. In
+cases where you're using large data structures, mutating an instance in place
+may be faster than copying and returning newly allocated instances. It all
+depends on the tradeoffs you want to make in your situation.
 
+### Shadowing
 
-******* insert *why* you might want to use mutability here *********
-
-
-
-
-One final thing about bindings: they can *shadow* previous bindings. Shadowing
-is what happens when you declare two bindings with the same name. We say that
-the first binding is ‘shadowed’ by the second, which means that the second
-binding's value is what you will see when you use the variable after the second
-binding. This can be useful if you’d like to perform a few transformations on a
-value, but still leave the binding immutable. For example:
+As we saw in the guessing game tutorial, we can declare new bindings with the
+same name as a previous binding, and the new binding *shadows* the previous
+binding. We say that the first binding is ‘shadowed’ by the second, which means
+that the second binding's value is what you will see when you use the variable
+after the second binding. This can be useful if you’d like to perform a few
+transformations on a value, but have the binding be immutable after those
+transformations have been completed. For example:
 
 ```rust
 fn main() {
@@ -168,7 +183,7 @@ The value of x is: 12
 ```
 
 Shadowing is useful because it lets us modify `x` without having to make the
-variable mutable. This means the compiler will still keep us from accidentally
+binding mutable. This means the compiler will still keep us from accidentally
 trying to mutate `x` directly later.
 
 Now let's look at some of the types of values that we can bind variables to.
