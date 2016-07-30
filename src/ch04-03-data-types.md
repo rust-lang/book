@@ -1,73 +1,22 @@
 ## Data Types
 
 Every value in Rust is of a certain *type*, which tells Rust what kind of data
-is being given so it knows how to work with that data. You can usually rely on
-Rust's ability to infer types to figure out the type of a binding, or you can
-annotate it explicitly if needed. In this section, we'll look at a number of
-types built into the language itself split into two subsets of Rust data types:
-scalar and compound. First, let's look at how Rust deals with types.
+is being given so it knows how to work with that data. In this section, we'll
+look at a number of types built into the language itself split into two subsets
+of Rust data types: scalar and compound.
 
-### Type Inference and Annotation
+Something to keep in mind throughout this section: Rust is a *statically typed*
+language, which means that it must know the types of all bindings at compile
+time. The compiler can usually infer what type we want to use based on the
+value and how we use it. When many types are possible, such as when we
+converted a `String` to a numeric type using `parse()` in the guessing game
+tutorial, we can add a type annotation, like this:
 
-Rust is a *statically typed* language, which means that it must know the types
-of all bindings at compile time. However, you may have noticed that we didn’t
-declare a type for `x` or `y` in our previous examples.
-
-This is because Rust can often tell the type of a binding without you having to
-declare it. Annotating every single binding with a type can take uneccesary
-time and make code noisy. To avoid this, Rust uses *type inference*, meaning
-that it attempts to figure out the types of your bindings by looking at how the
-binding is used. Let’s look at the the first `let` statement you wrote again:
-
-```rust
-fn main() {
-    let x = 5;
-}
+```rust,ignore
+let x: i32 = 5;
 ```
 
-When we bind `x` to `5`, the compiler determines that `x` should be a numeric
-type based on the value it is bound to. Without any other information, it sets
-the `x` variable's type to `i32` (a thirty-two bit integer type) by default.
-
-If we were to declare the type with the variable binding, that would be called
-a *type annotation*. A `let` statement that includes a type annotation would
-look like this:
-
-```text
-let PATTERN: TYPE = VALUE;
-```
-
-The `let` statement now has a colon after the `PATTERN`, followed by the `TYPE`
-name. Note that the colon and the `TYPE` go _after_ the `PATTERN`, not inside
-the pattern itself. Given this structure, here's how you'd rewrite `let x = 5`
-to use type annotation:
-
-```rust
-fn main() {
-    let x: i32 = 5;
-}
-```
-
-This does the same thing as `let x = 5` but explicitly states that `x` should
-be of the `i32` type. This is a simple case, but more complex patterns with
-multiple bindings can use type annotation, too. A binding with two variables
-would look like this:
-
-```rust
-fn main() {
-    let (x, y): (i32, i32) = (5, 6);
-}
-```
-
-In the same way as we place the `VALUE` and the `PATTERN` in corresponding
-positions, we also match up the position of the `TYPE` with the `PATTERN` it
-corresponds to.
-
-There are times when multiple types could be correct, and there is not enough
-information in the surrounding context for Rust to be able to tell which type
-you want to use. In those cases type annotations are required. We will look at
-some of those situations later, but for now, let's look at the types available
-in Rust.
+You will see some type annotations as we discuss the various data types.
 
 ### Scalar Types
 
