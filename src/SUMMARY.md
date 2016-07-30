@@ -25,8 +25,7 @@
 - [Enums](ch06-00-enums.md)
     - [Option](ch06-01-option.md)
     - [Match](ch06-02-match.md)
-    - [Patterns](ch06-03-patterns.md)
-    - [if let](ch06-04-if-let.md)
+    - [if let](ch06-03-if-let.md)
 
 - [MANY MORE CHAPTERS COMING SOON]()
 
