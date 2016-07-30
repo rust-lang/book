@@ -81,8 +81,10 @@
     - [Using Rust from Other Languages]()
     - [`static`]()
 
-- [Cargo]()
+- [Creating a Library]()
+    - [Cargo]()
     - [Crates.io]()
+    - [Documentation](chYY-YY-documentation.md)
 
 - [Advanced Type System Features]()
     - [Associated Types]()
