@@ -56,7 +56,7 @@ You should see the version number, commit hash, and commit date.
 
 If you do, Rust has been installed successfully! Congrats!
 
-If you don't and you're on Windows, check that Rust is in your %PATH% system
+If you don't and you're on Windows, check that Rust is in your `%PATH%` system
 variable. If it isn't, run the installer again, select "Change" on the "Change,
 repair, or remove installation" page and ensure "Add to PATH" is checked.
 
