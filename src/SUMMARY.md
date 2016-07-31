@@ -5,7 +5,7 @@
     - [Hello, World!](ch01-03-hello-world.md)
     - [The Design of Rust](ch01-04-design.md)
 
-- [Tutorial]()
+- [Guessing Game Tutorial](ch02-01-guessing-game-tutorial.md)
 
 - [Up and Running](ch03-01-up-and-running.md)
     - [Variable Bindings](ch03-02-variable-bindings.md)
