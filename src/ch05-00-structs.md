@@ -148,16 +148,10 @@ struct Point {
 let p1 = Point { x: 0.0, y: 5.0 };
 ```
 
-Here’s what declaring a `struct` looks like in general:
-
-```text
-struct NAME {
-    NAME: TYPE,
-}
-```
-
-The `NAME: TYPE` bit is called a ‘field’, and we can have as many or as few of
-them as we’d like.
+Here we've defined a `struct` and given it the name `Point`. The parts inside
+`{}` are defining the _fields_ of the struct. We can have as many or as few of
+them as we'd like, and we give them a name and specify their type. Here we have
+two fields named `x` and `y`, and they both hold `f64`s.
 
 We can access the field of a struct in the same way we access an element of
 a tuple, except we use its name:
