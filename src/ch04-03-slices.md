@@ -201,7 +201,7 @@ This would also work for a `second_word()`:
 fn second_word(s: &String) -> &str {
 ```
 
-Same deal. We now have a straightforward API that’s much harder to mess up.
+We now have a straightforward API that’s much harder to mess up.
 
 But what about our error condition from before? Slices also fix that. Using
 the slice version of `first_word()` will throw an error:
