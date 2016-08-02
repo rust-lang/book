@@ -27,8 +27,9 @@ h(g(f(x)));
 x.f().g().h();
 ```
 
-The nested-functions version reads in reverse: we call `f()`, then `g()`, then
-`h()`, but it reads as `h()`, then `g()`, then `f()`.
+The nested-functions version reads in reverse: the program executes `f()`, then
+`g()`, then `h()`, but we read it left-to-right as `h()`, then `g()`, then
+`f()`. The method syntax is executed in the same order as we would read it.
 
 Before we get into the details, let’s talk about how to define your own
 methods.
@@ -124,19 +125,22 @@ fn distance(p1: Point, p2: Point) -> f64 {
 #     let y_squared = f64::powi(p2.y - p1.y, 2);
 # 
 #     f64::sqrt(x_squared + y_squared)
-# }
+}
 ```
 
 Other than this, the rest of the example is familiar: an implementation of
-`distance()`, and using the method to find an answer.
+`distance()` and using the method to find an answer.
 
-There are two differences. The first is in the first argument. Instead of a name
-and a type, we have written `&self`. This is what distinguishes a method from a
-function: using `self` inside of an `impl` block. Because we already know that
-we are implementing this method on `Point`, we don’t need to write the type of
-`self` out. However, we have written `&self`, not only `self`. This is because
-we want to take our argument by reference rather than by ownership. In other
-words, these two forms are the same:
+There are two differences in the definitions. The first is in the first
+argument. Instead of a name and a type, we have written `&self`. This is what
+distinguishes a method from a function: using `self` inside of an `impl` block
+means we have a method. Because we already know that we are implementing this
+method on `Point` because of the surrounding `impl Point` block, we don’t need
+to write the type of `self` out.
+
+Note that we have written `&self`, not just `self`. This is because we want to
+take a reference to our argument's value rather than taking ownership of it. In
+other words, these two forms are the same:
 
 ```rust,ignore
 fn foo(self: &Point)
@@ -152,10 +156,12 @@ fn foo(&mut self) // take self by mutable reference
 fn foo(self) // take self by ownership
 ```
 
-In this case, we only need a reference. We don’t plan on taking ownership, and
-we don’t need to mutate either point. Taking by reference is by far the most
-common form of method, followed by a mutable reference, and then occasionally
-by ownership.
+In this case, we only need a reference. We don’t need to mutate either `Point`
+to get the distance between them, so we won't take a mutable reference to the
+`Point` that we call the method on. Methods that take ownership of `self` are
+rarely used. An example of a time to do that would be if we wanted to have a
+method that would transform `self` into something else and prevent other code
+from using the value of `self` after the transformation happens.
 
 ### Methods and automatic referencing
 
