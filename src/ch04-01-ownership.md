@@ -178,20 +178,13 @@ For right now, it's fine to ignore the capacity.
 
 When we assign `s1` to `s2`, the `String` itself is copied, meaning we copy the
 pointer, the length, and the capacity. We do not copy the data that the
-`String`'s pointer refers to. Many people draw distinctions between ‘shallow
-copying’ and ‘deep copying’, and would call this a ‘shallow copy’. We don’t use
-these terms in Rust; we instead say that something is ‘moved’ or ‘cloned’.
-Assignment in Rust causes a ‘move’. In other words, it looks like this:
+`String`'s pointer refers to. In other words, it looks like this:
 
 <img alt="s1 and s2" src="img/foo2.png" class="center" style="width: 50%;" />
 
 _Not_ this:
 
 <img alt="s1 and s2 to two places" src="img/foo4.png" class="center" style="width: 50%;" />
-
-When moving, Rust makes a copy of the data structure itself. The contents of
-`s1` are copied, but if `s1` contains a reference, like it does in this case,
-Rust will not copy the things that those references refer to.
 
 There’s a problem here. Both data pointers are pointing to the same place. Why
 is this a problem? Well, when `s2` goes out of scope, it will free the memory
@@ -200,17 +193,17 @@ try to free the memory that the pointer points to. That’s bad, and is known as
 a "double free" error.
 
 So what’s the solution? Here, we stand at a crossroads with a few options. One
-would be to declare that assignment will also copy out any data. This works,
-but is inefficient: what if our `String` contained a novel? Also, it only works
-for memory. What if, instead of a `String`, we had a `TcpConnection`? Opening
-and closing a network connection is very similar to allocating and freeing
-memory, so it would be nice to be able to use the same mechanism, but we can't
-because creating a new connection requires more than just copying memory: we
-have to request a new connection from the operating system. The solution that
-we could use there is to allow the programmer to hook into the assignment,
-similar to `drop()`, and write code to fix things up. That would work, but now,
-an `=` can run arbitrary code. That’s also not good, and it doesn’t solve our
-efficiency concerns either.
+would be to change assignment so that it will also copy out any data. This
+works, but is inefficient: what if our `String` contained a novel? Also, that
+solution only works for memory. What if, instead of a `String`, we had a
+`TcpConnection`? Opening and closing a network connection is very similar to
+allocating and freeing memory, so it would be nice to be able to use the same
+mechanism. We wouldn't be able to, though, because creating a new connection
+requires more than just copying memory: we have to request a new connection
+from the operating system. The solution that we could use there is to allow the
+programmer to hook into the assignment, similar to `drop()`, and write code to
+fix things up. That would work, but if we did that, an `=` could run arbitrary
+code. That’s also not good, and it doesn’t solve our efficiency concerns either.
 
 Let’s take a step back: the root of the problem is that `s1` and `s2` both
 think that they have control of the memory and therefore need to free it.
@@ -238,14 +231,17 @@ println!("{}", s1);
      ^~
 ```
 
-We say that `s1` was _moved_ into `s2`. When a value moves, its data is copied,
-but the original variable binding is no longer usable. That solves our problem,
-so what actually happens looks like this:
+If you have heard the terms "shallow copy" and "deep copy" while working with
+other languages, the concept of copying the pointer, length, and capacity
+without copying the data probably sounded like a shallow copy. Because Rust
+also invalidates the first binding, instead of calling this a shallow copy,
+it's called a _move_. Here we would read this by saying that `s1` was _moved_
+into `s2`. So what actually happens looks like this:
 
 <img alt="s1 and s2 to the same place" src="img/foo3.png" class="center" style="width: 50%;" />
 
-With only `s2` valid, when it goes out of scope, it will free the memory, and
-we’re done.
+That solves our problem! With only `s2` valid, when it goes out of scope, it
+alone will free the memory, and we’re done.
 
 ## Ownership Rules
 
