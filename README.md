@@ -13,7 +13,7 @@ If you would like to see this version rendered, it’s [on GitHub pages][html].
 
 ## Requirements
 
-Building the book requires [mdBook]. To get it:
+Building the book requires [mdBook] >= v0.0.13. To get it:
 
 [mdBook]: https://github.com/azerupi/mdBook
 
