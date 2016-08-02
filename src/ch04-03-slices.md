@@ -55,9 +55,10 @@ a tuple instead. The first element of the tuple is the index, and the
 second element is a reference to the element itself. This is a bit
 nicer than calculating the index ourselves.
 
-Since it’s a tuple, we can use patterns, just like elsewhere in Rust.
-So we match against the tuple with i for the index and &byte for
-the byte itself.
+Since it’s a tuple, we can use patterns, just like elsewhere in Rust. So we
+match against the tuple with i for the index and &byte for the byte itself.
+Since we get a reference to a byte, we can put the `&` in the pattern, and then
+the binding `byte` will hold the actual byte, not a reference to a byte.
 
 ```rust,ignore
     if byte == 32 {
