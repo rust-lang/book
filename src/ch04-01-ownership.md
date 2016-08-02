@@ -51,8 +51,8 @@ In other words, there are two important points in time here:
 - When `s` comes ‘into scope’, it is valid.
 - It remains so until it ‘goes out of scope’.
 
-At this point, things are similar to other programming languages. Let’s build
-on top of this understanding by introducing a new type: `String`.
+At this point, things are similar to other programming languages. Now let’s
+build on top of this understanding by introducing the `String` type.
 
 ## Strings
 
