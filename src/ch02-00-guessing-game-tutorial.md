@@ -1,18 +1,14 @@
 # Guessing Game
 
-Let’s learn some Rust! For our first project, we’ll implement a classic
+Let's jump into Rust with a hands-on project! We’ll implement a classic
 beginner programming problem: the guessing game. Here’s how it works: Our
 program will generate a random integer between one and a hundred. It will then
 prompt us to enter a guess. Upon entering our guess, it will tell us if we’re
-too low or too high. Once we guess correctly, it will congratulate us. Sound
-good?
-
+too low or too high. Once we guess correctly, it will congratulate us.
 
 ## Set up
 
-Let’s set up a new project. Go to your projects directory. Remember the end of
-the `hello world` example that mentioned `cargo new` to create new cargo
-projects? Let’s give it a shot:
+Let’s set up a new project. Go to your projects directory, and create a new project using Cargo.
 
 ```bash
 $ cd ~/projects
@@ -21,7 +17,7 @@ $ cd guessing_game
 ```
 
 We pass the name of our project to `cargo new`, then the `--bin` flag, since
-we’re making a binary, rather than a library.
+we’re going to be making another binary like in Chapter 1.
 
 Take a look at the generated `Cargo.toml`:
 
@@ -34,10 +30,11 @@ authors = ["Your Name <you@example.com>"]
 [dependencies]
 ```
 
-Cargo gets this information from your environment. If it’s not correct, go ahead
-and fix that.
+If the authors information that Cargo got from your environment is not correct,
+go ahead and fix that.
 
-Finally, Cargo generated a ‘Hello, world!’ for us. Check out `src/main.rs`:
+And as we saw in the last chapter, `cargo new` generates a ‘Hello, world!’ for
+us. Check out `src/main.rs`:
 
 ```rust
 fn main() {
@@ -45,16 +42,7 @@ fn main() {
 }
 ```
 
-Let’s try compiling what Cargo gave us:
-
-```bash
-$ cargo build
-   Compiling guessing_game v0.1.0 (file:///home/you/projects/guessing_game)
-```
-
-Before we move on, let me show you one more Cargo command: `run`. `cargo run`
-is kind of like `cargo build`, but it also then runs the produced executable.
-Try it out:
+Let’s try compiling what Cargo gave us and running it in the same step, using the `cargo run` command:
 
 ```bash
 $ cargo run
@@ -101,12 +89,10 @@ use std::io;
 We’ll need to take user input and then print the result as output. As such, we
 need the `io` library from the standard library. Rust only imports a few things
 by default into every program, [the ‘prelude’][prelude]. If it’s not in the
-prelude, you’ll have to `use` it directly. There is also a second ‘prelude’, the
-[`io` prelude][ioprelude], which serves a similar function: when you import it,
-you get a number of useful, `io`-related things, so that's what we've done here.
+prelude, you’ll have to `use` it directly. Using the `std::io` library gets
+you a number of useful `io`-related things, so that's what we've done here.
 
 [prelude]: ../std/prelude/index.html
-[ioprelude]: ../std/io/prelude/index.html
 
 ```rust,ignore
 fn main() {
@@ -114,9 +100,7 @@ fn main() {
 
 As you’ve seen in Chapter 1, the `main()` function is the entry point into the
 program. The `fn` syntax declares a new function, the `()`s indicate that
-there are no arguments, and `{` starts the body of the function. Because
-we didn’t include a return type, it’s assumed to be `()`, an empty
-tuple. We will go over tuples in Chapter XX.
+there are no arguments, and `{` starts the body of the function.
 
 ```rust,ignore
 println!("Guess the number!");
@@ -179,7 +163,7 @@ io::stdin().read_line(&mut guess)
     .expect("Failed to read line");
 ```
 
-That’s a lot more! Let’s go bit-by-bit. The first line has two parts. Here’s
+Let’s go through this together bit-by-bit. The first line has two parts. Here’s
 the first:
 
 ```rust,ignore
@@ -201,10 +185,8 @@ The next part will use this handle to get input from the user:
 .read_line(&mut guess)
 ```
 
-Here, we call the [`read_line()`][read_line] method on our handle. Methods are
-like associated functions but are only available on a particular instance of a
-type, rather than the type itself. We'll talk more about methods in Chapter XX.
-We’re also passing one argument to `read_line()`: `&mut guess`.
+Here, we call the [`read_line()`][read_line] method on our handle. We’re also
+passing one argument to `read_line()`: `&mut guess`.
 
 [read_line]: ../std/io/struct.Stdin.html#method.read_line
 
@@ -254,9 +236,8 @@ sub-libraries, like `io::Result`.
 The purpose of these `Result` types is to encode error handling information.
 Values of the `Result` type, like any type, have methods defined on them. In
 this case, `io::Result` has an [`expect()` method][expect] that takes a value
-it’s called on, and if it isn’t a successful one, `panic!`s with a
-message you passed it. A `panic!` like this will cause our program to crash,
-displaying the message.
+it’s called on, and if it isn’t a successful result, will cause our program to
+crash and display the message that we passed as an argument to `expect()`.
 
 [expect]: ../std/result/enum.Result.html#method.expect
 
@@ -342,19 +323,12 @@ everything that follows the section heading is part of that section, until
 another section starts. Cargo uses the dependencies section to know what
 dependencies on external crates you have and what versions of those crates you
 require. In this case, we’ve specified the `rand` crate with the semantic
-version specifier `0.3.14`.
-
-Cargo understands [Semantic Versioning][semver], which is a standard for
-writing version numbers. A bare number like above is actually shorthand for
-`^0.3.14`, which means "any version that has a public API compatible with
-version 0.3.14". If we wanted to use only `0.3.14` exactly, we could say `rand
-= "=0.3.14"` (note the equal sign within the version string). And if we wanted
-to use whatever the latest version currently is, we could use `*`. [Cargo’s
-documentation][cargodoc] contains more details and other ways to specify
-dependencies.
+version specifier `0.3.14`. Cargo understands [Semantic Versioning][semver], a
+standard for writing version numbers. A bare number like above is actually
+shorthand for `^0.3.14`, which means "any version that has a public API
+compatible with version 0.3.14".
 
 [semver]: http://semver.org
-[cargodoc]: http://doc.crates.io/specifying-dependencies.html
 
 Now, without changing any of our code, let’s build our project:
 
@@ -770,8 +744,8 @@ fn main() {
 ```
 
 And try it out. But wait, didn’t we just add an infinite loop? Yup. Remember
-our discussion about `parse()`? If we give a non-number answer, we’ll `panic!`
-and quit. Observe:
+our discussion about `parse()`? If we give a non-number answer, the program
+will crash and, therefore, quit. Observe:
 
 ```bash
 $ cargo run
