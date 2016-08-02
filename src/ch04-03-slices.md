@@ -288,13 +288,19 @@ with no loss of functionality:
 #     &s[..]
 # }
 fn main() {
-    let s = String::from("hello world");
-    let word = first_word(&s[..]);
+    let my_string = String::from("hello world");
 
-    let s = "hello world";
-    let word = first_word(&s[..]);
+    // first_word works on slices of `String`s
+    let word = first_word(&my_string[..]);
 
-    let word = first_word(s); // since literals are &strs, this works too!
+    let my_string_literal = "hello world";
+
+    // first_word works on slices of string literals
+    let word = first_word(&my_string_literal[..]);
+
+    // since string literals *are* string slices already,
+    // this works too, without the slice syntax!
+    let word = first_word(my_string_literal);
 }
 ```
 
