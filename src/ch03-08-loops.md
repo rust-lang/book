@@ -151,7 +151,7 @@ fn main() {
     let mut index = 0;
 
     while index < 5 {
-        println!("the value is is: {}", a[index]);
+        println!("the value is: {}", a[index]);
 
         index = index + 1;
     }
