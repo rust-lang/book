@@ -24,8 +24,8 @@ the word, though. Let’s try that:
 fn first_word(s: &String) -> usize {
     let bytes = s.as_bytes();
 
-    for (i, &byte) in bytes.iter().enumerate() {
-        if byte == 32 {
+    for (i, &item) in bytes.iter().enumerate() {
+        if item == 32 {
             return i;
         }
     }
@@ -45,7 +45,7 @@ check if a value is a space, we will convert our String to an
 array of bytes using the `.as_bytes()` method.
 
 ```rust,ignore
-for (i, &byte) in bytes.iter().enumerate() {
+for (i, &item) in bytes.iter().enumerate() {
 ```
 
 We will be discussing iterators in more detail in Chapter XX, but for
@@ -56,12 +56,11 @@ second element is a reference to the element itself. This is a bit
 nicer than calculating the index ourselves.
 
 Since it’s a tuple, we can use patterns, just like elsewhere in Rust. So we
-match against the tuple with i for the index and &byte for the byte itself.
-Since we get a reference to a byte, we can put the `&` in the pattern, and then
-the binding `byte` will hold the actual byte, not a reference to a byte.
+match against the tuple with i for the index and &item for a single byte. Since
+we get a reference from `.iter().enumerate()`, we use `&` in the pattern.
 
 ```rust,ignore
-    if byte == 32 {
+    if item == 32 {
         return i;
     }
 }
@@ -81,8 +80,8 @@ that it will still be valid in the future. Consider this:
 # fn first_word(s: &String) -> usize {
 #     let bytes = s.as_bytes();
 #
-#     for (i, &byte) in bytes.iter().enumerate() {
-#         if byte == 32 {
+#     for (i, &item) in bytes.iter().enumerate() {
+#         if item == 32 {
 #             return i;
 #         }
 #     }
@@ -181,8 +180,8 @@ With this in mind, let’s re-write `first_word()` to return a slice:
 fn first_word(s: &String) -> &str {
     let bytes = s.as_bytes();
 
-    for (i, &byte) in bytes.iter().enumerate() {
-        if byte == 32 {
+    for (i, &item) in bytes.iter().enumerate() {
+        if item == 32 {
             return &s[0..i];
         }
     }
@@ -279,8 +278,8 @@ with no loss of functionality:
 # fn first_word(s: &str) -> &str {
 #     let bytes = s.as_bytes();
 #
-#     for (i, &byte) in bytes.iter().enumerate() {
-#         if byte == 32 {
+#     for (i, &item) in bytes.iter().enumerate() {
+#         if item == 32 {
 #             return &s[0..i];
 #         }
 #     }
