@@ -218,7 +218,7 @@ fn main() {
 
 Here’s the error:
 
-```text
+```bash
 17:6 error: cannot borrow `s` as mutable because it is also borrowed as
             immutable [E0502]
     s.clear(); // Error!
