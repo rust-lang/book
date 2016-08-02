@@ -64,67 +64,27 @@ assert_eq!(8.200609733428363, p1.distance(&p2));
 Let’s break this down. First, we have our `Point` struct from earlier in the
 chapter. Next comes our first use of the `impl` keyword:
 
-```
-# #[derive(Debug,Copy,Clone)]
-# struct Point {
-#     x: f64,
-#     y: f64,
-# }
-# 
+```rust,ignore
 impl Point {
-#    fn distance(&self, other: &Point) -> f64 {
-#        let x_squared = f64::powi(other.x - self.x, 2);
-#        let y_squared = f64::powi(other.y - self.y, 2);
-# 
-#        f64::sqrt(x_squared + y_squared)
-#    }
+    // ...
 }
-# 
-# let p1 = Point { x: 0.0, y: 0.0 };
-# let p2 = Point { x: 5.0, y: 6.5 };
-# 
-# assert_eq!(8.200609733428363, p1.distance(&p2));
 ```
 
 Everything we put inside of the curly braces will be methods implemented on
 `Point`.
 
-```
-# #[derive(Debug,Copy,Clone)]
-# struct Point {
-#     x: f64,
-#     y: f64,
-# }
-# 
-# impl Point {
-    fn distance(&self, other: &Point) -> f64 {
-#        let x_squared = f64::powi(other.x - self.x, 2);
-#        let y_squared = f64::powi(other.y - self.y, 2);
-# 
-#        f64::sqrt(x_squared + y_squared)
-    }
-# }
-# 
-# let p1 = Point { x: 0.0, y: 0.0 };
-# let p2 = Point { x: 5.0, y: 6.5 };
-# 
-# assert_eq!(8.200609733428363, p1.distance(&p2));
+```rust,ignore
+fn distance(&self, other: &Point) -> f64 {
+    // ...
+}
 ```
 
 Next is our definition. This looks very similar to our previous definition of
 `distance()` as a function:
 
-```rust
-# #[derive(Debug,Copy,Clone)]
-# struct Point {
-#     x: f64,
-#     y: f64,
-# }
+```rust,ignore
 fn distance(p1: Point, p2: Point) -> f64 {
-#     let x_squared = f64::powi(p2.x - p1.x, 2);
-#     let y_squared = f64::powi(p2.y - p1.y, 2);
-# 
-#     f64::sqrt(x_squared + y_squared)
+    // ...
 }
 ```
 
@@ -167,25 +127,7 @@ from using the value of `self` after the transformation happens.
 
 We’ve left out an important detail. It’s in this line of the example:
 
-```
-# #[derive(Debug,Copy,Clone)]
-# struct Point {
-#     x: f64,
-#     y: f64,
-# }
-# 
-# impl Point {
-#    fn distance(&self, other: &Point) -> f64 {
-#        let x_squared = f64::powi(other.x - self.x, 2);
-#        let y_squared = f64::powi(other.y - self.y, 2);
-# 
-#        f64::sqrt(x_squared + y_squared)
-#    }
-# }
-# 
-# let p1 = Point { x: 0.0, y: 0.0 };
-# let p2 = Point { x: 5.0, y: 6.5 };
-# 
+```rust,ignore
 assert_eq!(8.200609733428363, p1.distance(&p2));
 ```
 
