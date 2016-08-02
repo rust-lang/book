@@ -4,9 +4,9 @@ In the last section on ownership, we made several references to ‘methods’.
 Methods look like this:
 
 ```rust
-let s1 = String::from("hello");
+let s1 = "hello";
 
-// call a method on our String
+// call a method on s1
 let s2 = s1.clone();
 
 println!("{}", s1);
