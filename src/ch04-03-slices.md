@@ -207,17 +207,6 @@ But what about our error condition from before? Slices also fix that. Using
 the slice version of `first_word()` will throw an error:
 
 ```rust,ignore
-# fn first_word(s: &String) -> &str {
-#     let bytes = s.as_bytes();
-#
-#     for (i, &byte) in bytes.iter().enumerate() {
-#         if byte == 32 {
-#             return &s[0..i];
-#         }
-#     }
-#
-#     &s[..]
-# }
 fn main() {
     let mut s = String::from("hello world");
 
