@@ -187,38 +187,3 @@ of a method whether the method is just reading (so needs `&self`), mutating (so
 `&mut self`), or consuming (so `self`). The fact that Rust makes borrowing
 implicit for method receivers is a big part of making ownership ergonomic in
 practice.
-
-## Methods can be called like functions
-
-Furthermore, if we have a method, we can also call it like a function:
-
-```rust
-# #[derive(Debug,Copy,Clone)]
-# struct Point {
-#     x: f64,
-#     y: f64,
-# }
-# 
-# impl Point {
-#    fn distance(&self, other: &Point) -> f64 {
-#        let x_squared = f64::powi(other.x - self.x, 2);
-#        let y_squared = f64::powi(other.y - self.y, 2);
-# 
-#        f64::sqrt(x_squared + y_squared)
-#    }
-# }
-# let p1 = Point { x: 0.0, y: 0.0 };
-# let p2 = Point { x: 5.0, y: 6.5 };
-let d1 = p1.distance(&p2);
-let d2 = Point::distance(&p1, &p2);
-
-assert_eq!(d1, d2);
-```
-
-Instead of using `self.(`, we use `Point` and the namespace operator to call it
-like a function instead. Because functions do not do the automatic referencing,
-we must pass in `&p1` explicitly.
-
-While methods can be called like functions, functions cannot be called like
-methods. If the first argument isn’t named `self`, it cannot be called like a
-method.
