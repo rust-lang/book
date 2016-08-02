@@ -306,23 +306,15 @@ there’s no difference between deep and shallow copying here, so calling
 we can leave it out.
 
 Rust has a special annotation that you can place on types like these, and that
-annotation is called `Copy`. If a type is `Copy`, an older binding is still
-usable after assignment. Integers are an example of such a type; most of the
-primitive types are `Copy`.
-
-While we haven’t talked about how to mark a type as `Copy` yet, you might ask
-yourself “what happens if we made `String` `Copy`?” The answer is you cannot.
-Remember `drop()`? Rust will not let you make something `Copy` if it has
+annotation is the `Copy` trait. We'll talk more about traits in Chapter XX. If
+a type has the `Copy` trait, an older binding is still usable after assignment.
+Rust will not let you make something have the `Copy` trait if it has
 implemented `drop()`. If you need to do something special when the value goes
 out of scope, being `Copy` will be an error.
 
 So what types are `Copy`? You can check the documentation for the given type to
 be sure, but as a rule of thumb, any group of simple scalar values can be Copy,
-but nothing that requires allocation or is some form of resource is `Copy`. And
-you can’t get it wrong: the compiler will throw an error if you incorrectly try
-to use a type that moves, as we saw above.
-
-Here’s some types that are `Copy`:
+but nothing that requires allocation or is some form of resource is `Copy`. Here’s some of the types that are `Copy`:
 
 * All of the integer types, like `u32`.
 * The booleans, `true` and `false`.
