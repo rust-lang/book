@@ -192,18 +192,20 @@ that the pointer points to. And then `s1` goes out of scope, and it will _also_
 try to free the memory that the pointer points to. That’s bad, and is known as
 a "double free" error.
 
-So what’s the solution? Here, we stand at a crossroads with a few options. One
-would be to change assignment so that it will also copy out any data. This
-works, but is inefficient: what if our `String` contained a novel? Also, that
-solution only works for memory. What if, instead of a `String`, we had a
-`TcpConnection`? Opening and closing a network connection is very similar to
-allocating and freeing memory, so it would be nice to be able to use the same
-mechanism. We wouldn't be able to, though, because creating a new connection
-requires more than just copying memory: we have to request a new connection
-from the operating system. The solution that we could use there is to allow the
-programmer to hook into the assignment, similar to `drop()`, and write code to
-fix things up. That would work, but if we did that, an `=` could run arbitrary
-code. That’s also not good, and it doesn’t solve our efficiency concerns either.
+So what’s the solution? Here, we stand at a crossroads with a few options.
+
+One way would be to change assignment so that it will also copy out any data.
+This works, but is inefficient: what if our `String` contained a novel?
+Also, that solution would only work for memory. What if, instead of a `String`,
+we had a `TcpConnection`? Opening and closing a network connection is very
+similar to allocating and freeing memory, so it would be nice to be able to use
+the same mechanism. We wouldn't be able to, though, because creating a new
+connection requires more than just copying memory: we have to request a new
+connection from the operating system. We could then extend our solution to
+allow the programmer to hook into the assignment, similar to `drop()`, and
+write code to fix things up. That would work, but if we did that, an `=` could
+run arbitrary code. That’s also not good, and it doesn’t solve our efficiency
+concerns either.
 
 Let’s take a step back: the root of the problem is that `s1` and `s2` both
 think that they have control of the memory and therefore need to free it.
