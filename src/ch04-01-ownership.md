@@ -90,9 +90,9 @@ cannot? The difference comes down to how these two types deal with memory.
 In the case of a string literal, because we know the contents of the string at
 compile time, we can hard-code the text of the string directly into the final
 executable. This means that string literals are quite fast and efficient. But
-these properties only come from its immutability. We can’t put a blob of memory
-into the binary for each string whose size is unknown at compile time and whose
-size might change over the course of running the program!
+these properties only come from its immutability. Unfortunately, we can’t put a
+blob of memory into the binary for each string whose size is unknown at compile
+time and whose size might change over the course of running the program.
 
 With `String`, in order to support a mutable, growable string, we need to
 allocate an unknown amount of memory to hold the contents. This means two
@@ -129,7 +129,7 @@ Rust takes a different path. Remember our example? Here’s a version with
 ```
 
 We have a natural point at which we can return the memory our `String` needs
-back to the operating system: when it goes out of scope! When a variable goes
+back to the operating system: when it goes out of scope. When a variable goes
 out of scope, Rust calls a special function for us. This function is called
 `drop()`, and it is where the author of `String` can put the code to return the
 memory.
@@ -141,7 +141,7 @@ memory.
 > is _roughly_ similar in Rust, but not identical.
 
 This pattern has a profound impact on the way that Rust code is written. It may
-seem obvious right now, but things can get tricky in more advanced situations!
+seem obvious right now, but things can get tricky in more advanced situations.
 Let’s go over the first one of those right now.
 
 ## Move
@@ -153,7 +153,7 @@ let x = 5;
 let y = x;
 ```
 
-You might say “Make a copy of `5`.” That’d be correct! We now have two
+You might say “Make a copy of `5`”, and that would be correct. We now have two
 bindings, `x` and `y`, and both equal `5`.
 
 Now let’s look at `String`. What would you expect this code to do?
@@ -193,10 +193,10 @@ When moving, Rust makes a copy of the data structure itself. The contents of
 `s1` are copied, but if `s1` contains a reference, like it does in this case,
 Rust will not copy the things that those references refer to.
 
-There’s a problem here! Both data pointers are pointing to the same place. Why
+There’s a problem here. Both data pointers are pointing to the same place. Why
 is this a problem? Well, when `s2` goes out of scope, it will free the memory
 that the pointer points to. And then `s1` goes out of scope, and it will _also_
-try to free the memory that the pointer points to! That’s bad, and is known as
+try to free the memory that the pointer points to. That’s bad, and is known as
 a "double free" error.
 
 So what’s the solution? Here, we stand at a crossroads with a few options. One
@@ -245,7 +245,7 @@ so what actually happens looks like this:
 <img alt="s1 and s2 to the same place" src="img/foo3.png" class="center" style="width: 50%;" />
 
 With only `s2` valid, when it goes out of scope, it will free the memory, and
-we’re done!
+we’re done.
 
 ## Ownership Rules
 
@@ -330,7 +330,7 @@ Here’s some types that are `Copy`:
 * The booleans, `true` and `false`.
 * All of the floating point types, like `f64`.
 * Tuples, but only if they contain types which are also `Copy`. `(i32, i32)`
-  is `Copy`, but `(i32, String)` is not!
+  is `Copy`, but `(i32, String)` is not.
 
 ## Ownership and functions
 
@@ -386,7 +386,7 @@ fn makes_copy(some_integer: i32) { // some_integer comes into scope.
 ```
 
 Remember: If we tried to use `s` after the call to `takes_ownership()`, Rust
-would throw a compile-time error! These static checks protect us from mistakes.
+would throw a compile-time error. These static checks protect us from mistakes.
 Try adding code to `main` that uses `s` and `x` to see where you can use them
 and where the ownership rules prevent you from doing so.
 
