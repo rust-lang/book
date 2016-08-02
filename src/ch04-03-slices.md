@@ -68,8 +68,9 @@ the binding `byte` will hold the actual byte, not a reference to a byte.
 s.len()
 ```
 
-We search for the value 32, which represents a space in UTF-8. If we find one, we return the
-position.  Otherwise, we return the length of the string, using `s.len()`.
+We search for the value 32, which represents a space in UTF-8. If we find one,
+we return the position. Otherwise, we return the length of the string, using
+`s.len()`.
 
 This works, but there’s a problem. We’re returning a `usize` on its own, but
 it’s only a meaningful number in the context of the `&String`. In other
