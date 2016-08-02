@@ -71,7 +71,7 @@ impl Point {
 ```
 
 Everything we put inside of the curly braces will be methods implemented on
-`Point`.
+`Point`. Next is our definition:
 
 ```rust,ignore
 fn distance(&self, other: &Point) -> f64 {
@@ -79,8 +79,12 @@ fn distance(&self, other: &Point) -> f64 {
 }
 ```
 
-Next is our definition. This looks very similar to our previous definition of
-`distance()` as a function:
+Other than this, the rest of the example is familiar: an implementation of
+`distance()` and using the method to find an answer.
+
+Our definition of `distance()` here as a method looks very similar to our
+previous definition of `distance()` as a function, but with two differences.
+Here's the `distance()` function again:
 
 ```rust,ignore
 fn distance(p1: Point, p2: Point) -> f64 {
@@ -88,15 +92,11 @@ fn distance(p1: Point, p2: Point) -> f64 {
 }
 ```
 
-Other than this, the rest of the example is familiar: an implementation of
-`distance()` and using the method to find an answer.
-
-There are two differences in the definitions. The first is in the first
-argument. Instead of a name and a type, we have written `&self`. This is what
-distinguishes a method from a function: using `self` inside of an `impl` block
-means we have a method. Because we already know that we are implementing this
-method on `Point` because of the surrounding `impl Point` block, we don’t need
-to write the type of `self` out.
+The first difference is in the first argument. Instead of a name and a type, we
+have written `&self`. This is what distinguishes a method from a function:
+using `self` inside of an `impl` block means we have a method. Because we
+already know that we are implementing this method on `Point` because of the
+surrounding `impl Point` block, we don’t need to write the type of `self` out.
 
 Note that we have written `&self`, not just `self`. This is because we want to
 take a reference to our argument's value rather than taking ownership of it. In
