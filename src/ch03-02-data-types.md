@@ -246,7 +246,7 @@ by the standard library that _is_ allowed to grow or shrink in size. If you're
 unsure whether to use an array or a `Vec`, you should probably go with a `Vec`,
 and we'll discuss them in more detail in chapter XX.
 
-#### Accessing and Modifying Array Elements
+#### Accessing Array Elements
 
 An array is a single chunk of memory, allocated on the stack. We can access
 elements of an array using indexing, like this:
