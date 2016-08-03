@@ -169,8 +169,7 @@ has two primitive compound types: tuples and arrays.
 
 We’ve seen tuples already, when binding multiple values at once. A tuple is a
 general way of grouping together some number of other values with distinct
-types into one compound type. The number of values is called the *arity* of the
-tuple.
+types into one compound type.
 
 We create a tuple by writing a comma-separated list of values inside
 parentheses. Each position in the tuple has a distinct type, as in this example:
