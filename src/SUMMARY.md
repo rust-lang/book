@@ -42,6 +42,8 @@
 
 - [Lifetimes]()
 
+- [Generics](chZZ-generics.md)
+
 - [Traits]()
 
 - [Closures]()
