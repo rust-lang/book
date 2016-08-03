@@ -1,49 +1,45 @@
-# Ownership
+## Ownership
 
 Rust’s central feature is called ‘ownership’. It is a feature that is
 straightforward to explain, but has deep implications for the rest of the
 language.
 
-Rust is committed to both safety and speed. One of the key tools for balancing
-between them is “zero-cost abstractions”: the various abstractions in Rust do
-not pose a global performance penalty. The ownership system is a prime example
-of a zero-cost abstraction. All of the analysis we’ll talk about in this guide
-is done at compile time. You do not pay any run-time cost for any of these
+All programs have to manage the way they use a computer's memory while running.
+Some languages have garbage collection, while in others, the programmer has to
+explicitly allocate and free the memory. Rust takes a third approach: memory is
+managed through a system of ownership with a set of rules that the compiler
+checks at compile-time. You do not pay any run-time cost for any of these
 features.
 
-However, this system does have a certain cost: learning curve. Many new
-Rustaceans experience something we like to call ‘fighting with the borrow
-checker’, where the Rust compiler refuses to compile a program that the author
-thinks is valid. This can happen because the programmer isn’t used to thinking
-carefully about ownership, or is thinking about it differently from the way
-that Rust does. You probably will experience something similar at first. There is
-good news, however: more experienced Rust developers report that once they work
-with the rules of the ownership system for a period of time, they fight the
-borrow checker less and less. Keep at it!
+However, because ownership is a new concept for many programmers, it does take
+some time to get used to. There is good news, though: the more experienced you
+become with Rust and the rules of the ownership system, the more you'll be
+able to naturally develop code that is both safe and efficient. Keep at it!
 
-This chapter will give you a foundation for understanding the rest of the
-language. To do so, we’re going to learn through examples, focusing on a very
-common data structure: strings.
+Once you understand ownership, you have a good foundation for understanding the
+features that make Rust unique. In this chapter, we'll learn ownership by going
+through some examples, focusing on a very common data structure: strings.
 
-## Variable binding scope
+### Variable binding scope
 
-Let’s take a step back and look at the very basics again. Now that we’re past
-basic syntax, we won’t include all of the `fn main() {` stuff in examples, so
-if you’re following along, you will have to put them inside of a `main()`
-function. This lets our examples be a bit more concise, letting us focus on the
-actual details, rather than boilerplate.
+We've walked through an example of a Rust program already in the tutorial
+chapter. Now that we’re past basic syntax, we won’t include all of the `fn
+main() {` stuff in examples, so if you’re following along, you will have to put
+them inside of a `main()` function. This lets our examples be a bit more
+concise, letting us focus on the actual details rather than boilerplate.
 
-Anyway, here it is:
+Anyway, here is our first example:
 
 ```rust
 let s = "hello";
 ```
 
-This variable binding refers to a string literal. It’s valid from the point at
-which it’s declared, until the end of the current _scope_. That is:
+This variable binding refers to a string literal, where the value of the string
+is hard coded into the text of our program. The binding is valid from the point
+at which it’s declared until the end of the current _scope_. That is:
 
 ```rust
-{                      // s is not valid here, it’s not yet in scope
+{                      // s is not valid here, it’s not yet declared
     let s = "hello";   // s is valid from this point forward
 
     // do stuff with s
@@ -55,36 +51,38 @@ In other words, there are two important points in time here:
 - When `s` comes ‘into scope’, it is valid.
 - It remains so until it ‘goes out of scope’.
 
-At this point, things are similar to other programming languages. Let’s build
-on top of this understanding by introducing a new type: `String`.
+At this point, things are similar to other programming languages. Now let’s
+build on top of this understanding by introducing the `String` type.
 
-## Strings
+### Strings
 
-String literals are convenient, but they aren’t the only way that you use strings.
-For one thing, they’re immutable. For another, not every string is literal:
-what about taking user input and storing it in a string?
+String literals are convenient, but they aren’t the only way that you use
+strings. For one thing, they’re immutable. For another, not every string is
+literal: what about taking user input and storing it in a string?
 
-For this, Rust has a second string type, `String`. You can create a `String` from
-a string literal using the `from` function:
+For this, Rust has a second string type, `String`. You can create a `String`
+from a string literal using the `from` function:
 
 ```rust
 let s = String::from("hello");
 ```
 
-We haven’t seen the double colon (`::`) syntax yet. It is a kind of scope
-operator, allowing us to namespace this particular `from()` function under the
-`String` type itself, rather than using some sort of name like `string_from()`.
-We’ll discuss this syntax more in the “Method Syntax” and “Modules” chapters.
+We haven’t seen the double colon (`::`) syntax yet. It is an operator that
+allows us to namespace this particular `from()` function under the `String`
+type itself, rather than using some sort of name like `string_from()`. We’ll
+discuss this syntax more in the “Method Syntax” and “Modules” chapters.
 
 This kind of string can be mutated:
 
 ```rust
 let mut s = String::from("hello");
 
-s.push_str(", world!");
+s.push_str(", world!"); // push_str() appends a literal to a String
+
+println!("{}", s); // This will print `hello, world!`
 ```
 
-## Memory and allocation
+### Memory and allocation
 
 So, what’s the difference here? Why can `String` be mutated, but literals
 cannot? The difference comes down to how these two types deal with memory.
@@ -92,11 +90,13 @@ cannot? The difference comes down to how these two types deal with memory.
 In the case of a string literal, because we know the contents of the string at
 compile time, we can hard-code the text of the string directly into the final
 executable. This means that string literals are quite fast and efficient. But
-these properties only come from its immutability; we can’t put an
-arbitrary-sized blob of memory into the binary for each string!
+these properties only come from its immutability. Unfortunately, we can’t put a
+blob of memory into the binary for each string whose size is unknown at compile
+time and whose size might change over the course of running the program.
 
-With `String`, to support a mutable, growable string, we need to allocate an
-unknown amount of memory to hold the contents. This means two things:
+With `String`, in order to support a mutable, growable string, we need to
+allocate an unknown amount of memory to hold the contents. This means two
+things:
 
 1. The memory must be requested from the operating system at runtime.
 2. We need a way of giving this memory back to the operating system when we’re
@@ -107,13 +107,15 @@ implementation requests the memory it needs. This is pretty much universal in
 programming languages.
 
 The second case, however, is different. In languages with a garbage collector
-(‘GC’), the GC handles that second case, and we, as the programmer, don’t need
-to think about it. Without GC, it’s the programmer’s responsibility to identify
-when memory is no longer being used, and explicitly return it, just as it was
-requested. Doing this correctly has historically been a difficult problem. If
-we forget, we will waste memory. If we do it too early, we will have an invalid
-variable. If we do it twice, that’s a bug too. We need to pair exactly one
-`allocate()` with exactly one `free()`.
+(‘GC’), the GC will keep track and clean up memory that isn't being used
+anymore, and we, as the programmer, don’t need to think about it. Without GC,
+it’s our responsibility to identify when memory is no longer being used and
+call code to explicitly return it, just as we did to request it. Doing this
+correctly has historically been a difficult problem. If we forget, we will
+waste memory. If we do it too early, we will have an invalid variable. If we do
+it twice, that’s a bug too. We need to pair exactly one `allocate()` with
+exactly one `free()`.
+
 
 Rust takes a different path. Remember our example? Here’s a version with
 `String`:
@@ -126,10 +128,11 @@ Rust takes a different path. Remember our example? Here’s a version with
 }                                  // this scope is now over, and s is no longer valid
 ```
 
-We have a natural point at which we can return the memory our `String` needs back
-to the operating system: when it goes out of scope! When a variable goes out of
-scope, a special function is called. This function is called `drop()`, and it
-is where the author of `String` can put the code to return the memory.
+We have a natural point at which we can return the memory our `String` needs
+back to the operating system: when it goes out of scope. When a variable goes
+out of scope, Rust calls a special function for us. This function is called
+`drop()`, and it is where the author of `String` can put the code to return the
+memory.
 
 > Aside: This pattern is sometimes called “Resource Acquisition Is
 > Initialization” in C++, or “RAII” for short. While they are very similar,
@@ -138,10 +141,10 @@ is where the author of `String` can put the code to return the memory.
 > is _roughly_ similar in Rust, but not identical.
 
 This pattern has a profound impact on the way that Rust code is written. It may
-seem obvious right now, but things can get tricky in more advanced situations!
+seem obvious right now, but things can get tricky in more advanced situations.
 Let’s go over the first one of those right now.
 
-## Move
+### Move
 
 What would you expect this code to do?
 
@@ -150,7 +153,7 @@ let x = 5;
 let y = x;
 ```
 
-You might say “Make a copy of `5`.” That’d be correct! We now have two
+You might say “Make a copy of `5`”, and that would be correct. We now have two
 bindings, `x` and `y`, and both equal `5`.
 
 Now let’s look at `String`. What would you expect this code to do?
@@ -170,19 +173,12 @@ A `String` is made up of three parts: a pointer to the memory that holds the
 contents of the string, a length, and a capacity. The length is how much memory
 the `String` is currently using. The capacity is the total amount of memory the
 `String` has gotten from the operating system. The difference between length
-and capacity matters, but not in this context, so don’t worry about it too much
-if it doesn’t make sense, and just ignore the capacity.
+and capacity matters but not in this context, so don’t worry about it too much.
+For right now, it's fine to ignore the capacity.
 
-> We’ve talked about two kinds of composite types: arrays and tuples. `String`
-> is a third type: a `struct`, which we will cover the details of in the next
-> chapter of the book. For now, thinking about `String` as a tuple is close
-> enough.
-
-When we assign `s1` to `s2`, the `String` itself is copied. But not all kinds
-of copying are the same. Many people draw distinctions between ‘shallow
-copying’ and ‘deep copying’. We don’t use these terms in Rust. We instead say
-that something is ‘moved’ or ‘cloned’. Assignment in Rust causes a ‘move’. In
-other words, it looks like this:
+When we assign `s1` to `s2`, the `String` itself is copied, meaning we copy the
+pointer, the length, and the capacity. We do not copy the data that the
+`String`'s pointer refers to. In other words, it looks like this:
 
 <img alt="s1 and s2" src="img/foo2.png" class="center" style="width: 50%;" />
 
@@ -190,31 +186,33 @@ _Not_ this:
 
 <img alt="s1 and s2 to two places" src="img/foo4.png" class="center" style="width: 50%;" />
 
-When moving, Rust makes a copy of the data structure itself, the contents of
-`s1` are copied, but if `s1` contains a reference, like it does in this case,
-Rust will not copy the things that those references refer to.
+There’s a problem here. Both data pointers are pointing to the same place. Why
+is this a problem? Well, when `s2` goes out of scope, it will free the memory
+that the pointer points to. And then `s1` goes out of scope, and it will _also_
+try to free the memory that the pointer points to. That’s bad, and is known as
+a "double free" error.
 
-There’s a problem here! Both `data` pointers are pointing to the same place.
-Why is this a problem? Well, when `s2` goes out of scope, it will free the
-memory that `data` points to. And then `s1` goes out of scope, and it will
-_also_ try to free the memory that `data` points to! That’s bad.
+So what’s the solution? Here, we stand at a crossroads with a few options.
 
-So what’s the solution? Here, we stand at a crossroads. There are a few
-options. One would be to declare that assignment will also copy out any data.
-This works, but is inefficient: what if our `String` contained a novel? Also,
-it only works for memory. What if, instead of a `String`, we had a
-`TcpConnection`? Opening and closing a network connection is very similar to
-allocating and freeing memory. The solution that we could use there is to allow
-the programmer to hook into the assignment, similar to `drop()`, and write code
-to fix things up. That would work, but now, an `=` can run arbitrary code. That’s
-also not good, and it doesn’t solve our efficiency concerns either.
+One way would be to change assignment so that it will also copy out any data.
+This works, but is inefficient: what if our `String` contained a novel?
+Also, that solution would only work for memory. What if, instead of a `String`,
+we had a `TcpConnection`? Opening and closing a network connection is very
+similar to allocating and freeing memory, so it would be nice to be able to use
+the same mechanism. We wouldn't be able to, though, because creating a new
+connection requires more than just copying memory: we have to request a new
+connection from the operating system. We could then extend our solution to
+allow the programmer to hook into the assignment, similar to `drop()`, and
+write code to fix things up. That would work, but if we did that, an `=` could
+run arbitrary code. That’s also not good, and it doesn’t solve our efficiency
+concerns either.
 
 Let’s take a step back: the root of the problem is that `s1` and `s2` both
-think that they have control of the memory, and therefore needs to free it.
+think that they have control of the memory and therefore need to free it.
 Instead of trying to copy the allocated memory, we could say that `s1` is no
-longer valid, and therefore, doesn’t need to free anything. This is in fact the
-choice that Rust makes. Check it out what happens when you try to use `s1`
-after `s2` is created:
+longer valid and, therefore, doesn’t need to free anything. This is in fact the
+choice that Rust makes. Check out what happens when you try to use `s1` after
+`s2` is created:
 
 ```rust,ignore
 let s1 = String::from("hello");
@@ -225,7 +223,7 @@ println!("{}", s1);
 
 You’ll get an error like this:
 
-```text
+```bash
 5:22 error: use of moved value: `s1` [E0382]
 println!("{}", s1);
                ^~
@@ -235,30 +233,35 @@ println!("{}", s1);
      ^~
 ```
 
-We say that `s1` was _moved_ into `s2`. When a value moves, its data is copied,
-but the original variable binding is no longer usable. That solves our problem:
+If you have heard the terms "shallow copy" and "deep copy" while working with
+other languages, the concept of copying the pointer, length, and capacity
+without copying the data probably sounded like a shallow copy. Because Rust
+also invalidates the first binding, instead of calling this a shallow copy,
+it's called a _move_. Here we would read this by saying that `s1` was _moved_
+into `s2`. So what actually happens looks like this:
 
 <img alt="s1 and s2 to the same place" src="img/foo3.png" class="center" style="width: 50%;" />
 
-With only `s2` valid, when it goes out of scope, it will free the memory, and we’re done!
+That solves our problem! With only `s2` valid, when it goes out of scope, it
+alone will free the memory, and we’re done.
 
-## Ownership Rules
+### Ownership Rules
 
 This leads us to the Ownership Rules:
 
-> 1. Each value in Rust has a variable binding that’s called it’s ‘owner’.
+> 1. Each value in Rust has a variable binding that’s called its ‘owner’.
 > 2. There can only be one owner at a time.
 > 3. When the owner goes out of scope, the value will be `drop()`ped.
 
 Furthermore, there’s a design choice that’s implied by this: Rust will never
-automatically create ‘deep’ copies of your data. Any automatic copying must be
-inexpensive.
+automatically create ‘deep’ copies of your data. Therefore, any _automatic_
+copying can be assumed to be inexpensive.
 
-## Clone
+### Clone
 
-But what if we _do_ want to deeply copy the `String`’s data, and not just the
+But what if we _do_ want to deeply copy the `String`’s data and not just the
 `String` itself? There’s a common method for that: `clone()`. We will discuss
-methods in the next section on [`structs`], but they’re a common enough feature
+methods in the section on [`structs`], but they’re a common enough feature
 in many programming languages that you have probably seen them before.
 
 Here’s an example of the `clone()` method in action:
@@ -278,10 +281,10 @@ it _is_ doing this:
 <img alt="s1 and s2 to two places" src="img/foo4.png" class="center" style="width: 50%;" />
 
 When you see a call to `clone()`, you know that some arbitrary code is being
-executed, which may be expensive. It’s a visual indicator that something
+executed, and that code may be expensive. It’s a visual indicator that something
 different is going on here.
 
-## Copy
+### Copy
 
 There’s one last wrinkle that we haven’t talked about yet. This code works:
 
@@ -294,38 +297,32 @@ println!("{}", x);
 
 But why? We don’t have a call to `clone()`. Why didn’t `x` get moved into `y`?
 
-For types that do not have any kind of complex storage requirements, like
-integers, typing `clone()` is busy work. There’s no reason we would ever want
-to prevent `x` from being valid here, as there’s no situation in which it’s
-incorrect. In other words, there’s no difference between deep and shallow
-copying here, so calling `clone()` wouldn’t do anything differently from the
-usual shallow copying.
+Types like integers that have a known size at compile time do not ask for
+memory from the operating system and therefore do not need to be `drop()`ped
+when they go out of scope. That means there's no reason we would want to
+prevent `x` from being valid after we create the binding `y`. In other words,
+there’s no difference between deep and shallow copying here, so calling
+`clone()` wouldn’t do anything differently from the usual shallow copying and
+we can leave it out.
 
-Rust has a special annotation that you can place on types, called `Copy`. If
-a type is `Copy`, an older binding is still usable after assignment. Integers
-are an example of such a type; most of the primitive types are `Copy`.
-
-While we haven’t talked about how to mark a type as `Copy` yet, you might ask
-yourself “what happens if we made `String` `Copy`?” The answer is, you cannot.
-Remember `drop()`? Rust will not let you make something `Copy` if it has
+Rust has a special annotation that you can place on types like these, and that
+annotation is the `Copy` trait. We'll talk more about traits in Chapter XX. If
+a type has the `Copy` trait, an older binding is still usable after assignment.
+Rust will not let you make something have the `Copy` trait if it has
 implemented `drop()`. If you need to do something special when the value goes
 out of scope, being `Copy` will be an error.
 
 So what types are `Copy`? You can check the documentation for the given type to
-be sure, but as a rule of thumb, any group of simple scalar values can be
-Copy, but nothing that requires allocation or is some form of resource is `Copy`.
-And you can’t get it wrong: the compiler will throw an error if you try to use
-a type that moves incorrectly, as we saw above.
-
-Here’s some types that you’ve seen so far that are `Copy`:
+be sure, but as a rule of thumb, any group of simple scalar values can be Copy,
+but nothing that requires allocation or is some form of resource is `Copy`. Here’s some of the types that are `Copy`:
 
 * All of the integer types, like `u32`.
 * The booleans, `true` and `false`.
 * All of the floating point types, like `f64`.
 * Tuples, but only if they contain types which are also `Copy`. `(i32, i32)`
-  is `Copy`, but `(i32, String)` is not!
+  is `Copy`, but `(i32, String)` is not.
 
-## Ownership and functions
+### Ownership and functions
 
 Passing a value to a function has similar semantics as assigning it:
 
@@ -379,7 +376,9 @@ fn makes_copy(some_integer: i32) { // some_integer comes into scope.
 ```
 
 Remember: If we tried to use `s` after the call to `takes_ownership()`, Rust
-would throw a compile-time error! These static checks protect us from mistakes.
+would throw a compile-time error. These static checks protect us from mistakes.
+Try adding code to `main` that uses `s` and `x` to see where you can use them
+and where the ownership rules prevent you from doing so.
 
 Returning values can also transfer ownership:
 
@@ -440,9 +439,11 @@ fn takes_and_gives_back(a_string: String) -> String { // a_string comes into sco
 It’s the same pattern, every time: assigning something moves it, and when an
 owner goes out of scope, if it hasn’t been moved, it will `drop()`.
 
-This might seem a bit tedious, and it is. What if I want to let a function use
-a value, but not take ownership? It’s quite annoying that anything I pass in
-also needs to be passed back. Look at this function:
+This might seem a bit tedious, and it is. What if we want to let a function use
+a value but not take ownership? It’s quite annoying that anything we pass in
+also needs to be passed back if we want to use it again, in addition to any
+data resulting from the body of the function that we might want to return as
+well. It's _possible_ to return multiple values, using a tuple, like this:
 
 ```rust
 fn main() {
@@ -460,7 +461,6 @@ fn calculate_length(s: String) -> (String, usize) {
 }
 ```
 
-This is too much ceremony: we have to use a tuple to give back the `String` as
-well as the length. It’s a lot of work for a pattern that should be common.
-
-Luckily for us, Rust has such a feature, and it’s what the next section is about.
+But this is too much ceremony and a lot of work for a concept that should be
+common. Luckily for us, Rust has a feature for this concept, and it’s what the
+next section is about.

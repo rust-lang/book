@@ -1,34 +1,30 @@
 # The Rust Programming Language
 
-- [Introduction](ch01-01-introduction.md)
-    - [Installation](ch01-02-installation.md)
-    - [Hello, World!](ch01-03-hello-world.md)
-    - [The Design of Rust](ch01-04-design.md)
+- [Introduction](ch01-00-introduction.md)
+    - [Installation](ch01-01-installation.md)
+    - [Hello, World!](ch01-02-hello-world.md)
 
-- [Tutorial]()
+- [Guessing Game Tutorial](ch02-00-guessing-game-tutorial.md)
 
-- [Up and Running](ch03-01-up-and-running.md)
-    - [Variable Bindings](ch03-02-variable-bindings.md)
-    - [Functions](ch03-03-functions.md)
-    - [Scalar Types](ch03-04-scalar-types.md)
-    - [Compound Types](ch03-05-compound-types.md)
-    - [Comments](ch03-06-comments.md)
-    - [Control flow with `if`](ch03-07-if.md)
-    - [Loops](ch03-08-loops.md)
+- [Common Programming Concepts in Rust](ch03-00-common-programming-concepts-in-rust.md)
+    - [Variable Bindings and Mutability](ch03-01-variable-bindings-and-mutability.md)
+    - [Data Types](ch03-02-data-types.md)
+    - [How Functions Work](ch03-03-how-functions-work.md)
+    - [Comments](ch03-04-comments.md)
+    - [Control Flow](ch03-05-control-flow.md)
 
-- [Understanding Ownership](ch04-01-understanding-ownership.md)
-    - [Ownership](ch04-02-ownership.md)
-    - [References & Borrowing](ch04-03-references-and-borrowing.md)
-    - [Slices](ch04-04-slices.md)
+- [Understanding Ownership](ch04-00-understanding-ownership.md)
+    - [Ownership](ch04-01-ownership.md)
+    - [References & Borrowing](ch04-02-references-and-borrowing.md)
+    - [Slices](ch04-03-slices.md)
 
-- [Structs](ch05-01-structs.md)
-    - [Method Syntax](ch05-02-method-syntax.md)
-    - [Advanced]()
+- [Structs](ch05-00-structs.md)
+    - [Method Syntax](ch05-01-method-syntax.md)
 
-- [Enums](ch06-01-enums.md)
-    - [Option](ch06-02-option.md)
-    - [Match](ch06-03-match.md)
-    - [if let](ch06-04-if-let.md)
+- [Enums](ch06-00-enums.md)
+    - [Option](ch06-01-option.md)
+    - [Match](ch06-02-match.md)
+    - [if let](ch06-03-if-let.md)
 
 - [Crates & Modules]()
 
@@ -100,3 +96,6 @@
 - [Macros]()
 
 - [Nightly Rust]()
+
+- [Appendix](appendix-00.md)
+    - [Keywords](appendix-01-keywords.md)

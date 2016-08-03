@@ -1,4 +1,4 @@
-# if let
+## if let
 
 There's one more advanced control flow structure we haven't discussed: `if
 let`. Imagine we're in a situation like this:
@@ -16,9 +16,9 @@ match some_option {
 We care about the `Some` case, but don't want to do anything with the `None`
 case. With an `Option`, this isn't _too_ bad, but with a more complex enum,
 adding `_ => {}` after processing just one variant doesn't feel great. We have
-this boilerplate arm, and we have an extra level of indentation: the code that
-does something with `x` is indented twice, rather than just once. We really want
-a construct that says "Do something with this one case, I don't care about the
+this boilerplate arm and an extra level of indentation (the code that
+does something with `x` is indented twice, rather than just once). We really want
+a construct that says "Do something with this one case; I don't care about the
 others."
 
 Enter `if let`:
@@ -63,4 +63,4 @@ match expression {
 ```
 
 In other words, it's the high-level construct we were originally looking for:
-do something with a single pattern.
+do something special with only one pattern.
