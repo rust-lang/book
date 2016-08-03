@@ -1,0 +1,430 @@
+<!DOCTYPE HTML>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>The Rust Programming Language</title>
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <base href="">
+
+        <link rel="stylesheet" href="book.css">
+        <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+        <link rel="shortcut icon" href="favicon.png">
+
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+
+        <!-- MathJax -->
+        <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+        <!-- Fetch JQuery from CDN but have a local fallback -->
+        <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+        <script>
+            if (typeof jQuery == 'undefined') {
+                document.write(unescape("%3Cscript src='jquery.js'%3E%3C/script%3E"));
+            }
+        </script>
+    </head>
+    <body class="light">
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme = localStorage.getItem('theme');
+            if (theme == null) { theme = 'light'; }
+            $('body').removeClass().addClass(theme);
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var sidebar = localStorage.getItem('sidebar');
+            if (sidebar === "hidden") { $("html").addClass("sidebar-hidden") }
+            else if (sidebar === "visible") { $("html").addClass("sidebar-visible") }
+        </script>
+
+        <div id="sidebar" class="sidebar">
+            <ul class="chapter"><li><a href="ch01-00-introduction.html"><strong>1.</strong> Introduction</a></li><li><ul class="section"><li><a href="ch01-01-installation.html"><strong>1.1.</strong> Installation</a></li><li><a href="ch01-02-hello-world.html"><strong>1.2.</strong> Hello, World!</a></li></ul></li><li><a href="ch02-00-guessing-game-tutorial.html"><strong>2.</strong> Guessing Game Tutorial</a></li><li><a href="ch03-00-common-programming-concepts-in-rust.html"><strong>3.</strong> Common Programming Concepts in Rust</a></li><li><ul class="section"><li><a href="ch03-01-variable-bindings-and-mutability.html"><strong>3.1.</strong> Variable Bindings and Mutability</a></li><li><a href="ch03-02-data-types.html"><strong>3.2.</strong> Data Types</a></li><li><a href="ch03-03-how-functions-work.html"><strong>3.3.</strong> How Functions Work</a></li><li><a href="ch03-04-comments.html"><strong>3.4.</strong> Comments</a></li><li><a href="ch03-05-control-flow.html" class="active"><strong>3.5.</strong> Control Flow</a></li></ul></li><li><a href="ch04-00-understanding-ownership.html"><strong>4.</strong> Understanding Ownership</a></li><li><ul class="section"><li><a href="ch04-01-ownership.html"><strong>4.1.</strong> Ownership</a></li><li><a href="ch04-02-references-and-borrowing.html"><strong>4.2.</strong> References &amp; Borrowing</a></li><li><a href="ch04-03-slices.html"><strong>4.3.</strong> Slices</a></li></ul></li><li><a href="ch05-00-structs.html"><strong>5.</strong> Structs</a></li><li><ul class="section"><li><a href="ch05-01-method-syntax.html"><strong>5.1.</strong> Method Syntax</a></li></ul></li><li><a href="ch06-00-enums.html"><strong>6.</strong> Enums</a></li><li><ul class="section"><li><a href="ch06-01-option.html"><strong>6.1.</strong> Option</a></li><li><a href="ch06-02-match.html"><strong>6.2.</strong> Match</a></li><li><a href="ch06-03-if-let.html"><strong>6.3.</strong> if let</a></li></ul></li><li><strong>7.</strong> Crates &amp; Modules</li><li><strong>8.</strong> Error Handling</li><li><strong>9.</strong> Basic Collections</li><li><ul class="section"><li><strong>9.1.</strong> Vectors</li><li><strong>9.2.</strong> Strings</li><li><strong>9.3.</strong> <code>HashMap&lt;K, V&gt;</code></li></ul></li><li><strong>10.</strong> Lifetimes</li><li><a href="chZZ-generics.html"><strong>11.</strong> Generics</a></li><li><strong>12.</strong> Traits</li><li><strong>13.</strong> Closures</li><li><strong>14.</strong> Iterators</li><li><a href="chXX-patterns.html"><strong>15.</strong> Patterns</a></li><li><strong>16.</strong> I/O</li><li><ul class="section"><li><strong>16.1.</strong> <code>Read</code> &amp; <code>Write</code></li><li><strong>16.2.</strong> <code>std::fs</code></li><li><strong>16.3.</strong> <code>std::path</code></li><li><strong>16.4.</strong> <code>std::env</code></li></ul></li><li><strong>17.</strong> Testing</li><li><strong>18.</strong> Smart Pointers</li><li><ul class="section"><li><strong>18.1.</strong> <code>Deref</code></li><li><strong>18.2.</strong> <code>Deref</code> coercions</li><li><strong>18.3.</strong> <code>Box&lt;T&gt;</code></li><li><strong>18.4.</strong> <code>Rc&lt;T&gt;</code></li></ul></li><li><strong>19.</strong> Concurrency</li><li><ul class="section"><li><strong>19.1.</strong> Threads</li><li><strong>19.2.</strong> <code>Send</code> &amp; <code>Sync</code></li><li><strong>19.3.</strong> <code>Arc&lt;T&gt;</code></li><li><strong>19.4.</strong> <code>Mutex&lt;T&gt;</code></li><li><strong>19.5.</strong> <code>Channels</code></li></ul></li><li><strong>20.</strong> Unsafe Rust</li><li><ul class="section"><li><strong>20.1.</strong> Raw Pointers</li><li><strong>20.2.</strong> transmute</li></ul></li><li><strong>21.</strong> FFI</li><li><ul class="section"><li><strong>21.1.</strong> Conditional Compilation</li><li><strong>21.2.</strong> Bindings to C</li><li><strong>21.3.</strong> Using Rust from Other Languages</li><li><strong>21.4.</strong> <code>static</code></li></ul></li><li><strong>22.</strong> Creating a Library</li><li><ul class="section"><li><strong>22.1.</strong> Cargo</li><li><strong>22.2.</strong> Crates.io</li><li><a href="chYY-YY-documentation.html"><strong>22.3.</strong> Documentation</a></li></ul></li><li><strong>23.</strong> Advanced Type System Features</li><li><ul class="section"><li><strong>23.1.</strong> Associated Types</li><li><strong>23.2.</strong> Trait Objects</li><li><strong>23.3.</strong> UFCS</li><li><strong>23.4.</strong> Coherence</li></ul></li><li><strong>24.</strong> Interior mutability</li><li><ul class="section"><li><strong>24.1.</strong> <code>Cell&lt;T&gt;</code></li><li><strong>24.2.</strong> <code>RefCell&lt;T&gt;</code></li></ul></li><li><strong>25.</strong> Macros</li><li><strong>26.</strong> Nightly Rust</li><li><a href="appendix-00.html"><strong>27.</strong> Appendix</a></li><li><ul class="section"><li><a href="appendix-01-keywords.html"><strong>27.1.</strong> Keywords</a></li></ul></li></ul>
+        </div>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar" class="menu-bar">
+                    <div class="left-buttons">
+                        <i id="sidebar-toggle" class="fa fa-bars"></i>
+                        <i id="theme-toggle" class="fa fa-paint-brush"></i>
+                    </div>
+
+                    <h1 class="menu-title">The Rust Programming Language</h1>
+
+                    <div class="right-buttons">
+                        <i id="print-button" class="fa fa-print" title="Print this book"></i>
+                    </div>
+                </div>
+
+                <div id="content" class="content">
+                    <h2>Control Flow</h2>
+<p>Deciding whether or not to run some code depending on if a condition is true,
+or deciding to run some code repeatedly while a condition is true, are basic
+building blocks in most programming languages. The most common constructs that
+let us control the flow of execution of our Rust code are <code>if</code> expressions and
+loops.</p>
+<h3><code>if</code> Expressions</h3>
+<p>An <code>if</code> expression allows us to branch our code depending on conditions. We
+provide a condition and then say, &quot;If this condition is met, then run this
+block of code. If the condition is not met, do not run this block of code.&quot;</p>
+<p>Let’s make a new project to explore <code>if</code>. Navigate to your projects directory,
+and use Cargo to make a new project called <code>branches</code>:</p>
+<pre><code class="language-bash">$ cargo new --bin branches
+$ cd branches
+</code></pre>
+<p>Write this sample program using <code>if</code> and save it in the <em>branches</em> directory in
+<code>src/main.rs</code>:</p>
+<pre><code class="language-rust">fn main() {
+    let number = 3;
+
+    if number &lt; 5 {
+        println!(&quot;condition was true&quot;);
+    } else {
+        println!(&quot;condition was false&quot;);
+    }
+}
+</code></pre>
+<p>All <code>if</code> expressions start with <code>if</code>, which is followed by a condition. In this
+case, our condition is checking if our variable binding <code>number</code> has a value
+that is less than 5. The block of code we want to execute if the condition is
+true goes immediately after the condition, inside curly braces. These blocks
+are sometimes called ‘arms’. We can optionally also include an <code>else</code>
+statement, which we have chosen to do here. <code>else</code> gives the program a block of
+code to execute should <code>condition</code> evaluate to false.</p>
+<p>Try running this code, and you should see output like this:</p>
+<pre><code class="language-bash">$ cargo run
+   Compiling branches v0.1.0 (file:///projects/branches)
+     Running `target/debug/branches`
+condition was true
+</code></pre>
+<p>Let’s try changing the value of <code>number</code> to a value that makes the condition
+<code>false</code> to see what happens:</p>
+<pre><code class="language-rust,ignore">let number = 7;
+</code></pre>
+<p>Run the program again, and look at the output:</p>
+<pre><code class="language-bash">$ cargo run
+   Compiling branches v0.1.0 (file:///projects/branches)
+     Running `target/debug/branches`
+condition was false
+</code></pre>
+<p>It’s also worth noting that <code>condition</code> here <em>must</em> be a <code>bool</code>. To see what
+happens if the condition isn't a <code>bool</code>, try running this code:</p>
+<pre><code class="language-rust,ignore">fn main() {
+    let number = 3;
+
+    if number {
+        println!(&quot;number was three&quot;);
+    }
+}
+</code></pre>
+<p>The <code>if</code> condition evaluates to a value of <code>3</code> this time, and Rust will
+complain about it:</p>
+<pre><code class="language-bash">   Compiling branches v0.1.0 (file:///projects/branches)
+error: mismatched types [--explain E0308]
+ --&gt; src/main.rs:4:8
+4 |&gt;     if number {
+  |&gt;        ^^^^^^ expected bool, found integral variable
+note: expected type `bool`
+note:    found type `_`
+
+error: aborting due to previous error
+Could not compile `branches`.
+</code></pre>
+<p>The error tells us that Rust expected a <code>bool</code>, but got an integer. Rust will
+not automatically try to convert non-boolean types to a boolean here, unlike
+languages like Ruby or JavaScript. We must be explicit and always give <code>if</code> a
+<code>boolean</code> as its condition. If your intention is for the <code>if</code> code block to be run if a number is not equal to <code>0</code>, for example, we would change the <code>if</code> expression to read:</p>
+<pre><code class="language-rust">fn main() {
+    let number = 3;
+
+    if number != 0 {
+        println!(&quot;number was something other than zero&quot;);
+    }
+}
+</code></pre>
+<p>Running this will print &quot;number was something other than zero&quot;.</p>
+<h4>Multiple Conditions with <code>else if</code></h4>
+<p>We can have multiple coniditions by combining <code>if</code> and <code>else</code> in an <code>else if</code>
+expression. For example:</p>
+<pre><code class="language-rust">fn main() {
+    let number = 5;
+
+    if number == 3 {
+        println!(&quot;condition was 3&quot;);
+    } else if number == 4 {
+        println!(&quot;condition was 4&quot;);
+    } else if number == 5 {
+        println!(&quot;condition was 5&quot;);
+    } else {
+        println!(&quot;condition was something else&quot;);
+    }
+}
+</code></pre>
+<p>This program has four possible paths it can take. If you try running it, you
+should see output like this:</p>
+<pre><code class="language-bash">$ cargo run
+   Compiling branches v0.1.0 (file:///projects/branches)
+     Running `target/debug/branches`
+condition was 5
+</code></pre>
+<p>When this program executes, it will check each <code>if</code> expression in turn and
+execute the first body for which the condition holds true.</p>
+<p>Using too many <code>else if</code> expressions can clutter your code, so if you find
+yourself with more than one, you may want to look at refactoring your code. In
+Chapter XX, we'll talk about a powerful Rust branching construct called <code>match</code>
+for these cases.</p>
+<h4>Using <code>if</code> in a Binding</h4>
+<p>The last detail you need to learn about <code>if</code> is that it’s an expression. That
+means that we can use it on the right hand side of a <code>let</code> binding, for
+instance:</p>
+<pre><code class="language-rust">fn main() {
+    let condition = true;
+    let number = if condition {
+        5
+    } else {
+        6
+    };
+
+    println!(&quot;The value of number is: {}&quot;, number);
+}
+</code></pre>
+<p>The <code>number</code> variable will be bound to a value based on the outcome of the <code>if</code>
+expression. Let’s run this to see what happens:</p>
+<pre><code class="language-bash">$ cargo run
+   Compiling branches v0.1.0 (file:///projects/branches)
+     Running `target/debug/branches`
+The value of number is: 5
+</code></pre>
+<p>Remember, blocks of code evaluate to the last expression in them, and numbers
+by themselves are also expressions. In this case, the value of the whole <code>if</code>
+expression depends on which block of code executes. This means that the value
+that results from both arms of the <code>if</code> must be the same type; in the previous
+example, they were both <code>i32</code> integers. But what happens if the types are
+mismatched, as in the following example?</p>
+<pre><code class="language-rust,ignore">fn main() {
+    let condition = true;
+
+    let number = if condition {
+        5
+    } else {
+        &quot;six&quot;
+    };
+
+    println!(&quot;The value of number is: {}&quot;, number);
+}
+</code></pre>
+<p>The expression in the <code>if</code> block is an integer and the expresion in the <code>else</code>
+block is a string. This can’t work, because variable bindings must have a
+single type. If we try to run this, we’ll get an error:</p>
+<pre><code class="language-bash">   Compiling branches v0.1.0 (file:///projects/branches)
+src/main.rs:4:18: 8:6 error: if and else have incompatible types:
+ expected `_`,
+    found `&amp;‘static str`
+(expected integral variable,
+    found &amp;-ptr) [E0308]
+src/main.rs:4     let number = if condition {
+src/main.rs:5         5
+src/main.rs:6     } else {
+src/main.rs:7         &quot;six&quot;
+src/main.rs:8     };
+src/main.rs:4:18: 8:6 help: run `rustc --explain E0308` to see a detailed explanation
+error: aborting due to previous error
+Could not compile `branches`.
+</code></pre>
+<p>The <code>if</code> and <code>else</code> arms have value types that are incompatible, and Rust tells
+us exactly where to find the problem in our program.</p>
+<h3>Repetition with Loops</h3>
+<p>It’s often useful to be able to execute a block of code more than one time. For
+this, Rust has several constructs called <em>loops</em>. A loop runs through the code
+inside it to the end and then starts immediately back at the beginning. To try
+out loops, let’s make a new project. Navigate to your <em>projects</em> folder and use
+Cargo to make a new project:</p>
+<pre><code class="language-bash">$ cargo new --bin loops
+$ cd loops
+</code></pre>
+<p>There are three kinds of loops in Rust: <code>loop</code>, <code>while</code>, and <code>for</code>. Let’s dig
+in.</p>
+<h4>Repeating Code with <code>loop</code></h4>
+<p>The <code>loop</code> keyword tells Rust to execute a block of code over and over again
+forever or until we explicitly tell it to stop.</p>
+<p>For an example, change the <em>src/main.rs</em> file in your <em>loops</em> directory to look
+like this:</p>
+<pre><code class="language-rust,ignore">fn main() {
+    loop {
+        println!(&quot;again!&quot;);
+    }
+}
+</code></pre>
+<p>If we run this program, we’ll see <code>again!</code> printed over and over continuously
+until we stop the program manually. Most terminals support a keyboard shortcut,
+<code>control-c</code>, to halt a program stuck in a continual loop. Give it a try:</p>
+<pre><code class="language-bash">$ cargo run
+   Compiling loops v0.1.0 (file:///projects/loops)
+     Running `target/debug/loops`
+again!
+again!
+again!
+again!
+^Cagain!
+</code></pre>
+<p>That <code>^C</code> there is where we hit <code>control-c</code>. You may or may not see &quot;again!&quot;
+printed after the <code>^C</code>, depending on where the code was in the loop when it
+received the signal to halt.</p>
+<p>Fortunately, Rust provides another, more reliable way to break out of a loop.
+We can place the <code>break</code> keyword within the loop to tell the program when to
+stop executing the loop. Recall that we did this in the guessing game to exit
+the program when the user won the game by guessing the number correctly.</p>
+<h4>Conditional Loops With <code>while</code></h4>
+<p>A useful thing that many programs do is have a condition that can be evaluated
+within a loop. While the condition is true, the loop runs. When the condition
+ceases to be true, we call <code>break</code>, stopping the loop. This could be
+implemented with a combination of <code>loop</code>, <code>if</code>, <code>else</code>, and <code>break</code>; try to do
+that now if you'd like!</p>
+<p>But this pattern is so common that Rust has a more efficient language construct
+for it, called a <code>while</code> loop. Here's an example using <code>while</code>: this program
+loops three times, counting down each time. Finally, after the loop, it prints
+another message, then exits:</p>
+<pre><code class="language-rust">fn main() {
+    let mut number = 3;
+
+    while number != 0  {
+        println!(&quot;{}!&quot;, number);
+
+        number = number - 1;
+    }
+
+    println!(&quot;LIFTOFF!!!&quot;);
+}
+</code></pre>
+<p>This gets rid of a lot of nesting that would be necessary if we used <code>loop</code>,
+<code>if</code>, <code>else</code>, and <code>break</code>, and it's more clear. While a condition holds, run
+this code; otherwise, exit the loop.</p>
+<h4>Looping Though a Collection with <code>for</code></h4>
+<p>We could use this <code>while</code> construct to loop over the elements of a collection,
+like an array. For example:</p>
+<pre><code class="language-rust">fn main() {
+    let a = [10, 20, 30, 40, 50];
+    let mut index = 0;
+
+    while index &lt; 5 {
+        println!(&quot;the value is: {}&quot;, a[index]);
+
+        index = index + 1;
+    }
+}
+</code></pre>
+<p>Here, we're counting up through the elements in the array. We start at index 0,
+then loop until we hit the final index of our array (that is, when <code>index &lt; 5</code>
+is no longer true). Running this will print out every element of the array:</p>
+<pre><code class="language-bash">$ cargo run
+   Compiling loops v0.1.0 (file:///projects/loops)
+     Running `target/debug/loops`
+the value is: 10
+the value is: 20
+the value is: 30
+the value is: 40
+the value is: 50
+</code></pre>
+<p>All five array values appear in the terminal, as expected. Even though <code>index</code>
+will reach a value of <code>6</code> at some point, the loop stops executing before trying
+to fetch a sixth value from the array.</p>
+<p>This approach is error-prone, though; we could cause our program to panic by
+getting the index length incorrect. It's also slow, as the compiler needs to
+perform the conditional check on every element on every iteration through the
+loop.</p>
+<p>As a more efficient alternative, we can use a <code>for</code> loop and execute some code
+for each item in a collection. A <code>for</code> loop looks like this:</p>
+<pre><code class="language-rust">fn main() {
+    let a = [10, 20, 30, 40, 50];
+
+    for element in a.iter() {
+        println!(&quot;the value is: {}&quot;, element);
+    }
+}
+</code></pre>
+<p>If we run this, we'll see the same output as the previous example. Importantly,
+though, we've now increased the safety of our code and eliminated the chance of
+bugs resulting from going beyond the end of the array or not going far enough
+and missing some items.</p>
+<p>For example, in the previous code that uses the <code>while</code> loop, if we removed an
+item from the <code>a</code> array but forgot to update the condition to be <code>while index &lt; 4</code>, our code would panic. Using the <code>for</code> loop means we would not need to
+remember to change any other code if we changed the the number of values in the
+array.</p>
+<p>If you're wondering about the <code>.iter()</code> code in this example, keep reading! We
+will cover method syntax generally in Chapter XX and iterators specifically in
+Chapter XX.</p>
+<p>The safety and conciseness of <code>for</code> loops make them the most commonly used loop
+construct in Rust. Even in situations where you want to run some code a certain
+number of times, like our countdown example that used a <code>while</code> loop, most
+Rustaceans would use a <code>for</code> loop. The way to do that is using a <code>Range</code>, which
+is a type provided by the standard library that generates numbers starting from
+one number and ending before another number. Here's what the countdown would
+look like with a for loop, and using another method we haven't yet talked
+about, <code>.rev()</code>, to reverse the range:</p>
+<pre><code class="language-rust">fn main() {
+    for number in (1..4).rev() {
+        println!(&quot;{}!&quot;, number);
+    }
+    println!(&quot;LIFTOFF!!!&quot;);
+}
+</code></pre>
+<p>That's a bit nicer, isn't it?</p>
+<p>Now that you know how Rust does things that most other languages can do, let's
+talk about a concept that <em>doesn't</em> commonly exist: ownership.</p>
+
+                </div>
+
+                <!-- Mobile navigation buttons -->
+                
+                    <a href="ch03-04-comments.html" class="mobile-nav-chapters previous">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+                    <a href="ch04-00-understanding-ownership.html" class="mobile-nav-chapters next">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                
+
+            </div>
+
+            
+                <a href="ch03-04-comments.html" class="nav-chapters previous" title="You can navigate through the chapters using the arrow keys">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+            
+
+            
+                <a href="ch04-00-understanding-ownership.html" class="nav-chapters next" title="You can navigate through the chapters using the arrow keys">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            
+
+        </div>
+
+
+        <!-- Local fallback for Font Awesome -->
+        <script>
+            if ($(".fa").css("font-family") !== "FontAwesome") {
+                $('<link rel="stylesheet" type="text/css" href="_FontAwesome/css/font-awesome.css">').prependTo('head');
+            }
+        </script>
+
+        <!-- Livereload script (if served using the cli tool) -->
+        
+
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+    </body>
+</html>

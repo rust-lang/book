@@ -1,0 +1,368 @@
+<!DOCTYPE HTML>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>The Rust Programming Language</title>
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <base href="">
+
+        <link rel="stylesheet" href="book.css">
+        <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+        <link rel="shortcut icon" href="favicon.png">
+
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+
+        <!-- MathJax -->
+        <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+        <!-- Fetch JQuery from CDN but have a local fallback -->
+        <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+        <script>
+            if (typeof jQuery == 'undefined') {
+                document.write(unescape("%3Cscript src='jquery.js'%3E%3C/script%3E"));
+            }
+        </script>
+    </head>
+    <body class="light">
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme = localStorage.getItem('theme');
+            if (theme == null) { theme = 'light'; }
+            $('body').removeClass().addClass(theme);
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var sidebar = localStorage.getItem('sidebar');
+            if (sidebar === "hidden") { $("html").addClass("sidebar-hidden") }
+            else if (sidebar === "visible") { $("html").addClass("sidebar-visible") }
+        </script>
+
+        <div id="sidebar" class="sidebar">
+            <ul class="chapter"><li><a href="ch01-00-introduction.html"><strong>1.</strong> Introduction</a></li><li><ul class="section"><li><a href="ch01-01-installation.html"><strong>1.1.</strong> Installation</a></li><li><a href="ch01-02-hello-world.html"><strong>1.2.</strong> Hello, World!</a></li></ul></li><li><a href="ch02-00-guessing-game-tutorial.html"><strong>2.</strong> Guessing Game Tutorial</a></li><li><a href="ch03-00-common-programming-concepts-in-rust.html"><strong>3.</strong> Common Programming Concepts in Rust</a></li><li><ul class="section"><li><a href="ch03-01-variable-bindings-and-mutability.html"><strong>3.1.</strong> Variable Bindings and Mutability</a></li><li><a href="ch03-02-data-types.html"><strong>3.2.</strong> Data Types</a></li><li><a href="ch03-03-how-functions-work.html" class="active"><strong>3.3.</strong> How Functions Work</a></li><li><a href="ch03-04-comments.html"><strong>3.4.</strong> Comments</a></li><li><a href="ch03-05-control-flow.html"><strong>3.5.</strong> Control Flow</a></li></ul></li><li><a href="ch04-00-understanding-ownership.html"><strong>4.</strong> Understanding Ownership</a></li><li><ul class="section"><li><a href="ch04-01-ownership.html"><strong>4.1.</strong> Ownership</a></li><li><a href="ch04-02-references-and-borrowing.html"><strong>4.2.</strong> References &amp; Borrowing</a></li><li><a href="ch04-03-slices.html"><strong>4.3.</strong> Slices</a></li></ul></li><li><a href="ch05-00-structs.html"><strong>5.</strong> Structs</a></li><li><ul class="section"><li><a href="ch05-01-method-syntax.html"><strong>5.1.</strong> Method Syntax</a></li></ul></li><li><a href="ch06-00-enums.html"><strong>6.</strong> Enums</a></li><li><ul class="section"><li><a href="ch06-01-option.html"><strong>6.1.</strong> Option</a></li><li><a href="ch06-02-match.html"><strong>6.2.</strong> Match</a></li><li><a href="ch06-03-if-let.html"><strong>6.3.</strong> if let</a></li></ul></li><li><strong>7.</strong> Crates &amp; Modules</li><li><strong>8.</strong> Error Handling</li><li><strong>9.</strong> Basic Collections</li><li><ul class="section"><li><strong>9.1.</strong> Vectors</li><li><strong>9.2.</strong> Strings</li><li><strong>9.3.</strong> <code>HashMap&lt;K, V&gt;</code></li></ul></li><li><strong>10.</strong> Lifetimes</li><li><a href="chZZ-generics.html"><strong>11.</strong> Generics</a></li><li><strong>12.</strong> Traits</li><li><strong>13.</strong> Closures</li><li><strong>14.</strong> Iterators</li><li><a href="chXX-patterns.html"><strong>15.</strong> Patterns</a></li><li><strong>16.</strong> I/O</li><li><ul class="section"><li><strong>16.1.</strong> <code>Read</code> &amp; <code>Write</code></li><li><strong>16.2.</strong> <code>std::fs</code></li><li><strong>16.3.</strong> <code>std::path</code></li><li><strong>16.4.</strong> <code>std::env</code></li></ul></li><li><strong>17.</strong> Testing</li><li><strong>18.</strong> Smart Pointers</li><li><ul class="section"><li><strong>18.1.</strong> <code>Deref</code></li><li><strong>18.2.</strong> <code>Deref</code> coercions</li><li><strong>18.3.</strong> <code>Box&lt;T&gt;</code></li><li><strong>18.4.</strong> <code>Rc&lt;T&gt;</code></li></ul></li><li><strong>19.</strong> Concurrency</li><li><ul class="section"><li><strong>19.1.</strong> Threads</li><li><strong>19.2.</strong> <code>Send</code> &amp; <code>Sync</code></li><li><strong>19.3.</strong> <code>Arc&lt;T&gt;</code></li><li><strong>19.4.</strong> <code>Mutex&lt;T&gt;</code></li><li><strong>19.5.</strong> <code>Channels</code></li></ul></li><li><strong>20.</strong> Unsafe Rust</li><li><ul class="section"><li><strong>20.1.</strong> Raw Pointers</li><li><strong>20.2.</strong> transmute</li></ul></li><li><strong>21.</strong> FFI</li><li><ul class="section"><li><strong>21.1.</strong> Conditional Compilation</li><li><strong>21.2.</strong> Bindings to C</li><li><strong>21.3.</strong> Using Rust from Other Languages</li><li><strong>21.4.</strong> <code>static</code></li></ul></li><li><strong>22.</strong> Creating a Library</li><li><ul class="section"><li><strong>22.1.</strong> Cargo</li><li><strong>22.2.</strong> Crates.io</li><li><a href="chYY-YY-documentation.html"><strong>22.3.</strong> Documentation</a></li></ul></li><li><strong>23.</strong> Advanced Type System Features</li><li><ul class="section"><li><strong>23.1.</strong> Associated Types</li><li><strong>23.2.</strong> Trait Objects</li><li><strong>23.3.</strong> UFCS</li><li><strong>23.4.</strong> Coherence</li></ul></li><li><strong>24.</strong> Interior mutability</li><li><ul class="section"><li><strong>24.1.</strong> <code>Cell&lt;T&gt;</code></li><li><strong>24.2.</strong> <code>RefCell&lt;T&gt;</code></li></ul></li><li><strong>25.</strong> Macros</li><li><strong>26.</strong> Nightly Rust</li><li><a href="appendix-00.html"><strong>27.</strong> Appendix</a></li><li><ul class="section"><li><a href="appendix-01-keywords.html"><strong>27.1.</strong> Keywords</a></li></ul></li></ul>
+        </div>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar" class="menu-bar">
+                    <div class="left-buttons">
+                        <i id="sidebar-toggle" class="fa fa-bars"></i>
+                        <i id="theme-toggle" class="fa fa-paint-brush"></i>
+                    </div>
+
+                    <h1 class="menu-title">The Rust Programming Language</h1>
+
+                    <div class="right-buttons">
+                        <i id="print-button" class="fa fa-print" title="Print this book"></i>
+                    </div>
+                </div>
+
+                <div id="content" class="content">
+                    <h2>How Functions Work</h2>
+<p>Functions are pervasive in Rust code. We’ve already seen one of the most
+important functions in the language: the <code>main()</code> function that’s the entry
+point of many programs. We've also seen the <code>fn</code> keyword, which allows us to
+declare new functions.</p>
+<p>Rust code uses <em>snake case</em> as the conventional style for function names. In
+snake case, all letters are lower case, and there are underscores separating
+words. (Rust also uses snake case for the names of variable bindings; we just
+haven't used any variable bindings with enough letters to need underscores
+yet). Here's a program containing an example function definition:</p>
+<pre><code class="language-rust">fn main() {
+    println!(&quot;Hello, world!&quot;);
+
+    another_function();
+}
+
+fn another_function() {
+    println!(&quot;Another function.&quot;);
+}
+</code></pre>
+<p>Function definitions in Rust start with <code>fn</code> and have a set of parentheses
+after the function name. The curly braces tell the compiler where the function
+body begins and ends.</p>
+<p>We can call any function we’ve defined by entering its name followed by a pair
+of parentheses. Since <code>another_function()</code> is defined in the program, it can be
+called from inside the <code>main()</code> function. Note that we defined
+<code>another_function()</code> <em>after</em> the <code>main()</code> function in our source code; we could
+have defined it before as well. Rust doesn’t care where you define your
+functions, only that they are defined somewhere.</p>
+<p>Let’s start a new project to explore functions further. Open a terminal, and
+navigate to the directory you're keeping your projects in. From there, use
+Cargo to generate a new project, as follows:</p>
+<pre><code class="language-bash">$ cargo new --bin functions
+$ cd functions
+</code></pre>
+<p>Place the <code>another_function()</code> example in a file named <em>src/main.rs</em> and run
+it. You should see the following output:</p>
+<pre><code class="language-bash">$ cargo run
+   Compiling functions v0.1.0 (file:///projects/functions)
+     Running `target/debug/functions`
+Hello, world!
+Another function.
+</code></pre>
+<p>The lines execute in the order they appear in the <code>main()</code> function. First, our
+“Hello, world!” message prints, and then <code>another_function()</code> is called and its
+message is printed.</p>
+<h3>Function Arguments</h3>
+<p>Functions can also take arguments. The following rewritten version of
+<code>another_function()</code> shows what arguments look like in Rust:</p>
+<pre><code class="language-rust">fn main() {
+    another_function(5);
+}
+
+fn another_function(x: i32) {
+    println!(&quot;The value of x is: {}&quot;, x);
+}
+</code></pre>
+<p>Try running this program, and you should get this output:</p>
+<pre><code class="language-bash">$ cargo run
+   Compiling functions v0.1.0 (file:///projects/functions)
+     Running `target/debug/functions`
+The value of x is: 5
+</code></pre>
+<p>Since we passed <code>5</code> to <code>another_function()</code>, the <code>println!</code> macro put <code>5</code> where
+the pair of curly braces were in the format string. The declaration of
+<code>another_function()</code> shows that it takes one argument named <code>x</code>, and the type
+of <code>x</code> is <code>i32</code>.</p>
+<p>In function signatures, we <em>must</em> declare the type. This is a deliberate
+decision in the design of Rust; requiring type annotations in function
+definitions means the compiler almost never needs you to use them elsewhere in
+the code in order to figure out what you mean.</p>
+<p>When you want a function to have multiple arguments, just separate them inside
+the function signature with commas, like this:</p>
+<pre><code class="language-rust">fn main() {
+    another_function(5, 6);
+}
+
+fn another_function(x: i32, y: i32) {
+    println!(&quot;The value of x is: {}&quot;, x);
+    println!(&quot;The value of y is: {}&quot;, y);
+}
+</code></pre>
+<p>In this example, we make a function with two arguments, both of which are
+<code>i32</code>s. If your function has multiple arguments, they don’t need to be the same
+type, but they just happen to be in this example. Our function then prints out
+the values of both of its arguments.</p>
+<p>Let’s try out this code. Replace the program currently in your <code>function</code>
+project's <code>main.rs</code> file with the example above, and run it as follows:</p>
+<pre><code class="language-bash">$ cargo run
+   Compiling functions v0.1.0 (file:///projects/functions)
+     Running `target/debug/functions`
+The value of x is: 5
+The value of y is: 6
+</code></pre>
+<p>Since <code>5</code> is passed as the <code>x</code> argument and <code>6</code> is passed as the <code>y</code> argument,
+the two strings are printed with these values.</p>
+<h3>Function Bodies</h3>
+<p>Function bodies are made up of a series of statements ending in an optional
+expression. So far, we've only seen functions without an ending expression, but
+we have seen expressions as parts of statements. Since Rust is an
+expression-based language, this is an important distinction to understand.
+Other languages don't have the same distinctions, so let's look at what
+statements and expressions are and how their differences affect the bodies of
+functions.</p>
+<h4>Statements and Expressions</h4>
+<p>We've already been using both statements and expressions. <em>Statements</em> are
+instructions that perform some action and do not return a value. <em>Expressions</em>
+evaluate to a resulting value. Let's look at some examples.</p>
+<p><code>Let</code> bindings are statements. They instruct the program to create a binding
+name and assign a value to it. <code>let y = 6;</code> in this example is a statement:</p>
+<pre><code class="language-rust">fn main() {
+    let y = 6;
+}
+</code></pre>
+<p>Function definitions are also statements-- so the entire previous example is a
+statement as well.</p>
+<p>Statements do not return values themselves. Therefore, you can’t assign a <code>let</code>
+binding to another binding, as this code tries to do:</p>
+<pre><code class="language-rust,ignore">fn main() {
+    let x = (let y = 6);
+}
+</code></pre>
+<p>If we were to run this program, we’d get an error like this:</p>
+<pre><code class="language-bash">$ cargo run
+   Compiling functions v0.1.0 (file:///projects/functions)
+error: expected expression, found statement (`let`)
+ --&gt; src/main.rs:2:14
+2 |&gt;     let x = (let y = 6);
+  |&gt;              ^^^
+note: variable declaration using `let` is a statement
+
+error: aborting due to previous error
+error: Could not compile `functions`.
+</code></pre>
+<p>The <code>let y = 6</code> statement does not return a value, so there isn't anything for
+<code>x</code> to bind to. This is different than in other languages like C and Ruby where
+the assignment returns the value of the assignment. In those languages, you
+could write <code>x = y = 6</code> and have both <code>x</code> and <code>y</code> have the value <code>6</code>, but that
+is not the case in Rust.</p>
+<p>Expressions are most of the rest of the code that you will write in Rust.
+Consider a simple math operation, like this:</p>
+<pre><code class="language-rust,ignore">5 + 6
+</code></pre>
+<p>This is an expression, and evaluating it results in the value <code>11</code>. Expressions
+can be part of statements-- in the previous example that had the statement <code>let y = 6;</code>, <code>6</code> is an expression that evaluates to the value <code>6</code>. Calling a
+function is an expression. Calling a macro is an expression. The block that we
+use to create new scopes, <code>{}</code>, is an expression, for example:</p>
+<pre><code class="language-rust">fn main() {
+    let x = 5;
+
+    let y = {
+        let x = 3;
+        x + 1
+    };
+
+    println!(&quot;The value of y is: {}&quot;, y);
+}
+</code></pre>
+<p>The expression:</p>
+<pre><code class="language-rust,ignore">{
+    let x = 3;
+    x + 1
+}
+</code></pre>
+<p>is a block that, in this case, gets evaluated to <code>4</code>, which then gets bound to
+<code>y</code> as part of the <code>let</code> statement.</p>
+<p>Note that the line containing <code>x + 1</code> does not have a semicolon at the end like
+most of the lines we've seen up until now have had. This is the most important
+distinction between expressions and statements to remember: statements end in
+semicolons while expressions do not. If you add a semicolon to the end of an
+expression, that will turn it into a statement, which will then not return a
+value. Keep this in mind as we explore function return values and expressions.</p>
+<h3>Functions with Return Values</h3>
+<p>Functions can return values back to the code that calls them. We don’t name
+return values, but we do declare their type, after an arrow (<code>-&gt;</code>). In Rust,
+the &quot;return value of the function” is synonymous with “the value of the final
+expression in the block of the body of a function.” Here's an example of a
+function that returns a value:</p>
+<pre><code class="language-rust">fn five() -&gt; i32 {
+    5
+}
+
+fn main() {
+    let x = five();
+
+    println!(&quot;The value of x is: {}&quot;, x);
+}
+</code></pre>
+<p>There are no function calls, macros, or even <code>let</code> statements in the <code>five()</code>
+function-- just the number <code>5</code> by itself. That's a perfectly valid function in
+Rust. Note the function's return type, too. Try running this code, and the
+output should look like this:</p>
+<pre><code class="language-bash">$ cargo run
+   Compiling functions v0.1.0 (file:///projects/functions)
+     Running `target/debug/functions`
+The value of x is: 5
+</code></pre>
+<p>The <code>5</code> in <code>five()</code> is actually the function's return value, which is why the
+return type is <code>i32</code>. Let’s examine this in more detail. There are two
+important bits. First, the line <code>let x = five();</code> in <code>main()</code> shows that we can
+use the return value of a function to initialize a binding.</p>
+<p>Because the function <code>five()</code> returns a <code>5</code>, that line is the same as saying:</p>
+<pre><code class="language-rust">let x = 5;
+</code></pre>
+<p>The second interesting bit is the <code>five()</code> function itself. It requires no
+arguments and defines the type of the return value, but the body of the
+function is a lonely <code>5</code> with no semicolon because it is an expression whose
+value we want to return. Let's look at another example:</p>
+<pre><code class="language-rust">fn main() {
+    let x = plus_one(5);
+
+    println!(&quot;The value of x is: {}&quot;, x);
+}
+
+fn plus_one(x: i32) -&gt; i32 {
+    x + 1
+}
+</code></pre>
+<p>Running this code will print <code>The value of x is: 6</code>. What happens if we put a
+semicolon at the end of the line containing <code>x + 1</code>, changing it from an
+expression to a statement?</p>
+<pre><code class="language-rust,ignore">fn main() {
+    let x = plus_one(5);
+
+    println!(&quot;The value of x is: {}&quot;, x);
+}
+
+fn plus_one(x: i32) -&gt; i32 {
+    x + 1;
+}
+</code></pre>
+<p>Running this code gives an error, as follows:</p>
+<pre><code class="language-bash">$ cargo run
+   Compiling functions v0.1.0 (file:///projects/functions)
+error: not all control paths return a value [--explain E0269]
+ --&gt; src/main.rs:7:1
+7 |&gt; fn plus_one(x: i32) -&gt; i32 {
+  |&gt; ^
+help: consider removing this semicolon:
+ --&gt; src/main.rs:8:10
+8 |&gt;     x + 1;
+  |&gt;          ^
+
+error: aborting due to previous error
+error: Could not compile `functions`.
+</code></pre>
+<p>The main error message, &quot;not all control paths return a value&quot;, reveals the
+core of the issue with this code. The definition of the function <code>plus_one</code>
+says that it will return an <code>i32</code>, but statements don’t evaluate to a value.
+Therefore, nothing is returned, which contradicts the function definition and
+results in an error. In this output, Rust gives an option to rectify this: it
+suggests removing the semicolon, which would fix the error.</p>
+
+                </div>
+
+                <!-- Mobile navigation buttons -->
+                
+                    <a href="ch03-02-data-types.html" class="mobile-nav-chapters previous">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+                    <a href="ch03-04-comments.html" class="mobile-nav-chapters next">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                
+
+            </div>
+
+            
+                <a href="ch03-02-data-types.html" class="nav-chapters previous" title="You can navigate through the chapters using the arrow keys">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+            
+
+            
+                <a href="ch03-04-comments.html" class="nav-chapters next" title="You can navigate through the chapters using the arrow keys">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            
+
+        </div>
+
+
+        <!-- Local fallback for Font Awesome -->
+        <script>
+            if ($(".fa").css("font-family") !== "FontAwesome") {
+                $('<link rel="stylesheet" type="text/css" href="_FontAwesome/css/font-awesome.css">').prependTo('head');
+            }
+        </script>
+
+        <!-- Livereload script (if served using the cli tool) -->
+        
+
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+    </body>
+</html>

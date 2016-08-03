@@ -1,0 +1,265 @@
+<!DOCTYPE HTML>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>The Rust Programming Language</title>
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <base href="">
+
+        <link rel="stylesheet" href="book.css">
+        <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+        <link rel="shortcut icon" href="favicon.png">
+
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+
+        <!-- MathJax -->
+        <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+        <!-- Fetch JQuery from CDN but have a local fallback -->
+        <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+        <script>
+            if (typeof jQuery == 'undefined') {
+                document.write(unescape("%3Cscript src='jquery.js'%3E%3C/script%3E"));
+            }
+        </script>
+    </head>
+    <body class="light">
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme = localStorage.getItem('theme');
+            if (theme == null) { theme = 'light'; }
+            $('body').removeClass().addClass(theme);
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var sidebar = localStorage.getItem('sidebar');
+            if (sidebar === "hidden") { $("html").addClass("sidebar-hidden") }
+            else if (sidebar === "visible") { $("html").addClass("sidebar-visible") }
+        </script>
+
+        <div id="sidebar" class="sidebar">
+            <ul class="chapter"><li><a href="ch01-00-introduction.html"><strong>1.</strong> Introduction</a></li><li><ul class="section"><li><a href="ch01-01-installation.html"><strong>1.1.</strong> Installation</a></li><li><a href="ch01-02-hello-world.html"><strong>1.2.</strong> Hello, World!</a></li></ul></li><li><a href="ch02-00-guessing-game-tutorial.html"><strong>2.</strong> Guessing Game Tutorial</a></li><li><a href="ch03-00-common-programming-concepts-in-rust.html"><strong>3.</strong> Common Programming Concepts in Rust</a></li><li><ul class="section"><li><a href="ch03-01-variable-bindings-and-mutability.html" class="active"><strong>3.1.</strong> Variable Bindings and Mutability</a></li><li><a href="ch03-02-data-types.html"><strong>3.2.</strong> Data Types</a></li><li><a href="ch03-03-how-functions-work.html"><strong>3.3.</strong> How Functions Work</a></li><li><a href="ch03-04-comments.html"><strong>3.4.</strong> Comments</a></li><li><a href="ch03-05-control-flow.html"><strong>3.5.</strong> Control Flow</a></li></ul></li><li><a href="ch04-00-understanding-ownership.html"><strong>4.</strong> Understanding Ownership</a></li><li><ul class="section"><li><a href="ch04-01-ownership.html"><strong>4.1.</strong> Ownership</a></li><li><a href="ch04-02-references-and-borrowing.html"><strong>4.2.</strong> References &amp; Borrowing</a></li><li><a href="ch04-03-slices.html"><strong>4.3.</strong> Slices</a></li></ul></li><li><a href="ch05-00-structs.html"><strong>5.</strong> Structs</a></li><li><ul class="section"><li><a href="ch05-01-method-syntax.html"><strong>5.1.</strong> Method Syntax</a></li></ul></li><li><a href="ch06-00-enums.html"><strong>6.</strong> Enums</a></li><li><ul class="section"><li><a href="ch06-01-option.html"><strong>6.1.</strong> Option</a></li><li><a href="ch06-02-match.html"><strong>6.2.</strong> Match</a></li><li><a href="ch06-03-if-let.html"><strong>6.3.</strong> if let</a></li></ul></li><li><strong>7.</strong> Crates &amp; Modules</li><li><strong>8.</strong> Error Handling</li><li><strong>9.</strong> Basic Collections</li><li><ul class="section"><li><strong>9.1.</strong> Vectors</li><li><strong>9.2.</strong> Strings</li><li><strong>9.3.</strong> <code>HashMap&lt;K, V&gt;</code></li></ul></li><li><strong>10.</strong> Lifetimes</li><li><a href="chZZ-generics.html"><strong>11.</strong> Generics</a></li><li><strong>12.</strong> Traits</li><li><strong>13.</strong> Closures</li><li><strong>14.</strong> Iterators</li><li><a href="chXX-patterns.html"><strong>15.</strong> Patterns</a></li><li><strong>16.</strong> I/O</li><li><ul class="section"><li><strong>16.1.</strong> <code>Read</code> &amp; <code>Write</code></li><li><strong>16.2.</strong> <code>std::fs</code></li><li><strong>16.3.</strong> <code>std::path</code></li><li><strong>16.4.</strong> <code>std::env</code></li></ul></li><li><strong>17.</strong> Testing</li><li><strong>18.</strong> Smart Pointers</li><li><ul class="section"><li><strong>18.1.</strong> <code>Deref</code></li><li><strong>18.2.</strong> <code>Deref</code> coercions</li><li><strong>18.3.</strong> <code>Box&lt;T&gt;</code></li><li><strong>18.4.</strong> <code>Rc&lt;T&gt;</code></li></ul></li><li><strong>19.</strong> Concurrency</li><li><ul class="section"><li><strong>19.1.</strong> Threads</li><li><strong>19.2.</strong> <code>Send</code> &amp; <code>Sync</code></li><li><strong>19.3.</strong> <code>Arc&lt;T&gt;</code></li><li><strong>19.4.</strong> <code>Mutex&lt;T&gt;</code></li><li><strong>19.5.</strong> <code>Channels</code></li></ul></li><li><strong>20.</strong> Unsafe Rust</li><li><ul class="section"><li><strong>20.1.</strong> Raw Pointers</li><li><strong>20.2.</strong> transmute</li></ul></li><li><strong>21.</strong> FFI</li><li><ul class="section"><li><strong>21.1.</strong> Conditional Compilation</li><li><strong>21.2.</strong> Bindings to C</li><li><strong>21.3.</strong> Using Rust from Other Languages</li><li><strong>21.4.</strong> <code>static</code></li></ul></li><li><strong>22.</strong> Creating a Library</li><li><ul class="section"><li><strong>22.1.</strong> Cargo</li><li><strong>22.2.</strong> Crates.io</li><li><a href="chYY-YY-documentation.html"><strong>22.3.</strong> Documentation</a></li></ul></li><li><strong>23.</strong> Advanced Type System Features</li><li><ul class="section"><li><strong>23.1.</strong> Associated Types</li><li><strong>23.2.</strong> Trait Objects</li><li><strong>23.3.</strong> UFCS</li><li><strong>23.4.</strong> Coherence</li></ul></li><li><strong>24.</strong> Interior mutability</li><li><ul class="section"><li><strong>24.1.</strong> <code>Cell&lt;T&gt;</code></li><li><strong>24.2.</strong> <code>RefCell&lt;T&gt;</code></li></ul></li><li><strong>25.</strong> Macros</li><li><strong>26.</strong> Nightly Rust</li><li><a href="appendix-00.html"><strong>27.</strong> Appendix</a></li><li><ul class="section"><li><a href="appendix-01-keywords.html"><strong>27.1.</strong> Keywords</a></li></ul></li></ul>
+        </div>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar" class="menu-bar">
+                    <div class="left-buttons">
+                        <i id="sidebar-toggle" class="fa fa-bars"></i>
+                        <i id="theme-toggle" class="fa fa-paint-brush"></i>
+                    </div>
+
+                    <h1 class="menu-title">The Rust Programming Language</h1>
+
+                    <div class="right-buttons">
+                        <i id="print-button" class="fa fa-print" title="Print this book"></i>
+                    </div>
+                </div>
+
+                <div id="content" class="content">
+                    <h2>Variable Bindings and Mutability</h2>
+<p>We mentioned in Chapter XX that by default, variable bindings are <em>immutable</em>.
+This is one of many nudges that Rust's design has to encourage us to write our
+code to get the most of the safety and easy concurrency that Rust has to offer.
+We still have the option to make our bindings mutable, though. Let's explore
+how and why Rust encourages us to favor immutability, and why we might want to
+opt out of that.</p>
+<p>Variable bindings being immutable means that once a value is bound, you can't
+change that value. To illustrate this, let's generate a new project with Cargo.
+Open a terminal, and navigate to the directory you want to store your projects
+in. From there, run these commands:</p>
+<pre><code class="language-bash">$ cargo new --bin bindings
+$ cd bindings
+</code></pre>
+<p>Then open <em>src/main.rs</em> and replace its code with the following:</p>
+<pre><code class="language-rust,ignore">fn main() {
+    let x = 5;
+    println!(&quot;The value of x is: {}&quot;, x);
+    x = 6;
+    println!(&quot;The value of x is: {}&quot;, x);
+}
+</code></pre>
+<p>Save and run the program using <code>cargo run</code>, and you should receive an error
+message, as in this output:</p>
+<pre><code class="language-bash">$ cargo run
+   Compiling bindings v0.0.1 (file:///projects/bindings)
+error: re-assignment of immutable variable `x` [--explain E0384]
+ --&gt; src/main.rs:4:5
+4 |&gt;     x = 6;
+  |&gt;     ^^^^^
+note: prior assignment occurs here
+ --&gt; src/main.rs:2:9
+2 |&gt;     let x = 5;
+  |&gt;         ^
+</code></pre>
+<p>This is our first example of the compiler helping us find an error in our
+program! Compiler errors can be frustrating. Keep in mind that they only mean
+your program isn't safely doing what you want it to do yet; they do <em>not</em> mean
+that you're not a good programmer! Experienced Rustaceans still get compiler
+errors. Try to keep in mind that the Rust compiler is trying to help your
+program be the very best.</p>
+<p>PROD: START BOX
+######Extended Error Explanations</p>
+<p>Now that you've seen an example of a Rust error, let's look at one particularly
+useful aspect of errors. Rust encourages you to seek further information on the
+kind of error you've received with output like this:</p>
+<pre><code class="language-bash">error: re-assignment of immutable variable `x` [--explain E0384]
+</code></pre>
+<p>This tells us that if we pass the <code>--explain</code> flag to <code>rustc</code> with the provided
+error code, we can see an extended explanation which will try to explain common
+causes of and solutions to that kind of error. Not every error has a longer
+explanation, but many do. Here’s the explanation for the <code>E0384</code> error we
+received:</p>
+<pre><code class="language-bash">$ rustc --explain E0384
+This error occurs when an attempt is made to reassign an immutable variable.
+For example:
+
+```
+fn main(){
+    let x = 3;
+    x = 5; // error, reassignment of immutable variable
+}
+```
+
+By default, variables in Rust are immutable. To fix this error, add the keyword
+`mut` after the keyword `let` when declaring the variable. For example:
+
+```
+fn main(){
+    let mut x = 3;
+    x = 5;
+}
+```
+</code></pre>
+<p>These explanations can really help if you’re stuck on an error, so don't
+hesitate to look up the error code. The compiler is your friend, and it's there
+to help.</p>
+<p>PROD: END BOX</p>
+<p>The error includes the message <code>re-assigment of immutable variable</code> because the
+program tried to assign a second value to the <code>x</code> variable.</p>
+<p>Getting compile-time errors when your code attempts to change a value that it
+previously said was immutable is important because this very situation can lead
+to bugs. If one part of your code operates on an assumption that a value it's
+operating on will never change, and another part of your code changes that
+value, it's possible that the first code won't do what it was designed to do.
+Especially when the second piece of code only changes the value <em>sometimes</em>,
+this cause of bugs can be difficult to track down after the fact.</p>
+<p>In Rust, our code can know that a value our code assumes won't change really
+won't change, because the compiler is enforcing that guarantee for us. When
+reading and writing code, we don't have to keep track in our head how and where
+a value might change. This can make code easier to reason about.</p>
+<p>Mutability is really useful, though! Bindings are immutable only by default;
+you can make them mutable by adding <code>mut</code> in front of the variable name. In
+addition to telling the compiler it should allow this value to be changed, it
+conveys intent to future readers of the code and says that other parts of the
+code will be changing this value.</p>
+<p>For example, change the program you just wrote to the following:</p>
+<pre><code class="language-rust">fn main() {
+    let mut x = 5;
+    println!(&quot;The value of x is: {}&quot;, x);
+    x = 6;
+    println!(&quot;The value of x is: {}&quot;, x);
+}
+</code></pre>
+<p>Running this, we get:</p>
+<pre><code class="language-bash">$ cargo run
+   Compiling bindings v0.1.0 (file:///projects/bindings)
+     Running `target/debug/bindings`
+The value of x is: 5
+The value of x is: 6
+</code></pre>
+<p>Using <code>mut</code>, we are allowed to change the value that <code>x</code> binds to from <code>5</code> to
+<code>6</code>. You might want to make a binding mutable because it makes the code easier
+to understand than an implementation that only uses immutable bindings. In
+cases where you're using large data structures, mutating an instance in place
+may be faster than copying and returning newly allocated instances. It all
+depends on the tradeoffs you want to make in your situation.</p>
+<h3>Shadowing</h3>
+<p>As we saw in the guessing game tutorial, we can declare new bindings with the
+same name as a previous binding, and the new binding <em>shadows</em> the previous
+binding. We say that the first binding is ‘shadowed’ by the second, which means
+that the second binding's value is what you will see when you use the variable
+after the second binding. This can be useful if you’d like to perform a few
+transformations on a value, but have the binding be immutable after those
+transformations have been completed. For example:</p>
+<pre><code class="language-rust">fn main() {
+    let x = 5;
+
+    let x = x + 1;
+
+    let x = x * 2;
+
+    println!(&quot;The value of x is: {}&quot;, x);
+}
+</code></pre>
+<p>This program first binds <code>x</code> to a value of <code>5</code>. Then, it shadows <code>x</code> by saying
+<code>let x =</code> again, taking the original value and adding <code>1</code> so that the value of
+<code>x</code> is then <code>6</code>. The third <code>let</code> statement also shadows <code>x</code>, taking the
+previous value and multiplying it by <code>2</code> to give <code>x</code> a final value of <code>12</code>. If
+you run this, it will output:</p>
+<pre><code class="language-bash">$ cargo run
+   Compiling bindings v0.1.0 (file:///projects/bindings)
+     Running `target/debug/bindings`
+The value of x is: 12
+</code></pre>
+<p>Shadowing is useful because it lets us modify <code>x</code> without having to make the
+binding mutable. This means the compiler will still keep us from accidentally
+trying to mutate <code>x</code> directly later.</p>
+<p>Now let's look at some of the types of values that we can bind variables to.</p>
+
+                </div>
+
+                <!-- Mobile navigation buttons -->
+                
+                    <a href="ch03-00-common-programming-concepts-in-rust.html" class="mobile-nav-chapters previous">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+                    <a href="ch03-02-data-types.html" class="mobile-nav-chapters next">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                
+
+            </div>
+
+            
+                <a href="ch03-00-common-programming-concepts-in-rust.html" class="nav-chapters previous" title="You can navigate through the chapters using the arrow keys">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+            
+
+            
+                <a href="ch03-02-data-types.html" class="nav-chapters next" title="You can navigate through the chapters using the arrow keys">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            
+
+        </div>
+
+
+        <!-- Local fallback for Font Awesome -->
+        <script>
+            if ($(".fa").css("font-family") !== "FontAwesome") {
+                $('<link rel="stylesheet" type="text/css" href="_FontAwesome/css/font-awesome.css">').prependTo('head');
+            }
+        </script>
+
+        <!-- Livereload script (if served using the cli tool) -->
+        
+
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+    </body>
+</html>

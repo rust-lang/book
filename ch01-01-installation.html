@@ -1,0 +1,167 @@
+<!DOCTYPE HTML>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>The Rust Programming Language</title>
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <base href="">
+
+        <link rel="stylesheet" href="book.css">
+        <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+        <link rel="shortcut icon" href="favicon.png">
+
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+
+        <!-- MathJax -->
+        <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+        <!-- Fetch JQuery from CDN but have a local fallback -->
+        <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+        <script>
+            if (typeof jQuery == 'undefined') {
+                document.write(unescape("%3Cscript src='jquery.js'%3E%3C/script%3E"));
+            }
+        </script>
+    </head>
+    <body class="light">
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme = localStorage.getItem('theme');
+            if (theme == null) { theme = 'light'; }
+            $('body').removeClass().addClass(theme);
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var sidebar = localStorage.getItem('sidebar');
+            if (sidebar === "hidden") { $("html").addClass("sidebar-hidden") }
+            else if (sidebar === "visible") { $("html").addClass("sidebar-visible") }
+        </script>
+
+        <div id="sidebar" class="sidebar">
+            <ul class="chapter"><li><a href="ch01-00-introduction.html"><strong>1.</strong> Introduction</a></li><li><ul class="section"><li><a href="ch01-01-installation.html" class="active"><strong>1.1.</strong> Installation</a></li><li><a href="ch01-02-hello-world.html"><strong>1.2.</strong> Hello, World!</a></li></ul></li><li><a href="ch02-00-guessing-game-tutorial.html"><strong>2.</strong> Guessing Game Tutorial</a></li><li><a href="ch03-00-common-programming-concepts-in-rust.html"><strong>3.</strong> Common Programming Concepts in Rust</a></li><li><ul class="section"><li><a href="ch03-01-variable-bindings-and-mutability.html"><strong>3.1.</strong> Variable Bindings and Mutability</a></li><li><a href="ch03-02-data-types.html"><strong>3.2.</strong> Data Types</a></li><li><a href="ch03-03-how-functions-work.html"><strong>3.3.</strong> How Functions Work</a></li><li><a href="ch03-04-comments.html"><strong>3.4.</strong> Comments</a></li><li><a href="ch03-05-control-flow.html"><strong>3.5.</strong> Control Flow</a></li></ul></li><li><a href="ch04-00-understanding-ownership.html"><strong>4.</strong> Understanding Ownership</a></li><li><ul class="section"><li><a href="ch04-01-ownership.html"><strong>4.1.</strong> Ownership</a></li><li><a href="ch04-02-references-and-borrowing.html"><strong>4.2.</strong> References &amp; Borrowing</a></li><li><a href="ch04-03-slices.html"><strong>4.3.</strong> Slices</a></li></ul></li><li><a href="ch05-00-structs.html"><strong>5.</strong> Structs</a></li><li><ul class="section"><li><a href="ch05-01-method-syntax.html"><strong>5.1.</strong> Method Syntax</a></li></ul></li><li><a href="ch06-00-enums.html"><strong>6.</strong> Enums</a></li><li><ul class="section"><li><a href="ch06-01-option.html"><strong>6.1.</strong> Option</a></li><li><a href="ch06-02-match.html"><strong>6.2.</strong> Match</a></li><li><a href="ch06-03-if-let.html"><strong>6.3.</strong> if let</a></li></ul></li><li><strong>7.</strong> Crates &amp; Modules</li><li><strong>8.</strong> Error Handling</li><li><strong>9.</strong> Basic Collections</li><li><ul class="section"><li><strong>9.1.</strong> Vectors</li><li><strong>9.2.</strong> Strings</li><li><strong>9.3.</strong> <code>HashMap&lt;K, V&gt;</code></li></ul></li><li><strong>10.</strong> Lifetimes</li><li><a href="chZZ-generics.html"><strong>11.</strong> Generics</a></li><li><strong>12.</strong> Traits</li><li><strong>13.</strong> Closures</li><li><strong>14.</strong> Iterators</li><li><a href="chXX-patterns.html"><strong>15.</strong> Patterns</a></li><li><strong>16.</strong> I/O</li><li><ul class="section"><li><strong>16.1.</strong> <code>Read</code> &amp; <code>Write</code></li><li><strong>16.2.</strong> <code>std::fs</code></li><li><strong>16.3.</strong> <code>std::path</code></li><li><strong>16.4.</strong> <code>std::env</code></li></ul></li><li><strong>17.</strong> Testing</li><li><strong>18.</strong> Smart Pointers</li><li><ul class="section"><li><strong>18.1.</strong> <code>Deref</code></li><li><strong>18.2.</strong> <code>Deref</code> coercions</li><li><strong>18.3.</strong> <code>Box&lt;T&gt;</code></li><li><strong>18.4.</strong> <code>Rc&lt;T&gt;</code></li></ul></li><li><strong>19.</strong> Concurrency</li><li><ul class="section"><li><strong>19.1.</strong> Threads</li><li><strong>19.2.</strong> <code>Send</code> &amp; <code>Sync</code></li><li><strong>19.3.</strong> <code>Arc&lt;T&gt;</code></li><li><strong>19.4.</strong> <code>Mutex&lt;T&gt;</code></li><li><strong>19.5.</strong> <code>Channels</code></li></ul></li><li><strong>20.</strong> Unsafe Rust</li><li><ul class="section"><li><strong>20.1.</strong> Raw Pointers</li><li><strong>20.2.</strong> transmute</li></ul></li><li><strong>21.</strong> FFI</li><li><ul class="section"><li><strong>21.1.</strong> Conditional Compilation</li><li><strong>21.2.</strong> Bindings to C</li><li><strong>21.3.</strong> Using Rust from Other Languages</li><li><strong>21.4.</strong> <code>static</code></li></ul></li><li><strong>22.</strong> Creating a Library</li><li><ul class="section"><li><strong>22.1.</strong> Cargo</li><li><strong>22.2.</strong> Crates.io</li><li><a href="chYY-YY-documentation.html"><strong>22.3.</strong> Documentation</a></li></ul></li><li><strong>23.</strong> Advanced Type System Features</li><li><ul class="section"><li><strong>23.1.</strong> Associated Types</li><li><strong>23.2.</strong> Trait Objects</li><li><strong>23.3.</strong> UFCS</li><li><strong>23.4.</strong> Coherence</li></ul></li><li><strong>24.</strong> Interior mutability</li><li><ul class="section"><li><strong>24.1.</strong> <code>Cell&lt;T&gt;</code></li><li><strong>24.2.</strong> <code>RefCell&lt;T&gt;</code></li></ul></li><li><strong>25.</strong> Macros</li><li><strong>26.</strong> Nightly Rust</li><li><a href="appendix-00.html"><strong>27.</strong> Appendix</a></li><li><ul class="section"><li><a href="appendix-01-keywords.html"><strong>27.1.</strong> Keywords</a></li></ul></li></ul>
+        </div>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar" class="menu-bar">
+                    <div class="left-buttons">
+                        <i id="sidebar-toggle" class="fa fa-bars"></i>
+                        <i id="theme-toggle" class="fa fa-paint-brush"></i>
+                    </div>
+
+                    <h1 class="menu-title">The Rust Programming Language</h1>
+
+                    <div class="right-buttons">
+                        <i id="print-button" class="fa fa-print" title="Print this book"></i>
+                    </div>
+                </div>
+
+                <div id="content" class="content">
+                    <h2>Installation</h2>
+<p>The first step to using Rust is to install it. You’ll need an internet
+connection to run the commands in this chapter, as we’ll be downloading Rust
+from the internet.</p>
+<p>We’ll be showing off a number of commands using a terminal, and those lines all
+start with <code>$</code>. You don't need to type in the <code>$</code>s; they are there to indicate
+the start of each command. You’ll see many tutorials and examples around the web
+that follow this convention: <code>$</code> for commands run as a regular user, and <code>#</code>
+for commands you should be running as an administrator. Lines that don't start
+with <code>$</code> are typically showing the output of the previous command.</p>
+<h3>Installing on Linux or Mac</h3>
+<p>If you're on Linux or a Mac, all you need to do is open a terminal and type
+this:</p>
+<pre><code class="language-bash">$ curl https://sh.rustup.rs -sSf | sh
+</code></pre>
+<p>This will download a script and start the installation. You may be prompted for
+your password. If it all goes well, you’ll see this appear:</p>
+<pre><code class="language-bash">Rust is installed now. Great!
+</code></pre>
+<h3>Installing on Windows</h3>
+<p>If you're on Windows, please download the appropriate <a href="https://www.rust-lang.org/install.html">installer</a>.</p>
+<h3>Uninstalling</h3>
+<p>Uninstalling Rust is as easy as installing it. On Linux or Mac, just run
+the uninstall script:</p>
+<pre><code class="language-bash">$ rustup self uninstall
+</code></pre>
+<p>If you used the Windows installer, you can re-run the <code>.msi</code> and it will give
+you an uninstall option.</p>
+<h3>Troubleshooting</h3>
+<p>If you've got Rust installed, you can open up a shell, and type this:</p>
+<pre><code class="language-bash">$ rustc --version
+</code></pre>
+<p>You should see the version number, commit hash, and commit date in a format
+similar to this for the latest stable version at the time you install:</p>
+<pre><code class="language-bash">rustc x.y.z (abcabcabc yyyy-mm-dd)
+</code></pre>
+<p>If you see this, Rust has been installed successfully!
+Congrats!</p>
+<p>If you don't and you're on Windows, check that Rust is in your <code>%PATH%</code> system
+variable. If it isn't, run the installer again, select &quot;Change&quot; on the &quot;Change,
+repair, or remove installation&quot; page and ensure &quot;Add to PATH&quot; is checked.</p>
+<p>If not, there are a number of places where you can get help. The easiest is
+<a href="irc://irc.mozilla.org/#rust">the #rust IRC channel on irc.mozilla.org</a>, which you can access through
+<a href="http://chat.mibbit.com/?server=irc.mozilla.org&amp;channel=%23rust">Mibbit</a>. Click that link, and you'll be chatting with other Rustaceans
+(a silly nickname we call ourselves) who can help you out. Other great resources
+include <a href="https://users.rust-lang.org/">the user’s forum</a> and <a href="http://stackoverflow.com/questions/tagged/rust">Stack Overflow</a>.</p>
+<h3>Local documentation</h3>
+<p>The installer also includes a copy of the documentation locally, so you can
+read it offline. On Linux or Mac, run <code>rustup doc</code> to open the local
+documentation in your browser. On Windows, the documentation is in a
+<code>share/doc</code> directory inside the directory where Rust was installed.</p>
+
+                </div>
+
+                <!-- Mobile navigation buttons -->
+                
+                    <a href="ch01-00-introduction.html" class="mobile-nav-chapters previous">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+                    <a href="ch01-02-hello-world.html" class="mobile-nav-chapters next">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                
+
+            </div>
+
+            
+                <a href="ch01-00-introduction.html" class="nav-chapters previous" title="You can navigate through the chapters using the arrow keys">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+            
+
+            
+                <a href="ch01-02-hello-world.html" class="nav-chapters next" title="You can navigate through the chapters using the arrow keys">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            
+
+        </div>
+
+
+        <!-- Local fallback for Font Awesome -->
+        <script>
+            if ($(".fa").css("font-family") !== "FontAwesome") {
+                $('<link rel="stylesheet" type="text/css" href="_FontAwesome/css/font-awesome.css">').prependTo('head');
+            }
+        </script>
+
+        <!-- Livereload script (if served using the cli tool) -->
+        
+
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+    </body>
+</html>

@@ -1,0 +1,354 @@
+<!DOCTYPE HTML>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>The Rust Programming Language</title>
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <base href="">
+
+        <link rel="stylesheet" href="book.css">
+        <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+        <link rel="shortcut icon" href="favicon.png">
+
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+
+        <!-- MathJax -->
+        <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+        <!-- Fetch JQuery from CDN but have a local fallback -->
+        <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+        <script>
+            if (typeof jQuery == 'undefined') {
+                document.write(unescape("%3Cscript src='jquery.js'%3E%3C/script%3E"));
+            }
+        </script>
+    </head>
+    <body class="light">
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme = localStorage.getItem('theme');
+            if (theme == null) { theme = 'light'; }
+            $('body').removeClass().addClass(theme);
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var sidebar = localStorage.getItem('sidebar');
+            if (sidebar === "hidden") { $("html").addClass("sidebar-hidden") }
+            else if (sidebar === "visible") { $("html").addClass("sidebar-visible") }
+        </script>
+
+        <div id="sidebar" class="sidebar">
+            <ul class="chapter"><li><a href="ch01-00-introduction.html"><strong>1.</strong> Introduction</a></li><li><ul class="section"><li><a href="ch01-01-installation.html"><strong>1.1.</strong> Installation</a></li><li><a href="ch01-02-hello-world.html"><strong>1.2.</strong> Hello, World!</a></li></ul></li><li><a href="ch02-00-guessing-game-tutorial.html"><strong>2.</strong> Guessing Game Tutorial</a></li><li><a href="ch03-00-common-programming-concepts-in-rust.html"><strong>3.</strong> Common Programming Concepts in Rust</a></li><li><ul class="section"><li><a href="ch03-01-variable-bindings-and-mutability.html"><strong>3.1.</strong> Variable Bindings and Mutability</a></li><li><a href="ch03-02-data-types.html"><strong>3.2.</strong> Data Types</a></li><li><a href="ch03-03-how-functions-work.html"><strong>3.3.</strong> How Functions Work</a></li><li><a href="ch03-04-comments.html"><strong>3.4.</strong> Comments</a></li><li><a href="ch03-05-control-flow.html"><strong>3.5.</strong> Control Flow</a></li></ul></li><li><a href="ch04-00-understanding-ownership.html"><strong>4.</strong> Understanding Ownership</a></li><li><ul class="section"><li><a href="ch04-01-ownership.html"><strong>4.1.</strong> Ownership</a></li><li><a href="ch04-02-references-and-borrowing.html"><strong>4.2.</strong> References &amp; Borrowing</a></li><li><a href="ch04-03-slices.html"><strong>4.3.</strong> Slices</a></li></ul></li><li><a href="ch05-00-structs.html" class="active"><strong>5.</strong> Structs</a></li><li><ul class="section"><li><a href="ch05-01-method-syntax.html"><strong>5.1.</strong> Method Syntax</a></li></ul></li><li><a href="ch06-00-enums.html"><strong>6.</strong> Enums</a></li><li><ul class="section"><li><a href="ch06-01-option.html"><strong>6.1.</strong> Option</a></li><li><a href="ch06-02-match.html"><strong>6.2.</strong> Match</a></li><li><a href="ch06-03-if-let.html"><strong>6.3.</strong> if let</a></li></ul></li><li><strong>7.</strong> Crates &amp; Modules</li><li><strong>8.</strong> Error Handling</li><li><strong>9.</strong> Basic Collections</li><li><ul class="section"><li><strong>9.1.</strong> Vectors</li><li><strong>9.2.</strong> Strings</li><li><strong>9.3.</strong> <code>HashMap&lt;K, V&gt;</code></li></ul></li><li><strong>10.</strong> Lifetimes</li><li><a href="chZZ-generics.html"><strong>11.</strong> Generics</a></li><li><strong>12.</strong> Traits</li><li><strong>13.</strong> Closures</li><li><strong>14.</strong> Iterators</li><li><a href="chXX-patterns.html"><strong>15.</strong> Patterns</a></li><li><strong>16.</strong> I/O</li><li><ul class="section"><li><strong>16.1.</strong> <code>Read</code> &amp; <code>Write</code></li><li><strong>16.2.</strong> <code>std::fs</code></li><li><strong>16.3.</strong> <code>std::path</code></li><li><strong>16.4.</strong> <code>std::env</code></li></ul></li><li><strong>17.</strong> Testing</li><li><strong>18.</strong> Smart Pointers</li><li><ul class="section"><li><strong>18.1.</strong> <code>Deref</code></li><li><strong>18.2.</strong> <code>Deref</code> coercions</li><li><strong>18.3.</strong> <code>Box&lt;T&gt;</code></li><li><strong>18.4.</strong> <code>Rc&lt;T&gt;</code></li></ul></li><li><strong>19.</strong> Concurrency</li><li><ul class="section"><li><strong>19.1.</strong> Threads</li><li><strong>19.2.</strong> <code>Send</code> &amp; <code>Sync</code></li><li><strong>19.3.</strong> <code>Arc&lt;T&gt;</code></li><li><strong>19.4.</strong> <code>Mutex&lt;T&gt;</code></li><li><strong>19.5.</strong> <code>Channels</code></li></ul></li><li><strong>20.</strong> Unsafe Rust</li><li><ul class="section"><li><strong>20.1.</strong> Raw Pointers</li><li><strong>20.2.</strong> transmute</li></ul></li><li><strong>21.</strong> FFI</li><li><ul class="section"><li><strong>21.1.</strong> Conditional Compilation</li><li><strong>21.2.</strong> Bindings to C</li><li><strong>21.3.</strong> Using Rust from Other Languages</li><li><strong>21.4.</strong> <code>static</code></li></ul></li><li><strong>22.</strong> Creating a Library</li><li><ul class="section"><li><strong>22.1.</strong> Cargo</li><li><strong>22.2.</strong> Crates.io</li><li><a href="chYY-YY-documentation.html"><strong>22.3.</strong> Documentation</a></li></ul></li><li><strong>23.</strong> Advanced Type System Features</li><li><ul class="section"><li><strong>23.1.</strong> Associated Types</li><li><strong>23.2.</strong> Trait Objects</li><li><strong>23.3.</strong> UFCS</li><li><strong>23.4.</strong> Coherence</li></ul></li><li><strong>24.</strong> Interior mutability</li><li><ul class="section"><li><strong>24.1.</strong> <code>Cell&lt;T&gt;</code></li><li><strong>24.2.</strong> <code>RefCell&lt;T&gt;</code></li></ul></li><li><strong>25.</strong> Macros</li><li><strong>26.</strong> Nightly Rust</li><li><a href="appendix-00.html"><strong>27.</strong> Appendix</a></li><li><ul class="section"><li><a href="appendix-01-keywords.html"><strong>27.1.</strong> Keywords</a></li></ul></li></ul>
+        </div>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar" class="menu-bar">
+                    <div class="left-buttons">
+                        <i id="sidebar-toggle" class="fa fa-bars"></i>
+                        <i id="theme-toggle" class="fa fa-paint-brush"></i>
+                    </div>
+
+                    <h1 class="menu-title">The Rust Programming Language</h1>
+
+                    <div class="right-buttons">
+                        <i id="print-button" class="fa fa-print" title="Print this book"></i>
+                    </div>
+                </div>
+
+                <div id="content" class="content">
+                    <h1>Structs</h1>
+<p>A <code>struct</code>, short for &quot;structure&quot;, gives us the ability to name and package
+together multiple related values that make up a meaningful group. If you come
+from an object-oriented language, a <code>struct</code> is like an object's data
+attributes. <code>struct</code> and <code>enum</code> (that we talked about in the last chapter) are
+the building blocks you can use in Rust to create new types in your program's
+domain in order to take full advantage of Rust's compile-time type checking.</p>
+<p>Let’s write a program which calculates the distance between two points.
+We’ll start off with single variable bindings, and then refactor it to
+use <code>struct</code>s instead.</p>
+<p>Let’s make a new project with Cargo:</p>
+<pre><code class="language-bash">$ cargo new --bin points
+$ cd points
+</code></pre>
+<p>Here’s a short program which calculates the distance between two points. Put
+it into your <code>src/main.rs</code>:</p>
+<pre><code class="language-rust">fn main() {
+    let x1 = 0.0;
+    let y1 = 5.0;
+
+    let x2 = 12.0;
+    let y2 = 0.0;
+
+    let answer = distance(x1, y1, x2, y2);
+
+    println!(&quot;Point 1: ({}, {})&quot;, x1, y1);
+    println!(&quot;Point 2: ({}, {})&quot;, x2, y2);
+    println!(&quot;Distance: {}&quot;, answer);
+}
+
+fn distance(x1: f64, y1: f64, x2: f64, y2: f64) -&gt; f64 {
+    let x_squared = f64::powi(x2 - x1, 2);
+    let y_squared = f64::powi(y2 - y1, 2);
+
+    f64::sqrt(x_squared + y_squared)
+}
+</code></pre>
+<p>Let's try running this program with <code>cargo run</code>:</p>
+<pre><code class="language-bash">$ cargo run
+   Compiling points v0.1.0 (file:///projects/points)
+     Running `target/debug/points`
+Point 1: (0, 5)
+Point 2: (12, 0)
+Distance: 13
+</code></pre>
+<p>Let's take a quick look at <code>distance()</code> before we move forward. To find the
+distance between two points, we can use the Pythagorean Theorem. The theorem is
+named after Pythagoras, who was the first person to mathematically prove this
+formula. The details aren't that important; just know the theorem says that the
+formula for the distance between two points is equal to:</p>
+<ul>
+<li>squaring the distance between the points horizontally (the &quot;x&quot; direction)</li>
+<li>squaring the distance between the points vertically (the &quot;y&quot; direction)</li>
+<li>adding those together</li>
+<li>and taking the square root of that.</li>
+</ul>
+<p>So that's what we're implementing here.</p>
+<pre><code class="language-rust,ignore">f64::powi(2.0, 3)
+</code></pre>
+<p>The double colon (<code>::</code>) here is a namespace operator. We haven’t talked about
+modules and namespaces in depth yet, but you can think of the <code>powi()</code> function
+as being scoped inside of another name. In this case, the name is <code>f64</code>, the
+same as the type. The <code>powi()</code> function takes two arguments: the first is a
+number, and the second is the power that it raises that number to. In this
+case, the second number is an integer, hence the ‘i’ in its name. Similarly,
+<code>sqrt()</code> is a function under the <code>f64</code> module, which takes the square root of
+its argument.</p>
+<h2>Why <code>struct</code>s?</h2>
+<p>Our little program is okay, but we can do better. The key to seeing this is in
+the signature of <code>distance()</code>:</p>
+<pre><code class="language-rust,ignore">fn distance(x1: f64, y1: f64, x2: f64, y2: f64) -&gt; f64 {
+</code></pre>
+<p>The distance function is supposed to calculate the distance between two points.
+But our distance function calculates some distance between four numbers. The
+first two and last two arguments are related, but that’s not expressed anywhere
+in our program itself. It would be nicer if we had a way to group <code>(x1, y1)</code>
+and <code>(x2, y2)</code> together.</p>
+<p>We’ve already discussed one way to do that: tuples. Here’s a version of our
+program which uses tuples:</p>
+<pre><code class="language-rust">fn main() {
+    let p1 = (0.0, 5.0);
+
+    let p2 = (12.0, 0.0);
+
+    let answer = distance(p1, p2);
+
+    println!(&quot;Point 1: {:?}&quot;, p1);
+    println!(&quot;Point 2: {:?}&quot;, p2);
+    println!(&quot;Distance: {}&quot;, answer);
+}
+
+fn distance(p1: (f64, f64), p2: (f64, f64)) -&gt; f64 {
+    let x_squared = f64::powi(p2.0 - p1.0, 2);
+    let y_squared = f64::powi(p2.1 - p1.1, 2);
+
+    f64::sqrt(x_squared + y_squared)
+}
+</code></pre>
+<p>This is a little better, for sure. Tuples let us add a little bit of structure.
+We’re now passing two arguments, so that’s more clear. But it’s also worse:
+tuples don’t give names to their elements, so our calculation has gotten more
+confusing:</p>
+<pre><code class="language-rust,ignore">p2.0 - p1.0
+p2.1 - p1.1
+</code></pre>
+<p>When writing this example, your authors almost got it wrong themselves! Distance
+is all about <code>x</code> and <code>y</code> points, but our code is talking about <code>0</code> and <code>1</code>.
+This isn’t great.</p>
+<p>Enter <code>struct</code>s. We can transform our tuples into something with a name for the
+whole as well as names for the parts:</p>
+<pre><code class="language-rust,ignore">let p1 = (0.0, 5.0);
+
+struct Point {
+    x: f64,
+    y: f64,
+}
+
+let p1 = Point { x: 0.0, y: 5.0 };
+</code></pre>
+<p>Here we've defined a <code>struct</code> and given it the name <code>Point</code>. The parts inside
+<code>{}</code> are defining the <em>fields</em> of the struct. We can have as many or as few of
+them as we'd like, and we give them a name and specify their type. Here we have
+two fields named <code>x</code> and <code>y</code>, and they both hold <code>f64</code>s.</p>
+<p>We can access the field of a struct in the same way we access an element of
+a tuple, except we use its name:</p>
+<pre><code class="language-rust,ignore">let p1 = (0.0, 5.0);
+let x = p1.0;
+
+struct Point {
+    x: f64,
+    y: f64,
+}
+
+let p1 = Point { x: 0.0, y: 5.0 };
+let x = p1.x;
+</code></pre>
+<p>Let’s convert our program to use our <code>Point</code> <code>struct</code>. Here’s what it looks
+like now:</p>
+<pre><code class="language-rust">#[derive(Debug,Copy,Clone)]
+struct Point {
+    x: f64,
+    y: f64,
+}
+
+fn main() {
+    let p1 = Point { x: 0.0, y: 5.0};
+
+    let p2 = Point { x: 12.0, y: 0.0};
+
+    let answer = distance(p1, p2);
+
+    println!(&quot;Point 1: {:?}&quot;, p1);
+    println!(&quot;Point 2: {:?}&quot;, p2);
+    println!(&quot;Distance: {}&quot;, answer);
+}
+
+fn distance(p1: Point, p2: Point) -&gt; f64 {
+    let x_squared = f64::powi(p2.x - p1.x, 2);
+    let y_squared = f64::powi(p2.y - p1.y, 2);
+
+    f64::sqrt(x_squared + y_squared)
+}
+</code></pre>
+<p>Our function signature for <code>distance()</code> now says exactly what we mean: it
+calculates the distance between two <code>Point</code>s. And rather than <code>0</code> and <code>1</code>,
+we’ve got back our <code>x</code> and <code>y</code>. This is a win for clarity.</p>
+<h2>Derived Traits</h2>
+<p>There’s one other thing that’s a bit strange here, this stuff above the
+<code>struct</code> declaration:</p>
+<pre><code class="language-rust,ignore">#[derive(Debug,Copy,Clone)]
+struct Point {
+</code></pre>
+<p>This is an annotation that tells the compiler our struct should get some
+default behavior for the <code>Debug</code>, <code>Copy</code>, and <code>Clone</code> traits. We talked about
+marking that types can be <code>Copy</code> and <code>Clone</code>-able in Chapter XX when we
+discussed ownership. <code>Debug</code> is the trait that enables us to print out our
+struct so that we can see its value while we are debugging our code.</p>
+<p>So far, we’ve been printing values using <code>{}</code> in a <code>println!</code> macro. If we try
+that with a struct, however, by default, we'll get an error. Say we have the
+following program:</p>
+<pre><code class="language-rust,ignore">struct Point {
+    x: f64,
+    y: f64,
+}
+
+fn main() {
+    let p1 = Point { x: 0.0, y: 5.0};
+    println!(&quot;Point 1: {}&quot;, p1);
+}
+</code></pre>
+<p>This code tries to print the <code>p1</code> point directly, which may seem innocuous. But
+running it produces the following output:</p>
+<pre><code class="language-bash">$ cargo run
+   Compiling points v0.1.0 (file:///projects/points)
+error: the trait bound `Point: std::fmt::Display` is not satisfied [--explain E0277]
+ --&gt; src/main.rs:8:29
+8 |&gt;     println!(&quot;Point 1: {}&quot;, p1);
+  |&gt;                             ^^
+&lt;std macros&gt;:2:27: 2:58: note: in this expansion of format_args!
+&lt;std macros&gt;:3:1: 3:54: note: in this expansion of print! (defined in &lt;std macros&gt;)
+src/main.rs:8:5: 8:33: note: in this expansion of println! (defined in &lt;std macros&gt;)
+note: `Point` cannot be formatted with the default formatter; try using `:?` instead if you are using a format string
+note: required by `std::fmt::Display::fmt`
+</code></pre>
+<p>Whew! The core of the error is this part: <em>the trait bound <code>Point: std::fmt::Display</code> is not satisfied</em>. <code>println!</code> can do many kinds of
+formatting. By default, <code>{}</code> implements a kind of formatting known as
+<code>Display</code>: output intended for direct end-user consumption. The primitive types
+we’ve seen implement <code>Display</code>, as there’s only one way you’d show a <code>1</code> to a
+user. But with structs, the output is less clear. Do you want commas or not?
+What about the <code>{}</code>s? Should all the fields be shown?</p>
+<p>More complex types in the standard library and that are defined by the
+programmer do not automatically implement <code>Display</code> formatting. Standard
+library types implement <code>Debug</code> formatting, which is intended for the
+programmer to see. The <code>#[derive(Debug)]</code> annotation lets us use a default
+implementation of <code>Debug</code> formatting to easily get this ability for types we've
+defined. To ask <code>println!</code> to use <code>Debug</code> formatting with our <code>Point</code>, we add
+the annotation to derive the trait and include <code>:?</code> in the print string, like
+this:</p>
+<pre><code class="language-rust">#[derive(Debug)]
+struct Point {
+    x: f64,
+    y: f64,
+}
+
+fn main() {
+    let p1 = Point { x: 0.0, y: 5.0};
+    println!(&quot;Point 1: {:?}&quot;, p1);
+}
+</code></pre>
+<p>If you run this, it should print the values of each field in the <code>Point</code> struct
+as desired:</p>
+<pre><code class="language-bash">$ cargo run
+   Compiling points v0.1.0 (file:///projects/points)
+     Running `target/debug/points`
+Point 1: Point { x: 0, y: 5 }
+</code></pre>
+<p>You’ll see this repeated later with other types. We’ll cover traits fully in
+Chapter XX.</p>
+
+                </div>
+
+                <!-- Mobile navigation buttons -->
+                
+                    <a href="ch04-03-slices.html" class="mobile-nav-chapters previous">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+                    <a href="ch05-01-method-syntax.html" class="mobile-nav-chapters next">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                
+
+            </div>
+
+            
+                <a href="ch04-03-slices.html" class="nav-chapters previous" title="You can navigate through the chapters using the arrow keys">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+            
+
+            
+                <a href="ch05-01-method-syntax.html" class="nav-chapters next" title="You can navigate through the chapters using the arrow keys">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            
+
+        </div>
+
+
+        <!-- Local fallback for Font Awesome -->
+        <script>
+            if ($(".fa").css("font-family") !== "FontAwesome") {
+                $('<link rel="stylesheet" type="text/css" href="_FontAwesome/css/font-awesome.css">').prependTo('head');
+            }
+        </script>
+
+        <!-- Livereload script (if served using the cli tool) -->
+        
+
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+    </body>
+</html>

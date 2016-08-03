@@ -1,0 +1,350 @@
+<!DOCTYPE HTML>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>The Rust Programming Language</title>
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <base href="">
+
+        <link rel="stylesheet" href="book.css">
+        <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+        <link rel="shortcut icon" href="favicon.png">
+
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+
+        <!-- MathJax -->
+        <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+        <!-- Fetch JQuery from CDN but have a local fallback -->
+        <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+        <script>
+            if (typeof jQuery == 'undefined') {
+                document.write(unescape("%3Cscript src='jquery.js'%3E%3C/script%3E"));
+            }
+        </script>
+    </head>
+    <body class="light">
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme = localStorage.getItem('theme');
+            if (theme == null) { theme = 'light'; }
+            $('body').removeClass().addClass(theme);
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var sidebar = localStorage.getItem('sidebar');
+            if (sidebar === "hidden") { $("html").addClass("sidebar-hidden") }
+            else if (sidebar === "visible") { $("html").addClass("sidebar-visible") }
+        </script>
+
+        <div id="sidebar" class="sidebar">
+            <ul class="chapter"><li><a href="ch01-00-introduction.html"><strong>1.</strong> Introduction</a></li><li><ul class="section"><li><a href="ch01-01-installation.html"><strong>1.1.</strong> Installation</a></li><li><a href="ch01-02-hello-world.html"><strong>1.2.</strong> Hello, World!</a></li></ul></li><li><a href="ch02-00-guessing-game-tutorial.html"><strong>2.</strong> Guessing Game Tutorial</a></li><li><a href="ch03-00-common-programming-concepts-in-rust.html"><strong>3.</strong> Common Programming Concepts in Rust</a></li><li><ul class="section"><li><a href="ch03-01-variable-bindings-and-mutability.html"><strong>3.1.</strong> Variable Bindings and Mutability</a></li><li><a href="ch03-02-data-types.html" class="active"><strong>3.2.</strong> Data Types</a></li><li><a href="ch03-03-how-functions-work.html"><strong>3.3.</strong> How Functions Work</a></li><li><a href="ch03-04-comments.html"><strong>3.4.</strong> Comments</a></li><li><a href="ch03-05-control-flow.html"><strong>3.5.</strong> Control Flow</a></li></ul></li><li><a href="ch04-00-understanding-ownership.html"><strong>4.</strong> Understanding Ownership</a></li><li><ul class="section"><li><a href="ch04-01-ownership.html"><strong>4.1.</strong> Ownership</a></li><li><a href="ch04-02-references-and-borrowing.html"><strong>4.2.</strong> References &amp; Borrowing</a></li><li><a href="ch04-03-slices.html"><strong>4.3.</strong> Slices</a></li></ul></li><li><a href="ch05-00-structs.html"><strong>5.</strong> Structs</a></li><li><ul class="section"><li><a href="ch05-01-method-syntax.html"><strong>5.1.</strong> Method Syntax</a></li></ul></li><li><a href="ch06-00-enums.html"><strong>6.</strong> Enums</a></li><li><ul class="section"><li><a href="ch06-01-option.html"><strong>6.1.</strong> Option</a></li><li><a href="ch06-02-match.html"><strong>6.2.</strong> Match</a></li><li><a href="ch06-03-if-let.html"><strong>6.3.</strong> if let</a></li></ul></li><li><strong>7.</strong> Crates &amp; Modules</li><li><strong>8.</strong> Error Handling</li><li><strong>9.</strong> Basic Collections</li><li><ul class="section"><li><strong>9.1.</strong> Vectors</li><li><strong>9.2.</strong> Strings</li><li><strong>9.3.</strong> <code>HashMap&lt;K, V&gt;</code></li></ul></li><li><strong>10.</strong> Lifetimes</li><li><a href="chZZ-generics.html"><strong>11.</strong> Generics</a></li><li><strong>12.</strong> Traits</li><li><strong>13.</strong> Closures</li><li><strong>14.</strong> Iterators</li><li><a href="chXX-patterns.html"><strong>15.</strong> Patterns</a></li><li><strong>16.</strong> I/O</li><li><ul class="section"><li><strong>16.1.</strong> <code>Read</code> &amp; <code>Write</code></li><li><strong>16.2.</strong> <code>std::fs</code></li><li><strong>16.3.</strong> <code>std::path</code></li><li><strong>16.4.</strong> <code>std::env</code></li></ul></li><li><strong>17.</strong> Testing</li><li><strong>18.</strong> Smart Pointers</li><li><ul class="section"><li><strong>18.1.</strong> <code>Deref</code></li><li><strong>18.2.</strong> <code>Deref</code> coercions</li><li><strong>18.3.</strong> <code>Box&lt;T&gt;</code></li><li><strong>18.4.</strong> <code>Rc&lt;T&gt;</code></li></ul></li><li><strong>19.</strong> Concurrency</li><li><ul class="section"><li><strong>19.1.</strong> Threads</li><li><strong>19.2.</strong> <code>Send</code> &amp; <code>Sync</code></li><li><strong>19.3.</strong> <code>Arc&lt;T&gt;</code></li><li><strong>19.4.</strong> <code>Mutex&lt;T&gt;</code></li><li><strong>19.5.</strong> <code>Channels</code></li></ul></li><li><strong>20.</strong> Unsafe Rust</li><li><ul class="section"><li><strong>20.1.</strong> Raw Pointers</li><li><strong>20.2.</strong> transmute</li></ul></li><li><strong>21.</strong> FFI</li><li><ul class="section"><li><strong>21.1.</strong> Conditional Compilation</li><li><strong>21.2.</strong> Bindings to C</li><li><strong>21.3.</strong> Using Rust from Other Languages</li><li><strong>21.4.</strong> <code>static</code></li></ul></li><li><strong>22.</strong> Creating a Library</li><li><ul class="section"><li><strong>22.1.</strong> Cargo</li><li><strong>22.2.</strong> Crates.io</li><li><a href="chYY-YY-documentation.html"><strong>22.3.</strong> Documentation</a></li></ul></li><li><strong>23.</strong> Advanced Type System Features</li><li><ul class="section"><li><strong>23.1.</strong> Associated Types</li><li><strong>23.2.</strong> Trait Objects</li><li><strong>23.3.</strong> UFCS</li><li><strong>23.4.</strong> Coherence</li></ul></li><li><strong>24.</strong> Interior mutability</li><li><ul class="section"><li><strong>24.1.</strong> <code>Cell&lt;T&gt;</code></li><li><strong>24.2.</strong> <code>RefCell&lt;T&gt;</code></li></ul></li><li><strong>25.</strong> Macros</li><li><strong>26.</strong> Nightly Rust</li><li><a href="appendix-00.html"><strong>27.</strong> Appendix</a></li><li><ul class="section"><li><a href="appendix-01-keywords.html"><strong>27.1.</strong> Keywords</a></li></ul></li></ul>
+        </div>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar" class="menu-bar">
+                    <div class="left-buttons">
+                        <i id="sidebar-toggle" class="fa fa-bars"></i>
+                        <i id="theme-toggle" class="fa fa-paint-brush"></i>
+                    </div>
+
+                    <h1 class="menu-title">The Rust Programming Language</h1>
+
+                    <div class="right-buttons">
+                        <i id="print-button" class="fa fa-print" title="Print this book"></i>
+                    </div>
+                </div>
+
+                <div id="content" class="content">
+                    <h2>Data Types</h2>
+<p>Every value in Rust is of a certain <em>type</em>, which tells Rust what kind of data
+is being given so it knows how to work with that data. In this section, we'll
+look at a number of types built into the language itself split into two subsets
+of Rust data types: scalar and compound.</p>
+<p>Something to keep in mind throughout this section: Rust is a <em>statically typed</em>
+language, which means that it must know the types of all bindings at compile
+time. The compiler can usually infer what type we want to use based on the
+value and how we use it. When many types are possible, such as when we
+converted a <code>String</code> to a numeric type using <code>parse()</code> in the guessing game
+tutorial, we can add a type annotation, like this:</p>
+<pre><code class="language-rust,ignore">let x: i32 = 5;
+</code></pre>
+<p>You will see some type annotations as we discuss the various data types.</p>
+<h3>Scalar Types</h3>
+<p>A <em>scalar</em> type is one that represents a single value. There are four key
+scalar types in Rust: integers, floating point numbers, booleans, and
+characters. You'll likely recognize these from other programming languages, but
+let's jump into how they work in Rust.</p>
+<h4>Integer Types</h4>
+<p>An <em>integer</em> is a number without a fractional component. We've used one integer
+type already in this chapter, the <code>i32</code> type. This type declaration indicates
+that the value it's associated with should be a signed integer (hence the <code>i</code>,
+as opposed to a <code>u</code> for unsigned) for a 32-bit system. There are a number of
+built-in integer types in Rust, shown in Table 3-1.</p>
+<table><thead><tr><td> Length </td><td> signed </td><td> unsigned </td></tr></thead>
+<tr><td> 8-bit  </td><td> i8     </td><td> u8       </td></tr>
+<tr><td> 16-bit </td><td> i16    </td><td> u16      </td></tr>
+<tr><td> 32-bit </td><td> i32    </td><td> u32      </td></tr>
+<tr><td> 64-bit </td><td> i64    </td><td> u64      </td></tr>
+<tr><td> arch   </td><td> isize  </td><td> usize    </td></tr>
+</table>
+<p><em>Table 4-1: Integer types in Rust. Each code (for example, i32) can be used to
+declare the type of a value.</em></p>
+<p>Each variant can be either signed or unsigned and has an explicit size. Signed
+and unsigned merely refers to whether it is possible for the number to be
+either negative or positive, meaning the number needs to have a sign with it
+(&quot;signed&quot;), or whether it will only ever be positive and can therefore be
+represented without a sign (&quot;unsigned&quot;). It's like writing numbers on paper:
+when the sign matters, a number is shown with a plus sign or minus sign, but
+when it's safe to assume the number is positive, it's shown with no sign.
+Signed numbers are stored using two’s complement representation (if you're
+unsure what this is you can search for it online; an explanation is outside the
+scope of this text).</p>
+<p>Finally, the <code>isize</code> and <code>usize</code> types depend on the kind of computer your
+program is running on: 64-bits if you're on a 64-bit architecture, and 32-bits
+if you’re on a 32-bit architecture.</p>
+<p>So how do you know which type of integer to use? If you're unsure, Rust's
+defaults are generally good choices, and integer types default to <code>i32</code>: it’s
+generally the fastest, even on 64-bit systems. The primary situation in which
+you'd need to specify <code>isize</code> or <code>usize</code> is when indexing some sort of
+collection, which we'll talk about in the &quot;Arrays&quot; section.</p>
+<h4>Floating-Point Types</h4>
+<p>Rust also has two primitive types for <em>floating-point numbers</em>, which are
+numbers with decimal points. Rust's floating-point types are <code>f32</code> and <code>f64</code>,
+which are 32 bits and 64 bits in size, respectively. The default type is <code>f64</code>,
+as it’s roughly the same speed as <code>f32</code>, but has a larger precision. It is
+possible to use an <code>f64</code> on 32 bit systems, but it will be slower than using an
+<code>f32</code> on those systems. Most of the time, trading potential worse performance
+for better precision is a reasonable initial choice, and you should benchmark
+your code if you suspect floating-point size is a problem in your case.</p>
+<p>Here's an example showing floating-point numbers in action:</p>
+<pre><code class="language-rust">fn main() {
+    let x = 2.0; // f64
+
+    let y: f32 = 3.0; // f32
+}
+</code></pre>
+<p>Floating-point numbers are represented according to the IEEE-754 standard. The
+<code>f32</code> type is a single-precision float, while <code>f64</code> has double-precision.</p>
+<h4>Numeric Operations</h4>
+<p>Rust supports the usual basic mathematic operations you’d expect for all of
+these number types: addition, subtraction, multiplication, division, and
+modulo. This code shows how you'd use each one in a <code>let</code> statement:</p>
+<pre><code class="language-rust">fn main() {
+    // addition
+    let sum = 5 + 10;
+
+    // subtraction
+    let difference = 95.5 - 4.3;
+
+    // multiplication
+    let product = 4 * 30;
+
+    // division
+    let quotient = 56.7 / 32.2;
+
+    // modulo
+    let remainder = 43 % 5;
+}
+</code></pre>
+<p>Each expression in these statements uses a mathematical operator and evaluates
+to a single value, which is then bound to a variable.</p>
+<h4>The Boolean Type</h4>
+<p>As in most other programming languages, a boolean type in Rust has two possible
+values: <code>true</code> and <code>false</code>. The boolean type in Rust is specified with <code>bool</code>.
+For example:</p>
+<pre><code class="language-rust">fn main() {
+    let t = true;
+
+    let f: bool = false; // with explicit type annotation
+}
+</code></pre>
+<p>The main way to consume boolean values is through conditionals like an <code>if</code>
+statement. We’ll cover how <code>if</code> statements work in Rust in the &quot;Control Flow&quot;
+section of this chapter.</p>
+<h4>The Character Type</h4>
+<p>So far we’ve only worked with numbers, but Rust supports letters too. Rust’s
+<code>char</code> type is the language's most primitive alphabetic type, and this code
+shows one way to use it:</p>
+<pre><code class="language-rust">fn main() {
+   let c = 'z';
+   let z = 'ℤ';
+   let heart_eyed_cat = '😻';
+}
+</code></pre>
+<p>Rust’s <code>char</code> represents a Unicode Scalar Value, which means that it can
+represent a lot more than just ASCII. Accented letters, Chinese/Japanese/Korean
+ideographs, emoji, and zero width spaces are all valid <code>char</code>s in Rust. Unicode
+Scalar Values range from <code>U+0000</code> to <code>U+D7FF</code> and <code>U+E000</code> to <code>U+10FFFF</code>
+inclusive. A &quot;character&quot; isn’t really a concept in Unicode, however, so your
+human intuition for what a &quot;character&quot; is may not match up with what a <code>char</code>
+is in Rust. It also means that <code>char</code>s are four bytes each. You can learn more
+about Unicode Scalar Values at
+<em>http://www.unicode.org/glossary/#unicode_scalar_value</em> and find a chart for
+all unicode code points at <em>http://www.unicode.org/charts/</em>.</p>
+<h3>Compound Types</h3>
+<p><em>Compound types</em> can group multiple values of other types into one type. Rust
+has two primitive compound types: tuples and arrays.</p>
+<h4>Grouping Values into Tuples</h4>
+<p>We’ve seen tuples already, when binding multiple values at once. A tuple is a
+general way of grouping together some number of other values with distinct
+types into one compound type.</p>
+<p>We create a tuple by writing a comma-separated list of values inside
+parentheses. Each position in the tuple has a distinct type, as in this example:</p>
+<pre><code class="language-rust">fn main() {
+    let tup: (i32, f64, u8) = (500, 6.4, 1);
+}
+</code></pre>
+<p>Note that, unlike the examples of multiple bindings, here we bind the single
+name <code>tup</code> to the entire tuple, emphasizing the fact that a tuple is considered
+a single compound element. We could then use pattern matching to destructure
+this tuple value, like this:</p>
+<pre><code class="language-rust">fn main() {
+    let tup: (i32, f64, u8) = (500, 6.4, 1);
+
+    let (x, y, z) = tup;
+
+    println!(&quot;The value of y is: {}&quot;, y);
+}
+</code></pre>
+<p>In this program, we first create a tuple and bind it to the name <code>tup</code>. We then
+use a pattern with <code>let</code> to take <code>tup</code> and turn it into three separate
+bindings, <code>x</code>, <code>y</code>, and <code>z</code>. This is called ‘destructuring’, because it breaks
+the single tuple into three parts.</p>
+<p>Finally, we print the value of <code>y</code>, which is <code>6.4</code>.</p>
+<h4>Tuple Indexing</h4>
+<p>In addition to destructuring through pattern matching, we can also access a
+tuple element directly by using a period (<code>.</code>) followed by the index of the
+value we want to access. For example:</p>
+<pre><code class="language-rust">fn main() {
+    let x: (i32, f64, u8) = (500, 6.4, 1);
+
+    let five_hundred = x.0;
+
+    let six_point_four = x.1;
+
+    let one = x.2;
+}
+</code></pre>
+<p>This program creates a tuple, <code>x</code>, and then makes new bindings to each element
+by using their index. As with most programming languages, the first index in a
+tuple is 0.</p>
+<h3>Arrays</h3>
+<p>Another way to bind a name to a collection of multiple values is with an
+<em>array</em>. Unlike a tuple, every element of an array must have the same type.
+Arrays in Rust are different than arrays in some other languages because arrays
+in Rust have a fixed length-- once declared, they cannot grow or shrink in size.</p>
+<p>In Rust, the values going into an array are written as a comma separated list
+inside square brackets:</p>
+<pre><code class="language-rust">fn main() {
+    let a = [1, 2, 3, 4, 5];
+}
+</code></pre>
+<p>While arrays can be useful since they are a primitive type, they aren't as
+flexible as the <code>Vec</code> (short for &quot;vector&quot;), a similar collection type provided
+by the standard library that <em>is</em> allowed to grow or shrink in size. If you're
+unsure whether to use an array or a <code>Vec</code>, you should probably go with a <code>Vec</code>,
+and we'll discuss them in more detail in chapter XX.</p>
+<h4>Accessing Array Elements</h4>
+<p>An array is a single chunk of memory, allocated on the stack. We can access
+elements of an array using indexing, like this:</p>
+<pre><code class="language-rust">fn main() {
+    let a = [1, 2, 3, 4, 5];
+
+    let first = a[0];
+    let second = a[1];
+}
+</code></pre>
+<p>In this example, the <code>first</code> variable will bind to <code>1</code> at index <code>[0]</code> in the
+array, and <code>second</code> will bind to <code>2</code> at index <code>[1]</code> in the array. Note that
+these values are copied out of the array and into <code>first</code> and <code>second</code> when the
+<code>let</code> statement is called. That means if the array changes after the <code>let</code>
+statements, these bindings will not, and the two variables should retain their
+values.</p>
+<h4>Invalid array element access</h4>
+<p>What happens if you try to access an element of an array past the end of the
+array? Say we changed our program to:</p>
+<pre><code class="language-rust,ignore">fn main() {
+    let a = [1, 2, 3, 4, 5];
+
+    let element = a[10];
+
+    println!(&quot;The value of element is: {}&quot;, element);
+}
+</code></pre>
+<p>Running this code with <code>cargo run</code> produces:</p>
+<pre><code class="language-bash">$ cargo run
+   Compiling arrays v0.1.0 (file:///projects/arrays)
+     Running `target/debug/arrays`
+thread '&lt;main&gt;' panicked at 'index out of bounds: the len is 5 but the index is 10', src/main.rs:4
+note: Run with `RUST_BACKTRACE=1` for a backtrace.
+error: Process didn't exit successfully: `target/debug/arrays` (exit code: 101)
+</code></pre>
+<p>We can see that compiling did not give us any errors, but we got a <em>runtime</em>
+error and our program didn't exit successfully. When we attempt to access an
+element using indexing, Rust will check that the index we've specified is less
+than the array length. If the index is greater than the length, it will
+&quot;panic&quot;, which is what it's called when a Rust program exits with an error.</p>
+<p>This is our first example of Rust’s safety principles in action. In many
+low-level languages, this kind of check is not done, and when you provide an
+incorrect index, invalid memory can be accessed. Rust protects us against this
+kind of error by immediately exiting instead of allowing the memory access and
+continuing. We'll discuss more of Rust’s error handling in Chapter XX.</p>
+
+                </div>
+
+                <!-- Mobile navigation buttons -->
+                
+                    <a href="ch03-01-variable-bindings-and-mutability.html" class="mobile-nav-chapters previous">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+                    <a href="ch03-03-how-functions-work.html" class="mobile-nav-chapters next">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                
+
+            </div>
+
+            
+                <a href="ch03-01-variable-bindings-and-mutability.html" class="nav-chapters previous" title="You can navigate through the chapters using the arrow keys">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+            
+
+            
+                <a href="ch03-03-how-functions-work.html" class="nav-chapters next" title="You can navigate through the chapters using the arrow keys">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            
+
+        </div>
+
+
+        <!-- Local fallback for Font Awesome -->
+        <script>
+            if ($(".fa").css("font-family") !== "FontAwesome") {
+                $('<link rel="stylesheet" type="text/css" href="_FontAwesome/css/font-awesome.css">').prependTo('head');
+            }
+        </script>
+
+        <!-- Livereload script (if served using the cli tool) -->
+        
+
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+    </body>
+</html>
