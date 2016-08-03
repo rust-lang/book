@@ -111,6 +111,8 @@ println!("Please input your guess.");
 We previously learned in Chapter 1 that `println!()` is a macro that
 prints a string to the screen.
 
+### Variable Bindings
+
 ```rust,ignore
 let mut guess = String::new();
 ```
@@ -223,7 +225,11 @@ io::stdin().read_line(&mut guess).expect("failed to read line");
 ```
 
 But that gets hard to read. So we’ve split it up, two lines for two method
-calls. We already talked about `read_line()`, but what about `expect()`? Well,
+calls.
+
+### The `Result` Type
+
+We already talked about `read_line()`, but what about `expect()`? Well,
 we already mentioned that `read_line()` puts what the user types into the `&mut
 String` we pass it. But it also returns a value: in this case, an
 [`io::Result`][ioresult]. Rust has a number of types named `Result` in its
@@ -258,6 +264,8 @@ haven’t handled a possible error. The right way to suppress the error is to
 actually write error handling. Luckily, if we want to crash if there’s a
 problem, we can use `expect()`. If we can recover from the error somehow, we’d
 do something else, but we’ll save that for a future project.
+
+### `println!()` Placeholders
 
 There’s only one line of this first example left, aside from the closing curly
 brace:
