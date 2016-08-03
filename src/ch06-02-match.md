@@ -4,30 +4,31 @@ Rust has an extremely powerful control-flow operator: `match`. It allows us to
 compare a value against a series of patterns and then execute code based on
 how they compare.
 
-A `match` expression is kind of like a coin sorting machine. Coins slide down
-a track that has variously sized holes along it, and each coin falls through the
-first hole it encounters that it fits into. American coins are, in order of
-diameter from smallest to largest diameter, dime ($0.10), penny ($0.01), nickel
-($0.05), and quarter ($0.25). It is indeed strange that the dime is smallest
-in diameter but not smallest in denomination.
+Think of a `match` expression kind of like a coin sorting machine. Coins slide
+down a track that has variously sized holes along it, and each coin falls
+through the first hole it encounters that it fits into. In the same way, values
+go through each pattern in a `match`, and for the first pattern that the value
+"fits", the value will fall into the associated code block to be used during
+execution.
 
-We can write a function in Rust using a `match` expression that can take an
-unknown American coin and, in a similar way as the coin counting machine,
-determine which coin it is and return its value in cents:
+Since we're already talking about coins, let's use them for an example using
+`match`! We can write a function that can take an unknown American coin and, in
+a similar way as the coin counting machine, determine which coin it is and
+return its value in cents:
 
 ```rust
 enum Coin {
-    Dime,
     Penny,
     Nickel,
+    Dime,
     Quarter,
 }
 
 fn value_in_cents(coin: Coin) -> i32 {
     match coin {
-        Coin::Dime => 10,
         Coin::Penny => 1,
         Coin::Nickel => 5,
+        Coin::Dime => 10,
         Coin::Quarter => 25,
     }
 }
@@ -66,20 +67,20 @@ but would still return the last value of the block, `1`:
 
 ```rust
 # enum Coin {
-#    Dime,
 #    Penny,
 #    Nickel,
+#    Dime,
 #    Quarter,
 # }
 #
 fn value_in_cents(coin: Coin) -> i32 {
     match coin {
-        Coin::Dime => 10,
         Coin::Penny => {
             println!("Lucky penny!");
             1
         },
         Coin::Nickel => 5,
+        Coin::Dime => 10,
         Coin::Quarter => 25,
     }
 }
@@ -100,9 +101,9 @@ enum UsState {
 }
 
 enum Coin {
-    Dime,
     Penny,
     Nickel,
+    Dime,
     Quarter(UsState),
 }
 ```
@@ -125,17 +126,17 @@ in the code for that arm:
 # }
 #
 # enum Coin {
-#    Dime,
 #    Penny,
 #    Nickel,
+#    Dime,
 #    Quarter(UsState),
 # }
 #
 fn value_in_cents(coin: Coin) -> i32 {
     match coin {
-        Coin::Dime => 10,
         Coin::Penny => 1,
         Coin::Nickel => 5,
+        Coin::Dime => 10,
         Coin::Quarter(state) => {
             println!("State quarter from {:?}!", state);
             25
