@@ -228,34 +228,21 @@ value. Keep this in mind as we explore function return values and expressions.
 
 ### Functions with Return Values
 
-Functions can return values back to the code that calls them. In Rust, the
-"return value of the function” is synonymous with “the value of the final
-expression in the block of the body of a function.” A function that returns a
-value looks like this:
-
-```text
-fn NAME(PATTERN: TYPE, PATTERN: TYPE, PATTERN: TYPE, PATTERN: TYPE...) -> TYPE {
-    STATEMENT*
-    EXPRESSION
-}
-```
-
-The `*` by `STATEMENT` indicates "zero or more", meaning we can have any number
-of statements inside the function body block, ending with an expression since
-we are returning a value.
-
-In Rust, we don’t name return values, but we do declare their type, after an
-arrow (`->`). Here’s a sample program to illustrate this concept:
+Functions can return values back to the code that calls them. We don’t name
+return values, but we do declare their type, after an arrow (`->`). In Rust,
+the "return value of the function” is synonymous with “the value of the final
+expression in the block of the body of a function.” Here's an example of a
+function that returns a value:
 
 ```rust
+fn five() -> i32 {
+    5
+}
+
 fn main() {
     let x = five();
 
     println!("The value of x is: {}", x);
-}
-
-fn five() -> i32 {
-    5
 }
 ```
 
