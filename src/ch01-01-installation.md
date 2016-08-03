@@ -1,4 +1,4 @@
-# Installation
+## Installation
 
 The first step to using Rust is to install it. You’ll need an internet
 connection to run the commands in this chapter, as we’ll be downloading Rust
@@ -11,7 +11,7 @@ that follow this convention: `$` for commands run as a regular user, and `#`
 for commands you should be running as an administrator. Lines that don't start
 with `$` are typically showing the output of the previous command.
 
-## Installing on Linux or Mac
+### Installing on Linux or Mac
 
 If you're on Linux or a Mac, all you need to do is open a terminal and type
 this:
@@ -27,13 +27,13 @@ your password. If it all goes well, you’ll see this appear:
 Rust is installed now. Great!
 ```
 
-## Installing on Windows
+### Installing on Windows
 
 If you're on Windows, please download the appropriate [installer][install-page].
 
 [install-page]: https://www.rust-lang.org/install.html
 
-## Uninstalling
+### Uninstalling
 
 Uninstalling Rust is as easy as installing it. On Linux or Mac, just run
 the uninstall script:
@@ -45,7 +45,7 @@ $ rustup self uninstall
 If you used the Windows installer, you can re-run the `.msi` and it will give
 you an uninstall option.
 
-## Troubleshooting
+### Troubleshooting
 
 If you've got Rust installed, you can open up a shell, and type this:
 
@@ -78,7 +78,7 @@ include [the user’s forum][users] and [Stack Overflow][stackoverflow].
 [users]: https://users.rust-lang.org/
 [stackoverflow]: http://stackoverflow.com/questions/tagged/rust
 
-## Local documentation
+### Local documentation
 
 The installer also includes a copy of the documentation locally, so you can
 read it offline. On Linux or Mac, run `rustup doc` to open the local

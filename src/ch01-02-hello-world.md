@@ -1,4 +1,4 @@
-# Hello, World!
+## Hello, World!
 
 Now that you have Rust installed, let’s write your first Rust program. It's
 traditional when learning a new language to write a little program to print the
@@ -9,7 +9,7 @@ tradition.
 > makes no specific demands about your editing, tooling, or where your code
 > lives, so if you prefer an IDE to the command line, that's an option.
 
-## Creating a Project File
+### Creating a Project File
 
 First, make a file to put your Rust code in. Rust doesn't care where your code
 lives, but for this book, we'd suggest making a *projects* directory in your
@@ -27,7 +27,7 @@ $ cd hello_world
 > your home directory may not work.
 > Consult the documentation for your shell for more details.
 
-## Writing and Running a Rust Program
+### Writing and Running a Rust Program
 
 Next, make a new source file and call it *main.rs*. Rust files always end with
 the *.rs* extension. If you’re using more than one word in your filename, use
@@ -56,7 +56,7 @@ system, you should see the string `Hello, world!` print to the terminal. If you
 did, then congratulations! You've officially written a Rust program. That makes
 you a Rust programmer! Welcome.
 
-## Anatomy of a Rust Program
+### Anatomy of a Rust Program
 
 Now, let’s go over what just happened in your "Hello, world!" program in
 detail. Here's the first piece of the puzzle:
@@ -104,7 +104,7 @@ The line ends with a semicolon (`;`). The `;` indicates that this expression is
 over, and the next one is ready to begin. Most lines of Rust code end with a
 `;`.
 
-## Compiling and Running Are Separate Steps
+### Compiling and Running Are Separate Steps
 
 In "Writing and Running a Rust Program", we showed you how to run a newly
 created program. We'll break that process down and examine each step now.
@@ -160,7 +160,7 @@ and make it easy to share your code with other people and projects. Next, we'll
 introduce you to a tool called Cargo, which will help you write real-world Rust
 programs.
 
-# Hello, Cargo!
+## Hello, Cargo!
 
 Cargo is Rust’s build system and package manager, and Rustaceans use Cargo to
 manage their Rust projects because it makes a lot of tasks easier. For example,
@@ -188,7 +188,7 @@ If you see a version number, great! If you see an error like `command not
 found`, then you should look at the documentation for the way you installed
 Rust to determine how to install Cargo separately.
 
-## Creating a Project with Cargo
+### Creating a Project with Cargo
 
 Let's create a new project using Cargo and look at how it differs from our
 project in `hello_world`. Go back to your projects directory (or wherever you
@@ -277,7 +277,7 @@ the `hello_world` directory, you can convert it to a project that does use
 Cargo by moving your code into the `src` directory and creating an appropriate
 `Cargo.toml`.
 
-## Building and Running a Cargo Project
+### Building and Running a Cargo Project
 
 Now let's look at what's different about building and running your Hello World
 program through Cargo! To do so, enter the following commands:
@@ -337,7 +337,7 @@ So a few more differences we've now seen:
 3. Instead of using `rustc`, build a project using `cargo build` (or build and run it in one step with `cargo run`)
 4. Instead of the result of the build being put in the same directory as our code, Cargo will put it in the `target/debug` directory.
 
-## Building for Release
+### Building for Release
 
 When your project is finally ready for release, you can use `cargo build
 --release` to compile your project with optimizations. This will create an
@@ -350,7 +350,7 @@ that we want to run as fast as possible. If you're benchmarking the running
 time of your code, be sure to run `cargo build --release` and benchmark with
 the executable in `target/release`.
 
-## Cargo as Convention
+### Cargo as Convention
 
 With simple projects, Cargo doesn't provide a whole lot of value over just
 using `rustc`, but it will prove its worth as you continue. With complex
