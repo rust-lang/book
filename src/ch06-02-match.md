@@ -266,8 +266,3 @@ The `_` pattern will match all the other cases, and `()` will do nothing, it's
 the unit value. This way, we don't have to list individual match arms for all
 the other possible values in order to say that we want to do nothing for all of
 those-- the `_` is a placeholder for any value.
-
-## More about patterns
-
-As we've just seen, patterns are powerful. They can also get complex, so let's
-take a whole section to cover all of the things that they can do.
