@@ -83,39 +83,17 @@ The value of x is: 5
 ```
 
 Since we passed `5` to `another_function()`, the `println!` macro put `5` where
-the pair of curly braces were in the format string.
+the pair of curly braces were in the format string. The declaration of
+`another_function()` shows that it takes one argument named `x`, and the type
+of `x` is `i32`.
 
-Let’s take a closer look at the signature of a function which takes a single
-argument:
-
-```text
-fn NAME(PATTERN: TYPE) {
-```
-
-The parameter declaration in a single-argument function signature looks like
-the `let` bindings we used earlier in the "Type Inference and Annotation"
-section. Just look at both together, and compare them:
-
-```rust,ignore
-let x: i32;
-fn another_function(x: i32) {
-```
-
-The one difference is that in function signatures, we _must_ declare the type.
-This is a deliberate decision in the design of Rust; requiring type annotations
-in function definitions means the compiler almost never needs you to use them
-elsewhere in the code in order to figure out what you mean.
+In function signatures, we _must_ declare the type. This is a deliberate
+decision in the design of Rust; requiring type annotations in function
+definitions means the compiler almost never needs you to use them elsewhere in
+the code in order to figure out what you mean.
 
 When you want a function to have multiple arguments, just separate them inside
 the function signature with commas, like this:
-
-```text
-fn NAME(PATTERN: TYPE, PATTERN: TYPE, PATTERN: TYPE, PATTERN: TYPE...) {
-```
-
-And just like a `let` declaration with multiple patterns, a type must be
-applied to each pattern separately. To demonstrate, here’s a full example of a
-function with multiple arguments:
 
 ```rust
 fn main() {
