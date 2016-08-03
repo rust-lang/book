@@ -1,4 +1,4 @@
-# Match
+## Match
 
 Rust has an extremely powerful control-flow operator: `match`. It allows us to
 compare a value against a series of patterns and then execute code based on
@@ -212,7 +212,7 @@ inside, and then execute code based on it. It's a bit tricky at first, but
 once you get used to it, you'll wish you had it in languages that don't support
 it. It's consistently a user favorite.
 
-## Matches are exhaustive
+### Matches are exhaustive
 
 There's one other aspect of `match` we didn't talk about. Consider this version
 of `plus_one()`:
@@ -243,7 +243,7 @@ every last option possible in order to be valid. Especially in the case of
 have null and thus making the billion-dollar mistake we discussed in the
 previous section.
 
-## The _ placeholder
+### The _ placeholder
 
 What if we don't care about all of the possible values, though? Especially when
 there are a lot of possible values for a type: a `u8` can have valid values of

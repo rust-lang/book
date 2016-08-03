@@ -1,4 +1,4 @@
-# Ownership
+## Ownership
 
 Rust’s central feature is called ‘ownership’. It is a feature that is
 straightforward to explain, but has deep implications for the rest of the
@@ -20,7 +20,7 @@ Once you understand ownership, you have a good foundation for understanding the
 features that make Rust unique. In this chapter, we'll learn ownership by going
 through some examples, focusing on a very common data structure: strings.
 
-## Variable binding scope
+### Variable binding scope
 
 We've walked through an example of a Rust program already in the tutorial
 chapter. Now that we’re past basic syntax, we won’t include all of the `fn
@@ -54,7 +54,7 @@ In other words, there are two important points in time here:
 At this point, things are similar to other programming languages. Now let’s
 build on top of this understanding by introducing the `String` type.
 
-## Strings
+### Strings
 
 String literals are convenient, but they aren’t the only way that you use
 strings. For one thing, they’re immutable. For another, not every string is
@@ -82,7 +82,7 @@ s.push_str(", world!"); // push_str() appends a literal to a String
 println!("{}", s); // This will print `hello, world!`
 ```
 
-## Memory and allocation
+### Memory and allocation
 
 So, what’s the difference here? Why can `String` be mutated, but literals
 cannot? The difference comes down to how these two types deal with memory.
@@ -144,7 +144,7 @@ This pattern has a profound impact on the way that Rust code is written. It may
 seem obvious right now, but things can get tricky in more advanced situations.
 Let’s go over the first one of those right now.
 
-## Move
+### Move
 
 What would you expect this code to do?
 
@@ -245,7 +245,7 @@ into `s2`. So what actually happens looks like this:
 That solves our problem! With only `s2` valid, when it goes out of scope, it
 alone will free the memory, and we’re done.
 
-## Ownership Rules
+### Ownership Rules
 
 This leads us to the Ownership Rules:
 
@@ -257,7 +257,7 @@ Furthermore, there’s a design choice that’s implied by this: Rust will never
 automatically create ‘deep’ copies of your data. Therefore, any _automatic_
 copying can be assumed to be inexpensive.
 
-## Clone
+### Clone
 
 But what if we _do_ want to deeply copy the `String`’s data and not just the
 `String` itself? There’s a common method for that: `clone()`. We will discuss
@@ -284,7 +284,7 @@ When you see a call to `clone()`, you know that some arbitrary code is being
 executed, and that code may be expensive. It’s a visual indicator that something
 different is going on here.
 
-## Copy
+### Copy
 
 There’s one last wrinkle that we haven’t talked about yet. This code works:
 
@@ -322,7 +322,7 @@ but nothing that requires allocation or is some form of resource is `Copy`. Here
 * Tuples, but only if they contain types which are also `Copy`. `(i32, i32)`
   is `Copy`, but `(i32, String)` is not.
 
-## Ownership and functions
+### Ownership and functions
 
 Passing a value to a function has similar semantics as assigning it:
 

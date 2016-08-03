@@ -1,4 +1,4 @@
-# Option
+## Option
 
 Now that we have had an introduction to enums, let's combine them with a
 feature that we talked a little bit about in the previous chapter: generics.
@@ -18,7 +18,7 @@ The inventor of this concept has this to say:
 > implement. This has led to innumerable errors, vulnerabilities, and system
 > crashes, which have probably caused a billion dollars of pain and damage in
 > the last forty years.
-> 
+>
 > - Tony Hoare "Null References: The Billion Dollar Mistake"
 
 The problem with null values is twofold: first, a value can be null or not, at

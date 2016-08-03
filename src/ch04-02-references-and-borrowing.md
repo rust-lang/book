@@ -1,4 +1,4 @@
-# References and Borrowing
+## References and Borrowing
 
 At the end of the last section, we had some example Rust that wasn’t very
 good. Here it is again:
@@ -117,7 +117,7 @@ error: cannot borrow immutable borrowed content `*some_string` as mutable
 Just like bindings are immutable by default, so are references. We’re not
 allowed to modify something we have a reference to.
 
-## Mutable references
+### Mutable references
 
 We can fix this bug! Just a small tweak:
 
@@ -209,7 +209,7 @@ Whew! We _also_ cannot have a mutable reference while we have an immutable one.
 Users of an immutable reference don’t expect the values to suddenly change out
 from under them! Multiple immutable references are okay, however.
 
-## Dangling references
+### Dangling references
 
 In languages with pointers, it’s easy to create a “dangling pointer” by freeing
 some memory while keeping around a pointer to that memory. In Rust, by
@@ -240,7 +240,7 @@ error[E0106]: missing lifetime specifier
 5 | fn dangle() -> &String {
   |                ^^^^^^^
   |
-  = help: this function's return type contains a borrowed value, but there is no 
+  = help: this function's return type contains a borrowed value, but there is no
     value for it to be borrowed from
   = help: consider giving it a 'static lifetime
 
@@ -285,7 +285,7 @@ fn no_dangle() -> String {
 
 This works, no problem. Ownership is moved out, nothing is deallocated.
 
-## The Rules of References
+### The Rules of References
 
 Here’s a recap of what we’ve talked about:
 

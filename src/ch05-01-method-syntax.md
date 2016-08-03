@@ -1,4 +1,4 @@
-# Method Syntax
+## Method Syntax
 
 In the last section on ownership, we made several references to ‘methods’.
 Methods look like this:
@@ -34,7 +34,7 @@ The nested-functions version reads in reverse: the program executes `f()`, then
 Before we get into the details, let’s talk about how to define your own
 methods.
 
-## Defining methods
+### Defining methods
 
 We can define methods with the `impl` keyword. `impl` is short for
 ‘implementation’. Doing so looks like this:
@@ -123,7 +123,7 @@ rarely used. An example of a time to do that would be if we wanted to have a
 method that would transform `self` into something else and prevent other code
 from using the value of `self` after the transformation happens.
 
-### Methods and automatic referencing
+#### Methods and automatic referencing
 
 We’ve left out an important detail. It’s in this line of the example:
 
@@ -145,12 +145,12 @@ or `&mut`s to match the signature. In other words, these are the same:
 #     x: f64,
 #     y: f64,
 # }
-# 
+#
 # impl Point {
 #    fn distance(&self, other: &Point) -> f64 {
 #        let x_squared = f64::powi(other.x - self.x, 2);
 #        let y_squared = f64::powi(other.y - self.y, 2);
-# 
+#
 #        f64::sqrt(x_squared + y_squared)
 #    }
 # }

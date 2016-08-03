@@ -1,4 +1,4 @@
-# Slices
+## Slices
 
 So far, we’ve talked about types that have ownership, like `String`, and ones
 that don’t, like `&String`. There is another kind of type which does not have
@@ -114,7 +114,7 @@ around which need to be kept in sync.
 
 Luckily, Rust has a solution to this problem: string slices.
 
-# String slices
+## String slices
 
 A string slice looks like this:
 
@@ -253,7 +253,7 @@ The type of `s` here is `&str`: It’s a slice, pointing to that specific point
 of the binary. This is also why string literals are immutable; `&str` is an
 immutable reference.
 
-## String slices as arguments
+### String slices as arguments
 
 Knowing that you can take slices of both literals and `String`s leads us to
 one more improvement on `first_word()`, and that’s its signature:
@@ -303,7 +303,7 @@ fn main() {
 }
 ```
 
-# Other slices
+## Other slices
 
 String slices, as you might imagine, are specific to strings. But there’s a more
 general slice type, too. Consider arrays:
