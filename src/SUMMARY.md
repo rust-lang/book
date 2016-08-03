@@ -20,7 +20,6 @@
 
 - [Structs](ch05-00-structs.md)
     - [Method Syntax](ch05-01-method-syntax.md)
-    - [Generics](ch05-02-generics.md)
 
 - [Enums](ch06-00-enums.md)
     - [Option](ch06-01-option.md)
