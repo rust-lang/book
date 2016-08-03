@@ -36,7 +36,7 @@ $ cargo run
    Compiling bindings v0.0.1 (file:///projects/bindings)
 error: re-assignment of immutable variable `x` [--explain E0384]
  --> src/main.rs:4:5
-3 |>     x = 6;
+4 |>     x = 6;
   |>     ^^^^^
 note: prior assignment occurs here
  --> src/main.rs:2:9
