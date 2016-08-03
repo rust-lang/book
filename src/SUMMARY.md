@@ -23,7 +23,6 @@
 
 - [Structs](ch05-01-structs.md)
     - [Method Syntax](ch05-02-method-syntax.md)
-    - [Generics](ch05-03-generics.md)
     - [Advanced]()
 
 - [Enums](ch06-01-enums.md)
