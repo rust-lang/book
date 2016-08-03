@@ -584,7 +584,7 @@ match guess.cmp(&secret_number) {
 If it’s `Less`, we print `Too small!`, if it’s `Greater`, `Too big!`, and if
 `Equal`, `You win!`. `match` is really useful and is used often in Rust.
 
-I did mention that this won’t quite compile yet, though. Let’s try it:
+We did mention that this won’t quite compile yet, though. Let’s try it:
 
 ```bash
 $ cargo build
@@ -655,7 +655,7 @@ let guess: u32 = guess.trim().parse()
     .expect("Please type a number!");
 ```
 
-Wait a minute, I thought we already had a `guess`? We do, but Rust allows us
+Wait a minute, didn't we already have a `guess`? We do, but Rust allows us
 to ‘shadow’ the previous `guess` with a new one. This is often used in this
 exact situation, where `guess` starts as a `String`, but we want to convert it
 to a `u32`. Shadowing lets us re-use the `guess` name rather than forcing us
@@ -704,8 +704,8 @@ You guessed: 76
 Too big!
 ```
 
-Nice! You can see I even added spaces before my guess, and it still figured
-out that I guessed 76. Run the program a few times. Verify that guessing
+Nice! You can see we even added spaces before our guess, and it still figured
+out that we guessed 76. Run the program a few times. Verify that guessing
 the secret number works, as well as guessing a number too small.
 
 Now we’ve got most of the game working, but we can only make one guess. Let’s

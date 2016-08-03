@@ -86,8 +86,8 @@ This lets us write functions which take references as arguments instead of the
 values themselves, so that we won’t need to return them to give back ownership.
 
 There’s another word for what references do, and that’s ‘borrowing’. Just like
-with real life, if I own something, you can borrow it from me. When you’re done,
-you have to give it back.
+with real life, if a person owns something, you can borrow it from them. When
+you’re done, you have to give it back.
 
 Speaking of which, what if you try to modify something you borrow from me? Try
 this code out. Spoiler alert: it doesn’t work!

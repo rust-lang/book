@@ -274,7 +274,7 @@ again!
 ^Cagain!
 ```
 
-That `^C` there is where I hit `control-c`. You may or may not see "again!"
+That `^C` there is where we hit `control-c`. You may or may not see "again!"
 printed after the `^C`, depending on where the code was in the loop when it
 received the signal to halt.
 
