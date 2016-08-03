@@ -167,10 +167,12 @@ If we were to run this program, we’d get an error like this:
 ```bash
 $ cargo run
    Compiling functions v0.1.0 (file:///projects/functions)
-src/main.rs:2:14: 2:17 error: expected expression, found statement (`let`)
-src/main.rs:2     let x = (let y = 6);
-                           ^~~
-src/main.rs:2:14: 2:17 note: variable declaration using `let` is a statement
+error: expected expression, found statement (`let`)
+ --> src/main.rs:2:14
+2 |>     let x = (let y = 6);
+  |>              ^^^
+note: variable declaration using `let` is a statement
+
 error: aborting due to previous error
 error: Could not compile `functions`.
 ```
@@ -307,13 +309,15 @@ Running this code gives an error, as follows:
 ```bash
 $ cargo run
    Compiling functions v0.1.0 (file:///projects/functions)
-src/main.rs:7:1: 9:2 error: not all control paths return a value [E0269]
-src/main.rs:7 fn plus_one(x: i32) -> i32 {
-              ^
-src/main.rs:7:1: 9:2 help: run `rustc --explain E0269` to see a detailed explanation
-src/main.rs:8:10: 8:11 help: consider removing this semicolon:
-src/main.rs:8     x + 1;
-                       ^
+error: not all control paths return a value [--explain E0269]
+ --> src/main.rs:7:1
+7 |> fn plus_one(x: i32) -> i32 {
+  |> ^
+help: consider removing this semicolon:
+ --> src/main.rs:8:10
+8 |>     x + 1;
+  |>          ^
+
 error: aborting due to previous error
 error: Could not compile `functions`.
 ```
