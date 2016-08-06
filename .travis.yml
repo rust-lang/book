@@ -6,7 +6,6 @@ rust:
   - stable
 before_script:
   - cargo install mdbook
-  - PATH=$PATH:/home/travis/.cargo/bin mdbook --version
 script:
   - PATH=$PATH:/home/travis/.cargo/bin mdbook test
   - PATH=$PATH:/home/travis/.cargo/bin mdbook build
