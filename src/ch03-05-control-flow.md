@@ -377,7 +377,7 @@ and missing some items.
 For example, in the previous code that uses the `while` loop, if we removed an
 item from the `a` array but forgot to update the condition to be `while index <
 4`, our code would panic. Using the `for` loop means we would not need to
-remember to change any other code if we changed the the number of values in the
+remember to change any other code if we changed the number of values in the
 array.
 
 If you're wondering about the `.iter()` code in this example, keep reading! We
