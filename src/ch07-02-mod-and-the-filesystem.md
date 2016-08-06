@@ -1,7 +1,7 @@
 # `mod` and the filesystem
 
-Every module in Rust starts with the `mod` keyword. Let's give it a try. Let's
-make a new project with Cargo:
+Every module in Rust starts with the `mod` keyword. Let's give it a try by
+making a new project with Cargo:
 
 ```bash
 $ cargo new modules
@@ -89,7 +89,7 @@ More complicated projects can have a lot of modules.
 
 ## Putting modules in another file
 
-So, modules form a hierarchical, tree-like structure. So does another thing:
+Modules form a hierarchical, tree-like structure. So does another thing:
 file systems! The module system is the way that we split larger Rust projects up
 into multiple files. Let's imagine we have a module layout like this:
 
@@ -111,7 +111,7 @@ mod tests {
 ```
 
 Let's extract the `foo` module into another file. First, we need to change our
-source code:
+code in `src/lib.rs`:
 
 ```rust,ignore
 mod foo;
@@ -221,7 +221,7 @@ error: Could not compile `modules`.
 ```
 
 This error is actually pretty helpful. It points out something we didn't know
-yet: 
+that we could do yet:
 
 > note: maybe move this module `tests` to its own directory via `tests/mod.rs`
 

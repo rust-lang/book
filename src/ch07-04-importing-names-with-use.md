@@ -39,7 +39,7 @@ fn main() {
 
 We can `use` a module, and that will bring its name into scope. This allows us
 to shorten our function call, only requiring us to type the final module name,
-not the entire chain of them. `use` is quite powerful, and can bring all kinds
+not the entire chain of them. `use` is quite powerful and can bring all kinds
 of things into scope. For example, we could `use` the function itself:
 
 ```rust
@@ -98,7 +98,7 @@ fn main() {
 ```
 
 The `*` is called a 'glob', and it will import everything that's public inside
-of the module. Globs should be used sparingly; they are convenient, but you
+of the module. Globs should be used sparingly: they are convenient, but you
 might also pull in more things than you expected, causing naming conflicts.
 
 ## Re-exports with `pub use`

@@ -127,7 +127,7 @@ Modify `src/tests/mod.rs`:
 
 ```rust,ignore
 pub fn it_works() {
-}   
+}
 
 mod bar;
 ```
@@ -161,7 +161,7 @@ mod foo;
 pub mod tests;
 ```
 
-Now, we're declaring the `tests` module public. Lo and behold, our warning
+Now, we're declaring the `tests` module public. Lo and behold, that warning
 is gone:
 
 ```bash
@@ -173,7 +173,7 @@ src/tests/bar.rs:1 fn it_works() {
                    ^
 ```
 
-Only one last error! So wait, why did we need to make `tests` public, but not
+Only one last warning! So wait, why did we need to make `tests` public, but not
 `foo`? The answer lies in the way that they were used: in the first case, we're
 calling `foo::it_works` from `try_me`. But since it's inside a private module,
 anyone using our library couldn't call `foo::it_works()`. So why does it need to
