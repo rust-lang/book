@@ -1,0 +1,10 @@
+[package]
+name = "rust-book"
+version = "0.0.1"
+authors = ["Steve Klabnik <steve@steveklabnik.com>"]
+description = "The Rust Book"
+
+[dependencies]
+walkdir = "0.1.5"
+docopt = "0.6.82"
+rustc-serialize = "0.3.19"

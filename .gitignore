@@ -1,2 +1,5 @@
 book/
 *~
+.idea
+.DS_Store
+target
