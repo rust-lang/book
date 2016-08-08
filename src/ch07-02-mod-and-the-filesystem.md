@@ -74,10 +74,9 @@ mod tests {
 
 This gives us `tests::it_works` and `tests::foo::it_works`.
 
-In this way, modules form a tree. The contents of `src/lib.rs` form a sort of
-"anonymous module" that's at the root of the tree, with the submodules forming
-the leaves. For example, here's what our first example looks like when thought
-of this way:
+In this way, modules form a tree. The contents of `src/lib.rs` are at the root
+of the project's tree, and the submodules form the leaves. Here's what our
+first example looks like when thought of this way:
 
 ```text
 modules
