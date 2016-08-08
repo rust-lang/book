@@ -143,9 +143,10 @@ fn it_works() {
 }
 ```
 
-Note that we don't need a `mod` declaration in this file. `mod` is for declaring
-a new module, and we've already declared this module in `src/lib.rs`. If we put
-a `mod foo` here, we'd be giving the `foo` module its own submodule named `foo`!
+Note that we don't need a `mod` declaration in this file. `mod` is for
+declaring a new module, and we've already declared this module in `src/lib.rs`.
+This file provides the _contents_ of the `foo` module. If we put a `mod foo`
+here, we'd be giving the `foo` module its own submodule named `foo`!
 
 Now, everything should compile:
 
