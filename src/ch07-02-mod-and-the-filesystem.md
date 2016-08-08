@@ -35,11 +35,12 @@ mod tests {
 }
 ```
 
-This is our first module declaration. As you can see, you use the `mod` keyword,
-followed by the name of the module, and then a block of code in curly braces.
-Everything inside this block is inside the namespace `tests`. In this case, we
-have a single function, `it_works`. If we wanted to try and call this function,
-we would say `tests::it_works` rather than `it_works`.
+This is our first module declaration. As you can see, you use the `mod`
+keyword, followed by the name of the module, and then a block of code in curly
+braces. Everything inside this block is inside the namespace `tests`. In this
+case, we have a single function, `it_works`. If we wanted to try and call this
+function from outside the `tests` module, we would say `tests::it_works` rather
+than `it_works`.
 
 You could have multiple modules, side-by-side:
 
