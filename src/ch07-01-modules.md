@@ -8,8 +8,8 @@ tackles both of these problems. Here's an overview of how the bits fit together:
 
 * `mod` declares a new module.
 * Everything starts off as private, but the `pub` keyword makes it public.
-* The `use` keyword allows you to bring modules into scope so that it's easier
-  to refer to them.
+* The `use` keyword allows you to bring modules, or definitions inside of them,
+  into scope so that it's easier to refer to them.
 
 We'll take a look at each of these parts and see how they fit into the whole.
 Then, we'll take a look at the standard library and its module layout.
