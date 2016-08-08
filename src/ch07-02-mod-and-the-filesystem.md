@@ -1,14 +1,19 @@
 # `mod` and the filesystem
 
 Every module in Rust starts with the `mod` keyword. Let's give it a try by
-making a new project with Cargo:
+making a new project with Cargo called "modules". This time, instead of a
+binary, we're going to make a library: a project that other people would pull
+into their projects as a dependency to get the functionality we provided, like
+we used the `rand` crate in Chapter 2. So we're not going to use the `--bin`
+option like we have before, instead run:
 
 ```bash
 $ cargo new modules
 $ cd modules
 ```
 
-If we examine the `src/lib.rs` that Cargo generated for us, we'll find this:
+You'll notice that Cargo generated `src/lib.rs` instead of `src/main.rs` for
+us, and inside it we'll find this:
 
 ```rust
 #[cfg(test)]
@@ -19,7 +24,9 @@ mod tests {
 }
 ```
 
-We haven't talked about the `#[]` stuff yet, so let's ignore those for now:
+This is an empty test to help us get our library started, instead of the binary
+that says "Hello, world!" that we get with a new binary. We haven't talked
+about the `#[]` stuff yet, so let's ignore those for now:
 
 ```rust
 mod tests {
