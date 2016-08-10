@@ -86,7 +86,7 @@ the word, though. Let’s try that:</p>
     let bytes = s.as_bytes();
 
     for (i, &amp;item) in bytes.iter().enumerate() {
-        if byte == b' ' {
+        if item == b' ' {
             return i;
         }
     }
@@ -128,7 +128,7 @@ that it will still be valid in the future. Consider this:</p>
 #     let bytes = s.as_bytes();
 #
 #     for (i, &amp;item) in bytes.iter().enumerate() {
-#         if byte == b' ' {
+#         if item == b' ' {
 #             return i;
 #         }
 #     }
@@ -203,7 +203,7 @@ let slice = &amp;s[..];
     let bytes = s.as_bytes();
 
     for (i, &amp;item) in bytes.iter().enumerate() {
-        if byte == b' ' {
+        if item == b' ' {
             return &amp;s[0..i];
         }
     }
@@ -274,7 +274,7 @@ with no loss of functionality:</p>
 #     let bytes = s.as_bytes();
 #
 #     for (i, &amp;item) in bytes.iter().enumerate() {
-#         if byte == b' ' {
+#         if item == b' ' {
 #             return &amp;s[0..i];
 #         }
 #     }
