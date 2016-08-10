@@ -160,6 +160,22 @@ about Unicode Scalar Values at
 *http://www.unicode.org/glossary/#unicode_scalar_value* and find a chart for
 all unicode code points at *http://www.unicode.org/charts/*.
 
+#### The Byte Type
+
+You can work with the bytes of data directly. Byte literals can be created from
+the ASCII characters using `b` and single quotes:
+
+```rust
+fn main() {
+    let byte = b' ';
+    println!("byte is {}", byte);
+}
+```
+
+This will print `byte is 97`. Similarly, byte string literals can be created
+using `b` and double quotes, like `b"some byte string"`. Note that since you are
+limited to ASCII characters, it's a best practice to use characters instead of bytes when you're working with natural language text.
+
 ### Compound Types
 
 *Compound types* can group multiple values of other types into one type. Rust
