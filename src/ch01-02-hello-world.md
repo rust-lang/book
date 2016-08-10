@@ -284,7 +284,7 @@ program through Cargo! To do so, enter the following commands:
 
 ```bash
 $ cargo build
-   Compiling hello_cargo v0.1.0 (file:///home/yourname/projects/hello_cargo)
+   Compiling hello_cargo v0.1.0 (file:///projects/hello_cargo)
 ```
 
 This should have created an executable file in `target/debug/hello_cargo` (or `target/debug/hello_cargo.exe` on Windows), which you can run with this command:
@@ -327,7 +327,7 @@ project before running it, and you would have seen something like this:
 
 ```bash
 $ cargo run
-   Compiling hello_cargo v0.1.0 (file:///home/yourname/projects/hello_cargo)
+   Compiling hello_cargo v0.1.0 (file:///projects/hello_cargo)
      Running `target/debug/hello_cargo`
 Hello, world!
 ```

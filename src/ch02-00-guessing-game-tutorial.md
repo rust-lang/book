@@ -46,7 +46,7 @@ Let’s try compiling what Cargo gave us and running it in the same step, using 
 
 ```bash
 $ cargo run
-   Compiling guessing_game v0.1.0 (file:///home/you/projects/guessing_game)
+   Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
      Running `target/debug/guessing_game`
 Hello, world!
 ```
@@ -251,7 +251,7 @@ If we don't call this method, our program will compile, but we’ll get a warnin
 
 ```bash
 $ cargo build
-   Compiling guessing_game v0.1.0 (file:///home/you/projects/guessing_game)
+   Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
 src/main.rs:10:5: 10:39 warning: unused result which must be used,
 #[warn(unused_must_use)] on by default
 src/main.rs:10     io::stdin().read_line(&mut guess);
@@ -293,7 +293,7 @@ Anyway, back to our guessing game. We can run what we have with `cargo run`:
 
 ```bash
 $ cargo run
-   Compiling guessing_game v0.1.0 (file:///home/you/projects/guessing_game)
+   Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
      Running `target/debug/guessing_game`
 Guess the number!
 Please input your guess.
@@ -347,7 +347,7 @@ $ cargo build
  Downloading libc v0.2.14
    Compiling libc v0.2.14
    Compiling rand v0.3.14
-   Compiling guessing_game v0.1.0 (file:///home/you/projects/guessing_game)
+   Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
 ```
 
 You may see different versions (but they will be compatible, thanks to semver!)
@@ -380,7 +380,7 @@ we’ll only see one line:
 
 ```bash
 $ cargo build
-   Compiling guessing_game v0.1.0 (file:///home/you/projects/guessing_game)
+   Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
 ```
 
 What happens when next week version `v0.3.15` of the `rand` crate comes out,
@@ -478,7 +478,7 @@ Try running our new program a few times:
 
 ```bash
 $ cargo run
-   Compiling guessing_game v0.1.0 (file:///home/you/projects/guessing_game)
+   Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
      Running `target/debug/guessing_game`
 Guess the number!
 The secret number is: 7
@@ -588,7 +588,7 @@ We did mention that this won’t quite compile yet, though. Let’s try it:
 
 ```bash
 $ cargo build
-   Compiling guessing_game v0.1.0 (file:///home/you/projects/guessing_game)
+   Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
 src/main.rs:23:21: 23:35 error: mismatched types [E0308]
 src/main.rs:23     match guess.cmp(&secret_number) {
                                    ^~~~~~~~~~~~~~
@@ -694,7 +694,7 @@ Let’s try our program out!
 
 ```bash
 $ cargo run
-   Compiling guessing_game v0.1.0 (file:///home/you/projects/guessing_game)
+   Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
      Running `target/guessing_game`
 Guess the number!
 The secret number is: 58
@@ -757,7 +757,7 @@ will crash and, therefore, quit. Observe:
 
 ```bash
 $ cargo run
-   Compiling guessing_game v0.1.0 (file:///home/you/projects/guessing_game)
+   Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
      Running `target/guessing_game`
 Guess the number!
 The secret number is: 59
@@ -894,7 +894,7 @@ Now we should be good! Let’s try it:
 
 ```bash
 $ cargo run
-   Compiling guessing_game v0.1.0 (file:///home/you/projects/guessing_game)
+   Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
      Running `target/guessing_game`
 Guess the number!
 The secret number is: 61
