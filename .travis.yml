@@ -5,7 +5,7 @@ rust:
   - beta
   - stable
 before_script:
-  - cargo install mdbook
+        - cargo install mdbook --git https://github.com/azerupi/mdBook.git
 script:
   - PATH=$PATH:/home/travis/.cargo/bin mdbook test
   - PATH=$PATH:/home/travis/.cargo/bin mdbook build
