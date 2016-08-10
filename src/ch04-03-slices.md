@@ -25,7 +25,7 @@ fn first_word(s: &String) -> usize {
     let bytes = s.as_bytes();
 
     for (i, &item) in bytes.iter().enumerate() {
-        if item == 32 {
+        if byte == b' ' {
             return i;
         }
     }
@@ -60,16 +60,16 @@ match against the tuple with i for the index and &item for a single byte. Since
 we get a reference from `.iter().enumerate()`, we use `&` in the pattern.
 
 ```rust,ignore
-    if item == 32 {
+    if item == b' ' {
         return i;
     }
 }
 s.len()
 ```
 
-We search for the value 32, which represents a space in UTF-8. If we find one,
-we return the position. Otherwise, we return the length of the string, using
-`s.len()`.
+We search for the byte that represents the space, using the byte literal
+syntax. If we find one, we return the position. Otherwise, we return the length
+of the string, using `s.len()`.
 
 This works, but there’s a problem. We’re returning a `usize` on its own, but
 it’s only a meaningful number in the context of the `&String`. In other
@@ -81,7 +81,7 @@ that it will still be valid in the future. Consider this:
 #     let bytes = s.as_bytes();
 #
 #     for (i, &item) in bytes.iter().enumerate() {
-#         if item == 32 {
+#         if byte == b' ' {
 #             return i;
 #         }
 #     }
@@ -181,7 +181,7 @@ fn first_word(s: &String) -> &str {
     let bytes = s.as_bytes();
 
     for (i, &item) in bytes.iter().enumerate() {
-        if item == 32 {
+        if byte == b' ' {
             return &s[0..i];
         }
     }
@@ -279,7 +279,7 @@ with no loss of functionality:
 #     let bytes = s.as_bytes();
 #
 #     for (i, &item) in bytes.iter().enumerate() {
-#         if item == 32 {
+#         if byte == b' ' {
 #             return &s[0..i];
 #         }
 #     }
