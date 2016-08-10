@@ -1,5 +1,7 @@
 # The Rust Programming Language
 
+[![Build Status](https://travis-ci.org/rust-lang/book.svg?branch=master)](https://travis-ci.org/rust-lang/book)
+
 This is the next iteration of “The Rust Programming Language”, which is
 currently located [in the main Rust repository][src]. If you want to read the
 book, you should check it out there or [on the web][prod].
