@@ -25,7 +25,7 @@ fn first_word(s: &String) -> usize {
     let bytes = s.as_bytes();
 
     for (i, &item) in bytes.iter().enumerate() {
-        if byte == b' ' {
+        if item == b' ' {
             return i;
         }
     }
@@ -81,7 +81,7 @@ that it will still be valid in the future. Consider this:
 #     let bytes = s.as_bytes();
 #
 #     for (i, &item) in bytes.iter().enumerate() {
-#         if byte == b' ' {
+#         if item == b' ' {
 #             return i;
 #         }
 #     }
@@ -181,7 +181,7 @@ fn first_word(s: &String) -> &str {
     let bytes = s.as_bytes();
 
     for (i, &item) in bytes.iter().enumerate() {
-        if byte == b' ' {
+        if item == b' ' {
             return &s[0..i];
         }
     }
@@ -279,7 +279,7 @@ with no loss of functionality:
 #     let bytes = s.as_bytes();
 #
 #     for (i, &item) in bytes.iter().enumerate() {
-#         if byte == b' ' {
+#         if item == b' ' {
 #             return &s[0..i];
 #         }
 #     }
