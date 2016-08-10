@@ -275,7 +275,7 @@ Cargo by moving your code into the <code>src</code> directory and creating an ap
 <p>Now let's look at what's different about building and running your Hello World
 program through Cargo! To do so, enter the following commands:</p>
 <pre><code class="language-bash">$ cargo build
-   Compiling hello_cargo v0.1.0 (file:///home/yourname/projects/hello_cargo)
+   Compiling hello_cargo v0.1.0 (file:///projects/hello_cargo)
 </code></pre>
 <p>This should have created an executable file in <code>target/debug/hello_cargo</code> (or <code>target/debug/hello_cargo.exe</code> on Windows), which you can run with this command:</p>
 <pre><code class="language-bash">$ ./target/debug/hello_cargo # or ./target/debug/hello_cargo.exe on Windows
@@ -304,7 +304,7 @@ Hello, world!
 the binary. If you had modified your source code, Cargo would have rebuilt the
 project before running it, and you would have seen something like this:</p>
 <pre><code class="language-bash">$ cargo run
-   Compiling hello_cargo v0.1.0 (file:///home/yourname/projects/hello_cargo)
+   Compiling hello_cargo v0.1.0 (file:///projects/hello_cargo)
      Running `target/debug/hello_cargo`
 Hello, world!
 </code></pre>

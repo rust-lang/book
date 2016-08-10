@@ -99,7 +99,7 @@ us. Check out <code>src/main.rs</code>:</p>
 </code></pre>
 <p>Let’s try compiling what Cargo gave us and running it in the same step, using the <code>cargo run</code> command:</p>
 <pre><code class="language-bash">$ cargo run
-   Compiling guessing_game v0.1.0 (file:///home/you/projects/guessing_game)
+   Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
      Running `target/debug/guessing_game`
 Hello, world!
 </code></pre>
@@ -232,7 +232,7 @@ it’s called on, and if it isn’t a successful result, will cause our program 
 crash and display the message that we passed as an argument to <code>expect()</code>.</p>
 <p>If we don't call this method, our program will compile, but we’ll get a warning:</p>
 <pre><code class="language-bash">$ cargo build
-   Compiling guessing_game v0.1.0 (file:///home/you/projects/guessing_game)
+   Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
 src/main.rs:10:5: 10:39 warning: unused result which must be used,
 #[warn(unused_must_use)] on by default
 src/main.rs:10     io::stdin().read_line(&amp;mut guess);
@@ -262,7 +262,7 @@ println!(&quot;x and y: {} and {}&quot;, x, y);
 <p>Which would print out &quot;x and y: 5 and 10&quot;.</p>
 <p>Anyway, back to our guessing game. We can run what we have with <code>cargo run</code>:</p>
 <pre><code class="language-bash">$ cargo run
-   Compiling guessing_game v0.1.0 (file:///home/you/projects/guessing_game)
+   Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
      Running `target/debug/guessing_game`
 Guess the number!
 Please input your guess.
@@ -302,7 +302,7 @@ compatible with version 0.3.14&quot;.</p>
  Downloading libc v0.2.14
    Compiling libc v0.2.14
    Compiling rand v0.3.14
-   Compiling guessing_game v0.1.0 (file:///home/you/projects/guessing_game)
+   Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
 </code></pre>
 <p>You may see different versions (but they will be compatible, thanks to semver!)
 and the lines may be in a different order.</p>
@@ -324,7 +324,7 @@ no reason to do all that stuff again. With nothing to do, it simply
 exits. If we open up <code>src/main.rs</code>, make a trivial change, then save it again,
 we’ll only see one line:</p>
 <pre><code class="language-bash">$ cargo build
-   Compiling guessing_game v0.1.0 (file:///home/you/projects/guessing_game)
+   Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
 </code></pre>
 <p>What happens when next week version <code>v0.3.15</code> of the <code>rand</code> crate comes out,
 with an important bugfix? While getting bugfixes is important, what if <code>0.3.15</code>
@@ -401,7 +401,7 @@ deleting it for the final version. It’s not much of a game if it prints out
 the answer when you start it up!</p>
 <p>Try running our new program a few times:</p>
 <pre><code class="language-bash">$ cargo run
-   Compiling guessing_game v0.1.0 (file:///home/you/projects/guessing_game)
+   Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
      Running `target/debug/guessing_game`
 Guess the number!
 The secret number is: 7
@@ -489,7 +489,7 @@ we have three types of <code>Ordering</code>, we have three arms:</p>
 <code>Equal</code>, <code>You win!</code>. <code>match</code> is really useful and is used often in Rust.</p>
 <p>We did mention that this won’t quite compile yet, though. Let’s try it:</p>
 <pre><code class="language-bash">$ cargo build
-   Compiling guessing_game v0.1.0 (file:///home/you/projects/guessing_game)
+   Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
 src/main.rs:23:21: 23:35 error: mismatched types [E0308]
 src/main.rs:23     match guess.cmp(&amp;secret_number) {
                                    ^~~~~~~~~~~~~~
@@ -576,7 +576,7 @@ such, we’ll do the same thing we did with <code>read_line()</code>: use the <c
 method to crash if there’s an error.</p>
 <p>Let’s try our program out!</p>
 <pre><code class="language-bash">$ cargo run
-   Compiling guessing_game v0.1.0 (file:///home/you/projects/guessing_game)
+   Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
      Running `target/guessing_game`
 Guess the number!
 The secret number is: 58
@@ -630,7 +630,7 @@ fn main() {
 our discussion about <code>parse()</code>? If we give a non-number answer, the program
 will crash and, therefore, quit. Observe:</p>
 <pre><code class="language-bash">$ cargo run
-   Compiling guessing_game v0.1.0 (file:///home/you/projects/guessing_game)
+   Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
      Running `target/guessing_game`
 Guess the number!
 The secret number is: 59
@@ -754,7 +754,7 @@ of a name. So for all errors, we run the code <code>continue</code>, which lets 
 the next iteration of the loop, effectively ignoring the errors.</p>
 <p>Now we should be good! Let’s try it:</p>
 <pre><code class="language-bash">$ cargo run
-   Compiling guessing_game v0.1.0 (file:///home/you/projects/guessing_game)
+   Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
      Running `target/guessing_game`
 Guess the number!
 The secret number is: 61
