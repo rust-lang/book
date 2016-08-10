@@ -86,7 +86,7 @@ the word, though. Let’s try that:</p>
     let bytes = s.as_bytes();
 
     for (i, &amp;item) in bytes.iter().enumerate() {
-        if item == 32 {
+        if byte == b' ' {
             return i;
         }
     }
@@ -111,15 +111,15 @@ nicer than calculating the index ourselves.</p>
 <p>Since it’s a tuple, we can use patterns, just like elsewhere in Rust. So we
 match against the tuple with i for the index and &amp;item for a single byte. Since
 we get a reference from <code>.iter().enumerate()</code>, we use <code>&amp;</code> in the pattern.</p>
-<pre><code class="language-rust,ignore">    if item == 32 {
+<pre><code class="language-rust,ignore">    if item == b' ' {
         return i;
     }
 }
 s.len()
 </code></pre>
-<p>We search for the value 32, which represents a space in UTF-8. If we find one,
-we return the position. Otherwise, we return the length of the string, using
-<code>s.len()</code>.</p>
+<p>We search for the byte that represents the space, using the byte literal
+syntax. If we find one, we return the position. Otherwise, we return the length
+of the string, using <code>s.len()</code>.</p>
 <p>This works, but there’s a problem. We’re returning a <code>usize</code> on its own, but
 it’s only a meaningful number in the context of the <code>&amp;String</code>. In other
 words, because it’s a separate value from the <code>String</code>, there’s no guarantee
@@ -128,7 +128,7 @@ that it will still be valid in the future. Consider this:</p>
 #     let bytes = s.as_bytes();
 #
 #     for (i, &amp;item) in bytes.iter().enumerate() {
-#         if item == 32 {
+#         if byte == b' ' {
 #             return i;
 #         }
 #     }
@@ -203,7 +203,7 @@ let slice = &amp;s[..];
     let bytes = s.as_bytes();
 
     for (i, &amp;item) in bytes.iter().enumerate() {
-        if item == 32 {
+        if byte == b' ' {
             return &amp;s[0..i];
         }
     }
@@ -274,7 +274,7 @@ with no loss of functionality:</p>
 #     let bytes = s.as_bytes();
 #
 #     for (i, &amp;item) in bytes.iter().enumerate() {
-#         if item == 32 {
+#         if byte == b' ' {
 #             return &amp;s[0..i];
 #         }
 #     }

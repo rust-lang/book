@@ -1460,6 +1460,17 @@ is in Rust. It also means that <code>char</code>s are four bytes each. You can l
 about Unicode Scalar Values at
 <em>http://www.unicode.org/glossary/#unicode_scalar_value</em> and find a chart for
 all unicode code points at <em>http://www.unicode.org/charts/</em>.</p>
+<h4>The Byte Type</h4>
+<p>You can work with the bytes of data directly. Byte literals can be created from
+the ASCII characters using <code>b</code> and single quotes:</p>
+<pre><code class="language-rust">fn main() {
+    let byte = b' ';
+    println!(&quot;byte is {}&quot;, byte);
+}
+</code></pre>
+<p>This will print <code>byte is 97</code>. Similarly, byte string literals can be created
+using <code>b</code> and double quotes, like <code>b&quot;some byte string&quot;</code>. Note that since you are
+limited to ASCII characters, it's a best practice to use characters instead of bytes when you're working with natural language text.</p>
 <h3>Compound Types</h3>
 <p><em>Compound types</em> can group multiple values of other types into one type. Rust
 has two primitive compound types: tuples and arrays.</p>
@@ -2785,7 +2796,7 @@ the word, though. Let’s try that:</p>
     let bytes = s.as_bytes();
 
     for (i, &amp;item) in bytes.iter().enumerate() {
-        if item == 32 {
+        if byte == b' ' {
             return i;
         }
     }
@@ -2810,15 +2821,15 @@ nicer than calculating the index ourselves.</p>
 <p>Since it’s a tuple, we can use patterns, just like elsewhere in Rust. So we
 match against the tuple with i for the index and &amp;item for a single byte. Since
 we get a reference from <code>.iter().enumerate()</code>, we use <code>&amp;</code> in the pattern.</p>
-<pre><code class="language-rust,ignore">    if item == 32 {
+<pre><code class="language-rust,ignore">    if item == b' ' {
         return i;
     }
 }
 s.len()
 </code></pre>
-<p>We search for the value 32, which represents a space in UTF-8. If we find one,
-we return the position. Otherwise, we return the length of the string, using
-<code>s.len()</code>.</p>
+<p>We search for the byte that represents the space, using the byte literal
+syntax. If we find one, we return the position. Otherwise, we return the length
+of the string, using <code>s.len()</code>.</p>
 <p>This works, but there’s a problem. We’re returning a <code>usize</code> on its own, but
 it’s only a meaningful number in the context of the <code>&amp;String</code>. In other
 words, because it’s a separate value from the <code>String</code>, there’s no guarantee
@@ -2827,7 +2838,7 @@ that it will still be valid in the future. Consider this:</p>
 #     let bytes = s.as_bytes();
 #
 #     for (i, &amp;item) in bytes.iter().enumerate() {
-#         if item == 32 {
+#         if byte == b' ' {
 #             return i;
 #         }
 #     }
@@ -2902,7 +2913,7 @@ let slice = &amp;s[..];
     let bytes = s.as_bytes();
 
     for (i, &amp;item) in bytes.iter().enumerate() {
-        if item == 32 {
+        if byte == b' ' {
             return &amp;s[0..i];
         }
     }
@@ -2973,7 +2984,7 @@ with no loss of functionality:</p>
 #     let bytes = s.as_bytes();
 #
 #     for (i, &amp;item) in bytes.iter().enumerate() {
-#         if item == 32 {
+#         if byte == b' ' {
 #             return &amp;s[0..i];
 #         }
 #     }
