@@ -67,7 +67,7 @@ If you don't and you're on Windows, check that Rust is in your `%PATH%` system
 variable. If it isn't, run the installer again, select "Change" on the "Change,
 repair, or remove installation" page and ensure "Add to PATH" is checked.
 
-If not, there are a number of places where you can get help. The easiest is
+If it still isn't working, there are a number of places where you can get help. The easiest is
 [the #rust IRC channel on irc.mozilla.org][irc], which you can access through
 [Mibbit][mibbit]. Click that link, and you'll be chatting with other Rustaceans
 (a silly nickname we call ourselves) who can help you out. Other great resources
