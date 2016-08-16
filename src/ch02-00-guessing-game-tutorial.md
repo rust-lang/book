@@ -172,7 +172,7 @@ the first:
 io::stdin()
 ```
 
-Remember how we `use`d `std::io` on the first line of the program? We’re now
+Remember how we said `use std::io;` on the first line of the program? We’re now
 calling an associated function on it. If we didn’t `use std::io`, we could
 have written this line as `std::io::stdin()`.
 
@@ -545,10 +545,10 @@ match guess.cmp(&secret_number) {
 }
 ```
 
-The `cmp()` method can be called on anything that can be compared, and it
-takes a reference to the thing you want to compare it to. It returns the
-`Ordering` type we `use`d earlier. We use a [`match`][match] statement to
-determine exactly what kind of `Ordering` it is. `Ordering` is an
+The `cmp()` method can be called on anything that can be compared, and it takes
+a reference to the thing you want to compare it to. It returns the `Ordering`
+type we imported with the `use` statement earlier. We use a [`match`][match]
+statement to determine exactly what kind of `Ordering` it is. `Ordering` is an
 [`enum`][enum], short for ‘enumeration’, which looks like this:
 
 ```rust
