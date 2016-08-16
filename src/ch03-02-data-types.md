@@ -167,7 +167,7 @@ the ASCII characters using `b` and single quotes:
 
 ```rust
 fn main() {
-    let byte = b' ';
+    let byte = b'a';
     println!("byte is {}", byte);
 }
 ```
