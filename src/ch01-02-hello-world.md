@@ -7,7 +7,8 @@ tradition.
 
 > Note: This book assumes basic familiarity with the command line. Rust itself
 > makes no specific demands about your editing, tooling, or where your code
-> lives, so if you prefer an IDE to the command line, feel free to use your favored IDE.
+> lives, so if you prefer an IDE to the command line, feel free to use your
+> favored IDE.
 
 ### Creating a Project File
 
@@ -185,8 +186,8 @@ $ cargo --version
 ```
 
 If you see a version number, great! If you see an error like `command not
-found`, then you should look at the documentation for your method of installation
-to determine how to install Cargo separately.
+found`, then you should look at the documentation for your method of
+installation to determine how to install Cargo separately.
 
 ### Creating a Project with Cargo
 
@@ -207,9 +208,9 @@ $ cd hello_cargo
 
 We passed the `--bin` argument to `cargo new` because our goal is to make an
 executable application, as opposed to a library. Executables are often called
-*binaries* (as in `/usr/bin`, if you’re on a Unix system). We've given `hello_cargo` as the
-name for our project, and Cargo creates its files in a directory
-of the same name that we can then go into.
+*binaries* (as in `/usr/bin`, if you’re on a Unix system). We've given
+`hello_cargo` as the name for our project, and Cargo creates its files in a
+directory of the same name that we can then go into.
 
 If we list the files in the `hello_cargo` directory, we can see that Cargo has
 generated two files and one directory for us: a `Cargo.toml` and a `src`
@@ -292,7 +293,8 @@ $ cargo build
    Compiling hello_cargo v0.1.0 (file:///projects/hello_cargo)
 ```
 
-This should have created an executable file in `target/debug/hello_cargo` (or `target/debug/hello_cargo.exe` on Windows), which you can run with this command:
+This should have created an executable file in `target/debug/hello_cargo` (or
+`target/debug/hello_cargo.exe` on Windows), which you can run with this command:
 
 ```bash
 $ ./target/debug/hello_cargo # or ./target/debug/hello_cargo.exe on Windows
@@ -327,10 +329,11 @@ $ cargo run
 Hello, world!
 ```
 
-Notice that this time, we didn't see the output telling us that Cargo was compiling
-`hello_cargo`. Cargo figured out that the files haven’t changed, so it just ran
-the binary. If you had modified your source code, Cargo would have rebuilt the
-project before running it, and you would have seen something like this:
+Notice that this time, we didn't see the output telling us that Cargo was
+compiling `hello_cargo`. Cargo figured out that the files haven’t changed, so
+it just ran the binary. If you had modified your source code, Cargo would have
+rebuilt the project before running it, and you would have seen something like
+this:
 
 ```bash
 $ cargo run
@@ -341,8 +344,10 @@ Hello, world!
 
 So a few more differences we've now seen:
 
-3. Instead of using `rustc`, build a project using `cargo build` (or build and run it in one step with `cargo run`)
-4. Instead of the result of the build being put in the same directory as our code, Cargo will put it in the `target/debug` directory.
+3. Instead of using `rustc`, build a project using `cargo build` (or build and
+  run it in one step with `cargo run`)
+4. Instead of the result of the build being put in the same directory as our
+  code, Cargo will put it in the `target/debug` directory.
 
 ### Building for Release
 

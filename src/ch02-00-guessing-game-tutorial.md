@@ -45,8 +45,8 @@ authors = ["Your Name <you@example.com>"]
 If the author information that Cargo got from your environment is not correct,
 go ahead and fix that in the file and save it again.
 
-And as we saw in the last chapter, `cargo new` generates a "Hello, world!" program for
-us. Check out `src/main.rs`:
+And as we saw in the last chapter, `cargo new` generates a "Hello, world!"
+program for us. Check out `src/main.rs`:
 
 Filename: src/main.rs
 
@@ -56,7 +56,8 @@ fn main() {
 }
 ```
 
-Let’s try compiling what Cargo gave us and running it in the same step, using the `cargo run` command:
+Let’s try compiling what Cargo gave us and running it in the same step, using
+the `cargo run` command:
 
 ```bash
 $ cargo run
@@ -154,8 +155,8 @@ This will create a new binding named `foo`, and bind it to the value `bar`. In
 many languages, this is called a *variable*, but Rust’s variable bindings have
 a few differences.
 
-For example, they’re immutable by default. To make our binding mutable, our example
-uses `mut` before the binding name.
+For example, they’re immutable by default. To make our binding mutable, our
+example uses `mut` before the binding name.
 
 ```rust
 let foo = 5; // immutable.
@@ -308,10 +309,10 @@ brace:
 ```
 
 This prints out the string we saved our input in. The `{}`s are a placeholder:
-think of `{}` as little crab pincers, holding a value in place.
-You can print more than one value this way: the first `{}`
-holds the first value listed after the format string, the second set holds the second
-value, and so on. Printing out multiple values in one call to `println!()` would then look like this:
+think of `{}` as little crab pincers, holding a value in place. You can print
+more than one value this way: the first `{}` holds the first value listed after
+the format string, the second set holds the second value, and so on. Printing
+out multiple values in one call to `println!()` would then look like this:
 
 ```rust
 let x = 5;
@@ -324,7 +325,8 @@ Which would print out "x = 5 and y = 10".
 
 ### Testing the First Part
 
-Back to our guessing game, let's test what we have so far. We can run it with `cargo run`:
+Back to our guessing game, let's test what we have so far. We can run it with
+`cargo run`:
 
 ```bash
 $ cargo run
@@ -392,8 +394,8 @@ $ cargo build
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
 ```
 
-You may see different version numbers (but they will all be compatible with your code, thanks to semver!)
-and the lines may be in a different order.
+You may see different version numbers (but they will all be compatible with
+your code, thanks to semver!) and the lines may be in a different order.
 
 Lots of new output! Now that we have an external dependency, Cargo fetches the
 latest versions of everything from the *registry*, which is a copy of data from
@@ -403,8 +405,8 @@ post their open source Rust projects for others to use.
 [cratesio]: https://crates.io
 
 After updating the registry, Cargo checks our `[dependencies]` and downloads
-any we don’t have yet. In this case, while we only listed
-`rand` as a dependency, we’ve also grabbed a copy of `libc`, because `rand` depends on
+any we don’t have yet. In this case, while we only listed `rand` as a
+dependency, we’ve also grabbed a copy of `libc`, because `rand` depends on
 `libc` to work. After downloading them, Rust compiles them and then compiles
 our project.
 
@@ -454,7 +456,8 @@ When we _do_ want to update a crate, Cargo has another command,
 - If that works, write those versions out to the lock file.
 
 But by default, Cargo will only look for versions larger than `0.3.0` and
-smaller than `0.4.0`. If the `rand` crate has released two new versions, `0.3.15` and `0.4.0`, this is what we would see if we ran `cargo update`:
+smaller than `0.4.0`. If the `rand` crate has released two new versions,
+`0.3.15` and `0.4.0`, this is what we would see if we ran `cargo update`:
 
 ```bash
 $ cargo update
@@ -490,7 +493,8 @@ number of sub-packages.
 
 ### Generating a Random Number
 
-Let’s get on to actually _using_ `rand`. Our next step is to update our `main.rs` code as follows:
+Let’s get on to actually _using_ `rand`. Our next step is to update our
+`main.rs` code as follows:
 
 Filename: src/main.rs
 
@@ -684,11 +688,11 @@ Whew! This is a big error. The core of the error says that we have *mismatched
 types*. Rust has a strong, static type system. However, it also has type
 inference. When we wrote `let guess = String::new()`, Rust was able to infer
 that `guess` should be a `String` and didn’t make us write the type out. Our
-`secret_number` on the other hand is a number type. There are a few number types which
-can have a value between one and a hundred: `i32`, a thirty-two-bit number; or
-`u32`, an unsigned thirty-two-bit number; `i64`, a sixty-four-bit number; or
-others. Rust defaults to an `i32`, so that's the type of `secret_number`. The
-error is because Rust will not compare two different types.
+`secret_number` on the other hand is a number type. There are a few number
+types which can have a value between one and a hundred: `i32`, a thirty-two-bit
+number; or `u32`, an unsigned thirty-two-bit number; `i64`, a sixty-four-bit
+number; or others. Rust defaults to an `i32`, so that's the type of
+`secret_number`. The error is because Rust will not compare two different types.
 
 Ultimately, we want to convert the `String` we read as input
 into a real number type so that we can compare it to the guess numerically. We
@@ -947,7 +951,8 @@ let guess: u32 = match guess.trim().parse() {
 This is how you generally move from "crash on error" to "actually handle the
 error": by switching from an `expect()` statement to a `match` statement.
 Remember that `parse()` returns a `Result` type, and `Result` is an enum that
-has the variants `Ok` or `Err`. We're going to use a `match` statement here, like we did with the `Ordering` result of the `cmp()` method.
+has the variants `Ok` or `Err`. We're going to use a `match` statement here,
+like we did with the `Ordering` result of the `cmp()` method.
 
 If `parse()` is able to successfully turn the string into a number, it will
 return an `Ok` value that contains the resulting number. That `Ok` value will
