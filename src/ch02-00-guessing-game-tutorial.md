@@ -163,8 +163,8 @@ let foo = 5; // immutable.
 let mut bar = 5; // mutable
 ```
 
-*Note: The `//` syntax will start a comment that continues until the end of the
-line. Rust ignores everything in comments.*
+> Note: The `//` syntax will start a comment that continues until the end of the
+> line. Rust ignores everything in comments.
 
 So now we know that `let mut guess` will introduce a mutable binding named
 `guess`, but we have to look at the other side of the `=` for the value it’s
