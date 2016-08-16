@@ -531,7 +531,7 @@ a new value of some kind.</p>
 the first:</p>
 <pre><code class="language-rust,ignore">io::stdin()
 </code></pre>
-<p>Remember how we <code>use</code>d <code>std::io</code> on the first line of the program? We’re now
+<p>Remember how we said <code>use std::io;</code> on the first line of the program? We’re now
 calling an associated function on it. If we didn’t <code>use std::io</code>, we could
 have written this line as <code>std::io::stdin()</code>.</p>
 <p>This particular function returns a handle to the standard input for your
@@ -809,10 +809,10 @@ use that type:</p>
     Ordering::Equal   =&gt; println!(&quot;You win!&quot;),
 }
 </code></pre>
-<p>The <code>cmp()</code> method can be called on anything that can be compared, and it
-takes a reference to the thing you want to compare it to. It returns the
-<code>Ordering</code> type we <code>use</code>d earlier. We use a <a href="match.html"><code>match</code></a> statement to
-determine exactly what kind of <code>Ordering</code> it is. <code>Ordering</code> is an
+<p>The <code>cmp()</code> method can be called on anything that can be compared, and it takes
+a reference to the thing you want to compare it to. It returns the <code>Ordering</code>
+type we imported with the <code>use</code> statement earlier. We use a <a href="match.html"><code>match</code></a>
+statement to determine exactly what kind of <code>Ordering</code> it is. <code>Ordering</code> is an
 <a href="enums.html"><code>enum</code></a>, short for ‘enumeration’, which looks like this:</p>
 <pre><code class="language-rust">enum Foo {
     Bar,
