@@ -110,7 +110,7 @@ functonality we need to import the `io` (input/output) library from the
 standard library (which is known as `std`).
 
 By default, Rust only imports a few things into every program in [the
-*prelude*](prelude). If it’s not in the prelude, you’ll have to import it into
+*prelude*][prelude]. If it’s not in the prelude, you’ll have to import it into
 your program explicitly with a `use` statement. Using the `std::io` library
 gets you a number of useful `io`-related things, including the functionality to
 accept user input.
@@ -256,7 +256,7 @@ sub-libraries, like `io::Result`.
 [ioresult]: ../std/io/type.Result.html
 [result]: ../std/result/enum.Result.html
 
-The `Result` types are [enum]s, which is short for *enumeration*. An
+The `Result` types are [enums], which is short for *enumeration*. An
 enumeration is a type that can have a fixed set of values, which are called the
 `enum`'s *variants*. We will be covering enums in more detail in Chapter XX.
 
@@ -265,7 +265,7 @@ successful, and inside the `Ok` variant is the successfully generated value.
 `Err` means the operation failed, and the `Err` contains information about how
 or why the operation failed.
 
-[enum]: enums.html
+[enums]: ch06-00-enums.html
 
 The purpose of these `Result` types is to encode error handling information.
 Values of the `Result` type, like any type, have methods defined on them. In
