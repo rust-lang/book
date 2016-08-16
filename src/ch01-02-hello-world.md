@@ -8,7 +8,7 @@ tradition.
 > Note: This book assumes basic familiarity with the command line. Rust itself
 > makes no specific demands about your editing, tooling, or where your code
 > lives, so if you prefer an IDE to the command line, feel free to use your
-> favored IDE.
+> favorite IDE.
 
 ### Creating a Project File
 

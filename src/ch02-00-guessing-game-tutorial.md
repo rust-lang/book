@@ -247,8 +247,8 @@ calls. Now let's see what this line does.
 
 ### Handling Potential Failure with the `Result` Type
 
-We mentioned that `read_line()` puts what the user types into the `&mut
-String` we pass it, but it also returns a value: in this case, an
+We mentioned that `read_line()` puts what the user types into the string we
+pass it, but it also returns a value: in this case, an
 [`io::Result`][ioresult]. Rust has a number of types named `Result` in its
 standard library: a generic [`Result`][result], and then specific versions for
 sub-libraries, like `io::Result`.
@@ -305,7 +305,6 @@ brace:
 
 ```rust,ignore
     println!("You guessed: {}", guess);
-}
 ```
 
 This prints out the string we saved our input in. The `{}`s are a placeholder:
@@ -744,9 +743,9 @@ let guess: u32 = guess.trim().parse()
 We create a variable binding `guess`. But wait a minute, don't we already have
 a variable binding named `guess`? We do, but Rust allows us to *shadow* the
 previous value of `guess` with a new one. This is often used in this exact
-situation, where we want to convert a string to a numerical type. Shadowing
-lets us re-use the `guess` variable name rather than forcing us to come up with
-two unique bindings, like `guess_str` and `guess` or something.
+situation, where we want to convert a value from one type into another type.
+Shadowing lets us re-use the `guess` variable name rather than forcing us to
+come up with two unique bindings, like `guess_str` and `guess` or something.
 
 We bind `guess` to the expression `guess.trim().parse()`.
 
@@ -760,9 +759,9 @@ represents "newline", the return key. The `trim()` method gets rid of this,
 leaving our string with only the `5`.
 
 The [`parse()` method on strings][parse] parses a string into some kind of
-number. Since it can parse a variety of number types, we need to tell Rust the
-exact type of number we want with `let guess: u32`. The colon (`:`) after
-`guess` tells Rust we’re going to annotate its type. Rust has a few
+number. Since this method can parse a variety of number types, we need to tell
+Rust the exact type of number we want with `let guess: u32`. The colon (`:`)
+after `guess` tells Rust we’re going to annotate its type. Rust has a few
 built-in number types, but we’ve chosen `u32`, an unsigned, thirty-two bit
 integer. It’s a good default choice for a small positive number. You'll see the
 other number types in Chapter XX.
@@ -800,7 +799,7 @@ behavior with different kinds of input: guess the number correctly, guess a
 number that is too high, and guess a number that is too low.
 
 Now we’ve got most of the game working, but we can only make one guess. Let’s
-change that by adding loops!
+change that by adding a loop!
 
 ## Allowing Multiple Guesses with Looping
 
