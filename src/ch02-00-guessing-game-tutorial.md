@@ -583,8 +583,8 @@ Please input your guess.
 You guessed: 5
 ```
 
-You should get different random numbers, and they should all be between 1 and
-100. Great job!
+You should get different random numbers, and they should all be numbers between
+1 and 100. Great job!
 
 ## Comparing Our Guesses
 
@@ -658,8 +658,8 @@ are powerful features in Rust that will be covered in detail in Chapter XX and
 Chapter XX, respectively.
 
 Let's walk through an example of what would happen with our `match`. Say that
-the user has guessed 50, and the randomly-generated secret number this time is
-38. So when we compare 50 to 38, the `cmp()` method will return
+the user has guessed 50, and the randomly-generated secret number this time
+is 38. So when we compare 50 to 38, the `cmp()` method will return
 `Ordering::Greater`, since 50 is greater than 38. `Ordering::Greater` is the
 value that the `match` statement gets. It looks at the first arm's pattern,
 `Ordering::Less`, and says nope, the value we have (`Ordering::Greater`) does
