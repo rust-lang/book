@@ -11,12 +11,10 @@ use std::collections::BTreeMap;
 
 use regex::Regex;
 
-
 static PATTERNS: &'static [(&'static str, &'static str)] = &[
     (r"ch(\d\d)-\d\d-.*\.md", "chapter$1.md"),
     (r"appendix-(\d\d).*\.md", "appendix.md"),
 ];
-
 
 lazy_static! {
     static ref MATCHERS: Vec<(Regex, &'static str)> = {
@@ -25,7 +23,6 @@ lazy_static! {
             .collect()
     };
 }
-
 
 fn main() {
     let args: Vec<String> = env::args().collect();
@@ -45,8 +42,6 @@ fn main() {
         concat_files(source_paths, target_path).unwrap();
     }
 }
-
-
 
 fn match_files(source_dir: &Path, target_dir: &Path) -> Vec<(PathBuf, PathBuf)> {
     read_dir(source_dir)
@@ -69,7 +64,6 @@ fn match_files(source_dir: &Path, target_dir: &Path) -> Vec<(PathBuf, PathBuf)> 
         .collect()
 }
 
-
 fn group_by_target(matched_files: Vec<(PathBuf, PathBuf)>) -> BTreeMap<PathBuf, Vec<PathBuf>> {
     let mut grouped: BTreeMap<PathBuf, Vec<PathBuf>> = BTreeMap::new();
     for (source, target) in matched_files {
@@ -82,7 +76,6 @@ fn group_by_target(matched_files: Vec<(PathBuf, PathBuf)>) -> BTreeMap<PathBuf, 
     }
     grouped
 }
-
 
 fn concat_files(source_paths: Vec<PathBuf>, target_path: PathBuf) -> io::Result<()> {
     println!("Concatenating into {}:", target_path.to_string_lossy());
@@ -103,7 +96,6 @@ fn concat_files(source_paths: Vec<PathBuf>, target_path: PathBuf) -> io::Result<
     }
     Ok(())
 }
-
 
 fn ensure_dir_exists(dir_string: &str) -> io::Result<&Path> {
     let path = Path::new(dir_string);
