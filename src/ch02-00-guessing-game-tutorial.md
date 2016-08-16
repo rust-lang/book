@@ -172,7 +172,7 @@ the first:
 io::stdin()
 ```
 
-Remember how we `use`d `std::io` on the first line of the program? We’re now
+Remember how we used `std::io` on the first line of the program? We’re now
 calling an associated function on it. If we didn’t `use std::io`, we could
 have written this line as `std::io::stdin()`.
 
