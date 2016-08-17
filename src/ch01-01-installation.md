@@ -29,21 +29,23 @@ Rust is installed now. Great!
 
 ### Installing on Windows
 
-If you're on Windows, please download the appropriate [installer][install-page].
+If you're on Windows, please go to [rustup.rs](https://rustup.rs/) and follow
+the instructions to download rustup-init.exe. Run that and follow the rest of
+the instructions.
 
-[install-page]: https://www.rust-lang.org/install.html
+The rest of the Windows-specific commands in the book will assume that you are
+using `cmd` as your shell. If you use a different shell, you may be able to run
+the same commands that Linux and Mac users do. If neither work, consult the
+documentation for the shell you are using.
 
 ### Uninstalling
 
-Uninstalling Rust is as easy as installing it. On Linux or Mac, just run
+Uninstalling Rust is as easy as installing it. From your shell, run
 the uninstall script:
 
 ```bash
 $ rustup self uninstall
 ```
-
-If you used the Windows installer, you can re-run the `.msi` and it will give
-you an uninstall option.
 
 ### Troubleshooting
 
@@ -64,12 +66,11 @@ If you see this, Rust has been installed successfully!
 Congrats!
 
 If you don't and you're on Windows, check that Rust is in your `%PATH%` system
-variable. If it isn't, run the installer again, select "Change" on the "Change,
-repair, or remove installation" page and ensure "Add to PATH" is checked.
+variable.
 
 If it still isn't working, there are a number of places where you can get help.
 The easiest is [the #rust IRC channel on irc.mozilla.org][irc], which you can
-access through [Mibbit][mibbit]. Click that link, and you'll be chatting with
+access through [Mibbit][mibbit]. Go to that address, and you'll be chatting with
 other Rustaceans (a silly nickname we call ourselves) who can help you out.
 Other great resources include [the user’s forum][users] and [Stack
 Overflow][stackoverflow].
@@ -82,6 +83,5 @@ Overflow][stackoverflow].
 ### Local documentation
 
 The installer also includes a copy of the documentation locally, so you can
-read it offline. On Linux or Mac, run `rustup doc` to open the local
-documentation in your browser. On Windows, the documentation is in a
-`share/doc` directory inside the directory where Rust was installed.
+read it offline. Run `rustup doc` to open the local documentation in your
+browser.

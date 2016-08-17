@@ -21,7 +21,6 @@ Let’s set up a new project. Go to your projects directory from the previous
 chapter, and create a new project using Cargo, like so:
 
 ```bash
-$ cd ~/projects
 $ cargo new guessing_game --bin
 $ cd guessing_game
 ```
