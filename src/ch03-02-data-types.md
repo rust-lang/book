@@ -174,7 +174,8 @@ fn main() {
 
 This will print `byte is 97`. Similarly, byte string literals can be created
 using `b` and double quotes, like `b"some byte string"`. Note that since you are
-limited to ASCII characters, it's a best practice to use characters instead of bytes when you're working with natural language text.
+limited to ASCII characters, it's a best practice to use characters instead of
+bytes when you're working with natural language text.
 
 ### Compound Types
 
