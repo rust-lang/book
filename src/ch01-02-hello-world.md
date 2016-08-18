@@ -247,9 +247,10 @@ from your environment. If it’s not correct, go ahead and fix that and save the
 file.
 
 The last line, `[dependencies]`, is the start of a section for you to list any
-crates that your project will depend on so that Cargo knows to download and
-compile those too. We won't need any other crates for this project, but we will
-in the guessing game tutorial in the next chapter.
+*crates* (which is what we call packages of Rust code) that your project will
+depend on so that Cargo knows to download and compile those too. We won't need
+any other crates for this project, but we will in the guessing game tutorial in
+the next chapter.
 
 Now let's look at `src/main.rs`:
 
