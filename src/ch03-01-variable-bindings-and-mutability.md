@@ -17,7 +17,7 @@ $ cargo new --bin bindings
 $ cd bindings
 ```
 
-Then open *src/main.rs* and replace its code with the following:
+Then open `src/main.rs` and replace its code with the following:
 
 ```rust,ignore
 fn main() {
