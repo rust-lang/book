@@ -82,6 +82,7 @@
     - [Cargo]()
     - [Crates.io]()
     - [Documentation](chYY-YY-documentation.md)
+    - [Workspaces and Multiple Related Crates](chYY-YY-workspaces.md)
 
 - [Advanced Type System Features]()
     - [Associated Types]()
