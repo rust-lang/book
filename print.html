@@ -1470,7 +1470,8 @@ the ASCII characters using <code>b</code> and single quotes:</p>
 </code></pre>
 <p>This will print <code>byte is 97</code>. Similarly, byte string literals can be created
 using <code>b</code> and double quotes, like <code>b&quot;some byte string&quot;</code>. Note that since you are
-limited to ASCII characters, it's a best practice to use characters instead of bytes when you're working with natural language text.</p>
+limited to ASCII characters, it's a best practice to use characters instead of
+bytes when you're working with natural language text.</p>
 <h3>Compound Types</h3>
 <p><em>Compound types</em> can group multiple values of other types into one type. Rust
 has two primitive compound types: tuples and arrays.</p>
@@ -2100,7 +2101,7 @@ another message, then exits:</p>
 <p>This gets rid of a lot of nesting that would be necessary if we used <code>loop</code>,
 <code>if</code>, <code>else</code>, and <code>break</code>, and it's more clear. While a condition holds, run
 this code; otherwise, exit the loop.</p>
-<h4>Looping Though a Collection with <code>for</code></h4>
+<h4>Looping Through a Collection with <code>for</code></h4>
 <p>We could use this <code>while</code> construct to loop over the elements of a collection,
 like an array. For example:</p>
 <pre><code class="language-rust">fn main() {
@@ -2378,8 +2379,9 @@ copying can be assumed to be inexpensive.</p>
 <h3>Clone</h3>
 <p>But what if we <em>do</em> want to deeply copy the <code>String</code>’s data and not just the
 <code>String</code> itself? There’s a common method for that: <code>clone()</code>. We will discuss
-methods in the section on <a href="ch05-01-structs.html"><code>structs</code></a>, but they’re a common enough feature
-in many programming languages that you have probably seen them before.</p>
+methods in the section on [<code>structs</code> in Chapter XX], but they’re a common
+enough feature in many programming languages that you have probably seen them
+before.</p>
 <p>Here’s an example of the <code>clone()</code> method in action:</p>
 <pre><code class="language-rust">let s1 = String::from(&quot;hello&quot;);
 let s2 = s1.clone();
