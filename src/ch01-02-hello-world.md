@@ -166,7 +166,7 @@ Cargo is Rust’s build system and package manager, and Rustaceans use Cargo to
 manage their Rust projects because it makes a lot of tasks easier. For example,
 Cargo takes care of building your code, downloading the libraries your code
 depends on, and building those libraries. We call libraries your code needs
-‘dependencies’ since your code depends on them.
+*dependencies* since your code depends on them.
 
 The simplest Rust programs, like the one we've written so far, don’t have any
 dependencies, so right now, you'd only be using the part of Cargo that can take

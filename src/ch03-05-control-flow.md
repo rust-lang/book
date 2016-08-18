@@ -39,7 +39,7 @@ All `if` expressions start with `if`, which is followed by a condition. In this
 case, our condition is checking if our variable binding `number` has a value
 that is less than 5. The block of code we want to execute if the condition is
 true goes immediately after the condition, inside curly braces. These blocks
-are sometimes called ‘arms’. We can optionally also include an `else`
+are sometimes called *arms*. We can optionally also include an `else`
 statement, which we have chosen to do here. `else` gives the program a block of
 code to execute should `condition` evaluate to false.
 
@@ -211,7 +211,7 @@ single type. If we try to run this, we’ll get an error:
    Compiling branches v0.1.0 (file:///projects/branches)
 src/main.rs:4:18: 8:6 error: if and else have incompatible types:
  expected `_`,
-    found `&‘static str`
+    found `&'static str`
 (expected integral variable,
     found &-ptr) [E0308]
 src/main.rs:4     let number = if condition {

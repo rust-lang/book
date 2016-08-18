@@ -46,7 +46,7 @@ function return value is gone. Next, note that we pass `&s1` into
 `calculate_length()`, and in its definition, we take `&String` rather than
 `String`.
 
-These `&`s are called ‘references’, and they allow you to refer to some value
+These `&`s are called *references*, and they allow you to refer to some value
 without taking ownership of it. Here’s a diagram:
 
 DIAGRAM GOES HERE of a &String pointing at a String, with (ptr, len, capacity)
@@ -85,7 +85,7 @@ we don’t drop what a reference points to when the reference goes out of scope.
 This lets us write functions which take references as arguments instead of the
 values themselves, so that we won’t need to return them to give back ownership.
 
-There’s another word for what references do, and that’s ‘borrowing’. Just like
+There’s another word for what references do, and that’s *borrowing*. Just like
 with real life, if a person owns something, you can borrow it from them. When
 you’re done, you have to give it back.
 
@@ -248,7 +248,7 @@ error: aborting due to previous error
 ```
 
 This error message refers to a feature we haven’t learned about yet,
-‘lifetimes’. The message does contain the key to why this code is a problem,
+*lifetimes*. The message does contain the key to why this code is a problem,
 though:
 
 ```bash

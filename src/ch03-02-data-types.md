@@ -214,7 +214,7 @@ fn main() {
 
 In this program, we first create a tuple and bind it to the name `tup`. We then
 use a pattern with `let` to take `tup` and turn it into three separate
-bindings, `x`, `y`, and `z`. This is called ‘destructuring’, because it breaks
+bindings, `x`, `y`, and `z`. This is called *destructuring*, because it breaks
 the single tuple into three parts.
 
 Finally, we print the value of `y`, which is `6.4`.

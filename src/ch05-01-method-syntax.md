@@ -1,7 +1,7 @@
 ## Method Syntax
 
-In the last section on ownership, we made several references to ‘methods’.
-Methods look like this:
+In Chapter 4 when we discussed ownership, we made several references to
+*methods*. Methods look like this:
 
 ```rust
 let s1 = "hello";
@@ -12,8 +12,8 @@ let s2 = s1.clone();
 println!("{}", s1);
 ```
 
-The call to `clone()` is attached to `s1` with a dot. This is called ‘method
-syntax’, and it’s a way to call certain functions with a different style.
+The call to `clone()` is attached to `s1` with a dot. This is called *method
+syntax*, and it’s a way to call certain functions with a different style.
 
 Why have two ways to call functions? We’ll talk about some deeper reasons
 related to ownership in a moment, but one big reason is that methods look nicer
@@ -37,7 +37,7 @@ methods.
 ### Defining methods
 
 We can define methods with the `impl` keyword. `impl` is short for
-‘implementation’. Doing so looks like this:
+*implementation*. Doing so looks like this:
 
 ```rust
 #[derive(Debug,Copy,Clone)]
@@ -134,7 +134,7 @@ assert_eq!(8.200609733428363, p1.distance(&p2));
 When we defined `distance()`, we took both `self` and the other argument by
 reference. Yet, we needed a `&` for `p2` but not `p1`. What gives?
 
-This feature is called ‘automatic referencing’, and calling methods is one
+This feature is called *automatic referencing*, and calling methods is one
 of the few places in Rust that has behavior like this. Here’s how it works:
 when you call a method with `self.(`, Rust will automatically add in `&`s
 or `&mut`s to match the signature. In other words, these are the same:

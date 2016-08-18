@@ -1,6 +1,6 @@
 ## Ownership
 
-Rust’s central feature is called ‘ownership’. It is a feature that is
+Rust’s central feature is called *ownership*. It is a feature that is
 straightforward to explain, but has deep implications for the rest of the
 language.
 
@@ -48,8 +48,8 @@ at which it’s declared until the end of the current _scope_. That is:
 
 In other words, there are two important points in time here:
 
-- When `s` comes ‘into scope’, it is valid.
-- It remains so until it ‘goes out of scope’.
+- When `s` comes "into scope", it is valid.
+- It remains so until it "goes out of scope".
 
 At this point, things are similar to other programming languages. Now let’s
 build on top of this understanding by introducing the `String` type.
@@ -106,8 +106,8 @@ That first part is done by us: when we call `String::from()`, its
 implementation requests the memory it needs. This is pretty much universal in
 programming languages.
 
-The second case, however, is different. In languages with a garbage collector
-(‘GC’), the GC will keep track and clean up memory that isn't being used
+The second case, however, is different. In languages with a *garbage collector*
+(*GC*), the GC will keep track and clean up memory that isn't being used
 anymore, and we, as the programmer, don’t need to think about it. Without GC,
 it’s our responsibility to identify when memory is no longer being used and
 call code to explicitly return it, just as we did to request it. Doing this
@@ -249,12 +249,12 @@ alone will free the memory, and we’re done.
 
 This leads us to the Ownership Rules:
 
-> 1. Each value in Rust has a variable binding that’s called its ‘owner’.
+> 1. Each value in Rust has a variable binding that’s called its *owner*.
 > 2. There can only be one owner at a time.
 > 3. When the owner goes out of scope, the value will be `drop()`ped.
 
 Furthermore, there’s a design choice that’s implied by this: Rust will never
-automatically create ‘deep’ copies of your data. Therefore, any _automatic_
+automatically create "deep" copies of your data. Therefore, any _automatic_
 copying can be assumed to be inexpensive.
 
 ### Clone

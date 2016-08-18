@@ -33,7 +33,7 @@ authors = ["Your Name <you@example.com>"]
 If the authors information that Cargo got from your environment is not correct,
 go ahead and fix that.
 
-And as we saw in the last chapter, `cargo new` generates a ‘Hello, world!’ for
+And as we saw in the last chapter, `cargo new` generates a "Hello, world!" for
 us. Check out `src/main.rs`:
 
 ```rust
@@ -88,7 +88,7 @@ use std::io;
 
 We’ll need to take user input and then print the result as output. As such, we
 need the `io` library from the standard library. Rust only imports a few things
-by default into every program, [the ‘prelude’][prelude]. If it’s not in the
+by default into every program, [the *prelude*][prelude]. If it’s not in the
 prelude, you’ll have to `use` it directly. Using the `std::io` library gets
 you a number of useful `io`-related things, so that's what we've done here.
 
@@ -119,14 +119,14 @@ let mut guess = String::new();
 
 Now we’re getting interesting! There’s a lot going on in this little line.
 The first thing to notice is that this is a let statement, which is
-used to create what are called ‘variable bindings’. Here's an example:
+used to create what are called *variable bindings*. Here's an example:
 
 ```rust,ignore
 let foo = bar;
 ```
 
 This will create a new binding named `foo`, and bind it to the value `bar`. In
-many languages, this is called a ‘variable’, but Rust’s variable bindings have
+many languages, this is called a *variable*, but Rust’s variable bindings have
 a few tricks up their sleeves.
 
 For example, they’re immutable by default. That’s why our example
@@ -149,10 +149,10 @@ bound to: `String::new()`.
 
 [string]: ../std/string/struct.String.html
 
-The `::new()` syntax uses `::` because this is an ‘associated function’ of
+The `::new()` syntax uses `::` because this is an *associated function* of
 a particular type. That is to say, it’s associated with `String` itself,
 rather than a particular instance of a `String`. Some languages call this a
-‘static method’.
+*static method*.
 
 This function is named `new()`, because it creates a new, empty `String`.
 You’ll find a `new()` function on many types, as it’s a common name for making
@@ -194,7 +194,7 @@ passing one argument to `read_line()`: `&mut guess`.
 
 Remember how we bound `guess` above? We said it was mutable. However,
 `read_line` doesn’t take a `String` as an argument: it takes a `&mut String`.
-The `&` is the feature of Rust called a ‘reference’, which allows you to have
+The `&` is the feature of Rust called a *reference*, which allows you to have
 multiple ways to access one piece of data in order to reduce copying.
 References are a complex feature, as one of Rust’s major selling points is how
 safe and easy it is to use references. We don’t need to know a lot of those
@@ -308,9 +308,9 @@ print it back out.
 
 Next, we need to generate a secret number. Rust does not yet include random
 number functionality in its standard library. The Rust team does, however,
-provide a [`rand` crate][randcrate]. A ‘crate’ is a package of Rust code.
-We’ve been building a ‘binary crate’, which is an executable. `rand` is a
-‘library crate’, which contains code that’s intended to be used with other
+provide a [`rand` crate][randcrate]. A *crate* is a package of Rust code.
+We’ve been building a *binary crate*, which is an executable. `rand` is a
+*library crate*, which contains code that’s intended to be used with other
 programs.
 
 [randcrate]: https://crates.io/crates/rand
@@ -398,9 +398,9 @@ we’ll stay at `0.3.14` until we explicitly upgrade, and so will anyone who we
 share our code with, thanks to the lock file.
 
 What about when we _do_ want to use `v0.3.15`? Cargo has another command,
-`update`, which says ‘ignore the `Cargo.lock` file and figure out all the
+`update`, which says "ignore the `Cargo.lock` file and figure out all the
 latest versions that fit what we’ve specified in `Cargo.toml`. If that works,
-write those versions out to the lock file’. But by default, Cargo will only
+write those versions out to the lock file". But by default, Cargo will only
 look for versions larger than `0.3.0` and smaller than `0.4.0`. If we want to
 move to `0.4.x`, we’d have to update what is in the `Cargo.toml` file. When we
 do, the next time we `cargo build`, Cargo will update the index and re-evaluate
@@ -449,7 +449,7 @@ call anything in the `rand` crate by prefixing it with `rand::`.
 
 Next, we added another `use` line: `use rand::Rng`. We’re going to use a
 method in a moment, and it requires that `Rng` be in scope to work. The basic
-idea is this: methods are defined on something called ‘traits’, and for the
+idea is this: methods are defined on something called *traits*, and for the
 method to work, it needs the trait to be in scope. For more about the
 details, read the traits section in Chapter XX.
 
@@ -549,7 +549,7 @@ The `cmp()` method can be called on anything that can be compared, and it takes
 a reference to the thing you want to compare it to. It returns the `Ordering`
 type we imported with the `use` statement earlier. We use a [`match`][match]
 statement to determine exactly what kind of `Ordering` it is. `Ordering` is an
-[`enum`][enum], short for ‘enumeration’, which looks like this:
+[`enum`][enum], short for *enumeration*, which looks like this:
 
 ```rust
 enum Foo {
@@ -567,7 +567,7 @@ namespace for a particular `enum` variant.
 
 The [`Ordering`][ordering] `enum` has three possible variants: `Less`, `Equal`,
 and `Greater`. The `match` statement takes a value of a type and lets you
-create an ‘arm’ for each possible value. An arm is made up of a pattern and the
+create an *arm* for each possible value. An arm is made up of a pattern and the
 code that we should execute if the pattern matches the value of the type. Since
 we have three types of `Ordering`, we have three arms:
 
@@ -599,7 +599,7 @@ error: aborting due to previous error
 Could not compile `guessing_game`.
 ```
 
-Whew! This is a big error. The core of it is that we have ‘mismatched types’.
+Whew! This is a big error. The core of it is that we have *mismatched types*.
 Rust has a strong, static type system. However, it also has type inference.
 When we wrote `let guess = String::new()`, Rust was able to infer that `guess`
 should be a `String`, so it doesn’t make us write out the type. With our
@@ -656,7 +656,7 @@ let guess: u32 = guess.trim().parse()
 ```
 
 Wait a minute, didn't we already have a `guess`? We do, but Rust allows us
-to ‘shadow’ the previous `guess` with a new one. This is often used in this
+to *shadow* the previous `guess` with a new one. This is often used in this
 exact situation, where `guess` starts as a `String`, but we want to convert it
 to a `u32`. Shadowing lets us re-use the `guess` name rather than forcing us
 to come up with two unique names like `guess_str` and `guess` or something
@@ -671,8 +671,8 @@ guess.trim().parse()
 Here, `guess` refers to the old `guess`, the one that was a `String` with our
 input in it. The `trim()` method on `String`s will eliminate any white space at
 the beginning and end of our string. This is important, as we had to press the
-‘return’ key to satisfy `read_line()`. If we type `5` and hit return, `guess`
-looks like this: `5\n`. The `\n` represents ‘newline’, the enter key. `trim()`
+"return" key to satisfy `read_line()`. If we type `5` and hit return, `guess`
+looks like this: `5\n`. The `\n` represents "newline", the return key. `trim()`
 gets rid of this, leaving our string with only the `5`.
 
 The [`parse()` method on strings][parse] parses a string into some kind of
@@ -878,8 +878,8 @@ let guess: u32 = match guess.trim().parse() {
 };
 ```
 
-This is how you generally move from ‘crash on error’ to ‘actually handle the
-error’: by switching from `expect()` to a `match` statement. A `Result` is the
+This is how you generally move from "crash on error" to "actually handle the
+error": by switching from `expect()` to a `match` statement. A `Result` is the
 return type of `parse()`. `Result` is an `enum` like `Ordering`, but in this
 case, each variant has some data associated with it. `Ok` is a success, and
 `Err` is a failure. Each contains more information: in this case, the

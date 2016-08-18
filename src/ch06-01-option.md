@@ -5,7 +5,7 @@ feature that we talked a little bit about in the previous chapter: generics.
 
 Programming language design is often thought of as which features you include,
 but it's also about which features you leave out. Rust does not have a feature
-that is in many other languages: 'null'. In languages with this feature,
+that is in many other languages: *null*. In languages with this feature,
 variables can have two states: null or not-null.
 
 The inventor of this concept has this to say:
@@ -60,7 +60,7 @@ let absent_number: Option<i32> = None;
 Let's dig in. First, you'll notice that we used the `<T>` syntax when defining
 `Option<T>`: it's a generic enum. `Option<T>` has two variants: `Some`, which
 contains a `T`, and `None`, which has no data associated with it. In some
-sense, `None` means 'null', and `Some` means 'not null'. So why is this any
+sense, `None` means "null", and `Some` means "not null". So why is this any
 better than null?
 
 In short, because `Option<T>` and `T` are different types. That's a bit too

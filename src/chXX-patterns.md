@@ -67,13 +67,13 @@ figure out which style is better, but it’s mostly a judgement call.
 
 ## Type annotations
 
-Most of the time, Rust uses ‘type inference’, meaning that it attempts to infer
+Most of the time, Rust uses *type inference*, meaning that it attempts to infer
 the types of your bindings rather than you having to declare them explicitly
 even though Rust is a statically typed language. Occasionally, Rust won't have
 enough information to infer the type of your value, and you will need to add a
 type annotation in with the pattern.
 
-Here’s what a `let` statement with a ‘type annotation’ looks like:
+Here’s what a `let` statement with a *type annotation* looks like:
 
 ```rust
 fn main() {
