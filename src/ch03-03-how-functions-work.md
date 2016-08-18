@@ -43,7 +43,7 @@ $ cargo new --bin functions
 $ cd functions
 ```
 
-Place the `another_function()` example in a file named *src/main.rs* and run
+Place the `another_function()` example in a file named `src/main.rs` and run
 it. You should see the following output:
 
 ```bash

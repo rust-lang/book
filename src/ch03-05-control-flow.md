@@ -248,7 +248,7 @@ in.
 The `loop` keyword tells Rust to execute a block of code over and over again
 forever or until we explicitly tell it to stop.
 
-For an example, change the *src/main.rs* file in your *loops* directory to look
+For an example, change the `src/main.rs` file in your *loops* directory to look
 like this:
 
 ```rust,ignore
@@ -314,7 +314,7 @@ This gets rid of a lot of nesting that would be necessary if we used `loop`,
 `if`, `else`, and `break`, and it's more clear. While a condition holds, run
 this code; otherwise, exit the loop.
 
-#### Looping Though a Collection with `for`
+#### Looping Through a Collection with `for`
 
 We could use this `while` construct to loop over the elements of a collection,
 like an array. For example:
