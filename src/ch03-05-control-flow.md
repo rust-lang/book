@@ -248,7 +248,7 @@ in.
 The `loop` keyword tells Rust to execute a block of code over and over again
 forever or until we explicitly tell it to stop.
 
-For an example, change the *src/main.rs* file in your *loops* directory to look
+For an example, change the `src/main.rs` file in your *loops* directory to look
 like this:
 
 ```rust,ignore
