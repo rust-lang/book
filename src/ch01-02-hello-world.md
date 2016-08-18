@@ -237,8 +237,8 @@ configuration format.
 [TOML]: https://github.com/toml-lang/toml
 
 The first line, `[package]`, is a section heading that indicates that the
-following statements are configuring a package. As we add more information to
-this file, we’ll add other sections.
+following statements are configuring a package, also known as a crate. As 
+we add more information to this file, we’ll add other sections.
 
 The next three lines set the three bits of configuration that Cargo needs to
 see in order to know that it should compile your program: its name, what
