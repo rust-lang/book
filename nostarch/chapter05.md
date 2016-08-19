@@ -3,9 +3,10 @@
 A `struct`, short for "structure", gives us the ability to name and package
 together multiple related values that make up a meaningful group. If you come
 from an object-oriented language, a `struct` is like an object's data
-attributes. `struct` and `enum` (that we talked about in the last chapter) are
-the building blocks you can use in Rust to create new types in your program's
-domain in order to take full advantage of Rust's compile-time type checking.
+attributes. `struct` and `enum` (that we will talk about in the next chapter)
+are the building blocks you can use in Rust to create new types in your
+program's domain in order to take full advantage of Rust's compile-time type
+checking.
 
 Let’s write a program which calculates the distance between two points.
 We’ll start off with single variable bindings, and then refactor it to
