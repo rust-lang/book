@@ -11,6 +11,8 @@ words. (Rust also uses snake case for the names of variable bindings; we just
 haven't used any variable bindings with enough letters to need underscores
 yet). Here's a program containing an example function definition:
 
+Filename: src/main.rs
+
 ```rust
 fn main() {
     println!("Hello, world!");
@@ -63,6 +65,8 @@ message is printed.
 Functions can also take arguments. The following rewritten version of
 `another_function()` shows what arguments look like in Rust:
 
+Filename: src/main.rs
+
 ```rust
 fn main() {
     another_function(5);
@@ -94,6 +98,8 @@ the code in order to figure out what you mean.
 
 When you want a function to have multiple arguments, just separate them inside
 the function signature with commas, like this:
+
+Filename: src/main.rs
 
 ```rust
 fn main() {
@@ -144,6 +150,8 @@ evaluate to a resulting value. Let's look at some examples.
 `Let` bindings are statements. They instruct the program to create a binding
 name and assign a value to it. `let y = 6;` in this example is a statement:
 
+Filename: src/main.rs
+
 ```rust
 fn main() {
     let y = 6;
@@ -155,6 +163,8 @@ statement as well.
 
 Statements do not return values themselves. Therefore, you can’t assign a `let`
 binding to another binding, as this code tries to do:
+
+Filename: src/main.rs
 
 ```rust,ignore
 fn main() {
@@ -196,6 +206,8 @@ y = 6;`, `6` is an expression that evaluates to the value `6`. Calling a
 function is an expression. Calling a macro is an expression. The block that we
 use to create new scopes, `{}`, is an expression, for example:
 
+Filename: src/main.rs
+
 ```rust
 fn main() {
     let x = 5;
@@ -235,6 +247,8 @@ return values, but we do declare their type, after an arrow (`->`). In Rust,
 the "return value of the function” is synonymous with “the value of the final
 expression in the block of the body of a function.” Here's an example of a
 function that returns a value:
+
+Filename: src/main.rs
 
 ```rust
 fn five() -> i32 {
@@ -276,6 +290,8 @@ arguments and defines the type of the return value, but the body of the
 function is a lonely `5` with no semicolon because it is an expression whose
 value we want to return. Let's look at another example:
 
+Filename: src/main.rs
+
 ```rust
 fn main() {
     let x = plus_one(5);
@@ -291,6 +307,8 @@ fn plus_one(x: i32) -> i32 {
 Running this code will print `The value of x is: 6`. What happens if we put a
 semicolon at the end of the line containing `x + 1`, changing it from an
 expression to a statement?
+
+Filename: src/main.rs
 
 ```rust,ignore
 fn main() {

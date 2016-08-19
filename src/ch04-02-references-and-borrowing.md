@@ -3,6 +3,8 @@
 At the end of the last section, we had some example Rust that wasn’t very
 good. Here it is again:
 
+Filename: src/main.rs
+
 ```rust
 fn main() {
     let s1 = String::from("hello");
@@ -24,6 +26,8 @@ function so that we can still use it there, since it was moved when we called
 `calculate_length()`.
 
 There is a better way. It looks like this:
+
+Filename: src/main.rs
 
 ```rust
 fn main() {
@@ -92,6 +96,8 @@ you’re done, you have to give it back.
 Speaking of which, what if you try to modify something you borrow from me? Try
 this code out. Spoiler alert: it doesn’t work!
 
+Filename: src/main.rs
+
 ```rust,ignore
 fn main() {
     let s = String::from("hello");
@@ -121,6 +127,8 @@ allowed to modify something we have a reference to.
 
 We can fix this bug! Just a small tweak:
 
+Filename: src/main.rs
+
 ```rust
 fn main() {
     let mut s = String::from("hello");
@@ -138,6 +146,8 @@ reference with `&mut s` and accept a mutable reference with `some_string: &mut
 String`.
 
 Mutable references have one big restriction, though. This code fails:
+
+Filename: src/main.rs
 
 ```rust,ignore
 let mut s = String::from("hello");
@@ -218,6 +228,8 @@ have a reference to something, the compiler will ensure that it will not go
 out of scope before the reference does.
 
 Let’s try to create a dangling reference:
+
+Filename: src/main.rs
 
 ```rust,ignore
 fn main() {

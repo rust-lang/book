@@ -36,6 +36,8 @@ than `helloworld.rs`.
 
 Now open the `main.rs` file you just created, and type the following code:
 
+Filename: main.rs
+
 ```rust
 fn main() {
     println!("Hello, world!");
@@ -221,6 +223,8 @@ different version control system, or no version control system, by using the
 Open up `Cargo.toml` in your text editor of choice. It should look something
 like this:
 
+Filename: Cargo.toml
+
 ```toml
 [package]
 name = "hello_cargo"
@@ -253,6 +257,8 @@ any other crates for this project, but we will in the guessing game tutorial in
 the next chapter.
 
 Now let's look at `src/main.rs`:
+
+Filename: src/main.rs
 
 ```rust
 fn main() {
@@ -299,6 +305,8 @@ Bam! If all goes well, `Hello, world!` should print to the terminal once more.
 
 Running `cargo build` for the first time also causes Cargo to create a new file
 at the top level called `Cargo.lock`, which looks like this:
+
+Filename: Cargo.lock
 
 ```toml
 [root]

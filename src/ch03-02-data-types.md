@@ -78,6 +78,8 @@ your code if you suspect floating-point size is a problem in your case.
 
 Here's an example showing floating-point numbers in action:
 
+Filename: src/main.rs
+
 ```rust
 fn main() {
     let x = 2.0; // f64
@@ -94,6 +96,8 @@ Floating-point numbers are represented according to the IEEE-754 standard. The
 Rust supports the usual basic mathematic operations you’d expect for all of
 these number types: addition, subtraction, multiplication, division, and
 modulo. This code shows how you'd use each one in a `let` statement:
+
+Filename: src/main.rs
 
 ```rust
 fn main() {
@@ -123,6 +127,8 @@ As in most other programming languages, a boolean type in Rust has two possible
 values: `true` and `false`. The boolean type in Rust is specified with `bool`.
 For example:
 
+Filename: src/main.rs
+
 ```rust
 fn main() {
     let t = true;
@@ -140,6 +146,8 @@ section of this chapter.
 So far we’ve only worked with numbers, but Rust supports letters too. Rust’s
 `char` type is the language's most primitive alphabetic type, and this code
 shows one way to use it:
+
+Filename: src/main.rs
 
 ```rust
 fn main() {
@@ -164,6 +172,8 @@ all unicode code points at *http://www.unicode.org/charts/*.
 
 You can work with the bytes of data directly. Byte literals can be created from
 the ASCII characters using `b` and single quotes:
+
+Filename: src/main.rs
 
 ```rust
 fn main() {
@@ -191,6 +201,8 @@ types into one compound type.
 We create a tuple by writing a comma-separated list of values inside
 parentheses. Each position in the tuple has a distinct type, as in this example:
 
+Filename: src/main.rs
+
 ```rust
 fn main() {
     let tup: (i32, f64, u8) = (500, 6.4, 1);
@@ -201,6 +213,8 @@ Note that, unlike the examples of multiple bindings, here we bind the single
 name `tup` to the entire tuple, emphasizing the fact that a tuple is considered
 a single compound element. We could then use pattern matching to destructure
 this tuple value, like this:
+
+Filename: src/main.rs
 
 ```rust
 fn main() {
@@ -224,6 +238,8 @@ Finally, we print the value of `y`, which is `6.4`.
 In addition to destructuring through pattern matching, we can also access a
 tuple element directly by using a period (`.`) followed by the index of the
 value we want to access. For example:
+
+Filename: src/main.rs
 
 ```rust
 fn main() {
@@ -251,6 +267,8 @@ in Rust have a fixed length-- once declared, they cannot grow or shrink in size.
 In Rust, the values going into an array are written as a comma separated list
 inside square brackets:
 
+Filename: src/main.rs
+
 ```rust
 fn main() {
     let a = [1, 2, 3, 4, 5];
@@ -267,6 +285,8 @@ and we'll discuss them in more detail in chapter XX.
 
 An array is a single chunk of memory, allocated on the stack. We can access
 elements of an array using indexing, like this:
+
+Filename: src/main.rs
 
 ```rust
 fn main() {
@@ -288,6 +308,8 @@ values.
 
 What happens if you try to access an element of an array past the end of the
 array? Say we changed our program to:
+
+Filename: src/main.rs
 
 ```rust,ignore
 fn main() {

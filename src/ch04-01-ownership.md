@@ -327,6 +327,8 @@ but nothing that requires allocation or is some form of resource is `Copy`. Here
 
 Passing a value to a function has similar semantics as assigning it:
 
+Filename: src/main.rs
+
 ```rust
 fn main() {
     let s = String::from("hello");
@@ -350,6 +352,8 @@ fn makes_copy(some_integer: i32) {
 Passing a binding to a function will move or copy, just like assignment. Here’s
 the same example, but with some annotations showing where things go into and
 out of scope:
+
+Filename: src/main.rs
 
 ```rust
 fn main() {
@@ -383,6 +387,8 @@ and where the ownership rules prevent you from doing so.
 
 Returning values can also transfer ownership:
 
+Filename: src/main.rs
+
 ```rust
 fn main() {
     let s1 = gives_ownership();
@@ -405,6 +411,8 @@ fn takes_and_gives_back(a_string: String) -> String {
 ```
 
 With similiar annotations:
+
+Filename: src/main.rs
 
 ```rust
 fn main() {
@@ -445,6 +453,8 @@ a value but not take ownership? It’s quite annoying that anything we pass in
 also needs to be passed back if we want to use it again, in addition to any
 data resulting from the body of the function that we might want to return as
 well. It's _possible_ to return multiple values, using a tuple, like this:
+
+Filename: src/main.rs
 
 ```rust
 fn main() {

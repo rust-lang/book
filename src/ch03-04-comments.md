@@ -23,6 +23,8 @@ include `//` on each line, like this:
 
 Comments can also be placed at the end of lines of code:
 
+Filename: src/main.rs
+
 ```rust
 fn main() {
     let lucky_number = 7; // I’m feeling lucky today.
@@ -30,6 +32,8 @@ fn main() {
 ```
 
 But you’ll more often see them above, like so:
+
+Filename: src/main.rs
 
 ```rust
 fn main() {

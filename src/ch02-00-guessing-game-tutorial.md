@@ -21,6 +21,8 @@ we’re going to be making another binary like in Chapter 1.
 
 Take a look at the generated `Cargo.toml`:
 
+Filename: Cargo.toml
+
 ```toml
 [package]
 name = "guessing_game"
@@ -35,6 +37,8 @@ go ahead and fix that.
 
 And as we saw in the last chapter, `cargo new` generates a "Hello, world!" for
 us. Check out `src/main.rs`:
+
+Filename: src/main.rs
 
 ```rust
 fn main() {
@@ -62,6 +66,8 @@ file.
 
 Let’s get to it! The first thing we need to do for our guessing game is
 allow our player to input a guess. Put this in your `src/main.rs`:
+
+Filename: src/main.rs
 
 ```rust,ignore
 use std::io;
@@ -320,6 +326,8 @@ the code using `rand`, we need to modify our `Cargo.toml`. Open it up, and
 add this line at the bottom beneath the `[dependencies]` section header that
 Cargo created for you:
 
+Filename: Cargo.toml
+
 ```toml
 [dependencies]
 
@@ -417,6 +425,8 @@ number of sub-packages.
 
 Let’s get on to actually _using_ `rand`. Here’s our next step:
 
+Filename: src/main.rs
+
 ```rust,ignore
 extern crate rand;
 
@@ -501,6 +511,8 @@ You should get different random numbers, and they should all be between 1 and
 
 Now that we’ve got user input, let’s compare our guess to the secret number.
 Here’s part of our next step. It won't quite compile yet though:
+
+Filename: src/main.rs
 
 ```rust,ignore
 extern crate rand;
@@ -614,6 +626,8 @@ Ultimately, we want to convert the `String` we read as input
 into a real number type so that we can compare it to the guess numerically. We
 can do that with two more lines. Here’s our new program:
 
+Filename: src/main.rs
+
 ```rust,ignore
 extern crate rand;
 
@@ -715,6 +729,8 @@ change that by adding loops!
 
 The `loop` keyword gives us an infinite loop. Let’s add that in:
 
+Filename: src/main.rs
+
 ```rust,ignore
 extern crate rand;
 
@@ -783,6 +799,8 @@ error: Process didn't exit successfully: `target/debug/guess` (exit code: 101)
 Ha! `quit` actually quits. As does any other non-number input. Well, this is
 suboptimal to say the least. First, let’s actually quit when you win the game:
 
+Filename: src/main.rs
+
 ```rust,ignore
 extern crate rand;
 
@@ -827,6 +845,8 @@ win. Exiting the loop also means exiting the program, since the loop is the last
 thing in `main()`. We have another tweak to make: when someone inputs a
 non-number, we don’t want to quit, we want to ignore it. We can do that
 like this:
+
+Filename: src/main.rs
 
 ```rust,ignore
 extern crate rand;
@@ -918,6 +938,8 @@ Awesome! With one tiny last tweak, we can finish the guessing game. Can you
 think of what it is? That’s right, we don’t want to print out the secret
 number. It was good for testing, but it kind of ruins the game. Here’s our
 final source:
+
+Filename: src/main.rs
 
 ```rust,ignore
 extern crate rand;

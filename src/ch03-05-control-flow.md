@@ -23,6 +23,8 @@ $ cd branches
 Write this sample program using `if` and save it in the *branches* directory in
 `src/main.rs`:
 
+Filename: src/main.rs
+
 ```rust
 fn main() {
     let number = 3;
@@ -71,6 +73,8 @@ condition was false
 It’s also worth noting that `condition` here _must_ be a `bool`. To see what
 happens if the condition isn't a `bool`, try running this code:
 
+Filename: src/main.rs
+
 ```rust,ignore
 fn main() {
     let number = 3;
@@ -102,6 +106,8 @@ not automatically try to convert non-boolean types to a boolean here, unlike
 languages like Ruby or JavaScript. We must be explicit and always give `if` a
 `boolean` as its condition. If your intention is for the `if` code block to be run if a number is not equal to `0`, for example, we would change the `if` expression to read:
 
+Filename: src/main.rs
+
 ```rust
 fn main() {
     let number = 3;
@@ -118,6 +124,8 @@ Running this will print "number was something other than zero".
 
 We can have multiple coniditions by combining `if` and `else` in an `else if`
 expression. For example:
+
+Filename: src/main.rs
 
 ```rust
 fn main() {
@@ -159,6 +167,8 @@ The last detail you need to learn about `if` is that it’s an expression. That
 means that we can use it on the right hand side of a `let` binding, for
 instance:
 
+Filename: src/main.rs
+
 ```rust
 fn main() {
     let condition = true;
@@ -188,6 +198,8 @@ expression depends on which block of code executes. This means that the value
 that results from both arms of the `if` must be the same type; in the previous
 example, they were both `i32` integers. But what happens if the types are
 mismatched, as in the following example?
+
+Filename: src/main.rs
 
 ```rust,ignore
 fn main() {
@@ -251,6 +263,8 @@ forever or until we explicitly tell it to stop.
 For an example, change the `src/main.rs` file in your *loops* directory to look
 like this:
 
+Filename: src/main.rs
+
 ```rust,ignore
 fn main() {
     loop {
@@ -296,6 +310,8 @@ for it, called a `while` loop. Here's an example using `while`: this program
 loops three times, counting down each time. Finally, after the loop, it prints
 another message, then exits:
 
+Filename: src/main.rs
+
 ```rust
 fn main() {
     let mut number = 3;
@@ -318,6 +334,8 @@ this code; otherwise, exit the loop.
 
 We could use this `while` construct to loop over the elements of a collection,
 like an array. For example:
+
+Filename: src/main.rs
 
 ```rust
 fn main() {
@@ -359,6 +377,8 @@ loop.
 As a more efficient alternative, we can use a `for` loop and execute some code
 for each item in a collection. A `for` loop looks like this:
 
+Filename: src/main.rs
+
 ```rust
 fn main() {
     let a = [10, 20, 30, 40, 50];
@@ -392,6 +412,8 @@ is a type provided by the standard library that generates numbers starting from
 one number and ending before another number. Here's what the countdown would
 look like with a for loop, and using another method we haven't yet talked
 about, `.rev()`, to reverse the range:
+
+Filename: src/main.rs
 
 ```rust
 fn main() {

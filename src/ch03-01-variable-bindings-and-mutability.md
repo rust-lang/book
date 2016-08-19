@@ -19,6 +19,8 @@ $ cd bindings
 
 Then open `src/main.rs` and replace its code with the following:
 
+Filename: src/main.rs
+
 ```rust,ignore
 fn main() {
     let x = 5;
@@ -121,6 +123,8 @@ code will be changing this value.
 
 For example, change the program you just wrote to the following:
 
+Filename: src/main.rs
+
 ```rust
 fn main() {
     let mut x = 5;
@@ -156,6 +160,8 @@ that the second binding's value is what you will see when you use the variable
 after the second binding. This can be useful if you’d like to perform a few
 transformations on a value, but have the binding be immutable after those
 transformations have been completed. For example:
+
+Filename: src/main.rs
 
 ```rust
 fn main() {

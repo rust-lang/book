@@ -20,6 +20,8 @@ particularly humble form of pattern.
 
 Let’s try a more complex pattern. Change our example program to this:
 
+Filename: src/main.rs
+
 ```rust
 fn main() {
     let (x, y) = (5, 6);

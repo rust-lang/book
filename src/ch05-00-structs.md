@@ -22,6 +22,8 @@ $ cd points
 Here’s a short program which calculates the distance between two points. Put
 it into your `src/main.rs`:
 
+Filename: src/main.rs
+
 ```rust
 fn main() {
     let x1 = 0.0;
@@ -100,6 +102,8 @@ and `(x2, y2)` together.
 We’ve already discussed one way to do that: tuples. Here’s a version of our
 program which uses tuples:
 
+Filename: src/main.rs
+
 ```rust
 fn main() {
     let p1 = (0.0, 5.0);
@@ -173,6 +177,8 @@ let x = p1.x;
 Let’s convert our program to use our `Point` `struct`. Here’s what it looks
 like now:
 
+Filename: src/main.rs
+
 ```rust
 #[derive(Debug,Copy,Clone)]
 struct Point {
@@ -224,6 +230,8 @@ So far, we’ve been printing values using `{}` in a `println!` macro. If we try
 that with a struct, however, by default, we'll get an error. Say we have the
 following program:
 
+Filename: src/main.rs
+
 ```rust,ignore
 struct Point {
     x: f64,
@@ -269,6 +277,8 @@ implementation of `Debug` formatting to easily get this ability for types we've
 defined. To ask `println!` to use `Debug` formatting with our `Point`, we add
 the annotation to derive the trait and include `:?` in the print string, like
 this:
+
+Filename: src/main.rs
 
 ```rust
 #[derive(Debug)]

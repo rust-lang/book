@@ -20,6 +20,8 @@ ownership, so this is fine. But what should we return? We don’t really have a
 way to talk about _part_ of a string. We could return the index of the end of
 the word, though. Let’s try that:
 
+Filename: src/main.rs
+
 ```rust
 fn first_word(s: &String) -> usize {
     let bytes = s.as_bytes();
@@ -75,6 +77,8 @@ This works, but there’s a problem. We’re returning a `usize` on its own, but
 it’s only a meaningful number in the context of the `&String`. In other
 words, because it’s a separate value from the `String`, there’s no guarantee
 that it will still be valid in the future. Consider this:
+
+Filename: src/main.rs
 
 ```rust
 # fn first_word(s: &String) -> usize {
@@ -176,6 +180,8 @@ let slice = &s[..];
 
 With this in mind, let’s re-write `first_word()` to return a slice:
 
+Filename: src/main.rs
+
 ```rust
 fn first_word(s: &String) -> &str {
     let bytes = s.as_bytes();
@@ -204,6 +210,8 @@ We now have a straightforward API that’s much harder to mess up.
 
 But what about our error condition from before? Slices also fix that. Using
 the slice version of `first_word()` will throw an error:
+
+Filename: src/main.rs
 
 ```rust,ignore
 fn main() {
@@ -273,6 +281,8 @@ a string slice that’s the full length of a `String`, so we haven’t lost
 the ability to talk about full `String`s. And additionally, we can take
 string slices of string literals too, so this function is more useful, but
 with no loss of functionality:
+
+Filename: src/main.rs
 
 ```rust
 # fn first_word(s: &str) -> &str {
