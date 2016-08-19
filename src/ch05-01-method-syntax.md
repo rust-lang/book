@@ -47,12 +47,12 @@ struct Point {
 }
 
 impl Point {
-   fn distance(&self, other: &Point) -> f64 {
-       let x_squared = f64::powi(other.x - self.x, 2);
-       let y_squared = f64::powi(other.y - self.y, 2);
+    fn distance(&self, other: &Point) -> f64 {
+        let x_squared = f64::powi(other.x - self.x, 2);
+        let y_squared = f64::powi(other.y - self.y, 2);
 
-       f64::sqrt(x_squared + y_squared)
-   }
+        f64::sqrt(x_squared + y_squared)
+    }
 }
 
 let p1 = Point { x: 0.0, y: 0.0 };
