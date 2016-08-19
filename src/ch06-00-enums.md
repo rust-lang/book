@@ -140,7 +140,7 @@ that you already know, except without the `struct` keyword and they are grouped
 together under the `Message` type. These structs could hold the same data that
 these enum variants hold:
 
-```
+```rust
 struct QuitMessage; // unit struct
 struct MoveMessage {
     x: i32,
