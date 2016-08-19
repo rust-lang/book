@@ -78,9 +78,7 @@ type annotation in with the pattern.
 Here’s what a `let` statement with a *type annotation* looks like:
 
 ```rust
-fn main() {
-    let x: i32 = 5;
-}
+let x: i32 = 5;
 ```
 
 We can add a colon, followed by the type name. Here’s the structure of a `let`
@@ -94,9 +92,7 @@ Note that the colon and the `TYPE` go _after_ the `PATTERN`, not in the pattern
 itself. As an example, here’s our more complex pattern with two bindings:
 
 ```rust
-fn main() {
-    let (x, y): (i32, i32) = (5, 6);
-}
+let (x, y): (i32, i32) = (5, 6);
 ```
 
 Just like we match up the `VALUE` with the `PATTERN`, we match up the `TYPE`
@@ -283,14 +279,12 @@ match x {
 Ranges are usually used with integers or `char`s:
 
 ```rust
-fn main() {
-    let x = 'c';
+let x = 'c';
 
-    match x {
-        'a' ... 'j' => println!("early ASCII letter"),
-        'k' ... 'z' => println!("late ASCII letter"),
-        _ => println!("something else"),
-    }
+match x {
+    'a' ... 'j' => println!("early ASCII letter"),
+    'k' ... 'z' => println!("late ASCII letter"),
+    _ => println!("something else"),
 }
 ```
 
