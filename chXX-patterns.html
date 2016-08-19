@@ -111,12 +111,12 @@ to <code>y</code>. We could have used two <code>let</code> statements as well:</
 multiple bindings at once is nice. As we become more proficient in Rust, we’ll
 figure out which style is better, but it’s mostly a judgement call.</p>
 <h2>Type annotations</h2>
-<p>Most of the time, Rust uses ‘type inference’, meaning that it attempts to infer
+<p>Most of the time, Rust uses <em>type inference</em>, meaning that it attempts to infer
 the types of your bindings rather than you having to declare them explicitly
 even though Rust is a statically typed language. Occasionally, Rust won't have
 enough information to infer the type of your value, and you will need to add a
 type annotation in with the pattern.</p>
-<p>Here’s what a <code>let</code> statement with a ‘type annotation’ looks like:</p>
+<p>Here’s what a <code>let</code> statement with a <em>type annotation</em> looks like:</p>
 <pre><code class="language-rust">fn main() {
     let x: i32 = 5;
 }

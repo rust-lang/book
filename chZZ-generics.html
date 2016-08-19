@@ -101,8 +101,8 @@ struct Point&lt;T&gt; {
 <p>Our previous definition said, &quot;We are defining a struct named Point.&quot; This
 definition says something slightly different: &quot;We are defining a struct named
 Point with one type parameter <code>T</code>.&quot;</p>
-<p>Let's talk about this term 'type parameter'. We've already seen one other thing
-called a 'parameter' in Rust: function parameters:</p>
+<p>Let's talk about this term <em>type parameter</em>. We've already seen one other thing
+called a &quot;parameter&quot; in Rust: function parameters:</p>
 <pre><code class="language-rust">fn plus_one(x: i32) -&gt; i32 {
     x + 1
 }
@@ -149,7 +149,7 @@ let same = Point { x: 5.0, y: 5.0 };
 <p>Here, instead of a single parameter, <code>T</code>, we have two: <code>T</code> and <code>OtherT</code>. Type
 parameters have the same naming convention as other types: <code>CamelCase</code>.
 However, you'll often see short, one-letter names used for types. <code>T</code> is very
-common, because it's short for 'type', but you can name them something longer
+common, because it's short for &quot;type&quot;, but you can name them something longer
 if you'd like. In this version of <code>Point</code>, we say that <code>x</code> has the type <code>T</code>,
 and <code>y</code> has the type <code>OtherT</code>. This lets us give them two different types, but
 they don't have to be.</p>

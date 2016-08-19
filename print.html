@@ -265,7 +265,7 @@ programs.</p>
 manage their Rust projects because it makes a lot of tasks easier. For example,
 Cargo takes care of building your code, downloading the libraries your code
 depends on, and building those libraries. We call libraries your code needs
-‘dependencies’ since your code depends on them.</p>
+<em>dependencies</em> since your code depends on them.</p>
 <p>The simplest Rust programs, like the one we've written so far, don’t have any
 dependencies, so right now, you'd only be using the part of Cargo that can take
 care of building your code. As you write more complex Rust programs, you’ll
@@ -440,7 +440,7 @@ authors = [&quot;Your Name &lt;you@example.com&gt;&quot;]
 </code></pre>
 <p>If the authors information that Cargo got from your environment is not correct,
 go ahead and fix that.</p>
-<p>And as we saw in the last chapter, <code>cargo new</code> generates a ‘Hello, world!’ for
+<p>And as we saw in the last chapter, <code>cargo new</code> generates a &quot;Hello, world!&quot; for
 us. Check out <code>src/main.rs</code>:</p>
 <pre><code class="language-rust">fn main() {
     println!(&quot;Hello, world!&quot;);
@@ -480,7 +480,7 @@ fn main() {
 </code></pre>
 <p>We’ll need to take user input and then print the result as output. As such, we
 need the <code>io</code> library from the standard library. Rust only imports a few things
-by default into every program, <a href="../std/prelude/index.html">the ‘prelude’</a>. If it’s not in the
+by default into every program, <a href="../std/prelude/index.html">the <em>prelude</em></a>. If it’s not in the
 prelude, you’ll have to <code>use</code> it directly. Using the <code>std::io</code> library gets
 you a number of useful <code>io</code>-related things, so that's what we've done here.</p>
 <pre><code class="language-rust,ignore">fn main() {
@@ -499,11 +499,11 @@ prints a string to the screen.</p>
 </code></pre>
 <p>Now we’re getting interesting! There’s a lot going on in this little line.
 The first thing to notice is that this is a let statement, which is
-used to create what are called ‘variable bindings’. Here's an example:</p>
+used to create what are called <em>variable bindings</em>. Here's an example:</p>
 <pre><code class="language-rust,ignore">let foo = bar;
 </code></pre>
 <p>This will create a new binding named <code>foo</code>, and bind it to the value <code>bar</code>. In
-many languages, this is called a ‘variable’, but Rust’s variable bindings have
+many languages, this is called a <em>variable</em>, but Rust’s variable bindings have
 a few tricks up their sleeves.</p>
 <p>For example, they’re immutable by default. That’s why our example
 uses <code>mut</code>: it makes a binding mutable, rather than immutable.</p>
@@ -517,10 +517,10 @@ everything in comments.</p>
 bound to: <code>String::new()</code>.</p>
 <p><code>String</code> is a string type, provided by the standard library. A
 <a href="../std/string/struct.String.html"><code>String</code></a> is a growable, UTF-8 encoded bit of text.</p>
-<p>The <code>::new()</code> syntax uses <code>::</code> because this is an ‘associated function’ of
+<p>The <code>::new()</code> syntax uses <code>::</code> because this is an <em>associated function</em> of
 a particular type. That is to say, it’s associated with <code>String</code> itself,
 rather than a particular instance of a <code>String</code>. Some languages call this a
-‘static method’.</p>
+<em>static method</em>.</p>
 <p>This function is named <code>new()</code>, because it creates a new, empty <code>String</code>.
 You’ll find a <code>new()</code> function on many types, as it’s a common name for making
 a new value of some kind.</p>
@@ -544,7 +544,7 @@ terminal. More specifically, a <a href="../std/io/struct.Stdin.html">std::io::St
 passing one argument to <code>read_line()</code>: <code>&amp;mut guess</code>.</p>
 <p>Remember how we bound <code>guess</code> above? We said it was mutable. However,
 <code>read_line</code> doesn’t take a <code>String</code> as an argument: it takes a <code>&amp;mut String</code>.
-The <code>&amp;</code> is the feature of Rust called a ‘reference’, which allows you to have
+The <code>&amp;</code> is the feature of Rust called a <em>reference</em>, which allows you to have
 multiple ways to access one piece of data in order to reduce copying.
 References are a complex feature, as one of Rust’s major selling points is how
 safe and easy it is to use references. We don’t need to know a lot of those
@@ -623,9 +623,9 @@ print it back out.</p>
 <h2>Generating a secret number</h2>
 <p>Next, we need to generate a secret number. Rust does not yet include random
 number functionality in its standard library. The Rust team does, however,
-provide a <a href="https://crates.io/crates/rand"><code>rand</code> crate</a>. A ‘crate’ is a package of Rust code.
-We’ve been building a ‘binary crate’, which is an executable. <code>rand</code> is a
-‘library crate’, which contains code that’s intended to be used with other
+provide a <a href="https://crates.io/crates/rand"><code>rand</code> crate</a>. A <em>crate</em> is a package of Rust code.
+We’ve been building a <em>binary crate</em>, which is an executable. <code>rand</code> is a
+<em>library crate</em>, which contains code that’s intended to be used with other
 programs.</p>
 <p>Using external crates is where Cargo really shines. Before we can write
 the code using <code>rand</code>, we need to modify our <code>Cargo.toml</code>. Open it up, and
@@ -688,9 +688,9 @@ again. This lets you have a repeatable build automatically. In other words,
 we’ll stay at <code>0.3.14</code> until we explicitly upgrade, and so will anyone who we
 share our code with, thanks to the lock file.</p>
 <p>What about when we <em>do</em> want to use <code>v0.3.15</code>? Cargo has another command,
-<code>update</code>, which says ‘ignore the <code>Cargo.lock</code> file and figure out all the
+<code>update</code>, which says &quot;ignore the <code>Cargo.lock</code> file and figure out all the
 latest versions that fit what we’ve specified in <code>Cargo.toml</code>. If that works,
-write those versions out to the lock file’. But by default, Cargo will only
+write those versions out to the lock file&quot;. But by default, Cargo will only
 look for versions larger than <code>0.3.0</code> and smaller than <code>0.4.0</code>. If we want to
 move to <code>0.4.x</code>, we’d have to update what is in the <code>Cargo.toml</code> file. When we
 do, the next time we <code>cargo build</code>, Cargo will update the index and re-evaluate
@@ -729,7 +729,7 @@ dependency. This also does the equivalent of a <code>use rand;</code> as well, s
 call anything in the <code>rand</code> crate by prefixing it with <code>rand::</code>.</p>
 <p>Next, we added another <code>use</code> line: <code>use rand::Rng</code>. We’re going to use a
 method in a moment, and it requires that <code>Rng</code> be in scope to work. The basic
-idea is this: methods are defined on something called ‘traits’, and for the
+idea is this: methods are defined on something called <em>traits</em>, and for the
 method to work, it needs the trait to be in scope. For more about the
 details, read the traits section in Chapter XX.</p>
 <p>There are two other lines we added, in the middle:</p>
@@ -814,7 +814,7 @@ use that type:</p>
 a reference to the thing you want to compare it to. It returns the <code>Ordering</code>
 type we imported with the <code>use</code> statement earlier. We use a <a href="match.html"><code>match</code></a>
 statement to determine exactly what kind of <code>Ordering</code> it is. <code>Ordering</code> is an
-<a href="enums.html"><code>enum</code></a>, short for ‘enumeration’, which looks like this:</p>
+<a href="enums.html"><code>enum</code></a>, short for <em>enumeration</em>, which looks like this:</p>
 <pre><code class="language-rust">enum Foo {
     Bar,
     Baz,
@@ -825,7 +825,7 @@ statement to determine exactly what kind of <code>Ordering</code> it is. <code>O
 namespace for a particular <code>enum</code> variant.</p>
 <p>The <a href="../std/cmp/enum.Ordering.html"><code>Ordering</code></a> <code>enum</code> has three possible variants: <code>Less</code>, <code>Equal</code>,
 and <code>Greater</code>. The <code>match</code> statement takes a value of a type and lets you
-create an ‘arm’ for each possible value. An arm is made up of a pattern and the
+create an <em>arm</em> for each possible value. An arm is made up of a pattern and the
 code that we should execute if the pattern matches the value of the type. Since
 we have three types of <code>Ordering</code>, we have three arms:</p>
 <pre><code class="language-rust,ignore">match guess.cmp(&amp;secret_number) {
@@ -848,7 +848,7 @@ src/main.rs:23:21: 23:35 note:    found type `&amp;_`
 error: aborting due to previous error
 Could not compile `guessing_game`.
 </code></pre>
-<p>Whew! This is a big error. The core of it is that we have ‘mismatched types’.
+<p>Whew! This is a big error. The core of it is that we have <em>mismatched types</em>.
 Rust has a strong, static type system. However, it also has type inference.
 When we wrote <code>let guess = String::new()</code>, Rust was able to infer that <code>guess</code>
 should be a <code>String</code>, so it doesn’t make us write out the type. With our
@@ -898,7 +898,7 @@ fn main() {
     .expect(&quot;Please type a number!&quot;);
 </code></pre>
 <p>Wait a minute, didn't we already have a <code>guess</code>? We do, but Rust allows us
-to ‘shadow’ the previous <code>guess</code> with a new one. This is often used in this
+to <em>shadow</em> the previous <code>guess</code> with a new one. This is often used in this
 exact situation, where <code>guess</code> starts as a <code>String</code>, but we want to convert it
 to a <code>u32</code>. Shadowing lets us re-use the <code>guess</code> name rather than forcing us
 to come up with two unique names like <code>guess_str</code> and <code>guess</code> or something
@@ -909,8 +909,8 @@ else.</p>
 <p>Here, <code>guess</code> refers to the old <code>guess</code>, the one that was a <code>String</code> with our
 input in it. The <code>trim()</code> method on <code>String</code>s will eliminate any white space at
 the beginning and end of our string. This is important, as we had to press the
-‘return’ key to satisfy <code>read_line()</code>. If we type <code>5</code> and hit return, <code>guess</code>
-looks like this: <code>5\n</code>. The <code>\n</code> represents ‘newline’, the enter key. <code>trim()</code>
+&quot;return&quot; key to satisfy <code>read_line()</code>. If we type <code>5</code> and hit return, <code>guess</code>
+looks like this: <code>5\n</code>. The <code>\n</code> represents &quot;newline&quot;, the return key. <code>trim()</code>
 gets rid of this, leaving our string with only the <code>5</code>.</p>
 <p>The <a href="../std/primitive.str.html#method.parse"><code>parse()</code> method on strings</a> parses a string into some kind of
 number. Since it can parse a variety of numbers, we need to give Rust a hint as
@@ -1090,8 +1090,8 @@ fn main() {
     Err(_) =&gt; continue,
 };
 </code></pre>
-<p>This is how you generally move from ‘crash on error’ to ‘actually handle the
-error’: by switching from <code>expect()</code> to a <code>match</code> statement. A <code>Result</code> is the
+<p>This is how you generally move from &quot;crash on error&quot; to &quot;actually handle the
+error&quot;: by switching from <code>expect()</code> to a <code>match</code> statement. A <code>Result</code> is the
 return type of <code>parse()</code>. <code>Result</code> is an <code>enum</code> like <code>Ordering</code>, but in this
 case, each variant has some data associated with it. <code>Ok</code> is a success, and
 <code>Err</code> is a failure. Each contains more information: in this case, the
@@ -1306,7 +1306,7 @@ depends on the tradeoffs you want to make in your situation.</p>
 <h3>Shadowing</h3>
 <p>As we saw in the guessing game tutorial, we can declare new bindings with the
 same name as a previous binding, and the new binding <em>shadows</em> the previous
-binding. We say that the first binding is ‘shadowed’ by the second, which means
+binding. We say that the first binding is <em>shadowed</em> by the second, which means
 that the second binding's value is what you will see when you use the variable
 after the second binding. This can be useful if you’d like to perform a few
 transformations on a value, but have the binding be immutable after those
@@ -1500,7 +1500,7 @@ this tuple value, like this:</p>
 </code></pre>
 <p>In this program, we first create a tuple and bind it to the name <code>tup</code>. We then
 use a pattern with <code>let</code> to take <code>tup</code> and turn it into three separate
-bindings, <code>x</code>, <code>y</code>, and <code>z</code>. This is called ‘destructuring’, because it breaks
+bindings, <code>x</code>, <code>y</code>, and <code>z</code>. This is called <em>destructuring</em>, because it breaks
 the single tuple into three parts.</p>
 <p>Finally, we print the value of <code>y</code>, which is <code>6.4</code>.</p>
 <h4>Tuple Indexing</h4>
@@ -1891,7 +1891,7 @@ $ cd branches
 case, our condition is checking if our variable binding <code>number</code> has a value
 that is less than 5. The block of code we want to execute if the condition is
 true goes immediately after the condition, inside curly braces. These blocks
-are sometimes called ‘arms’. We can optionally also include an <code>else</code>
+are sometimes called <em>arms</em>. We can optionally also include an <code>else</code>
 statement, which we have chosen to do here. <code>else</code> gives the program a block of
 code to execute should <code>condition</code> evaluate to false.</p>
 <p>Try running this code, and you should see output like this:</p>
@@ -2022,7 +2022,7 @@ single type. If we try to run this, we’ll get an error:</p>
 <pre><code class="language-bash">   Compiling branches v0.1.0 (file:///projects/branches)
 src/main.rs:4:18: 8:6 error: if and else have incompatible types:
  expected `_`,
-    found `&amp;‘static str`
+    found `&amp;'static str`
 (expected integral variable,
     found &amp;-ptr) [E0308]
 src/main.rs:4     let number = if condition {
@@ -2180,7 +2180,7 @@ enables Rust to make memory safety guarantees without needing a garbage
 collector. We’ll also talk about several related features: borrowing, slices,
 and how Rust lays things out in memory.</p>
 <h2>Ownership</h2>
-<p>Rust’s central feature is called ‘ownership’. It is a feature that is
+<p>Rust’s central feature is called <em>ownership</em>. It is a feature that is
 straightforward to explain, but has deep implications for the rest of the
 language.</p>
 <p>All programs have to manage the way they use a computer's memory while running.
@@ -2215,8 +2215,8 @@ at which it’s declared until the end of the current <em>scope</em>. That is:</
 </code></pre>
 <p>In other words, there are two important points in time here:</p>
 <ul>
-<li>When <code>s</code> comes ‘into scope’, it is valid.</li>
-<li>It remains so until it ‘goes out of scope’.</li>
+<li>When <code>s</code> comes &quot;into scope&quot;, it is valid.</li>
+<li>It remains so until it &quot;goes out of scope&quot;.</li>
 </ul>
 <p>At this point, things are similar to other programming languages. Now let’s
 build on top of this understanding by introducing the <code>String</code> type.</p>
@@ -2259,8 +2259,8 @@ done with our <code>String</code>.</li>
 <p>That first part is done by us: when we call <code>String::from()</code>, its
 implementation requests the memory it needs. This is pretty much universal in
 programming languages.</p>
-<p>The second case, however, is different. In languages with a garbage collector
-(‘GC’), the GC will keep track and clean up memory that isn't being used
+<p>The second case, however, is different. In languages with a <em>garbage collector</em>
+(<em>GC</em>), the GC will keep track and clean up memory that isn't being used
 anymore, and we, as the programmer, don’t need to think about it. Without GC,
 it’s our responsibility to identify when memory is no longer being used and
 call code to explicitly return it, just as we did to request it. Doing this
@@ -2369,13 +2369,13 @@ alone will free the memory, and we’re done.</p>
 <p>This leads us to the Ownership Rules:</p>
 <blockquote>
 <ol>
-<li>Each value in Rust has a variable binding that’s called its ‘owner’.</li>
+<li>Each value in Rust has a variable binding that’s called its <em>owner</em>.</li>
 <li>There can only be one owner at a time.</li>
 <li>When the owner goes out of scope, the value will be <code>drop()</code>ped.</li>
 </ol>
 </blockquote>
 <p>Furthermore, there’s a design choice that’s implied by this: Rust will never
-automatically create ‘deep’ copies of your data. Therefore, any <em>automatic</em>
+automatically create &quot;deep&quot; copies of your data. Therefore, any <em>automatic</em>
 copying can be assumed to be inexpensive.</p>
 <h3>Clone</h3>
 <p>But what if we <em>do</em> want to deeply copy the <code>String</code>’s data and not just the
@@ -2589,7 +2589,7 @@ fn calculate_length(s: &amp;String) -&gt; usize {
 function return value is gone. Next, note that we pass <code>&amp;s1</code> into
 <code>calculate_length()</code>, and in its definition, we take <code>&amp;String</code> rather than
 <code>String</code>.</p>
-<p>These <code>&amp;</code>s are called ‘references’, and they allow you to refer to some value
+<p>These <code>&amp;</code>s are called <em>references</em>, and they allow you to refer to some value
 without taking ownership of it. Here’s a diagram:</p>
 <p>DIAGRAM GOES HERE of a &amp;String pointing at a String, with (ptr, len, capacity)</p>
 <p>Let’s take a closer look at the function call here:</p>
@@ -2618,7 +2618,7 @@ a reference as an argument. Let’s add some explanatory annotations:</p>
 we don’t drop what a reference points to when the reference goes out of scope.
 This lets us write functions which take references as arguments instead of the
 values themselves, so that we won’t need to return them to give back ownership.</p>
-<p>There’s another word for what references do, and that’s ‘borrowing’. Just like
+<p>There’s another word for what references do, and that’s <em>borrowing</em>. Just like
 with real life, if a person owns something, you can borrow it from them. When
 you’re done, you have to give it back.</p>
 <p>Speaking of which, what if you try to modify something you borrow from me? Try
@@ -2742,7 +2742,7 @@ fn dangle() -&gt; &amp;String {
 error: aborting due to previous error
 </code></pre>
 <p>This error message refers to a feature we haven’t learned about yet,
-‘lifetimes’. The message does contain the key to why this code is a problem,
+<em>lifetimes</em>. The message does contain the key to why this code is a problem,
 though:</p>
 <pre><code class="language-bash">this function’s return type contains a borrowed value, but there is no value
 for it to be borrowed from
@@ -3090,7 +3090,7 @@ modules and namespaces in depth yet, but you can think of the <code>powi()</code
 as being scoped inside of another name. In this case, the name is <code>f64</code>, the
 same as the type. The <code>powi()</code> function takes two arguments: the first is a
 number, and the second is the power that it raises that number to. In this
-case, the second number is an integer, hence the ‘i’ in its name. Similarly,
+case, the second number is an integer, hence the <code>i</code> in its name. Similarly,
 <code>sqrt()</code> is a function under the <code>f64</code> module, which takes the square root of
 its argument.</p>
 <h2>Why <code>struct</code>s?</h2>
@@ -3265,8 +3265,8 @@ Point 1: Point { x: 0, y: 5 }
 <p>You’ll see this repeated later with other types. We’ll cover traits fully in
 Chapter XX.</p>
 <h2>Method Syntax</h2>
-<p>In the last section on ownership, we made several references to ‘methods’.
-Methods look like this:</p>
+<p>In Chapter 4 when we discussed ownership, we made several references to
+<em>methods</em>. Methods look like this:</p>
 <pre><code class="language-rust">let s1 = &quot;hello&quot;;
 
 // call a method on s1
@@ -3274,8 +3274,8 @@ let s2 = s1.clone();
 
 println!(&quot;{}&quot;, s1);
 </code></pre>
-<p>The call to <code>clone()</code> is attached to <code>s1</code> with a dot. This is called ‘method
-syntax’, and it’s a way to call certain functions with a different style.</p>
+<p>The call to <code>clone()</code> is attached to <code>s1</code> with a dot. This is called <em>method
+syntax</em>, and it’s a way to call certain functions with a different style.</p>
 <p>Why have two ways to call functions? We’ll talk about some deeper reasons
 related to ownership in a moment, but one big reason is that methods look nicer
 when chained together:</p>
@@ -3292,7 +3292,7 @@ x.f().g().h();
 methods.</p>
 <h3>Defining methods</h3>
 <p>We can define methods with the <code>impl</code> keyword. <code>impl</code> is short for
-‘implementation’. Doing so looks like this:</p>
+<em>implementation</em>. Doing so looks like this:</p>
 <pre><code class="language-rust">#[derive(Debug,Copy,Clone)]
 struct Point {
     x: f64,
@@ -3363,7 +3363,7 @@ from using the value of <code>self</code> after the transformation happens.</p>
 </code></pre>
 <p>When we defined <code>distance()</code>, we took both <code>self</code> and the other argument by
 reference. Yet, we needed a <code>&amp;</code> for <code>p2</code> but not <code>p1</code>. What gives?</p>
-<p>This feature is called ‘automatic referencing’, and calling methods is one
+<p>This feature is called <em>automatic referencing</em>, and calling methods is one
 of the few places in Rust that has behavior like this. Here’s how it works:
 when you call a method with <code>self.(</code>, Rust will automatically add in <code>&amp;</code>s
 or <code>&amp;mut</code>s to match the signature. In other words, these are the same:</p>
@@ -3535,7 +3535,7 @@ useful: <code>Option</code>.</p>
 feature that we talked a little bit about in the previous chapter: generics.</p>
 <p>Programming language design is often thought of as which features you include,
 but it's also about which features you leave out. Rust does not have a feature
-that is in many other languages: 'null'. In languages with this feature,
+that is in many other languages: <em>null</em>. In languages with this feature,
 variables can have two states: null or not-null.</p>
 <p>The inventor of this concept has this to say:</p>
 <blockquote>
@@ -3580,7 +3580,7 @@ let absent_number: Option&lt;i32&gt; = None;
 <p>Let's dig in. First, you'll notice that we used the <code>&lt;T&gt;</code> syntax when defining
 <code>Option&lt;T&gt;</code>: it's a generic enum. <code>Option&lt;T&gt;</code> has two variants: <code>Some</code>, which
 contains a <code>T</code>, and <code>None</code>, which has no data associated with it. In some
-sense, <code>None</code> means 'null', and <code>Some</code> means 'not null'. So why is this any
+sense, <code>None</code> means &quot;null&quot;, and <code>Some</code> means &quot;not null&quot;. So why is this any
 better than null?</p>
 <p>In short, because <code>Option&lt;T&gt;</code> and <code>T</code> are different types. That's a bit too
 short though. Here's an example:</p>
@@ -3916,8 +3916,8 @@ struct Point&lt;T&gt; {
 <p>Our previous definition said, &quot;We are defining a struct named Point.&quot; This
 definition says something slightly different: &quot;We are defining a struct named
 Point with one type parameter <code>T</code>.&quot;</p>
-<p>Let's talk about this term 'type parameter'. We've already seen one other thing
-called a 'parameter' in Rust: function parameters:</p>
+<p>Let's talk about this term <em>type parameter</em>. We've already seen one other thing
+called a &quot;parameter&quot; in Rust: function parameters:</p>
 <pre><code class="language-rust">fn plus_one(x: i32) -&gt; i32 {
     x + 1
 }
@@ -3964,7 +3964,7 @@ let same = Point { x: 5.0, y: 5.0 };
 <p>Here, instead of a single parameter, <code>T</code>, we have two: <code>T</code> and <code>OtherT</code>. Type
 parameters have the same naming convention as other types: <code>CamelCase</code>.
 However, you'll often see short, one-letter names used for types. <code>T</code> is very
-common, because it's short for 'type', but you can name them something longer
+common, because it's short for &quot;type&quot;, but you can name them something longer
 if you'd like. In this version of <code>Point</code>, we say that <code>x</code> has the type <code>T</code>,
 and <code>y</code> has the type <code>OtherT</code>. This lets us give them two different types, but
 they don't have to be.</p>
@@ -4069,12 +4069,12 @@ to <code>y</code>. We could have used two <code>let</code> statements as well:</
 multiple bindings at once is nice. As we become more proficient in Rust, we’ll
 figure out which style is better, but it’s mostly a judgement call.</p>
 <h2>Type annotations</h2>
-<p>Most of the time, Rust uses ‘type inference’, meaning that it attempts to infer
+<p>Most of the time, Rust uses <em>type inference</em>, meaning that it attempts to infer
 the types of your bindings rather than you having to declare them explicitly
 even though Rust is a statically typed language. Occasionally, Rust won't have
 enough information to infer the type of your value, and you will need to add a
 type annotation in with the pattern.</p>
-<p>Here’s what a <code>let</code> statement with a ‘type annotation’ looks like:</p>
+<p>Here’s what a <code>let</code> statement with a <em>type annotation</em> looks like:</p>
 <pre><code class="language-rust">fn main() {
     let x: i32 = 5;
 }

@@ -106,7 +106,7 @@ fn calculate_length(s: &amp;String) -&gt; usize {
 function return value is gone. Next, note that we pass <code>&amp;s1</code> into
 <code>calculate_length()</code>, and in its definition, we take <code>&amp;String</code> rather than
 <code>String</code>.</p>
-<p>These <code>&amp;</code>s are called ‘references’, and they allow you to refer to some value
+<p>These <code>&amp;</code>s are called <em>references</em>, and they allow you to refer to some value
 without taking ownership of it. Here’s a diagram:</p>
 <p>DIAGRAM GOES HERE of a &amp;String pointing at a String, with (ptr, len, capacity)</p>
 <p>Let’s take a closer look at the function call here:</p>
@@ -135,7 +135,7 @@ a reference as an argument. Let’s add some explanatory annotations:</p>
 we don’t drop what a reference points to when the reference goes out of scope.
 This lets us write functions which take references as arguments instead of the
 values themselves, so that we won’t need to return them to give back ownership.</p>
-<p>There’s another word for what references do, and that’s ‘borrowing’. Just like
+<p>There’s another word for what references do, and that’s <em>borrowing</em>. Just like
 with real life, if a person owns something, you can borrow it from them. When
 you’re done, you have to give it back.</p>
 <p>Speaking of which, what if you try to modify something you borrow from me? Try
@@ -259,7 +259,7 @@ fn dangle() -&gt; &amp;String {
 error: aborting due to previous error
 </code></pre>
 <p>This error message refers to a feature we haven’t learned about yet,
-‘lifetimes’. The message does contain the key to why this code is a problem,
+<em>lifetimes</em>. The message does contain the key to why this code is a problem,
 though:</p>
 <pre><code class="language-bash">this function’s return type contains a borrowed value, but there is no value
 for it to be borrowed from

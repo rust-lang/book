@@ -68,8 +68,8 @@
 
                 <div id="content" class="content">
                     <h2>Method Syntax</h2>
-<p>In the last section on ownership, we made several references to ‘methods’.
-Methods look like this:</p>
+<p>In Chapter 4 when we discussed ownership, we made several references to
+<em>methods</em>. Methods look like this:</p>
 <pre><code class="language-rust">let s1 = &quot;hello&quot;;
 
 // call a method on s1
@@ -77,8 +77,8 @@ let s2 = s1.clone();
 
 println!(&quot;{}&quot;, s1);
 </code></pre>
-<p>The call to <code>clone()</code> is attached to <code>s1</code> with a dot. This is called ‘method
-syntax’, and it’s a way to call certain functions with a different style.</p>
+<p>The call to <code>clone()</code> is attached to <code>s1</code> with a dot. This is called <em>method
+syntax</em>, and it’s a way to call certain functions with a different style.</p>
 <p>Why have two ways to call functions? We’ll talk about some deeper reasons
 related to ownership in a moment, but one big reason is that methods look nicer
 when chained together:</p>
@@ -95,7 +95,7 @@ x.f().g().h();
 methods.</p>
 <h3>Defining methods</h3>
 <p>We can define methods with the <code>impl</code> keyword. <code>impl</code> is short for
-‘implementation’. Doing so looks like this:</p>
+<em>implementation</em>. Doing so looks like this:</p>
 <pre><code class="language-rust">#[derive(Debug,Copy,Clone)]
 struct Point {
     x: f64,
@@ -166,7 +166,7 @@ from using the value of <code>self</code> after the transformation happens.</p>
 </code></pre>
 <p>When we defined <code>distance()</code>, we took both <code>self</code> and the other argument by
 reference. Yet, we needed a <code>&amp;</code> for <code>p2</code> but not <code>p1</code>. What gives?</p>
-<p>This feature is called ‘automatic referencing’, and calling methods is one
+<p>This feature is called <em>automatic referencing</em>, and calling methods is one
 of the few places in Rust that has behavior like this. Here’s how it works:
 when you call a method with <code>self.(</code>, Rust will automatically add in <code>&amp;</code>s
 or <code>&amp;mut</code>s to match the signature. In other words, these are the same:</p>

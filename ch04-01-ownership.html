@@ -68,7 +68,7 @@
 
                 <div id="content" class="content">
                     <h2>Ownership</h2>
-<p>Rust’s central feature is called ‘ownership’. It is a feature that is
+<p>Rust’s central feature is called <em>ownership</em>. It is a feature that is
 straightforward to explain, but has deep implications for the rest of the
 language.</p>
 <p>All programs have to manage the way they use a computer's memory while running.
@@ -103,8 +103,8 @@ at which it’s declared until the end of the current <em>scope</em>. That is:</
 </code></pre>
 <p>In other words, there are two important points in time here:</p>
 <ul>
-<li>When <code>s</code> comes ‘into scope’, it is valid.</li>
-<li>It remains so until it ‘goes out of scope’.</li>
+<li>When <code>s</code> comes &quot;into scope&quot;, it is valid.</li>
+<li>It remains so until it &quot;goes out of scope&quot;.</li>
 </ul>
 <p>At this point, things are similar to other programming languages. Now let’s
 build on top of this understanding by introducing the <code>String</code> type.</p>
@@ -147,8 +147,8 @@ done with our <code>String</code>.</li>
 <p>That first part is done by us: when we call <code>String::from()</code>, its
 implementation requests the memory it needs. This is pretty much universal in
 programming languages.</p>
-<p>The second case, however, is different. In languages with a garbage collector
-(‘GC’), the GC will keep track and clean up memory that isn't being used
+<p>The second case, however, is different. In languages with a <em>garbage collector</em>
+(<em>GC</em>), the GC will keep track and clean up memory that isn't being used
 anymore, and we, as the programmer, don’t need to think about it. Without GC,
 it’s our responsibility to identify when memory is no longer being used and
 call code to explicitly return it, just as we did to request it. Doing this
@@ -257,13 +257,13 @@ alone will free the memory, and we’re done.</p>
 <p>This leads us to the Ownership Rules:</p>
 <blockquote>
 <ol>
-<li>Each value in Rust has a variable binding that’s called its ‘owner’.</li>
+<li>Each value in Rust has a variable binding that’s called its <em>owner</em>.</li>
 <li>There can only be one owner at a time.</li>
 <li>When the owner goes out of scope, the value will be <code>drop()</code>ped.</li>
 </ol>
 </blockquote>
 <p>Furthermore, there’s a design choice that’s implied by this: Rust will never
-automatically create ‘deep’ copies of your data. Therefore, any <em>automatic</em>
+automatically create &quot;deep&quot; copies of your data. Therefore, any <em>automatic</em>
 copying can be assumed to be inexpensive.</p>
 <h3>Clone</h3>
 <p>But what if we <em>do</em> want to deeply copy the <code>String</code>’s data and not just the

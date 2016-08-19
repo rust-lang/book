@@ -91,7 +91,7 @@ authors = [&quot;Your Name &lt;you@example.com&gt;&quot;]
 </code></pre>
 <p>If the authors information that Cargo got from your environment is not correct,
 go ahead and fix that.</p>
-<p>And as we saw in the last chapter, <code>cargo new</code> generates a ‘Hello, world!’ for
+<p>And as we saw in the last chapter, <code>cargo new</code> generates a &quot;Hello, world!&quot; for
 us. Check out <code>src/main.rs</code>:</p>
 <pre><code class="language-rust">fn main() {
     println!(&quot;Hello, world!&quot;);
@@ -131,7 +131,7 @@ fn main() {
 </code></pre>
 <p>We’ll need to take user input and then print the result as output. As such, we
 need the <code>io</code> library from the standard library. Rust only imports a few things
-by default into every program, <a href="../std/prelude/index.html">the ‘prelude’</a>. If it’s not in the
+by default into every program, <a href="../std/prelude/index.html">the <em>prelude</em></a>. If it’s not in the
 prelude, you’ll have to <code>use</code> it directly. Using the <code>std::io</code> library gets
 you a number of useful <code>io</code>-related things, so that's what we've done here.</p>
 <pre><code class="language-rust,ignore">fn main() {
@@ -150,11 +150,11 @@ prints a string to the screen.</p>
 </code></pre>
 <p>Now we’re getting interesting! There’s a lot going on in this little line.
 The first thing to notice is that this is a let statement, which is
-used to create what are called ‘variable bindings’. Here's an example:</p>
+used to create what are called <em>variable bindings</em>. Here's an example:</p>
 <pre><code class="language-rust,ignore">let foo = bar;
 </code></pre>
 <p>This will create a new binding named <code>foo</code>, and bind it to the value <code>bar</code>. In
-many languages, this is called a ‘variable’, but Rust’s variable bindings have
+many languages, this is called a <em>variable</em>, but Rust’s variable bindings have
 a few tricks up their sleeves.</p>
 <p>For example, they’re immutable by default. That’s why our example
 uses <code>mut</code>: it makes a binding mutable, rather than immutable.</p>
@@ -168,10 +168,10 @@ everything in comments.</p>
 bound to: <code>String::new()</code>.</p>
 <p><code>String</code> is a string type, provided by the standard library. A
 <a href="../std/string/struct.String.html"><code>String</code></a> is a growable, UTF-8 encoded bit of text.</p>
-<p>The <code>::new()</code> syntax uses <code>::</code> because this is an ‘associated function’ of
+<p>The <code>::new()</code> syntax uses <code>::</code> because this is an <em>associated function</em> of
 a particular type. That is to say, it’s associated with <code>String</code> itself,
 rather than a particular instance of a <code>String</code>. Some languages call this a
-‘static method’.</p>
+<em>static method</em>.</p>
 <p>This function is named <code>new()</code>, because it creates a new, empty <code>String</code>.
 You’ll find a <code>new()</code> function on many types, as it’s a common name for making
 a new value of some kind.</p>
@@ -195,7 +195,7 @@ terminal. More specifically, a <a href="../std/io/struct.Stdin.html">std::io::St
 passing one argument to <code>read_line()</code>: <code>&amp;mut guess</code>.</p>
 <p>Remember how we bound <code>guess</code> above? We said it was mutable. However,
 <code>read_line</code> doesn’t take a <code>String</code> as an argument: it takes a <code>&amp;mut String</code>.
-The <code>&amp;</code> is the feature of Rust called a ‘reference’, which allows you to have
+The <code>&amp;</code> is the feature of Rust called a <em>reference</em>, which allows you to have
 multiple ways to access one piece of data in order to reduce copying.
 References are a complex feature, as one of Rust’s major selling points is how
 safe and easy it is to use references. We don’t need to know a lot of those
@@ -274,9 +274,9 @@ print it back out.</p>
 <h2>Generating a secret number</h2>
 <p>Next, we need to generate a secret number. Rust does not yet include random
 number functionality in its standard library. The Rust team does, however,
-provide a <a href="https://crates.io/crates/rand"><code>rand</code> crate</a>. A ‘crate’ is a package of Rust code.
-We’ve been building a ‘binary crate’, which is an executable. <code>rand</code> is a
-‘library crate’, which contains code that’s intended to be used with other
+provide a <a href="https://crates.io/crates/rand"><code>rand</code> crate</a>. A <em>crate</em> is a package of Rust code.
+We’ve been building a <em>binary crate</em>, which is an executable. <code>rand</code> is a
+<em>library crate</em>, which contains code that’s intended to be used with other
 programs.</p>
 <p>Using external crates is where Cargo really shines. Before we can write
 the code using <code>rand</code>, we need to modify our <code>Cargo.toml</code>. Open it up, and
@@ -339,9 +339,9 @@ again. This lets you have a repeatable build automatically. In other words,
 we’ll stay at <code>0.3.14</code> until we explicitly upgrade, and so will anyone who we
 share our code with, thanks to the lock file.</p>
 <p>What about when we <em>do</em> want to use <code>v0.3.15</code>? Cargo has another command,
-<code>update</code>, which says ‘ignore the <code>Cargo.lock</code> file and figure out all the
+<code>update</code>, which says &quot;ignore the <code>Cargo.lock</code> file and figure out all the
 latest versions that fit what we’ve specified in <code>Cargo.toml</code>. If that works,
-write those versions out to the lock file’. But by default, Cargo will only
+write those versions out to the lock file&quot;. But by default, Cargo will only
 look for versions larger than <code>0.3.0</code> and smaller than <code>0.4.0</code>. If we want to
 move to <code>0.4.x</code>, we’d have to update what is in the <code>Cargo.toml</code> file. When we
 do, the next time we <code>cargo build</code>, Cargo will update the index and re-evaluate
@@ -380,7 +380,7 @@ dependency. This also does the equivalent of a <code>use rand;</code> as well, s
 call anything in the <code>rand</code> crate by prefixing it with <code>rand::</code>.</p>
 <p>Next, we added another <code>use</code> line: <code>use rand::Rng</code>. We’re going to use a
 method in a moment, and it requires that <code>Rng</code> be in scope to work. The basic
-idea is this: methods are defined on something called ‘traits’, and for the
+idea is this: methods are defined on something called <em>traits</em>, and for the
 method to work, it needs the trait to be in scope. For more about the
 details, read the traits section in Chapter XX.</p>
 <p>There are two other lines we added, in the middle:</p>
@@ -465,7 +465,7 @@ use that type:</p>
 a reference to the thing you want to compare it to. It returns the <code>Ordering</code>
 type we imported with the <code>use</code> statement earlier. We use a <a href="match.html"><code>match</code></a>
 statement to determine exactly what kind of <code>Ordering</code> it is. <code>Ordering</code> is an
-<a href="enums.html"><code>enum</code></a>, short for ‘enumeration’, which looks like this:</p>
+<a href="enums.html"><code>enum</code></a>, short for <em>enumeration</em>, which looks like this:</p>
 <pre><code class="language-rust">enum Foo {
     Bar,
     Baz,
@@ -476,7 +476,7 @@ statement to determine exactly what kind of <code>Ordering</code> it is. <code>O
 namespace for a particular <code>enum</code> variant.</p>
 <p>The <a href="../std/cmp/enum.Ordering.html"><code>Ordering</code></a> <code>enum</code> has three possible variants: <code>Less</code>, <code>Equal</code>,
 and <code>Greater</code>. The <code>match</code> statement takes a value of a type and lets you
-create an ‘arm’ for each possible value. An arm is made up of a pattern and the
+create an <em>arm</em> for each possible value. An arm is made up of a pattern and the
 code that we should execute if the pattern matches the value of the type. Since
 we have three types of <code>Ordering</code>, we have three arms:</p>
 <pre><code class="language-rust,ignore">match guess.cmp(&amp;secret_number) {
@@ -499,7 +499,7 @@ src/main.rs:23:21: 23:35 note:    found type `&amp;_`
 error: aborting due to previous error
 Could not compile `guessing_game`.
 </code></pre>
-<p>Whew! This is a big error. The core of it is that we have ‘mismatched types’.
+<p>Whew! This is a big error. The core of it is that we have <em>mismatched types</em>.
 Rust has a strong, static type system. However, it also has type inference.
 When we wrote <code>let guess = String::new()</code>, Rust was able to infer that <code>guess</code>
 should be a <code>String</code>, so it doesn’t make us write out the type. With our
@@ -549,7 +549,7 @@ fn main() {
     .expect(&quot;Please type a number!&quot;);
 </code></pre>
 <p>Wait a minute, didn't we already have a <code>guess</code>? We do, but Rust allows us
-to ‘shadow’ the previous <code>guess</code> with a new one. This is often used in this
+to <em>shadow</em> the previous <code>guess</code> with a new one. This is often used in this
 exact situation, where <code>guess</code> starts as a <code>String</code>, but we want to convert it
 to a <code>u32</code>. Shadowing lets us re-use the <code>guess</code> name rather than forcing us
 to come up with two unique names like <code>guess_str</code> and <code>guess</code> or something
@@ -560,8 +560,8 @@ else.</p>
 <p>Here, <code>guess</code> refers to the old <code>guess</code>, the one that was a <code>String</code> with our
 input in it. The <code>trim()</code> method on <code>String</code>s will eliminate any white space at
 the beginning and end of our string. This is important, as we had to press the
-‘return’ key to satisfy <code>read_line()</code>. If we type <code>5</code> and hit return, <code>guess</code>
-looks like this: <code>5\n</code>. The <code>\n</code> represents ‘newline’, the enter key. <code>trim()</code>
+&quot;return&quot; key to satisfy <code>read_line()</code>. If we type <code>5</code> and hit return, <code>guess</code>
+looks like this: <code>5\n</code>. The <code>\n</code> represents &quot;newline&quot;, the return key. <code>trim()</code>
 gets rid of this, leaving our string with only the <code>5</code>.</p>
 <p>The <a href="../std/primitive.str.html#method.parse"><code>parse()</code> method on strings</a> parses a string into some kind of
 number. Since it can parse a variety of numbers, we need to give Rust a hint as
@@ -741,8 +741,8 @@ fn main() {
     Err(_) =&gt; continue,
 };
 </code></pre>
-<p>This is how you generally move from ‘crash on error’ to ‘actually handle the
-error’: by switching from <code>expect()</code> to a <code>match</code> statement. A <code>Result</code> is the
+<p>This is how you generally move from &quot;crash on error&quot; to &quot;actually handle the
+error&quot;: by switching from <code>expect()</code> to a <code>match</code> statement. A <code>Result</code> is the
 return type of <code>parse()</code>. <code>Result</code> is an <code>enum</code> like <code>Ordering</code>, but in this
 case, each variant has some data associated with it. <code>Ok</code> is a success, and
 <code>Err</code> is a failure. Each contains more information: in this case, the
