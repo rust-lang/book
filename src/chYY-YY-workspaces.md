@@ -8,8 +8,8 @@ We weren't technically precise about the difference between a *package* and a
 interchangeably and everyone will understand.
 
 But there are cases when it makes sense to have multiple crates in one project
-because [insert reasons here]. For example, [insert examples here, maybe
-log/env_log in rust-lang-nursery?]
+because (insert reasons here). For example, (insert examples here, maybe
+log/env_log in rust-lang-nursery?)
 
 So let's get more precise now. Earlier, we said:
 

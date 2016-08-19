@@ -261,9 +261,11 @@ copying can be assumed to be inexpensive.
 
 But what if we _do_ want to deeply copy the `String`’s data and not just the
 `String` itself? There’s a common method for that: `clone()`. We will discuss
-methods in the section on [`structs` in Chapter XX], but they’re a common
-enough feature in many programming languages that you have probably seen them
-before.
+methods in the section on [`structs` in Chapter XX][structs], but they’re a
+common enough feature in many programming languages that you have probably seen
+them before.
+
+[structs]: ch05-01-structs.html
 
 Here’s an example of the `clone()` method in action:
 
@@ -273,8 +275,6 @@ let s2 = s1.clone();
 
 println!("{}", s1);
 ```
-
-[`structs`]: ch05-01-structs.html
 
 This will work just fine. Remember our diagram from before? In this case,
 it _is_ doing this:
