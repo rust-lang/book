@@ -169,7 +169,7 @@ fn foo<T>(x: T) {
 
 We'll get an error:
 
-```text
+```bash
 error: the trait `core::fmt::Display` is not implemented for the type `T` [E0277]
 println!("x is: {}", x);
                      ^
