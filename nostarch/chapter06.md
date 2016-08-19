@@ -1,3 +1,6 @@
+
+[TOC]
+
 # Enums
 
 Next, let’s look at *enumerations*, which allow you to define a type by
@@ -25,11 +28,6 @@ enumerate all of the possible kinds that our value can have.
 We can create values of `IpAddrKind` like this:
 
 ```rust
-# enum IpAddrKind {
-#     V4,
-#     V6,
-# }
-#
 let four = IpAddrKind::V4;
 let six = IpAddrKind::V6;
 ```
@@ -98,7 +96,7 @@ let loopback = IpAddr::V6(String::from("::1"));
 ```
 
 You can put any kind of data inside of an enum variant, including another enum!
-The `IpAddr` enum is [in the standard library][IpAddr], but it embeds two
+The `IpAddr` enum is in the standard library, but it embeds two
 different structs inside of its variants:
 
 ```rust
@@ -115,8 +113,6 @@ enum IpAddr {
     V6(Ipv6Addr),
 }
 ```
-
-[IpAddr]: http://doc.rust-lang.org/std/net/enum.IpAddr.html
 
 Here’s an enum with a variety of types embedded in its variants:
 
@@ -140,7 +136,7 @@ that you already know, except without the `struct` keyword and they are grouped
 together under the `Message` type. These structs could hold the same data that
 these enum variants hold:
 
-```
+```rust
 struct QuitMessage; // unit struct
 struct MoveMessage {
     x: i32,
@@ -160,7 +156,7 @@ feature that we talked a little bit about in the previous chapter: generics.
 
 Programming language design is often thought of as which features you include,
 but it's also about which features you leave out. Rust does not have a feature
-that is in many other languages: 'null'. In languages with this feature,
+that is in many other languages: *null*. In languages with this feature,
 variables can have two states: null or not-null.
 
 The inventor of this concept has this to say:
@@ -195,12 +191,10 @@ enum Option<T> {
 }
 ```
 
-This enum is [provided by the standard library][option], and is so useful that
+This enum is provided by the standard library, and is so useful that
 it's even in the prelude; you don't need to import it explicitly. Furthermore,
 so are its variants: you can say `Some` and `None` directly, without prefixing
 them with `Option::`.
-
-[option]: ../std/option/enum.Option.html
 
 Here's an example of using `Option<T>`:
 
@@ -215,7 +209,7 @@ let absent_number: Option<i32> = None;
 Let's dig in. First, you'll notice that we used the `<T>` syntax when defining
 `Option<T>`: it's a generic enum. `Option<T>` has two variants: `Some`, which
 contains a `T`, and `None`, which has no data associated with it. In some
-sense, `None` means 'null', and `Some` means 'not null'. So why is this any
+sense, `None` means "null", and `Some` means "not null". So why is this any
 better than null?
 
 In short, because `Option<T>` and `T` are different types. That's a bit too
@@ -230,7 +224,7 @@ let sum = x + y;
 
 This will not compile. We get an error message like this:
 
-```text
+```bash
 error: the trait bound `i8: std::ops::Add<std::option::Option<i8>>` is not
 satisfied [E0277]
 
@@ -255,10 +249,8 @@ deliberate design decision for Rust to limit null's pervasiveness and increase
 the safety of Rust code.
 
 So, how _do_ you get a `T` from an `Option<T>`?  The `Option<T>` enum has a
-large number of methods that you can check out in [its documentation], and
+large number of methods that you can check out in its documentation, and
 becoming familiar with them will be extremely useful in your journey with Rust.
-
-[its documentation]: ../std/option/enum.Option.html
 
 But we want a deeper understanding than that. If we didn't have those methods
 defined for us already, what would we do? And more generally, how do we get
@@ -332,13 +324,6 @@ print out "Lucky penny!" every time the method was called with a `Coin::Penny`,
 but would still return the last value of the block, `1`:
 
 ```rust
-# enum Coin {
-#    Penny,
-#    Nickel,
-#    Dime,
-#    Quarter,
-# }
-#
 fn value_in_cents(coin: Coin) -> i32 {
     match coin {
         Coin::Penny => {
@@ -385,19 +370,6 @@ created if the coin matches the `Quarter` pattern. Then we can use the binding
 in the code for that arm:
 
 ```rust
-# #[derive(Debug)]
-# enum UsState {
-#    Alabama,
-#    Alaska,
-# }
-#
-# enum Coin {
-#    Penny,
-#    Nickel,
-#    Dime,
-#    Quarter(UsState),
-# }
-#
 fn value_in_cents(coin: Coin) -> i32 {
     match coin {
         Coin::Penny => 1,
@@ -494,7 +466,7 @@ fn plus_one(x: Option<i32>) -> Option<i32> {
 A bug! We didn't handle the `None` case. Luckily, it's a bug Rust knows how to
 catch. If we try to compile this code, we'll get an error:
 
-```text
+```bash
 error: non-exhaustive patterns: `None` not covered [E0004]
 match x {
     Some(i) => Some(i + 1),
@@ -539,7 +511,6 @@ There's one more advanced control flow structure we haven't discussed: `if
 let`. Imagine we're in a situation like this:
 
 ```rust
-# let some_option = Some(5);
 match some_option {
     Some(x) => {
         // do something with x
@@ -559,7 +530,6 @@ others."
 Enter `if let`:
 
 ```rust
-# let some_option = Some(5);
 if let Some(x) = some_option {
     // do something with x
 }

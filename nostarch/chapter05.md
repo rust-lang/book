@@ -1,3 +1,6 @@
+
+[TOC]
+
 # Structs
 
 A `struct`, short for "structure", gives us the ability to name and package
@@ -21,6 +24,8 @@ $ cd points
 
 Here’s a short program which calculates the distance between two points. Put
 it into your `src/main.rs`:
+
+Filename: src/main.rs
 
 ```rust
 fn main() {
@@ -78,7 +83,7 @@ modules and namespaces in depth yet, but you can think of the `powi()` function
 as being scoped inside of another name. In this case, the name is `f64`, the
 same as the type. The `powi()` function takes two arguments: the first is a
 number, and the second is the power that it raises that number to. In this
-case, the second number is an integer, hence the ‘i’ in its name. Similarly,
+case, the second number is an integer, hence the `i` in its name. Similarly,
 `sqrt()` is a function under the `f64` module, which takes the square root of
 its argument.
 
@@ -99,6 +104,8 @@ and `(x2, y2)` together.
 
 We’ve already discussed one way to do that: tuples. Here’s a version of our
 program which uses tuples:
+
+Filename: src/main.rs
 
 ```rust
 fn main() {
@@ -173,6 +180,8 @@ let x = p1.x;
 Let’s convert our program to use our `Point` `struct`. Here’s what it looks
 like now:
 
+Filename: src/main.rs
+
 ```rust
 #[derive(Debug,Copy,Clone)]
 struct Point {
@@ -224,6 +233,8 @@ So far, we’ve been printing values using `{}` in a `println!` macro. If we try
 that with a struct, however, by default, we'll get an error. Say we have the
 following program:
 
+Filename: src/main.rs
+
 ```rust,ignore
 struct Point {
     x: f64,
@@ -270,6 +281,8 @@ defined. To ask `println!` to use `Debug` formatting with our `Point`, we add
 the annotation to derive the trait and include `:?` in the print string, like
 this:
 
+Filename: src/main.rs
+
 ```rust
 #[derive(Debug)]
 struct Point {
@@ -298,8 +311,8 @@ Chapter XX.
 
 ## Method Syntax
 
-In the last section on ownership, we made several references to ‘methods’.
-Methods look like this:
+In Chapter 4 when we discussed ownership, we made several references to
+*methods*. Methods look like this:
 
 ```rust
 let s1 = "hello";
@@ -310,8 +323,8 @@ let s2 = s1.clone();
 println!("{}", s1);
 ```
 
-The call to `clone()` is attached to `s1` with a dot. This is called ‘method
-syntax’, and it’s a way to call certain functions with a different style.
+The call to `clone()` is attached to `s1` with a dot. This is called *method
+syntax*, and it’s a way to call certain functions with a different style.
 
 Why have two ways to call functions? We’ll talk about some deeper reasons
 related to ownership in a moment, but one big reason is that methods look nicer
@@ -335,7 +348,7 @@ methods.
 ### Defining methods
 
 We can define methods with the `impl` keyword. `impl` is short for
-‘implementation’. Doing so looks like this:
+*implementation*. Doing so looks like this:
 
 ```rust
 #[derive(Debug,Copy,Clone)]
@@ -432,28 +445,12 @@ assert_eq!(8.200609733428363, p1.distance(&p2));
 When we defined `distance()`, we took both `self` and the other argument by
 reference. Yet, we needed a `&` for `p2` but not `p1`. What gives?
 
-This feature is called ‘automatic referencing’, and calling methods is one
+This feature is called *automatic referencing*, and calling methods is one
 of the few places in Rust that has behavior like this. Here’s how it works:
 when you call a method with `self.(`, Rust will automatically add in `&`s
 or `&mut`s to match the signature. In other words, these are the same:
 
 ```rust
-# #[derive(Debug,Copy,Clone)]
-# struct Point {
-#     x: f64,
-#     y: f64,
-# }
-#
-# impl Point {
-#    fn distance(&self, other: &Point) -> f64 {
-#        let x_squared = f64::powi(other.x - self.x, 2);
-#        let y_squared = f64::powi(other.y - self.y, 2);
-#
-#        f64::sqrt(x_squared + y_squared)
-#    }
-# }
-# let p1 = Point { x: 0.0, y: 0.0 };
-# let p2 = Point { x: 5.0, y: 6.5 };
 p1.distance(&p2);
 (&p1).distance(&p2);
 ```
@@ -471,13 +468,11 @@ s.push_str(" world!");
 assert_eq!("Hello, world!", s);
 ```
 
-Because [`push_str()`] has the following signature:
+Because `push_str()` has the following signature:
 
 ```rust,ignore
 fn push_str(&mut self, string: &str) {
 ```
-
-[`push_str()`]: http://doc.rust-lang.org/collections/string/struct.String.html#method.push_str
 
 This automatic referencing behavior works because methods have a clear receiver
 — the type of `self` — and in most cases it’s clear given the receiver and name

@@ -1,3 +1,6 @@
+
+[TOC]
+
 # Common Programming Concepts in Rust
 
 Let's look at concepts that appear in almost every programming language and see
@@ -42,7 +45,9 @@ $ cargo new --bin bindings
 $ cd bindings
 ```
 
-Then open *src/main.rs* and replace its code with the following:
+Then open `src/main.rs` and replace its code with the following:
+
+Filename: src/main.rs
 
 ```rust,ignore
 fn main() {
@@ -146,6 +151,8 @@ code will be changing this value.
 
 For example, change the program you just wrote to the following:
 
+Filename: src/main.rs
+
 ```rust
 fn main() {
     let mut x = 5;
@@ -176,11 +183,13 @@ depends on the tradeoffs you want to make in your situation.
 
 As we saw in the guessing game tutorial, we can declare new bindings with the
 same name as a previous binding, and the new binding *shadows* the previous
-binding. We say that the first binding is ‘shadowed’ by the second, which means
+binding. We say that the first binding is *shadowed* by the second, which means
 that the second binding's value is what you will see when you use the variable
 after the second binding. This can be useful if you’d like to perform a few
 transformations on a value, but have the binding be immutable after those
 transformations have been completed. For example:
+
+Filename: src/main.rs
 
 ```rust
 fn main() {
@@ -293,6 +302,8 @@ your code if you suspect floating-point size is a problem in your case.
 
 Here's an example showing floating-point numbers in action:
 
+Filename: src/main.rs
+
 ```rust
 fn main() {
     let x = 2.0; // f64
@@ -309,6 +320,8 @@ Floating-point numbers are represented according to the IEEE-754 standard. The
 Rust supports the usual basic mathematic operations you’d expect for all of
 these number types: addition, subtraction, multiplication, division, and
 modulo. This code shows how you'd use each one in a `let` statement:
+
+Filename: src/main.rs
 
 ```rust
 fn main() {
@@ -338,6 +351,8 @@ As in most other programming languages, a boolean type in Rust has two possible
 values: `true` and `false`. The boolean type in Rust is specified with `bool`.
 For example:
 
+Filename: src/main.rs
+
 ```rust
 fn main() {
     let t = true;
@@ -355,6 +370,8 @@ section of this chapter.
 So far we’ve only worked with numbers, but Rust supports letters too. Rust’s
 `char` type is the language's most primitive alphabetic type, and this code
 shows one way to use it:
+
+Filename: src/main.rs
 
 ```rust
 fn main() {
@@ -375,6 +392,25 @@ about Unicode Scalar Values at
 *http://www.unicode.org/glossary/#unicode_scalar_value* and find a chart for
 all unicode code points at *http://www.unicode.org/charts/*.
 
+#### The Byte Type
+
+You can work with the bytes of data directly. Byte literals can be created from
+the ASCII characters using `b` and single quotes:
+
+Filename: src/main.rs
+
+```rust
+fn main() {
+    let byte = b'a';
+    println!("byte is {}", byte);
+}
+```
+
+This will print `byte is 97`. Similarly, byte string literals can be created
+using `b` and double quotes, like `b"some byte string"`. Note that since you are
+limited to ASCII characters, it's a best practice to use characters instead of
+bytes when you're working with natural language text.
+
 ### Compound Types
 
 *Compound types* can group multiple values of other types into one type. Rust
@@ -389,6 +425,8 @@ types into one compound type.
 We create a tuple by writing a comma-separated list of values inside
 parentheses. Each position in the tuple has a distinct type, as in this example:
 
+Filename: src/main.rs
+
 ```rust
 fn main() {
     let tup: (i32, f64, u8) = (500, 6.4, 1);
@@ -399,6 +437,8 @@ Note that, unlike the examples of multiple bindings, here we bind the single
 name `tup` to the entire tuple, emphasizing the fact that a tuple is considered
 a single compound element. We could then use pattern matching to destructure
 this tuple value, like this:
+
+Filename: src/main.rs
 
 ```rust
 fn main() {
@@ -412,7 +452,7 @@ fn main() {
 
 In this program, we first create a tuple and bind it to the name `tup`. We then
 use a pattern with `let` to take `tup` and turn it into three separate
-bindings, `x`, `y`, and `z`. This is called ‘destructuring’, because it breaks
+bindings, `x`, `y`, and `z`. This is called *destructuring*, because it breaks
 the single tuple into three parts.
 
 Finally, we print the value of `y`, which is `6.4`.
@@ -422,6 +462,8 @@ Finally, we print the value of `y`, which is `6.4`.
 In addition to destructuring through pattern matching, we can also access a
 tuple element directly by using a period (`.`) followed by the index of the
 value we want to access. For example:
+
+Filename: src/main.rs
 
 ```rust
 fn main() {
@@ -449,6 +491,8 @@ in Rust have a fixed length-- once declared, they cannot grow or shrink in size.
 In Rust, the values going into an array are written as a comma separated list
 inside square brackets:
 
+Filename: src/main.rs
+
 ```rust
 fn main() {
     let a = [1, 2, 3, 4, 5];
@@ -465,6 +509,8 @@ and we'll discuss them in more detail in chapter XX.
 
 An array is a single chunk of memory, allocated on the stack. We can access
 elements of an array using indexing, like this:
+
+Filename: src/main.rs
 
 ```rust
 fn main() {
@@ -486,6 +532,8 @@ values.
 
 What happens if you try to access an element of an array past the end of the
 array? Say we changed our program to:
+
+Filename: src/main.rs
 
 ```rust,ignore
 fn main() {
@@ -533,6 +581,8 @@ words. (Rust also uses snake case for the names of variable bindings; we just
 haven't used any variable bindings with enough letters to need underscores
 yet). Here's a program containing an example function definition:
 
+Filename: src/main.rs
+
 ```rust
 fn main() {
     println!("Hello, world!");
@@ -565,7 +615,7 @@ $ cargo new --bin functions
 $ cd functions
 ```
 
-Place the `another_function()` example in a file named *src/main.rs* and run
+Place the `another_function()` example in a file named `src/main.rs` and run
 it. You should see the following output:
 
 ```bash
@@ -584,6 +634,8 @@ message is printed.
 
 Functions can also take arguments. The following rewritten version of
 `another_function()` shows what arguments look like in Rust:
+
+Filename: src/main.rs
 
 ```rust
 fn main() {
@@ -616,6 +668,8 @@ the code in order to figure out what you mean.
 
 When you want a function to have multiple arguments, just separate them inside
 the function signature with commas, like this:
+
+Filename: src/main.rs
 
 ```rust
 fn main() {
@@ -666,6 +720,8 @@ evaluate to a resulting value. Let's look at some examples.
 `Let` bindings are statements. They instruct the program to create a binding
 name and assign a value to it. `let y = 6;` in this example is a statement:
 
+Filename: src/main.rs
+
 ```rust
 fn main() {
     let y = 6;
@@ -677,6 +733,8 @@ statement as well.
 
 Statements do not return values themselves. Therefore, you can’t assign a `let`
 binding to another binding, as this code tries to do:
+
+Filename: src/main.rs
 
 ```rust,ignore
 fn main() {
@@ -718,6 +776,8 @@ y = 6;`, `6` is an expression that evaluates to the value `6`. Calling a
 function is an expression. Calling a macro is an expression. The block that we
 use to create new scopes, `{}`, is an expression, for example:
 
+Filename: src/main.rs
+
 ```rust
 fn main() {
     let x = 5;
@@ -757,6 +817,8 @@ return values, but we do declare their type, after an arrow (`->`). In Rust,
 the "return value of the function” is synonymous with “the value of the final
 expression in the block of the body of a function.” Here's an example of a
 function that returns a value:
+
+Filename: src/main.rs
 
 ```rust
 fn five() -> i32 {
@@ -798,6 +860,8 @@ arguments and defines the type of the return value, but the body of the
 function is a lonely `5` with no semicolon because it is an expression whose
 value we want to return. Let's look at another example:
 
+Filename: src/main.rs
+
 ```rust
 fn main() {
     let x = plus_one(5);
@@ -813,6 +877,8 @@ fn plus_one(x: i32) -> i32 {
 Running this code will print `The value of x is: 6`. What happens if we put a
 semicolon at the end of the line containing `x + 1`, changing it from an
 expression to a statement?
+
+Filename: src/main.rs
 
 ```rust,ignore
 fn main() {
@@ -876,6 +942,8 @@ include `//` on each line, like this:
 
 Comments can also be placed at the end of lines of code:
 
+Filename: src/main.rs
+
 ```rust
 fn main() {
     let lucky_number = 7; // I’m feeling lucky today.
@@ -883,6 +951,8 @@ fn main() {
 ```
 
 But you’ll more often see them above, like so:
+
+Filename: src/main.rs
 
 ```rust
 fn main() {
@@ -918,6 +988,8 @@ $ cd branches
 Write this sample program using `if` and save it in the *branches* directory in
 `src/main.rs`:
 
+Filename: src/main.rs
+
 ```rust
 fn main() {
     let number = 3;
@@ -934,7 +1006,7 @@ All `if` expressions start with `if`, which is followed by a condition. In this
 case, our condition is checking if our variable binding `number` has a value
 that is less than 5. The block of code we want to execute if the condition is
 true goes immediately after the condition, inside curly braces. These blocks
-are sometimes called ‘arms’. We can optionally also include an `else`
+are sometimes called *arms*. We can optionally also include an `else`
 statement, which we have chosen to do here. `else` gives the program a block of
 code to execute should `condition` evaluate to false.
 
@@ -965,6 +1037,8 @@ condition was false
 
 It’s also worth noting that `condition` here _must_ be a `bool`. To see what
 happens if the condition isn't a `bool`, try running this code:
+
+Filename: src/main.rs
 
 ```rust,ignore
 fn main() {
@@ -997,6 +1071,8 @@ not automatically try to convert non-boolean types to a boolean here, unlike
 languages like Ruby or JavaScript. We must be explicit and always give `if` a
 `boolean` as its condition. If your intention is for the `if` code block to be run if a number is not equal to `0`, for example, we would change the `if` expression to read:
 
+Filename: src/main.rs
+
 ```rust
 fn main() {
     let number = 3;
@@ -1013,6 +1089,8 @@ Running this will print "number was something other than zero".
 
 We can have multiple coniditions by combining `if` and `else` in an `else if`
 expression. For example:
+
+Filename: src/main.rs
 
 ```rust
 fn main() {
@@ -1054,6 +1132,8 @@ The last detail you need to learn about `if` is that it’s an expression. That
 means that we can use it on the right hand side of a `let` binding, for
 instance:
 
+Filename: src/main.rs
+
 ```rust
 fn main() {
     let condition = true;
@@ -1084,6 +1164,8 @@ that results from both arms of the `if` must be the same type; in the previous
 example, they were both `i32` integers. But what happens if the types are
 mismatched, as in the following example?
 
+Filename: src/main.rs
+
 ```rust,ignore
 fn main() {
     let condition = true;
@@ -1106,7 +1188,7 @@ single type. If we try to run this, we’ll get an error:
    Compiling branches v0.1.0 (file:///projects/branches)
 src/main.rs:4:18: 8:6 error: if and else have incompatible types:
  expected `_`,
-    found `&‘static str`
+    found `&'static str`
 (expected integral variable,
     found &-ptr) [E0308]
 src/main.rs:4     let number = if condition {
@@ -1143,8 +1225,10 @@ in.
 The `loop` keyword tells Rust to execute a block of code over and over again
 forever or until we explicitly tell it to stop.
 
-For an example, change the *src/main.rs* file in your *loops* directory to look
+For an example, change the `src/main.rs` file in your *loops* directory to look
 like this:
+
+Filename: src/main.rs
 
 ```rust,ignore
 fn main() {
@@ -1191,6 +1275,8 @@ for it, called a `while` loop. Here's an example using `while`: this program
 loops three times, counting down each time. Finally, after the loop, it prints
 another message, then exits:
 
+Filename: src/main.rs
+
 ```rust
 fn main() {
     let mut number = 3;
@@ -1213,6 +1299,8 @@ this code; otherwise, exit the loop.
 
 We could use this `while` construct to loop over the elements of a collection,
 like an array. For example:
+
+Filename: src/main.rs
 
 ```rust
 fn main() {
@@ -1254,6 +1342,8 @@ loop.
 As a more efficient alternative, we can use a `for` loop and execute some code
 for each item in a collection. A `for` loop looks like this:
 
+Filename: src/main.rs
+
 ```rust
 fn main() {
     let a = [10, 20, 30, 40, 50];
@@ -1272,7 +1362,7 @@ and missing some items.
 For example, in the previous code that uses the `while` loop, if we removed an
 item from the `a` array but forgot to update the condition to be `while index <
 4`, our code would panic. Using the `for` loop means we would not need to
-remember to change any other code if we changed the the number of values in the
+remember to change any other code if we changed the number of values in the
 array.
 
 If you're wondering about the `.iter()` code in this example, keep reading! We
@@ -1287,6 +1377,8 @@ is a type provided by the standard library that generates numbers starting from
 one number and ending before another number. Here's what the countdown would
 look like with a for loop, and using another method we haven't yet talked
 about, `.rev()`, to reverse the range:
+
+Filename: src/main.rs
 
 ```rust
 fn main() {

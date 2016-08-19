@@ -26,9 +26,7 @@ well as how they work behind the scenes.
 ## Contributing to the book
 
 This book is open source. If you find an error, please don’t hesitate to file an
-issue or send a pull request [on GitHub].
-
-[on GitHub]: https://github.com/rust-lang/book
+issue or send a pull request on GitHub at *https://github.com/rust-lang/book*.
 
 ## Installation
 
@@ -61,21 +59,23 @@ Rust is installed now. Great!
 
 ### Installing on Windows
 
-If you're on Windows, please download the appropriate [installer][install-page].
+If you're on Windows, please go to *https://rustup.rs/* and follow
+the instructions to download rustup-init.exe. Run that and follow the rest of
+the instructions.
 
-[install-page]: https://www.rust-lang.org/install.html
+The rest of the Windows-specific commands in the book will assume that you are
+using `cmd` as your shell. If you use a different shell, you may be able to run
+the same commands that Linux and Mac users do. If neither work, consult the
+documentation for the shell you are using.
 
 ### Uninstalling
 
-Uninstalling Rust is as easy as installing it. On Linux or Mac, just run
+Uninstalling Rust is as easy as installing it. From your shell, run
 the uninstall script:
 
 ```bash
 $ rustup self uninstall
 ```
-
-If you used the Windows installer, you can re-run the `.msi` and it will give
-you an uninstall option.
 
 ### Troubleshooting
 
@@ -96,26 +96,22 @@ If you see this, Rust has been installed successfully!
 Congrats!
 
 If you don't and you're on Windows, check that Rust is in your `%PATH%` system
-variable. If it isn't, run the installer again, select "Change" on the "Change,
-repair, or remove installation" page and ensure "Add to PATH" is checked.
+variable.
 
-If not, there are a number of places where you can get help. The easiest is
-[the #rust IRC channel on irc.mozilla.org][irc], which you can access through
-[Mibbit][mibbit]. Click that link, and you'll be chatting with other Rustaceans
-(a silly nickname we call ourselves) who can help you out. Other great resources
-include [the user’s forum][users] and [Stack Overflow][stackoverflow].
-
-[irc]: irc://irc.mozilla.org/#rust
-[mibbit]: http://chat.mibbit.com/?server=irc.mozilla.org&channel=%23rust
-[users]: https://users.rust-lang.org/
-[stackoverflow]: http://stackoverflow.com/questions/tagged/rust
+If it still isn't working, there are a number of places where you can get help.
+The easiest is the #rust IRC channel on irc.mozilla.org, which you can access
+through Mibbit at
+*http://chat.mibbit.com/?server=irc.mozilla.org&channel=%23rust*. Go to that
+address, and you'll be chatting with other Rustaceans (a silly nickname we call
+ourselves) who can help you out. Other great resources include the user’s forum
+at *https://users.rust-lang.org/* and Stack Overflow at
+*http://stackoverflow.com/questions/tagged/rust*.
 
 ### Local documentation
 
 The installer also includes a copy of the documentation locally, so you can
-read it offline. On Linux or Mac, run `rustup doc` to open the local
-documentation in your browser. On Windows, the documentation is in a
-`share/doc` directory inside the directory where Rust was installed.
+read it offline. Run `rustup doc` to open the local documentation in your
+browser.
 
 ## Hello, World!
 
@@ -126,7 +122,8 @@ tradition.
 
 > Note: This book assumes basic familiarity with the command line. Rust itself
 > makes no specific demands about your editing, tooling, or where your code
-> lives, so if you prefer an IDE to the command line, that's an option.
+> lives, so if you prefer an IDE to the command line, feel free to use your
+> favorite IDE.
 
 ### Creating a Project File
 
@@ -135,6 +132,8 @@ lives, but for this book, we'd suggest making a *projects* directory in your
 home directory and keeping all your projects there. Open a terminal and enter
 the following commands to make a directory for this particular project:
 
+Linux and Mac:
+
 ```bash
 $ mkdir ~/projects
 $ cd ~/projects
@@ -142,18 +141,25 @@ $ mkdir hello_world
 $ cd hello_world
 ```
 
-> Note: If you’re on Windows and not using PowerShell, the `~` that represents
-> your home directory may not work.
-> Consult the documentation for your shell for more details.
+Windows:
+
+```bash
+$ mkdir %USERPROFILE%\projects
+$ cd %USERPROFILE%\projects
+$ mkdir hello_world
+$ cd hello_world
+```
 
 ### Writing and Running a Rust Program
 
-Next, make a new source file and call it *main.rs*. Rust files always end with
-the *.rs* extension. If you’re using more than one word in your filename, use
-an underscore to separate them. For example, you'd use *hello_world.rs* rather
-than *helloworld.rs*.
+Next, make a new source file and call it `main.rs`. Rust files always end with
+the `.rs` extension. If you’re using more than one word in your filename, use
+an underscore to separate them. For example, you'd use `hello_world.rs` rather
+than `helloworld.rs`.
 
-Now open the *main.rs* file you just created, and type the following code:
+Now open the `main.rs` file you just created, and type the following code:
+
+Filename: main.rs
 
 ```rust
 fn main() {
@@ -170,10 +176,10 @@ $ ./main
 Hello, world!
 ```
 
-On Windows, just replace `main` with `main.exe`. Regardless of your operating
-system, you should see the string `Hello, world!` print to the terminal. If you
-did, then congratulations! You've officially written a Rust program. That makes
-you a Rust programmer! Welcome.
+On Windows, just replace `./main` with `.\main.exe`. Regardless of your
+operating system, you should see the string `Hello, world!` print to the
+terminal. If you did, then congratulations! You've officially written a Rust
+program. That makes you a Rust programmer! Welcome.
 
 ### Anatomy of a Rust Program
 
@@ -189,12 +195,10 @@ fn main() {
 These lines define a *function* in Rust. The `main` function is special: it's
 the first thing that is run for every executable Rust program. The first line
 says, “I’m declaring a function named `main` that takes no arguments and
-returns nothing.” If there were arguments, they would go inside the parentheses
-(`(` and `)`). We aren’t returning anything from this function, so we have
-omitted the return type entirely. If there was a return type, there would be a
-`->` and the return type after the parentheses.
+returns nothing.” If there were arguments, they would go inside the parentheses,
+`(` and `)`.
 
-Also note that the function body is wrapped in curly braces (`{` and `}`). Rust
+Also note that the function body is wrapped in curly braces, `{` and `}`. Rust
 requires these around all function bodies. It's considered good style to put
 the opening curly brace on the same line as the function declaration, with one
 space in between.
@@ -207,7 +211,7 @@ Inside the `main()` function:
 
 This line does all of the work in this little program: it prints text to the
 screen. There are a number of details that are important here. The first is
-that it’s indented with four spaces, not tabs.
+that it’s indented with four spaces, not a tab.
 
 The second important part is `println!()`. This is calling a Rust *macro*,
 which is how metaprogramming is done in Rust. If it were calling a function
@@ -249,8 +253,9 @@ main  main.rs
 On Windows, you'd enter:
 
 ```bash
-$ dir
-main.exe  main.rs
+$ dir /B # the /B option says to only show the file names
+main.exe
+main.rs
 ```
 
 This shows we have two files: the source code, with the `.rs` extension, and the
@@ -258,10 +263,10 @@ executable (`main.exe` on Windows, `main` everywhere else). All that's left to
 do from here is run the `main` or `main.exe` file, like this:
 
 ```bash
-$ ./main  # or main.exe on Windows
+$ ./main  # or .\main.exe on Windows
 ```
 
-If *main.rs* were your "Hello, world!" program, this would print `Hello,
+If `main.rs` were your "Hello, world!" program, this would print `Hello,
 world!` to your terminal.
 
 If you come from a dynamic language like Ruby, Python, or JavaScript, you may
@@ -285,7 +290,7 @@ Cargo is Rust’s build system and package manager, and Rustaceans use Cargo to
 manage their Rust projects because it makes a lot of tasks easier. For example,
 Cargo takes care of building your code, downloading the libraries your code
 depends on, and building those libraries. We call libraries your code needs
-‘dependencies’ since your code depends on them.
+*dependencies*.
 
 The simplest Rust programs, like the one we've written so far, don’t have any
 dependencies, so right now, you'd only be using the part of Cargo that can take
@@ -304,8 +309,8 @@ $ cargo --version
 ```
 
 If you see a version number, great! If you see an error like `command not
-found`, then you should look at the documentation for the way you installed
-Rust to determine how to install Cargo separately.
+found`, then you should look at the documentation for your method of
+installation to determine how to install Cargo separately.
 
 ### Creating a Project with Cargo
 
@@ -313,11 +318,19 @@ Let's create a new project using Cargo and look at how it differs from our
 project in `hello_world`. Go back to your projects directory (or wherever you
 decided to put your code):
 
+Linux and Mac:
+
 ```bash
 $ cd ~/projects
 ```
 
-And then run:
+Windows:
+
+```bash
+$ cd %USERPROFILE%\projects
+```
+
+And then on any operating system run:
 
 ```bash
 $ cargo new hello_cargo --bin
@@ -326,19 +339,21 @@ $ cd hello_cargo
 
 We passed the `--bin` argument to `cargo new` because our goal is to make an
 executable application, as opposed to a library. Executables are often called
-*binaries* (as in `/usr/bin`, if you’re on a Unix system). `hello_cargo` is the
-name we've chosen for our project, and Cargo creates its files in a directory
-of the same name that we can then go into.
+*binaries* (as in `/usr/bin`, if you’re on a Unix system). We've given
+`hello_cargo` as the name for our project, and Cargo creates its files in a
+directory of the same name that we can then go into.
 
 If we list the files in the `hello_cargo` directory, we can see that Cargo has
-generated two files and one directory for us: a `Cargo.toml` and a *src*
-directory with a *main.rs* file inside. It has also initialized a new `git`
-repository in the `hello_cargo` directory for us; you can change this to use a
-different version control system, or no version control system, by using the
-`--vcs` flag.
+generated two files and one directory for us: a `Cargo.toml` and a `src`
+directory with a `main.rs` file inside. It has also initialized a new `git`
+repository in the `hello_cargo` directory for us, along with a `.gitignore`
+file; you can change this to use a different version control system, or no
+version control system, by using the `--vcs` flag.
 
 Open up `Cargo.toml` in your text editor of choice. It should look something
 like this:
+
+Filename: Cargo.toml
 
 ```toml
 [package]
@@ -349,11 +364,9 @@ authors = ["Your Name <you@example.com>"]
 [dependencies]
 ```
 
-This file is in the *[TOML]* (Tom's Obvious, Minimal Language) format. TOML is
+This file is in the *TOML* (Tom's Obvious, Minimal Language) format. TOML is
 similar to INI but has some extra goodies and is used as Cargo’s
 configuration format.
-
-[TOML]: https://github.com/toml-lang/toml
 
 The first line, `[package]`, is a section heading that indicates that the
 following statements are configuring a package. As we add more information to
@@ -366,11 +379,14 @@ from your environment. If it’s not correct, go ahead and fix that and save the
 file.
 
 The last line, `[dependencies]`, is the start of a section for you to list any
-crates that your project will depend on so that Cargo knows to download and
-compile those too. We won't need any other crates for this project, but we will
-in the guessing game tutorial in the next chapter.
+*crates* (which is what we call packages of Rust code) that your project will
+depend on so that Cargo knows to download and compile those too. We won't need
+any other crates for this project, but we will in the guessing game tutorial in
+the next chapter.
 
 Now let's look at `src/main.rs`:
+
+Filename: src/main.rs
 
 ```rust
 fn main() {
@@ -385,7 +401,7 @@ and the project generated by Cargo that we've seen so far are:
 1. Our code goes in the `src` directory
 2. The top level contains a `Cargo.toml` configuration file
 
-Cargo expects your source files to live inside the *src* directory so that the
+Cargo expects your source files to live inside the `src` directory so that the
 top-level project directory is just for READMEs, license information,
 configuration files, and anything else not related to your code. In this way,
 using Cargo helps you keep your projects nice and tidy. There's a place for
@@ -403,20 +419,23 @@ program through Cargo! To do so, enter the following commands:
 
 ```bash
 $ cargo build
-   Compiling hello_cargo v0.1.0 (file:///home/yourname/projects/hello_cargo)
+   Compiling hello_cargo v0.1.0 (file:///projects/hello_cargo)
 ```
 
-This should have created an executable file in `target/debug/hello_cargo` (or `target/debug/hello_cargo.exe` on Windows), which you can run with this command:
+This should have created an executable file in `target/debug/hello_cargo` (or
+`target\debug\hello_cargo.exe` on Windows), which you can run with this command:
 
 ```bash
-$ ./target/debug/hello_cargo # or ./target/debug/hello_cargo.exe on Windows
+$ ./target/debug/hello_cargo # or .\target\debug\hello_cargo.exe on Windows
 Hello, world!
 ```
 
 Bam! If all goes well, `Hello, world!` should print to the terminal once more.
 
 Running `cargo build` for the first time also causes Cargo to create a new file
-at the top level called *Cargo.lock*, which looks like this:
+at the top level called `Cargo.lock`, which looks like this:
+
+Filename: Cargo.lock
 
 ```toml
 [root]
@@ -424,7 +443,7 @@ name = "hello_cargo"
 version = "0.1.0"
 ```
 
-Cargo uses the *Cargo.lock* file to keep track of dependencies in your
+Cargo uses the `Cargo.lock` file to keep track of dependencies in your
 application. This project doesn't have dependencies, so the file is a bit
 sparse. Realistically, you won't ever need to touch this file yourself; just
 let Cargo handle it.
@@ -439,22 +458,29 @@ $ cargo run
 Hello, world!
 ```
 
-Notice that this time, we didn't see the output that Cargo was compiling
-`hello_cargo`. Cargo figured out that the files haven’t changed, so it just ran
-the binary. If you had modified your source code, Cargo would have rebuilt the
-project before running it, and you would have seen something like this:
+Notice that this time, we didn't see the output telling us that Cargo was
+compiling `hello_cargo`. Cargo figured out that the files haven’t changed, so
+it just ran the binary. If you had modified your source code, Cargo would have
+rebuilt the project before running it, and you would have seen something like
+this:
 
 ```bash
 $ cargo run
-   Compiling hello_cargo v0.1.0 (file:///home/yourname/projects/hello_cargo)
+   Compiling hello_cargo v0.1.0 (file:///projects/hello_cargo)
      Running `target/debug/hello_cargo`
 Hello, world!
 ```
 
 So a few more differences we've now seen:
 
-3. Instead of using `rustc`, build a project using `cargo build` (or build and run it in one step with `cargo run`)
-4. Instead of the result of the build being put in the same directory as our code, Cargo will put it in the `target/debug` directory.
+3. Instead of using `rustc`, build a project using `cargo build` (or build and
+  run it in one step with `cargo run`)
+4. Instead of the result of the build being put in the same directory as our
+  code, Cargo will put it in the `target/debug` directory.
+
+The other advantage of using Cargo is that the commands are the same no matter
+what operating system you're on, so at this point we will no longer be
+providing specific instructions for Linux and Mac versus Windows.
 
 ### Building for Release
 
@@ -477,7 +503,7 @@ projects composed of multiple crates, it’s much easier to let Cargo coordinate
 the build. With Cargo, you can just run `cargo build`, and it should work the
 right way. Even though this project is simple, it now uses much of the real
 tooling you’ll use for the rest of your Rust career. In fact, you can get
-started with virtually all Rust projects you might find that you want to work
+started with virtually all Rust projects you want to work
 on with the following commands:
 
 ```bash
@@ -487,6 +513,4 @@ $ cargo build
 ```
 
 > Note: If you want to look at Cargo in more detail, check out the official
-[Cargo guide], which covers all of its features.
-
-[Cargo guide]: http://doc.crates.io/guide.html
+Cargo guide at *http://doc.crates.io/guide.html*, which covers all of its features.

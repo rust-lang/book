@@ -1,3 +1,6 @@
+
+[TOC]
+
 # Understanding Ownership
 
 Ownership is important to understand: it's Rust's most unique feature, and
@@ -7,7 +10,7 @@ and how Rust lays things out in memory.
 
 ## Ownership
 
-Rust’s central feature is called ‘ownership’. It is a feature that is
+Rust’s central feature is called *ownership*. It is a feature that is
 straightforward to explain, but has deep implications for the rest of the
 language.
 
@@ -55,8 +58,8 @@ at which it’s declared until the end of the current _scope_. That is:
 
 In other words, there are two important points in time here:
 
-- When `s` comes ‘into scope’, it is valid.
-- It remains so until it ‘goes out of scope’.
+- When `s` comes "into scope", it is valid.
+- It remains so until it "goes out of scope".
 
 At this point, things are similar to other programming languages. Now let’s
 build on top of this understanding by introducing the `String` type.
@@ -113,8 +116,8 @@ That first part is done by us: when we call `String::from()`, its
 implementation requests the memory it needs. This is pretty much universal in
 programming languages.
 
-The second case, however, is different. In languages with a garbage collector
-(‘GC’), the GC will keep track and clean up memory that isn't being used
+The second case, however, is different. In languages with a *garbage collector*
+(*GC*), the GC will keep track and clean up memory that isn't being used
 anymore, and we, as the programmer, don’t need to think about it. Without GC,
 it’s our responsibility to identify when memory is no longer being used and
 call code to explicitly return it, just as we did to request it. Doing this
@@ -122,7 +125,6 @@ correctly has historically been a difficult problem. If we forget, we will
 waste memory. If we do it too early, we will have an invalid variable. If we do
 it twice, that’s a bug too. We need to pair exactly one `allocate()` with
 exactly one `free()`.
-
 
 Rust takes a different path. Remember our example? Here’s a version with
 `String`:
@@ -256,20 +258,21 @@ alone will free the memory, and we’re done.
 
 This leads us to the Ownership Rules:
 
-> 1. Each value in Rust has a variable binding that’s called its ‘owner’.
+> 1. Each value in Rust has a variable binding that’s called its *owner*.
 > 2. There can only be one owner at a time.
 > 3. When the owner goes out of scope, the value will be `drop()`ped.
 
 Furthermore, there’s a design choice that’s implied by this: Rust will never
-automatically create ‘deep’ copies of your data. Therefore, any _automatic_
+automatically create "deep" copies of your data. Therefore, any _automatic_
 copying can be assumed to be inexpensive.
 
 ### Clone
 
 But what if we _do_ want to deeply copy the `String`’s data and not just the
 `String` itself? There’s a common method for that: `clone()`. We will discuss
-methods in the section on [`structs`], but they’re a common enough feature
-in many programming languages that you have probably seen them before.
+methods in the section on `structs` in Chapter XX, but they’re a
+common enough feature in many programming languages that you have probably seen
+them before.
 
 Here’s an example of the `clone()` method in action:
 
@@ -279,8 +282,6 @@ let s2 = s1.clone();
 
 println!("{}", s1);
 ```
-
-[`structs`]: ch05-01-structs.html
 
 This will work just fine. Remember our diagram from before? In this case,
 it _is_ doing this:
@@ -333,6 +334,8 @@ but nothing that requires allocation or is some form of resource is `Copy`. Here
 
 Passing a value to a function has similar semantics as assigning it:
 
+Filename: src/main.rs
+
 ```rust
 fn main() {
     let s = String::from("hello");
@@ -356,6 +359,8 @@ fn makes_copy(some_integer: i32) {
 Passing a binding to a function will move or copy, just like assignment. Here’s
 the same example, but with some annotations showing where things go into and
 out of scope:
+
+Filename: src/main.rs
 
 ```rust
 fn main() {
@@ -389,6 +394,8 @@ and where the ownership rules prevent you from doing so.
 
 Returning values can also transfer ownership:
 
+Filename: src/main.rs
+
 ```rust
 fn main() {
     let s1 = gives_ownership();
@@ -411,6 +418,8 @@ fn takes_and_gives_back(a_string: String) -> String {
 ```
 
 With similiar annotations:
+
+Filename: src/main.rs
 
 ```rust
 fn main() {
@@ -452,6 +461,8 @@ also needs to be passed back if we want to use it again, in addition to any
 data resulting from the body of the function that we might want to return as
 well. It's _possible_ to return multiple values, using a tuple, like this:
 
+Filename: src/main.rs
+
 ```rust
 fn main() {
     let s1 = String::from("hello");
@@ -477,6 +488,8 @@ next section is about.
 At the end of the last section, we had some example Rust that wasn’t very
 good. Here it is again:
 
+Filename: src/main.rs
+
 ```rust
 fn main() {
     let s1 = String::from("hello");
@@ -499,6 +512,8 @@ function so that we can still use it there, since it was moved when we called
 
 There is a better way. It looks like this:
 
+Filename: src/main.rs
+
 ```rust
 fn main() {
     let s1 = String::from("hello");
@@ -520,7 +535,7 @@ function return value is gone. Next, note that we pass `&s1` into
 `calculate_length()`, and in its definition, we take `&String` rather than
 `String`.
 
-These `&`s are called ‘references’, and they allow you to refer to some value
+These `&`s are called *references*, and they allow you to refer to some value
 without taking ownership of it. Here’s a diagram:
 
 DIAGRAM GOES HERE of a &String pointing at a String, with (ptr, len, capacity)
@@ -528,11 +543,6 @@ DIAGRAM GOES HERE of a &String pointing at a String, with (ptr, len, capacity)
 Let’s take a closer look at the function call here:
 
 ```rust
-# fn calculate_length(s: &String) -> usize {
-#     let length = s.len();
-#
-#     length
-# }
 let s1 = String::from("hello");
 
 let len = calculate_length(&s1);
@@ -559,12 +569,14 @@ we don’t drop what a reference points to when the reference goes out of scope.
 This lets us write functions which take references as arguments instead of the
 values themselves, so that we won’t need to return them to give back ownership.
 
-There’s another word for what references do, and that’s ‘borrowing’. Just like
+There’s another word for what references do, and that’s *borrowing*. Just like
 with real life, if a person owns something, you can borrow it from them. When
 you’re done, you have to give it back.
 
 Speaking of which, what if you try to modify something you borrow from me? Try
 this code out. Spoiler alert: it doesn’t work!
+
+Filename: src/main.rs
 
 ```rust,ignore
 fn main() {
@@ -595,6 +607,8 @@ allowed to modify something we have a reference to.
 
 We can fix this bug! Just a small tweak:
 
+Filename: src/main.rs
+
 ```rust
 fn main() {
     let mut s = String::from("hello");
@@ -612,6 +626,8 @@ reference with `&mut s` and accept a mutable reference with `some_string: &mut
 String`.
 
 Mutable references have one big restriction, though. This code fails:
+
+Filename: src/main.rs
 
 ```rust,ignore
 let mut s = String::from("hello");
@@ -693,6 +709,8 @@ out of scope before the reference does.
 
 Let’s try to create a dangling reference:
 
+Filename: src/main.rs
+
 ```rust,ignore
 fn main() {
     let reference_to_nothing = dangle();
@@ -722,7 +740,7 @@ error: aborting due to previous error
 ```
 
 This error message refers to a feature we haven’t learned about yet,
-‘lifetimes’. The message does contain the key to why this code is a problem,
+*lifetimes*. The message does contain the key to why this code is a problem,
 though:
 
 ```bash
@@ -792,12 +810,14 @@ ownership, so this is fine. But what should we return? We don’t really have a
 way to talk about _part_ of a string. We could return the index of the end of
 the word, though. Let’s try that:
 
+Filename: src/main.rs
+
 ```rust
 fn first_word(s: &String) -> usize {
     let bytes = s.as_bytes();
 
     for (i, &item) in bytes.iter().enumerate() {
-        if item == 32 {
+        if item == b' ' {
             return i;
         }
     }
@@ -832,35 +852,25 @@ match against the tuple with i for the index and &item for a single byte. Since
 we get a reference from `.iter().enumerate()`, we use `&` in the pattern.
 
 ```rust,ignore
-    if item == 32 {
+    if item == b' ' {
         return i;
     }
 }
 s.len()
 ```
 
-We search for the value 32, which represents a space in UTF-8. If we find one,
-we return the position. Otherwise, we return the length of the string, using
-`s.len()`.
+We search for the byte that represents the space, using the byte literal
+syntax. If we find one, we return the position. Otherwise, we return the length
+of the string, using `s.len()`.
 
 This works, but there’s a problem. We’re returning a `usize` on its own, but
 it’s only a meaningful number in the context of the `&String`. In other
 words, because it’s a separate value from the `String`, there’s no guarantee
 that it will still be valid in the future. Consider this:
 
-```rust
-# fn first_word(s: &String) -> usize {
-#     let bytes = s.as_bytes();
-#
-#     for (i, &item) in bytes.iter().enumerate() {
-#         if item == 32 {
-#             return i;
-#         }
-#     }
-#
-#     s.len()
-# }
+Filename: src/main.rs
 
+```rust
 fn main() {
     let mut s = String::from("hello world");
 
@@ -948,12 +958,14 @@ let slice = &s[..];
 
 With this in mind, let’s re-write `first_word()` to return a slice:
 
+Filename: src/main.rs
+
 ```rust
 fn first_word(s: &String) -> &str {
     let bytes = s.as_bytes();
 
     for (i, &item) in bytes.iter().enumerate() {
-        if item == 32 {
+        if item == b' ' {
             return &s[0..i];
         }
     }
@@ -976,6 +988,8 @@ We now have a straightforward API that’s much harder to mess up.
 
 But what about our error condition from before? Slices also fix that. Using
 the slice version of `first_word()` will throw an error:
+
+Filename: src/main.rs
 
 ```rust,ignore
 fn main() {
@@ -1046,18 +1060,9 @@ the ability to talk about full `String`s. And additionally, we can take
 string slices of string literals too, so this function is more useful, but
 with no loss of functionality:
 
+Filename: src/main.rs
+
 ```rust
-# fn first_word(s: &str) -> &str {
-#     let bytes = s.as_bytes();
-#
-#     for (i, &item) in bytes.iter().enumerate() {
-#         if item == 32 {
-#             return &s[0..i];
-#         }
-#     }
-#
-#     &s[..]
-# }
 fn main() {
     let my_string = String::from("hello world");
 
