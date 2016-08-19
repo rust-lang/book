@@ -7,7 +7,8 @@ tradition.
 
 > Note: This book assumes basic familiarity with the command line. Rust itself
 > makes no specific demands about your editing, tooling, or where your code
-> lives, so if you prefer an IDE to the command line, that's an option.
+> lives, so if you prefer an IDE to the command line, feel free to use your
+> favorite IDE.
 
 ### Creating a Project File
 
@@ -16,6 +17,8 @@ lives, but for this book, we'd suggest making a *projects* directory in your
 home directory and keeping all your projects there. Open a terminal and enter
 the following commands to make a directory for this particular project:
 
+Linux and Mac:
+
 ```bash
 $ mkdir ~/projects
 $ cd ~/projects
@@ -23,9 +26,14 @@ $ mkdir hello_world
 $ cd hello_world
 ```
 
-> Note: If you’re on Windows and not using PowerShell, the `~` that represents
-> your home directory may not work.
-> Consult the documentation for your shell for more details.
+Windows:
+
+```bash
+$ mkdir %USERPROFILE%\projects
+$ cd %USERPROFILE%\projects
+$ mkdir hello_world
+$ cd hello_world
+```
 
 ### Writing and Running a Rust Program
 
@@ -53,10 +61,10 @@ $ ./main
 Hello, world!
 ```
 
-On Windows, just replace `main` with `main.exe`. Regardless of your operating
-system, you should see the string `Hello, world!` print to the terminal. If you
-did, then congratulations! You've officially written a Rust program. That makes
-you a Rust programmer! Welcome.
+On Windows, just replace `./main` with `.\main.exe`. Regardless of your
+operating system, you should see the string `Hello, world!` print to the
+terminal. If you did, then congratulations! You've officially written a Rust
+program. That makes you a Rust programmer! Welcome.
 
 ### Anatomy of a Rust Program
 
@@ -72,12 +80,10 @@ fn main() {
 These lines define a *function* in Rust. The `main` function is special: it's
 the first thing that is run for every executable Rust program. The first line
 says, “I’m declaring a function named `main` that takes no arguments and
-returns nothing.” If there were arguments, they would go inside the parentheses
-(`(` and `)`). We aren’t returning anything from this function, so we have
-omitted the return type entirely. If there was a return type, there would be a
-`->` and the return type after the parentheses.
+returns nothing.” If there were arguments, they would go inside the parentheses,
+`(` and `)`.
 
-Also note that the function body is wrapped in curly braces (`{` and `}`). Rust
+Also note that the function body is wrapped in curly braces, `{` and `}`. Rust
 requires these around all function bodies. It's considered good style to put
 the opening curly brace on the same line as the function declaration, with one
 space in between.
@@ -90,7 +96,7 @@ Inside the `main()` function:
 
 This line does all of the work in this little program: it prints text to the
 screen. There are a number of details that are important here. The first is
-that it’s indented with four spaces, not tabs.
+that it’s indented with four spaces, not a tab.
 
 The second important part is `println!()`. This is calling a Rust *macro*,
 which is how metaprogramming is done in Rust. If it were calling a function
@@ -132,8 +138,9 @@ main  main.rs
 On Windows, you'd enter:
 
 ```bash
-$ dir
-main.exe  main.rs
+$ dir /B # the /B option says to only show the file names
+main.exe
+main.rs
 ```
 
 This shows we have two files: the source code, with the `.rs` extension, and the
@@ -141,7 +148,7 @@ executable (`main.exe` on Windows, `main` everywhere else). All that's left to
 do from here is run the `main` or `main.exe` file, like this:
 
 ```bash
-$ ./main  # or main.exe on Windows
+$ ./main  # or .\main.exe on Windows
 ```
 
 If `main.rs` were your "Hello, world!" program, this would print `Hello,
@@ -168,7 +175,7 @@ Cargo is Rust’s build system and package manager, and Rustaceans use Cargo to
 manage their Rust projects because it makes a lot of tasks easier. For example,
 Cargo takes care of building your code, downloading the libraries your code
 depends on, and building those libraries. We call libraries your code needs
-*dependencies* since your code depends on them.
+*dependencies*.
 
 The simplest Rust programs, like the one we've written so far, don’t have any
 dependencies, so right now, you'd only be using the part of Cargo that can take
@@ -187,8 +194,8 @@ $ cargo --version
 ```
 
 If you see a version number, great! If you see an error like `command not
-found`, then you should look at the documentation for the way you installed
-Rust to determine how to install Cargo separately.
+found`, then you should look at the documentation for your method of
+installation to determine how to install Cargo separately.
 
 ### Creating a Project with Cargo
 
@@ -196,11 +203,19 @@ Let's create a new project using Cargo and look at how it differs from our
 project in `hello_world`. Go back to your projects directory (or wherever you
 decided to put your code):
 
+Linux and Mac:
+
 ```bash
 $ cd ~/projects
 ```
 
-And then run:
+Windows:
+
+```bash
+$ cd %USERPROFILE%\projects
+```
+
+And then on any operating system run:
 
 ```bash
 $ cargo new hello_cargo --bin
@@ -209,16 +224,16 @@ $ cd hello_cargo
 
 We passed the `--bin` argument to `cargo new` because our goal is to make an
 executable application, as opposed to a library. Executables are often called
-*binaries* (as in `/usr/bin`, if you’re on a Unix system). `hello_cargo` is the
-name we've chosen for our project, and Cargo creates its files in a directory
-of the same name that we can then go into.
+*binaries* (as in `/usr/bin`, if you’re on a Unix system). We've given
+`hello_cargo` as the name for our project, and Cargo creates its files in a
+directory of the same name that we can then go into.
 
 If we list the files in the `hello_cargo` directory, we can see that Cargo has
 generated two files and one directory for us: a `Cargo.toml` and a `src`
 directory with a `main.rs` file inside. It has also initialized a new `git`
-repository in the `hello_cargo` directory for us; you can change this to use a
-different version control system, or no version control system, by using the
-`--vcs` flag.
+repository in the `hello_cargo` directory for us, along with a `.gitignore`
+file; you can change this to use a different version control system, or no
+version control system, by using the `--vcs` flag.
 
 Open up `Cargo.toml` in your text editor of choice. It should look something
 like this:
@@ -294,10 +309,11 @@ $ cargo build
    Compiling hello_cargo v0.1.0 (file:///projects/hello_cargo)
 ```
 
-This should have created an executable file in `target/debug/hello_cargo` (or `target/debug/hello_cargo.exe` on Windows), which you can run with this command:
+This should have created an executable file in `target/debug/hello_cargo` (or
+`target\debug\hello_cargo.exe` on Windows), which you can run with this command:
 
 ```bash
-$ ./target/debug/hello_cargo # or ./target/debug/hello_cargo.exe on Windows
+$ ./target/debug/hello_cargo # or .\target\debug\hello_cargo.exe on Windows
 Hello, world!
 ```
 
@@ -329,10 +345,11 @@ $ cargo run
 Hello, world!
 ```
 
-Notice that this time, we didn't see the output that Cargo was compiling
-`hello_cargo`. Cargo figured out that the files haven’t changed, so it just ran
-the binary. If you had modified your source code, Cargo would have rebuilt the
-project before running it, and you would have seen something like this:
+Notice that this time, we didn't see the output telling us that Cargo was
+compiling `hello_cargo`. Cargo figured out that the files haven’t changed, so
+it just ran the binary. If you had modified your source code, Cargo would have
+rebuilt the project before running it, and you would have seen something like
+this:
 
 ```bash
 $ cargo run
@@ -343,8 +360,14 @@ Hello, world!
 
 So a few more differences we've now seen:
 
-3. Instead of using `rustc`, build a project using `cargo build` (or build and run it in one step with `cargo run`)
-4. Instead of the result of the build being put in the same directory as our code, Cargo will put it in the `target/debug` directory.
+3. Instead of using `rustc`, build a project using `cargo build` (or build and
+  run it in one step with `cargo run`)
+4. Instead of the result of the build being put in the same directory as our
+  code, Cargo will put it in the `target/debug` directory.
+
+The other advantage of using Cargo is that the commands are the same no matter
+what operating system you're on, so at this point we will no longer be
+providing specific instructions for Linux and Mac versus Windows.
 
 ### Building for Release
 
@@ -367,7 +390,7 @@ projects composed of multiple crates, it’s much easier to let Cargo coordinate
 the build. With Cargo, you can just run `cargo build`, and it should work the
 right way. Even though this project is simple, it now uses much of the real
 tooling you’ll use for the rest of your Rust career. In fact, you can get
-started with virtually all Rust projects you might find that you want to work
+started with virtually all Rust projects you want to work
 on with the following commands:
 
 ```bash
