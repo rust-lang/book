@@ -351,9 +351,9 @@ Rust team does, however, provide a [`rand` crate][randcrate].
 
 ### Using a Crate to Get More Functionality
 
-A *crate* is what we call a package of Rust code. The project we’ve been
-building is a *binary crate*, which is an executable. The `rand` crate is a
-*library crate*, which contains code intended to be used in other programs.
+Remember that *crate* is what we call a package of Rust code. The project we’ve
+been building is a *binary crate*, which is an executable. The `rand` crate is
+a *library crate*, which contains code intended to be used in other programs.
 
 Cargo's use of external crates is where it really shines. Before we can write
 the code using `rand`, we need to modify our `Cargo.toml` to include the `rand`
