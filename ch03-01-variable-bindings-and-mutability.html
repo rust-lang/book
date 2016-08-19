@@ -82,6 +82,7 @@ in. From there, run these commands:</p>
 $ cd bindings
 </code></pre>
 <p>Then open <code>src/main.rs</code> and replace its code with the following:</p>
+<p>Filename: src/main.rs</p>
 <pre><code class="language-rust,ignore">fn main() {
     let x = 5;
     println!(&quot;The value of x is: {}&quot;, x);
@@ -164,6 +165,7 @@ addition to telling the compiler it should allow this value to be changed, it
 conveys intent to future readers of the code and says that other parts of the
 code will be changing this value.</p>
 <p>For example, change the program you just wrote to the following:</p>
+<p>Filename: src/main.rs</p>
 <pre><code class="language-rust">fn main() {
     let mut x = 5;
     println!(&quot;The value of x is: {}&quot;, x);
@@ -192,6 +194,7 @@ that the second binding's value is what you will see when you use the variable
 after the second binding. This can be useful if you’d like to perform a few
 transformations on a value, but have the binding be immutable after those
 transformations have been completed. For example:</p>
+<p>Filename: src/main.rs</p>
 <pre><code class="language-rust">fn main() {
     let x = 5;
 

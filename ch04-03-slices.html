@@ -82,6 +82,7 @@ then the whole string is a word, so the whole thing should be returned.</p>
 ownership, so this is fine. But what should we return? We don’t really have a
 way to talk about <em>part</em> of a string. We could return the index of the end of
 the word, though. Let’s try that:</p>
+<p>Filename: src/main.rs</p>
 <pre><code class="language-rust">fn first_word(s: &amp;String) -&gt; usize {
     let bytes = s.as_bytes();
 
@@ -124,6 +125,7 @@ of the string, using <code>s.len()</code>.</p>
 it’s only a meaningful number in the context of the <code>&amp;String</code>. In other
 words, because it’s a separate value from the <code>String</code>, there’s no guarantee
 that it will still be valid in the future. Consider this:</p>
+<p>Filename: src/main.rs</p>
 <pre><code class="language-rust"># fn first_word(s: &amp;String) -&gt; usize {
 #     let bytes = s.as_bytes();
 #
@@ -135,7 +137,7 @@ that it will still be valid in the future. Consider this:</p>
 #
 #     s.len()
 # }
-
+#
 fn main() {
     let mut s = String::from(&quot;hello world&quot;);
 
@@ -199,6 +201,7 @@ let slice = &amp;s[0..len];
 let slice = &amp;s[..];
 </code></pre>
 <p>With this in mind, let’s re-write <code>first_word()</code> to return a slice:</p>
+<p>Filename: src/main.rs</p>
 <pre><code class="language-rust">fn first_word(s: &amp;String) -&gt; &amp;str {
     let bytes = s.as_bytes();
 
@@ -220,6 +223,7 @@ slice and the number of elements in the slice.</p>
 <p>We now have a straightforward API that’s much harder to mess up.</p>
 <p>But what about our error condition from before? Slices also fix that. Using
 the slice version of <code>first_word()</code> will throw an error:</p>
+<p>Filename: src/main.rs</p>
 <pre><code class="language-rust,ignore">fn main() {
     let mut s = String::from(&quot;hello world&quot;);
 
@@ -270,6 +274,7 @@ a string slice that’s the full length of a <code>String</code>, so we haven’
 the ability to talk about full <code>String</code>s. And additionally, we can take
 string slices of string literals too, so this function is more useful, but
 with no loss of functionality:</p>
+<p>Filename: src/main.rs</p>
 <pre><code class="language-rust"># fn first_word(s: &amp;str) -&gt; &amp;str {
 #     let bytes = s.as_bytes();
 #

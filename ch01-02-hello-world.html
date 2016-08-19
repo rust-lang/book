@@ -98,6 +98,7 @@ the <code>.rs</code> extension. If you’re using more than one word in your fil
 an underscore to separate them. For example, you'd use <code>hello_world.rs</code> rather
 than <code>helloworld.rs</code>.</p>
 <p>Now open the <code>main.rs</code> file you just created, and type the following code:</p>
+<p>Filename: main.rs</p>
 <pre><code class="language-rust">fn main() {
     println!(&quot;Hello, world!&quot;);
 }
@@ -228,6 +229,7 @@ different version control system, or no version control system, by using the
 <code>--vcs</code> flag.</p>
 <p>Open up <code>Cargo.toml</code> in your text editor of choice. It should look something
 like this:</p>
+<p>Filename: Cargo.toml</p>
 <pre><code class="language-toml">[package]
 name = &quot;hello_cargo&quot;
 version = &quot;0.1.0&quot;
@@ -252,6 +254,7 @@ depend on so that Cargo knows to download and compile those too. We won't need
 any other crates for this project, but we will in the guessing game tutorial in
 the next chapter.</p>
 <p>Now let's look at <code>src/main.rs</code>:</p>
+<p>Filename: src/main.rs</p>
 <pre><code class="language-rust">fn main() {
     println!(&quot;Hello, world!&quot;);
 }
@@ -285,6 +288,7 @@ Hello, world!
 <p>Bam! If all goes well, <code>Hello, world!</code> should print to the terminal once more.</p>
 <p>Running <code>cargo build</code> for the first time also causes Cargo to create a new file
 at the top level called <code>Cargo.lock</code>, which looks like this:</p>
+<p>Filename: Cargo.lock</p>
 <pre><code class="language-toml">[root]
 name = &quot;hello_cargo&quot;
 version = &quot;0.1.0&quot;

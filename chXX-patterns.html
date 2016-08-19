@@ -80,6 +80,7 @@ any place where a pattern is used.</p>
 particularly humble form of pattern.</p>
 <h2>Multiple bindings</h2>
 <p>Let’s try a more complex pattern. Change our example program to this:</p>
+<p>Filename: src/main.rs</p>
 <pre><code class="language-rust">fn main() {
     let (x, y) = (5, 6);
 
@@ -117,9 +118,7 @@ even though Rust is a statically typed language. Occasionally, Rust won't have
 enough information to infer the type of your value, and you will need to add a
 type annotation in with the pattern.</p>
 <p>Here’s what a <code>let</code> statement with a <em>type annotation</em> looks like:</p>
-<pre><code class="language-rust">fn main() {
-    let x: i32 = 5;
-}
+<pre><code class="language-rust">let x: i32 = 5;
 </code></pre>
 <p>We can add a colon, followed by the type name. Here’s the structure of a <code>let</code>
 statement with a type annotation:</p>
@@ -127,9 +126,7 @@ statement with a type annotation:</p>
 </code></pre>
 <p>Note that the colon and the <code>TYPE</code> go <em>after</em> the <code>PATTERN</code>, not in the pattern
 itself. As an example, here’s our more complex pattern with two bindings:</p>
-<pre><code class="language-rust">fn main() {
-    let (x, y): (i32, i32) = (5, 6);
-}
+<pre><code class="language-rust">let (x, y): (i32, i32) = (5, 6);
 </code></pre>
 <p>Just like we match up the <code>VALUE</code> with the <code>PATTERN</code>, we match up the <code>TYPE</code>
 with the <code>PATTERN</code>.</p>
@@ -267,14 +264,12 @@ match x {
 }
 </code></pre>
 <p>Ranges are usually used with integers or <code>char</code>s:</p>
-<pre><code class="language-rust">fn main() {
-    let x = 'c';
+<pre><code class="language-rust">let x = 'c';
 
-    match x {
-        'a' ... 'j' =&gt; println!(&quot;early ASCII letter&quot;),
-        'k' ... 'z' =&gt; println!(&quot;late ASCII letter&quot;),
-        _ =&gt; println!(&quot;something else&quot;),
-    }
+match x {
+    'a' ... 'j' =&gt; println!(&quot;early ASCII letter&quot;),
+    'k' ... 'z' =&gt; println!(&quot;late ASCII letter&quot;),
+    _ =&gt; println!(&quot;something else&quot;),
 }
 </code></pre>
 <h2>Guards</h2>

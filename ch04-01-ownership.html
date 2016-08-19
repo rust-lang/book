@@ -316,6 +316,7 @@ is <code>Copy</code>, but <code>(i32, String)</code> is not.</li>
 </ul>
 <h3>Ownership and functions</h3>
 <p>Passing a value to a function has similar semantics as assigning it:</p>
+<p>Filename: src/main.rs</p>
 <pre><code class="language-rust">fn main() {
     let s = String::from(&quot;hello&quot;);
 
@@ -337,6 +338,7 @@ fn makes_copy(some_integer: i32) {
 <p>Passing a binding to a function will move or copy, just like assignment. Here’s
 the same example, but with some annotations showing where things go into and
 out of scope:</p>
+<p>Filename: src/main.rs</p>
 <pre><code class="language-rust">fn main() {
     let s = String::from(&quot;hello&quot;);  // s goes into scope.
 
@@ -365,6 +367,7 @@ would throw a compile-time error. These static checks protect us from mistakes.
 Try adding code to <code>main</code> that uses <code>s</code> and <code>x</code> to see where you can use them
 and where the ownership rules prevent you from doing so.</p>
 <p>Returning values can also transfer ownership:</p>
+<p>Filename: src/main.rs</p>
 <pre><code class="language-rust">fn main() {
     let s1 = gives_ownership();
 
@@ -385,6 +388,7 @@ fn takes_and_gives_back(a_string: String) -&gt; String {
 }
 </code></pre>
 <p>With similiar annotations:</p>
+<p>Filename: src/main.rs</p>
 <pre><code class="language-rust">fn main() {
     let s1 = gives_ownership();         // gives_ownership moves its return
                                         // value into s1.
@@ -421,6 +425,7 @@ a value but not take ownership? It’s quite annoying that anything we pass in
 also needs to be passed back if we want to use it again, in addition to any
 data resulting from the body of the function that we might want to return as
 well. It's <em>possible</em> to return multiple values, using a tuple, like this:</p>
+<p>Filename: src/main.rs</p>
 <pre><code class="language-rust">fn main() {
     let s1 = String::from(&quot;hello&quot;);
 

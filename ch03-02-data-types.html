@@ -129,6 +129,7 @@ possible to use an <code>f64</code> on 32 bit systems, but it will be slower tha
 for better precision is a reasonable initial choice, and you should benchmark
 your code if you suspect floating-point size is a problem in your case.</p>
 <p>Here's an example showing floating-point numbers in action:</p>
+<p>Filename: src/main.rs</p>
 <pre><code class="language-rust">fn main() {
     let x = 2.0; // f64
 
@@ -141,6 +142,7 @@ your code if you suspect floating-point size is a problem in your case.</p>
 <p>Rust supports the usual basic mathematic operations you’d expect for all of
 these number types: addition, subtraction, multiplication, division, and
 modulo. This code shows how you'd use each one in a <code>let</code> statement:</p>
+<p>Filename: src/main.rs</p>
 <pre><code class="language-rust">fn main() {
     // addition
     let sum = 5 + 10;
@@ -164,6 +166,7 @@ to a single value, which is then bound to a variable.</p>
 <p>As in most other programming languages, a boolean type in Rust has two possible
 values: <code>true</code> and <code>false</code>. The boolean type in Rust is specified with <code>bool</code>.
 For example:</p>
+<p>Filename: src/main.rs</p>
 <pre><code class="language-rust">fn main() {
     let t = true;
 
@@ -177,6 +180,7 @@ section of this chapter.</p>
 <p>So far we’ve only worked with numbers, but Rust supports letters too. Rust’s
 <code>char</code> type is the language's most primitive alphabetic type, and this code
 shows one way to use it:</p>
+<p>Filename: src/main.rs</p>
 <pre><code class="language-rust">fn main() {
    let c = 'z';
    let z = 'ℤ';
@@ -196,6 +200,7 @@ all unicode code points at <em>http://www.unicode.org/charts/</em>.</p>
 <h4>The Byte Type</h4>
 <p>You can work with the bytes of data directly. Byte literals can be created from
 the ASCII characters using <code>b</code> and single quotes:</p>
+<p>Filename: src/main.rs</p>
 <pre><code class="language-rust">fn main() {
     let byte = b'a';
     println!(&quot;byte is {}&quot;, byte);
@@ -214,6 +219,7 @@ general way of grouping together some number of other values with distinct
 types into one compound type.</p>
 <p>We create a tuple by writing a comma-separated list of values inside
 parentheses. Each position in the tuple has a distinct type, as in this example:</p>
+<p>Filename: src/main.rs</p>
 <pre><code class="language-rust">fn main() {
     let tup: (i32, f64, u8) = (500, 6.4, 1);
 }
@@ -222,6 +228,7 @@ parentheses. Each position in the tuple has a distinct type, as in this example:
 name <code>tup</code> to the entire tuple, emphasizing the fact that a tuple is considered
 a single compound element. We could then use pattern matching to destructure
 this tuple value, like this:</p>
+<p>Filename: src/main.rs</p>
 <pre><code class="language-rust">fn main() {
     let tup: (i32, f64, u8) = (500, 6.4, 1);
 
@@ -239,6 +246,7 @@ the single tuple into three parts.</p>
 <p>In addition to destructuring through pattern matching, we can also access a
 tuple element directly by using a period (<code>.</code>) followed by the index of the
 value we want to access. For example:</p>
+<p>Filename: src/main.rs</p>
 <pre><code class="language-rust">fn main() {
     let x: (i32, f64, u8) = (500, 6.4, 1);
 
@@ -259,6 +267,7 @@ Arrays in Rust are different than arrays in some other languages because arrays
 in Rust have a fixed length-- once declared, they cannot grow or shrink in size.</p>
 <p>In Rust, the values going into an array are written as a comma separated list
 inside square brackets:</p>
+<p>Filename: src/main.rs</p>
 <pre><code class="language-rust">fn main() {
     let a = [1, 2, 3, 4, 5];
 }
@@ -271,6 +280,7 @@ and we'll discuss them in more detail in chapter XX.</p>
 <h4>Accessing Array Elements</h4>
 <p>An array is a single chunk of memory, allocated on the stack. We can access
 elements of an array using indexing, like this:</p>
+<p>Filename: src/main.rs</p>
 <pre><code class="language-rust">fn main() {
     let a = [1, 2, 3, 4, 5];
 
@@ -287,6 +297,7 @@ values.</p>
 <h4>Invalid array element access</h4>
 <p>What happens if you try to access an element of an array past the end of the
 array? Say we changed our program to:</p>
+<p>Filename: src/main.rs</p>
 <pre><code class="language-rust,ignore">fn main() {
     let a = [1, 2, 3, 4, 5];
 

@@ -84,6 +84,7 @@ $ cd branches
 </code></pre>
 <p>Write this sample program using <code>if</code> and save it in the <em>branches</em> directory in
 <code>src/main.rs</code>:</p>
+<p>Filename: src/main.rs</p>
 <pre><code class="language-rust">fn main() {
     let number = 3;
 
@@ -119,6 +120,7 @@ condition was false
 </code></pre>
 <p>It’s also worth noting that <code>condition</code> here <em>must</em> be a <code>bool</code>. To see what
 happens if the condition isn't a <code>bool</code>, try running this code:</p>
+<p>Filename: src/main.rs</p>
 <pre><code class="language-rust,ignore">fn main() {
     let number = 3;
 
@@ -144,6 +146,7 @@ Could not compile `branches`.
 not automatically try to convert non-boolean types to a boolean here, unlike
 languages like Ruby or JavaScript. We must be explicit and always give <code>if</code> a
 <code>boolean</code> as its condition. If your intention is for the <code>if</code> code block to be run if a number is not equal to <code>0</code>, for example, we would change the <code>if</code> expression to read:</p>
+<p>Filename: src/main.rs</p>
 <pre><code class="language-rust">fn main() {
     let number = 3;
 
@@ -156,6 +159,7 @@ languages like Ruby or JavaScript. We must be explicit and always give <code>if<
 <h4>Multiple Conditions with <code>else if</code></h4>
 <p>We can have multiple coniditions by combining <code>if</code> and <code>else</code> in an <code>else if</code>
 expression. For example:</p>
+<p>Filename: src/main.rs</p>
 <pre><code class="language-rust">fn main() {
     let number = 5;
 
@@ -187,6 +191,7 @@ for these cases.</p>
 <p>The last detail you need to learn about <code>if</code> is that it’s an expression. That
 means that we can use it on the right hand side of a <code>let</code> binding, for
 instance:</p>
+<p>Filename: src/main.rs</p>
 <pre><code class="language-rust">fn main() {
     let condition = true;
     let number = if condition {
@@ -211,6 +216,7 @@ expression depends on which block of code executes. This means that the value
 that results from both arms of the <code>if</code> must be the same type; in the previous
 example, they were both <code>i32</code> integers. But what happens if the types are
 mismatched, as in the following example?</p>
+<p>Filename: src/main.rs</p>
 <pre><code class="language-rust,ignore">fn main() {
     let condition = true;
 
@@ -259,6 +265,7 @@ in.</p>
 forever or until we explicitly tell it to stop.</p>
 <p>For an example, change the <code>src/main.rs</code> file in your <em>loops</em> directory to look
 like this:</p>
+<p>Filename: src/main.rs</p>
 <pre><code class="language-rust,ignore">fn main() {
     loop {
         println!(&quot;again!&quot;);
@@ -294,6 +301,7 @@ that now if you'd like!</p>
 for it, called a <code>while</code> loop. Here's an example using <code>while</code>: this program
 loops three times, counting down each time. Finally, after the loop, it prints
 another message, then exits:</p>
+<p>Filename: src/main.rs</p>
 <pre><code class="language-rust">fn main() {
     let mut number = 3;
 
@@ -312,6 +320,7 @@ this code; otherwise, exit the loop.</p>
 <h4>Looping Through a Collection with <code>for</code></h4>
 <p>We could use this <code>while</code> construct to loop over the elements of a collection,
 like an array. For example:</p>
+<p>Filename: src/main.rs</p>
 <pre><code class="language-rust">fn main() {
     let a = [10, 20, 30, 40, 50];
     let mut index = 0;
@@ -344,6 +353,7 @@ perform the conditional check on every element on every iteration through the
 loop.</p>
 <p>As a more efficient alternative, we can use a <code>for</code> loop and execute some code
 for each item in a collection. A <code>for</code> loop looks like this:</p>
+<p>Filename: src/main.rs</p>
 <pre><code class="language-rust">fn main() {
     let a = [10, 20, 30, 40, 50];
 
@@ -371,6 +381,7 @@ is a type provided by the standard library that generates numbers starting from
 one number and ending before another number. Here's what the countdown would
 look like with a for loop, and using another method we haven't yet talked
 about, <code>.rev()</code>, to reverse the range:</p>
+<p>Filename: src/main.rs</p>
 <pre><code class="language-rust">fn main() {
     for number in (1..4).rev() {
         println!(&quot;{}!&quot;, number);

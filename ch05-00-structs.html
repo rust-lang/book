@@ -84,6 +84,7 @@ $ cd points
 </code></pre>
 <p>Here’s a short program which calculates the distance between two points. Put
 it into your <code>src/main.rs</code>:</p>
+<p>Filename: src/main.rs</p>
 <pre><code class="language-rust">fn main() {
     let x1 = 0.0;
     let y1 = 5.0;
@@ -147,6 +148,7 @@ in our program itself. It would be nicer if we had a way to group <code>(x1, y1)
 and <code>(x2, y2)</code> together.</p>
 <p>We’ve already discussed one way to do that: tuples. Here’s a version of our
 program which uses tuples:</p>
+<p>Filename: src/main.rs</p>
 <pre><code class="language-rust">fn main() {
     let p1 = (0.0, 5.0);
 
@@ -206,6 +208,7 @@ let x = p1.x;
 </code></pre>
 <p>Let’s convert our program to use our <code>Point</code> <code>struct</code>. Here’s what it looks
 like now:</p>
+<p>Filename: src/main.rs</p>
 <pre><code class="language-rust">#[derive(Debug,Copy,Clone)]
 struct Point {
     x: f64,
@@ -248,6 +251,7 @@ struct so that we can see its value while we are debugging our code.</p>
 <p>So far, we’ve been printing values using <code>{}</code> in a <code>println!</code> macro. If we try
 that with a struct, however, by default, we'll get an error. Say we have the
 following program:</p>
+<p>Filename: src/main.rs</p>
 <pre><code class="language-rust,ignore">struct Point {
     x: f64,
     y: f64,
@@ -286,6 +290,7 @@ implementation of <code>Debug</code> formatting to easily get this ability for t
 defined. To ask <code>println!</code> to use <code>Debug</code> formatting with our <code>Point</code>, we add
 the annotation to derive the trait and include <code>:?</code> in the print string, like
 this:</p>
+<p>Filename: src/main.rs</p>
 <pre><code class="language-rust">#[derive(Debug)]
 struct Point {
     x: f64,

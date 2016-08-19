@@ -77,6 +77,7 @@ snake case, all letters are lower case, and there are underscores separating
 words. (Rust also uses snake case for the names of variable bindings; we just
 haven't used any variable bindings with enough letters to need underscores
 yet). Here's a program containing an example function definition:</p>
+<p>Filename: src/main.rs</p>
 <pre><code class="language-rust">fn main() {
     println!(&quot;Hello, world!&quot;);
 
@@ -116,6 +117,7 @@ message is printed.</p>
 <h3>Function Arguments</h3>
 <p>Functions can also take arguments. The following rewritten version of
 <code>another_function()</code> shows what arguments look like in Rust:</p>
+<p>Filename: src/main.rs</p>
 <pre><code class="language-rust">fn main() {
     another_function(5);
 }
@@ -140,6 +142,7 @@ definitions means the compiler almost never needs you to use them elsewhere in
 the code in order to figure out what you mean.</p>
 <p>When you want a function to have multiple arguments, just separate them inside
 the function signature with commas, like this:</p>
+<p>Filename: src/main.rs</p>
 <pre><code class="language-rust">fn main() {
     another_function(5, 6);
 }
@@ -177,6 +180,7 @@ instructions that perform some action and do not return a value. <em>Expressions
 evaluate to a resulting value. Let's look at some examples.</p>
 <p><code>Let</code> bindings are statements. They instruct the program to create a binding
 name and assign a value to it. <code>let y = 6;</code> in this example is a statement:</p>
+<p>Filename: src/main.rs</p>
 <pre><code class="language-rust">fn main() {
     let y = 6;
 }
@@ -185,6 +189,7 @@ name and assign a value to it. <code>let y = 6;</code> in this example is a stat
 statement as well.</p>
 <p>Statements do not return values themselves. Therefore, you can’t assign a <code>let</code>
 binding to another binding, as this code tries to do:</p>
+<p>Filename: src/main.rs</p>
 <pre><code class="language-rust,ignore">fn main() {
     let x = (let y = 6);
 }
@@ -214,6 +219,7 @@ Consider a simple math operation, like this:</p>
 can be part of statements-- in the previous example that had the statement <code>let y = 6;</code>, <code>6</code> is an expression that evaluates to the value <code>6</code>. Calling a
 function is an expression. Calling a macro is an expression. The block that we
 use to create new scopes, <code>{}</code>, is an expression, for example:</p>
+<p>Filename: src/main.rs</p>
 <pre><code class="language-rust">fn main() {
     let x = 5;
 
@@ -245,6 +251,7 @@ return values, but we do declare their type, after an arrow (<code>-&gt;</code>)
 the &quot;return value of the function” is synonymous with “the value of the final
 expression in the block of the body of a function.” Here's an example of a
 function that returns a value:</p>
+<p>Filename: src/main.rs</p>
 <pre><code class="language-rust">fn five() -&gt; i32 {
     5
 }
@@ -275,6 +282,7 @@ use the return value of a function to initialize a binding.</p>
 arguments and defines the type of the return value, but the body of the
 function is a lonely <code>5</code> with no semicolon because it is an expression whose
 value we want to return. Let's look at another example:</p>
+<p>Filename: src/main.rs</p>
 <pre><code class="language-rust">fn main() {
     let x = plus_one(5);
 
@@ -288,6 +296,7 @@ fn plus_one(x: i32) -&gt; i32 {
 <p>Running this code will print <code>The value of x is: 6</code>. What happens if we put a
 semicolon at the end of the line containing <code>x + 1</code>, changing it from an
 expression to a statement?</p>
+<p>Filename: src/main.rs</p>
 <pre><code class="language-rust,ignore">fn main() {
     let x = plus_one(5);
 

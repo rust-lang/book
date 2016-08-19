@@ -82,6 +82,7 @@ $ cd guessing_game
 <p>We pass the name of our project to <code>cargo new</code>, then the <code>--bin</code> flag, since
 we’re going to be making another binary like in Chapter 1.</p>
 <p>Take a look at the generated <code>Cargo.toml</code>:</p>
+<p>Filename: Cargo.toml</p>
 <pre><code class="language-toml">[package]
 name = &quot;guessing_game&quot;
 version = &quot;0.1.0&quot;
@@ -93,6 +94,7 @@ authors = [&quot;Your Name &lt;you@example.com&gt;&quot;]
 go ahead and fix that.</p>
 <p>And as we saw in the last chapter, <code>cargo new</code> generates a &quot;Hello, world!&quot; for
 us. Check out <code>src/main.rs</code>:</p>
+<p>Filename: src/main.rs</p>
 <pre><code class="language-rust">fn main() {
     println!(&quot;Hello, world!&quot;);
 }
@@ -111,6 +113,7 @@ file.</p>
 <h2>Processing a Guess</h2>
 <p>Let’s get to it! The first thing we need to do for our guessing game is
 allow our player to input a guess. Put this in your <code>src/main.rs</code>:</p>
+<p>Filename: src/main.rs</p>
 <pre><code class="language-rust,ignore">use std::io;
 
 fn main() {
@@ -282,6 +285,7 @@ programs.</p>
 the code using <code>rand</code>, we need to modify our <code>Cargo.toml</code>. Open it up, and
 add this line at the bottom beneath the <code>[dependencies]</code> section header that
 Cargo created for you:</p>
+<p>Filename: Cargo.toml</p>
 <pre><code class="language-toml">[dependencies]
 
 rand = &quot;0.3.14&quot;
@@ -352,6 +356,7 @@ that’s all we need to know. Cargo makes it really easy to re-use libraries, so
 Rustaceans are able to write smaller projects which are assembled out of a
 number of sub-packages.</p>
 <p>Let’s get on to actually <em>using</em> <code>rand</code>. Here’s our next step:</p>
+<p>Filename: src/main.rs</p>
 <pre><code class="language-rust,ignore">extern crate rand;
 
 use std::io;
@@ -423,6 +428,7 @@ You guessed: 5
 <h2>Comparing guesses</h2>
 <p>Now that we’ve got user input, let’s compare our guess to the secret number.
 Here’s part of our next step. It won't quite compile yet though:</p>
+<p>Filename: src/main.rs</p>
 <pre><code class="language-rust,ignore">extern crate rand;
 
 use std::io;
@@ -512,6 +518,7 @@ be the same type.</p>
 <p>Ultimately, we want to convert the <code>String</code> we read as input
 into a real number type so that we can compare it to the guess numerically. We
 can do that with two more lines. Here’s our new program:</p>
+<p>Filename: src/main.rs</p>
 <pre><code class="language-rust,ignore">extern crate rand;
 
 use std::io;
@@ -592,6 +599,7 @@ the secret number works, as well as guessing a number too small.</p>
 change that by adding loops!</p>
 <h2>Looping</h2>
 <p>The <code>loop</code> keyword gives us an infinite loop. Let’s add that in:</p>
+<p>Filename: src/main.rs</p>
 <pre><code class="language-rust,ignore">extern crate rand;
 
 use std::io;
@@ -654,6 +662,7 @@ error: Process didn't exit successfully: `target/debug/guess` (exit code: 101)
 </code></pre>
 <p>Ha! <code>quit</code> actually quits. As does any other non-number input. Well, this is
 suboptimal to say the least. First, let’s actually quit when you win the game:</p>
+<p>Filename: src/main.rs</p>
 <pre><code class="language-rust,ignore">extern crate rand;
 
 use std::io;
@@ -696,6 +705,7 @@ win. Exiting the loop also means exiting the program, since the loop is the last
 thing in <code>main()</code>. We have another tweak to make: when someone inputs a
 non-number, we don’t want to quit, we want to ignore it. We can do that
 like this:</p>
+<p>Filename: src/main.rs</p>
 <pre><code class="language-rust,ignore">extern crate rand;
 
 use std::io;
@@ -777,6 +787,7 @@ You win!
 think of what it is? That’s right, we don’t want to print out the secret
 number. It was good for testing, but it kind of ruins the game. Here’s our
 final source:</p>
+<p>Filename: src/main.rs</p>
 <pre><code class="language-rust,ignore">extern crate rand;
 
 use std::io;

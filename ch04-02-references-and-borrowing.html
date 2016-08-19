@@ -70,6 +70,7 @@
                     <h2>References and Borrowing</h2>
 <p>At the end of the last section, we had some example Rust that wasn’t very
 good. Here it is again:</p>
+<p>Filename: src/main.rs</p>
 <pre><code class="language-rust">fn main() {
     let s1 = String::from(&quot;hello&quot;);
 
@@ -88,6 +89,7 @@ fn calculate_length(s: String) -&gt; (String, usize) {
 function so that we can still use it there, since it was moved when we called
 <code>calculate_length()</code>.</p>
 <p>There is a better way. It looks like this:</p>
+<p>Filename: src/main.rs</p>
 <pre><code class="language-rust">fn main() {
     let s1 = String::from(&quot;hello&quot;);
 
@@ -140,6 +142,7 @@ with real life, if a person owns something, you can borrow it from them. When
 you’re done, you have to give it back.</p>
 <p>Speaking of which, what if you try to modify something you borrow from me? Try
 this code out. Spoiler alert: it doesn’t work!</p>
+<p>Filename: src/main.rs</p>
 <pre><code class="language-rust,ignore">fn main() {
     let s = String::from(&quot;hello&quot;);
 
@@ -161,6 +164,7 @@ fn change(some_string: &amp;String) {
 allowed to modify something we have a reference to.</p>
 <h3>Mutable references</h3>
 <p>We can fix this bug! Just a small tweak:</p>
+<p>Filename: src/main.rs</p>
 <pre><code class="language-rust">fn main() {
     let mut s = String::from(&quot;hello&quot;);
 
@@ -174,6 +178,7 @@ fn change(some_string: &amp;mut String) {
 <p>First, we had to change <code>s</code> to be <code>mut</code>. Then we had to create a mutable
 reference with <code>&amp;mut s</code> and accept a mutable reference with <code>some_string: &amp;mut String</code>.</p>
 <p>Mutable references have one big restriction, though. This code fails:</p>
+<p>Filename: src/main.rs</p>
 <pre><code class="language-rust,ignore">let mut s = String::from(&quot;hello&quot;);
 
 let r1 = &amp;mut s;
@@ -235,6 +240,7 @@ contrast, the compiler guarantees that references will never be dangling: if we
 have a reference to something, the compiler will ensure that it will not go
 out of scope before the reference does.</p>
 <p>Let’s try to create a dangling reference:</p>
+<p>Filename: src/main.rs</p>
 <pre><code class="language-rust,ignore">fn main() {
     let reference_to_nothing = dangle();
 }

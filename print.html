@@ -173,6 +173,7 @@ the <code>.rs</code> extension. If you’re using more than one word in your fil
 an underscore to separate them. For example, you'd use <code>hello_world.rs</code> rather
 than <code>helloworld.rs</code>.</p>
 <p>Now open the <code>main.rs</code> file you just created, and type the following code:</p>
+<p>Filename: main.rs</p>
 <pre><code class="language-rust">fn main() {
     println!(&quot;Hello, world!&quot;);
 }
@@ -303,6 +304,7 @@ different version control system, or no version control system, by using the
 <code>--vcs</code> flag.</p>
 <p>Open up <code>Cargo.toml</code> in your text editor of choice. It should look something
 like this:</p>
+<p>Filename: Cargo.toml</p>
 <pre><code class="language-toml">[package]
 name = &quot;hello_cargo&quot;
 version = &quot;0.1.0&quot;
@@ -327,6 +329,7 @@ depend on so that Cargo knows to download and compile those too. We won't need
 any other crates for this project, but we will in the guessing game tutorial in
 the next chapter.</p>
 <p>Now let's look at <code>src/main.rs</code>:</p>
+<p>Filename: src/main.rs</p>
 <pre><code class="language-rust">fn main() {
     println!(&quot;Hello, world!&quot;);
 }
@@ -360,6 +363,7 @@ Hello, world!
 <p>Bam! If all goes well, <code>Hello, world!</code> should print to the terminal once more.</p>
 <p>Running <code>cargo build</code> for the first time also causes Cargo to create a new file
 at the top level called <code>Cargo.lock</code>, which looks like this:</p>
+<p>Filename: Cargo.lock</p>
 <pre><code class="language-toml">[root]
 name = &quot;hello_cargo&quot;
 version = &quot;0.1.0&quot;
@@ -431,6 +435,7 @@ $ cd guessing_game
 <p>We pass the name of our project to <code>cargo new</code>, then the <code>--bin</code> flag, since
 we’re going to be making another binary like in Chapter 1.</p>
 <p>Take a look at the generated <code>Cargo.toml</code>:</p>
+<p>Filename: Cargo.toml</p>
 <pre><code class="language-toml">[package]
 name = &quot;guessing_game&quot;
 version = &quot;0.1.0&quot;
@@ -442,6 +447,7 @@ authors = [&quot;Your Name &lt;you@example.com&gt;&quot;]
 go ahead and fix that.</p>
 <p>And as we saw in the last chapter, <code>cargo new</code> generates a &quot;Hello, world!&quot; for
 us. Check out <code>src/main.rs</code>:</p>
+<p>Filename: src/main.rs</p>
 <pre><code class="language-rust">fn main() {
     println!(&quot;Hello, world!&quot;);
 }
@@ -460,6 +466,7 @@ file.</p>
 <h2>Processing a Guess</h2>
 <p>Let’s get to it! The first thing we need to do for our guessing game is
 allow our player to input a guess. Put this in your <code>src/main.rs</code>:</p>
+<p>Filename: src/main.rs</p>
 <pre><code class="language-rust,ignore">use std::io;
 
 fn main() {
@@ -631,6 +638,7 @@ programs.</p>
 the code using <code>rand</code>, we need to modify our <code>Cargo.toml</code>. Open it up, and
 add this line at the bottom beneath the <code>[dependencies]</code> section header that
 Cargo created for you:</p>
+<p>Filename: Cargo.toml</p>
 <pre><code class="language-toml">[dependencies]
 
 rand = &quot;0.3.14&quot;
@@ -701,6 +709,7 @@ that’s all we need to know. Cargo makes it really easy to re-use libraries, so
 Rustaceans are able to write smaller projects which are assembled out of a
 number of sub-packages.</p>
 <p>Let’s get on to actually <em>using</em> <code>rand</code>. Here’s our next step:</p>
+<p>Filename: src/main.rs</p>
 <pre><code class="language-rust,ignore">extern crate rand;
 
 use std::io;
@@ -772,6 +781,7 @@ You guessed: 5
 <h2>Comparing guesses</h2>
 <p>Now that we’ve got user input, let’s compare our guess to the secret number.
 Here’s part of our next step. It won't quite compile yet though:</p>
+<p>Filename: src/main.rs</p>
 <pre><code class="language-rust,ignore">extern crate rand;
 
 use std::io;
@@ -861,6 +871,7 @@ be the same type.</p>
 <p>Ultimately, we want to convert the <code>String</code> we read as input
 into a real number type so that we can compare it to the guess numerically. We
 can do that with two more lines. Here’s our new program:</p>
+<p>Filename: src/main.rs</p>
 <pre><code class="language-rust,ignore">extern crate rand;
 
 use std::io;
@@ -941,6 +952,7 @@ the secret number works, as well as guessing a number too small.</p>
 change that by adding loops!</p>
 <h2>Looping</h2>
 <p>The <code>loop</code> keyword gives us an infinite loop. Let’s add that in:</p>
+<p>Filename: src/main.rs</p>
 <pre><code class="language-rust,ignore">extern crate rand;
 
 use std::io;
@@ -1003,6 +1015,7 @@ error: Process didn't exit successfully: `target/debug/guess` (exit code: 101)
 </code></pre>
 <p>Ha! <code>quit</code> actually quits. As does any other non-number input. Well, this is
 suboptimal to say the least. First, let’s actually quit when you win the game:</p>
+<p>Filename: src/main.rs</p>
 <pre><code class="language-rust,ignore">extern crate rand;
 
 use std::io;
@@ -1045,6 +1058,7 @@ win. Exiting the loop also means exiting the program, since the loop is the last
 thing in <code>main()</code>. We have another tweak to make: when someone inputs a
 non-number, we don’t want to quit, we want to ignore it. We can do that
 like this:</p>
+<p>Filename: src/main.rs</p>
 <pre><code class="language-rust,ignore">extern crate rand;
 
 use std::io;
@@ -1126,6 +1140,7 @@ You win!
 think of what it is? That’s right, we don’t want to print out the secret
 number. It was good for testing, but it kind of ruins the game. Here’s our
 final source:</p>
+<p>Filename: src/main.rs</p>
 <pre><code class="language-rust,ignore">extern crate rand;
 
 use std::io;
@@ -1201,6 +1216,7 @@ in. From there, run these commands:</p>
 $ cd bindings
 </code></pre>
 <p>Then open <code>src/main.rs</code> and replace its code with the following:</p>
+<p>Filename: src/main.rs</p>
 <pre><code class="language-rust,ignore">fn main() {
     let x = 5;
     println!(&quot;The value of x is: {}&quot;, x);
@@ -1283,6 +1299,7 @@ addition to telling the compiler it should allow this value to be changed, it
 conveys intent to future readers of the code and says that other parts of the
 code will be changing this value.</p>
 <p>For example, change the program you just wrote to the following:</p>
+<p>Filename: src/main.rs</p>
 <pre><code class="language-rust">fn main() {
     let mut x = 5;
     println!(&quot;The value of x is: {}&quot;, x);
@@ -1311,6 +1328,7 @@ that the second binding's value is what you will see when you use the variable
 after the second binding. This can be useful if you’d like to perform a few
 transformations on a value, but have the binding be immutable after those
 transformations have been completed. For example:</p>
+<p>Filename: src/main.rs</p>
 <pre><code class="language-rust">fn main() {
     let x = 5;
 
@@ -1397,6 +1415,7 @@ possible to use an <code>f64</code> on 32 bit systems, but it will be slower tha
 for better precision is a reasonable initial choice, and you should benchmark
 your code if you suspect floating-point size is a problem in your case.</p>
 <p>Here's an example showing floating-point numbers in action:</p>
+<p>Filename: src/main.rs</p>
 <pre><code class="language-rust">fn main() {
     let x = 2.0; // f64
 
@@ -1409,6 +1428,7 @@ your code if you suspect floating-point size is a problem in your case.</p>
 <p>Rust supports the usual basic mathematic operations you’d expect for all of
 these number types: addition, subtraction, multiplication, division, and
 modulo. This code shows how you'd use each one in a <code>let</code> statement:</p>
+<p>Filename: src/main.rs</p>
 <pre><code class="language-rust">fn main() {
     // addition
     let sum = 5 + 10;
@@ -1432,6 +1452,7 @@ to a single value, which is then bound to a variable.</p>
 <p>As in most other programming languages, a boolean type in Rust has two possible
 values: <code>true</code> and <code>false</code>. The boolean type in Rust is specified with <code>bool</code>.
 For example:</p>
+<p>Filename: src/main.rs</p>
 <pre><code class="language-rust">fn main() {
     let t = true;
 
@@ -1445,6 +1466,7 @@ section of this chapter.</p>
 <p>So far we’ve only worked with numbers, but Rust supports letters too. Rust’s
 <code>char</code> type is the language's most primitive alphabetic type, and this code
 shows one way to use it:</p>
+<p>Filename: src/main.rs</p>
 <pre><code class="language-rust">fn main() {
    let c = 'z';
    let z = 'ℤ';
@@ -1464,6 +1486,7 @@ all unicode code points at <em>http://www.unicode.org/charts/</em>.</p>
 <h4>The Byte Type</h4>
 <p>You can work with the bytes of data directly. Byte literals can be created from
 the ASCII characters using <code>b</code> and single quotes:</p>
+<p>Filename: src/main.rs</p>
 <pre><code class="language-rust">fn main() {
     let byte = b'a';
     println!(&quot;byte is {}&quot;, byte);
@@ -1482,6 +1505,7 @@ general way of grouping together some number of other values with distinct
 types into one compound type.</p>
 <p>We create a tuple by writing a comma-separated list of values inside
 parentheses. Each position in the tuple has a distinct type, as in this example:</p>
+<p>Filename: src/main.rs</p>
 <pre><code class="language-rust">fn main() {
     let tup: (i32, f64, u8) = (500, 6.4, 1);
 }
@@ -1490,6 +1514,7 @@ parentheses. Each position in the tuple has a distinct type, as in this example:
 name <code>tup</code> to the entire tuple, emphasizing the fact that a tuple is considered
 a single compound element. We could then use pattern matching to destructure
 this tuple value, like this:</p>
+<p>Filename: src/main.rs</p>
 <pre><code class="language-rust">fn main() {
     let tup: (i32, f64, u8) = (500, 6.4, 1);
 
@@ -1507,6 +1532,7 @@ the single tuple into three parts.</p>
 <p>In addition to destructuring through pattern matching, we can also access a
 tuple element directly by using a period (<code>.</code>) followed by the index of the
 value we want to access. For example:</p>
+<p>Filename: src/main.rs</p>
 <pre><code class="language-rust">fn main() {
     let x: (i32, f64, u8) = (500, 6.4, 1);
 
@@ -1527,6 +1553,7 @@ Arrays in Rust are different than arrays in some other languages because arrays
 in Rust have a fixed length-- once declared, they cannot grow or shrink in size.</p>
 <p>In Rust, the values going into an array are written as a comma separated list
 inside square brackets:</p>
+<p>Filename: src/main.rs</p>
 <pre><code class="language-rust">fn main() {
     let a = [1, 2, 3, 4, 5];
 }
@@ -1539,6 +1566,7 @@ and we'll discuss them in more detail in chapter XX.</p>
 <h4>Accessing Array Elements</h4>
 <p>An array is a single chunk of memory, allocated on the stack. We can access
 elements of an array using indexing, like this:</p>
+<p>Filename: src/main.rs</p>
 <pre><code class="language-rust">fn main() {
     let a = [1, 2, 3, 4, 5];
 
@@ -1555,6 +1583,7 @@ values.</p>
 <h4>Invalid array element access</h4>
 <p>What happens if you try to access an element of an array past the end of the
 array? Say we changed our program to:</p>
+<p>Filename: src/main.rs</p>
 <pre><code class="language-rust,ignore">fn main() {
     let a = [1, 2, 3, 4, 5];
 
@@ -1591,6 +1620,7 @@ snake case, all letters are lower case, and there are underscores separating
 words. (Rust also uses snake case for the names of variable bindings; we just
 haven't used any variable bindings with enough letters to need underscores
 yet). Here's a program containing an example function definition:</p>
+<p>Filename: src/main.rs</p>
 <pre><code class="language-rust">fn main() {
     println!(&quot;Hello, world!&quot;);
 
@@ -1630,6 +1660,7 @@ message is printed.</p>
 <h3>Function Arguments</h3>
 <p>Functions can also take arguments. The following rewritten version of
 <code>another_function()</code> shows what arguments look like in Rust:</p>
+<p>Filename: src/main.rs</p>
 <pre><code class="language-rust">fn main() {
     another_function(5);
 }
@@ -1654,6 +1685,7 @@ definitions means the compiler almost never needs you to use them elsewhere in
 the code in order to figure out what you mean.</p>
 <p>When you want a function to have multiple arguments, just separate them inside
 the function signature with commas, like this:</p>
+<p>Filename: src/main.rs</p>
 <pre><code class="language-rust">fn main() {
     another_function(5, 6);
 }
@@ -1691,6 +1723,7 @@ instructions that perform some action and do not return a value. <em>Expressions
 evaluate to a resulting value. Let's look at some examples.</p>
 <p><code>Let</code> bindings are statements. They instruct the program to create a binding
 name and assign a value to it. <code>let y = 6;</code> in this example is a statement:</p>
+<p>Filename: src/main.rs</p>
 <pre><code class="language-rust">fn main() {
     let y = 6;
 }
@@ -1699,6 +1732,7 @@ name and assign a value to it. <code>let y = 6;</code> in this example is a stat
 statement as well.</p>
 <p>Statements do not return values themselves. Therefore, you can’t assign a <code>let</code>
 binding to another binding, as this code tries to do:</p>
+<p>Filename: src/main.rs</p>
 <pre><code class="language-rust,ignore">fn main() {
     let x = (let y = 6);
 }
@@ -1728,6 +1762,7 @@ Consider a simple math operation, like this:</p>
 can be part of statements-- in the previous example that had the statement <code>let y = 6;</code>, <code>6</code> is an expression that evaluates to the value <code>6</code>. Calling a
 function is an expression. Calling a macro is an expression. The block that we
 use to create new scopes, <code>{}</code>, is an expression, for example:</p>
+<p>Filename: src/main.rs</p>
 <pre><code class="language-rust">fn main() {
     let x = 5;
 
@@ -1759,6 +1794,7 @@ return values, but we do declare their type, after an arrow (<code>-&gt;</code>)
 the &quot;return value of the function” is synonymous with “the value of the final
 expression in the block of the body of a function.” Here's an example of a
 function that returns a value:</p>
+<p>Filename: src/main.rs</p>
 <pre><code class="language-rust">fn five() -&gt; i32 {
     5
 }
@@ -1789,6 +1825,7 @@ use the return value of a function to initialize a binding.</p>
 arguments and defines the type of the return value, but the body of the
 function is a lonely <code>5</code> with no semicolon because it is an expression whose
 value we want to return. Let's look at another example:</p>
+<p>Filename: src/main.rs</p>
 <pre><code class="language-rust">fn main() {
     let x = plus_one(5);
 
@@ -1802,6 +1839,7 @@ fn plus_one(x: i32) -&gt; i32 {
 <p>Running this code will print <code>The value of x is: 6</code>. What happens if we put a
 semicolon at the end of the line containing <code>x + 1</code>, changing it from an
 expression to a statement?</p>
+<p>Filename: src/main.rs</p>
 <pre><code class="language-rust,ignore">fn main() {
     let x = plus_one(5);
 
@@ -1849,11 +1887,13 @@ include <code>//</code> on each line, like this:</p>
 // explain what’s going on.
 </code></pre>
 <p>Comments can also be placed at the end of lines of code:</p>
+<p>Filename: src/main.rs</p>
 <pre><code class="language-rust">fn main() {
     let lucky_number = 7; // I’m feeling lucky today.
 }
 </code></pre>
 <p>But you’ll more often see them above, like so:</p>
+<p>Filename: src/main.rs</p>
 <pre><code class="language-rust">fn main() {
     // I’m feeling lucky today.
     let lucky_number = 7;
@@ -1877,6 +1917,7 @@ $ cd branches
 </code></pre>
 <p>Write this sample program using <code>if</code> and save it in the <em>branches</em> directory in
 <code>src/main.rs</code>:</p>
+<p>Filename: src/main.rs</p>
 <pre><code class="language-rust">fn main() {
     let number = 3;
 
@@ -1912,6 +1953,7 @@ condition was false
 </code></pre>
 <p>It’s also worth noting that <code>condition</code> here <em>must</em> be a <code>bool</code>. To see what
 happens if the condition isn't a <code>bool</code>, try running this code:</p>
+<p>Filename: src/main.rs</p>
 <pre><code class="language-rust,ignore">fn main() {
     let number = 3;
 
@@ -1937,6 +1979,7 @@ Could not compile `branches`.
 not automatically try to convert non-boolean types to a boolean here, unlike
 languages like Ruby or JavaScript. We must be explicit and always give <code>if</code> a
 <code>boolean</code> as its condition. If your intention is for the <code>if</code> code block to be run if a number is not equal to <code>0</code>, for example, we would change the <code>if</code> expression to read:</p>
+<p>Filename: src/main.rs</p>
 <pre><code class="language-rust">fn main() {
     let number = 3;
 
@@ -1949,6 +1992,7 @@ languages like Ruby or JavaScript. We must be explicit and always give <code>if<
 <h4>Multiple Conditions with <code>else if</code></h4>
 <p>We can have multiple coniditions by combining <code>if</code> and <code>else</code> in an <code>else if</code>
 expression. For example:</p>
+<p>Filename: src/main.rs</p>
 <pre><code class="language-rust">fn main() {
     let number = 5;
 
@@ -1980,6 +2024,7 @@ for these cases.</p>
 <p>The last detail you need to learn about <code>if</code> is that it’s an expression. That
 means that we can use it on the right hand side of a <code>let</code> binding, for
 instance:</p>
+<p>Filename: src/main.rs</p>
 <pre><code class="language-rust">fn main() {
     let condition = true;
     let number = if condition {
@@ -2004,6 +2049,7 @@ expression depends on which block of code executes. This means that the value
 that results from both arms of the <code>if</code> must be the same type; in the previous
 example, they were both <code>i32</code> integers. But what happens if the types are
 mismatched, as in the following example?</p>
+<p>Filename: src/main.rs</p>
 <pre><code class="language-rust,ignore">fn main() {
     let condition = true;
 
@@ -2052,6 +2098,7 @@ in.</p>
 forever or until we explicitly tell it to stop.</p>
 <p>For an example, change the <code>src/main.rs</code> file in your <em>loops</em> directory to look
 like this:</p>
+<p>Filename: src/main.rs</p>
 <pre><code class="language-rust,ignore">fn main() {
     loop {
         println!(&quot;again!&quot;);
@@ -2087,6 +2134,7 @@ that now if you'd like!</p>
 for it, called a <code>while</code> loop. Here's an example using <code>while</code>: this program
 loops three times, counting down each time. Finally, after the loop, it prints
 another message, then exits:</p>
+<p>Filename: src/main.rs</p>
 <pre><code class="language-rust">fn main() {
     let mut number = 3;
 
@@ -2105,6 +2153,7 @@ this code; otherwise, exit the loop.</p>
 <h4>Looping Through a Collection with <code>for</code></h4>
 <p>We could use this <code>while</code> construct to loop over the elements of a collection,
 like an array. For example:</p>
+<p>Filename: src/main.rs</p>
 <pre><code class="language-rust">fn main() {
     let a = [10, 20, 30, 40, 50];
     let mut index = 0;
@@ -2137,6 +2186,7 @@ perform the conditional check on every element on every iteration through the
 loop.</p>
 <p>As a more efficient alternative, we can use a <code>for</code> loop and execute some code
 for each item in a collection. A <code>for</code> loop looks like this:</p>
+<p>Filename: src/main.rs</p>
 <pre><code class="language-rust">fn main() {
     let a = [10, 20, 30, 40, 50];
 
@@ -2164,6 +2214,7 @@ is a type provided by the standard library that generates numbers starting from
 one number and ending before another number. Here's what the countdown would
 look like with a for loop, and using another method we haven't yet talked
 about, <code>.rev()</code>, to reverse the range:</p>
+<p>Filename: src/main.rs</p>
 <pre><code class="language-rust">fn main() {
     for number in (1..4).rev() {
         println!(&quot;{}!&quot;, number);
@@ -2428,6 +2479,7 @@ is <code>Copy</code>, but <code>(i32, String)</code> is not.</li>
 </ul>
 <h3>Ownership and functions</h3>
 <p>Passing a value to a function has similar semantics as assigning it:</p>
+<p>Filename: src/main.rs</p>
 <pre><code class="language-rust">fn main() {
     let s = String::from(&quot;hello&quot;);
 
@@ -2449,6 +2501,7 @@ fn makes_copy(some_integer: i32) {
 <p>Passing a binding to a function will move or copy, just like assignment. Here’s
 the same example, but with some annotations showing where things go into and
 out of scope:</p>
+<p>Filename: src/main.rs</p>
 <pre><code class="language-rust">fn main() {
     let s = String::from(&quot;hello&quot;);  // s goes into scope.
 
@@ -2477,6 +2530,7 @@ would throw a compile-time error. These static checks protect us from mistakes.
 Try adding code to <code>main</code> that uses <code>s</code> and <code>x</code> to see where you can use them
 and where the ownership rules prevent you from doing so.</p>
 <p>Returning values can also transfer ownership:</p>
+<p>Filename: src/main.rs</p>
 <pre><code class="language-rust">fn main() {
     let s1 = gives_ownership();
 
@@ -2497,6 +2551,7 @@ fn takes_and_gives_back(a_string: String) -&gt; String {
 }
 </code></pre>
 <p>With similiar annotations:</p>
+<p>Filename: src/main.rs</p>
 <pre><code class="language-rust">fn main() {
     let s1 = gives_ownership();         // gives_ownership moves its return
                                         // value into s1.
@@ -2533,6 +2588,7 @@ a value but not take ownership? It’s quite annoying that anything we pass in
 also needs to be passed back if we want to use it again, in addition to any
 data resulting from the body of the function that we might want to return as
 well. It's <em>possible</em> to return multiple values, using a tuple, like this:</p>
+<p>Filename: src/main.rs</p>
 <pre><code class="language-rust">fn main() {
     let s1 = String::from(&quot;hello&quot;);
 
@@ -2553,6 +2609,7 @@ next section is about.</p>
 <h2>References and Borrowing</h2>
 <p>At the end of the last section, we had some example Rust that wasn’t very
 good. Here it is again:</p>
+<p>Filename: src/main.rs</p>
 <pre><code class="language-rust">fn main() {
     let s1 = String::from(&quot;hello&quot;);
 
@@ -2571,6 +2628,7 @@ fn calculate_length(s: String) -&gt; (String, usize) {
 function so that we can still use it there, since it was moved when we called
 <code>calculate_length()</code>.</p>
 <p>There is a better way. It looks like this:</p>
+<p>Filename: src/main.rs</p>
 <pre><code class="language-rust">fn main() {
     let s1 = String::from(&quot;hello&quot;);
 
@@ -2623,6 +2681,7 @@ with real life, if a person owns something, you can borrow it from them. When
 you’re done, you have to give it back.</p>
 <p>Speaking of which, what if you try to modify something you borrow from me? Try
 this code out. Spoiler alert: it doesn’t work!</p>
+<p>Filename: src/main.rs</p>
 <pre><code class="language-rust,ignore">fn main() {
     let s = String::from(&quot;hello&quot;);
 
@@ -2644,6 +2703,7 @@ fn change(some_string: &amp;String) {
 allowed to modify something we have a reference to.</p>
 <h3>Mutable references</h3>
 <p>We can fix this bug! Just a small tweak:</p>
+<p>Filename: src/main.rs</p>
 <pre><code class="language-rust">fn main() {
     let mut s = String::from(&quot;hello&quot;);
 
@@ -2657,6 +2717,7 @@ fn change(some_string: &amp;mut String) {
 <p>First, we had to change <code>s</code> to be <code>mut</code>. Then we had to create a mutable
 reference with <code>&amp;mut s</code> and accept a mutable reference with <code>some_string: &amp;mut String</code>.</p>
 <p>Mutable references have one big restriction, though. This code fails:</p>
+<p>Filename: src/main.rs</p>
 <pre><code class="language-rust,ignore">let mut s = String::from(&quot;hello&quot;);
 
 let r1 = &amp;mut s;
@@ -2718,6 +2779,7 @@ contrast, the compiler guarantees that references will never be dangling: if we
 have a reference to something, the compiler will ensure that it will not go
 out of scope before the reference does.</p>
 <p>Let’s try to create a dangling reference:</p>
+<p>Filename: src/main.rs</p>
 <pre><code class="language-rust,ignore">fn main() {
     let reference_to_nothing = dangle();
 }
@@ -2795,6 +2857,7 @@ then the whole string is a word, so the whole thing should be returned.</p>
 ownership, so this is fine. But what should we return? We don’t really have a
 way to talk about <em>part</em> of a string. We could return the index of the end of
 the word, though. Let’s try that:</p>
+<p>Filename: src/main.rs</p>
 <pre><code class="language-rust">fn first_word(s: &amp;String) -&gt; usize {
     let bytes = s.as_bytes();
 
@@ -2837,6 +2900,7 @@ of the string, using <code>s.len()</code>.</p>
 it’s only a meaningful number in the context of the <code>&amp;String</code>. In other
 words, because it’s a separate value from the <code>String</code>, there’s no guarantee
 that it will still be valid in the future. Consider this:</p>
+<p>Filename: src/main.rs</p>
 <pre><code class="language-rust"># fn first_word(s: &amp;String) -&gt; usize {
 #     let bytes = s.as_bytes();
 #
@@ -2848,7 +2912,7 @@ that it will still be valid in the future. Consider this:</p>
 #
 #     s.len()
 # }
-
+#
 fn main() {
     let mut s = String::from(&quot;hello world&quot;);
 
@@ -2912,6 +2976,7 @@ let slice = &amp;s[0..len];
 let slice = &amp;s[..];
 </code></pre>
 <p>With this in mind, let’s re-write <code>first_word()</code> to return a slice:</p>
+<p>Filename: src/main.rs</p>
 <pre><code class="language-rust">fn first_word(s: &amp;String) -&gt; &amp;str {
     let bytes = s.as_bytes();
 
@@ -2933,6 +2998,7 @@ slice and the number of elements in the slice.</p>
 <p>We now have a straightforward API that’s much harder to mess up.</p>
 <p>But what about our error condition from before? Slices also fix that. Using
 the slice version of <code>first_word()</code> will throw an error:</p>
+<p>Filename: src/main.rs</p>
 <pre><code class="language-rust,ignore">fn main() {
     let mut s = String::from(&quot;hello world&quot;);
 
@@ -2983,6 +3049,7 @@ a string slice that’s the full length of a <code>String</code>, so we haven’
 the ability to talk about full <code>String</code>s. And additionally, we can take
 string slices of string literals too, so this function is more useful, but
 with no loss of functionality:</p>
+<p>Filename: src/main.rs</p>
 <pre><code class="language-rust"># fn first_word(s: &amp;str) -&gt; &amp;str {
 #     let bytes = s.as_bytes();
 #
@@ -3042,6 +3109,7 @@ $ cd points
 </code></pre>
 <p>Here’s a short program which calculates the distance between two points. Put
 it into your <code>src/main.rs</code>:</p>
+<p>Filename: src/main.rs</p>
 <pre><code class="language-rust">fn main() {
     let x1 = 0.0;
     let y1 = 5.0;
@@ -3105,6 +3173,7 @@ in our program itself. It would be nicer if we had a way to group <code>(x1, y1)
 and <code>(x2, y2)</code> together.</p>
 <p>We’ve already discussed one way to do that: tuples. Here’s a version of our
 program which uses tuples:</p>
+<p>Filename: src/main.rs</p>
 <pre><code class="language-rust">fn main() {
     let p1 = (0.0, 5.0);
 
@@ -3164,6 +3233,7 @@ let x = p1.x;
 </code></pre>
 <p>Let’s convert our program to use our <code>Point</code> <code>struct</code>. Here’s what it looks
 like now:</p>
+<p>Filename: src/main.rs</p>
 <pre><code class="language-rust">#[derive(Debug,Copy,Clone)]
 struct Point {
     x: f64,
@@ -3206,6 +3276,7 @@ struct so that we can see its value while we are debugging our code.</p>
 <p>So far, we’ve been printing values using <code>{}</code> in a <code>println!</code> macro. If we try
 that with a struct, however, by default, we'll get an error. Say we have the
 following program:</p>
+<p>Filename: src/main.rs</p>
 <pre><code class="language-rust,ignore">struct Point {
     x: f64,
     y: f64,
@@ -3244,6 +3315,7 @@ implementation of <code>Debug</code> formatting to easily get this ability for t
 defined. To ask <code>println!</code> to use <code>Debug</code> formatting with our <code>Point</code>, we add
 the annotation to derive the trait and include <code>:?</code> in the print string, like
 this:</p>
+<p>Filename: src/main.rs</p>
 <pre><code class="language-rust">#[derive(Debug)]
 struct Point {
     x: f64,
@@ -3520,7 +3592,7 @@ possibilities is that they are just like different kinds of struct definitions
 that you already know, except without the <code>struct</code> keyword and they are grouped
 together under the <code>Message</code> type. These structs could hold the same data that
 these enum variants hold:</p>
-<pre><code>struct QuitMessage; // unit struct
+<pre><code class="language-rust">struct QuitMessage; // unit struct
 struct MoveMessage {
     x: i32,
     y: i32,
@@ -4038,6 +4110,7 @@ any place where a pattern is used.</p>
 particularly humble form of pattern.</p>
 <h2>Multiple bindings</h2>
 <p>Let’s try a more complex pattern. Change our example program to this:</p>
+<p>Filename: src/main.rs</p>
 <pre><code class="language-rust">fn main() {
     let (x, y) = (5, 6);
 
@@ -4075,9 +4148,7 @@ even though Rust is a statically typed language. Occasionally, Rust won't have
 enough information to infer the type of your value, and you will need to add a
 type annotation in with the pattern.</p>
 <p>Here’s what a <code>let</code> statement with a <em>type annotation</em> looks like:</p>
-<pre><code class="language-rust">fn main() {
-    let x: i32 = 5;
-}
+<pre><code class="language-rust">let x: i32 = 5;
 </code></pre>
 <p>We can add a colon, followed by the type name. Here’s the structure of a <code>let</code>
 statement with a type annotation:</p>
@@ -4085,9 +4156,7 @@ statement with a type annotation:</p>
 </code></pre>
 <p>Note that the colon and the <code>TYPE</code> go <em>after</em> the <code>PATTERN</code>, not in the pattern
 itself. As an example, here’s our more complex pattern with two bindings:</p>
-<pre><code class="language-rust">fn main() {
-    let (x, y): (i32, i32) = (5, 6);
-}
+<pre><code class="language-rust">let (x, y): (i32, i32) = (5, 6);
 </code></pre>
 <p>Just like we match up the <code>VALUE</code> with the <code>PATTERN</code>, we match up the <code>TYPE</code>
 with the <code>PATTERN</code>.</p>
@@ -4225,14 +4294,12 @@ match x {
 }
 </code></pre>
 <p>Ranges are usually used with integers or <code>char</code>s:</p>
-<pre><code class="language-rust">fn main() {
-    let x = 'c';
+<pre><code class="language-rust">let x = 'c';
 
-    match x {
-        'a' ... 'j' =&gt; println!(&quot;early ASCII letter&quot;),
-        'k' ... 'z' =&gt; println!(&quot;late ASCII letter&quot;),
-        _ =&gt; println!(&quot;something else&quot;),
-    }
+match x {
+    'a' ... 'j' =&gt; println!(&quot;early ASCII letter&quot;),
+    'k' ... 'z' =&gt; println!(&quot;late ASCII letter&quot;),
+    _ =&gt; println!(&quot;something else&quot;),
 }
 </code></pre>
 <h2>Guards</h2>
