@@ -1,6 +1,3 @@
-
-[TOC]
-
 # Guessing Game
 
 Let's jump into Rust with a hands-on project! This chapter will introduce you to
