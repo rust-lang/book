@@ -151,7 +151,7 @@ fn change(some_string: &amp;String) {
 }
 </code></pre>
 <p>Here’s the error:</p>
-<pre><code class="language-text">error: cannot borrow immutable borrowed content `*some_string` as mutable
+<pre><code class="language-bash">error: cannot borrow immutable borrowed content `*some_string` as mutable
  --&gt; error.rs:8:5
   |
 8 |     some_string.push_str(&quot;, world&quot;);
@@ -180,7 +180,7 @@ let r1 = &amp;mut s;
 let r2 = &amp;mut s;
 </code></pre>
 <p>Here’s the error:</p>
-<pre><code class="language-text">error[E0499]: cannot borrow `s` as mutable more than once at a time
+<pre><code class="language-bash">error[E0499]: cannot borrow `s` as mutable more than once at a time
  --&gt; borrow_twice.rs:5:19
   |
 4 |     let r1 = &amp;mut s;
@@ -214,7 +214,7 @@ let r2 = &amp;s; // no problem
 let r3 = &amp;mut s; // BIG PROBLEM
 </code></pre>
 <p>Here’s the error:</p>
-<pre><code class="language-text">error[E0502]: cannot borrow `s` as mutable because it is also borrowed as immutable
+<pre><code class="language-bash">error[E0502]: cannot borrow `s` as mutable because it is also borrowed as immutable
  --&gt; borrow_thrice.rs:6:19
   |
 4 |     let r1 = &amp;s; // no problem
@@ -246,7 +246,7 @@ fn dangle() -&gt; &amp;String {
 }
 </code></pre>
 <p>Here’s the error:</p>
-<pre><code class="language-text">error[E0106]: missing lifetime specifier
+<pre><code class="language-bash">error[E0106]: missing lifetime specifier
  --&gt; dangle.rs:5:16
   |
 5 | fn dangle() -&gt; &amp;String {
@@ -261,7 +261,7 @@ error: aborting due to previous error
 <p>This error message refers to a feature we haven’t learned about yet,
 ‘lifetimes’. The message does contain the key to why this code is a problem,
 though:</p>
-<pre><code class="language-text">this function’s return type contains a borrowed value, but there is no value
+<pre><code class="language-bash">this function’s return type contains a borrowed value, but there is no value
 for it to be borrowed from
 </code></pre>
 <p>Let’s examine exactly what happens with <code>dangle()</code>:</p>
