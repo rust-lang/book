@@ -436,7 +436,6 @@ $ cargo build
 <p>Note: If you want to look at Cargo in more detail, check out the official
 <a href="http://doc.crates.io/guide.html">Cargo guide</a>, which covers all of its features.</p>
 </blockquote>
-<p>[TOC]</p>
 <h1>Guessing Game</h1>
 <p>Let's jump into Rust with a hands-on project! This chapter will introduce you to
 a few common Rust concepts by showing how you would use them in a real program.
@@ -2499,9 +2498,9 @@ copying can be assumed to be inexpensive.</p>
 <h3>Clone</h3>
 <p>But what if we <em>do</em> want to deeply copy the <code>String</code>’s data and not just the
 <code>String</code> itself? There’s a common method for that: <code>clone()</code>. We will discuss
-methods in the section on [<code>structs</code> in Chapter XX], but they’re a common
-enough feature in many programming languages that you have probably seen them
-before.</p>
+methods in the section on <a href="ch05-01-structs.html"><code>structs</code> in Chapter XX</a>, but they’re a
+common enough feature in many programming languages that you have probably seen
+them before.</p>
 <p>Here’s an example of the <code>clone()</code> method in action:</p>
 <pre><code class="language-rust">let s1 = String::from(&quot;hello&quot;);
 let s2 = s1.clone();
@@ -4436,8 +4435,8 @@ the same Cargo.lock and output directory.</p>
 <em>crate</em> until now, and casually people will use the words <em>package</em> and <em>crate</em>
 interchangeably and everyone will understand.</p>
 <p>But there are cases when it makes sense to have multiple crates in one project
-because [insert reasons here]. For example, [insert examples here, maybe
-log/env_log in rust-lang-nursery?]</p>
+because (insert reasons here). For example, (insert examples here, maybe
+log/env_log in rust-lang-nursery?)</p>
 <p>So let's get more precise now. Earlier, we said:</p>
 <blockquote>
 <p>A <em>crate</em> is what we call a package of Rust code.</p>

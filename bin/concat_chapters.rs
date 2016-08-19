@@ -87,7 +87,9 @@ fn concat_files(source_paths: Vec<PathBuf>, target_path: PathBuf) -> io::Result<
         let mut contents: Vec<u8> = Vec::new();
         try!(source.read_to_end(&mut contents));
 
-        if !is_first {
+        if is_first {
+            try!(target.write_all(b"\n[TOC]\n\n"));
+        } else {
             try!(target.write_all(b"\n"));
         }
         try!(target.write_all(&contents));

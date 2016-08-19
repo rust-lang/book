@@ -39,12 +39,12 @@ fn parse_references(buffer: String) -> (String, HashMap<String, String>) {
 
 fn parse_links((buffer, ref_map): (String, HashMap<String, String>)) -> String {
     // TODO: check which punctuation is allowed by spec
-    let re = Regex::new(r###"(?:(?P<pre>(?:```(?:[^`]|`[^`])*`?\n```\n)|(?:[^[]`[^`\n]+[\n]?[^`\n]*`))|(?:\[(?P<name>[^]]+)\](?:(?:\([[:blank:]]*(?P<val>[^")]*[^ ])(?:[[:blank:]]*"[^"]*")?\))|(?:\[(?P<key>[^]]*)\]))?))"###).unwrap();
+    let re = Regex::new(r###"(?:(?P<pre>(?:```(?:[^`]|`[^`])*`?\n```\n)|(?:[^[]`[^`\n]+[\n]?[^`\n]*`))|(?:\[(?P<name>[^]]+)\](?:(?:\([[:blank:]]*(?P<val>[^")]*[^ ])(?:[[:blank:]]*"[^"]*")?\))|(?:\[(?P<key>[^]]*)\]))?))"###).expect("could not create regex");
     let output = re.replace_all(&buffer, |caps: &Captures| {
         match caps.name("pre") {
             Some(pre_section) => format!("{}", pre_section.to_owned()),
             None => {
-                let name = caps.name("name").unwrap().to_owned();
+                let name = caps.name("name").expect("could not get name").to_owned();
                 let val = match caps.name("val") {
                     // [name](link)
                     Some(value) => value.to_owned(),
@@ -53,13 +53,13 @@ fn parse_links((buffer, ref_map): (String, HashMap<String, String>)) -> String {
                             Some(key) => {
                                 match key {
                                     // [name][]
-                                    "" => format!("{}", ref_map.get(&name.to_uppercase()).unwrap()),
+                                    "" => format!("{}", ref_map.get(&name.to_uppercase()).expect(&format!("could not find url for the link text `{}`", name))),
                                     // [name][reference]
-                                    _ => format!("{}", ref_map.get(&key.to_uppercase()).unwrap()),
+                                    _ => format!("{}", ref_map.get(&key.to_uppercase()).expect(&format!("could not find url for the link text `{}`", key))),
                                 }
                             }
                             // [name] as reference
-                            None => format!("{}", ref_map.get(&name.to_uppercase()).unwrap()),
+                            None => format!("{}", ref_map.get(&name.to_uppercase()).expect(&format!("could not find url for the link text `{}`", name))),
                         }
                     }
                 };
