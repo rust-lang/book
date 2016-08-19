@@ -3589,7 +3589,7 @@ let y: Option&lt;i8&gt; = Some(5);
 let sum = x + y;
 </code></pre>
 <p>This will not compile. We get an error message like this:</p>
-<pre><code class="language-text">error: the trait bound `i8: std::ops::Add&lt;std::option::Option&lt;i8&gt;&gt;` is not
+<pre><code class="language-bash">error: the trait bound `i8: std::ops::Add&lt;std::option::Option&lt;i8&gt;&gt;` is not
 satisfied [E0277]
 
 let sum = x + y;
@@ -3799,7 +3799,7 @@ of <code>plus_one()</code>:</p>
 </code></pre>
 <p>A bug! We didn't handle the <code>None</code> case. Luckily, it's a bug Rust knows how to
 catch. If we try to compile this code, we'll get an error:</p>
-<pre><code class="language-text">error: non-exhaustive patterns: `None` not covered [E0004]
+<pre><code class="language-bash">error: non-exhaustive patterns: `None` not covered [E0004]
 match x {
     Some(i) =&gt; Some(i + 1),
 }
@@ -4006,7 +4006,7 @@ the value of <code>x</code>:</p>
 }
 </code></pre>
 <p>We'll get an error:</p>
-<pre><code class="language-text">error: the trait `core::fmt::Display` is not implemented for the type `T` [E0277]
+<pre><code class="language-bash">error: the trait `core::fmt::Display` is not implemented for the type `T` [E0277]
 println!(&quot;x is: {}&quot;, x);
                      ^
 </code></pre>
@@ -4288,7 +4288,7 @@ example, a program with only this:</p>
 <pre><code class="language-rust,ignore">/// What am I documenting?
 </code></pre>
 <p>Will give a compiler error:</p>
-<pre><code class="language-text">src/main.rs:1:1: 1:27 error: expected item after doc comment
+<pre><code class="language-bash">src/main.rs:1:1: 1:27 error: expected item after doc comment
 src/main.rs:1 /// What am I documenting?
               ^~~~~~~~~~~~~~~~~~~~~~~~~~
 </code></pre>

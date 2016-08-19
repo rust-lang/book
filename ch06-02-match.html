@@ -251,7 +251,7 @@ of <code>plus_one()</code>:</p>
 </code></pre>
 <p>A bug! We didn't handle the <code>None</code> case. Luckily, it's a bug Rust knows how to
 catch. If we try to compile this code, we'll get an error:</p>
-<pre><code class="language-text">error: non-exhaustive patterns: `None` not covered [E0004]
+<pre><code class="language-bash">error: non-exhaustive patterns: `None` not covered [E0004]
 match x {
     Some(i) =&gt; Some(i + 1),
 }
