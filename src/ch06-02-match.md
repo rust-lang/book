@@ -12,7 +12,7 @@ go through each pattern in a `match`, and for the first pattern that the value
 execution.
 
 Since we're already talking about coins, let's use them for an example using
-`match`! We can write a function that can take an unknown American coin and, in
+`match`. We can write a function that can take an unknown American coin and, in
 a similar way as the coin counting machine, determine which coin it is and
 return its value in cents:
 
