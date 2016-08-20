@@ -262,7 +262,8 @@ tuple is 0.
 Another way to bind a name to a collection of multiple values is with an
 *array*. Unlike a tuple, every element of an array must have the same type.
 Arrays in Rust are different than arrays in some other languages because arrays
-in Rust have a fixed length-- once declared, they cannot grow or shrink in size.
+in Rust have a fixed length at compile time -- they cannot grow or shrink in
+size.
 
 In Rust, the values going into an array are written as a comma separated list
 inside square brackets:
