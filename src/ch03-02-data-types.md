@@ -59,6 +59,20 @@ Finally, the `isize` and `usize` types depend on the kind of computer your
 program is running on: 64-bits if you're on a 64-bit architecture, and 32-bits
 if you’re on a 32-bit architecture.
 
+You can write integer literals in any of the forms shown in Table 3-2. Note that
+all number literals except for the byte literal allow a type suffix, such as
+`57u8`, and `_` as a visual separator, such as `1_000`.
+
+| Number literals  | Example       |
+|------------------|---------------|
+| Decimal          | `98_222`      |
+| Hex              | `0xff`        |
+| Octal            | `0o77`        |
+| Binary           | `0b1111_0000` |
+| Byte (`u8` only) | `b'A'`        |
+
+*Table 3-2: Integer literals in Rust.*
+
 So how do you know which type of integer to use? If you're unsure, Rust's
 defaults are generally good choices, and integer types default to `i32`: it’s
 generally the fastest, even on 64-bit systems. The primary situation in which
@@ -167,30 +181,6 @@ is in Rust. It also means that `char`s are four bytes each. You can learn more
 about Unicode Scalar Values at
 *http://www.unicode.org/glossary/#unicode_scalar_value* and find a chart for
 all unicode code points at *http://www.unicode.org/charts/*.
-
-#### Byte Literals
-
-You can work with the bytes of data directly. Byte literals can be created from
-the ASCII characters using `b` and single quotes:
-
-Filename: src/main.rs
-
-```rust
-fn main() {
-    let byte = b'a';
-    println!("byte is {}", byte);
-}
-```
-
-This will print `byte is 97`. Similarly, byte string literals can be created
-using `b` and double quotes, like `b"some byte string"`.
-
-A byte literal is equivalent to a `u8` unsigned 8-bit integer *number literal*,
-and a byte string literal of length `n` is equivalent to a `&'static [u8; n]`
-borrowed fixed-sized array of unsigned 8-bit integers.
-
-Note that since you are limited to 8-bit values, it's a best practice to use
-characters instead of bytes when you're working with natural language text.
 
 ### Compound Types
 
