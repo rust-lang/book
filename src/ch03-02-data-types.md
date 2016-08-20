@@ -168,7 +168,7 @@ about Unicode Scalar Values at
 *http://www.unicode.org/glossary/#unicode_scalar_value* and find a chart for
 all unicode code points at *http://www.unicode.org/charts/*.
 
-#### The Byte Type
+#### Byte Literals
 
 You can work with the bytes of data directly. Byte literals can be created from
 the ASCII characters using `b` and single quotes:
@@ -183,9 +183,14 @@ fn main() {
 ```
 
 This will print `byte is 97`. Similarly, byte string literals can be created
-using `b` and double quotes, like `b"some byte string"`. Note that since you are
-limited to ASCII characters, it's a best practice to use characters instead of
-bytes when you're working with natural language text.
+using `b` and double quotes, like `b"some byte string"`.
+
+A byte literal is equivalent to a `u8` unsigned 8-bit integer *number literal*,
+and a byte string literal of length `n` is equivalent to a `&'static [u8; n]`
+borrowed fixed-sized array of unsigned 8-bit integers.
+
+Note that since you are limited to 8-bit values, it's a best practice to use
+characters instead of bytes when you're working with natural language text.
 
 ### Compound Types
 
