@@ -116,7 +116,7 @@ enum IpAddr {
 }
 ```
 
-[IpAddr]: http://doc.rust-lang.org/std/net/enum.IpAddr.html
+[IpAddr]: ../std/net/enum.IpAddr.html
 
 Here’s an enum with a variety of types embedded in its variants:
 

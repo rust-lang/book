@@ -179,7 +179,7 @@ Because [`push_str()`] has the following signature:
 fn push_str(&mut self, string: &str) {
 ```
 
-[`push_str()`]: http://doc.rust-lang.org/collections/string/struct.String.html#method.push_str
+[`push_str()`]: ../collections/string/struct.String.html#method.push_str
 
 This automatic referencing behavior works because methods have a clear receiver
 — the type of `self` — and in most cases it’s clear given the receiver and name
