@@ -38,6 +38,11 @@ using `cmd` as your shell. If you use a different shell, you may be able to run
 the same commands that Linux and Mac users do. If neither work, consult the
 documentation for the shell you are using.
 
+### Custom installations
+
+If you have reasons for preferring not to use rustup.rs, please see [the Rust
+installation page](https://www.rust-lang.org/install.html) for other options.
+
 ### Uninstalling
 
 Uninstalling Rust is as easy as installing it. From your shell, run
