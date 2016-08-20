@@ -199,7 +199,7 @@ s.push_str(&quot; world!&quot;);
 
 assert_eq!(&quot;Hello, world!&quot;, s);
 </code></pre>
-<p>Because <a href="http://doc.rust-lang.org/collections/string/struct.String.html#method.push_str"><code>push_str()</code></a> has the following signature:</p>
+<p>Because <a href="../collections/string/struct.String.html#method.push_str"><code>push_str()</code></a> has the following signature:</p>
 <pre><code class="language-rust,ignore">fn push_str(&amp;mut self, string: &amp;str) {
 </code></pre>
 <p>This automatic referencing behavior works because methods have a clear receiver

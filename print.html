@@ -3535,7 +3535,7 @@ s.push_str(&quot; world!&quot;);
 
 assert_eq!(&quot;Hello, world!&quot;, s);
 </code></pre>
-<p>Because <a href="http://doc.rust-lang.org/collections/string/struct.String.html#method.push_str"><code>push_str()</code></a> has the following signature:</p>
+<p>Because <a href="../collections/string/struct.String.html#method.push_str"><code>push_str()</code></a> has the following signature:</p>
 <pre><code class="language-rust,ignore">fn push_str(&amp;mut self, string: &amp;str) {
 </code></pre>
 <p>This automatic referencing behavior works because methods have a clear receiver
@@ -3625,7 +3625,7 @@ let home = IpAddr::V4(127, 0, 0, 1);
 let loopback = IpAddr::V6(String::from(&quot;::1&quot;));
 </code></pre>
 <p>You can put any kind of data inside of an enum variant, including another enum!
-The <code>IpAddr</code> enum is <a href="http://doc.rust-lang.org/std/net/enum.IpAddr.html">in the standard library</a>, but it embeds two
+The <code>IpAddr</code> enum is <a href="../std/net/enum.IpAddr.html">in the standard library</a>, but it embeds two
 different structs inside of its variants:</p>
 <pre><code class="language-rust">struct Ipv4Addr {
     // details elided
