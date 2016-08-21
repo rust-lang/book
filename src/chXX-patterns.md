@@ -175,6 +175,7 @@ match name {
 
 // name is not moved here; the match only took a reference to its data rather
 // than moving it
+println!("name is: {:?}", name);
 ```
 
 ## Destructuring
