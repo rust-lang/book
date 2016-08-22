@@ -269,9 +269,23 @@ $ cargo build
 $
 ```
 
-It works! In summary, these are the two rules of modules with regards to files:
+It works! In summary, these are the rules of modules with regards to files:
 
-* If a module named `foo` has no submodules, it will be named `foo.rs`.
-* If a module named `foo` does have submodules, it will be named `foo/mod.rs`.
+* If a module named `foo` has no submodules, you should put the declarations in
+  the `foo` module in a file named `foo.rs`.
+* If a module named `foo` does have submodules, you should put the declarations
+  for `foo` in a file named `foo/mod.rs`.
+* The first two rules apply recursively, so that if a module named `foo` has a
+  submodule named `bar` and `bar` does not have submodules, you should have the
+  following files in your `src` directory:
+
+  ```
+  ├── foo
+  │   ├── bar.rs (contains the declarations in `foo::bar`)
+  │   └── mod.rs (contains the declarations in `foo`, including `mod bar`)
+  ```
+
+* The modules themselves should be declared in their parent module's file using
+  the `mod` keyword.
 
 Next, we'll talk about the `pub` keyword, and get rid of those warnings!
