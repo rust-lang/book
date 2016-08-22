@@ -90,3 +90,6 @@ Overflow][stackoverflow].
 The installer also includes a copy of the documentation locally, so you can
 read it offline. Run `rustup doc` to open the local documentation in your
 browser.
+
+Any time there's a type or function provided by the standard library and you're
+not sure what it does, use the API documentation to find out!
