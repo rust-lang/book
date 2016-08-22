@@ -4289,6 +4289,7 @@ match name {
 
 // name is not moved here; the match only took a reference to its data rather
 // than moving it
+println!(&quot;name is: {:?}&quot;, name);
 </code></pre>
 <h2>Destructuring</h2>
 <p>Patterns can be used to destructure structs and enums:</p>
