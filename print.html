@@ -945,7 +945,9 @@ that <code>guess</code> should be a <code>String</code> and didn’t make us wri
 types which can have a value between one and a hundred: <code>i32</code>, a thirty-two-bit
 number; or <code>u32</code>, an unsigned thirty-two-bit number; <code>i64</code>, a sixty-four-bit
 number; or others. Rust defaults to an <code>i32</code>, so that's the type of
-<code>secret_number</code>. The error is because Rust will not compare two different types.</p>
+<code>secret_number</code> unless we add type information elsewhere that would cause Rust
+to infer a different numerical type. The error is because Rust will not compare
+a string and a number type.</p>
 <p>Ultimately, we want to convert the <code>String</code> we read as input
 into a real number type so that we can compare it to the guess numerically. We
 can do that with two more lines; add this to your program:</p>
@@ -1006,18 +1008,21 @@ number. Since this method can parse a variety of number types, we need to tell
 Rust the exact type of number we want with <code>let guess: u32</code>. The colon (<code>:</code>)
 after <code>guess</code> tells Rust we’re going to annotate its type. Rust has a few
 built-in number types, but we’ve chosen <code>u32</code>, an unsigned, thirty-two bit
-integer. It’s a good default choice for a small positive number. You'll see the
-other number types in Chapter XX.</p>
-<p>Our call to <code>parse()</code> could quite easily cause an error, if, for example, our
-string contained <code>A👍%</code>; there’d be no way to convert that to a number. Because
-it might fail, the <code>parse()</code> method returns a <code>Result</code> type, much like the
-<code>read_line()</code> method does that we discussed earlier. We're going to treat this
-<code>Result</code> the same way by using the <code>expect()</code> method again. If <code>parse()</code>
-returns an <code>Err</code> <code>Result</code> variant because it could not create a number from the
-string, the <code>expect()</code> call will crash the game and print the message we give
-it. If <code>parse()</code> can successfully turn the string into a number, it will return
-the <code>Ok</code> variant of <code>Result</code>, and <code>expect()</code> will return the number that we
-want that it will take out of the <code>Ok</code> value for us.</p>
+integer. It’s a good default choice for a small positive number. Additionally,
+our <code>u32</code> annotation here and the comparison with <code>secret_number</code> means that
+Rust will infer that <code>secret_number</code> should be a <code>u32</code> as well. So now the
+comparison will be between two values of the same type!</p>
+<p>There's just one remaining piece to handle: our call to <code>parse()</code> could quite
+easily cause an error, if, for example, our string contained <code>A👍%</code>; there’d be
+no way to convert that to a number. Because it might fail, the <code>parse()</code> method
+returns a <code>Result</code> type, much like the <code>read_line()</code> method does that we
+discussed earlier. We're going to treat this <code>Result</code> the same way by using the
+<code>expect()</code> method again. If <code>parse()</code> returns an <code>Err</code> <code>Result</code> variant because
+it could not create a number from the string, the <code>expect()</code> call will crash
+the game and print the message we give it. If <code>parse()</code> can successfully turn
+the string into a number, it will return the <code>Ok</code> variant of <code>Result</code>, and
+<code>expect()</code> will return the number that we want that it will take out of the
+<code>Ok</code> value for us.</p>
 <p>Let’s try our program out!</p>
 <pre><code class="language-bash">$ cargo run
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
