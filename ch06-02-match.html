@@ -145,7 +145,8 @@ quarters with different designs for each of the 50 states on one side. The other
 coins did not get state designs, so only quarters have this extra attribute. We
 can add this information to our <code>enum</code> by changing the <code>Quarter</code> variant to have
 a <code>State</code> value:</p>
-<pre><code class="language-rust">enum UsState {
+<pre><code class="language-rust">#[derive(Debug)] // So we can inspect the state in a minute
+enum UsState {
     Alabama,
     Alaska,
     // ... etc
@@ -196,7 +197,8 @@ be <code>Coin::Quarter(UsState::Alaska)</code>. When we compare that value with 
 match arms, none of them match until we reach <code>Coin::Quarter(state)</code>. At that
 point, the binding for <code>state</code> will be the value <code>UsState::Alaska</code>. We can then
 use that binding in the <code>println!</code>, thus getting the inner state value out of
-the <code>Coin</code> enum variant for <code>Quarter</code>.</p>
+the <code>Coin</code> enum variant for <code>Quarter</code> and enabling us to print &quot;State quarter
+from Alaska!&quot;.</p>
 <p>Remember the <code>Option&lt;T&gt;</code> type from the previous section, and that we wanted to
 be able to get the inner <code>T</code> value out of the <code>Some</code> case? This will be very
 similar! Instead of coins, we will be comparing to other patterns, but the way
