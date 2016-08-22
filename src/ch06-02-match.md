@@ -94,6 +94,7 @@ can add this information to our `enum` by changing the `Quarter` variant to have
 a `State` value:
 
 ```rust
+#[derive(Debug)] // So we can inspect the state in a minute
 enum UsState {
     Alabama,
     Alaska,
@@ -150,7 +151,8 @@ be `Coin::Quarter(UsState::Alaska)`. When we compare that value with each of the
 match arms, none of them match until we reach `Coin::Quarter(state)`. At that
 point, the binding for `state` will be the value `UsState::Alaska`. We can then
 use that binding in the `println!`, thus getting the inner state value out of
-the `Coin` enum variant for `Quarter`.
+the `Coin` enum variant for `Quarter` and enabling us to print "State quarter
+from Alaska!".
 
 Remember the `Option<T>` type from the previous section, and that we wanted to
 be able to get the inner `T` value out of the `Some` case? This will be very
