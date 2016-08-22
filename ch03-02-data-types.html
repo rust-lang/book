@@ -114,6 +114,17 @@ scope of this text).</p>
 <p>Finally, the <code>isize</code> and <code>usize</code> types depend on the kind of computer your
 program is running on: 64-bits if you're on a 64-bit architecture, and 32-bits
 if you’re on a 32-bit architecture.</p>
+<p>You can write integer literals in any of the forms shown in Table 3-2. Note that
+all number literals except for the byte literal allow a type suffix, such as
+<code>57u8</code>, and <code>_</code> as a visual separator, such as <code>1_000</code>.</p>
+<table><thead><tr><td> Number literals  </td><td> Example       </td></tr></thead>
+<tr><td> Decimal          </td><td> <code>98_222</code>      </td></tr>
+<tr><td> Hex              </td><td> <code>0xff</code>        </td></tr>
+<tr><td> Octal            </td><td> <code>0o77</code>        </td></tr>
+<tr><td> Binary           </td><td> <code>0b1111_0000</code> </td></tr>
+<tr><td> Byte (<code>u8</code> only) </td><td> <code>b'A'</code>        </td></tr>
+</table>
+<p><em>Table 3-2: Integer literals in Rust.</em></p>
 <p>So how do you know which type of integer to use? If you're unsure, Rust's
 defaults are generally good choices, and integer types default to <code>i32</code>: it’s
 generally the fastest, even on 64-bit systems. The primary situation in which
@@ -197,19 +208,6 @@ is in Rust. It also means that <code>char</code>s are four bytes each. You can l
 about Unicode Scalar Values at
 <em>http://www.unicode.org/glossary/#unicode_scalar_value</em> and find a chart for
 all unicode code points at <em>http://www.unicode.org/charts/</em>.</p>
-<h4>The Byte Type</h4>
-<p>You can work with the bytes of data directly. Byte literals can be created from
-the ASCII characters using <code>b</code> and single quotes:</p>
-<p>Filename: src/main.rs</p>
-<pre><code class="language-rust">fn main() {
-    let byte = b'a';
-    println!(&quot;byte is {}&quot;, byte);
-}
-</code></pre>
-<p>This will print <code>byte is 97</code>. Similarly, byte string literals can be created
-using <code>b</code> and double quotes, like <code>b&quot;some byte string&quot;</code>. Note that since you are
-limited to ASCII characters, it's a best practice to use characters instead of
-bytes when you're working with natural language text.</p>
 <h3>Compound Types</h3>
 <p><em>Compound types</em> can group multiple values of other types into one type. Rust
 has two primitive compound types: tuples and arrays.</p>
