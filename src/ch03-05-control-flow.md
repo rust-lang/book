@@ -122,7 +122,7 @@ Running this will print "number was something other than zero".
 
 #### Multiple Conditions with `else if`
 
-We can have multiple coniditions by combining `if` and `else` in an `else if`
+We can have multiple conditions by combining `if` and `else` in an `else if`
 expression. For example:
 
 Filename: src/main.rs
