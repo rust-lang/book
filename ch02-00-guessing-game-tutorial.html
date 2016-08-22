@@ -531,11 +531,9 @@ compare two things.</p>
 </code></pre>
 <p>The <code>cmp()</code> method compares two values, and can be called on anything that can
 be compared. It takes a reference to the thing you want to compare it to, so
-here it's comparing our <code>guess</code> to our <code>secret_number</code>. <code>cmp()</code> returns a
-variant of the <code>Ordering</code> type we imported with the <code>use</code> statement earlier. We
-use a <a href="match.html"><code>match</code></a> statement to decide what to do next based on which
-variant of <code>Ordering</code> we got back from our call to <code>cmp()</code> with the values in
-<code>guess</code> and <code>secret_number</code>.</p>
+here it's comparing our <code>guess</code> to our <code>secret_number</code>, and it returns a
+variant of the <code>Ordering</code> enum. We use a <a href="match.html"><code>match</code></a> statement to decide
+what to do next based on which variant of <code>Ordering</code> we got back.</p>
 <p><code>match</code> statements are made up of <em>arms</em>. An arm consists of a <em>pattern</em> and
 the code that we should run if the value given to the beginning of the <code>match</code>
 statement fits that arm's pattern. Rust takes the value given to <code>match</code> and
