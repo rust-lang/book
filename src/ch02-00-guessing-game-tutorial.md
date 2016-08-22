@@ -685,7 +685,9 @@ that `guess` should be a `String` and didn’t make us write the type out. Our
 types which can have a value between one and a hundred: `i32`, a thirty-two-bit
 number; or `u32`, an unsigned thirty-two-bit number; `i64`, a sixty-four-bit
 number; or others. Rust defaults to an `i32`, so that's the type of
-`secret_number`. The error is because Rust will not compare two different types.
+`secret_number` unless we add type information elsewhere that would cause Rust
+to infer a different numerical type. The error is because Rust will not compare
+a string and a number type.
 
 Ultimately, we want to convert the `String` we read as input
 into a real number type so that we can compare it to the guess numerically. We
@@ -757,21 +759,24 @@ number. Since this method can parse a variety of number types, we need to tell
 Rust the exact type of number we want with `let guess: u32`. The colon (`:`)
 after `guess` tells Rust we’re going to annotate its type. Rust has a few
 built-in number types, but we’ve chosen `u32`, an unsigned, thirty-two bit
-integer. It’s a good default choice for a small positive number. You'll see the
-other number types in Chapter XX.
+integer. It’s a good default choice for a small positive number. Additionally,
+our `u32` annotation here and the comparison with `secret_number` means that
+Rust will infer that `secret_number` should be a `u32` as well. So now the
+comparison will be between two values of the same type!
 
 [parse]: ../std/primitive.str.html#method.parse
 
-Our call to `parse()` could quite easily cause an error, if, for example, our
-string contained `A👍%`; there’d be no way to convert that to a number. Because
-it might fail, the `parse()` method returns a `Result` type, much like the
-`read_line()` method does that we discussed earlier. We're going to treat this
-`Result` the same way by using the `expect()` method again. If `parse()`
-returns an `Err` `Result` variant because it could not create a number from the
-string, the `expect()` call will crash the game and print the message we give
-it. If `parse()` can successfully turn the string into a number, it will return
-the `Ok` variant of `Result`, and `expect()` will return the number that we
-want that it will take out of the `Ok` value for us.
+There's just one remaining piece to handle: our call to `parse()` could quite
+easily cause an error, if, for example, our string contained `A👍%`; there’d be
+no way to convert that to a number. Because it might fail, the `parse()` method
+returns a `Result` type, much like the `read_line()` method does that we
+discussed earlier. We're going to treat this `Result` the same way by using the
+`expect()` method again. If `parse()` returns an `Err` `Result` variant because
+it could not create a number from the string, the `expect()` call will crash
+the game and print the message we give it. If `parse()` can successfully turn
+the string into a number, it will return the `Ok` variant of `Result`, and
+`expect()` will return the number that we want that it will take out of the
+`Ok` value for us.
 
 Let’s try our program out!
 
