@@ -80,16 +80,20 @@ The `pub` goes right before `fn`. Let's try building again:
 ```bash
 $ cargo build
    Compiling modules v0.1.0 (file:///projects/modules)
-src/lib.rs:1:1: 3:2 warning: function is never used: `try_me`, #[warn(dead_code)] on by default
+src/lib.rs:1:1: 3:2 warning: function is never used: `try_me`,
+#[warn(dead_code)] on by default
 src/lib.rs:1 fn try_me() {
              ^
-src/client.rs:1:1: 2:2 warning: function is never used: `connect`, #[warn(dead_code)] on by default
+src/client.rs:1:1: 2:2 warning: function is never used: `connect`,
+#[warn(dead_code)] on by default
 src/client.rs:1 pub fn connect() {
                 ^
-src/network/mod.rs:1:1: 2:2 warning: function is never used: `connect`, #[warn(dead_code)] on by default
+src/network/mod.rs:1:1: 2:2 warning: function is never used: `connect`,
+#[warn(dead_code)] on by default
 src/network/mod.rs:1 fn connect() {
                      ^
-src/network/server.rs:1:1: 2:2 warning: function is never used: `connect`, #[warn(dead_code)] on by default
+src/network/server.rs:1:1: 2:2 warning: function is never used: `connect`,
+#[warn(dead_code)] on by default
 src/network/server.rs:1 fn connect() {
                         ^
 ```
@@ -114,10 +118,12 @@ And try to build:
 ```bash
 $ cargo build
    Compiling modules v0.1.0 (file:///projects/modules)
-src/network/mod.rs:1:1: 2:2 warning: function is never used: `connect`, #[warn(dead_code)] on by default
+src/network/mod.rs:1:1: 2:2 warning: function is never used: `connect`,
+#[warn(dead_code)] on by default
 src/network/mod.rs:1 fn connect() {
                      ^
-src/network/server.rs:1:1: 2:2 warning: function is never used: `connect`, #[warn(dead_code)] on by default
+src/network/server.rs:1:1: 2:2 warning: function is never used: `connect`,
+#[warn(dead_code)] on by default
 src/network/server.rs:1 fn connect() {
                         ^
 ```
@@ -171,7 +177,8 @@ is gone:
 ```bash
 $ cargo build
    Compiling modules v0.1.0 (file:///projects/modules)
-src/network/server.rs:1:1: 2:2 warning: function is never used: `connect`, #[warn(dead_code)] on by default
+src/network/server.rs:1:1: 2:2 warning: function is never used: `connect`,
+#[warn(dead_code)] on by default
 src/network/server.rs:1 fn connect() {
                         ^
 ```

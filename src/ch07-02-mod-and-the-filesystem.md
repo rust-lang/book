@@ -25,7 +25,10 @@ mod tests {
 ```
 
 This is an empty test to help us get our library started, instead of the binary
-that says "Hello, world!" that we get with a new binary. Let's ignore the `#[]` stuff and `mod tests` for a little bit, but leave it at the end of `src/lib.rs`. Let's imagine that we're creating a library to provide networking functionality. At the beginning of the file, add:
+that says "Hello, world!" that we get with a new binary. Let's ignore the `#[]`
+stuff and `mod tests` for a little bit, but leave it at the end of
+`src/lib.rs`. Let's imagine that we're creating a library to provide networking
+functionality. At the beginning of the file, add:
 
 Filename: src/lib.rs
 
@@ -206,7 +209,8 @@ mod server {
 ```
 
 And then run `cargo build` again. Success! We have one more module to extract:
-`server`. Unfortunately, our current tactic won't work. Let's try it anyway. Modify `src/network.rs` to look like this:
+`server`. Unfortunately, our current tactic won't work. Let's try it anyway.
+Modify `src/network.rs` to look like this:
 
 Filename: src/network.rs
 
@@ -234,10 +238,12 @@ $ cargo build
 src/network.rs:4:5: 4:11 error: cannot declare a new module at this location
 src/network.rs:4 mod server;
                      ^~~~~~
-src/network.rs:4:5: 4:11 note: maybe move this module `network` to its own directory via `network/mod.rs`
+src/network.rs:4:5: 4:11 note: maybe move this module `network` to its own
+directory via `network/mod.rs`
 src/network.rs:4 mod server;
                      ^~~~~~
-src/network.rs:4:5: 4:11 note: ... or maybe `use` the module `server` instead of possibly redeclaring it
+src/network.rs:4:5: 4:11 note: ... or maybe `use` the module `server` instead
+of possibly redeclaring it
 src/network.rs:4 mod server;
                      ^~~~~~
 error: aborting due to previous error
