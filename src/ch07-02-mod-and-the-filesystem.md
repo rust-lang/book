@@ -162,7 +162,7 @@ Now, everything should compile:
 
 ```bash
 $ cargo build
-   Compiling modules v0.1.0 (file:///home/steve/tmp/modules)
+   Compiling modules v0.1.0 (file:///projects/modules)
 
 src/client.rs:1:1: 2:2 warning: function is never used: `connect`,
 #[warn(dead_code)] on by default
@@ -230,7 +230,7 @@ When we try to `cargo build`, we'll get an error:
 
 ```bash
 $ cargo build
-   Compiling modules v0.1.0 (file:///home/steve/tmp/modules)
+   Compiling modules v0.1.0 (file:///projects/modules)
 src/network.rs:4:5: 4:11 error: cannot declare a new module at this location
 src/network.rs:4 mod server;
                      ^~~~~~
@@ -264,7 +264,7 @@ $ mkdir src/network
 $ mv src/server.rs src/network
 $ mv src/network.rs src/network/mod.rs
 $ cargo build
-   Compiling modules v0.1.0 (file:///home/steve/tmp/modules)
+   Compiling modules v0.1.0 (file:///projects/modules)
 <warnings>
 $
 ```

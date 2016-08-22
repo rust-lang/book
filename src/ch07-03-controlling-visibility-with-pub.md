@@ -13,7 +13,7 @@ modules
 When we compiled it, we got some strange warnings:
 
 ```bash
-   Compiling modules v0.1.0 (file:///home/steve/tmp/modules)
+   Compiling modules v0.1.0 (file:///projects/modules)
 src/client.rs:1:1: 2:2 warning: function is never used: `connect`,
 #[warn(dead_code)] on by default
 src/client.rs:1 fn connect() {
@@ -50,7 +50,7 @@ Invoking `cargo build` will give us an error:
 
 ```bash
 $ cargo build
-   Compiling modules v0.1.0 (file:///home/steve/tmp/modules)
+   Compiling modules v0.1.0 (file:///projects/modules)
 src/lib.rs:2:5: 2:20 error: function `connect` is private
 src/lib.rs:2     client::connect();
                  ^~~~~~~~~~~~~~~
@@ -79,7 +79,7 @@ The `pub` goes right before `fn`. Let's try building again:
 
 ```bash
 $ cargo build
-   Compiling modules v0.1.0 (file:///home/steve/tmp/modules)
+   Compiling modules v0.1.0 (file:///projects/modules)
 src/lib.rs:1:1: 3:2 warning: function is never used: `try_me`, #[warn(dead_code)] on by default
 src/lib.rs:1 fn try_me() {
              ^
@@ -113,7 +113,7 @@ And try to build:
 
 ```bash
 $ cargo build
-   Compiling modules v0.1.0 (file:///home/steve/tmp/modules)
+   Compiling modules v0.1.0 (file:///projects/modules)
 src/network/mod.rs:1:1: 2:2 warning: function is never used: `connect`, #[warn(dead_code)] on by default
 src/network/mod.rs:1 fn connect() {
                      ^
@@ -138,7 +138,7 @@ And compile:
 
 ```bash
 $ cargo build
-   Compiling modules v0.1.0 (file:///home/steve/tmp/modules)
+   Compiling modules v0.1.0 (file:///projects/modules)
 src/network/mod.rs:1:1: 2:2 warning: function is never used: `connect`,
 #[warn(dead_code)] on by default
 src/network/mod.rs:1 pub fn connect() {
@@ -170,7 +170,7 @@ is gone:
 
 ```bash
 $ cargo build
-   Compiling modules v0.1.0 (file:///home/steve/tmp/modules)
+   Compiling modules v0.1.0 (file:///projects/modules)
 src/network/server.rs:1:1: 2:2 warning: function is never used: `connect`, #[warn(dead_code)] on by default
 src/network/server.rs:1 fn connect() {
                         ^
