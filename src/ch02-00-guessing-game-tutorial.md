@@ -637,10 +637,9 @@ match guess.cmp(&secret_number) {
 
 The `cmp()` method compares two values, and can be called on anything that can
 be compared. It takes a reference to the thing you want to compare it to, so
-here it's comparing our `guess` to our `secret_number` and returning a variant 
-of the `Ordering` enum. We use a [`match`][match] statement to decide what to 
-do next based on which variant of `Ordering` we got back from our call to 
-`cmp()` with the values in `guess` and `secret_number`.
+here it's comparing our `guess` to our `secret_number`, and it returns a
+variant of the `Ordering` enum. We use a [`match`][match] statement to decide
+what to do next based on which variant of `Ordering` we got back.
 
 [match]: match.html
 
