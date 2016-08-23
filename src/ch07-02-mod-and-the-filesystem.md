@@ -67,7 +67,7 @@ mod client {
 
 Now we have a `network::connect()` function and a `client::connect()` function.
 
-And you can put modules inside of modules, if you wanted to have `client` to be
+And you can put modules inside of modules. If you wanted to have `client` be
 within `network`:
 
 ```rust
@@ -262,7 +262,7 @@ that we could do yet:
 
 Here's the problem: in our case, we have different names for our modules:
 `client` and `network::server`. But what if we had `client` and
-`network::client`? That's completely valid, but then which module is
+`network::client`? That's completely valid, but then which module is the file
 `src/client.rs` for?
 
 So instead, we can do what the error suggests. We'll make a new directory,
