@@ -27,8 +27,12 @@ mod tests {
 This is an empty test to help us get our library started, instead of the binary
 that says "Hello, world!" that we get with a new binary. Let's ignore the `#[]`
 stuff and `mod tests` for a little bit, but leave it at the end of
-`src/lib.rs`. Let's imagine that we're creating a library to provide networking
-functionality. At the beginning of the file, add:
+`src/lib.rs`.
+
+Imagine that we're creating a library to provide some general networking
+functionality. We're going to look at different ways we could choose to
+organize our code, any of which could make sense depending on exactly what we
+were trying to do. To start, add this code at the beginning of the file:
 
 Filename: src/lib.rs
 
