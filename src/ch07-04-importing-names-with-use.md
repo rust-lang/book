@@ -81,7 +81,7 @@ fn main() {
 
 ## Glob imports with `*`
 
-If you'd like to import many names at once, you can use `*` to do so:
+If you'd like to import all the items in a namespace at once, you can use `*`:
 
 ```rust
 enum TrafficLight {
