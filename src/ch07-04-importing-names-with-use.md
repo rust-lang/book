@@ -58,7 +58,10 @@ fn main() {
 }
 ```
 
-Enums also form this kind of namespace; we can use `use` on those as well:
+Enums also form this kind of namespace; we can import an enum's variants with
+`use` as well. For any kind of `use` statement, if you are importing multiple
+items from one namespace, you can list them using curly braces and commas in
+the last position, like so:
 
 ```rust
 enum TrafficLight {
@@ -67,8 +70,7 @@ enum TrafficLight {
     Green,
 }
 
-use TrafficLight::Red;
-use TrafficLight::Yellow;
+use TrafficLight::{Red, Yellow};
 
 fn main() {
     let red = Red;
