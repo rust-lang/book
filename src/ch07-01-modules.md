@@ -14,4 +14,3 @@ their module or not. Here's an overview of how the bits fit together:
   into scope so that it's easier to refer to them.
 
 We'll take a look at each of these parts and see how they fit into the whole.
-Then, we'll take a look at the standard library and its module layout.
