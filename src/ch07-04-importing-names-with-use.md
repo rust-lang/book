@@ -142,23 +142,3 @@ src/main.rs:8 use TrafficLight::*;
 
 If, instead, we were explicit about the variants we wanted to import, our code
 would not have stopped compiling when we upgraded the `traffic_light` crate.
-
-## Re-exports with `pub use`
-
-Finally, you can combine the `pub` keyword with `use` to 're-export' something:
-
-```rust
-mod a {
-    mod namespace {
-        pub fn function() {}
-    }
-}
-
-pub use a::namespace::function;
-```
-
-Here, the `a` and `namespace` modules are not public, so users of our library
-couldn't call `a::namespace` themselves. However, since we've `pub use`'d
-`function`, it will be public. Users can just call `function` themselves,
-directly. This allows us to organize our code internally however we'd like,
-while presenting a different external interface.
