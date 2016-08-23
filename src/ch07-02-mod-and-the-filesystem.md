@@ -285,7 +285,7 @@ It works! In summary, these are the rules of modules with regards to files:
   submodule named `bar` and `bar` does not have submodules, you should have the
   following files in your `src` directory:
 
-  ```
+  ```text
   ├── foo
   │   ├── bar.rs (contains the declarations in `foo::bar`)
   │   └── mod.rs (contains the declarations in `foo`, including `mod bar`)
