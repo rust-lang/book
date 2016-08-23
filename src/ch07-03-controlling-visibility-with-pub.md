@@ -44,8 +44,8 @@ mod client;
 mod network;
 ```
 
-Here, we make a new `try_me` function, which calls the `connect` function from
-the `client` module, which is the first warning in our build output above.
+Here, we make a new `try_me()` function, which calls the `connect()` function
+from the `client` module, which is the first warning in our build output above.
 Invoking `cargo build` will give us an error:
 
 ```bash
@@ -66,7 +66,7 @@ This is the first time we've run into the concepts of 'public' and 'private' in
 the context of Rust. There's no keyword to make something private; that's the
 default state. To make something public, we need to introduce the `pub` keyword.
 It goes before the declaration itself. Let's modify `src/client.rs` to make
-`connect` public:
+`connect()` public:
 
 Filename: src/client.rs
 
@@ -98,8 +98,8 @@ src/network/server.rs:1 fn connect() {
                         ^
 ```
 
-It worked! But, funny enough, we forgot to make `try_me` public, so we've just
-added a new warning. Let's make `try_me` public in `src/lib.rs`:
+It worked! But, funny enough, we forgot to make `try_me()` public, so we've just
+added a new warning. Let's make `try_me()` public in `src/lib.rs`:
 
 Filename: src/lib.rs
 
@@ -185,7 +185,7 @@ src/network/server.rs:1 fn connect() {
 
 Only one last warning! So wait, why did we need to make `network` public, but
 not `client`? The answer lies in the way that they were used: in the first
-case, we're calling `client::connect` from `try_me`. But since it's inside a
+case, we're calling `client::connect()` from `try_me()`. But since it's inside a
 private module, anyone using our library couldn't call `client::connect()`. So
 why does it need to be public? Let's take a deeper look at privacy.
 
