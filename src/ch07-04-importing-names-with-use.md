@@ -99,9 +99,49 @@ fn main() {
 }
 ```
 
-The `*` is called a 'glob', and it will import everything that's public inside
-of the module. Globs should be used sparingly: they are convenient, but you
-might also pull in more things than you expected, causing naming conflicts.
+The `*` is called a 'glob', and it will import everything that's visible inside
+of the namespace. Globs should be used sparingly: they are convenient, but you
+might also pull in more things than you expected and cause naming conflicts.
+
+For example, in this program, imagine that `TrafficLight` is actually coming
+from an external `traffic_light` crate we're depending on. We could also happen
+to define our own enum named `Blue` that looks like:
+
+```rust
+enum Blue {
+    Cyan,
+    Navy,
+    Royal,
+}
+```
+
+If the traffic_light crate released a new major version and we decided to
+upgrade, the crate could have added `Blue` to its `TrafficLight` variants:
+
+```rust
+enum TrafficLight {
+    Red,
+    Yellow,
+    Green,
+    Blue,
+}
+```
+
+Since we have imported all the names in `TrafficLight` using `*`, we would now
+have a name conflict in our code and just upgrading would cause our crate to no
+longer compile:
+
+```bash
+src/main.rs:10:1: 14:2 error: a type named `Blue` has already been imported in this module [E0255]
+src/main.rs:10 enum Blue {
+               ^
+src/main.rs:8:5: 8:21 note: previous import of `Blue` here
+src/main.rs:8 use TrafficLight::*;
+                  ^~~~~~~~~~~~~~~~
+```
+
+If, instead, we were explicit about the variants we wanted to import, our code
+would not have stopped compiling when we upgraded the `traffic_light` crate.
 
 ## Re-exports with `pub use`
 
