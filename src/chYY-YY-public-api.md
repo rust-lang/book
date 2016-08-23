@@ -11,7 +11,7 @@ organization, you can re-export items in the way you want them to be organized.
 To re-export a name, combine the `pub` keyword with `use`:
 
 ```rust
-# fn main() {} # this doesn't work if it's inside main
+# fn main() {} // this ex needs to be outside main
 mod a {
     pub mod namespace {
         pub fn function() {}
