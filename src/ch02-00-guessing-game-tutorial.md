@@ -201,7 +201,7 @@ terminal.
 
 [iostdin]: ../std/io/struct.Stdin.html
 
-The next part, `.read_line(&mut guess)`, calls the [`readline()`][read_line]
+The next part, `.read_line(&mut guess)`, calls the [`read_line()`][read_line]
 method on the standard input handle to get input from the user. We’re also
 passing one argument to `read_line()`: `&mut guess`.
 
