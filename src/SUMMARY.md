@@ -55,6 +55,8 @@
 
 - [Testing]()
 
+- [Debugging]()
+
 - [Smart Pointers]()
     - [`Deref`]()
     - [`Deref` coercions]()
