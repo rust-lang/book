@@ -223,10 +223,10 @@ $ cd hello_cargo
 ```
 
 We passed the `--bin` argument to `cargo new` because our goal is to make an
-executable application, as opposed to a library. Executables are often called
-*binaries* (as in `/usr/bin`, if you’re on a Unix system). We've given
-`hello_cargo` as the name for our project, and Cargo creates its files in a
-directory of the same name that we can then go into.
+executable application, as opposed to a library. Executables are binary
+executable files often called just *binaries*. We've given `hello_cargo`
+as the name for our project, and Cargo creates its files in a directory
+of the same name that we can then go into.
 
 If we list the files in the `hello_cargo` directory, we can see that Cargo has
 generated two files and one directory for us: a `Cargo.toml` and a `src`
