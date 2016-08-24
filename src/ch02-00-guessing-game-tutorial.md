@@ -111,7 +111,7 @@ your program explicitly with a `use` statement. Using the `std::io` library
 gets you a number of useful `io`-related things, including the functionality to
 accept user input.
 
-[prelude]: ../std/prelude/index.html
+[prelude]: https://doc.rust-lang.org/std/prelude/
 
 ```rust,ignore
 fn main() {
