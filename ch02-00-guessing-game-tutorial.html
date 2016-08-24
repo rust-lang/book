@@ -206,7 +206,7 @@ have written this line as <code>std::io::stdin()</code>.</p>
 <p>This particular function returns an instance of <a href="../std/io/struct.Stdin.html"><code>std::io::Stdin</code></a>,
 which is a type that represents a handle to the standard input for your
 terminal.</p>
-<p>The next part, <code>.read_line(&amp;mut guess)</code>, calls the <a href="../std/io/struct.Stdin.html#method.read_line"><code>readline()</code></a>
+<p>The next part, <code>.read_line(&amp;mut guess)</code>, calls the <a href="../std/io/struct.Stdin.html#method.read_line"><code>read_line()</code></a>
 method on the standard input handle to get input from the user. We’re also
 passing one argument to <code>read_line()</code>: <code>&amp;mut guess</code>.</p>
 <p>The job of <code>read_line()</code> is to take whatever the user types into standard input
