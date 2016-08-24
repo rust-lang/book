@@ -102,7 +102,7 @@ use std::io;
 ```
 
 We’ll need to take user input and then print the result as output, and for that
-functonality we need to import the `io` (input/output) library from the
+functionality we need to import the `io` (input/output) library from the
 standard library (which is known as `std`).
 
 By default, Rust only imports a few things into every program in [the
