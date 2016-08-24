@@ -336,8 +336,8 @@ sparse. Realistically, you won't ever need to touch this file yourself; just
 let Cargo handle it.
 
 We just built a project with `cargo build` and ran it with
-`./target/debug/hello_cargo`, but we can actually do both in one step with
-`cargo run` as follows:
+`./target/debug/hello_cargo`, but we can also use `cargo run` to compile
+and then run:
 
 ```bash
 $ cargo run
