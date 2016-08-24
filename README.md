@@ -32,10 +32,16 @@ $ mdbook build
 ```
 
 The output will be in the `book` subdirectory. To check it out, open it in
-your web browser:
+your web browser.
 
+_Firefox:_
 ```bash
 $ firefox book/index.html
+```
+
+_Chrome:_
+```bash
+$ open -a "Google Chrome" book/index.html 
 ```
 
 To run the tests:
