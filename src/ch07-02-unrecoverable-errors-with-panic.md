@@ -41,8 +41,11 @@ fn main() {
 We attempt to access the hundredth element of our vector, but it only has three
 elements. In this situation, Rust will panic. Using `[]` is supposed to return
 a number. But if you pass it an invalid index, there's no number Rust could
-return here, it would be wrong. So the only thing that we can do is terminate
-the program.
+return here, it would be wrong. In this case, we've typed in a literal, so in
+theory, Rust could figure it out. But if our program was different, say, maybe
+reading the index from user input, it would not be possible to determine at
+compile time if the index was in bounds. So the only thing that we can do is
+terminate the program.
 
 Let's try to run it:
 
