@@ -192,6 +192,65 @@ Overall, these are the rules for item visibility:
 2. If an item is private, it may be accessed by the current module and its
   child modules.
 
+Let's look at a few more examples to get some practice. What if we had this
+code in a new project's `src/lib.rs`:
 
-but describing them in a human way is very hard.
+```rust,ignore
+mod outermost {
+    pub fn middle_function() {}
 
+    fn middle_secret_function() {}
+
+    mod inside {
+        pub fn inner_function() {}
+
+        fn secret_function() {}
+    }
+}
+
+fn try_me() {
+    outermost::middle_function();
+    outermost::middle_secret_function();
+    outermost::inside::inner_function();
+    outermost::inside::secret_function();
+}
+```
+
+Before you try to compile this code, make a guess about which lines in
+`try_me()` will have errors.
+
+Ready? Let's talk through them!
+
+The `try_me()` function is in the root module of our project. The module named
+`outermost` is private, but the second rule says we're allowed to access it
+since `outermost` is in our current, root module.
+
+The function call `outermost::middle_function()` will work. `middle_function()`
+is public, and we are accessing it through its parent module, `outermost`,
+which we just determined we can access in the previous paragraph.
+
+`outermost::middle_secret_function()` will cause a compilation error.
+`middle_secret_function()` is private, so the second rule applies. Our current
+root module is neither the current module of `middle_secret_function()`
+(`outermost` is), nor is it a child module of the current module of
+`middle_secret_function()`.
+
+The module named `inside` is private and has no child modules, so it can only
+be accessed by its current module, `outermost`. That means the `try_me()`
+function is not allowed to call `outermost::inside::inner_function()` or
+`outermost::inside::secret_function()`.
+
+Here are some changes to make to this code. Try each one, make a guess
+about what will be allowed or not, compile to see if you're right, and use the
+rules to understand why.
+
+* What if the `inside` module was public?
+* What if `outside` was public and `inside` was private?
+* What if, in the body of `inner_function()`, we called
+  `::outermost::middle_secret_function()`? (The two colons at the beginning
+  mean that we want to refer to the namespaces starting from the root
+  namespace.)
+
+Feel free to design more experiments and try them out!
+
+Next, let's talk about bringing items into a scope with the `use` keyword.
