@@ -1,16 +1,6 @@
 # Controlling visibility with `pub`
 
-At the end of the last section, we had a project, `modules`, with a module
-layout that looks like this:
-
-```text
-modules
- ├── client
- └── network
-     └── server
-```
-
-When we compiled it, we got some strange warnings:
+At the end of the last section, we had a project, `modules`, and when we compiled it, we got some strange warnings:
 
 ```bash
    Compiling modules v0.1.0 (file:///projects/modules)

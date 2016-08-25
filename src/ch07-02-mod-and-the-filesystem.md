@@ -281,7 +281,27 @@ $ cargo build
 $
 ```
 
-It works! In summary, these are the rules of modules with regards to files:
+It works! So now our module layout looks like this:
+
+```text
+modules
+ ├── client
+ └── network
+     └── server
+```
+
+And the corresponding file layout looks like this:
+
+```text
+├── src
+│   ├── client.rs
+│   ├── lib.rs
+│   └── network
+│       ├── mod.rs
+│       └── server.rs
+```
+
+In summary, these are the rules of modules with regards to files:
 
 * If a module named `foo` has no submodules, you should put the declarations in
   the `foo` module in a file named `foo.rs`.
