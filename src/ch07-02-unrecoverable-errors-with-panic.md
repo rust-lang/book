@@ -39,7 +39,12 @@ fn main() {
 ```
 
 We attempt to access the hundredth element of our vector, but it only has three
-elements. In this situation, Rust will panic. Let's try it:
+elements. In this situation, Rust will panic. Using `[]` is supposed to return
+a number. But if you pass it an invalid index, there's no number Rust could
+return here, it would be wrong. So the only thing that we can do is terminate
+the program.
+
+Let's try to run it:
 
 ```bash
 $ cargo run
@@ -97,8 +102,3 @@ error: Process didn't exit successfully: `target/debug/panic` (exit code: 101)
 
 That's a lot of output! Line `11` there has the line in our project:
 `src/main.rs` line four.
-
-So why does Rust panic here? In this case, using `[]` is supposed to return
-a number. But if you pass it an invalid index, there's no number Rust could
-return here, it would be wrong. So the only thing that we can do is terminate
-the program.
