@@ -1,10 +1,10 @@
 # Recoverable errors with `Result<T, E>`
 
-Most errors aren't so dire. When a function can fail for some reason, it'd be
-nice for it to not kill our entire program. As an example, maybe we are making
-a request to a website, but it's down for maintenance. In this situation, we'd
-like to wait and then try again. Terminating our process isn't the right thing
-to do here.
+Most errors aren't so dire. Sometimes, when a function fails, it's for a reason
+that we can easily interpret and respond to. As an example, maybe we are
+making a request to a website, but it's down for maintenance. In this
+situation, we'd like to wait and then try again. Terminating our process isn't
+the right thing to do here.
 
 In these cases, Rust's standard library provides an `enum` to use as the return
 type of the function:
