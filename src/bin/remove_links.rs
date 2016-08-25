@@ -3,6 +3,7 @@ extern crate regex;
 use std::io;
 use std::io::{Read, Write};
 use regex::{Regex, Captures};
+use std::collections::HashSet;
 
 fn main () {
     let mut buffer = String::new();
@@ -10,18 +11,34 @@ fn main () {
         panic!(e);
     }
 
-    //let refs = Vec::new();
+    let mut refs = HashSet::new();
 
-    let re = Regex::new(r"\[([^\]]+)\](?:(?:\[([^\]]+)\])|(?:\([^\)]+\)))<!-- ignore -->").unwrap();
-    let out = re.replace_all(&buffer, |caps: &Captures| {
-        // if let Some(ref) = caps.at(2) {
-        //     refs.push(ref.to_owned());
-        // }
+    // capture all links and link references
+    let link_regex = Regex::new(r"\[([^\]]+)\](?:(?:\[([^\]]+)\])|(?:\([^\)]+\)))(?i)<!-- ignore -->").unwrap();
+    let first_pass = link_regex.replace_all(&buffer, |caps: &Captures| {
 
-        caps.at(1).unwrap().to_owned();
+        // save the link reference we want to delete
+        if let Some(reference) = caps.at(2) {
+            refs.insert(reference.to_owned());
+        } 
+
+        // put the link title back
+        caps.at(1).unwrap().to_owned()
+    });
+
+    // search for the references we need to delete
+    let ref_regex = Regex::new(r"\n\[([^\]]+)\]:\s.*\n").unwrap();
+    let out = ref_regex.replace_all(&first_pass, |caps: &Captures| {
+        let capture = caps.at(1).unwrap().to_owned();
+
+        // check if we've marked this reference for deletion...
+        if refs.contains(capture.as_str()) {
+            return "".to_string();
+        }
+
+        //... else we put back everything we captured
+        caps.at(0).unwrap().to_owned()
     });
 
     write!(io::stdout(), "{}", out).unwrap();
-
-    //println!("refs: {:?}", refs);
 }
