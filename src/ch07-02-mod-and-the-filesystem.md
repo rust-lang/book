@@ -262,11 +262,13 @@ that we could do yet:
 
 Here's the problem: in our case, we have different names for our modules:
 `client` and `network::server`. But what if we had `client` and
-`network::client`? That's completely valid, but then which module is the file
-`src/client.rs` for?
+`network::client`, or `server` and `network::server`? That's completely valid,
+but then which module would the files `src/client.rs` and `src/server.rs`,
+respectively, be for?
 
-So instead, we can do what the error suggests. We'll make a new directory,
-move `src/server.rs` into it, and change `src/network.rs` to `src/network/mod.rs`.
+Instead of continuing to follow the same file naming pattern we used
+previously, we can do what the error suggests. We'll make a new directory, move
+`src/server.rs` into it, and change `src/network.rs` to `src/network/mod.rs`.
 Then, we try to build:
 
 ```bash

@@ -1,7 +1,7 @@
 # Controlling visibility with `pub`
 
-At the end of the last section, we had a project, `modules`, with a layout that
-looks like this:
+At the end of the last section, we had a project, `modules`, with a module
+layout that looks like this:
 
 ```text
 modules
@@ -29,9 +29,12 @@ src/network/server.rs:1 fn connect() {
 ```
 
 Why does this happen? After all, we're building a library. What if these three
-functions are the public interface that we want our users to use? Well, let's
-try using them as if we were another project using our library. Create a
-`src/main.rs` file with this code:
+functions are the public interface that we want our *users* to use? We won't
+necessarily be using them within our own crate, but the point of creating them
+is that they *will* be used by another project. Let's try using them as if we
+were another project using our library to see what happens and understand why
+we're getting these unused function warnings. Create a `src/main.rs` file with
+this code:
 
 Filename: src/main.rs
 
@@ -84,7 +87,8 @@ state, no one else could possibly use it, so if we don't use it within our
 library crate, Rust will warn us that it's unused. Once we tell Rust something
 is public, Rust knows that we intend for code external to our crate to use it,
 and Rust considers theoretical external usage that is now possible to count as
-being used and it will stop warning us.
+being used. Thus, when something is marked as public, Rust will stop warning us
+that it is unused.
 
 To tell Rust we want to make something public, we add the `pub` keyword. This
 keyword goes before the declaration of the item we want to make public. Let's
@@ -147,15 +151,17 @@ src/network/server.rs:1 fn connect() {
 ```
 
 It compiled! And the warning about `client::connect()` not being used is gone!
-Since we also want the other two functions to be part of our crate's public
-API, let's mark them as `pub` as well to get rid of the remaining warnings. If
-we *didn't* want these functions to be part of our public API and we got these
-warnings, they could be alerting us to code we no longer needed, or a bug if we
-just removed the place within our library where we called this function
-accidentally.
 
-So to fix the next warning, let's make `network::connect()` public. Modify
-`src/network/mod.rs` to be:
+Making functions public isn't the only way to fix unused code warnings: if
+we *didn't* want these functions to be part of our public API and we got these
+warnings, the warnings could be alerting us to code we no longer needed and
+could safely delete. They could also be alerting us to a bug, if we
+had just accidentally removed all places within our library where we called
+this function.
+
+However, we *do* want the other two functions to be part of our crate's public
+API, so let's mark them as `pub` as well to get rid of the remaining warnings.
+Modify `src/network/mod.rs` to be:
 
 Filename: src/network/mod.rs
 
@@ -181,11 +187,11 @@ src/network/server.rs:1 fn connect() {
                         ^
 ```
 
-Hmmm, it says this is still dead, even though it's `pub`. This is because,
-while the function is public, it's not totally public: the module it's in
-is not public. We're working from the interior of the library out, this time,
-as opposed to with `client` where we worked from the outside in. Let's change
-`src/lib.rs` to add the same fix though:
+Hmmm, it says this is still dead, even though it's `pub`. While the function is
+public within the module, the `network` module it's in is not public. We're
+working from the interior of the library out, this time, as opposed to with
+`client` where we worked from the outside in. Let's change `src/lib.rs` to add
+the same fix though, by making `network` public like `client` is:
 
 Filename: src/lib.rs
 
@@ -195,8 +201,7 @@ pub mod client;
 pub mod network;
 ```
 
-Now, we're declaring that the `network` module should be public as well. Lo and
-behold, that warning is gone:
+Now if we compile, that warning is gone:
 
 ```bash
 $ cargo build
@@ -228,13 +233,14 @@ mod tests {
 }
 ```
 
-We'll explain more about testing in Chapter XX, but we've talked about modules
-now, so parts of this should make sense: we have a module named `tests` that
-lives next to our other modules and contains one function named `it_works()`.
+We'll explain more about testing in Chapter XX, but parts of this should make
+sense now: we have a module named `tests` that lives next to our other modules
+and contains one function named `it_works()`. Even though there are special
+annotations, the `tests` module is just another module!
 
 Since tests are for exercising the code within our library, let's try to call
 our `client::connect()` function from this `it_works()` function, even though
-we're not going to be testing any functionality:
+we're not going to be checking any functionality right now:
 
 ```rust
 #[cfg(test)]
@@ -263,9 +269,9 @@ Why doesn't this work? It's not because we don't have `modules::` in front of
 the function like we had in `src/main.rs`: we are definitely within the
 `modules` library crate here. It's because we have to be explicit about the
 names we want to `use` in scope, even with sibling modules in the same library.
-We need to bring `client` in scope, and because `client` is a sibling module to
-`tests`, we can move up a level using the `super` module to refer to the parent
-module of `tests`:
+We need to bring `client` in scope. `use` is relative to the current module,
+`tests`. We can move up a module level using the `super` module to refer to the
+parent module of `tests`, and then we can access the sibling `client` module:
 
 ```rust
 #[cfg(test)]
