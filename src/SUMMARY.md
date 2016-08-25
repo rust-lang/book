@@ -28,12 +28,12 @@
 
 - [Crates & Modules]()
 
-- [Error Handling]()
-
 - [Basic Collections]()
     - [Vectors]()
     - [Strings]()
     - [`HashMap<K, V>`]()
+
+- [Error Handling]()
 
 - [Lifetimes]()
 
