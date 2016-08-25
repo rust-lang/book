@@ -124,13 +124,13 @@ fn main() {
     let number = 5;
 
     if number == 3 {
-        println!("condition was 3");
+        println!("number was 3");
     } else if number == 4 {
-        println!("condition was 4");
+        println!("number was 4");
     } else if number == 5 {
-        println!("condition was 5");
+        println!("number was 5");
     } else {
-        println!("condition was something else");
+        println!("number was something else");
     }
 }
 ```
