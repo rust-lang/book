@@ -143,10 +143,10 @@ src/main.rs:8 use TrafficLight::*;
 If, instead, we were explicit about the variants we wanted to import, our code
 would not have stopped compiling when we upgraded the `traffic_light` crate.
 
-
 ## Using `super` to access a parent module
 
-Remember when we created our crate that Cargo made a `tests` module for us? Let's talk about that now. It was in `src/lib.rs`:
+Remember when we created our crate that Cargo made a `tests` module for us?
+Let's talk about that now. It was in `src/lib.rs`:
 
 Filename: src/lib.rs
 
@@ -197,13 +197,35 @@ explanation
 
 Why doesn't this work? It's not because we don't have `modules::` in front of
 the function like we had in `src/main.rs`: we are definitely within the
-`modules` library crate here. It's because we have to be explicit about the
-names we want to `use` in scope, even with sibling modules in the same library.
-We need to bring `client` in scope.
+`modules` library crate here. The reason is that paths anywhere except in a
+`use` statement are relative to the current module. Our `tests` module doesn't
+have a `client` module in its scope!
 
-`use` is relative to the current module, `tests`. We can move up a module level
-using `super` to refer to the parent module of `tests`, and from there we can
-access the sibling `client` module:
+So how do we get back up one module? We can either use leading colons to say
+that we want to start from the root and list the whole path:
+
+```rust,ignore
+::client::connect();
+```
+
+Or we can use `super` to move up one module in the hierarchy:
+
+```rust,ignore
+super::client::connect();
+```
+
+If we were deep in the module hierarchy, starting from the root every time
+would get long. Plus, if we rearrange our modules by moving a subtree to
+another place, there might be a lot of places the path would need to be updated
+if we always used the path from the root.
+
+It would also be annoying to have to type `super::` all the time in each test,
+but we now have a tool for that solution: `use`! `super::` is special and
+changes the path we give to `use` so that it is relative to the parent module
+instead of to the root module.
+
+For these reasons, in the `tests` module especially, `use super::something` is
+usually the way to go. So now our test looks like this:
 
 ```rust
 #[cfg(test)]
