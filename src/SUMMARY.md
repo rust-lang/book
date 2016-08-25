@@ -26,10 +26,10 @@
     - [Match](ch06-02-match.md)
     - [if let](ch06-03-if-let.md)
 
-- [Modules](ch07-01-modules.md)
-    - [`mod` and the filesystem](ch07-02-mod-and-the-filesystem.md)
-    - [Controlling visibility with `pub`](ch07-03-controlling-visibility-with-pub.md)
-    - [Importing names with `use`](ch07-04-importing-names-with-use.md)
+- [Modules](ch07-00-modules.md)
+    - [`mod` and the filesystem](ch07-01-mod-and-the-filesystem.md)
+    - [Controlling visibility with `pub`](ch07-02-controlling-visibility-with-pub.md)
+    - [Importing names with `use`](ch07-03-importing-names-with-use.md)
 
 - [Basic Collections]()
     - [Vectors]()
