@@ -185,12 +185,12 @@ Only one last warning! Try to fix this one on your own!
 
 ## Privacy rules
 
-FIXME: these are the rules:
+Overall, these are the rules for item visibility:
 
-* If an item is public, then it can be used externally through any of its
+1. If an item is public, then it can be accessed through any of its
   parent modules.
-* If an item is private, it may be accessed by the current module and its
-  submodules.
+2. If an item is private, it may be accessed by the current module and its
+  child modules.
 
 
 but describing them in a human way is very hard.
