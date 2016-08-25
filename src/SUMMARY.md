@@ -6,7 +6,6 @@
 
 - [Guessing Game Tutorial](ch02-00-guessing-game-tutorial.md)
 
-<<<<<<< a2bc57618340b6257b9a4dd7d4f3993c71cde2e4
 - [Common Programming Concepts in Rust](ch03-00-common-programming-concepts-in-rust.md)
     - [Variable Bindings and Mutability](ch03-01-variable-bindings-and-mutability.md)
     - [Data Types](ch03-02-data-types.md)

@@ -175,3 +175,6 @@ effects; nothing is returned upon success. Well, functions with no return type,
 as we just saw with `main()`, are the same as returning unit. So we can use
 it as the return type here, too. This leads to the last line of the function,
 the slightly silly-looking `Ok(())`. This is an `Ok()` with a `()` inside.
+
+In chapter XX, we'll learn how to make our own types like these, but for now,
+an understanding of the core `Result<T, E>` is enough.
