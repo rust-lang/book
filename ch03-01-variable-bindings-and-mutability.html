@@ -75,13 +75,10 @@ We still have the option to make our bindings mutable, though. Let's explore
 how and why Rust encourages us to favor immutability, and why we might want to
 opt out of that.</p>
 <p>Variable bindings being immutable means that once a value is bound, you can't
-change that value. To illustrate this, let's generate a new project with Cargo.
-Open a terminal, and navigate to the directory you want to store your projects
-in. From there, run these commands:</p>
-<pre><code class="language-bash">$ cargo new --bin bindings
-$ cd bindings
-</code></pre>
-<p>Then open <code>src/main.rs</code> and replace its code with the following:</p>
+change that value. To illustrate this, let's generate a new project in your
+projects directory called <code>bindings</code> by using <code>cargo new --bin bindings</code>.</p>
+<p>Then, in your new <code>bindings</code> directory, open <code>src/main.rs</code> and replace its code
+with the following:</p>
 <p>Filename: src/main.rs</p>
 <pre><code class="language-rust,ignore">fn main() {
     let x = 5;
@@ -103,7 +100,7 @@ note: prior assignment occurs here
 2 |&gt;     let x = 5;
   |&gt;         ^
 </code></pre>
-<p>This is our first example of the compiler helping us find an error in our
+<p>This is an example of the compiler helping us find an error in our
 program! Compiler errors can be frustrating. Keep in mind that they only mean
 your program isn't safely doing what you want it to do yet; they do <em>not</em> mean
 that you're not a good programmer! Experienced Rustaceans still get compiler
@@ -111,9 +108,9 @@ errors. Try to keep in mind that the Rust compiler is trying to help your
 program be the very best.</p>
 <p>PROD: START BOX
 ######Extended Error Explanations</p>
-<p>Now that you've seen an example of a Rust error, let's look at one particularly
-useful aspect of errors. Rust encourages you to seek further information on the
-kind of error you've received with output like this:</p>
+<p>Now that you've seen a few examples of Rust errors, let's look at one
+particularly useful aspect of errors. Rust encourages you to seek further
+information on the kind of error you've received with output like this:</p>
 <pre><code class="language-bash">error: re-assignment of immutable variable `x` [--explain E0384]
 </code></pre>
 <p>This tells us that if we pass the <code>--explain</code> flag to <code>rustc</code> with the provided

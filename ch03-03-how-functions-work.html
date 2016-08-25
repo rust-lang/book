@@ -72,11 +72,9 @@
 important functions in the language: the <code>main()</code> function that’s the entry
 point of many programs. We've also seen the <code>fn</code> keyword, which allows us to
 declare new functions.</p>
-<p>Rust code uses <em>snake case</em> as the conventional style for function names. In
-snake case, all letters are lower case, and there are underscores separating
-words. (Rust also uses snake case for the names of variable bindings; we just
-haven't used any variable bindings with enough letters to need underscores
-yet). Here's a program containing an example function definition:</p>
+<p>Rust code uses <em>snake case</em> as the conventional style for function and variable
+names. In snake case, all letters are lower case, and there are underscores
+separating words. Here's a program containing an example function definition:</p>
 <p>Filename: src/main.rs</p>
 <pre><code class="language-rust">fn main() {
     println!(&quot;Hello, world!&quot;);
@@ -97,14 +95,9 @@ called from inside the <code>main()</code> function. Note that we defined
 <code>another_function()</code> <em>after</em> the <code>main()</code> function in our source code; we could
 have defined it before as well. Rust doesn’t care where you define your
 functions, only that they are defined somewhere.</p>
-<p>Let’s start a new project to explore functions further. Open a terminal, and
-navigate to the directory you're keeping your projects in. From there, use
-Cargo to generate a new project, as follows:</p>
-<pre><code class="language-bash">$ cargo new --bin functions
-$ cd functions
-</code></pre>
-<p>Place the <code>another_function()</code> example in a file named <code>src/main.rs</code> and run
-it. You should see the following output:</p>
+<p>Let’s start a new binary project named <code>functions</code> so that we can explore
+further. Place the <code>another_function()</code> example in <code>src/main.rs</code> and run it.
+You should see the following output:</p>
 <pre><code class="language-bash">$ cargo run
    Compiling functions v0.1.0 (file:///projects/functions)
      Running `target/debug/functions`

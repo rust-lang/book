@@ -77,13 +77,8 @@ loops.</p>
 <p>An <code>if</code> expression allows us to branch our code depending on conditions. We
 provide a condition and then say, &quot;If this condition is met, then run this
 block of code. If the condition is not met, do not run this block of code.&quot;</p>
-<p>Let’s make a new project to explore <code>if</code>. Navigate to your projects directory,
-and use Cargo to make a new project called <code>branches</code>:</p>
-<pre><code class="language-bash">$ cargo new --bin branches
-$ cd branches
-</code></pre>
-<p>Write this sample program using <code>if</code> and save it in the <em>branches</em> directory in
-<code>src/main.rs</code>:</p>
+<p>Let’s make a new project to explore <code>if</code>, called <code>branches</code>. In <code>src/main.rs</code>,
+put:</p>
 <p>Filename: src/main.rs</p>
 <pre><code class="language-rust">fn main() {
     let number = 3;
@@ -164,13 +159,13 @@ expression. For example:</p>
     let number = 5;
 
     if number == 3 {
-        println!(&quot;condition was 3&quot;);
+        println!(&quot;number was 3&quot;);
     } else if number == 4 {
-        println!(&quot;condition was 4&quot;);
+        println!(&quot;number was 4&quot;);
     } else if number == 5 {
-        println!(&quot;condition was 5&quot;);
+        println!(&quot;number was 5&quot;);
     } else {
-        println!(&quot;condition was something else&quot;);
+        println!(&quot;number was something else&quot;);
     }
 }
 </code></pre>
@@ -253,11 +248,7 @@ us exactly where to find the problem in our program.</p>
 <p>It’s often useful to be able to execute a block of code more than one time. For
 this, Rust has several constructs called <em>loops</em>. A loop runs through the code
 inside it to the end and then starts immediately back at the beginning. To try
-out loops, let’s make a new project. Navigate to your <em>projects</em> folder and use
-Cargo to make a new project:</p>
-<pre><code class="language-bash">$ cargo new --bin loops
-$ cd loops
-</code></pre>
+out loops, let’s make a new project called <code>loops</code>.</p>
 <p>There are three kinds of loops in Rust: <code>loop</code>, <code>while</code>, and <code>for</code>. Let’s dig
 in.</p>
 <h4>Repeating Code with <code>loop</code></h4>
