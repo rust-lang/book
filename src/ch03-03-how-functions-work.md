@@ -5,11 +5,9 @@ important functions in the language: the `main()` function that’s the entry
 point of many programs. We've also seen the `fn` keyword, which allows us to
 declare new functions.
 
-Rust code uses *snake case* as the conventional style for function names. In
-snake case, all letters are lower case, and there are underscores separating
-words. (Rust also uses snake case for the names of variable bindings; we just
-haven't used any variable bindings with enough letters to need underscores
-yet). Here's a program containing an example function definition:
+Rust code uses *snake case* as the conventional style for function and variable
+names. In snake case, all letters are lower case, and there are underscores
+separating words. Here's a program containing an example function definition:
 
 Filename: src/main.rs
 
