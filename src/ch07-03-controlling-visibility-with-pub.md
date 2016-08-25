@@ -56,23 +56,13 @@ a nice separation of concerns.
 
 Our binary crate right now just calls our library's `connect()` function from
 the `client` module; we picked that one since it's the first warning in our
-build output above. Invoking `cargo build` will now give us an error:
+build output above. Invoking `cargo build` will now give us an error after the
+warnings:
 
 ```bash
 $ cargo build
    Compiling modules v0.1.0 (file:///projects/modules)
-src/client.rs:1:1: 2:2 warning: function is never used: `connect`,
-#[warn(dead_code)] on by default
-src/client.rs:1 fn connect() {
-                ^
-src/network/mod.rs:1:1: 2:2 warning: function is never used: `connect`,
-#[warn(dead_code)] on by default
-src/network/mod.rs:1 fn connect() {
-                     ^
-src/network/server.rs:1:1: 2:2 warning: function is never used: `connect`,
-#[warn(dead_code)] on by default
-src/network/server.rs:1 fn connect() {
-                        ^
+<warnings>
 src/main.rs:4:5: 4:29 error: module `client` is private
 src/main.rs:4     modules::client::connect();
                   ^~~~~~~~~~~~~~~~~~~~~~~~
@@ -107,18 +97,7 @@ The `pub` goes right before `mod`. Let's try building again:
 ```bash
 $ cargo build
    Compiling modules v0.1.0 (file:///projects/modules)
-src/client.rs:1:1: 2:2 warning: function is never used: `connect`,
-#[warn(dead_code)] on by default
-src/client.rs:1 fn connect() {
-                ^
-src/network/mod.rs:1:1: 2:2 warning: function is never used: `connect`,
-#[warn(dead_code)] on by default
-src/network/mod.rs:1 fn connect() {
-                     ^
-src/network/server.rs:1:1: 2:2 warning: function is never used: `connect`,
-#[warn(dead_code)] on by default
-src/network/server.rs:1 fn connect() {
-                        ^
+<warnings>
 src/main.rs:4:5: 4:29 error: function `connect` is private
 src/main.rs:4     modules::client::connect();
                   ^~~~~~~~~~~~~~~~~~~~~~~~
