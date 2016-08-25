@@ -67,10 +67,10 @@ from a string literal using the `from` function:
 let s = String::from("hello");
 ```
 
-We haven’t seen the double colon (`::`) syntax yet. It is an operator that
-allows us to namespace this particular `from()` function under the `String`
-type itself, rather than using some sort of name like `string_from()`. We’ll
-discuss this syntax more in the “Method Syntax” and “Modules” chapters.
+The double colon (`::`) is an operator that allows us to namespace this
+particular `from()` function under the `String` type itself, rather than using
+some sort of name like `string_from()`. We’ll discuss this syntax more in the
+“Method Syntax” and “Modules” chapters.
 
 This kind of string can be mutated:
 
