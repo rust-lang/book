@@ -41,7 +41,7 @@ note: prior assignment occurs here
   |>         ^
 ```
 
-This is our first example of the compiler helping us find an error in our
+This is an example of the compiler helping us find an error in our
 program! Compiler errors can be frustrating. Keep in mind that they only mean
 your program isn't safely doing what you want it to do yet; they do _not_ mean
 that you're not a good programmer! Experienced Rustaceans still get compiler
@@ -51,9 +51,9 @@ program be the very best.
 PROD: START BOX
 ######Extended Error Explanations
 
-Now that you've seen an example of a Rust error, let's look at one particularly
-useful aspect of errors. Rust encourages you to seek further information on the
-kind of error you've received with output like this:
+Now that you've seen a few examples of Rust errors, let's look at one
+particularly useful aspect of errors. Rust encourages you to seek further
+information on the kind of error you've received with output like this:
 
 ```bash
 error: re-assignment of immutable variable `x` [--explain E0384]
