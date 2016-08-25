@@ -253,4 +253,6 @@ test tests::it_works ... ok
 test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured
 ```
 
-`super` is generally only used with tests because...?
+Now you know techniques for organizing your code! Use these to group related
+functionality together, keep files from getting too long, and present a tidy
+public API to users of your library.
