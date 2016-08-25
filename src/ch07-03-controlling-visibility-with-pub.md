@@ -158,7 +158,7 @@ src/network/server.rs:1 fn connect() {
 
 Hmmm, it says this is still dead, even though it's `pub`. While the function is
 public within the module, the `network` module it's in is not public. We're
-working from the interior of the library out, this time, as opposed to with
+working from the interior of the library out this time, as opposed to with
 `client` where we worked from the outside in. Let's change `src/lib.rs` to add
 the same fix though, by making `network` public like `client` is:
 
