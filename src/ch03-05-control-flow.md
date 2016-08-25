@@ -12,16 +12,8 @@ An `if` expression allows us to branch our code depending on conditions. We
 provide a condition and then say, "If this condition is met, then run this
 block of code. If the condition is not met, do not run this block of code."
 
-Let’s make a new project to explore `if`. Navigate to your projects directory,
-and use Cargo to make a new project called `branches`:
-
-```bash
-$ cargo new --bin branches
-$ cd branches
-```
-
-Write this sample program using `if` and save it in the *branches* directory in
-`src/main.rs`:
+Let’s make a new project to explore `if`, called `branches`. In `src/main.rs`,
+put:
 
 Filename: src/main.rs
 
@@ -244,13 +236,7 @@ us exactly where to find the problem in our program.
 It’s often useful to be able to execute a block of code more than one time. For
 this, Rust has several constructs called *loops*. A loop runs through the code
 inside it to the end and then starts immediately back at the beginning. To try
-out loops, let’s make a new project. Navigate to your *projects* folder and use
-Cargo to make a new project:
-
-```bash
-$ cargo new --bin loops
-$ cd loops
-```
+out loops, let’s make a new project called `loops`.
 
 There are three kinds of loops in Rust: `loop`, `while`, and `for`. Let’s dig
 in.

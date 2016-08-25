@@ -8,16 +8,11 @@ how and why Rust encourages us to favor immutability, and why we might want to
 opt out of that.
 
 Variable bindings being immutable means that once a value is bound, you can't
-change that value. To illustrate this, let's generate a new project with Cargo.
-Open a terminal, and navigate to the directory you want to store your projects
-in. From there, run these commands:
+change that value. To illustrate this, let's generate a new project in your
+projects directory called `bindings` by using `cargo new --bin bindings`.
 
-```bash
-$ cargo new --bin bindings
-$ cd bindings
-```
-
-Then open `src/main.rs` and replace its code with the following:
+Then, in your new `bindings` directory, open `src/main.rs` and replace its code
+with the following:
 
 Filename: src/main.rs
 

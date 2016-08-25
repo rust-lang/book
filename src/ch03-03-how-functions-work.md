@@ -36,17 +36,9 @@ called from inside the `main()` function. Note that we defined
 have defined it before as well. Rust doesn’t care where you define your
 functions, only that they are defined somewhere.
 
-Let’s start a new project to explore functions further. Open a terminal, and
-navigate to the directory you're keeping your projects in. From there, use
-Cargo to generate a new project, as follows:
-
-```bash
-$ cargo new --bin functions
-$ cd functions
-```
-
-Place the `another_function()` example in a file named `src/main.rs` and run
-it. You should see the following output:
+Let’s start a new binary project named `functions` so that we can explore
+further. Place the `another_function()` example in `src/main.rs` and run it.
+You should see the following output:
 
 ```bash
 $ cargo run

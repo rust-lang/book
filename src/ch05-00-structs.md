@@ -12,15 +12,9 @@ Let’s write a program which calculates the distance between two points.
 We’ll start off with single variable bindings, and then refactor it to
 use `struct`s instead.
 
-Let’s make a new project with Cargo:
-
-```bash
-$ cargo new --bin points
-$ cd points
-```
-
-Here’s a short program which calculates the distance between two points. Put
-it into your `src/main.rs`:
+Let’s make a new project with Cargo called `points`. Here’s a short program
+which calculates the distance between two points to put into this project's
+`src/main.rs`:
 
 Filename: src/main.rs
 
