@@ -1,4 +1,4 @@
-# Importing names with `use`
+## Importing names with `use`
 
 We've seen how we can call functions defined within a module by using the
 module name as part of the call, like this:
@@ -79,7 +79,7 @@ fn main() {
 }
 ```
 
-## Glob imports with `*`
+### Glob imports with `*`
 
 If you'd like to import all the items in a namespace at once, you can use `*`:
 
@@ -143,7 +143,7 @@ src/main.rs:8 use TrafficLight::*;
 If, instead, we were explicit about the variants we wanted to import, our code
 would not have stopped compiling when we upgraded the `traffic_light` crate.
 
-## Using `super` to access a parent module
+### Using `super` to access a parent module
 
 Remember when we created our crate that Cargo made a `tests` module for us?
 Let's talk about that now. It was in `src/lib.rs`:

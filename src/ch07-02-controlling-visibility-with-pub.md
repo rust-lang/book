@@ -1,4 +1,4 @@
-# Controlling visibility with `pub`
+## Controlling visibility with `pub`
 
 At the end of the last section, we had a project, `modules`, and when we compiled it, we got some strange warnings:
 
@@ -183,7 +183,7 @@ src/network/server.rs:1 fn connect() {
 
 Only one last warning! Try to fix this one on your own!
 
-## Privacy rules
+### Privacy rules
 
 Overall, these are the rules for item visibility:
 
