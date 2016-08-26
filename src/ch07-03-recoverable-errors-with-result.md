@@ -76,6 +76,17 @@ fn main() {
 This has the same behavior as our previous example: If the call to `open`
 returns `Ok`, return the value inside. If it's an `Err`, panic.
 
+There's also another method, similar to unwrap, that lets us choose the error
+message: `expect`. It looks like this:
+
+```rust,should_panic
+use std::fs::File;
+
+fn main() {
+    let f = File::open("hello.txt").expect("failed to open hello.txt");
+}
+```
+
 This isn't the only way to deal with errors, however. This entire section is
 supposed to be about recovering from errors, but we've gone back to panic.
 This is true, and gets at an underlying truth: you can easily turn a
@@ -155,9 +166,6 @@ Instead of `main()`, let's create a function that returns a result:
 
 use std::fs::File;
 use std::io;
-
-fn main() {
-}
 
 pub fn process_file() -> Result<(), io::Error> {
     let f = File::open("hello.txt")?;

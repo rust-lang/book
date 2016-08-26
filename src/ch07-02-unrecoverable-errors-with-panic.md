@@ -2,8 +2,11 @@
 
 Sometimes, bad things happen, and there's nothing that you can do about it. For
 these cases, Rust has a macro, `panic!`. When this macro executes, your program
-will terminate execution, printing a failure message and then quitting. Try
-this program:
+will terminate execution, printing a failure message and then quitting. The most
+common reason for this is when a bug of some kind has been detected, and it's not
+clear how to handle the error.
+
+Let's try it out with a simple program: 
 
 ```rust,should_panic
 fn main() {
