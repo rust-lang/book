@@ -1,13 +1,18 @@
 # Strings
 
+We've already talked about strings a bunch in chapter four, but let's take a
+more in-depth look at them now.
+
 ## creating
 
-new, push_str, String::from and .to_string()
+
+
+new,  String::from and .to_string()
 
 ## reading
 
+slicing syntax, indexing
+
 ## updating
 
-## implementaiton details
-
-just like vecs with extra utf8 checks
+push_str, concatenation
