@@ -143,7 +143,7 @@ an `Err` to our caller.
 There's one problem though: let's try compiling the example:
 
 ```rust,ignore
-   Compiling result v0.1.0 (file:///home/steve/tmp/result)
+   Compiling result v0.1.0 (file:///projects/result)
 error[E0308]: mismatched types
  --> src/main.rs:6:13
   |

@@ -18,7 +18,7 @@ If you run it, you'll see something like this:
 
 ```bash
 $ cargo run
-   Compiling panic v0.1.0 (file:///home/steve/tmp/panic)
+   Compiling panic v0.1.0 (file:///projects/panic)
     Finished debug [unoptimized + debuginfo] target(s) in 0.25 secs
      Running `target/debug/panic`
 thread 'main' panicked at 'crash and burn', src/main.rs:2
@@ -54,7 +54,7 @@ Let's try to run it:
 
 ```bash
 $ cargo run
-   Compiling panic v0.1.0 (file:///home/steve/tmp/panic)
+   Compiling panic v0.1.0 (file:///projects/panic)
     Finished debug [unoptimized + debuginfo] target(s) in 0.27 secs
      Running `target/debug/panic`
 thread 'main' panicked at 'index out of bounds: the len is 3 but the index is
@@ -96,7 +96,7 @@ core::panicking::panic_bounds_check::hb2d969c3cc11ed08
 core..ops..Index<usize>>::index::hb9f10d3dadbe8101
                         at ../src/libcollections/vec.rs:1265
   11:     0x56095614c134 - panic::main::h2d7d3751fb8705e2
-                        at /home/steve/tmp/panic/src/main.rs:4
+                        at /projects/panic/src/main.rs:4
   12:     0x56095615af46 - __rust_maybe_catch_panic
   13:     0x560956152082 - std::rt::lang_start::h352a66f5026f54bd
   14:     0x56095614c1b3 - main
