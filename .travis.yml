@@ -1,5 +1,6 @@
 sudo: false
 language: rust
+cache: cargo
 rust:
   - nightly
   - stable
