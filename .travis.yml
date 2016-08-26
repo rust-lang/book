@@ -3,7 +3,10 @@ language: rust
 cache: cargo
 rust:
   - nightly
-  - stable
+# - beta
+# ^ to be changed once a new beta is cut that doesn't crash
+# - stable
+# ^ to be changed once question_mark becomes stable
 before_script:
   - (cargo install mdbook || true)
 script:
