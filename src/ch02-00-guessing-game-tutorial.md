@@ -450,7 +450,8 @@ When we _do_ want to update a crate, Cargo has another command,
 
 - Ignore the `Cargo.lock` file and figure out all the latest versions that fit
   our specifications in `Cargo.toml`.
-- If that works, write those versions out to the lock file.
+- If that works, fetch and install all the new package versions.
+- Write those versions out to the lock file.
 
 But by default, Cargo will only look for versions larger than `0.3.0` and
 smaller than `0.4.0`. If the `rand` crate has released two new versions,
