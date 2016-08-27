@@ -103,10 +103,10 @@ call this enum <code>Option&lt;T&gt;</code>, and it looks like this:</p>
     None,
 }
 </code></pre>
-<p>This enum is <a href="../std/option/enum.Option.html">provided by the standard library</a>, and is so useful that
-it's even in the prelude; you don't need to import it explicitly. Furthermore,
-so are its variants: you can say <code>Some</code> and <code>None</code> directly, without prefixing
-them with <code>Option::</code>.</p>
+<p>This enum is <a href="../std/option/enum.Option.html">provided by the standard library</a><!-- ignore -->, and is
+so useful that it's even in the prelude; you don't need to import it
+explicitly. Furthermore, so are its variants: you can say <code>Some</code> and <code>None</code>
+directly, without prefixing them with <code>Option::</code>.</p>
 <p>Here's an example of using <code>Option&lt;T&gt;</code>:</p>
 <pre><code class="language-rust">let some_number = Some(5);
 let some_string = Some(&quot;a string&quot;);
@@ -148,8 +148,9 @@ when the value is null. Everywhere that a value has a type that isn't an
 deliberate design decision for Rust to limit null's pervasiveness and increase
 the safety of Rust code.</p>
 <p>So, how <em>do</em> you get a <code>T</code> from an <code>Option&lt;T&gt;</code>?  The <code>Option&lt;T&gt;</code> enum has a
-large number of methods that you can check out in <a href="../std/option/enum.Option.html">its documentation</a>, and
-becoming familiar with them will be extremely useful in your journey with Rust.</p>
+large number of methods that you can check out in
+<a href="../std/option/enum.Option.html">its documentation</a><!-- ignore -->, and becoming familiar with them will
+be extremely useful in your journey with Rust.</p>
 <p>But we want a deeper understanding than that. If we didn't have those methods
 defined for us already, what would we do? And more generally, how do we get
 the inner values out of any enum variant? We need a new feature: <code>match</code>.</p>

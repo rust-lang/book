@@ -148,8 +148,8 @@ let home = IpAddr::V4(127, 0, 0, 1);
 let loopback = IpAddr::V6(String::from(&quot;::1&quot;));
 </code></pre>
 <p>You can put any kind of data inside of an enum variant, including another enum!
-The <code>IpAddr</code> enum is <a href="../std/net/enum.IpAddr.html">in the standard library</a>, but it embeds two
-different structs inside of its variants:</p>
+The <code>IpAddr</code> enum is <a href="../std/net/enum.IpAddr.html">in the standard library</a><!-- ignore -->, but it
+embeds two different structs inside of its variants:</p>
 <pre><code class="language-rust">struct Ipv4Addr {
     // details elided
 }

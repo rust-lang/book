@@ -144,10 +144,10 @@ fn main() {
 functionality we need to import the <code>io</code> (input/output) library from the
 standard library (which is known as <code>std</code>).</p>
 <p>By default, Rust only imports a few things into every program in <a href="https://doc.rust-lang.org/std/prelude/">the
-<em>prelude</em></a>. If it’s not in the prelude, you’ll have to import it into
-your program explicitly with a <code>use</code> statement. Using the <code>std::io</code> library
-gets you a number of useful <code>io</code>-related things, including the functionality to
-accept user input.</p>
+<em>prelude</em></a><!-- ignore -->. If it’s not in the prelude, you’ll have to
+import it into your program explicitly with a <code>use</code> statement. Using the
+<code>std::io</code> library gets you a number of useful <code>io</code>-related things, including
+the functionality to accept user input.</p>
 <pre><code class="language-rust,ignore">fn main() {
 </code></pre>
 <p>As you’ve seen in Chapter 1, the <code>main()</code> function is the entry point into the
@@ -185,7 +185,7 @@ line. Rust ignores everything in comments.</p>
 <code>guess</code>, but we have to look at the other side of the <code>=</code> for the value it’s
 bound to: <code>String::new()</code>.</p>
 <p><code>String</code> is a string type, provided by the standard library. A
-<a href="../std/string/struct.String.html"><code>String</code></a> is a growable, UTF-8 encoded bit of text.</p>
+<a href="../std/string/struct.String.html"><code>String</code></a><!-- ignore --> is a growable, UTF-8 encoded bit of text.</p>
 <p>The <code>::</code> syntax in the <code>::new()</code> line indicates that <code>new()</code> is an <em>associated
 function</em> of a particular type. An associated function is a function that is
 associated with a type, in this case <code>String</code>, rather than a particular
@@ -203,12 +203,13 @@ Whew!</p>
 <p>Remember how we said <code>use std::io;</code> on the first line of the program? We’re now
 calling an associated function on it. If we didn’t <code>use std::io</code>, we could
 have written this line as <code>std::io::stdin()</code>.</p>
-<p>This particular function returns an instance of <a href="../std/io/struct.Stdin.html"><code>std::io::Stdin</code></a>,
+<p>This function returns an instance of <a href="../std/io/struct.Stdin.html"><code>std::io::Stdin</code></a><!-- ignore -->,
 which is a type that represents a handle to the standard input for your
 terminal.</p>
-<p>The next part, <code>.read_line(&amp;mut guess)</code>, calls the <a href="../std/io/struct.Stdin.html#method.read_line"><code>read_line()</code></a>
-method on the standard input handle to get input from the user. We’re also
-passing one argument to <code>read_line()</code>: <code>&amp;mut guess</code>.</p>
+<p>The next part, <code>.read_line(&amp;mut guess)</code>, calls the
+<a href="../std/io/struct.Stdin.html#method.read_line"><code>read_line()</code></a><!-- ignore --> method on the standard input handle
+to get input from the user. We’re also passing one argument to <code>read_line()</code>:
+<code>&amp;mut guess</code>.</p>
 <p>The job of <code>read_line()</code> is to take whatever the user types into standard input
 and place that into a string, so it takes that string as an argument. The
 string argument needs to be mutable so that the method can change the string's
@@ -237,27 +238,28 @@ calls. Now let's see what this line does.</p>
 <h3>Handling Potential Failure with the <code>Result</code> Type</h3>
 <p>We mentioned that <code>read_line()</code> puts what the user types into the string we
 pass it, but it also returns a value: in this case, an
-<a href="../std/io/type.Result.html"><code>io::Result</code></a>. Rust has a number of types named <code>Result</code> in its
-standard library: a generic <a href="../std/result/enum.Result.html"><code>Result</code></a>, and then specific versions for
-sub-libraries, like <code>io::Result</code>.</p>
-<p>The <code>Result</code> types are <a href="ch06-00-enums.html">enums</a>, which is short for <em>enumeration</em>. An
-enumeration is a type that can have a fixed set of values, which are called the
-<code>enum</code>'s <em>variants</em>. We will be covering enums in more detail in Chapter XX.</p>
+<a href="../std/io/type.Result.html"><code>io::Result</code></a><!-- ignore -->. Rust has a number of types named
+<code>Result</code> in its standard library: a generic <a href="../std/result/enum.Result.html"><code>Result</code></a><!-- ignore -->,
+and then specific versions for sub-libraries, like <code>io::Result</code>.</p>
+<p>The <code>Result</code> types are <a href="ch06-00-enums.html">enums</a><!-- ignore -->, which is short for
+<em>enumeration</em>. An enumeration is a type that can have a fixed set of values,
+which are called the <code>enum</code>'s <em>variants</em>. We will be covering enums in more
+detail in Chapter XX.</p>
 <p>For <code>Result</code>, the variants are <code>Ok</code> or <code>Err</code>. <code>Ok</code> means the operation was
 successful, and inside the <code>Ok</code> variant is the successfully generated value.
 <code>Err</code> means the operation failed, and the <code>Err</code> contains information about how
 or why the operation failed.</p>
 <p>The purpose of these <code>Result</code> types is to encode error handling information.
 Values of the <code>Result</code> type, like any type, have methods defined on them. In
-this case, <code>io::Result</code> has an <a href="../std/result/enum.Result.html#method.expect"><code>expect()</code> method</a> that we can call. If
-this instance of <code>io::Result</code> is an <code>Err</code> value, <code>expect()</code> will cause our
-program to crash and display the message that we passed as an argument to
-<code>expect()</code>. In this case, if the <code>read_line()</code> method returns an <code>Err</code>, it would
-likely be the result of an error coming from the underlying operating system.
-If this instance of <code>io::Result</code> is an <code>Ok</code> value, <code>expect()</code> will take the
-return value that <code>Ok</code> is holding out of the <code>Ok</code> and return just that value to
-us so that we can use it. In this case, that value will be what the user
-entered into standard input.</p>
+this case, <code>io::Result</code> has an <a href="../std/result/enum.Result.html#method.expect"><code>expect()</code> method</a><!-- ignore --> that
+we can call. If this instance of <code>io::Result</code> is an <code>Err</code> value, <code>expect()</code>
+will cause our program to crash and display the message that we passed as an
+argument to <code>expect()</code>. In this case, if the <code>read_line()</code> method returns an
+<code>Err</code>, it would likely be the result of an error coming from the underlying
+operating system. If this instance of <code>io::Result</code> is an <code>Ok</code> value, <code>expect()</code>
+will take the return value that <code>Ok</code> is holding out of the <code>Ok</code> and return just
+that value to us so that we can use it. In this case, that value will be what
+the user entered into standard input.</p>
 <p>If we don't call <code>expect()</code>, our program will compile, but we’ll get a warning:</p>
 <pre><code class="language-bash">$ cargo build
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
@@ -324,10 +326,10 @@ that goes until another section starts. Cargo uses the <code>[dependencies]</cod
 to know what external crates your project depends on and what versions of those
 crates you require. In this case, we’ve specified the <code>rand</code> crate with the
 semantic version specifier <code>0.3.14</code>. Cargo understands <a href="http://semver.org">Semantic
-Versioning</a> (sometimes called <em>semver</em>), which is a standard for
-writing version numbers. A bare number like above is actually shorthand for
-<code>^0.3.14</code>, which means &quot;any version that has a public API compatible with
-version 0.3.14&quot;.</p>
+Versioning</a><!-- ignore --> (sometimes called <em>semver</em>), which is a
+standard for writing version numbers. A bare number like above is actually
+shorthand for <code>^0.3.14</code>, which means &quot;any version that has a public API
+compatible with version 0.3.14&quot;.</p>
 <p>Now, without changing any of our code, let’s build our project:</p>
 <pre><code class="language-bash">$ cargo build
     Updating registry `https://github.com/rust-lang/crates.io-index`
@@ -402,11 +404,11 @@ rand = &quot;0.4.0&quot;
 <p>The next time we <code>cargo build</code>, assuming that the <code>rand</code> crate version <code>0.4.0</code>
 has been released, Cargo will update the crates index and re-evaluate our
 <code>rand</code> requirements according to the new version we have specified.</p>
-<p>There’s a lot more to say about <a href="http://doc.crates.io">Cargo</a> and <a href="http://doc.crates.io/crates-io.html">its
-ecosystem</a> that we will get into in Chapter XX, but for now,
-that’s all we need to know. Cargo makes it really easy to re-use libraries, so
-Rustaceans are able to write smaller projects which are assembled out of a
-number of sub-packages.</p>
+<p>There’s a lot more to say about <a href="http://doc.crates.io">Cargo</a><!-- ignore --> and <a href="http://doc.crates.io/crates-io.html">its
+ecosystem</a><!-- ignore --> that we will get into in Chapter XX, but
+for now, that’s all we need to know. Cargo makes it really easy to re-use
+libraries, so Rustaceans are able to write smaller projects which are assembled
+out of a number of sub-packages.</p>
 <h3>Generating a Random Number</h3>
 <p>Let’s get on to actually <em>using</em> <code>rand</code>. Our next step is to update our
 <code>main.rs</code> code as follows:</p>
@@ -532,8 +534,9 @@ compare two things.</p>
 <p>The <code>cmp()</code> method compares two values, and can be called on anything that can
 be compared. It takes a reference to the thing you want to compare it to, so
 here it's comparing our <code>guess</code> to our <code>secret_number</code>, and it returns a
-variant of the <code>Ordering</code> enum. We use a <a href="match.html"><code>match</code></a> statement to decide
-what to do next based on which variant of <code>Ordering</code> we got back.</p>
+variant of the <code>Ordering</code> enum. We use a <a href="match.html"><code>match</code></a><!-- ignore -->
+statement to decide what to do next based on which variant of <code>Ordering</code> we got
+back.</p>
 <p><code>match</code> statements are made up of <em>arms</em>. An arm consists of a <em>pattern</em> and
 the code that we should run if the value given to the beginning of the <code>match</code>
 statement fits that arm's pattern. Rust takes the value given to <code>match</code> and
@@ -629,15 +632,15 @@ When we press the return key, it introduces a newline character. For example,
 if we type <code>5</code> and hit return, <code>guess</code> looks like this: <code>5\n</code>. The <code>\n</code>
 represents &quot;newline&quot;, the return key. The <code>trim()</code> method gets rid of this,
 leaving our string with only the <code>5</code>.</p>
-<p>The <a href="../std/primitive.str.html#method.parse"><code>parse()</code> method on strings</a> parses a string into some kind of
-number. Since this method can parse a variety of number types, we need to tell
-Rust the exact type of number we want with <code>let guess: u32</code>. The colon (<code>:</code>)
-after <code>guess</code> tells Rust we’re going to annotate its type. Rust has a few
-built-in number types, but we’ve chosen <code>u32</code>, an unsigned, thirty-two bit
-integer. It’s a good default choice for a small positive number. Additionally,
-our <code>u32</code> annotation here and the comparison with <code>secret_number</code> means that
-Rust will infer that <code>secret_number</code> should be a <code>u32</code> as well. So now the
-comparison will be between two values of the same type!</p>
+<p>The <a href="../std/primitive.str.html#method.parse"><code>parse()</code> method on strings</a><!-- ignore --> parses a string into
+some kind of number. Since this method can parse a variety of number types, we
+need to tell Rust the exact type of number we want with <code>let guess: u32</code>. The
+colon (<code>:</code>) after <code>guess</code> tells Rust we’re going to annotate its type. Rust has
+a few built-in number types, but we’ve chosen <code>u32</code>, an unsigned, thirty-two
+bit integer. It’s a good default choice for a small positive number.
+Additionally, our <code>u32</code> annotation here and the comparison with <code>secret_number</code>
+means that Rust will infer that <code>secret_number</code> should be a <code>u32</code> as well. So
+now the comparison will be between two values of the same type!</p>
 <p>There's just one remaining piece to handle: our call to <code>parse()</code> could quite
 easily cause an error, if, for example, our string contained <code>A👍%</code>; there’d be
 no way to convert that to a number. Because it might fail, the <code>parse()</code> method
