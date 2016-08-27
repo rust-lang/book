@@ -40,10 +40,10 @@ enum Option<T> {
 }
 ```
 
-This enum is [provided by the standard library][option], and is so useful that
-it's even in the prelude; you don't need to import it explicitly. Furthermore,
-so are its variants: you can say `Some` and `None` directly, without prefixing
-them with `Option::`.
+This enum is [provided by the standard library][option]<!-- ignore -->, and is
+so useful that it's even in the prelude; you don't need to import it
+explicitly. Furthermore, so are its variants: you can say `Some` and `None`
+directly, without prefixing them with `Option::`.
 
 [option]: ../std/option/enum.Option.html
 
@@ -100,10 +100,11 @@ deliberate design decision for Rust to limit null's pervasiveness and increase
 the safety of Rust code.
 
 So, how _do_ you get a `T` from an `Option<T>`?  The `Option<T>` enum has a
-large number of methods that you can check out in [its documentation], and
-becoming familiar with them will be extremely useful in your journey with Rust.
+large number of methods that you can check out in
+[its documentation][docs]<!-- ignore -->, and becoming familiar with them will
+be extremely useful in your journey with Rust.
 
-[its documentation]: ../std/option/enum.Option.html
+[docs]: ../std/option/enum.Option.html
 
 But we want a deeper understanding than that. If we didn't have those methods
 defined for us already, what would we do? And more generally, how do we get

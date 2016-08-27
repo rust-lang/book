@@ -173,13 +173,13 @@ s.push_str(" world!");
 assert_eq!("Hello, world!", s);
 ```
 
-Because [`push_str()`] has the following signature:
+Because [`push_str()`][pushstr]<!-- ignore --> has the following signature:
 
 ```rust,ignore
 fn push_str(&mut self, string: &str) {
 ```
 
-[`push_str()`]: ../collections/string/struct.String.html#method.push_str
+[push_str]: ../collections/string/struct.String.html#method.push_str
 
 This automatic referencing behavior works because methods have a clear receiver
 — the type of `self` — and in most cases it’s clear given the receiver and name

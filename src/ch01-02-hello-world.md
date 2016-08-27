@@ -249,11 +249,11 @@ authors = ["Your Name <you@example.com>"]
 [dependencies]
 ```
 
-This file is in the *[TOML]* (Tom's Obvious, Minimal Language) format. TOML is
-similar to INI but has some extra goodies and is used as Cargo’s
-configuration format.
+This file is in the [*TOML*][toml]<!-- ignore --> (Tom's Obvious, Minimal
+Language) format. TOML is similar to INI but has some extra goodies and is used
+as Cargo’s configuration format.
 
-[TOML]: https://github.com/toml-lang/toml
+[toml]: https://github.com/toml-lang/toml
 
 The first line, `[package]`, is a section heading that indicates that the
 following statements are configuring a package. As we add more information to

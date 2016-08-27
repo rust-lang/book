@@ -106,10 +106,10 @@ functionality we need to import the `io` (input/output) library from the
 standard library (which is known as `std`).
 
 By default, Rust only imports a few things into every program in [the
-*prelude*][prelude]. If it’s not in the prelude, you’ll have to import it into
-your program explicitly with a `use` statement. Using the `std::io` library
-gets you a number of useful `io`-related things, including the functionality to
-accept user input.
+*prelude*][prelude]<!-- ignore -->. If it’s not in the prelude, you’ll have to
+import it into your program explicitly with a `use` statement. Using the
+`std::io` library gets you a number of useful `io`-related things, including
+the functionality to accept user input.
 
 [prelude]: https://doc.rust-lang.org/std/prelude/
 
@@ -167,7 +167,7 @@ So now we know that `let mut guess` will introduce a mutable binding named
 bound to: `String::new()`.
 
 `String` is a string type, provided by the standard library. A
-[`String`][string] is a growable, UTF-8 encoded bit of text.
+[`String`][string]<!-- ignore --> is a growable, UTF-8 encoded bit of text.
 
 [string]: ../std/string/struct.String.html
 
@@ -195,15 +195,16 @@ Remember how we said `use std::io;` on the first line of the program? We’re no
 calling an associated function on it. If we didn’t `use std::io`, we could
 have written this line as `std::io::stdin()`.
 
-This particular function returns an instance of [`std::io::Stdin`][iostdin],
+This function returns an instance of [`std::io::Stdin`][iostdin]<!-- ignore -->,
 which is a type that represents a handle to the standard input for your
 terminal.
 
 [iostdin]: ../std/io/struct.Stdin.html
 
-The next part, `.read_line(&mut guess)`, calls the [`read_line()`][read_line]
-method on the standard input handle to get input from the user. We’re also
-passing one argument to `read_line()`: `&mut guess`.
+The next part, `.read_line(&mut guess)`, calls the
+[`read_line()`][read_line]<!-- ignore --> method on the standard input handle
+to get input from the user. We’re also passing one argument to `read_line()`:
+`&mut guess`.
 
 [read_line]: ../std/io/struct.Stdin.html#method.read_line
 
@@ -245,35 +246,36 @@ calls. Now let's see what this line does.
 
 We mentioned that `read_line()` puts what the user types into the string we
 pass it, but it also returns a value: in this case, an
-[`io::Result`][ioresult]. Rust has a number of types named `Result` in its
-standard library: a generic [`Result`][result], and then specific versions for
-sub-libraries, like `io::Result`.
+[`io::Result`][ioresult]<!-- ignore -->. Rust has a number of types named
+`Result` in its standard library: a generic [`Result`][result]<!-- ignore -->,
+and then specific versions for sub-libraries, like `io::Result`.
 
 [ioresult]: ../std/io/type.Result.html
 [result]: ../std/result/enum.Result.html
 
-The `Result` types are [enums], which is short for *enumeration*. An
-enumeration is a type that can have a fixed set of values, which are called the
-`enum`'s *variants*. We will be covering enums in more detail in Chapter XX.
+The `Result` types are [enums][enums]<!-- ignore -->, which is short for
+*enumeration*. An enumeration is a type that can have a fixed set of values,
+which are called the `enum`'s *variants*. We will be covering enums in more
+detail in Chapter XX.
+
+[enums]: ch06-00-enums.html
 
 For `Result`, the variants are `Ok` or `Err`. `Ok` means the operation was
 successful, and inside the `Ok` variant is the successfully generated value.
 `Err` means the operation failed, and the `Err` contains information about how
 or why the operation failed.
 
-[enums]: ch06-00-enums.html
-
 The purpose of these `Result` types is to encode error handling information.
 Values of the `Result` type, like any type, have methods defined on them. In
-this case, `io::Result` has an [`expect()` method][expect] that we can call. If
-this instance of `io::Result` is an `Err` value, `expect()` will cause our
-program to crash and display the message that we passed as an argument to
-`expect()`. In this case, if the `read_line()` method returns an `Err`, it would
-likely be the result of an error coming from the underlying operating system.
-If this instance of `io::Result` is an `Ok` value, `expect()` will take the
-return value that `Ok` is holding out of the `Ok` and return just that value to
-us so that we can use it. In this case, that value will be what the user
-entered into standard input.
+this case, `io::Result` has an [`expect()` method][expect]<!-- ignore --> that
+we can call. If this instance of `io::Result` is an `Err` value, `expect()`
+will cause our program to crash and display the message that we passed as an
+argument to `expect()`. In this case, if the `read_line()` method returns an
+`Err`, it would likely be the result of an error coming from the underlying
+operating system. If this instance of `io::Result` is an `Ok` value, `expect()`
+will take the return value that `Ok` is holding out of the `Ok` and return just
+that value to us so that we can use it. In this case, that value will be what
+the user entered into standard input.
 
 [expect]: ../std/result/enum.Result.html#method.expect
 
@@ -370,10 +372,10 @@ that goes until another section starts. Cargo uses the `[dependencies]` section
 to know what external crates your project depends on and what versions of those
 crates you require. In this case, we’ve specified the `rand` crate with the
 semantic version specifier `0.3.14`. Cargo understands [Semantic
-Versioning][semver] (sometimes called *semver*), which is a standard for
-writing version numbers. A bare number like above is actually shorthand for
-`^0.3.14`, which means "any version that has a public API compatible with
-version 0.3.14".
+Versioning][semver]<!-- ignore --> (sometimes called *semver*), which is a
+standard for writing version numbers. A bare number like above is actually
+shorthand for `^0.3.14`, which means "any version that has a public API
+compatible with version 0.3.14".
 
 [semver]: http://semver.org
 
@@ -477,11 +479,11 @@ The next time we `cargo build`, assuming that the `rand` crate version `0.4.0`
 has been released, Cargo will update the crates index and re-evaluate our
 `rand` requirements according to the new version we have specified.
 
-There’s a lot more to say about [Cargo][doccargo] and [its
-ecosystem][doccratesio] that we will get into in Chapter XX, but for now,
-that’s all we need to know. Cargo makes it really easy to re-use libraries, so
-Rustaceans are able to write smaller projects which are assembled out of a
-number of sub-packages.
+There’s a lot more to say about [Cargo][doccargo]<!-- ignore --> and [its
+ecosystem][doccratesio]<!-- ignore --> that we will get into in Chapter XX, but
+for now, that’s all we need to know. Cargo makes it really easy to re-use
+libraries, so Rustaceans are able to write smaller projects which are assembled
+out of a number of sub-packages.
 
 [doccargo]: http://doc.crates.io
 [doccratesio]: http://doc.crates.io/crates-io.html
@@ -638,8 +640,9 @@ match guess.cmp(&secret_number) {
 The `cmp()` method compares two values, and can be called on anything that can
 be compared. It takes a reference to the thing you want to compare it to, so
 here it's comparing our `guess` to our `secret_number`, and it returns a
-variant of the `Ordering` enum. We use a [`match`][match] statement to decide
-what to do next based on which variant of `Ordering` we got back.
+variant of the `Ordering` enum. We use a [`match`][match]<!-- ignore -->
+statement to decide what to do next based on which variant of `Ordering` we got
+back.
 
 [match]: match.html
 
@@ -754,15 +757,15 @@ if we type `5` and hit return, `guess` looks like this: `5\n`. The `\n`
 represents "newline", the return key. The `trim()` method gets rid of this,
 leaving our string with only the `5`.
 
-The [`parse()` method on strings][parse] parses a string into some kind of
-number. Since this method can parse a variety of number types, we need to tell
-Rust the exact type of number we want with `let guess: u32`. The colon (`:`)
-after `guess` tells Rust we’re going to annotate its type. Rust has a few
-built-in number types, but we’ve chosen `u32`, an unsigned, thirty-two bit
-integer. It’s a good default choice for a small positive number. Additionally,
-our `u32` annotation here and the comparison with `secret_number` means that
-Rust will infer that `secret_number` should be a `u32` as well. So now the
-comparison will be between two values of the same type!
+The [`parse()` method on strings][parse]<!-- ignore --> parses a string into
+some kind of number. Since this method can parse a variety of number types, we
+need to tell Rust the exact type of number we want with `let guess: u32`. The
+colon (`:`) after `guess` tells Rust we’re going to annotate its type. Rust has
+a few built-in number types, but we’ve chosen `u32`, an unsigned, thirty-two
+bit integer. It’s a good default choice for a small positive number.
+Additionally, our `u32` annotation here and the comparison with `secret_number`
+means that Rust will infer that `secret_number` should be a `u32` as well. So
+now the comparison will be between two values of the same type!
 
 [parse]: ../std/primitive.str.html#method.parse
 

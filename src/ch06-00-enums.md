@@ -98,8 +98,8 @@ let loopback = IpAddr::V6(String::from("::1"));
 ```
 
 You can put any kind of data inside of an enum variant, including another enum!
-The `IpAddr` enum is [in the standard library][IpAddr], but it embeds two
-different structs inside of its variants:
+The `IpAddr` enum is [in the standard library][IpAddr]<!-- ignore -->, but it
+embeds two different structs inside of its variants:
 
 ```rust
 struct Ipv4Addr {

@@ -29,9 +29,9 @@ Rust is installed now. Great!
 
 ### Installing on Windows
 
-If you're on Windows, please go to [rustup.rs](https://rustup.rs/) and follow
-the instructions to download rustup-init.exe. Run that and follow the rest of
-the instructions.
+On Windows, go to [https://rustup.rs](https://rustup.rs/)<!-- ignore --> and
+follow the instructions to download rustup-init.exe. Run that and follow the
+rest of the instructions it gives you.
 
 The rest of the Windows-specific commands in the book will assume that you are
 using `cmd` as your shell. If you use a different shell, you may be able to run
@@ -74,11 +74,11 @@ If you don't and you're on Windows, check that Rust is in your `%PATH%` system
 variable.
 
 If it still isn't working, there are a number of places where you can get help.
-The easiest is [the #rust IRC channel on irc.mozilla.org][irc], which you can
-access through [Mibbit][mibbit]. Go to that address, and you'll be chatting with
-other Rustaceans (a silly nickname we call ourselves) who can help you out.
-Other great resources include [the user’s forum][users] and [Stack
-Overflow][stackoverflow].
+The easiest is [the #rust IRC channel on irc.mozilla.org][irc]<!-- ignore -->,
+which you can access through [Mibbit][mibbit]. Go to that address, and you'll
+be chatting with other Rustaceans (a silly nickname we call ourselves) who can
+help you out. Other great resources include [the user’s forum][users] and
+[Stack Overflow][stackoverflow].
 
 [irc]: irc://irc.mozilla.org/#rust
 [mibbit]: http://chat.mibbit.com/?server=irc.mozilla.org&channel=%23rust
