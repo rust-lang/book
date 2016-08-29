@@ -26,7 +26,10 @@
     - [Match](ch06-02-match.md)
     - [if let](ch06-03-if-let.md)
 
-- [Crates & Modules]()
+- [Modules](ch07-00-modules.md)
+    - [`mod` and the filesystem](ch07-01-mod-and-the-filesystem.md)
+    - [Controlling visibility with `pub`](ch07-02-controlling-visibility-with-pub.md)
+    - [Importing names with `use`](ch07-03-importing-names-with-use.md)
 
 - [Basic Collections]()
     - [Vectors]()
@@ -83,6 +86,7 @@
 - [Creating a Library]()
     - [Cargo]()
     - [Crates.io]()
+    - [Organizing your Public API](chYY-YY-public-api.md)
     - [Documentation](chYY-YY-documentation.md)
     - [Workspaces and Multiple Related Crates](chYY-YY-workspaces.md)
 
