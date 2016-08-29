@@ -4,7 +4,7 @@ Let's jump into Rust with a hands-on project! This chapter will introduce you to
 a few common Rust concepts by showing how you would use them in a real program.
 You'll learn about `let`, `match`, methods, associated functions, using
 external crates, and more! Following chapters will explore these ideas in more
-detail.
+detail; this chapter will get you practicing the fundamentals.
 
 We’re going to implement a classic beginner programming problem: the guessing
 game. Here’s how it works: Our program will generate a random integer between
@@ -41,8 +41,8 @@ authors = ["Your Name <you@example.com>"]
 If the author information that Cargo got from your environment is not correct,
 go ahead and fix that in the file and save it again.
 
-And as we saw in the last chapter, `cargo new` generates a "Hello, world!"
-program for us. Check out `src/main.rs`:
+As we saw in the last chapter, cargo new generates a “Hello, world!” program
+for us. Check out src/main.rs:
 
 Filename: src/main.rs
 
@@ -164,10 +164,9 @@ let mut bar = 5; // mutable
 
 So now we know that `let mut guess` will introduce a mutable binding named
 `guess`, but we have to look at the other side of the `=` for the value it’s
-bound to: `String::new()`.
-
-`String` is a string type, provided by the standard library. A
-[`String`][string]<!-- ignore --> is a growable, UTF-8 encoded bit of text.
+bound to: `String::new()`. `String` is a string type, provided by the standard
+library. A [`String`][string]<!-- ignore --> is a growable, UTF-8 encoded bit
+of text.
 
 [string]: ../std/string/struct.String.html
 
@@ -189,13 +188,12 @@ Let’s move forward:
 ```rust,ignore
 io::stdin().read_line(&mut guess)
     .expect("Failed to read line");
-```
 
-Remember how we said `use std::io;` on the first line of the program? We’re now
-calling an associated function on it. If we didn’t `use std::io`, we could
-have written this line as `std::io::stdin()`.
-
-This function returns an instance of [`std::io::Stdin`][iostdin]<!-- ignore -->,
+We included the input/output functionality from the standard library with use
+std::io; on the first line of the program. We are now calling an associated
+function, stdin(), on io. If we didn’t have the use std::io line at the
+beginning of the program, we could have written this function call as
+std::io::stdin(). The stdin() function returns an instance of std::io::Stdin,
 which is a type that represents a handle to the standard input for your
 terminal.
 
@@ -214,13 +212,13 @@ string argument needs to be mutable so that the method can change the string's
 content by adding the user input.
 
 The `&` indicates that this argument is a *reference*, which gives you a way to
-allow multiple parts of your code to access to one piece of data without
-needing to copy that data into memory multiple times. References are a complex
-feature, and one of Rust’s major advantages is how safe and easy it is to use
+let multiple parts of your code access one piece of data without needing to
+copy that data into memory multiple times. References are a complex feature,
+and one of Rust’s major advantages is how safe and easy it is to use
 references. We don’t need to know a lot of those details to finish our program
 right now, though; Chapter XX will cover references in more detail. For now,
 all we need to know is that like `let` bindings, references are immutable by
-default. Hence, we need to write `&mut guess`, rather than `&guess` to make it
+default. Hence, we need to write `&mut guess`, rather than `&guess`, to make it
 mutable.
 
 We’re not quite done with this line of code. While it’s a single line of text,
@@ -232,8 +230,8 @@ this method:
 ```
 
 When you call a method with the `.foo()` syntax, it's often wise to introduce a
-newline and other whitespace. This helps you split up long lines. We _could_
-have written this code as:
+newline and other whitespace. This helps you split up long lines. We could have
+written this code as:
 
 ```rust,ignore
 io::stdin().read_line(&mut guess).expect("failed to read line");
@@ -254,13 +252,13 @@ and then specific versions for sub-libraries, like `io::Result`.
 [result]: ../std/result/enum.Result.html
 
 The `Result` types are [enums][enums]<!-- ignore -->, which is short for
-*enumeration*. An enumeration is a type that can have a fixed set of values,
-which are called the `enum`'s *variants*. We will be covering enums in more
+*enumerations*. An enumeration is a type that can have a fixed set of values,
+which are called the enum's *variants*. We will be covering enums in more
 detail in Chapter XX.
 
 [enums]: ch06-00-enums.html
 
-For `Result`, the variants are `Ok` or `Err`. `Ok` means the operation was
+For `Result`, the variants are `Ok` or `Err`. `Ok` indicates the operation was
 successful, and inside the `Ok` variant is the successfully generated value.
 `Err` means the operation failed, and the `Err` contains information about how
 or why the operation failed.
@@ -273,9 +271,9 @@ will cause our program to crash and display the message that we passed as an
 argument to `expect()`. In this case, if the `read_line()` method returns an
 `Err`, it would likely be the result of an error coming from the underlying
 operating system. If this instance of `io::Result` is an `Ok` value, `expect()`
-will take the return value that `Ok` is holding out of the `Ok` and return just
-that value to us so that we can use it. In this case, that value will be what
-the user entered into standard input.
+will take the return value that `Ok` is holding and return just that value to
+us so that we can use it. In this case, that value will be what the user
+entered into standard input.
 
 [expect]: ../std/result/enum.Result.html#method.expect
 
@@ -340,11 +338,12 @@ print it back out.
 
 ## Generating a Secret Number
 
-Next, we need to generate a secret number that the user is trying to guess. The
+Next, we need to generate a secret number that the user will try to guess. The
 secret number should be different every time so that the game is fun to play
-more than once. So we'd like to have a random number between 1 and 100. Rust
-does not yet include random number functionality in its standard library. The
-Rust team does, however, provide a [`rand` crate][randcrate].
+more than once, and we'd like to have a random number between 1 and 100 so the
+game isn’t too difficult. Rust does not yet include random number functionality
+in its standard library. The Rust team does, however, provide a [`rand`
+crate][randcrate].
 
 [randcrate]: https://crates.io/crates/rand
 
@@ -423,6 +422,7 @@ we’ll only see one line:
 $ cargo build
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
 ```
+
 This just updates the build with your tiny change to the `main.rs` file.
 
 #### The Cargo.lock File that Ensures Reproducible Builds
@@ -537,15 +537,15 @@ let secret_number = rand::thread_rng().gen_range(1, 101);
 println!("The secret number is: {}", secret_number);
 ```
 
-`rand::thread_rng()` is a function that will give us the particular random
-number generator that we're going to use: one that is local to our current
-thread of execution and seeded by the operating system. Next, we call the
-`gen_range()` method on our random number generator. This method is one that is
-defined by the Rng trait that we brought into scope with the `use rand::Rng`
-statement above. `gen_range()` takes two numbers as arguments and generates a
-random number between them. It’s inclusive on the lower bound but exclusive on
-the upper bound, so we need `1` and `101` to ask for a number ranging from one
-to a hundred.
+The `rand::thread_rng()` function will give us the particular random number
+generator that we're going to use: one that is local to our current thread of
+execution and seeded by the operating system. Next, we call the `gen_range()`
+method on our random number generator. This method is defined by the `Rng`
+trait that we brought into scope with the `use rand::Rng` statement above. The
+`gen_range()` method takes two numbers as arguments and generates a random
+number between them. It's inclusive on the lower bound but exclusive on the
+upper bound, so we need `1` and `101` to ask for a number ranging from one to a
+hundred.
 
 Knowing what traits to import and what functions and methods to use from a
 crate isn't something that you'll just *know*. Instructions for using a crate
@@ -625,7 +625,7 @@ There are a few new bits here. The first is another `use`, bringing a type
 called `std::cmp::Ordering` into scope from the standard crate. `Ordering` is
 another enum, like `Result`, but the variants for `Ordering` are `Less`,
 `Greater`, and `Equal`. These are the three outcomes that are possible when you
-compare two things.
+compare two values.
 
 Then we add five new lines at the bottom that use the `Ordering` type:
 
@@ -638,11 +638,12 @@ match guess.cmp(&secret_number) {
 ```
 
 The `cmp()` method compares two values, and can be called on anything that can
-be compared. It takes a reference to the thing you want to compare it to, so
-here it's comparing our `guess` to our `secret_number`, and it returns a
-variant of the `Ordering` enum. We use a [`match`][match]<!-- ignore -->
-statement to decide what to do next based on which variant of `Ordering` we got
-back.
+be compared. It takes a reference to whatever you want to compare with, so here
+it's comparing our `guess` to our `secret_number`. `cmp()` returns a variant of
+the `Ordering` enum we imported with the `use` statement earlier. We use a
+[`match`][match]<!-- ignore --> statement to decide what to do next based on
+which variant of `Ordering` we got back from our call to `cmp()` with the values
+in `guess` and `secret_number`.
 
 [match]: match.html
 
@@ -686,7 +687,7 @@ inference. When we wrote `let guess = String::new()`, Rust was able to infer
 that `guess` should be a `String` and didn’t make us write the type out. Our
 `secret_number` on the other hand is a number type. There are a few number
 types which can have a value between one and a hundred: `i32`, a thirty-two-bit
-number; or `u32`, an unsigned thirty-two-bit number; `i64`, a sixty-four-bit
+number; `u32`, an unsigned thirty-two-bit number; `i64`, a sixty-four-bit
 number; or others. Rust defaults to an `i32`, so that's the type of
 `secret_number` unless we add type information elsewhere that would cause Rust
 to infer a different numerical type. The error is because Rust will not compare
@@ -694,7 +695,7 @@ a string and a number type.
 
 Ultimately, we want to convert the `String` we read as input
 into a real number type so that we can compare it to the guess numerically. We
-can do that with two more lines; add this to your program:
+can do that with two more lines; to your `fn main()` body, add the following two lines:
 
 Filename: src/main.rs
 
@@ -744,42 +745,43 @@ a variable binding named `guess`? We do, but Rust allows us to *shadow* the
 previous value of `guess` with a new one. This is often used in this exact
 situation, where we want to convert a value from one type into another type.
 Shadowing lets us re-use the `guess` variable name rather than forcing us to
-come up with two unique bindings, like `guess_str` and `guess` or something.
+come up with two unique bindings, like `guess_str` and `guess` or something
+(we'll cover shadowing in more detail in Chapter 3).
 
-We bind `guess` to the expression `guess.trim().parse()`.
-
-The `guess` in the expression refers to the original `guess` that was a
-`String` with our input in it. The `trim()` method on `String`s will eliminate
-any white space at the beginning and end. Our u32 can only contain numerical
-characters, but we have to press the "return" key to satisfy `read_line()`.
-When we press the return key, it introduces a newline character. For example,
-if we type `5` and hit return, `guess` looks like this: `5\n`. The `\n`
-represents "newline", the return key. The `trim()` method gets rid of this,
-leaving our string with only the `5`.
+We bind `guess` to the expression `guess.trim().parse()`. The `guess` in the
+expression refers to the original `guess` that was a `String` with our input in
+it. The `trim()` method on `String`s will eliminate any whitespace at the
+beginning and end. Our `u32` can only contain numerical characters, but we have
+to press the return key to satisfy `read_line()`. When we press the return
+key, it introduces a newline character. For example, if we type `5` and hit
+return, `guess` looks like this: `5\n`. The `\n` represents "newline", the
+return key. The `trim()` method gets rid of this, leaving our string with only
+the `5`.
 
 The [`parse()` method on strings][parse]<!-- ignore --> parses a string into
 some kind of number. Since this method can parse a variety of number types, we
 need to tell Rust the exact type of number we want with `let guess: u32`. The
 colon (`:`) after `guess` tells Rust we’re going to annotate its type. Rust has
 a few built-in number types, but we’ve chosen `u32`, an unsigned, thirty-two
-bit integer. It’s a good default choice for a small positive number.
-Additionally, our `u32` annotation here and the comparison with `secret_number`
-means that Rust will infer that `secret_number` should be a `u32` as well. So
-now the comparison will be between two values of the same type!
+bit integer. It’s a good default choice for a small positive number. You'll see
+the other number types in Chapter XX. Additionally, our `u32` annotation here
+and the comparison with `secret_number` means that Rust will infer that
+`secret_number` should be a `u32` as well. So now the comparison will be
+between two values of the same type!
 
 [parse]: ../std/primitive.str.html#method.parse
 
-There's just one remaining piece to handle: our call to `parse()` could quite
-easily cause an error, if, for example, our string contained `A👍%`; there’d be
-no way to convert that to a number. Because it might fail, the `parse()` method
-returns a `Result` type, much like the `read_line()` method does that we
-discussed earlier. We're going to treat this `Result` the same way by using the
-`expect()` method again. If `parse()` returns an `Err` `Result` variant because
-it could not create a number from the string, the `expect()` call will crash
-the game and print the message we give it. If `parse()` can successfully turn
-the string into a number, it will return the `Ok` variant of `Result`, and
-`expect()` will return the number that we want that it will take out of the
-`Ok` value for us.
+Our call to `parse()` could quite easily cause an error. If, for example, our
+string contained `A👍%`, there’d be no way to convert that to a number. Because
+it might fail, the `parse()` method returns a `Result` type, much like the
+`read_line()` method does that we discussed earlier. We're going to treat this
+`Result` the same way by using the `expect()` method again. If `parse()`
+returns an `Err` `Result` variant because it could not create a number from the
+string, the `expect()` call will crash the game and print the message we give
+it. If `parse()` can successfully turn the string into a number, it will return
+the `Ok` variant of `Result`, and `expect()` will return the number that we
+want that it will take out of the `Ok` value for us.
+
 
 Let’s try our program out!
 
@@ -852,10 +854,9 @@ You'll notice we have a new problem because the program is doing exactly what we
 told it to do: ask for another guess forever! It doesn't seem like we can quit!
 
 We could always halt the program by using the keyboard shortcut `control-c`.
-There's another way to escape the monster we've created that will infinitely
-demand more guesses, though, that can be found in our discussion about
-`parse()`: if we give a non-number answer, the program will crash. We can use
-that to quit! Observe:
+There's another way to escape the insatiable monster we've created, though,
+that can be found in our discussion about `parse()`: if we give a non-number
+answer, the program will crash. We can use that to quit! Observe:
 
 ```bash
 $ cargo run
