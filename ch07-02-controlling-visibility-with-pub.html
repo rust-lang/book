@@ -1,0 +1,317 @@
+<!DOCTYPE HTML>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>The Rust Programming Language</title>
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <base href="">
+
+        <link rel="stylesheet" href="book.css">
+        <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+        <link rel="shortcut icon" href="favicon.png">
+
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+
+        <!-- MathJax -->
+        <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+        <!-- Fetch JQuery from CDN but have a local fallback -->
+        <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+        <script>
+            if (typeof jQuery == 'undefined') {
+                document.write(unescape("%3Cscript src='jquery.js'%3E%3C/script%3E"));
+            }
+        </script>
+    </head>
+    <body class="light">
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme = localStorage.getItem('theme');
+            if (theme == null) { theme = 'light'; }
+            $('body').removeClass().addClass(theme);
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var sidebar = localStorage.getItem('sidebar');
+            if (sidebar === "hidden") { $("html").addClass("sidebar-hidden") }
+            else if (sidebar === "visible") { $("html").addClass("sidebar-visible") }
+        </script>
+
+        <div id="sidebar" class="sidebar">
+            <ul class="chapter"><li><a href="ch01-00-introduction.html"><strong>1.</strong> Introduction</a></li><li><ul class="section"><li><a href="ch01-01-installation.html"><strong>1.1.</strong> Installation</a></li><li><a href="ch01-02-hello-world.html"><strong>1.2.</strong> Hello, World!</a></li></ul></li><li><a href="ch02-00-guessing-game-tutorial.html"><strong>2.</strong> Guessing Game Tutorial</a></li><li><a href="ch03-00-common-programming-concepts-in-rust.html"><strong>3.</strong> Common Programming Concepts in Rust</a></li><li><ul class="section"><li><a href="ch03-01-variable-bindings-and-mutability.html"><strong>3.1.</strong> Variable Bindings and Mutability</a></li><li><a href="ch03-02-data-types.html"><strong>3.2.</strong> Data Types</a></li><li><a href="ch03-03-how-functions-work.html"><strong>3.3.</strong> How Functions Work</a></li><li><a href="ch03-04-comments.html"><strong>3.4.</strong> Comments</a></li><li><a href="ch03-05-control-flow.html"><strong>3.5.</strong> Control Flow</a></li></ul></li><li><a href="ch04-00-understanding-ownership.html"><strong>4.</strong> Understanding Ownership</a></li><li><ul class="section"><li><a href="ch04-01-ownership.html"><strong>4.1.</strong> Ownership</a></li><li><a href="ch04-02-references-and-borrowing.html"><strong>4.2.</strong> References &amp; Borrowing</a></li><li><a href="ch04-03-slices.html"><strong>4.3.</strong> Slices</a></li></ul></li><li><a href="ch05-00-structs.html"><strong>5.</strong> Structs</a></li><li><ul class="section"><li><a href="ch05-01-method-syntax.html"><strong>5.1.</strong> Method Syntax</a></li></ul></li><li><a href="ch06-00-enums.html"><strong>6.</strong> Enums</a></li><li><ul class="section"><li><a href="ch06-01-option.html"><strong>6.1.</strong> Option</a></li><li><a href="ch06-02-match.html"><strong>6.2.</strong> Match</a></li><li><a href="ch06-03-if-let.html"><strong>6.3.</strong> if let</a></li></ul></li><li><a href="ch07-00-modules.html"><strong>7.</strong> Modules</a></li><li><ul class="section"><li><a href="ch07-01-mod-and-the-filesystem.html"><strong>7.1.</strong> <code>mod</code> and the filesystem</a></li><li><a href="ch07-02-controlling-visibility-with-pub.html" class="active"><strong>7.2.</strong> Controlling visibility with <code>pub</code></a></li><li><a href="ch07-03-importing-names-with-use.html"><strong>7.3.</strong> Importing names with <code>use</code></a></li></ul></li><li><strong>8.</strong> Basic Collections</li><li><ul class="section"><li><strong>8.1.</strong> Vectors</li><li><strong>8.2.</strong> Strings</li><li><strong>8.3.</strong> <code>HashMap&lt;K, V&gt;</code></li></ul></li><li><strong>9.</strong> Error Handling</li><li><strong>10.</strong> Lifetimes</li><li><a href="chZZ-generics.html"><strong>11.</strong> Generics</a></li><li><strong>12.</strong> Traits</li><li><strong>13.</strong> Closures</li><li><strong>14.</strong> Iterators</li><li><a href="chXX-patterns.html"><strong>15.</strong> Patterns</a></li><li><strong>16.</strong> I/O</li><li><ul class="section"><li><strong>16.1.</strong> <code>Read</code> &amp; <code>Write</code></li><li><strong>16.2.</strong> <code>std::fs</code></li><li><strong>16.3.</strong> <code>std::path</code></li><li><strong>16.4.</strong> <code>std::env</code></li></ul></li><li><strong>17.</strong> Testing</li><li><strong>18.</strong> Debugging</li><li><strong>19.</strong> Smart Pointers</li><li><ul class="section"><li><strong>19.1.</strong> <code>Deref</code></li><li><strong>19.2.</strong> <code>Deref</code> coercions</li><li><strong>19.3.</strong> <code>Box&lt;T&gt;</code></li><li><strong>19.4.</strong> <code>Rc&lt;T&gt;</code></li></ul></li><li><strong>20.</strong> Concurrency</li><li><ul class="section"><li><strong>20.1.</strong> Threads</li><li><strong>20.2.</strong> <code>Send</code> &amp; <code>Sync</code></li><li><strong>20.3.</strong> <code>Arc&lt;T&gt;</code></li><li><strong>20.4.</strong> <code>Mutex&lt;T&gt;</code></li><li><strong>20.5.</strong> <code>Channels</code></li></ul></li><li><strong>21.</strong> Unsafe Rust</li><li><ul class="section"><li><strong>21.1.</strong> Raw Pointers</li><li><strong>21.2.</strong> transmute</li></ul></li><li><strong>22.</strong> FFI</li><li><ul class="section"><li><strong>22.1.</strong> Conditional Compilation</li><li><strong>22.2.</strong> Bindings to C</li><li><strong>22.3.</strong> Using Rust from Other Languages</li><li><strong>22.4.</strong> <code>static</code></li></ul></li><li><strong>23.</strong> Creating a Library</li><li><ul class="section"><li><strong>23.1.</strong> Cargo</li><li><strong>23.2.</strong> Crates.io</li><li><a href="chYY-YY-public-api.html"><strong>23.3.</strong> Organizing your Public API</a></li><li><a href="chYY-YY-documentation.html"><strong>23.4.</strong> Documentation</a></li><li><a href="chYY-YY-workspaces.html"><strong>23.5.</strong> Workspaces and Multiple Related Crates</a></li></ul></li><li><strong>24.</strong> Advanced Type System Features</li><li><ul class="section"><li><strong>24.1.</strong> Associated Types</li><li><strong>24.2.</strong> Trait Objects</li><li><strong>24.3.</strong> UFCS</li><li><strong>24.4.</strong> Coherence</li></ul></li><li><strong>25.</strong> Interior mutability</li><li><ul class="section"><li><strong>25.1.</strong> <code>Cell&lt;T&gt;</code></li><li><strong>25.2.</strong> <code>RefCell&lt;T&gt;</code></li></ul></li><li><strong>26.</strong> Macros</li><li><strong>27.</strong> Nightly Rust</li><li><a href="appendix-00.html"><strong>28.</strong> Appendix</a></li><li><ul class="section"><li><a href="appendix-01-keywords.html"><strong>28.1.</strong> Keywords</a></li></ul></li></ul>
+        </div>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar" class="menu-bar">
+                    <div class="left-buttons">
+                        <i id="sidebar-toggle" class="fa fa-bars"></i>
+                        <i id="theme-toggle" class="fa fa-paint-brush"></i>
+                    </div>
+
+                    <h1 class="menu-title">The Rust Programming Language</h1>
+
+                    <div class="right-buttons">
+                        <i id="print-button" class="fa fa-print" title="Print this book"></i>
+                    </div>
+                </div>
+
+                <div id="content" class="content">
+                    <h2>Controlling visibility with <code>pub</code></h2>
+<p>At the end of the last section, we had a project, <code>modules</code>, and when we compiled it, we got some strange warnings:</p>
+<pre><code class="language-bash">   Compiling modules v0.1.0 (file:///projects/modules)
+src/client.rs:1:1: 2:2 warning: function is never used: `connect`,
+#[warn(dead_code)] on by default
+src/client.rs:1 fn connect() {
+                ^
+src/network/mod.rs:1:1: 2:2 warning: function is never used: `connect`,
+#[warn(dead_code)] on by default
+src/network/mod.rs:1 fn connect() {
+                     ^
+src/network/server.rs:1:1: 2:2 warning: function is never used: `connect`,
+#[warn(dead_code)] on by default
+src/network/server.rs:1 fn connect() {
+                        ^
+</code></pre>
+<p>Why does this happen? After all, we're building a library. What if these three
+functions are the public interface that we want our <em>users</em> to use? We won't
+necessarily be using them within our own crate, but the point of creating them
+is that they <em>will</em> be used by another project. Let's try using them as if we
+were another project using our library to see what happens and understand why
+we're getting these unused function warnings. Create a <code>src/main.rs</code> file with
+this code:</p>
+<p>Filename: src/main.rs</p>
+<pre><code class="language-rust,ignore">extern crate modules;
+
+fn main() {
+    modules::client::connect();
+}
+</code></pre>
+<p>We need the <code>extern crate</code> line to bring our <code>modules</code> library crate into
+scope, because our package actually now contains <em>two</em> crates. Cargo treats
+src/main.rs as the crate root of a binary crate, and we also have our existing
+library crate. This pattern is quite common for executable crates: most
+functionality is in a library crate, and the executable crate uses that
+library. This way, other programs can also use the library crate, and it’s also
+a nice separation of concerns.</p>
+<p>Our binary crate right now just calls our library's <code>connect()</code> function from
+the <code>client</code> module; we picked that one since it's the first warning in our
+build output above. Invoking <code>cargo build</code> will now give us an error after the
+warnings:</p>
+<pre><code class="language-bash">$ cargo build
+   Compiling modules v0.1.0 (file:///projects/modules)
+&lt;warnings&gt;
+src/main.rs:4:5: 4:29 error: module `client` is private
+src/main.rs:4     modules::client::connect();
+                  ^~~~~~~~~~~~~~~~~~~~~~~~
+error: aborting due to previous error
+error: Could not compile `modules`.
+</code></pre>
+<p>Ah ha! The <code>client</code> module is private. This is the first time we've run into
+the concepts of 'public' and 'private' in the context of Rust. There's no
+keyword to make something private; that's the default state. In this default
+state, no one else could possibly use it, so if we don't use it within our
+library crate, Rust will warn us that it's unused. Once we tell Rust something
+is public, Rust knows that we intend for code external to our crate to use it,
+and Rust considers theoretical external usage that is now possible to count as
+being used. Thus, when something is marked as public, Rust will stop warning us
+that it is unused.</p>
+<p>To tell Rust we want to make something public, we add the <code>pub</code> keyword. This
+keyword goes before the declaration of the item we want to make public. Let's
+modify <code>src/lib.rs</code> to make the <code>client</code> module public to fix the error we got:</p>
+<p>Filename: src/lib.rs</p>
+<pre><code class="language-rust,ignore">pub mod client;
+
+mod network;
+</code></pre>
+<p>The <code>pub</code> goes right before <code>mod</code>. Let's try building again:</p>
+<pre><code class="language-bash">$ cargo build
+   Compiling modules v0.1.0 (file:///projects/modules)
+&lt;warnings&gt;
+src/main.rs:4:5: 4:29 error: function `connect` is private
+src/main.rs:4     modules::client::connect();
+                  ^~~~~~~~~~~~~~~~~~~~~~~~
+</code></pre>
+<p>Hooray! We have a different error! Yes, different error messages are a cause
+for celebration. The new error says &quot;function <code>connect</code> is private&quot;, so let's
+edit <code>src/client.rs</code> to make <code>client::connect()</code> public:</p>
+<p>Filename: src/client.rs</p>
+<pre><code class="language-rust">pub fn connect() {
+}
+</code></pre>
+<p>And run <code>cargo build</code> again:</p>
+<pre><code class="language-bash"> cargo build
+   Compiling modules v0.1.0 (file:///projects/modules)
+src/network/mod.rs:1:1: 2:2 warning: function is never used: `connect`,
+#[warn(dead_code)] on by default
+src/network/mod.rs:1 fn connect() {
+                     ^
+src/network/server.rs:1:1: 2:2 warning: function is never used: `connect`,
+#[warn(dead_code)] on by default
+src/network/server.rs:1 fn connect() {
+                        ^
+</code></pre>
+<p>It compiled! And the warning about <code>client::connect()</code> not being used is gone!</p>
+<p>Making functions public isn't the only way to fix unused code warnings: if
+we <em>didn't</em> want these functions to be part of our public API and we got these
+warnings, the warnings could be alerting us to code we no longer needed and
+could safely delete. They could also be alerting us to a bug, if we
+had just accidentally removed all places within our library where we called
+this function.</p>
+<p>However, we <em>do</em> want the other two functions to be part of our crate's public
+API, so let's mark them as <code>pub</code> as well to get rid of the remaining warnings.
+Modify <code>src/network/mod.rs</code> to be:</p>
+<p>Filename: src/network/mod.rs</p>
+<pre><code class="language-rust,ignore">pub fn connect() {
+}
+
+mod server;
+</code></pre>
+<p>And compile:</p>
+<pre><code class="language-bash">$ cargo build
+   Compiling modules v0.1.0 (file:///projects/modules)
+src/network/mod.rs:1:1: 2:2 warning: function is never used: `connect`,
+#[warn(dead_code)] on by default
+src/network/mod.rs:1 pub fn connect() {
+                     ^
+src/network/server.rs:1:1: 2:2 warning: function is never used: `connect`,
+#[warn(dead_code)] on by default
+src/network/server.rs:1 fn connect() {
+                        ^
+</code></pre>
+<p>Hmmm, it says this is still dead, even though it's <code>pub</code>. While the function is
+public within the module, the <code>network</code> module it's in is not public. We're
+working from the interior of the library out this time, as opposed to with
+<code>client</code> where we worked from the outside in. Let's change <code>src/lib.rs</code> to add
+the same fix though, by making <code>network</code> public like <code>client</code> is:</p>
+<p>Filename: src/lib.rs</p>
+<pre><code class="language-rust,ignore">pub mod client;
+
+pub mod network;
+</code></pre>
+<p>Now if we compile, that warning is gone:</p>
+<pre><code class="language-bash">$ cargo build
+   Compiling modules v0.1.0 (file:///projects/modules)
+src/network/server.rs:1:1: 2:2 warning: function is never used: `connect`,
+#[warn(dead_code)] on by default
+src/network/server.rs:1 fn connect() {
+                        ^
+</code></pre>
+<p>Only one last warning! Try to fix this one on your own!</p>
+<h3>Privacy rules</h3>
+<p>Overall, these are the rules for item visibility:</p>
+<ol>
+<li>If an item is public, then it can be accessed through any of its
+parent modules.</li>
+<li>If an item is private, it may be accessed by the current module and its
+child modules.</li>
+</ol>
+<p>Let's look at a few more examples to get some practice. What if we had this
+code in a new project's <code>src/lib.rs</code>:</p>
+<pre><code class="language-rust,ignore">mod outermost {
+    pub fn middle_function() {}
+
+    fn middle_secret_function() {}
+
+    mod inside {
+        pub fn inner_function() {}
+
+        fn secret_function() {}
+    }
+}
+
+fn try_me() {
+    outermost::middle_function();
+    outermost::middle_secret_function();
+    outermost::inside::inner_function();
+    outermost::inside::secret_function();
+}
+</code></pre>
+<p>Before you try to compile this code, make a guess about which lines in
+<code>try_me()</code> will have errors.</p>
+<p>Ready? Let's talk through them!</p>
+<p>The <code>try_me()</code> function is in the root module of our project. The module named
+<code>outermost</code> is private, but the second rule says we're allowed to access it
+since <code>outermost</code> is in our current, root module.</p>
+<p>The function call <code>outermost::middle_function()</code> will work. <code>middle_function()</code>
+is public, and we are accessing it through its parent module, <code>outermost</code>,
+which we just determined we can access in the previous paragraph.</p>
+<p><code>outermost::middle_secret_function()</code> will cause a compilation error.
+<code>middle_secret_function()</code> is private, so the second rule applies. Our current
+root module is neither the current module of <code>middle_secret_function()</code>
+(<code>outermost</code> is), nor is it a child module of the current module of
+<code>middle_secret_function()</code>.</p>
+<p>The module named <code>inside</code> is private and has no child modules, so it can only
+be accessed by its current module, <code>outermost</code>. That means the <code>try_me()</code>
+function is not allowed to call <code>outermost::inside::inner_function()</code> or
+<code>outermost::inside::secret_function()</code>.</p>
+<p>Here are some changes to make to this code. Try each one, make a guess
+about what will be allowed or not, compile to see if you're right, and use the
+rules to understand why.</p>
+<ul>
+<li>What if the <code>inside</code> module was public?</li>
+<li>What if <code>outside</code> was public and <code>inside</code> was private?</li>
+<li>What if, in the body of <code>inner_function()</code>, we called
+<code>::outermost::middle_secret_function()</code>? (The two colons at the beginning
+mean that we want to refer to the namespaces starting from the root
+namespace.)</li>
+</ul>
+<p>Feel free to design more experiments and try them out!</p>
+<p>Next, let's talk about bringing items into a scope with the <code>use</code> keyword.</p>
+
+                </div>
+
+                <!-- Mobile navigation buttons -->
+                
+                    <a href="ch07-01-mod-and-the-filesystem.html" class="mobile-nav-chapters previous">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+                    <a href="ch07-03-importing-names-with-use.html" class="mobile-nav-chapters next">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                
+
+            </div>
+
+            
+                <a href="ch07-01-mod-and-the-filesystem.html" class="nav-chapters previous" title="You can navigate through the chapters using the arrow keys">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+            
+
+            
+                <a href="ch07-03-importing-names-with-use.html" class="nav-chapters next" title="You can navigate through the chapters using the arrow keys">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            
+
+        </div>
+
+
+        <!-- Local fallback for Font Awesome -->
+        <script>
+            if ($(".fa").css("font-family") !== "FontAwesome") {
+                $('<link rel="stylesheet" type="text/css" href="_FontAwesome/css/font-awesome.css">').prependTo('head');
+            }
+        </script>
+
+        <!-- Livereload script (if served using the cli tool) -->
+        
+
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+    </body>
+</html>

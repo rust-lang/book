@@ -1,0 +1,368 @@
+<!DOCTYPE HTML>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>The Rust Programming Language</title>
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <base href="">
+
+        <link rel="stylesheet" href="book.css">
+        <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+        <link rel="shortcut icon" href="favicon.png">
+
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+
+        <!-- MathJax -->
+        <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+        <!-- Fetch JQuery from CDN but have a local fallback -->
+        <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+        <script>
+            if (typeof jQuery == 'undefined') {
+                document.write(unescape("%3Cscript src='jquery.js'%3E%3C/script%3E"));
+            }
+        </script>
+    </head>
+    <body class="light">
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme = localStorage.getItem('theme');
+            if (theme == null) { theme = 'light'; }
+            $('body').removeClass().addClass(theme);
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var sidebar = localStorage.getItem('sidebar');
+            if (sidebar === "hidden") { $("html").addClass("sidebar-hidden") }
+            else if (sidebar === "visible") { $("html").addClass("sidebar-visible") }
+        </script>
+
+        <div id="sidebar" class="sidebar">
+            <ul class="chapter"><li><a href="ch01-00-introduction.html"><strong>1.</strong> Introduction</a></li><li><ul class="section"><li><a href="ch01-01-installation.html"><strong>1.1.</strong> Installation</a></li><li><a href="ch01-02-hello-world.html"><strong>1.2.</strong> Hello, World!</a></li></ul></li><li><a href="ch02-00-guessing-game-tutorial.html"><strong>2.</strong> Guessing Game Tutorial</a></li><li><a href="ch03-00-common-programming-concepts-in-rust.html"><strong>3.</strong> Common Programming Concepts in Rust</a></li><li><ul class="section"><li><a href="ch03-01-variable-bindings-and-mutability.html"><strong>3.1.</strong> Variable Bindings and Mutability</a></li><li><a href="ch03-02-data-types.html"><strong>3.2.</strong> Data Types</a></li><li><a href="ch03-03-how-functions-work.html"><strong>3.3.</strong> How Functions Work</a></li><li><a href="ch03-04-comments.html"><strong>3.4.</strong> Comments</a></li><li><a href="ch03-05-control-flow.html"><strong>3.5.</strong> Control Flow</a></li></ul></li><li><a href="ch04-00-understanding-ownership.html"><strong>4.</strong> Understanding Ownership</a></li><li><ul class="section"><li><a href="ch04-01-ownership.html"><strong>4.1.</strong> Ownership</a></li><li><a href="ch04-02-references-and-borrowing.html"><strong>4.2.</strong> References &amp; Borrowing</a></li><li><a href="ch04-03-slices.html"><strong>4.3.</strong> Slices</a></li></ul></li><li><a href="ch05-00-structs.html"><strong>5.</strong> Structs</a></li><li><ul class="section"><li><a href="ch05-01-method-syntax.html"><strong>5.1.</strong> Method Syntax</a></li></ul></li><li><a href="ch06-00-enums.html"><strong>6.</strong> Enums</a></li><li><ul class="section"><li><a href="ch06-01-option.html"><strong>6.1.</strong> Option</a></li><li><a href="ch06-02-match.html"><strong>6.2.</strong> Match</a></li><li><a href="ch06-03-if-let.html"><strong>6.3.</strong> if let</a></li></ul></li><li><a href="ch07-00-modules.html"><strong>7.</strong> Modules</a></li><li><ul class="section"><li><a href="ch07-01-mod-and-the-filesystem.html" class="active"><strong>7.1.</strong> <code>mod</code> and the filesystem</a></li><li><a href="ch07-02-controlling-visibility-with-pub.html"><strong>7.2.</strong> Controlling visibility with <code>pub</code></a></li><li><a href="ch07-03-importing-names-with-use.html"><strong>7.3.</strong> Importing names with <code>use</code></a></li></ul></li><li><strong>8.</strong> Basic Collections</li><li><ul class="section"><li><strong>8.1.</strong> Vectors</li><li><strong>8.2.</strong> Strings</li><li><strong>8.3.</strong> <code>HashMap&lt;K, V&gt;</code></li></ul></li><li><strong>9.</strong> Error Handling</li><li><strong>10.</strong> Lifetimes</li><li><a href="chZZ-generics.html"><strong>11.</strong> Generics</a></li><li><strong>12.</strong> Traits</li><li><strong>13.</strong> Closures</li><li><strong>14.</strong> Iterators</li><li><a href="chXX-patterns.html"><strong>15.</strong> Patterns</a></li><li><strong>16.</strong> I/O</li><li><ul class="section"><li><strong>16.1.</strong> <code>Read</code> &amp; <code>Write</code></li><li><strong>16.2.</strong> <code>std::fs</code></li><li><strong>16.3.</strong> <code>std::path</code></li><li><strong>16.4.</strong> <code>std::env</code></li></ul></li><li><strong>17.</strong> Testing</li><li><strong>18.</strong> Debugging</li><li><strong>19.</strong> Smart Pointers</li><li><ul class="section"><li><strong>19.1.</strong> <code>Deref</code></li><li><strong>19.2.</strong> <code>Deref</code> coercions</li><li><strong>19.3.</strong> <code>Box&lt;T&gt;</code></li><li><strong>19.4.</strong> <code>Rc&lt;T&gt;</code></li></ul></li><li><strong>20.</strong> Concurrency</li><li><ul class="section"><li><strong>20.1.</strong> Threads</li><li><strong>20.2.</strong> <code>Send</code> &amp; <code>Sync</code></li><li><strong>20.3.</strong> <code>Arc&lt;T&gt;</code></li><li><strong>20.4.</strong> <code>Mutex&lt;T&gt;</code></li><li><strong>20.5.</strong> <code>Channels</code></li></ul></li><li><strong>21.</strong> Unsafe Rust</li><li><ul class="section"><li><strong>21.1.</strong> Raw Pointers</li><li><strong>21.2.</strong> transmute</li></ul></li><li><strong>22.</strong> FFI</li><li><ul class="section"><li><strong>22.1.</strong> Conditional Compilation</li><li><strong>22.2.</strong> Bindings to C</li><li><strong>22.3.</strong> Using Rust from Other Languages</li><li><strong>22.4.</strong> <code>static</code></li></ul></li><li><strong>23.</strong> Creating a Library</li><li><ul class="section"><li><strong>23.1.</strong> Cargo</li><li><strong>23.2.</strong> Crates.io</li><li><a href="chYY-YY-public-api.html"><strong>23.3.</strong> Organizing your Public API</a></li><li><a href="chYY-YY-documentation.html"><strong>23.4.</strong> Documentation</a></li><li><a href="chYY-YY-workspaces.html"><strong>23.5.</strong> Workspaces and Multiple Related Crates</a></li></ul></li><li><strong>24.</strong> Advanced Type System Features</li><li><ul class="section"><li><strong>24.1.</strong> Associated Types</li><li><strong>24.2.</strong> Trait Objects</li><li><strong>24.3.</strong> UFCS</li><li><strong>24.4.</strong> Coherence</li></ul></li><li><strong>25.</strong> Interior mutability</li><li><ul class="section"><li><strong>25.1.</strong> <code>Cell&lt;T&gt;</code></li><li><strong>25.2.</strong> <code>RefCell&lt;T&gt;</code></li></ul></li><li><strong>26.</strong> Macros</li><li><strong>27.</strong> Nightly Rust</li><li><a href="appendix-00.html"><strong>28.</strong> Appendix</a></li><li><ul class="section"><li><a href="appendix-01-keywords.html"><strong>28.1.</strong> Keywords</a></li></ul></li></ul>
+        </div>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar" class="menu-bar">
+                    <div class="left-buttons">
+                        <i id="sidebar-toggle" class="fa fa-bars"></i>
+                        <i id="theme-toggle" class="fa fa-paint-brush"></i>
+                    </div>
+
+                    <h1 class="menu-title">The Rust Programming Language</h1>
+
+                    <div class="right-buttons">
+                        <i id="print-button" class="fa fa-print" title="Print this book"></i>
+                    </div>
+                </div>
+
+                <div id="content" class="content">
+                    <h2><code>mod</code> and the filesystem</h2>
+<p>Every module in Rust starts with the <code>mod</code> keyword. Let's give it a try by
+making a new project with Cargo called 'modules'. This time, instead of a
+binary, we're going to make a library: a project that other people would pull
+into their projects as a dependency to get the functionality we provided, like
+we used the <code>rand</code> crate in Chapter 2. So we're not going to use the <code>--bin</code>
+option like we have before, instead run:</p>
+<pre><code class="language-bash">$ cargo new modules
+$ cd modules
+</code></pre>
+<p>You'll notice that Cargo generated <code>src/lib.rs</code> instead of <code>src/main.rs</code> for
+us, and inside it we'll find this:</p>
+<pre><code class="language-rust">#[cfg(test)]
+mod tests {
+    #[test]
+    fn it_works() {
+    }
+}
+</code></pre>
+<p>This is an empty test to help us get our library started, instead of the binary
+that says &quot;Hello, world!&quot; that we get with a new binary. Let's ignore the <code>#[]</code>
+stuff and <code>mod tests</code> for a little bit, but leave it at the end of
+<code>src/lib.rs</code>.</p>
+<p>Imagine that we're creating a library to provide some general networking
+functionality. We're going to look at different ways we could choose to
+organize our code, any of which could make sense depending on exactly what we
+were trying to do. To start, add this code at the beginning of the file:</p>
+<p>Filename: src/lib.rs</p>
+<pre><code class="language-rust">mod network {
+    fn connect() {
+    }
+}
+</code></pre>
+<p>This is our first module declaration. As you can see, you use the <code>mod</code>
+keyword, followed by the name of the module, and then a block of code in curly
+braces. Everything inside this block is inside the namespace <code>network</code>. In this
+case, we have a single function, <code>connect()</code>. If we wanted to try and call this
+function from outside the <code>network</code> module, we would say <code>network::connect()</code>
+rather than <code>connect()</code>.</p>
+<p>You could have multiple modules, side-by-side. For example, if you wanted a
+<code>client</code> module:</p>
+<pre><code class="language-rust">mod network {
+    fn connect() {
+    }
+}
+
+mod client {
+    fn connect() {
+    }
+}
+</code></pre>
+<p>Now we have a <code>network::connect()</code> function and a <code>client::connect()</code> function.</p>
+<p>And you can put modules inside of modules. If you wanted to have <code>client</code> be
+within <code>network</code>:</p>
+<pre><code class="language-rust">mod network {
+    fn connect() {
+    }
+
+    mod client {
+        fn connect() {
+        }
+    }
+}
+</code></pre>
+<p>This gives us <code>network::connect()</code> and <code>network::client::connect()</code>.</p>
+<p>In this way, modules form a tree. The contents of <code>src/lib.rs</code> are at the root
+of the project's tree, and the submodules form the leaves. Here's what our
+first example looks like when thought of this way:</p>
+<pre><code class="language-text">modules
+ ├── network
+ └── client
+</code></pre>
+<p>And here's the second:</p>
+<pre><code class="language-text">modules
+ └── network
+     └── client
+</code></pre>
+<p>More complicated projects can have a lot of modules.</p>
+<h3>Putting modules in another file</h3>
+<p>Modules form a hierarchical, tree-like structure. So does another thing:
+file systems! The module system is the way that we split larger Rust projects up
+into multiple files. Let's imagine we have a module layout like this:</p>
+<p>File: src/lib.rs</p>
+<pre><code class="language-rust">mod client {
+    fn connect() {
+    }
+}
+
+mod network {
+    fn connect() {
+    }
+
+    mod server {
+        fn connect() {
+        }
+    }
+}
+</code></pre>
+<p>Let's extract the <code>client</code> module into another file. First, we need to change
+our code in <code>src/lib.rs</code>:</p>
+<p>File: src/lib.rs</p>
+<pre><code class="language-rust,ignore">mod client;
+
+mod network {
+    fn connect() {
+    }
+
+    mod server {
+        fn connect() {
+        }
+    }
+}
+</code></pre>
+<p>We still say <code>mod client</code>, but instead of curly braces, we have a semicolon.
+This lets Rust know that we have a module, but it's in another file. Which file
+is it in? Open up <code>src/client.rs</code> and put this in it:</p>
+<p>File: src/client.rs</p>
+<pre><code class="language-rust">fn connect() {
+}
+</code></pre>
+<p>Note that we don't need a <code>mod</code> declaration in this file. <code>mod</code> is for
+declaring a new module, and we've already declared this module in <code>src/lib.rs</code>.
+This file provides the <em>contents</em> of the <code>client</code> module. If we put a <code>mod client</code> here, we'd be giving the <code>client</code> module its own submodule named
+<code>client</code>!</p>
+<p>Now, everything should compile:</p>
+<pre><code class="language-bash">$ cargo build
+   Compiling modules v0.1.0 (file:///projects/modules)
+
+src/client.rs:1:1: 2:2 warning: function is never used: `connect`,
+#[warn(dead_code)] on by default
+src/client.rs:1 fn connect() {
+                ^
+src/lib.rs:4:5: 5:6 warning: function is never used: `connect`,
+#[warn(dead_code)] on by default
+src/lib.rs:4     fn connect() {
+                 ^
+src/lib.rs:8:9: 9:10 warning: function is never used: `connect`,
+#[warn(dead_code)] on by default
+src/lib.rs:8         fn connect() {
+                     ^
+</code></pre>
+<p>Don't worry about those warnings for now; we'll clear them up in a future
+section. They're just warnings, we've built things successfully!</p>
+<p>Let's convert the <code>network</code> module next. Change <code>src/lib.rs</code> to look like this:</p>
+<p>Filename: src/lib.rs</p>
+<pre><code class="language-rust,ignore">mod client;
+
+mod network;
+</code></pre>
+<p>And then put this in <code>src/network.rs</code></p>
+<p>Filename: src/network.rs</p>
+<pre><code class="language-rust">fn connect() {
+}
+
+mod server {
+    fn connect() {
+    }
+}
+</code></pre>
+<p>And then run <code>cargo build</code> again. Success! We have one more module to extract:
+<code>server</code>. Unfortunately, our current tactic won't work. Let's try it anyway.
+Modify <code>src/network.rs</code> to look like this:</p>
+<p>Filename: src/network.rs</p>
+<pre><code class="language-rust,ignore">fn connect() {
+}
+
+mod server;
+</code></pre>
+<p>Put this in <code>src/server.rs</code></p>
+<p>Filename: src/server.rs</p>
+<pre><code class="language-rust">fn connect() {
+}
+</code></pre>
+<p>When we try to <code>cargo build</code>, we'll get an error:</p>
+<pre><code class="language-bash">$ cargo build
+   Compiling modules v0.1.0 (file:///projects/modules)
+src/network.rs:4:5: 4:11 error: cannot declare a new module at this location
+src/network.rs:4 mod server;
+                     ^~~~~~
+src/network.rs:4:5: 4:11 note: maybe move this module `network` to its own
+directory via `network/mod.rs`
+src/network.rs:4 mod server;
+                     ^~~~~~
+src/network.rs:4:5: 4:11 note: ... or maybe `use` the module `server` instead
+of possibly redeclaring it
+src/network.rs:4 mod server;
+                     ^~~~~~
+error: aborting due to previous error
+error: Could not compile `modules`.
+</code></pre>
+<p>This error is actually pretty helpful. It points out something we didn't know
+that we could do yet:</p>
+<blockquote>
+<p>note: maybe move this module <code>network</code> to its own directory via
+<code>network/mod.rs</code></p>
+</blockquote>
+<p>Here's the problem: in our case, we have different names for our modules:
+<code>client</code> and <code>network::server</code>. But what if we had <code>client</code> and
+<code>network::client</code>, or <code>server</code> and <code>network::server</code>? That's completely valid,
+but then which module would the files <code>src/client.rs</code> and <code>src/server.rs</code>,
+respectively, be for?</p>
+<p>Instead of continuing to follow the same file naming pattern we used
+previously, we can do what the error suggests. We'll make a new directory, move
+<code>src/server.rs</code> into it, and change <code>src/network.rs</code> to <code>src/network/mod.rs</code>.
+Then, we try to build:</p>
+<pre><code class="language-bash">$ mkdir src/network
+$ mv src/server.rs src/network
+$ mv src/network.rs src/network/mod.rs
+$ cargo build
+   Compiling modules v0.1.0 (file:///projects/modules)
+&lt;warnings&gt;
+$
+</code></pre>
+<p>It works! So now our module layout looks like this:</p>
+<pre><code class="language-text">modules
+ ├── client
+ └── network
+     └── server
+</code></pre>
+<p>And the corresponding file layout looks like this:</p>
+<pre><code class="language-text">├── src
+│   ├── client.rs
+│   ├── lib.rs
+│   └── network
+│       ├── mod.rs
+│       └── server.rs
+</code></pre>
+<p>In summary, these are the rules of modules with regards to files:</p>
+<ul>
+<li>
+<p>If a module named <code>foo</code> has no submodules, you should put the declarations in
+the <code>foo</code> module in a file named <code>foo.rs</code>.</p>
+</li>
+<li>
+<p>If a module named <code>foo</code> does have submodules, you should put the declarations
+for <code>foo</code> in a file named <code>foo/mod.rs</code>.</p>
+</li>
+<li>
+<p>The first two rules apply recursively, so that if a module named <code>foo</code> has a
+submodule named <code>bar</code> and <code>bar</code> does not have submodules, you should have the
+following files in your <code>src</code> directory:</p>
+<pre><code class="language-text">├── foo
+│   ├── bar.rs (contains the declarations in `foo::bar`)
+│   └── mod.rs (contains the declarations in `foo`, including `mod bar`)
+</code></pre>
+</li>
+<li>
+<p>The modules themselves should be declared in their parent module's file using
+the <code>mod</code> keyword.</p>
+</li>
+</ul>
+<p>Next, we'll talk about the <code>pub</code> keyword, and get rid of those warnings!</p>
+
+                </div>
+
+                <!-- Mobile navigation buttons -->
+                
+                    <a href="ch07-00-modules.html" class="mobile-nav-chapters previous">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+                    <a href="ch07-02-controlling-visibility-with-pub.html" class="mobile-nav-chapters next">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                
+
+            </div>
+
+            
+                <a href="ch07-00-modules.html" class="nav-chapters previous" title="You can navigate through the chapters using the arrow keys">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+            
+
+            
+                <a href="ch07-02-controlling-visibility-with-pub.html" class="nav-chapters next" title="You can navigate through the chapters using the arrow keys">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            
+
+        </div>
+
+
+        <!-- Local fallback for Font Awesome -->
+        <script>
+            if ($(".fa").css("font-family") !== "FontAwesome") {
+                $('<link rel="stylesheet" type="text/css" href="_FontAwesome/css/font-awesome.css">').prependTo('head');
+            }
+        </script>
+
+        <!-- Livereload script (if served using the cli tool) -->
+        
+
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+    </body>
+</html>
