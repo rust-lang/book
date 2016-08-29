@@ -1,7 +1,7 @@
 ## `mod` and the filesystem
 
 Every module in Rust starts with the `mod` keyword. Let's give it a try by
-making a new project with Cargo called "modules". This time, instead of a
+making a new project with Cargo called 'modules'. This time, instead of a
 binary, we're going to make a library: a project that other people would pull
 into their projects as a dependency to get the functionality we provided, like
 we used the `rand` crate in Chapter 2. So we're not going to use the `--bin`
