@@ -1,10 +1,11 @@
 sudo: false
 language: rust
+cache: cargo
 rust:
   - nightly
   - stable
 before_script:
-  - cargo install mdbook
+  - (cargo install mdbook || true)
 script:
   - PATH=$PATH:/home/travis/.cargo/bin mdbook test
   - PATH=$PATH:/home/travis/.cargo/bin mdbook build
