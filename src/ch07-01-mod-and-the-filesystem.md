@@ -174,15 +174,15 @@ $ cargo build
 src/client.rs:1:1: 2:2 warning: function is never used: `connect`,
 #[warn(dead_code)] on by default
 src/client.rs:1 fn connect() {
-               ^
+                ^
 src/lib.rs:4:5: 5:6 warning: function is never used: `connect`,
 #[warn(dead_code)] on by default
 src/lib.rs:4     fn connect() {
-                ^
+                 ^
 src/lib.rs:8:9: 9:10 warning: function is never used: `connect`,
 #[warn(dead_code)] on by default
 src/lib.rs:8         fn connect() {
-                    ^
+                     ^
 ```
 
 Don't worry about those warnings for now; we'll clear them up in a future
