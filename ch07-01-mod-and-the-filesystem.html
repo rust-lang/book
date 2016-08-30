@@ -69,13 +69,14 @@
                 <div id="content" class="content">
                     <h2><code>mod</code> and the filesystem</h2>
 <p>Every module in Rust starts with the <code>mod</code> keyword. Let's give it a try by
-making a new project with Cargo called 'modules'. This time, instead of a
-binary, we're going to make a library: a project that other people would pull
-into their projects as a dependency to get the functionality we provided, like
-we used the <code>rand</code> crate in Chapter 2. So we're not going to use the <code>--bin</code>
-option like we have before, instead run:</p>
-<pre><code class="language-bash">$ cargo new modules
-$ cd modules
+making a new project with Cargo. This time, instead of a binary, we're going to
+make a library: a project that other people would pull into their projects as a
+dependency to get the functionality we provided, like we used the <code>rand</code> crate
+in Chapter 2. Imagine that we're creating a library to provide some general
+networking functionality, and we decide to call our library <code>communicator</code>. So
+we're not going to use the <code>--bin</code> option like we have before, instead run:</p>
+<pre><code class="language-bash">$ cargo new communicator
+$ cd communicator
 </code></pre>
 <p>You'll notice that Cargo generated <code>src/lib.rs</code> instead of <code>src/main.rs</code> for
 us, and inside it we'll find this:</p>
@@ -87,13 +88,12 @@ mod tests {
 }
 </code></pre>
 <p>This is an empty test to help us get our library started, instead of the binary
-that says &quot;Hello, world!&quot; that we get with a new binary. Let's ignore the <code>#[]</code>
-stuff and <code>mod tests</code> for a little bit, but leave it at the end of
+that says &quot;Hello, world!&quot; that we get with the <code>--bin</code> option. Let's ignore the
+<code>#[]</code> stuff and <code>mod tests</code> for a little bit, but leave it at the end of
 <code>src/lib.rs</code>.</p>
-<p>Imagine that we're creating a library to provide some general networking
-functionality. We're going to look at different ways we could choose to
-organize our code, any of which could make sense depending on exactly what we
-were trying to do. To start, add this code at the beginning of the file:</p>
+<p>We're going to look at different ways we could choose to organize our library's
+code, any of which could make sense depending on exactly what we were trying to
+do. To start, add this code at the beginning of the file:</p>
 <p>Filename: src/lib.rs</p>
 <pre><code class="language-rust">mod network {
     fn connect() {
@@ -135,12 +135,12 @@ within <code>network</code>:</p>
 <p>In this way, modules form a tree. The contents of <code>src/lib.rs</code> are at the root
 of the project's tree, and the submodules form the leaves. Here's what our
 first example looks like when thought of this way:</p>
-<pre><code class="language-text">modules
+<pre><code class="language-text">communicator
  ├── network
  └── client
 </code></pre>
 <p>And here's the second:</p>
-<pre><code class="language-text">modules
+<pre><code class="language-text">communicator
  └── network
      └── client
 </code></pre>
@@ -193,7 +193,7 @@ This file provides the <em>contents</em> of the <code>client</code> module. If w
 <code>client</code>!</p>
 <p>Now, everything should compile:</p>
 <pre><code class="language-bash">$ cargo build
-   Compiling modules v0.1.0 (file:///projects/modules)
+   Compiling communicator v0.1.0 (file:///projects/communicator)
 
 src/client.rs:1:1: 2:2 warning: function is never used: `connect`,
 #[warn(dead_code)] on by default
@@ -242,7 +242,7 @@ mod server;
 </code></pre>
 <p>When we try to <code>cargo build</code>, we'll get an error:</p>
 <pre><code class="language-bash">$ cargo build
-   Compiling modules v0.1.0 (file:///projects/modules)
+   Compiling communicator v0.1.0 (file:///projects/communicator)
 src/network.rs:4:5: 4:11 error: cannot declare a new module at this location
 src/network.rs:4 mod server;
                      ^~~~~~
@@ -255,7 +255,7 @@ of possibly redeclaring it
 src/network.rs:4 mod server;
                      ^~~~~~
 error: aborting due to previous error
-error: Could not compile `modules`.
+error: Could not compile `communicator`.
 </code></pre>
 <p>This error is actually pretty helpful. It points out something we didn't know
 that we could do yet:</p>
@@ -276,12 +276,12 @@ Then, we try to build:</p>
 $ mv src/server.rs src/network
 $ mv src/network.rs src/network/mod.rs
 $ cargo build
-   Compiling modules v0.1.0 (file:///projects/modules)
+   Compiling communicator v0.1.0 (file:///projects/communicator)
 &lt;warnings&gt;
 $
 </code></pre>
 <p>It works! So now our module layout looks like this:</p>
-<pre><code class="language-text">modules
+<pre><code class="language-text">communicator
  ├── client
  └── network
      └── server

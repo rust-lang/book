@@ -68,8 +68,8 @@
 
                 <div id="content" class="content">
                     <h2>Controlling visibility with <code>pub</code></h2>
-<p>At the end of the last section, we had a project, <code>modules</code>, and when we compiled it, we got some strange warnings:</p>
-<pre><code class="language-bash">   Compiling modules v0.1.0 (file:///projects/modules)
+<p>At the end of the last section, we had a project, <code>communicator</code>, and when we compiled it, we got some strange warnings:</p>
+<pre><code class="language-bash">   Compiling communicator v0.1.0 (file:///projects/communicator)
 src/client.rs:1:1: 2:2 warning: function is never used: `connect`,
 #[warn(dead_code)] on by default
 src/client.rs:1 fn connect() {
@@ -91,13 +91,13 @@ were another project using our library to see what happens and understand why
 we're getting these unused function warnings. Create a <code>src/main.rs</code> file with
 this code:</p>
 <p>Filename: src/main.rs</p>
-<pre><code class="language-rust,ignore">extern crate modules;
+<pre><code class="language-rust,ignore">extern crate communicator;
 
 fn main() {
-    modules::client::connect();
+    communicator::client::connect();
 }
 </code></pre>
-<p>We need the <code>extern crate</code> line to bring our <code>modules</code> library crate into
+<p>We need the <code>extern crate</code> line to bring our <code>communicator</code> library crate into
 scope, because our package actually now contains <em>two</em> crates. Cargo treats
 src/main.rs as the crate root of a binary crate, and we also have our existing
 library crate. This pattern is quite common for executable crates: most
@@ -109,13 +109,13 @@ the <code>client</code> module; we picked that one since it's the first warning 
 build output above. Invoking <code>cargo build</code> will now give us an error after the
 warnings:</p>
 <pre><code class="language-bash">$ cargo build
-   Compiling modules v0.1.0 (file:///projects/modules)
+   Compiling communicator v0.1.0 (file:///projects/communicator)
 &lt;warnings&gt;
 src/main.rs:4:5: 4:29 error: module `client` is private
-src/main.rs:4     modules::client::connect();
+src/main.rs:4     communicator::client::connect();
                   ^~~~~~~~~~~~~~~~~~~~~~~~
 error: aborting due to previous error
-error: Could not compile `modules`.
+error: Could not compile `communicator`.
 </code></pre>
 <p>Ah ha! The <code>client</code> module is private. This is the first time we've run into
 the concepts of 'public' and 'private' in the context of Rust. There's no
@@ -136,10 +136,10 @@ mod network;
 </code></pre>
 <p>The <code>pub</code> goes right before <code>mod</code>. Let's try building again:</p>
 <pre><code class="language-bash">$ cargo build
-   Compiling modules v0.1.0 (file:///projects/modules)
+   Compiling communicator v0.1.0 (file:///projects/communicator)
 &lt;warnings&gt;
 src/main.rs:4:5: 4:29 error: function `connect` is private
-src/main.rs:4     modules::client::connect();
+src/main.rs:4     communicator::client::connect();
                   ^~~~~~~~~~~~~~~~~~~~~~~~
 </code></pre>
 <p>Hooray! We have a different error! Yes, different error messages are a cause
@@ -151,7 +151,7 @@ edit <code>src/client.rs</code> to make <code>client::connect()</code> public:</
 </code></pre>
 <p>And run <code>cargo build</code> again:</p>
 <pre><code class="language-bash"> cargo build
-   Compiling modules v0.1.0 (file:///projects/modules)
+   Compiling communicator v0.1.0 (file:///projects/communicator)
 src/network/mod.rs:1:1: 2:2 warning: function is never used: `connect`,
 #[warn(dead_code)] on by default
 src/network/mod.rs:1 fn connect() {
@@ -179,7 +179,7 @@ mod server;
 </code></pre>
 <p>And compile:</p>
 <pre><code class="language-bash">$ cargo build
-   Compiling modules v0.1.0 (file:///projects/modules)
+   Compiling communicator v0.1.0 (file:///projects/communicator)
 src/network/mod.rs:1:1: 2:2 warning: function is never used: `connect`,
 #[warn(dead_code)] on by default
 src/network/mod.rs:1 pub fn connect() {
@@ -201,7 +201,7 @@ pub mod network;
 </code></pre>
 <p>Now if we compile, that warning is gone:</p>
 <pre><code class="language-bash">$ cargo build
-   Compiling modules v0.1.0 (file:///projects/modules)
+   Compiling communicator v0.1.0 (file:///projects/communicator)
 src/network/server.rs:1:1: 2:2 warning: function is never used: `connect`,
 #[warn(dead_code)] on by default
 src/network/server.rs:1 fn connect() {

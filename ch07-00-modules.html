@@ -68,16 +68,18 @@
 
                 <div id="content" class="content">
                     <h1>Modules</h1>
-<p>When we write a program in Rust, your code starts off living in <code>main</code>. But as
-your code grows, you eventually move functionality out into functions, both for
-re-use, and for nicer organization. By splitting your code up into smaller
-chunks, each chunk is easier to understand on its own. So what happens when we
-start having too many functions? Rust has a module system that tackles both of
-these problems. In the same way that we extract some lines of code into a
-function, we can extract some functions (and other things too) into different
-modules.  A <em>module</em> is a namespace that contains definitions of functions or
-types, and those definitions can be visible outside their module or not. Here's
-an overview of how the bits fit together:</p>
+<p>When you write a program in Rust, your code might start off living solely in
+the <code>main</code> function. As your code grows, you eventually move functionality out
+into functions, both for re-use and for nicer organization. By splitting your
+code up into smaller chunks, each chunk is easier to understand on its own. So
+what happens when you start having too many functions? Rust has a module system
+that tackles both the problem of wanting to be able to re-use code and the
+problem of keeping your code organized.</p>
+<p>In the same way that you extract lines of code into a function, you can extract
+functions (and other code like structs and enums too) into different modules. A
+<em>module</em> is a namespace that contains definitions of functions or types, and
+those definitions can be visible outside their module or not. Here's an
+overview of how the bits fit together:</p>
 <ul>
 <li><code>mod</code> declares a new module.</li>
 <li>Everything starts off as private, but the <code>pub</code> keyword makes it public.</li>

@@ -186,7 +186,7 @@ mod tests {
 </code></pre>
 <p>Run the tests by invoking the <code>cargo test</code> command:</p>
 <pre><code class="language-bash">$ cargo test
-   Compiling modules v0.1.0 (file:///projects/modules)
+   Compiling communicator v0.1.0 (file:///projects/communicator)
 src/lib.rs:9:9: 9:24 error: failed to resolve. Use of undeclared type or module
 `client` [E0433]
 src/lib.rs:9         client::connect();
@@ -194,11 +194,12 @@ src/lib.rs:9         client::connect();
 src/lib.rs:9:9: 9:24 help: run `rustc --explain E0433` to see a detailed
 explanation
 </code></pre>
-<p>Why doesn't this work? It's not because we don't have <code>modules::</code> in front of
-the function like we had in <code>src/main.rs</code>: we are definitely within the
-<code>modules</code> library crate here. The reason is that paths anywhere except in a
-<code>use</code> statement are relative to the current module. Our <code>tests</code> module doesn't
-have a <code>client</code> module in its scope!</p>
+<p>Why doesn't this work? It's not because we don't have <code>communicator::</code> in front
+of the function like we had in <code>src/main.rs</code>: we are definitely within the
+<code>communicator</code> library crate here. The reason is that paths anywhere except in
+a <code>use</code> statement are relative to the current module (In a <code>use</code> statement,
+they're relative to the crate root by default). Our <code>tests</code> module doesn't have
+a <code>client</code> module in its scope!</p>
 <p>So how do we get back up one module? We can either use leading colons to say
 that we want to start from the root and list the whole path:</p>
 <pre><code class="language-rust,ignore">::client::connect();
@@ -229,8 +230,8 @@ mod tests {
 <p>If we run <code>cargo test</code> again, the test will pass and the first part of the test
 result output will be:</p>
 <pre><code class="language-bash">$ cargo test
-   Compiling modules v0.1.0 (file:///projects/modules)
-     Running target/debug/modules-92007ddb5330fa5a
+   Compiling communicator v0.1.0 (file:///projects/communicator)
+     Running target/debug/communicator-92007ddb5330fa5a
 
 running 1 test
 test tests::it_works ... ok
