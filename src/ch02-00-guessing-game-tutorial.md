@@ -932,7 +932,7 @@ fn main() {
 }
 ```
 
-By adding the `break` line after `You win!`, we’ll exit the loop when we guses
+By adding the `break` line after `You win!`, we’ll exit the loop when we guess
 the secret number correctly. Exiting the loop also means exiting the program,
 since the loop is the last thing in `main()`.
 
