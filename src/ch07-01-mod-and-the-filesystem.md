@@ -1,15 +1,16 @@
 ## `mod` and the filesystem
 
 Every module in Rust starts with the `mod` keyword. Let's give it a try by
-making a new project with Cargo called 'modules'. This time, instead of a
-binary, we're going to make a library: a project that other people would pull
-into their projects as a dependency to get the functionality we provided, like
-we used the `rand` crate in Chapter 2. So we're not going to use the `--bin`
-option like we have before, instead run:
+making a new project with Cargo. This time, instead of a binary, we're going to
+make a library: a project that other people would pull into their projects as a
+dependency to get the functionality we provided, like we used the `rand` crate
+in Chapter 2. Imagine that we're creating a library to provide some general
+networking functionality, and we decide to call our library `communicator`. So
+we're not going to use the `--bin` option like we have before, instead run:
 
 ```bash
-$ cargo new modules
-$ cd modules
+$ cargo new communicator
+$ cd communicator
 ```
 
 You'll notice that Cargo generated `src/lib.rs` instead of `src/main.rs` for
@@ -25,14 +26,13 @@ mod tests {
 ```
 
 This is an empty test to help us get our library started, instead of the binary
-that says "Hello, world!" that we get with a new binary. Let's ignore the `#[]`
-stuff and `mod tests` for a little bit, but leave it at the end of
+that says "Hello, world!" that we get with the `--bin` option. Let's ignore the
+`#[]` stuff and `mod tests` for a little bit, but leave it at the end of
 `src/lib.rs`.
 
-Imagine that we're creating a library to provide some general networking
-functionality. We're going to look at different ways we could choose to
-organize our code, any of which could make sense depending on exactly what we
-were trying to do. To start, add this code at the beginning of the file:
+We're going to look at different ways we could choose to organize our library's
+code, any of which could make sense depending on exactly what we were trying to
+do. To start, add this code at the beginning of the file:
 
 Filename: src/lib.rs
 
@@ -89,7 +89,7 @@ of the project's tree, and the submodules form the leaves. Here's what our
 first example looks like when thought of this way:
 
 ```text
-modules
+communicator
  ├── network
  └── client
 ```
@@ -97,7 +97,7 @@ modules
 And here's the second:
 
 ```text
-modules
+communicator
  └── network
      └── client
 ```
@@ -169,7 +169,7 @@ Now, everything should compile:
 
 ```bash
 $ cargo build
-   Compiling modules v0.1.0 (file:///projects/modules)
+   Compiling communicator v0.1.0 (file:///projects/communicator)
 
 src/client.rs:1:1: 2:2 warning: function is never used: `connect`,
 #[warn(dead_code)] on by default
@@ -238,7 +238,7 @@ When we try to `cargo build`, we'll get an error:
 
 ```bash
 $ cargo build
-   Compiling modules v0.1.0 (file:///projects/modules)
+   Compiling communicator v0.1.0 (file:///projects/communicator)
 src/network.rs:4:5: 4:11 error: cannot declare a new module at this location
 src/network.rs:4 mod server;
                      ^~~~~~
@@ -251,7 +251,7 @@ of possibly redeclaring it
 src/network.rs:4 mod server;
                      ^~~~~~
 error: aborting due to previous error
-error: Could not compile `modules`.
+error: Could not compile `communicator`.
 ```
 
 This error is actually pretty helpful. It points out something we didn't know
@@ -276,7 +276,7 @@ $ mkdir src/network
 $ mv src/server.rs src/network
 $ mv src/network.rs src/network/mod.rs
 $ cargo build
-   Compiling modules v0.1.0 (file:///projects/modules)
+   Compiling communicator v0.1.0 (file:///projects/communicator)
 <warnings>
 $
 ```
@@ -284,7 +284,7 @@ $
 It works! So now our module layout looks like this:
 
 ```text
-modules
+communicator
  ├── client
  └── network
      └── server

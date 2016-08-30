@@ -146,7 +146,7 @@ Run the tests by invoking the `cargo test` command:
 
 ```bash
 $ cargo test
-   Compiling modules v0.1.0 (file:///projects/modules)
+   Compiling communicator v0.1.0 (file:///projects/communicator)
 src/lib.rs:9:9: 9:24 error: failed to resolve. Use of undeclared type or module
 `client` [E0433]
 src/lib.rs:9         client::connect();
@@ -155,11 +155,11 @@ src/lib.rs:9:9: 9:24 help: run `rustc --explain E0433` to see a detailed
 explanation
 ```
 
-Why doesn't this work? It's not because we don't have `modules::` in front of
-the function like we had in `src/main.rs`: we are definitely within the
-`modules` library crate here. The reason is that paths anywhere except in a
-`use` statement are relative to the current module. Our `tests` module doesn't
-have a `client` module in its scope!
+Why doesn't this work? It's not because we don't have `communicator::` in front
+of the function like we had in `src/main.rs`: we are definitely within the
+`communicator` library crate here. The reason is that paths anywhere except in
+a `use` statement are relative to the current module. Our `tests` module
+doesn't have a `client` module in its scope!
 
 So how do we get back up one module? We can either use leading colons to say
 that we want to start from the root and list the whole path:
@@ -204,8 +204,8 @@ result output will be:
 
 ```bash
 $ cargo test
-   Compiling modules v0.1.0 (file:///projects/modules)
-     Running target/debug/modules-92007ddb5330fa5a
+   Compiling communicator v0.1.0 (file:///projects/communicator)
+     Running target/debug/communicator-92007ddb5330fa5a
 
 running 1 test
 test tests::it_works ... ok

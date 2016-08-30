@@ -1,9 +1,9 @@
 ## Controlling visibility with `pub`
 
-At the end of the last section, we had a project, `modules`, and when we compiled it, we got some strange warnings:
+At the end of the last section, we had a project, `communicator`, and when we compiled it, we got some strange warnings:
 
 ```bash
-   Compiling modules v0.1.0 (file:///projects/modules)
+   Compiling communicator v0.1.0 (file:///projects/communicator)
 src/client.rs:1:1: 2:2 warning: function is never used: `connect`,
 #[warn(dead_code)] on by default
 src/client.rs:1 fn connect() {
@@ -29,14 +29,14 @@ this code:
 Filename: src/main.rs
 
 ```rust,ignore
-extern crate modules;
+extern crate communicator;
 
 fn main() {
-    modules::client::connect();
+    communicator::client::connect();
 }
 ```
 
-We need the `extern crate` line to bring our `modules` library crate into
+We need the `extern crate` line to bring our `communicator` library crate into
 scope, because our package actually now contains *two* crates. Cargo treats
 src/main.rs as the crate root of a binary crate, and we also have our existing
 library crate. This pattern is quite common for executable crates: most
@@ -51,13 +51,13 @@ warnings:
 
 ```bash
 $ cargo build
-   Compiling modules v0.1.0 (file:///projects/modules)
+   Compiling communicator v0.1.0 (file:///projects/communicator)
 <warnings>
 src/main.rs:4:5: 4:29 error: module `client` is private
-src/main.rs:4     modules::client::connect();
+src/main.rs:4     communicator::client::connect();
                   ^~~~~~~~~~~~~~~~~~~~~~~~
 error: aborting due to previous error
-error: Could not compile `modules`.
+error: Could not compile `communicator`.
 ```
 
 Ah ha! The `client` module is private. This is the first time we've run into
@@ -86,10 +86,10 @@ The `pub` goes right before `mod`. Let's try building again:
 
 ```bash
 $ cargo build
-   Compiling modules v0.1.0 (file:///projects/modules)
+   Compiling communicator v0.1.0 (file:///projects/communicator)
 <warnings>
 src/main.rs:4:5: 4:29 error: function `connect` is private
-src/main.rs:4     modules::client::connect();
+src/main.rs:4     communicator::client::connect();
                   ^~~~~~~~~~~~~~~~~~~~~~~~
 ```
 
@@ -108,7 +108,7 @@ And run `cargo build` again:
 
 ```bash
  cargo build
-   Compiling modules v0.1.0 (file:///projects/modules)
+   Compiling communicator v0.1.0 (file:///projects/communicator)
 src/network/mod.rs:1:1: 2:2 warning: function is never used: `connect`,
 #[warn(dead_code)] on by default
 src/network/mod.rs:1 fn connect() {
@@ -145,7 +145,7 @@ And compile:
 
 ```bash
 $ cargo build
-   Compiling modules v0.1.0 (file:///projects/modules)
+   Compiling communicator v0.1.0 (file:///projects/communicator)
 src/network/mod.rs:1:1: 2:2 warning: function is never used: `connect`,
 #[warn(dead_code)] on by default
 src/network/mod.rs:1 pub fn connect() {
@@ -174,7 +174,7 @@ Now if we compile, that warning is gone:
 
 ```bash
 $ cargo build
-   Compiling modules v0.1.0 (file:///projects/modules)
+   Compiling communicator v0.1.0 (file:///projects/communicator)
 src/network/server.rs:1:1: 2:2 warning: function is never used: `connect`,
 #[warn(dead_code)] on by default
 src/network/server.rs:1 fn connect() {
