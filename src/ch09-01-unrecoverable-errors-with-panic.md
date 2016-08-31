@@ -44,14 +44,24 @@ fn main() {
 
 We attempt to access the hundredth element of our vector, but it only has three
 elements. In this situation, Rust will panic. Using `[]` is supposed to return
-an element. But if you pass it an invalid index, there's no number Rust could
-return here, it would be wrong. In this case, we've typed in a literal, so in
-theory, Rust could figure it out. But if our program was different, say, maybe
-reading the index from user input, it would not be possible to determine at
-compile time if the index was in bounds. So the only thing that we can do is
-terminate the program.
+an element. If you pass `[]` an invalid index, though, there's no element that
+Rust could return here that would be correct. In this case, we've typed in a
+literal index of `100`, so in theory, Rust could examine our code at compile
+time and raise an error at that point. But if our program was different, say,
+maybe reading the index from user input, it would not be possible to determine
+at compile time if the index was in bounds.
 
-Let's try to run it:
+Other languages like C will attempt to give you exactly what you asked for in
+this situation, even though it isn't what you want: you'll get whatever is at
+the location in memory that would correspond to that element in the vector,
+even though the memory doesn't belong to the vector. This is called a *buffer
+overread*, and can lead to security vulnerabilities if an attacker can
+manipulate the index in such a way as to read data they shouldn't be allowed to
+that is stored after the array.
+
+In order to protect your program from this sort of vulnerability, if you try to
+read an element at an index that doesn't exist, Rust will terminate the program.
+Let's try it and see:
 
 ```bash
 $ cargo run
