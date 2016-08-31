@@ -16,9 +16,10 @@ enum Result<T, E> {
 }
 ```
 
-We have `Ok` for successful results, and `Err` for ones that have an error.
-These two variants each contain one thing: in `Ok`'s case, it's the successful
-return value. With `Err`, it's some type that represents the error.
+The `Ok` variant indicates a successful result, and `Err` indicates an
+unsuccessful result. These two variants each contain one thing: in `Ok`'s case,
+it's the successful return value. With `Err`, it's some type that represents
+the error.
 
 As an example, let's try opening a file:
 
@@ -101,9 +102,9 @@ your program to blow up, and that's not good.
 
 ## Propagating errors with `?`
 
-Sometimes, when writing a function, you don't want to handle the error where
-you are, but instead would prefer to return the error to the calling function.
-Something like this:
+When writing a function, if you don't want to handle the error where you are,
+you can return the error to the calling function. Within your function, that
+would look like:
 
 ```rust
 use std::fs::File;
@@ -137,10 +138,11 @@ let f = File::open("hello.txt")?;
 ```
 
 The `?` operator at the end of the `open` call does the same thing as our
-previous example: It will return the value of an `Ok`, but return the value of
-an `Err` to our caller.
+previous example: It will return the value inside an `Ok` to the binding `f`,
+but will return early out of the whole function and give any `Err` value we get
+to our caller.
 
-There's one problem though: let's try compiling the example:
+There's one problem though; let's try compiling the example:
 
 ```rust,ignore
    Compiling result v0.1.0 (file:///projects/result)
@@ -158,8 +160,8 @@ error: aborting due to previous error
 ```
 
 What gives? The issue is that the `main()` function has a return type of `()`,
-but the question mark operator is trying to return a result. This doesn't work.
-Instead of `main()`, let's create a function that returns a result:
+but the question mark operator is trying to return a `Result`. This doesn't
+work. Instead of `main()`, let's create a function that returns a `Result`:
 
 ```rust
 #![feature(question_mark)]
@@ -176,13 +178,15 @@ pub fn process_file() -> Result<(), io::Error> {
 }
 ```
 
-Since the result type has two type parameters, we need to include them. In this
-case, `File::open` returns an `std::io::Error`, so we will use it as our error
+Since the `Result` type has two type parameters, we need to include them. In
+this case, `File::open` returns `std::io::Error`, so we will use it as our error
 type. But what about success? This function is executed purely for its side
-effects; nothing is returned upon success. Well, functions with no return type,
-as we just saw with `main()`, are the same as returning unit. So we can use
-it as the return type here, too. This leads to the last line of the function,
-the slightly silly-looking `Ok(())`. This is an `Ok()` with a `()` inside.
+effects; no value is returned when everything works. Functions with no return
+type, as we just saw with `main()`, are the same as returning the unit type,
+`()`. So we can use the unit type as the return type here, too.
+
+This leads us to the last line of the function, the slightly silly-looking
+`Ok(())`. This is an `Ok()` with a `()` value inside.
 
 In chapter XX, we'll learn how to make our own types like these, but for now,
 an understanding of the core `Result<T, E>` is enough.

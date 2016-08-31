@@ -81,7 +81,7 @@ could have Rust tell us what line in our program caused the error.
 
 That's what the next line, the `note` is about. If we set the `RUST_BACKTRACE`
 environment variable, we'll get a backtrace of exactly how the error happend.
-Let's try it:
+Let's try that:
 
 ```bash
 $ RUST_BACKTRACE=1 cargo run
