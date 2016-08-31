@@ -74,10 +74,10 @@ note: Run with `RUST_BACKTRACE=1` for a backtrace.
 error: Process didn't exit successfully: `target/debug/panic` (exit code: 101)
 ```
 
-This points at a file we didn't write, `../src/libcollections/vec.rs`, line 1265.
-That's the implementation of `Vec<T>` in the standard library. While it's easy
-to see in this short program where the error was, it would be nicer if we could
-have Rust tell us what line in our program caused the error.
+This points at a file we didn't write, `../src/libcollections/vec.rs`, line
+1265. That's the implementation of `Vec<T>` in the standard library. While it's
+easy to see in this short program where the error was, it would be nicer if we
+could have Rust tell us what line in our program caused the error.
 
 That's what the next line, the `note` is about. If we set the `RUST_BACKTRACE`
 environment variable, we'll get a backtrace of exactly how the error happend.
