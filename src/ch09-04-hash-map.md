@@ -30,6 +30,18 @@ often used, and so has a bit less support from the language. There's no built-in
 macro to construct them, for example, and they're not in the prelude, and so need
 to be `use`d directly.
 
+Just like vectors, hashmaps store their data on the heap.
+
+If you have a vector of tuples, you can convert it into a hashmap with `collect`:
+
+```rust
+use std::collections::HashMap;
+
+let data = vec![(1, "hello"), (2, "world")];
+
+let map: HashMap<i32, &'static str> = data.into_iter().collect();
+```
+
 ## reading
 
 We can get a value out of the hashmap by providing the proper key to the `get`
@@ -49,6 +61,22 @@ let value = map.get(&2);
 Here, `value` will have the value `Some("world")`, since that's the value
 associated with the `2` key. It's wrapped in `Some` because `get` returns an
 `Option<V>`, that is, if there's no value for that key, it will return `None`.
+
+We can iterate over a hasmap in a similar manner as we do with vectors, using
+a `for` loop:
+
+```rust
+use std::collections::HashMap;
+
+let mut map = HashMap::new();
+
+map.insert(1, "hello");
+map.insert(2, "world");
+
+for (key, value) in &map {
+    println!("{}: {}", key, value);
+}
+```
 
 ## updating
 
