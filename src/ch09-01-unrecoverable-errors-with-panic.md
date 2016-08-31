@@ -31,7 +31,8 @@ message and the place in our source code where the panic occurred:
 `src/main.rs`, line two.
 
 But that only shows us the exact line that called `panic!`. That's not always
-useful. Let's modify our example slightly:
+useful. Let's modify our example slightly to see what it's like when a `panic!`
+call comes from code we call instead of from our code directly:
 
 ```rust,should_panic
 fn main() {
