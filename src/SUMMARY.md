@@ -45,7 +45,11 @@
     - [Recoverable Errors with `Result`](ch09-02-recoverable-errors-with-result.md)
     - [To `panic!` or Not To `panic!`](ch09-03-to-panic-or-not-to-panic.md)
 
-- [Generics]()
+- [Generics](ch10-00-generics.md)
+    - [Traits](ch10-01-traits.md)
+    - [Lifetimes](ch10-02-lifetimes.md)
+
+- [Closures]()
 
 - [I/O]()
     - [`Read` & `Write`]()
