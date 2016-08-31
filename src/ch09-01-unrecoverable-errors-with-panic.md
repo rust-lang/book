@@ -2,11 +2,11 @@
 
 Sometimes, bad things happen, and there's nothing that you can do about it. For
 these cases, Rust has a macro, `panic!`. When this macro executes, your program
-will terminate execution, printing a failure message and then quitting. The most
-common reason for this is when a bug of some kind has been detected, and it's not
-clear how to handle the error.
+will print a failure message and then quit. The most common reason for this is
+when a bug of some kind has been detected, and it's not clear how to handle the
+error.
 
-Let's try it out with a simple program: 
+Let's try it out with a simple program:
 
 ```rust,should_panic
 fn main() {
@@ -43,7 +43,7 @@ fn main() {
 
 We attempt to access the hundredth element of our vector, but it only has three
 elements. In this situation, Rust will panic. Using `[]` is supposed to return
-a number. But if you pass it an invalid index, there's no number Rust could
+an element. But if you pass it an invalid index, there's no number Rust could
 return here, it would be wrong. In this case, we've typed in a literal, so in
 theory, Rust could figure it out. But if our program was different, say, maybe
 reading the index from user input, it would not be possible to determine at
