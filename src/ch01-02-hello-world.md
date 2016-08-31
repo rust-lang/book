@@ -28,11 +28,11 @@ $ cd hello_world
 
 Windows:
 
-```bash
-$ mkdir %USERPROFILE%\projects
-$ cd %USERPROFILE%\projects
-$ mkdir hello_world
-$ cd hello_world
+```cmd
+> mkdir %USERPROFILE%\projects
+> cd %USERPROFILE%\projects
+> mkdir hello_world
+> cd hello_world
 ```
 
 ### Writing and Running a Rust Program
@@ -137,8 +137,8 @@ main  main.rs
 
 On Windows, you'd enter:
 
-```bash
-$ dir /B # the /B option says to only show the file names
+```cmd
+> dir /B %= the /B option says to only show the file names =%
 main.exe
 main.rs
 ```
@@ -211,8 +211,8 @@ $ cd ~/projects
 
 Windows:
 
-```bash
-$ cd %USERPROFILE%\projects
+```cmd
+> cd %USERPROFILE%\projects
 ```
 
 And then on any operating system run:
