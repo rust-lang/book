@@ -1,7 +1,7 @@
 # Error Handling
 
 Rust's laser-focus on safety spills over into a related area: error handling.
-Errors are a fact of life in software, so Rust has a number of tools that you
+Errors are a fact of life in software, so Rust has a number of features that you
 can use to handle situations in which something bad happens. In many cases,
 Rust requires you to acknowledge the possibility of an error occurring and take
 some action in that situation. This makes your program safer and more robust by
