@@ -8,7 +8,7 @@ some action in that situation. This makes your program safer and more robust by
 eliminating the possibility of unexpected errors being discovered late in the
 development process.
 
-Rust splits errors into two major kinds: errors that are recoverable, and
+Rust groups errors into two major kinds: errors that are recoverable, and
 errors that are not recoverable. What does it mean to "recover" from an
 error? In the simplest sense, it relates to the answer of this question:
 
