@@ -62,7 +62,7 @@ we have to decide what to do with it. The simplest thing is to turn our error
 into a `panic!` instead, by calling the macro. And since we haven't created
 that file yet, we'll see it in the error message:
 
-```text
+```bash
 thread 'main' panicked at 'There was a problem opening the file: Error { repr:
 Os { code: 2, message: "No such file or directory" } }', src/main.rs:8
 ```
