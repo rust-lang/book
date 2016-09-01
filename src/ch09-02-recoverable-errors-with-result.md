@@ -41,6 +41,8 @@ not yet exist. Before we can do anything with our `File`, we need to extract
 it out of the result. Let's start with a basic tool: `match`. We've used it
 to deal with enums previously.
 
+<!-- I'll ghost everything except the match statement lines in the libreoffice file /Carol -->
+
 ```rust,should_panic
 use std::fs::File;
 
@@ -70,6 +72,8 @@ communicate intent well. The `Result<T, E>` type has many helper methods
 defined it to do various things. "Panic on an error result" is one of those
 methods, and it's called `unwrap`:
 
+<!-- I'll ghost everything except `unwrap()` in the libreoffice file /Carol -->
+
 ```rust,should_panic
 use std::fs::File;
 
@@ -83,6 +87,8 @@ returns `Ok`, return the value inside. If it's an `Err`, panic.
 
 There's also another method, similar to unwrap, that lets us choose the error
 message: `expect`. It looks like this:
+
+<!-- I'll ghost everything except `expect()` in the libreoffice file /Carol -->
 
 ```rust,should_panic
 use std::fs::File;
@@ -110,6 +116,7 @@ When writing a function, if you don't want to handle the error where you are,
 you can return the error to the calling function. Within your function, that
 would look like:
 
+<!-- I'll ghost everything except `return Err(e)` in the libreoffice file /Carol -->
 ```rust
 use std::fs::File;
 
@@ -129,6 +136,8 @@ This is a very common way of handling errors: propagate them upward until
 you're ready to deal with them. This pattern is so common in Rust that there is
 dedicated syntax for it: the question mark operator. We could have also written
 the example like this:
+
+<!-- I'll ghost everything except `?` in the libreoffice file /Carol -->
 
 ```rust
 #![feature(question_mark)]
