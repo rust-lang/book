@@ -204,5 +204,7 @@ type, as we just saw with `main()`, are the same as returning the unit type,
 This leads us to the last line of the function, the slightly silly-looking
 `Ok(())`. This is an `Ok()` with a `()` value inside.
 
-In chapter XX, we'll learn how to make our own types like these, but for now,
-an understanding of the core `Result<T, E>` is enough.
+TODO:
+- an example returning something other than ()
+- mention you'd still do a `match` in main where you call this function
+- show how to chain
