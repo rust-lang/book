@@ -70,7 +70,7 @@ Os { code: 2, message: "No such file or directory" } }', src/main.rs:8
 This works okay. However, `match` can be a bit verbose, and it doesn't always
 communicate intent well. The `Result<T, E>` type has many helper methods
 defined it to do various things. "Panic on an error result" is one of those
-methods, and it's called `unwrap`:
+methods, and it's called `unwrap()`:
 
 <!-- I'll ghost everything except `unwrap()` in the libreoffice file /Carol -->
 
@@ -82,11 +82,13 @@ fn main() {
 }
 ```
 
-This has the same behavior as our previous example: If the call to `open`
+This has the same behavior as our previous example: If the call to `open()`
 returns `Ok`, return the value inside. If it's an `Err`, panic.
 
-There's also another method, similar to unwrap, that lets us choose the error
-message: `expect`. It looks like this:
+There's also another method, similar to `unwrap()`, that lets us choose the
+error message: `expect()`. Using `expect()` instead of `unwrap()` and providing
+good error messages can convey your intent and make tracking down the source of
+a panic easier. `expect()` looks like this:
 
 <!-- I'll ghost everything except `expect()` in the libreoffice file /Carol -->
 
@@ -99,16 +101,18 @@ fn main() {
 ```
 
 This isn't the only way to deal with errors, however. This entire section is
-supposed to be about recovering from errors, but we've gone back to panic.
-This is true, and gets at an underlying truth: you can easily turn a
-recoverable error into an unrecoverable one with `unwrap`, but you can't turn
-an unrecoverable error into a recoverable one. This is why good Rust code
-chooses to make errors recoverable: you give your caller options.
+supposed to be about recovering from errors, but we've gone back to panic. This
+observation gets at an underlying truth: you can easily turn a recoverable
+error into an unrecoverable one with `unwrap()` or `expect()`, but you can't
+turn an unrecoverable `panic!` into a recoverable one. This is why good Rust
+code chooses to make errors recoverable: you give your caller options.
 
-The Rust community has a love/hate relationship with `unwrap`. It's useful
-in tests, and in examples where you don't want to muddy the example with proper
-error handling. But if used in library code, mis-using that library can cause
-your program to blow up, and that's not good.
+The Rust community has a love/hate relationship with `unwrap()` and `expect()`.
+They're useful in tests since they will cause the test to fail if there's an
+error anyplace you call them. In examples, you might not want to muddy the code
+with proper error handling. But if you use them in a library, mis-using your
+library can cause other people's programs to halt unexpectedly, and that's not
+very user-friendly.
 
 ## Propagating errors with `?`
 
