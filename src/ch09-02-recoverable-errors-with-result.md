@@ -121,9 +121,9 @@ you can return the error to the calling function. Within your function, that
 would look like:
 
 <!-- I'll ghost everything except `return Err(e)` in the libreoffice file /Carol -->
-```rust
-use std::fs::File;
 
+```rust,ignore
+# use std::fs::File;
 # fn foo() -> std::io::Result<()> {
 let f = File::open("hello.txt");
 
@@ -143,15 +143,14 @@ the example like this:
 
 <!-- I'll ghost everything except `?` in the libreoffice file /Carol -->
 
-```rust
+```rust,ignore
 #![feature(question_mark)]
 
 use std::fs::File;
 
-# fn foo() -> std::io::Result<()> {
-let f = File::open("hello.txt")?;
-# Ok(())
-# }
+fn main() {
+    let f = File::open("hello.txt")?;
+}
 ```
 
 The `?` operator at the end of the `open` call does the same thing as our
