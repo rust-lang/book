@@ -1,6 +1,6 @@
 ## References and Borrowing
 
-At the end of the last section, we had some example Rust that wasn’t very
+<!-- At the end of the last section, we had some example Rust that wasn’t very
 good. Here it is again:
 
 Filename: src/main.rs
@@ -19,13 +19,13 @@ fn calculate_length(s: String) -> (String, usize) {
 
     (s, length)
 }
-```
+``` :-->
 
-The issue here is that we have to return the `String` back to the calling
+The issue with the tuple code at the end of the last section is that we have to return the `String` back to the calling
 function so that we can still use it there, since it was moved when we called
 `calculate_length()`.
 
-There is a better way. It looks like this:
+Here is how you would use a function without taking ownership of it using *references:*
 
 Filename: src/main.rs
 
@@ -50,25 +50,21 @@ function return value is gone. Next, note that we pass `&s1` into
 `calculate_length()`, and in its definition, we take `&String` rather than
 `String`.
 
-These `&`s are called *references*, and they allow you to refer to some value
-without taking ownership of it. Here’s a diagram:
+These `&`s are *references*, and they allow you to refer to some value
+without taking ownership of it. Figure 4-6 shows a diagram of this.
 
-DIAGRAM GOES HERE of a &String pointing at a String, with (ptr, len, capacity)
+// DIAGRAM GOES HERE of a &String pointing at a String, with (ptr, len, capacity)
+Figure 4-6:
 
 Let’s take a closer look at the function call here:
 
 ```rust
-# fn calculate_length(s: &String) -> usize {
-#     let length = s.len();
-#
-#     length
-# }
 let s1 = String::from("hello");
 
 let len = calculate_length(&s1);
 ```
 
-The `&s1` syntax lets us create a reference with `s1`. This reference _refers_
+The `&s1` syntax lets us create a reference with `s1` which _refers_
 to the value of `s1` but does not own it. Because it does not own it, the
 value it points to will not be dropped when the reference goes out of scope.
 
@@ -84,16 +80,15 @@ fn calculate_length(s: &String) -> usize { // s is a reference to a String
   // it refers to, nothing happens.
 ```
 
-It’s the same process as before, except that because we don’t have ownership,
-we don’t drop what a reference points to when the reference goes out of scope.
+It’s the same process as before, but we don’t drop what the reference points to when it goes out of scope because we don't have ownership.
 This lets us write functions which take references as arguments instead of the
 values themselves, so that we won’t need to return them to give back ownership.
 
-There’s another word for what references do, and that’s *borrowing*. Just like
-with real life, if a person owns something, you can borrow it from them. When
+We call this process *borrowing*. Just like
+with real life, if a person owns something, you can borrow it from them, and when
 you’re done, you have to give it back.
 
-Speaking of which, what if you try to modify something you borrow from me? Try
+So what happens if you try to modify something you borrow? Try
 this code out. Spoiler alert: it doesn’t work!
 
 Filename: src/main.rs
@@ -123,9 +118,9 @@ error: cannot borrow immutable borrowed content `*some_string` as mutable
 Just like bindings are immutable by default, so are references. We’re not
 allowed to modify something we have a reference to.
 
-### Mutable references
+### Mutable References
 
-We can fix this bug! Just a small tweak:
+We can fix this bug with just a small tweak:
 
 Filename: src/main.rs
 
@@ -145,7 +140,7 @@ First, we had to change `s` to be `mut`. Then we had to create a mutable
 reference with `&mut s` and accept a mutable reference with `some_string: &mut
 String`.
 
-Mutable references have one big restriction, though. This code fails:
+Mutable references have one big restriction, though: you cannot borrow a mutable reference more than once. This code will fail:
 
 Filename: src/main.rs
 
@@ -170,8 +165,9 @@ error[E0499]: cannot borrow `s` as mutable more than once at a time
   | - first borrow ends here
 ```
 
-The error is what it says: you cannot borrow something mutably more than once
-at a time. This restriction allows for mutation but in a very controlled
+<!-- Is there a reason for this? Because the value might change? -->
+
+This restriction allows for mutation but in a very controlled
 fashion. It is something that new Rustaceans struggle with, because most
 languages let you mutate whenever you’d like.
 
@@ -219,9 +215,11 @@ Whew! We _also_ cannot have a mutable reference while we have an immutable one.
 Users of an immutable reference don’t expect the values to suddenly change out
 from under them! Multiple immutable references are okay, however.
 
-### Dangling references
+<!-- Do you want to give a justification/reminder of the justification for the reason Rust does this? Presumably it's a safety measure? We're giving lots of things they can't do here! -->
 
-In languages with pointers, it’s easy to create a “dangling pointer” by freeing
+### Dangling References
+
+In languages with pointers, it's easy to make the error of creating a “dangling pointer” by freeing
 some memory while keeping around a pointer to that memory. In Rust, by
 contrast, the compiler guarantees that references will never be dangling: if we
 have a reference to something, the compiler will ensure that it will not go
@@ -259,16 +257,14 @@ error[E0106]: missing lifetime specifier
 error: aborting due to previous error
 ```
 
-This error message refers to a feature we haven’t learned about yet,
+This error message refers to a feature we haven’t learned about yet:
 *lifetimes*. The message does contain the key to why this code is a problem,
-though:
+though: `this function’s return type contains a borrowed value, but there is no value
+for it to be borrowed from`
 
-```bash
-this function’s return type contains a borrowed value, but there is no value
-for it to be borrowed from
-```
+<!-- Are we going to be covering lifetimes in a future chapter? -->
 
-Let’s examine exactly what happens with `dangle()`:
+Let’s have a closer look at exactly what's happenening at each stage of our  `dangle()` code:
 
 ```rust,ignore
 fn dangle() -> &String { // dangle returns a reference to a String
