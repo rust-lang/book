@@ -4,18 +4,23 @@ At the end of the last section, we had a project, `communicator`, and when we co
 
 ```bash
    Compiling communicator v0.1.0 (file:///projects/communicator)
-src/client.rs:1:1: 2:2 warning: function is never used: `connect`,
-#[warn(dead_code)] on by default
-src/client.rs:1 fn connect() {
-                ^
-src/network/mod.rs:1:1: 2:2 warning: function is never used: `connect`,
-#[warn(dead_code)] on by default
-src/network/mod.rs:1 fn connect() {
-                     ^
-src/network/server.rs:1:1: 2:2 warning: function is never used: `connect`,
-#[warn(dead_code)] on by default
-src/network/server.rs:1 fn connect() {
-                        ^
+warning: function is never used: `connect`, #[warn(dead_code)] on by default
+ --> src/client.rs:1:1
+  |
+1 | fn connect() {
+  | ^
+
+warning: function is never used: `connect`, #[warn(dead_code)] on by default
+ --> src/network/mod.rs:1:1
+  |
+1 | fn connect() {
+  | ^
+
+warning: function is never used: `connect`, #[warn(dead_code)] on by default
+ --> src/network/server.rs:1:1
+  |
+1 | fn connect() {
+  | ^
 ```
 
 Why does this happen? After all, we're building a library. What if these three
@@ -52,12 +57,11 @@ warnings:
 ```bash
 $ cargo build
    Compiling communicator v0.1.0 (file:///projects/communicator)
-<warnings>
-src/main.rs:4:5: 4:29 error: module `client` is private
-src/main.rs:4     communicator::client::connect();
-                  ^~~~~~~~~~~~~~~~~~~~~~~~
-error: aborting due to previous error
-error: Could not compile `communicator`.
+error: module `client` is private
+ --> src/main.rs:4:5
+  |
+4 |     communicator::client::connect();
+  |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 ```
 
 Ah ha! The `client` module is private. This is the first time we've run into
@@ -88,9 +92,11 @@ The `pub` goes right before `mod`. Let's try building again:
 $ cargo build
    Compiling communicator v0.1.0 (file:///projects/communicator)
 <warnings>
-src/main.rs:4:5: 4:29 error: function `connect` is private
-src/main.rs:4     communicator::client::connect();
-                  ^~~~~~~~~~~~~~~~~~~~~~~~
+error: function `connect` is private
+ --> src/main.rs:4:5
+  |
+4 |     communicator::client::connect();
+  |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 ```
 
 Hooray! We have a different error! Yes, different error messages are a cause
@@ -109,14 +115,17 @@ And run `cargo build` again:
 ```bash
  cargo build
    Compiling communicator v0.1.0 (file:///projects/communicator)
-src/network/mod.rs:1:1: 2:2 warning: function is never used: `connect`,
-#[warn(dead_code)] on by default
-src/network/mod.rs:1 fn connect() {
-                     ^
-src/network/server.rs:1:1: 2:2 warning: function is never used: `connect`,
-#[warn(dead_code)] on by default
-src/network/server.rs:1 fn connect() {
-                        ^
+warning: function is never used: `connect`, #[warn(dead_code)] on by default
+ --> src/network/mod.rs:1:1
+  |
+1 | fn connect() {
+  | ^
+
+warning: function is never used: `connect`, #[warn(dead_code)] on by default
+ --> src/network/server.rs:1:1
+  |
+1 | fn connect() {
+  | ^
 ```
 
 It compiled! And the warning about `client::connect()` not being used is gone!
@@ -146,14 +155,17 @@ And compile:
 ```bash
 $ cargo build
    Compiling communicator v0.1.0 (file:///projects/communicator)
-src/network/mod.rs:1:1: 2:2 warning: function is never used: `connect`,
-#[warn(dead_code)] on by default
-src/network/mod.rs:1 pub fn connect() {
-                     ^
-src/network/server.rs:1:1: 2:2 warning: function is never used: `connect`,
-#[warn(dead_code)] on by default
-src/network/server.rs:1 fn connect() {
-                        ^
+warning: function is never used: `connect`, #[warn(dead_code)] on by default
+ --> src/network/mod.rs:1:1
+  |
+1 | pub fn connect() {
+  | ^
+
+warning: function is never used: `connect`, #[warn(dead_code)] on by default
+ --> src/network/server.rs:1:1
+  |
+1 | fn connect() {
+  | ^
 ```
 
 Hmmm, it says this is still dead, even though it's `pub`. While the function is
@@ -175,10 +187,11 @@ Now if we compile, that warning is gone:
 ```bash
 $ cargo build
    Compiling communicator v0.1.0 (file:///projects/communicator)
-src/network/server.rs:1:1: 2:2 warning: function is never used: `connect`,
-#[warn(dead_code)] on by default
-src/network/server.rs:1 fn connect() {
-                        ^
+warning: function is never used: `connect`, #[warn(dead_code)] on by default
+ --> src/network/server.rs:1:1
+  |
+1 | fn connect() {
+  | ^
 ```
 
 Only one last warning! Try to fix this one on your own!
