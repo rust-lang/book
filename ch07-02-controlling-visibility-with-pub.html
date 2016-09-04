@@ -70,18 +70,23 @@
                     <h2>Controlling visibility with <code>pub</code></h2>
 <p>At the end of the last section, we had a project, <code>communicator</code>, and when we compiled it, we got some strange warnings:</p>
 <pre><code class="language-bash">   Compiling communicator v0.1.0 (file:///projects/communicator)
-src/client.rs:1:1: 2:2 warning: function is never used: `connect`,
-#[warn(dead_code)] on by default
-src/client.rs:1 fn connect() {
-                ^
-src/network/mod.rs:1:1: 2:2 warning: function is never used: `connect`,
-#[warn(dead_code)] on by default
-src/network/mod.rs:1 fn connect() {
-                     ^
-src/network/server.rs:1:1: 2:2 warning: function is never used: `connect`,
-#[warn(dead_code)] on by default
-src/network/server.rs:1 fn connect() {
-                        ^
+warning: function is never used: `connect`, #[warn(dead_code)] on by default
+ --&gt; src/client.rs:1:1
+  |
+1 | fn connect() {
+  | ^
+
+warning: function is never used: `connect`, #[warn(dead_code)] on by default
+ --&gt; src/network/mod.rs:1:1
+  |
+1 | fn connect() {
+  | ^
+
+warning: function is never used: `connect`, #[warn(dead_code)] on by default
+ --&gt; src/network/server.rs:1:1
+  |
+1 | fn connect() {
+  | ^
 </code></pre>
 <p>Why does this happen? After all, we're building a library. What if these three
 functions are the public interface that we want our <em>users</em> to use? We won't
@@ -110,12 +115,11 @@ build output above. Invoking <code>cargo build</code> will now give us an error 
 warnings:</p>
 <pre><code class="language-bash">$ cargo build
    Compiling communicator v0.1.0 (file:///projects/communicator)
-&lt;warnings&gt;
-src/main.rs:4:5: 4:29 error: module `client` is private
-src/main.rs:4     communicator::client::connect();
-                  ^~~~~~~~~~~~~~~~~~~~~~~~
-error: aborting due to previous error
-error: Could not compile `communicator`.
+error: module `client` is private
+ --&gt; src/main.rs:4:5
+  |
+4 |     communicator::client::connect();
+  |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 </code></pre>
 <p>Ah ha! The <code>client</code> module is private. This is the first time we've run into
 the concepts of 'public' and 'private' in the context of Rust. There's no
@@ -138,9 +142,11 @@ mod network;
 <pre><code class="language-bash">$ cargo build
    Compiling communicator v0.1.0 (file:///projects/communicator)
 &lt;warnings&gt;
-src/main.rs:4:5: 4:29 error: function `connect` is private
-src/main.rs:4     communicator::client::connect();
-                  ^~~~~~~~~~~~~~~~~~~~~~~~
+error: function `connect` is private
+ --&gt; src/main.rs:4:5
+  |
+4 |     communicator::client::connect();
+  |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 </code></pre>
 <p>Hooray! We have a different error! Yes, different error messages are a cause
 for celebration. The new error says &quot;function <code>connect</code> is private&quot;, so let's
@@ -152,14 +158,17 @@ edit <code>src/client.rs</code> to make <code>client::connect()</code> public:</
 <p>And run <code>cargo build</code> again:</p>
 <pre><code class="language-bash"> cargo build
    Compiling communicator v0.1.0 (file:///projects/communicator)
-src/network/mod.rs:1:1: 2:2 warning: function is never used: `connect`,
-#[warn(dead_code)] on by default
-src/network/mod.rs:1 fn connect() {
-                     ^
-src/network/server.rs:1:1: 2:2 warning: function is never used: `connect`,
-#[warn(dead_code)] on by default
-src/network/server.rs:1 fn connect() {
-                        ^
+warning: function is never used: `connect`, #[warn(dead_code)] on by default
+ --&gt; src/network/mod.rs:1:1
+  |
+1 | fn connect() {
+  | ^
+
+warning: function is never used: `connect`, #[warn(dead_code)] on by default
+ --&gt; src/network/server.rs:1:1
+  |
+1 | fn connect() {
+  | ^
 </code></pre>
 <p>It compiled! And the warning about <code>client::connect()</code> not being used is gone!</p>
 <p>Making functions public isn't the only way to fix unused code warnings: if
@@ -180,14 +189,17 @@ mod server;
 <p>And compile:</p>
 <pre><code class="language-bash">$ cargo build
    Compiling communicator v0.1.0 (file:///projects/communicator)
-src/network/mod.rs:1:1: 2:2 warning: function is never used: `connect`,
-#[warn(dead_code)] on by default
-src/network/mod.rs:1 pub fn connect() {
-                     ^
-src/network/server.rs:1:1: 2:2 warning: function is never used: `connect`,
-#[warn(dead_code)] on by default
-src/network/server.rs:1 fn connect() {
-                        ^
+warning: function is never used: `connect`, #[warn(dead_code)] on by default
+ --&gt; src/network/mod.rs:1:1
+  |
+1 | pub fn connect() {
+  | ^
+
+warning: function is never used: `connect`, #[warn(dead_code)] on by default
+ --&gt; src/network/server.rs:1:1
+  |
+1 | fn connect() {
+  | ^
 </code></pre>
 <p>Hmmm, it says this is still dead, even though it's <code>pub</code>. While the function is
 public within the module, the <code>network</code> module it's in is not public. We're
@@ -202,10 +214,11 @@ pub mod network;
 <p>Now if we compile, that warning is gone:</p>
 <pre><code class="language-bash">$ cargo build
    Compiling communicator v0.1.0 (file:///projects/communicator)
-src/network/server.rs:1:1: 2:2 warning: function is never used: `connect`,
-#[warn(dead_code)] on by default
-src/network/server.rs:1 fn connect() {
-                        ^
+warning: function is never used: `connect`, #[warn(dead_code)] on by default
+ --&gt; src/network/server.rs:1:1
+  |
+1 | fn connect() {
+  | ^
 </code></pre>
 <p>Only one last warning! Try to fix this one on your own!</p>
 <h3>Privacy rules</h3>

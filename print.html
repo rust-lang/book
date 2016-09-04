@@ -4046,13 +4046,14 @@ into scope so that it's easier to refer to them.</li>
 </ul>
 <p>We'll take a look at each of these parts and see how they fit into the whole.</p>
 <h2><code>mod</code> and the filesystem</h2>
-<p>Every module in Rust starts with the <code>mod</code> keyword. Let's give it a try by
-making a new project with Cargo. This time, instead of a binary, we're going to
-make a library: a project that other people would pull into their projects as a
-dependency to get the functionality we provided, like we used the <code>rand</code> crate
-in Chapter 2. Imagine that we're creating a library to provide some general
-networking functionality, and we decide to call our library <code>communicator</code>. So
-we're not going to use the <code>--bin</code> option like we have before, instead run:</p>
+<p>Every module in Rust starts with the <code>mod</code> keyword. In this next example, we'll
+start again by making a new project with Cargo. This time, instead of a binary,
+we're going to make a library: a project that other people would pull into their
+projects as a dependency.  We saw this with the <code>rand</code> crate in Chapter 2.</p>
+<p>Imagine that we're creating a library to provide some general
+networking functionality, and we decide to call our library <code>communicator</code>. To
+create this library, we won't use the <code>--bin</code> option like we have before. This
+is because by default cargo will create a library:</p>
 <pre><code class="language-bash">$ cargo new communicator
 $ cd communicator
 </code></pre>
@@ -4067,8 +4068,8 @@ mod tests {
 </code></pre>
 <p>This is an empty test to help us get our library started, instead of the binary
 that says &quot;Hello, world!&quot; that we get with the <code>--bin</code> option. Let's ignore the
-<code>#[]</code> stuff and <code>mod tests</code> for a little bit, but leave it at the end of
-<code>src/lib.rs</code>.</p>
+<code>#[]</code> stuff and <code>mod tests</code> for a little bit, but we'll make sure to leave it
+in <code>src/lib.rs</code> for later.</p>
 <p>We're going to look at different ways we could choose to organize our library's
 code, any of which could make sense depending on exactly what we were trying to
 do. To start, add this code at the beginning of the file:</p>
@@ -4173,18 +4174,23 @@ This file provides the <em>contents</em> of the <code>client</code> module. If w
 <pre><code class="language-bash">$ cargo build
    Compiling communicator v0.1.0 (file:///projects/communicator)
 
-src/client.rs:1:1: 2:2 warning: function is never used: `connect`,
-#[warn(dead_code)] on by default
-src/client.rs:1 fn connect() {
-                ^
-src/lib.rs:4:5: 5:6 warning: function is never used: `connect`,
-#[warn(dead_code)] on by default
-src/lib.rs:4     fn connect() {
-                 ^
-src/lib.rs:8:9: 9:10 warning: function is never used: `connect`,
-#[warn(dead_code)] on by default
-src/lib.rs:8         fn connect() {
-                     ^
+warning: function is never used: `connect`, #[warn(dead_code)] on by default
+ --&gt; src/client.rs:1:1
+  |
+1 | fn connect() {
+  | ^
+
+warning: function is never used: `connect`, #[warn(dead_code)] on by default
+ --&gt; src/lib.rs:4:5
+  |
+4 |     fn connect() {
+  |     ^
+
+warning: function is never used: `connect`, #[warn(dead_code)] on by default
+ --&gt; src/lib.rs:8:9
+  |
+8 |         fn connect() {
+  |         ^
 </code></pre>
 <p>Don't worry about those warnings for now; we'll clear them up in a future
 section. They're just warnings, we've built things successfully!</p>
@@ -4221,19 +4227,22 @@ mod server;
 <p>When we try to <code>cargo build</code>, we'll get an error:</p>
 <pre><code class="language-bash">$ cargo build
    Compiling communicator v0.1.0 (file:///projects/communicator)
-src/network.rs:4:5: 4:11 error: cannot declare a new module at this location
-src/network.rs:4 mod server;
-                     ^~~~~~
-src/network.rs:4:5: 4:11 note: maybe move this module `network` to its own
-directory via `network/mod.rs`
-src/network.rs:4 mod server;
-                     ^~~~~~
-src/network.rs:4:5: 4:11 note: ... or maybe `use` the module `server` instead
-of possibly redeclaring it
-src/network.rs:4 mod server;
-                     ^~~~~~
-error: aborting due to previous error
-error: Could not compile `communicator`.
+error: cannot declare a new module at this location
+ --&gt; src/network.rs:4:5
+  |
+4 | mod server;
+  |     ^^^^^^
+  |
+note: maybe move this module `network` to its own directory via `network/mod.rs`
+ --&gt; src/network.rs:4:5
+  |
+4 | mod server;
+  |     ^^^^^^
+note: ... or maybe `use` the module `server` instead of possibly redeclaring it
+ --&gt; src/network.rs:4:5
+  |
+4 | mod server;
+  |     ^^^^^^
 </code></pre>
 <p>This error is actually pretty helpful. It points out something we didn't know
 that we could do yet:</p>
@@ -4300,18 +4309,23 @@ the <code>mod</code> keyword.</p>
 <h2>Controlling visibility with <code>pub</code></h2>
 <p>At the end of the last section, we had a project, <code>communicator</code>, and when we compiled it, we got some strange warnings:</p>
 <pre><code class="language-bash">   Compiling communicator v0.1.0 (file:///projects/communicator)
-src/client.rs:1:1: 2:2 warning: function is never used: `connect`,
-#[warn(dead_code)] on by default
-src/client.rs:1 fn connect() {
-                ^
-src/network/mod.rs:1:1: 2:2 warning: function is never used: `connect`,
-#[warn(dead_code)] on by default
-src/network/mod.rs:1 fn connect() {
-                     ^
-src/network/server.rs:1:1: 2:2 warning: function is never used: `connect`,
-#[warn(dead_code)] on by default
-src/network/server.rs:1 fn connect() {
-                        ^
+warning: function is never used: `connect`, #[warn(dead_code)] on by default
+ --&gt; src/client.rs:1:1
+  |
+1 | fn connect() {
+  | ^
+
+warning: function is never used: `connect`, #[warn(dead_code)] on by default
+ --&gt; src/network/mod.rs:1:1
+  |
+1 | fn connect() {
+  | ^
+
+warning: function is never used: `connect`, #[warn(dead_code)] on by default
+ --&gt; src/network/server.rs:1:1
+  |
+1 | fn connect() {
+  | ^
 </code></pre>
 <p>Why does this happen? After all, we're building a library. What if these three
 functions are the public interface that we want our <em>users</em> to use? We won't
@@ -4340,12 +4354,11 @@ build output above. Invoking <code>cargo build</code> will now give us an error 
 warnings:</p>
 <pre><code class="language-bash">$ cargo build
    Compiling communicator v0.1.0 (file:///projects/communicator)
-&lt;warnings&gt;
-src/main.rs:4:5: 4:29 error: module `client` is private
-src/main.rs:4     communicator::client::connect();
-                  ^~~~~~~~~~~~~~~~~~~~~~~~
-error: aborting due to previous error
-error: Could not compile `communicator`.
+error: module `client` is private
+ --&gt; src/main.rs:4:5
+  |
+4 |     communicator::client::connect();
+  |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 </code></pre>
 <p>Ah ha! The <code>client</code> module is private. This is the first time we've run into
 the concepts of 'public' and 'private' in the context of Rust. There's no
@@ -4368,9 +4381,11 @@ mod network;
 <pre><code class="language-bash">$ cargo build
    Compiling communicator v0.1.0 (file:///projects/communicator)
 &lt;warnings&gt;
-src/main.rs:4:5: 4:29 error: function `connect` is private
-src/main.rs:4     communicator::client::connect();
-                  ^~~~~~~~~~~~~~~~~~~~~~~~
+error: function `connect` is private
+ --&gt; src/main.rs:4:5
+  |
+4 |     communicator::client::connect();
+  |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 </code></pre>
 <p>Hooray! We have a different error! Yes, different error messages are a cause
 for celebration. The new error says &quot;function <code>connect</code> is private&quot;, so let's
@@ -4382,14 +4397,17 @@ edit <code>src/client.rs</code> to make <code>client::connect()</code> public:</
 <p>And run <code>cargo build</code> again:</p>
 <pre><code class="language-bash"> cargo build
    Compiling communicator v0.1.0 (file:///projects/communicator)
-src/network/mod.rs:1:1: 2:2 warning: function is never used: `connect`,
-#[warn(dead_code)] on by default
-src/network/mod.rs:1 fn connect() {
-                     ^
-src/network/server.rs:1:1: 2:2 warning: function is never used: `connect`,
-#[warn(dead_code)] on by default
-src/network/server.rs:1 fn connect() {
-                        ^
+warning: function is never used: `connect`, #[warn(dead_code)] on by default
+ --&gt; src/network/mod.rs:1:1
+  |
+1 | fn connect() {
+  | ^
+
+warning: function is never used: `connect`, #[warn(dead_code)] on by default
+ --&gt; src/network/server.rs:1:1
+  |
+1 | fn connect() {
+  | ^
 </code></pre>
 <p>It compiled! And the warning about <code>client::connect()</code> not being used is gone!</p>
 <p>Making functions public isn't the only way to fix unused code warnings: if
@@ -4410,14 +4428,17 @@ mod server;
 <p>And compile:</p>
 <pre><code class="language-bash">$ cargo build
    Compiling communicator v0.1.0 (file:///projects/communicator)
-src/network/mod.rs:1:1: 2:2 warning: function is never used: `connect`,
-#[warn(dead_code)] on by default
-src/network/mod.rs:1 pub fn connect() {
-                     ^
-src/network/server.rs:1:1: 2:2 warning: function is never used: `connect`,
-#[warn(dead_code)] on by default
-src/network/server.rs:1 fn connect() {
-                        ^
+warning: function is never used: `connect`, #[warn(dead_code)] on by default
+ --&gt; src/network/mod.rs:1:1
+  |
+1 | pub fn connect() {
+  | ^
+
+warning: function is never used: `connect`, #[warn(dead_code)] on by default
+ --&gt; src/network/server.rs:1:1
+  |
+1 | fn connect() {
+  | ^
 </code></pre>
 <p>Hmmm, it says this is still dead, even though it's <code>pub</code>. While the function is
 public within the module, the <code>network</code> module it's in is not public. We're
@@ -4432,10 +4453,11 @@ pub mod network;
 <p>Now if we compile, that warning is gone:</p>
 <pre><code class="language-bash">$ cargo build
    Compiling communicator v0.1.0 (file:///projects/communicator)
-src/network/server.rs:1:1: 2:2 warning: function is never used: `connect`,
-#[warn(dead_code)] on by default
-src/network/server.rs:1 fn connect() {
-                        ^
+warning: function is never used: `connect`, #[warn(dead_code)] on by default
+ --&gt; src/network/server.rs:1:1
+  |
+1 | fn connect() {
+  | ^
 </code></pre>
 <p>Only one last warning! Try to fix this one on your own!</p>
 <h3>Privacy rules</h3>
@@ -4618,12 +4640,17 @@ mod tests {
 <p>Run the tests by invoking the <code>cargo test</code> command:</p>
 <pre><code class="language-bash">$ cargo test
    Compiling communicator v0.1.0 (file:///projects/communicator)
-src/lib.rs:9:9: 9:24 error: failed to resolve. Use of undeclared type or module
-`client` [E0433]
-src/lib.rs:9         client::connect();
-                     ^~~~~~~~~~~~~~~
-src/lib.rs:9:9: 9:24 help: run `rustc --explain E0433` to see a detailed
-explanation
+error[E0433]: failed to resolve. Use of undeclared type or module `client`
+ --&gt; src/lib.rs:9:9
+  |
+9 |         client::connect();
+  |         ^^^^^^^^^^^^^^^ Use of undeclared type or module `client`
+
+warning: function is never used: `connect`, #[warn(dead_code)] on by default
+ --&gt; src/network/server.rs:1:1
+  |
+1 | fn connect() {
+  | ^
 </code></pre>
 <p>Why doesn't this work? It's not because we don't have <code>communicator::</code> in front
 of the function like we had in <code>src/main.rs</code>: we are definitely within the
