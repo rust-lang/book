@@ -147,12 +147,17 @@ Run the tests by invoking the `cargo test` command:
 ```bash
 $ cargo test
    Compiling communicator v0.1.0 (file:///projects/communicator)
-src/lib.rs:9:9: 9:24 error: failed to resolve. Use of undeclared type or module
-`client` [E0433]
-src/lib.rs:9         client::connect();
-                     ^~~~~~~~~~~~~~~
-src/lib.rs:9:9: 9:24 help: run `rustc --explain E0433` to see a detailed
-explanation
+error[E0433]: failed to resolve. Use of undeclared type or module `client`
+ --> src/lib.rs:9:9
+  |
+9 |         client::connect();
+  |         ^^^^^^^^^^^^^^^ Use of undeclared type or module `client`
+
+warning: function is never used: `connect`, #[warn(dead_code)] on by default
+ --> src/network/server.rs:1:1
+  |
+1 | fn connect() {
+  | ^
 ```
 
 Why doesn't this work? It's not because we don't have `communicator::` in front
