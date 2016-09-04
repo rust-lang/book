@@ -1,13 +1,15 @@
 ## Slices
 
-So far, we’ve talked about types that have ownership, like `String`, and ones
-that don’t, like `&String`. There is another kind of type which does not have
+<!-- So far, we’ve talked about types that have ownership, like `String`, and ones
+that don’t, like `&String`.-->
+
+There is another kind of type which does not have
 ownership: slices. Slices let you reference a contiguous sequence of elements
 in a collection rather than the whole collection itself.
 
 Here’s a small programming problem: write a function which takes a string
-and returns the first word you find. If we don’t find a space in the string,
-then the whole string is a word, so the whole thing should be returned.
+and returns the first word it finds in that string. If it doesn’t find a space in the string,
+it means the whole string is one word, so the whole thing should be returned.
 
 Let’s think about the signature of this function:
 
@@ -53,12 +55,12 @@ for (i, &item) in bytes.iter().enumerate() {
 We will be discussing iterators in more detail in Chapter XX, but for
 now, know that `iter()` is a method that returns each element in a
 collection, and `enumerate()` modifies the result of `iter()` and returns
-a tuple instead. The first element of the tuple is the index, and the
+it as a tuple instead. The first element of the returned tuple is the index, and the
 second element is a reference to the element itself. This is a bit
 nicer than calculating the index ourselves.
 
 Since it’s a tuple, we can use patterns, just like elsewhere in Rust. So we
-match against the tuple with i for the index and &item for a single byte. Since
+match against the tuple with `i` for the index and `&item` for a single byte. Since
 we get a reference from `.iter().enumerate()`, we use `&` in the pattern.
 
 ```rust,ignore
@@ -70,29 +72,17 @@ s.len()
 ```
 
 We search for the byte that represents the space, using the byte literal
-syntax. If we find one, we return the position. Otherwise, we return the length
+syntax. If we find a space, we return the position. Otherwise, we return the length
 of the string, using `s.len()`.
 
-This works, but there’s a problem. We’re returning a `usize` on its own, but
+We now have a way to find out the index of the end of the first word in the string, but there’s a problem. We’re returning a `usize` on its own, but
 it’s only a meaningful number in the context of the `&String`. In other
 words, because it’s a separate value from the `String`, there’s no guarantee
-that it will still be valid in the future. Consider this:
+that it will still be valid in the future. Consider this program that uses this method:
 
 Filename: src/main.rs
 
 ```rust
-# fn first_word(s: &String) -> usize {
-#     let bytes = s.as_bytes();
-#
-#     for (i, &item) in bytes.iter().enumerate() {
-#         if item == b' ' {
-#             return i;
-#         }
-#     }
-#
-#     s.len()
-# }
-#
 fn main() {
     let mut s = String::from("hello world");
 
@@ -118,9 +108,9 @@ around which need to be kept in sync.
 
 Luckily, Rust has a solution to this problem: string slices.
 
-## String slices
+### String Slices
 
-A string slice looks like this:
+A string slice is a string that references part of another string, and looks like this:
 
 ```rust
 let s = String::from("hello world");
@@ -129,19 +119,20 @@ let hello = &s[0..5];
 let world = &s[6..11];
 ```
 
-This looks just like taking a reference to the whole `String`, but with the
-extra `[0..5]` bit. Instead of being a reference to the entire `String`, it’s a
+This is similar to taking a reference to the whole `String`, but with the
+extra `[0..5]` bit. Rather than a reference to the entire `String`, it’s a
 reference to an internal position in the `String` and the number of elements
 that it refers to.
 
-We can create slices with a range of `[starting_index..ending_index]`, but the
+We create slices with a range of `[starting_index..ending_index]`, but the
 slice data structure actually stores the starting position and the length of the
 slice. So in the case of `let world = &s[6..11];`, `world` would be a slice that
 contains a pointer to the 6th byte of `s` and a length value of 5.
 
-In other words, it looks like this:
+Figure 4-7 shows this in a diagram:
 
 DIAGRAM GOES HERE of s, hello, and world
+Figure 4-7:
 
 With Rust’s `..` range syntax, if you want to start at the first index (zero),
 you can drop the value before the `..`. In other words, these are equal:
@@ -196,7 +187,7 @@ fn first_word(s: &String) -> &str {
 }
 ```
 
-Now we have a single value, the `&str`, pronounced "string slice". It stores
+We get the index for the end of the word in the same way as before, by specifying the space byte, and then store than index in `i`. Now we have a single value, the `&str`, pronounced "string slice". It stores
 both elements that we care about: a reference to the starting point of the
 slice and the number of elements in the slice.
 
@@ -210,6 +201,8 @@ We now have a straightforward API that’s much harder to mess up.
 
 But what about our error condition from before? Slices also fix that. Using
 the slice version of `first_word()` will throw an error:
+
+<!-- I'm not sure which error condition you mean here? It also looks like we're not showing slices fixing the error message, since we're still getting one --- maybe just a rephrasing here would clear that up? Do we mean 'prevents the bug' rather than fixes the error? -->
 
 Filename: src/main.rs
 
@@ -241,13 +234,13 @@ fn main() {
 ^
 ```
 
-Remember the borrowing rules? If we have an immutable reference to something,
+Remember from the borrowing rules that if we have an immutable reference to something,
 we cannot also take a mutable reference. Since `clear()` needs to truncate the
 `String`, it tries to take a mutable reference, which fails. Not only has Rust
 made our API easier to use, but it’s also eliminated an entire class of errors
 at compile time!
 
-### String literals are slices
+#### String Literals are Slices
 
 Remember how we talked about string literals being stored inside of the binary
 itself? Now that we know about slices, we can now properly understand string
@@ -261,7 +254,7 @@ The type of `s` here is `&str`: It’s a slice, pointing to that specific point
 of the binary. This is also why string literals are immutable; `&str` is an
 immutable reference.
 
-### String slices as arguments
+#### String Slices as Arguments
 
 Knowing that you can take slices of both literals and `String`s leads us to
 one more improvement on `first_word()`, and that’s its signature:
@@ -276,6 +269,8 @@ A more experienced Rustacean would write this one instead:
 fn first_word(s: &str) -> &str {
 ```
 
+<!-- I'm struggling to follow this, so what's the advantage of this change? That the same function can be applied to `String`s and string literals? -->
+
 Why is this? Well, we aren’t trying to modify `s` at all. And we can take
 a string slice that’s the full length of a `String`, so we haven’t lost
 the ability to talk about full `String`s. And additionally, we can take
@@ -285,17 +280,6 @@ with no loss of functionality:
 Filename: src/main.rs
 
 ```rust
-# fn first_word(s: &str) -> &str {
-#     let bytes = s.as_bytes();
-#
-#     for (i, &item) in bytes.iter().enumerate() {
-#         if item == b' ' {
-#             return &s[0..i];
-#         }
-#     }
-#
-#     &s[..]
-# }
 fn main() {
     let my_string = String::from("hello world");
 
@@ -313,17 +297,17 @@ fn main() {
 }
 ```
 
-## Other slices
+### Other Slices
 
 String slices, as you might imagine, are specific to strings. But there’s a more
-general slice type, too. Consider arrays:
+general slice type, too. Consider this array:
 
 ```rust
 let a = [1, 2, 3, 4, 5];
 ```
 
 Just like we may want to refer to a part of a string, we may want to refer to
-part of an array:
+part of an array, and would do so like this:
 
 ```rust
 let a = [1, 2, 3, 4, 5];
@@ -335,3 +319,7 @@ This slice has the type `&[i32]`. It works the exact same way as string slices
 do, by storing a reference to the first element and a length. You’ll use this
 kind of slice for all sorts of other collections. We’ll discuss these in detail
 when we talk about vectors in Chapter XX.
+
+## Summary
+
+<!-- Could you wrap this up with a small summary and conect it to the next chapter? -->
