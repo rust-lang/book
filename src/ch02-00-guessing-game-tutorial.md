@@ -188,6 +188,7 @@ Let’s move forward:
 ```rust,ignore
 io::stdin().read_line(&mut guess)
     .expect("Failed to read line");
+```
 
 We included the input/output functionality from the standard library with use
 std::io; on the first line of the program. We are now calling an associated
