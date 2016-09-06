@@ -573,45 +573,35 @@ Whew!</p>
 <p>Let’s move forward:</p>
 <pre><code class="language-rust,ignore">io::stdin().read_line(&amp;mut guess)
     .expect(&quot;Failed to read line&quot;);
-
-We included the input/output functionality from the standard library with use
+</code></pre>
+<p>We included the input/output functionality from the standard library with use
 std::io; on the first line of the program. We are now calling an associated
 function, stdin(), on io. If we didn’t have the use std::io line at the
 beginning of the program, we could have written this function call as
 std::io::stdin(). The stdin() function returns an instance of std::io::Stdin,
 which is a type that represents a handle to the standard input for your
-terminal.
-
-[iostdin]: ../std/io/struct.Stdin.html
-
-The next part, `.read_line(&amp;mut guess)`, calls the
-[`read_line()`][read_line]&lt;!-- ignore --&gt; method on the standard input handle
-to get input from the user. We’re also passing one argument to `read_line()`:
-`&amp;mut guess`.
-
-[read_line]: ../std/io/struct.Stdin.html#method.read_line
-
-The job of `read_line()` is to take whatever the user types into standard input
+terminal.</p>
+<p>The next part, <code>.read_line(&amp;mut guess)</code>, calls the
+<a href="../std/io/struct.Stdin.html#method.read_line"><code>read_line()</code></a><!-- ignore --> method on the standard input handle
+to get input from the user. We’re also passing one argument to <code>read_line()</code>:
+<code>&amp;mut guess</code>.</p>
+<p>The job of <code>read_line()</code> is to take whatever the user types into standard input
 and place that into a string, so it takes that string as an argument. The
 string argument needs to be mutable so that the method can change the string's
-content by adding the user input.
-
-The `&amp;` indicates that this argument is a *reference*, which gives you a way to
+content by adding the user input.</p>
+<p>The <code>&amp;</code> indicates that this argument is a <em>reference</em>, which gives you a way to
 let multiple parts of your code access one piece of data without needing to
 copy that data into memory multiple times. References are a complex feature,
 and one of Rust’s major advantages is how safe and easy it is to use
 references. We don’t need to know a lot of those details to finish our program
 right now, though; Chapter XX will cover references in more detail. For now,
-all we need to know is that like `let` bindings, references are immutable by
-default. Hence, we need to write `&amp;mut guess`, rather than `&amp;guess`, to make it
-mutable.
-
-We’re not quite done with this line of code. While it’s a single line of text,
+all we need to know is that like <code>let</code> bindings, references are immutable by
+default. Hence, we need to write <code>&amp;mut guess</code>, rather than <code>&amp;guess</code>, to make it
+mutable.</p>
+<p>We’re not quite done with this line of code. While it’s a single line of text,
 it’s only the first part of the single logical line of code. The second part is
-this method:
-
-```rust,ignore
-.expect(&quot;Failed to read line&quot;);
+this method:</p>
+<pre><code class="language-rust,ignore">.expect(&quot;Failed to read line&quot;);
 </code></pre>
 <p>When you call a method with the <code>.foo()</code> syntax, it's often wise to introduce a
 newline and other whitespace. This helps you split up long lines. We could have
