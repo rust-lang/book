@@ -167,7 +167,7 @@ You might say “copy the `String`!” This is both correct and incorrect at the
 same time. It does a _shallow_ copy of the `String`. What’s that mean? Well,
 let’s take a look at what `String` looks like under the covers:
 
-<img alt="string" src="img/trpl04-01.png" class="center" style="width: 50%;" />
+<img alt="String in memory" src="img/trpl04-01.svg" class="center" style="width: 50%;" />
 
 A `String` is made up of three parts: a pointer to the memory that holds the
 contents of the string, a length, and a capacity. The length is how much memory
@@ -180,11 +180,11 @@ When we assign `s1` to `s2`, the `String` itself is copied, meaning we copy the
 pointer, the length, and the capacity. We do not copy the data that the
 `String`'s pointer refers to. In other words, it looks like this:
 
-<img alt="s1 and s2" src="img/trpl04-02.png" class="center" style="width: 50%;" />
+<img alt="s1 and s2 pointing to the same value" src="img/trpl04-02.svg" class="center" style="width: 50%;" />
 
 _Not_ this:
 
-<img alt="s1 and s2 to two places" src="img/trpl04-03.png" class="center" style="width: 50%;" />
+<img alt="s1 and s2 to two places" src="img/trpl04-03.svg" class="center" style="width: 50%;" />
 
 There’s a problem here. Both data pointers are pointing to the same place. Why
 is this a problem? Well, when `s2` goes out of scope, it will free the memory
@@ -240,7 +240,7 @@ also invalidates the first binding, instead of calling this a shallow copy,
 it's called a _move_. Here we would read this by saying that `s1` was _moved_
 into `s2`. So what actually happens looks like this:
 
-<img alt="s1 and s2 to the same place" src="img/trpl-04-04.png" class="center" style="width: 50%;" />
+<img alt="s1 moved to s2" src="img/trpl04-04.svg" class="center" style="width: 50%;" />
 
 That solves our problem! With only `s2` valid, when it goes out of scope, it
 alone will free the memory, and we’re done.
@@ -279,7 +279,7 @@ println!("{}", s1);
 This will work just fine. Remember our diagram from before? In this case,
 it _is_ doing this:
 
-<img alt="s1 and s2 to two places" src="img/trpl04-03.png" class="center" style="width: 50%;" />
+<img alt="s1 and s2 to two places" src="img/trpl04-03.svg" class="center" style="width: 50%;" />
 
 When you see a call to `clone()`, you know that some arbitrary code is being
 executed, and that code may be expensive. It’s a visual indicator that something
