@@ -46,8 +46,9 @@
     - [To `panic!` or Not To `panic!`](ch09-03-to-panic-or-not-to-panic.md)
 
 - [Generics](ch10-00-generics.md)
-    - [Traits](ch10-01-traits.md)
-    - [Lifetimes](ch10-02-lifetimes.md)
+    - [Syntax](ch10-01-syntax.md)
+    - [Traits](ch10-02-traits.md)
+    - [Lifetimes](ch10-03-lifetimes.md)
 
 - [Closures]()
 
