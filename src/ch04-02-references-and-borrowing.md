@@ -2,8 +2,8 @@
 
 The issue with the tuple code at the end of the last section is that we have to
 return the `String` back to the calling function so that we can still use the
-`String` after the call to `calculate_length()`, since the `String` was moved
-into `calculate_length()`.
+`String` after the call to `calculate_length`, since the `String` was moved
+into `calculate_length`.
 
 Here is how you would use a function without taking ownership of it using
 *references:*
@@ -28,7 +28,7 @@ fn calculate_length(s: &String) -> usize {
 
 First, you’ll notice all of the tuple stuff in the binding declaration and the
 function return value is gone. Next, note that we pass `&s1` into
-`calculate_length()`, and in its definition, we take `&String` rather than
+`calculate_length`, and in its definition, we take `&String` rather than
 `String`.
 
 These `&`s are *references*, and they allow you to refer to some value
@@ -159,10 +159,11 @@ something that new Rustaceans struggle with, because most languages let you
 mutate whenever you’d like. The benefit of having this restriction is that Rust
 can prevent data races at compile time. A *data race* is a particular type of
 race condition where two or more pointers access the same data at the same
-time, and at least one of the pointers is being used to write to the data. Data
-races cause unpredictable behavior and can be difficult to diagnose and fix
-when trying to track them down at runtime; Rust prevents this problem from
-happening since it won't even compile code with data races!
+time, at least one of the pointers is being used to write to the data, and
+there's no mechanism being used to synchronize access to the data. Data races
+cause undefined behavior and can be difficult to diagnose and fix when trying
+to track them down at runtime; Rust prevents this problem from happening since
+it won't even compile code with data races!
 
 As always, we can use `{}`s to create a new scope, allowing for multiple mutable
 references, just not _simultaneous_ ones:
@@ -217,11 +218,13 @@ to track down why sometimes your data isn't what you thought it should be.
 
 ### Dangling References
 
-In languages with pointers, it's easy to make the error of creating a “dangling
-pointer” by freeing some memory while keeping around a pointer to that memory.
-In Rust, by contrast, the compiler guarantees that references will never be
-dangling: if we have a reference to some data, the compiler will ensure that
-the data will not go out of scope before the reference to the data does.
+In languages with pointers, it's easy to make the error of creating a *dangling
+pointer*, a pointer referencing a location in memory that may have been given
+to someone else, by freeing some memory while keeping around a pointer to that
+memory. In Rust, by contrast, the compiler guarantees that references will
+never be dangling: if we have a reference to some data, the compiler will
+ensure that the data will not go out of scope before the reference to the data
+does.
 
 Let’s try to create a dangling reference:
 
@@ -262,7 +265,7 @@ a problem: `this function’s return type contains a borrowed value, but there i
 no value for it to be borrowed from`.
 
 Let’s have a closer look at exactly what's happenening at each stage of our
-`dangle()` code:
+`dangle` code:
 
 ```rust,ignore
 fn dangle() -> &String { // dangle returns a reference to a String
@@ -274,7 +277,7 @@ fn dangle() -> &String { // dangle returns a reference to a String
   // Danger!
 ```
 
-Because `s` is created inside of `dangle()`, when the code of `dangle()` is
+Because `s` is created inside of `dangle`, when the code of `dangle` is
 finished, it will be deallocated. But we tried to return a reference to it.
 That means this reference would be pointing to an invalid `String`! That’s
 no good. Rust won’t let us do this.

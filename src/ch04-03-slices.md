@@ -44,15 +44,15 @@ let bytes = s.as_bytes();
 
 Since we need to go through the String element by element and
 check if a value is a space, we will convert our String to an
-array of bytes using the `.as_bytes()` method.
+array of bytes using the `as_bytes` method.
 
 ```rust,ignore
 for (i, &item) in bytes.iter().enumerate() {
 ```
 
 We will be discussing iterators in more detail in Chapter XX, but for now, know
-that `iter()` is a method that returns each element in a collection, and
-`enumerate()` modifies the result of `iter()` and returns each element as part
+that `iter` is a method that returns each element in a collection, and
+`enumerate` modifies the result of `iter` and returns each element as part
 of a tuple instead, where the first element of the tuple is the index, and the
 second element is a reference to the element itself. This is a bit nicer than
 calculating the index ourselves.
@@ -78,7 +78,7 @@ string, but there’s a problem. We’re returning a `usize` on its own, but it�
 only a meaningful number in the context of the `&String`. In other words,
 because it’s a separate value from the `String`, there’s no guarantee that it
 will still be valid in the future. Consider this program that uses this
-`first_word()` function:
+`first_word` function:
 
 Filename: src/main.rs
 
@@ -113,7 +113,7 @@ so `word` still contains the value `5`. We could use that `5` with `s` to try
 to extract the first word out, but this would be a bug since the contents of
 `s` have changed since we saved `5` in `word`.
 
-This is bad! It’s even worse if we wanted to write a `second_word()`
+This is bad! It’s even worse if we wanted to write a `second_word`
 function. Its signature would have to look like this:
 
 ```rust,ignore
@@ -188,7 +188,7 @@ let slice = &s[0..len];
 let slice = &s[..];
 ```
 
-With this in mind, let’s re-write `first_word()` to return a slice. The type
+With this in mind, let’s re-write `first_word` to return a slice. The type
 that signifies "string slice" is written as `&str`:
 
 Filename: src/main.rs
@@ -212,11 +212,11 @@ for the first occurrence of a space. When we find a space, we return a string
 slice using the start of the string and the index of the space as the starting
 and ending indices.
 
-Now when we call `first_word()`, we get back a single value that is tied to the
+Now when we call `first_word`, we get back a single value that is tied to the
 underlying data. The value is made up of a reference to the starting point of
 the slice and the number of elements in the slice.
 
-Returning a slice would also work for a `second_word()` function:
+Returning a slice would also work for a `second_word` function:
 
 ```rust,ignore
 fn second_word(s: &String) -> &str {
@@ -225,10 +225,10 @@ fn second_word(s: &String) -> &str {
 We now have a straightforward API that’s much harder to mess up. Remember our
 bug from before, when we got the first word but then cleared the string so that
 our first word was invalid? That code was logically incorrect but didn't show
-any immediate errors-- the problems would show up later, if we kept trying to
+any immediate errors. The problems would show up later, if we kept trying to
 use the first word index with an emptied string. Slices make this bug
 impossible, and let us know we have a problem with our code much sooner. Using
-the slice version of `first_word()` will throw a compile time error:
+the slice version of `first_word` will throw a compile time error:
 
 Filename: src/main.rs
 
@@ -261,7 +261,7 @@ fn main() {
 ```
 
 Remember from the borrowing rules that if we have an immutable reference to
-something, we cannot also take a mutable reference. Since `clear()` needs to
+something, we cannot also take a mutable reference. Since `clear` needs to
 truncate the `String`, it tries to take a mutable reference, which fails. Not
 only has Rust made our API easier to use, but it’s also eliminated an entire
 class of errors at compile time!
@@ -283,7 +283,7 @@ immutable reference.
 #### String Slices as Arguments
 
 Knowing that you can take slices of both literals and `String`s leads us to
-one more improvement on `first_word()`, and that’s its signature:
+one more improvement on `first_word`, and that’s its signature:
 
 ```rust,ignore
 fn first_word(s: &String) -> &str {

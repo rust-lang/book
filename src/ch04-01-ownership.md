@@ -49,9 +49,10 @@ change, we can store data on the heap instead. The heap is less organized: when
 we put data on the heap, we ask for some amount of space. The operating system
 finds an empty spot somewhere in the heap that is big enough, marks it as being
 in use, and returns to us a pointer to that location. This process is called
-*allocating on the heap*. Since the pointer is a known, fixed size, we can
-store the pointer on the stack, but when we want the actual data, we have to
-follow the pointer.
+*allocating on the heap*, and sometimes we just say "allocating" for short.
+Pushing values onto the stack is not considered allocating. Since the pointer
+is a known, fixed size, we can store the pointer on the stack, but when we want
+the actual data, we have to follow the pointer.
 
 Think of being seated at a restaurant. When you enter, you say how many people
 are in your group, and the staff finds an empty table that would fit everyone
@@ -82,14 +83,14 @@ examples that will illustrate the rules:
 
 > 1. Each value in Rust has a variable binding that’s called its *owner*.
 > 2. There can only be one owner at a time.
-> 3. When the owner goes out of scope, the value will be `drop()`ped.
+> 3. When the owner goes out of scope, the value will be dropped.
 
 ### Variable Binding Scope
 
 We've walked through an example of a Rust program already in the tutorial
 chapter. Now that we’re past basic syntax, we won’t include all of the `fn
 main() {` stuff in examples, so if you’re following along, you will have to put
-the following examples inside of a `main()` function yourself. This lets our
+the following examples inside of a `main` function yourself. This lets our
 examples be a bit more concise, letting us focus on the actual details rather
 than boilerplate.
 
@@ -135,11 +136,10 @@ data types provided by the standard library and that you create. We'll go into
 more depth about `String` specifically in Chapter XX.
 
 We've already seen string literals, where a string value is hard-coded into our
-program. String literals are on the stack, because our source code is actually
-the first thing that goes onto our stack. String literals are convenient, but
-they aren’t always suitable for every situation you want to use text. For one
-thing, they’re immutable. For another, not every string value can be known when
-we write our code: what if we want to take user input and store it?
+program. String literals are convenient, but they aren’t always suitable for
+every situation you want to use text. For one thing, they’re immutable. For
+another, not every string value can be known when we write our code: what if we
+want to take user input and store it?
 
 For things like this, Rust has a second string type, `String`. This type is
 allocated on the heap, and as such, is able to store an amount of text that is
@@ -151,8 +151,8 @@ let s = String::from("hello");
 ```
 
 The double colon (`::`) is an operator that allows us to namespace this
-particular `from()` function under the `String` type itself, rather than using
-some sort of name like `string_from()`. We’ll discuss this syntax more in the
+particular `from` function under the `String` type itself, rather than using
+some sort of name like `string_from`. We’ll discuss this syntax more in the
 “Method Syntax” and “Modules” chapters.
 
 This kind of string *can* be mutated:
@@ -170,11 +170,11 @@ cannot? The difference comes down to how these two types deal with memory.
 ### Memory and Allocation
 
 In the case of a string literal, because we know the contents at compile time,
-the text is hard-coded directly into the final executable and stored with the
-code on the stack. This makes string literals quite fast and efficient. But
-these properties only come from its immutability. Unfortunately, we can’t put a
-blob of memory into the binary for each piece of text whose size is unknown at
-compile time and whose size might change over the course of running the program.
+the text is hard-coded directly into the final executable. This makes string
+literals quite fast and efficient. But these properties only come from its
+immutability. Unfortunately, we can’t put a blob of memory into the binary for
+each piece of text whose size is unknown at compile time and whose size might
+change over the course of running the program.
 
 With the `String` type, in order to support a mutable, growable piece of text,
 we need to allocate an amount of memory on the heap, unknown at compile time,
@@ -184,7 +184,7 @@ to hold the contents. This means two things:
 2. We need a way of giving this memory back to the operating system when we’re
    done with our `String`.
 
-That first part is done by us: when we call `String::from()`, its
+That first part is done by us: when we call `String::from`, its
 implementation requests the memory it needs. This is pretty much universal in
 programming languages.
 
@@ -196,7 +196,7 @@ call code to explicitly return it, just as we did to request it. Doing this
 correctly has historically been a difficult problem in programming. If we
 forget, we will waste memory. If we do it too early, we will have an invalid
 variable. If we do it twice, that’s a bug too. We need to pair exactly one
-`allocate()` with exactly one `free()`.
+`allocate` with exactly one `free`.
 
 Rust takes a different path: the memory is automatically returned once the
 binding to it goes out of scope. Here’s a version of our scope example from
@@ -213,11 +213,11 @@ earlier using `String`:
 There is a natural point at which we can return the memory our `String` needs
 back to the operating system: when `s` goes out of scope. When a variable
 binding goes out of scope, Rust calls a special function for us. This function
-is called `drop()`, and it is where the author of `String` can put the code to
-return the memory. Rust calls `drop()` automatically at the closing `}`.
+is called `drop`, and it is where the author of `String` can put the code to
+return the memory. Rust calls `drop` automatically at the closing `}`.
 
-> Note: This pattern is sometimes called “Resource Acquisition Is
-> Initialization” in C++, or “RAII” for short. While they are very similar,
+> Note: This pattern is sometimes called *Resource Acquisition Is
+> Initialization* in C++, or RAII for short. While they are very similar,
 > Rust’s take on this concept has a number of differences, so we don’t tend
 > to use the same term. If you’re familiar with this idea, keep in mind that it
 > is _roughly_ similar in Rust, but not identical.
@@ -239,7 +239,7 @@ let y = x;
 
 We can probably guess what this is doing based on our experience with other
 languages: “Bind the value `5` to `x`, then make a copy of the value in `x` and
-bind it to `y`”. We now have two bindings, `x` and `y`, and both equal `5`.
+bind it to `y`.” We now have two bindings, `x` and `y`, and both equal `5`.
 This is indeed what is happening since integers are simple values with a known,
 fixed size, and these two `5` values are pushed onto the stack.
 
@@ -252,10 +252,7 @@ let s2 = s1;
 
 This looks very similar to the previous code, so we might assume that the way
 it works would be the same: that the second line would make a copy of the value
-in `s1` and bind it to `s2`. This isn't quite what happens: `String` values are
-stored on the heap, so Rust's ownership rules apply here so that Rust ensures
-we don't have any of the bugs we mentioned before that are common around
-cleaning up memory.
+in `s1` and bind it to `s2`. This isn't quite what happens.
 
 To explain this more thoroughly, let’s take a look at what `String` looks like
 under the covers in Figure 4-1. A `String` is made up of three parts, shown on
@@ -292,10 +289,10 @@ Figure 4-3: Another possibility for what `s2 = s1` might do, if Rust chose to
 copy heap data as well.
 
 Earlier, we said that when a binding goes out of scope, Rust will automatically
-call the `drop()` function and clean up the heap memory for that binding. But
+call the `drop` function and clean up the heap memory for that binding. But
 in figure 4-2, we see both data pointers pointing to the same location. This is
 a problem: when `s2` and `s1` go out of scope, they will both try to free the
-same memory. This is known as a "double free" error and is one of the memory
+same memory. This is known as a *double free* error and is one of the memory
 safety bugs we mentioned before. Freeing memory twice can lead to memory
 corruption, which can potentially lead to security vulnerabilities.
 
@@ -344,14 +341,14 @@ copying can be assumed to be inexpensive.
 #### Ways Bindings and Data Interact: Clone
 
 If we _do_ want to deeply copy the `String`’s data and not just the `String`
-itself, there’s a common method for that: `clone()`. We will discuss methods in
+itself, there’s a common method for that: `clone`. We will discuss methods in
 the section on [`structs` in Chapter XX][structs]<!-- ignore -->, but they’re a
 common enough feature in many programming languages that you have probably seen
 them before.
 
 [structs]: ch05-01-structs.html
 
-Here’s an example of the `clone()` method in action:
+Here’s an example of the `clone` method in action:
 
 ```rust
 let s1 = String::from("hello");
@@ -363,7 +360,7 @@ println!("s1 = {}, s2 = {}", s1, s2);
 This will work just fine, and this is how you can explicitly get the behavior
 we showed in Figure 4-3, where the heap data *does* get copied.
 
-When you see a call to `clone()`, you know that some arbitrary code is being
+When you see a call to `clone`, you know that some arbitrary code is being
 executed, and that code may be expensive. It’s a visual indicator that something
 different is going on here.
 
@@ -380,21 +377,20 @@ println!("x = {}, y = {}", x, y);
 ```
 
 This seems to contradict what we just learned: we don't have a call to
-`clone()`, but `x` is still valid, and wasn't moved into `y`.
+`clone`, but `x` is still valid, and wasn't moved into `y`.
 
 This is because types like integers that have a known size at compile time are
-stored entirely on the stack, do not ask for heap memory from the operating
-system, and therefore do not need to be `drop()`ped when they go out of scope.
+stored entirely on the stack, so copies of the actual values are quick to make.
 That means there's no reason we would want to prevent `x` from being valid
 after we create the binding `y`. In other words, there’s no difference between
-deep and shallow copying here, so calling `clone()` wouldn’t do anything
+deep and shallow copying here, so calling `clone` wouldn’t do anything
 differently from the usual shallow copying and we can leave it out.
 
 Rust has a special annotation called the `Copy` trait that we can place on
 types like these (we'll talk more about traits in Chapter XX). If a type has
 the `Copy` trait, an older binding is still usable after assignment. Rust will
 not let us annotate a type with the `Copy` trait if the type, or any of its
-parts, has implemented `drop()`. If the type needs something special to happen
+parts, has implemented `drop`. If the type needs something special to happen
 when the value goes out of scope and we add the `Copy` annotation to that type,
 we will get a compile-time error.
 
@@ -435,7 +431,7 @@ fn main() {
 
 fn takes_ownership(some_string: String) { // some_string comes into scope.
     println!("{}", some_string);
-} // Here, some_string goes out of scope and `drop()` is called. The backing
+} // Here, some_string goes out of scope and `drop` is called. The backing
   // memory is freed.
 
 fn makes_copy(some_integer: i32) { // some_integer comes into scope.
@@ -443,7 +439,7 @@ fn makes_copy(some_integer: i32) { // some_integer comes into scope.
 } // Here, some_integer goes out of scope. Nothing special happens.
 ```
 
-If we tried to use `s` after the call to `takes_ownership()`, Rust
+If we tried to use `s` after the call to `takes_ownership`, Rust
 would throw a compile-time error. These static checks protect us from mistakes.
 Try adding code to `main` that uses `s` and `x` to see where you can use them
 and where the ownership rules prevent you from doing so.
@@ -488,7 +484,7 @@ fn takes_and_gives_back(a_string: String) -> String { // a_string comes into sco
 It’s the same pattern, every time: assigning a value to another binding moves
 it, and when heap data values' bindings go out of scope, if the data hasn’t
 been moved to be owned by another binding, the value will be cleaned up by
-`drop()`.
+`drop`.
 
 Taking ownership then returning ownership with every function is a bit tedious.
 What if we want to let a function use a value but not take ownership? It’s
