@@ -6,8 +6,8 @@
   Number` rather than `## Generating a secret number`.
 * Prefer italics over single quotes when calling out a term, ex: `is an
   *associated function* of` rather than `is an ‘associated function’ of`.
-* When talking about a method in prose, include the parentheses, ex:
-  `read_line()` rather than `read_line`.
+* When talking about a method in prose, DO NOT include the parentheses, ex:
+  `read_line` rather than `read_line()`.
 * Hard wrap at 80 chars
 * Prefer not mixing code and not-code in one word, ex: ``Remember when we wrote
   `use std::io`?`` rather than ``Remember when we `use`d `std::io`?``
