@@ -49,7 +49,7 @@ functionality is in a library crate, and the executable crate uses that
 library. This way, other programs can also use the library crate, and it’s also
 a nice separation of concerns.
 
-Our binary crate right now just calls our library's `connect()` function from
+Our binary crate right now just calls our library's `connect` function from
 the `client` module; we picked that one since it's the first warning in our
 build output above. Invoking `cargo build` will now give us an error after the
 warnings:
@@ -101,7 +101,7 @@ error: function `connect` is private
 
 Hooray! We have a different error! Yes, different error messages are a cause
 for celebration. The new error says "function `connect` is private", so let's
-edit `src/client.rs` to make `client::connect()` public:
+edit `src/client.rs` to make `client::connect` public:
 
 Filename: src/client.rs
 
@@ -128,7 +128,7 @@ warning: function is never used: `connect`, #[warn(dead_code)] on by default
   | ^
 ```
 
-It compiled! And the warning about `client::connect()` not being used is gone!
+It compiled! And the warning about `client::connect` not being used is gone!
 
 Making functions public isn't the only way to fix unused code warnings: if
 we *didn't* want these functions to be part of our public API and we got these
@@ -230,26 +230,26 @@ fn try_me() {
 ```
 
 Before you try to compile this code, make a guess about which lines in
-`try_me()` will have errors.
+`try_me` will have errors.
 
 Ready? Let's talk through them!
 
-The `try_me()` function is in the root module of our project. The module named
+The `try_me` function is in the root module of our project. The module named
 `outermost` is private, but the second rule says we're allowed to access it
 since `outermost` is in our current, root module.
 
-The function call `outermost::middle_function()` will work. `middle_function()`
+The function call `outermost::middle_function()` will work. `middle_function`
 is public, and we are accessing it through its parent module, `outermost`,
 which we just determined we can access in the previous paragraph.
 
 `outermost::middle_secret_function()` will cause a compilation error.
-`middle_secret_function()` is private, so the second rule applies. Our current
-root module is neither the current module of `middle_secret_function()`
+`middle_secret_function` is private, so the second rule applies. Our current
+root module is neither the current module of `middle_secret_function`
 (`outermost` is), nor is it a child module of the current module of
-`middle_secret_function()`.
+`middle_secret_function`.
 
 The module named `inside` is private and has no child modules, so it can only
-be accessed by its current module, `outermost`. That means the `try_me()`
+be accessed by its current module, `outermost`. That means the `try_me`
 function is not allowed to call `outermost::inside::inner_function()` or
 `outermost::inside::secret_function()`.
 
@@ -259,7 +259,7 @@ rules to understand why.
 
 * What if the `inside` module was public?
 * What if `outside` was public and `inside` was private?
-* What if, in the body of `inner_function()`, we called
+* What if, in the body of `inner_function`, we called
   `::outermost::middle_secret_function()`? (The two colons at the beginning
   mean that we want to refer to the namespaces starting from the root
   namespace.)

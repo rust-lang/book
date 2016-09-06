@@ -125,7 +125,7 @@ fn foo<T>(x: T) {
 }
 ```
 
-This `foo()` function has one generic parameter, `T`, and takes one argument,
+This `foo` function has one generic parameter, `T`, and takes one argument,
 `x`, which has the type `T`. Let's talk a little bit more about what this means.
 
 
@@ -158,7 +158,7 @@ more advanced features later, this distinction will become more useful.
 ## There's more to the story
 
 This section covered the basic syntax of generics, but it's not the full story.
-For example, let's try to implement our `foo()` function: we'll have it print out
+For example, let's try to implement our `foo` function: we'll have it print out
 the value of `x`:
 
 ```rust,ignore

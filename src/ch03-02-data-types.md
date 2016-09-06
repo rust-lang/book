@@ -9,7 +9,7 @@ Something to keep in mind throughout this section: Rust is a *statically typed*
 language, which means that it must know the types of all bindings at compile
 time. The compiler can usually infer what type we want to use based on the
 value and how we use it. When many types are possible, such as when we
-converted a `String` to a numeric type using `parse()` in the guessing game
+converted a `String` to a numeric type using `parse` in the guessing game
 tutorial, we can add a type annotation, like this:
 
 ```rust,ignore

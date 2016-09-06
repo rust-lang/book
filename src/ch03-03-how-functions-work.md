@@ -1,7 +1,7 @@
 ## How Functions Work
 
 Functions are pervasive in Rust code. We’ve already seen one of the most
-important functions in the language: the `main()` function that’s the entry
+important functions in the language: the `main` function that’s the entry
 point of many programs. We've also seen the `fn` keyword, which allows us to
 declare new functions.
 
@@ -28,14 +28,14 @@ after the function name. The curly braces tell the compiler where the function
 body begins and ends.
 
 We can call any function we’ve defined by entering its name followed by a pair
-of parentheses. Since `another_function()` is defined in the program, it can be
-called from inside the `main()` function. Note that we defined
-`another_function()` _after_ the `main()` function in our source code; we could
+of parentheses. Since `another_function` is defined in the program, it can be
+called from inside the `main` function. Note that we defined
+`another_function` _after_ the `main` function in our source code; we could
 have defined it before as well. Rust doesn’t care where you define your
 functions, only that they are defined somewhere.
 
 Let’s start a new binary project named `functions` so that we can explore
-further. Place the `another_function()` example in `src/main.rs` and run it.
+further. Place the `another_function` example in `src/main.rs` and run it.
 You should see the following output:
 
 ```bash
@@ -46,14 +46,14 @@ Hello, world!
 Another function.
 ```
 
-The lines execute in the order they appear in the `main()` function. First, our
-“Hello, world!” message prints, and then `another_function()` is called and its
+The lines execute in the order they appear in the `main` function. First, our
+“Hello, world!” message prints, and then `another_function` is called and its
 message is printed.
 
 ### Function Arguments
 
 Functions can also take arguments. The following rewritten version of
-`another_function()` shows what arguments look like in Rust:
+`another_function` shows what arguments look like in Rust:
 
 Filename: src/main.rs
 
@@ -76,9 +76,9 @@ $ cargo run
 The value of x is: 5
 ```
 
-Since we passed `5` to `another_function()`, the `println!` macro put `5` where
+Since we passed `5` to `another_function`, the `println!` macro put `5` where
 the pair of curly braces were in the format string. The declaration of
-`another_function()` shows that it takes one argument named `x`, and the type
+`another_function` shows that it takes one argument named `x`, and the type
 of `x` is `i32`.
 
 In function signatures, we _must_ declare the type. This is a deliberate
@@ -252,8 +252,8 @@ fn main() {
 }
 ```
 
-There are no function calls, macros, or even `let` statements in the `five()`
-function-- just the number `5` by itself. That's a perfectly valid function in
+There are no function calls, macros, or even `let` statements in the `five`
+function: just the number `5` by itself. That's a perfectly valid function in
 Rust. Note the function's return type, too. Try running this code, and the
 output should look like this:
 
@@ -264,18 +264,18 @@ $ cargo run
 The value of x is: 5
 ```
 
-The `5` in `five()` is actually the function's return value, which is why the
-return type is `i32`. Let’s examine this in more detail. There are two
-important bits. First, the line `let x = five();` in `main()` shows that we can
-use the return value of a function to initialize a binding.
+The `5` in the `five` function is actually the function's return value, which
+is why the return type is `i32`. Let’s examine this in more detail. There are
+two important bits. First, the line `let x = five();` in `main` shows that we
+can use the return value of a function to initialize a binding.
 
-Because the function `five()` returns a `5`, that line is the same as saying:
+Because the function `five` returns a `5`, that line is the same as saying:
 
 ```rust
 let x = 5;
 ```
 
-The second interesting bit is the `five()` function itself. It requires no
+The second interesting bit is the `five` function itself. It requires no
 arguments and defines the type of the return value, but the body of the
 function is a lonely `5` with no semicolon because it is an expression whose
 value we want to return. Let's look at another example:

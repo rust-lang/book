@@ -24,7 +24,7 @@ pub use a::namespace::function;
 Here, the `a` module is not public to users of our library, so neither are its
 children, even though `namespace` and `function` are public *within* our
 library. So users of our library couldn't call `a::namespace::function()`
-themselves. However, since we've re-exported `function()` with `pub use`,
-`function()` will be public. Users can just call `function()` themselves,
+themselves. However, since we've re-exported `function` with `pub use`,
+`function` will be public. Users can just call `function` themselves,
 directly. This allows us to organize our code internally however we'd like,
 while presenting a different external interface.

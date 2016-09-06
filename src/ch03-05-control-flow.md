@@ -386,9 +386,8 @@ item from the `a` array but forgot to update the condition to be `while index <
 remember to change any other code if we changed the number of values in the
 array.
 
-If you're wondering about the `.iter()` code in this example, keep reading! We
-will cover method syntax generally in Chapter XX and iterators specifically in
-Chapter XX.
+If you're wondering about `iter` in this example, keep reading! We will cover
+method syntax generally in Chapter XX and iterators specifically in Chapter XX.
 
 The safety and conciseness of `for` loops make them the most commonly used loop
 construct in Rust. Even in situations where you want to run some code a certain
@@ -397,7 +396,7 @@ Rustaceans would use a `for` loop. The way to do that is using a `Range`, which
 is a type provided by the standard library that generates numbers starting from
 one number and ending before another number. Here's what the countdown would
 look like with a for loop, and using another method we haven't yet talked
-about, `.rev()`, to reverse the range:
+about, `rev`, to reverse the range:
 
 Filename: src/main.rs
 

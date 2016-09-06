@@ -117,7 +117,7 @@ the functionality to accept user input.
 fn main() {
 ```
 
-As you’ve seen in Chapter 1, the `main()` function is the entry point into the
+As you’ve seen in Chapter 1, the `main` function is the entry point into the
 program. The `fn` syntax declares a new function, the `()`s indicate that
 there are no arguments, and `{` starts the body of the function.
 
@@ -127,7 +127,7 @@ println!("Guess the number!");
 println!("Please input your guess.");
 ```
 
-As we learned in Chapter 1, `println!()` is a macro that prints a string to the
+As we learned in Chapter 1, `println!` is a macro that prints a string to the
 screen. This is just a prompt stating what the game is and requesting input from
 the user.
 
@@ -164,19 +164,19 @@ let mut bar = 5; // mutable
 
 So now we know that `let mut guess` will introduce a mutable binding named
 `guess`, but we have to look at the other side of the `=` for the value it’s
-bound to: `String::new()`. `String` is a string type, provided by the standard
+bound to: `String::new`. `String` is a string type, provided by the standard
 library. A [`String`][string]<!-- ignore --> is a growable, UTF-8 encoded bit
 of text.
 
 [string]: ../std/string/struct.String.html
 
-The `::` syntax in the `::new()` line indicates that `new()` is an *associated
+The `::` syntax in the `::new` line indicates that `new` is an *associated
 function* of a particular type. An associated function is a function that is
 associated with a type, in this case `String`, rather than a particular
 instance of a `String`. Some languages call this a *static method*.
 
-This `new()` function creates a new, empty `String`.
-You’ll find a `new()` function on many types, as it’s a common name for making
+This `new` function creates a new, empty `String`.
+You’ll find a `new` function on many types, as it’s a common name for making
 a new value of some kind.
 
 So to summarize, the `let mut guess = String::new();` line has created a
@@ -201,13 +201,13 @@ terminal.
 [iostdin]: ../std/io/struct.Stdin.html
 
 The next part, `.read_line(&mut guess)`, calls the
-[`read_line()`][read_line]<!-- ignore --> method on the standard input handle
-to get input from the user. We’re also passing one argument to `read_line()`:
+[`read_line`][read_line]<!-- ignore --> method on the standard input handle
+to get input from the user. We’re also passing one argument to `read_line`:
 `&mut guess`.
 
 [read_line]: ../std/io/struct.Stdin.html#method.read_line
 
-The job of `read_line()` is to take whatever the user types into standard input
+The job of `read_line` is to take whatever the user types into standard input
 and place that into a string, so it takes that string as an argument. The
 string argument needs to be mutable so that the method can change the string's
 content by adding the user input.
@@ -243,7 +243,7 @@ calls. Now let's see what this line does.
 
 ### Handling Potential Failure with the `Result` Type
 
-We mentioned that `read_line()` puts what the user types into the string we
+We mentioned that `read_line` puts what the user types into the string we
 pass it, but it also returns a value: in this case, an
 [`io::Result`][ioresult]<!-- ignore -->. Rust has a number of types named
 `Result` in its standard library: a generic [`Result`][result]<!-- ignore -->,
@@ -266,19 +266,19 @@ or why the operation failed.
 
 The purpose of these `Result` types is to encode error handling information.
 Values of the `Result` type, like any type, have methods defined on them. In
-this case, `io::Result` has an [`expect()` method][expect]<!-- ignore --> that
-we can call. If this instance of `io::Result` is an `Err` value, `expect()`
+this case, `io::Result` has an [`expect` method][expect]<!-- ignore --> that
+we can call. If this instance of `io::Result` is an `Err` value, `expect`
 will cause our program to crash and display the message that we passed as an
-argument to `expect()`. In this case, if the `read_line()` method returns an
+argument to `expect`. In this case, if the `read_line` method returns an
 `Err`, it would likely be the result of an error coming from the underlying
-operating system. If this instance of `io::Result` is an `Ok` value, `expect()`
+operating system. If this instance of `io::Result` is an `Ok` value, `expect`
 will take the return value that `Ok` is holding and return just that value to
 us so that we can use it. In this case, that value will be what the user
 entered into standard input.
 
 [expect]: ../std/result/enum.Result.html#method.expect
 
-If we don't call `expect()`, our program will compile, but we’ll get a warning:
+If we don't call `expect`, our program will compile, but we’ll get a warning:
 
 ```bash
 $ cargo build
@@ -292,10 +292,10 @@ src/main.rs:10     io::stdin().read_line(&mut guess);
 Rust warns that we haven’t used the `Result` value, telling us that we
 haven’t handled a possible error. The right way to suppress the warning is to
 actually write error handling, but if we just want to crash the program when a
-problem occurs, we can use `expect()`. We’ll save recovering from errors for a
+problem occurs, we can use `expect`. We’ll save recovering from errors for a
 future project.
 
-### Printing Values with `println!()` Placeholders
+### Printing Values with `println!` Placeholders
 
 There’s only one line of this first example left, aside from the closing curly
 brace:
@@ -308,7 +308,7 @@ This prints out the string we saved our input in. The `{}`s are a placeholder:
 think of `{}` as little crab pincers, holding a value in place. You can print
 more than one value this way: the first `{}` holds the first value listed after
 the format string, the second set holds the second value, and so on. Printing
-out multiple values in one call to `println!()` would then look like this:
+out multiple values in one call to `println!` would then look like this:
 
 ```rust
 let x = 5;
@@ -538,12 +538,12 @@ let secret_number = rand::thread_rng().gen_range(1, 101);
 println!("The secret number is: {}", secret_number);
 ```
 
-The `rand::thread_rng()` function will give us the particular random number
+The `rand::thread_rng` function will give us the particular random number
 generator that we're going to use: one that is local to our current thread of
-execution and seeded by the operating system. Next, we call the `gen_range()`
+execution and seeded by the operating system. Next, we call the `gen_range`
 method on our random number generator. This method is defined by the `Rng`
 trait that we brought into scope with the `use rand::Rng` statement above. The
-`gen_range()` method takes two numbers as arguments and generates a random
+`gen_range` method takes two numbers as arguments and generates a random
 number between them. It's inclusive on the lower bound but exclusive on the
 upper bound, so we need `1` and `101` to ask for a number ranging from one to a
 hundred.
@@ -638,12 +638,12 @@ match guess.cmp(&secret_number) {
 }
 ```
 
-The `cmp()` method compares two values, and can be called on anything that can
+The `cmp` method compares two values, and can be called on anything that can
 be compared. It takes a reference to whatever you want to compare with, so here
-it's comparing our `guess` to our `secret_number`. `cmp()` returns a variant of
+it's comparing our `guess` to our `secret_number`. `cmp` returns a variant of
 the `Ordering` enum we imported with the `use` statement earlier. We use a
 [`match`][match]<!-- ignore --> statement to decide what to do next based on
-which variant of `Ordering` we got back from our call to `cmp()` with the values
+which variant of `Ordering` we got back from our call to `cmp` with the values
 in `guess` and `secret_number`.
 
 [match]: match.html
@@ -657,7 +657,7 @@ Chapter XX, respectively.
 
 Let's walk through an example of what would happen with our `match`. Say that
 the user has guessed 50, and the randomly-generated secret number this time
-is 38. So when we compare 50 to 38, the `cmp()` method will return
+is 38. So when we compare 50 to 38, the `cmp` method will return
 `Ordering::Greater`, since 50 is greater than 38. `Ordering::Greater` is the
 value that the `match` statement gets. It looks at the first arm's pattern,
 `Ordering::Less`, and says nope, the value we have (`Ordering::Greater`) does
@@ -694,9 +694,9 @@ number; or others. Rust defaults to an `i32`, so that's the type of
 to infer a different numerical type. The error is because Rust will not compare
 a string and a number type.
 
-Ultimately, we want to convert the `String` we read as input
-into a real number type so that we can compare it to the guess numerically. We
-can do that with two more lines; to your `fn main()` body, add the following two lines:
+Ultimately, we want to convert the `String` we read as input into a real number
+type so that we can compare it to the guess numerically. We can do that with
+two more lines; to your `main` function body, add the following two lines:
 
 Filename: src/main.rs
 
@@ -751,15 +751,15 @@ come up with two unique bindings, like `guess_str` and `guess` or something
 
 We bind `guess` to the expression `guess.trim().parse()`. The `guess` in the
 expression refers to the original `guess` that was a `String` with our input in
-it. The `trim()` method on `String`s will eliminate any whitespace at the
+it. The `trim` method on `String`s will eliminate any whitespace at the
 beginning and end. Our `u32` can only contain numerical characters, but we have
-to press the return key to satisfy `read_line()`. When we press the return
+to press the return key to satisfy `read_line`. When we press the return
 key, it introduces a newline character. For example, if we type `5` and hit
 return, `guess` looks like this: `5\n`. The `\n` represents "newline", the
-return key. The `trim()` method gets rid of this, leaving our string with only
+return key. The `trim` method gets rid of this, leaving our string with only
 the `5`.
 
-The [`parse()` method on strings][parse]<!-- ignore --> parses a string into
+The [`parse` method on strings][parse]<!-- ignore --> parses a string into
 some kind of number. Since this method can parse a variety of number types, we
 need to tell Rust the exact type of number we want with `let guess: u32`. The
 colon (`:`) after `guess` tells Rust we’re going to annotate its type. Rust has
@@ -772,15 +772,15 @@ between two values of the same type!
 
 [parse]: ../std/primitive.str.html#method.parse
 
-Our call to `parse()` could quite easily cause an error. If, for example, our
+Our call to `parse` could quite easily cause an error. If, for example, our
 string contained `A👍%`, there’d be no way to convert that to a number. Because
-it might fail, the `parse()` method returns a `Result` type, much like the
-`read_line()` method does that we discussed earlier. We're going to treat this
-`Result` the same way by using the `expect()` method again. If `parse()`
+it might fail, the `parse` method returns a `Result` type, much like the
+`read_line` method does that we discussed earlier. We're going to treat this
+`Result` the same way by using the `expect` method again. If `parse`
 returns an `Err` `Result` variant because it could not create a number from the
-string, the `expect()` call will crash the game and print the message we give
-it. If `parse()` can successfully turn the string into a number, it will return
-the `Ok` variant of `Result`, and `expect()` will return the number that we
+string, the `expect` call will crash the game and print the message we give
+it. If `parse` can successfully turn the string into a number, it will return
+the `Ok` variant of `Result`, and `expect` will return the number that we
 want that it will take out of the `Ok` value for us.
 
 
@@ -856,7 +856,7 @@ told it to do: ask for another guess forever! It doesn't seem like we can quit!
 
 We could always halt the program by using the keyboard shortcut `control-c`.
 There's another way to escape the insatiable monster we've created, though,
-that can be found in our discussion about `parse()`: if we give a non-number
+that can be found in our discussion about `parse`: if we give a non-number
 answer, the program will crash. We can use that to quit! Observe:
 
 ```bash
@@ -935,7 +935,7 @@ fn main() {
 
 By adding the `break` line after `You win!`, we’ll exit the loop when we guess
 the secret number correctly. Exiting the loop also means exiting the program,
-since the loop is the last thing in `main()`.
+since the loop is the last thing in `main`.
 
 #### Handling Invalid Input
 
@@ -952,25 +952,25 @@ let guess: u32 = match guess.trim().parse() {
 ```
 
 This is how you generally move from "crash on error" to "actually handle the
-error": by switching from an `expect()` statement to a `match` statement.
-Remember that `parse()` returns a `Result` type, and `Result` is an enum that
+error": by switching from an `expect` statement to a `match` statement.
+Remember that `parse` returns a `Result` type, and `Result` is an enum that
 has the variants `Ok` or `Err`. We're going to use a `match` statement here,
-like we did with the `Ordering` result of the `cmp()` method.
+like we did with the `Ordering` result of the `cmp` method.
 
-If `parse()` is able to successfully turn the string into a number, it will
+If `parse` is able to successfully turn the string into a number, it will
 return an `Ok` value that contains the resulting number. That `Ok` value will
 match the first arm's pattern, and the match statement will just return the
-`num` value that `parse()` produced and put inside the `Ok` value. That number
+`num` value that `parse` produced and put inside the `Ok` value. That number
 will end up right where we want it, in the new `guess` binding we're creating.
 
-If `parse()` is *not* able to turn the string into a number, it will return an
+If `parse` is *not* able to turn the string into a number, it will return an
 `Err` value that contains more information about the error. The `Err` value
 does not match the `Ok(num)` pattern in the first match arm, but it does match
 the `Err(_)` pattern in the second arm. The `_` is a catch-all value; we're
 saying we want to match all `Err` values, no matter what information they have
 inside them. So we execute the second arm's code, `continue`: this means to go
 to the next iteration of the `loop` and ask for another guess. So we have
-effectively ignored all errors that `parse()` might hit!
+effectively ignored all errors that `parse` might hit!
 
 Now everything in our program should work as we expect it to! Let’s try it:
 

@@ -24,7 +24,7 @@ fn bar() {
 ```
 
 This comment would then be interpreted by `rustdoc` as documenting the thing
-that follows it: `foo()` and `bar()`.
+that follows it: `foo` and `bar`.
 
 Because documentation comments have semantic meaning to `rustdoc`, the compiler
 will pay attention to the placement of your documentation comments. For

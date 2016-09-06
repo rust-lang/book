@@ -125,11 +125,11 @@ mod tests {
 
 We'll explain more about testing in Chapter XX, but parts of this should make
 sense now: we have a module named `tests` that lives next to our other modules
-and contains one function named `it_works()`. Even though there are special
+and contains one function named `it_works`. Even though there are special
 annotations, the `tests` module is just another module!
 
 Since tests are for exercising the code within our library, let's try to call
-our `client::connect()` function from this `it_works()` function, even though
+our `client::connect` function from this `it_works` function, even though
 we're not going to be checking any functionality right now:
 
 ```rust
