@@ -150,14 +150,14 @@ import it into your program explicitly with a <code>use</code> statement. Using 
 the functionality to accept user input.</p>
 <pre><code class="language-rust,ignore">fn main() {
 </code></pre>
-<p>As you’ve seen in Chapter 1, the <code>main()</code> function is the entry point into the
+<p>As you’ve seen in Chapter 1, the <code>main</code> function is the entry point into the
 program. The <code>fn</code> syntax declares a new function, the <code>()</code>s indicate that
 there are no arguments, and <code>{</code> starts the body of the function.</p>
 <pre><code class="language-rust,ignore">println!(&quot;Guess the number!&quot;);
 
 println!(&quot;Please input your guess.&quot;);
 </code></pre>
-<p>As we learned in Chapter 1, <code>println!()</code> is a macro that prints a string to the
+<p>As we learned in Chapter 1, <code>println!</code> is a macro that prints a string to the
 screen. This is just a prompt stating what the game is and requesting input from
 the user.</p>
 <h3>Storing Values with Variable Bindings</h3>
@@ -183,15 +183,15 @@ line. Rust ignores everything in comments.</p>
 </blockquote>
 <p>So now we know that <code>let mut guess</code> will introduce a mutable binding named
 <code>guess</code>, but we have to look at the other side of the <code>=</code> for the value it’s
-bound to: <code>String::new()</code>. <code>String</code> is a string type, provided by the standard
+bound to: <code>String::new</code>. <code>String</code> is a string type, provided by the standard
 library. A <a href="../std/string/struct.String.html"><code>String</code></a><!-- ignore --> is a growable, UTF-8 encoded bit
 of text.</p>
-<p>The <code>::</code> syntax in the <code>::new()</code> line indicates that <code>new()</code> is an <em>associated
+<p>The <code>::</code> syntax in the <code>::new</code> line indicates that <code>new</code> is an <em>associated
 function</em> of a particular type. An associated function is a function that is
 associated with a type, in this case <code>String</code>, rather than a particular
 instance of a <code>String</code>. Some languages call this a <em>static method</em>.</p>
-<p>This <code>new()</code> function creates a new, empty <code>String</code>.
-You’ll find a <code>new()</code> function on many types, as it’s a common name for making
+<p>This <code>new</code> function creates a new, empty <code>String</code>.
+You’ll find a <code>new</code> function on many types, as it’s a common name for making
 a new value of some kind.</p>
 <p>So to summarize, the <code>let mut guess = String::new();</code> line has created a
 mutable binding that is currently bound to a new, empty instance of a <code>String</code>.
@@ -208,10 +208,10 @@ std::io::stdin(). The stdin() function returns an instance of std::io::Stdin,
 which is a type that represents a handle to the standard input for your
 terminal.</p>
 <p>The next part, <code>.read_line(&amp;mut guess)</code>, calls the
-<a href="../std/io/struct.Stdin.html#method.read_line"><code>read_line()</code></a><!-- ignore --> method on the standard input handle
-to get input from the user. We’re also passing one argument to <code>read_line()</code>:
+<a href="../std/io/struct.Stdin.html#method.read_line"><code>read_line</code></a><!-- ignore --> method on the standard input handle
+to get input from the user. We’re also passing one argument to <code>read_line</code>:
 <code>&amp;mut guess</code>.</p>
-<p>The job of <code>read_line()</code> is to take whatever the user types into standard input
+<p>The job of <code>read_line</code> is to take whatever the user types into standard input
 and place that into a string, so it takes that string as an argument. The
 string argument needs to be mutable so that the method can change the string's
 content by adding the user input.</p>
@@ -237,7 +237,7 @@ written this code as:</p>
 <p>But that gets hard to read. So we’ve split it up, two lines for two method
 calls. Now let's see what this line does.</p>
 <h3>Handling Potential Failure with the <code>Result</code> Type</h3>
-<p>We mentioned that <code>read_line()</code> puts what the user types into the string we
+<p>We mentioned that <code>read_line</code> puts what the user types into the string we
 pass it, but it also returns a value: in this case, an
 <a href="../std/io/type.Result.html"><code>io::Result</code></a><!-- ignore -->. Rust has a number of types named
 <code>Result</code> in its standard library: a generic <a href="../std/result/enum.Result.html"><code>Result</code></a><!-- ignore -->,
@@ -252,16 +252,16 @@ successful, and inside the <code>Ok</code> variant is the successfully generated
 or why the operation failed.</p>
 <p>The purpose of these <code>Result</code> types is to encode error handling information.
 Values of the <code>Result</code> type, like any type, have methods defined on them. In
-this case, <code>io::Result</code> has an <a href="../std/result/enum.Result.html#method.expect"><code>expect()</code> method</a><!-- ignore --> that
-we can call. If this instance of <code>io::Result</code> is an <code>Err</code> value, <code>expect()</code>
+this case, <code>io::Result</code> has an <a href="../std/result/enum.Result.html#method.expect"><code>expect</code> method</a><!-- ignore --> that
+we can call. If this instance of <code>io::Result</code> is an <code>Err</code> value, <code>expect</code>
 will cause our program to crash and display the message that we passed as an
-argument to <code>expect()</code>. In this case, if the <code>read_line()</code> method returns an
+argument to <code>expect</code>. In this case, if the <code>read_line</code> method returns an
 <code>Err</code>, it would likely be the result of an error coming from the underlying
-operating system. If this instance of <code>io::Result</code> is an <code>Ok</code> value, <code>expect()</code>
+operating system. If this instance of <code>io::Result</code> is an <code>Ok</code> value, <code>expect</code>
 will take the return value that <code>Ok</code> is holding and return just that value to
 us so that we can use it. In this case, that value will be what the user
 entered into standard input.</p>
-<p>If we don't call <code>expect()</code>, our program will compile, but we’ll get a warning:</p>
+<p>If we don't call <code>expect</code>, our program will compile, but we’ll get a warning:</p>
 <pre><code class="language-bash">$ cargo build
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
 src/main.rs:10:5: 10:39 warning: unused result which must be used,
@@ -272,9 +272,9 @@ src/main.rs:10     io::stdin().read_line(&amp;mut guess);
 <p>Rust warns that we haven’t used the <code>Result</code> value, telling us that we
 haven’t handled a possible error. The right way to suppress the warning is to
 actually write error handling, but if we just want to crash the program when a
-problem occurs, we can use <code>expect()</code>. We’ll save recovering from errors for a
+problem occurs, we can use <code>expect</code>. We’ll save recovering from errors for a
 future project.</p>
-<h3>Printing Values with <code>println!()</code> Placeholders</h3>
+<h3>Printing Values with <code>println!</code> Placeholders</h3>
 <p>There’s only one line of this first example left, aside from the closing curly
 brace:</p>
 <pre><code class="language-rust,ignore">    println!(&quot;You guessed: {}&quot;, guess);
@@ -283,7 +283,7 @@ brace:</p>
 think of <code>{}</code> as little crab pincers, holding a value in place. You can print
 more than one value this way: the first <code>{}</code> holds the first value listed after
 the format string, the second set holds the second value, and so on. Printing
-out multiple values in one call to <code>println!()</code> would then look like this:</p>
+out multiple values in one call to <code>println!</code> would then look like this:</p>
 <pre><code class="language-rust">let x = 5;
 let y = 10;
 
@@ -450,12 +450,12 @@ Traits section in Chapter XX.</p>
 
 println!(&quot;The secret number is: {}&quot;, secret_number);
 </code></pre>
-<p>The <code>rand::thread_rng()</code> function will give us the particular random number
+<p>The <code>rand::thread_rng</code> function will give us the particular random number
 generator that we're going to use: one that is local to our current thread of
-execution and seeded by the operating system. Next, we call the <code>gen_range()</code>
+execution and seeded by the operating system. Next, we call the <code>gen_range</code>
 method on our random number generator. This method is defined by the <code>Rng</code>
 trait that we brought into scope with the <code>use rand::Rng</code> statement above. The
-<code>gen_range()</code> method takes two numbers as arguments and generates a random
+<code>gen_range</code> method takes two numbers as arguments and generates a random
 number between them. It's inclusive on the lower bound but exclusive on the
 upper bound, so we need <code>1</code> and <code>101</code> to ask for a number ranging from one to a
 hundred.</p>
@@ -533,12 +533,12 @@ compare two values.</p>
     Ordering::Equal   =&gt; println!(&quot;You win!&quot;),
 }
 </code></pre>
-<p>The <code>cmp()</code> method compares two values, and can be called on anything that can
+<p>The <code>cmp</code> method compares two values, and can be called on anything that can
 be compared. It takes a reference to whatever you want to compare with, so here
-it's comparing our <code>guess</code> to our <code>secret_number</code>. <code>cmp()</code> returns a variant of
+it's comparing our <code>guess</code> to our <code>secret_number</code>. <code>cmp</code> returns a variant of
 the <code>Ordering</code> enum we imported with the <code>use</code> statement earlier. We use a
 <a href="match.html"><code>match</code></a><!-- ignore --> statement to decide what to do next based on
-which variant of <code>Ordering</code> we got back from our call to <code>cmp()</code> with the values
+which variant of <code>Ordering</code> we got back from our call to <code>cmp</code> with the values
 in <code>guess</code> and <code>secret_number</code>.</p>
 <p><code>match</code> statements are made up of <em>arms</em>. An arm consists of a <em>pattern</em> and
 the code that we should run if the value given to the beginning of the <code>match</code>
@@ -548,7 +548,7 @@ are powerful features in Rust that will be covered in detail in Chapter XX and
 Chapter XX, respectively.</p>
 <p>Let's walk through an example of what would happen with our <code>match</code>. Say that
 the user has guessed 50, and the randomly-generated secret number this time
-is 38. So when we compare 50 to 38, the <code>cmp()</code> method will return
+is 38. So when we compare 50 to 38, the <code>cmp</code> method will return
 <code>Ordering::Greater</code>, since 50 is greater than 38. <code>Ordering::Greater</code> is the
 value that the <code>match</code> statement gets. It looks at the first arm's pattern,
 <code>Ordering::Less</code>, and says nope, the value we have (<code>Ordering::Greater</code>) does
@@ -580,9 +580,9 @@ number; or others. Rust defaults to an <code>i32</code>, so that's the type of
 <code>secret_number</code> unless we add type information elsewhere that would cause Rust
 to infer a different numerical type. The error is because Rust will not compare
 a string and a number type.</p>
-<p>Ultimately, we want to convert the <code>String</code> we read as input
-into a real number type so that we can compare it to the guess numerically. We
-can do that with two more lines; to your <code>fn main()</code> body, add the following two lines:</p>
+<p>Ultimately, we want to convert the <code>String</code> we read as input into a real number
+type so that we can compare it to the guess numerically. We can do that with
+two more lines; to your <code>main</code> function body, add the following two lines:</p>
 <p>Filename: src/main.rs</p>
 <pre><code class="language-rust,ignore">extern crate rand;
 
@@ -629,14 +629,14 @@ come up with two unique bindings, like <code>guess_str</code> and <code>guess</c
 (we'll cover shadowing in more detail in Chapter 3).</p>
 <p>We bind <code>guess</code> to the expression <code>guess.trim().parse()</code>. The <code>guess</code> in the
 expression refers to the original <code>guess</code> that was a <code>String</code> with our input in
-it. The <code>trim()</code> method on <code>String</code>s will eliminate any whitespace at the
+it. The <code>trim</code> method on <code>String</code>s will eliminate any whitespace at the
 beginning and end. Our <code>u32</code> can only contain numerical characters, but we have
-to press the return key to satisfy <code>read_line()</code>. When we press the return
+to press the return key to satisfy <code>read_line</code>. When we press the return
 key, it introduces a newline character. For example, if we type <code>5</code> and hit
 return, <code>guess</code> looks like this: <code>5\n</code>. The <code>\n</code> represents &quot;newline&quot;, the
-return key. The <code>trim()</code> method gets rid of this, leaving our string with only
+return key. The <code>trim</code> method gets rid of this, leaving our string with only
 the <code>5</code>.</p>
-<p>The <a href="../std/primitive.str.html#method.parse"><code>parse()</code> method on strings</a><!-- ignore --> parses a string into
+<p>The <a href="../std/primitive.str.html#method.parse"><code>parse</code> method on strings</a><!-- ignore --> parses a string into
 some kind of number. Since this method can parse a variety of number types, we
 need to tell Rust the exact type of number we want with <code>let guess: u32</code>. The
 colon (<code>:</code>) after <code>guess</code> tells Rust we’re going to annotate its type. Rust has
@@ -646,15 +646,15 @@ the other number types in Chapter XX. Additionally, our <code>u32</code> annotat
 and the comparison with <code>secret_number</code> means that Rust will infer that
 <code>secret_number</code> should be a <code>u32</code> as well. So now the comparison will be
 between two values of the same type!</p>
-<p>Our call to <code>parse()</code> could quite easily cause an error. If, for example, our
+<p>Our call to <code>parse</code> could quite easily cause an error. If, for example, our
 string contained <code>A👍%</code>, there’d be no way to convert that to a number. Because
-it might fail, the <code>parse()</code> method returns a <code>Result</code> type, much like the
-<code>read_line()</code> method does that we discussed earlier. We're going to treat this
-<code>Result</code> the same way by using the <code>expect()</code> method again. If <code>parse()</code>
+it might fail, the <code>parse</code> method returns a <code>Result</code> type, much like the
+<code>read_line</code> method does that we discussed earlier. We're going to treat this
+<code>Result</code> the same way by using the <code>expect</code> method again. If <code>parse</code>
 returns an <code>Err</code> <code>Result</code> variant because it could not create a number from the
-string, the <code>expect()</code> call will crash the game and print the message we give
-it. If <code>parse()</code> can successfully turn the string into a number, it will return
-the <code>Ok</code> variant of <code>Result</code>, and <code>expect()</code> will return the number that we
+string, the <code>expect</code> call will crash the game and print the message we give
+it. If <code>parse</code> can successfully turn the string into a number, it will return
+the <code>Ok</code> variant of <code>Result</code>, and <code>expect</code> will return the number that we
 want that it will take out of the <code>Ok</code> value for us.</p>
 <p>Let’s try our program out!</p>
 <pre><code class="language-bash">$ cargo run
@@ -717,7 +717,7 @@ You'll notice we have a new problem because the program is doing exactly what we
 told it to do: ask for another guess forever! It doesn't seem like we can quit!</p>
 <p>We could always halt the program by using the keyboard shortcut <code>control-c</code>.
 There's another way to escape the insatiable monster we've created, though,
-that can be found in our discussion about <code>parse()</code>: if we give a non-number
+that can be found in our discussion about <code>parse</code>: if we give a non-number
 answer, the program will crash. We can use that to quit! Observe:</p>
 <pre><code class="language-bash">$ cargo run
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
@@ -787,7 +787,7 @@ fn main() {
 </code></pre>
 <p>By adding the <code>break</code> line after <code>You win!</code>, we’ll exit the loop when we guess
 the secret number correctly. Exiting the loop also means exiting the program,
-since the loop is the last thing in <code>main()</code>.</p>
+since the loop is the last thing in <code>main</code>.</p>
 <h4>Handling Invalid Input</h4>
 <p>For our final refinement of the game's behavior, rather than crashing the
 program when someone inputs a non-number, we want the game to ignore it so we
@@ -799,23 +799,23 @@ can continue guessing. We can do that by altering the line where we convert
 };
 </code></pre>
 <p>This is how you generally move from &quot;crash on error&quot; to &quot;actually handle the
-error&quot;: by switching from an <code>expect()</code> statement to a <code>match</code> statement.
-Remember that <code>parse()</code> returns a <code>Result</code> type, and <code>Result</code> is an enum that
+error&quot;: by switching from an <code>expect</code> statement to a <code>match</code> statement.
+Remember that <code>parse</code> returns a <code>Result</code> type, and <code>Result</code> is an enum that
 has the variants <code>Ok</code> or <code>Err</code>. We're going to use a <code>match</code> statement here,
-like we did with the <code>Ordering</code> result of the <code>cmp()</code> method.</p>
-<p>If <code>parse()</code> is able to successfully turn the string into a number, it will
+like we did with the <code>Ordering</code> result of the <code>cmp</code> method.</p>
+<p>If <code>parse</code> is able to successfully turn the string into a number, it will
 return an <code>Ok</code> value that contains the resulting number. That <code>Ok</code> value will
 match the first arm's pattern, and the match statement will just return the
-<code>num</code> value that <code>parse()</code> produced and put inside the <code>Ok</code> value. That number
+<code>num</code> value that <code>parse</code> produced and put inside the <code>Ok</code> value. That number
 will end up right where we want it, in the new <code>guess</code> binding we're creating.</p>
-<p>If <code>parse()</code> is <em>not</em> able to turn the string into a number, it will return an
+<p>If <code>parse</code> is <em>not</em> able to turn the string into a number, it will return an
 <code>Err</code> value that contains more information about the error. The <code>Err</code> value
 does not match the <code>Ok(num)</code> pattern in the first match arm, but it does match
 the <code>Err(_)</code> pattern in the second arm. The <code>_</code> is a catch-all value; we're
 saying we want to match all <code>Err</code> values, no matter what information they have
 inside them. So we execute the second arm's code, <code>continue</code>: this means to go
 to the next iteration of the <code>loop</code> and ask for another guess. So we have
-effectively ignored all errors that <code>parse()</code> might hit!</p>
+effectively ignored all errors that <code>parse</code> might hit!</p>
 <p>Now everything in our program should work as we expect it to! Let’s try it:</p>
 <pre><code class="language-bash">$ cargo run
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)

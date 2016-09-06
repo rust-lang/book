@@ -171,10 +171,10 @@ mod tests {
 </code></pre>
 <p>We'll explain more about testing in Chapter XX, but parts of this should make
 sense now: we have a module named <code>tests</code> that lives next to our other modules
-and contains one function named <code>it_works()</code>. Even though there are special
+and contains one function named <code>it_works</code>. Even though there are special
 annotations, the <code>tests</code> module is just another module!</p>
 <p>Since tests are for exercising the code within our library, let's try to call
-our <code>client::connect()</code> function from this <code>it_works()</code> function, even though
+our <code>client::connect</code> function from this <code>it_works</code> function, even though
 we're not going to be checking any functionality right now:</p>
 <pre><code class="language-rust">#[cfg(test)]
 mod tests {

@@ -109,7 +109,7 @@ library crate. This pattern is quite common for executable crates: most
 functionality is in a library crate, and the executable crate uses that
 library. This way, other programs can also use the library crate, and it’s also
 a nice separation of concerns.</p>
-<p>Our binary crate right now just calls our library's <code>connect()</code> function from
+<p>Our binary crate right now just calls our library's <code>connect</code> function from
 the <code>client</code> module; we picked that one since it's the first warning in our
 build output above. Invoking <code>cargo build</code> will now give us an error after the
 warnings:</p>
@@ -150,7 +150,7 @@ error: function `connect` is private
 </code></pre>
 <p>Hooray! We have a different error! Yes, different error messages are a cause
 for celebration. The new error says &quot;function <code>connect</code> is private&quot;, so let's
-edit <code>src/client.rs</code> to make <code>client::connect()</code> public:</p>
+edit <code>src/client.rs</code> to make <code>client::connect</code> public:</p>
 <p>Filename: src/client.rs</p>
 <pre><code class="language-rust">pub fn connect() {
 }
@@ -170,7 +170,7 @@ warning: function is never used: `connect`, #[warn(dead_code)] on by default
 1 | fn connect() {
   | ^
 </code></pre>
-<p>It compiled! And the warning about <code>client::connect()</code> not being used is gone!</p>
+<p>It compiled! And the warning about <code>client::connect</code> not being used is gone!</p>
 <p>Making functions public isn't the only way to fix unused code warnings: if
 we <em>didn't</em> want these functions to be part of our public API and we got these
 warnings, the warnings could be alerting us to code we no longer needed and
@@ -251,21 +251,21 @@ fn try_me() {
 }
 </code></pre>
 <p>Before you try to compile this code, make a guess about which lines in
-<code>try_me()</code> will have errors.</p>
+<code>try_me</code> will have errors.</p>
 <p>Ready? Let's talk through them!</p>
-<p>The <code>try_me()</code> function is in the root module of our project. The module named
+<p>The <code>try_me</code> function is in the root module of our project. The module named
 <code>outermost</code> is private, but the second rule says we're allowed to access it
 since <code>outermost</code> is in our current, root module.</p>
-<p>The function call <code>outermost::middle_function()</code> will work. <code>middle_function()</code>
+<p>The function call <code>outermost::middle_function()</code> will work. <code>middle_function</code>
 is public, and we are accessing it through its parent module, <code>outermost</code>,
 which we just determined we can access in the previous paragraph.</p>
 <p><code>outermost::middle_secret_function()</code> will cause a compilation error.
-<code>middle_secret_function()</code> is private, so the second rule applies. Our current
-root module is neither the current module of <code>middle_secret_function()</code>
+<code>middle_secret_function</code> is private, so the second rule applies. Our current
+root module is neither the current module of <code>middle_secret_function</code>
 (<code>outermost</code> is), nor is it a child module of the current module of
-<code>middle_secret_function()</code>.</p>
+<code>middle_secret_function</code>.</p>
 <p>The module named <code>inside</code> is private and has no child modules, so it can only
-be accessed by its current module, <code>outermost</code>. That means the <code>try_me()</code>
+be accessed by its current module, <code>outermost</code>. That means the <code>try_me</code>
 function is not allowed to call <code>outermost::inside::inner_function()</code> or
 <code>outermost::inside::secret_function()</code>.</p>
 <p>Here are some changes to make to this code. Try each one, make a guess
@@ -274,7 +274,7 @@ rules to understand why.</p>
 <ul>
 <li>What if the <code>inside</code> module was public?</li>
 <li>What if <code>outside</code> was public and <code>inside</code> was private?</li>
-<li>What if, in the body of <code>inner_function()</code>, we called
+<li>What if, in the body of <code>inner_function</code>, we called
 <code>::outermost::middle_secret_function()</code>? (The two colons at the beginning
 mean that we want to refer to the namespaces starting from the root
 namespace.)</li>

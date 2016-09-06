@@ -86,8 +86,8 @@ pub use a::namespace::function;
 <p>Here, the <code>a</code> module is not public to users of our library, so neither are its
 children, even though <code>namespace</code> and <code>function</code> are public <em>within</em> our
 library. So users of our library couldn't call <code>a::namespace::function()</code>
-themselves. However, since we've re-exported <code>function()</code> with <code>pub use</code>,
-<code>function()</code> will be public. Users can just call <code>function()</code> themselves,
+themselves. However, since we've re-exported <code>function</code> with <code>pub use</code>,
+<code>function</code> will be public. Users can just call <code>function</code> themselves,
 directly. This allows us to organize our code internally however we'd like,
 while presenting a different external interface.</p>
 

@@ -215,20 +215,20 @@ returns nothing.” If there were arguments, they would go inside the parenthese
 requires these around all function bodies. It's considered good style to put
 the opening curly brace on the same line as the function declaration, with one
 space in between.</p>
-<p>Inside the <code>main()</code> function:</p>
+<p>Inside the <code>main</code> function:</p>
 <pre><code class="language-rust">    println!(&quot;Hello, world!&quot;);
 </code></pre>
 <p>This line does all of the work in this little program: it prints text to the
 screen. There are a number of details that are important here. The first is
 that it’s indented with four spaces, not a tab.</p>
-<p>The second important part is <code>println!()</code>. This is calling a Rust <em>macro</em>,
+<p>The second important part is <code>println!</code>. This is calling a Rust <em>macro</em>,
 which is how metaprogramming is done in Rust. If it were calling a function
-instead, it would look like this: <code>println()</code> (without the <code>!</code>). We'll discuss
+instead, it would look like this: <code>println</code> (without the <code>!</code>). We'll discuss
 Rust macros in more detail in Chapter XX, but for now you just need to know
 that when you see a <code>!</code> that means that you’re calling a macro instead of a
 normal function.</p>
 <p>Next is <code>&quot;Hello, world!&quot;</code> which is a <em>string</em>. We pass this string as an
-argument to <code>println!()</code>, which prints the string to the screen. Easy enough!</p>
+argument to <code>println!</code>, which prints the string to the screen. Easy enough!</p>
 <p>The line ends with a semicolon (<code>;</code>). The <code>;</code> indicates that this expression is
 over, and the next one is ready to begin. Most lines of Rust code end with a
 <code>;</code>.</p>
@@ -524,14 +524,14 @@ import it into your program explicitly with a <code>use</code> statement. Using 
 the functionality to accept user input.</p>
 <pre><code class="language-rust,ignore">fn main() {
 </code></pre>
-<p>As you’ve seen in Chapter 1, the <code>main()</code> function is the entry point into the
+<p>As you’ve seen in Chapter 1, the <code>main</code> function is the entry point into the
 program. The <code>fn</code> syntax declares a new function, the <code>()</code>s indicate that
 there are no arguments, and <code>{</code> starts the body of the function.</p>
 <pre><code class="language-rust,ignore">println!(&quot;Guess the number!&quot;);
 
 println!(&quot;Please input your guess.&quot;);
 </code></pre>
-<p>As we learned in Chapter 1, <code>println!()</code> is a macro that prints a string to the
+<p>As we learned in Chapter 1, <code>println!</code> is a macro that prints a string to the
 screen. This is just a prompt stating what the game is and requesting input from
 the user.</p>
 <h3>Storing Values with Variable Bindings</h3>
@@ -557,15 +557,15 @@ line. Rust ignores everything in comments.</p>
 </blockquote>
 <p>So now we know that <code>let mut guess</code> will introduce a mutable binding named
 <code>guess</code>, but we have to look at the other side of the <code>=</code> for the value it’s
-bound to: <code>String::new()</code>. <code>String</code> is a string type, provided by the standard
+bound to: <code>String::new</code>. <code>String</code> is a string type, provided by the standard
 library. A <a href="../std/string/struct.String.html"><code>String</code></a><!-- ignore --> is a growable, UTF-8 encoded bit
 of text.</p>
-<p>The <code>::</code> syntax in the <code>::new()</code> line indicates that <code>new()</code> is an <em>associated
+<p>The <code>::</code> syntax in the <code>::new</code> line indicates that <code>new</code> is an <em>associated
 function</em> of a particular type. An associated function is a function that is
 associated with a type, in this case <code>String</code>, rather than a particular
 instance of a <code>String</code>. Some languages call this a <em>static method</em>.</p>
-<p>This <code>new()</code> function creates a new, empty <code>String</code>.
-You’ll find a <code>new()</code> function on many types, as it’s a common name for making
+<p>This <code>new</code> function creates a new, empty <code>String</code>.
+You’ll find a <code>new</code> function on many types, as it’s a common name for making
 a new value of some kind.</p>
 <p>So to summarize, the <code>let mut guess = String::new();</code> line has created a
 mutable binding that is currently bound to a new, empty instance of a <code>String</code>.
@@ -582,10 +582,10 @@ std::io::stdin(). The stdin() function returns an instance of std::io::Stdin,
 which is a type that represents a handle to the standard input for your
 terminal.</p>
 <p>The next part, <code>.read_line(&amp;mut guess)</code>, calls the
-<a href="../std/io/struct.Stdin.html#method.read_line"><code>read_line()</code></a><!-- ignore --> method on the standard input handle
-to get input from the user. We’re also passing one argument to <code>read_line()</code>:
+<a href="../std/io/struct.Stdin.html#method.read_line"><code>read_line</code></a><!-- ignore --> method on the standard input handle
+to get input from the user. We’re also passing one argument to <code>read_line</code>:
 <code>&amp;mut guess</code>.</p>
-<p>The job of <code>read_line()</code> is to take whatever the user types into standard input
+<p>The job of <code>read_line</code> is to take whatever the user types into standard input
 and place that into a string, so it takes that string as an argument. The
 string argument needs to be mutable so that the method can change the string's
 content by adding the user input.</p>
@@ -611,7 +611,7 @@ written this code as:</p>
 <p>But that gets hard to read. So we’ve split it up, two lines for two method
 calls. Now let's see what this line does.</p>
 <h3>Handling Potential Failure with the <code>Result</code> Type</h3>
-<p>We mentioned that <code>read_line()</code> puts what the user types into the string we
+<p>We mentioned that <code>read_line</code> puts what the user types into the string we
 pass it, but it also returns a value: in this case, an
 <a href="../std/io/type.Result.html"><code>io::Result</code></a><!-- ignore -->. Rust has a number of types named
 <code>Result</code> in its standard library: a generic <a href="../std/result/enum.Result.html"><code>Result</code></a><!-- ignore -->,
@@ -626,16 +626,16 @@ successful, and inside the <code>Ok</code> variant is the successfully generated
 or why the operation failed.</p>
 <p>The purpose of these <code>Result</code> types is to encode error handling information.
 Values of the <code>Result</code> type, like any type, have methods defined on them. In
-this case, <code>io::Result</code> has an <a href="../std/result/enum.Result.html#method.expect"><code>expect()</code> method</a><!-- ignore --> that
-we can call. If this instance of <code>io::Result</code> is an <code>Err</code> value, <code>expect()</code>
+this case, <code>io::Result</code> has an <a href="../std/result/enum.Result.html#method.expect"><code>expect</code> method</a><!-- ignore --> that
+we can call. If this instance of <code>io::Result</code> is an <code>Err</code> value, <code>expect</code>
 will cause our program to crash and display the message that we passed as an
-argument to <code>expect()</code>. In this case, if the <code>read_line()</code> method returns an
+argument to <code>expect</code>. In this case, if the <code>read_line</code> method returns an
 <code>Err</code>, it would likely be the result of an error coming from the underlying
-operating system. If this instance of <code>io::Result</code> is an <code>Ok</code> value, <code>expect()</code>
+operating system. If this instance of <code>io::Result</code> is an <code>Ok</code> value, <code>expect</code>
 will take the return value that <code>Ok</code> is holding and return just that value to
 us so that we can use it. In this case, that value will be what the user
 entered into standard input.</p>
-<p>If we don't call <code>expect()</code>, our program will compile, but we’ll get a warning:</p>
+<p>If we don't call <code>expect</code>, our program will compile, but we’ll get a warning:</p>
 <pre><code class="language-bash">$ cargo build
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
 src/main.rs:10:5: 10:39 warning: unused result which must be used,
@@ -646,9 +646,9 @@ src/main.rs:10     io::stdin().read_line(&amp;mut guess);
 <p>Rust warns that we haven’t used the <code>Result</code> value, telling us that we
 haven’t handled a possible error. The right way to suppress the warning is to
 actually write error handling, but if we just want to crash the program when a
-problem occurs, we can use <code>expect()</code>. We’ll save recovering from errors for a
+problem occurs, we can use <code>expect</code>. We’ll save recovering from errors for a
 future project.</p>
-<h3>Printing Values with <code>println!()</code> Placeholders</h3>
+<h3>Printing Values with <code>println!</code> Placeholders</h3>
 <p>There’s only one line of this first example left, aside from the closing curly
 brace:</p>
 <pre><code class="language-rust,ignore">    println!(&quot;You guessed: {}&quot;, guess);
@@ -657,7 +657,7 @@ brace:</p>
 think of <code>{}</code> as little crab pincers, holding a value in place. You can print
 more than one value this way: the first <code>{}</code> holds the first value listed after
 the format string, the second set holds the second value, and so on. Printing
-out multiple values in one call to <code>println!()</code> would then look like this:</p>
+out multiple values in one call to <code>println!</code> would then look like this:</p>
 <pre><code class="language-rust">let x = 5;
 let y = 10;
 
@@ -824,12 +824,12 @@ Traits section in Chapter XX.</p>
 
 println!(&quot;The secret number is: {}&quot;, secret_number);
 </code></pre>
-<p>The <code>rand::thread_rng()</code> function will give us the particular random number
+<p>The <code>rand::thread_rng</code> function will give us the particular random number
 generator that we're going to use: one that is local to our current thread of
-execution and seeded by the operating system. Next, we call the <code>gen_range()</code>
+execution and seeded by the operating system. Next, we call the <code>gen_range</code>
 method on our random number generator. This method is defined by the <code>Rng</code>
 trait that we brought into scope with the <code>use rand::Rng</code> statement above. The
-<code>gen_range()</code> method takes two numbers as arguments and generates a random
+<code>gen_range</code> method takes two numbers as arguments and generates a random
 number between them. It's inclusive on the lower bound but exclusive on the
 upper bound, so we need <code>1</code> and <code>101</code> to ask for a number ranging from one to a
 hundred.</p>
@@ -907,12 +907,12 @@ compare two values.</p>
     Ordering::Equal   =&gt; println!(&quot;You win!&quot;),
 }
 </code></pre>
-<p>The <code>cmp()</code> method compares two values, and can be called on anything that can
+<p>The <code>cmp</code> method compares two values, and can be called on anything that can
 be compared. It takes a reference to whatever you want to compare with, so here
-it's comparing our <code>guess</code> to our <code>secret_number</code>. <code>cmp()</code> returns a variant of
+it's comparing our <code>guess</code> to our <code>secret_number</code>. <code>cmp</code> returns a variant of
 the <code>Ordering</code> enum we imported with the <code>use</code> statement earlier. We use a
 <a href="match.html"><code>match</code></a><!-- ignore --> statement to decide what to do next based on
-which variant of <code>Ordering</code> we got back from our call to <code>cmp()</code> with the values
+which variant of <code>Ordering</code> we got back from our call to <code>cmp</code> with the values
 in <code>guess</code> and <code>secret_number</code>.</p>
 <p><code>match</code> statements are made up of <em>arms</em>. An arm consists of a <em>pattern</em> and
 the code that we should run if the value given to the beginning of the <code>match</code>
@@ -922,7 +922,7 @@ are powerful features in Rust that will be covered in detail in Chapter XX and
 Chapter XX, respectively.</p>
 <p>Let's walk through an example of what would happen with our <code>match</code>. Say that
 the user has guessed 50, and the randomly-generated secret number this time
-is 38. So when we compare 50 to 38, the <code>cmp()</code> method will return
+is 38. So when we compare 50 to 38, the <code>cmp</code> method will return
 <code>Ordering::Greater</code>, since 50 is greater than 38. <code>Ordering::Greater</code> is the
 value that the <code>match</code> statement gets. It looks at the first arm's pattern,
 <code>Ordering::Less</code>, and says nope, the value we have (<code>Ordering::Greater</code>) does
@@ -954,9 +954,9 @@ number; or others. Rust defaults to an <code>i32</code>, so that's the type of
 <code>secret_number</code> unless we add type information elsewhere that would cause Rust
 to infer a different numerical type. The error is because Rust will not compare
 a string and a number type.</p>
-<p>Ultimately, we want to convert the <code>String</code> we read as input
-into a real number type so that we can compare it to the guess numerically. We
-can do that with two more lines; to your <code>fn main()</code> body, add the following two lines:</p>
+<p>Ultimately, we want to convert the <code>String</code> we read as input into a real number
+type so that we can compare it to the guess numerically. We can do that with
+two more lines; to your <code>main</code> function body, add the following two lines:</p>
 <p>Filename: src/main.rs</p>
 <pre><code class="language-rust,ignore">extern crate rand;
 
@@ -1003,14 +1003,14 @@ come up with two unique bindings, like <code>guess_str</code> and <code>guess</c
 (we'll cover shadowing in more detail in Chapter 3).</p>
 <p>We bind <code>guess</code> to the expression <code>guess.trim().parse()</code>. The <code>guess</code> in the
 expression refers to the original <code>guess</code> that was a <code>String</code> with our input in
-it. The <code>trim()</code> method on <code>String</code>s will eliminate any whitespace at the
+it. The <code>trim</code> method on <code>String</code>s will eliminate any whitespace at the
 beginning and end. Our <code>u32</code> can only contain numerical characters, but we have
-to press the return key to satisfy <code>read_line()</code>. When we press the return
+to press the return key to satisfy <code>read_line</code>. When we press the return
 key, it introduces a newline character. For example, if we type <code>5</code> and hit
 return, <code>guess</code> looks like this: <code>5\n</code>. The <code>\n</code> represents &quot;newline&quot;, the
-return key. The <code>trim()</code> method gets rid of this, leaving our string with only
+return key. The <code>trim</code> method gets rid of this, leaving our string with only
 the <code>5</code>.</p>
-<p>The <a href="../std/primitive.str.html#method.parse"><code>parse()</code> method on strings</a><!-- ignore --> parses a string into
+<p>The <a href="../std/primitive.str.html#method.parse"><code>parse</code> method on strings</a><!-- ignore --> parses a string into
 some kind of number. Since this method can parse a variety of number types, we
 need to tell Rust the exact type of number we want with <code>let guess: u32</code>. The
 colon (<code>:</code>) after <code>guess</code> tells Rust we’re going to annotate its type. Rust has
@@ -1020,15 +1020,15 @@ the other number types in Chapter XX. Additionally, our <code>u32</code> annotat
 and the comparison with <code>secret_number</code> means that Rust will infer that
 <code>secret_number</code> should be a <code>u32</code> as well. So now the comparison will be
 between two values of the same type!</p>
-<p>Our call to <code>parse()</code> could quite easily cause an error. If, for example, our
+<p>Our call to <code>parse</code> could quite easily cause an error. If, for example, our
 string contained <code>A👍%</code>, there’d be no way to convert that to a number. Because
-it might fail, the <code>parse()</code> method returns a <code>Result</code> type, much like the
-<code>read_line()</code> method does that we discussed earlier. We're going to treat this
-<code>Result</code> the same way by using the <code>expect()</code> method again. If <code>parse()</code>
+it might fail, the <code>parse</code> method returns a <code>Result</code> type, much like the
+<code>read_line</code> method does that we discussed earlier. We're going to treat this
+<code>Result</code> the same way by using the <code>expect</code> method again. If <code>parse</code>
 returns an <code>Err</code> <code>Result</code> variant because it could not create a number from the
-string, the <code>expect()</code> call will crash the game and print the message we give
-it. If <code>parse()</code> can successfully turn the string into a number, it will return
-the <code>Ok</code> variant of <code>Result</code>, and <code>expect()</code> will return the number that we
+string, the <code>expect</code> call will crash the game and print the message we give
+it. If <code>parse</code> can successfully turn the string into a number, it will return
+the <code>Ok</code> variant of <code>Result</code>, and <code>expect</code> will return the number that we
 want that it will take out of the <code>Ok</code> value for us.</p>
 <p>Let’s try our program out!</p>
 <pre><code class="language-bash">$ cargo run
@@ -1091,7 +1091,7 @@ You'll notice we have a new problem because the program is doing exactly what we
 told it to do: ask for another guess forever! It doesn't seem like we can quit!</p>
 <p>We could always halt the program by using the keyboard shortcut <code>control-c</code>.
 There's another way to escape the insatiable monster we've created, though,
-that can be found in our discussion about <code>parse()</code>: if we give a non-number
+that can be found in our discussion about <code>parse</code>: if we give a non-number
 answer, the program will crash. We can use that to quit! Observe:</p>
 <pre><code class="language-bash">$ cargo run
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
@@ -1161,7 +1161,7 @@ fn main() {
 </code></pre>
 <p>By adding the <code>break</code> line after <code>You win!</code>, we’ll exit the loop when we guess
 the secret number correctly. Exiting the loop also means exiting the program,
-since the loop is the last thing in <code>main()</code>.</p>
+since the loop is the last thing in <code>main</code>.</p>
 <h4>Handling Invalid Input</h4>
 <p>For our final refinement of the game's behavior, rather than crashing the
 program when someone inputs a non-number, we want the game to ignore it so we
@@ -1173,23 +1173,23 @@ can continue guessing. We can do that by altering the line where we convert
 };
 </code></pre>
 <p>This is how you generally move from &quot;crash on error&quot; to &quot;actually handle the
-error&quot;: by switching from an <code>expect()</code> statement to a <code>match</code> statement.
-Remember that <code>parse()</code> returns a <code>Result</code> type, and <code>Result</code> is an enum that
+error&quot;: by switching from an <code>expect</code> statement to a <code>match</code> statement.
+Remember that <code>parse</code> returns a <code>Result</code> type, and <code>Result</code> is an enum that
 has the variants <code>Ok</code> or <code>Err</code>. We're going to use a <code>match</code> statement here,
-like we did with the <code>Ordering</code> result of the <code>cmp()</code> method.</p>
-<p>If <code>parse()</code> is able to successfully turn the string into a number, it will
+like we did with the <code>Ordering</code> result of the <code>cmp</code> method.</p>
+<p>If <code>parse</code> is able to successfully turn the string into a number, it will
 return an <code>Ok</code> value that contains the resulting number. That <code>Ok</code> value will
 match the first arm's pattern, and the match statement will just return the
-<code>num</code> value that <code>parse()</code> produced and put inside the <code>Ok</code> value. That number
+<code>num</code> value that <code>parse</code> produced and put inside the <code>Ok</code> value. That number
 will end up right where we want it, in the new <code>guess</code> binding we're creating.</p>
-<p>If <code>parse()</code> is <em>not</em> able to turn the string into a number, it will return an
+<p>If <code>parse</code> is <em>not</em> able to turn the string into a number, it will return an
 <code>Err</code> value that contains more information about the error. The <code>Err</code> value
 does not match the <code>Ok(num)</code> pattern in the first match arm, but it does match
 the <code>Err(_)</code> pattern in the second arm. The <code>_</code> is a catch-all value; we're
 saying we want to match all <code>Err</code> values, no matter what information they have
 inside them. So we execute the second arm's code, <code>continue</code>: this means to go
 to the next iteration of the <code>loop</code> and ask for another guess. So we have
-effectively ignored all errors that <code>parse()</code> might hit!</p>
+effectively ignored all errors that <code>parse</code> might hit!</p>
 <p>Now everything in our program should work as we expect it to! Let’s try it:</p>
 <pre><code class="language-bash">$ cargo run
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
@@ -1440,7 +1440,7 @@ of Rust data types: scalar and compound.</p>
 language, which means that it must know the types of all bindings at compile
 time. The compiler can usually infer what type we want to use based on the
 value and how we use it. When many types are possible, such as when we
-converted a <code>String</code> to a numeric type using <code>parse()</code> in the guessing game
+converted a <code>String</code> to a numeric type using <code>parse</code> in the guessing game
 tutorial, we can add a type annotation, like this:</p>
 <pre><code class="language-rust,ignore">let x: i32 = 5;
 </code></pre>
@@ -1689,7 +1689,7 @@ kind of error by immediately exiting instead of allowing the memory access and
 continuing. We'll discuss more of Rust’s error handling in Chapter XX.</p>
 <h2>How Functions Work</h2>
 <p>Functions are pervasive in Rust code. We’ve already seen one of the most
-important functions in the language: the <code>main()</code> function that’s the entry
+important functions in the language: the <code>main</code> function that’s the entry
 point of many programs. We've also seen the <code>fn</code> keyword, which allows us to
 declare new functions.</p>
 <p>Rust code uses <em>snake case</em> as the conventional style for function and variable
@@ -1710,13 +1710,13 @@ fn another_function() {
 after the function name. The curly braces tell the compiler where the function
 body begins and ends.</p>
 <p>We can call any function we’ve defined by entering its name followed by a pair
-of parentheses. Since <code>another_function()</code> is defined in the program, it can be
-called from inside the <code>main()</code> function. Note that we defined
-<code>another_function()</code> <em>after</em> the <code>main()</code> function in our source code; we could
+of parentheses. Since <code>another_function</code> is defined in the program, it can be
+called from inside the <code>main</code> function. Note that we defined
+<code>another_function</code> <em>after</em> the <code>main</code> function in our source code; we could
 have defined it before as well. Rust doesn’t care where you define your
 functions, only that they are defined somewhere.</p>
 <p>Let’s start a new binary project named <code>functions</code> so that we can explore
-further. Place the <code>another_function()</code> example in <code>src/main.rs</code> and run it.
+further. Place the <code>another_function</code> example in <code>src/main.rs</code> and run it.
 You should see the following output:</p>
 <pre><code class="language-bash">$ cargo run
    Compiling functions v0.1.0 (file:///projects/functions)
@@ -1724,12 +1724,12 @@ You should see the following output:</p>
 Hello, world!
 Another function.
 </code></pre>
-<p>The lines execute in the order they appear in the <code>main()</code> function. First, our
-“Hello, world!” message prints, and then <code>another_function()</code> is called and its
+<p>The lines execute in the order they appear in the <code>main</code> function. First, our
+“Hello, world!” message prints, and then <code>another_function</code> is called and its
 message is printed.</p>
 <h3>Function Arguments</h3>
 <p>Functions can also take arguments. The following rewritten version of
-<code>another_function()</code> shows what arguments look like in Rust:</p>
+<code>another_function</code> shows what arguments look like in Rust:</p>
 <p>Filename: src/main.rs</p>
 <pre><code class="language-rust">fn main() {
     another_function(5);
@@ -1745,9 +1745,9 @@ fn another_function(x: i32) {
      Running `target/debug/functions`
 The value of x is: 5
 </code></pre>
-<p>Since we passed <code>5</code> to <code>another_function()</code>, the <code>println!</code> macro put <code>5</code> where
+<p>Since we passed <code>5</code> to <code>another_function</code>, the <code>println!</code> macro put <code>5</code> where
 the pair of curly braces were in the format string. The declaration of
-<code>another_function()</code> shows that it takes one argument named <code>x</code>, and the type
+<code>another_function</code> shows that it takes one argument named <code>x</code>, and the type
 of <code>x</code> is <code>i32</code>.</p>
 <p>In function signatures, we <em>must</em> declare the type. This is a deliberate
 decision in the design of Rust; requiring type annotations in function
@@ -1875,8 +1875,8 @@ fn main() {
     println!(&quot;The value of x is: {}&quot;, x);
 }
 </code></pre>
-<p>There are no function calls, macros, or even <code>let</code> statements in the <code>five()</code>
-function-- just the number <code>5</code> by itself. That's a perfectly valid function in
+<p>There are no function calls, macros, or even <code>let</code> statements in the <code>five</code>
+function: just the number <code>5</code> by itself. That's a perfectly valid function in
 Rust. Note the function's return type, too. Try running this code, and the
 output should look like this:</p>
 <pre><code class="language-bash">$ cargo run
@@ -1884,14 +1884,14 @@ output should look like this:</p>
      Running `target/debug/functions`
 The value of x is: 5
 </code></pre>
-<p>The <code>5</code> in <code>five()</code> is actually the function's return value, which is why the
-return type is <code>i32</code>. Let’s examine this in more detail. There are two
-important bits. First, the line <code>let x = five();</code> in <code>main()</code> shows that we can
-use the return value of a function to initialize a binding.</p>
-<p>Because the function <code>five()</code> returns a <code>5</code>, that line is the same as saying:</p>
+<p>The <code>5</code> in the <code>five</code> function is actually the function's return value, which
+is why the return type is <code>i32</code>. Let’s examine this in more detail. There are
+two important bits. First, the line <code>let x = five();</code> in <code>main</code> shows that we
+can use the return value of a function to initialize a binding.</p>
+<p>Because the function <code>five</code> returns a <code>5</code>, that line is the same as saying:</p>
 <pre><code class="language-rust">let x = 5;
 </code></pre>
-<p>The second interesting bit is the <code>five()</code> function itself. It requires no
+<p>The second interesting bit is the <code>five</code> function itself. It requires no
 arguments and defines the type of the return value, but the body of the
 function is a lonely <code>5</code> with no semicolon because it is an expression whose
 value we want to return. Let's look at another example:</p>
@@ -2264,9 +2264,8 @@ and missing some items.</p>
 item from the <code>a</code> array but forgot to update the condition to be <code>while index &lt; 4</code>, our code would panic. Using the <code>for</code> loop means we would not need to
 remember to change any other code if we changed the number of values in the
 array.</p>
-<p>If you're wondering about the <code>.iter()</code> code in this example, keep reading! We
-will cover method syntax generally in Chapter XX and iterators specifically in
-Chapter XX.</p>
+<p>If you're wondering about <code>iter</code> in this example, keep reading! We will cover
+method syntax generally in Chapter XX and iterators specifically in Chapter XX.</p>
 <p>The safety and conciseness of <code>for</code> loops make them the most commonly used loop
 construct in Rust. Even in situations where you want to run some code a certain
 number of times, like our countdown example that used a <code>while</code> loop, most
@@ -2274,7 +2273,7 @@ Rustaceans would use a <code>for</code> loop. The way to do that is using a <cod
 is a type provided by the standard library that generates numbers starting from
 one number and ending before another number. Here's what the countdown would
 look like with a for loop, and using another method we haven't yet talked
-about, <code>.rev()</code>, to reverse the range:</p>
+about, <code>rev</code>, to reverse the range:</p>
 <p>Filename: src/main.rs</p>
 <pre><code class="language-rust">fn main() {
     for number in (1..4).rev() {
@@ -4072,7 +4071,7 @@ do. To start, add this code at the beginning of the file:</p>
 <p>This is our first module declaration. As you can see, you use the <code>mod</code>
 keyword, followed by the name of the module, and then a block of code in curly
 braces. Everything inside this block is inside the namespace <code>network</code>. In this
-case, we have a single function, <code>connect()</code>. If we wanted to try and call this
+case, we have a single function, <code>connect</code>. If we wanted to try and call this
 function from outside the <code>network</code> module, we would say <code>network::connect()</code>
 rather than <code>connect()</code>.</p>
 <p>You could have multiple modules, side-by-side. For example, if you wanted a
@@ -4087,7 +4086,7 @@ mod client {
     }
 }
 </code></pre>
-<p>Now we have a <code>network::connect()</code> function and a <code>client::connect()</code> function.</p>
+<p>Now we have a <code>network::connect</code> function and a <code>client::connect</code> function.</p>
 <p>And you can put modules inside of modules. If you wanted to have <code>client</code> be
 within <code>network</code>:</p>
 <pre><code class="language-rust">mod network {
@@ -4100,7 +4099,7 @@ within <code>network</code>:</p>
     }
 }
 </code></pre>
-<p>This gives us <code>network::connect()</code> and <code>network::client::connect()</code>.</p>
+<p>This gives us <code>network::connect</code> and <code>network::client::connect</code>.</p>
 <p>In this way, modules form a tree. The contents of <code>src/lib.rs</code> are at the root
 of the project's tree, and the submodules form the leaves. Here's what our
 first example looks like when thought of this way:</p>
@@ -4338,7 +4337,7 @@ library crate. This pattern is quite common for executable crates: most
 functionality is in a library crate, and the executable crate uses that
 library. This way, other programs can also use the library crate, and it’s also
 a nice separation of concerns.</p>
-<p>Our binary crate right now just calls our library's <code>connect()</code> function from
+<p>Our binary crate right now just calls our library's <code>connect</code> function from
 the <code>client</code> module; we picked that one since it's the first warning in our
 build output above. Invoking <code>cargo build</code> will now give us an error after the
 warnings:</p>
@@ -4379,7 +4378,7 @@ error: function `connect` is private
 </code></pre>
 <p>Hooray! We have a different error! Yes, different error messages are a cause
 for celebration. The new error says &quot;function <code>connect</code> is private&quot;, so let's
-edit <code>src/client.rs</code> to make <code>client::connect()</code> public:</p>
+edit <code>src/client.rs</code> to make <code>client::connect</code> public:</p>
 <p>Filename: src/client.rs</p>
 <pre><code class="language-rust">pub fn connect() {
 }
@@ -4399,7 +4398,7 @@ warning: function is never used: `connect`, #[warn(dead_code)] on by default
 1 | fn connect() {
   | ^
 </code></pre>
-<p>It compiled! And the warning about <code>client::connect()</code> not being used is gone!</p>
+<p>It compiled! And the warning about <code>client::connect</code> not being used is gone!</p>
 <p>Making functions public isn't the only way to fix unused code warnings: if
 we <em>didn't</em> want these functions to be part of our public API and we got these
 warnings, the warnings could be alerting us to code we no longer needed and
@@ -4480,21 +4479,21 @@ fn try_me() {
 }
 </code></pre>
 <p>Before you try to compile this code, make a guess about which lines in
-<code>try_me()</code> will have errors.</p>
+<code>try_me</code> will have errors.</p>
 <p>Ready? Let's talk through them!</p>
-<p>The <code>try_me()</code> function is in the root module of our project. The module named
+<p>The <code>try_me</code> function is in the root module of our project. The module named
 <code>outermost</code> is private, but the second rule says we're allowed to access it
 since <code>outermost</code> is in our current, root module.</p>
-<p>The function call <code>outermost::middle_function()</code> will work. <code>middle_function()</code>
+<p>The function call <code>outermost::middle_function()</code> will work. <code>middle_function</code>
 is public, and we are accessing it through its parent module, <code>outermost</code>,
 which we just determined we can access in the previous paragraph.</p>
 <p><code>outermost::middle_secret_function()</code> will cause a compilation error.
-<code>middle_secret_function()</code> is private, so the second rule applies. Our current
-root module is neither the current module of <code>middle_secret_function()</code>
+<code>middle_secret_function</code> is private, so the second rule applies. Our current
+root module is neither the current module of <code>middle_secret_function</code>
 (<code>outermost</code> is), nor is it a child module of the current module of
-<code>middle_secret_function()</code>.</p>
+<code>middle_secret_function</code>.</p>
 <p>The module named <code>inside</code> is private and has no child modules, so it can only
-be accessed by its current module, <code>outermost</code>. That means the <code>try_me()</code>
+be accessed by its current module, <code>outermost</code>. That means the <code>try_me</code>
 function is not allowed to call <code>outermost::inside::inner_function()</code> or
 <code>outermost::inside::secret_function()</code>.</p>
 <p>Here are some changes to make to this code. Try each one, make a guess
@@ -4503,7 +4502,7 @@ rules to understand why.</p>
 <ul>
 <li>What if the <code>inside</code> module was public?</li>
 <li>What if <code>outside</code> was public and <code>inside</code> was private?</li>
-<li>What if, in the body of <code>inner_function()</code>, we called
+<li>What if, in the body of <code>inner_function</code>, we called
 <code>::outermost::middle_secret_function()</code>? (The two colons at the beginning
 mean that we want to refer to the namespaces starting from the root
 namespace.)</li>
@@ -4614,10 +4613,10 @@ mod tests {
 </code></pre>
 <p>We'll explain more about testing in Chapter XX, but parts of this should make
 sense now: we have a module named <code>tests</code> that lives next to our other modules
-and contains one function named <code>it_works()</code>. Even though there are special
+and contains one function named <code>it_works</code>. Even though there are special
 annotations, the <code>tests</code> module is just another module!</p>
 <p>Since tests are for exercising the code within our library, let's try to call
-our <code>client::connect()</code> function from this <code>it_works()</code> function, even though
+our <code>client::connect</code> function from this <code>it_works</code> function, even though
 we're not going to be checking any functionality right now:</p>
 <pre><code class="language-rust">#[cfg(test)]
 mod tests {
@@ -4782,7 +4781,7 @@ very similar:</p>
     // ...
 }
 </code></pre>
-<p>This <code>foo()</code> function has one generic parameter, <code>T</code>, and takes one argument,
+<p>This <code>foo</code> function has one generic parameter, <code>T</code>, and takes one argument,
 <code>x</code>, which has the type <code>T</code>. Let's talk a little bit more about what this means.</p>
 <h2>Generic methods</h2>
 <p>We've seen how to define methods with the <code>impl</code> keyword. Our generic <code>Point</code>
@@ -4807,7 +4806,7 @@ case, this syntax can feel a bit redundant, but when we get into some of Rust's
 more advanced features later, this distinction will become more useful.</p>
 <h2>There's more to the story</h2>
 <p>This section covered the basic syntax of generics, but it's not the full story.
-For example, let's try to implement our <code>foo()</code> function: we'll have it print out
+For example, let's try to implement our <code>foo</code> function: we'll have it print out
 the value of <code>x</code>:</p>
 <pre><code class="language-rust,ignore">fn foo&lt;T&gt;(x: T) {
     println!(&quot;x is: {}&quot;, x);
@@ -5085,8 +5084,8 @@ pub use a::namespace::function;
 <p>Here, the <code>a</code> module is not public to users of our library, so neither are its
 children, even though <code>namespace</code> and <code>function</code> are public <em>within</em> our
 library. So users of our library couldn't call <code>a::namespace::function()</code>
-themselves. However, since we've re-exported <code>function()</code> with <code>pub use</code>,
-<code>function()</code> will be public. Users can just call <code>function()</code> themselves,
+themselves. However, since we've re-exported <code>function</code> with <code>pub use</code>,
+<code>function</code> will be public. Users can just call <code>function</code> themselves,
 directly. This allows us to organize our code internally however we'd like,
 while presenting a different external interface.</p>
 <h2>Documentation</h2>
@@ -5108,7 +5107,7 @@ fn bar() {
 }
 </code></pre>
 <p>This comment would then be interpreted by <code>rustdoc</code> as documenting the thing
-that follows it: <code>foo()</code> and <code>bar()</code>.</p>
+that follows it: <code>foo</code> and <code>bar</code>.</p>
 <p>Because documentation comments have semantic meaning to <code>rustdoc</code>, the compiler
 will pay attention to the placement of your documentation comments. For
 example, a program with only this:</p>

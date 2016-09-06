@@ -104,7 +104,7 @@ do. To start, add this code at the beginning of the file:</p>
 <p>This is our first module declaration. As you can see, you use the <code>mod</code>
 keyword, followed by the name of the module, and then a block of code in curly
 braces. Everything inside this block is inside the namespace <code>network</code>. In this
-case, we have a single function, <code>connect()</code>. If we wanted to try and call this
+case, we have a single function, <code>connect</code>. If we wanted to try and call this
 function from outside the <code>network</code> module, we would say <code>network::connect()</code>
 rather than <code>connect()</code>.</p>
 <p>You could have multiple modules, side-by-side. For example, if you wanted a
@@ -119,7 +119,7 @@ mod client {
     }
 }
 </code></pre>
-<p>Now we have a <code>network::connect()</code> function and a <code>client::connect()</code> function.</p>
+<p>Now we have a <code>network::connect</code> function and a <code>client::connect</code> function.</p>
 <p>And you can put modules inside of modules. If you wanted to have <code>client</code> be
 within <code>network</code>:</p>
 <pre><code class="language-rust">mod network {
@@ -132,7 +132,7 @@ within <code>network</code>:</p>
     }
 }
 </code></pre>
-<p>This gives us <code>network::connect()</code> and <code>network::client::connect()</code>.</p>
+<p>This gives us <code>network::connect</code> and <code>network::client::connect</code>.</p>
 <p>In this way, modules form a tree. The contents of <code>src/lib.rs</code> are at the root
 of the project's tree, and the submodules form the leaves. Here's what our
 first example looks like when thought of this way:</p>

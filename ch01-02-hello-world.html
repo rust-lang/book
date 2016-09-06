@@ -132,20 +132,20 @@ returns nothing.” If there were arguments, they would go inside the parenthese
 requires these around all function bodies. It's considered good style to put
 the opening curly brace on the same line as the function declaration, with one
 space in between.</p>
-<p>Inside the <code>main()</code> function:</p>
+<p>Inside the <code>main</code> function:</p>
 <pre><code class="language-rust">    println!(&quot;Hello, world!&quot;);
 </code></pre>
 <p>This line does all of the work in this little program: it prints text to the
 screen. There are a number of details that are important here. The first is
 that it’s indented with four spaces, not a tab.</p>
-<p>The second important part is <code>println!()</code>. This is calling a Rust <em>macro</em>,
+<p>The second important part is <code>println!</code>. This is calling a Rust <em>macro</em>,
 which is how metaprogramming is done in Rust. If it were calling a function
-instead, it would look like this: <code>println()</code> (without the <code>!</code>). We'll discuss
+instead, it would look like this: <code>println</code> (without the <code>!</code>). We'll discuss
 Rust macros in more detail in Chapter XX, but for now you just need to know
 that when you see a <code>!</code> that means that you’re calling a macro instead of a
 normal function.</p>
 <p>Next is <code>&quot;Hello, world!&quot;</code> which is a <em>string</em>. We pass this string as an
-argument to <code>println!()</code>, which prints the string to the screen. Easy enough!</p>
+argument to <code>println!</code>, which prints the string to the screen. Easy enough!</p>
 <p>The line ends with a semicolon (<code>;</code>). The <code>;</code> indicates that this expression is
 over, and the next one is ready to begin. Most lines of Rust code end with a
 <code>;</code>.</p>

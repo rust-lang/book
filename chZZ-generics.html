@@ -160,7 +160,7 @@ very similar:</p>
     // ...
 }
 </code></pre>
-<p>This <code>foo()</code> function has one generic parameter, <code>T</code>, and takes one argument,
+<p>This <code>foo</code> function has one generic parameter, <code>T</code>, and takes one argument,
 <code>x</code>, which has the type <code>T</code>. Let's talk a little bit more about what this means.</p>
 <h2>Generic methods</h2>
 <p>We've seen how to define methods with the <code>impl</code> keyword. Our generic <code>Point</code>
@@ -185,7 +185,7 @@ case, this syntax can feel a bit redundant, but when we get into some of Rust's
 more advanced features later, this distinction will become more useful.</p>
 <h2>There's more to the story</h2>
 <p>This section covered the basic syntax of generics, but it's not the full story.
-For example, let's try to implement our <code>foo()</code> function: we'll have it print out
+For example, let's try to implement our <code>foo</code> function: we'll have it print out
 the value of <code>x</code>:</p>
 <pre><code class="language-rust,ignore">fn foo&lt;T&gt;(x: T) {
     println!(&quot;x is: {}&quot;, x);

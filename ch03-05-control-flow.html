@@ -361,9 +361,8 @@ and missing some items.</p>
 item from the <code>a</code> array but forgot to update the condition to be <code>while index &lt; 4</code>, our code would panic. Using the <code>for</code> loop means we would not need to
 remember to change any other code if we changed the number of values in the
 array.</p>
-<p>If you're wondering about the <code>.iter()</code> code in this example, keep reading! We
-will cover method syntax generally in Chapter XX and iterators specifically in
-Chapter XX.</p>
+<p>If you're wondering about <code>iter</code> in this example, keep reading! We will cover
+method syntax generally in Chapter XX and iterators specifically in Chapter XX.</p>
 <p>The safety and conciseness of <code>for</code> loops make them the most commonly used loop
 construct in Rust. Even in situations where you want to run some code a certain
 number of times, like our countdown example that used a <code>while</code> loop, most
@@ -371,7 +370,7 @@ Rustaceans would use a <code>for</code> loop. The way to do that is using a <cod
 is a type provided by the standard library that generates numbers starting from
 one number and ending before another number. Here's what the countdown would
 look like with a for loop, and using another method we haven't yet talked
-about, <code>.rev()</code>, to reverse the range:</p>
+about, <code>rev</code>, to reverse the range:</p>
 <p>Filename: src/main.rs</p>
 <pre><code class="language-rust">fn main() {
     for number in (1..4).rev() {

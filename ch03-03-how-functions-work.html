@@ -69,7 +69,7 @@
                 <div id="content" class="content">
                     <h2>How Functions Work</h2>
 <p>Functions are pervasive in Rust code. We’ve already seen one of the most
-important functions in the language: the <code>main()</code> function that’s the entry
+important functions in the language: the <code>main</code> function that’s the entry
 point of many programs. We've also seen the <code>fn</code> keyword, which allows us to
 declare new functions.</p>
 <p>Rust code uses <em>snake case</em> as the conventional style for function and variable
@@ -90,13 +90,13 @@ fn another_function() {
 after the function name. The curly braces tell the compiler where the function
 body begins and ends.</p>
 <p>We can call any function we’ve defined by entering its name followed by a pair
-of parentheses. Since <code>another_function()</code> is defined in the program, it can be
-called from inside the <code>main()</code> function. Note that we defined
-<code>another_function()</code> <em>after</em> the <code>main()</code> function in our source code; we could
+of parentheses. Since <code>another_function</code> is defined in the program, it can be
+called from inside the <code>main</code> function. Note that we defined
+<code>another_function</code> <em>after</em> the <code>main</code> function in our source code; we could
 have defined it before as well. Rust doesn’t care where you define your
 functions, only that they are defined somewhere.</p>
 <p>Let’s start a new binary project named <code>functions</code> so that we can explore
-further. Place the <code>another_function()</code> example in <code>src/main.rs</code> and run it.
+further. Place the <code>another_function</code> example in <code>src/main.rs</code> and run it.
 You should see the following output:</p>
 <pre><code class="language-bash">$ cargo run
    Compiling functions v0.1.0 (file:///projects/functions)
@@ -104,12 +104,12 @@ You should see the following output:</p>
 Hello, world!
 Another function.
 </code></pre>
-<p>The lines execute in the order they appear in the <code>main()</code> function. First, our
-“Hello, world!” message prints, and then <code>another_function()</code> is called and its
+<p>The lines execute in the order they appear in the <code>main</code> function. First, our
+“Hello, world!” message prints, and then <code>another_function</code> is called and its
 message is printed.</p>
 <h3>Function Arguments</h3>
 <p>Functions can also take arguments. The following rewritten version of
-<code>another_function()</code> shows what arguments look like in Rust:</p>
+<code>another_function</code> shows what arguments look like in Rust:</p>
 <p>Filename: src/main.rs</p>
 <pre><code class="language-rust">fn main() {
     another_function(5);
@@ -125,9 +125,9 @@ fn another_function(x: i32) {
      Running `target/debug/functions`
 The value of x is: 5
 </code></pre>
-<p>Since we passed <code>5</code> to <code>another_function()</code>, the <code>println!</code> macro put <code>5</code> where
+<p>Since we passed <code>5</code> to <code>another_function</code>, the <code>println!</code> macro put <code>5</code> where
 the pair of curly braces were in the format string. The declaration of
-<code>another_function()</code> shows that it takes one argument named <code>x</code>, and the type
+<code>another_function</code> shows that it takes one argument named <code>x</code>, and the type
 of <code>x</code> is <code>i32</code>.</p>
 <p>In function signatures, we <em>must</em> declare the type. This is a deliberate
 decision in the design of Rust; requiring type annotations in function
@@ -255,8 +255,8 @@ fn main() {
     println!(&quot;The value of x is: {}&quot;, x);
 }
 </code></pre>
-<p>There are no function calls, macros, or even <code>let</code> statements in the <code>five()</code>
-function-- just the number <code>5</code> by itself. That's a perfectly valid function in
+<p>There are no function calls, macros, or even <code>let</code> statements in the <code>five</code>
+function: just the number <code>5</code> by itself. That's a perfectly valid function in
 Rust. Note the function's return type, too. Try running this code, and the
 output should look like this:</p>
 <pre><code class="language-bash">$ cargo run
@@ -264,14 +264,14 @@ output should look like this:</p>
      Running `target/debug/functions`
 The value of x is: 5
 </code></pre>
-<p>The <code>5</code> in <code>five()</code> is actually the function's return value, which is why the
-return type is <code>i32</code>. Let’s examine this in more detail. There are two
-important bits. First, the line <code>let x = five();</code> in <code>main()</code> shows that we can
-use the return value of a function to initialize a binding.</p>
-<p>Because the function <code>five()</code> returns a <code>5</code>, that line is the same as saying:</p>
+<p>The <code>5</code> in the <code>five</code> function is actually the function's return value, which
+is why the return type is <code>i32</code>. Let’s examine this in more detail. There are
+two important bits. First, the line <code>let x = five();</code> in <code>main</code> shows that we
+can use the return value of a function to initialize a binding.</p>
+<p>Because the function <code>five</code> returns a <code>5</code>, that line is the same as saying:</p>
 <pre><code class="language-rust">let x = 5;
 </code></pre>
-<p>The second interesting bit is the <code>five()</code> function itself. It requires no
+<p>The second interesting bit is the <code>five</code> function itself. It requires no
 arguments and defines the type of the return value, but the body of the
 function is a lonely <code>5</code> with no semicolon because it is an expression whose
 value we want to return. Let's look at another example:</p>
