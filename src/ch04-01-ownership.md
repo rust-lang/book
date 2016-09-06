@@ -20,6 +20,62 @@ Once you understand ownership, you have a good foundation for understanding the
 features that make Rust unique. In this chapter, we'll learn ownership by going
 through some examples, focusing on a very common data structure: strings.
 
+PROD: START BOX
+
+###### The Stack and the Heap
+
+In many programming languages, we don't have to think about the stack and the
+heap very often. But in a systems programming language like Rust, whether a
+value is on the stack or the heap has more of an effect on how the language
+behaves and why we have to make certain decisions. We're going to be describing
+parts of ownership in relation to the stack and the heap, so here is a brief
+explanation.
+
+Both the stack and the heap are parts of memory that is available to your code
+to use at runtime, but they are structured in different ways. The stack stores
+values in the order it gets them and removes the values in the opposite order.
+This is referred to as *last in, first out*. Think of a stack of plates: when
+you add more plates, you put them on top of the pile, and when you need a
+plate, you take one off the top. Adding or removing plates from the middle or
+bottom wouldn't work as well! Adding data is called *pushing onto the stack*
+and removing data is called *popping off the stack*.
+
+The stack is fast because of the way it accesses the data: it never has to look
+around for a place to put new data or a place to get data from; that place is
+always the top. Another property that makes the stack fast is that all data on
+the stack must take up a known, fixed size.
+
+For data with a size unknown to us at compile time, or a size that might
+change, we can store data on the heap instead. The heap is less organized: when
+we put data on the heap, we ask for some amount of space. The operating system
+finds an empty spot somewhere in the heap that is big enough, marks it as being
+in use, and returns to us a pointer to that location. This process is called
+*allocating on the heap*. Since the pointer is a known, fixed size, we can
+store the pointer on the stack, but when we want the actual data, we have to
+follow the pointer.
+
+Think of being seated at a restaurant. When you enter, you say how many people
+are in your group, and the staff finds an empty table that would fit everyone
+and leads you there. If someone in your group comes late, they can ask where
+you have been seated to find you.
+
+Accessing data in the heap is slower because we have to follow a pointer to
+get there. Allocating a large amount of space can also take time.
+
+When our code calls a function, the values passed into the function (including,
+potentially, pointers to data on the heap) and the function's local variables
+get pushed onto the stack. When the function is over, those values get popped
+off the stack.
+
+Keeping track of what parts of code are using what data on the heap, minimizing
+the amount of duplicate data on the heap, and cleaning up unused data on the
+heap so that we don't run out of space are all problems that ownership
+addresses. Once you understand ownership, you won't need to think about the
+stack and the heap very often, but knowing that managing heap data is why
+ownership exists can help explain why it works the way it does.
+
+PROD: END BOX
+
 ### Variable binding scope
 
 We've walked through an example of a Rust program already in the tutorial
@@ -56,12 +112,28 @@ build on top of this understanding by introducing the `String` type.
 
 ### Strings
 
-String literals are convenient, but they aren’t the only way that you use
-strings. For one thing, they’re immutable. For another, not every string is
-literal: what about taking user input and storing it in a string?
+In order to illustrate the rules of ownership, we need a data type that is more
+complex than the ones we covered in Chapter 3. All of the data types we've
+looked at previously are stored on the stack and popped off the stack when
+their scope is over, but we want to look at data that is stored on the heap and
+explore how Rust knows when to clean that data up.
 
-For this, Rust has a second string type, `String`. You can create a `String`
-from a string literal using the `from` function:
+We're going to use `String` as the example here and concentrate on the parts of
+`String` that relate to ownership. These aspects also apply to other complex
+data types provided by the standard library and that you create. We'll go into
+more depth about `String` specifically in Chapter XX.
+
+We've already seen string literals, where a string value is hard-coded into our
+program. String literals are on the stack, because our source code is actually
+the first thing that goes onto our stack. String literals are convenient, but
+they aren’t always suitable for every situation you want to use text. For one
+thing, they’re immutable. For another, not every string value can be known when
+we write our code: what if we want to take user input and store it?
+
+For things like this, Rust has a second string type, `String`. This type is
+allocated on the heap, and as such, is able to store an amount of text that is
+unknown to us at compile time. You can create a `String` from a string literal
+using the `from` function, like so:
 
 ```rust
 let s = String::from("hello");
@@ -81,22 +153,21 @@ s.push_str(", world!"); // push_str() appends a literal to a String
 
 println!("{}", s); // This will print `hello, world!`
 ```
-
-### Memory and allocation
-
 So, what’s the difference here? Why can `String` be mutated, but literals
 cannot? The difference comes down to how these two types deal with memory.
 
-In the case of a string literal, because we know the contents of the string at
-compile time, we can hard-code the text of the string directly into the final
-executable. This means that string literals are quite fast and efficient. But
+### Memory and Allocation
+
+In the case of a string literal, because we know the contents at compile time,
+the text is hard-coded directly into the final executable and stored with the
+code on the stack. This makes string literals quite fast and efficient. But
 these properties only come from its immutability. Unfortunately, we can’t put a
 blob of memory into the binary for each string whose size is unknown at compile
 time and whose size might change over the course of running the program.
 
-With `String`, in order to support a mutable, growable string, we need to
-allocate an unknown amount of memory to hold the contents. This means two
-things:
+With the `String` type, in order to support a mutable, growable piece of text,
+we need to allocate an amount of memory on the heap, unknown at compile time,
+to hold the contents. This means two things:
 
 1. The memory must be requested from the operating system at runtime.
 2. We need a way of giving this memory back to the operating system when we’re
@@ -141,8 +212,9 @@ memory.
 > is _roughly_ similar in Rust, but not identical.
 
 This pattern has a profound impact on the way that Rust code is written. It may
-seem obvious right now, but things can get tricky in more advanced situations.
-Let’s go over the first one of those right now.
+seem simple right now, but things can get tricky in more advanced situations
+when we want to have multiple variable bindings use the data that we have
+allocated on the heap. Let’s go over some of those situations now.
 
 ### Move
 
@@ -153,8 +225,11 @@ let x = 5;
 let y = x;
 ```
 
-You might say “Make a copy of `5`”, and that would be correct. We now have two
-bindings, `x` and `y`, and both equal `5`.
+We can probably guess what this is doing based on our experience with other
+languages: “Bind the value `5` to `x`, then make a copy of the value in `x` and
+bind it to `y`”. We now have two bindings, `x` and `y`, and both equal `5`.
+This is indeed what is happening since integers are simple values with a known,
+fixed size, and these two `5` values are pushed onto the stack.
 
 Now let’s look at `String`. What would you expect this code to do?
 
@@ -163,9 +238,18 @@ let s1 = String::from("hello");
 let s2 = s1;
 ```
 
-You might say “copy the `String`!” This is both correct and incorrect at the
-same time. It does a _shallow_ copy of the `String`. What’s that mean? Well,
-let’s take a look at what `String` looks like under the covers:
+This looks very similar to the previous code, so we might assume that the way
+it works would be the same: that the second line would make a copy of the value
+in `s1` and bind it to `s2`. This isn't quite what happens: `String` values are
+stored on the heap, so Rust's ownership rules apply here so that Rust ensures
+we don't have any of the bugs we mentioned before that are common around
+cleaning up memory.
+
+To explain this more thoroughly, let’s take a look at what `String` looks like
+under the covers in Figure 4-1. A `String` is made up of three parts, shown on
+the left: a pointer to the memory that holds the contents of the string, a
+length, and a capacity. This group of data is stored on the stack. On the right
+is the memory that holds the contents, and this is on the heap.
 
 <img alt="String in memory" src="img/trpl04-01.svg" class="center" style="width: 50%;" />
 
@@ -176,43 +260,35 @@ the `String` is currently using. The capacity is the total amount of memory the
 and capacity matters but not in this context, so don’t worry about it too much.
 For right now, it's fine to ignore the capacity.
 
-When we assign `s1` to `s2`, the `String` itself is copied, meaning we copy the
-pointer, the length, and the capacity. We do not copy the data that the
-`String`'s pointer refers to. In other words, it looks like this:
+When we assign `s1` to `s2`, the `String` data itself is copied, meaning we
+copy the pointer, the length, and the capacity that are on the stack. We do not
+copy the data on the heap that the `String`'s pointer refers to. In other
+words, it looks like figure 4-2.
 
 <img alt="s1 and s2 pointing to the same value" src="img/trpl04-02.svg" class="center" style="width: 50%;" />
 
-_Not_ this:
+And _not_ Figure 4-3, which is what memory would look like if Rust instead
+copied the heap data as well. If Rust did this, the operation `s2 = s1` could
+potentially be very expensive if the data on the heap was large.
 
 <img alt="s1 and s2 to two places" src="img/trpl04-03.svg" class="center" style="width: 50%;" />
 
-There’s a problem here. Both data pointers are pointing to the same place. Why
-is this a problem? Well, when `s2` goes out of scope, it will free the memory
-that the pointer points to. And then `s1` goes out of scope, and it will _also_
-try to free the memory that the pointer points to. That’s bad, and is known as
-a "double free" error.
+Figure 4-3: Another possibility for what `s2 = s1` might do, if Rust chose to
+copy heap data as well.
 
-So what’s the solution? Here, we stand at a crossroads with a few options.
+Earlier, we said that when a binding goes out of scope, Rust will automatically
+call the `drop()` function and clean up the heap memory for that binding. But
+in figure 4-2, we see both data pointers pointing to the same location. This is
+a problem: when `s2` and `s1` go out of scope, they will both try to free the
+same memory. This is known as a "double free" error and is one of the memory
+safety bugs we mentioned before. Freeing memory twice can lead to memory
+corruption, which can potentially lead to security vulnerabilities.
 
-One way would be to change assignment so that it will also copy out any data.
-This works, but is inefficient: what if our `String` contained a novel?
-Also, that solution would only work for memory. What if, instead of a `String`,
-we had a `TcpConnection`? Opening and closing a network connection is very
-similar to allocating and freeing memory, so it would be nice to be able to use
-the same mechanism. We wouldn't be able to, though, because creating a new
-connection requires more than just copying memory: we have to request a new
-connection from the operating system. We could then extend our solution to
-allow the programmer to hook into the assignment, similar to `drop()`, and
-write code to fix things up. That would work, but if we did that, an `=` could
-run arbitrary code. That’s also not good, and it doesn’t solve our efficiency
-concerns either.
-
-Let’s take a step back: the root of the problem is that `s1` and `s2` both
-think that they have control of the memory and therefore need to free it.
-Instead of trying to copy the allocated memory, we could say that `s1` is no
-longer valid and, therefore, doesn’t need to free anything. This is in fact the
-choice that Rust makes. Check out what happens when you try to use `s1` after
-`s2` is created:
+In order to ensure memory safety, there's one more detail to what happens in
+this situation in Rust. Instead of trying to copy the allocated memory, Rust
+says that `s1` is no longer valid and, therefore, doesn’t need to free anything
+when it goes out of scope. Check out what happens when you try to use `s1`
+after `s2` is created:
 
 ```rust,ignore
 let s1 = String::from("hello");
@@ -276,16 +352,14 @@ let s2 = s1.clone();
 println!("{}", s1);
 ```
 
-This will work just fine. Remember our diagram from before? In this case,
-it _is_ doing this:
-
-<img alt="s1 and s2 to two places" src="img/trpl04-03.svg" class="center" style="width: 50%;" />
+This will work just fine, and this is how you can explicitly get the behavior
+we showed in Figure 4-3, where the heap data *does* get copied.
 
 When you see a call to `clone()`, you know that some arbitrary code is being
 executed, and that code may be expensive. It’s a visual indicator that something
 different is going on here.
 
-### Copy
+#### Stack-only Data: Copy
 
 There’s one last wrinkle that we haven’t talked about yet. This code works:
 
@@ -296,22 +370,24 @@ let y = x;
 println!("{}", x);
 ```
 
-But why? We don’t have a call to `clone()`. Why didn’t `x` get moved into `y`?
+This seems to contradict what we just learned: we don't have a call to
+`clone()`, but `x` is still valid, and wasn't moved into `y`.
 
-Types like integers that have a known size at compile time do not ask for
-memory from the operating system and therefore do not need to be `drop()`ped
-when they go out of scope. That means there's no reason we would want to
-prevent `x` from being valid after we create the binding `y`. In other words,
-there’s no difference between deep and shallow copying here, so calling
-`clone()` wouldn’t do anything differently from the usual shallow copying and
-we can leave it out.
+This is because types like integers that have a known size at compile time are
+stored entirely on the stack, do not ask for heap memory from the operating
+system, and therefore do not need to be `drop()`ped when they go out of scope.
+That means there's no reason we would want to prevent `x` from being valid
+after we create the binding `y`. In other words, there’s no difference between
+deep and shallow copying here, so calling `clone()` wouldn’t do anything
+differently from the usual shallow copying and we can leave it out.
 
-Rust has a special annotation that you can place on types like these, and that
-annotation is the `Copy` trait. We'll talk more about traits in Chapter XX. If
-a type has the `Copy` trait, an older binding is still usable after assignment.
-Rust will not let you make something have the `Copy` trait if it has
-implemented `drop()`. If you need to do something special when the value goes
-out of scope, being `Copy` will be an error.
+Rust has a special annotation called the `Copy` trait that we can place on
+types like these (we'll talk more about traits in Chapter XX). If a type has
+the `Copy` trait, an older binding is still usable after assignment. Rust will
+not let us annotate a type with the `Copy` trait if the type, or any of its
+parts, has implemented `drop()`. If the type needs something special to happen
+when the value goes out of scope and we add the `Copy` annotation to that type,
+we will get a compile-time error.
 
 So what types are `Copy`? You can check the documentation for the given type to
 be sure, but as a rule of thumb, any group of simple scalar values can be Copy,
