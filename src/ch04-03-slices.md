@@ -141,7 +141,7 @@ contains a pointer to the 6th byte of `s` and a length value of 5.
 
 In other words, it looks like this:
 
-DIAGRAM GOES HERE of s, hello, and world
+<img alt="world containing a pointer to the 6th byte of String s and a length 5" src="img/trpl04-06.svg" class="center" style="width: 50%;" />
 
 With Rust’s `..` range syntax, if you want to start at the first index (zero),
 you can drop the value before the `..`. In other words, these are equal:
