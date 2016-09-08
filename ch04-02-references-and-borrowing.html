@@ -110,7 +110,7 @@ function return value is gone. Next, note that we pass <code>&amp;s1</code> into
 <code>String</code>.</p>
 <p>These <code>&amp;</code>s are called <em>references</em>, and they allow you to refer to some value
 without taking ownership of it. Here’s a diagram:</p>
-<p>DIAGRAM GOES HERE of a &amp;String pointing at a String, with (ptr, len, capacity)</p>
+<p><img alt="&String s pointing at String s1" src="img/trpl04-05.svg" class="center" /></p>
 <p>Let’s take a closer look at the function call here:</p>
 <pre><code class="language-rust"># fn calculate_length(s: &amp;String) -&gt; usize {
 #     let length = s.len();

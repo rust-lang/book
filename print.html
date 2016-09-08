@@ -2416,7 +2416,7 @@ let s2 = s1;
 <p>You might say “copy the <code>String</code>!” This is both correct and incorrect at the
 same time. It does a <em>shallow</em> copy of the <code>String</code>. What’s that mean? Well,
 let’s take a look at what <code>String</code> looks like under the covers:</p>
-<p><img alt="string" src="img/foo1.png" class="center" style="width: 50%;" /></p>
+<p><img alt="String in memory" src="img/trpl04-01.svg" class="center" style="width: 50%;" /></p>
 <p>A <code>String</code> is made up of three parts: a pointer to the memory that holds the
 contents of the string, a length, and a capacity. The length is how much memory
 the <code>String</code> is currently using. The capacity is the total amount of memory the
@@ -2426,9 +2426,9 @@ For right now, it's fine to ignore the capacity.</p>
 <p>When we assign <code>s1</code> to <code>s2</code>, the <code>String</code> itself is copied, meaning we copy the
 pointer, the length, and the capacity. We do not copy the data that the
 <code>String</code>'s pointer refers to. In other words, it looks like this:</p>
-<p><img alt="s1 and s2" src="img/foo2.png" class="center" style="width: 50%;" /></p>
+<p><img alt="s1 and s2 pointing to the same value" src="img/trpl04-02.svg" class="center" style="width: 50%;" /></p>
 <p><em>Not</em> this:</p>
-<p><img alt="s1 and s2 to two places" src="img/foo4.png" class="center" style="width: 50%;" /></p>
+<p><img alt="s1 and s2 to two places" src="img/trpl04-03.svg" class="center" style="width: 50%;" /></p>
 <p>There’s a problem here. Both data pointers are pointing to the same place. Why
 is this a problem? Well, when <code>s2</code> goes out of scope, it will free the memory
 that the pointer points to. And then <code>s1</code> goes out of scope, and it will <em>also</em>
@@ -2473,7 +2473,7 @@ without copying the data probably sounded like a shallow copy. Because Rust
 also invalidates the first binding, instead of calling this a shallow copy,
 it's called a <em>move</em>. Here we would read this by saying that <code>s1</code> was <em>moved</em>
 into <code>s2</code>. So what actually happens looks like this:</p>
-<p><img alt="s1 and s2 to the same place" src="img/foo3.png" class="center" style="width: 50%;" /></p>
+<p><img alt="s1 moved to s2" src="img/trpl04-04.svg" class="center" style="width: 50%;" /></p>
 <p>That solves our problem! With only <code>s2</code> valid, when it goes out of scope, it
 alone will free the memory, and we’re done.</p>
 <h3>Ownership Rules</h3>
@@ -2502,7 +2502,7 @@ println!(&quot;{}&quot;, s1);
 </code></pre>
 <p>This will work just fine. Remember our diagram from before? In this case,
 it <em>is</em> doing this:</p>
-<p><img alt="s1 and s2 to two places" src="img/foo4.png" class="center" style="width: 50%;" /></p>
+<p><img alt="s1 and s2 to two places" src="img/trpl04-03.svg" class="center" style="width: 50%;" /></p>
 <p>When you see a call to <code>clone()</code>, you know that some arbitrary code is being
 executed, and that code may be expensive. It’s a visual indicator that something
 different is going on here.</p>
@@ -2709,7 +2709,7 @@ function return value is gone. Next, note that we pass <code>&amp;s1</code> into
 <code>String</code>.</p>
 <p>These <code>&amp;</code>s are called <em>references</em>, and they allow you to refer to some value
 without taking ownership of it. Here’s a diagram:</p>
-<p>DIAGRAM GOES HERE of a &amp;String pointing at a String, with (ptr, len, capacity)</p>
+<p><img alt="&String s pointing at String s1" src="img/trpl04-05.svg" class="center" /></p>
 <p>Let’s take a closer look at the function call here:</p>
 <pre><code class="language-rust"># fn calculate_length(s: &amp;String) -&gt; usize {
 #     let length = s.len();
@@ -3008,7 +3008,7 @@ slice data structure actually stores the starting position and the length of the
 slice. So in the case of <code>let world = &amp;s[6..11];</code>, <code>world</code> would be a slice that
 contains a pointer to the 6th byte of <code>s</code> and a length value of 5.</p>
 <p>In other words, it looks like this:</p>
-<p>DIAGRAM GOES HERE of s, hello, and world</p>
+<p><img alt="world containing a pointer to the 6th byte of String s and a length 5" src="img/trpl04-06.svg" class="center" style="width: 50%;" /></p>
 <p>With Rust’s <code>..</code> range syntax, if you want to start at the first index (zero),
 you can drop the value before the <code>..</code>. In other words, these are equal:</p>
 <pre><code class="language-rust">let s = String::from(&quot;hello&quot;);
