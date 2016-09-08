@@ -35,6 +35,7 @@ These `&`s are *references*, and they allow you to refer to some value
 without taking ownership of it. Figure 4-5 shows a diagram of this.
 
 <img alt="&String s pointing at String s1" src="img/trpl04-05.svg" class="center" />
+
 Figure 4-5: `&String s` pointing at `String s1`
 
 Let’s take a closer look at the function call here:

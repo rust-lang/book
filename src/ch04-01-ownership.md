@@ -261,6 +261,7 @@ length, and a capacity. This group of data is stored on the stack. On the right
 is the memory that holds the contents, and this is on the heap.
 
 <img alt="String in memory" src="img/trpl04-01.svg" class="center" style="width: 50%;" />
+
 Figure 4-1: Representation in memory of a `String` holding the value "hello"
 bound to `s1`
 
@@ -276,6 +277,7 @@ copy the data on the heap that the `String`'s pointer refers to. In other
 words, it looks like figure 4-2.
 
 <img alt="s1 and s2 pointing to the same value" src="img/trpl04-02.svg" class="center" style="width: 50%;" />
+
 Figure 4-2: Representation in memory of the binding `s2` that has a copy of
 `s1`'s pointer, length and capacity
 
@@ -329,6 +331,7 @@ it's known as a _move_. Here we would read this by saying that `s1` was _moved_
 into `s2`. So what actually happens looks like Figure 4-4.
 
 <img alt="s1 moved to s2" src="img/trpl04-04.svg" class="center" style="width: 50%;" />
+
 Figure 4-4: Representation in memory after `s1` has been invalidated
 
 That solves our problem! With only `s2` valid, when it goes out of scope, it

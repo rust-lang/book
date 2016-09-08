@@ -148,10 +148,11 @@ slice data structure actually stores the starting position and the length of the
 slice. So in the case of `let world = &s[6..11];`, `world` would be a slice that
 contains a pointer to the 6th byte of `s` and a length value of 5.
 
-Figure 4-7 shows this in a diagram:
+Figure 4-6 shows this in a diagram:
 
 <img alt="world containing a pointer to the 6th byte of String s and a length 5" src="img/trpl04-06.svg" class="center" style="width: 50%;" />
-Figure 4-7: Two string slices referring to parts of a `String`
+
+Figure 4-6: Two string slices referring to parts of a `String`
 
 With Rust’s `..` range syntax, if you want to start at the first index (zero),
 you can drop the value before the `..`. In other words, these are equal:
