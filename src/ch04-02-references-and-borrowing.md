@@ -53,7 +53,7 @@ function return value is gone. Next, note that we pass `&s1` into
 These `&`s are called *references*, and they allow you to refer to some value
 without taking ownership of it. Here’s a diagram:
 
-DIAGRAM GOES HERE of a &String pointing at a String, with (ptr, len, capacity)
+<img alt="&String s pointing at String s1" src="img/trpl04-05.svg" class="center" />
 
 Let’s take a closer look at the function call here:
 
