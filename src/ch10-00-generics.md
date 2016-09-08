@@ -1,8 +1,9 @@
 # Generics
 
-One of the core tools a programming gives you is the ability to deal
+One of the core tools a programming language gives you is the ability to deal
 effectively with duplication. Different kinds of duplication are dealt with in
-different ways. Consider a small program that finds the largest number in a list:
+different ways. Consider a small program that finds the largest number in a
+list:
 
 ```rust
 let numbers = vec![34, 50, 25, 100, 65];
@@ -53,7 +54,7 @@ answer is functions:
 ```rust
 fn largest(numbers: Vec<i32>) {
     let mut largest = numbers[0];
-    
+
     for number in numbers {
         if largest > number {
             largest = number;
