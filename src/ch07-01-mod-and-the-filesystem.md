@@ -47,14 +47,13 @@ mod network {
 }
 ```
 
-This is our first module declaration. As you can see, you use the `mod`
-keyword, followed by the name of the module, and then a block of code in curly
-braces. Everything inside this block is inside the namespace `network`. In this
-case, we have a single function, `connect`. If we wanted to try and call this
-function from outside the `network` module, we would say `network::connect()`
-rather than `connect()`.
+This is our first module declaration. We use the `mod` keyword, followed by the
+name of the module, and then a block of code in curly braces. Everything inside
+this block is inside the namespace `network`. In this case, we have a single
+function, `connect`. If we wanted to try and call this function from outside
+the `network` module, we would say `network::connect()` rather than `connect()`.
 
-You could have multiple modules, side-by-side. For example, if you wanted a
+We could have multiple modules, side-by-side. For example, if we wanted a
 `client` module:
 
 Filename: src/lib.rs
@@ -73,7 +72,7 @@ mod client {
 
 Now we have a `network::connect` function and a `client::connect` function.
 
-And you can put modules inside of modules. If you wanted to have `client` be
+And we can put modules inside of modules. If we wanted to have `client` be
 within `network`:
 
 Filename: src/lib.rs
