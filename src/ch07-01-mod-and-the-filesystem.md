@@ -3,12 +3,12 @@
 Every module in Rust starts with the `mod` keyword. In this next example, we'll
 start again by making a new project with Cargo. This time, instead of a binary,
 we're going to make a library: a project that other people would pull into their
-projects as a dependency.  We saw this with the `rand` crate in Chapter 2.
+projects as a dependency. We saw this with the `rand` crate in Chapter 2.
 
-Imagine that we're creating a library to provide some general
-networking functionality, and we decide to call our library `communicator`. To
-create this library, we won't use the `--bin` option like we have before. This
-is because by default cargo will create a library:
+Imagine that we're creating a library to provide some general networking
+functionality, and we decide to call our library `communicator`. To create this
+library, we won't use the `--bin` option like we have before. This is because
+by default cargo will create a library:
 
 ```bash
 $ cargo new communicator
