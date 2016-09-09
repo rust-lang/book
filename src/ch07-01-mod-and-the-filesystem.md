@@ -156,8 +156,8 @@ mod network {
 ```
 
 We still say `mod client`, but instead of curly braces, we have a semicolon.
-This lets Rust know that we have a module, but it's in another file. Which file
-is it in? Open up `src/client.rs` and put this in it:
+This lets Rust know that we have a module, but it's in another file with that
+module's name. Open up `src/client.rs` and put this in it:
 
 File: src/client.rs
 
@@ -172,7 +172,7 @@ This file provides the _contents_ of the `client` module. If we put a `mod
 client` here, we'd be giving the `client` module its own submodule named
 `client`!
 
-Now, everything should compile:
+Now, everything should compile successfully, but with a few warnings:
 
 ```bash
 $ cargo build
@@ -200,7 +200,8 @@ warning: function is never used: `connect`, #[warn(dead_code)] on by default
 Don't worry about those warnings for now; we'll clear them up in a future
 section. They're just warnings, we've built things successfully!
 
-Let's convert the `network` module next. Change `src/lib.rs` to look like this:
+Let's extract the `network` module into its own file next, using the same
+pattern. Change `src/lib.rs` to look like this:
 
 Filename: src/lib.rs
 
@@ -225,8 +226,9 @@ mod server {
 ```
 
 And then run `cargo build` again. Success! We have one more module to extract:
-`server`. Unfortunately, our current tactic won't work. Let's try it anyway.
-Modify `src/network.rs` to look like this:
+`server`. Unfortunately, our current tactic of extracting a module into a file
+named after that module won't work. Let's try it anyway. Modify
+`src/network.rs` to look like this:
 
 Filename: src/network.rs
 
@@ -277,14 +279,15 @@ that we could do yet:
 
 Here's the problem: in our case, we have different names for our modules:
 `client` and `network::server`. But what if we had `client` and
-`network::client`, or `server` and `network::server`? That's completely valid,
-but then which module would the files `src/client.rs` and `src/server.rs`,
-respectively, be for?
+`network::client`, or `server` and `network::server`? Having two modules at
+different places in the module hierarchy have the same name is completely
+valid, but then which module would the files `src/client.rs` and
+`src/server.rs`, respectively, be for?
 
 Instead of continuing to follow the same file naming pattern we used
-previously, we can do what the error suggests. We'll make a new directory, move
-`src/server.rs` into it, and change `src/network.rs` to `src/network/mod.rs`.
-Then, we try to build:
+previously, we can do what the error suggests. We'll make a new _directory_,
+move `src/server.rs` into it, and change `src/network.rs` to
+`src/network/mod.rs`. Then, when we try to build:
 
 ```bash
 $ mkdir src/network

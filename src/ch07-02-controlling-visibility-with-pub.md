@@ -25,7 +25,7 @@ warning: function is never used: `connect`, #[warn(dead_code)] on by default
 
 Why does this happen? After all, we're building a library. What if these three
 functions are the public interface that we want our *users* to use? We won't
-necessarily be using them within our own crate, but the point of creating them
+necessarily be using them within our own project, but the point of creating them
 is that they *will* be used by another project. Let's try using them as if we
 were another project using our library to see what happens and understand why
 we're getting these unused function warnings. Create a `src/main.rs` file with
@@ -46,8 +46,8 @@ scope, because our package actually now contains *two* crates. Cargo treats
 src/main.rs as the crate root of a binary crate, and we also have our existing
 library crate. This pattern is quite common for executable crates: most
 functionality is in a library crate, and the executable crate uses that
-library. This way, other programs can also use the library crate, and it’s also
-a nice separation of concerns.
+library. This way, other programs can also use the library crate, and it’s a
+nice separation of concerns.
 
 Our binary crate right now just calls our library's `connect` function from
 the `client` module; we picked that one since it's the first warning in our
@@ -255,7 +255,7 @@ be accessed by its current module, `outermost`. That means the `try_me`
 function is not allowed to call `outermost::inside::inner_function()` or
 `outermost::inside::secret_function()`.
 
-Here are some changes to make to this code. Try each one, make a guess
+Here are some changes to try making with this code. Try each one, make a guess
 about what will be allowed or not, compile to see if you're right, and use the
 rules to understand why.
 

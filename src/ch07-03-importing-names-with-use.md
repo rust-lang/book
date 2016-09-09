@@ -166,10 +166,10 @@ warning: function is never used: `connect`, #[warn(dead_code)] on by default
   | ^
 ```
 
-Why doesn't this work? It's not because we don't have `communicator::` in front
-of the function like we had in `src/main.rs`: we are definitely within the
-`communicator` library crate here. The reason is that paths anywhere except in
-a `use` statement are relative to the current module (In a `use` statement,
+Why doesn't this compile? It's not because we don't have `communicator::` in
+front of the function like we had in `src/main.rs`: we are definitely within
+the `communicator` library crate here. The reason is that paths anywhere except
+in a `use` statement are relative to the current module (In a `use` statement,
 they're relative to the crate root by default). Our `tests` module doesn't have
 a `client` module in its scope!
 
