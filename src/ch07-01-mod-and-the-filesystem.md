@@ -1,4 +1,4 @@
-## `mod` and the filesystem
+## `mod` and the Filesystem
 
 Every module in Rust starts with the `mod` keyword. In this next example, we'll
 start again by making a new project with Cargo. This time, instead of a binary,
@@ -106,7 +106,7 @@ communicator
 
 More complicated projects can have a lot of modules.
 
-### Putting modules in another file
+### Putting Modules in Another File
 
 Modules form a hierarchical, tree-like structure. So does another thing:
 file systems! The module system is the way that we split larger Rust projects up

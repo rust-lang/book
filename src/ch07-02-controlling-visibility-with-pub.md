@@ -1,4 +1,4 @@
-## Controlling visibility with `pub`
+## Controlling Visibility with `pub`
 
 At the end of the last section, we had a project, `communicator`, and when we compiled it, we got some strange warnings:
 
@@ -196,7 +196,7 @@ warning: function is never used: `connect`, #[warn(dead_code)] on by default
 
 Only one last warning! Try to fix this one on your own!
 
-### Privacy rules
+### Privacy Rules
 
 Overall, these are the rules for item visibility:
 
