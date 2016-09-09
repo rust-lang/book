@@ -55,10 +55,12 @@ impl Point {
     }
 }
 
-let p1 = Point { x: 0.0, y: 0.0 };
-let p2 = Point { x: 5.0, y: 6.5 };
+fn main() {
+    let p1 = Point { x: 0.0, y: 0.0 };
+    let p2 = Point { x: 5.0, y: 6.5 };
 
-assert_eq!(8.200609733428363, p1.distance(&p2));
+    assert_eq!(8.200609733428363, p1.distance(&p2));
+}
 ```
 
 Let’s break this down. First, we have our `Point` struct from earlier in the
