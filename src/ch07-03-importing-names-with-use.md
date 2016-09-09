@@ -3,6 +3,8 @@
 We've seen how we can call functions defined within a module by using the
 module name as part of the call, like this:
 
+Filename: src/main.rs
+
 ```rust
 pub mod a {
     pub mod series {
@@ -20,6 +22,8 @@ fn main() {
 However, referring to the fully qualified name can get quite lengthy, as we see
 in that example. To solve this issue, Rust has a keyword, `use`. It works like
 this:
+
+Filename: src/main.rs
 
 ```rust
 pub mod a {
@@ -132,6 +136,8 @@ Since tests are for exercising the code within our library, let's try to call
 our `client::connect` function from this `it_works` function, even though
 we're not going to be checking any functionality right now:
 
+Filename: src/lib.rs
+
 ```rust
 #[cfg(test)]
 mod tests {
@@ -192,6 +198,8 @@ instead of to the root module.
 
 For these reasons, in the `tests` module especially, `use super::something` is
 usually the way to go. So now our test looks like this:
+
+Filename: src/lib.rs
 
 ```rust
 #[cfg(test)]

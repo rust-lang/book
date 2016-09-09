@@ -208,6 +208,8 @@ Overall, these are the rules for item visibility:
 Let's look at a few more examples to get some practice. What if we had this
 code in a new project's `src/lib.rs`:
 
+Filename: src/lib.rs
+
 ```rust,ignore
 mod outermost {
     pub fn middle_function() {}

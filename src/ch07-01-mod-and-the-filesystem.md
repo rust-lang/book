@@ -15,8 +15,10 @@ $ cargo new communicator
 $ cd communicator
 ```
 
-You'll notice that Cargo generated `src/lib.rs` instead of `src/main.rs` for
-us, and inside it we'll find this:
+Notice that Cargo generated `src/lib.rs` instead of `src/main.rs` for us, and
+inside it we'll find this:
+
+Filename: src/lib.rs
 
 ```rust
 #[cfg(test)]
@@ -55,6 +57,8 @@ rather than `connect()`.
 You could have multiple modules, side-by-side. For example, if you wanted a
 `client` module:
 
+Filename: src/lib.rs
+
 ```rust
 mod network {
     fn connect() {
@@ -71,6 +75,8 @@ Now we have a `network::connect` function and a `client::connect` function.
 
 And you can put modules inside of modules. If you wanted to have `client` be
 within `network`:
+
+Filename: src/lib.rs
 
 ```rust
 mod network {
