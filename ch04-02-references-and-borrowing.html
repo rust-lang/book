@@ -68,27 +68,12 @@
 
                 <div id="content" class="content">
                     <h2>References and Borrowing</h2>
-<p>At the end of the last section, we had some example Rust that wasn’t very
-good. Here it is again:</p>
-<p>Filename: src/main.rs</p>
-<pre><code class="language-rust">fn main() {
-    let s1 = String::from(&quot;hello&quot;);
-
-    let (s2, len) = calculate_length(s1);
-
-    println!(&quot;The length of '{}' is {}.&quot;, s2, len);
-}
-
-fn calculate_length(s: String) -&gt; (String, usize) {
-    let length = s.len(); // len() returns the length of a String.
-
-    (s, length)
-}
-</code></pre>
-<p>The issue here is that we have to return the <code>String</code> back to the calling
-function so that we can still use it there, since it was moved when we called
-<code>calculate_length()</code>.</p>
-<p>There is a better way. It looks like this:</p>
+<p>The issue with the tuple code at the end of the last section is that we have to
+return the <code>String</code> back to the calling function so that we can still use the
+<code>String</code> after the call to <code>calculate_length</code>, since the <code>String</code> was moved
+into <code>calculate_length</code>.</p>
+<p>Here is how you would use a function without taking ownership of it using
+<em>references:</em></p>
 <p>Filename: src/main.rs</p>
 <pre><code class="language-rust">fn main() {
     let s1 = String::from(&quot;hello&quot;);
@@ -106,11 +91,12 @@ fn calculate_length(s: &amp;String) -&gt; usize {
 </code></pre>
 <p>First, you’ll notice all of the tuple stuff in the binding declaration and the
 function return value is gone. Next, note that we pass <code>&amp;s1</code> into
-<code>calculate_length()</code>, and in its definition, we take <code>&amp;String</code> rather than
+<code>calculate_length</code>, and in its definition, we take <code>&amp;String</code> rather than
 <code>String</code>.</p>
-<p>These <code>&amp;</code>s are called <em>references</em>, and they allow you to refer to some value
-without taking ownership of it. Here’s a diagram:</p>
+<p>These <code>&amp;</code>s are <em>references</em>, and they allow you to refer to some value
+without taking ownership of it. Figure 4-5 shows a diagram of this.</p>
 <p><img alt="&String s pointing at String s1" src="img/trpl04-05.svg" class="center" /></p>
+<p>Figure 4-5: <code>&amp;String s</code> pointing at <code>String s1</code></p>
 <p>Let’s take a closer look at the function call here:</p>
 <pre><code class="language-rust"># fn calculate_length(s: &amp;String) -&gt; usize {
 #     let length = s.len();
@@ -121,9 +107,9 @@ let s1 = String::from(&quot;hello&quot;);
 
 let len = calculate_length(&amp;s1);
 </code></pre>
-<p>The <code>&amp;s1</code> syntax lets us create a reference with <code>s1</code>. This reference <em>refers</em>
-to the value of <code>s1</code> but does not own it. Because it does not own it, the
-value it points to will not be dropped when the reference goes out of scope.</p>
+<p>The <code>&amp;s1</code> syntax lets us create a reference which <em>refers</em> to the value of <code>s1</code>
+but does not own it. Because it does not own it, the value it points to will
+not be dropped when the reference goes out of scope.</p>
 <p>Likewise, the signature of the function uses <code>&amp;</code> to indicate that it takes
 a reference as an argument. Let’s add some explanatory annotations:</p>
 <pre><code class="language-rust">fn calculate_length(s: &amp;String) -&gt; usize { // s is a reference to a String
@@ -133,15 +119,15 @@ a reference as an argument. Let’s add some explanatory annotations:</p>
 } // Here, s goes out of scope. But since it does not have ownership of what
   // it refers to, nothing happens.
 </code></pre>
-<p>It’s the same process as before, except that because we don’t have ownership,
-we don’t drop what a reference points to when the reference goes out of scope.
-This lets us write functions which take references as arguments instead of the
-values themselves, so that we won’t need to return them to give back ownership.</p>
-<p>There’s another word for what references do, and that’s <em>borrowing</em>. Just like
-with real life, if a person owns something, you can borrow it from them. When
-you’re done, you have to give it back.</p>
-<p>Speaking of which, what if you try to modify something you borrow from me? Try
-this code out. Spoiler alert: it doesn’t work!</p>
+<p>It’s the same process as before, but we don’t drop what the reference points to
+when it goes out of scope because we don't have ownership. This lets us write
+functions which take references as arguments instead of the values themselves,
+so that we won’t need to return them to give back ownership.</p>
+<p>We call this process <em>borrowing</em>. Just like with real life, if a person owns
+something, you can borrow it from them, and when you’re done, you have to give
+it back.</p>
+<p>So what happens if we try to modify something we're borrowing? Try this code
+out. Spoiler alert: it doesn’t work!</p>
 <p>Filename: src/main.rs</p>
 <pre><code class="language-rust,ignore">fn main() {
     let s = String::from(&quot;hello&quot;);
@@ -160,10 +146,10 @@ fn change(some_string: &amp;String) {
 8 |     some_string.push_str(&quot;, world&quot;);
   |     ^^^^^^^^^^^
 </code></pre>
-<p>Just like bindings are immutable by default, so are references. We’re not
-allowed to modify something we have a reference to.</p>
-<h3>Mutable references</h3>
-<p>We can fix this bug! Just a small tweak:</p>
+<p>Just as bindings are immutable by default, so are references. We’re not allowed
+to modify something we have a reference to.</p>
+<h3>Mutable References</h3>
+<p>We can fix this error with just a small tweak:</p>
 <p>Filename: src/main.rs</p>
 <pre><code class="language-rust">fn main() {
     let mut s = String::from(&quot;hello&quot;);
@@ -177,7 +163,9 @@ fn change(some_string: &amp;mut String) {
 </code></pre>
 <p>First, we had to change <code>s</code> to be <code>mut</code>. Then we had to create a mutable
 reference with <code>&amp;mut s</code> and accept a mutable reference with <code>some_string: &amp;mut String</code>.</p>
-<p>Mutable references have one big restriction, though. This code fails:</p>
+<p>Mutable references have one big restriction, though: you can only have one
+mutable reference to a particular piece of data in a particular scope. This
+code will fail:</p>
 <p>Filename: src/main.rs</p>
 <pre><code class="language-rust,ignore">let mut s = String::from(&quot;hello&quot;);
 
@@ -195,10 +183,16 @@ let r2 = &amp;mut s;
 6 | }
   | - first borrow ends here
 </code></pre>
-<p>The error is what it says: you cannot borrow something mutably more than once
-at a time. This restriction allows for mutation but in a very controlled
-fashion. It is something that new Rustaceans struggle with, because most
-languages let you mutate whenever you’d like.</p>
+<p>This restriction allows for mutation but in a very controlled fashion. It is
+something that new Rustaceans struggle with, because most languages let you
+mutate whenever you’d like. The benefit of having this restriction is that Rust
+can prevent data races at compile time. A <em>data race</em> is a particular type of
+race condition where two or more pointers access the same data at the same
+time, at least one of the pointers is being used to write to the data, and
+there's no mechanism being used to synchronize access to the data. Data races
+cause undefined behavior and can be difficult to diagnose and fix when trying
+to track them down at runtime; Rust prevents this problem from happening since
+it won't even compile code with data races!</p>
 <p>As always, we can use <code>{}</code>s to create a new scope, allowing for multiple mutable
 references, just not <em>simultaneous</em> ones:</p>
 <pre><code class="language-rust">let mut s = String::from(&quot;hello&quot;);
@@ -232,13 +226,21 @@ let r3 = &amp;mut s; // BIG PROBLEM
 </code></pre>
 <p>Whew! We <em>also</em> cannot have a mutable reference while we have an immutable one.
 Users of an immutable reference don’t expect the values to suddenly change out
-from under them! Multiple immutable references are okay, however.</p>
-<h3>Dangling references</h3>
-<p>In languages with pointers, it’s easy to create a “dangling pointer” by freeing
-some memory while keeping around a pointer to that memory. In Rust, by
-contrast, the compiler guarantees that references will never be dangling: if we
-have a reference to something, the compiler will ensure that it will not go
-out of scope before the reference does.</p>
+from under them! Multiple immutable references are okay, however, since no one
+who is just reading the data has the ability to affect anyone else's reading of
+the data.</p>
+<p>Even though these errors may be frustrating at times, remember that it's the
+Rust compiler pointing out a potential bug earlier (at compile time rather than
+at runtime) and showing you exactly where the problem is instead of you having
+to track down why sometimes your data isn't what you thought it should be.</p>
+<h3>Dangling References</h3>
+<p>In languages with pointers, it's easy to make the error of creating a <em>dangling
+pointer</em>, a pointer referencing a location in memory that may have been given
+to someone else, by freeing some memory while keeping around a pointer to that
+memory. In Rust, by contrast, the compiler guarantees that references will
+never be dangling: if we have a reference to some data, the compiler will
+ensure that the data will not go out of scope before the reference to the data
+does.</p>
 <p>Let’s try to create a dangling reference:</p>
 <p>Filename: src/main.rs</p>
 <pre><code class="language-rust,ignore">fn main() {
@@ -264,13 +266,12 @@ fn dangle() -&gt; &amp;String {
 
 error: aborting due to previous error
 </code></pre>
-<p>This error message refers to a feature we haven’t learned about yet,
-<em>lifetimes</em>. The message does contain the key to why this code is a problem,
-though:</p>
-<pre><code class="language-bash">this function’s return type contains a borrowed value, but there is no value
-for it to be borrowed from
-</code></pre>
-<p>Let’s examine exactly what happens with <code>dangle()</code>:</p>
+<p>This error message refers to a feature we haven’t learned about yet:
+<em>lifetimes</em>. We'll discuss lifetimes in detail in Chapter XX, but, disregarding
+the parts about lifetimes, the message does contain the key to why this code is
+a problem: <code>this function’s return type contains a borrowed value, but there is no value for it to be borrowed from</code>.</p>
+<p>Let’s have a closer look at exactly what's happenening at each stage of our
+<code>dangle</code> code:</p>
 <pre><code class="language-rust,ignore">fn dangle() -&gt; &amp;String { // dangle returns a reference to a String
 
     let s = String::from(&quot;hello&quot;); // s is a new String
@@ -279,7 +280,7 @@ for it to be borrowed from
 } // Here, s goes out of scope, and is dropped. Its memory goes away.
   // Danger!
 </code></pre>
-<p>Because <code>s</code> is created inside of <code>dangle()</code>, when the code of <code>dangle()</code> is
+<p>Because <code>s</code> is created inside of <code>dangle</code>, when the code of <code>dangle</code> is
 finished, it will be deallocated. But we tried to return a reference to it.
 That means this reference would be pointing to an invalid <code>String</code>! That’s
 no good. Rust won’t let us do this.</p>

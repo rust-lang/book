@@ -2286,38 +2286,97 @@ about, <code>rev</code>, to reverse the range:</p>
 <p>Now that you know how Rust does things that most other languages can do, let's
 talk about a concept that <em>doesn't</em> commonly exist: ownership.</p>
 <h1>Understanding Ownership</h1>
-<p>Ownership is important to understand: it's Rust's most unique feature, and
-enables Rust to make memory safety guarantees without needing a garbage
-collector. We’ll also talk about several related features: borrowing, slices,
-and how Rust lays things out in memory.</p>
+<p>Ownership is Rust's most unique feature, and enables Rust to make memory safety
+guarantees without needing a garbage collector. It's therefore important to
+understand how ownership works in Rust. In this chapter we'll talk about
+ownership as well as several related features: borrowing, slices, and how Rust
+lays things out in memory.</p>
 <h2>Ownership</h2>
-<p>Rust’s central feature is called <em>ownership</em>. It is a feature that is
-straightforward to explain, but has deep implications for the rest of the
-language.</p>
+<p>Rust’s central feature is <em>ownership</em>. It is a feature that is straightforward
+to explain, but has deep implications for the rest of the language.</p>
 <p>All programs have to manage the way they use a computer's memory while running.
 Some languages have garbage collection, while in others, the programmer has to
 explicitly allocate and free the memory. Rust takes a third approach: memory is
 managed through a system of ownership with a set of rules that the compiler
 checks at compile-time. You do not pay any run-time cost for any of these
 features.</p>
-<p>However, because ownership is a new concept for many programmers, it does take
+<p>Since ownership is a new concept for many programmers, it does take
 some time to get used to. There is good news, though: the more experienced you
 become with Rust and the rules of the ownership system, the more you'll be
 able to naturally develop code that is both safe and efficient. Keep at it!</p>
 <p>Once you understand ownership, you have a good foundation for understanding the
 features that make Rust unique. In this chapter, we'll learn ownership by going
 through some examples, focusing on a very common data structure: strings.</p>
-<h3>Variable binding scope</h3>
+<p>PROD: START BOX</p>
+<h6>The Stack and the Heap</h6>
+<p>In many programming languages, we don't have to think about the stack and the
+heap very often. But in a systems programming language like Rust, whether a
+value is on the stack or the heap has more of an effect on how the language
+behaves and why we have to make certain decisions. We're going to be describing
+parts of ownership in relation to the stack and the heap, so here is a brief
+explanation.</p>
+<p>Both the stack and the heap are parts of memory that is available to your code
+to use at runtime, but they are structured in different ways. The stack stores
+values in the order it gets them and removes the values in the opposite order.
+This is referred to as <em>last in, first out</em>. Think of a stack of plates: when
+you add more plates, you put them on top of the pile, and when you need a
+plate, you take one off the top. Adding or removing plates from the middle or
+bottom wouldn't work as well! Adding data is called <em>pushing onto the stack</em>
+and removing data is called <em>popping off the stack</em>.</p>
+<p>The stack is fast because of the way it accesses the data: it never has to look
+around for a place to put new data or a place to get data from; that place is
+always the top. Another property that makes the stack fast is that all data on
+the stack must take up a known, fixed size.</p>
+<p>For data with a size unknown to us at compile time, or a size that might
+change, we can store data on the heap instead. The heap is less organized: when
+we put data on the heap, we ask for some amount of space. The operating system
+finds an empty spot somewhere in the heap that is big enough, marks it as being
+in use, and returns to us a pointer to that location. This process is called
+<em>allocating on the heap</em>, and sometimes we just say &quot;allocating&quot; for short.
+Pushing values onto the stack is not considered allocating. Since the pointer
+is a known, fixed size, we can store the pointer on the stack, but when we want
+the actual data, we have to follow the pointer.</p>
+<p>Think of being seated at a restaurant. When you enter, you say how many people
+are in your group, and the staff finds an empty table that would fit everyone
+and leads you there. If someone in your group comes late, they can ask where
+you have been seated to find you.</p>
+<p>Accessing data in the heap is slower because we have to follow a pointer to
+get there. Allocating a large amount of space can also take time.</p>
+<p>When our code calls a function, the values passed into the function (including,
+potentially, pointers to data on the heap) and the function's local variables
+get pushed onto the stack. When the function is over, those values get popped
+off the stack.</p>
+<p>Keeping track of what parts of code are using what data on the heap, minimizing
+the amount of duplicate data on the heap, and cleaning up unused data on the
+heap so that we don't run out of space are all problems that ownership
+addresses. Once you understand ownership, you won't need to think about the
+stack and the heap very often, but knowing that managing heap data is why
+ownership exists can help explain why it works the way it does.</p>
+<p>PROD: END BOX</p>
+<h3>Ownership Rules</h3>
+<p>First, let's take a look at the rules. Keep these in mind as we go through the
+examples that will illustrate the rules:</p>
+<blockquote>
+<ol>
+<li>Each value in Rust has a variable binding that’s called its <em>owner</em>.</li>
+<li>There can only be one owner at a time.</li>
+<li>When the owner goes out of scope, the value will be dropped.</li>
+</ol>
+</blockquote>
+<h3>Variable Binding Scope</h3>
 <p>We've walked through an example of a Rust program already in the tutorial
 chapter. Now that we’re past basic syntax, we won’t include all of the <code>fn main() {</code> stuff in examples, so if you’re following along, you will have to put
-them inside of a <code>main()</code> function. This lets our examples be a bit more
-concise, letting us focus on the actual details rather than boilerplate.</p>
-<p>Anyway, here is our first example:</p>
+the following examples inside of a <code>main</code> function yourself. This lets our
+examples be a bit more concise, letting us focus on the actual details rather
+than boilerplate.</p>
+<p>As a first example of ownership, we'll look at the <em>scope</em> of some variable
+bindings. A scope is the range within a program for which an item is valid.
+Let's say we have a variable binding that looks like this:</p>
 <pre><code class="language-rust">let s = &quot;hello&quot;;
 </code></pre>
-<p>This variable binding refers to a string literal, where the value of the string
-is hard coded into the text of our program. The binding is valid from the point
-at which it’s declared until the end of the current <em>scope</em>. That is:</p>
+<p>The variable binding <code>s</code> refers to a string literal, where the value of the
+string is hard coded into the text of our program. The binding is valid from
+the point at which it’s declared until the end of the current <em>scope</em>. That is:</p>
 <pre><code class="language-rust">{                      // s is not valid here, it’s not yet declared
     let s = &quot;hello&quot;;   // s is valid from this point forward
 
@@ -2326,133 +2385,153 @@ at which it’s declared until the end of the current <em>scope</em>. That is:</
 </code></pre>
 <p>In other words, there are two important points in time here:</p>
 <ul>
-<li>When <code>s</code> comes &quot;into scope&quot;, it is valid.</li>
-<li>It remains so until it &quot;goes out of scope&quot;.</li>
+<li>When <code>s</code> comes <em>into scope</em>, it is valid.</li>
+<li>It remains so until it <em>goes out of scope</em>.</li>
 </ul>
 <p>At this point, things are similar to other programming languages. Now let’s
 build on top of this understanding by introducing the <code>String</code> type.</p>
-<h3>Strings</h3>
-<p>String literals are convenient, but they aren’t the only way that you use
-strings. For one thing, they’re immutable. For another, not every string is
-literal: what about taking user input and storing it in a string?</p>
-<p>For this, Rust has a second string type, <code>String</code>. You can create a <code>String</code>
-from a string literal using the <code>from</code> function:</p>
+<h3>The <code>String</code> Type</h3>
+<p>In order to illustrate the rules of ownership, we need a data type that is more
+complex than the ones we covered in Chapter 3. All of the data types we've
+looked at previously are stored on the stack and popped off the stack when
+their scope is over, but we want to look at data that is stored on the heap and
+explore how Rust knows when to clean that data up.</p>
+<p>We're going to use <code>String</code> as the example here and concentrate on the parts of
+<code>String</code> that relate to ownership. These aspects also apply to other complex
+data types provided by the standard library and that you create. We'll go into
+more depth about <code>String</code> specifically in Chapter XX.</p>
+<p>We've already seen string literals, where a string value is hard-coded into our
+program. String literals are convenient, but they aren’t always suitable for
+every situation you want to use text. For one thing, they’re immutable. For
+another, not every string value can be known when we write our code: what if we
+want to take user input and store it?</p>
+<p>For things like this, Rust has a second string type, <code>String</code>. This type is
+allocated on the heap, and as such, is able to store an amount of text that is
+unknown to us at compile time. You can create a <code>String</code> from a string literal
+using the <code>from</code> function, like so:</p>
 <pre><code class="language-rust">let s = String::from(&quot;hello&quot;);
 </code></pre>
 <p>The double colon (<code>::</code>) is an operator that allows us to namespace this
-particular <code>from()</code> function under the <code>String</code> type itself, rather than using
-some sort of name like <code>string_from()</code>. We’ll discuss this syntax more in the
+particular <code>from</code> function under the <code>String</code> type itself, rather than using
+some sort of name like <code>string_from</code>. We’ll discuss this syntax more in the
 “Method Syntax” and “Modules” chapters.</p>
-<p>This kind of string can be mutated:</p>
+<p>This kind of string <em>can</em> be mutated:</p>
 <pre><code class="language-rust">let mut s = String::from(&quot;hello&quot;);
 
 s.push_str(&quot;, world!&quot;); // push_str() appends a literal to a String
 
 println!(&quot;{}&quot;, s); // This will print `hello, world!`
 </code></pre>
-<h3>Memory and allocation</h3>
 <p>So, what’s the difference here? Why can <code>String</code> be mutated, but literals
 cannot? The difference comes down to how these two types deal with memory.</p>
-<p>In the case of a string literal, because we know the contents of the string at
-compile time, we can hard-code the text of the string directly into the final
-executable. This means that string literals are quite fast and efficient. But
-these properties only come from its immutability. Unfortunately, we can’t put a
-blob of memory into the binary for each string whose size is unknown at compile
-time and whose size might change over the course of running the program.</p>
-<p>With <code>String</code>, in order to support a mutable, growable string, we need to
-allocate an unknown amount of memory to hold the contents. This means two
-things:</p>
+<h3>Memory and Allocation</h3>
+<p>In the case of a string literal, because we know the contents at compile time,
+the text is hard-coded directly into the final executable. This makes string
+literals quite fast and efficient. But these properties only come from its
+immutability. Unfortunately, we can’t put a blob of memory into the binary for
+each piece of text whose size is unknown at compile time and whose size might
+change over the course of running the program.</p>
+<p>With the <code>String</code> type, in order to support a mutable, growable piece of text,
+we need to allocate an amount of memory on the heap, unknown at compile time,
+to hold the contents. This means two things:</p>
 <ol>
 <li>The memory must be requested from the operating system at runtime.</li>
 <li>We need a way of giving this memory back to the operating system when we’re
 done with our <code>String</code>.</li>
 </ol>
-<p>That first part is done by us: when we call <code>String::from()</code>, its
+<p>That first part is done by us: when we call <code>String::from</code>, its
 implementation requests the memory it needs. This is pretty much universal in
 programming languages.</p>
 <p>The second case, however, is different. In languages with a <em>garbage collector</em>
-(<em>GC</em>), the GC will keep track and clean up memory that isn't being used
-anymore, and we, as the programmer, don’t need to think about it. Without GC,
-it’s our responsibility to identify when memory is no longer being used and
+(GC), the GC will keep track and clean up memory that isn't being used anymore,
+and we, as the programmer, don’t need to think about it. Without GC, it’s the
+programmer's responsibility to identify when memory is no longer being used and
 call code to explicitly return it, just as we did to request it. Doing this
-correctly has historically been a difficult problem. If we forget, we will
-waste memory. If we do it too early, we will have an invalid variable. If we do
-it twice, that’s a bug too. We need to pair exactly one <code>allocate()</code> with
-exactly one <code>free()</code>.</p>
-<p>Rust takes a different path. Remember our example? Here’s a version with
-<code>String</code>:</p>
+correctly has historically been a difficult problem in programming. If we
+forget, we will waste memory. If we do it too early, we will have an invalid
+variable. If we do it twice, that’s a bug too. We need to pair exactly one
+<code>allocate</code> with exactly one <code>free</code>.</p>
+<p>Rust takes a different path: the memory is automatically returned once the
+binding to it goes out of scope. Here’s a version of our scope example from
+earlier using <code>String</code>:</p>
 <pre><code class="language-rust">{
     let s = String::from(&quot;hello&quot;); // s is valid from this point forward
 
     // do stuff with s
 }                                  // this scope is now over, and s is no longer valid
 </code></pre>
-<p>We have a natural point at which we can return the memory our <code>String</code> needs
-back to the operating system: when it goes out of scope. When a variable goes
-out of scope, Rust calls a special function for us. This function is called
-<code>drop()</code>, and it is where the author of <code>String</code> can put the code to return the
-memory.</p>
+<p>There is a natural point at which we can return the memory our <code>String</code> needs
+back to the operating system: when <code>s</code> goes out of scope. When a variable
+binding goes out of scope, Rust calls a special function for us. This function
+is called <code>drop</code>, and it is where the author of <code>String</code> can put the code to
+return the memory. Rust calls <code>drop</code> automatically at the closing <code>}</code>.</p>
 <blockquote>
-<p>Aside: This pattern is sometimes called “Resource Acquisition Is
-Initialization” in C++, or “RAII” for short. While they are very similar,
-Rust’s take on this concept has a number of differences, and so we don’t tend
+<p>Note: This pattern is sometimes called *Resource Acquisition Is
+Initialization* in C++, or RAII for short. While they are very similar,
+Rust’s take on this concept has a number of differences, so we don’t tend
 to use the same term. If you’re familiar with this idea, keep in mind that it
 is <em>roughly</em> similar in Rust, but not identical.</p>
 </blockquote>
 <p>This pattern has a profound impact on the way that Rust code is written. It may
-seem obvious right now, but things can get tricky in more advanced situations.
-Let’s go over the first one of those right now.</p>
-<h3>Move</h3>
-<p>What would you expect this code to do?</p>
+seem simple right now, but things can get tricky in more advanced situations
+when we want to have multiple variable bindings use the data that we have
+allocated on the heap. Let’s go over some of those situations now.</p>
+<h4>Ways Bindings and Data Interact: Move</h4>
+<p>There are different ways that multiple bindings can interact with the same data
+in Rust. Let's take an example using an integer:</p>
 <pre><code class="language-rust">let x = 5;
 let y = x;
 </code></pre>
-<p>You might say “Make a copy of <code>5</code>”, and that would be correct. We now have two
-bindings, <code>x</code> and <code>y</code>, and both equal <code>5</code>.</p>
-<p>Now let’s look at <code>String</code>. What would you expect this code to do?</p>
+<p>We can probably guess what this is doing based on our experience with other
+languages: “Bind the value <code>5</code> to <code>x</code>, then make a copy of the value in <code>x</code> and
+bind it to <code>y</code>.” We now have two bindings, <code>x</code> and <code>y</code>, and both equal <code>5</code>.
+This is indeed what is happening since integers are simple values with a known,
+fixed size, and these two <code>5</code> values are pushed onto the stack.</p>
+<p>Now let’s look at the <code>String</code> version:</p>
 <pre><code class="language-rust">let s1 = String::from(&quot;hello&quot;);
 let s2 = s1;
 </code></pre>
-<p>You might say “copy the <code>String</code>!” This is both correct and incorrect at the
-same time. It does a <em>shallow</em> copy of the <code>String</code>. What’s that mean? Well,
-let’s take a look at what <code>String</code> looks like under the covers:</p>
+<p>This looks very similar to the previous code, so we might assume that the way
+it works would be the same: that the second line would make a copy of the value
+in <code>s1</code> and bind it to <code>s2</code>. This isn't quite what happens.</p>
+<p>To explain this more thoroughly, let’s take a look at what <code>String</code> looks like
+under the covers in Figure 4-1. A <code>String</code> is made up of three parts, shown on
+the left: a pointer to the memory that holds the contents of the string, a
+length, and a capacity. This group of data is stored on the stack. On the right
+is the memory that holds the contents, and this is on the heap.</p>
 <p><img alt="String in memory" src="img/trpl04-01.svg" class="center" style="width: 50%;" /></p>
-<p>A <code>String</code> is made up of three parts: a pointer to the memory that holds the
-contents of the string, a length, and a capacity. The length is how much memory
-the <code>String</code> is currently using. The capacity is the total amount of memory the
+<p>Figure 4-1: Representation in memory of a <code>String</code> holding the value &quot;hello&quot;
+bound to <code>s1</code></p>
+<p>The length is how much memory, in bytes, the contents of the <code>String</code> is
+currently using. The capacity is the total amount of memory, in bytes, that the
 <code>String</code> has gotten from the operating system. The difference between length
-and capacity matters but not in this context, so don’t worry about it too much.
-For right now, it's fine to ignore the capacity.</p>
-<p>When we assign <code>s1</code> to <code>s2</code>, the <code>String</code> itself is copied, meaning we copy the
-pointer, the length, and the capacity. We do not copy the data that the
-<code>String</code>'s pointer refers to. In other words, it looks like this:</p>
+and capacity matters but not in this context, so for now, it's fine to ignore
+the capacity.</p>
+<p>When we assign <code>s1</code> to <code>s2</code>, the <code>String</code> data itself is copied, meaning we
+copy the pointer, the length, and the capacity that are on the stack. We do not
+copy the data on the heap that the <code>String</code>'s pointer refers to. In other
+words, it looks like figure 4-2.</p>
 <p><img alt="s1 and s2 pointing to the same value" src="img/trpl04-02.svg" class="center" style="width: 50%;" /></p>
-<p><em>Not</em> this:</p>
+<p>Figure 4-2: Representation in memory of the binding <code>s2</code> that has a copy of
+<code>s1</code>'s pointer, length and capacity</p>
+<p>And <em>not</em> Figure 4-3, which is what memory would look like if Rust instead
+copied the heap data as well. If Rust did this, the operation <code>s2 = s1</code> could
+potentially be very expensive if the data on the heap was large.</p>
 <p><img alt="s1 and s2 to two places" src="img/trpl04-03.svg" class="center" style="width: 50%;" /></p>
-<p>There’s a problem here. Both data pointers are pointing to the same place. Why
-is this a problem? Well, when <code>s2</code> goes out of scope, it will free the memory
-that the pointer points to. And then <code>s1</code> goes out of scope, and it will <em>also</em>
-try to free the memory that the pointer points to. That’s bad, and is known as
-a &quot;double free&quot; error.</p>
-<p>So what’s the solution? Here, we stand at a crossroads with a few options.</p>
-<p>One way would be to change assignment so that it will also copy out any data.
-This works, but is inefficient: what if our <code>String</code> contained a novel?
-Also, that solution would only work for memory. What if, instead of a <code>String</code>,
-we had a <code>TcpConnection</code>? Opening and closing a network connection is very
-similar to allocating and freeing memory, so it would be nice to be able to use
-the same mechanism. We wouldn't be able to, though, because creating a new
-connection requires more than just copying memory: we have to request a new
-connection from the operating system. We could then extend our solution to
-allow the programmer to hook into the assignment, similar to <code>drop()</code>, and
-write code to fix things up. That would work, but if we did that, an <code>=</code> could
-run arbitrary code. That’s also not good, and it doesn’t solve our efficiency
-concerns either.</p>
-<p>Let’s take a step back: the root of the problem is that <code>s1</code> and <code>s2</code> both
-think that they have control of the memory and therefore need to free it.
-Instead of trying to copy the allocated memory, we could say that <code>s1</code> is no
-longer valid and, therefore, doesn’t need to free anything. This is in fact the
-choice that Rust makes. Check out what happens when you try to use <code>s1</code> after
-<code>s2</code> is created:</p>
+<p>Figure 4-3: Another possibility for what <code>s2 = s1</code> might do, if Rust chose to
+copy heap data as well.</p>
+<p>Earlier, we said that when a binding goes out of scope, Rust will automatically
+call the <code>drop</code> function and clean up the heap memory for that binding. But
+in figure 4-2, we see both data pointers pointing to the same location. This is
+a problem: when <code>s2</code> and <code>s1</code> go out of scope, they will both try to free the
+same memory. This is known as a <em>double free</em> error and is one of the memory
+safety bugs we mentioned before. Freeing memory twice can lead to memory
+corruption, which can potentially lead to security vulnerabilities.</p>
+<p>In order to ensure memory safety, there's one more detail to what happens in
+this situation in Rust. Instead of trying to copy the allocated memory, Rust
+says that <code>s1</code> is no longer valid and, therefore, doesn’t need to free anything
+when it goes out of scope. Check out what happens when you try to use <code>s1</code>
+after <code>s2</code> is created:</p>
 <pre><code class="language-rust,ignore">let s1 = String::from(&quot;hello&quot;);
 let s2 = s1;
 
@@ -2469,67 +2548,61 @@ println!(&quot;{}&quot;, s1);
 </code></pre>
 <p>If you have heard the terms &quot;shallow copy&quot; and &quot;deep copy&quot; while working with
 other languages, the concept of copying the pointer, length, and capacity
-without copying the data probably sounded like a shallow copy. Because Rust
+without copying the data probably sounds like a shallow copy. But because Rust
 also invalidates the first binding, instead of calling this a shallow copy,
-it's called a <em>move</em>. Here we would read this by saying that <code>s1</code> was <em>moved</em>
-into <code>s2</code>. So what actually happens looks like this:</p>
+it's known as a <em>move</em>. Here we would read this by saying that <code>s1</code> was <em>moved</em>
+into <code>s2</code>. So what actually happens looks like Figure 4-4.</p>
 <p><img alt="s1 moved to s2" src="img/trpl04-04.svg" class="center" style="width: 50%;" /></p>
+<p>Figure 4-4: Representation in memory after <code>s1</code> has been invalidated</p>
 <p>That solves our problem! With only <code>s2</code> valid, when it goes out of scope, it
 alone will free the memory, and we’re done.</p>
-<h3>Ownership Rules</h3>
-<p>This leads us to the Ownership Rules:</p>
-<blockquote>
-<ol>
-<li>Each value in Rust has a variable binding that’s called its <em>owner</em>.</li>
-<li>There can only be one owner at a time.</li>
-<li>When the owner goes out of scope, the value will be <code>drop()</code>ped.</li>
-</ol>
-</blockquote>
 <p>Furthermore, there’s a design choice that’s implied by this: Rust will never
 automatically create &quot;deep&quot; copies of your data. Therefore, any <em>automatic</em>
 copying can be assumed to be inexpensive.</p>
-<h3>Clone</h3>
-<p>But what if we <em>do</em> want to deeply copy the <code>String</code>’s data and not just the
-<code>String</code> itself? There’s a common method for that: <code>clone()</code>. We will discuss
-methods in the section on <a href="ch05-01-structs.html"><code>structs</code> in Chapter XX</a><!-- ignore -->,
-but they’re a common enough feature in many programming languages that you have
-probably seen them before.</p>
-<p>Here’s an example of the <code>clone()</code> method in action:</p>
+<h4>Ways Bindings and Data Interact: Clone</h4>
+<p>If we <em>do</em> want to deeply copy the <code>String</code>’s data and not just the <code>String</code>
+itself, there’s a common method for that: <code>clone</code>. We will discuss methods in
+the section on <a href="ch05-01-structs.html"><code>structs</code> in Chapter XX</a><!-- ignore -->, but they’re a
+common enough feature in many programming languages that you have probably seen
+them before.</p>
+<p>Here’s an example of the <code>clone</code> method in action:</p>
 <pre><code class="language-rust">let s1 = String::from(&quot;hello&quot;);
 let s2 = s1.clone();
 
-println!(&quot;{}&quot;, s1);
+println!(&quot;s1 = {}, s2 = {}&quot;, s1, s2);
 </code></pre>
-<p>This will work just fine. Remember our diagram from before? In this case,
-it <em>is</em> doing this:</p>
-<p><img alt="s1 and s2 to two places" src="img/trpl04-03.svg" class="center" style="width: 50%;" /></p>
-<p>When you see a call to <code>clone()</code>, you know that some arbitrary code is being
+<p>This will work just fine, and this is how you can explicitly get the behavior
+we showed in Figure 4-3, where the heap data <em>does</em> get copied.</p>
+<p>When you see a call to <code>clone</code>, you know that some arbitrary code is being
 executed, and that code may be expensive. It’s a visual indicator that something
 different is going on here.</p>
-<h3>Copy</h3>
-<p>There’s one last wrinkle that we haven’t talked about yet. This code works:</p>
+<h4>Stack-only Data: Copy</h4>
+<p>There’s another wrinkle we haven’t talked about yet. This code, that we showed
+earlier, works and is valid:</p>
 <pre><code class="language-rust">let x = 5;
 let y = x;
 
-println!(&quot;{}&quot;, x);
+println!(&quot;x = {}, y = {}&quot;, x, y);
 </code></pre>
-<p>But why? We don’t have a call to <code>clone()</code>. Why didn’t <code>x</code> get moved into <code>y</code>?</p>
-<p>Types like integers that have a known size at compile time do not ask for
-memory from the operating system and therefore do not need to be <code>drop()</code>ped
-when they go out of scope. That means there's no reason we would want to
-prevent <code>x</code> from being valid after we create the binding <code>y</code>. In other words,
-there’s no difference between deep and shallow copying here, so calling
-<code>clone()</code> wouldn’t do anything differently from the usual shallow copying and
-we can leave it out.</p>
-<p>Rust has a special annotation that you can place on types like these, and that
-annotation is the <code>Copy</code> trait. We'll talk more about traits in Chapter XX. If
-a type has the <code>Copy</code> trait, an older binding is still usable after assignment.
-Rust will not let you make something have the <code>Copy</code> trait if it has
-implemented <code>drop()</code>. If you need to do something special when the value goes
-out of scope, being <code>Copy</code> will be an error.</p>
+<p>This seems to contradict what we just learned: we don't have a call to
+<code>clone</code>, but <code>x</code> is still valid, and wasn't moved into <code>y</code>.</p>
+<p>This is because types like integers that have a known size at compile time are
+stored entirely on the stack, so copies of the actual values are quick to make.
+That means there's no reason we would want to prevent <code>x</code> from being valid
+after we create the binding <code>y</code>. In other words, there’s no difference between
+deep and shallow copying here, so calling <code>clone</code> wouldn’t do anything
+differently from the usual shallow copying and we can leave it out.</p>
+<p>Rust has a special annotation called the <code>Copy</code> trait that we can place on
+types like these (we'll talk more about traits in Chapter XX). If a type has
+the <code>Copy</code> trait, an older binding is still usable after assignment. Rust will
+not let us annotate a type with the <code>Copy</code> trait if the type, or any of its
+parts, has implemented <code>drop</code>. If the type needs something special to happen
+when the value goes out of scope and we add the <code>Copy</code> annotation to that type,
+we will get a compile-time error.</p>
 <p>So what types are <code>Copy</code>? You can check the documentation for the given type to
 be sure, but as a rule of thumb, any group of simple scalar values can be Copy,
-but nothing that requires allocation or is some form of resource is <code>Copy</code>. Here’s some of the types that are <code>Copy</code>:</p>
+and nothing that requires allocation or is some form of resource is <code>Copy</code>.
+Here’s some of the types that are <code>Copy</code>:</p>
 <ul>
 <li>All of the integer types, like <code>u32</code>.</li>
 <li>The booleans, <code>true</code> and <code>false</code>.</li>
@@ -2537,80 +2610,41 @@ but nothing that requires allocation or is some form of resource is <code>Copy</
 <li>Tuples, but only if they contain types which are also <code>Copy</code>. <code>(i32, i32)</code>
 is <code>Copy</code>, but <code>(i32, String)</code> is not.</li>
 </ul>
-<h3>Ownership and functions</h3>
-<p>Passing a value to a function has similar semantics as assigning it:</p>
+<h3>Ownership and Functions</h3>
+<p>The semantics for passing a value to a function are similar to assigning a
+value to a binding. Passing a binding to a function will move or copy, just
+like assignment. Here’s an example, with some annotations showing where bindings
+go into and out of scope:</p>
 <p>Filename: src/main.rs</p>
 <pre><code class="language-rust">fn main() {
-    let s = String::from(&quot;hello&quot;);
+    let s = String::from(&quot;hello&quot;);  // s comes into scope.
 
-    takes_ownership(s);
-
-    let x = 5;
-
-    makes_copy(x);
-}
-
-fn takes_ownership(some_string: String) {
-    println!(&quot;{}&quot;, some_string);
-}
-
-fn makes_copy(some_integer: i32) {
-    println!(&quot;{}&quot;, some_integer);
-}
-</code></pre>
-<p>Passing a binding to a function will move or copy, just like assignment. Here’s
-the same example, but with some annotations showing where things go into and
-out of scope:</p>
-<p>Filename: src/main.rs</p>
-<pre><code class="language-rust">fn main() {
-    let s = String::from(&quot;hello&quot;);  // s goes into scope.
-
-    takes_ownership(s);             // s moves into the function...
+    takes_ownership(s);             // s's value moves into the function...
                                     // ... and so is no longer valid here.
-    let x = 5;                      // x goes into scope.
+    let x = 5;                      // x comes into scope.
 
     makes_copy(x);                  // x would move into the function,
                                     // but i32 is Copy, so it’s okay to still
                                     // use x afterward.
 
-} // Here, x goes out of scope, then s. But since s was moved, nothing special
-  // happens.
+} // Here, x goes out of scope, then s. But since s's value was moved, nothing
+  // special happens.
 
 fn takes_ownership(some_string: String) { // some_string comes into scope.
     println!(&quot;{}&quot;, some_string);
-} // Here, some_string goes out of scope and `drop()` is called. The backing
+} // Here, some_string goes out of scope and `drop` is called. The backing
   // memory is freed.
 
 fn makes_copy(some_integer: i32) { // some_integer comes into scope.
     println!(&quot;{}&quot;, some_integer);
 } // Here, some_integer goes out of scope. Nothing special happens.
 </code></pre>
-<p>Remember: If we tried to use <code>s</code> after the call to <code>takes_ownership()</code>, Rust
+<p>If we tried to use <code>s</code> after the call to <code>takes_ownership</code>, Rust
 would throw a compile-time error. These static checks protect us from mistakes.
 Try adding code to <code>main</code> that uses <code>s</code> and <code>x</code> to see where you can use them
 and where the ownership rules prevent you from doing so.</p>
-<p>Returning values can also transfer ownership:</p>
-<p>Filename: src/main.rs</p>
-<pre><code class="language-rust">fn main() {
-    let s1 = gives_ownership();
-
-    let s2 = String::from(&quot;hello&quot;);
-
-    let s3 = takes_and_gives_back(s2);
-}
-
-fn gives_ownership() -&gt; String {
-    let some_string = String::from(&quot;hello&quot;);
-
-    some_string
-}
-
-fn takes_and_gives_back(a_string: String) -&gt; String {
-
-    a_string
-}
-</code></pre>
-<p>With similiar annotations:</p>
+<h3>Return Values and Scope</h3>
+<p>Returning values can also transfer ownership. Here's an example with similar annotations:</p>
 <p>Filename: src/main.rs</p>
 <pre><code class="language-rust">fn main() {
     let s1 = gives_ownership();         // gives_ownership moves its return
@@ -2641,13 +2675,16 @@ fn takes_and_gives_back(a_string: String) -&gt; String { // a_string comes into 
     a_string  // a_string is returned, and moves out to the calling function
 }
 </code></pre>
-<p>It’s the same pattern, every time: assigning something moves it, and when an
-owner goes out of scope, if it hasn’t been moved, it will <code>drop()</code>.</p>
-<p>This might seem a bit tedious, and it is. What if we want to let a function use
-a value but not take ownership? It’s quite annoying that anything we pass in
-also needs to be passed back if we want to use it again, in addition to any
-data resulting from the body of the function that we might want to return as
-well. It's <em>possible</em> to return multiple values, using a tuple, like this:</p>
+<p>It’s the same pattern, every time: assigning a value to another binding moves
+it, and when heap data values' bindings go out of scope, if the data hasn’t
+been moved to be owned by another binding, the value will be cleaned up by
+<code>drop</code>.</p>
+<p>Taking ownership then returning ownership with every function is a bit tedious.
+What if we want to let a function use a value but not take ownership? It’s
+quite annoying that anything we pass in also needs to be passed back if we want
+to use it again, in addition to any data resulting from the body of the
+function that we might want to return as well.</p>
+<p>It is possible to return multiple values using a tuple, like this:</p>
 <p>Filename: src/main.rs</p>
 <pre><code class="language-rust">fn main() {
     let s1 = String::from(&quot;hello&quot;);
@@ -2664,30 +2701,14 @@ fn calculate_length(s: String) -&gt; (String, usize) {
 }
 </code></pre>
 <p>But this is too much ceremony and a lot of work for a concept that should be
-common. Luckily for us, Rust has a feature for this concept, and it’s what the
-next section is about.</p>
+common. Luckily for us, Rust has a feature for this concept: references.</p>
 <h2>References and Borrowing</h2>
-<p>At the end of the last section, we had some example Rust that wasn’t very
-good. Here it is again:</p>
-<p>Filename: src/main.rs</p>
-<pre><code class="language-rust">fn main() {
-    let s1 = String::from(&quot;hello&quot;);
-
-    let (s2, len) = calculate_length(s1);
-
-    println!(&quot;The length of '{}' is {}.&quot;, s2, len);
-}
-
-fn calculate_length(s: String) -&gt; (String, usize) {
-    let length = s.len(); // len() returns the length of a String.
-
-    (s, length)
-}
-</code></pre>
-<p>The issue here is that we have to return the <code>String</code> back to the calling
-function so that we can still use it there, since it was moved when we called
-<code>calculate_length()</code>.</p>
-<p>There is a better way. It looks like this:</p>
+<p>The issue with the tuple code at the end of the last section is that we have to
+return the <code>String</code> back to the calling function so that we can still use the
+<code>String</code> after the call to <code>calculate_length</code>, since the <code>String</code> was moved
+into <code>calculate_length</code>.</p>
+<p>Here is how you would use a function without taking ownership of it using
+<em>references:</em></p>
 <p>Filename: src/main.rs</p>
 <pre><code class="language-rust">fn main() {
     let s1 = String::from(&quot;hello&quot;);
@@ -2705,11 +2726,12 @@ fn calculate_length(s: &amp;String) -&gt; usize {
 </code></pre>
 <p>First, you’ll notice all of the tuple stuff in the binding declaration and the
 function return value is gone. Next, note that we pass <code>&amp;s1</code> into
-<code>calculate_length()</code>, and in its definition, we take <code>&amp;String</code> rather than
+<code>calculate_length</code>, and in its definition, we take <code>&amp;String</code> rather than
 <code>String</code>.</p>
-<p>These <code>&amp;</code>s are called <em>references</em>, and they allow you to refer to some value
-without taking ownership of it. Here’s a diagram:</p>
+<p>These <code>&amp;</code>s are <em>references</em>, and they allow you to refer to some value
+without taking ownership of it. Figure 4-5 shows a diagram of this.</p>
 <p><img alt="&String s pointing at String s1" src="img/trpl04-05.svg" class="center" /></p>
+<p>Figure 4-5: <code>&amp;String s</code> pointing at <code>String s1</code></p>
 <p>Let’s take a closer look at the function call here:</p>
 <pre><code class="language-rust"># fn calculate_length(s: &amp;String) -&gt; usize {
 #     let length = s.len();
@@ -2720,9 +2742,9 @@ let s1 = String::from(&quot;hello&quot;);
 
 let len = calculate_length(&amp;s1);
 </code></pre>
-<p>The <code>&amp;s1</code> syntax lets us create a reference with <code>s1</code>. This reference <em>refers</em>
-to the value of <code>s1</code> but does not own it. Because it does not own it, the
-value it points to will not be dropped when the reference goes out of scope.</p>
+<p>The <code>&amp;s1</code> syntax lets us create a reference which <em>refers</em> to the value of <code>s1</code>
+but does not own it. Because it does not own it, the value it points to will
+not be dropped when the reference goes out of scope.</p>
 <p>Likewise, the signature of the function uses <code>&amp;</code> to indicate that it takes
 a reference as an argument. Let’s add some explanatory annotations:</p>
 <pre><code class="language-rust">fn calculate_length(s: &amp;String) -&gt; usize { // s is a reference to a String
@@ -2732,15 +2754,15 @@ a reference as an argument. Let’s add some explanatory annotations:</p>
 } // Here, s goes out of scope. But since it does not have ownership of what
   // it refers to, nothing happens.
 </code></pre>
-<p>It’s the same process as before, except that because we don’t have ownership,
-we don’t drop what a reference points to when the reference goes out of scope.
-This lets us write functions which take references as arguments instead of the
-values themselves, so that we won’t need to return them to give back ownership.</p>
-<p>There’s another word for what references do, and that’s <em>borrowing</em>. Just like
-with real life, if a person owns something, you can borrow it from them. When
-you’re done, you have to give it back.</p>
-<p>Speaking of which, what if you try to modify something you borrow from me? Try
-this code out. Spoiler alert: it doesn’t work!</p>
+<p>It’s the same process as before, but we don’t drop what the reference points to
+when it goes out of scope because we don't have ownership. This lets us write
+functions which take references as arguments instead of the values themselves,
+so that we won’t need to return them to give back ownership.</p>
+<p>We call this process <em>borrowing</em>. Just like with real life, if a person owns
+something, you can borrow it from them, and when you’re done, you have to give
+it back.</p>
+<p>So what happens if we try to modify something we're borrowing? Try this code
+out. Spoiler alert: it doesn’t work!</p>
 <p>Filename: src/main.rs</p>
 <pre><code class="language-rust,ignore">fn main() {
     let s = String::from(&quot;hello&quot;);
@@ -2759,10 +2781,10 @@ fn change(some_string: &amp;String) {
 8 |     some_string.push_str(&quot;, world&quot;);
   |     ^^^^^^^^^^^
 </code></pre>
-<p>Just like bindings are immutable by default, so are references. We’re not
-allowed to modify something we have a reference to.</p>
-<h3>Mutable references</h3>
-<p>We can fix this bug! Just a small tweak:</p>
+<p>Just as bindings are immutable by default, so are references. We’re not allowed
+to modify something we have a reference to.</p>
+<h3>Mutable References</h3>
+<p>We can fix this error with just a small tweak:</p>
 <p>Filename: src/main.rs</p>
 <pre><code class="language-rust">fn main() {
     let mut s = String::from(&quot;hello&quot;);
@@ -2776,7 +2798,9 @@ fn change(some_string: &amp;mut String) {
 </code></pre>
 <p>First, we had to change <code>s</code> to be <code>mut</code>. Then we had to create a mutable
 reference with <code>&amp;mut s</code> and accept a mutable reference with <code>some_string: &amp;mut String</code>.</p>
-<p>Mutable references have one big restriction, though. This code fails:</p>
+<p>Mutable references have one big restriction, though: you can only have one
+mutable reference to a particular piece of data in a particular scope. This
+code will fail:</p>
 <p>Filename: src/main.rs</p>
 <pre><code class="language-rust,ignore">let mut s = String::from(&quot;hello&quot;);
 
@@ -2794,10 +2818,16 @@ let r2 = &amp;mut s;
 6 | }
   | - first borrow ends here
 </code></pre>
-<p>The error is what it says: you cannot borrow something mutably more than once
-at a time. This restriction allows for mutation but in a very controlled
-fashion. It is something that new Rustaceans struggle with, because most
-languages let you mutate whenever you’d like.</p>
+<p>This restriction allows for mutation but in a very controlled fashion. It is
+something that new Rustaceans struggle with, because most languages let you
+mutate whenever you’d like. The benefit of having this restriction is that Rust
+can prevent data races at compile time. A <em>data race</em> is a particular type of
+race condition where two or more pointers access the same data at the same
+time, at least one of the pointers is being used to write to the data, and
+there's no mechanism being used to synchronize access to the data. Data races
+cause undefined behavior and can be difficult to diagnose and fix when trying
+to track them down at runtime; Rust prevents this problem from happening since
+it won't even compile code with data races!</p>
 <p>As always, we can use <code>{}</code>s to create a new scope, allowing for multiple mutable
 references, just not <em>simultaneous</em> ones:</p>
 <pre><code class="language-rust">let mut s = String::from(&quot;hello&quot;);
@@ -2831,13 +2861,21 @@ let r3 = &amp;mut s; // BIG PROBLEM
 </code></pre>
 <p>Whew! We <em>also</em> cannot have a mutable reference while we have an immutable one.
 Users of an immutable reference don’t expect the values to suddenly change out
-from under them! Multiple immutable references are okay, however.</p>
-<h3>Dangling references</h3>
-<p>In languages with pointers, it’s easy to create a “dangling pointer” by freeing
-some memory while keeping around a pointer to that memory. In Rust, by
-contrast, the compiler guarantees that references will never be dangling: if we
-have a reference to something, the compiler will ensure that it will not go
-out of scope before the reference does.</p>
+from under them! Multiple immutable references are okay, however, since no one
+who is just reading the data has the ability to affect anyone else's reading of
+the data.</p>
+<p>Even though these errors may be frustrating at times, remember that it's the
+Rust compiler pointing out a potential bug earlier (at compile time rather than
+at runtime) and showing you exactly where the problem is instead of you having
+to track down why sometimes your data isn't what you thought it should be.</p>
+<h3>Dangling References</h3>
+<p>In languages with pointers, it's easy to make the error of creating a <em>dangling
+pointer</em>, a pointer referencing a location in memory that may have been given
+to someone else, by freeing some memory while keeping around a pointer to that
+memory. In Rust, by contrast, the compiler guarantees that references will
+never be dangling: if we have a reference to some data, the compiler will
+ensure that the data will not go out of scope before the reference to the data
+does.</p>
 <p>Let’s try to create a dangling reference:</p>
 <p>Filename: src/main.rs</p>
 <pre><code class="language-rust,ignore">fn main() {
@@ -2863,13 +2901,12 @@ fn dangle() -&gt; &amp;String {
 
 error: aborting due to previous error
 </code></pre>
-<p>This error message refers to a feature we haven’t learned about yet,
-<em>lifetimes</em>. The message does contain the key to why this code is a problem,
-though:</p>
-<pre><code class="language-bash">this function’s return type contains a borrowed value, but there is no value
-for it to be borrowed from
-</code></pre>
-<p>Let’s examine exactly what happens with <code>dangle()</code>:</p>
+<p>This error message refers to a feature we haven’t learned about yet:
+<em>lifetimes</em>. We'll discuss lifetimes in detail in Chapter XX, but, disregarding
+the parts about lifetimes, the message does contain the key to why this code is
+a problem: <code>this function’s return type contains a borrowed value, but there is no value for it to be borrowed from</code>.</p>
+<p>Let’s have a closer look at exactly what's happenening at each stage of our
+<code>dangle</code> code:</p>
 <pre><code class="language-rust,ignore">fn dangle() -&gt; &amp;String { // dangle returns a reference to a String
 
     let s = String::from(&quot;hello&quot;); // s is a new String
@@ -2878,7 +2915,7 @@ for it to be borrowed from
 } // Here, s goes out of scope, and is dropped. Its memory goes away.
   // Danger!
 </code></pre>
-<p>Because <code>s</code> is created inside of <code>dangle()</code>, when the code of <code>dangle()</code> is
+<p>Because <code>s</code> is created inside of <code>dangle</code>, when the code of <code>dangle</code> is
 finished, it will be deallocated. But we tried to return a reference to it.
 That means this reference would be pointing to an invalid <code>String</code>! That’s
 no good. Rust won’t let us do this.</p>
@@ -2903,13 +2940,13 @@ no good. Rust won’t let us do this.</p>
 </ol>
 <p>Next, let's look at a different kind of reference: slices.</p>
 <h2>Slices</h2>
-<p>So far, we’ve talked about types that have ownership, like <code>String</code>, and ones
-that don’t, like <code>&amp;String</code>. There is another kind of type which does not have
-ownership: slices. Slices let you reference a contiguous sequence of elements
-in a collection rather than the whole collection itself.</p>
-<p>Here’s a small programming problem: write a function which takes a string
-and returns the first word you find. If we don’t find a space in the string,
-then the whole string is a word, so the whole thing should be returned.</p>
+<p>There is another data type which does not have ownership: slices. Slices let
+you reference a contiguous sequence of elements in a collection rather than the
+whole collection itself.</p>
+<p>Here’s a small programming problem: write a function which takes a string and
+returns the first word it finds in that string. If it doesn’t find a space in
+the string, it means the whole string is one word, so the whole thing should be
+returned.</p>
 <p>Let’s think about the signature of this function:</p>
 <pre><code class="language-rust,ignore">fn first_word(s: &amp;String) -&gt; ?
 </code></pre>
@@ -2935,18 +2972,18 @@ the word, though. Let’s try that:</p>
 </code></pre>
 <p>Since we need to go through the String element by element and
 check if a value is a space, we will convert our String to an
-array of bytes using the <code>.as_bytes()</code> method.</p>
+array of bytes using the <code>as_bytes</code> method.</p>
 <pre><code class="language-rust,ignore">for (i, &amp;item) in bytes.iter().enumerate() {
 </code></pre>
-<p>We will be discussing iterators in more detail in Chapter XX, but for
-now, know that <code>iter()</code> is a method that returns each element in a
-collection, and <code>enumerate()</code> modifies the result of <code>iter()</code> and returns
-a tuple instead. The first element of the tuple is the index, and the
-second element is a reference to the element itself. This is a bit
-nicer than calculating the index ourselves.</p>
+<p>We will be discussing iterators in more detail in Chapter XX, but for now, know
+that <code>iter</code> is a method that returns each element in a collection, and
+<code>enumerate</code> modifies the result of <code>iter</code> and returns each element as part
+of a tuple instead, where the first element of the tuple is the index, and the
+second element is a reference to the element itself. This is a bit nicer than
+calculating the index ourselves.</p>
 <p>Since it’s a tuple, we can use patterns, just like elsewhere in Rust. So we
-match against the tuple with i for the index and &amp;item for a single byte. Since
-we get a reference from <code>.iter().enumerate()</code>, we use <code>&amp;</code> in the pattern.</p>
+match against the tuple with <code>i</code> for the index and <code>&amp;item</code> for a single byte.
+Since we get a reference from <code>.iter().enumerate()</code>, we use <code>&amp;</code> in the pattern.</p>
 <pre><code class="language-rust,ignore">    if item == b' ' {
         return i;
     }
@@ -2954,12 +2991,14 @@ we get a reference from <code>.iter().enumerate()</code>, we use <code>&amp;</co
 s.len()
 </code></pre>
 <p>We search for the byte that represents the space, using the byte literal
-syntax. If we find one, we return the position. Otherwise, we return the length
-of the string, using <code>s.len()</code>.</p>
-<p>This works, but there’s a problem. We’re returning a <code>usize</code> on its own, but
-it’s only a meaningful number in the context of the <code>&amp;String</code>. In other
-words, because it’s a separate value from the <code>String</code>, there’s no guarantee
-that it will still be valid in the future. Consider this:</p>
+syntax. If we find a space, we return the position. Otherwise, we return the
+length of the string, using <code>s.len()</code>.</p>
+<p>We now have a way to find out the index of the end of the first word in the
+string, but there’s a problem. We’re returning a <code>usize</code> on its own, but it’s
+only a meaningful number in the context of the <code>&amp;String</code>. In other words,
+because it’s a separate value from the <code>String</code>, there’s no guarantee that it
+will still be valid in the future. Consider this program that uses this
+<code>first_word</code> function:</p>
 <p>Filename: src/main.rs</p>
 <pre><code class="language-rust"># fn first_word(s: &amp;String) -&gt; usize {
 #     let bytes = s.as_bytes();
@@ -2984,31 +3023,38 @@ fn main() {
     // we could meaningfully use the value 5 with. word is now totally invalid!
 }
 </code></pre>
-<p>This is bad! It’s even worse if we wanted to write a <code>second_word()</code>
+<p>This program compiles without any errors, and also would if we used <code>word</code>
+after calling <code>s.clear()</code>. <code>word</code> isn't connected to the state of <code>s</code> at all,
+so <code>word</code> still contains the value <code>5</code>. We could use that <code>5</code> with <code>s</code> to try
+to extract the first word out, but this would be a bug since the contents of
+<code>s</code> have changed since we saved <code>5</code> in <code>word</code>.</p>
+<p>This is bad! It’s even worse if we wanted to write a <code>second_word</code>
 function. Its signature would have to look like this:</p>
 <pre><code class="language-rust,ignore">fn second_word(s: &amp;String) -&gt; (usize, usize) {
 </code></pre>
-<p>Now we’re tracking both a start <em>and</em> an ending index. Even more chances for
-things to go wrong. We now have three unrelated variable bindings floating
+<p>Now we’re tracking both a start <em>and</em> an ending index, and we have even more
+values that were calculated from data in a particular state but aren't tied to
+that state at all. We now have three unrelated variable bindings floating
 around which need to be kept in sync.</p>
 <p>Luckily, Rust has a solution to this problem: string slices.</p>
-<h2>String slices</h2>
-<p>A string slice looks like this:</p>
+<h3>String Slices</h3>
+<p>A string slice is a reference to part of a <code>String</code>, and looks like this:</p>
 <pre><code class="language-rust">let s = String::from(&quot;hello world&quot;);
 
 let hello = &amp;s[0..5];
 let world = &amp;s[6..11];
 </code></pre>
-<p>This looks just like taking a reference to the whole <code>String</code>, but with the
-extra <code>[0..5]</code> bit. Instead of being a reference to the entire <code>String</code>, it’s a
+<p>This is similar to taking a reference to the whole <code>String</code>, but with the
+extra <code>[0..5]</code> bit. Rather than a reference to the entire <code>String</code>, it’s a
 reference to an internal position in the <code>String</code> and the number of elements
 that it refers to.</p>
-<p>We can create slices with a range of <code>[starting_index..ending_index]</code>, but the
+<p>We create slices with a range of <code>[starting_index..ending_index]</code>, but the
 slice data structure actually stores the starting position and the length of the
 slice. So in the case of <code>let world = &amp;s[6..11];</code>, <code>world</code> would be a slice that
 contains a pointer to the 6th byte of <code>s</code> and a length value of 5.</p>
-<p>In other words, it looks like this:</p>
+<p>Figure 4-6 shows this in a diagram:</p>
 <p><img alt="world containing a pointer to the 6th byte of String s and a length 5" src="img/trpl04-06.svg" class="center" style="width: 50%;" /></p>
+<p>Figure 4-6: Two string slices referring to parts of a <code>String</code></p>
 <p>With Rust’s <code>..</code> range syntax, if you want to start at the first index (zero),
 you can drop the value before the <code>..</code>. In other words, these are equal:</p>
 <pre><code class="language-rust">let s = String::from(&quot;hello&quot;);
@@ -3035,7 +3081,8 @@ let len = s.len();
 let slice = &amp;s[0..len];
 let slice = &amp;s[..];
 </code></pre>
-<p>With this in mind, let’s re-write <code>first_word()</code> to return a slice:</p>
+<p>With this in mind, let’s re-write <code>first_word</code> to return a slice. The type
+that signifies &quot;string slice&quot; is written as <code>&amp;str</code>:</p>
 <p>Filename: src/main.rs</p>
 <pre><code class="language-rust">fn first_word(s: &amp;String) -&gt; &amp;str {
     let bytes = s.as_bytes();
@@ -3049,15 +3096,23 @@ let slice = &amp;s[..];
     &amp;s[..]
 }
 </code></pre>
-<p>Now we have a single value, the <code>&amp;str</code>, pronounced &quot;string slice&quot;. It stores
-both elements that we care about: a reference to the starting point of the
-slice and the number of elements in the slice.</p>
-<p>This would also work for a <code>second_word()</code>:</p>
+<p>We get the index for the end of the word in the same way as before, by looking
+for the first occurrence of a space. When we find a space, we return a string
+slice using the start of the string and the index of the space as the starting
+and ending indices.</p>
+<p>Now when we call <code>first_word</code>, we get back a single value that is tied to the
+underlying data. The value is made up of a reference to the starting point of
+the slice and the number of elements in the slice.</p>
+<p>Returning a slice would also work for a <code>second_word</code> function:</p>
 <pre><code class="language-rust,ignore">fn second_word(s: &amp;String) -&gt; &amp;str {
 </code></pre>
-<p>We now have a straightforward API that’s much harder to mess up.</p>
-<p>But what about our error condition from before? Slices also fix that. Using
-the slice version of <code>first_word()</code> will throw an error:</p>
+<p>We now have a straightforward API that’s much harder to mess up. Remember our
+bug from before, when we got the first word but then cleared the string so that
+our first word was invalid? That code was logically incorrect but didn't show
+any immediate errors. The problems would show up later, if we kept trying to
+use the first word index with an emptied string. Slices make this bug
+impossible, and let us know we have a problem with our code much sooner. Using
+the slice version of <code>first_word</code> will throw a compile time error:</p>
 <p>Filename: src/main.rs</p>
 <pre><code class="language-rust,ignore">fn main() {
     let mut s = String::from(&quot;hello world&quot;);
@@ -3067,7 +3122,7 @@ the slice version of <code>first_word()</code> will throw an error:</p>
     s.clear(); // Error!
 }
 </code></pre>
-<p>Here’s the error:</p>
+<p>Here’s the compiler error:</p>
 <pre><code class="language-bash">17:6 error: cannot borrow `s` as mutable because it is also borrowed as
             immutable [E0502]
     s.clear(); // Error!
@@ -3082,12 +3137,12 @@ fn main() {
 }
 ^
 </code></pre>
-<p>Remember the borrowing rules? If we have an immutable reference to something,
-we cannot also take a mutable reference. Since <code>clear()</code> needs to truncate the
-<code>String</code>, it tries to take a mutable reference, which fails. Not only has Rust
-made our API easier to use, but it’s also eliminated an entire class of errors
-at compile time!</p>
-<h3>String literals are slices</h3>
+<p>Remember from the borrowing rules that if we have an immutable reference to
+something, we cannot also take a mutable reference. Since <code>clear</code> needs to
+truncate the <code>String</code>, it tries to take a mutable reference, which fails. Not
+only has Rust made our API easier to use, but it’s also eliminated an entire
+class of errors at compile time!</p>
+<h4>String Literals are Slices</h4>
 <p>Remember how we talked about string literals being stored inside of the binary
 itself? Now that we know about slices, we can now properly understand string
 literals.</p>
@@ -3096,19 +3151,18 @@ literals.</p>
 <p>The type of <code>s</code> here is <code>&amp;str</code>: It’s a slice, pointing to that specific point
 of the binary. This is also why string literals are immutable; <code>&amp;str</code> is an
 immutable reference.</p>
-<h3>String slices as arguments</h3>
+<h4>String Slices as Arguments</h4>
 <p>Knowing that you can take slices of both literals and <code>String</code>s leads us to
-one more improvement on <code>first_word()</code>, and that’s its signature:</p>
+one more improvement on <code>first_word</code>, and that’s its signature:</p>
 <pre><code class="language-rust,ignore">fn first_word(s: &amp;String) -&gt; &amp;str {
 </code></pre>
-<p>A more experienced Rustacean would write this one instead:</p>
+<p>A more experienced Rustacean would write this one instead because it allows us
+to use the same function on both <code>String</code>s and <code>&amp;str</code>s:</p>
 <pre><code class="language-rust,ignore">fn first_word(s: &amp;str) -&gt; &amp;str {
 </code></pre>
-<p>Why is this? Well, we aren’t trying to modify <code>s</code> at all. And we can take
-a string slice that’s the full length of a <code>String</code>, so we haven’t lost
-the ability to talk about full <code>String</code>s. And additionally, we can take
-string slices of string literals too, so this function is more useful, but
-with no loss of functionality:</p>
+<p>If we have a string slice, we can pass that as the argument directly. If we
+have a <code>String</code>, we can pass a slice of the entire <code>String</code>. This makes our API
+more general and useful without losing any functionality:</p>
 <p>Filename: src/main.rs</p>
 <pre><code class="language-rust"># fn first_word(s: &amp;str) -&gt; &amp;str {
 #     let bytes = s.as_bytes();
@@ -3137,13 +3191,13 @@ fn main() {
     let word = first_word(my_string_literal);
 }
 </code></pre>
-<h2>Other slices</h2>
+<h3>Other Slices</h3>
 <p>String slices, as you might imagine, are specific to strings. But there’s a more
-general slice type, too. Consider arrays:</p>
+general slice type, too. Consider this array:</p>
 <pre><code class="language-rust">let a = [1, 2, 3, 4, 5];
 </code></pre>
 <p>Just like we may want to refer to a part of a string, we may want to refer to
-part of an array:</p>
+part of an array, and would do so like this:</p>
 <pre><code class="language-rust">let a = [1, 2, 3, 4, 5];
 
 let slice = &amp;a[1..3];
@@ -3152,6 +3206,16 @@ let slice = &amp;a[1..3];
 do, by storing a reference to the first element and a length. You’ll use this
 kind of slice for all sorts of other collections. We’ll discuss these in detail
 when we talk about vectors in Chapter XX.</p>
+<h2>Summary</h2>
+<p>The concepts of ownership, borrowing, and slices are what ensure memory safety
+in Rust programs at compile time. Rust is a language that gives you control
+over your memory usage like other systems programming languages, but having the
+owner of data automatically clean up that data when the owner goes out of scope
+means you don't have to write and debug extra code to get this control.</p>
+<p>Ownership affects how lots of other parts of Rust work, so we will be talking
+about these concepts further throughout the rest of the book. Let's move on to
+the next chapter where we'll look at grouping pieces of data together in a
+<code>struct</code>.</p>
 <h1>Structs</h1>
 <p>A <code>struct</code>, short for &quot;structure&quot;, gives us the ability to name and package
 together multiple related values that make up a meaningful group. If you come
