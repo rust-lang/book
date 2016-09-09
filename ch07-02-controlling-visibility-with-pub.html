@@ -67,7 +67,7 @@
                 </div>
 
                 <div id="content" class="content">
-                    <h2>Controlling visibility with <code>pub</code></h2>
+                    <h2>Controlling Visibility with <code>pub</code></h2>
 <p>At the end of the last section, we had a project, <code>communicator</code>, and when we compiled it, we got some strange warnings:</p>
 <pre><code class="language-bash">   Compiling communicator v0.1.0 (file:///projects/communicator)
 warning: function is never used: `connect`, #[warn(dead_code)] on by default
@@ -90,7 +90,7 @@ warning: function is never used: `connect`, #[warn(dead_code)] on by default
 </code></pre>
 <p>Why does this happen? After all, we're building a library. What if these three
 functions are the public interface that we want our <em>users</em> to use? We won't
-necessarily be using them within our own crate, but the point of creating them
+necessarily be using them within our own project, but the point of creating them
 is that they <em>will</em> be used by another project. Let's try using them as if we
 were another project using our library to see what happens and understand why
 we're getting these unused function warnings. Create a <code>src/main.rs</code> file with
@@ -107,8 +107,8 @@ scope, because our package actually now contains <em>two</em> crates. Cargo trea
 src/main.rs as the crate root of a binary crate, and we also have our existing
 library crate. This pattern is quite common for executable crates: most
 functionality is in a library crate, and the executable crate uses that
-library. This way, other programs can also use the library crate, and it’s also
-a nice separation of concerns.</p>
+library. This way, other programs can also use the library crate, and it’s a
+nice separation of concerns.</p>
 <p>Our binary crate right now just calls our library's <code>connect</code> function from
 the <code>client</code> module; we picked that one since it's the first warning in our
 build output above. Invoking <code>cargo build</code> will now give us an error after the
@@ -221,7 +221,7 @@ warning: function is never used: `connect`, #[warn(dead_code)] on by default
   | ^
 </code></pre>
 <p>Only one last warning! Try to fix this one on your own!</p>
-<h3>Privacy rules</h3>
+<h3>Privacy Rules</h3>
 <p>Overall, these are the rules for item visibility:</p>
 <ol>
 <li>If an item is public, then it can be accessed through any of its
@@ -231,6 +231,7 @@ child modules.</li>
 </ol>
 <p>Let's look at a few more examples to get some practice. What if we had this
 code in a new project's <code>src/lib.rs</code>:</p>
+<p>Filename: src/lib.rs</p>
 <pre><code class="language-rust,ignore">mod outermost {
     pub fn middle_function() {}
 
@@ -268,7 +269,7 @@ root module is neither the current module of <code>middle_secret_function</code>
 be accessed by its current module, <code>outermost</code>. That means the <code>try_me</code>
 function is not allowed to call <code>outermost::inside::inner_function()</code> or
 <code>outermost::inside::secret_function()</code>.</p>
-<p>Here are some changes to make to this code. Try each one, make a guess
+<p>Here are some changes to try making with this code. Try each one, make a guess
 about what will be allowed or not, compile to see if you're right, and use the
 rules to understand why.</p>
 <ul>

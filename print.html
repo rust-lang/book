@@ -4098,20 +4098,21 @@ overview of how the bits fit together:</p>
 into scope so that it's easier to refer to them.</li>
 </ul>
 <p>We'll take a look at each of these parts and see how they fit into the whole.</p>
-<h2><code>mod</code> and the filesystem</h2>
+<h2><code>mod</code> and the Filesystem</h2>
 <p>Every module in Rust starts with the <code>mod</code> keyword. In this next example, we'll
 start again by making a new project with Cargo. This time, instead of a binary,
 we're going to make a library: a project that other people would pull into their
-projects as a dependency.  We saw this with the <code>rand</code> crate in Chapter 2.</p>
-<p>Imagine that we're creating a library to provide some general
-networking functionality, and we decide to call our library <code>communicator</code>. To
-create this library, we won't use the <code>--bin</code> option like we have before. This
-is because by default cargo will create a library:</p>
+projects as a dependency. We saw this with the <code>rand</code> crate in Chapter 2.</p>
+<p>Imagine that we're creating a library to provide some general networking
+functionality, and we decide to call our library <code>communicator</code>. To create this
+library, we won't use the <code>--bin</code> option like we have before. This is because
+by default cargo will create a library:</p>
 <pre><code class="language-bash">$ cargo new communicator
 $ cd communicator
 </code></pre>
-<p>You'll notice that Cargo generated <code>src/lib.rs</code> instead of <code>src/main.rs</code> for
-us, and inside it we'll find this:</p>
+<p>Notice that Cargo generated <code>src/lib.rs</code> instead of <code>src/main.rs</code> for us, and
+inside it we'll find this:</p>
+<p>Filename: src/lib.rs</p>
 <pre><code class="language-rust">#[cfg(test)]
 mod tests {
     #[test]
@@ -4132,14 +4133,14 @@ do. To start, add this code at the beginning of the file:</p>
     }
 }
 </code></pre>
-<p>This is our first module declaration. As you can see, you use the <code>mod</code>
-keyword, followed by the name of the module, and then a block of code in curly
-braces. Everything inside this block is inside the namespace <code>network</code>. In this
-case, we have a single function, <code>connect</code>. If we wanted to try and call this
-function from outside the <code>network</code> module, we would say <code>network::connect()</code>
-rather than <code>connect()</code>.</p>
-<p>You could have multiple modules, side-by-side. For example, if you wanted a
+<p>This is our first module declaration. We use the <code>mod</code> keyword, followed by the
+name of the module, and then a block of code in curly braces. Everything inside
+this block is inside the namespace <code>network</code>. In this case, we have a single
+function, <code>connect</code>. If we wanted to try and call this function from outside
+the <code>network</code> module, we would say <code>network::connect()</code> rather than <code>connect()</code>.</p>
+<p>We could have multiple modules, side-by-side. For example, if we wanted a
 <code>client</code> module:</p>
+<p>Filename: src/lib.rs</p>
 <pre><code class="language-rust">mod network {
     fn connect() {
     }
@@ -4151,8 +4152,9 @@ mod client {
 }
 </code></pre>
 <p>Now we have a <code>network::connect</code> function and a <code>client::connect</code> function.</p>
-<p>And you can put modules inside of modules. If you wanted to have <code>client</code> be
+<p>And we can put modules inside of modules. If we wanted to have <code>client</code> be
 within <code>network</code>:</p>
+<p>Filename: src/lib.rs</p>
 <pre><code class="language-rust">mod network {
     fn connect() {
     }
@@ -4177,7 +4179,7 @@ first example looks like when thought of this way:</p>
      └── client
 </code></pre>
 <p>More complicated projects can have a lot of modules.</p>
-<h3>Putting modules in another file</h3>
+<h3>Putting Modules in Another File</h3>
 <p>Modules form a hierarchical, tree-like structure. So does another thing:
 file systems! The module system is the way that we split larger Rust projects up
 into multiple files. Let's imagine we have a module layout like this:</p>
@@ -4213,8 +4215,8 @@ mod network {
 }
 </code></pre>
 <p>We still say <code>mod client</code>, but instead of curly braces, we have a semicolon.
-This lets Rust know that we have a module, but it's in another file. Which file
-is it in? Open up <code>src/client.rs</code> and put this in it:</p>
+This lets Rust know that we have a module, but it's in another file with that
+module's name. Open up <code>src/client.rs</code> and put this in it:</p>
 <p>File: src/client.rs</p>
 <pre><code class="language-rust">fn connect() {
 }
@@ -4223,7 +4225,7 @@ is it in? Open up <code>src/client.rs</code> and put this in it:</p>
 declaring a new module, and we've already declared this module in <code>src/lib.rs</code>.
 This file provides the <em>contents</em> of the <code>client</code> module. If we put a <code>mod client</code> here, we'd be giving the <code>client</code> module its own submodule named
 <code>client</code>!</p>
-<p>Now, everything should compile:</p>
+<p>Now, everything should compile successfully, but with a few warnings:</p>
 <pre><code class="language-bash">$ cargo build
    Compiling communicator v0.1.0 (file:///projects/communicator)
 
@@ -4247,7 +4249,8 @@ warning: function is never used: `connect`, #[warn(dead_code)] on by default
 </code></pre>
 <p>Don't worry about those warnings for now; we'll clear them up in a future
 section. They're just warnings, we've built things successfully!</p>
-<p>Let's convert the <code>network</code> module next. Change <code>src/lib.rs</code> to look like this:</p>
+<p>Let's extract the <code>network</code> module into its own file next, using the same
+pattern. Change <code>src/lib.rs</code> to look like this:</p>
 <p>Filename: src/lib.rs</p>
 <pre><code class="language-rust,ignore">mod client;
 
@@ -4264,8 +4267,9 @@ mod server {
 }
 </code></pre>
 <p>And then run <code>cargo build</code> again. Success! We have one more module to extract:
-<code>server</code>. Unfortunately, our current tactic won't work. Let's try it anyway.
-Modify <code>src/network.rs</code> to look like this:</p>
+<code>server</code>. Unfortunately, our current tactic of extracting a module into a file
+named after that module won't work. Let's try it anyway. Modify
+<code>src/network.rs</code> to look like this:</p>
 <p>Filename: src/network.rs</p>
 <pre><code class="language-rust,ignore">fn connect() {
 }
@@ -4305,13 +4309,14 @@ that we could do yet:</p>
 </blockquote>
 <p>Here's the problem: in our case, we have different names for our modules:
 <code>client</code> and <code>network::server</code>. But what if we had <code>client</code> and
-<code>network::client</code>, or <code>server</code> and <code>network::server</code>? That's completely valid,
-but then which module would the files <code>src/client.rs</code> and <code>src/server.rs</code>,
-respectively, be for?</p>
+<code>network::client</code>, or <code>server</code> and <code>network::server</code>? Having two modules at
+different places in the module hierarchy have the same name is completely
+valid, but then which module would the files <code>src/client.rs</code> and
+<code>src/server.rs</code>, respectively, be for?</p>
 <p>Instead of continuing to follow the same file naming pattern we used
-previously, we can do what the error suggests. We'll make a new directory, move
-<code>src/server.rs</code> into it, and change <code>src/network.rs</code> to <code>src/network/mod.rs</code>.
-Then, we try to build:</p>
+previously, we can do what the error suggests. We'll make a new <em>directory</em>,
+move <code>src/server.rs</code> into it, and change <code>src/network.rs</code> to
+<code>src/network/mod.rs</code>. Then, when we try to build:</p>
 <pre><code class="language-bash">$ mkdir src/network
 $ mv src/server.rs src/network
 $ mv src/network.rs src/network/mod.rs
@@ -4359,7 +4364,7 @@ the <code>mod</code> keyword.</p>
 </li>
 </ul>
 <p>Next, we'll talk about the <code>pub</code> keyword, and get rid of those warnings!</p>
-<h2>Controlling visibility with <code>pub</code></h2>
+<h2>Controlling Visibility with <code>pub</code></h2>
 <p>At the end of the last section, we had a project, <code>communicator</code>, and when we compiled it, we got some strange warnings:</p>
 <pre><code class="language-bash">   Compiling communicator v0.1.0 (file:///projects/communicator)
 warning: function is never used: `connect`, #[warn(dead_code)] on by default
@@ -4382,7 +4387,7 @@ warning: function is never used: `connect`, #[warn(dead_code)] on by default
 </code></pre>
 <p>Why does this happen? After all, we're building a library. What if these three
 functions are the public interface that we want our <em>users</em> to use? We won't
-necessarily be using them within our own crate, but the point of creating them
+necessarily be using them within our own project, but the point of creating them
 is that they <em>will</em> be used by another project. Let's try using them as if we
 were another project using our library to see what happens and understand why
 we're getting these unused function warnings. Create a <code>src/main.rs</code> file with
@@ -4399,8 +4404,8 @@ scope, because our package actually now contains <em>two</em> crates. Cargo trea
 src/main.rs as the crate root of a binary crate, and we also have our existing
 library crate. This pattern is quite common for executable crates: most
 functionality is in a library crate, and the executable crate uses that
-library. This way, other programs can also use the library crate, and it’s also
-a nice separation of concerns.</p>
+library. This way, other programs can also use the library crate, and it’s a
+nice separation of concerns.</p>
 <p>Our binary crate right now just calls our library's <code>connect</code> function from
 the <code>client</code> module; we picked that one since it's the first warning in our
 build output above. Invoking <code>cargo build</code> will now give us an error after the
@@ -4513,7 +4518,7 @@ warning: function is never used: `connect`, #[warn(dead_code)] on by default
   | ^
 </code></pre>
 <p>Only one last warning! Try to fix this one on your own!</p>
-<h3>Privacy rules</h3>
+<h3>Privacy Rules</h3>
 <p>Overall, these are the rules for item visibility:</p>
 <ol>
 <li>If an item is public, then it can be accessed through any of its
@@ -4523,6 +4528,7 @@ child modules.</li>
 </ol>
 <p>Let's look at a few more examples to get some practice. What if we had this
 code in a new project's <code>src/lib.rs</code>:</p>
+<p>Filename: src/lib.rs</p>
 <pre><code class="language-rust,ignore">mod outermost {
     pub fn middle_function() {}
 
@@ -4560,7 +4566,7 @@ root module is neither the current module of <code>middle_secret_function</code>
 be accessed by its current module, <code>outermost</code>. That means the <code>try_me</code>
 function is not allowed to call <code>outermost::inside::inner_function()</code> or
 <code>outermost::inside::secret_function()</code>.</p>
-<p>Here are some changes to make to this code. Try each one, make a guess
+<p>Here are some changes to try making with this code. Try each one, make a guess
 about what will be allowed or not, compile to see if you're right, and use the
 rules to understand why.</p>
 <ul>
@@ -4573,9 +4579,10 @@ namespace.)</li>
 </ul>
 <p>Feel free to design more experiments and try them out!</p>
 <p>Next, let's talk about bringing items into a scope with the <code>use</code> keyword.</p>
-<h2>Importing names with <code>use</code></h2>
+<h2>Importing Names with <code>use</code></h2>
 <p>We've seen how we can call functions defined within a module by using the
 module name as part of the call, like this:</p>
+<p>Filename: src/main.rs</p>
 <pre><code class="language-rust">pub mod a {
     pub mod series {
         pub mod of {
@@ -4591,6 +4598,7 @@ fn main() {
 <p>However, referring to the fully qualified name can get quite lengthy, as we see
 in that example. To solve this issue, Rust has a keyword, <code>use</code>. It works like
 this:</p>
+<p>Filename: src/main.rs</p>
 <pre><code class="language-rust">pub mod a {
     pub mod series {
         pub mod of {
@@ -4641,7 +4649,7 @@ fn main() {
     let green = TrafficLight::Green; // because we didn't use TrafficLight::Green
 }
 </code></pre>
-<h3>Glob imports with <code>*</code></h3>
+<h3>Glob Imports with <code>*</code></h3>
 <p>If you'd like to import all the items in a namespace at once, you can use <code>*</code>:</p>
 <pre><code class="language-rust">enum TrafficLight {
     Red,
@@ -4660,7 +4668,7 @@ fn main() {
 <p>The <code>*</code> is called a 'glob', and it will import everything that's visible inside
 of the namespace. Globs should be used sparingly: they are convenient, but you
 might also pull in more things than you expected and cause naming conflicts.</p>
-<h3>Using <code>super</code> to access a parent module</h3>
+<h3>Using <code>super</code> to Access a Parent Module</h3>
 <p>Remember when we created our crate that Cargo made a <code>tests</code> module for us?
 Let's talk about that now. It was in <code>src/lib.rs</code>:</p>
 <p>Filename: src/lib.rs</p>
@@ -4682,6 +4690,7 @@ annotations, the <code>tests</code> module is just another module!</p>
 <p>Since tests are for exercising the code within our library, let's try to call
 our <code>client::connect</code> function from this <code>it_works</code> function, even though
 we're not going to be checking any functionality right now:</p>
+<p>Filename: src/lib.rs</p>
 <pre><code class="language-rust">#[cfg(test)]
 mod tests {
     #[test]
@@ -4705,10 +4714,10 @@ warning: function is never used: `connect`, #[warn(dead_code)] on by default
 1 | fn connect() {
   | ^
 </code></pre>
-<p>Why doesn't this work? It's not because we don't have <code>communicator::</code> in front
-of the function like we had in <code>src/main.rs</code>: we are definitely within the
-<code>communicator</code> library crate here. The reason is that paths anywhere except in
-a <code>use</code> statement are relative to the current module (In a <code>use</code> statement,
+<p>Why doesn't this compile? It's not because we don't have <code>communicator::</code> in
+front of the function like we had in <code>src/main.rs</code>: we are definitely within
+the <code>communicator</code> library crate here. The reason is that paths anywhere except
+in a <code>use</code> statement are relative to the current module (In a <code>use</code> statement,
 they're relative to the crate root by default). Our <code>tests</code> module doesn't have
 a <code>client</code> module in its scope!</p>
 <p>So how do we get back up one module? We can either use leading colons to say
@@ -4728,6 +4737,7 @@ changes the path we give to <code>use</code> so that it is relative to the paren
 instead of to the root module.</p>
 <p>For these reasons, in the <code>tests</code> module especially, <code>use super::something</code> is
 usually the way to go. So now our test looks like this:</p>
+<p>Filename: src/lib.rs</p>
 <pre><code class="language-rust">#[cfg(test)]
 mod tests {
     use super::client;

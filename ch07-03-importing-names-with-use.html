@@ -67,9 +67,10 @@
                 </div>
 
                 <div id="content" class="content">
-                    <h2>Importing names with <code>use</code></h2>
+                    <h2>Importing Names with <code>use</code></h2>
 <p>We've seen how we can call functions defined within a module by using the
 module name as part of the call, like this:</p>
+<p>Filename: src/main.rs</p>
 <pre><code class="language-rust">pub mod a {
     pub mod series {
         pub mod of {
@@ -85,6 +86,7 @@ fn main() {
 <p>However, referring to the fully qualified name can get quite lengthy, as we see
 in that example. To solve this issue, Rust has a keyword, <code>use</code>. It works like
 this:</p>
+<p>Filename: src/main.rs</p>
 <pre><code class="language-rust">pub mod a {
     pub mod series {
         pub mod of {
@@ -135,7 +137,7 @@ fn main() {
     let green = TrafficLight::Green; // because we didn't use TrafficLight::Green
 }
 </code></pre>
-<h3>Glob imports with <code>*</code></h3>
+<h3>Glob Imports with <code>*</code></h3>
 <p>If you'd like to import all the items in a namespace at once, you can use <code>*</code>:</p>
 <pre><code class="language-rust">enum TrafficLight {
     Red,
@@ -154,7 +156,7 @@ fn main() {
 <p>The <code>*</code> is called a 'glob', and it will import everything that's visible inside
 of the namespace. Globs should be used sparingly: they are convenient, but you
 might also pull in more things than you expected and cause naming conflicts.</p>
-<h3>Using <code>super</code> to access a parent module</h3>
+<h3>Using <code>super</code> to Access a Parent Module</h3>
 <p>Remember when we created our crate that Cargo made a <code>tests</code> module for us?
 Let's talk about that now. It was in <code>src/lib.rs</code>:</p>
 <p>Filename: src/lib.rs</p>
@@ -176,6 +178,7 @@ annotations, the <code>tests</code> module is just another module!</p>
 <p>Since tests are for exercising the code within our library, let's try to call
 our <code>client::connect</code> function from this <code>it_works</code> function, even though
 we're not going to be checking any functionality right now:</p>
+<p>Filename: src/lib.rs</p>
 <pre><code class="language-rust">#[cfg(test)]
 mod tests {
     #[test]
@@ -199,10 +202,10 @@ warning: function is never used: `connect`, #[warn(dead_code)] on by default
 1 | fn connect() {
   | ^
 </code></pre>
-<p>Why doesn't this work? It's not because we don't have <code>communicator::</code> in front
-of the function like we had in <code>src/main.rs</code>: we are definitely within the
-<code>communicator</code> library crate here. The reason is that paths anywhere except in
-a <code>use</code> statement are relative to the current module (In a <code>use</code> statement,
+<p>Why doesn't this compile? It's not because we don't have <code>communicator::</code> in
+front of the function like we had in <code>src/main.rs</code>: we are definitely within
+the <code>communicator</code> library crate here. The reason is that paths anywhere except
+in a <code>use</code> statement are relative to the current module (In a <code>use</code> statement,
 they're relative to the crate root by default). Our <code>tests</code> module doesn't have
 a <code>client</code> module in its scope!</p>
 <p>So how do we get back up one module? We can either use leading colons to say
@@ -222,6 +225,7 @@ changes the path we give to <code>use</code> so that it is relative to the paren
 instead of to the root module.</p>
 <p>For these reasons, in the <code>tests</code> module especially, <code>use super::something</code> is
 usually the way to go. So now our test looks like this:</p>
+<p>Filename: src/lib.rs</p>
 <pre><code class="language-rust">#[cfg(test)]
 mod tests {
     use super::client;
