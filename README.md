@@ -36,12 +36,13 @@ your web browser.
 
 _Firefox:_
 ```bash
-$ firefox book/index.html
+$ firefox book/index.html           # Linux
+$ open -a "Firefox" book/index.html # OS X
 ```
 
 _Chrome:_
 ```bash
-$ open -a "Google Chrome" book/index.html 
+$ open -a "Google Chrome" book/index.html # OS X
 ```
 
 To run the tests:
