@@ -42,6 +42,7 @@ $ open -a "Firefox" book/index.html # OS X
 
 _Chrome:_
 ```bash
+$ google-chrome book/index.html           # Linux
 $ open -a "Google Chrome" book/index.html # OS X
 ```
 
