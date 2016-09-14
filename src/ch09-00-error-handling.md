@@ -18,4 +18,6 @@ error? In the simplest sense, it relates to the answer of this question:
 The technique that you use depends on the answer to this question. First,
 we'll talk about `panic!`, Rust's way of signaling an unrecoverable error.
 Then, we'll talk about `Result<T, E>`, the return type for functions that
-may return an error you can recover from.
+may return an error you can recover from. Finally, we'll discuss considerations
+to take into account when deciding whether to try to recover from an error or
+to stop execution.
