@@ -60,8 +60,8 @@ manipulate the index in such a way as to read data they shouldn't be allowed to
 that is stored after the array.
 
 In order to protect your program from this sort of vulnerability, if you try to
-read an element at an index that doesn't exist, Rust will terminate the program.
-Let's try it and see:
+read an element at an index that doesn't exist, Rust will stop execution and
+refuse to continue with an invalid value. Let's try it and see:
 
 ```bash
 $ cargo run
@@ -119,15 +119,11 @@ error: Process didn't exit successfully: `target/debug/panic` (exit code: 101)
 
 That's a lot of output! Line `11` there has the line in our project:
 `src/main.rs` line four. The key to reading the backtrace is to start from the
-top and read until we see code that we wrote: that's where the problem
+top and read until we see files that we wrote: that's where the problem
 originated. If we didn't want our program to panic here, this line is where we
 would start investigating in order to figure out how we got to this location
-with the values that made our code panic.
+with values that cause the panic.
 
-Because `panic!` ends the program with no opportunity to recover, it's best to
-not `panic!` in library crates if at all possible. That way, people who use your
-crate get to decide how they want to handle failures from your code, instead of
-you deciding for them. A common pattern when you're writing a binary crate is
-to only `panic!` in the `main` function if an error condition ends up there,
-and to use recoverable errors in all the library functions that might fail.
-Let's look at how to make errors recoverable.
+Now that we've covered how to `panic!` to stop our code's execution and how to
+debug a `panic!`, let's look at how to instead return and use recoverable
+errors with `Result`.

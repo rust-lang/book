@@ -57,10 +57,11 @@ error),
 }
 ```
 
-If we see an `Ok`, we can return the inner `file` out of it. If we see `Err`,
-we have to decide what to do with it. The simplest thing is to turn our error
-into a `panic!` instead, by calling the macro. And since we haven't created
-that file yet, we'll see it in the error message:
+If we see an `Ok`, we can return the inner `file` out of the `Ok` variant. If
+we see `Err`, we have to decide what to do with it. The simplest thing is to
+turn our error into a `panic!` instead, by calling the macro. And since we
+haven't created that file yet, we'll see a message indicating as such when we
+print the error value:
 
 ```bash
 thread 'main' panicked at 'There was a problem opening the file: Error { repr:
@@ -69,7 +70,7 @@ Os { code: 2, message: "No such file or directory" } }', src/main.rs:8
 
 This works okay. However, `match` can be a bit verbose, and it doesn't always
 communicate intent well. The `Result<T, E>` type has many helper methods
-defined it to do various things. "Panic on an error result" is one of those
+defined on it to do various things. "Panic on an error result" is one of those
 methods, and it's called `unwrap()`:
 
 <!-- I'll ghost everything except `unwrap()` in the libreoffice file /Carol -->
@@ -85,7 +86,7 @@ fn main() {
 This has the same behavior as our previous example: If the call to `open()`
 returns `Ok`, return the value inside. If it's an `Err`, panic.
 
-There's also another method, similar to `unwrap()`, that lets us choose the
+There's also another method, similar to `unwrap()`, but that lets us choose the
 error message: `expect()`. Using `expect()` instead of `unwrap()` and providing
 good error messages can convey your intent and make tracking down the source of
 a panic easier. `expect()` looks like this:
@@ -105,7 +106,7 @@ supposed to be about recovering from errors, but we've gone back to panic. This
 observation gets at an underlying truth: you can easily turn a recoverable
 error into an unrecoverable one with `unwrap()` or `expect()`, but you can't
 turn an unrecoverable `panic!` into a recoverable one. This is why good Rust
-code chooses to make errors recoverable: you give your caller options.
+code chooses to make errors recoverable: you give your caller choices.
 
 The Rust community has a love/hate relationship with `unwrap()` and `expect()`.
 They're useful in tests since they will cause the test to fail if there's an
@@ -177,7 +178,8 @@ error: aborting due to previous error
 
 What gives? The issue is that the `main()` function has a return type of `()`,
 but the question mark operator is trying to return a `Result`. This doesn't
-work. Instead of `main()`, let's create a function that returns a `Result`:
+work. Instead of `main()`, let's create a function that returns a `Result` so
+that we are allowed to use the question mark operator:
 
 ```rust
 #![feature(question_mark)]
@@ -194,17 +196,25 @@ pub fn process_file() -> Result<(), io::Error> {
 }
 ```
 
-Since the `Result` type has two type parameters, we need to include them. In
-this case, `File::open` returns `std::io::Error`, so we will use it as our error
-type. But what about success? This function is executed purely for its side
-effects; no value is returned when everything works. Functions with no return
-type, as we just saw with `main()`, are the same as returning the unit type,
-`()`. So we can use the unit type as the return type here, too.
+Since the `Result` type has two type parameters, we need to include them both
+in our function signature. In this case, `File::open` returns `std::io::Error`,
+so we will use it as our error type. But what about success? This function is
+executed purely for its side effects; no value is returned when everything
+works. Functions with no return type, as we just saw with `main()`, are the
+same as returning the unit type, `()`. So we can use the unit type as the
+return type here, too.
 
 This leads us to the last line of the function, the slightly silly-looking
 `Ok(())`. This is an `Ok()` with a `()` value inside.
 
-TODO:
-- an example returning something other than ()
-- mention you'd still do a `match` in main where you call this function
-- show how to chain
+Now we have the function `process_file` that uses the question mark operator and compiles successfully. We can call this function and handle the return value in any other function that returns a `Result` by also using the question mark operator there, and that would look like `process_file()?`. However, the `main` function still returns `()`, so we would still have to use a `match` statement, an `unwrap()`, or an `expect()` if we wanted to call `process_file` from `main`. Using `expect()` would look like this:
+
+```rust,ignore
+fn main() {
+    process_file().expect("There was a problem processing the file");
+}
+```
+
+## Chaining Question Mark Operators
+
+TODO
