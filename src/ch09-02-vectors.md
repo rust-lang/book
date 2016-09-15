@@ -1,6 +1,6 @@
 # Vectors
 
-The first type we'll look at is `Vec<T>`, also known as a 'vector'. Vectors
+The first type we'll look at is `Vec<T>`, also known as a *vector*. Vectors
 allow you to store more than one value in a single data structure next to each
 other in memory.
 
