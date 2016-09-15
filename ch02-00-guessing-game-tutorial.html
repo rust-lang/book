@@ -866,8 +866,6 @@ fn main() {
             Err(_) =&gt; continue,
         };
 
-        println!(&quot;You guessed: {}&quot;, guess);
-
         match guess.cmp(&amp;secret_number) {
             Ordering::Less    =&gt; println!(&quot;Too small!&quot;),
             Ordering::Greater =&gt; println!(&quot;Too big!&quot;),
