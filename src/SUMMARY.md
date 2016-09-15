@@ -31,8 +31,6 @@
     - [Controlling visibility with `pub`](ch07-02-controlling-visibility-with-pub.md)
     - [Importing names with `use`](ch07-03-importing-names-with-use.md)
 
-- [Error Handling]()
-
 - [Essential Collections](ch09-01-essential-collections.md)
     - [Vectors](ch09-02-vectors.md)
     - [Strings](ch09-03-strings.md)
