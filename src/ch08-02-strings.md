@@ -3,7 +3,7 @@
 We've already talked about strings a bunch in chapter four, but let's take a
 more in-depth look at them now.
 
-## Six(?) kinds of strings
+## Many Kinds of Strings
 
 Strings are a common place for new Rustaceans to get stuck. This is due to a
 combination of three things: Rust's propensity for making sure to expose
@@ -37,10 +37,10 @@ more about how to use them, and when each is appropriate.
 Many options! As I said, strings are surprisingly complex. Most of the time,
 we'll be using `String` as an owned string type, though. So let's talk about
 how to use it.
+## Creating a New String
 
-## Creating
-
-You can create an empty string with `new`:
+Let's look at how to do the same operations on `String` as we did with `Vec`,
+starting with creating one. Similarly, `String` has `new`:
 
 ```rust
 let s = String::new();
@@ -89,7 +89,7 @@ let hello = "Здравствуйте";
 let hello = "Hola";
 ```
 
-## Updating
+## Updating a String
 
 You can grow a `String` by using the `push_str` method to append another
 string:
@@ -189,7 +189,7 @@ The `format!` macro works in the same way as `println!`, but instead of
 printing the output to the screen, it returns a `String` with the contents.
 This version is much easier to read than all of the `+`s.
 
-## Indexing strings
+## Indexing Strings
 
 If you try to access a string with the indexing syntax, you'll get an error. In
 other words, this:
@@ -215,7 +215,7 @@ That note tells the story: Rust strings don't support indexing like this. So
 the follow-up question is, why not? In order to answer that, we have to talk a
 bit about how Rust stores strings in memory.
 
-### Internal representation
+### Internal Representation
 
 A `String` is a wrapper over a `Vec<u8>`. Let's take a look at some of our
 examples from before. First, this one:

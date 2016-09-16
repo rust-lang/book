@@ -13,4 +13,6 @@ go over three collections which are used very often in Rust programs:
 * A *HashMap* allows you to associate a value with a particular key.
 
 There are more specialized variants of each of these data structures for
-particular situations, but these are the most fundamental and common.
+particular situations, but these are the most fundamental and common. We're
+going to discuss how to create and update each of the collections, as well as
+what makes each special.

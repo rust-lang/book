@@ -1,4 +1,4 @@
-# `HashMap<K, V>`
+# HashMaps
 
 The last of our essential collections is the hashmap. A `HashMap<K, V>`
 stores a mapping of keys to values. It does this via a "hashing function",
@@ -11,7 +11,7 @@ We'll go over the basic API in this chapter, but there's many more goodies
 hiding in there. As always, check the standard library docs for more fun
 things to do with hashmaps.
 
-## creating
+## Creating a HashMap
 
 We can create an empty hashmap with `new`, and add things with `insert`:
 
@@ -42,7 +42,7 @@ let data = vec![(1, "hello"), (2, "world")];
 let map: HashMap<i32, &'static str> = data.into_iter().collect();
 ```
 
-## reading
+## Accessing Values in a HashMap
 
 We can get a value out of the hashmap by providing the proper key to the `get`
 method:
@@ -78,7 +78,7 @@ for (key, value) in &map {
 }
 ```
 
-## updating
+## Updating a HashMap
 
 It's common to want to see if there's some sort of value already stored in the hashmap,
 and if not, insert something. Hashmaps have a special API for this, called `entry`:
