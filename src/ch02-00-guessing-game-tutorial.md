@@ -265,16 +265,16 @@ successful, and inside the `Ok` variant is the successfully generated value.
 or why the operation failed.
 
 The purpose of these `Result` types is to encode error handling information.
-Values of the `Result` type, like any type, have methods defined on them. In
-this case, `io::Result` has an [`expect` method][expect]<!-- ignore --> that
-we can call. If this instance of `io::Result` is an `Err` value, `expect`
-will cause our program to crash and display the message that we passed as an
-argument to `expect`. In this case, if the `read_line` method returns an
-`Err`, it would likely be the result of an error coming from the underlying
-operating system. If this instance of `io::Result` is an `Ok` value, `expect`
-will take the return value that `Ok` is holding and return just that value to
-us so that we can use it. In this case, that value is the number of
-characters the user entered into standard input.
+Values of the `Result` type, like any type, have methods defined on them.
+`io::Result` has an [`expect` method][expect]<!-- ignore --> that we can call.
+If this instance of `io::Result` is an `Err` value, `expect` will cause our
+program to crash and display the message that we passed as an argument to
+`expect`. If the `read_line` method returns an `Err`, it would likely be the
+result of an error coming from the underlying operating system. If this
+instance of `io::Result` is an `Ok` value, `expect` will take the return value
+that `Ok` is holding and return just that value to us so that we could use it.
+In this case, that value is the number of characters the user entered into
+standard input.
 
 [expect]: ../std/result/enum.Result.html#method.expect
 
