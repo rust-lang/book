@@ -633,8 +633,8 @@ argument to <code>expect</code>. In this case, if the <code>read_line</code> met
 <code>Err</code>, it would likely be the result of an error coming from the underlying
 operating system. If this instance of <code>io::Result</code> is an <code>Ok</code> value, <code>expect</code>
 will take the return value that <code>Ok</code> is holding and return just that value to
-us so that we can use it. In this case, that value will be what the user
-entered into standard input.</p>
+us so that we can use it. In this case, that value is the number of
+characters the user entered into standard input.</p>
 <p>If we don't call <code>expect</code>, our program will compile, but we’ll get a warning:</p>
 <pre><code class="language-bash">$ cargo build
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
