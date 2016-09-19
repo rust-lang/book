@@ -39,8 +39,14 @@ use std::collections::HashMap;
 
 let data = vec![(1, "hello"), (2, "world")];
 
-let map: HashMap<i32, &'static str> = data.into_iter().collect();
+let map: HashMap<_, _> = data.into_iter().collect();
 ```
+
+The type annotation `HashMap<_, _>` is needed here because it's possible to
+`collect` into many different data structures, so Rust doesn't know which we
+want. For the type parameters for the key and value types, however, we can use
+underscores and Rust can infer the types that the HashMap contains based on the
+types of the data in our vector.
 
 ## Accessing Values in a HashMap
 
