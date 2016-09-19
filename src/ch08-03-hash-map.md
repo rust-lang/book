@@ -1,19 +1,19 @@
 # HashMaps
 
-The last of our essential collections is the hashmap. A `HashMap<K, V>`
-stores a mapping of keys to values. It does this via a "hashing function",
-which determines how it places these keys and values into memory. Many
-different programming languges support this kind of data structure, but
-often with a different name: a "hash", a "map", an "object", a "hash table",
-an "associative array"... so many names.
+The last of our essential collections is the *HashMap*. A `HashMap<K, V>`
+stores a mapping of keys of type `K` to values of type `V`. It does this via a
+*hashing function*, which determines how it places these keys and values into
+memory. Many different programming languges support this kind of data
+structure, but often with a different name: hash, map, object, hash table, or
+associative array, just to name a few.
 
-We'll go over the basic API in this chapter, but there's many more goodies
-hiding in there. As always, check the standard library docs for more fun
-things to do with hashmaps.
+We'll go over the basic API in this chapter, but there are many more goodies
+hiding in the functions defined on HashMap by the standard library. As always,
+check the standard library documentation for more information.
 
 ## Creating a HashMap
 
-We can create an empty hashmap with `new`, and add things with `insert`:
+We can create an empty HashMap with `new`, and add elements with `insert`:
 
 ```rust
 use std::collections::HashMap;
@@ -24,15 +24,20 @@ map.insert(1, "hello");
 map.insert(2, "world");
 ```
 
-You'll note that we need to `use` the `HashMap` from the collections portion of
-the standard library. Of our three essential collections, this one is the least
-often used, and so has a bit less support from the language. There's no built-in
-macro to construct them, for example, and they're not in the prelude, and so need
-to be `use`d directly.
+Note that we need to `use` the `HashMap` from the collections portion of the
+standard library. Of our three essential collections, this one is the least
+often used, so it has a bit less support from the language. There's no built-in
+macro to construct them, for example, and they're not in the prelude, so we
+need to add a `use` statement for them.
 
-Just like vectors, hashmaps store their data on the heap.
+Just like vectors, HashMaps store their data on the heap. This HashMap has keys
+of type `i32` and values of type `&str`. Like vectors, HashMaps are homogenous:
+all of the keys must have the same type, and all of the values must have the
+same type.
 
-If you have a vector of tuples, you can convert it into a hashmap with `collect`:
+If you have a vector of tuples, you can convert it into a HashMap with the
+`collect` method. The first element in each tuple will be the key, and the
+second element will be the value:
 
 ```rust
 use std::collections::HashMap;
@@ -48,10 +53,32 @@ want. For the type parameters for the key and value types, however, we can use
 underscores and Rust can infer the types that the HashMap contains based on the
 types of the data in our vector.
 
+For types that implement the `Copy` trait like `i32` does, the values are
+copied into the HashMap. If we insert owned values like `String`, the values
+will be moved and the HashMap will be the owner of those values:
+
+```rust
+use std::collections::HashMap;
+
+let field_name = String::from("Favorite color");
+let field_value = String::from("Blue");
+
+let mut map = HashMap::new();
+map.insert(field_name, field_value);
+// field_name and field_value are invalid at this point
+```
+
+We would not be able to use the bindings `field_name` and `field_value` after
+they have been moved into the HashMap with the call to `insert`.
+
+If we insert references to values, the values themselves will not be moved into
+the HashMap. The values that the references point to must be valid for at least
+as long as the HashMap is valid, though. We will talk more about these issues
+in the Lifetimes section of Chapter XX.
+
 ## Accessing Values in a HashMap
 
-We can get a value out of the hashmap by providing the proper key to the `get`
-method:
+We can get a value out of the HashMap by providing its key to the `get` method:
 
 ```rust
 use std::collections::HashMap;
@@ -65,11 +92,12 @@ let value = map.get(&2);
 ```
 
 Here, `value` will have the value `Some("world")`, since that's the value
-associated with the `2` key. It's wrapped in `Some` because `get` returns an
-`Option<V>`, that is, if there's no value for that key, it will return `None`.
+associated with the `2` key. "world" is wrapped in `Some` because `get` returns
+an `Option<V>`. If there's no value for that key in the HashMap, `get` will
+return `None`.
 
-We can iterate over a hasmap in a similar manner as we do with vectors, using
-a `for` loop:
+We can iterate over each key/value pair in a HashMap in a similar manner as we
+do with vectors, using a `for` loop:
 
 ```rust
 use std::collections::HashMap;
@@ -84,25 +112,53 @@ for (key, value) in &map {
 }
 ```
 
+This will print:
+
+```bash
+1: hello
+2: world
+```
+
 ## Updating a HashMap
 
-It's common to want to see if there's some sort of value already stored in the hashmap,
-and if not, insert something. Hashmaps have a special API for this, called `entry`:
+### Overwriting a Value
+
+If you insert a key and a value, then insert that key with a different value, the value associated with that key will be replaced. Even though this code calls `insert` twice, the HashMap will only contain one key/value pair, since we're inserting with the key `1` both times:
 
 ```rust
 use std::collections::HashMap;
 
 let mut map = HashMap::new();
 
+map.insert(1, "hello");
+map.insert(1, "Hi There");
+
+println!("{:?}", map);
+```
+
+This will print `{1: "Hi There"}`.
+
+### Only Insert If the Key Has No Value
+
+It's common to want to see if there's some sort of value already stored in the
+HashMap for a particular key, and if not, insert a value. HashMaps have a
+special API for this, called `entry`, that takes the key we want to check as an
+argument:
+
+```rust
+use std::collections::HashMap;
+
+let mut map = HashMap::new();
 map.insert(1, "hello");
 
 let e = map.entry(2);
 ```
 
-Here, `e` is a special enum, `Entry`. An entry represents a value that might
-exist, or might not. Let's say that we want to see if the key `2` has a value
-associated with it.  If it doesn't, we want to insert `"world"`, and then in
-both cases, return the value. With the entry API, it looks like this:
+Here, the value bound to `e` is a special enum, `Entry`. An `Entry` represents a
+value that might or might not exist. Let's say that we want to see if the key
+`2` has a value associated with it. If it doesn't, we want to insert the value
+"world". In both cases, we want to return the resulting value that now goes
+with `2`. With the entry API, it looks like this:
 
 ```rust
 use std::collections::HashMap;
@@ -111,9 +167,60 @@ let mut map = HashMap::new();
 
 map.insert(1, "hello");
 
-let e = map.entry(2).or_insert("world");
+map.entry(2).or_insert("world");
+map.entry(1).or_insert("Hi There");
+
+println!("{:?}", map);
 ```
 
-The `or_insert` method on entry does exactly this: returns the value, and if
-not, inserts its argument and returns that. This is much cleaner than writing
-the logic yourself, and in addition, plays more nicely with the borrow checker.
+The `or_insert` method on `Entry` does exactly this: returns the value for the
+`Entry`'s key if it exists, and if not, inserts its argument as the new value
+for the `Entry`'s key and returns that. This is much cleaner than writing the
+logic yourself, and in addition, plays more nicely with the borrow checker.
+
+This code will print `{1: "hello", 2: "world"}`. The first call to `entry` will
+insert the key `2` with the value "world", since `2` doesn't have a value
+already. The second call to `entry` will not change the HashMap since `1`
+already has the value "hello".
+
+### Update a Value Based on the Old Value
+
+Another common use case for HashMaps is to look up a key's value then update
+it, using the old value. For instance, if we wanted to count how many times
+each word appeared in some text, we could use a HashMap with the words as keys
+and increment the value to keep track of how many times we've seen that word.
+If this is the first time we've seen a word, we'll first insert the value `0`.
+
+```rust
+use std::collections::HashMap;
+
+let text = "hello world wonderful world";
+
+let mut map = HashMap::new();
+
+for word in text.split_whitespace() {
+    let count = map.entry(word).or_insert(0);
+    *count += 1;
+}
+
+println!("{:?}", map);
+```
+
+This will print `{"world": 2, "hello": 1, "wonderful": 1}`. The `or_insert`
+method actually returns a mutable reference (`&mut V`) to the value in the
+HashMap for this key. Here we store that mutable reference in the `count`
+variable binding, so in order to assign to that value we must first dereference
+`count` using the asterisk (`*`). The mutable reference goes out of scope at
+the end of the `for` loop, so all of these changes are safe and allowed by the
+borrowing rules.
+
+## Hashing Function
+
+By default, HashMap uses a cryptographically secure hashing function that can
+provide resistance to Denial of Service (DoS) attacks. This is not the fastest
+hashing algorithm out there, but the tradeoff for better security that comes
+with the drop in performance is a good default tradeoff to make. If you profile
+your code and find that the default hash function is too slow for your
+purposes, you can switch to another function by specifying a different
+*hasher*. A hasher is an object that implements the `BuildHasher` trait. We'll
+be talking about traits and how to implement them in Chapter XX.
