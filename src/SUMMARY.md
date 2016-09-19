@@ -34,7 +34,7 @@
 - [Essential Collections](ch08-00-essential-collections.md)
     - [Vectors](ch08-01-vectors.md)
     - [Strings](ch08-02-strings.md)
-    - [`HashMap<K, V>`](ch08-03-hash-map.md)
+    - [HashMaps](ch08-03-hashmaps.md)
 
 - [Error Handling]()
 
