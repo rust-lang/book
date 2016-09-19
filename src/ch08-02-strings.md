@@ -252,31 +252,31 @@ expect: `&"hello"[0]` would then return `104`, not `h`.
 
 This leads to another point about UTF-8: there are really three relevant ways
 to look at strings, from Rust's perspective: bytes, scalar values, and grapheme
-clusters. If we look at the string "नमस्ते ", it is ultimately stored as a `Vec`
+clusters. If we look at the string "नमस्ते", it is ultimately stored as a `Vec`
 of `u8` values that looks like this:
 
 ```text
-[224, 164, 168, 224, 164, 174, 224, 164, 184, 224, 165, 141, 224, 164, 164, 224, 165, 135, 32]
+[224, 164, 168, 224, 164, 174, 224, 164, 184, 224, 165, 141, 224, 164, 164, 224, 165, 135]
 ```
 
-That's 19 bytes. But if we look at them as Unicode scalar values, which are
+That's 18 bytes. But if we look at them as Unicode scalar values, which are
 what Rust's `char` type is, those bytes look like this:
 
 ```text
-['न', 'म', 'स', '्', 'त', 'े', ' ']
+['न', 'म', 'स', '्', 'त', 'े']
 ```
 
-There are seven `char` values here, and the last one isn't even visible!
-Finally, if we look at them as grapheme clusters, which is the closest thing
-to what humans would call 'letters', we'd get this:
+There are six `char` values here. Finally, if we look at them as grapheme
+clusters, which is the closest thing to what humans would call 'letters', we'd
+get this:
 
 ```text
-["न", "म", "स्", "ते", " "]
+["न", "म", "स्", "ते"]
 ```
 
-Five elements, and there's still that empty character on the end. It turns out
-that even within 'grapheme cluster', there are multiple ways of grouping
-things. Have we convinced you strings are actually really complicated yet?
+Four elements! It turns out that even within 'grapheme cluster', there are
+multiple ways of grouping things. Have we convinced you strings are actually
+really complicated yet?
 
 All of these problems mean that Rust does not implement `[]` for `String`, so
 we cannot directly do this.
