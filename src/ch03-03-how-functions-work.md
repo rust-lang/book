@@ -76,10 +76,10 @@ $ cargo run
 The value of x is: 5
 ```
 
-Since we passed `5` to `another_function`, the `println!` macro put `5` where
-the pair of curly braces were in the format string. The declaration of
-`another_function` shows that it takes one argument named `x`, and the type
-of `x` is `i32`.
+In the declaration of `another_function`, we place one argument named `x`. We
+specify the type of `x` as `i32`. When we pass `5` to `another_function`,
+the `println!` macro puts `5` where the pair of curly braces were in the format
+string.
 
 In function signatures, we _must_ declare the type. This is a deliberate
 decision in the design of Rust; requiring type annotations in function
@@ -123,7 +123,7 @@ the two strings are printed with these values.
 
 ### Function Bodies
 
-Function bodies are made up of a series of statements ending in an optional
+Function bodies are made up of a series of statements optionally ending in an
 expression. So far, we've only seen functions without an ending expression, but
 we have seen expressions as parts of statements. Since Rust is an
 expression-based language, this is an important distinction to understand.
@@ -137,8 +137,8 @@ We've already been using both statements and expressions. *Statements* are
 instructions that perform some action and do not return a value. *Expressions*
 evaluate to a resulting value. Let's look at some examples.
 
-`Let` bindings are statements. They instruct the program to create a binding
-name and assign a value to it. `let y = 6;` in this example is a statement:
+Creating a variable binding and assigning a value to it with the `let` keyword
+is a statement. In this example, `let y = 6;` is a statement:
 
 Filename: src/main.rs
 
@@ -148,8 +148,8 @@ fn main() {
 }
 ```
 
-Function definitions are also statements-- so the entire previous example is a
-statement as well.
+Function definitions are also statements; the entire previous example is a
+statement in itself.
 
 Statements do not return values themselves. Therefore, you can’t assign a `let`
 binding to another binding, as this code tries to do:
@@ -179,12 +179,13 @@ error: Could not compile `functions`.
 
 The `let y = 6` statement does not return a value, so there isn't anything for
 `x` to bind to. This is different than in other languages like C and Ruby where
-the assignment returns the value of the assignment. In those languages, you
-could write `x = y = 6` and have both `x` and `y` have the value `6`, but that
-is not the case in Rust.
+the assignment returns the value of the assignment. In those languages, we can
+write `x = y = 6` and have both `x` and `y` have the value `6`; that is not the
+case in Rust.
 
-Expressions are most of the rest of the code that you will write in Rust.
-Consider a simple math operation, like this:
+Expressions are code that evaluate to something, and make up most of the rest
+of the code that you will write in Rust. Consider a simple math operation, like
+this:
 
 ```rust,ignore
 5 + 6
@@ -210,6 +211,9 @@ fn main() {
     println!("The value of y is: {}", y);
 }
 ```
+<!-- If we use wingding numbers to call out code, we might delete the
+repetition here and just use those numbers--that can help the flow of the text.
+I'm flagging this as a reminder for when we transfer to libreoffice -->
 
 The expression:
 
@@ -220,11 +224,11 @@ The expression:
 }
 ```
 
-is a block that, in this case, gets evaluated to `4`, which then gets bound to
+is a block that, in this case, evaluates to `4`, and then gets bound to
 `y` as part of the `let` statement.
 
-Note that the line containing `x + 1` does not have a semicolon at the end like
-most of the lines we've seen up until now have had. This is the most important
+Note that the line containing `x + 1` does not have a semicolon at the end,
+unlike most of the lines we've seen up until now. This is the most important
 distinction between expressions and statements to remember: statements end in
 semicolons while expressions do not. If you add a semicolon to the end of an
 expression, that will turn it into a statement, which will then not return a
@@ -234,7 +238,7 @@ value. Keep this in mind as we explore function return values and expressions.
 
 Functions can return values back to the code that calls them. We don’t name
 return values, but we do declare their type, after an arrow (`->`). In Rust,
-the "return value of the function” is synonymous with “the value of the final
+the "return value of the function” is synonymous with the "value of the final
 expression in the block of the body of a function.” Here's an example of a
 function that returns a value:
 
@@ -254,8 +258,8 @@ fn main() {
 
 There are no function calls, macros, or even `let` statements in the `five`
 function: just the number `5` by itself. That's a perfectly valid function in
-Rust. Note the function's return type, too. Try running this code, and the
-output should look like this:
+Rust. Note the function's return type is specified, too, as `-> i32`. Try
+running this code, and the output should look like this:
 
 ```bash
 $ cargo run
@@ -264,10 +268,10 @@ $ cargo run
 The value of x is: 5
 ```
 
-The `5` in the `five` function is actually the function's return value, which
-is why the return type is `i32`. Let’s examine this in more detail. There are
-two important bits. First, the line `let x = five();` in `main` shows that we
-can use the return value of a function to initialize a binding.
+The `5` in `five` is the function's return value, which is why the return type
+is `i32`. Let’s examine this in more detail. There are two important bits.
+First, the line `let x = five();` shows us using the return value of a function
+to initialize a binding.
 
 Because the function `five` returns a `5`, that line is the same as saying:
 

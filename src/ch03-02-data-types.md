@@ -2,8 +2,8 @@
 
 Every value in Rust is of a certain *type*, which tells Rust what kind of data
 is being given so it knows how to work with that data. In this section, we'll
-look at a number of types built into the language itself split into two subsets
-of Rust data types: scalar and compound.
+look at a number of types built into the language itself split into two subsets:
+scalar and compound.
 
 Something to keep in mind throughout this section: Rust is a *statically typed*
 language, which means that it must know the types of all bindings at compile
@@ -20,10 +20,10 @@ You will see some type annotations as we discuss the various data types.
 
 ### Scalar Types
 
-A *scalar* type is one that represents a single value. There are four key
-scalar types in Rust: integers, floating point numbers, booleans, and
-characters. You'll likely recognize these from other programming languages, but
-let's jump into how they work in Rust.
+A *scalar* type represents a single value. There are four essential scalar
+types in Rust: integers, floating point numbers, booleans, and characters.
+You'll likely recognize these from other programming languages, but let's jump
+into how they work in Rust.
 
 #### Integer Types
 
@@ -41,19 +41,19 @@ built-in integer types in Rust, shown in Table 3-1.
 | 64-bit | i64    | u64      |
 | arch   | isize  | usize    |
 
-*Table 4-1: Integer types in Rust. Each code (for example, i32) can be used to
-declare the type of a value.*
+*Table 3-1: Integer types in Rust. Each type code (for example, i32) can be
+used to declare the type of a value.*
 
 Each variant can be either signed or unsigned and has an explicit size. Signed
 and unsigned merely refers to whether it is possible for the number to be
-either negative or positive, meaning the number needs to have a sign with it
-("signed"), or whether it will only ever be positive and can therefore be
-represented without a sign ("unsigned"). It's like writing numbers on paper:
-when the sign matters, a number is shown with a plus sign or minus sign, but
-when it's safe to assume the number is positive, it's shown with no sign.
-Signed numbers are stored using two’s complement representation (if you're
-unsure what this is you can search for it online; an explanation is outside the
-scope of this text).
+either negative or positive; in other words, whether the number needs to have a
+sign with it ("signed"), or whether it will only ever be positive and can
+therefore be represented without a sign ("unsigned"). It's like writing numbers
+on paper: when the sign matters, a number is shown with a plus sign or minus
+sign, but when it's safe to assume the number is positive, it's shown with no
+sign. Signed numbers are stored using two’s complement representation (if
+you're unsure what this is you can search for it online; an explanation is
+outside the scope of this text).
 
 Finally, the `isize` and `usize` types depend on the kind of computer your
 program is running on: 64-bits if you're on a 64-bit architecture, and 32-bits
@@ -76,8 +76,7 @@ all number literals except for the byte literal allow a type suffix, such as
 So how do you know which type of integer to use? If you're unsure, Rust's
 defaults are generally good choices, and integer types default to `i32`: it’s
 generally the fastest, even on 64-bit systems. The primary situation in which
-you'd need to specify `isize` or `usize` is when indexing some sort of
-collection, which we'll talk about in the "Arrays" section.
+you'd use `isize` or `usize` is when indexing some sort of collection.
 
 #### Floating-Point Types
 
@@ -295,12 +294,12 @@ fn main() {
 
 In this example, the `first` variable will bind to `1` at index `[0]` in the
 array, and `second` will bind to `2` at index `[1]` in the array. Note that
-these values are copied out of the array and into `first` and `second` when the
+these values are copied from the array and into `first` and `second` when the
 `let` statement is called. That means if the array changes after the `let`
 statements, these bindings will not, and the two variables should retain their
 values.
 
-#### Invalid array element access
+#### Invalid Array Element Access
 
 What happens if you try to access an element of an array past the end of the
 array? Say we changed our program to:
@@ -323,16 +322,18 @@ Running this code with `cargo run` produces:
 $ cargo run
    Compiling arrays v0.1.0 (file:///projects/arrays)
      Running `target/debug/arrays`
-thread '<main>' panicked at 'index out of bounds: the len is 5 but the index is 10', src/main.rs:4
+thread '<main>' panicked at 'index out of bounds: the len is 5 but the index is
+10', src/main.rs:4
 note: Run with `RUST_BACKTRACE=1` for a backtrace.
 error: Process didn't exit successfully: `target/debug/arrays` (exit code: 101)
 ```
 
-We can see that compiling did not give us any errors, but we got a *runtime*
-error and our program didn't exit successfully. When we attempt to access an
-element using indexing, Rust will check that the index we've specified is less
-than the array length. If the index is greater than the length, it will
-"panic", which is what it's called when a Rust program exits with an error.
+We can see that the compilation did not give us any errors, but we got a
+*runtime* error and our program didn't exit successfully. When we attempt to
+access an element using indexing, Rust will check that the index we've
+specified is less than the array length. If the index is greater than the
+length, it will "panic", which is what it's called when a Rust program exits
+with an error.
 
 This is our first example of Rust’s safety principles in action. In many
 low-level languages, this kind of check is not done, and when you provide an

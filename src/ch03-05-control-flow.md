@@ -1,15 +1,15 @@
 ## Control Flow
 
-Deciding whether or not to run some code depending on if a condition is true,
-or deciding to run some code repeatedly while a condition is true, are basic
-building blocks in most programming languages. The most common constructs that
-let us control the flow of execution of our Rust code are `if` expressions and
-loops.
+Decisions on whether or not to run some code depending on if a condition is
+true, or deciding to run some code repeatedly while a condition is true, are
+basic building blocks in most programming languages. The most common constructs
+that let us control the flow of execution of our Rust code are `if` expressions
+and loops.
 
 ### `if` Expressions
 
 An `if` expression allows us to branch our code depending on conditions. We
-provide a condition and then say, "If this condition is met, then run this
+provide a condition and then say, "If this condition is met, run this
 block of code. If the condition is not met, do not run this block of code."
 
 Let’s make a new project to explore `if`, called `branches`. In `src/main.rs`,
@@ -29,13 +29,15 @@ fn main() {
 }
 ```
 
-All `if` expressions start with `if`, which is followed by a condition. In this
-case, our condition is checking if our variable binding `number` has a value
-that is less than 5. The block of code we want to execute if the condition is
-true goes immediately after the condition, inside curly braces. These blocks
-are sometimes called *arms*. We can optionally also include an `else`
-statement, which we have chosen to do here. `else` gives the program a block of
-code to execute should `condition` evaluate to false.
+All `if` expressions start with the keyword `if`, which is followed by a
+condition. In this case, our condition is checking if our variable binding
+`number` has a value that is less than 5. The block of code we want to execute
+if the condition is true goes immediately after the condition, inside curly
+braces. These blocks are sometimes called *arms*. We can optionally also
+include an `else` expression, which we have chosen to do here. This gives the
+program an alternative block of code to execute should the condition evaluate
+to false. If you don't give an `else` expression and the condition is false,
+the program will just skip the `if` block and move on to the next bit of code.
 
 Try running this code, and you should see output like this:
 
@@ -62,7 +64,7 @@ $ cargo run
 condition was false
 ```
 
-It’s also worth noting that `condition` here _must_ be a `bool`. To see what
+It’s also worth noting that the condition here _must_ be a `bool`. To see what
 happens if the condition isn't a `bool`, try running this code:
 
 Filename: src/main.rs
@@ -96,7 +98,9 @@ Could not compile `branches`.
 The error tells us that Rust expected a `bool`, but got an integer. Rust will
 not automatically try to convert non-boolean types to a boolean here, unlike
 languages like Ruby or JavaScript. We must be explicit and always give `if` a
-`boolean` as its condition. If your intention is for the `if` code block to be run if a number is not equal to `0`, for example, we would change the `if` expression to read:
+`boolean` as its condition. If you wanted your `if` code block to run only when
+a number is not equal to `0`, for example, we would change the `if` expression
+to read:
 
 Filename: src/main.rs
 
@@ -110,7 +114,7 @@ fn main() {
 }
 ```
 
-Running this will print "number was something other than zero".
+Running this will print `number was something other than zero`.
 
 #### Multiple Conditions with `else if`
 
@@ -155,7 +159,7 @@ for these cases.
 
 #### Using `if` in a Binding
 
-The last detail you need to learn about `if` is that it’s an expression. That
+The last detail you need to know about `if` is that it’s an expression. That
 means that we can use it on the right hand side of a `let` binding, for
 instance:
 
@@ -223,7 +227,8 @@ src/main.rs:5         5
 src/main.rs:6     } else {
 src/main.rs:7         "six"
 src/main.rs:8     };
-src/main.rs:4:18: 8:6 help: run `rustc --explain E0308` to see a detailed explanation
+src/main.rs:4:18: 8:6 help: run `rustc --explain E0308` to see a detailed
+explanation
 error: aborting due to previous error
 Could not compile `branches`.
 ```
@@ -234,9 +239,9 @@ us exactly where to find the problem in our program.
 ### Repetition with Loops
 
 It’s often useful to be able to execute a block of code more than one time. For
-this, Rust has several constructs called *loops*. A loop runs through the code
-inside it to the end and then starts immediately back at the beginning. To try
-out loops, let’s make a new project called `loops`.
+this, Rust has several *loops*. A loop runs through the code inside the loop
+body to the end and then starts immediately back at the beginning. To try out
+loops, let’s make a new project called `loops`.
 
 There are three kinds of loops in Rust: `loop`, `while`, and `for`. Let’s dig
 in.
@@ -280,16 +285,17 @@ received the signal to halt.
 
 Fortunately, Rust provides another, more reliable way to break out of a loop.
 We can place the `break` keyword within the loop to tell the program when to
-stop executing the loop. Recall that we did this in the guessing game to exit
-the program when the user won the game by guessing the number correctly.
+stop executing the loop. Recall that we did this in the guessing game in
+Chapter 2 to exit the program when the user won the game by guessing the number
+correctly.
 
 #### Conditional Loops With `while`
 
-A useful thing that many programs do is have a condition that can be evaluated
+It's often useful for a program to have a condition that can be evaluated
 within a loop. While the condition is true, the loop runs. When the condition
 ceases to be true, we call `break`, stopping the loop. This could be
-implemented with a combination of `loop`, `if`, `else`, and `break`; try to do
-that now if you'd like!
+implemented with a combination of `loop`, `if`, `else`, and `break`; you could
+try that now in a program, if you'd like.
 
 But this pattern is so common that Rust has a more efficient language construct
 for it, called a `while` loop. Here's an example using `while`: this program
@@ -377,26 +383,28 @@ fn main() {
 
 If we run this, we'll see the same output as the previous example. Importantly,
 though, we've now increased the safety of our code and eliminated the chance of
-bugs resulting from going beyond the end of the array or not going far enough
-and missing some items.
+bugs that might result from going beyond the end of the array or not going far
+enough and missing some items.
 
 For example, in the previous code that uses the `while` loop, if we removed an
-item from the `a` array but forgot to update the condition to be `while index <
+item from the `a` array but forgot to update the condition to `while index <
 4`, our code would panic. Using the `for` loop means we would not need to
 remember to change any other code if we changed the number of values in the
 array.
 
-If you're wondering about `iter` in this example, keep reading! We will cover
-method syntax generally in Chapter XX and iterators specifically in Chapter XX.
+If you're wondering about the `iter` code in this example, keep reading! We
+will cover method syntax generally in Chapter XX and iterators specifically in
+Chapter XX.
 
 The safety and conciseness of `for` loops make them the most commonly used loop
 construct in Rust. Even in situations where you want to run some code a certain
 number of times, like our countdown example that used a `while` loop, most
-Rustaceans would use a `for` loop. The way to do that is using a `Range`, which
-is a type provided by the standard library that generates numbers starting from
-one number and ending before another number. Here's what the countdown would
-look like with a for loop, and using another method we haven't yet talked
-about, `rev`, to reverse the range:
+Rustaceans would use a `for` loop. The way to do that would be to use a
+`Range`, which is a type provided by the standard library that generates all
+numbers in sequence starting from one number and ending before another number.
+
+Here's what the countdown would look like with a for loop, and using another
+method we haven't yet talked about, `rev`, to reverse the range:
 
 Filename: src/main.rs
 
@@ -411,5 +419,17 @@ fn main() {
 
 That's a bit nicer, isn't it?
 
-Now that you know how Rust does things that most other languages can do, let's
-talk about a concept that _doesn't_ commonly exist: ownership.
+## Summary
+
+You made it! That was a big chapter: we covered variable bindings, scalar and
+compound data types, functions, comments, `if` expressions, and loops! If you'd
+like to get some practice with the concepts in this chapter, try building
+programs to do things like:
+
+* Converting temperatures between Fahrenheit and Celsius
+* Generate the nth Fibonacci number
+* Print the lyrics to the Christmas carol *The Twelve Days of Christmas*,
+  taking advantage of the repetition in the song.
+
+When you're ready to move on, we'll talk about a concept in Rust that _doesn't_
+commonly exist in other programming languages: ownership.
