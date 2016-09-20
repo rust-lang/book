@@ -200,12 +200,13 @@ has two primitive compound types: tuples and arrays.
 
 #### Grouping Values into Tuples
 
-We’ve seen tuples already, when binding multiple values at once. A tuple is a
-general way of grouping together some number of other values with distinct
-types into one compound type.
+A tuple is a general way of grouping together some number of other values with
+distinct types into one compound type.
 
 We create a tuple by writing a comma-separated list of values inside
-parentheses. Each position in the tuple has a distinct type, as in this example:
+parentheses. Each position in the tuple has a distinct type, and the types of
+the different values in the tuple do not have to be the same. We've added
+optional type annotations in this example:
 
 Filename: src/main.rs
 
@@ -215,16 +216,16 @@ fn main() {
 }
 ```
 
-Note that, unlike the examples of multiple bindings, here we bind the single
-name `tup` to the entire tuple, emphasizing the fact that a tuple is considered
-a single compound element. We could then use pattern matching to destructure
-this tuple value, like this:
+Note that the single name `tup` binds to the entire tuple, emphasizing the fact
+that a tuple is considered a single compound element. To get the individual
+values out of a tuple, we can use pattern matching to destructure a tuple
+value, like this:
 
 Filename: src/main.rs
 
 ```rust
 fn main() {
-    let tup: (i32, f64, u8) = (500, 6.4, 1);
+    let tup = (500, 6.4, 1);
 
     let (x, y, z) = tup;
 
@@ -235,9 +236,8 @@ fn main() {
 In this program, we first create a tuple and bind it to the name `tup`. We then
 use a pattern with `let` to take `tup` and turn it into three separate
 bindings, `x`, `y`, and `z`. This is called *destructuring*, because it breaks
-the single tuple into three parts.
-
-Finally, we print the value of `y`, which is `6.4`.
+the single tuple into three parts. Finally, we print the value of `y`, which is
+`6.4`.
 
 #### Tuple Indexing
 
