@@ -3,7 +3,7 @@
 
 # Common Programming Concepts in Rust
 
-Let's look at concepts that appear in almost every programming language and see
+Let's first look at concepts that appear in almost every programming language and see
 how they work in Rust. Many programming languages have much in common at their
 core. None of the concepts presented in this chapter are unique to Rust, but
 we’ll discuss Rust’s particular syntax and conventions concerning these common
@@ -28,12 +28,14 @@ PROD: END BOX
 
 ## Variable Bindings and Mutability
 
-We mentioned in Chapter XX that by default, variable bindings are *immutable*.
-This is one of many nudges that Rust's design has to encourage us to write our
-code to get the most of the safety and easy concurrency that Rust has to offer.
+We mentioned in Chapter 2 that by default, variable bindings are *immutable*.
+This is one of many nudges in Rust that encourages us to write our
+code in a way that gets the most of the safety and easy concurrency that Rust has to offer.
 We still have the option to make our bindings mutable, though. Let's explore
 how and why Rust encourages us to favor immutability, and why we might want to
 opt out of that.
+
+<!-- Great, I like that we're expounding on Rust's virtues! I think these explanations really give the chapter shape, too -->
 
 Variable bindings being immutable means that once a value is bound, you can't
 change that value. To illustrate this, let's generate a new project with Cargo.
@@ -78,13 +80,13 @@ This is our first example of the compiler helping us find an error in our
 program! Compiler errors can be frustrating. Keep in mind that they only mean
 your program isn't safely doing what you want it to do yet; they do _not_ mean
 that you're not a good programmer! Experienced Rustaceans still get compiler
-errors. Try to keep in mind that the Rust compiler is trying to help your
+errors. The Rust compiler is just trying to help your
 program be the very best.
 
 PROD: START BOX
 ######Extended Error Explanations
 
-Now that you've seen an example of a Rust error, let's look at one particularly
+Now that you've seen a Rust error, let's take an interlude to look at one particularly
 useful aspect of errors. Rust encourages you to seek further information on the
 kind of error you've received with output like this:
 
@@ -109,8 +111,9 @@ fn main(){
     x = 5; // error, reassignment of immutable variable
 }
 ```
+<!-- This might be jumping the gun a little, we're going to explain this in a moment. We might cut this box short here, end it with a line like "this will give us clues as to how to fix the error, as we'll see in a moment" -->
 
-By default, variables in Rust are immutable. To fix this error, add the keyword
+<!--By default, variables in Rust are immutable. To fix this error, add the keyword
 `mut` after the keyword `let` when declaring the variable. For example:
 
 ```
@@ -120,33 +123,33 @@ fn main(){
 }
 ```
 ````
-
+-->
 These explanations can really help if you’re stuck on an error, so don't
 hesitate to look up the error code. The compiler is your friend, and it's there
 to help.
 
 PROD: END BOX
 
-The error includes the message `re-assigment of immutable variable` because the
-program tried to assign a second value to the `x` variable.
+The error tells us that the cause of the error is `re-assigment of immutable variable`, because we
+ tried to assign a second value to the immutable `x` variable.
 
-Getting compile-time errors when your code attempts to change a value that it
-previously said was immutable is important because this very situation can lead
-to bugs. If one part of your code operates on an assumption that a value it's
-operating on will never change, and another part of your code changes that
-value, it's possible that the first code won't do what it was designed to do.
-Especially when the second piece of code only changes the value _sometimes_,
-this cause of bugs can be difficult to track down after the fact.
+It's important that we get compile-time errors when our code attempts to change a value that it
+previously said was immutable because this very situation can lead
+to bugs. If one part of your code operates on an assumption that a value
+will never change, and another part of your code changes that
+value, it's possible that the first part of the code won't do what it was designed to do.
+This cause of bugs can be difficult to track down after the fact,
+especially when the second piece of code only changes the value _sometimes_.
 
-In Rust, our code can know that a value our code assumes won't change really
+In Rust, our code can trust that a value we say won't change really
 won't change, because the compiler is enforcing that guarantee for us. When
 reading and writing code, we don't have to keep track in our head how and where
 a value might change. This can make code easier to reason about.
 
-Mutability is really useful, though! Bindings are immutable only by default;
+Mutability can be really useful, though! Bindings are immutable only by default;
 you can make them mutable by adding `mut` in front of the variable name. In
-addition to telling the compiler it should allow this value to be changed, it
-conveys intent to future readers of the code and says that other parts of the
+addition to allowing this value to be changed, it
+conveys intent to future readers of the code by indicating that other parts of the
 code will be changing this value.
 
 For example, change the program you just wrote to the following:
@@ -173,19 +176,20 @@ The value of x is: 6
 ```
 
 Using `mut`, we are allowed to change the value that `x` binds to from `5` to
-`6`. You might want to make a binding mutable because it makes the code easier
+`6`. In some cases you'll want to make a binding mutable because it makes the code easier
 to understand than an implementation that only uses immutable bindings. In
 cases where you're using large data structures, mutating an instance in place
 may be faster than copying and returning newly allocated instances. It all
 depends on the tradeoffs you want to make in your situation.
 
 ### Shadowing
+<!--Hm, I'm not sure it's clear here at the moment how this differs from the previous attempt to **reassign** a variable binding, could you add a note highlighting that? -->
 
 As we saw in the guessing game tutorial, we can declare new bindings with the
 same name as a previous binding, and the new binding *shadows* the previous
 binding. We say that the first binding is *shadowed* by the second, which means
-that the second binding's value is what you will see when you use the variable
-after the second binding. This can be useful if you’d like to perform a few
+that the second binding's value is what you will see when you use the variable.
+This can be useful if you’d like to perform a few
 transformations on a value, but have the binding be immutable after those
 transformations have been completed. For example:
 
@@ -203,8 +207,8 @@ fn main() {
 }
 ```
 
-This program first binds `x` to a value of `5`. Then, it shadows `x` by saying
-`let x =` again, taking the original value and adding `1` so that the value of
+This program first binds `x` to a value of `5`. Then, it shadows `x` by repeating
+`let x =`, taking the original value and adding `1` so that the value of
 `x` is then `6`. The third `let` statement also shadows `x`, taking the
 previous value and multiplying it by `2` to give `x` a final value of `12`. If
 you run this, it will output:
@@ -226,15 +230,17 @@ Now let's look at some of the types of values that we can bind variables to.
 
 Every value in Rust is of a certain *type*, which tells Rust what kind of data
 is being given so it knows how to work with that data. In this section, we'll
-look at a number of types built into the language itself split into two subsets
-of Rust data types: scalar and compound.
+look at a number of types built into the language itself split into two subsets:
+scalar and compound.
 
 Something to keep in mind throughout this section: Rust is a *statically typed*
 language, which means that it must know the types of all bindings at compile
 time. The compiler can usually infer what type we want to use based on the
 value and how we use it. When many types are possible, such as when we
-converted a `String` to a numeric type using `parse()` in the guessing game
-tutorial, we can add a type annotation, like this:
+converted a `String` to a numeric type using `parse()` in Chapter 2,
+we can add a type annotation, like this:
+
+<!-- We **can** add a type annotation, or we **need to** add a type annotation? What does Rust do if there are multiple options and we don't annotate type? -->
 
 ```rust,ignore
 let x: i32 = 5;
@@ -244,7 +250,7 @@ You will see some type annotations as we discuss the various data types.
 
 ### Scalar Types
 
-A *scalar* type is one that represents a single value. There are four key
+A *scalar* type represents a single value. There are four key
 scalar types in Rust: integers, floating point numbers, booleans, and
 characters. You'll likely recognize these from other programming languages, but
 let's jump into how they work in Rust.
@@ -265,12 +271,12 @@ built-in integer types in Rust, shown in Table 3-1.
 | 64-bit | i64    | u64      |
 | arch   | isize  | usize    |
 
-*Table 4-1: Integer types in Rust. Each code (for example, i32) can be used to
+*Table 3-1: Integer types in Rust. Each type code (for example, i32) can be used to
 declare the type of a value.*
 
 Each variant can be either signed or unsigned and has an explicit size. Signed
 and unsigned merely refers to whether it is possible for the number to be
-either negative or positive, meaning the number needs to have a sign with it
+either negative or positive; in other words, whether the number needs to have a sign with it
 ("signed"), or whether it will only ever be positive and can therefore be
 represented without a sign ("unsigned"). It's like writing numbers on paper:
 when the sign matters, a number is shown with a plus sign or minus sign, but
@@ -299,6 +305,7 @@ possible to use an `f64` on 32 bit systems, but it will be slower than using an
 `f32` on those systems. Most of the time, trading potential worse performance
 for better precision is a reasonable initial choice, and you should benchmark
 your code if you suspect floating-point size is a problem in your case.
+<!-- Is it safe to assume the reader will be experienced to know whether this would be a problem in their case, or is it worth giving an example? -->
 
 Here's an example showing floating-point numbers in action:
 
@@ -387,10 +394,15 @@ ideographs, emoji, and zero width spaces are all valid `char`s in Rust. Unicode
 Scalar Values range from `U+0000` to `U+D7FF` and `U+E000` to `U+10FFFF`
 inclusive. A "character" isn’t really a concept in Unicode, however, so your
 human intuition for what a "character" is may not match up with what a `char`
-is in Rust. It also means that `char`s are four bytes each. You can learn more
+is in Rust.
+<!-- Will this ever be a problem in the code? Would it be worth mentioning an example of when this might occur? -->
+
+It also means that `char`s are four bytes each. You can learn more
 about Unicode Scalar Values at
 *http://www.unicode.org/glossary/#unicode_scalar_value* and find a chart for
 all unicode code points at *http://www.unicode.org/charts/*.
+
+<!-- This first link doesn't actually give that much information, just a line of definition---I'm not sure it's that helpful, do you have another link you want to give? -->
 
 #### The Byte Type
 
@@ -417,6 +429,8 @@ bytes when you're working with natural language text.
 has two primitive compound types: tuples and arrays.
 
 #### Grouping Values into Tuples
+
+<!-- I don't think we've looked at binding multiple values in this version of the chapter -- do you want to add that section in, or should we just change the text below? -->
 
 We’ve seen tuples already, when binding multiple values at once. A tuple is a
 general way of grouping together some number of other values with distinct
@@ -456,6 +470,12 @@ bindings, `x`, `y`, and `z`. This is called *destructuring*, because it breaks
 the single tuple into three parts.
 
 Finally, we print the value of `y`, which is `6.4`.
+
+<!-- if you were to create a tuple with elements of all the same type, would you still have to repeat it, like:
+let tup: (i32, i32, i32) = (500, 6, 15);
+or would
+let tup: (i32) = (500, 6, 15);
+do? Or would you just use an array for that? Might be worth specifying,  -->
 
 #### Tuple Indexing
 
@@ -505,6 +525,8 @@ by the standard library that _is_ allowed to grow or shrink in size. If you're
 unsure whether to use an array or a `Vec`, you should probably go with a `Vec`,
 and we'll discuss them in more detail in chapter XX.
 
+<!-- Could you say why you might an array at all then, rather than just a Vec? What's the advantage  of an array? -->
+
 #### Accessing Array Elements
 
 An array is a single chunk of memory, allocated on the stack. We can access
@@ -523,12 +545,12 @@ fn main() {
 
 In this example, the `first` variable will bind to `1` at index `[0]` in the
 array, and `second` will bind to `2` at index `[1]` in the array. Note that
-these values are copied out of the array and into `first` and `second` when the
+these values are copied from the array and into `first` and `second` when the
 `let` statement is called. That means if the array changes after the `let`
 statements, these bindings will not, and the two variables should retain their
 values.
 
-#### Invalid array element access
+#### Invalid Array Element Access
 
 What happens if you try to access an element of an array past the end of the
 array? Say we changed our program to:
@@ -556,7 +578,7 @@ note: Run with `RUST_BACKTRACE=1` for a backtrace.
 error: Process didn't exit successfully: `target/debug/arrays` (exit code: 101)
 ```
 
-We can see that compiling did not give us any errors, but we got a *runtime*
+We can see that the compilation did not give us any errors, but we got a *runtime*
 error and our program didn't exit successfully. When we attempt to access an
 element using indexing, Rust will check that the index we've specified is less
 than the array length. If the index is greater than the length, it will
@@ -630,6 +652,8 @@ The lines execute in the order they appear in the `main()` function. First, our
 “Hello, world!” message prints, and then `another_function()` is called and its
 message is printed.
 
+<!-- Lovely simple example!  -->
+
 ### Function Arguments
 
 Functions can also take arguments. The following rewritten version of
@@ -656,10 +680,10 @@ $ cargo run
 The value of x is: 5
 ```
 
-Since we passed `5` to `another_function()`, the `println!` macro put `5` where
-the pair of curly braces were in the format string. The declaration of
-`another_function()` shows that it takes one argument named `x`, and the type
-of `x` is `i32`.
+In the declaration of
+`another_function()` we place one argument named `x`, and we speficy the type
+of `x` as `i32`. When we pass `5` to `another_function()`, the `println!` macro puts `5` where
+the pair of curly braces were in the format string.
 
 In function signatures, we _must_ declare the type. This is a deliberate
 decision in the design of Rust; requiring type annotations in function
@@ -688,7 +712,7 @@ type, but they just happen to be in this example. Our function then prints out
 the values of both of its arguments.
 
 Let’s try out this code. Replace the program currently in your `function`
-project's `main.rs` file with the example above, and run it as follows:
+project's *main.rs* file with the example above, and run it as follows:
 
 ```bash
 $ cargo run
@@ -703,7 +727,7 @@ the two strings are printed with these values.
 
 ### Function Bodies
 
-Function bodies are made up of a series of statements ending in an optional
+Function bodies are made up of a series of statements optionally ending in an
 expression. So far, we've only seen functions without an ending expression, but
 we have seen expressions as parts of statements. Since Rust is an
 expression-based language, this is an important distinction to understand.
@@ -717,8 +741,10 @@ We've already been using both statements and expressions. *Statements* are
 instructions that perform some action and do not return a value. *Expressions*
 evaluate to a resulting value. Let's look at some examples.
 
-`Let` bindings are statements. They instruct the program to create a binding
-name and assign a value to it. `let y = 6;` in this example is a statement:
+<!-- We tend to try to avoid opening sentences with code samples, it often doesn't come out too well in print. We can rectify these as we go through, no need to make a global change, I just wanted to give you the reason for restructuring the line below -->
+
+The code `let` used for variable bindings is a statement. It instructs the program to create a binding
+name and assign a value to it. In this example `let y = 6;` is a statement:
 
 Filename: src/main.rs
 
@@ -728,8 +754,8 @@ fn main() {
 }
 ```
 
-Function definitions are also statements-- so the entire previous example is a
-statement as well.
+Function definitions are also statements--so the entire previous example is a
+statement in itself.
 
 Statements do not return values themselves. Therefore, you can’t assign a `let`
 binding to another binding, as this code tries to do:
@@ -759,11 +785,11 @@ error: Could not compile `functions`.
 
 The `let y = 6` statement does not return a value, so there isn't anything for
 `x` to bind to. This is different than in other languages like C and Ruby where
-the assignment returns the value of the assignment. In those languages, you
-could write `x = y = 6` and have both `x` and `y` have the value `6`, but that
+the assignment returns the value of the assignment, so you
+could write `x = y = 6` and have both `x` and `y` have the value `6`; that
 is not the case in Rust.
 
-Expressions are most of the rest of the code that you will write in Rust.
+Expressions are code that evaluate to something, and make up most of the rest of the code that you will write in Rust.
 Consider a simple math operation, like this:
 
 ```rust,ignore
@@ -790,6 +816,7 @@ fn main() {
     println!("The value of y is: {}", y);
 }
 ```
+<!-- If we use wingding numbers to call out code, we might delete the repetition here and just use those numbers--that can help the flow of the text. I'm flagging this as a reminder for when we transfer to libreoffice -->
 
 The expression:
 
@@ -800,11 +827,11 @@ The expression:
 }
 ```
 
-is a block that, in this case, gets evaluated to `4`, which then gets bound to
+is a block that, in this case, evaluates to `4`, and then gets bound to
 `y` as part of the `let` statement.
 
-Note that the line containing `x + 1` does not have a semicolon at the end like
-most of the lines we've seen up until now have had. This is the most important
+Note that the line containing `x + 1` does not have a semicolon at the end, unlike
+most of the lines we've seen up until now. This is the most important
 distinction between expressions and statements to remember: statements end in
 semicolons while expressions do not. If you add a semicolon to the end of an
 expression, that will turn it into a statement, which will then not return a
@@ -814,7 +841,7 @@ value. Keep this in mind as we explore function return values and expressions.
 
 Functions can return values back to the code that calls them. We don’t name
 return values, but we do declare their type, after an arrow (`->`). In Rust,
-the "return value of the function” is synonymous with “the value of the final
+the "return value of the function” is synonymous with the "value of the final
 expression in the block of the body of a function.” Here's an example of a
 function that returns a value:
 
@@ -834,7 +861,7 @@ fn main() {
 
 There are no function calls, macros, or even `let` statements in the `five()`
 function-- just the number `5` by itself. That's a perfectly valid function in
-Rust. Note the function's return type, too. Try running this code, and the
+Rust. Note the function's return type is specified, too, as `-> i32`. Try running this code, and the
 output should look like this:
 
 ```bash
@@ -846,8 +873,8 @@ The value of x is: 5
 
 The `5` in `five()` is actually the function's return value, which is why the
 return type is `i32`. Let’s examine this in more detail. There are two
-important bits. First, the line `let x = five();` in `main()` shows that we can
-use the return value of a function to initialize a binding.
+important bits. First, the line `let x = five();` shows us using
+the return value of a function to initialize a binding.
 
 Because the function `five()` returns a `5`, that line is the same as saying:
 
@@ -965,7 +992,7 @@ That’s all there is to it. Comments are not particularly complicated.
 
 ## Control Flow
 
-Deciding whether or not to run some code depending on if a condition is true,
+Decisions on whether or not to run some code depending on if a condition is true,
 or deciding to run some code repeatedly while a condition is true, are basic
 building blocks in most programming languages. The most common constructs that
 let us control the flow of execution of our Rust code are `if` expressions and
@@ -974,7 +1001,7 @@ loops.
 ### `if` Expressions
 
 An `if` expression allows us to branch our code depending on conditions. We
-provide a condition and then say, "If this condition is met, then run this
+provide a condition and then say, "If this condition is met, run this
 block of code. If the condition is not met, do not run this block of code."
 
 Let’s make a new project to explore `if`. Navigate to your projects directory,
@@ -985,7 +1012,7 @@ $ cargo new --bin branches
 $ cd branches
 ```
 
-Write this sample program using `if` and save it in the *branches* directory in
+Enter this sample program using `if` and save it in the *branches* directory in
 `src/main.rs`:
 
 Filename: src/main.rs
@@ -1002,13 +1029,15 @@ fn main() {
 }
 ```
 
-All `if` expressions start with `if`, which is followed by a condition. In this
+<!-- we're calling 'if' an expression and 'else' a statement, I just want to double check that's correct? If so, is there a reason one's a statement and the other an expression? -->
+
+All `if` expressions start with they keyword `if`, which is followed by a condition. In this
 case, our condition is checking if our variable binding `number` has a value
 that is less than 5. The block of code we want to execute if the condition is
 true goes immediately after the condition, inside curly braces. These blocks
 are sometimes called *arms*. We can optionally also include an `else`
-statement, which we have chosen to do here. `else` gives the program a block of
-code to execute should `condition` evaluate to false.
+statement, which we have chosen to do here---this gives the program an alternative block of
+code to execute should `condition` evaluate to false. If you don't give an else statement and the condition is false, the program will just skip the first arm and do nothing, or move on to the next bit of code.
 
 Try running this code, and you should see output like this:
 
@@ -1035,7 +1064,7 @@ $ cargo run
 condition was false
 ```
 
-It’s also worth noting that `condition` here _must_ be a `bool`. To see what
+It’s also worth noting that the condition here _must_ be a `bool`. To see what
 happens if the condition isn't a `bool`, try running this code:
 
 Filename: src/main.rs
@@ -1069,7 +1098,7 @@ Could not compile `branches`.
 The error tells us that Rust expected a `bool`, but got an integer. Rust will
 not automatically try to convert non-boolean types to a boolean here, unlike
 languages like Ruby or JavaScript. We must be explicit and always give `if` a
-`boolean` as its condition. If your intention is for the `if` code block to be run if a number is not equal to `0`, for example, we would change the `if` expression to read:
+`boolean` as its condition. If you wanted your `if` code block to run only when a number is not equal to `0`, for example, we would change the `if` expression to read:
 
 Filename: src/main.rs
 
@@ -1083,7 +1112,7 @@ fn main() {
 }
 ```
 
-Running this will print "number was something other than zero".
+Running this will print `number was something other than zero`.
 
 #### Multiple Conditions with `else if`
 
@@ -1121,6 +1150,8 @@ condition was 5
 When this program executes, it will check each `if` expression in turn and
 execute the first body for which the condition holds true.
 
+<!--- Will it carry on checking the others, too, or stop at the first true condition and skip the rest? -->
+
 Using too many `else if` expressions can clutter your code, so if you find
 yourself with more than one, you may want to look at refactoring your code. In
 Chapter XX, we'll talk about a powerful Rust branching construct called `match`
@@ -1128,7 +1159,7 @@ for these cases.
 
 #### Using `if` in a Binding
 
-The last detail you need to learn about `if` is that it’s an expression. That
+The last detail you need to know about `if` is that it’s an expression. That
 means that we can use it on the right hand side of a `let` binding, for
 instance:
 
@@ -1164,6 +1195,8 @@ that results from both arms of the `if` must be the same type; in the previous
 example, they were both `i32` integers. But what happens if the types are
 mismatched, as in the following example?
 
+<!-- Hm, why does it mean the return values must be the same type? Is this to do with Rust needing to know types at compile time? Could you expand on that a little? -->
+
 Filename: src/main.rs
 
 ```rust,ignore
@@ -1179,6 +1212,7 @@ fn main() {
     println!("The value of number is: {}", number);
 }
 ```
+<!-- Presumably only one of these values will be used --- is this because Rust must infer the type at compile time, so they must be the same, single type for Rust to be able to infer it? That might be worth clarifying explicitly -->
 
 The expression in the `if` block is an integer and the expresion in the `else`
 block is a string. This can’t work, because variable bindings must have a
@@ -1207,8 +1241,8 @@ us exactly where to find the problem in our program.
 ### Repetition with Loops
 
 It’s often useful to be able to execute a block of code more than one time. For
-this, Rust has several constructs called *loops*. A loop runs through the code
-inside it to the end and then starts immediately back at the beginning. To try
+this, Rust has several *loops*. A loop runs through the code
+inside the loop body to the end and then starts immediately back at the beginning. To try
 out loops, let’s make a new project. Navigate to your *projects* folder and use
 Cargo to make a new project:
 
@@ -1259,16 +1293,17 @@ received the signal to halt.
 
 Fortunately, Rust provides another, more reliable way to break out of a loop.
 We can place the `break` keyword within the loop to tell the program when to
-stop executing the loop. Recall that we did this in the guessing game to exit
+stop executing the loop. Recall that we did this in the guessing game in Chapter 1 to exit
 the program when the user won the game by guessing the number correctly.
+
+<!-- Nicely succinct, I like the use of the tutorial chapter in references here -->
 
 #### Conditional Loops With `while`
 
-A useful thing that many programs do is have a condition that can be evaluated
+It's often useful for a program to have a condition that can be evaluated
 within a loop. While the condition is true, the loop runs. When the condition
 ceases to be true, we call `break`, stopping the loop. This could be
-implemented with a combination of `loop`, `if`, `else`, and `break`; try to do
-that now if you'd like!
+implemented with a combination of `loop`, `if`, `else`, and `break`; you could try that now in a program, if you'd like.
 
 But this pattern is so common that Rust has a more efficient language construct
 for it, called a `while` loop. Here's an example using `while`: this program
@@ -1356,11 +1391,11 @@ fn main() {
 
 If we run this, we'll see the same output as the previous example. Importantly,
 though, we've now increased the safety of our code and eliminated the chance of
-bugs resulting from going beyond the end of the array or not going far enough
+bugs that might result from going beyond the end of the array or not going far enough
 and missing some items.
 
 For example, in the previous code that uses the `while` loop, if we removed an
-item from the `a` array but forgot to update the condition to be `while index <
+item from the `a` array but forgot to update the condition to `while index <
 4`, our code would panic. Using the `for` loop means we would not need to
 remember to change any other code if we changed the number of values in the
 array.
@@ -1372,9 +1407,11 @@ Chapter XX.
 The safety and conciseness of `for` loops make them the most commonly used loop
 construct in Rust. Even in situations where you want to run some code a certain
 number of times, like our countdown example that used a `while` loop, most
-Rustaceans would use a `for` loop. The way to do that is using a `Range`, which
+Rustaceans would use a `for` loop. The way to do that would be to use a `Range`, which
 is a type provided by the standard library that generates numbers starting from
-one number and ending before another number. Here's what the countdown would
+one number and ending before another number (not dissimilar to the `rand::Rng` type we used in Chapter 2).
+
+Here's what the countdown would
 look like with a for loop, and using another method we haven't yet talked
 about, `.rev()`, to reverse the range:
 
@@ -1390,6 +1427,9 @@ fn main() {
 ```
 
 That's a bit nicer, isn't it?
+
+##Summary
+<!-- Could you add a conclusion or summary, just summing up what we've been through and how it's useful? It only need be a couple of lines, but can help round a chapter off and keep concepts straight, especially for readers who won't read the chapter in one sitting -->
 
 Now that you know how Rust does things that most other languages can do, let's
 talk about a concept that _doesn't_ commonly exist: ownership.
