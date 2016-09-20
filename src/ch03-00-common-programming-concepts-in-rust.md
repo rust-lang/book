@@ -1,6 +1,6 @@
 # Common Programming Concepts in Rust
 
-Let's look at concepts that appear in almost every programming language and see
+Let's first look at concepts that appear in almost every programming language and see
 how they work in Rust. Many programming languages have much in common at their
 core. None of the concepts presented in this chapter are unique to Rust, but
 we’ll discuss Rust’s particular syntax and conventions concerning these common
