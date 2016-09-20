@@ -100,7 +100,8 @@ as it’s roughly the same speed as `f32`, but has a larger precision. It is
 possible to use an `f64` on 32 bit systems, but it will be slower than using an
 `f32` on those systems. Most of the time, trading potential worse performance
 for better precision is a reasonable initial choice, and you should benchmark
-your code if you suspect floating-point size is a problem in your case.
+your code if you suspect floating-point size is a problem in your case. See
+Chapter XX for how to run benchmarks.
 
 Here's an example showing floating-point numbers in action:
 
