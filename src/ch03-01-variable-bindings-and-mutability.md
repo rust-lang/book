@@ -47,8 +47,8 @@ your program isn't safely doing what you want it to do yet; they do _not_ mean
 that you're not a good programmer! Experienced Rustaceans still get compiler
 errors. The Rust compiler is just trying to help your program be the very best.
 
-PROD: START BOX
-######Extended Error Explanations
+<!-- PROD: START BOX -->
+###### Extended Error Explanations
 
 Now that you've seen a Rust error, let's take an interlude to look at one
 particularly useful aspect of errors. Rust encourages you to seek further
@@ -81,7 +81,7 @@ These explanations can really help if you’re stuck on an error, so don't
 hesitate to look up the error code. The compiler is your friend, and it's there
 to help.
 
-PROD: END BOX
+<!-- PROD: END BOX -->
 
 The error tells us that the cause of the error is `re-assigment of immutable
 variable`, because we tried to assign a second value to the immutable `x`
