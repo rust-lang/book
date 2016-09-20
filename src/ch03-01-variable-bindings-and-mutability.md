@@ -140,11 +140,10 @@ instances. It all depends on the tradeoffs you want to make in your situation.
 
 As we saw in the guessing game tutorial, we can declare new bindings with the
 same name as a previous binding, and the new binding *shadows* the previous
-binding. When we say the first binding is *shadowed* by the second, it means
-the second binding's value is what you will see when you use the variable
-after the second binding. This can be useful if you’d like to perform a few
-transformations on a value, but have the binding be immutable after those
-transformations have been completed. For example:
+binding. We say that the first binding is *shadowed* by the second, which means
+that the second binding's value is what you will see when you use the variable.
+We can shadow a binding by using the same binding's name and repeating the use
+of the `let` keyword as follows:
 
 Filename: src/main.rs
 
@@ -160,9 +159,9 @@ fn main() {
 }
 ```
 
-This program first binds `x` to a value of `5`. Then, it shadows `x` by saying
-`let x =` again, taking the original value and adding `1` so that the value of
-`x` is then `6`. The third `let` statement also shadows `x`, taking the
+This program first binds `x` to a value of `5`. Then, it shadows `x` by
+repeating `let x =`, taking the original value and adding `1` so that the value
+of `x` is then `6`. The third `let` statement also shadows `x`, taking the
 previous value and multiplying it by `2` to give `x` a final value of `12`. If
 you run this, it will output:
 
@@ -173,8 +172,48 @@ $ cargo run
 The value of x is: 12
 ```
 
-Shadowing is useful because it lets us modify `x` without having to make the
-binding mutable. This means the compiler will still keep us from accidentally
-trying to mutate `x` directly later.
+This is different from marking a binding as `mut` because unless we use the
+`let` keyword again, we'll get a compile-time error if we accidentally try to
+reassign to this binding. We can perform a few transformations on a value, but
+have the binding be immutable after those transformations have been completed.
 
-Now let's look at some of the types of values that we can bind variables to.
+The other difference between `mut` and shadowing is that, since we're
+effectively creating a new binding when we use the `let` keyword again, we can
+change the type of the value we're binding to but reuse the same name. For
+example, say we ask a user to show us how many spaces they want between some
+text by sending us space characters, but we really want to store that as a
+number:
+
+```rust
+let spaces = "   ";
+let spaces = spaces.len();
+```
+
+This is allowed: the first `spaces` binding is a string type, and the second
+`spaces` binding, which is a brand new binding that happens to have the same
+name as the first one, is a number type. Shadowing thus saves us from having to
+come up with different names like `spaces_str` and `spaces_num`; we can reuse
+the simpler `spaces` name. If we try to use `mut` for this, however, like this:
+
+```rust,ignore
+let mut spaces = "   ";
+spaces = spaces.len();
+```
+
+We will get a compile-time error because we are not allowed to mutate a
+binding's type:
+
+```bash
+error: mismatched types [--explain E0308]
+ -->
+  |>
+4 |> spaces = spaces.len();
+  |>          ^^^^^^^^^^^^ expected &-ptr, found usize
+note: expected type `&str`
+note:    found type `usize`
+
+error: aborting due to previous error
+```
+
+Now that we've explored how variable bindings work, let's look at some more
+data types of values that we can bind variables to.
