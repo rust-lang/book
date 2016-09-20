@@ -250,6 +250,8 @@ should `answer` be `208`? `208` is not a valid character on its own, though.
 Plus, for latin letters, this would not return the answer most people would
 expect: `&"hello"[0]` would then return `104`, not `h`.
 
+### Bytes, and Scalar Values, and Grapheme Clusters! Oh my!
+
 This leads to another point about UTF-8: there are really three relevant ways
 to look at strings, from Rust's perspective: bytes, scalar values, and grapheme
 clusters. If we look at the string "नमस्ते", it is ultimately stored as a `Vec`
@@ -281,10 +283,11 @@ really complicated yet?
 All of these problems mean that Rust does not implement `[]` for `String`, so
 we cannot directly do this.
 
-However.
+## Slicing Strings
 
-Sometimes, indexing the bytes of a string is useful. So while you can't use `[]`
-with a single number, you _can_ use `[]` with a range:
+However, indexing the bytes of a string is very useful. While you can't use
+`[]` with a single number, you _can_ use `[]` with a range to create a string
+slice from particular bytes:
 
 ```rust
 let hello = "Здравствуйте";
@@ -294,8 +297,19 @@ let s = &hello[0..4];
 
 Here, `s` will be a `&str` that contains the first four bytes of the string.
 Earlier, we mentioned that each of these characters was two bytes, so that means
-that `s` will be 'Зд'.
+that `s` will be "Зд".
 
 What would happen if we did `&hello[0..1]`? We said each of these characters
-required two bytes. The answer: it will panic, in the same way that accessing
-an invalid index in a vector does.
+required two bytes. The answer: it will panic at runtime, in the same way that
+accessing an invalid index in a vector does:
+
+```bash
+thread 'main' panicked at 'index 0 and/or 1 in `Здравствуйте` do not lie on
+character boundary', ../src/libcore/str/mod.rs:1694
+```
+
+## Methods for Iterating Over Strings
+
+TODO: Add examples of using  `bytes`, `chars`, since those are recommended?
+
+TODO: summary that ties this to the next chapter
