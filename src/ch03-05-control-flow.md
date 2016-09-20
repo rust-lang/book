@@ -125,16 +125,16 @@ Filename: src/main.rs
 
 ```rust
 fn main() {
-    let number = 5;
+    let number = 6;
 
-    if number == 3 {
-        println!("number was 3");
-    } else if number == 4 {
-        println!("number was 4");
-    } else if number == 5 {
-        println!("number was 5");
+    if number % 4 == 0 {
+        println!("number is divisible by 4");
+    } else if number % 3 == 0 {
+        println!("number is divisible by 3");
+    } else if number % 2 == 0 {
+        println!("number is divisible by 2");
     } else {
-        println!("number was something else");
+        println!("number is not divisible by 4, 3, or 2");
     }
 }
 ```
@@ -146,11 +146,15 @@ should see output like this:
 $ cargo run
    Compiling branches v0.1.0 (file:///projects/branches)
      Running `target/debug/branches`
-condition was 5
+number is divisible by 3
 ```
 
 When this program executes, it will check each `if` expression in turn and
-execute the first body for which the condition holds true.
+execute the first body for which the condition holds true. Note that even
+though 6 is divisible by 2 ], we did not see the output `number is divisible by
+2`, nor did we see the `number is not divisible by 4, 3, or 2` text from the
+`else` block. That's because Rust will only execute the block for the first
+true condition, and once it finds one, it won't even check the rest.
 
 Using too many `else if` expressions can clutter your code, so if you find
 yourself with more than one, you may want to look at refactoring your code. In
