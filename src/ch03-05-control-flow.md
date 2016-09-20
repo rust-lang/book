@@ -194,8 +194,8 @@ The value of number is: 5
 
 Remember, blocks of code evaluate to the last expression in them, and numbers
 by themselves are also expressions. In this case, the value of the whole `if`
-expression depends on which block of code executes. This means that the value
-that results from both arms of the `if` must be the same type; in the previous
+expression depends on which block of code executes. This means the value that
+results from both arms of the `if` must be the same type; in the previous
 example, they were both `i32` integers. But what happens if the types are
 mismatched, as in the following example?
 
@@ -215,9 +215,9 @@ fn main() {
 }
 ```
 
-The expression in the `if` block is an integer and the expresion in the `else`
-block is a string. This can’t work, because variable bindings must have a
-single type. If we try to run this, we’ll get an error:
+If we try to run this, we’ll get an error. The `if` and `else` arms have value
+types that are incompatible, and Rust tells us exactly where to find the
+problem in our program:
 
 ```bash
    Compiling branches v0.1.0 (file:///projects/branches)
@@ -237,8 +237,14 @@ error: aborting due to previous error
 Could not compile `branches`.
 ```
 
-The `if` and `else` arms have value types that are incompatible, and Rust tells
-us exactly where to find the problem in our program.
+The expression in the `if` block evaluates to an integer and the expresion in
+the `else` block evaluates to a string. This can’t work, because variable
+bindings must have a single type. Rust needs to know at compile time what type
+the `number` binding is, definitively, so that it can verify at compile time
+that its type is valid everywhere we use `number`. Rust wouldn't be able to do
+that if the type of `number` was only determined at runtime; the compiler would
+be more complex and be able to make fewer guarantees about our code if it had
+to keep track of multiple hypothetical types for any variable binding.
 
 ### Repetition with Loops
 
