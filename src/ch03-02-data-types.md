@@ -268,8 +268,7 @@ tuple is 0.
 Another way to bind a name to a collection of multiple values is with an
 *array*. Unlike a tuple, every element of an array must have the same type.
 Arrays in Rust are different than arrays in some other languages because arrays
-in Rust have a fixed length at compile time -- they cannot grow or shrink in
-size.
+in Rust have a fixed length: once declared, they cannot grow or shrink in size.
 
 In Rust, the values going into an array are written as a comma separated list
 inside square brackets:
@@ -282,11 +281,21 @@ fn main() {
 }
 ```
 
-While arrays can be useful since they are a primitive type, they aren't as
-flexible as the `Vec` (short for "vector"), a similar collection type provided
-by the standard library that _is_ allowed to grow or shrink in size. If you're
-unsure whether to use an array or a `Vec`, you should probably go with a `Vec`,
-and we'll discuss them in more detail in chapter XX.
+While arrays can be useful since they are a primitive type so using them can be
+very fast, they aren't as flexible as the `Vec` type (short for "vector"). The
+`Vec` type is a similar collection type provided by the standard library that
+_is_ allowed to grow or shrink in size. If you're unsure whether to use an
+array or a `Vec`, you should probably go with a `Vec`, and we'll discuss them
+in more detail in Chapter XX.
+
+An example of when we might want to use an array is storing the months of the
+year. It's very unlikely that our program will need to add or remove months, so
+we can use an array since we know we will always have 12 items:
+
+```rust
+let months = ["January", "February", "March", "April", "May", "June", "July",
+              "August", "September", "October", "November", "December"];
+```
 
 #### Accessing Array Elements
 
