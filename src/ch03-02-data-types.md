@@ -8,12 +8,25 @@ scalar and compound.
 Something to keep in mind throughout this section: Rust is a *statically typed*
 language, which means that it must know the types of all bindings at compile
 time. The compiler can usually infer what type we want to use based on the
-value and how we use it. When many types are possible, such as when we
-converted a `String` to a numeric type using `parse` in the guessing game
-tutorial, we can add a type annotation, like this:
+value and how we use it. In cases when many types are possible, such as when we
+converted a `String` to a numeric type using `parse()` in Chapter 2, we must
+add a type annotation, like this:
 
-```rust,ignore
-let x: i32 = 5;
+```rust
+let guess: u32 = "42".parse().unwrap();
+```
+
+If we don't put the type annotation here, Rust will give us this error that
+means the compiler needs more information from us to know which possible type
+we want:
+
+```bash
+error: unable to infer enough type information about `_`; type annotations or
+generic parameter binding required [--explain E0282]
+ -->
+  |>
+3 |> let guess = "42".parse().unwrap();
+  |>     ^^^^^
 ```
 
 You will see some type annotations as we discuss the various data types.
