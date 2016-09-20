@@ -2,15 +2,17 @@
 
 Every value in Rust is of a certain *type*, which tells Rust what kind of data
 is being given so it knows how to work with that data. In this section, we'll
-look at a number of types built into the language itself split into two subsets
-of Rust data types: scalar and compound.
+look at a number of types built into the language itself split into two subsets:
+scalar and compound.
 
 Something to keep in mind throughout this section: Rust is a *statically typed*
 language, which means that it must know the types of all bindings at compile
 time. The compiler can usually infer what type we want to use based on the
 value and how we use it. When many types are possible, such as when we
-converted a `String` to a numeric type using `parse` in the guessing game
-tutorial, we can add a type annotation, like this:
+converted a `String` to a numeric type using `parse()` in Chapter 2,
+we can add a type annotation, like this:
+
+<!-- We **can** add a type annotation, or we **need to** add a type annotation? What does Rust do if there are multiple options and we don't annotate type? -->
 
 ```rust,ignore
 let x: i32 = 5;
@@ -20,7 +22,7 @@ You will see some type annotations as we discuss the various data types.
 
 ### Scalar Types
 
-A *scalar* type is one that represents a single value. There are four key
+A *scalar* type represents a single value. There are four key
 scalar types in Rust: integers, floating point numbers, booleans, and
 characters. You'll likely recognize these from other programming languages, but
 let's jump into how they work in Rust.
@@ -41,12 +43,12 @@ built-in integer types in Rust, shown in Table 3-1.
 | 64-bit | i64    | u64      |
 | arch   | isize  | usize    |
 
-*Table 4-1: Integer types in Rust. Each code (for example, i32) can be used to
+*Table 3-1: Integer types in Rust. Each type code (for example, i32) can be used to
 declare the type of a value.*
 
 Each variant can be either signed or unsigned and has an explicit size. Signed
 and unsigned merely refers to whether it is possible for the number to be
-either negative or positive, meaning the number needs to have a sign with it
+either negative or positive; in other words, whether the number needs to have a sign with it
 ("signed"), or whether it will only ever be positive and can therefore be
 represented without a sign ("unsigned"). It's like writing numbers on paper:
 when the sign matters, a number is shown with a plus sign or minus sign, but
@@ -58,20 +60,6 @@ scope of this text).
 Finally, the `isize` and `usize` types depend on the kind of computer your
 program is running on: 64-bits if you're on a 64-bit architecture, and 32-bits
 if you’re on a 32-bit architecture.
-
-You can write integer literals in any of the forms shown in Table 3-2. Note that
-all number literals except for the byte literal allow a type suffix, such as
-`57u8`, and `_` as a visual separator, such as `1_000`.
-
-| Number literals  | Example       |
-|------------------|---------------|
-| Decimal          | `98_222`      |
-| Hex              | `0xff`        |
-| Octal            | `0o77`        |
-| Binary           | `0b1111_0000` |
-| Byte (`u8` only) | `b'A'`        |
-
-*Table 3-2: Integer literals in Rust.*
 
 So how do you know which type of integer to use? If you're unsure, Rust's
 defaults are generally good choices, and integer types default to `i32`: it’s
@@ -89,6 +77,7 @@ possible to use an `f64` on 32 bit systems, but it will be slower than using an
 `f32` on those systems. Most of the time, trading potential worse performance
 for better precision is a reasonable initial choice, and you should benchmark
 your code if you suspect floating-point size is a problem in your case.
+<!-- Is it safe to assume the reader will be experienced to know whether this would be a problem in their case, or is it worth giving an example? -->
 
 Here's an example showing floating-point numbers in action:
 
@@ -177,10 +166,34 @@ ideographs, emoji, and zero width spaces are all valid `char`s in Rust. Unicode
 Scalar Values range from `U+0000` to `U+D7FF` and `U+E000` to `U+10FFFF`
 inclusive. A "character" isn’t really a concept in Unicode, however, so your
 human intuition for what a "character" is may not match up with what a `char`
-is in Rust. It also means that `char`s are four bytes each. You can learn more
+is in Rust.
+<!-- Will this ever be a problem in the code? Would it be worth mentioning an example of when this might occur? -->
+
+It also means that `char`s are four bytes each. You can learn more
 about Unicode Scalar Values at
 *http://www.unicode.org/glossary/#unicode_scalar_value* and find a chart for
 all unicode code points at *http://www.unicode.org/charts/*.
+
+<!-- This first link doesn't actually give that much information, just a line of definition---I'm not sure it's that helpful, do you have another link you want to give? -->
+
+#### The Byte Type
+
+You can work with the bytes of data directly. Byte literals can be created from
+the ASCII characters using `b` and single quotes:
+
+Filename: src/main.rs
+
+```rust
+fn main() {
+    let byte = b'a';
+    println!("byte is {}", byte);
+}
+```
+
+This will print `byte is 97`. Similarly, byte string literals can be created
+using `b` and double quotes, like `b"some byte string"`. Note that since you are
+limited to ASCII characters, it's a best practice to use characters instead of
+bytes when you're working with natural language text.
 
 ### Compound Types
 
@@ -188,6 +201,8 @@ all unicode code points at *http://www.unicode.org/charts/*.
 has two primitive compound types: tuples and arrays.
 
 #### Grouping Values into Tuples
+
+<!-- I don't think we've looked at binding multiple values in this version of the chapter -- do you want to add that section in, or should we just change the text below? -->
 
 We’ve seen tuples already, when binding multiple values at once. A tuple is a
 general way of grouping together some number of other values with distinct
@@ -228,6 +243,12 @@ the single tuple into three parts.
 
 Finally, we print the value of `y`, which is `6.4`.
 
+<!-- if you were to create a tuple with elements of all the same type, would you still have to repeat it, like:
+let tup: (i32, i32, i32) = (500, 6, 15);
+or would
+let tup: (i32) = (500, 6, 15);
+do? Or would you just use an array for that? Might be worth specifying,  -->
+
 #### Tuple Indexing
 
 In addition to destructuring through pattern matching, we can also access a
@@ -257,8 +278,7 @@ tuple is 0.
 Another way to bind a name to a collection of multiple values is with an
 *array*. Unlike a tuple, every element of an array must have the same type.
 Arrays in Rust are different than arrays in some other languages because arrays
-in Rust have a fixed length at compile time -- they cannot grow or shrink in
-size.
+in Rust have a fixed length-- once declared, they cannot grow or shrink in size.
 
 In Rust, the values going into an array are written as a comma separated list
 inside square brackets:
@@ -276,6 +296,8 @@ flexible as the `Vec` (short for "vector"), a similar collection type provided
 by the standard library that _is_ allowed to grow or shrink in size. If you're
 unsure whether to use an array or a `Vec`, you should probably go with a `Vec`,
 and we'll discuss them in more detail in chapter XX.
+
+<!-- Could you say why you might an array at all then, rather than just a Vec? What's the advantage  of an array? -->
 
 #### Accessing Array Elements
 
@@ -295,12 +317,12 @@ fn main() {
 
 In this example, the `first` variable will bind to `1` at index `[0]` in the
 array, and `second` will bind to `2` at index `[1]` in the array. Note that
-these values are copied out of the array and into `first` and `second` when the
+these values are copied from the array and into `first` and `second` when the
 `let` statement is called. That means if the array changes after the `let`
 statements, these bindings will not, and the two variables should retain their
 values.
 
-#### Invalid array element access
+#### Invalid Array Element Access
 
 What happens if you try to access an element of an array past the end of the
 array? Say we changed our program to:
@@ -328,7 +350,7 @@ note: Run with `RUST_BACKTRACE=1` for a backtrace.
 error: Process didn't exit successfully: `target/debug/arrays` (exit code: 101)
 ```
 
-We can see that compiling did not give us any errors, but we got a *runtime*
+We can see that the compilation did not give us any errors, but we got a *runtime*
 error and our program didn't exit successfully. When we attempt to access an
 element using indexing, Rust will check that the index we've specified is less
 than the array length. If the index is greater than the length, it will
