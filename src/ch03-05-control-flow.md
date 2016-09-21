@@ -221,20 +221,18 @@ problem in our program:
 
 ```bash
    Compiling branches v0.1.0 (file:///projects/branches)
-src/main.rs:4:18: 8:6 error: if and else have incompatible types:
- expected `_`,
-    found `&'static str`
-(expected integral variable,
-    found &-ptr) [E0308]
-src/main.rs:4     let number = if condition {
-src/main.rs:5         5
-src/main.rs:6     } else {
-src/main.rs:7         "six"
-src/main.rs:8     };
-src/main.rs:4:18: 8:6 help: run `rustc --explain E0308` to see a detailed
-explanation
+error[E0308]: if and else have incompatible types
+ --> src/main.rs:4:18
+  |
+4 |     let number = if condition {
+  |                  ^ expected integral variable, found reference
+  |
+  = note: expected type `{integer}`
+  = note:    found type `&'static str`
+
 error: aborting due to previous error
-Could not compile `branches`.
+
+error: Could not compile `branches`.
 ```
 
 The expression in the `if` block evaluates to an integer and the expresion in
