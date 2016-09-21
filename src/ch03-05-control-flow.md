@@ -436,8 +436,8 @@ compound data types, functions, comments, `if` expressions, and loops! If you'd
 like to get some practice with the concepts in this chapter, try building
 programs to do things like:
 
-* Converting temperatures between Fahrenheit and Celsius
-* Generate the nth Fibonacci number
+* Converting temperatures between Fahrenheit and Celsius.
+* Generate the nth Fibonacci number.
 * Print the lyrics to the Christmas carol *The Twelve Days of Christmas*,
   taking advantage of the repetition in the song.
 

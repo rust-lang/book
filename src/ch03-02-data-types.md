@@ -9,7 +9,7 @@ Something to keep in mind throughout this section: Rust is a *statically typed*
 language, which means that it must know the types of all bindings at compile
 time. The compiler can usually infer what type we want to use based on the
 value and how we use it. In cases when many types are possible, such as when we
-converted a `String` to a numeric type using `parse()` in Chapter 2, we must
+converted a `String` to a numeric type using `parse` in Chapter 2, we must
 add a type annotation, like this:
 
 ```rust
@@ -33,7 +33,7 @@ You will see some type annotations as we discuss the various data types.
 
 ### Scalar Types
 
-A *scalar* type represents a single value. There are four essential scalar
+A *scalar* type represents a single value. There are four primary scalar
 types in Rust: integers, floating point numbers, booleans, and characters.
 You'll likely recognize these from other programming languages, but let's jump
 into how they work in Rust.
@@ -54,14 +54,15 @@ built-in integer types in Rust, shown in Table 3-1.
 | 64-bit | i64    | u64      |
 | arch   | isize  | usize    |
 
-*Table 3-1: Integer types in Rust. Each type code (for example, i32) can be
-used to declare the type of a value.*
+*Table 3-1: Integer types in Rust. Each variant in the signed and unsigned
+columns (for example, `i32`) can be used to declare the type of an integer
+value.*
 
 Each variant can be either signed or unsigned and has an explicit size. Signed
 and unsigned merely refers to whether it is possible for the number to be
 either negative or positive; in other words, whether the number needs to have a
-sign with it ("signed"), or whether it will only ever be positive and can
-therefore be represented without a sign ("unsigned"). It's like writing numbers
+sign with it (signed), or whether it will only ever be positive and can
+therefore be represented without a sign (unsigned). It's like writing numbers
 on paper: when the sign matters, a number is shown with a plus sign or minus
 sign, but when it's safe to assume the number is positive, it's shown with no
 sign. Signed numbers are stored using two’s complement representation (if
@@ -196,8 +197,7 @@ ideographs, emoji, and zero width spaces are all valid `char`s in Rust. Unicode
 Scalar Values range from `U+0000` to `U+D7FF` and `U+E000` to `U+10FFFF`
 inclusive. A "character" isn’t really a concept in Unicode, however, so your
 human intuition for what a "character" is may not match up with what a `char`
-is in Rust. We'll discuss this in more detail in the Strings section of Chapter
-XX.
+is in Rust. We'll discuss this in detail in the Strings section of Chapter 8.
 
 ### Compound Types
 
@@ -288,11 +288,11 @@ fn main() {
 ```
 
 While arrays can be useful since they are a primitive type so using them can be
-very fast, they aren't as flexible as the `Vec` type (short for "vector"). The
-`Vec` type is a similar collection type provided by the standard library that
-_is_ allowed to grow or shrink in size. If you're unsure whether to use an
-array or a `Vec`, you should probably go with a `Vec`, and we'll discuss them
-in more detail in Chapter XX.
+very fast, they aren't as flexible as the vector type. The vector type is a
+similar collection type provided by the standard library that _is_ allowed to
+grow or shrink in size. If you're unsure whether to use an array or a vector,
+you should probably go with a vector, and we'll discuss them in more detail in
+Chapter 8.
 
 An example of when we might want to use an array is storing the months of the
 year. It's very unlikely that our program will need to add or remove months, so
