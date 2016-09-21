@@ -19,7 +19,7 @@ Once you understand ownership, you have a good foundation for understanding the
 features that make Rust unique. In this chapter, we'll learn ownership by going
 through some examples, focusing on a very common data structure: strings.
 
-PROD: START BOX
+<!-- PROD: START BOX -->
 
 ###### The Stack and the Heap
 
@@ -74,7 +74,7 @@ addresses. Once you understand ownership, you won't need to think about the
 stack and the heap very often, but knowing that managing heap data is why
 ownership exists can help explain why it works the way it does.
 
-PROD: END BOX
+<!-- PROD: END BOX -->
 
 ### Ownership Rules
 
