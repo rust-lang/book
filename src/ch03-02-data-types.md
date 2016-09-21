@@ -319,12 +319,9 @@ fn main() {
 }
 ```
 
-In this example, the `first` variable will bind to `1` at index `[0]` in the
-array, and `second` will bind to `2` at index `[1]` in the array. Note that
-these values are copied from the array and into `first` and `second` when the
-`let` statement is called. That means if the array changes after the `let`
-statements, these bindings will not, and the two variables should retain their
-values.
+In this example, the binding named `first` will get the value `1`, since that
+is the value at index `[0]` in the array. The binding named `second` will get
+the value `2` from index `[1]` in the array.
 
 #### Invalid Array Element Access
 
