@@ -151,7 +151,7 @@ number is divisible by 3
 
 When this program executes, it will check each `if` expression in turn and
 execute the first body for which the condition holds true. Note that even
-though 6 is divisible by 2 ], we did not see the output `number is divisible by
+though 6 is divisible by 2, we did not see the output `number is divisible by
 2`, nor did we see the `number is not divisible by 4, 3, or 2` text from the
 `else` block. That's because Rust will only execute the block for the first
 true condition, and once it finds one, it won't even check the rest.
