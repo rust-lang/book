@@ -68,14 +68,14 @@
 
                 <div id="content" class="content">
                     <h2>Control Flow</h2>
-<p>Deciding whether or not to run some code depending on if a condition is true,
-or deciding to run some code repeatedly while a condition is true, are basic
-building blocks in most programming languages. The most common constructs that
-let us control the flow of execution of our Rust code are <code>if</code> expressions and
-loops.</p>
+<p>Decisions on whether or not to run some code depending on if a condition is
+true, or deciding to run some code repeatedly while a condition is true, are
+basic building blocks in most programming languages. The most common constructs
+that let us control the flow of execution of our Rust code are <code>if</code> expressions
+and loops.</p>
 <h3><code>if</code> Expressions</h3>
 <p>An <code>if</code> expression allows us to branch our code depending on conditions. We
-provide a condition and then say, &quot;If this condition is met, then run this
+provide a condition and then say, &quot;If this condition is met, run this
 block of code. If the condition is not met, do not run this block of code.&quot;</p>
 <p>Let’s make a new project to explore <code>if</code>, called <code>branches</code>. In <code>src/main.rs</code>,
 put:</p>
@@ -90,13 +90,15 @@ put:</p>
     }
 }
 </code></pre>
-<p>All <code>if</code> expressions start with <code>if</code>, which is followed by a condition. In this
-case, our condition is checking if our variable binding <code>number</code> has a value
-that is less than 5. The block of code we want to execute if the condition is
-true goes immediately after the condition, inside curly braces. These blocks
-are sometimes called <em>arms</em>. We can optionally also include an <code>else</code>
-statement, which we have chosen to do here. <code>else</code> gives the program a block of
-code to execute should <code>condition</code> evaluate to false.</p>
+<p>All <code>if</code> expressions start with the keyword <code>if</code>, which is followed by a
+condition. In this case, our condition is checking if our variable binding
+<code>number</code> has a value that is less than 5. The block of code we want to execute
+if the condition is true goes immediately after the condition, inside curly
+braces. These blocks are sometimes called <em>arms</em>. We can optionally also
+include an <code>else</code> expression, which we have chosen to do here. This gives the
+program an alternative block of code to execute should the condition evaluate
+to false. If you don't give an <code>else</code> expression and the condition is false,
+the program will just skip the <code>if</code> block and move on to the next bit of code.</p>
 <p>Try running this code, and you should see output like this:</p>
 <pre><code class="language-bash">$ cargo run
    Compiling branches v0.1.0 (file:///projects/branches)
@@ -113,7 +115,7 @@ condition was true
      Running `target/debug/branches`
 condition was false
 </code></pre>
-<p>It’s also worth noting that <code>condition</code> here <em>must</em> be a <code>bool</code>. To see what
+<p>It’s also worth noting that the condition here <em>must</em> be a <code>bool</code>. To see what
 happens if the condition isn't a <code>bool</code>, try running this code:</p>
 <p>Filename: src/main.rs</p>
 <pre><code class="language-rust,ignore">fn main() {
@@ -140,7 +142,9 @@ Could not compile `branches`.
 <p>The error tells us that Rust expected a <code>bool</code>, but got an integer. Rust will
 not automatically try to convert non-boolean types to a boolean here, unlike
 languages like Ruby or JavaScript. We must be explicit and always give <code>if</code> a
-<code>boolean</code> as its condition. If your intention is for the <code>if</code> code block to be run if a number is not equal to <code>0</code>, for example, we would change the <code>if</code> expression to read:</p>
+<code>boolean</code> as its condition. If you wanted your <code>if</code> code block to run only when
+a number is not equal to <code>0</code>, for example, we would change the <code>if</code> expression
+to read:</p>
 <p>Filename: src/main.rs</p>
 <pre><code class="language-rust">fn main() {
     let number = 3;
@@ -150,22 +154,22 @@ languages like Ruby or JavaScript. We must be explicit and always give <code>if<
     }
 }
 </code></pre>
-<p>Running this will print &quot;number was something other than zero&quot;.</p>
+<p>Running this will print <code>number was something other than zero</code>.</p>
 <h4>Multiple Conditions with <code>else if</code></h4>
 <p>We can have multiple conditions by combining <code>if</code> and <code>else</code> in an <code>else if</code>
 expression. For example:</p>
 <p>Filename: src/main.rs</p>
 <pre><code class="language-rust">fn main() {
-    let number = 5;
+    let number = 6;
 
-    if number == 3 {
-        println!(&quot;number was 3&quot;);
-    } else if number == 4 {
-        println!(&quot;number was 4&quot;);
-    } else if number == 5 {
-        println!(&quot;number was 5&quot;);
+    if number % 4 == 0 {
+        println!(&quot;number is divisible by 4&quot;);
+    } else if number % 3 == 0 {
+        println!(&quot;number is divisible by 3&quot;);
+    } else if number % 2 == 0 {
+        println!(&quot;number is divisible by 2&quot;);
     } else {
-        println!(&quot;number was something else&quot;);
+        println!(&quot;number is not divisible by 4, 3, or 2&quot;);
     }
 }
 </code></pre>
@@ -174,16 +178,19 @@ should see output like this:</p>
 <pre><code class="language-bash">$ cargo run
    Compiling branches v0.1.0 (file:///projects/branches)
      Running `target/debug/branches`
-condition was 5
+number is divisible by 3
 </code></pre>
 <p>When this program executes, it will check each <code>if</code> expression in turn and
-execute the first body for which the condition holds true.</p>
+execute the first body for which the condition holds true. Note that even
+though 6 is divisible by 2 ], we did not see the output <code>number is divisible by 2</code>, nor did we see the <code>number is not divisible by 4, 3, or 2</code> text from the
+<code>else</code> block. That's because Rust will only execute the block for the first
+true condition, and once it finds one, it won't even check the rest.</p>
 <p>Using too many <code>else if</code> expressions can clutter your code, so if you find
 yourself with more than one, you may want to look at refactoring your code. In
 Chapter XX, we'll talk about a powerful Rust branching construct called <code>match</code>
 for these cases.</p>
 <h4>Using <code>if</code> in a Binding</h4>
-<p>The last detail you need to learn about <code>if</code> is that it’s an expression. That
+<p>The last detail you need to know about <code>if</code> is that it’s an expression. That
 means that we can use it on the right hand side of a <code>let</code> binding, for
 instance:</p>
 <p>Filename: src/main.rs</p>
@@ -207,8 +214,8 @@ The value of number is: 5
 </code></pre>
 <p>Remember, blocks of code evaluate to the last expression in them, and numbers
 by themselves are also expressions. In this case, the value of the whole <code>if</code>
-expression depends on which block of code executes. This means that the value
-that results from both arms of the <code>if</code> must be the same type; in the previous
+expression depends on which block of code executes. This means the value that
+results from both arms of the <code>if</code> must be the same type; in the previous
 example, they were both <code>i32</code> integers. But what happens if the types are
 mismatched, as in the following example?</p>
 <p>Filename: src/main.rs</p>
@@ -224,9 +231,9 @@ mismatched, as in the following example?</p>
     println!(&quot;The value of number is: {}&quot;, number);
 }
 </code></pre>
-<p>The expression in the <code>if</code> block is an integer and the expresion in the <code>else</code>
-block is a string. This can’t work, because variable bindings must have a
-single type. If we try to run this, we’ll get an error:</p>
+<p>If we try to run this, we’ll get an error. The <code>if</code> and <code>else</code> arms have value
+types that are incompatible, and Rust tells us exactly where to find the
+problem in our program:</p>
 <pre><code class="language-bash">   Compiling branches v0.1.0 (file:///projects/branches)
 src/main.rs:4:18: 8:6 error: if and else have incompatible types:
  expected `_`,
@@ -238,17 +245,24 @@ src/main.rs:5         5
 src/main.rs:6     } else {
 src/main.rs:7         &quot;six&quot;
 src/main.rs:8     };
-src/main.rs:4:18: 8:6 help: run `rustc --explain E0308` to see a detailed explanation
+src/main.rs:4:18: 8:6 help: run `rustc --explain E0308` to see a detailed
+explanation
 error: aborting due to previous error
 Could not compile `branches`.
 </code></pre>
-<p>The <code>if</code> and <code>else</code> arms have value types that are incompatible, and Rust tells
-us exactly where to find the problem in our program.</p>
+<p>The expression in the <code>if</code> block evaluates to an integer and the expresion in
+the <code>else</code> block evaluates to a string. This can’t work, because variable
+bindings must have a single type. Rust needs to know at compile time what type
+the <code>number</code> binding is, definitively, so that it can verify at compile time
+that its type is valid everywhere we use <code>number</code>. Rust wouldn't be able to do
+that if the type of <code>number</code> was only determined at runtime; the compiler would
+be more complex and be able to make fewer guarantees about our code if it had
+to keep track of multiple hypothetical types for any variable binding.</p>
 <h3>Repetition with Loops</h3>
 <p>It’s often useful to be able to execute a block of code more than one time. For
-this, Rust has several constructs called <em>loops</em>. A loop runs through the code
-inside it to the end and then starts immediately back at the beginning. To try
-out loops, let’s make a new project called <code>loops</code>.</p>
+this, Rust has several <em>loops</em>. A loop runs through the code inside the loop
+body to the end and then starts immediately back at the beginning. To try out
+loops, let’s make a new project called <code>loops</code>.</p>
 <p>There are three kinds of loops in Rust: <code>loop</code>, <code>while</code>, and <code>for</code>. Let’s dig
 in.</p>
 <h4>Repeating Code with <code>loop</code></h4>
@@ -280,14 +294,15 @@ printed after the <code>^C</code>, depending on where the code was in the loop w
 received the signal to halt.</p>
 <p>Fortunately, Rust provides another, more reliable way to break out of a loop.
 We can place the <code>break</code> keyword within the loop to tell the program when to
-stop executing the loop. Recall that we did this in the guessing game to exit
-the program when the user won the game by guessing the number correctly.</p>
+stop executing the loop. Recall that we did this in the guessing game in
+Chapter 2 to exit the program when the user won the game by guessing the number
+correctly.</p>
 <h4>Conditional Loops With <code>while</code></h4>
-<p>A useful thing that many programs do is have a condition that can be evaluated
+<p>It's often useful for a program to have a condition that can be evaluated
 within a loop. While the condition is true, the loop runs. When the condition
 ceases to be true, we call <code>break</code>, stopping the loop. This could be
-implemented with a combination of <code>loop</code>, <code>if</code>, <code>else</code>, and <code>break</code>; try to do
-that now if you'd like!</p>
+implemented with a combination of <code>loop</code>, <code>if</code>, <code>else</code>, and <code>break</code>; you could
+try that now in a program, if you'd like.</p>
 <p>But this pattern is so common that Rust has a more efficient language construct
 for it, called a <code>while</code> loop. Here's an example using <code>while</code>: this program
 loops three times, counting down each time. Finally, after the loop, it prints
@@ -355,22 +370,23 @@ for each item in a collection. A <code>for</code> loop looks like this:</p>
 </code></pre>
 <p>If we run this, we'll see the same output as the previous example. Importantly,
 though, we've now increased the safety of our code and eliminated the chance of
-bugs resulting from going beyond the end of the array or not going far enough
-and missing some items.</p>
+bugs that might result from going beyond the end of the array or not going far
+enough and missing some items.</p>
 <p>For example, in the previous code that uses the <code>while</code> loop, if we removed an
-item from the <code>a</code> array but forgot to update the condition to be <code>while index &lt; 4</code>, our code would panic. Using the <code>for</code> loop means we would not need to
+item from the <code>a</code> array but forgot to update the condition to <code>while index &lt; 4</code>, our code would panic. Using the <code>for</code> loop means we would not need to
 remember to change any other code if we changed the number of values in the
 array.</p>
-<p>If you're wondering about <code>iter</code> in this example, keep reading! We will cover
-method syntax generally in Chapter XX and iterators specifically in Chapter XX.</p>
+<p>If you're wondering about the <code>iter</code> code in this example, keep reading! We
+will cover method syntax generally in Chapter XX and iterators specifically in
+Chapter XX.</p>
 <p>The safety and conciseness of <code>for</code> loops make them the most commonly used loop
 construct in Rust. Even in situations where you want to run some code a certain
 number of times, like our countdown example that used a <code>while</code> loop, most
-Rustaceans would use a <code>for</code> loop. The way to do that is using a <code>Range</code>, which
-is a type provided by the standard library that generates numbers starting from
-one number and ending before another number. Here's what the countdown would
-look like with a for loop, and using another method we haven't yet talked
-about, <code>rev</code>, to reverse the range:</p>
+Rustaceans would use a <code>for</code> loop. The way to do that would be to use a
+<code>Range</code>, which is a type provided by the standard library that generates all
+numbers in sequence starting from one number and ending before another number.</p>
+<p>Here's what the countdown would look like with a for loop, and using another
+method we haven't yet talked about, <code>rev</code>, to reverse the range:</p>
 <p>Filename: src/main.rs</p>
 <pre><code class="language-rust">fn main() {
     for number in (1..4).rev() {
@@ -380,8 +396,19 @@ about, <code>rev</code>, to reverse the range:</p>
 }
 </code></pre>
 <p>That's a bit nicer, isn't it?</p>
-<p>Now that you know how Rust does things that most other languages can do, let's
-talk about a concept that <em>doesn't</em> commonly exist: ownership.</p>
+<h2>Summary</h2>
+<p>You made it! That was a big chapter: we covered variable bindings, scalar and
+compound data types, functions, comments, <code>if</code> expressions, and loops! If you'd
+like to get some practice with the concepts in this chapter, try building
+programs to do things like:</p>
+<ul>
+<li>Converting temperatures between Fahrenheit and Celsius.</li>
+<li>Generate the nth Fibonacci number.</li>
+<li>Print the lyrics to the Christmas carol <em>The Twelve Days of Christmas</em>,
+taking advantage of the repetition in the song.</li>
+</ul>
+<p>When you're ready to move on, we'll talk about a concept in Rust that <em>doesn't</em>
+commonly exist in other programming languages: ownership.</p>
 
                 </div>
 

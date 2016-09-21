@@ -125,10 +125,10 @@ fn another_function(x: i32) {
      Running `target/debug/functions`
 The value of x is: 5
 </code></pre>
-<p>Since we passed <code>5</code> to <code>another_function</code>, the <code>println!</code> macro put <code>5</code> where
-the pair of curly braces were in the format string. The declaration of
-<code>another_function</code> shows that it takes one argument named <code>x</code>, and the type
-of <code>x</code> is <code>i32</code>.</p>
+<p>In the declaration of <code>another_function</code>, we place one argument named <code>x</code>. We
+specify the type of <code>x</code> as <code>i32</code>. When we pass <code>5</code> to <code>another_function</code>,
+the <code>println!</code> macro puts <code>5</code> where the pair of curly braces were in the format
+string.</p>
 <p>In function signatures, we <em>must</em> declare the type. This is a deliberate
 decision in the design of Rust; requiring type annotations in function
 definitions means the compiler almost never needs you to use them elsewhere in
@@ -160,7 +160,7 @@ The value of y is: 6
 <p>Since <code>5</code> is passed as the <code>x</code> argument and <code>6</code> is passed as the <code>y</code> argument,
 the two strings are printed with these values.</p>
 <h3>Function Bodies</h3>
-<p>Function bodies are made up of a series of statements ending in an optional
+<p>Function bodies are made up of a series of statements optionally ending in an
 expression. So far, we've only seen functions without an ending expression, but
 we have seen expressions as parts of statements. Since Rust is an
 expression-based language, this is an important distinction to understand.
@@ -171,15 +171,15 @@ functions.</p>
 <p>We've already been using both statements and expressions. <em>Statements</em> are
 instructions that perform some action and do not return a value. <em>Expressions</em>
 evaluate to a resulting value. Let's look at some examples.</p>
-<p><code>Let</code> bindings are statements. They instruct the program to create a binding
-name and assign a value to it. <code>let y = 6;</code> in this example is a statement:</p>
+<p>Creating a variable binding and assigning a value to it with the <code>let</code> keyword
+is a statement. In this example, <code>let y = 6;</code> is a statement:</p>
 <p>Filename: src/main.rs</p>
 <pre><code class="language-rust">fn main() {
     let y = 6;
 }
 </code></pre>
-<p>Function definitions are also statements-- so the entire previous example is a
-statement as well.</p>
+<p>Function definitions are also statements; the entire previous example is a
+statement in itself.</p>
 <p>Statements do not return values themselves. Therefore, you can’t assign a <code>let</code>
 binding to another binding, as this code tries to do:</p>
 <p>Filename: src/main.rs</p>
@@ -201,11 +201,12 @@ error: Could not compile `functions`.
 </code></pre>
 <p>The <code>let y = 6</code> statement does not return a value, so there isn't anything for
 <code>x</code> to bind to. This is different than in other languages like C and Ruby where
-the assignment returns the value of the assignment. In those languages, you
-could write <code>x = y = 6</code> and have both <code>x</code> and <code>y</code> have the value <code>6</code>, but that
-is not the case in Rust.</p>
-<p>Expressions are most of the rest of the code that you will write in Rust.
-Consider a simple math operation, like this:</p>
+the assignment returns the value of the assignment. In those languages, we can
+write <code>x = y = 6</code> and have both <code>x</code> and <code>y</code> have the value <code>6</code>; that is not the
+case in Rust.</p>
+<p>Expressions are code that evaluate to something, and make up most of the rest
+of the code that you will write in Rust. Consider a simple math operation, like
+this:</p>
 <pre><code class="language-rust,ignore">5 + 6
 </code></pre>
 <p>This is an expression, and evaluating it results in the value <code>11</code>. Expressions
@@ -224,16 +225,19 @@ use to create new scopes, <code>{}</code>, is an expression, for example:</p>
     println!(&quot;The value of y is: {}&quot;, y);
 }
 </code></pre>
+<!-- If we use wingding numbers to call out code, we might delete the
+repetition here and just use those numbers--that can help the flow of the text.
+I'm flagging this as a reminder for when we transfer to libreoffice -->
 <p>The expression:</p>
 <pre><code class="language-rust,ignore">{
     let x = 3;
     x + 1
 }
 </code></pre>
-<p>is a block that, in this case, gets evaluated to <code>4</code>, which then gets bound to
+<p>is a block that, in this case, evaluates to <code>4</code>, and then gets bound to
 <code>y</code> as part of the <code>let</code> statement.</p>
-<p>Note that the line containing <code>x + 1</code> does not have a semicolon at the end like
-most of the lines we've seen up until now have had. This is the most important
+<p>Note that the line containing <code>x + 1</code> does not have a semicolon at the end,
+unlike most of the lines we've seen up until now. This is the most important
 distinction between expressions and statements to remember: statements end in
 semicolons while expressions do not. If you add a semicolon to the end of an
 expression, that will turn it into a statement, which will then not return a
@@ -241,7 +245,7 @@ value. Keep this in mind as we explore function return values and expressions.</
 <h3>Functions with Return Values</h3>
 <p>Functions can return values back to the code that calls them. We don’t name
 return values, but we do declare their type, after an arrow (<code>-&gt;</code>). In Rust,
-the &quot;return value of the function” is synonymous with “the value of the final
+the &quot;return value of the function” is synonymous with the &quot;value of the final
 expression in the block of the body of a function.” Here's an example of a
 function that returns a value:</p>
 <p>Filename: src/main.rs</p>
@@ -257,17 +261,17 @@ fn main() {
 </code></pre>
 <p>There are no function calls, macros, or even <code>let</code> statements in the <code>five</code>
 function: just the number <code>5</code> by itself. That's a perfectly valid function in
-Rust. Note the function's return type, too. Try running this code, and the
-output should look like this:</p>
+Rust. Note the function's return type is specified, too, as <code>-&gt; i32</code>. Try
+running this code, and the output should look like this:</p>
 <pre><code class="language-bash">$ cargo run
    Compiling functions v0.1.0 (file:///projects/functions)
      Running `target/debug/functions`
 The value of x is: 5
 </code></pre>
-<p>The <code>5</code> in the <code>five</code> function is actually the function's return value, which
-is why the return type is <code>i32</code>. Let’s examine this in more detail. There are
-two important bits. First, the line <code>let x = five();</code> in <code>main</code> shows that we
-can use the return value of a function to initialize a binding.</p>
+<p>The <code>5</code> in <code>five</code> is the function's return value, which is why the return type
+is <code>i32</code>. Let’s examine this in more detail. There are two important bits.
+First, the line <code>let x = five();</code> shows us using the return value of a function
+to initialize a binding.</p>
 <p>Because the function <code>five</code> returns a <code>5</code>, that line is the same as saying:</p>
 <pre><code class="language-rust">let x = 5;
 </code></pre>
