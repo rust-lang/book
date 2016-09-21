@@ -158,7 +158,7 @@ true condition, and once it finds one, it won't even check the rest.
 
 Using too many `else if` expressions can clutter your code, so if you find
 yourself with more than one, you may want to look at refactoring your code. In
-Chapter XX, we'll talk about a powerful Rust branching construct called `match`
+Chapter 6, we'll talk about a powerful Rust branching construct called `match`
 for these cases.
 
 #### Using `if` in a Binding
