@@ -224,32 +224,48 @@ fn main() {
 }
 ```
 
-If we run this, we get an error with the core message ``the trait bound
-`Rectangle: std::fmt::Display`` is not satisfied`. The `println!` macro can do
-many kinds of formatting, and by default, `{}` tells `println!` to use a kind
-of formatting known as `Display`: output intended for direct end-user
-consumption. The primitive types we’ve seen so far implement `Display` by
-default, as there’s only one way you’d want to show a `1` or any other
-primitive type to a user. But with structs, the way `println!` should format
-the output is less clear as there are more display options: Do you want commas
-or not? Do you want to print the struct `{}`s? Should all the fields be shown?
-Because of this ambiguity, Rust doesn't try to guess what we want and structs
-do not have a provided implementation of `Display`.
+If we run this, we get an error with this core message:
 
-If we keep reading the error messages, though, we'll find ``note: `Rectangle`
-cannot be formatted with the default formatter; try using `:?` instead if you
-are using a format string``. Let's try it! The `println!` will now look like
+```bash
+error: the trait bound `Rectangle: std::fmt::Display` is not satisfied
+```
+
+The `println!` macro can do many kinds of formatting, and by default, `{}`
+tells `println!` to use formatting known as `Display`: output intended for
+direct end-user consumption. The primitive types we’ve seen so far implement
+`Display` by default, as there’s only one way you’d want to show a `1` or any
+other primitive type to a user. But with structs, the way `println!` should
+format the output is less clear as there are more display possibilities: Do you
+want commas or not? Do you want to print the struct `{}`s? Should all the
+fields be shown? Because of this ambiguity, Rust doesn't try to guess what we
+want and structs do not have a provided implementation of `Display`.
+
+If we keep reading the errors, though, we'll find this helpful note:
+
+```bash
+note: `Rectangle` cannot be formatted with the default formatter; try using
+`:?` instead if you are using a format string
+```
+
+Let's try it! The `println!` will now look like
 `println!("The rectangle is {:?}", rect1);`. Putting the specifier `:?` inside
 the `{}` tells `println!` we want to use an output format called `Debug`.
 `Debug` is a trait that enables us to print out our struct in a way that is
 useful for developers so that we can see its value while we are debugging our
 code.
 
-Let's try running with this change and... drat. We still get an error: ``the
-trait bound `Rectangle: std::fmt::Debug` is not satisfied``. Again, though, the
-compliler has given us a helpful note! ``note: `Rectangle` cannot be formatted
-using `:?`; if it is defined in your crate, add `#[derive(Debug)]` or manually
-implement it``.
+Let's try running with this change and... drat. We still get an error:
+
+```bash
+error: the trait bound `Rectangle: std::fmt::Debug` is not satisfied
+```
+
+Again, though, the compliler has given us a helpful note!
+
+```bash
+note: `Rectangle` cannot be formatted using `:?`; if it is defined in your
+crate, add `#[derive(Debug)]` or manually implement it
+```
 
 Rust *does* include functionality to print out debugging information, but we
 have to explicitly opt-in to having that functionality be available for our
