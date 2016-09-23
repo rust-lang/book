@@ -49,7 +49,7 @@ type. For example, we can declare a particular user like this:
 #     sign_in_count: u64,
 #     active: bool,
 # }
-
+#
 let user1 = User {
     email: String::from("someone@example.com"),
     username: String::from("someusername123"),
