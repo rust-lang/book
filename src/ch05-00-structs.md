@@ -220,7 +220,7 @@ struct Rectangle {
 fn main() {
     let rect1 = Rectangle { length: 50, width: 30 };
 
-    println!("The rectangle is {}", rect1);
+    println!("rect1 is {}", rect1);
 }
 ```
 
@@ -248,7 +248,7 @@ note: `Rectangle` cannot be formatted with the default formatter; try using
 ```
 
 Let's try it! The `println!` will now look like
-`println!("The rectangle is {:?}", rect1);`. Putting the specifier `:?` inside
+`println!("rect1 is {:?}", rect1);`. Putting the specifier `:?` inside
 the `{}` tells `println!` we want to use an output format called `Debug`.
 `Debug` is a trait that enables us to print out our struct in a way that is
 useful for developers so that we can see its value while we are debugging our
@@ -282,7 +282,7 @@ struct Rectangle {
 fn main() {
     let rect1 = Rectangle { length: 50, width: 30 };
 
-    println!("The rectangle is {:?}", rect1);
+    println!("rect1 is {:?}", rect1);
 }
 ```
 
@@ -290,7 +290,7 @@ At this point, if we run this program, we won't get any errors and we'll see the
 following output:
 
 ```bash
-The rectangle is Rectangle { length: 50, width: 30 }
+rect1 is Rectangle { length: 50, width: 30 }
 ```
 
 Nice! It's not the prettiest output, but it shows the values of all the fields
