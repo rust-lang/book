@@ -134,10 +134,10 @@ fn area(dimensions: (u32, u32)) -> u32 {
 }
 ```
 
-In one way, this is a little better. Tuples let us add a little bit of
-structure, and we’re now passing just one argument. But in another way this
-method less clear: tuples don’t give names to their elements, so our
-calculation has gotten more confusing because we have to use the tuple's index:
+In one way, this is a little better. Tuples let us add a bit of structure, and
+we’re now passing just one argument. But in another way this method less clear:
+tuples don’t give names to their elements, so our calculation has gotten more
+confusing because we have to index into the parts of the tuple:
 
 ```rust,ignore
 dimensions.0 * dimensions.1
@@ -193,14 +193,14 @@ The `area` function accesses the `length` and `width` fields of the `Rectangle`
 instance it got as an argument. Our function signature for `area` now says
 exactly what we mean: calculate the area of a `Rectangle`, using its `length`
 and `width` fields. This conveys that the length and width are related to each
-other, and gives descriptive names to the values rather than using the index
-values of `0` and `1`. This is a win for clarity.
+other, and gives descriptive names to the values rather than using the tuple
+index values of `0` and `1`. This is a win for clarity.
 
 ### Adding Useful Functionality with Derived Traits
 
 It'd be nice to be able to print out an instance of our `Rectangle` while we're
-debugging our program and be able to see the values for all its fields. Let's
-try using the `println!` macro as we have been and see what happens:
+debugging our program and see the values for all its fields. Let's try using
+the `println!` macro as we have been and see what happens:
 
 Filename: src/main.rs
 
@@ -247,7 +247,7 @@ implement it``.
 Rust *does* include functionality to print out debugging information, but we
 have to explicitly opt-in to having that functionality be available for our
 struct. To do that, we add the annotation `#[derive(Debug)]` just before our
-struct definition, so now our program looks like this:
+struct definition. Now our program looks like this:
 
 ```rust
 #[derive(Debug)]
@@ -263,20 +263,20 @@ fn main() {
 }
 ```
 
-*Now* if we run this program, we won't get any errors and we'll see the
+At this point, if we run this program, we won't get any errors and we'll see the
 following output:
 
 ```bash
 The rectangle is Rectangle { length: 50, width: 30 }
 ```
 
-Neat! It's not the prettiest output, but it shows the values of all the fields
+Nice! It's not the prettiest output, but it shows the values of all the fields
 for this instance, which would definitely help during debugging.
 
 There are a number of traits Rust has provided for us to use with the `derive`
 annotation that can add useful behavior to our custom types. Those traits and
 their behaviors are listed in Appendix XX. We'll be covering how to implement
-these traits with different behavior, as well as creating your own traits, in
+these traits with custom behavior, as well as creating your own traits, in
 Chapter 10.
 
 Our `area` function is pretty specific-- it only computes the area of
