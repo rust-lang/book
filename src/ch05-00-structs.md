@@ -42,10 +42,17 @@ words, the struct definition is like a general template for the type, and
 instances fill in that template with particular data to create values of the
 type. For example, we can declare a particular user like this:
 
-```rust,ignore
+```rust
+# struct User {
+#     username: String,
+#     email: String,
+#     sign_in_count: u64,
+#     active: bool,
+# }
+
 let user1 = User {
-    email: "someone@example.com",
-    username: "someusername123",
+    email: String::from("someone@example.com"),
+    username: String::from("someusername123"),
     active: true,
     sign_in_count: 1,
 };
@@ -188,7 +195,7 @@ try using the `println!` macro as we have been and see what happens:
 
 Filename: src/main.rs
 
-```rust
+```rust,ignore
 struct Rectangle {
     length: u32,
     width: u32,
