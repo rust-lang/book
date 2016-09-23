@@ -1,6 +1,6 @@
 # Structs
 
-A `struct`, short for "structure", is a custom data type that lets us name and
+A `struct`, short for *structure*, is a custom data type that lets us name and
 package together multiple related values that make up a meaningful group. If
 you come from an object-oriented language, a `struct` is like an object's data
 attributes. In the next section of this chapter, we'll talk about how to define
