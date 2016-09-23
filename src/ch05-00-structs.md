@@ -134,10 +134,15 @@ fn area(dimensions: (u32, u32)) -> u32 {
 }
 ```
 
+<!-- I will add ghosting & wingdings once we're in libreoffice /Carol -->
+
 In one way, this is a little better. Tuples let us add a bit of structure, and
 we’re now passing just one argument. But in another way this method less clear:
 tuples don’t give names to their elements, so our calculation has gotten more
 confusing because we have to index into the parts of the tuple:
+
+<!-- I will change this to use wingdings instead of repeating this code once
+we're in libreoffice /Carol -->
 
 ```rust,ignore
 dimensions.0 * dimensions.1
@@ -177,6 +182,8 @@ fn area(rectangle: &Rectangle) -> u32 {
     rectangle.length * rectangle.width
 }
 ```
+
+<!-- Will add ghosting & wingdings once we're in libreoffice /Carol -->
 
 Here we've defined a `struct` and given it the name `Rectangle`. Inside the
 `{}` we defined the fields to be `length` and `width`, both of which have type
