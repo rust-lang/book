@@ -134,9 +134,17 @@ Methods can take multiple arguments that we add to the signature after the
 
 ### Associated Functions
 
-One more useful feature of `impl` blocks: we're allowed to define functions within `impl` blocks that *don't* take `self` as a parameter. These are called *associated functions*, since they're associated with the struct. They're still functions though, not methods, since they don't have an instance of the struct to work with. You've already used an associated function: `String::from`.
+One more useful feature of `impl` blocks: we're allowed to define functions
+within `impl` blocks that *don't* take `self` as a parameter. These are called
+*associated functions*, since they're associated with the struct. They're still
+functions though, not methods, since they don't have an instance of the struct
+to work with. You've already used an associated function: `String::from`.
 
-Associated functions are often used for constructors that will return a new instance of the struct. For example, we could provide an associated function that would take one dimension argument and use that as both length and width, thus making it easier to create a square `Rectangle` rather than having to specify the same value twice:
+Associated functions are often used for constructors that will return a new
+instance of the struct. For example, we could provide an associated function
+that would take one dimension argument and use that as both length and width,
+thus making it easier to create a square `Rectangle` rather than having to
+specify the same value twice:
 
 ```rust
 # #[derive(Debug)]
