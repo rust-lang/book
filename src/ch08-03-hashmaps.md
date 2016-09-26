@@ -1,4 +1,4 @@
-# HashMaps
+## HashMaps
 
 The last of our essential collections is the *HashMap*. A `HashMap<K, V>`
 stores a mapping of keys of type `K` to values of type `V`. It does this via a
@@ -11,7 +11,7 @@ We'll go over the basic API in this chapter, but there are many more goodies
 hiding in the functions defined on HashMap by the standard library. As always,
 check the standard library documentation for more information.
 
-## Creating a HashMap
+### Creating a HashMap
 
 We can create an empty HashMap with `new`, and add elements with `insert`:
 
@@ -76,7 +76,7 @@ the HashMap. The values that the references point to must be valid for at least
 as long as the HashMap is valid, though. We will talk more about these issues
 in the Lifetimes section of Chapter XX.
 
-## Accessing Values in a HashMap
+### Accessing Values in a HashMap
 
 We can get a value out of the HashMap by providing its key to the `get` method:
 
@@ -119,9 +119,9 @@ This will print:
 2: world
 ```
 
-## Updating a HashMap
+### Updating a HashMap
 
-### Overwriting a Value
+#### Overwriting a Value
 
 If you insert a key and a value, then insert that key with a different value, the value associated with that key will be replaced. Even though this code calls `insert` twice, the HashMap will only contain one key/value pair, since we're inserting with the key `1` both times:
 
@@ -138,7 +138,7 @@ println!("{:?}", map);
 
 This will print `{1: "Hi There"}`.
 
-### Only Insert If the Key Has No Value
+#### Only Insert If the Key Has No Value
 
 It's common to want to see if there's some sort of value already stored in the
 HashMap for a particular key, and if not, insert a value. HashMaps have a
@@ -183,7 +183,7 @@ insert the key `2` with the value "world", since `2` doesn't have a value
 already. The second call to `entry` will not change the HashMap since `1`
 already has the value "hello".
 
-### Update a Value Based on the Old Value
+#### Update a Value Based on the Old Value
 
 Another common use case for HashMaps is to look up a key's value then update
 it, using the old value. For instance, if we wanted to count how many times
@@ -214,7 +214,7 @@ variable binding, so in order to assign to that value we must first dereference
 the end of the `for` loop, so all of these changes are safe and allowed by the
 borrowing rules.
 
-## Hashing Function
+### Hashing Function
 
 By default, HashMap uses a cryptographically secure hashing function that can
 provide resistance to Denial of Service (DoS) attacks. This is not the fastest

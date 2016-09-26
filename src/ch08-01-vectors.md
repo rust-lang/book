@@ -1,10 +1,10 @@
-# Vectors
+## Vectors
 
 The first type we'll look at is `Vec<T>`, also known as a *vector*. Vectors
 allow you to store more than one value in a single data structure that puts all
 the values next to each other in memory.
 
-## Creating a New Vector
+### Creating a New Vector
 
 To create a new vector, you can call the `new` function:
 
@@ -24,7 +24,7 @@ That said, in real code, you very rarely need to do this type annotation since
 Rust can infer the type of value we want to store once we insert values. Let's
 look at how to modify a vector next.
 
-## Updating a Vector
+### Updating a Vector
 
 To put elements in the vector, we can use the `push` method:
 
@@ -50,7 +50,7 @@ let v = vec![5, 6, 7, 8];
 This macro does a similar thing to our previous example, but it's much more
 convenient.
 
-## Dropping a Vector Drops its Elements
+### Dropping a Vector Drops its Elements
 
 Like any other `struct`, a vector will be freed when it goes out of scope:
 
@@ -68,7 +68,7 @@ integers are going to be cleaned up as well. This may seem like a
 straightforward point, but can get a little more complicated once we start to
 introduce references to the elements of the vector. Let's tackle that next!
 
-## Reading Elements of Vectors
+### Reading Elements of Vectors
 
 Now that we know how creating and destroying vectors works, knowing how to read
 their contents is a good next step. There are two ways to reference a value

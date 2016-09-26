@@ -1,9 +1,9 @@
-# Strings
+## Strings
 
 We've already talked about strings a bunch in Chapter 4, but let's take a more
 in-depth look at them now.
 
-## Many Kinds of Strings
+### Many Kinds of Strings
 
 Strings are a common place for new Rustaceans to get stuck. This is due to a
 combination of three things: Rust's propensity for making sure to expose
@@ -33,7 +33,7 @@ represented in memory in a different way, for example. We won't be talking
 about these other string types in this chapter; see their API documentation for
 more about how to use them and when each is appropriate.
 
-## Creating a New String
+### Creating a New String
 
 Let's look at how to do the same operations on `String` as we did with `Vec`,
 starting with creating one. Similarly, `String` has `new`:
@@ -85,11 +85,11 @@ let hello = "Здравствуйте";
 let hello = "Hola";
 ```
 
-## Updating a String
+### Updating a String
 
 A `String` can be changed and can grow in size, just like a `Vec` can.
 
-### Push
+#### Push
 
 You can grow a `String` by using the `push_str` method to append another
 string:
@@ -119,7 +119,7 @@ s.clear();
 
 Now `s` will be the empty string, "".
 
-### Concatenation
+#### Concatenation
 
 Often, you'll want to combine two strings together. One way is to use the `+`
 operator:
@@ -187,7 +187,7 @@ same way as `println!`, but instead of printing the output to the screen, it
 returns a `String` with the contents. This version is much easier to read than
 all of the `+`s.
 
-## Indexing into Strings
+### Indexing into Strings
 
 In many other languages, accessing individual characters in a string by
 referencing the characters by index is a valid and common operation. In Rust,
@@ -214,7 +214,7 @@ The error and the note tell the story: Rust strings don't support indexing. So
 the follow-up question is, why not? In order to answer that, we have to talk a
 bit about how Rust stores strings in memory.
 
-### Internal Representation
+#### Internal Representation
 
 A `String` is a wrapper over a `Vec<u8>`. Let's take a look at some of our
 properly-encoded UTF-8 example strings from before. First, this one:
@@ -250,7 +250,7 @@ should `answer` be `208`? `208` is not a valid character on its own, though.
 Plus, for latin letters, this would not return the answer most people would
 expect: `&"hello"[0]` would then return `104`, not `h`.
 
-### Bytes and Scalar Values and Grapheme Clusters! Oh my!
+#### Bytes and Scalar Values and Grapheme Clusters! Oh my!
 
 This leads to another point about UTF-8: there are really three relevant ways
 to look at strings, from Rust's perspective: bytes, scalar values, and grapheme
@@ -289,7 +289,7 @@ matter how we define "character".
 All of these problems mean that Rust does not implement `[]` for `String`, so
 we cannot directly do this.
 
-## Slicing Strings
+### Slicing Strings
 
 However, indexing the bytes of a string is very useful, and is not expected to
 be fast. While you can't use `[]` with a single number, you _can_ use `[]` with
@@ -313,9 +313,11 @@ thread 'main' panicked at 'index 0 and/or 1 in `Здравствуйте` do not
 character boundary', ../src/libcore/str/mod.rs:1694
 ```
 
-## Methods for Iterating Over Strings
+### Methods for Iterating Over Strings
 
-If we do need to perform operations on individual characters, the best way to do that is using the `chars` method. Calling `chars` on "नमस्ते" gives us the six Rust `char` values:
+If we do need to perform operations on individual characters, the best way to
+do that is using the `chars` method. Calling `chars` on "नमस्ते" gives us the six
+Rust `char` values:
 
 ```rust
 for c in "नमस्ते".chars() {
