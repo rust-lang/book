@@ -224,3 +224,28 @@ your code and find that the default hash function is too slow for your
 purposes, you can switch to another function by specifying a different
 *hasher*. A hasher is an object that implements the `BuildHasher` trait. We'll
 be talking about traits and how to implement them in Chapter XX.
+
+## Summary
+
+Vectors, Strings, and HashMaps will take you far in programs where you need to
+store, access, and modify data. Some programs you are now equipped to write and
+might want to try include:
+
+* Given a list of integers, use a Vector and return their mean (average),
+  median (when sorted, the value in the middle position), and mode (the value
+  that occurs most often; a HashMap will be helpful here).
+* Convert Strings to Pig Latin, where the first consonant of each word gets
+  moved to the end with an added "ay", so "first" becomes "irst-fay". Words that
+  start with a vowel get an h instead ("apple" becomes "apple-hay"). Remember
+  about UTF-8 encoding!
+* Using a HashMap and Vectors, create a text interface to allow a user to add
+  employee names to a department in the company. For example, "Add Sally to
+  Engineering" or "Add Ron to Sales". Then let the user retrieve a list of all
+  people in a department or all people in the company by department, sorted
+  alphabetically.
+
+The standard library API documentation describes methods these types have that
+will be helpful for these exercises!
+
+We're getting into more complex programs where operations can fail, which means
+it's a perfect time to go over error handling next!
