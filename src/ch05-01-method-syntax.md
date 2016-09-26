@@ -46,7 +46,7 @@ body. Then in `main` where we called the `area` function and passed `rect1` as
 an argument, we can instead use *method syntax* to call the `area` method on
 our `Rectangle` instance.
 
-In the signature for `area`, we get to use `self` instead of `rectangle:
+In the signature for `area`, we get to use `&self` instead of `rectangle:
 &Rectangle` because Rust knows the type of `self` is `Rectangle` due to this
 method being inside the `impl Rectangle` context. Note we still need to have
 the `&` before `self`, just like we had `&Rectangle`. Methods can choose to
