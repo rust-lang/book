@@ -35,7 +35,7 @@ of type `i32` and values of type `&str`. Like vectors, HashMaps are homogenous:
 all of the keys must have the same type, and all of the values must have the
 same type.
 
-If you have a vector of tuples, you can convert it into a HashMap with the
+If we have a vector of tuples, we can convert it into a HashMap with the
 `collect` method. The first element in each tuple will be the key, and the
 second element will be the value:
 
@@ -123,7 +123,7 @@ This will print:
 
 #### Overwriting a Value
 
-If you insert a key and a value, then insert that key with a different value, the value associated with that key will be replaced. Even though this code calls `insert` twice, the HashMap will only contain one key/value pair, since we're inserting with the key `1` both times:
+If we insert a key and a value, then insert that key with a different value, the value associated with that key will be replaced. Even though this code calls `insert` twice, the HashMap will only contain one key/value pair, since we're inserting with the key `1` both times:
 
 ```rust
 use std::collections::HashMap;
@@ -176,7 +176,7 @@ println!("{:?}", map);
 The `or_insert` method on `Entry` does exactly this: returns the value for the
 `Entry`'s key if it exists, and if not, inserts its argument as the new value
 for the `Entry`'s key and returns that. This is much cleaner than writing the
-logic yourself, and in addition, plays more nicely with the borrow checker.
+logic ourselves, and in addition, plays more nicely with the borrow checker.
 
 This code will print `{1: "hello", 2: "world"}`. The first call to `entry` will
 insert the key `2` with the value "world", since `2` doesn't have a value

@@ -9,16 +9,16 @@ Strings are a common place for new Rustaceans to get stuck. This is due to a
 combination of three things: Rust's propensity for making sure to expose
 possible errors, strings being a more complicated data structure than many
 programmers give them credit for, and UTF-8. These things combine in a way that
-can seem difficult when you're used to other languages.
+can seem difficult coming from other languages.
 
-Before we can dig into those things, we need to talk about what exactly we even
-mean by the word 'string'. Rust-the-language has only one string type: `&str`.
-We talked about these string slices in Chapter 4: they're a reference to some
-UTF-8 encoded string data stored somewhere else. String literals, for example,
-are stored in the binary output of your program, and are therefore string
-slices.
+Before we can dig into those aspects, we need to talk about what exactly we
+even mean by the word 'string'. Rust actually only has one string type in the
+core language itself: `&str`. We talked about these string slices in Chapter 4:
+they're a reference to some UTF-8 encoded string data stored somewhere else.
+String literals, for example, are stored in the binary output of the program,
+and are therefore string slices.
 
-Rust's standard library also provides a type called `String`. This is a
+Rust's standard library is what provides the type called `String`. This is a
 growable, mutable, owned, UTF-8 encoded string type. When Rustaceans talk about
 'strings' in Rust, they usually mean "`String` and `&str`". This chapter is
 largely about `String`, and these two types are used heavily in Rust's standard
@@ -26,12 +26,12 @@ library. Both `String` and string slices are UTF-8 encoded.
 
 Rust's standard library also includes a number of other string types, such as
 `OsString`, `OsStr`, `CString`, and `CStr`. Library crates may provide even
-more options for storing string data. As you can see from the `*String`/`*Str`
-naming, they often provide an owned and borrowed variant, just like
-`String`/`&str`. These string types may store different encodings or be
-represented in memory in a different way, for example. We won't be talking
-about these other string types in this chapter; see their API documentation for
-more about how to use them and when each is appropriate.
+more options for storing string data. Similarly to the `*String`/`*Str` naming,
+they often provide an owned and borrowed variant, just like `String`/`&str`.
+These string types may store different encodings or be represented in memory in
+a different way, for example. We won't be talking about these other string
+types in this chapter; see their API documentation for more about how to use
+them and when each is appropriate.
 
 ### Creating a New String
 
@@ -42,8 +42,8 @@ starting with creating one. Similarly, `String` has `new`:
 let s = String::new();
 ```
 
-Often, you have some initial data that you'd like to start the string off with.
-For that, there's the `.to_string()` method:
+Often, we'll have some initial data that we'd like to start the string off with.
+For that, there's the `to_string` method:
 
 ```rust
 let data = "initial contents";
@@ -54,13 +54,13 @@ let s = data.to_string();
 let s = "initial contents".to_string();
 ```
 
-You'll also see this form sometimes:
+This form is equivalent to using `to_string`:
 
 ```rust
 let s = String::from("Initial contents");
 ```
 
-Because strings are used for so many things, there are many different generic
+Since strings are used for so many things, there are many different generic
 APIs that make sense for strings. There are a lot of options, and some of them
 can feel redundant because of this, but they all have their place! In this
 case, `String::from` and `.to_string` end up doing the exact same thing, so
@@ -68,8 +68,8 @@ which you choose is a matter of style. Some people use `String::from` for
 literals, and `.to_string` for variable bindings. Most Rust style is pretty
 uniform, but this specific question is one of the most debated.
 
-Don't forget that strings are UTF-8 encoded, so you can include any
-properly encoded data in them:
+Remember that strings are UTF-8 encoded, so we can include any properly encoded
+data in them:
 
 ```rust
 let hello = "السلام عليكم";
@@ -91,7 +91,7 @@ A `String` can be changed and can grow in size, just like a `Vec` can.
 
 #### Push
 
-You can grow a `String` by using the `push_str` method to append another
+We can grow a `String` by using the `push_str` method to append another
 string:
 
 ```rust
@@ -110,7 +110,7 @@ s.push('l');
 
 `s` will contain "lol" after this point.
 
-You can make any `String` contain the empty string with the `clear` method:
+We can make any `String` contain the empty string with the `clear` method:
 
 ```rust
 let mut s = String::from("Noooooooooooooooooooooo!");
@@ -121,7 +121,7 @@ Now `s` will be the empty string, "".
 
 #### Concatenation
 
-Often, you'll want to combine two strings together. One way is to use the `+`
+Often, we'll want to combine two strings together. One way is to use the `+`
 operator:
 
 ```rust
@@ -144,11 +144,11 @@ signature of the method would be if `add` was defined specifically for
 `String`. This signature gives us the clues we need in order to understand the
 tricky bits of `+`.
 
-First of all, you'll notice that `s2` has an `&`. This is because of the `s`
-argument in the `add` function: you can only add a `&str` to a `String`, you
-can't add two `String`s together. Remember back in Chapter 4 when we talked
-about how `&String` will coerce to `&str`: we write `&s2` so that the `String`
-will coerce to the proper type, `&str`.
+First of all, `s2` has an `&`. This is because of the `s` argument in the `add`
+function: we can only add a `&str` to a `String`, we can't add two `String`s
+together. Remember back in Chapter 4 when we talked about how `&String` will
+coerce to `&str`: we write `&s2` so that the `String` will coerce to the proper
+type, `&str`.
 
 Secondly, `add` takes ownership of `self`, which we can tell because `self`
 does *not* have an `&` in the signature. This means `s1` in the above example
@@ -159,7 +159,7 @@ new one, this statement actually takes ownership of `s1`, appends a copy of
 like it's making a lot of copies, but isn't: the implementation is more
 efficient than copying.
 
-If you need to concatenate multiple strings, this behavior of `+` gets
+If we need to concatenate multiple strings, this behavior of `+` gets
 unwieldy:
 
 ```rust
@@ -245,7 +245,7 @@ let answer = &h[0];
 ```
 
 What should the value of `answer` be? Should it be `З`, the first letter? When
-you encode `З` in UTF-8, the first byte is `208`, and the second is `151`. So
+encoded in UTF-8, the first byte of `З` is `208`, and the second is `151`. So
 should `answer` be `208`? `208` is not a valid character on its own, though.
 Plus, for latin letters, this would not return the answer most people would
 expect: `&"hello"[0]` would then return `104`, not `h`.
@@ -277,8 +277,8 @@ get this:
 ```
 
 Four elements! It turns out that even within 'grapheme cluster', there are
-multiple ways of grouping things. Have we convinced you strings are actually
-really complicated yet?
+multiple ways of grouping things. Convinced that strings are actually really
+complicated yet?
 
 Another reason that indexing into a `String` to get a character is not available
 is that indexing operations are expected to always be fast. This isn't possible
@@ -292,7 +292,7 @@ we cannot directly do this.
 ### Slicing Strings
 
 However, indexing the bytes of a string is very useful, and is not expected to
-be fast. While you can't use `[]` with a single number, you _can_ use `[]` with
+be fast. While we can't use `[]` with a single number, we _can_ use `[]` with
 a range to create a string slice from particular bytes:
 
 ```rust

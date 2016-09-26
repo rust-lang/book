@@ -1,26 +1,26 @@
 ## Vectors
 
 The first type we'll look at is `Vec<T>`, also known as a *vector*. Vectors
-allow you to store more than one value in a single data structure that puts all
+allow us to store more than one value in a single data structure that puts all
 the values next to each other in memory.
 
 ### Creating a New Vector
 
-To create a new vector, you can call the `new` function:
+To create a new vector, we can call the `new` function:
 
 ```rust
 let v: Vec<i32> = Vec::new();
 ```
 
-You'll note that we added a type annotation here. Because we don't actually do
+Note that we added a type annotation here. Since we don't actually do
 anything with the vector, Rust doesn't know what kind of elements we intend to
 store. This is an important point. Vectors are homogenous: they may store many
 values, but those values must all be the same type. Vectors are generic over
-the type you store inside them (we'll talk about Generics more throroughly in
+the type stored inside them (we'll talk about Generics more throroughly in
 Chapter XX), and the angle brackets here tell Rust that this vector will hold
 elements of the `i32` type.
 
-That said, in real code, you very rarely need to do this type annotation since
+That said, in real code, we very rarely need to do this type annotation since
 Rust can infer the type of value we want to store once we insert values. Let's
 look at how to modify a vector next.
 
@@ -100,10 +100,10 @@ let does_not_exist = v.get(100);
 
 With the `[]`s, Rust will cause a `panic!`. With the `get` method, it will
 instead return `None` without `panic!`ing. Deciding which way to access
-elements in a vector depends on whether you consider an attempted access past
-the end of the vector to be an error, in which case you would want the `panic!`
+elements in a vector depends on whether we consider an attempted access past
+the end of the vector to be an error, in which case we'd want the `panic!`
 behavior, or whether this will happen occasionally under normal circumstances
-and your code will have logic to handle getting `Some(&element)` or `None`.
+and our code will have logic to handle getting `Some(&element)` or `None`.
 
 Once we have a valid reference, the borrow checker will enforce the ownership
 and borrowing rules we covered in Chapter 4 in order to ensure this and other
