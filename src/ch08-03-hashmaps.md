@@ -74,7 +74,7 @@ they have been moved into the HashMap with the call to `insert`.
 If we insert references to values, the values themselves will not be moved into
 the HashMap. The values that the references point to must be valid for at least
 as long as the HashMap is valid, though. We will talk more about these issues
-in the Lifetimes section of Chapter XX.
+in the Lifetimes section of Chapter 10.
 
 ### Accessing Values in a HashMap
 
@@ -223,7 +223,7 @@ with the drop in performance is a good default tradeoff to make. If you profile
 your code and find that the default hash function is too slow for your
 purposes, you can switch to another function by specifying a different
 *hasher*. A hasher is an object that implements the `BuildHasher` trait. We'll
-be talking about traits and how to implement them in Chapter XX.
+be talking about traits and how to implement them in Chapter 10.
 
 ## Summary
 
