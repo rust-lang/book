@@ -107,9 +107,31 @@ and your code will have logic to handle getting `Some(&element)` or `None`.
 
 Once we have a valid reference, the borrow checker will enforce the ownership
 and borrowing rules we covered in Chapter 4 in order to ensure this and other
-references to the contents of the vector stay valid. For example, here's code
-that looks like it should be allowed, but it won't compile because the
-references actually aren't valid anymore:
+references to the contents of the vector stay valid. This means in a function
+that owns a `Vec`, we can't return a reference to an element since the `Vec`
+will be cleaned up at the end of the function:
+
+```rust,ignore
+fn element() -> String {
+    let list = vec![String::from("hi"), String::from("bye")];
+    list[1]
+}
+```
+
+Trying to compile this will result in the following error:
+
+```bash
+error: cannot move out of indexed content [--explain E0507]
+  |>
+4 |>     list[1]
+  |>     ^^^^^^^ cannot move out of indexed content
+```
+
+Since `list` goes out of scope and gets cleaned up at the end of the function,
+the reference `list[1]` cannot be returned because it would outlive `list`.
+
+Here's another example of code that looks like it should be allowed, but it
+won't compile because the references actually aren't valid anymore:
 
 ```rust,ignore
 let mut v = vec![1, 2, 3, 4, 5];
