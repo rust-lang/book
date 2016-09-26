@@ -250,7 +250,7 @@ should `answer` be `208`? `208` is not a valid character on its own, though.
 Plus, for latin letters, this would not return the answer most people would
 expect: `&"hello"[0]` would then return `104`, not `h`.
 
-### Bytes, and Scalar Values, and Grapheme Clusters! Oh my!
+### Bytes and Scalar Values and Grapheme Clusters! Oh my!
 
 This leads to another point about UTF-8: there are really three relevant ways
 to look at strings, from Rust's perspective: bytes, scalar values, and grapheme
@@ -280,14 +280,20 @@ Four elements! It turns out that even within 'grapheme cluster', there are
 multiple ways of grouping things. Have we convinced you strings are actually
 really complicated yet?
 
+Another reason that indexing into a `String` to get a character is not available
+is that indexing operations are expected to always be fast. This isn't possible
+with a `String`, since Rust would have to walk through the contents from the
+beginning to the index to determine how many valid characters there were, no
+matter how we define "character".
+
 All of these problems mean that Rust does not implement `[]` for `String`, so
 we cannot directly do this.
 
 ## Slicing Strings
 
-However, indexing the bytes of a string is very useful. While you can't use
-`[]` with a single number, you _can_ use `[]` with a range to create a string
-slice from particular bytes:
+However, indexing the bytes of a string is very useful, and is not expected to
+be fast. While you can't use `[]` with a single number, you _can_ use `[]` with
+a range to create a string slice from particular bytes:
 
 ```rust
 let hello = "Здравствуйте";
@@ -299,9 +305,8 @@ Here, `s` will be a `&str` that contains the first four bytes of the string.
 Earlier, we mentioned that each of these characters was two bytes, so that means
 that `s` will be "Зд".
 
-What would happen if we did `&hello[0..1]`? We said each of these characters
-required two bytes. The answer: it will panic at runtime, in the same way that
-accessing an invalid index in a vector does:
+What would happen if we did `&hello[0..1]`? The answer: it will panic at
+runtime, in the same way that accessing an invalid index in a vector does:
 
 ```bash
 thread 'main' panicked at 'index 0 and/or 1 in `Здравствуйте` do not lie on
@@ -310,6 +315,54 @@ character boundary', ../src/libcore/str/mod.rs:1694
 
 ## Methods for Iterating Over Strings
 
-TODO: Add examples of using  `bytes`, `chars`, since those are recommended?
+If we do need to perform operations on individual characters, the best way to do that is using the `chars` method. Calling `chars` on "नमस्ते" gives us the six Rust `char` values:
 
-TODO: summary that ties this to the next chapter
+```rust
+for c in "नमस्ते".chars() {
+    println!("{}", c);
+}
+```
+
+This code will print:
+
+```bash
+न
+म
+स
+्
+त
+े
+```
+
+The `bytes` method returns each raw byte, which might be appropriate for your
+domain, but remember that valid UTF-8 characters may be made up of more than
+one byte:
+
+```rust
+for b in "नमस्ते".bytes() {
+    println!("{}", b);
+}
+```
+
+This code will print the 18 bytes that make up this `String`, starting with:
+
+```bash
+224
+164
+168
+224
+// ... etc
+```
+
+There are crates available to get grapheme clusters from `String`s.
+
+To summarize, strings are complicated. Different programming languages make
+different choices about how to present this complexity to the programmer. Rust
+has chosen to attempt to make correct handling of `String` data be the default
+for all Rust programs, which does mean programmers have to put more thought
+into handling UTF-8 data upfront. This tradeoff exposes us to more of the
+complexity of strings than we have to handle in other languages, but will
+prevent us from having to handle errors involving non-ASCII characters later in
+our development lifecycle.
+
+Let's switch to something a bit less complex: HashMap!
