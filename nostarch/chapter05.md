@@ -3,480 +3,503 @@
 
 # Structs
 
-A `struct`, short for "structure", gives us the ability to name and package
-together multiple related values that make up a meaningful group. If you come
-from an object-oriented language, a `struct` is like an object's data
-attributes. `struct` and `enum` (that we will talk about in the next chapter)
-are the building blocks you can use in Rust to create new types in your
+A `struct`, short for *structure*, is a custom data type that lets us name and
+package together multiple related values that make up a meaningful group. If
+you come from an object-oriented language, a `struct` is like an object's data
+attributes. In the next section of this chapter, we'll talk about how to define
+methods on our structs; methods are how you specify the *behavior* that goes
+along with a struct's data. The `struct` and `enum` (that we will talk about in
+Chapter 6) concepts are the building blocks for creating new types in your
 program's domain in order to take full advantage of Rust's compile-time type
 checking.
 
-Let’s write a program which calculates the distance between two points.
-We’ll start off with single variable bindings, and then refactor it to
-use `struct`s instead.
+One way of thinking about structs is that they are similar to tuples that we
+talked about in Chapter 3. Like tuples, the pieces of a struct can be different
+types. Unlike tuples, we name each piece of data so that it's clearer what the
+values mean. Structs are more flexible as a result of these names: we don't
+have to rely on the order of the data to specify or access the values of an
+instance.
 
-Let’s make a new project with Cargo:
+To define a struct, we enter the keyword `struct` and give the whole struct a
+name. A struct's name should describe what the significance is of these pieces
+of data being grouped together. Then, inside curly braces, we define the names
+of the pieces of data, which we call *fields*, and specify each field's type.
+For example, a struct to store information about a user account might look like:
 
-```bash
-$ cargo new --bin points
-$ cd points
+```rust
+struct User {
+    username: String,
+    email: String,
+    sign_in_count: u64,
+    active: bool,
+}
 ```
 
-Here’s a short program which calculates the distance between two points. Put
-it into your `src/main.rs`:
+To use a struct, we create an *instance* of that struct by specifying concrete
+values for each of the fields. Creating an instance is done by declaring a
+binding with `let`, stating the name of the struct, then curly braces with
+`key: value` pairs inside it where the keys are the names of the fields and the
+values are the data we want to store in those fields. The fields don't have to
+be specified in the same order in which the struct declared them. In other
+words, the struct definition is like a general template for the type, and
+instances fill in that template with particular data to create values of the
+type. For example, we can declare a particular user like this:
+
+```rust
+let user1 = User {
+    email: String::from("someone@example.com"),
+    username: String::from("someusername123"),
+    active: true,
+    sign_in_count: 1,
+};
+```
+
+To get a particular value out of a struct, we can use dot notation. If we
+wanted just this user's email address, we can say `user1.email`.
+
+## An Example Program
+
+To understand when we might want to use structs, let’s write a program that
+calculates the area of a rectangle. We’ll start off with single variable
+bindings, then refactor our program until we're using `struct`s instead.
+
+Let’s make a new binary project with Cargo called *rectangles* that will take
+the length and width of a rectangle specified in pixels and will calculate the
+area of the rectangle. Here’s a short program that has one way of doing just
+that to put into our project's `src/main.rs`:
 
 Filename: src/main.rs
 
 ```rust
 fn main() {
-    let x1 = 0.0;
-    let y1 = 5.0;
+    let length1 = 50;
+    let width1 = 30;
 
-    let x2 = 12.0;
-    let y2 = 0.0;
-
-    let answer = distance(x1, y1, x2, y2);
-
-    println!("Point 1: ({}, {})", x1, y1);
-    println!("Point 2: ({}, {})", x2, y2);
-    println!("Distance: {}", answer);
+    println!(
+        "The area of the rectangle is {} square pixels.",
+        area(length1, width1)
+    );
 }
 
-fn distance(x1: f64, y1: f64, x2: f64, y2: f64) -> f64 {
-    let x_squared = f64::powi(x2 - x1, 2);
-    let y_squared = f64::powi(y2 - y1, 2);
-
-    f64::sqrt(x_squared + y_squared)
+fn area(length: u32, width: u32) -> u32 {
+    length * width
 }
 ```
 
 Let's try running this program with `cargo run`:
 
 ```bash
-$ cargo run
-   Compiling points v0.1.0 (file:///projects/points)
-     Running `target/debug/points`
-Point 1: (0, 5)
-Point 2: (12, 0)
-Distance: 13
+The area of the rectangle is 1500 square pixels.
 ```
 
-Let's take a quick look at `distance()` before we move forward. To find the
-distance between two points, we can use the Pythagorean Theorem. The theorem is
-named after Pythagoras, who was the first person to mathematically prove this
-formula. The details aren't that important; just know the theorem says that the
-formula for the distance between two points is equal to:
+### Refactoring with Tuples
 
-- squaring the distance between the points horizontally (the "x" direction)
-- squaring the distance between the points vertically (the "y" direction)
-- adding those together
-- and taking the square root of that.
+Our little program works okay; it figures out the area of the rectangle by
+calling the `area` function with each dimension. But we can do better. The
+length and the width are related to each other since together they describe one
+rectangle.
 
-So that's what we're implementing here.
+The issue with this method is evident in the signature of `area`:
 
 ```rust,ignore
-f64::powi(2.0, 3)
+fn area(length: u32, width: u32) -> u32 {
 ```
 
-The double colon (`::`) here is a namespace operator. We haven’t talked about
-modules and namespaces in depth yet, but you can think of the `powi()` function
-as being scoped inside of another name. In this case, the name is `f64`, the
-same as the type. The `powi()` function takes two arguments: the first is a
-number, and the second is the power that it raises that number to. In this
-case, the second number is an integer, hence the `i` in its name. Similarly,
-`sqrt()` is a function under the `f64` module, which takes the square root of
-its argument.
+The area function is supposed to calculate the area of one rectangle, but our
+function takes two arguments. The arguments are related, but that's not
+expressed anywhere in our program itself. It would be more readable and more
+manageable to group length and width together.
 
-## Why `struct`s?
-
-Our little program is okay, but we can do better. The key to seeing this is in
-the signature of `distance()`:
-
-```rust,ignore
-fn distance(x1: f64, y1: f64, x2: f64, y2: f64) -> f64 {
-```
-
-The distance function is supposed to calculate the distance between two points.
-But our distance function calculates some distance between four numbers. The
-first two and last two arguments are related, but that’s not expressed anywhere
-in our program itself. It would be nicer if we had a way to group `(x1, y1)`
-and `(x2, y2)` together.
-
-We’ve already discussed one way to do that: tuples. Here’s a version of our
-program which uses tuples:
+We’ve already discussed one way we might do that in Chapter 3: tuples. Here’s a
+version of our program which uses tuples:
 
 Filename: src/main.rs
 
 ```rust
 fn main() {
-    let p1 = (0.0, 5.0);
+    let rect1 = (50, 30);
 
-    let p2 = (12.0, 0.0);
-
-    let answer = distance(p1, p2);
-
-    println!("Point 1: {:?}", p1);
-    println!("Point 2: {:?}", p2);
-    println!("Distance: {}", answer);
+    println!(
+        "The area of the rectangle is {} square pixels.",
+        area(rect1)
+    );
 }
 
-fn distance(p1: (f64, f64), p2: (f64, f64)) -> f64 {
-    let x_squared = f64::powi(p2.0 - p1.0, 2);
-    let y_squared = f64::powi(p2.1 - p1.1, 2);
-
-    f64::sqrt(x_squared + y_squared)
+fn area(dimensions: (u32, u32)) -> u32 {
+    dimensions.0 * dimensions.1
 }
 ```
 
-This is a little better, for sure. Tuples let us add a little bit of structure.
-We’re now passing two arguments, so that’s more clear. But it’s also worse:
+<!-- I will add ghosting & wingdings once we're in libreoffice /Carol -->
+
+In one way, this is a little better. Tuples let us add a bit of structure, and
+we’re now passing just one argument. But in another way this method less clear:
 tuples don’t give names to their elements, so our calculation has gotten more
-confusing:
+confusing because we have to index into the parts of the tuple:
+
+<!-- I will change this to use wingdings instead of repeating this code once
+we're in libreoffice /Carol -->
 
 ```rust,ignore
-p2.0 - p1.0
-p2.1 - p1.1
+dimensions.0 * dimensions.1
 ```
 
-When writing this example, your authors almost got it wrong themselves! Distance
-is all about `x` and `y` points, but our code is talking about `0` and `1`.
-This isn’t great.
+It doesn't matter if we mix up length and width for the area calculation, but
+if we were to draw the rectangle on the screen it would matter! We would have
+to remember that `length` was the tuple index `0` and `width` was the tuple
+index `1`. If someone else was to work on this code, they would have to figure
+this out and remember it as well. It would be easy to forget or mix these
+values up and cause errors, since we haven't conveyed the meaning of our data
+in our code.
 
-Enter `struct`s. We can transform our tuples into something with a name for the
-whole as well as names for the parts:
+### Refactoring with Structs: Adding More Meaning
 
-```rust,ignore
-let p1 = (0.0, 5.0);
-
-struct Point {
-    x: f64,
-    y: f64,
-}
-
-let p1 = Point { x: 0.0, y: 5.0 };
-```
-
-Here we've defined a `struct` and given it the name `Point`. The parts inside
-`{}` are defining the _fields_ of the struct. We can have as many or as few of
-them as we'd like, and we give them a name and specify their type. Here we have
-two fields named `x` and `y`, and they both hold `f64`s.
-
-We can access the field of a struct in the same way we access an element of
-a tuple, except we use its name:
-
-```rust,ignore
-let p1 = (0.0, 5.0);
-let x = p1.0;
-
-struct Point {
-    x: f64,
-    y: f64,
-}
-
-let p1 = Point { x: 0.0, y: 5.0 };
-let x = p1.x;
-```
-
-Let’s convert our program to use our `Point` `struct`. Here’s what it looks
-like now:
+Here is where we bring in `struct`s. We can transform our tuple into a data
+type with a name for the whole as well as names for the parts:
 
 Filename: src/main.rs
 
 ```rust
-#[derive(Debug,Copy,Clone)]
-struct Point {
-    x: f64,
-    y: f64,
+struct Rectangle {
+    length: u32,
+    width: u32,
 }
 
 fn main() {
-    let p1 = Point { x: 0.0, y: 5.0};
+    let rect1 = Rectangle { length: 50, width: 30 };
 
-    let p2 = Point { x: 12.0, y: 0.0};
-
-    let answer = distance(p1, p2);
-
-    println!("Point 1: {:?}", p1);
-    println!("Point 2: {:?}", p2);
-    println!("Distance: {}", answer);
+    println!(
+        "The area of the rectangle is {} square pixels.",
+        area(&rect1)
+    );
 }
 
-fn distance(p1: Point, p2: Point) -> f64 {
-    let x_squared = f64::powi(p2.x - p1.x, 2);
-    let y_squared = f64::powi(p2.y - p1.y, 2);
-
-    f64::sqrt(x_squared + y_squared)
+fn area(rectangle: &Rectangle) -> u32 {
+    rectangle.length * rectangle.width
 }
 ```
 
-Our function signature for `distance()` now says exactly what we mean: it
-calculates the distance between two `Point`s. And rather than `0` and `1`,
-we’ve got back our `x` and `y`. This is a win for clarity.
+<!-- Will add ghosting & wingdings once we're in libreoffice /Carol -->
 
-## Derived Traits
+Here we've defined a `struct` and given it the name `Rectangle`. Inside the
+`{}` we defined the fields to be `length` and `width`, both of which have type
+`u32`. Then in `main`, we create a particular instance of a `Rectangle` that
+has a length of 50 and a width of 30.
 
-There’s one other thing that’s a bit strange here, this stuff above the
-`struct` declaration:
+Our `area` function now takes one argument that we've named `rectangle` whose
+type is an immutable borrow of a struct `Rectangle` instance. As we covered in
+Chapter 4, we want to borrow the struct rather than take ownership of it so
+that `main` keeps its ownership and can continue using `rect1`, so that's why
+we have the `&` in the function signature and at the call site.
 
-```rust,ignore
-#[derive(Debug,Copy,Clone)]
-struct Point {
-```
+The `area` function accesses the `length` and `width` fields of the `Rectangle`
+instance it got as an argument. Our function signature for `area` now says
+exactly what we mean: calculate the area of a `Rectangle`, using its `length`
+and `width` fields. This conveys that the length and width are related to each
+other, and gives descriptive names to the values rather than using the tuple
+index values of `0` and `1`. This is a win for clarity.
 
-This is an annotation that tells the compiler our struct should get some
-default behavior for the `Debug`, `Copy`, and `Clone` traits. We talked about
-marking that types can be `Copy` and `Clone`-able in Chapter XX when we
-discussed ownership. `Debug` is the trait that enables us to print out our
-struct so that we can see its value while we are debugging our code.
+### Adding Useful Functionality with Derived Traits
 
-So far, we’ve been printing values using `{}` in a `println!` macro. If we try
-that with a struct, however, by default, we'll get an error. Say we have the
-following program:
+It'd be nice to be able to print out an instance of our `Rectangle` while we're
+debugging our program and see the values for all its fields. Let's try using
+the `println!` macro as we have been and see what happens:
 
 Filename: src/main.rs
 
 ```rust,ignore
-struct Point {
-    x: f64,
-    y: f64,
+struct Rectangle {
+    length: u32,
+    width: u32,
 }
 
 fn main() {
-    let p1 = Point { x: 0.0, y: 5.0};
-    println!("Point 1: {}", p1);
+    let rect1 = Rectangle { length: 50, width: 30 };
+
+    println!("rect1 is {}", rect1);
 }
 ```
 
-This code tries to print the `p1` point directly, which may seem innocuous. But
-running it produces the following output:
+If we run this, we get an error with this core message:
 
 ```bash
-$ cargo run
-   Compiling points v0.1.0 (file:///projects/points)
-error: the trait bound `Point: std::fmt::Display` is not satisfied [--explain E0277]
- --> src/main.rs:8:29
-8 |>     println!("Point 1: {}", p1);
-  |>                             ^^
-<std macros>:2:27: 2:58: note: in this expansion of format_args!
-<std macros>:3:1: 3:54: note: in this expansion of print! (defined in <std macros>)
-src/main.rs:8:5: 8:33: note: in this expansion of println! (defined in <std macros>)
-note: `Point` cannot be formatted with the default formatter; try using `:?` instead if you are using a format string
-note: required by `std::fmt::Display::fmt`
+error: the trait bound `Rectangle: std::fmt::Display` is not satisfied
 ```
 
-Whew! The core of the error is this part: *the trait bound `Point:
-std::fmt::Display` is not satisfied*. `println!` can do many kinds of
-formatting. By default, `{}` implements a kind of formatting known as
-`Display`: output intended for direct end-user consumption. The primitive types
-we’ve seen implement `Display`, as there’s only one way you’d show a `1` to a
-user. But with structs, the output is less clear. Do you want commas or not?
-What about the `{}`s? Should all the fields be shown?
+The `println!` macro can do many kinds of formatting, and by default, `{}`
+tells `println!` to use formatting known as `Display`: output intended for
+direct end-user consumption. The primitive types we’ve seen so far implement
+`Display` by default, as there’s only one way you’d want to show a `1` or any
+other primitive type to a user. But with structs, the way `println!` should
+format the output is less clear as there are more display possibilities: Do you
+want commas or not? Do you want to print the struct `{}`s? Should all the
+fields be shown? Because of this ambiguity, Rust doesn't try to guess what we
+want and structs do not have a provided implementation of `Display`.
 
-More complex types in the standard library and that are defined by the
-programmer do not automatically implement `Display` formatting. Standard
-library types implement `Debug` formatting, which is intended for the
-programmer to see. The `#[derive(Debug)]` annotation lets us use a default
-implementation of `Debug` formatting to easily get this ability for types we've
-defined. To ask `println!` to use `Debug` formatting with our `Point`, we add
-the annotation to derive the trait and include `:?` in the print string, like
-this:
+If we keep reading the errors, though, we'll find this helpful note:
 
-Filename: src/main.rs
+```bash
+note: `Rectangle` cannot be formatted with the default formatter; try using
+`:?` instead if you are using a format string
+```
+
+Let's try it! The `println!` will now look like
+`println!("rect1 is {:?}", rect1);`. Putting the specifier `:?` inside
+the `{}` tells `println!` we want to use an output format called `Debug`.
+`Debug` is a trait that enables us to print out our struct in a way that is
+useful for developers so that we can see its value while we are debugging our
+code.
+
+Let's try running with this change and... drat. We still get an error:
+
+```bash
+error: the trait bound `Rectangle: std::fmt::Debug` is not satisfied
+```
+
+Again, though, the compliler has given us a helpful note!
+
+```bash
+note: `Rectangle` cannot be formatted using `:?`; if it is defined in your
+crate, add `#[derive(Debug)]` or manually implement it
+```
+
+Rust *does* include functionality to print out debugging information, but we
+have to explicitly opt-in to having that functionality be available for our
+struct. To do that, we add the annotation `#[derive(Debug)]` just before our
+struct definition. Now our program looks like this:
 
 ```rust
 #[derive(Debug)]
-struct Point {
-    x: f64,
-    y: f64,
+struct Rectangle {
+    length: u32,
+    width: u32,
 }
 
 fn main() {
-    let p1 = Point { x: 0.0, y: 5.0};
-    println!("Point 1: {:?}", p1);
+    let rect1 = Rectangle { length: 50, width: 30 };
+
+    println!("rect1 is {:?}", rect1);
 }
 ```
 
-If you run this, it should print the values of each field in the `Point` struct
-as desired:
+At this point, if we run this program, we won't get any errors and we'll see the
+following output:
 
 ```bash
-$ cargo run
-   Compiling points v0.1.0 (file:///projects/points)
-     Running `target/debug/points`
-Point 1: Point { x: 0, y: 5 }
+rect1 is Rectangle { length: 50, width: 30 }
 ```
 
-You’ll see this repeated later with other types. We’ll cover traits fully in
-Chapter XX.
+Nice! It's not the prettiest output, but it shows the values of all the fields
+for this instance, which would definitely help during debugging.
+
+There are a number of traits Rust has provided for us to use with the `derive`
+annotation that can add useful behavior to our custom types. Those traits and
+their behaviors are listed in Appendix XX. We'll be covering how to implement
+these traits with custom behavior, as well as creating your own traits, in
+Chapter 10.
+
+Our `area` function is pretty specific-- it only computes the area of
+rectangles. It would be nice to tie this behavior together more closely with our
+`Rectangle` struct, since it's behavior that our `Rectangle` type has
+specifically. Let's now look at how we can continue to refactor this code by
+turning the `area` function into an `area` *method* defined on our `Rectangle`
+type.
 
 ## Method Syntax
 
-In Chapter 4 when we discussed ownership, we made several references to
-*methods*. Methods look like this:
+*Methods* are similar to functions: they're declared with the `fn` keyword and
+their name, they can take arguments and return values, and they contain some
+code that gets run when they're called from somewhere else. Methods are
+different from functions, however, because they're defined within the context
+of a struct (or an enum or a trait object, which we will cover in Chapters 6
+and XX respectively), and their first argument is always `self`, which
+represents the instance of the struct that the method is being called on.
+
+### Defining Methods
+
+Let's change our `area` function that takes a `Rectangle` instance as an
+argument and instead make an `area` method defined on the `Rectangle` struct:
 
 ```rust
-let s1 = "hello";
-
-// call a method on s1
-let s2 = s1.clone();
-
-println!("{}", s1);
-```
-
-The call to `clone()` is attached to `s1` with a dot. This is called *method
-syntax*, and it’s a way to call certain functions with a different style.
-
-Why have two ways to call functions? We’ll talk about some deeper reasons
-related to ownership in a moment, but one big reason is that methods look nicer
-when chained together:
-
-```rust,ignore
-// with functions
-h(g(f(x)));
-
-// with methods
-x.f().g().h();
-```
-
-The nested-functions version reads in reverse: the program executes `f()`, then
-`g()`, then `h()`, but we read it left-to-right as `h()`, then `g()`, then
-`f()`. The method syntax is executed in the same order as we would read it.
-
-Before we get into the details, let’s talk about how to define your own
-methods.
-
-### Defining methods
-
-We can define methods with the `impl` keyword. `impl` is short for
-*implementation*. Doing so looks like this:
-
-```rust
-#[derive(Debug,Copy,Clone)]
-struct Point {
-    x: f64,
-    y: f64,
+#[derive(Debug)]
+struct Rectangle {
+    length: u32,
+    width: u32,
 }
 
-impl Point {
-    fn distance(&self, other: &Point) -> f64 {
-        let x_squared = f64::powi(other.x - self.x, 2);
-        let y_squared = f64::powi(other.y - self.y, 2);
-
-        f64::sqrt(x_squared + y_squared)
+impl Rectangle {
+    fn area(&self) -> u32 {
+        self.length * self.width
     }
 }
 
-let p1 = Point { x: 0.0, y: 0.0 };
-let p2 = Point { x: 5.0, y: 6.5 };
+fn main() {
+    let rect1 = Rectangle { length: 50, width: 30 };
 
-assert_eq!(8.200609733428363, p1.distance(&p2));
-```
-
-Let’s break this down. First, we have our `Point` struct from earlier in the
-chapter. Next comes our first use of the `impl` keyword:
-
-```rust,ignore
-impl Point {
-    // ...
+    println!(
+        "The area of the rectangle is {} square pixels.",
+        rect1.area()
+    );
 }
 ```
 
-Everything we put inside of the curly braces will be methods implemented on
-`Point`. Next is our definition:
+<!-- Will add ghosting and wingdings here in libreoffice /Carol -->
 
-```rust,ignore
-fn distance(&self, other: &Point) -> f64 {
-    // ...
-}
-```
+In order to make the function be defined within the context of `Rectangle`, we
+start an `impl` block (`impl` is short for *implementation*). Then we move the
+function within the `impl` curly braces, and change the first (and in this
+case, only) argument to be `self` in the signature and everywhere within the
+body. Then in `main` where we called the `area` function and passed `rect1` as
+an argument, we can instead use *method syntax* to call the `area` method on
+our `Rectangle` instance.
 
-Other than this, the rest of the example is familiar: an implementation of
-`distance()` and using the method to find an answer.
+In the signature for `area`, we get to use `&self` instead of `rectangle:
+&Rectangle` because Rust knows the type of `self` is `Rectangle` due to this
+method being inside the `impl Rectangle` context. Note we still need to have
+the `&` before `self`, just like we had `&Rectangle`. Methods can choose to
+take ownership of `self`, borrow `self` immutably as we've done here, or borrow
+`self` mutably, just like any other argument.
 
-Our definition of `distance()` here as a method looks very similar to our
-previous definition of `distance()` as a function, but with two differences.
-Here's the `distance()` function again:
+We've chosen `&self` here for the same reason we used `&Rectangle` in the
+function version: we don't want to take ownership, and we just want to be able
+to read the data in the struct, not write to it. If we wanted to be able to
+change the instance that we've called the method on as part of what the method
+does, we'd put `&mut self` as the first argument instead. Having a method that
+takes ownership of the instance by having just `self` as the first argument is
+rarer; this is usually used when the method transforms `self` into something
+else and we want to prevent the caller from using the original instance after
+the transformation.
 
-```rust,ignore
-fn distance(p1: Point, p2: Point) -> f64 {
-    // ...
-}
-```
+The main benefit of using methods over functions, in addition to getting to use
+method syntax and not having to repeat the type of `self` in every method's
+signature, is for organization. We've put all the things we can do with an
+instance of a type together in one `impl` block, rather than make future users
+of our code search for capabilities of `Rectangle` all over the place.
 
-The first difference is in the first argument. Instead of a name and a type, we
-have written `&self`. This is what distinguishes a method from a function:
-using `self` inside of an `impl` block means we have a method. Because we
-already know that we are implementing this method on `Point` because of the
-surrounding `impl Point` block, we don’t need to write the type of `self` out.
+PROD: START BOX
 
-Note that we have written `&self`, not just `self`. This is because we want to
-take a reference to our argument's value rather than taking ownership of it. In
-other words, these two forms are the same:
+#### Where's the `->` operator?
 
-```rust,ignore
-fn foo(self: &Point)
-fn foo(&self)
-```
+In languages like C++, there are two different operators for calling methods:
+`.` if you're calling a method on the object directly, and `->` if you're
+calling the method on a pointer to the object and thus need to dereference the
+pointer first. In other words, if `object` is a pointer, `object->something()`
+is like `(*object).something()`.
 
-Just like any other parameter, you can take `self` in three forms. Here’s the
-list, with the most common form first:
+Rust doesn't have an equivalent to the `->` operator; instead, Rust has a
+feature called *automatic referencing and dereferencing*. Calling methods is
+one of the few places in Rust that has behavior like this.
 
-```rust,ignore
-fn foo(&self) // take self by reference
-fn foo(&mut self) // take self by mutable reference
-fn foo(self) // take self by ownership
-```
-
-In this case, we only need a reference. We don’t need to mutate either `Point`
-to get the distance between them, so we won't take a mutable reference to the
-`Point` that we call the method on. Methods that take ownership of `self` are
-rarely used. An example of a time to do that would be if we wanted to have a
-method that would transform `self` into something else and prevent other code
-from using the value of `self` after the transformation happens.
-
-#### Methods and automatic referencing
-
-We’ve left out an important detail. It’s in this line of the example:
-
-```rust,ignore
-assert_eq!(8.200609733428363, p1.distance(&p2));
-```
-
-When we defined `distance()`, we took both `self` and the other argument by
-reference. Yet, we needed a `&` for `p2` but not `p1`. What gives?
-
-This feature is called *automatic referencing*, and calling methods is one
-of the few places in Rust that has behavior like this. Here’s how it works:
-when you call a method with `self.(`, Rust will automatically add in `&`s
-or `&mut`s to match the signature. In other words, these are the same:
+Here’s how it works: when you call a method with `object.something()`, Rust
+will automatically add in `&`, `&mut`, or `*` so that `object` matches the
+signature of the method. In other words, these are the same:
 
 ```rust
 p1.distance(&p2);
 (&p1).distance(&p2);
 ```
 
-The first one looks much, much cleaner. Here’s another example:
+The first one looks much, much cleaner. This automatic referencing behavior
+works because methods have a clear receiver — the type of `self`. Given the
+receiver and name of a method, Rust can figure out definitively whether the
+method is just reading (so needs `&self`), mutating (so `&mut self`), or
+consuming (so `self`). The fact that Rust makes borrowing implicit for method
+receivers is a big part of making ownership ergonomic in practice.
 
-```rust
-let mut s = String::from("Hello,");
+PROD: END BOX
 
-s.push_str(" world!");
+### Methods with More Arguments
 
-// The above is the same as:
-// (&mut s).push_str(" world!");
-
-assert_eq!("Hello, world!", s);
-```
-
-Because `push_str()` has the following signature:
+Let's practice some more with methods by implementing a second method on our
+`Rectangle` struct. This time, we'd like for an instance of `Rectangle` to take
+another instance of `Rectangle` and return `true` if the second rectangle could
+fit completely within `self` and `false` if it would not. That is, if we run
+this code:
 
 ```rust,ignore
-fn push_str(&mut self, string: &str) {
+fn main() {
+    let rect1 = Rectangle { length: 50, width: 30 };
+    let rect2 = Rectangle { length: 40, width: 10 };
+    let rect3 = Rectangle { length: 45, width: 60 };
+
+    println!("Can rect1 hold rect2? {}", rect1.can_hold(&rect2));
+    println!("Can rect1 hold rect3? {}", rect1.can_hold(&rect3));
+}
 ```
 
-This automatic referencing behavior works because methods have a clear receiver
-— the type of `self` — and in most cases it’s clear given the receiver and name
-of a method whether the method is just reading (so needs `&self`), mutating (so
-`&mut self`), or consuming (so `self`). The fact that Rust makes borrowing
-implicit for method receivers is a big part of making ownership ergonomic in
-practice.
+We want to see this output, since both of `rect2`'s dimensions are smaller than
+`rect1`'s, but `rect3` is wider than `rect1`:
+
+```bash
+Can rect1 hold rect2? true
+Can rect1 hold rect3? false
+```
+
+We know we want to define a method, so it will be within the `impl Rectangle`
+block. The method name will be `can_hold`, and it will take an immutable borrow
+of another `Rectangle` as an argument. We can tell what the type of the
+argument will be by looking at a call site: `rect1.can_hold(&rect2)` passes in
+`&rect2`, which is an immutable borrow to `rect2`, an instance of `Rectangle`.
+This makes sense, since we only need to read `rect2` (rather than write, which
+would mean we'd need a mutable borrow) and we want `main` to keep ownership of
+`rect2` so that we could use it again after calling this method. The return
+value of `can_hold` will be a boolean, and the implementation will check to see
+if `self`'s length and width are both greater than the length and width of the
+other `Rectagle`, respectively. Let's write that code!
+
+```
+impl Rectangle {
+    fn area(&self) -> u32 {
+        self.length * self.width
+    }
+
+    fn can_hold(&self, other: &Rectangle) -> bool {
+        self.length > other.length && self.width > other.width
+    }
+}
+```
+
+<!-- Will add ghosting here in libreoffice /Carol -->
+
+If we run this with the `main` from earlier, we will get our desired output!
+Methods can take multiple arguments that we add to the signature after the
+`self` parameter, and those arguments work just like arguments in functions do.
+
+### Associated Functions
+
+One more useful feature of `impl` blocks: we're allowed to define functions
+within `impl` blocks that *don't* take `self` as a parameter. These are called
+*associated functions*, since they're associated with the struct. They're still
+functions though, not methods, since they don't have an instance of the struct
+to work with. You've already used an associated function: `String::from`.
+
+Associated functions are often used for constructors that will return a new
+instance of the struct. For example, we could provide an associated function
+that would take one dimension argument and use that as both length and width,
+thus making it easier to create a square `Rectangle` rather than having to
+specify the same value twice:
+
+```rust
+impl Rectangle {
+    fn square(size: u32) -> Rectangle {
+        Rectangle { length: size, width: size }
+    }
+}
+```
+
+To call this associated function, we use the `::` syntax with the struct name:
+`let sq = Rectange::square(3);`, for example. It's kind of this function is
+namespaced by the struct: the `::` syntax is used for both associated functions
+and namespaces created by modules, which we'll learn about in Chapter 7.
+
+## Summary
+
+Structs let us create custom types that are meaningful for our domain. By using
+structs, we can keep associated pieces of data connected to each other and name
+each piece to make our code clear. Methods let us specify the behavior that
+instances of our structs have, and associated functions let us namespace
+functionality that is particular to our struct without having an instance
+available.
+
+Structs aren't the only way we can create custom types, though; let's turn to
+the `enum` feature of Rust and add another tool to our toolbox.
