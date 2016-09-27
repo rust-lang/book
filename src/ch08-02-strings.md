@@ -356,7 +356,7 @@ This code will print the 18 bytes that make up this `String`, starting with:
 // ... etc
 ```
 
-There are crates available to get grapheme clusters from `String`s.
+There are crates available on crates.io to get grapheme clusters from `String`s.
 
 To summarize, strings are complicated. Different programming languages make
 different choices about how to present this complexity to the programmer. Rust
