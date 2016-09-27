@@ -13,7 +13,7 @@ can seem difficult coming from other languages.
 
 Before we can dig into those aspects, we need to talk about what exactly we
 even mean by the word 'string'. Rust actually only has one string type in the
-core language itself: `&str`. We talked about these string slices in Chapter 4:
+core language itself: `&str`. We talked about *string slices* in Chapter 4:
 they're a reference to some UTF-8 encoded string data stored somewhere else.
 String literals, for example, are stored in the binary output of the program,
 and are therefore string slices.
