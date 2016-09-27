@@ -203,6 +203,11 @@ performed on the vector. Using an enum plus a `match` where we access elements
 in a vector like this means that Rust will ensure at compile time that we
 always handle every possible case.
 
+Using an enum for storing different types in a vector does imply that we need
+to know the set of types we'll want to store at compile time. If that's not the
+case, instead of an enum, we can use a trait object. We'll learn about those in
+Chapter XX.
+
 Now that we've gone over some of the most common ways to use vectors, be sure
 to take a look at the API documentation for other useful methods defined on
 `Vec` by the standard library. For example, in addition to `push` there's a
