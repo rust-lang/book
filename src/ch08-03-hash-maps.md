@@ -121,6 +121,13 @@ This will print:
 
 ### Updating a Hash Map
 
+Since each key can only have one value, when we want to change the data in a
+hash map, we have to decide how to handle the case when a key already has a
+value assigned. We could choose to replace the old value with the new value. We
+could choose to keep the old value and ignore the new value, and only add the
+new value if the key *doesn't* already have a value. Or we could change the
+existing value. Let's look at how to do each of these!
+
 #### Overwriting a Value
 
 If we insert a key and a value, then insert that key with a different value, the value associated with that key will be replaced. Even though this code calls `insert` twice, the hash map will only contain one key/value pair, since we're inserting with the key `1` both times:
