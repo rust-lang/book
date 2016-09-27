@@ -73,16 +73,19 @@ of our code search for capabilities of `Rectangle` all over the place.
 
 #### Where's the `->` operator?
 
-In C++, there are two different operators for calling methods: `.` if you're
-calling a method on the object directly, and `->` if you're calling the method
-on a pointer to the object and thus need to dereference the pointer first. Rust
-doesn't have an equivalent to the `->` operator; instead, Rust has a feature
-called *automatic referencing*. Calling methods is one of the few places in
-Rust that has behavior like this.
+In languages like C++, there are two different operators for calling methods:
+`.` if you're calling a method on the object directly, and `->` if you're
+calling the method on a pointer to the object and thus need to dereference the
+pointer first. In other words, if `object` is a pointer, `object->something()`
+is like `(*object).something()`.
 
-Here’s how it works: when you call a method with `object.something(`, Rust will
-automatically add in `&`s or `&mut`s so that `object` matches the signature of
-the method. In other words, these are the same:
+Rust doesn't have an equivalent to the `->` operator; instead, Rust has a
+feature called *automatic referencing and dereferencing*. Calling methods is
+one of the few places in Rust that has behavior like this.
+
+Here’s how it works: when you call a method with `object.something()`, Rust
+will automatically add in `&`, `&mut`, or `*` so that `object` matches the
+signature of the method. In other words, these are the same:
 
 ```rust
 # #[derive(Debug,Copy,Clone)]
