@@ -405,26 +405,24 @@ After updating the registry, Cargo checks our `[dependencies]` and downloads
 any we don’t have yet. In this case, while we only listed `rand` as a
 dependency, we’ve also grabbed a copy of `libc`, because `rand` depends on
 `libc` to work. After downloading them, Rust compiles them and then compiles
-our project.
+our project with our dependencies available.
 
-If we run `cargo build` again, we’ll get different output:
-
-```bash
-$ cargo build
-```
-
-That’s right, no output! Cargo knows that our project has been built, that
-all of its dependencies are built, and that no changes have been made. There’s
-no reason to do all that stuff again. With nothing to do, it simply
-exits. If we open up `src/main.rs`, make a trivial change, then save it again,
-we’ll only see one line:
+If we immediately run `cargo build` again without making any changes, we won't
+get any output. Cargo knows it has already downloaded and compiled our
+dependencies, and we haven't changed anything about them in our `Cargo.toml`
+file. Cargo also knows that we haven't changed anything about our code, so it
+doesn't recompile that either. With nothing to do, it simply exits. If we open
+up `src/main.rs`, make a trivial change, then save it again, we’ll only see one
+line:
 
 ```bash
 $ cargo build
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
 ```
 
-This just updates the build with your tiny change to the `main.rs` file.
+This just updates the build with your tiny change to the `main.rs` file. Our
+dependencies haven't changed, so Cargo knows it can reuse what it has already
+downloaded and compiled for those. It just rebuilds our part of the code.
 
 #### The Cargo.lock File that Ensures Reproducible Builds
 
