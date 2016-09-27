@@ -1,0 +1,279 @@
+<!DOCTYPE HTML>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>The Rust Programming Language</title>
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <base href="">
+
+        <link rel="stylesheet" href="book.css">
+        <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+        <link rel="shortcut icon" href="favicon.png">
+
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+
+        <!-- MathJax -->
+        <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+        <!-- Fetch JQuery from CDN but have a local fallback -->
+        <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+        <script>
+            if (typeof jQuery == 'undefined') {
+                document.write(unescape("%3Cscript src='jquery.js'%3E%3C/script%3E"));
+            }
+        </script>
+    </head>
+    <body class="light">
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme = localStorage.getItem('theme');
+            if (theme == null) { theme = 'light'; }
+            $('body').removeClass().addClass(theme);
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var sidebar = localStorage.getItem('sidebar');
+            if (sidebar === "hidden") { $("html").addClass("sidebar-hidden") }
+            else if (sidebar === "visible") { $("html").addClass("sidebar-visible") }
+        </script>
+
+        <div id="sidebar" class="sidebar">
+            <ul class="chapter"><li><a href="ch01-00-introduction.html"><strong>1.</strong> Introduction</a></li><li><ul class="section"><li><a href="ch01-01-installation.html"><strong>1.1.</strong> Installation</a></li><li><a href="ch01-02-hello-world.html"><strong>1.2.</strong> Hello, World!</a></li></ul></li><li><a href="ch02-00-guessing-game-tutorial.html"><strong>2.</strong> Guessing Game Tutorial</a></li><li><a href="ch03-00-common-programming-concepts-in-rust.html"><strong>3.</strong> Common Programming Concepts in Rust</a></li><li><ul class="section"><li><a href="ch03-01-variable-bindings-and-mutability.html"><strong>3.1.</strong> Variable Bindings and Mutability</a></li><li><a href="ch03-02-data-types.html"><strong>3.2.</strong> Data Types</a></li><li><a href="ch03-03-how-functions-work.html"><strong>3.3.</strong> How Functions Work</a></li><li><a href="ch03-04-comments.html"><strong>3.4.</strong> Comments</a></li><li><a href="ch03-05-control-flow.html"><strong>3.5.</strong> Control Flow</a></li></ul></li><li><a href="ch04-00-understanding-ownership.html"><strong>4.</strong> Understanding Ownership</a></li><li><ul class="section"><li><a href="ch04-01-ownership.html"><strong>4.1.</strong> Ownership</a></li><li><a href="ch04-02-references-and-borrowing.html"><strong>4.2.</strong> References &amp; Borrowing</a></li><li><a href="ch04-03-slices.html"><strong>4.3.</strong> Slices</a></li></ul></li><li><a href="ch05-00-structs.html"><strong>5.</strong> Structs</a></li><li><ul class="section"><li><a href="ch05-01-method-syntax.html"><strong>5.1.</strong> Method Syntax</a></li></ul></li><li><a href="ch06-00-enums.html"><strong>6.</strong> Enums</a></li><li><ul class="section"><li><a href="ch06-01-option.html"><strong>6.1.</strong> Option</a></li><li><a href="ch06-02-match.html"><strong>6.2.</strong> Match</a></li><li><a href="ch06-03-if-let.html"><strong>6.3.</strong> if let</a></li></ul></li><li><a href="ch07-00-modules.html"><strong>7.</strong> Modules</a></li><li><ul class="section"><li><a href="ch07-01-mod-and-the-filesystem.html"><strong>7.1.</strong> <code>mod</code> and the filesystem</a></li><li><a href="ch07-02-controlling-visibility-with-pub.html"><strong>7.2.</strong> Controlling visibility with <code>pub</code></a></li><li><a href="ch07-03-importing-names-with-use.html"><strong>7.3.</strong> Importing names with <code>use</code></a></li></ul></li><li><a href="ch08-00-fundamental-collections.html"><strong>8.</strong> Fundamental Collections</a></li><li><ul class="section"><li><a href="ch08-01-vectors.html" class="active"><strong>8.1.</strong> Vectors</a></li><li><a href="ch08-02-strings.html"><strong>8.2.</strong> Strings</a></li><li><a href="ch08-03-hash-maps.html"><strong>8.3.</strong> Hash Maps</a></li></ul></li><li><strong>9.</strong> Error Handling</li><li><strong>10.</strong> Lifetimes</li><li><a href="chZZ-generics.html"><strong>11.</strong> Generics</a></li><li><strong>12.</strong> Traits</li><li><strong>13.</strong> Closures</li><li><strong>14.</strong> Iterators</li><li><a href="chXX-patterns.html"><strong>15.</strong> Patterns</a></li><li><strong>16.</strong> I/O</li><li><ul class="section"><li><strong>16.1.</strong> <code>Read</code> &amp; <code>Write</code></li><li><strong>16.2.</strong> <code>std::fs</code></li><li><strong>16.3.</strong> <code>std::path</code></li><li><strong>16.4.</strong> <code>std::env</code></li></ul></li><li><strong>17.</strong> Testing</li><li><strong>18.</strong> Debugging</li><li><strong>19.</strong> Smart Pointers</li><li><ul class="section"><li><strong>19.1.</strong> <code>Deref</code></li><li><strong>19.2.</strong> <code>Deref</code> coercions</li><li><strong>19.3.</strong> <code>Box&lt;T&gt;</code></li><li><strong>19.4.</strong> <code>Rc&lt;T&gt;</code></li></ul></li><li><strong>20.</strong> Concurrency</li><li><ul class="section"><li><strong>20.1.</strong> Threads</li><li><strong>20.2.</strong> <code>Send</code> &amp; <code>Sync</code></li><li><strong>20.3.</strong> <code>Arc&lt;T&gt;</code></li><li><strong>20.4.</strong> <code>Mutex&lt;T&gt;</code></li><li><strong>20.5.</strong> <code>Channels</code></li></ul></li><li><strong>21.</strong> Unsafe Rust</li><li><ul class="section"><li><strong>21.1.</strong> Raw Pointers</li><li><strong>21.2.</strong> transmute</li></ul></li><li><strong>22.</strong> FFI</li><li><ul class="section"><li><strong>22.1.</strong> Conditional Compilation</li><li><strong>22.2.</strong> Bindings to C</li><li><strong>22.3.</strong> Using Rust from Other Languages</li><li><strong>22.4.</strong> <code>static</code></li></ul></li><li><strong>23.</strong> Creating a Library</li><li><ul class="section"><li><strong>23.1.</strong> Cargo</li><li><strong>23.2.</strong> Crates.io</li><li><a href="chYY-YY-public-api.html"><strong>23.3.</strong> Organizing your Public API</a></li><li><a href="chYY-YY-documentation.html"><strong>23.4.</strong> Documentation</a></li><li><a href="chYY-YY-workspaces.html"><strong>23.5.</strong> Workspaces and Multiple Related Crates</a></li></ul></li><li><strong>24.</strong> Advanced Type System Features</li><li><ul class="section"><li><strong>24.1.</strong> Associated Types</li><li><strong>24.2.</strong> Trait Objects</li><li><strong>24.3.</strong> UFCS</li><li><strong>24.4.</strong> Coherence</li></ul></li><li><strong>25.</strong> Interior mutability</li><li><ul class="section"><li><strong>25.1.</strong> <code>Cell&lt;T&gt;</code></li><li><strong>25.2.</strong> <code>RefCell&lt;T&gt;</code></li></ul></li><li><strong>26.</strong> Macros</li><li><strong>27.</strong> Nightly Rust</li><li><a href="appendix-00.html"><strong>28.</strong> Appendix</a></li><li><ul class="section"><li><a href="appendix-01-keywords.html"><strong>28.1.</strong> Keywords</a></li></ul></li></ul>
+        </div>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar" class="menu-bar">
+                    <div class="left-buttons">
+                        <i id="sidebar-toggle" class="fa fa-bars"></i>
+                        <i id="theme-toggle" class="fa fa-paint-brush"></i>
+                    </div>
+
+                    <h1 class="menu-title">The Rust Programming Language</h1>
+
+                    <div class="right-buttons">
+                        <i id="print-button" class="fa fa-print" title="Print this book"></i>
+                    </div>
+                </div>
+
+                <div id="content" class="content">
+                    <h2>Vectors</h2>
+<p>The first type we'll look at is <code>Vec&lt;T&gt;</code>, also known as a <em>vector</em>. Vectors
+allow us to store more than one value in a single data structure that puts all
+the values next to each other in memory.</p>
+<h3>Creating a New Vector</h3>
+<p>To create a new vector, we can call the <code>new</code> function:</p>
+<pre><code class="language-rust">let v: Vec&lt;i32&gt; = Vec::new();
+</code></pre>
+<p>Note that we added a type annotation here. Since we don't actually do
+anything with the vector, Rust doesn't know what kind of elements we intend to
+store. This is an important point. Vectors are homogenous: they may store many
+values, but those values must all be the same type. Vectors are generic over
+the type stored inside them (we'll talk about Generics more throroughly in
+Chapter 10), and the angle brackets here tell Rust that this vector will hold
+elements of the <code>i32</code> type.</p>
+<p>That said, in real code, we very rarely need to do this type annotation since
+Rust can infer the type of value we want to store once we insert values. Let's
+look at how to modify a vector next.</p>
+<h3>Updating a Vector</h3>
+<p>To put elements in the vector, we can use the <code>push</code> method:</p>
+<pre><code class="language-rust">let mut v = Vec::new();
+
+v.push(5);
+v.push(6);
+v.push(7);
+v.push(8);
+</code></pre>
+<p>Since these numbers are <code>i32</code>s, Rust infers the type of data we want to store
+in the vector, so we don't need the <code>&lt;i32&gt;</code> annotation.</p>
+<p>We can improve this code even further. Creating a vector with some initial
+values like this is very common, so there's a macro to do it for us:</p>
+<pre><code class="language-rust">let v = vec![5, 6, 7, 8];
+</code></pre>
+<p>This macro does a similar thing to our previous example, but it's much more
+convenient.</p>
+<h3>Dropping a Vector Drops its Elements</h3>
+<p>Like any other <code>struct</code>, a vector will be freed when it goes out of scope:</p>
+<pre><code class="language-rust">{
+    let v = vec![1, 2, 3, 4];
+
+    // do stuff with v
+
+} // &lt;- v goes out of scope and is freed here
+</code></pre>
+<p>When the vector gets dropped, it will also drop all of its contents, so those
+integers are going to be cleaned up as well. This may seem like a
+straightforward point, but can get a little more complicated once we start to
+introduce references to the elements of the vector. Let's tackle that next!</p>
+<h3>Reading Elements of Vectors</h3>
+<p>Now that we know how creating and destroying vectors works, knowing how to read
+their contents is a good next step. There are two ways to reference a value
+stored in a vector. In the following examples of these two ways, we've
+annotated the types of the values that are returned from these functions for
+extra clarity:</p>
+<pre><code class="language-rust">let v = vec![1, 2, 3, 4, 5];
+
+let third: &amp;i32 = &amp;v[2];
+let third: Option&lt;&amp;i32&gt; = v.get(2);
+</code></pre>
+<p>First, note that we use the index value of <code>2</code> to get the third element:
+vectors are indexed by number, starting at zero. Secondly, the two different
+ways to get the third element are using <code>&amp;</code> and <code>[]</code>s and using the <code>get</code>
+method. The square brackets give us a reference, and <code>get</code> gives us an
+<code>Option&lt;&amp;T&gt;</code>. The reason we have two ways to reference an element is so that we
+can choose the behavior we'd like to have if we try to use an index value that
+the vector doesn't have an element for:</p>
+<pre><code class="language-rust,should_panic">let v = vec![1, 2, 3, 4, 5];
+
+let does_not_exist = &amp;v[100];
+let does_not_exist = v.get(100);
+</code></pre>
+<p>With the <code>[]</code>s, Rust will cause a <code>panic!</code>. With the <code>get</code> method, it will
+instead return <code>None</code> without <code>panic!</code>ing. Deciding which way to access
+elements in a vector depends on whether we consider an attempted access past
+the end of the vector to be an error, in which case we'd want the <code>panic!</code>
+behavior, or whether this will happen occasionally under normal circumstances
+and our code will have logic to handle getting <code>Some(&amp;element)</code> or <code>None</code>.</p>
+<p>Once we have a valid reference, the borrow checker will enforce the ownership
+and borrowing rules we covered in Chapter 4 in order to ensure this and other
+references to the contents of the vector stay valid. This means in a function
+that owns a <code>Vec</code>, we can't return a reference to an element since the <code>Vec</code>
+will be cleaned up at the end of the function:</p>
+<pre><code class="language-rust,ignore">fn element() -&gt; String {
+    let list = vec![String::from(&quot;hi&quot;), String::from(&quot;bye&quot;)];
+    list[1]
+}
+</code></pre>
+<p>Trying to compile this will result in the following error:</p>
+<pre><code class="language-bash">error: cannot move out of indexed content [--explain E0507]
+  |&gt;
+4 |&gt;     list[1]
+  |&gt;     ^^^^^^^ cannot move out of indexed content
+</code></pre>
+<p>Since <code>list</code> goes out of scope and gets cleaned up at the end of the function,
+the reference <code>list[1]</code> cannot be returned because it would outlive <code>list</code>.</p>
+<p>Here's another example of code that looks like it should be allowed, but it
+won't compile because the references actually aren't valid anymore:</p>
+<pre><code class="language-rust,ignore">let mut v = vec![1, 2, 3, 4, 5];
+
+let first = &amp;v[0];
+
+v.push(6);
+</code></pre>
+<p>Compiling this will give us this error:</p>
+<pre><code class="language-bash">error: cannot borrow `v` as mutable because it is also borrowed as immutable
+[--explain E0502]
+  |&gt;
+5 |&gt; let first = &amp;v[0];
+  |&gt;              - immutable borrow occurs here
+7 |&gt; v.push(6);
+  |&gt; ^ mutable borrow occurs here
+9 |&gt; }
+  |&gt; - immutable borrow ends here
+</code></pre>
+<p>This violates one of the ownership rules we covered in Chapter 4: the <code>push</code>
+method needs to have a mutable borrow to the <code>Vec</code>, and we aren't allowed to
+have any immutable borrows while we have a mutable borrow.</p>
+<p>Why is it an error to have a reference to the first element in a vector while
+we try to add a new item to the end, though? Due to the way vectors work,
+adding a new element onto the end might require allocating new memory and
+copying the old elements over to the new space if there wasn't enough room to
+put all the elements next to each other where the vector was. If this happened,
+our reference would be pointing to deallocated memory. For more on this, see
+<a href="https://doc.rust-lang.org/stable/nomicon/vec.html">The Nomicon</a>.</p>
+<h3>Using an Enum to Store Multiple Types</h3>
+<p>Let's put vectors together with what we learned about enums in Chapter 6. At
+the beginning of this section, we said that vectors will only store values that
+are all the same type. This can be inconvenient; there are definitely use cases
+for needing to store a list of things that might be different types. Luckily,
+the variants of an enum are all the same type as each other, so when we're in
+this scenario, we can define and use an enum!</p>
+<p>For example, let's say we're going to be getting values for a row in a
+spreadsheet. Some of the columns contain integers, some floating point numbers,
+and some strings. We can define an enum whose variants will hold the different
+value types. All of the enum variants will then be the same type, that of the
+enum. Then we can create a vector that, ultimately, holds different types:</p>
+<pre><code class="language-rust">enum SpreadsheetCell {
+    Int(i32),
+    Float(f64),
+    Text(String),
+}
+
+let row = vec![
+    SpreadsheetCell::Int(3),
+    SpreadsheetCell::Text(String::from(&quot;blue&quot;)),
+    SpreadsheetCell::Float(10.12),
+];
+</code></pre>
+<p>This has the advantage of being explicit about what types are allowed in this
+vector. If we allowed any type to be in a vector, there would be a chance that
+the vector would hold a type that would cause errors with the operations we
+performed on the vector. Using an enum plus a <code>match</code> where we access elements
+in a vector like this means that Rust will ensure at compile time that we
+always handle every possible case.</p>
+<p>Using an enum for storing different types in a vector does imply that we need
+to know the set of types we'll want to store at compile time. If that's not the
+case, instead of an enum, we can use a trait object. We'll learn about those in
+Chapter XX.</p>
+<p>Now that we've gone over some of the most common ways to use vectors, be sure
+to take a look at the API documentation for other useful methods defined on
+<code>Vec</code> by the standard library. For example, in addition to <code>push</code> there's a
+<code>pop</code> method that will remove and return the last element. Let's move on to the
+next collection type: <code>String</code>!</p>
+
+                </div>
+
+                <!-- Mobile navigation buttons -->
+                
+                    <a href="ch08-00-fundamental-collections.html" class="mobile-nav-chapters previous">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+                    <a href="ch08-02-strings.html" class="mobile-nav-chapters next">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                
+
+            </div>
+
+            
+                <a href="ch08-00-fundamental-collections.html" class="nav-chapters previous" title="You can navigate through the chapters using the arrow keys">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+            
+
+            
+                <a href="ch08-02-strings.html" class="nav-chapters next" title="You can navigate through the chapters using the arrow keys">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            
+
+        </div>
+
+
+        <!-- Local fallback for Font Awesome -->
+        <script>
+            if ($(".fa").css("font-family") !== "FontAwesome") {
+                $('<link rel="stylesheet" type="text/css" href="_FontAwesome/css/font-awesome.css">').prependTo('head');
+            }
+        </script>
+
+        <!-- Livereload script (if served using the cli tool) -->
+        
+
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+    </body>
+</html>
