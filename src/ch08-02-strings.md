@@ -367,4 +367,4 @@ complexity of strings than we have to handle in other languages, but will
 prevent us from having to handle errors involving non-ASCII characters later in
 our development lifecycle.
 
-Let's switch to something a bit less complex: HashMap!
+Let's switch to something a bit less complex: Hash Map!

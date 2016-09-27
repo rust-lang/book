@@ -34,7 +34,7 @@
 - [Fundamental Collections](ch08-00-fundamental-collections.md)
     - [Vectors](ch08-01-vectors.md)
     - [Strings](ch08-02-strings.md)
-    - [HashMaps](ch08-03-hashmaps.md)
+    - [Hash Maps](ch08-03-hash-maps.md)
 
 - [Error Handling]()
 
