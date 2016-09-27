@@ -31,10 +31,10 @@
     - [Controlling visibility with `pub`](ch07-02-controlling-visibility-with-pub.md)
     - [Importing names with `use`](ch07-03-importing-names-with-use.md)
 
-- [Basic Collections]()
-    - [Vectors]()
-    - [Strings]()
-    - [`HashMap<K, V>`]()
+- [Fundamental Collections](ch08-00-fundamental-collections.md)
+    - [Vectors](ch08-01-vectors.md)
+    - [Strings](ch08-02-strings.md)
+    - [Hash Maps](ch08-03-hash-maps.md)
 
 - [Error Handling]()
 
