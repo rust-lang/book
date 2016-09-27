@@ -167,7 +167,44 @@ put all the elements next to each other where the vector was. If this happened,
 our reference would be pointing to deallocated memory. For more on this, see
 [The Nomicon](https://doc.rust-lang.org/stable/nomicon/vec.html).
 
-Be sure to take a look at the API documentation for all the methods defined on
+### Using an Enum to Store Multiple Types
+
+Let's put vectors together with what we learned about enums in Chapter 6. At
+the beginning of this section, we said that vectors will only store values that
+are all the same type. This can be inconvenient; there are definitely use cases
+for needing to store a list of things that might be different types. Luckily,
+the variants of an enum are all the same type as each other, so when we're in
+this scenario, we can define and use an enum!
+
+For example, let's say we're going to be getting values for a row in a
+spreadsheet. Some of the columns contain integers, some floating point numbers,
+and some strings. We can define an enum whose variants will hold the different
+value types. All of the enum variants will then be the same type, that of the
+enum. Then we can create a vector that, ultimately, holds different types:
+
+```rust
+enum SpreadsheetCell {
+    Int(i32),
+    Float(f64),
+    Text(String),
+}
+
+let row = vec![
+    SpreadsheetCell::Int(3),
+    SpreadsheetCell::Text(String::from("blue")),
+    SpreadsheetCell::Float(10.12),
+];
+```
+
+This has the advantage of being explicit about what types are allowed in this
+vector. If we allowed any type to be in a vector, there would be a chance that
+the vector would hold a type that would cause errors with the operations we
+performed on the vector. Using an enum plus a `match` where we access elements
+in a vector like this means that Rust will ensure at compile time that we
+always handle every possible case.
+
+Now that we've gone over some of the most common ways to use vectors, be sure
+to take a look at the API documentation for other useful methods defined on
 `Vec` by the standard library. For example, in addition to `push` there's a
 `pop` method that will remove and return the last element. Let's move on to the
 next collection type: `String`!
