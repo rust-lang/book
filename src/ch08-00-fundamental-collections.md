@@ -1,4 +1,4 @@
-# Essential Collections
+# Fundamental Collections
 
 Rust's standard library includes a number of really useful data structures
 called *collections*. Most other types represent one specific value, but

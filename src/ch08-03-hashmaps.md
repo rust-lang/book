@@ -1,6 +1,6 @@
 ## HashMaps
 
-The last of our essential collections is the *HashMap*. A `HashMap<K, V>`
+The last of our fundamental collections is the *HashMap*. A `HashMap<K, V>`
 stores a mapping of keys of type `K` to values of type `V`. It does this via a
 *hashing function*, which determines how it places these keys and values into
 memory. Many different programming languges support this kind of data
@@ -25,7 +25,7 @@ map.insert(2, "world");
 ```
 
 Note that we need to `use` the `HashMap` from the collections portion of the
-standard library. Of our three essential collections, this one is the least
+standard library. Of our three fundamental collections, this one is the least
 often used, so it has a bit less support from the language. There's no built-in
 macro to construct them, for example, and they're not in the prelude, so we
 need to add a `use` statement for them.
