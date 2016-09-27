@@ -130,7 +130,10 @@ existing value. Let's look at how to do each of these!
 
 #### Overwriting a Value
 
-If we insert a key and a value, then insert that key with a different value, the value associated with that key will be replaced. Even though this code calls `insert` twice, the hash map will only contain one key/value pair, since we're inserting with the key `1` both times:
+If we insert a key and a value, then insert that key with a different value,
+the value associated with that key will be replaced. Even though this code
+calls `insert` twice, the hash map will only contain one key/value pair, since
+we're inserting with the key `1` both times:
 
 ```rust
 use std::collections::HashMap;
