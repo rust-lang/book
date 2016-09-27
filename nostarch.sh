@@ -3,6 +3,7 @@
 set -eu
 
 mkdir -p tmp
+rm -rf tmp/*.md
 
 # Get all the markdown files in the src dir,
 ls src/*.md | \
