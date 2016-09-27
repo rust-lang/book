@@ -1,143 +1,91 @@
 ## Method Syntax
 
-In Chapter 4 when we discussed ownership, we made several references to
-*methods*. Methods look like this:
+*Methods* are similar to functions: they're declared with the `fn` keyword and
+their name, they can take arguments and return values, and they contain some
+code that gets run when they're called from somewhere else. Methods are
+different from functions, however, because they're defined within the context
+of a struct (or an enum or a trait object, which we will cover in Chapters 6
+and XX respectively), and their first argument is always `self`, which
+represents the instance of the struct that the method is being called on.
+
+### Defining Methods
+
+Let's change our `area` function that takes a `Rectangle` instance as an
+argument and instead make an `area` method defined on the `Rectangle` struct:
 
 ```rust
-let s1 = "hello";
-
-// call a method on s1
-let s2 = s1.clone();
-
-println!("{}", s1);
-```
-
-The call to `clone()` is attached to `s1` with a dot. This is called *method
-syntax*, and it’s a way to call certain functions with a different style.
-
-Why have two ways to call functions? We’ll talk about some deeper reasons
-related to ownership in a moment, but one big reason is that methods look nicer
-when chained together:
-
-```rust,ignore
-// with functions
-h(g(f(x)));
-
-// with methods
-x.f().g().h();
-```
-
-The nested-functions version reads in reverse: the program executes `f()`, then
-`g()`, then `h()`, but we read it left-to-right as `h()`, then `g()`, then
-`f()`. The method syntax is executed in the same order as we would read it.
-
-Before we get into the details, let’s talk about how to define your own
-methods.
-
-### Defining methods
-
-We can define methods with the `impl` keyword. `impl` is short for
-*implementation*. Doing so looks like this:
-
-```rust
-#[derive(Debug,Copy,Clone)]
-struct Point {
-    x: f64,
-    y: f64,
+#[derive(Debug)]
+struct Rectangle {
+    length: u32,
+    width: u32,
 }
 
-impl Point {
-    fn distance(&self, other: &Point) -> f64 {
-        let x_squared = f64::powi(other.x - self.x, 2);
-        let y_squared = f64::powi(other.y - self.y, 2);
-
-        f64::sqrt(x_squared + y_squared)
+impl Rectangle {
+    fn area(&self) -> u32 {
+        self.length * self.width
     }
 }
 
-let p1 = Point { x: 0.0, y: 0.0 };
-let p2 = Point { x: 5.0, y: 6.5 };
+fn main() {
+    let rect1 = Rectangle { length: 50, width: 30 };
 
-assert_eq!(8.200609733428363, p1.distance(&p2));
-```
-
-Let’s break this down. First, we have our `Point` struct from earlier in the
-chapter. Next comes our first use of the `impl` keyword:
-
-```rust,ignore
-impl Point {
-    // ...
+    println!(
+        "The area of the rectangle is {} square pixels.",
+        rect1.area()
+    );
 }
 ```
 
-Everything we put inside of the curly braces will be methods implemented on
-`Point`. Next is our definition:
+<!-- Will add ghosting and wingdings here in libreoffice /Carol -->
 
-```rust,ignore
-fn distance(&self, other: &Point) -> f64 {
-    // ...
-}
-```
+In order to make the function be defined within the context of `Rectangle`, we
+start an `impl` block (`impl` is short for *implementation*). Then we move the
+function within the `impl` curly braces, and change the first (and in this
+case, only) argument to be `self` in the signature and everywhere within the
+body. Then in `main` where we called the `area` function and passed `rect1` as
+an argument, we can instead use *method syntax* to call the `area` method on
+our `Rectangle` instance.
 
-Other than this, the rest of the example is familiar: an implementation of
-`distance()` and using the method to find an answer.
+In the signature for `area`, we get to use `&self` instead of `rectangle:
+&Rectangle` because Rust knows the type of `self` is `Rectangle` due to this
+method being inside the `impl Rectangle` context. Note we still need to have
+the `&` before `self`, just like we had `&Rectangle`. Methods can choose to
+take ownership of `self`, borrow `self` immutably as we've done here, or borrow
+`self` mutably, just like any other argument.
 
-Our definition of `distance()` here as a method looks very similar to our
-previous definition of `distance()` as a function, but with two differences.
-Here's the `distance()` function again:
+We've chosen `&self` here for the same reason we used `&Rectangle` in the
+function version: we don't want to take ownership, and we just want to be able
+to read the data in the struct, not write to it. If we wanted to be able to
+change the instance that we've called the method on as part of what the method
+does, we'd put `&mut self` as the first argument instead. Having a method that
+takes ownership of the instance by having just `self` as the first argument is
+rarer; this is usually used when the method transforms `self` into something
+else and we want to prevent the caller from using the original instance after
+the transformation.
 
-```rust,ignore
-fn distance(p1: Point, p2: Point) -> f64 {
-    // ...
-}
-```
+The main benefit of using methods over functions, in addition to getting to use
+method syntax and not having to repeat the type of `self` in every method's
+signature, is for organization. We've put all the things we can do with an
+instance of a type together in one `impl` block, rather than make future users
+of our code search for capabilities of `Rectangle` all over the place.
 
-The first difference is in the first argument. Instead of a name and a type, we
-have written `&self`. This is what distinguishes a method from a function:
-using `self` inside of an `impl` block means we have a method. Because we
-already know that we are implementing this method on `Point` because of the
-surrounding `impl Point` block, we don’t need to write the type of `self` out.
+<!-- PROD: START BOX -->
 
-Note that we have written `&self`, not just `self`. This is because we want to
-take a reference to our argument's value rather than taking ownership of it. In
-other words, these two forms are the same:
+#### Where's the `->` operator?
 
-```rust,ignore
-fn foo(self: &Point)
-fn foo(&self)
-```
+In languages like C++, there are two different operators for calling methods:
+`.` if you're calling a method on the object directly, and `->` if you're
+calling the method on a pointer to the object and thus need to dereference the
+pointer first. In other words, if `object` is a pointer, `object->something()`
+is like `(*object).something()`.
 
-Just like any other parameter, you can take `self` in three forms. Here’s the
-list, with the most common form first:
+Rust doesn't have an equivalent to the `->` operator; instead, Rust has a
+feature called *automatic referencing and dereferencing*. Calling methods is
+one of the few places in Rust that has behavior like this.
 
-```rust,ignore
-fn foo(&self) // take self by reference
-fn foo(&mut self) // take self by mutable reference
-fn foo(self) // take self by ownership
-```
-
-In this case, we only need a reference. We don’t need to mutate either `Point`
-to get the distance between them, so we won't take a mutable reference to the
-`Point` that we call the method on. Methods that take ownership of `self` are
-rarely used. An example of a time to do that would be if we wanted to have a
-method that would transform `self` into something else and prevent other code
-from using the value of `self` after the transformation happens.
-
-#### Methods and automatic referencing
-
-We’ve left out an important detail. It’s in this line of the example:
-
-```rust,ignore
-assert_eq!(8.200609733428363, p1.distance(&p2));
-```
-
-When we defined `distance()`, we took both `self` and the other argument by
-reference. Yet, we needed a `&` for `p2` but not `p1`. What gives?
-
-This feature is called *automatic referencing*, and calling methods is one
-of the few places in Rust that has behavior like this. Here’s how it works:
-when you call a method with `self.(`, Rust will automatically add in `&`s
-or `&mut`s to match the signature. In other words, these are the same:
+Here’s how it works: when you call a method with `object.something()`, Rust
+will automatically add in `&`, `&mut`, or `*` so that `object` matches the
+signature of the method. In other words, these are the same:
 
 ```rust
 # #[derive(Debug,Copy,Clone)]
@@ -160,30 +108,119 @@ p1.distance(&p2);
 (&p1).distance(&p2);
 ```
 
-The first one looks much, much cleaner. Here’s another example:
+The first one looks much, much cleaner. This automatic referencing behavior
+works because methods have a clear receiver — the type of `self`. Given the
+receiver and name of a method, Rust can figure out definitively whether the
+method is just reading (so needs `&self`), mutating (so `&mut self`), or
+consuming (so `self`). The fact that Rust makes borrowing implicit for method
+receivers is a big part of making ownership ergonomic in practice.
 
-```rust
-let mut s = String::from("Hello,");
+<!-- PROD: END BOX -->
 
-s.push_str(" world!");
+### Methods with More Arguments
 
-// The above is the same as:
-// (&mut s).push_str(" world!");
-
-assert_eq!("Hello, world!", s);
-```
-
-Because [`push_str()`][pushstr]<!-- ignore --> has the following signature:
+Let's practice some more with methods by implementing a second method on our
+`Rectangle` struct. This time, we'd like for an instance of `Rectangle` to take
+another instance of `Rectangle` and return `true` if the second rectangle could
+fit completely within `self` and `false` if it would not. That is, if we run
+this code:
 
 ```rust,ignore
-fn push_str(&mut self, string: &str) {
+fn main() {
+    let rect1 = Rectangle { length: 50, width: 30 };
+    let rect2 = Rectangle { length: 40, width: 10 };
+    let rect3 = Rectangle { length: 45, width: 60 };
+
+    println!("Can rect1 hold rect2? {}", rect1.can_hold(&rect2));
+    println!("Can rect1 hold rect3? {}", rect1.can_hold(&rect3));
+}
 ```
 
-[push_str]: ../collections/string/struct.String.html#method.push_str
+We want to see this output, since both of `rect2`'s dimensions are smaller than
+`rect1`'s, but `rect3` is wider than `rect1`:
 
-This automatic referencing behavior works because methods have a clear receiver
-— the type of `self` — and in most cases it’s clear given the receiver and name
-of a method whether the method is just reading (so needs `&self`), mutating (so
-`&mut self`), or consuming (so `self`). The fact that Rust makes borrowing
-implicit for method receivers is a big part of making ownership ergonomic in
-practice.
+```bash
+Can rect1 hold rect2? true
+Can rect1 hold rect3? false
+```
+
+We know we want to define a method, so it will be within the `impl Rectangle`
+block. The method name will be `can_hold`, and it will take an immutable borrow
+of another `Rectangle` as an argument. We can tell what the type of the
+argument will be by looking at a call site: `rect1.can_hold(&rect2)` passes in
+`&rect2`, which is an immutable borrow to `rect2`, an instance of `Rectangle`.
+This makes sense, since we only need to read `rect2` (rather than write, which
+would mean we'd need a mutable borrow) and we want `main` to keep ownership of
+`rect2` so that we could use it again after calling this method. The return
+value of `can_hold` will be a boolean, and the implementation will check to see
+if `self`'s length and width are both greater than the length and width of the
+other `Rectagle`, respectively. Let's write that code!
+
+```
+# #[derive(Debug)]
+# struct Rectangle {
+#     length: u32,
+#     width: u32,
+# }
+#
+impl Rectangle {
+    fn area(&self) -> u32 {
+        self.length * self.width
+    }
+
+    fn can_hold(&self, other: &Rectangle) -> bool {
+        self.length > other.length && self.width > other.width
+    }
+}
+```
+
+<!-- Will add ghosting here in libreoffice /Carol -->
+
+If we run this with the `main` from earlier, we will get our desired output!
+Methods can take multiple arguments that we add to the signature after the
+`self` parameter, and those arguments work just like arguments in functions do.
+
+### Associated Functions
+
+One more useful feature of `impl` blocks: we're allowed to define functions
+within `impl` blocks that *don't* take `self` as a parameter. These are called
+*associated functions*, since they're associated with the struct. They're still
+functions though, not methods, since they don't have an instance of the struct
+to work with. You've already used an associated function: `String::from`.
+
+Associated functions are often used for constructors that will return a new
+instance of the struct. For example, we could provide an associated function
+that would take one dimension argument and use that as both length and width,
+thus making it easier to create a square `Rectangle` rather than having to
+specify the same value twice:
+
+```rust
+# #[derive(Debug)]
+# struct Rectangle {
+#     length: u32,
+#     width: u32,
+# }
+#
+impl Rectangle {
+    fn square(size: u32) -> Rectangle {
+        Rectangle { length: size, width: size }
+    }
+}
+```
+
+To call this associated function, we use the `::` syntax with the struct name:
+`let sq = Rectange::square(3);`, for example. It's kind of this function is
+namespaced by the struct: the `::` syntax is used for both associated functions
+and namespaces created by modules, which we'll learn about in Chapter 7.
+
+## Summary
+
+Structs let us create custom types that are meaningful for our domain. By using
+structs, we can keep associated pieces of data connected to each other and name
+each piece to make our code clear. Methods let us specify the behavior that
+instances of our structs have, and associated functions let us namespace
+functionality that is particular to our struct without having an instance
+available.
+
+Structs aren't the only way we can create custom types, though; let's turn to
+the `enum` feature of Rust and add another tool to our toolbox.
