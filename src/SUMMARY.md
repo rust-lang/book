@@ -1,5 +1,7 @@
 # The Rust Programming Language
 
+## Introduction
+
 - [Introduction](ch01-00-introduction.md)
     - [Installation](ch01-01-installation.md)
     - [Hello, World!](ch01-02-hello-world.md)
@@ -26,6 +28,8 @@
     - [Match](ch06-02-match.md)
     - [if let](ch06-03-if-let.md)
 
+## Get you going
+
 - [Modules](ch07-00-modules.md)
     - [`mod` and the filesystem](ch07-01-mod-and-the-filesystem.md)
     - [Controlling visibility with `pub`](ch07-02-controlling-visibility-with-pub.md)
@@ -38,17 +42,9 @@
 
 - [Error Handling]()
 
-- [Lifetimes]()
-
-- [Generics](chZZ-generics.md)
-
-- [Traits]()
-
-- [Closures]()
+- [Generics]()
 
 - [Iterators]()
-
-- [Patterns](chXX-patterns.md)
 
 - [I/O]()
     - [`Read` & `Write`]()
@@ -56,9 +52,27 @@
     - [`std::path`]()
     - [`std::env`]()
 
+- [Composition]()
+
+- [Patterns](chXX-patterns.md)
+
 - [Testing]()
 
 - [Debugging]()
+
+- [Creating a Library]()
+    - [Cargo]()
+    - [Crates.io]()
+    - [Organizing your Public API](chYY-YY-public-api.md)
+    - [Documentation](chYY-YY-documentation.md)
+    - [Workspaces and Multiple Related Crates](chYY-YY-workspaces.md)
+
+## Why
+
+- [Zero-cost Abstractions]()
+  - [Iterators as a case study]()
+
+- [Closures]()
 
 - [Smart Pointers]()
     - [`Deref`]()
@@ -82,13 +96,6 @@
     - [Bindings to C]()
     - [Using Rust from Other Languages]()
     - [`static`]()
-
-- [Creating a Library]()
-    - [Cargo]()
-    - [Crates.io]()
-    - [Organizing your Public API](chYY-YY-public-api.md)
-    - [Documentation](chYY-YY-documentation.md)
-    - [Workspaces and Multiple Related Crates](chYY-YY-workspaces.md)
 
 - [Advanced Type System Features]()
     - [Associated Types]()
