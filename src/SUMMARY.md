@@ -65,7 +65,7 @@
 - [Closures]()
 
 - [Zero-cost Abstractions]()
-  - [Iterators as a case study]()
+    - [Iterators as a case study]()
 
 - [Creating a Library]()
     - [Cargo]()
