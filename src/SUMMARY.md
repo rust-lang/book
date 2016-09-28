@@ -52,13 +52,20 @@
     - [`std::path`]()
     - [`std::env`]()
 
-- [Composition]()
-
 - [Patterns](chXX-patterns.md)
 
 - [Testing]()
 
 - [Debugging]()
+
+## Thinking in Rust
+
+- [Composition]()
+
+- [Closures]()
+
+- [Zero-cost Abstractions]()
+  - [Iterators as a case study]()
 
 - [Creating a Library]()
     - [Cargo]()
@@ -66,13 +73,6 @@
     - [Organizing your Public API](chYY-YY-public-api.md)
     - [Documentation](chYY-YY-documentation.md)
     - [Workspaces and Multiple Related Crates](chYY-YY-workspaces.md)
-
-## Why
-
-- [Zero-cost Abstractions]()
-  - [Iterators as a case study]()
-
-- [Closures]()
 
 - [Smart Pointers]()
     - [`Deref`]()
@@ -86,6 +86,8 @@
     - [`Arc<T>`]()
     - [`Mutex<T>`]()
     - [`Channels`]()
+
+## Advanced Topics
 
 - [Unsafe Rust]()
     - [Raw Pointers]()
