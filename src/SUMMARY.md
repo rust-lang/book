@@ -26,14 +26,14 @@
 - [Enums](ch06-00-enums.md)
     - [Option](ch06-01-option.md)
     - [Match](ch06-02-match.md)
-    - [if let](ch06-03-if-let.md)
+    - [`if let`](ch06-03-if-let.md)
 
 ## Get you going
 
 - [Modules](ch07-00-modules.md)
-    - [`mod` and the filesystem](ch07-01-mod-and-the-filesystem.md)
-    - [Controlling visibility with `pub`](ch07-02-controlling-visibility-with-pub.md)
-    - [Importing names with `use`](ch07-03-importing-names-with-use.md)
+    - [`mod` and the Filesystem](ch07-01-mod-and-the-filesystem.md)
+    - [Controlling Visibility with `pub`](ch07-02-controlling-visibility-with-pub.md)
+    - [Importing Names with `use`](ch07-03-importing-names-with-use.md)
 
 - [Fundamental Collections](ch08-00-fundamental-collections.md)
     - [Vectors](ch08-01-vectors.md)
@@ -65,7 +65,7 @@
 - [Closures]()
 
 - [Zero-cost Abstractions]()
-    - [Iterators as a case study]()
+    - [Iterators as a Case Study]()
 
 - [Creating a Library]()
     - [Cargo]()
@@ -76,7 +76,7 @@
 
 - [Smart Pointers]()
     - [`Deref`]()
-    - [`Deref` coercions]()
+    - [`Deref` Coercions]()
     - [`Box<T>`]()
     - [`Rc<T>`]()
 
@@ -91,7 +91,7 @@
 
 - [Unsafe Rust]()
     - [Raw Pointers]()
-    - [transmute]()
+    - [`transmute`]()
 
 - [FFI]()
     - [Conditional Compilation]()
@@ -105,7 +105,7 @@
     - [UFCS]()
     - [Coherence]()
 
-- [Interior mutability]()
+- [Interior Mutability]()
     - [`Cell<T>`]()
     - [`RefCell<T>`]()
 
