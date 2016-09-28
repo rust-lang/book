@@ -115,3 +115,4 @@
 
 - [Appendix](appendix-00.md)
     - [Keywords](appendix-01-keywords.md)
+    - [Derivable Traits](appendix-02-derivable-traits.md)
