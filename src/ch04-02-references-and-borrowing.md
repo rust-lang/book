@@ -265,7 +265,7 @@ the parts about lifetimes, the message does contain the key to why this code is
 a problem: `this function’s return type contains a borrowed value, but there is
 no value for it to be borrowed from`.
 
-Let’s have a closer look at exactly what's happenening at each stage of our
+Let’s have a closer look at exactly what's happening at each stage of our
 `dangle` code:
 
 ```rust,ignore

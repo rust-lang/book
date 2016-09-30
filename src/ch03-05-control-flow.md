@@ -235,7 +235,7 @@ error: aborting due to previous error
 error: Could not compile `branches`.
 ```
 
-The expression in the `if` block evaluates to an integer and the expresion in
+The expression in the `if` block evaluates to an integer and the expression in
 the `else` block evaluates to a string. This can’t work, because variable
 bindings must have a single type. Rust needs to know at compile time what type
 the `number` binding is, definitively, so that it can verify at compile time
