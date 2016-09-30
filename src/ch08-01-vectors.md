@@ -16,7 +16,7 @@ Note that we added a type annotation here. Since we don't actually do
 anything with the vector, Rust doesn't know what kind of elements we intend to
 store. This is an important point. Vectors are homogenous: they may store many
 values, but those values must all be the same type. Vectors are generic over
-the type stored inside them (we'll talk about Generics more throroughly in
+the type stored inside them (we'll talk about Generics more thoroughly in
 Chapter 10), and the angle brackets here tell Rust that this vector will hold
 elements of the `i32` type.
 

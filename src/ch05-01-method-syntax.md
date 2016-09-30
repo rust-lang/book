@@ -154,7 +154,7 @@ would mean we'd need a mutable borrow) and we want `main` to keep ownership of
 `rect2` so that we could use it again after calling this method. The return
 value of `can_hold` will be a boolean, and the implementation will check to see
 if `self`'s length and width are both greater than the length and width of the
-other `Rectagle`, respectively. Let's write that code!
+other `Rectangle`, respectively. Let's write that code!
 
 ```
 # #[derive(Debug)]

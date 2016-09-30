@@ -83,7 +83,7 @@ to help.
 
 <!-- PROD: END BOX -->
 
-The error tells us that the cause of the error is `re-assigment of immutable
+The error tells us that the cause of the error is `re-assignment of immutable
 variable`, because we tried to assign a second value to the immutable `x`
 variable.
 

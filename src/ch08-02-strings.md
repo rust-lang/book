@@ -138,7 +138,7 @@ for the `add` method that the `+` operator uses looks something like this:
 fn add(self, s: &str) -> String {
 ```
 
-This isn't excatly what the actual signature is in the standard library because
+This isn't exactly what the actual signature is in the standard library because
 `add` is defined using generics there. Here, we're just looking at what the
 signature of the method would be if `add` was defined specifically for
 `String`. This signature gives us the clues we need in order to understand the

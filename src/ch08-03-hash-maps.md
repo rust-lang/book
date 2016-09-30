@@ -3,7 +3,7 @@
 The last of our fundamental collections is the *hash map*. The type `HashMap<K,
 V>` stores a mapping of keys of type `K` to values of type `V`. It does this
 via a *hashing function*, which determines how it places these keys and values
-into memory. Many different programming languges support this kind of data
+into memory. Many different programming languages support this kind of data
 structure, but often with a different name: hash, map, object, hash table, or
 associative array, just to name a few.
 

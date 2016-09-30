@@ -260,7 +260,7 @@ Let's try running with this change and... drat. We still get an error:
 error: the trait bound `Rectangle: std::fmt::Debug` is not satisfied
 ```
 
-Again, though, the compliler has given us a helpful note!
+Again, though, the compiler has given us a helpful note!
 
 ```bash
 note: `Rectangle` cannot be formatted using `:?`; if it is defined in your
