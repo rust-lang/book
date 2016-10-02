@@ -351,19 +351,20 @@ post their open source Rust projects for others to use.</p>
 any we don’t have yet. In this case, while we only listed <code>rand</code> as a
 dependency, we’ve also grabbed a copy of <code>libc</code>, because <code>rand</code> depends on
 <code>libc</code> to work. After downloading them, Rust compiles them and then compiles
-our project.</p>
-<p>If we run <code>cargo build</code> again, we’ll get different output:</p>
-<pre><code class="language-bash">$ cargo build
-</code></pre>
-<p>That’s right, no output! Cargo knows that our project has been built, that
-all of its dependencies are built, and that no changes have been made. There’s
-no reason to do all that stuff again. With nothing to do, it simply
-exits. If we open up <code>src/main.rs</code>, make a trivial change, then save it again,
-we’ll only see one line:</p>
+our project with our dependencies available.</p>
+<p>If we immediately run <code>cargo build</code> again without making any changes, we won't
+get any output. Cargo knows it has already downloaded and compiled our
+dependencies, and we haven't changed anything about them in our <code>Cargo.toml</code>
+file. Cargo also knows that we haven't changed anything about our code, so it
+doesn't recompile that either. With nothing to do, it simply exits. If we open
+up <code>src/main.rs</code>, make a trivial change, then save it again, we’ll only see one
+line:</p>
 <pre><code class="language-bash">$ cargo build
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
 </code></pre>
-<p>This just updates the build with your tiny change to the <code>main.rs</code> file.</p>
+<p>This just updates the build with your tiny change to the <code>main.rs</code> file. Our
+dependencies haven't changed, so Cargo knows it can reuse what it has already
+downloaded and compiled for those. It just rebuilds our part of the code.</p>
 <h4>The Cargo.lock File that Ensures Reproducible Builds</h4>
 <p>Cargo has a mechanism to make sure we can rebuild the exact same artifact every
 time we or anyone else builds our code: Cargo will only use the versions of the
