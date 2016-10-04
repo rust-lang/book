@@ -14,8 +14,8 @@ digraph {
         <TR><TD COLSPAN="2" SIDES="B">s</TD></TR>
         <TR><TD>name</TD><TD>value</TD></TR>
         <TR><TD>ptr</TD><TD PORT="pointer"></TD></TR>
-        <TR><TD>len</TD><TD>5</TD></TR>
-        <TR><TD>capacity</TD><TD>5</TD></TR>
+        <TR><TD>len</TD><TD>11</TD></TR>
+        <TR><TD>capacity</TD><TD>11</TD></TR>
     </TABLE>>];
     table4[label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">
         <TR><TD>index</TD><TD>value</TD></TR>
