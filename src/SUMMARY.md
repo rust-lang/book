@@ -48,7 +48,7 @@
 - [Generics](ch10-00-generics.md)
     - [Syntax](ch10-01-syntax.md)
     - [Traits](ch10-02-traits.md)
-    - [Lifetimes](ch10-03-lifetimes.md)
+    - [Lifetime syntax](ch10-03-lifetime-syntax.md)
 
 - [Closures]()
 
