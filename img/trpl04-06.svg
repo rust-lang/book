@@ -95,11 +95,11 @@
 <polygon fill="none" stroke="black" points="8,-187 8,-207 60,-207 60,-187 8,-187"/>
 <text text-anchor="start" x="25.4482" y="-192.8" font-family="Times,serif" font-size="14.00">len</text>
 <polygon fill="none" stroke="black" points="60,-187 60,-207 96,-207 96,-187 60,-187"/>
-<text text-anchor="start" x="74.5" y="-192.8" font-family="Times,serif" font-size="14.00">5</text>
+<text text-anchor="start" x="71.2563" y="-192.8" font-family="Times,serif" font-size="14.00">11</text>
 <polygon fill="none" stroke="black" points="8,-167 8,-187 60,-187 60,-167 8,-167"/>
 <text text-anchor="start" x="10.6826" y="-172.8" font-family="Times,serif" font-size="14.00">capacity</text>
 <polygon fill="none" stroke="black" points="60,-167 60,-187 96,-187 96,-167 60,-167"/>
-<text text-anchor="start" x="74.5" y="-172.8" font-family="Times,serif" font-size="14.00">5</text>
+<text text-anchor="start" x="71.2563" y="-172.8" font-family="Times,serif" font-size="14.00">11</text>
 </g>
 <!-- table3&#45;&gt;table4 -->
 <g id="edge2" class="edge"><title>table3:pointer:c&#45;&gt;table4:pointee</title>
