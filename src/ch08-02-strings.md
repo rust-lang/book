@@ -65,7 +65,7 @@ APIs that make sense for strings. There are a lot of options, and some of them
 can feel redundant because of this, but they all have their place! In this
 case, `String::from` and `.to_string` end up doing the exact same thing, so
 which you choose is a matter of style. Some people use `String::from` for
-literals, and `.to_string` for variable bindings. Most Rust style is pretty
+literals, and `.to_string` for variables. Most Rust style is pretty
 uniform, but this specific question is one of the most debated.
 
 Remember that strings are UTF-8 encoded, so we can include any properly encoded
@@ -152,7 +152,7 @@ type, `&str`.
 
 Secondly, `add` takes ownership of `self`, which we can tell because `self`
 does *not* have an `&` in the signature. This means `s1` in the above example
-will be moved into the `add` call and no longer be a valid binding after that.
+will be moved into the `add` call and no longer be a valid variable after that.
 So while `let s3 = s1 + &s2;` looks like it will copy both strings and create a
 new one, this statement actually takes ownership of `s1`, appends a copy of
 `s2`'s contents, then returns ownership of the result. In other words, it looks

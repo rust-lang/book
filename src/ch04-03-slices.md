@@ -122,7 +122,7 @@ fn second_word(s: &String) -> (usize, usize) {
 
 Now we’re tracking both a start _and_ an ending index, and we have even more
 values that were calculated from data in a particular state but aren't tied to
-that state at all. We now have three unrelated variable bindings floating
+that state at all. We now have three unrelated variables floating
 around which need to be kept in sync.
 
 Luckily, Rust has a solution to this problem: string slices.

@@ -1,7 +1,7 @@
 # Patterns
 
 We've actually used patterns a few times so far: they're used in `let`
-bindings, in function arguments, and in the `match` expression. Patterns have a
+statements, in function arguments, and in the `match` expression. Patterns have a
 lot more abilities than we have demonstrated so far, so we'll cover some of the most commonly used ones in this section. Any of these abilities work in
 any place where a pattern is used.
 
@@ -16,7 +16,7 @@ let PATTERN = EXPRESSION;
 We've seen bindings that have names in the `PATTERN` slot: a name is just a
 particularly humble form of pattern.
 
-## Multiple bindings
+## Binding Multiple variables
 
 Let’s try a more complex pattern. Change our example program to this:
 
@@ -35,13 +35,13 @@ And run it with `cargo run`:
 
 ```text
 $ cargo run
-   Compiling bindings v0.1.0 (file:///projects/bindings)
-     Running `target/debug/bindings`
+   Compiling patterns v0.1.0 (file:///projects/patterns)
+     Running `target/debug/patterns`
 The value of x is: 5
 The value of y is: 6
 ```
 
-We’ve created two bindings with one `let`! Here’s our pattern:
+We’ve created two variables with one `let`! Here’s our pattern:
 
 ```text
 (x, y)
@@ -64,13 +64,13 @@ fn main() {
 ```
 
 In simple cases like this, two `let`s may be clearer, but in others, creating
-multiple bindings at once is nice. As we become more proficient in Rust, we’ll
+multiple variables at once is nice. As we become more proficient in Rust, we’ll
 figure out which style is better, but it’s mostly a judgement call.
 
 ## Type annotations
 
 Most of the time, Rust uses *type inference*, meaning that it attempts to infer
-the types of your bindings rather than you having to declare them explicitly
+the types of your variables rather than you having to declare them explicitly
 even though Rust is a statically typed language. Occasionally, Rust won't have
 enough information to infer the type of your value, and you will need to add a
 type annotation in with the pattern.
@@ -89,7 +89,7 @@ let PATTERN: TYPE = VALUE;
 ```
 
 Note that the colon and the `TYPE` go _after_ the `PATTERN`, not in the pattern
-itself. As an example, here’s our more complex pattern with two bindings:
+itself. As an example, here’s our more complex pattern with two variables:
 
 ```rust
 let (x, y): (i32, i32) = (5, 6);
@@ -133,7 +133,7 @@ This prints `one or two`.
 
 ## ref and ref mut
 
-Usually, when you match against a pattern, bindings are bound by value.
+Usually, when you match against a pattern, variables are bound by value.
 This means you'll end up moving the value out:
 
 ```rust,ignore
@@ -193,7 +193,7 @@ let origin = Point { x: 0, y: 0 };
 let Point { x, y } = origin;
 ```
 
-This brings an `x` and `y` binding into scope, matching the `x` and `y` of
+This brings `x` and `y` variables into scope, matching the `x` and `y` of
 `origin`. While it can be unusual in `let`, this is the same principle of
 patterns in `match`:
 
@@ -212,8 +212,8 @@ match origin {
 
 ## Shadowing
 
-As with all bindings, anything bound by a pattern will shadow bindings
-outside of the binding construct:
+As with all variables, anything bound by a pattern will shadow variables
+outside of the `match` construct:
 
 ```rust
 let x = Some(5);
@@ -224,7 +224,7 @@ match x {
 }
 ```
 
-## Ignoring bindings
+## Ignoring values
 
 We discussed using `_` as a whole pattern to ignore it above, but you can
 also use `_` inside of another pattern to ignore just part of it:

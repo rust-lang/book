@@ -81,11 +81,11 @@ ownership exists can help explain why it works the way it does.
 First, let's take a look at the rules. Keep these in mind as we go through the
 examples that will illustrate the rules:
 
-> 1. Each value in Rust has a variable binding that’s called its *owner*.
+> 1. Each value in Rust has a variable that’s called its *owner*.
 > 2. There can only be one owner at a time.
 > 3. When the owner goes out of scope, the value will be dropped.
 
-### Variable Binding Scope
+### Variable Scope
 
 We've walked through an example of a Rust program already in the tutorial
 chapter. Now that we’re past basic syntax, we won’t include all of the `fn
@@ -94,16 +94,16 @@ the following examples inside of a `main` function yourself. This lets our
 examples be a bit more concise, letting us focus on the actual details rather
 than boilerplate.
 
-As a first example of ownership, we'll look at the *scope* of some variable
-bindings. A scope is the range within a program for which an item is valid.
-Let's say we have a variable binding that looks like this:
+As a first example of ownership, we'll look at the *scope* of some variables.
+A scope is the range within a program for which an item is valid.
+Let's say we have a variable that looks like this:
 
 ```rust
 let s = "hello";
 ```
 
-The variable binding `s` refers to a string literal, where the value of the
-string is hard coded into the text of our program. The binding is valid from
+The variable `s` refers to a string literal, where the value of the
+string is hard coded into the text of our program. The variable is valid from
 the point at which it’s declared until the end of the current _scope_. That is:
 
 ```rust
@@ -199,7 +199,7 @@ variable. If we do it twice, that’s a bug too. We need to pair exactly one
 `allocate` with exactly one `free`.
 
 Rust takes a different path: the memory is automatically returned once the
-binding to it goes out of scope. Here’s a version of our scope example from
+variable that owns it goes out of scope. Here’s a version of our scope example from
 earlier using `String`:
 
 ```rust
@@ -212,7 +212,7 @@ earlier using `String`:
 
 There is a natural point at which we can return the memory our `String` needs
 back to the operating system: when `s` goes out of scope. When a variable
-binding goes out of scope, Rust calls a special function for us. This function
+goes out of scope, Rust calls a special function for us. This function
 is called `drop`, and it is where the author of `String` can put the code to
 return the memory. Rust calls `drop` automatically at the closing `}`.
 
@@ -224,12 +224,12 @@ return the memory. Rust calls `drop` automatically at the closing `}`.
 
 This pattern has a profound impact on the way that Rust code is written. It may
 seem simple right now, but things can get tricky in more advanced situations
-when we want to have multiple variable bindings use the data that we have
+when we want to have multiple variables use the data that we have
 allocated on the heap. Let’s go over some of those situations now.
 
-#### Ways Bindings and Data Interact: Move
+#### Ways Variables and Data Interact: Move
 
-There are different ways that multiple bindings can interact with the same data
+There are different ways that multiple variables can interact with the same data
 in Rust. Let's take an example using an integer:
 
 ```rust
@@ -239,7 +239,7 @@ let y = x;
 
 We can probably guess what this is doing based on our experience with other
 languages: “Bind the value `5` to `x`, then make a copy of the value in `x` and
-bind it to `y`.” We now have two bindings, `x` and `y`, and both equal `5`.
+bind it to `y`.” We now have two variables, `x` and `y`, and both equal `5`.
 This is indeed what is happening since integers are simple values with a known,
 fixed size, and these two `5` values are pushed onto the stack.
 
@@ -278,7 +278,7 @@ words, it looks like figure 4-2.
 
 <img alt="s1 and s2 pointing to the same value" src="img/trpl04-02.svg" class="center" style="width: 50%;" />
 
-Figure 4-2: Representation in memory of the binding `s2` that has a copy of
+Figure 4-2: Representation in memory of the variable `s2` that has a copy of
 `s1`'s pointer, length and capacity
 
 And _not_ Figure 4-3, which is what memory would look like if Rust instead
@@ -290,8 +290,8 @@ potentially be very expensive if the data on the heap was large.
 Figure 4-3: Another possibility for what `s2 = s1` might do, if Rust chose to
 copy heap data as well.
 
-Earlier, we said that when a binding goes out of scope, Rust will automatically
-call the `drop` function and clean up the heap memory for that binding. But
+Earlier, we said that when a variable goes out of scope, Rust will automatically
+call the `drop` function and clean up the heap memory for that variable. But
 in figure 4-2, we see both data pointers pointing to the same location. This is
 a problem: when `s2` and `s1` go out of scope, they will both try to free the
 same memory. This is known as a *double free* error and is one of the memory
@@ -326,7 +326,7 @@ println!("{}", s1);
 If you have heard the terms "shallow copy" and "deep copy" while working with
 other languages, the concept of copying the pointer, length, and capacity
 without copying the data probably sounds like a shallow copy. But because Rust
-also invalidates the first binding, instead of calling this a shallow copy,
+also invalidates the first variable, instead of calling this a shallow copy,
 it's known as a _move_. Here we would read this by saying that `s1` was _moved_
 into `s2`. So what actually happens looks like Figure 4-4.
 
@@ -341,7 +341,7 @@ Furthermore, there’s a design choice that’s implied by this: Rust will never
 automatically create "deep" copies of your data. Therefore, any _automatic_
 copying can be assumed to be inexpensive.
 
-#### Ways Bindings and Data Interact: Clone
+#### Ways Variables and Data Interact: Clone
 
 If we _do_ want to deeply copy the `String`’s data and not just the `String`
 itself, there’s a common method for that: `clone`. We will discuss methods in
@@ -385,13 +385,13 @@ This seems to contradict what we just learned: we don't have a call to
 This is because types like integers that have a known size at compile time are
 stored entirely on the stack, so copies of the actual values are quick to make.
 That means there's no reason we would want to prevent `x` from being valid
-after we create the binding `y`. In other words, there’s no difference between
+after we create the variable `y`. In other words, there’s no difference between
 deep and shallow copying here, so calling `clone` wouldn’t do anything
 differently from the usual shallow copying and we can leave it out.
 
 Rust has a special annotation called the `Copy` trait that we can place on
 types like these (we'll talk more about traits in Chapter XX). If a type has
-the `Copy` trait, an older binding is still usable after assignment. Rust will
+the `Copy` trait, an older variable is still usable after assignment. Rust will
 not let us annotate a type with the `Copy` trait if the type, or any of its
 parts, has implemented `drop`. If the type needs something special to happen
 when the value goes out of scope and we add the `Copy` annotation to that type,
@@ -411,8 +411,8 @@ Here’s some of the types that are `Copy`:
 ### Ownership and Functions
 
 The semantics for passing a value to a function are similar to assigning a
-value to a binding. Passing a binding to a function will move or copy, just
-like assignment. Here’s an example, with some annotations showing where bindings
+value to a variable. Passing a variable to a function will move or copy, just
+like assignment. Here’s an example, with some annotations showing where variables
 go into and out of scope:
 
 Filename: src/main.rs
@@ -484,9 +484,9 @@ fn takes_and_gives_back(a_string: String) -> String { // a_string comes into sco
 }
 ```
 
-It’s the same pattern, every time: assigning a value to another binding moves
-it, and when heap data values' bindings go out of scope, if the data hasn’t
-been moved to be owned by another binding, the value will be cleaned up by
+It’s the same pattern, every time: assigning a value to another variable moves
+it, and when heap data values' variables go out of scope, if the data hasn’t
+been moved to be owned by another variable, the value will be cleaned up by
 `drop`.
 
 Taking ownership then returning ownership with every function is a bit tedious.

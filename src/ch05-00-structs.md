@@ -34,7 +34,7 @@ struct User {
 
 To use a struct, we create an *instance* of that struct by specifying concrete
 values for each of the fields. Creating an instance is done by declaring a
-binding with `let`, stating the name of the struct, then curly braces with
+variable with `let`, stating the name of the struct, then curly braces with
 `key: value` pairs inside it where the keys are the names of the fields and the
 values are the data we want to store in those fields. The fields don't have to
 be specified in the same order in which the struct declared them. In other
@@ -64,8 +64,8 @@ wanted just this user's email address, we can say `user1.email`.
 ## An Example Program
 
 To understand when we might want to use structs, let’s write a program that
-calculates the area of a rectangle. We’ll start off with single variable
-bindings, then refactor our program until we're using `struct`s instead.
+calculates the area of a rectangle. We’ll start off with single variables, then
+refactor our program until we're using `struct`s instead.
 
 Let’s make a new binary project with Cargo called *rectangles* that will take
 the length and width of a rectangle specified in pixels and will calculate the

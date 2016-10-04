@@ -86,7 +86,7 @@ fn value_in_cents(coin: Coin) -> i32 {
 }
 ```
 
-Another useful feature of match arms is that they can create bindings to parts
+Another useful feature of match arms is that they can create variables for parts
 of the values that match the pattern. From 1999 through 2008, the U.S. printed
 quarters with different designs for each of the 50 states on one side. The other
 coins did not get state designs, so only quarters have this extra attribute. We
@@ -114,9 +114,9 @@ While we sort our loose change by coin type in order to count it, we're going
 to call out the name of the state so that if it's one our friend doesn't have
 yet, they can add it to their collection.
 
-In the match statement to do this, the quarter case now has a binding, `state`,
-that contains the value of the state of that quarter. The binding will only get
-created if the coin matches the `Quarter` pattern. Then we can use the binding
+In the match statement to do this, the quarter case now has a variable, `state`,
+that contains the value of the state of that quarter. The variable will only get
+created if the coin matches the `Quarter` pattern. Then we can use the variable
 in the code for that arm:
 
 ```rust
@@ -149,8 +149,8 @@ fn value_in_cents(coin: Coin) -> i32 {
 If we were to call `value_in_cents(Coin::Quarter(UsState::Alaska))`, `coin` will
 be `Coin::Quarter(UsState::Alaska)`. When we compare that value with each of the
 match arms, none of them match until we reach `Coin::Quarter(state)`. At that
-point, the binding for `state` will be the value `UsState::Alaska`. We can then
-use that binding in the `println!`, thus getting the inner state value out of
+point, the variable `state` will be bound to the value `UsState::Alaska`. We can then
+use that variable in the `println!`, thus getting the inner state value out of
 the `Coin` enum variant for `Quarter` and enabling us to print "State quarter
 from Alaska!".
 

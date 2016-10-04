@@ -30,7 +30,7 @@ fn main() {
 ```
 
 All `if` expressions start with the keyword `if`, which is followed by a
-condition. In this case, our condition is checking if our variable binding
+condition. In this case, our condition is checking if our variable
 `number` has a value that is less than 5. The block of code we want to execute
 if the condition is true goes immediately after the condition, inside curly
 braces. These blocks are sometimes called *arms*. We can optionally also
@@ -161,10 +161,10 @@ yourself with more than one, you may want to look at refactoring your code. In
 Chapter 6, we'll talk about a powerful Rust branching construct called `match`
 for these cases.
 
-#### Using `if` in a Binding
+#### Using `if` in a `let` statement
 
 The last detail you need to know about `if` is that it’s an expression. That
-means that we can use it on the right hand side of a `let` binding, for
+means that we can use it on the right hand side of a `let` statement, for
 instance:
 
 Filename: src/main.rs
@@ -236,13 +236,13 @@ error: Could not compile `branches`.
 ```
 
 The expression in the `if` block evaluates to an integer and the expression in
-the `else` block evaluates to a string. This can’t work, because variable
-bindings must have a single type. Rust needs to know at compile time what type
-the `number` binding is, definitively, so that it can verify at compile time
+the `else` block evaluates to a string. This can’t work, because variables
+must have a single type. Rust needs to know at compile time what type
+the `number` variable is, definitively, so that it can verify at compile time
 that its type is valid everywhere we use `number`. Rust wouldn't be able to do
 that if the type of `number` was only determined at runtime; the compiler would
 be more complex and be able to make fewer guarantees about our code if it had
-to keep track of multiple hypothetical types for any variable binding.
+to keep track of multiple hypothetical types for any variable.
 
 ### Repetition with Loops
 
@@ -429,7 +429,7 @@ That's a bit nicer, isn't it?
 
 ## Summary
 
-You made it! That was a big chapter: we covered variable bindings, scalar and
+You made it! That was a big chapter: we covered variables, scalar and
 compound data types, functions, comments, `if` expressions, and loops! If you'd
 like to get some practice with the concepts in this chapter, try building
 programs to do things like:
