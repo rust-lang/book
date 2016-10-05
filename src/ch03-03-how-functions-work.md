@@ -224,7 +224,7 @@ The expression:
 }
 ```
 
-is a block that, in this case, evaluates to `4`, and then gets bound to
+is a block that, in this case, evaluates to `4`, and then gets assigned to
 `y` as part of the `let` statement.
 
 Note that the line containing `x + 1` does not have a semicolon at the end,

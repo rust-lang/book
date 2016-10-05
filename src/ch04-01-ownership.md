@@ -262,8 +262,7 @@ is the memory that holds the contents, and this is on the heap.
 
 <img alt="String in memory" src="img/trpl04-01.svg" class="center" style="width: 50%;" />
 
-Figure 4-1: Representation in memory of a `String` holding the value "hello"
-bound to `s1`
+Figure 4-1: Representation in memory of a `String` variable `s1` holding the value "hello"
 
 The length is how much memory, in bytes, the contents of the `String` is
 currently using. The capacity is the total amount of memory, in bytes, that the

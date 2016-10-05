@@ -1,4 +1,4 @@
-## Variable Bindings and Mutability
+## Variables and Mutability
 
 We mentioned in Chapter 2 that by default, variables are *immutable*.
 This is one of many nudges in Rust that encourages us to write our code in a
@@ -7,8 +7,8 @@ offer. We still have the option to make our variables mutable, though. Let's
 explore how and why Rust encourages us to favor immutability, and why we might
 want to opt out of that.
 
-Variables being immutable means that once a value is bound, you can't
-change that value. To illustrate this, let's generate a new project in your
+Variables being immutable means once they're initialized, you can't
+change their value. To illustrate this, let's generate a new project in your
 projects directory called `variables` by using `cargo new --bin variables`.
 
 Then, in your new `variables` directory, open `src/main.rs` and replace its code
@@ -129,12 +129,26 @@ The value of x is: 5
 The value of x is: 6
 ```
 
-Using `mut`, we are allowed to change the value that `x` binds to from `5` to
+Using `mut`, we are allowed to change the value of `x` from `5` to
 `6`. In some cases you'll want to make a variable mutable because it makes the
 code easier to understand than an implementation that only uses immutable
 variables. In cases where you're using large data structures, mutating an
 instance in place may be faster than copying and returning newly allocated
 instances. It all depends on the tradeoffs you want to make in your situation.
+
+### Variable Binding and Constants
+
+In rust we talk about binding a variable name to a value, which simply means
+initializing a variable with a value, also known as initial assignment.
+
+```rust,ignore
+let x;             // declares a variable x, which is not yet bound
+let x = 37;        // declares a variable x, which is bound to the value 37
+const x: i32 = 37; // declares a constant x, whose value is 37
+```
+
+A constant is declared using `const`, is bound to a value at compile time and
+remains unchanged throughout the execution of the program.
 
 ### Shadowing
 
@@ -179,7 +193,7 @@ have the variable be immutable after those transformations have been completed.
 
 The other difference between `mut` and shadowing is that, since we're
 effectively creating a new variable when we use the `let` keyword again, we can
-change the type of the value we're binding to but reuse the same name. For
+change the type of the value we're binding to, but reuse the same name. For
 example, say we ask a user to show us how many spaces they want between some
 text by sending us space characters, but we really want to store that as a
 number:

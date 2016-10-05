@@ -131,7 +131,7 @@ As we learned in Chapter 1, `println!` is a macro that prints a string to the
 screen. This is just a prompt stating what the game is and requesting input from
 the user.
 
-### Storing Values with Variable Bindings
+### Storing Values with Variables
 
 Next we need to store the user input.
 
@@ -147,7 +147,7 @@ used to create *variables*. Here's another example:
 let foo = bar;
 ```
 
-This will create a new variable named `foo`, and bind it to the value `bar`.
+This will create a new variable named `foo`, and initialize it with the value `bar`.
 In Rust, variables are immutable by default. To make our variable mutable, our
 example uses `mut` before the variable name.
 
@@ -161,7 +161,7 @@ let mut bar = 5; // mutable
 
 So now we know that `let mut guess` will introduce a mutable variable named
 `guess`, but we have to look at the other side of the `=` for the value it’s
-bound to: `String::new`. `String` is a string type, provided by the standard
+initialized with: `String::new`. `String` is a string type, provided by the standard
 library. A [`String`][string]<!-- ignore --> is a growable, UTF-8 encoded bit
 of text.
 
@@ -177,7 +177,7 @@ You’ll find a `new` function on many types, as it’s a common name for making
 a new value of some kind.
 
 So to summarize, the `let mut guess = String::new();` line has created a
-mutable variable that is currently bound to a new, empty instance of a `String`.
+mutable variable that is initialized with a new, empty instance of a `String`.
 Whew!
 
 Let’s move forward:
@@ -744,7 +744,7 @@ Shadowing lets us re-use the `guess` variable name rather than forcing us to
 come up with two unique variables, like `guess_str` and `guess` or something
 (we'll cover shadowing in more detail in Chapter 3).
 
-We bind `guess` to the expression `guess.trim().parse()`. The `guess` in the
+We re-initialize `guess` to the result of the expression `guess.trim().parse()`. The `guess` in the
 expression refers to the original `guess` that was a `String` with our input in
 it. The `trim` method on `String`s will eliminate any whitespace at the
 beginning and end. Our `u32` can only contain numerical characters, but we have

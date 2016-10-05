@@ -182,7 +182,7 @@ fn main() {
 }
 ```
 
-The `number` variable will be bound to a value based on the outcome of the `if`
+The `number` variable will be initialized to a value based on the outcome of the `if`
 expression. Let’s run this to see what happens:
 
 ```bash

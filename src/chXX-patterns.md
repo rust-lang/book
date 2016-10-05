@@ -13,8 +13,8 @@ A basic `let` statement has this form:
 let PATTERN = EXPRESSION;
 ```
 
-We've seen bindings that have names in the `PATTERN` slot: a name is just a
-particularly humble form of pattern.
+We've seen statements like `let x = 5;` with a variable name in the `PATTERN`
+slot; a variable name is just a particularly humble form of pattern.
 
 ## Binding Multiple variables
 

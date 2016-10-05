@@ -149,7 +149,7 @@ fn value_in_cents(coin: Coin) -> i32 {
 If we were to call `value_in_cents(Coin::Quarter(UsState::Alaska))`, `coin` will
 be `Coin::Quarter(UsState::Alaska)`. When we compare that value with each of the
 match arms, none of them match until we reach `Coin::Quarter(state)`. At that
-point, the variable `state` will be bound to the value `UsState::Alaska`. We can then
+point, the variable `state` will have the value `UsState::Alaska`. We can then
 use that variable in the `println!`, thus getting the inner state value out of
 the `Coin` enum variant for `Quarter` and enabling us to print "State quarter
 from Alaska!".
