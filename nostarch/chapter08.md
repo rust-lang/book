@@ -36,9 +36,9 @@ let v: Vec<i32> = Vec::new();
 
 Note that we added a type annotation here. Since we don't actually do
 anything with the vector, Rust doesn't know what kind of elements we intend to
-store. This is an important point. Vectors are homogenous: they may store many
+store. This is an important point. Vectors are homogeneous: they may store many
 values, but those values must all be the same type. Vectors are generic over
-the type stored inside them (we'll talk about Generics more throroughly in
+the type stored inside them (we'll talk about Generics more thoroughly in
 Chapter 10), and the angle brackets here tell Rust that this vector will hold
 elements of the `i32` type.
 
@@ -376,7 +376,7 @@ for the `add` method that the `+` operator uses looks something like this:
 fn add(self, s: &str) -> String {
 ```
 
-This isn't excatly what the actual signature is in the standard library because
+This isn't exactly what the actual signature is in the standard library because
 `add` is defined using generics there. Here, we're just looking at what the
 signature of the method would be if `add` was defined specifically for
 `String`. This signature gives us the clues we need in order to understand the
@@ -485,7 +485,7 @@ let answer = &h[0];
 What should the value of `answer` be? Should it be `З`, the first letter? When
 encoded in UTF-8, the first byte of `З` is `208`, and the second is `151`. So
 should `answer` be `208`? `208` is not a valid character on its own, though.
-Plus, for latin letters, this would not return the answer most people would
+Plus, for Latin letters, this would not return the answer most people would
 expect: `&"hello"[0]` would then return `104`, not `h`.
 
 #### Bytes and Scalar Values and Grapheme Clusters! Oh my!
@@ -612,7 +612,7 @@ Let's switch to something a bit less complex: Hash Map!
 The last of our fundamental collections is the *hash map*. The type `HashMap<K,
 V>` stores a mapping of keys of type `K` to values of type `V`. It does this
 via a *hashing function*, which determines how it places these keys and values
-into memory. Many different programming languges support this kind of data
+into memory. Many different programming languages support this kind of data
 structure, but often with a different name: hash, map, object, hash table, or
 associative array, just to name a few.
 
@@ -641,7 +641,7 @@ need to add a `use` statement for them.
 
 Just like vectors, hash maps store their data on the heap. This `HashMap` has
 keys of type `i32` and values of type `&str`. Like vectors, hash maps are
-homogenous: all of the keys must have the same type, and all of the values must
+homogeneous: all of the keys must have the same type, and all of the values must
 have the same type.
 
 If we have a vector of tuples, we can convert it into a hash map with the

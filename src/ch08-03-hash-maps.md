@@ -32,7 +32,7 @@ need to add a `use` statement for them.
 
 Just like vectors, hash maps store their data on the heap. This `HashMap` has
 keys of type `i32` and values of type `&str`. Like vectors, hash maps are
-homogenous: all of the keys must have the same type, and all of the values must
+homogeneous: all of the keys must have the same type, and all of the values must
 have the same type.
 
 If we have a vector of tuples, we can convert it into a hash map with the
