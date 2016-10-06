@@ -140,13 +140,142 @@ This is because lifetimes are a form of generics. In the examples above, `'a`
 and `'b` were concrete lifetimes: we knew about `x` and `r`, and how long they
 would live exactly. But when we write a function, we can't know exactly all of
 the arguments that it would be called with; so we have to explain to Rust what
-we'd expect the lifetime of the argument to be. This is similar to how when we
-write a generic function, we don't know what type the argument would be, but
-it's for the scope of a reference, rather than a type.
+we'd expect the lifetime of the argument to be. We'll learn more about how to
+do this in a bit, but for now, let's just go with it. This is similar to how
+when we write a generic function, we don't know what type the argument would
+be, but it's for the scope of a reference, rather than a type.
+
+## But why?
+
+So why do we need to declare lifetimes on functions, but not inside of them?
+Here's our example from before:
+
+```rust,ignore
+let r;
+
+{
+    let x = 5;
+    r = &x;
+}
+
+println!("r: {}", r);
+```
+
+Let's extract that inner block into a function. Remember, this code won't
+compile yet.
+
+```rust,ignore
+fn foo() -> &i32 {
+    let x = 5;
+
+    &x
+}
+
+let r = foo();
+
+println!("r: {}", r);
+```
+
+We get an error:
+
+```text
+	error[E0106]: missing lifetime specifier
+ --> <anon>:2:17
+  |
+2 |     fn foo() -> &i32 {
+  |                 ^ expected lifetime parameter
+  |
+  = help: this function's return type contains a borrowed value, but there is no value for it to be borrowed from
+  = help: consider giving it a 'static lifetime
+```
+
+Rust wants us to put in a lifetime parameter. It also mentions something about
+"a `'static` lifetime," but let's ignore that for now. We'll come back to it at
+the end of the chapter.
+
+Let's add a parameter. It won't quite fix it, but we get a different error:
+
+```rust
+fn foo<'a>() -> &'a i32 {
+    let x = 5;
+
+    &x
+}
+
+let r = foo();
+
+println!("r: {}", r);
+```
+
+Here's the error:
+
+```text
+	error: `x` does not live long enough
+ --> <anon>:5:6
+  |
+5 |     &x
+  |      ^ does not live long enough
+6 | }
+  | - borrowed value only lives until here
+  |
+note: borrowed value must be valid for the lifetime 'a as defined on the block at 2:28...
+ --> <anon>:2:29
+  |
+2 |     fn foo<'a>() -> &'a i32 {
+  |                             ^
+```
+
+Now we have our "does not live long enough" error. What gives? Why does Rust
+need this parameter in the first place?
+
+When we have code inside of a function, Rust can analyze that specific case.
+There's only one thing to look at. But functions get called multiple times. So
+it can't just be one, concrete case: you have to analyze everywhere that it's
+called. Multiple, similar but different, scopes of code. So in the same way
+that functions which take multiple types need type parameters, functions which
+operate over different lifetimes need lifetime parameters. Think about it like this:
+
+```rust,ignore
+let r;         // -------+-- We know that this lifetime starts exactly here...
+               //        |
+{              //        |
+    let x = 5; //        |
+    r = &x;    //        |
+}              //        |
+               //        |
+println!("r: {}", r); // |
+               //        |
+               // -------+-- ... and ends here.
+```
+
+But in this case:
+
+```rust
+fn foo<'a>() -> &'a i32 {
+    let x = 5;
+
+    &x
+}
+
+let r1 = foo();         // -----+-- 'r1 starts here
+                        //      |
+println!("r: {}", r1);  //      |
+                        //      |
+let r2 = foo();         // --+--+-- 'r2 starts here
+                        //   |  |
+println!("r2: {}", r1); //   |  |
+                        // --+--+-- 'r2 ends
+                        // -----+-- 'r1 ends
+```
+
+That parameter, `'a`, will represent `'r1` in the first case, and `'r2` in the
+second. Two different scopes, one single parameter. Hence, generic, just like
+two different types, one type parameter.
 
 ## Two lifetimes, intertwined
 
-So what does a lifetime parameter do, anyway? Consider this example:
+To illustrate this principle a bit further, let's look at a function that takes
+_two_ references:
 
 ```rust,ignore
 fn foo(x: &i32, y: &i32) -> &i32 {
@@ -247,3 +376,30 @@ without needing to consider explicit lifetimes. But it's not 100% of the time,
 and so you may see explicit lifetimes used in various places.
 
 ## The static lifetime
+
+There is _one_ special lifetime that Rust knows about. Remember this program
+from before?
+
+```rust,ignore
+fn foo() -> &i32 {
+    let x = 5;
+
+    &x
+}
+```
+
+It gave us this help message:
+
+```text
+  = help: consider giving it a 'static lifetime
+```
+
+As it turns out, `'static` is a special lifetime. It means "this reference
+lasts for the entire duration of the program." Why would that matter? Well,
+let's think about this function a bit more. We're trying to create a new
+integer, and then return a reference to it. When the function is over, `x`
+is going to go out of scope, and so this reference is dangling. The only way
+we could possibly return a reference from a function with no parameters is
+if it were alive before the function executed. Hence, `'static`.
+
+ZOMG WE HAVENT TALKED ABOUT CONST AND STATIC YET FUUUUUU
