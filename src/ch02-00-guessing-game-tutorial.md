@@ -744,9 +744,9 @@ Shadowing lets us re-use the `guess` variable name rather than forcing us to
 come up with two unique variables, like `guess_str` and `guess` or something
 (we'll cover shadowing in more detail in Chapter 3).
 
-We re-initialize `guess` to the result of the expression `guess.trim().parse()`. The `guess` in the
-expression refers to the original `guess` that was a `String` with our input in
-it. The `trim` method on `String`s will eliminate any whitespace at the
+We initialize the second `guess` variable (a number of type u32) to the result
+of calling `.trim().parse()` on the first guess variable (a String).
+The `trim` method on `String`s will eliminate any whitespace at the
 beginning and end. Our `u32` can only contain numerical characters, but we have
 to press the return key to satisfy `read_line`. When we press the return
 key, it introduces a newline character. For example, if we type `5` and hit
