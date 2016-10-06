@@ -193,7 +193,7 @@ Some(i) => Some(i + 1),
 ```
 
 Does `Some(5)` match `Some(i)`? Why yes it does! We have the same variant. The
-`i` binds to the value inside of the `Some`, so `i` has the value `5`. Then we
+`i` initializes to the value inside of the `Some`, so `i` has the value `5`. Then we
 execute the code in that match arm: take `i`, which is `5`, add one to it, and
 create a new `Some` value with our total inside.
 
@@ -209,7 +209,7 @@ return the `None` value that is on the right side of the `=>`. We don't
 check any other arms since we found one that matched.
 
 Combining `match` and enums together is extremely powerful. You'll see this
-pattern a lot in Rust code: `match` against an enum, bind to the data
+pattern a lot in Rust code: `match` against an enum, initialize a variable to the data
 inside, and then execute code based on it. It's a bit tricky at first, but
 once you get used to it, you'll wish you had it in languages that don't support
 it. It's consistently a user favorite.

@@ -222,8 +222,8 @@ fn main() {
 }
 ```
 
-Note that the single name `tup` binds to the entire tuple, emphasizing the fact
-that a tuple is considered a single compound element. To get the individual
+The variable `tup` contains the entire tuple,
+it's a single compound element. To get the individual
 values out of a tuple, we can use pattern matching to destructure a tuple
 value, like this:
 
@@ -239,7 +239,7 @@ fn main() {
 }
 ```
 
-In this program, we first create a tuple and bind it to the name `tup`. We then
+In this program, we first create a tuple and assign it to the variable `tup`. We then
 use a pattern with `let` to take `tup` and turn it into three separate
 variables, `x`, `y`, and `z`. This is called *destructuring*, because it breaks
 the single tuple into three parts. Finally, we print the value of `y`, which is
@@ -271,7 +271,7 @@ tuple is 0.
 
 ### Arrays
 
-Another way to bind a name to a collection of multiple values is with an
+Another way to have a collection of multiple values is with an
 *array*. Unlike a tuple, every element of an array must have the same type.
 Arrays in Rust are different than arrays in some other languages because arrays
 in Rust have a fixed length: once declared, they cannot grow or shrink in size.

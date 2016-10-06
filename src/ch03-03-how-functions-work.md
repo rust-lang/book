@@ -178,7 +178,7 @@ error: Could not compile `functions`.
 ```
 
 The `let y = 6` statement does not return a value, so there isn't anything for
-`x` to bind to. This is different than in other languages like C and Ruby where
+`x` to initialize to. This is different than in other languages like C and Ruby where
 the assignment returns the value of the assignment. In those languages, we can
 write `x = y = 6` and have both `x` and `y` have the value `6`; that is not the
 case in Rust.

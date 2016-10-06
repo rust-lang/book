@@ -136,20 +136,6 @@ variables. In cases where you're using large data structures, mutating an
 instance in place may be faster than copying and returning newly allocated
 instances. It all depends on the tradeoffs you want to make in your situation.
 
-### Variable Binding and Constants
-
-In rust we talk about binding a variable name to a value, which simply means
-initializing a variable with a value, also known as initial assignment.
-
-```rust,ignore
-let x;             // declares a variable x, which is not yet bound
-let x = 37;        // declares a variable x, which is bound to the value 37
-const x: i32 = 37; // declares a constant x, whose value is 37
-```
-
-A constant is declared using `const`, is bound to a value at compile time and
-remains unchanged throughout the execution of the program.
-
 ### Shadowing
 
 As we saw in the guessing game tutorial, we can declare new variables with the
@@ -173,7 +159,7 @@ fn main() {
 }
 ```
 
-This program first binds `x` to a value of `5`. Then, it shadows `x` by
+This program first initializes `x` to a value of `5`. Then, it shadows `x` by
 repeating `let x =`, taking the original value and adding `1` so that the value
 of `x` is then `6`. The third `let` statement also shadows `x`, taking the
 previous value and multiplying it by `2` to give `x` a final value of `12`. If
@@ -193,7 +179,7 @@ have the variable be immutable after those transformations have been completed.
 
 The other difference between `mut` and shadowing is that, since we're
 effectively creating a new variable when we use the `let` keyword again, we can
-change the type of the value we're binding to, but reuse the same name. For
+change the type of the value, but reuse the same name. For
 example, say we ask a user to show us how many spaces they want between some
 text by sending us space characters, but we really want to store that as a
 number:
@@ -230,4 +216,4 @@ error: aborting due to previous error
 ```
 
 Now that we've explored how variables work, let's look at some more
-data types of values that we can bind variables to.
+data types they can have.

@@ -13,10 +13,8 @@ A basic `let` statement has this form:
 let PATTERN = EXPRESSION;
 ```
 
-We've seen statements like `let x = 5;` with a variable name in the `PATTERN`
-slot; a variable name is just a particularly humble form of pattern.
-
-## Binding Multiple variables
+We've seen statements like `let x = 5;` with a variable in the `PATTERN`
+slot; a variable is just a particularly humble form of pattern.
 
 Let’s try a more complex pattern. Change our example program to this:
 
@@ -53,8 +51,8 @@ And here’s the value:
 (5, 6)
 ```
 
-As you can see, the two line up visually, and so `let` binds `5` to `x` and `6`
-to `y`. We could have used two `let` statements as well:
+As you can see, the two line up visually, and so `let` initializes `x` to `5`
+and `y` to `6`. We could have used two `let` statements as well:
 
 ```rust
 fn main() {
@@ -133,7 +131,7 @@ This prints `one or two`.
 
 ## ref and ref mut
 
-Usually, when you match against a pattern, variables are bound by value.
+Usually, when you match against a pattern, variables are initialized to a value.
 This means you'll end up moving the value out:
 
 ```rust,ignore
@@ -148,7 +146,7 @@ match name {
 println!("name is: {:?}", name);
 ```
 
-If you'd prefer to bind `name` by reference, use the `ref` keyword:
+If you'd prefer to initialize `name` to a reference, use the `ref` keyword:
 
 ```rust
 let name = Some(String::from("Bors"));
@@ -206,13 +204,13 @@ struct Point {
 let origin = Point { x: 0, y: 0 };
 
 match origin {
-    Point { x, y } => { }, // x and y are bound here
+    Point { x, y } => { }, // x and y are initialized here
 }
 ```
 
 ## Shadowing
 
-As with all variables, anything bound by a pattern will shadow variables
+As with all variables, those declared by a pattern will shadow variables
 outside of the `match` construct:
 
 ```rust
