@@ -72,8 +72,9 @@
 return the <code>String</code> back to the calling function so that we can still use the
 <code>String</code> after the call to <code>calculate_length</code>, since the <code>String</code> was moved
 into <code>calculate_length</code>.</p>
-<p>Here is how you would use a function without taking ownership of it using
-<em>references:</em></p>
+<p>Here is how you would define and use a <code>calculate_length</code> function that takes a
+<em>reference</em> to an object as an argument instead of taking ownership of the
+argument:</p>
 <p>Filename: src/main.rs</p>
 <pre><code class="language-rust">fn main() {
     let s1 = String::from(&quot;hello&quot;);
