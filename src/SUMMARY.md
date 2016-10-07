@@ -44,8 +44,6 @@
 
 - [Generics]()
 
-- [Iterators]()
-
 - [I/O]()
     - [`Read` & `Write`]()
     - [`std::fs`]()
