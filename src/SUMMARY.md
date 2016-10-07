@@ -47,7 +47,7 @@
 
 - [Generics]()
 
-- [I/O]()
+- [A tour of the standard library]()
     - [`Read` & `Write`]()
     - [`std::fs`]()
     - [`std::path`]()
@@ -57,6 +57,12 @@
     - [Unit Tests]()
     - [Integration Tests]()
     - [Test Attribute]()
+
+- [Creating a Library with Cargo](chXX-00-creating-a-library-with-cargo.md)
+    - [Crates.io](chXX-01-crates-io.md)
+    - [Organizing your Public API](chXX-02-public-api.md)
+    - [Documentation](chXX-03-documentation.md)
+    - [Workspaces and Multiple Related Crates](chXX-04-workspaces.md)
 
 ## Thinking in Rust
 
