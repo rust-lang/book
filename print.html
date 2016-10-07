@@ -4897,7 +4897,7 @@ the values next to each other in memory.</p>
 </code></pre>
 <p>Note that we added a type annotation here. Since we don't actually do
 anything with the vector, Rust doesn't know what kind of elements we intend to
-store. This is an important point. Vectors are homogenous: they may store many
+store. This is an important point. Vectors are homogeneous: they may store many
 values, but those values must all be the same type. Vectors are generic over
 the type stored inside them (we'll talk about Generics more thoroughly in
 Chapter 10), and the angle brackets here tell Rust that this vector will hold
@@ -5227,7 +5227,7 @@ let answer = &amp;h[0];
 <p>What should the value of <code>answer</code> be? Should it be <code>З</code>, the first letter? When
 encoded in UTF-8, the first byte of <code>З</code> is <code>208</code>, and the second is <code>151</code>. So
 should <code>answer</code> be <code>208</code>? <code>208</code> is not a valid character on its own, though.
-Plus, for latin letters, this would not return the answer most people would
+Plus, for Latin letters, this would not return the answer most people would
 expect: <code>&amp;&quot;hello&quot;[0]</code> would then return <code>104</code>, not <code>h</code>.</p>
 <h4>Bytes and Scalar Values and Grapheme Clusters! Oh my!</h4>
 <p>This leads to another point about UTF-8: there are really three relevant ways
@@ -5336,7 +5336,7 @@ macro to construct them, for example, and they're not in the prelude, so we
 need to add a <code>use</code> statement for them.</p>
 <p>Just like vectors, hash maps store their data on the heap. This <code>HashMap</code> has
 keys of type <code>i32</code> and values of type <code>&amp;str</code>. Like vectors, hash maps are
-homogenous: all of the keys must have the same type, and all of the values must
+homogeneous: all of the keys must have the same type, and all of the values must
 have the same type.</p>
 <p>If we have a vector of tuples, we can convert it into a hash map with the
 <code>collect</code> method. The first element in each tuple will be the key, and the

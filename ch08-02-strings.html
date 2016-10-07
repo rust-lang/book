@@ -244,7 +244,7 @@ let answer = &amp;h[0];
 <p>What should the value of <code>answer</code> be? Should it be <code>З</code>, the first letter? When
 encoded in UTF-8, the first byte of <code>З</code> is <code>208</code>, and the second is <code>151</code>. So
 should <code>answer</code> be <code>208</code>? <code>208</code> is not a valid character on its own, though.
-Plus, for latin letters, this would not return the answer most people would
+Plus, for Latin letters, this would not return the answer most people would
 expect: <code>&amp;&quot;hello&quot;[0]</code> would then return <code>104</code>, not <code>h</code>.</p>
 <h4>Bytes and Scalar Values and Grapheme Clusters! Oh my!</h4>
 <p>This leads to another point about UTF-8: there are really three relevant ways
