@@ -247,7 +247,7 @@ let answer = &h[0];
 What should the value of `answer` be? Should it be `З`, the first letter? When
 encoded in UTF-8, the first byte of `З` is `208`, and the second is `151`. So
 should `answer` be `208`? `208` is not a valid character on its own, though.
-Plus, for latin letters, this would not return the answer most people would
+Plus, for Latin letters, this would not return the answer most people would
 expect: `&"hello"[0]` would then return `104`, not `h`.
 
 #### Bytes and Scalar Values and Grapheme Clusters! Oh my!
