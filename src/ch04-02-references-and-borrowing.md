@@ -5,8 +5,9 @@ return the `String` back to the calling function so that we can still use the
 `String` after the call to `calculate_length`, since the `String` was moved
 into `calculate_length`.
 
-Here is how you would use a function without taking ownership of it using
-*references:*
+Here is how you would define and use a `calculate_length` function that takes a
+*reference* to an object as an argument instead of taking ownership of the
+argument:
 
 Filename: src/main.rs
 
