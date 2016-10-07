@@ -2,8 +2,8 @@
 
 Every value in Rust is of a certain *type*, which tells Rust what kind of data
 is being given so it knows how to work with that data. In this section, we'll
-look at a number of types built into the language itself split into two subsets:
-scalar and compound.
+look at a number of types built into the language itself. We split the types
+into two subsets: scalar and compound.
 
 Something to keep in mind throughout this section: Rust is a *statically typed*
 language, which means that it must know the types of all bindings at compile
