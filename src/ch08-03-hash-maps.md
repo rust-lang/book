@@ -68,7 +68,7 @@ map.insert(field_name, field_value);
 // field_name and field_value are invalid at this point
 ```
 
-We would not be able to use the bindings `field_name` and `field_value` after
+We would not be able to use the variables `field_name` and `field_value` after
 they have been moved into the hash map with the call to `insert`.
 
 If we insert references to values, the values themselves will not be moved into
@@ -164,7 +164,7 @@ map.insert(1, "hello");
 let e = map.entry(2);
 ```
 
-Here, the value bound to `e` is a special enum, `Entry`. An `Entry` represents a
+Here, `e` is initialized with a special enum, `Entry`. An `Entry` represents a
 value that might or might not exist. Let's say that we want to see if the key
 `2` has a value associated with it. If it doesn't, we want to insert the value
 "world". In both cases, we want to return the resulting value that now goes
@@ -219,7 +219,7 @@ println!("{:?}", map);
 This will print `{"world": 2, "hello": 1, "wonderful": 1}`. The `or_insert`
 method actually returns a mutable reference (`&mut V`) to the value in the
 hash map for this key. Here we store that mutable reference in the `count`
-variable binding, so in order to assign to that value we must first dereference
+variable, so in order to assign to that value we must first dereference
 `count` using the asterisk (`*`). The mutable reference goes out of scope at
 the end of the `for` loop, so all of these changes are safe and allowed by the
 borrowing rules.

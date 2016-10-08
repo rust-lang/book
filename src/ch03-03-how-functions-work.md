@@ -137,7 +137,7 @@ We've already been using both statements and expressions. *Statements* are
 instructions that perform some action and do not return a value. *Expressions*
 evaluate to a resulting value. Let's look at some examples.
 
-Creating a variable binding and assigning a value to it with the `let` keyword
+Creating a variable and assigning a value to it with the `let` keyword
 is a statement. In this example, `let y = 6;` is a statement:
 
 Filename: src/main.rs
@@ -152,7 +152,7 @@ Function definitions are also statements; the entire previous example is a
 statement in itself.
 
 Statements do not return values themselves. Therefore, you can’t assign a `let`
-binding to another binding, as this code tries to do:
+statement to another variable, as this code tries to do:
 
 Filename: src/main.rs
 
@@ -178,7 +178,7 @@ error: Could not compile `functions`.
 ```
 
 The `let y = 6` statement does not return a value, so there isn't anything for
-`x` to bind to. This is different than in other languages like C and Ruby where
+`x` to initialize to. This is different than in other languages like C and Ruby where
 the assignment returns the value of the assignment. In those languages, we can
 write `x = y = 6` and have both `x` and `y` have the value `6`; that is not the
 case in Rust.
@@ -224,7 +224,7 @@ The expression:
 }
 ```
 
-is a block that, in this case, evaluates to `4`, and then gets bound to
+is a block that, in this case, evaluates to `4`, and then gets assigned to
 `y` as part of the `let` statement.
 
 Note that the line containing `x + 1` does not have a semicolon at the end,
@@ -271,7 +271,7 @@ The value of x is: 5
 The `5` in `five` is the function's return value, which is why the return type
 is `i32`. Let’s examine this in more detail. There are two important bits.
 First, the line `let x = five();` shows us using the return value of a function
-to initialize a binding.
+to initialize a variable.
 
 Because the function `five` returns a `5`, that line is the same as saying:
 

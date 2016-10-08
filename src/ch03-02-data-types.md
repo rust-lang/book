@@ -6,7 +6,7 @@ look at a number of types built into the language itself. We split the types
 into two subsets: scalar and compound.
 
 Something to keep in mind throughout this section: Rust is a *statically typed*
-language, which means that it must know the types of all bindings at compile
+language, which means that it must know the types of all variables at compile
 time. The compiler can usually infer what type we want to use based on the
 value and how we use it. In cases when many types are possible, such as when we
 converted a `String` to a numeric type using `parse` in Chapter 2, we must
@@ -153,7 +153,7 @@ fn main() {
 ```
 
 Each expression in these statements uses a mathematical operator and evaluates
-to a single value, which is then bound to a variable.
+to a single value, which is then assigned to a variable.
 
 #### The Boolean Type
 
@@ -222,8 +222,8 @@ fn main() {
 }
 ```
 
-Note that the single name `tup` binds to the entire tuple, emphasizing the fact
-that a tuple is considered a single compound element. To get the individual
+The variable `tup` contains the entire tuple,
+it's a single compound element. To get the individual
 values out of a tuple, we can use pattern matching to destructure a tuple
 value, like this:
 
@@ -239,9 +239,9 @@ fn main() {
 }
 ```
 
-In this program, we first create a tuple and bind it to the name `tup`. We then
+In this program, we first create a tuple and assign it to the variable `tup`. We then
 use a pattern with `let` to take `tup` and turn it into three separate
-bindings, `x`, `y`, and `z`. This is called *destructuring*, because it breaks
+variables, `x`, `y`, and `z`. This is called *destructuring*, because it breaks
 the single tuple into three parts. Finally, we print the value of `y`, which is
 `6.4`.
 
@@ -265,13 +265,13 @@ fn main() {
 }
 ```
 
-This program creates a tuple, `x`, and then makes new bindings to each element
+This program creates a tuple, `x`, and then makes new variables for each element
 by using their index. As with most programming languages, the first index in a
 tuple is 0.
 
 ### Arrays
 
-Another way to bind a name to a collection of multiple values is with an
+Another way to have a collection of multiple values is with an
 *array*. Unlike a tuple, every element of an array must have the same type.
 Arrays in Rust are different than arrays in some other languages because arrays
 in Rust have a fixed length: once declared, they cannot grow or shrink in size.
@@ -319,8 +319,8 @@ fn main() {
 }
 ```
 
-In this example, the binding named `first` will get the value `1`, since that
-is the value at index `[0]` in the array. The binding named `second` will get
+In this example, the variable named `first` will get the value `1`, since that
+is the value at index `[0]` in the array. The variable named `second` will get
 the value `2` from index `[1]` in the array.
 
 #### Invalid Array Element Access

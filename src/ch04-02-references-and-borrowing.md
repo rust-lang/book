@@ -27,7 +27,7 @@ fn calculate_length(s: &String) -> usize {
 }
 ```
 
-First, you’ll notice all of the tuple stuff in the binding declaration and the
+First, you’ll notice all of the tuple stuff in the variable declaration and the
 function return value is gone. Next, note that we pass `&s1` into
 `calculate_length`, and in its definition, we take `&String` rather than
 `String`.
@@ -104,7 +104,7 @@ error: cannot borrow immutable borrowed content `*some_string` as mutable
   |     ^^^^^^^^^^^
 ```
 
-Just as bindings are immutable by default, so are references. We’re not allowed
+Just as variables are immutable by default, so are references. We’re not allowed
 to modify something we have a reference to.
 
 ### Mutable References

@@ -1,17 +1,17 @@
-## Variable Bindings and Mutability
+## Variables and Mutability
 
-We mentioned in Chapter 2 that by default, variable bindings are *immutable*.
+We mentioned in Chapter 2 that by default, variables are *immutable*.
 This is one of many nudges in Rust that encourages us to write our code in a
 way that gets the most of the safety and easy concurrency that Rust has to
-offer. We still have the option to make our bindings mutable, though. Let's
+offer. We still have the option to make our variables mutable, though. Let's
 explore how and why Rust encourages us to favor immutability, and why we might
 want to opt out of that.
 
-Variable bindings being immutable means that once a value is bound, you can't
-change that value. To illustrate this, let's generate a new project in your
-projects directory called `bindings` by using `cargo new --bin bindings`.
+Variables being immutable means once they're initialized, you can't
+change their value. To illustrate this, let's generate a new project in your
+projects directory called `variables` by using `cargo new --bin variables`.
 
-Then, in your new `bindings` directory, open `src/main.rs` and replace its code
+Then, in your new `variables` directory, open `src/main.rs` and replace its code
 with the following:
 
 Filename: src/main.rs
@@ -30,7 +30,7 @@ message, as in this output:
 
 ```bash
 $ cargo run
-   Compiling bindings v0.0.1 (file:///projects/bindings)
+   Compiling variables v0.0.1 (file:///projects/variables)
 error: re-assignment of immutable variable `x` [--explain E0384]
  --> src/main.rs:4:5
 4 |>     x = 6;
@@ -100,7 +100,7 @@ because the compiler is enforcing that guarantee for us. When reading and
 writing code, we don't have to keep track in our head how and where a value
 might change. This can make code easier to reason about.
 
-Mutability can be really useful, though! Bindings are immutable only by
+Mutability can be really useful, though! Variables are immutable only by
 default; you can make them mutable by adding `mut` in front of the variable
 name. In addition to allowing this value to be changed, it conveys intent to
 future readers of the code by indicating that other parts of the code will be
@@ -123,26 +123,26 @@ Running this, we get:
 
 ```bash
 $ cargo run
-   Compiling bindings v0.1.0 (file:///projects/bindings)
-     Running `target/debug/bindings`
+   Compiling variables v0.1.0 (file:///projects/variables)
+     Running `target/debug/variables`
 The value of x is: 5
 The value of x is: 6
 ```
 
-Using `mut`, we are allowed to change the value that `x` binds to from `5` to
-`6`. In some cases you'll want to make a binding mutable because it makes the
+Using `mut`, we are allowed to change the value of `x` from `5` to
+`6`. In some cases you'll want to make a variable mutable because it makes the
 code easier to understand than an implementation that only uses immutable
-bindings. In cases where you're using large data structures, mutating an
+variables. In cases where you're using large data structures, mutating an
 instance in place may be faster than copying and returning newly allocated
 instances. It all depends on the tradeoffs you want to make in your situation.
 
 ### Shadowing
 
-As we saw in the guessing game tutorial, we can declare new bindings with the
-same name as a previous binding, and the new binding *shadows* the previous
-binding. We say that the first binding is *shadowed* by the second, which means
-that the second binding's value is what you will see when you use the variable.
-We can shadow a binding by using the same binding's name and repeating the use
+As we saw in the guessing game tutorial, we can declare new variables with the
+same name as a previous variable, and the new variable *shadows* the previous
+variable. We say that the first variable is *shadowed* by the second, which means
+that the second variable's value is what you will see when you use the variable.
+We can shadow a variable by using the same variable's name and repeating the use
 of the `let` keyword as follows:
 
 Filename: src/main.rs
@@ -159,7 +159,7 @@ fn main() {
 }
 ```
 
-This program first binds `x` to a value of `5`. Then, it shadows `x` by
+This program first initializes `x` to a value of `5`. Then, it shadows `x` by
 repeating `let x =`, taking the original value and adding `1` so that the value
 of `x` is then `6`. The third `let` statement also shadows `x`, taking the
 previous value and multiplying it by `2` to give `x` a final value of `12`. If
@@ -167,19 +167,19 @@ you run this, it will output:
 
 ```bash
 $ cargo run
-   Compiling bindings v0.1.0 (file:///projects/bindings)
-     Running `target/debug/bindings`
+   Compiling variables v0.1.0 (file:///projects/variables)
+     Running `target/debug/variables`
 The value of x is: 12
 ```
 
-This is different from marking a binding as `mut` because unless we use the
+This is different from marking a variable as `mut` because unless we use the
 `let` keyword again, we'll get a compile-time error if we accidentally try to
-reassign to this binding. We can perform a few transformations on a value, but
-have the binding be immutable after those transformations have been completed.
+reassign to this variable. We can perform a few transformations on a value, but
+have the variable be immutable after those transformations have been completed.
 
 The other difference between `mut` and shadowing is that, since we're
-effectively creating a new binding when we use the `let` keyword again, we can
-change the type of the value we're binding to but reuse the same name. For
+effectively creating a new variable when we use the `let` keyword again, we can
+change the type of the value, but reuse the same name. For
 example, say we ask a user to show us how many spaces they want between some
 text by sending us space characters, but we really want to store that as a
 number:
@@ -189,8 +189,8 @@ let spaces = "   ";
 let spaces = spaces.len();
 ```
 
-This is allowed: the first `spaces` binding is a string type, and the second
-`spaces` binding, which is a brand new binding that happens to have the same
+This is allowed: the first `spaces` variable is a string type, and the second
+`spaces` variable, which is a brand new variable that happens to have the same
 name as the first one, is a number type. Shadowing thus saves us from having to
 come up with different names like `spaces_str` and `spaces_num`; we can reuse
 the simpler `spaces` name. If we try to use `mut` for this, however, like this:
@@ -201,7 +201,7 @@ spaces = spaces.len();
 ```
 
 We will get a compile-time error because we are not allowed to mutate a
-binding's type:
+variable's type:
 
 ```bash
 error: mismatched types [--explain E0308]
@@ -215,5 +215,5 @@ note:    found type `usize`
 error: aborting due to previous error
 ```
 
-Now that we've explored how variable bindings work, let's look at some more
-data types of values that we can bind variables to.
+Now that we've explored how variables work, let's look at some more
+data types they can have.
