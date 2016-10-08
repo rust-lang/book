@@ -1,9 +1,10 @@
 # Patterns
 
 We've actually used patterns a few times so far: they're used in `let`
-statements, in function arguments, and in the `match` expression. Patterns have a
-lot more abilities than we have demonstrated so far, so we'll cover some of the most commonly used ones in this section. Any of these abilities work in
-any place where a pattern is used.
+statements, in function arguments, and in the `match` expression. Patterns have
+a lot more abilities than we have demonstrated so far, so we'll cover some of
+the most commonly used ones in this section. Any of these abilities work in any
+place where a pattern is used.
 
 ## `let` statements
 
@@ -13,8 +14,8 @@ A basic `let` statement has this form:
 let PATTERN = EXPRESSION;
 ```
 
-We've seen statements like `let x = 5;` with a variable in the `PATTERN`
-slot; a variable is just a particularly humble form of pattern.
+We've seen statements like `let x = 5;` with a variable name in the `PATTERN`
+slot; a variable name is just a particularly humble form of pattern.
 
 Let’s try a more complex pattern. Change our example program to this:
 
@@ -51,8 +52,9 @@ And here’s the value:
 (5, 6)
 ```
 
-As you can see, the two line up visually, and so `let` initializes `x` to `5`
-and `y` to `6`. We could have used two `let` statements as well:
+As you can see, the two line up visually, and so `let` binds the variable `x`
+to the value `5` and `y` to `6`. We could have used two `let` statements as
+well:
 
 ```rust
 fn main() {
@@ -131,8 +133,8 @@ This prints `one or two`.
 
 ## ref and ref mut
 
-Usually, when you match against a pattern, variables are initialized to a value.
-This means you'll end up moving the value out:
+Usually, when you match against a pattern, variables are bound to a value.
+This means you'll end up moving the value into the `match`:
 
 ```rust,ignore
 let name = Some(String::from("Bors"));
@@ -146,7 +148,7 @@ match name {
 println!("name is: {:?}", name);
 ```
 
-If you'd prefer to initialize `name` to a reference, use the `ref` keyword:
+If you'd prefer to bind `name` to a reference, use the `ref` keyword:
 
 ```rust
 let name = Some(String::from("Bors"));
@@ -204,7 +206,7 @@ struct Point {
 let origin = Point { x: 0, y: 0 };
 
 match origin {
-    Point { x, y } => { }, // x and y are initialized here
+    Point { x, y } => { }, // variables x and y are created here
 }
 ```
 

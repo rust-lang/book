@@ -164,7 +164,7 @@ map.insert(1, "hello");
 let e = map.entry(2);
 ```
 
-Here, `e` is initialized with a special enum, `Entry`. An `Entry` represents a
+Here, the value bound to `e` is a special enum, `Entry`. An `Entry` represents a
 value that might or might not exist. Let's say that we want to see if the key
 `2` has a value associated with it. If it doesn't, we want to insert the value
 "world". In both cases, we want to return the resulting value that now goes

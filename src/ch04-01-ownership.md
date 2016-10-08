@@ -238,8 +238,8 @@ let y = x;
 ```
 
 We can probably guess what this is doing based on our experience with other
-languages: “Assign the value `5` to `x`, then make a copy of the value in `x` and
-assign it to `y`.” We now have two variables, `x` and `y`, and both equal `5`.
+languages: “Bind the value `5` to `x`, then make a copy of the value in `x` and
+bind it to `y`.” We now have two variables, `x` and `y`, and both equal `5`.
 This is indeed what is happening since integers are simple values with a known,
 fixed size, and these two `5` values are pushed onto the stack.
 
@@ -252,7 +252,7 @@ let s2 = s1;
 
 This looks very similar to the previous code, so we might assume that the way
 it works would be the same: that the second line would make a copy of the value
-in `s1` and assign it to `s2`. This isn't quite what happens.
+in `s1` and bind it to `s2`. This isn't quite what happens.
 
 To explain this more thoroughly, let’s take a look at what `String` looks like
 under the covers in Figure 4-1. A `String` is made up of three parts, shown on
@@ -262,7 +262,8 @@ is the memory that holds the contents, and this is on the heap.
 
 <img alt="String in memory" src="img/trpl04-01.svg" class="center" style="width: 50%;" />
 
-Figure 4-1: Representation in memory of a `String` variable `s1` holding the value "hello"
+Figure 4-1: Representation in memory of a `String` holding the value "hello"
+bound to `s1`
 
 The length is how much memory, in bytes, the contents of the `String` is
 currently using. The capacity is the total amount of memory, in bytes, that the

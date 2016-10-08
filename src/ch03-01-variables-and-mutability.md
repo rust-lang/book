@@ -7,8 +7,8 @@ offer. We still have the option to make our variables mutable, though. Let's
 explore how and why Rust encourages us to favor immutability, and why we might
 want to opt out of that.
 
-Variables being immutable means once they're initialized, you can't
-change their value. To illustrate this, let's generate a new project in your
+Variables being immutable means once a value is bound, you can't
+change that value. To illustrate this, let's generate a new project in your
 projects directory called `variables` by using `cargo new --bin variables`.
 
 Then, in your new `variables` directory, open `src/main.rs` and replace its code
@@ -129,7 +129,7 @@ The value of x is: 5
 The value of x is: 6
 ```
 
-Using `mut`, we are allowed to change the value of `x` from `5` to
+Using `mut`, we are allowed to change the value that `x` binds to from `5` to
 `6`. In some cases you'll want to make a variable mutable because it makes the
 code easier to understand than an implementation that only uses immutable
 variables. In cases where you're using large data structures, mutating an
@@ -159,7 +159,7 @@ fn main() {
 }
 ```
 
-This program first initializes `x` to a value of `5`. Then, it shadows `x` by
+This program first binds `x` to a value of `5`. Then, it shadows `x` by
 repeating `let x =`, taking the original value and adding `1` so that the value
 of `x` is then `6`. The third `let` statement also shadows `x`, taking the
 previous value and multiplying it by `2` to give `x` a final value of `12`. If

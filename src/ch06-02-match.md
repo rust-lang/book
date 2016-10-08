@@ -86,12 +86,12 @@ fn value_in_cents(coin: Coin) -> i32 {
 }
 ```
 
-Another useful feature of match arms is that they can create variables for parts
-of the values that match the pattern. From 1999 through 2008, the U.S. printed
-quarters with different designs for each of the 50 states on one side. The other
-coins did not get state designs, so only quarters have this extra attribute. We
-can add this information to our `enum` by changing the `Quarter` variant to have
-a `State` value:
+Another useful feature of match arms is that they can create variables that bind
+to values in the matching pattern. Here's an example use case: from 1999 through
+2008, the U.S. printed quarters with different designs for each of the 50 states
+on one side. The other coins did not get state designs, so only quarters have
+this extra attribute. We can add this information to our `enum` by changing the
+`Quarter` variant to have a `State` value:
 
 ```rust
 #[derive(Debug)] // So we can inspect the state in a minute
@@ -115,9 +115,9 @@ to call out the name of the state so that if it's one our friend doesn't have
 yet, they can add it to their collection.
 
 In the match statement to do this, the quarter case now has a variable, `state`,
-that contains the value of the state of that quarter. The variable will only get
-created if the coin matches the `Quarter` pattern. Then we can use the variable
-in the code for that arm:
+that binds to the value of the state for that quarter. The variable will only
+get created if the coin matches the `Quarter` pattern. Then we can use the
+variable in the code for that arm:
 
 ```rust
 # #[derive(Debug)]
@@ -146,13 +146,13 @@ fn value_in_cents(coin: Coin) -> i32 {
 }
 ```
 
-If we were to call `value_in_cents(Coin::Quarter(UsState::Alaska))`, `coin` will
-be `Coin::Quarter(UsState::Alaska)`. When we compare that value with each of the
-match arms, none of them match until we reach `Coin::Quarter(state)`. At that
-point, the variable `state` will have the value `UsState::Alaska`. We can then
-use that variable in the `println!`, thus getting the inner state value out of
-the `Coin` enum variant for `Quarter` and enabling us to print "State quarter
-from Alaska!".
+If we were to call `value_in_cents(Coin::Quarter(UsState::Alaska))`, `coin`
+will be `Coin::Quarter(UsState::Alaska)`. When we compare that value with each
+of the match arms, none of the patterns will match until we reach
+`Coin::Quarter(state)`. At that point, the variable `state` will bind to the
+value `UsState::Alaska`. We can then use that variable in the `println!`, thus
+getting the inner state value out of the `Coin` enum variant for `Quarter` and
+enabling us to print "State quarter from Alaska!".
 
 Remember the `Option<T>` type from the previous section, and that we wanted to
 be able to get the inner `T` value out of the `Some` case? This will be very
@@ -193,7 +193,7 @@ Some(i) => Some(i + 1),
 ```
 
 Does `Some(5)` match `Some(i)`? Why yes it does! We have the same variant. The
-`i` initializes to the value inside of the `Some`, so `i` has the value `5`. Then we
+`i` binds to the value inside of the `Some`, so `i` has the value `5`. Then we
 execute the code in that match arm: take `i`, which is `5`, add one to it, and
 create a new `Some` value with our total inside.
 
@@ -209,8 +209,8 @@ return the `None` value that is on the right side of the `=>`. We don't
 check any other arms since we found one that matched.
 
 Combining `match` and enums together is extremely powerful. You'll see this
-pattern a lot in Rust code: `match` against an enum, initialize a variable to the data
-inside, and then execute code based on it. It's a bit tricky at first, but
+pattern a lot in Rust code: `match` against an enum, bind a variable to the data
+inside, and then execute code using the variable. It's a bit tricky at first, but
 once you get used to it, you'll wish you had it in languages that don't support
 it. It's consistently a user favorite.
 

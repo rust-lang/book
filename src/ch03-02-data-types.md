@@ -153,7 +153,7 @@ fn main() {
 ```
 
 Each expression in these statements uses a mathematical operator and evaluates
-to a single value, which is then assigned to a variable.
+to a single value, which is then bound to a variable.
 
 #### The Boolean Type
 
@@ -222,10 +222,9 @@ fn main() {
 }
 ```
 
-The variable `tup` contains the entire tuple,
-it's a single compound element. To get the individual
-values out of a tuple, we can use pattern matching to destructure a tuple
-value, like this:
+The variable `tup` binds to the entire tuple, since a tuple is considered a
+single compound element. To get the individual values out of a tuple, we can
+use pattern matching to destructure a tuple value, like this:
 
 Filename: src/main.rs
 
@@ -239,8 +238,8 @@ fn main() {
 }
 ```
 
-In this program, we first create a tuple and assign it to the variable `tup`. We then
-use a pattern with `let` to take `tup` and turn it into three separate
+In this program, we first create a tuple and bind it to the variable `tup`. We
+then use a pattern with `let` to take `tup` and turn it into three separate
 variables, `x`, `y`, and `z`. This is called *destructuring*, because it breaks
 the single tuple into three parts. Finally, we print the value of `y`, which is
 `6.4`.
