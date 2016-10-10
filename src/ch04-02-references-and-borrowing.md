@@ -21,9 +21,7 @@ fn main() {
 }
 
 fn calculate_length(s: &String) -> usize {
-    let length = s.len();
-
-    length
+    s.len()
 }
 ```
 
@@ -43,9 +41,7 @@ Let’s take a closer look at the function call here:
 
 ```rust
 # fn calculate_length(s: &String) -> usize {
-#     let length = s.len();
-#
-#     length
+#     s.len()
 # }
 let s1 = String::from("hello");
 
@@ -61,9 +57,7 @@ a reference as an argument. Let’s add some explanatory annotations:
 
 ```rust
 fn calculate_length(s: &String) -> usize { // s is a reference to a String
-    let length = s.len();
-
-    length
+    s.len()
 } // Here, s goes out of scope. But since it does not have ownership of what
   // it refers to, nothing happens.
 ```
