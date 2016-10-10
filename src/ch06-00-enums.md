@@ -1,3 +1,14 @@
+<!-- Hi Steve, Carol. I like this chapter, we're getting into some powerful
+tools here! I saw that the copyeditor has suggested listing numbers, which I
+think is a good idea. If you agree, could you suggest captions and add
+numbering to those listings we reference again in the chapter? Also, if we are
+going to include any of these in the source files can you add file names?
+Thanks! /Liz -->
+<!-- I added some listing numbers where the code examples were lengthy or
+referred to again. I haven't added any file names-- the code in this chapter is
+little snippets that would be useful in larger programs, but they could appear
+anywhere and don't have to be in any particular file. /Carol -->
+
 # Enums
 
 In this chapter we'll look at *enumerations*, also referred to as *enums*.
