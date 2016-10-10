@@ -85,9 +85,7 @@ argument:</p>
 }
 
 fn calculate_length(s: &amp;String) -&gt; usize {
-    let length = s.len();
-
-    length
+    s.len()
 }
 </code></pre>
 <p>First, you’ll notice all of the tuple stuff in the variable declaration and the
@@ -100,9 +98,7 @@ without taking ownership of it. Figure 4-5 shows a diagram of this.</p>
 <p>Figure 4-5: <code>&amp;String s</code> pointing at <code>String s1</code></p>
 <p>Let’s take a closer look at the function call here:</p>
 <pre><code class="language-rust"># fn calculate_length(s: &amp;String) -&gt; usize {
-#     let length = s.len();
-#
-#     length
+#     s.len()
 # }
 let s1 = String::from(&quot;hello&quot;);
 
@@ -114,9 +110,7 @@ not be dropped when the reference goes out of scope.</p>
 <p>Likewise, the signature of the function uses <code>&amp;</code> to indicate that it takes
 a reference as an argument. Let’s add some explanatory annotations:</p>
 <pre><code class="language-rust">fn calculate_length(s: &amp;String) -&gt; usize { // s is a reference to a String
-    let length = s.len();
-
-    length
+    s.len()
 } // Here, s goes out of scope. But since it does not have ownership of what
   // it refers to, nothing happens.
 </code></pre>
