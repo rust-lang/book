@@ -2,11 +2,26 @@
 
 Sometimes, bad things happen, and there's nothing that you can do about it. For
 these cases, Rust has a macro, `panic!`. When this macro executes, your program
-will print a failure message and then quit. The most common reason for this is
-when a bug of some kind has been detected, and it's not clear how to handle the
-error.
+will print a failure message, unwind and clean up the stack, and then quit. The
+most common reason for this is when a bug of some kind has been detected, and
+it's not clear how to handle the error.
 
-Let's try it out with a simple program:
+<!-- PROD: START BOX -->
+
+> #### Unwinding
+> By default, when a `panic!` happens in Rust, the program starts
+> *unwinding*, which means Rust walks back up the stack and cleans up the data
+> from each function it encounters. Doing that walking and cleanup is a lot of
+> work. The alternative is to immediately `abort`, which ends the program
+> without cleaning up. Memory that the program was using will need to be cleaned
+> up by the operating system. If you're in a situation where you need to make
+> the resulting binary as small as possible, you can switch from unwinding on
+> panic to aborting on panic by adding `panic = 'abort'` to the appropriate
+> `[profile]` sections in your `Cargo.toml` file.
+
+<!-- PROD: END BOX -->
+
+Let's try out calling `panic!()` with a simple program:
 
 ```rust,should_panic
 fn main() {
