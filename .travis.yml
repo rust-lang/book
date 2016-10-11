@@ -4,7 +4,7 @@ cache: cargo
 rust:
   - nightly
 # - beta
-# ^ to be changed once a new beta is cut that doesn't crash
+# ^ to be changed once question_mark is in beta
 # - stable
 # ^ to be changed once question_mark becomes stable
 before_script:
