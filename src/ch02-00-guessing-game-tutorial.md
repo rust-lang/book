@@ -4,7 +4,7 @@ Let’s jump into Rust by working on a hands-on project! This chapter introduces
 you to a few common Rust concepts by showing you how to use them in a real
 program. You’ll learn about `let`, `match`, methods, associated functions, using
 external crates, and more! The following chapters will explore these ideas in
-more detail. In this chapter, you’ll practice the fundamentals.
+more detail: in this chapter, you’ll practice the fundamentals.
 
 You’ll implement a classic beginner programming problem: a guessing game.
 Here’s how it works: the program will generate a random integer between 1 and
@@ -14,16 +14,16 @@ game will congratulate you.
 
 ## Setting Up a New Project
 
-To set up a new project, go to the projects directory that you created in
-Chapter 1, and make a new project using Cargo, like so:
+To set up a new project, go to your projects directory that you established in
+Chapter 1, and create a new project using Cargo, like so:
 
 ```bash
 $ cargo new guessing_game --bin
 $ cd guessing_game
 ```
 
-Pass the name of your project to `cargo new` and use the `--bin` flag, because
-you’ll be making another binary similar to the one in Chapter 1.
+We pass the name of our project to `cargo new` and pass the `--bin` flag,
+because we’ll be making another binary similar to the one in Chapter 1.
 
 Look at the generated `Cargo.toml` file:
 
@@ -52,8 +52,8 @@ fn main() {
 }
 ```
 
-Now let’s compile this “Hello, world!” program and run it in the same step
-using the `cargo run` command:
+Now let’s compile what Cargo gave us and run it in the same step using the
+`cargo run` command:
 
 ```bash
 $ cargo run
@@ -63,8 +63,8 @@ Hello, world!
 ```
 
 The `run` command comes in handy when you need to rapidly iterate on a project,
-and this game is such a project: you should quickly test each iteration before
-moving on to the next one.
+and this game is such a project: we want to quickly test each iteration
+before moving on to the next one.
 
 Reopen the `src/main.rs` file. You’ll be writing all your code in this file.
 
