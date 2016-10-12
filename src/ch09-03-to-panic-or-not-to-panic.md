@@ -65,8 +65,8 @@ None, but haven't been able to convey that to the type system.
 ### Creating Custom Types for Validation
 
 Going a step further with the idea of using Rust's type system to ensure we
-have a valid value, let's look at an example of creating a custom type in this
-situation. Recall the guessing game in Chapter 2, where our code asked the user
+have a valid value, let's look at an example of creating a custom type for
+validation. Recall the guessing game in Chapter 2, where our code asked the user
 to guess a number between 1 and 100. We actually never validated that the
 user's guess was between those numbers before checking it against our secret
 number, only that it was positive. In this case, the consequences were not very
