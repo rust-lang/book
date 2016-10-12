@@ -139,4 +139,6 @@ That way, users of our library can make sure their code uses our library
 properly, or at least there is an explanation for any `panic!` they get from
 our code.
 
+## Summary
+
 Now that we've reduced duplication in our validation code, let's look at a feature of Rust that helps reduce duplication in lots of code: generics!

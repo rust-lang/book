@@ -1,4 +1,4 @@
-# Recoverable errors with `Result<T, E>`
+## Recoverable errors with `Result<T, E>`
 
 Most errors aren't so dire. Sometimes, when a function fails, it's for a reason
 that we can easily interpret and respond to. As an example, maybe we are
@@ -68,7 +68,7 @@ thread 'main' panicked at 'There was a problem opening the file: Error { repr:
 Os { code: 2, message: "No such file or directory" } }', src/main.rs:8
 ```
 
-## Matching on Different Errors
+### Matching on Different Errors
 
 There are many reasons why opening a file might fail, and we may not want to
 take the same actions to try to recover for all of them. For example, if the
@@ -116,7 +116,7 @@ variant of the `ErrorKind` enum. Note that `File::create` could also fail, so
 we need to add an inner `match` statement as well! The last arm of the outer
 `match` stays the same to panic on any error besides the file not being found.
 
-## Shortcuts for Panic on Error: `unwrap` and `expect`
+### Shortcuts for Panic on Error: `unwrap` and `expect`
 
 Using `match` works okay but can be a bit verbose, and it doesn't always
 communicate intent well. The `Result<T, E>` type has many helper methods
@@ -167,7 +167,7 @@ examples, you might not want to muddy the code with proper error handling. But
 if you use them in a library, mis-using your library can cause other people's
 programs to halt unexpectedly, and that's not very user-friendly.
 
-## Propagating errors with `try!` or `?`
+### Propagating errors with `try!` or `?`
 
 When writing a function, if you don't want to handle the error where you are,
 you can return the error to the calling function. For example, here's a
