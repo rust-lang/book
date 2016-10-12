@@ -13,23 +13,20 @@ look at some more nuanced guidelines.
 `panic!` when your code is in a situation where it's possible to be in a bad
 state and:
 
-* The cause of the bad state is not your code, it's caused by code that's
-  calling your code or code that your code is calling that's out of your control
 * The bad state is not something that's *expected* to happen occasionally
 * Your code after this point needs to rely on not being in this bad state
 * There's not a good way to encode this information in the types you use
 
-Taking these in turn:
-
-A bad state consists of things like invalid values, contradictory values, or
+By *bad state*, we mean some assumption, guarantee, contract, or invariant has
+been broken. Some examples are invalid values, contradictory values, or
 nothing when you expect to have something. If someone calls your code and
 passes in values that don't make sense, the best thing might be to `panic!` and
 alert the person using your library to the bug in their code so that they can
 fix it during development. Similarly, `panic!` is often appropriate if you call
 someone else's code that is out of your control, and it returns an invalid
-state that you have no way of fixing. Getting null pointers back from calling
-functions in C is an example of this situation. If the only place the bug could
-possibly come from is your own code, however, you should fix your bug!
+state that you have no way of fixing.
+
+Taking the bullet points in turn:
 
 Some bad states are expected to happen sometimes, and will happen no matter how
 well you write your code. Example of this include a parser being given
