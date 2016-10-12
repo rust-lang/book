@@ -1,11 +1,8 @@
 ## To `panic!` or Not To `panic!`
 
 So how do you decide when you should call `panic!` and when you should return
-`Result`? The most concise answer is to `panic!` in `main`, at your outermost
-layer, and return `Result` everywhere else in your code. Especially when you're
-writing a library for others to use, it's best to not `panic!` if at all
-possible. That way, people who use your crate get to decide how they want to
-handle failures from your code, instead of you deciding for them.
+`Result`? A good default for a function that might fail is to return `Result`
+since that gives the caller of your function the most flexibility.
 
 But that answer is simplistic. There are cases where you might want to call
 `panic!` in library code that have to do with Rust's quest for safety. Let's
