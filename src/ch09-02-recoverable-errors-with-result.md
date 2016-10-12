@@ -117,7 +117,7 @@ examples, you might not want to muddy the code with proper error handling. But
 if you use them in a library, mis-using your library can cause other people's
 programs to halt unexpectedly, and that's not very user-friendly.
 
-## Propagating errors with `?`
+## Propagating errors with `try!` or `?`
 
 When writing a function, if you don't want to handle the error where you are,
 you can return the error to the calling function. For example, here's a
@@ -146,6 +146,12 @@ fn read_username_from_file() -> Result<String, io::Error> {
     }
 }
 ```
+
+Since the `Result` type has two type parameters, we need to include them both
+in our function signature. In this case, `File::open` and `read_to_string`
+return `std::io::Error` as the value inside the `Err` variant, so we will also
+use it as our error type. If this function succeeds, we want to return the
+username as a `String` inside the `Ok` variant, so that is our success type.
 
 This is a very common way of handling errors: propagate them upward until
 you're ready to deal with them. This pattern is so common in Rust that there is
@@ -245,49 +251,13 @@ error[E0308]: mismatched types
   |
   = note: expected type `()`
   = note:    found type `std::result::Result<_, _>`
-
-error: aborting due to previous error
 ```
 
-What gives? The issue is that the `main()` function has a return type of `()`,
-but the question mark operator is trying to return a `Result`. This doesn't
-work. Instead of `main()`, let's create a function that returns a `Result` so
-that we are allowed to use the question mark operator:
+The mismatched types that this error is pointing out says the `main()` function
+has a return type of `()`, but the `try!` macro is trying to return a `Result`.
+So in functions that don't return `Result`, when you call other functions that
+return `Result`, you'll need to use a `match` or one of the methods on `Result`
+to handle it instead of using `try!` or `?`.
 
-```rust
-#![feature(question_mark)]
-
-use std::fs::File;
-use std::io;
-
-pub fn process_file() -> Result<(), io::Error> {
-    let f = File::open("hello.txt")?;
-
-    // do some stuff with f
-
-    Ok(())
-}
-```
-
-Since the `Result` type has two type parameters, we need to include them both
-in our function signature. In this case, `File::open` returns `std::io::Error`,
-so we will use it as our error type. But what about success? This function is
-executed purely for its side effects; no value is returned when everything
-works. Functions with no return type, as we just saw with `main()`, are the
-same as returning the unit type, `()`. So we can use the unit type as the
-return type here, too.
-
-This leads us to the last line of the function, the slightly silly-looking
-`Ok(())`. This is an `Ok()` with a `()` value inside.
-
-Now we have the function `process_file` that uses the question mark operator and compiles successfully. We can call this function and handle the return value in any other function that returns a `Result` by also using the question mark operator there, and that would look like `process_file()?`. However, the `main` function still returns `()`, so we would still have to use a `match` statement, an `unwrap()`, or an `expect()` if we wanted to call `process_file` from `main`. Using `expect()` would look like this:
-
-```rust,ignore
-fn main() {
-    process_file().expect("There was a problem processing the file");
-}
-```
-
-## Chaining Question Mark Operators
-
-TODO
+Now that we've discussed the details of calling `panic!` or returning `Result`,
+let's return to the topic of how to decide which is appropriate in which cases.
