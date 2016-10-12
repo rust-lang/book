@@ -218,34 +218,30 @@ fn read_username_from_file() -> Result<String, io::Error> {
 Much nicer, right? The `try!` macro and the `?` operator make propagating
 errors upwards much more ergonomic. There's one catch though: they can only be
 used in functions that return a `Result`, since they expand to the same `match`
-expression we saw above that had a potential early return of an `Err` value. Let's look at what happens if we try to use `?` in the `main` function, which has a return type of `()`:
+expression we saw above that had a potential early return of an `Err` value.
+Let's look at what happens if we try to use `try!` in the `main` function,
+which you'll recall has a return type of `()`:
 
 ```rust,ignore
-#![feature(question_mark)]
 # use std::fs::File;
 fn main() {
-    let f = File::open("hello.txt")?;
+    let f = try!(File::open("hello.txt"));
 }
 ```
+
+<!-- NOTE: as of 2016-10-12, the error message when calling `?` in a function
+that doesn't return a result is confusing. `try!` isn't as bad, so I'm using
+that. When https://github.com/rust-lang/rust/issues/35946 is fixed, we can
+switch this example to use `?`. /Carol -->
 
 When we compile this, we get the following error message:
 
 ```bash
-```
-
-
-
-
-There's one problem though; let's try compiling the example:
-
-```rust,ignore
-   Compiling result v0.1.0 (file:///projects/result)
 error[E0308]: mismatched types
- --> src/main.rs:6:13
+ -->
   |
-6 |     let f = File::open("hello.txt")?;
-  |             ^^^^^^^^^^^^^^^^^^^^^^^^ expected (), found enum
-`std::result::Result`
+3 |     let f = try!(File::open("hello.txt"));
+  |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ expected (), found enum `std::result::Result`
   |
   = note: expected type `()`
   = note:    found type `std::result::Result<_, _>`
