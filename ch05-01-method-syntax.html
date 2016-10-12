@@ -127,6 +127,7 @@ signature, is for organization. We've put all the things we can do with an
 instance of a type together in one <code>impl</code> block, rather than make future users
 of our code search for capabilities of <code>Rectangle</code> all over the place.</p>
 <!-- PROD: START BOX -->
+<blockquote>
 <h4>Where's the <code>-&gt;</code> operator?</h4>
 <p>In languages like C++, there are two different operators for calling methods:
 <code>.</code> if you're calling a method on the object directly, and <code>-&gt;</code> if you're
@@ -164,6 +165,7 @@ receiver and name of a method, Rust can figure out definitively whether the
 method is just reading (so needs <code>&amp;self</code>), mutating (so <code>&amp;mut self</code>), or
 consuming (so <code>self</code>). The fact that Rust makes borrowing implicit for method
 receivers is a big part of making ownership ergonomic in practice.</p>
+</blockquote>
 <!-- PROD: END BOX -->
 <h3>Methods with More Arguments</h3>
 <p>Let's practice some more with methods by implementing a second method on our

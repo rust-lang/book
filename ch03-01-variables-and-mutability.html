@@ -106,17 +106,18 @@ your program isn't safely doing what you want it to do yet; they do <em>not</em>
 that you're not a good programmer! Experienced Rustaceans still get compiler
 errors. The Rust compiler is trying to help your program be the very best.</p>
 <!-- PROD: START BOX -->
-###### Extended Error Explanations
+<blockquote>
+<h4>Extended Error Explanations</h4>
 <p>Now that you've seen a Rust error, let's take a moment to look at one
 particularly useful aspect of errors. Rust encourages you to seek further
 information on the kind of error you've received with output like this:</p>
 <pre><code class="language-bash">error: re-assignment of immutable variable `x` [--explain E0384]
 </code></pre>
-<p>This tells us that if we pass the <code>--explain</code> flag to <code>rustc</code> with the provided
-error code, we can see an extended explanation which will try to explain common
-causes of and solutions to that kind of error. Not every error has a longer
-explanation, but many do. Here’s a portion of the explanation for the <code>E0384</code>
-error we received:</p>
+<p>This tells us that if we pass the <code>--explain</code> flag to <code>rustc</code> with the
+provided error code, we can see an extended explanation which will try to
+explain common causes of and solutions to that kind of error. Not every error
+has a longer explanation, but many do. Here’s a portion of the explanation
+for the <code>E0384</code> error we received:</p>
 <pre><code class="language-bash">$ rustc --explain E0384
 This error occurs when an attempt is made to reassign an immutable variable.
 For example:
@@ -129,8 +130,9 @@ fn main(){
 ```
 </code></pre>
 <p>These explanations can really help if you’re stuck on an error, so don't
-hesitate to look up the error code. The compiler is your friend, and it's there
-to help.</p>
+hesitate to look up the error code. The compiler is your friend, and it's
+there to help.</p>
+</blockquote>
 <!-- PROD: END BOX -->
 <p>The error tells us that the cause of the error is <code>re-assignment of immutable variable</code>, because we tried to assign a second value to the immutable <code>x</code>
 variable.</p>
