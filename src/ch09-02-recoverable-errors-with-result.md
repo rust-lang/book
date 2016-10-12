@@ -83,7 +83,7 @@ fn main() {
 }
 ```
 
-This has the same behavior as our previous example: If the call to `open()`
+This has similar behavior as our previous example: If the call to `open()`
 returns `Ok`, return the value inside. If it's an `Err`, panic.
 
 There's also another method, similar to `unwrap()`, but that lets us choose the
@@ -97,7 +97,7 @@ a panic easier. `expect()` looks like this:
 use std::fs::File;
 
 fn main() {
-    let f = File::open("hello.txt").expect("failed to open hello.txt");
+    let f = File::open("hello.txt").expect("Failed to open hello.txt.");
 }
 ```
 
@@ -109,55 +109,132 @@ turn an unrecoverable `panic!` into a recoverable one. This is why good Rust
 code chooses to make errors recoverable: you give your caller choices.
 
 The Rust community has a love/hate relationship with `unwrap()` and `expect()`.
-They're useful in tests since they will cause the test to fail if there's an
-error anyplace you call them. In examples, you might not want to muddy the code
-with proper error handling. But if you use them in a library, mis-using your
-library can cause other people's programs to halt unexpectedly, and that's not
-very user-friendly.
+They're very handy when prototyping, before you're ready to decide how to
+handle errors, and in that case they leave clear markers to look for when you
+are ready to make your program more robust. They're useful in tests since they
+will cause the test to fail if there's an error anyplace you call them. In
+examples, you might not want to muddy the code with proper error handling. But
+if you use them in a library, mis-using your library can cause other people's
+programs to halt unexpectedly, and that's not very user-friendly.
 
 ## Propagating errors with `?`
 
 When writing a function, if you don't want to handle the error where you are,
-you can return the error to the calling function. Within your function, that
-would look like:
+you can return the error to the calling function. For example, here's a
+function that reads a username from a file. If the file doesn't exist or can't
+be read, this function will return those errors to the code that called this
+function:
 
-<!-- I'll ghost everything except `return Err(e)` in the libreoffice file /Carol -->
-
-```rust,ignore
+```rust
 # use std::fs::File;
-# fn foo() -> std::io::Result<()> {
-let f = File::open("hello.txt");
+# use std::io;
+# use std::io::Read;
+#
+fn read_username_from_file() -> Result<String, io::Error> {
+    let f = File::open("hello.txt");
 
-let f = match f {
-    Ok(file) => file,
-    Err(e) => return Err(e),
-};
+    let mut f = match f {
+        Ok(file) => file,
+        Err(e) => return Err(e),
+    };
 
-# Ok(())
-# }
+    let mut s = String::new();
+
+    match f.read_to_string(&mut s) {
+        Ok(_) => Ok(s),
+        Err(e) => Err(e),
+    }
+}
 ```
 
 This is a very common way of handling errors: propagate them upward until
 you're ready to deal with them. This pattern is so common in Rust that there is
-dedicated syntax for it: the question mark operator. We could have also written
-the example like this:
+a macro for it, `try!`, and as of Rust 1.XX, dedicated syntax for it: the
+question mark operator. We could have written the above like this using the
+`try!` macro and it would have the same functionality as the `match` expressions:
 
-<!-- I'll ghost everything except `?` in the libreoffice file /Carol -->
+<!-- I'll ghost everything except the calls to `try!` in the libreoffice file
+/Carol -->
+
+```rust
+# use std::fs::File;
+# use std::io;
+# use std::io::Read;
+#
+fn read_username_from_file() -> Result<String, io::Error> {
+    let mut f = try!(File::open("hello.txt"));
+    let mut s = String::new();
+    try!(f.read_to_string(&mut s));
+    Ok(s)
+}
+```
+
+Or like this using the question mark operator:
+
+<!-- I'll ghost everything except the question mark operator in the libreoffice
+file. Also note the `#![feature(question_mark)]` line won't be needed once this
+feature has made it into a stable version of Rust, which will happen well
+before the book's publication. /Carol -->
+
+```rust
+#![feature(question_mark)]
+# fn main() {}
+# use std::fs::File;
+# use std::io;
+# use std::io::Read;
+#
+fn read_username_from_file() -> Result<String, io::Error> {
+    let mut f = File::open("hello.txt")?;
+    let mut s = String::new();
+    f.read_to_string(&mut s)?;
+    Ok(s)
+}
+```
+
+The `?` operator at the end of the `open` call does the same thing as the
+example that uses `match` and the example that uses the `try!` macro: It will
+return the value inside an `Ok` to the binding `f`, but will return early out
+of the whole function and give any `Err` value we get to our caller. The same
+thing applies to the `?` at the end of the `read_to_string` call.
+
+The advantage of using the question mark operator over the `try!` macro is the
+question mark operator permits chaining. We could further shorten this code
+by instead doing:
+
+```rust
+#![feature(question_mark)]
+# fn main() {}
+# use std::fs::File;
+# use std::io;
+# use std::io::Read;
+#
+fn read_username_from_file() -> Result<String, io::Error> {
+    let mut s = String::new();
+    File::open("hello.txt")?.read_to_string(&mut s)?;
+    Ok(s)
+}
+```
+
+Much nicer, right? The `try!` macro and the `?` operator make propagating
+errors upwards much more ergonomic. There's one catch though: they can only be
+used in functions that return a `Result`, since they expand to the same `match`
+expression we saw above that had a potential early return of an `Err` value. Let's look at what happens if we try to use `?` in the `main` function, which has a return type of `()`:
 
 ```rust,ignore
 #![feature(question_mark)]
-
-use std::fs::File;
-
+# use std::fs::File;
 fn main() {
     let f = File::open("hello.txt")?;
 }
 ```
 
-The `?` operator at the end of the `open` call does the same thing as our
-previous example: It will return the value inside an `Ok` to the binding `f`,
-but will return early out of the whole function and give any `Err` value we get
-to our caller.
+When we compile this, we get the following error message:
+
+```bash
+```
+
+
+
 
 There's one problem though; let's try compiling the example:
 
