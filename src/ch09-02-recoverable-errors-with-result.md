@@ -68,7 +68,57 @@ thread 'main' panicked at 'There was a problem opening the file: Error { repr:
 Os { code: 2, message: "No such file or directory" } }', src/main.rs:8
 ```
 
-This works okay. However, `match` can be a bit verbose, and it doesn't always
+## Matching on Different Errors
+
+There are many reasons why opening a file might fail, and we may not want to
+take the same actions to try to recover for all of them. For example, if the
+file we're trying to open does not exist, we could choose to create it. If the
+file exists but we don't have permission to read it, or any other error, we
+still want to `panic!` in the same way as above and not create the file.
+
+The `Err` type `File::open` returns is [`io::Error`][ioerror]<!-- ignore -->,
+which is a struct provided by the standard library. This struct has a method
+`kind` that we can call to get an [`io::ErrorKind`][iokind]<!-- ignore -->
+value that we can use to handle different causes of an `Err` returned from
+`File::open` differently:
+
+[ioerror]: ../std/io/struct.Error.html
+[iokind]: ../std/io/enum.ErrorKind.html
+
+```rust,should_panic
+use std::fs::File;
+use std::io::ErrorKind;
+
+fn main() {
+    let f = File::open("hello.txt");
+
+    let f = match f {
+        Ok(file) => file,
+        Err(ref error) if error.kind() == ErrorKind::NotFound => {
+            match File::create("hello.txt") {
+                Ok(fc) => fc,
+                Err(e) => panic!("Tried to create file but there was a problem: {:?}", e),
+            }
+        },
+        Err(error) => panic!("There was a problem opening the file: {:?}",
+error),
+    };
+}
+```
+
+<!-- I will add ghosting and wingdings here in openoffice /Carol -->
+
+This example uses a *match guard* with the second arm's pattern to add a
+condition that further refines the pattern. The `ref` in the pattern is needed
+so that the `error` is not moved into the guard condition. The condition we
+want to check is that the value `error.kind()` returns is the `NotFound`
+variant of the `ErrorKind` enum. Note that `File::create` could also fail, so
+we need to add an inner `match` statement as well! The last arm of the outer
+`match` stays the same to panic on any error besides the file not being found.
+
+## Shortcuts for Panic on Error: `unwrap` and `expect`
+
+Using `match` works okay but can be a bit verbose, and it doesn't always
 communicate intent well. The `Result<T, E>` type has many helper methods
 defined on it to do various things. "Panic on an error result" is one of those
 methods, and it's called `unwrap()`:
