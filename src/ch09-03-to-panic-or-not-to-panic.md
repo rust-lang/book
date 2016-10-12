@@ -57,6 +57,11 @@ don't have to have an explicit check to make sure. Another example is using an
 unsigned integer type like `u32`, which ensures the argument value is never
 negative.
 
+### When `unwrap` is Appropriate
+
+It's fine to call unwrap when you know for sure that you have Some rather than
+None, but haven't been able to convey that to the type system.
+
 ### Creating Custom Types for Validation
 
 Going a step further with the idea of using Rust's type system to ensure we
