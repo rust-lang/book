@@ -71,49 +71,49 @@ of our code search for capabilities of `Rectangle` all over the place.
 
 <!-- PROD: START BOX -->
 
-#### Where's the `->` operator?
-
-In languages like C++, there are two different operators for calling methods:
-`.` if you're calling a method on the object directly, and `->` if you're
-calling the method on a pointer to the object and thus need to dereference the
-pointer first. In other words, if `object` is a pointer, `object->something()`
-is like `(*object).something()`.
-
-Rust doesn't have an equivalent to the `->` operator; instead, Rust has a
-feature called *automatic referencing and dereferencing*. Calling methods is
-one of the few places in Rust that has behavior like this.
-
-Here’s how it works: when you call a method with `object.something()`, Rust
-will automatically add in `&`, `&mut`, or `*` so that `object` matches the
-signature of the method. In other words, these are the same:
-
-```rust
-# #[derive(Debug,Copy,Clone)]
-# struct Point {
-#     x: f64,
-#     y: f64,
-# }
-#
-# impl Point {
-#    fn distance(&self, other: &Point) -> f64 {
-#        let x_squared = f64::powi(other.x - self.x, 2);
-#        let y_squared = f64::powi(other.y - self.y, 2);
-#
-#        f64::sqrt(x_squared + y_squared)
-#    }
-# }
-# let p1 = Point { x: 0.0, y: 0.0 };
-# let p2 = Point { x: 5.0, y: 6.5 };
-p1.distance(&p2);
-(&p1).distance(&p2);
-```
-
-The first one looks much, much cleaner. This automatic referencing behavior
-works because methods have a clear receiver — the type of `self`. Given the
-receiver and name of a method, Rust can figure out definitively whether the
-method is just reading (so needs `&self`), mutating (so `&mut self`), or
-consuming (so `self`). The fact that Rust makes borrowing implicit for method
-receivers is a big part of making ownership ergonomic in practice.
+> #### Where's the `->` operator?
+>
+> In languages like C++, there are two different operators for calling methods:
+> `.` if you're calling a method on the object directly, and `->` if you're
+> calling the method on a pointer to the object and thus need to dereference the
+> pointer first. In other words, if `object` is a pointer, `object->something()`
+> is like `(*object).something()`.
+>
+> Rust doesn't have an equivalent to the `->` operator; instead, Rust has a
+> feature called *automatic referencing and dereferencing*. Calling methods is
+> one of the few places in Rust that has behavior like this.
+>
+> Here’s how it works: when you call a method with `object.something()`, Rust
+> will automatically add in `&`, `&mut`, or `*` so that `object` matches the
+> signature of the method. In other words, these are the same:
+>
+> ```rust
+> # #[derive(Debug,Copy,Clone)]
+> # struct Point {
+> #     x: f64,
+> #     y: f64,
+> # }
+> #
+> # impl Point {
+> #    fn distance(&self, other: &Point) -> f64 {
+> #        let x_squared = f64::powi(other.x - self.x, 2);
+> #        let y_squared = f64::powi(other.y - self.y, 2);
+> #
+> #        f64::sqrt(x_squared + y_squared)
+> #    }
+> # }
+> # let p1 = Point { x: 0.0, y: 0.0 };
+> # let p2 = Point { x: 5.0, y: 6.5 };
+> p1.distance(&p2);
+> (&p1).distance(&p2);
+> ```
+>
+> The first one looks much, much cleaner. This automatic referencing behavior
+> works because methods have a clear receiver — the type of `self`. Given the
+> receiver and name of a method, Rust can figure out definitively whether the
+> method is just reading (so needs `&self`), mutating (so `&mut self`), or
+> consuming (so `self`). The fact that Rust makes borrowing implicit for method
+> receivers is a big part of making ownership ergonomic in practice.
 
 <!-- PROD: END BOX -->
 

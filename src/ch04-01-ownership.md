@@ -21,58 +21,58 @@ through some examples, focusing on a very common data structure: strings.
 
 <!-- PROD: START BOX -->
 
-###### The Stack and the Heap
-
-In many programming languages, we don't have to think about the stack and the
-heap very often. But in a systems programming language like Rust, whether a
-value is on the stack or the heap has more of an effect on how the language
-behaves and why we have to make certain decisions. We're going to be describing
-parts of ownership in relation to the stack and the heap, so here is a brief
-explanation.
-
-Both the stack and the heap are parts of memory that is available to your code
-to use at runtime, but they are structured in different ways. The stack stores
-values in the order it gets them and removes the values in the opposite order.
-This is referred to as *last in, first out*. Think of a stack of plates: when
-you add more plates, you put them on top of the pile, and when you need a
-plate, you take one off the top. Adding or removing plates from the middle or
-bottom wouldn't work as well! Adding data is called *pushing onto the stack*
-and removing data is called *popping off the stack*.
-
-The stack is fast because of the way it accesses the data: it never has to look
-around for a place to put new data or a place to get data from; that place is
-always the top. Another property that makes the stack fast is that all data on
-the stack must take up a known, fixed size.
-
-For data with a size unknown to us at compile time, or a size that might
-change, we can store data on the heap instead. The heap is less organized: when
-we put data on the heap, we ask for some amount of space. The operating system
-finds an empty spot somewhere in the heap that is big enough, marks it as being
-in use, and returns to us a pointer to that location. This process is called
-*allocating on the heap*, and sometimes we just say "allocating" for short.
-Pushing values onto the stack is not considered allocating. Since the pointer
-is a known, fixed size, we can store the pointer on the stack, but when we want
-the actual data, we have to follow the pointer.
-
-Think of being seated at a restaurant. When you enter, you say how many people
-are in your group, and the staff finds an empty table that would fit everyone
-and leads you there. If someone in your group comes late, they can ask where
-you have been seated to find you.
-
-Accessing data in the heap is slower because we have to follow a pointer to
-get there. Allocating a large amount of space can also take time.
-
-When our code calls a function, the values passed into the function (including,
-potentially, pointers to data on the heap) and the function's local variables
-get pushed onto the stack. When the function is over, those values get popped
-off the stack.
-
-Keeping track of what parts of code are using what data on the heap, minimizing
-the amount of duplicate data on the heap, and cleaning up unused data on the
-heap so that we don't run out of space are all problems that ownership
-addresses. Once you understand ownership, you won't need to think about the
-stack and the heap very often, but knowing that managing heap data is why
-ownership exists can help explain why it works the way it does.
+> #### The Stack and the Heap
+>
+> In many programming languages, we don't have to think about the stack and the
+> heap very often. But in a systems programming language like Rust, whether a
+> value is on the stack or the heap has more of an effect on how the language
+> behaves and why we have to make certain decisions. We're going to be
+> describing parts of ownership in relation to the stack and the heap, so here
+> is a brief explanation.
+>
+> Both the stack and the heap are parts of memory that is available to your code
+> to use at runtime, but they are structured in different ways. The stack stores
+> values in the order it gets them and removes the values in the opposite order.
+> This is referred to as *last in, first out*. Think of a stack of plates: when
+> you add more plates, you put them on top of the pile, and when you need a
+> plate, you take one off the top. Adding or removing plates from the middle or
+> bottom wouldn't work as well! Adding data is called *pushing onto the stack*
+> and removing data is called *popping off the stack*.
+>
+> The stack is fast because of the way it accesses the data: it never has to
+> look around for a place to put new data or a place to get data from; that
+> place is always the top. Another property that makes the stack fast is that
+> all data on the stack must take up a known, fixed size.
+>
+> For data with a size unknown to us at compile time, or a size that might
+> change, we can store data on the heap instead. The heap is less organized:
+> when we put data on the heap, we ask for some amount of space. The operating
+> system finds an empty spot somewhere in the heap that is big enough, marks it
+> as being in use, and returns to us a pointer to that location. This process
+> is called *allocating on the heap*, and sometimes we just say "allocating"
+> for short. Pushing values onto the stack is not considered allocating. Since
+> the pointer is a known, fixed size, we can store the pointer on the stack,
+> but when we want the actual data, we have to follow the pointer.
+>
+> Think of being seated at a restaurant. When you enter, you say how many people
+> are in your group, and the staff finds an empty table that would fit everyone
+> and leads you there. If someone in your group comes late, they can ask where
+> you have been seated to find you.
+>
+> Accessing data in the heap is slower because we have to follow a pointer to
+> get there. Allocating a large amount of space can also take time.
+>
+> When our code calls a function, the values passed into the function
+> (including, potentially, pointers to data on the heap) and the function's
+> local variables get pushed onto the stack. When the function is over, those
+> values get popped off the stack.
+>
+> Keeping track of what parts of code are using what data on the heap,
+> minimizing the amount of duplicate data on the heap, and cleaning up unused
+> data on the heap so that we don't run out of space are all problems that
+> ownership addresses. Once you understand ownership, you won't need to think
+> about the stack and the heap very often, but knowing that managing heap data
+> is why ownership exists can help explain why it works the way it does.
 
 <!-- PROD: END BOX -->
 

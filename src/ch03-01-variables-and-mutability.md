@@ -48,38 +48,39 @@ that you're not a good programmer! Experienced Rustaceans still get compiler
 errors. The Rust compiler is trying to help your program be the very best.
 
 <!-- PROD: START BOX -->
-###### Extended Error Explanations
 
-Now that you've seen a Rust error, let's take a moment to look at one
-particularly useful aspect of errors. Rust encourages you to seek further
-information on the kind of error you've received with output like this:
-
-```bash
-error: re-assignment of immutable variable `x` [--explain E0384]
-```
-
-This tells us that if we pass the `--explain` flag to `rustc` with the provided
-error code, we can see an extended explanation which will try to explain common
-causes of and solutions to that kind of error. Not every error has a longer
-explanation, but many do. Here’s a portion of the explanation for the `E0384`
-error we received:
-
-````bash
-$ rustc --explain E0384
-This error occurs when an attempt is made to reassign an immutable variable.
-For example:
-
-```
-fn main(){
-    let x = 3;
-    x = 5; // error, reassignment of immutable variable
-}
-```
-````
-
-These explanations can really help if you’re stuck on an error, so don't
-hesitate to look up the error code. The compiler is your friend, and it's there
-to help.
+> #### Extended Error Explanations
+>
+> Now that you've seen a Rust error, let's take a moment to look at one
+> particularly useful aspect of errors. Rust encourages you to seek further
+> information on the kind of error you've received with output like this:
+>
+> ```bash
+> error: re-assignment of immutable variable `x` [--explain E0384]
+> ```
+>
+> This tells us that if we pass the `--explain` flag to `rustc` with the
+> provided error code, we can see an extended explanation which will try to
+> explain common causes of and solutions to that kind of error. Not every error
+> has a longer explanation, but many do. Here’s a portion of the explanation
+> for the `E0384` error we received:
+>
+> ````bash
+> $ rustc --explain E0384
+> This error occurs when an attempt is made to reassign an immutable variable.
+> For example:
+>
+> ```
+> fn main(){
+>     let x = 3;
+>     x = 5; // error, reassignment of immutable variable
+> }
+> ```
+> ````
+>
+> These explanations can really help if you’re stuck on an error, so don't
+> hesitate to look up the error code. The compiler is your friend, and it's
+> there to help.
 
 <!-- PROD: END BOX -->
 
