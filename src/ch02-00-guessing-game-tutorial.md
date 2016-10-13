@@ -253,9 +253,10 @@ well as specific versions for sublibraries, such as `io::Result`.
 [ioresult]: ../std/io/type.Result.html
 [result]: ../std/result/enum.Result.html
 
-The `Result` types are [enums][enums]<!-- ignore -->, or *enumerations*. An
-enumeration is a type that can have a fixed set of values, and those values are
-called the enum’s *variants*. Chapter 6 will cover enums in more detail.
+The `Result` types are [*enumerations*][enums]<!-- ignore -->, often referred
+to as *enums*. An enumeration is a type that can have a fixed set of values,
+and those values are called the enum’s *variants*. Chapter 6 will cover enums
+in more detail.
 
 [enums]: ch06-00-enums.html
 
