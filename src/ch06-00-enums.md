@@ -93,7 +93,7 @@ both values `IpAddrKind::V4` and `IpAddrKind::V6` are of the same type:
 fn route(ip_type: IpAddrKind) { }
 ```
 
-And we can call this function with either value that we have:
+And we can call this function with either variant:
 
 ```rust
 # enum IpAddrKind {
@@ -172,7 +172,7 @@ There's another advantage to using an enum over a struct: each variant can
 store *different kinds* of data. Version four type IP addresses will always
 have four numeric components that will have values between 0 and 255. If we
 wanted to store `V4` addresses as four `u8`s but still express `V6` addresses
-as `String`s, we wouldn't be able to with a `struct`. Enums deal with this case
+as `String`s, we wouldn't be able to with a `struct`. Enums handle this case
 with ease:
 
 ```rust

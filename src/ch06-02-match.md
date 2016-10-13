@@ -294,7 +294,7 @@ match some_u8_value {
     3 => println!("three"),
     5 => println!("five"),
     7 => println!("seven"),
-    _ => {},
+    _ => (),
 }
 ```
 

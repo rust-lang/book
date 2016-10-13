@@ -15,7 +15,7 @@ the *null* feature that many other languages have. Null is a value that
 means there is no value there. In languages with null, variables
 can always be in one of two states: null or not-null.
 
-The inventor of the null concept has this to say:
+The inventor of null has this to say:
 
 > I call it my billion-dollar mistake. At that time, I was designing the first
 > comprehensive type system for references in an object-oriented language. My
@@ -64,11 +64,11 @@ before mentioning it so they know what significance it has here -->
 <!-- We did speak about the prelude previously, in chapter 2, the Processing a
 Guess section. I don't have any comments from you about it there... /Carol -->
 
-The `<T>` is a feature of Rust we haven't talked about yet. It's a generic type
-parameter, and we'll cover generics in more detail in Chapter 10. For now, all
-you need to know is that this means the `Some` variant of the `Option` enum can
-hold one piece of data of any type. Here are some examples of using `Option`
-values to hold number types and string types:
+The `<T>` syntax is a feature of Rust we haven't talked about yet. It's a
+generic type parameter, and we'll cover generics in more detail in Chapter 10.
+For now, all you need to know is that this means the `Some` variant of the
+`Option` enum can hold one piece of data of any type. Here are some examples of
+using `Option` values to hold number types and string types:
 
 ```rust
 let some_number = Some(5);

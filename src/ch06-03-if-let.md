@@ -10,13 +10,13 @@ match some_option {
     Some(x) => {
         // do something with x
     },
-    None => {},
+    None => (),
 }
 ```
 
 We want to do something with the `Some` match, but do nothing with the `None`
 case. We can do this with an `Option`, but with a more complex enum,
-adding `_ => {}` after processing just one variant is a lot of boilerplate code
+adding `_ => ()` after processing just one variant is a lot of boilerplate code
 that we have to add to satisfy the `match` expression.
 
 Instead, we could write this in a shorter way with `if let`. This code behaves
