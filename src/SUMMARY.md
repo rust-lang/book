@@ -54,8 +54,6 @@
 
 - [Testing]()
 
-- [Debugging]()
-
 ## Thinking in Rust
 
 - [Composition]()
