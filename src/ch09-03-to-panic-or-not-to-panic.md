@@ -29,7 +29,7 @@ state that you have no way of fixing.
 Taking the bullet points in turn:
 
 Some bad states are expected to happen sometimes, and will happen no matter how
-well you write your code. Example of this include a parser being given
+well you write your code. Examples of this include a parser being given
 malformed data to parse, or an HTTP request returning a status that indicates
 you have hit a rate limit. In these cases, you should indicate that failure is
 an expected possibility by returning a `Result` and propagate these bad states
@@ -42,9 +42,14 @@ mostly for safety reasons: attempting to operate on invalid data can expose
 your code to vulnerabilities. This is the main reason that the standard library
 will `panic!` if you attempt an out-of-bounds array access: trying to access
 memory that doesn't belong to the current data structure is a common security
-problem. A less important reason is that it makes your code more organized to
-have the error checking first and the rest of the logic afterwards, rather than
-interspersing error checks in with your logic.
+problem. Functions often have *contracts*: their behavior is only guaranteed if
+the inputs meet particular requirements. Panicking when the contract is
+violated makes sense because a contract violation always indicates a
+caller-side bug, and it is not a kind of error you want callers to have to
+explicitly handle. In fact, there's no reasonable way for calling code to
+recover: the calling *programmers* need to fix the code. Contracts for a
+function, especially when a violation will cause a `panic`, should be explained
+in the API documentation for the function.
 
 Having lots of error checks in all of your functions would be verbose and
 annoying, though. Luckily, our last guideline has a tip for this situation: use
@@ -56,11 +61,6 @@ ensured you have a valid value. For example, if you have a type rather than an
 don't have to have an explicit check to make sure. Another example is using an
 unsigned integer type like `u32`, which ensures the argument value is never
 negative.
-
-### When `unwrap` is Appropriate
-
-It's fine to call unwrap when you know for sure that you have Some rather than
-None, but haven't been able to convey that to the type system.
 
 ### Creating Custom Types for Validation
 
@@ -116,7 +116,7 @@ struct Guess {
 }
 
 impl Guess {
-    fn new(value: u32) -> Guess {
+    pub fn new(value: u32) -> Guess {
         if value < 1 || value > 100 {
             panic!("Guess value must be between 1 and 100, got {}.", value);
         }
@@ -124,19 +124,29 @@ impl Guess {
             value: value,
         }
     }
+
+    pub fn value(&self) -> u32 {
+        self.value
+    }
 }
 ```
+
+Important to note is the `value` field of the `Guess` struct is private, so
+code using this struct may not set that value directly. Callers *must* use the
+`Guess::new` constructor function to create an instance of `Guess`, and they
+may read the value using the public `value` function, but they may not access
+the field directly. This means any created instance of `Guess` that does not
+cause a `panic!` when `new` is called is guaranteed to return numbers between 1
+and 100 from its `value` function.
 
 A function that takes as an argument or returns only numbers between 1 and 100
 could then declare in its signature to take a `Guess` rather than a `u32`, and
 would not need to do any additional checks in its body.
 
-One last guideline: since users of our library will expect `panic!` to be rare,
-if we decide a library function fits these guidelines and should call `panic!`,
-it's a good idea to document which functions `panic!` and in what conditions.
-That way, users of our library can make sure their code uses our library
-properly, or at least there is an explanation for any `panic!` they get from
-our code.
+### When `unwrap` is Appropriate
+
+It's fine to call unwrap when you know for sure that you have Some rather than
+None, but haven't been able to convey that to the type system.
 
 ## Summary
 
