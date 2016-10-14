@@ -526,7 +526,9 @@ fn main() {
 }
 ```
 
+<caption>
 Listing 2-3: Code changes needed in order to generate a random number
+</caption>
 
 We're adding a `extern crate rand;` line to the top that lets Rust know we’ll be
 using that external dependency. This also does the equivalent of calling `use
@@ -621,7 +623,9 @@ fn main() {
 }
 ```
 
+<caption>
 Listing 2-4: Handling the possible return values of comparing two numbers
+</caption>
 
 The first new bit here is another `use`, bringing a type called
 `std::cmp::Ordering` into scope from the standard library. `Ordering` is
@@ -1049,7 +1053,9 @@ fn main() {
 }
 ```
 
+<caption>
 Listing 2-5: Complete code of the guessing game
+</caption>
 
 ## Summary
 
