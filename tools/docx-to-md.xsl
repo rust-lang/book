@@ -9,6 +9,8 @@
     <xsl:template match="w:p[starts-with(w:pPr/w:pStyle/@w:val, 'TOC')]" />
     <xsl:template match="w:p[w:pPr/w:pStyle/@w:val = 'ChapterStart']" />
 
+    <!-- Paragraph styles -->
+
     <xsl:template match="w:p[w:pPr/w:pStyle/@w:val = 'ChapterTitle']">
         <xsl:text>&#10;[TOC]&#10;&#10;</xsl:text>
         <xsl:text># </xsl:text>
@@ -26,6 +28,31 @@
         <xsl:apply-templates select="w:r" />
         <xsl:text>&#10;&#10;</xsl:text>
     </xsl:template>
+
+    <xsl:template match="w:p[w:pPr/w:pStyle/@w:val = 'CodeA']">
+        <xsl:text>```&#10;</xsl:text>
+        <xsl:value-of select="w:r/w:t" />
+        <xsl:text>&#10;</xsl:text>
+    </xsl:template>
+
+    <xsl:template match="w:p[w:pPr/w:pStyle/@w:val = 'CodeB']">
+        <xsl:value-of select="w:r/w:t" />
+    </xsl:template>
+
+    <xsl:template match="w:p[w:pPr/w:pStyle/@w:val = 'CodeC']">
+        <xsl:value-of select="w:r/w:t" />
+        <xsl:text>&#10;```&#10;&#10;</xsl:text>
+    </xsl:template>
+
+    <xsl:template match="w:p">
+Unmatched: <xsl:value-of select="w:pPr/w:pStyle/@w:val" />
+      <xsl:text>
+      </xsl:text>
+
+
+    </xsl:template>
+
+    <!-- Character styles -->
 
     <xsl:template match="w:r[w:rPr/w:rStyle/@w:val = 'Literal']">
         <xsl:text>`</xsl:text>
@@ -46,30 +73,7 @@
         </xsl:choose>
     </xsl:template>
 
-    <xsl:template match="w:p[w:pPr/w:pStyle/@w:val = 'CodeA']">
-        <xsl:text>```&#10;</xsl:text>
-        <xsl:value-of select="w:r/w:t" />
-        <xsl:text>&#10;</xsl:text>
-    </xsl:template>
-
-    <xsl:template match="w:p[w:pPr/w:pStyle/@w:val = 'CodeB']">
-        <xsl:value-of select="w:r/w:t" />
-    </xsl:template>
-
-    <xsl:template match="w:p[w:pPr/w:pStyle/@w:val = 'CodeC']">
-        <xsl:value-of select="w:r/w:t" />
-        <xsl:text>&#10;```&#10;&#10;</xsl:text>
-    </xsl:template>
-
     <xsl:template match="w:r">
         <xsl:value-of select="w:t" />
-    </xsl:template>
-
-    <xsl:template match="w:p">
-Unmatched: <xsl:value-of select="w:pPr/w:pStyle/@w:val" />
-      <xsl:text>
-      </xsl:text>
-
-
     </xsl:template>
 </xsl:stylesheet>
