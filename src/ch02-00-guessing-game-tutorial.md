@@ -25,7 +25,7 @@ $ cd guessing_game
 The first command, `cargo new`, takes the name of the project (`guessing_game`)
 as the first argument. The `--bin` flag tells Cargo to make a binary project,
 similar to the one in Chapter 1. The second command changes to the new
-project's directory.
+project’s directory.
 
 Look at the generated *Cargo.toml* file:
 
@@ -54,7 +54,7 @@ fn main() {
 }
 ```
 
-Now let’s compile this "Hello, world!" program and run it in the same step
+Now let’s compile this “Hello, world!” program and run it in the same step
 using the `cargo run` command:
 
 ```bash
@@ -139,7 +139,7 @@ input from the user.
 
 ### Storing Values with Variables
 
-Next, we'll create a place to store the user input, like this:
+Next, we’ll create a place to store the user input, like this:
 
 ```rust,ignore
 let mut guess = String::new();
@@ -187,7 +187,7 @@ To summarize, the `let mut guess = String::new();` line has created a mutable
 variable that is currently bound to a new, empty instance of a `String`. Whew!
 
 Recall that we included the input/output functionality from the standard
-library with `use std::io;` on the first line of the program. Now we'll call an
+library with `use std::io;` on the first line of the program. Now we’ll call an
 associated function, `stdin`, on `io`:
 
 ```rust,ignore
@@ -334,7 +334,7 @@ Please input your guess.
 You guessed: 6
 ```
 
-At this point, the first part of the game is done: we're getting input from the
+At this point, the first part of the game is done: we’re getting input from the
 keyboard and then printing it.
 
 ## Generating a Secret Number
@@ -856,7 +856,7 @@ fn main() {
 }
 ```
 
-As you can see, we've moved everything into a loop from the guess input prompt
+As you can see, we’ve moved everything into a loop from the guess input prompt
 onward. Be sure to indent those lines another four spaces each, and run the
 program again. Notice that there is a new problem because the program is doing
 exactly what we told it to do: ask for another guess forever! It doesn’t seem
