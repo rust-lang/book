@@ -86,9 +86,19 @@ Unmatched: <xsl:value-of select="w:pPr/w:pStyle/@w:val" />
     <!-- Character styles -->
 
     <xsl:template match="w:r[w:rPr/w:rStyle/@w:val = 'Literal']">
-        <xsl:text>`</xsl:text>
-        <xsl:value-of select="w:t" />
-        <xsl:text>`</xsl:text>
+        <xsl:choose>
+            <xsl:when test="normalize-space(w:t) != ''">
+                <xsl:text>`</xsl:text>
+                <xsl:value-of select="normalize-space(w:t)" />
+                <xsl:text>`</xsl:text>
+                <xsl:if test="substring(w:t, string-length(w:t)) = ' '">
+                    <xsl:text> </xsl:text>
+                </xsl:if>
+            </xsl:when>
+            <xsl:when test="normalize-space(w:t) != w:t">
+                <xsl:text> </xsl:text>
+            </xsl:when>
+        </xsl:choose>
     </xsl:template>
 
     <xsl:template match="w:r[w:rPr/w:rStyle/@w:val = 'EmphasisItalic']">
