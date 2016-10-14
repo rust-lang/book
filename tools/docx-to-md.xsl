@@ -14,30 +14,30 @@
     <xsl:template match="w:p[w:pPr/w:pStyle/@w:val = 'ChapterTitle']">
         <xsl:text>&#10;[TOC]&#10;&#10;</xsl:text>
         <xsl:text># </xsl:text>
-        <xsl:apply-templates select="w:r" />
+        <xsl:apply-templates select="*" />
         <xsl:text>&#10;&#10;</xsl:text>
     </xsl:template>
 
     <xsl:template match="w:p[w:pPr/w:pStyle/@w:val = 'HeadA']">
         <xsl:text>## </xsl:text>
-        <xsl:apply-templates select="w:r" />
+        <xsl:apply-templates select="*" />
         <xsl:text>&#10;&#10;</xsl:text>
     </xsl:template>
 
     <xsl:template match="w:p[w:pPr/w:pStyle/@w:val = 'HeadB']">
         <xsl:text>### </xsl:text>
-        <xsl:apply-templates select="w:r" />
+        <xsl:apply-templates select="*" />
         <xsl:text>&#10;&#10;</xsl:text>
     </xsl:template>
 
     <xsl:template match="w:p[w:pPr/w:pStyle/@w:val = 'HeadC']">
         <xsl:text>#### </xsl:text>
-        <xsl:apply-templates select="w:r" />
+        <xsl:apply-templates select="*" />
         <xsl:text>&#10;&#10;</xsl:text>
     </xsl:template>
 
     <xsl:template match="w:p[w:pPr/w:pStyle[@w:val = 'BodyFirst' or @w:val = 'Body']]">
-        <xsl:apply-templates select="w:r" />
+        <xsl:apply-templates select="*" />
         <xsl:text>&#10;&#10;</xsl:text>
     </xsl:template>
 
@@ -59,25 +59,25 @@
 
     <xsl:template match="w:p[w:pPr/w:pStyle/@w:val = 'CodeSingle']">
         <xsl:text>```&#10;</xsl:text>
-        <xsl:apply-templates select="w:r" />
+        <xsl:apply-templates select="*" />
         <xsl:text>&#10;```&#10;&#10;</xsl:text>
     </xsl:template>
 
     <xsl:template match="w:p[w:pPr/w:pStyle/@w:val = 'ProductionDirective']">
-        <xsl:apply-templates select="w:r" />
+        <xsl:apply-templates select="*" />
         <xsl:text>&#10;&#10;</xsl:text>
     </xsl:template>
 
     <xsl:template match="w:p[w:pPr/w:pStyle/@w:val = 'Caption']">
         <xsl:text>&lt;caption>&#10;</xsl:text>
-        <xsl:apply-templates select="w:r" />
+        <xsl:apply-templates select="*" />
         <xsl:text>&#10;&lt;/caption></xsl:text>
         <xsl:text>&#10;&#10;</xsl:text>
     </xsl:template>
 
     <xsl:template match="w:p[w:pPr/w:pStyle/@w:val = 'Note']">
         <xsl:text>> </xsl:text>
-        <xsl:apply-templates select="w:r" />
+        <xsl:apply-templates select="*" />
         <xsl:text>&#10;&#10;</xsl:text>
     </xsl:template>
 
