@@ -36,6 +36,18 @@
         <xsl:text>&#10;&#10;</xsl:text>
     </xsl:template>
 
+    <xsl:template match="w:p[w:pPr/w:pStyle[@w:val = 'NumListA' or @w:val = 'NumListB']]">
+        <xsl:text>1. </xsl:text>
+        <xsl:apply-templates select="*" />
+        <xsl:text>&#10;</xsl:text>
+    </xsl:template>
+
+    <xsl:template match="w:p[w:pPr/w:pStyle[@w:val = 'NumListC']]">
+        <xsl:text>1. </xsl:text>
+        <xsl:apply-templates select="*" />
+        <xsl:text>&#10;&#10;</xsl:text>
+    </xsl:template>
+
     <xsl:template match="w:p[w:pPr/w:pStyle[@w:val = 'BodyFirst' or @w:val = 'Body']]">
         <xsl:apply-templates select="*" />
         <xsl:text>&#10;&#10;</xsl:text>
