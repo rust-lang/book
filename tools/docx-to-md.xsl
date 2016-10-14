@@ -44,6 +44,11 @@
         <xsl:text>&#10;```&#10;&#10;</xsl:text>
     </xsl:template>
 
+    <xsl:template match="w:p[w:pPr/w:pStyle/@w:val = 'ProductionDirective']">
+        <xsl:value-of select="w:r/w:t" />
+        <xsl:text>&#10;&#10;</xsl:text>
+    </xsl:template>
+
     <xsl:template match="w:p">
 Unmatched: <xsl:value-of select="w:pPr/w:pStyle/@w:val" />
       <xsl:text>
