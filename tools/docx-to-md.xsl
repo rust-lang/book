@@ -45,6 +45,12 @@
         <xsl:text>&#10;```&#10;&#10;</xsl:text>
     </xsl:template>
 
+    <xsl:template match="w:p[w:pPr/w:pStyle/@w:val = 'CodeSingle']">
+        <xsl:text>```&#10;</xsl:text>
+        <xsl:apply-templates select="w:r/w:t" />
+        <xsl:text>&#10;```&#10;&#10;</xsl:text>
+    </xsl:template>
+
     <xsl:template match="w:p[w:pPr/w:pStyle/@w:val = 'ProductionDirective']">
         <xsl:apply-templates select="w:r/w:t" />
         <xsl:text>&#10;&#10;</xsl:text>
