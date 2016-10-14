@@ -43,17 +43,26 @@
 
     <xsl:template match="w:p[w:pPr/w:pStyle/@w:val = 'CodeA']">
         <xsl:text>```&#10;</xsl:text>
-        <xsl:apply-templates select="w:r" />
+        <!-- Don't apply Emphasis/etc templates in code blocks -->
+        <xsl:for-each select="w:r">
+            <xsl:value-of select="w:t" />
+        </xsl:for-each>
         <xsl:text>&#10;</xsl:text>
     </xsl:template>
 
     <xsl:template match="w:p[w:pPr/w:pStyle/@w:val = 'CodeB']">
-        <xsl:apply-templates select="w:r" />
+        <!-- Don't apply Emphasis/etc templates in code blocks -->
+        <xsl:for-each select="w:r">
+            <xsl:value-of select="w:t" />
+        </xsl:for-each>
         <xsl:text>&#10;</xsl:text>
     </xsl:template>
 
     <xsl:template match="w:p[w:pPr/w:pStyle/@w:val = 'CodeC']">
-        <xsl:apply-templates select="w:r" />
+        <!-- Don't apply Emphasis/etc templates in code blocks -->
+        <xsl:for-each select="w:r">
+            <xsl:value-of select="w:t" />
+        </xsl:for-each>
         <xsl:text>&#10;```&#10;&#10;</xsl:text>
     </xsl:template>
 
