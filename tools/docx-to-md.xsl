@@ -16,6 +16,12 @@
         <xsl:text>&#10;&#10;</xsl:text>
     </xsl:template>
 
+    <xsl:template match="w:p[w:pPr/w:pStyle/@w:val = 'HeadA']">
+        <xsl:text>## </xsl:text>
+        <xsl:value-of select="w:r/w:t" />
+        <xsl:text>&#10;&#10;</xsl:text>
+    </xsl:template>
+
     <xsl:template match="w:p[w:pPr/w:pStyle[@w:val = 'BodyFirst' or @w:val = 'Body']]">
         <xsl:apply-templates select="w:r" />
         <xsl:text>&#10;&#10;</xsl:text>
@@ -25,6 +31,21 @@
         <xsl:text>`</xsl:text>
         <xsl:value-of select="w:t" />
         <xsl:text>`</xsl:text>
+    </xsl:template>
+
+    <xsl:template match="w:p[w:pPr/w:pStyle/@w:val = 'CodeA']">
+        <xsl:text>```&#10;</xsl:text>
+        <xsl:value-of select="w:r/w:t" />
+        <xsl:text>&#10;</xsl:text>
+    </xsl:template>
+
+    <xsl:template match="w:p[w:pPr/w:pStyle/@w:val = 'CodeB']">
+        <xsl:value-of select="w:r/w:t" />
+    </xsl:template>
+
+    <xsl:template match="w:p[w:pPr/w:pStyle/@w:val = 'CodeC']">
+        <xsl:value-of select="w:r/w:t" />
+        <xsl:text>&#10;```&#10;&#10;</xsl:text>
     </xsl:template>
 
     <xsl:template match="w:r">
