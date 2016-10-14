@@ -17,7 +17,7 @@ correct, the game will print congratulations and exit.
 
 ## Setting Up a New Project
 
-To set up a new project, go to the projects directory that you created in
+To set up a new project, go to the *projects* directory that you created in
 Chapter 1, and make a new project using Cargo, like so:
 
 ```bash
@@ -30,7 +30,7 @@ as the first argument. The `--bin` flag tells Cargo to make a binary project,
 similar to the one in Chapter 1. The second command changes to the new
 project's directory.
 
-Look at the generated `Cargo.toml` file:
+Look at the generated *Cargo.toml* file:
 
 Filename: Cargo.toml
 
@@ -47,7 +47,7 @@ If the author information that Cargo obtained from your environment is not
 correct, fix that in the file and save it again.
 
 As you saw in Chapter 1, `cargo new` generates a “Hello, world!” program for
-you. Check out the `src/main.rs` file:
+you. Check out the *src/main.rs* file:
 
 Filename: src/main.rs
 
@@ -71,13 +71,13 @@ The `run` command comes in handy when you need to rapidly iterate on a project,
 and this game is such a project: we want to quickly test each iteration
 before moving on to the next one.
 
-Reopen the `src/main.rs` file. You’ll be writing all the code in this file.
+Reopen the *src/main.rs* file. You’ll be writing all the code in this file.
 
 ## Processing a Guess
 
 The first part of the program will ask for user input, process that input, and
 check that the input is in the expected form. To start, we’ll allow the player
-to input a guess. Enter the code in Listing 2-1 into `src/main.rs`.
+to input a guess. Enter the code in Listing 2-1 into *src/main.rs*.
 
 Filename: src/main.rs
 
@@ -341,7 +341,7 @@ building is a *binary crate*, which is an executable. The `rand` crate is a
 *library crate*, which contains code intended to be used in other programs.
 
 Cargo’s use of external crates is where it really shines. Before we can write
-code that uses `rand`, we need to modify the `Cargo.toml` file to include the
+code that uses `rand`, we need to modify the *Cargo.toml* file to include the
 `rand` crate as a dependency. Open that file now and add the following line to
 the bottom beneath the `[dependencies]` section header that Cargo created for
 you:
@@ -354,7 +354,7 @@ Filename: Cargo.toml
 rand = "0.3.14"
 ```
 
-In the `Cargo.toml` file, everything that follows a header is part of a section
+In the *Cargo.toml* file, everything that follows a header is part of a section
 that continues until another section starts. The `[dependencies]` section is
 where you tell Cargo which external crates your project depends on and which
 versions of those crates you require. In this case, we’ll specify the `rand`
@@ -399,10 +399,10 @@ the project with the dependencies available.
 
 If you immediately run `cargo build` again without making any changes, you won’t
 get any output. Cargo knows it has already downloaded and compiled the
-dependencies, and you haven't changed anything about them in your `Cargo.toml`
+dependencies, and you haven't changed anything about them in your *Cargo.toml*
 file. Cargo also knows that you haven't changed anything about your code, so it
 doesn't recompile that either. With nothing to do, it simply exits. If you open
-up the `src/main.rs` file, make a trivial change, then save it and build again,
+up the *src/main.rs* file, make a trivial change, then save it and build again,
 you’ll only see one line of output:
 
 ```bash
@@ -415,7 +415,7 @@ This line shows Cargo only updates the build with your tiny change to the
 reuse what it has already downloaded and compiled for those. It just rebuilds
 your part of the code.
 
-#### The Cargo.lock File Ensures Reproducible Builds
+#### The *Cargo.lock* File Ensures Reproducible Builds
 
 Cargo has a mechanism that ensures you can rebuild the same artifact every time
 you or anyone else builds your code: Cargo will use only the versions of the
@@ -437,12 +437,12 @@ file.
 
 #### Updating a Crate to Get a New Version
 
-When you _do_ want to update a crate, Cargo provides another command, `update`,
+When you *do* want to update a crate, Cargo provides another command, `update`,
 which will:
 
-1. Ignore the `Cargo.lock` file and figure out all the latest versions that fit
-  your specifications in `Cargo.toml`.
-1. If that works, Cargo will write those versions to the `Cargo.lock` file.
+1. Ignore the *Cargo.lock* file and figure out all the latest versions that fit
+your specifications in *Cargo.toml*.
+1. If that works, Cargo will write those versions to the *Cargo.lock* file.
 
 But by default, Cargo will only look for versions larger than `0.3.0` and
 smaller than `0.4.0`. If the `rand` crate has released two new versions,
@@ -454,11 +454,11 @@ $ cargo update
     Updating rand v0.3.14 -> v0.3.15
 ```
 
-At this point, you would also notice a change in your `Cargo.lock` file noting
+At this point, you would also notice a change in your *Cargo.lock* file noting
 that the version of the `rand` crate you are now using is `0.3.15`.
 
 If you wanted to use `rand` version `0.4.0` or any version in the `0.4.x`
-series, you’d have to update the `Cargo.toml` file to look like this instead:
+series, you’d have to update the *Cargo.toml* file to look like this instead:
 
 ```toml
 [dependencies]
@@ -478,7 +478,7 @@ number of packages.
 
 ### Generating a Random Number
 
-Let’s start _using_ `rand`. The next step is to update `src/main.rs`, as shown
+Let’s start *using* `rand`. The next step is to update *src/main.rs*, as shown
 in Listing 2-3:
 
 Filename: src/main.rs
