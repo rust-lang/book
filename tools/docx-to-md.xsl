@@ -11,6 +11,7 @@
     <xsl:template match="w:p[w:pPr/w:pStyle/@w:val = 'ChapterStart']" />
 
     <xsl:template match="w:p[w:pPr/w:pStyle/@w:val = 'ChapterTitle']">
+        <xsl:text>&#10;[TOC]&#10;&#10;</xsl:text>
         <xsl:text># </xsl:text>
         <xsl:value-of select="w:r/w:t" />
         <xsl:text>&#10;&#10;</xsl:text>
