@@ -69,11 +69,14 @@ Unmatched: <xsl:value-of select="w:pPr/w:pStyle/@w:val" />
         <xsl:choose>
             <xsl:when test="normalize-space(w:t) != ''">
                 <xsl:text>*</xsl:text>
-                <xsl:value-of select="w:t" />
+                <xsl:value-of select="normalize-space(w:t)" />
                 <xsl:text>*</xsl:text>
+                <xsl:if test="substring(w:t, string-length(w:t)) = ' '">
+                    <xsl:text> </xsl:text>
+                </xsl:if>
             </xsl:when>
             <xsl:otherwise>
-                <xsl:value-of select="w:t" />
+                <xsl:text> </xsl:text>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
