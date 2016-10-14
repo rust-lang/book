@@ -153,9 +153,9 @@ line. Notice that this is a `let` statement, which is used to create
 let foo = bar;
 ```
 
-This line will create a new variable named `foo` and bind this name to the
-value `bar`. In Rust, variables are immutable by default. The following example
-shows how to use `mut` before the variable name to make a variable mutable:
+This line will create a new variable named `foo` and bind it to the value
+`bar`. In Rust, variables are immutable by default. The following example shows
+how to use `mut` before the variable name to make a variable mutable:
 
 ```rust
 let foo = 5; // immutable
@@ -248,7 +248,7 @@ As mentioned earlier, `read_line` puts what the user types into the string we're
 passing it, but it also returns a value—in this case, an
 [`io::Result`][ioresult]<!-- ignore -->. Rust has a number of types named
 `Result` in its standard library: a generic [`Result`][result]<!-- ignore --> as
-well as specific versions for sublibraries, such as `io::Result`.
+well as specific versions for submodules, such as `io::Result`.
 
 [ioresult]: ../std/io/type.Result.html
 [result]: ../std/result/enum.Result.html
@@ -490,7 +490,7 @@ There’s a lot more to say about [Cargo][doccargo]<!-- ignore --> and [its
 ecosystem][doccratesio]<!-- ignore --> that Chapter XX will discuss, but for
 now, that’s all you need to know. Cargo makes it very easy to reuse libraries,
 so Rustaceans are able to write smaller projects that are assembled from a
-number of subpackages.
+number of packages.
 
 [doccargo]: http://doc.crates.io
 [doccratesio]: http://doc.crates.io/crates-io.html
