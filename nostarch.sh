@@ -2,6 +2,8 @@
 
 set -eu
 
+cargo build --release
+
 mkdir -p tmp
 rm -rf tmp/*.md
 
