@@ -50,6 +50,13 @@
         <xsl:text>&#10;&#10;</xsl:text>
     </xsl:template>
 
+    <xsl:template match="w:p[w:pPr/w:pStyle/@w:val = 'Caption']">
+        <xsl:text>&lt;caption>&#10;</xsl:text>
+        <xsl:apply-templates select="w:r/w:t" />
+        <xsl:text>&#10;&lt;/caption></xsl:text>
+        <xsl:text>&#10;&#10;</xsl:text>
+    </xsl:template>
+
     <xsl:template match="w:p">
 Unmatched: <xsl:value-of select="w:pPr/w:pStyle/@w:val" />
       <xsl:text>
