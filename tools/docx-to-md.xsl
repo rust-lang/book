@@ -91,7 +91,7 @@ Unmatched: <xsl:value-of select="w:pPr/w:pStyle/@w:val" />
 
     <!-- Character styles -->
 
-    <xsl:template match="w:r[w:rPr/w:rStyle/@w:val = 'Literal']">
+    <xsl:template match="w:r[w:rPr/w:rStyle[@w:val = 'Literal' or @w:val = 'LiteralBold']]">
         <xsl:choose>
             <xsl:when test="normalize-space(w:t) != ''">
                 <xsl:text>`</xsl:text>
