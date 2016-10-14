@@ -75,6 +75,12 @@
         <xsl:text>&#10;&#10;</xsl:text>
     </xsl:template>
 
+    <xsl:template match="w:p[w:pPr/w:pStyle/@w:val = 'Note']">
+        <xsl:text>> </xsl:text>
+        <xsl:apply-templates select="w:r" />
+        <xsl:text>&#10;&#10;</xsl:text>
+    </xsl:template>
+
     <xsl:template match="w:p">
 Unmatched: <xsl:value-of select="w:pPr/w:pStyle/@w:val" />
       <xsl:text>
