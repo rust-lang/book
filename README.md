@@ -72,5 +72,15 @@ There are a number of labels on Issues:
 As the book will be published by No Starch, we first iterate here, then ship the
 text off to No Starch. Then they do editing, and we fold it back in.
 
-As such, there’s a directory, `nostarch`, which corresponds to the text in No
+As such, there’s a directory, *nostarch*, which corresponds to the text in No
 Starch’s system.
+
+When we've started working with No Starch in a word doc, we will also check
+those into the repo in the *nostarch/odt* directory. To extract the text from
+the word doc as markdown in order to backport changes to the online book:
+
+1. Open the doc file in LibreOffice
+1. Accept all tracked changes
+1. Save as Microsoft Word 2007-2013 XML (.docx) in the *tmp* directory
+1. Run `./doc-to-md.sh`
+1. Inspect changes made to the markdown file in the *nostarch* directory and copy the changes to the *src* directory as appropriate.
