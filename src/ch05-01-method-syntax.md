@@ -156,7 +156,7 @@ value of `can_hold` will be a boolean, and the implementation will check to see
 if `self`'s length and width are both greater than the length and width of the
 other `Rectangle`, respectively. Let's write that code!
 
-```
+```rust
 # #[derive(Debug)]
 # struct Rectangle {
 #     length: u32,
