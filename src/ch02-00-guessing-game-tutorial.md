@@ -897,7 +897,7 @@ Typing `quit` actually quits the game, but so will any other non-number input.
 However, this is suboptimal to say the least. We want the game to automatically
 stop when the correct number is guessed.
 
-#### Quitting After a Correct Guess
+### Quitting After a Correct Guess
 
 Let’s program the game to quit when the user wins by adding a `break`:
 
@@ -946,7 +946,7 @@ By adding the `break` line after `You win!`, the program will exit the loop
 when the user guesses the secret number correctly. Exiting the loop also means
 exiting the program, because the loop is the last part of `main`.
 
-#### Handling Invalid Input
+### Handling Invalid Input
 
 To further refine the game’s behavior, rather than crashing the program when
 the user inputs a non-number, let’s make the game ignore a non-number so the
