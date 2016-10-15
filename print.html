@@ -750,15 +750,15 @@ dependencies you specified until you indicate otherwise. For example, what
 happens if next week version <code>v0.3.15</code> of the <code>rand</code> crate comes out and
 contains an important bug fix but also contains a regression that will break
 your code?</p>
-<p>The answer to this problem is the <code>Cargo.lock</code> file, which was created the
-first time you ran <code>cargo build</code> and is now in your <code>guessing_game</code> directory.
+<p>The answer to this problem is the <em>Cargo.lock</em> file, which was created the
+first time you ran <code>cargo build</code> and is now in your <em>guessing_game</em> directory.
 When you build a project for the first time, Cargo figures out all the
 versions of the dependencies that fit the criteria and then writes them to
-the <code>Cargo.lock</code> file. When you build your project in the future, Cargo will
-see that the <code>Cargo.lock</code> file exists and use the versions specified there
+the <em>Cargo.lock</em> file. When you build your project in the future, Cargo will
+see that the <em>Cargo.lock</em> file exists and use the versions specified there
 rather than doing all the work of figuring out versions again. This lets you
 have a reproducible build automatically. In other words, your project will
-remain at <code>0.3.14</code> until you explicitly upgrade, thanks to the <code>Cargo.lock</code>
+remain at <code>0.3.14</code> until you explicitly upgrade, thanks to the <em>Cargo.lock</em>
 file.</p>
 <h4>Updating a Crate to Get a New Version</h4>
 <p>When you <em>do</em> want to update a crate, Cargo provides another command, <code>update</code>,
