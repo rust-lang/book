@@ -610,7 +610,7 @@ written this code as:</p>
 <p>However, one long line is difficult to read, so it’s best to divide it, two
 lines for two method calls. Now let’s discuss what this line does.</p>
 <h3>Handling Potential Failure with the <code>Result</code> Type</h3>
-<p>As mentioned earlier, <code>read_line</code> puts what the user types into the string we're
+<p>As mentioned earlier, <code>read_line</code> puts what the user types into the string we’re
 passing it, but it also returns a value—in this case, an
 <a href="../std/io/type.Result.html"><code>io::Result</code></a><!-- ignore -->. Rust has a number of types named
 <code>Result</code> in its standard library: a generic <a href="../std/result/enum.Result.html"><code>Result</code></a><!-- ignore --> as
@@ -703,7 +703,7 @@ crate with the semantic version specifier <code>0.3.14</code>. Cargo understands
 Versioning</a><!-- ignore --> (sometimes called <em>SemVer</em>), which is a
 standard for writing version numbers. The number <code>0.3.14</code> is actually shorthand
 for <code>^0.3.14</code>, which means “any version that has a public API compatible with
-version <code>0.3.14</code>.”</p>
+version 0.3.14.”</p>
 <p>Now, without changing any of the code, let’s build the project, as shown in
 Listing 2-2:</p>
 <pre><code class="language-bash">$ cargo build
@@ -740,7 +740,7 @@ you’ll only see one line of output:</p>
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
 </code></pre>
 <p>This line shows Cargo only updates the build with your tiny change to the
-<code>src/main.rs</code> file. Your dependencies haven't changed, so Cargo knows it can
+<em>src/main.rs</em> file. Your dependencies haven't changed, so Cargo knows it can
 reuse what it has already downloaded and compiled for those. It just rebuilds
 your part of the code.</p>
 <h4>The <em>Cargo.lock</em> File Ensures Reproducible Builds</h4>
@@ -820,13 +820,13 @@ fn main() {
 <caption>
 Listing 2-3: Code changes needed in order to generate a random number
 </caption>
-<p>We're adding a <code>extern crate rand;</code> line to the top that lets Rust know we’ll be
+<p>We’re adding a <code>extern crate rand;</code> line to the top that lets Rust know we’ll be
 using that external dependency. This also does the equivalent of calling <code>use rand</code>, so now we can call anything in the <code>rand</code> crate by prefixing it with
 <code>rand::</code>.</p>
-<p>Next, we're adding another <code>use</code> line: <code>use rand::Rng</code>. <code>Rng</code> is a trait that
+<p>Next, we’re adding another <code>use</code> line: <code>use rand::Rng</code>. <code>Rng</code> is a trait that
 defines methods that random number generators implement, and this trait must be
 in scope for us to use those methods. Chapter 10 will cover traits in detail.</p>
-<p>Also, we're adding two more lines in the middle. The <code>rand::thread_rng</code> function
+<p>Also, we’re adding two more lines in the middle. The <code>rand::thread_rng</code> function
 will give us the particular random number generator that we’re going to use:
 one that is local to the current thread of execution and seeded by the
 operating system. Next, we call the <code>gen_range</code> method on the random number
@@ -932,8 +932,8 @@ number this time is 38. When the code compares 50 to 38, the <code>cmp</code> me
 return <code>Ordering::Greater</code>, because 50 is greater than 38. <code>Ordering::Greater</code>
 is the value that the <code>match</code> expression gets. It looks at the first arm’s
 pattern, <code>Ordering::Less</code>, but the value <code>Ordering::Greater</code> does not match
-<code>Ordering::Les</code>s. So it ignores the code in that arm and moves to the next arm.
-The next arm’s pattern, <code>Ordering::Greater</code>, <strong>does</strong> match
+<code>Ordering::Less</code>. So it ignores the code in that arm and moves to the next arm.
+The next arm’s pattern, <code>Ordering::Greater</code>, <em>does</em> match
 <code>Ordering::Greater</code>! The associated code in that arm will execute and print
 <code>Too big!</code> to the screen. The <code>match</code> expression ends because it has no need to
 look at the last arm in this particular scenario.</p>
@@ -1129,7 +1129,7 @@ error: Process didn't exit successfully: `target/debug/guess` (exit code: 101)
 <p>Typing <code>quit</code> actually quits the game, but so will any other non-number input.
 However, this is suboptimal to say the least. We want the game to automatically
 stop when the correct number is guessed.</p>
-<h4>Quitting After a Correct Guess</h4>
+<h3>Quitting After a Correct Guess</h3>
 <p>Let’s program the game to quit when the user wins by adding a <code>break</code>:</p>
 <p>Filename: src/main.rs</p>
 <pre><code class="language-rust,ignore">extern crate rand;
@@ -1172,7 +1172,7 @@ fn main() {
 <p>By adding the <code>break</code> line after <code>You win!</code>, the program will exit the loop
 when the user guesses the secret number correctly. Exiting the loop also means
 exiting the program, because the loop is the last part of <code>main</code>.</p>
-<h4>Handling Invalid Input</h4>
+<h3>Handling Invalid Input</h3>
 <p>To further refine the game’s behavior, rather than crashing the program when
 the user inputs a non-number, let’s make the game ignore a non-number so the
 user can continue guessing. We can do that by altering the line where <code>guess</code> is
@@ -1185,20 +1185,20 @@ converted from a <code>String</code> to a <code>u32</code>:</p>
 <p>Switching from an <code>expect</code> call to a <code>match</code> expression is how you generally
 move from crash on error to actually handling the error. Remember that <code>parse</code>
 returns a <code>Result</code> type, and <code>Result</code> is an enum that has the variants <code>Ok</code> or
-<code>Err</code>. We're using a <code>match</code> expression here, like we did with the <code>Ordering</code>
+<code>Err</code>. We’re using a <code>match</code> expression here, like we did with the <code>Ordering</code>
 result of the <code>cmp</code> method.</p>
 <p>If <code>parse</code> is able to successfully turn the string into a number, it will return
 an <code>Ok</code> value that contains the resulting number. That <code>Ok</code> value will match the
 first arm’s pattern, and the <code>match</code> expression will just return the <code>num</code> value
 that <code>parse</code> produced and put inside the <code>Ok</code> value. That number will end up
 right where we want it in the new <code>guess</code> variable we’re creating.</p>
-<p>If <code>parse</code> is not able to turn the string into a number, it will return an
+<p>If <code>parse</code> is <em>not</em> able to turn the string into a number, it will return an
 <code>Err</code> value that contains more information about the error. The <code>Err</code> value
-does not match the <code>Ok(num)</code> pattern in the first match arm, but it does match
+does not match the <code>Ok(num)</code> pattern in the first <code>match</code> arm, but it does match
 the <code>Err(_)</code> pattern in the second arm. The <code>_</code> is a catchall value; in this
 example, we’re saying we want to match all <code>Err</code> values, no matter what
 information they have inside them. So the program will execute the second arm’s
-code, <code>continue</code>, which means to go to the next iteration of the loop and ask
+code, <code>continue</code>, which means to go to the next iteration of the <code>loop</code> and ask
 for another guess. So effectively, the program ignores all errors that <code>parse</code>
 might encounter!</p>
 <p>Now everything in the program should work as expected. Let’s try it by running
