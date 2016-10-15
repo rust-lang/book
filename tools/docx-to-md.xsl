@@ -49,8 +49,10 @@
     </xsl:template>
 
     <xsl:template match="w:p[w:pPr/w:pStyle[@w:val = 'BodyFirst' or @w:val = 'Body']]">
-        <xsl:apply-templates select="*" />
-        <xsl:text>&#10;&#10;</xsl:text>
+        <xsl:if test=".//w:t">
+            <xsl:apply-templates select="*" />
+            <xsl:text>&#10;&#10;</xsl:text>
+        </xsl:if>
     </xsl:template>
 
     <xsl:template match="w:p[w:pPr/w:pStyle/@w:val = 'CodeA']">
