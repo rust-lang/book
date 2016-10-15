@@ -231,7 +231,7 @@ newline and other whitespace to help break up long lines. We could have
 written this code as:
 
 ```rust,ignore
-io::stdin().read_line(&mut guess).expect("failed to read line");
+io::stdin().read_line(&mut guess).expect("Failed to read line");
 ```
 
 However, one long line is difficult to read, so it’s best to divide it, two
@@ -501,7 +501,7 @@ fn main() {
     let mut guess = String::new();
 
     io::stdin().read_line(&mut guess)
-        .expect("failed to read line");
+        .expect("Failed to read line");
 
     println!("You guessed: {}", guess);
 }
@@ -592,7 +592,7 @@ fn main() {
     let mut guess = String::new();
 
     io::stdin().read_line(&mut guess)
-        .expect("failed to read line");
+        .expect("Failed to read line");
 
     println!("You guessed: {}", guess);
 
@@ -706,7 +706,7 @@ fn main() {
     let mut guess = String::new();
 
     io::stdin().read_line(&mut guess)
-        .expect("failed to read line");
+        .expect("Failed to read line");
 
     let guess: u32 = guess.trim().parse()
         .expect("Please type a number!");
@@ -817,7 +817,7 @@ fn main() {
         let mut guess = String::new();
 
         io::stdin().read_line(&mut guess)
-            .expect("failed to read line");
+            .expect("Failed to read line");
 
         let guess: u32 = guess.trim().parse()
             .expect("Please type a number!");
@@ -900,7 +900,7 @@ fn main() {
         let mut guess = String::new();
 
         io::stdin().read_line(&mut guess)
-            .expect("failed to read line");
+            .expect("Failed to read line");
 
         let guess: u32 = guess.trim().parse()
             .expect("Please type a number!");
@@ -1009,7 +1009,7 @@ fn main() {
         let mut guess = String::new();
 
         io::stdin().read_line(&mut guess)
-            .expect("failed to read line");
+            .expect("Failed to read line");
 
         let guess: u32 = match guess.trim().parse() {
             Ok(num) => num,
