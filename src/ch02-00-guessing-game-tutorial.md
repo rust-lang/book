@@ -667,8 +667,8 @@ number this time is 38. When the code compares 50 to 38, the `cmp` method will
 return `Ordering::Greater`, because 50 is greater than 38. `Ordering::Greater`
 is the value that the `match` expression gets. It looks at the first arm’s
 pattern, `Ordering::Less`, but the value `Ordering::Greater` does not match
-`Ordering::Les`s. So it ignores the code in that arm and moves to the next arm.
-The next arm’s pattern, `Ordering::Greater`, **does** match
+`Ordering::Less`. So it ignores the code in that arm and moves to the next arm.
+The next arm’s pattern, `Ordering::Greater`, *does* match
 `Ordering::Greater`! The associated code in that arm will execute and print
 `Too big!` to the screen. The `match` expression ends because it has no need to
 look at the last arm in this particular scenario.
@@ -972,13 +972,13 @@ first arm’s pattern, and the `match` expression will just return the `num` val
 that `parse` produced and put inside the `Ok` value. That number will end up
 right where we want it in the new `guess` variable we’re creating.
 
-If `parse` is not able to turn the string into a number, it will return an
+If `parse` is *not* able to turn the string into a number, it will return an
 `Err` value that contains more information about the error. The `Err` value
-does not match the `Ok(num)` pattern in the first match arm, but it does match
+does not match the `Ok(num)` pattern in the first `match` arm, but it does match
 the `Err(_)` pattern in the second arm. The `_` is a catchall value; in this
 example, we’re saying we want to match all `Err` values, no matter what
 information they have inside them. So the program will execute the second arm’s
-code, `continue`, which means to go to the next iteration of the loop and ask
+code, `continue`, which means to go to the next iteration of the `loop` and ask
 for another guess. So effectively, the program ignores all errors that `parse`
 might encounter!
 
