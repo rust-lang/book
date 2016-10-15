@@ -375,7 +375,7 @@ crate with the semantic version specifier `0.3.14`. Cargo understands [Semantic
 Versioning][semver]<!-- ignore --> (sometimes called *SemVer*), which is a
 standard for writing version numbers. The number `0.3.14` is actually shorthand
 for `^0.3.14`, which means “any version that has a public API compatible with
-version `0.3.14`.”
+version 0.3.14.”
 
 [semver]: http://semver.org
 

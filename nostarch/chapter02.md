@@ -362,7 +362,7 @@ crate with the semantic version specifier `0.3.14`. Cargo understands Semantic
 Versioning (sometimes called *SemVer*), which is a
 standard for writing version numbers. The number `0.3.14` is actually shorthand
 for `^0.3.14`, which means “any version that has a public API compatible with
-version `0.3.14`.”
+version 0.3.14.”
 
 Now, without changing any of the code, let’s build the project, as shown in
 Listing 2-2:
