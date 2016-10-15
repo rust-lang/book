@@ -231,7 +231,7 @@ part is this method:</p>
 <p>When you call a method with the <code>.foo()</code> syntax, it’s often wise to introduce a
 newline and other whitespace to help break up long lines. We could have
 written this code as:</p>
-<pre><code class="language-rust,ignore">io::stdin().read_line(&amp;mut guess).expect(&quot;failed to read line&quot;);
+<pre><code class="language-rust,ignore">io::stdin().read_line(&amp;mut guess).expect(&quot;Failed to read line&quot;);
 </code></pre>
 <p>However, one long line is difficult to read, so it’s best to divide it, two
 lines for two method calls. Now let’s discuss what this line does.</p>
@@ -438,7 +438,7 @@ fn main() {
     let mut guess = String::new();
 
     io::stdin().read_line(&amp;mut guess)
-        .expect(&quot;failed to read line&quot;);
+        .expect(&quot;Failed to read line&quot;);
 
     println!(&quot;You guessed: {}&quot;, guess);
 }
@@ -512,7 +512,7 @@ fn main() {
     let mut guess = String::new();
 
     io::stdin().read_line(&amp;mut guess)
-        .expect(&quot;failed to read line&quot;);
+        .expect(&quot;Failed to read line&quot;);
 
     println!(&quot;You guessed: {}&quot;, guess);
 
@@ -610,7 +610,7 @@ fn main() {
     let mut guess = String::new();
 
     io::stdin().read_line(&amp;mut guess)
-        .expect(&quot;failed to read line&quot;);
+        .expect(&quot;Failed to read line&quot;);
 
     let guess: u32 = guess.trim().parse()
         .expect(&quot;Please type a number!&quot;);
@@ -704,7 +704,7 @@ fn main() {
         let mut guess = String::new();
 
         io::stdin().read_line(&amp;mut guess)
-            .expect(&quot;failed to read line&quot;);
+            .expect(&quot;Failed to read line&quot;);
 
         let guess: u32 = guess.trim().parse()
             .expect(&quot;Please type a number!&quot;);
@@ -777,7 +777,7 @@ fn main() {
         let mut guess = String::new();
 
         io::stdin().read_line(&amp;mut guess)
-            .expect(&quot;failed to read line&quot;);
+            .expect(&quot;Failed to read line&quot;);
 
         let guess: u32 = guess.trim().parse()
             .expect(&quot;Please type a number!&quot;);
@@ -871,7 +871,7 @@ fn main() {
         let mut guess = String::new();
 
         io::stdin().read_line(&amp;mut guess)
-            .expect(&quot;failed to read line&quot;);
+            .expect(&quot;Failed to read line&quot;);
 
         let guess: u32 = match guess.trim().parse() {
             Ok(num) =&gt; num,
