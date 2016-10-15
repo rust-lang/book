@@ -156,13 +156,13 @@ value of `can_hold` will be a boolean, and the implementation will check to see
 if `self`'s length and width are both greater than the length and width of the
 other `Rectangle`, respectively. Let's write that code!
 
-```
-# #[derive(Debug)]
-# struct Rectangle {
-#     length: u32,
-#     width: u32,
-# }
-#
+```rust
+#[derive(Debug)]
+struct Rectangle {
+    length: u32,
+    width: u32,
+}
+
 impl Rectangle {
     fn area(&self) -> u32 {
         self.length * self.width
@@ -195,12 +195,12 @@ thus making it easier to create a square `Rectangle` rather than having to
 specify the same value twice:
 
 ```rust
-# #[derive(Debug)]
-# struct Rectangle {
-#     length: u32,
-#     width: u32,
-# }
-#
+#[derive(Debug)]
+struct Rectangle {
+    length: u32,
+    width: u32,
+}
+
 impl Rectangle {
     fn square(size: u32) -> Rectangle {
         Rectangle { length: size, width: size }
