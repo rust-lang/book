@@ -244,7 +244,7 @@ lines for two method calls. Now let’s discuss what this line does.
 
 ### Handling Potential Failure with the `Result` Type
 
-As mentioned earlier, `read_line` puts what the user types into the string we're
+As mentioned earlier, `read_line` puts what the user types into the string we’re
 passing it, but it also returns a value—in this case, an
 [`io::Result`][ioresult]<!-- ignore -->. Rust has a number of types named
 `Result` in its standard library: a generic [`Result`][result]<!-- ignore --> as
@@ -530,16 +530,16 @@ fn main() {
 Listing 2-3: Code changes needed in order to generate a random number
 </caption>
 
-We're adding a `extern crate rand;` line to the top that lets Rust know we’ll be
+We’re adding a `extern crate rand;` line to the top that lets Rust know we’ll be
 using that external dependency. This also does the equivalent of calling `use
 rand`, so now we can call anything in the `rand` crate by prefixing it with
 `rand::`.
 
-Next, we're adding another `use` line: `use rand::Rng`. `Rng` is a trait that
+Next, we’re adding another `use` line: `use rand::Rng`. `Rng` is a trait that
 defines methods that random number generators implement, and this trait must be
 in scope for us to use those methods. Chapter 10 will cover traits in detail.
 
-Also, we're adding two more lines in the middle. The `rand::thread_rng` function
+Also, we’re adding two more lines in the middle. The `rand::thread_rng` function
 will give us the particular random number generator that we’re going to use:
 one that is local to the current thread of execution and seeded by the
 operating system. Next, we call the `gen_range` method on the random number
@@ -963,7 +963,7 @@ let guess: u32 = match guess.trim().parse() {
 Switching from an `expect` call to a `match` expression is how you generally
 move from crash on error to actually handling the error. Remember that `parse`
 returns a `Result` type, and `Result` is an enum that has the variants `Ok` or
-`Err`. We're using a `match` expression here, like we did with the `Ordering`
+`Err`. We’re using a `match` expression here, like we did with the `Ordering`
 result of the `cmp` method.
 
 If `parse` is able to successfully turn the string into a number, it will return
