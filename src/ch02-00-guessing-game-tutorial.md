@@ -393,8 +393,8 @@ $ cargo build
 ```
 
 <caption>
-Listing 2-2: The output from running cargo build after adding the rand crate as
-a dependency
+Listing 2-2: The output from running `cargo build` after adding the rand crate
+as a dependency
 </caption>
 
 You may see different version numbers (but they will all be compatible with
