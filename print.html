@@ -447,15 +447,13 @@ chapter introduces you to a few common Rust concepts by showing you how to use
 them in a real program. You’ll learn about <code>let</code>, <code>match</code>, methods, associated
 functions, using external crates, and more! The following chapters will explore
 these ideas in more detail. In this chapter, you’ll practice the fundamentals.</p>
-<p>We’ll implement a classic beginner programming problem: a guessing game.
-Here’s how it works: the program will generate a random integer between 1 and</p>
-<ol start="100">
-<li>It will then prompt the player to enter a guess. After entering a guess, it
-will indicate whether the guess is too low or too high. If the guess is
-correct, the game will print congratulations and exit.</li>
-</ol>
+<p>We’ll implement a classic beginner programming problem: a guessing game. Here’s
+how it works: the program will generate a random integer between 1 and 100. It
+will then prompt the player to enter a guess. After entering a guess, it will
+indicate whether the guess is too low or too high. If the guess is correct, the
+game will print congratulations and exit.</p>
 <h2>Setting Up a New Project</h2>
-<p>To set up a new project, go to the projects directory that you created in
+<p>To set up a new project, go to the <em>projects</em> directory that you created in
 Chapter 1, and make a new project using Cargo, like so:</p>
 <pre><code class="language-bash">$ cargo new guessing_game --bin
 $ cd guessing_game
@@ -463,8 +461,8 @@ $ cd guessing_game
 <p>The first command, <code>cargo new</code>, takes the name of the project (<code>guessing_game</code>)
 as the first argument. The <code>--bin</code> flag tells Cargo to make a binary project,
 similar to the one in Chapter 1. The second command changes to the new
-project's directory.</p>
-<p>Look at the generated <code>Cargo.toml</code> file:</p>
+project’s directory.</p>
+<p>Look at the generated <em>Cargo.toml</em> file:</p>
 <p>Filename: Cargo.toml</p>
 <pre><code class="language-toml">[package]
 name = &quot;guessing_game&quot;
@@ -476,13 +474,13 @@ authors = [&quot;Your Name &lt;you@example.com&gt;&quot;]
 <p>If the author information that Cargo obtained from your environment is not
 correct, fix that in the file and save it again.</p>
 <p>As you saw in Chapter 1, <code>cargo new</code> generates a “Hello, world!” program for
-you. Check out the <code>src/main.rs</code> file:</p>
+you. Check out the <em>src/main.rs</em> file:</p>
 <p>Filename: src/main.rs</p>
 <pre><code class="language-rust">fn main() {
     println!(&quot;Hello, world!&quot;);
 }
 </code></pre>
-<p>Now let’s compile this &quot;Hello, world!&quot; program and run it in the same step
+<p>Now let’s compile this “Hello, world!” program and run it in the same step
 using the <code>cargo run</code> command:</p>
 <pre><code class="language-bash">$ cargo run
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
@@ -492,11 +490,11 @@ Hello, world!
 <p>The <code>run</code> command comes in handy when you need to rapidly iterate on a project,
 and this game is such a project: we want to quickly test each iteration
 before moving on to the next one.</p>
-<p>Reopen the <code>src/main.rs</code> file. You’ll be writing all the code in this file.</p>
+<p>Reopen the <em>src/main.rs</em> file. You’ll be writing all the code in this file.</p>
 <h2>Processing a Guess</h2>
 <p>The first part of the program will ask for user input, process that input, and
 check that the input is in the expected form. To start, we’ll allow the player
-to input a guess. Enter the code in Listing 2-1 into <code>src/main.rs</code>.</p>
+to input a guess. Enter the code in Listing 2-1 into <em>src/main.rs</em>.</p>
 <p>Filename: src/main.rs</p>
 <pre><code class="language-rust,ignore">use std::io;
 
@@ -541,7 +539,7 @@ println!(&quot;Please input your guess.&quot;);
 <p>This code is just printing a prompt stating what the game is and requesting
 input from the user.</p>
 <h3>Storing Values with Variables</h3>
-<p>Next, we'll create a place to store the user input, like this:</p>
+<p>Next, we’ll create a place to store the user input, like this:</p>
 <pre><code class="language-rust,ignore">let mut guess = String::new();
 </code></pre>
 <p>Now the program is getting interesting! There’s a lot going on in this little
@@ -575,7 +573,7 @@ of some kind.</p>
 <p>To summarize, the <code>let mut guess = String::new();</code> line has created a mutable
 variable that is currently bound to a new, empty instance of a <code>String</code>. Whew!</p>
 <p>Recall that we included the input/output functionality from the standard
-library with <code>use std::io;</code> on the first line of the program. Now we'll call an
+library with <code>use std::io;</code> on the first line of the program. Now we’ll call an
 associated function, <code>stdin</code>, on <code>io</code>:</p>
 <pre><code class="language-rust,ignore">io::stdin().read_line(&amp;mut guess)
     .expect(&quot;Failed to read line&quot;);
@@ -675,7 +673,7 @@ Please input your guess.
 6
 You guessed: 6
 </code></pre>
-<p>At this point, the first part of the game is done: we're getting input from the
+<p>At this point, the first part of the game is done: we’re getting input from the
 keyboard and then printing it.</p>
 <h2>Generating a Secret Number</h2>
 <p>Next, we need to generate a secret number that the user will try to guess. The
@@ -688,7 +686,7 @@ library. However, the Rust team does provide a <a href="https://crates.io/crates
 building is a <em>binary crate</em>, which is an executable. The <code>rand</code> crate is a
 <em>library crate</em>, which contains code intended to be used in other programs.</p>
 <p>Cargo’s use of external crates is where it really shines. Before we can write
-code that uses <code>rand</code>, we need to modify the <code>Cargo.toml</code> file to include the
+code that uses <code>rand</code>, we need to modify the <em>Cargo.toml</em> file to include the
 <code>rand</code> crate as a dependency. Open that file now and add the following line to
 the bottom beneath the <code>[dependencies]</code> section header that Cargo created for
 you:</p>
@@ -697,7 +695,7 @@ you:</p>
 
 rand = &quot;0.3.14&quot;
 </code></pre>
-<p>In the <code>Cargo.toml</code> file, everything that follows a header is part of a section
+<p>In the <em>Cargo.toml</em> file, everything that follows a header is part of a section
 that continues until another section starts. The <code>[dependencies]</code> section is
 where you tell Cargo which external crates your project depends on and which
 versions of those crates you require. In this case, we’ll specify the <code>rand</code>
@@ -733,10 +731,10 @@ as a dependency, Cargo also grabbed a copy of <code>libc</code>, because <code>r
 the project with the dependencies available.</p>
 <p>If you immediately run <code>cargo build</code> again without making any changes, you won’t
 get any output. Cargo knows it has already downloaded and compiled the
-dependencies, and you haven't changed anything about them in your <code>Cargo.toml</code>
+dependencies, and you haven't changed anything about them in your <em>Cargo.toml</em>
 file. Cargo also knows that you haven't changed anything about your code, so it
 doesn't recompile that either. With nothing to do, it simply exits. If you open
-up the <code>src/main.rs</code> file, make a trivial change, then save it and build again,
+up the <em>src/main.rs</em> file, make a trivial change, then save it and build again,
 you’ll only see one line of output:</p>
 <pre><code class="language-bash">$ cargo build
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
@@ -745,7 +743,7 @@ you’ll only see one line of output:</p>
 <code>src/main.rs</code> file. Your dependencies haven't changed, so Cargo knows it can
 reuse what it has already downloaded and compiled for those. It just rebuilds
 your part of the code.</p>
-<h4>The Cargo.lock File Ensures Reproducible Builds</h4>
+<h4>The <em>Cargo.lock</em> File Ensures Reproducible Builds</h4>
 <p>Cargo has a mechanism that ensures you can rebuild the same artifact every time
 you or anyone else builds your code: Cargo will use only the versions of the
 dependencies you specified until you indicate otherwise. For example, what
@@ -766,9 +764,9 @@ file.</p>
 <p>When you <em>do</em> want to update a crate, Cargo provides another command, <code>update</code>,
 which will:</p>
 <ol>
-<li>Ignore the <code>Cargo.lock</code> file and figure out all the latest versions that fit
-your specifications in <code>Cargo.toml</code>.</li>
-<li>If that works, Cargo will write those versions to the <code>Cargo.lock</code> file.</li>
+<li>Ignore the <em>Cargo.lock</em> file and figure out all the latest versions that fit
+your specifications in <em>Cargo.toml</em>.</li>
+<li>If that works, Cargo will write those versions to the <em>Cargo.lock</em> file.</li>
 </ol>
 <p>But by default, Cargo will only look for versions larger than <code>0.3.0</code> and
 smaller than <code>0.4.0</code>. If the <code>rand</code> crate has released two new versions,
@@ -777,10 +775,10 @@ smaller than <code>0.4.0</code>. If the <code>rand</code> crate has released two
     Updating registry `https://github.com/rust-lang/crates.io-index`
     Updating rand v0.3.14 -&gt; v0.3.15
 </code></pre>
-<p>At this point, you would also notice a change in your <code>Cargo.lock</code> file noting
+<p>At this point, you would also notice a change in your <em>Cargo.lock</em> file noting
 that the version of the <code>rand</code> crate you are now using is <code>0.3.15</code>.</p>
 <p>If you wanted to use <code>rand</code> version <code>0.4.0</code> or any version in the <code>0.4.x</code>
-series, you’d have to update the <code>Cargo.toml</code> file to look like this instead:</p>
+series, you’d have to update the <em>Cargo.toml</em> file to look like this instead:</p>
 <pre><code class="language-toml">[dependencies]
 
 rand = &quot;0.4.0&quot;
@@ -794,7 +792,7 @@ now, that’s all you need to know. Cargo makes it very easy to reuse libraries,
 so Rustaceans are able to write smaller projects that are assembled from a
 number of packages.</p>
 <h3>Generating a Random Number</h3>
-<p>Let’s start <em>using</em> <code>rand</code>. The next step is to update <code>src/main.rs</code>, as shown
+<p>Let’s start <em>using</em> <code>rand</code>. The next step is to update <em>src/main.rs</em>, as shown
 in Listing 2-3:</p>
 <p>Filename: src/main.rs</p>
 <pre><code class="language-rust,ignore">extern crate rand;
@@ -819,7 +817,9 @@ fn main() {
     println!(&quot;You guessed: {}&quot;, guess);
 }
 </code></pre>
-<p>Listing 2-3: Code changes needed in order to generate a random number</p>
+<caption>
+Listing 2-3: Code changes needed in order to generate a random number
+</caption>
 <p>We're adding a <code>extern crate rand;</code> line to the top that lets Rust know we’ll be
 using that external dependency. This also does the equivalent of calling <code>use rand</code>, so now we can call anything in the <code>rand</code> crate by prefixing it with
 <code>rand::</code>.</p>
@@ -897,7 +897,9 @@ fn main() {
     }
 }
 </code></pre>
-<p>Listing 2-4: Handling the possible return values of comparing two numbers</p>
+<caption>
+Listing 2-4: Handling the possible return values of comparing two numbers
+</caption>
 <p>The first new bit here is another <code>use</code>, bringing a type called
 <code>std::cmp::Ordering</code> into scope from the standard library. <code>Ordering</code> is
 another enum, like <code>Result</code>, but the variants for <code>Ordering</code> are <code>Less</code>,
@@ -1091,7 +1093,7 @@ fn main() {
     }
 }
 </code></pre>
-<p>As you can see, we've moved everything into a loop from the guess input prompt
+<p>As you can see, we’ve moved everything into a loop from the guess input prompt
 onward. Be sure to indent those lines another four spaces each, and run the
 program again. Notice that there is a new problem because the program is doing
 exactly what we told it to do: ask for another guess forever! It doesn’t seem
@@ -1263,7 +1265,9 @@ fn main() {
     }
 }
 </code></pre>
-<p>Listing 2-5: Complete code of the guessing game</p>
+<caption>
+Listing 2-5: Complete code of the guessing game
+</caption>
 <h2>Summary</h2>
 <p>At this point, you’ve successfully built the guessing game! Congratulations!</p>
 <p>This project was a hands-on way to introduce you to many new Rust concepts:
