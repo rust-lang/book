@@ -3669,7 +3669,7 @@ would mean we'd need a mutable borrow) and we want <code>main</code> to keep own
 value of <code>can_hold</code> will be a boolean, and the implementation will check to see
 if <code>self</code>'s length and width are both greater than the length and width of the
 other <code>Rectangle</code>, respectively. Let's write that code!</p>
-<pre><code># #[derive(Debug)]
+<pre><code class="language-rust"># #[derive(Debug)]
 # struct Rectangle {
 #     length: u32,
 #     width: u32,
