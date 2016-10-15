@@ -440,15 +440,15 @@ happens if next week version `v0.3.15` of the `rand` crate comes out and
 contains an important bug fix but also contains a regression that will break
 your code?
 
-The answer to this problem is the `Cargo.lock` file, which was created the
-first time you ran `cargo build` and is now in your `guessing_game` directory.
+The answer to this problem is the *Cargo.lock* file, which was created the
+first time you ran `cargo build` and is now in your *guessing_game* directory.
 When you build a project for the first time, Cargo figures out all the
 versions of the dependencies that fit the criteria and then writes them to
-the `Cargo.lock` file. When you build your project in the future, Cargo will
-see that the `Cargo.lock` file exists and use the versions specified there
+the *Cargo.lock* file. When you build your project in the future, Cargo will
+see that the *Cargo.lock* file exists and use the versions specified there
 rather than doing all the work of figuring out versions again. This lets you
 have a reproducible build automatically. In other words, your project will
-remain at `0.3.14` until you explicitly upgrade, thanks to the `Cargo.lock`
+remain at `0.3.14` until you explicitly upgrade, thanks to the *Cargo.lock*
 file.
 
 #### Updating a Crate to Get a New Version
