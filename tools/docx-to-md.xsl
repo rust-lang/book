@@ -122,7 +122,7 @@ Unmatched: <xsl:value-of select="w:pPr/w:pStyle/@w:val" />
                     <xsl:text> </xsl:text>
                 </xsl:if>
             </xsl:when>
-            <xsl:when test="normalize-space(w:t) != w:t">
+            <xsl:when test="normalize-space(w:t) != w:t and w:t != ''">
                 <xsl:text> </xsl:text>
             </xsl:when>
         </xsl:choose>
