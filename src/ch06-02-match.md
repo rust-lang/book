@@ -128,7 +128,7 @@ enum Coin {
 <caption>
 Listing 6-3: A `Coin` enum where the `Quarter` variant also holds a `UsState`
 value
-</caption
+</caption>
 
 Let's imagine that a friend of ours is trying to collect all 50 state quarters.
 While we sort our loose change by coin type, we're also going to call out the
