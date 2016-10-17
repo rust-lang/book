@@ -143,11 +143,7 @@ A function that takes as an argument or returns only numbers between 1 and 100
 could then declare in its signature to take a `Guess` rather than a `u32`, and
 would not need to do any additional checks in its body.
 
-### When `unwrap` is Appropriate
-
-It's fine to call unwrap when you know for sure that you have Some rather than
-None, but haven't been able to convey that to the type system.
-
 ## Summary
 
-Now that we've reduced duplication in our validation code, let's look at a feature of Rust that helps reduce duplication in lots of code: generics!
+Now that we've reduced duplication in our validation code, let's look at a
+feature of Rust that helps reduce duplication in lots of code: generics!

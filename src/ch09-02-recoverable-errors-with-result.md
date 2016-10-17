@@ -165,6 +165,23 @@ examples, you might not want to muddy the code with proper error handling. But
 if you use them in a library, mis-using your library can cause other people's
 programs to halt unexpectedly, and that's not very user-friendly.
 
+Another time it's appropriate to call `unwrap` is when we have some other logic
+that ensures the `Result` will have an `Ok` value, but the logic isn't
+something the compiler understands. If you can ensure by manually inspecting
+the code that you'll never have an `Err` variant, it is perfectly acceptable to
+call `unwrap`. Here's an example:
+
+```rust
+use std::net::IpAddr;
+let home = "127.0.0.1".parse::<IpAddr>().unwrap();
+```
+
+We're creating an `IpAddr` instance by parsing a hardcoded string. We can see
+that `"127.0.0.1"` is a valid IP address, so it's acceptable to use `unwrap`
+here. If we got the IP address string from a user of our program instead of
+hardcoding this value, we'd definitely want to handle the `Result` in a more
+robust way instead.
+
 ### Propagating errors with `try!` or `?`
 
 When writing a function, if you don't want to handle the error where you are,
