@@ -135,6 +135,12 @@ impl Guess {
 Listing 9-8: A `Guess` type that will only hold values between 1 and 100
 </caption>
 
+If code calling `Guess::new` passed in a value that was not between 1 and 100,
+that would be a violation of the contract that `Guess::new` is relying on. This
+function needs to signal to the calling code that it has a bug somewhere
+leading to the contract violation. The conditions in which `Guess::new` might
+panic should be discussed in its public-facing API documentation.
+
 Important to note is the `value` field of the `Guess` struct is private, so
 code using this struct may not set that value directly. Callers *must* use the
 `Guess::new` constructor function to create an instance of `Guess`, and they
