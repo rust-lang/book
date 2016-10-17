@@ -106,7 +106,7 @@ and 100, and we had many functions that had this requirement, it would be
 tedious (and potentially impact performance) to have a check like this in every
 function. Instead, we can make a new type and put the validations in one place,
 in the type's constructor. Then our functions can use the type with the
-confidence that we have values that meet our requirements. Here's an example of
+confidence that we have values that meet our requirements. Listing 9-8 shows
 one way to define a `Guess` type that will only create an instance of `Guess`
 if the `new` function gets a value between 1 and 100:
 
@@ -130,6 +130,10 @@ impl Guess {
     }
 }
 ```
+
+<caption>
+Listing 9-8: A `Guess` type that will only hold values between 1 and 100
+</caption>
 
 Important to note is the `value` field of the `Guess` struct is private, so
 code using this struct may not set that value directly. Callers *must* use the

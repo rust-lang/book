@@ -25,6 +25,8 @@ in more detail in Chapter XX. What you need to know for right now is that the
 `T` that is what we want to return in the success case, and any type `E` that
 is what we want to return in the error case.
 
+Listing 9-2 shows an example of something that might fail: opening a file.
+
 ```rust
 use std::fs::File;
 
@@ -33,11 +35,15 @@ fn main() {
 }
 ```
 
-The `open` function returns a `Result`: there are many ways in which opening a
-file can fail. For example, unless we created `hello.txt`, this file does not
-yet exist. Before we can do anything with our `File`, we need to extract it out
-of the result. Let's start with a basic tool: the `match` expression that we
-learned about in Chapter 6.
+<caption>
+Listing 9-2: Opening a file
+</caption>
+
+The type of `f` in this example is a `Result`, because there are many ways in
+which opening a file can fail. For example, unless we created `hello.txt`, this
+file does not yet exist. Before we can do anything with our `File`, we need to
+extract it out of the result. Listing 9-3 shows one way to handle the `Result`
+with a basic tool: the `match` expression that we learned about in Chapter 6.
 
 <!-- I'll ghost everything except the match statement lines in the libreoffice file /Carol -->
 
@@ -54,6 +60,10 @@ error),
     };
 }
 ```
+
+<caption>
+Listing 9-3: Using a `match` expression to handle the `Result` variants we might have
+</caption>
 
 If we see an `Ok`, we can return the inner `file` out of the `Ok` variant. If
 we see `Err`, we have to decide what to do with it. The simplest thing is to
@@ -78,7 +88,7 @@ The `Err` type `File::open` returns is [`io::Error`][ioerror]<!-- ignore -->,
 which is a struct provided by the standard library. This struct has a method
 `kind` that we can call to get an [`io::ErrorKind`][iokind]<!-- ignore -->
 value that we can use to handle different causes of an `Err` returned from
-`File::open` differently:
+`File::open` differently as in Listing 9-4:
 
 [ioerror]: ../std/io/struct.Error.html
 [iokind]: ../std/io/enum.ErrorKind.html
@@ -103,6 +113,10 @@ error),
     };
 }
 ```
+
+<caption>
+Listing 9-4: Handling different kinds of errors in different ways
+</caption>
 
 <!-- I will add ghosting and wingdings here in libreoffice /Carol -->
 
@@ -131,13 +145,13 @@ fn main() {
 }
 ```
 
-This has similar behavior as our previous example: If the call to `open()`
-returns `Ok`, return the value inside. If it's an `Err`, panic.
+This has similar behavior as the example using `match` in Listing 9-3: If the
+call to `open()` returns `Ok`, return the value inside. If it's an `Err`, panic.
 
-There's also another method, similar to `unwrap()`, but that lets us choose the
-error message: `expect()`. Using `expect()` instead of `unwrap()` and providing
-good error messages can convey your intent and make tracking down the source of
-a panic easier. `expect()` looks like this:
+There's also another method that is similar to `unwrap()`, but lets us choose
+the error message: `expect()`. Using `expect()` instead of `unwrap()` and
+providing good error messages can convey your intent and make tracking down the
+source of a panic easier. `expect()` looks like this:
 
 <!-- I'll ghost everything except `expect()` in the libreoffice file /Carol -->
 
@@ -185,10 +199,10 @@ robust way instead.
 ### Propagating errors with `try!` or `?`
 
 When writing a function, if you don't want to handle the error where you are,
-you can return the error to the calling function. For example, here's a
-function that reads a username from a file. If the file doesn't exist or can't
-be read, this function will return those errors to the code that called this
-function:
+you can return the error to the calling function. For example, Listing 9-5
+shows a function that reads a username from a file. If the file doesn't exist
+or can't be read, this function will return those errors to the code that
+called this function:
 
 ```rust
 # use std::fs::File;
@@ -212,6 +226,10 @@ fn read_username_from_file() -> Result<String, io::Error> {
 }
 ```
 
+<caption>
+Listing 9-5: A function that returns errors to the calling code using `match`
+</caption>
+
 Since the `Result` type has two type parameters, we need to include them both
 in our function signature. In this case, `File::open` and `read_to_string`
 return `std::io::Error` as the value inside the `Err` variant, so we will also
@@ -220,9 +238,12 @@ username as a `String` inside the `Ok` variant, so that is our success type.
 
 This is a very common way of handling errors: propagate them upward until
 you're ready to deal with them. This pattern is so common in Rust that there is
-a macro for it, `try!`, and as of Rust 1.XX, dedicated syntax for it: the
-question mark operator. We could have written the above like this using the
-`try!` macro and it would have the same functionality as the `match` expressions:
+a macro for it, `try!`, and as of Rust 1.XX <!-- We will fill this in once the
+question mark is released in a stable version; we don't know for sure which
+version it will be yet /Carol -->, dedicated syntax for it: the question mark
+operator. We could have written the code in Listing 9-5 using the `try!` macro,
+as in Listing 9-6, and it would have the same functionality as the `match`
+expressions:
 
 <!-- I'll ghost everything except the calls to `try!` in the libreoffice file
 /Carol -->
@@ -240,7 +261,11 @@ fn read_username_from_file() -> Result<String, io::Error> {
 }
 ```
 
-Or like this using the question mark operator:
+<caption>
+Listing 9-6: A function that returns errors to the calling code using `try!`
+</caption>
+
+Or as in Listing 9-7, which uses the question mark operator:
 
 <!-- I'll ghost everything except the question mark operator in the libreoffice
 file. Also note the `#![feature(question_mark)]` line won't be needed once this
@@ -268,6 +293,9 @@ fn read_username_from_file() -> Result<String, io::Error> {
     Ok(s)
 }
 ```
+<caption>
+Listing 9-7: A function that returns errors to the calling code using `?`
+</caption>
 
 The `?` operator at the end of the `open` call does the same thing as the
 example that uses `match` and the example that uses the `try!` macro: It will
