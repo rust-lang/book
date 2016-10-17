@@ -1,10 +1,10 @@
 ## Recoverable errors with `Result<T, E>`
 
 Most errors aren't so dire. Sometimes, when a function fails, it's for a reason
-that we can easily interpret and respond to. As an example, maybe we are
-making a request to a website, but it's down for maintenance. In this
-situation, we'd like to wait and then try again. Terminating our process isn't
-the right thing to do here.
+that we can easily interpret and respond to. As an example, maybe we are making
+a request to a website, but it's down for maintenance. In this situation, we'd
+like to wait and then try again. Terminating our process isn't the right thing
+to do here.
 
 In these cases, Rust's standard library provides an `enum` to use as the return
 type of the function:
@@ -25,8 +25,6 @@ in more detail in Chapter XX. What you need to know for right now is that the
 `T` that is what we want to return in the success case, and any type `E` that
 is what we want to return in the error case.
 
-As an example, let's try opening a file:
-
 ```rust
 use std::fs::File;
 
@@ -35,11 +33,11 @@ fn main() {
 }
 ```
 
-The `open` function returns a `Result`: there are many ways in which opening
-a file can fail. For example, unless we created `hello.txt`, this file does
-not yet exist. Before we can do anything with our `File`, we need to extract
-it out of the result. Let's start with a basic tool: `match`. We've used it
-to deal with enums previously.
+The `open` function returns a `Result`: there are many ways in which opening a
+file can fail. For example, unless we created `hello.txt`, this file does not
+yet exist. Before we can do anything with our `File`, we need to extract it out
+of the result. Let's start with a basic tool: the `match` expression that we
+learned about in Chapter 6.
 
 <!-- I'll ghost everything except the match statement lines in the libreoffice file /Carol -->
 
@@ -85,7 +83,7 @@ value that we can use to handle different causes of an `Err` returned from
 [ioerror]: ../std/io/struct.Error.html
 [iokind]: ../std/io/enum.ErrorKind.html
 
-```rust,should_panic
+```rust,ignore
 use std::fs::File;
 use std::io::ErrorKind;
 
@@ -106,7 +104,7 @@ error),
 }
 ```
 
-<!-- I will add ghosting and wingdings here in openoffice /Carol -->
+<!-- I will add ghosting and wingdings here in libreoffice /Carol -->
 
 This example uses a *match guard* with the second arm's pattern to add a
 condition that further refines the pattern. The `ref` in the pattern is needed
@@ -230,7 +228,14 @@ Or like this using the question mark operator:
 <!-- I'll ghost everything except the question mark operator in the libreoffice
 file. Also note the `#![feature(question_mark)]` line won't be needed once this
 feature has made it into a stable version of Rust, which will happen well
-before the book's publication. /Carol -->
+before the book's publication.
+
+In order to run the code examples that have the `#![feature(question_mark)]`
+line, you'll need to install a nightly version of the Rust compiler. Again,
+readers of the book won't need to do this since we expect the question mark
+feature to stabilize before publication.
+
+/Carol -->
 
 ```rust
 #![feature(question_mark)]
@@ -304,10 +309,10 @@ error[E0308]: mismatched types
 ```
 
 The mismatched types that this error is pointing out says the `main()` function
-has a return type of `()`, but the `try!` macro is trying to return a `Result`.
-So in functions that don't return `Result`, when you call other functions that
-return `Result`, you'll need to use a `match` or one of the methods on `Result`
-to handle it instead of using `try!` or `?`.
+has a return type of `()`, but the `try!` macro might return a `Result`. So in
+functions that don't return `Result`, when you call other functions that return
+`Result`, you'll need to use a `match` or one of the methods on `Result` to
+handle it instead of using `try!` or `?`.
 
 Now that we've discussed the details of calling `panic!` or returning `Result`,
 let's return to the topic of how to decide which is appropriate in which cases.

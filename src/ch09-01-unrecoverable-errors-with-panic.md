@@ -46,7 +46,7 @@ message and the place in our source code where the panic occurred:
 `src/main.rs`, line two.
 
 But that only shows us the exact line that called `panic!`. That's not always
-useful. Let's modify our example slightly to see what it's like when a `panic!`
+useful. Let's look at another example to see what it's like when a `panic!`
 call comes from code we call instead of from our code directly:
 
 ```rust,should_panic
@@ -57,10 +57,10 @@ fn main() {
 }
 ```
 
-We attempt to access the hundredth element of our vector, but it only has three
-elements. In this situation, Rust will panic. Using `[]` is supposed to return
-an element. If you pass `[]` an invalid index, though, there's no element that
-Rust could return here that would be correct.
+We're attempting to access the hundredth element of our vector, but it only has
+three elements. In this situation, Rust will panic. Using `[]` is supposed to
+return an element. If you pass `[]` an invalid index, though, there's no
+element that Rust could return here that would be correct.
 
 Other languages like C will attempt to give you exactly what you asked for in
 this situation, even though it isn't what you want: you'll get whatever is at
@@ -85,10 +85,10 @@ note: Run with `RUST_BACKTRACE=1` for a backtrace.
 error: Process didn't exit successfully: `target/debug/panic` (exit code: 101)
 ```
 
-This points at a file we didn't write, `../src/libcollections/vec.rs`, line
-1265. That's the implementation of `Vec<T>` in the standard library. While it's
-easy to see in this short program where the error was, it would be nicer if we
-could have Rust tell us what line in our program caused the error.
+This points at a file we didn't write, `../src/libcollections/vec.rs`. That's
+the implementation of `Vec<T>` in the standard library. While it's easy to see
+in this short program where the error was, it would be nicer if we could have
+Rust tell us what line in our program caused the error.
 
 That's what the next line, the `note` is about. If we set the `RUST_BACKTRACE`
 environment variable, we'll get a backtrace of exactly how the error happend.
@@ -128,12 +128,12 @@ core..ops..Index<usize>>::index::hb9f10d3dadbe8101
 error: Process didn't exit successfully: `target/debug/panic` (exit code: 101)
 ```
 
-That's a lot of output! Line `11` there has the line in our project:
-`src/main.rs` line four. The key to reading the backtrace is to start from the
-top and read until we see files that we wrote: that's where the problem
-originated. If we didn't want our program to panic here, this line is where we
-would start investigating in order to figure out how we got to this location
-with values that cause the panic.
+That's a lot of output! Line 11 of the backtrace points to the line in our
+project causing the problem: `src/main.rs` line four. The key to reading the
+backtrace is to start from the top and read until we see files that we wrote:
+that's where the problem originated. If we didn't want our program to panic
+here, this line is where we would start investigating in order to figure out
+how we got to this location with values that caused the panic.
 
 Now that we've covered how to `panic!` to stop our code's execution and how to
 debug a `panic!`, let's look at how to instead return and use recoverable

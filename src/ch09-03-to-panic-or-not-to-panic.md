@@ -26,7 +26,7 @@ fix it during development. Similarly, `panic!` is often appropriate if you call
 someone else's code that is out of your control, and it returns an invalid
 state that you have no way of fixing.
 
-Taking the bullet points in turn:
+Taking each point in turn:
 
 Some bad states are expected to happen sometimes, and will happen no matter how
 well you write your code. Examples of this include a parser being given
