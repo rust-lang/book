@@ -177,7 +177,7 @@ enum Coin {
 <caption>
 Listing 6-3: A `Coin` enum where the `Quarter` variant also holds a `UsState`
 value
-</caption
+</caption>
 <p>Let's imagine that a friend of ours is trying to collect all 50 state quarters.
 While we sort our loose change by coin type, we're also going to call out the
 name of the state associated with each quarter so that if it's one our friend
@@ -244,7 +244,7 @@ Listing 6-4: A function that uses a `match` expression on an `Option<i32>`
 </caption>
 <!-- Flagging for wingding numbers -->
 <h4>Matching <code>Some(T)</code></h4>
-<p>Let's examine the first execution of <code>plus_one()</code> in more detail. In the above
+<p>Let's examine the first execution of <code>plus_one</code> in more detail. In the above
 example when we call <code>plus_one(five)</code>, the variable <code>x</code> in the body of
 <code>plus_one</code> will have the value <code>Some(5)</code>. We compare that against each match
 arm:</p>
@@ -258,7 +258,7 @@ arm:</p>
 code in the match arm is then executed, so we add one to the value of <code>i</code>
 and create a new <code>Some</code> value with our total <code>6</code> inside.</p>
 <h4>Matching <code>None</code></h4>
-<p>Now let's consider the second call of <code>plus_one()</code> where <code>x</code> is <code>None</code>. We
+<p>Now let's consider the second call of <code>plus_one</code> where <code>x</code> is <code>None</code>. We
 enter the <code>match</code>, and compare to the first arm:</p>
 <pre><code class="language-rust,ignore">None =&gt; None,
 </code></pre>
@@ -272,7 +272,7 @@ once you get used to it, you'll wish you had it in all languages. It's
 consistently a user favorite.</p>
 <h3>Matches are Exhaustive</h3>
 <p>There's one other aspect of <code>match</code> we haven't discussed. Consider this version
-of our <code>plus_one()</code> function:</p>
+of our <code>plus_one</code> function:</p>
 <pre><code class="language-rust,ignore">fn plus_one(x: Option&lt;i32&gt;) -&gt; Option&lt;i32&gt; {
     match x {
         Some(i) =&gt; Some(i + 1),
