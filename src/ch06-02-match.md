@@ -210,7 +210,7 @@ Listing 6-4: A function that uses a `match` expression on an `Option<i32>`
 
 #### Matching `Some(T)`
 
-Let's examine the first execution of `plus_one()` in more detail. In the above
+Let's examine the first execution of `plus_one` in more detail. In the above
 example when we call `plus_one(five)`, the variable `x` in the body of
 `plus_one` will have the value `Some(5)`. We compare that against each match
 arm:
@@ -232,7 +232,7 @@ and create a new `Some` value with our total `6` inside.
 
 #### Matching `None`
 
-Now let's consider the second call of `plus_one()` where `x` is `None`. We
+Now let's consider the second call of `plus_one` where `x` is `None`. We
 enter the `match`, and compare to the first arm:
 
 ```rust,ignore
@@ -252,7 +252,7 @@ consistently a user favorite.
 ### Matches are Exhaustive
 
 There's one other aspect of `match` we haven't discussed. Consider this version
-of our `plus_one()` function:
+of our `plus_one` function:
 
 ```rust,ignore
 fn plus_one(x: Option<i32>) -> Option<i32> {
