@@ -68,19 +68,20 @@
 
                 <div id="content" class="content">
                     <h2>Match</h2>
-<p>Rust has an extremely powerful control-flow operator: <code>match</code>. It allows us to
+<p>Rust has an extremely powerful control-flow operator, <code>match</code>, that allows us to
 compare a value against a series of patterns and then execute code based on
-how they compare.</p>
-<p>Think of a <code>match</code> expression kind of like a coin sorting machine. Coins slide
-down a track that has variously sized holes along it, and each coin falls
+which pattern matches. The power comes from the expressiveness of the patterns
+and the compiler checks that make sure all possible cases are handled.</p>
+<p>Think of a <code>match</code> expression kind of like a coin sorting machine: coins slide
+down a track with variously sized holes along it, and each coin falls
 through the first hole it encounters that it fits into. In the same way, values
-go through each pattern in a <code>match</code>, and for the first pattern that the value
+go through each pattern in a <code>match</code>, and at the first pattern the value
 &quot;fits&quot;, the value will fall into the associated code block to be used during
 execution.</p>
 <p>Since we're already talking about coins, let's use them for an example using
-<code>match</code>. We can write a function that can take an unknown American coin and, in
-a similar way as the coin counting machine, determine which coin it is and
-return its value in cents:</p>
+<code>match</code>! We can write a function that can take an unknown American coin and, in
+a similar way as the counting machine, determine which coin it is and
+return its value in cents, shown here in Listing 6-2:</p>
 <pre><code class="language-rust">enum Coin {
     Penny,
     Nickel,
@@ -97,29 +98,39 @@ fn value_in_cents(coin: Coin) -&gt; i32 {
     }
 }
 </code></pre>
-<p>Let's break down the <code>match</code>! At a high-level, using <code>match</code> looks like this:</p>
-<pre><code class="language-text">match expression {
-    pattern =&gt; code,
-}
-</code></pre>
-<p>First, we have the <code>match</code> keyword. Next, we have an expression. This feels
-very similar to an expression used with <code>if</code>, but there's a big difference:
-with <code>if</code>, the condition needs to return a boolean value. Here, it can be any
-type.</p>
-<p>Next, we have a &quot;match arm&quot;. That's the part that looks like <code>pattern =&gt; code,</code>.  We can have as many arms as we need to: our <code>match</code> above has four
-arms. An arm has two parts: a pattern and some code. When the <code>match</code>
-expression executes, it compares the resulting value against the pattern of
-each arm, in order. If a pattern matches the value, the code associated
-with that pattern is executed. If that pattern doesn't match the value,
-execution continues to the next arm, much like a coin sorting machine.</p>
+<caption>
+Listing 6-2: An enum and a `match` expression that has the variants of the enum
+as its patterns.
+</caption>
+<!--- Flagging as a place to possibly put wingding numbers -- would it work to
+put two arms in this example? I think that would illustrate the control flow
+well -->
+<!-- I think we're moving away from using generic examples like this and talking
+about concrete examples instead. I've changed the text to reflect that, and I'm
+happy to add wingdings once we're in libreoffice. /Carol -->
+<p>Let's break down the <code>match</code> in the <code>value_in_cents</code> function. First, we list
+the <code>match</code> keyword followed by an expression, which in this case is the value
+<code>coin</code>. This feels very similar to an expression used with <code>if</code>, but there's a
+big difference: with <code>if</code>, the expression needs to return a boolean value.
+Here, it can be any type. The type of <code>coin</code> in this example is the <code>Coin</code> enum
+that we have defined above.</p>
+<p>Next, we have the <em>match arms</em>. An arm has two parts: a pattern and some code.
+The first arm here has a pattern that is the value <code>Coin::Penny</code>, then the <code>=&gt;</code>
+operator that separates the pattern and the code to run. The code in this case
+is just the value <code>1</code>. Each arm is separated from the next with a comma.</p>
+<p>When the <code>match</code> expression executes, it compares the resulting value against
+the pattern of each arm, in order. If a pattern matches the value, the code
+associated with that pattern is executed. If that pattern doesn't match the
+value, execution continues to the next arm, much like a coin sorting machine.
+We can have as many arms as we need: our <code>match</code> above has four arms.</p>
 <p>The code associated with each arm is an expression, and the resulting value of
-the code with the matching arm that gets executed is the value that gets
-returned for the entire <code>match</code> expression.</p>
+the expression in the matching arm is the value that gets returned for the
+entire <code>match</code> expression.</p>
 <p>Curly braces typically aren't used if the match arm code is short, as it is in
-the above example where each arm just returns a value. If we wanted to run
-multiple lines of code in a match arm, we can use curly braces. This code would
-print out &quot;Lucky penny!&quot; every time the method was called with a <code>Coin::Penny</code>,
-but would still return the last value of the block, <code>1</code>:</p>
+the above example where each arm just returns a value. If you wanted to run
+multiple lines of code in a match arm, you can use curly braces. For example,
+this code would print out &quot;Lucky penny!&quot; every time the method was called with
+a <code>Coin::Penny</code>, but would still return the last value of the block, <code>1</code>:</p>
 <pre><code class="language-rust"># enum Coin {
 #    Penny,
 #    Nickel,
@@ -139,12 +150,16 @@ fn value_in_cents(coin: Coin) -&gt; i32 {
     }
 }
 </code></pre>
-<p>Another useful feature of match arms is that they can create variables that bind
-to values in the matching pattern. Here's an example use case: from 1999 through
-2008, the U.S. printed quarters with different designs for each of the 50 states
-on one side. The other coins did not get state designs, so only quarters have
-this extra attribute. We can add this information to our <code>enum</code> by changing the
-<code>Quarter</code> variant to have a <code>State</code> value:</p>
+<h3>Patterns that Bind to Values</h3>
+<p>Another useful feature of match arms is that they can bind to parts of the
+values that match the pattern. This is how we can extract values out of enum
+variants.</p>
+<p>As an example, let's change one of our enum variants to hold data inside it.
+From 1999 through 2008, the U.S. printed quarters with different designs for
+each of the 50 states on one side. No other coins got state designs, so only
+quarters have this extra value. We can add this information to our <code>enum</code>
+by changing the <code>Quarter</code> variant to include a <code>State</code> value stored inside it
+as we've done here in Listing 6-3:</p>
 <pre><code class="language-rust">#[derive(Debug)] // So we can inspect the state in a minute
 enum UsState {
     Alabama,
@@ -159,14 +174,18 @@ enum Coin {
     Quarter(UsState),
 }
 </code></pre>
+<caption>
+Listing 6-3: A `Coin` enum where the `Quarter` variant also holds a `UsState`
+value
+</caption
 <p>Let's imagine that a friend of ours is trying to collect all 50 state quarters.
-While we sort our loose change by coin type in order to count it, we're going
-to call out the name of the state so that if it's one our friend doesn't have
-yet, they can add it to their collection.</p>
-<p>In the match statement to do this, the quarter case now has a variable, <code>state</code>,
-that binds to the value of the state for that quarter. The variable will only
-get created if the coin matches the <code>Quarter</code> pattern. Then we can use the
-variable in the code for that arm:</p>
+While we sort our loose change by coin type, we're also going to call out the
+name of the state associated with each quarter so that if it's one our friend
+doesn't have they can add it to their collection.</p>
+<p>In the match expression for this, we add a variable, <code>state</code>, to the pattern
+that matches values of the variant <code>Coin::Quarter</code>. When a <code>Coin::Quarter</code>
+matches, the <code>state</code> variable will bind to the value of that quarter's state.
+Then we can use <code>state</code> in the code for that arm like so:</p>
 <pre><code class="language-rust"># #[derive(Debug)]
 # enum UsState {
 #    Alabama,
@@ -193,21 +212,22 @@ fn value_in_cents(coin: Coin) -&gt; i32 {
 }
 </code></pre>
 <p>If we were to call <code>value_in_cents(Coin::Quarter(UsState::Alaska))</code>, <code>coin</code>
-will be <code>Coin::Quarter(UsState::Alaska)</code>. When we compare that value with each
-of the match arms, none of the patterns will match until we reach
-<code>Coin::Quarter(state)</code>. At that point, the variable <code>state</code> will bind to the
-value <code>UsState::Alaska</code>. We can then use that variable in the <code>println!</code>, thus
-getting the inner state value out of the <code>Coin</code> enum variant for <code>Quarter</code> and
-enabling us to print &quot;State quarter from Alaska!&quot;.</p>
-<p>Remember the <code>Option&lt;T&gt;</code> type from the previous section, and that we wanted to
-be able to get the inner <code>T</code> value out of the <code>Some</code> case? This will be very
-similar! Instead of coins, we will be comparing to other patterns, but the way
-that the <code>match</code> expression works remains the same as a coin sorting machine in
-the way that we look for the first pattern that fits the value.</p>
-<p>Let's say that we want to write a function that takes an <code>Option&lt;i32&gt;</code>, and
-if there's a value inside, add one to it. If there isn't a value inside, we
-want to return the <code>None</code> value and not attempt to add.</p>
-<p>This function is very easy to write, thanks to <code>match</code>. It looks like this:</p>
+would be <code>Coin::Quarter(UsState::Alaska)</code>. When we compare that value with each
+of the match arms, none of them match until we reach <code>Coin::Quarter(state)</code>. At
+that point, the binding for <code>state</code> will be the value <code>UsState::Alaska</code>. We can
+then use that binding in the <code>println!</code> expression, thus getting the inner
+state value out of the <code>Coin</code> enum variant for <code>Quarter</code>.</p>
+<h3>Matching with Option<T></h3>
+<p>In the previous section we wanted to get the inner <code>T</code> value out of the <code>Some</code>
+case when using <code>Option&lt;T&gt;</code>; we can do this in a very similar way! Instead of
+comparing coins we will be comparing the variants of <code>Option&lt;T&gt;</code>, but the way
+that the <code>match</code> expression works remains the same.</p>
+<p>Let's say we want to write a function that takes an <code>Option&lt;i32&gt;</code> and if
+there's a value inside, adds one to that value. If there isn't a value inside,
+the function should return the <code>None</code> value and not attempt to perform any
+operations.</p>
+<p>This function is very easy to write, thanks to <code>match</code>, and will look like
+Listing 6-4:</p>
 <pre><code class="language-rust">fn plus_one(x: Option&lt;i32&gt;) -&gt; Option&lt;i32&gt; {
     match x {
         None =&gt; None,
@@ -219,58 +239,66 @@ let five = Some(5);
 let six = plus_one(five);
 let none = plus_one(None);
 </code></pre>
+<caption>
+Listing 6-4: A function that uses a `match` expression on an `Option<i32>`
+</caption>
+<!-- Flagging for wingding numbers -->
+<h4>Matching <code>Some(T)</code></h4>
 <p>Let's examine the first execution of <code>plus_one()</code> in more detail. In the above
-example, <code>x</code> will be <code>Some(5)</code>. Let's compare that against each arm:</p>
-<pre><code class="language-text">None =&gt; None,
+example when we call <code>plus_one(five)</code>, the variable <code>x</code> in the body of
+<code>plus_one</code> will have the value <code>Some(5)</code>. We compare that against each match
+arm:</p>
+<pre><code class="language-rust,ignore">None =&gt; None,
 </code></pre>
-<p>Does <code>Some(5)</code> match <code>None</code>? No, it's the wrong variant. So let's continue.</p>
-<pre><code class="language-text">Some(i) =&gt; Some(i + 1),
+<p>The <code>Some(5)</code> value doesn't match the pattern <code>None</code>, so we continue.</p>
+<pre><code class="language-rust,ignore">Some(i) =&gt; Some(i + 1),
 </code></pre>
 <p>Does <code>Some(5)</code> match <code>Some(i)</code>? Why yes it does! We have the same variant. The
-<code>i</code> binds to the value inside of the <code>Some</code>, so <code>i</code> has the value <code>5</code>. Then we
-execute the code in that match arm: take <code>i</code>, which is <code>5</code>, add one to it, and
-create a new <code>Some</code> value with our total inside.</p>
-<p>Now let's consider the second call of <code>plus_one()</code>. In this case, <code>x</code> is
-<code>None</code>. We enter the <code>match</code>, and compare to the first arm:</p>
-<pre><code class="language-text">None =&gt; None,
+<code>i</code> binds to the value contained in <code>Some</code>, so <code>i</code> takes the value <code>5</code>. The
+code in the match arm is then executed, so we add one to the value of <code>i</code>
+and create a new <code>Some</code> value with our total <code>6</code> inside.</p>
+<h4>Matching <code>None</code></h4>
+<p>Now let's consider the second call of <code>plus_one()</code> where <code>x</code> is <code>None</code>. We
+enter the <code>match</code>, and compare to the first arm:</p>
+<pre><code class="language-rust,ignore">None =&gt; None,
 </code></pre>
-<p>Does <code>None</code> match <code>None</code>? Yup! There's no value to add to. So we stop and
-return the <code>None</code> value that is on the right side of the <code>=&gt;</code>. We don't
-check any other arms since we found one that matched.</p>
+<p>It matches! There's no value to add to, so the program stops and returns the
+<code>None</code> value on the right side of <code>=&gt;</code>. Since the first arm matched, no other
+arms are compared.</p>
 <p>Combining <code>match</code> and enums together is extremely powerful. You'll see this
-pattern a lot in Rust code: <code>match</code> against an enum, bind a variable to the data
-inside, and then execute code using the variable. It's a bit tricky at first, but
-once you get used to it, you'll wish you had it in languages that don't support
-it. It's consistently a user favorite.</p>
-<h3>Matches are exhaustive</h3>
-<p>There's one other aspect of <code>match</code> we didn't talk about. Consider this version
-of <code>plus_one()</code>:</p>
+pattern a lot in Rust code: <code>match</code> against an enum, bind a variable to the
+data inside, then execute code based on it. It's a bit tricky at first, but
+once you get used to it, you'll wish you had it in all languages. It's
+consistently a user favorite.</p>
+<h3>Matches are Exhaustive</h3>
+<p>There's one other aspect of <code>match</code> we haven't discussed. Consider this version
+of our <code>plus_one()</code> function:</p>
 <pre><code class="language-rust,ignore">fn plus_one(x: Option&lt;i32&gt;) -&gt; Option&lt;i32&gt; {
     match x {
         Some(i) =&gt; Some(i + 1),
     }
 }
 </code></pre>
-<p>A bug! We didn't handle the <code>None</code> case. Luckily, it's a bug Rust knows how to
-catch. If we try to compile this code, we'll get an error:</p>
-<pre><code class="language-bash">error: non-exhaustive patterns: `None` not covered [E0004]
-match x {
-    Some(i) =&gt; Some(i + 1),
-}
+<p>We didn't handle the <code>None</code> case, so this will cause a bug. Luckily, it's a bug
+Rust knows how to catch. If we try to compile this code, we'll get this error:</p>
+<pre><code class="language-bash">error[E0004]: non-exhaustive patterns: `None` not covered
+ --&gt;
+  |
+6 |         match x {
+  |               ^ pattern `None` not covered
 </code></pre>
 <p>Rust knows that we did not cover every possible option, and even knows which
-pattern we forgot! This is referred to as being &quot;exhaustive&quot;: we must exhaust
-every last option possible in order to be valid. Especially in the case of
-<code>Option&lt;T&gt;</code>, when Rust prevents us from forgetting to explicitly handle the
-<code>None</code> case, it protects us from assuming that we have a value when we might
-have null and thus making the billion-dollar mistake we discussed in the
-previous section.</p>
-<h3>The _ placeholder</h3>
-<p>What if we don't care about all of the possible values, though? Especially when
-there are a lot of possible values for a type: a <code>u8</code> can have valid values of
-zero through 255-- if we only care about 1, 3, 5, and 7, does this mean we must
-list out 0, 2, 4, 6, 8, 9, all the way up through 255? Thankfully, no! We can
-use a special pattern, <code>_</code>:</p>
+pattern we forgot! Enums in Rust are <em>exhaustive</em>: we must exhaust every last
+option possible in order to be valid. Especially in the case of <code>Option&lt;T&gt;</code>,
+when Rust prevents us from forgetting to explicitly handle the <code>None</code> case, it
+protects us from assuming that we have a value when we might have null and thus
+making the billion-dollar mistake discussed earlier.</p>
+<h3>The _ Placeholder</h3>
+<p>Rust also has a pattern we can use in situations when we don't want to list all
+possible values. For example, a <code>u8</code> can have valid values of zero through 255.
+If we only care about the values 1, 3, 5, and 7, we don't want to have to list
+out 0, 2, 4, 6, 8, 9 all the way up to 255. Thankfully, we don't have to: we
+can use the special pattern <code>_</code> instead.</p>
 <pre><code class="language-rust">let some_u8_value = 0u8;
 match some_u8_value {
     1 =&gt; println!(&quot;one&quot;),
@@ -280,10 +308,13 @@ match some_u8_value {
     _ =&gt; (),
 }
 </code></pre>
-<p>The <code>_</code> pattern will match all the other cases, and <code>()</code> will do nothing, it's
-the unit value. This way, we don't have to list individual match arms for all
-the other possible values in order to say that we want to do nothing for all of
-those-- the <code>_</code> is a placeholder for any value.</p>
+<p>The <code>_</code> pattern will match any value. By putting it after our other arms, the
+<code>_</code> will match all the possible cases that aren't specified before it. The <code>()</code>
+is just the unit value, so nothing will happen in the <code>_</code> case. This way, we
+can say that we want to do nothing for all of the possible values that we don't
+list before the <code>_</code> placeholder.</p>
+<p>The <code>match</code> expression can be a little wordy for the case where we only care
+about <em>one</em> of the cases, though. For that case, Rust provides <code>if let</code>.</p>
 
                 </div>
 

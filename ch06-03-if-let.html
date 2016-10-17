@@ -67,57 +67,102 @@
                 </div>
 
                 <div id="content" class="content">
-                    <h2>if let</h2>
-<p>There's one more advanced control flow structure we haven't discussed: <code>if let</code>. Imagine we're in a situation like this:</p>
+                    <h2>Concise control flow with <code>if let</code></h2>
+<p>The <code>if let</code> syntax lets you combine <code>if</code> and <code>let</code> into a less verbose way to
+handle values that match one pattern and ignoring the rest. Take the following
+program:</p>
 <pre><code class="language-rust"># let some_option = Some(5);
 match some_option {
     Some(x) =&gt; {
         // do something with x
     },
-    None =&gt; {},
+    None =&gt; (),
 }
 </code></pre>
-<p>We care about the <code>Some</code> case, but don't want to do anything with the <code>None</code>
-case. With an <code>Option</code>, this isn't <em>too</em> bad, but with a more complex enum,
-adding <code>_ =&gt; {}</code> after processing just one variant doesn't feel great. We have
-this boilerplate arm and an extra level of indentation (the code that
-does something with <code>x</code> is indented twice, rather than just once). We really want
-a construct that says &quot;Do something with this one case; I don't care about the
-others.&quot;</p>
-<p>Enter <code>if let</code>:</p>
+<p>We want to do something with the <code>Some</code> match, but do nothing with the <code>None</code>
+case. We can do this with an <code>Option</code>, but with a more complex enum,
+adding <code>_ =&gt; ()</code> after processing just one variant is a lot of boilerplate code
+that we have to add to satisfy the <code>match</code> expression.</p>
+<p>Instead, we could write this in a shorter way with <code>if let</code>. This code behaves
+exactly the same as the <code>match</code> above:</p>
 <pre><code class="language-rust"># let some_option = Some(5);
 if let Some(x) = some_option {
     // do something with x
 }
 </code></pre>
-<p><code>if let</code> takes a pattern and an expression, separated by an <code>=</code>. It works
-exactly like a <code>match</code>, where the expression is given to the <code>match</code> and the
-pattern is its first arm. In other words, you can think of <code>if let</code> as syntax
-sugar:</p>
-<pre><code class="language-rust,ignore">if let pattern = expression {
-    body
-}
-
-match expression {
-   pattern =&gt; body,
-   _ =&gt; {}
+<p><code>if let</code> takes a pattern and an expression separated by an <code>=</code>. It works
+just like a <code>match</code>, where the expression is given to the <code>match</code> and the
+pattern is its first arm.</p>
+<p>Using <code>if let</code> means you have less to type, less indentation, and less
+boilerplate. However, we've lost the exhaustiveness checking that <code>match</code>
+enforces. Choosing between <code>match</code> and <code>if let</code> depends on what you're doing in
+your particular case, and if gaining conciseness is an appropriate tradeoff for
+losing exhaustiveness checking.</p>
+<p>In other words, you can think of <code>if let</code> as syntax sugar for a <code>match</code> that
+runs code when the value matches one pattern and then ignores all other values.</p>
+<p>We can include an <code>else</code> that goes with an <code>if let</code>. The block of code that
+goes with the <code>else</code> is the same as the block of code that would go with the
+<code>_</code> case in the <code>match</code> expression that is equivalent to the <code>if let</code> and
+<code>else</code>. Recall the <code>Coin</code> enum definition in Listing 6-3, where the <code>Quarter</code>
+variant also held a <code>UsState</code> value. If we wanted to count all non-quarter
+coins we see while also announcing the state of the quarters, we could do that
+with a <code>match</code> expression like this:</p>
+<pre><code class="language-rust"># #[derive(Debug)]
+# enum UsState {
+#    Alabama,
+#    Alaska,
+# }
+#
+# enum Coin {
+#    Penny,
+#    Nickel,
+#    Dime,
+#    Quarter(UsState),
+# }
+# let coin = Coin::Penny;
+let mut count = 0;
+match coin {
+    Coin::Quarter(state) =&gt; println!(&quot;State quarter from {:?}!&quot;, state),
+    _ =&gt; count += 1,
 }
 </code></pre>
-<p>And in fact, we can include an <code>else</code> and it becomes the body of the <code>_</code>
-case:</p>
-<pre><code class="language-rust,ignore">if let pattern = expression {
-    body
+<p>Or we could choose to use an <code>if let</code> and <code>else</code> expression like this:</p>
+<pre><code class="language-rust"># #[derive(Debug)]
+# enum UsState {
+#    Alabama,
+#    Alaska,
+# }
+#
+# enum Coin {
+#    Penny,
+#    Nickel,
+#    Dime,
+#    Quarter(UsState),
+# }
+# let coin = Coin::Penny;
+let mut count = 0;
+if let Coin::Quarter(state) = coin {
+    println!(&quot;State quarter from {:?}!&quot;, state);
 } else {
-    else_body
-}
-
-match expression {
-   pattern =&gt; body,
-   _ =&gt; else_body,
+    count += 1;
 }
 </code></pre>
-<p>In other words, it's the high-level construct we were originally looking for:
-do something special with only one pattern.</p>
+<p>If you find yourself in a situation where your program has logic that is
+verbose to express using a <code>match</code>, remember that <code>if let</code> is in your Rust
+toolbox as well.</p>
+<h2>Summary</h2>
+<p>We've now covered how to use enums to create custom types that can be one of a
+set of enumerated values. We've shown how the standard library's <code>Option&lt;T&gt;</code>
+type helps you use the type system to prevent errors. When enum values have data
+inside them, you can use <code>match</code> or <code>if let</code> to extract and use those values,
+depending on how many cases you need to handle.</p>
+<p>Your Rust programs can now express concepts in your domain using structs and
+enums. Creating custom types to use in your API ensures type safety: the
+compiler will make certain your functions only get values of the type each
+function expects.</p>
+<p>In order to provide a well-organized API to your users that is straightforward
+to use and only exposes exactly what your users will need, let's now turn to
+Rust's <em>modules</em>.</p>
 
                 </div>
 
