@@ -61,12 +61,41 @@ This is now a custom data type that we can use elsewhere in our code.
 
 ### Enum Values
 
-An `enum` definition is similar to a `struct` definition: it defines a new type
-and a template of what instances of that new type will be like. When we want to
-use a struct, we create an *instance* of the struct. When we want to use an
-enum, we use a *value* that is one of the variants the enum allows.
+<!-- Liz: You seemed confused at this point about the differences between an
+enum's definition, which includes its valid variants, and using the values of
+the enum. You had changed this text to be:
 
-We can create values of the two variants of `IpAddrKind` like this:
+"Enum variants can optionally have associated values. We can create values of
+`IpAddrKind` like this:"
+
+While it's strictly true that enum values are "optional", there wouldn't be any
+point in defining the enum unless you were going to use values of that type.
+Also, "associated" has other meanings in Rust that we don't want to conflate
+with.
+
+We've tried to clear up the confusion here by relating enum definition and
+instantiation to struct definition and instantiation, assuming the reader
+understands structs at this point. We're having trouble figuring out just the
+right wording here, though, so we have two options for you. Please let us
+know which is clearest, or a combination of the two, or if you have any
+suggestions in a totally different direction! /Carol -->
+
+<!-- Option 1: -->
+An `enum` definition is similar to a `struct` definition: it defines a new type
+and a template of what instances of that new type will be like. When you want to
+use a struct, you create an instance of the struct. When you want to use an
+enum, you use an instannce of the enum that is one of the variants the enum
+allows.
+
+<!-- Option 2: -->
+When you want to use a struct, you create an instance of the *struct* itself.
+When you want to use an enum, you create an instance of one of its *variants*.
+Each variant is defined like a struct, and you instantiate both using the same
+syntax.
+
+<!-- end options -->
+
+We can create instances of each of the two variants of `IpAddrKind` like this:
 
 ```rust
 # enum IpAddrKind {
