@@ -2,7 +2,8 @@
 
 Rust has an extremely powerful control-flow operator, `match`, that allows us to
 compare a value against a series of patterns and then execute code based on
-which pattern matches.
+which pattern matches. The power comes from the expressiveness of the patterns
+and the compiler checks that make sure all possible cases are handled.
 
 Think of a `match` expression kind of like a coin sorting machine: coins slide
 down a track with variously sized holes along it, and each coin falls
@@ -44,7 +45,7 @@ put two arms in this example? I think that would illustrate the control flow
 well -->
 <!-- I think we're moving away from using generic examples like this and talking
 about concrete examples instead. I've changed the text to reflect that, and I'm
-happy to add wingdings once we're in libreoffice. -->
+happy to add wingdings once we're in libreoffice. /Carol -->
 
 Let's break down the `match` in the `value_in_cents` function. First, we list
 the `match` keyword followed by an expression, which in this case is the value
@@ -65,12 +66,12 @@ value, execution continues to the next arm, much like a coin sorting machine.
 We can have as many arms as we need: our `match` above has four arms.
 
 The code associated with each arm is an expression, and the resulting value of
-the expression in the matching arm is the value that gets
-returned for the entire `match` expression.
+the expression in the matching arm is the value that gets returned for the
+entire `match` expression.
 
 Curly braces typically aren't used if the match arm code is short, as it is in
-the above example where each arm just returns a value. If we wanted to run
-multiple lines of code in a match arm, we can use curly braces. For example,
+the above example where each arm just returns a value. If you wanted to run
+multiple lines of code in a match arm, you can use curly braces. For example,
 this code would print out "Lucky penny!" every time the method was called with
 a `Coin::Penny`, but would still return the last value of the block, `1`:
 
@@ -177,10 +178,10 @@ state value out of the `Coin` enum variant for `Quarter`.
 
 In the previous section we wanted to get the inner `T` value out of the `Some`
 case when using `Option<T>`; we can do this in a very similar way! Instead of
-comparing coins we will be comparing patterns, but the way that the `match`
-expression works remains the same.
+comparing coins we will be comparing the variants of `Option<T>`, but the way
+that the `match` expression works remains the same.
 
-Let's say we want to write a function that takes an `Option<i32>`, and if
+Let's say we want to write a function that takes an `Option<i32>` and if
 there's a value inside, adds one to that value. If there isn't a value inside,
 the function should return the `None` value and not attempt to perform any
 operations.
@@ -210,8 +211,8 @@ Listing 6-4: A function that uses a `match` expression on an `Option<i32>`
 #### Matching `Some(T)`
 
 Let's examine the first execution of `plus_one()` in more detail. In the above
-example when we call `plus_one(five)`, the variable `x` in the body
-of`plus_one` will have the value `Some(5)`. We compare that against each match
+example when we call `plus_one(five)`, the variable `x` in the body of
+`plus_one` will have the value `Some(5)`. We compare that against each match
 arm:
 
 ```rust,ignore
@@ -273,11 +274,11 @@ error[E0004]: non-exhaustive patterns: `None` not covered
 ```
 
 Rust knows that we did not cover every possible option, and even knows which
-pattern we forgot! Enums in Rust are *exhaustive*: we must exhaust
-every last option possible in order to be valid. Especially in the case of
-`Option<T>`, when Rust prevents us from forgetting to explicitly handle the
-`None` case, it protects us from assuming that we have a value when we might
-have null and thus making the billion-dollar mistake discussed earlier.
+pattern we forgot! Enums in Rust are *exhaustive*: we must exhaust every last
+option possible in order to be valid. Especially in the case of `Option<T>`,
+when Rust prevents us from forgetting to explicitly handle the `None` case, it
+protects us from assuming that we have a value when we might have null and thus
+making the billion-dollar mistake discussed earlier.
 
 ### The _ Placeholder
 
@@ -299,10 +300,10 @@ match some_u8_value {
 ```
 
 The `_` pattern will match any value. By putting it after our other arms, the
-`_` will match all the possible cases that aren't specified before it. The `{}`
-is just an empty block of code, so nothing will happen in the `_` case. This
-way, we can say that we want to do nothing for all of the possible values that
-we don't list before the `_` placeholder.
+`_` will match all the possible cases that aren't specified before it. The `()`
+is just the unit value, so nothing will happen in the `_` case. This way, we
+can say that we want to do nothing for all of the possible values that we don't
+list before the `_` placeholder.
 
 The `match` expression can be a little wordy for the case where we only care
 about *one* of the cases, though. For that case, Rust provides `if let`.

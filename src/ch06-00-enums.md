@@ -43,11 +43,11 @@ Any IP address can be either a version four or a version six address, but not
 both at the same time. That property of IP addresses makes the enum data
 structure appropriate for this case, since enum values can only be one of the
 variants. Both version four and version six addresses are still fundamentally
-IP addresses, though, so they should be treated as the same type when
-appropriate.
+IP addresses, though, so they should be treated as the same type when the code
+is handling situations that apply to any kind of IP address.
 
 We can express this concept in code by defining an `IpAddrKind` enumeration and
-listing the possible kinds an IP address can be, `V4` and `V6`, which are known
+listing the possible kinds an IP address can be, `V4` and `V6`. These are known
 as the *variants* of the enum:
 
 ```rust
@@ -137,9 +137,9 @@ route(IpAddrKind::V6);
 ```
 
 Enums have more tricks up their sleeves, too. Thinking more about our IP
-address type, at the moment we don’t have a way to store the actual *data* of the
-IP address; we only know what *kind* it is. Given that you just learned about
-structs, you might tackle this problem as in Listing 6-1:
+address type, at the moment we don’t have a way to store the actual *data* of
+the IP address; we only know what *kind* it is. Given that you just learned
+about structs, you might tackle this problem as in Listing 6-1:
 
 ```rust
 enum IpAddrKind {

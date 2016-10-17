@@ -3,17 +3,17 @@
 In the previous section, we looked at how the `IpAddr` enum let us use Rust's
 type system to encode more information than just the data into our program.
 This section is a case study of `Option`, which is another enum defined by the
-standard library that is used in many places because it encodes the very common
-scenario in which a value could be *something* or it could be *nothing*.
-Expressing this concept in terms of the type system means the compiler can
-check that we've handled all the cases we should be handling, which can prevent
-bugs that are extremely common in other programming languages.
+standard library. The `Option` type is used in many places because it encodes
+the very common scenario in which a value could be *something* or it could be
+*nothing*. Expressing this concept in terms of the type system means the
+compiler can check that you've handled all the cases you should be handling,
+which can prevent bugs that are extremely common in other programming languages.
 
 Programming language design is often thought of in terms of which features you
 include, but the features you leave out are important too. Rust does not have
-the *null* feature that many other languages have. Null is a value that
-means there is no value there. In languages with null, variables
-can always be in one of two states: null or not-null.
+the *null* feature that many other languages have. Null is a value that means
+there is no value there. In languages with null, variables can always be in one
+of two states: null or not-null.
 
 The inventor of null has this to say:
 
@@ -38,9 +38,9 @@ null is a value which is currently invalid or absent for some reason.
 
 The problem isn't with the concept itself, but with the particular
 implementation. As such, Rust does not have nulls, but it does have an enum
-that can encode the concept of a value being present or absent. We call this
-enum `Option<T>`, and it is [defined by the standard
-library][option]<!-- ignore --> as follows:
+that can encode the concept of a value being present or absent. This enum is
+`Option<T>`, and it is [defined by the standard library][option]<!-- ignore -->
+as follows:
 
 [option]: ../std/option/enum.Option.html
 
@@ -51,11 +51,11 @@ enum Option<T> {
 }
 ```
 
-This enum is so useful that it's even included in the prelude; you don't need
-to import it explicitly. Furthermore, so are its variants: you can use `Some`
-and `None` directly, without prefixing them with `Option::`. This is still just
-a regular enum, however, `Some(T)` and `None` are still values of type
-`Option<T>`.
+The `Option<T>` enum is so useful that it's even included in the prelude; you
+don't need to import it explicitly. Furthermore, so are its variants: you can
+use `Some` and `None` directly, without prefixing them with `Option::`. This is
+still just a regular enum, however, `Some(T)` and `None` are still values of
+type `Option<T>`.
 
 <!-- We haven't spoken about the prelude so far in the book, I think I made a
 note of that in a previous chapter---we should tell the reader what it is

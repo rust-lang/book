@@ -30,7 +30,7 @@ if let Some(x) = some_option {
 ```
 
 `if let` takes a pattern and an expression separated by an `=`. It works
-exactly like a `match`, where the expression is given to the `match` and the
+just like a `match`, where the expression is given to the `match` and the
 pattern is its first arm.
 
 Using `if let` means you have less to type, less indentation, and less
@@ -103,9 +103,9 @@ toolbox as well.
 
 We've now covered how to use enums to create custom types that can be one of a
 set of enumerated values. We've shown how the standard library's `Option<T>`
-type helps us use the type system to prevent errors. When enum values have data
-inside them, we can use `match` or `if let` to extract and use those values,
-depending on how many cases we need to handle.
+type helps you use the type system to prevent errors. When enum values have data
+inside them, you can use `match` or `if let` to extract and use those values,
+depending on how many cases you need to handle.
 
 Your Rust programs can now express concepts in your domain using structs and
 enums. Creating custom types to use in your API ensures type safety: the
