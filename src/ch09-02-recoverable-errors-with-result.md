@@ -1,4 +1,4 @@
-## Recoverable errors with `Result<T, E>`
+## Recoverable Errors with `Result`
 
 Most errors aren't so dire. Sometimes, when a function fails, it's for a reason
 that we can easily interpret and respond to. As an example, maybe we are making

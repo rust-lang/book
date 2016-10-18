@@ -37,8 +37,8 @@
     - [`HashMap<K, V>`]()
 
 - [Error Handling](ch09-00-error-handling.md)
-    - [Unrecoverable errors with panic!](ch09-01-unrecoverable-errors-with-panic.md)
-    - [Recoverable errors with `Result<T, E>`](ch09-02-recoverable-errors-with-result.md)
+    - [Unrecoverable Errors with `panic!`](ch09-01-unrecoverable-errors-with-panic.md)
+    - [Recoverable Errors with `Result`](ch09-02-recoverable-errors-with-result.md)
     - [To `panic!` or Not To `panic!`](ch09-03-to-panic-or-not-to-panic.md)
 
 - [Lifetimes]()
