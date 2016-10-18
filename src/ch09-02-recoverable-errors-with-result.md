@@ -187,6 +187,7 @@ call `unwrap`. Here's an example:
 
 ```rust
 use std::net::IpAddr;
+
 let home = "127.0.0.1".parse::<IpAddr>().unwrap();
 ```
 
@@ -256,7 +257,9 @@ expressions:
 fn read_username_from_file() -> Result<String, io::Error> {
     let mut f = try!(File::open("hello.txt"));
     let mut s = String::new();
+
     try!(f.read_to_string(&mut s));
+
     Ok(s)
 }
 ```
@@ -316,7 +319,9 @@ by instead doing:
 #
 fn read_username_from_file() -> Result<String, io::Error> {
     let mut s = String::new();
+
     File::open("hello.txt")?.read_to_string(&mut s)?;
+
     Ok(s)
 }
 ```
