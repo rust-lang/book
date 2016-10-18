@@ -9,8 +9,8 @@ experience in languages like C and are looking for a safer alternative, as well
 as programmers from languages like Python who are looking for ways to write
 code that performs better without losing expressiveness.
 
-Rust provides the majority of its safety checks at compile time and without a
-garbage collector so that your program's runtime isn't impacted. This makes it
+Rust performs the majority of its safety checks and memory management decisions
+at compile time, so that your program's runtime isn't impacted. This makes it
 useful in a number of use cases that other languages aren’t good at: embedding
 in other languages, programs with specific space and time requirements, and
 writing low-level code, like device drivers and operating systems. It's also
