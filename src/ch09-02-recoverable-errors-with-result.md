@@ -174,7 +174,7 @@ The Rust community has a love/hate relationship with `unwrap()` and `expect()`.
 They're very handy when prototyping, before you're ready to decide how to
 handle errors, and in that case they leave clear markers to look for when you
 are ready to make your program more robust. They're useful in tests since they
-will cause the test to fail if there's an error anyplace you call them. In
+will cause the test to fail if there's an error any place you call them. In
 examples, you might not want to muddy the code with proper error handling. But
 if you use them in a library, mis-using your library can cause other people's
 programs to halt unexpectedly, and that's not very user-friendly.
