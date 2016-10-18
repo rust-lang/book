@@ -239,9 +239,9 @@ username as a `String` inside the `Ok` variant, so that is our success type.
 
 This is a very common way of handling errors: propagate them upward until
 you're ready to deal with them. This pattern is so common in Rust that there is
-a macro for it, `try!`, and as of Rust 1.XX <!-- We will fill this in once the
-question mark is released in a stable version; we don't know for sure which
-version it will be yet /Carol -->, dedicated syntax for it: the question mark
+a macro for it, `try!`, and as of Rust 1.14 <!-- 1.14 has not been released as
+a stable version yet, but that's the version the question mark operator will be
+released in /Carol -->, dedicated syntax for it: the question mark
 operator. We could have written the code in Listing 9-5 using the `try!` macro,
 as in Listing 9-6, and it would have the same functionality as the `match`
 expressions:
