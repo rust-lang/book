@@ -17,7 +17,7 @@ it's not clear how to handle the error.
 > up by the operating system. If you're in a situation where you need to make
 > the resulting binary as small as possible, you can switch from unwinding on
 > panic to aborting on panic by adding `panic = 'abort'` to the appropriate
-> `[profile]` sections in your `Cargo.toml` file.
+> `[profile]` sections in your `Cargo.toml`.
 
 <!-- PROD: END BOX -->
 
