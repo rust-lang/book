@@ -10,8 +10,8 @@ Chapter 6) concepts are the building blocks for creating new types in your
 program's domain in order to take full advantage of Rust's compile-time type
 checking.
 
-One way of thinking about structs is that they are similar to tuples that we
-talked about in Chapter 3. Like tuples, the pieces of a struct can be different
+One way of thinking about structs is that they are similar to tuples, which we
+talked about in Chapter 3. Like tuples, the pieces of a struct can be of different
 types. Unlike tuples, we name each piece of data so that it's clearer what the
 values mean. Structs are more flexible as a result of these names: we don't
 have to rely on the order of the data to specify or access the values of an
