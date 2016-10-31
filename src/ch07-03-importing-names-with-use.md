@@ -1,7 +1,7 @@
-## Importing Names with `use`
+## Importing Names
 
-We've seen how we can call functions defined within a module by using the
-module name as part of the call, like this:
+You've seen how you can call functions defined within a module using the
+module name as part of the call, as in Listing 7-6.
 
 Filename: src/main.rs
 
@@ -19,9 +19,16 @@ fn main() {
 }
 ```
 
-However, referring to the fully qualified name can get quite lengthy, as we see
-in that example. To solve this issue, Rust has a keyword, `use`. It works like
-this:
+Listing 7-6:
+
+As you can see, referring to the fully qualified name can get quite lengthy.
+Luckily, Rust has a keyword to make these calls more efficient.
+
+### Efficient Imports with `use`
+
+Rust's `use` keyword works to shorten lengthy function calls by bringing the
+modules of the function you want to call into scope. To use `use`, replace your
+*src/main.rs* code with the following:
 
 Filename: src/main.rs
 
@@ -41,10 +48,16 @@ fn main() {
 }
 ```
 
-We can `use` a module, and that will bring its name into scope. This allows us
-to shorten our function call, only requiring us to type the final module name,
-not the entire chain of them. `use` is quite powerful and can bring all kinds
-of things into scope. For example, we could `use` the function itself:
+<!--- I had assumed the line "of::namespaces();" line would just need to be
+"namespaces();" since we include "of" in the `use`, could you say explicitly
+that we need to repeat "of" and why? -->
+
+When you `use` a module, it brings the module's name into scope, allowing you
+to shorten the function call; you only need type the final module name,
+not the entire chain of modules.
+
+The `use` keyword is quite powerful and can bring all kinds of things into
+scope. For example, we could `use` the function itself:
 
 ```rust
 pub mod a {
@@ -62,8 +75,14 @@ fn main() {
 }
 ```
 
-Enums also form this kind of namespace; we can import an enum's variants with
-`use` as well. For any kind of `use` statement, if you are importing multiple
+<!--- Ah, this is what I thought we were doing above. So why would you ever
+namespace the module over the function, if this is more efficient --- if the
+module had more than one function? -->
+
+This allows us to exclude any of the modules and just reference the function.
+
+Since Enums form this kind of namespace, we can import an enum's variants with
+`use` as well. For any kind of `use` statement, if you're importing multiple
 items from one namespace, you can list them using curly braces and commas in
 the last position, like so:
 
@@ -85,7 +104,8 @@ fn main() {
 
 ### Glob Imports with `*`
 
-If you'd like to import all the items in a namespace at once, you can use `*`:
+If you'd like to import all the items in a namespace at once, you can use the
+`*` syntax. For example:
 
 ```rust
 enum TrafficLight {
@@ -109,8 +129,9 @@ might also pull in more things than you expected and cause naming conflicts.
 
 ### Using `super` to Access a Parent Module
 
-Remember when we created our crate that Cargo made a `tests` module for us?
-Let's talk about that now. It was in `src/lib.rs`:
+As you now know, when you create a crate Cargo makes a `tests` module for you.
+Let's go into more detail about that now. Open your `communicator` project, and
+open `src/lib.rs`.
 
 Filename: src/lib.rs
 
@@ -132,7 +153,7 @@ sense now: we have a module named `tests` that lives next to our other modules
 and contains one function named `it_works`. Even though there are special
 annotations, the `tests` module is just another module!
 
-Since tests are for exercising the code within our library, let's try to call
+Tests are for exercising the code within our library, so let's try to call
 our `client::connect` function from this `it_works` function, even though
 we're not going to be checking any functionality right now:
 
@@ -166,15 +187,15 @@ warning: function is never used: `connect`, #[warn(dead_code)] on by default
   | ^
 ```
 
-Why doesn't this compile? It's not because we don't have `communicator::` in
-front of the function like we had in `src/main.rs`: we are definitely within
-the `communicator` library crate here. The reason is that paths anywhere except
-in a `use` statement are relative to the current module (In a `use` statement,
-they're relative to the crate root by default). Our `tests` module doesn't have
-a `client` module in its scope!
+The compilation failed, but why? We don't need to place `communicator::` in
+front of the function like we did in `src/main.rs` because we are definitely
+within the `communicator` library crate here. The reason is that paths are
+always relative to the current module; the only exception being in a `use`
+statement, where paths are relative to the crate root by default. Our `tests`
+module needs a `client` module in its scope!
 
-So how do we get back up one module? We can either use leading colons to say
-that we want to start from the root and list the whole path:
+So how do we get back up one module? We can either use leading colons to let
+Rust know that we want to start from the root and list the whole path:
 
 ```rust,ignore
 ::client::connect();
@@ -186,15 +207,20 @@ Or we can use `super` to move up one module in the hierarchy:
 super::client::connect();
 ```
 
-If we were deep in the module hierarchy, starting from the root every time
-would get long. Plus, if we rearrange our modules by moving a subtree to
-another place, there might be a lot of places the path would need to be updated
-if we always used the path from the root.
+<!-- I can't really see what the different is with the examples above since
+super uses the root path but also adds super? It doesn't seem more convenient,
+is this just not a great example of its use? -->
+
+If you're deep in the module hierarchy, starting from the root every time would
+get long, so using `super` is a good shortcut. Plus, if you've used the path
+from the root in many places in your code and then you rearrange your modules
+by moving a subtree to another place, you'd end up needing to update the path
+in a lot of places and could easily miss some.
 
 It would also be annoying to have to type `super::` all the time in each test,
-but we now have a tool for that solution: `use`! `super::` is special and
-changes the path we give to `use` so that it is relative to the parent module
-instead of to the root module.
+but you've already seen the tool for that solution: `use`! The `super::`
+functionality changes the path you give to `use` so that it is relative to the
+parent module instead of to the root module.
 
 For these reasons, in the `tests` module especially, `use super::something` is
 usually the way to go. So now our test looks like this:
@@ -230,3 +256,5 @@ test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured
 Now you know techniques for organizing your code! Use these to group related
 functionality together, keep files from getting too long, and present a tidy
 public API to users of your library.
+
+<!-- Could you add the summary? -->

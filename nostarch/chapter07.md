@@ -3,46 +3,51 @@
 
 # Modules
 
-When you write a program in Rust, your code might start off living solely in
-the `main` function. As your code grows, you eventually move functionality out
-into functions, both for re-use and for nicer organization. By splitting your
-code up into smaller chunks, each chunk is easier to understand on its own. So
-what happens when you start having too many functions? Rust has a module system
-that tackles both the problem of wanting to be able to re-use code and the
-problem of keeping your code organized.
+When you start writing programs in Rust, your code might live solely in the
+`main` function. As your code grows, you'll eventually move functionality out
+into other functions, both for re-use and for better organization. By splitting
+your code up into smaller chunks, each chunk is easier to understand on its
+own. But what happens if find yourself with too many functions? Rust has a
+module system that handles the problem of wanting to to re-use code while
+keeping your code organized.
 
 In the same way that you extract lines of code into a function, you can extract
 functions (and other code like structs and enums too) into different modules. A
 *module* is a namespace that contains definitions of functions or types, and
-those definitions can be visible outside their module or not. Here's an
-overview of how the bits fit together:
+you can choose whether those definitions are visible outside their module
+(public) or not (private). Here's an overview of how modules work in Rust:
 
-* `mod` declares a new module.
-* Everything starts off as private, but the `pub` keyword makes it public.
-* The `use` keyword allows you to bring modules, or definitions inside of them,
-  into scope so that it's easier to refer to them.
+* You declare a new module with the keyword `mod`
+* By default, everything is set as private, but you can use the `pub` keyword
+  to make the module public, and therefore visible outside of the namespace.
+* The `use` keyword allows you to bring modules, or the definitions inside
+  modules, into scope so that it's easier to refer to them.
 
 We'll take a look at each of these parts and see how they fit into the whole.
 
-## `mod` and the Filesystem
+## mod and the Filesystem
 
-Every module in Rust starts with the `mod` keyword. In this next example, we'll
-start again by making a new project with Cargo. This time, instead of a binary,
-we're going to make a library: a project that other people would pull into their
-projects as a dependency. We saw this with the `rand` crate in Chapter 2.
+We'll start our modules example by making a new project with Cargo, but instead
+of creating a binary file, we're going to make a library: a project that other
+people can pull into their projects as a dependency. We saw this with the
+`rand` crate in Chapter 2.
 
-Imagine that we're creating a library to provide some general networking
-functionality, and we decide to call our library `communicator`. To create this
-library, we won't use the `--bin` option like we have before. This is because
-by default cargo will create a library:
+<!-- do we generally refer to libraries as crates in Rust, or can you have both
+crates and libraries? If the former, we should make that known, something like
+"we're going to make a library, known as a crate in Rust" -->
+
+We'll create a library that provides some general networking functionality, and
+we'll call our library `communicator`. By default, cargo will create a library
+unless another type of file is specified, so if we leave off the `--bin` option
+that we've been using so far our file will be a library:
 
 ```bash
 $ cargo new communicator
 $ cd communicator
 ```
 
-Notice that Cargo generated `src/lib.rs` instead of `src/main.rs` for us, and
-inside it we'll find this:
+Notice that Cargo generated `src/lib.rs` instead of `src/main.rs`, and inside
+it we'll find this:
 
 Filename: src/lib.rs
 
@@ -55,14 +60,22 @@ mod tests {
 }
 ```
 
-This is an empty test to help us get our library started, instead of the binary
-that says "Hello, world!" that we get with the `--bin` option. Let's ignore the
-`#[]` stuff and `mod tests` for a little bit, but we'll make sure to leave it
-in `src/lib.rs` for later.
+Rust creates an empty test created to help us get our library started, rather
+than the "Hello, world!" binary that we get with the `--bin` option. We'll look
+at the `#[]` and `mod tests` syntax a little later, but for now just make sure
+to leave it in your `src/lib.rs`.
 
-We're going to look at different ways we could choose to organize our library's
-code, any of which could make sense depending on exactly what we were trying to
-do. To start, add this code at the beginning of the file:
+We're going to look at the different options for organizing your library's
+code, suitable for the different intentions you have for your code.
+
+### Module Definitions
+
+Every module definition in Rust starts with the `mod` keyword. Add this code to
+the beginning of the *lib.rs* file, above the test code:
+
+<!-- What does "cryptic!" mean? Intriguing! -->
+
+<!--cryptic!-->
 
 Filename: src/lib.rs
 
@@ -74,13 +87,15 @@ mod network {
 ```
 
 This is our first module declaration. We use the `mod` keyword, followed by the
-name of the module, and then a block of code in curly braces. Everything inside
-this block is inside the namespace `network`. In this case, we have a single
-function, `connect`. If we wanted to try and call this function from outside
-the `network` module, we would say `network::connect()` rather than `connect()`.
+name of the module `network`, and then a block of code in curly braces.
+Everything inside this block is inside the namespace `network`. In this case,
+we have a single function, `connect`. If we wanted to call this function from a
+script outside the `network` module, we would need to specify the module and
+use the namespace syntax `::`, like so `network::connect()`, rather than just
+`connect()`.
 
-We could have multiple modules, side-by-side. For example, if we wanted a
-`client` module:
+We can also have multiple modules, side-by-side, in the same *lib.rs* file. For
+example, if we wanted a `client` module too, we would add:
 
 Filename: src/lib.rs
 
@@ -96,10 +111,22 @@ mod client {
 }
 ```
 
+Listing 7-1:
+
+<!---I'm adding listing numbers to those examples we later reference, could you
+add captions? If you feel other listings warrant numbers too, feel free to add.
+We can update the numbering at copyedit, no need to worry about it now -->
+
 Now we have a `network::connect` function and a `client::connect` function.
 
-And we can put modules inside of modules. If we wanted to have `client` be
-within `network`:
+<!-- Would these `connect` functions do the same thing, or can they be totally
+different? -->
+
+And we can put modules inside of modules. If we wanted to have a `client` module
+within `network`, we can do so like this:
+
+<!-- In what situation would you want to put a module inside another module?
+Can we give some clues as to when each organization style would be suitable? -->
 
 Filename: src/lib.rs
 
@@ -114,12 +141,19 @@ mod network {
     }
 }
 ```
+Listing 7-2:
 
-This gives us `network::connect` and `network::client::connect`.
+Place this in your *lib.rs* file. This gives us `network::connect` and
+`network::client::connect`.
+
+<!-- What would the difference between this and the example in 7-1 be? -->
 
 In this way, modules form a tree. The contents of `src/lib.rs` are at the root
 of the project's tree, and the submodules form the leaves. Here's what our
-first example looks like when thought of this way:
+example from Listing 7-1 looks like when thought of this way:
+
+<!-- Above --- would the submodules not be the branches? That seems like the
+more common metaphor, though I may well be wrong!-->
 
 ```text
 communicator
@@ -127,7 +161,7 @@ communicator
  └── client
 ```
 
-And here's the second:
+And here's the example from Listing 7-2:
 
 ```text
 communicator
@@ -135,13 +169,22 @@ communicator
      └── client
 ```
 
-More complicated projects can have a lot of modules.
+You can see that the `client` branch is a sub-branch of `network`, rather than
+running parralel to it.
 
-### Putting Modules in Another File
+<!---What does this mean for the project, how would this kind of branching
+effect the program? -->
 
-Modules form a hierarchical, tree-like structure. So does another thing:
-file systems! The module system is the way that we split larger Rust projects up
-into multiple files. Let's imagine we have a module layout like this:
+More complicated projects can have a lot of modules, and they'll need to be
+orgnaized logically in order to keep track of them.
+
+### Moving Modules to Other Files
+
+Modules form a hierarchical, tree-like structure, much like another structure
+in Rust: file systems! We use Rust's module system to split Rust projects up
+into multiple files. As an example, replace the modules in your *lib.rs* file
+with the following (remembering to leave the `#[cfg:(test)]` block at the
+bottom):
 
 File: src/lib.rs
 
@@ -162,8 +205,11 @@ mod network {
 }
 ```
 
+<!-- Can you give an example of when we'd want to split the client module into
+another file? -->
+
 Let's extract the `client` module into another file. First, we need to change
-our code in `src/lib.rs`:
+our code in `src/lib.rs` to the following:
 
 File: src/lib.rs
 
@@ -181,9 +227,18 @@ mod network {
 }
 ```
 
-We still say `mod client`, but instead of curly braces, we have a semicolon.
-This lets Rust know that we have a module, but it's in another file with that
-module's name. Open up `src/client.rs` and put this in it:
+<!--- Since we're using the mod keyword, are we still defining client here or
+is this just referencing it? Reading it on, it looks like we are defining it
+here, that might be worth mentioning here -->
+
+Here we still reference the module `client`, but but rather than following `mod
+client` with curly braces, we have a semicolon, and we delete the `connect`
+function namespaced within it. This lets Rust know that this module exists, but
+that it's in an external file with that module's name.
+
+So now we need to create the external file with that module name. Create a
+`client.rs` file in your *src/* directory, then open it up and enter the
+following:
 
 File: src/client.rs
 
@@ -192,13 +247,23 @@ fn connect() {
 }
 ```
 
-Note that we don't need a `mod` declaration in this file. `mod` is for
-declaring a new module, and we've already declared this module in `src/lib.rs`.
-This file provides the _contents_ of the `client` module. If we put a `mod
-client` here, we'd be giving the `client` module its own submodule named
-`client`!
+Note that we don't need a `mod` declaration in this file; that's because we
+already declared the `client` module with `mod` in `src/lib.rs`. This file just
+provides the _contents_ of the `client` module. If we put a `mod client` here,
+we'd be giving the `client` module its own submodule named `client`!
 
-Now, everything should compile successfully, but with a few warnings:
+<!-- so you declare the module in the file you want to reference the module in,
+but hold that module's contents in another file, is that right? Why do it that
+way, and not have the entire module with declaration in one file and just
+reference it? Seems interesting/useful to know. That may be a silly question,
+coming from a non-programmer perspective, apologies if so! -->
+
+Now, everything should compile successfully, though you'll get a few warnings:
+
+<!-- why do we use `build` and not `run` here? I just tried `run` out of habit
+and got an error requesting a bin file --- you might want to point out that
+we're only building and not running, so reader don't make the same mistake, and
+say why -->
 
 ```bash
 $ cargo build
@@ -223,11 +288,14 @@ warning: function is never used: `connect`, #[warn(dead_code)] on by default
   |         ^
 ```
 
-Don't worry about those warnings for now; we'll clear them up in a future
-section. They're just warnings, we've built things successfully!
+These warnings tell us that we have a function that we never use, much like the
+unused variable warnings we got in Chapter XX. Don't worry about those warnings
+for now; we'll clear them later in the chapter . The good news us that they're
+just warnings, but our project was built successfully!
 
 Let's extract the `network` module into its own file next, using the same
-pattern. Change `src/lib.rs` to look like this:
+pattern. In `src/lib.rs` delete your `network` branches and add a semicolon to
+the declaration, like so:
 
 Filename: src/lib.rs
 
@@ -237,7 +305,7 @@ mod client;
 mod network;
 ```
 
-And then put this in `src/network.rs`
+And then create a new `src/network.rs` file and enter the following:
 
 Filename: src/network.rs
 
@@ -251,10 +319,17 @@ mod server {
 }
 ```
 
-And then run `cargo build` again. Success! We have one more module to extract:
-`server`. Unfortunately, our current tactic of extracting a module into a file
-named after that module won't work. Let's try it anyway. Modify
-`src/network.rs` to look like this:
+Notice that here you *have* added a `mod` declaration within this module file;
+this is because you want `server` to be a sub-module of `network`.
+
+<!-- I think it's worth drawing attention to this, above, feel free to
+re-word/add -->
+
+Now run `cargo build` again. Success! We have one more module to extract:
+`server`. Because it's a sub-module---that is, a module within a module---our
+current tactic of extracting a module into a file named after that module won't
+work. If we try in now, by modifying `src/network.rs` to look like this, we'll
+get an error:
 
 Filename: src/network.rs
 
@@ -265,7 +340,7 @@ fn connect() {
 mod server;
 ```
 
-Put this in `src/server.rs`
+Now create a `src/server.rs` file and enter the following:
 
 Filename: src/server.rs
 
@@ -274,7 +349,7 @@ fn connect() {
 }
 ```
 
-When we try to `cargo build`, we'll get an error:
+When we try to `cargo build`, we'll get this error:
 
 ```bash
 $ cargo build
@@ -296,24 +371,39 @@ note: ... or maybe `use` the module `server` instead of possibly redeclaring it
 4 | mod server;
   |     ^^^^^^
 ```
+Listing 7-4:
 
-This error is actually pretty helpful. It points out something we didn't know
-that we could do yet:
+<!-- I got a bit lost with the hypothetical tone of the original text here,
+below --- are we saying that this **is** what happened, what caused the error?
+Or just something that can happen? Is there a way to make this more clear, I'm
+stil not quite following -->
+
+The problem here is that, in our case, we have different names for our modules:
+`client` and `network::server`. But when we make a separate module file for the
+submodule, we have `client` and `network::client`, or `server` and
+`network::server`, meaning we have two modules with the same name at different
+places in the module hierarchy. This is completely valid in Rust, but then the
+program doesn't know which module the files `src/client.rs` and `src/server.rs`
+are for.
+
+The error we get in Listing 7-4 is actually pretty helpful, as it points out
+something you probably didn't know you could do:
 
 > note: maybe move this module `network` to its own directory via
 `network/mod.rs`
 
-Here's the problem: in our case, we have different names for our modules:
-`client` and `network::server`. But what if we had `client` and
-`network::client`, or `server` and `network::server`? Having two modules at
-different places in the module hierarchy have the same name is completely
-valid, but then which module would the files `src/client.rs` and
-`src/server.rs`, respectively, be for?
-
 Instead of continuing to follow the same file naming pattern we used
-previously, we can do what the error suggests. We'll make a new _directory_,
-move `src/server.rs` into it, and change `src/network.rs` to
-`src/network/mod.rs`. Then, when we try to build:
+previously, we can do what the error suggests, and make a new _directory_ with
+the module branch's name, move the submodule file `src/server.rs` into it, and
+change
+
+<!-- I'm not sure what you mean by "change `src/network.rs` to
+`src/network/mod.rs`." That we need to make a new directory, move the
+network.rs file into it, and rename it as mod.rs? That's how I'm reading it,
+but it doesn't seem right, can you clarify that? -->
+
+`src/network.rs` to `src/network/mod.rs`. If you do that now and try to build
+it:
 
 ```bash
 $ mkdir src/network
@@ -326,6 +416,9 @@ $
 ```
 
 It works! So now our module layout looks like this:
+
+<!-- can you explain a bit about why this works, where the previous method
+failed? -->
 
 ```text
 communicator
@@ -345,10 +438,12 @@ And the corresponding file layout looks like this:
 │       └── server.rs
 ```
 
+### Rules of Module File Systems
+
 In summary, these are the rules of modules with regards to files:
 
-* If a module named `foo` has no submodules, you should put the declarations in
-  the `foo` module in a file named `foo.rs`.
+* If a module named `foo` has no submodules, you should put the declarations
+  for `foo` in a file named `foo.rs`.
 * If a module named `foo` does have submodules, you should put the declarations
   for `foo` in a file named `foo/mod.rs`.
 * The first two rules apply recursively, so that if a module named `foo` has a
@@ -368,12 +463,16 @@ Next, we'll talk about the `pub` keyword, and get rid of those warnings!
 
 ## Controlling Visibility with `pub`
 
-At the end of the last section, we had a project, `communicator`, and when we compiled it, we got some strange warnings:
+Listing 7-4 showed the error message we received when we built our
+`communicator` as it was then, warning us that the `connect` function is never
+used.
 
-```bash
+<!--
    Compiling communicator v0.1.0 (file:///projects/communicator)
 warning: function is never used: `connect`, #[warn(dead_code)] on by default
- --> src/client.rs:1:1
+ -->
+```bash
+src/client.rs:1:1
   |
 1 | fn connect() {
   | ^
@@ -391,13 +490,18 @@ warning: function is never used: `connect`, #[warn(dead_code)] on by default
   | ^
 ```
 
-Why does this happen? After all, we're building a library. What if these three
-functions are the public interface that we want our *users* to use? We won't
-necessarily be using them within our own project, but the point of creating them
-is that they *will* be used by another project. Let's try using them as if we
-were another project using our library to see what happens and understand why
-we're getting these unused function warnings. Create a `src/main.rs` file with
-this code:
+So why are we receiving these errors? After all, we're building a library with
+functions that are intended to be used by our *users*, and not necessarily by
+us within our own project, so it shouldn't matter that `connect` goes unused.
+The point of creating them is that they will be used by another project and not
+our own.
+
+To understand why this program invokes these warnings, let's try using the
+`connect` library as if we were another project, calling it externally. Create
+a `src/main.rs` file and fille it with with this code:
+
+<!--- do they need to create a new binary/cargo project? Or is this within the
+communcator library? -->
 
 Filename: src/main.rs
 
@@ -409,18 +513,22 @@ fn main() {
 }
 ```
 
-We need the `extern crate` line to bring our `communicator` library crate into
-scope, because our package actually now contains *two* crates. Cargo treats
-src/main.rs as the crate root of a binary crate, and we also have our existing
+<!-- I'm not sure what the phrase "as the crate root of a binary crate" means
+or refers to here, I didn't can you expand on that? What is the binary crate
+here, I can't see where the binary came from? And what is the exisiting library
+create, you mean the `communicator` crate?-->
+
+We use the `extern crate` command to bring the `communicator` library crate
+into scope, because our package actually now contains *two* crates: Cargo
+treats src/main.rs as the crate root of a binary crate, and the existing
 library crate. This pattern is quite common for executable crates: most
 functionality is in a library crate, and the executable crate uses that
 library. This way, other programs can also use the library crate, and it’s a
 nice separation of concerns.
 
-Our binary crate right now just calls our library's `connect` function from
-the `client` module; we picked that one since it's the first warning in our
-build output above. Invoking `cargo build` will now give us an error after the
-warnings:
+Our binary crate right now just calls our library's `connect` function from the
+`client` module. However, invoking `cargo build` will now give us an error
+after the warnings:
 
 ```bash
 $ cargo build
@@ -432,19 +540,23 @@ error: module `client` is private
   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 ```
 
-Ah ha! The `client` module is private. This is the first time we've run into
-the concepts of 'public' and 'private' in the context of Rust. There's no
-keyword to make something private; that's the default state. In this default
-state, no one else could possibly use it, so if we don't use it within our
-library crate, Rust will warn us that it's unused. Once we tell Rust something
-is public, Rust knows that we intend for code external to our crate to use it,
-and Rust considers theoretical external usage that is now possible to count as
-being used. Thus, when something is marked as public, Rust will stop warning us
-that it is unused.
+Ah ha! This tells us that the `client` module is private, and this is the crux
+of the warnings. It's also the first time you've run into the concepts of
+'public' and 'private' in the context of Rust. The default state of all
+programs in Rust is private, where no one else can possibly use the code. That
+menas that so if you don't use a function within your own program, Rust will
+warn you that it's gone unused. Once we specify that the function is public,
+Rust knows that you intend the functions for external use and considers the
+theoretical external usage that's now possible as "being used". Thus, when
+something is marked as public, Rust will not require that it's ussed in your
+own program and will stop warning that the item is unused.
 
-To tell Rust we want to make something public, we add the `pub` keyword. This
-keyword goes before the declaration of the item we want to make public. Let's
-modify `src/lib.rs` to make the `client` module public to fix the error we got:
+### Making a Function Public
+
+To tell Rust to make something public, you add the `pub` keyword to the start
+of the declaration of the item you want to make public. We'll focus on fixing
+that tells us that `client::connect` has gone unused for now. To fix the error,
+modify `src/lib.rs` to make the `client` module public, like so:
 
 Filename: src/lib.rs
 
@@ -469,7 +581,7 @@ error: function `connect` is private
 
 Hooray! We have a different error! Yes, different error messages are a cause
 for celebration. The new error says "function `connect` is private", so let's
-edit `src/client.rs` to make `client::connect` public:
+edit `src/client.rs` to make `client::connect` public too:
 
 Filename: src/client.rs
 
@@ -496,18 +608,18 @@ warning: function is never used: `connect`, #[warn(dead_code)] on by default
   | ^
 ```
 
-It compiled! And the warning about `client::connect` not being used is gone!
+It compiled, and the warning about `client::connect` not being used is gone!
 
-Making functions public isn't the only way to fix unused code warnings: if
-we *didn't* want these functions to be part of our public API and we got these
-warnings, the warnings could be alerting us to code we no longer needed and
-could safely delete. They could also be alerting us to a bug, if we
-had just accidentally removed all places within our library where we called
-this function.
+> Note: Unused code warnings don't always indicate that something needs to be
+> made public: if you *didn't* want these functions to be part of your public
+> API, unused code warnings could be alerting you to code you no longer needed
+> and can safely delete. They could also be alerting you to a bug, if you had
+> just accidentally removed all places within your library where this function
+> is called.
 
-However, we *do* want the other two functions to be part of our crate's public
-API, so let's mark them as `pub` as well to get rid of the remaining warnings.
-Modify `src/network/mod.rs` to be:
+In our case though, we *do* want the other two functions to be part of our
+crate's public API, so let's mark them as `pub` as well to try to get rid of
+the remaining warnings. Modify `src/network/mod.rs` to be:
 
 Filename: src/network/mod.rs
 
@@ -536,11 +648,11 @@ warning: function is never used: `connect`, #[warn(dead_code)] on by default
   | ^
 ```
 
-Hmmm, it says this is still dead, even though it's `pub`. While the function is
-public within the module, the `network` module it's in is not public. We're
-working from the interior of the library out this time, as opposed to with
-`client` where we worked from the outside in. Let's change `src/lib.rs` to add
-the same fix though, by making `network` public like `client` is:
+Hmmm, we're still getting an unused warning even though `connect` is set to
+`pub`. This is, because while the function is public within the module, the
+`network` module the function resides in is not public. We're working from the
+interior of the library out this time, where with `client` where we worked from
+the outside in. We need to change `src/lib.rs` to make `network` public too:
 
 Filename: src/lib.rs
 
@@ -562,19 +674,21 @@ warning: function is never used: `connect`, #[warn(dead_code)] on by default
   | ^
 ```
 
-Only one last warning! Try to fix this one on your own!
+Only one warning left! Try to fix this one on your own!
 
 ### Privacy Rules
 
 Overall, these are the rules for item visibility:
 
-1. If an item is public, then it can be accessed through any of its
+1. If an item is public, it can be accessed through any of its
   parent modules.
-2. If an item is private, it may be accessed by the current module and its
+2. If an item is private, it may be accessed only by the current module and its
   child modules.
 
-Let's look at a few more examples to get some practice. What if we had this
-code in a new project's `src/lib.rs`:
+### A Privacy Example
+
+Let's look at a few more examples to get some practice. Create a new libary
+project and enter the code in Listing 7-5 into your new project's `src/lib.rs`:
 
 Filename: src/lib.rs
 
@@ -600,20 +714,23 @@ fn try_me() {
 ```
 
 Before you try to compile this code, make a guess about which lines in
-`try_me` will have errors.
+`try_me` function will have errors.
 
-Ready? Let's talk through them!
+When you've made some educated guesses, read on and we'll talk through them!
 
-The `try_me` function is in the root module of our project. The module named
-`outermost` is private, but the second rule says we're allowed to access it
-since `outermost` is in our current, root module.
+#### A Privacy Example: Looking at the Errors
 
-The function call `outermost::middle_function()` will work. `middle_function`
-is public, and we are accessing it through its parent module, `outermost`,
-which we just determined we can access in the previous paragraph.
+The `try_me` function is in the root module of your project. The module named
+`outermost` is private, but the second rule says you, the compiler, are allowed
+to access it since `outermost` is in your current root module.
+
+The function call `outermost::middle_function()` will work. This is because
+`middle_function` is public, and you are accessing it through its parent
+module, `outermost`, which we just determined you can access in the previous
+paragraph.
 
 `outermost::middle_secret_function()` will cause a compilation error.
-`middle_secret_function` is private, so the second rule applies. Our current
+`middle_secret_function` is private, so the second rule applies. Your current
 root module is neither the current module of `middle_secret_function`
 (`outermost` is), nor is it a child module of the current module of
 `middle_secret_function`.
@@ -623,13 +740,15 @@ be accessed by its current module, `outermost`. That means the `try_me`
 function is not allowed to call `outermost::inside::inner_function()` or
 `outermost::inside::secret_function()`.
 
-Here are some changes to try making with this code. Try each one, make a guess
-about what will be allowed or not, compile to see if you're right, and use the
-rules to understand why.
+#### A Privacy Example: Fixing the Errors
+
+Here we provide you with some suggestions for fixing the code. Before you try
+each one, make a guess as to whether it will fix the errors, then compile to
+see if you're right and use the privacy rules to understand why.
 
 * What if the `inside` module was public?
 * What if `outside` was public and `inside` was private?
-* What if, in the body of `inner_function`, we called
+* What if, in the body of `inner_function`, you called
   `::outermost::middle_secret_function()`? (The two colons at the beginning
   mean that we want to refer to the namespaces starting from the root
   namespace.)
@@ -638,10 +757,10 @@ Feel free to design more experiments and try them out!
 
 Next, let's talk about bringing items into a scope with the `use` keyword.
 
-## Importing Names with `use`
+## Importing Names
 
-We've seen how we can call functions defined within a module by using the
-module name as part of the call, like this:
+You've seen how you can call functions defined within a module using the
+module name as part of the call, as in Listing 7-6.
 
 Filename: src/main.rs
 
@@ -659,9 +778,16 @@ fn main() {
 }
 ```
 
-However, referring to the fully qualified name can get quite lengthy, as we see
-in that example. To solve this issue, Rust has a keyword, `use`. It works like
-this:
+Listing 7-6:
+
+As you can see, referring to the fully qualified name can get quite lengthy.
+Luckily, Rust has a keyword to make these calls more efficient.
+
+### Efficient Imports with `use`
+
+Rust's `use` keyword works to shorten lengthy function calls by bringing the
+modules of the function you want to call into scope. To use `use`, replace your
+*src/main.rs* code with the following:
 
 Filename: src/main.rs
 
@@ -681,10 +807,16 @@ fn main() {
 }
 ```
 
-We can `use` a module, and that will bring its name into scope. This allows us
-to shorten our function call, only requiring us to type the final module name,
-not the entire chain of them. `use` is quite powerful and can bring all kinds
-of things into scope. For example, we could `use` the function itself:
+<!--- I had assumed the line "of::namespaces();" line would just need to be
+"namespaces();" since we include "of" in the `use`, could you say explicitly
+that we need to repeat "of" and why? -->
+
+When you `use` a module, it brings the module's name into scope, allowing you
+to shorten the function call; you only need type the final module name,
+not the entire chain of modules.
+
+The `use` keyword is quite powerful and can bring all kinds of things into
+scope. For example, we could `use` the function itself:
 
 ```rust
 pub mod a {
@@ -702,8 +834,14 @@ fn main() {
 }
 ```
 
-Enums also form this kind of namespace; we can import an enum's variants with
-`use` as well. For any kind of `use` statement, if you are importing multiple
+<!--- Ah, this is what I thought we were doing above. So why would you ever
+namespace the module over the function, if this is more efficient --- if the
+module had more than one function? -->
+
+This allows us to exclude any of the modules and just reference the function.
+
+Since Enums form this kind of namespace, we can import an enum's variants with
+`use` as well. For any kind of `use` statement, if you're importing multiple
 items from one namespace, you can list them using curly braces and commas in
 the last position, like so:
 
@@ -725,7 +863,8 @@ fn main() {
 
 ### Glob Imports with `*`
 
-If you'd like to import all the items in a namespace at once, you can use `*`:
+If you'd like to import all the items in a namespace at once, you can use the
+`*` syntax. For example:
 
 ```rust
 enum TrafficLight {
@@ -749,8 +888,9 @@ might also pull in more things than you expected and cause naming conflicts.
 
 ### Using `super` to Access a Parent Module
 
-Remember when we created our crate that Cargo made a `tests` module for us?
-Let's talk about that now. It was in `src/lib.rs`:
+As you now know, when you create a crate Cargo makes a `tests` module for you.
+Let's go into more detail about that now. Open your `communicator` project, and
+open `src/lib.rs`.
 
 Filename: src/lib.rs
 
@@ -772,7 +912,7 @@ sense now: we have a module named `tests` that lives next to our other modules
 and contains one function named `it_works`. Even though there are special
 annotations, the `tests` module is just another module!
 
-Since tests are for exercising the code within our library, let's try to call
+Tests are for exercising the code within our library, so let's try to call
 our `client::connect` function from this `it_works` function, even though
 we're not going to be checking any functionality right now:
 
@@ -806,15 +946,15 @@ warning: function is never used: `connect`, #[warn(dead_code)] on by default
   | ^
 ```
 
-Why doesn't this compile? It's not because we don't have `communicator::` in
-front of the function like we had in `src/main.rs`: we are definitely within
-the `communicator` library crate here. The reason is that paths anywhere except
-in a `use` statement are relative to the current module (In a `use` statement,
-they're relative to the crate root by default). Our `tests` module doesn't have
-a `client` module in its scope!
+The compilation failed, but why? We don't need to place `communicator::` in
+front of the function like we did in `src/main.rs` because we are definitely
+within the `communicator` library crate here. The reason is that paths are
+always relative to the current module; the only exception being in a `use`
+statement, where paths are relative to the crate root by default. Our `tests`
+module needs a `client` module in its scope!
 
-So how do we get back up one module? We can either use leading colons to say
-that we want to start from the root and list the whole path:
+So how do we get back up one module? We can either use leading colons to let
+Rust know that we want to start from the root and list the whole path:
 
 ```rust,ignore
 ::client::connect();
@@ -826,15 +966,20 @@ Or we can use `super` to move up one module in the hierarchy:
 super::client::connect();
 ```
 
-If we were deep in the module hierarchy, starting from the root every time
-would get long. Plus, if we rearrange our modules by moving a subtree to
-another place, there might be a lot of places the path would need to be updated
-if we always used the path from the root.
+<!-- I can't really see what the different is with the examples above since
+super uses the root path but also adds super? It doesn't seem more convenient,
+is this just not a great example of its use? -->
+
+If you're deep in the module hierarchy, starting from the root every time would
+get long, so using `super` is a good shortcut. Plus, if you've used the path
+from the root in many places in your code and then you rearrange your modules
+by moving a subtree to another place, you'd end up needing to update the path
+in a lot of places and could easily miss some.
 
 It would also be annoying to have to type `super::` all the time in each test,
-but we now have a tool for that solution: `use`! `super::` is special and
-changes the path we give to `use` so that it is relative to the parent module
-instead of to the root module.
+but you've already seen the tool for that solution: `use`! The `super::`
+functionality changes the path you give to `use` so that it is relative to the
+parent module instead of to the root module.
 
 For these reasons, in the `tests` module especially, `use super::something` is
 usually the way to go. So now our test looks like this:
@@ -870,3 +1015,5 @@ test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured
 Now you know techniques for organizing your code! Use these to group related
 functionality together, keep files from getting too long, and present a tidy
 public API to users of your library.
+
+<!-- Could you add the summary? -->
