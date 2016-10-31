@@ -1,0 +1,237 @@
+<!DOCTYPE HTML>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>The Rust Programming Language</title>
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <base href="">
+
+        <link rel="stylesheet" href="book.css">
+        <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+        <link rel="shortcut icon" href="favicon.png">
+
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+
+        <!-- MathJax -->
+        <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+        <!-- Fetch JQuery from CDN but have a local fallback -->
+        <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+        <script>
+            if (typeof jQuery == 'undefined') {
+                document.write(unescape("%3Cscript src='jquery.js'%3E%3C/script%3E"));
+            }
+        </script>
+    </head>
+    <body class="light">
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme = localStorage.getItem('theme');
+            if (theme == null) { theme = 'light'; }
+            $('body').removeClass().addClass(theme);
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var sidebar = localStorage.getItem('sidebar');
+            if (sidebar === "hidden") { $("html").addClass("sidebar-hidden") }
+            else if (sidebar === "visible") { $("html").addClass("sidebar-visible") }
+        </script>
+
+        <div id="sidebar" class="sidebar">
+            <ul class="chapter"><li><a href="ch01-00-introduction.html"><strong>1.</strong> Introduction</a></li><li><ul class="section"><li><a href="ch01-01-installation.html"><strong>1.1.</strong> Installation</a></li><li><a href="ch01-02-hello-world.html"><strong>1.2.</strong> Hello, World!</a></li></ul></li><li><a href="ch02-00-guessing-game-tutorial.html"><strong>2.</strong> Guessing Game Tutorial</a></li><li><a href="ch03-00-common-programming-concepts-in-rust.html"><strong>3.</strong> Common Programming Concepts in Rust</a></li><li><ul class="section"><li><a href="ch03-01-variables-and-mutability.html"><strong>3.1.</strong> Variables and Mutability</a></li><li><a href="ch03-02-data-types.html"><strong>3.2.</strong> Data Types</a></li><li><a href="ch03-03-how-functions-work.html"><strong>3.3.</strong> How Functions Work</a></li><li><a href="ch03-04-comments.html"><strong>3.4.</strong> Comments</a></li><li><a href="ch03-05-control-flow.html"><strong>3.5.</strong> Control Flow</a></li></ul></li><li><a href="ch04-00-understanding-ownership.html"><strong>4.</strong> Understanding Ownership</a></li><li><ul class="section"><li><a href="ch04-01-ownership.html"><strong>4.1.</strong> Ownership</a></li><li><a href="ch04-02-references-and-borrowing.html"><strong>4.2.</strong> References &amp; Borrowing</a></li><li><a href="ch04-03-slices.html"><strong>4.3.</strong> Slices</a></li></ul></li><li><a href="ch05-00-structs.html"><strong>5.</strong> Structs</a></li><li><ul class="section"><li><a href="ch05-01-method-syntax.html"><strong>5.1.</strong> Method Syntax</a></li></ul></li><li><a href="ch06-00-enums.html"><strong>6.</strong> Enums</a></li><li><ul class="section"><li><a href="ch06-01-option.html"><strong>6.1.</strong> Option</a></li><li><a href="ch06-02-match.html"><strong>6.2.</strong> Match</a></li><li><a href="ch06-03-if-let.html"><strong>6.3.</strong> <code>if let</code></a></li></ul></li><li><a href="ch07-00-modules.html"><strong>7.</strong> Modules</a></li><li><ul class="section"><li><a href="ch07-01-mod-and-the-filesystem.html"><strong>7.1.</strong> <code>mod</code> and the Filesystem</a></li><li><a href="ch07-02-controlling-visibility-with-pub.html"><strong>7.2.</strong> Controlling Visibility with <code>pub</code></a></li><li><a href="ch07-03-importing-names-with-use.html"><strong>7.3.</strong> Importing Names with <code>use</code></a></li></ul></li><li><a href="ch08-00-fundamental-collections.html"><strong>8.</strong> Fundamental Collections</a></li><li><ul class="section"><li><a href="ch08-01-vectors.html"><strong>8.1.</strong> Vectors</a></li><li><a href="ch08-02-strings.html"><strong>8.2.</strong> Strings</a></li><li><a href="ch08-03-hash-maps.html"><strong>8.3.</strong> Hash Maps</a></li></ul></li><li><a href="ch09-00-error-handling.html"><strong>9.</strong> Error Handling</a></li><li><ul class="section"><li><a href="ch09-01-unrecoverable-errors-with-panic.html" class="active"><strong>9.1.</strong> Unrecoverable Errors with <code>panic!</code></a></li><li><a href="ch09-02-recoverable-errors-with-result.html"><strong>9.2.</strong> Recoverable Errors with <code>Result</code></a></li><li><a href="ch09-03-to-panic-or-not-to-panic.html"><strong>9.3.</strong> To <code>panic!</code> or Not To <code>panic!</code></a></li></ul></li><li><strong>10.</strong> Generics</li><li><strong>11.</strong> I/O</li><li><ul class="section"><li><strong>11.1.</strong> <code>Read</code> &amp; <code>Write</code></li><li><strong>11.2.</strong> <code>std::fs</code></li><li><strong>11.3.</strong> <code>std::path</code></li><li><strong>11.4.</strong> <code>std::env</code></li></ul></li><li><a href="chXX-patterns.html"><strong>12.</strong> Patterns</a></li><li><strong>13.</strong> Testing</li><li><strong>14.</strong> Composition</li><li><strong>15.</strong> Closures</li><li><strong>16.</strong> Zero-cost Abstractions</li><li><ul class="section"><li><strong>16.1.</strong> Iterators as a Case Study</li></ul></li><li><strong>17.</strong> Creating a Library</li><li><ul class="section"><li><strong>17.1.</strong> Cargo</li><li><strong>17.2.</strong> Crates.io</li><li><a href="chYY-YY-public-api.html"><strong>17.3.</strong> Organizing your Public API</a></li><li><a href="chYY-YY-documentation.html"><strong>17.4.</strong> Documentation</a></li><li><a href="chYY-YY-workspaces.html"><strong>17.5.</strong> Workspaces and Multiple Related Crates</a></li></ul></li><li><strong>18.</strong> Smart Pointers</li><li><ul class="section"><li><strong>18.1.</strong> <code>Deref</code></li><li><strong>18.2.</strong> <code>Deref</code> Coercions</li><li><strong>18.3.</strong> <code>Box&lt;T&gt;</code></li><li><strong>18.4.</strong> <code>Rc&lt;T&gt;</code></li></ul></li><li><strong>19.</strong> Concurrency</li><li><ul class="section"><li><strong>19.1.</strong> Threads</li><li><strong>19.2.</strong> <code>Send</code> &amp; <code>Sync</code></li><li><strong>19.3.</strong> <code>Arc&lt;T&gt;</code></li><li><strong>19.4.</strong> <code>Mutex&lt;T&gt;</code></li><li><strong>19.5.</strong> <code>Channels</code></li></ul></li><li><strong>20.</strong> More Lifetimes</li><li><strong>21.</strong> Unsafe Rust</li><li><ul class="section"><li><strong>21.1.</strong> Raw Pointers</li><li><strong>21.2.</strong> <code>transmute</code></li></ul></li><li><strong>22.</strong> FFI</li><li><ul class="section"><li><strong>22.1.</strong> Conditional Compilation</li><li><strong>22.2.</strong> Bindings to C</li><li><strong>22.3.</strong> Using Rust from Other Languages</li><li><strong>22.4.</strong> <code>static</code></li></ul></li><li><strong>23.</strong> Advanced Type System Features</li><li><ul class="section"><li><strong>23.1.</strong> Associated Types</li><li><strong>23.2.</strong> Trait Objects</li><li><strong>23.3.</strong> UFCS</li><li><strong>23.4.</strong> Coherence</li></ul></li><li><strong>24.</strong> Interior Mutability</li><li><ul class="section"><li><strong>24.1.</strong> <code>Cell&lt;T&gt;</code></li><li><strong>24.2.</strong> <code>RefCell&lt;T&gt;</code></li></ul></li><li><strong>25.</strong> Macros</li><li><strong>26.</strong> Nightly Rust</li><li><a href="appendix-00.html"><strong>27.</strong> Appendix</a></li><li><ul class="section"><li><a href="appendix-01-keywords.html"><strong>27.1.</strong> Keywords</a></li><li><a href="appendix-02-operators.html"><strong>27.2.</strong> Operators</a></li><li><a href="appendix-03-derivable-traits.html"><strong>27.3.</strong> Derivable Traits</a></li></ul></li></ul>
+        </div>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar" class="menu-bar">
+                    <div class="left-buttons">
+                        <i id="sidebar-toggle" class="fa fa-bars"></i>
+                        <i id="theme-toggle" class="fa fa-paint-brush"></i>
+                    </div>
+
+                    <h1 class="menu-title">The Rust Programming Language</h1>
+
+                    <div class="right-buttons">
+                        <i id="print-button" class="fa fa-print" title="Print this book"></i>
+                    </div>
+                </div>
+
+                <div id="content" class="content">
+                    <h2>Unrecoverable Errors with <code>panic!</code></h2>
+<p>Sometimes, bad things happen, and there's nothing that you can do about it. For
+these cases, Rust has a macro, <code>panic!</code>. When this macro executes, your program
+will print a failure message, unwind and clean up the stack, and then quit. The
+most common reason for this is when a bug of some kind has been detected, and
+it's not clear how to handle the error.</p>
+<!-- PROD: START BOX -->
+<blockquote>
+<h4>Unwinding</h4>
+<p>By default, when a <code>panic!</code> happens in Rust, the program starts
+<em>unwinding</em>, which means Rust walks back up the stack and cleans up the data
+from each function it encounters. Doing that walking and cleanup is a lot of
+work. The alternative is to immediately <code>abort</code>, which ends the program
+without cleaning up. Memory that the program was using will need to be cleaned
+up by the operating system. If you're in a situation where you need to make
+the resulting binary as small as possible, you can switch from unwinding on
+panic to aborting on panic by adding <code>panic = 'abort'</code> to the appropriate
+<code>[profile]</code> sections in your <code>Cargo.toml</code>.</p>
+</blockquote>
+<!-- PROD: END BOX -->
+<p>Let's try out calling <code>panic!()</code> with a simple program:</p>
+<pre><code class="language-rust,should_panic">fn main() {
+    panic!(&quot;crash and burn&quot;);
+}
+</code></pre>
+<p>If you run it, you'll see something like this:</p>
+<pre><code class="language-bash">$ cargo run
+   Compiling panic v0.1.0 (file:///projects/panic)
+    Finished debug [unoptimized + debuginfo] target(s) in 0.25 secs
+     Running `target/debug/panic`
+thread 'main' panicked at 'crash and burn', src/main.rs:2
+note: Run with `RUST_BACKTRACE=1` for a backtrace.
+error: Process didn't exit successfully: `target/debug/panic` (exit code: 101)
+</code></pre>
+<p>There are three lines of error message here. The first line shows our panic
+message and the place in our source code where the panic occurred:
+<code>src/main.rs</code>, line two.</p>
+<p>But that only shows us the exact line that called <code>panic!</code>. That's not always
+useful. Let's look at another example to see what it's like when a <code>panic!</code>
+call comes from code we call instead of from our code directly:</p>
+<pre><code class="language-rust,should_panic">fn main() {
+    let v = vec![1, 2, 3];
+
+    v[100];
+}
+</code></pre>
+<p>We're attempting to access the hundredth element of our vector, but it only has
+three elements. In this situation, Rust will panic. Using <code>[]</code> is supposed to
+return an element. If you pass <code>[]</code> an invalid index, though, there's no
+element that Rust could return here that would be correct.</p>
+<p>Other languages like C will attempt to give you exactly what you asked for in
+this situation, even though it isn't what you want: you'll get whatever is at
+the location in memory that would correspond to that element in the vector,
+even though the memory doesn't belong to the vector. This is called a <em>buffer
+overread</em>, and can lead to security vulnerabilities if an attacker can
+manipulate the index in such a way as to read data they shouldn't be allowed to
+that is stored after the array.</p>
+<p>In order to protect your program from this sort of vulnerability, if you try to
+read an element at an index that doesn't exist, Rust will stop execution and
+refuse to continue with an invalid value. Let's try it and see:</p>
+<pre><code class="language-bash">$ cargo run
+   Compiling panic v0.1.0 (file:///projects/panic)
+    Finished debug [unoptimized + debuginfo] target(s) in 0.27 secs
+     Running `target/debug/panic`
+thread 'main' panicked at 'index out of bounds: the len is 3 but the index is
+100', ../src/libcollections/vec.rs:1265
+note: Run with `RUST_BACKTRACE=1` for a backtrace.
+error: Process didn't exit successfully: `target/debug/panic` (exit code: 101)
+</code></pre>
+<p>This points at a file we didn't write, <code>../src/libcollections/vec.rs</code>. That's
+the implementation of <code>Vec&lt;T&gt;</code> in the standard library. While it's easy to see
+in this short program where the error was, it would be nicer if we could have
+Rust tell us what line in our program caused the error.</p>
+<p>That's what the next line, the <code>note</code> is about. If we set the <code>RUST_BACKTRACE</code>
+environment variable, we'll get a backtrace of exactly how the error happend.
+Let's try that. Listing 9-1 shows the output:</p>
+<pre><code class="language-bash">$ RUST_BACKTRACE=1 cargo run
+    Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
+     Running `target/debug/panic`
+thread 'main' panicked at 'index out of bounds: the len is 3 but the index is
+100', ../src/libcollections/vec.rs:1265
+stack backtrace:
+   1:     0x560956150ae9 -
+std::sys::backtrace::tracing::imp::write::h482d45d91246faa2
+   2:     0x56095615345c -
+std::panicking::default_hook::_{{closure}}::h89158f66286b674e
+   3:     0x56095615291e - std::panicking::default_hook::h9e30d428ee3b0c43
+   4:     0x560956152f88 -
+std::panicking::rust_panic_with_hook::h2224f33fb7bf2f4c
+   5:     0x560956152e22 - std::panicking::begin_panic::hcb11a4dc6d779ae5
+   6:     0x560956152d50 - std::panicking::begin_panic_fmt::h310416c62f3935b3
+   7:     0x560956152cd1 - rust_begin_unwind
+   8:     0x560956188a2f - core::panicking::panic_fmt::hc5789f4e80194729
+   9:     0x5609561889d3 -
+core::panicking::panic_bounds_check::hb2d969c3cc11ed08
+  10:     0x56095614c075 - _&lt;collections..vec..Vec&lt;T&gt; as
+core..ops..Index&lt;usize&gt;&gt;::index::hb9f10d3dadbe8101
+                        at ../src/libcollections/vec.rs:1265
+  11:     0x56095614c134 - panic::main::h2d7d3751fb8705e2
+                        at /projects/panic/src/main.rs:4
+  12:     0x56095615af46 - __rust_maybe_catch_panic
+  13:     0x560956152082 - std::rt::lang_start::h352a66f5026f54bd
+  14:     0x56095614c1b3 - main
+  15:     0x7f75b88ed72f - __libc_start_main
+  16:     0x56095614b3c8 - _start
+  17:                0x0 - &lt;unknown&gt;
+error: Process didn't exit successfully: `target/debug/panic` (exit code: 101)
+</code></pre>
+<caption>
+Listing 9-1: The backtrace generated by a call to `panic!` displayed when
+the environment variable `RUST_BACKTRACE` is set
+</caption>
+<p>That's a lot of output! Line 11 of the backtrace points to the line in our
+project causing the problem: <code>src/main.rs</code> line four. The key to reading the
+backtrace is to start from the top and read until we see files that we wrote:
+that's where the problem originated. If we didn't want our program to panic
+here, this line is where we would start investigating in order to figure out
+how we got to this location with values that caused the panic.</p>
+<p>Now that we've covered how to <code>panic!</code> to stop our code's execution and how to
+debug a <code>panic!</code>, let's look at how to instead return and use recoverable
+errors with <code>Result</code>.</p>
+
+                </div>
+
+                <!-- Mobile navigation buttons -->
+                
+                    <a href="ch09-00-error-handling.html" class="mobile-nav-chapters previous">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+                    <a href="ch09-02-recoverable-errors-with-result.html" class="mobile-nav-chapters next">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                
+
+            </div>
+
+            
+                <a href="ch09-00-error-handling.html" class="nav-chapters previous" title="You can navigate through the chapters using the arrow keys">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+            
+
+            
+                <a href="ch09-02-recoverable-errors-with-result.html" class="nav-chapters next" title="You can navigate through the chapters using the arrow keys">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            
+
+        </div>
+
+
+        <!-- Local fallback for Font Awesome -->
+        <script>
+            if ($(".fa").css("font-family") !== "FontAwesome") {
+                $('<link rel="stylesheet" type="text/css" href="_FontAwesome/css/font-awesome.css">').prependTo('head');
+            }
+        </script>
+
+        <!-- Livereload script (if served using the cli tool) -->
+        
+
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+    </body>
+</html>
