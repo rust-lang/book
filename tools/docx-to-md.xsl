@@ -7,7 +7,12 @@
 
     <!-- Ignore these -->
     <xsl:template match="w:p[starts-with(w:pPr/w:pStyle/@w:val, 'TOC')]" />
+    <xsl:template match="w:p[starts-with(w:pPr/w:pStyle/@w:val, 'Contents1')]" />
+    <xsl:template match="w:p[starts-with(w:pPr/w:pStyle/@w:val, 'Contents2')]" />
+    <xsl:template match="w:p[starts-with(w:pPr/w:pStyle/@w:val, 'Contents3')]" />
+
     <xsl:template match="w:p[w:pPr/w:pStyle/@w:val = 'ChapterStart']" />
+    <xsl:template match="w:p[w:pPr/w:pStyle/@w:val = 'Normal']" />
 
     <!-- Paragraph styles -->
 
@@ -36,6 +41,12 @@
         <xsl:text>&#10;&#10;</xsl:text>
     </xsl:template>
 
+    <xsl:template match="w:p[w:pPr/w:pStyle/@w:val = 'HeadBox']">
+        <xsl:text>### </xsl:text>
+        <xsl:apply-templates select="*" />
+        <xsl:text>&#10;&#10;</xsl:text>
+    </xsl:template>
+
     <xsl:template match="w:p[w:pPr/w:pStyle[@w:val = 'NumListA' or @w:val = 'NumListB']]">
         <xsl:text>1. </xsl:text>
         <xsl:apply-templates select="*" />
@@ -48,7 +59,19 @@
         <xsl:text>&#10;&#10;</xsl:text>
     </xsl:template>
 
-    <xsl:template match="w:p[w:pPr/w:pStyle[@w:val = 'BodyFirst' or @w:val = 'Body']]">
+    <xsl:template match="w:p[w:pPr/w:pStyle[@w:val = 'BulletA' or @w:val = 'BulletB']]">
+        <xsl:text>* </xsl:text>
+        <xsl:apply-templates select="*" />
+        <xsl:text>&#10;</xsl:text>
+    </xsl:template>
+
+    <xsl:template match="w:p[w:pPr/w:pStyle[@w:val = 'BulletC']]">
+        <xsl:text>* </xsl:text>
+        <xsl:apply-templates select="*" />
+        <xsl:text>&#10;&#10;</xsl:text>
+    </xsl:template>
+
+    <xsl:template match="w:p[w:pPr/w:pStyle[@w:val = 'BodyFirst' or @w:val = 'Body' or @w:val = 'BodyFirstBox' or @w:val = 'BodyBox']]">
         <xsl:if test=".//w:t">
             <xsl:apply-templates select="*" />
             <xsl:text>&#10;&#10;</xsl:text>
@@ -91,7 +114,7 @@
         <xsl:text>&#10;&#10;</xsl:text>
     </xsl:template>
 
-    <xsl:template match="w:p[w:pPr/w:pStyle/@w:val = 'Caption']">
+    <xsl:template match="w:p[w:pPr/w:pStyle[@w:val = 'Caption' or @w:val = 'TableTitle' or @w:val = 'Caption1']]">
         <xsl:text>&lt;caption>&#10;</xsl:text>
         <xsl:apply-templates select="*" />
         <xsl:text>&#10;&lt;/caption></xsl:text>
