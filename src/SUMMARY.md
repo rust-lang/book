@@ -1,6 +1,6 @@
 # The Rust Programming Language
 
-## Introduction
+## Getting started
 
 - [Introduction](ch01-00-introduction.md)
     - [Installation](ch01-01-installation.md)
@@ -28,7 +28,7 @@
     - [Match](ch06-02-match.md)
     - [`if let`](ch06-03-if-let.md)
 
-## Get you going
+## Basic Rust Literacy
 
 - [Modules](ch07-00-modules.md)
     - [`mod` and the Filesystem](ch07-01-mod-and-the-filesystem.md)
@@ -53,18 +53,16 @@
     - [`std::path`]()
     - [`std::env`]()
 
-- [Patterns](chXX-patterns.md)
-
 - [Testing]()
+    - [Unit Tests]()
+    - [Integration Tests]()
+    - [Test Attribute]()
 
 ## Thinking in Rust
 
 - [Composition]()
-
-- [Closures]()
-
-- [Zero-cost Abstractions]()
-    - [Iterators as a Case Study]()
+    - [Instead of Inheritance]()
+    - [Trait Objects?]()
 
 - [Creating a Library]()
     - [Cargo]()
@@ -73,11 +71,17 @@
     - [Documentation](chYY-YY-documentation.md)
     - [Workspaces and Multiple Related Crates](chYY-YY-workspaces.md)
 
+- [Closures]()
+
+- [Zero-cost Abstractions]()
+    - [Iterators as a Case Study]()
+
 - [Smart Pointers]()
-    - [`Deref`]()
-    - [`Deref` Coercions]()
     - [`Box<T>`]()
     - [`Rc<T>`]()
+    - [`Cell`]()
+    - [`RefCell`]()
+    - [Interior Mutability]()
 
 - [Concurrency]()
     - [Threads]()
@@ -88,31 +92,32 @@
 
 ## Advanced Topics
 
+- [Patterns](chXX-patterns.md)
+
 - [More Lifetimes]()
 
 - [Unsafe Rust]()
     - [Raw Pointers]()
     - [`transmute`]()
 
-- [FFI]()
+- [Foreign Function Interface]() (?)
     - [Conditional Compilation]()
     - [Bindings to C]()
     - [Using Rust from Other Languages]()
     - [`static`]()
 
-- [Advanced Type System Features]()
+- [Advanced Type System Features]() (perhaps called "Advanced Traits"?)
     - [Associated Types]()
-    - [Trait Objects]()
+    - [Trait Objects]() (might be incorporated into the Composition chapter?)
     - [UFCS]()
     - [Coherence]()
 
-- [Interior Mutability]()
-    - [`Cell<T>`]()
-    - [`RefCell<T>`]()
-
 - [Macros]()
+    - [Writing Your Own Macros]()
 
-- [Nightly Rust]()
+- [Nightly Rust]() (?)
+    - [Nightly Features]()
+    - [How to Find Out About Nightly Features]()
 
 - [Appendix](appendix-00.md)
     - [Keywords](appendix-01-keywords.md)
