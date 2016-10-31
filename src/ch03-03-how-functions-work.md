@@ -2,12 +2,12 @@
 
 Functions are pervasive in Rust code. We’ve already seen one of the most
 important functions in the language: the `main` function that’s the entry
-point of many programs. We've also seen the `fn` keyword, which allows us to
+point of many programs. We’ve also seen the `fn` keyword, which allows us to
 declare new functions.
 
 Rust code uses *snake case* as the conventional style for function and variable
 names. In snake case, all letters are lower case, and there are underscores
-separating words. Here's a program containing an example function definition:
+separating words. Here’s a program containing an example function definition:
 
 Filename: src/main.rs
 
@@ -108,7 +108,7 @@ type, but they just happen to be in this example. Our function then prints out
 the values of both of its arguments.
 
 Let’s try out this code. Replace the program currently in your `function`
-project's `main.rs` file with the example above, and run it as follows:
+project’s `main.rs` file with the example above, and run it as follows:
 
 ```bash
 $ cargo run
@@ -124,18 +124,18 @@ the two strings are printed with these values.
 ### Function Bodies
 
 Function bodies are made up of a series of statements optionally ending in an
-expression. So far, we've only seen functions without an ending expression, but
+expression. So far, we’ve only seen functions without an ending expression, but
 we have seen expressions as parts of statements. Since Rust is an
 expression-based language, this is an important distinction to understand.
-Other languages don't have the same distinctions, so let's look at what
+Other languages don’t have the same distinctions, so let’s look at what
 statements and expressions are and how their differences affect the bodies of
 functions.
 
 #### Statements and Expressions
 
-We've already been using both statements and expressions. *Statements* are
+We’ve already been using both statements and expressions. *Statements* are
 instructions that perform some action and do not return a value. *Expressions*
-evaluate to a resulting value. Let's look at some examples.
+evaluate to a resulting value. Let’s look at some examples.
 
 Creating a variable and assigning a value to it with the `let` keyword
 is a statement. In this example, `let y = 6;` is a statement:
@@ -177,7 +177,7 @@ error: aborting due to previous error
 error: Could not compile `functions`.
 ```
 
-The `let y = 6` statement does not return a value, so there isn't anything for
+The `let y = 6` statement does not return a value, so there isn’t anything for
 `x` to bind to. This is different than in other languages like C and Ruby where
 the assignment returns the value of the assignment. In those languages, we can
 write `x = y = 6` and have both `x` and `y` have the value `6`; that is not the
@@ -213,7 +213,7 @@ fn main() {
 ```
 <!-- If we use wingding numbers to call out code, we might delete the
 repetition here and just use those numbers--that can help the flow of the text.
-I'm flagging this as a reminder for when we transfer to libreoffice -->
+I’m flagging this as a reminder for when we transfer to libreoffice -->
 
 The expression:
 
@@ -228,7 +228,7 @@ is a block that, in this case, evaluates to `4`, and then gets bound to
 `y` as part of the `let` statement.
 
 Note that the line containing `x + 1` does not have a semicolon at the end,
-unlike most of the lines we've seen up until now. This is the most important
+unlike most of the lines we’ve seen up until now. This is the most important
 distinction between expressions and statements to remember: statements end in
 semicolons while expressions do not. If you add a semicolon to the end of an
 expression, that will turn it into a statement, which will then not return a
@@ -238,8 +238,8 @@ value. Keep this in mind as we explore function return values and expressions.
 
 Functions can return values back to the code that calls them. We don’t name
 return values, but we do declare their type, after an arrow (`->`). In Rust,
-the "return value of the function” is synonymous with the "value of the final
-expression in the block of the body of a function.” Here's an example of a
+the “return value of the function” is synonymous with the “value of the final
+expression in the block of the body of a function.” Here’s an example of a
 function that returns a value:
 
 Filename: src/main.rs
@@ -257,8 +257,8 @@ fn main() {
 ```
 
 There are no function calls, macros, or even `let` statements in the `five`
-function: just the number `5` by itself. That's a perfectly valid function in
-Rust. Note the function's return type is specified, too, as `-> i32`. Try
+function: just the number `5` by itself. That’s a perfectly valid function in
+Rust. Note the function’s return type is specified, too, as `-> i32`. Try
 running this code, and the output should look like this:
 
 ```bash
@@ -268,7 +268,7 @@ $ cargo run
 The value of x is: 5
 ```
 
-The `5` in `five` is the function's return value, which is why the return type
+The `5` in `five` is the function’s return value, which is why the return type
 is `i32`. Let’s examine this in more detail. There are two important bits.
 First, the line `let x = five();` shows us using the return value of a function
 to initialize a variable.
@@ -282,7 +282,7 @@ let x = 5;
 The second interesting bit is the `five` function itself. It requires no
 arguments and defines the type of the return value, but the body of the
 function is a lonely `5` with no semicolon because it is an expression whose
-value we want to return. Let's look at another example:
+value we want to return. Let’s look at another example:
 
 Filename: src/main.rs
 
@@ -334,7 +334,7 @@ error: aborting due to previous error
 error: Could not compile `functions`.
 ```
 
-The main error message, "not all control paths return a value", reveals the
+The main error message, “not all control paths return a value”, reveals the
 core of the issue with this code. The definition of the function `plus_one`
 says that it will return an `i32`, but statements don’t evaluate to a value.
 Therefore, nothing is returned, which contradicts the function definition and

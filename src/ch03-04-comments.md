@@ -12,7 +12,7 @@ Here’s a simple comment:
 ```
 
 In Rust, comments must start with two slashes and will last until the end of
-the line. For comments that extend beyond a single line, you'll need to
+the line. For comments that extend beyond a single line, you’ll need to
 include `//` on each line, like this:
 
 ```rust

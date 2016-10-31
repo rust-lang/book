@@ -102,13 +102,13 @@ fn main() {
 
     s.clear(); // This empties the String, making it equal to "".
 
-    // word still has the value 5 here, but there's no more string that
+    // word still has the value 5 here, but there’s no more string that
     // we could meaningfully use the value 5 with. word is now totally invalid!
 }
 ```
 
 This program compiles without any errors, and also would if we used `word`
-after calling `s.clear()`. `word` isn't connected to the state of `s` at all,
+after calling `s.clear()`. `word` isn’t connected to the state of `s` at all,
 so `word` still contains the value `5`. We could use that `5` with `s` to try
 to extract the first word out, but this would be a bug since the contents of
 `s` have changed since we saved `5` in `word`.
@@ -121,7 +121,7 @@ fn second_word(s: &String) -> (usize, usize) {
 ```
 
 Now we’re tracking both a start *and* an ending index, and we have even more
-values that were calculated from data in a particular state but aren't tied to
+values that were calculated from data in a particular state but aren’t tied to
 that state at all. We now have three unrelated variables floating
 around which need to be kept in sync.
 
@@ -190,7 +190,7 @@ let slice = &s[..];
 ```
 
 With this in mind, let’s re-write `first_word` to return a slice. The type
-that signifies "string slice" is written as `&str`:
+that signifies “string slice” is written as `&str`:
 
 Filename: src/main.rs
 
@@ -225,7 +225,7 @@ fn second_word(s: &String) -> &str {
 
 We now have a straightforward API that’s much harder to mess up. Remember our
 bug from before, when we got the first word but then cleared the string so that
-our first word was invalid? That code was logically incorrect but didn't show
+our first word was invalid? That code was logically incorrect but didn’t show
 any immediate errors. The problems would show up later, if we kept trying to
 use the first word index with an emptied string. Slices make this bug
 impossible, and let us know we have a problem with our code much sooner. Using
@@ -361,9 +361,9 @@ The concepts of ownership, borrowing, and slices are what ensure memory safety
 in Rust programs at compile time. Rust is a language that gives you control
 over your memory usage like other systems programming languages, but having the
 owner of data automatically clean up that data when the owner goes out of scope
-means you don't have to write and debug extra code to get this control.
+means you don’t have to write and debug extra code to get this control.
 
 Ownership affects how lots of other parts of Rust work, so we will be talking
-about these concepts further throughout the rest of the book. Let's move on to
-the next chapter where we'll look at grouping pieces of data together in a
+about these concepts further throughout the rest of the book. Let’s move on to
+the next chapter where we’ll look at grouping pieces of data together in a
 `struct`.

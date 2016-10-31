@@ -9,8 +9,8 @@ and loops.
 ### `if` Expressions
 
 An `if` expression allows us to branch our code depending on conditions. We
-provide a condition and then say, "If this condition is met, run this
-block of code. If the condition is not met, do not run this block of code."
+provide a condition and then say, “If this condition is met, run this
+block of code. If the condition is not met, do not run this block of code.”
 
 Let’s make a new project to explore `if`, called `branches`. In `src/main.rs`,
 put:
@@ -36,7 +36,7 @@ if the condition is true goes immediately after the condition, inside curly
 braces. These blocks are sometimes called *arms*. We can optionally also
 include an `else` expression, which we have chosen to do here. This gives the
 program an alternative block of code to execute should the condition evaluate
-to false. If you don't give an `else` expression and the condition is false,
+to false. If you don’t give an `else` expression and the condition is false,
 the program will just skip the `if` block and move on to the next bit of code.
 
 Try running this code, and you should see output like this:
@@ -65,7 +65,7 @@ condition was false
 ```
 
 It’s also worth noting that the condition here *must* be a `bool`. To see what
-happens if the condition isn't a `bool`, try running this code:
+happens if the condition isn’t a `bool`, try running this code:
 
 Filename: src/main.rs
 
@@ -153,12 +153,12 @@ When this program executes, it will check each `if` expression in turn and
 execute the first body for which the condition holds true. Note that even
 though 6 is divisible by 2, we did not see the output `number is divisible by
 2`, nor did we see the `number is not divisible by 4, 3, or 2` text from the
-`else` block. That's because Rust will only execute the block for the first
-true condition, and once it finds one, it won't even check the rest.
+`else` block. That’s because Rust will only execute the block for the first
+true condition, and once it finds one, it won’t even check the rest.
 
 Using too many `else if` expressions can clutter your code, so if you find
 yourself with more than one, you may want to look at refactoring your code. In
-Chapter 6, we'll talk about a powerful Rust branching construct called `match`
+Chapter 6, we’ll talk about a powerful Rust branching construct called `match`
 for these cases.
 
 #### Using `if` in a `let` statement
@@ -239,7 +239,7 @@ The expression in the `if` block evaluates to an integer and the expression in
 the `else` block evaluates to a string. This can’t work, because variables
 must have a single type. Rust needs to know at compile time what type
 the `number` variable is, definitively, so that it can verify at compile time
-that its type is valid everywhere we use `number`. Rust wouldn't be able to do
+that its type is valid everywhere we use `number`. Rust wouldn’t be able to do
 that if the type of `number` was only determined at runtime; the compiler would
 be more complex and be able to make fewer guarantees about our code if it had
 to keep track of multiple hypothetical types for any variable.
@@ -287,7 +287,7 @@ again!
 ^Cagain!
 ```
 
-That `^C` there is where we hit `control-c`. You may or may not see "again!"
+That `^C` there is where we hit `control-c`. You may or may not see `again!`
 printed after the `^C`, depending on where the code was in the loop when it
 received the signal to halt.
 
@@ -299,14 +299,14 @@ correctly.
 
 #### Conditional Loops With `while`
 
-It's often useful for a program to have a condition that can be evaluated
+It’s often useful for a program to have a condition that can be evaluated
 within a loop. While the condition is true, the loop runs. When the condition
 ceases to be true, we call `break`, stopping the loop. This could be
 implemented with a combination of `loop`, `if`, `else`, and `break`; you could
-try that now in a program, if you'd like.
+try that now in a program, if you’d like.
 
 But this pattern is so common that Rust has a more efficient language construct
-for it, called a `while` loop. Here's an example using `while`: this program
+for it, called a `while` loop. Here’s an example using `while`: this program
 loops three times, counting down each time. Finally, after the loop, it prints
 another message, then exits:
 
@@ -327,7 +327,7 @@ fn main() {
 ```
 
 This gets rid of a lot of nesting that would be necessary if we used `loop`,
-`if`, `else`, and `break`, and it's more clear. While a condition holds, run
+`if`, `else`, and `break`, and it’s more clear. While a condition holds, run
 this code; otherwise, exit the loop.
 
 #### Looping Through a Collection with `for`
@@ -350,7 +350,7 @@ fn main() {
 }
 ```
 
-Here, we're counting up through the elements in the array. We start at index 0,
+Here, we’re counting up through the elements in the array. We start at index 0,
 then loop until we hit the final index of our array (that is, when `index < 5`
 is no longer true). Running this will print out every element of the array:
 
@@ -370,7 +370,7 @@ will reach a value of `6` at some point, the loop stops executing before trying
 to fetch a sixth value from the array.
 
 This approach is error-prone, though; we could cause our program to panic by
-getting the index length incorrect. It's also slow, as the compiler needs to
+getting the index length incorrect. It’s also slow, as the compiler needs to
 perform the conditional check on every element on every iteration through the
 loop.
 
@@ -389,8 +389,8 @@ fn main() {
 }
 ```
 
-If we run this, we'll see the same output as the previous example. Importantly,
-though, we've now increased the safety of our code and eliminated the chance of
+If we run this, we’ll see the same output as the previous example. Importantly,
+though, we’ve now increased the safety of our code and eliminated the chance of
 bugs that might result from going beyond the end of the array or not going far
 enough and missing some items.
 
@@ -400,7 +400,7 @@ item from the `a` array but forgot to update the condition to `while index <
 remember to change any other code if we changed the number of values in the
 array.
 
-If you're wondering about the `iter` code in this example, keep reading! We
+If you’re wondering about the `iter` code in this example, keep reading! We
 will cover method syntax generally in Chapter XX and iterators specifically in
 Chapter XX.
 
@@ -411,8 +411,8 @@ Rustaceans would use a `for` loop. The way to do that would be to use a
 `Range`, which is a type provided by the standard library that generates all
 numbers in sequence starting from one number and ending before another number.
 
-Here's what the countdown would look like with a for loop, and using another
-method we haven't yet talked about, `rev`, to reverse the range:
+Here’s what the countdown would look like with a for loop, and using another
+method we haven’t yet talked about, `rev`, to reverse the range:
 
 Filename: src/main.rs
 
@@ -425,12 +425,12 @@ fn main() {
 }
 ```
 
-That's a bit nicer, isn't it?
+That’s a bit nicer, isn’t it?
 
 ## Summary
 
 You made it! That was a big chapter: we covered variables, scalar and
-compound data types, functions, comments, `if` expressions, and loops! If you'd
+compound data types, functions, comments, `if` expressions, and loops! If you’d
 like to get some practice with the concepts in this chapter, try building
 programs to do things like:
 
@@ -439,5 +439,5 @@ programs to do things like:
 * Print the lyrics to the Christmas carol *The Twelve Days of Christmas*,
   taking advantage of the repetition in the song.
 
-When you're ready to move on, we'll talk about a concept in Rust that *doesn't*
+When you’re ready to move on, we’ll talk about a concept in Rust that *doesn’t*
 commonly exist in other programming languages: ownership.

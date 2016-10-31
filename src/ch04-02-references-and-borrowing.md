@@ -63,7 +63,7 @@ fn calculate_length(s: &String) -> usize { // s is a reference to a String
 ```
 
 It’s the same process as before, but we don’t drop what the reference points to
-when it goes out of scope because we don't have ownership. This lets us write
+when it goes out of scope because we don’t have ownership. This lets us write
 functions which take references as arguments instead of the values themselves,
 so that we won’t need to return them to give back ownership.
 
@@ -71,7 +71,7 @@ We call this process *borrowing*. Just like with real life, if a person owns
 something, you can borrow it from them, and when you’re done, you have to give
 it back.
 
-So what happens if we try to modify something we're borrowing? Try this code
+So what happens if we try to modify something we’re borrowing? Try this code
 out. Spoiler alert: it doesn’t work!
 
 Filename: src/main.rs
@@ -156,10 +156,10 @@ mutate whenever you’d like. The benefit of having this restriction is that Rus
 can prevent data races at compile time. A *data race* is a particular type of
 race condition where two or more pointers access the same data at the same
 time, at least one of the pointers is being used to write to the data, and
-there's no mechanism being used to synchronize access to the data. Data races
+there’s no mechanism being used to synchronize access to the data. Data races
 cause undefined behavior and can be difficult to diagnose and fix when trying
 to track them down at runtime; Rust prevents this problem from happening since
-it won't even compile code with data races!
+it won’t even compile code with data races!
 
 As always, we can use `{}`s to create a new scope, allowing for multiple mutable
 references, just not *simultaneous* ones:
@@ -204,17 +204,17 @@ error[E0502]: cannot borrow `s` as mutable because it is also borrowed as immuta
 Whew! We *also* cannot have a mutable reference while we have an immutable one.
 Users of an immutable reference don’t expect the values to suddenly change out
 from under them! Multiple immutable references are okay, however, since no one
-who is just reading the data has the ability to affect anyone else's reading of
+who is just reading the data has the ability to affect anyone else’s reading of
 the data.
 
-Even though these errors may be frustrating at times, remember that it's the
+Even though these errors may be frustrating at times, remember that it’s the
 Rust compiler pointing out a potential bug earlier (at compile time rather than
 at runtime) and showing you exactly where the problem is instead of you having
-to track down why sometimes your data isn't what you thought it should be.
+to track down why sometimes your data isn’t what you thought it should be.
 
 ### Dangling References
 
-In languages with pointers, it's easy to make the error of creating a *dangling
+In languages with pointers, it’s easy to make the error of creating a *dangling
 pointer*, a pointer referencing a location in memory that may have been given
 to someone else, by freeing some memory while keeping around a pointer to that
 memory. In Rust, by contrast, the compiler guarantees that references will
@@ -255,12 +255,12 @@ error: aborting due to previous error
 ```
 
 This error message refers to a feature we haven’t learned about yet:
-*lifetimes*. We'll discuss lifetimes in detail in Chapter XX, but, disregarding
+*lifetimes*. We’ll discuss lifetimes in detail in Chapter XX, but, disregarding
 the parts about lifetimes, the message does contain the key to why this code is
 a problem: `this function’s return type contains a borrowed value, but there is
 no value for it to be borrowed from`.
 
-Let’s have a closer look at exactly what's happening at each stage of our
+Let’s have a closer look at exactly what’s happening at each stage of our
 `dangle` code:
 
 ```rust,ignore
@@ -299,4 +299,4 @@ Here’s a recap of what we’ve talked about:
     2. Any number of immutable references.
 2. References must always be valid.
 
-Next, let's look at a different kind of reference: slices.
+Next, let’s look at a different kind of reference: slices.

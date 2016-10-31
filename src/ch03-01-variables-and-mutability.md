@@ -3,12 +3,12 @@
 We mentioned in Chapter 2 that by default, variables are *immutable*.
 This is one of many nudges in Rust that encourages us to write our code in a
 way that gets the most of the safety and easy concurrency that Rust has to
-offer. We still have the option to make our variables mutable, though. Let's
+offer. We still have the option to make our variables mutable, though. Let’s
 explore how and why Rust encourages us to favor immutability, and why we might
 want to opt out of that.
 
-Variables being immutable means once a value is bound, you can't
-change that value. To illustrate this, let's generate a new project in your
+Variables being immutable means once a value is bound, you can’t
+change that value. To illustrate this, let’s generate a new project in your
 projects directory called `variables` by using `cargo new --bin variables`.
 
 Then, in your new `variables` directory, open `src/main.rs` and replace its code
@@ -43,17 +43,17 @@ note: prior assignment occurs here
 
 This is our first example of the compiler helping us find an error in our
 program! Compiler errors can be frustrating. Keep in mind that they only mean
-your program isn't safely doing what you want it to do yet; they do *not* mean
-that you're not a good programmer! Experienced Rustaceans still get compiler
+your program isn’t safely doing what you want it to do yet; they do *not* mean
+that you’re not a good programmer! Experienced Rustaceans still get compiler
 errors. The Rust compiler is trying to help your program be the very best.
 
 <!-- PROD: START BOX -->
 
 > #### Extended Error Explanations
 >
-> Now that you've seen a Rust error, let's take a moment to look at one
+> Now that you’ve seen a Rust error, let’s take a moment to look at one
 > particularly useful aspect of errors. Rust encourages you to seek further
-> information on the kind of error you've received with output like this:
+> information on the kind of error you’ve received with output like this:
 >
 > ```bash
 > error: re-assignment of immutable variable `x` [--explain E0384]
@@ -78,8 +78,8 @@ errors. The Rust compiler is trying to help your program be the very best.
 > ```
 > ````
 >
-> These explanations can really help if you’re stuck on an error, so don't
-> hesitate to look up the error code. The compiler is your friend, and it's
+> These explanations can really help if you’re stuck on an error, so don’t
+> hesitate to look up the error code. The compiler is your friend, and it’s
 > there to help.
 
 <!-- PROD: END BOX -->
@@ -88,17 +88,17 @@ The error tells us that the cause of the error is `re-assignment of immutable
 variable`, because we tried to assign a second value to the immutable `x`
 variable.
 
-It's important that we get compile-time errors when we attempt to change a
+It’s important that we get compile-time errors when we attempt to change a
 value that we previously said was immutable because this very situation can
 lead to bugs. If one part of our code operates on an assumption that a value
-will never change, and another part of our code changes that value, it's
-possible that the first part of the code won't do what it was designed to do.
+will never change, and another part of our code changes that value, it’s
+possible that the first part of the code won’t do what it was designed to do.
 This cause of bugs can be difficult to track down after the fact, especially
 when the second piece of code only changes the value *sometimes*.
 
-In Rust, we can trust that a value we say won't change really won't change,
+In Rust, we can trust that a value we say won’t change really won’t change,
 because the compiler is enforcing that guarantee for us. When reading and
-writing code, we don't have to keep track in our head how and where a value
+writing code, we don’t have to keep track in our head how and where a value
 might change. This can make code easier to reason about.
 
 Mutability can be really useful, though! Variables are immutable only by
@@ -131,9 +131,9 @@ The value of x is: 6
 ```
 
 Using `mut`, we are allowed to change the value that `x` binds to from `5` to
-`6`. In some cases you'll want to make a variable mutable because it makes the
+`6`. In some cases you’ll want to make a variable mutable because it makes the
 code easier to understand than an implementation that only uses immutable
-variables. In cases where you're using large data structures, mutating an
+variables. In cases where you’re using large data structures, mutating an
 instance in place may be faster than copying and returning newly allocated
 instances. It all depends on the tradeoffs you want to make in your situation.
 
@@ -142,8 +142,8 @@ instances. It all depends on the tradeoffs you want to make in your situation.
 As we saw in the guessing game tutorial, we can declare new variables with the
 same name as a previous variable, and the new variable *shadows* the previous
 variable. We say that the first variable is *shadowed* by the second, which means
-that the second variable's value is what you will see when you use the variable.
-We can shadow a variable by using the same variable's name and repeating the use
+that the second variable’s value is what you will see when you use the variable.
+We can shadow a variable by using the same variable’s name and repeating the use
 of the `let` keyword as follows:
 
 Filename: src/main.rs
@@ -174,11 +174,11 @@ The value of x is: 12
 ```
 
 This is different from marking a variable as `mut` because unless we use the
-`let` keyword again, we'll get a compile-time error if we accidentally try to
+`let` keyword again, we’ll get a compile-time error if we accidentally try to
 reassign to this variable. We can perform a few transformations on a value, but
 have the variable be immutable after those transformations have been completed.
 
-The other difference between `mut` and shadowing is that, since we're
+The other difference between `mut` and shadowing is that, since we’re
 effectively creating a new variable when we use the `let` keyword again, we can
 change the type of the value, but reuse the same name. For
 example, say we ask a user to show us how many spaces they want between some
@@ -202,7 +202,7 @@ spaces = spaces.len();
 ```
 
 We will get a compile-time error because we are not allowed to mutate a
-variable's type:
+variable’s type:
 
 ```bash
 error: mismatched types [--explain E0308]
@@ -216,5 +216,5 @@ note:    found type `usize`
 error: aborting due to previous error
 ```
 
-Now that we've explored how variables work, let's look at some more
+Now that we’ve explored how variables work, let’s look at some more
 data types they can have.
