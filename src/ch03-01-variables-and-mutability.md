@@ -43,7 +43,7 @@ note: prior assignment occurs here
 
 This is our first example of the compiler helping us find an error in our
 program! Compiler errors can be frustrating. Keep in mind that they only mean
-your program isn't safely doing what you want it to do yet; they do _not_ mean
+your program isn't safely doing what you want it to do yet; they do *not* mean
 that you're not a good programmer! Experienced Rustaceans still get compiler
 errors. The Rust compiler is trying to help your program be the very best.
 
@@ -94,7 +94,7 @@ lead to bugs. If one part of our code operates on an assumption that a value
 will never change, and another part of our code changes that value, it's
 possible that the first part of the code won't do what it was designed to do.
 This cause of bugs can be difficult to track down after the fact, especially
-when the second piece of code only changes the value _sometimes_.
+when the second piece of code only changes the value *sometimes*.
 
 In Rust, we can trust that a value we say won't change really won't change,
 because the compiler is enforcing that guarantee for us. When reading and

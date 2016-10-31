@@ -289,7 +289,7 @@ fn main() {
 
 While arrays can be useful since they are a primitive type so using them can be
 very fast, they aren't as flexible as the vector type. The vector type is a
-similar collection type provided by the standard library that _is_ allowed to
+similar collection type provided by the standard library that *is* allowed to
 grow or shrink in size. If you're unsure whether to use an array or a vector,
 you should probably go with a vector, and we'll discuss them in more detail in
 Chapter 8.

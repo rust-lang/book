@@ -64,7 +64,7 @@ $ cargo run
 condition was false
 ```
 
-It’s also worth noting that the condition here _must_ be a `bool`. To see what
+It’s also worth noting that the condition here *must* be a `bool`. To see what
 happens if the condition isn't a `bool`, try running this code:
 
 Filename: src/main.rs
@@ -439,5 +439,5 @@ programs to do things like:
 * Print the lyrics to the Christmas carol *The Twelve Days of Christmas*,
   taking advantage of the repetition in the song.
 
-When you're ready to move on, we'll talk about a concept in Rust that _doesn't_
+When you're ready to move on, we'll talk about a concept in Rust that *doesn't*
 commonly exist in other programming languages: ownership.

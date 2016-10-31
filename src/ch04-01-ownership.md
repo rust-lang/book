@@ -104,7 +104,7 @@ let s = "hello";
 
 The variable `s` refers to a string literal, where the value of the
 string is hard coded into the text of our program. The variable is valid from
-the point at which it’s declared until the end of the current _scope_. That is:
+the point at which it’s declared until the end of the current *scope*. That is:
 
 ```rust
 {                      // s is not valid here, it’s not yet declared
@@ -220,7 +220,7 @@ return the memory. Rust calls `drop` automatically at the closing `}`.
 > Initialization* in C++, or RAII for short. While they are very similar,
 > Rust’s take on this concept has a number of differences, so we don’t tend
 > to use the same term. If you’re familiar with this idea, keep in mind that it
-> is _roughly_ similar in Rust, but not identical.
+> is *roughly* similar in Rust, but not identical.
 
 This pattern has a profound impact on the way that Rust code is written. It may
 seem simple right now, but things can get tricky in more advanced situations
@@ -281,7 +281,7 @@ words, it looks like figure 4-2.
 Figure 4-2: Representation in memory of the variable `s2` that has a copy of
 `s1`'s pointer, length and capacity
 
-And _not_ Figure 4-3, which is what memory would look like if Rust instead
+And *not* Figure 4-3, which is what memory would look like if Rust instead
 copied the heap data as well. If Rust did this, the operation `s2 = s1` could
 potentially be very expensive if the data on the heap was large.
 
@@ -327,7 +327,7 @@ If you have heard the terms "shallow copy" and "deep copy" while working with
 other languages, the concept of copying the pointer, length, and capacity
 without copying the data probably sounds like a shallow copy. But because Rust
 also invalidates the first variable, instead of calling this a shallow copy,
-it's known as a _move_. Here we would read this by saying that `s1` was _moved_
+it's known as a *move*. Here we would read this by saying that `s1` was *moved*
 into `s2`. So what actually happens looks like Figure 4-4.
 
 <img alt="s1 moved to s2" src="img/trpl04-04.svg" class="center" style="width: 50%;" />
@@ -338,12 +338,12 @@ That solves our problem! With only `s2` valid, when it goes out of scope, it
 alone will free the memory, and we’re done.
 
 Furthermore, there’s a design choice that’s implied by this: Rust will never
-automatically create "deep" copies of your data. Therefore, any _automatic_
+automatically create "deep" copies of your data. Therefore, any *automatic*
 copying can be assumed to be inexpensive.
 
 #### Ways Variables and Data Interact: Clone
 
-If we _do_ want to deeply copy the `String`’s data and not just the `String`
+If we *do* want to deeply copy the `String`’s data and not just the `String`
 itself, there’s a common method for that: `clone`. We will discuss methods in
 the section on [`structs` in Chapter XX][structs]<!-- ignore -->, but they’re a
 common enough feature in many programming languages that you have probably seen

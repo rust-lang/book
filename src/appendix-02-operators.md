@@ -148,7 +148,7 @@ surprising side-effects on the dynamic execution semantics.
 
 #### Assignment expressions
 
-An _assignment expression_ consists of a pattern followed by an equals
+An *assignment expression* consists of a pattern followed by an equals
 sign (`=`) and an expression.
 
 Evaluating an assignment expression either copies or

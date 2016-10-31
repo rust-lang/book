@@ -30,7 +30,7 @@ body begins and ends.
 We can call any function we’ve defined by entering its name followed by a pair
 of parentheses. Since `another_function` is defined in the program, it can be
 called from inside the `main` function. Note that we defined
-`another_function` _after_ the `main` function in our source code; we could
+`another_function` *after* the `main` function in our source code; we could
 have defined it before as well. Rust doesn’t care where you define your
 functions, only that they are defined somewhere.
 
@@ -81,7 +81,7 @@ specify the type of `x` as `i32`. When we pass `5` to `another_function`,
 the `println!` macro puts `5` where the pair of curly braces were in the format
 string.
 
-In function signatures, we _must_ declare the type. This is a deliberate
+In function signatures, we *must* declare the type. This is a deliberate
 decision in the design of Rust; requiring type annotations in function
 definitions means the compiler almost never needs you to use them elsewhere in
 the code in order to figure out what you mean.

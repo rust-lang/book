@@ -292,7 +292,7 @@ we cannot directly do this.
 ### Slicing Strings
 
 However, indexing the bytes of a string is very useful, and is not expected to
-be fast. While we can't use `[]` with a single number, we _can_ use `[]` with
+be fast. While we can't use `[]` with a single number, we *can* use `[]` with
 a range to create a string slice from particular bytes:
 
 ```rust

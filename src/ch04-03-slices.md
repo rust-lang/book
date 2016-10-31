@@ -17,7 +17,7 @@ fn first_word(s: &String) -> ?
 
 This function, `first_word`, takes a `&String` as an argument. We don’t want
 ownership, so this is fine. But what should we return? We don’t really have a
-way to talk about _part_ of a string. We could return the index of the end of
+way to talk about *part* of a string. We could return the index of the end of
 the word, though. Let’s try that:
 
 Filename: src/main.rs
@@ -120,7 +120,7 @@ function. Its signature would have to look like this:
 fn second_word(s: &String) -> (usize, usize) {
 ```
 
-Now we’re tracking both a start _and_ an ending index, and we have even more
+Now we’re tracking both a start *and* an ending index, and we have even more
 values that were calculated from data in a particular state but aren't tied to
 that state at all. We now have three unrelated variables floating
 around which need to be kept in sync.

@@ -115,7 +115,7 @@ let s = "hello";
 
 The variable binding `s` refers to a string literal, where the value of the
 string is hard coded into the text of our program. The binding is valid from
-the point at which it’s declared until the end of the current _scope_. That is:
+the point at which it’s declared until the end of the current *scope*. That is:
 
 ```rust
 {                      // s is not valid here, it’s not yet declared
@@ -231,7 +231,7 @@ return the memory. Rust calls `drop` automatically at the closing `}`.
 > Initialization* in C++, or RAII for short. While they are very similar,
 > Rust’s take on this concept has a number of differences, so we don’t tend
 > to use the same term. If you’re familiar with this idea, keep in mind that it
-> is _roughly_ similar in Rust, but not identical.
+> is *roughly* similar in Rust, but not identical.
 
 This pattern has a profound impact on the way that Rust code is written. It may
 seem simple right now, but things can get tricky in more advanced situations
@@ -292,7 +292,7 @@ words, it looks like figure 4-2.
 Figure 4-2: Representation in memory of the binding `s2` that has a copy of
 `s1`'s pointer, length and capacity
 
-And _not_ Figure 4-3, which is what memory would look like if Rust instead
+And *not* Figure 4-3, which is what memory would look like if Rust instead
 copied the heap data as well. If Rust did this, the operation `s2 = s1` could
 potentially be very expensive if the data on the heap was large.
 
@@ -338,7 +338,7 @@ If you have heard the terms "shallow copy" and "deep copy" while working with
 other languages, the concept of copying the pointer, length, and capacity
 without copying the data probably sounds like a shallow copy. But because Rust
 also invalidates the first binding, instead of calling this a shallow copy,
-it's known as a _move_. Here we would read this by saying that `s1` was _moved_
+it's known as a *move*. Here we would read this by saying that `s1` was *moved*
 into `s2`. So what actually happens looks like Figure 4-4.
 
 <img alt="s1 moved to s2" src="img/trpl04-04.svg" class="center" style="width: 50%;" />
@@ -349,12 +349,12 @@ That solves our problem! With only `s2` valid, when it goes out of scope, it
 alone will free the memory, and we’re done.
 
 Furthermore, there’s a design choice that’s implied by this: Rust will never
-automatically create "deep" copies of your data. Therefore, any _automatic_
+automatically create "deep" copies of your data. Therefore, any *automatic*
 copying can be assumed to be inexpensive.
 
 #### Ways Bindings and Data Interact: Clone
 
-If we _do_ want to deeply copy the `String`’s data and not just the `String`
+If we *do* want to deeply copy the `String`’s data and not just the `String`
 itself, there’s a common method for that: `clone`. We will discuss methods in
 the section on `structs` in Chapter XX, but they’re a
 common enough feature in many programming languages that you have probably seen
@@ -575,7 +575,7 @@ let s1 = String::from("hello");
 let len = calculate_length(&s1);
 ```
 
-The `&s1` syntax lets us create a reference which _refers_ to the value of `s1`
+The `&s1` syntax lets us create a reference which *refers* to the value of `s1`
 but does not own it. Because it does not own it, the value it points to will
 not be dropped when the reference goes out of scope.
 
@@ -691,7 +691,7 @@ to track them down at runtime; Rust prevents this problem from happening since
 it won't even compile code with data races!
 
 As always, we can use `{}`s to create a new scope, allowing for multiple mutable
-references, just not _simultaneous_ ones:
+references, just not *simultaneous* ones:
 
 ```rust
 let mut s = String::from("hello");
@@ -730,7 +730,7 @@ error[E0502]: cannot borrow `s` as mutable because it is also borrowed as immuta
   | - immutable borrow ends here
 ```
 
-Whew! We _also_ cannot have a mutable reference while we have an immutable one.
+Whew! We *also* cannot have a mutable reference while we have an immutable one.
 Users of an immutable reference don’t expect the values to suddenly change out
 from under them! Multiple immutable references are okay, however, since no one
 who is just reading the data has the ability to affect anyone else's reading of
@@ -823,7 +823,7 @@ This works, no problem. Ownership is moved out, nothing is deallocated.
 
 Here’s a recap of what we’ve talked about:
 
-1. At any given time, you may have _either_, but not both of:
+1. At any given time, you may have *either*, but not both of:
     1. One mutable reference.
     2. Any number of immutable references.
 2. References must always be valid.
@@ -849,7 +849,7 @@ fn first_word(s: &String) -> ?
 
 This function, `first_word`, takes a `&String` as an argument. We don’t want
 ownership, so this is fine. But what should we return? We don’t really have a
-way to talk about _part_ of a string. We could return the index of the end of
+way to talk about *part* of a string. We could return the index of the end of
 the word, though. Let’s try that:
 
 Filename: src/main.rs
@@ -940,7 +940,7 @@ function. Its signature would have to look like this:
 fn second_word(s: &String) -> (usize, usize) {
 ```
 
-Now we’re tracking both a start _and_ an ending index, and we have even more
+Now we’re tracking both a start *and* an ending index, and we have even more
 values that were calculated from data in a particular state but aren't tied to
 that state at all. We now have three unrelated variable bindings floating
 around which need to be kept in sync.

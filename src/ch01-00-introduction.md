@@ -15,7 +15,7 @@ useful in a number of use cases that other languages aren’t good at: embedding
 in other languages, programs with specific space and time requirements, and
 writing low-level code, like device drivers and operating systems. It's also
 great for web applications: it powers the Rust package registry site, crates.io!
-We're excited to see what _you_ create with Rust.
+We're excited to see what *you* create with Rust.
 
 This book is written for a reader who already knows how to program in at least
 one programming language. After reading this book, you should be comfortable

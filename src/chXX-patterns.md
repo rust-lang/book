@@ -88,7 +88,7 @@ statement with a type annotation:
 let PATTERN: TYPE = VALUE;
 ```
 
-Note that the colon and the `TYPE` go _after_ the `PATTERN`, not in the pattern
+Note that the colon and the `TYPE` go *after* the `PATTERN`, not in the pattern
 itself. As an example, here’s our more complex pattern with two variables:
 
 ```rust

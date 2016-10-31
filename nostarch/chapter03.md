@@ -71,7 +71,7 @@ note: prior assignment occurs here
 
 This is our first example of the compiler helping us find an error in our
 program! Compiler errors can be frustrating. Keep in mind that they only mean
-your program isn't safely doing what you want it to do yet; they do _not_ mean
+your program isn't safely doing what you want it to do yet; they do *not* mean
 that you're not a good programmer! Experienced Rustaceans still get compiler
 errors. The Rust compiler is trying to help your program be the very best.
 
@@ -121,7 +121,7 @@ lead to bugs. If one part of our code operates on an assumption that a value
 will never change, and another part of our code changes that value, it's
 possible that the first part of the code won't do what it was designed to do.
 This cause of bugs can be difficult to track down after the fact, especially
-when the second piece of code only changes the value _sometimes_.
+when the second piece of code only changes the value *sometimes*.
 
 In Rust, we can trust that a value we say won't change really won't change,
 because the compiler is enforcing that guarantee for us. When reading and
@@ -537,7 +537,7 @@ fn main() {
 
 While arrays can be useful since they are a primitive type so using them can be
 very fast, they aren't as flexible as the vector type. The vector type is a
-similar collection type provided by the standard library that _is_ allowed to
+similar collection type provided by the standard library that *is* allowed to
 grow or shrink in size. If you're unsure whether to use an array or a vector,
 you should probably go with a vector, and we'll discuss them in more detail in
 Chapter 8.
@@ -645,7 +645,7 @@ body begins and ends.
 We can call any function we’ve defined by entering its name followed by a pair
 of parentheses. Since `another_function` is defined in the program, it can be
 called from inside the `main` function. Note that we defined
-`another_function` _after_ the `main` function in our source code; we could
+`another_function` *after* the `main` function in our source code; we could
 have defined it before as well. Rust doesn’t care where you define your
 functions, only that they are defined somewhere.
 
@@ -696,7 +696,7 @@ specify the type of `x` as `i32`. When we pass `5` to `another_function`,
 the `println!` macro puts `5` where the pair of curly braces were in the format
 string.
 
-In function signatures, we _must_ declare the type. This is a deliberate
+In function signatures, we *must* declare the type. This is a deliberate
 decision in the design of Rust; requiring type annotations in function
 definitions means the compiler almost never needs you to use them elsewhere in
 the code in order to figure out what you mean.
@@ -1068,7 +1068,7 @@ $ cargo run
 condition was false
 ```
 
-It’s also worth noting that the condition here _must_ be a `bool`. To see what
+It’s also worth noting that the condition here *must* be a `bool`. To see what
 happens if the condition isn't a `bool`, try running this code:
 
 Filename: src/main.rs
@@ -1443,5 +1443,5 @@ programs to do things like:
 * Print the lyrics to the Christmas carol *The Twelve Days of Christmas*,
   taking advantage of the repetition in the song.
 
-When you're ready to move on, we'll talk about a concept in Rust that _doesn't_
+When you're ready to move on, we'll talk about a concept in Rust that *doesn't*
 commonly exist in other programming languages: ownership.

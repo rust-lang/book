@@ -48,7 +48,7 @@ let s1 = String::from("hello");
 let len = calculate_length(&s1);
 ```
 
-The `&s1` syntax lets us create a reference which _refers_ to the value of `s1`
+The `&s1` syntax lets us create a reference which *refers* to the value of `s1`
 but does not own it. Because it does not own it, the value it points to will
 not be dropped when the reference goes out of scope.
 
@@ -162,7 +162,7 @@ to track them down at runtime; Rust prevents this problem from happening since
 it won't even compile code with data races!
 
 As always, we can use `{}`s to create a new scope, allowing for multiple mutable
-references, just not _simultaneous_ ones:
+references, just not *simultaneous* ones:
 
 ```rust
 let mut s = String::from("hello");
@@ -201,7 +201,7 @@ error[E0502]: cannot borrow `s` as mutable because it is also borrowed as immuta
   | - immutable borrow ends here
 ```
 
-Whew! We _also_ cannot have a mutable reference while we have an immutable one.
+Whew! We *also* cannot have a mutable reference while we have an immutable one.
 Users of an immutable reference don’t expect the values to suddenly change out
 from under them! Multiple immutable references are okay, however, since no one
 who is just reading the data has the ability to affect anyone else's reading of
@@ -294,7 +294,7 @@ This works, no problem. Ownership is moved out, nothing is deallocated.
 
 Here’s a recap of what we’ve talked about:
 
-1. At any given time, you may have _either_, but not both of:
+1. At any given time, you may have *either*, but not both of:
     1. One mutable reference.
     2. Any number of immutable references.
 2. References must always be valid.

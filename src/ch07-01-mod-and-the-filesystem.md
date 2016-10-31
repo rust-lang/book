@@ -168,7 +168,7 @@ fn connect() {
 
 Note that we don't need a `mod` declaration in this file. `mod` is for
 declaring a new module, and we've already declared this module in `src/lib.rs`.
-This file provides the _contents_ of the `client` module. If we put a `mod
+This file provides the *contents* of the `client` module. If we put a `mod
 client` here, we'd be giving the `client` module its own submodule named
 `client`!
 
@@ -285,7 +285,7 @@ valid, but then which module would the files `src/client.rs` and
 `src/server.rs`, respectively, be for?
 
 Instead of continuing to follow the same file naming pattern we used
-previously, we can do what the error suggests. We'll make a new _directory_,
+previously, we can do what the error suggests. We'll make a new *directory*,
 move `src/server.rs` into it, and change `src/network.rs` to
 `src/network/mod.rs`. Then, when we try to build:
 

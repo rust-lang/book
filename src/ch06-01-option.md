@@ -134,7 +134,7 @@ the safety of Rust code.
 `None`'s type is `Option<T>`. I hope with the clarifications I added in the
 previous section that this will be clear by this point. /Carol -->
 
-So, how _do_ you get the `T` value out of a `Some` variant when you have a
+So, how *do* you get the `T` value out of a `Some` variant when you have a
 value of type `Option<T>` so that you can use that value? The `Option<T>` enum
 has a large number of methods useful in a variety of situations that you can
 check out in [its documentation][docs]<!-- ignore -->, and becoming familiar
@@ -144,8 +144,8 @@ with them will be extremely useful in your journey with Rust.
 
 What we generally want to do in order to use an `Option<T>` value is to have
 code that will handle each variant. We want some code that will run only in the
-case that we have a `Some(T)` value, and this code _is_ allowed to use the
-inner `T`. We want some _other_ code to run if we have a `None` value, and that
+case that we have a `Some(T)` value, and this code *is* allowed to use the
+inner `T`. We want some *other* code to run if we have a `None` value, and that
 code doesn't have a `T` value available. The `match` expression is a control
 flow construct that does just this, when used with enums: it will run different
 code depending on which variant of the enum it has, and that code can use the
