@@ -147,12 +147,12 @@ fn main() {
 
     s.clear(); // This empties the String, making it equal to &quot;&quot;.
 
-    // word still has the value 5 here, but there's no more string that
+    // word still has the value 5 here, but there’s no more string that
     // we could meaningfully use the value 5 with. word is now totally invalid!
 }
 </code></pre>
 <p>This program compiles without any errors, and also would if we used <code>word</code>
-after calling <code>s.clear()</code>. <code>word</code> isn't connected to the state of <code>s</code> at all,
+after calling <code>s.clear()</code>. <code>word</code> isn’t connected to the state of <code>s</code> at all,
 so <code>word</code> still contains the value <code>5</code>. We could use that <code>5</code> with <code>s</code> to try
 to extract the first word out, but this would be a bug since the contents of
 <code>s</code> have changed since we saved <code>5</code> in <code>word</code>.</p>
@@ -161,7 +161,7 @@ function. Its signature would have to look like this:</p>
 <pre><code class="language-rust,ignore">fn second_word(s: &amp;String) -&gt; (usize, usize) {
 </code></pre>
 <p>Now we’re tracking both a start <em>and</em> an ending index, and we have even more
-values that were calculated from data in a particular state but aren't tied to
+values that were calculated from data in a particular state but aren’t tied to
 that state at all. We now have three unrelated variables floating
 around which need to be kept in sync.</p>
 <p>Luckily, Rust has a solution to this problem: string slices.</p>
@@ -210,7 +210,7 @@ let slice = &amp;s[0..len];
 let slice = &amp;s[..];
 </code></pre>
 <p>With this in mind, let’s re-write <code>first_word</code> to return a slice. The type
-that signifies &quot;string slice&quot; is written as <code>&amp;str</code>:</p>
+that signifies “string slice” is written as <code>&amp;str</code>:</p>
 <p>Filename: src/main.rs</p>
 <pre><code class="language-rust">fn first_word(s: &amp;String) -&gt; &amp;str {
     let bytes = s.as_bytes();
@@ -236,7 +236,7 @@ the slice and the number of elements in the slice.</p>
 </code></pre>
 <p>We now have a straightforward API that’s much harder to mess up. Remember our
 bug from before, when we got the first word but then cleared the string so that
-our first word was invalid? That code was logically incorrect but didn't show
+our first word was invalid? That code was logically incorrect but didn’t show
 any immediate errors. The problems would show up later, if we kept trying to
 use the first word index with an emptied string. Slices make this bug
 impossible, and let us know we have a problem with our code much sooner. Using
@@ -339,10 +339,10 @@ when we talk about vectors in Chapter XX.</p>
 in Rust programs at compile time. Rust is a language that gives you control
 over your memory usage like other systems programming languages, but having the
 owner of data automatically clean up that data when the owner goes out of scope
-means you don't have to write and debug extra code to get this control.</p>
+means you don’t have to write and debug extra code to get this control.</p>
 <p>Ownership affects how lots of other parts of Rust work, so we will be talking
-about these concepts further throughout the rest of the book. Let's move on to
-the next chapter where we'll look at grouping pieces of data together in a
+about these concepts further throughout the rest of the book. Let’s move on to
+the next chapter where we’ll look at grouping pieces of data together in a
 <code>struct</code>.</p>
 
                 </div>

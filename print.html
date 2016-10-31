@@ -1279,7 +1279,7 @@ Chapter 4 explores ownership, which is a Rust feature that is most different
 from other languages. Chapter 5 discusses structs and method syntax, and
 Chapter 6 endeavors to explain enums.</p>
 <h1>Common Programming Concepts in Rust</h1>
-<p>Let's first look at concepts that appear in almost every programming language
+<p>Let’s first look at concepts that appear in almost every programming language
 and see how they work in Rust. Many programming languages have much in common
 at their core. None of the concepts presented in this chapter are unique to
 Rust, but we’ll discuss Rust’s particular syntax and conventions concerning
@@ -1303,11 +1303,11 @@ keywords in Appendix XX.</p>
 <p>We mentioned in Chapter 2 that by default, variables are <em>immutable</em>.
 This is one of many nudges in Rust that encourages us to write our code in a
 way that gets the most of the safety and easy concurrency that Rust has to
-offer. We still have the option to make our variables mutable, though. Let's
+offer. We still have the option to make our variables mutable, though. Let’s
 explore how and why Rust encourages us to favor immutability, and why we might
 want to opt out of that.</p>
-<p>Variables being immutable means once a value is bound, you can't
-change that value. To illustrate this, let's generate a new project in your
+<p>Variables being immutable means once a value is bound, you can’t
+change that value. To illustrate this, let’s generate a new project in your
 projects directory called <code>variables</code> by using <code>cargo new --bin variables</code>.</p>
 <p>Then, in your new <code>variables</code> directory, open <code>src/main.rs</code> and replace its code
 with the following:</p>
@@ -1334,15 +1334,15 @@ note: prior assignment occurs here
 </code></pre>
 <p>This is our first example of the compiler helping us find an error in our
 program! Compiler errors can be frustrating. Keep in mind that they only mean
-your program isn't safely doing what you want it to do yet; they do <em>not</em> mean
-that you're not a good programmer! Experienced Rustaceans still get compiler
+your program isn’t safely doing what you want it to do yet; they do <em>not</em> mean
+that you’re not a good programmer! Experienced Rustaceans still get compiler
 errors. The Rust compiler is trying to help your program be the very best.</p>
 <!-- PROD: START BOX -->
 <blockquote>
 <h4>Extended Error Explanations</h4>
-<p>Now that you've seen a Rust error, let's take a moment to look at one
+<p>Now that you’ve seen a Rust error, let’s take a moment to look at one
 particularly useful aspect of errors. Rust encourages you to seek further
-information on the kind of error you've received with output like this:</p>
+information on the kind of error you’ve received with output like this:</p>
 <pre><code class="language-bash">error: re-assignment of immutable variable `x` [--explain E0384]
 </code></pre>
 <p>This tells us that if we pass the <code>--explain</code> flag to <code>rustc</code> with the
@@ -1361,23 +1361,23 @@ fn main(){
 }
 ```
 </code></pre>
-<p>These explanations can really help if you’re stuck on an error, so don't
-hesitate to look up the error code. The compiler is your friend, and it's
+<p>These explanations can really help if you’re stuck on an error, so don’t
+hesitate to look up the error code. The compiler is your friend, and it’s
 there to help.</p>
 </blockquote>
 <!-- PROD: END BOX -->
 <p>The error tells us that the cause of the error is <code>re-assignment of immutable variable</code>, because we tried to assign a second value to the immutable <code>x</code>
 variable.</p>
-<p>It's important that we get compile-time errors when we attempt to change a
+<p>It’s important that we get compile-time errors when we attempt to change a
 value that we previously said was immutable because this very situation can
 lead to bugs. If one part of our code operates on an assumption that a value
-will never change, and another part of our code changes that value, it's
-possible that the first part of the code won't do what it was designed to do.
+will never change, and another part of our code changes that value, it’s
+possible that the first part of the code won’t do what it was designed to do.
 This cause of bugs can be difficult to track down after the fact, especially
 when the second piece of code only changes the value <em>sometimes</em>.</p>
-<p>In Rust, we can trust that a value we say won't change really won't change,
+<p>In Rust, we can trust that a value we say won’t change really won’t change,
 because the compiler is enforcing that guarantee for us. When reading and
-writing code, we don't have to keep track in our head how and where a value
+writing code, we don’t have to keep track in our head how and where a value
 might change. This can make code easier to reason about.</p>
 <p>Mutability can be really useful, though! Variables are immutable only by
 default; you can make them mutable by adding <code>mut</code> in front of the variable
@@ -1401,17 +1401,17 @@ The value of x is: 5
 The value of x is: 6
 </code></pre>
 <p>Using <code>mut</code>, we are allowed to change the value that <code>x</code> binds to from <code>5</code> to
-<code>6</code>. In some cases you'll want to make a variable mutable because it makes the
+<code>6</code>. In some cases you’ll want to make a variable mutable because it makes the
 code easier to understand than an implementation that only uses immutable
-variables. In cases where you're using large data structures, mutating an
+variables. In cases where you’re using large data structures, mutating an
 instance in place may be faster than copying and returning newly allocated
 instances. It all depends on the tradeoffs you want to make in your situation.</p>
 <h3>Shadowing</h3>
 <p>As we saw in the guessing game tutorial, we can declare new variables with the
 same name as a previous variable, and the new variable <em>shadows</em> the previous
 variable. We say that the first variable is <em>shadowed</em> by the second, which means
-that the second variable's value is what you will see when you use the variable.
-We can shadow a variable by using the same variable's name and repeating the use
+that the second variable’s value is what you will see when you use the variable.
+We can shadow a variable by using the same variable’s name and repeating the use
 of the <code>let</code> keyword as follows:</p>
 <p>Filename: src/main.rs</p>
 <pre><code class="language-rust">fn main() {
@@ -1435,10 +1435,10 @@ you run this, it will output:</p>
 The value of x is: 12
 </code></pre>
 <p>This is different from marking a variable as <code>mut</code> because unless we use the
-<code>let</code> keyword again, we'll get a compile-time error if we accidentally try to
+<code>let</code> keyword again, we’ll get a compile-time error if we accidentally try to
 reassign to this variable. We can perform a few transformations on a value, but
 have the variable be immutable after those transformations have been completed.</p>
-<p>The other difference between <code>mut</code> and shadowing is that, since we're
+<p>The other difference between <code>mut</code> and shadowing is that, since we’re
 effectively creating a new variable when we use the <code>let</code> keyword again, we can
 change the type of the value, but reuse the same name. For
 example, say we ask a user to show us how many spaces they want between some
@@ -1456,7 +1456,7 @@ the simpler <code>spaces</code> name. If we try to use <code>mut</code> for this
 spaces = spaces.len();
 </code></pre>
 <p>We will get a compile-time error because we are not allowed to mutate a
-variable's type:</p>
+variable’s type:</p>
 <pre><code class="language-bash">error: mismatched types [--explain E0308]
  --&gt;
   |&gt;
@@ -1467,11 +1467,11 @@ note:    found type `usize`
 
 error: aborting due to previous error
 </code></pre>
-<p>Now that we've explored how variables work, let's look at some more
+<p>Now that we’ve explored how variables work, let’s look at some more
 data types they can have.</p>
 <h2>Data Types</h2>
 <p>Every value in Rust is of a certain <em>type</em>, which tells Rust what kind of data
-is being given so it knows how to work with that data. In this section, we'll
+is being given so it knows how to work with that data. In this section, we’ll
 look at a number of types built into the language itself. We split the types
 into two subsets: scalar and compound.</p>
 <p>Something to keep in mind throughout this section: Rust is a <em>statically typed</em>
@@ -1482,7 +1482,7 @@ converted a <code>String</code> to a numeric type using <code>parse</code> in Ch
 add a type annotation, like this:</p>
 <pre><code class="language-rust">let guess: u32 = &quot;42&quot;.parse().unwrap();
 </code></pre>
-<p>If we don't put the type annotation here, Rust will give us this error that
+<p>If we don’t put the type annotation here, Rust will give us this error that
 means the compiler needs more information from us to know which possible type
 we want:</p>
 <pre><code class="language-bash">error: unable to infer enough type information about `_`; type annotations or
@@ -1496,12 +1496,12 @@ generic parameter binding required [--explain E0282]
 <h3>Scalar Types</h3>
 <p>A <em>scalar</em> type represents a single value. There are four primary scalar
 types in Rust: integers, floating point numbers, booleans, and characters.
-You'll likely recognize these from other programming languages, but let's jump
+You’ll likely recognize these from other programming languages, but let’s jump
 into how they work in Rust.</p>
 <h4>Integer Types</h4>
-<p>An <em>integer</em> is a number without a fractional component. We've used one integer
+<p>An <em>integer</em> is a number without a fractional component. We’ve used one integer
 type already in this chapter, the <code>i32</code> type. This type declaration indicates
-that the value it's associated with should be a signed integer (hence the <code>i</code>,
+that the value it’s associated with should be a signed integer (hence the <code>i</code>,
 as opposed to a <code>u</code> for unsigned) for a 32-bit system. There are a number of
 built-in integer types in Rust, shown in Table 3-1.</p>
 <table><thead><tr><td> Length </td><td> signed </td><td> unsigned </td></tr></thead>
@@ -1518,11 +1518,11 @@ value.</em></p>
 and unsigned merely refers to whether it is possible for the number to be
 either negative or positive; in other words, whether the number needs to have a
 sign with it (signed), or whether it will only ever be positive and can
-therefore be represented without a sign (unsigned). It's like writing numbers
+therefore be represented without a sign (unsigned). It’s like writing numbers
 on paper: when the sign matters, a number is shown with a plus sign or minus
-sign, but when it's safe to assume the number is positive, it's shown with no
+sign, but when it’s safe to assume the number is positive, it’s shown with no
 sign. Signed numbers are stored using two’s complement representation (if
-you're unsure what this is you can search for it online; an explanation is
+you’re unsure what this is you can search for it online; an explanation is
 outside the scope of this text).</p>
 <p>Each signed variant can store numbers from -(2<sup>n - 1</sup>) to 2<sup>n -
 1</sup> - 1 inclusive, where <code>n</code> is the number of bits that variant uses. So an
@@ -1530,7 +1530,7 @@ outside the scope of this text).</p>
 to 127. Unsigned variants can store numbers from 0 to 2<sup>n</sup> - 1, so a
 <code>u8</code> can store from 0 to 2<sup>8</sup> - 1, which equals 0 to 255.</p>
 <p>Finally, the <code>isize</code> and <code>usize</code> types depend on the kind of computer your
-program is running on: 64-bits if you're on a 64-bit architecture, and 32-bits
+program is running on: 64-bits if you’re on a 64-bit architecture, and 32-bits
 if you’re on a 32-bit architecture.</p>
 <p>You can write integer literals in any of the forms shown in Table 3-2. Note that
 all number literals except for the byte literal allow a type suffix, such as
@@ -1543,13 +1543,13 @@ all number literals except for the byte literal allow a type suffix, such as
 <tr><td> Byte (<code>u8</code> only) </td><td> <code>b'A'</code>        </td></tr>
 </table>
 <p><em>Table 3-2: Integer literals in Rust.</em></p>
-<p>So how do you know which type of integer to use? If you're unsure, Rust's
+<p>So how do you know which type of integer to use? If you’re unsure, Rust’s
 defaults are generally good choices, and integer types default to <code>i32</code>: it’s
 generally the fastest, even on 64-bit systems. The primary situation in which
-you'd use <code>isize</code> or <code>usize</code> is when indexing some sort of collection.</p>
+you’d use <code>isize</code> or <code>usize</code> is when indexing some sort of collection.</p>
 <h4>Floating-Point Types</h4>
 <p>Rust also has two primitive types for <em>floating-point numbers</em>, which are
-numbers with decimal points. Rust's floating-point types are <code>f32</code> and <code>f64</code>,
+numbers with decimal points. Rust’s floating-point types are <code>f32</code> and <code>f64</code>,
 which are 32 bits and 64 bits in size, respectively. The default type is <code>f64</code>,
 as it’s roughly the same speed as <code>f32</code>, but has a larger precision. It is
 possible to use an <code>f64</code> on 32 bit systems, but it will be slower than using an
@@ -1557,7 +1557,7 @@ possible to use an <code>f64</code> on 32 bit systems, but it will be slower tha
 for better precision is a reasonable initial choice, and you should benchmark
 your code if you suspect floating-point size is a problem in your case. See
 Chapter XX for how to run benchmarks.</p>
-<p>Here's an example showing floating-point numbers in action:</p>
+<p>Here’s an example showing floating-point numbers in action:</p>
 <p>Filename: src/main.rs</p>
 <pre><code class="language-rust">fn main() {
     let x = 2.0; // f64
@@ -1570,7 +1570,7 @@ Chapter XX for how to run benchmarks.</p>
 <h4>Numeric Operations</h4>
 <p>Rust supports the usual basic mathematic operations you’d expect for all of
 these number types: addition, subtraction, multiplication, division, and
-remainder. This code shows how you'd use each one in a <code>let</code> statement:</p>
+remainder. This code shows how you’d use each one in a <code>let</code> statement:</p>
 <p>Filename: src/main.rs</p>
 <pre><code class="language-rust">fn main() {
     // addition
@@ -1604,11 +1604,11 @@ For example:</p>
 }
 </code></pre>
 <p>The main way to consume boolean values is through conditionals like an <code>if</code>
-statement. We’ll cover how <code>if</code> statements work in Rust in the &quot;Control Flow&quot;
+statement. We’ll cover how <code>if</code> statements work in Rust in the “Control Flow”
 section of this chapter.</p>
 <h4>The Character Type</h4>
 <p>So far we’ve only worked with numbers, but Rust supports letters too. Rust’s
-<code>char</code> type is the language's most primitive alphabetic type, and this code
+<code>char</code> type is the language’s most primitive alphabetic type, and this code
 shows one way to use it:</p>
 <p>Filename: src/main.rs</p>
 <pre><code class="language-rust">fn main() {
@@ -1621,9 +1621,9 @@ shows one way to use it:</p>
 represent a lot more than just ASCII. Accented letters, Chinese/Japanese/Korean
 ideographs, emoji, and zero width spaces are all valid <code>char</code>s in Rust. Unicode
 Scalar Values range from <code>U+0000</code> to <code>U+D7FF</code> and <code>U+E000</code> to <code>U+10FFFF</code>
-inclusive. A &quot;character&quot; isn’t really a concept in Unicode, however, so your
-human intuition for what a &quot;character&quot; is may not match up with what a <code>char</code>
-is in Rust. We'll discuss this in detail in the Strings section of Chapter 8.</p>
+inclusive. A “character” isn’t really a concept in Unicode, however, so your
+human intuition for what a “character” is may not match up with what a <code>char</code>
+is in Rust. We’ll discuss this in detail in the Strings section of Chapter 8.</p>
 <h3>Compound Types</h3>
 <p><em>Compound types</em> can group multiple values of other types into one type. Rust
 has two primitive compound types: tuples and arrays.</p>
@@ -1632,7 +1632,7 @@ has two primitive compound types: tuples and arrays.</p>
 distinct types into one compound type.</p>
 <p>We create a tuple by writing a comma-separated list of values inside
 parentheses. Each position in the tuple has a distinct type, and the types of
-the different values in the tuple do not have to be the same. We've added
+the different values in the tuple do not have to be the same. We’ve added
 optional type annotations in this example:</p>
 <p>Filename: src/main.rs</p>
 <pre><code class="language-rust">fn main() {
@@ -1687,13 +1687,13 @@ inside square brackets:</p>
 }
 </code></pre>
 <p>While arrays can be useful since they are a primitive type so using them can be
-very fast, they aren't as flexible as the vector type. The vector type is a
+very fast, they aren’t as flexible as the vector type. The vector type is a
 similar collection type provided by the standard library that <em>is</em> allowed to
-grow or shrink in size. If you're unsure whether to use an array or a vector,
-you should probably go with a vector, and we'll discuss them in more detail in
+grow or shrink in size. If you’re unsure whether to use an array or a vector,
+you should probably go with a vector, and we’ll discuss them in more detail in
 Chapter 8.</p>
 <p>An example of when we might want to use an array is storing the months of the
-year. It's very unlikely that our program will need to add or remove months, so
+year. It’s very unlikely that our program will need to add or remove months, so
 we can use an array since we know we will always have 12 items:</p>
 <pre><code class="language-rust">let months = [&quot;January&quot;, &quot;February&quot;, &quot;March&quot;, &quot;April&quot;, &quot;May&quot;, &quot;June&quot;, &quot;July&quot;,
               &quot;August&quot;, &quot;September&quot;, &quot;October&quot;, &quot;November&quot;, &quot;December&quot;];
@@ -1734,24 +1734,24 @@ note: Run with `RUST_BACKTRACE=1` for a backtrace.
 error: Process didn't exit successfully: `target/debug/arrays` (exit code: 101)
 </code></pre>
 <p>We can see that the compilation did not give us any errors, but we got a
-<em>runtime</em> error and our program didn't exit successfully. When we attempt to
-access an element using indexing, Rust will check that the index we've
+<em>runtime</em> error and our program didn’t exit successfully. When we attempt to
+access an element using indexing, Rust will check that the index we’ve
 specified is less than the array length. If the index is greater than the
-length, it will &quot;panic&quot;, which is what it's called when a Rust program exits
+length, it will <em>panic</em>, which is what it’s called when a Rust program exits
 with an error.</p>
 <p>This is our first example of Rust’s safety principles in action. In many
 low-level languages, this kind of check is not done, and when you provide an
 incorrect index, invalid memory can be accessed. Rust protects us against this
 kind of error by immediately exiting instead of allowing the memory access and
-continuing. We'll discuss more of Rust’s error handling in Chapter XX.</p>
+continuing. We’ll discuss more of Rust’s error handling in Chapter XX.</p>
 <h2>How Functions Work</h2>
 <p>Functions are pervasive in Rust code. We’ve already seen one of the most
 important functions in the language: the <code>main</code> function that’s the entry
-point of many programs. We've also seen the <code>fn</code> keyword, which allows us to
+point of many programs. We’ve also seen the <code>fn</code> keyword, which allows us to
 declare new functions.</p>
 <p>Rust code uses <em>snake case</em> as the conventional style for function and variable
 names. In snake case, all letters are lower case, and there are underscores
-separating words. Here's a program containing an example function definition:</p>
+separating words. Here’s a program containing an example function definition:</p>
 <p>Filename: src/main.rs</p>
 <pre><code class="language-rust">fn main() {
     println!(&quot;Hello, world!&quot;);
@@ -1827,7 +1827,7 @@ fn another_function(x: i32, y: i32) {
 type, but they just happen to be in this example. Our function then prints out
 the values of both of its arguments.</p>
 <p>Let’s try out this code. Replace the program currently in your <code>function</code>
-project's <code>main.rs</code> file with the example above, and run it as follows:</p>
+project’s <code>main.rs</code> file with the example above, and run it as follows:</p>
 <pre><code class="language-bash">$ cargo run
    Compiling functions v0.1.0 (file:///projects/functions)
      Running `target/debug/functions`
@@ -1838,16 +1838,16 @@ The value of y is: 6
 the two strings are printed with these values.</p>
 <h3>Function Bodies</h3>
 <p>Function bodies are made up of a series of statements optionally ending in an
-expression. So far, we've only seen functions without an ending expression, but
+expression. So far, we’ve only seen functions without an ending expression, but
 we have seen expressions as parts of statements. Since Rust is an
 expression-based language, this is an important distinction to understand.
-Other languages don't have the same distinctions, so let's look at what
+Other languages don’t have the same distinctions, so let’s look at what
 statements and expressions are and how their differences affect the bodies of
 functions.</p>
 <h4>Statements and Expressions</h4>
-<p>We've already been using both statements and expressions. <em>Statements</em> are
+<p>We’ve already been using both statements and expressions. <em>Statements</em> are
 instructions that perform some action and do not return a value. <em>Expressions</em>
-evaluate to a resulting value. Let's look at some examples.</p>
+evaluate to a resulting value. Let’s look at some examples.</p>
 <p>Creating a variable and assigning a value to it with the <code>let</code> keyword
 is a statement. In this example, <code>let y = 6;</code> is a statement:</p>
 <p>Filename: src/main.rs</p>
@@ -1876,7 +1876,7 @@ note: variable declaration using `let` is a statement
 error: aborting due to previous error
 error: Could not compile `functions`.
 </code></pre>
-<p>The <code>let y = 6</code> statement does not return a value, so there isn't anything for
+<p>The <code>let y = 6</code> statement does not return a value, so there isn’t anything for
 <code>x</code> to bind to. This is different than in other languages like C and Ruby where
 the assignment returns the value of the assignment. In those languages, we can
 write <code>x = y = 6</code> and have both <code>x</code> and <code>y</code> have the value <code>6</code>; that is not the
@@ -1904,7 +1904,7 @@ use to create new scopes, <code>{}</code>, is an expression, for example:</p>
 </code></pre>
 <!-- If we use wingding numbers to call out code, we might delete the
 repetition here and just use those numbers--that can help the flow of the text.
-I'm flagging this as a reminder for when we transfer to libreoffice -->
+I’m flagging this as a reminder for when we transfer to libreoffice -->
 <p>The expression:</p>
 <pre><code class="language-rust,ignore">{
     let x = 3;
@@ -1914,7 +1914,7 @@ I'm flagging this as a reminder for when we transfer to libreoffice -->
 <p>is a block that, in this case, evaluates to <code>4</code>, and then gets bound to
 <code>y</code> as part of the <code>let</code> statement.</p>
 <p>Note that the line containing <code>x + 1</code> does not have a semicolon at the end,
-unlike most of the lines we've seen up until now. This is the most important
+unlike most of the lines we’ve seen up until now. This is the most important
 distinction between expressions and statements to remember: statements end in
 semicolons while expressions do not. If you add a semicolon to the end of an
 expression, that will turn it into a statement, which will then not return a
@@ -1922,8 +1922,8 @@ value. Keep this in mind as we explore function return values and expressions.</
 <h3>Functions with Return Values</h3>
 <p>Functions can return values back to the code that calls them. We don’t name
 return values, but we do declare their type, after an arrow (<code>-&gt;</code>). In Rust,
-the &quot;return value of the function” is synonymous with the &quot;value of the final
-expression in the block of the body of a function.” Here's an example of a
+the “return value of the function” is synonymous with the “value of the final
+expression in the block of the body of a function.” Here’s an example of a
 function that returns a value:</p>
 <p>Filename: src/main.rs</p>
 <pre><code class="language-rust">fn five() -&gt; i32 {
@@ -1937,15 +1937,15 @@ fn main() {
 }
 </code></pre>
 <p>There are no function calls, macros, or even <code>let</code> statements in the <code>five</code>
-function: just the number <code>5</code> by itself. That's a perfectly valid function in
-Rust. Note the function's return type is specified, too, as <code>-&gt; i32</code>. Try
+function: just the number <code>5</code> by itself. That’s a perfectly valid function in
+Rust. Note the function’s return type is specified, too, as <code>-&gt; i32</code>. Try
 running this code, and the output should look like this:</p>
 <pre><code class="language-bash">$ cargo run
    Compiling functions v0.1.0 (file:///projects/functions)
      Running `target/debug/functions`
 The value of x is: 5
 </code></pre>
-<p>The <code>5</code> in <code>five</code> is the function's return value, which is why the return type
+<p>The <code>5</code> in <code>five</code> is the function’s return value, which is why the return type
 is <code>i32</code>. Let’s examine this in more detail. There are two important bits.
 First, the line <code>let x = five();</code> shows us using the return value of a function
 to initialize a variable.</p>
@@ -1955,7 +1955,7 @@ to initialize a variable.</p>
 <p>The second interesting bit is the <code>five</code> function itself. It requires no
 arguments and defines the type of the return value, but the body of the
 function is a lonely <code>5</code> with no semicolon because it is an expression whose
-value we want to return. Let's look at another example:</p>
+value we want to return. Let’s look at another example:</p>
 <p>Filename: src/main.rs</p>
 <pre><code class="language-rust">fn main() {
     let x = plus_one(5);
@@ -1996,7 +1996,7 @@ help: consider removing this semicolon:
 error: aborting due to previous error
 error: Could not compile `functions`.
 </code></pre>
-<p>The main error message, &quot;not all control paths return a value&quot;, reveals the
+<p>The main error message, “not all control paths return a value”, reveals the
 core of the issue with this code. The definition of the function <code>plus_one</code>
 says that it will return an <code>i32</code>, but statements don’t evaluate to a value.
 Therefore, nothing is returned, which contradicts the function definition and
@@ -2011,7 +2011,7 @@ useful. These notes are called <em>comments</em>.</p>
 <pre><code class="language-rust">// Hello, world.
 </code></pre>
 <p>In Rust, comments must start with two slashes and will last until the end of
-the line. For comments that extend beyond a single line, you'll need to
+the line. For comments that extend beyond a single line, you’ll need to
 include <code>//</code> on each line, like this:</p>
 <pre><code class="language-rust">// So we’re doing something complicated here, long enough that we need
 // multiple lines of comments to do it! Whew! Hopefully, this comment will
@@ -2039,8 +2039,8 @@ that let us control the flow of execution of our Rust code are <code>if</code> e
 and loops.</p>
 <h3><code>if</code> Expressions</h3>
 <p>An <code>if</code> expression allows us to branch our code depending on conditions. We
-provide a condition and then say, &quot;If this condition is met, run this
-block of code. If the condition is not met, do not run this block of code.&quot;</p>
+provide a condition and then say, “If this condition is met, run this
+block of code. If the condition is not met, do not run this block of code.”</p>
 <p>Let’s make a new project to explore <code>if</code>, called <code>branches</code>. In <code>src/main.rs</code>,
 put:</p>
 <p>Filename: src/main.rs</p>
@@ -2061,7 +2061,7 @@ if the condition is true goes immediately after the condition, inside curly
 braces. These blocks are sometimes called <em>arms</em>. We can optionally also
 include an <code>else</code> expression, which we have chosen to do here. This gives the
 program an alternative block of code to execute should the condition evaluate
-to false. If you don't give an <code>else</code> expression and the condition is false,
+to false. If you don’t give an <code>else</code> expression and the condition is false,
 the program will just skip the <code>if</code> block and move on to the next bit of code.</p>
 <p>Try running this code, and you should see output like this:</p>
 <pre><code class="language-bash">$ cargo run
@@ -2080,7 +2080,7 @@ condition was true
 condition was false
 </code></pre>
 <p>It’s also worth noting that the condition here <em>must</em> be a <code>bool</code>. To see what
-happens if the condition isn't a <code>bool</code>, try running this code:</p>
+happens if the condition isn’t a <code>bool</code>, try running this code:</p>
 <p>Filename: src/main.rs</p>
 <pre><code class="language-rust,ignore">fn main() {
     let number = 3;
@@ -2147,11 +2147,11 @@ number is divisible by 3
 <p>When this program executes, it will check each <code>if</code> expression in turn and
 execute the first body for which the condition holds true. Note that even
 though 6 is divisible by 2, we did not see the output <code>number is divisible by 2</code>, nor did we see the <code>number is not divisible by 4, 3, or 2</code> text from the
-<code>else</code> block. That's because Rust will only execute the block for the first
-true condition, and once it finds one, it won't even check the rest.</p>
+<code>else</code> block. That’s because Rust will only execute the block for the first
+true condition, and once it finds one, it won’t even check the rest.</p>
 <p>Using too many <code>else if</code> expressions can clutter your code, so if you find
 yourself with more than one, you may want to look at refactoring your code. In
-Chapter 6, we'll talk about a powerful Rust branching construct called <code>match</code>
+Chapter 6, we’ll talk about a powerful Rust branching construct called <code>match</code>
 for these cases.</p>
 <h4>Using <code>if</code> in a <code>let</code> statement</h4>
 <p>The last detail you need to know about <code>if</code> is that it’s an expression. That
@@ -2216,7 +2216,7 @@ error: Could not compile `branches`.
 the <code>else</code> block evaluates to a string. This can’t work, because variables
 must have a single type. Rust needs to know at compile time what type
 the <code>number</code> variable is, definitively, so that it can verify at compile time
-that its type is valid everywhere we use <code>number</code>. Rust wouldn't be able to do
+that its type is valid everywhere we use <code>number</code>. Rust wouldn’t be able to do
 that if the type of <code>number</code> was only determined at runtime; the compiler would
 be more complex and be able to make fewer guarantees about our code if it had
 to keep track of multiple hypothetical types for any variable.</p>
@@ -2251,7 +2251,7 @@ again!
 again!
 ^Cagain!
 </code></pre>
-<p>That <code>^C</code> there is where we hit <code>control-c</code>. You may or may not see &quot;again!&quot;
+<p>That <code>^C</code> there is where we hit <code>control-c</code>. You may or may not see <code>again!</code>
 printed after the <code>^C</code>, depending on where the code was in the loop when it
 received the signal to halt.</p>
 <p>Fortunately, Rust provides another, more reliable way to break out of a loop.
@@ -2260,13 +2260,13 @@ stop executing the loop. Recall that we did this in the guessing game in
 Chapter 2 to exit the program when the user won the game by guessing the number
 correctly.</p>
 <h4>Conditional Loops With <code>while</code></h4>
-<p>It's often useful for a program to have a condition that can be evaluated
+<p>It’s often useful for a program to have a condition that can be evaluated
 within a loop. While the condition is true, the loop runs. When the condition
 ceases to be true, we call <code>break</code>, stopping the loop. This could be
 implemented with a combination of <code>loop</code>, <code>if</code>, <code>else</code>, and <code>break</code>; you could
-try that now in a program, if you'd like.</p>
+try that now in a program, if you’d like.</p>
 <p>But this pattern is so common that Rust has a more efficient language construct
-for it, called a <code>while</code> loop. Here's an example using <code>while</code>: this program
+for it, called a <code>while</code> loop. Here’s an example using <code>while</code>: this program
 loops three times, counting down each time. Finally, after the loop, it prints
 another message, then exits:</p>
 <p>Filename: src/main.rs</p>
@@ -2283,7 +2283,7 @@ another message, then exits:</p>
 }
 </code></pre>
 <p>This gets rid of a lot of nesting that would be necessary if we used <code>loop</code>,
-<code>if</code>, <code>else</code>, and <code>break</code>, and it's more clear. While a condition holds, run
+<code>if</code>, <code>else</code>, and <code>break</code>, and it’s more clear. While a condition holds, run
 this code; otherwise, exit the loop.</p>
 <h4>Looping Through a Collection with <code>for</code></h4>
 <p>We could use this <code>while</code> construct to loop over the elements of a collection,
@@ -2300,7 +2300,7 @@ like an array. For example:</p>
     }
 }
 </code></pre>
-<p>Here, we're counting up through the elements in the array. We start at index 0,
+<p>Here, we’re counting up through the elements in the array. We start at index 0,
 then loop until we hit the final index of our array (that is, when <code>index &lt; 5</code>
 is no longer true). Running this will print out every element of the array:</p>
 <pre><code class="language-bash">$ cargo run
@@ -2316,7 +2316,7 @@ the value is: 50
 will reach a value of <code>6</code> at some point, the loop stops executing before trying
 to fetch a sixth value from the array.</p>
 <p>This approach is error-prone, though; we could cause our program to panic by
-getting the index length incorrect. It's also slow, as the compiler needs to
+getting the index length incorrect. It’s also slow, as the compiler needs to
 perform the conditional check on every element on every iteration through the
 loop.</p>
 <p>As a more efficient alternative, we can use a <code>for</code> loop and execute some code
@@ -2330,15 +2330,15 @@ for each item in a collection. A <code>for</code> loop looks like this:</p>
     }
 }
 </code></pre>
-<p>If we run this, we'll see the same output as the previous example. Importantly,
-though, we've now increased the safety of our code and eliminated the chance of
+<p>If we run this, we’ll see the same output as the previous example. Importantly,
+though, we’ve now increased the safety of our code and eliminated the chance of
 bugs that might result from going beyond the end of the array or not going far
 enough and missing some items.</p>
 <p>For example, in the previous code that uses the <code>while</code> loop, if we removed an
 item from the <code>a</code> array but forgot to update the condition to <code>while index &lt; 4</code>, our code would panic. Using the <code>for</code> loop means we would not need to
 remember to change any other code if we changed the number of values in the
 array.</p>
-<p>If you're wondering about the <code>iter</code> code in this example, keep reading! We
+<p>If you’re wondering about the <code>iter</code> code in this example, keep reading! We
 will cover method syntax generally in Chapter XX and iterators specifically in
 Chapter XX.</p>
 <p>The safety and conciseness of <code>for</code> loops make them the most commonly used loop
@@ -2347,8 +2347,8 @@ number of times, like our countdown example that used a <code>while</code> loop,
 Rustaceans would use a <code>for</code> loop. The way to do that would be to use a
 <code>Range</code>, which is a type provided by the standard library that generates all
 numbers in sequence starting from one number and ending before another number.</p>
-<p>Here's what the countdown would look like with a for loop, and using another
-method we haven't yet talked about, <code>rev</code>, to reverse the range:</p>
+<p>Here’s what the countdown would look like with a for loop, and using another
+method we haven’t yet talked about, <code>rev</code>, to reverse the range:</p>
 <p>Filename: src/main.rs</p>
 <pre><code class="language-rust">fn main() {
     for number in (1..4).rev() {
@@ -2357,10 +2357,10 @@ method we haven't yet talked about, <code>rev</code>, to reverse the range:</p>
     println!(&quot;LIFTOFF!!!&quot;);
 }
 </code></pre>
-<p>That's a bit nicer, isn't it?</p>
+<p>That’s a bit nicer, isn’t it?</p>
 <h2>Summary</h2>
 <p>You made it! That was a big chapter: we covered variables, scalar and
-compound data types, functions, comments, <code>if</code> expressions, and loops! If you'd
+compound data types, functions, comments, <code>if</code> expressions, and loops! If you’d
 like to get some practice with the concepts in this chapter, try building
 programs to do things like:</p>
 <ul>
@@ -2369,18 +2369,18 @@ programs to do things like:</p>
 <li>Print the lyrics to the Christmas carol <em>The Twelve Days of Christmas</em>,
 taking advantage of the repetition in the song.</li>
 </ul>
-<p>When you're ready to move on, we'll talk about a concept in Rust that <em>doesn't</em>
+<p>When you’re ready to move on, we’ll talk about a concept in Rust that <em>doesn’t</em>
 commonly exist in other programming languages: ownership.</p>
 <h1>Understanding Ownership</h1>
-<p>Ownership is Rust's most unique feature and enables Rust to make memory safety
-guarantees without needing a garbage collector. It's therefore important to
-understand how ownership works in Rust. In this chapter we'll talk about
+<p>Ownership is Rust’s most unique feature, and enables Rust to make memory safety
+guarantees without needing a garbage collector. It’s therefore important to
+understand how ownership works in Rust. In this chapter we’ll talk about
 ownership as well as several related features: borrowing, slices, and how Rust
 lays things out in memory.</p>
 <h2>Ownership</h2>
 <p>Rust’s central feature is <em>ownership</em>. It is a feature that is straightforward
 to explain, but has deep implications for the rest of the language.</p>
-<p>All programs have to manage the way they use a computer's memory while running.
+<p>All programs have to manage the way they use a computer’s memory while running.
 Some languages have garbage collection, while in others, the programmer has to
 explicitly allocate and free the memory. Rust takes a third approach: memory is
 managed through a system of ownership with a set of rules that the compiler
@@ -2388,18 +2388,18 @@ checks at compile-time. You do not pay any run-time cost for any of these
 features.</p>
 <p>Since ownership is a new concept for many programmers, it does take
 some time to get used to. There is good news, though: the more experienced you
-become with Rust and the rules of the ownership system, the more you'll be
+become with Rust and the rules of the ownership system, the more you’ll be
 able to naturally develop code that is both safe and efficient. Keep at it!</p>
 <p>Once you understand ownership, you have a good foundation for understanding the
-features that make Rust unique. In this chapter, we'll learn ownership by going
+features that make Rust unique. In this chapter, we’ll learn ownership by going
 through some examples, focusing on a very common data structure: strings.</p>
 <!-- PROD: START BOX -->
 <blockquote>
 <h4>The Stack and the Heap</h4>
-<p>In many programming languages, we don't have to think about the stack and the
+<p>In many programming languages, we don’t have to think about the stack and the
 heap very often. But in a systems programming language like Rust, whether a
 value is on the stack or the heap has more of an effect on how the language
-behaves and why we have to make certain decisions. We're going to be
+behaves and why we have to make certain decisions. We’re going to be
 describing parts of ownership in relation to the stack and the heap, so here
 is a brief explanation.</p>
 <p>Both the stack and the heap are parts of memory that is available to your code
@@ -2408,7 +2408,7 @@ values in the order it gets them and removes the values in the opposite order.
 This is referred to as <em>last in, first out</em>. Think of a stack of plates: when
 you add more plates, you put them on top of the pile, and when you need a
 plate, you take one off the top. Adding or removing plates from the middle or
-bottom wouldn't work as well! Adding data is called <em>pushing onto the stack</em>
+bottom wouldn’t work as well! Adding data is called <em>pushing onto the stack</em>
 and removing data is called <em>popping off the stack</em>.</p>
 <p>The stack is fast because of the way it accesses the data: it never has to
 look around for a place to put new data or a place to get data from; that
@@ -2419,7 +2419,7 @@ change, we can store data on the heap instead. The heap is less organized:
 when we put data on the heap, we ask for some amount of space. The operating
 system finds an empty spot somewhere in the heap that is big enough, marks it
 as being in use, and returns to us a pointer to that location. This process
-is called <em>allocating on the heap</em>, and sometimes we just say &quot;allocating&quot;
+is called <em>allocating on the heap</em>, and sometimes we just say <em>allocating</em>
 for short. Pushing values onto the stack is not considered allocating. Since
 the pointer is a known, fixed size, we can store the pointer on the stack,
 but when we want the actual data, we have to follow the pointer.</p>
@@ -2430,19 +2430,19 @@ you have been seated to find you.</p>
 <p>Accessing data in the heap is slower because we have to follow a pointer to
 get there. Allocating a large amount of space can also take time.</p>
 <p>When our code calls a function, the values passed into the function
-(including, potentially, pointers to data on the heap) and the function's
+(including, potentially, pointers to data on the heap) and the function’s
 local variables get pushed onto the stack. When the function is over, those
 values get popped off the stack.</p>
 <p>Keeping track of what parts of code are using what data on the heap,
 minimizing the amount of duplicate data on the heap, and cleaning up unused
-data on the heap so that we don't run out of space are all problems that
-ownership addresses. Once you understand ownership, you won't need to think
+data on the heap so that we don’t run out of space are all problems that
+ownership addresses. Once you understand ownership, you won’t need to think
 about the stack and the heap very often, but knowing that managing heap data
 is why ownership exists can help explain why it works the way it does.</p>
 </blockquote>
 <!-- PROD: END BOX -->
 <h3>Ownership Rules</h3>
-<p>First, let's take a look at the rules. Keep these in mind as we go through the
+<p>First, let’s take a look at the rules. Keep these in mind as we go through the
 examples that will illustrate the rules:</p>
 <blockquote>
 <ol>
@@ -2452,14 +2452,14 @@ examples that will illustrate the rules:</p>
 </ol>
 </blockquote>
 <h3>Variable Scope</h3>
-<p>We've walked through an example of a Rust program already in the tutorial
+<p>We’ve walked through an example of a Rust program already in the tutorial
 chapter. Now that we’re past basic syntax, we won’t include all of the <code>fn main() {</code> stuff in examples, so if you’re following along, you will have to put
 the following examples inside of a <code>main</code> function yourself. This lets our
 examples be a bit more concise, letting us focus on the actual details rather
 than boilerplate.</p>
-<p>As a first example of ownership, we'll look at the <em>scope</em> of some variables.
+<p>As a first example of ownership, we’ll look at the <em>scope</em> of some variables.
 A scope is the range within a program for which an item is valid.
-Let's say we have a variable that looks like this:</p>
+Let’s say we have a variable that looks like this:</p>
 <pre><code class="language-rust">let s = &quot;hello&quot;;
 </code></pre>
 <p>The variable <code>s</code> refers to a string literal, where the value of the
@@ -2480,15 +2480,15 @@ the point at which it’s declared until the end of the current <em>scope</em>. 
 build on top of this understanding by introducing the <code>String</code> type.</p>
 <h3>The <code>String</code> Type</h3>
 <p>In order to illustrate the rules of ownership, we need a data type that is more
-complex than the ones we covered in Chapter 3. All of the data types we've
+complex than the ones we covered in Chapter 3. All of the data types we’ve
 looked at previously are stored on the stack and popped off the stack when
 their scope is over, but we want to look at data that is stored on the heap and
 explore how Rust knows when to clean that data up.</p>
-<p>We're going to use <code>String</code> as the example here and concentrate on the parts of
+<p>We’re going to use <code>String</code> as the example here and concentrate on the parts of
 <code>String</code> that relate to ownership. These aspects also apply to other complex
-data types provided by the standard library and that you create. We'll go into
+data types provided by the standard library and that you create. We’ll go into
 more depth about <code>String</code> specifically in Chapter XX.</p>
-<p>We've already seen string literals, where a string value is hard-coded into our
+<p>We’ve already seen string literals, where a string value is hard-coded into our
 program. String literals are convenient, but they aren’t always suitable for
 every situation you want to use text. For one thing, they’re immutable. For
 another, not every string value can be known when we write our code: what if we
@@ -2531,9 +2531,9 @@ done with our <code>String</code>.</li>
 implementation requests the memory it needs. This is pretty much universal in
 programming languages.</p>
 <p>The second case, however, is different. In languages with a <em>garbage collector</em>
-(GC), the GC will keep track and clean up memory that isn't being used anymore,
+(GC), the GC will keep track and clean up memory that isn’t being used anymore,
 and we, as the programmer, don’t need to think about it. Without GC, it’s the
-programmer's responsibility to identify when memory is no longer being used and
+programmer’s responsibility to identify when memory is no longer being used and
 call code to explicitly return it, just as we did to request it. Doing this
 correctly has historically been a difficult problem in programming. If we
 forget, we will waste memory. If we do it too early, we will have an invalid
@@ -2566,7 +2566,7 @@ when we want to have multiple variables use the data that we have
 allocated on the heap. Let’s go over some of those situations now.</p>
 <h4>Ways Variables and Data Interact: Move</h4>
 <p>There are different ways that multiple variables can interact with the same data
-in Rust. Let's take an example using an integer:</p>
+in Rust. Let’s take an example using an integer:</p>
 <pre><code class="language-rust">let x = 5;
 let y = x;
 </code></pre>
@@ -2581,27 +2581,27 @@ let s2 = s1;
 </code></pre>
 <p>This looks very similar to the previous code, so we might assume that the way
 it works would be the same: that the second line would make a copy of the value
-in <code>s1</code> and bind it to <code>s2</code>. This isn't quite what happens.</p>
+in <code>s1</code> and bind it to <code>s2</code>. This isn’t quite what happens.</p>
 <p>To explain this more thoroughly, let’s take a look at what <code>String</code> looks like
 under the covers in Figure 4-1. A <code>String</code> is made up of three parts, shown on
 the left: a pointer to the memory that holds the contents of the string, a
 length, and a capacity. This group of data is stored on the stack. On the right
 is the memory that holds the contents, and this is on the heap.</p>
 <p><img alt="String in memory" src="img/trpl04-01.svg" class="center" style="width: 50%;" /></p>
-<p>Figure 4-1: Representation in memory of a <code>String</code> holding the value &quot;hello&quot;
+<p>Figure 4-1: Representation in memory of a <code>String</code> holding the value <code>&quot;hello&quot;</code>
 bound to <code>s1</code></p>
 <p>The length is how much memory, in bytes, the contents of the <code>String</code> is
 currently using. The capacity is the total amount of memory, in bytes, that the
 <code>String</code> has gotten from the operating system. The difference between length
-and capacity matters but not in this context, so for now, it's fine to ignore
+and capacity matters but not in this context, so for now, it’s fine to ignore
 the capacity.</p>
 <p>When we assign <code>s1</code> to <code>s2</code>, the <code>String</code> data itself is copied, meaning we
 copy the pointer, the length, and the capacity that are on the stack. We do not
-copy the data on the heap that the <code>String</code>'s pointer refers to. In other
+copy the data on the heap that the <code>String</code>’s pointer refers to. In other
 words, it looks like figure 4-2.</p>
 <p><img alt="s1 and s2 pointing to the same value" src="img/trpl04-02.svg" class="center" style="width: 50%;" /></p>
 <p>Figure 4-2: Representation in memory of the variable <code>s2</code> that has a copy of
-<code>s1</code>'s pointer, length and capacity</p>
+<code>s1</code>’s pointer, length and capacity</p>
 <p>And <em>not</em> Figure 4-3, which is what memory would look like if Rust instead
 copied the heap data as well. If Rust did this, the operation <code>s2 = s1</code> could
 potentially be very expensive if the data on the heap was large.</p>
@@ -2615,7 +2615,7 @@ a problem: when <code>s2</code> and <code>s1</code> go out of scope, they will b
 same memory. This is known as a <em>double free</em> error and is one of the memory
 safety bugs we mentioned before. Freeing memory twice can lead to memory
 corruption, which can potentially lead to security vulnerabilities.</p>
-<p>In order to ensure memory safety, there's one more detail to what happens in
+<p>In order to ensure memory safety, there’s one more detail to what happens in
 this situation in Rust. Instead of trying to copy the allocated memory, Rust
 says that <code>s1</code> is no longer valid and, therefore, doesn’t need to free anything
 when it goes out of scope. Check out what happens when you try to use <code>s1</code>
@@ -2634,18 +2634,18 @@ println!(&quot;{}&quot;, s1);
  let s2 = s1;
      ^~
 </code></pre>
-<p>If you have heard the terms &quot;shallow copy&quot; and &quot;deep copy&quot; while working with
+<p>If you have heard the terms “shallow copy” and “deep copy” while working with
 other languages, the concept of copying the pointer, length, and capacity
 without copying the data probably sounds like a shallow copy. But because Rust
 also invalidates the first variable, instead of calling this a shallow copy,
-it's known as a <em>move</em>. Here we would read this by saying that <code>s1</code> was <em>moved</em>
+it’s known as a <em>move</em>. Here we would read this by saying that <code>s1</code> was <em>moved</em>
 into <code>s2</code>. So what actually happens looks like Figure 4-4.</p>
 <p><img alt="s1 moved to s2" src="img/trpl04-04.svg" class="center" style="width: 50%;" /></p>
 <p>Figure 4-4: Representation in memory after <code>s1</code> has been invalidated</p>
 <p>That solves our problem! With only <code>s2</code> valid, when it goes out of scope, it
 alone will free the memory, and we’re done.</p>
 <p>Furthermore, there’s a design choice that’s implied by this: Rust will never
-automatically create &quot;deep&quot; copies of your data. Therefore, any <em>automatic</em>
+automatically create “deep” copies of your data. Therefore, any <em>automatic</em>
 copying can be assumed to be inexpensive.</p>
 <h4>Ways Variables and Data Interact: Clone</h4>
 <p>If we <em>do</em> want to deeply copy the <code>String</code>’s data and not just the <code>String</code>
@@ -2672,16 +2672,16 @@ let y = x;
 
 println!(&quot;x = {}, y = {}&quot;, x, y);
 </code></pre>
-<p>This seems to contradict what we just learned: we don't have a call to
-<code>clone</code>, but <code>x</code> is still valid, and wasn't moved into <code>y</code>.</p>
+<p>This seems to contradict what we just learned: we don’t have a call to <code>clone</code>,
+but <code>x</code> is still valid, and wasn’t moved into <code>y</code>.</p>
 <p>This is because types like integers that have a known size at compile time are
 stored entirely on the stack, so copies of the actual values are quick to make.
-That means there's no reason we would want to prevent <code>x</code> from being valid
+That means there’s no reason we would want to prevent <code>x</code> from being valid
 after we create the variable <code>y</code>. In other words, there’s no difference between
 deep and shallow copying here, so calling <code>clone</code> wouldn’t do anything
 differently from the usual shallow copying and we can leave it out.</p>
 <p>Rust has a special annotation called the <code>Copy</code> trait that we can place on
-types like these (we'll talk more about traits in Chapter XX). If a type has
+types like these (we’ll talk more about traits in Chapter XX). If a type has
 the <code>Copy</code> trait, an older variable is still usable after assignment. Rust will
 not let us annotate a type with the <code>Copy</code> trait if the type, or any of its
 parts, has implemented <code>drop</code>. If the type needs something special to happen
@@ -2707,7 +2707,7 @@ go into and out of scope:</p>
 <pre><code class="language-rust">fn main() {
     let s = String::from(&quot;hello&quot;);  // s comes into scope.
 
-    takes_ownership(s);             // s's value moves into the function...
+    takes_ownership(s);             // s’s value moves into the function...
                                     // ... and so is no longer valid here.
     let x = 5;                      // x comes into scope.
 
@@ -2715,7 +2715,7 @@ go into and out of scope:</p>
                                     // but i32 is Copy, so it’s okay to still
                                     // use x afterward.
 
-} // Here, x goes out of scope, then s. But since s's value was moved, nothing
+} // Here, x goes out of scope, then s. But since s’s value was moved, nothing
   // special happens.
 
 fn takes_ownership(some_string: String) { // some_string comes into scope.
@@ -2732,7 +2732,8 @@ would throw a compile-time error. These static checks protect us from mistakes.
 Try adding code to <code>main</code> that uses <code>s</code> and <code>x</code> to see where you can use them
 and where the ownership rules prevent you from doing so.</p>
 <h3>Return Values and Scope</h3>
-<p>Returning values can also transfer ownership. Here's an example with similar annotations:</p>
+<p>Returning values can also transfer ownership. Here’s an example with similar
+annotations:</p>
 <p>Filename: src/main.rs</p>
 <pre><code class="language-rust">fn main() {
     let s1 = gives_ownership();         // gives_ownership moves its return
@@ -2764,7 +2765,7 @@ fn takes_and_gives_back(a_string: String) -&gt; String { // a_string comes into 
 }
 </code></pre>
 <p>It’s the same pattern, every time: assigning a value to another variable moves
-it, and when heap data values' variables go out of scope, if the data hasn’t
+it, and when heap data values’ variables go out of scope, if the data hasn’t
 been moved to be owned by another variable, the value will be cleaned up by
 <code>drop</code>.</p>
 <p>Taking ownership then returning ownership with every function is a bit tedious.
@@ -2838,13 +2839,13 @@ a reference as an argument. Let’s add some explanatory annotations:</p>
   // it refers to, nothing happens.
 </code></pre>
 <p>It’s the same process as before, but we don’t drop what the reference points to
-when it goes out of scope because we don't have ownership. This lets us write
+when it goes out of scope because we don’t have ownership. This lets us write
 functions which take references as arguments instead of the values themselves,
 so that we won’t need to return them to give back ownership.</p>
 <p>We call this process <em>borrowing</em>. Just like with real life, if a person owns
 something, you can borrow it from them, and when you’re done, you have to give
 it back.</p>
-<p>So what happens if we try to modify something we're borrowing? Try this code
+<p>So what happens if we try to modify something we’re borrowing? Try this code
 out. Spoiler alert: it doesn’t work!</p>
 <p>Filename: src/main.rs</p>
 <pre><code class="language-rust,ignore">fn main() {
@@ -2907,10 +2908,10 @@ mutate whenever you’d like. The benefit of having this restriction is that Rus
 can prevent data races at compile time. A <em>data race</em> is a particular type of
 race condition where two or more pointers access the same data at the same
 time, at least one of the pointers is being used to write to the data, and
-there's no mechanism being used to synchronize access to the data. Data races
+there’s no mechanism being used to synchronize access to the data. Data races
 cause undefined behavior and can be difficult to diagnose and fix when trying
 to track them down at runtime; Rust prevents this problem from happening since
-it won't even compile code with data races!</p>
+it won’t even compile code with data races!</p>
 <p>As always, we can use <code>{}</code>s to create a new scope, allowing for multiple mutable
 references, just not <em>simultaneous</em> ones:</p>
 <pre><code class="language-rust">let mut s = String::from(&quot;hello&quot;);
@@ -2945,14 +2946,14 @@ let r3 = &amp;mut s; // BIG PROBLEM
 <p>Whew! We <em>also</em> cannot have a mutable reference while we have an immutable one.
 Users of an immutable reference don’t expect the values to suddenly change out
 from under them! Multiple immutable references are okay, however, since no one
-who is just reading the data has the ability to affect anyone else's reading of
+who is just reading the data has the ability to affect anyone else’s reading of
 the data.</p>
-<p>Even though these errors may be frustrating at times, remember that it's the
+<p>Even though these errors may be frustrating at times, remember that it’s the
 Rust compiler pointing out a potential bug earlier (at compile time rather than
 at runtime) and showing you exactly where the problem is instead of you having
-to track down why sometimes your data isn't what you thought it should be.</p>
+to track down why sometimes your data isn’t what you thought it should be.</p>
 <h3>Dangling References</h3>
-<p>In languages with pointers, it's easy to make the error of creating a <em>dangling
+<p>In languages with pointers, it’s easy to make the error of creating a <em>dangling
 pointer</em>, a pointer referencing a location in memory that may have been given
 to someone else, by freeing some memory while keeping around a pointer to that
 memory. In Rust, by contrast, the compiler guarantees that references will
@@ -2985,10 +2986,10 @@ fn dangle() -&gt; &amp;String {
 error: aborting due to previous error
 </code></pre>
 <p>This error message refers to a feature we haven’t learned about yet:
-<em>lifetimes</em>. We'll discuss lifetimes in detail in Chapter XX, but, disregarding
+<em>lifetimes</em>. We’ll discuss lifetimes in detail in Chapter XX, but, disregarding
 the parts about lifetimes, the message does contain the key to why this code is
 a problem: <code>this function’s return type contains a borrowed value, but there is no value for it to be borrowed from</code>.</p>
-<p>Let’s have a closer look at exactly what's happening at each stage of our
+<p>Let’s have a closer look at exactly what’s happening at each stage of our
 <code>dangle</code> code:</p>
 <pre><code class="language-rust,ignore">fn dangle() -&gt; &amp;String { // dangle returns a reference to a String
 
@@ -3021,7 +3022,7 @@ no good. Rust won’t let us do this.</p>
 </li>
 <li>References must always be valid.</li>
 </ol>
-<p>Next, let's look at a different kind of reference: slices.</p>
+<p>Next, let’s look at a different kind of reference: slices.</p>
 <h2>Slices</h2>
 <p>There is another data type which does not have ownership: slices. Slices let
 you reference a contiguous sequence of elements in a collection rather than the
@@ -3102,12 +3103,12 @@ fn main() {
 
     s.clear(); // This empties the String, making it equal to &quot;&quot;.
 
-    // word still has the value 5 here, but there's no more string that
+    // word still has the value 5 here, but there’s no more string that
     // we could meaningfully use the value 5 with. word is now totally invalid!
 }
 </code></pre>
 <p>This program compiles without any errors, and also would if we used <code>word</code>
-after calling <code>s.clear()</code>. <code>word</code> isn't connected to the state of <code>s</code> at all,
+after calling <code>s.clear()</code>. <code>word</code> isn’t connected to the state of <code>s</code> at all,
 so <code>word</code> still contains the value <code>5</code>. We could use that <code>5</code> with <code>s</code> to try
 to extract the first word out, but this would be a bug since the contents of
 <code>s</code> have changed since we saved <code>5</code> in <code>word</code>.</p>
@@ -3116,7 +3117,7 @@ function. Its signature would have to look like this:</p>
 <pre><code class="language-rust,ignore">fn second_word(s: &amp;String) -&gt; (usize, usize) {
 </code></pre>
 <p>Now we’re tracking both a start <em>and</em> an ending index, and we have even more
-values that were calculated from data in a particular state but aren't tied to
+values that were calculated from data in a particular state but aren’t tied to
 that state at all. We now have three unrelated variables floating
 around which need to be kept in sync.</p>
 <p>Luckily, Rust has a solution to this problem: string slices.</p>
@@ -3165,7 +3166,7 @@ let slice = &amp;s[0..len];
 let slice = &amp;s[..];
 </code></pre>
 <p>With this in mind, let’s re-write <code>first_word</code> to return a slice. The type
-that signifies &quot;string slice&quot; is written as <code>&amp;str</code>:</p>
+that signifies “string slice” is written as <code>&amp;str</code>:</p>
 <p>Filename: src/main.rs</p>
 <pre><code class="language-rust">fn first_word(s: &amp;String) -&gt; &amp;str {
     let bytes = s.as_bytes();
@@ -3191,7 +3192,7 @@ the slice and the number of elements in the slice.</p>
 </code></pre>
 <p>We now have a straightforward API that’s much harder to mess up. Remember our
 bug from before, when we got the first word but then cleared the string so that
-our first word was invalid? That code was logically incorrect but didn't show
+our first word was invalid? That code was logically incorrect but didn’t show
 any immediate errors. The problems would show up later, if we kept trying to
 use the first word index with an emptied string. Slices make this bug
 impossible, and let us know we have a problem with our code much sooner. Using
@@ -3294,10 +3295,10 @@ when we talk about vectors in Chapter XX.</p>
 in Rust programs at compile time. Rust is a language that gives you control
 over your memory usage like other systems programming languages, but having the
 owner of data automatically clean up that data when the owner goes out of scope
-means you don't have to write and debug extra code to get this control.</p>
+means you don’t have to write and debug extra code to get this control.</p>
 <p>Ownership affects how lots of other parts of Rust work, so we will be talking
-about these concepts further throughout the rest of the book. Let's move on to
-the next chapter where we'll look at grouping pieces of data together in a
+about these concepts further throughout the rest of the book. Let’s move on to
+the next chapter where we’ll look at grouping pieces of data together in a
 <code>struct</code>.</p>
 <h1>Structs</h1>
 <p>A <code>struct</code>, short for <em>structure</em>, is a custom data type that lets us name and
