@@ -457,12 +457,12 @@ has two primitive compound types: tuples and arrays.
 #### Grouping Values into Tuples
 
 A tuple is a general way of grouping together some number of other values with
-distinct types into one compound type.
+a variety of types into one compound type.
 
 We create a tuple by writing a comma-separated list of values inside
-parentheses. Each position in the tuple has a distinct type, and the types of
-the different values in the tuple do not have to be the same. We’ve added
-optional type annotations in this example:
+parentheses. Each position in the tuple has a type, and the types of the
+different values in the tuple don’t have to be the same. We’ve added optional
+type annotations in this example:
 
 Filename: src/main.rs
 
