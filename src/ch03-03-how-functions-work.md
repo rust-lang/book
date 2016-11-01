@@ -35,7 +35,7 @@ have defined it before as well. Rust doesn’t care where you define your
 functions, only that they are defined somewhere.
 
 Let’s start a new binary project named `functions` so that we can explore
-further. Place the `another_function` example in `src/main.rs` and run it.
+further. Place the `another_function` example in *src/main.rs* and run it.
 You should see the following output:
 
 ```bash

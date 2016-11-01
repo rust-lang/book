@@ -9,9 +9,9 @@ want to opt out of that.
 
 Variables being immutable means once a value is bound, you can’t
 change that value. To illustrate this, let’s generate a new project in your
-projects directory called `variables` by using `cargo new --bin variables`.
+*projects* directory called `variables` by using `cargo new --bin variables`.
 
-Then, in your new `variables` directory, open `src/main.rs` and replace its code
+Then, in your new *variables* directory, open *src/main.rs* and replace its code
 with the following:
 
 Filename: src/main.rs
