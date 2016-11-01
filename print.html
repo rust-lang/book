@@ -1629,11 +1629,11 @@ is in Rust. We’ll discuss this in detail in the Strings section of Chapter 8.<
 has two primitive compound types: tuples and arrays.</p>
 <h4>Grouping Values into Tuples</h4>
 <p>A tuple is a general way of grouping together some number of other values with
-distinct types into one compound type.</p>
+a variety of types into one compound type.</p>
 <p>We create a tuple by writing a comma-separated list of values inside
-parentheses. Each position in the tuple has a distinct type, and the types of
-the different values in the tuple do not have to be the same. We’ve added
-optional type annotations in this example:</p>
+parentheses. Each position in the tuple has a type, and the types of the
+different values in the tuple don’t have to be the same. We’ve added optional
+type annotations in this example:</p>
 <p>Filename: src/main.rs</p>
 <pre><code class="language-rust">fn main() {
     let tup: (i32, f64, u8) = (500, 6.4, 1);
