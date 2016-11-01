@@ -1308,8 +1308,8 @@ explore how and why Rust encourages us to favor immutability, and why we might
 want to opt out of that.</p>
 <p>Variables being immutable means once a value is bound, you can’t
 change that value. To illustrate this, let’s generate a new project in your
-projects directory called <code>variables</code> by using <code>cargo new --bin variables</code>.</p>
-<p>Then, in your new <code>variables</code> directory, open <code>src/main.rs</code> and replace its code
+<em>projects</em> directory called <code>variables</code> by using <code>cargo new --bin variables</code>.</p>
+<p>Then, in your new <em>variables</em> directory, open <em>src/main.rs</em> and replace its code
 with the following:</p>
 <p>Filename: src/main.rs</p>
 <pre><code class="language-rust,ignore">fn main() {
@@ -1773,7 +1773,7 @@ called from inside the <code>main</code> function. Note that we defined
 have defined it before as well. Rust doesn’t care where you define your
 functions, only that they are defined somewhere.</p>
 <p>Let’s start a new binary project named <code>functions</code> so that we can explore
-further. Place the <code>another_function</code> example in <code>src/main.rs</code> and run it.
+further. Place the <code>another_function</code> example in <em>src/main.rs</em> and run it.
 You should see the following output:</p>
 <pre><code class="language-bash">$ cargo run
    Compiling functions v0.1.0 (file:///projects/functions)
@@ -2041,7 +2041,7 @@ and loops.</p>
 <p>An <code>if</code> expression allows us to branch our code depending on conditions. We
 provide a condition and then say, “If this condition is met, run this
 block of code. If the condition is not met, do not run this block of code.”</p>
-<p>Let’s make a new project to explore <code>if</code>, called <code>branches</code>. In <code>src/main.rs</code>,
+<p>Let’s make a new project to explore <code>if</code>, called <code>branches</code>. In <em>src/main.rs</em>,
 put:</p>
 <p>Filename: src/main.rs</p>
 <pre><code class="language-rust">fn main() {
