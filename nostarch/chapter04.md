@@ -9,13 +9,14 @@ understand how ownership works in Rust. In this chapter we’ll talk about
 ownership as well as several related features: borrowing, slices, and how Rust
 lays things out in memory.
 
-## Ownership
+## Ownership and Memory
 
 Rust’s central feature is *ownership*. It is a feature that is straightforward
 to explain, but has deep implications for the rest of the language.
 
 All programs have to manage the way they use a computer’s memory while running.
-Some languages have garbage collection, while in others, the programmer has to
+Some languages have garbage collection that’s constantly looking for no longer
+used memory as the program runs, while in others the programmer has to
 explicitly allocate and free the memory. Rust takes a third approach: memory is
 managed through a system of ownership with a set of rules that the compiler
 checks at compile-time. You do not pay any run-time cost for any of these
@@ -60,7 +61,7 @@ change, we can store data on the heap instead. The heap is less organized: when
 we put data on the heap, we ask for some amount of space. The operating system
 finds an empty spot somewhere in the heap that is big enough, marks it as being
 in use, and returns to us a pointer to that location. This process is called
-*allocating on the heap*, and sometimes we just say *allocating* for short.
+*allocating on the heap*, and sometimes we just say “allocating” for short.
 Pushing values onto the stack is not considered allocating. Since the pointer
 is a known, fixed size, we can store the pointer on the stack, but when we want
 the actual data, we have to follow the pointer.
@@ -71,7 +72,11 @@ and leads you there. If someone in your group comes late, they can ask where
 you have been seated to find you.
 
 Accessing data in the heap is slower because we have to follow a pointer to get
-there. Allocating a large amount of space can also take time.
+there. Modern processors are faster if they jump around less in memory, not
+unlike a waiter taking all orders at each table instead of going to all tables
+and taking one order from each, as both accessing memory at random and moving
+to another table take time and effort. Allocating a large amount of space can
+also take time.
 
 When our code calls a function, the values passed into the function (including,
 potentially, pointers to data on the heap) and the function’s local variables
@@ -80,7 +85,7 @@ off the stack.
 
 Keeping track of what parts of code are using what data on the heap, minimizing
 the amount of duplicate data on the heap, and cleaning up unused data on the
-heap so that we don’t run out of space are all problems that ownership
+heap so that we don’t run out of space - these are all problems that ownership
 addresses. Once you understand ownership, you won’t need to think about the
 stack and the heap very often, but knowing that managing heap data is why
 ownership exists can help explain why it works the way it does.
@@ -144,7 +149,7 @@ explore how Rust knows when to clean that data up.
 We’re going to use `String` as the example here and concentrate on the parts of
 `String` that relate to ownership. These aspects also apply to other complex
 data types provided by the standard library and that you create. We’ll go into
-more depth about `String` specifically in Chapter XX.
+more depth about `String` specifically in Chapter 8.
 
 We’ve already seen string literals, where a string value is hard-coded into our
 program. String literals are convenient, but they aren’t always suitable for
@@ -420,10 +425,10 @@ and nothing that requires allocation or is some form of resource is `Copy`.
 Here’s some of the types that are `Copy`:
 
 * All of the integer types, like `u32`.
-* The booleans, `true` and `false`.
+* The boolean type, `bool`, with values `true` and `false`.
 * All of the floating point types, like `f64`.
-* Tuples, but only if they contain types which are also `Copy`. `(i32, i32)`
-  is `Copy`, but `(i32, String)` is not.
+* Tuples, but only if they contain types which are also `Copy`. `(i32, i32)` is
+`Copy`, but `(i32, String)` is not.
 
 ### Ownership and Functions
 
@@ -794,8 +799,12 @@ error: aborting due to previous error
 This error message refers to a feature we haven’t learned about yet:
 *lifetimes*. We’ll discuss lifetimes in detail in Chapter XX, but, disregarding
 the parts about lifetimes, the message does contain the key to why this code is
-a problem: `this function’s return type contains a borrowed value, but there is
-no value for it to be borrowed from`.
+a problem:
+
+```
+this function’s return type contains a borrowed value, but there is no value
+for it to be borrowed from.
+```
 
 Let’s have a closer look at exactly what’s happening at each stage of our
 `dangle` code:
@@ -886,13 +895,13 @@ Since we need to go through the String element by element and check if a value
 is a space, we will convert our String to an array of bytes using the
 `as_bytes` method.
 
-```rust,ignore
+```
 for (i, &item) in bytes.iter().enumerate() {
 ```
 
 We will be discussing iterators in more detail in Chapter XX, but for now, know
 that `iter` is a method that returns each element in a collection, and
-`enumerate` modifies the result of `iter` and returns each element as part of a
+`enumerate` wraps the result of `iter` and returns each element as part of a
 tuple instead, where the first element of the tuple is the index, and the
 second element is a reference to the element itself. This is a bit nicer than
 calculating the index ourselves.
@@ -937,9 +946,9 @@ fn main() {
 
 This program compiles without any errors, and also would if we used `word`
 after calling `s.clear()`. `word` isn’t connected to the state of `s` at all,
-so `word` still contains the value `5`. We could use that `5` with `s` to try
-to extract the first word out, but this would be a bug since the contents of
-`s` have changed since we saved `5` in `word`.
+so `word` still contains the value `5`. We could use that value `5` with the
+variable `s` to try to extract the first word out, but this would be a bug
+since the contents of `s` have changed since we saved `5` in `word`.
 
 This is bad! It’s even worse if we wanted to write a `second_word` function.
 Its signature would have to look like this:
