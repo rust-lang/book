@@ -1,6 +1,6 @@
 ## The `Option` Enum and its Advantages Over Null Values
 
-In the previous section, we looked at how the `IpAddr` enum lets us use Rust's
+In the previous section, we looked at how the `IpAddr` enum let us use Rust's
 type system to encode more information than just the data into our program.
 This section is a case study of `Option`, which is another enum defined by the
 standard library. The `Option` type is used in many places because it encodes

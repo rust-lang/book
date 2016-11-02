@@ -195,7 +195,7 @@ already has the value "hello".
 
 #### Update a Value Based on the Old Value
 
-Another common use case for hash maps is to look up a key's value then update
+Another common use case for hash maps is to look up a key's value and then update
 it, using the old value. For instance, if we wanted to count how many times
 each word appeared in some text, we could use a hash map with the words as keys
 and increment the value to keep track of how many times we've seen that word.
