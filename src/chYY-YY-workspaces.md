@@ -1,7 +1,7 @@
 ## Workspaces and Multiple Related Crates
 
-Projects can define a workspace, which is a set of crates that will all share
-the same `Cargo.lock` and output directory.
+Projects can define a *workspace*, which is a set of crates that will all share
+the same *Cargo.lock* and output directory.
 
 We weren't technically precise about the difference between a *package* and a
 *crate* until now, and casually people will use the words *package* and *crate*
