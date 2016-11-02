@@ -3322,8 +3322,8 @@ along with a struct's data. The <code>struct</code> and <code>enum</code> (that 
 Chapter 6) concepts are the building blocks for creating new types in your
 program's domain in order to take full advantage of Rust's compile-time type
 checking.</p>
-<p>One way of thinking about structs is that they are similar to tuples that we
-talked about in Chapter 3. Like tuples, the pieces of a struct can be different
+<p>One way of thinking about structs is that they are similar to tuples, which we
+talked about in Chapter 3. Like tuples, the pieces of a struct can be of different
 types. Unlike tuples, we name each piece of data so that it's clearer what the
 values mean. Structs are more flexible as a result of these names: we don't
 have to rely on the order of the data to specify or access the values of an
@@ -3999,7 +3999,7 @@ the <code>call</code> method when <code>m.call()</code> runs.</p>
 <p>Let's look at another enum in the standard library that is very common and
 useful: <code>Option</code>.</p>
 <h2>The <code>Option</code> Enum and its Advantages Over Null Values</h2>
-<p>In the previous section, we looked at how the <code>IpAddr</code> enum lets us use Rust's
+<p>In the previous section, we looked at how the <code>IpAddr</code> enum let us use Rust's
 type system to encode more information than just the data into our program.
 This section is a case study of <code>Option</code>, which is another enum defined by the
 standard library. The <code>Option</code> type is used in many places because it encodes
@@ -5744,7 +5744,7 @@ insert the key <code>2</code> with the value &quot;world&quot;, since <code>2</c
 already. The second call to <code>entry</code> will not change the hash map since <code>1</code>
 already has the value &quot;hello&quot;.</p>
 <h4>Update a Value Based on the Old Value</h4>
-<p>Another common use case for hash maps is to look up a key's value then update
+<p>Another common use case for hash maps is to look up a key's value and then update
 it, using the old value. For instance, if we wanted to count how many times
 each word appeared in some text, we could use a hash map with the words as keys
 and increment the value to keep track of how many times we've seen that word.
@@ -6448,8 +6448,8 @@ likely to go out of date! To use this feature:</p>
 <code>use</code> statement including parts of the current crate, not just stdlib.</li>
 </ul>
 <h2>Workspaces and Multiple Related Crates</h2>
-<p>Projects can define a workspace which is a set of crates that will all share
-the same Cargo.lock and output directory.</p>
+<p>Projects can define a <em>workspace</em>, which is a set of crates that will all share
+the same <em>Cargo.lock</em> and output directory.</p>
 <p>We weren't technically precise about the difference between a <em>package</em> and a
 <em>crate</em> until now, and casually people will use the words <em>package</em> and <em>crate</em>
 interchangeably and everyone will understand.</p>
