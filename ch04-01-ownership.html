@@ -278,8 +278,10 @@ the left: a pointer to the memory that holds the contents of the string, a
 length, and a capacity. This group of data is stored on the stack. On the right
 is the memory that holds the contents, and this is on the heap.</p>
 <p><img alt="String in memory" src="img/trpl04-01.svg" class="center" style="width: 50%;" /></p>
-<p>Figure 4-1: Representation in memory of a <code>String</code> holding the value <code>&quot;hello&quot;</code>
-bound to <code>s1</code></p>
+<caption>
+Figure 4-1: Representation in memory of a `String` holding the value `"hello"`
+bound to `s1`
+</caption>
 <p>The length is how much memory, in bytes, the contents of the <code>String</code> is
 currently using. The capacity is the total amount of memory, in bytes, that the
 <code>String</code> has gotten from the operating system. The difference between length
@@ -290,14 +292,18 @@ copy the pointer, the length, and the capacity that are on the stack. We do not
 copy the data on the heap that the <code>String</code>’s pointer refers to. In other
 words, it looks like figure 4-2.</p>
 <p><img alt="s1 and s2 pointing to the same value" src="img/trpl04-02.svg" class="center" style="width: 50%;" /></p>
-<p>Figure 4-2: Representation in memory of the variable <code>s2</code> that has a copy of
-<code>s1</code>’s pointer, length and capacity</p>
+<caption>
+Figure 4-2: Representation in memory of the variable `s2` that has a copy of
+`s1`’s pointer, length and capacity
+</caption>
 <p>And <em>not</em> Figure 4-3, which is what memory would look like if Rust instead
 copied the heap data as well. If Rust did this, the operation <code>s2 = s1</code> could
 potentially be very expensive if the data on the heap was large.</p>
 <p><img alt="s1 and s2 to two places" src="img/trpl04-03.svg" class="center" style="width: 50%;" /></p>
-<p>Figure 4-3: Another possibility for what <code>s2 = s1</code> might do, if Rust chose to
-copy heap data as well.</p>
+<caption>
+Figure 4-3: Another possibility for what `s2 = s1` might do, if Rust chose to
+copy heap data as well.
+</caption>
 <p>Earlier, we said that when a variable goes out of scope, Rust will automatically
 call the <code>drop</code> function and clean up the heap memory for that variable. But
 in figure 4-2, we see both data pointers pointing to the same location. This is
@@ -331,7 +337,9 @@ also invalidates the first variable, instead of calling this a shallow copy,
 it’s known as a <em>move</em>. Here we would read this by saying that <code>s1</code> was <em>moved</em>
 into <code>s2</code>. So what actually happens looks like Figure 4-4.</p>
 <p><img alt="s1 moved to s2" src="img/trpl04-04.svg" class="center" style="width: 50%;" /></p>
-<p>Figure 4-4: Representation in memory after <code>s1</code> has been invalidated</p>
+<caption>
+Figure 4-4: Representation in memory after `s1` has been invalidated
+</caption>
 <p>That solves our problem! With only <code>s2</code> valid, when it goes out of scope, it
 alone will free the memory, and we’re done.</p>
 <p>Furthermore, there’s a design choice that’s implied by this: Rust will never

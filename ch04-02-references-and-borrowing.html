@@ -95,7 +95,9 @@ function return value is gone. Next, note that we pass <code>&amp;s1</code> into
 <p>These <code>&amp;</code>s are <em>references</em>, and they allow you to refer to some value
 without taking ownership of it. Figure 4-5 shows a diagram of this.</p>
 <p><img alt="&String s pointing at String s1" src="img/trpl04-05.svg" class="center" /></p>
-<p>Figure 4-5: <code>&amp;String s</code> pointing at <code>String s1</code></p>
+<caption>
+Figure 4-5: `&String s` pointing at `String s1`
+</caption>
 <p>Let’s take a closer look at the function call here:</p>
 <pre><code class="language-rust"># fn calculate_length(s: &amp;String) -&gt; usize {
 #     s.len()
