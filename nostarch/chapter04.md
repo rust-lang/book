@@ -895,7 +895,7 @@ Since we need to go through the String element by element and check if a value
 is a space, we will convert our String to an array of bytes using the
 `as_bytes` method.
 
-```
+```rust,ignore
 for (i, &item) in bytes.iter().enumerate() {
 ```
 
