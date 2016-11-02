@@ -152,7 +152,9 @@ Figure 4-6 shows this in a diagram:
 
 <img alt="world containing a pointer to the 6th byte of String s and a length 5" src="img/trpl04-06.svg" class="center" style="width: 50%;" />
 
+<caption>
 Figure 4-6: String slice referring to part of a `String`
+</caption>
 
 With Rust’s `..` range syntax, if you want to start at the first index (zero),
 you can drop the value before the `..`. In other words, these are equal:

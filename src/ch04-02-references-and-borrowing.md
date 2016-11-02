@@ -35,7 +35,9 @@ without taking ownership of it. Figure 4-5 shows a diagram of this.
 
 <img alt="&String s pointing at String s1" src="img/trpl04-05.svg" class="center" />
 
+<caption>
 Figure 4-5: `&String s` pointing at `String s1`
+</caption>
 
 Let’s take a closer look at the function call here:
 

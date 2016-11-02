@@ -262,8 +262,10 @@ is the memory that holds the contents, and this is on the heap.
 
 <img alt="String in memory" src="img/trpl04-01.svg" class="center" style="width: 50%;" />
 
+<caption>
 Figure 4-1: Representation in memory of a `String` holding the value `"hello"`
 bound to `s1`
+</caption>
 
 The length is how much memory, in bytes, the contents of the `String` is
 currently using. The capacity is the total amount of memory, in bytes, that the
@@ -278,8 +280,10 @@ words, it looks like figure 4-2.
 
 <img alt="s1 and s2 pointing to the same value" src="img/trpl04-02.svg" class="center" style="width: 50%;" />
 
+<caption>
 Figure 4-2: Representation in memory of the variable `s2` that has a copy of
 `s1`’s pointer, length and capacity
+</caption>
 
 And *not* Figure 4-3, which is what memory would look like if Rust instead
 copied the heap data as well. If Rust did this, the operation `s2 = s1` could
@@ -287,8 +291,10 @@ potentially be very expensive if the data on the heap was large.
 
 <img alt="s1 and s2 to two places" src="img/trpl04-03.svg" class="center" style="width: 50%;" />
 
+<caption>
 Figure 4-3: Another possibility for what `s2 = s1` might do, if Rust chose to
 copy heap data as well.
+</caption>
 
 Earlier, we said that when a variable goes out of scope, Rust will automatically
 call the `drop` function and clean up the heap memory for that variable. But
@@ -332,7 +338,9 @@ into `s2`. So what actually happens looks like Figure 4-4.
 
 <img alt="s1 moved to s2" src="img/trpl04-04.svg" class="center" style="width: 50%;" />
 
+<caption>
 Figure 4-4: Representation in memory after `s1` has been invalidated
+</caption>
 
 That solves our problem! With only `s2` valid, when it goes out of scope, it
 alone will free the memory, and we’re done.
