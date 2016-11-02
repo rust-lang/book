@@ -370,7 +370,7 @@ copying can be assumed to be inexpensive.
 
 If we *do* want to deeply copy the `String`’s data and not just the `String`
 itself, there’s a common method for that: `clone`. We will discuss methods in
-the section on `structs` in Chapter XX, but they’re a common enough feature in
+the section on `structs` in Chapter 5, but they’re a common enough feature in
 many programming languages that you have probably seen them before.
 
 Here’s an example of the `clone` method in action:
@@ -412,7 +412,7 @@ deep and shallow copying here, so calling `clone` wouldn’t do anything
 differently from the usual shallow copying and we can leave it out.
 
 Rust has a special annotation called the `Copy` trait that we can place on
-types like these (we’ll talk more about traits in Chapter XX). If a type has
+types like these (we’ll talk more about traits in Chapter 10). If a type has
 the `Copy` trait, an older variable is still usable after assignment. Rust will
 not let us annotate a type with the `Copy` trait if the type, or any of its
 parts, has implemented `drop`. If the type needs something special to happen
@@ -797,7 +797,7 @@ error: aborting due to previous error
 ```
 
 This error message refers to a feature we haven’t learned about yet:
-*lifetimes*. We’ll discuss lifetimes in detail in Chapter XX, but, disregarding
+*lifetimes*. We’ll discuss lifetimes in detail in Chapter 10, but, disregarding
 the parts about lifetimes, the message does contain the key to why this code is
 a problem:
 
@@ -899,7 +899,7 @@ is a space, we will convert our String to an array of bytes using the
 for (i, &item) in bytes.iter().enumerate() {
 ```
 
-We will be discussing iterators in more detail in Chapter XX, but for now, know
+We will be discussing iterators in more detail in Chapter 16, but for now, know
 that `iter` is a method that returns each element in a collection, and
 `enumerate` wraps the result of `iter` and returns each element as part of a
 tuple instead, where the first element of the tuple is the index, and the
@@ -1180,7 +1180,7 @@ let slice = &a[1..3];
 This slice has the type `&[i32]`. It works the exact same way as string slices
 do, by storing a reference to the first element and a length. You’ll use this
 kind of slice for all sorts of other collections. We’ll discuss these in detail
-when we talk about vectors in Chapter XX.
+when we talk about vectors in Chapter 8.
 
 ## Summary
 
