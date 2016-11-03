@@ -81,7 +81,7 @@ our call to that function from our binary crate be allowed, the warning that
 the function is unused will go away. Marking something public lets Rust know
 that we intend for the function to be used by code outside of our program. Rust
 considers the theoretical external usage that’s now possible as the function
-"being used." Thus, when something is marked as public, Rust will not require
+“being used.” Thus, when something is marked as public, Rust will not require
 that it’s used in our own program and will stop warning that the item is
 unused.
 
@@ -90,7 +90,7 @@ unused.
 To tell Rust to make something public, we add the `pub` keyword to the start of
 the declaration of the item we want to make public. We’ll focus on fixing the
 warning that tells us that `client::connect` has gone unused for now, as well
-as the "module `client` is private" error from our binary crate. Modify
+as the “module `client` is private” error from our binary crate. Modify
 `src/lib.rs` to make the `client` module public, like so:
 
 Filename: src/lib.rs
@@ -113,7 +113,7 @@ error: function `connect` is private
 ```
 
 Hooray! We have a different error! Yes, different error messages are a cause
-for celebration. The new error says "function `connect` is private", so let’s
+for celebration. The new error says “function `connect` is private”, so let’s
 edit `src/client.rs` to make `client::connect` public too:
 
 Filename: src/client.rs
