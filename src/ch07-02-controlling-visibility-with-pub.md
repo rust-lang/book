@@ -81,7 +81,7 @@ our call to that function from our binary crate be allowed, the warning that
 the function is unused will go away. Marking something public lets Rust know
 that we intend for the function to be used by code outside of our program. Rust
 considers the theoretical external usage that's now possible as the function
-"being used". Thus, when something is marked as public, Rust will not require
+"being used." Thus, when something is marked as public, Rust will not require
 that it's used in our own program and will stop warning that the item is
 unused.
 
