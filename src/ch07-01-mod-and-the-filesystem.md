@@ -305,7 +305,7 @@ Notice that we still have a `mod` declaration within this module file;
 this is because we still want `server` to be a sub-module of `network`.
 
 Now run `cargo build` again. Success! We have one more module to extract:
-`server`. Because it's a sub-module---that is, a module within a module---our
+`server`. Because it's a sub-module—that is, a module within a module—our
 current tactic of extracting a module into a file named after that module won't
 work. We're going to try anyway so that we can see the error. First change
 *src/network.rs* to have `mod server;` instead of the `server` module's
