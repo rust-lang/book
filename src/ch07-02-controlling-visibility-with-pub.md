@@ -27,13 +27,13 @@ warning: function is never used: `connect`, #[warn(dead_code)] on by default
   | ^
 ```
 
-So why are we receiving these warnings? After all, we're building a library
+So why are we receiving these warnings? After all, we’re building a library
 with functions that are intended to be used by our *users*, and not necessarily
-by us within our own project, so it shouldn't matter that these `connect`
+by us within our own project, so it shouldn’t matter that these `connect`
 functions go unused. The point of creating them is that they will be used by
 another project and not our own.
 
-To understand why this program invokes these warnings, let's try using the
+To understand why this program invokes these warnings, let’s try using the
 `connect` library as if we were another project, calling it externally. We can
 do that by creating a binary crate in the same directory as our library crate,
 by making a `src/main.rs` file containing this code:
@@ -56,7 +56,7 @@ quite common for executable projects: most functionality is in a library crate,
 and the binary crate uses that library crate. This way, other programs can also
 use the library crate, and it’s a nice separation of concerns.
 
-Our binary crate right now just calls our library's `connect` function from the
+Our binary crate right now just calls our library’s `connect` function from the
 `client` module. However, invoking `cargo build` will now give us an error
 after the warnings:
 
@@ -69,9 +69,9 @@ error: module `client` is private
 ```
 
 Ah ha! This tells us that the `client` module is private, and this is the crux
-of the warnings. It's also the first time we've run into the concepts of
-'public' and 'private' in the context of Rust. The default state of all code in
-Rust is private: no one else is allowed to use the code. If you don't use a
+of the warnings. It’s also the first time we’ve run into the concepts of
+*public* and *private* in the context of Rust. The default state of all code in
+Rust is private: no one else is allowed to use the code. If you don’t use a
 private function within your own program, since your own program is the only
 code allowed to use that function, Rust will warn you that the function has
 gone unused.
@@ -80,15 +80,15 @@ Once we specify that a function like `client::connect` is public, not only will
 our call to that function from our binary crate be allowed, the warning that
 the function is unused will go away. Marking something public lets Rust know
 that we intend for the function to be used by code outside of our program. Rust
-considers the theoretical external usage that's now possible as the function
+considers the theoretical external usage that’s now possible as the function
 "being used." Thus, when something is marked as public, Rust will not require
-that it's used in our own program and will stop warning that the item is
+that it’s used in our own program and will stop warning that the item is
 unused.
 
 ### Making a Function Public
 
 To tell Rust to make something public, we add the `pub` keyword to the start of
-the declaration of the item we want to make public. We'll focus on fixing the
+the declaration of the item we want to make public. We’ll focus on fixing the
 warning that tells us that `client::connect` has gone unused for now, as well
 as the "module `client` is private" error from our binary crate. Modify
 `src/lib.rs` to make the `client` module public, like so:
@@ -101,7 +101,7 @@ pub mod client;
 mod network;
 ```
 
-The `pub` goes right before `mod`. Let's try building again:
+The `pub` goes right before `mod`. Let’s try building again:
 
 ```bash
 <warnings>
@@ -113,7 +113,7 @@ error: function `connect` is private
 ```
 
 Hooray! We have a different error! Yes, different error messages are a cause
-for celebration. The new error says "function `connect` is private", so let's
+for celebration. The new error says "function `connect` is private", so let’s
 edit `src/client.rs` to make `client::connect` public too:
 
 Filename: src/client.rs
@@ -141,15 +141,15 @@ warning: function is never used: `connect`, #[warn(dead_code)] on by default
 
 It compiled, and the warning about `client::connect` not being used is gone!
 
-Unused code warnings don't always indicate that something needs to be made
-public: if you *didn't* want these functions to be part of your public API,
+Unused code warnings don’t always indicate that something needs to be made
+public: if you *didn’t* want these functions to be part of your public API,
 unused code warnings could be alerting you to code you no longer needed and can
 safely delete. They could also be alerting you to a bug, if you had just
 accidentally removed all places within your library where this function is
 called.
 
 In our case though, we *do* want the other two functions to be part of our
-crate's public API, so let's mark them as `pub` as well to try to get rid of
+crate’s public API, so let’s mark them as `pub` as well to try to get rid of
 the remaining warnings. Modify `src/network/mod.rs` to be:
 
 Filename: src/network/mod.rs
@@ -177,10 +177,10 @@ warning: function is never used: `connect`, #[warn(dead_code)] on by default
   | ^
 ```
 
-Hmmm, we're still getting an unused function warning even though
+Hmmm, we’re still getting an unused function warning even though
 `network::connect` is set to `pub`. This is because the function is public
 within the module, but the `network` module that the function resides in is not
-public. We're working from the interior of the library out this time, where
+public. We’re working from the interior of the library out this time, where
 with `client::connect` we worked from the outside in. We need to change
 `src/lib.rs` to make `network` public too:
 
@@ -215,8 +215,8 @@ Overall, these are the rules for item visibility:
 
 ### Privacy Examples
 
-Let's look at a few more examples to get some practice. Create a new libary
-project and enter the code in Listing 7-5 into your new project's `src/lib.rs`:
+Let’s look at a few more examples to get some practice. Create a new libary
+project and enter the code in Listing 7-5 into your new project’s `src/lib.rs`:
 
 Filename: src/lib.rs
 
@@ -271,7 +271,7 @@ function is not allowed to call `outermost::inside::inner_function` or
 
 Here are some suggestions for changing the code in an attempt to fix the
 errors. Before you try each one, make a guess as to whether it will fix the
-errors, then compile to see if you're right and use the privacy rules to
+errors, then compile to see if you’re right and use the privacy rules to
 understand why.
 
 * What if the `inside` module was public?
@@ -283,4 +283,4 @@ understand why.
 
 Feel free to design more experiments and try them out!
 
-Next, let's talk about bringing items into a scope with the `use` keyword.
+Next, let’s talk about bringing items into a scope with the `use` keyword.
