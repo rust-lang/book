@@ -86,7 +86,8 @@ mod client {
 ```
 
 <caption>
-Listing 7-1: The `network` module and the `client` module defined side-by-side in *src/lib.rs*
+Listing 7-1: The `network` module and the `client` module defined side-by-side
+in *src/lib.rs*
 </caption>
 
 Now we have a `network::connect` function and a `client::connect` function.
@@ -178,7 +179,8 @@ mod network {
 ```
 
 <caption>
-Listing 7-3: Three modules, `client`, `network`, and `network::server` all defined in *src/lib.rs*
+Listing 7-3: Three modules, `client`, `network`, and `network::server` all
+defined in *src/lib.rs*
 </caption>
 
 which has this module hierarchy:
@@ -318,7 +320,8 @@ fn connect() {
 mod server;
 ```
 
-Then create a `src/server.rs` file and enter the contents of the `server` module that we extracted:
+Then create a `src/server.rs` file and enter the contents of the `server`
+module that we extracted:
 
 Filename: src/server.rs
 
@@ -382,7 +385,8 @@ $ mv src/server.rs src/network
 ```
 
 Now if we try to `cargo build`, compilation will work (we'll still have
-warnings though). Our module layout still looks like this, which is exactly the same as it did when we had all the code in *src/lib.rs* in Listing 7-3:
+warnings though). Our module layout still looks like this, which is exactly the
+same as it did when we had all the code in *src/lib.rs* in Listing 7-3:
 
 ```text
 communicator

@@ -1,6 +1,11 @@
 ## Controlling Visibility with `pub`
 
-We resolved the error messages shown in Listing 7-4 by moving the `network` and `network::server` code into the *src/network/mod.rs* and *src/network/server.rs* files, respectively. At that point, `cargo build` was able to build our project, but we still get some warning messages about the `client::connect`, `network::connect`, and `network::server::connect` functions not being used:
+We resolved the error messages shown in Listing 7-4 by moving the `network` and
+`network::server` code into the *src/network/mod.rs* and
+*src/network/server.rs* files, respectively. At that point, `cargo build` was
+able to build our project, but we still get some warning messages about the
+`client::connect`, `network::connect`, and `network::server::connect` functions
+not being used:
 
 ```bash
 warning: function is never used: `connect`, #[warn(dead_code)] on by default
@@ -84,7 +89,9 @@ unused.
 
 To tell Rust to make something public, we add the `pub` keyword to the start of
 the declaration of the item we want to make public. We'll focus on fixing the
-warning that tells us that `client::connect` has gone unused for now, as well as the "module `client` is private" error from our binary crate. Modify `src/lib.rs` to make the `client` module public, like so:
+warning that tells us that `client::connect` has gone unused for now, as well
+as the "module `client` is private" error from our binary crate. Modify
+`src/lib.rs` to make the `client` module public, like so:
 
 Filename: src/lib.rs
 
