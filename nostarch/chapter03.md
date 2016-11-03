@@ -53,7 +53,7 @@ fn main() {
 }
 ```
 
-Save and run the program using `cargo run`: you should receive an error
+Save and run the program using `cargo run`. You should receive an error
 message, as shown in this output:
 
 ```bash
@@ -187,7 +187,7 @@ This construct is allowed because the first `spaces` variable is a string type,
 and the second `spaces` variable, which is a brand-new variable that happens to
 have the same name as the first one, is a number type. Shadowing thus spares us
 from having to come up with different names, like `spaces_str` and
-`s``paces_num`; instead, we can reuse the simpler `spaces` name. However, if we
+`spaces_num`; instead, we can reuse the simpler `spaces` name. However, if we
 try to use `mut` for this, as shown here:
 
 ```rust,ignore
@@ -266,7 +266,7 @@ built-in integer types in Rust. Each variant in the Signed and Unsigned columns
 Table 3-1: Integer Types in Rust
 </caption>
 
-| Length | signed | unsigned |
+| Length | Signed | Unsigned |
 |--------|--------|----------|
 | 8-bit  | i8     | u8       |
 | 16-bit | i16    | u16      |
@@ -285,11 +285,11 @@ Signed numbers are stored using two’s complement representation (if you’re
 unsure what this is, you can search for it online; an explanation is outside
 the scope of this book).
 
-Each signed variant can store numbers from -(2n - 1) to 2n -  1 - 1 inclusive,
-where `n` is the number of bits that variant uses. So an `i8` can store numbers
-from -(27) to 27, which equals -128 to 127. Unsigned variants can store numbers
-from 0 to 2n - 1, so a `u8` can store numbers from 0 to 28 - 1, which equals 0
-to 255.
+Each signed variant can store numbers from -(2<sup>n - 1</sup>) to 2<sup>n -
+1</sup> - 1 inclusive, where `n` is the number of bits that variant uses. So an
+`i8` can store numbers from -(2<sup>7</sup>) to 2<sup>7</sup>, which equals
+-128 to 127. Unsigned variants can store numbers from 0 to 2<sup>n</sup> - 1,
+so a `u8` can store numbers from 0 to 2<sup>8</sup> - 1, which equals 0 to 255.
 
 Additionally, the `isize` and `usize` types depend on the kind of computer your
 program is running on: 64-bits if you’re on a 64-bit architecture and 32-bits
@@ -504,12 +504,13 @@ fn main() {
 }
 ```
 
-Although arrays can be useful because they’re a primitive type and therefore
-can be very fast to use, they aren’t as flexible as the vector type. The vector
-type is a similar collection type provided by the standard library that *is*
-allowed to grow or shrink in size. If you’re unsure whether to use an array or
-a vector, you should probably use a vector: Chapter 8 discusses vectors in more
-detail.
+Arrays are useful when you want your data allocated on the stack rather than
+the heap (we will discuss the stack and the heap more in Chapter 4), or when
+you want to ensure you always have a fixed number of elements. They aren’t as
+flexible as the vector type, though. The vector type is a similar collection
+type provided by the standard library that *is* allowed to grow or shrink in
+size. If you’re unsure whether to use an array or a vector, you should probably
+use a vector: Chapter 8 discusses vectors in more detail.
 
 An example of when you might want to use an array rather than a vector is in a
 program that needs to know the names of the months of the year. It’s very
@@ -999,7 +1000,7 @@ condition is true is placed immediately after the condition inside curly
 braces. Blocks of code associated with the conditions in `if` expressions are
 sometimes called *arms*, just like the arms in `match` expressions that we
 discussed in the “Comparing the Guess to the Secret Number” section of Chapter
-2. Optionally, we can also include an `else` expression, which we chose to do 
+2. Optionally, we can also include an `else` expression, which we chose to do
 here, to give the program an alternative block of code to execute should the
 condition evaluate to false. If you don’t provide an `else` expression and the
 condition is false, the program will just skip the `if` block and move on to
