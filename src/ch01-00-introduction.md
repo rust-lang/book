@@ -3,19 +3,19 @@
 Welcome to “The Rust Programming Language,” an introductory book about Rust.
 Rust is a programming language that’s focused on safety, speed, and
 concurrency. Its design lets you create programs that have the performance and
-control of a low-level language, but with helpful abstractions that feel like a
-high-level language. The Rust community welcomes all programmers who have their
-experience in languages like C and are looking for a safer alternative, as well
-as programmers from languages like Python who are looking for ways to write
-code that performs better without losing expressiveness.
+control of a low-level language, but with the powerful abstractions of a
+high-level language. These properties make Rust suitable for programmers who
+have experience in languages like C and are looking for a safer alternative, as
+well as those from languages like Python who are looking for ways to write code
+that performs better without sacrificing expressiveness.
 
 Rust performs the majority of its safety checks and memory management decisions
-at compile time, so that your program's runtime isn't impacted. This makes it
-useful in a number of use cases that other languages aren’t good at: embedding
-in other languages, programs with specific space and time requirements, and
-writing low-level code, like device drivers and operating systems. It's also
-great for web applications: it powers the Rust package registry site, crates.io!
-We're excited to see what *you* create with Rust.
+at compile time, so that your program's runtime performance isn't impacted. This
+makes it useful in a number of use cases that other languages aren’t good at:
+programs with predictable space and time requirements, embedding in other
+languages, and writing low-level code, like device drivers and operating
+systems. It's also great for web applications: it powers the Rust package
+registry site, crates.io!  We're excited to see what *you* create with Rust.
 
 This book is written for a reader who already knows how to program in at least
 one programming language. After reading this book, you should be comfortable
