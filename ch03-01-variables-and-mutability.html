@@ -68,17 +68,16 @@
 
                 <div id="content" class="content">
                     <h2>Variables and Mutability</h2>
-<p>We mentioned in Chapter 2 that by default, variables are <em>immutable</em>.
-This is one of many nudges in Rust that encourages us to write our code in a
-way that gets the most of the safety and easy concurrency that Rust has to
-offer. We still have the option to make our variables mutable, though. Let’s
-explore how and why Rust encourages us to favor immutability, and why we might
-want to opt out of that.</p>
-<p>Variables being immutable means once a value is bound, you can’t
-change that value. To illustrate this, let’s generate a new project in your
-<em>projects</em> directory called <code>variables</code> by using <code>cargo new --bin variables</code>.</p>
-<p>Then, in your new <em>variables</em> directory, open <em>src/main.rs</em> and replace its code
-with the following:</p>
+<p>As mentioned in Chapter 2, by default variables are <em>immutable</em>. This is one of
+many nudges in Rust that encourages you to write your code in a way that takes
+advantage of the safety and easy concurrency that Rust offers. However, you
+still have the option to make your variables mutable. Let’s explore how and why
+Rust encourages you to favor immutability, and why you might want to opt out.</p>
+<p>When a variable is immutable, that means mean once a value is bound to a name,
+you can’t change that value. To illustrate, let’s generate a new project called
+<em>variables</em> in your <em>projects</em> directory by using <code>cargo new --bin variables</code>.</p>
+<p>Then, in your new <em>variables</em> directory, open <em>src/main.rs</em> and replace its
+code with the following:</p>
 <p>Filename: src/main.rs</p>
 <pre><code class="language-rust,ignore">fn main() {
     let x = 5;
@@ -87,72 +86,42 @@ with the following:</p>
     println!(&quot;The value of x is: {}&quot;, x);
 }
 </code></pre>
-<p>Save and run the program using <code>cargo run</code>, and you should receive an error
-message, as in this output:</p>
+<p>Save and run the program using <code>cargo run</code>. You should receive an error
+message, as shown in this output:</p>
 <pre><code class="language-bash">$ cargo run
    Compiling variables v0.0.1 (file:///projects/variables)
-error: re-assignment of immutable variable `x` [--explain E0384]
+error[E0384]: re-assignment of immutable variable `x`
  --&gt; src/main.rs:4:5
-4 |&gt;     x = 6;
-  |&gt;     ^^^^^
-note: prior assignment occurs here
- --&gt; src/main.rs:2:9
-2 |&gt;     let x = 5;
-  |&gt;         ^
+  |
+2 |     let x = 5;
+  |         - first assignment to `x`
+3 |     println!(&quot;The value of x is: {}&quot;, x);
+4 |     x = 6;
+  |     ^^^^^ re-assignment of immutable variable
 </code></pre>
-<p>This is our first example of the compiler helping us find an error in our
-program! Compiler errors can be frustrating. Keep in mind that they only mean
-your program isn’t safely doing what you want it to do yet; they do <em>not</em> mean
-that you’re not a good programmer! Experienced Rustaceans still get compiler
-errors. The Rust compiler is trying to help your program be the very best.</p>
-<!-- PROD: START BOX -->
-<blockquote>
-<h4>Extended Error Explanations</h4>
-<p>Now that you’ve seen a Rust error, let’s take a moment to look at one
-particularly useful aspect of errors. Rust encourages you to seek further
-information on the kind of error you’ve received with output like this:</p>
-<pre><code class="language-bash">error: re-assignment of immutable variable `x` [--explain E0384]
-</code></pre>
-<p>This tells us that if we pass the <code>--explain</code> flag to <code>rustc</code> with the
-provided error code, we can see an extended explanation which will try to
-explain common causes of and solutions to that kind of error. Not every error
-has a longer explanation, but many do. Here’s a portion of the explanation
-for the <code>E0384</code> error we received:</p>
-<pre><code class="language-bash">$ rustc --explain E0384
-This error occurs when an attempt is made to reassign an immutable variable.
-For example:
-
-```
-fn main(){
-    let x = 3;
-    x = 5; // error, reassignment of immutable variable
-}
-```
-</code></pre>
-<p>These explanations can really help if you’re stuck on an error, so don’t
-hesitate to look up the error code. The compiler is your friend, and it’s
-there to help.</p>
-</blockquote>
-<!-- PROD: END BOX -->
-<p>The error tells us that the cause of the error is <code>re-assignment of immutable variable</code>, because we tried to assign a second value to the immutable <code>x</code>
+<p>This example shows how the compiler helps you find errors in your programs.
+Even though compiler errors can be frustrating, they only mean your program
+isn’t safely doing what you want it to do yet; they do <em>not</em> mean that you’re
+not a good programmer! Experienced Rustaceans still get compiler errors. The
+error indicates that the cause of the error is <code>re-assignment of immutable variable</code>, because we tried to assign a second value to the immutable <code>x</code>
 variable.</p>
 <p>It’s important that we get compile-time errors when we attempt to change a
-value that we previously said was immutable because this very situation can
-lead to bugs. If one part of our code operates on an assumption that a value
-will never change, and another part of our code changes that value, it’s
+value that we previously designated as immutable because this very situation
+can lead to bugs. If one part of our code operates on the assumption that a
+value will never change and another part of our code changes that value, it’s
 possible that the first part of the code won’t do what it was designed to do.
 This cause of bugs can be difficult to track down after the fact, especially
-when the second piece of code only changes the value <em>sometimes</em>.</p>
-<p>In Rust, we can trust that a value we say won’t change really won’t change,
-because the compiler is enforcing that guarantee for us. When reading and
-writing code, we don’t have to keep track in our head how and where a value
-might change. This can make code easier to reason about.</p>
-<p>Mutability can be really useful, though! Variables are immutable only by
-default; you can make them mutable by adding <code>mut</code> in front of the variable
-name. In addition to allowing this value to be changed, it conveys intent to
-future readers of the code by indicating that other parts of the code will be
-changing this value.</p>
-<p>For example, change the program you just wrote to the following:</p>
+when the second piece of code changes the value only <em>sometimes</em>.</p>
+<p>In Rust the compiler guarantees that when we state that a value won’t change,
+it really won’t change. That means that when you’re reading and writing code,
+you don’t have to keep track of how and where a value might change, which can
+make code easier to reason about.</p>
+<p>But mutability can be very useful. Variables are immutable only by default; we
+can make them mutable by adding <code>mut</code> in front of the variable name. In
+addition to allowing this value to change, it conveys intent to future readers
+of the code by indicating that other parts of the code will be changing this
+variable value.</p>
+<p>For example, change <em>src/main.rs</em> to the following:</p>
 <p>Filename: src/main.rs</p>
 <pre><code class="language-rust">fn main() {
     let mut x = 5;
@@ -161,26 +130,30 @@ changing this value.</p>
     println!(&quot;The value of x is: {}&quot;, x);
 }
 </code></pre>
-<p>Running this, we get:</p>
+<p>When we run this program, we get the following:</p>
 <pre><code class="language-bash">$ cargo run
    Compiling variables v0.1.0 (file:///projects/variables)
      Running `target/debug/variables`
 The value of x is: 5
 The value of x is: 6
 </code></pre>
-<p>Using <code>mut</code>, we are allowed to change the value that <code>x</code> binds to from <code>5</code> to
-<code>6</code>. In some cases you’ll want to make a variable mutable because it makes the
-code easier to understand than an implementation that only uses immutable
-variables. In cases where you’re using large data structures, mutating an
-instance in place may be faster than copying and returning newly allocated
-instances. It all depends on the tradeoffs you want to make in your situation.</p>
+<p>Using <code>mut</code>, we’re allowed to change the value that <code>x</code> binds to from <code>5</code> to
+<code>6</code>. In some cases, you’ll want to make a variable mutable because it makes the
+code more convenient to write than an implementation that only uses immutable
+variables.</p>
+<p>There are multiple trade-offs to consider, in addition to the prevention of
+bugs. For example, in cases where you’re using large data structures, mutating
+an instance in place may be faster than copying and returning newly allocated
+instances. With smaller data structures, always creating new instances and
+writing in a more functional programming style may be easier to reason about,
+so the lower performance penalty might be worth it to gain that clarity.</p>
 <h3>Shadowing</h3>
-<p>As we saw in the guessing game tutorial, we can declare new variables with the
-same name as a previous variable, and the new variable <em>shadows</em> the previous
-variable. We say that the first variable is <em>shadowed</em> by the second, which means
-that the second variable’s value is what you will see when you use the variable.
-We can shadow a variable by using the same variable’s name and repeating the use
-of the <code>let</code> keyword as follows:</p>
+<p>As we saw in the guessing game tutorial in Chapter 2, we can declare new
+variables with the same name as a previous variables, and the new variable
+<em>shadows</em> the previous variable. Rustaceans say that the first variable is
+<em>shadowed</em> by the second, which means that the second variable’s value is what
+we’ll see when we use the variable. We can shadow a variable by using the same
+variable’s name and repeating the use of the <code>let</code> keyword as follows:</p>
 <p>Filename: src/main.rs</p>
 <pre><code class="language-rust">fn main() {
     let x = 5;
@@ -192,51 +165,50 @@ of the <code>let</code> keyword as follows:</p>
     println!(&quot;The value of x is: {}&quot;, x);
 }
 </code></pre>
-<p>This program first binds <code>x</code> to a value of <code>5</code>. Then, it shadows <code>x</code> by
-repeating <code>let x =</code>, taking the original value and adding <code>1</code> so that the value
-of <code>x</code> is then <code>6</code>. The third <code>let</code> statement also shadows <code>x</code>, taking the
-previous value and multiplying it by <code>2</code> to give <code>x</code> a final value of <code>12</code>. If
-you run this, it will output:</p>
+<p>This program first binds <code>x</code> to a value of <code>5</code>. Then it shadows <code>x</code> by
+repeating <code>let x =</code>, taking the original value and adding <code>1</code> so the value of
+<code>x</code> is then <code>6</code>. The third <code>let</code> statement also shadows <code>x</code>, taking the
+previous value and multiplying it by <code>2</code> to give <code>x</code> a final value of <code>12</code>.
+When you run this program, it will output the following:</p>
 <pre><code class="language-bash">$ cargo run
    Compiling variables v0.1.0 (file:///projects/variables)
      Running `target/debug/variables`
 The value of x is: 12
 </code></pre>
-<p>This is different from marking a variable as <code>mut</code> because unless we use the
+<p>This is different than marking a variable as <code>mut</code>, because unless we use the
 <code>let</code> keyword again, we’ll get a compile-time error if we accidentally try to
-reassign to this variable. We can perform a few transformations on a value, but
+reassign to this variable. We can perform a few transformations on a value but
 have the variable be immutable after those transformations have been completed.</p>
-<p>The other difference between <code>mut</code> and shadowing is that, since we’re
+<p>The other difference between <code>mut</code> and shadowing is that because we’re
 effectively creating a new variable when we use the <code>let</code> keyword again, we can
-change the type of the value, but reuse the same name. For
-example, say we ask a user to show us how many spaces they want between some
-text by sending us space characters, but we really want to store that as a
-number:</p>
+change the type of the value, but reuse the same name. For example, say our
+program asks a user to show how many spaces they want between some text by
+inputting space characters, but we really want to store that input as a number:</p>
 <pre><code class="language-rust">let spaces = &quot;   &quot;;
 let spaces = spaces.len();
 </code></pre>
-<p>This is allowed: the first <code>spaces</code> variable is a string type, and the second
-<code>spaces</code> variable, which is a brand new variable that happens to have the same
-name as the first one, is a number type. Shadowing thus saves us from having to
-come up with different names like <code>spaces_str</code> and <code>spaces_num</code>; we can reuse
-the simpler <code>spaces</code> name. If we try to use <code>mut</code> for this, however, like this:</p>
+<p>This construct is allowed because the first <code>spaces</code> variable is a string type,
+and the second <code>spaces</code> variable, which is a brand-new variable that happens to
+have the same name as the first one, is a number type. Shadowing thus spares us
+from having to come up with different names, like <code>spaces_str</code> and
+<code>spaces_num</code>; instead, we can reuse the simpler <code>spaces</code> name. However, if we
+try to use <code>mut</code> for this, as shown here:</p>
 <pre><code class="language-rust,ignore">let mut spaces = &quot;   &quot;;
 spaces = spaces.len();
 </code></pre>
-<p>We will get a compile-time error because we are not allowed to mutate a
-variable’s type:</p>
-<pre><code class="language-bash">error: mismatched types [--explain E0308]
- --&gt;
-  |&gt;
-4 |&gt; spaces = spaces.len();
-  |&gt;          ^^^^^^^^^^^^ expected &amp;-ptr, found usize
-note: expected type `&amp;str`
-note:    found type `usize`
-
-error: aborting due to previous error
+<p>we’ll get a compile-time error because we’re not allowed to mutate a variable’s
+type:</p>
+<pre><code class="language-bash">error[E0308]: mismatched types
+ --&gt; src/main.rs:3:14
+  |
+3 |     spaces = spaces.len();
+  |              ^^^^^^^^^^^^ expected &amp;str, found usize
+  |
+  = note: expected type `&amp;str`
+  = note:    found type `usize`
 </code></pre>
-<p>Now that we’ve explored how variables work, let’s look at some more
-data types they can have.</p>
+<p>Now that we’ve explored how variables work, let’s look at more data types they
+can have.</p>
 
                 </div>
 

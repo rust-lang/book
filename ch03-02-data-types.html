@@ -69,70 +69,75 @@
                 <div id="content" class="content">
                     <h2>Data Types</h2>
 <p>Every value in Rust is of a certain <em>type</em>, which tells Rust what kind of data
-is being given so it knows how to work with that data. In this section, we’ll
-look at a number of types built into the language itself. We split the types
-into two subsets: scalar and compound.</p>
-<p>Something to keep in mind throughout this section: Rust is a <em>statically typed</em>
+is being specified so it knows how to work with that data. In this section,
+we’ll look at a number of types that are built into the language. We split the
+types into two subsets: scalar and compound.</p>
+<p>Throughout this section, keep in mind that Rust is a <em>statically typed</em>
 language, which means that it must know the types of all variables at compile
 time. The compiler can usually infer what type we want to use based on the
 value and how we use it. In cases when many types are possible, such as when we
-converted a <code>String</code> to a numeric type using <code>parse</code> in Chapter 2, we must
-add a type annotation, like this:</p>
+converted a <code>String</code> to a numeric type using <code>parse</code> in Chapter 2, we must add
+a type annotation, like this:</p>
 <pre><code class="language-rust">let guess: u32 = &quot;42&quot;.parse().unwrap();
 </code></pre>
-<p>If we don’t put the type annotation here, Rust will give us this error that
-means the compiler needs more information from us to know which possible type
-we want:</p>
-<pre><code class="language-bash">error: unable to infer enough type information about `_`; type annotations or
-generic parameter binding required [--explain E0282]
- --&gt;
-  |&gt;
-3 |&gt; let guess = &quot;42&quot;.parse().unwrap();
-  |&gt;     ^^^^^
+<p>If we don’t add the type annotation here, Rust will display the following
+error, which means the compiler needs more information from us to know which
+possible type we want to use:</p>
+<pre><code class="language-bash">error[E0282]: unable to infer enough type information about `_`
+ --&gt; src/main.rs:2:5
+  |
+2 | let guess = &quot;42&quot;.parse().unwrap();
+  |     ^^^^^ cannot infer type for `_`
+  |
+  = note: type annotations or generic parameter binding required
 </code></pre>
-<p>You will see some type annotations as we discuss the various data types.</p>
+<p>You’ll see different type annotations as we discuss the various data types.</p>
 <h3>Scalar Types</h3>
-<p>A <em>scalar</em> type represents a single value. There are four primary scalar
-types in Rust: integers, floating point numbers, booleans, and characters.
-You’ll likely recognize these from other programming languages, but let’s jump
-into how they work in Rust.</p>
+<p>A <em>scalar</em> type represents a single value. Rust has four primary scalar types:
+integers, floating-point numbers, booleans, and characters. You’ll likely
+recognize these from other programming languages, but let’s jump into how they
+work in Rust.</p>
 <h4>Integer Types</h4>
-<p>An <em>integer</em> is a number without a fractional component. We’ve used one integer
-type already in this chapter, the <code>i32</code> type. This type declaration indicates
+<p>An <em>integer</em> is a number without a fractional component. We used one integer
+type earlier in this chapter, the <code>i32</code> type. This type declaration indicates
 that the value it’s associated with should be a signed integer (hence the <code>i</code>,
-as opposed to a <code>u</code> for unsigned) for a 32-bit system. There are a number of
-built-in integer types in Rust, shown in Table 3-1.</p>
-<table><thead><tr><td> Length </td><td> signed </td><td> unsigned </td></tr></thead>
+as opposed to a <code>u</code> for unsigned) for a 32-bit system. Table 3-1 shows the
+built-in integer types in Rust. Each variant in the Signed and Unsigned columns
+(for example, <em>i32</em>) can be used to declare the type of an integer value.</p>
+<caption>
+Table 3-1: Integer Types in Rust
+</caption>
+<table><thead><tr><td> Length </td><td> Signed </td><td> Unsigned </td></tr></thead>
 <tr><td> 8-bit  </td><td> i8     </td><td> u8       </td></tr>
 <tr><td> 16-bit </td><td> i16    </td><td> u16      </td></tr>
 <tr><td> 32-bit </td><td> i32    </td><td> u32      </td></tr>
 <tr><td> 64-bit </td><td> i64    </td><td> u64      </td></tr>
 <tr><td> arch   </td><td> isize  </td><td> usize    </td></tr>
 </table>
-<p><em>Table 3-1: Integer types in Rust. Each variant in the signed and unsigned
-columns (for example, <code>i32</code>) can be used to declare the type of an integer
-value.</em></p>
-<p>Each variant can be either signed or unsigned and has an explicit size. Signed
-and unsigned merely refers to whether it is possible for the number to be
-either negative or positive; in other words, whether the number needs to have a
-sign with it (signed), or whether it will only ever be positive and can
-therefore be represented without a sign (unsigned). It’s like writing numbers
-on paper: when the sign matters, a number is shown with a plus sign or minus
-sign, but when it’s safe to assume the number is positive, it’s shown with no
-sign. Signed numbers are stored using two’s complement representation (if
-you’re unsure what this is you can search for it online; an explanation is
-outside the scope of this text).</p>
+<p>Each variant can be either signed or unsigned and has an explicit size.
+Signed and unsigned refers to whether it’s possible for the number to be
+negative or positive; in other words, whether the number needs to have a sign
+with it (signed) or whether it will only ever be positive and can therefore be
+represented without a sign (unsigned). It’s like writing numbers on paper: when
+the sign matters, a number is shown with a plus sign or a minus sign; however,
+when it’s safe to assume the number is positive, it’s shown with no sign.
+Signed numbers are stored using two’s complement representation (if you’re
+unsure what this is, you can search for it online; an explanation is outside
+the scope of this book).</p>
 <p>Each signed variant can store numbers from -(2<sup>n - 1</sup>) to 2<sup>n -
 1</sup> - 1 inclusive, where <code>n</code> is the number of bits that variant uses. So an
-<code>i8</code> can store from -(2<sup>7</sup>) to 2<sup>7</sup> - 1, which equals -128
-to 127. Unsigned variants can store numbers from 0 to 2<sup>n</sup> - 1, so a
-<code>u8</code> can store from 0 to 2<sup>8</sup> - 1, which equals 0 to 255.</p>
-<p>Finally, the <code>isize</code> and <code>usize</code> types depend on the kind of computer your
-program is running on: 64-bits if you’re on a 64-bit architecture, and 32-bits
+<code>i8</code> can store numbers from -(2<sup>7</sup>) to 2<sup>7</sup>, which equals
+-128 to 127. Unsigned variants can store numbers from 0 to 2<sup>n</sup> - 1,
+so a <code>u8</code> can store numbers from 0 to 2<sup>8</sup> - 1, which equals 0 to 255.</p>
+<p>Additionally, the <code>isize</code> and <code>usize</code> types depend on the kind of computer your
+program is running on: 64-bits if you’re on a 64-bit architecture and 32-bits
 if you’re on a 32-bit architecture.</p>
-<p>You can write integer literals in any of the forms shown in Table 3-2. Note that
-all number literals except for the byte literal allow a type suffix, such as
+<p>You can write integer literals in any of the forms shown in Table 3-2. Note
+that all number literals except the byte literal allow a type suffix, such as
 <code>57u8</code>, and <code>_</code> as a visual separator, such as <code>1_000</code>.</p>
+<caption>
+Table 3-2: Integer Literals in Rust
+</caption>
 <table><thead><tr><td> Number literals  </td><td> Example       </td></tr></thead>
 <tr><td> Decimal          </td><td> <code>98_222</code>      </td></tr>
 <tr><td> Hex              </td><td> <code>0xff</code>        </td></tr>
@@ -140,7 +145,6 @@ all number literals except for the byte literal allow a type suffix, such as
 <tr><td> Binary           </td><td> <code>0b1111_0000</code> </td></tr>
 <tr><td> Byte (<code>u8</code> only) </td><td> <code>b'A'</code>        </td></tr>
 </table>
-<p><em>Table 3-2: Integer literals in Rust.</em></p>
 <p>So how do you know which type of integer to use? If you’re unsure, Rust’s
 defaults are generally good choices, and integer types default to <code>i32</code>: it’s
 generally the fastest, even on 64-bit systems. The primary situation in which
@@ -148,14 +152,14 @@ you’d use <code>isize</code> or <code>usize</code> is when indexing some sort 
 <h4>Floating-Point Types</h4>
 <p>Rust also has two primitive types for <em>floating-point numbers</em>, which are
 numbers with decimal points. Rust’s floating-point types are <code>f32</code> and <code>f64</code>,
-which are 32 bits and 64 bits in size, respectively. The default type is <code>f64</code>,
-as it’s roughly the same speed as <code>f32</code>, but has a larger precision. It is
-possible to use an <code>f64</code> on 32 bit systems, but it will be slower than using an
-<code>f32</code> on those systems. Most of the time, trading potential worse performance
-for better precision is a reasonable initial choice, and you should benchmark
-your code if you suspect floating-point size is a problem in your case. See
-Chapter XX for how to run benchmarks.</p>
-<p>Here’s an example showing floating-point numbers in action:</p>
+which are 32 bits and 64 bits in size, respectively. The default type is <code>f64</code>
+because it’s roughly the same speed as <code>f32</code> but is capable of more precision.
+It’s possible to use an <code>f64</code> type on 32-bit systems, but it will be slower
+than using an <code>f32</code> type on those systems. Most of the time, trading potential
+worse performance for better precision is a reasonable initial choice, and you
+should benchmark your code if you suspect floating-point size is a problem in
+your situation.</p>
+<p>Here’s an example that shows floating-point numbers in action:</p>
 <p>Filename: src/main.rs</p>
 <pre><code class="language-rust">fn main() {
     let x = 2.0; // f64
@@ -164,11 +168,11 @@ Chapter XX for how to run benchmarks.</p>
 }
 </code></pre>
 <p>Floating-point numbers are represented according to the IEEE-754 standard. The
-<code>f32</code> type is a single-precision float, while <code>f64</code> has double-precision.</p>
+<code>f32</code> type is a single-precision float, and <code>f64</code> has double precision.</p>
 <h4>Numeric Operations</h4>
-<p>Rust supports the usual basic mathematic operations you’d expect for all of
-these number types: addition, subtraction, multiplication, division, and
-remainder. This code shows how you’d use each one in a <code>let</code> statement:</p>
+<p>Rust supports the usual basic mathematic operations you’d expect for all of the
+number types: addition, subtraction, multiplication, division, and remainder.
+The following code shows how you’d use each one in a <code>let</code> statement:</p>
 <p>Filename: src/main.rs</p>
 <pre><code class="language-rust">fn main() {
     // addition
@@ -188,11 +192,11 @@ remainder. This code shows how you’d use each one in a <code>let</code> statem
 }
 </code></pre>
 <p>Each expression in these statements uses a mathematical operator and evaluates
-to a single value, which is then bound to a variable. Appendix XX contains a
+to a single value, which is then bound to a variable. Appendix B contains a
 list of all operators that Rust provides.</p>
 <h4>The Boolean Type</h4>
 <p>As in most other programming languages, a boolean type in Rust has two possible
-values: <code>true</code> and <code>false</code>. The boolean type in Rust is specified with <code>bool</code>.
+values: <code>true</code> and <code>false</code>. The boolean type in Rust is specified using <code>bool</code>.
 For example:</p>
 <p>Filename: src/main.rs</p>
 <pre><code class="language-rust">fn main() {
@@ -201,13 +205,13 @@ For example:</p>
     let f: bool = false; // with explicit type annotation
 }
 </code></pre>
-<p>The main way to consume boolean values is through conditionals like an <code>if</code>
+<p>The main way to consume boolean values is through conditionals, such as an <code>if</code>
 statement. We’ll cover how <code>if</code> statements work in Rust in the “Control Flow”
-section of this chapter.</p>
+section.</p>
 <h4>The Character Type</h4>
 <p>So far we’ve only worked with numbers, but Rust supports letters too. Rust’s
-<code>char</code> type is the language’s most primitive alphabetic type, and this code
-shows one way to use it:</p>
+<code>char</code> type is the language’s most primitive alphabetic type, and the following
+code shows one way to use it:</p>
 <p>Filename: src/main.rs</p>
 <pre><code class="language-rust">fn main() {
    let c = 'z';
@@ -215,13 +219,14 @@ shows one way to use it:</p>
    let heart_eyed_cat = '😻';
 }
 </code></pre>
-<p>Rust’s <code>char</code> represents a Unicode Scalar Value, which means that it can
+<p>Rust’s <code>char</code> type represents a Unicode Scalar Value, which means it can
 represent a lot more than just ASCII. Accented letters, Chinese/Japanese/Korean
-ideographs, emoji, and zero width spaces are all valid <code>char</code>s in Rust. Unicode
-Scalar Values range from <code>U+0000</code> to <code>U+D7FF</code> and <code>U+E000</code> to <code>U+10FFFF</code>
-inclusive. A “character” isn’t really a concept in Unicode, however, so your
-human intuition for what a “character” is may not match up with what a <code>char</code>
-is in Rust. We’ll discuss this in detail in the Strings section of Chapter 8.</p>
+ideographs, emoji, and zero width spaces are all valid <code>char</code> types in Rust.
+Unicode Scalar Values range from <code>U+0000</code> to <code>U+D7FF</code> and <code>U+E000</code> to
+<code>U+10FFFF</code> inclusive. However, a “character” isn’t really a concept in Unicode,
+so your human intuition for what a “character” is may not match up with what a
+<code>char</code> is in Rust. We’ll discuss this topic in detail in the “Strings” section
+in Chapter 8.</p>
 <h3>Compound Types</h3>
 <p><em>Compound types</em> can group multiple values of other types into one type. Rust
 has two primitive compound types: tuples and arrays.</p>
@@ -249,12 +254,11 @@ use pattern matching to destructure a tuple value, like this:</p>
     println!(&quot;The value of y is: {}&quot;, y);
 }
 </code></pre>
-<p>In this program, we first create a tuple and bind it to the variable <code>tup</code>. We
-then use a pattern with <code>let</code> to take <code>tup</code> and turn it into three separate
+<p>This program first creates a tuple and binds it to the variable <code>tup</code>. It then
+uses a pattern with <code>let</code> to take <code>tup</code> and turn it into three separate
 variables, <code>x</code>, <code>y</code>, and <code>z</code>. This is called <em>destructuring</em>, because it breaks
-the single tuple into three parts. Finally, we print the value of <code>y</code>, which is
-<code>6.4</code>.</p>
-<h4>Tuple Indexing</h4>
+the single tuple into three parts. Finally, the program prints the value of
+<code>y</code>, which is <code>6.4</code>.</p>
 <p>In addition to destructuring through pattern matching, we can also access a
 tuple element directly by using a period (<code>.</code>) followed by the index of the
 value we want to access. For example:</p>
@@ -269,35 +273,37 @@ value we want to access. For example:</p>
     let one = x.2;
 }
 </code></pre>
-<p>This program creates a tuple, <code>x</code>, and then makes new variables for each element
-by using their index. As with most programming languages, the first index in a
-tuple is 0.</p>
-<h3>Arrays</h3>
-<p>Another way to have a collection of multiple values is with an
-<em>array</em>. Unlike a tuple, every element of an array must have the same type.
-Arrays in Rust are different than arrays in some other languages because arrays
-in Rust have a fixed length: once declared, they cannot grow or shrink in size.</p>
-<p>In Rust, the values going into an array are written as a comma separated list
+<p>This program creates a tuple, <code>x</code>, and then makes new variables for each
+element by using their index. As with most programming languages, the first
+index in a tuple is 0.</p>
+<h4>Arrays</h4>
+<p>Another way to have a collection of multiple values is with an <em>array</em>. Unlike
+a tuple, every element of an array must have the same type. Arrays in Rust are
+different than arrays in some other languages because arrays in Rust have a
+fixed length: once declared, they cannot grow or shrink in size.</p>
+<p>In Rust, the values going into an array are written as a comma-separated list
 inside square brackets:</p>
 <p>Filename: src/main.rs</p>
 <pre><code class="language-rust">fn main() {
     let a = [1, 2, 3, 4, 5];
 }
 </code></pre>
-<p>While arrays can be useful since they are a primitive type so using them can be
-very fast, they aren’t as flexible as the vector type. The vector type is a
-similar collection type provided by the standard library that <em>is</em> allowed to
-grow or shrink in size. If you’re unsure whether to use an array or a vector,
-you should probably go with a vector, and we’ll discuss them in more detail in
-Chapter 8.</p>
-<p>An example of when we might want to use an array is storing the months of the
-year. It’s very unlikely that our program will need to add or remove months, so
-we can use an array since we know we will always have 12 items:</p>
+<p>Arrays are useful when you want your data allocated on the stack rather than
+the heap (we will discuss the stack and the heap more in Chapter 4), or when
+you want to ensure you always have a fixed number of elements. They aren’t as
+flexible as the vector type, though. The vector type is a similar collection
+type provided by the standard library that <em>is</em> allowed to grow or shrink in
+size. If you’re unsure whether to use an array or a vector, you should probably
+use a vector: Chapter 8 discusses vectors in more detail.</p>
+<p>An example of when you might want to use an array rather than a vector is in a
+program that needs to know the names of the months of the year. It’s very
+unlikely that such a program will need to add or remove months, so you can use
+an array because you know it will always contain 12 items:</p>
 <pre><code class="language-rust">let months = [&quot;January&quot;, &quot;February&quot;, &quot;March&quot;, &quot;April&quot;, &quot;May&quot;, &quot;June&quot;, &quot;July&quot;,
               &quot;August&quot;, &quot;September&quot;, &quot;October&quot;, &quot;November&quot;, &quot;December&quot;];
 </code></pre>
-<h4>Accessing Array Elements</h4>
-<p>An array is a single chunk of memory, allocated on the stack. We can access
+<h5>Accessing Array Elements</h5>
+<p>An array is a single chunk of memory allocated on the stack. We can access
 elements of an array using indexing, like this:</p>
 <p>Filename: src/main.rs</p>
 <pre><code class="language-rust">fn main() {
@@ -307,12 +313,12 @@ elements of an array using indexing, like this:</p>
     let second = a[1];
 }
 </code></pre>
-<p>In this example, the variable named <code>first</code> will get the value <code>1</code>, since that
-is the value at index <code>[0]</code> in the array. The variable named <code>second</code> will get
-the value <code>2</code> from index <code>[1]</code> in the array.</p>
-<h4>Invalid Array Element Access</h4>
-<p>What happens if you try to access an element of an array past the end of the
-array? Say we changed our program to:</p>
+<p>In this example, the variable named <code>first</code> will get the value <code>1</code>, because
+that is the value at index <code>[0]</code> in the array. The variable named <code>second</code> will
+get the value <code>2</code> from index <code>[1]</code> in the array.</p>
+<h5>Invalid Array Element Access</h5>
+<p>What happens if we try to access an element of an array that is past the end of
+the array? Say we change the example to the following:</p>
 <p>Filename: src/main.rs</p>
 <pre><code class="language-rust,ignore">fn main() {
     let a = [1, 2, 3, 4, 5];
@@ -322,26 +328,25 @@ array? Say we changed our program to:</p>
     println!(&quot;The value of element is: {}&quot;, element);
 }
 </code></pre>
-<p>Running this code with <code>cargo run</code> produces:</p>
+<p>Running this code using <code>cargo run</code> produces the following result:</p>
 <pre><code class="language-bash">$ cargo run
    Compiling arrays v0.1.0 (file:///projects/arrays)
      Running `target/debug/arrays`
 thread '&lt;main&gt;' panicked at 'index out of bounds: the len is 5 but the index is
-10', src/main.rs:4
+ 10', src/main.rs:4
 note: Run with `RUST_BACKTRACE=1` for a backtrace.
 error: Process didn't exit successfully: `target/debug/arrays` (exit code: 101)
 </code></pre>
-<p>We can see that the compilation did not give us any errors, but we got a
-<em>runtime</em> error and our program didn’t exit successfully. When we attempt to
-access an element using indexing, Rust will check that the index we’ve
-specified is less than the array length. If the index is greater than the
-length, it will <em>panic</em>, which is what it’s called when a Rust program exits
-with an error.</p>
-<p>This is our first example of Rust’s safety principles in action. In many
+<p>The compilation didn’t produce any errors, but the program results in a
+<em>runtime</em> error and didn’t exit successfully. When you attempt to access an
+element using indexing, Rust will check that the index you’ve specified is less
+than the array length. If the index is greater than the length, Rust will
+<em>panic</em>, which is the term Rust uses when a program exits with an error.</p>
+<p>This is the first example of Rust’s safety principles in action. In many
 low-level languages, this kind of check is not done, and when you provide an
-incorrect index, invalid memory can be accessed. Rust protects us against this
+incorrect index, invalid memory can be accessed. Rust protects you against this
 kind of error by immediately exiting instead of allowing the memory access and
-continuing. We’ll discuss more of Rust’s error handling in Chapter XX.</p>
+continuing. Chapter 9 discusses more of Rust’s error handling.</p>
 
                 </div>
 
