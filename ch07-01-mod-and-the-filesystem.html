@@ -68,19 +68,21 @@
 
                 <div id="content" class="content">
                     <h2><code>mod</code> and the Filesystem</h2>
-<p>Every module in Rust starts with the <code>mod</code> keyword. In this next example, we'll
-start again by making a new project with Cargo. This time, instead of a binary,
-we're going to make a library: a project that other people would pull into their
-projects as a dependency. We saw this with the <code>rand</code> crate in Chapter 2.</p>
-<p>Imagine that we're creating a library to provide some general networking
-functionality, and we decide to call our library <code>communicator</code>. To create this
-library, we won't use the <code>--bin</code> option like we have before. This is because
-by default cargo will create a library:</p>
+<p>We’ll start our module example by making a new project with Cargo, but instead
+of creating a binary crate, we’re going to make a library crate: a project that
+other people can pull into their projects as a dependency. We saw this with the
+<code>rand</code> crate in Chapter 2.</p>
+<p>We’ll create a skeleton of a library that provides some general networking
+functionality; we’re going to concentrate on the organization of the modules
+and functions, but not worry about what code goes in the function bodies. We’ll
+call our library <code>communicator</code>. By default, cargo will create a library unless
+another type of project is specified, so if we leave off the <code>--bin</code> option
+that we’ve been using so far our project will be a library:</p>
 <pre><code class="language-bash">$ cargo new communicator
 $ cd communicator
 </code></pre>
-<p>Notice that Cargo generated <code>src/lib.rs</code> instead of <code>src/main.rs</code> for us, and
-inside it we'll find this:</p>
+<p>Notice that Cargo generated <em>src/lib.rs</em> instead of <em>src/main.rs</em>. Inside
+<em>src/lib.rs</em> we’ll find this:</p>
 <p>Filename: src/lib.rs</p>
 <pre><code class="language-rust">#[cfg(test)]
 mod tests {
@@ -89,26 +91,36 @@ mod tests {
     }
 }
 </code></pre>
-<p>This is an empty test to help us get our library started, instead of the binary
-that says &quot;Hello, world!&quot; that we get with the <code>--bin</code> option. Let's ignore the
-<code>#[]</code> stuff and <code>mod tests</code> for a little bit, but we'll make sure to leave it
-in <code>src/lib.rs</code> for later.</p>
-<p>We're going to look at different ways we could choose to organize our library's
-code, any of which could make sense depending on exactly what we were trying to
-do. To start, add this code at the beginning of the file:</p>
+<p>Cargo creates an empty test to help us get our library started, rather
+than the “Hello, world!” binary that we get with the <code>--bin</code> option. We’ll look
+at the <code>#[]</code> and <code>mod tests</code> syntax a little later, but for now just make sure
+to leave it in your <em>src/lib.rs</em>.</p>
+<p>Since we don’t have a <em>src/main.rs</em>, there’s nothing for Cargo to execute with
+the <code>cargo run</code> command. Therefore, we will be using the <code>cargo build</code> command
+to only compile our library crate’s code.</p>
+<p>We’re going to look at different options for organizing your library’s code
+which will be suitable in a variety of situations, depending on the intentions
+you have for your code.</p>
+<h3>Module Definitions</h3>
+<p>For our <code>communicator</code> networking library, we’re first going to define a module
+named <code>network</code> that contains the definition of a function called <code>connect</code>.
+Every module definition in Rust starts with the <code>mod</code> keyword. Add this code to
+the beginning of the <em>lib.rs</em> file, above the test code:</p>
 <p>Filename: src/lib.rs</p>
 <pre><code class="language-rust">mod network {
     fn connect() {
     }
 }
 </code></pre>
-<p>This is our first module declaration. We use the <code>mod</code> keyword, followed by the
-name of the module, and then a block of code in curly braces. Everything inside
-this block is inside the namespace <code>network</code>. In this case, we have a single
-function, <code>connect</code>. If we wanted to try and call this function from outside
-the <code>network</code> module, we would say <code>network::connect()</code> rather than <code>connect()</code>.</p>
-<p>We could have multiple modules, side-by-side. For example, if we wanted a
-<code>client</code> module:</p>
+<p>After the <code>mod</code> keyword, we put the name of the module, <code>network</code>, then a block
+of code in curly braces. Everything inside this block is inside the namespace
+<code>network</code>. In this case, we have a single function, <code>connect</code>. If we wanted to
+call this function from a script outside the <code>network</code> module, we would need to
+specify the module and use the namespace syntax <code>::</code>, like so:
+<code>network::connect()</code>, rather than just <code>connect()</code>.</p>
+<p>We can also have multiple modules, side-by-side, in the same <em>src/lib.rs</em> file.
+For example, to have a <code>client</code> module too, that also has a function named
+<code>connect</code>, we can add:</p>
 <p>Filename: src/lib.rs</p>
 <pre><code class="language-rust">mod network {
     fn connect() {
@@ -120,9 +132,19 @@ mod client {
     }
 }
 </code></pre>
-<p>Now we have a <code>network::connect</code> function and a <code>client::connect</code> function.</p>
-<p>And we can put modules inside of modules. If we wanted to have <code>client</code> be
-within <code>network</code>:</p>
+<caption>
+Listing 7-1: The `network` module and the `client` module defined side-by-side
+in *src/lib.rs*
+</caption>
+<p>Now we have a <code>network::connect</code> function and a <code>client::connect</code> function.
+These can have completely different functionality, and the function names do
+not conflict with each other since they’re in different modules.</p>
+<p>We can also put modules inside of modules. This can be useful as your modules
+grow to keep related functionality organized together and separate
+functionality apart. The choice of how you organize your code depends on how
+you think about the relationship between the parts of your code. For instance,
+the <code>client</code> code and its <code>connect</code> function might make more sense to users of
+our library if it was inside the <code>network</code> namespace instead, like so:</p>
 <p>Filename: src/lib.rs</p>
 <pre><code class="language-rust">mod network {
     fn connect() {
@@ -134,24 +156,39 @@ within <code>network</code>:</p>
     }
 }
 </code></pre>
-<p>This gives us <code>network::connect</code> and <code>network::client::connect</code>.</p>
-<p>In this way, modules form a tree. The contents of <code>src/lib.rs</code> are at the root
-of the project's tree, and the submodules form the leaves. Here's what our
-first example looks like when thought of this way:</p>
+<caption>
+Listing 7-2: Moving the `client` module inside of the `network` module
+</caption>
+<p>In your <em>src/lib.rs</em> file, replace the existing <code>mod network</code> and <code>mod client</code>
+definitions with this one that has the <code>client</code> module as an inner module of
+<code>network</code>. Now we have the functions <code>network::connect</code> and
+<code>network::client::connect</code>: again, the two functions named <code>connect</code> don’t
+conflict with each other since they’re in different namespaces.</p>
+<p>In this way, modules form a hierarchy. The contents of <code>src/lib.rs</code> are at the
+topmost level, and the submodules are at lower levels. Here’s what the
+organization of our example from Listing 7-1 looks like when thought of this
+way:</p>
 <pre><code class="language-text">communicator
  ├── network
  └── client
 </code></pre>
-<p>And here's the second:</p>
+<p>And here’s the example from Listing 7-2:</p>
 <pre><code class="language-text">communicator
  └── network
      └── client
 </code></pre>
-<p>More complicated projects can have a lot of modules.</p>
-<h3>Putting Modules in Another File</h3>
-<p>Modules form a hierarchical, tree-like structure. So does another thing:
-file systems! The module system is the way that we split larger Rust projects up
-into multiple files. Let's imagine we have a module layout like this:</p>
+<p>You can see that in Listing 7-2, <code>client</code> is a child of the <code>network</code> module,
+rather than a sibling. More complicated projects can have a lot of modules, and
+they’ll need to be orgnaized logically in order to keep track of them. What
+“logically” means in your project is up to you and depends on how you and users
+of your library think about your project’s domain. Use the techniques we’ve
+shown here to create side-by-side modules and nested modules in whatever
+structure you would like.</p>
+<h3>Moving Modules to Other Files</h3>
+<p>Modules form a hierarchical structure, much like another structure in computing
+that you’re used to: file systems! We can use Rust’s module system along with
+multiple files to split Rust projects up so that not everything lives in
+<em>src/lib.rs</em>. For this example, we will start with this code in <em>src/lib.rs</em>:</p>
 <p>File: src/lib.rs</p>
 <pre><code class="language-rust">mod client {
     fn connect() {
@@ -168,8 +205,22 @@ mod network {
     }
 }
 </code></pre>
-<p>Let's extract the <code>client</code> module into another file. First, we need to change
-our code in <code>src/lib.rs</code>:</p>
+<caption>
+Listing 7-3: Three modules, `client`, `network`, and `network::server` all
+defined in *src/lib.rs*
+</caption>
+<p>which has this module hierarchy:</p>
+<pre><code class="language-text">communicator
+ ├── client
+ └── network
+     └── server
+</code></pre>
+<p>If these modules had many functions, and each function was getting long, we
+would have to scroll through this file to find the code we wanted to work with.
+This would be a good reason to pull each of the <code>client</code>, <code>network</code>, and
+<code>server</code> modules out of <em>src/lib.rs</em> and into their own files. Let’s start by
+extracting the <code>client</code> module into another file. First, replace the <code>client</code>
+module code in <em>src/lib.rs</em> with the following:</p>
 <p>File: src/lib.rs</p>
 <pre><code class="language-rust,ignore">mod client;
 
@@ -183,18 +234,30 @@ mod network {
     }
 }
 </code></pre>
-<p>We still say <code>mod client</code>, but instead of curly braces, we have a semicolon.
-This lets Rust know that we have a module, but it's in another file with that
-module's name. Open up <code>src/client.rs</code> and put this in it:</p>
+<!-- I will add wingdings/ghosting in libreoffice /Carol -->
+<p>We’re still <em>defining</em> the <code>client</code> module here, but by removing the curly
+braces and definitions inside the <code>client</code> module and replacing them with a
+semicolon, we’re letting Rust know to look in another location for the code
+defined inside that module.</p>
+<p>So now we need to create the external file with that module name. Create a
+<code>client.rs</code> file in your <em>src/</em> directory, then open it up and enter the
+following, which is the <code>connect</code> function in the <code>client</code> module that we
+removed in the previous step:</p>
 <p>File: src/client.rs</p>
 <pre><code class="language-rust">fn connect() {
 }
 </code></pre>
-<p>Note that we don't need a <code>mod</code> declaration in this file. <code>mod</code> is for
-declaring a new module, and we've already declared this module in <code>src/lib.rs</code>.
-This file provides the <em>contents</em> of the <code>client</code> module. If we put a <code>mod client</code> here, we'd be giving the <code>client</code> module its own submodule named
-<code>client</code>!</p>
-<p>Now, everything should compile successfully, but with a few warnings:</p>
+<p>Note that we don’t need a <code>mod</code> declaration in this file; that’s because we
+already declared the <code>client</code> module with <code>mod</code> in <code>src/lib.rs</code>. This file just
+provides the <em>contents</em> of the <code>client</code> module. If we put a <code>mod client</code> here,
+we’d be giving the <code>client</code> module its own submodule named <code>client</code>!</p>
+<p>Rust only knows to look in <em>src/lib.rs</em> by default. If we want to add more
+files to our project, we need to tell Rust in <em>src/lib.rs</em> to look in other
+files; this is why <code>mod client</code> needs to be defined in <em>src/lib.rs</em> and can’t
+be defined in <em>src/client.rs</em>.</p>
+<p>Now, everything should compile successfully, though you’ll get a few warnings.
+Remember to use <code>cargo build</code> instead of <code>cargo run</code> since we have a library
+crate rather than a binary crate:</p>
 <pre><code class="language-bash">$ cargo build
    Compiling communicator v0.1.0 (file:///projects/communicator)
 
@@ -216,16 +279,18 @@ warning: function is never used: `connect`, #[warn(dead_code)] on by default
 8 |         fn connect() {
   |         ^
 </code></pre>
-<p>Don't worry about those warnings for now; we'll clear them up in a future
-section. They're just warnings, we've built things successfully!</p>
-<p>Let's extract the <code>network</code> module into its own file next, using the same
-pattern. Change <code>src/lib.rs</code> to look like this:</p>
+<p>These warnings tell us that we have functions that are never used. Don’t worry
+about those warnings for now; we’ll address them later in the chapter. The good
+news is that they’re just warnings; our project was built successfully!</p>
+<p>Let’s extract the <code>network</code> module into its own file next, using the same
+pattern. In <code>src/lib.rs</code>, delete the body of the <code>network</code> module and add a
+semicolon to the declaration, like so:</p>
 <p>Filename: src/lib.rs</p>
 <pre><code class="language-rust,ignore">mod client;
 
 mod network;
 </code></pre>
-<p>And then put this in <code>src/network.rs</code></p>
+<p>Then create a new <code>src/network.rs</code> file and enter the following:</p>
 <p>Filename: src/network.rs</p>
 <pre><code class="language-rust">fn connect() {
 }
@@ -235,22 +300,27 @@ mod server {
     }
 }
 </code></pre>
-<p>And then run <code>cargo build</code> again. Success! We have one more module to extract:
-<code>server</code>. Unfortunately, our current tactic of extracting a module into a file
-named after that module won't work. Let's try it anyway. Modify
-<code>src/network.rs</code> to look like this:</p>
+<p>Notice that we still have a <code>mod</code> declaration within this module file;
+this is because we still want <code>server</code> to be a sub-module of <code>network</code>.</p>
+<p>Now run <code>cargo build</code> again. Success! We have one more module to extract:
+<code>server</code>. Because it’s a sub-module—that is, a module within a module—our
+current tactic of extracting a module into a file named after that module won’t
+work. We’re going to try anyway so that we can see the error. First change
+<em>src/network.rs</em> to have <code>mod server;</code> instead of the <code>server</code> module’s
+contents:</p>
 <p>Filename: src/network.rs</p>
 <pre><code class="language-rust,ignore">fn connect() {
 }
 
 mod server;
 </code></pre>
-<p>Put this in <code>src/server.rs</code></p>
+<p>Then create a <code>src/server.rs</code> file and enter the contents of the <code>server</code>
+module that we extracted:</p>
 <p>Filename: src/server.rs</p>
 <pre><code class="language-rust">fn connect() {
 }
 </code></pre>
-<p>When we try to <code>cargo build</code>, we'll get an error:</p>
+<p>When we try to <code>cargo build</code>, we’ll get this error:</p>
 <pre><code class="language-bash">$ cargo build
    Compiling communicator v0.1.0 (file:///projects/communicator)
 error: cannot declare a new module at this location
@@ -270,37 +340,41 @@ note: ... or maybe `use` the module `server` instead of possibly redeclaring it
 4 | mod server;
   |     ^^^^^^
 </code></pre>
-<p>This error is actually pretty helpful. It points out something we didn't know
-that we could do yet:</p>
+<caption>
+Listing 7-4: Error when trying to extract the `server` submodule into
+*src/server.rs*
+</caption>
+<p>The error says we <code>cannot declare a new module at this location</code> and is
+pointing to the <code>mod server;</code> line in <code>src/network.rs</code>. So <code>src/network.rs</code> is
+different than <code>src/lib.rs</code> somehow; let’s keep reading to understand why.</p>
+<p>The note in the middle of Listing 7-4 is actually pretty helpful, as it points
+out something we haven’t yet talked about doing:</p>
 <blockquote>
 <p>note: maybe move this module <code>network</code> to its own directory via
 <code>network/mod.rs</code></p>
 </blockquote>
-<p>Here's the problem: in our case, we have different names for our modules:
-<code>client</code> and <code>network::server</code>. But what if we had <code>client</code> and
-<code>network::client</code>, or <code>server</code> and <code>network::server</code>? Having two modules at
-different places in the module hierarchy have the same name is completely
-valid, but then which module would the files <code>src/client.rs</code> and
-<code>src/server.rs</code>, respectively, be for?</p>
 <p>Instead of continuing to follow the same file naming pattern we used
-previously, we can do what the error suggests. We'll make a new <em>directory</em>,
-move <code>src/server.rs</code> into it, and change <code>src/network.rs</code> to
-<code>src/network/mod.rs</code>. Then, when we try to build:</p>
+previously, we can do what the note suggests:</p>
+<ol>
+<li>Make a new <em>directory</em> named <em>network</em>, the parent module’s name</li>
+<li>Move the <em>src/network.rs</em> file into the new <em>network</em> directory and rename
+it so that it is now <em>src/network/mod.rs</em></li>
+<li>Move the submodule file <em>src/server.rs</em> into the <em>network</em> directory</li>
+</ol>
+<p>Here are commands to carry out these steps:</p>
 <pre><code class="language-bash">$ mkdir src/network
-$ mv src/server.rs src/network
 $ mv src/network.rs src/network/mod.rs
-$ cargo build
-   Compiling communicator v0.1.0 (file:///projects/communicator)
-&lt;warnings&gt;
-$
+$ mv src/server.rs src/network
 </code></pre>
-<p>It works! So now our module layout looks like this:</p>
+<p>Now if we try to <code>cargo build</code>, compilation will work (we’ll still have
+warnings though). Our module layout still looks like this, which is exactly the
+same as it did when we had all the code in <em>src/lib.rs</em> in Listing 7-3:</p>
 <pre><code class="language-text">communicator
  ├── client
  └── network
      └── server
 </code></pre>
-<p>And the corresponding file layout looks like this:</p>
+<p>The corresponding file layout now looks like this:</p>
 <pre><code class="language-text">├── src
 │   ├── client.rs
 │   ├── lib.rs
@@ -308,11 +382,42 @@ $
 │       ├── mod.rs
 │       └── server.rs
 </code></pre>
+<p>So when we wanted to extract the <code>network::server</code> module, why did we have to
+also change the <em>src/network.rs</em> file into the <em>src/network/mod.rs</em> file, and
+also put the code for <code>network::server</code> in the <code>network</code> directory in
+<em>src/network/server.rs</em>, instead of just being able to extract the
+<em>network::server</em> into <em>src/server.rs</em>? The reason is that Rust wouldn’t be
+able to tell that <code>server</code> was supposed to be a submodule of <code>network</code> if the
+<em>server.rs</em> file was in the <em>src</em> directory. To make it clearer why Rust can’t
+tell, let’s consider a different example where we have this module hierarchy
+with all the definitions in <em>src/lib.rs</em>:</p>
+<pre><code class="language-text">communicator
+ ├── client
+ └── network
+     └── client
+</code></pre>
+<p>In this example, we have three modules again, <code>client</code>, <code>network</code>, and
+<code>network::client</code>. If we follow the same steps we originally did above for
+extracting modules into files, for the <code>client</code> module we would create
+<em>src/client.rs</em>. For the <code>network</code> module, we would create <em>src/network.rs</em>.
+Then we wouldn’t be able to extract the <code>network::client</code> module into a
+<em>src/client.rs</em> file, because that already exists for the top-level <code>client</code>
+module! If we put the code in both the <code>client</code> and <code>network::client</code> modules
+in the <em>src/client.rs</em> file, Rust would not have any way to know whether the
+code was for <code>client</code> or for <code>network::client</code>.</p>
+<p>Therefore, once we wanted to extract a file for the <code>network::client</code> submodule
+of the <code>network</code> module, we needed to create a directory for the <code>network</code>
+module instead of a <em>src/network.rs</em> file. The code that is in the <code>network</code>
+module then goes into the <em>src/network/mod.rs</em> file, and the submodule
+<code>network::client</code> can have its own <em>src/network/client.rs</em> file. Now the
+top-level <em>src/client.rs</em> is unambiguously the code that belongs to the
+<code>client</code> module.</p>
+<h3>Rules of Module File Systems</h3>
 <p>In summary, these are the rules of modules with regards to files:</p>
 <ul>
 <li>
-<p>If a module named <code>foo</code> has no submodules, you should put the declarations in
-the <code>foo</code> module in a file named <code>foo.rs</code>.</p>
+<p>If a module named <code>foo</code> has no submodules, you should put the declarations
+for <code>foo</code> in a file named <code>foo.rs</code>.</p>
 </li>
 <li>
 <p>If a module named <code>foo</code> does have submodules, you should put the declarations
@@ -328,11 +433,11 @@ following files in your <code>src</code> directory:</p>
 </code></pre>
 </li>
 <li>
-<p>The modules themselves should be declared in their parent module's file using
+<p>The modules themselves should be declared in their parent module’s file using
 the <code>mod</code> keyword.</p>
 </li>
 </ul>
-<p>Next, we'll talk about the <code>pub</code> keyword, and get rid of those warnings!</p>
+<p>Next, we’ll talk about the <code>pub</code> keyword, and get rid of those warnings!</p>
 
                 </div>
 

@@ -67,9 +67,10 @@
                 </div>
 
                 <div id="content" class="content">
-                    <h2>Importing Names with <code>use</code></h2>
-<p>We've seen how we can call functions defined within a module by using the
-module name as part of the call, like this:</p>
+                    <h2>Importing Names</h2>
+<p>We’ve covered how to call functions defined within a module using the module
+name as part of the call, as in the call to the <code>namespaces</code> function shown
+here in Listing 7-6.</p>
 <p>Filename: src/main.rs</p>
 <pre><code class="language-rust">pub mod a {
     pub mod series {
@@ -83,9 +84,16 @@ fn main() {
     a::series::of::namespaces();
 }
 </code></pre>
-<p>However, referring to the fully qualified name can get quite lengthy, as we see
-in that example. To solve this issue, Rust has a keyword, <code>use</code>. It works like
-this:</p>
+<caption>
+Listing 7-6: Calling a function by fully specifying its enclosing module’s
+namespaces
+</caption>
+<p>As you can see, referring to the fully qualified name can get quite lengthy.
+Luckily, Rust has a keyword to make these calls more concise.</p>
+<h3>Concise Imports with <code>use</code></h3>
+<p>Rust’s <code>use</code> keyword works to shorten lengthy function calls by bringing the
+modules of the function you want to call into a scope. Here’s an example of
+bringing the <code>a::series::of</code> namespace into a binary crate’s root scope:</p>
 <p>Filename: src/main.rs</p>
 <pre><code class="language-rust">pub mod a {
     pub mod series {
@@ -101,10 +109,14 @@ fn main() {
     of::namespaces();
 }
 </code></pre>
-<p>We can <code>use</code> a module, and that will bring its name into scope. This allows us
-to shorten our function call, only requiring us to type the final module name,
-not the entire chain of them. <code>use</code> is quite powerful and can bring all kinds
-of things into scope. For example, we could <code>use</code> the function itself:</p>
+<p>The line <code>use a::series::of;</code> has made it so that anywhere in this scope that
+we would want to refer to the <code>of</code> namespace, instead of having to say
+<code>a::series::of</code>, we can replace that with <code>of</code>.</p>
+<p>The <code>use</code> keyword brings only what we have specified into scope; it does not
+bring children of modules into scope. That’s why we still have to say
+<code>of::namespaces</code> when we want to call the <code>namespaces</code> function.</p>
+<p>We could have chosen to bring the function itself into scope, by instead
+specifying the function in the <code>use</code> as follows:</p>
 <pre><code class="language-rust">pub mod a {
     pub mod series {
         pub mod of {
@@ -119,10 +131,12 @@ fn main() {
     namespaces();
 }
 </code></pre>
-<p>Enums also form this kind of namespace; we can import an enum's variants with
-<code>use</code> as well. For any kind of <code>use</code> statement, if you are importing multiple
-items from one namespace, you can list them using curly braces and commas in
-the last position, like so:</p>
+<p>This allows us to exclude any of the modules and just reference the function at
+the callsite.</p>
+<p>Since enums also form this kind of namespace, we can import an enum’s variants
+with <code>use</code> as well. For any kind of <code>use</code> statement, if you’re importing
+multiple items from one namespace, you can list them using curly braces and
+commas in the last position, like so:</p>
 <pre><code class="language-rust">enum TrafficLight {
     Red,
     Yellow,
@@ -134,11 +148,12 @@ use TrafficLight::{Red, Yellow};
 fn main() {
     let red = Red;
     let yellow = Yellow;
-    let green = TrafficLight::Green; // because we didn't use TrafficLight::Green
+    let green = TrafficLight::Green; // because we didn’t `use` TrafficLight::Green
 }
 </code></pre>
 <h3>Glob Imports with <code>*</code></h3>
-<p>If you'd like to import all the items in a namespace at once, you can use <code>*</code>:</p>
+<p>To import all the items in a namespace at once, we can use the <code>*</code> syntax. For
+example:</p>
 <pre><code class="language-rust">enum TrafficLight {
     Red,
     Yellow,
@@ -153,12 +168,13 @@ fn main() {
     let green = Green;
 }
 </code></pre>
-<p>The <code>*</code> is called a 'glob', and it will import everything that's visible inside
+<p>The <code>*</code> is called a <em>glob</em>, and it will import everything that’s visible inside
 of the namespace. Globs should be used sparingly: they are convenient, but you
 might also pull in more things than you expected and cause naming conflicts.</p>
 <h3>Using <code>super</code> to Access a Parent Module</h3>
-<p>Remember when we created our crate that Cargo made a <code>tests</code> module for us?
-Let's talk about that now. It was in <code>src/lib.rs</code>:</p>
+<p>As you now know, when you create a library crate, Cargo makes a <code>tests</code> module
+for you. Let’s go into more detail about that now. In your <code>communicator</code>
+project, open <code>src/lib.rs</code>.</p>
 <p>Filename: src/lib.rs</p>
 <pre><code class="language-rust,ignore">pub mod client;
 
@@ -171,13 +187,20 @@ mod tests {
     }
 }
 </code></pre>
-<p>We'll explain more about testing in Chapter XX, but parts of this should make
+<p>We’ll explain more about testing in Chapter 12, but parts of this should make
 sense now: we have a module named <code>tests</code> that lives next to our other modules
 and contains one function named <code>it_works</code>. Even though there are special
-annotations, the <code>tests</code> module is just another module!</p>
-<p>Since tests are for exercising the code within our library, let's try to call
+annotations, the <code>tests</code> module is just another module! So our module hierarchy
+looks like this:</p>
+<pre><code class="language-text">communicator
+ ├── client
+ ├── network
+ |   └── client
+ └── tests
+</code></pre>
+<p>Tests are for exercising the code within our library, so let’s try to call
 our <code>client::connect</code> function from this <code>it_works</code> function, even though
-we're not going to be checking any functionality right now:</p>
+we’re not going to be checking any functionality right now:</p>
 <p>Filename: src/lib.rs</p>
 <pre><code class="language-rust">#[cfg(test)]
 mod tests {
@@ -202,27 +225,33 @@ warning: function is never used: `connect`, #[warn(dead_code)] on by default
 1 | fn connect() {
   | ^
 </code></pre>
-<p>Why doesn't this compile? It's not because we don't have <code>communicator::</code> in
-front of the function like we had in <code>src/main.rs</code>: we are definitely within
-the <code>communicator</code> library crate here. The reason is that paths anywhere except
-in a <code>use</code> statement are relative to the current module (In a <code>use</code> statement,
-they're relative to the crate root by default). Our <code>tests</code> module doesn't have
-a <code>client</code> module in its scope!</p>
-<p>So how do we get back up one module? We can either use leading colons to say
-that we want to start from the root and list the whole path:</p>
+<p>The compilation failed, but why? We don’t need to place <code>communicator::</code> in
+front of the function like we did in <code>src/main.rs</code> because we are definitely
+within the <code>communicator</code> library crate here. The reason is that paths are
+always relative to the current module, which here is <code>tests</code>. The only
+exception is in a <code>use</code> statement, where paths are relative to the crate root
+by default. Our <code>tests</code> module needs the <code>client</code> module in its scope!</p>
+<p>So how do we get back up one module in the module hierarchy to be able to call
+the <code>client::connect</code> function in the <code>tests</code> module? In the <code>tests</code> module, we
+can either use leading colons to let Rust know that we want to start from the
+root and list the whole path:</p>
 <pre><code class="language-rust,ignore">::client::connect();
 </code></pre>
-<p>Or we can use <code>super</code> to move up one module in the hierarchy:</p>
+<p>Or we can use <code>super</code> to move up one module in the hierarchy from our current
+module:</p>
 <pre><code class="language-rust,ignore">super::client::connect();
 </code></pre>
-<p>If we were deep in the module hierarchy, starting from the root every time
-would get long. Plus, if we rearrange our modules by moving a subtree to
-another place, there might be a lot of places the path would need to be updated
-if we always used the path from the root.</p>
+<p>These two options don’t look all that different in this example, but if you’re
+deeper in a module hierarchy, starting from the root every time would get long.
+In those cases, using <code>super</code> to get from the current module to sibling modules
+is a good shortcut. Plus, if you’ve specified the path from the root in many
+places in your code and then you rearrange your modules by moving a subtree to
+another place, you’d end up needing to update the path in a lot of places,
+which would be tedious.</p>
 <p>It would also be annoying to have to type <code>super::</code> all the time in each test,
-but we now have a tool for that solution: <code>use</code>! <code>super::</code> is special and
-changes the path we give to <code>use</code> so that it is relative to the parent module
-instead of to the root module.</p>
+but you’ve already seen the tool for that solution: <code>use</code>! The <code>super::</code>
+functionality changes the path you give to <code>use</code> so that it is relative to the
+parent module instead of to the root module.</p>
 <p>For these reasons, in the <code>tests</code> module especially, <code>use super::something</code> is
 usually the way to go. So now our test looks like this:</p>
 <p>Filename: src/lib.rs</p>
@@ -247,9 +276,12 @@ test tests::it_works ... ok
 
 test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured
 </code></pre>
+<h2>Summary</h2>
 <p>Now you know techniques for organizing your code! Use these to group related
 functionality together, keep files from getting too long, and present a tidy
 public API to users of your library.</p>
+<p>Next, let’s look at some collection data structures in the standard library
+that you can make use of in your nice, neat code!</p>
 
                 </div>
 
