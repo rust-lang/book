@@ -1086,7 +1086,7 @@ fn main() {
 
 Running this code will print `number was something other than zero`.
 
-### Multiple Conditions with `else if`
+#### Multiple Conditions with `else if`
 
 We can have multiple conditions by combining `if` and `else` in an `else if`
 expression. For example:
@@ -1130,7 +1130,7 @@ Using too many `else if` expressions can clutter your code, so if you have more
 than one, you might want to refactor your code. Chapter 6 describes a powerful
 Rust branching construct called `match` for these cases.
 
-### Using `if` in a `let` statement
+#### Using `if` in a `let` statement
 
 Because `if` is an expression, we can use it on the right side of a `let`
 statement, for instance in Listing 3-4:
@@ -1213,7 +1213,7 @@ of `number` was only determined at runtime; the compiler would be more complex
 and would make fewer guarantees about the code if it had to keep track of
 multiple hypothetical types for any variable.
 
-## Repetition with Loops
+### Repetition with Loops
 
 It’s often useful to execute a block of code more than once. For this task,
 Rust provides several *loops*. A loop runs through the code inside the loop
@@ -1222,7 +1222,7 @@ experiment with loops, let’s make a new project called *loops*.
 
 Rust has three kinds of loops: `loop`, `while`, and `for`. Let’s try each one.
 
-### Repeating Code with `loop`
+#### Repeating Code with `loop`
 
 The `loop` keyword tells Rust to execute a block of code over and over again
 forever or until you explicitly tell it to stop.
@@ -1265,7 +1265,7 @@ stop executing the loop. Recall that we did this in the guessing game in the
 “Quitting After a Correct Guess” section of Chapter 2 to exit the
 program when the user won the game by guessing the correct number.
 
-### Conditional Loops with `while`
+#### Conditional Loops with `while`
 
 It’s often useful for a program to evaluate a condition within a loop. While
 the condition is true, the loop runs. When the condition ceases to be true, you
@@ -1298,7 +1298,7 @@ This construct eliminates a lot of nesting that would be necessary if you used
 `loop`, `if`, `else`, and `break`, and it’s clearer. While a condition holds
 true, the code runs; otherwise, it exits the loop.
 
-### Looping Through a Collection with `for`
+#### Looping Through a Collection with `for`
 
 You could use the `while` construct to loop over the elements of a collection,
 such as an array. For example:
