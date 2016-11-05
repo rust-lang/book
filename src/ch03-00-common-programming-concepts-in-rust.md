@@ -1,24 +1,25 @@
-# Common Programming Concepts in Rust
+# Common Programming Concepts
 
-Let’s first look at concepts that appear in almost every programming language
-and see how they work in Rust. Many programming languages have much in common
-at their core. None of the concepts presented in this chapter are unique to
-Rust, but we’ll discuss Rust’s particular syntax and conventions concerning
-these common concepts.
+This chapter covers concepts that appear in almost every programming language
+and how they work in Rust. Many programming languages have much in common at
+their core. None of the concepts presented in this chapter are unique to Rust,
+but we’ll discuss Rust’s particular syntax and conventions concerning these
+common concepts.
 
-Specifically, we’ll be talking about variables, basic types, functions,
-comments, and control flow. These foundations will be in every Rust
-program, and learning them early will give you a strong core to start from.
+Specifically, you’ll learn about variables, basic types, functions, comments,
+and control flow. These foundations will be in every Rust program, and learning
+them early will give you a strong core to start from.
 
 <!-- PROD: START BOX -->
 
-> Keep in mind as we get into variables and functions that the Rust language has
-> a set of *keywords* that have been reserved for use by the language only, much
-> like other languages do. This means you cannot use these words as names of
-> variables or functions, for example. Most of these have special meaning and we
-> will be using them to do various things in our Rust programs; a few have no
-> current functionality associated but have been reserved for functionality that
-> might be in the Rust language in the future. You can find a list of the
-> keywords in Appendix XX.
+### Keywords
+
+The Rust language has a set of *keywords* that have been reserved for use by
+the language only, much like other languages do. Keep in mind that you cannot
+use these words as names of variables or functions. Most of the keywords have
+special meanings, and you’ll be using them to do various tasks in your Rust
+programs; a few have no current functionality associated with them but have
+been reserved for functionality that might be added to Rust in the future. You
+can find a list of the keywords in Appendix A.
 
 <!-- PROD: END BOX -->

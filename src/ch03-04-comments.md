@@ -1,9 +1,9 @@
 ## Comments
 
 All programmers strive to make their code easy to understand, but sometimes
-extra explanation is warranted. In these cases, we leave notes in our source
-code that the compiler will ignore but people reading the source code may find
-useful. These notes are called *comments*.
+extra explanation is warranted. In these cases, programmers leave notes, or
+*comments*, in their source code that the compiler will ignore but people
+reading the source code may find useful.
 
 Here’s a simple comment:
 
@@ -11,9 +11,9 @@ Here’s a simple comment:
 // Hello, world.
 ```
 
-In Rust, comments must start with two slashes and will last until the end of
-the line. For comments that extend beyond a single line, you’ll need to
-include `//` on each line, like this:
+In Rust, comments must start with two slashes and continue until the end of the
+line. For comments that extend beyond a single line, you’ll need to include
+`//` on each line, like this:
 
 ```rust
 // So we’re doing something complicated here, long enough that we need
@@ -21,7 +21,7 @@ include `//` on each line, like this:
 // explain what’s going on.
 ```
 
-Comments can also be placed at the end of lines of code:
+Comments can also be placed at the end of lines containing code:
 
 Filename: src/main.rs
 
@@ -31,7 +31,8 @@ fn main() {
 }
 ```
 
-But you’ll more often see them above, like so:
+But you’ll more often see them used in this format, with the comment on a
+separate line above the code it's annotating:
 
 Filename: src/main.rs
 
@@ -42,4 +43,4 @@ fn main() {
 }
 ```
 
-That’s all there is to it. Comments are not particularly complicated.
+That’s all there is to comments. They’re not particularly complicated.
