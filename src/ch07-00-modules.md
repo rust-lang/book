@@ -1,22 +1,23 @@
 # Modules
 
-When you write a program in Rust, your code might start off living solely in
-the `main` function. As your code grows, you eventually move functionality out
-into functions, both for re-use and for nicer organization. By splitting your
-code up into smaller chunks, each chunk is easier to understand on its own. So
-what happens when you start having too many functions? Rust has a module system
-that tackles both the problem of wanting to be able to re-use code and the
-problem of keeping your code organized.
+When you start writing programs in Rust, your code might live solely in the
+`main` function. As your code grows, you’ll eventually move functionality out
+into other functions, both for re-use and for better organization. By splitting
+your code up into smaller chunks, each chunk is easier to understand on its
+own. But what happens if find yourself with too many functions? Rust has a
+module system that handles the problem of wanting to to re-use code while
+keeping your code organized.
 
 In the same way that you extract lines of code into a function, you can extract
 functions (and other code like structs and enums too) into different modules. A
 *module* is a namespace that contains definitions of functions or types, and
-those definitions can be visible outside their module or not. Here's an
-overview of how the bits fit together:
+you can choose whether those definitions are visible outside their module
+(public) or not (private). Here’s an overview of how modules work:
 
-* `mod` declares a new module.
-* Everything starts off as private, but the `pub` keyword makes it public.
-* The `use` keyword allows you to bring modules, or definitions inside of them,
-  into scope so that it's easier to refer to them.
+* You declare a new module with the keyword `mod`
+* By default, everything is set as private, but you can use the `pub` keyword
+  to make the module public, and therefore visible outside of the namespace.
+* The `use` keyword allows you to bring modules, or the definitions inside
+  modules, into scope so that it’s easier to refer to them.
 
-We'll take a look at each of these parts and see how they fit into the whole.
+We’ll take a look at each of these parts and see how they fit into the whole.
