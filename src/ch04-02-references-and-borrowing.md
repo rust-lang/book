@@ -157,7 +157,7 @@ something that new Rustaceans struggle with, because most languages let you
 mutate whenever you’d like. The benefit of having this restriction is that Rust
 can prevent data races at compile time. A *data race* is a particular type of
 race condition where two or more pointers access the same data at the same
-time, at least one of the pointers is being used to write to the data, and
+time. At least one of the pointers is being used to write to the data, and
 there’s no mechanism being used to synchronize access to the data. Data races
 cause undefined behavior and can be difficult to diagnose and fix when trying
 to track them down at runtime; Rust prevents this problem from happening since
