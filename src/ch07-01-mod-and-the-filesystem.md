@@ -146,7 +146,7 @@ communicator
 
 You can see that in Listing 7-2, `client` is a child of the `network` module,
 rather than a sibling. More complicated projects can have a lot of modules, and
-they’ll need to be orgnaized logically in order to keep track of them. What
+they’ll need to be organized logically in order to keep track of them. What
 “logically” means in your project is up to you and depends on how you and users
 of your library think about your project’s domain. Use the techniques we’ve
 shown here to create side-by-side modules and nested modules in whatever
