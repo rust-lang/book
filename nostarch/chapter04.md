@@ -45,7 +45,7 @@ explanation.
 Both the stack and the heap are parts of memory that is available to your code
 to use at runtime, but they are structured in different ways. The stack stores
 values in the order it gets them and removes the values in the opposite order.
-This is referred to as *last in, first out*. Think of a stack of plates: when
+This is referred to as *last in, first out*. <!-- Could use a simple diagram of a data/call stack. /eddyb --> Think of a stack of plates: when
 you add more plates, you put them on top of the pile, and when you need a
 plate, you take one off the top. Adding or removing plates from the middle or
 bottom wouldn’t work as well! Adding data is called *pushing onto the stack*
@@ -320,7 +320,7 @@ automatically call the `drop` function and clean up the heap memory for that
 variable. But in figure 4-2, we see both data pointers pointing to the same
 location. This is a problem: when `s2` and `s1` go out of scope, they will both
 try to free the same memory. This is known as a *double free* error and is one
-of the memory safety bugs we mentioned before. Freeing memory twice can lead to
+of the memory safety bugs we mentioned before. Freeing <!-- Torn between “freeing” and “deallocating” (not just here). I suppose both work? /eddyb --> memory twice can lead to
 memory corruption, which can potentially lead to security vulnerabilities.
 
 In order to ensure memory safety, there’s one more detail to what happens in
@@ -365,7 +365,7 @@ That solves our problem! With only `s2` valid, when it goes out of scope, it
 alone will free the memory, and we’re done.
 
 Furthermore, there’s a design choice that’s implied by this: Rust will never
-automatically create “deep” copies of your data. Therefore, any *automatic*
+automatically create “deep” copies of your data. Therefore, any <!-- Caveat: large arrays (but not large enough to cause a stack overflow) can be expensive to copy. /eddyb --> *automatic*
 copying can be assumed to be inexpensive.
 
 #### Ways Variables and Data Interact: Clone
@@ -417,7 +417,7 @@ Rust has a special annotation called the `Copy` trait that we can place on
 types like these (we’ll talk more about traits in Chapter 10). If a type has
 the `Copy` trait, an older variable is still usable after assignment. Rust will
 not let us annotate a type with the `Copy` trait if the type, or any of its
-parts, has implemented `drop`. If the type needs something special to happen
+parts, has implemented `drop`. <!-- Maybe pedantry, but “implemented X” sounds like X is a trait, and there is a trait (“Drop”, containing a method “drop”) so this could get confusing. On top of that, the drop function in the prelude is not directly related. /eddyb --> If the type needs something special to happen
 when the value goes out of scope and we add the `Copy` annotation to that type,
 we will get a compile-time error.
 
@@ -990,6 +990,8 @@ that contains a pointer to the 6th byte of `s` and a length value of 5.
 Figure 4-6 shows this in a diagram:
 
 <img alt="world containing a pointer to the 6th byte of String s and a length 5" src="img/trpl04-06.svg" class="center" style="width: 50%;" />
+
+<!-- Would be helpful to show the “span” of a slice, covering all of “world”. /eddyb -->
 
 <caption>
 Figure 4-6: String slice referring to part of a `String`
