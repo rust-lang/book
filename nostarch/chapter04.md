@@ -9,14 +9,14 @@ understand how ownership works in Rust. In this chapter we’ll talk about
 ownership as well as several related features: borrowing, slices, and how Rust
 lays things out in memory.
 
-## Ownership and Memory
+## Ownership of Memory
 
 Rust’s central feature is *ownership*. It is a feature that is straightforward
 to explain, but has deep implications for the rest of the language.
 
 All programs have to manage the way they use a computer’s memory while running.
 Some languages have garbage collection that’s constantly looking for no longer
-used memory as the program runs, while in others the programmer has to
+used memory as the program runs, while in others, the programmer has to
 explicitly allocate and free the memory. Rust takes a third approach: memory is
 managed through a system of ownership with a set of rules that the compiler
 checks at compile-time. You do not pay any run-time cost for any of these
@@ -33,7 +33,7 @@ through some examples, focusing on a very common data structure: strings.
 
 PROD: START BOX
 
-#### The Stack and the Heap
+### The Stack and the Heap
 
 In many programming languages, we don’t have to think about the stack and the
 heap very often. But in a systems programming language like Rust, whether a
@@ -72,11 +72,15 @@ and leads you there. If someone in your group comes late, they can ask where
 you have been seated to find you.
 
 Accessing data in the heap is slower because we have to follow a pointer to get
-there. Modern processors are faster if they jump around less in memory, not
-unlike a waiter taking all orders at each table instead of going to all tables
-and taking one order from each, as both accessing memory at random and moving
-to another table take time and effort. Allocating a large amount of space can
-also take time.
+there. Contemporary processors are faster if they jump around less in memory.
+Continuing the analogy, consider a server at a restaurant who is taking orders
+from many tables. It's most efficient to get all of the orders at one table
+before moving on to the next table. Taking an order from table A, then an order
+from table B, then one from A again, then one from B again would be much
+slower. By the same token, a processor can do its job better if it works on
+data that's close to other data (as it is on the stack), rather than farther
+away (as it can be on the heap). Allocating a large amount of space on the heap
+can also take time.
 
 When our code calls a function, the values passed into the function (including,
 potentially, pointers to data on the heap) and the function’s local variables
@@ -85,7 +89,7 @@ off the stack.
 
 Keeping track of what parts of code are using what data on the heap, minimizing
 the amount of duplicate data on the heap, and cleaning up unused data on the
-heap so that we don’t run out of space - these are all problems that ownership
+heap so that we don’t run out of space—these are all problems that ownership
 addresses. Once you understand ownership, you won’t need to think about the
 stack and the heap very often, but knowing that managing heap data is why
 ownership exists can help explain why it works the way it does.
@@ -233,11 +237,9 @@ out of scope, Rust calls a special function for us. This function is called
 `drop`, and it is where the author of `String` can put the code to return the
 memory. Rust calls `drop` automatically at the closing `}`.
 
-Note: This pattern is sometimes called *Resource Acquisition Is Initialization*
-in C++, or RAII for short. While they are very similar, Rust’s take on this
-concept has a number of differences, so we don’t tend to use the same term. If
-you’re familiar with this idea, keep in mind that it is *roughly* similar in
-Rust, but not identical.
+> Note: This pattern is sometimes called *Resource Acquisition Is
+Initialization* in C++, or RAII for short. The `drop` function in Rust will be
+familiar to you if you have used RAII patterns.
 
 This pattern has a profound impact on the way that Rust code is written. It may
 seem simple right now, but things can get tricky in more advanced situations
