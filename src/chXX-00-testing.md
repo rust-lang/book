@@ -198,6 +198,16 @@ if left_val =! right_val {
 }
 ```
 
+And if the test fails, we get an error that looks like this:
+
+```text
+---- failing_test stdout ----
+	thread 'failing_test' panicked at 'assertion failed: `(left == right)` (left: `"hello"`, right: `"world"`)', failing_test.rs:4
+```
+
+One other thing to notice is that they're named "left" and "right" rather than
+"expected" vs "actual"; the order isn't particularly important.
+
 But they're a bit more convenient than writing this out by hand.  These macros
 are often used to call some function with some known arguments and compare it
 to the expected output, like this:
