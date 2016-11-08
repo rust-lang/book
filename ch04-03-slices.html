@@ -103,7 +103,7 @@ check if a value is a space, we will convert our String to an
 array of bytes using the <code>as_bytes</code> method.</p>
 <pre><code class="language-rust,ignore">for (i, &amp;item) in bytes.iter().enumerate() {
 </code></pre>
-<p>We will be discussing iterators in more detail in Chapter XX, but for now, know
+<p>We will be discussing iterators in more detail in Chapter 16, but for now, know
 that <code>iter</code> is a method that returns each element in a collection, and
 <code>enumerate</code> modifies the result of <code>iter</code> and returns each element as part
 of a tuple instead, where the first element of the tuple is the index, and the
@@ -335,7 +335,7 @@ let slice = &amp;a[1..3];
 <p>This slice has the type <code>&amp;[i32]</code>. It works the exact same way as string slices
 do, by storing a reference to the first element and a length. You’ll use this
 kind of slice for all sorts of other collections. We’ll discuss these in detail
-when we talk about vectors in Chapter XX.</p>
+when we talk about vectors in Chapter 8.</p>
 <h2>Summary</h2>
 <p>The concepts of ownership, borrowing, and slices are what ensure memory safety
 in Rust programs at compile time. Rust is a language that gives you control

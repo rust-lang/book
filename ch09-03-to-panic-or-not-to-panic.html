@@ -191,7 +191,7 @@ that would be a violation of the contract that <code>Guess::new</code> is relyin
 function needs to signal to the calling code that it has a bug somewhere
 leading to the contract violation. The conditions in which <code>Guess::new</code> might
 panic should be discussed in its public-facing API documentation, which we will
-cover in Chapter XX.</p>
+cover in Chapter 14.</p>
 <p>Important to note is the <code>value</code> field of the <code>Guess</code> struct is private, so
 code using this struct may not set that value directly. Callers <em>must</em> use the
 <code>Guess::new</code> constructor function to create an instance of <code>Guess</code>, and they

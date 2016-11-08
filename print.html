@@ -224,7 +224,7 @@ that it’s indented with four spaces, not a tab.</p>
 <p>The second important part is <code>println!</code>. This is calling a Rust <em>macro</em>,
 which is how metaprogramming is done in Rust. If it were calling a function
 instead, it would look like this: <code>println</code> (without the <code>!</code>). We'll discuss
-Rust macros in more detail in Chapter XX, but for now you just need to know
+Rust macros in more detail in Chapter 24, but for now you just need to know
 that when you see a <code>!</code> that means that you’re calling a macro instead of a
 normal function.</p>
 <p>Next is <code>&quot;Hello, world!&quot;</code> which is a <em>string</em>. We pass this string as an
@@ -787,7 +787,7 @@ rand = &quot;0.4.0&quot;
 available and reevaluate your <code>rand</code> requirements according to the new version
 you specified.</p>
 <p>There’s a lot more to say about <a href="http://doc.crates.io">Cargo</a><!-- ignore --> and <a href="http://doc.crates.io/crates-io.html">its
-ecosystem</a><!-- ignore --> that Chapter XX will discuss, but for
+ecosystem</a><!-- ignore --> that Chapter 14 will discuss, but for
 now, that’s all you need to know. Cargo makes it very easy to reuse libraries,
 so Rustaceans are able to write smaller projects that are assembled from a
 number of packages.</p>
@@ -925,7 +925,7 @@ expression fits that arm’s pattern. Rust takes the value given to <code>match<
 looks through each arm’s pattern in turn. The <code>match</code> construct and patterns
 are powerful features in Rust that let you express a variety of situations your
 code might encounter and helps ensure that you handle them all. These features
-will be covered in detail in Chapter 6 and Chapter XX, respectively.</p>
+will be covered in detail in Chapter 6 and Chapter 19, respectively.</p>
 <p>Let’s walk through an example of what would happen with the <code>match</code> expression
 used here. Say that the user has guessed 50, and the randomly generated secret
 number this time is 38. When the code compares 50 to 38, the <code>cmp</code> method will
@@ -2467,7 +2467,7 @@ explore how Rust knows when to clean that data up.</p>
 <p>We’re going to use <code>String</code> as the example here and concentrate on the parts of
 <code>String</code> that relate to ownership. These aspects also apply to other complex
 data types provided by the standard library and that you create. We’ll go into
-more depth about <code>String</code> specifically in Chapter XX.</p>
+more depth about <code>String</code> specifically in Chapter 8.</p>
 <p>We’ve already seen string literals, where a string value is hard-coded into our
 program. String literals are convenient, but they aren’t always suitable for
 every situation you want to use text. For one thing, they’re immutable. For
@@ -2638,7 +2638,7 @@ copying can be assumed to be inexpensive.</p>
 <h4>Ways Variables and Data Interact: Clone</h4>
 <p>If we <em>do</em> want to deeply copy the <code>String</code>’s data and not just the <code>String</code>
 itself, there’s a common method for that: <code>clone</code>. We will discuss methods in
-the section on <a href="ch05-01-structs.html"><code>structs</code> in Chapter XX</a><!-- ignore -->, but they’re a
+the section on <a href="ch05-01-structs.html"><code>structs</code> in Chapter 5</a><!-- ignore -->, but they’re a
 common enough feature in many programming languages that you have probably seen
 them before.</p>
 <p>Here’s an example of the <code>clone</code> method in action:</p>
@@ -2669,7 +2669,7 @@ after we create the variable <code>y</code>. In other words, there’s no differ
 deep and shallow copying here, so calling <code>clone</code> wouldn’t do anything
 differently from the usual shallow copying and we can leave it out.</p>
 <p>Rust has a special annotation called the <code>Copy</code> trait that we can place on
-types like these (we’ll talk more about traits in Chapter XX). If a type has
+types like these (we’ll talk more about traits in Chapter 23). If a type has
 the <code>Copy</code> trait, an older variable is still usable after assignment. Rust will
 not let us annotate a type with the <code>Copy</code> trait if the type, or any of its
 parts, has implemented <code>drop</code>. If the type needs something special to happen
@@ -2976,7 +2976,7 @@ fn dangle() -&gt; &amp;String {
 error: aborting due to previous error
 </code></pre>
 <p>This error message refers to a feature we haven’t learned about yet:
-<em>lifetimes</em>. We’ll discuss lifetimes in detail in Chapter XX, but, disregarding
+<em>lifetimes</em>. We’ll discuss lifetimes in detail in Chapter 20, but, disregarding
 the parts about lifetimes, the message does contain the key to why this code is
 a problem: <code>this function’s return type contains a borrowed value, but there is no value for it to be borrowed from</code>.</p>
 <p>Let’s have a closer look at exactly what’s happening at each stage of our
@@ -3049,7 +3049,7 @@ check if a value is a space, we will convert our String to an
 array of bytes using the <code>as_bytes</code> method.</p>
 <pre><code class="language-rust,ignore">for (i, &amp;item) in bytes.iter().enumerate() {
 </code></pre>
-<p>We will be discussing iterators in more detail in Chapter XX, but for now, know
+<p>We will be discussing iterators in more detail in Chapter 16, but for now, know
 that <code>iter</code> is a method that returns each element in a collection, and
 <code>enumerate</code> modifies the result of <code>iter</code> and returns each element as part
 of a tuple instead, where the first element of the tuple is the index, and the
@@ -3281,7 +3281,7 @@ let slice = &amp;a[1..3];
 <p>This slice has the type <code>&amp;[i32]</code>. It works the exact same way as string slices
 do, by storing a reference to the first element and a length. You’ll use this
 kind of slice for all sorts of other collections. We’ll discuss these in detail
-when we talk about vectors in Chapter XX.</p>
+when we talk about vectors in Chapter 8.</p>
 <h2>Summary</h2>
 <p>The concepts of ownership, borrowing, and slices are what ensure memory safety
 in Rust programs at compile time. Rust is a language that gives you control
@@ -3537,7 +3537,7 @@ their name, they can take arguments and return values, and they contain some
 code that gets run when they're called from somewhere else. Methods are
 different from functions, however, because they're defined within the context
 of a struct (or an enum or a trait object, which we will cover in Chapters 6
-and XX respectively), and their first argument is always <code>self</code>, which
+and 23 respectively), and their first argument is always <code>self</code>, which
 represents the instance of the struct that the method is being called on.</p>
 <h3>Defining Methods</h3>
 <p>Let's change our <code>area</code> function that takes a <code>Rectangle</code> instance as an
@@ -5455,7 +5455,7 @@ always handle every possible case.</p>
 <p>Using an enum for storing different types in a vector does imply that we need
 to know the set of types we'll want to store at compile time. If that's not the
 case, instead of an enum, we can use a trait object. We'll learn about those in
-Chapter XX.</p>
+Chapter 23.</p>
 <p>Now that we've gone over some of the most common ways to use vectors, be sure
 to take a look at the API documentation for other useful methods defined on
 <code>Vec</code> by the standard library. For example, in addition to <code>push</code> there's a
@@ -6088,7 +6088,7 @@ type of the function:</p>
 unsuccessful result. These two variants each contain one thing: in <code>Ok</code>'s case,
 it's the successful return value. With <code>Err</code>, it's some value that represents
 the error. The <code>T</code> and <code>E</code> are generic type parameters; we'll go into generics
-in more detail in Chapter XX. What you need to know for right now is that the
+in more detail in Chapter 10. What you need to know for right now is that the
 <code>Result</code> type is defined such that it can have the same behavior for any type
 <code>T</code> that is what we want to return in the success case, and any type <code>E</code> that
 is what we want to return in the error case.</p>
@@ -6489,7 +6489,7 @@ that would be a violation of the contract that <code>Guess::new</code> is relyin
 function needs to signal to the calling code that it has a bug somewhere
 leading to the contract violation. The conditions in which <code>Guess::new</code> might
 panic should be discussed in its public-facing API documentation, which we will
-cover in Chapter XX.</p>
+cover in Chapter 14.</p>
 <p>Important to note is the <code>value</code> field of the <code>Guess</code> struct is private, so
 code using this struct may not set that value directly. Callers <em>must</em> use the
 <code>Guess::new</code> constructor function to create an instance of <code>Guess</code>, and they

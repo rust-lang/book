@@ -177,7 +177,7 @@ explore how Rust knows when to clean that data up.</p>
 <p>We’re going to use <code>String</code> as the example here and concentrate on the parts of
 <code>String</code> that relate to ownership. These aspects also apply to other complex
 data types provided by the standard library and that you create. We’ll go into
-more depth about <code>String</code> specifically in Chapter XX.</p>
+more depth about <code>String</code> specifically in Chapter 8.</p>
 <p>We’ve already seen string literals, where a string value is hard-coded into our
 program. String literals are convenient, but they aren’t always suitable for
 every situation you want to use text. For one thing, they’re immutable. For
@@ -348,7 +348,7 @@ copying can be assumed to be inexpensive.</p>
 <h4>Ways Variables and Data Interact: Clone</h4>
 <p>If we <em>do</em> want to deeply copy the <code>String</code>’s data and not just the <code>String</code>
 itself, there’s a common method for that: <code>clone</code>. We will discuss methods in
-the section on <a href="ch05-01-structs.html"><code>structs</code> in Chapter XX</a><!-- ignore -->, but they’re a
+the section on <a href="ch05-01-structs.html"><code>structs</code> in Chapter 5</a><!-- ignore -->, but they’re a
 common enough feature in many programming languages that you have probably seen
 them before.</p>
 <p>Here’s an example of the <code>clone</code> method in action:</p>
@@ -379,7 +379,7 @@ after we create the variable <code>y</code>. In other words, there’s no differ
 deep and shallow copying here, so calling <code>clone</code> wouldn’t do anything
 differently from the usual shallow copying and we can leave it out.</p>
 <p>Rust has a special annotation called the <code>Copy</code> trait that we can place on
-types like these (we’ll talk more about traits in Chapter XX). If a type has
+types like these (we’ll talk more about traits in Chapter 23). If a type has
 the <code>Copy</code> trait, an older variable is still usable after assignment. Rust will
 not let us annotate a type with the <code>Copy</code> trait if the type, or any of its
 parts, has implemented <code>drop</code>. If the type needs something special to happen
