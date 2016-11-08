@@ -30,7 +30,7 @@ Let's run them:
 
 ```bash
 $ cargo test
-   Compiling adder v0.1.0 (file:///home/steve/tmp/adder)
+   Compiling adder v0.1.0 (file:///projects/tmp/adder)
      Running target/adder-91b3e234d4ed382a
 
 running 1 test
@@ -92,7 +92,7 @@ Let's try running this:
 
 ```bash
 $ cargo test
-   Compiling adder v0.1.0 (file:///home/steve/tmp/adder)
+   Compiling adder v0.1.0 (file:///projects/tmp/adder)
     Finished debug [unoptimized + debuginfo] target(s) in 0.25 secs
      Running target/debug/deps/adder-ce99bcc2479f4607
 
@@ -139,7 +139,7 @@ making modules in integration tests. If we move `tests/common.rs` to
 $ mkdir tests/common
 $ mv tests/common.rs tests/common/mod.rs
 $ cargo test
-   Compiling adder v0.1.0 (file:///home/steve/tmp/adder)
+   Compiling adder v0.1.0 (file:///projects/tmp/adder)
     Finished debug [unoptimized + debuginfo] target(s) in 0.24 secs
      Running target/debug/deps/adder-ce99bcc2479f4607
 
