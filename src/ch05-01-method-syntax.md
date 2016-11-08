@@ -5,7 +5,7 @@ their name, they can take arguments and return values, and they contain some
 code that gets run when they're called from somewhere else. Methods are
 different from functions, however, because they're defined within the context
 of a struct (or an enum or a trait object, which we will cover in Chapters 6
-and XX respectively), and their first argument is always `self`, which
+and 23 respectively), and their first argument is always `self`, which
 represents the instance of the struct that the method is being called on.
 
 ### Defining Methods

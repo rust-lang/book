@@ -487,7 +487,7 @@ available and reevaluate your `rand` requirements according to the new version
 you specified.
 
 There’s a lot more to say about [Cargo][doccargo]<!-- ignore --> and [its
-ecosystem][doccratesio]<!-- ignore --> that Chapter XX will discuss, but for
+ecosystem][doccratesio]<!-- ignore --> that Chapter 14 will discuss, but for
 now, that’s all you need to know. Cargo makes it very easy to reuse libraries,
 so Rustaceans are able to write smaller projects that are assembled from a
 number of packages.
@@ -659,7 +659,7 @@ expression fits that arm’s pattern. Rust takes the value given to `match` and
 looks through each arm’s pattern in turn. The `match` construct and patterns
 are powerful features in Rust that let you express a variety of situations your
 code might encounter and helps ensure that you handle them all. These features
-will be covered in detail in Chapter 6 and Chapter XX, respectively.
+will be covered in detail in Chapter 6 and Chapter 19, respectively.
 
 Let’s walk through an example of what would happen with the `match` expression
 used here. Say that the user has guessed 50, and the randomly generated secret

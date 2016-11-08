@@ -20,7 +20,7 @@ The `Ok` variant indicates a successful result, and `Err` indicates an
 unsuccessful result. These two variants each contain one thing: in `Ok`'s case,
 it's the successful return value. With `Err`, it's some value that represents
 the error. The `T` and `E` are generic type parameters; we'll go into generics
-in more detail in Chapter XX. What you need to know for right now is that the
+in more detail in Chapter 10. What you need to know for right now is that the
 `Result` type is defined such that it can have the same behavior for any type
 `T` that is what we want to return in the success case, and any type `E` that
 is what we want to return in the error case.

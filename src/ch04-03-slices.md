@@ -50,7 +50,7 @@ array of bytes using the `as_bytes` method.
 for (i, &item) in bytes.iter().enumerate() {
 ```
 
-We will be discussing iterators in more detail in Chapter XX, but for now, know
+We will be discussing iterators in more detail in Chapter 16, but for now, know
 that `iter` is a method that returns each element in a collection, and
 `enumerate` modifies the result of `iter` and returns each element as part
 of a tuple instead, where the first element of the tuple is the index, and the
@@ -355,7 +355,7 @@ let slice = &a[1..3];
 This slice has the type `&[i32]`. It works the exact same way as string slices
 do, by storing a reference to the first element and a length. You’ll use this
 kind of slice for all sorts of other collections. We’ll discuss these in detail
-when we talk about vectors in Chapter XX.
+when we talk about vectors in Chapter 8.
 
 ## Summary
 
