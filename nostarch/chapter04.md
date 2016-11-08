@@ -9,7 +9,7 @@ understand how ownership works in Rust. In this chapter we’ll talk about
 ownership as well as several related features: borrowing, slices, and how Rust
 lays things out in memory.
 
-## Ownership of Memory
+## What is Ownership?
 
 Rust’s central feature is *ownership*. It is a feature that is straightforward
 to explain, but has deep implications for the rest of the language.
@@ -417,9 +417,9 @@ Rust has a special annotation called the `Copy` trait that we can place on
 types like these (we’ll talk more about traits in Chapter 10). If a type has
 the `Copy` trait, an older variable is still usable after assignment. Rust will
 not let us annotate a type with the `Copy` trait if the type, or any of its
-parts, has implemented `drop`. <!-- Maybe pedantry, but “implemented X” sounds like X is a trait, and there is a trait (“Drop”, containing a method “drop”) so this could get confusing. On top of that, the drop function in the prelude is not directly related. /eddyb --> If the type needs something special to happen
-when the value goes out of scope and we add the `Copy` annotation to that type,
-we will get a compile-time error.
+parts, has implemented the `Drop` trait. <!-- Maybe pedantry, but “implemented X” sounds like X is a trait, and there is a trait (“Drop”, containing a method “drop”) so this could get confusing. On top of that, the drop function in the prelude is not directly related. /eddyb --> If the type needs something special
+to happen when the value goes out of scope and we add the `Copy` annotation to
+that type, we will get a compile-time error.
 
 So what types are `Copy`? You can check the documentation for the given type to
 be sure, but as a rule of thumb, any group of simple scalar values can be Copy,
