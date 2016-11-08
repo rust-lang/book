@@ -101,7 +101,7 @@ that it’s indented with four spaces, not a tab.
 The second important part is `println!`. This is calling a Rust *macro*,
 which is how metaprogramming is done in Rust. If it were calling a function
 instead, it would look like this: `println` (without the `!`). We'll discuss
-Rust macros in more detail in Chapter XX, but for now you just need to know
+Rust macros in more detail in Chapter 24, but for now you just need to know
 that when you see a `!` that means that you’re calling a macro instead of a
 normal function.
 

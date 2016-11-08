@@ -133,7 +133,7 @@ explore how Rust knows when to clean that data up.
 We’re going to use `String` as the example here and concentrate on the parts of
 `String` that relate to ownership. These aspects also apply to other complex
 data types provided by the standard library and that you create. We’ll go into
-more depth about `String` specifically in Chapter XX.
+more depth about `String` specifically in Chapter 8.
 
 We’ve already seen string literals, where a string value is hard-coded into our
 program. String literals are convenient, but they aren’t always suitable for
@@ -353,7 +353,7 @@ copying can be assumed to be inexpensive.
 
 If we *do* want to deeply copy the `String`’s data and not just the `String`
 itself, there’s a common method for that: `clone`. We will discuss methods in
-the section on [`structs` in Chapter XX][structs]<!-- ignore -->, but they’re a
+the section on [`structs` in Chapter 5][structs]<!-- ignore -->, but they’re a
 common enough feature in many programming languages that you have probably seen
 them before.
 
@@ -398,7 +398,7 @@ deep and shallow copying here, so calling `clone` wouldn’t do anything
 differently from the usual shallow copying and we can leave it out.
 
 Rust has a special annotation called the `Copy` trait that we can place on
-types like these (we’ll talk more about traits in Chapter XX). If a type has
+types like these (we’ll talk more about traits in Chapter 23). If a type has
 the `Copy` trait, an older variable is still usable after assignment. Rust will
 not let us annotate a type with the `Copy` trait if the type, or any of its
 parts, has implemented `drop`. If the type needs something special to happen

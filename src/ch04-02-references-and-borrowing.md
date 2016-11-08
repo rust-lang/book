@@ -257,7 +257,7 @@ error: aborting due to previous error
 ```
 
 This error message refers to a feature we haven’t learned about yet:
-*lifetimes*. We’ll discuss lifetimes in detail in Chapter XX, but, disregarding
+*lifetimes*. We’ll discuss lifetimes in detail in Chapter 20, but, disregarding
 the parts about lifetimes, the message does contain the key to why this code is
 a problem: `this function’s return type contains a borrowed value, but there is
 no value for it to be borrowed from`.
