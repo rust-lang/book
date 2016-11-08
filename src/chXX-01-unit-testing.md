@@ -129,3 +129,97 @@ mod tests {
 In this scenario, we have a non-`pub` function, `internal_adder`. Because tests
 are just Rust code, and the `tests` module is just another module, we can
 import and call `internal_adder` in a test just fine.
+
+## Running a subset of tests
+
+Sometimes, running a full test suite can take a long time. `cargo test` takes
+an argument that allows you to only run certain tests, if you'd prefer to do that.
+Let's say we had two tests of `add_two`:
+
+```rust
+pub fn add_two(a: i32) -> i32 {
+    a + 2
+}
+
+#[cfg(test)]
+mod tests {
+    use add_two;
+
+    #[test]
+    fn add_two_and_two() {
+        assert_eq!(4, add_two(2));
+    }
+
+    #[test]
+    fn add_three_and_two() {
+        assert_eq!(5, add_two(3));
+    }
+
+    #[test]
+    fn one_hundred() {
+        assert_eq!(102, add_two(100));
+    }
+}
+```
+
+Running with different arguments will run different subsets of the tests.
+No arguments, as we've already seen, runs all the tests:
+
+```text
+$ cargo test
+    Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
+     Running target/debug/deps/lol-06a75b4a1f2515e9
+
+running 3 tests
+test tests::add_three_and_two ... ok
+test tests::one_hundred ... ok
+test tests::add_two_and_two ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured
+
+   Doc-tests lol
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured
+```
+
+We can pass the name of any test function to run only that test:
+
+```text
+$ cargo test one_hundred
+    Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
+     Running target/debug/deps/lol-06a75b4a1f2515e9
+
+running 1 test
+test tests::one_hundred ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured
+
+   Doc-tests lol
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured
+```
+
+We can also pass part of a name, and `cargo test` will run all tests
+that match:
+
+```text
+$ cargo test add
+    Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
+     Running target/debug/deps/lol-06a75b4a1f2515e9
+
+running 2 tests
+test tests::add_three_and_two ... ok
+test tests::add_two_and_two ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured
+
+   Doc-tests lol
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured
+```
