@@ -1,19 +1,20 @@
-## Ownership
+## What is Ownership?
 
 Rust’s central feature is *ownership*. It is a feature that is straightforward
 to explain, but has deep implications for the rest of the language.
 
 All programs have to manage the way they use a computer’s memory while running.
-Some languages have garbage collection, while in others, the programmer has to
+Some languages have garbage collection that’s constantly looking for no longer
+used memory as the program runs, while in others, the programmer has to
 explicitly allocate and free the memory. Rust takes a third approach: memory is
 managed through a system of ownership with a set of rules that the compiler
 checks at compile-time. You do not pay any run-time cost for any of these
 features.
 
-Since ownership is a new concept for many programmers, it does take
-some time to get used to. There is good news, though: the more experienced you
-become with Rust and the rules of the ownership system, the more you’ll be
-able to naturally develop code that is both safe and efficient. Keep at it!
+Since ownership is a new concept for many programmers, it does take some time
+to get used to. There is good news, though: the more experienced you become
+with Rust and the rules of the ownership system, the more you’ll be able to
+naturally develop code that is both safe and efficient. Keep at it!
 
 Once you understand ownership, you have a good foundation for understanding the
 features that make Rust unique. In this chapter, we’ll learn ownership by going
@@ -21,7 +22,7 @@ through some examples, focusing on a very common data structure: strings.
 
 <!-- PROD: START BOX -->
 
-> #### The Stack and the Heap
+> ### The Stack and the Heap
 >
 > In many programming languages, we don’t have to think about the stack and the
 > heap very often. But in a systems programming language like Rust, whether a
@@ -49,7 +50,7 @@ through some examples, focusing on a very common data structure: strings.
 > when we put data on the heap, we ask for some amount of space. The operating
 > system finds an empty spot somewhere in the heap that is big enough, marks it
 > as being in use, and returns to us a pointer to that location. This process
-> is called *allocating on the heap*, and sometimes we just say *allocating*
+> is called *allocating on the heap*, and sometimes we just say “allocating”
 > for short. Pushing values onto the stack is not considered allocating. Since
 > the pointer is a known, fixed size, we can store the pointer on the stack,
 > but when we want the actual data, we have to follow the pointer.
@@ -60,7 +61,15 @@ through some examples, focusing on a very common data structure: strings.
 > you have been seated to find you.
 >
 > Accessing data in the heap is slower because we have to follow a pointer to
-> get there. Allocating a large amount of space can also take time.
+> get there. Contemporary processors are faster if they jump around less in
+> memory. Continuing the analogy, consider a server at a restaurant who is
+> taking orders from many tables. It's most efficient to get all of the orders
+> at one table before moving on to the next table. Taking an order from table
+> A, then an order from table B, then one from A again, then one from B again
+> would be much slower. By the same token, a processor can do its job better if
+> it works on data that's close to other data (as it is on the stack), rather
+> than farther away (as it can be on the heap). Allocating a large amount of
+> space on the heap can also take time.
 >
 > When our code calls a function, the values passed into the function
 > (including, potentially, pointers to data on the heap) and the function’s
@@ -69,10 +78,10 @@ through some examples, focusing on a very common data structure: strings.
 >
 > Keeping track of what parts of code are using what data on the heap,
 > minimizing the amount of duplicate data on the heap, and cleaning up unused
-> data on the heap so that we don’t run out of space are all problems that
-> ownership addresses. Once you understand ownership, you won’t need to think
-> about the stack and the heap very often, but knowing that managing heap data
-> is why ownership exists can help explain why it works the way it does.
+> data on the heap so that we don’t run out of space—these are all problems
+> that ownership addresses. Once you understand ownership, you won’t need to
+> think about the stack and the heap very often, but knowing that managing heap
+> data is why ownership exists can help explain why it works the way it does.
 
 <!-- PROD: END BOX -->
 
@@ -94,17 +103,17 @@ the following examples inside of a `main` function yourself. This lets our
 examples be a bit more concise, letting us focus on the actual details rather
 than boilerplate.
 
-As a first example of ownership, we’ll look at the *scope* of some variables.
-A scope is the range within a program for which an item is valid.
-Let’s say we have a variable that looks like this:
+As a first example of ownership, we’ll look at the *scope* of some variables. A
+scope is the range within a program for which an item is valid. Let’s say we
+have a variable that looks like this:
 
 ```rust
 let s = "hello";
 ```
 
-The variable `s` refers to a string literal, where the value of the
-string is hard coded into the text of our program. The variable is valid from
-the point at which it’s declared until the end of the current *scope*. That is:
+The variable `s` refers to a string literal, where the value of the string is
+hard coded into the text of our program. The variable is valid from the point
+at which it’s declared until the end of the current *scope*. That is:
 
 ```rust
 {                      // s is not valid here, it’s not yet declared
@@ -164,6 +173,7 @@ s.push_str(", world!"); // push_str() appends a literal to a String
 
 println!("{}", s); // This will print `hello, world!`
 ```
+
 So, what’s the difference here? Why can `String` be mutated, but literals
 cannot? The difference comes down to how these two types deal with memory.
 
@@ -184,9 +194,9 @@ to hold the contents. This means two things:
 2. We need a way of giving this memory back to the operating system when we’re
    done with our `String`.
 
-That first part is done by us: when we call `String::from`, its
-implementation requests the memory it needs. This is pretty much universal in
-programming languages.
+That first part is done by us: when we call `String::from`, its implementation
+requests the memory it needs. This is pretty much universal in programming
+languages.
 
 The second case, however, is different. In languages with a *garbage collector*
 (GC), the GC will keep track and clean up memory that isn’t being used anymore,
@@ -199,8 +209,8 @@ variable. If we do it twice, that’s a bug too. We need to pair exactly one
 `allocate` with exactly one `free`.
 
 Rust takes a different path: the memory is automatically returned once the
-variable that owns it goes out of scope. Here’s a version of our scope example from
-earlier using `String`:
+variable that owns it goes out of scope. Here’s a version of our scope example
+from earlier using `String`:
 
 ```rust
 {
@@ -211,21 +221,19 @@ earlier using `String`:
 ```
 
 There is a natural point at which we can return the memory our `String` needs
-back to the operating system: when `s` goes out of scope. When a variable
-goes out of scope, Rust calls a special function for us. This function
-is called `drop`, and it is where the author of `String` can put the code to
-return the memory. Rust calls `drop` automatically at the closing `}`.
+back to the operating system: when `s` goes out of scope. When a variable goes
+out of scope, Rust calls a special function for us. This function is called
+`drop`, and it is where the author of `String` can put the code to return the
+memory. Rust calls `drop` automatically at the closing `}`.
 
 > Note: This pattern is sometimes called *Resource Acquisition Is
-> Initialization* in C++, or RAII for short. While they are very similar,
-> Rust’s take on this concept has a number of differences, so we don’t tend
-> to use the same term. If you’re familiar with this idea, keep in mind that it
-> is *roughly* similar in Rust, but not identical.
+> Initialization* in C++, or RAII for short. The `drop` function in Rust will be
+> familiar to you if you have used RAII patterns.
 
 This pattern has a profound impact on the way that Rust code is written. It may
 seem simple right now, but things can get tricky in more advanced situations
-when we want to have multiple variables use the data that we have
-allocated on the heap. Let’s go over some of those situations now.
+when we want to have multiple variables use the data that we have allocated on
+the heap. Let’s go over some of those situations now.
 
 #### Ways Variables and Data Interact: Move
 
@@ -296,13 +304,13 @@ Figure 4-3: Another possibility for what `s2 = s1` might do, if Rust chose to
 copy heap data as well.
 </caption>
 
-Earlier, we said that when a variable goes out of scope, Rust will automatically
-call the `drop` function and clean up the heap memory for that variable. But
-in figure 4-2, we see both data pointers pointing to the same location. This is
-a problem: when `s2` and `s1` go out of scope, they will both try to free the
-same memory. This is known as a *double free* error and is one of the memory
-safety bugs we mentioned before. Freeing memory twice can lead to memory
-corruption, which can potentially lead to security vulnerabilities.
+Earlier, we said that when a variable goes out of scope, Rust will
+automatically call the `drop` function and clean up the heap memory for that
+variable. But in figure 4-2, we see both data pointers pointing to the same
+location. This is a problem: when `s2` and `s1` go out of scope, they will both
+try to free the same memory. This is known as a *double free* error and is one
+of the memory safety bugs we mentioned before. Freeing memory twice can lead to
+memory corruption, which can potentially lead to security vulnerabilities.
 
 In order to ensure memory safety, there’s one more detail to what happens in
 this situation in Rust. Instead of trying to copy the allocated memory, Rust
@@ -372,8 +380,8 @@ This will work just fine, and this is how you can explicitly get the behavior
 we showed in Figure 4-3, where the heap data *does* get copied.
 
 When you see a call to `clone`, you know that some arbitrary code is being
-executed, and that code may be expensive. It’s a visual indicator that something
-different is going on here.
+executed, and that code may be expensive. It’s a visual indicator that
+something different is going on here.
 
 #### Stack-only Data: Copy
 
@@ -398,12 +406,12 @@ deep and shallow copying here, so calling `clone` wouldn’t do anything
 differently from the usual shallow copying and we can leave it out.
 
 Rust has a special annotation called the `Copy` trait that we can place on
-types like these (we’ll talk more about traits in Chapter 23). If a type has
+types like these (we’ll talk more about traits in Chapter 10). If a type has
 the `Copy` trait, an older variable is still usable after assignment. Rust will
 not let us annotate a type with the `Copy` trait if the type, or any of its
-parts, has implemented `drop`. If the type needs something special to happen
-when the value goes out of scope and we add the `Copy` annotation to that type,
-we will get a compile-time error.
+parts, has implemented the `Drop` trait. If the type needs something special
+to happen when the value goes out of scope and we add the `Copy` annotation to
+that type, we will get a compile-time error.
 
 So what types are `Copy`? You can check the documentation for the given type to
 be sure, but as a rule of thumb, any group of simple scalar values can be Copy,
@@ -411,17 +419,17 @@ and nothing that requires allocation or is some form of resource is `Copy`.
 Here’s some of the types that are `Copy`:
 
 * All of the integer types, like `u32`.
-* The booleans, `true` and `false`.
+* The boolean type, `bool`, with values `true` and `false`.
 * All of the floating point types, like `f64`.
-* Tuples, but only if they contain types which are also `Copy`. `(i32, i32)`
-  is `Copy`, but `(i32, String)` is not.
+* Tuples, but only if they contain types which are also `Copy`. `(i32, i32)` is
+`Copy`, but `(i32, String)` is not.
 
 ### Ownership and Functions
 
 The semantics for passing a value to a function are similar to assigning a
 value to a variable. Passing a variable to a function will move or copy, just
-like assignment. Here’s an example, with some annotations showing where variables
-go into and out of scope:
+like assignment. Here’s an example, with some annotations showing where
+variables go into and out of scope:
 
 Filename: src/main.rs
 
@@ -450,10 +458,10 @@ fn makes_copy(some_integer: i32) { // some_integer comes into scope.
 } // Here, some_integer goes out of scope. Nothing special happens.
 ```
 
-If we tried to use `s` after the call to `takes_ownership`, Rust
-would throw a compile-time error. These static checks protect us from mistakes.
-Try adding code to `main` that uses `s` and `x` to see where you can use them
-and where the ownership rules prevent you from doing so.
+If we tried to use `s` after the call to `takes_ownership`, Rust would throw a
+compile-time error. These static checks protect us from mistakes. Try adding
+code to `main` that uses `s` and `x` to see where you can use them and where
+the ownership rules prevent you from doing so.
 
 ### Return Values and Scope
 

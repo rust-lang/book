@@ -16,7 +16,7 @@
     - [Control Flow](ch03-05-control-flow.md)
 
 - [Understanding Ownership](ch04-00-understanding-ownership.md)
-    - [Ownership](ch04-01-ownership.md)
+    - [What is Ownership?](ch04-01-what-is-ownership.md)
     - [References & Borrowing](ch04-02-references-and-borrowing.md)
     - [Slices](ch04-03-slices.md)
 

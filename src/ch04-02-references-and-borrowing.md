@@ -30,8 +30,8 @@ function return value is gone. Next, note that we pass `&s1` into
 `calculate_length`, and in its definition, we take `&String` rather than
 `String`.
 
-These `&`s are *references*, and they allow you to refer to some value
-without taking ownership of it. Figure 4-5 shows a diagram of this.
+These `&`s are *references*, and they allow you to refer to some value without
+taking ownership of it. Figure 4-5 shows a diagram of this.
 
 <img alt="&String s pointing at String s1" src="img/trpl04-05.svg" class="center" />
 
@@ -54,8 +54,8 @@ The `&s1` syntax lets us create a reference which *refers* to the value of `s1`
 but does not own it. Because it does not own it, the value it points to will
 not be dropped when the reference goes out of scope.
 
-Likewise, the signature of the function uses `&` to indicate that it takes
-a reference as an argument. Let’s add some explanatory annotations:
+Likewise, the signature of the function uses `&` to indicate that it takes a
+reference as an argument. Let’s add some explanatory annotations:
 
 ```rust
 fn calculate_length(s: &String) -> usize { // s is a reference to a String
@@ -157,18 +157,19 @@ something that new Rustaceans struggle with, because most languages let you
 mutate whenever you’d like. The benefit of having this restriction is that Rust
 can prevent data races at compile time.
 
-A *data race* is a particular type of race condition where these three things occur:
+A *data race* is a particular type of race condition where these three things
+occur:
 
--  two or more pointers access the same data at the same time
--  at least one of the pointers is being used to write to the data
--  there’s no mechanism being used to synchronize access to the data
+1. Two or more pointers access the same data at the same time
+1. At least one of the pointers is being used to write to the data
+1. There’s no mechanism being used to synchronize access to the data
 
 Data races cause undefined behavior and can be difficult to diagnose and fix
 when trying to track them down at runtime; Rust prevents this problem from
 happening since it won’t even compile code with data races!
 
-As always, we can use `{}`s to create a new scope, allowing for multiple mutable
-references, just not *simultaneous* ones:
+As always, we can use `{}`s to create a new scope, allowing for multiple
+mutable references, just not *simultaneous* ones:
 
 ```rust
 let mut s = String::from("hello");
@@ -261,10 +262,14 @@ error: aborting due to previous error
 ```
 
 This error message refers to a feature we haven’t learned about yet:
-*lifetimes*. We’ll discuss lifetimes in detail in Chapter 20, but, disregarding
+*lifetimes*. We’ll discuss lifetimes in detail in Chapter 10, but, disregarding
 the parts about lifetimes, the message does contain the key to why this code is
-a problem: `this function’s return type contains a borrowed value, but there is
-no value for it to be borrowed from`.
+a problem:
+
+```
+this function’s return type contains a borrowed value, but there is no value
+for it to be borrowed from.
+```
 
 Let’s have a closer look at exactly what’s happening at each stage of our
 `dangle` code:
@@ -281,8 +286,8 @@ fn dangle() -> &String { // dangle returns a reference to a String
 
 Because `s` is created inside of `dangle`, when the code of `dangle` is
 finished, it will be deallocated. But we tried to return a reference to it.
-That means this reference would be pointing to an invalid `String`! That’s
-no good. Rust won’t let us do this.
+That means this reference would be pointing to an invalid `String`! That’s no
+good. Rust won’t let us do this.
 
 The correct code here is to return the `String` directly:
 

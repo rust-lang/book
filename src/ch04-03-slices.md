@@ -42,9 +42,9 @@ Let’s break that down a bit:
 let bytes = s.as_bytes();
 ```
 
-Since we need to go through the String element by element and
-check if a value is a space, we will convert our String to an
-array of bytes using the `as_bytes` method.
+Since we need to go through the String element by element and check if a value
+is a space, we will convert our String to an array of bytes using the
+`as_bytes` method.
 
 ```rust,ignore
 for (i, &item) in bytes.iter().enumerate() {
@@ -52,8 +52,8 @@ for (i, &item) in bytes.iter().enumerate() {
 
 We will be discussing iterators in more detail in Chapter 16, but for now, know
 that `iter` is a method that returns each element in a collection, and
-`enumerate` modifies the result of `iter` and returns each element as part
-of a tuple instead, where the first element of the tuple is the index, and the
+`enumerate` wraps the result of `iter` and returns each element as part of a
+tuple instead, where the first element of the tuple is the index, and the
 second element is a reference to the element itself. This is a bit nicer than
 calculating the index ourselves.
 
@@ -109,12 +109,12 @@ fn main() {
 
 This program compiles without any errors, and also would if we used `word`
 after calling `s.clear()`. `word` isn’t connected to the state of `s` at all,
-so `word` still contains the value `5`. We could use that `5` with `s` to try
-to extract the first word out, but this would be a bug since the contents of
-`s` have changed since we saved `5` in `word`.
+so `word` still contains the value `5`. We could use that value `5` with the
+variable `s` to try to extract the first word out, but this would be a bug
+since the contents of `s` have changed since we saved `5` in `word`.
 
-This is bad! It’s even worse if we wanted to write a `second_word`
-function. Its signature would have to look like this:
+This is bad! It’s even worse if we wanted to write a `second_word` function.
+Its signature would have to look like this:
 
 ```rust,ignore
 fn second_word(s: &String) -> (usize, usize) {
@@ -122,8 +122,8 @@ fn second_word(s: &String) -> (usize, usize) {
 
 Now we’re tracking both a start *and* an ending index, and we have even more
 values that were calculated from data in a particular state but aren’t tied to
-that state at all. We now have three unrelated variables floating
-around which need to be kept in sync.
+that state at all. We now have three unrelated variables floating around which
+need to be kept in sync.
 
 Luckily, Rust has a solution to this problem: string slices.
 
@@ -138,15 +138,15 @@ let hello = &s[0..5];
 let world = &s[6..11];
 ```
 
-This is similar to taking a reference to the whole `String`, but with the
-extra `[0..5]` bit. Rather than a reference to the entire `String`, it’s a
-reference to an internal position in the `String` and the number of elements
-that it refers to.
+This is similar to taking a reference to the whole `String`, but with the extra
+`[0..5]` bit. Rather than a reference to the entire `String`, it’s a reference
+to an internal position in the `String` and the number of elements that it
+refers to.
 
 We create slices with a range of `[starting_index..ending_index]`, but the
-slice data structure actually stores the starting position and the length of the
-slice. So in the case of `let world = &s[6..11];`, `world` would be a slice that
-contains a pointer to the 6th byte of `s` and a length value of 5.
+slice data structure actually stores the starting position and the length of
+the slice. So in the case of `let world = &s[6..11];`, `world` would be a slice
+that contains a pointer to the 6th byte of `s` and a length value of 5.
 
 Figure 4-6 shows this in a diagram:
 
@@ -166,9 +166,8 @@ let slice = &s[0..2];
 let slice = &s[..2];
 ```
 
-By the same token, if your slice should include the last byte of the
-`String`, you can drop the trailing number. That means these are
-equal:
+By the same token, if your slice should include the last byte of the `String`,
+you can drop the trailing number. That means these are equal:
 
 ```rust
 let s = String::from("hello");
@@ -191,8 +190,8 @@ let slice = &s[0..len];
 let slice = &s[..];
 ```
 
-With this in mind, let’s re-write `first_word` to return a slice. The type
-that signifies “string slice” is written as `&str`:
+With this in mind, let’s re-write `first_word` to return a slice. The type that
+signifies “string slice” is written as `&str`:
 
 Filename: src/main.rs
 
@@ -285,8 +284,8 @@ immutable reference.
 
 #### String Slices as Arguments
 
-Knowing that you can take slices of both literals and `String`s leads us to
-one more improvement on `first_word`, and that’s its signature:
+Knowing that you can take slices of both literals and `String`s leads us to one
+more improvement on `first_word`, and that’s its signature:
 
 ```rust,ignore
 fn first_word(s: &String) -> &str {
@@ -336,8 +335,8 @@ fn main() {
 
 ### Other Slices
 
-String slices, as you might imagine, are specific to strings. But there’s a more
-general slice type, too. Consider this array:
+String slices, as you might imagine, are specific to strings. But there’s a
+more general slice type, too. Consider this array:
 
 ```rust
 let a = [1, 2, 3, 4, 5];
