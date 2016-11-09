@@ -809,7 +809,7 @@ the parts about lifetimes, the message does contain the key to why this code is
 a problem:
 
 ```
-this function’s return type contains a borrowed value, but there is no value
+this function's return type contains a borrowed value, but there is no value
 for it to be borrowed from.
 ```
 
