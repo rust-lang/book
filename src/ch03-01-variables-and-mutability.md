@@ -108,15 +108,15 @@ Not being able to change the value of a variable might have reminded you of
 another programming concept that most languages have: *constants*. Constants
 are also values bound to a name that are not allowed to change, but there are a
 few differences between constants and variables. First, using `mut` with
-constants is not allowed: constants aren't just immutable by default, they're
+constants is not allowed: constants aren't only immutable by default, they're
 always immutable. Constants are declared using the `const` keyword instead of
 the `let` keyword, and the type of the value *must* be annotated. We're about
 to cover types and type annotations in the next section, “Data Types,” so don't
-worry about the type annotation right now. Constants can be declared in any
-scope, including the global scope, which makes them useful for a value that
-many parts of your code need to know about. The last difference is that
-constants may only be set to a constant expression, not the result of a
-function call or any other value that could only be used at runtime.
+worry about the details right now. Constants can be declared in any scope,
+including the global scope, which makes them useful for a value that many parts
+of your code need to know about. The last difference is that constants may only
+be set to a constant expression, not the result of a function call or any other
+value that could only be used at runtime.
 
 Here's an example of a constant declaration where the constant's name is
 `MAX_POINTS` and its value is set to 100,000. Rust constant naming convention
