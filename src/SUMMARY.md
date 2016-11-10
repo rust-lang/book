@@ -8,7 +8,7 @@
 
 - [Guessing Game Tutorial](ch02-00-guessing-game-tutorial.md)
 
-- [Common Programming Concepts in Rust](ch03-00-common-programming-concepts-in-rust.md)
+- [Common Programming Concepts](ch03-00-common-programming-concepts.md)
     - [Variables and Mutability](ch03-01-variables-and-mutability.md)
     - [Data Types](ch03-02-data-types.md)
     - [How Functions Work](ch03-03-how-functions-work.md)
