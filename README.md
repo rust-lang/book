@@ -75,3 +75,19 @@ the word doc as markdown in order to backport changes to the online book:
 1. Save as Microsoft Word 2007-2013 XML (.docx) in the *tmp* directory
 1. Run `./doc-to-md.sh`
 1. Inspect changes made to the markdown file in the *nostarch* directory and copy the changes to the *src* directory as appropriate.
+
+## Graphviz dot
+
+This is mostly for Carol's reference because she keeps having to look it up.
+
+We're using [Graphviz](http://graphviz.org/) for some of the diagrams in the
+book. The source for those files live in the `dot` directory. To turn a `dot`
+file, for example, `dot/trpl04-01.dot` into an `svg`, run:
+
+```
+$ dot dot/trpl04-01.dot -Tsvg > src/img/trpl04-01.svg
+```
+
+In the generated SVG, remove the width and the height attributes from the `svg`
+element and set the `viewBox` attribute to `0.00 0.00 1000.00 1000.00` or other
+values that don't cut off the image.
