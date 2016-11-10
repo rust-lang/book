@@ -4,7 +4,7 @@ digraph {
     node [shape="plaintext"];
 
     table0[label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">
-        <TR><TD COLSPAN="2" SIDES="B">s1</TD></TR>
+        <TR><TD COLSPAN="2" SIDES="B">s2</TD></TR>
         <TR><TD>name</TD><TD>value</TD></TR>
         <TR><TD>ptr</TD><TD PORT="pointer"></TD></TR>
         <TR><TD>len</TD><TD>5</TD></TR>
@@ -20,7 +20,7 @@ digraph {
     </TABLE>>];
 
     table3[label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">
-        <TR><TD COLSPAN="2" SIDES="B">s2</TD></TR>
+        <TR><TD COLSPAN="2" SIDES="B">s1</TD></TR>
         <TR><TD>name</TD><TD>value</TD></TR>
         <TR><TD>ptr</TD><TD PORT="pointer"></TD></TR>
         <TR><TD>len</TD><TD>5</TD></TR>
