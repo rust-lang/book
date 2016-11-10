@@ -6326,17 +6326,7 @@ fn read_username_from_file() -&gt; Result&lt;String, io::Error&gt; {
 Listing 9-6: A function that returns errors to the calling code using `try!`
 </caption>
 <p>Or as in Listing 9-7, which uses the question mark operator:</p>
-<!-- I'll ghost everything except the question mark operator in the libreoffice
-file. Also note the `#![feature(question_mark)]` line won't be needed once this
-feature has made it into a stable version of Rust, which will happen well
-before the book's publication.
-<p>In order to run the code examples that have the <code>#![feature(question_mark)]</code>
-line, you'll need to install a nightly version of the Rust compiler. Again,
-readers of the book won't need to do this since we expect the question mark
-feature to stabilize before publication.</p>
-<p>/Carol --&gt;</p>
-<pre><code class="language-rust">#![feature(question_mark)]
-# fn main() {}
+<pre><code class="language-rust"># fn main() {}
 # use std::fs::File;
 # use std::io;
 # use std::io::Read;
@@ -6359,8 +6349,7 @@ thing applies to the <code>?</code> at the end of the <code>read_to_string</code
 <p>The advantage of using the question mark operator over the <code>try!</code> macro is the
 question mark operator permits chaining. We could further shorten this code
 by instead doing:</p>
-<pre><code class="language-rust">#![feature(question_mark)]
-# fn main() {}
+<pre><code class="language-rust"># fn main() {}
 # use std::fs::File;
 # use std::io;
 # use std::io::Read;
