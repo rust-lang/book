@@ -12,7 +12,7 @@
 <!-- table0 -->
 <g id="node1" class="node"><title>table0</title>
 <polyline fill="none" stroke="black" points="8,-124 96,-124 "/>
-<text text-anchor="start" x="45.7759" y="-129.8" font-family="Times,serif" font-size="14.00">s1</text>
+<text text-anchor="start" x="45.7759" y="-129.8" font-family="Times,serif" font-size="14.00">s2</text>
 <polygon fill="none" stroke="black" points="8,-104 8,-124 60,-124 60,-104 8,-104"/>
 <text text-anchor="start" x="18.8413" y="-109.8" font-family="Times,serif" font-size="14.00">name</text>
 <polygon fill="none" stroke="black" points="60,-104 60,-124 96,-124 96,-104 60,-104"/>
@@ -64,7 +64,7 @@
 <!-- table3 -->
 <g id="node3" class="node"><title>table3</title>
 <polyline fill="none" stroke="black" points="8,-270 96,-270 "/>
-<text text-anchor="start" x="45.7759" y="-275.8" font-family="Times,serif" font-size="14.00">s2</text>
+<text text-anchor="start" x="45.7759" y="-275.8" font-family="Times,serif" font-size="14.00">s1</text>
 <polygon fill="none" stroke="black" points="8,-250 8,-270 60,-270 60,-250 8,-250"/>
 <text text-anchor="start" x="18.8413" y="-255.8" font-family="Times,serif" font-size="14.00">name</text>
 <polygon fill="none" stroke="black" points="60,-250 60,-270 96,-270 96,-250 60,-250"/>
