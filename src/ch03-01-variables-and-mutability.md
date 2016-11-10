@@ -102,6 +102,41 @@ instances. With smaller data structures, always creating new instances and
 writing in a more functional programming style may be easier to reason about,
 so the lower performance penalty might be worth it to gain that clarity.
 
+### Differences Between Variables and Constants
+
+Not being able to change the value of a variable might have reminded you of
+another programming concept that most languages have: *constants*. Constants
+are also values bound to a name that are not allowed to change, but there are a
+few differences between constants and variables. First, using `mut` with
+constants is not allowed: constants aren't only immutable by default, they're
+always immutable. Constants are declared using the `const` keyword instead of
+the `let` keyword, and the type of the value *must* be annotated. We're about
+to cover types and type annotations in the next section, “Data Types,” so don't
+worry about the details right now. Constants can be declared in any scope,
+including the global scope, which makes them useful for a value that many parts
+of your code need to know about. The last difference is that constants may only
+be set to a constant expression, not the result of a function call or any other
+value that could only be used at runtime.
+
+Here's an example of a constant declaration where the constant's name is
+`MAX_POINTS` and its value is set to 100,000. Rust constant naming convention
+is to use all upper case with underscores between words:
+
+```
+const MAX_POINTS: u32 = 100_000;
+```
+
+Constants are valid for the entire lifetime of a program, within the scope they
+were declared in. That makes constants useful for values in your application
+domain that multiple part of the program might need to know about, such as the
+maximum number of points any player of a game is allowed to earn or the number
+of seconds in a year.
+
+Documenting hardcoded values used throughout your program by naming them as
+constants is useful to convey the meaning of that value to future maintainers
+of the code. It also helps to have only one place in your code that you would
+need to change if the hardcoded value needed to be updated in the future.
+
 ### Shadowing
 
 As we saw in the guessing game tutorial in Chapter 2, we can declare new
