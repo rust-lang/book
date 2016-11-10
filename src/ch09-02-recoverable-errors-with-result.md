@@ -270,20 +270,7 @@ Listing 9-6: A function that returns errors to the calling code using `try!`
 
 Or as in Listing 9-7, which uses the question mark operator:
 
-<!-- I'll ghost everything except the question mark operator in the libreoffice
-file. Also note the `#![feature(question_mark)]` line won't be needed once this
-feature has made it into a stable version of Rust, which will happen well
-before the book's publication.
-
-In order to run the code examples that have the `#![feature(question_mark)]`
-line, you'll need to install a nightly version of the Rust compiler. Again,
-readers of the book won't need to do this since we expect the question mark
-feature to stabilize before publication.
-
-/Carol -->
-
 ```rust
-#![feature(question_mark)]
 # fn main() {}
 # use std::fs::File;
 # use std::io;
@@ -311,7 +298,6 @@ question mark operator permits chaining. We could further shorten this code
 by instead doing:
 
 ```rust
-#![feature(question_mark)]
 # fn main() {}
 # use std::fs::File;
 # use std::io;
