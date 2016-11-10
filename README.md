@@ -54,18 +54,9 @@ $ mdbook test
 
 ## Contributing
 
-I’m not going to be accepting major changes at first, but pull requests to fix
-typos and such are welcome. Please file any issues for any bugs you find.
+We'd love your help! Please see [CONTRIBUTING.md][contrib].
 
-This repository is under the same license as Rust itself, MIT/Apache2.
-
-There are a number of labels on Issues:
-
-* `Enhancement` issues are a request for an improvement of some kind.
-* `Bug` issues indicate problems in the text.
-* `Needs Backport` will be used when we are further along. At some point, we
-  will import the text into their review system, and so changes made here will
-  need to be upstreamed. This will track those.
+[contrib]: https://github.com/rust-lang/book/blob/master/CONTRIBUTING.md
 
 ## No Starch
 
