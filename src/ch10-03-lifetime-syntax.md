@@ -195,7 +195,7 @@ the end of the chapter.
 
 Let's add a parameter. It won't quite fix it, but we get a different error:
 
-```rust
+```rust,ignore
 fn foo<'a>() -> &'a i32 {
     let x = 5;
 
@@ -250,7 +250,7 @@ println!("r: {}", r); // |
 
 But in this case:
 
-```rust
+```rust,ignore
 fn foo<'a>() -> &'a i32 {
     let x = 5;
 
