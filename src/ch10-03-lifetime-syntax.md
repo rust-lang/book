@@ -1,24 +1,27 @@
 ## Lifetime Syntax
 
-So far, we've talked about two ways in which Rust allows you to abstract over
-different things: generic type parameters let us abstract over types, and
-traits let us abstract over a collection of methods. There's one more way that
-Rust allows us to do something similar: *lifetimes* allow us to be generic over
-scopes of code.
+Generic type parameters let us abstract over types, and traits let us abstract
+over a collection of methods. There's one more way that Rust allows us to do
+something similar: *lifetimes* allow us to be generic over scopes of code.
 
 Scopes of code? Yes, it's a bit unusual. Lifetimes are, in some ways, Rust's
-most distinctive feature. They are a bit different than the tools you have
-used in other programming languages. Lifetimes are a big topic, and so we're
-not going to cover everything about them in this chapter. What we _are_ going
-to do is talk about the very basics of lifetimes, so that when you see the
-syntax in documentation or other places, you won't be totally lost. Chapter XX
-will contain more advanced information about everything lifetimes can do.
+most distinctive feature. They are a bit different than the tools you have used
+in other programming languages. Lifetimes are a big topic, so we're not going
+to cover everything about them in this chapter. What we *are* going to do is
+talk about the very basics of lifetimes, so that when you see the syntax in
+documentation or other places, you'll know what the syntax has to do with.
+Chapter 20 will contain more advanced information about everything lifetimes
+can do.
 
 ### Core Syntax
 
-We've talked about references previously, but we left something important out.
-As it turns out, every reference in Rust has a lifetime. Lifetimes have a
-slightly unusual syntax:
+We talked about references in Chapter 4, but we left out an important detail.
+As it turns out, every reference in Rust has a *lifetime*, which is the scope
+for which that reference is valid. Most of the time, lifetimes are implicit,
+but just like we can choose to annotate types everywhere, we can choose to
+annotate lifetimes.
+
+Lifetimes have a slightly unusual syntax:
 
 ```rust,ignore
 &i32 // a reference
@@ -26,43 +29,54 @@ slightly unusual syntax:
 ```
 
 The `'a` there is a *lifetime* with the name `a`. A single apostrophe indicates
-that this name is for a lifetime. But where does that name come from? Here's
-a function signature with lifetime annotations:
+that this name is for a lifetime. Lifetime names need to be declared before
+they're used. Here's a function signature with lifetime declarations and
+annotations:
 
 ```rust,ignore
 fn lifetime<'a>(argument: &'a i32) {
 ```
 
-Notice anything? In the same way that generic type parameters go inside angle
-brackets after the function name, lifetimes also go inside angle brackets. We
-can even write functions that take both:
+Notice anything? In the same way that generic type declarations go inside angle
+brackets after the function name, lifetime declarations also go inside those
+same angle brackets. We can even write functions that take both:
 
 ```rust,ignore
 fn lifetime<'a, T>(argument: &'a T) {
 ```
 
-This function takes one argument, and that argument is a reference to some
-type, `T`, but with the lifetime `'a`. In the same way that we parameterize
-functions that take generic types, we parameterize references with lifetimes.
+This function takes one argument, a reference to some type, `T`, and the
+reference has the lifetime `'a`. In the same way that we parameterize functions
+that take generic types, we parameterize references with lifetimes.
 
 So, that's the syntax, but _why_? What does a lifetime do, anyway?
 
-### No Dangling References!
+### Lifetimes Prevent Dangling References
 
-Consider this program:
+Consider the program in listing 10-8. There's an outer scope and an inner
+scope. The outer scope declares a variable named `r` with no initial value, and
+the inner scope declares a variable named `x` with the initial value of 5.
+Inside the inner scope, we attempt to set the value of `r` to a reference to
+`x`. Then the inner scope ends and we attempt to print out the value in `r`:
 
 ```rust,ignore
-let r;
-
 {
-    let x = 5;
-    r = &x;
-}
+    let r;
 
-println!("r: {}", r);
+    {
+        let x = 5;
+        r = &x;
+    }
+
+    println!("r: {}", r);
+}
 ```
 
-If we compile it, we get an error:
+<caption>
+Listing 10-8: An attempt to use a reference whose value has gone out of scope
+</caption>
+
+If we compile this code, we get an error:
 
 ```text
 	error: `x` does not live long enough
@@ -78,13 +92,14 @@ If we compile it, we get an error:
 ```
 
 The variable `x` doesn't "live long enough." Why not? Well, `x` is going to go
-out of scope when we hit the closing curly brace. But `r` is outside of the
-curly brace.  So it has a larger scope. If Rust allowed this code to work, `r`
-would be referencing memory that we've deallocated. That'd be bad! Once it's
-deallocated, it's meaningless.
+out of scope when we hit the closing curly brace on line 7, ending the inner
+scope. But `r` is valid for the outer scope; its scope is larger and we say
+that it "lives longer." If Rust allowed this code to work, `r` would be
+referencing memory that was deallocated when `x` went out of scope. That'd be
+bad! Once it's deallocated, it's meaningless.
 
-So how does Rust determine that this code is bad? It compares scopes. Here's an
-example with some annotations:
+So how does Rust determine that this code should not be allowed? It compares
+scopes. Here's the same example from Listing 10-8 with some annotations:
 
 ```rust,ignore
 {
@@ -101,18 +116,21 @@ example with some annotations:
 }
 ```
 
-Here, we've annotated the lifetime of `r` with `'a`, and the lifetime of `x`
-with `'b`. Rust looks at these lifetimes, sees that `r` has a lifetime of `'a`,
-but refers to something with a lifetime of `'b`, and rejects the program, since
-`'b` doesn't live as long as `'a` does.
+Here, we've annotated the lifetime of `r` with `'a` and the lifetime of `x`
+with `'b`. Rust looks at these lifetimes and sees that `r` has a lifetime of
+`'a`, but that it refers to something with a lifetime of `'b`. It rejects the
+program because the lifetime `'b` is shorter than the lifetime of `'a`-- the
+value that the reference is referring to does not live as long as the reference
+does.
 
-What about an example that _does_ work?
+Let's look at a different example that compiles because it does not try to make
+a dangling reference, and see what the lifetimes look like:
 
 ```rust
 {
-    let x = 5;            // -----+-- 'a
+    let x = 5;            // -----+-- 'b
                           //      |
-    let r = &x;           // --+--+-- 'b
+    let r = &x;           // --+--+-- 'a
                           //   |  |
     println!("r: {}", r); //   |  |
                           // --+  |
@@ -120,19 +138,14 @@ What about an example that _does_ work?
 }
 ```
 
-Here, `x` lives for `'a`, which is larger than `'b`. So this is okay: we know
-that `r` will always be valid, as it has a smaller scope than the thing it
-refers to, `x`.
+Here, `x` lives for `'b`, which in this case is larger than `'a`. This is
+allowed: Rust knows that the reference in `r` will always be valid, as it has a
+smaller scope than `x`, the value it refers to.
 
-Note that we didn't have to name any lifetimes here; Rust figured it out for
-us. One situation in which Rust can't figure out the lifetimes for a function
-or method is when one of the arguments is a reference, except for a few
-scenarios we'll discuss in the lifetime elision section. An example signature
-of a function with a named lifetime for an argument that takes a reference is:
-
-```rust,ignore
-fn lifetime<'a, T>(argument: &'a T) {
-```
+Note that we didn't have to name any lifetimes in the code itself; Rust figured
+it out for us. One situation in which Rust can't figure out the lifetimes for a
+function or method is when one of the arguments is a reference, except for a
+few scenarios we'll discuss in the lifetime elision section.
 
 Another time that Rust can't figure out the lifetimes is when structs have a
 field that holds a reference. In that case, naming the lifetimes looks like
@@ -144,14 +157,18 @@ struct Ref<'a> {
 }
 ```
 
-This is because lifetimes are a form of generics. In the examples above, `'a`
-and `'b` were concrete lifetimes: we knew about `x` and `r`, and how long they
-would live exactly. But when we write a function, we can't know exactly all of
-the arguments that it would be called with; so we have to explain to Rust what
-we'd expect the lifetime of the argument to be. We'll learn more about how to
-do this in a bit, but for now, let's just go with it. This is similar to how
-when we write a generic function, we don't know what type the argument would
-be, but it's for the scope of a reference, rather than a type.
+Again, the lifetime names are declared in the angle brackets where generic type
+parameters are declared, and this is because lifetimes are a form of generics.
+In the examples above, `'a` and `'b` were concrete lifetimes: we knew about `r`
+and `x` and how long they would live exactly. However, when we write a
+function, we can't know beforehand exactly all of the arguments that it could
+be called with and how long they will be valid for. We have to explain to Rust
+what we expect the lifetime of the argument to be (we'll learn more about how
+to know what you expect the lifetime to be in a bit). This is similar to
+writing a function that has an argument of a generic type: we don't know what
+type the arguments will actually end up being when the function gets called.
+Lifetimes are the same idea, but they are generic over the scope of a
+reference, rather than a type.
 
 ### But Why?
 
