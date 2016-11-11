@@ -421,8 +421,18 @@ going to go out of scope, and so this reference is dangling. The only way we
 could possibly return a reference from a function with no parameters is if it
 were alive before the function executed. Hence, `'static`.
 
-ZOMG WE HAVENT TALKED ABOUT CONST AND STATIC YET FUUUUUU
+As an example of the `'static` lifetime, string literals have one:
+
+```rust
+let s: &'static str = "I have a static lifetime.";
+```
+
+The text of this string is stored directly in the binary of your program,
+therefore, it's always available, and so is `'static`.
 
 ## Summary
 
-TODO
+We've covered the basics of Rust's system of generics. Generics are the core to
+building good abstractions, and can be used in a number of ways. There's more
+to learn about them, particularly lifetimes, but we'll cover those in later
+chapters.
