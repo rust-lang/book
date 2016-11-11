@@ -240,7 +240,8 @@ note: borrowed value must be valid for the lifetime 'a as defined on the block a
 ```
 
 Now we have our "does not live long enough" error. What gives? Why does Rust
-need this parameter in the first place?
+need this parameter in the first place? And why didn't adding this parameter
+fix the error?
 
 When we have code inside of a function, Rust can analyze that specific case.
 There's only one thing to look at. But functions get called multiple times. So
