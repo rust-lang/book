@@ -7,7 +7,7 @@ with generics.
 
 The types we've seen before like `Vec<i32>`? That's employing generics. The
 proper type for vectors is `Vec<T>`. That `T` is called a *type parameter*, and
-it serves a similar function to parameters to functions: you fill in the
+it serves a similar function as parameters to functions: you fill in the
 parameter with a concrete type, and that determines how the overall type works.
 In the same way that a function like `foo(x: i32)` can be called with a
 specific value such as `foo(5)`, a `Vec<T>` can be created with a specific
