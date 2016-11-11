@@ -95,8 +95,8 @@ let p = Point { x: 1, y: 10 };
 p.print();
 ```
 
-There's a twist, though. We can only do this if our trait is in scope. For example,
-if we had our trait in a module:
+There's a twist, though. We can only do this if our trait is in scope. For
+example, if we had our trait in a module:
 
 ```rust
 mod point {

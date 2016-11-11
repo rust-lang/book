@@ -74,13 +74,15 @@ largest(numbers);
 ```
 
 But functions aren't the only way to abstract away different kinds of code. For
-example, our `largest` function only works for vectors of `i32`. What if we wanted
-to find the largest number in a list of floats? Or the largest element of some sort
-of custom `struct` or `enum`? We can't solve this duplication with regular functions.
+example, our `largest` function only works for vectors of `i32`. What if we
+wanted to find the largest number in a list of floats? Or the largest element
+of some sort of custom `struct` or `enum`? We can't solve this duplication with
+regular functions.
 
-To solve these kinds of problems, Rust provides a feature called *generics*. In the
-same way that functions allow us to abstract over common code, generics allow us to
-abstract over types. This ability gives us tremendous power to write code that works
-in a large number of situations. First, we'll examine the syntax of generics. Then,
-we'll talk about another feature that's used to augment generics: traits. Finally,
-we'll discuss one of Rust's most unique uses of generics: lifetimes.
+To solve these kinds of problems, Rust provides a feature called *generics*. In
+the same way that functions allow us to abstract over common code, generics
+allow us to abstract over types. This ability gives us tremendous power to
+write code that works in a large number of situations. First, we'll examine the
+syntax of generics. Then, we'll talk about another feature that's used to
+augment generics: traits. Finally, we'll discuss one of Rust's most unique uses
+of generics: lifetimes.

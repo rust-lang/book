@@ -329,12 +329,11 @@ fn do_nothing(x: &i32) -> &i32 {
 }
 ```
 
-We haven't annotated any lifetime here, yet Rust happily compiles this
-function.
+We haven't annotated any lifetime here, yet Rust happily compiles this function.
 
-The answer here is historical: in ancient versions of pre-1.0 Rust, this
-would not have compiled. Every reference needed an explicit lifetime. So
-this would have to be written like this:
+The answer here is historical: in ancient versions of pre-1.0 Rust, this would
+not have compiled. Every reference needed an explicit lifetime. So this would
+have to be written like this:
 
 ```rust
 fn do_nothing<'a>(x: &'a i32) -> &'a i32 {
@@ -349,8 +348,8 @@ experience.
 
 To fix this, we developed the 'lifetime elision' rules. It's not full
 inference: Rust doesn't try to guess what you meant, and then infer that. It's
-a very basic set of patterns, and if they match, you don't need to write
-the lifetimes explicitly. Here's the rules:
+a very basic set of patterns, and if they match, you don't need to write the
+lifetimes explicitly. Here's the rules:
 
 Lifetimes on function arguments are called "input lifetimes", and lifetimes on
 return values are called "output lifetimes." With that in mind, there's one
@@ -397,9 +396,9 @@ It gave us this help message:
 As it turns out, `'static` is a special lifetime. It means "this reference
 lasts for the entire duration of the program." Why would that matter? Well,
 let's think about this function a bit more. We're trying to create a new
-integer, and then return a reference to it. When the function is over, `x`
-is going to go out of scope, and so this reference is dangling. The only way
-we could possibly return a reference from a function with no parameters is
-if it were alive before the function executed. Hence, `'static`.
+integer, and then return a reference to it. When the function is over, `x` is
+going to go out of scope, and so this reference is dangling. The only way we
+could possibly return a reference from a function with no parameters is if it
+were alive before the function executed. Hence, `'static`.
 
 ZOMG WE HAVENT TALKED ABOUT CONST AND STATIC YET FUUUUUU
