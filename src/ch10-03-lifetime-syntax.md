@@ -390,7 +390,7 @@ fn foo() -> &i32 {
 It gave us this help message:
 
 ```text
-  = help: consider giving it a 'static lifetime
+= help: consider giving it a 'static lifetime
 ```
 
 As it turns out, `'static` is a special lifetime. It means "this reference
