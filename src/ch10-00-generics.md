@@ -13,9 +13,11 @@ duplicate code. Generics come in the form of generic types, traits that those
 generic types have, and generic lifetimes. We'll cover how to use all of these
 in this chapter.
 
-Different kinds of duplication are dealt with in
-different ways. Consider a small program that finds the largest number in a
-list:
+## Removing Duplication by Extracting a Function
+
+Let's first go through a technique for dealing with duplication that you're
+probably familiar with: extracting a function. Consider a small program that
+finds the largest number in a list, shown in Listing 10-1:
 
 ```rust
 let numbers = vec![34, 50, 25, 100, 65];
@@ -31,7 +33,13 @@ for number in numbers {
 println!("The largest number is {}", largest);
 ```
 
-If we needed to find the largest number twice, we could duplicate our code:
+<caption>
+Listing 10-1: Code to find the largest number in a list of numbers
+</caption>
+
+If we needed to find the largest number in two different lists of numbers, we
+could duplicate the code in Listing 10-1 and have the same logic exist in two
+places in the program:
 
 ```rust
 let numbers = vec![34, 50, 25, 100, 65];
@@ -59,9 +67,13 @@ for number in numbers {
 println!("The largest number is {}", largest);
 ```
 
-However, this is tedious and error-prone. Rust, like many languages, gives us a
-way to deal with this duplication by creating an abstraction. In this case, the
-answer is functions:
+Copying code is tedious and error-prone, plus now we have two places to update
+the logic if we need it to change. Rust, like many languages, gives us a way to
+deal with this duplication by creating an abstraction, and in this case the
+abstraction we'll use is a function. Here's a program where we've extracted the
+code in Listing 10-1 that finds the largest number into a function named
+`largest`. This program can find the largest number in two different lists of
+numbers, but the code from Listing 10-1 only exists in one spot:
 
 ```rust
 fn largest(numbers: Vec<i32>) {
@@ -85,10 +97,10 @@ let numbers = vec![102, 34, 6000, 89, 54, 2, 43, 8];
 largest(numbers);
 ```
 
-But functions aren't the only way to abstract away different kinds of code. For
-example, our `largest` function only works for vectors of `i32`. What if we
-wanted to find the largest number in a list of floats? Or the largest element
-of some sort of custom `struct` or `enum`? We can't solve this duplication with
+But functions aren't the only way to eliminate duplication. For example, our
+`largest` function only works for vectors of `i32`. What if we wanted to find
+the largest number in a list of floats? Or the largest value in some sort of
+custom `struct` or `enum`? We can't solve those kinds of duplication with
 regular functions.
 
 To solve these kinds of problems, Rust provides a feature called *generics*. In
