@@ -50,8 +50,6 @@
     - [Traits](ch10-02-traits.md)
     - [Lifetime syntax](ch10-03-lifetime-syntax.md)
 
-- [Closures]()
-
 - [I/O]()
     - [`Read` & `Write`]()
     - [`std::fs`]()
