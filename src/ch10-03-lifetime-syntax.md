@@ -125,14 +125,18 @@ that `r` will always be valid, as it has a smaller scope than the thing it
 refers to, `x`.
 
 Note that we didn't have to name any lifetimes here; Rust figured it out for
-us. We only name lifetimes when we accept a reference as an argument, either
-for a function:
+us. One situation in which Rust can't figure out the lifetimes for a function
+or method is when one of the arguments is a reference, except for a few
+scenarios we'll discuss in the lifetime elision section. An example signature
+of a function with a named lifetime for an argument that takes a reference is:
 
 ```rust,ignore
 fn lifetime<'a, T>(argument: &'a T) {
 ```
 
-Or in a struct:
+Another time that Rust can't figure out the lifetimes is when structs have a
+field that holds a reference. In that case, naming the lifetimes looks like
+this:
 
 ```rust
 struct Ref<'a> {
