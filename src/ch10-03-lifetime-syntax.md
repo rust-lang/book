@@ -402,3 +402,7 @@ could possibly return a reference from a function with no parameters is if it
 were alive before the function executed. Hence, `'static`.
 
 ZOMG WE HAVENT TALKED ABOUT CONST AND STATIC YET FUUUUUU
+
+## Summary
+
+TODO
