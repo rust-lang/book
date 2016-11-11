@@ -65,7 +65,9 @@ trait Printable {
 
 impl Printable for Point {
     fn print(&self) {
-        println!("I'm a Point! I have an x of {} and a y of {}.", self.x, self.y);
+        println!("I'm a Point! I have an x of {} and a y of {}.",
+                 self.x,
+                 self.y);
     }
 }
 ```
@@ -86,7 +88,9 @@ we called other methods:
 #
 # impl Printable for Point {
 #     fn print(&self) {
-#         println!("I'm a Point! I have an x of {} and a y of {}.", self.x, self.y);
+#         println!("I'm a Point! I have an x of {} and a y of {}.",
+#                  self.x,
+#                  self.y);
 #     }
 # }
 #
@@ -111,7 +115,9 @@ mod point {
 
     impl Printable for Point {
         fn print(&self) {
-            println!("I'm a Point! I have an x of {} and a y of {}.", self.x, self.y);
+            println!("I'm a Point! I have an x of {} and a y of {}.",
+                     self.x,
+                     self.y);
         }
     }
 }
@@ -180,7 +186,9 @@ trait Printable {
 
 impl Printable for Point {
     fn print(&self) {
-        println!("I'm a Point! I have an x of {} and a y of {}.", self.x, self.y);
+        println!("I'm a Point! I have an x of {} and a y of {}.",
+                 self.x,
+                 self.y);
     }
 }
 
