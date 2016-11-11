@@ -299,7 +299,7 @@ method definitions. The angle brackets for type parameters go after the
 function or method name and before the argument list in parentheses:
 
 ```rust
-fn generic_function<T>(argument: T) {
+fn generic_function<T>(value: T) {
     // code goes here
 }
 ```
@@ -307,40 +307,47 @@ fn generic_function<T>(argument: T) {
 We can use the same process that we used to refactor duplicated type
 definitions using generics to refactor duplicated function definitions using
 generics. Consider these two side-by-side function signatures that differ in
-the type of `argument`:
+the type of `value`:
 
 ```text
-fn takes_integer(argument: i32) {       fn takes_float(argument: f64) {
+fn takes_integer(value: i32) {          fn takes_float(value: f64) {
     // code goes here                       // code goes here
 }                                       }
 ```
 
-We can add a type parameter list that declares the generic type `T` after the function names, then use `T` where the specific `i32` and `f64` types were:
+We can add a type parameter list that declares the generic type `T` after the
+function names, then use `T` where the specific `i32` and `f64` types were:
 
 ```text
-fn takes_integer<T>(argument: T) {    fn takes_float<T>(argument: T) {
+fn takes_integer<T>(value: T) {       fn takes_float<T>(value: T) {
     // code goes here                     // code goes here
 }                                     }
 ```
 
-At this point, only the names differ, so we could unify the two functions into one:
+At this point, only the names differ, so we could unify the two functions into
+one:
 
 ```rust,ignore
-fn takes<T>(argument: T) {
+fn takes<T>(value: T) {
     // code goes here
 }
 ```
 
 There's one problem though. We've got some function _definitions_ that work,
-but if we try to use `argument` in code in the function body, we'll get an
-error. For example, this function definition tries to print out the value of
-`argument` in its body:
+but if we try to use `value` in code in the function body, we'll get an
+error. For example, the function definition in Listing 10-3 tries to print out
+`value` in its body:
 
 ```rust,ignore
-fn print<T>(argument: T) {
-    println!("Got an argument: {}", argument);
+fn show_anything<T>(value: T) {
+    println!("I have something to show you!");
+    println!("It's: {}", value);
 }
 ```
+
+<caption>
+Listing 10-3: A `show_anything` function definition that does not yet compile
+</caption>
 
 Compiling this definition results in an error:
 
@@ -348,8 +355,8 @@ Compiling this definition results in an error:
 	error[E0277]: the trait bound `T: std::fmt::Display` is not satisfied
  --> <anon>:3:37
   |
-3 |     println!("Got an argument: {}", argument);
-  |                                     ^^^^^^^^ trait `T: std::fmt::Display` not satisfied
+3 |     println!("It's: {}", value);
+  |                          ^^^^^ trait `T: std::fmt::Display` not satisfied
   |
   = help: consider adding a `where T: std::fmt::Display` bound
   = note: required by `std::fmt::Display::fmt`
