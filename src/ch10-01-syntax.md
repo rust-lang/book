@@ -157,6 +157,7 @@ enum OptionFloat {
 let integer = OptionInteger::Some(5);
 let float = OptionFloat::Some(5.0);
 ```
+
 In other words, we can write the non-duplicated form, but Rust will act as
 though we wrote the specific type out in each instance. This means we pay no
 runtime cost for using generics; it's just like we copy/pasted each particular
