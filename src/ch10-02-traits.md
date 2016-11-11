@@ -146,8 +146,8 @@ imagine we had a function that wanted to call `print` for any type that supports
 printing. We could write it like this:
 
 ```rust,ignore
-fn print(value: v) {
-    v.print();
+fn print<T>(value: T) {
+    value.print();
 }
 ```
 
