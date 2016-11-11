@@ -97,7 +97,13 @@ let numbers = vec![102, 34, 6000, 89, 54, 2, 43, 8];
 largest(numbers);
 ```
 
-But functions aren't the only way to eliminate duplication. For example, our
+The function takes an argument, `numbers`, which represents any concrete
+`Vec<i32>` that we might pass into the function. The code in the function
+definition operates on the `numbers` representation of any `Vec<i32>`. When
+we call the `largest` function, the code actually runs on the specific values
+that we pass in.
+
+Functions aren't the only way to eliminate duplication. For example, our
 `largest` function only works for vectors of `i32`. What if we wanted to find
 the largest number in a list of floats? Or the largest value in some sort of
 custom `struct` or `enum`? We can't solve those kinds of duplication with
