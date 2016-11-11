@@ -1,4 +1,4 @@
-# Generics
+## Generics Syntax
 
 We've already hinted at generics previously, but never dug into what exactly
 they are. You can always recognize when generics are used by the way that they
@@ -13,7 +13,7 @@ In the same way that a function like `foo(x: i32)` can be called with a
 specific value such as `foo(5)`, a `Vec<T>` can be created with a specific
 type, like `Vec<i32>`.
 
-## Generic data types
+### Generic Data Types
 
 Let's dive into generic data types in a bit more detail. We previously learned
 about the `Option<T>` type, but we never examined its definition. Let's try to
@@ -204,7 +204,7 @@ You can have as many type parameters as you'd like. Similarly to parameters of
 values, if you have a lot of them, it can get quite confusing, so try to keep
 the number of them small if you can.
 
-## Generic functions and methods
+### Generic Functions and Methods
 
 In a similar way to data structures, we can use the `<>` syntax to write
 functions:

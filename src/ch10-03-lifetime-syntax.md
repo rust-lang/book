@@ -1,4 +1,4 @@
-# Lifetime syntax
+## Lifetime Syntax
 
 So far, we've talked about two ways in which Rust allows you to abstract over
 different things: generic type parameters let us abstract over types, and
@@ -14,7 +14,7 @@ to do is talk about the very basics of lifetimes, so that when you see the
 syntax in documentation or other places, you won't be totally lost. Chapter XX
 will contain more advanced information about everything lifetimes can do.
 
-## Core syntax
+### Core Syntax
 
 We've talked about references previously, but we left something important out.
 As it turns out, every reference in Rust has a lifetime. Lifetimes have a
@@ -47,7 +47,7 @@ functions that take generic types, we parameterize references with lifetimes.
 
 So, that's the syntax, but _why_? What does a lifetime do, anyway?
 
-## No dangling references!
+### No Dangling References!
 
 Consider this program:
 
@@ -145,7 +145,7 @@ do this in a bit, but for now, let's just go with it. This is similar to how
 when we write a generic function, we don't know what type the argument would
 be, but it's for the scope of a reference, rather than a type.
 
-## But why?
+### But Why?
 
 So why do we need to declare lifetimes on functions, but not inside of them?
 Here's our example from before:
@@ -272,7 +272,7 @@ That parameter, `'a`, will represent `'r1` in the first case, and `'r2` in the
 second. Two different scopes, one single parameter. Hence, generic, just like
 two different types, one type parameter.
 
-## Two lifetimes, intertwined
+### Two Lifetimes, Intertwined
 
 To illustrate this principle a bit further, let's look at a function that takes
 _two_ references:
@@ -318,7 +318,7 @@ lifetime syntax is about: connecting the lifetimes of various parameters and
 return values of functions, so that Rust can understand how long your
 references are supposed to live.
 
-## Lifetime elision
+### Lifetime Elision
 
 If every reference has a lifetime, and we need to provide them for functions
 that take references, then why does this function compile?
@@ -374,7 +374,7 @@ they cover the vast majority of cases, allowing you to write a lot of code
 without needing to consider explicit lifetimes. But it's not 100% of the time,
 and so you may see explicit lifetimes used in various places.
 
-## The static lifetime
+### The Static Lifetime
 
 There is _one_ special lifetime that Rust knows about. Remember this program
 from before?

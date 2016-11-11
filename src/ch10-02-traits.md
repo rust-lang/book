@@ -1,4 +1,4 @@
-# Traits
+## Traits
 
 At the end of the last section, we had this code:
 
@@ -139,7 +139,7 @@ Why do we need the trait in scope? Imagine we had two traits with the same
 method definition, and our `Point` struct implemented both. We wouldn't know
 which method we were trying to call. `use` makes it explicit.
 
-## Trait bounds
+### Trait Bounds
 
 We previously knew how to define methods, so what makes traits special? Well,
 imagine we had a function that wanted to call `print` for any type that supports
@@ -220,7 +220,7 @@ fn print<T: Display>(argument: T) {
 
 Now that we've said "for any type that implements `Display`," this works well.
 
-## Where syntax
+### `where` Syntax
 
 When bounds start getting complicated, there is another syntax that's a bit
 cleaner: `where`. And in fact, our original error referred to it. It looks
