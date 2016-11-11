@@ -87,16 +87,18 @@ So how does Rust determine that this code is bad? It compares scopes. Here's an
 example with some annotations:
 
 ```rust,ignore
-let r;         // -------+-- 'a
-               //        |
-{              //        |
-    let x = 5; // -+-----+-- 'b
-    r = &x;    //  |     |
-}              // -+     |
-               //        |
-println!("r: {}", r); // |
-               //        |
-               // -------+
+{
+    let r;         // -------+-- 'a
+                   //        |
+    {              //        |
+        let x = 5; // -+-----+-- 'b
+        r = &x;    //  |     |
+    }              // -+     |
+                   //        |
+    println!("r: {}", r); // |
+                   //        |
+                   // -------+
+}
 ```
 
 Here, we've annotated the lifetime of `r` with `'a`, and the lifetime of `x`
@@ -107,13 +109,15 @@ but refers to something with a lifetime of `'b`, and rejects the program, since
 What about an example that _does_ work?
 
 ```rust
-let x = 5;            // -----+-- 'a
-                      //      |
-let r = &x;           // --+--+-- 'b
-                      //   |  |
-println!("r: {}", r); //   |  |
-                      // --+  |
-                      // -----+
+{
+    let x = 5;            // -----+-- 'a
+                          //      |
+    let r = &x;           // --+--+-- 'b
+                          //   |  |
+    println!("r: {}", r); //   |  |
+                          // --+  |
+                          // -----+
+}
 ```
 
 Here, `x` lives for `'a`, which is larger than `'b`. So this is okay: we know
@@ -151,14 +155,16 @@ So why do we need to declare lifetimes on functions, but not inside of them?
 Here's our example from before:
 
 ```rust,ignore
-let r;
-
 {
-    let x = 5;
-    r = &x;
-}
+    let r;
 
-println!("r: {}", r);
+    {
+        let x = 5;
+        r = &x;
+    }
+
+    println!("r: {}", r);
+}
 ```
 
 Let's extract that inner block into a function. Remember, this code won't
@@ -171,9 +177,11 @@ fn foo() -> &i32 {
     &x
 }
 
-let r = foo();
+{
+    let r = foo();
 
-println!("r: {}", r);
+    println!("r: {}", r);
+}
 ```
 
 We get an error:
@@ -202,9 +210,11 @@ fn foo<'a>() -> &'a i32 {
     &x
 }
 
-let r = foo();
+{
+    let r = foo();
 
-println!("r: {}", r);
+    println!("r: {}", r);
+}
 ```
 
 Here's the error:
@@ -236,16 +246,18 @@ that functions which take multiple types need type parameters, functions which
 operate over different lifetimes need lifetime parameters. Think about it like this:
 
 ```rust,ignore
-let r;         // -------+-- We know that this lifetime starts exactly here...
-               //        |
-{              //        |
-    let x = 5; //        |
-    r = &x;    //        |
-}              //        |
-               //        |
-println!("r: {}", r); // |
-               //        |
-               // -------+-- ... and ends here.
+{
+    let r;         // -------+-- We know that this lifetime starts exactly here...
+                   //        |
+    {              //        |
+        let x = 5; //        |
+        r = &x;    //        |
+    }              //        |
+                   //        |
+    println!("r: {}", r); // |
+                   //        |
+                   // -------+-- ... and ends here.
+}
 ```
 
 But in this case:
@@ -257,15 +269,17 @@ fn foo<'a>() -> &'a i32 {
     &x
 }
 
-let r1 = foo();         // -----+-- 'r1 starts here
-                        //      |
-println!("r: {}", r1);  //      |
-                        //      |
-let r2 = foo();         // --+--+-- 'r2 starts here
-                        //   |  |
-println!("r2: {}", r1); //   |  |
-                        // --+--+-- 'r2 ends
-                        // -----+-- 'r1 ends
+{
+    let r1 = foo();         // -----+-- 'r1 starts here
+                            //      |
+    println!("r: {}", r1);  //      |
+                            //      |
+    let r2 = foo();         // --+--+-- 'r2 starts here
+                            //   |  |
+    println!("r2: {}", r1); //   |  |
+                            // --+--+-- 'r2 ends
+                            // -----+-- 'r1 ends
+}
 ```
 
 That parameter, `'a`, will represent `'r1` in the first case, and `'r2` in the
