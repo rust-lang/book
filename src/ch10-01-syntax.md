@@ -68,7 +68,7 @@ let float = Option::Some(5.0);
 ```
 
 We've left in the `Option::` bit for consistency with the previous examples, but
-since `Option<T>` is in the prelude, it's not needed:
+since `use Option::*` is in the prelude, it's not needed:
 
 ```rust
 let integer = Some(5);
