@@ -79,17 +79,17 @@ we called other methods:
 #     x: i32,
 #     y: i32,
 # }
-# 
+#
 # trait Printable {
 #     fn print(&self);
 # }
-# 
+#
 # impl Printable for Point {
 #     fn print(&self) {
 #         println!("I'm a Point! I have an x of {} and a y of {}.", self.x, self.y);
 #     }
 # }
-# 
+#
 let p = Point { x: 1, y: 10 };
 
 p.print();
@@ -104,11 +104,11 @@ mod point {
         pub x: i32,
         pub y: i32,
     }
-    
+
     pub trait Printable {
         fn print(&self);
     }
-    
+
     impl Printable for Point {
         fn print(&self) {
             println!("I'm a Point! I have an x of {} and a y of {}.", self.x, self.y);
