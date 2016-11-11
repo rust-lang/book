@@ -386,7 +386,8 @@ And two related to output lifetimes:
   or `&mut self`, then the lifetime of `self` is the lifetime assigned to all
   output lifetime parameters.
 
-If none of these things are true, then you must explicitly annotate lifetimes.
+If none of these three rules apply, then you must explicitly annotate input and
+output lifetimes.
 
 These rules sound a little bit technical, and they are. But we've found that
 they cover the vast majority of cases, allowing you to write a lot of code
