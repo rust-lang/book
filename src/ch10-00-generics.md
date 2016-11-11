@@ -1,7 +1,19 @@
 # Generics
 
 One of the core tools a programming language gives you is the ability to deal
-effectively with duplication. Different kinds of duplication are dealt with in
+effectively with duplication of code. It's important to minimize the amount of
+code that is duplicated throughout a program to make maintenace easier and
+minimize logic errors. Maintenance will be easier if there's only one place
+that you need to change the code if you change your mind about how the program
+should work, rather than multiple places in the code. If your program's logic
+is duplicated in different places and those places don't match, you'll get
+errors or unexpected and undesired behavior from your program that could be
+hard to track down. Rust has the concept of *generics* as one way to eliminate
+duplicate code. Generics come in the form of generic types, traits that those
+generic types have, and generic lifetimes. We'll cover how to use all of these
+in this chapter.
+
+Different kinds of duplication are dealt with in
 different ways. Consider a small program that finds the largest number in a
 list:
 
