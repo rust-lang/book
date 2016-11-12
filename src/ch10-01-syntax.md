@@ -56,52 +56,13 @@ let no_number = OptionalFloatingPointNumber::None;
 We've made the enum's name a bit long in order to drive the point home. With
 what we currently know how to do in Rust, we would have to write a unique type
 for every single kind of value we wanted to have either `Some` or `None` of. In
-other words, the idea of "an optional value" is a higher-order concept than one
+other words, the idea of "an optional value" is a more abstract concept than one
 specific type. We want it to work for any type at all.
-
-### Generic Type Parameters
-
-We can define an `Option` type that works for any type by using generics. In
-fact, that's how the actual `Option` type works in Rust. Let's check out its
-definition:
-
-```rust
-enum Option<T> {
-    Some(T),
-    None,
-}
-```
-
-The angle brackets (`<>`) go after the enum name and before the curly brace in
-the enum definition. Inside the brackets is the declaration of the generic type
-name `T`. The defintion of the enum's variants can then use `T` to stand in for
-any type. In this case, the definition `Some(T)` says that the `Some` variant
-can hold a value of any type. If we were to read this definition aloud, we'd
-say, "`Option` is an `enum` with one type parameter, `T`. It has two variants:
-`Some`, which has a value with type `T`, and `None`, which has no value." A bit
-of a mouthful!
-
-This definition allows using `Option` with any type, like these uses of
-`Option` with an `i32` and with an `f64`:
-
-```rust
-let integer = Option::Some(5);
-let float = Option::Some(5.0);
-```
-
-We've left in the `Option::` namespace for consistency with the previous
-examples, but since `use Option::*` is in the prelude, it's not needed. Usually
-using `Option` looks like this:
-
-```rust
-let integer = Some(5);
-let float = Some(5.0);
-```
 
 ### Removing Duplication by Extracting a Generic Data Type
 
-Let's return to our two non-generic `enum`s to see how to get from duplicated
-types to the generic type. Here are the definitions side-by-side:
+Let's see how to get from duplicated types to the generic type. Here are the
+definitions of our two enums side-by-side:
 
 ```text
 enum OptionalNumber {   enum OptionalFloatingPointNumber {
@@ -154,19 +115,38 @@ enum Option<T> {	enum Option<T> {
 }                   }
 ```
 
-Now they're identical! We've made our type fully generic. When you recognize
-situations with almost-duplicate types like this, you can follow this process
-to reduce duplication using generics.
+Now they're identical! We've made our type fully generic. This definition is
+also how `Option` is defined in the standard library. If we were to read this
+definition aloud, we'd say, "`Option` is an `enum` with one type parameter,
+`T`. It has two variants: `Some`, which has a value with type `T`, and `None`,
+which has no value." We can now use the same `Option` type whether we're holding an `i32` or an `f64`:
+
+```rust
+let integer = Option::Some(5);
+let float = Option::Some(5.0);
+```
+
+We've left in the `Option::` namespace for consistency with the previous
+examples, but since `use Option::*` is in the prelude, it's not needed. Usually
+using `Option` looks like this:
+
+```rust
+let integer = Some(5);
+let float = Some(5.0);
+```
+
+When you recognize situations with almost-duplicate types like this in your
+code, you can follow this process to reduce duplication using generics.
 
 ### Monomorphization at Compile Time
 
 Understanding this refactoring process is also useful in understanding how
 generics work behind the scenes: the compiler does the exact opposite of this
-process when compiling your code. *Monomorphization* means taking code that is
-generic over some type and generating code that is specific for the concrete
-types that are used with the generic code. Monomorphization is why Rust's
-generics are extremely efficient. Consider this code that uses the standard
-library's `Option`:
+process when compiling your code. *Monomorphization* means taking code that
+uses generic type parameters and generating code that is specific for each
+concrete type that is used with the generic code. Monomorphization is why
+Rust's generics are extremely efficient at runtime. Consider this code that
+uses the standard library's `Option`:
 
 ```rust
 let integer = Some(5);
@@ -176,24 +156,23 @@ let float = Some(5.0);
 When Rust compiles this code, it will perform monomorphization. What this means
 is the compiler will see that we've used two kinds of `Option<T>`: one where
 `T` is `i32`, and one where `T` is `f64`. As such, it will expand the generic
-definition of `Option<T>` into `OptionInteger<i32>` and `OptionFloat<f64>`,
-thereby replacing the generic definition with the specific ones. The more
-specific version looks like the duplicated code we started with at the
-beginning of this section:
+definition of `Option<T>` into `Option_i32` and `Option_f64`, thereby replacing
+the generic definition with the specific ones. The more specific version looks
+like the duplicated code we started with at the beginning of this section:
 
 ```rust
-enum OptionInteger {
+enum Option_i32 {
     Some(i32),
     None,
 }
 
-enum OptionFloat {
+enum Option_f64 {
     Some(f64),
     None,
 }
 
-let integer = OptionInteger::Some(5);
-let float = OptionFloat::Some(5.0);
+let integer = Option_i32::Some(5);
+let float = Option_f64::Some(5.0);
 ```
 
 In other words, we can write the non-duplicated form that uses generics in our
@@ -204,9 +183,10 @@ generics; it's just like we duplicated each particular definition.
 ### Generic Structs
 
 In a similar fashion as we did with enums, we can use `<>`s with structs as
-well in order to define structs that could hold data values of any type.
-Listing 10-2 shows the definition and use of a `Point` struct that could hold
-`x` and `y` coordinate values that are any type:
+well in order to define structs that have a generic type parameter in one or
+more of their fields. Generic structs also get monomorphized into specialized
+types at compile time. Listing 10-2 shows the definition and use of a `Point`
+struct that could hold `x` and `y` coordinate values that are any type:
 
 ```rust
 struct Point<T> {

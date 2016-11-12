@@ -2,7 +2,8 @@
 
 Rust has a feature called *traits*. Traits are similar to a feature often
 called 'interfaces' in other languages, but are also different. Traits let us
-do another kind of abstraction: they let us abstract over a group of methods.
+do another kind of abstraction: they let us abstract over *behavior* that types
+can have in common.
 
 When we use a generic type parameter, we are telling Rust that any type is
 valid in that location. When other code *uses* a value that could be of any
@@ -30,49 +31,37 @@ We declare a trait with the `trait` keyword, then the trait's name. In this
 case, our trait will describe types which can be printed. Inside of curly
 braces, we declare a method signature, but instead of providing an
 implementation inside curly braces, we put a semicolon after the signature. A
-trait can also have multiple methods; in the next example, we've added a
-`print_debug` method to the definition of `Printable`:
-
-```rust
-trait Printable {
-    fn print(&self);
-
-    fn print_debug(&self);
-}
-```
-
-What this definition is saying is that in order for a type to implement the
-`Printable` trait and specify that it can be printed, that type must implement
-the methods `print` and `print_debug` with the signatures specified here.
+trait can have multiple methods in its body, with the method signatures listend one per line and each line ending in a semicolon.
 
 Implementing a trait for a particular type looks similar to implementing
 methods on a type since it's also done with the `impl` keyword, but we specify
 the trait name as well. Inside the `impl` block, we specify definitions for the
 trait's methods in the context of the specific type. Listing 10-5 has an
 example of implementing the `Printable` trait from Listing 10-4 (that only has
-the `print` method) for a `Point` struct:
+the `print` method) for a `Temperature` enum:
 
 ```rust
 # trait Printable {
 #     fn print(&self);
 # }
 #
-struct Point {
-    x: i32,
-    y: i32,
+enum Temperature {
+    Celsius(i32),
+    Fahrenheit(i32),
 }
 
-impl Printable for Point {
+impl Printable for Temperature {
     fn print(&self) {
-        println!("I'm a Point! I have an x of {} and a y of {}.",
-                 self.x,
-                 self.y);
+        match *self {
+            Temperature::Celsius(val) => println!("{}°C", val),
+            Temperature::Fahrenheit(val) => println!("{}°F", val),
+        }
     }
 }
 ```
 
 <caption>
-Listing 10-5: Implementing the `Printable` trait on a `Point` struct
+Listing 10-5: Implementing the `Printable` trait on a `Temperature` enum
 </caption>
 
 In the same way `impl` lets us define methods, we've used it to define methods
@@ -84,32 +73,32 @@ like we can call other methods:
 #     fn print(&self);
 # }
 #
-# struct Point {
-#     x: i32,
-#     y: i32,
+# enum Temperature {
+#     Celsius(i32),
+#     Fahrenheit(i32),
 # }
 #
-# impl Printable for Point {
-#     fn print(&self) {
-#         println!("I'm a Point! I have an x of {} and a y of {}.",
-#                  self.x,
-#                  self.y);
+# impl Printable for Temperature {
+#    fn print(&self) {
+#        match *self {
+#             Temperature::Celsius(val) => println!("{}°C", val),
+#             Temperature::Fahrenheit(val) => println!("{}°F", val),
+#         }
 #     }
 # }
 #
-let p = Point { x: 1, y: 10 };
+let t = Temperature::Celsius(37);
 
-p.print();
+t.print();
 ```
 
 Note that in order to use a trait's methods, the trait itself must be in scope.
 If the definition of `Printable` was in a module, the definition would need to
 be defined as `pub` and we would need to `use` the trait in the scope where we
 wanted to call the `print` method. This is because it's possible to have two
-traits that both define a method named `print`, and our `Point` struct might
+traits that both define a method named `print`, and our `Temperature` enum might
 implement both. Rust wouldn't know which `print` method we wanted unless we
 brought the trait we wanted into our current scope with `use`.
-
 
 ### Trait Bounds
 
@@ -150,35 +139,35 @@ the type name declarations because we want to be able to call the `print`
 method that is part of the `Printable` trait.
 
 Now we are able to call the `print_anything` function from Listing 10-6 and
-pass it a `Point` instance as the `value` parameter, since we implemented the
-trait `Printable` on `Point` in Listing 10-5:
+pass it a `Temperature` instance as the `value` parameter, since we implemented
+the trait `Printable` on `Temperature` in Listing 10-5:
 
 ```
 # trait Printable {
 #     fn print(&self);
 # }
 #
-#
-# struct Point {
-#     x: i32,
-#     y: i32,
+# enum Temperature {
+#     Celsius(i32),
+#     Fahrenheit(i32),
 # }
 #
-# impl Printable for Point {
-#     fn print(&self) {
-#         println!("I'm a Point! I have an x of {} and a y of {}.",
-#                  self.x,
-#                  self.y);
+# impl Printable for Temperature {
+#    fn print(&self) {
+#        match *self {
+#             Temperature::Celsius(val) => println!("{}°C", val),
+#             Temperature::Fahrenheit(val) => println!("{}°F", val),
+#         }
 #     }
 # }
 #
 # fn print_anything<T: Printable>(value: T) {
-#     println!("Got something!");
+#     println!("I have something to print for you!");
 #     value.print();
 # }
 #
-let point = Point { x: 1, y: 10 };
-print_anything(point);
+let temperature = Temperature::Fahrenheit(98);
+print_anything(temperature);
 ```
 
 If we implement the `Printable` trait on other types, we can use them with the
