@@ -267,10 +267,10 @@ fn show_anything<T>(value: T) where T: Display {
 Instead of `T: Display` going inside the angle brackets, they go after the
 `where` keyword at the end of the function signature. This can make complex
 signatures easier to read. The `where` clause and its parts can also go on new
-lines. Here's a function that takes a lot of generic type parameters that each
-have multiple trait bounds:
+lines. Here's the signature of a function that takes three generic type
+parameters that each have multiple trait bounds:
 
-```rust
+```rust,ignore
 fn some_function<T, U, V>(t: T, u: U, v: V)
     where T: Display + Clone,
           U: Printable + Debug,
