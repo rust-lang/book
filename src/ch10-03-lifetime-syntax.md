@@ -1,17 +1,16 @@
 ## Lifetime Syntax
 
 Generic type parameters let us abstract over types, and traits let us abstract
-over a collection of methods. There's one more way that Rust allows us to do
-something similar: *lifetimes* allow us to be generic over scopes of code.
+over behavior. There's one more way that Rust allows us to do something
+similar: *lifetimes* allow us to be generic over scopes of code.
 
 Scopes of code? Yes, it's a bit unusual. Lifetimes are, in some ways, Rust's
 most distinctive feature. They are a bit different than the tools you have used
 in other programming languages. Lifetimes are a big topic, so we're not going
 to cover everything about them in this chapter. What we *are* going to do is
 talk about the very basics of lifetimes, so that when you see the syntax in
-documentation or other places, you'll know what the syntax has to do with.
-Chapter 20 will contain more advanced information about everything lifetimes
-can do.
+documentation or other places, you'll be familiar with the concepts. Chapter 20
+will contain more advanced information about everything lifetimes can do.
 
 ### Core Syntax
 
@@ -39,7 +38,8 @@ fn lifetime<'a>(argument: &'a i32) {
 
 Notice anything? In the same way that generic type declarations go inside angle
 brackets after the function name, lifetime declarations also go inside those
-same angle brackets. We can even write functions that take both:
+same angle brackets. We can even write functions that take both a lifetime
+declaration and a generic type declaration:
 
 ```rust,ignore
 fn lifetime<'a, T>(argument: &'a T) {
@@ -98,8 +98,10 @@ that it "lives longer." If Rust allowed this code to work, `r` would be
 referencing memory that was deallocated when `x` went out of scope. That'd be
 bad! Once it's deallocated, it's meaningless.
 
-So how does Rust determine that this code should not be allowed? It compares
-scopes. Here's the same example from Listing 10-8 with some annotations:
+So how does Rust determine that this code should not be allowed? Part of the
+compiler called the *borrow checker* compares scopes to determine that all
+borrows are valid. Here's the same example from Listing 10-8 with some
+annotations:
 
 ```rust,ignore
 {
@@ -143,9 +145,10 @@ allowed: Rust knows that the reference in `r` will always be valid, as it has a
 smaller scope than `x`, the value it refers to.
 
 Note that we didn't have to name any lifetimes in the code itself; Rust figured
-it out for us. One situation in which Rust can't figure out the lifetimes for a
-function or method is when one of the arguments is a reference, except for a
-few scenarios we'll discuss in the lifetime elision section.
+it out for us. One situation in which Rust can't figure out the lifetimes is
+for a function or method when one of the arguments or return values is a
+reference, except for a few scenarios we'll discuss in the lifetime elision
+section.
 
 Another time that Rust can't figure out the lifetimes is when structs have a
 field that holds a reference. In that case, naming the lifetimes looks like
@@ -163,293 +166,277 @@ In the examples above, `'a` and `'b` were concrete lifetimes: we knew about `r`
 and `x` and how long they would live exactly. However, when we write a
 function, we can't know beforehand exactly all of the arguments that it could
 be called with and how long they will be valid for. We have to explain to Rust
-what we expect the lifetime of the argument to be (we'll learn more about how
+what we expect the lifetime of the argument to be (we'll learn about how
 to know what you expect the lifetime to be in a bit). This is similar to
 writing a function that has an argument of a generic type: we don't know what
 type the arguments will actually end up being when the function gets called.
 Lifetimes are the same idea, but they are generic over the scope of a
 reference, rather than a type.
 
-### But Why?
+### Lifetime Annotations in Function Signatures
 
-So why do we need to declare lifetimes on functions, but not inside of them?
-Here's our example from before:
+Lifetime annotations for functions go on the function signature, but we don't
+have to annotate any of the code in the function body with lifetimes. That's
+because Rust can analyze the specific code inside the function without any
+help. When a function interacts with references that come from or go to code
+outside that function, however, the lifetimes of those arguments or return
+values will potentially be different each time that function gets called. Rust
+would have to analyze every place the function is called to determine that
+there were no dangling references. That would be impossible because a library
+that you provide to someone else might be called in code that hasn't been
+written yet, at the time that you're compiling your library.
+
+Lifetime parameters specify generic lifetimes that will apply to any specific
+lifetimes the function gets called with. The annotation of lifetime parameters
+tell Rust what it needs to know in order to be able to analyze a function
+without knowing about all possible calling code. Lifetime annotations do not
+change how long any of the references involved live. In the same way that
+functions can accept any type when the signature specifies a generic type
+parameter, functions can accept references with any lifetime when the signature
+specifies a generic lifetime parameter.
+
+To understand lifetime annotations in context, let's write a function that will
+return the longest of two string slices. The way we want to be able to call
+this function is by passing two string slices, and we want to get back a string
+slice. The code in Listing 10-9 should print `The longest string is abcd` once
+we've implemented the `longest` function:
+
+```rust
+# fn longest<'a>(x: &'a str, y: &'a str) -> &'a str {
+#     if x.len() > y.len() {
+#         x
+#     } else {
+#         y
+#     }
+# }
+#
+fn main() {
+    let a = String::from("abcd");
+    let b = "xyz";
+
+    let c = longest(a.as_str(), b);
+    println!("The longest string is {}", c);
+}
+```
+
+<caption>
+Listing 10-9: A `main` function that demonstrates how we'd like to use the
+`longest` function
+</caption>
+
+Note that we want the function to take string slices because we don't want the
+`longest` function to take ownership of its arguments, and we want the function
+to be able to accept slices of a `String` (like `a`) is as well as string
+literals (`b`). Refer back to the "String Slices as Arguments" section of
+Chapter 4 for more discussion about why these are the arguments we want.
+
+Here's the start of an implementation of the `longest` function that won't
+compile yet:
 
 ```rust,ignore
-{
-    let r;
-
-    {
-        let x = 5;
-        r = &x;
+fn longest(x: &str, y: &str) -> &str {
+    if x.len() > y.len() {
+        x
+    } else {
+        y
     }
-
-    println!("r: {}", r);
 }
 ```
 
-Let's extract that inner block into a function. Remember, this code won't
-compile yet.
-
-```rust,ignore
-fn foo() -> &i32 {
-    let x = 5;
-
-    &x
-}
-
-{
-    let r = foo();
-
-    println!("r: {}", r);
-}
-```
-
-We get an error:
+If we try to compile this, we get an error that talks about lifetimes:
 
 ```text
-	error[E0106]: missing lifetime specifier
- --> <anon>:2:17
-  |
-2 |     fn foo() -> &i32 {
-  |                 ^ expected lifetime parameter
-  |
-  = help: this function's return type contains a borrowed value, but there is no value for it to be borrowed from
-  = help: consider giving it a 'static lifetime
+error[E0106]: missing lifetime specifier
+   |
+1  | fn longest(x: &str, y: &str) -> &str {
+   |                                 ^ expected lifetime parameter
+   |
+   = help: this function's return type contains a borrowed value, but the signature does not say whether it is borrowed from `x` or `y`
 ```
 
-Rust wants us to put in a lifetime parameter. It also mentions something about
-"a `'static` lifetime," but let's ignore that for now. We'll come back to it at
-the end of the chapter.
+The help text is telling us that the return type needs a generic lifetime
+parameter on it because this function is returning a reference and Rust can't
+tell if the reference being returned refers to `x` or `y`. Actually, we don't
+know either, since in the `if` block in the body of this function returns a
+reference to `x` and the `else` block returns a reference to `y`! The way to
+specify the lifetime parameters in this case is to have the same lifetime for
+all of the input parameters and the return type:
 
-Let's add a parameter. It won't quite fix it, but we get a different error:
-
-```rust,ignore
-fn foo<'a>() -> &'a i32 {
-    let x = 5;
-
-    &x
-}
-
-{
-    let r = foo();
-
-    println!("r: {}", r);
+```rust
+fn longest<'a>(x: &'a str, y: &'a str) -> &'a str {
+    if x.len() > y.len() {
+        x
+    } else {
+        y
+    }
 }
 ```
 
-Here's the error:
+This will compile and will produce the result we want with the `main` function
+in Listing 10-9. This function signature is now saying that for some lifetime
+named `'a`, it will get two arguments, both which are string slices that live
+at least as long as the lifetime `'a`. The function will return a string slice
+that also will last at least as long as the lifetime `'a`. This is the contract
+we are telling Rust we want it to enforce. By specifying the lifetime
+parameters in this function signature, we are not changing the lifetimes of any
+values passed in or returned, but we are saying that any values that do not
+adhere to this contract should be rejected by the borrow checker. This function
+does not know (or need to know) exactly how long `x` and `y` will live since it
+knows that there is some scope that can be substituted for `'a` that will
+satisfy this signature.
 
-```text
-	error: `x` does not live long enough
- --> <anon>:5:6
-  |
-5 |     &x
-  |      ^ does not live long enough
-6 | }
-  | - borrowed value only lives until here
-  |
-note: borrowed value must be valid for the lifetime 'a as defined on the block at 2:28...
- --> <anon>:2:29
-  |
-2 |     fn foo<'a>() -> &'a i32 {
-  |                             ^
-```
+The exact way to specify lifetime parameters depends on what your function is
+doing. If the function didn't actually return the longest string slice but
+instead always returned the first argument, we wouldn't need to specify a
+lifetime on `y`. This code compiles:
 
-Now we have our "does not live long enough" error. What gives? Why does Rust
-need this parameter in the first place? And why didn't adding this parameter
-fix the error?
-
-When we have code inside of a function, Rust can analyze that specific case.
-There's only one thing to look at. But functions get called multiple times. So
-it can't just be one, concrete case: you have to analyze everywhere that it's
-called. Multiple, similar but different, scopes of code. So in the same way
-that functions which take multiple types need type parameters, functions which
-operate over different lifetimes need lifetime parameters. Think about it like this:
-
-```rust,ignore
-{
-    let r;         // -------+-- We know that this lifetime starts exactly here...
-                   //        |
-    {              //        |
-        let x = 5; //        |
-        r = &x;    //        |
-    }              //        |
-                   //        |
-    println!("r: {}", r); // |
-                   //        |
-                   // -------+-- ... and ends here.
-}
-```
-
-But in this case:
-
-```rust,ignore
-fn foo<'a>() -> &'a i32 {
-    let x = 5;
-
-    &x
-}
-
-{
-    let r1 = foo();         // -----+-- 'r1 starts here
-                            //      |
-    println!("r: {}", r1);  //      |
-                            //      |
-    let r2 = foo();         // --+--+-- 'r2 starts here
-                            //   |  |
-    println!("r2: {}", r1); //   |  |
-                            // --+--+-- 'r2 ends
-                            // -----+-- 'r1 ends
-}
-```
-
-That parameter, `'a`, will represent `'r1` in the first case, and `'r2` in the
-second. Two different scopes, one single parameter. Hence, generic, just like
-two different types, one type parameter.
-
-### Two Lifetimes, Intertwined
-
-To illustrate this principle a bit further, let's look at a function that takes
-_two_ references:
-
-```rust,ignore
-fn foo(x: &i32, y: &i32) -> &i32 {
-```
-
-Which reference is the return value connected to? If the function looks
-like this:
-
-```rust,ignore
-fn foo(x: &i32, y: &i32) -> &i32 {
+```rust
+fn longest<'a>(x: &'a str, y: &str) -> &'a str {
     x
 }
 ```
 
-Then it's the first, but if it's like this:
+The lifetime parameter for the return type needs to be specified and needs to
+match one of the arguments' lifetime parameters. If the reference returned does
+*not* refer to one of the arguments, the only other possibility is that it
+refers to a value created within this function, and that would be a dangling
+reference since the value will go out of scope at the end of the function.
+Consider this attempted implementation of `longest`:
 
 ```rust,ignore
-fn foo(x: &i32, y: &i32) -> &i32 {
-    y
+fn longest<'a>(x: &str, y: &str) -> &'a str {
+    let result = String::from("really long string");
+    result.as_str()
 }
 ```
 
-Then it's the second.
+Even though we've specified a lifetime for the return type, this function fails
+to compile with the following error message:
 
-This is what lifetime parameters give us control over. If we say
-
-```rust,ignore
-fn foo<'a>(x: &'a i32, y: &i32) -> &'a i32 {
+```text
+error: `result` does not live long enough
+  |
+3 |     result.as_str()
+  |     ^^^^^^ does not live long enough
+4 | }
+  | - borrowed value only lives until here
+  |
+note: borrowed value must be valid for the lifetime 'a as defined on the block at 1:44...
+  |
+1 | fn longest<'a>(x: &str, y: &str) -> &'a str {
+  |                                             ^
 ```
 
-Then we know that the return value's lifetime is tied to the lifetime of `x`.
-And likewise:
+The problem is that `result` will go out of scope and get cleaned up at the end
+of the `longest` function, and we're trying to return a reference to `result`
+from the function. There's no way we can specify lifetime parameters that would
+change the dangling reference, and Rust won't let us create a dangling
+reference. In this case, the best fix would be to return an owned data type
+rather than a reference so that the calling function is then responsible for
+cleaning up the value.
 
-```rust,ignore
-fn foo<'a>(x: &i32, y: &'a i32) -> &'a i32 {
-```
-
-This lets us know that it's tied to the value of `y`. Ultimately, this is what
-lifetime syntax is about: connecting the lifetimes of various parameters and
-return values of functions, so that Rust can understand how long your
-references are supposed to live.
+Ultimately, lifetime syntax is about connecting the lifetimes of various
+arguments and return values of functions. Once they're connected, Rust has
+enough information to allow memory-safe operations and disallow operations that
+would create dangling pointers or otherwise violate memory safety.
 
 ### Lifetime Elision
 
 If every reference has a lifetime, and we need to provide them for functions
-that take references, then why does this function compile?
+that use references as arguments or return values, then why did this function
+from the "String Slices" section of Chapter 4 compile? We haven't annotated any
+lifetimes here, yet Rust happily compiles this function:
 
 ```rust
-fn do_nothing(x: &i32) -> &i32 {
-    x
+fn first_word(s: &str) -> &str {
+    let bytes = s.as_bytes();
+
+    for (i, &item) in bytes.iter().enumerate() {
+        if item == b' ' {
+            return &s[0..i];
+        }
+    }
+
+    &s[..]
 }
 ```
 
-We haven't annotated any lifetime here, yet Rust happily compiles this function.
+The answer is historical: in early versions of pre-1.0 Rust, this would not
+have compiled. Every reference needed an explicit lifetime. At that time, the
+function signature would have been written like this:
 
-The answer here is historical: in ancient versions of pre-1.0 Rust, this would
-not have compiled. Every reference needed an explicit lifetime. So this would
-have to be written like this:
-
-```rust
-fn do_nothing<'a>(x: &'a i32) -> &'a i32 {
-    x
-}
+```rust,ignore
+fn first_word<'a>(s: &'a str) -> &'a str {
 ```
 
-However, after writing a lot of Rust code, some patterns developed. We noticed
-that the vast majority of code followed these patterns. And being forced to use
-explicit lifetime syntax on every reference wasn't a very great developer
-experience.
+After writing a lot of Rust code, some patterns developed. The Rust team
+noticed that the vast majority of code followed the pattern, and being forced
+to use explicit lifetime syntax on every reference wasn't a very great
+developer experience.
 
-To fix this, we developed the 'lifetime elision' rules. It's not full
-inference: Rust doesn't try to guess what you meant, and then infer that. It's
-a very basic set of patterns, and if they match, you don't need to write the
-lifetimes explicitly. Here's the rules:
+To make it so that lifetime annotations weren't needed as often, they added
+*lifetime elision rules* to Rust's analysis of references. This feature isn't
+full inference: Rust doesn't try to guess what you meant in places where there
+could be ambiguity. The rules are a very basic set of particular cases, and if
+your code fits one of those cases, you don't need to write the lifetimes
+explicitly. Here are the rules:
 
-Lifetimes on function arguments are called "input lifetimes", and lifetimes on
-return values are called "output lifetimes." With that in mind, there's one
-rule related to input lifetimes:
+Lifetimes on function arguments are called *input lifetimes*, and lifetimes on
+return values are called *output lifetimes*. There's one rule related to how
+Rust infers input lifetimes in the absence of explicit annotations:
 
-* Each argument that needs a lifetime parameter gets its own. In other words,
-  `fn foo<'a>(x: &'a i32)`, and `fn foo<'a, 'b>(x: &'a i32, y: &'b i32)`, and
+1. Each argument that is a reference and therefore needs a lifetime parameter
+  gets its own. In other words, a function with one argument gets one lifetime
+  parameter: `fn foo<'a>(x: &'a i32)`, a function with two arguments gets two
+  separate lifetime parameters: `fn foo<'a, 'b>(x: &'a i32, y: &'b i32)`, and
   so on.
 
-And two related to output lifetimes:
+And two rules related to output lifetimes:
 
-* If there is exactly one input lifetime parameter, that lifetime is assigned
-  to all output lifetime parameters.
-* If there are multiple input lifetime parameters, but one of them is `&self`
+2. If there is exactly one input lifetime parameter, that lifetime is assigned
+  to all output lifetime parameters: `fn foo<'a>(x: &'a i32) -> &'a i32`.
+3. If there are multiple input lifetime parameters, but one of them is `&self`
   or `&mut self`, then the lifetime of `self` is the lifetime assigned to all
-  output lifetime parameters.
-
+  output lifetime parameters. This makes writing methods much nicer.
+  
 If none of these three rules apply, then you must explicitly annotate input and
-output lifetimes.
+output lifetimes. These rules do apply in the `first_word` function, which is
+why we didn't have to specify any lifetimes.
 
-These rules sound a little bit technical, and they are. But we've found that
-they cover the vast majority of cases, allowing you to write a lot of code
-without needing to consider explicit lifetimes. But it's not 100% of the time,
-and so you may see explicit lifetimes used in various places.
+<!-- Should we have an example of the third rule here? It involves creating a
+struct with a reference, and then an impl with a lifetime, and then a function
+with references, which could get a bit wordy but not having one feels like an
+omission /Carol -->
+
+These rules cover the vast majority of cases, allowing you to write a lot of
+code without needing to specify explicit lifetimes. However, Rust is always
+checking these rules and the lifetimes in your program, and cases in which the
+lifetime elision rules do not apply are cases where you'll need to add lifetime
+parameters to help Rust understand the contracts of your code.
 
 ### The Static Lifetime
 
-There is _one_ special lifetime that Rust knows about. Remember this program
-from before?
-
-```rust,ignore
-fn foo() -> &i32 {
-    let x = 5;
-
-    &x
-}
-```
-
-It gave us this help message:
-
-```text
-= help: consider giving it a 'static lifetime
-```
-
-As it turns out, `'static` is a special lifetime. It means "this reference
-lasts for the entire duration of the program." Why would that matter? Well,
-let's think about this function a bit more. We're trying to create a new
-integer, and then return a reference to it. When the function is over, `x` is
-going to go out of scope, and so this reference is dangling. The only way we
-could possibly return a reference from a function with no parameters is if it
-were alive before the function executed. Hence, `'static`.
-
-As an example of the `'static` lifetime, string literals have one:
+There is _one_ special lifetime that Rust knows about: `'static`. The `'static`
+lifetime is the entire duration of the program. All string literals have the
+`'static` lifetime:
 
 ```rust
 let s: &'static str = "I have a static lifetime.";
 ```
 
-The text of this string is stored directly in the binary of your program,
-therefore, it's always available, and so is `'static`.
+The text of this string is stored directly in the binary of your program and
+the binary of your program is always available. Therefore, the lifetime of all
+string literals is `'static`. You may see suggestions to use the `'static`
+lifetime in error message help text, but before adding it, think about whether
+the reference you have is one that actually lives the entire lifetime of your
+program or not (or even if you want it to live that long, if it could). Most of
+the time, the problem in the code is an attempt to create a dangling reference
+or a mismatch of the available lifetimes, and the solution is fixing those
+problems, not specifying the `'static` lifetime.
 
 ## Summary
 
 We've covered the basics of Rust's system of generics. Generics are the core to
 building good abstractions, and can be used in a number of ways. There's more
 to learn about them, particularly lifetimes, but we'll cover those in later
-chapters.
+chapters. Let's move on to I/O functionality.
