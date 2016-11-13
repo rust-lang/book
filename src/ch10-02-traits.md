@@ -142,7 +142,7 @@ Now we are able to call the `print_anything` function from Listing 10-6 and
 pass it a `Temperature` instance as the `value` parameter, since we implemented
 the trait `Printable` on `Temperature` in Listing 10-5:
 
-```
+```rust
 # trait Printable {
 #     fn print(&self);
 # }
