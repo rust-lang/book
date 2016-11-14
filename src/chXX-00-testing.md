@@ -289,3 +289,33 @@ test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured
 
 The `--ignored` argument is an argument to the test binary, and not to Cargo,
 which is why the command is `cargo test -- --ignored`.
+
+## Parallelism
+
+One thing that is important to note when writing tests are run in parallel
+using threads. For this reason you should take care that your tests are written
+in such a way as to not depend on each other, or on any shared state. "Shared
+state" can also include the environment, such as the current working directory,
+or environment variables.
+
+If you don't want this behavior, or if you want more fine-grained control over
+the number of threads used, you can use the `--test-threads` flag:
+
+```bash
+$ cargo test -- --test-threads=1 # one thread means no parallelism
+```
+
+Note the `--`, which is important. `--test-threads` is an argument to our
+tests, not to `cargo test` directly.
+
+## Test output
+
+By default Rust's test library captures and discards output to standard
+out/error, e.g. output from `println!()`. This can be controlled using a flag:
+
+```bash
+$ cargo test -- --nocapture
+```
+
+Note the `--`, which is important. `--nocapture` is an argument to our tests,
+not to `cargo test` directly.
