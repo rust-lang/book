@@ -150,6 +150,8 @@ for a function or method when one of the arguments or return values is a
 reference, except for a few scenarios we'll discuss in the lifetime elision
 section.
 
+### Lifetime Annotations in Struct Definitions
+
 Another time that Rust can't figure out the lifetimes is when structs have a
 field that holds a reference. In that case, naming the lifetimes looks like
 this:
@@ -398,21 +400,45 @@ And two rules related to output lifetimes:
 3. If there are multiple input lifetime parameters, but one of them is `&self`
   or `&mut self`, then the lifetime of `self` is the lifetime assigned to all
   output lifetime parameters. This makes writing methods much nicer.
-  
+
 If none of these three rules apply, then you must explicitly annotate input and
 output lifetimes. These rules do apply in the `first_word` function, which is
 why we didn't have to specify any lifetimes.
-
-<!-- Should we have an example of the third rule here? It involves creating a
-struct with a reference, and then an impl with a lifetime, and then a function
-with references, which could get a bit wordy but not having one feels like an
-omission /Carol -->
 
 These rules cover the vast majority of cases, allowing you to write a lot of
 code without needing to specify explicit lifetimes. However, Rust is always
 checking these rules and the lifetimes in your program, and cases in which the
 lifetime elision rules do not apply are cases where you'll need to add lifetime
 parameters to help Rust understand the contracts of your code.
+
+### Lifetime Annotations in Method Definitions
+
+Now that we've gone over the lifetime elision rules, defining methods on
+structs that hold references will make more sense. The lifetime name needs to
+be declared after the `impl` keyword and then used after the struct's name,
+since the lifetime is part of the struct's type. The lifetimes can be elided in
+any methods where the output type's lifetime is the same as that of the
+struct's because of the third elision rule. Here's a struct called `App` that
+holds a reference to another struct, `Config`, defined elsewhere. The
+`append_to_name` method does not need lifetime annotations even though the
+method has a reference as an argument and is returning a reference; the
+lifetime of the return value will be the lifetime of `self`:
+
+```rust
+# struct Config {}
+#
+struct App<'a> {
+    name: String,
+    config: &'a Config,
+}
+
+impl<'a> App<'a> {
+    fn append_to_name(&mut self, suffix: &str) -> &str {
+        self.name.push_str(suffix);
+        self.name.as_str()
+    }
+}
+```
 
 ### The Static Lifetime
 
