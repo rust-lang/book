@@ -47,7 +47,7 @@
 
 - [Generics]()
 
-- [A tour of the standard library]()
+- [I/O]()
     - [`Read` & `Write`]()
     - [`std::fs`]()
     - [`std::path`]()

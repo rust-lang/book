@@ -68,7 +68,7 @@ we choose to `cargo update`.
 
 You can now use the `regex` library using `extern crate` in `main.rs`.
 
-```
+```ignore
 extern crate regex;
 
 use regex::Regex;
