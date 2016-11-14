@@ -1,9 +1,8 @@
 ## Traits
 
-Rust has a feature called *traits*. Traits are similar to a feature often
-called 'interfaces' in other languages, but are also different. Traits let us
-do another kind of abstraction: they let us abstract over *behavior* that types
-can have in common.
+*Traits* are similar to a feature often called 'interfaces' in other languages,
+but are also different. Traits let us do another kind of abstraction: they let
+us abstract over *behavior* that types can have in common.
 
 When we use a generic type parameter, we are telling Rust that any type is
 valid in that location. When other code *uses* a value that could be of any
