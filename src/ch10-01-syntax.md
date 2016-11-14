@@ -1,10 +1,9 @@
 ## Generics Syntax
 
-We've already hinted at the concept of generics in previous chapters, but we
+We've already hinted at the idea of generics in previous chapters, but we
 never dug into what exactly they are or how to use them. In places where we
 specify a type, like function signatures or structs, instead we can use
-*generics*. Generics are stand-ins that represent more than one particular
-concept. In this section, we're going to cover generic *data types*.
+*generics*. Generics are stand-ins that represent an abstract set instead of something concrete. In this section, we're going to cover generic *data types*.
 
 You can recognize when any kind of generics are used by the way that they fit
 into Rust's syntax: any time you see angle brackets, `<>`, you're dealing with
