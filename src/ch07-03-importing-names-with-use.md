@@ -182,7 +182,7 @@ mod tests {
 
 Run the tests by invoking the `cargo test` command:
 
-```bash
+```text
 $ cargo test
    Compiling communicator v0.1.0 (file:///projects/communicator)
 error[E0433]: failed to resolve. Use of undeclared type or module `client`
@@ -254,7 +254,7 @@ mod tests {
 If we run `cargo test` again, the test will pass and the first part of the test
 result output will be:
 
-```bash
+```text
 $ cargo test
    Compiling communicator v0.1.0 (file:///projects/communicator)
      Running target/debug/communicator-92007ddb5330fa5a

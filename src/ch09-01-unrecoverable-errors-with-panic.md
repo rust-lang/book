@@ -31,7 +31,7 @@ fn main() {
 
 If you run it, you'll see something like this:
 
-```bash
+```text
 $ cargo run
    Compiling panic v0.1.0 (file:///projects/panic)
     Finished debug [unoptimized + debuginfo] target(s) in 0.25 secs
@@ -74,7 +74,7 @@ In order to protect your program from this sort of vulnerability, if you try to
 read an element at an index that doesn't exist, Rust will stop execution and
 refuse to continue with an invalid value. Let's try it and see:
 
-```bash
+```text
 $ cargo run
    Compiling panic v0.1.0 (file:///projects/panic)
     Finished debug [unoptimized + debuginfo] target(s) in 0.27 secs
@@ -94,7 +94,7 @@ That's what the next line, the `note` is about. If we set the `RUST_BACKTRACE`
 environment variable, we'll get a backtrace of exactly how the error happend.
 Let's try that. Listing 9-1 shows the output:
 
-```bash
+```text
 $ RUST_BACKTRACE=1 cargo run
     Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
      Running `target/debug/panic`

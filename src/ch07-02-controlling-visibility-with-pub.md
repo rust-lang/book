@@ -7,7 +7,7 @@ able to build our project, but we still get some warning messages about the
 `client::connect`, `network::connect`, and `network::server::connect` functions
 not being used:
 
-```bash
+```text
 warning: function is never used: `connect`, #[warn(dead_code)] on by default
 src/client.rs:1:1
   |
@@ -60,7 +60,7 @@ Our binary crate right now just calls our library’s `connect` function from th
 `client` module. However, invoking `cargo build` will now give us an error
 after the warnings:
 
-```bash
+```text
 error: module `client` is private
  --> src/main.rs:4:5
   |
@@ -103,7 +103,7 @@ mod network;
 
 The `pub` goes right before `mod`. Let’s try building again:
 
-```bash
+```text
 <warnings>
 error: function `connect` is private
  --> src/main.rs:4:5
@@ -125,7 +125,7 @@ pub fn connect() {
 
 And run `cargo build` again:
 
-```bash
+```text
 warning: function is never used: `connect`, #[warn(dead_code)] on by default
  --> src/network/mod.rs:1:1
   |
@@ -163,7 +163,7 @@ mod server;
 
 And compile:
 
-```bash
+```text
 warning: function is never used: `connect`, #[warn(dead_code)] on by default
  --> src/network/mod.rs:1:1
   |
@@ -194,7 +194,7 @@ pub mod network;
 
 Now if we compile, that warning is gone:
 
-```bash
+```text
 warning: function is never used: `connect`, #[warn(dead_code)] on by default
  --> src/network/server.rs:1:1
   |

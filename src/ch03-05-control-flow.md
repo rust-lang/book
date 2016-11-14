@@ -44,7 +44,7 @@ the next bit of code.
 
 Try running this code; you should see the following output:
 
-```bash
+```text
 $ cargo run
    Compiling branches v0.1.0 (file:///projects/branches)
      Running `target/debug/branches`
@@ -60,7 +60,7 @@ let number = 7;
 
 Run the program again, and look at the output:
 
-```bash
+```text
 $ cargo run
    Compiling branches v0.1.0 (file:///projects/branches)
      Running `target/debug/branches`
@@ -86,7 +86,7 @@ fn main() {
 The `if` condition evaluates to a value of `3` this time, and Rust throws an
 error:
 
-```bash
+```text
    Compiling branches v0.1.0 (file:///projects/branches)
 error[E0308]: mismatched types
  --> src/main.rs:4:8
@@ -148,7 +148,7 @@ fn main() {
 This program has four possible paths it can take. After running it, you should
 see the following output:
 
-```bash
+```text
 $ cargo run
    Compiling branches v0.1.0 (file:///projects/branches)
      Running `target/debug/branches`
@@ -193,7 +193,7 @@ Listing 3-4: Assigning the result of an `if` expression to a variable
 The `number` variable will be bound to a value based on the outcome of the `if`
 expression. Run this code to see what happens:
 
-```bash
+```text
 $ cargo run
    Compiling branches v0.1.0 (file:///projects/branches)
      Running `target/debug/branches`
@@ -228,7 +228,7 @@ When we run this code, we’ll get an error. The `if` and `else` arms have value
 types that are incompatible, and Rust indicates exactly where to find the
 problem in the program:
 
-```bash
+```text
    Compiling branches v0.1.0 (file:///projects/branches)
 error[E0308]: if and else have incompatible types
  --> src/main.rs:4:18
@@ -280,7 +280,7 @@ When we run this program, we’ll see `again!` printed over and over continuousl
 until we stop the program manually. Most terminals support a keyboard shortcut,
  ctrl-C, to halt a program that is stuck in a continual loop. Give it a try:
 
-```bash
+```text
 $ cargo run
    Compiling loops v0.1.0 (file:///projects/loops)
      Running `target/debug/loops`
@@ -363,7 +363,7 @@ Here, the code counts up through the elements in the array. It starts at index
 when `index < 5` is no longer true). Running this code will print out every
 element in the array:
 
-```bash
+```text
 $ cargo run
    Compiling loops v0.1.0 (file:///projects/loops)
      Running `target/debug/loops`

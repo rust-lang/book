@@ -174,7 +174,7 @@ Any such expression always has the `unit` type.
 The precedence of Rust binary operators is ordered as follows, going from
 strong to weak:
 
-```bash
+```text
 as :
 * / %
 + -

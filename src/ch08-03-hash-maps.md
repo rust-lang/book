@@ -114,7 +114,7 @@ for (key, value) in &map {
 
 This will print:
 
-```bash
+```text
 1: hello
 2: world
 ```

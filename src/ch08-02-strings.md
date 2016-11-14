@@ -308,7 +308,7 @@ that `s` will be "Зд".
 What would happen if we did `&hello[0..1]`? The answer: it will panic at
 runtime, in the same way that accessing an invalid index in a vector does:
 
-```bash
+```text
 thread 'main' panicked at 'index 0 and/or 1 in `Здравствуйте` do not lie on
 character boundary', ../src/libcore/str/mod.rs:1694
 ```
@@ -327,7 +327,7 @@ for c in "नमस्ते".chars() {
 
 This code will print:
 
-```bash
+```text
 न
 म
 स
@@ -348,7 +348,7 @@ for b in "नमस्ते".bytes() {
 
 This code will print the 18 bytes that make up this `String`, starting with:
 
-```bash
+```text
 224
 164
 168

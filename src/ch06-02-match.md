@@ -265,7 +265,7 @@ fn plus_one(x: Option<i32>) -> Option<i32> {
 We didn't handle the `None` case, so this will cause a bug. Luckily, it's a bug
 Rust knows how to catch. If we try to compile this code, we'll get this error:
 
-```bash
+```text
 error[E0004]: non-exhaustive patterns: `None` not covered
  -->
   |

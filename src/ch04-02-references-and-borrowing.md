@@ -92,7 +92,7 @@ fn change(some_string: &String) {
 
 Here’s the error:
 
-```bash
+```text
 error: cannot borrow immutable borrowed content `*some_string` as mutable
  --> error.rs:8:5
   |
@@ -140,7 +140,7 @@ let r2 = &mut s;
 
 Here’s the error:
 
-```bash
+```text
 error[E0499]: cannot borrow `s` as mutable more than once at a time
  --> borrow_twice.rs:5:19
   |
@@ -195,7 +195,7 @@ let r3 = &mut s; // BIG PROBLEM
 
 Here’s the error:
 
-```bash
+```text
 error[E0502]: cannot borrow `s` as mutable because it is also borrowed as immutable
  --> borrow_thrice.rs:6:19
   |
@@ -247,7 +247,7 @@ fn dangle() -> &String {
 
 Here’s the error:
 
-```bash
+```text
 error[E0106]: missing lifetime specifier
  --> dangle.rs:5:16
   |
@@ -266,7 +266,7 @@ This error message refers to a feature we haven’t learned about yet:
 the parts about lifetimes, the message does contain the key to why this code is
 a problem:
 
-```bash
+```text
 this function's return type contains a borrowed value, but there is no value
 for it to be borrowed from.
 ```

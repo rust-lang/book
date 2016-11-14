@@ -27,7 +27,7 @@ fn main() {
 Save and run the program using `cargo run`. You should receive an error
 message, as shown in this output:
 
-```bash
+```text
 $ cargo run
    Compiling variables v0.0.1 (file:///projects/variables)
 error[E0384]: re-assignment of immutable variable `x`
@@ -82,7 +82,7 @@ fn main() {
 
 When we run this program, we get the following:
 
-```bash
+```text
 $ cargo run
    Compiling variables v0.1.0 (file:///projects/variables)
      Running `target/debug/variables`
@@ -166,7 +166,7 @@ repeating `let x =`, taking the original value and adding `1` so the value of
 previous value and multiplying it by `2` to give `x` a final value of `12`.
 When you run this program, it will output the following:
 
-```bash
+```text
 $ cargo run
    Compiling variables v0.1.0 (file:///projects/variables)
      Running `target/debug/variables`
@@ -204,7 +204,7 @@ spaces = spaces.len();
 we’ll get a compile-time error because we’re not allowed to mutate a variable’s
 type:
 
-```bash
+```text
 error[E0308]: mismatched types
  --> src/main.rs:3:14
   |

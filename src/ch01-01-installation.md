@@ -16,14 +16,14 @@ with `$` are typically showing the output of the previous command.
 If you're on Linux or a Mac, all you need to do is open a terminal and type
 this:
 
-```bash
+```text
 $ curl https://sh.rustup.rs -sSf | sh
 ```
 
 This will download a script and start the installation. You may be prompted for
 your password. If it all goes well, you’ll see this appear:
 
-```bash
+```text
 Rust is installed now. Great!
 ```
 
@@ -48,7 +48,7 @@ installation page](https://www.rust-lang.org/install.html) for other options.
 Uninstalling Rust is as easy as installing it. From your shell, run
 the uninstall script:
 
-```bash
+```text
 $ rustup self uninstall
 ```
 
@@ -56,14 +56,14 @@ $ rustup self uninstall
 
 If you've got Rust installed, you can open up a shell, and type this:
 
-```bash
+```text
 $ rustc --version
 ```
 
 You should see the version number, commit hash, and commit date in a format
 similar to this for the latest stable version at the time you install:
 
-```bash
+```text
 rustc x.y.z (abcabcabc yyyy-mm-dd)
 ```
 

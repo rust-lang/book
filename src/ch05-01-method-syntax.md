@@ -139,7 +139,7 @@ fn main() {
 We want to see this output, since both of `rect2`'s dimensions are smaller than
 `rect1`'s, but `rect3` is wider than `rect1`:
 
-```bash
+```text
 Can rect1 hold rect2? true
 Can rect1 hold rect3? false
 ```

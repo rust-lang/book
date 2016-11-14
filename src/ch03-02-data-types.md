@@ -20,7 +20,7 @@ If we don’t add the type annotation here, Rust will display the following
 error, which means the compiler needs more information from us to know which
 possible type we want to use:
 
-```bash
+```text
 error[E0282]: unable to infer enough type information about `_`
  --> src/main.rs:2:5
   |
@@ -347,7 +347,7 @@ fn main() {
 
 Running this code using `cargo run` produces the following result:
 
-```bash
+```text
 $ cargo run
    Compiling arrays v0.1.0 (file:///projects/arrays)
      Running `target/debug/arrays`

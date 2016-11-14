@@ -71,7 +71,7 @@ turn our error into a `panic!` instead, by calling the macro. And since we
 haven't created that file yet, we'll see a message indicating as such when we
 print the error value:
 
-```bash
+```text
 thread 'main' panicked at 'There was a problem opening the file: Error { repr:
 Os { code: 2, message: "No such file or directory" } }', src/main.rs:8
 ```
@@ -333,7 +333,7 @@ switch this example to use `?`. /Carol -->
 
 When we compile this, we get the following error message:
 
-```bash
+```text
 error[E0308]: mismatched types
  -->
   |

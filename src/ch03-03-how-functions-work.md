@@ -38,7 +38,7 @@ Let’s start a new binary project named *functions* to explore functions
 further. Place the `another_function` example in *src/main.rs* and run it. You
 should see the following output:
 
-```bash
+```text
 $ cargo run
    Compiling functions v0.1.0 (file:///projects/functions)
      Running `target/debug/functions`
@@ -69,7 +69,7 @@ fn another_function(x: i32) {
 
 Try running this program; you should get the following output:
 
-```bash
+```text
 $ cargo run
    Compiling functions v0.1.0 (file:///projects/functions)
      Running `target/debug/functions`
@@ -111,7 +111,7 @@ Let’s try running this code. Replace the program currently in your *function*
 project’s *src/main.rs* file with the preceding example, and run it using
 `cargo run`:
 
-```bash
+```text
 $ cargo run
    Compiling functions v0.1.0 (file:///projects/functions)
      Running `target/debug/functions`
@@ -169,7 +169,7 @@ fn main() {
 
 When you run this program, you’ll get an error like this:
 
-```bash
+```text
 $ cargo run
    Compiling functions v0.1.0 (file:///projects/functions)
 error: expected expression, found statement (`let`)
@@ -253,7 +253,7 @@ function—just the number `5` by itself. That’s a perfectly valid function in
 Rust. Note that the function’s return type is specified, too, as `-> i32`. Try
 running this code; the output should look like this:
 
-```bash
+```text
 $ cargo run
    Compiling functions v0.1.0 (file:///projects/functions)
      Running `target/debug/functions`
@@ -309,7 +309,7 @@ fn plus_one(x: i32) -> i32 {
 
 Running this code produces an error, as follows:
 
-```bash
+```text
 error[E0269]: not all control paths return a value
  --> src/main.rs:7:1
   |

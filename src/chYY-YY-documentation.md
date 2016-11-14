@@ -36,7 +36,7 @@ example, a program with only this:
 
 Will give a compiler error:
 
-```bash
+```text
 src/main.rs:1:1: 1:27 error: expected item after doc comment
 src/main.rs:1 /// What am I documenting?
               ^~~~~~~~~~~~~~~~~~~~~~~~~~

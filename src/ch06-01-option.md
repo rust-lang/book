@@ -99,7 +99,7 @@ let sum = x + y;
 
 If we run this code, we get an error message like this:
 
-```bash
+```text
 error[E0277]: the trait bound `i8: std::ops::Add<std::option::Option<i8>>` is not satisfied
  -->
   |

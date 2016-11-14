@@ -17,7 +17,7 @@ game will print congratulations and exit.
 To set up a new project, go to the *projects* directory that you created in
 Chapter 1, and make a new project using Cargo, like so:
 
-```bash
+```text
 $ cargo new guessing_game --bin
 $ cd guessing_game
 ```
@@ -57,7 +57,7 @@ fn main() {
 Now let’s compile this “Hello, world!” program and run it in the same step
 using the `cargo run` command:
 
-```bash
+```text
 $ cargo run
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
      Running `target/debug/guessing_game`
@@ -281,7 +281,7 @@ entered into standard input.
 
 If we don’t call `expect`, the program will compile, but we’ll get a warning:
 
-```bash
+```text
 $ cargo build
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
 src/main.rs:10:5: 10:39 warning: unused result which must be used,
@@ -324,7 +324,7 @@ This code would print out `x = 5 and y = 10`.
 
 Let’s test the first part of the guessing game. You can run it using `cargo run`:
 
-```bash
+```text
 $ cargo run
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
      Running `target/debug/guessing_game`
@@ -382,7 +382,7 @@ version 0.3.14.”
 Now, without changing any of the code, let’s build the project, as shown in
 Listing 2-2:
 
-```bash
+```text
 $ cargo build
     Updating registry `https://github.com/rust-lang/crates.io-index`
  Downloading rand v0.3.14
@@ -421,7 +421,7 @@ doesn't recompile that either. With nothing to do, it simply exits. If you open
 up the *src/main.rs* file, make a trivial change, then save it and build again,
 you’ll only see one line of output:
 
-```bash
+```text
 $ cargo build
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
 ```
@@ -464,7 +464,7 @@ But by default, Cargo will only look for versions larger than `0.3.0` and
 smaller than `0.4.0`. If the `rand` crate has released two new versions,
 `0.3.15` and `0.4.0`, you would see the following if you ran `cargo update`:
 
-```bash
+```text
 $ cargo update
     Updating registry `https://github.com/rust-lang/crates.io-index`
     Updating rand v0.3.14 -> v0.3.15
@@ -564,7 +564,7 @@ the answer as soon as it starts!
 
 Try running the program a few times:
 
-```bash
+```text
 $ cargo run
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
      Running `target/debug/guessing_game`
@@ -675,7 +675,7 @@ look at the last arm in this particular scenario.
 
 However, the code in Listing 2-4 won’t compile yet. Let’s try it:
 
-```bash
+```text
 $ cargo build
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
 error[E0308]: mismatched types
@@ -793,7 +793,7 @@ and `expect` will return the number that we want from the `Ok` value.
 
 Let’s run the program now!
 
-```bash
+```text
 $ cargo run
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
      Running `target/guessing_game`
@@ -868,7 +868,7 @@ the `parse` discussion in “Comparing the Guesses” on page XX: if the user
 enters a non-number answer, the program will crash. The user can take advantage
 of that in order to quit, as shown here:
 
-```bash
+```text
 $ cargo run
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
      Running `target/guessing_game`
@@ -985,7 +985,7 @@ might encounter!
 Now everything in the program should work as expected. Let’s try it by running
 `cargo run`:
 
-```bash
+```text
 $ cargo run
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
      Running `target/guessing_game`

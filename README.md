@@ -19,7 +19,7 @@ Building the book requires [mdBook] >= v0.0.13. To get it:
 
 [mdBook]: https://github.com/azerupi/mdBook
 
-```bash
+```
 $ cargo install mdbook
 ```
 
@@ -27,7 +27,7 @@ $ cargo install mdbook
 
 To build the book, type:
 
-```bash
+```
 $ mdbook build
 ```
 
@@ -35,20 +35,20 @@ The output will be in the `book` subdirectory. To check it out, open it in
 your web browser.
 
 _Firefox:_
-```bash
+```
 $ firefox book/index.html           # Linux
 $ open -a "Firefox" book/index.html # OS X
 ```
 
 _Chrome:_
-```bash
+```
 $ google-chrome book/index.html           # Linux
 $ open -a "Google Chrome" book/index.html # OS X
 ```
 
 To run the tests:
 
-```bash
+```
 $ mdbook test
 ```
 

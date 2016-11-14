@@ -120,7 +120,7 @@ fn element() -> String {
 
 Trying to compile this will result in the following error:
 
-```bash
+```text
 error: cannot move out of indexed content [--explain E0507]
   |>
 4 |>     list[1]
@@ -143,7 +143,7 @@ v.push(6);
 
 Compiling this will give us this error:
 
-```bash
+```text
 error: cannot borrow `v` as mutable because it is also borrowed as immutable
 [--explain E0502]
   |>

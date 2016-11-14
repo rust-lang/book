@@ -92,7 +92,7 @@ fn area(length: u32, width: u32) -> u32 {
 
 Let's try running this program with `cargo run`:
 
-```bash
+```text
 The area of the rectangle is 1500 square pixels.
 ```
 
@@ -226,7 +226,7 @@ fn main() {
 
 If we run this, we get an error with this core message:
 
-```bash
+```text
 error: the trait bound `Rectangle: std::fmt::Display` is not satisfied
 ```
 
@@ -242,7 +242,7 @@ want and structs do not have a provided implementation of `Display`.
 
 If we keep reading the errors, though, we'll find this helpful note:
 
-```bash
+```text
 note: `Rectangle` cannot be formatted with the default formatter; try using
 `:?` instead if you are using a format string
 ```
@@ -256,13 +256,13 @@ code.
 
 Let's try running with this change and... drat. We still get an error:
 
-```bash
+```text
 error: the trait bound `Rectangle: std::fmt::Debug` is not satisfied
 ```
 
 Again, though, the compiler has given us a helpful note!
 
-```bash
+```text
 note: `Rectangle` cannot be formatted using `:?`; if it is defined in your
 crate, add `#[derive(Debug)]` or manually implement it
 ```
@@ -289,7 +289,7 @@ fn main() {
 At this point, if we run this program, we won't get any errors and we'll see the
 following output:
 
-```bash
+```text
 rect1 is Rectangle { length: 50, width: 30 }
 ```
 

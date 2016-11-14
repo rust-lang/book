@@ -12,7 +12,7 @@ call our library `communicator`. By default, cargo will create a library unless
 another type of project is specified, so if we leave off the `--bin` option
 that we’ve been using so far our project will be a library:
 
-```bash
+```text
 $ cargo new communicator
 $ cd communicator
 ```
@@ -248,7 +248,7 @@ Now, everything should compile successfully, though you’ll get a few warnings.
 Remember to use `cargo build` instead of `cargo run` since we have a library
 crate rather than a binary crate:
 
-```bash
+```text
 $ cargo build
    Compiling communicator v0.1.0 (file:///projects/communicator)
 
@@ -332,7 +332,7 @@ fn connect() {
 
 When we try to `cargo build`, we’ll get this error:
 
-```bash
+```text
 $ cargo build
    Compiling communicator v0.1.0 (file:///projects/communicator)
 error: cannot declare a new module at this location
@@ -378,7 +378,7 @@ previously, we can do what the note suggests:
 
 Here are commands to carry out these steps:
 
-```bash
+```text
 $ mkdir src/network
 $ mv src/network.rs src/network/mod.rs
 $ mv src/server.rs src/network

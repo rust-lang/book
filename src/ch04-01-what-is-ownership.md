@@ -327,7 +327,7 @@ println!("{}", s1);
 
 You’ll get an error like this:
 
-```bash
+```text
 5:22 error: use of moved value: `s1` [E0382]
 println!("{}", s1);
                ^~
