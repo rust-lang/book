@@ -19,18 +19,22 @@ Let's first go through a technique for dealing with duplication that you're
 probably familiar with: extracting a function. Consider a small program that
 finds the largest number in a list, shown in Listing 10-1:
 
+Filename: src/main.rs
+
 ```rust
-let numbers = vec![34, 50, 25, 100, 65];
+fn main() {
+    let numbers = vec![34, 50, 25, 100, 65];
 
-let mut largest = numbers[0];
+    let mut largest = numbers[0];
 
-for number in numbers {
-    if largest > number {
-        largest = number;
+    for number in numbers {
+        if largest > number {
+            largest = number;
+        }
     }
-}
 
-println!("The largest number is {}", largest);
+    println!("The largest number is {}", largest);
+}
 ```
 
 <caption>
@@ -41,30 +45,34 @@ If we needed to find the largest number in two different lists of numbers, we
 could duplicate the code in Listing 10-1 and have the same logic exist in two
 places in the program:
 
+Filename: src/main.rs
+
 ```rust
-let numbers = vec![34, 50, 25, 100, 65];
+fn main() {
+    let numbers = vec![34, 50, 25, 100, 65];
 
-let mut largest = numbers[0];
+    let mut largest = numbers[0];
 
-for number in numbers {
-    if largest > number {
-        largest = number;
+    for number in numbers {
+        if largest > number {
+            largest = number;
+        }
     }
-}
 
-println!("The largest number is {}", largest);
+    println!("The largest number is {}", largest);
 
-let numbers = vec![102, 34, 6000, 89, 54, 2, 43, 8];
+    let numbers = vec![102, 34, 6000, 89, 54, 2, 43, 8];
 
-let mut largest = numbers[0];
+    let mut largest = numbers[0];
 
-for number in numbers {
-    if largest > number {
-        largest = number;
+    for number in numbers {
+        if largest > number {
+            largest = number;
+        }
     }
-}
 
-println!("The largest number is {}", largest);
+    println!("The largest number is {}", largest);
+}
 ```
 
 Copying code is tedious and error-prone, plus now we have two places to update
@@ -74,6 +82,8 @@ abstraction we'll use is a function. Here's a program where we've extracted the
 code in Listing 10-1 that finds the largest number into a function named
 `largest`. This program can find the largest number in two different lists of
 numbers, but the code from Listing 10-1 only exists in one spot:
+
+Filename: src/main.rs
 
 ```rust
 fn largest(numbers: Vec<i32>) {
@@ -88,13 +98,15 @@ fn largest(numbers: Vec<i32>) {
     println!("The largest number is {}", largest);
 }
 
-let numbers = vec![34, 50, 25, 100, 65];
+fn main() {
+    let numbers = vec![34, 50, 25, 100, 65];
 
-largest(numbers);
+    largest(numbers);
 
-let numbers = vec![102, 34, 6000, 89, 54, 2, 43, 8];
+    let numbers = vec![102, 34, 6000, 89, 54, 2, 43, 8];
 
-largest(numbers);
+    largest(numbers);
+}
 ```
 
 The function takes an argument, `numbers`, which represents any concrete

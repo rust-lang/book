@@ -16,6 +16,8 @@ that have the behavior we need to be able to use.
 Here's an example definition of a trait named `Printable` that has a method
 named `print`:
 
+Filename: src/lib.rs
+
 ```rust
 trait Printable {
     fn print(&self);
@@ -38,6 +40,8 @@ the trait name as well. Inside the `impl` block, we specify definitions for the
 trait's methods in the context of the specific type. Listing 10-5 has an
 example of implementing the `Printable` trait from Listing 10-4 (that only has
 the `print` method) for a `Temperature` enum:
+
+Filename: src/lib.rs
 
 ```rust
 # trait Printable {
@@ -67,6 +71,8 @@ In the same way `impl` lets us define methods, we've used it to define methods
 that pertain to our trait. We can call methods that our trait has defined just
 like we can call other methods:
 
+Filename: src/main.rs
+
 ```rust
 # trait Printable {
 #     fn print(&self);
@@ -86,9 +92,11 @@ like we can call other methods:
 #     }
 # }
 #
-let t = Temperature::Celsius(37);
+fn main() {
+    let t = Temperature::Celsius(37);
 
-t.print();
+    t.print();
+}
 ```
 
 Note that in order to use a trait's methods, the trait itself must be in scope.
@@ -112,6 +120,8 @@ but this function has a *trait bound* on the generic type `T` and uses the
 be any type that implements the trait specified, instead of any type at all.
 With the trait bound, we're then allowed to use the trait method `print` in the
 function body:
+
+Filename: src/lib.rs
 
 ```rust
 # trait Printable {
@@ -141,6 +151,8 @@ Now we are able to call the `print_anything` function from Listing 10-6 and
 pass it a `Temperature` instance as the `value` parameter, since we implemented
 the trait `Printable` on `Temperature` in Listing 10-5:
 
+Filename: src/main.rs
+
 ```rust
 # trait Printable {
 #     fn print(&self);
@@ -165,8 +177,10 @@ the trait `Printable` on `Temperature` in Listing 10-5:
 #     value.print();
 # }
 #
-let temperature = Temperature::Fahrenheit(98);
-print_anything(temperature);
+fn main() {
+    let temperature = Temperature::Fahrenheit(98);
+    print_anything(temperature);
+}
 ```
 
 If we implement the `Printable` trait on other types, we can use them with the
@@ -195,6 +209,8 @@ And in fact, that's how `println!` decides how to format things with `{}`. The
 Listing 10-7 shows our original example from Listing 10-3, but this time using
 the standard library's `Display` trait in the trait bound on the generic type
 in the `show_anything` function:
+
+Filename: src/lib.rs
 
 ```rust
 use std::fmt::Display;
@@ -242,6 +258,8 @@ help: consider adding a `where T: std::fmt::Display` bound
 The `where` syntax moves the trait bounds after the function arguments list.
 This definition of `show_anything` means the exact same thing as the definition
 in Listing 10-7, just said a different way:
+
+Filename: src/lib.rs
 
 ```rust
 use std::fmt::Display;

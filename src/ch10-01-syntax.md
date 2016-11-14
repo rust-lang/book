@@ -27,14 +27,18 @@ extracting a function, but the mechanics of doing the extraction will be
 similar. First, let's consider an `Option` enum with a `Some` variant that can
 only hold an `i32`. We'll call this enum `OptionalNumber`:
 
+Filename: src/main.rs
+
 ```rust
 enum OptionalNumber {
     Some(i32),
     None,
 }
 
-let number = OptionalNumber::Some(5);
-let no_number = OptionalNumber::None;
+fn main() {
+    let number = OptionalNumber::Some(5);
+    let no_number = OptionalNumber::None;
+}
 ```
 
 This works just fine for `i32`s. But what if we also wanted to store `f64`s? We
@@ -42,14 +46,18 @@ would have to duplicate code to define a separate `Option` enum type for each
 type we wanted to be able to hold in the `Some` variants. For example, here is
 how we could define and use `OptionalFloatingPointNumber`:
 
+Filename: src/main.rs
+
 ```rust
 enum OptionalFloatingPointNumber {
     Some(f64),
     None,
 }
 
-let number = OptionalFloatingPointNumber::Some(5.0);
-let no_number = OptionalFloatingPointNumber::None;
+fn main() {
+    let number = OptionalFloatingPointNumber::Some(5.0);
+    let no_number = OptionalFloatingPointNumber::None;
+}
 ```
 
 We've made the enum's name a bit long in order to drive the point home. With
@@ -159,6 +167,8 @@ definition of `Option<T>` into `Option_i32` and `Option_f64`, thereby replacing
 the generic definition with the specific ones. The more specific version looks
 like the duplicated code we started with at the beginning of this section:
 
+Filename: src/main.rs
+
 ```rust
 enum Option_i32 {
     Some(i32),
@@ -170,8 +180,10 @@ enum Option_f64 {
     None,
 }
 
-let integer = Option_i32::Some(5);
-let float = Option_f64::Some(5.0);
+fn main() {
+    let integer = Option_i32::Some(5);
+    let float = Option_f64::Some(5.0);
+}
 ```
 
 In other words, we can write the non-duplicated form that uses generics in our
@@ -187,14 +199,18 @@ more of their fields. Generic structs also get monomorphized into specialized
 types at compile time. Listing 10-2 shows the definition and use of a `Point`
 struct that could hold `x` and `y` coordinate values that are any type:
 
+Filename: src/main.rs
+
 ```rust
 struct Point<T> {
     x: T,
     y: T,
 }
 
-let integer = Point { x: 5, y: 10 };
-let float = Point { x: 1.0, y: 4.0 };
+fn main() {
+    let integer = Point { x: 5, y: 10 };
+    let float = Point { x: 1.0, y: 4.0 };
+}
 ```
 
 <caption>
@@ -234,15 +250,19 @@ declare multiple type parameters within the angle brackets, separated by a
 comma. Listing 10-3 shows how to define a `Point` that can have different types
 for `x` and `y`:
 
+Filename: src/main.rs
+
 ```rust
 struct Point<X, Y> {
     x: X,
     y: Y,
 }
 
-let integer = Point { x: 5, y: 10 };
-let float = Point { x: 1.0, y: 4.0 };
-let p = Point { x: 5, y: 20.0 };
+fn main() {
+    let integer = Point { x: 5, y: 10 };
+    let float = Point { x: 1.0, y: 4.0 };
+    let p = Point { x: 5, y: 20.0 };
+}
 ```
 
 <caption>
@@ -316,6 +336,8 @@ There's one problem though. We've got some function _definitions_ that work,
 but if we try to use `value` in code in the function body, we'll get an
 error. For example, the function definition in Listing 10-3 tries to print out
 `value` in its body:
+
+Filename: src/lib.rs
 
 ```rust,ignore
 fn show_anything<T>(value: T) {

@@ -203,6 +203,8 @@ this function is by passing two string slices, and we want to get back a string
 slice. The code in Listing 10-9 should print `The longest string is abcd` once
 we've implemented the `longest` function:
 
+Filename: src/main.rs
+
 ```rust
 # fn longest<'a>(x: &'a str, y: &'a str) -> &'a str {
 #     if x.len() > y.len() {
@@ -264,6 +266,8 @@ reference to `x` and the `else` block returns a reference to `y`! The way to
 specify the lifetime parameters in this case is to have the same lifetime for
 all of the input parameters and the return type:
 
+Filename: src/main.rs
+
 ```rust
 fn longest<'a>(x: &'a str, y: &'a str) -> &'a str {
     if x.len() > y.len() {
@@ -292,6 +296,8 @@ doing. If the function didn't actually return the longest string slice but
 instead always returned the first argument, we wouldn't need to specify a
 lifetime on `y`. This code compiles:
 
+Filename: src/main.rs
+
 ```rust
 fn longest<'a>(x: &'a str, y: &str) -> &'a str {
     x
@@ -304,6 +310,8 @@ match one of the arguments' lifetime parameters. If the reference returned does
 refers to a value created within this function, and that would be a dangling
 reference since the value will go out of scope at the end of the function.
 Consider this attempted implementation of `longest`:
+
+Filename: src/main.rs
 
 ```rust,ignore
 fn longest<'a>(x: &str, y: &str) -> &'a str {
@@ -348,6 +356,8 @@ If every reference has a lifetime, and we need to provide them for functions
 that use references as arguments or return values, then why did this function
 from the "String Slices" section of Chapter 4 compile? We haven't annotated any
 lifetimes here, yet Rust happily compiles this function:
+
+Filename: src/lib.rs
 
 ```rust
 fn first_word(s: &str) -> &str {
@@ -423,6 +433,8 @@ holds a reference to another struct, `Config`, defined elsewhere. The
 `append_to_name` method does not need lifetime annotations even though the
 method has a reference as an argument and is returning a reference; the
 lifetime of the return value will be the lifetime of `self`:
+
+Filename: src/lib.rs
 
 ```rust
 # struct Config {}
