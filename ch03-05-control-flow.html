@@ -105,7 +105,7 @@ condition is false, the program will just skip the <code>if</code> block and mov
 the next bit of code.</li>
 </ol>
 <p>Try running this code; you should see the following output:</p>
-<pre><code class="language-bash">$ cargo run
+<pre><code class="language-text">$ cargo run
    Compiling branches v0.1.0 (file:///projects/branches)
      Running `target/debug/branches`
 condition was true
@@ -115,7 +115,7 @@ condition was true
 <pre><code class="language-rust,ignore">let number = 7;
 </code></pre>
 <p>Run the program again, and look at the output:</p>
-<pre><code class="language-bash">$ cargo run
+<pre><code class="language-text">$ cargo run
    Compiling branches v0.1.0 (file:///projects/branches)
      Running `target/debug/branches`
 condition was false
@@ -134,7 +134,7 @@ code:</p>
 </code></pre>
 <p>The <code>if</code> condition evaluates to a value of <code>3</code> this time, and Rust throws an
 error:</p>
-<pre><code class="language-bash">   Compiling branches v0.1.0 (file:///projects/branches)
+<pre><code class="language-text">   Compiling branches v0.1.0 (file:///projects/branches)
 error[E0308]: mismatched types
  --&gt; src/main.rs:4:8
   |
@@ -183,7 +183,7 @@ expression. For example:</p>
 </code></pre>
 <p>This program has four possible paths it can take. After running it, you should
 see the following output:</p>
-<pre><code class="language-bash">$ cargo run
+<pre><code class="language-text">$ cargo run
    Compiling branches v0.1.0 (file:///projects/branches)
      Running `target/debug/branches`
 number is divisible by 3
@@ -217,7 +217,7 @@ Listing 3-4: Assigning the result of an `if` expression to a variable
 </caption>
 <p>The <code>number</code> variable will be bound to a value based on the outcome of the <code>if</code>
 expression. Run this code to see what happens:</p>
-<pre><code class="language-bash">$ cargo run
+<pre><code class="language-text">$ cargo run
    Compiling branches v0.1.0 (file:///projects/branches)
      Running `target/debug/branches`
 The value of number is: 5
@@ -245,7 +245,7 @@ the following example?</p>
 <p>When we run this code, we’ll get an error. The <code>if</code> and <code>else</code> arms have value
 types that are incompatible, and Rust indicates exactly where to find the
 problem in the program:</p>
-<pre><code class="language-bash">   Compiling branches v0.1.0 (file:///projects/branches)
+<pre><code class="language-text">   Compiling branches v0.1.0 (file:///projects/branches)
 error[E0308]: if and else have incompatible types
  --&gt; src/main.rs:4:18
   |
@@ -284,7 +284,7 @@ like this:</p>
 <p>When we run this program, we’ll see <code>again!</code> printed over and over continuously
 until we stop the program manually. Most terminals support a keyboard shortcut,
 ctrl-C, to halt a program that is stuck in a continual loop. Give it a try:</p>
-<pre><code class="language-bash">$ cargo run
+<pre><code class="language-text">$ cargo run
    Compiling loops v0.1.0 (file:///projects/loops)
      Running `target/debug/loops`
 again!
@@ -349,7 +349,7 @@ Listing 3-5: Looping through each element of a collection using a `while` loop
 <code>0</code>, and then loops until it reaches the final index in the array (that is,
 when <code>index &lt; 5</code> is no longer true). Running this code will print out every
 element in the array:</p>
-<pre><code class="language-bash">$ cargo run
+<pre><code class="language-text">$ cargo run
    Compiling loops v0.1.0 (file:///projects/loops)
      Running `target/debug/loops`
 the value is: 10

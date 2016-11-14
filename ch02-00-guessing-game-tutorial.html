@@ -81,7 +81,7 @@ game will print congratulations and exit.</p>
 <h2>Setting Up a New Project</h2>
 <p>To set up a new project, go to the <em>projects</em> directory that you created in
 Chapter 1, and make a new project using Cargo, like so:</p>
-<pre><code class="language-bash">$ cargo new guessing_game --bin
+<pre><code class="language-text">$ cargo new guessing_game --bin
 $ cd guessing_game
 </code></pre>
 <p>The first command, <code>cargo new</code>, takes the name of the project (<code>guessing_game</code>)
@@ -108,7 +108,7 @@ you. Check out the <em>src/main.rs</em> file:</p>
 </code></pre>
 <p>Now let’s compile this “Hello, world!” program and run it in the same step
 using the <code>cargo run</code> command:</p>
-<pre><code class="language-bash">$ cargo run
+<pre><code class="language-text">$ cargo run
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
      Running `target/debug/guessing_game`
 Hello, world!
@@ -261,7 +261,7 @@ return value that <code>Ok</code> is holding and return just that value to you s
 could use it. In this case, that value is the number of characters the user
 entered into standard input.</p>
 <p>If we don’t call <code>expect</code>, the program will compile, but we’ll get a warning:</p>
-<pre><code class="language-bash">$ cargo build
+<pre><code class="language-text">$ cargo build
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
 src/main.rs:10:5: 10:39 warning: unused result which must be used,
 #[warn(unused_must_use)] on by default
@@ -291,7 +291,7 @@ println!(&quot;x = {} and y = {}&quot;, x, y);
 <p>This code would print out <code>x = 5 and y = 10</code>.</p>
 <h3>Testing the First Part</h3>
 <p>Let’s test the first part of the guessing game. You can run it using <code>cargo run</code>:</p>
-<pre><code class="language-bash">$ cargo run
+<pre><code class="language-text">$ cargo run
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
      Running `target/debug/guessing_game`
 Guess the number!
@@ -332,7 +332,7 @@ for <code>^0.3.14</code>, which means “any version that has a public API compa
 version 0.3.14.”</p>
 <p>Now, without changing any of the code, let’s build the project, as shown in
 Listing 2-2:</p>
-<pre><code class="language-bash">$ cargo build
+<pre><code class="language-text">$ cargo build
     Updating registry `https://github.com/rust-lang/crates.io-index`
  Downloading rand v0.3.14
  Downloading libc v0.2.14
@@ -362,7 +362,7 @@ file. Cargo also knows that you haven't changed anything about your code, so it
 doesn't recompile that either. With nothing to do, it simply exits. If you open
 up the <em>src/main.rs</em> file, make a trivial change, then save it and build again,
 you’ll only see one line of output:</p>
-<pre><code class="language-bash">$ cargo build
+<pre><code class="language-text">$ cargo build
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
 </code></pre>
 <p>This line shows Cargo only updates the build with your tiny change to the
@@ -397,7 +397,7 @@ your specifications in <em>Cargo.toml</em>.</li>
 <p>But by default, Cargo will only look for versions larger than <code>0.3.0</code> and
 smaller than <code>0.4.0</code>. If the <code>rand</code> crate has released two new versions,
 <code>0.3.15</code> and <code>0.4.0</code>, you would see the following if you ran <code>cargo update</code>:</p>
-<pre><code class="language-bash">$ cargo update
+<pre><code class="language-text">$ cargo update
     Updating registry `https://github.com/rust-lang/crates.io-index`
     Updating rand v0.3.14 -&gt; v0.3.15
 </code></pre>
@@ -472,7 +472,7 @@ useful while we’re developing the program to be able to test it, but we’ll
 delete it from the final version. It’s not much of a game if the program prints
 the answer as soon as it starts!</p>
 <p>Try running the program a few times:</p>
-<pre><code class="language-bash">$ cargo run
+<pre><code class="language-text">$ cargo run
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
      Running `target/debug/guessing_game`
 Guess the number!
@@ -564,7 +564,7 @@ The next arm’s pattern, <code>Ordering::Greater</code>, <em>does</em> match
 <code>Too big!</code> to the screen. The <code>match</code> expression ends because it has no need to
 look at the last arm in this particular scenario.</p>
 <p>However, the code in Listing 2-4 won’t compile yet. Let’s try it:</p>
-<pre><code class="language-bash">$ cargo build
+<pre><code class="language-text">$ cargo build
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
 error[E0308]: mismatched types
   --&gt; src/main.rs:23:21
@@ -665,7 +665,7 @@ crash the game and print the message we give it. If <code>parse</code> can succe
 convert the string to a number, it will return the <code>Ok</code> variant of <code>Result</code>,
 and <code>expect</code> will return the number that we want from the <code>Ok</code> value.</p>
 <p>Let’s run the program now!</p>
-<pre><code class="language-bash">$ cargo run
+<pre><code class="language-text">$ cargo run
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
      Running `target/guessing_game`
 Guess the number!
@@ -729,7 +729,7 @@ But there’s another way to escape this insatiable monster that we mentioned in
 the <code>parse</code> discussion in “Comparing the Guesses” on page XX: if the user
 enters a non-number answer, the program will crash. The user can take advantage
 of that in order to quit, as shown here:</p>
-<pre><code class="language-bash">$ cargo run
+<pre><code class="language-text">$ cargo run
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
      Running `target/guessing_game`
 Guess the number!
@@ -829,7 +829,7 @@ for another guess. So effectively, the program ignores all errors that <code>par
 might encounter!</p>
 <p>Now everything in the program should work as expected. Let’s try it by running
 <code>cargo run</code>:</p>
-<pre><code class="language-bash">$ cargo run
+<pre><code class="language-text">$ cargo run
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
      Running `target/guessing_game`
 Guess the number!

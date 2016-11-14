@@ -144,7 +144,7 @@ fn area(length: u32, width: u32) -&gt; u32 {
 }
 </code></pre>
 <p>Let's try running this program with <code>cargo run</code>:</p>
-<pre><code class="language-bash">The area of the rectangle is 1500 square pixels.
+<pre><code class="language-text">The area of the rectangle is 1500 square pixels.
 </code></pre>
 <h3>Refactoring with Tuples</h3>
 <p>Our little program works okay; it figures out the area of the rectangle by
@@ -245,7 +245,7 @@ fn main() {
 }
 </code></pre>
 <p>If we run this, we get an error with this core message:</p>
-<pre><code class="language-bash">error: the trait bound `Rectangle: std::fmt::Display` is not satisfied
+<pre><code class="language-text">error: the trait bound `Rectangle: std::fmt::Display` is not satisfied
 </code></pre>
 <p>The <code>println!</code> macro can do many kinds of formatting, and by default, <code>{}</code>
 tells <code>println!</code> to use formatting known as <code>Display</code>: output intended for
@@ -257,7 +257,7 @@ want commas or not? Do you want to print the struct <code>{}</code>s? Should all
 fields be shown? Because of this ambiguity, Rust doesn't try to guess what we
 want and structs do not have a provided implementation of <code>Display</code>.</p>
 <p>If we keep reading the errors, though, we'll find this helpful note:</p>
-<pre><code class="language-bash">note: `Rectangle` cannot be formatted with the default formatter; try using
+<pre><code class="language-text">note: `Rectangle` cannot be formatted with the default formatter; try using
 `:?` instead if you are using a format string
 </code></pre>
 <p>Let's try it! The <code>println!</code> will now look like
@@ -267,10 +267,10 @@ the <code>{}</code> tells <code>println!</code> we want to use an output format 
 useful for developers so that we can see its value while we are debugging our
 code.</p>
 <p>Let's try running with this change and... drat. We still get an error:</p>
-<pre><code class="language-bash">error: the trait bound `Rectangle: std::fmt::Debug` is not satisfied
+<pre><code class="language-text">error: the trait bound `Rectangle: std::fmt::Debug` is not satisfied
 </code></pre>
 <p>Again, though, the compiler has given us a helpful note!</p>
-<pre><code class="language-bash">note: `Rectangle` cannot be formatted using `:?`; if it is defined in your
+<pre><code class="language-text">note: `Rectangle` cannot be formatted using `:?`; if it is defined in your
 crate, add `#[derive(Debug)]` or manually implement it
 </code></pre>
 <p>Rust <em>does</em> include functionality to print out debugging information, but we
@@ -291,7 +291,7 @@ fn main() {
 </code></pre>
 <p>At this point, if we run this program, we won't get any errors and we'll see the
 following output:</p>
-<pre><code class="language-bash">rect1 is Rectangle { length: 50, width: 30 }
+<pre><code class="language-text">rect1 is Rectangle { length: 50, width: 30 }
 </code></pre>
 <p>Nice! It's not the prettiest output, but it shows the values of all the fields
 for this instance, which would definitely help during debugging.</p>

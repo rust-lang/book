@@ -74,7 +74,7 @@
 able to build our project, but we still get some warning messages about the
 <code>client::connect</code>, <code>network::connect</code>, and <code>network::server::connect</code> functions
 not being used:</p>
-<pre><code class="language-bash">warning: function is never used: `connect`, #[warn(dead_code)] on by default
+<pre><code class="language-text">warning: function is never used: `connect`, #[warn(dead_code)] on by default
 src/client.rs:1:1
   |
 1 | fn connect() {
@@ -118,7 +118,7 @@ use the library crate, and it’s a nice separation of concerns.</p>
 <p>Our binary crate right now just calls our library’s <code>connect</code> function from the
 <code>client</code> module. However, invoking <code>cargo build</code> will now give us an error
 after the warnings:</p>
-<pre><code class="language-bash">error: module `client` is private
+<pre><code class="language-text">error: module `client` is private
  --&gt; src/main.rs:4:5
   |
 4 |     communicator::client::connect();
@@ -151,7 +151,7 @@ as the “module <code>client</code> is private” error from our binary crate. 
 mod network;
 </code></pre>
 <p>The <code>pub</code> goes right before <code>mod</code>. Let’s try building again:</p>
-<pre><code class="language-bash">&lt;warnings&gt;
+<pre><code class="language-text">&lt;warnings&gt;
 error: function `connect` is private
  --&gt; src/main.rs:4:5
   |
@@ -166,7 +166,7 @@ edit <code>src/client.rs</code> to make <code>client::connect</code> public too:
 }
 </code></pre>
 <p>And run <code>cargo build</code> again:</p>
-<pre><code class="language-bash">warning: function is never used: `connect`, #[warn(dead_code)] on by default
+<pre><code class="language-text">warning: function is never used: `connect`, #[warn(dead_code)] on by default
  --&gt; src/network/mod.rs:1:1
   |
 1 | fn connect() {
@@ -195,7 +195,7 @@ the remaining warnings. Modify <code>src/network/mod.rs</code> to be:</p>
 mod server;
 </code></pre>
 <p>And compile:</p>
-<pre><code class="language-bash">warning: function is never used: `connect`, #[warn(dead_code)] on by default
+<pre><code class="language-text">warning: function is never used: `connect`, #[warn(dead_code)] on by default
  --&gt; src/network/mod.rs:1:1
   |
 1 | pub fn connect() {
@@ -219,7 +219,7 @@ with <code>client::connect</code> we worked from the outside in. We need to chan
 pub mod network;
 </code></pre>
 <p>Now if we compile, that warning is gone:</p>
-<pre><code class="language-bash">warning: function is never used: `connect`, #[warn(dead_code)] on by default
+<pre><code class="language-text">warning: function is never used: `connect`, #[warn(dead_code)] on by default
  --&gt; src/network/server.rs:1:1
   |
 1 | fn connect() {

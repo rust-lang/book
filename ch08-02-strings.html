@@ -285,7 +285,7 @@ Earlier, we mentioned that each of these characters was two bytes, so that means
 that <code>s</code> will be &quot;Зд&quot;.</p>
 <p>What would happen if we did <code>&amp;hello[0..1]</code>? The answer: it will panic at
 runtime, in the same way that accessing an invalid index in a vector does:</p>
-<pre><code class="language-bash">thread 'main' panicked at 'index 0 and/or 1 in `Здравствуйте` do not lie on
+<pre><code class="language-text">thread 'main' panicked at 'index 0 and/or 1 in `Здравствуйте` do not lie on
 character boundary', ../src/libcore/str/mod.rs:1694
 </code></pre>
 <h3>Methods for Iterating Over Strings</h3>
@@ -297,7 +297,7 @@ Rust <code>char</code> values:</p>
 }
 </code></pre>
 <p>This code will print:</p>
-<pre><code class="language-bash">न
+<pre><code class="language-text">न
 म
 स
 ्
@@ -312,7 +312,7 @@ one byte:</p>
 }
 </code></pre>
 <p>This code will print the 18 bytes that make up this <code>String</code>, starting with:</p>
-<pre><code class="language-bash">224
+<pre><code class="language-text">224
 164
 168
 224

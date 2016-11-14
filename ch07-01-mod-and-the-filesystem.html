@@ -78,7 +78,7 @@ and functions, but not worry about what code goes in the function bodies. We’l
 call our library <code>communicator</code>. By default, cargo will create a library unless
 another type of project is specified, so if we leave off the <code>--bin</code> option
 that we’ve been using so far our project will be a library:</p>
-<pre><code class="language-bash">$ cargo new communicator
+<pre><code class="language-text">$ cargo new communicator
 $ cd communicator
 </code></pre>
 <p>Notice that Cargo generated <em>src/lib.rs</em> instead of <em>src/main.rs</em>. Inside
@@ -258,7 +258,7 @@ be defined in <em>src/client.rs</em>.</p>
 <p>Now, everything should compile successfully, though you’ll get a few warnings.
 Remember to use <code>cargo build</code> instead of <code>cargo run</code> since we have a library
 crate rather than a binary crate:</p>
-<pre><code class="language-bash">$ cargo build
+<pre><code class="language-text">$ cargo build
    Compiling communicator v0.1.0 (file:///projects/communicator)
 
 warning: function is never used: `connect`, #[warn(dead_code)] on by default
@@ -321,7 +321,7 @@ module that we extracted:</p>
 }
 </code></pre>
 <p>When we try to <code>cargo build</code>, we’ll get this error:</p>
-<pre><code class="language-bash">$ cargo build
+<pre><code class="language-text">$ cargo build
    Compiling communicator v0.1.0 (file:///projects/communicator)
 error: cannot declare a new module at this location
  --&gt; src/network.rs:4:5
@@ -362,7 +362,7 @@ it so that it is now <em>src/network/mod.rs</em></li>
 <li>Move the submodule file <em>src/server.rs</em> into the <em>network</em> directory</li>
 </ol>
 <p>Here are commands to carry out these steps:</p>
-<pre><code class="language-bash">$ mkdir src/network
+<pre><code class="language-text">$ mkdir src/network
 $ mv src/network.rs src/network/mod.rs
 $ mv src/server.rs src/network
 </code></pre>

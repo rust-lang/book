@@ -104,11 +104,11 @@ with <code>$</code> are typically showing the output of the previous command.</p
 <h3>Installing on Linux or Mac</h3>
 <p>If you're on Linux or a Mac, all you need to do is open a terminal and type
 this:</p>
-<pre><code class="language-bash">$ curl https://sh.rustup.rs -sSf | sh
+<pre><code class="language-text">$ curl https://sh.rustup.rs -sSf | sh
 </code></pre>
 <p>This will download a script and start the installation. You may be prompted for
 your password. If it all goes well, you’ll see this appear:</p>
-<pre><code class="language-bash">Rust is installed now. Great!
+<pre><code class="language-text">Rust is installed now. Great!
 </code></pre>
 <h3>Installing on Windows</h3>
 <p>On Windows, go to <a href="https://rustup.rs/">https://rustup.rs</a><!-- ignore --> and
@@ -124,15 +124,15 @@ installation page</a> for other options.</p>
 <h3>Uninstalling</h3>
 <p>Uninstalling Rust is as easy as installing it. From your shell, run
 the uninstall script:</p>
-<pre><code class="language-bash">$ rustup self uninstall
+<pre><code class="language-text">$ rustup self uninstall
 </code></pre>
 <h3>Troubleshooting</h3>
 <p>If you've got Rust installed, you can open up a shell, and type this:</p>
-<pre><code class="language-bash">$ rustc --version
+<pre><code class="language-text">$ rustc --version
 </code></pre>
 <p>You should see the version number, commit hash, and commit date in a format
 similar to this for the latest stable version at the time you install:</p>
-<pre><code class="language-bash">rustc x.y.z (abcabcabc yyyy-mm-dd)
+<pre><code class="language-text">rustc x.y.z (abcabcabc yyyy-mm-dd)
 </code></pre>
 <p>If you see this, Rust has been installed successfully!
 Congrats!</p>
@@ -167,7 +167,7 @@ lives, but for this book, we'd suggest making a <em>projects</em> directory in y
 home directory and keeping all your projects there. Open a terminal and enter
 the following commands to make a directory for this particular project:</p>
 <p>Linux and Mac:</p>
-<pre><code class="language-bash">$ mkdir ~/projects
+<pre><code class="language-text">$ mkdir ~/projects
 $ cd ~/projects
 $ mkdir hello_world
 $ cd hello_world
@@ -191,7 +191,7 @@ than <code>helloworld.rs</code>.</p>
 </code></pre>
 <p>Save the file, and go back to your terminal window. On Linux or OSX, enter the
 following commands:</p>
-<pre><code class="language-bash">$ rustc main.rs
+<pre><code class="language-text">$ rustc main.rs
 $ ./main
 Hello, world!
 </code></pre>
@@ -238,13 +238,13 @@ created program. We'll break that process down and examine each step now.</p>
 <p>Before running a Rust program, you have to compile it. You can use the Rust
 compiler by entering the <code>rustc</code> command and passing it the name of your source
 file, like this:</p>
-<pre><code class="language-bash">$ rustc main.rs
+<pre><code class="language-text">$ rustc main.rs
 </code></pre>
 <p>If you come from a C or C++ background, you'll notice that this is similar to
 <code>gcc</code> or <code>clang</code>. After compiling successfully, Rust should output a binary
 executable, which you can see on Linux or OSX by entering the <code>ls</code> command in
 your shell as follows:</p>
-<pre><code class="language-bash">$ ls
+<pre><code class="language-text">$ ls
 main  main.rs
 </code></pre>
 <p>On Windows, you'd enter:</p>
@@ -255,7 +255,7 @@ main.rs
 <p>This shows we have two files: the source code, with the <code>.rs</code> extension, and the
 executable (<code>main.exe</code> on Windows, <code>main</code> everywhere else). All that's left to
 do from here is run the <code>main</code> or <code>main.exe</code> file, like this:</p>
-<pre><code class="language-bash">$ ./main  # or .\main.exe on Windows
+<pre><code class="language-text">$ ./main  # or .\main.exe on Windows
 </code></pre>
 <p>If <code>main.rs</code> were your &quot;Hello, world!&quot; program, this would print <code>Hello, world!</code> to your terminal.</p>
 <p>If you come from a dynamic language like Ruby, Python, or JavaScript, you may
@@ -287,7 +287,7 @@ you’re using it for the rest of the book. Cargo comes installed with Rust
 itself, if you used the official installers as covered in the Installation
 chapter. If you installed Rust through some other means, you can check if you
 have Cargo installed by typing the following into your terminal:</p>
-<pre><code class="language-bash">$ cargo --version
+<pre><code class="language-text">$ cargo --version
 </code></pre>
 <p>If you see a version number, great! If you see an error like <code>command not found</code>, then you should look at the documentation for your method of
 installation to determine how to install Cargo separately.</p>
@@ -296,13 +296,13 @@ installation to determine how to install Cargo separately.</p>
 project in <code>hello_world</code>. Go back to your projects directory (or wherever you
 decided to put your code):</p>
 <p>Linux and Mac:</p>
-<pre><code class="language-bash">$ cd ~/projects
+<pre><code class="language-text">$ cd ~/projects
 </code></pre>
 <p>Windows:</p>
 <pre><code class="language-cmd">&gt; cd %USERPROFILE%\projects
 </code></pre>
 <p>And then on any operating system run:</p>
-<pre><code class="language-bash">$ cargo new hello_cargo --bin
+<pre><code class="language-text">$ cargo new hello_cargo --bin
 $ cd hello_cargo
 </code></pre>
 <p>We passed the <code>--bin</code> argument to <code>cargo new</code> because our goal is to make an
@@ -367,12 +367,12 @@ Cargo by moving your code into the <code>src</code> directory and creating an ap
 <h3>Building and Running a Cargo Project</h3>
 <p>Now let's look at what's different about building and running your Hello World
 program through Cargo! To do so, enter the following commands:</p>
-<pre><code class="language-bash">$ cargo build
+<pre><code class="language-text">$ cargo build
    Compiling hello_cargo v0.1.0 (file:///projects/hello_cargo)
 </code></pre>
 <p>This should have created an executable file in <code>target/debug/hello_cargo</code> (or
 <code>target\debug\hello_cargo.exe</code> on Windows), which you can run with this command:</p>
-<pre><code class="language-bash">$ ./target/debug/hello_cargo # or .\target\debug\hello_cargo.exe on Windows
+<pre><code class="language-text">$ ./target/debug/hello_cargo # or .\target\debug\hello_cargo.exe on Windows
 Hello, world!
 </code></pre>
 <p>Bam! If all goes well, <code>Hello, world!</code> should print to the terminal once more.</p>
@@ -390,7 +390,7 @@ let Cargo handle it.</p>
 <p>We just built a project with <code>cargo build</code> and ran it with
 <code>./target/debug/hello_cargo</code>, but we can also use <code>cargo run</code> to compile
 and then run:</p>
-<pre><code class="language-bash">$ cargo run
+<pre><code class="language-text">$ cargo run
      Running `target/debug/hello_cargo`
 Hello, world!
 </code></pre>
@@ -399,7 +399,7 @@ compiling <code>hello_cargo</code>. Cargo figured out that the files haven’t c
 it just ran the binary. If you had modified your source code, Cargo would have
 rebuilt the project before running it, and you would have seen something like
 this:</p>
-<pre><code class="language-bash">$ cargo run
+<pre><code class="language-text">$ cargo run
    Compiling hello_cargo v0.1.0 (file:///projects/hello_cargo)
      Running `target/debug/hello_cargo`
 Hello, world!
@@ -433,7 +433,7 @@ right way. Even though this project is simple, it now uses much of the real
 tooling you’ll use for the rest of your Rust career. In fact, you can get
 started with virtually all Rust projects you want to work
 on with the following commands:</p>
-<pre><code class="language-bash">$ git clone someurl.com/someproject
+<pre><code class="language-text">$ git clone someurl.com/someproject
 $ cd someproject
 $ cargo build
 </code></pre>
@@ -455,7 +455,7 @@ game will print congratulations and exit.</p>
 <h2>Setting Up a New Project</h2>
 <p>To set up a new project, go to the <em>projects</em> directory that you created in
 Chapter 1, and make a new project using Cargo, like so:</p>
-<pre><code class="language-bash">$ cargo new guessing_game --bin
+<pre><code class="language-text">$ cargo new guessing_game --bin
 $ cd guessing_game
 </code></pre>
 <p>The first command, <code>cargo new</code>, takes the name of the project (<code>guessing_game</code>)
@@ -482,7 +482,7 @@ you. Check out the <em>src/main.rs</em> file:</p>
 </code></pre>
 <p>Now let’s compile this “Hello, world!” program and run it in the same step
 using the <code>cargo run</code> command:</p>
-<pre><code class="language-bash">$ cargo run
+<pre><code class="language-text">$ cargo run
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
      Running `target/debug/guessing_game`
 Hello, world!
@@ -635,7 +635,7 @@ return value that <code>Ok</code> is holding and return just that value to you s
 could use it. In this case, that value is the number of characters the user
 entered into standard input.</p>
 <p>If we don’t call <code>expect</code>, the program will compile, but we’ll get a warning:</p>
-<pre><code class="language-bash">$ cargo build
+<pre><code class="language-text">$ cargo build
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
 src/main.rs:10:5: 10:39 warning: unused result which must be used,
 #[warn(unused_must_use)] on by default
@@ -665,7 +665,7 @@ println!(&quot;x = {} and y = {}&quot;, x, y);
 <p>This code would print out <code>x = 5 and y = 10</code>.</p>
 <h3>Testing the First Part</h3>
 <p>Let’s test the first part of the guessing game. You can run it using <code>cargo run</code>:</p>
-<pre><code class="language-bash">$ cargo run
+<pre><code class="language-text">$ cargo run
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
      Running `target/debug/guessing_game`
 Guess the number!
@@ -706,7 +706,7 @@ for <code>^0.3.14</code>, which means “any version that has a public API compa
 version 0.3.14.”</p>
 <p>Now, without changing any of the code, let’s build the project, as shown in
 Listing 2-2:</p>
-<pre><code class="language-bash">$ cargo build
+<pre><code class="language-text">$ cargo build
     Updating registry `https://github.com/rust-lang/crates.io-index`
  Downloading rand v0.3.14
  Downloading libc v0.2.14
@@ -736,7 +736,7 @@ file. Cargo also knows that you haven't changed anything about your code, so it
 doesn't recompile that either. With nothing to do, it simply exits. If you open
 up the <em>src/main.rs</em> file, make a trivial change, then save it and build again,
 you’ll only see one line of output:</p>
-<pre><code class="language-bash">$ cargo build
+<pre><code class="language-text">$ cargo build
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
 </code></pre>
 <p>This line shows Cargo only updates the build with your tiny change to the
@@ -771,7 +771,7 @@ your specifications in <em>Cargo.toml</em>.</li>
 <p>But by default, Cargo will only look for versions larger than <code>0.3.0</code> and
 smaller than <code>0.4.0</code>. If the <code>rand</code> crate has released two new versions,
 <code>0.3.15</code> and <code>0.4.0</code>, you would see the following if you ran <code>cargo update</code>:</p>
-<pre><code class="language-bash">$ cargo update
+<pre><code class="language-text">$ cargo update
     Updating registry `https://github.com/rust-lang/crates.io-index`
     Updating rand v0.3.14 -&gt; v0.3.15
 </code></pre>
@@ -846,7 +846,7 @@ useful while we’re developing the program to be able to test it, but we’ll
 delete it from the final version. It’s not much of a game if the program prints
 the answer as soon as it starts!</p>
 <p>Try running the program a few times:</p>
-<pre><code class="language-bash">$ cargo run
+<pre><code class="language-text">$ cargo run
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
      Running `target/debug/guessing_game`
 Guess the number!
@@ -938,7 +938,7 @@ The next arm’s pattern, <code>Ordering::Greater</code>, <em>does</em> match
 <code>Too big!</code> to the screen. The <code>match</code> expression ends because it has no need to
 look at the last arm in this particular scenario.</p>
 <p>However, the code in Listing 2-4 won’t compile yet. Let’s try it:</p>
-<pre><code class="language-bash">$ cargo build
+<pre><code class="language-text">$ cargo build
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
 error[E0308]: mismatched types
   --&gt; src/main.rs:23:21
@@ -1039,7 +1039,7 @@ crash the game and print the message we give it. If <code>parse</code> can succe
 convert the string to a number, it will return the <code>Ok</code> variant of <code>Result</code>,
 and <code>expect</code> will return the number that we want from the <code>Ok</code> value.</p>
 <p>Let’s run the program now!</p>
-<pre><code class="language-bash">$ cargo run
+<pre><code class="language-text">$ cargo run
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
      Running `target/guessing_game`
 Guess the number!
@@ -1103,7 +1103,7 @@ But there’s another way to escape this insatiable monster that we mentioned in
 the <code>parse</code> discussion in “Comparing the Guesses” on page XX: if the user
 enters a non-number answer, the program will crash. The user can take advantage
 of that in order to quit, as shown here:</p>
-<pre><code class="language-bash">$ cargo run
+<pre><code class="language-text">$ cargo run
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
      Running `target/guessing_game`
 Guess the number!
@@ -1203,7 +1203,7 @@ for another guess. So effectively, the program ignores all errors that <code>par
 might encounter!</p>
 <p>Now everything in the program should work as expected. Let’s try it by running
 <code>cargo run</code>:</p>
-<pre><code class="language-bash">$ cargo run
+<pre><code class="language-text">$ cargo run
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
      Running `target/guessing_game`
 Guess the number!
@@ -1317,7 +1317,7 @@ code with the following:</p>
 </code></pre>
 <p>Save and run the program using <code>cargo run</code>. You should receive an error
 message, as shown in this output:</p>
-<pre><code class="language-bash">$ cargo run
+<pre><code class="language-text">$ cargo run
    Compiling variables v0.0.1 (file:///projects/variables)
 error[E0384]: re-assignment of immutable variable `x`
  --&gt; src/main.rs:4:5
@@ -1360,7 +1360,7 @@ variable value.</p>
 }
 </code></pre>
 <p>When we run this program, we get the following:</p>
-<pre><code class="language-bash">$ cargo run
+<pre><code class="language-text">$ cargo run
    Compiling variables v0.1.0 (file:///projects/variables)
      Running `target/debug/variables`
 The value of x is: 5
@@ -1427,7 +1427,7 @@ repeating <code>let x =</code>, taking the original value and adding <code>1</co
 <code>x</code> is then <code>6</code>. The third <code>let</code> statement also shadows <code>x</code>, taking the
 previous value and multiplying it by <code>2</code> to give <code>x</code> a final value of <code>12</code>.
 When you run this program, it will output the following:</p>
-<pre><code class="language-bash">$ cargo run
+<pre><code class="language-text">$ cargo run
    Compiling variables v0.1.0 (file:///projects/variables)
      Running `target/debug/variables`
 The value of x is: 12
@@ -1455,7 +1455,7 @@ spaces = spaces.len();
 </code></pre>
 <p>we’ll get a compile-time error because we’re not allowed to mutate a variable’s
 type:</p>
-<pre><code class="language-bash">error[E0308]: mismatched types
+<pre><code class="language-text">error[E0308]: mismatched types
  --&gt; src/main.rs:3:14
   |
 3 |     spaces = spaces.len();
@@ -1482,7 +1482,7 @@ a type annotation, like this:</p>
 <p>If we don’t add the type annotation here, Rust will display the following
 error, which means the compiler needs more information from us to know which
 possible type we want to use:</p>
-<pre><code class="language-bash">error[E0282]: unable to infer enough type information about `_`
+<pre><code class="language-text">error[E0282]: unable to infer enough type information about `_`
  --&gt; src/main.rs:2:5
   |
 2 | let guess = &quot;42&quot;.parse().unwrap();
@@ -1728,7 +1728,7 @@ the array? Say we change the example to the following:</p>
 }
 </code></pre>
 <p>Running this code using <code>cargo run</code> produces the following result:</p>
-<pre><code class="language-bash">$ cargo run
+<pre><code class="language-text">$ cargo run
    Compiling arrays v0.1.0 (file:///projects/arrays)
      Running `target/debug/arrays`
 thread '&lt;main&gt;' panicked at 'index out of bounds: the len is 5 but the index is
@@ -1777,7 +1777,7 @@ defined somewhere.</p>
 <p>Let’s start a new binary project named <em>functions</em> to explore functions
 further. Place the <code>another_function</code> example in <em>src/main.rs</em> and run it. You
 should see the following output:</p>
-<pre><code class="language-bash">$ cargo run
+<pre><code class="language-text">$ cargo run
    Compiling functions v0.1.0 (file:///projects/functions)
      Running `target/debug/functions`
 Hello, world!
@@ -1799,7 +1799,7 @@ fn another_function(x: i32) {
 }
 </code></pre>
 <p>Try running this program; you should get the following output:</p>
-<pre><code class="language-bash">$ cargo run
+<pre><code class="language-text">$ cargo run
    Compiling functions v0.1.0 (file:///projects/functions)
      Running `target/debug/functions`
 The value of x is: 5
@@ -1831,7 +1831,7 @@ prints out the values of both of its arguments.</p>
 <p>Let’s try running this code. Replace the program currently in your <em>function</em>
 project’s <em>src/main.rs</em> file with the preceding example, and run it using
 <code>cargo run</code>:</p>
-<pre><code class="language-bash">$ cargo run
+<pre><code class="language-text">$ cargo run
    Compiling functions v0.1.0 (file:///projects/functions)
      Running `target/debug/functions`
 The value of x is: 5
@@ -1871,7 +1871,7 @@ to another variable, as the following code tries to do:</p>
 }
 </code></pre>
 <p>When you run this program, you’ll get an error like this:</p>
-<pre><code class="language-bash">$ cargo run
+<pre><code class="language-text">$ cargo run
    Compiling functions v0.1.0 (file:///projects/functions)
 error: expected expression, found statement (`let`)
  --&gt; src/main.rs:2:14
@@ -1938,7 +1938,7 @@ fn main() {
 function—just the number <code>5</code> by itself. That’s a perfectly valid function in
 Rust. Note that the function’s return type is specified, too, as <code>-&gt; i32</code>. Try
 running this code; the output should look like this:</p>
-<pre><code class="language-bash">$ cargo run
+<pre><code class="language-text">$ cargo run
    Compiling functions v0.1.0 (file:///projects/functions)
      Running `target/debug/functions`
 The value of x is: 5
@@ -1980,7 +1980,7 @@ fn plus_one(x: i32) -&gt; i32 {
 }
 </code></pre>
 <p>Running this code produces an error, as follows:</p>
-<pre><code class="language-bash">error[E0269]: not all control paths return a value
+<pre><code class="language-text">error[E0269]: not all control paths return a value
  --&gt; src/main.rs:7:1
   |
 7 | fn plus_one(x: i32) -&gt; i32 {
@@ -2066,7 +2066,7 @@ condition is false, the program will just skip the <code>if</code> block and mov
 the next bit of code.</li>
 </ol>
 <p>Try running this code; you should see the following output:</p>
-<pre><code class="language-bash">$ cargo run
+<pre><code class="language-text">$ cargo run
    Compiling branches v0.1.0 (file:///projects/branches)
      Running `target/debug/branches`
 condition was true
@@ -2076,7 +2076,7 @@ condition was true
 <pre><code class="language-rust,ignore">let number = 7;
 </code></pre>
 <p>Run the program again, and look at the output:</p>
-<pre><code class="language-bash">$ cargo run
+<pre><code class="language-text">$ cargo run
    Compiling branches v0.1.0 (file:///projects/branches)
      Running `target/debug/branches`
 condition was false
@@ -2095,7 +2095,7 @@ code:</p>
 </code></pre>
 <p>The <code>if</code> condition evaluates to a value of <code>3</code> this time, and Rust throws an
 error:</p>
-<pre><code class="language-bash">   Compiling branches v0.1.0 (file:///projects/branches)
+<pre><code class="language-text">   Compiling branches v0.1.0 (file:///projects/branches)
 error[E0308]: mismatched types
  --&gt; src/main.rs:4:8
   |
@@ -2144,7 +2144,7 @@ expression. For example:</p>
 </code></pre>
 <p>This program has four possible paths it can take. After running it, you should
 see the following output:</p>
-<pre><code class="language-bash">$ cargo run
+<pre><code class="language-text">$ cargo run
    Compiling branches v0.1.0 (file:///projects/branches)
      Running `target/debug/branches`
 number is divisible by 3
@@ -2178,7 +2178,7 @@ Listing 3-4: Assigning the result of an `if` expression to a variable
 </caption>
 <p>The <code>number</code> variable will be bound to a value based on the outcome of the <code>if</code>
 expression. Run this code to see what happens:</p>
-<pre><code class="language-bash">$ cargo run
+<pre><code class="language-text">$ cargo run
    Compiling branches v0.1.0 (file:///projects/branches)
      Running `target/debug/branches`
 The value of number is: 5
@@ -2206,7 +2206,7 @@ the following example?</p>
 <p>When we run this code, we’ll get an error. The <code>if</code> and <code>else</code> arms have value
 types that are incompatible, and Rust indicates exactly where to find the
 problem in the program:</p>
-<pre><code class="language-bash">   Compiling branches v0.1.0 (file:///projects/branches)
+<pre><code class="language-text">   Compiling branches v0.1.0 (file:///projects/branches)
 error[E0308]: if and else have incompatible types
  --&gt; src/main.rs:4:18
   |
@@ -2245,7 +2245,7 @@ like this:</p>
 <p>When we run this program, we’ll see <code>again!</code> printed over and over continuously
 until we stop the program manually. Most terminals support a keyboard shortcut,
 ctrl-C, to halt a program that is stuck in a continual loop. Give it a try:</p>
-<pre><code class="language-bash">$ cargo run
+<pre><code class="language-text">$ cargo run
    Compiling loops v0.1.0 (file:///projects/loops)
      Running `target/debug/loops`
 again!
@@ -2310,7 +2310,7 @@ Listing 3-5: Looping through each element of a collection using a `while` loop
 <code>0</code>, and then loops until it reaches the final index in the array (that is,
 when <code>index &lt; 5</code> is no longer true). Running this code will print out every
 element in the array:</p>
-<pre><code class="language-bash">$ cargo run
+<pre><code class="language-text">$ cargo run
    Compiling loops v0.1.0 (file:///projects/loops)
      Running `target/debug/loops`
 the value is: 10
@@ -2646,7 +2646,7 @@ let s2 = s1;
 println!(&quot;{}&quot;, s1);
 </code></pre>
 <p>You’ll get an error like this:</p>
-<pre><code class="language-bash">5:22 error: use of moved value: `s1` [E0382]
+<pre><code class="language-text">5:22 error: use of moved value: `s1` [E0382]
 println!(&quot;{}&quot;, s1);
                ^~
 5:24 note: in this expansion of println! (defined in &lt;std macros&gt;)
@@ -2883,7 +2883,7 @@ fn change(some_string: &amp;String) {
 }
 </code></pre>
 <p>Here’s the error:</p>
-<pre><code class="language-bash">error: cannot borrow immutable borrowed content `*some_string` as mutable
+<pre><code class="language-text">error: cannot borrow immutable borrowed content `*some_string` as mutable
  --&gt; error.rs:8:5
   |
 8 |     some_string.push_str(&quot;, world&quot;);
@@ -2916,7 +2916,7 @@ let r1 = &amp;mut s;
 let r2 = &amp;mut s;
 </code></pre>
 <p>Here’s the error:</p>
-<pre><code class="language-bash">error[E0499]: cannot borrow `s` as mutable more than once at a time
+<pre><code class="language-text">error[E0499]: cannot borrow `s` as mutable more than once at a time
  --&gt; borrow_twice.rs:5:19
   |
 4 |     let r1 = &amp;mut s;
@@ -2960,7 +2960,7 @@ let r2 = &amp;s; // no problem
 let r3 = &amp;mut s; // BIG PROBLEM
 </code></pre>
 <p>Here’s the error:</p>
-<pre><code class="language-bash">error[E0502]: cannot borrow `s` as mutable because it is also borrowed as immutable
+<pre><code class="language-text">error[E0502]: cannot borrow `s` as mutable because it is also borrowed as immutable
  --&gt; borrow_thrice.rs:6:19
   |
 4 |     let r1 = &amp;s; // no problem
@@ -3001,7 +3001,7 @@ fn dangle() -&gt; &amp;String {
 }
 </code></pre>
 <p>Here’s the error:</p>
-<pre><code class="language-bash">error[E0106]: missing lifetime specifier
+<pre><code class="language-text">error[E0106]: missing lifetime specifier
  --&gt; dangle.rs:5:16
   |
 5 | fn dangle() -&gt; &amp;String {
@@ -3017,7 +3017,7 @@ error: aborting due to previous error
 <em>lifetimes</em>. We’ll discuss lifetimes in detail in Chapter 10, but, disregarding
 the parts about lifetimes, the message does contain the key to why this code is
 a problem:</p>
-<pre><code class="language-bash">this function's return type contains a borrowed value, but there is no value
+<pre><code class="language-text">this function's return type contains a borrowed value, but there is no value
 for it to be borrowed from.
 </code></pre>
 <p>Let’s have a closer look at exactly what’s happening at each stage of our
@@ -3239,7 +3239,7 @@ the slice version of <code>first_word</code> will throw a compile time error:</p
 }
 </code></pre>
 <p>Here’s the compiler error:</p>
-<pre><code class="language-bash">17:6 error: cannot borrow `s` as mutable because it is also borrowed as
+<pre><code class="language-text">17:6 error: cannot borrow `s` as mutable because it is also borrowed as
             immutable [E0502]
     s.clear(); // Error!
     ^
@@ -3409,7 +3409,7 @@ fn area(length: u32, width: u32) -&gt; u32 {
 }
 </code></pre>
 <p>Let's try running this program with <code>cargo run</code>:</p>
-<pre><code class="language-bash">The area of the rectangle is 1500 square pixels.
+<pre><code class="language-text">The area of the rectangle is 1500 square pixels.
 </code></pre>
 <h3>Refactoring with Tuples</h3>
 <p>Our little program works okay; it figures out the area of the rectangle by
@@ -3510,7 +3510,7 @@ fn main() {
 }
 </code></pre>
 <p>If we run this, we get an error with this core message:</p>
-<pre><code class="language-bash">error: the trait bound `Rectangle: std::fmt::Display` is not satisfied
+<pre><code class="language-text">error: the trait bound `Rectangle: std::fmt::Display` is not satisfied
 </code></pre>
 <p>The <code>println!</code> macro can do many kinds of formatting, and by default, <code>{}</code>
 tells <code>println!</code> to use formatting known as <code>Display</code>: output intended for
@@ -3522,7 +3522,7 @@ want commas or not? Do you want to print the struct <code>{}</code>s? Should all
 fields be shown? Because of this ambiguity, Rust doesn't try to guess what we
 want and structs do not have a provided implementation of <code>Display</code>.</p>
 <p>If we keep reading the errors, though, we'll find this helpful note:</p>
-<pre><code class="language-bash">note: `Rectangle` cannot be formatted with the default formatter; try using
+<pre><code class="language-text">note: `Rectangle` cannot be formatted with the default formatter; try using
 `:?` instead if you are using a format string
 </code></pre>
 <p>Let's try it! The <code>println!</code> will now look like
@@ -3532,10 +3532,10 @@ the <code>{}</code> tells <code>println!</code> we want to use an output format 
 useful for developers so that we can see its value while we are debugging our
 code.</p>
 <p>Let's try running with this change and... drat. We still get an error:</p>
-<pre><code class="language-bash">error: the trait bound `Rectangle: std::fmt::Debug` is not satisfied
+<pre><code class="language-text">error: the trait bound `Rectangle: std::fmt::Debug` is not satisfied
 </code></pre>
 <p>Again, though, the compiler has given us a helpful note!</p>
-<pre><code class="language-bash">note: `Rectangle` cannot be formatted using `:?`; if it is defined in your
+<pre><code class="language-text">note: `Rectangle` cannot be formatted using `:?`; if it is defined in your
 crate, add `#[derive(Debug)]` or manually implement it
 </code></pre>
 <p>Rust <em>does</em> include functionality to print out debugging information, but we
@@ -3556,7 +3556,7 @@ fn main() {
 </code></pre>
 <p>At this point, if we run this program, we won't get any errors and we'll see the
 following output:</p>
-<pre><code class="language-bash">rect1 is Rectangle { length: 50, width: 30 }
+<pre><code class="language-text">rect1 is Rectangle { length: 50, width: 30 }
 </code></pre>
 <p>Nice! It's not the prettiest output, but it shows the values of all the fields
 for this instance, which would definitely help during debugging.</p>
@@ -3688,7 +3688,7 @@ this code:</p>
 </code></pre>
 <p>We want to see this output, since both of <code>rect2</code>'s dimensions are smaller than
 <code>rect1</code>'s, but <code>rect3</code> is wider than <code>rect1</code>:</p>
-<pre><code class="language-bash">Can rect1 hold rect2? true
+<pre><code class="language-text">Can rect1 hold rect2? true
 Can rect1 hold rect3? false
 </code></pre>
 <p>We know we want to define a method, so it will be within the <code>impl Rectangle</code>
@@ -4098,7 +4098,7 @@ let y: Option&lt;i8&gt; = Some(5);
 let sum = x + y;
 </code></pre>
 <p>If we run this code, we get an error message like this:</p>
-<pre><code class="language-bash">error[E0277]: the trait bound `i8: std::ops::Add&lt;std::option::Option&lt;i8&gt;&gt;` is not satisfied
+<pre><code class="language-text">error[E0277]: the trait bound `i8: std::ops::Add&lt;std::option::Option&lt;i8&gt;&gt;` is not satisfied
  --&gt;
   |
 7 | let sum = x + y;
@@ -4359,7 +4359,7 @@ of our <code>plus_one</code> function:</p>
 </code></pre>
 <p>We didn't handle the <code>None</code> case, so this will cause a bug. Luckily, it's a bug
 Rust knows how to catch. If we try to compile this code, we'll get this error:</p>
-<pre><code class="language-bash">error[E0004]: non-exhaustive patterns: `None` not covered
+<pre><code class="language-text">error[E0004]: non-exhaustive patterns: `None` not covered
  --&gt;
   |
 6 |         match x {
@@ -4521,7 +4521,7 @@ and functions, but not worry about what code goes in the function bodies. We’l
 call our library <code>communicator</code>. By default, cargo will create a library unless
 another type of project is specified, so if we leave off the <code>--bin</code> option
 that we’ve been using so far our project will be a library:</p>
-<pre><code class="language-bash">$ cargo new communicator
+<pre><code class="language-text">$ cargo new communicator
 $ cd communicator
 </code></pre>
 <p>Notice that Cargo generated <em>src/lib.rs</em> instead of <em>src/main.rs</em>. Inside
@@ -4701,7 +4701,7 @@ be defined in <em>src/client.rs</em>.</p>
 <p>Now, everything should compile successfully, though you’ll get a few warnings.
 Remember to use <code>cargo build</code> instead of <code>cargo run</code> since we have a library
 crate rather than a binary crate:</p>
-<pre><code class="language-bash">$ cargo build
+<pre><code class="language-text">$ cargo build
    Compiling communicator v0.1.0 (file:///projects/communicator)
 
 warning: function is never used: `connect`, #[warn(dead_code)] on by default
@@ -4764,7 +4764,7 @@ module that we extracted:</p>
 }
 </code></pre>
 <p>When we try to <code>cargo build</code>, we’ll get this error:</p>
-<pre><code class="language-bash">$ cargo build
+<pre><code class="language-text">$ cargo build
    Compiling communicator v0.1.0 (file:///projects/communicator)
 error: cannot declare a new module at this location
  --&gt; src/network.rs:4:5
@@ -4805,7 +4805,7 @@ it so that it is now <em>src/network/mod.rs</em></li>
 <li>Move the submodule file <em>src/server.rs</em> into the <em>network</em> directory</li>
 </ol>
 <p>Here are commands to carry out these steps:</p>
-<pre><code class="language-bash">$ mkdir src/network
+<pre><code class="language-text">$ mkdir src/network
 $ mv src/network.rs src/network/mod.rs
 $ mv src/server.rs src/network
 </code></pre>
@@ -4888,7 +4888,7 @@ the <code>mod</code> keyword.</p>
 able to build our project, but we still get some warning messages about the
 <code>client::connect</code>, <code>network::connect</code>, and <code>network::server::connect</code> functions
 not being used:</p>
-<pre><code class="language-bash">warning: function is never used: `connect`, #[warn(dead_code)] on by default
+<pre><code class="language-text">warning: function is never used: `connect`, #[warn(dead_code)] on by default
 src/client.rs:1:1
   |
 1 | fn connect() {
@@ -4932,7 +4932,7 @@ use the library crate, and it’s a nice separation of concerns.</p>
 <p>Our binary crate right now just calls our library’s <code>connect</code> function from the
 <code>client</code> module. However, invoking <code>cargo build</code> will now give us an error
 after the warnings:</p>
-<pre><code class="language-bash">error: module `client` is private
+<pre><code class="language-text">error: module `client` is private
  --&gt; src/main.rs:4:5
   |
 4 |     communicator::client::connect();
@@ -4965,7 +4965,7 @@ as the “module <code>client</code> is private” error from our binary crate. 
 mod network;
 </code></pre>
 <p>The <code>pub</code> goes right before <code>mod</code>. Let’s try building again:</p>
-<pre><code class="language-bash">&lt;warnings&gt;
+<pre><code class="language-text">&lt;warnings&gt;
 error: function `connect` is private
  --&gt; src/main.rs:4:5
   |
@@ -4980,7 +4980,7 @@ edit <code>src/client.rs</code> to make <code>client::connect</code> public too:
 }
 </code></pre>
 <p>And run <code>cargo build</code> again:</p>
-<pre><code class="language-bash">warning: function is never used: `connect`, #[warn(dead_code)] on by default
+<pre><code class="language-text">warning: function is never used: `connect`, #[warn(dead_code)] on by default
  --&gt; src/network/mod.rs:1:1
   |
 1 | fn connect() {
@@ -5009,7 +5009,7 @@ the remaining warnings. Modify <code>src/network/mod.rs</code> to be:</p>
 mod server;
 </code></pre>
 <p>And compile:</p>
-<pre><code class="language-bash">warning: function is never used: `connect`, #[warn(dead_code)] on by default
+<pre><code class="language-text">warning: function is never used: `connect`, #[warn(dead_code)] on by default
  --&gt; src/network/mod.rs:1:1
   |
 1 | pub fn connect() {
@@ -5033,7 +5033,7 @@ with <code>client::connect</code> we worked from the outside in. We need to chan
 pub mod network;
 </code></pre>
 <p>Now if we compile, that warning is gone:</p>
-<pre><code class="language-bash">warning: function is never used: `connect`, #[warn(dead_code)] on by default
+<pre><code class="language-text">warning: function is never used: `connect`, #[warn(dead_code)] on by default
  --&gt; src/network/server.rs:1:1
   |
 1 | fn connect() {
@@ -5250,7 +5250,7 @@ mod tests {
 }
 </code></pre>
 <p>Run the tests by invoking the <code>cargo test</code> command:</p>
-<pre><code class="language-bash">$ cargo test
+<pre><code class="language-text">$ cargo test
    Compiling communicator v0.1.0 (file:///projects/communicator)
 error[E0433]: failed to resolve. Use of undeclared type or module `client`
  --&gt; src/lib.rs:9:9
@@ -5306,7 +5306,7 @@ mod tests {
 </code></pre>
 <p>If we run <code>cargo test</code> again, the test will pass and the first part of the test
 result output will be:</p>
-<pre><code class="language-bash">$ cargo test
+<pre><code class="language-text">$ cargo test
    Compiling communicator v0.1.0 (file:///projects/communicator)
      Running target/debug/communicator-92007ddb5330fa5a
 
@@ -5426,7 +5426,7 @@ will be cleaned up at the end of the function:</p>
 }
 </code></pre>
 <p>Trying to compile this will result in the following error:</p>
-<pre><code class="language-bash">error: cannot move out of indexed content [--explain E0507]
+<pre><code class="language-text">error: cannot move out of indexed content [--explain E0507]
   |&gt;
 4 |&gt;     list[1]
   |&gt;     ^^^^^^^ cannot move out of indexed content
@@ -5442,7 +5442,7 @@ let first = &amp;v[0];
 v.push(6);
 </code></pre>
 <p>Compiling this will give us this error:</p>
-<pre><code class="language-bash">error: cannot borrow `v` as mutable because it is also borrowed as immutable
+<pre><code class="language-text">error: cannot borrow `v` as mutable because it is also borrowed as immutable
 [--explain E0502]
   |&gt;
 5 |&gt; let first = &amp;v[0];
@@ -5719,7 +5719,7 @@ Earlier, we mentioned that each of these characters was two bytes, so that means
 that <code>s</code> will be &quot;Зд&quot;.</p>
 <p>What would happen if we did <code>&amp;hello[0..1]</code>? The answer: it will panic at
 runtime, in the same way that accessing an invalid index in a vector does:</p>
-<pre><code class="language-bash">thread 'main' panicked at 'index 0 and/or 1 in `Здравствуйте` do not lie on
+<pre><code class="language-text">thread 'main' panicked at 'index 0 and/or 1 in `Здравствуйте` do not lie on
 character boundary', ../src/libcore/str/mod.rs:1694
 </code></pre>
 <h3>Methods for Iterating Over Strings</h3>
@@ -5731,7 +5731,7 @@ Rust <code>char</code> values:</p>
 }
 </code></pre>
 <p>This code will print:</p>
-<pre><code class="language-bash">न
+<pre><code class="language-text">न
 म
 स
 ्
@@ -5746,7 +5746,7 @@ one byte:</p>
 }
 </code></pre>
 <p>This code will print the 18 bytes that make up this <code>String</code>, starting with:</p>
-<pre><code class="language-bash">224
+<pre><code class="language-text">224
 164
 168
 224
@@ -5850,7 +5850,7 @@ for (key, value) in &amp;map {
 }
 </code></pre>
 <p>This will print:</p>
-<pre><code class="language-bash">1: hello
+<pre><code class="language-text">1: hello
 2: world
 </code></pre>
 <h3>Updating a Hash Map</h3>
@@ -6016,7 +6016,7 @@ panic to aborting on panic by adding <code>panic = 'abort'</code> to the appropr
 }
 </code></pre>
 <p>If you run it, you'll see something like this:</p>
-<pre><code class="language-bash">$ cargo run
+<pre><code class="language-text">$ cargo run
    Compiling panic v0.1.0 (file:///projects/panic)
     Finished debug [unoptimized + debuginfo] target(s) in 0.25 secs
      Running `target/debug/panic`
@@ -6050,7 +6050,7 @@ that is stored after the array.</p>
 <p>In order to protect your program from this sort of vulnerability, if you try to
 read an element at an index that doesn't exist, Rust will stop execution and
 refuse to continue with an invalid value. Let's try it and see:</p>
-<pre><code class="language-bash">$ cargo run
+<pre><code class="language-text">$ cargo run
    Compiling panic v0.1.0 (file:///projects/panic)
     Finished debug [unoptimized + debuginfo] target(s) in 0.27 secs
      Running `target/debug/panic`
@@ -6066,7 +6066,7 @@ Rust tell us what line in our program caused the error.</p>
 <p>That's what the next line, the <code>note</code> is about. If we set the <code>RUST_BACKTRACE</code>
 environment variable, we'll get a backtrace of exactly how the error happend.
 Let's try that. Listing 9-1 shows the output:</p>
-<pre><code class="language-bash">$ RUST_BACKTRACE=1 cargo run
+<pre><code class="language-text">$ RUST_BACKTRACE=1 cargo run
     Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
      Running `target/debug/panic`
 thread 'main' panicked at 'index out of bounds: the len is 3 but the index is
@@ -6168,7 +6168,7 @@ we see <code>Err</code>, we have to decide what to do with it. The simplest thin
 turn our error into a <code>panic!</code> instead, by calling the macro. And since we
 haven't created that file yet, we'll see a message indicating as such when we
 print the error value:</p>
-<pre><code class="language-bash">thread 'main' panicked at 'There was a problem opening the file: Error { repr:
+<pre><code class="language-text">thread 'main' panicked at 'There was a problem opening the file: Error { repr:
 Os { code: 2, message: &quot;No such file or directory&quot; } }', src/main.rs:8
 </code></pre>
 <h3>Matching on Different Errors</h3>
@@ -6378,7 +6378,7 @@ that doesn't return a result is confusing. `try!` isn't as bad, so I'm using
 that. When https://github.com/rust-lang/rust/issues/35946 is fixed, we can
 switch this example to use `?`. /Carol -->
 <p>When we compile this, we get the following error message:</p>
-<pre><code class="language-bash">error[E0308]: mismatched types
+<pre><code class="language-text">error[E0308]: mismatched types
  --&gt;
   |
 3 |     let f = try!(File::open(&quot;hello.txt&quot;));
@@ -6591,7 +6591,7 @@ example, a program with only this:</p>
 <pre><code class="language-rust,ignore">/// What am I documenting?
 </code></pre>
 <p>Will give a compiler error:</p>
-<pre><code class="language-bash">src/main.rs:1:1: 1:27 error: expected item after doc comment
+<pre><code class="language-text">src/main.rs:1:1: 1:27 error: expected item after doc comment
 src/main.rs:1 /// What am I documenting?
               ^~~~~~~~~~~~~~~~~~~~~~~~~~
 </code></pre>
@@ -7086,7 +7086,7 @@ composed with the <code>=</code> operator. The expression <code>lval OP= val</co
 <h4>Operator precedence</h4>
 <p>The precedence of Rust binary operators is ordered as follows, going from
 strong to weak:</p>
-<pre><code class="language-bash">as :
+<pre><code class="language-text">as :
 * / %
 + -
 &lt;&lt; &gt;&gt;

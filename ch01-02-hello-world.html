@@ -84,7 +84,7 @@ lives, but for this book, we'd suggest making a <em>projects</em> directory in y
 home directory and keeping all your projects there. Open a terminal and enter
 the following commands to make a directory for this particular project:</p>
 <p>Linux and Mac:</p>
-<pre><code class="language-bash">$ mkdir ~/projects
+<pre><code class="language-text">$ mkdir ~/projects
 $ cd ~/projects
 $ mkdir hello_world
 $ cd hello_world
@@ -108,7 +108,7 @@ than <code>helloworld.rs</code>.</p>
 </code></pre>
 <p>Save the file, and go back to your terminal window. On Linux or OSX, enter the
 following commands:</p>
-<pre><code class="language-bash">$ rustc main.rs
+<pre><code class="language-text">$ rustc main.rs
 $ ./main
 Hello, world!
 </code></pre>
@@ -155,13 +155,13 @@ created program. We'll break that process down and examine each step now.</p>
 <p>Before running a Rust program, you have to compile it. You can use the Rust
 compiler by entering the <code>rustc</code> command and passing it the name of your source
 file, like this:</p>
-<pre><code class="language-bash">$ rustc main.rs
+<pre><code class="language-text">$ rustc main.rs
 </code></pre>
 <p>If you come from a C or C++ background, you'll notice that this is similar to
 <code>gcc</code> or <code>clang</code>. After compiling successfully, Rust should output a binary
 executable, which you can see on Linux or OSX by entering the <code>ls</code> command in
 your shell as follows:</p>
-<pre><code class="language-bash">$ ls
+<pre><code class="language-text">$ ls
 main  main.rs
 </code></pre>
 <p>On Windows, you'd enter:</p>
@@ -172,7 +172,7 @@ main.rs
 <p>This shows we have two files: the source code, with the <code>.rs</code> extension, and the
 executable (<code>main.exe</code> on Windows, <code>main</code> everywhere else). All that's left to
 do from here is run the <code>main</code> or <code>main.exe</code> file, like this:</p>
-<pre><code class="language-bash">$ ./main  # or .\main.exe on Windows
+<pre><code class="language-text">$ ./main  # or .\main.exe on Windows
 </code></pre>
 <p>If <code>main.rs</code> were your &quot;Hello, world!&quot; program, this would print <code>Hello, world!</code> to your terminal.</p>
 <p>If you come from a dynamic language like Ruby, Python, or JavaScript, you may
@@ -204,7 +204,7 @@ you’re using it for the rest of the book. Cargo comes installed with Rust
 itself, if you used the official installers as covered in the Installation
 chapter. If you installed Rust through some other means, you can check if you
 have Cargo installed by typing the following into your terminal:</p>
-<pre><code class="language-bash">$ cargo --version
+<pre><code class="language-text">$ cargo --version
 </code></pre>
 <p>If you see a version number, great! If you see an error like <code>command not found</code>, then you should look at the documentation for your method of
 installation to determine how to install Cargo separately.</p>
@@ -213,13 +213,13 @@ installation to determine how to install Cargo separately.</p>
 project in <code>hello_world</code>. Go back to your projects directory (or wherever you
 decided to put your code):</p>
 <p>Linux and Mac:</p>
-<pre><code class="language-bash">$ cd ~/projects
+<pre><code class="language-text">$ cd ~/projects
 </code></pre>
 <p>Windows:</p>
 <pre><code class="language-cmd">&gt; cd %USERPROFILE%\projects
 </code></pre>
 <p>And then on any operating system run:</p>
-<pre><code class="language-bash">$ cargo new hello_cargo --bin
+<pre><code class="language-text">$ cargo new hello_cargo --bin
 $ cd hello_cargo
 </code></pre>
 <p>We passed the <code>--bin</code> argument to <code>cargo new</code> because our goal is to make an
@@ -284,12 +284,12 @@ Cargo by moving your code into the <code>src</code> directory and creating an ap
 <h3>Building and Running a Cargo Project</h3>
 <p>Now let's look at what's different about building and running your Hello World
 program through Cargo! To do so, enter the following commands:</p>
-<pre><code class="language-bash">$ cargo build
+<pre><code class="language-text">$ cargo build
    Compiling hello_cargo v0.1.0 (file:///projects/hello_cargo)
 </code></pre>
 <p>This should have created an executable file in <code>target/debug/hello_cargo</code> (or
 <code>target\debug\hello_cargo.exe</code> on Windows), which you can run with this command:</p>
-<pre><code class="language-bash">$ ./target/debug/hello_cargo # or .\target\debug\hello_cargo.exe on Windows
+<pre><code class="language-text">$ ./target/debug/hello_cargo # or .\target\debug\hello_cargo.exe on Windows
 Hello, world!
 </code></pre>
 <p>Bam! If all goes well, <code>Hello, world!</code> should print to the terminal once more.</p>
@@ -307,7 +307,7 @@ let Cargo handle it.</p>
 <p>We just built a project with <code>cargo build</code> and ran it with
 <code>./target/debug/hello_cargo</code>, but we can also use <code>cargo run</code> to compile
 and then run:</p>
-<pre><code class="language-bash">$ cargo run
+<pre><code class="language-text">$ cargo run
      Running `target/debug/hello_cargo`
 Hello, world!
 </code></pre>
@@ -316,7 +316,7 @@ compiling <code>hello_cargo</code>. Cargo figured out that the files haven’t c
 it just ran the binary. If you had modified your source code, Cargo would have
 rebuilt the project before running it, and you would have seen something like
 this:</p>
-<pre><code class="language-bash">$ cargo run
+<pre><code class="language-text">$ cargo run
    Compiling hello_cargo v0.1.0 (file:///projects/hello_cargo)
      Running `target/debug/hello_cargo`
 Hello, world!
@@ -350,7 +350,7 @@ right way. Even though this project is simple, it now uses much of the real
 tooling you’ll use for the rest of your Rust career. In fact, you can get
 started with virtually all Rust projects you want to work
 on with the following commands:</p>
-<pre><code class="language-bash">$ git clone someurl.com/someproject
+<pre><code class="language-text">$ git clone someurl.com/someproject
 $ cd someproject
 $ cargo build
 </code></pre>

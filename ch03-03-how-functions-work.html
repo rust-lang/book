@@ -98,7 +98,7 @@ defined somewhere.</p>
 <p>Let’s start a new binary project named <em>functions</em> to explore functions
 further. Place the <code>another_function</code> example in <em>src/main.rs</em> and run it. You
 should see the following output:</p>
-<pre><code class="language-bash">$ cargo run
+<pre><code class="language-text">$ cargo run
    Compiling functions v0.1.0 (file:///projects/functions)
      Running `target/debug/functions`
 Hello, world!
@@ -120,7 +120,7 @@ fn another_function(x: i32) {
 }
 </code></pre>
 <p>Try running this program; you should get the following output:</p>
-<pre><code class="language-bash">$ cargo run
+<pre><code class="language-text">$ cargo run
    Compiling functions v0.1.0 (file:///projects/functions)
      Running `target/debug/functions`
 The value of x is: 5
@@ -152,7 +152,7 @@ prints out the values of both of its arguments.</p>
 <p>Let’s try running this code. Replace the program currently in your <em>function</em>
 project’s <em>src/main.rs</em> file with the preceding example, and run it using
 <code>cargo run</code>:</p>
-<pre><code class="language-bash">$ cargo run
+<pre><code class="language-text">$ cargo run
    Compiling functions v0.1.0 (file:///projects/functions)
      Running `target/debug/functions`
 The value of x is: 5
@@ -192,7 +192,7 @@ to another variable, as the following code tries to do:</p>
 }
 </code></pre>
 <p>When you run this program, you’ll get an error like this:</p>
-<pre><code class="language-bash">$ cargo run
+<pre><code class="language-text">$ cargo run
    Compiling functions v0.1.0 (file:///projects/functions)
 error: expected expression, found statement (`let`)
  --&gt; src/main.rs:2:14
@@ -259,7 +259,7 @@ fn main() {
 function—just the number <code>5</code> by itself. That’s a perfectly valid function in
 Rust. Note that the function’s return type is specified, too, as <code>-&gt; i32</code>. Try
 running this code; the output should look like this:</p>
-<pre><code class="language-bash">$ cargo run
+<pre><code class="language-text">$ cargo run
    Compiling functions v0.1.0 (file:///projects/functions)
      Running `target/debug/functions`
 The value of x is: 5
@@ -301,7 +301,7 @@ fn plus_one(x: i32) -&gt; i32 {
 }
 </code></pre>
 <p>Running this code produces an error, as follows:</p>
-<pre><code class="language-bash">error[E0269]: not all control paths return a value
+<pre><code class="language-text">error[E0269]: not all control paths return a value
  --&gt; src/main.rs:7:1
   |
 7 | fn plus_one(x: i32) -&gt; i32 {

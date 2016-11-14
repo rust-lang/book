@@ -155,7 +155,7 @@ will be cleaned up at the end of the function:</p>
 }
 </code></pre>
 <p>Trying to compile this will result in the following error:</p>
-<pre><code class="language-bash">error: cannot move out of indexed content [--explain E0507]
+<pre><code class="language-text">error: cannot move out of indexed content [--explain E0507]
   |&gt;
 4 |&gt;     list[1]
   |&gt;     ^^^^^^^ cannot move out of indexed content
@@ -171,7 +171,7 @@ let first = &amp;v[0];
 v.push(6);
 </code></pre>
 <p>Compiling this will give us this error:</p>
-<pre><code class="language-bash">error: cannot borrow `v` as mutable because it is also borrowed as immutable
+<pre><code class="language-text">error: cannot borrow `v` as mutable because it is also borrowed as immutable
 [--explain E0502]
   |&gt;
 5 |&gt; let first = &amp;v[0];

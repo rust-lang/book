@@ -147,7 +147,7 @@ let y: Option&lt;i8&gt; = Some(5);
 let sum = x + y;
 </code></pre>
 <p>If we run this code, we get an error message like this:</p>
-<pre><code class="language-bash">error[E0277]: the trait bound `i8: std::ops::Add&lt;std::option::Option&lt;i8&gt;&gt;` is not satisfied
+<pre><code class="language-text">error[E0277]: the trait bound `i8: std::ops::Add&lt;std::option::Option&lt;i8&gt;&gt;` is not satisfied
  --&gt;
   |
 7 | let sum = x + y;
