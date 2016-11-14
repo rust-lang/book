@@ -49,7 +49,7 @@ This function takes one argument, a reference to some type, `T`, and the
 reference has the lifetime `'a`. In the same way that we parameterize functions
 that take generic types, we parameterize references with lifetimes.
 
-So, that's the syntax, but _why_? What does a lifetime do, anyway?
+So, that's the syntax, but *why*? What does a lifetime do, anyway?
 
 ### Lifetimes Prevent Dangling References
 
@@ -454,7 +454,7 @@ impl<'a> App<'a> {
 
 ### The Static Lifetime
 
-There is _one_ special lifetime that Rust knows about: `'static`. The `'static`
+There is *one* special lifetime that Rust knows about: `'static`. The `'static`
 lifetime is the entire duration of the program. All string literals have the
 `'static` lifetime:
 

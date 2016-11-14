@@ -332,7 +332,7 @@ fn takes<T>(value: T) {
 }
 ```
 
-There's one problem though. We've got some function _definitions_ that work,
+There's one problem though. We've got some function *definitions* that work,
 but if we try to use `value` in code in the function body, we'll get an
 error. For example, the function definition in Listing 10-3 tries to print out
 `value` in its body:
