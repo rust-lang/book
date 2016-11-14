@@ -33,7 +33,7 @@ they're used. Here's a function signature with lifetime declarations and
 annotations:
 
 ```rust,ignore
-fn lifetime<'a>(argument: &'a i32) {
+fn some_function<'a>(argument: &'a i32) {
 ```
 
 Notice anything? In the same way that generic type declarations go inside angle
@@ -42,7 +42,7 @@ same angle brackets. We can even write functions that take both a lifetime
 declaration and a generic type declaration:
 
 ```rust,ignore
-fn lifetime<'a, T>(argument: &'a T) {
+fn some_function<'a, T>(argument: &'a T) {
 ```
 
 This function takes one argument, a reference to some type, `T`, and the
