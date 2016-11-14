@@ -142,34 +142,6 @@ And that's reflected in the summary line:
 test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured
 ```
 
-## Inverting failure with `should_panic`
-
-We can invert our test's failure with another attribute: `should_panic`:
-
-```rust
-#[test]
-#[should_panic]
-fn it_works() {
-    assert!(false);
-}
-```
-
-This test will now succeed if we `panic!` and fail if we complete.
-
-`should_panic` tests can be fragile, as it's hard to guarantee that the test
-didn't fail for an unexpected reason. To help with this, an optional `expected`
-parameter can be added to the `should_panic` attribute. The test harness will
-make sure that the failure message contains the provided text. A safer version
-of the example above would be:
-
-```rust
-#[test]
-#[should_panic(expected = "assertion failed")]
-fn it_works() {
-    assert!(false);
-}
-```
-
 ## Testing equality
 
 Rust provides a pair of macros, `assert_eq!` and `assert_ne!`, that compares
@@ -222,6 +194,35 @@ fn it_works() {
     assert_eq!(4, add_two(2));
 }
 ```
+
+## Inverting failure with `should_panic`
+
+We can invert our test's failure with another attribute: `should_panic`:
+
+```rust
+#[test]
+#[should_panic]
+fn it_works() {
+    assert!(false);
+}
+```
+
+This test will now succeed if we `panic!` and fail if we complete.
+
+`should_panic` tests can be fragile, as it's hard to guarantee that the test
+didn't fail for an unexpected reason. To help with this, an optional `expected`
+parameter can be added to the `should_panic` attribute. The test harness will
+make sure that the failure message contains the provided text. A safer version
+of the example above would be:
+
+```rust
+#[test]
+#[should_panic(expected = "assertion failed")]
+fn it_works() {
+    assert!(false);
+}
+```
+
 
 ## The `ignore` attribute
 
