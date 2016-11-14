@@ -1,0 +1,396 @@
+<!DOCTYPE HTML>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>The Rust Programming Language</title>
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <base href="">
+
+        <link rel="stylesheet" href="book.css">
+        <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+        <link rel="shortcut icon" href="favicon.png">
+
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+
+        <!-- MathJax -->
+        <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+        <!-- Fetch JQuery from CDN but have a local fallback -->
+        <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+        <script>
+            if (typeof jQuery == 'undefined') {
+                document.write(unescape("%3Cscript src='jquery.js'%3E%3C/script%3E"));
+            }
+        </script>
+    </head>
+    <body class="light">
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme = localStorage.getItem('theme');
+            if (theme == null) { theme = 'light'; }
+            $('body').removeClass().addClass(theme);
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var sidebar = localStorage.getItem('sidebar');
+            if (sidebar === "hidden") { $("html").addClass("sidebar-hidden") }
+            else if (sidebar === "visible") { $("html").addClass("sidebar-visible") }
+        </script>
+
+        <div id="sidebar" class="sidebar">
+            <ul class="chapter"><li><a href="ch01-00-introduction.html"><strong>1.</strong> Introduction</a></li><li><ul class="section"><li><a href="ch01-01-installation.html"><strong>1.1.</strong> Installation</a></li><li><a href="ch01-02-hello-world.html"><strong>1.2.</strong> Hello, World!</a></li></ul></li><li><a href="ch02-00-guessing-game-tutorial.html"><strong>2.</strong> Guessing Game Tutorial</a></li><li><a href="ch03-00-common-programming-concepts.html"><strong>3.</strong> Common Programming Concepts</a></li><li><ul class="section"><li><a href="ch03-01-variables-and-mutability.html"><strong>3.1.</strong> Variables and Mutability</a></li><li><a href="ch03-02-data-types.html"><strong>3.2.</strong> Data Types</a></li><li><a href="ch03-03-how-functions-work.html"><strong>3.3.</strong> How Functions Work</a></li><li><a href="ch03-04-comments.html"><strong>3.4.</strong> Comments</a></li><li><a href="ch03-05-control-flow.html"><strong>3.5.</strong> Control Flow</a></li></ul></li><li><a href="ch04-00-understanding-ownership.html"><strong>4.</strong> Understanding Ownership</a></li><li><ul class="section"><li><a href="ch04-01-what-is-ownership.html"><strong>4.1.</strong> What is Ownership?</a></li><li><a href="ch04-02-references-and-borrowing.html"><strong>4.2.</strong> References &amp; Borrowing</a></li><li><a href="ch04-03-slices.html"><strong>4.3.</strong> Slices</a></li></ul></li><li><a href="ch05-00-structs.html"><strong>5.</strong> Structs</a></li><li><ul class="section"><li><a href="ch05-01-method-syntax.html"><strong>5.1.</strong> Method Syntax</a></li></ul></li><li><a href="ch06-00-enums.html"><strong>6.</strong> Enums</a></li><li><ul class="section"><li><a href="ch06-01-option.html"><strong>6.1.</strong> Option</a></li><li><a href="ch06-02-match.html"><strong>6.2.</strong> Match</a></li><li><a href="ch06-03-if-let.html"><strong>6.3.</strong> <code>if let</code></a></li></ul></li><li><a href="ch07-00-modules.html"><strong>7.</strong> Modules</a></li><li><ul class="section"><li><a href="ch07-01-mod-and-the-filesystem.html"><strong>7.1.</strong> <code>mod</code> and the Filesystem</a></li><li><a href="ch07-02-controlling-visibility-with-pub.html"><strong>7.2.</strong> Controlling Visibility with <code>pub</code></a></li><li><a href="ch07-03-importing-names-with-use.html"><strong>7.3.</strong> Importing Names with <code>use</code></a></li></ul></li><li><a href="ch08-00-fundamental-collections.html"><strong>8.</strong> Fundamental Collections</a></li><li><ul class="section"><li><a href="ch08-01-vectors.html"><strong>8.1.</strong> Vectors</a></li><li><a href="ch08-02-strings.html"><strong>8.2.</strong> Strings</a></li><li><a href="ch08-03-hash-maps.html"><strong>8.3.</strong> Hash Maps</a></li></ul></li><li><a href="ch09-00-error-handling.html"><strong>9.</strong> Error Handling</a></li><li><ul class="section"><li><a href="ch09-01-unrecoverable-errors-with-panic.html"><strong>9.1.</strong> Unrecoverable Errors with <code>panic!</code></a></li><li><a href="ch09-02-recoverable-errors-with-result.html"><strong>9.2.</strong> Recoverable Errors with <code>Result</code></a></li><li><a href="ch09-03-to-panic-or-not-to-panic.html"><strong>9.3.</strong> To <code>panic!</code> or Not To <code>panic!</code></a></li></ul></li><li><a href="ch10-00-generics.html"><strong>10.</strong> Generics</a></li><li><ul class="section"><li><a href="ch10-01-syntax.html" class="active"><strong>10.1.</strong> Syntax</a></li><li><a href="ch10-02-traits.html"><strong>10.2.</strong> Traits</a></li><li><a href="ch10-03-lifetime-syntax.html"><strong>10.3.</strong> Lifetime syntax</a></li></ul></li><li><strong>11.</strong> I/O</li><li><ul class="section"><li><strong>11.1.</strong> <code>Read</code> &amp; <code>Write</code></li><li><strong>11.2.</strong> <code>std::fs</code></li><li><strong>11.3.</strong> <code>std::path</code></li><li><strong>11.4.</strong> <code>std::env</code></li></ul></li><li><strong>12.</strong> Testing</li><li><ul class="section"><li><strong>12.1.</strong> Unit Tests</li><li><strong>12.2.</strong> Integration Tests</li><li><strong>12.3.</strong> Test Attribute</li></ul></li><li><strong>13.</strong> Composition</li><li><ul class="section"><li><strong>13.1.</strong> Instead of Inheritance</li><li><strong>13.2.</strong> Trait Objects?</li></ul></li><li><strong>14.</strong> Creating a Library</li><li><ul class="section"><li><strong>14.1.</strong> Cargo</li><li><strong>14.2.</strong> Crates.io</li><li><a href="chYY-YY-public-api.html"><strong>14.3.</strong> Organizing your Public API</a></li><li><a href="chYY-YY-documentation.html"><strong>14.4.</strong> Documentation</a></li><li><a href="chYY-YY-workspaces.html"><strong>14.5.</strong> Workspaces and Multiple Related Crates</a></li></ul></li><li><strong>15.</strong> Closures</li><li><strong>16.</strong> Zero-cost Abstractions</li><li><ul class="section"><li><strong>16.1.</strong> Iterators as a Case Study</li></ul></li><li><strong>17.</strong> Smart Pointers</li><li><ul class="section"><li><strong>17.1.</strong> <code>Box&lt;T&gt;</code></li><li><strong>17.2.</strong> <code>Rc&lt;T&gt;</code></li><li><strong>17.3.</strong> <code>Cell</code></li><li><strong>17.4.</strong> <code>RefCell</code></li><li><strong>17.5.</strong> Interior Mutability</li></ul></li><li><strong>18.</strong> Concurrency</li><li><ul class="section"><li><strong>18.1.</strong> Threads</li><li><strong>18.2.</strong> <code>Send</code> &amp; <code>Sync</code></li><li><strong>18.3.</strong> <code>Arc&lt;T&gt;</code></li><li><strong>18.4.</strong> <code>Mutex&lt;T&gt;</code></li><li><strong>18.5.</strong> <code>Channels</code></li></ul></li><li><a href="chXX-patterns.html"><strong>19.</strong> Patterns</a></li><li><strong>20.</strong> More Lifetimes</li><li><strong>21.</strong> Unsafe Rust</li><li><ul class="section"><li><strong>21.1.</strong> Raw Pointers</li><li><strong>21.2.</strong> <code>transmute</code></li></ul></li><li><strong>22.</strong> Foreign Function Interface</li><li><ul class="section"><li><strong>22.1.</strong> Conditional Compilation</li><li><strong>22.2.</strong> Bindings to C</li><li><strong>22.3.</strong> Using Rust from Other Languages</li><li><strong>22.4.</strong> <code>static</code></li></ul></li><li><strong>23.</strong> Advanced Type System Features</li><li><ul class="section"><li><strong>23.1.</strong> Associated Types</li><li><strong>23.2.</strong> Trait Objects</li><li><strong>23.3.</strong> UFCS</li><li><strong>23.4.</strong> Coherence</li></ul></li><li><strong>24.</strong> Macros</li><li><ul class="section"><li><strong>24.1.</strong> Writing Your Own Macros</li></ul></li><li><strong>25.</strong> Nightly Rust</li><li><ul class="section"><li><strong>25.1.</strong> Nightly Features</li><li><strong>25.2.</strong> How to Find Out About Nightly Features</li></ul></li><li><a href="appendix-00.html"><strong>26.</strong> Appendix</a></li><li><ul class="section"><li><a href="appendix-01-keywords.html"><strong>26.1.</strong> Keywords</a></li><li><a href="appendix-02-operators.html"><strong>26.2.</strong> Operators</a></li><li><a href="appendix-03-derivable-traits.html"><strong>26.3.</strong> Derivable Traits</a></li></ul></li></ul>
+        </div>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar" class="menu-bar">
+                    <div class="left-buttons">
+                        <i id="sidebar-toggle" class="fa fa-bars"></i>
+                        <i id="theme-toggle" class="fa fa-paint-brush"></i>
+                    </div>
+
+                    <h1 class="menu-title">The Rust Programming Language</h1>
+
+                    <div class="right-buttons">
+                        <i id="print-button" class="fa fa-print" title="Print this book"></i>
+                    </div>
+                </div>
+
+                <div id="content" class="content">
+                    <h2>Generics Syntax</h2>
+<p>We've already hinted at the idea of generics in previous chapters, but we
+never dug into what exactly they are or how to use them. In places where we
+specify a type, like function signatures or structs, instead we can use
+<em>generics</em>. Generics are stand-ins that represent an abstract set instead of something concrete. In this section, we're going to cover generic <em>data types</em>.</p>
+<p>You can recognize when any kind of generics are used by the way that they fit
+into Rust's syntax: any time you see angle brackets, <code>&lt;&gt;</code>, you're dealing with
+generics. Types we've seen before, like in Chapter 8 where we discussed vectors
+with types like <code>Vec&lt;i32&gt;</code>, employ generics. The type that the standard library
+defines for vectors is <code>Vec&lt;T&gt;</code>. That <code>T</code> is called a <em>type parameter</em>, and it
+serves a similar function as parameters to functions: you fill in the parameter
+with a concrete type, and that determines how the overall type works. In the
+same way that a function like <code>foo(x: i32)</code> can be called with a specific value
+such as <code>foo(5)</code>, a <code>Vec&lt;T&gt;</code> can be created with a specific type, like
+<code>Vec&lt;i32&gt;</code>.</p>
+<h3>Duplicated Enum Definitions</h3>
+<p>Let's dive into generic data types in more detail. We learned about how to use
+the <code>Option&lt;T&gt;</code> enum in Chapter 6, but we never examined its definition. Let's
+try to imagine how we'd write it! We'll start from duplicated code like we did
+in the &quot;Removing Duplication by Extracting a Function&quot; section. This time,
+we'll remove the duplication by extracting a generic data type instead of
+extracting a function, but the mechanics of doing the extraction will be
+similar. First, let's consider an <code>Option</code> enum with a <code>Some</code> variant that can
+only hold an <code>i32</code>. We'll call this enum <code>OptionalNumber</code>:</p>
+<p>Filename: src/main.rs</p>
+<pre><code class="language-rust">enum OptionalNumber {
+    Some(i32),
+    None,
+}
+
+fn main() {
+    let number = OptionalNumber::Some(5);
+    let no_number = OptionalNumber::None;
+}
+</code></pre>
+<p>This works just fine for <code>i32</code>s. But what if we also wanted to store <code>f64</code>s? We
+would have to duplicate code to define a separate <code>Option</code> enum type for each
+type we wanted to be able to hold in the <code>Some</code> variants. For example, here is
+how we could define and use <code>OptionalFloatingPointNumber</code>:</p>
+<p>Filename: src/main.rs</p>
+<pre><code class="language-rust">enum OptionalFloatingPointNumber {
+    Some(f64),
+    None,
+}
+
+fn main() {
+    let number = OptionalFloatingPointNumber::Some(5.0);
+    let no_number = OptionalFloatingPointNumber::None;
+}
+</code></pre>
+<p>We've made the enum's name a bit long in order to drive the point home. With
+what we currently know how to do in Rust, we would have to write a unique type
+for every single kind of value we wanted to have either <code>Some</code> or <code>None</code> of. In
+other words, the idea of &quot;an optional value&quot; is a more abstract concept than one
+specific type. We want it to work for any type at all.</p>
+<h3>Removing Duplication by Extracting a Generic Data Type</h3>
+<p>Let's see how to get from duplicated types to the generic type. Here are the
+definitions of our two enums side-by-side:</p>
+<pre><code class="language-text">enum OptionalNumber {   enum OptionalFloatingPointNumber {
+    Some(i32),              Some(f64),
+    None,                   None,
+}                       }
+</code></pre>
+<p>Aside from the names, we have one line where the two definitions are very
+close, but still different: the line with the <code>Some</code> definitions. The only
+difference is the type of the data in that variant, <code>i32</code> and <code>f64</code>.</p>
+<p>Just like we can parameterize arguments to a function by choosing a name, we
+can parameterize the type by choosing a name. In this case, we've chosen the
+name <code>T</code>. We could choose any identifier here, but Rust style has type
+parameters follow the same style as types themselves: CamelCase. In addition,
+they tend to be short, often one letter. <code>T</code> is the traditional default choice,
+short for 'type'. Let's use that name in our <code>Some</code> variant definitions where
+the <code>i32</code> and <code>f64</code> types were:</p>
+<pre><code class="language-text">enum OptionalNumber {   enum OptionalFloatingPointNumber {
+    Some(T),                Some(T),
+    None,                   None,
+}                       }
+</code></pre>
+<p>There's one problem, though: we've <em>used</em> <code>T</code>, but not defined it. This would
+be similar to using an argument to a function in the body without declaring it
+in the signature. We need to tell Rust that we've introduced a generic
+parameter. The syntax to do that is the angle brackets, like this:</p>
+<pre><code class="language-text">enum OptionalNumber&lt;T&gt; {   enum OptionalFloatingPointNumber&lt;T&gt; {
+    Some(T),                Some(T),
+    None,                   None,
+}                       }
+</code></pre>
+<p>The <code>&lt;&gt;</code>s after the enum name indicate a list of type parameters, just like
+<code>()</code> after a function name indicates a list of value parameters. Now the only
+difference between our two <code>enum</code>s is the name. Since we've made them generic,
+they're not specific to integers or floating point numbers anymore, so they can
+have the same name:</p>
+<pre><code class="language-text">enum Option&lt;T&gt; {    enum Option&lt;T&gt; {
+    Some(T),            Some(T),
+    None,               None,
+}                   }
+</code></pre>
+<p>Now they're identical! We've made our type fully generic. This definition is
+also how <code>Option</code> is defined in the standard library. If we were to read this
+definition aloud, we'd say, &quot;<code>Option</code> is an <code>enum</code> with one type parameter,
+<code>T</code>. It has two variants: <code>Some</code>, which has a value with type <code>T</code>, and <code>None</code>,
+which has no value.&quot; We can now use the same <code>Option</code> type whether we're holding an <code>i32</code> or an <code>f64</code>:</p>
+<pre><code class="language-rust">let integer = Option::Some(5);
+let float = Option::Some(5.0);
+</code></pre>
+<p>We've left in the <code>Option::</code> namespace for consistency with the previous
+examples, but since <code>use Option::*</code> is in the prelude, it's not needed. Usually
+using <code>Option</code> looks like this:</p>
+<pre><code class="language-rust">let integer = Some(5);
+let float = Some(5.0);
+</code></pre>
+<p>When you recognize situations with almost-duplicate types like this in your
+code, you can follow this process to reduce duplication using generics.</p>
+<h3>Monomorphization at Compile Time</h3>
+<p>Understanding this refactoring process is also useful in understanding how
+generics work behind the scenes: the compiler does the exact opposite of this
+process when compiling your code. <em>Monomorphization</em> means taking code that
+uses generic type parameters and generating code that is specific for each
+concrete type that is used with the generic code. Monomorphization is why
+Rust's generics are extremely efficient at runtime. Consider this code that
+uses the standard library's <code>Option</code>:</p>
+<pre><code class="language-rust">let integer = Some(5);
+let float = Some(5.0);
+</code></pre>
+<p>When Rust compiles this code, it will perform monomorphization. What this means
+is the compiler will see that we've used two kinds of <code>Option&lt;T&gt;</code>: one where
+<code>T</code> is <code>i32</code>, and one where <code>T</code> is <code>f64</code>. As such, it will expand the generic
+definition of <code>Option&lt;T&gt;</code> into <code>Option_i32</code> and <code>Option_f64</code>, thereby replacing
+the generic definition with the specific ones. The more specific version looks
+like the duplicated code we started with at the beginning of this section:</p>
+<p>Filename: src/main.rs</p>
+<pre><code class="language-rust">enum Option_i32 {
+    Some(i32),
+    None,
+}
+
+enum Option_f64 {
+    Some(f64),
+    None,
+}
+
+fn main() {
+    let integer = Option_i32::Some(5);
+    let float = Option_f64::Some(5.0);
+}
+</code></pre>
+<p>In other words, we can write the non-duplicated form that uses generics in our
+code, but Rust will compile that into code that acts as though we wrote the
+specific type out in each instance. This means we pay no runtime cost for using
+generics; it's just like we duplicated each particular definition.</p>
+<h3>Generic Structs</h3>
+<p>In a similar fashion as we did with enums, we can use <code>&lt;&gt;</code>s with structs as
+well in order to define structs that have a generic type parameter in one or
+more of their fields. Generic structs also get monomorphized into specialized
+types at compile time. Listing 10-2 shows the definition and use of a <code>Point</code>
+struct that could hold <code>x</code> and <code>y</code> coordinate values that are any type:</p>
+<p>Filename: src/main.rs</p>
+<pre><code class="language-rust">struct Point&lt;T&gt; {
+    x: T,
+    y: T,
+}
+
+fn main() {
+    let integer = Point { x: 5, y: 10 };
+    let float = Point { x: 1.0, y: 4.0 };
+}
+</code></pre>
+<caption>
+Listing 10-2: A `Point` struct that holds `x` and `y` values of type `T`
+</caption>
+<p>The syntax is the same with structs: add a <code>&lt;T&gt;</code> after the name of the struct,
+then use <code>T</code> in the definition where you want to use that generic type instead
+of a specific type.</p>
+<h3>Multiple Type Parameters</h3>
+<p>Note that in the <code>Point</code> definition in Listing 10-2, we've used the same <code>T</code>
+parameter for both fields. This means <code>x</code> and <code>y</code> must always be values of the
+same type. Trying to instantiate a <code>Point</code> that uses an <code>i32</code> for <code>x</code> and an
+<code>f64</code> for <code>y</code>, like this:</p>
+<pre><code class="language-rust,ignore">let p = Point { x: 5, y: 20.0 };
+</code></pre>
+<p>results in a compile-time error that indicates the type of <code>y</code> must match the
+type of <code>x</code>:</p>
+<pre><code class="language-bash">error[E0308]: mismatched types
+  |
+7 | let p = Point { x: 5, y: 20.0 };
+  |                          ^^^^ expected integral variable, found floating-point variable
+  |
+  = note: expected type `{integer}`
+  = note:    found type `{float}`
+</code></pre>
+<p>If we need to be able to have fields with generic but different types, we can
+declare multiple type parameters within the angle brackets, separated by a
+comma. Listing 10-3 shows how to define a <code>Point</code> that can have different types
+for <code>x</code> and <code>y</code>:</p>
+<p>Filename: src/main.rs</p>
+<pre><code class="language-rust">struct Point&lt;X, Y&gt; {
+    x: X,
+    y: Y,
+}
+
+fn main() {
+    let integer = Point { x: 5, y: 10 };
+    let float = Point { x: 1.0, y: 4.0 };
+    let p = Point { x: 5, y: 20.0 };
+}
+</code></pre>
+<caption>
+Listing 10-2: A `Point` struct that holds an `x` value of type `X` and a `y`
+value of type `Y`
+</caption>
+<p>Now <code>x</code> will have the type of <code>X</code>, and <code>y</code> will have the type of <code>Y</code>, and we
+can instantiate a <code>Point</code> with an <code>i32</code> for <code>x</code> and an <code>f64</code> for <code>y</code>.</p>
+<p>We can make <code>enum</code>s with multiple type parameters as well. Recall the enum
+<code>Result&lt;T, E&gt;</code> from Chapter 9 that we used for recoverable errors. Here's its
+definition:</p>
+<pre><code class="language-rust">enum Result&lt;T, E&gt; {
+    Ok(T),
+    Err(E),
+}
+</code></pre>
+<p>Each variant stores a different kind of information, and they're both generic.</p>
+<p>You can have as many type parameters as you'd like. Similarly to parameters of
+values in function signatures, if you have a lot of parameters, the code can
+get quite confusing, so try to keep the number of parameters defined in any one
+type small if you can.</p>
+<h3>Generic Functions and Methods</h3>
+<p>In a similar way to data structures, we can use the <code>&lt;&gt;</code> syntax in function or
+method definitions. The angle brackets for type parameters go after the
+function or method name and before the argument list in parentheses:</p>
+<pre><code class="language-rust">fn generic_function&lt;T&gt;(value: T) {
+    // code goes here
+}
+</code></pre>
+<p>We can use the same process that we used to refactor duplicated type
+definitions using generics to refactor duplicated function definitions using
+generics. Consider these two side-by-side function signatures that differ in
+the type of <code>value</code>:</p>
+<pre><code class="language-text">fn takes_integer(value: i32) {          fn takes_float(value: f64) {
+    // code goes here                       // code goes here
+}                                       }
+</code></pre>
+<p>We can add a type parameter list that declares the generic type <code>T</code> after the
+function names, then use <code>T</code> where the specific <code>i32</code> and <code>f64</code> types were:</p>
+<pre><code class="language-text">fn takes_integer&lt;T&gt;(value: T) {       fn takes_float&lt;T&gt;(value: T) {
+    // code goes here                     // code goes here
+}                                     }
+</code></pre>
+<p>At this point, only the names differ, so we could unify the two functions into
+one:</p>
+<pre><code class="language-rust,ignore">fn takes&lt;T&gt;(value: T) {
+    // code goes here
+}
+</code></pre>
+<p>There's one problem though. We've got some function <em>definitions</em> that work,
+but if we try to use <code>value</code> in code in the function body, we'll get an
+error. For example, the function definition in Listing 10-3 tries to print out
+<code>value</code> in its body:</p>
+<p>Filename: src/lib.rs</p>
+<pre><code class="language-rust,ignore">fn show_anything&lt;T&gt;(value: T) {
+    println!(&quot;I have something to show you!&quot;);
+    println!(&quot;It's: {}&quot;, value);
+}
+</code></pre>
+<caption>
+Listing 10-3: A `show_anything` function definition that does not yet compile
+</caption>
+<p>Compiling this definition results in an error:</p>
+<pre><code class="language-bash">    error[E0277]: the trait bound `T: std::fmt::Display` is not satisfied
+ --&gt; &lt;anon&gt;:3:37
+  |
+3 |     println!(&quot;It's: {}&quot;, value);
+  |                          ^^^^^ trait `T: std::fmt::Display` not satisfied
+  |
+  = help: consider adding a `where T: std::fmt::Display` bound
+  = note: required by `std::fmt::Display::fmt`
+
+error: aborting due to previous error(s)
+</code></pre>
+<p>This error mentions something we haven't learned about yet: traits. In the next
+section, we'll learn how to make this compile.</p>
+
+                </div>
+
+                <!-- Mobile navigation buttons -->
+                
+                    <a href="ch10-00-generics.html" class="mobile-nav-chapters previous">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+                    <a href="ch10-02-traits.html" class="mobile-nav-chapters next">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                
+
+            </div>
+
+            
+                <a href="ch10-00-generics.html" class="nav-chapters previous" title="You can navigate through the chapters using the arrow keys">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+            
+
+            
+                <a href="ch10-02-traits.html" class="nav-chapters next" title="You can navigate through the chapters using the arrow keys">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            
+
+        </div>
+
+
+        <!-- Local fallback for Font Awesome -->
+        <script>
+            if ($(".fa").css("font-family") !== "FontAwesome") {
+                $('<link rel="stylesheet" type="text/css" href="_FontAwesome/css/font-awesome.css">').prependTo('head');
+            }
+        </script>
+
+        <!-- Livereload script (if served using the cli tool) -->
+        
+
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+    </body>
+</html>

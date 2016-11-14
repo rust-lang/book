@@ -1,0 +1,501 @@
+<!DOCTYPE HTML>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>The Rust Programming Language</title>
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <base href="">
+
+        <link rel="stylesheet" href="book.css">
+        <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+        <link rel="shortcut icon" href="favicon.png">
+
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+
+        <!-- MathJax -->
+        <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+        <!-- Fetch JQuery from CDN but have a local fallback -->
+        <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+        <script>
+            if (typeof jQuery == 'undefined') {
+                document.write(unescape("%3Cscript src='jquery.js'%3E%3C/script%3E"));
+            }
+        </script>
+    </head>
+    <body class="light">
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme = localStorage.getItem('theme');
+            if (theme == null) { theme = 'light'; }
+            $('body').removeClass().addClass(theme);
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var sidebar = localStorage.getItem('sidebar');
+            if (sidebar === "hidden") { $("html").addClass("sidebar-hidden") }
+            else if (sidebar === "visible") { $("html").addClass("sidebar-visible") }
+        </script>
+
+        <div id="sidebar" class="sidebar">
+            <ul class="chapter"><li><a href="ch01-00-introduction.html"><strong>1.</strong> Introduction</a></li><li><ul class="section"><li><a href="ch01-01-installation.html"><strong>1.1.</strong> Installation</a></li><li><a href="ch01-02-hello-world.html"><strong>1.2.</strong> Hello, World!</a></li></ul></li><li><a href="ch02-00-guessing-game-tutorial.html"><strong>2.</strong> Guessing Game Tutorial</a></li><li><a href="ch03-00-common-programming-concepts.html"><strong>3.</strong> Common Programming Concepts</a></li><li><ul class="section"><li><a href="ch03-01-variables-and-mutability.html"><strong>3.1.</strong> Variables and Mutability</a></li><li><a href="ch03-02-data-types.html"><strong>3.2.</strong> Data Types</a></li><li><a href="ch03-03-how-functions-work.html"><strong>3.3.</strong> How Functions Work</a></li><li><a href="ch03-04-comments.html"><strong>3.4.</strong> Comments</a></li><li><a href="ch03-05-control-flow.html"><strong>3.5.</strong> Control Flow</a></li></ul></li><li><a href="ch04-00-understanding-ownership.html"><strong>4.</strong> Understanding Ownership</a></li><li><ul class="section"><li><a href="ch04-01-what-is-ownership.html"><strong>4.1.</strong> What is Ownership?</a></li><li><a href="ch04-02-references-and-borrowing.html"><strong>4.2.</strong> References &amp; Borrowing</a></li><li><a href="ch04-03-slices.html"><strong>4.3.</strong> Slices</a></li></ul></li><li><a href="ch05-00-structs.html"><strong>5.</strong> Structs</a></li><li><ul class="section"><li><a href="ch05-01-method-syntax.html"><strong>5.1.</strong> Method Syntax</a></li></ul></li><li><a href="ch06-00-enums.html"><strong>6.</strong> Enums</a></li><li><ul class="section"><li><a href="ch06-01-option.html"><strong>6.1.</strong> Option</a></li><li><a href="ch06-02-match.html"><strong>6.2.</strong> Match</a></li><li><a href="ch06-03-if-let.html"><strong>6.3.</strong> <code>if let</code></a></li></ul></li><li><a href="ch07-00-modules.html"><strong>7.</strong> Modules</a></li><li><ul class="section"><li><a href="ch07-01-mod-and-the-filesystem.html"><strong>7.1.</strong> <code>mod</code> and the Filesystem</a></li><li><a href="ch07-02-controlling-visibility-with-pub.html"><strong>7.2.</strong> Controlling Visibility with <code>pub</code></a></li><li><a href="ch07-03-importing-names-with-use.html"><strong>7.3.</strong> Importing Names with <code>use</code></a></li></ul></li><li><a href="ch08-00-fundamental-collections.html"><strong>8.</strong> Fundamental Collections</a></li><li><ul class="section"><li><a href="ch08-01-vectors.html"><strong>8.1.</strong> Vectors</a></li><li><a href="ch08-02-strings.html"><strong>8.2.</strong> Strings</a></li><li><a href="ch08-03-hash-maps.html"><strong>8.3.</strong> Hash Maps</a></li></ul></li><li><a href="ch09-00-error-handling.html"><strong>9.</strong> Error Handling</a></li><li><ul class="section"><li><a href="ch09-01-unrecoverable-errors-with-panic.html"><strong>9.1.</strong> Unrecoverable Errors with <code>panic!</code></a></li><li><a href="ch09-02-recoverable-errors-with-result.html"><strong>9.2.</strong> Recoverable Errors with <code>Result</code></a></li><li><a href="ch09-03-to-panic-or-not-to-panic.html"><strong>9.3.</strong> To <code>panic!</code> or Not To <code>panic!</code></a></li></ul></li><li><a href="ch10-00-generics.html"><strong>10.</strong> Generics</a></li><li><ul class="section"><li><a href="ch10-01-syntax.html"><strong>10.1.</strong> Syntax</a></li><li><a href="ch10-02-traits.html"><strong>10.2.</strong> Traits</a></li><li><a href="ch10-03-lifetime-syntax.html" class="active"><strong>10.3.</strong> Lifetime syntax</a></li></ul></li><li><strong>11.</strong> I/O</li><li><ul class="section"><li><strong>11.1.</strong> <code>Read</code> &amp; <code>Write</code></li><li><strong>11.2.</strong> <code>std::fs</code></li><li><strong>11.3.</strong> <code>std::path</code></li><li><strong>11.4.</strong> <code>std::env</code></li></ul></li><li><strong>12.</strong> Testing</li><li><ul class="section"><li><strong>12.1.</strong> Unit Tests</li><li><strong>12.2.</strong> Integration Tests</li><li><strong>12.3.</strong> Test Attribute</li></ul></li><li><strong>13.</strong> Composition</li><li><ul class="section"><li><strong>13.1.</strong> Instead of Inheritance</li><li><strong>13.2.</strong> Trait Objects?</li></ul></li><li><strong>14.</strong> Creating a Library</li><li><ul class="section"><li><strong>14.1.</strong> Cargo</li><li><strong>14.2.</strong> Crates.io</li><li><a href="chYY-YY-public-api.html"><strong>14.3.</strong> Organizing your Public API</a></li><li><a href="chYY-YY-documentation.html"><strong>14.4.</strong> Documentation</a></li><li><a href="chYY-YY-workspaces.html"><strong>14.5.</strong> Workspaces and Multiple Related Crates</a></li></ul></li><li><strong>15.</strong> Closures</li><li><strong>16.</strong> Zero-cost Abstractions</li><li><ul class="section"><li><strong>16.1.</strong> Iterators as a Case Study</li></ul></li><li><strong>17.</strong> Smart Pointers</li><li><ul class="section"><li><strong>17.1.</strong> <code>Box&lt;T&gt;</code></li><li><strong>17.2.</strong> <code>Rc&lt;T&gt;</code></li><li><strong>17.3.</strong> <code>Cell</code></li><li><strong>17.4.</strong> <code>RefCell</code></li><li><strong>17.5.</strong> Interior Mutability</li></ul></li><li><strong>18.</strong> Concurrency</li><li><ul class="section"><li><strong>18.1.</strong> Threads</li><li><strong>18.2.</strong> <code>Send</code> &amp; <code>Sync</code></li><li><strong>18.3.</strong> <code>Arc&lt;T&gt;</code></li><li><strong>18.4.</strong> <code>Mutex&lt;T&gt;</code></li><li><strong>18.5.</strong> <code>Channels</code></li></ul></li><li><a href="chXX-patterns.html"><strong>19.</strong> Patterns</a></li><li><strong>20.</strong> More Lifetimes</li><li><strong>21.</strong> Unsafe Rust</li><li><ul class="section"><li><strong>21.1.</strong> Raw Pointers</li><li><strong>21.2.</strong> <code>transmute</code></li></ul></li><li><strong>22.</strong> Foreign Function Interface</li><li><ul class="section"><li><strong>22.1.</strong> Conditional Compilation</li><li><strong>22.2.</strong> Bindings to C</li><li><strong>22.3.</strong> Using Rust from Other Languages</li><li><strong>22.4.</strong> <code>static</code></li></ul></li><li><strong>23.</strong> Advanced Type System Features</li><li><ul class="section"><li><strong>23.1.</strong> Associated Types</li><li><strong>23.2.</strong> Trait Objects</li><li><strong>23.3.</strong> UFCS</li><li><strong>23.4.</strong> Coherence</li></ul></li><li><strong>24.</strong> Macros</li><li><ul class="section"><li><strong>24.1.</strong> Writing Your Own Macros</li></ul></li><li><strong>25.</strong> Nightly Rust</li><li><ul class="section"><li><strong>25.1.</strong> Nightly Features</li><li><strong>25.2.</strong> How to Find Out About Nightly Features</li></ul></li><li><a href="appendix-00.html"><strong>26.</strong> Appendix</a></li><li><ul class="section"><li><a href="appendix-01-keywords.html"><strong>26.1.</strong> Keywords</a></li><li><a href="appendix-02-operators.html"><strong>26.2.</strong> Operators</a></li><li><a href="appendix-03-derivable-traits.html"><strong>26.3.</strong> Derivable Traits</a></li></ul></li></ul>
+        </div>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar" class="menu-bar">
+                    <div class="left-buttons">
+                        <i id="sidebar-toggle" class="fa fa-bars"></i>
+                        <i id="theme-toggle" class="fa fa-paint-brush"></i>
+                    </div>
+
+                    <h1 class="menu-title">The Rust Programming Language</h1>
+
+                    <div class="right-buttons">
+                        <i id="print-button" class="fa fa-print" title="Print this book"></i>
+                    </div>
+                </div>
+
+                <div id="content" class="content">
+                    <h2>Lifetime Syntax</h2>
+<p>Generic type parameters let us abstract over types, and traits let us abstract
+over behavior. There's one more way that Rust allows us to do something
+similar: <em>lifetimes</em> allow us to be generic over scopes of code.</p>
+<p>Scopes of code? Yes, it's a bit unusual. Lifetimes are, in some ways, Rust's
+most distinctive feature. They are a bit different than the tools you have used
+in other programming languages. Lifetimes are a big topic, so we're not going
+to cover everything about them in this chapter. What we <em>are</em> going to do is
+talk about the very basics of lifetimes, so that when you see the syntax in
+documentation or other places, you'll be familiar with the concepts. Chapter 20
+will contain more advanced information about everything lifetimes can do.</p>
+<h3>Core Syntax</h3>
+<p>We talked about references in Chapter 4, but we left out an important detail.
+As it turns out, every reference in Rust has a <em>lifetime</em>, which is the scope
+for which that reference is valid. Most of the time, lifetimes are implicit,
+but just like we can choose to annotate types everywhere, we can choose to
+annotate lifetimes.</p>
+<p>Lifetimes have a slightly unusual syntax:</p>
+<pre><code class="language-rust,ignore">&amp;i32 // a reference
+&amp;'a i32 // a reference with an explicit lifetime
+</code></pre>
+<p>The <code>'a</code> there is a <em>lifetime</em> with the name <code>a</code>. A single apostrophe indicates
+that this name is for a lifetime. Lifetime names need to be declared before
+they're used. Here's a function signature with lifetime declarations and
+annotations:</p>
+<pre><code class="language-rust,ignore">fn some_function&lt;'a&gt;(argument: &amp;'a i32) {
+</code></pre>
+<p>Notice anything? In the same way that generic type declarations go inside angle
+brackets after the function name, lifetime declarations also go inside those
+same angle brackets. We can even write functions that take both a lifetime
+declaration and a generic type declaration:</p>
+<pre><code class="language-rust,ignore">fn some_function&lt;'a, T&gt;(argument: &amp;'a T) {
+</code></pre>
+<p>This function takes one argument, a reference to some type, <code>T</code>, and the
+reference has the lifetime <code>'a</code>. In the same way that we parameterize functions
+that take generic types, we parameterize references with lifetimes.</p>
+<p>So, that's the syntax, but <em>why</em>? What does a lifetime do, anyway?</p>
+<h3>Lifetimes Prevent Dangling References</h3>
+<p>Consider the program in listing 10-8. There's an outer scope and an inner
+scope. The outer scope declares a variable named <code>r</code> with no initial value, and
+the inner scope declares a variable named <code>x</code> with the initial value of 5.
+Inside the inner scope, we attempt to set the value of <code>r</code> to a reference to
+<code>x</code>. Then the inner scope ends and we attempt to print out the value in <code>r</code>:</p>
+<pre><code class="language-rust,ignore">{
+    let r;
+
+    {
+        let x = 5;
+        r = &amp;x;
+    }
+
+    println!(&quot;r: {}&quot;, r);
+}
+</code></pre>
+<caption>
+Listing 10-8: An attempt to use a reference whose value has gone out of scope
+</caption>
+<p>If we compile this code, we get an error:</p>
+<pre><code class="language-text">    error: `x` does not live long enough
+  --&gt; &lt;anon&gt;:6:10
+   |
+6  |     r = &amp;x;
+   |          ^ does not live long enough
+7  | }
+   | - borrowed value only lives until here
+...
+10 | }
+   | - borrowed value needs to live until here
+</code></pre>
+<p>The variable <code>x</code> doesn't &quot;live long enough.&quot; Why not? Well, <code>x</code> is going to go
+out of scope when we hit the closing curly brace on line 7, ending the inner
+scope. But <code>r</code> is valid for the outer scope; its scope is larger and we say
+that it &quot;lives longer.&quot; If Rust allowed this code to work, <code>r</code> would be
+referencing memory that was deallocated when <code>x</code> went out of scope. That'd be
+bad! Once it's deallocated, it's meaningless.</p>
+<p>So how does Rust determine that this code should not be allowed? Part of the
+compiler called the <em>borrow checker</em> compares scopes to determine that all
+borrows are valid. Here's the same example from Listing 10-8 with some
+annotations:</p>
+<pre><code class="language-rust,ignore">{
+    let r;         // -------+-- 'a
+                   //        |
+    {              //        |
+        let x = 5; // -+-----+-- 'b
+        r = &amp;x;    //  |     |
+    }              // -+     |
+                   //        |
+    println!(&quot;r: {}&quot;, r); // |
+                   //        |
+                   // -------+
+}
+</code></pre>
+<p>Here, we've annotated the lifetime of <code>r</code> with <code>'a</code> and the lifetime of <code>x</code>
+with <code>'b</code>. Rust looks at these lifetimes and sees that <code>r</code> has a lifetime of
+<code>'a</code>, but that it refers to something with a lifetime of <code>'b</code>. It rejects the
+program because the lifetime <code>'b</code> is shorter than the lifetime of <code>'a</code>-- the
+value that the reference is referring to does not live as long as the reference
+does.</p>
+<p>Let's look at a different example that compiles because it does not try to make
+a dangling reference, and see what the lifetimes look like:</p>
+<pre><code class="language-rust">{
+    let x = 5;            // -----+-- 'b
+                          //      |
+    let r = &amp;x;           // --+--+-- 'a
+                          //   |  |
+    println!(&quot;r: {}&quot;, r); //   |  |
+                          // --+  |
+                          // -----+
+}
+</code></pre>
+<p>Here, <code>x</code> lives for <code>'b</code>, which in this case is larger than <code>'a</code>. This is
+allowed: Rust knows that the reference in <code>r</code> will always be valid, as it has a
+smaller scope than <code>x</code>, the value it refers to.</p>
+<p>Note that we didn't have to name any lifetimes in the code itself; Rust figured
+it out for us. One situation in which Rust can't figure out the lifetimes is
+for a function or method when one of the arguments or return values is a
+reference, except for a few scenarios we'll discuss in the lifetime elision
+section.</p>
+<h3>Lifetime Annotations in Struct Definitions</h3>
+<p>Another time that Rust can't figure out the lifetimes is when structs have a
+field that holds a reference. In that case, naming the lifetimes looks like
+this:</p>
+<pre><code class="language-rust">struct Ref&lt;'a&gt; {
+    x: &amp;'a i32,
+}
+</code></pre>
+<p>Again, the lifetime names are declared in the angle brackets where generic type
+parameters are declared, and this is because lifetimes are a form of generics.
+In the examples above, <code>'a</code> and <code>'b</code> were concrete lifetimes: we knew about <code>r</code>
+and <code>x</code> and how long they would live exactly. However, when we write a
+function, we can't know beforehand exactly all of the arguments that it could
+be called with and how long they will be valid for. We have to explain to Rust
+what we expect the lifetime of the argument to be (we'll learn about how
+to know what you expect the lifetime to be in a bit). This is similar to
+writing a function that has an argument of a generic type: we don't know what
+type the arguments will actually end up being when the function gets called.
+Lifetimes are the same idea, but they are generic over the scope of a
+reference, rather than a type.</p>
+<h3>Lifetime Annotations in Function Signatures</h3>
+<p>Lifetime annotations for functions go on the function signature, but we don't
+have to annotate any of the code in the function body with lifetimes. That's
+because Rust can analyze the specific code inside the function without any
+help. When a function interacts with references that come from or go to code
+outside that function, however, the lifetimes of those arguments or return
+values will potentially be different each time that function gets called. Rust
+would have to analyze every place the function is called to determine that
+there were no dangling references. That would be impossible because a library
+that you provide to someone else might be called in code that hasn't been
+written yet, at the time that you're compiling your library.</p>
+<p>Lifetime parameters specify generic lifetimes that will apply to any specific
+lifetimes the function gets called with. The annotation of lifetime parameters
+tell Rust what it needs to know in order to be able to analyze a function
+without knowing about all possible calling code. Lifetime annotations do not
+change how long any of the references involved live. In the same way that
+functions can accept any type when the signature specifies a generic type
+parameter, functions can accept references with any lifetime when the signature
+specifies a generic lifetime parameter.</p>
+<p>To understand lifetime annotations in context, let's write a function that will
+return the longest of two string slices. The way we want to be able to call
+this function is by passing two string slices, and we want to get back a string
+slice. The code in Listing 10-9 should print <code>The longest string is abcd</code> once
+we've implemented the <code>longest</code> function:</p>
+<p>Filename: src/main.rs</p>
+<pre><code class="language-rust"># fn longest&lt;'a&gt;(x: &amp;'a str, y: &amp;'a str) -&gt; &amp;'a str {
+#     if x.len() &gt; y.len() {
+#         x
+#     } else {
+#         y
+#     }
+# }
+#
+fn main() {
+    let a = String::from(&quot;abcd&quot;);
+    let b = &quot;xyz&quot;;
+
+    let c = longest(a.as_str(), b);
+    println!(&quot;The longest string is {}&quot;, c);
+}
+</code></pre>
+<caption>
+Listing 10-9: A `main` function that demonstrates how we'd like to use the
+`longest` function
+</caption>
+<p>Note that we want the function to take string slices because we don't want the
+<code>longest</code> function to take ownership of its arguments, and we want the function
+to be able to accept slices of a <code>String</code> (like <code>a</code>) is as well as string
+literals (<code>b</code>). Refer back to the &quot;String Slices as Arguments&quot; section of
+Chapter 4 for more discussion about why these are the arguments we want.</p>
+<p>Here's the start of an implementation of the <code>longest</code> function that won't
+compile yet:</p>
+<pre><code class="language-rust,ignore">fn longest(x: &amp;str, y: &amp;str) -&gt; &amp;str {
+    if x.len() &gt; y.len() {
+        x
+    } else {
+        y
+    }
+}
+</code></pre>
+<p>If we try to compile this, we get an error that talks about lifetimes:</p>
+<pre><code class="language-text">error[E0106]: missing lifetime specifier
+   |
+1  | fn longest(x: &amp;str, y: &amp;str) -&gt; &amp;str {
+   |                                 ^ expected lifetime parameter
+   |
+   = help: this function's return type contains a borrowed value, but the signature does not say whether it is borrowed from `x` or `y`
+</code></pre>
+<p>The help text is telling us that the return type needs a generic lifetime
+parameter on it because this function is returning a reference and Rust can't
+tell if the reference being returned refers to <code>x</code> or <code>y</code>. Actually, we don't
+know either, since in the <code>if</code> block in the body of this function returns a
+reference to <code>x</code> and the <code>else</code> block returns a reference to <code>y</code>! The way to
+specify the lifetime parameters in this case is to have the same lifetime for
+all of the input parameters and the return type:</p>
+<p>Filename: src/main.rs</p>
+<pre><code class="language-rust">fn longest&lt;'a&gt;(x: &amp;'a str, y: &amp;'a str) -&gt; &amp;'a str {
+    if x.len() &gt; y.len() {
+        x
+    } else {
+        y
+    }
+}
+</code></pre>
+<p>This will compile and will produce the result we want with the <code>main</code> function
+in Listing 10-9. This function signature is now saying that for some lifetime
+named <code>'a</code>, it will get two arguments, both which are string slices that live
+at least as long as the lifetime <code>'a</code>. The function will return a string slice
+that also will last at least as long as the lifetime <code>'a</code>. This is the contract
+we are telling Rust we want it to enforce. By specifying the lifetime
+parameters in this function signature, we are not changing the lifetimes of any
+values passed in or returned, but we are saying that any values that do not
+adhere to this contract should be rejected by the borrow checker. This function
+does not know (or need to know) exactly how long <code>x</code> and <code>y</code> will live since it
+knows that there is some scope that can be substituted for <code>'a</code> that will
+satisfy this signature.</p>
+<p>The exact way to specify lifetime parameters depends on what your function is
+doing. If the function didn't actually return the longest string slice but
+instead always returned the first argument, we wouldn't need to specify a
+lifetime on <code>y</code>. This code compiles:</p>
+<p>Filename: src/main.rs</p>
+<pre><code class="language-rust">fn longest&lt;'a&gt;(x: &amp;'a str, y: &amp;str) -&gt; &amp;'a str {
+    x
+}
+</code></pre>
+<p>The lifetime parameter for the return type needs to be specified and needs to
+match one of the arguments' lifetime parameters. If the reference returned does
+<em>not</em> refer to one of the arguments, the only other possibility is that it
+refers to a value created within this function, and that would be a dangling
+reference since the value will go out of scope at the end of the function.
+Consider this attempted implementation of <code>longest</code>:</p>
+<p>Filename: src/main.rs</p>
+<pre><code class="language-rust,ignore">fn longest&lt;'a&gt;(x: &amp;str, y: &amp;str) -&gt; &amp;'a str {
+    let result = String::from(&quot;really long string&quot;);
+    result.as_str()
+}
+</code></pre>
+<p>Even though we've specified a lifetime for the return type, this function fails
+to compile with the following error message:</p>
+<pre><code class="language-text">error: `result` does not live long enough
+  |
+3 |     result.as_str()
+  |     ^^^^^^ does not live long enough
+4 | }
+  | - borrowed value only lives until here
+  |
+note: borrowed value must be valid for the lifetime 'a as defined on the block at 1:44...
+  |
+1 | fn longest&lt;'a&gt;(x: &amp;str, y: &amp;str) -&gt; &amp;'a str {
+  |                                             ^
+</code></pre>
+<p>The problem is that <code>result</code> will go out of scope and get cleaned up at the end
+of the <code>longest</code> function, and we're trying to return a reference to <code>result</code>
+from the function. There's no way we can specify lifetime parameters that would
+change the dangling reference, and Rust won't let us create a dangling
+reference. In this case, the best fix would be to return an owned data type
+rather than a reference so that the calling function is then responsible for
+cleaning up the value.</p>
+<p>Ultimately, lifetime syntax is about connecting the lifetimes of various
+arguments and return values of functions. Once they're connected, Rust has
+enough information to allow memory-safe operations and disallow operations that
+would create dangling pointers or otherwise violate memory safety.</p>
+<h3>Lifetime Elision</h3>
+<p>If every reference has a lifetime, and we need to provide them for functions
+that use references as arguments or return values, then why did this function
+from the &quot;String Slices&quot; section of Chapter 4 compile? We haven't annotated any
+lifetimes here, yet Rust happily compiles this function:</p>
+<p>Filename: src/lib.rs</p>
+<pre><code class="language-rust">fn first_word(s: &amp;str) -&gt; &amp;str {
+    let bytes = s.as_bytes();
+
+    for (i, &amp;item) in bytes.iter().enumerate() {
+        if item == b' ' {
+            return &amp;s[0..i];
+        }
+    }
+
+    &amp;s[..]
+}
+</code></pre>
+<p>The answer is historical: in early versions of pre-1.0 Rust, this would not
+have compiled. Every reference needed an explicit lifetime. At that time, the
+function signature would have been written like this:</p>
+<pre><code class="language-rust,ignore">fn first_word&lt;'a&gt;(s: &amp;'a str) -&gt; &amp;'a str {
+</code></pre>
+<p>After writing a lot of Rust code, some patterns developed. The Rust team
+noticed that the vast majority of code followed the pattern, and being forced
+to use explicit lifetime syntax on every reference wasn't a very great
+developer experience.</p>
+<p>To make it so that lifetime annotations weren't needed as often, they added
+<em>lifetime elision rules</em> to Rust's analysis of references. This feature isn't
+full inference: Rust doesn't try to guess what you meant in places where there
+could be ambiguity. The rules are a very basic set of particular cases, and if
+your code fits one of those cases, you don't need to write the lifetimes
+explicitly. Here are the rules:</p>
+<p>Lifetimes on function arguments are called <em>input lifetimes</em>, and lifetimes on
+return values are called <em>output lifetimes</em>. There's one rule related to how
+Rust infers input lifetimes in the absence of explicit annotations:</p>
+<ol>
+<li>Each argument that is a reference and therefore needs a lifetime parameter
+gets its own. In other words, a function with one argument gets one lifetime
+parameter: <code>fn foo&lt;'a&gt;(x: &amp;'a i32)</code>, a function with two arguments gets two
+separate lifetime parameters: <code>fn foo&lt;'a, 'b&gt;(x: &amp;'a i32, y: &amp;'b i32)</code>, and
+so on.</li>
+</ol>
+<p>And two rules related to output lifetimes:</p>
+<ol start="2">
+<li>If there is exactly one input lifetime parameter, that lifetime is assigned
+to all output lifetime parameters: <code>fn foo&lt;'a&gt;(x: &amp;'a i32) -&gt; &amp;'a i32</code>.</li>
+<li>If there are multiple input lifetime parameters, but one of them is <code>&amp;self</code>
+or <code>&amp;mut self</code>, then the lifetime of <code>self</code> is the lifetime assigned to all
+output lifetime parameters. This makes writing methods much nicer.</li>
+</ol>
+<p>If none of these three rules apply, then you must explicitly annotate input and
+output lifetimes. These rules do apply in the <code>first_word</code> function, which is
+why we didn't have to specify any lifetimes.</p>
+<p>These rules cover the vast majority of cases, allowing you to write a lot of
+code without needing to specify explicit lifetimes. However, Rust is always
+checking these rules and the lifetimes in your program, and cases in which the
+lifetime elision rules do not apply are cases where you'll need to add lifetime
+parameters to help Rust understand the contracts of your code.</p>
+<h3>Lifetime Annotations in Method Definitions</h3>
+<p>Now that we've gone over the lifetime elision rules, defining methods on
+structs that hold references will make more sense. The lifetime name needs to
+be declared after the <code>impl</code> keyword and then used after the struct's name,
+since the lifetime is part of the struct's type. The lifetimes can be elided in
+any methods where the output type's lifetime is the same as that of the
+struct's because of the third elision rule. Here's a struct called <code>App</code> that
+holds a reference to another struct, <code>Config</code>, defined elsewhere. The
+<code>append_to_name</code> method does not need lifetime annotations even though the
+method has a reference as an argument and is returning a reference; the
+lifetime of the return value will be the lifetime of <code>self</code>:</p>
+<p>Filename: src/lib.rs</p>
+<pre><code class="language-rust"># struct Config {}
+#
+struct App&lt;'a&gt; {
+    name: String,
+    config: &amp;'a Config,
+}
+
+impl&lt;'a&gt; App&lt;'a&gt; {
+    fn append_to_name(&amp;mut self, suffix: &amp;str) -&gt; &amp;str {
+        self.name.push_str(suffix);
+        self.name.as_str()
+    }
+}
+</code></pre>
+<h3>The Static Lifetime</h3>
+<p>There is <em>one</em> special lifetime that Rust knows about: <code>'static</code>. The <code>'static</code>
+lifetime is the entire duration of the program. All string literals have the
+<code>'static</code> lifetime:</p>
+<pre><code class="language-rust">let s: &amp;'static str = &quot;I have a static lifetime.&quot;;
+</code></pre>
+<p>The text of this string is stored directly in the binary of your program and
+the binary of your program is always available. Therefore, the lifetime of all
+string literals is <code>'static</code>. You may see suggestions to use the <code>'static</code>
+lifetime in error message help text, but before adding it, think about whether
+the reference you have is one that actually lives the entire lifetime of your
+program or not (or even if you want it to live that long, if it could). Most of
+the time, the problem in the code is an attempt to create a dangling reference
+or a mismatch of the available lifetimes, and the solution is fixing those
+problems, not specifying the <code>'static</code> lifetime.</p>
+<h2>Summary</h2>
+<p>We've covered the basics of Rust's system of generics. Generics are the core to
+building good abstractions, and can be used in a number of ways. There's more
+to learn about them, particularly lifetimes, but we'll cover those in later
+chapters. Let's move on to I/O functionality.</p>
+
+                </div>
+
+                <!-- Mobile navigation buttons -->
+                
+                    <a href="ch10-02-traits.html" class="mobile-nav-chapters previous">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+                    <a href="chYY-YY-public-api.html" class="mobile-nav-chapters next">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                
+
+            </div>
+
+            
+                <a href="ch10-02-traits.html" class="nav-chapters previous" title="You can navigate through the chapters using the arrow keys">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+            
+
+            
+                <a href="chYY-YY-public-api.html" class="nav-chapters next" title="You can navigate through the chapters using the arrow keys">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            
+
+        </div>
+
+
+        <!-- Local fallback for Font Awesome -->
+        <script>
+            if ($(".fa").css("font-family") !== "FontAwesome") {
+                $('<link rel="stylesheet" type="text/css" href="_FontAwesome/css/font-awesome.css">').prependTo('head');
+            }
+        </script>
+
+        <!-- Livereload script (if served using the cli tool) -->
+        
+
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+    </body>
+</html>
