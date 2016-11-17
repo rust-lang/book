@@ -94,7 +94,9 @@ Now we have a `network::connect` function and a `client::connect` function.
 These can have completely different functionality, and the function names do
 not conflict with each other since they’re in different modules.
 
-We can also put modules inside of modules. This can be useful as your modules
+While in this case, we’re building a library, there's nothing special about
+`lib.rs`. We could also make use of submodules in a `main.rs` as well. In fact,
+we can also put modules inside of modules. This can be useful as your modules
 grow to keep related functionality organized together and separate
 functionality apart. The choice of how you organize your code depends on how
 you think about the relationship between the parts of your code. For instance,
