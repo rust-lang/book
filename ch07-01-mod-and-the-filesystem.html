@@ -139,7 +139,9 @@ in *src/lib.rs*
 <p>Now we have a <code>network::connect</code> function and a <code>client::connect</code> function.
 These can have completely different functionality, and the function names do
 not conflict with each other since they’re in different modules.</p>
-<p>We can also put modules inside of modules. This can be useful as your modules
+<p>While in this case, we’re building a library, there's nothing special about
+<code>lib.rs</code>. We could also make use of submodules in a <code>main.rs</code> as well. In fact,
+we can also put modules inside of modules. This can be useful as your modules
 grow to keep related functionality organized together and separate
 functionality apart. The choice of how you organize your code depends on how
 you think about the relationship between the parts of your code. For instance,
