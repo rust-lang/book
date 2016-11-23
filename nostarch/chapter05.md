@@ -105,7 +105,7 @@ The issue with this method is evident in the signature of `area`:
 fn area(length: u32, width: u32) -> u32 {
 ```
 
-The area function is supposed to calculate the area of one rectangle, but our
+The `area` function is supposed to calculate the area of one rectangle, but our
 function takes two arguments. The arguments are related, but that’s not
 expressed anywhere in our program itself. It would be more readable and more
 manageable to group length and width together.
