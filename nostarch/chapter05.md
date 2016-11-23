@@ -36,14 +36,14 @@ struct User {
 ```
 
 To use a struct, we create an *instance* of that struct by specifying concrete
-values for each of the fields. Creating an instance is done by declaring a
-binding with `let`, stating the name of the struct, then curly braces with
-`key: value` pairs inside it where the keys are the names of the fields and the
-values are the data we want to store in those fields. The fields don't have to
-be specified in the same order in which the struct declared them. In other
-words, the struct definition is like a general template for the type, and
-instances fill in that template with particular data to create values of the
-type. For example, we can declare a particular user like this:
+values for each of the fields. Creating an instance is done by stating the name
+of the struct, then curly braces with `key: value` pairs inside it where the
+keys are the names of the fields and the values are the data we want to store
+in those fields. The fields don’t have to be specified in the same order in
+which the struct declared them. In other words, the struct definition is like a
+general template for the type, and instances fill in that template with
+particular data to create values of the type. For example, we can declare a
+particular user like this:
 
 ```rust
 let user1 = User {
@@ -488,9 +488,9 @@ impl Rectangle {
 ```
 
 To call this associated function, we use the `::` syntax with the struct name:
-`let sq = Rectange::square(3);`, for example. It's kind of this function is
-namespaced by the struct: the `::` syntax is used for both associated functions
-and namespaces created by modules, which we'll learn about in Chapter 7.
+`let sq = Rectange::square(3);`, for example. This function is namespaced by
+the struct: the `::` syntax is used for both associated functions and
+namespaces created by modules, which we’ll learn about in Chapter 7.
 
 ## Summary
 
