@@ -13,7 +13,7 @@ Chapter 6) concepts are the building blocks for creating new types in your
 program’s domain in order to take full advantage of Rust’s compile-time type
 checking.
 
-One way of thinking about structs is that they are similar to tuples that we
+One way of thinking about structs is that they are similar to tuples, which we
 talked about in Chapter 3. Like tuples, the pieces of a struct can be different
 types. Unlike tuples, we name each piece of data so that it’s clearer what the
 values mean. Structs are more flexible as a result of these names: we don’t
@@ -60,8 +60,8 @@ wanted just this user’s email address, we can say `user1.email`.
 ## An Example Program
 
 To understand when we might want to use structs, let’s write a program that
-calculates the area of a rectangle. We’ll start off with single variable
-bindings, then refactor our program until we’re using structs instead.
+calculates the area of a rectangle. We’ll start off with single variables, then
+refactor our program until we’re using structs instead.
 
 Let’s make a new binary project with Cargo called *rectangles* that will take
 the length and width of a rectangle specified in pixels and will calculate the
