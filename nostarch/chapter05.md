@@ -256,7 +256,7 @@ Let’s try running with this change and… drat. We still get an error:
 error: the trait bound `Rectangle: std::fmt::Debug` is not satisfied
 ```
 
-Again, though, the compliler has given us a helpful note!
+Again, though, the compiler has given us a helpful note!
 
 ```bash
 note: `Rectangle` cannot be formatted using `:?`; if it is defined in your
@@ -445,7 +445,7 @@ would mean we’d need a mutable borrow) and we want `main` to keep ownership of
 `rect2` so that we could use it again after calling this method. The return
 value of `can_hold` will be a boolean, and the implementation will check to see
 if `self`’s length and width are both greater than the length and width of the
-other `Rectagle`, respectively. Let’s write that code!
+other `Rectangle`, respectively. Let’s write that code!
 
 ```
 impl Rectangle {
