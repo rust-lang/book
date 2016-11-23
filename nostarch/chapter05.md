@@ -61,7 +61,7 @@ wanted just this user’s email address, we can say `user1.email`.
 
 To understand when we might want to use structs, let’s write a program that
 calculates the area of a rectangle. We’ll start off with single variable
-bindings, then refactor our program until we’re using `struct`s instead.
+bindings, then refactor our program until we’re using structs instead.
 
 Let’s make a new binary project with Cargo called *rectangles* that will take
 the length and width of a rectangle specified in pixels and will calculate the
@@ -154,8 +154,8 @@ in our code.
 
 ### Refactoring with Structs: Adding More Meaning
 
-Here is where we bring in `struct`s. We can transform our tuple into a data
-type with a name for the whole as well as names for the parts:
+Here is where we bring in structs. We can transform our tuple into a data type
+with a name for the whole as well as names for the parts:
 
 Filename: src/main.rs
 
@@ -181,8 +181,8 @@ fn area(rectangle: &Rectangle) -> u32 {
 
 <!-- Will add ghosting & wingdings once we're in libreoffice /Carol -->
 
-Here we've defined a `struct` and given it the name `Rectangle`. Inside the
-`{}` we defined the fields to be `length` and `width`, both of which have type
+Here we’ve defined a struct and given it the name `Rectangle`. Inside the `{}`
+we defined the fields to be `length` and `width`, both of which have type
 `u32`. Then in `main`, we create a particular instance of a `Rectangle` that
 has a length of 50 and a width of 30.
 
