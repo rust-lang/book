@@ -60,8 +60,6 @@
     - [Unit testing](chXX-01-unit-testing.md)
     - [Integration testing](chXX-02-integration-testing.md)
 
-- [Debugging]()
-
 ## Thinking in Rust
 
 - [Composition]()
