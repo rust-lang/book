@@ -66,7 +66,7 @@ bindings, then refactor our program until we’re using structs instead.
 Let’s make a new binary project with Cargo called *rectangles* that will take
 the length and width of a rectangle specified in pixels and will calculate the
 area of the rectangle. Here’s a short program that has one way of doing just
-that to put into our project’s `src/main.rs`:
+that to put into our project’s *src/main.rs*:
 
 Filename: src/main.rs
 
