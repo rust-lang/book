@@ -1,16 +1,16 @@
 ## Method Syntax
 
-*Methods* are similar to functions: they're declared with the `fn` keyword and
+*Methods* are similar to functions: they’re declared with the `fn` keyword and
 their name, they can take arguments and return values, and they contain some
-code that gets run when they're called from somewhere else. Methods are
-different from functions, however, because they're defined within the context
+code that gets run when they’re called from somewhere else. Methods are
+different from functions, however, because they’re defined within the context
 of a struct (or an enum or a trait object, which we will cover in Chapters 6
-and 23 respectively), and their first argument is always `self`, which
+and 13, respectively), and their first argument is always `self`, which
 represents the instance of the struct that the method is being called on.
 
 ### Defining Methods
 
-Let's change our `area` function that takes a `Rectangle` instance as an
+Let’s change our `area` function that takes a `Rectangle` instance as an
 argument and instead make an `area` method defined on the `Rectangle` struct:
 
 ```rust
@@ -44,42 +44,43 @@ function within the `impl` curly braces, and change the first (and in this
 case, only) argument to be `self` in the signature and everywhere within the
 body. Then in `main` where we called the `area` function and passed `rect1` as
 an argument, we can instead use *method syntax* to call the `area` method on
-our `Rectangle` instance.
+our `Rectangle` instance. Method syntax is taking an instance and adding a dot
+followed by the method name, parentheses, and any arguments.
 
 In the signature for `area`, we get to use `&self` instead of `rectangle:
 &Rectangle` because Rust knows the type of `self` is `Rectangle` due to this
 method being inside the `impl Rectangle` context. Note we still need to have
 the `&` before `self`, just like we had `&Rectangle`. Methods can choose to
-take ownership of `self`, borrow `self` immutably as we've done here, or borrow
+take ownership of `self`, borrow `self` immutably as we’ve done here, or borrow
 `self` mutably, just like any other argument.
 
-We've chosen `&self` here for the same reason we used `&Rectangle` in the
-function version: we don't want to take ownership, and we just want to be able
+We’ve chosen `&self` here for the same reason we used `&Rectangle` in the
+function version: we don’t want to take ownership, and we just want to be able
 to read the data in the struct, not write to it. If we wanted to be able to
-change the instance that we've called the method on as part of what the method
-does, we'd put `&mut self` as the first argument instead. Having a method that
+change the instance that we’ve called the method on as part of what the method
+does, we’d put `&mut self` as the first argument instead. Having a method that
 takes ownership of the instance by having just `self` as the first argument is
 rarer; this is usually used when the method transforms `self` into something
 else and we want to prevent the caller from using the original instance after
 the transformation.
 
 The main benefit of using methods over functions, in addition to getting to use
-method syntax and not having to repeat the type of `self` in every method's
-signature, is for organization. We've put all the things we can do with an
+method syntax and not having to repeat the type of `self` in every method’s
+signature, is for organization. We’ve put all the things we can do with an
 instance of a type together in one `impl` block, rather than make future users
 of our code search for capabilities of `Rectangle` all over the place.
 
 <!-- PROD: START BOX -->
 
-> #### Where's the `->` operator?
+> ### Where’s the `->` operator?
 >
 > In languages like C++, there are two different operators for calling methods:
-> `.` if you're calling a method on the object directly, and `->` if you're
+> `.` if you’re calling a method on the object directly, and `->` if you’re
 > calling the method on a pointer to the object and thus need to dereference the
 > pointer first. In other words, if `object` is a pointer, `object->something()`
 > is like `(*object).something()`.
 >
-> Rust doesn't have an equivalent to the `->` operator; instead, Rust has a
+> Rust doesn’t have an equivalent to the `->` operator; instead, Rust has a
 > feature called *automatic referencing and dereferencing*. Calling methods is
 > one of the few places in Rust that has behavior like this.
 >
@@ -119,8 +120,8 @@ of our code search for capabilities of `Rectangle` all over the place.
 
 ### Methods with More Arguments
 
-Let's practice some more with methods by implementing a second method on our
-`Rectangle` struct. This time, we'd like for an instance of `Rectangle` to take
+Let’s practice some more with methods by implementing a second method on our
+`Rectangle` struct. This time, we’d like for an instance of `Rectangle` to take
 another instance of `Rectangle` and return `true` if the second rectangle could
 fit completely within `self` and `false` if it would not. That is, if we run
 this code:
@@ -136,8 +137,8 @@ fn main() {
 }
 ```
 
-We want to see this output, since both of `rect2`'s dimensions are smaller than
-`rect1`'s, but `rect3` is wider than `rect1`:
+We want to see this output, since both of `rect2`’s dimensions are smaller than
+`rect1`’s, but `rect3` is wider than `rect1`:
 
 ```text
 Can rect1 hold rect2? true
@@ -150,11 +151,11 @@ of another `Rectangle` as an argument. We can tell what the type of the
 argument will be by looking at a call site: `rect1.can_hold(&rect2)` passes in
 `&rect2`, which is an immutable borrow to `rect2`, an instance of `Rectangle`.
 This makes sense, since we only need to read `rect2` (rather than write, which
-would mean we'd need a mutable borrow) and we want `main` to keep ownership of
+would mean we’d need a mutable borrow) and we want `main` to keep ownership of
 `rect2` so that we could use it again after calling this method. The return
 value of `can_hold` will be a boolean, and the implementation will check to see
-if `self`'s length and width are both greater than the length and width of the
-other `Rectangle`, respectively. Let's write that code!
+if `self`’s length and width are both greater than the length and width of the
+other `Rectangle`, respectively. Let’s write that code!
 
 ```rust
 # #[derive(Debug)]
@@ -182,11 +183,11 @@ Methods can take multiple arguments that we add to the signature after the
 
 ### Associated Functions
 
-One more useful feature of `impl` blocks: we're allowed to define functions
-within `impl` blocks that *don't* take `self` as a parameter. These are called
-*associated functions*, since they're associated with the struct. They're still
-functions though, not methods, since they don't have an instance of the struct
-to work with. You've already used an associated function: `String::from`.
+One more useful feature of `impl` blocks: we’re allowed to define functions
+within `impl` blocks that *don’t* take `self` as a parameter. These are called
+*associated functions*, since they’re associated with the struct. They’re still
+functions though, not methods, since they don’t have an instance of the struct
+to work with. You’ve already used an associated function: `String::from`.
 
 Associated functions are often used for constructors that will return a new
 instance of the struct. For example, we could provide an associated function
@@ -209,9 +210,9 @@ impl Rectangle {
 ```
 
 To call this associated function, we use the `::` syntax with the struct name:
-`let sq = Rectange::square(3);`, for example. It's kind of like this function is
-namespaced by the struct: the `::` syntax is used for both associated functions
-and namespaces created by modules, which we'll learn about in Chapter 7.
+`let sq = Rectange::square(3);`, for example. This function is namespaced by
+the struct: the `::` syntax is used for both associated functions and
+namespaces created by modules, which we’ll learn about in Chapter 7.
 
 ## Summary
 
@@ -222,5 +223,5 @@ instances of our structs have, and associated functions let us namespace
 functionality that is particular to our struct without having an instance
 available.
 
-Structs aren't the only way we can create custom types, though; let's turn to
+Structs aren’t the only way we can create custom types, though; let’s turn to
 the `enum` feature of Rust and add another tool to our toolbox.
