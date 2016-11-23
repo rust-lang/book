@@ -304,7 +304,7 @@ rect1 is Rectangle {
 
 There are a number of traits Rust has provided for us to use with the `derive`
 annotation that can add useful behavior to our custom types. Those traits and
-their behaviors are listed in Appendix XX. We’ll be covering how to implement
+their behaviors are listed in Appendix C. We’ll be covering how to implement
 these traits with custom behavior, as well as creating your own traits, in
 Chapter 10.
 
@@ -322,7 +322,7 @@ their name, they can take arguments and return values, and they contain some
 code that gets run when they’re called from somewhere else. Methods are
 different from functions, however, because they’re defined within the context
 of a struct (or an enum or a trait object, which we will cover in Chapters 6
-and XX respectively), and their first argument is always `self`, which
+and 13, respectively), and their first argument is always `self`, which
 represents the instance of the struct that the method is being called on.
 
 ### Defining Methods
