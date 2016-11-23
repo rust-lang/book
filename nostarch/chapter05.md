@@ -62,6 +62,57 @@ let user1 = User {
 To get a particular value out of a struct, we can use dot notation. If we
 wanted just this user’s email address, we can say `user1.email`.
 
+## Ownership of Struct Data
+
+In the `User` struct definition in Listing 5-1, we used the owned `String` type
+rather than the `&str` string slice type. This is a deliberate choice because
+we want instances of this struct to own all of its data and be valid for as
+long as the entire struct is valid.
+
+It is possible for structs to store references to data owned by something else,
+but to do so requires the use of *lifetimes*, a feature of Rust that we'll
+discuss in Chapter 10. Lifetimes ensure that the data a struct references is
+valid for as long as the struct is. If you try to store a reference in a struct
+without specifying lifetimes, like this:
+
+```rust,ignore
+struct User {
+    username: &str,
+    email: &str,
+    sign_in_count: u64,
+    active: bool,
+}
+
+fn main() {
+    let user1 = User {
+        email: "someone@example.com",
+        username: "someusername123",
+        active: true,
+        sign_in_count: 1,
+    };
+}
+```
+
+The compiler will complain that it needs lifetime specifiers:
+
+```text
+error[E0106]: missing lifetime specifier
+ -->
+  |
+2 |     username: &str,
+  |               ^ expected lifetime parameter
+
+error[E0106]: missing lifetime specifier
+ -->
+  |
+3 |     email: &str,
+  |            ^ expected lifetime parameter
+```
+
+We will talk about how to fix these in order to store references in structs in
+Chapter 10, but for now, fix errors like these by switching to owned types like
+`String` instead of references like `&str`.
+
 ## An Example Program
 
 To understand when we might want to use structs, let’s write a program that
