@@ -361,7 +361,8 @@ function within the `impl` curly braces, and change the first (and in this
 case, only) argument to be `self` in the signature and everywhere within the
 body. Then in `main` where we called the `area` function and passed `rect1` as
 an argument, we can instead use *method syntax* to call the `area` method on
-our `Rectangle` instance.
+our `Rectangle` instance. Method syntax is taking an instance and adding a dot
+followed by the method name, parentheses, and any arguments.
 
 In the signature for `area`, we get to use `&self` instead of `rectangle:
 &Rectangle` because Rust knows the type of `self` is `Rectangle` due to this
