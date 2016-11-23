@@ -223,7 +223,7 @@ fn main() {
 If we run this, we get an error with this core message:
 
 ```bash
-error: the trait bound `Rectangle: std::fmt::Display` is not satisfied
+error[E0277]: the trait bound `Rectangle: std::fmt::Display` is not satisfied
 ```
 
 The `println!` macro can do many kinds of formatting, and by default, `{}`
