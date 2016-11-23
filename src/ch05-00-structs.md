@@ -299,7 +299,7 @@ output that is a bit prettier and easier to read, which can be helpful with
 larger structs, we can use `{:#?}` in place of `{:?}` in the `println!` string.
 If we use the pretty debug style in this example, the output will look like:
 
-```
+```text
 rect1 is Rectangle {
     length: 50,
     width: 30
