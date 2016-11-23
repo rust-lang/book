@@ -11,7 +11,8 @@ represents the instance of the struct that the method is being called on.
 ### Defining Methods
 
 Let’s change our `area` function that takes a `Rectangle` instance as an
-argument and instead make an `area` method defined on the `Rectangle` struct:
+argument and instead make an `area` method defined on the `Rectangle` struct,
+as shown in Listing 5-7:
 
 ```rust
 #[derive(Debug)]
@@ -35,6 +36,10 @@ fn main() {
     );
 }
 ```
+
+<caption>
+Listing 5-7: Defining an `area` method on the `Rectangle` struct
+</caption>
 
 <!-- Will add ghosting and wingdings here in libreoffice /Carol -->
 
@@ -124,7 +129,7 @@ Let’s practice some more with methods by implementing a second method on our
 `Rectangle` struct. This time, we’d like for an instance of `Rectangle` to take
 another instance of `Rectangle` and return `true` if the second rectangle could
 fit completely within `self` and `false` if it would not. That is, if we run
-this code:
+the code in Listing 5-8, once we've defined the `can_hold` method:
 
 ```rust,ignore
 fn main() {
@@ -136,6 +141,10 @@ fn main() {
     println!("Can rect1 hold rect3? {}", rect1.can_hold(&rect3));
 }
 ```
+
+<caption>
+Listing 5-8: Demonstration of using the as-yet-unwritten `can_hold` method
+</caption>
 
 We want to see this output, since both of `rect2`’s dimensions are smaller than
 `rect1`’s, but `rect3` is wider than `rect1`:
@@ -155,7 +164,8 @@ would mean we’d need a mutable borrow) and we want `main` to keep ownership of
 `rect2` so that we could use it again after calling this method. The return
 value of `can_hold` will be a boolean, and the implementation will check to see
 if `self`’s length and width are both greater than the length and width of the
-other `Rectangle`, respectively. Let’s write that code!
+other `Rectangle`, respectively. Let’s add this new method to the `impl` block
+from Listing 5-7:
 
 ```rust
 # #[derive(Debug)]
@@ -177,7 +187,7 @@ impl Rectangle {
 
 <!-- Will add ghosting here in libreoffice /Carol -->
 
-If we run this with the `main` from earlier, we will get our desired output!
+If we run this with the `main` from Listing 5-8, we will get our desired output!
 Methods can take multiple arguments that we add to the signature after the
 `self` parameter, and those arguments work just like arguments in functions do.
 

@@ -24,7 +24,8 @@ To define a struct, we enter the keyword `struct` and give the whole struct a
 name. A struct’s name should describe what the significance is of these pieces
 of data being grouped together. Then, inside curly braces, we define the names
 of the pieces of data, which we call *fields*, and specify each field’s type.
-For example, a struct to store information about a user account might look like:
+For example, Listing 5-1 shows a struct to store information about a user
+account:
 
 ```rust
 struct User {
@@ -35,15 +36,19 @@ struct User {
 }
 ```
 
-To use a struct, we create an *instance* of that struct by specifying concrete
-values for each of the fields. Creating an instance is done by stating the name
-of the struct, then curly braces with `key: value` pairs inside it where the
-keys are the names of the fields and the values are the data we want to store
-in those fields. The fields don’t have to be specified in the same order in
-which the struct declared them. In other words, the struct definition is like a
-general template for the type, and instances fill in that template with
-particular data to create values of the type. For example, we can declare a
-particular user like this:
+<caption>
+Listing 5-1: A `User` struct definition
+</caption>
+
+To use a struct once we've defined it, we create an *instance* of that struct
+by specifying concrete values for each of the fields. Creating an instance is
+done by stating the name of the struct, then curly braces with `key: value`
+pairs inside it where the keys are the names of the fields and the values are
+the data we want to store in those fields. The fields don’t have to be
+specified in the same order in which the struct declared them. In other words,
+the struct definition is like a general template for the type, and instances
+fill in that template with particular data to create values of the type. For
+example, we can declare a particular user like this:
 
 ```rust
 let user1 = User {
@@ -65,8 +70,8 @@ refactor our program until we’re using structs instead.
 
 Let’s make a new binary project with Cargo called *rectangles* that will take
 the length and width of a rectangle specified in pixels and will calculate the
-area of the rectangle. Here’s a short program that has one way of doing just
-that to put into our project’s *src/main.rs*:
+area of the rectangle. Listing 5-2 has a short program with one way of doing
+just that in our project’s *src/main.rs*:
 
 Filename: src/main.rs
 
@@ -85,6 +90,11 @@ fn area(length: u32, width: u32) -> u32 {
     length * width
 }
 ```
+
+<caption>
+Listing 5-2: Calculating the area of a rectangle specified by its length and
+width in separate variables
+</caption>
 
 Let’s try running this program with `cargo run`:
 
@@ -110,8 +120,8 @@ function takes two arguments. The arguments are related, but that’s not
 expressed anywhere in our program itself. It would be more readable and more
 manageable to group length and width together.
 
-We’ve already discussed one way we might do that in Chapter 3: tuples. Here’s a
-version of our program which uses tuples:
+We’ve already discussed one way we might do that in Chapter 3: tuples. Listing
+5-3 has a version of our program which uses tuples:
 
 Filename: src/main.rs
 
@@ -129,6 +139,10 @@ fn area(dimensions: (u32, u32)) -> u32 {
     dimensions.0 * dimensions.1
 }
 ```
+
+<caption>
+Listing 5-3: Specifying the length and width of the rectangle with a tuple
+</caption>
 
 <!-- I will add ghosting & wingdings once we're in libreoffice /Carol -->
 
@@ -155,7 +169,8 @@ in our code.
 ### Refactoring with Structs: Adding More Meaning
 
 Here is where we bring in structs. We can transform our tuple into a data type
-with a name for the whole as well as names for the parts:
+with a name for the whole as well as names for the parts, as shown in Listing
+5-4:
 
 Filename: src/main.rs
 
@@ -178,6 +193,10 @@ fn area(rectangle: &Rectangle) -> u32 {
     rectangle.length * rectangle.width
 }
 ```
+
+<caption>
+Listing 5-4: Defining a `Rectangle` struct
+</caption>
 
 <!-- Will add ghosting & wingdings once we're in libreoffice /Carol -->
 
@@ -202,8 +221,8 @@ index values of `0` and `1`. This is a win for clarity.
 ### Adding Useful Functionality with Derived Traits
 
 It’d be nice to be able to print out an instance of our `Rectangle` while we’re
-debugging our program and see the values for all its fields. Let’s try using
-the `println!` macro as we have been and see what happens:
+debugging our program and see the values for all its fields. Listing 5-5 tries
+using the `println!` macro as we have been:
 
 Filename: src/main.rs
 
@@ -219,6 +238,10 @@ fn main() {
     println!("rect1 is {}", rect1);
 }
 ```
+
+<caption>
+Listing 5-5: Attempting to print a `Rectangle` instance
+</caption>
 
 If we run this, we get an error with this core message:
 
@@ -266,7 +289,7 @@ crate, add `#[derive(Debug)]` or manually implement it
 Rust *does* include functionality to print out debugging information, but we
 have to explicitly opt-in to having that functionality be available for our
 struct. To do that, we add the annotation `#[derive(Debug)]` just before our
-struct definition. Now our program looks like this:
+struct definition, as shown in Listing 5-6. Now our program looks like this:
 
 ```rust
 #[derive(Debug)]
@@ -281,6 +304,11 @@ fn main() {
     println!("rect1 is {:?}", rect1);
 }
 ```
+
+<caption>
+Listing 5-6: Adding the annotation to derive the `Debug` trait and printing the
+`Rectangle` instance using debug formatting
+</caption>
 
 At this point, if we run this program, we won’t get any errors and we’ll see
 the following output:
@@ -328,7 +356,8 @@ represents the instance of the struct that the method is being called on.
 ### Defining Methods
 
 Let’s change our `area` function that takes a `Rectangle` instance as an
-argument and instead make an `area` method defined on the `Rectangle` struct:
+argument and instead make an `area` method defined on the `Rectangle` struct,
+as shown in Listing 5-7:
 
 ```rust
 #[derive(Debug)]
@@ -352,6 +381,10 @@ fn main() {
     );
 }
 ```
+
+<caption>
+Listing 5-7: Defining an `area` method on the `Rectangle` struct
+</caption>
 
 <!-- Will add ghosting and wingdings here in libreoffice /Carol -->
 
@@ -425,7 +458,7 @@ Let’s practice some more with methods by implementing a second method on our
 `Rectangle` struct. This time, we’d like for an instance of `Rectangle` to take
 another instance of `Rectangle` and return `true` if the second rectangle could
 fit completely within `self` and `false` if it would not. That is, if we run
-this code:
+the code in Listing 5-8, once we've defined the `can_hold` method:
 
 ```rust,ignore
 fn main() {
@@ -437,6 +470,10 @@ fn main() {
     println!("Can rect1 hold rect3? {}", rect1.can_hold(&rect3));
 }
 ```
+
+<caption>
+Listing 5-8: Demonstration of using the as-yet-unwritten `can_hold` method
+</caption>
 
 We want to see this output, since both of `rect2`’s dimensions are smaller than
 `rect1`’s, but `rect3` is wider than `rect1`:
@@ -456,7 +493,8 @@ would mean we’d need a mutable borrow) and we want `main` to keep ownership of
 `rect2` so that we could use it again after calling this method. The return
 value of `can_hold` will be a boolean, and the implementation will check to see
 if `self`’s length and width are both greater than the length and width of the
-other `Rectangle`, respectively. Let’s write that code!
+other `Rectangle`, respectively. Let’s add this new method to the `impl` block
+from Listing 5-7:
 
 ```
 impl Rectangle {
@@ -472,7 +510,7 @@ impl Rectangle {
 
 <!-- Will add ghosting here in libreoffice /Carol -->
 
-If we run this with the `main` from earlier, we will get our desired output!
+If we run this with the `main` from Listing 5-8, we will get our desired output!
 Methods can take multiple arguments that we add to the signature after the
 `self` parameter, and those arguments work just like arguments in functions do.
 
