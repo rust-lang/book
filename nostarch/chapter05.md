@@ -289,8 +289,18 @@ the following output:
 rect1 is Rectangle { length: 50, width: 30 }
 ```
 
-Nice! It's not the prettiest output, but it shows the values of all the fields
-for this instance, which would definitely help during debugging.
+Nice! It’s not the prettiest output, but it shows the values of all the fields
+for this instance, which would definitely help during debugging. If we want
+output that is a bit prettier and easier to read, which can be helpful with
+larger structs, we can use `{:#?}` in place of `{:?}` in the `println!` string.
+If we use the pretty debug style in this example, the output will look like:
+
+```
+rect1 is Rectangle {
+    length: 50,
+    width: 30
+}
+```
 
 There are a number of traits Rust has provided for us to use with the `derive`
 annotation that can add useful behavior to our custom types. Those traits and
