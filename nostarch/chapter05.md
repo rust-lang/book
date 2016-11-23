@@ -388,7 +388,7 @@ of our code search for capabilities of `Rectangle` all over the place.
 
 PROD: START BOX
 
-#### Where's the `->` operator?
+### Where’s the -> Operator?
 
 In languages like C++, there are two different operators for calling methods:
 `.` if you’re calling a method on the object directly, and `->` if you’re
