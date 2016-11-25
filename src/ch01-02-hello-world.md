@@ -95,8 +95,8 @@ Inside the `main` function:
 ```
 
 This line does all of the work in this little program: it prints text to the
-screen. There are a number of details that are important here. The first is
-that it’s indented with four spaces, not a tab.
+screen. There are a number of details to notice here. The first is that Rust
+style is to indent with four spaces, not a tab.
 
 The second important part is `println!`. This is calling a Rust *macro*,
 which is how metaprogramming is done in Rust. If it were calling a function
