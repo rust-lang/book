@@ -235,7 +235,7 @@ let p = Point { x: 5, y: 20.0 };
 results in a compile-time error that indicates the type of `y` must match the
 type of `x`:
 
-```bash
+```text
 error[E0308]: mismatched types
   |
 7 | let p = Point { x: 5, y: 20.0 };
@@ -352,7 +352,7 @@ Listing 10-3: A `show_anything` function definition that does not yet compile
 
 Compiling this definition results in an error:
 
-```bash
+```text
 	error[E0277]: the trait bound `T: std::fmt::Display` is not satisfied
  --> <anon>:3:37
   |

@@ -188,7 +188,7 @@ If we implement the `Printable` trait on other types, we can use them with the
 which does *not* implement the `Printable` trait, we get a compile-time error
 that looks like this:
 
-```bash
+```text
 error[E0277]: the trait bound `{integer}: Printable` is not satisfied
    |
 29 | print_anything(3);
@@ -251,7 +251,7 @@ When trait bounds start getting complicated, there is another syntax that's a
 bit cleaner: `where`. And in fact, the error we got when we ran the code from
 Listing 10-3 referred to it:
 
-```bash
+```text
 help: consider adding a `where T: std::fmt::Display` bound
 ```
 
