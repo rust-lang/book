@@ -226,7 +226,7 @@ fn main() {
 <code>print_anything</code> method too. If we try to call <code>print_anything</code> with an <code>i32</code>,
 which does <em>not</em> implement the <code>Printable</code> trait, we get a compile-time error
 that looks like this:</p>
-<pre><code class="language-bash">error[E0277]: the trait bound `{integer}: Printable` is not satisfied
+<pre><code class="language-text">error[E0277]: the trait bound `{integer}: Printable` is not satisfied
    |
 29 | print_anything(3);
    | ^^^^^^^^^^^^^^ trait `{integer}: Printable` not satisfied
@@ -272,7 +272,7 @@ standard library trait we have mentioned):</p>
 <p>When trait bounds start getting complicated, there is another syntax that's a
 bit cleaner: <code>where</code>. And in fact, the error we got when we ran the code from
 Listing 10-3 referred to it:</p>
-<pre><code class="language-bash">help: consider adding a `where T: std::fmt::Display` bound
+<pre><code class="language-text">help: consider adding a `where T: std::fmt::Display` bound
 </code></pre>
 <p>The <code>where</code> syntax moves the trait bounds after the function arguments list.
 This definition of <code>show_anything</code> means the exact same thing as the definition

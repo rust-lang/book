@@ -249,7 +249,7 @@ same type. Trying to instantiate a <code>Point</code> that uses an <code>i32</co
 </code></pre>
 <p>results in a compile-time error that indicates the type of <code>y</code> must match the
 type of <code>x</code>:</p>
-<pre><code class="language-bash">error[E0308]: mismatched types
+<pre><code class="language-text">error[E0308]: mismatched types
   |
 7 | let p = Point { x: 5, y: 20.0 };
   |                          ^^^^ expected integral variable, found floating-point variable
@@ -334,7 +334,7 @@ error. For example, the function definition in Listing 10-3 tries to print out
 Listing 10-3: A `show_anything` function definition that does not yet compile
 </caption>
 <p>Compiling this definition results in an error:</p>
-<pre><code class="language-bash">    error[E0277]: the trait bound `T: std::fmt::Display` is not satisfied
+<pre><code class="language-text">    error[E0277]: the trait bound `T: std::fmt::Display` is not satisfied
  --&gt; &lt;anon&gt;:3:37
   |
 3 |     println!(&quot;It's: {}&quot;, value);
