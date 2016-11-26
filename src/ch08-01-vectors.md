@@ -131,41 +131,10 @@ the program for a typo!
 
 Once the program has a valid reference, the borrow checker will enforce the
 ownership and borrowing rules covered in Chapter 4 to ensure this reference and
-any other references to the contents of the vector stay valid. This means that
-in a function that owns a `Vec`, we can't return a reference to an element in
-the `Vec` to be used outside the function since the `Vec` will be cleaned up at
-the end of the function. Try it out with the following:
-
-<!-- TODO: fix this code example https://github.com/rust-lang/book/issues/273 -->
-
-```rust,ignore
-fn element() -> String {
-    let list = vec![String::from("hi"), String::from("bye")];
-    list[1]
-} // <-- list goes out of scope here
-
-fn main() {
-    let e = element();
-    println!("{}", e); // <-- we can't have a reference to an element of
-                       // list out here since list was cleaned up at the end
-                       // of the element function.
-}
-```
-
-Trying to compile this will result in the following error:
-
-```text
-error: cannot move out of indexed content [--explain E0507]
-  |>
-4 |>     list[1]
-  |>     ^^^^^^^ cannot move out of indexed content
-```
-
-Since `list` goes out of scope and gets cleaned up at the end of the function,
-the reference `list[1]` cannot be returned because it would outlive `list`.
-
-Here's another example of code that looks like it should be allowed, but won't
-compile because the references aren't valid:
+any other references to the contents of the vector stay valid. Recall the rule
+that says we can't have mutable and immutable references in the same scope.
+That rule applies in this example, where we hold an immutable reference to the
+first element in a vector and try to add an element to the end:
 
 ```rust,ignore
 let mut v = vec![1, 2, 3, 4, 5];
@@ -189,18 +158,14 @@ error[E0502]: cannot borrow `v` as mutable because it is also borrowed as immuta
   | - immutable borrow ends here
 ```
 
-This violates one of the ownership rules we covered in Chapter 4: the `push`
-method needs to have a mutable borrow to the `Vec`, and Rust doesn't allow any
-immutable borrows in the same scope as a mutable borrow.
-
-The reason behind disallowing references to the first element in a vector while
-trying to add a new item to the end is due to the way vectors work. Adding a
-new element onto the end of the vector might require allocating new memory and
-copying the old elements over to the new space, in the circumstance that there
-isn't enough room to put all the elements next to each other where the vector
-was. In that case, the reference to the first element would be pointing to
-deallocated memory. The borrowing rules prevent programs from ending up in that
-situation.
+This code might look like it should work: why should a reference to the first
+element care about what changes about the end of the vector? The reason why
+this code isn't allowed is due to the way vectors work. Adding a new element
+onto the end of the vector might require allocating new memory and copying the
+old elements over to the new space, in the circumstance that there isn't enough
+room to put all the elements next to each other where the vector was. In that
+case, the reference to the first element would be pointing to deallocated
+memory. The borrowing rules prevent programs from ending up in that situation.
 
 > Note: For more on this, see [The Nomicon][nomicon].
 
