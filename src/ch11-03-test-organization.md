@@ -235,120 +235,35 @@ test it_adds_two ... ok
 test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured
 ```
 
-#### Submodules in integration tests
+#### Submodules in Integration Tests
 
 As you add more integration tests, you may want to make more than one file in
 the `tests` directory in order to group the test functions by the functionality
 they're testing, for example. As we mentioned before, that will work fine,
-given that Cargo treats every file as its own crate. But there's one small trap
-that can happen if we try to extract a file that contains common helper
-functions that we want to share across all of the integration test files.
+given that Cargo treats every file as its own crate.
 
-Let's try to extract a module called `common` from our
-*tests/integration_test.rs* file into its own file by following the steps we
-took to extract a module in Chapter 7. The `common` module contains a function
-named `helper` that takes care of some setup that all tests in the *tests*
-directory need to do. So we remove the `helper` function from the
-*tests/integration_test.rs* file, leaving the `mod common` declaration:
+Eventually, you may have a set of helper functions that are common to all
+integration tests, for example, functions that set up common scenarios. If you
+extract these into a file in the *tests* directory, like *tests/common.rs* for
+example, this file will be compiled into a separate crate just like the Rust
+files in this directory that contain test functions are. There will be a
+separate section in the test output for this file. Since this is probably not
+what you want, it's recommended to instead use a *mod.rs* file in a
+subdirectory, like *tests/common/mod.rs*, for helper functions. Files in
+subdirectories of the *tests* directory do not get compiled as separate crates
+or have sections in the test output.
 
-Filename: tests/integration_test.rs
+#### Integration Tests for Binary Crates
 
-```rust,ignore
-extern crate adder;
-
-mod common;
-
-#[test]
-fn it_works() {
-    common::helper();
-
-    assert_eq!(4, adder::add_two(2));
-}
-```
-
-Then we create a `tests/common.rs` file to hold our common helpers:
-
-Filename: tests/common.rs
-
-```rust
-pub fn helper() {
-    // test setup code goes here
-}
-```
-
-Let's try running the tests:
-
-```text
-$ cargo test
-   Compiling adder v0.1.0 (file:///projects/tmp/adder)
-    Finished debug [unoptimized + debuginfo] target(s) in 0.25 secs
-     Running target/debug/deps/adder-ce99bcc2479f4607
-
-running 1 test
-test tests::internal ... ok
-
-test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured
-
-     Running target/debug/common-c3635c69f3aeef92
-
-running 0 tests
-
-test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured
-
-     Running target/debug/integration_tests-6d6e12b4680b0368
-
-running 1 test
-test it_works ... ok
-
-test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured
-
-   Doc-tests adder
-
-running 0 tests
-
-test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured
-```
-
-Wait a minute. Now we have four sections: one is for our `common` module!
-
-```text
-Running target/debug/common-c3635c69f3aeef92
-```
-
-Because `common.rs` is in our `tests` directory, Cargo is also compiling it as
-its own crate. `common.rs` is so simple, so we didn't get any errors, but
-with more complex code, this might not work. So what can we do?
-
-The key is, always use the `common/mod.rs` form over the `common.rs` form when
-making modules in integration tests. If we move `tests/common.rs` to
-`tests/common/mod.rs`, we'll go back to our expected output:
-
-```text
-$ mkdir tests/common
-$ mv tests/common.rs tests/common/mod.rs
-$ cargo test
-   Compiling adder v0.1.0 (file:///projects/tmp/adder)
-    Finished debug [unoptimized + debuginfo] target(s) in 0.24 secs
-     Running target/debug/deps/adder-ce99bcc2479f4607
-
-running 1 test
-test tests::internal ... ok
-
-test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured
-
-     Running target/debug/integration_tests-6d6e12b4680b0368
-
-running 1 test
-test it_works ... ok
-
-test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured
-
-   Doc-tests adder
-
-running 0 tests
-
-test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured
-```
+If your project is a binary crate that only contains a *src/main.rs* and does
+not have a *src/lib.rs*, it is not possible to create integration tests in the
+*tests* directory and use `extern crate` to import the functions in
+*src/main.rs*. This is one of the reasons Rust projects that provide a binary
+have a straightforward *src/main.rs* that calls logic that lives in
+*src/lib.rs*. With that structure, integration tests *can* test the library
+crate by using `extern crate` to cover the important functionality, and if that
+works, the small amount of code in *src/main.rs* will work as well and does not
+need to be tested.
 
 ## Summary
 
