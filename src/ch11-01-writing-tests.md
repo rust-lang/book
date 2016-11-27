@@ -165,13 +165,13 @@ is a custom message that you'd like to be added to the failure message. The
 macros expand to logic similar to this:
 
 ```rust,ignore
-// assert_eq
-if left_val == right_val {
+// assert_eq! - panic if the values aren't equal
+if left_val != right_val {
     panic!("your optional custom message")
 }
 
-// assert_ne
-if left_val != right_val {
+// assert_ne! - panic if the values are equal
+if left_val == right_val {
     panic!("your optional custom message")
 }
 ```
