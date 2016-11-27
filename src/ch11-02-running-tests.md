@@ -112,6 +112,68 @@ test add_two_and_two ... ok
 test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured
 ```
 
+Module names become part of the test name, so module names can be used in a
+similar way to run just the tests for a particular module. For example, if our
+code was organized into a module named `adding` and a module named
+`subtracting` with tests in each:
+
+```rust
+mod adding {
+    #[test]
+    fn add_two_and_two() {
+        assert_eq!(4, 2 + 2);
+    }
+
+    #[test]
+    fn add_three_and_two() {
+        assert_eq!(5, 3 + 2);
+    }
+
+    #[test]
+    fn one_hundred() {
+        assert_eq!(102, 100 + 2);
+    }
+}
+
+mod subtracting {
+    #[test]
+    fn subtract_three_and_two() {
+        assert_eq!(1, 3 - 2);
+    }
+}
+```
+
+Running `cargo test` will run all of the tests, and the module names will
+appear in the test names in the output:
+
+```text
+$ cargo test
+    Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
+     Running target/debug/deps/adder-d84f1c6cb24adeb4
+
+running 4 tests
+test adding::add_two_and_two ... ok
+test adding::add_three_and_two ... ok
+test subtracting::subtract_three_and_two ... ok
+test adding::one_hundred ... ok
+```
+
+Running `cargo test adding` would run just the tests in that module and not any
+of the tests in the subtracting module:
+
+```text
+$ cargo test adding
+    Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
+     Running target/debug/deps/adder-d84f1c6cb24adeb4
+
+running 3 tests
+test adding::add_three_and_two ... ok
+test adding::one_hundred ... ok
+test adding::add_two_and_two ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured
+```
+
 ### Ignore Some Tests Unless Specifically Requested
 
 Sometimes a few specific tests can be very time-consuming to execute, so during
