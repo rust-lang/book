@@ -48,7 +48,7 @@ working on code in a particular area, you might want to only run the tests
 having to do with that code. `cargo test` takes an argument that allows you to
 only run certain tests, specified by name.
 
-Let's create three tests with the following names:
+Let's create three tests with the following names as shown in Listing 11-3:
 
 Filename: src/lib.rs
 
@@ -68,6 +68,10 @@ fn one_hundred() {
     assert_eq!(102, 100 + 2);
 }
 ```
+
+<caption>
+Listing 11-3: Three tests with a variety of names
+</caption>
 
 Running with different arguments will run different subsets of the tests. No
 arguments, as we've already seen, runs all the tests:
@@ -115,7 +119,7 @@ test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured
 Module names become part of the test name, so module names can be used in a
 similar way to run just the tests for a particular module. For example, if our
 code was organized into a module named `adding` and a module named
-`subtracting` with tests in each:
+`subtracting` with tests in each, as in Listing 11-4:
 
 ```rust
 mod adding {
@@ -142,6 +146,10 @@ mod subtracting {
     }
 }
 ```
+
+<caption>
+Listing 11-4: Tests in two modules named `adding` and `subtracting`
+</caption>
 
 Running `cargo test` will run all of the tests, and the module names will
 appear in the test names in the output:

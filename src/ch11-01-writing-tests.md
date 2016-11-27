@@ -229,7 +229,7 @@ is useful when we want to test that calling a particular function will cause an
 error. For example, let's test something that we know will panic from Chapter
 8: attempting to create a slice using range syntax with byte indices that
 aren't on character boundaries. Add the `#[should_panic]` attribute before the
-function like the `#[test]` attribute:
+function like the `#[test]` attribute, as shown in Listing 11-1:
 
 Filename: src/lib.rs
 
@@ -242,6 +242,10 @@ fn slice_not_on_char_boundaries() {
 }
 ```
 
+<caption>
+Listing 11-1: A test expecting a `panic!`
+</caption>
+
 This test will succeed, since the code panics and we said that it should. If
 this code happened to run and did not cause a `panic!`, this test would fail.
 
@@ -249,7 +253,8 @@ this code happened to run and did not cause a `panic!`, this test would fail.
 didn't fail for a different reason than the one you were expecting. To help
 with this, an optional `expected` parameter can be added to the `should_panic`
 attribute. The test harness will make sure that the failure message contains
-the provided text. A safer version of the example above would be:
+the provided text. A safer version of Listing 11-1 would be the following, in
+Listing 11-2:
 
 Filename: src/lib.rs
 
@@ -261,6 +266,12 @@ fn slice_not_on_char_boundaries() {
     &s[0..1];
 }
 ```
+
+<!-- I will add ghosting in libreoffice /Carol -->
+
+<caption>
+Listing 11-2: A test expecting a `panic!` with a particular message
+</caption>
 
 Try on your own to see what happens when a `should_panic` test panics but
 doesn't match the expected message: cause a `panic!` that happens for a

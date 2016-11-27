@@ -61,7 +61,7 @@ this is a common use of globs.
 Up until now in this chapter, we've been writing tests in our `adder` project
 that don't actually call any code we've written. Let's change that now! In
 *src/lib.rs*, place this `add_two` function and `tests` module that has a test
-function to exercise the code:
+function to exercise the code, as shown in Listing 11-5:
 
 Filename: src/lib.rs
 
@@ -80,6 +80,10 @@ mod tests {
     }
 }
 ```
+
+<caption>
+Listing 11-5: Testing the function `add_two` in a child `tests` module
+</caption>
 
 Notice in addition to the test function, we also added `use add_two;` within
 the `tests` module. This brings the code we want to test into the scope of the
@@ -115,8 +119,8 @@ everything into the `test` module scope at once.
 There's controversy within the testing community about whether you should write
 unit tests for private functions or not. Regardless of which testing ideology
 you adhere to, Rust does allow you to test private functions due to the way
-that the privacy rules work. Consider this code with the private function
-`internal_adder`:
+that the privacy rules work. Consider the code in Listing 11-6 with the private
+function `internal_adder`:
 
 Filename: src/lib.rs
 
@@ -140,6 +144,10 @@ mod tests {
 }
 ```
 
+<caption>
+Listing 11-6: Testing a private function
+</caption>
+
 Because tests are just Rust code and the `tests` module is just another module,
 we can import and call `internal_adder` in a test just fine. If you don't think
 private functions should be tested, there's nothing in Rust that will compel
@@ -159,9 +167,9 @@ Cargo has support for integration tests in the *tests* directory. If you make
 one and put Rust files inside, Cargo will compile each of the files as an
 individual crate. Let's give it a try!
 
-First, make a *tests* directory at the top level of your project directory, next
-to *src*. Then, make a new file, *tests/integration_test.rs*, and put this
-inside:
+First, make a *tests* directory at the top level of your project directory,
+next to *src*. Then, make a new file, *tests/integration_test.rs*, and put the
+code in Listing 11-7 inside:
 
 Filename: tests/integration_test.rs
 
@@ -173,6 +181,10 @@ fn it_adds_two() {
     assert_eq!(4, adder::add_two(2));
 }
 ```
+
+<caption>
+Listing 11-7: An integration test of a function in the `adder` crate
+</caption>
 
 We now have `extern crate adder` at the top, which we didn't need in the unit
 tests. Each test in the `tests` directory is an entirely separate crate, so we
