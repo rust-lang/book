@@ -275,7 +275,7 @@ errors, then compile to see if you’re right and use the privacy rules to
 understand why.
 
 * What if the `inside` module was public?
-* What if `outside` was public and `inside` was private?
+* What if `outermost` was public and `inside` was private?
 * What if, in the body of `inner_function`, you called
   `::outermost::middle_secret_function()`? (The two colons at the beginning
   mean that we want to refer to the namespaces starting from the root
