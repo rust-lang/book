@@ -20,7 +20,7 @@ $ cd communicator
 Notice that Cargo generated *src/lib.rs* instead of *src/main.rs*. Inside
 *src/lib.rs* we’ll find this:
 
-Filename: src/lib.rs
+<span class="filename">Filename: src/lib.rs</span>
 
 ```rust
 #[cfg(test)]
@@ -51,7 +51,7 @@ named `network` that contains the definition of a function called `connect`.
 Every module definition in Rust starts with the `mod` keyword. Add this code to
 the beginning of the *lib.rs* file, above the test code:
 
-Filename: src/lib.rs
+<span class="filename">Filename: src/lib.rs</span>
 
 ```rust
 mod network {
@@ -71,7 +71,8 @@ We can also have multiple modules, side-by-side, in the same *src/lib.rs* file.
 For example, to have a `client` module too, that also has a function named
 `connect`, we can add:
 
-Filename: src/lib.rs
+<figure>
+<span class="filename">Filename: src/lib.rs</span>
 
 ```rust
 mod network {
@@ -85,17 +86,20 @@ mod client {
 }
 ```
 
-<caption>
+<figcaption>
+
 Listing 7-1: The `network` module and the `client` module defined side-by-side
 in *src/lib.rs*
-</caption>
+
+</figcaption>
+</figure>
 
 Now we have a `network::connect` function and a `client::connect` function.
 These can have completely different functionality, and the function names do
 not conflict with each other since they’re in different modules.
 
 While in this case, we’re building a library, there's nothing special about
-`lib.rs`. We could also make use of submodules in a `main.rs` as well. In fact,
+*lib.rs*. We could also make use of submodules in a *main.rs* as well. In fact,
 we can also put modules inside of modules. This can be useful as your modules
 grow to keep related functionality organized together and separate
 functionality apart. The choice of how you organize your code depends on how
@@ -103,7 +107,8 @@ you think about the relationship between the parts of your code. For instance,
 the `client` code and its `connect` function might make more sense to users of
 our library if it was inside the `network` namespace instead, like so:
 
-Filename: src/lib.rs
+<figure>
+<span class="filename">Filename: src/lib.rs</span>
 
 ```rust
 mod network {
@@ -117,9 +122,12 @@ mod network {
 }
 ```
 
-<caption>
+<figcaption>
+
 Listing 7-2: Moving the `client` module inside of the `network` module
-</caption>
+
+</figcaption>
+</figure>
 
 In your *src/lib.rs* file, replace the existing `mod network` and `mod client`
 definitions with this one that has the `client` module as an inner module of
@@ -127,7 +135,7 @@ definitions with this one that has the `client` module as an inner module of
 `network::client::connect`: again, the two functions named `connect` don’t
 conflict with each other since they’re in different namespaces.
 
-In this way, modules form a hierarchy. The contents of `src/lib.rs` are at the
+In this way, modules form a hierarchy. The contents of *src/lib.rs* are at the
 topmost level, and the submodules are at lower levels. Here’s what the
 organization of our example from Listing 7-1 looks like when thought of this
 way:
@@ -161,7 +169,8 @@ that you’re used to: file systems! We can use Rust’s module system along wit
 multiple files to split Rust projects up so that not everything lives in
 *src/lib.rs*. For this example, we will start with this code in *src/lib.rs*:
 
-File: src/lib.rs
+<figure>
+<span class="filename">File: src/lib.rs</span>
 
 ```rust
 mod client {
@@ -180,10 +189,13 @@ mod network {
 }
 ```
 
-<caption>
+<figcaption>
+
 Listing 7-3: Three modules, `client`, `network`, and `network::server` all
 defined in *src/lib.rs*
-</caption>
+
+</figcaption>
+</figure>
 
 which has this module hierarchy:
 
@@ -201,7 +213,7 @@ This would be a good reason to pull each of the `client`, `network`, and
 extracting the `client` module into another file. First, replace the `client`
 module code in *src/lib.rs* with the following:
 
-File: src/lib.rs
+<span class="filename">File: src/lib.rs</span>
 
 ```rust,ignore
 mod client;
@@ -225,11 +237,11 @@ semicolon, we’re letting Rust know to look in another location for the code
 defined inside that module.
 
 So now we need to create the external file with that module name. Create a
-`client.rs` file in your *src/* directory, then open it up and enter the
+*client.rs* file in your *src/* directory, then open it up and enter the
 following, which is the `connect` function in the `client` module that we
 removed in the previous step:
 
-File: src/client.rs
+<span class="filename">File: src/client.rs</span>
 
 ```rust
 fn connect() {
@@ -237,7 +249,7 @@ fn connect() {
 ```
 
 Note that we don’t need a `mod` declaration in this file; that’s because we
-already declared the `client` module with `mod` in `src/lib.rs`. This file just
+already declared the `client` module with `mod` in *src/lib.rs*. This file just
 provides the *contents* of the `client` module. If we put a `mod client` here,
 we’d be giving the `client` module its own submodule named `client`!
 
@@ -278,10 +290,10 @@ about those warnings for now; we’ll address them later in the chapter. The goo
 news is that they’re just warnings; our project was built successfully!
 
 Let’s extract the `network` module into its own file next, using the same
-pattern. In `src/lib.rs`, delete the body of the `network` module and add a
+pattern. In *src/lib.rs*, delete the body of the `network` module and add a
 semicolon to the declaration, like so:
 
-Filename: src/lib.rs
+<span class="filename">Filename: src/lib.rs</span>
 
 ```rust,ignore
 mod client;
@@ -289,9 +301,9 @@ mod client;
 mod network;
 ```
 
-Then create a new `src/network.rs` file and enter the following:
+Then create a new *src/network.rs* file and enter the following:
 
-Filename: src/network.rs
+<span class="filename">Filename: src/network.rs</span>
 
 ```rust
 fn connect() {
@@ -313,7 +325,7 @@ work. We’re going to try anyway so that we can see the error. First change
 *src/network.rs* to have `mod server;` instead of the `server` module’s
 contents:
 
-Filename: src/network.rs
+<span class="filename">Filename: src/network.rs</span>
 
 ```rust,ignore
 fn connect() {
@@ -322,10 +334,10 @@ fn connect() {
 mod server;
 ```
 
-Then create a `src/server.rs` file and enter the contents of the `server`
+Then create a *src/server.rs* file and enter the contents of the `server`
 module that we extracted:
 
-Filename: src/server.rs
+<span class="filename">Filename: src/server.rs</span>
 
 ```rust
 fn connect() {
@@ -333,6 +345,8 @@ fn connect() {
 ```
 
 When we try to `cargo build`, we’ll get this error:
+
+<figure>
 
 ```text
 $ cargo build
@@ -355,14 +369,17 @@ note: ... or maybe `use` the module `server` instead of possibly redeclaring it
   |     ^^^^^^
 ```
 
-<caption>
+<figcaption>
+
 Listing 7-4: Error when trying to extract the `server` submodule into
 *src/server.rs*
-</caption>
+
+</figcaption>
+</figure>
 
 The error says we `cannot declare a new module at this location` and is
-pointing to the `mod server;` line in `src/network.rs`. So `src/network.rs` is
-different than `src/lib.rs` somehow; let’s keep reading to understand why.
+pointing to the `mod server;` line in *src/network.rs*. So *src/network.rs* is
+different than *src/lib.rs* somehow; let’s keep reading to understand why.
 
 The note in the middle of Listing 7-4 is actually pretty helpful, as it points
 out something we haven’t yet talked about doing:
@@ -412,7 +429,7 @@ So when we wanted to extract the `network::server` module, why did we have to
 also change the *src/network.rs* file into the *src/network/mod.rs* file, and
 also put the code for `network::server` in the `network` directory in
 *src/network/server.rs*, instead of just being able to extract the
-*network::server* into *src/server.rs*? The reason is that Rust wouldn’t be
+`network::server` into *src/server.rs*? The reason is that Rust wouldn’t be
 able to tell that `server` was supposed to be a submodule of `network` if the
 *server.rs* file was in the *src* directory. To make it clearer why Rust can’t
 tell, let’s consider a different example where we have this module hierarchy
@@ -448,12 +465,12 @@ top-level *src/client.rs* is unambiguously the code that belongs to the
 In summary, these are the rules of modules with regards to files:
 
 * If a module named `foo` has no submodules, you should put the declarations
-  for `foo` in a file named `foo.rs`.
+  for `foo` in a file named *foo.rs*.
 * If a module named `foo` does have submodules, you should put the declarations
-  for `foo` in a file named `foo/mod.rs`.
+  for `foo` in a file named *foo/mod.rs*.
 * The first two rules apply recursively, so that if a module named `foo` has a
   submodule named `bar` and `bar` does not have submodules, you should have the
-  following files in your `src` directory:
+  following files in your *src* directory:
 
   ```text
   ├── foo

@@ -9,7 +9,7 @@ Rust code uses *snake case* as the conventional style for function and variable
 names. In snake case, all letters are lowercase and underscores separate words.
 Here’s a program that contains an example function definition:
 
-Filename: src/main.rs
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 fn main() {
@@ -55,7 +55,7 @@ called and its message is printed.
 Functions can also take arguments. The following rewritten version of
 `another_function` shows what arguments look like in Rust:
 
-Filename: src/main.rs
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 fn main() {
@@ -89,7 +89,7 @@ figure out what you mean.
 When you want a function to have multiple arguments, separate them inside the
 function signature with commas, like this:
 
-Filename: src/main.rs
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 fn main() {
@@ -141,7 +141,8 @@ evaluate to a resulting value. Let’s look at some examples.
 Creating a variable and assigning a value to it with the `let` keyword is a
 statement. In Listing 3-3, `let y = 6;` is a statement:
 
-Filename: src/main.rs
+<figure>
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 fn main() {
@@ -149,9 +150,12 @@ fn main() {
 }
 ```
 
-<caption>
+<figcaption>
+
 Listing 3-3: A `main` function declaration containing one statement.
-</caption>
+
+</figcaption>
+</figure>
 
 Function definitions are also statements; the entire preceding example is a
 statement in itself.
@@ -159,7 +163,7 @@ statement in itself.
 Statements do not return values. Therefore, you can’t assign a `let` statement
 to another variable, as the following code tries to do:
 
-Filename: src/main.rs
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore
 fn main() {
@@ -195,7 +199,7 @@ expression that evaluates to the value `6`. Calling a function is an
 expression. Calling a macro is an expression. The block that we use to create
 new scopes, `{}`, is an expression, for example:
 
-Filename: src/main.rs
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 fn main() {
@@ -234,7 +238,7 @@ value of the function is synonymous with the value of the final expression in
 the block of the body of a function. Here’s an example of a function that
 returns a value:
 
-Filename: src/main.rs
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 fn five() -> i32 {
@@ -275,7 +279,7 @@ return value, but the body of the function is a lonely `5` with no semicolon
 because it’s an expression whose value we want to return. Let’s look at another
 example:
 
-Filename: src/main.rs
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 fn main() {
@@ -293,7 +297,7 @@ Running this code will print `The value of x is: 6`. What happens if we place a
 semicolon at the end of the line containing `x + 1`, changing it from an
 expression to a statement?
 
-Filename: src/main.rs
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore
 fn main() {

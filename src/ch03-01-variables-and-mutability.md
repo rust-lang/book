@@ -13,7 +13,7 @@ you can’t change that value. To illustrate, let’s generate a new project cal
 Then, in your new *variables* directory, open *src/main.rs* and replace its
 code with the following:
 
-Filename: src/main.rs
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore
 fn main() {
@@ -69,7 +69,7 @@ variable value.
 
 For example, change *src/main.rs* to the following:
 
-Filename: src/main.rs
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 fn main() {
@@ -146,7 +146,7 @@ variables with the same name as a previous variables, and the new variable
 we’ll see when we use the variable. We can shadow a variable by using the same
 variable’s name and repeating the use of the `let` keyword as follows:
 
-Filename: src/main.rs
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 fn main() {

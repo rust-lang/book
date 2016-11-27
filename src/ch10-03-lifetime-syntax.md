@@ -59,6 +59,9 @@ the inner scope declares a variable named `x` with the initial value of 5.
 Inside the inner scope, we attempt to set the value of `r` to a reference to
 `x`. Then the inner scope ends and we attempt to print out the value in `r`:
 
+<figure>
+<span class="filename">Filename: src/lib.rs</span>
+
 ```rust,ignore
 {
     let r;
@@ -72,9 +75,12 @@ Inside the inner scope, we attempt to set the value of `r` to a reference to
 }
 ```
 
-<caption>
+<figcaption>
+
 Listing 10-8: An attempt to use a reference whose value has gone out of scope
-</caption>
+
+</figcaption>
+</figure>
 
 If we compile this code, we get an error:
 
@@ -203,7 +209,8 @@ this function is by passing two string slices, and we want to get back a string
 slice. The code in Listing 10-9 should print `The longest string is abcd` once
 we've implemented the `longest` function:
 
-Filename: src/main.rs
+<figure>
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 # fn longest<'a>(x: &'a str, y: &'a str) -> &'a str {
@@ -223,10 +230,13 @@ fn main() {
 }
 ```
 
-<caption>
+<figcaption>
+
 Listing 10-9: A `main` function that demonstrates how we'd like to use the
 `longest` function
-</caption>
+
+</figcaption>
+</figure>
 
 Note that we want the function to take string slices because we don't want the
 `longest` function to take ownership of its arguments, and we want the function
@@ -236,6 +246,8 @@ Chapter 4 for more discussion about why these are the arguments we want.
 
 Here's the start of an implementation of the `longest` function that won't
 compile yet:
+
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore
 fn longest(x: &str, y: &str) -> &str {
@@ -266,7 +278,7 @@ reference to `x` and the `else` block returns a reference to `y`! The way to
 specify the lifetime parameters in this case is to have the same lifetime for
 all of the input parameters and the return type:
 
-Filename: src/main.rs
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 fn longest<'a>(x: &'a str, y: &'a str) -> &'a str {
@@ -296,7 +308,7 @@ doing. If the function didn't actually return the longest string slice but
 instead always returned the first argument, we wouldn't need to specify a
 lifetime on `y`. This code compiles:
 
-Filename: src/main.rs
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 fn longest<'a>(x: &'a str, y: &str) -> &'a str {
@@ -311,7 +323,7 @@ refers to a value created within this function, and that would be a dangling
 reference since the value will go out of scope at the end of the function.
 Consider this attempted implementation of `longest`:
 
-Filename: src/main.rs
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore
 fn longest<'a>(x: &str, y: &str) -> &'a str {
@@ -357,7 +369,7 @@ that use references as arguments or return values, then why did this function
 from the "String Slices" section of Chapter 4 compile? We haven't annotated any
 lifetimes here, yet Rust happily compiles this function:
 
-Filename: src/lib.rs
+<span class="filename">Filename: src/lib.rs</span>
 
 ```rust
 fn first_word(s: &str) -> &str {
@@ -434,7 +446,7 @@ holds a reference to another struct, `Config`, defined elsewhere. The
 method has a reference as an argument and is returning a reference; the
 lifetime of the return value will be the lifetime of `self`:
 
-Filename: src/lib.rs
+<span class="filename">Filename: src/lib.rs</span>
 
 ```rust
 # struct Config {}

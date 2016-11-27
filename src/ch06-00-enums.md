@@ -141,6 +141,8 @@ address type, at the moment we don’t have a way to store the actual *data* of
 the IP address; we only know what *kind* it is. Given that you just learned
 about structs, you might tackle this problem as in Listing 6-1:
 
+<figure>
+
 ```rust
 enum IpAddrKind {
     V4,
@@ -163,9 +165,12 @@ let loopback = IpAddr {
 };
 ```
 
-<caption>
+<figcaption>
+
 Listing 6-1: Storing the data and type of an IP address using a `struct`
-</caption>
+
+</figcaption>
+</figure>
 
 <!-- I will add wingdings here in libreoffice /Carol -->
 

@@ -13,10 +13,11 @@ powerful because we can still leave our definitions generic to allow use of
 many different types, but we can constrain the type at compile-time to types
 that have the behavior we need to be able to use.
 
-Here's an example definition of a trait named `Printable` that has a method
-named `print`:
+Listing 10-5 has an example definition of a trait named `Printable` with a
+method named `print`:
 
-Filename: src/lib.rs
+<figure>
+<span class="filename">Filename: src/lib.rs</span>
 
 ```rust
 trait Printable {
@@ -24,9 +25,12 @@ trait Printable {
 }
 ```
 
-<caption>
-Listing 10-4: A `Printable` trait definition with one method, `print`
-</caption>
+<figcaption>
+
+Listing 10-5: A `Printable` trait definition with one method, `print`
+
+</figcaption>
+</figure>
 
 We declare a trait with the `trait` keyword, then the trait's name. In this
 case, our trait will describe types which can be printed. Inside of curly
@@ -37,11 +41,12 @@ trait can have multiple methods in its body, with the method signatures listend 
 Implementing a trait for a particular type looks similar to implementing
 methods on a type since it's also done with the `impl` keyword, but we specify
 the trait name as well. Inside the `impl` block, we specify definitions for the
-trait's methods in the context of the specific type. Listing 10-5 has an
-example of implementing the `Printable` trait from Listing 10-4 (that only has
+trait's methods in the context of the specific type. Listing 10-6 has an
+example of implementing the `Printable` trait from Listing 10-5 (that only has
 the `print` method) for a `Temperature` enum:
 
-Filename: src/lib.rs
+<figure>
+<span class="filename">Filename: src/lib.rs</span>
 
 ```rust
 # trait Printable {
@@ -63,15 +68,18 @@ impl Printable for Temperature {
 }
 ```
 
-<caption>
-Listing 10-5: Implementing the `Printable` trait on a `Temperature` enum
-</caption>
+<figcaption>
+
+Listing 10-6: Implementing the `Printable` trait on a `Temperature` enum
+
+</figcaption>
+</figure>
 
 In the same way `impl` lets us define methods, we've used it to define methods
 that pertain to our trait. We can call methods that our trait has defined just
 like we can call other methods:
 
-Filename: src/main.rs
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 # trait Printable {
@@ -113,15 +121,16 @@ Defining traits with methods and implementing the trait methods on a particular
 type gives Rust more information than just defining methods on a type directly.
 The information Rust gets is that the type that implements the trait can be
 used in places where the code specifies that it needs some type that implements
-a trait. To illustrate this, Listing 10-6 has a `print_anything` function
-definition. This is similar to the `show_anything` function from Listing 10-3,
+a trait. To illustrate this, Listing 10-7 has a `print_anything` function
+definition. This is similar to the `show_anything` function from Listing 10-4,
 but this function has a *trait bound* on the generic type `T` and uses the
 `print` function from the trait. A trait bound constrains the generic type to
 be any type that implements the trait specified, instead of any type at all.
 With the trait bound, we're then allowed to use the trait method `print` in the
 function body:
 
-Filename: src/lib.rs
+<figure>
+<span class="filename">Filename: src/lib.rs</figure>
 
 ```rust
 # trait Printable {
@@ -134,10 +143,13 @@ fn print_anything<T: Printable>(value: T) {
 }
 ```
 
-<caption>
-Listing 10-6: A `print_anything` function that uses the trait bound `Printable`
+<figcaption>
+
+Listing 10-7: A `print_anything` function that uses the trait bound `Printable`
 on type `T`
-</caption>
+
+</figcaption>
+</figure>
 
 Trait bounds are specified in the type name declarations within the angle
 brackets. After the name of the type that you want to apply the bound to, add a
@@ -147,11 +159,11 @@ implements the trait `Printable`. We need to specify the `Printable` trait in
 the type name declarations because we want to be able to call the `print`
 method that is part of the `Printable` trait.
 
-Now we are able to call the `print_anything` function from Listing 10-6 and
+Now we are able to call the `print_anything` function from Listing 10-7 and
 pass it a `Temperature` instance as the `value` parameter, since we implemented
-the trait `Printable` on `Temperature` in Listing 10-5:
+the trait `Printable` on `Temperature` in Listing 10-6:
 
-Filename: src/main.rs
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 # trait Printable {
@@ -206,11 +218,12 @@ example, our `Printable` trait is similar to one of those traits, `Display`.
 And in fact, that's how `println!` decides how to format things with `{}`. The
 `Display` trait has a `fmt` method that determines how to format something.
 
-Listing 10-7 shows our original example from Listing 10-3, but this time using
+Listing 10-8 shows our original example from Listing 10-3, but this time using
 the standard library's `Display` trait in the trait bound on the generic type
 in the `show_anything` function:
 
-Filename: src/lib.rs
+<figure>
+<span class="filename">Filename: src/lib.rs</span>
 
 ```rust
 use std::fmt::Display;
@@ -221,9 +234,12 @@ fn show_anything<T: Display>(value: T) {
 }
 ```
 
-<caption>
-Listing 10-7: The `show_anything` function with trait bounds
-</caption>
+<figcaption>
+
+Listing 10-8: The `show_anything` function with trait bounds
+
+</figcaption>
+</figure>
 
 Now that this function specifies that `T` can be any type as long as that type
 implements the `Display` trait, this code will compile.
@@ -257,9 +273,9 @@ help: consider adding a `where T: std::fmt::Display` bound
 
 The `where` syntax moves the trait bounds after the function arguments list.
 This definition of `show_anything` means the exact same thing as the definition
-in Listing 10-7, just said a different way:
+in Listing 10-8, just said a different way:
 
-Filename: src/lib.rs
+<span class="filename">Filename: src/lib.rs</span>
 
 ```rust
 use std::fmt::Display;

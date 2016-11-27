@@ -110,6 +110,8 @@ confidence that we have values that meet our requirements. Listing 9-8 shows
 one way to define a `Guess` type that will only create an instance of `Guess`
 if the `new` function gets a value between 1 and 100:
 
+<figure>
+
 ```rust
 struct Guess {
     value: u32,
@@ -132,9 +134,12 @@ impl Guess {
 }
 ```
 
-<caption>
+<figcaption>
+
 Listing 9-8: A `Guess` type that will only hold values between 1 and 100
-</caption>
+
+</figcaption>
+</figure>
 
 If code calling `Guess::new` passed in a value that was not between 1 and 100,
 that would be a violation of the contract that `Guess::new` is relying on. This

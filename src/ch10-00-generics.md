@@ -19,7 +19,8 @@ Let's first go through a technique for dealing with duplication that you're
 probably familiar with: extracting a function. Consider a small program that
 finds the largest number in a list, shown in Listing 10-1:
 
-Filename: src/main.rs
+<figure>
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 fn main() {
@@ -37,15 +38,18 @@ fn main() {
 }
 ```
 
-<caption>
+<figcaption>
+
 Listing 10-1: Code to find the largest number in a list of numbers
-</caption>
+
+</figcaption>
+</figure>
 
 If we needed to find the largest number in two different lists of numbers, we
 could duplicate the code in Listing 10-1 and have the same logic exist in two
 places in the program:
 
-Filename: src/main.rs
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 fn main() {
@@ -83,7 +87,7 @@ code in Listing 10-1 that finds the largest number into a function named
 `largest`. This program can find the largest number in two different lists of
 numbers, but the code from Listing 10-1 only exists in one spot:
 
-Filename: src/main.rs
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 fn largest(numbers: Vec<i32>) {

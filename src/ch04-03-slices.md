@@ -20,7 +20,7 @@ ownership, so this is fine. But what should we return? We don’t really have a
 way to talk about *part* of a string. We could return the index of the end of
 the word, though. Let’s try that:
 
-Filename: src/main.rs
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 fn first_word(s: &String) -> usize {
@@ -80,7 +80,7 @@ because it’s a separate value from the `String`, there’s no guarantee that i
 will still be valid in the future. Consider this program that uses this
 `first_word` function:
 
-Filename: src/main.rs
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 # fn first_word(s: &String) -> usize {
@@ -150,11 +150,15 @@ that contains a pointer to the 6th byte of `s` and a length value of 5.
 
 Figure 4-6 shows this in a diagram:
 
+<figure>
 <img alt="world containing a pointer to the 6th byte of String s and a length 5" src="img/trpl04-06.svg" class="center" style="width: 50%;" />
 
-<caption>
+<figcaption>
+
 Figure 4-6: String slice referring to part of a `String`
-</caption>
+
+</figcaption>
+</figure>
 
 With Rust’s `..` range syntax, if you want to start at the first index (zero),
 you can drop the value before the `..`. In other words, these are equal:
@@ -193,7 +197,7 @@ let slice = &s[..];
 With this in mind, let’s re-write `first_word` to return a slice. The type that
 signifies “string slice” is written as `&str`:
 
-Filename: src/main.rs
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 fn first_word(s: &String) -> &str {
@@ -232,7 +236,7 @@ use the first word index with an emptied string. Slices make this bug
 impossible, and let us know we have a problem with our code much sooner. Using
 the slice version of `first_word` will throw a compile time error:
 
-Filename: src/main.rs
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore
 fn main() {
@@ -302,7 +306,7 @@ If we have a string slice, we can pass that as the argument directly. If we
 have a `String`, we can pass a slice of the entire `String`. This makes our API
 more general and useful without losing any functionality:
 
-Filename: src/main.rs
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 # fn first_word(s: &str) -> &str {

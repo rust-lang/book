@@ -4,7 +4,8 @@ We’ve covered how to call functions defined within a module using the module
 name as part of the call, as in the call to the `namespaces` function shown
 here in Listing 7-6.
 
-Filename: src/main.rs
+<figure>
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 pub mod a {
@@ -20,10 +21,13 @@ fn main() {
 }
 ```
 
-<caption>
+<figcaption>
+
 Listing 7-6: Calling a function by fully specifying its enclosing module’s
 namespaces
-</caption>
+
+</figcaption>
+</figure>
 
 As you can see, referring to the fully qualified name can get quite lengthy.
 Luckily, Rust has a keyword to make these calls more concise.
@@ -34,7 +38,7 @@ Rust’s `use` keyword works to shorten lengthy function calls by bringing the
 modules of the function you want to call into a scope. Here’s an example of
 bringing the `a::series::of` namespace into a binary crate’s root scope:
 
-Filename: src/main.rs
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 pub mod a {
@@ -132,9 +136,9 @@ might also pull in more things than you expected and cause naming conflicts.
 
 As you now know, when you create a library crate, Cargo makes a `tests` module
 for you. Let’s go into more detail about that now. In your `communicator`
-project, open `src/lib.rs`.
+project, open *src/lib.rs*.
 
-Filename: src/lib.rs
+<span class="filename">Filename: src/lib.rs</span>
 
 ```rust,ignore
 pub mod client;
@@ -163,12 +167,11 @@ communicator
  └── tests
 ```
 
-
 Tests are for exercising the code within our library, so let’s try to call
 our `client::connect` function from this `it_works` function, even though
 we’re not going to be checking any functionality right now:
 
-Filename: src/lib.rs
+<span class="filename">Filename: src/lib.rs</span>
 
 ```rust
 #[cfg(test)]
@@ -237,7 +240,7 @@ parent module instead of to the root module.
 For these reasons, in the `tests` module especially, `use super::something` is
 usually the way to go. So now our test looks like this:
 
-Filename: src/lib.rs
+<span class="filename">Filename: src/lib.rs</span>
 
 ```rust
 #[cfg(test)]

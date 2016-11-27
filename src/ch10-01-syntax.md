@@ -27,7 +27,7 @@ extracting a function, but the mechanics of doing the extraction will be
 similar. First, let's consider an `Option` enum with a `Some` variant that can
 only hold an `i32`. We'll call this enum `OptionalNumber`:
 
-Filename: src/main.rs
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 enum OptionalNumber {
@@ -46,7 +46,7 @@ would have to duplicate code to define a separate `Option` enum type for each
 type we wanted to be able to hold in the `Some` variants. For example, here is
 how we could define and use `OptionalFloatingPointNumber`:
 
-Filename: src/main.rs
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 enum OptionalFloatingPointNumber {
@@ -167,7 +167,7 @@ definition of `Option<T>` into `Option_i32` and `Option_f64`, thereby replacing
 the generic definition with the specific ones. The more specific version looks
 like the duplicated code we started with at the beginning of this section:
 
-Filename: src/main.rs
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 enum Option_i32 {
@@ -199,7 +199,8 @@ more of their fields. Generic structs also get monomorphized into specialized
 types at compile time. Listing 10-2 shows the definition and use of a `Point`
 struct that could hold `x` and `y` coordinate values that are any type:
 
-Filename: src/main.rs
+<figure>
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 struct Point<T> {
@@ -213,9 +214,12 @@ fn main() {
 }
 ```
 
-<caption>
+<figcaption>
+
 Listing 10-2: A `Point` struct that holds `x` and `y` values of type `T`
-</caption>
+
+</figcaption>
+</figure>
 
 The syntax is the same with structs: add a `<T>` after the name of the struct,
 then use `T` in the definition where you want to use that generic type instead
@@ -250,7 +254,8 @@ declare multiple type parameters within the angle brackets, separated by a
 comma. Listing 10-3 shows how to define a `Point` that can have different types
 for `x` and `y`:
 
-Filename: src/main.rs
+<figure>
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 struct Point<X, Y> {
@@ -265,10 +270,13 @@ fn main() {
 }
 ```
 
-<caption>
-Listing 10-2: A `Point` struct that holds an `x` value of type `X` and a `y`
+<figcaption>
+
+Listing 10-3: A `Point` struct that holds an `x` value of type `X` and a `y`
 value of type `Y`
-</caption>
+
+</figcaption>
+</figure>
 
 Now `x` will have the type of `X`, and `y` will have the type of `Y`, and we
 can instantiate a `Point` with an `i32` for `x` and an `f64` for `y`.
@@ -334,10 +342,11 @@ fn takes<T>(value: T) {
 
 There's one problem though. We've got some function *definitions* that work,
 but if we try to use `value` in code in the function body, we'll get an
-error. For example, the function definition in Listing 10-3 tries to print out
+error. For example, the function definition in Listing 10-4 tries to print out
 `value` in its body:
 
-Filename: src/lib.rs
+<figure>
+<span class="filename">Filename: src/lib.rs</span>
 
 ```rust,ignore
 fn show_anything<T>(value: T) {
@@ -346,9 +355,12 @@ fn show_anything<T>(value: T) {
 }
 ```
 
-<caption>
-Listing 10-3: A `show_anything` function definition that does not yet compile
-</caption>
+<figcaption>
+
+Listing 10-4: A `show_anything` function definition that does not yet compile
+
+</figcaption>
+</figure>
 
 Compiling this definition results in an error:
 

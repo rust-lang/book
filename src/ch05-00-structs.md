@@ -70,9 +70,9 @@ refactor our program until we're using `struct`s instead.
 Let’s make a new binary project with Cargo called *rectangles* that will take
 the length and width of a rectangle specified in pixels and will calculate the
 area of the rectangle. Here’s a short program that has one way of doing just
-that to put into our project's `src/main.rs`:
+that to put into our project's *src/main.rs*:
 
-Filename: src/main.rs
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 fn main() {
@@ -117,7 +117,7 @@ manageable to group length and width together.
 We’ve already discussed one way we might do that in Chapter 3: tuples. Here’s a
 version of our program which uses tuples:
 
-Filename: src/main.rs
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 fn main() {
@@ -161,7 +161,7 @@ in our code.
 Here is where we bring in `struct`s. We can transform our tuple into a data
 type with a name for the whole as well as names for the parts:
 
-Filename: src/main.rs
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 struct Rectangle {
@@ -209,7 +209,7 @@ It'd be nice to be able to print out an instance of our `Rectangle` while we're
 debugging our program and see the values for all its fields. Let's try using
 the `println!` macro as we have been and see what happens:
 
-Filename: src/main.rs
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore
 struct Rectangle {

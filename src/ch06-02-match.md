@@ -17,6 +17,8 @@ Since we're already talking about coins, let's use them for an example using
 a similar way as the counting machine, determine which coin it is and
 return its value in cents, shown here in Listing 6-2:
 
+<figure>
+
 ```rust
 enum Coin {
     Penny,
@@ -35,10 +37,13 @@ fn value_in_cents(coin: Coin) -> i32 {
 }
 ```
 
-<caption>
+<figcaption>
+
 Listing 6-2: An enum and a `match` expression that has the variants of the enum
 as its patterns.
-</caption>
+
+</figcaption>
+</figure>
 
 <!--- Flagging as a place to possibly put wingding numbers -- would it work to
 put two arms in this example? I think that would illustrate the control flow
@@ -109,6 +114,8 @@ quarters have this extra value. We can add this information to our `enum`
 by changing the `Quarter` variant to include a `State` value stored inside it
 as we've done here in Listing 6-3:
 
+<figure>
+
 ```rust
 #[derive(Debug)] // So we can inspect the state in a minute
 enum UsState {
@@ -125,10 +132,13 @@ enum Coin {
 }
 ```
 
-<caption>
+<figcaption>
+
 Listing 6-3: A `Coin` enum where the `Quarter` variant also holds a `UsState`
 value
-</caption>
+
+</figcaption>
+</figure>
 
 Let's imagine that a friend of ours is trying to collect all 50 state quarters.
 While we sort our loose change by coin type, we're also going to call out the
@@ -189,6 +199,8 @@ operations.
 This function is very easy to write, thanks to `match`, and will look like
 Listing 6-4:
 
+<figure>
+
 ```rust
 fn plus_one(x: Option<i32>) -> Option<i32> {
     match x {
@@ -202,9 +214,12 @@ let six = plus_one(five);
 let none = plus_one(None);
 ```
 
-<caption>
+<figcaption>
+
 Listing 6-4: A function that uses a `match` expression on an `Option<i32>`
-</caption>
+
+</figcaption>
+</figure>
 
 <!-- Flagging for wingding numbers -->
 

@@ -9,7 +9,7 @@ Here is how you would define and use a `calculate_length` function that takes a
 *reference* to an object as an argument instead of taking ownership of the
 argument:
 
-Filename: src/main.rs
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 fn main() {
@@ -33,11 +33,15 @@ function return value is gone. Next, note that we pass `&s1` into
 These `&`s are *references*, and they allow you to refer to some value without
 taking ownership of it. Figure 4-5 shows a diagram of this.
 
+<figure>
 <img alt="&String s pointing at String s1" src="img/trpl04-05.svg" class="center" />
 
-<caption>
+<figcaption>
+
 Figure 4-5: `&String s` pointing at `String s1`
-</caption>
+
+</figcaption>
+</figure>
 
 Let’s take a closer look at the function call here:
 
@@ -76,7 +80,7 @@ it back.
 So what happens if we try to modify something we’re borrowing? Try this code
 out. Spoiler alert: it doesn’t work!
 
-Filename: src/main.rs
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore
 fn main() {
@@ -107,7 +111,7 @@ to modify something we have a reference to.
 
 We can fix this error with just a small tweak:
 
-Filename: src/main.rs
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 fn main() {
@@ -129,7 +133,7 @@ Mutable references have one big restriction, though: you can only have one
 mutable reference to a particular piece of data in a particular scope. This
 code will fail:
 
-Filename: src/main.rs
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore
 let mut s = String::from("hello");
@@ -231,7 +235,7 @@ does.
 
 Let’s try to create a dangling reference:
 
-Filename: src/main.rs
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore
 fn main() {

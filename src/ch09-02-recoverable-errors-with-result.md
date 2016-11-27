@@ -27,6 +27,9 @@ is what we want to return in the error case.
 
 Listing 9-2 shows an example of something that might fail: opening a file.
 
+<figure>
+<span class="filename">Filename: src/main.rs</span>
+
 ```rust
 use std::fs::File;
 
@@ -35,9 +38,12 @@ fn main() {
 }
 ```
 
-<caption>
+<figcaption>
+
 Listing 9-2: Opening a file
-</caption>
+
+</figcaption>
+</figure>
 
 The type of `f` in this example is a `Result`, because there are many ways in
 which opening a file can fail. For example, unless we created `hello.txt`, this
@@ -46,6 +52,9 @@ extract it out of the result. Listing 9-3 shows one way to handle the `Result`
 with a basic tool: the `match` expression that we learned about in Chapter 6.
 
 <!-- I'll ghost everything except the match statement lines in the libreoffice file /Carol -->
+
+<figure>
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust,should_panic
 use std::fs::File;
@@ -61,9 +70,13 @@ error),
 }
 ```
 
-<caption>
-Listing 9-3: Using a `match` expression to handle the `Result` variants we might have
-</caption>
+<figcaption>
+
+Listing 9-3: Using a `match` expression to handle the `Result` variants we
+might have
+
+</figcaption>
+</figure>
 
 If we see an `Ok`, we can return the inner `file` out of the `Ok` variant. If
 we see `Err`, we have to decide what to do with it. The simplest thing is to
@@ -93,6 +106,9 @@ value that we can use to handle different causes of an `Err` returned from
 [ioerror]: ../std/io/struct.Error.html
 [iokind]: ../std/io/enum.ErrorKind.html
 
+<figure>
+<span class="filename">Filename: src/main.rs</span>
+
 ```rust,ignore
 use std::fs::File;
 use std::io::ErrorKind;
@@ -114,9 +130,12 @@ error),
 }
 ```
 
-<caption>
+<figcaption>
+
 Listing 9-4: Handling different kinds of errors in different ways
-</caption>
+
+</figcaption>
+</figure>
 
 <!-- I will add ghosting and wingdings here in libreoffice /Carol -->
 
@@ -137,6 +156,8 @@ methods, and it's called `unwrap()`:
 
 <!-- I'll ghost everything except `unwrap()` in the libreoffice file /Carol -->
 
+<span class="filename">Filename: src/main.rs</span>
+
 ```rust,should_panic
 use std::fs::File;
 
@@ -154,6 +175,8 @@ providing good error messages can convey your intent and make tracking down the
 source of a panic easier. `expect()` looks like this:
 
 <!-- I'll ghost everything except `expect()` in the libreoffice file /Carol -->
+
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust,should_panic
 use std::fs::File;
@@ -205,6 +228,8 @@ shows a function that reads a username from a file. If the file doesn't exist
 or can't be read, this function will return those errors to the code that
 called this function:
 
+<figure>
+
 ```rust
 # use std::fs::File;
 # use std::io;
@@ -227,9 +252,12 @@ fn read_username_from_file() -> Result<String, io::Error> {
 }
 ```
 
-<caption>
+<figcaption>
+
 Listing 9-5: A function that returns errors to the calling code using `match`
-</caption>
+
+</figcaption>
+</figure>
 
 Since the `Result` type has two type parameters, we need to include them both
 in our function signature. In this case, `File::open` and `read_to_string`
@@ -249,6 +277,8 @@ expressions:
 <!-- I'll ghost everything except the calls to `try!` in the libreoffice file
 /Carol -->
 
+<figure>
+
 ```rust
 # use std::fs::File;
 # use std::io;
@@ -264,11 +294,16 @@ fn read_username_from_file() -> Result<String, io::Error> {
 }
 ```
 
-<caption>
+<figcaption>
+
 Listing 9-6: A function that returns errors to the calling code using `try!`
-</caption>
+
+</figcaption>
+</figure>
 
 Or as in Listing 9-7, which uses the question mark operator:
+
+<figure>
 
 ```rust
 # fn main() {}
@@ -283,9 +318,13 @@ fn read_username_from_file() -> Result<String, io::Error> {
     Ok(s)
 }
 ```
-<caption>
+
+<figcaption>
+
 Listing 9-7: A function that returns errors to the calling code using `?`
-</caption>
+
+</figcaption>
+</figure>
 
 The `?` operator at the end of the `open` call does the same thing as the
 example that uses `match` and the example that uses the `try!` macro: It will
@@ -318,6 +357,8 @@ used in functions that return a `Result`, since they expand to the same `match`
 expression we saw above that had a potential early return of an `Err` value.
 Let's look at what happens if we try to use `try!` in the `main` function,
 which you'll recall has a return type of `()`:
+
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore
 # use std::fs::File;

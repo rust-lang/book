@@ -36,9 +36,9 @@ another project and not our own.
 To understand why this program invokes these warnings, let’s try using the
 `connect` library as if we were another project, calling it externally. We can
 do that by creating a binary crate in the same directory as our library crate,
-by making a `src/main.rs` file containing this code:
+by making a *src/main.rs* file containing this code:
 
-Filename: src/main.rs
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore
 extern crate communicator;
@@ -91,9 +91,9 @@ To tell Rust to make something public, we add the `pub` keyword to the start of
 the declaration of the item we want to make public. We’ll focus on fixing the
 warning that tells us that `client::connect` has gone unused for now, as well
 as the “module `client` is private” error from our binary crate. Modify
-`src/lib.rs` to make the `client` module public, like so:
+*src/lib.rs* to make the `client` module public, like so:
 
-Filename: src/lib.rs
+<span class="filename">Filename: src/lib.rs</span>
 
 ```rust,ignore
 pub mod client;
@@ -116,7 +116,7 @@ Hooray! We have a different error! Yes, different error messages are a cause
 for celebration. The new error says “function `connect` is private”, so let’s
 edit `src/client.rs` to make `client::connect` public too:
 
-Filename: src/client.rs
+<span class="filename">Filename: src/client.rs</span>
 
 ```rust
 pub fn connect() {
@@ -150,9 +150,9 @@ called.
 
 In our case though, we *do* want the other two functions to be part of our
 crate’s public API, so let’s mark them as `pub` as well to try to get rid of
-the remaining warnings. Modify `src/network/mod.rs` to be:
+the remaining warnings. Modify *src/network/mod.rs* to be:
 
-Filename: src/network/mod.rs
+<span class="filename">Filename: src/network/mod.rs</span>
 
 ```rust,ignore
 pub fn connect() {
@@ -184,7 +184,7 @@ public. We’re working from the interior of the library out this time, where
 with `client::connect` we worked from the outside in. We need to change
 `src/lib.rs` to make `network` public too:
 
-Filename: src/lib.rs
+<span class="filename">Filename: src/lib.rs</span>
 
 ```rust,ignore
 pub mod client;
@@ -216,9 +216,10 @@ Overall, these are the rules for item visibility:
 ### Privacy Examples
 
 Let’s look at a few more examples to get some practice. Create a new libary
-project and enter the code in Listing 7-5 into your new project’s `src/lib.rs`:
+project and enter the code in Listing 7-5 into your new project’s *src/lib.rs*:
 
-Filename: src/lib.rs
+<figure>
+<span class="filename">Filename: src/lib.rs</span>
 
 ```rust,ignore
 mod outermost {
@@ -240,6 +241,14 @@ fn try_me() {
     outermost::inside::secret_function();
 }
 ```
+
+<figcaption>
+
+Listing 7-5: Examples of private and public functions, some of which are
+incorrect
+
+</figcaption>
+</figure>
 
 Before you try to compile this code, make a guess about which lines in `try_me`
 function will have errors. Then try compiling to see if you were right, and read
