@@ -1,8 +1,11 @@
 # Fundamental Collections
 
 Rust's standard library includes a number of really useful data structures
-called *collections*. Most other types represent one specific value, but
-collections can contain multiple values inside of them. Each collection has
+called *collections*. Most other data types represent one specific value, but
+<!--- It would be useful to differentiate collections from tuple and arrays
+here, the other structures we've seen that hold multiple values -->
+
+collections can contain multiple values. Each kind of collection has
 different capabilities and costs, and choosing an appropriate one for the
 situation you're in is a skill you'll develop over time. In this chapter, we'll
 go over three collections which are used very often in Rust programs:
