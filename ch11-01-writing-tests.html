@@ -1,0 +1,326 @@
+<!DOCTYPE HTML>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>The Rust Programming Language</title>
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <base href="">
+
+        <link rel="stylesheet" href="book.css">
+        <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+        <link rel="shortcut icon" href="favicon.png">
+
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+
+        <!-- MathJax -->
+        <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+        <!-- Fetch JQuery from CDN but have a local fallback -->
+        <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+        <script>
+            if (typeof jQuery == 'undefined') {
+                document.write(unescape("%3Cscript src='jquery.js'%3E%3C/script%3E"));
+            }
+        </script>
+    </head>
+    <body class="light">
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme = localStorage.getItem('theme');
+            if (theme == null) { theme = 'light'; }
+            $('body').removeClass().addClass(theme);
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var sidebar = localStorage.getItem('sidebar');
+            if (sidebar === "hidden") { $("html").addClass("sidebar-hidden") }
+            else if (sidebar === "visible") { $("html").addClass("sidebar-visible") }
+        </script>
+
+        <div id="sidebar" class="sidebar">
+            <ul class="chapter"><li><a href="ch01-00-introduction.html"><strong>1.</strong> Introduction</a></li><li><ul class="section"><li><a href="ch01-01-installation.html"><strong>1.1.</strong> Installation</a></li><li><a href="ch01-02-hello-world.html"><strong>1.2.</strong> Hello, World!</a></li></ul></li><li><a href="ch02-00-guessing-game-tutorial.html"><strong>2.</strong> Guessing Game Tutorial</a></li><li><a href="ch03-00-common-programming-concepts.html"><strong>3.</strong> Common Programming Concepts</a></li><li><ul class="section"><li><a href="ch03-01-variables-and-mutability.html"><strong>3.1.</strong> Variables and Mutability</a></li><li><a href="ch03-02-data-types.html"><strong>3.2.</strong> Data Types</a></li><li><a href="ch03-03-how-functions-work.html"><strong>3.3.</strong> How Functions Work</a></li><li><a href="ch03-04-comments.html"><strong>3.4.</strong> Comments</a></li><li><a href="ch03-05-control-flow.html"><strong>3.5.</strong> Control Flow</a></li></ul></li><li><a href="ch04-00-understanding-ownership.html"><strong>4.</strong> Understanding Ownership</a></li><li><ul class="section"><li><a href="ch04-01-what-is-ownership.html"><strong>4.1.</strong> What is Ownership?</a></li><li><a href="ch04-02-references-and-borrowing.html"><strong>4.2.</strong> References &amp; Borrowing</a></li><li><a href="ch04-03-slices.html"><strong>4.3.</strong> Slices</a></li></ul></li><li><a href="ch05-00-structs.html"><strong>5.</strong> Structs</a></li><li><ul class="section"><li><a href="ch05-01-method-syntax.html"><strong>5.1.</strong> Method Syntax</a></li></ul></li><li><a href="ch06-00-enums.html"><strong>6.</strong> Enums</a></li><li><ul class="section"><li><a href="ch06-01-option.html"><strong>6.1.</strong> Option</a></li><li><a href="ch06-02-match.html"><strong>6.2.</strong> Match</a></li><li><a href="ch06-03-if-let.html"><strong>6.3.</strong> <code>if let</code></a></li></ul></li><li><a href="ch07-00-modules.html"><strong>7.</strong> Modules</a></li><li><ul class="section"><li><a href="ch07-01-mod-and-the-filesystem.html"><strong>7.1.</strong> <code>mod</code> and the Filesystem</a></li><li><a href="ch07-02-controlling-visibility-with-pub.html"><strong>7.2.</strong> Controlling Visibility with <code>pub</code></a></li><li><a href="ch07-03-importing-names-with-use.html"><strong>7.3.</strong> Importing Names with <code>use</code></a></li></ul></li><li><a href="ch08-00-fundamental-collections.html"><strong>8.</strong> Fundamental Collections</a></li><li><ul class="section"><li><a href="ch08-01-vectors.html"><strong>8.1.</strong> Vectors</a></li><li><a href="ch08-02-strings.html"><strong>8.2.</strong> Strings</a></li><li><a href="ch08-03-hash-maps.html"><strong>8.3.</strong> Hash Maps</a></li></ul></li><li><a href="ch09-00-error-handling.html"><strong>9.</strong> Error Handling</a></li><li><ul class="section"><li><a href="ch09-01-unrecoverable-errors-with-panic.html"><strong>9.1.</strong> Unrecoverable Errors with <code>panic!</code></a></li><li><a href="ch09-02-recoverable-errors-with-result.html"><strong>9.2.</strong> Recoverable Errors with <code>Result</code></a></li><li><a href="ch09-03-to-panic-or-not-to-panic.html"><strong>9.3.</strong> To <code>panic!</code> or Not To <code>panic!</code></a></li></ul></li><li><a href="ch10-00-generics.html"><strong>10.</strong> Generics</a></li><li><ul class="section"><li><a href="ch10-01-syntax.html"><strong>10.1.</strong> Syntax</a></li><li><a href="ch10-02-traits.html"><strong>10.2.</strong> Traits</a></li><li><a href="ch10-03-lifetime-syntax.html"><strong>10.3.</strong> Lifetime syntax</a></li></ul></li><li><a href="ch11-00-testing.html"><strong>11.</strong> Testing</a></li><li><ul class="section"><li><a href="ch11-01-writing-tests.html" class="active"><strong>11.1.</strong> Writing tests</a></li><li><a href="ch11-02-running-tests.html"><strong>11.2.</strong> Running tests</a></li><li><a href="ch11-03-test-organization.html"><strong>11.3.</strong> Test Organization</a></li></ul></li><li><strong>12.</strong> I/O</li><li><ul class="section"><li><strong>12.1.</strong> <code>Read</code> &amp; <code>Write</code></li><li><strong>12.2.</strong> <code>std::fs</code></li><li><strong>12.3.</strong> <code>std::path</code></li><li><strong>12.4.</strong> <code>std::env</code></li></ul></li><li><strong>13.</strong> Composition</li><li><ul class="section"><li><strong>13.1.</strong> Instead of Inheritance</li><li><strong>13.2.</strong> Trait Objects?</li></ul></li><li><strong>14.</strong> Creating a Library</li><li><ul class="section"><li><strong>14.1.</strong> Cargo</li><li><strong>14.2.</strong> Crates.io</li><li><a href="chYY-YY-public-api.html"><strong>14.3.</strong> Organizing your Public API</a></li><li><a href="chYY-YY-documentation.html"><strong>14.4.</strong> Documentation</a></li><li><a href="chYY-YY-workspaces.html"><strong>14.5.</strong> Workspaces and Multiple Related Crates</a></li></ul></li><li><strong>15.</strong> Closures</li><li><strong>16.</strong> Zero-cost Abstractions</li><li><ul class="section"><li><strong>16.1.</strong> Iterators as a Case Study</li></ul></li><li><strong>17.</strong> Smart Pointers</li><li><ul class="section"><li><strong>17.1.</strong> <code>Box&lt;T&gt;</code></li><li><strong>17.2.</strong> <code>Rc&lt;T&gt;</code></li><li><strong>17.3.</strong> <code>Cell</code></li><li><strong>17.4.</strong> <code>RefCell</code></li><li><strong>17.5.</strong> Interior Mutability</li></ul></li><li><strong>18.</strong> Concurrency</li><li><ul class="section"><li><strong>18.1.</strong> Threads</li><li><strong>18.2.</strong> <code>Send</code> &amp; <code>Sync</code></li><li><strong>18.3.</strong> <code>Arc&lt;T&gt;</code></li><li><strong>18.4.</strong> <code>Mutex&lt;T&gt;</code></li><li><strong>18.5.</strong> <code>Channels</code></li></ul></li><li><a href="chXX-patterns.html"><strong>19.</strong> Patterns</a></li><li><strong>20.</strong> More Lifetimes</li><li><strong>21.</strong> Unsafe Rust</li><li><ul class="section"><li><strong>21.1.</strong> Raw Pointers</li><li><strong>21.2.</strong> <code>transmute</code></li></ul></li><li><strong>22.</strong> Foreign Function Interface</li><li><ul class="section"><li><strong>22.1.</strong> Conditional Compilation</li><li><strong>22.2.</strong> Bindings to C</li><li><strong>22.3.</strong> Using Rust from Other Languages</li><li><strong>22.4.</strong> <code>static</code></li></ul></li><li><strong>23.</strong> Advanced Type System Features</li><li><ul class="section"><li><strong>23.1.</strong> Associated Types</li><li><strong>23.2.</strong> Trait Objects</li><li><strong>23.3.</strong> UFCS</li><li><strong>23.4.</strong> Coherence</li></ul></li><li><strong>24.</strong> Macros</li><li><ul class="section"><li><strong>24.1.</strong> Writing Your Own Macros</li></ul></li><li><strong>25.</strong> Nightly Rust</li><li><ul class="section"><li><strong>25.1.</strong> Nightly Features</li><li><strong>25.2.</strong> How to Find Out About Nightly Features</li></ul></li><li><a href="appendix-00.html"><strong>26.</strong> Appendix</a></li><li><ul class="section"><li><a href="appendix-01-keywords.html"><strong>26.1.</strong> Keywords</a></li><li><a href="appendix-02-operators.html"><strong>26.2.</strong> Operators</a></li><li><a href="appendix-03-derivable-traits.html"><strong>26.3.</strong> Derivable Traits</a></li></ul></li></ul>
+        </div>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar" class="menu-bar">
+                    <div class="left-buttons">
+                        <i id="sidebar-toggle" class="fa fa-bars"></i>
+                        <i id="theme-toggle" class="fa fa-paint-brush"></i>
+                    </div>
+
+                    <h1 class="menu-title">The Rust Programming Language</h1>
+
+                    <div class="right-buttons">
+                        <i id="print-button" class="fa fa-print" title="Print this book"></i>
+                    </div>
+                </div>
+
+                <div id="content" class="content">
+                    <h2>Writing Tests</h2>
+<p>Tests are Rust functions that use particular features and are written in such a
+way as to verify that non-test code is functioning in the expected manner.
+Everything we've discussed about Rust code applies to Rust tests as well! Let's
+look at the features Rust provides specifically for writing tests: the <code>test</code>
+attribute, a few macros, and the <code>should_panic</code> attribute.</p>
+<h3>The <code>test</code> attribute</h3>
+<p>At its simplest, a test in Rust is a function that's annotated with the <code>test</code>
+attribute. Let's make a new library project with Cargo called <code>adder</code>:</p>
+<pre><code class="language-text">$ cargo new adder
+     Created library `adder` project
+$ cd adder
+</code></pre>
+<p>Cargo will automatically generate a simple test when you make a new library
+project. Here's the contents of <code>src/lib.rs</code>:</p>
+<p>Filename: src/lib.rs</p>
+<pre><code class="language-rust">#[cfg(test)]
+mod tests {
+    #[test]
+    fn it_works() {
+    }
+}
+</code></pre>
+<p>For now, let's ignore the <code>tests</code> module and the <code>#[cfg(test)]</code> annotation in
+order to focus on just the function. Note the <code>#[test]</code> before it: this
+attribute indicates this is a test function. The function currently has no
+body; that's good enough to pass! We can run the tests with <code>cargo test</code>:</p>
+<pre><code class="language-text">$ cargo test
+   Compiling adder v0.1.0 (file:///projects/adder)
+    Finished debug [unoptimized + debuginfo] target(s) in 0.22 secs
+     Running target/debug/deps/adder-ce99bcc2479f4607
+
+running 1 test
+test it_works ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured
+
+   Doc-tests adder
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured
+</code></pre>
+<p>Cargo compiled and ran our tests. There are two sets of output here; we're
+going to focus on the first set in this chapter. The second set of output is
+for documentation tests, which we'll talk about in Chapter 14. For now, note
+this line:</p>
+<pre><code class="language-text">test it_works ... ok
+</code></pre>
+<p>The <code>it_works</code> text comes from the name of our function.</p>
+<p>We also get a summary line that tells us the aggregate results of all the
+tests that we have:</p>
+<pre><code class="language-text">test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured
+</code></pre>
+<h3>The <code>assert!</code> macro</h3>
+<p>The empty test function passes because any test which doesn't <code>panic!</code> passes,
+and any test that does <code>panic!</code> fails. Let's make the test fail by using the
+<code>assert!</code> macro:</p>
+<p>Filename: src/lib.rs</p>
+<pre><code class="language-rust">#[test]
+fn it_works() {
+    assert!(false);
+}
+</code></pre>
+<p>The <code>assert!</code> macro is provided by the standard library, and it takes one
+argument. If the argument is <code>true</code>, nothing happens. If the argument is
+<code>false</code>, the macro will <code>panic!</code>. Let's run our tests again:</p>
+<pre><code class="language-text">$ cargo test
+   Compiling adder v0.1.0 (file:///projects/adder)
+    Finished debug [unoptimized + debuginfo] target(s) in 0.22 secs
+     Running target/debug/deps/adder-ce99bcc2479f4607
+
+running 1 test
+test it_works ... FAILED
+
+failures:
+
+---- it_works stdout ----
+    thread 'it_works' panicked at 'assertion failed: false', src/lib.rs:5
+note: Run with `RUST_BACKTRACE=1` for a backtrace.
+
+
+failures:
+    it_works
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured
+
+error: test failed
+</code></pre>
+<p>Rust indicates that our test failed:</p>
+<pre><code class="language-text">test it_works ... FAILED
+</code></pre>
+<p>And shows that the test failed because the <code>assert!</code> macro in <code>src/lib.rs</code> on
+line 5 got a <code>false</code> value:</p>
+<pre><code class="language-text">thread 'it_works' panicked at 'assertion failed: false', src/lib.rs:5
+</code></pre>
+<p>The test failure is also reflected in the summary line:</p>
+<pre><code class="language-text">test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured
+</code></pre>
+<h3>Testing equality with the <code>assert_eq!</code> and <code>assert_ne!</code> macros</h3>
+<p>A common way to test functionality is to compare the result of the code under
+test to the value you expect it to be, and check that they're equal. You can do
+this using the <code>assert!</code> macro by passing it an expression using the <code>==</code>
+macro. This is so common, though, that the standard library provides a pair of
+macros to do this for convenience: <code>assert_eq!</code> and <code>assert_ne!</code>. These macros
+compare two arguments for equality or inequality, respectively. The other
+advantage of using these macros is they will print out what the two values
+actually are if the assertion fails so that it's easier to see <em>why</em> the test
+failed, whereas the <code>assert!</code> macro would just print out that it got a <code>false</code>
+value for the <code>==</code> expression.</p>
+<p>Here's an example test that uses each of these macros and will pass:</p>
+<p>Filename: src/lib.rs</p>
+<pre><code class="language-rust">#[test]
+fn it_works() {
+    assert_eq!(&quot;Hello&quot;, &quot;Hello&quot;);
+
+    assert_ne!(&quot;Hello&quot;, &quot;world&quot;);
+}
+</code></pre>
+<p>You can also specify an optional third argument to each of these macros, which
+is a custom message that you'd like to be added to the failure message. The
+macros expand to logic similar to this:</p>
+<pre><code class="language-rust,ignore">// assert_eq! - panic if the values aren't equal
+if left_val != right_val {
+    panic!(
+        &quot;assertion failed: `(left == right)` (left: `{:?}`, right: `{:?}`): {}&quot;
+        left_val,
+        right_val,
+        optional_custom_message
+    )
+}
+
+// assert_ne! - panic if the values are equal
+if left_val == right_val {
+    panic!(
+        &quot;assertion failed: `(left != right)` (left: `{:?}`, right: `{:?}`): {}&quot;
+        left_val,
+        right_val,
+        optional_custom_message
+    )
+}
+</code></pre>
+<p>Let's take a look at a test that will fail becasue <code>hello</code> is not equal to
+<code>world</code>. We've also added a custom error message, <code>greeting operation failed</code>:</p>
+<p>Filename: src/lib.rs</p>
+<pre><code class="language-rust">#[test]
+fn a_simple_case() {
+    let result = &quot;hello&quot;; // this value would come from running your code
+    assert_eq!(result, &quot;world&quot;, &quot;greeting operation failed&quot;);
+}
+</code></pre>
+<p>Running this indeed fails, and the output we get explains why the test failed
+and includes the custom error message we specified:</p>
+<pre><code class="language-text">---- a_simple_case stdout ----
+    thread 'a_simple_case' panicked at 'assertion failed: `(left == right)` (left: `&quot;hello&quot;`, right: `&quot;world&quot;`): greeting operation failed', src/main.rs:4
+</code></pre>
+<p>The two arguments to <code>assert_eq!</code> are named &quot;left&quot; and &quot;right&quot; rather than
+&quot;expected&quot; and &quot;actual&quot;; the order of the value that comes from your code and
+the value hardcoded into your test isn't important.</p>
+<p>Since these macros use the operators <code>==</code> and <code>!=</code> and print the values using
+debug formatting, the values being compared must implement the <code>PartialEq</code> and
+<code>Debug</code> traits. Types provided by Rust implement these traits, but for structs
+and enums that you define, you'll need to add <code>PartialEq</code> in order to be able
+to assert that values of those types are equal or not equal and <code>Debug</code> in
+order to be able to print out the values in the case that the assertion fails.
+Because both of these traits are derivable traits that we mentioned in Chapter
+5, usually this is as straightforward as adding the <code>#[derive(PartialEq, Debug)]</code> annotation to your struct or enum definition. See Appendix C for more
+details about these and other derivable traits.</p>
+<h2>Test for failure with <code>should_panic</code></h2>
+<p>We can invert our test's failure with another attribute: <code>should_panic</code>. This
+is useful when we want to test that calling a particular function will cause an
+error. For example, let's test something that we know will panic from Chapter
+8: attempting to create a slice using range syntax with byte indices that
+aren't on character boundaries. Add the <code>#[should_panic]</code> attribute before the
+function like the <code>#[test]</code> attribute, as shown in Listing 11-1:</p>
+<p>Filename: src/lib.rs</p>
+<pre><code class="language-rust">#[test]
+#[should_panic]
+fn slice_not_on_char_boundaries() {
+    let s = &quot;Здравствуйте&quot;;
+    &amp;s[0..1];
+}
+</code></pre>
+<caption>
+Listing 11-1: A test expecting a `panic!`
+</caption>
+<p>This test will succeed, since the code panics and we said that it should. If
+this code happened to run and did not cause a <code>panic!</code>, this test would fail.</p>
+<p><code>should_panic</code> tests can be fragile, as it's hard to guarantee that the test
+didn't fail for a different reason than the one you were expecting. To help
+with this, an optional <code>expected</code> parameter can be added to the <code>should_panic</code>
+attribute. The test harness will make sure that the failure message contains
+the provided text. A more robust version of Listing 11-1 would be the
+following, in Listing 11-2:</p>
+<p>Filename: src/lib.rs</p>
+<pre><code class="language-rust">#[test]
+#[should_panic(expected = &quot;do not lie on character boundary&quot;)]
+fn slice_not_on_char_boundaries() {
+    let s = &quot;Здравствуйте&quot;;
+    &amp;s[0..1];
+}
+</code></pre>
+<!-- I will add ghosting in libreoffice /Carol -->
+<caption>
+Listing 11-2: A test expecting a `panic!` with a particular message
+</caption>
+<p>Try on your own to see what happens when a <code>should_panic</code> test panics but
+doesn't match the expected message: cause a <code>panic!</code> that happens for a
+different reason in this test, or change the expected panic message to
+something that doesn't match the character boundary panic message.</p>
+
+                </div>
+
+                <!-- Mobile navigation buttons -->
+                
+                    <a href="ch11-00-testing.html" class="mobile-nav-chapters previous">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+                    <a href="ch11-02-running-tests.html" class="mobile-nav-chapters next">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                
+
+            </div>
+
+            
+                <a href="ch11-00-testing.html" class="nav-chapters previous" title="You can navigate through the chapters using the arrow keys">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+            
+
+            
+                <a href="ch11-02-running-tests.html" class="nav-chapters next" title="You can navigate through the chapters using the arrow keys">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            
+
+        </div>
+
+
+        <!-- Local fallback for Font Awesome -->
+        <script>
+            if ($(".fa").css("font-family") !== "FontAwesome") {
+                $('<link rel="stylesheet" type="text/css" href="_FontAwesome/css/font-awesome.css">').prependTo('head');
+            }
+        </script>
+
+        <!-- Livereload script (if served using the cli tool) -->
+        
+
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+    </body>
+</html>

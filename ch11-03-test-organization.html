@@ -1,0 +1,352 @@
+<!DOCTYPE HTML>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>The Rust Programming Language</title>
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <base href="">
+
+        <link rel="stylesheet" href="book.css">
+        <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+        <link rel="shortcut icon" href="favicon.png">
+
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+
+        <!-- MathJax -->
+        <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+        <!-- Fetch JQuery from CDN but have a local fallback -->
+        <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+        <script>
+            if (typeof jQuery == 'undefined') {
+                document.write(unescape("%3Cscript src='jquery.js'%3E%3C/script%3E"));
+            }
+        </script>
+    </head>
+    <body class="light">
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme = localStorage.getItem('theme');
+            if (theme == null) { theme = 'light'; }
+            $('body').removeClass().addClass(theme);
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var sidebar = localStorage.getItem('sidebar');
+            if (sidebar === "hidden") { $("html").addClass("sidebar-hidden") }
+            else if (sidebar === "visible") { $("html").addClass("sidebar-visible") }
+        </script>
+
+        <div id="sidebar" class="sidebar">
+            <ul class="chapter"><li><a href="ch01-00-introduction.html"><strong>1.</strong> Introduction</a></li><li><ul class="section"><li><a href="ch01-01-installation.html"><strong>1.1.</strong> Installation</a></li><li><a href="ch01-02-hello-world.html"><strong>1.2.</strong> Hello, World!</a></li></ul></li><li><a href="ch02-00-guessing-game-tutorial.html"><strong>2.</strong> Guessing Game Tutorial</a></li><li><a href="ch03-00-common-programming-concepts.html"><strong>3.</strong> Common Programming Concepts</a></li><li><ul class="section"><li><a href="ch03-01-variables-and-mutability.html"><strong>3.1.</strong> Variables and Mutability</a></li><li><a href="ch03-02-data-types.html"><strong>3.2.</strong> Data Types</a></li><li><a href="ch03-03-how-functions-work.html"><strong>3.3.</strong> How Functions Work</a></li><li><a href="ch03-04-comments.html"><strong>3.4.</strong> Comments</a></li><li><a href="ch03-05-control-flow.html"><strong>3.5.</strong> Control Flow</a></li></ul></li><li><a href="ch04-00-understanding-ownership.html"><strong>4.</strong> Understanding Ownership</a></li><li><ul class="section"><li><a href="ch04-01-what-is-ownership.html"><strong>4.1.</strong> What is Ownership?</a></li><li><a href="ch04-02-references-and-borrowing.html"><strong>4.2.</strong> References &amp; Borrowing</a></li><li><a href="ch04-03-slices.html"><strong>4.3.</strong> Slices</a></li></ul></li><li><a href="ch05-00-structs.html"><strong>5.</strong> Structs</a></li><li><ul class="section"><li><a href="ch05-01-method-syntax.html"><strong>5.1.</strong> Method Syntax</a></li></ul></li><li><a href="ch06-00-enums.html"><strong>6.</strong> Enums</a></li><li><ul class="section"><li><a href="ch06-01-option.html"><strong>6.1.</strong> Option</a></li><li><a href="ch06-02-match.html"><strong>6.2.</strong> Match</a></li><li><a href="ch06-03-if-let.html"><strong>6.3.</strong> <code>if let</code></a></li></ul></li><li><a href="ch07-00-modules.html"><strong>7.</strong> Modules</a></li><li><ul class="section"><li><a href="ch07-01-mod-and-the-filesystem.html"><strong>7.1.</strong> <code>mod</code> and the Filesystem</a></li><li><a href="ch07-02-controlling-visibility-with-pub.html"><strong>7.2.</strong> Controlling Visibility with <code>pub</code></a></li><li><a href="ch07-03-importing-names-with-use.html"><strong>7.3.</strong> Importing Names with <code>use</code></a></li></ul></li><li><a href="ch08-00-fundamental-collections.html"><strong>8.</strong> Fundamental Collections</a></li><li><ul class="section"><li><a href="ch08-01-vectors.html"><strong>8.1.</strong> Vectors</a></li><li><a href="ch08-02-strings.html"><strong>8.2.</strong> Strings</a></li><li><a href="ch08-03-hash-maps.html"><strong>8.3.</strong> Hash Maps</a></li></ul></li><li><a href="ch09-00-error-handling.html"><strong>9.</strong> Error Handling</a></li><li><ul class="section"><li><a href="ch09-01-unrecoverable-errors-with-panic.html"><strong>9.1.</strong> Unrecoverable Errors with <code>panic!</code></a></li><li><a href="ch09-02-recoverable-errors-with-result.html"><strong>9.2.</strong> Recoverable Errors with <code>Result</code></a></li><li><a href="ch09-03-to-panic-or-not-to-panic.html"><strong>9.3.</strong> To <code>panic!</code> or Not To <code>panic!</code></a></li></ul></li><li><a href="ch10-00-generics.html"><strong>10.</strong> Generics</a></li><li><ul class="section"><li><a href="ch10-01-syntax.html"><strong>10.1.</strong> Syntax</a></li><li><a href="ch10-02-traits.html"><strong>10.2.</strong> Traits</a></li><li><a href="ch10-03-lifetime-syntax.html"><strong>10.3.</strong> Lifetime syntax</a></li></ul></li><li><a href="ch11-00-testing.html"><strong>11.</strong> Testing</a></li><li><ul class="section"><li><a href="ch11-01-writing-tests.html"><strong>11.1.</strong> Writing tests</a></li><li><a href="ch11-02-running-tests.html"><strong>11.2.</strong> Running tests</a></li><li><a href="ch11-03-test-organization.html" class="active"><strong>11.3.</strong> Test Organization</a></li></ul></li><li><strong>12.</strong> I/O</li><li><ul class="section"><li><strong>12.1.</strong> <code>Read</code> &amp; <code>Write</code></li><li><strong>12.2.</strong> <code>std::fs</code></li><li><strong>12.3.</strong> <code>std::path</code></li><li><strong>12.4.</strong> <code>std::env</code></li></ul></li><li><strong>13.</strong> Composition</li><li><ul class="section"><li><strong>13.1.</strong> Instead of Inheritance</li><li><strong>13.2.</strong> Trait Objects?</li></ul></li><li><strong>14.</strong> Creating a Library</li><li><ul class="section"><li><strong>14.1.</strong> Cargo</li><li><strong>14.2.</strong> Crates.io</li><li><a href="chYY-YY-public-api.html"><strong>14.3.</strong> Organizing your Public API</a></li><li><a href="chYY-YY-documentation.html"><strong>14.4.</strong> Documentation</a></li><li><a href="chYY-YY-workspaces.html"><strong>14.5.</strong> Workspaces and Multiple Related Crates</a></li></ul></li><li><strong>15.</strong> Closures</li><li><strong>16.</strong> Zero-cost Abstractions</li><li><ul class="section"><li><strong>16.1.</strong> Iterators as a Case Study</li></ul></li><li><strong>17.</strong> Smart Pointers</li><li><ul class="section"><li><strong>17.1.</strong> <code>Box&lt;T&gt;</code></li><li><strong>17.2.</strong> <code>Rc&lt;T&gt;</code></li><li><strong>17.3.</strong> <code>Cell</code></li><li><strong>17.4.</strong> <code>RefCell</code></li><li><strong>17.5.</strong> Interior Mutability</li></ul></li><li><strong>18.</strong> Concurrency</li><li><ul class="section"><li><strong>18.1.</strong> Threads</li><li><strong>18.2.</strong> <code>Send</code> &amp; <code>Sync</code></li><li><strong>18.3.</strong> <code>Arc&lt;T&gt;</code></li><li><strong>18.4.</strong> <code>Mutex&lt;T&gt;</code></li><li><strong>18.5.</strong> <code>Channels</code></li></ul></li><li><a href="chXX-patterns.html"><strong>19.</strong> Patterns</a></li><li><strong>20.</strong> More Lifetimes</li><li><strong>21.</strong> Unsafe Rust</li><li><ul class="section"><li><strong>21.1.</strong> Raw Pointers</li><li><strong>21.2.</strong> <code>transmute</code></li></ul></li><li><strong>22.</strong> Foreign Function Interface</li><li><ul class="section"><li><strong>22.1.</strong> Conditional Compilation</li><li><strong>22.2.</strong> Bindings to C</li><li><strong>22.3.</strong> Using Rust from Other Languages</li><li><strong>22.4.</strong> <code>static</code></li></ul></li><li><strong>23.</strong> Advanced Type System Features</li><li><ul class="section"><li><strong>23.1.</strong> Associated Types</li><li><strong>23.2.</strong> Trait Objects</li><li><strong>23.3.</strong> UFCS</li><li><strong>23.4.</strong> Coherence</li></ul></li><li><strong>24.</strong> Macros</li><li><ul class="section"><li><strong>24.1.</strong> Writing Your Own Macros</li></ul></li><li><strong>25.</strong> Nightly Rust</li><li><ul class="section"><li><strong>25.1.</strong> Nightly Features</li><li><strong>25.2.</strong> How to Find Out About Nightly Features</li></ul></li><li><a href="appendix-00.html"><strong>26.</strong> Appendix</a></li><li><ul class="section"><li><a href="appendix-01-keywords.html"><strong>26.1.</strong> Keywords</a></li><li><a href="appendix-02-operators.html"><strong>26.2.</strong> Operators</a></li><li><a href="appendix-03-derivable-traits.html"><strong>26.3.</strong> Derivable Traits</a></li></ul></li></ul>
+        </div>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar" class="menu-bar">
+                    <div class="left-buttons">
+                        <i id="sidebar-toggle" class="fa fa-bars"></i>
+                        <i id="theme-toggle" class="fa fa-paint-brush"></i>
+                    </div>
+
+                    <h1 class="menu-title">The Rust Programming Language</h1>
+
+                    <div class="right-buttons">
+                        <i id="print-button" class="fa fa-print" title="Print this book"></i>
+                    </div>
+                </div>
+
+                <div id="content" class="content">
+                    <h2>Test Organization</h2>
+<p>As mentioned before, testing is a large discipline, and different people
+sometimes use different terminology and organization. The Rust community tends
+to think about tests in terms of two main categories: <em>unit tests</em> and
+<em>integration tests</em>. Unit tests tend to be smaller and more focused, testing
+one module in isolation at a time. They can also test private interfaces.
+Integration tests are entirely external to your library. They use your code in
+the same way any other code would, using only the public interface and
+exercising multiple modules per test. Both kinds of tests are important to
+ensure that the pieces of your library are doing what you expect them to
+separately and together.</p>
+<h3>Unit Tests</h3>
+<p>The purpose of unit tests is to test each unit of code in isolation from the
+rest of the code, in order to be able to quickly pinpoint where code is working
+as expected or not. Unit tests live in the <em>src</em> directory, in the same files
+as the code they are testing. They are separated into their own <code>tests</code> module
+in each file.</p>
+<h4>The Tests Module and <code>cfg(test)</code></h4>
+<p>By placing tests in their own module and using the <code>cfg</code> annotation on the
+module, we can tell Rust to only compile and run the test code when we run
+<code>cargo test</code>. This saves compile time when we only want to build the library
+code with <code>cargo build</code>, and saves space in the resulting compiled artifact
+since the tests are not included.</p>
+<p>Remember when we generated the new <code>adder</code> project in the last section? Cargo
+generated this code for us:</p>
+<p>Filename: src/lib.rs</p>
+<pre><code class="language-rust">#[cfg(test)]
+mod tests {
+    #[test]
+    fn it_works() {
+    }
+}
+</code></pre>
+<p>We ignored the module stuff so we could concentrate on the mechanics of the
+test code inside the module, but now let's focus on the code surrounding our
+tests.</p>
+<p>First of all, there's a new attribute, <code>cfg</code>. The <code>cfg</code> attribute lets us
+declare that something should only be included given a certain <em>configuration</em>.
+Rust provides the <code>test</code> configuration for compiling and running tests. By
+using this attribute, Cargo only compiles our test code if we're currently
+trying to run the tests.</p>
+<p>Next, the <code>tests</code> module holds all of our test functions, while our code is
+outside of the <code>tests</code> module. The name of the <code>tests</code> module is a convention;
+otherwise this is a regular module that follows the usual visibility rules we
+covered in Chapter 7. Because we're in an inner module, we need to bring the
+code under test into scope. This can be annoying if you have a large module, so
+this is a common use of globs.</p>
+<p>Up until now in this chapter, we've been writing tests in our <code>adder</code> project
+that don't actually call any code we've written. Let's change that now! In
+<em>src/lib.rs</em>, place this <code>add_two</code> function and <code>tests</code> module that has a test
+function to exercise the code, as shown in Listing 11-5:</p>
+<p>Filename: src/lib.rs</p>
+<pre><code class="language-rust">pub fn add_two(a: i32) -&gt; i32 {
+    a + 2
+}
+
+#[cfg(test)]
+mod tests {
+    use add_two;
+
+    #[test]
+    fn it_works() {
+        assert_eq!(4, add_two(2));
+    }
+}
+</code></pre>
+<caption>
+Listing 11-5: Testing the function `add_two` in a child `tests` module
+</caption>
+<p>Notice in addition to the test function, we also added <code>use add_two;</code> within
+the <code>tests</code> module. This brings the code we want to test into the scope of the
+inner <code>tests</code> module, just like we'd need to do for any inner module. If we run
+this test now with <code>cargo test</code>, it will pass:</p>
+<pre><code class="language-text">running 1 test
+test tests::it_works ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured
+</code></pre>
+<p>If we had forgotten to bring the <code>add_two</code> function into scope, we would get an
+unresolved name error since the <code>tests</code> module wouldn't know anything about the
+<code>add_two</code> function:</p>
+<pre><code class="language-text">error[E0425]: unresolved name `add_two`
+ --&gt; src/lib.rs:9:23
+  |
+9 |         assert_eq!(4, add_two(2));
+  |                       ^^^^^^^ unresolved name
+</code></pre>
+<p>If this module contained lots of code we wanted to test, it would be annoying
+to list everything in the <code>use</code> statement in the tests. It's common instead to
+put <code>use super::*;</code> within a module's <code>test</code> submodule in order to bring
+everything into the <code>test</code> module scope at once.</p>
+<h4>Testing Private Functions</h4>
+<p>There's controversy within the testing community about whether you should write
+unit tests for private functions or not. Regardless of which testing ideology
+you adhere to, Rust does allow you to test private functions due to the way
+that the privacy rules work. Consider the code in Listing 11-6 with the private
+function <code>internal_adder</code>:</p>
+<p>Filename: src/lib.rs</p>
+<pre><code class="language-rust">pub fn add_two(a: i32) -&gt; i32 {
+    internal_adder(a, 2)
+}
+
+fn internal_adder(a: i32, b: i32) -&gt; i32 {
+    a + b
+}
+
+#[cfg(test)]
+mod tests {
+    use internal_adder;
+
+    #[test]
+    fn internal() {
+        assert_eq!(4, internal_adder(2, 2));
+    }
+}
+</code></pre>
+<caption>
+Listing 11-6: Testing a private function
+</caption>
+<p>Because tests are just Rust code and the <code>tests</code> module is just another module,
+we can import and call <code>internal_adder</code> in a test just fine. If you don't think
+private functions should be tested, there's nothing in Rust that will compel
+you to do so.</p>
+<h3>Integration Tests</h3>
+<p>In Rust, integration tests are tests that are entirely external to your
+library. They use your library in the same way any other code would. Their
+purpose is to test that many parts of your library work correctly together.
+Units of code that work correctly by themselves could have problems when
+integrated, so test coverage of the integrated code is important as well.</p>
+<h4>The <em>tests</em> Directory</h4>
+<p>Cargo has support for integration tests in the <em>tests</em> directory. If you make
+one and put Rust files inside, Cargo will compile each of the files as an
+individual crate. Let's give it a try!</p>
+<p>First, make a <em>tests</em> directory at the top level of your project directory,
+next to <em>src</em>. Then, make a new file, <em>tests/integration_test.rs</em>, and put the
+code in Listing 11-7 inside:</p>
+<p>Filename: tests/integration_test.rs</p>
+<pre><code class="language-rust,ignore">extern crate adder;
+
+#[test]
+fn it_adds_two() {
+    assert_eq!(4, adder::add_two(2));
+}
+</code></pre>
+<caption>
+Listing 11-7: An integration test of a function in the `adder` crate
+</caption>
+<p>We now have <code>extern crate adder</code> at the top, which we didn't need in the unit
+tests. Each test in the <code>tests</code> directory is an entirely separate crate, so we
+need to import our library into each of them. This is also why <code>tests</code> is a
+suitable place to write integration-style tests: they use the library like any
+other consumer of it would, by importing the crate and using only the public
+API.</p>
+<p>We also don't need a <code>tests</code> module in this file. The whole directory won't be
+compiled unless we're running the tests, so we don't need to annotate any part
+of it with <code>#[cfg(test)]</code>. Also, each test file is already isolated into its
+own crate, so we don't need to separate the test code further.</p>
+<p>Let's run the integration tests, which also get run when we run <code>cargo test</code>:</p>
+<pre><code class="language-text">$ cargo test
+   Compiling adder v0.1.0 (file:///projects/adder)
+     Running target/debug/deps/adder-91b3e234d4ed382a
+
+running 1 test
+test tests::it_works ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured
+
+     Running target/debug/integration_test-952a27e0126bb565
+
+running 1 test
+test it_adds_two ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured
+
+   Doc-tests adder
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured
+</code></pre>
+<p>Now we have three sections of output: the unit tests, the integration test, and
+the doc tests. Note that adding more unit tests in any <em>src</em> file will add more
+lines to the unit tests section. Adding more test functions to the integration
+test file we created will add more lines to that section. If we add more
+integration test <em>files</em> in the <em>tests</em> directory, there will be more
+integration test sections: one for each file.</p>
+<p>Specifying a test function name argument with <code>cargo test</code> will also match
+against test function names in any integration test file. To run all of the
+tests in only one particular integration test file, use the <code>--test</code> argument
+of <code>cargo test</code>:</p>
+<pre><code class="language-text">$ cargo test --test integration_test
+    Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
+     Running target/debug/integration_test-952a27e0126bb565
+
+running 1 test
+test it_adds_two ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured
+</code></pre>
+<h4>Submodules in Integration Tests</h4>
+<p>As you add more integration tests, you may want to make more than one file in
+the <code>tests</code> directory in order to group the test functions by the functionality
+they're testing, for example. As we mentioned before, that will work fine,
+given that Cargo treats every file as its own crate.</p>
+<p>Eventually, you may have a set of helper functions that are common to all
+integration tests, for example, functions that set up common scenarios. If you
+extract these into a file in the <em>tests</em> directory, like <em>tests/common.rs</em> for
+example, this file will be compiled into a separate crate just like the Rust
+files in this directory that contain test functions are. There will be a
+separate section in the test output for this file. Since this is probably not
+what you want, it's recommended to instead use a <em>mod.rs</em> file in a
+subdirectory, like <em>tests/common/mod.rs</em>, for helper functions. Files in
+subdirectories of the <em>tests</em> directory do not get compiled as separate crates
+or have sections in the test output.</p>
+<h4>Integration Tests for Binary Crates</h4>
+<p>If your project is a binary crate that only contains a <em>src/main.rs</em> and does
+not have a <em>src/lib.rs</em>, it is not possible to create integration tests in the
+<em>tests</em> directory and use <code>extern crate</code> to import the functions in
+<em>src/main.rs</em>. This is one of the reasons Rust projects that provide a binary
+have a straightforward <em>src/main.rs</em> that calls logic that lives in
+<em>src/lib.rs</em>. With that structure, integration tests <em>can</em> test the library
+crate by using <code>extern crate</code> to cover the important functionality, and if that
+works, the small amount of code in <em>src/main.rs</em> will work as well and does not
+need to be tested.</p>
+<h2>Summary</h2>
+<p>Rust's testing features provide a way to specify how code should function to
+ensure the code continues to work in the specified ways even as we make
+changes. Unit tests exercise different parts of a library separately and can
+test private implementation details. Integration tests cover the use of many
+parts of the library working together, and use the library's public API to test
+the code in the same way other code will use it. Rust's type system and
+ownership rules help prevent some kinds of bugs, but tests are an important
+part of reducing logic bugs having to do with how your code is expected to
+behave.</p>
+<p>Let's put together the knowledge from this chapter and other previous chapters
+and work on a project in the next chapter!</p>
+
+                </div>
+
+                <!-- Mobile navigation buttons -->
+                
+                    <a href="ch11-02-running-tests.html" class="mobile-nav-chapters previous">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+                    <a href="chYY-YY-public-api.html" class="mobile-nav-chapters next">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                
+
+            </div>
+
+            
+                <a href="ch11-02-running-tests.html" class="nav-chapters previous" title="You can navigate through the chapters using the arrow keys">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+            
+
+            
+                <a href="chYY-YY-public-api.html" class="nav-chapters next" title="You can navigate through the chapters using the arrow keys">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            
+
+        </div>
+
+
+        <!-- Local fallback for Font Awesome -->
+        <script>
+            if ($(".fa").css("font-family") !== "FontAwesome") {
+                $('<link rel="stylesheet" type="text/css" href="_FontAwesome/css/font-awesome.css">').prependTo('head');
+            }
+        </script>
+
+        <!-- Livereload script (if served using the cli tool) -->
+        
+
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+    </body>
+</html>

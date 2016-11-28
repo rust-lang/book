@@ -1,0 +1,314 @@
+<!DOCTYPE HTML>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>The Rust Programming Language</title>
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <base href="">
+
+        <link rel="stylesheet" href="book.css">
+        <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+        <link rel="shortcut icon" href="favicon.png">
+
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+
+        <!-- MathJax -->
+        <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+        <!-- Fetch JQuery from CDN but have a local fallback -->
+        <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+        <script>
+            if (typeof jQuery == 'undefined') {
+                document.write(unescape("%3Cscript src='jquery.js'%3E%3C/script%3E"));
+            }
+        </script>
+    </head>
+    <body class="light">
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme = localStorage.getItem('theme');
+            if (theme == null) { theme = 'light'; }
+            $('body').removeClass().addClass(theme);
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var sidebar = localStorage.getItem('sidebar');
+            if (sidebar === "hidden") { $("html").addClass("sidebar-hidden") }
+            else if (sidebar === "visible") { $("html").addClass("sidebar-visible") }
+        </script>
+
+        <div id="sidebar" class="sidebar">
+            <ul class="chapter"><li><a href="ch01-00-introduction.html"><strong>1.</strong> Introduction</a></li><li><ul class="section"><li><a href="ch01-01-installation.html"><strong>1.1.</strong> Installation</a></li><li><a href="ch01-02-hello-world.html"><strong>1.2.</strong> Hello, World!</a></li></ul></li><li><a href="ch02-00-guessing-game-tutorial.html"><strong>2.</strong> Guessing Game Tutorial</a></li><li><a href="ch03-00-common-programming-concepts.html"><strong>3.</strong> Common Programming Concepts</a></li><li><ul class="section"><li><a href="ch03-01-variables-and-mutability.html"><strong>3.1.</strong> Variables and Mutability</a></li><li><a href="ch03-02-data-types.html"><strong>3.2.</strong> Data Types</a></li><li><a href="ch03-03-how-functions-work.html"><strong>3.3.</strong> How Functions Work</a></li><li><a href="ch03-04-comments.html"><strong>3.4.</strong> Comments</a></li><li><a href="ch03-05-control-flow.html"><strong>3.5.</strong> Control Flow</a></li></ul></li><li><a href="ch04-00-understanding-ownership.html"><strong>4.</strong> Understanding Ownership</a></li><li><ul class="section"><li><a href="ch04-01-what-is-ownership.html"><strong>4.1.</strong> What is Ownership?</a></li><li><a href="ch04-02-references-and-borrowing.html"><strong>4.2.</strong> References &amp; Borrowing</a></li><li><a href="ch04-03-slices.html"><strong>4.3.</strong> Slices</a></li></ul></li><li><a href="ch05-00-structs.html"><strong>5.</strong> Structs</a></li><li><ul class="section"><li><a href="ch05-01-method-syntax.html"><strong>5.1.</strong> Method Syntax</a></li></ul></li><li><a href="ch06-00-enums.html"><strong>6.</strong> Enums</a></li><li><ul class="section"><li><a href="ch06-01-option.html"><strong>6.1.</strong> Option</a></li><li><a href="ch06-02-match.html"><strong>6.2.</strong> Match</a></li><li><a href="ch06-03-if-let.html"><strong>6.3.</strong> <code>if let</code></a></li></ul></li><li><a href="ch07-00-modules.html"><strong>7.</strong> Modules</a></li><li><ul class="section"><li><a href="ch07-01-mod-and-the-filesystem.html"><strong>7.1.</strong> <code>mod</code> and the Filesystem</a></li><li><a href="ch07-02-controlling-visibility-with-pub.html"><strong>7.2.</strong> Controlling Visibility with <code>pub</code></a></li><li><a href="ch07-03-importing-names-with-use.html"><strong>7.3.</strong> Importing Names with <code>use</code></a></li></ul></li><li><a href="ch08-00-fundamental-collections.html"><strong>8.</strong> Fundamental Collections</a></li><li><ul class="section"><li><a href="ch08-01-vectors.html"><strong>8.1.</strong> Vectors</a></li><li><a href="ch08-02-strings.html"><strong>8.2.</strong> Strings</a></li><li><a href="ch08-03-hash-maps.html"><strong>8.3.</strong> Hash Maps</a></li></ul></li><li><a href="ch09-00-error-handling.html"><strong>9.</strong> Error Handling</a></li><li><ul class="section"><li><a href="ch09-01-unrecoverable-errors-with-panic.html"><strong>9.1.</strong> Unrecoverable Errors with <code>panic!</code></a></li><li><a href="ch09-02-recoverable-errors-with-result.html"><strong>9.2.</strong> Recoverable Errors with <code>Result</code></a></li><li><a href="ch09-03-to-panic-or-not-to-panic.html"><strong>9.3.</strong> To <code>panic!</code> or Not To <code>panic!</code></a></li></ul></li><li><a href="ch10-00-generics.html"><strong>10.</strong> Generics</a></li><li><ul class="section"><li><a href="ch10-01-syntax.html"><strong>10.1.</strong> Syntax</a></li><li><a href="ch10-02-traits.html"><strong>10.2.</strong> Traits</a></li><li><a href="ch10-03-lifetime-syntax.html"><strong>10.3.</strong> Lifetime syntax</a></li></ul></li><li><a href="ch11-00-testing.html"><strong>11.</strong> Testing</a></li><li><ul class="section"><li><a href="ch11-01-writing-tests.html"><strong>11.1.</strong> Writing tests</a></li><li><a href="ch11-02-running-tests.html" class="active"><strong>11.2.</strong> Running tests</a></li><li><a href="ch11-03-test-organization.html"><strong>11.3.</strong> Test Organization</a></li></ul></li><li><strong>12.</strong> I/O</li><li><ul class="section"><li><strong>12.1.</strong> <code>Read</code> &amp; <code>Write</code></li><li><strong>12.2.</strong> <code>std::fs</code></li><li><strong>12.3.</strong> <code>std::path</code></li><li><strong>12.4.</strong> <code>std::env</code></li></ul></li><li><strong>13.</strong> Composition</li><li><ul class="section"><li><strong>13.1.</strong> Instead of Inheritance</li><li><strong>13.2.</strong> Trait Objects?</li></ul></li><li><strong>14.</strong> Creating a Library</li><li><ul class="section"><li><strong>14.1.</strong> Cargo</li><li><strong>14.2.</strong> Crates.io</li><li><a href="chYY-YY-public-api.html"><strong>14.3.</strong> Organizing your Public API</a></li><li><a href="chYY-YY-documentation.html"><strong>14.4.</strong> Documentation</a></li><li><a href="chYY-YY-workspaces.html"><strong>14.5.</strong> Workspaces and Multiple Related Crates</a></li></ul></li><li><strong>15.</strong> Closures</li><li><strong>16.</strong> Zero-cost Abstractions</li><li><ul class="section"><li><strong>16.1.</strong> Iterators as a Case Study</li></ul></li><li><strong>17.</strong> Smart Pointers</li><li><ul class="section"><li><strong>17.1.</strong> <code>Box&lt;T&gt;</code></li><li><strong>17.2.</strong> <code>Rc&lt;T&gt;</code></li><li><strong>17.3.</strong> <code>Cell</code></li><li><strong>17.4.</strong> <code>RefCell</code></li><li><strong>17.5.</strong> Interior Mutability</li></ul></li><li><strong>18.</strong> Concurrency</li><li><ul class="section"><li><strong>18.1.</strong> Threads</li><li><strong>18.2.</strong> <code>Send</code> &amp; <code>Sync</code></li><li><strong>18.3.</strong> <code>Arc&lt;T&gt;</code></li><li><strong>18.4.</strong> <code>Mutex&lt;T&gt;</code></li><li><strong>18.5.</strong> <code>Channels</code></li></ul></li><li><a href="chXX-patterns.html"><strong>19.</strong> Patterns</a></li><li><strong>20.</strong> More Lifetimes</li><li><strong>21.</strong> Unsafe Rust</li><li><ul class="section"><li><strong>21.1.</strong> Raw Pointers</li><li><strong>21.2.</strong> <code>transmute</code></li></ul></li><li><strong>22.</strong> Foreign Function Interface</li><li><ul class="section"><li><strong>22.1.</strong> Conditional Compilation</li><li><strong>22.2.</strong> Bindings to C</li><li><strong>22.3.</strong> Using Rust from Other Languages</li><li><strong>22.4.</strong> <code>static</code></li></ul></li><li><strong>23.</strong> Advanced Type System Features</li><li><ul class="section"><li><strong>23.1.</strong> Associated Types</li><li><strong>23.2.</strong> Trait Objects</li><li><strong>23.3.</strong> UFCS</li><li><strong>23.4.</strong> Coherence</li></ul></li><li><strong>24.</strong> Macros</li><li><ul class="section"><li><strong>24.1.</strong> Writing Your Own Macros</li></ul></li><li><strong>25.</strong> Nightly Rust</li><li><ul class="section"><li><strong>25.1.</strong> Nightly Features</li><li><strong>25.2.</strong> How to Find Out About Nightly Features</li></ul></li><li><a href="appendix-00.html"><strong>26.</strong> Appendix</a></li><li><ul class="section"><li><a href="appendix-01-keywords.html"><strong>26.1.</strong> Keywords</a></li><li><a href="appendix-02-operators.html"><strong>26.2.</strong> Operators</a></li><li><a href="appendix-03-derivable-traits.html"><strong>26.3.</strong> Derivable Traits</a></li></ul></li></ul>
+        </div>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar" class="menu-bar">
+                    <div class="left-buttons">
+                        <i id="sidebar-toggle" class="fa fa-bars"></i>
+                        <i id="theme-toggle" class="fa fa-paint-brush"></i>
+                    </div>
+
+                    <h1 class="menu-title">The Rust Programming Language</h1>
+
+                    <div class="right-buttons">
+                        <i id="print-button" class="fa fa-print" title="Print this book"></i>
+                    </div>
+                </div>
+
+                <div id="content" class="content">
+                    <h2>Running tests</h2>
+<p>Just like <code>cargo run</code> compiles your code and then runs the resulting binary,
+<code>cargo test</code> compiles your code in test mode and runs the resulting test
+binary. The default behavior of the binary that <code>cargo test</code> produces is to run
+all the tests in parallel and to capture output generated during test runs so
+that it's easier to read the output about the test results.</p>
+<p>The default behavior of running tests can be changed by specifying command line
+options. Some of these options can be passed to <code>cargo test</code>, and some need to
+be passed instead to the resulting test binary. The way to separate these
+arguments is with <code>--</code>: after <code>cargo test</code>, list the arguments that go to
+<code>cargo test</code>, then the separator <code>--</code>, and then the arguments that go to the
+test binary.</p>
+<h3>Tests Run in Parallel</h3>
+<p>Tests are run in parallel using threads. For this reason, you should take care
+that your tests are written in such a way as to not depend on each other or on
+any shared state. Shared state can also include the environment, such as the
+current working directory or environment variables.</p>
+<p>If you don't want this behavior, or if you want more fine-grained control over
+the number of threads used, you can send the <code>--test-threads</code> flag and the
+number of threads to the test binary. Setting the number of test threads to 1
+means to not use any parallelism:</p>
+<pre><code class="language-text">$ cargo test -- --test-threads=1
+</code></pre>
+<h3>Tests Capture Output</h3>
+<p>By default, Rust's test library captures and discards output to standard out
+and standard error, unless the test fails. For example, if you call
+<code>println!()</code> in a test and the test passes, you won't see the <code>println!</code> output
+in your terminal. This behavior can be disabled by sending the <code>--nocapture</code>
+flag to the test binary:</p>
+<pre><code class="language-text">$ cargo test -- --nocapture
+</code></pre>
+<h3>Running a Subset of Tests by Name</h3>
+<p>Sometimes, running a full test suite can take a long time. If you're only
+working on code in a particular area, you might want to only run the tests
+having to do with that code. <code>cargo test</code> takes an argument that allows you to
+only run certain tests, specified by name.</p>
+<p>Let's create three tests with the following names as shown in Listing 11-3:</p>
+<p>Filename: src/lib.rs</p>
+<pre><code class="language-rust">#[test]
+fn add_two_and_two() {
+    assert_eq!(4, 2 + 2);
+}
+
+#[test]
+fn add_three_and_two() {
+    assert_eq!(5, 3 + 2);
+}
+
+#[test]
+fn one_hundred() {
+    assert_eq!(102, 100 + 2);
+}
+</code></pre>
+<caption>
+Listing 11-3: Three tests with a variety of names
+</caption>
+<p>Running with different arguments will run different subsets of the tests. No
+arguments, as we've already seen, runs all the tests:</p>
+<pre><code class="language-text">$ cargo test
+    Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
+     Running target/debug/deps/adder-06a75b4a1f2515e9
+
+running 3 tests
+test add_three_and_two ... ok
+test one_hundred ... ok
+test add_two_and_two ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured
+</code></pre>
+<p>We can pass the name of any test function to run only that test:</p>
+<pre><code class="language-text">$ cargo test one_hundred
+    Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
+     Running target/debug/deps/adder-06a75b4a1f2515e9
+
+running 1 test
+test one_hundred ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured
+</code></pre>
+<p>We can also pass part of a name, and <code>cargo test</code> will run all tests that match:</p>
+<pre><code class="language-text">$ cargo test add
+    Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
+     Running target/debug/deps/adder-06a75b4a1f2515e9
+
+running 2 tests
+test add_three_and_two ... ok
+test add_two_and_two ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured
+</code></pre>
+<p>Module names become part of the test name, so module names can be used in a
+similar way to run just the tests for a particular module. For example, if our
+code was organized into a module named <code>adding</code> and a module named
+<code>subtracting</code> with tests in each, as in Listing 11-4:</p>
+<pre><code class="language-rust">mod adding {
+    #[test]
+    fn add_two_and_two() {
+        assert_eq!(4, 2 + 2);
+    }
+
+    #[test]
+    fn add_three_and_two() {
+        assert_eq!(5, 3 + 2);
+    }
+
+    #[test]
+    fn one_hundred() {
+        assert_eq!(102, 100 + 2);
+    }
+}
+
+mod subtracting {
+    #[test]
+    fn subtract_three_and_two() {
+        assert_eq!(1, 3 - 2);
+    }
+}
+</code></pre>
+<caption>
+Listing 11-4: Tests in two modules named `adding` and `subtracting`
+</caption>
+<p>Running <code>cargo test</code> will run all of the tests, and the module names will
+appear in the test names in the output:</p>
+<pre><code class="language-text">$ cargo test
+    Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
+     Running target/debug/deps/adder-d84f1c6cb24adeb4
+
+running 4 tests
+test adding::add_two_and_two ... ok
+test adding::add_three_and_two ... ok
+test subtracting::subtract_three_and_two ... ok
+test adding::one_hundred ... ok
+</code></pre>
+<p>Running <code>cargo test adding</code> would run just the tests in that module and not any
+of the tests in the subtracting module:</p>
+<pre><code class="language-text">$ cargo test adding
+    Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
+     Running target/debug/deps/adder-d84f1c6cb24adeb4
+
+running 3 tests
+test adding::add_three_and_two ... ok
+test adding::one_hundred ... ok
+test adding::add_two_and_two ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured
+</code></pre>
+<h3>Ignore Some Tests Unless Specifically Requested</h3>
+<p>Sometimes a few specific tests can be very time-consuming to execute, so during
+most runs of <code>cargo test</code>, we'd like to exclude them. Instead of having to
+construct an argument to <code>cargo test</code> to run all tests except these and
+remember to use that argument every time, we can annotate these tests with the
+<code>ignore</code> attribute:</p>
+<p>Filename: src/lib.rs</p>
+<pre><code class="language-rust">#[test]
+fn it_works() {
+    assert!(true);
+}
+
+#[test]
+#[ignore]
+fn expensive_test() {
+    // code that takes an hour to run
+}
+</code></pre>
+<p>Now if we run our tests, we'll see <code>it_works</code> is run, but <code>expensive_test</code> is
+not:</p>
+<pre><code class="language-text">$ cargo test
+   Compiling adder v0.1.0 (file:///projects/adder)
+    Finished debug [unoptimized + debuginfo] target(s) in 0.24 secs
+     Running target/debug/deps/adder-ce99bcc2479f4607
+
+running 2 tests
+test expensive_test ... ignored
+test it_works ... ok
+
+test result: ok. 1 passed; 0 failed; 1 ignored; 0 measured
+
+   Doc-tests adder
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured
+</code></pre>
+<p>We can run only the expensive tests by explicitly asking to run them using
+<code>cargo test -- --ignored</code>:</p>
+<pre><code class="language-text">$ cargo test -- --ignored
+    Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
+     Running target/debug/deps/adder-ce99bcc2479f4607
+
+running 1 test
+test expensive_test ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured
+</code></pre>
+<p>This way, most of the time that you run <code>cargo test</code> the results would be fast.
+When you're at a point that it makes sense to check the results of the
+<code>ignored</code> tests and you have time to wait for the results, you can choose to
+run <code>cargo test -- --ignored</code> instead.</p>
+
+                </div>
+
+                <!-- Mobile navigation buttons -->
+                
+                    <a href="ch11-01-writing-tests.html" class="mobile-nav-chapters previous">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+                    <a href="ch11-03-test-organization.html" class="mobile-nav-chapters next">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                
+
+            </div>
+
+            
+                <a href="ch11-01-writing-tests.html" class="nav-chapters previous" title="You can navigate through the chapters using the arrow keys">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+            
+
+            
+                <a href="ch11-03-test-organization.html" class="nav-chapters next" title="You can navigate through the chapters using the arrow keys">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            
+
+        </div>
+
+
+        <!-- Local fallback for Font Awesome -->
+        <script>
+            if ($(".fa").css("font-family") !== "FontAwesome") {
+                $('<link rel="stylesheet" type="text/css" href="_FontAwesome/css/font-awesome.css">').prependTo('head');
+            }
+        </script>
+
+        <!-- Livereload script (if served using the cli tool) -->
+        
+
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+    </body>
+</html>
