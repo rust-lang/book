@@ -253,8 +253,8 @@ this code happened to run and did not cause a `panic!`, this test would fail.
 didn't fail for a different reason than the one you were expecting. To help
 with this, an optional `expected` parameter can be added to the `should_panic`
 attribute. The test harness will make sure that the failure message contains
-the provided text. A safer version of Listing 11-1 would be the following, in
-Listing 11-2:
+the provided text. A more robust version of Listing 11-1 would be the
+following, in Listing 11-2:
 
 Filename: src/lib.rs
 
