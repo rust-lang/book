@@ -32,10 +32,10 @@ $ cargo test -- --test-threads=1
 ### Tests Capture Output
 
 By default, Rust's test library captures and discards output to standard out
-and standard error, unless the test fails. For example, if you call
-`println!()` in a test and the test passes, you won't see the `println!` output
-in your terminal. This behavior can be disabled by sending the `--nocapture`
-flag to the test binary:
+and standard error, unless the test fails. For example, if you call `println!`
+in a test and the test passes, you won't see the `println!` output in your
+terminal. This behavior can be disabled by sending the `--nocapture` flag to
+the test binary:
 
 ```text
 $ cargo test -- --nocapture

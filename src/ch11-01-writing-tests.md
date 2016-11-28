@@ -204,7 +204,9 @@ and includes the custom error message we specified:
 
 ```text
 ---- a_simple_case stdout ----
-	thread 'a_simple_case' panicked at 'assertion failed: `(left == right)` (left: `"hello"`, right: `"world"`): greeting operation failed', src/main.rs:4
+	thread 'a_simple_case' panicked at 'assertion failed: `(left == right)`
+    (left: `"hello"`, right: `"world"`): greeting operation failed',
+    src/main.rs:4
 ```
 
 The two arguments to `assert_eq!` are named "left" and "right" rather than
