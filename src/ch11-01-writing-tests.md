@@ -20,7 +20,7 @@ $ cd adder
 Cargo will automatically generate a simple test when you make a new library
 project. Here's the contents of `src/lib.rs`:
 
-Filename: src/lib.rs
+<span class="filename">Filename: src/lib.rs</span>
 
 ```rust
 #[cfg(test)]
@@ -78,7 +78,7 @@ The empty test function passes because any test which doesn't `panic!` passes,
 and any test that does `panic!` fails. Let's make the test fail by using the
 `assert!` macro:
 
-Filename: src/lib.rs
+<span class="filename">Filename: src/lib.rs</span>
 
 ```rust
 #[test]
@@ -149,7 +149,7 @@ value for the `==` expression.
 
 Here's an example test that uses each of these macros and will pass:
 
-Filename: src/lib.rs
+<span class="filename">Filename: src/lib.rs</span>
 
 ```rust
 #[test]
@@ -189,7 +189,7 @@ if left_val == right_val {
 Let's take a look at a test that will fail becasue `hello` is not equal to
 `world`. We've also added a custom error message, `greeting operation failed`:
 
-Filename: src/lib.rs
+<span class="filename">Filename: src/lib.rs</span>
 
 ```rust
 #[test]
@@ -233,7 +233,8 @@ error. For example, let's test something that we know will panic from Chapter
 aren't on character boundaries. Add the `#[should_panic]` attribute before the
 function like the `#[test]` attribute, as shown in Listing 11-1:
 
-Filename: src/lib.rs
+<figure>
+<span class="filename">Filename: src/lib.rs</span>
 
 ```rust
 #[test]
@@ -244,9 +245,12 @@ fn slice_not_on_char_boundaries() {
 }
 ```
 
-<caption>
+<figcaption>
+
 Listing 11-1: A test expecting a `panic!`
-</caption>
+
+</figcaption>
+</figure>
 
 This test will succeed, since the code panics and we said that it should. If
 this code happened to run and did not cause a `panic!`, this test would fail.
@@ -258,7 +262,8 @@ attribute. The test harness will make sure that the failure message contains
 the provided text. A more robust version of Listing 11-1 would be the
 following, in Listing 11-2:
 
-Filename: src/lib.rs
+<figure>
+<span class="filename">Filename: src/lib.rs</span>
 
 ```rust
 #[test]
@@ -271,9 +276,12 @@ fn slice_not_on_char_boundaries() {
 
 <!-- I will add ghosting in libreoffice /Carol -->
 
-<caption>
+<figcaption>
+
 Listing 11-2: A test expecting a `panic!` with a particular message
-</caption>
+
+</figcaption>
+</figure>
 
 Try on your own to see what happens when a `should_panic` test panics but
 doesn't match the expected message: cause a `panic!` that happens for a

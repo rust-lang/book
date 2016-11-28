@@ -30,7 +30,7 @@ since the tests are not included.
 Remember when we generated the new `adder` project in the last section? Cargo
 generated this code for us:
 
-Filename: src/lib.rs
+<span class="filename">Filename: src/lib.rs</span>
 
 ```rust
 #[cfg(test)]
@@ -63,7 +63,8 @@ that don't actually call any code we've written. Let's change that now! In
 *src/lib.rs*, place this `add_two` function and `tests` module that has a test
 function to exercise the code, as shown in Listing 11-5:
 
-Filename: src/lib.rs
+<figure>
+<span class="filename">Filename: src/lib.rs</span>
 
 ```rust
 pub fn add_two(a: i32) -> i32 {
@@ -81,9 +82,12 @@ mod tests {
 }
 ```
 
-<caption>
+<figcaption>
+
 Listing 11-5: Testing the function `add_two` in a child `tests` module
-</caption>
+
+</figcaption>
+</figure>
 
 Notice in addition to the test function, we also added `use add_two;` within
 the `tests` module. This brings the code we want to test into the scope of the
@@ -122,7 +126,8 @@ you adhere to, Rust does allow you to test private functions due to the way
 that the privacy rules work. Consider the code in Listing 11-6 with the private
 function `internal_adder`:
 
-Filename: src/lib.rs
+<figure>
+<span class="filename">Filename: src/lib.rs</span>
 
 ```rust
 pub fn add_two(a: i32) -> i32 {
@@ -144,9 +149,12 @@ mod tests {
 }
 ```
 
-<caption>
+<figcaption>
+
 Listing 11-6: Testing a private function
-</caption>
+
+</figcaption>
+</figure>
 
 Because tests are just Rust code and the `tests` module is just another module,
 we can import and call `internal_adder` in a test just fine. If you don't think
@@ -171,7 +179,8 @@ First, make a *tests* directory at the top level of your project directory,
 next to *src*. Then, make a new file, *tests/integration_test.rs*, and put the
 code in Listing 11-7 inside:
 
-Filename: tests/integration_test.rs
+<figure>
+<span class="filename">Filename: tests/integration_test.rs</span>
 
 ```rust,ignore
 extern crate adder;
@@ -182,9 +191,12 @@ fn it_adds_two() {
 }
 ```
 
-<caption>
+<figcaption>
+
 Listing 11-7: An integration test of a function in the `adder` crate
-</caption>
+
+</figcaption>
+</figure>
 
 We now have `extern crate adder` at the top, which we didn't need in the unit
 tests. Each test in the `tests` directory is an entirely separate crate, so we

@@ -50,7 +50,8 @@ only run certain tests, specified by name.
 
 Let's create three tests with the following names as shown in Listing 11-3:
 
-Filename: src/lib.rs
+<figure>
+<span class="filename">Filename: src/lib.rs</span>
 
 ```rust
 #[test]
@@ -69,9 +70,12 @@ fn one_hundred() {
 }
 ```
 
-<caption>
+<figcaption>
+
 Listing 11-3: Three tests with a variety of names
-</caption>
+
+</figcaption>
+</figure>
 
 Running with different arguments will run different subsets of the tests. No
 arguments, as we've already seen, runs all the tests:
@@ -121,6 +125,9 @@ similar way to run just the tests for a particular module. For example, if our
 code was organized into a module named `adding` and a module named
 `subtracting` with tests in each, as in Listing 11-4:
 
+<figure>
+<span class="filename">Filename: src/lib.rs</span>
+
 ```rust
 mod adding {
     #[test]
@@ -147,9 +154,12 @@ mod subtracting {
 }
 ```
 
-<caption>
+<figcaption>
+
 Listing 11-4: Tests in two modules named `adding` and `subtracting`
-</caption>
+
+</figcaption>
+</figure>
 
 Running `cargo test` will run all of the tests, and the module names will
 appear in the test names in the output:
@@ -190,7 +200,7 @@ construct an argument to `cargo test` to run all tests except these and
 remember to use that argument every time, we can annotate these tests with the
 `ignore` attribute:
 
-Filename: src/lib.rs
+<span class="filename">Filename: src/lib.rs</span>
 
 ```rust
 #[test]
