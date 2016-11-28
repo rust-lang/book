@@ -17,7 +17,7 @@ implement and compile that function, and Rust can do all the type checking and
 borrow checking that we've seen it's capable of doing. What Rust *can't* check
 for us is that we've implemented this function to return the argument plus two
 and not the argument plus 10 or the argument minus 50! That's where tests come
-in: we can write tests that, for example, pass `3` to the `add_two` function
+in. We can write tests that, for example, pass `3` to the `add_two` function
 and check that we get `5` back. We can run the tests whenever we make changes
 to our code to make sure we didn't change any existing behavior from what the
 tests specify it should be.
