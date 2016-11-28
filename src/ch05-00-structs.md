@@ -24,6 +24,8 @@ of the pieces of data, which we call *fields*, and specify each field’s type.
 For example, Listing 5-1 shows a struct to store information about a user
 account:
 
+<figure>
+
 ```rust
 struct User {
     username: String,
@@ -33,9 +35,12 @@ struct User {
 }
 ```
 
-<caption>
+<figcaption>
+
 Listing 5-1: A `User` struct definition
-</caption>
+
+</figcaption>
+</figure>
 
 To use a struct once we've defined it, we create an *instance* of that struct
 by specifying concrete values for each of the fields. Creating an instance is
@@ -78,6 +83,8 @@ but to do so requires the use of *lifetimes*, a feature of Rust that we'll
 discuss in Chapter 10. Lifetimes ensure that the data a struct references is
 valid for as long as the struct is. If you try to store a reference in a struct
 without specifying lifetimes, like this:
+
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore
 struct User {
@@ -128,6 +135,7 @@ the length and width of a rectangle specified in pixels and will calculate the
 area of the rectangle. Listing 5-2 has a short program with one way of doing
 just that in our project’s *src/main.rs*:
 
+<figure>
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
@@ -146,10 +154,13 @@ fn area(length: u32, width: u32) -> u32 {
 }
 ```
 
-<caption>
+<figcaption>
+
 Listing 5-2: Calculating the area of a rectangle specified by its length and
 width in separate variables
-</caption>
+
+</figcaption>
+</figure>
 
 Let’s try running this program with `cargo run`:
 
@@ -178,6 +189,7 @@ manageable to group length and width together.
 We’ve already discussed one way we might do that in Chapter 3: tuples. Listing
 5-3 has a version of our program which uses tuples:
 
+<figure>
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
@@ -195,9 +207,12 @@ fn area(dimensions: (u32, u32)) -> u32 {
 }
 ```
 
-<caption>
+<figcaption>
+
 Listing 5-3: Specifying the length and width of the rectangle with a tuple
-</caption>
+
+</figcaption>
+</figure>
 
 <!-- I will add ghosting & wingdings once we're in libreoffice /Carol -->
 
@@ -227,6 +242,7 @@ Here is where we bring in structs. We can transform our tuple into a data type
 with a name for the whole as well as names for the parts, as shown in Listing
 5-4:
 
+<figure>
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
@@ -249,9 +265,12 @@ fn area(rectangle: &Rectangle) -> u32 {
 }
 ```
 
-<caption>
+<figcaption>
+
 Listing 5-4: Defining a `Rectangle` struct
-</caption>
+
+</figcaption>
+</figure>
 
 <!-- Will add ghosting & wingdings once we're in libreoffice /Carol -->
 
@@ -279,6 +298,7 @@ It’d be nice to be able to print out an instance of our `Rectangle` while we�
 debugging our program and see the values for all its fields. Listing 5-5 tries
 using the `println!` macro as we have been:
 
+<figure>
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore
@@ -294,9 +314,12 @@ fn main() {
 }
 ```
 
-<caption>
+<figcaption>
+
 Listing 5-5: Attempting to print a `Rectangle` instance
-</caption>
+
+</figcaption>
+</figure>
 
 If we run this, we get an error with this core message:
 
@@ -346,6 +369,8 @@ have to explicitly opt-in to having that functionality be available for our
 struct. To do that, we add the annotation `#[derive(Debug)]` just before our
 struct definition, as shown in Listing 5-6. Now our program looks like this:
 
+<figure>
+
 ```rust
 #[derive(Debug)]
 struct Rectangle {
@@ -360,10 +385,13 @@ fn main() {
 }
 ```
 
-<caption>
+<figcaption>
+
 Listing 5-6: Adding the annotation to derive the `Debug` trait and printing the
 `Rectangle` instance using debug formatting
-</caption>
+
+</figcaption>
+</figure>
 
 At this point, if we run this program, we won’t get any errors and we’ll see
 the following output:

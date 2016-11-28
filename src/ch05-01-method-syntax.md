@@ -14,6 +14,9 @@ Let’s change our `area` function that takes a `Rectangle` instance as an
 argument and instead make an `area` method defined on the `Rectangle` struct,
 as shown in Listing 5-7:
 
+<figure>
+<span class="filename">Filename: src/main.rs</span>
+
 ```rust
 #[derive(Debug)]
 struct Rectangle {
@@ -37,9 +40,12 @@ fn main() {
 }
 ```
 
-<caption>
+<figcaption>
+
 Listing 5-7: Defining an `area` method on the `Rectangle` struct
-</caption>
+
+</figcaption>
+</figure>
 
 <!-- Will add ghosting and wingdings here in libreoffice /Carol -->
 
@@ -131,6 +137,9 @@ another instance of `Rectangle` and return `true` if the second rectangle could
 fit completely within `self` and `false` if it would not. That is, if we run
 the code in Listing 5-8, once we've defined the `can_hold` method:
 
+<figure>
+<span class="filename">Filename: src/main.rs</span>
+
 ```rust,ignore
 fn main() {
     let rect1 = Rectangle { length: 50, width: 30 };
@@ -142,9 +151,12 @@ fn main() {
 }
 ```
 
-<caption>
+<figcaption>
+
 Listing 5-8: Demonstration of using the as-yet-unwritten `can_hold` method
-</caption>
+
+</figcaption>
+</figure>
 
 We want to see this output, since both of `rect2`’s dimensions are smaller than
 `rect1`’s, but `rect3` is wider than `rect1`:
@@ -166,6 +178,8 @@ value of `can_hold` will be a boolean, and the implementation will check to see
 if `self`’s length and width are both greater than the length and width of the
 other `Rectangle`, respectively. Let’s add this new method to the `impl` block
 from Listing 5-7:
+
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 # #[derive(Debug)]
@@ -204,6 +218,8 @@ instance of the struct. For example, we could provide an associated function
 that would take one dimension argument and use that as both length and width,
 thus making it easier to create a square `Rectangle` rather than having to
 specify the same value twice:
+
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 # #[derive(Debug)]

@@ -75,6 +75,8 @@ discuss in Chapter 10. Lifetimes ensure that the data a struct references is
 valid for as long as the struct is. If you try to store a reference in a struct
 without specifying lifetimes, like this:
 
+Filename: src/main.rs
+
 ```rust,ignore
 struct User {
     username: &str,
@@ -410,6 +412,8 @@ Let’s change our `area` function that takes a `Rectangle` instance as an
 argument and instead make an `area` method defined on the `Rectangle` struct,
 as shown in Listing 5-7:
 
+Filename: src/main.rs
+
 ```rust
 #[derive(Debug)]
 struct Rectangle {
@@ -511,6 +515,8 @@ another instance of `Rectangle` and return `true` if the second rectangle could
 fit completely within `self` and `false` if it would not. That is, if we run
 the code in Listing 5-8, once we've defined the `can_hold` method:
 
+Filename: src/main.rs
+
 ```rust,ignore
 fn main() {
     let rect1 = Rectangle { length: 50, width: 30 };
@@ -547,7 +553,9 @@ if `self`’s length and width are both greater than the length and width of the
 other `Rectangle`, respectively. Let’s add this new method to the `impl` block
 from Listing 5-7:
 
-```
+Filename: src/main.rs
+
+```rust
 impl Rectangle {
     fn area(&self) -> u32 {
         self.length * self.width
@@ -578,6 +586,8 @@ instance of the struct. For example, we could provide an associated function
 that would take one dimension argument and use that as both length and width,
 thus making it easier to create a square `Rectangle` rather than having to
 specify the same value twice:
+
+Filename: src/main.rs
 
 ```rust
 impl Rectangle {
