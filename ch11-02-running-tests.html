@@ -92,10 +92,10 @@ means to not use any parallelism:</p>
 </code></pre>
 <h3>Tests Capture Output</h3>
 <p>By default, Rust's test library captures and discards output to standard out
-and standard error, unless the test fails. For example, if you call
-<code>println!()</code> in a test and the test passes, you won't see the <code>println!</code> output
-in your terminal. This behavior can be disabled by sending the <code>--nocapture</code>
-flag to the test binary:</p>
+and standard error, unless the test fails. For example, if you call <code>println!</code>
+in a test and the test passes, you won't see the <code>println!</code> output in your
+terminal. This behavior can be disabled by sending the <code>--nocapture</code> flag to
+the test binary:</p>
 <pre><code class="language-text">$ cargo test -- --nocapture
 </code></pre>
 <h3>Running a Subset of Tests by Name</h3>
@@ -104,7 +104,8 @@ working on code in a particular area, you might want to only run the tests
 having to do with that code. <code>cargo test</code> takes an argument that allows you to
 only run certain tests, specified by name.</p>
 <p>Let's create three tests with the following names as shown in Listing 11-3:</p>
-<p>Filename: src/lib.rs</p>
+<figure>
+<span class="filename">Filename: src/lib.rs</span>
 <pre><code class="language-rust">#[test]
 fn add_two_and_two() {
     assert_eq!(4, 2 + 2);
@@ -120,9 +121,10 @@ fn one_hundred() {
     assert_eq!(102, 100 + 2);
 }
 </code></pre>
-<caption>
-Listing 11-3: Three tests with a variety of names
-</caption>
+<figcaption>
+<p>Listing 11-3: Three tests with a variety of names</p>
+</figcaption>
+</figure>
 <p>Running with different arguments will run different subsets of the tests. No
 arguments, as we've already seen, runs all the tests:</p>
 <pre><code class="language-text">$ cargo test
@@ -161,6 +163,8 @@ test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured
 similar way to run just the tests for a particular module. For example, if our
 code was organized into a module named <code>adding</code> and a module named
 <code>subtracting</code> with tests in each, as in Listing 11-4:</p>
+<figure>
+<span class="filename">Filename: src/lib.rs</span>
 <pre><code class="language-rust">mod adding {
     #[test]
     fn add_two_and_two() {
@@ -185,9 +189,10 @@ mod subtracting {
     }
 }
 </code></pre>
-<caption>
-Listing 11-4: Tests in two modules named `adding` and `subtracting`
-</caption>
+<figcaption>
+<p>Listing 11-4: Tests in two modules named <code>adding</code> and <code>subtracting</code></p>
+</figcaption>
+</figure>
 <p>Running <code>cargo test</code> will run all of the tests, and the module names will
 appear in the test names in the output:</p>
 <pre><code class="language-text">$ cargo test
@@ -219,7 +224,7 @@ most runs of <code>cargo test</code>, we'd like to exclude them. Instead of havi
 construct an argument to <code>cargo test</code> to run all tests except these and
 remember to use that argument every time, we can annotate these tests with the
 <code>ignore</code> attribute:</p>
-<p>Filename: src/lib.rs</p>
+<p><span class="filename">Filename: src/lib.rs</span></p>
 <pre><code class="language-rust">#[test]
 fn it_works() {
     assert!(true);

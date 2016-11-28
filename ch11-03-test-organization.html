@@ -92,7 +92,7 @@ code with <code>cargo build</code>, and saves space in the resulting compiled ar
 since the tests are not included.</p>
 <p>Remember when we generated the new <code>adder</code> project in the last section? Cargo
 generated this code for us:</p>
-<p>Filename: src/lib.rs</p>
+<p><span class="filename">Filename: src/lib.rs</span></p>
 <pre><code class="language-rust">#[cfg(test)]
 mod tests {
     #[test]
@@ -118,7 +118,8 @@ this is a common use of globs.</p>
 that don't actually call any code we've written. Let's change that now! In
 <em>src/lib.rs</em>, place this <code>add_two</code> function and <code>tests</code> module that has a test
 function to exercise the code, as shown in Listing 11-5:</p>
-<p>Filename: src/lib.rs</p>
+<figure>
+<span class="filename">Filename: src/lib.rs</span>
 <pre><code class="language-rust">pub fn add_two(a: i32) -&gt; i32 {
     a + 2
 }
@@ -133,9 +134,10 @@ mod tests {
     }
 }
 </code></pre>
-<caption>
-Listing 11-5: Testing the function `add_two` in a child `tests` module
-</caption>
+<figcaption>
+<p>Listing 11-5: Testing the function <code>add_two</code> in a child <code>tests</code> module</p>
+</figcaption>
+</figure>
 <p>Notice in addition to the test function, we also added <code>use add_two;</code> within
 the <code>tests</code> module. This brings the code we want to test into the scope of the
 inner <code>tests</code> module, just like we'd need to do for any inner module. If we run
@@ -164,7 +166,8 @@ unit tests for private functions or not. Regardless of which testing ideology
 you adhere to, Rust does allow you to test private functions due to the way
 that the privacy rules work. Consider the code in Listing 11-6 with the private
 function <code>internal_adder</code>:</p>
-<p>Filename: src/lib.rs</p>
+<figure>
+<span class="filename">Filename: src/lib.rs</span>
 <pre><code class="language-rust">pub fn add_two(a: i32) -&gt; i32 {
     internal_adder(a, 2)
 }
@@ -183,9 +186,10 @@ mod tests {
     }
 }
 </code></pre>
-<caption>
-Listing 11-6: Testing a private function
-</caption>
+<figcaption>
+<p>Listing 11-6: Testing a private function</p>
+</figcaption>
+</figure>
 <p>Because tests are just Rust code and the <code>tests</code> module is just another module,
 we can import and call <code>internal_adder</code> in a test just fine. If you don't think
 private functions should be tested, there's nothing in Rust that will compel
@@ -203,7 +207,8 @@ individual crate. Let's give it a try!</p>
 <p>First, make a <em>tests</em> directory at the top level of your project directory,
 next to <em>src</em>. Then, make a new file, <em>tests/integration_test.rs</em>, and put the
 code in Listing 11-7 inside:</p>
-<p>Filename: tests/integration_test.rs</p>
+<figure>
+<span class="filename">Filename: tests/integration_test.rs</span>
 <pre><code class="language-rust,ignore">extern crate adder;
 
 #[test]
@@ -211,9 +216,10 @@ fn it_adds_two() {
     assert_eq!(4, adder::add_two(2));
 }
 </code></pre>
-<caption>
-Listing 11-7: An integration test of a function in the `adder` crate
-</caption>
+<figcaption>
+<p>Listing 11-7: An integration test of a function in the <code>adder</code> crate</p>
+</figcaption>
+</figure>
 <p>We now have <code>extern crate adder</code> at the top, which we didn't need in the unit
 tests. Each test in the <code>tests</code> directory is an entirely separate crate, so we
 need to import our library into each of them. This is also why <code>tests</code> is a

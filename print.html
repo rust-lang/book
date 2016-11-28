@@ -7899,7 +7899,7 @@ $ cd adder
 </code></pre>
 <p>Cargo will automatically generate a simple test when you make a new library
 project. Here's the contents of <code>src/lib.rs</code>:</p>
-<p>Filename: src/lib.rs</p>
+<p><span class="filename">Filename: src/lib.rs</span></p>
 <pre><code class="language-rust">#[cfg(test)]
 mod tests {
     #[test]
@@ -7942,7 +7942,7 @@ tests that we have:</p>
 <p>The empty test function passes because any test which doesn't <code>panic!</code> passes,
 and any test that does <code>panic!</code> fails. Let's make the test fail by using the
 <code>assert!</code> macro:</p>
-<p>Filename: src/lib.rs</p>
+<p><span class="filename">Filename: src/lib.rs</span></p>
 <pre><code class="language-rust">#[test]
 fn it_works() {
     assert!(false);
@@ -7995,7 +7995,7 @@ actually are if the assertion fails so that it's easier to see <em>why</em> the 
 failed, whereas the <code>assert!</code> macro would just print out that it got a <code>false</code>
 value for the <code>==</code> expression.</p>
 <p>Here's an example test that uses each of these macros and will pass:</p>
-<p>Filename: src/lib.rs</p>
+<p><span class="filename">Filename: src/lib.rs</span></p>
 <pre><code class="language-rust">#[test]
 fn it_works() {
     assert_eq!(&quot;Hello&quot;, &quot;Hello&quot;);
@@ -8028,7 +8028,7 @@ if left_val == right_val {
 </code></pre>
 <p>Let's take a look at a test that will fail becasue <code>hello</code> is not equal to
 <code>world</code>. We've also added a custom error message, <code>greeting operation failed</code>:</p>
-<p>Filename: src/lib.rs</p>
+<p><span class="filename">Filename: src/lib.rs</span></p>
 <pre><code class="language-rust">#[test]
 fn a_simple_case() {
     let result = &quot;hello&quot;; // this value would come from running your code
@@ -8038,7 +8038,9 @@ fn a_simple_case() {
 <p>Running this indeed fails, and the output we get explains why the test failed
 and includes the custom error message we specified:</p>
 <pre><code class="language-text">---- a_simple_case stdout ----
-    thread 'a_simple_case' panicked at 'assertion failed: `(left == right)` (left: `&quot;hello&quot;`, right: `&quot;world&quot;`): greeting operation failed', src/main.rs:4
+    thread 'a_simple_case' panicked at 'assertion failed: `(left == right)`
+    (left: `&quot;hello&quot;`, right: `&quot;world&quot;`): greeting operation failed',
+    src/main.rs:4
 </code></pre>
 <p>The two arguments to <code>assert_eq!</code> are named &quot;left&quot; and &quot;right&quot; rather than
 &quot;expected&quot; and &quot;actual&quot;; the order of the value that comes from your code and
@@ -8059,7 +8061,8 @@ error. For example, let's test something that we know will panic from Chapter
 8: attempting to create a slice using range syntax with byte indices that
 aren't on character boundaries. Add the <code>#[should_panic]</code> attribute before the
 function like the <code>#[test]</code> attribute, as shown in Listing 11-1:</p>
-<p>Filename: src/lib.rs</p>
+<figure>
+<span class="filename">Filename: src/lib.rs</span>
 <pre><code class="language-rust">#[test]
 #[should_panic]
 fn slice_not_on_char_boundaries() {
@@ -8067,9 +8070,10 @@ fn slice_not_on_char_boundaries() {
     &amp;s[0..1];
 }
 </code></pre>
-<caption>
-Listing 11-1: A test expecting a `panic!`
-</caption>
+<figcaption>
+<p>Listing 11-1: A test expecting a <code>panic!</code></p>
+</figcaption>
+</figure>
 <p>This test will succeed, since the code panics and we said that it should. If
 this code happened to run and did not cause a <code>panic!</code>, this test would fail.</p>
 <p><code>should_panic</code> tests can be fragile, as it's hard to guarantee that the test
@@ -8078,7 +8082,8 @@ with this, an optional <code>expected</code> parameter can be added to the <code
 attribute. The test harness will make sure that the failure message contains
 the provided text. A more robust version of Listing 11-1 would be the
 following, in Listing 11-2:</p>
-<p>Filename: src/lib.rs</p>
+<figure>
+<span class="filename">Filename: src/lib.rs</span>
 <pre><code class="language-rust">#[test]
 #[should_panic(expected = &quot;do not lie on character boundary&quot;)]
 fn slice_not_on_char_boundaries() {
@@ -8087,9 +8092,10 @@ fn slice_not_on_char_boundaries() {
 }
 </code></pre>
 <!-- I will add ghosting in libreoffice /Carol -->
-<caption>
-Listing 11-2: A test expecting a `panic!` with a particular message
-</caption>
+<figcaption>
+<p>Listing 11-2: A test expecting a <code>panic!</code> with a particular message</p>
+</figcaption>
+</figure>
 <p>Try on your own to see what happens when a <code>should_panic</code> test panics but
 doesn't match the expected message: cause a <code>panic!</code> that happens for a
 different reason in this test, or change the expected panic message to
@@ -8119,10 +8125,10 @@ means to not use any parallelism:</p>
 </code></pre>
 <h3>Tests Capture Output</h3>
 <p>By default, Rust's test library captures and discards output to standard out
-and standard error, unless the test fails. For example, if you call
-<code>println!()</code> in a test and the test passes, you won't see the <code>println!</code> output
-in your terminal. This behavior can be disabled by sending the <code>--nocapture</code>
-flag to the test binary:</p>
+and standard error, unless the test fails. For example, if you call <code>println!</code>
+in a test and the test passes, you won't see the <code>println!</code> output in your
+terminal. This behavior can be disabled by sending the <code>--nocapture</code> flag to
+the test binary:</p>
 <pre><code class="language-text">$ cargo test -- --nocapture
 </code></pre>
 <h3>Running a Subset of Tests by Name</h3>
@@ -8131,7 +8137,8 @@ working on code in a particular area, you might want to only run the tests
 having to do with that code. <code>cargo test</code> takes an argument that allows you to
 only run certain tests, specified by name.</p>
 <p>Let's create three tests with the following names as shown in Listing 11-3:</p>
-<p>Filename: src/lib.rs</p>
+<figure>
+<span class="filename">Filename: src/lib.rs</span>
 <pre><code class="language-rust">#[test]
 fn add_two_and_two() {
     assert_eq!(4, 2 + 2);
@@ -8147,9 +8154,10 @@ fn one_hundred() {
     assert_eq!(102, 100 + 2);
 }
 </code></pre>
-<caption>
-Listing 11-3: Three tests with a variety of names
-</caption>
+<figcaption>
+<p>Listing 11-3: Three tests with a variety of names</p>
+</figcaption>
+</figure>
 <p>Running with different arguments will run different subsets of the tests. No
 arguments, as we've already seen, runs all the tests:</p>
 <pre><code class="language-text">$ cargo test
@@ -8188,6 +8196,8 @@ test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured
 similar way to run just the tests for a particular module. For example, if our
 code was organized into a module named <code>adding</code> and a module named
 <code>subtracting</code> with tests in each, as in Listing 11-4:</p>
+<figure>
+<span class="filename">Filename: src/lib.rs</span>
 <pre><code class="language-rust">mod adding {
     #[test]
     fn add_two_and_two() {
@@ -8212,9 +8222,10 @@ mod subtracting {
     }
 }
 </code></pre>
-<caption>
-Listing 11-4: Tests in two modules named `adding` and `subtracting`
-</caption>
+<figcaption>
+<p>Listing 11-4: Tests in two modules named <code>adding</code> and <code>subtracting</code></p>
+</figcaption>
+</figure>
 <p>Running <code>cargo test</code> will run all of the tests, and the module names will
 appear in the test names in the output:</p>
 <pre><code class="language-text">$ cargo test
@@ -8246,7 +8257,7 @@ most runs of <code>cargo test</code>, we'd like to exclude them. Instead of havi
 construct an argument to <code>cargo test</code> to run all tests except these and
 remember to use that argument every time, we can annotate these tests with the
 <code>ignore</code> attribute:</p>
-<p>Filename: src/lib.rs</p>
+<p><span class="filename">Filename: src/lib.rs</span></p>
 <pre><code class="language-rust">#[test]
 fn it_works() {
     assert!(true);
@@ -8317,7 +8328,7 @@ code with <code>cargo build</code>, and saves space in the resulting compiled ar
 since the tests are not included.</p>
 <p>Remember when we generated the new <code>adder</code> project in the last section? Cargo
 generated this code for us:</p>
-<p>Filename: src/lib.rs</p>
+<p><span class="filename">Filename: src/lib.rs</span></p>
 <pre><code class="language-rust">#[cfg(test)]
 mod tests {
     #[test]
@@ -8343,7 +8354,8 @@ this is a common use of globs.</p>
 that don't actually call any code we've written. Let's change that now! In
 <em>src/lib.rs</em>, place this <code>add_two</code> function and <code>tests</code> module that has a test
 function to exercise the code, as shown in Listing 11-5:</p>
-<p>Filename: src/lib.rs</p>
+<figure>
+<span class="filename">Filename: src/lib.rs</span>
 <pre><code class="language-rust">pub fn add_two(a: i32) -&gt; i32 {
     a + 2
 }
@@ -8358,9 +8370,10 @@ mod tests {
     }
 }
 </code></pre>
-<caption>
-Listing 11-5: Testing the function `add_two` in a child `tests` module
-</caption>
+<figcaption>
+<p>Listing 11-5: Testing the function <code>add_two</code> in a child <code>tests</code> module</p>
+</figcaption>
+</figure>
 <p>Notice in addition to the test function, we also added <code>use add_two;</code> within
 the <code>tests</code> module. This brings the code we want to test into the scope of the
 inner <code>tests</code> module, just like we'd need to do for any inner module. If we run
@@ -8389,7 +8402,8 @@ unit tests for private functions or not. Regardless of which testing ideology
 you adhere to, Rust does allow you to test private functions due to the way
 that the privacy rules work. Consider the code in Listing 11-6 with the private
 function <code>internal_adder</code>:</p>
-<p>Filename: src/lib.rs</p>
+<figure>
+<span class="filename">Filename: src/lib.rs</span>
 <pre><code class="language-rust">pub fn add_two(a: i32) -&gt; i32 {
     internal_adder(a, 2)
 }
@@ -8408,9 +8422,10 @@ mod tests {
     }
 }
 </code></pre>
-<caption>
-Listing 11-6: Testing a private function
-</caption>
+<figcaption>
+<p>Listing 11-6: Testing a private function</p>
+</figcaption>
+</figure>
 <p>Because tests are just Rust code and the <code>tests</code> module is just another module,
 we can import and call <code>internal_adder</code> in a test just fine. If you don't think
 private functions should be tested, there's nothing in Rust that will compel
@@ -8428,7 +8443,8 @@ individual crate. Let's give it a try!</p>
 <p>First, make a <em>tests</em> directory at the top level of your project directory,
 next to <em>src</em>. Then, make a new file, <em>tests/integration_test.rs</em>, and put the
 code in Listing 11-7 inside:</p>
-<p>Filename: tests/integration_test.rs</p>
+<figure>
+<span class="filename">Filename: tests/integration_test.rs</span>
 <pre><code class="language-rust,ignore">extern crate adder;
 
 #[test]
@@ -8436,9 +8452,10 @@ fn it_adds_two() {
     assert_eq!(4, adder::add_two(2));
 }
 </code></pre>
-<caption>
-Listing 11-7: An integration test of a function in the `adder` crate
-</caption>
+<figcaption>
+<p>Listing 11-7: An integration test of a function in the <code>adder</code> crate</p>
+</figcaption>
+</figure>
 <p>We now have <code>extern crate adder</code> at the top, which we didn't need in the unit
 tests. Each test in the <code>tests</code> directory is an entirely separate crate, so we
 need to import our library into each of them. This is also why <code>tests</code> is a
