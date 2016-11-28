@@ -110,6 +110,8 @@ scope. The outer scope declares a variable named <code>r</code> with no initial 
 the inner scope declares a variable named <code>x</code> with the initial value of 5.
 Inside the inner scope, we attempt to set the value of <code>r</code> to a reference to
 <code>x</code>. Then the inner scope ends and we attempt to print out the value in <code>r</code>:</p>
+<figure>
+<span class="filename">Filename: src/lib.rs</span>
 <pre><code class="language-rust,ignore">{
     let r;
 
@@ -121,9 +123,10 @@ Inside the inner scope, we attempt to set the value of <code>r</code> to a refer
     println!(&quot;r: {}&quot;, r);
 }
 </code></pre>
-<caption>
-Listing 10-8: An attempt to use a reference whose value has gone out of scope
-</caption>
+<figcaption>
+<p>Listing 10-8: An attempt to use a reference whose value has gone out of scope</p>
+</figcaption>
+</figure>
 <p>If we compile this code, we get an error:</p>
 <pre><code class="language-text">    error: `x` does not live long enough
   --&gt; &lt;anon&gt;:6:10
@@ -229,7 +232,8 @@ return the longest of two string slices. The way we want to be able to call
 this function is by passing two string slices, and we want to get back a string
 slice. The code in Listing 10-9 should print <code>The longest string is abcd</code> once
 we've implemented the <code>longest</code> function:</p>
-<p>Filename: src/main.rs</p>
+<figure>
+<span class="filename">Filename: src/main.rs</span>
 <pre><code class="language-rust"># fn longest&lt;'a&gt;(x: &amp;'a str, y: &amp;'a str) -&gt; &amp;'a str {
 #     if x.len() &gt; y.len() {
 #         x
@@ -246,10 +250,11 @@ fn main() {
     println!(&quot;The longest string is {}&quot;, c);
 }
 </code></pre>
-<caption>
-Listing 10-9: A `main` function that demonstrates how we'd like to use the
-`longest` function
-</caption>
+<figcaption>
+<p>Listing 10-9: A <code>main</code> function that demonstrates how we'd like to use the
+<code>longest</code> function</p>
+</figcaption>
+</figure>
 <p>Note that we want the function to take string slices because we don't want the
 <code>longest</code> function to take ownership of its arguments, and we want the function
 to be able to accept slices of a <code>String</code> (like <code>a</code>) is as well as string
@@ -257,6 +262,7 @@ literals (<code>b</code>). Refer back to the &quot;String Slices as Arguments&qu
 Chapter 4 for more discussion about why these are the arguments we want.</p>
 <p>Here's the start of an implementation of the <code>longest</code> function that won't
 compile yet:</p>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust,ignore">fn longest(x: &amp;str, y: &amp;str) -&gt; &amp;str {
     if x.len() &gt; y.len() {
         x
@@ -280,7 +286,7 @@ know either, since in the <code>if</code> block in the body of this function ret
 reference to <code>x</code> and the <code>else</code> block returns a reference to <code>y</code>! The way to
 specify the lifetime parameters in this case is to have the same lifetime for
 all of the input parameters and the return type:</p>
-<p>Filename: src/main.rs</p>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust">fn longest&lt;'a&gt;(x: &amp;'a str, y: &amp;'a str) -&gt; &amp;'a str {
     if x.len() &gt; y.len() {
         x
@@ -305,7 +311,7 @@ satisfy this signature.</p>
 doing. If the function didn't actually return the longest string slice but
 instead always returned the first argument, we wouldn't need to specify a
 lifetime on <code>y</code>. This code compiles:</p>
-<p>Filename: src/main.rs</p>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust">fn longest&lt;'a&gt;(x: &amp;'a str, y: &amp;str) -&gt; &amp;'a str {
     x
 }
@@ -316,7 +322,7 @@ match one of the arguments' lifetime parameters. If the reference returned does
 refers to a value created within this function, and that would be a dangling
 reference since the value will go out of scope at the end of the function.
 Consider this attempted implementation of <code>longest</code>:</p>
-<p>Filename: src/main.rs</p>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust,ignore">fn longest&lt;'a&gt;(x: &amp;str, y: &amp;str) -&gt; &amp;'a str {
     let result = String::from(&quot;really long string&quot;);
     result.as_str()
@@ -352,7 +358,7 @@ would create dangling pointers or otherwise violate memory safety.</p>
 that use references as arguments or return values, then why did this function
 from the &quot;String Slices&quot; section of Chapter 4 compile? We haven't annotated any
 lifetimes here, yet Rust happily compiles this function:</p>
-<p>Filename: src/lib.rs</p>
+<p><span class="filename">Filename: src/lib.rs</span></p>
 <pre><code class="language-rust">fn first_word(s: &amp;str) -&gt; &amp;str {
     let bytes = s.as_bytes();
 
@@ -417,7 +423,7 @@ holds a reference to another struct, <code>Config</code>, defined elsewhere. The
 <code>append_to_name</code> method does not need lifetime annotations even though the
 method has a reference as an argument and is returning a reference; the
 lifetime of the return value will be the lifetime of <code>self</code>:</p>
-<p>Filename: src/lib.rs</p>
+<p><span class="filename">Filename: src/lib.rs</span></p>
 <pre><code class="language-rust"># struct Config {}
 #
 struct App&lt;'a&gt; {

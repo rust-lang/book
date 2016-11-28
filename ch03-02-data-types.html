@@ -104,9 +104,10 @@ that the value it’s associated with should be a signed integer (hence the <cod
 as opposed to a <code>u</code> for unsigned) for a 32-bit system. Table 3-1 shows the
 built-in integer types in Rust. Each variant in the Signed and Unsigned columns
 (for example, <em>i32</em>) can be used to declare the type of an integer value.</p>
-<caption>
-Table 3-1: Integer Types in Rust
-</caption>
+<figure>
+<figcaption>
+<p>Table 3-1: Integer Types in Rust</p>
+</figcaption>
 <table><thead><tr><td> Length </td><td> Signed </td><td> Unsigned </td></tr></thead>
 <tr><td> 8-bit  </td><td> i8     </td><td> u8       </td></tr>
 <tr><td> 16-bit </td><td> i16    </td><td> u16      </td></tr>
@@ -114,6 +115,7 @@ Table 3-1: Integer Types in Rust
 <tr><td> 64-bit </td><td> i64    </td><td> u64      </td></tr>
 <tr><td> arch   </td><td> isize  </td><td> usize    </td></tr>
 </table>
+</figure>
 <p>Each variant can be either signed or unsigned and has an explicit size.
 Signed and unsigned refers to whether it’s possible for the number to be
 negative or positive; in other words, whether the number needs to have a sign
@@ -135,9 +137,10 @@ if you’re on a 32-bit architecture.</p>
 <p>You can write integer literals in any of the forms shown in Table 3-2. Note
 that all number literals except the byte literal allow a type suffix, such as
 <code>57u8</code>, and <code>_</code> as a visual separator, such as <code>1_000</code>.</p>
-<caption>
-Table 3-2: Integer Literals in Rust
-</caption>
+<figure>
+<figcaption>
+<p>Table 3-2: Integer Literals in Rust</p>
+</figcaption>
 <table><thead><tr><td> Number literals  </td><td> Example       </td></tr></thead>
 <tr><td> Decimal          </td><td> <code>98_222</code>      </td></tr>
 <tr><td> Hex              </td><td> <code>0xff</code>        </td></tr>
@@ -145,6 +148,7 @@ Table 3-2: Integer Literals in Rust
 <tr><td> Binary           </td><td> <code>0b1111_0000</code> </td></tr>
 <tr><td> Byte (<code>u8</code> only) </td><td> <code>b'A'</code>        </td></tr>
 </table>
+</figure>
 <p>So how do you know which type of integer to use? If you’re unsure, Rust’s
 defaults are generally good choices, and integer types default to <code>i32</code>: it’s
 generally the fastest, even on 64-bit systems. The primary situation in which
@@ -160,7 +164,7 @@ worse performance for better precision is a reasonable initial choice, and you
 should benchmark your code if you suspect floating-point size is a problem in
 your situation.</p>
 <p>Here’s an example that shows floating-point numbers in action:</p>
-<p>Filename: src/main.rs</p>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust">fn main() {
     let x = 2.0; // f64
 
@@ -173,7 +177,7 @@ your situation.</p>
 <p>Rust supports the usual basic mathematic operations you’d expect for all of the
 number types: addition, subtraction, multiplication, division, and remainder.
 The following code shows how you’d use each one in a <code>let</code> statement:</p>
-<p>Filename: src/main.rs</p>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust">fn main() {
     // addition
     let sum = 5 + 10;
@@ -198,7 +202,7 @@ list of all operators that Rust provides.</p>
 <p>As in most other programming languages, a boolean type in Rust has two possible
 values: <code>true</code> and <code>false</code>. The boolean type in Rust is specified using <code>bool</code>.
 For example:</p>
-<p>Filename: src/main.rs</p>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust">fn main() {
     let t = true;
 
@@ -212,7 +216,7 @@ section.</p>
 <p>So far we’ve only worked with numbers, but Rust supports letters too. Rust’s
 <code>char</code> type is the language’s most primitive alphabetic type, and the following
 code shows one way to use it:</p>
-<p>Filename: src/main.rs</p>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust">fn main() {
    let c = 'z';
    let z = 'ℤ';
@@ -237,7 +241,7 @@ a variety of types into one compound type.</p>
 parentheses. Each position in the tuple has a type, and the types of the
 different values in the tuple don’t have to be the same. We’ve added optional
 type annotations in this example:</p>
-<p>Filename: src/main.rs</p>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust">fn main() {
     let tup: (i32, f64, u8) = (500, 6.4, 1);
 }
@@ -245,7 +249,7 @@ type annotations in this example:</p>
 <p>The variable <code>tup</code> binds to the entire tuple, since a tuple is considered a
 single compound element. To get the individual values out of a tuple, we can
 use pattern matching to destructure a tuple value, like this:</p>
-<p>Filename: src/main.rs</p>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust">fn main() {
     let tup = (500, 6.4, 1);
 
@@ -262,7 +266,7 @@ the single tuple into three parts. Finally, the program prints the value of
 <p>In addition to destructuring through pattern matching, we can also access a
 tuple element directly by using a period (<code>.</code>) followed by the index of the
 value we want to access. For example:</p>
-<p>Filename: src/main.rs</p>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust">fn main() {
     let x: (i32, f64, u8) = (500, 6.4, 1);
 
@@ -283,7 +287,7 @@ different than arrays in some other languages because arrays in Rust have a
 fixed length: once declared, they cannot grow or shrink in size.</p>
 <p>In Rust, the values going into an array are written as a comma-separated list
 inside square brackets:</p>
-<p>Filename: src/main.rs</p>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust">fn main() {
     let a = [1, 2, 3, 4, 5];
 }
@@ -305,7 +309,7 @@ an array because you know it will always contain 12 items:</p>
 <h5>Accessing Array Elements</h5>
 <p>An array is a single chunk of memory allocated on the stack. We can access
 elements of an array using indexing, like this:</p>
-<p>Filename: src/main.rs</p>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust">fn main() {
     let a = [1, 2, 3, 4, 5];
 
@@ -319,7 +323,7 @@ get the value <code>2</code> from index <code>[1]</code> in the array.</p>
 <h5>Invalid Array Element Access</h5>
 <p>What happens if we try to access an element of an array that is past the end of
 the array? Say we change the example to the following:</p>
-<p>Filename: src/main.rs</p>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust,ignore">fn main() {
     let a = [1, 2, 3, 4, 5];
 

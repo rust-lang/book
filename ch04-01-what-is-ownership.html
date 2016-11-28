@@ -284,11 +284,13 @@ under the covers in Figure 4-1. A <code>String</code> is made up of three parts,
 the left: a pointer to the memory that holds the contents of the string, a
 length, and a capacity. This group of data is stored on the stack. On the right
 is the memory that holds the contents, and this is on the heap.</p>
-<p><img alt="String in memory" src="img/trpl04-01.svg" class="center" style="width: 50%;" /></p>
-<caption>
-Figure 4-1: Representation in memory of a `String` holding the value `"hello"`
-bound to `s1`
-</caption>
+<figure>
+<img alt="String in memory" src="img/trpl04-01.svg" class="center" style="width: 50%;" />
+<figcaption>
+<p>Figure 4-1: Representation in memory of a <code>String</code> holding the value <code>&quot;hello&quot;</code>
+bound to <code>s1</code></p>
+</figcaption>
+</figure>
 <p>The length is how much memory, in bytes, the contents of the <code>String</code> is
 currently using. The capacity is the total amount of memory, in bytes, that the
 <code>String</code> has gotten from the operating system. The difference between length
@@ -298,19 +300,23 @@ the capacity.</p>
 copy the pointer, the length, and the capacity that are on the stack. We do not
 copy the data on the heap that the <code>String</code>’s pointer refers to. In other
 words, it looks like figure 4-2.</p>
-<p><img alt="s1 and s2 pointing to the same value" src="img/trpl04-02.svg" class="center" style="width: 50%;" /></p>
-<caption>
-Figure 4-2: Representation in memory of the variable `s2` that has a copy of
-`s1`’s pointer, length and capacity
-</caption>
+<figure>
+<img alt="s1 and s2 pointing to the same value" src="img/trpl04-02.svg" class="center" style="width: 50%;" />
+<figcaption>
+<p>Figure 4-2: Representation in memory of the variable <code>s2</code> that has a copy of
+<code>s1</code>’s pointer, length and capacity</p>
+</figcaption>
+</figure>
 <p>And <em>not</em> Figure 4-3, which is what memory would look like if Rust instead
 copied the heap data as well. If Rust did this, the operation <code>s2 = s1</code> could
 potentially be very expensive if the data on the heap was large.</p>
-<p><img alt="s1 and s2 to two places" src="img/trpl04-03.svg" class="center" style="width: 50%;" /></p>
-<caption>
-Figure 4-3: Another possibility for what `s2 = s1` might do, if Rust chose to
-copy heap data as well.
-</caption>
+<figure>
+<img alt="s1 and s2 to two places" src="img/trpl04-03.svg" class="center" style="width: 50%;" />
+<figcaption>
+<p>Figure 4-3: Another possibility for what <code>s2 = s1</code> might do, if Rust chose to
+copy heap data as well.</p>
+</figcaption>
+</figure>
 <p>Earlier, we said that when a variable goes out of scope, Rust will
 automatically call the <code>drop</code> function and clean up the heap memory for that
 variable. But in figure 4-2, we see both data pointers pointing to the same
@@ -343,10 +349,12 @@ without copying the data probably sounds like a shallow copy. But because Rust
 also invalidates the first variable, instead of calling this a shallow copy,
 it’s known as a <em>move</em>. Here we would read this by saying that <code>s1</code> was <em>moved</em>
 into <code>s2</code>. So what actually happens looks like Figure 4-4.</p>
-<p><img alt="s1 moved to s2" src="img/trpl04-04.svg" class="center" style="width: 50%;" /></p>
-<caption>
-Figure 4-4: Representation in memory after `s1` has been invalidated
-</caption>
+<figure>
+<img alt="s1 moved to s2" src="img/trpl04-04.svg" class="center" style="width: 50%;" />
+<figcaption>
+<p>Figure 4-4: Representation in memory after <code>s1</code> has been invalidated</p>
+</figcaption>
+</figure>
 <p>That solves our problem! With only <code>s2</code> valid, when it goes out of scope, it
 alone will free the memory, and we’re done.</p>
 <p>Furthermore, there’s a design choice that’s implied by this: Rust will never
@@ -408,7 +416,7 @@ Here’s some of the types that are <code>Copy</code>:</p>
 value to a variable. Passing a variable to a function will move or copy, just
 like assignment. Here’s an example, with some annotations showing where
 variables go into and out of scope:</p>
-<p>Filename: src/main.rs</p>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust">fn main() {
     let s = String::from(&quot;hello&quot;);  // s comes into scope.
 
@@ -439,7 +447,7 @@ the ownership rules prevent you from doing so.</p>
 <h3>Return Values and Scope</h3>
 <p>Returning values can also transfer ownership. Here’s an example with similar
 annotations:</p>
-<p>Filename: src/main.rs</p>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust">fn main() {
     let s1 = gives_ownership();         // gives_ownership moves its return
                                         // value into s1.
@@ -479,7 +487,7 @@ quite annoying that anything we pass in also needs to be passed back if we want
 to use it again, in addition to any data resulting from the body of the
 function that we might want to return as well.</p>
 <p>It is possible to return multiple values using a tuple, like this:</p>
-<p>Filename: src/main.rs</p>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust">fn main() {
     let s1 = String::from(&quot;hello&quot;);
 

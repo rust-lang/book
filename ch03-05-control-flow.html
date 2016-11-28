@@ -79,7 +79,7 @@ provide a condition and then state, “If this condition is met, run this block
 of code. If the condition is not met, do not run this block of code.”</p>
 <p>Create a new project called <em>branches</em> in your <em>projects</em> directory to explore
 the <code>if</code> expression. In the <em>src/main.rs</em> file, input the following:</p>
-<p>Filename: src/main.rs</p>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust">fn main() {
     let number = 3;
 
@@ -123,7 +123,7 @@ condition was false
 <p>It’s also worth noting that the condition in this code <em>must</em> be a <code>bool</code>. To
 see what happens if the condition isn’t a <code>bool</code>, try running the following
 code:</p>
-<p>Filename: src/main.rs</p>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust,ignore">fn main() {
     let number = 3;
 
@@ -153,7 +153,7 @@ languages such as Ruby and JavaScript. You must be explicit and always provide
 <code>if</code> with a <code>boolean</code> as its condition. If we want the <code>if</code> code block to run
 only when a number is not equal to <code>0</code>, for example, we can change the <code>if</code>
 expression to the following:</p>
-<p>Filename: src/main.rs</p>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust">fn main() {
     let number = 3;
 
@@ -166,7 +166,7 @@ expression to the following:</p>
 <h4>Multiple Conditions with <code>else if</code></h4>
 <p>We can have multiple conditions by combining <code>if</code> and <code>else</code> in an <code>else if</code>
 expression. For example:</p>
-<p>Filename: src/main.rs</p>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust">fn main() {
     let number = 6;
 
@@ -200,7 +200,8 @@ Rust branching construct called <code>match</code> for these cases.</p>
 <h4>Using <code>if</code> in a <code>let</code> statement</h4>
 <p>Because <code>if</code> is an expression, we can use it on the right side of a <code>let</code>
 statement, for instance in Listing 3-4:</p>
-<p>Filename: src/main.rs</p>
+<figure>
+<span class="filename">Filename: src/main.rs</span>
 <pre><code class="language-rust">fn main() {
     let condition = true;
     let number = if condition {
@@ -212,9 +213,10 @@ statement, for instance in Listing 3-4:</p>
     println!(&quot;The value of number is: {}&quot;, number);
 }
 </code></pre>
-<caption>
-Listing 3-4: Assigning the result of an `if` expression to a variable
-</caption>
+<figcaption>
+<p>Listing 3-4: Assigning the result of an <code>if</code> expression to a variable</p>
+</figcaption>
+</figure>
 <p>The <code>number</code> variable will be bound to a value based on the outcome of the <code>if</code>
 expression. Run this code to see what happens:</p>
 <pre><code class="language-text">$ cargo run
@@ -229,7 +231,7 @@ values that have the potential to be results from each arm of the <code>if</code
 the same type; in Listing 3-4, the results of both the <code>if</code> arm and the <code>else</code>
 arm were <code>i32</code> integers. But what happens if the types are mismatched, as in
 the following example?</p>
-<p>Filename: src/main.rs</p>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust,ignore">fn main() {
     let condition = true;
 
@@ -274,7 +276,7 @@ experiment with loops, let’s make a new project called <em>loops</em>.</p>
 forever or until you explicitly tell it to stop.</p>
 <p>As an example, change the <em>src/main.rs</em> file in your <em>loops</em> directory to look
 like this:</p>
-<p>Filename: src/main.rs</p>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust,ignore">fn main() {
     loop {
         println!(&quot;again!&quot;);
@@ -311,7 +313,7 @@ program, if you’d like.</p>
 for it, and it’s called a <code>while</code> loop. The following example uses <code>while</code>: the
 program loops three times, counting down each time. Then, after the loop, it
 prints another message and exits:</p>
-<p>Filename: src/main.rs</p>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust">fn main() {
     let mut number = 3;
 
@@ -330,7 +332,8 @@ true, the code runs; otherwise, it exits the loop.</p>
 <h4>Looping Through a Collection with <code>for</code></h4>
 <p>You could use the <code>while</code> construct to loop over the elements of a collection,
 such as an array. For example:</p>
-<p>Filename: src/main.rs</p>
+<figure>
+<span class="filename">Filename: src/main.rs</span>
 <pre><code class="language-rust">fn main() {
     let a = [10, 20, 30, 40, 50];
     let mut index = 0;
@@ -342,9 +345,10 @@ such as an array. For example:</p>
     }
 }
 </code></pre>
-<caption>
-Listing 3-5: Looping through each element of a collection using a `while` loop
-</caption>
+<figcaption>
+<p>Listing 3-5: Looping through each element of a collection using a <code>while</code> loop</p>
+</figcaption>
+</figure>
 <p>Here, the code counts up through the elements in the array. It starts at index
 <code>0</code>, and then loops until it reaches the final index in the array (that is,
 when <code>index &lt; 5</code> is no longer true). Running this code will print out every
@@ -367,7 +371,8 @@ perform the conditional check on every element on every iteration through the
 loop.</p>
 <p>As a more efficient alternative, you can use a <code>for</code> loop and execute some code
 for each item in a collection. A <code>for</code> loop looks like this:</p>
-<p>Filename: src/main.rs</p>
+<figure>
+<span class="filename">Filename: src/main.rs</span>
 <pre><code class="language-rust">fn main() {
     let a = [10, 20, 30, 40, 50];
 
@@ -376,9 +381,10 @@ for each item in a collection. A <code>for</code> loop looks like this:</p>
     }
 }
 </code></pre>
-<caption>
-Listing 3-6: Looping through each element of a collection using a `for` loop
-</caption>
+<figcaption>
+<p>Listing 3-6: Looping through each element of a collection using a <code>for</code> loop</p>
+</figcaption>
+</figure>
 <p>When we run this code, we’ll see the same output as in Listing 3-5. More
 importantly, we’ve now increased the safety of the code and eliminated the
 chance of bugs that might result from going beyond the end of the array or not
@@ -396,7 +402,7 @@ that generates all numbers in sequence starting from one number and ending
 before another number.</p>
 <p>Here’s what the countdown would look like using a <code>for</code> loop and another method
 we’ve not yet talked about, <code>rev</code>, to reverse the range:</p>
-<p>Filename: src/main.rs</p>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust">fn main() {
     for number in (1..4).rev() {
         println!(&quot;{}!&quot;, number);

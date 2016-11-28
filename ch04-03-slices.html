@@ -82,7 +82,7 @@ returned.</p>
 ownership, so this is fine. But what should we return? We don’t really have a
 way to talk about <em>part</em> of a string. We could return the index of the end of
 the word, though. Let’s try that:</p>
-<p>Filename: src/main.rs</p>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust">fn first_word(s: &amp;String) -&gt; usize {
     let bytes = s.as_bytes();
 
@@ -127,7 +127,7 @@ only a meaningful number in the context of the <code>&amp;String</code>. In othe
 because it’s a separate value from the <code>String</code>, there’s no guarantee that it
 will still be valid in the future. Consider this program that uses this
 <code>first_word</code> function:</p>
-<p>Filename: src/main.rs</p>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust"># fn first_word(s: &amp;String) -&gt; usize {
 #     let bytes = s.as_bytes();
 #
@@ -181,10 +181,12 @@ slice data structure actually stores the starting position and the length of
 the slice. So in the case of <code>let world = &amp;s[6..11];</code>, <code>world</code> would be a slice
 that contains a pointer to the 6th byte of <code>s</code> and a length value of 5.</p>
 <p>Figure 4-6 shows this in a diagram:</p>
-<p><img alt="world containing a pointer to the 6th byte of String s and a length 5" src="img/trpl04-06.svg" class="center" style="width: 50%;" /></p>
-<caption>
-Figure 4-6: String slice referring to part of a `String`
-</caption>
+<figure>
+<img alt="world containing a pointer to the 6th byte of String s and a length 5" src="img/trpl04-06.svg" class="center" style="width: 50%;" />
+<figcaption>
+<p>Figure 4-6: String slice referring to part of a <code>String</code></p>
+</figcaption>
+</figure>
 <p>With Rust’s <code>..</code> range syntax, if you want to start at the first index (zero),
 you can drop the value before the <code>..</code>. In other words, these are equal:</p>
 <pre><code class="language-rust">let s = String::from(&quot;hello&quot;);
@@ -212,7 +214,7 @@ let slice = &amp;s[..];
 </code></pre>
 <p>With this in mind, let’s re-write <code>first_word</code> to return a slice. The type that
 signifies “string slice” is written as <code>&amp;str</code>:</p>
-<p>Filename: src/main.rs</p>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust">fn first_word(s: &amp;String) -&gt; &amp;str {
     let bytes = s.as_bytes();
 
@@ -242,7 +244,7 @@ any immediate errors. The problems would show up later, if we kept trying to
 use the first word index with an emptied string. Slices make this bug
 impossible, and let us know we have a problem with our code much sooner. Using
 the slice version of <code>first_word</code> will throw a compile time error:</p>
-<p>Filename: src/main.rs</p>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust,ignore">fn main() {
     let mut s = String::from(&quot;hello world&quot;);
 
@@ -292,7 +294,7 @@ to use the same function on both <code>String</code>s and <code>&amp;str</code>s
 <p>If we have a string slice, we can pass that as the argument directly. If we
 have a <code>String</code>, we can pass a slice of the entire <code>String</code>. This makes our API
 more general and useful without losing any functionality:</p>
-<p>Filename: src/main.rs</p>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust"># fn first_word(s: &amp;str) -&gt; &amp;str {
 #     let bytes = s.as_bytes();
 #

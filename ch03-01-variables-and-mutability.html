@@ -78,7 +78,7 @@ you can’t change that value. To illustrate, let’s generate a new project cal
 <em>variables</em> in your <em>projects</em> directory by using <code>cargo new --bin variables</code>.</p>
 <p>Then, in your new <em>variables</em> directory, open <em>src/main.rs</em> and replace its
 code with the following:</p>
-<p>Filename: src/main.rs</p>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust,ignore">fn main() {
     let x = 5;
     println!(&quot;The value of x is: {}&quot;, x);
@@ -122,7 +122,7 @@ addition to allowing this value to change, it conveys intent to future readers
 of the code by indicating that other parts of the code will be changing this
 variable value.</p>
 <p>For example, change <em>src/main.rs</em> to the following:</p>
-<p>Filename: src/main.rs</p>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust">fn main() {
     let mut x = 5;
     println!(&quot;The value of x is: {}&quot;, x);
@@ -182,7 +182,7 @@ variables with the same name as a previous variables, and the new variable
 <em>shadowed</em> by the second, which means that the second variable’s value is what
 we’ll see when we use the variable. We can shadow a variable by using the same
 variable’s name and repeating the use of the <code>let</code> keyword as follows:</p>
-<p>Filename: src/main.rs</p>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust">fn main() {
     let x = 5;
 

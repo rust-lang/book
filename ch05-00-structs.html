@@ -127,8 +127,8 @@ refactor our program until we're using <code>struct</code>s instead.</p>
 <p>Let’s make a new binary project with Cargo called <em>rectangles</em> that will take
 the length and width of a rectangle specified in pixels and will calculate the
 area of the rectangle. Here’s a short program that has one way of doing just
-that to put into our project's <code>src/main.rs</code>:</p>
-<p>Filename: src/main.rs</p>
+that to put into our project's <em>src/main.rs</em>:</p>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust">fn main() {
     let length1 = 50;
     let width1 = 30;
@@ -160,7 +160,7 @@ expressed anywhere in our program itself. It would be more readable and more
 manageable to group length and width together.</p>
 <p>We’ve already discussed one way we might do that in Chapter 3: tuples. Here’s a
 version of our program which uses tuples:</p>
-<p>Filename: src/main.rs</p>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust">fn main() {
     let rect1 = (50, 30);
 
@@ -193,7 +193,7 @@ in our code.</p>
 <h3>Refactoring with Structs: Adding More Meaning</h3>
 <p>Here is where we bring in <code>struct</code>s. We can transform our tuple into a data
 type with a name for the whole as well as names for the parts:</p>
-<p>Filename: src/main.rs</p>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust">struct Rectangle {
     length: u32,
     width: u32,
@@ -232,7 +232,7 @@ index values of <code>0</code> and <code>1</code>. This is a win for clarity.</p
 <p>It'd be nice to be able to print out an instance of our <code>Rectangle</code> while we're
 debugging our program and see the values for all its fields. Let's try using
 the <code>println!</code> macro as we have been and see what happens:</p>
-<p>Filename: src/main.rs</p>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust,ignore">struct Rectangle {
     length: u32,
     width: u32,

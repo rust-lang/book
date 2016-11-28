@@ -89,7 +89,7 @@ as the first argument. The <code>--bin</code> flag tells Cargo to make a binary 
 similar to the one in Chapter 1. The second command changes to the new
 project’s directory.</p>
 <p>Look at the generated <em>Cargo.toml</em> file:</p>
-<p>Filename: Cargo.toml</p>
+<p><span class="filename">Filename: Cargo.toml</span></p>
 <pre><code class="language-toml">[package]
 name = &quot;guessing_game&quot;
 version = &quot;0.1.0&quot;
@@ -101,7 +101,7 @@ authors = [&quot;Your Name &lt;you@example.com&gt;&quot;]
 correct, fix that in the file and save it again.</p>
 <p>As you saw in Chapter 1, <code>cargo new</code> generates a “Hello, world!” program for
 you. Check out the <em>src/main.rs</em> file:</p>
-<p>Filename: src/main.rs</p>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust">fn main() {
     println!(&quot;Hello, world!&quot;);
 }
@@ -121,7 +121,8 @@ before moving on to the next one.</p>
 <p>The first part of the program will ask for user input, process that input, and
 check that the input is in the expected form. To start, we’ll allow the player
 to input a guess. Enter the code in Listing 2-1 into <em>src/main.rs</em>.</p>
-<p>Filename: src/main.rs</p>
+<figure>
+<span class="filename">Filename: src/main.rs</span>
 <pre><code class="language-rust,ignore">use std::io;
 
 fn main() {
@@ -137,9 +138,10 @@ fn main() {
     println!(&quot;You guessed: {}&quot;, guess);
 }
 </code></pre>
-<caption>
-Listing 2-1: Code to get a guess from the user and print it out
-</caption>
+<figcaption>
+<p>Listing 2-1: Code to get a guess from the user and print it out</p>
+</figcaption>
+</figure>
 <p>This code contains a lot of information, so let’s go over it bit by bit. To
 obtain user input and then print the result as output, we need to import the
 <code>io</code> (input/output) library from the standard library (which is known as <code>std</code>):</p>
@@ -316,7 +318,7 @@ code that uses <code>rand</code>, we need to modify the <em>Cargo.toml</em> file
 <code>rand</code> crate as a dependency. Open that file now and add the following line to
 the bottom beneath the <code>[dependencies]</code> section header that Cargo created for
 you:</p>
-<p>Filename: Cargo.toml</p>
+<p><span class="filename">Filename: Cargo.toml</span></p>
 <pre><code class="language-toml">[dependencies]
 
 rand = &quot;0.3.14&quot;
@@ -332,6 +334,7 @@ for <code>^0.3.14</code>, which means “any version that has a public API compa
 version 0.3.14.”</p>
 <p>Now, without changing any of the code, let’s build the project, as shown in
 Listing 2-2:</p>
+<figure>
 <pre><code class="language-text">$ cargo build
     Updating registry `https://github.com/rust-lang/crates.io-index`
  Downloading rand v0.3.14
@@ -340,10 +343,11 @@ Listing 2-2:</p>
    Compiling rand v0.3.14
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
 </code></pre>
-<caption>
-Listing 2-2: The output from running `cargo build` after adding the rand crate
-as a dependency
-</caption>
+<figcaption>
+<p>Listing 2-2: The output from running <code>cargo build</code> after adding the rand crate
+as a dependency</p>
+</figcaption>
+</figure>
 <p>You may see different version numbers (but they will all be compatible with
 the code, thanks to SemVer!), and the lines may be in a different order.</p>
 <p>Now that we have an external dependency, Cargo fetches the latest versions of
@@ -420,7 +424,8 @@ number of packages.</p>
 <h3>Generating a Random Number</h3>
 <p>Let’s start <em>using</em> <code>rand</code>. The next step is to update <em>src/main.rs</em>, as shown
 in Listing 2-3:</p>
-<p>Filename: src/main.rs</p>
+<figure>
+<span class="filename">Filename: src/main.rs</span>
 <pre><code class="language-rust,ignore">extern crate rand;
 
 use std::io;
@@ -443,9 +448,10 @@ fn main() {
     println!(&quot;You guessed: {}&quot;, guess);
 }
 </code></pre>
-<caption>
-Listing 2-3: Code changes needed in order to generate a random number
-</caption>
+<figcaption>
+<p>Listing 2-3: Code changes needed in order to generate a random number</p>
+</figcaption>
+</figure>
 <p>We’re adding a <code>extern crate rand;</code> line to the top that lets Rust know we’ll be
 using that external dependency. This also does the equivalent of calling <code>use rand</code>, so now we can call anything in the <code>rand</code> crate by prefixing it with
 <code>rand::</code>.</p>
@@ -493,7 +499,8 @@ You guessed: 5
 <h2>Comparing the Guess to the Secret Number</h2>
 <p>Now that we have user input and a random number, we can compare them. That
 step is shown in Listing 2-4:</p>
-<p>Filename: src/main.rs</p>
+<figure>
+<span class="filename">Filename: src/main.rs</span>
 <pre><code class="language-rust,ignore">extern crate rand;
 
 use std::io;
@@ -523,9 +530,10 @@ fn main() {
     }
 }
 </code></pre>
-<caption>
-Listing 2-4: Handling the possible return values of comparing two numbers
-</caption>
+<figcaption>
+<p>Listing 2-4: Handling the possible return values of comparing two numbers</p>
+</figcaption>
+</figure>
 <p>The first new bit here is another <code>use</code>, bringing a type called
 <code>std::cmp::Ordering</code> into scope from the standard library. <code>Ordering</code> is
 another enum, like <code>Result</code>, but the variants for <code>Ordering</code> are <code>Less</code>,
@@ -591,7 +599,7 @@ not compare a string and a number type.</p>
 <p>Ultimately, we want to convert the <code>String</code> the program reads as input into a
 real number type so we can compare it to the guess numerically. We can do
 that by adding the following two lines to the <code>main</code> function body:</p>
-<p>Filename: src/main.rs</p>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust,ignore">extern crate rand;
 
 use std::io;
@@ -684,7 +692,7 @@ Let’s change that by adding a loop!</p>
 <h2>Allowing Multiple Guesses with Looping</h2>
 <p>The <code>loop</code> keyword gives us an infinite loop. Add that now to give users more
 chances at guessing the number:</p>
-<p>Filename: src/main.rs</p>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust,ignore">extern crate rand;
 
 use std::io;
@@ -757,7 +765,7 @@ However, this is suboptimal to say the least. We want the game to automatically
 stop when the correct number is guessed.</p>
 <h3>Quitting After a Correct Guess</h3>
 <p>Let’s program the game to quit when the user wins by adding a <code>break</code>:</p>
-<p>Filename: src/main.rs</p>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust,ignore">extern crate rand;
 
 use std::io;
@@ -853,7 +861,8 @@ You win!
 that the program is still printing out the secret number. That worked well for
 testing, but it ruins the game. Let’s delete the <code>println!</code> that outputs the
 secret number. Listing 2-5 shows the final code:</p>
-<p>Filename: src/main.rs</p>
+<figure>
+<span class="filename">Filename: src/main.rs</span>
 <pre><code class="language-rust,ignore">extern crate rand;
 
 use std::io;
@@ -891,9 +900,10 @@ fn main() {
     }
 }
 </code></pre>
-<caption>
-Listing 2-5: Complete code of the guessing game
-</caption>
+<figcaption>
+<p>Listing 2-5: Complete code of the guessing game</p>
+</figcaption>
+</figure>
 <h2>Summary</h2>
 <p>At this point, you’ve successfully built the guessing game! Congratulations!</p>
 <p>This project was a hands-on way to introduce you to many new Rust concepts:

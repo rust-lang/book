@@ -75,7 +75,7 @@ into <code>calculate_length</code>.</p>
 <p>Here is how you would define and use a <code>calculate_length</code> function that takes a
 <em>reference</em> to an object as an argument instead of taking ownership of the
 argument:</p>
-<p>Filename: src/main.rs</p>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust">fn main() {
     let s1 = String::from(&quot;hello&quot;);
 
@@ -94,10 +94,12 @@ function return value is gone. Next, note that we pass <code>&amp;s1</code> into
 <code>String</code>.</p>
 <p>These <code>&amp;</code>s are <em>references</em>, and they allow you to refer to some value without
 taking ownership of it. Figure 4-5 shows a diagram of this.</p>
-<p><img alt="&String s pointing at String s1" src="img/trpl04-05.svg" class="center" /></p>
-<caption>
-Figure 4-5: `&String s` pointing at `String s1`
-</caption>
+<figure>
+<img alt="&String s pointing at String s1" src="img/trpl04-05.svg" class="center" />
+<figcaption>
+<p>Figure 4-5: <code>&amp;String s</code> pointing at <code>String s1</code></p>
+</figcaption>
+</figure>
 <p>Let’s take a closer look at the function call here:</p>
 <pre><code class="language-rust"># fn calculate_length(s: &amp;String) -&gt; usize {
 #     s.len()
@@ -125,7 +127,7 @@ something, you can borrow it from them, and when you’re done, you have to give
 it back.</p>
 <p>So what happens if we try to modify something we’re borrowing? Try this code
 out. Spoiler alert: it doesn’t work!</p>
-<p>Filename: src/main.rs</p>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust,ignore">fn main() {
     let s = String::from(&quot;hello&quot;);
 
@@ -147,7 +149,7 @@ fn change(some_string: &amp;String) {
 to modify something we have a reference to.</p>
 <h3>Mutable References</h3>
 <p>We can fix this error with just a small tweak:</p>
-<p>Filename: src/main.rs</p>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust">fn main() {
     let mut s = String::from(&quot;hello&quot;);
 
@@ -163,7 +165,7 @@ reference with <code>&amp;mut s</code> and accept a mutable reference with <code
 <p>Mutable references have one big restriction, though: you can only have one
 mutable reference to a particular piece of data in a particular scope. This
 code will fail:</p>
-<p>Filename: src/main.rs</p>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust,ignore">let mut s = String::from(&quot;hello&quot;);
 
 let r1 = &amp;mut s;
@@ -243,7 +245,7 @@ never be dangling: if we have a reference to some data, the compiler will
 ensure that the data will not go out of scope before the reference to the data
 does.</p>
 <p>Let’s try to create a dangling reference:</p>
-<p>Filename: src/main.rs</p>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust,ignore">fn main() {
     let reference_to_nothing = dangle();
 }

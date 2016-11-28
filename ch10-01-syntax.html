@@ -91,7 +91,7 @@ we'll remove the duplication by extracting a generic data type instead of
 extracting a function, but the mechanics of doing the extraction will be
 similar. First, let's consider an <code>Option</code> enum with a <code>Some</code> variant that can
 only hold an <code>i32</code>. We'll call this enum <code>OptionalNumber</code>:</p>
-<p>Filename: src/main.rs</p>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust">enum OptionalNumber {
     Some(i32),
     None,
@@ -106,7 +106,7 @@ fn main() {
 would have to duplicate code to define a separate <code>Option</code> enum type for each
 type we wanted to be able to hold in the <code>Some</code> variants. For example, here is
 how we could define and use <code>OptionalFloatingPointNumber</code>:</p>
-<p>Filename: src/main.rs</p>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust">enum OptionalFloatingPointNumber {
     Some(f64),
     None,
@@ -197,7 +197,7 @@ is the compiler will see that we've used two kinds of <code>Option&lt;T&gt;</cod
 definition of <code>Option&lt;T&gt;</code> into <code>Option_i32</code> and <code>Option_f64</code>, thereby replacing
 the generic definition with the specific ones. The more specific version looks
 like the duplicated code we started with at the beginning of this section:</p>
-<p>Filename: src/main.rs</p>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust">enum Option_i32 {
     Some(i32),
     None,
@@ -223,7 +223,8 @@ well in order to define structs that have a generic type parameter in one or
 more of their fields. Generic structs also get monomorphized into specialized
 types at compile time. Listing 10-2 shows the definition and use of a <code>Point</code>
 struct that could hold <code>x</code> and <code>y</code> coordinate values that are any type:</p>
-<p>Filename: src/main.rs</p>
+<figure>
+<span class="filename">Filename: src/main.rs</span>
 <pre><code class="language-rust">struct Point&lt;T&gt; {
     x: T,
     y: T,
@@ -234,9 +235,10 @@ fn main() {
     let float = Point { x: 1.0, y: 4.0 };
 }
 </code></pre>
-<caption>
-Listing 10-2: A `Point` struct that holds `x` and `y` values of type `T`
-</caption>
+<figcaption>
+<p>Listing 10-2: A <code>Point</code> struct that holds <code>x</code> and <code>y</code> values of type <code>T</code></p>
+</figcaption>
+</figure>
 <p>The syntax is the same with structs: add a <code>&lt;T&gt;</code> after the name of the struct,
 then use <code>T</code> in the definition where you want to use that generic type instead
 of a specific type.</p>
@@ -261,7 +263,8 @@ type of <code>x</code>:</p>
 declare multiple type parameters within the angle brackets, separated by a
 comma. Listing 10-3 shows how to define a <code>Point</code> that can have different types
 for <code>x</code> and <code>y</code>:</p>
-<p>Filename: src/main.rs</p>
+<figure>
+<span class="filename">Filename: src/main.rs</span>
 <pre><code class="language-rust">struct Point&lt;X, Y&gt; {
     x: X,
     y: Y,
@@ -273,10 +276,11 @@ fn main() {
     let p = Point { x: 5, y: 20.0 };
 }
 </code></pre>
-<caption>
-Listing 10-2: A `Point` struct that holds an `x` value of type `X` and a `y`
-value of type `Y`
-</caption>
+<figcaption>
+<p>Listing 10-3: A <code>Point</code> struct that holds an <code>x</code> value of type <code>X</code> and a <code>y</code>
+value of type <code>Y</code></p>
+</figcaption>
+</figure>
 <p>Now <code>x</code> will have the type of <code>X</code>, and <code>y</code> will have the type of <code>Y</code>, and we
 can instantiate a <code>Point</code> with an <code>i32</code> for <code>x</code> and an <code>f64</code> for <code>y</code>.</p>
 <p>We can make <code>enum</code>s with multiple type parameters as well. Recall the enum
@@ -322,17 +326,19 @@ one:</p>
 </code></pre>
 <p>There's one problem though. We've got some function <em>definitions</em> that work,
 but if we try to use <code>value</code> in code in the function body, we'll get an
-error. For example, the function definition in Listing 10-3 tries to print out
+error. For example, the function definition in Listing 10-4 tries to print out
 <code>value</code> in its body:</p>
-<p>Filename: src/lib.rs</p>
+<figure>
+<span class="filename">Filename: src/lib.rs</span>
 <pre><code class="language-rust,ignore">fn show_anything&lt;T&gt;(value: T) {
     println!(&quot;I have something to show you!&quot;);
     println!(&quot;It's: {}&quot;, value);
 }
 </code></pre>
-<caption>
-Listing 10-3: A `show_anything` function definition that does not yet compile
-</caption>
+<figcaption>
+<p>Listing 10-4: A <code>show_anything</code> function definition that does not yet compile</p>
+</figcaption>
+</figure>
 <p>Compiling this definition results in an error:</p>
 <pre><code class="language-text">    error[E0277]: the trait bound `T: std::fmt::Display` is not satisfied
  --&gt; &lt;anon&gt;:3:37

@@ -89,21 +89,26 @@ in more detail in Chapter 10. What you need to know for right now is that the
 <code>T</code> that is what we want to return in the success case, and any type <code>E</code> that
 is what we want to return in the error case.</p>
 <p>Listing 9-2 shows an example of something that might fail: opening a file.</p>
+<figure>
+<span class="filename">Filename: src/main.rs</span>
 <pre><code class="language-rust">use std::fs::File;
 
 fn main() {
     let f = File::open(&quot;hello.txt&quot;);
 }
 </code></pre>
-<caption>
-Listing 9-2: Opening a file
-</caption>
+<figcaption>
+<p>Listing 9-2: Opening a file</p>
+</figcaption>
+</figure>
 <p>The type of <code>f</code> in this example is a <code>Result</code>, because there are many ways in
 which opening a file can fail. For example, unless we created <code>hello.txt</code>, this
 file does not yet exist. Before we can do anything with our <code>File</code>, we need to
 extract it out of the result. Listing 9-3 shows one way to handle the <code>Result</code>
 with a basic tool: the <code>match</code> expression that we learned about in Chapter 6.</p>
 <!-- I'll ghost everything except the match statement lines in the libreoffice file /Carol -->
+<figure>
+<span class="filename">Filename: src/main.rs</span>
 <pre><code class="language-rust,should_panic">use std::fs::File;
 
 fn main() {
@@ -116,9 +121,11 @@ error),
     };
 }
 </code></pre>
-<caption>
-Listing 9-3: Using a `match` expression to handle the `Result` variants we might have
-</caption>
+<figcaption>
+<p>Listing 9-3: Using a <code>match</code> expression to handle the <code>Result</code> variants we
+might have</p>
+</figcaption>
+</figure>
 <p>If we see an <code>Ok</code>, we can return the inner <code>file</code> out of the <code>Ok</code> variant. If
 we see <code>Err</code>, we have to decide what to do with it. The simplest thing is to
 turn our error into a <code>panic!</code> instead, by calling the macro. And since we
@@ -138,6 +145,8 @@ which is a struct provided by the standard library. This struct has a method
 <code>kind</code> that we can call to get an <a href="../std/io/enum.ErrorKind.html"><code>io::ErrorKind</code></a><!-- ignore -->
 value that we can use to handle different causes of an <code>Err</code> returned from
 <code>File::open</code> differently as in Listing 9-4:</p>
+<figure>
+<span class="filename">Filename: src/main.rs</span>
 <pre><code class="language-rust,ignore">use std::fs::File;
 use std::io::ErrorKind;
 
@@ -157,9 +166,10 @@ error),
     };
 }
 </code></pre>
-<caption>
-Listing 9-4: Handling different kinds of errors in different ways
-</caption>
+<figcaption>
+<p>Listing 9-4: Handling different kinds of errors in different ways</p>
+</figcaption>
+</figure>
 <!-- I will add ghosting and wingdings here in libreoffice /Carol -->
 <p>This example uses a <em>match guard</em> with the second arm's pattern to add a
 condition that further refines the pattern. The <code>ref</code> in the pattern is needed
@@ -174,6 +184,7 @@ communicate intent well. The <code>Result&lt;T, E&gt;</code> type has many helpe
 defined on it to do various things. &quot;Panic on an error result&quot; is one of those
 methods, and it's called <code>unwrap()</code>:</p>
 <!-- I'll ghost everything except `unwrap()` in the libreoffice file /Carol -->
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust,should_panic">use std::fs::File;
 
 fn main() {
@@ -187,6 +198,7 @@ the error message: <code>expect()</code>. Using <code>expect()</code> instead of
 providing good error messages can convey your intent and make tracking down the
 source of a panic easier. <code>expect()</code> looks like this:</p>
 <!-- I'll ghost everything except `expect()` in the libreoffice file /Carol -->
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust,should_panic">use std::fs::File;
 
 fn main() {
@@ -227,6 +239,7 @@ you can return the error to the calling function. For example, Listing 9-5
 shows a function that reads a username from a file. If the file doesn't exist
 or can't be read, this function will return those errors to the code that
 called this function:</p>
+<figure>
 <pre><code class="language-rust"># use std::fs::File;
 # use std::io;
 # use std::io::Read;
@@ -247,9 +260,10 @@ fn read_username_from_file() -&gt; Result&lt;String, io::Error&gt; {
     }
 }
 </code></pre>
-<caption>
-Listing 9-5: A function that returns errors to the calling code using `match`
-</caption>
+<figcaption>
+<p>Listing 9-5: A function that returns errors to the calling code using <code>match</code></p>
+</figcaption>
+</figure>
 <p>Since the <code>Result</code> type has two type parameters, we need to include them both
 in our function signature. In this case, <code>File::open</code> and <code>read_to_string</code>
 return <code>std::io::Error</code> as the value inside the <code>Err</code> variant, so we will also
@@ -265,6 +279,7 @@ as in Listing 9-6, and it would have the same functionality as the <code>match</
 expressions:</p>
 <!-- I'll ghost everything except the calls to `try!` in the libreoffice file
 /Carol -->
+<figure>
 <pre><code class="language-rust"># use std::fs::File;
 # use std::io;
 # use std::io::Read;
@@ -278,10 +293,12 @@ fn read_username_from_file() -&gt; Result&lt;String, io::Error&gt; {
     Ok(s)
 }
 </code></pre>
-<caption>
-Listing 9-6: A function that returns errors to the calling code using `try!`
-</caption>
+<figcaption>
+<p>Listing 9-6: A function that returns errors to the calling code using <code>try!</code></p>
+</figcaption>
+</figure>
 <p>Or as in Listing 9-7, which uses the question mark operator:</p>
+<figure>
 <pre><code class="language-rust"># fn main() {}
 # use std::fs::File;
 # use std::io;
@@ -294,9 +311,10 @@ fn read_username_from_file() -&gt; Result&lt;String, io::Error&gt; {
     Ok(s)
 }
 </code></pre>
-<caption>
-Listing 9-7: A function that returns errors to the calling code using `?`
-</caption>
+<figcaption>
+<p>Listing 9-7: A function that returns errors to the calling code using <code>?</code></p>
+</figcaption>
+</figure>
 <p>The <code>?</code> operator at the end of the <code>open</code> call does the same thing as the
 example that uses <code>match</code> and the example that uses the <code>try!</code> macro: It will
 return the value inside an <code>Ok</code> to the binding <code>f</code>, but will return early out
@@ -324,6 +342,7 @@ used in functions that return a <code>Result</code>, since they expand to the sa
 expression we saw above that had a potential early return of an <code>Err</code> value.
 Let's look at what happens if we try to use <code>try!</code> in the <code>main</code> function,
 which you'll recall has a return type of <code>()</code>:</p>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust,ignore"># use std::fs::File;
 fn main() {
     let f = try!(File::open(&quot;hello.txt&quot;));

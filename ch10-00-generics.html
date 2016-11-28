@@ -84,7 +84,8 @@ in this chapter.</p>
 <p>Let's first go through a technique for dealing with duplication that you're
 probably familiar with: extracting a function. Consider a small program that
 finds the largest number in a list, shown in Listing 10-1:</p>
-<p>Filename: src/main.rs</p>
+<figure>
+<span class="filename">Filename: src/main.rs</span>
 <pre><code class="language-rust">fn main() {
     let numbers = vec![34, 50, 25, 100, 65];
 
@@ -99,13 +100,14 @@ finds the largest number in a list, shown in Listing 10-1:</p>
     println!(&quot;The largest number is {}&quot;, largest);
 }
 </code></pre>
-<caption>
-Listing 10-1: Code to find the largest number in a list of numbers
-</caption>
+<figcaption>
+<p>Listing 10-1: Code to find the largest number in a list of numbers</p>
+</figcaption>
+</figure>
 <p>If we needed to find the largest number in two different lists of numbers, we
 could duplicate the code in Listing 10-1 and have the same logic exist in two
 places in the program:</p>
-<p>Filename: src/main.rs</p>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust">fn main() {
     let numbers = vec![34, 50, 25, 100, 65];
 
@@ -139,7 +141,7 @@ abstraction we'll use is a function. Here's a program where we've extracted the
 code in Listing 10-1 that finds the largest number into a function named
 <code>largest</code>. This program can find the largest number in two different lists of
 numbers, but the code from Listing 10-1 only exists in one spot:</p>
-<p>Filename: src/main.rs</p>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust">fn largest(numbers: Vec&lt;i32&gt;) {
     let mut largest = numbers[0];
 

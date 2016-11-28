@@ -82,6 +82,7 @@ execution.</p>
 <code>match</code>! We can write a function that can take an unknown American coin and, in
 a similar way as the counting machine, determine which coin it is and
 return its value in cents, shown here in Listing 6-2:</p>
+<figure>
 <pre><code class="language-rust">enum Coin {
     Penny,
     Nickel,
@@ -98,10 +99,11 @@ fn value_in_cents(coin: Coin) -&gt; i32 {
     }
 }
 </code></pre>
-<caption>
-Listing 6-2: An enum and a `match` expression that has the variants of the enum
-as its patterns.
-</caption>
+<figcaption>
+<p>Listing 6-2: An enum and a <code>match</code> expression that has the variants of the enum
+as its patterns.</p>
+</figcaption>
+</figure>
 <!--- Flagging as a place to possibly put wingding numbers -- would it work to
 put two arms in this example? I think that would illustrate the control flow
 well -->
@@ -160,6 +162,7 @@ each of the 50 states on one side. No other coins got state designs, so only
 quarters have this extra value. We can add this information to our <code>enum</code>
 by changing the <code>Quarter</code> variant to include a <code>State</code> value stored inside it
 as we've done here in Listing 6-3:</p>
+<figure>
 <pre><code class="language-rust">#[derive(Debug)] // So we can inspect the state in a minute
 enum UsState {
     Alabama,
@@ -174,10 +177,11 @@ enum Coin {
     Quarter(UsState),
 }
 </code></pre>
-<caption>
-Listing 6-3: A `Coin` enum where the `Quarter` variant also holds a `UsState`
-value
-</caption>
+<figcaption>
+<p>Listing 6-3: A <code>Coin</code> enum where the <code>Quarter</code> variant also holds a <code>UsState</code>
+value</p>
+</figcaption>
+</figure>
 <p>Let's imagine that a friend of ours is trying to collect all 50 state quarters.
 While we sort our loose change by coin type, we're also going to call out the
 name of the state associated with each quarter so that if it's one our friend
@@ -228,6 +232,7 @@ the function should return the <code>None</code> value and not attempt to perfor
 operations.</p>
 <p>This function is very easy to write, thanks to <code>match</code>, and will look like
 Listing 6-4:</p>
+<figure>
 <pre><code class="language-rust">fn plus_one(x: Option&lt;i32&gt;) -&gt; Option&lt;i32&gt; {
     match x {
         None =&gt; None,
@@ -239,9 +244,10 @@ let five = Some(5);
 let six = plus_one(five);
 let none = plus_one(None);
 </code></pre>
-<caption>
-Listing 6-4: A function that uses a `match` expression on an `Option<i32>`
-</caption>
+<figcaption>
+<p>Listing 6-4: A function that uses a <code>match</code> expression on an <code>Option&lt;i32&gt;</code></p>
+</figcaption>
+</figure>
 <!-- Flagging for wingding numbers -->
 <h4>Matching <code>Some(T)</code></h4>
 <p>Let's examine the first execution of <code>plus_one</code> in more detail. In the above

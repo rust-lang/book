@@ -79,16 +79,18 @@ methods defined on it that allow us to print a value of that type. This is
 powerful because we can still leave our definitions generic to allow use of
 many different types, but we can constrain the type at compile-time to types
 that have the behavior we need to be able to use.</p>
-<p>Here's an example definition of a trait named <code>Printable</code> that has a method
-named <code>print</code>:</p>
-<p>Filename: src/lib.rs</p>
+<p>Listing 10-5 has an example definition of a trait named <code>Printable</code> with a
+method named <code>print</code>:</p>
+<figure>
+<span class="filename">Filename: src/lib.rs</span>
 <pre><code class="language-rust">trait Printable {
     fn print(&amp;self);
 }
 </code></pre>
-<caption>
-Listing 10-4: A `Printable` trait definition with one method, `print`
-</caption>
+<figcaption>
+<p>Listing 10-5: A <code>Printable</code> trait definition with one method, <code>print</code></p>
+</figcaption>
+</figure>
 <p>We declare a trait with the <code>trait</code> keyword, then the trait's name. In this
 case, our trait will describe types which can be printed. Inside of curly
 braces, we declare a method signature, but instead of providing an
@@ -97,10 +99,11 @@ trait can have multiple methods in its body, with the method signatures listend 
 <p>Implementing a trait for a particular type looks similar to implementing
 methods on a type since it's also done with the <code>impl</code> keyword, but we specify
 the trait name as well. Inside the <code>impl</code> block, we specify definitions for the
-trait's methods in the context of the specific type. Listing 10-5 has an
-example of implementing the <code>Printable</code> trait from Listing 10-4 (that only has
+trait's methods in the context of the specific type. Listing 10-6 has an
+example of implementing the <code>Printable</code> trait from Listing 10-5 (that only has
 the <code>print</code> method) for a <code>Temperature</code> enum:</p>
-<p>Filename: src/lib.rs</p>
+<figure>
+<span class="filename">Filename: src/lib.rs</span>
 <pre><code class="language-rust"># trait Printable {
 #     fn print(&amp;self);
 # }
@@ -119,13 +122,14 @@ impl Printable for Temperature {
     }
 }
 </code></pre>
-<caption>
-Listing 10-5: Implementing the `Printable` trait on a `Temperature` enum
-</caption>
+<figcaption>
+<p>Listing 10-6: Implementing the <code>Printable</code> trait on a <code>Temperature</code> enum</p>
+</figcaption>
+</figure>
 <p>In the same way <code>impl</code> lets us define methods, we've used it to define methods
 that pertain to our trait. We can call methods that our trait has defined just
 like we can call other methods:</p>
-<p>Filename: src/main.rs</p>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust"># trait Printable {
 #     fn print(&amp;self);
 # }
@@ -162,14 +166,15 @@ brought the trait we wanted into our current scope with <code>use</code>.</p>
 type gives Rust more information than just defining methods on a type directly.
 The information Rust gets is that the type that implements the trait can be
 used in places where the code specifies that it needs some type that implements
-a trait. To illustrate this, Listing 10-6 has a <code>print_anything</code> function
-definition. This is similar to the <code>show_anything</code> function from Listing 10-3,
+a trait. To illustrate this, Listing 10-7 has a <code>print_anything</code> function
+definition. This is similar to the <code>show_anything</code> function from Listing 10-4,
 but this function has a <em>trait bound</em> on the generic type <code>T</code> and uses the
 <code>print</code> function from the trait. A trait bound constrains the generic type to
 be any type that implements the trait specified, instead of any type at all.
 With the trait bound, we're then allowed to use the trait method <code>print</code> in the
 function body:</p>
-<p>Filename: src/lib.rs</p>
+<figure>
+<span class="filename">Filename: src/lib.rs</figure>
 <pre><code class="language-rust"># trait Printable {
 #     fn print(&amp;self);
 # }
@@ -179,10 +184,11 @@ fn print_anything&lt;T: Printable&gt;(value: T) {
     value.print();
 }
 </code></pre>
-<caption>
-Listing 10-6: A `print_anything` function that uses the trait bound `Printable`
-on type `T`
-</caption>
+<figcaption>
+<p>Listing 10-7: A <code>print_anything</code> function that uses the trait bound <code>Printable</code>
+on type <code>T</code></p>
+</figcaption>
+</figure>
 <p>Trait bounds are specified in the type name declarations within the angle
 brackets. After the name of the type that you want to apply the bound to, add a
 colon (<code>:</code>) and then specify the name of the trait. This function now specifies
@@ -190,10 +196,10 @@ that it takes a <code>value</code> parameter that can be of any type, as long as
 implements the trait <code>Printable</code>. We need to specify the <code>Printable</code> trait in
 the type name declarations because we want to be able to call the <code>print</code>
 method that is part of the <code>Printable</code> trait.</p>
-<p>Now we are able to call the <code>print_anything</code> function from Listing 10-6 and
+<p>Now we are able to call the <code>print_anything</code> function from Listing 10-7 and
 pass it a <code>Temperature</code> instance as the <code>value</code> parameter, since we implemented
-the trait <code>Printable</code> on <code>Temperature</code> in Listing 10-5:</p>
-<p>Filename: src/main.rs</p>
+the trait <code>Printable</code> on <code>Temperature</code> in Listing 10-6:</p>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust"># trait Printable {
 #     fn print(&amp;self);
 # }
@@ -241,10 +247,11 @@ standard library, and they're used for many, many different things. For
 example, our <code>Printable</code> trait is similar to one of those traits, <code>Display</code>.
 And in fact, that's how <code>println!</code> decides how to format things with <code>{}</code>. The
 <code>Display</code> trait has a <code>fmt</code> method that determines how to format something.</p>
-<p>Listing 10-7 shows our original example from Listing 10-3, but this time using
+<p>Listing 10-8 shows our original example from Listing 10-3, but this time using
 the standard library's <code>Display</code> trait in the trait bound on the generic type
 in the <code>show_anything</code> function:</p>
-<p>Filename: src/lib.rs</p>
+<figure>
+<span class="filename">Filename: src/lib.rs</span>
 <pre><code class="language-rust">use std::fmt::Display;
 
 fn show_anything&lt;T: Display&gt;(value: T) {
@@ -252,9 +259,10 @@ fn show_anything&lt;T: Display&gt;(value: T) {
     println!(&quot;It's: {}&quot;, value);
 }
 </code></pre>
-<caption>
-Listing 10-7: The `show_anything` function with trait bounds
-</caption>
+<figcaption>
+<p>Listing 10-8: The <code>show_anything</code> function with trait bounds</p>
+</figcaption>
+</figure>
 <p>Now that this function specifies that <code>T</code> can be any type as long as that type
 implements the <code>Display</code> trait, this code will compile.</p>
 <h3>Multiple Trait Bounds and <code>where</code> Syntax</h3>
@@ -276,8 +284,8 @@ Listing 10-3 referred to it:</p>
 </code></pre>
 <p>The <code>where</code> syntax moves the trait bounds after the function arguments list.
 This definition of <code>show_anything</code> means the exact same thing as the definition
-in Listing 10-7, just said a different way:</p>
-<p>Filename: src/lib.rs</p>
+in Listing 10-8, just said a different way:</p>
+<p><span class="filename">Filename: src/lib.rs</span></p>
 <pre><code class="language-rust">use std::fmt::Display;
 
 fn show_anything&lt;T&gt;(value: T) where T: Display {

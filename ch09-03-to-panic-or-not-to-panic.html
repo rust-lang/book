@@ -163,6 +163,7 @@ in the type's constructor. Then our functions can use the type with the
 confidence that we have values that meet our requirements. Listing 9-8 shows
 one way to define a <code>Guess</code> type that will only create an instance of <code>Guess</code>
 if the <code>new</code> function gets a value between 1 and 100:</p>
+<figure>
 <pre><code class="language-rust">struct Guess {
     value: u32,
 }
@@ -183,9 +184,10 @@ impl Guess {
     }
 }
 </code></pre>
-<caption>
-Listing 9-8: A `Guess` type that will only hold values between 1 and 100
-</caption>
+<figcaption>
+<p>Listing 9-8: A <code>Guess</code> type that will only hold values between 1 and 100</p>
+</figcaption>
+</figure>
 <p>If code calling <code>Guess::new</code> passed in a value that was not between 1 and 100,
 that would be a violation of the contract that <code>Guess::new</code> is relying on. This
 function needs to signal to the calling code that it has a bug somewhere

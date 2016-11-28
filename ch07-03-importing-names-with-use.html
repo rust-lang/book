@@ -71,7 +71,8 @@
 <p>We’ve covered how to call functions defined within a module using the module
 name as part of the call, as in the call to the <code>namespaces</code> function shown
 here in Listing 7-6.</p>
-<p>Filename: src/main.rs</p>
+<figure>
+<span class="filename">Filename: src/main.rs</span>
 <pre><code class="language-rust">pub mod a {
     pub mod series {
         pub mod of {
@@ -84,17 +85,18 @@ fn main() {
     a::series::of::namespaces();
 }
 </code></pre>
-<caption>
-Listing 7-6: Calling a function by fully specifying its enclosing module’s
-namespaces
-</caption>
+<figcaption>
+<p>Listing 7-6: Calling a function by fully specifying its enclosing module’s
+namespaces</p>
+</figcaption>
+</figure>
 <p>As you can see, referring to the fully qualified name can get quite lengthy.
 Luckily, Rust has a keyword to make these calls more concise.</p>
 <h3>Concise Imports with <code>use</code></h3>
 <p>Rust’s <code>use</code> keyword works to shorten lengthy function calls by bringing the
 modules of the function you want to call into a scope. Here’s an example of
 bringing the <code>a::series::of</code> namespace into a binary crate’s root scope:</p>
-<p>Filename: src/main.rs</p>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust">pub mod a {
     pub mod series {
         pub mod of {
@@ -174,8 +176,8 @@ might also pull in more things than you expected and cause naming conflicts.</p>
 <h3>Using <code>super</code> to Access a Parent Module</h3>
 <p>As you now know, when you create a library crate, Cargo makes a <code>tests</code> module
 for you. Let’s go into more detail about that now. In your <code>communicator</code>
-project, open <code>src/lib.rs</code>.</p>
-<p>Filename: src/lib.rs</p>
+project, open <em>src/lib.rs</em>.</p>
+<p><span class="filename">Filename: src/lib.rs</span></p>
 <pre><code class="language-rust,ignore">pub mod client;
 
 pub mod network;
@@ -201,7 +203,7 @@ looks like this:</p>
 <p>Tests are for exercising the code within our library, so let’s try to call
 our <code>client::connect</code> function from this <code>it_works</code> function, even though
 we’re not going to be checking any functionality right now:</p>
-<p>Filename: src/lib.rs</p>
+<p><span class="filename">Filename: src/lib.rs</span></p>
 <pre><code class="language-rust">#[cfg(test)]
 mod tests {
     #[test]
@@ -254,7 +256,7 @@ functionality changes the path you give to <code>use</code> so that it is relati
 parent module instead of to the root module.</p>
 <p>For these reasons, in the <code>tests</code> module especially, <code>use super::something</code> is
 usually the way to go. So now our test looks like this:</p>
-<p>Filename: src/lib.rs</p>
+<p><span class="filename">Filename: src/lib.rs</span></p>
 <pre><code class="language-rust">#[cfg(test)]
 mod tests {
     use super::client;

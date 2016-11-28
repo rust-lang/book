@@ -180,6 +180,7 @@ route(IpAddrKind::V6);
 address type, at the moment we don’t have a way to store the actual <em>data</em> of
 the IP address; we only know what <em>kind</em> it is. Given that you just learned
 about structs, you might tackle this problem as in Listing 6-1:</p>
+<figure>
 <pre><code class="language-rust">enum IpAddrKind {
     V4,
     V6,
@@ -200,9 +201,10 @@ let loopback = IpAddr {
     address: String::from(&quot;::1&quot;),
 };
 </code></pre>
-<caption>
-Listing 6-1: Storing the data and type of an IP address using a `struct`
-</caption>
+<figcaption>
+<p>Listing 6-1: Storing the data and type of an IP address using a <code>struct</code></p>
+</figcaption>
+</figure>
 <!-- I will add wingdings here in libreoffice /Carol -->
 <p>Here, we've defined a struct <code>IpAddr</code> that has two fields: a <code>kind</code> field that
 is of type <code>IpAddrKind</code> (the enum we defined previously), and an <code>address</code>

@@ -75,7 +75,7 @@ declare new functions.</p>
 <p>Rust code uses <em>snake case</em> as the conventional style for function and variable
 names. In snake case, all letters are lowercase and underscores separate words.
 Here’s a program that contains an example function definition:</p>
-<p>Filename: src/main.rs</p>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust">fn main() {
     println!(&quot;Hello, world!&quot;);
 
@@ -110,7 +110,7 @@ called and its message is printed.</p>
 <h3>Function Arguments</h3>
 <p>Functions can also take arguments. The following rewritten version of
 <code>another_function</code> shows what arguments look like in Rust:</p>
-<p>Filename: src/main.rs</p>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust">fn main() {
     another_function(5);
 }
@@ -135,7 +135,7 @@ means the compiler almost never needs you to use them elsewhere in the code to
 figure out what you mean.</p>
 <p>When you want a function to have multiple arguments, separate them inside the
 function signature with commas, like this:</p>
-<p>Filename: src/main.rs</p>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust">fn main() {
     another_function(5, 6);
 }
@@ -174,19 +174,21 @@ instructions that perform some action and do not return a value. <em>Expressions
 evaluate to a resulting value. Let’s look at some examples.</p>
 <p>Creating a variable and assigning a value to it with the <code>let</code> keyword is a
 statement. In Listing 3-3, <code>let y = 6;</code> is a statement:</p>
-<p>Filename: src/main.rs</p>
+<figure>
+<span class="filename">Filename: src/main.rs</span>
 <pre><code class="language-rust">fn main() {
     let y = 6;
 }
 </code></pre>
-<caption>
-Listing 3-3: A `main` function declaration containing one statement.
-</caption>
+<figcaption>
+<p>Listing 3-3: A <code>main</code> function declaration containing one statement.</p>
+</figcaption>
+</figure>
 <p>Function definitions are also statements; the entire preceding example is a
 statement in itself.</p>
 <p>Statements do not return values. Therefore, you can’t assign a <code>let</code> statement
 to another variable, as the following code tries to do:</p>
-<p>Filename: src/main.rs</p>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust,ignore">fn main() {
     let x = (let y = 6);
 }
@@ -214,7 +216,7 @@ statements: in Listing 3-3 that had the statement <code>let y = 6;</code>, <code
 expression that evaluates to the value <code>6</code>. Calling a function is an
 expression. Calling a macro is an expression. The block that we use to create
 new scopes, <code>{}</code>, is an expression, for example:</p>
-<p>Filename: src/main.rs</p>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust">fn main() {
     let x = 5;
 
@@ -244,7 +246,7 @@ values, but we do declare their type after an arrow (<code>-&gt;</code>). In Rus
 value of the function is synonymous with the value of the final expression in
 the block of the body of a function. Here’s an example of a function that
 returns a value:</p>
-<p>Filename: src/main.rs</p>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust">fn five() -&gt; i32 {
     5
 }
@@ -275,7 +277,7 @@ that line is the same as the following:</p>
 return value, but the body of the function is a lonely <code>5</code> with no semicolon
 because it’s an expression whose value we want to return. Let’s look at another
 example:</p>
-<p>Filename: src/main.rs</p>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust">fn main() {
     let x = plus_one(5);
 
@@ -289,7 +291,7 @@ fn plus_one(x: i32) -&gt; i32 {
 <p>Running this code will print <code>The value of x is: 6</code>. What happens if we place a
 semicolon at the end of the line containing <code>x + 1</code>, changing it from an
 expression to a statement?</p>
-<p>Filename: src/main.rs</p>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust,ignore">fn main() {
     let x = plus_one(5);
 
