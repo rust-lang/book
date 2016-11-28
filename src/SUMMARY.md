@@ -50,16 +50,17 @@
     - [Traits](ch10-02-traits.md)
     - [Lifetime syntax](ch10-03-lifetime-syntax.md)
 
+- [Testing](ch11-00-testing.md)
+    - [Writing tests](ch11-01-writing-tests.md)
+    - [Running tests](ch11-02-running-tests.md)
+    - [Test Organization](ch11-03-test-organization.md)
+
 - [I/O]()
     - [`Read` & `Write`]()
     - [`std::fs`]()
     - [`std::path`]()
     - [`std::env`]()
 
-- [Testing]()
-    - [Unit Tests]()
-    - [Integration Tests]()
-    - [Test Attribute]()
 
 ## Thinking in Rust
 
