@@ -89,6 +89,7 @@ of data being grouped together. Then, inside curly braces, we define the names
 of the pieces of data, which we call <em>fields</em>, and specify each field’s type.
 For example, Listing 5-1 shows a struct to store information about a user
 account:</p>
+<figure>
 <pre><code class="language-rust">struct User {
     username: String,
     email: String,
@@ -96,9 +97,10 @@ account:</p>
     active: bool,
 }
 </code></pre>
-<caption>
-Listing 5-1: A `User` struct definition
-</caption>
+<figcaption>
+<p>Listing 5-1: A <code>User</code> struct definition</p>
+</figcaption>
+</figure>
 <p>To use a struct once we've defined it, we create an <em>instance</em> of that struct
 by specifying concrete values for each of the fields. Creating an instance is
 done by stating the name of the struct, then curly braces with <code>key: value</code>
@@ -127,13 +129,14 @@ wanted just this user’s email address, we can say <code>user1.email</code>.</p
 <h2>Ownership of Struct Data</h2>
 <p>In the <code>User</code> struct definition in Listing 5-1, we used the owned <code>String</code> type
 rather than the <code>&amp;str</code> string slice type. This is a deliberate choice because
-we want instances of this struct to own all of its data and be valid for as
-long as the entire struct is valid.</p>
+we want instances of this struct to own all of its data, and for that data to
+be valid for as long as the entire struct is valid.</p>
 <p>It is possible for structs to store references to data owned by something else,
 but to do so requires the use of <em>lifetimes</em>, a feature of Rust that we'll
 discuss in Chapter 10. Lifetimes ensure that the data a struct references is
 valid for as long as the struct is. If you try to store a reference in a struct
 without specifying lifetimes, like this:</p>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust,ignore">struct User {
     username: &amp;str,
     email: &amp;str,
@@ -163,9 +166,9 @@ error[E0106]: missing lifetime specifier
 3 |     email: &amp;str,
   |            ^ expected lifetime parameter
 </code></pre>
-<p>We will talk about how to fix these in order to store references in structs in
-Chapter 10, but for now, fix errors like these by switching to owned types like
-<code>String</code> instead of references like <code>&amp;str</code>.</p>
+<p>We will talk about how to fix these errors in order to store references in
+structs in Chapter 10, but for now, fix errors like these by switching to owned
+types like <code>String</code> instead of references like <code>&amp;str</code>.</p>
 <h2>An Example Program</h2>
 <p>To understand when we might want to use structs, let’s write a program that
 calculates the area of a rectangle. We’ll start off with single variables, then
@@ -174,7 +177,8 @@ refactor our program until we’re using structs instead.</p>
 the length and width of a rectangle specified in pixels and will calculate the
 area of the rectangle. Listing 5-2 has a short program with one way of doing
 just that in our project’s <em>src/main.rs</em>:</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure>
+<span class="filename">Filename: src/main.rs</span>
 <pre><code class="language-rust">fn main() {
     let length1 = 50;
     let width1 = 30;
@@ -189,10 +193,11 @@ fn area(length: u32, width: u32) -&gt; u32 {
     length * width
 }
 </code></pre>
-<caption>
-Listing 5-2: Calculating the area of a rectangle specified by its length and
-width in separate variables
-</caption>
+<figcaption>
+<p>Listing 5-2: Calculating the area of a rectangle specified by its length and
+width in separate variables</p>
+</figcaption>
+</figure>
 <p>Let’s try running this program with <code>cargo run</code>:</p>
 <pre><code class="language-text">The area of the rectangle is 1500 square pixels.
 </code></pre>
@@ -210,7 +215,8 @@ expressed anywhere in our program itself. It would be more readable and more
 manageable to group length and width together.</p>
 <p>We’ve already discussed one way we might do that in Chapter 3: tuples. Listing
 5-3 has a version of our program which uses tuples:</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure>
+<span class="filename">Filename: src/main.rs</span>
 <pre><code class="language-rust">fn main() {
     let rect1 = (50, 30);
 
@@ -224,9 +230,10 @@ fn area(dimensions: (u32, u32)) -&gt; u32 {
     dimensions.0 * dimensions.1
 }
 </code></pre>
-<caption>
-Listing 5-3: Specifying the length and width of the rectangle with a tuple
-</caption>
+<figcaption>
+<p>Listing 5-3: Specifying the length and width of the rectangle with a tuple</p>
+</figcaption>
+</figure>
 <!-- I will add ghosting & wingdings once we're in libreoffice /Carol -->
 <p>In one way, this is a little better. Tuples let us add a bit of structure, and
 we’re now passing just one argument. But in another way this method less clear:
@@ -247,7 +254,8 @@ in our code.</p>
 <p>Here is where we bring in structs. We can transform our tuple into a data type
 with a name for the whole as well as names for the parts, as shown in Listing
 5-4:</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure>
+<span class="filename">Filename: src/main.rs</span>
 <pre><code class="language-rust">struct Rectangle {
     length: u32,
     width: u32,
@@ -266,9 +274,10 @@ fn area(rectangle: &amp;Rectangle) -&gt; u32 {
     rectangle.length * rectangle.width
 }
 </code></pre>
-<caption>
-Listing 5-4: Defining a `Rectangle` struct
-</caption>
+<figcaption>
+<p>Listing 5-4: Defining a <code>Rectangle</code> struct</p>
+</figcaption>
+</figure>
 <!-- Will add ghosting & wingdings once we're in libreoffice /Carol -->
 <p>Here we’ve defined a struct and given it the name <code>Rectangle</code>. Inside the <code>{}</code>
 we defined the fields to be <code>length</code> and <code>width</code>, both of which have type
@@ -289,7 +298,8 @@ index values of <code>0</code> and <code>1</code>. This is a win for clarity.</p
 <p>It’d be nice to be able to print out an instance of our <code>Rectangle</code> while we’re
 debugging our program and see the values for all its fields. Listing 5-5 tries
 using the <code>println!</code> macro as we have been:</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+<figure>
+<span class="filename">Filename: src/main.rs</span>
 <pre><code class="language-rust,ignore">struct Rectangle {
     length: u32,
     width: u32,
@@ -301,9 +311,10 @@ fn main() {
     println!(&quot;rect1 is {}&quot;, rect1);
 }
 </code></pre>
-<caption>
-Listing 5-5: Attempting to print a `Rectangle` instance
-</caption>
+<figcaption>
+<p>Listing 5-5: Attempting to print a <code>Rectangle</code> instance</p>
+</figcaption>
+</figure>
 <p>If we run this, we get an error with this core message:</p>
 <pre><code class="language-text">error[E0277]: the trait bound `Rectangle: std::fmt::Display` is not satisfied
 </code></pre>
@@ -336,7 +347,8 @@ crate, add `#[derive(Debug)]` or manually implement it
 <p>Rust <em>does</em> include functionality to print out debugging information, but we
 have to explicitly opt-in to having that functionality be available for our
 struct. To do that, we add the annotation <code>#[derive(Debug)]</code> just before our
-struct definition, as shown in Listing 5-6. Now our program looks like this:</p>
+struct definition, as shown in Listing 5-6:</p>
+<figure>
 <pre><code class="language-rust">#[derive(Debug)]
 struct Rectangle {
     length: u32,
@@ -349,10 +361,11 @@ fn main() {
     println!(&quot;rect1 is {:?}&quot;, rect1);
 }
 </code></pre>
-<caption>
-Listing 5-6: Adding the annotation to derive the `Debug` trait and printing the
-`Rectangle` instance using debug formatting
-</caption>
+<figcaption>
+<p>Listing 5-6: Adding the annotation to derive the <code>Debug</code> trait and printing the
+<code>Rectangle</code> instance using debug formatting</p>
+</figcaption>
+</figure>
 <p>At this point, if we run this program, we won’t get any errors and we’ll see
 the following output:</p>
 <pre><code class="language-text">rect1 is Rectangle { length: 50, width: 30 }
