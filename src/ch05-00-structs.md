@@ -75,8 +75,8 @@ wanted just this user’s email address, we can say `user1.email`.
 
 In the `User` struct definition in Listing 5-1, we used the owned `String` type
 rather than the `&str` string slice type. This is a deliberate choice because
-we want instances of this struct to own all of its data and be valid for as
-long as the entire struct is valid.
+we want instances of this struct to own all of its data, and for that data to
+be valid for as long as the entire struct is valid.
 
 It is possible for structs to store references to data owned by something else,
 but to do so requires the use of *lifetimes*, a feature of Rust that we'll
@@ -120,9 +120,9 @@ error[E0106]: missing lifetime specifier
   |            ^ expected lifetime parameter
 ```
 
-We will talk about how to fix these in order to store references in structs in
-Chapter 10, but for now, fix errors like these by switching to owned types like
-`String` instead of references like `&str`.
+We will talk about how to fix these errors in order to store references in
+structs in Chapter 10, but for now, fix errors like these by switching to owned
+types like `String` instead of references like `&str`.
 
 ## An Example Program
 
@@ -367,7 +367,7 @@ crate, add `#[derive(Debug)]` or manually implement it
 Rust *does* include functionality to print out debugging information, but we
 have to explicitly opt-in to having that functionality be available for our
 struct. To do that, we add the annotation `#[derive(Debug)]` just before our
-struct definition, as shown in Listing 5-6. Now our program looks like this:
+struct definition, as shown in Listing 5-6:
 
 <figure>
 
