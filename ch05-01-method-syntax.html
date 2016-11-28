@@ -68,16 +68,17 @@
 
                 <div id="content" class="content">
                     <h2>Method Syntax</h2>
-<p><em>Methods</em> are similar to functions: they're declared with the <code>fn</code> keyword and
+<p><em>Methods</em> are similar to functions: they’re declared with the <code>fn</code> keyword and
 their name, they can take arguments and return values, and they contain some
-code that gets run when they're called from somewhere else. Methods are
-different from functions, however, because they're defined within the context
+code that gets run when they’re called from somewhere else. Methods are
+different from functions, however, because they’re defined within the context
 of a struct (or an enum or a trait object, which we will cover in Chapters 6
-and 23 respectively), and their first argument is always <code>self</code>, which
+and 13, respectively), and their first argument is always <code>self</code>, which
 represents the instance of the struct that the method is being called on.</p>
 <h3>Defining Methods</h3>
-<p>Let's change our <code>area</code> function that takes a <code>Rectangle</code> instance as an
-argument and instead make an <code>area</code> method defined on the <code>Rectangle</code> struct:</p>
+<p>Let’s change our <code>area</code> function that takes a <code>Rectangle</code> instance as an
+argument and instead make an <code>area</code> method defined on the <code>Rectangle</code> struct,
+as shown in Listing 5-7:</p>
 <pre><code class="language-rust">#[derive(Debug)]
 struct Rectangle {
     length: u32,
@@ -99,6 +100,9 @@ fn main() {
     );
 }
 </code></pre>
+<caption>
+Listing 5-7: Defining an `area` method on the `Rectangle` struct
+</caption>
 <!-- Will add ghosting and wingdings here in libreoffice /Carol -->
 <p>In order to make the function be defined within the context of <code>Rectangle</code>, we
 start an <code>impl</code> block (<code>impl</code> is short for <em>implementation</em>). Then we move the
@@ -106,35 +110,36 @@ function within the <code>impl</code> curly braces, and change the first (and in
 case, only) argument to be <code>self</code> in the signature and everywhere within the
 body. Then in <code>main</code> where we called the <code>area</code> function and passed <code>rect1</code> as
 an argument, we can instead use <em>method syntax</em> to call the <code>area</code> method on
-our <code>Rectangle</code> instance.</p>
+our <code>Rectangle</code> instance. Method syntax is taking an instance and adding a dot
+followed by the method name, parentheses, and any arguments.</p>
 <p>In the signature for <code>area</code>, we get to use <code>&amp;self</code> instead of <code>rectangle: &amp;Rectangle</code> because Rust knows the type of <code>self</code> is <code>Rectangle</code> due to this
 method being inside the <code>impl Rectangle</code> context. Note we still need to have
 the <code>&amp;</code> before <code>self</code>, just like we had <code>&amp;Rectangle</code>. Methods can choose to
-take ownership of <code>self</code>, borrow <code>self</code> immutably as we've done here, or borrow
+take ownership of <code>self</code>, borrow <code>self</code> immutably as we’ve done here, or borrow
 <code>self</code> mutably, just like any other argument.</p>
-<p>We've chosen <code>&amp;self</code> here for the same reason we used <code>&amp;Rectangle</code> in the
-function version: we don't want to take ownership, and we just want to be able
+<p>We’ve chosen <code>&amp;self</code> here for the same reason we used <code>&amp;Rectangle</code> in the
+function version: we don’t want to take ownership, and we just want to be able
 to read the data in the struct, not write to it. If we wanted to be able to
-change the instance that we've called the method on as part of what the method
-does, we'd put <code>&amp;mut self</code> as the first argument instead. Having a method that
+change the instance that we’ve called the method on as part of what the method
+does, we’d put <code>&amp;mut self</code> as the first argument instead. Having a method that
 takes ownership of the instance by having just <code>self</code> as the first argument is
 rarer; this is usually used when the method transforms <code>self</code> into something
 else and we want to prevent the caller from using the original instance after
 the transformation.</p>
 <p>The main benefit of using methods over functions, in addition to getting to use
-method syntax and not having to repeat the type of <code>self</code> in every method's
-signature, is for organization. We've put all the things we can do with an
+method syntax and not having to repeat the type of <code>self</code> in every method’s
+signature, is for organization. We’ve put all the things we can do with an
 instance of a type together in one <code>impl</code> block, rather than make future users
 of our code search for capabilities of <code>Rectangle</code> all over the place.</p>
 <!-- PROD: START BOX -->
 <blockquote>
-<h4>Where's the <code>-&gt;</code> operator?</h4>
+<h3>Where’s the <code>-&gt;</code> operator?</h3>
 <p>In languages like C++, there are two different operators for calling methods:
-<code>.</code> if you're calling a method on the object directly, and <code>-&gt;</code> if you're
+<code>.</code> if you’re calling a method on the object directly, and <code>-&gt;</code> if you’re
 calling the method on a pointer to the object and thus need to dereference the
 pointer first. In other words, if <code>object</code> is a pointer, <code>object-&gt;something()</code>
 is like <code>(*object).something()</code>.</p>
-<p>Rust doesn't have an equivalent to the <code>-&gt;</code> operator; instead, Rust has a
+<p>Rust doesn’t have an equivalent to the <code>-&gt;</code> operator; instead, Rust has a
 feature called <em>automatic referencing and dereferencing</em>. Calling methods is
 one of the few places in Rust that has behavior like this.</p>
 <p>Here’s how it works: when you call a method with <code>object.something()</code>, Rust
@@ -168,11 +173,11 @@ receivers is a big part of making ownership ergonomic in practice.</p>
 </blockquote>
 <!-- PROD: END BOX -->
 <h3>Methods with More Arguments</h3>
-<p>Let's practice some more with methods by implementing a second method on our
-<code>Rectangle</code> struct. This time, we'd like for an instance of <code>Rectangle</code> to take
+<p>Let’s practice some more with methods by implementing a second method on our
+<code>Rectangle</code> struct. This time, we’d like for an instance of <code>Rectangle</code> to take
 another instance of <code>Rectangle</code> and return <code>true</code> if the second rectangle could
 fit completely within <code>self</code> and <code>false</code> if it would not. That is, if we run
-this code:</p>
+the code in Listing 5-8, once we've defined the <code>can_hold</code> method:</p>
 <pre><code class="language-rust,ignore">fn main() {
     let rect1 = Rectangle { length: 50, width: 30 };
     let rect2 = Rectangle { length: 40, width: 10 };
@@ -182,8 +187,11 @@ this code:</p>
     println!(&quot;Can rect1 hold rect3? {}&quot;, rect1.can_hold(&amp;rect3));
 }
 </code></pre>
-<p>We want to see this output, since both of <code>rect2</code>'s dimensions are smaller than
-<code>rect1</code>'s, but <code>rect3</code> is wider than <code>rect1</code>:</p>
+<caption>
+Listing 5-8: Demonstration of using the as-yet-unwritten `can_hold` method
+</caption>
+<p>We want to see this output, since both of <code>rect2</code>’s dimensions are smaller than
+<code>rect1</code>’s, but <code>rect3</code> is wider than <code>rect1</code>:</p>
 <pre><code class="language-text">Can rect1 hold rect2? true
 Can rect1 hold rect3? false
 </code></pre>
@@ -193,11 +201,12 @@ of another <code>Rectangle</code> as an argument. We can tell what the type of t
 argument will be by looking at a call site: <code>rect1.can_hold(&amp;rect2)</code> passes in
 <code>&amp;rect2</code>, which is an immutable borrow to <code>rect2</code>, an instance of <code>Rectangle</code>.
 This makes sense, since we only need to read <code>rect2</code> (rather than write, which
-would mean we'd need a mutable borrow) and we want <code>main</code> to keep ownership of
+would mean we’d need a mutable borrow) and we want <code>main</code> to keep ownership of
 <code>rect2</code> so that we could use it again after calling this method. The return
 value of <code>can_hold</code> will be a boolean, and the implementation will check to see
-if <code>self</code>'s length and width are both greater than the length and width of the
-other <code>Rectangle</code>, respectively. Let's write that code!</p>
+if <code>self</code>’s length and width are both greater than the length and width of the
+other <code>Rectangle</code>, respectively. Let’s add this new method to the <code>impl</code> block
+from Listing 5-7:</p>
 <pre><code class="language-rust"># #[derive(Debug)]
 # struct Rectangle {
 #     length: u32,
@@ -215,15 +224,15 @@ impl Rectangle {
 }
 </code></pre>
 <!-- Will add ghosting here in libreoffice /Carol -->
-<p>If we run this with the <code>main</code> from earlier, we will get our desired output!
+<p>If we run this with the <code>main</code> from Listing 5-8, we will get our desired output!
 Methods can take multiple arguments that we add to the signature after the
 <code>self</code> parameter, and those arguments work just like arguments in functions do.</p>
 <h3>Associated Functions</h3>
-<p>One more useful feature of <code>impl</code> blocks: we're allowed to define functions
-within <code>impl</code> blocks that <em>don't</em> take <code>self</code> as a parameter. These are called
-<em>associated functions</em>, since they're associated with the struct. They're still
-functions though, not methods, since they don't have an instance of the struct
-to work with. You've already used an associated function: <code>String::from</code>.</p>
+<p>One more useful feature of <code>impl</code> blocks: we’re allowed to define functions
+within <code>impl</code> blocks that <em>don’t</em> take <code>self</code> as a parameter. These are called
+<em>associated functions</em>, since they’re associated with the struct. They’re still
+functions though, not methods, since they don’t have an instance of the struct
+to work with. You’ve already used an associated function: <code>String::from</code>.</p>
 <p>Associated functions are often used for constructors that will return a new
 instance of the struct. For example, we could provide an associated function
 that would take one dimension argument and use that as both length and width,
@@ -242,9 +251,9 @@ impl Rectangle {
 }
 </code></pre>
 <p>To call this associated function, we use the <code>::</code> syntax with the struct name:
-<code>let sq = Rectange::square(3);</code>, for example. It's kind of like this function is
-namespaced by the struct: the <code>::</code> syntax is used for both associated functions
-and namespaces created by modules, which we'll learn about in Chapter 7.</p>
+<code>let sq = Rectange::square(3);</code>, for example. This function is namespaced by
+the struct: the <code>::</code> syntax is used for both associated functions and
+namespaces created by modules, which we’ll learn about in Chapter 7.</p>
 <h2>Summary</h2>
 <p>Structs let us create custom types that are meaningful for our domain. By using
 structs, we can keep associated pieces of data connected to each other and name
@@ -252,7 +261,7 @@ each piece to make our code clear. Methods let us specify the behavior that
 instances of our structs have, and associated functions let us namespace
 functionality that is particular to our struct without having an instance
 available.</p>
-<p>Structs aren't the only way we can create custom types, though; let's turn to
+<p>Structs aren’t the only way we can create custom types, though; let’s turn to
 the <code>enum</code> feature of Rust and add another tool to our toolbox.</p>
 
                 </div>

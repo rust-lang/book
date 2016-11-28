@@ -3371,24 +3371,25 @@ the next chapter where we’ll look at grouping pieces of data together in a
 <h1>Structs</h1>
 <p>A <code>struct</code>, short for <em>structure</em>, is a custom data type that lets us name and
 package together multiple related values that make up a meaningful group. If
-you come from an object-oriented language, a <code>struct</code> is like an object's data
-attributes. In the next section of this chapter, we'll talk about how to define
+you come from an object-oriented language, a <code>struct</code> is like an object’s data
+attributes. In the next section of this chapter, we’ll talk about how to define
 methods on our structs; methods are how you specify the <em>behavior</em> that goes
-along with a struct's data. The <code>struct</code> and <code>enum</code> (that we will talk about in
+along with a struct’s data. The <code>struct</code> and <code>enum</code> (that we will talk about in
 Chapter 6) concepts are the building blocks for creating new types in your
-program's domain in order to take full advantage of Rust's compile-time type
+program’s domain in order to take full advantage of Rust’s compile-time type
 checking.</p>
 <p>One way of thinking about structs is that they are similar to tuples, which we
-talked about in Chapter 3. Like tuples, the pieces of a struct can be of different
-types. Unlike tuples, we name each piece of data so that it's clearer what the
-values mean. Structs are more flexible as a result of these names: we don't
+talked about in Chapter 3. Like tuples, the pieces of a struct can be different
+types. Unlike tuples, we name each piece of data so that it’s clearer what the
+values mean. Structs are more flexible as a result of these names: we don’t
 have to rely on the order of the data to specify or access the values of an
 instance.</p>
 <p>To define a struct, we enter the keyword <code>struct</code> and give the whole struct a
-name. A struct's name should describe what the significance is of these pieces
+name. A struct’s name should describe what the significance is of these pieces
 of data being grouped together. Then, inside curly braces, we define the names
-of the pieces of data, which we call <em>fields</em>, and specify each field's type.
-For example, a struct to store information about a user account might look like:</p>
+of the pieces of data, which we call <em>fields</em>, and specify each field’s type.
+For example, Listing 5-1 shows a struct to store information about a user
+account:</p>
 <pre><code class="language-rust">struct User {
     username: String,
     email: String,
@@ -3396,15 +3397,18 @@ For example, a struct to store information about a user account might look like:
     active: bool,
 }
 </code></pre>
-<p>To use a struct, we create an <em>instance</em> of that struct by specifying concrete
-values for each of the fields. Creating an instance is done by declaring a
-variable with <code>let</code>, stating the name of the struct, then curly braces with
-<code>key: value</code> pairs inside it where the keys are the names of the fields and the
-values are the data we want to store in those fields. The fields don't have to
-be specified in the same order in which the struct declared them. In other
-words, the struct definition is like a general template for the type, and
-instances fill in that template with particular data to create values of the
-type. For example, we can declare a particular user like this:</p>
+<caption>
+Listing 5-1: A `User` struct definition
+</caption>
+<p>To use a struct once we've defined it, we create an <em>instance</em> of that struct
+by specifying concrete values for each of the fields. Creating an instance is
+done by stating the name of the struct, then curly braces with <code>key: value</code>
+pairs inside it where the keys are the names of the fields and the values are
+the data we want to store in those fields. The fields don’t have to be
+specified in the same order in which the struct declared them. In other words,
+the struct definition is like a general template for the type, and instances
+fill in that template with particular data to create values of the type. For
+example, we can declare a particular user like this:</p>
 <pre><code class="language-rust"># struct User {
 #     username: String,
 #     email: String,
@@ -3420,15 +3424,57 @@ let user1 = User {
 };
 </code></pre>
 <p>To get a particular value out of a struct, we can use dot notation. If we
-wanted just this user's email address, we can say <code>user1.email</code>.</p>
+wanted just this user’s email address, we can say <code>user1.email</code>.</p>
+<h2>Ownership of Struct Data</h2>
+<p>In the <code>User</code> struct definition in Listing 5-1, we used the owned <code>String</code> type
+rather than the <code>&amp;str</code> string slice type. This is a deliberate choice because
+we want instances of this struct to own all of its data and be valid for as
+long as the entire struct is valid.</p>
+<p>It is possible for structs to store references to data owned by something else,
+but to do so requires the use of <em>lifetimes</em>, a feature of Rust that we'll
+discuss in Chapter 10. Lifetimes ensure that the data a struct references is
+valid for as long as the struct is. If you try to store a reference in a struct
+without specifying lifetimes, like this:</p>
+<pre><code class="language-rust,ignore">struct User {
+    username: &amp;str,
+    email: &amp;str,
+    sign_in_count: u64,
+    active: bool,
+}
+
+fn main() {
+    let user1 = User {
+        email: &quot;someone@example.com&quot;,
+        username: &quot;someusername123&quot;,
+        active: true,
+        sign_in_count: 1,
+    };
+}
+</code></pre>
+<p>The compiler will complain that it needs lifetime specifiers:</p>
+<pre><code class="language-text">error[E0106]: missing lifetime specifier
+ --&gt;
+  |
+2 |     username: &amp;str,
+  |               ^ expected lifetime parameter
+
+error[E0106]: missing lifetime specifier
+ --&gt;
+  |
+3 |     email: &amp;str,
+  |            ^ expected lifetime parameter
+</code></pre>
+<p>We will talk about how to fix these in order to store references in structs in
+Chapter 10, but for now, fix errors like these by switching to owned types like
+<code>String</code> instead of references like <code>&amp;str</code>.</p>
 <h2>An Example Program</h2>
 <p>To understand when we might want to use structs, let’s write a program that
 calculates the area of a rectangle. We’ll start off with single variables, then
-refactor our program until we're using <code>struct</code>s instead.</p>
+refactor our program until we’re using structs instead.</p>
 <p>Let’s make a new binary project with Cargo called <em>rectangles</em> that will take
 the length and width of a rectangle specified in pixels and will calculate the
-area of the rectangle. Here’s a short program that has one way of doing just
-that to put into our project's <em>src/main.rs</em>:</p>
+area of the rectangle. Listing 5-2 has a short program with one way of doing
+just that in our project’s <em>src/main.rs</em>:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust">fn main() {
     let length1 = 50;
@@ -3444,7 +3490,11 @@ fn area(length: u32, width: u32) -&gt; u32 {
     length * width
 }
 </code></pre>
-<p>Let's try running this program with <code>cargo run</code>:</p>
+<caption>
+Listing 5-2: Calculating the area of a rectangle specified by its length and
+width in separate variables
+</caption>
+<p>Let’s try running this program with <code>cargo run</code>:</p>
 <pre><code class="language-text">The area of the rectangle is 1500 square pixels.
 </code></pre>
 <h3>Refactoring with Tuples</h3>
@@ -3455,12 +3505,12 @@ rectangle.</p>
 <p>The issue with this method is evident in the signature of <code>area</code>:</p>
 <pre><code class="language-rust,ignore">fn area(length: u32, width: u32) -&gt; u32 {
 </code></pre>
-<p>The area function is supposed to calculate the area of one rectangle, but our
-function takes two arguments. The arguments are related, but that's not
+<p>The <code>area</code> function is supposed to calculate the area of one rectangle, but our
+function takes two arguments. The arguments are related, but that’s not
 expressed anywhere in our program itself. It would be more readable and more
 manageable to group length and width together.</p>
-<p>We’ve already discussed one way we might do that in Chapter 3: tuples. Here’s a
-version of our program which uses tuples:</p>
+<p>We’ve already discussed one way we might do that in Chapter 3: tuples. Listing
+5-3 has a version of our program which uses tuples:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust">fn main() {
     let rect1 = (50, 30);
@@ -3475,6 +3525,9 @@ fn area(dimensions: (u32, u32)) -&gt; u32 {
     dimensions.0 * dimensions.1
 }
 </code></pre>
+<caption>
+Listing 5-3: Specifying the length and width of the rectangle with a tuple
+</caption>
 <!-- I will add ghosting & wingdings once we're in libreoffice /Carol -->
 <p>In one way, this is a little better. Tuples let us add a bit of structure, and
 we’re now passing just one argument. But in another way this method less clear:
@@ -3484,16 +3537,17 @@ confusing because we have to index into the parts of the tuple:</p>
 we're in libreoffice /Carol -->
 <pre><code class="language-rust,ignore">dimensions.0 * dimensions.1
 </code></pre>
-<p>It doesn't matter if we mix up length and width for the area calculation, but
+<p>It doesn’t matter if we mix up length and width for the area calculation, but
 if we were to draw the rectangle on the screen it would matter! We would have
 to remember that <code>length</code> was the tuple index <code>0</code> and <code>width</code> was the tuple
 index <code>1</code>. If someone else was to work on this code, they would have to figure
 this out and remember it as well. It would be easy to forget or mix these
-values up and cause errors, since we haven't conveyed the meaning of our data
+values up and cause errors, since we haven’t conveyed the meaning of our data
 in our code.</p>
 <h3>Refactoring with Structs: Adding More Meaning</h3>
-<p>Here is where we bring in <code>struct</code>s. We can transform our tuple into a data
-type with a name for the whole as well as names for the parts:</p>
+<p>Here is where we bring in structs. We can transform our tuple into a data type
+with a name for the whole as well as names for the parts, as shown in Listing
+5-4:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust">struct Rectangle {
     length: u32,
@@ -3513,15 +3567,18 @@ fn area(rectangle: &amp;Rectangle) -&gt; u32 {
     rectangle.length * rectangle.width
 }
 </code></pre>
+<caption>
+Listing 5-4: Defining a `Rectangle` struct
+</caption>
 <!-- Will add ghosting & wingdings once we're in libreoffice /Carol -->
-<p>Here we've defined a <code>struct</code> and given it the name <code>Rectangle</code>. Inside the
-<code>{}</code> we defined the fields to be <code>length</code> and <code>width</code>, both of which have type
+<p>Here we’ve defined a struct and given it the name <code>Rectangle</code>. Inside the <code>{}</code>
+we defined the fields to be <code>length</code> and <code>width</code>, both of which have type
 <code>u32</code>. Then in <code>main</code>, we create a particular instance of a <code>Rectangle</code> that
 has a length of 50 and a width of 30.</p>
-<p>Our <code>area</code> function now takes one argument that we've named <code>rectangle</code> whose
+<p>Our <code>area</code> function now takes one argument that we’ve named <code>rectangle</code> whose
 type is an immutable borrow of a struct <code>Rectangle</code> instance. As we covered in
 Chapter 4, we want to borrow the struct rather than take ownership of it so
-that <code>main</code> keeps its ownership and can continue using <code>rect1</code>, so that's why
+that <code>main</code> keeps its ownership and can continue using <code>rect1</code>, so that’s why
 we have the <code>&amp;</code> in the function signature and at the call site.</p>
 <p>The <code>area</code> function accesses the <code>length</code> and <code>width</code> fields of the <code>Rectangle</code>
 instance it got as an argument. Our function signature for <code>area</code> now says
@@ -3530,9 +3587,9 @@ and <code>width</code> fields. This conveys that the length and width are relate
 other, and gives descriptive names to the values rather than using the tuple
 index values of <code>0</code> and <code>1</code>. This is a win for clarity.</p>
 <h3>Adding Useful Functionality with Derived Traits</h3>
-<p>It'd be nice to be able to print out an instance of our <code>Rectangle</code> while we're
-debugging our program and see the values for all its fields. Let's try using
-the <code>println!</code> macro as we have been and see what happens:</p>
+<p>It’d be nice to be able to print out an instance of our <code>Rectangle</code> while we’re
+debugging our program and see the values for all its fields. Listing 5-5 tries
+using the <code>println!</code> macro as we have been:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust,ignore">struct Rectangle {
     length: u32,
@@ -3545,8 +3602,11 @@ fn main() {
     println!(&quot;rect1 is {}&quot;, rect1);
 }
 </code></pre>
+<caption>
+Listing 5-5: Attempting to print a `Rectangle` instance
+</caption>
 <p>If we run this, we get an error with this core message:</p>
-<pre><code class="language-text">error: the trait bound `Rectangle: std::fmt::Display` is not satisfied
+<pre><code class="language-text">error[E0277]: the trait bound `Rectangle: std::fmt::Display` is not satisfied
 </code></pre>
 <p>The <code>println!</code> macro can do many kinds of formatting, and by default, <code>{}</code>
 tells <code>println!</code> to use formatting known as <code>Display</code>: output intended for
@@ -3555,19 +3615,19 @@ direct end-user consumption. The primitive types we’ve seen so far implement
 other primitive type to a user. But with structs, the way <code>println!</code> should
 format the output is less clear as there are more display possibilities: Do you
 want commas or not? Do you want to print the struct <code>{}</code>s? Should all the
-fields be shown? Because of this ambiguity, Rust doesn't try to guess what we
+fields be shown? Because of this ambiguity, Rust doesn’t try to guess what we
 want and structs do not have a provided implementation of <code>Display</code>.</p>
-<p>If we keep reading the errors, though, we'll find this helpful note:</p>
+<p>If we keep reading the errors, though, we’ll find this helpful note:</p>
 <pre><code class="language-text">note: `Rectangle` cannot be formatted with the default formatter; try using
 `:?` instead if you are using a format string
 </code></pre>
-<p>Let's try it! The <code>println!</code> will now look like
+<p>Let’s try it! The <code>println!</code> will now look like
 <code>println!(&quot;rect1 is {:?}&quot;, rect1);</code>. Putting the specifier <code>:?</code> inside
 the <code>{}</code> tells <code>println!</code> we want to use an output format called <code>Debug</code>.
 <code>Debug</code> is a trait that enables us to print out our struct in a way that is
 useful for developers so that we can see its value while we are debugging our
 code.</p>
-<p>Let's try running with this change and... drat. We still get an error:</p>
+<p>Let’s try running with this change and… drat. We still get an error:</p>
 <pre><code class="language-text">error: the trait bound `Rectangle: std::fmt::Debug` is not satisfied
 </code></pre>
 <p>Again, though, the compiler has given us a helpful note!</p>
@@ -3577,7 +3637,7 @@ crate, add `#[derive(Debug)]` or manually implement it
 <p>Rust <em>does</em> include functionality to print out debugging information, but we
 have to explicitly opt-in to having that functionality be available for our
 struct. To do that, we add the annotation <code>#[derive(Debug)]</code> just before our
-struct definition. Now our program looks like this:</p>
+struct definition, as shown in Listing 5-6. Now our program looks like this:</p>
 <pre><code class="language-rust">#[derive(Debug)]
 struct Rectangle {
     length: u32,
@@ -3590,34 +3650,47 @@ fn main() {
     println!(&quot;rect1 is {:?}&quot;, rect1);
 }
 </code></pre>
-<p>At this point, if we run this program, we won't get any errors and we'll see the
-following output:</p>
+<caption>
+Listing 5-6: Adding the annotation to derive the `Debug` trait and printing the
+`Rectangle` instance using debug formatting
+</caption>
+<p>At this point, if we run this program, we won’t get any errors and we’ll see
+the following output:</p>
 <pre><code class="language-text">rect1 is Rectangle { length: 50, width: 30 }
 </code></pre>
-<p>Nice! It's not the prettiest output, but it shows the values of all the fields
-for this instance, which would definitely help during debugging.</p>
+<p>Nice! It’s not the prettiest output, but it shows the values of all the fields
+for this instance, which would definitely help during debugging. If we want
+output that is a bit prettier and easier to read, which can be helpful with
+larger structs, we can use <code>{:#?}</code> in place of <code>{:?}</code> in the <code>println!</code> string.
+If we use the pretty debug style in this example, the output will look like:</p>
+<pre><code class="language-text">rect1 is Rectangle {
+    length: 50,
+    width: 30
+}
+</code></pre>
 <p>There are a number of traits Rust has provided for us to use with the <code>derive</code>
 annotation that can add useful behavior to our custom types. Those traits and
-their behaviors are listed in Appendix XX. We'll be covering how to implement
+their behaviors are listed in Appendix C. We’ll be covering how to implement
 these traits with custom behavior, as well as creating your own traits, in
 Chapter 10.</p>
-<p>Our <code>area</code> function is pretty specific-- it only computes the area of
-rectangles. It would be nice to tie this behavior together more closely with our
-<code>Rectangle</code> struct, since it's behavior that our <code>Rectangle</code> type has
-specifically. Let's now look at how we can continue to refactor this code by
+<p>Our <code>area</code> function is pretty specific—it only computes the area of rectangles.
+It would be nice to tie this behavior together more closely with our
+<code>Rectangle</code> struct, since it’s behavior that our <code>Rectangle</code> type has
+specifically. Let’s now look at how we can continue to refactor this code by
 turning the <code>area</code> function into an <code>area</code> <em>method</em> defined on our <code>Rectangle</code>
 type.</p>
 <h2>Method Syntax</h2>
-<p><em>Methods</em> are similar to functions: they're declared with the <code>fn</code> keyword and
+<p><em>Methods</em> are similar to functions: they’re declared with the <code>fn</code> keyword and
 their name, they can take arguments and return values, and they contain some
-code that gets run when they're called from somewhere else. Methods are
-different from functions, however, because they're defined within the context
+code that gets run when they’re called from somewhere else. Methods are
+different from functions, however, because they’re defined within the context
 of a struct (or an enum or a trait object, which we will cover in Chapters 6
-and 23 respectively), and their first argument is always <code>self</code>, which
+and 13, respectively), and their first argument is always <code>self</code>, which
 represents the instance of the struct that the method is being called on.</p>
 <h3>Defining Methods</h3>
-<p>Let's change our <code>area</code> function that takes a <code>Rectangle</code> instance as an
-argument and instead make an <code>area</code> method defined on the <code>Rectangle</code> struct:</p>
+<p>Let’s change our <code>area</code> function that takes a <code>Rectangle</code> instance as an
+argument and instead make an <code>area</code> method defined on the <code>Rectangle</code> struct,
+as shown in Listing 5-7:</p>
 <pre><code class="language-rust">#[derive(Debug)]
 struct Rectangle {
     length: u32,
@@ -3639,6 +3712,9 @@ fn main() {
     );
 }
 </code></pre>
+<caption>
+Listing 5-7: Defining an `area` method on the `Rectangle` struct
+</caption>
 <!-- Will add ghosting and wingdings here in libreoffice /Carol -->
 <p>In order to make the function be defined within the context of <code>Rectangle</code>, we
 start an <code>impl</code> block (<code>impl</code> is short for <em>implementation</em>). Then we move the
@@ -3646,35 +3722,36 @@ function within the <code>impl</code> curly braces, and change the first (and in
 case, only) argument to be <code>self</code> in the signature and everywhere within the
 body. Then in <code>main</code> where we called the <code>area</code> function and passed <code>rect1</code> as
 an argument, we can instead use <em>method syntax</em> to call the <code>area</code> method on
-our <code>Rectangle</code> instance.</p>
+our <code>Rectangle</code> instance. Method syntax is taking an instance and adding a dot
+followed by the method name, parentheses, and any arguments.</p>
 <p>In the signature for <code>area</code>, we get to use <code>&amp;self</code> instead of <code>rectangle: &amp;Rectangle</code> because Rust knows the type of <code>self</code> is <code>Rectangle</code> due to this
 method being inside the <code>impl Rectangle</code> context. Note we still need to have
 the <code>&amp;</code> before <code>self</code>, just like we had <code>&amp;Rectangle</code>. Methods can choose to
-take ownership of <code>self</code>, borrow <code>self</code> immutably as we've done here, or borrow
+take ownership of <code>self</code>, borrow <code>self</code> immutably as we’ve done here, or borrow
 <code>self</code> mutably, just like any other argument.</p>
-<p>We've chosen <code>&amp;self</code> here for the same reason we used <code>&amp;Rectangle</code> in the
-function version: we don't want to take ownership, and we just want to be able
+<p>We’ve chosen <code>&amp;self</code> here for the same reason we used <code>&amp;Rectangle</code> in the
+function version: we don’t want to take ownership, and we just want to be able
 to read the data in the struct, not write to it. If we wanted to be able to
-change the instance that we've called the method on as part of what the method
-does, we'd put <code>&amp;mut self</code> as the first argument instead. Having a method that
+change the instance that we’ve called the method on as part of what the method
+does, we’d put <code>&amp;mut self</code> as the first argument instead. Having a method that
 takes ownership of the instance by having just <code>self</code> as the first argument is
 rarer; this is usually used when the method transforms <code>self</code> into something
 else and we want to prevent the caller from using the original instance after
 the transformation.</p>
 <p>The main benefit of using methods over functions, in addition to getting to use
-method syntax and not having to repeat the type of <code>self</code> in every method's
-signature, is for organization. We've put all the things we can do with an
+method syntax and not having to repeat the type of <code>self</code> in every method’s
+signature, is for organization. We’ve put all the things we can do with an
 instance of a type together in one <code>impl</code> block, rather than make future users
 of our code search for capabilities of <code>Rectangle</code> all over the place.</p>
 <!-- PROD: START BOX -->
 <blockquote>
-<h4>Where's the <code>-&gt;</code> operator?</h4>
+<h3>Where’s the <code>-&gt;</code> operator?</h3>
 <p>In languages like C++, there are two different operators for calling methods:
-<code>.</code> if you're calling a method on the object directly, and <code>-&gt;</code> if you're
+<code>.</code> if you’re calling a method on the object directly, and <code>-&gt;</code> if you’re
 calling the method on a pointer to the object and thus need to dereference the
 pointer first. In other words, if <code>object</code> is a pointer, <code>object-&gt;something()</code>
 is like <code>(*object).something()</code>.</p>
-<p>Rust doesn't have an equivalent to the <code>-&gt;</code> operator; instead, Rust has a
+<p>Rust doesn’t have an equivalent to the <code>-&gt;</code> operator; instead, Rust has a
 feature called <em>automatic referencing and dereferencing</em>. Calling methods is
 one of the few places in Rust that has behavior like this.</p>
 <p>Here’s how it works: when you call a method with <code>object.something()</code>, Rust
@@ -3708,11 +3785,11 @@ receivers is a big part of making ownership ergonomic in practice.</p>
 </blockquote>
 <!-- PROD: END BOX -->
 <h3>Methods with More Arguments</h3>
-<p>Let's practice some more with methods by implementing a second method on our
-<code>Rectangle</code> struct. This time, we'd like for an instance of <code>Rectangle</code> to take
+<p>Let’s practice some more with methods by implementing a second method on our
+<code>Rectangle</code> struct. This time, we’d like for an instance of <code>Rectangle</code> to take
 another instance of <code>Rectangle</code> and return <code>true</code> if the second rectangle could
 fit completely within <code>self</code> and <code>false</code> if it would not. That is, if we run
-this code:</p>
+the code in Listing 5-8, once we've defined the <code>can_hold</code> method:</p>
 <pre><code class="language-rust,ignore">fn main() {
     let rect1 = Rectangle { length: 50, width: 30 };
     let rect2 = Rectangle { length: 40, width: 10 };
@@ -3722,8 +3799,11 @@ this code:</p>
     println!(&quot;Can rect1 hold rect3? {}&quot;, rect1.can_hold(&amp;rect3));
 }
 </code></pre>
-<p>We want to see this output, since both of <code>rect2</code>'s dimensions are smaller than
-<code>rect1</code>'s, but <code>rect3</code> is wider than <code>rect1</code>:</p>
+<caption>
+Listing 5-8: Demonstration of using the as-yet-unwritten `can_hold` method
+</caption>
+<p>We want to see this output, since both of <code>rect2</code>’s dimensions are smaller than
+<code>rect1</code>’s, but <code>rect3</code> is wider than <code>rect1</code>:</p>
 <pre><code class="language-text">Can rect1 hold rect2? true
 Can rect1 hold rect3? false
 </code></pre>
@@ -3733,11 +3813,12 @@ of another <code>Rectangle</code> as an argument. We can tell what the type of t
 argument will be by looking at a call site: <code>rect1.can_hold(&amp;rect2)</code> passes in
 <code>&amp;rect2</code>, which is an immutable borrow to <code>rect2</code>, an instance of <code>Rectangle</code>.
 This makes sense, since we only need to read <code>rect2</code> (rather than write, which
-would mean we'd need a mutable borrow) and we want <code>main</code> to keep ownership of
+would mean we’d need a mutable borrow) and we want <code>main</code> to keep ownership of
 <code>rect2</code> so that we could use it again after calling this method. The return
 value of <code>can_hold</code> will be a boolean, and the implementation will check to see
-if <code>self</code>'s length and width are both greater than the length and width of the
-other <code>Rectangle</code>, respectively. Let's write that code!</p>
+if <code>self</code>’s length and width are both greater than the length and width of the
+other <code>Rectangle</code>, respectively. Let’s add this new method to the <code>impl</code> block
+from Listing 5-7:</p>
 <pre><code class="language-rust"># #[derive(Debug)]
 # struct Rectangle {
 #     length: u32,
@@ -3755,15 +3836,15 @@ impl Rectangle {
 }
 </code></pre>
 <!-- Will add ghosting here in libreoffice /Carol -->
-<p>If we run this with the <code>main</code> from earlier, we will get our desired output!
+<p>If we run this with the <code>main</code> from Listing 5-8, we will get our desired output!
 Methods can take multiple arguments that we add to the signature after the
 <code>self</code> parameter, and those arguments work just like arguments in functions do.</p>
 <h3>Associated Functions</h3>
-<p>One more useful feature of <code>impl</code> blocks: we're allowed to define functions
-within <code>impl</code> blocks that <em>don't</em> take <code>self</code> as a parameter. These are called
-<em>associated functions</em>, since they're associated with the struct. They're still
-functions though, not methods, since they don't have an instance of the struct
-to work with. You've already used an associated function: <code>String::from</code>.</p>
+<p>One more useful feature of <code>impl</code> blocks: we’re allowed to define functions
+within <code>impl</code> blocks that <em>don’t</em> take <code>self</code> as a parameter. These are called
+<em>associated functions</em>, since they’re associated with the struct. They’re still
+functions though, not methods, since they don’t have an instance of the struct
+to work with. You’ve already used an associated function: <code>String::from</code>.</p>
 <p>Associated functions are often used for constructors that will return a new
 instance of the struct. For example, we could provide an associated function
 that would take one dimension argument and use that as both length and width,
@@ -3782,9 +3863,9 @@ impl Rectangle {
 }
 </code></pre>
 <p>To call this associated function, we use the <code>::</code> syntax with the struct name:
-<code>let sq = Rectange::square(3);</code>, for example. It's kind of like this function is
-namespaced by the struct: the <code>::</code> syntax is used for both associated functions
-and namespaces created by modules, which we'll learn about in Chapter 7.</p>
+<code>let sq = Rectange::square(3);</code>, for example. This function is namespaced by
+the struct: the <code>::</code> syntax is used for both associated functions and
+namespaces created by modules, which we’ll learn about in Chapter 7.</p>
 <h2>Summary</h2>
 <p>Structs let us create custom types that are meaningful for our domain. By using
 structs, we can keep associated pieces of data connected to each other and name
@@ -3792,7 +3873,7 @@ each piece to make our code clear. Methods let us specify the behavior that
 instances of our structs have, and associated functions let us namespace
 functionality that is particular to our struct without having an instance
 available.</p>
-<p>Structs aren't the only way we can create custom types, though; let's turn to
+<p>Structs aren’t the only way we can create custom types, though; let’s turn to
 the <code>enum</code> feature of Rust and add another tool to our toolbox.</p>
 <!-- Hi Steve, Carol. I like this chapter, we're getting into some powerful
 tools here! I saw that the copyeditor has suggested listing numbers, which I
