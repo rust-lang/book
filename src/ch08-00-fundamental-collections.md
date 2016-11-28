@@ -1,11 +1,14 @@
 # Fundamental Collections
 
 Rust's standard library includes a number of really useful data structures
-called *collections*. Most other types represent one specific value, but
-collections can contain multiple values inside of them. Each collection has
-different capabilities and costs, and choosing an appropriate one for the
-situation you're in is a skill you'll develop over time. In this chapter, we'll
-go over three collections which are used very often in Rust programs:
+called *collections*. Most other data types represent one specific value, but
+collections can contain multiple values. Unlike the built-in array and tuple
+types, the data these collections point to is stored on the heap, which means
+the amount of data does not need to be known at compile time and can grow or
+shrink as the program runs. Each kind of collection has different capabilities
+and costs, and choosing an appropriate one for the situation you're in is a
+skill you'll develop over time. In this chapter, we'll go over three
+collections which are used very often in Rust programs:
 
 * A *vector* allows us to store a variable number of values next to each other.
 * A *string* is a collection of characters. We've seen the `String` type
