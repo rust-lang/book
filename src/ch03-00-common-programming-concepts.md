@@ -11,14 +11,14 @@ them early will give you a strong core to start from.
 
 <!-- PROD: START BOX -->
 
-### Keywords
-
-The Rust language has a set of *keywords* that have been reserved for use by
-the language only, much like other languages do. Keep in mind that you cannot
-use these words as names of variables or functions. Most of the keywords have
-special meanings, and you’ll be using them to do various tasks in your Rust
-programs; a few have no current functionality associated with them but have
-been reserved for functionality that might be added to Rust in the future. You
-can find a list of the keywords in Appendix A.
+> ### Keywords
+>
+> The Rust language has a set of *keywords* that have been reserved for use by
+> the language only, much like other languages do. Keep in mind that you cannot
+> use these words as names of variables or functions. Most of the keywords have
+> special meanings, and you’ll be using them to do various tasks in your Rust
+> programs; a few have no current functionality associated with them but have
+> been reserved for functionality that might be added to Rust in the future. You
+> can find a list of the keywords in Appendix A.
 
 <!-- PROD: END BOX -->
