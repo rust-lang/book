@@ -489,4 +489,4 @@ problems, not specifying the `'static` lifetime.
 We've covered the basics of Rust's system of generics. Generics are the core to
 building good abstractions, and can be used in a number of ways. There's more
 to learn about them, particularly lifetimes, but we'll cover those in later
-chapters. Let's move on to I/O functionality.
+chapters. Let's move on to testing.
