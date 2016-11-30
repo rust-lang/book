@@ -13,6 +13,7 @@
 
     <xsl:template match="w:p[w:pPr/w:pStyle/@w:val = 'ChapterStart']" />
     <xsl:template match="w:p[w:pPr/w:pStyle/@w:val = 'Normal']" />
+    <xsl:template match="w:p[w:pPr/w:pStyle/@w:val = 'Standard']" />
 
     <!-- Paragraph styles -->
 
@@ -71,7 +72,7 @@
         <xsl:text>&#10;&#10;</xsl:text>
     </xsl:template>
 
-    <xsl:template match="w:p[w:pPr/w:pStyle[@w:val = 'BodyFirst' or @w:val = 'Body' or @w:val = 'BodyFirstBox' or @w:val = 'BodyBox']]">
+    <xsl:template match="w:p[w:pPr/w:pStyle[@w:val = 'BodyFirst' or @w:val = 'Body' or @w:val = 'BodyFirstBox' or @w:val = 'BodyBox' or @w:val = '1stPara']]">
         <xsl:if test=".//w:t">
             <xsl:apply-templates select="*" />
             <xsl:text>&#10;&#10;</xsl:text>
@@ -137,7 +138,7 @@ Unmatched: <xsl:value-of select="w:pPr/w:pStyle/@w:val" />
 
     <!-- Character styles -->
 
-    <xsl:template match="w:r[w:rPr/w:rStyle[@w:val = 'Literal' or @w:val = 'LiteralBold' or @w:val = 'EmphasisBold']]">
+    <xsl:template match="w:r[w:rPr/w:rStyle[@w:val = 'Literal' or @w:val = 'LiteralBold' or @w:val = 'EmphasisBold' or @w:val = 'LiteralCaption']]">
         <xsl:choose>
             <xsl:when test="normalize-space(w:t) != ''">
                 <xsl:if test="starts-with(w:t, ' ')">
@@ -156,7 +157,7 @@ Unmatched: <xsl:value-of select="w:pPr/w:pStyle/@w:val" />
         </xsl:choose>
     </xsl:template>
 
-    <xsl:template match="w:r[w:rPr/w:rStyle/@w:val = 'EmphasisItalic']">
+    <xsl:template match="w:r[w:rPr/w:rStyle[@w:val = 'EmphasisItalic' or @w:val = 'EmphasisItalicBox' or @w:val = 'EmphasisNote']]">
         <xsl:choose>
             <xsl:when test="normalize-space(w:t) != ''">
                 <xsl:if test="starts-with(w:t, ' ')">
