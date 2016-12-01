@@ -47,7 +47,7 @@ if [[ ! -f "$dict_filename" ]]; then
     # After user validates that this file contains only valid words, we can
     # look for typos using this dictionary and some default aspell dictionary.
     echo "Scanning files to generate dictionary file '$dict_filename'."
-    echo "Please check it doesn't contain any spellings for correct results."
+    echo "Please check that it doesn't contain any misspellings."
 
     echo "personal_ws-1.1 en 0 utf-8" > "$dict_filename"
     cat "${markdown_sources[@]}" | aspell --ignore 3 list | sort -u >> "$dict_filename"
@@ -73,6 +73,6 @@ elif [[ "$mode" == "check" ]]; then
     # Interactive mode: fix typos
     cp "$dict_filename" "$dict_path"
     for fname in "${markdown_sources[@]}"; do
-        aspell --ignore 3 --personal="$dict_path" "$mode" "$fname"
+        aspell --ignore 3 --dont-backup --personal="$dict_path" "$mode" "$fname"
     done
 fi
