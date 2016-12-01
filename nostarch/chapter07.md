@@ -708,7 +708,7 @@ Overall, these are the rules for item visibility:
 
 ### Privacy Examples
 
-Let’s look at a few more examples to get some practice. Create a new libary
+Let’s look at a few more examples to get some practice. Create a new library
 project and enter the code in Listing 7-5 into your new project’s `src/lib.rs`:
 
 Filename: src/lib.rs

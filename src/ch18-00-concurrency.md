@@ -17,8 +17,8 @@ modifiability. And indeed, it says
 
 > Indeed, under the implementation strategy we outlined above, in which the
 > compiler is unaware of threads, it is allowed to transform code subject only
-> to sequential cor- rectness constraints and hence could generate the code
-> con- taining a race.
+> to sequential correctness constraints and hence could generate the code
+> containing a race.
 
 However, in Rust, this re-ordering can't happen: Rust won't let you alias x and
 y between two threads without some sort of synchronization primitive. But this

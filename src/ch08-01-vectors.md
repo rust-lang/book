@@ -219,7 +219,7 @@ don't think we should repeat it here as well, but we added a reference. /Carol
 
 If you don't know at the time that you're writing a program the exhaustive set
 of types the program will get at runtime to store in a vector, the enum
-technique won't work. Insetad, you can use a trait object, which we'll cover in
+technique won't work. Instead, you can use a trait object, which we'll cover in
 Chapter 13.
 
 Now that we've gone over some of the most common ways to use vectors, be sure
@@ -233,7 +233,7 @@ in the book for space reasons? We might want to justify sending them out of the
 book if we don't want to cover it here -->
 
 <!-- Yes, there are many, many methods on Vec: https://doc.rust-lang.org/stable/std/vec/struct.Vec.html
-Also there are occcasionally new methods available with new versions of the
+Also there are occasionally new methods available with new versions of the
 language, so there's no way we can be comprehensive here. We want the reader to
 use the API documentation in these situations since the purpose of the online
 docs is to be comprehensive and up to date. I personally wouldn't expect a book

@@ -186,7 +186,7 @@ if left_val == right_val {
 }
 ```
 
-Let's take a look at a test that will fail becasue `hello` is not equal to
+Let's take a look at a test that will fail because `hello` is not equal to
 `world`. We've also added a custom error message, `greeting operation failed`:
 
 <span class="filename">Filename: src/lib.rs</span>
