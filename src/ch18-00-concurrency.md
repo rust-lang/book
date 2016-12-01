@@ -2,9 +2,10 @@
 
 This is a really rough sketch of some ideas that this chapter might cover.
 
-From [the orange website].
+From a comment of steveklabnik's on [the orange website]. "that paper" refers to [Boehm 2004].
 
 [the orange website]: https://news.ycombinator.com/item?id=13078384
+[Boehm 2004]: http://www.hpl.hp.com/techreports/2004/HPL-2004-209.pdf
 
 So, with Rust, it's more subtle than that. That is, while threading proper
 isn't part of the language itself, Rust's type system is structured in such a
@@ -58,7 +59,7 @@ need either a single lock around the whole array, which destroys the
 concurrency entirely, or some set of more fine-grained locks, which introduce
 cost, as well as limiting the amount of concurrency to some degree.
 
-But with a small utility function [1], which performs a small (ie, non-atomic)
+But with a [small utility function][fn], which performs a small (ie, non-atomic)
 check at runtime, we can safety split up our array into as many disjoint chunks
 as we'd like, and then pass each one off to its own thread, which is free to do
 the modification with no more synchronization needed. In fact, libraries like
@@ -66,7 +67,7 @@ Rayon can even determine roughly the correct amount for you, if you don't want
 to think about it, and it will near-transparently just handle this for you (you
 change a call from iter() to par_iter() and you're done).
 
-1: https://github.com/rust-lang/rust/blob/f8614c397313db00e4b46...
+[fn]: https://github.com/rust-lang/rust/blob/f8614c397313db00e4b4626d1ba77ae00dbf7549/src/libcore/slice.rs#L344-L355
 
 So yeah. I'm in agreement with the paper that the language needs to do _some_
 kind of reasoning, but since aliasing and concurrency are so tightly related, I
