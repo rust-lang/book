@@ -160,7 +160,6 @@ RAII
 randcrate
 READMEs
 rect
-Rectange
 redeclaring
 RefCell
 repr
