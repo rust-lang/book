@@ -91,3 +91,11 @@ $ dot dot/trpl04-01.dot -Tsvg > src/img/trpl04-01.svg
 In the generated SVG, remove the width and the height attributes from the `svg`
 element and set the `viewBox` attribute to `0.00 0.00 1000.00 1000.00` or other
 values that don't cut off the image.
+
+## Spellchecking
+
+To scan source file for spell errors, you can use `spellcheck.sh` script. It
+needs a dictionary of valid words, which is provided in `dictionary.txt`. If
+script produces a false positive (say, you used word `BTreeMap` which script
+considers invalid) you need to add this word to dictionary file (in any place
+in the file, but you can keep sorted order for consistency).
