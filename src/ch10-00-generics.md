@@ -29,7 +29,7 @@ fn main() {
     let mut largest = numbers[0];
 
     for number in numbers {
-        if largest > number {
+        if number > largest {
             largest = number;
         }
     }
@@ -58,7 +58,7 @@ fn main() {
     let mut largest = numbers[0];
 
     for number in numbers {
-        if largest > number {
+        if number > largest {
             largest = number;
         }
     }
@@ -70,7 +70,7 @@ fn main() {
     let mut largest = numbers[0];
 
     for number in numbers {
-        if largest > number {
+        if number > largest {
             largest = number;
         }
     }
@@ -94,7 +94,7 @@ fn largest(numbers: Vec<i32>) {
     let mut largest = numbers[0];
 
     for number in numbers {
-        if largest > number {
+        if number > largest {
             largest = number;
         }
     }
