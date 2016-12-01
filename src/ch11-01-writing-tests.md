@@ -40,7 +40,7 @@ body; that's good enough to pass! We can run the tests with `cargo test`:
 $ cargo test
    Compiling adder v0.1.0 (file:///projects/adder)
     Finished debug [unoptimized + debuginfo] target(s) in 0.22 secs
-     Running target/debug/deps/adder-ce99bcc2479f4607
+     Running target/debug/deps/adder-abcabcabc
 
 running 1 test
 test it_works ... ok
@@ -95,7 +95,7 @@ argument. If the argument is `true`, nothing happens. If the argument is
 $ cargo test
    Compiling adder v0.1.0 (file:///projects/adder)
     Finished debug [unoptimized + debuginfo] target(s) in 0.22 secs
-     Running target/debug/deps/adder-ce99bcc2479f4607
+     Running target/debug/deps/adder-abcabcabc
 
 running 1 test
 test it_works ... FAILED

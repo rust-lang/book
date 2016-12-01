@@ -215,7 +215,7 @@ Let's run the integration tests, which also get run when we run `cargo test`:
 ```text
 $ cargo test
    Compiling adder v0.1.0 (file:///projects/adder)
-     Running target/debug/deps/adder-91b3e234d4ed382a
+     Running target/debug/deps/adder-abcabcabc
 
 running 1 test
 test tests::it_works ... ok

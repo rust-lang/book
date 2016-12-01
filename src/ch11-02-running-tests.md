@@ -83,7 +83,7 @@ arguments, as we've already seen, runs all the tests:
 ```text
 $ cargo test
     Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
-     Running target/debug/deps/adder-06a75b4a1f2515e9
+     Running target/debug/deps/adder-abcabcabc
 
 running 3 tests
 test add_three_and_two ... ok
@@ -98,7 +98,7 @@ We can pass the name of any test function to run only that test:
 ```text
 $ cargo test one_hundred
     Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
-     Running target/debug/deps/adder-06a75b4a1f2515e9
+     Running target/debug/deps/adder-abcabcabc
 
 running 1 test
 test one_hundred ... ok
@@ -111,7 +111,7 @@ We can also pass part of a name, and `cargo test` will run all tests that match:
 ```text
 $ cargo test add
     Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
-     Running target/debug/deps/adder-06a75b4a1f2515e9
+     Running target/debug/deps/adder-abcabcabc
 
 running 2 tests
 test add_three_and_two ... ok
@@ -167,7 +167,7 @@ appear in the test names in the output:
 ```text
 $ cargo test
     Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
-     Running target/debug/deps/adder-d84f1c6cb24adeb4
+     Running target/debug/deps/adder-abcabcabc
 
 running 4 tests
 test adding::add_two_and_two ... ok
@@ -182,7 +182,7 @@ of the tests in the subtracting module:
 ```text
 $ cargo test adding
     Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
-     Running target/debug/deps/adder-d84f1c6cb24adeb4
+     Running target/debug/deps/adder-abcabcabc
 
 running 3 tests
 test adding::add_three_and_two ... ok
@@ -222,7 +222,7 @@ not:
 $ cargo test
    Compiling adder v0.1.0 (file:///projects/adder)
     Finished debug [unoptimized + debuginfo] target(s) in 0.24 secs
-     Running target/debug/deps/adder-ce99bcc2479f4607
+     Running target/debug/deps/adder-abcabcabc
 
 running 2 tests
 test expensive_test ... ignored
@@ -243,7 +243,7 @@ We can run only the expensive tests by explicitly asking to run them using
 ```text
 $ cargo test -- --ignored
     Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
-     Running target/debug/deps/adder-ce99bcc2479f4607
+     Running target/debug/deps/adder-abcabcabc
 
 running 1 test
 test expensive_test ... ok
