@@ -94,11 +94,11 @@ values that don't cut off the image.
 
 ## Spellchecking
 
-To scan source file for spell errors, you can use `spellcheck.sh` script. It
-needs a dictionary of valid words, which is provided in `dictionary.txt`. If
-script produces a false positive (say, you used word `BTreeMap` which script
-considers invalid) you need to add this word to dictionary file (in any place
-in the file, but you can keep sorted order for consistency).
+To scan source files for spelling errors, you can use the `spellcheck.sh`
+script. It needs a dictionary of valid words, which is provided in
+`dictionary.txt`. If the script produces a false positive (say, you used word
+`BTreeMap` which the script considers invalid), you need to add this word to
+`dictionary.txt` (keep the sorted order for consistency).
 
 ## Converting Windows newlines to Unix
 
