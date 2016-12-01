@@ -65,7 +65,7 @@ fn main() {
 
 In simple cases like this, two `let`s may be clearer, but in others, creating
 multiple variables at once is nice. As we become more proficient in Rust, we’ll
-figure out which style is better, but it’s mostly a judgement call.
+figure out which style is better, but it’s mostly a judgment call.
 
 ## Type annotations
 
