@@ -69,7 +69,7 @@
                 <div id="content" class="content">
                     <h1>Concurrency</h1>
 <p>This is a really rough sketch of some ideas that this chapter might cover.</p>
-<p>From <a href="https://news.ycombinator.com/item?id=13078384">the orange website</a>.</p>
+<p>From a comment of steveklabnik's on <a href="https://news.ycombinator.com/item?id=13078384">the orange website</a>. &quot;that paper&quot; refers to <a href="http://www.hpl.hp.com/techreports/2004/HPL-2004-209.pdf">Boehm 2004</a>.</p>
 <p>So, with Rust, it's more subtle than that. That is, while threading proper
 isn't part of the language itself, Rust's type system is structured in such a
 way as to make it possible to build those kinds of libraries. In other words,
@@ -116,14 +116,13 @@ the paper mentions, with a pthreads-style approach to making it safe, one would
 need either a single lock around the whole array, which destroys the
 concurrency entirely, or some set of more fine-grained locks, which introduce
 cost, as well as limiting the amount of concurrency to some degree.</p>
-<p>But with a small utility function [1], which performs a small (ie, non-atomic)
+<p>But with a <a href="https://github.com/rust-lang/rust/blob/f8614c397313db00e4b4626d1ba77ae00dbf7549/src/libcore/slice.rs#L344-L355">small utility function</a>, which performs a small (ie, non-atomic)
 check at runtime, we can safety split up our array into as many disjoint chunks
 as we'd like, and then pass each one off to its own thread, which is free to do
 the modification with no more synchronization needed. In fact, libraries like
 Rayon can even determine roughly the correct amount for you, if you don't want
 to think about it, and it will near-transparently just handle this for you (you
 change a call from iter() to par_iter() and you're done).</p>
-<p>1: https://github.com/rust-lang/rust/blob/f8614c397313db00e4b46...</p>
 <p>So yeah. I'm in agreement with the paper that the language needs to do <em>some</em>
 kind of reasoning, but since aliasing and concurrency are so tightly related, I
 would argue that the language could understand only aliasing, not concurrency,
