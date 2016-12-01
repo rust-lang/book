@@ -87,7 +87,7 @@
     - [`RefCell`]()
     - [Interior Mutability]()
 
-- [Concurrency]()
+- [Concurrency](ch18-00-concurrency.md)
     - [Threads]()
     - [`Send` & `Sync`]()
     - [`Arc<T>`]()
