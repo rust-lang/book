@@ -447,7 +447,7 @@ Rust has a special annotation called the `Copy` trait that we can place on
 types like integers that are stored on the stack (we’ll talk more about traits
 in Chapter 10). If a type has the `Copy` trait, an older variable is still
 usable after assignment. Rust won’t let us annotate a type with the `Copy`
-trait if the type, or any of its parts, has implemented the `D``rop` trait. If
+trait if the type, or any of its parts, has implemented the `Drop` trait. If
 the type needs something special to happen when the value goes out of scope and
 we add the `Copy` annotation to that type, we’ll get a compile time error.
 
