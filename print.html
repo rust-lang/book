@@ -2756,7 +2756,7 @@ differently from the usual shallow copying and we can leave it out.</p>
 types like integers that are stored on the stack (we’ll talk more about traits
 in Chapter 10). If a type has the <code>Copy</code> trait, an older variable is still
 usable after assignment. Rust won’t let us annotate a type with the <code>Copy</code>
-trait if the type, or any of its parts, has implemented the <code>D``rop</code> trait. If
+trait if the type, or any of its parts, has implemented the <code>Drop</code> trait. If
 the type needs something special to happen when the value goes out of scope and
 we add the <code>Copy</code> annotation to that type, we’ll get a compile time error.</p>
 <p>So what types are <code>Copy</code>? You can check the documentation for the given type to
