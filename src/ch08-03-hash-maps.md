@@ -41,7 +41,7 @@ in the prelude. Hash maps also have less support from the standard library;
 there's no built-in macro to construct them, for example.
 
 Just like vectors, hash maps store their data on the heap. This `HashMap` has
-keys of type `i32` and values of type `&str`. Like vectors, hash maps are
+keys of type `&str` and values of type `i32`. Like vectors, hash maps are
 homogenous: all of the keys must have the same type, and all of the values must
 have the same type.
 
@@ -173,7 +173,7 @@ scores.insert(String::from("Blue"), 25);
 println!("{:?}", scores);
 ```
 
-This will print `{"Blue": 25}`. The original value of 25 has been overwritten.
+This will print `{"Blue": 25}`. The original value of 10 has been overwritten.
 
 
 #### Only Insert If the Key Has No Value
