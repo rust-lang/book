@@ -100,7 +100,7 @@ least often used, so it's not included in the features imported automatically
 in the prelude. Hash maps also have less support from the standard library;
 there's no built-in macro to construct them, for example.</p>
 <p>Just like vectors, hash maps store their data on the heap. This <code>HashMap</code> has
-keys of type <code>&amp;str</code> and values of type <code>i32</code>. Like vectors, hash maps are
+keys of type <code>i32</code> and values of type <code>&amp;str</code>. Like vectors, hash maps are
 homogenous: all of the keys must have the same type, and all of the values must
 have the same type.</p>
 <p>Another way of constructing a hash map is by using the <code>collect</code> method on a
@@ -203,7 +203,7 @@ scores.insert(String::from(&quot;Blue&quot;), 25);
 
 println!(&quot;{:?}&quot;, scores);
 </code></pre>
-<p>This will print <code>{&quot;Blue&quot;: 25}</code>. The original value of 10 has been overwritten.</p>
+<p>This will print <code>{&quot;Blue&quot;: 25}</code>. The original value of 25 has been overwritten.</p>
 <h4>Only Insert If the Key Has No Value</h4>
 <p>It's common to want to check if a particular key has a value and, if it does
 not, insert a value for it. Hash maps have a special API for this, called
