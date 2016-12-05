@@ -91,3 +91,11 @@ $ dot dot/trpl04-01.dot -Tsvg > src/img/trpl04-01.svg
 In the generated SVG, remove the width and the height attributes from the `svg`
 element and set the `viewBox` attribute to `0.00 0.00 1000.00 1000.00` or other
 values that don't cut off the image.
+
+## Converting Windows newlines to Unix
+
+This is mostly for Carol's reference because she keeps having to look it up.
+
+```
+$ tr -d '\015' < DOS-file > UNIX-file
+```
