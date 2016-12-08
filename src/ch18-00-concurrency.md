@@ -73,3 +73,7 @@ So yeah. I'm in agreement with the paper that the language needs to do _some_
 kind of reasoning, but since aliasing and concurrency are so tightly related, I
 would argue that the language could understand only aliasing, not concurrency,
 and then library abstractions are sufficient.
+
+## Arc
+
+Check out [this awesome explanation of `Arc`](http://stackoverflow.com/a/40985661/51683).
