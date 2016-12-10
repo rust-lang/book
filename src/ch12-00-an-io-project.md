@@ -283,3 +283,44 @@ running 0 tests
 test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured
 ```
 
+## Call the function from main
+
+Filename: src/main.rs
+
+```rust
+extern crate greprs;
+
+use std::env;
+use std::io::prelude::*;
+use std::fs::File;
+
+fn main() {
+    let args: Vec<String> = env::args().collect();
+
+    let search = args.get(1).expect(
+        "No search string or filename found. Usage: greprs <search> <file>"
+    );
+    let filename = args.get(2).expect(
+        "No filename found. Usage: greprs <search> <file>"
+    );
+
+    let mut f = File::open(filename).expect("Could not open file.");
+    let mut contents = String::new();
+    f.read_to_string(&mut contents).expect("Could not read file");
+
+    let results = greprs::grep(search, &contents);
+
+    for line in results {
+        println!("{}", line);
+    }
+}
+```
+
+```text
+$ cargo run the poem.txt
+   Compiling greprs v0.1.0 (file:///Users/carolnichols/rust/greprs)
+    Finished debug [unoptimized + debuginfo] target(s) in 0.38 secs
+     Running `target/debug/greprs the poem.txt`
+Then there's a pair of us — don't tell!
+To tell your name the livelong day
+```
