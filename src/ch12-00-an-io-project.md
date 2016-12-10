@@ -59,7 +59,7 @@ Should we do a match so that when someone gives
 
 Filename: src/main.rs
 
-```rust
+```rust,ignore
 use std::env;
 
 fn main() {
@@ -116,7 +116,7 @@ welcome. /Carol -->
 
 Filename: src/main.rs
 
-```rust
+```rust,ignore
 use std::env;
 use std::io::prelude::*;
 use std::fs::File;
@@ -287,7 +287,7 @@ test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured
 
 Filename: src/main.rs
 
-```rust
+```rust,ignore
 extern crate greprs;
 
 use std::env;
