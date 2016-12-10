@@ -104,9 +104,9 @@ parameter. The syntax to do that is the angle brackets, like this:
 
 ```text
 enum OptionalNumber<T> {   enum OptionalFloatingPointNumber<T> {
-    Some(T),                Some(T),
-    None,                   None,
-}                       }
+    Some(T),                   Some(T),
+    None,                      None,
+}                          }
 ```
 
 The `<>`s after the enum name indicate a list of type parameters, just like
@@ -116,7 +116,7 @@ they're not specific to integers or floating point numbers anymore, so they can
 have the same name:
 
 ```text
-enum Option<T> {	enum Option<T> {
+enum Option<T> {    enum Option<T> {
     Some(T),            Some(T),
     None,               None,
 }                   }
