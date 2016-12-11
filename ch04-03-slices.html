@@ -101,12 +101,12 @@ end of the word. Let’s try that as shown in Listing 4-10:</p>
 the <code>String</code> argument</p>
 </figcaption>
 </figure>
-<p>Let’s break down this code a bit:</p>
+<p>Let’s break down this code a bit. Because we need to go through the <code>String</code>
+element by element and check whether a value is a space, we’ll convert our
+<code>String</code> to an array of bytes using the <code>as_bytes</code> method:</p>
 <pre><code class="language-rust,ignore">let bytes = s.as_bytes();
 </code></pre>
-<p>Because we need to go through the <code>String</code> element by element and check whether
-a value is a space, we’ll convert our <code>String</code> to an array of bytes using the
-<code>as_bytes</code> method:</p>
+<p>Next, we create an iterator over the array of bytes using the <code>iter</code> method :</p>
 <pre><code class="language-rust,ignore">for (i, &amp;item) in bytes.iter().enumerate() {
 </code></pre>
 <p>We’ll discuss iterators in more detail in Chapter 16. For now, know that <code>iter</code>
@@ -115,19 +115,20 @@ the result of <code>iter</code> and returns each element as part of a tuple inst
 first element of the returned tuple is the index, and the second element is a
 reference to the element. This is a bit more convenient than calculating the
 index ourselves.</p>
-<p>Because the method returns a tuple, we can use patterns, just like everywhere
-else in Rust. So we match against the tuple with <code>i</code> for the index and <code>&amp;item</code>
-for a single byte. Because we get a reference from <code>.iter().enumerate()</code>, we
-use <code>&amp;</code> in the pattern:</p>
+<p>Because the <code>enumerate</code> method returns a tuple, we can use patterns to
+destructure that tuple, just like everywhere else in Rust. So in the <code>for</code>
+loop, we specify a pattern that has <code>i</code> for the index in the tuple and <code>&amp;item</code>
+for the single byte in the tuple. Because we get a reference to the element
+from <code>.iter().enumerate()</code>, we use <code>&amp;</code> in the pattern.</p>
+<p>We search for the byte that represents the space by using the byte literal
+syntax. If we find a space, we return the position. Otherwise, we return the
+length of the string by using <code>s.len()</code>:</p>
 <pre><code class="language-rust,ignore">    if item == b' ' {
         return i;
     }
 }
 s.len()
 </code></pre>
-<p>We search for the byte that represents the space by using the byte literal
-syntax. If we find a space, we return the position. Otherwise, we return the
-length of the string by using <code>s.len()</code>.</p>
 <p>We now have a way to find out the index of the end of the first word in the
 string, but there’s a problem. We’re returning a <code>usize</code> on its own, but it’s
 only a meaningful number in the context of the <code>&amp;String</code>. In other words,
