@@ -45,15 +45,15 @@ the `String` argument
 </figcaption>
 </figure>
 
-Let’s break down this code a bit:
+Let’s break down this code a bit. Because we need to go through the `String`
+element by element and check whether a value is a space, we’ll convert our
+`String` to an array of bytes using the `as_bytes` method:
 
 ```rust,ignore
 let bytes = s.as_bytes();
 ```
 
-Because we need to go through the `String` element by element and check whether
-a value is a space, we’ll convert our `String` to an array of bytes using the
-`as_bytes` method:
+Next, we create an iterator over the array of bytes using the `iter` method :
 
 ```rust,ignore
 for (i, &item) in bytes.iter().enumerate() {
@@ -66,10 +66,15 @@ first element of the returned tuple is the index, and the second element is a
 reference to the element. This is a bit more convenient than calculating the
 index ourselves.
 
-Because the method returns a tuple, we can use patterns, just like everywhere
-else in Rust. So we match against the tuple with `i` for the index and `&item`
-for a single byte. Because we get a reference from `.iter().enumerate()`, we
-use `&` in the pattern:
+Because the `enumerate` method returns a tuple, we can use patterns to
+destructure that tuple, just like everywhere else in Rust. So in the `for`
+loop, we specify a pattern that has `i` for the index in the tuple and `&item`
+for the single byte in the tuple. Because we get a reference to the element
+from `.iter().enumerate()`, we use `&` in the pattern.
+
+We search for the byte that represents the space by using the byte literal
+syntax. If we find a space, we return the position. Otherwise, we return the
+length of the string by using `s.len()`:
 
 ```rust,ignore
     if item == b' ' {
@@ -78,10 +83,6 @@ use `&` in the pattern:
 }
 s.len()
 ```
-
-We search for the byte that represents the space by using the byte literal
-syntax. If we find a space, we return the position. Otherwise, we return the
-length of the string by using `s.len()`.
 
 We now have a way to find out the index of the end of the first word in the
 string, but there’s a problem. We’re returning a `usize` on its own, but it’s
