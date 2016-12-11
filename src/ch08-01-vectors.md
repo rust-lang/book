@@ -16,7 +16,7 @@ let v: Vec<i32> = Vec::new();
 
 Note that we added a type annotation here. Since we aren't inserting any values
 into this vector, Rust doesn't know what kind of elements we intend to store.
-This is an important point. Vectors are homogenous: they may store many values,
+This is an important point. Vectors are homogeneous: they may store many values,
 but those values must all be the same type. Vectors are implemented using
 generics, which Chapter 10 will cover how to use in your own types. For now,
 all you need to know is that the `Vec` type provided by the standard library

@@ -42,7 +42,7 @@ there's no built-in macro to construct them, for example.
 
 Just like vectors, hash maps store their data on the heap. This `HashMap` has
 keys of type `&str` and values of type `i32`. Like vectors, hash maps are
-homogenous: all of the keys must have the same type, and all of the values must
+homogeneous: all of the keys must have the same type, and all of the values must
 have the same type.
 
 Another way of constructing a hash map is by using the `collect` method on a
@@ -68,7 +68,7 @@ want unless you specify. For the type parameters for the key and value types,
 however, we use underscores and Rust can infer the types that the hash map
 contains based on the types of the data in the vector.
 
-### Hashmaps and Ownership
+### Hash Maps and Ownership
 
 For types that implement the `Copy` trait, like `i32`, the values are copied
 into the hash map. For owned values like `String`, the values will be moved and
@@ -156,7 +156,7 @@ Let's look at how to do each of these!
 
 #### Overwriting a Value
 
-If we insert a key and a value into a hashmap, then insert that same key with a
+If we insert a key and a value into a hash map, then insert that same key with a
 different value, the value associated with that key will be replaced. Even
 though this following code calls `insert` twice, the hash map will only contain
 one key/value pair because we're inserting the value for the Blue team's key
