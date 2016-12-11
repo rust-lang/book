@@ -37,9 +37,6 @@ Run it with various arguments. The binary is the first argument:
 
 ```text
 $ cargo run
-   Compiling greprs v0.1.0 (file:///Users/carolnichols/rust/greprs)
-    Finished debug [unoptimized + debuginfo] target(s) in 0.39 secs
-     Running `target/debug/greprs`
 ["target/debug/greprs"]
 
 $ cargo run needle haystack
@@ -144,9 +141,6 @@ fn main() {
 
 ```text
 $ cargo run test poem.txt
-   Compiling greprs v0.1.0 (file:///Users/carolnichols/rust/greprs)
-    Finished debug [unoptimized + debuginfo] target(s) in 0.36 secs
-     Running `target/debug/greprs test poem.txt`
 Searching for test
 In file poem.txt
 With text:
@@ -199,7 +193,6 @@ Pick three.";
 
 ```text
 $ cargo test
-   Compiling greprs v0.1.0 (file:///Users/carolnichols/rust/greprs)
 ...warnings...
     Finished debug [unoptimized + debuginfo] target(s) in 0.43 secs
      Running target/debug/deps/greprs-917c5edfc3cf199a
@@ -261,10 +254,6 @@ Pick three.";
 
 ```text
 $ cargo test
-   Compiling greprs v0.1.0 (file:///Users/carolnichols/rust/greprs)
-    Finished debug [unoptimized + debuginfo] target(s) in 0.56 secs
-     Running target/debug/deps/greprs-917c5edfc3cf199a
-
 running 1 test
 test test::one_result ... ok
 
@@ -318,9 +307,6 @@ fn main() {
 
 ```text
 $ cargo run the poem.txt
-   Compiling greprs v0.1.0 (file:///Users/carolnichols/rust/greprs)
-    Finished debug [unoptimized + debuginfo] target(s) in 0.38 secs
-     Running `target/debug/greprs the poem.txt`
 Then there's a pair of us — don't tell!
 To tell your name the livelong day
 ```
