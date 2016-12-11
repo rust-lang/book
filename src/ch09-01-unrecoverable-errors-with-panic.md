@@ -95,7 +95,7 @@ in this short program where the error was, it would be nicer if we could have
 Rust tell us what line in our program caused the error.
 
 That's what the next line, the `note` is about. If we set the `RUST_BACKTRACE`
-environment variable, we'll get a backtrace of exactly how the error happend.
+environment variable, we'll get a backtrace of exactly how the error happened.
 Let's try that. Listing 9-1 shows the output:
 
 <figure>

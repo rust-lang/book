@@ -224,7 +224,7 @@ We've been showing a bunch of different possibilities that we could define in
 our code for storing IP addresses of the two different kinds using an enum. It
 turns out, though, that wanting to store IP addresses and encode which kind
 they are is so common that [the standard library has a definition we can
-use!][IpAddr]<!-- ignore --> Let's look at how the standard libary defines
+use!][IpAddr]<!-- ignore --> Let's look at how the standard library defines
 `IpAddr`: it has the exact enum and variants that we've defined and used, but
 it chose to embed the address data inside the variants in the form of two
 different structs, which are defined differently for each variant:
