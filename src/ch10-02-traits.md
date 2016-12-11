@@ -36,7 +36,8 @@ We declare a trait with the `trait` keyword, then the trait's name. In this
 case, our trait will describe types which can be printed. Inside of curly
 braces, we declare a method signature, but instead of providing an
 implementation inside curly braces, we put a semicolon after the signature. A
-trait can have multiple methods in its body, with the method signatures listened one per line and each line ending in a semicolon.
+trait can have multiple methods in its body, with the method signatures listed
+one per line and each line ending in a semicolon.
 
 Implementing a trait for a particular type looks similar to implementing
 methods on a type since it's also done with the `impl` keyword, but we specify
