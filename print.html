@@ -3933,7 +3933,7 @@ impl Rectangle {
 }
 </code></pre>
 <p>To call this associated function, we use the <code>::</code> syntax with the struct name:
-<code>let sq = Rectange::square(3);</code>, for example. This function is namespaced by
+<code>let sq = Rectangle::square(3);</code>, for example. This function is namespaced by
 the struct: the <code>::</code> syntax is used for both associated functions and
 namespaces created by modules, which we’ll learn about in Chapter 7.</p>
 <h2>Summary</h2>
@@ -4126,7 +4126,7 @@ let loopback = IpAddr::V6(String::from(&quot;::1&quot;));
 our code for storing IP addresses of the two different kinds using an enum. It
 turns out, though, that wanting to store IP addresses and encode which kind
 they are is so common that <a href="../std/net/enum.IpAddr.html">the standard library has a definition we can
-use!</a><!-- ignore --> Let's look at how the standard libary defines
+use!</a><!-- ignore --> Let's look at how the standard library defines
 <code>IpAddr</code>: it has the exact enum and variants that we've defined and used, but
 it chose to embed the address data inside the variants in the form of two
 different structs, which are defined differently for each variant:</p>
@@ -5254,7 +5254,7 @@ parent modules.</li>
 child modules.</li>
 </ol>
 <h3>Privacy Examples</h3>
-<p>Let’s look at a few more examples to get some practice. Create a new libary
+<p>Let’s look at a few more examples to get some practice. Create a new library
 project and enter the code in Listing 7-5 into your new project’s <em>src/lib.rs</em>:</p>
 <figure>
 <span class="filename">Filename: src/lib.rs</span>
@@ -5566,7 +5566,7 @@ as the lines of text in a file or the prices of items in a shopping cart.</p>
 </code></pre>
 <p>Note that we added a type annotation here. Since we aren't inserting any values
 into this vector, Rust doesn't know what kind of elements we intend to store.
-This is an important point. Vectors are homogenous: they may store many values,
+This is an important point. Vectors are homogeneous: they may store many values,
 but those values must all be the same type. Vectors are implemented using
 generics, which Chapter 10 will cover how to use in your own types. For now,
 all you need to know is that the <code>Vec</code> type provided by the standard library
@@ -5727,7 +5727,7 @@ don't think we should repeat it here as well, but we added a reference. /Carol
 -->
 <p>If you don't know at the time that you're writing a program the exhaustive set
 of types the program will get at runtime to store in a vector, the enum
-technique won't work. Insetad, you can use a trait object, which we'll cover in
+technique won't work. Instead, you can use a trait object, which we'll cover in
 Chapter 13.</p>
 <p>Now that we've gone over some of the most common ways to use vectors, be sure
 to take a look at the API documentation for all of the many useful methods
@@ -5738,7 +5738,7 @@ on to the next collection type: <code>String</code>!</p>
 in the book for space reasons? We might want to justify sending them out of the
 book if we don't want to cover it here -->
 <!-- Yes, there are many, many methods on Vec: https://doc.rust-lang.org/stable/std/vec/struct.Vec.html
-Also there are occcasionally new methods available with new versions of the
+Also there are occasionally new methods available with new versions of the
 language, so there's no way we can be comprehensive here. We want the reader to
 use the API documentation in these situations since the purpose of the online
 docs is to be comprehensive and up to date. I personally wouldn't expect a book
@@ -5954,7 +5954,7 @@ encoded in UTF-8, the first byte of <code>З</code> is <code>208</code>, and the
 own. Returning <code>208</code> is likely not what a person would want if they asked for
 the first letter of this string, but that's the only data that Rust has at byte
 index 0. Returning the byte value is probably not what people want, even with
-only latin letters: <code>&amp;&quot;hello&quot;[0]</code> would return <code>104</code>, not <code>h</code>. To avoid
+only Latin letters: <code>&amp;&quot;hello&quot;[0]</code> would return <code>104</code>, not <code>h</code>. To avoid
 returning an unexpected value and causing bugs that might not be discovered
 immediately, Rust chooses to not compile this code at all and prevent
 misunderstandings earlier.</p>
@@ -6055,7 +6055,7 @@ into handling UTF-8 data upfront. This tradeoff exposes more of the complexity
 of strings than other programming languages do, but this will prevent you from
 having to handle errors involving non-ASCII characters later in your
 development lifecycle.</p>
-<p>Let's switch to something a bit less complex: Hash Map!</p>
+<p>Let's switch to something a bit less complex: hash map!</p>
 <h2>Hash Maps</h2>
 <p>The last of our fundamental collections is the <em>hash map</em>. The type <code>HashMap&lt;K, V&gt;</code> stores a mapping of keys of type <code>K</code> to values of type <code>V</code>. It does this
 via a <em>hashing function</em>, which determines how it places these keys and values
@@ -6090,7 +6090,7 @@ in the prelude. Hash maps also have less support from the standard library;
 there's no built-in macro to construct them, for example.</p>
 <p>Just like vectors, hash maps store their data on the heap. This <code>HashMap</code> has
 keys of type <code>&amp;str</code> and values of type <code>i32</code>. Like vectors, hash maps are
-homogenous: all of the keys must have the same type, and all of the values must
+homogeneous: all of the keys must have the same type, and all of the values must
 have the same type.</p>
 <p>Another way of constructing a hash map is by using the <code>collect</code> method on a
 vector of tuples, where each tuple consists of a key and its value. The
@@ -6111,7 +6111,7 @@ let scores: HashMap&lt;_, _&gt; = teams.iter().zip(initial_scores.iter()).collec
 want unless you specify. For the type parameters for the key and value types,
 however, we use underscores and Rust can infer the types that the hash map
 contains based on the types of the data in the vector.</p>
-<h3>Hashmaps and Ownership</h3>
+<h3>Hash Maps and Ownership</h3>
 <p>For types that implement the <code>Copy</code> trait, like <code>i32</code>, the values are copied
 into the hash map. For owned values like <code>String</code>, the values will be moved and
 the hash map will be the owner of those values:</p>
@@ -6178,7 +6178,7 @@ and ignore the new value, and only add the new value if the key <em>doesn't</em>
 already have a value. Or we could combine the old value and the new value.
 Let's look at how to do each of these!</p>
 <h4>Overwriting a Value</h4>
-<p>If we insert a key and a value into a hashmap, then insert that same key with a
+<p>If we insert a key and a value into a hash map, then insert that same key with a
 different value, the value associated with that key will be replaced. Even
 though this following code calls <code>insert</code> twice, the hash map will only contain
 one key/value pair because we're inserting the value for the Blue team's key
@@ -6374,7 +6374,7 @@ the implementation of <code>Vec&lt;T&gt;</code> in the standard library. While i
 in this short program where the error was, it would be nicer if we could have
 Rust tell us what line in our program caused the error.</p>
 <p>That's what the next line, the <code>note</code> is about. If we set the <code>RUST_BACKTRACE</code>
-environment variable, we'll get a backtrace of exactly how the error happend.
+environment variable, we'll get a backtrace of exactly how the error happened.
 Let's try that. Listing 9-1 shows the output:</p>
 <figure>
 <pre><code class="language-text">$ RUST_BACKTRACE=1 cargo run
@@ -6878,7 +6878,7 @@ can make use of them in your code.</p>
 <h1>Generics</h1>
 <p>One of the core tools a programming language gives you is the ability to deal
 effectively with duplication of code. It's important to minimize the amount of
-code that is duplicated throughout a program to make maintenace easier and
+code that is duplicated throughout a program to make maintenance easier and
 minimize logic errors. Maintenance will be easier if there's only one place
 that you need to change the code if you change your mind about how the program
 should work, rather than multiple places in the code. If your program's logic
@@ -7303,7 +7303,8 @@ method named <code>print</code>:</p>
 case, our trait will describe types which can be printed. Inside of curly
 braces, we declare a method signature, but instead of providing an
 implementation inside curly braces, we put a semicolon after the signature. A
-trait can have multiple methods in its body, with the method signatures listend one per line and each line ending in a semicolon.</p>
+trait can have multiple methods in its body, with the method signatures listed
+one per line and each line ending in a semicolon.</p>
 <p>Implementing a trait for a particular type looks similar to implementing
 methods on a type since it's also done with the <code>impl</code> keyword, but we specify
 the trait name as well. Inside the <code>impl</code> block, we specify definitions for the
@@ -7963,7 +7964,7 @@ body; that's good enough to pass! We can run the tests with <code>cargo test</co
 <pre><code class="language-text">$ cargo test
    Compiling adder v0.1.0 (file:///projects/adder)
     Finished debug [unoptimized + debuginfo] target(s) in 0.22 secs
-     Running target/debug/deps/adder-ce99bcc2479f4607
+     Running target/debug/deps/adder-abcabcabc
 
 running 1 test
 test it_works ... ok
@@ -8003,7 +8004,7 @@ argument. If the argument is <code>true</code>, nothing happens. If the argument
 <pre><code class="language-text">$ cargo test
    Compiling adder v0.1.0 (file:///projects/adder)
     Finished debug [unoptimized + debuginfo] target(s) in 0.22 secs
-     Running target/debug/deps/adder-ce99bcc2479f4607
+     Running target/debug/deps/adder-abcabcabc
 
 running 1 test
 test it_works ... FAILED
@@ -8075,7 +8076,7 @@ if left_val == right_val {
     )
 }
 </code></pre>
-<p>Let's take a look at a test that will fail becasue <code>hello</code> is not equal to
+<p>Let's take a look at a test that will fail because <code>hello</code> is not equal to
 <code>world</code>. We've also added a custom error message, <code>greeting operation failed</code>:</p>
 <p><span class="filename">Filename: src/lib.rs</span></p>
 <pre><code class="language-rust">#[test]
@@ -8211,7 +8212,7 @@ fn one_hundred() {
 arguments, as we've already seen, runs all the tests:</p>
 <pre><code class="language-text">$ cargo test
     Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
-     Running target/debug/deps/adder-06a75b4a1f2515e9
+     Running target/debug/deps/adder-abcabcabc
 
 running 3 tests
 test add_three_and_two ... ok
@@ -8223,7 +8224,7 @@ test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured
 <p>We can pass the name of any test function to run only that test:</p>
 <pre><code class="language-text">$ cargo test one_hundred
     Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
-     Running target/debug/deps/adder-06a75b4a1f2515e9
+     Running target/debug/deps/adder-abcabcabc
 
 running 1 test
 test one_hundred ... ok
@@ -8233,7 +8234,7 @@ test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured
 <p>We can also pass part of a name, and <code>cargo test</code> will run all tests that match:</p>
 <pre><code class="language-text">$ cargo test add
     Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
-     Running target/debug/deps/adder-06a75b4a1f2515e9
+     Running target/debug/deps/adder-abcabcabc
 
 running 2 tests
 test add_three_and_two ... ok
@@ -8279,7 +8280,7 @@ mod subtracting {
 appear in the test names in the output:</p>
 <pre><code class="language-text">$ cargo test
     Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
-     Running target/debug/deps/adder-d84f1c6cb24adeb4
+     Running target/debug/deps/adder-abcabcabc
 
 running 4 tests
 test adding::add_two_and_two ... ok
@@ -8291,7 +8292,7 @@ test adding::one_hundred ... ok
 of the tests in the subtracting module:</p>
 <pre><code class="language-text">$ cargo test adding
     Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
-     Running target/debug/deps/adder-d84f1c6cb24adeb4
+     Running target/debug/deps/adder-abcabcabc
 
 running 3 tests
 test adding::add_three_and_two ... ok
@@ -8323,7 +8324,7 @@ not:</p>
 <pre><code class="language-text">$ cargo test
    Compiling adder v0.1.0 (file:///projects/adder)
     Finished debug [unoptimized + debuginfo] target(s) in 0.24 secs
-     Running target/debug/deps/adder-ce99bcc2479f4607
+     Running target/debug/deps/adder-abcabcabc
 
 running 2 tests
 test expensive_test ... ignored
@@ -8341,7 +8342,7 @@ test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured
 <code>cargo test -- --ignored</code>:</p>
 <pre><code class="language-text">$ cargo test -- --ignored
     Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
-     Running target/debug/deps/adder-ce99bcc2479f4607
+     Running target/debug/deps/adder-abcabcabc
 
 running 1 test
 test expensive_test ... ok
@@ -8518,7 +8519,7 @@ own crate, so we don't need to separate the test code further.</p>
 <p>Let's run the integration tests, which also get run when we run <code>cargo test</code>:</p>
 <pre><code class="language-text">$ cargo test
    Compiling adder v0.1.0 (file:///projects/adder)
-     Running target/debug/deps/adder-91b3e234d4ed382a
+     Running target/debug/deps/adder-abcabcabc
 
 running 1 test
 test tests::it_works ... ok
@@ -8705,8 +8706,8 @@ modifiability. And indeed, it says</p>
 <blockquote>
 <p>Indeed, under the implementation strategy we outlined above, in which the
 compiler is unaware of threads, it is allowed to transform code subject only
-to sequential cor- rectness constraints and hence could generate the code
-con- taining a race.</p>
+to sequential correctness constraints and hence could generate the code
+containing a race.</p>
 </blockquote>
 <p>However, in Rust, this re-ordering can't happen: Rust won't let you alias x and
 y between two threads without some sort of synchronization primitive. But this
@@ -8799,7 +8800,7 @@ well:</p>
 </code></pre>
 <p>In simple cases like this, two <code>let</code>s may be clearer, but in others, creating
 multiple variables at once is nice. As we become more proficient in Rust, we’ll
-figure out which style is better, but it’s mostly a judgement call.</p>
+figure out which style is better, but it’s mostly a judgment call.</p>
 <h2>Type annotations</h2>
 <p>Most of the time, Rust uses <em>type inference</em>, meaning that it attempts to infer
 the types of your variables rather than you having to declare them explicitly

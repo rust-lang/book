@@ -248,7 +248,7 @@ let loopback = IpAddr::V6(String::from(&quot;::1&quot;));
 our code for storing IP addresses of the two different kinds using an enum. It
 turns out, though, that wanting to store IP addresses and encode which kind
 they are is so common that <a href="../std/net/enum.IpAddr.html">the standard library has a definition we can
-use!</a><!-- ignore --> Let's look at how the standard libary defines
+use!</a><!-- ignore --> Let's look at how the standard library defines
 <code>IpAddr</code>: it has the exact enum and variants that we've defined and used, but
 it chose to embed the address data inside the variants in the form of two
 different structs, which are defined differently for each variant:</p>

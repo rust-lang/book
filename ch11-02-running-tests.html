@@ -129,7 +129,7 @@ fn one_hundred() {
 arguments, as we've already seen, runs all the tests:</p>
 <pre><code class="language-text">$ cargo test
     Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
-     Running target/debug/deps/adder-06a75b4a1f2515e9
+     Running target/debug/deps/adder-abcabcabc
 
 running 3 tests
 test add_three_and_two ... ok
@@ -141,7 +141,7 @@ test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured
 <p>We can pass the name of any test function to run only that test:</p>
 <pre><code class="language-text">$ cargo test one_hundred
     Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
-     Running target/debug/deps/adder-06a75b4a1f2515e9
+     Running target/debug/deps/adder-abcabcabc
 
 running 1 test
 test one_hundred ... ok
@@ -151,7 +151,7 @@ test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured
 <p>We can also pass part of a name, and <code>cargo test</code> will run all tests that match:</p>
 <pre><code class="language-text">$ cargo test add
     Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
-     Running target/debug/deps/adder-06a75b4a1f2515e9
+     Running target/debug/deps/adder-abcabcabc
 
 running 2 tests
 test add_three_and_two ... ok
@@ -197,7 +197,7 @@ mod subtracting {
 appear in the test names in the output:</p>
 <pre><code class="language-text">$ cargo test
     Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
-     Running target/debug/deps/adder-d84f1c6cb24adeb4
+     Running target/debug/deps/adder-abcabcabc
 
 running 4 tests
 test adding::add_two_and_two ... ok
@@ -209,7 +209,7 @@ test adding::one_hundred ... ok
 of the tests in the subtracting module:</p>
 <pre><code class="language-text">$ cargo test adding
     Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
-     Running target/debug/deps/adder-d84f1c6cb24adeb4
+     Running target/debug/deps/adder-abcabcabc
 
 running 3 tests
 test adding::add_three_and_two ... ok
@@ -241,7 +241,7 @@ not:</p>
 <pre><code class="language-text">$ cargo test
    Compiling adder v0.1.0 (file:///projects/adder)
     Finished debug [unoptimized + debuginfo] target(s) in 0.24 secs
-     Running target/debug/deps/adder-ce99bcc2479f4607
+     Running target/debug/deps/adder-abcabcabc
 
 running 2 tests
 test expensive_test ... ignored
@@ -259,7 +259,7 @@ test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured
 <code>cargo test -- --ignored</code>:</p>
 <pre><code class="language-text">$ cargo test -- --ignored
     Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
-     Running target/debug/deps/adder-ce99bcc2479f4607
+     Running target/debug/deps/adder-abcabcabc
 
 running 1 test
 test expensive_test ... ok

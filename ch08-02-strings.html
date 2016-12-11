@@ -277,7 +277,7 @@ encoded in UTF-8, the first byte of <code>З</code> is <code>208</code>, and the
 own. Returning <code>208</code> is likely not what a person would want if they asked for
 the first letter of this string, but that's the only data that Rust has at byte
 index 0. Returning the byte value is probably not what people want, even with
-only latin letters: <code>&amp;&quot;hello&quot;[0]</code> would return <code>104</code>, not <code>h</code>. To avoid
+only Latin letters: <code>&amp;&quot;hello&quot;[0]</code> would return <code>104</code>, not <code>h</code>. To avoid
 returning an unexpected value and causing bugs that might not be discovered
 immediately, Rust chooses to not compile this code at all and prevent
 misunderstandings earlier.</p>
@@ -378,7 +378,7 @@ into handling UTF-8 data upfront. This tradeoff exposes more of the complexity
 of strings than other programming languages do, but this will prevent you from
 having to handle errors involving non-ASCII characters later in your
 development lifecycle.</p>
-<p>Let's switch to something a bit less complex: Hash Map!</p>
+<p>Let's switch to something a bit less complex: hash map!</p>
 
                 </div>
 

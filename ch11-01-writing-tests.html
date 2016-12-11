@@ -97,7 +97,7 @@ body; that's good enough to pass! We can run the tests with <code>cargo test</co
 <pre><code class="language-text">$ cargo test
    Compiling adder v0.1.0 (file:///projects/adder)
     Finished debug [unoptimized + debuginfo] target(s) in 0.22 secs
-     Running target/debug/deps/adder-ce99bcc2479f4607
+     Running target/debug/deps/adder-abcabcabc
 
 running 1 test
 test it_works ... ok
@@ -137,7 +137,7 @@ argument. If the argument is <code>true</code>, nothing happens. If the argument
 <pre><code class="language-text">$ cargo test
    Compiling adder v0.1.0 (file:///projects/adder)
     Finished debug [unoptimized + debuginfo] target(s) in 0.22 secs
-     Running target/debug/deps/adder-ce99bcc2479f4607
+     Running target/debug/deps/adder-abcabcabc
 
 running 1 test
 test it_works ... FAILED
@@ -209,7 +209,7 @@ if left_val == right_val {
     )
 }
 </code></pre>
-<p>Let's take a look at a test that will fail becasue <code>hello</code> is not equal to
+<p>Let's take a look at a test that will fail because <code>hello</code> is not equal to
 <code>world</code>. We've also added a custom error message, <code>greeting operation failed</code>:</p>
 <p><span class="filename">Filename: src/lib.rs</span></p>
 <pre><code class="language-rust">#[test]

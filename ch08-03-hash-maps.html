@@ -101,7 +101,7 @@ in the prelude. Hash maps also have less support from the standard library;
 there's no built-in macro to construct them, for example.</p>
 <p>Just like vectors, hash maps store their data on the heap. This <code>HashMap</code> has
 keys of type <code>&amp;str</code> and values of type <code>i32</code>. Like vectors, hash maps are
-homogenous: all of the keys must have the same type, and all of the values must
+homogeneous: all of the keys must have the same type, and all of the values must
 have the same type.</p>
 <p>Another way of constructing a hash map is by using the <code>collect</code> method on a
 vector of tuples, where each tuple consists of a key and its value. The
@@ -122,7 +122,7 @@ let scores: HashMap&lt;_, _&gt; = teams.iter().zip(initial_scores.iter()).collec
 want unless you specify. For the type parameters for the key and value types,
 however, we use underscores and Rust can infer the types that the hash map
 contains based on the types of the data in the vector.</p>
-<h3>Hashmaps and Ownership</h3>
+<h3>Hash Maps and Ownership</h3>
 <p>For types that implement the <code>Copy</code> trait, like <code>i32</code>, the values are copied
 into the hash map. For owned values like <code>String</code>, the values will be moved and
 the hash map will be the owner of those values:</p>
@@ -189,7 +189,7 @@ and ignore the new value, and only add the new value if the key <em>doesn't</em>
 already have a value. Or we could combine the old value and the new value.
 Let's look at how to do each of these!</p>
 <h4>Overwriting a Value</h4>
-<p>If we insert a key and a value into a hashmap, then insert that same key with a
+<p>If we insert a key and a value into a hash map, then insert that same key with a
 different value, the value associated with that key will be replaced. Even
 though this following code calls <code>insert</code> twice, the hash map will only contain
 one key/value pair because we're inserting the value for the Blue team's key

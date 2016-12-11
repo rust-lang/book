@@ -79,7 +79,7 @@ as the lines of text in a file or the prices of items in a shopping cart.</p>
 </code></pre>
 <p>Note that we added a type annotation here. Since we aren't inserting any values
 into this vector, Rust doesn't know what kind of elements we intend to store.
-This is an important point. Vectors are homogenous: they may store many values,
+This is an important point. Vectors are homogeneous: they may store many values,
 but those values must all be the same type. Vectors are implemented using
 generics, which Chapter 10 will cover how to use in your own types. For now,
 all you need to know is that the <code>Vec</code> type provided by the standard library
@@ -240,7 +240,7 @@ don't think we should repeat it here as well, but we added a reference. /Carol
 -->
 <p>If you don't know at the time that you're writing a program the exhaustive set
 of types the program will get at runtime to store in a vector, the enum
-technique won't work. Insetad, you can use a trait object, which we'll cover in
+technique won't work. Instead, you can use a trait object, which we'll cover in
 Chapter 13.</p>
 <p>Now that we've gone over some of the most common ways to use vectors, be sure
 to take a look at the API documentation for all of the many useful methods
@@ -251,7 +251,7 @@ on to the next collection type: <code>String</code>!</p>
 in the book for space reasons? We might want to justify sending them out of the
 book if we don't want to cover it here -->
 <!-- Yes, there are many, many methods on Vec: https://doc.rust-lang.org/stable/std/vec/struct.Vec.html
-Also there are occcasionally new methods available with new versions of the
+Also there are occasionally new methods available with new versions of the
 language, so there's no way we can be comprehensive here. We want the reader to
 use the API documentation in these situations since the purpose of the online
 docs is to be comprehensive and up to date. I personally wouldn't expect a book
