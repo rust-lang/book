@@ -43,6 +43,7 @@ CString
 ctrl
 Ctrl
 deallocated
+deallocating
 debuginfo
 deps
 deref
@@ -130,6 +131,7 @@ Mutex
 namespace
 namespaced
 namespaces
+namespacing
 nocapture
 nomicon
 Nomicon
