@@ -35,12 +35,12 @@ condition. In this case, the condition checks whether or not the variable
 condition is true is placed immediately after the condition inside curly
 braces. Blocks of code associated with the conditions in `if` expressions are
 sometimes called *arms*, just like the arms in `match` expressions that we
-discussed in the “Comparing the Guess to the Secret Number” section of Chapter
-2. Optionally, we can also include an `else` expression, which we chose to do
-here, to give the program an alternative block of code to execute should the
-condition evaluate to false. If you don’t provide an `else` expression and the
-condition is false, the program will just skip the `if` block and move on to
-the next bit of code.
+discussed in the “Comparing the Guess to the Secret Number” section of
+Chapter 2. Optionally, we can also include an `else` expression, which we chose
+to do here, to give the program an alternative block of code to execute should
+the condition evaluate to false. If you don’t provide an `else` expression and
+the condition is false, the program will just skip the `if` block and move on
+to the next bit of code.
 
 Try running this code; you should see the following output:
 
