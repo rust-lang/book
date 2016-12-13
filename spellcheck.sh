@@ -1,5 +1,7 @@
 #!/bin/bash
 
+aspell --version
+
 # Checks project markdown files for spell errors
 
 # Notes:
@@ -56,6 +58,7 @@ elif [[ "$mode" == "list" ]]; then
     declare -i retval=0
 
     for fname in "${markdown_sources[@]}"; do
+        echo "command = aspell --ignore 3 --personal=\"$dict_filename\" \"$mode\" < \"$fname\""
         command=$(aspell --ignore 3 --personal="$dict_filename" "$mode" < "$fname")
         if [[ -n "$command" ]]; then
             for error in $command; do
