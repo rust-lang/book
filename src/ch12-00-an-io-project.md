@@ -15,9 +15,8 @@ In order to do a good job, we will:
 - Organize code (using what we learned in modules, ch 7)
 - Use vectors and strings (collections, ch 8)
 - Handle errors (ch 9)
+- Use traits and lifetimes where appropriate (ch 10)
 - Have tests (ch 11)
-
-Generics/traits/lifetimes?
 
 ## Command line arguments
 
@@ -53,17 +52,24 @@ $ cargo run needle haystack
 
 What we want to do is:
 
-1. Discard the binary name
-2. Get the search string, which will be in the next argument
-3. Get the filename we want to search in as the next argument
+1. Discard the binary name that will always be the first argument
+2. Collect the rest of the arguments and store them in a configuration struct
+3. Pass the configuration to a `run` function that returns a `Result`
+4. If there were errors, print information about them and exit with 1.
 
-We'll ignore any arguments after that, and we'll error if we don't get enough
-arguments.
+The reason we want to have a `run` function in `src/lib.rs` is that it will
+make it easier to write tests and pass in different configurations, without
+having to actually run our binary from the command line.
 
 Filename: src/main.rs
 
 ```rust,ignore
+extern crate greprs;
+
+use greprs::Config;
+
 use std::env;
+use std::process;
 
 fn main() {
     let mut args = env::args();
@@ -71,16 +77,42 @@ fn main() {
     // Discard the name of the binary
     args.next();
 
-    // `next` returns an `Option`
-    let search = args.next().expect(
-        "No search string or filename found. Usage: greprs <search> <file>"
-    );
-    let filename = args.next().expect(
-        "No filename found. Usage: greprs <search> <file>"
-    );
+    let config = Config {
+        arguments: args.collect(),
+    };
+
+    if let Err(e) = greprs::run(config) {
+        println!("Application error: {}", e);
+        process::exit(1);
+    }
+}
+```
+
+The code in `src/lib.rs` now needs to define a `Config` struct and a `run`
+function. The `run` function in `src/lib.rs` will:
+
+1. Get the search string, which will be in the next argument
+2. Get the filename we want to search in as the next argument
+
+This function will ignore any arguments after that, and will return an error if
+it doesn't get enough arguments.
+
+Filename: src/lib.rs
+
+```rust
+pub struct Config {
+    pub arguments: Vec<String>,
+}
+
+pub fn run(config: Config) -> Result<(), String> {
+    let mut args = config.arguments.iter();
+
+    let search = args.next().ok_or("No search string or filename found")?;
+    let filename = args.next().ok_or("No filename found")?;
 
     println!("Searching for {}", search);
     println!("In file {}", filename);
+    Ok(())
 }
 ```
 
@@ -88,10 +120,10 @@ Try it out with no arguments, one argument, and two arguments:
 
 ```text
 $ cargo run
-thread 'main' panicked at 'No search string or filename found. Usage: greprs <search> <file>', ../src/libcore/option.rs:705
+Application error: No search string or filename found
 
 $ cargo run needle
-thread 'main' panicked at 'No filename found. Usage: greprs <search> <file>', ../src/libcore/option.rs:705
+Application error: No filename found
 
 $ cargo run needle haystack
 Searching for needle
@@ -121,35 +153,32 @@ short, but that has multiple lines and some repetition. We could search through
 code; that gets a bit meta and possibly confusing... Changes to this are most
 welcome. /Carol -->
 
-Filename: src/main.rs
+Filename: src/lib.rs
 
-```rust,ignore
-use std::env;
-use std::io::prelude::*;
+```rust
 use std::fs::File;
+use std::io::prelude::*;
+use std::error::Error;
 
-fn main() {
-    let mut args = env::args();
+pub struct Config {
+    pub arguments: Vec<String>,
+}
 
-    // Discard the name of the binary
-    args.next();
+pub fn run(config: Config) -> Result<(), Box<Error>> {
+    let mut args = config.arguments.iter();
 
-    // `next` returns an `Option`
-    let search = args.next().expect(
-        "No search string or filename found. Usage: greprs <search> <file>"
-    );
-    let filename = args.next().expect(
-        "No filename found. Usage: greprs <search> <file>"
-    );
+    let search = args.next().ok_or("No search string or filename found")?;
+    let filename = args.next().ok_or("No filename found")?;
 
     println!("Searching for {}", search);
     println!("In file {}", filename);
 
-    let mut f = File::open(filename).expect("Could not open file.");
+    let mut f = File::open(filename)?;
     let mut contents = String::new();
-    f.read_to_string(&mut contents).expect("Could not read file");
+    f.read_to_string(&mut contents)?;
 
     println!("With text:\n{}", contents);
+    Ok(())
 }
 ```
 
@@ -171,23 +200,24 @@ To an admiring bog!
 
 ## Tests
 
-Make a src/lib.rs and start some tests.
+Start some tests in *src/lib.rs*.
 
 We want a function that will take a search term and contents, and return a
-vector of lines from the contents that contain the search term.
+vector of lines from the contents that contain the search term. Here's a
+failing test:
 
 <!-- Oh hey we can use lifetimes here /Carol -->
 
 File: src/lib.rs
 
 ```rust
-pub fn grep<'a>(search: &str, contents: &'a str) -> Vec<&'a str> {
+fn grep<'a>(search: &str, contents: &'a str) -> Vec<&'a str> {
     vec![]
 }
 
 #[cfg(test)]
 mod test {
-    use super::*;
+    use grep;
 
     #[test]
     fn one_result() {
@@ -229,7 +259,7 @@ test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured
 error: test failed
 ```
 
-Get the test passing by:
+We're going to get the test passing by:
 
 1. Getting an iterator over each line of the contents with the `lines` function
 2. Use the `filter` method and specify the condition a line should meet in
@@ -284,40 +314,40 @@ running 0 tests
 test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured
 ```
 
-## Call the function from main
+## Call the `grep` function from the `run` function
 
-Filename: src/main.rs
+Filename: src/lib.rs
 
-```rust,ignore
-extern crate greprs;
-
-use std::env;
-use std::io::prelude::*;
+```rust
 use std::fs::File;
+use std::io::prelude::*;
+use std::error::Error;
 
-fn main() {
-    let mut args = env::args();
+pub struct Config {
+    pub arguments: Vec<String>,
+}
 
-    // Discard the name of the binary
-    args.next();
+pub fn run(config: Config) -> Result<(), Box<Error>> {
+    let mut args = config.arguments.iter();
 
-    // `next` returns an `Option`
-    let search = args.next().expect(
-        "No search string or filename found. Usage: greprs <search> <file>"
-    );
-    let filename = args.next().expect(
-        "No filename found. Usage: greprs <search> <file>"
-    );
+    let search = args.next().ok_or("No search string or filename found")?;
+    let filename = args.next().ok_or("No filename found")?;
 
-    let mut f = File::open(filename).expect("Could not open file.");
+    let mut f = File::open(filename)?;
     let mut contents = String::new();
-    f.read_to_string(&mut contents).expect("Could not read file");
+    f.read_to_string(&mut contents)?;
 
-    let results = greprs::grep(&search, &contents);
+    let results = grep(&search, &contents);
 
     for line in results {
         println!("{}", line);
     }
+
+    Ok(())
+}
+
+fn grep<'a>(search: &str, contents: &'a str) -> Vec<&'a str> {
+    contents.lines().filter(|line| line.contains(search)).collect()
 }
 ```
 
@@ -329,7 +359,11 @@ To tell your name the livelong day
 
 ## Working with Environment Variables
 
-### Implement a Case-Insensitive `grep` Function
+Enhancement we want to add: allow the user of our program to set an environment
+variable in their terminal session to do searches that match on case exactly or
+not.
+
+### Implement and Test a Case-Insensitive `grep` Function
 
 Filename: src/lib.rs
 
@@ -348,7 +382,7 @@ pub fn grep_case_insensitive<'a>(search: &str, contents: &'a str)
 
 #[cfg(test)]
 mod test {
-    use super::*;
+    use {grep, grep_case_insensitive};
 
     #[test]
     fn case_sensitive() {
@@ -384,45 +418,71 @@ Trust me.";
 
 ### Have `main` Check the Environment Variable
 
+And put the result in the configuration that gets passed to `run`.
+
 Filename: src/main.rs
 
 ```rust,ignore
 extern crate greprs;
 
+use greprs::Config;
+
 use std::env;
-use std::io::prelude::*;
-use std::fs::File;
+use std::process;
 
 fn main() {
-    let mut case_sensitive = true;
-    for (var, _) in env::vars() {
-        if var == "CASE_INSENSITIVE" {
-            case_sensitive = false;
-        }
-    }
-
     let mut args = env::args();
 
     // Discard the name of the binary
     args.next();
 
-    // `next` returns an `Option`
-    let search = args.next().expect(
-        "No search string or filename found. Usage: greprs <search> <file>"
-    );
-    let filename = args.next().expect(
-        "No filename found. Usage: greprs <search> <file>"
-    );
+    let case_insensitive = env::vars().find(|&(ref var, _)| {
+        var ==  "CASE_INSENSITIVE"
+    }).is_some();
 
-    let results = if case_sensitive {
-        greprs::grep(search, &contents)
+    let config = Config {
+        arguments: args.collect(),
+        case_insensitive: case_insensitive,
+    };
+
+    if let Err(e) = greprs::run(config) {
+        println!("Application error: {}", e);
+        process::exit(1);
+    }
+}
+```
+
+Modify `run` to decide which `grep` function to call based on the configuration.
+
+Filename: src/lib.rs
+
+```rust
+pub struct Config {
+    pub arguments: Vec<String>,
+    pub case_insensitive: bool,
+}
+
+pub fn run(config: Config) -> Result<(), Box<Error>> {
+    let mut args = config.arguments.iter();
+
+    let search = args.next().ok_or("No search string or filename found")?;
+    let filename = args.next().ok_or("No filename found")?;
+
+    let mut f = File::open(filename)?;
+    let mut contents = String::new();
+    f.read_to_string(&mut contents)?;
+
+    let results = if config.case_insensitive {
+        grep_case_insensitive(&search, &contents)
     } else {
-        greprs::grep_case_insensitive(search, &contents)
+        grep(&search, &contents)
     };
 
     for line in results {
         println!("{}", line);
     }
+
+    Ok(())
 }
 ```
 
@@ -442,123 +502,66 @@ To an admiring bog!
 
 ## Write to `stderr` Instead of `stdout`
 
-Let's say we want to output statistics about how many lines have matched to `stderr`.
+Let's say we want to output any errors to `stderr` instead of `stdout`. Right now, if we run:
+
+```text
+$ cargo run > output.txt
+```
+
+The contents of *output.txt* will be:
+
+```text
+Application error: No search string or filename found
+```
+
+Even if we're saving the output to a file, we want to see errors on the screen.
 
 Filename: src/main.rs
 
 ```rust,ignore
 extern crate greprs;
 
+use greprs::Config;
+
 use std::env;
+use std::process;
 use std::io::prelude::*;
-use std::fs::File;
 
 fn main() {
-    let mut stderr = std::io::stderr();
-
-    let case_insensitive = env::vars().find(|&(ref var, _)| {
-        var ==  "CASE_INSENSITIVE"
-    }).is_some();
-
     let mut args = env::args();
 
     // Discard the name of the binary
     args.next();
 
-    // `next` returns an `Option`
-    let search = args.next().expect(
-        "No search string or filename found. Usage: greprs <search> <file>"
-    );
-    let filename = args.next().expect(
-        "No filename found. Usage: greprs <search> <file>"
-    );
+    let case_insensitive = env::vars().find(|&(ref var, _)| {
+        var ==  "CASE_INSENSITIVE"
+    }).is_some();
 
-    let mut f = File::open(filename).expect("Could not open file.");
-    let mut contents = String::new();
-    f.read_to_string(&mut contents).expect("Could not read file");
-
-    let results = if case_insensitive {
-        greprs::grep_case_insensitive(&search, &contents)
-    } else {
-        greprs::grep(&search, &contents)
+    let config = Config {
+        arguments: args.collect(),
+        case_insensitive: case_insensitive,
     };
 
-    let matching_lines = results.len();
-    writeln!(
-        &mut stderr,
-        "{} lines matched",
-        matching_lines
-    ).expect("Could not write to stderr");
+    if let Err(e) = greprs::run(config) {
+        let mut stderr = std::io::stderr();
 
-    for line in results {
-        println!("{}", line);
+        writeln!(
+            &mut stderr,
+            "Application error: {}",
+            e
+        ).expect("Could not write to stderr");
+
+        process::exit(1);
     }
 }
 ```
 
-Filename: src/lib.rs
-
-```rust
-pub fn grep<'a>(search: &str, contents: &'a str) -> Vec<&'a str> {
-    contents.lines().filter(|line| line.contains(search)).collect()
-}
-
-pub fn grep_case_insensitive<'a>(search: &str, contents: &'a str)
-       -> Vec<&'a str> {
-    let search = search.to_lowercase();
-    contents.lines().filter(|line| {
-        line.to_lowercase().contains(&search)
-    }).collect()
-}
-
-#[cfg(test)]
-mod test {
-    use super::*;
-
-    #[test]
-    fn case_sensitive() {
-        let search = "duct";
-        let contents = "\
-Rust:
-safe, fast, productive.
-Pick three.
-Duct tape.";
-
-        assert_eq!(
-            vec!["safe, fast, productive."],
-            grep(search, contents)
-        );
-    }
-
-    #[test]
-    fn case_insensitive() {
-        let search = "rust";
-        let contents = "\
-Rust:
-safe, fast, productive.
-Pick three.
-Trust me.";
-
-        assert_eq!(
-            vec!["Rust:", "Trust me."],
-            grep_case_insensitive(search, contents)
-        );
-    }
-}
-```
-
-Output:
+Now the output when we don't pass any arguments but redirect stdout to a file
+is:
 
 ```text
-$ cargo run to poem.txt
-2/9 lines matched
-Are you nobody, too?
-How dreary to be somebody!
+$ cargo run > output.txt
+Application error: No search string or filename found
 ```
 
-Redirecting stdout to a file, stderr still gets displayed:
-
-```text
-$ cargo run to poem.txt > new_poem.txt
-2/9 lines matched
-```
+and the file is empty.
