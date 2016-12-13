@@ -21,7 +21,13 @@ Generics/traits/lifetimes?
 
 ## Command line arguments
 
-* Use `std::env::args()`
+To get the arguments passed to the binary, use `std::env::args()`. This
+function returns an *iterator*. We're going to use a bunch of iterators and
+useful functions on them in this chapter, and chapter 16 will go into depth on
+how iterators work.
+
+We can see all the items in the iterator by collecting them into a vector and
+printing it out using debug formatting:
 
 Filename: src/main.rs
 
@@ -45,13 +51,14 @@ $ cargo run needle haystack
 ["target/debug/greprs", "needle", "haystack"]
 ```
 
-Discard the binary name, next argument is the search string, next argument is
-the filename we want to search in:
+What we want to do is:
 
-<!-- I'd probably use `next` here instead of collecting, but we haven't really
-covered iterators yet and we have covered vectors.
+1. Discard the binary name
+2. Get the search string, which will be in the next argument
+3. Get the filename we want to search in as the next argument
 
-/Carol -->
+We'll ignore any arguments after that, and we'll error if we don't get enough
+arguments.
 
 Filename: src/main.rs
 
@@ -59,12 +66,16 @@ Filename: src/main.rs
 use std::env;
 
 fn main() {
-    let args: Vec<String> = env::args().collect();
+    let mut args = env::args();
 
-    let search = args.get(1).expect(
+    // Discard the name of the binary
+    args.next();
+
+    // `next` returns an `Option`
+    let search = args.next().expect(
         "No search string or filename found. Usage: greprs <search> <file>"
     );
-    let filename = args.get(2).expect(
+    let filename = args.next().expect(
         "No filename found. Usage: greprs <search> <file>"
     );
 
@@ -73,7 +84,7 @@ fn main() {
 }
 ```
 
-Trying it out:
+Try it out with no arguments, one argument, and two arguments:
 
 ```text
 $ cargo run
@@ -118,12 +129,16 @@ use std::io::prelude::*;
 use std::fs::File;
 
 fn main() {
-    let args: Vec<String> = env::args().collect();
+    let mut args = env::args();
 
-    let search = args.get(1).expect(
+    // Discard the name of the binary
+    args.next();
+
+    // `next` returns an `Option`
+    let search = args.next().expect(
         "No search string or filename found. Usage: greprs <search> <file>"
     );
-    let filename = args.get(2).expect(
+    let filename = args.next().expect(
         "No filename found. Usage: greprs <search> <file>"
     );
 
@@ -214,24 +229,19 @@ test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured
 error: test failed
 ```
 
-Get the test passing:
+Get the test passing by:
 
-<!-- Again, I'd want to do a `filter` and a `collect` here instead but we
-haven't covered iterators yet /Carol -->
+1. Getting an iterator over each line of the contents with the `lines` function
+2. Use the `filter` method and specify the condition a line should meet in
+   order to pass through the filter.
+3. The condition is that the line contains the search string
+4. Collect the results of the filtered iterator into a vector and return it
 
 File: src/lib.rs
 
 ```rust
 pub fn grep<'a>(search: &str, contents: &'a str) -> Vec<&'a str> {
-    let mut results = vec![];
-
-    for line in contents.lines() {
-        if line.contains(search) {
-            results.push(line);
-        }
-    }
-
-    results
+    contents.lines().filter(|line| line.contains(search)).collect()
 }
 
 #[cfg(test)]
@@ -286,12 +296,16 @@ use std::io::prelude::*;
 use std::fs::File;
 
 fn main() {
-    let args: Vec<String> = env::args().collect();
+    let mut args = env::args();
 
-    let search = args.get(1).expect(
+    // Discard the name of the binary
+    args.next();
+
+    // `next` returns an `Option`
+    let search = args.next().expect(
         "No search string or filename found. Usage: greprs <search> <file>"
     );
-    let filename = args.get(2).expect(
+    let filename = args.next().expect(
         "No filename found. Usage: greprs <search> <file>"
     );
 
@@ -299,7 +313,7 @@ fn main() {
     let mut contents = String::new();
     f.read_to_string(&mut contents).expect("Could not read file");
 
-    let results = greprs::grep(search, &contents);
+    let results = greprs::grep(&search, &contents);
 
     for line in results {
         println!("{}", line);
@@ -321,29 +335,15 @@ Filename: src/lib.rs
 
 ```rust
 pub fn grep<'a>(search: &str, contents: &'a str) -> Vec<&'a str> {
-    let mut results = vec![];
-
-    for line in contents.lines() {
-        if line.contains(search) {
-            results.push(line);
-        }
-    }
-
-    results
+    contents.lines().filter(|line| line.contains(search)).collect()
 }
 
 pub fn grep_case_insensitive<'a>(search: &str, contents: &'a str)
        -> Vec<&'a str> {
-    let mut results = vec![];
     let search = search.to_lowercase();
-
-    for line in contents.lines() {
-        if line.to_lowercase().contains(&search) {
-            results.push(line);
-        }
-    }
-
-    results
+    contents.lines().filter(|line| {
+        line.to_lowercase().contains(&search)
+    }).collect()
 }
 
 #[cfg(test)]
@@ -394,8 +394,6 @@ use std::io::prelude::*;
 use std::fs::File;
 
 fn main() {
-    let args: Vec<String> = env::args().collect();
-
     let mut case_sensitive = true;
     for (var, _) in env::vars() {
         if var == "CASE_INSENSITIVE" {
@@ -403,16 +401,18 @@ fn main() {
         }
     }
 
-    let search = args.get(1).expect(
+    let mut args = env::args();
+
+    // Discard the name of the binary
+    args.next();
+
+    // `next` returns an `Option`
+    let search = args.next().expect(
         "No search string or filename found. Usage: greprs <search> <file>"
     );
-    let filename = args.get(2).expect(
+    let filename = args.next().expect(
         "No filename found. Usage: greprs <search> <file>"
     );
-
-    let mut f = File::open(filename).expect("Could not open file.");
-    let mut contents = String::new();
-    f.read_to_string(&mut contents).expect("Could not read file");
 
     let results = if case_sensitive {
         greprs::grep(search, &contents)
@@ -454,21 +454,22 @@ use std::io::prelude::*;
 use std::fs::File;
 
 fn main() {
-    let args: Vec<String> = env::args().collect();
-
     let mut stderr = std::io::stderr();
 
-    let mut case_sensitive = true;
-    for (var, _) in env::vars() {
-        if var == "CASE_INSENSITIVE" {
-            case_sensitive = false;
-        }
-    }
+    let case_insensitive = env::vars().find(|&(ref var, _)| {
+        var ==  "CASE_INSENSITIVE"
+    }).is_some();
 
-    let search = args.get(1).expect(
+    let mut args = env::args();
+
+    // Discard the name of the binary
+    args.next();
+
+    // `next` returns an `Option`
+    let search = args.next().expect(
         "No search string or filename found. Usage: greprs <search> <file>"
     );
-    let filename = args.get(2).expect(
+    let filename = args.next().expect(
         "No filename found. Usage: greprs <search> <file>"
     );
 
@@ -476,23 +477,17 @@ fn main() {
     let mut contents = String::new();
     f.read_to_string(&mut contents).expect("Could not read file");
 
-    let contents: Vec<&str> = contents.lines().collect();
-
-    let total_lines = contents.len();
-
-    let results = if case_sensitive {
-        greprs::grep(search, &contents)
+    let results = if case_insensitive {
+        greprs::grep_case_insensitive(&search, &contents)
     } else {
-        greprs::grep_case_insensitive(search, &contents)
+        greprs::grep(&search, &contents)
     };
 
     let matching_lines = results.len();
-
     writeln!(
         &mut stderr,
-        "{}/{} lines matched",
-        matching_lines,
-        total_lines
+        "{} lines matched",
+        matching_lines
     ).expect("Could not write to stderr");
 
     for line in results {
@@ -504,30 +499,16 @@ fn main() {
 Filename: src/lib.rs
 
 ```rust
-pub fn grep<'a>(search: &str, contents: &[&'a str]) -> Vec<&'a str> {
-    let mut results = vec![];
-
-    for &line in contents {
-        if line.contains(search) {
-            results.push(line);
-        }
-    }
-
-    results
+pub fn grep<'a>(search: &str, contents: &'a str) -> Vec<&'a str> {
+    contents.lines().filter(|line| line.contains(search)).collect()
 }
 
-pub fn grep_case_insensitive<'a>(search: &str, contents: &[&'a str])
+pub fn grep_case_insensitive<'a>(search: &str, contents: &'a str)
        -> Vec<&'a str> {
-    let mut results = vec![];
     let search = search.to_lowercase();
-
-    for &line in contents {
-        if line.to_lowercase().contains(&search) {
-            results.push(line);
-        }
-    }
-
-    results
+    contents.lines().filter(|line| {
+        line.to_lowercase().contains(&search)
+    }).collect()
 }
 
 #[cfg(test)]
@@ -537,30 +518,30 @@ mod test {
     #[test]
     fn case_sensitive() {
         let search = "duct";
-        let contents: Vec<&str> = "\
+        let contents = "\
 Rust:
 safe, fast, productive.
 Pick three.
-Duct tape.".lines().collect();
+Duct tape.";
 
         assert_eq!(
             vec!["safe, fast, productive."],
-            grep(search, &contents)
+            grep(search, contents)
         );
     }
 
     #[test]
     fn case_insensitive() {
         let search = "rust";
-        let contents: Vec<&str> = "\
+        let contents = "\
 Rust:
 safe, fast, productive.
 Pick three.
-Trust me.".lines().collect();
+Trust me.";
 
         assert_eq!(
             vec!["Rust:", "Trust me."],
-            grep_case_insensitive(search, &contents)
+            grep_case_insensitive(search, contents)
         );
     }
 }
