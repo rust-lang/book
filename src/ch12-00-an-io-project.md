@@ -8,6 +8,7 @@ Project requirements:
 - Read the file
 - Find lines in the file that contain the search string
 - Print out those lines
+- Have an environment variable setting to search without regards to case
 
 In order to do a good job, we will:
 
@@ -49,8 +50,6 @@ the filename we want to search in:
 
 <!-- I'd probably use `next` here instead of collecting, but we haven't really
 covered iterators yet and we have covered vectors.
-
-Should we do a match so that when someone gives
 
 /Carol -->
 
@@ -217,6 +216,9 @@ error: test failed
 
 Get the test passing:
 
+<!-- Again, I'd want to do a `filter` and a `collect` here instead but we
+haven't covered iterators yet /Carol -->
+
 File: src/lib.rs
 
 ```rust
@@ -309,4 +311,131 @@ fn main() {
 $ cargo run the poem.txt
 Then there's a pair of us — don't tell!
 To tell your name the livelong day
+```
+
+## Working with Environment Variables
+
+### Implement a Case-Insensitive `grep` Function
+
+Filename: src/lib.rs
+
+```rust
+pub fn grep<'a>(search: &str, contents: &'a str) -> Vec<&'a str> {
+    let mut results = vec![];
+
+    for line in contents.lines() {
+        if line.contains(search) {
+            results.push(line);
+        }
+    }
+
+    results
+}
+
+pub fn grep_case_insensitive<'a>(search: &str, contents: &'a str)
+       -> Vec<&'a str> {
+    let mut results = vec![];
+    let search = search.to_lowercase();
+
+    for line in contents.lines() {
+        if line.to_lowercase().contains(&search) {
+            results.push(line);
+        }
+    }
+
+    results
+}
+
+#[cfg(test)]
+mod test {
+    use super::*;
+
+    #[test]
+    fn case_sensitive() {
+        let search = "duct";
+        let contents = "\
+Rust:
+safe, fast, productive.
+Pick three.
+Duct tape.";
+
+        assert_eq!(
+            vec!["safe, fast, productive."],
+            grep(search, contents)
+        );
+    }
+
+    #[test]
+    fn case_insensitive() {
+        let search = "rust";
+        let contents = "\
+Rust:
+safe, fast, productive.
+Pick three.
+Trust me.";
+
+        assert_eq!(
+            vec!["Rust:", "Trust me."],
+            grep_case_insensitive(search, contents)
+        );
+    }
+}
+```
+
+### Have `main` Check the Environment Variable
+
+Filename: src/main.rs
+
+```rust,ignore
+extern crate greprs;
+
+use std::env;
+use std::io::prelude::*;
+use std::fs::File;
+
+fn main() {
+    let args: Vec<String> = env::args().collect();
+
+    let mut case_sensitive = true;
+    for (var, _) in env::vars() {
+        if var == "CASE_INSENSITIVE" {
+            case_sensitive = false;
+        }
+    }
+
+    let search = args.get(1).expect(
+        "No search string or filename found. Usage: greprs <search> <file>"
+    );
+    let filename = args.get(2).expect(
+        "No filename found. Usage: greprs <search> <file>"
+    );
+
+    let mut f = File::open(filename).expect("Could not open file.");
+    let mut contents = String::new();
+    f.read_to_string(&mut contents).expect("Could not read file");
+
+    let results = if case_sensitive {
+        greprs::grep(search, &contents)
+    } else {
+        greprs::grep_case_insensitive(search, &contents)
+    };
+
+    for line in results {
+        println!("{}", line);
+    }
+}
+```
+
+```text
+$ cargo run to poem.txt
+Are you nobody, too?
+How dreary to be somebody!
+```
+
+```text
+$ CASE_INSENSITIVE=1 cargo run to poem.txt
+Are you nobody, too?
+How dreary to be somebody!
+To tell your name the livelong day
+To an admiring bog!
 ```
