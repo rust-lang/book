@@ -446,7 +446,7 @@ Let's say we want to output statistics about how many lines have matched to `std
 
 Filename: src/main.rs
 
-```rust
+```rust,ignore
 extern crate greprs;
 
 use std::env;
