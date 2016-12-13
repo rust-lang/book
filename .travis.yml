@@ -9,6 +9,7 @@ addons:
   apt:
     packages:
       - aspell
+      - aspell-en
 before_script:
   - (cargo install mdbook --git https://github.com/azerupi/mdBook.git --force || true)
 script:
