@@ -439,3 +439,145 @@ How dreary to be somebody!
 To tell your name the livelong day
 To an admiring bog!
 ```
+
+## Write to `stderr` Instead of `stdout`
+
+Let's say we want to output statistics about how many lines have matched to `stderr`.
+
+Filename: src/main.rs
+
+```rust
+extern crate greprs;
+
+use std::env;
+use std::io::prelude::*;
+use std::fs::File;
+
+fn main() {
+    let args: Vec<String> = env::args().collect();
+
+    let mut stderr = std::io::stderr();
+
+    let mut case_sensitive = true;
+    for (var, _) in env::vars() {
+        if var == "CASE_INSENSITIVE" {
+            case_sensitive = false;
+        }
+    }
+
+    let search = args.get(1).expect(
+        "No search string or filename found. Usage: greprs <search> <file>"
+    );
+    let filename = args.get(2).expect(
+        "No filename found. Usage: greprs <search> <file>"
+    );
+
+    let mut f = File::open(filename).expect("Could not open file.");
+    let mut contents = String::new();
+    f.read_to_string(&mut contents).expect("Could not read file");
+
+    let contents: Vec<&str> = contents.lines().collect();
+
+    let total_lines = contents.len();
+
+    let results = if case_sensitive {
+        greprs::grep(search, &contents)
+    } else {
+        greprs::grep_case_insensitive(search, &contents)
+    };
+
+    let matching_lines = results.len();
+
+    writeln!(
+        &mut stderr,
+        "{}/{} lines matched",
+        matching_lines,
+        total_lines
+    ).expect("Could not write to stderr");
+
+    for line in results {
+        println!("{}", line);
+    }
+}
+```
+
+Filename: src/lib.rs
+
+```rust
+pub fn grep<'a>(search: &str, contents: &[&'a str]) -> Vec<&'a str> {
+    let mut results = vec![];
+
+    for &line in contents {
+        if line.contains(search) {
+            results.push(line);
+        }
+    }
+
+    results
+}
+
+pub fn grep_case_insensitive<'a>(search: &str, contents: &[&'a str])
+       -> Vec<&'a str> {
+    let mut results = vec![];
+    let search = search.to_lowercase();
+
+    for &line in contents {
+        if line.to_lowercase().contains(&search) {
+            results.push(line);
+        }
+    }
+
+    results
+}
+
+#[cfg(test)]
+mod test {
+    use super::*;
+
+    #[test]
+    fn case_sensitive() {
+        let search = "duct";
+        let contents: Vec<&str> = "\
+Rust:
+safe, fast, productive.
+Pick three.
+Duct tape.".lines().collect();
+
+        assert_eq!(
+            vec!["safe, fast, productive."],
+            grep(search, &contents)
+        );
+    }
+
+    #[test]
+    fn case_insensitive() {
+        let search = "rust";
+        let contents: Vec<&str> = "\
+Rust:
+safe, fast, productive.
+Pick three.
+Trust me.".lines().collect();
+
+        assert_eq!(
+            vec!["Rust:", "Trust me."],
+            grep_case_insensitive(search, &contents)
+        );
+    }
+}
+```
+
+Output:
+
+```text
+$ cargo run to poem.txt
+2/9 lines matched
+Are you nobody, too?
+How dreary to be somebody!
+```
+
+Redirecting stdout to a file, stderr still gets displayed:
+
+```text
+$ cargo run to poem.txt > new_poem.txt
+2/9 lines matched
+```
