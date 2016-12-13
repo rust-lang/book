@@ -30,13 +30,13 @@
 
 shopt -s nullglob
 
-dict_filename=dictionary.txt
+dict_filename=./dictionary.txt
 markdown_sources=(./src/*.md)
 mode="check"
 
-# aspell repeatedly modifies personal dictionary for some purpose,
+# aspell repeatedly modifies personal dictionary when checking interactively,
 # so we should use a copy of our dictionary
-dict_path="/tmp/$dict_filename"
+dict_path="/tmp/dictionary.txt"
 
 if [[ "$1" == "list" ]]; then
     mode="list"
@@ -53,11 +53,10 @@ if [[ ! -f "$dict_filename" ]]; then
     cat "${markdown_sources[@]}" | aspell --ignore 3 list | sort -u >> "$dict_filename"
 elif [[ "$mode" == "list" ]]; then
     # List (default) mode: scan all files, report errors
-    cp "$dict_filename" "$dict_path"
     declare -i retval=0
 
     for fname in "${markdown_sources[@]}"; do
-        command=$(aspell --ignore 3 --personal="$dict_path" "$mode" < "$fname")
+        command=$(aspell --ignore 3 --personal="$dict_filename" "$mode" < "$fname")
         if [[ -n "$command" ]]; then
             for error in $command; do
                 # TODO: Find more correct way to get line number
