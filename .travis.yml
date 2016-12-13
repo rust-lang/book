@@ -5,9 +5,12 @@ rust:
   - nightly
   - beta
   - stable
+addons:
+  apt:
+    packages:
+      - aspell
 before_script:
   - (cargo install mdbook --git https://github.com/azerupi/mdBook.git --force || true)
-  - apt-get install aspell
 script:
   - bash spellcheck.sh list
   - PATH=$PATH:/home/travis/.cargo/bin mdbook test
