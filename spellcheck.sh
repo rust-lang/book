@@ -32,7 +32,7 @@ aspell --version
 
 shopt -s nullglob
 
-dict_filename=./dictionary.txt
+dict_filename=dictionary.txt
 markdown_sources=(./src/*.md)
 mode="check"
 
@@ -58,8 +58,8 @@ elif [[ "$mode" == "list" ]]; then
     declare -i retval=0
 
     for fname in "${markdown_sources[@]}"; do
-        echo "command = aspell --ignore 3 --personal=\"$dict_filename\" \"$mode\" < \"$fname\""
-        command=$(aspell --ignore 3 --personal="$dict_filename" "$mode" < "$fname")
+        echo "command = aspell --home-dir=. --ignore 3 --personal=\"$dict_filename\" \"$mode\" < \"$fname\""
+        command=$(aspell --home-dir=. --ignore 3 --personal="$dict_filename" "$mode" < "$fname")
         if [[ -n "$command" ]]; then
             for error in $command; do
                 # TODO: Find more correct way to get line number
