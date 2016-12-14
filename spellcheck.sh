@@ -55,8 +55,14 @@ if [[ ! -f "$dict_filename" ]]; then
     cat "${markdown_sources[@]}" | aspell --ignore 3 list | sort -u >> "$dict_filename"
 elif [[ "$mode" == "list" ]]; then
     # List (default) mode: scan all files, report errors
-    cp "$dict_filename" "$dict_path"
     declare -i retval=0
+
+    cp "$dict_filename" "$dict_path"
+
+    if [ ! -f $dict_path ]; then
+        retval=1
+        exit "$retval"
+    fi
 
     for fname in "${markdown_sources[@]}"; do
         command=$(aspell --ignore 3 --personal="$dict_path" "$mode" < "$fname")
@@ -74,6 +80,12 @@ elif [[ "$mode" == "list" ]]; then
 elif [[ "$mode" == "check" ]]; then
     # Interactive mode: fix typos
     cp "$dict_filename" "$dict_path"
+
+    if [ ! -f $dict_path ]; then
+        retval=1
+        exit "$retval"
+    fi
+
     for fname in "${markdown_sources[@]}"; do
         aspell --ignore 3 --dont-backup --personal="$dict_path" "$mode" "$fname"
     done
