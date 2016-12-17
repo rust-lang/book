@@ -1,29 +1,29 @@
 ## Unrecoverable Errors with `panic!`
 
 Sometimes, bad things happen, and there's nothing that you can do about it. For
-these cases, Rust has a macro, `panic!`. When this macro executes, your program
-will print a failure message, unwind and clean up the stack, and then quit. The
-most common reason for this is when a bug of some kind has been detected, and
-it's not clear how to handle the error.
+these cases, Rust has the `panic!` macro. When this macro executes, your
+program will print a failure message, unwind and clean up the stack, and then
+quit. The most common situation this occurs in is when a bug of some kind has
+been detected and it's not clear to Rust how to handle the error.
 
 <!-- PROD: START BOX -->
 
 > #### Unwinding
-> By default, when a `panic!` happens in Rust, the program starts
+> By default, when a `panic!` occurs, the program starts
 > *unwinding*, which means Rust walks back up the stack and cleans up the data
-> from each function it encounters. Doing that walking and cleanup is a lot of
+> from each function it encounters, but this walking and cleanup is a lot of
 > work. The alternative is to immediately `abort`, which ends the program
-> without cleaning up. Memory that the program was using will need to be cleaned
-> up by the operating system. If you're in a situation where you need to make
-> the resulting binary as small as possible, you can switch from unwinding on
-> panic to aborting on panic by adding `panic = 'abort'` to the appropriate
-> `[profile]` sections in your *Cargo.toml*.
+> without cleaning up. Memory that the program was using will then need to be
+> cleaned up by the operating system. If in your program you need to make
+> the resulting binary as small as possible, you can switch from unwinding to
+> aborting on panic by adding `panic = 'abort'` to the appropriate `[profile]`
+> sections in your `Cargo.toml`.
+<!-- Which is the appropriate profile section, will that be obvious? Maybe we
+could give a screenshot? -->
 
 <!-- PROD: END BOX -->
 
-Let's try out calling `panic!()` with a simple program:
-
-<span class="filename">Filename: src/main.rs</span>
+Let's try calling `panic!()` with a simple program:
 
 ```rust,should_panic
 fn main() {
@@ -33,7 +33,7 @@ fn main() {
 
 If you run it, you'll see something like this:
 
-```text
+```bash
 $ cargo run
    Compiling panic v0.1.0 (file:///projects/panic)
     Finished debug [unoptimized + debuginfo] target(s) in 0.25 secs
@@ -43,15 +43,26 @@ note: Run with `RUST_BACKTRACE=1` for a backtrace.
 error: Process didn't exit successfully: `target/debug/panic` (exit code: 101)
 ```
 
-There are three lines of error message here. The first line shows our panic
+There are three lines of errors here. The first line shows our panic
 message and the place in our source code where the panic occurred:
-*src/main.rs*, line two.
+`src/main.rs:2` indicates that it's the second like of our *main.rs* file.
+
+<!-- Can you clarify which three lines are the error, the last three? -->
 
 But that only shows us the exact line that called `panic!`. That's not always
-useful. Let's look at another example to see what it's like when a `panic!`
-call comes from code we call instead of from our code directly:
+useful.
+<!-- why isn't that always useful, you mean because it doesn't specify which
+part of that line causes the panic? What's the alternative? I'm not entirely
+sure what point we're making? -->
 
-<span class="filename">Filename: src/main.rs</span>
+### Heading
+
+<!-- I may be wrong, but this reads like a slightly different topic, can you
+suggest a heading? Otherwise, perhaps just make it more clear how they connect?
+Is this next section all just about tracing the error? It's not quite clear -->
+
+Let's look at another example to see what it's like when a `panic!` call comes
+from a bug in our code instead of from calling the macro directly:
 
 ```rust,should_panic
 fn main() {
@@ -63,8 +74,8 @@ fn main() {
 
 We're attempting to access the hundredth element of our vector, but it only has
 three elements. In this situation, Rust will panic. Using `[]` is supposed to
-return an element. If you pass `[]` an invalid index, though, there's no
-element that Rust could return here that would be correct.
+return an element, but if you pass an invalid index, there's no element that
+Rust could return here that would be correct.
 
 Other languages like C will attempt to give you exactly what you asked for in
 this situation, even though it isn't what you want: you'll get whatever is at
@@ -76,9 +87,9 @@ that is stored after the array.
 
 In order to protect your program from this sort of vulnerability, if you try to
 read an element at an index that doesn't exist, Rust will stop execution and
-refuse to continue with an invalid value. Let's try it and see:
+refuse to continue. Let's try it and see:
 
-```text
+```bash
 $ cargo run
    Compiling panic v0.1.0 (file:///projects/panic)
     Finished debug [unoptimized + debuginfo] target(s) in 0.27 secs
@@ -89,18 +100,27 @@ note: Run with `RUST_BACKTRACE=1` for a backtrace.
 error: Process didn't exit successfully: `target/debug/panic` (exit code: 101)
 ```
 
-This points at a file we didn't write, *../src/libcollections/vec.rs*. That's
-the implementation of `Vec<T>` in the standard library. While it's easy to see
-in this short program where the error was, it would be nicer if we could have
-Rust tell us what line in our program caused the error.
+This points at a file we didn't write, `../src/libcollections/vec.rs`. That's
+the implementation of `Vec<T>` in the standard library.
 
-That's what the next line, the `note` is about. If we set the `RUST_BACKTRACE`
-environment variable, we'll get a backtrace of exactly how the error happened.
-Let's try that. Listing 9-1 shows the output:
+<!-- I'm not sure what Vec<T> is doing here, can you go over that a bit more?
+Also, are there other types of panic errors that will automatically be caught
+by Rust other than an index out of bounds type error? Can we give a general
+rule on what causes panics? -->
+
+While it's easy to see in this short program where the error was, it would be
+helpful if Rust could tell us what line in our program caused the error.
+
+<!-- Hm, earlier we seemed to say that pointing to the line in the program was
+not very useful -->
+
+The next `note` line tells us that we can set the `RUST_BACKTRACE` environment
+variable to get a backtrace of exactly what happened to cause the error. Let's
+try that. Listing 9-1 shows the output:
 
 <figure>
 
-```text
+```bash
 $ RUST_BACKTRACE=1 cargo run
     Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
      Running `target/debug/panic`
@@ -143,12 +163,19 @@ the environment variable `RUST_BACKTRACE` is set
 </figure>
 
 That's a lot of output! Line 11 of the backtrace points to the line in our
-project causing the problem: *src/main.rs* line four. The key to reading the
-backtrace is to start from the top and read until we see files that we wrote:
-that's where the problem originated. If we didn't want our program to panic
-here, this line is where we would start investigating in order to figure out
-how we got to this location with values that caused the panic.
+project causing the problem: `src/main.rs`, line four. The key to reading the
+backtrace is to start from the top and read until you see files you wrote:
+that's where the problem originated.
 
-Now that we've covered how to `panic!` to stop our code's execution and how to
-debug a `panic!`, let's look at how to instead return and use recoverable
-errors with `Result`.
+<!-- So is the rest of it code embedded in Rust? -->
+
+If we don't want our program to panic, this line is where we would start
+investigating in order to figure out how we got to this location with values
+that caused the panic.
+
+<!--Are we going to show them how to fix the panic, or is this just something
+that's particular to each case?-->
+
+We'll come back to `panic!` and when we should and should not use these methods
+later in the chapter. Next, we'll now look at how to recover from an error with
+`Result`.
