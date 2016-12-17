@@ -23,7 +23,7 @@ aspell --version
 # 1 if any errors found,
 # 0 if all is clear.
 
-# Script skips words with length less then or equal to 3. This helps to avoid
+# Script skips words with length less than or equal to 3. This helps to avoid
 # some false positives.
 
 # We can consider skipping source code in markdown files (```code```) to reduce
