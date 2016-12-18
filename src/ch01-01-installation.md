@@ -27,6 +27,9 @@ your password. If it all goes well, you’ll see this appear:
 Rust is installed now. Great!
 ```
 
+Of course, if you disapprove of the `curl | sh` pattern, you can download, inspect
+and run the script however you like.
+
 ### Installing on Windows
 
 On Windows, go to [https://rustup.rs](https://rustup.rs/)<!-- ignore --> and
