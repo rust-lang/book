@@ -383,7 +383,7 @@ the value is: 50
 ```
 
 All five array values appear in the terminal, as expected. Even though `index`
-will reach a value of `6` at some point, the loop stops executing before trying
+will reach a value of `5` at some point, the loop stops executing before trying
 to fetch a sixth value from the array.
 
 But this approach is error prone; we could cause the program to panic if the
