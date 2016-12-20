@@ -152,8 +152,9 @@ Rust knows when to clean up that data.
 
 We’ll use `String` as the example here and concentrate on the parts of `String`
 that relate to ownership. These aspects also apply to other complex data types
-provided by the standard library and that you create. We’ll discuss `String` in
-more depth in Chapter 8.
+provided by the standard library and that you create. When reading this
+Chapter note that `String` are encoded in UTF-8 which uses one byte only for
+ASCII characters. We’ll discuss `String` in more depth in Chapter 8.
 
 We’ve already seen string literals, where a string value is hardcoded into our
 program. String literals are convenient, but they aren’t always suitable for
