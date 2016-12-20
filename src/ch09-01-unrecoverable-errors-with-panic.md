@@ -1,27 +1,33 @@
 ## Unrecoverable Errors with `panic!`
 
 Sometimes, bad things happen, and there's nothing that you can do about it. For
-these cases, Rust has a macro, `panic!`. When this macro executes, your program
-will print a failure message, unwind and clean up the stack, and then quit. The
-most common reason for this is when a bug of some kind has been detected, and
-it's not clear how to handle the error.
+these cases, Rust has the `panic!` macro. When this macro executes, your
+program will print a failure message, unwind and clean up the stack, and then
+quit. The most common situation this occurs in is when a bug of some kind has
+been detected and it's not clear to the programmer how to handle the error.
 
 <!-- PROD: START BOX -->
 
 > #### Unwinding
-> By default, when a `panic!` happens in Rust, the program starts
+> By default, when a `panic!` occurs, the program starts
 > *unwinding*, which means Rust walks back up the stack and cleans up the data
-> from each function it encounters. Doing that walking and cleanup is a lot of
+> from each function it encounters, but this walking and cleanup is a lot of
 > work. The alternative is to immediately `abort`, which ends the program
-> without cleaning up. Memory that the program was using will need to be cleaned
-> up by the operating system. If you're in a situation where you need to make
-> the resulting binary as small as possible, you can switch from unwinding on
-> panic to aborting on panic by adding `panic = 'abort'` to the appropriate
-> `[profile]` sections in your *Cargo.toml*.
+> without cleaning up. Memory that the program was using will then need to be
+> cleaned up by the operating system. If in your program you need to make
+> the resulting binary as small as possible, you can switch from unwinding to
+> aborting on panic by adding `panic = 'abort'` to the appropriate `[profile]`
+> sections in your `Cargo.toml`. For example, if you want to abort on panic in
+> release mode:
+>
+> ```toml
+> [profile.release]
+> panic = 'abort'
+> ```
 
 <!-- PROD: END BOX -->
 
-Let's try out calling `panic!()` with a simple program:
+Let's try calling `panic!()` with a simple program:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -43,13 +49,23 @@ note: Run with `RUST_BACKTRACE=1` for a backtrace.
 error: Process didn't exit successfully: `target/debug/panic` (exit code: 101)
 ```
 
-There are three lines of error message here. The first line shows our panic
-message and the place in our source code where the panic occurred:
-*src/main.rs*, line two.
+The last three lines contain the error message caused by the call to `panic!`.
+The first line shows our panic message and the place in our source code where
+the panic occurred: `src/main.rs:2` indicates that it's the second like of our
+*main.rs* file.
 
-But that only shows us the exact line that called `panic!`. That's not always
-useful. Let's look at another example to see what it's like when a `panic!`
-call comes from code we call instead of from our code directly:
+In this case, the line indicated is part of our code, and if we go to that line
+we see the `panic!` macro call. In other cases, the `panic!` call might be in
+code that our code calls. The filename and line number reported by the error
+message will be someone else's code where the `panic!` macro is called, not the
+line of our code that eventually led to the `panic!`. We can use the backtrace
+of the functions the `panic!` call came from to figure this out.
+
+### Using a `panic!` Backtrace
+
+Let's look at another example to see what it's like when a `panic!` call comes
+from a library because of a bug in our code instead of from our code calling
+the macro directly:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -63,8 +79,8 @@ fn main() {
 
 We're attempting to access the hundredth element of our vector, but it only has
 three elements. In this situation, Rust will panic. Using `[]` is supposed to
-return an element. If you pass `[]` an invalid index, though, there's no
-element that Rust could return here that would be correct.
+return an element, but if you pass an invalid index, there's no element that
+Rust could return here that would be correct.
 
 Other languages like C will attempt to give you exactly what you asked for in
 this situation, even though it isn't what you want: you'll get whatever is at
@@ -76,7 +92,7 @@ that is stored after the array.
 
 In order to protect your program from this sort of vulnerability, if you try to
 read an element at an index that doesn't exist, Rust will stop execution and
-refuse to continue with an invalid value. Let's try it and see:
+refuse to continue. Let's try it and see:
 
 ```text
 $ cargo run
@@ -90,13 +106,13 @@ error: Process didn't exit successfully: `target/debug/panic` (exit code: 101)
 ```
 
 This points at a file we didn't write, *../src/libcollections/vec.rs*. That's
-the implementation of `Vec<T>` in the standard library. While it's easy to see
-in this short program where the error was, it would be nicer if we could have
-Rust tell us what line in our program caused the error.
+the implementation of `Vec<T>` in the standard library. The code that gets run
+when we use `[]` on our vector `v` is in *../src/libcollections/vec.rs*, and
+that is where the `panic!` is actually happening.
 
-That's what the next line, the `note` is about. If we set the `RUST_BACKTRACE`
-environment variable, we'll get a backtrace of exactly how the error happened.
-Let's try that. Listing 9-1 shows the output:
+The next `note` line tells us that we can set the `RUST_BACKTRACE` environment
+variable to get a backtrace of exactly what happened to cause the error. Let's
+try that. Listing 9-1 shows the output:
 
 <figure>
 
@@ -143,12 +159,25 @@ the environment variable `RUST_BACKTRACE` is set
 </figure>
 
 That's a lot of output! Line 11 of the backtrace points to the line in our
-project causing the problem: *src/main.rs* line four. The key to reading the
-backtrace is to start from the top and read until we see files that we wrote:
-that's where the problem originated. If we didn't want our program to panic
-here, this line is where we would start investigating in order to figure out
-how we got to this location with values that caused the panic.
+project causing the problem: `src/main.rs`, line four. A backtrace is a list of
+all the functions that have been called to get to this point. Backtraces in
+Rust work like they do in other languages: the key to reading the backtrace is
+to start from the top and read until you see files you wrote. That's the spot
+where the problem originated. The lines above the lines mentioning your files
+are code that your code called; the lines below are code that called your code.
+These lines might include core Rust code, standard library code, or crates that
+you're using.
 
-Now that we've covered how to `panic!` to stop our code's execution and how to
-debug a `panic!`, let's look at how to instead return and use recoverable
-errors with `Result`.
+If we don't want our program to panic, the location pointed to by the first
+line mentioning a file we wrote is where we should start investigating in order
+to figure out how we got to this location with values that caused the panic. In
+our example where we deliberately wrote code that would panic in order to
+demonstrate how to use backtraces, the way to fix the panic is to not try to
+request an element at index 100 from a vector that only contains three items.
+When your code panics in the future, you'll need to figure out for your
+particular case what action the code is taking with what values that causes the
+panic and what the code should do instead.
+
+We'll come back to `panic!` and when we should and should not use these methods
+later in the chapter. Next, we'll now look at how to recover from an error with
+`Result`.

@@ -1,13 +1,14 @@
 ## Recoverable Errors with `Result`
 
-Most errors aren't so dire. Sometimes, when a function fails, it's for a reason
-that we can easily interpret and respond to. As an example, maybe we are making
-a request to a website, but it's down for maintenance. In this situation, we'd
-like to wait and then try again. Terminating our process isn't the right thing
-to do here.
+Most errors aren't so dire as to require the program to stop entirely.
+Sometimes, when a function fails, it's for a reason that we can easily
+interpret and respond to. For example, if we try to open a file and that
+operation fails because the file doesn't exist, we might want to create the
+file instead of terminating the process.
 
-In these cases, Rust's standard library provides an `enum` to use as the return
-type of the function:
+Recall from Chapter 2 the section on "Handling Potential Failure with the
+`Result` Type" that the `Result` enum is defined as having two variants, `Ok`
+and `Err`, as follows:
 
 ```rust
 enum Result<T, E> {
@@ -16,16 +17,32 @@ enum Result<T, E> {
 }
 ```
 
-The `Ok` variant indicates a successful result, and `Err` indicates an
-unsuccessful result. These two variants each contain one thing: in `Ok`'s case,
-it's the successful return value. With `Err`, it's some value that represents
-the error. The `T` and `E` are generic type parameters; we'll go into generics
-in more detail in Chapter 10. What you need to know for right now is that the
-`Result` type is defined such that it can have the same behavior for any type
-`T` that is what we want to return in the success case, and any type `E` that
-is what we want to return in the error case.
+<!-- Would it make sense for this to be something like:
 
-Listing 9-2 shows an example of something that might fail: opening a file.
+```
+enum Result<T, E> {
+    Ok(T) => successful_result,
+    Err(E) => error,
+}
+```
+
+instead? Then you could concretely explain the returned result.
+-->
+<!-- This notation looks similar to a `match`, but it's not a `match`, so we
+think this would be confusing. We've tried to clarify better in the text.
+/Carol -->
+
+The `T` and `E` are generic type parameters; we'll go into generics in more
+detail in Chapter 10. What you need to know right now is that `T` represents
+the type of the value that will be returned in a success case within the `Ok`
+variant, and `E` represents the type of the error that will be returned in a
+failure case within the `Err` variant. Because `Result` has these generic type
+parameters, we can use the `Result` type and the functions that the standard
+library has defined on it in many different situations where the successful
+value and error value we want to return may differ.
+
+Let's call a function that returns a `Result` value because the function could
+fail: opening a file, shown in Listing 9-2.
 
 <figure>
 <span class="filename">Filename: src/main.rs</span>
@@ -45,13 +62,65 @@ Listing 9-2: Opening a file
 </figcaption>
 </figure>
 
-The type of `f` in this example is a `Result`, because there are many ways in
-which opening a file can fail. For example, unless we created `hello.txt`, this
-file does not yet exist. Before we can do anything with our `File`, we need to
-extract it out of the result. Listing 9-3 shows one way to handle the `Result`
-with a basic tool: the `match` expression that we learned about in Chapter 6.
+How do we know `File::open` returns a `Result`? We could look at the standard
+library API documentation. We could ask the compiler! If we give `f` a type
+annotation of some type that we know the return type of the function is *not*,
+then we try to compile the code, the compiler will tell us that the types don't
+match. The error message will then tell us what the type of `f` *is*! Let's try
+it: we know that the return type of `File::open` isn't of type `u32`, so let's
+change the `let f` statement to:
 
-<!-- I'll ghost everything except the match statement lines in the libreoffice file /Carol -->
+```rust,ignore
+let f: u32 = File::open("hello.txt");
+```
+
+Attempting to compile now gives us:
+
+```text
+error[E0308]: mismatched types
+ --> src/main.rs:4:18
+  |
+4 |     let f: u32 = File::open("hello.txt");
+  |                  ^^^^^^^^^^^^^^^^^^^^^^^ expected u32, found enum `std::result::Result`
+  |
+  = note: expected type `u32`
+  = note:    found type `std::result::Result<std::fs::File, std::io::Error>`
+```
+
+This tells us the return type of the `File::open` function is a `Result<T, E>`.
+The generic parameter `T` has been filled in here with the type of the success
+value, `std::fs::File`, which is a file handle. The type of `E` used in the
+error value is `std::io::Error`.
+
+This return type means the call to `File::open` might succeed and return to us
+a file handle that we can read from or write to. The function call also might
+fail: for example, the file might not exist, or we might not have permission to
+access the file. The `File::open` function needs to have a way to tell us
+whether it succeeded or failed, and at the same time give us either the file
+handle or error information. This information is exactly what the `Result` enum
+conveys.
+
+In the case where `File::open` succeeds, the value we will have in the variable
+`f` will be an instance of `Ok` that contains a file handle. In the case where
+it fails, the value in `f` will be an instance of `Err` that contains more
+information about the kind of error that happened.
+
+<!--Can you say explicitly why there being many ways things can fail means we
+use the result type? Also, are we importing the File type from the standard
+crate here? That seems worth mentioning. -->
+<!-- We think it would be repetitive to point out every example that imports a
+type from the standard library. We're past the Modules Chapter 7 "Importing
+Names With Use" section that explains the concept in depth, as well as multiple
+examples in the Hash maps section of Chapter 8 that show how and why to import
+types from the standard library. /Carol -->
+
+We need to add to the code from Listing 9-2 to take different actions depending
+on the value `File::open` returned. Listing 9-3 shows one way to handle the
+`Result` with a basic tool: the `match` expression that we learned about in
+Chapter 6.
+
+<!-- I'll ghost everything except the match statement lines in the libreoffice
+file /Carol -->
 
 <figure>
 <span class="filename">Filename: src/main.rs</span>
@@ -78,33 +147,49 @@ might have
 </figcaption>
 </figure>
 
-If we see an `Ok`, we can return the inner `file` out of the `Ok` variant. If
-we see `Err`, we have to decide what to do with it. The simplest thing is to
-turn our error into a `panic!` instead, by calling the macro. And since we
-haven't created that file yet, we'll see a message indicating as such when we
-print the error value:
+<!-- So we don't need the Result keyword in this code example? And what is the
+{:?} syntax, can you include a line about that? -->
+<!-- We've added an explanation that Result is like Option in that it's
+imported into the prelude, which the reader should be familiar with. We
+explained the {:?} syntax in Structs, chapter 5, in the section "Adding Useful
+Functionality with Derived Traits". It's the debug format. Having to re-explain
+multiple concepts that are not the primary focus of this example really
+obscures the point of the section. /Carol -->
+
+Note that, like the `Option` enum, the `Result` enum and its variants have been
+imported in the prelude, so we don't need to specify `Result::` before the `Ok`
+and `Err` variants in the `match` arms.
+
+Here we tell Rust that when the result is `Ok`, return the inner `file` value
+out of the `Ok` variant, and we then assign that file handle value to the
+variable `f`. After the `match`, we can then use the file handle for reading or
+writing.
+
+The other arm of the `match` handles the case where we get an `Err` value from
+`File::open`. In this example, we've chosen to call the `panic!` macro. If
+there's no file named `hello.txt` in our current directory and we run this
+code, we'll see the following output from the `panic!` macro:
 
 ```text
 thread 'main' panicked at 'There was a problem opening the file: Error { repr:
 Os { code: 2, message: "No such file or directory" } }', src/main.rs:8
 ```
 
+<!-- Do we have to manually print the error message, or does it show when we
+run the program? -->
+<!-- No, the `panic!` macro prints what we give to it, which we covered in the
+section previous to this one. /Carol -->
+
 ### Matching on Different Errors
 
-There are many reasons why opening a file might fail, and we may not want to
-take the same actions to try to recover for all of them. For example, if the
-file we're trying to open does not exist, we could choose to create it. If the
-file exists but we don't have permission to read it, or any other error, we
-still want to `panic!` in the same way as above and not create the file.
-
-The `Err` type `File::open` returns is [`io::Error`][ioerror]<!-- ignore -->,
-which is a struct provided by the standard library. This struct has a method
-`kind` that we can call to get an [`io::ErrorKind`][iokind]<!-- ignore -->
-value that we can use to handle different causes of an `Err` returned from
-`File::open` differently as in Listing 9-4:
-
-[ioerror]: ../std/io/struct.Error.html
-[iokind]: ../std/io/enum.ErrorKind.html
+The code in Listing 9-3 will `panic!` no matter the reason that `File::open`
+failed. What we'd really like to do instead is take different actions for
+different failure reasons: if `File::open` failed because the file doesn't
+exist, we want to create the file and return the handle to the new file. If
+`File::open` failed for any other reason, for example because we didn't have
+permission to open the file, we still want to `panic!` in the same way as we
+did in Listing 9-3. Let's look at Listing 9-4, which adds another arm to the
+`match`:
 
 <figure>
 <span class="filename">Filename: src/main.rs</span>
@@ -139,20 +224,37 @@ Listing 9-4: Handling different kinds of errors in different ways
 
 <!-- I will add ghosting and wingdings here in libreoffice /Carol -->
 
-This example uses a *match guard* with the second arm's pattern to add a
-condition that further refines the pattern. The `ref` in the pattern is needed
-so that the `error` is not moved into the guard condition. The condition we
-want to check is that the value `error.kind()` returns is the `NotFound`
-variant of the `ErrorKind` enum. Note that `File::create` could also fail, so
-we need to add an inner `match` statement as well! The last arm of the outer
-`match` stays the same to panic on any error besides the file not being found.
+The type of the value that `File::open` returns inside the `Err` variant is
+`io::Error`, which is a struct provided by the standard library. This struct
+has a method `kind` that we can call to get an `io::ErrorKind` value.
+`io::ErrorKind` is an enum provided by the standard library that has variants
+representing the different kinds of errors that might result from an `io`
+operation. The variant we're interested in is `ErrorKind::NotFound`, which
+indicates the file we're trying to open doesn't exist yet.
+
+The condition `if error.kind() == ErrorKind::NotFound` is called a *match
+guard*: it's an extra condition on a `match` arm that further refines the arm's
+pattern. This condition must be true in order for that arm's code to get run;
+otherwise, the pattern matching will move on to consider the next arm in the
+`match`.  The `ref` in the pattern is needed so that the `error` is
+not moved into the guard condition but is merely referenced by it.
+
+<!-- Hm, how come we use `ref` as the syntax here and not &? -->
+
+The condition we want to check in the match guard is whether the value returned
+by `error.kind()` is the `NotFound` variant of the `ErrorKind` enum. If it is,
+we try to create the file with 'File::create'. However, since `File::create`
+could also fail, we need to add an inner `match` statement as well! When the
+file can't be opened, a different error message will be printed. The last arm
+of the outer `match` stays the same so that the program panics on any error
+besides the missing file error.
 
 ### Shortcuts for Panic on Error: `unwrap` and `expect`
 
-Using `match` works okay but can be a bit verbose, and it doesn't always
+Using `match` works well enough, but it can be a bit verbose and doesn't always
 communicate intent well. The `Result<T, E>` type has many helper methods
-defined on it to do various things. "Panic on an error result" is one of those
-methods, and it's called `unwrap()`:
+defined on it to do various things. One of those methods, called `unwrap`, is
+what causes the program to "panic on an error result":
 
 <!-- I'll ghost everything except `unwrap()` in the libreoffice file /Carol -->
 
