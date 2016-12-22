@@ -133,21 +133,26 @@ clear that simpler is better. /Carol -->
 
 ### Creating Custom Types for Validation
 
-Going a step further with the idea of using Rust's type system to ensure we
-have a valid value, let's look at an example of creating a custom type for
-validation. Recall the guessing game in Chapter 2, where our code asked the user
-to guess a number between 1 and 100. We actually never validated that the
-user's guess was between those numbers before checking it against our secret
-number, only that it was positive. In this case, the consequences were not very
-dire: our output of "Too high" or "Too low" would still be correct. It would be
-a nice enhancement to guide the user towards valid guesses, though. We could
-add a check after we parse the guess:
+Let's take the idea of using Rust's type system to ensure we have a valid value
+one step further, and look at creating a custom type for validation. Recall the
+guessing game in Chapter 2, where our code asked the user to guess a number
+between 1 and 100. We actually never validated that the user's guess was
+between those numbers before checking it against our secret number, only that
+it was positive. In this case, the consequences were not very dire: our output
+of "Too high" or "Too low" would still be correct. It would be a useful
+enhancement to guide the user towards valid guesses, though, and have different
+behavior when a user guesses a number that's out of range versus when a user
+types, for example, letters instead.
+
+One way to do this would be to parse the guess as an `i32` instead of only a
+`u32`, to allow potentially negative numbers, then add a check for the number
+being in range:
 
 ```rust,ignore
 loop {
     // snip
 
-    let guess: u32 = match guess.trim().parse() {
+    let guess: i32 = match guess.trim().parse() {
         Ok(num) => num,
         Err(_) => continue,
     };
