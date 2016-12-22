@@ -175,14 +175,17 @@ and ask for another guess. After the `if` expression, we can proceed with the
 comparisons between `guess` and the secret number knowing that guess is between
 1 and 100.
 
-If we had a situation where it was absolutely critical we had a value between 1
-and 100, and we had many functions that had this requirement, it would be
-tedious (and potentially impact performance) to have a check like this in every
-function. Instead, we can make a new type and put the validations in one place,
-in the type's constructor. Then our functions can use the type with the
-confidence that we have values that meet our requirements. Listing 9-8 shows
-one way to define a `Guess` type that will only create an instance of `Guess`
-if the `new` function gets a value between 1 and 100:
+However, this is not an ideal solution: if it was absolutely critical that the
+program only operated on values between 1 and 100, and it had many functions
+with this requirement, it would be tedious (and potentially impact performance)
+to have a check like this in every function.
+
+Instead, we can make a new type and put the validations in the type's
+constructor rather than repeating them. That way, it's safe for functions to
+use the new type in their signatures and confidently use the values they
+receive. Listing 9-8 shows one way to define a `Guess` type that will only
+create an instance of `Guess` if the `new` function receives a value between 1
+and 100:
 
 <figure>
 
@@ -210,41 +213,63 @@ impl Guess {
 
 <figcaption>
 
-Listing 9-8: A `Guess` type that will only hold values between 1 and 100
+Listing 9-8: A `Guess` type that will only continue with values between 1 and
+100
 
 </figcaption>
 </figure>
 
-If code calling `Guess::new` passed in a value that was not between 1 and 100,
-that would be a violation of the contract that `Guess::new` is relying on. This
-function needs to signal to the calling code that it has a bug somewhere
-leading to the contract violation. The conditions in which `Guess::new` might
-panic should be discussed in its public-facing API documentation, which we will
-cover in Chapter 14.
+<!-- I'll add wingding numbers in the libreoffice file /Carol -->
 
-Important to note is the `value` field of the `Guess` struct is private, so
-code using this struct may not set that value directly. Callers *must* use the
-`Guess::new` constructor function to create an instance of `Guess`, and they
-may read the value using the public `value` function, but they may not access
-the field directly. This means any created instance of `Guess` that does not
-cause a `panic!` when `new` is called is guaranteed to return numbers between 1
-and 100 from its `value` function.
+First, we define a struct named `Guess` that has a field named `value` that
+holds a `u32`. This is where the number will be stored.
+
+Then we implement an associated function named `new` on `Guess` that is a
+constructor of `Guess` values. The `new` function takes one argument named
+`value` of type `u32` and returns a `Guess`. The code in the body of the `new`
+function tests the `value` argument to make sure it is between 1 and 100. If
+`value` doesn't pass this test, we call `panic!`, which will alert the
+programmer who is calling this code that they have a bug they need to fix,
+since creating a `Guess` with a `value` outside this range would violate the
+contract that `Guess::new` is relying on. The conditions in which `Guess::new`
+might panic should be discussed in its public-facing API documentation; we'll
+cover documentation conventions around indicating the possibility of a `panic!`
+in the API documentation that you create in Chapter 14. If `value` does pass
+the test, we create a new `Guess` with its `value` field set to the `value`
+argument, and return the `Guess`.
+
+<!-- I'm not sure if you mean the function that creates the guess type (so
+listing 9-8) or the function that uses the guess type, below. You mean the
+wider function needs a way to signal that there's a bug leading to contract
+violation? -->
+<!-- I'm not sure what part is confusing, and I'm not sure what you mean by
+"wider function". I hope the slower explanation of the code has cleared
+this up; please provide more detail on what's confusing if not. /Carol -->
+
+Next, we implement a method named `value` that borrows `self`, doesn't take any
+other arguments, and returns a `u32`. This is a kind of method sometimes called
+a *getter*, since its purpose is to get some data from its fields and return
+it. This public method is necessary because the `value` field of the `Guess`
+struct is private. It's important that the `value` field is private so that
+code using the `Guess` struct is not allowed to set `value` directly: callers
+*must* use the `Guess::new` constructor function to create an instance of
+`Guess`, which ensures there's no way for a `Guess` to have a `value` that
+hasn't been checked by the conditions in the constructor.
 
 A function that takes as an argument or returns only numbers between 1 and 100
-could then declare in its signature to take a `Guess` rather than a `u32`, and
-would not need to do any additional checks in its body.
+could then declare in its signature that it takes a `Guess` rather than a
+`u32`, and wouldn't need to do any additional checks in its body.
 
 ## Summary
 
 Rust's error handling features are designed to help you write more robust code.
 The `panic!` macro signals that your program is in a state it can't handle, and
 lets you tell the process to stop instead of trying to proceed with invalid or
-incorrect values. The `Result` enum uses Rust's type system as a sign that
-operations you call might fail in a way that your code could recover from. You
-can use `Result` to tell code that calls yours that it needs to handle
-potential success or failure as well. Using `panic!` and `Result` in the
-appropriate situations will help your code be more reliable in the face of
-inevitable problems.
+incorrect values. The `Result` enum uses Rust's type system to indicate that
+operations might fail in a way that your code could recover from. You can use
+`Result` to tell code that calls your code that it needs to handle potential
+success or failure as well. Using `panic!` and `Result` in the appropriate
+situations will make your code more reliable in the face of inevitable problems.
 
 Now that we've seen useful ways that the standard library uses generics with
 the `Option` and `Result` enums, let's talk about how generics work and how you
