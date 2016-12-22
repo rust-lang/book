@@ -359,6 +359,9 @@ to the code that called this function:
 <figure>
 
 ```rust
+use std::io;
+use std::fs::File;
+
 fn read_username_from_file() -> Result<String, io::Error> {
     let f = File::open("hello.txt");
 
@@ -441,6 +444,9 @@ question mark:
 <figure>
 
 ```rust
+use std::io;
+use std::fs::File;
+
 fn read_username_from_file() -> Result<String, io::Error> {
     let mut f = File::open("hello.txt")?;
     let mut s = String::new();
@@ -480,6 +486,10 @@ implementation simpler. We could even shorten this code further by chaining
 method calls immediately after the `?`:
 
 ```rust
+use std::io;
+use std::io::Read;
+use std::fs::File;
+
 fn read_username_from_file() -> Result<String, io::Error> {
     let mut s = String::new();
 
