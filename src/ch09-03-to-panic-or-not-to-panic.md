@@ -66,7 +66,7 @@ here. However, having a hardcoded, valid string doesn't change the return type
 of the `parse` method: we still get a `Result` value, and the compiler will
 still make us handle the `Result` as if the `Err` variant is still a possibility
 since the compiler isn't smart enough to see that this string is always a
-parseable IP address. If the IP address string came from a user instead of being
+parsable IP address. If the IP address string came from a user instead of being
 hardcoded into the program, and therefore *did* have a possibility of failure,
 we'd definitely want to handle the `Result` in a more robust way instead.
 

@@ -339,10 +339,10 @@ into that section to keep that whole discussion together. /Carol
 
 ### Propagating Errors
 
-When writing a function whose implementation calls sometheing that might fail,
+When writing a function whose implementation calls something that might fail,
 instead of handling the error within this function, you can choose to let your
 caller know about the error so they can decide what to do. This is known as
-*propogating* the error, and gives more control to the calling code where there
+*propagating* the error, and gives more control to the calling code where there
 might be more information or logic that dictates how the error should be
 handled than what you have available in the context of your code.
 
