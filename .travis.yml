@@ -5,6 +5,9 @@ rust:
   - nightly
   - beta
   - stable
+branches:
+  only:
+  - master
 addons:
   apt:
     packages:
