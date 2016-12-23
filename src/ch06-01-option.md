@@ -53,9 +53,9 @@ enum Option<T> {
 
 The `Option<T>` enum is so useful that it's even included in the prelude; you
 don't need to import it explicitly. Furthermore, so are its variants: you can
-use `Some` and `None` directly, without prefixing them with `Option::`. This is
-still just a regular enum, however, `Some(T)` and `None` are still values of
-type `Option<T>`.
+use `Some` and `None` directly, without prefixing them with `Option::`.
+`Option<T>` is still just a regular enum, however, and `Some(T)` and `None` are
+still values of type `Option<T>`.
 
 <!-- We haven't spoken about the prelude so far in the book, I think I made a
 note of that in a previous chapter---we should tell the reader what it is
@@ -78,7 +78,8 @@ let absent_number: Option<i32> = None;
 ```
 
 If we use `None` rather than `Some`, we need to tell Rust what type of
-`Option<T>` we have.
+`Option<T>` we have, because the compiler can't infer it from the `Some`
+value.
 
 When we have a `Some` value, we know that there is a value present, and the
 value is held within the `Some`. When we have a `None` value, in some sense,
