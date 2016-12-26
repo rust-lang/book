@@ -64,7 +64,7 @@
 
 ## Thinking in Rust
 
-- [Composition]()
+- [Thinking in Rust]()
     - [Instead of Inheritance]()
     - [Trait Objects?]()
 
@@ -100,17 +100,16 @@
 
 - [More Lifetimes]()
 
-- [Unsafe Rust]()
+- [Unsafe Rust]() (think about merging into the next chapter on advanced type system features)
     - [Raw Pointers]()
     - [`transmute`]()
 
 - [Advanced Type System Features]() (perhaps called "Advanced Traits"?)
     - [Associated Types]()
-    - [Trait Objects]() (might be incorporated into the Composition chapter?)
     - [UFCS]()
     - [Coherence]()
 
-- [Macros]()
+- [Macros]() (think about making little book of rust macros the authority on this topic)
     - [Writing Your Own Macros]()
 
 - [Appendix](appendix-00.md)
