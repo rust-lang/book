@@ -119,11 +119,8 @@
 - [Macros]()
     - [Writing Your Own Macros]()
 
-- [Nightly Rust]() (?)
-    - [Nightly Features]()
-    - [How to Find Out About Nightly Features]()
-
 - [Appendix](appendix-00.md)
     - [Keywords](appendix-01-keywords.md)
     - [Operators](appendix-02-operators.md)
     - [Derivable Traits](appendix-03-derivable-traits.md)
+    - [Nightly Rust](appendix-04-nightly-rust.md)
