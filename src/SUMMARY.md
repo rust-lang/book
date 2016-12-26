@@ -104,12 +104,6 @@
     - [Raw Pointers]()
     - [`transmute`]()
 
-- [Foreign Function Interface]() (?)
-    - [Conditional Compilation]()
-    - [Bindings to C]()
-    - [Using Rust from Other Languages]()
-    - [`static`]()
-
 - [Advanced Type System Features]() (perhaps called "Advanced Traits"?)
     - [Associated Types]()
     - [Trait Objects]() (might be incorporated into the Composition chapter?)
