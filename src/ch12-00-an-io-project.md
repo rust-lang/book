@@ -1304,45 +1304,48 @@ its documentation for more goodies.
 
 ## Write to `stderr` Instead of `stdout`
 
-Let's say we want to output any errors to `stderr` instead of `stdout`. Right now, if we run:
+Right now, we're writing all of our output to the terminal with `println!`.
+This works, but most terminals provide two kinds of output: "standard out" is
+used for most things, but "standard error" is used for error messages. This
+makes it easier to do things like "Print error messages to my terminal, but
+write other output to a file."
+
+We can try this behavior with `>`:
 
 ```text
 $ cargo run > output.txt
 ```
 
-The contents of *output.txt* will be:
+The `>` syntax says, "please write the contents of standard out to
+`output.txt`." If we open *output.txt* we'll see:
 
 ```text
 Application error: No search string or filename found
 ```
 
-Even if we're saving the output to a file, we want to see errors on the screen.
+We'd like this to be printed to the screen instead. Let's make a change!
+
 
 Filename: src/main.rs
 
 ```rust,ignore
 extern crate greprs;
 
-use greprs::Config;
-
 use std::env;
 use std::process;
-use std::io::prelude::*;
+
+use greprs::Config;
 
 fn main() {
-    let mut args = env::args();
+    let args: Vec<String> = env::args().collect();
 
-    // Discard the name of the binary
-    args.next();
+    let config = Config::new(&args).unwrap_or_else(|err| {
+        println!("Problem parsing arguments: {}", err);
+        process::exit(1);
+    });
 
-    let case_insensitive = env::vars().find(|&(ref var, _)| {
-        var ==  "CASE_INSENSITIVE"
-    }).is_some();
-
-    let config = Config {
-        arguments: args.collect(),
-        case_insensitive: case_insensitive,
-    };
+    println!("Searching for {}", config.search);
+    println!("In file {}", config.filename);
 
     if let Err(e) = greprs::run(config) {
         let mut stderr = std::io::stderr();
@@ -1358,12 +1361,33 @@ fn main() {
 }
 ```
 
-Now the output when we don't pass any arguments but redirect stdout to a file
-is:
+Rust does not have a convenient function like `println!` for writing to
+standard error. Instead, we use the `writeln!` macro, which is sort of like
+`println!`, but it takes an extra argument: the first thing we pass to it is
+what to write to. We can aquire a handle to standard error through the
+`std::io::stderr` function, and we give a mutable reference to it to
+`wrintln!`; we need it to be mutable so we can write to it! The second and
+third arguments to `writeln!` are like the first and second arguments to
+`println!`: a format string, and then any variables we're interpolating.
+
+Let's try running it again with `>`:
 
 ```text
 $ cargo run > output.txt
 Application error: No search string or filename found
 ```
 
-and the file is empty.
+Now we see our error on the screen, but `output.txt` contains nothing.
+If we try it again with good arguments:
+
+```text
+$ cargo run to poem.txt > output.txt
+```
+
+We'll see no output to our terminal, but `output.txt` will contain
+our results:
+
+```text
+Are you nobody, too?
+How dreary to be somebody!
+```
