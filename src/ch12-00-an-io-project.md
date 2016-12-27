@@ -397,6 +397,8 @@ and updates to `main`:
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
+# use std::env;
+#
 fn main() {
     let args: Vec<String> = env::args().collect();
 
@@ -475,7 +477,8 @@ struct:
 <figure>
 <span class="filename">Filename: src/main.rs</span>
 
-```rust,ignore
+```rust
+
 fn main() {
     let args: Vec<String> = env::args().collect();
 
@@ -484,6 +487,11 @@ fn main() {
     // ...snip...
 }
 
+# struct Config {
+#     search: String,
+#     filename: String,
+# }
+#
 // ...snip...
 
 impl Config {
@@ -561,6 +569,11 @@ shown in Listing 12-8:
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore
+# struct Config {
+#     search: String,
+#     filename: String,
+# }
+#
 impl Config {
     fn new(args: &[String]) -> Result<Config, &'static str> {
         if args.len() < 3 {
@@ -876,6 +889,18 @@ function:
 File: src/lib.rs
 
 ```rust
+# use std::error::Error;
+# use std::fs::File;
+# use std::io::prelude::*;
+# pub struct Config {
+#     pub search: String,
+#     pub filename: String,
+# }
+#
+# fn grep<'a>(search: &str, contents: &'a str) -> Vec<&'a str> {
+#     vec![]
+# }
+#
 pub fn run(config: Config) -> Result<(), Box<Error>>{
     let mut f = File::open(config.filename)?;
 
@@ -1240,6 +1265,14 @@ use std::env;
 And then using the `vars` method from it inside of `new`:
 
 ```rust
+# use std::env;
+#
+# struct Config {
+#     search: String,
+#     filename: String,
+#     case_sensitive: bool,
+# }
+#
 impl Config {
     pub fn new(args: &[String]) -> Result<Config, &'static str> {
         if args.len() < 3 {
