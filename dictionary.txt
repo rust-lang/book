@@ -125,6 +125,7 @@ lifecycle
 loopback
 lval
 mathematic
+Metadata
 metaprogramming
 mibbit
 Mibbit
@@ -139,6 +140,7 @@ namespace
 namespaced
 namespaces
 namespacing
+newtype
 nocapture
 nomicon
 Nomicon
@@ -207,12 +209,15 @@ submodules
 Submodules
 suboptimal
 subtree
+subtyping
+Supertraits
 That'd
 test's
 TODO
 toml
 TOML
 tradeoff
+tradeoffs
 TrafficLight
 trpl
 tuple
@@ -224,6 +229,7 @@ Unary
 Uninstalling
 uninstall
 unoptimized
+UnsafeCell
 unsized
 unsynchronized
 username

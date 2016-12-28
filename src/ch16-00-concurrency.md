@@ -7,7 +7,7 @@ Rust's focus on aliasability ends up solving these problems.
 
 This is a library abstraction.
 
-Shared mutable state is a problem. Both useful. Functional langs get rid of
+Shared mutable state is a problem. Both useful. Functional languagess get rid of
 mutability.
 
 Ownership rules (that tame the "shared" aspect) enable fearless concurrency: the
@@ -20,7 +20,7 @@ compiler is making sure you don't shoot yourself in your foot.
 ## Rust's concurrency tradeoffs
 
 Lots of different languages tackle this problem in different ways. We are not
-going to talk about that: exercise for the reader is investigate other langs
+going to talk about that: exercise for the reader is investigate other languages
 and compare and contrast with Rust's approach.
 
 This is how Rust does it, what rust means by threads
@@ -72,7 +72,7 @@ Steve knows the motivating code that goes here.
 
 ### `Mutex<T>`
 
-For mutabe data.
+For mutable data.
 
 `lock` method, you get a Mutex guard. Change, then unlock, which usually happens
 automatically when the Mutex guard goes out of scope. If you do this wrong, your
@@ -82,9 +82,9 @@ Deadlocks are safe, you have to manage that yourself. Deadlock bugs usually
 happen bc you forget to unlock, but drop unlocks automatically.
 
 
-## Maybe make `greprs` concurrent?
+## Maybe make the I/O project concurrent?
 
-Might be boilerplatey without scoped threads, maybe just allude.
+Might be a lot of boilerplate without scoped threads, maybe just allude.
 
 
 
