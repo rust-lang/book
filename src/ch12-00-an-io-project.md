@@ -8,7 +8,7 @@ So what should we build? One that uses Rust's strengths. A great use of Rust is
 for command line tools: Rust's speed, safety, 'single binary' output, and
 cross-platform support make it a good language choice for this kind of task. So
 we'll make our own version of a classic command line tool: `grep`. `grep` is
-short for "*g*lobally search a *r*egular *e*xpression and *p*rint." In the
+short for "Globally search a Regular Expression and Print." In the
 simplest use case, it does this:
 
 - Takes a filename and a string as arguments.
