@@ -5,6 +5,9 @@ rust:
   - nightly
   - beta
   - stable
+branches:
+  only:
+  - master
 addons:
   apt:
     packages:
@@ -13,6 +16,7 @@ addons:
 before_script:
   - (cargo install mdbook --git https://github.com/azerupi/mdBook.git --force || true)
 script:
+  - bash spellcheck.sh list
   - PATH=$PATH:/home/travis/.cargo/bin mdbook test
   - PATH=$PATH:/home/travis/.cargo/bin mdbook build
   - cargo run --bin lfp src

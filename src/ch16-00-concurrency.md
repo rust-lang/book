@@ -1,16 +1,100 @@
-# Concurrency
-
-This is a really rough sketch of some ideas that this chapter might cover.
-
-From a comment of steveklabnik's on [the orange website]. "that paper" refers to [Boehm 2004].
-
-[the orange website]: https://news.ycombinator.com/item?id=13078384
-[Boehm 2004]: http://www.hpl.hp.com/techreports/2004/HPL-2004-209.pdf
+# Fearless Concurrency
 
 So, with Rust, it's more subtle than that. That is, while threading proper
 isn't part of the language itself, Rust's type system is structured in such a
 way as to make it possible to build those kinds of libraries. In other words,
 Rust's focus on aliasability ends up solving these problems.
+
+This is a library abstraction.
+
+Shared mutable state is a problem. Both useful. Functional langs get rid of
+mutability.
+
+Ownership rules (that tame the "shared" aspect) enable fearless concurrency: the
+compiler is making sure you don't shoot yourself in your foot.
+
+## What are threads
+
+
+
+## Rust's concurrency tradeoffs
+
+Lots of different languages tackle this problem in different ways. We are not
+going to talk about that: exercise for the reader is investigate other langs
+and compare and contrast with Rust's approach.
+
+This is how Rust does it, what rust means by threads
+
+OS threads are exposed in the standard library bc a systems programming language
+should integrate with your system.
+
+If you have a different threaded mechanism, you need a runtime, rust is trying
+to not have a heavy runtime.
+
+These are the reasons Rust's concurrency model is this way as opposed to other
+lang's ways, which are optimizing for different things.
+
+
+## Let's get a thread: `thread::spawn`
+
+Code examples - just print stuff, no data sharing
+
+## Communicating between threads
+
+### `Channels`
+
+Look up examples of cases where channels are useful
+
+Can match modeling of certain problems
+
+#### `Send`
+
+Send is a trait that means i'm allowed to transfer ownership to another thread
+down a channel
+
+What things can be send and what can't?
+
+## Sharing data between threads
+
+Try to share data and get an error about which trait it doesn't implement
+
+### `Sync`
+
+It's ok to access a thing from multiple threads at once
+
+Immutable things can be sync easily.
+
+### `Arc<T>`
+
+Atomic Reference Counting. Inner data still has to be immutable.
+
+Steve knows the motivating code that goes here.
+
+### `Mutex<T>`
+
+For mutabe data.
+
+`lock` method, you get a Mutex guard. Change, then unlock, which usually happens
+automatically when the Mutex guard goes out of scope. If you do this wrong, your
+code will hang.
+
+Deadlocks are safe, you have to manage that yourself. Deadlock bugs usually
+happen bc you forget to unlock, but drop unlocks automatically.
+
+
+## Maybe make `greprs` concurrent?
+
+Might be boilerplatey without scoped threads, maybe just allude.
+
+
+
+This is a really rough sketch of some ideas that this chapter might cover.
+
+From a comment of steveklabnik's on [the definitely not orange website]. "that paper" refers to [Boehm 2004].
+
+[the orange website]: https://news.ycombinator.com/item?id=13078384
+[Boehm 2004]: http://www.hpl.hp.com/techreports/2004/HPL-2004-209.pdf
+
 
 So for example, in that paper, 4.1 is about the problem of concurrent
 modifiability. And indeed, it says

@@ -47,7 +47,7 @@
 
 - [Generics](ch10-00-generics.md)
     - [Syntax](ch10-01-syntax.md)
-    - [Traits](ch10-02-traits.md)
+    - [Traits](ch10-02-traits.md) - NEED DEFAULT METHOD IMPLEMENTATIONS
     - [Lifetime syntax](ch10-03-lifetime-syntax.md)
 
 - [Testing](ch11-00-testing.md)
@@ -56,74 +56,32 @@
     - [Test Organization](ch11-03-test-organization.md)
 
 - [An I/O Project](ch12-00-an-io-project.md)
-    - [`Read` & `Write`]()
-    - [`std::fs`]()
-    - [`std::path`]()
-    - [`std::env`]()
-
 
 ## Thinking in Rust
 
-- [Composition]()
-    - [Instead of Inheritance]()
-    - [Trait Objects?]()
+- [Functional Language Features in Rust - Iterators and Closures](ch13-00-functional-features.md)
 
-- [Creating a Library]()
-    - [Cargo]()
-    - [Crates.io]()
-    - [Organizing your Public API](chYY-YY-public-api.md)
-    - [Documentation](chYY-YY-documentation.md)
-    - [Workspaces and Multiple Related Crates](chYY-YY-workspaces.md)
+- [More about Cargo and Crates.io](ch14-00-more-about-cargo.md)
 
-- [Closures]()
+- [Smart Pointers](ch15-00-smart-pointers.md)
 
-- [Zero-cost Abstractions]()
-    - [Iterators as a Case Study]()
+- [Concurrency](ch16-00-concurrency.md)
 
-- [Smart Pointers]()
-    - [`Box<T>`]()
-    - [`Rc<T>`]()
-    - [`Cell`]()
-    - [`RefCell`]()
-    - [Interior Mutability]()
-
-- [Concurrency](ch18-00-concurrency.md)
-    - [Threads]()
-    - [`Send` & `Sync`]()
-    - [`Arc<T>`]()
-    - [`Mutex<T>`]()
-    - [`Channels`]()
+- [Is Rust OOP?](ch17-00-oop.md)
 
 ## Advanced Topics
 
-- [Patterns](chXX-patterns.md)
+- [Patterns](ch18-00-patterns.md) (perhaps an appendix?)
 
-- [More Lifetimes]()
+- [More Lifetimes](ch19-00-more-lifetimes.md) (perhaps merge this into advanced type system features?)
 
-- [Unsafe Rust]()
-    - [Raw Pointers]()
-    - [`transmute`]()
+- [Advanced Type System Features](ch20-00-advanced-types.md) (perhaps called "Advanced Traits"?)
 
-- [Foreign Function Interface]() (?)
-    - [Conditional Compilation]()
-    - [Bindings to C]()
-    - [Using Rust from Other Languages]()
-    - [`static`]()
-
-- [Advanced Type System Features]() (perhaps called "Advanced Traits"?)
-    - [Associated Types]()
-    - [Trait Objects]() (might be incorporated into the Composition chapter?)
-    - [UFCS]()
-    - [Coherence]()
-
-- [Macros]()
+- [Macros]() (think about making little book of rust macros the authority on this topic)
     - [Writing Your Own Macros]()
-
-- [Nightly Rust]() (?)
-    - [Nightly Features]()
-    - [How to Find Out About Nightly Features]()
 
 - [Appendix](appendix-00.md)
     - [Keywords](appendix-01-keywords.md)
     - [Operators](appendix-02-operators.md)
     - [Derivable Traits](appendix-03-derivable-traits.md)
+    - [Nightly Rust](appendix-04-nightly-rust.md)

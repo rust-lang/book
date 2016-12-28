@@ -23,7 +23,7 @@ aspell --version
 # 1 if any errors found,
 # 0 if all is clear.
 
-# Script skips words with length less then or equal to 3. This helps to avoid
+# Script skips words with length less than or equal to 3. This helps to avoid
 # some false positives.
 
 # We can consider skipping source code in markdown files (```code```) to reduce
@@ -32,13 +32,13 @@ aspell --version
 
 shopt -s nullglob
 
-dict_filename=dictionary.txt
+dict_filename=./dictionary.txt
 markdown_sources=(./src/*.md)
 mode="check"
 
-# aspell repeatedly modifies personal dictionary when checking interactively,
+# aspell repeatedly modifies personal dictionary for some purpose,
 # so we should use a copy of our dictionary
-dict_path="/tmp/dictionary.txt"
+dict_path="/tmp/$dict_filename"
 
 if [[ "$1" == "list" ]]; then
     mode="list"
@@ -57,9 +57,15 @@ elif [[ "$mode" == "list" ]]; then
     # List (default) mode: scan all files, report errors
     declare -i retval=0
 
+    cp "$dict_filename" "$dict_path"
+
+    if [ ! -f $dict_path ]; then
+        retval=1
+        exit "$retval"
+    fi
+
     for fname in "${markdown_sources[@]}"; do
-        echo "command = aspell --home-dir=. --ignore 3 --personal=\"$dict_filename\" \"$mode\" < \"$fname\""
-        command=$(aspell --home-dir=. --ignore 3 --personal="$dict_filename" "$mode" < "$fname")
+        command=$(aspell --ignore 3 --personal="$dict_path" "$mode" < "$fname")
         if [[ -n "$command" ]]; then
             for error in $command; do
                 # TODO: Find more correct way to get line number
@@ -74,6 +80,12 @@ elif [[ "$mode" == "list" ]]; then
 elif [[ "$mode" == "check" ]]; then
     # Interactive mode: fix typos
     cp "$dict_filename" "$dict_path"
+
+    if [ ! -f $dict_path ]; then
+        retval=1
+        exit "$retval"
+    fi
+
     for fname in "${markdown_sources[@]}"; do
         aspell --ignore 3 --dont-backup --personal="$dict_path" "$mode" "$fname"
     done
