@@ -387,7 +387,7 @@ but we no longer get all the extra output. Let's try it:
 
 ```bash
 $ cargo run
-   Compiling greprs v0.1.0 (file:///project/greprs)
+   Compiling greprs v0.1.0 (file:///projects/greprs)
     Finished debug [unoptimized + debuginfo] target(s) in 0.48 secs
      Running `target\debug\greprs.exe`
 Problem parsing arguments: not enough arguments
