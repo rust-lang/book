@@ -92,7 +92,7 @@ This is a really rough sketch of some ideas that this chapter might cover.
 
 From a comment of steveklabnik's on [the definitely not orange website]. "that paper" refers to [Boehm 2004].
 
-[the orange website]: https://news.ycombinator.com/item?id=13078384
+[the definitely not orange website]: https://news.ycombinator.com/item?id=13078384
 [Boehm 2004]: http://www.hpl.hp.com/techreports/2004/HPL-2004-209.pdf
 
 
