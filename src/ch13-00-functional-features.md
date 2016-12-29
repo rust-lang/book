@@ -23,7 +23,7 @@ Difference between adapter and consumer - another iterator or consuming?
 Talk about using Associated Types here, foreshadow to advanced type systems
 chapter about why this is a different thing than normal
 
-## ??? How does this improve `greprs`
+## ??? How does this improve the I/O project from Chapter 12
 
 Does this get woven into the above sections?
 
@@ -35,5 +35,5 @@ Most complicated chain of iterator functions that compile down to the same ASM a
 
 ### Representation: Closures are a Struct
 
-Closures don't have any further perf penalty over regular fn calls
+Closures don't have any further performance penalty over regular fn calls
 
