@@ -122,6 +122,7 @@ lang
 latin
 libc
 libcore
+librarys
 libreoffice
 lifecycle
 loopback
