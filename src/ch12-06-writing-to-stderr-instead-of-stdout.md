@@ -72,7 +72,7 @@ Listing 12-15: Writing error messages to `stderr` instead of `stdout`
 Rust does not have a convenient function like `println!` for writing to
 standard error. Instead, we use the `writeln!` macro, which is sort of like
 `println!`, but it takes an extra argument. The first thing we pass to it is
-what to write to. We can aquire a handle to standard error through the
+what to write to. We can acquire a handle to standard error through the
 `std::io::stderr` function. We give a mutable reference to `stderr` to
 `writeln!`; we need it to be mutable so we can write to it! The second and
 third arguments to `writeln!` are like the first and second arguments to

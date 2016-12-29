@@ -9,7 +9,7 @@ arguments and check return values without having to call our binary from the
 command line.
 
 We're going to write a function named `grep` that takes our search term and the
-text to search and procudes a list of search results. Let's remove that
+text to search and produces a list of search results. Let's remove that
 `println!` from `run` (and from *src/main.rs* as well, as we don't really need
 those anymore either), and call the new `grep` function with the options we've
 collected. We'll add a placeholder implementation of the function for now, and
@@ -107,7 +107,7 @@ we want to return the parts of that text that match, we know `contents` is the
 argument that should be connected to the return value using the lifetime syntax.
 
 Connecting arguments to return values in the signature is something that other
-programming langugages don't make you do, so don't worry if this still feels
+programming languages don't make you do, so don't worry if this still feels
 strange! Knowing how to specify lifetimes gets easier over time, and practice
 makes perfect. You may want to re-read the above section or go back and compare
 this example with the Lifetime Syntax section in Chapter 10.
@@ -118,7 +118,7 @@ Now let's try running our test:
 $ cargo test
 ...warnings...
     Finished debug [unoptimized + debuginfo] target(s) in 0.43 secs
-     Running target/debug/deps/greprs-917c5edfc3cf199a
+     Running target/debug/deps/greprs-abcabcabc
 
 running 1 test
 test test::one_result ... FAILED
@@ -262,7 +262,7 @@ Now our whole program should be working! Let's try it out:
 
 ```text
 $ cargo run the poem.txt
-   Compiling greprs v0.1.0 (file:///C:/Users/steve/tmp/greprs)
+   Compiling greprs v0.1.0 (file:///projects/greprs)
     Finished debug [unoptimized + debuginfo] target(s) in 0.38 secs
      Running `target\debug\greprs.exe the poem.txt`
 Then there's a pair of us - don't tell!

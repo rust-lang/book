@@ -1,7 +1,7 @@
 
 ## Working with Environment Variables
 
-Let's add one more feature: case insensitive searching. In addtion, this
+Let's add one more feature: case insensitive searching. In addition, this
 setting won't be a command line option: it'll be an environment variable
 instead. We could choose to make case insensitivity a command line option, but
 our users have requested an environment variable that they could set once and

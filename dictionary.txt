@@ -141,6 +141,7 @@ namespace
 namespaced
 namespaces
 namespacing
+newfound
 nocapture
 nomicon
 Nomicon
@@ -193,6 +194,7 @@ someusername
 SpreadsheetCell
 sqrt
 stackoverflow
+stderr
 stdin
 Stdin
 stdlib
@@ -241,5 +243,6 @@ workspace
 workspaces
 Workspaces
 wouldn
+writeln
 WriteMessage
 yyyy

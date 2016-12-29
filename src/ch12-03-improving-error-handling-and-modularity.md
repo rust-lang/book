@@ -90,8 +90,8 @@ this change, run the program again to verify that the argument parsing still
 works. It's good to check your progress often, so that you have a better idea
 of which change caused a problem, should you encounter one.
 
-<!-- steve: cargo check is going to be in stable rust soon, so we should
-include it here i think. Thoughts? -->
+<!-- `cargo check` is going to be in stable rust soon, so we should
+include it here i think. Thoughts? /Steve -->
 <!-- I haven't been keeping up with what cargo check does-- it just checks
 syntax? If it seems worthwhile to check that but not the functionality, I'd
 be into it! /Carol -->
@@ -106,12 +106,12 @@ function `parse_config`. The `config` part of the name is saying the two values
 we return should really be bound together, since they're both part of one
 configuration value.
 
-> Note: some people call this antipattern of using primitive values when a
+> Note: some people call this anti-pattern of using primitive values when a
 > complex type would be more appropriate *primitive obsession*.
 
 Let's introduce a struct to hold all of our configuration. Listing 12-5 shows
-the addition of the `Config` struct definition, the refacting of `parse_config`,
-and updates to `main`:
+the addition of the `Config` struct definition, the refactoring of
+`parse_config`, and updates to `main`:
 
 <figure>
 <span class="filename">Filename: src/main.rs</span>
@@ -159,7 +159,7 @@ struct
 The signature of `parse_config` now indicates that it returns a `Config` value.
 In the body of `parse_config`, we used to be returning string slices that were
 references to `String` values in `args`, but we've defined `Config` to contain
-owend `String` values. Because the argument to `parse_config` is a slice of
+owned `String` values. Because the argument to `parse_config` is a slice of
 `String` values, the `Config` instance can't take ownership of the `String`
 values: that violates Rust's borrowing rules, since the `args` variable in
 `main` owns the `String` values and is only letting the `parse_config` function
@@ -609,7 +609,7 @@ method, and on the `run` function.
 
 Now in *src/main.rs*, we need to bring in the code that's now in *src/lib.rs*
 through `extern crate greprs`. Then we need to add a `use greprs::Config` line
-to bring `Corfig` into scope, and prefix the `run` function with our crate name
+to bring `Config` into scope, and prefix the `run` function with our crate name
 as shown in Listing 12-13:
 
 <figure>
