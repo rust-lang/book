@@ -11,8 +11,7 @@ Chapter 16 will cover them fully. For our purposes, though, we don't need to
 understand much about how they work in order to use them. We only need to
 understand two things:
 
-1. Iterators produce a series of values by repeatedly calling a `next`
-   function.
+1. Iterators produce a series of values.
 2. We can call the `collect` function on an iterator to turn it into a vector
    containing all of the elements the iterator produces.
 
