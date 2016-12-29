@@ -8,7 +8,9 @@ Amir
 APIs
 aren
 backtrace
+backtraces
 BACKTRACE
+Backtraces
 benchmarking
 bitand
 BitAnd
