@@ -1,4 +1,3 @@
-
 ## Reading a File
 
 Now that we have some variables containing the information that we need, let's

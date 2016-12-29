@@ -1,4 +1,3 @@
-
 ## Write to `stderr` Instead of `stdout`
 
 Right now, we're writing all of our output to the terminal with `println!`.

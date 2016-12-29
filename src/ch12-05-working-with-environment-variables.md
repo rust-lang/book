@@ -1,4 +1,3 @@
-
 ## Working with Environment Variables
 
 Let's add one more feature: case insensitive searching. In addition, this

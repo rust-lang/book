@@ -1,5 +1,3 @@
-
-
 ## Testing the Library's Functionality
 
 Writing tests for the core functionality of our code is now easier since we

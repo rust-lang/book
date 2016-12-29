@@ -1,4 +1,3 @@
-
 ## Accepting Command Line Arguments
 
 Our first task is to have `greprs` accept its two command line arguments. There
