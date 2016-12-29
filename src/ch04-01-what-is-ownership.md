@@ -415,7 +415,7 @@ println!("s1 = {}, s2 = {}", s1, s2);
 ```
 
 This works just fine and is how you can explicitly produce the behavior shown
-in Figure 4-4, where the heap data *does* get copied.
+in Figure 4-5, where the heap data *does* get copied.
 
 When you see a call to `clone`, you know that some arbitrary code is being
 executed and that code may be expensive. It’s a visual indicator that something

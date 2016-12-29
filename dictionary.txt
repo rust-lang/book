@@ -7,8 +7,11 @@ alignof
 Amir
 APIs
 aren
+args
 backtrace
+backtraces
 BACKTRACE
+Backtraces
 benchmarking
 bitand
 BitAnd
@@ -84,6 +87,7 @@ GitHub
 gitignore
 grapheme
 Grapheme
+greprs
 growable
 hardcoded
 hardcoding
@@ -120,11 +124,13 @@ lang
 latin
 libc
 libcore
+librarys
 libreoffice
 lifecycle
 loopback
 lval
 mathematic
+Metadata
 metaprogramming
 mibbit
 Mibbit
@@ -139,6 +145,8 @@ namespace
 namespaced
 namespaces
 namespacing
+newfound
+newtype
 nocapture
 nomicon
 Nomicon
@@ -175,6 +183,7 @@ refactor
 refactoring
 RefCell
 repr
+ripgrep
 runtime
 Rustacean
 Rustaceans
@@ -190,6 +199,7 @@ someusername
 SpreadsheetCell
 sqrt
 stackoverflow
+stderr
 stdin
 Stdin
 stdlib
@@ -207,12 +217,15 @@ submodules
 Submodules
 suboptimal
 subtree
+subtyping
+Supertraits
 That'd
 test's
 TODO
 toml
 TOML
 tradeoff
+tradeoffs
 TrafficLight
 trpl
 tuple
@@ -224,6 +237,7 @@ Unary
 Uninstalling
 uninstall
 unoptimized
+UnsafeCell
 unsized
 unsynchronized
 username
@@ -238,5 +252,6 @@ workspace
 workspaces
 Workspaces
 wouldn
+writeln
 WriteMessage
 yyyy

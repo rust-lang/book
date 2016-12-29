@@ -38,7 +38,7 @@ Runtime decisions about deciding what shared code we use
 
 Give example code
 
-With traits, libraries are extendable. This is why trait objects are different
+With traits, libraries are extensible. This is why trait objects are different
 than having an enum and a match statement that has to be exhaustive at compile
 time and we have to know all the things at compile time and no one can add
 new things to the set of possible things

@@ -88,7 +88,7 @@ but you need to be able to mutate the underlying data.
 Same thing as RefCell but for types that are Copy. No borrow checking rules here
 anyway. So just reason #2 above.
 
-## Is this really safe? Yes srsly
+## Is this really safe? Yes!
 
 RefCell is still doing the checks, just at runtime
 Cell is safe bc Copy types don't need the ownership rules anyway
