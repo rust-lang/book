@@ -7,6 +7,7 @@ alignof
 Amir
 APIs
 aren
+args
 backtrace
 backtraces
 BACKTRACE
@@ -86,6 +87,7 @@ GitHub
 gitignore
 grapheme
 Grapheme
+greprs
 growable
 hardcoded
 hardcoding
@@ -122,6 +124,7 @@ lang
 latin
 libc
 libcore
+librarys
 libreoffice
 lifecycle
 loopback
@@ -142,6 +145,7 @@ namespace
 namespaced
 namespaces
 namespacing
+newfound
 newtype
 nocapture
 nomicon
@@ -179,6 +183,7 @@ refactor
 refactoring
 RefCell
 repr
+ripgrep
 runtime
 Rustacean
 Rustaceans
@@ -194,6 +199,7 @@ someusername
 SpreadsheetCell
 sqrt
 stackoverflow
+stderr
 stdin
 Stdin
 stdlib
@@ -246,5 +252,6 @@ workspace
 workspaces
 Workspaces
 wouldn
+writeln
 WriteMessage
 yyyy
