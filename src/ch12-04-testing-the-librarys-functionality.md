@@ -240,7 +240,7 @@ a `for` loop that prints each line returned from the `grep` function:
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust,ignore
-pub fn run(config: Config) -> Result<(), Box<Error>>{
+pub fn run(config: Config) -> Result<(), Box<Error>> {
     let mut f = File::open(config.filename)?;
 
     let mut contents = String::new();
