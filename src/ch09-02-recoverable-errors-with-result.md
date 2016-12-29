@@ -530,9 +530,10 @@ of `Result` is `return Err(e)`, so the return type of the function must be a
 sure what you mean by "expand", that they have the same functionality (but
 condensed!)? -->
 <!-- You can tell what any function returns by looking at the return type
-defined signature, I'm not sure what part of Chapter 3 wasn't clear enough to
-convey that. The reader should be comfortable with function signatures by this
-point.
+defined in the function signature, I'm not sure what part of Chapter 3 wasn't
+clear enough to convey that. The reader should be comfortable with function
+signatures by this point, and could also use the API docs to tell what a
+function returns.
 
 I've reworded to remove the word expand, but yes, we meant "functionally
 equivalent to replacing it with the longer code"
