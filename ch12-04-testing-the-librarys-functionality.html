@@ -1,0 +1,357 @@
+<!DOCTYPE HTML>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>The Rust Programming Language</title>
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <base href="">
+
+        <link rel="stylesheet" href="book.css">
+        <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+        <link rel="shortcut icon" href="favicon.png">
+
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+
+        <!-- MathJax -->
+        <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+        <!-- Fetch JQuery from CDN but have a local fallback -->
+        <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+        <script>
+            if (typeof jQuery == 'undefined') {
+                document.write(unescape("%3Cscript src='jquery.js'%3E%3C/script%3E"));
+            }
+        </script>
+    </head>
+    <body class="light">
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme = localStorage.getItem('theme');
+            if (theme == null) { theme = 'light'; }
+            $('body').removeClass().addClass(theme);
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var sidebar = localStorage.getItem('sidebar');
+            if (sidebar === "hidden") { $("html").addClass("sidebar-hidden") }
+            else if (sidebar === "visible") { $("html").addClass("sidebar-visible") }
+        </script>
+
+        <div id="sidebar" class="sidebar">
+            <ul class="chapter"><li><a href="ch01-00-introduction.html"><strong>1.</strong> Introduction</a></li><li><ul class="section"><li><a href="ch01-01-installation.html"><strong>1.1.</strong> Installation</a></li><li><a href="ch01-02-hello-world.html"><strong>1.2.</strong> Hello, World!</a></li></ul></li><li><a href="ch02-00-guessing-game-tutorial.html"><strong>2.</strong> Guessing Game Tutorial</a></li><li><a href="ch03-00-common-programming-concepts.html"><strong>3.</strong> Common Programming Concepts</a></li><li><ul class="section"><li><a href="ch03-01-variables-and-mutability.html"><strong>3.1.</strong> Variables and Mutability</a></li><li><a href="ch03-02-data-types.html"><strong>3.2.</strong> Data Types</a></li><li><a href="ch03-03-how-functions-work.html"><strong>3.3.</strong> How Functions Work</a></li><li><a href="ch03-04-comments.html"><strong>3.4.</strong> Comments</a></li><li><a href="ch03-05-control-flow.html"><strong>3.5.</strong> Control Flow</a></li></ul></li><li><a href="ch04-00-understanding-ownership.html"><strong>4.</strong> Understanding Ownership</a></li><li><ul class="section"><li><a href="ch04-01-what-is-ownership.html"><strong>4.1.</strong> What is Ownership?</a></li><li><a href="ch04-02-references-and-borrowing.html"><strong>4.2.</strong> References &amp; Borrowing</a></li><li><a href="ch04-03-slices.html"><strong>4.3.</strong> Slices</a></li></ul></li><li><a href="ch05-00-structs.html"><strong>5.</strong> Structs</a></li><li><ul class="section"><li><a href="ch05-01-method-syntax.html"><strong>5.1.</strong> Method Syntax</a></li></ul></li><li><a href="ch06-00-enums.html"><strong>6.</strong> Enums</a></li><li><ul class="section"><li><a href="ch06-01-option.html"><strong>6.1.</strong> Option</a></li><li><a href="ch06-02-match.html"><strong>6.2.</strong> Match</a></li><li><a href="ch06-03-if-let.html"><strong>6.3.</strong> <code>if let</code></a></li></ul></li><li><a href="ch07-00-modules.html"><strong>7.</strong> Modules</a></li><li><ul class="section"><li><a href="ch07-01-mod-and-the-filesystem.html"><strong>7.1.</strong> <code>mod</code> and the Filesystem</a></li><li><a href="ch07-02-controlling-visibility-with-pub.html"><strong>7.2.</strong> Controlling Visibility with <code>pub</code></a></li><li><a href="ch07-03-importing-names-with-use.html"><strong>7.3.</strong> Importing Names with <code>use</code></a></li></ul></li><li><a href="ch08-00-fundamental-collections.html"><strong>8.</strong> Fundamental Collections</a></li><li><ul class="section"><li><a href="ch08-01-vectors.html"><strong>8.1.</strong> Vectors</a></li><li><a href="ch08-02-strings.html"><strong>8.2.</strong> Strings</a></li><li><a href="ch08-03-hash-maps.html"><strong>8.3.</strong> Hash Maps</a></li></ul></li><li><a href="ch09-00-error-handling.html"><strong>9.</strong> Error Handling</a></li><li><ul class="section"><li><a href="ch09-01-unrecoverable-errors-with-panic.html"><strong>9.1.</strong> Unrecoverable Errors with <code>panic!</code></a></li><li><a href="ch09-02-recoverable-errors-with-result.html"><strong>9.2.</strong> Recoverable Errors with <code>Result</code></a></li><li><a href="ch09-03-to-panic-or-not-to-panic.html"><strong>9.3.</strong> To <code>panic!</code> or Not To <code>panic!</code></a></li></ul></li><li><a href="ch10-00-generics.html"><strong>10.</strong> Generics</a></li><li><ul class="section"><li><a href="ch10-01-syntax.html"><strong>10.1.</strong> Syntax</a></li><li><a href="ch10-02-traits.html"><strong>10.2.</strong> Traits</a></li><li><a href="ch10-03-lifetime-syntax.html"><strong>10.3.</strong> Lifetime syntax</a></li></ul></li><li><a href="ch11-00-testing.html"><strong>11.</strong> Testing</a></li><li><ul class="section"><li><a href="ch11-01-writing-tests.html"><strong>11.1.</strong> Writing tests</a></li><li><a href="ch11-02-running-tests.html"><strong>11.2.</strong> Running tests</a></li><li><a href="ch11-03-test-organization.html"><strong>11.3.</strong> Test Organization</a></li></ul></li><li><a href="ch12-00-an-io-project.html"><strong>12.</strong> An I/O Project</a></li><li><ul class="section"><li><a href="ch12-01-accepting-command-line-arguments.html"><strong>12.1.</strong> Accepting Command Line Arguments</a></li><li><a href="ch12-02-reading-a-file.html"><strong>12.2.</strong> Reading a File</a></li><li><a href="ch12-03-improving-error-handling-and-modularity.html"><strong>12.3.</strong> Improving Error Handling and Modularity</a></li><li><a href="ch12-04-testing-the-librarys-functionality.html" class="active"><strong>12.4.</strong> Testing the Library's Functionality</a></li><li><a href="ch12-05-working-with-environment-variables.html"><strong>12.5.</strong> Working with Environment Variables</a></li><li><a href="ch12-06-writing-to-stderr-instead-of-stdout.html"><strong>12.6.</strong> Writing to <code>stderr</code> instead of <code>stdout</code></a></li></ul></li><li><a href="ch13-00-functional-features.html"><strong>13.</strong> Functional Language Features in Rust - Iterators and Closures</a></li><li><a href="ch14-00-more-about-cargo.html"><strong>14.</strong> More about Cargo and Crates.io</a></li><li><a href="ch15-00-smart-pointers.html"><strong>15.</strong> Smart Pointers</a></li><li><a href="ch16-00-concurrency.html"><strong>16.</strong> Concurrency</a></li><li><a href="ch17-00-oop.html"><strong>17.</strong> Is Rust OOP?</a></li><li><a href="ch18-00-patterns.html"><strong>18.</strong> Patterns</a></li><li><a href="ch19-00-more-lifetimes.html"><strong>19.</strong> More Lifetimes</a></li><li><a href="ch20-00-advanced-types.html"><strong>20.</strong> Advanced Type System Features</a></li><li><strong>21.</strong> Macros</li><li><ul class="section"><li><strong>21.1.</strong> Writing Your Own Macros</li></ul></li><li><a href="appendix-00.html"><strong>22.</strong> Appendix</a></li><li><ul class="section"><li><a href="appendix-01-keywords.html"><strong>22.1.</strong> Keywords</a></li><li><a href="appendix-02-operators.html"><strong>22.2.</strong> Operators</a></li><li><a href="appendix-03-derivable-traits.html"><strong>22.3.</strong> Derivable Traits</a></li><li><a href="appendix-04-nightly-rust.html"><strong>22.4.</strong> Nightly Rust</a></li></ul></li></ul>
+        </div>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar" class="menu-bar">
+                    <div class="left-buttons">
+                        <i id="sidebar-toggle" class="fa fa-bars"></i>
+                        <i id="theme-toggle" class="fa fa-paint-brush"></i>
+                    </div>
+
+                    <h1 class="menu-title">The Rust Programming Language</h1>
+
+                    <div class="right-buttons">
+                        <i id="print-button" class="fa fa-print" title="Print this book"></i>
+                    </div>
+                </div>
+
+                <div id="content" class="content">
+                    <h2>Testing the Library's Functionality</h2>
+<p>Writing tests for the core functionality of our code is now easier since we
+extracted the logic into <em>src/lib.rs</em> and left all the argument parsing and
+error handling in <em>src/main.rs</em>. We can now call our code directly with various
+arguments and check return values without having to call our binary from the
+command line.</p>
+<p>We're going to write a function named <code>grep</code> that takes our search term and the
+text to search and produces a list of search results. Let's remove that
+<code>println!</code> from <code>run</code> (and from <em>src/main.rs</em> as well, as we don't really need
+those anymore either), and call the new <code>grep</code> function with the options we've
+collected. We'll add a placeholder implementation of the function for now, and
+a test that specifies the behavior we'd like the <code>grep</code> function to have. The
+test will fail with our placeholder implementation, of course, but we can make
+sure the code compiles and that we get the failure message we expect. Listing
+12-14 shows these modifications:</p>
+<figure>
+<span class="filename">Filename: src/lib.rs</span>
+<pre><code class="language-rust"># use std::error::Error;
+# use std::fs::File;
+# use std::io::prelude::*;
+# pub struct Config {
+#     pub search: String,
+#     pub filename: String,
+# }
+#
+fn grep&lt;'a&gt;(search: &amp;str, contents: &amp;'a str) -&gt; Vec&lt;&amp;'a str&gt; {
+     vec![]
+}
+
+pub fn run(config: Config) -&gt; Result&lt;(), Box&lt;Error&gt;&gt;{
+    let mut f = File::open(config.filename)?;
+
+    let mut contents = String::new();
+    f.read_to_string(&amp;mut contents)?;
+
+    grep(&amp;config.search, &amp;contents);
+
+    Ok(())
+}
+
+#[cfg(test)]
+mod test {
+    use grep;
+
+    #[test]
+    fn one_result() {
+        let search = &quot;duct&quot;;
+        let contents = &quot;\
+Rust:
+safe, fast, productive.
+Pick three.&quot;;
+
+        assert_eq!(
+            vec![&quot;safe, fast, productive.&quot;],
+            grep(search, contents)
+        );
+    }
+}
+</code></pre>
+<figcaption>
+<p>Listing 12-14: Creating a function where our logic will go and a failing test
+for that function</p>
+</figcaption>
+</figure>
+<!-- Will add ghosting and wingdings in libreoffice /Carol -->
+<p>Notice that we need an explicit lifetime <code>'a</code> declared in the signature of
+<code>grep</code> and used with the <code>contents</code> argument and the return value. Remember,
+lifetime parameters are used to specify which arguments' lifetimes connect to
+the lifetime of the return value. In this case, we're indicating that the
+vector we're returning is going to contain string slices that reference slices
+of the argument <code>contents</code>, as opposed to referencing slices of the argument
+<code>search</code>. Another way to think about what we're telling Rust is that the data
+returned by the <code>grep</code> function will live as long as the data passed into this
+function in the <code>contents</code> argument. This is important! Given that the data a
+slice references needs to be valid in order for the reference to be valid, if
+the compiler thought that we were making string slices of <code>search</code> rather than
+<code>contents</code>, it would do its safety checking incorrectly. If we tried to compile
+this function without lifetimes, we would get this error:</p>
+<pre><code class="language-text">error[E0106]: missing lifetime specifier
+  --&gt; src\lib.rs:37:46
+   |
+37 | fn grep(search: &amp;str, contents: &amp;str) -&gt; Vec&lt;&amp;str&gt; {
+   |                                              ^ expected lifetime parameter
+   |
+   = help: this function's return type contains a borrowed value, but the
+       signature does not say whether it is borrowed from `search` or
+           `contents`
+</code></pre>
+<p>Rust can't possibly know which of the two arguments we need, so it needs us to
+tell it. Because <code>contents</code> is the argument that contains all of our text and
+we want to return the parts of that text that match, we know <code>contents</code> is the
+argument that should be connected to the return value using the lifetime syntax.</p>
+<p>Connecting arguments to return values in the signature is something that other
+programming languages don't make you do, so don't worry if this still feels
+strange! Knowing how to specify lifetimes gets easier over time, and practice
+makes perfect. You may want to re-read the above section or go back and compare
+this example with the Lifetime Syntax section in Chapter 10.</p>
+<p>Now let's try running our test:</p>
+<pre><code class="language-text">$ cargo test
+...warnings...
+    Finished debug [unoptimized + debuginfo] target(s) in 0.43 secs
+     Running target/debug/deps/greprs-abcabcabc
+
+running 1 test
+test test::one_result ... FAILED
+
+failures:
+
+---- test::one_result stdout ----
+    thread 'test::one_result' panicked at 'assertion failed: `(left == right)`
+(left: `[&quot;safe, fast, productive.&quot;]`, right: `[]`)', src/lib.rs:16
+note: Run with `RUST_BACKTRACE=1` for a backtrace.
+
+
+failures:
+    test::one_result
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured
+
+error: test failed
+</code></pre>
+<p>Great, our test fails, exactly as we expected. Let's get the test to pass! It's
+failing because we always return an empty vector. Here's what we're going to do
+to implement <code>grep</code>:</p>
+<ol>
+<li>Iterate through each line of the contents.</li>
+<li>Check if the line contains our search string.
+<ul>
+<li>If it does, add it to the list of values we're returning.</li>
+<li>If not, do nothing.</li>
+</ul>
+</li>
+<li>Return the list of results that match.</li>
+</ol>
+<p>Let's take each step at a time, starting with iterating through lines. Strings
+have a helpful method to handle this, conveniently named <code>lines</code>:</p>
+<p><span class="filename">Filename: src/lib.rs</span></p>
+<pre><code class="language-rust,ignore">fn grep&lt;'a&gt;(search: &amp;str, contents: &amp;'a str) -&gt; Vec&lt;&amp;'a str&gt; {
+    for line in contents.lines() {
+        // do something with line
+    }
+}
+</code></pre>
+<!-- Will add wingdings in libreoffice /Carol -->
+<p>We're using a <code>for</code> loop along with the <code>lines</code> method to get each line in turn.
+Next, let's see if our line contains the search string. Luckily, strings have a
+helpful method named <code>contains</code> that does this for us! Using the <code>contains</code>
+method looks like this:</p>
+<p><span class="filename">Filename: src/lib.rs</span></p>
+<pre><code class="language-rust,ignore">fn grep&lt;'a&gt;(search: &amp;str, contents: &amp;'a str) -&gt; Vec&lt;&amp;'a str&gt; {
+    for line in contents.lines() {
+        if line.contains(search) {
+            // do something with line
+        }
+    }
+}
+</code></pre>
+<!-- Will add ghosting and wingdings in libreoffice /Carol -->
+<p>Finally, we need a way to store the lines that contain our search string. For
+that, we can make a mutable vector before the <code>for</code> loop and call the <code>push</code>
+method to store a <code>line</code> in the vector. After the <code>for</code> loop, we return the
+vector:</p>
+<p><span class="filename">Filename: src/lib.rs</span></p>
+<pre><code class="language-rust,ignore">fn grep&lt;'a&gt;(search: &amp;str, contents: &amp;'a str) -&gt; Vec&lt;&amp;'a str&gt; {
+    let mut results = Vec::new();
+
+    for line in contents.lines() {
+        if line.contains(search) {
+            results.push(line);
+        }
+    }
+
+    results
+}
+</code></pre>
+<!-- Will add ghosting and wingdings in libreoffice /Carol -->
+<p>Let's give it a try:</p>
+<pre><code class="language-text">$ cargo test
+running 1 test
+test test::one_result ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured
+
+     Running target/debug/greprs-2f55ee8cd1721808
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured
+
+   Doc-tests greprs
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured
+</code></pre>
+<p>Great! It works. Now that our test is passing, we could consider opportunities
+for refactoring the implementation of <code>grep</code> and be certain we maintain the
+same functionality while we do so. This code isn't bad, but it isn't taking
+advantage of some useful features of iterators. We'll be coming back to this
+example in Chapter 13 where we'll explore iterators in detail and see how to
+improve it.</p>
+<p>Now that the <code>grep</code> function is working, we need to do one last thing inside of
+the <code>run</code> function: we never printed out the results! We'll do that by adding
+a <code>for</code> loop that prints each line returned from the <code>grep</code> function:</p>
+<p><span class="filename">Filename: src/lib.rs</span></p>
+<pre><code class="language-rust,ignore">pub fn run(config: Config) -&gt; Result&lt;(), Box&lt;Error&gt;&gt; {
+    let mut f = File::open(config.filename)?;
+
+    let mut contents = String::new();
+    f.read_to_string(&amp;mut contents)?;
+
+    for line in grep(&amp;config.search, &amp;contents) {
+        println!(&quot;{}&quot;, line);
+    }
+
+    Ok(())
+}
+</code></pre>
+<!-- Will add ghosting and wingdings in libreoffice /Carol -->
+<p>Now our whole program should be working! Let's try it out:</p>
+<pre><code class="language-text">$ cargo run the poem.txt
+   Compiling greprs v0.1.0 (file:///projects/greprs)
+    Finished debug [unoptimized + debuginfo] target(s) in 0.38 secs
+     Running `target\debug\greprs.exe the poem.txt`
+Then there's a pair of us - don't tell!
+To tell your name the livelong day
+
+$ cargo run a poem.txt
+    Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
+     Running `target\debug\greprs.exe a poem.txt`
+I'm nobody! Who are you?
+Then there's a pair of us - don't tell!
+They'd banish us, you know.
+How dreary to be somebody!
+How public, like a frog
+To tell your name the livelong day
+To an admiring bog!
+</code></pre>
+<p>Excellent! We've built our own version of a classic tool, and learned a lot
+about how to structure applications. We've also learned a bit about file input
+and output, lifetimes, testing, and command line parsing.</p>
+
+                </div>
+
+                <!-- Mobile navigation buttons -->
+                
+                    <a href="ch12-03-improving-error-handling-and-modularity.html" class="mobile-nav-chapters previous">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+                    <a href="ch12-05-working-with-environment-variables.html" class="mobile-nav-chapters next">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                
+
+            </div>
+
+            
+                <a href="ch12-03-improving-error-handling-and-modularity.html" class="nav-chapters previous" title="You can navigate through the chapters using the arrow keys">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+            
+
+            
+                <a href="ch12-05-working-with-environment-variables.html" class="nav-chapters next" title="You can navigate through the chapters using the arrow keys">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            
+
+        </div>
+
+
+        <!-- Local fallback for Font Awesome -->
+        <script>
+            if ($(".fa").css("font-family") !== "FontAwesome") {
+                $('<link rel="stylesheet" type="text/css" href="_FontAwesome/css/font-awesome.css">').prependTo('head');
+            }
+        </script>
+
+        <!-- Livereload script (if served using the cli tool) -->
+        
+
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+    </body>
+</html>
