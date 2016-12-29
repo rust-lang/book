@@ -7,7 +7,7 @@ Rust's focus on aliasability ends up solving these problems.
 
 This is a library abstraction.
 
-Shared mutable state is a problem. Both useful. Functional languagess get rid of
+Shared mutable state is a problem. Both useful. Functional languages get rid of
 mutability.
 
 Ownership rules (that tame the "shared" aspect) enable fearless concurrency: the
@@ -32,7 +32,7 @@ If you have a different threaded mechanism, you need a runtime, rust is trying
 to not have a heavy runtime.
 
 These are the reasons Rust's concurrency model is this way as opposed to other
-lang's ways, which are optimizing for different things.
+language's ways, which are optimizing for different things.
 
 
 ## Let's get a thread: `thread::spawn`
