@@ -236,10 +236,11 @@ The condition `if error.kind() == ErrorKind::NotFound` is called a *match
 guard*: it's an extra condition on a `match` arm that further refines the arm's
 pattern. This condition must be true in order for that arm's code to get run;
 otherwise, the pattern matching will move on to consider the next arm in the
-`match`.  The `ref` in the pattern is needed so that the `error` is
-not moved into the guard condition but is merely referenced by it.
-
-<!-- Hm, how come we use `ref` as the syntax here and not &? -->
+`match`. The `ref` in the pattern is needed so that the `error` is not moved
+into the guard condition but is merely referenced by it. The reason `ref` is
+used to take a reference in a pattern instead of `&` will be covered in detail
+in Chapter XX. In short, in the context of a pattern, `&` matches a reference
+and give us its value, but `ref` matches a value and gives us a reference to it.
 
 The condition we want to check in the match guard is whether the value returned
 by `error.kind()` is the `NotFound` variant of the `ErrorKind` enum. If it is,
