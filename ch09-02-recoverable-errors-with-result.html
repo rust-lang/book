@@ -68,27 +68,40 @@
 
                 <div id="content" class="content">
                     <h2>Recoverable Errors with <code>Result</code></h2>
-<p>Most errors aren't so dire. Sometimes, when a function fails, it's for a reason
-that we can easily interpret and respond to. As an example, maybe we are making
-a request to a website, but it's down for maintenance. In this situation, we'd
-like to wait and then try again. Terminating our process isn't the right thing
-to do here.</p>
-<p>In these cases, Rust's standard library provides an <code>enum</code> to use as the return
-type of the function:</p>
+<p>Most errors aren't serious enough to require the program to stop entirely.
+Sometimes, when a function fails, it's for a reason that we can easily
+interpret and respond to. For example, if we try to open a file and that
+operation fails because the file doesn't exist, we might want to create the
+file instead of terminating the process.</p>
+<p>Recall from Chapter 2 the section on &quot;Handling Potential Failure with the
+<code>Result</code> Type&quot; that the <code>Result</code> enum is defined as having two variants, <code>Ok</code>
+and <code>Err</code>, as follows:</p>
 <pre><code class="language-rust">enum Result&lt;T, E&gt; {
     Ok(T),
     Err(E),
 }
 </code></pre>
-<p>The <code>Ok</code> variant indicates a successful result, and <code>Err</code> indicates an
-unsuccessful result. These two variants each contain one thing: in <code>Ok</code>'s case,
-it's the successful return value. With <code>Err</code>, it's some value that represents
-the error. The <code>T</code> and <code>E</code> are generic type parameters; we'll go into generics
-in more detail in Chapter 10. What you need to know for right now is that the
-<code>Result</code> type is defined such that it can have the same behavior for any type
-<code>T</code> that is what we want to return in the success case, and any type <code>E</code> that
-is what we want to return in the error case.</p>
-<p>Listing 9-2 shows an example of something that might fail: opening a file.</p>
+<!-- Would it make sense for this to be something like:
+<pre><code>enum Result&lt;T, E&gt; {
+    Ok(T) =&gt; successful_result,
+    Err(E) =&gt; error,
+}
+</code></pre>
+<p>instead? Then you could concretely explain the returned result.
+--&gt;</p>
+<!-- This notation looks similar to a `match`, but it's not a `match`, so we
+think this would be confusing. We've tried to clarify better in the text.
+/Carol -->
+<p>The <code>T</code> and <code>E</code> are generic type parameters; we'll go into generics in more
+detail in Chapter 10. What you need to know right now is that <code>T</code> represents
+the type of the value that will be returned in a success case within the <code>Ok</code>
+variant, and <code>E</code> represents the type of the error that will be returned in a
+failure case within the <code>Err</code> variant. Because <code>Result</code> has these generic type
+parameters, we can use the <code>Result</code> type and the functions that the standard
+library has defined on it in many different situations where the successful
+value and error value we want to return may differ.</p>
+<p>Let's call a function that returns a <code>Result</code> value because the function could
+fail: opening a file, shown in Listing 9-2.</p>
 <figure>
 <span class="filename">Filename: src/main.rs</span>
 <pre><code class="language-rust">use std::fs::File;
@@ -101,12 +114,54 @@ fn main() {
 <p>Listing 9-2: Opening a file</p>
 </figcaption>
 </figure>
-<p>The type of <code>f</code> in this example is a <code>Result</code>, because there are many ways in
-which opening a file can fail. For example, unless we created <code>hello.txt</code>, this
-file does not yet exist. Before we can do anything with our <code>File</code>, we need to
-extract it out of the result. Listing 9-3 shows one way to handle the <code>Result</code>
-with a basic tool: the <code>match</code> expression that we learned about in Chapter 6.</p>
-<!-- I'll ghost everything except the match statement lines in the libreoffice file /Carol -->
+<p>How do we know <code>File::open</code> returns a <code>Result</code>? We could look at the standard
+library API documentation. We could ask the compiler! If we give <code>f</code> a type
+annotation of some type that we know the return type of the function is <em>not</em>,
+then we try to compile the code, the compiler will tell us that the types don't
+match. The error message will then tell us what the type of <code>f</code> <em>is</em>! Let's try
+it: we know that the return type of <code>File::open</code> isn't of type <code>u32</code>, so let's
+change the <code>let f</code> statement to:</p>
+<pre><code class="language-rust,ignore">let f: u32 = File::open(&quot;hello.txt&quot;);
+</code></pre>
+<p>Attempting to compile now gives us:</p>
+<pre><code class="language-text">error[E0308]: mismatched types
+ --&gt; src/main.rs:4:18
+  |
+4 |     let f: u32 = File::open(&quot;hello.txt&quot;);
+  |                  ^^^^^^^^^^^^^^^^^^^^^^^ expected u32, found enum `std::result::Result`
+  |
+  = note: expected type `u32`
+  = note:    found type `std::result::Result&lt;std::fs::File, std::io::Error&gt;`
+</code></pre>
+<p>This tells us the return type of the <code>File::open</code> function is a <code>Result&lt;T, E&gt;</code>.
+The generic parameter <code>T</code> has been filled in here with the type of the success
+value, <code>std::fs::File</code>, which is a file handle. The type of <code>E</code> used in the
+error value is <code>std::io::Error</code>.</p>
+<p>This return type means the call to <code>File::open</code> might succeed and return to us
+a file handle that we can read from or write to. The function call also might
+fail: for example, the file might not exist, or we might not have permission to
+access the file. The <code>File::open</code> function needs to have a way to tell us
+whether it succeeded or failed, and at the same time give us either the file
+handle or error information. This information is exactly what the <code>Result</code> enum
+conveys.</p>
+<p>In the case where <code>File::open</code> succeeds, the value we will have in the variable
+<code>f</code> will be an instance of <code>Ok</code> that contains a file handle. In the case where
+it fails, the value in <code>f</code> will be an instance of <code>Err</code> that contains more
+information about the kind of error that happened.</p>
+<!--Can you say explicitly why there being many ways things can fail means we
+use the result type? Also, are we importing the File type from the standard
+crate here? That seems worth mentioning. -->
+<!-- We think it would be repetitive to point out every example that imports a
+type from the standard library. We're past the Modules Chapter 7 "Importing
+Names With Use" section that explains the concept in depth, as well as multiple
+examples in the Hash maps section of Chapter 8 that show how and why to import
+types from the standard library. /Carol -->
+<p>We need to add to the code from Listing 9-2 to take different actions depending
+on the value <code>File::open</code> returned. Listing 9-3 shows one way to handle the
+<code>Result</code> with a basic tool: the <code>match</code> expression that we learned about in
+Chapter 6.</p>
+<!-- I'll ghost everything except the match statement lines in the libreoffice
+file /Carol -->
 <figure>
 <span class="filename">Filename: src/main.rs</span>
 <pre><code class="language-rust,should_panic">use std::fs::File;
@@ -126,25 +181,41 @@ error),
 might have</p>
 </figcaption>
 </figure>
-<p>If we see an <code>Ok</code>, we can return the inner <code>file</code> out of the <code>Ok</code> variant. If
-we see <code>Err</code>, we have to decide what to do with it. The simplest thing is to
-turn our error into a <code>panic!</code> instead, by calling the macro. And since we
-haven't created that file yet, we'll see a message indicating as such when we
-print the error value:</p>
+<!-- So we don't need the Result keyword in this code example? And what is the
+{:?} syntax, can you include a line about that? -->
+<!-- We've added an explanation that Result is like Option in that it's
+imported into the prelude, which the reader should be familiar with. We
+explained the {:?} syntax in Structs, chapter 5, in the section "Adding Useful
+Functionality with Derived Traits". It's the debug format. Having to re-explain
+multiple concepts that are not the primary focus of this example really
+obscures the point of the section. /Carol -->
+<p>Note that, like the <code>Option</code> enum, the <code>Result</code> enum and its variants have been
+imported in the prelude, so we don't need to specify <code>Result::</code> before the <code>Ok</code>
+and <code>Err</code> variants in the <code>match</code> arms.</p>
+<p>Here we tell Rust that when the result is <code>Ok</code>, return the inner <code>file</code> value
+out of the <code>Ok</code> variant, and we then assign that file handle value to the
+variable <code>f</code>. After the <code>match</code>, we can then use the file handle for reading or
+writing.</p>
+<p>The other arm of the <code>match</code> handles the case where we get an <code>Err</code> value from
+<code>File::open</code>. In this example, we've chosen to call the <code>panic!</code> macro. If
+there's no file named <code>hello.txt</code> in our current directory and we run this
+code, we'll see the following output from the <code>panic!</code> macro:</p>
 <pre><code class="language-text">thread 'main' panicked at 'There was a problem opening the file: Error { repr:
 Os { code: 2, message: &quot;No such file or directory&quot; } }', src/main.rs:8
 </code></pre>
+<!-- Do we have to manually print the error message, or does it show when we
+run the program? -->
+<!-- No, the `panic!` macro prints what we give to it, which we covered in the
+section previous to this one. /Carol -->
 <h3>Matching on Different Errors</h3>
-<p>There are many reasons why opening a file might fail, and we may not want to
-take the same actions to try to recover for all of them. For example, if the
-file we're trying to open does not exist, we could choose to create it. If the
-file exists but we don't have permission to read it, or any other error, we
-still want to <code>panic!</code> in the same way as above and not create the file.</p>
-<p>The <code>Err</code> type <code>File::open</code> returns is <a href="../std/io/struct.Error.html"><code>io::Error</code></a><!-- ignore -->,
-which is a struct provided by the standard library. This struct has a method
-<code>kind</code> that we can call to get an <a href="../std/io/enum.ErrorKind.html"><code>io::ErrorKind</code></a><!-- ignore -->
-value that we can use to handle different causes of an <code>Err</code> returned from
-<code>File::open</code> differently as in Listing 9-4:</p>
+<p>The code in Listing 9-3 will <code>panic!</code> no matter the reason that <code>File::open</code>
+failed. What we'd really like to do instead is take different actions for
+different failure reasons: if <code>File::open</code> failed because the file doesn't
+exist, we want to create the file and return the handle to the new file. If
+<code>File::open</code> failed for any other reason, for example because we didn't have
+permission to open the file, we still want to <code>panic!</code> in the same way as we
+did in Listing 9-3. Let's look at Listing 9-4, which adds another arm to the
+<code>match</code>:</p>
 <figure>
 <span class="filename">Filename: src/main.rs</span>
 <pre><code class="language-rust,ignore">use std::fs::File;
@@ -171,79 +242,117 @@ error),
 </figcaption>
 </figure>
 <!-- I will add ghosting and wingdings here in libreoffice /Carol -->
-<p>This example uses a <em>match guard</em> with the second arm's pattern to add a
-condition that further refines the pattern. The <code>ref</code> in the pattern is needed
-so that the <code>error</code> is not moved into the guard condition. The condition we
-want to check is that the value <code>error.kind()</code> returns is the <code>NotFound</code>
-variant of the <code>ErrorKind</code> enum. Note that <code>File::create</code> could also fail, so
-we need to add an inner <code>match</code> statement as well! The last arm of the outer
-<code>match</code> stays the same to panic on any error besides the file not being found.</p>
+<p>The type of the value that <code>File::open</code> returns inside the <code>Err</code> variant is
+<code>io::Error</code>, which is a struct provided by the standard library. This struct
+has a method <code>kind</code> that we can call to get an <code>io::ErrorKind</code> value.
+<code>io::ErrorKind</code> is an enum provided by the standard library that has variants
+representing the different kinds of errors that might result from an <code>io</code>
+operation. The variant we're interested in is <code>ErrorKind::NotFound</code>, which
+indicates the file we're trying to open doesn't exist yet.</p>
+<p>The condition <code>if error.kind() == ErrorKind::NotFound</code> is called a <em>match
+guard</em>: it's an extra condition on a <code>match</code> arm that further refines the arm's
+pattern. This condition must be true in order for that arm's code to get run;
+otherwise, the pattern matching will move on to consider the next arm in the
+<code>match</code>. The <code>ref</code> in the pattern is needed so that the <code>error</code> is not moved
+into the guard condition but is merely referenced by it. The reason <code>ref</code> is
+used to take a reference in a pattern instead of <code>&amp;</code> will be covered in detail
+in Chapter XX. In short, in the context of a pattern, <code>&amp;</code> matches a reference
+and give us its value, but <code>ref</code> matches a value and gives us a reference to it.</p>
+<p>The condition we want to check in the match guard is whether the value returned
+by <code>error.kind()</code> is the <code>NotFound</code> variant of the <code>ErrorKind</code> enum. If it is,
+we try to create the file with 'File::create'. However, since <code>File::create</code>
+could also fail, we need to add an inner <code>match</code> statement as well! When the
+file can't be opened, a different error message will be printed. The last arm
+of the outer <code>match</code> stays the same so that the program panics on any error
+besides the missing file error.</p>
 <h3>Shortcuts for Panic on Error: <code>unwrap</code> and <code>expect</code></h3>
-<p>Using <code>match</code> works okay but can be a bit verbose, and it doesn't always
+<p>Using <code>match</code> works well enough, but it can be a bit verbose and doesn't always
 communicate intent well. The <code>Result&lt;T, E&gt;</code> type has many helper methods
-defined on it to do various things. &quot;Panic on an error result&quot; is one of those
-methods, and it's called <code>unwrap()</code>:</p>
+defined on it to do various things. One of those methods, called <code>unwrap</code>, is
+a shortcut method that is implemented just like the <code>match</code> statement we wrote
+in Listing 9-3. If the <code>Result</code> value is the <code>Ok</code> variant, <code>unwrap</code> will return
+the value inside the <code>Ok</code>. If the <code>Result</code> is the <code>Err</code> variant, <code>unwrap</code> will
+call the <code>panic!</code> macro for us.</p>
+<!-- Can you explain a bit more what unwrap() does---you mean every time we
+cause a panic it calls the unwrap method? -->
+<!-- I'm not sure how the conclusion "every time we cause a panic it calls the
+unwrap method" follows from the text that was here, but I've tried to reword.
+Please let us know what part of the text specifically is implying that here so
+that we can be sure that we've fixed it. /Carol -->
 <!-- I'll ghost everything except `unwrap()` in the libreoffice file /Carol -->
-<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust,should_panic">use std::fs::File;
 
 fn main() {
     let f = File::open(&quot;hello.txt&quot;).unwrap();
 }
 </code></pre>
-<p>This has similar behavior as the example using <code>match</code> in Listing 9-3: If the
-call to <code>open()</code> returns <code>Ok</code>, return the value inside. If it's an <code>Err</code>, panic.</p>
-<p>There's also another method that is similar to <code>unwrap()</code>, but lets us choose
-the error message: <code>expect()</code>. Using <code>expect()</code> instead of <code>unwrap()</code> and
+<!-- Can you talk ore about the syntax here, how it differs? It looks like
+there aren't generics here for T and E. How is this still related to Result? -->
+<!-- I'm not sure how to make this clearer. We're chaining the method call onto
+the return value of the `File::open` function, which hasn't changed. The reader
+should understand method calls by now. T and E are part of the *definition* of
+the Result type, since Listing 9-2 we've been talking about *using* a Result
+instance. Listings 9-2, 9-3, and 9-4 don't contain T and E either, so I'm not
+sure why it's confusing that this code doesn't contain T and E. /Carol -->
+<p>If we run this code without a <em>hello.txt</em> file, we'll see an error message from
+the <code>panic</code> call that the <code>unwrap</code> method makes:</p>
+<pre><code class="language-text">thread 'main' panicked at 'called `Result::unwrap()` on an `Err` value: Error {
+repr: Os { code: 2, message: &quot;No such file or directory&quot; } }',
+../src/libcore/result.rs:837
+</code></pre>
+<p>There's another method similar to <code>unwrap</code> that lets us also choose the
+<code>panic!</code> error message: <code>expect</code>. Using <code>expect</code> instead of <code>unwrap</code> and
 providing good error messages can convey your intent and make tracking down the
-source of a panic easier. <code>expect()</code> looks like this:</p>
-<!-- I'll ghost everything except `expect()` in the libreoffice file /Carol -->
-<p><span class="filename">Filename: src/main.rs</span></p>
+source of a panic easier. The syntax of<code>expect</code> looks like this:</p>
+<!-- I'll ghost everything except `expect(...)` in the libreoffice file /Carol -->
 <pre><code class="language-rust,should_panic">use std::fs::File;
 
 fn main() {
-    let f = File::open(&quot;hello.txt&quot;).expect(&quot;Failed to open hello.txt.&quot;);
+    let f = File::open(&quot;hello.txt&quot;).expect(&quot;Failed to open hello.txt&quot;);
 }
 </code></pre>
-<p>This isn't the only way to deal with errors, however. This entire section is
-supposed to be about recovering from errors, but we've gone back to panic. This
-observation gets at an underlying truth: you can easily turn a recoverable
-error into an unrecoverable one with <code>unwrap()</code> or <code>expect()</code>, but you can't
-turn an unrecoverable <code>panic!</code> into a recoverable one. This is why good Rust
-code chooses to make errors recoverable: you give your caller choices.</p>
-<p>The Rust community has a love/hate relationship with <code>unwrap()</code> and <code>expect()</code>.
-They're very handy when prototyping, before you're ready to decide how to
-handle errors, and in that case they leave clear markers to look for when you
-are ready to make your program more robust. They're useful in tests since they
-will cause the test to fail if there's an error any place you call them. In
-examples, you might not want to muddy the code with proper error handling. But
-if you use them in a library, mis-using your library can cause other people's
-programs to halt unexpectedly, and that's not very user-friendly.</p>
-<p>Another time it's appropriate to call <code>unwrap</code> is when we have some other logic
-that ensures the <code>Result</code> will have an <code>Ok</code> value, but the logic isn't
-something the compiler understands. If you can ensure by manually inspecting
-the code that you'll never have an <code>Err</code> variant, it is perfectly acceptable to
-call <code>unwrap</code>. Here's an example:</p>
-<pre><code class="language-rust">use std::net::IpAddr;
-
-let home = &quot;127.0.0.1&quot;.parse::&lt;IpAddr&gt;().unwrap();
+<p>We use <code>expect</code> in the same way as <code>unwrap</code>: to return the file handle or call
+the <code>panic!</code> macro. The error message that <code>expect</code> uses in its call to
+<code>panic!</code> will be the parameter that we pass to <code>expect</code> instead of the default
+<code>panic!</code> message that <code>unwrap</code> uses. Here's what it looks like:</p>
+<pre><code class="language-text">thread 'main' panicked at 'Failed to open hello.txt: Error { repr: Os { code:
+2, message: &quot;No such file or directory&quot; } }', ../src/libcore/result.rs:837
 </code></pre>
-<p>We're creating an <code>IpAddr</code> instance by parsing a hardcoded string. We can see
-that <code>&quot;127.0.0.1&quot;</code> is a valid IP address, so it's acceptable to use <code>unwrap</code>
-here. If we got the IP address string from a user of our program instead of
-hardcoding this value, we'd definitely want to handle the <code>Result</code> in a more
-robust way instead.</p>
-<h3>Propagating errors with <code>try!</code> or <code>?</code></h3>
-<p>When writing a function, if you don't want to handle the error where you are,
-you can return the error to the calling function. For example, Listing 9-5
-shows a function that reads a username from a file. If the file doesn't exist
-or can't be read, this function will return those errors to the code that
-called this function:</p>
+<!-- I added the above paragraph, can you review it and correct it as
+necessary? So this is like what we did in Listing 9-3?-->
+<!-- Yes, the implementations for both `unwrap` and `expect` are similar to 9-3,
+which we want to show so that the reader knows they don't have to write out all
+of 9-3 every time they have a `Result` value. Does this comment mean your
+earlier comments in this section are moot? /Carol -->
+<!-- Is panic used for both types of errors? The introduction makes it seem as
+though it's only for unrecoverable errors -->
+<!-- When you call panic, you are causing the program to crash and therefore
+creating an unrecoverable error. You can choose to do that at any time, even
+when there are *no* errors. There's nothing that prevents you from calling
+`panic!` inappropriately, which is why the "to panic or not to panic" section
+goes over the criteria the reader should use to decide if they're in a
+situation that's recoverable or not. I've actually moved the text that was here
+into that section to keep that whole discussion together. /Carol
+-->
+<h3>Propagating Errors</h3>
+<p>When writing a function whose implementation calls something that might fail,
+instead of handling the error within this function, you can choose to let your
+caller know about the error so they can decide what to do. This is known as
+<em>propagating</em> the error, and gives more control to the calling code where there
+might be more information or logic that dictates how the error should be
+handled than what you have available in the context of your code.</p>
+<!-- What's the benefit/result of returning the error to the code that called
+the function, besides putting off handling it---can you lay that out? -->
+<!-- We're giving control/decision making ability to the code that's calling
+our code. I've tried to be more explicit here; please let me know what could be
+improved if it's still not clear. /Carol -->
+<p>For example, Listing 9-5 shows a function that reads a username from a file. If
+the file doesn't exist or can't be read, this function will return those errors
+to the code that called this function:</p>
 <figure>
-<pre><code class="language-rust"># use std::fs::File;
-# use std::io;
-# use std::io::Read;
-#
+<pre><code class="language-rust">use std::io;
+use std::fs::File;
+
 fn read_username_from_file() -&gt; Result&lt;String, io::Error&gt; {
     let f = File::open(&quot;hello.txt&quot;);
 
@@ -264,46 +373,55 @@ fn read_username_from_file() -&gt; Result&lt;String, io::Error&gt; {
 <p>Listing 9-5: A function that returns errors to the calling code using <code>match</code></p>
 </figcaption>
 </figure>
-<p>Since the <code>Result</code> type has two type parameters, we need to include them both
-in our function signature. In this case, <code>File::open</code> and <code>read_to_string</code>
-return <code>std::io::Error</code> as the value inside the <code>Err</code> variant, so we will also
-use it as our error type. If this function succeeds, we want to return the
-username as a <code>String</code> inside the <code>Ok</code> variant, so that is our success type.</p>
-<p>This is a very common way of handling errors: propagate them upward until
-you're ready to deal with them. This pattern is so common in Rust that there is
-a macro for it, <code>try!</code>, and as of Rust 1.14 <!-- 1.14 has not been released as
-a stable version yet, but that's the version the question mark operator will be
-released in /Carol -->, dedicated syntax for it: the question mark
-operator. We could have written the code in Listing 9-5 using the <code>try!</code> macro,
-as in Listing 9-6, and it would have the same functionality as the <code>match</code>
-expressions:</p>
-<!-- I'll ghost everything except the calls to `try!` in the libreoffice file
-/Carol -->
+<p>Let's look at the return type of the function first: <code>Result&lt;String, io::Error&gt;</code>. This means that the function is returning a value of the type
+<code>Result&lt;T, E&gt;</code> where the generic parameter <code>T</code> has been filled in with the
+concrete type <code>String</code>, and the generic type <code>E</code> has been filled in with the
+concrete type <code>io::Error</code>. If this function succeeds without any problems, the
+caller of this function will receive an <code>Ok</code> value that holds a <code>String</code> -- the
+username that this function read from the file. If this function encounters any
+problems, the caller of this function will receive an <code>Err</code> value that holds an
+instance of <code>io::Error</code> that contains more information about what the problems
+were. We chose <code>io::Error</code> as the return type of this function because that
+happens to be the type of the error value returned from both of the operations
+we're calling in this function's body that might fail: the <code>File::open</code>
+function and the <code>read_to_string</code> method.</p>
+<p>The body of the function starts by calling the <code>File::open</code> function. Then we
+handle the <code>Result</code> value returned with a <code>match</code> similar to the <code>match</code> in
+Listing 9-3, only instead of calling <code>panic!</code> in the <code>Err</code> case, we return
+early from this function and pass the error value from <code>File::open</code> back to the
+caller as this function's error value. If <code>File::open</code> succeeds, we store the
+file handle in the variable <code>f</code> and continue.</p>
+<p>Then we create a new <code>String</code> in variable <code>s</code> and call the <code>read_to_string</code>
+method on the file handle in <code>f</code> in order to read the contents of the file into
+<code>s</code>. The <code>read_to_string</code> method also returns a <code>Result</code> because it might fail,
+even though <code>File::open</code> succeeded. So we need another <code>match</code> to handle that
+<code>Result</code>: if <code>read_to_string</code> succeeds, then our function has succeeded, and we
+return the username from the file that's now in <code>s</code> wrapped in an <code>Ok</code>. If
+<code>read_to_string</code> fails, we return the error value in the same way that we
+returned the error value in the <code>match</code> that handled the return value of
+<code>File::open</code>. We don't need to explicitly say <code>return</code>, however, since this is
+the last expression in the function.</p>
+<p>The code that calls this code will then handle getting either an <code>Ok</code> value
+that contains a username or an <code>Err</code> value that contains an <code>io::Error</code>. We
+don't know what the caller will do with those values. If they get an <code>Err</code>
+value, they could choose to call <code>panic!</code> and crash their program, use a
+default username, or look up the username from somewhere other than a file, for
+example. We don't have enough information on what the caller is actually trying
+to do, so we propagate all the success or error information upwards for them to
+handle as they see fit.</p>
+<p>This pattern of propagating errors is so common in Rust that there is dedicated
+syntax to make this easier: <code>?</code>.</p>
+<h3>A Shortcut for Propagating Errors: <code>?</code></h3>
+<!-- The `?` ended up stabilizing in 1.13 and is quickly becoming preferred over
+`try!`, so we decided to only cover `?`. /Carol -->
+<p>Listing 9-6 shows an implementation of <code>read_username_from_file</code> that has the
+same functionality as it had in Listing 9-5, but this implementation uses the
+question mark:</p>
+<!-- I'll ghost everything except the question mark in libreoffice. /Carol -->
 <figure>
-<pre><code class="language-rust"># use std::fs::File;
-# use std::io;
-# use std::io::Read;
-#
-fn read_username_from_file() -&gt; Result&lt;String, io::Error&gt; {
-    let mut f = try!(File::open(&quot;hello.txt&quot;));
-    let mut s = String::new();
+<pre><code class="language-rust">use std::io;
+use std::fs::File;
 
-    try!(f.read_to_string(&amp;mut s));
-
-    Ok(s)
-}
-</code></pre>
-<figcaption>
-<p>Listing 9-6: A function that returns errors to the calling code using <code>try!</code></p>
-</figcaption>
-</figure>
-<p>Or as in Listing 9-7, which uses the question mark operator:</p>
-<figure>
-<pre><code class="language-rust"># fn main() {}
-# use std::fs::File;
-# use std::io;
-# use std::io::Read;
-#
 fn read_username_from_file() -&gt; Result&lt;String, io::Error&gt; {
     let mut f = File::open(&quot;hello.txt&quot;)?;
     let mut s = String::new();
@@ -312,22 +430,32 @@ fn read_username_from_file() -&gt; Result&lt;String, io::Error&gt; {
 }
 </code></pre>
 <figcaption>
-<p>Listing 9-7: A function that returns errors to the calling code using <code>?</code></p>
+<p>Listing 9-6: A function that returns errors to the calling code using <code>?</code></p>
 </figcaption>
 </figure>
-<p>The <code>?</code> operator at the end of the <code>open</code> call does the same thing as the
-example that uses <code>match</code> and the example that uses the <code>try!</code> macro: It will
-return the value inside an <code>Ok</code> to the binding <code>f</code>, but will return early out
-of the whole function and give any <code>Err</code> value we get to our caller. The same
-thing applies to the <code>?</code> at the end of the <code>read_to_string</code> call.</p>
-<p>The advantage of using the question mark operator over the <code>try!</code> macro is the
-question mark operator permits chaining. We could further shorten this code
-by instead doing:</p>
-<pre><code class="language-rust"># fn main() {}
-# use std::fs::File;
-# use std::io;
-# use std::io::Read;
-#
+<!-- Below, are we talking about what just the ? operator does, or what the
+program with the ? operator does? -->
+<!-- I'm not sure what the difference is. We're talking about what the ? does
+in the context of this program... /Carol -->
+<p>The <code>?</code> placed after a <code>Result</code> value is defined to work the exact same way as
+the<code>match</code> expressions we defined to handle the <code>Result</code> values in Listing 9-5.
+If the value of the <code>Result</code> is an <code>Ok</code>, the value inside the <code>Ok</code> will get
+returned from this expression and the program will continue. If the value is an
+<code>Err</code>, the value inside the <code>Err</code> will be returned from the whole function as
+if we had used the <code>return</code> keyword so that the error value gets propagated to
+the caller.</p>
+<p>In the context of Listing 9-6, the <code>?</code> at the end of the <code>File::open</code> call will
+return the value inside an <code>Ok</code> to the binding <code>f</code>. If an error occurs, <code>?</code>
+will return early out of the whole function and give any <code>Err</code> value to our
+caller. The same thing applies to the <code>?</code> at the end of the <code>read_to_string</code>
+call.</p>
+<p>The <code>?</code> eliminates a lot of boilerplate and makes this function's
+implementation simpler. We could even shorten this code further by chaining
+method calls immediately after the <code>?</code>:</p>
+<pre><code class="language-rust">use std::io;
+use std::io::Read;
+use std::fs::File;
+
 fn read_username_from_file() -&gt; Result&lt;String, io::Error&gt; {
     let mut s = String::new();
 
@@ -336,39 +464,71 @@ fn read_username_from_file() -&gt; Result&lt;String, io::Error&gt; {
     Ok(s)
 }
 </code></pre>
-<p>Much nicer, right? The <code>try!</code> macro and the <code>?</code> operator make propagating
-errors upwards much more ergonomic. There's one catch though: they can only be
-used in functions that return a <code>Result</code>, since they expand to the same <code>match</code>
-expression we saw above that had a potential early return of an <code>Err</code> value.
-Let's look at what happens if we try to use <code>try!</code> in the <code>main</code> function,
-which you'll recall has a return type of <code>()</code>:</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
-<pre><code class="language-rust,ignore"># use std::fs::File;
-fn main() {
-    let f = try!(File::open(&quot;hello.txt&quot;));
+<!-- Can you explain what is happening in this code and how it differs? -->
+<!-- I've tried to make it even clearer that the functionality does NOT differ
+/Carol -->
+<p>We've moved the creation of the new <code>String</code> in <code>s</code> to the beginning of the
+function; that part hasn't changed. Instead of creating a variable <code>f</code>, we've
+chained the call to <code>read_to_string</code> directly onto the result of
+<code>File::open(&quot;hello.txt&quot;)?</code>. We still have a <code>?</code> at the end of the
+<code>read_to_string</code> call, and we still return an <code>Ok</code> value containing the
+username in <code>s</code> when both <code>File::open</code> and <code>read_to_string</code> succeed rather than
+returning errors. The functionality is again the same as in Listing 9-5 and
+Listing 9-6, this is just a different, more ergonomic way to write it.</p>
+<h4><code>?</code> Can Only Be Used in Functions That Return <code>Result</code></h4>
+<!-- I think we need a new heading here, could you suggest something? I'm sure
+there's a better way to phrase this!-->
+<!-- I've tried, but I'm not really sure how to say it any more succinctly than
+this, I'm not sure if it's better than what you suggested /Carol -->
+<p>The <code>?</code> can only be used in functions that have a return type of <code>Result</code>,
+since it is defined to work in exactly the same way as the <code>match</code> expression
+we defined in Listing 9-5. The part of the <code>match</code> that requires a return type
+of <code>Result</code> is <code>return Err(e)</code>, so the return type of the function must be a
+<code>Result</code> to be compatible with this <code>return</code>.</p>
+<!-- Which functions return a Result and how would the reader know? I'm also not
+sure what you mean by "expand", that they have the same functionality (but
+condensed!)? -->
+<!-- You can tell what any function returns by looking at the return type
+defined in the function signature, I'm not sure what part of Chapter 3 wasn't
+clear enough to convey that. The reader should be comfortable with function
+signatures by this point, and could also use the API docs to tell what a
+function returns.
+<p>I've reworded to remove the word expand, but yes, we meant &quot;functionally
+equivalent to replacing it with the longer code&quot;</p>
+<p>/Carol
+--&gt;</p>
+<p>Let's look at what happens if use <code>try!</code> in the <code>main</code> function, which you'll
+recall has a return type of <code>()</code>:</p>
+<pre><code class="language-rust,ignore">fn main() {
+    let f = File::open(&quot;hello.txt&quot;)?;
 }
 </code></pre>
-<!-- NOTE: as of 2016-10-12, the error message when calling `?` in a function
-that doesn't return a result is confusing. `try!` isn't as bad, so I'm using
-that. When https://github.com/rust-lang/rust/issues/35946 is fixed, we can
-switch this example to use `?`. /Carol -->
+<!-- NOTE: as of 2016-12-21, the error message when calling `?` in a function
+that doesn't return a result is STILL confusing. Since we want to only explain
+`?` now, I've changed the example, but if you try running this code you WON'T
+get the error message below.
+<p>I'm bugging people to try and get
+https://github.com/rust-lang/rust/issues/35946 fixed soon, hopefully before this
+chapter gets through copy editing-- at that point I'll make sure to update this
+error message. /Carol --&gt;</p>
 <p>When we compile this, we get the following error message:</p>
-<pre><code class="language-text">error[E0308]: mismatched types
+<pre><code class="language-bash">error[E0308]: mismatched types
  --&gt;
   |
-3 |     let f = try!(File::open(&quot;hello.txt&quot;));
-  |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ expected (), found enum `std::result::Result`
+3 |     let f = File::open(&quot;hello.txt&quot;)?;
+  |             ^^^^^^^^^^^^^^^^^^^^^^^^^ expected (), found enum `std::result::Result`
   |
   = note: expected type `()`
   = note:    found type `std::result::Result&lt;_, _&gt;`
 </code></pre>
-<p>The mismatched types that this error is pointing out says the <code>main()</code> function
-has a return type of <code>()</code>, but the <code>try!</code> macro might return a <code>Result</code>. So in
-functions that don't return <code>Result</code>, when you call other functions that return
-<code>Result</code>, you'll need to use a <code>match</code> or one of the methods on <code>Result</code> to
-handle it instead of using <code>try!</code> or <code>?</code>.</p>
+<p>This error is pointing out that we have mismatched types: the <code>main()</code> function
+has a return type of <code>()</code>, but the <code>?</code> might return a <code>Result</code>. In functions
+that don't return <code>Result</code>, when you call other functions that return <code>Result</code>,
+you'll need to use a <code>match</code> or one of the <code>Result</code> methods to handle it,
+instead of using <code>?</code> to potentially propagate the error to the caller.</p>
 <p>Now that we've discussed the details of calling <code>panic!</code> or returning <code>Result</code>,
-let's return to the topic of how to decide which is appropriate in which cases.</p>
+let's return to the topic of how to decide which is appropriate to use in which
+cases.</p>
 
                 </div>
 
