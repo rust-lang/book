@@ -50,7 +50,7 @@ The `opt-level` setting controls how many optimizations Rust will apply to your
 code. The setting goes from zero to three. Why would you ever want fewer
 optimizations? Applying them takes time, and so leads to a slower build.
 
-We could override these defualts by putting this into `Cargo.toml`:
+We could override these defaults by putting this into `Cargo.toml`:
 
 ```toml
 [profile.dev]
@@ -66,7 +66,7 @@ For the full list of settings, see Cargo's documentation.
 
 In Chapter XX, we built a project that included both a binary and a library.
 But what if we want to split our project up into multiple libraries? As
-projects grow, separating out major componenets can be quite useful. In this
+projects grow, separating out major components can be quite useful. In this
 situation, Cargo has a feature called "workspaces" that can help us manage
 multiple packages.
 
@@ -128,7 +128,7 @@ $ cargo build
 
 See if you can add an `add-two` crate in the same way.
 
-As your project grows, consider a workspace: smaller componenets are easier
+As your project grows, consider a workspace: smaller components are easier
 to understand individually than one big blob of code.
 
 ## Getting your project ready to be published on Crates.io
@@ -258,7 +258,7 @@ limit to the number of versions which can be published, however.
 
 # Before your first publish
 
-First things first, youll need an account on [crates.io] to acquire an API
+First things first, you'll need an account on [crates.io] to acquire an API
 token. To do so, [visit the home page][crates.io] and log in via a GitHub
 account (required for now). After this, visit your [Account
 Settings](https://crates.io/me) page and run the `cargo login` command
@@ -281,14 +281,14 @@ serve basis. Once a crate name is taken, it cannot be used for another crate.
 ## Uploading the crate
 
 Crates can be uploaded to [crates.io] with the `cargo publish` command. And
-thats it, youve now published your first crate!
+that's it, you've now published your first crate!
 
-```notrust
+```text
 $ cargo publish
 ```
 
-If youd like to skip the `cargo package` step, the `cargo publish` subcommand
-will automatically package up the local crate if a copy isnt found already.
+If you'd like to skip the `cargo package` step, the `cargo publish` subcommand
+will automatically package up the local crate if a copy isn't found already.
 
 Be sure to check out the [metadata you can
 specify](manifest.html#package-metadata) to ensure your crate can be discovered
@@ -340,7 +340,7 @@ being broken for one reason or another (syntax error, forgot to include a file,
 etc.). For situations such as this, Cargo supports a "yank" of a version of a
 crate.
 
-```notrust
+```text
 $ cargo yank --vers 1.0.1
 $ cargo yank --vers 1.0.1 --undo
 ```

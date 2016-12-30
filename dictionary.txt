@@ -1,6 +1,7 @@
 personal_ws-1.1 en 0 utf-8
 abcabcabc
 abcd
+abcdefghijklmnopqrstuvwxyz
 Addr
 aliasability
 alignof
@@ -127,9 +128,11 @@ libcore
 librarys
 libreoffice
 lifecycle
+login
 loopback
 lval
 mathematic
+metadata
 Metadata
 metaprogramming
 mibbit
@@ -210,6 +213,7 @@ Struct
 structs
 struct's
 Structs
+subcommand
 subdirectories
 subdirectory
 submodule
@@ -245,6 +249,7 @@ USERPROFILE
 usize
 UsState
 variable's
+vers
 Versioning
 wasn
 whitespace
