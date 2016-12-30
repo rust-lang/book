@@ -7,7 +7,7 @@ we're learning, we'll implement this ourselves.
 We'll need to call a function provided in Rust's standard library:
 `std::env::args`. This function returns an *iterator* of the command line
 arguments that were given to our program. We haven't discussed iterators yet;
-Chapter 16 will cover them fully. For our purposes, though, we don't need to
+Chapter 13 will cover them fully. For our purposes, though, we don't need to
 understand much about how they work in order to use them. We only need to
 understand two things:
 
