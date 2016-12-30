@@ -121,8 +121,8 @@ Let's build it!
 
 ```bash
 $ cargo build
-   Compiling add-one v0.1.0 (file:///home/steve/tmp/adder/add-one)
-   Compiling adder v0.1.0 (file:///home/steve/tmp/adder)
+   Compiling add-one v0.1.0 (file:///projects/adder/add-one)
+   Compiling adder v0.1.0 (file:///projects/adder)
     Finished debug [unoptimized + debuginfo] target(s) in 0.68 secs
 ```
 
