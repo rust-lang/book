@@ -23,11 +23,14 @@ sure the code compiles and that we get the failure message we expect. Listing
 # use std::error::Error;
 # use std::fs::File;
 # use std::io::prelude::*;
+#
 # pub struct Config {
 #     pub search: String,
 #     pub filename: String,
 # }
 #
+// ...snip...
+
 fn grep<'a>(search: &str, contents: &'a str) -> Vec<&'a str> {
      vec![]
 }

@@ -59,13 +59,27 @@ a new function `parse_config`, which we're still going to define in
 <figure>
 <span class="filename">Filename: src/main.rs</span>
 
-```rust,ignore
+```rust
+# use std::env;
+# use std::fs::File;
+# use std::io::prelude::*;
+#
 fn main() {
     let args: Vec<String> = env::args().collect();
 
     let (search, filename) = parse_config(&args);
 
+    println!("Searching for {}", search);
+    println!("In file {}", filename);
+
     // ...snip...
+#
+#     let mut f = File::open(filename).expect("file not found");
+#
+#     let mut contents = String::new();
+#     f.read_to_string(&mut contents).expect("something went wrong reading the file");
+#
+#     println!("With text:\n{}", contents);
 }
 
 fn parse_config(args: &[String]) -> (&str, &str) {
@@ -90,12 +104,6 @@ this change, run the program again to verify that the argument parsing still
 works. It's good to check your progress often, so that you have a better idea
 of which change caused a problem, should you encounter one.
 
-<!-- `cargo check` is going to be in stable rust soon, so we should
-include it here i think. Thoughts? /Steve -->
-<!-- I haven't been keeping up with what cargo check does-- it just checks
-syntax? If it seems worthwhile to check that but not the functionality, I'd
-be into it! /Carol -->
-
 ### Grouping Configuration Values
 
 Now that we have a function, let's improve it. Our code still has an indication
@@ -118,6 +126,8 @@ the addition of the `Config` struct definition, the refactoring of
 
 ```rust
 # use std::env;
+# use std::fs::File;
+# use std::io::prelude::*;
 #
 fn main() {
     let args: Vec<String> = env::args().collect();
@@ -127,7 +137,13 @@ fn main() {
     println!("Searching for {}", config.search);
     println!("In file {}", config.filename);
 
+    let mut f = File::open(config.filename).expect("file not found");
+
     // ...snip...
+#     let mut contents = String::new();
+#     f.read_to_string(&mut contents).expect("something went wrong reading the file");
+#
+#    println!("With text:\n{}", contents);
 }
 
 struct Config {
@@ -205,13 +221,27 @@ result of transforming `parse_config` into a `new` function associated with our
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-
+# use std::env;
+# use std::fs::File;
+# use std::io::prelude::*;
+#
 fn main() {
     let args: Vec<String> = env::args().collect();
 
     let config = Config::new(&args);
 
+    println!("Searching for {}", config.search);
+    println!("In file {}", config.filename);
+
     // ...snip...
+
+#     let mut f = File::open(config.filename).expect("file not found");
+#
+#     let mut contents = String::new();
+#     f.read_to_string(&mut contents).expect("something went wrong reading the file");
+#
+#    println!("With text:\n{}", contents);
+
 }
 
 # struct Config {
@@ -258,13 +288,49 @@ error message:
 <figure>
 <span class="filename">Filename: src/main.rs</span>
 
-```rust,ignore
+```rust
+# use std::env;
+# use std::fs::File;
+# use std::io::prelude::*;
+#
+# fn main() {
+#     let args: Vec<String> = env::args().collect();
+#
+#     let config = Config::new(&args);
+#
+#     println!("Searching for {}", config.search);
+#     println!("In file {}", config.filename);
+#
+#     let mut f = File::open(config.filename).expect("file not found");
+#
+#     let mut contents = String::new();
+#     f.read_to_string(&mut contents).expect("something went wrong reading the file");
+#
+#     println!("With text:\n{}", contents);
+# }
+#
+# struct Config {
+#     search: String,
+#     filename: String,
+# }
+#
+# impl Config {
 // ...snip...
 fn new(args: &[String]) -> Config {
     if args.len() < 3 {
         panic!("not enough arguments");
     }
+
+    let search = args[1].clone();
     // ...snip...
+#     let filename = args[2].clone();
+#
+#     Config {
+#         search: search,
+#         filename: filename,
+#     }
+}
+# }
 ```
 
 <figcaption>
@@ -279,7 +345,7 @@ Listing 12-7: Adding a check for the number of arguments
 With these extra few lines of code in `new`, let's try running our program
 without any arguments:
 
-```bash
+```text
 $ cargo run
     Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
      Running `target\debug\greprs.exe`
@@ -297,7 +363,30 @@ shown in Listing 12-8:
 <figure>
 <span class="filename">Filename: src/main.rs</span>
 
-```rust,ignore
+```rust
+# use std::env;
+# use std::fs::File;
+# use std::io::prelude::*;
+# use std::process;
+#
+# fn main() {
+#     let args: Vec<String> = env::args().collect();
+#
+#     let config = Config::new(&args).unwrap_or_else(|err| {
+#         println!("Problem parsing arguments: {}", err);
+#         process::exit(1);
+#     });
+#
+#     println!("Searching for {}", config.search);
+#     println!("In file {}", config.filename);
+#
+#     let mut f = File::open(config.filename).expect("file not found");
+#
+#     let mut contents = String::new();
+#     f.read_to_string(&mut contents).expect("something went wrong reading the file");
+#
+#     println!("With text:\n{}", contents);
+# }
 # struct Config {
 #     search: String,
 #     filename: String,
@@ -346,7 +435,11 @@ Now we need to make some changes to `main` as shown in Listing 12-9:
 <figure>
 <span class="filename">Filename: src/main.rs</span>
 
-```rust,ignore
+```rust
+# use std::env;
+# use std::fs::File;
+# use std::io::prelude::*;
+// ...snip...
 use std::process;
 
 fn main() {
@@ -357,7 +450,39 @@ fn main() {
         process::exit(1);
     });
 
+    println!("Searching for {}", config.search);
+    println!("In file {}", config.filename);
+
     // ...snip...
+#
+#     let mut f = File::open(config.filename).expect("file not found");
+#
+#     let mut contents = String::new();
+#     f.read_to_string(&mut contents).expect("something went wrong reading the file");
+#
+#     println!("With text:\n{}", contents);
+# }
+#
+# struct Config {
+#     search: String,
+#     filename: String,
+# }
+#
+# impl Config {
+#     fn new(args: &[String]) -> Result<Config, &'static str> {
+#         if args.len() < 3 {
+#             return Err("not enough arguments");
+#         }
+#
+#         let search = args[1].clone();
+#         let filename = args[2].clone();
+#
+#         Ok(Config {
+#             search: search,
+#             filename: filename,
+#         })
+#     }
+# }
 ```
 
 <figcaption>
@@ -392,7 +517,7 @@ a zero means success and any other value means failure. In the end, this has
 similar characteristics to our `panic!`-based handling we had in Listing 12-7,
 but we no longer get all the extra output. Let's try it:
 
-```bash
+```text
 $ cargo run
    Compiling greprs v0.1.0 (file:///projects/greprs)
     Finished debug [unoptimized + debuginfo] target(s) in 0.48 secs
@@ -412,8 +537,19 @@ was in `main`:
 <figure>
 <span class="filename">Filename: src/main.rs</span>
 
-```rust,ignore
+```rust
+# use std::env;
+# use std::fs::File;
+# use std::io::prelude::*;
+# use std::process;
+#
 fn main() {
+#     let args: Vec<String> = env::args().collect();
+#
+#     let config = Config::new(&args).unwrap_or_else(|err| {
+#         println!("Problem parsing arguments: {}", err);
+#         process::exit(1);
+#     });
     // ...snip...
 
     println!("Searching for {}", config.search);
@@ -432,6 +568,27 @@ fn run(config: Config) {
 }
 
 // ...snip...
+#
+# struct Config {
+#     search: String,
+#     filename: String,
+# }
+#
+# impl Config {
+#     fn new(args: &[String]) -> Result<Config, &'static str> {
+#         if args.len() < 3 {
+#             return Err("not enough arguments");
+#         }
+#
+#         let search = args[1].clone();
+#         let filename = args[2].clone();
+#
+#         Ok(Config {
+#             search: search,
+#             filename: filename,
+#         })
+#     }
+# }
 ```
 
 <figcaption>
@@ -454,10 +611,28 @@ to return a `Result`:
 <figure>
 <span class="filename">Filename: src/main.rs</span>
 
-```rust,ignore
+```rust
 use std::error::Error;
+# use std::env;
+# use std::fs::File;
+# use std::io::prelude::*;
+# use std::process;
 
 // ...snip...
+# fn main() {
+#     let args: Vec<String> = env::args().collect();
+#
+#     let config = Config::new(&args).unwrap_or_else(|err| {
+#         println!("Problem parsing arguments: {}", err);
+#         process::exit(1);
+#     });
+#
+#     println!("Searching for {}", config.search);
+#     println!("In file {}", config.filename);
+#
+#     run(config);
+#
+# }
 
 fn run(config: Config) -> Result<(), Box<Error>> {
     let mut f = File::open(config.filename)?;
@@ -469,6 +644,27 @@ fn run(config: Config) -> Result<(), Box<Error>> {
 
     Ok(())
 }
+#
+# struct Config {
+#     search: String,
+#     filename: String,
+# }
+#
+# impl Config {
+#     fn new(args: &[String]) -> Result<Config, &'static str> {
+#         if args.len() < 3 {
+#             return Err("not enough arguments");
+#         }
+#
+#         let search = args[1].clone();
+#         let filename = args[2].clone();
+#
+#         Ok(Config {
+#             search: search,
+#             filename: filename,
+#         })
+#     }
+# }
 ```
 
 <figcaption>
@@ -532,6 +728,17 @@ fn main() {
         process::exit(1);
     }
 }
+
+fn run(config: Config) -> Result<(), Box<Error>> {
+    let mut f = File::open(config.filename)?;
+
+    let mut contents = String::new();
+    f.read_to_string(&mut contents)?;
+
+    println!("With text:\n{}", contents);
+
+    Ok(())
+}
 ```
 
 <!-- Will add ghosting and wingdings in libreoffice /Carol -->
@@ -564,7 +771,7 @@ and its `new` method as well. Your *src/lib.rs* should now look like Listing
 <figure>
 <span class="filename">Filename: src/lib.rs</span>
 
-```rust,ignore
+```rust
 use std::error::Error;
 use std::fs::File;
 use std::io::prelude::*;
