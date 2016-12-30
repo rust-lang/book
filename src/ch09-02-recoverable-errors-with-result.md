@@ -562,7 +562,7 @@ error message. /Carol -->
 
 When we compile this, we get the following error message:
 
-```bash
+```text
 error[E0308]: mismatched types
  -->
   |

@@ -191,7 +191,7 @@ vector:
 
 <span class="filename">Filename: src/lib.rs</span>
 
-```rust,ignore
+```rust
 fn grep<'a>(search: &str, contents: &'a str) -> Vec<&'a str> {
     let mut results = Vec::new();
 

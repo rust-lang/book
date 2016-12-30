@@ -19,7 +19,7 @@ The `>` syntax tells the shell to write the contents of standard out to
 running we'll see our error message:
 
 ```text
-Application error: No search string or filename found
+Problem parsing arguments: not enough arguments
 ```
 
 We'd like this to be printed to the screen instead, and only have the output
@@ -34,19 +34,25 @@ extern crate greprs;
 
 use std::env;
 use std::process;
+use std::io::prelude::*;
 
 use greprs::Config;
 
 fn main() {
+    let mut stderr = std::io::stderr();
     let args: Vec<String> = env::args().collect();
 
     let config = Config::new(&args).unwrap_or_else(|err| {
-        println!("Problem parsing arguments: {}", err);
+        writeln!(
+            &mut stderr,
+            "Problem parsing arguments: {}",
+            err
+        ).expect("Could not write to stderr");
+
         process::exit(1);
     });
 
     if let Err(e) = greprs::run(config) {
-        let mut stderr = std::io::stderr();
 
         writeln!(
             &mut stderr,
@@ -82,7 +88,7 @@ redirecting `stdout` with `>`:
 
 ```text
 $ cargo run > output.txt
-Application error: No search string or filename found
+Problem parsing arguments: not enough arguments
 ```
 
 Now we see our error on the screen, but `output.txt` contains nothing. If we
