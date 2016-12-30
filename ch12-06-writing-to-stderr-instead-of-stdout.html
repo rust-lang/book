@@ -81,7 +81,7 @@ without any arguments, which causes an error:</p>
 <p>The <code>&gt;</code> syntax tells the shell to write the contents of standard out to
 <em>output.txt</em> instead of the screen. However, if we open <em>output.txt</em> after
 running we'll see our error message:</p>
-<pre><code class="language-text">Application error: No search string or filename found
+<pre><code class="language-text">Problem parsing arguments: not enough arguments
 </code></pre>
 <p>We'd like this to be printed to the screen instead, and only have the output
 from a successful run end up in the file if we run our program this way. Let's
@@ -92,19 +92,25 @@ change how error messages are printed as shown in Listing 12-15:</p>
 
 use std::env;
 use std::process;
+use std::io::prelude::*;
 
 use greprs::Config;
 
 fn main() {
+    let mut stderr = std::io::stderr();
     let args: Vec&lt;String&gt; = env::args().collect();
 
     let config = Config::new(&amp;args).unwrap_or_else(|err| {
-        println!(&quot;Problem parsing arguments: {}&quot;, err);
+        writeln!(
+            &amp;mut stderr,
+            &quot;Problem parsing arguments: {}&quot;,
+            err
+        ).expect(&quot;Could not write to stderr&quot;);
+
         process::exit(1);
     });
 
     if let Err(e) = greprs::run(config) {
-        let mut stderr = std::io::stderr();
 
         writeln!(
             &amp;mut stderr,
@@ -132,7 +138,7 @@ third arguments to <code>writeln!</code> are like the first and second arguments
 <p>Let's try running the program again in the same way, without any arguments and
 redirecting <code>stdout</code> with <code>&gt;</code>:</p>
 <pre><code class="language-text">$ cargo run &gt; output.txt
-Application error: No search string or filename found
+Problem parsing arguments: not enough arguments
 </code></pre>
 <p>Now we see our error on the screen, but <code>output.txt</code> contains nothing. If we
 try it again with arguments that work:</p>

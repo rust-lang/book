@@ -87,11 +87,14 @@ sure the code compiles and that we get the failure message we expect. Listing
 <pre><code class="language-rust"># use std::error::Error;
 # use std::fs::File;
 # use std::io::prelude::*;
+#
 # pub struct Config {
 #     pub search: String,
 #     pub filename: String,
 # }
 #
+// ...snip...
+
 fn grep&lt;'a&gt;(search: &amp;str, contents: &amp;'a str) -&gt; Vec&lt;&amp;'a str&gt; {
      vec![]
 }
@@ -230,7 +233,7 @@ that, we can make a mutable vector before the <code>for</code> loop and call the
 method to store a <code>line</code> in the vector. After the <code>for</code> loop, we return the
 vector:</p>
 <p><span class="filename">Filename: src/lib.rs</span></p>
-<pre><code class="language-rust,ignore">fn grep&lt;'a&gt;(search: &amp;str, contents: &amp;'a str) -&gt; Vec&lt;&amp;'a str&gt; {
+<pre><code class="language-rust">fn grep&lt;'a&gt;(search: &amp;str, contents: &amp;'a str) -&gt; Vec&lt;&amp;'a str&gt; {
     let mut results = Vec::new();
 
     for line in contents.lines() {

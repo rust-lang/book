@@ -6891,7 +6891,7 @@ https://github.com/rust-lang/rust/issues/35946 fixed soon, hopefully before this
 chapter gets through copy editing-- at that point I'll make sure to update this
 error message. /Carol --&gt;</p>
 <p>When we compile this, we get the following error message:</p>
-<pre><code class="language-bash">error[E0308]: mismatched types
+<pre><code class="language-text">error[E0308]: mismatched types
  --&gt;
   |
 3 |     let f = File::open(&quot;hello.txt&quot;)?;
@@ -9147,12 +9147,26 @@ a new function <code>parse_config</code>, which we're still going to define in
 <em>src/main.rs</em>:</p>
 <figure>
 <span class="filename">Filename: src/main.rs</span>
-<pre><code class="language-rust,ignore">fn main() {
+<pre><code class="language-rust"># use std::env;
+# use std::fs::File;
+# use std::io::prelude::*;
+#
+fn main() {
     let args: Vec&lt;String&gt; = env::args().collect();
 
     let (search, filename) = parse_config(&amp;args);
 
+    println!(&quot;Searching for {}&quot;, search);
+    println!(&quot;In file {}&quot;, filename);
+
     // ...snip...
+#
+#     let mut f = File::open(filename).expect(&quot;file not found&quot;);
+#
+#     let mut contents = String::new();
+#     f.read_to_string(&amp;mut contents).expect(&quot;something went wrong reading the file&quot;);
+#
+#     println!(&quot;With text:\n{}&quot;, contents);
 }
 
 fn parse_config(args: &amp;[String]) -&gt; (&amp;str, &amp;str) {
@@ -9171,11 +9185,6 @@ fn parse_config(args: &amp;[String]) -&gt; (&amp;str, &amp;str) {
 this change, run the program again to verify that the argument parsing still
 works. It's good to check your progress often, so that you have a better idea
 of which change caused a problem, should you encounter one.</p>
-<!-- `cargo check` is going to be in stable rust soon, so we should
-include it here i think. Thoughts? /Steve -->
-<!-- I haven't been keeping up with what cargo check does-- it just checks
-syntax? If it seems worthwhile to check that but not the functionality, I'd
-be into it! /Carol -->
 <h3>Grouping Configuration Values</h3>
 <p>Now that we have a function, let's improve it. Our code still has an indication
 that there's a better design possible: we return a tuple, but then immediately
@@ -9194,6 +9203,8 @@ the addition of the <code>Config</code> struct definition, the refactoring of
 <figure>
 <span class="filename">Filename: src/main.rs</span>
 <pre><code class="language-rust"># use std::env;
+# use std::fs::File;
+# use std::io::prelude::*;
 #
 fn main() {
     let args: Vec&lt;String&gt; = env::args().collect();
@@ -9203,7 +9214,13 @@ fn main() {
     println!(&quot;Searching for {}&quot;, config.search);
     println!(&quot;In file {}&quot;, config.filename);
 
+    let mut f = File::open(config.filename).expect(&quot;file not found&quot;);
+
     // ...snip...
+#     let mut contents = String::new();
+#     f.read_to_string(&amp;mut contents).expect(&quot;something went wrong reading the file&quot;);
+#
+#    println!(&quot;With text:\n{}&quot;, contents);
 }
 
 struct Config {
@@ -9267,13 +9284,27 @@ result of transforming <code>parse_config</code> into a <code>new</code> functio
 <code>Config</code> struct:</p>
 <figure>
 <span class="filename">Filename: src/main.rs</span>
-<pre><code class="language-rust">
+<pre><code class="language-rust"># use std::env;
+# use std::fs::File;
+# use std::io::prelude::*;
+#
 fn main() {
     let args: Vec&lt;String&gt; = env::args().collect();
 
     let config = Config::new(&amp;args);
 
+    println!(&quot;Searching for {}&quot;, config.search);
+    println!(&quot;In file {}&quot;, config.filename);
+
     // ...snip...
+
+#     let mut f = File::open(config.filename).expect(&quot;file not found&quot;);
+#
+#     let mut contents = String::new();
+#     f.read_to_string(&amp;mut contents).expect(&quot;something went wrong reading the file&quot;);
+#
+#    println!(&quot;With text:\n{}&quot;, contents);
+
 }
 
 # struct Config {
@@ -9311,12 +9342,48 @@ slice is long enough before accessing those locations, and panic with a better
 error message:</p>
 <figure>
 <span class="filename">Filename: src/main.rs</span>
-<pre><code class="language-rust,ignore">// ...snip...
+<pre><code class="language-rust"># use std::env;
+# use std::fs::File;
+# use std::io::prelude::*;
+#
+# fn main() {
+#     let args: Vec&lt;String&gt; = env::args().collect();
+#
+#     let config = Config::new(&amp;args);
+#
+#     println!(&quot;Searching for {}&quot;, config.search);
+#     println!(&quot;In file {}&quot;, config.filename);
+#
+#     let mut f = File::open(config.filename).expect(&quot;file not found&quot;);
+#
+#     let mut contents = String::new();
+#     f.read_to_string(&amp;mut contents).expect(&quot;something went wrong reading the file&quot;);
+#
+#     println!(&quot;With text:\n{}&quot;, contents);
+# }
+#
+# struct Config {
+#     search: String,
+#     filename: String,
+# }
+#
+# impl Config {
+// ...snip...
 fn new(args: &amp;[String]) -&gt; Config {
     if args.len() &lt; 3 {
         panic!(&quot;not enough arguments&quot;);
     }
+
+    let search = args[1].clone();
     // ...snip...
+#     let filename = args[2].clone();
+#
+#     Config {
+#         search: search,
+#         filename: filename,
+#     }
+}
+# }
 </code></pre>
 <figcaption>
 <p>Listing 12-7: Adding a check for the number of arguments</p>
@@ -9325,7 +9392,7 @@ fn new(args: &amp;[String]) -&gt; Config {
 <!-- Will add ghosting and wingdings in libreoffice /Carol -->
 <p>With these extra few lines of code in <code>new</code>, let's try running our program
 without any arguments:</p>
-<pre><code class="language-bash">$ cargo run
+<pre><code class="language-text">$ cargo run
     Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
      Running `target\debug\greprs.exe`
 thread 'main' panicked at 'not enough arguments', src\main.rs:29
@@ -9339,7 +9406,30 @@ happened while creating our <code>Config</code>. Instead, we can return a <code>
 shown in Listing 12-8:</p>
 <figure>
 <span class="filename">Filename: src/main.rs</span>
-<pre><code class="language-rust,ignore"># struct Config {
+<pre><code class="language-rust"># use std::env;
+# use std::fs::File;
+# use std::io::prelude::*;
+# use std::process;
+#
+# fn main() {
+#     let args: Vec&lt;String&gt; = env::args().collect();
+#
+#     let config = Config::new(&amp;args).unwrap_or_else(|err| {
+#         println!(&quot;Problem parsing arguments: {}&quot;, err);
+#         process::exit(1);
+#     });
+#
+#     println!(&quot;Searching for {}&quot;, config.search);
+#     println!(&quot;In file {}&quot;, config.filename);
+#
+#     let mut f = File::open(config.filename).expect(&quot;file not found&quot;);
+#
+#     let mut contents = String::new();
+#     f.read_to_string(&amp;mut contents).expect(&quot;something went wrong reading the file&quot;);
+#
+#     println!(&quot;With text:\n{}&quot;, contents);
+# }
+# struct Config {
 #     search: String,
 #     filename: String,
 # }
@@ -9377,7 +9467,11 @@ conform to its new type signature.</p>
 <p>Now we need to make some changes to <code>main</code> as shown in Listing 12-9:</p>
 <figure>
 <span class="filename">Filename: src/main.rs</span>
-<pre><code class="language-rust,ignore">use std::process;
+<pre><code class="language-rust"># use std::env;
+# use std::fs::File;
+# use std::io::prelude::*;
+// ...snip...
+use std::process;
 
 fn main() {
     let args: Vec&lt;String&gt; = env::args().collect();
@@ -9387,7 +9481,39 @@ fn main() {
         process::exit(1);
     });
 
+    println!(&quot;Searching for {}&quot;, config.search);
+    println!(&quot;In file {}&quot;, config.filename);
+
     // ...snip...
+#
+#     let mut f = File::open(config.filename).expect(&quot;file not found&quot;);
+#
+#     let mut contents = String::new();
+#     f.read_to_string(&amp;mut contents).expect(&quot;something went wrong reading the file&quot;);
+#
+#     println!(&quot;With text:\n{}&quot;, contents);
+# }
+#
+# struct Config {
+#     search: String,
+#     filename: String,
+# }
+#
+# impl Config {
+#     fn new(args: &amp;[String]) -&gt; Result&lt;Config, &amp;'static str&gt; {
+#         if args.len() &lt; 3 {
+#             return Err(&quot;not enough arguments&quot;);
+#         }
+#
+#         let search = args[1].clone();
+#         let filename = args[2].clone();
+#
+#         Ok(Config {
+#             search: search,
+#             filename: filename,
+#         })
+#     }
+# }
 </code></pre>
 <figcaption>
 <p>Listing 12-9: Exiting with an error code if creating a new <code>Config</code> fails</p>
@@ -9414,7 +9540,7 @@ immediately and return the number passed to it as a return code. By convention,
 a zero means success and any other value means failure. In the end, this has
 similar characteristics to our <code>panic!</code>-based handling we had in Listing 12-7,
 but we no longer get all the extra output. Let's try it:</p>
-<pre><code class="language-bash">$ cargo run
+<pre><code class="language-text">$ cargo run
    Compiling greprs v0.1.0 (file:///projects/greprs)
     Finished debug [unoptimized + debuginfo] target(s) in 0.48 secs
      Running `target\debug\greprs.exe`
@@ -9428,7 +9554,18 @@ program's logic. Listing 12-10 shows the code after extracting a function named
 was in <code>main</code>:</p>
 <figure>
 <span class="filename">Filename: src/main.rs</span>
-<pre><code class="language-rust,ignore">fn main() {
+<pre><code class="language-rust"># use std::env;
+# use std::fs::File;
+# use std::io::prelude::*;
+# use std::process;
+#
+fn main() {
+#     let args: Vec&lt;String&gt; = env::args().collect();
+#
+#     let config = Config::new(&amp;args).unwrap_or_else(|err| {
+#         println!(&quot;Problem parsing arguments: {}&quot;, err);
+#         process::exit(1);
+#     });
     // ...snip...
 
     println!(&quot;Searching for {}&quot;, config.search);
@@ -9447,6 +9584,27 @@ fn run(config: Config) {
 }
 
 // ...snip...
+#
+# struct Config {
+#     search: String,
+#     filename: String,
+# }
+#
+# impl Config {
+#     fn new(args: &amp;[String]) -&gt; Result&lt;Config, &amp;'static str&gt; {
+#         if args.len() &lt; 3 {
+#             return Err(&quot;not enough arguments&quot;);
+#         }
+#
+#         let search = args[1].clone();
+#         let filename = args[2].clone();
+#
+#         Ok(Config {
+#             search: search,
+#             filename: filename,
+#         })
+#     }
+# }
 </code></pre>
 <figcaption>
 <p>Listing 12-10: Extracting a <code>run</code> functionality for the rest of the program logic</p>
@@ -9462,9 +9620,27 @@ Listing 12-8: let's return a <code>Result&lt;T, E&gt;</code> instead of calling 
 to return a <code>Result</code>:</p>
 <figure>
 <span class="filename">Filename: src/main.rs</span>
-<pre><code class="language-rust,ignore">use std::error::Error;
+<pre><code class="language-rust">use std::error::Error;
+# use std::env;
+# use std::fs::File;
+# use std::io::prelude::*;
+# use std::process;
 
 // ...snip...
+# fn main() {
+#     let args: Vec&lt;String&gt; = env::args().collect();
+#
+#     let config = Config::new(&amp;args).unwrap_or_else(|err| {
+#         println!(&quot;Problem parsing arguments: {}&quot;, err);
+#         process::exit(1);
+#     });
+#
+#     println!(&quot;Searching for {}&quot;, config.search);
+#     println!(&quot;In file {}&quot;, config.filename);
+#
+#     run(config);
+#
+# }
 
 fn run(config: Config) -&gt; Result&lt;(), Box&lt;Error&gt;&gt; {
     let mut f = File::open(config.filename)?;
@@ -9476,6 +9652,27 @@ fn run(config: Config) -&gt; Result&lt;(), Box&lt;Error&gt;&gt; {
 
     Ok(())
 }
+#
+# struct Config {
+#     search: String,
+#     filename: String,
+# }
+#
+# impl Config {
+#     fn new(args: &amp;[String]) -&gt; Result&lt;Config, &amp;'static str&gt; {
+#         if args.len() &lt; 3 {
+#             return Err(&quot;not enough arguments&quot;);
+#         }
+#
+#         let search = args[1].clone();
+#         let filename = args[2].clone();
+#
+#         Ok(Config {
+#             search: search,
+#             filename: filename,
+#         })
+#     }
+# }
 </code></pre>
 <figcaption>
 <p>Listing 12-11: Changing the <code>run</code> function to return <code>Result</code></p>
@@ -9525,6 +9722,17 @@ difference:</p>
         process::exit(1);
     }
 }
+
+fn run(config: Config) -&gt; Result&lt;(), Box&lt;Error&gt;&gt; {
+    let mut f = File::open(config.filename)?;
+
+    let mut contents = String::new();
+    f.read_to_string(&amp;mut contents)?;
+
+    println!(&quot;With text:\n{}&quot;, contents);
+
+    Ok(())
+}
 </code></pre>
 <!-- Will add ghosting and wingdings in libreoffice /Carol -->
 <p>Instead of <code>unwrap_or_else</code>, we use <code>if let</code> to see if <code>run</code> returns an <code>Err</code>
@@ -9550,7 +9758,7 @@ and its <code>new</code> method as well. Your <em>src/lib.rs</em> should now loo
 12-12:</p>
 <figure>
 <span class="filename">Filename: src/lib.rs</span>
-<pre><code class="language-rust,ignore">use std::error::Error;
+<pre><code class="language-rust">use std::error::Error;
 use std::fs::File;
 use std::io::prelude::*;
 
@@ -9657,11 +9865,14 @@ sure the code compiles and that we get the failure message we expect. Listing
 <pre><code class="language-rust"># use std::error::Error;
 # use std::fs::File;
 # use std::io::prelude::*;
+#
 # pub struct Config {
 #     pub search: String,
 #     pub filename: String,
 # }
 #
+// ...snip...
+
 fn grep&lt;'a&gt;(search: &amp;str, contents: &amp;'a str) -&gt; Vec&lt;&amp;'a str&gt; {
      vec![]
 }
@@ -9800,7 +10011,7 @@ that, we can make a mutable vector before the <code>for</code> loop and call the
 method to store a <code>line</code> in the vector. After the <code>for</code> loop, we return the
 vector:</p>
 <p><span class="filename">Filename: src/lib.rs</span></p>
-<pre><code class="language-rust,ignore">fn grep&lt;'a&gt;(search: &amp;str, contents: &amp;'a str) -&gt; Vec&lt;&amp;'a str&gt; {
+<pre><code class="language-rust">fn grep&lt;'a&gt;(search: &amp;str, contents: &amp;'a str) -&gt; Vec&lt;&amp;'a str&gt; {
     let mut results = Vec::new();
 
     for line in contents.lines() {
@@ -10096,7 +10307,7 @@ without any arguments, which causes an error:</p>
 <p>The <code>&gt;</code> syntax tells the shell to write the contents of standard out to
 <em>output.txt</em> instead of the screen. However, if we open <em>output.txt</em> after
 running we'll see our error message:</p>
-<pre><code class="language-text">Application error: No search string or filename found
+<pre><code class="language-text">Problem parsing arguments: not enough arguments
 </code></pre>
 <p>We'd like this to be printed to the screen instead, and only have the output
 from a successful run end up in the file if we run our program this way. Let's
@@ -10107,19 +10318,25 @@ change how error messages are printed as shown in Listing 12-15:</p>
 
 use std::env;
 use std::process;
+use std::io::prelude::*;
 
 use greprs::Config;
 
 fn main() {
+    let mut stderr = std::io::stderr();
     let args: Vec&lt;String&gt; = env::args().collect();
 
     let config = Config::new(&amp;args).unwrap_or_else(|err| {
-        println!(&quot;Problem parsing arguments: {}&quot;, err);
+        writeln!(
+            &amp;mut stderr,
+            &quot;Problem parsing arguments: {}&quot;,
+            err
+        ).expect(&quot;Could not write to stderr&quot;);
+
         process::exit(1);
     });
 
     if let Err(e) = greprs::run(config) {
-        let mut stderr = std::io::stderr();
 
         writeln!(
             &amp;mut stderr,
@@ -10147,7 +10364,7 @@ third arguments to <code>writeln!</code> are like the first and second arguments
 <p>Let's try running the program again in the same way, without any arguments and
 redirecting <code>stdout</code> with <code>&gt;</code>:</p>
 <pre><code class="language-text">$ cargo run &gt; output.txt
-Application error: No search string or filename found
+Problem parsing arguments: not enough arguments
 </code></pre>
 <p>Now we see our error on the screen, but <code>output.txt</code> contains nothing. If we
 try it again with arguments that work:</p>
