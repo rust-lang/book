@@ -54,7 +54,7 @@ We’re going to define a new function named `grep_case_insensitive`. Its
 implementation will be almost the same as the `grep` function, but with some
 minor changes:
 
-<span class=“filename”>Filename: src/lib.rs</span>
+<span class="filename">Filename: src/lib.rs</span>
 
 ```rust
 fn grep_case_insensitive<'a>(search: &str, contents: &'a str) -> Vec<&'a str> {
@@ -109,7 +109,7 @@ test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured
 Great! Now, we have to actually use the new `grep_case_insensitive` function.
 First, let’s add a configuration option for it to the `Config` struct:
 
-<span class=“filename”>Filename: src/lib.rs</span>
+<span class="filename">Filename: src/lib.rs</span>
 
 ```rust
 pub struct Config {
@@ -124,7 +124,7 @@ pub struct Config {
 And then check for that option inside of the `run` function, and decide which
 function to call based on the value of the `case_sensitive` function:
 
-<span class=“filename”>Filename: src/lib.rs</span>
+<span class="filename">Filename: src/lib.rs</span>
 
 ```rust,ignore
 pub fn run(config: Config) -> Result<(), Box<Error>>{
@@ -153,7 +153,7 @@ Finally, we need to actually check the environment for the variable. To bring
 the `env` module from the standard library into our project, we add a `use` line
 at the top of *src/lib.rs*:
 
-<span class=“filename”>Filename: src/lib.rs</span>
+<span class="filename">Filename: src/lib.rs</span>
 
 ```rust
 use std::env;
@@ -161,7 +161,7 @@ use std::env;
 
 And then use the `vars` method from the `env` module inside of `Config::new`:
 
-<span class=“filename”>Filename: src/lib.rs</span>
+<span class="filename">Filename: src/lib.rs</span>
 
 ```rust
 # use std::env;

@@ -29,7 +29,7 @@ been detected and it’s not clear to the programmer how to handle the error.
 
 Let’s try calling `panic!()` with a simple program:
 
-<span class=“filename”>Filename: src/main.rs</span>
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust,should_panic
 fn main() {
@@ -67,7 +67,7 @@ Let’s look at another example to see what it’s like when a `panic!` call com
 from a library because of a bug in our code instead of from our code calling
 the macro directly:
 
-<span class=“filename”>Filename: src/main.rs</span>
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust,should_panic
 fn main() {

@@ -140,9 +140,9 @@ Blue: 10
 
 ### Updating a Hash Map
 
-<!-- So the quantity of keys must be defined up front, that’s not growable?
+<!-- So the quantity of keys must be defined up front, that's not growable?
 That could be worthy saying -->
-<!-- No, the number of keys is growable, it’s just that for EACH individual
+<!-- No, the number of keys is growable, it's just that for EACH individual
 key, there can only be one value. I’ve tried to clarify. /Carol -->
 
 While the number of keys and values is growable, each individual key can only

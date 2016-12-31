@@ -9,7 +9,7 @@ Here is how you would define and use a `calculate_length` function that takes a
 *reference* to an object as an argument instead of taking ownership of the
 argument:
 
-<span class=“filename”>Filename: src/main.rs</span>
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 fn main() {
@@ -34,7 +34,7 @@ These ampersands are *references*, and they allow you to refer to some value
 without taking ownership of it. Figure 4-8 shows a diagram.
 
 <figure>
-<img alt=“&String s pointing at String s1” src=“img/trpl04-05.svg” class=“center” />
+<img alt="&String s pointing at String s1" src="img/trpl04-05.svg" class="center" />
 
 <figcaption>
 
@@ -82,7 +82,7 @@ So what happens if we try to modify something we’re borrowing? Try the code in
 Listing 4-9. Spoiler alert: it doesn’t work!
 
 <figure>
-<span class=“filename”>Filename: src/main.rs</span>
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore
 fn main() {
@@ -120,7 +120,7 @@ allowed to modify something we have a reference to.
 
 We can fix the error in the code from Listing 4-9 with just a small tweak:
 
-<span class=“filename”>Filename: src/main.rs</span>
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 fn main() {
@@ -142,7 +142,7 @@ But mutable references have one big restriction: you can only have one mutable
 reference to a particular piece of data in a particular scope. This code will
 fail:
 
-<span class=“filename”>Filename: src/main.rs</span>
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore
 let mut s = String::from("hello");
@@ -245,7 +245,7 @@ data does.
 
 Let’s try to create a dangling reference:
 
-<span class=“filename”>Filename: src/main.rs</span>
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore
 fn main() {

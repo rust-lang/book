@@ -17,7 +17,7 @@ Listing 10-5 has an example definition of a trait named `Printable` with a
 method named `print`:
 
 <figure>
-<span class=“filename”>Filename: src/lib.rs</span>
+<span class="filename">Filename: src/lib.rs</span>
 
 ```rust
 trait Printable {
@@ -47,7 +47,7 @@ example of implementing the `Printable` trait from Listing 10-5 (that only has
 the `print` method) for a `Temperature` enum:
 
 <figure>
-<span class=“filename”>Filename: src/lib.rs</span>
+<span class="filename">Filename: src/lib.rs</span>
 
 ```rust
 # trait Printable {
@@ -80,7 +80,7 @@ In the same way `impl` lets us define methods, we’ve used it to define methods
 that pertain to our trait. We can call methods that our trait has defined just
 like we can call other methods:
 
-<span class=“filename”>Filename: src/main.rs</span>
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 # trait Printable {
@@ -131,7 +131,7 @@ With the trait bound, we’re then allowed to use the trait method `print` in th
 function body:
 
 <figure>
-<span class=“filename”>Filename: src/lib.rs</figure>
+<span class="filename">Filename: src/lib.rs</figure>
 
 ```rust
 # trait Printable {
@@ -164,7 +164,7 @@ Now we are able to call the `print_anything` function from Listing 10-7 and
 pass it a `Temperature` instance as the `value` parameter, since we implemented
 the trait `Printable` on `Temperature` in Listing 10-6:
 
-<span class=“filename”>Filename: src/main.rs</span>
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 # trait Printable {
@@ -224,7 +224,7 @@ the standard library’s `Display` trait in the trait bound on the generic type
 in the `show_anything` function:
 
 <figure>
-<span class=“filename”>Filename: src/lib.rs</span>
+<span class="filename">Filename: src/lib.rs</span>
 
 ```rust
 use std::fmt::Display;
@@ -276,7 +276,7 @@ The `where` syntax moves the trait bounds after the function arguments list.
 This definition of `show_anything` means the exact same thing as the definition
 in Listing 10-8, just said a different way:
 
-<span class=“filename”>Filename: src/lib.rs</span>
+<span class="filename">Filename: src/lib.rs</span>
 
 ```rust
 use std::fmt::Display;

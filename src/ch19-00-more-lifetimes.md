@@ -6,6 +6,6 @@
 
 ## Higher ranked trait bounds
 
-for<‘a>
+for<'a>
 
 Needed for closures

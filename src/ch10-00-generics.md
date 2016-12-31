@@ -20,7 +20,7 @@ probably familiar with: extracting a function. Consider a small program that
 finds the largest number in a list, shown in Listing 10-1:
 
 <figure>
-<span class=“filename”>Filename: src/main.rs</span>
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 fn main() {
@@ -49,7 +49,7 @@ If we needed to find the largest number in two different lists of numbers, we
 could duplicate the code in Listing 10-1 and have the same logic exist in two
 places in the program:
 
-<span class=“filename”>Filename: src/main.rs</span>
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 fn main() {
@@ -87,7 +87,7 @@ code in Listing 10-1 that finds the largest number into a function named
 `largest`. This program can find the largest number in two different lists of
 numbers, but the code from Listing 10-1 only exists in one spot:
 
-<span class=“filename”>Filename: src/main.rs</span>
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 fn largest(numbers: Vec<i32>) {

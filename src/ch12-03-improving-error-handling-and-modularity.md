@@ -57,7 +57,7 @@ a new function `parse_config`, which we’re still going to define in
 *src/main.rs*:
 
 <figure>
-<span class=“filename”>Filename: src/main.rs</span>
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 # use std::env;
@@ -122,7 +122,7 @@ the addition of the `Config` struct definition, the refactoring of
 `parse_config`, and updates to `main`:
 
 <figure>
-<span class=“filename”>Filename: src/main.rs</span>
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 # use std::env;
@@ -218,7 +218,7 @@ result of transforming `parse_config` into a `new` function associated with our
 `Config` struct:
 
 <figure>
-<span class=“filename”>Filename: src/main.rs</span>
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 # use std::env;
@@ -286,7 +286,7 @@ slice is long enough before accessing those locations, and panic with a better
 error message:
 
 <figure>
-<span class=“filename”>Filename: src/main.rs</span>
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 # use std::env;
@@ -361,7 +361,7 @@ happened while creating our `Config`. Instead, we can return a `Result`, as
 shown in Listing 12-8:
 
 <figure>
-<span class=“filename”>Filename: src/main.rs</span>
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 # use std::env;
@@ -433,7 +433,7 @@ conform to its new type signature.
 Now we need to make some changes to `main` as shown in Listing 12-9:
 
 <figure>
-<span class=“filename”>Filename: src/main.rs</span>
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 # use std::env;
@@ -535,7 +535,7 @@ program’s logic. Listing 12-10 shows the code after extracting a function name
 was in `main`:
 
 <figure>
-<span class=“filename”>Filename: src/main.rs</span>
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 # use std::env;
@@ -609,7 +609,7 @@ Listing 12-8: let’s return a `Result<T, E>` instead of calling `panic!` via
 to return a `Result`:
 
 <figure>
-<span class=“filename”>Filename: src/main.rs</span>
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 use std::error::Error;
@@ -713,7 +713,7 @@ error value. Let’s handle that now. We’ll use a similar technique as the way
 handled failure with `Config::new` in Listing 12-9, but with a slight
 difference:
 
-<span class=“filename”>Filename: src/main.rs</span>
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore
 fn main() {
@@ -769,7 +769,7 @@ and its `new` method as well. Your *src/lib.rs* should now look like Listing
 12-12:
 
 <figure>
-<span class=“filename”>Filename: src/lib.rs</span>
+<span class="filename">Filename: src/lib.rs</span>
 
 ```rust
 use std::error::Error;
@@ -827,7 +827,7 @@ to bring `Config` into scope, and prefix the `run` function with our crate name
 as shown in Listing 12-13:
 
 <figure>
-<span class=“filename”>Filename: src/main.rs</span>
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore
 extern crate greprs;

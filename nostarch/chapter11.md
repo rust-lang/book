@@ -54,7 +54,7 @@ $ cd adder
 Cargo will automatically generate a simple test when you make a new library
 project. Here’s the contents of `src/lib.rs`:
 
-<span class=“filename”>Filename: src/lib.rs</span>
+<span class="filename">Filename: src/lib.rs</span>
 
 ```rust
 #[cfg(test)]
@@ -112,7 +112,7 @@ The empty test function passes because any test which doesn’t `panic!` passes,
 and any test that does `panic!` fails. Let’s make the test fail by using the
 `assert!` macro:
 
-<span class=“filename”>Filename: src/lib.rs</span>
+<span class="filename">Filename: src/lib.rs</span>
 
 ```rust
 #[test]
@@ -183,7 +183,7 @@ value for the `==` expression.
 
 Here’s an example test that uses each of these macros and will pass:
 
-<span class=“filename”>Filename: src/lib.rs</span>
+<span class="filename">Filename: src/lib.rs</span>
 
 ```rust
 #[test]
@@ -223,7 +223,7 @@ if left_val == right_val {
 Let’s take a look at a test that will fail becasue `hello` is not equal to
 `world`. We’ve also added a custom error message, `greeting operation failed`:
 
-<span class=“filename”>Filename: src/lib.rs</span>
+<span class="filename">Filename: src/lib.rs</span>
 
 ```rust
 #[test]
@@ -268,7 +268,7 @@ aren’t on character boundaries. Add the `#[should_panic]` attribute before the
 function like the `#[test]` attribute, as shown in Listing 11-1:
 
 <figure>
-<span class=“filename”>Filename: src/lib.rs</span>
+<span class="filename">Filename: src/lib.rs</span>
 
 ```rust
 #[test]
@@ -297,7 +297,7 @@ the provided text. A more robust version of Listing 11-1 would be the
 following, in Listing 11-2:
 
 <figure>
-<span class=“filename”>Filename: src/lib.rs</span>
+<span class="filename">Filename: src/lib.rs</span>
 
 ```rust
 #[test]
@@ -375,7 +375,7 @@ only run certain tests, specified by name.
 Let’s create three tests with the following names as shown in Listing 11-3:
 
 <figure>
-<span class=“filename”>Filename: src/lib.rs</span>
+<span class="filename">Filename: src/lib.rs</span>
 
 ```rust
 #[test]
@@ -450,7 +450,7 @@ code was organized into a module named `adding` and a module named
 `subtracting` with tests in each, as in Listing 11-4:
 
 <figure>
-<span class=“filename”>Filename: src/lib.rs</span>
+<span class="filename">Filename: src/lib.rs</span>
 
 ```rust
 mod adding {
@@ -524,7 +524,7 @@ construct an argument to `cargo test` to run all tests except these and
 remember to use that argument every time, we can annotate these tests with the
 `ignore` attribute:
 
-<span class=“filename”>Filename: src/lib.rs</span>
+<span class="filename">Filename: src/lib.rs</span>
 
 ```rust
 #[test]
@@ -612,7 +612,7 @@ since the tests are not included.
 Remember when we generated the new `adder` project in the last section? Cargo
 generated this code for us:
 
-<span class=“filename”>Filename: src/lib.rs</span>
+<span class="filename">Filename: src/lib.rs</span>
 
 ```rust
 #[cfg(test)]
@@ -646,7 +646,7 @@ that don’t actually call any code we’ve written. Let’s change that now! In
 function to exercise the code, as shown in Listing 11-5:
 
 <figure>
-<span class=“filename”>Filename: src/lib.rs</span>
+<span class="filename">Filename: src/lib.rs</span>
 
 ```rust
 pub fn add_two(a: i32) -> i32 {
@@ -709,7 +709,7 @@ that the privacy rules work. Consider the code in Listing 11-6 with the private
 function `internal_adder`:
 
 <figure>
-<span class=“filename”>Filename: src/lib.rs</span>
+<span class="filename">Filename: src/lib.rs</span>
 
 ```rust
 pub fn add_two(a: i32) -> i32 {
@@ -762,7 +762,7 @@ next to *src*. Then, make a new file, *tests/integration_test.rs*, and put the
 code in Listing 11-7 inside:
 
 <figure>
-<span class=“filename”>Filename: tests/integration_test.rs</span>
+<span class="filename">Filename: tests/integration_test.rs</span>
 
 ```rust,ignore
 extern crate adder;

@@ -60,7 +60,7 @@ Inside the inner scope, we attempt to set the value of `r` to a reference to
 `x`. Then the inner scope ends and we attempt to print out the value in `r`:
 
 <figure>
-<span class=“filename”>Filename: src/lib.rs</span>
+<span class="filename">Filename: src/lib.rs</span>
 
 ```rust,ignore
 {
@@ -210,7 +210,7 @@ slice. The code in Listing 10-9 should print `The longest string is abcd` once
 we’ve implemented the `longest` function:
 
 <figure>
-<span class=“filename”>Filename: src/main.rs</span>
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 # fn longest<'a>(x: &'a str, y: &'a str) -> &'a str {
@@ -247,7 +247,7 @@ Chapter 4 for more discussion about why these are the arguments we want.
 Here’s the start of an implementation of the `longest` function that won’t
 compile yet:
 
-<span class=“filename”>Filename: src/main.rs</span>
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore
 fn longest(x: &str, y: &str) -> &str {
@@ -278,7 +278,7 @@ reference to `x` and the `else` block returns a reference to `y`! The way to
 specify the lifetime parameters in this case is to have the same lifetime for
 all of the input parameters and the return type:
 
-<span class=“filename”>Filename: src/main.rs</span>
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 fn longest<'a>(x: &'a str, y: &'a str) -> &'a str {
@@ -308,7 +308,7 @@ doing. If the function didn’t actually return the longest string slice but
 instead always returned the first argument, we wouldn’t need to specify a
 lifetime on `y`. This code compiles:
 
-<span class=“filename”>Filename: src/main.rs</span>
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 fn longest<'a>(x: &'a str, y: &str) -> &'a str {
@@ -323,7 +323,7 @@ refers to a value created within this function, and that would be a dangling
 reference since the value will go out of scope at the end of the function.
 Consider this attempted implementation of `longest`:
 
-<span class=“filename”>Filename: src/main.rs</span>
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore
 fn longest<'a>(x: &str, y: &str) -> &'a str {
@@ -369,7 +369,7 @@ that use references as arguments or return values, then why did this function
 from the “String Slices” section of Chapter 4 compile? We haven’t annotated any
 lifetimes here, yet Rust happily compiles this function:
 
-<span class=“filename”>Filename: src/lib.rs</span>
+<span class="filename">Filename: src/lib.rs</span>
 
 ```rust
 fn first_word(s: &str) -> &str {
@@ -446,7 +446,7 @@ holds a reference to another struct, `Config`, defined elsewhere. The
 method has a reference as an argument and is returning a reference; the
 lifetime of the return value will be the lifetime of `self`:
 
-<span class=“filename”>Filename: src/lib.rs</span>
+<span class="filename">Filename: src/lib.rs</span>
 
 ```rust
 # struct Config {}

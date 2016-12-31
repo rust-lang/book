@@ -15,7 +15,7 @@ of code. If the condition is not met, do not run this block of code.”
 Create a new project called *branches* in your *projects* directory to explore
 the `if` expression. In the *src/main.rs* file, input the following:
 
-<span class=“filename”>Filename: src/main.rs</span>
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 fn main() {
@@ -71,7 +71,7 @@ It’s also worth noting that the condition in this code *must* be a `bool`. To
 see what happens if the condition isn’t a `bool`, try running the following
 code:
 
-<span class=“filename”>Filename: src/main.rs</span>
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore
 fn main() {
@@ -108,7 +108,7 @@ languages such as Ruby and JavaScript. You must be explicit and always provide
 only when a number is not equal to `0`, for example, we can change the `if`
 expression to the following:
 
-<span class=“filename”>Filename: src/main.rs</span>
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 fn main() {
@@ -127,7 +127,7 @@ Running this code will print `number was something other than zero`.
 We can have multiple conditions by combining `if` and `else` in an `else if`
 expression. For example:
 
-<span class=“filename”>Filename: src/main.rs</span>
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 fn main() {
@@ -172,7 +172,7 @@ Because `if` is an expression, we can use it on the right side of a `let`
 statement, for instance in Listing 3-4:
 
 <figure>
-<span class=“filename”>Filename: src/main.rs</span>
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 fn main() {
@@ -212,7 +212,7 @@ the same type; in Listing 3-4, the results of both the `if` arm and the `else`
 arm were `i32` integers. But what happens if the types are mismatched, as in
 the following example?
 
-<span class=“filename”>Filename: src/main.rs</span>
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore
 fn main() {
@@ -270,7 +270,7 @@ forever or until you explicitly tell it to stop.
 As an example, change the *src/main.rs* file in your *loops* directory to look
 like this:
 
-<span class=“filename”>Filename: src/main.rs</span>
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore
 fn main() {
@@ -318,7 +318,7 @@ for it, and it’s called a `while` loop. The following example uses `while`: th
 program loops three times, counting down each time. Then, after the loop, it
 prints another message and exits:
 
-<span class=“filename”>Filename: src/main.rs</span>
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 fn main() {
@@ -344,7 +344,7 @@ You could use the `while` construct to loop over the elements of a collection,
 such as an array. For example:
 
 <figure>
-<span class=“filename”>Filename: src/main.rs</span>
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 fn main() {
@@ -395,7 +395,7 @@ As a more efficient alternative, you can use a `for` loop and execute some code
 for each item in a collection. A `for` loop looks like this:
 
 <figure>
-<span class=“filename”>Filename: src/main.rs</span>
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 fn main() {
@@ -435,7 +435,7 @@ before another number.
 Here’s what the countdown would look like using a `for` loop and another method
 we’ve not yet talked about, `rev`, to reverse the range:
 
-<span class=“filename”>Filename: src/main.rs</span>
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 fn main() {

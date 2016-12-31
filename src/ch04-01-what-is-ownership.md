@@ -291,7 +291,7 @@ and a capacity. This group of data is stored on the stack. On the right is the
 memory on the heap that holds the contents.
 
 <figure>
-<img alt=“String in memory” src=“img/trpl04-01.svg” class=“center” style=“width: 50%;“ />
+<img alt="String in memory" src="img/trpl04-01.svg" class="center" style="width: 50%;" />
 
 <figcaption>
 
@@ -313,7 +313,7 @@ data on the heap that the pointer refers to. In other words, the data
 representation in memory looks like Figure 4-4.
 
 <figure>
-<img alt=“s1 and s2 pointing to the same value” src=“img/trpl04-02.svg” class=“center” style=“width: 50%;“ />
+<img alt="s1 and s2 pointing to the same value" src="img/trpl04-02.svg" class="center" style="width: 50%;" />
 
 <figcaption>
 
@@ -329,7 +329,7 @@ operation `s2 = s1` could potentially be very expensive in terms of runtime
 performance if the data on the heap was large.
 
 <figure>
-<img alt=“s1 and s2 to two places” src=“img/trpl04-03.svg” class=“center” style=“width: 50%;“ />
+<img alt="s1 and s2 to two places" src="img/trpl04-03.svg" class="center" style="width: 50%;" />
 
 <figcaption>
 
@@ -382,7 +382,7 @@ it’s known as a *move*. Here we would read this by saying that `s1` was *moved
 into `s2`. So what actually happens is shown in Figure 4-6.
 
 <figure>
-<img alt=“s1 moved to s2” src=“img/trpl04-04.svg” class=“center” style=“width: 50%;“ />
+<img alt="s1 moved to s2" src="img/trpl04-04.svg" class="center" style="width: 50%;" />
 
 <figcaption>
 
@@ -470,7 +470,7 @@ like assignment. Listing 4-7 has an example with some annotations showing where
 variables go into and out of scope:
 
 <figure>
-<span class=“filename”>Filename: src/main.rs</span>
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 fn main() {
@@ -514,7 +514,7 @@ the ownership rules prevent you from doing so.
 Returning values can also transfer ownership. Here’s an example with similar
 annotations to those in Listing 4-7:
 
-<span class=“filename”>Filename: src/main.rs</span>
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 fn main() {
@@ -561,7 +561,7 @@ function that we might want to return as well.
 
 It’s possible to return multiple values using a tuple, like this:
 
-<span class=“filename”>Filename: src/main.rs</span>
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 fn main() {

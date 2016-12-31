@@ -44,7 +44,7 @@ than *helloworld.rs*.
 
 Now open the *main.rs* file you just created, and type the following code:
 
-<span class=“filename”>Filename: main.rs</span>
+<span class="filename">Filename: main.rs</span>
 
 ```rust
 fn main() {
@@ -238,7 +238,7 @@ version control system, by using the `--vcs` flag.
 Open up *Cargo.toml* in your text editor of choice. It should look something
 like this:
 
-<span class=“filename”>Filename: Cargo.toml</span>
+<span class="filename">Filename: Cargo.toml</span>
 
 ```toml
 [package]
@@ -273,7 +273,7 @@ the next chapter.
 
 Now let’s look at *src/main.rs*:
 
-<span class=“filename”>Filename: src/main.rs</span>
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 fn main() {
@@ -322,7 +322,7 @@ Bam! If all goes well, `Hello, world!` should print to the terminal once more.
 Running `cargo build` for the first time also causes Cargo to create a new file
 at the top level called *Cargo.lock*, which looks like this:
 
-<span class=“filename”>Filename: Cargo.lock</span>
+<span class="filename">Filename: Cargo.lock</span>
 
 ```toml
 [root]

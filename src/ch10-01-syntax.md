@@ -27,7 +27,7 @@ extracting a function, but the mechanics of doing the extraction will be
 similar. First, let’s consider an `Option` enum with a `Some` variant that can
 only hold an `i32`. We’ll call this enum `OptionalNumber`:
 
-<span class=“filename”>Filename: src/main.rs</span>
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 enum OptionalNumber {
@@ -46,7 +46,7 @@ would have to duplicate code to define a separate `Option` enum type for each
 type we wanted to be able to hold in the `Some` variants. For example, here is
 how we could define and use `OptionalFloatingPointNumber`:
 
-<span class=“filename”>Filename: src/main.rs</span>
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 enum OptionalFloatingPointNumber {
@@ -167,7 +167,7 @@ definition of `Option<T>` into `Option_i32` and `Option_f64`, thereby replacing
 the generic definition with the specific ones. The more specific version looks
 like the duplicated code we started with at the beginning of this section:
 
-<span class=“filename”>Filename: src/main.rs</span>
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 enum Option_i32 {
@@ -200,7 +200,7 @@ types at compile time. Listing 10-2 shows the definition and use of a `Point`
 struct that could hold `x` and `y` coordinate values that are any type:
 
 <figure>
-<span class=“filename”>Filename: src/main.rs</span>
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 struct Point<T> {
@@ -255,7 +255,7 @@ comma. Listing 10-3 shows how to define a `Point` that can have different types
 for `x` and `y`:
 
 <figure>
-<span class=“filename”>Filename: src/main.rs</span>
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 struct Point<X, Y> {
@@ -346,7 +346,7 @@ error. For example, the function definition in Listing 10-4 tries to print out
 `value` in its body:
 
 <figure>
-<span class=“filename”>Filename: src/lib.rs</span>
+<span class="filename">Filename: src/lib.rs</span>
 
 ```rust,ignore
 fn show_anything<T>(value: T) {

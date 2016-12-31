@@ -204,7 +204,7 @@ let s = format!("{}-{}-{}", s1, s2, s3);
 more info here might be good, this seems like a really useful tool. Is it only
 used on strings? -->
 
-<!-- No, we weren’t planning on it. We thought it would be sufficient to
+<!-- No, we weren't planning on it. We thought it would be sufficient to
 mention that it works the same way as `println!` since we’ve covered how
 `println!` works in Ch 2, “Printing Values with `println!` Placeholders” and Ch
 5, Ch 5, “Adding Useful Functionality with Derived Traits”. `format!` can be
@@ -408,10 +408,10 @@ Getting grapheme clusters from `String`s is complex, so this functionality is
 not provided by the standard library. There are crates available on crates.io
 if this is the functionality you need.
 
-<!-- Can you recommend some, or maybe just say why we aren’t outlining the
+<!-- Can you recommend some, or maybe just say why we aren't outlining the
 method here, ie it’s complicated and therefore best to use a crate? -->
 
-<!-- We’re trying not to mention too many crates in the book. Most crates are
+<!-- We're trying not to mention too many crates in the book. Most crates are
 provided by the community, so we don’t want to mention some and not others and
 seem biased towards certain crates, plus crates can change more quickly (and
 new crates can be created) than the language and this book will. /Carol -->

@@ -19,7 +19,7 @@ slot; a variable name is just a particularly humble form of pattern.
 
 Let’s try a more complex pattern. Change our example program to this:
 
-<span class=“filename”>Filename: src/main.rs</span>
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 fn main() {

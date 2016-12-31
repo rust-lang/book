@@ -197,7 +197,7 @@ fn area(dimensions: (u32, u32)) -> u32 {
 Listing 5-3: Specifying the length and width of the rectangle with a tuple
 </caption>
 
-<!-- I will add ghosting & wingdings once we’re in libreoffice /Carol -->
+<!-- I will add ghosting & wingdings once we're in libreoffice /Carol -->
 
 In one way, this is a little better. Tuples let us add a bit of structure, and
 we’re now passing just one argument. But in another way this method less clear:
@@ -251,7 +251,7 @@ fn area(rectangle: &Rectangle) -> u32 {
 Listing 5-4: Defining a `Rectangle` struct
 </caption>
 
-<!-- Will add ghosting & wingdings once we’re in libreoffice /Carol -->
+<!-- Will add ghosting & wingdings once we're in libreoffice /Carol -->
 
 Here we’ve defined a struct and given it the name `Rectangle`. Inside the `{}`
 we defined the fields to be `length` and `width`, both of which have type

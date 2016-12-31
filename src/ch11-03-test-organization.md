@@ -30,7 +30,7 @@ since the tests are not included.
 Remember when we generated the new `adder` project in the last section? Cargo
 generated this code for us:
 
-<span class=“filename”>Filename: src/lib.rs</span>
+<span class="filename">Filename: src/lib.rs</span>
 
 ```rust
 #[cfg(test)]
@@ -64,7 +64,7 @@ that don’t actually call any code we’ve written. Let’s change that now! In
 function to exercise the code, as shown in Listing 11-5:
 
 <figure>
-<span class=“filename”>Filename: src/lib.rs</span>
+<span class="filename">Filename: src/lib.rs</span>
 
 ```rust
 pub fn add_two(a: i32) -> i32 {
@@ -127,7 +127,7 @@ that the privacy rules work. Consider the code in Listing 11-6 with the private
 function `internal_adder`:
 
 <figure>
-<span class=“filename”>Filename: src/lib.rs</span>
+<span class="filename">Filename: src/lib.rs</span>
 
 ```rust
 pub fn add_two(a: i32) -> i32 {
@@ -180,7 +180,7 @@ next to *src*. Then, make a new file, *tests/integration_test.rs*, and put the
 code in Listing 11-7 inside:
 
 <figure>
-<span class=“filename”>Filename: tests/integration_test.rs</span>
+<span class="filename">Filename: tests/integration_test.rs</span>
 
 ```rust,ignore
 extern crate adder;

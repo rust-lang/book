@@ -1,4 +1,4 @@
-<!-- Hi Steve, Carol. I like this chapter, we’re getting into some powerful
+<!-- Hi Steve, Carol. I like this chapter, we're getting into some powerful
 tools here! I saw that the copyeditor has suggested listing numbers, which I
 think is a good idea. If you agree, could you suggest captions and add
 numbering to those listings we reference again in the chapter? Also, if we are
@@ -27,7 +27,7 @@ functional languages like F#, OCaml, or Haskell.
 
 ## Defining an Enum
 
-<!-- I’m not sure what you meant by “looking inside it” when you said “I wasn’t
+<!-- I'm not sure what you meant by "looking inside it" when you said "I wasn't
 clear throughout this section whether we were defining the IpAddrKind enum or
 looking inside it”, but I’ve tried to clarify. Please elaborate on what you
 meant by that and why it’s confusing if I haven’t resolved the issue. /Carol -->

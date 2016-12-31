@@ -38,7 +38,7 @@ To understand why this program invokes these warnings, let’s try using the
 do that by creating a binary crate in the same directory as our library crate,
 by making a *src/main.rs* file containing this code:
 
-<span class=“filename”>Filename: src/main.rs</span>
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore
 extern crate communicator;
@@ -93,7 +93,7 @@ warning that tells us that `client::connect` has gone unused for now, as well
 as the “module `client` is private” error from our binary crate. Modify
 *src/lib.rs* to make the `client` module public, like so:
 
-<span class=“filename”>Filename: src/lib.rs</span>
+<span class="filename">Filename: src/lib.rs</span>
 
 ```rust,ignore
 pub mod client;
@@ -116,7 +116,7 @@ Hooray! We have a different error! Yes, different error messages are a cause
 for celebration. The new error says “function `connect` is private”, so let’s
 edit `src/client.rs` to make `client::connect` public too:
 
-<span class=“filename”>Filename: src/client.rs</span>
+<span class="filename">Filename: src/client.rs</span>
 
 ```rust
 pub fn connect() {
@@ -152,7 +152,7 @@ In our case though, we *do* want the other two functions to be part of our
 crate’s public API, so let’s mark them as `pub` as well to try to get rid of
 the remaining warnings. Modify *src/network/mod.rs* to be:
 
-<span class=“filename”>Filename: src/network/mod.rs</span>
+<span class="filename">Filename: src/network/mod.rs</span>
 
 ```rust,ignore
 pub fn connect() {
@@ -184,7 +184,7 @@ public. We’re working from the interior of the library out this time, where
 with `client::connect` we worked from the outside in. We need to change
 `src/lib.rs` to make `network` public too:
 
-<span class=“filename”>Filename: src/lib.rs</span>
+<span class="filename">Filename: src/lib.rs</span>
 
 ```rust,ignore
 pub mod client;
@@ -219,7 +219,7 @@ Let’s look at a few more examples to get some practice. Create a new library
 project and enter the code in Listing 7-5 into your new project’s *src/lib.rs*:
 
 <figure>
-<span class=“filename”>Filename: src/lib.rs</span>
+<span class="filename">Filename: src/lib.rs</span>
 
 ```rust,ignore
 mod outermost {

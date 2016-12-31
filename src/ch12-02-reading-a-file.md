@@ -5,7 +5,7 @@ try using them. The next step is to open the file that we want to search. To do
 that, we need a file. Create one called `poem.txt` at the root level of your
 project, and fill it up with some Emily Dickinson:
 
-<span class=“filename”>Filename: poem.txt</span>
+<span class="filename">Filename: poem.txt</span>
 
 ```text
 I'm nobody! Who are you?
@@ -28,7 +28,7 @@ With that in place, let’s edit *src/main.rs* and add code to open the file as
 shown in Listing 12-3:
 
 <figure>
-<span class=“filename”>Filename: src/main.rs</span>
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 use std::env;

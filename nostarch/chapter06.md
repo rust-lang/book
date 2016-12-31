@@ -1,7 +1,7 @@
 
 [TOC]
 
-<!-- Hi Steve, Carol. I like this chapter, we’re getting into some powerful
+<!-- Hi Steve, Carol. I like this chapter, we're getting into some powerful
 tools here! I saw that the copyeditor has suggested listing numbers, which I
 think is a good idea. If you agree, could you suggest captions and add
 numbering to those listings we reference again in the chapter? Also, if we are
@@ -30,7 +30,7 @@ functional languages like F#, OCaml, or Haskell.
 
 ## Defining an Enum
 
-<!-- I’m not sure what you meant by “looking inside it” when you said “I wasn’t
+<!-- I'm not sure what you meant by "looking inside it" when you said "I wasn't
 clear throughout this section whether we were defining the IpAddrKind enum or
 looking inside it”, but I’ve tried to clarify. Please elaborate on what you
 meant by that and why it’s confusing if I haven’t resolved the issue. /Carol -->
@@ -354,7 +354,7 @@ use `Some` and `None` directly, without prefixing them with `Option::`. This is
 still just a regular enum, however, `Some(T)` and `None` are still values of
 type `Option<T>`.
 
-<!-- We haven’t spoken about the prelude so far in the book, I think I made a
+<!-- We haven't spoken about the prelude so far in the book, I think I made a
 note of that in a previous chapter---we should tell the reader what it is
 before mentioning it so they know what significance it has here -->
 
@@ -446,11 +446,11 @@ flow construct that does just this, when used with enums: it will run different
 code depending on which variant of the enum it has, and that code can use the
 data inside the matching value.
 
-<!-- I’m not sure about this connecting paragraph, it doesn’t seem like match
+<!-- I'm not sure about this connecting paragraph, it doesn't seem like match
 and option are actually that much connected, at least not at first. That’s
 fine, this is all under the enum heading, but it might confuse if we imply
 otherwise --- unless I’m just missing the connection -->
-<!-- I’ve tried to make the connection more explicit, is this better? /Carol -->
+<!-- I've tried to make the connection more explicit, is this better? /Carol -->
 
 ## Match
 
@@ -497,7 +497,7 @@ as its patterns.
 <!--- Flagging as a place to possibly put wingding numbers -- would it work to
 put two arms in this example? I think that would illustrate the control flow
 well -->
-<!-- I think we’re moving away from using generic examples like this and talking
+<!-- I think we're moving away from using generic examples like this and talking
 about concrete examples instead. I’ve changed the text to reflect that, and I’m
 happy to add wingdings once we’re in libreoffice. /Carol -->
 

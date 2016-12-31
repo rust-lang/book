@@ -15,7 +15,7 @@ argument and instead make an `area` method defined on the `Rectangle` struct,
 as shown in Listing 5-7:
 
 <figure>
-<span class=“filename”>Filename: src/main.rs</span>
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 #[derive(Debug)]
@@ -138,7 +138,7 @@ fit completely within `self` and `false` if it would not. That is, if we run
 the code in Listing 5-8, once we’ve defined the `can_hold` method:
 
 <figure>
-<span class=“filename”>Filename: src/main.rs</span>
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore
 fn main() {
@@ -179,7 +179,7 @@ if `self`’s length and width are both greater than the length and width of the
 other `Rectangle`, respectively. Let’s add this new method to the `impl` block
 from Listing 5-7:
 
-<span class=“filename”>Filename: src/main.rs</span>
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 # #[derive(Debug)]
@@ -219,7 +219,7 @@ that would take one dimension argument and use that as both length and width,
 thus making it easier to create a square `Rectangle` rather than having to
 specify the same value twice:
 
-<span class=“filename”>Filename: src/main.rs</span>
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 # #[derive(Debug)]

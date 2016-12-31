@@ -17,7 +17,7 @@ sure the code compiles and that we get the failure message we expect. Listing
 12-14 shows these modifications:
 
 <figure>
-<span class=“filename”>Filename: src/lib.rs</span>
+<span class="filename">Filename: src/lib.rs</span>
 
 ```rust
 # use std::error::Error;
@@ -153,7 +153,7 @@ to implement `grep`:
 Let’s take each step at a time, starting with iterating through lines. Strings
 have a helpful method to handle this, conveniently named `lines`:
 
-<span class=“filename”>Filename: src/lib.rs</span>
+<span class="filename">Filename: src/lib.rs</span>
 
 ```rust,ignore
 fn grep<'a>(search: &str, contents: &'a str) -> Vec<&'a str> {
@@ -170,7 +170,7 @@ Next, let’s see if our line contains the search string. Luckily, strings have 
 helpful method named `contains` that does this for us! Using the `contains`
 method looks like this:
 
-<span class=“filename”>Filename: src/lib.rs</span>
+<span class="filename">Filename: src/lib.rs</span>
 
 ```rust,ignore
 fn grep<'a>(search: &str, contents: &'a str) -> Vec<&'a str> {
@@ -189,7 +189,7 @@ that, we can make a mutable vector before the `for` loop and call the `push`
 method to store a `line` in the vector. After the `for` loop, we return the
 vector:
 
-<span class=“filename”>Filename: src/lib.rs</span>
+<span class="filename">Filename: src/lib.rs</span>
 
 ```rust
 fn grep<'a>(search: &str, contents: &'a str) -> Vec<&'a str> {
@@ -240,7 +240,7 @@ Now that the `grep` function is working, we need to do one last thing inside of
 the `run` function: we never printed out the results! We’ll do that by adding
 a `for` loop that prints each line returned from the `grep` function:
 
-<span class=“filename”>Filename: src/lib.rs</span>
+<span class="filename">Filename: src/lib.rs</span>
 
 ```rust,ignore
 pub fn run(config: Config) -> Result<(), Box<Error>> {

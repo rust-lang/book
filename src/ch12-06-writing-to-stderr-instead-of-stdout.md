@@ -27,7 +27,7 @@ from a successful run end up in the file if we run our program this way. Let’s
 change how error messages are printed as shown in Listing 12-15:
 
 <figure>
-<span class=“filename”>Filename: src/main.rs</span>
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore
 extern crate greprs;
@@ -101,7 +101,7 @@ $ cargo run to poem.txt > output.txt
 We’ll see no output to our terminal, but `output.txt` will contain
 our results:
 
-<span class=“filename”>Filename: output.txt</span>
+<span class="filename">Filename: output.txt</span>
 
 ```text
 Are you nobody, too?

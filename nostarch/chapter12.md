@@ -72,7 +72,7 @@ understand two things:
 Let’s give it a try as shown in Listing 12-1:
 
 <figure>
-<span class=“filename”>Filename: src/main.rs</span>
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 use std::env;
@@ -126,7 +126,7 @@ Now that we have a way to access all of the arguments, let’s find the ones we
 care about and save them in variables as shown in Listing 12-2:
 
 <figure>
-<span class=“filename”>Filename: src/main.rs</span>
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 use std::env;
@@ -189,7 +189,7 @@ try using them. The next step is to open the file that we want to search. To do
 that, we need a file. Create one called `poem.txt` at the root level of your
 project, and fill it up with some Emily Dickinson:
 
-<span class=“filename”>Filename: poem.txt</span>
+<span class="filename">Filename: poem.txt</span>
 
 ```text
 I'm nobody! Who are you?
@@ -212,7 +212,7 @@ With that in place, let’s edit *src/main.rs* and add code to open the file as
 shown in Listing 12-3:
 
 <figure>
-<span class=“filename”>Filename: src/main.rs</span>
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 use std::env;
@@ -350,7 +350,7 @@ a new function `parse_config`, which we’re still going to define in
 *src/main.rs*:
 
 <figure>
-<span class=“filename”>Filename: src/main.rs</span>
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore
 fn main() {
@@ -401,7 +401,7 @@ the addition of the `Config` struct definition, the refactoring of
 `parse_config`, and updates to `main`:
 
 <figure>
-<span class=“filename”>Filename: src/main.rs</span>
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 # use std::env;
@@ -489,7 +489,7 @@ result of transforming `parse_config` into a `new` function associated with our
 `Config` struct:
 
 <figure>
-<span class=“filename”>Filename: src/main.rs</span>
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 
@@ -538,7 +538,7 @@ slice is long enough before accessing those locations, and panic with a better
 error message:
 
 <figure>
-<span class=“filename”>Filename: src/main.rs</span>
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore
 // ...snip...
@@ -577,7 +577,7 @@ happened while creating our `Config`. Instead, we can return a `Result`, as
 shown in Listing 12-8:
 
 <figure>
-<span class=“filename”>Filename: src/main.rs</span>
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore
 impl Config {
@@ -621,7 +621,7 @@ conform to its new type signature.
 Now we need to make some changes to `main` as shown in Listing 12-9:
 
 <figure>
-<span class=“filename”>Filename: src/main.rs</span>
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore
 use std::process;
@@ -687,7 +687,7 @@ program’s logic. Listing 12-10 shows the code after extracting a function name
 was in `main`:
 
 <figure>
-<span class=“filename”>Filename: src/main.rs</span>
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore
 fn main() {
@@ -729,7 +729,7 @@ Listing 12-8: let’s return a `Result<T, E>` instead of calling `panic!` via
 to return a `Result`:
 
 <figure>
-<span class=“filename”>Filename: src/main.rs</span>
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore
 use std::error::Error;
@@ -794,7 +794,7 @@ error value. Let’s handle that now. We’ll use a similar technique as the way
 handled failure with `Config::new` in Listing 12-9, but with a slight
 difference:
 
-<span class=“filename”>Filename: src/main.rs</span>
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore
 fn main() {
@@ -839,7 +839,7 @@ and its `new` method as well. Your *src/lib.rs* should now look like Listing
 12-12:
 
 <figure>
-<span class=“filename”>Filename: src/lib.rs</span>
+<span class="filename">Filename: src/lib.rs</span>
 
 ```rust,ignore
 use std::error::Error;
@@ -897,7 +897,7 @@ to bring `Config` into scope, and prefix the `run` function with our crate name
 as shown in Listing 12-13:
 
 <figure>
-<span class=“filename”>Filename: src/main.rs</span>
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore
 extern crate greprs;
@@ -964,7 +964,7 @@ sure the code compiles and that we get the failure message we expect. Listing
 12-14 shows these modifications:
 
 <figure>
-<span class=“filename”>Filename: src/lib.rs</span>
+<span class="filename">Filename: src/lib.rs</span>
 
 ```rust
 fn grep<'a>(search: &str, contents: &'a str) -> Vec<&'a str> {
@@ -1089,7 +1089,7 @@ to implement `grep`:
 Let’s take each step at a time, starting with iterating through lines. Strings
 have a helpful method to handle this, conveniently named `lines`:
 
-<span class=“filename”>Filename: src/lib.rs</span>
+<span class="filename">Filename: src/lib.rs</span>
 
 ```rust,ignore
 fn grep<'a>(search: &str, contents: &'a str) -> Vec<&'a str> {
@@ -1106,7 +1106,7 @@ Next, let’s see if our line contains the search string. Luckily, strings have 
 helpful method named `contains` that does this for us! Using the `contains`
 method looks like this:
 
-<span class=“filename”>Filename: src/lib.rs</span>
+<span class="filename">Filename: src/lib.rs</span>
 
 ```rust,ignore
 fn grep<'a>(search: &str, contents: &'a str) -> Vec<&'a str> {
@@ -1125,7 +1125,7 @@ that, we can make a mutable vector before the `for` loop and call the `push`
 method to store a `line` in the vector. After the `for` loop, we return the
 vector:
 
-<span class=“filename”>Filename: src/lib.rs</span>
+<span class="filename">Filename: src/lib.rs</span>
 
 ```rust,ignore
 fn grep<'a>(search: &str, contents: &'a str) -> Vec<&'a str> {
@@ -1176,7 +1176,7 @@ Now that the `grep` function is working, we need to do one last thing inside of
 the `run` function: we never printed out the results! We’ll do that by adding
 a `for` loop that prints each line returned from the `grep` function:
 
-<span class=“filename”>Filename: src/lib.rs</span>
+<span class="filename">Filename: src/lib.rs</span>
 
 ```rust,ignore
 pub fn run(config: Config) -> Result<(), Box<Error>> {
@@ -1277,7 +1277,7 @@ We’re going to define a new function named `grep_case_insensitive`. Its
 implementation will be almost the same as the `grep` function, but with some
 minor changes:
 
-<span class=“filename”>Filename: src/lib.rs</span>
+<span class="filename">Filename: src/lib.rs</span>
 
 ```rust
 fn grep_case_insensitive<'a>(search: &str, contents: &'a str) -> Vec<&'a str> {
@@ -1332,7 +1332,7 @@ test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured
 Great! Now, we have to actually use the new `grep_case_insensitive` function.
 First, let’s add a configuration option for it to the `Config` struct:
 
-<span class=“filename”>Filename: src/lib.rs</span>
+<span class="filename">Filename: src/lib.rs</span>
 
 ```rust
 pub struct Config {
@@ -1347,7 +1347,7 @@ pub struct Config {
 And then check for that option inside of the `run` function, and decide which
 function to call based on the value of the `case_sensitive` function:
 
-<span class=“filename”>Filename: src/lib.rs</span>
+<span class="filename">Filename: src/lib.rs</span>
 
 ```rust,ignore
 pub fn run(config: Config) -> Result<(), Box<Error>>{
@@ -1376,7 +1376,7 @@ Finally, we need to actually check the environment for the variable. To bring
 the `env` module from the standard library into our project, we add a `use` line
 at the top of *src/lib.rs*:
 
-<span class=“filename”>Filename: src/lib.rs</span>
+<span class="filename">Filename: src/lib.rs</span>
 
 ```rust
 use std::env;
@@ -1384,7 +1384,7 @@ use std::env;
 
 And then use the `vars` method from the `env` module inside of `Config::new`:
 
-<span class=“filename”>Filename: src/lib.rs</span>
+<span class="filename">Filename: src/lib.rs</span>
 
 ```rust
 impl Config {
@@ -1490,7 +1490,7 @@ from a successful run end up in the file if we run our program this way. Let’s
 change how error messages are printed as shown in Listing 12-15:
 
 <figure>
-<span class=“filename”>Filename: src/main.rs</span>
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore
 extern crate greprs;
@@ -1558,7 +1558,7 @@ $ cargo run to poem.txt > output.txt
 We’ll see no output to our terminal, but `output.txt` will contain
 our results:
 
-<span class=“filename”>Filename: output.txt</span>
+<span class="filename">Filename: output.txt</span>
 
 ```text
 Are you nobody, too?

@@ -51,7 +51,7 @@ only run certain tests, specified by name.
 Let’s create three tests with the following names as shown in Listing 11-3:
 
 <figure>
-<span class=“filename”>Filename: src/lib.rs</span>
+<span class="filename">Filename: src/lib.rs</span>
 
 ```rust
 #[test]
@@ -126,7 +126,7 @@ code was organized into a module named `adding` and a module named
 `subtracting` with tests in each, as in Listing 11-4:
 
 <figure>
-<span class=“filename”>Filename: src/lib.rs</span>
+<span class="filename">Filename: src/lib.rs</span>
 
 ```rust
 mod adding {
@@ -200,7 +200,7 @@ construct an argument to `cargo test` to run all tests except these and
 remember to use that argument every time, we can annotate these tests with the
 `ignore` attribute:
 
-<span class=“filename”>Filename: src/lib.rs</span>
+<span class="filename">Filename: src/lib.rs</span>
 
 ```rust
 #[test]

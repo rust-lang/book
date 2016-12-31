@@ -213,7 +213,7 @@ always handle every possible case, as we discussed in Chapter 6.
 <!-- Can you briefly explain what the match is doing here, as a recap? How does
 it mean we always handle every possible case? I’m not sure it’s totally clear.
 -->
-<!-- Because this is a focus of chapter 6 rather than this chapter’s focus, we
+<!-- Because this is a focus of chapter 6 rather than this chapter's focus, we
 don’t think we should repeat it here as well, but we added a reference. /Carol
 -->
 

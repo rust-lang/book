@@ -28,7 +28,7 @@ enum Result<T, E> {
 
 instead? Then you could concretely explain the returned result.
 -->
-<!-- This notation looks similar to a `match`, but it’s not a `match`, so we
+<!-- This notation looks similar to a `match`, but it's not a `match`, so we
 think this would be confusing. We’ve tried to clarify better in the text.
 /Carol -->
 
@@ -45,7 +45,7 @@ Let’s call a function that returns a `Result` value because the function could
 fail: opening a file, shown in Listing 9-2.
 
 <figure>
-<span class=“filename”>Filename: src/main.rs</span>
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 use std::fs::File;
@@ -119,11 +119,11 @@ on the value `File::open` returned. Listing 9-3 shows one way to handle the
 `Result` with a basic tool: the `match` expression that we learned about in
 Chapter 6.
 
-<!-- I’ll ghost everything except the match statement lines in the libreoffice
+<!-- I'll ghost everything except the match statement lines in the libreoffice
 file /Carol -->
 
 <figure>
-<span class=“filename”>Filename: src/main.rs</span>
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust,should_panic
 use std::fs::File;
@@ -147,9 +147,9 @@ might have
 </figcaption>
 </figure>
 
-<!-- So we don’t need the Result keyword in this code example? And what is the
+<!-- So we don't need the Result keyword in this code example? And what is the
 {:?} syntax, can you include a line about that? -->
-<!-- We’ve added an explanation that Result is like Option in that it’s
+<!-- We've added an explanation that Result is like Option in that it's
 imported into the prelude, which the reader should be familiar with. We
 explained the {:?} syntax in Structs, chapter 5, in the section “Adding Useful
 Functionality with Derived Traits”. It’s the debug format. Having to re-explain
@@ -192,7 +192,7 @@ did in Listing 9-3. Let’s look at Listing 9-4, which adds another arm to the
 `match`:
 
 <figure>
-<span class=“filename”>Filename: src/main.rs</span>
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore
 use std::fs::File;
@@ -262,12 +262,12 @@ call the `panic!` macro for us.
 
 <!-- Can you explain a bit more what unwrap() does---you mean every time we
 cause a panic it calls the unwrap method? -->
-<!-- I’m not sure how the conclusion “every time we cause a panic it calls the
+<!-- I'm not sure how the conclusion "every time we cause a panic it calls the
 unwrap method” follows from the text that was here, but I’ve tried to reword.
 Please let us know what part of the text specifically is implying that here so
 that we can be sure that we’ve fixed it. /Carol -->
 
-<!-- I’ll ghost everything except `unwrap()` in the libreoffice file /Carol -->
+<!-- I'll ghost everything except `unwrap()` in the libreoffice file /Carol -->
 
 ```rust,should_panic
 use std::fs::File;
@@ -279,7 +279,7 @@ fn main() {
 
 <!-- Can you talk ore about the syntax here, how it differs? It looks like
 there aren’t generics here for T and E. How is this still related to Result? -->
-<!-- I’m not sure how to make this clearer. We’re chaining the method call onto
+<!-- I'm not sure how to make this clearer. We're chaining the method call onto
 the return value of the `File::open` function, which hasn’t changed. The reader
 should understand method calls by now. T and E are part of the *definition* of
 the Result type, since Listing 9-2 we’ve been talking about *using* a Result
@@ -300,7 +300,7 @@ There’s another method similar to `unwrap` that lets us also choose the
 providing good error messages can convey your intent and make tracking down the
 source of a panic easier. The syntax of`expect` looks like this:
 
-<!-- I’ll ghost everything except `expect(...)` in the libreoffice file /Carol -->
+<!-- I'll ghost everything except `expect(...)` in the libreoffice file /Carol -->
 
 ```rust,should_panic
 use std::fs::File;
@@ -347,9 +347,9 @@ caller know about the error so they can decide what to do. This is known as
 might be more information or logic that dictates how the error should be
 handled than what you have available in the context of your code.
 
-<!-- What’s the benefit/result of returning the error to the code that called
+<!-- What's the benefit/result of returning the error to the code that called
 the function, besides putting off handling it---can you lay that out? -->
-<!-- We’re giving control/decision making ability to the code that’s calling
+<!-- We're giving control/decision making ability to the code that's calling
 our code. I’ve tried to be more explicit here; please let me know what could be
 improved if it’s still not clear. /Carol -->
 
@@ -440,7 +440,7 @@ Listing 9-6 shows an implementation of `read_username_from_file` that has the
 same functionality as it had in Listing 9-5, but this implementation uses the
 question mark:
 
-<!-- I’ll ghost everything except the question mark in libreoffice. /Carol -->
+<!-- I'll ghost everything except the question mark in libreoffice. /Carol -->
 
 <figure>
 
@@ -465,7 +465,7 @@ Listing 9-6: A function that returns errors to the calling code using `?`
 
 <!-- Below, are we talking about what just the ? operator does, or what the
 program with the ? operator does? -->
-<!-- I’m not sure what the difference is. We’re talking about what the ? does
+<!-- I'm not sure what the difference is. We're talking about what the ? does
 in the context of this program... /Carol -->
 
 The `?` placed after a `Result` value is defined to work the exact same way as
@@ -501,7 +501,7 @@ fn read_username_from_file() -> Result<String, io::Error> {
 ```
 
 <!-- Can you explain what is happening in this code and how it differs? -->
-<!-- I’ve tried to make it even clearer that the functionality does NOT differ
+<!-- I've tried to make it even clearer that the functionality does NOT differ
 /Carol -->
 
 We’ve moved the creation of the new `String` in `s` to the beginning of the
@@ -515,9 +515,9 @@ Listing 9-6, this is just a different, more ergonomic way to write it.
 
 #### `?` Can Only Be Used in Functions That Return `Result`
 
-<!-- I think we need a new heading here, could you suggest something? I’m sure
+<!-- I think we need a new heading here, could you suggest something? I'm sure
 there’s a better way to phrase this!-->
-<!-- I’ve tried, but I’m not really sure how to say it any more succinctly than
+<!-- I've tried, but I'm not really sure how to say it any more succinctly than
 this, I’m not sure if it’s better than what you suggested /Carol -->
 
 The `?` can only be used in functions that have a return type of `Result`,
@@ -526,7 +526,7 @@ we defined in Listing 9-5. The part of the `match` that requires a return type
 of `Result` is `return Err(e)`, so the return type of the function must be a
 `Result` to be compatible with this `return`.
 
-<!-- Which functions return a Result and how would the reader know? I’m also not
+<!-- Which functions return a Result and how would the reader know? I'm also not
 sure what you mean by “expand”, that they have the same functionality (but
 condensed!)? -->
 <!-- You can tell what any function returns by looking at the return type

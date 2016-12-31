@@ -18,7 +18,7 @@ understand two things:
 Let’s give it a try as shown in Listing 12-1:
 
 <figure>
-<span class=“filename”>Filename: src/main.rs</span>
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 use std::env;
@@ -72,7 +72,7 @@ Now that we have a way to access all of the arguments, let’s find the ones we
 care about and save them in variables as shown in Listing 12-2:
 
 <figure>
-<span class=“filename”>Filename: src/main.rs</span>
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 use std::env;
