@@ -238,7 +238,7 @@ of scope, Rust calls a special function for us. This function is called `drop`,
 and it’s where the author of `String` can put the code to return the memory.
 Rust calls `drop` automatically at the closing `}`.
 
-> Note: In C++, this pattern of deallocating resources at the end of an item's
+> Note: In C++, this pattern of deallocating resources at the end of an item’s
 > lifetime is sometimes called *Resource Acquisition Is Initialization (RAII)*.
 > The `drop` function in Rust will be familiar to you if you’ve used RAII
 > patterns.

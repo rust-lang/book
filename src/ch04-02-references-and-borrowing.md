@@ -69,7 +69,7 @@ fn calculate_length(s: &String) -> usize { // s is a reference to a String
 ```
 
 The scope in which the variable `s` is valid is the same as any function
-argument's scope, but we don’t drop what the reference points to when it goes
+argument’s scope, but we don’t drop what the reference points to when it goes
 out of scope because we don’t have ownership. Functions that take references as
 arguments instead of the actual values mean we won’t need to return the values
 in order to give back ownership, since we never had ownership.

@@ -59,7 +59,7 @@
     - [Accepting Command Line Arguments](ch12-01-accepting-command-line-arguments.md)
     - [Reading a File](ch12-02-reading-a-file.md)
     - [Improving Error Handling and Modularity](ch12-03-improving-error-handling-and-modularity.md)
-    - [Testing the Library's Functionality](ch12-04-testing-the-librarys-functionality.md)
+    - [Testing the Library’s Functionality](ch12-04-testing-the-librarys-functionality.md)
     - [Working with Environment Variables](ch12-05-working-with-environment-variables.md)
     - [Writing to `stderr` instead of `stdout`](ch12-06-writing-to-stderr-instead-of-stdout.md)
 
@@ -81,7 +81,7 @@
 
 - [More Lifetimes](ch19-00-more-lifetimes.md) (perhaps merge this into advanced type system features?)
 
-- [Advanced Type System Features](ch20-00-advanced-types.md) (perhaps called "Advanced Traits"?)
+- [Advanced Type System Features](ch20-00-advanced-types.md) (perhaps called “Advanced Traits”?)
 
 - [Macros]() (think about making little book of rust macros the authority on this topic)
     - [Writing Your Own Macros]()

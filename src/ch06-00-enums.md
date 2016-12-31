@@ -5,34 +5,34 @@ numbering to those listings we reference again in the chapter? Also, if we are
 going to include any of these in the source files can you add file names?
 Thanks! /Liz -->
 <!-- I added some listing numbers where the code examples were lengthy or
-referred to again. I haven't added any file names-- the code in this chapter is
+referred to again. I haven’t added any file names-- the code in this chapter is
 little snippets that would be useful in larger programs, but they could appear
-anywhere and don't have to be in any particular file. /Carol -->
+anywhere and don’t have to be in any particular file. /Carol -->
 
 # Enums
 
-In this chapter we'll look at *enumerations*, also referred to as *enums*.
+In this chapter we’ll look at *enumerations*, also referred to as *enums*.
 Enums allow you to define a type by enumerating its possible values. First
-we'll define and use an enum to show how an enum can encode meaning along with
-data. Then we'll explore a particularly useful enum, `Option`, which expresses
-that a value can be either something or nothing. Next we'll look at how pattern
+we’ll define and use an enum to show how an enum can encode meaning along with
+data. Then we’ll explore a particularly useful enum, `Option`, which expresses
+that a value can be either something or nothing. Next we’ll look at how pattern
 matching in the `match` statement makes it easy to run different code for
-different values of an enum. Finally, we'll cover how the `if let` construct is
+different values of an enum. Finally, we’ll cover how the `if let` construct is
 another convenient and concise idiom you have available to handle enums in your
 code.
 
 Enums are a feature in many languages, but their capabilities differ
-per-language. Rust’s enums are most similar to "algebraic data types" in
+per-language. Rust’s enums are most similar to “algebraic data types” in
 functional languages like F#, OCaml, or Haskell.
 
 ## Defining an Enum
 
 <!-- I'm not sure what you meant by "looking inside it" when you said "I wasn't
 clear throughout this section whether we were defining the IpAddrKind enum or
-looking inside it", but I've tried to clarify. Please elaborate on what you
-meant by that and why it's confusing if I haven't resolved the issue. /Carol -->
+looking inside it”, but I’ve tried to clarify. Please elaborate on what you
+meant by that and why it’s confusing if I haven’t resolved the issue. /Carol -->
 
-Let's look at a situation we might want to express in code and see why enums
+Let’s look at a situation we might want to express in code and see why enums
 are useful and more appropriate than structs in this case. Say we need to work
 with IP addresses. There are two major standards used for IP addresses today:
 version four and version six. These are the only possibilities for an IP
@@ -62,20 +62,20 @@ This is now a custom data type that we can use elsewhere in our code.
 ### Enum Values
 
 <!-- Liz: You seemed confused at this point about the differences between an
-enum's definition, which includes its valid variants, and using the values of
+enum’s definition, which includes its valid variants, and using the values of
 the enum. You had changed this text to be:
 
-"Enum variants can optionally have associated values. We can create values of
-`IpAddrKind` like this:"
+“Enum variants can optionally have associated values. We can create values of
+`IpAddrKind` like this:“
 
-While it's strictly true that enum values are "optional", there wouldn't be any
+While it’s strictly true that enum values are “optional”, there wouldn’t be any
 point in defining the enum unless you were going to use values of that type.
-Also, "associated" has other meanings in Rust that we don't want to conflate
+Also, “associated” has other meanings in Rust that we don’t want to conflate
 with.
 
-We've tried to clear up the confusion here by relating enum definition and
+We’ve tried to clear up the confusion here by relating enum definition and
 instantiation to struct definition and instantiation, assuming the reader
-understands structs at this point. We're having trouble figuring out just the
+understands structs at this point. We’re having trouble figuring out just the
 right wording here, though, so we have two options for you. Please let us
 know which is clearest, or a combination of the two, or if you have any
 suggestions in a totally different direction! /Carol -->
@@ -174,7 +174,7 @@ Listing 6-1: Storing the data and type of an IP address using a `struct`
 
 <!-- I will add wingdings here in libreoffice /Carol -->
 
-Here, we've defined a struct `IpAddr` that has two fields: a `kind` field that
+Here, we’ve defined a struct `IpAddr` that has two fields: a `kind` field that
 is of type `IpAddrKind` (the enum we defined previously), and an `address`
 field of type `String`. We have two instances of this struct. The first,
 `home`, has the value `IpAddrKind::V4` as its `kind`, with associated address
@@ -202,11 +202,11 @@ let loopback = IpAddr::V6(String::from("::1"));
 We attach data to each variant of the enum directly, no need for an extra
 struct.
 
-There's another advantage to using an enum over a struct: each variant can
+There’s another advantage to using an enum over a struct: each variant can
 store *different kinds* of data. Version four type IP addresses will always
 have four numeric components that will have values between 0 and 255. If we
 wanted to store `V4` addresses as four `u8`s but still express `V6` addresses
-as `String`s, we wouldn't be able to with a `struct`. Enums handle this case
+as `String`s, we wouldn’t be able to with a `struct`. Enums handle this case
 with ease:
 
 ```rust
@@ -220,12 +220,12 @@ let home = IpAddr::V4(127, 0, 0, 1);
 let loopback = IpAddr::V6(String::from("::1"));
 ```
 
-We've been showing a bunch of different possibilities that we could define in
+We’ve been showing a bunch of different possibilities that we could define in
 our code for storing IP addresses of the two different kinds using an enum. It
 turns out, though, that wanting to store IP addresses and encode which kind
 they are is so common that [the standard library has a definition we can
-use!][IpAddr]<!-- ignore --> Let's look at how the standard library defines
-`IpAddr`: it has the exact enum and variants that we've defined and used, but
+use!][IpAddr]<!-- ignore --> Let’s look at how the standard library defines
+`IpAddr`: it has the exact enum and variants that we’ve defined and used, but
 it chose to embed the address data inside the variants in the form of two
 different structs, which are defined differently for each variant:
 
@@ -253,10 +253,10 @@ come up with.
 
 Note that even though the standard library contains a definition for `IpAddr`,
 we can still choose to create and use our own definition without conflict since
-we haven't brought the standard library's definition into our scope. We'll talk
+we haven’t brought the standard library’s definition into our scope. We’ll talk
 more about importing types in Chapter 7.
 
-Let's look at another example: here’s an enum with a wide variety of types
+Let’s look at another example: here’s an enum with a wide variety of types
 embedded in its variants:
 
 ```rust
@@ -289,13 +289,13 @@ struct WriteMessage(String); // tuple struct
 struct ChangeColorMessage(i32, i32, i32); // tuple struct
 ```
 
-But if we used the different structs, we wouldn't be able to as easily define a
+But if we used the different structs, we wouldn’t be able to as easily define a
 function that could take any of these kinds of messages as we could with the
 `Message` enum defined above.
 
 One more similarity between enums and structs: just as we are able to define
 methods on structs using `impl`, we are also able to define methods on enums.
-Here's a method, `call`, that we could define on our `Message` enum:
+Here’s a method, `call`, that we could define on our `Message` enum:
 
 ```rust
 # enum Message {
@@ -318,9 +318,9 @@ m.call();
 <!-- I will add wingdings here /Carol -->
 
 The body of the method would use `self` to get the value that we called the
-method on. In this example, we've created a variable `m` that has the value
+method on. In this example, we’ve created a variable `m` that has the value
 `Message::Write("hello")`, and that is what `self` will be in the body of
 the `call` method when `m.call()` runs.
 
-Let's look at another enum in the standard library that is very common and
+Let’s look at another enum in the standard library that is very common and
 useful: `Option`.

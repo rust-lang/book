@@ -48,7 +48,7 @@ src/main.rs:1 /// What am I documenting?
 ### Documentation examples
 
 Another special part about documentation comments is that code examples in
-documentation comments are run as part of your tests, so that they're less
+documentation comments are run as part of your tests, so that they’re less
 likely to go out of date! To use this feature:
 
 - TODO: insert a documentation example, preferably one that demonstrates a

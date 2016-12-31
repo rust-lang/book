@@ -135,7 +135,7 @@ Let’s practice some more with methods by implementing a second method on our
 `Rectangle` struct. This time, we’d like for an instance of `Rectangle` to take
 another instance of `Rectangle` and return `true` if the second rectangle could
 fit completely within `self` and `false` if it would not. That is, if we run
-the code in Listing 5-8, once we've defined the `can_hold` method:
+the code in Listing 5-8, once we’ve defined the `can_hold` method:
 
 <figure>
 <span class="filename">Filename: src/main.rs</span>
