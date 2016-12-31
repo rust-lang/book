@@ -9,10 +9,10 @@ Think of a `match` expression kind of like a coin sorting machine: coins slide
 down a track with variously sized holes along it, and each coin falls
 through the first hole it encounters that it fits into. In the same way, values
 go through each pattern in a `match`, and at the first pattern the value
-"fits", the value will fall into the associated code block to be used during
+“fits”, the value will fall into the associated code block to be used during
 execution.
 
-Since we're already talking about coins, let's use them for an example using
+Since we’re already talking about coins, let’s use them for an example using
 `match`! We can write a function that can take an unknown American coin and, in
 a similar way as the counting machine, determine which coin it is and
 return its value in cents, shown here in Listing 6-2:
@@ -48,13 +48,13 @@ as its patterns.
 <!--- Flagging as a place to possibly put wingding numbers -- would it work to
 put two arms in this example? I think that would illustrate the control flow
 well -->
-<!-- I think we're moving away from using generic examples like this and talking
-about concrete examples instead. I've changed the text to reflect that, and I'm
-happy to add wingdings once we're in libreoffice. /Carol -->
+<!-- I think we’re moving away from using generic examples like this and talking
+about concrete examples instead. I’ve changed the text to reflect that, and I’m
+happy to add wingdings once we’re in libreoffice. /Carol -->
 
-Let's break down the `match` in the `value_in_cents` function. First, we list
+Let’s break down the `match` in the `value_in_cents` function. First, we list
 the `match` keyword followed by an expression, which in this case is the value
-`coin`. This feels very similar to an expression used with `if`, but there's a
+`coin`. This feels very similar to an expression used with `if`, but there’s a
 big difference: with `if`, the expression needs to return a boolean value.
 Here, it can be any type. The type of `coin` in this example is the `Coin` enum
 that we have defined above.
@@ -66,7 +66,7 @@ is just the value `1`. Each arm is separated from the next with a comma.
 
 When the `match` expression executes, it compares the resulting value against
 the pattern of each arm, in order. If a pattern matches the value, the code
-associated with that pattern is executed. If that pattern doesn't match the
+associated with that pattern is executed. If that pattern doesn’t match the
 value, execution continues to the next arm, much like a coin sorting machine.
 We can have as many arms as we need: our `match` above has four arms.
 
@@ -74,10 +74,10 @@ The code associated with each arm is an expression, and the resulting value of
 the expression in the matching arm is the value that gets returned for the
 entire `match` expression.
 
-Curly braces typically aren't used if the match arm code is short, as it is in
+Curly braces typically aren’t used if the match arm code is short, as it is in
 the above example where each arm just returns a value. If you wanted to run
 multiple lines of code in a match arm, you can use curly braces. For example,
-this code would print out "Lucky penny!" every time the method was called with
+this code would print out “Lucky penny!“ every time the method was called with
 a `Coin::Penny`, but would still return the last value of the block, `1`:
 
 ```rust
@@ -107,12 +107,12 @@ Another useful feature of match arms is that they can bind to parts of the
 values that match the pattern. This is how we can extract values out of enum
 variants.
 
-As an example, let's change one of our enum variants to hold data inside it.
+As an example, let’s change one of our enum variants to hold data inside it.
 From 1999 through 2008, the U.S. printed quarters with different designs for
 each of the 50 states on one side. No other coins got state designs, so only
 quarters have this extra value. We can add this information to our `enum`
 by changing the `Quarter` variant to include a `State` value stored inside it
-as we've done here in Listing 6-3:
+as we’ve done here in Listing 6-3:
 
 <figure>
 
@@ -140,14 +140,14 @@ value
 </figcaption>
 </figure>
 
-Let's imagine that a friend of ours is trying to collect all 50 state quarters.
-While we sort our loose change by coin type, we're also going to call out the
-name of the state associated with each quarter so that if it's one our friend
-doesn't have they can add it to their collection.
+Let’s imagine that a friend of ours is trying to collect all 50 state quarters.
+While we sort our loose change by coin type, we’re also going to call out the
+name of the state associated with each quarter so that if it’s one our friend
+doesn’t have they can add it to their collection.
 
 In the match expression for this, we add a variable, `state`, to the pattern
 that matches values of the variant `Coin::Quarter`. When a `Coin::Quarter`
-matches, the `state` variable will bind to the value of that quarter's state.
+matches, the `state` variable will bind to the value of that quarter’s state.
 Then we can use `state` in the code for that arm like so:
 
 ```rust
@@ -191,8 +191,8 @@ case when using `Option<T>`; we can do this in a very similar way! Instead of
 comparing coins we will be comparing the variants of `Option<T>`, but the way
 that the `match` expression works remains the same.
 
-Let's say we want to write a function that takes an `Option<i32>` and if
-there's a value inside, adds one to that value. If there isn't a value inside,
+Let’s say we want to write a function that takes an `Option<i32>` and if
+there’s a value inside, adds one to that value. If there isn’t a value inside,
 the function should return the `None` value and not attempt to perform any
 operations.
 
@@ -225,7 +225,7 @@ Listing 6-4: A function that uses a `match` expression on an `Option<i32>`
 
 #### Matching `Some(T)`
 
-Let's examine the first execution of `plus_one` in more detail. In the above
+Let’s examine the first execution of `plus_one` in more detail. In the above
 example when we call `plus_one(five)`, the variable `x` in the body of
 `plus_one` will have the value `Some(5)`. We compare that against each match
 arm:
@@ -234,7 +234,7 @@ arm:
 None => None,
 ```
 
-The `Some(5)` value doesn't match the pattern `None`, so we continue.
+The `Some(5)` value doesn’t match the pattern `None`, so we continue.
 
 ```rust,ignore
 Some(i) => Some(i + 1),
@@ -247,26 +247,26 @@ and create a new `Some` value with our total `6` inside.
 
 #### Matching `None`
 
-Now let's consider the second call of `plus_one` where `x` is `None`. We
+Now let’s consider the second call of `plus_one` where `x` is `None`. We
 enter the `match`, and compare to the first arm:
 
 ```rust,ignore
 None => None,
 ```
 
-It matches! There's no value to add to, so the program stops and returns the
+It matches! There’s no value to add to, so the program stops and returns the
 `None` value on the right side of `=>`. Since the first arm matched, no other
 arms are compared.
 
-Combining `match` and enums together is extremely powerful. You'll see this
+Combining `match` and enums together is extremely powerful. You’ll see this
 pattern a lot in Rust code: `match` against an enum, bind a variable to the
-data inside, then execute code based on it. It's a bit tricky at first, but
-once you get used to it, you'll wish you had it in all languages. It's
+data inside, then execute code based on it. It’s a bit tricky at first, but
+once you get used to it, you’ll wish you had it in all languages. It’s
 consistently a user favorite.
 
 ### Matches are Exhaustive
 
-There's one other aspect of `match` we haven't discussed. Consider this version
+There’s one other aspect of `match` we haven’t discussed. Consider this version
 of our `plus_one` function:
 
 ```rust,ignore
@@ -277,8 +277,8 @@ fn plus_one(x: Option<i32>) -> Option<i32> {
 }
 ```
 
-We didn't handle the `None` case, so this will cause a bug. Luckily, it's a bug
-Rust knows how to catch. If we try to compile this code, we'll get this error:
+We didn’t handle the `None` case, so this will cause a bug. Luckily, it’s a bug
+Rust knows how to catch. If we try to compile this code, we’ll get this error:
 
 ```text
 error[E0004]: non-exhaustive patterns: `None` not covered
@@ -297,10 +297,10 @@ making the billion-dollar mistake discussed earlier.
 
 ### The _ Placeholder
 
-Rust also has a pattern we can use in situations when we don't want to list all
+Rust also has a pattern we can use in situations when we don’t want to list all
 possible values. For example, a `u8` can have valid values of zero through 255.
-If we only care about the values 1, 3, 5, and 7, we don't want to have to list
-out 0, 2, 4, 6, 8, 9 all the way up to 255. Thankfully, we don't have to: we
+If we only care about the values 1, 3, 5, and 7, we don’t want to have to list
+out 0, 2, 4, 6, 8, 9 all the way up to 255. Thankfully, we don’t have to: we
 can use the special pattern `_` instead.
 
 ```rust
@@ -315,9 +315,9 @@ match some_u8_value {
 ```
 
 The `_` pattern will match any value. By putting it after our other arms, the
-`_` will match all the possible cases that aren't specified before it. The `()`
+`_` will match all the possible cases that aren’t specified before it. The `()`
 is just the unit value, so nothing will happen in the `_` case. This way, we
-can say that we want to do nothing for all of the possible values that we don't
+can say that we want to do nothing for all of the possible values that we don’t
 list before the `_` placeholder.
 
 The `match` expression can be a little wordy for the case where we only care

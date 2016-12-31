@@ -20,7 +20,7 @@ $ cd communicator
 Notice that Cargo generated *src/lib.rs* instead of *src/main.rs*. Inside
 *src/lib.rs* we’ll find this:
 
-<span class="filename">Filename: src/lib.rs</span>
+<span class=“filename”>Filename: src/lib.rs</span>
 
 ```rust
 #[cfg(test)]
@@ -51,7 +51,7 @@ named `network` that contains the definition of a function called `connect`.
 Every module definition in Rust starts with the `mod` keyword. Add this code to
 the beginning of the *lib.rs* file, above the test code:
 
-<span class="filename">Filename: src/lib.rs</span>
+<span class=“filename”>Filename: src/lib.rs</span>
 
 ```rust
 mod network {
@@ -72,7 +72,7 @@ For example, to have a `client` module too, that also has a function named
 `connect`, we can add:
 
 <figure>
-<span class="filename">Filename: src/lib.rs</span>
+<span class=“filename”>Filename: src/lib.rs</span>
 
 ```rust
 mod network {
@@ -98,7 +98,7 @@ Now we have a `network::connect` function and a `client::connect` function.
 These can have completely different functionality, and the function names do
 not conflict with each other since they’re in different modules.
 
-While in this case, we’re building a library, there's nothing special about
+While in this case, we’re building a library, there’s nothing special about
 *lib.rs*. We could also make use of submodules in a *main.rs* as well. In fact,
 we can also put modules inside of modules. This can be useful as your modules
 grow to keep related functionality organized together and separate
@@ -108,7 +108,7 @@ the `client` code and its `connect` function might make more sense to users of
 our library if it was inside the `network` namespace instead, like so:
 
 <figure>
-<span class="filename">Filename: src/lib.rs</span>
+<span class=“filename”>Filename: src/lib.rs</span>
 
 ```rust
 mod network {
@@ -170,7 +170,7 @@ multiple files to split Rust projects up so that not everything lives in
 *src/lib.rs*. For this example, we will start with this code in *src/lib.rs*:
 
 <figure>
-<span class="filename">File: src/lib.rs</span>
+<span class=“filename”>File: src/lib.rs</span>
 
 ```rust
 mod client {
@@ -213,7 +213,7 @@ This would be a good reason to pull each of the `client`, `network`, and
 extracting the `client` module into another file. First, replace the `client`
 module code in *src/lib.rs* with the following:
 
-<span class="filename">File: src/lib.rs</span>
+<span class=“filename”>File: src/lib.rs</span>
 
 ```rust,ignore
 mod client;
@@ -241,7 +241,7 @@ So now we need to create the external file with that module name. Create a
 following, which is the `connect` function in the `client` module that we
 removed in the previous step:
 
-<span class="filename">File: src/client.rs</span>
+<span class=“filename”>File: src/client.rs</span>
 
 ```rust
 fn connect() {
@@ -293,7 +293,7 @@ Let’s extract the `network` module into its own file next, using the same
 pattern. In *src/lib.rs*, delete the body of the `network` module and add a
 semicolon to the declaration, like so:
 
-<span class="filename">Filename: src/lib.rs</span>
+<span class=“filename”>Filename: src/lib.rs</span>
 
 ```rust,ignore
 mod client;
@@ -303,7 +303,7 @@ mod network;
 
 Then create a new *src/network.rs* file and enter the following:
 
-<span class="filename">Filename: src/network.rs</span>
+<span class=“filename”>Filename: src/network.rs</span>
 
 ```rust
 fn connect() {
@@ -325,7 +325,7 @@ work. We’re going to try anyway so that we can see the error. First change
 *src/network.rs* to have `mod server;` instead of the `server` module’s
 contents:
 
-<span class="filename">Filename: src/network.rs</span>
+<span class=“filename”>Filename: src/network.rs</span>
 
 ```rust,ignore
 fn connect() {
@@ -337,7 +337,7 @@ mod server;
 Then create a *src/server.rs* file and enter the contents of the `server`
 module that we extracted:
 
-<span class="filename">Filename: src/server.rs</span>
+<span class=“filename”>Filename: src/server.rs</span>
 
 ```rust
 fn connect() {

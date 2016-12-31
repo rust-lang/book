@@ -2,10 +2,10 @@
 
 ## Lifetimes that depend on other lifetimes
 
-'a: 'b stuff: subtyping
+‘a: ‘b stuff: subtyping
 
 ## Higher ranked trait bounds
 
-for<'a>
+for<‘a>
 
 Needed for closures

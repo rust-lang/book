@@ -54,7 +54,7 @@ $ mdbook test
 
 ## Contributing
 
-We'd love your help! Please see [CONTRIBUTING.md][contrib].
+We’d love your help! Please see [CONTRIBUTING.md][contrib].
 
 [contrib]: https://github.com/rust-lang/book/blob/master/CONTRIBUTING.md
 
@@ -66,7 +66,7 @@ text off to No Starch. Then they do editing, and we fold it back in.
 As such, there’s a directory, *nostarch*, which corresponds to the text in No
 Starch’s system.
 
-When we've started working with No Starch in a word doc, we will also check
+When we’ve started working with No Starch in a word doc, we will also check
 those into the repo in the *nostarch/odt* directory. To extract the text from
 the word doc as markdown in order to backport changes to the online book:
 
@@ -78,9 +78,9 @@ the word doc as markdown in order to backport changes to the online book:
 
 ## Graphviz dot
 
-This is mostly for Carol's reference because she keeps having to look it up.
+This is mostly for Carol’s reference because she keeps having to look it up.
 
-We're using [Graphviz](http://graphviz.org/) for some of the diagrams in the
+We’re using [Graphviz](http://graphviz.org/) for some of the diagrams in the
 book. The source for those files live in the `dot` directory. To turn a `dot`
 file, for example, `dot/trpl04-01.dot` into an `svg`, run:
 
@@ -90,7 +90,7 @@ $ dot dot/trpl04-01.dot -Tsvg > src/img/trpl04-01.svg
 
 In the generated SVG, remove the width and the height attributes from the `svg`
 element and set the `viewBox` attribute to `0.00 0.00 1000.00 1000.00` or other
-values that don't cut off the image.
+values that don’t cut off the image.
 
 ## Spellchecking
 
@@ -102,7 +102,7 @@ script. It needs a dictionary of valid words, which is provided in
 
 ## Converting Windows newlines to Unix
 
-This is mostly for Carol's reference because she keeps having to look it up.
+This is mostly for Carol’s reference because she keeps having to look it up.
 
 ```
 $ tr -d '\015' < DOS-file > UNIX-file

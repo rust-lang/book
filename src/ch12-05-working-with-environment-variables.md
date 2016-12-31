@@ -1,15 +1,15 @@
 ## Working with Environment Variables
 
-Let's add one more feature: case insensitive searching. In addition, this
-setting won't be a command line option: it'll be an environment variable
+Let’s add one more feature: case insensitive searching. In addition, this
+setting won’t be a command line option: it’ll be an environment variable
 instead. We could choose to make case insensitivity a command line option, but
 our users have requested an environment variable that they could set once and
 make all their searches case insensitive in that terminal session.
 
 ### Implement and Test a Case-Insensitive `grep` Function
 
-First, let's add a new function that we will call when the environment variable
-is on. Let's start by adding a new test and re-naming our existing one:
+First, let’s add a new function that we will call when the environment variable
+is on. Let’s start by adding a new test and re-naming our existing one:
 
 ```rust,ignore
 #[cfg(test)]
@@ -50,11 +50,11 @@ Trust me.";
 
 <!-- Will add ghosting and wingdings in libreoffice /Carol -->
 
-We're going to define a new function named `grep_case_insensitive`. Its
+We’re going to define a new function named `grep_case_insensitive`. Its
 implementation will be almost the same as the `grep` function, but with some
 minor changes:
 
-<span class="filename">Filename: src/lib.rs</span>
+<span class=“filename”>Filename: src/lib.rs</span>
 
 ```rust
 fn grep_case_insensitive<'a>(search: &str, contents: &'a str) -> Vec<&'a str> {
@@ -79,9 +79,9 @@ slice, so we need to add an ampersand when we pass `search` to `contains` since
 `contains` takes a string slice.
 
 Second, we add a call to `to_lowercase` each `line` before we check if it
-contains `search`. Since we've converted both `line` and `search` into all
-lowercase, we'll find matches no matter what case they used in the file and the
-command line arguments, respectively. Let's see if this passes the tests:
+contains `search`. Since we’ve converted both `line` and `search` into all
+lowercase, we’ll find matches no matter what case they used in the file and the
+command line arguments, respectively. Let’s see if this passes the tests:
 
 ```text
     Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
@@ -107,9 +107,9 @@ test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured
 ```
 
 Great! Now, we have to actually use the new `grep_case_insensitive` function.
-First, let's add a configuration option for it to the `Config` struct:
+First, let’s add a configuration option for it to the `Config` struct:
 
-<span class="filename">Filename: src/lib.rs</span>
+<span class=“filename”>Filename: src/lib.rs</span>
 
 ```rust
 pub struct Config {
@@ -124,7 +124,7 @@ pub struct Config {
 And then check for that option inside of the `run` function, and decide which
 function to call based on the value of the `case_sensitive` function:
 
-<span class="filename">Filename: src/lib.rs</span>
+<span class=“filename”>Filename: src/lib.rs</span>
 
 ```rust,ignore
 pub fn run(config: Config) -> Result<(), Box<Error>>{
@@ -153,7 +153,7 @@ Finally, we need to actually check the environment for the variable. To bring
 the `env` module from the standard library into our project, we add a `use` line
 at the top of *src/lib.rs*:
 
-<span class="filename">Filename: src/lib.rs</span>
+<span class=“filename”>Filename: src/lib.rs</span>
 
 ```rust
 use std::env;
@@ -161,7 +161,7 @@ use std::env;
 
 And then use the `vars` method from the `env` module inside of `Config::new`:
 
-<span class="filename">Filename: src/lib.rs</span>
+<span class=“filename”>Filename: src/lib.rs</span>
 
 ```rust
 # use std::env;
@@ -203,16 +203,16 @@ impl Config {
 Here, we call `env::vars`, which works in a similar way as `env::args`. The
 difference is `env::vars` returns an iterator of environment variables rather
 than command line arguments. Instead of using `collect` to create a vector of
-all of the environment variables, we're using a `for` loop. `env::vars` returns
+all of the environment variables, we’re using a `for` loop. `env::vars` returns
 tuples: the name of the environment variable and its value. We never care about
 the values, only if the variable is set at all, so we use the `_` placeholder
-instead of a name to let Rust know that it shouldn't warn us about an unused
+instead of a name to let Rust know that it shouldn’t warn us about an unused
 variable. Finally, we have a `case_sensitive` variable, which is set to true by
 default. If we ever find a `CASE_INSENSITIVE` environment variable, we set the
 `case_sensitive` variable to false instead. Then we return the value as part of
 the `Config`.
 
-Let's give it a try!
+Let’s give it a try!
 
 ```text
 $ cargo run to poem.txt
@@ -244,4 +244,4 @@ well, and decide which should take precedence if you run the program with
 contradictory values.
 
 The `std::env` module contains many more useful features for dealing with
-environment variables; check out its documentation to see what's available.
+environment variables; check out its documentation to see what’s available.

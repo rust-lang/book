@@ -126,7 +126,7 @@ your situation.
 
 Here’s an example that shows floating-point numbers in action:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class=“filename”>Filename: src/main.rs</span>
 
 ```rust
 fn main() {
@@ -145,7 +145,7 @@ Rust supports the usual basic mathematic operations you’d expect for all of th
 number types: addition, subtraction, multiplication, division, and remainder.
 The following code shows how you’d use each one in a `let` statement:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class=“filename”>Filename: src/main.rs</span>
 
 ```rust
 fn main() {
@@ -176,7 +176,7 @@ As in most other programming languages, a boolean type in Rust has two possible
 values: `true` and `false`. The boolean type in Rust is specified using `bool`.
 For example:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class=“filename”>Filename: src/main.rs</span>
 
 ```rust
 fn main() {
@@ -196,7 +196,7 @@ So far we’ve only worked with numbers, but Rust supports letters too. Rust’s
 `char` type is the language’s most primitive alphabetic type, and the following
 code shows one way to use it:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class=“filename”>Filename: src/main.rs</span>
 
 ```rust
 fn main() {
@@ -230,7 +230,7 @@ parentheses. Each position in the tuple has a type, and the types of the
 different values in the tuple don’t have to be the same. We’ve added optional
 type annotations in this example:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class=“filename”>Filename: src/main.rs</span>
 
 ```rust
 fn main() {
@@ -242,7 +242,7 @@ The variable `tup` binds to the entire tuple, since a tuple is considered a
 single compound element. To get the individual values out of a tuple, we can
 use pattern matching to destructure a tuple value, like this:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class=“filename”>Filename: src/main.rs</span>
 
 ```rust
 fn main() {
@@ -264,7 +264,7 @@ In addition to destructuring through pattern matching, we can also access a
 tuple element directly by using a period (`.`) followed by the index of the
 value we want to access. For example:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class=“filename”>Filename: src/main.rs</span>
 
 ```rust
 fn main() {
@@ -292,7 +292,7 @@ fixed length: once declared, they cannot grow or shrink in size.
 In Rust, the values going into an array are written as a comma-separated list
 inside square brackets:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class=“filename”>Filename: src/main.rs</span>
 
 ```rust
 fn main() {
@@ -323,7 +323,7 @@ let months = ["January", "February", "March", "April", "May", "June", "July",
 An array is a single chunk of memory allocated on the stack. We can access
 elements of an array using indexing, like this:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class=“filename”>Filename: src/main.rs</span>
 
 ```rust
 fn main() {
@@ -343,7 +343,7 @@ get the value `2` from index `[1]` in the array.
 What happens if we try to access an element of an array that is past the end of
 the array? Say we change the example to the following:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class=“filename”>Filename: src/main.rs</span>
 
 ```rust,ignore
 fn main() {

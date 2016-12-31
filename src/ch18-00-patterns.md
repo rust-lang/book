@@ -1,8 +1,8 @@
 # Patterns
 
-We've actually used patterns a few times so far: they're used in `let`
+We’ve actually used patterns a few times so far: they’re used in `let`
 statements, in function arguments, and in the `match` expression. Patterns have
-a lot more abilities than we have demonstrated so far, so we'll cover some of
+a lot more abilities than we have demonstrated so far, so we’ll cover some of
 the most commonly used ones in this section. Any of these abilities work in any
 place where a pattern is used.
 
@@ -14,12 +14,12 @@ A basic `let` statement has this form:
 let PATTERN = EXPRESSION;
 ```
 
-We've seen statements like `let x = 5;` with a variable name in the `PATTERN`
+We’ve seen statements like `let x = 5;` with a variable name in the `PATTERN`
 slot; a variable name is just a particularly humble form of pattern.
 
 Let’s try a more complex pattern. Change our example program to this:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class=“filename”>Filename: src/main.rs</span>
 
 ```rust
 fn main() {
@@ -71,7 +71,7 @@ figure out which style is better, but it’s mostly a judgment call.
 
 Most of the time, Rust uses *type inference*, meaning that it attempts to infer
 the types of your variables rather than you having to declare them explicitly
-even though Rust is a statically typed language. Occasionally, Rust won't have
+even though Rust is a statically typed language. Occasionally, Rust won’t have
 enough information to infer the type of your value, and you will need to add a
 type annotation in with the pattern.
 
@@ -134,7 +134,7 @@ This prints `one or two`.
 ## ref and ref mut
 
 Usually, when you match against a pattern, variables are bound to a value.
-This means you'll end up moving the value into the `match`:
+This means you’ll end up moving the value into the `match`:
 
 ```rust,ignore
 let name = Some(String::from("Bors"));
@@ -148,7 +148,7 @@ match name {
 println!("name is: {:?}", name);
 ```
 
-If you'd prefer to bind `name` to a reference, use the `ref` keyword:
+If you’d prefer to bind `name` to a reference, use the `ref` keyword:
 
 ```rust
 let name = Some(String::from("Bors"));
@@ -248,7 +248,7 @@ match numbers {
 }
 ```
 
-If you want, you can use `..` to ignore all of the parts you haven't defined:
+If you want, you can use `..` to ignore all of the parts you haven’t defined:
 
 ```rust
 struct Point {

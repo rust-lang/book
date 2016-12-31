@@ -10,12 +10,12 @@ well as those from languages like Python who are looking for ways to write code
 that performs better without sacrificing expressiveness.
 
 Rust performs the majority of its safety checks and memory management decisions
-at compile time, so that your program's runtime performance isn't impacted. This
+at compile time, so that your program’s runtime performance isn’t impacted. This
 makes it useful in a number of use cases that other languages aren’t good at:
 programs with predictable space and time requirements, embedding in other
 languages, and writing low-level code, like device drivers and operating
-systems. It's also great for web applications: it powers the Rust package
-registry site, crates.io!  We're excited to see what *you* create with Rust.
+systems. It’s also great for web applications: it powers the Rust package
+registry site, crates.io!  We’re excited to see what *you* create with Rust.
 
 This book is written for a reader who already knows how to program in at least
 one programming language. After reading this book, you should be comfortable

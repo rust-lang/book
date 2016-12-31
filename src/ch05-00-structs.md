@@ -42,7 +42,7 @@ Listing 5-1: A `User` struct definition
 </figcaption>
 </figure>
 
-To use a struct once we've defined it, we create an *instance* of that struct
+To use a struct once we’ve defined it, we create an *instance* of that struct
 by specifying concrete values for each of the fields. Creating an instance is
 done by stating the name of the struct, then curly braces with `key: value`
 pairs inside it where the keys are the names of the fields and the values are
@@ -79,12 +79,12 @@ we want instances of this struct to own all of its data, and for that data to
 be valid for as long as the entire struct is valid.
 
 It is possible for structs to store references to data owned by something else,
-but to do so requires the use of *lifetimes*, a feature of Rust that we'll
+but to do so requires the use of *lifetimes*, a feature of Rust that we’ll
 discuss in Chapter 10. Lifetimes ensure that the data a struct references is
 valid for as long as the struct is. If you try to store a reference in a struct
 without specifying lifetimes, like this:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class=“filename”>Filename: src/main.rs</span>
 
 ```rust,ignore
 struct User {
@@ -136,7 +136,7 @@ area of the rectangle. Listing 5-2 has a short program with one way of doing
 just that in our project’s *src/main.rs*:
 
 <figure>
-<span class="filename">Filename: src/main.rs</span>
+<span class=“filename”>Filename: src/main.rs</span>
 
 ```rust
 fn main() {
@@ -190,7 +190,7 @@ We’ve already discussed one way we might do that in Chapter 3: tuples. Listing
 5-3 has a version of our program which uses tuples:
 
 <figure>
-<span class="filename">Filename: src/main.rs</span>
+<span class=“filename”>Filename: src/main.rs</span>
 
 ```rust
 fn main() {
@@ -214,7 +214,7 @@ Listing 5-3: Specifying the length and width of the rectangle with a tuple
 </figcaption>
 </figure>
 
-<!-- I will add ghosting & wingdings once we're in libreoffice /Carol -->
+<!-- I will add ghosting & wingdings once we’re in libreoffice /Carol -->
 
 In one way, this is a little better. Tuples let us add a bit of structure, and
 we’re now passing just one argument. But in another way this method less clear:
@@ -222,7 +222,7 @@ tuples don’t give names to their elements, so our calculation has gotten more
 confusing because we have to index into the parts of the tuple:
 
 <!-- I will change this to use wingdings instead of repeating this code once
-we're in libreoffice /Carol -->
+we’re in libreoffice /Carol -->
 
 ```rust,ignore
 dimensions.0 * dimensions.1
@@ -243,7 +243,7 @@ with a name for the whole as well as names for the parts, as shown in Listing
 5-4:
 
 <figure>
-<span class="filename">Filename: src/main.rs</span>
+<span class=“filename”>Filename: src/main.rs</span>
 
 ```rust
 struct Rectangle {
@@ -272,7 +272,7 @@ Listing 5-4: Defining a `Rectangle` struct
 </figcaption>
 </figure>
 
-<!-- Will add ghosting & wingdings once we're in libreoffice /Carol -->
+<!-- Will add ghosting & wingdings once we’re in libreoffice /Carol -->
 
 Here we’ve defined a struct and given it the name `Rectangle`. Inside the `{}`
 we defined the fields to be `length` and `width`, both of which have type
@@ -299,7 +299,7 @@ debugging our program and see the values for all its fields. Listing 5-5 tries
 using the `println!` macro as we have been:
 
 <figure>
-<span class="filename">Filename: src/main.rs</span>
+<span class=“filename”>Filename: src/main.rs</span>
 
 ```rust,ignore
 struct Rectangle {

@@ -4,8 +4,8 @@ Aphorism: DRY
 
 So how do you share code?
 
-I'm used to doing things to solve problems, what do i do instead?
-Why do i need to do different things in Rust? Let's look at an example
+I’m used to doing things to solve problems, what do i do instead?
+Why do i need to do different things in Rust? Let’s look at an example
 with the Command pattern.
 
 ## Command pattern
@@ -16,18 +16,18 @@ Want caller to be able to customize what gets done
 
 Method takes command object, calls a run fn
 
-How do we say "we want a thing that has a run function"? Answer: Traits!
+How do we say “we want a thing that has a run function”? Answer: Traits!
 
 where T: Run
 
-This is the definition of the Fn trait! So we wouldn't implement this, we'd just
+This is the definition of the Fn trait! So we wouldn’t implement this, we’d just
 pass closures in
 
 ## Supertraits
 
 Trait constraints that use other traits
 
-Copy requires Clone because Copy is a subset of Clone's behavior, since if you
+Copy requires Clone because Copy is a subset of Clone’s behavior, since if you
 have one, you can trivially implement the other.
 
 Traits that need behavior of another trait in a default method or something.
@@ -59,13 +59,13 @@ dynamic dispatch (C++)
 
 ## Builder pattern
 
-When you don't know how many arguments you're going to have
+When you don’t know how many arguments you’re going to have
 
 ## Delegation
 
 Deref - be mad
 
-Deref is a way to delegate everything, if you don't want that, then write
+Deref is a way to delegate everything, if you don’t want that, then write
 boilerplate. Sending messages to your components.
 
 ## How do you share data?

@@ -23,7 +23,7 @@ line. For comments that extend beyond a single line, you’ll need to include
 
 Comments can also be placed at the end of lines containing code:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class=“filename”>Filename: src/main.rs</span>
 
 ```rust
 fn main() {
@@ -32,9 +32,9 @@ fn main() {
 ```
 
 But you’ll more often see them used in this format, with the comment on a
-separate line above the code it's annotating:
+separate line above the code it’s annotating:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class=“filename”>Filename: src/main.rs</span>
 
 ```rust
 fn main() {

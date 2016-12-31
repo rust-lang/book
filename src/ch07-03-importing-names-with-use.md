@@ -5,7 +5,7 @@ name as part of the call, as in the call to the `namespaces` function shown
 here in Listing 7-6.
 
 <figure>
-<span class="filename">Filename: src/main.rs</span>
+<span class=“filename”>Filename: src/main.rs</span>
 
 ```rust
 pub mod a {
@@ -38,7 +38,7 @@ Rust’s `use` keyword works to shorten lengthy function calls by bringing the
 modules of the function you want to call into a scope. Here’s an example of
 bringing the `a::series::of` namespace into a binary crate’s root scope:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class=“filename”>Filename: src/main.rs</span>
 
 ```rust
 pub mod a {
@@ -138,7 +138,7 @@ As you now know, when you create a library crate, Cargo makes a `tests` module
 for you. Let’s go into more detail about that now. In your `communicator`
 project, open *src/lib.rs*.
 
-<span class="filename">Filename: src/lib.rs</span>
+<span class=“filename”>Filename: src/lib.rs</span>
 
 ```rust,ignore
 pub mod client;
@@ -171,7 +171,7 @@ Tests are for exercising the code within our library, so let’s try to call
 our `client::connect` function from this `it_works` function, even though
 we’re not going to be checking any functionality right now:
 
-<span class="filename">Filename: src/lib.rs</span>
+<span class=“filename”>Filename: src/lib.rs</span>
 
 ```rust
 #[cfg(test)]
@@ -240,7 +240,7 @@ parent module instead of to the root module.
 For these reasons, in the `tests` module especially, `use super::something` is
 usually the way to go. So now our test looks like this:
 
-<span class="filename">Filename: src/lib.rs</span>
+<span class=“filename”>Filename: src/lib.rs</span>
 
 ```rust
 #[cfg(test)]

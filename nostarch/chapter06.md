@@ -1,41 +1,41 @@
 
 [TOC]
 
-<!-- Hi Steve, Carol. I like this chapter, we're getting into some powerful
+<!-- Hi Steve, Carol. I like this chapter, we’re getting into some powerful
 tools here! I saw that the copyeditor has suggested listing numbers, which I
 think is a good idea. If you agree, could you suggest captions and add
 numbering to those listings we reference again in the chapter? Also, if we are
 going to include any of these in the source files can you add file names?
 Thanks! /Liz -->
 <!-- I added some listing numbers where the code examples were lengthy or
-referred to again. I haven't added any file names-- the code in this chapter is
+referred to again. I haven’t added any file names-- the code in this chapter is
 little snippets that would be useful in larger programs, but they could appear
-anywhere and don't have to be in any particular file. /Carol -->
+anywhere and don’t have to be in any particular file. /Carol -->
 
 # Enums
 
-In this chapter we'll look at *enumerations*, also referred to as *enums*.
+In this chapter we’ll look at *enumerations*, also referred to as *enums*.
 Enums allow you to define a type by enumerating its possible values. First
-we'll define and use an enum to show how an enum can encode meaning along with
-data. Then we'll explore a particularly useful enum, `Option`, which expresses
-that a value can be either something or nothing. Next we'll look at how pattern
+we’ll define and use an enum to show how an enum can encode meaning along with
+data. Then we’ll explore a particularly useful enum, `Option`, which expresses
+that a value can be either something or nothing. Next we’ll look at how pattern
 matching in the `match` statement makes it easy to run different code for
-different values of an enum. Finally, we'll cover how the `if let` construct is
+different values of an enum. Finally, we’ll cover how the `if let` construct is
 another convenient and concise idiom you have available to handle enums in your
 code.
 
 Enums are a feature in many languages, but their capabilities differ
-per-language. Rust’s enums are most similar to "algebraic data types" in
+per-language. Rust’s enums are most similar to “algebraic data types” in
 functional languages like F#, OCaml, or Haskell.
 
 ## Defining an Enum
 
-<!-- I'm not sure what you meant by "looking inside it" when you said "I wasn't
+<!-- I’m not sure what you meant by “looking inside it” when you said “I wasn’t
 clear throughout this section whether we were defining the IpAddrKind enum or
-looking inside it", but I've tried to clarify. Please elaborate on what you
-meant by that and why it's confusing if I haven't resolved the issue. /Carol -->
+looking inside it”, but I’ve tried to clarify. Please elaborate on what you
+meant by that and why it’s confusing if I haven’t resolved the issue. /Carol -->
 
-Let's look at a situation we might want to express in code and see why enums
+Let’s look at a situation we might want to express in code and see why enums
 are useful and more appropriate than structs in this case. Say we need to work
 with IP addresses. There are two major standards used for IP addresses today:
 version four and version six. These are the only possibilities for an IP
@@ -65,20 +65,20 @@ This is now a custom data type that we can use elsewhere in our code.
 ### Enum Values
 
 <!-- Liz: You seemed confused at this point about the differences between an
-enum's definition, which includes its valid variants, and using the values of
+enum’s definition, which includes its valid variants, and using the values of
 the enum. You had changed this text to be:
 
-"Enum variants can optionally have associated values. We can create values of
-`IpAddrKind` like this:"
+“Enum variants can optionally have associated values. We can create values of
+`IpAddrKind` like this:“
 
-While it's strictly true that enum values are "optional", there wouldn't be any
+While it’s strictly true that enum values are “optional”, there wouldn’t be any
 point in defining the enum unless you were going to use values of that type.
-Also, "associated" has other meanings in Rust that we don't want to conflate
+Also, “associated” has other meanings in Rust that we don’t want to conflate
 with.
 
-We've tried to clear up the confusion here by relating enum definition and
+We’ve tried to clear up the confusion here by relating enum definition and
 instantiation to struct definition and instantiation, assuming the reader
-understands structs at this point. We're having trouble figuring out just the
+understands structs at this point. We’re having trouble figuring out just the
 right wording here, though, so we have two options for you. Please let us
 know which is clearest, or a combination of the two, or if you have any
 suggestions in a totally different direction! /Carol -->
@@ -155,7 +155,7 @@ Listing 6-1: Storing the data and type of an IP address using a `struct`
 
 <!-- I will add wingdings here in libreoffice /Carol -->
 
-Here, we've defined a struct `IPAddr` that has two fields: a `kind` field that
+Here, we’ve defined a struct `IPAddr` that has two fields: a `kind` field that
 is of type `IpAddrKind` (the enum we defined previously), and an `address`
 field of type `String`. We have two instances of this struct. The first,
 `home`, has the value `IpAddrKind::V4` as its `kind`, with associated address
@@ -183,11 +183,11 @@ let loopback = IpAddr::V6(String::from("::1"));
 We attach data to each variant of the enum directly, no need for an extra
 struct.
 
-There's another advantage to using an enum over a struct: each variant can
+There’s another advantage to using an enum over a struct: each variant can
 store *different kinds* of data. Version four type IP addresses will always
 have four numeric components that will have values between 0 and 255. If we
 wanted to store `V4` addresses as four `u8`s but still express `V6` addresses
-as `String`s, we wouldn't be able to with a `struct`. Enums handle this case
+as `String`s, we wouldn’t be able to with a `struct`. Enums handle this case
 with ease:
 
 ```rust
@@ -201,12 +201,12 @@ let home = IpAddr::V4(127, 0, 0, 1);
 let loopback = IpAddr::V6(String::from("::1"));
 ```
 
-We've been showing a bunch of different possibilities that we could define in
+We’ve been showing a bunch of different possibilities that we could define in
 our code for storing IP addresses of the two different kinds using an enum. It
 turns out, though, that wanting to store IP addresses and encode which kind
 they are is so common that the standard library has a definition we can use!
-Let's look at how the standard library defines `IpAddr`: it has the exact enum
-and variants that we've defined and used, but it chose to embed the address
+Let’s look at how the standard library defines `IpAddr`: it has the exact enum
+and variants that we’ve defined and used, but it chose to embed the address
 data inside the variants in the form of two different structs, which are
 defined differently for each variant:
 
@@ -232,10 +232,10 @@ come up with.
 
 Note that even though the standard library contains a definition for `IpAddr`,
 we can still choose to create and use our own definition without conflict since
-we haven't brought the standard library's definition into our scope. We'll talk
+we haven’t brought the standard library’s definition into our scope. We’ll talk
 more about importing types in Chapter 7.
 
-Let's look at another example: here’s an enum with a wide variety of types
+Let’s look at another example: here’s an enum with a wide variety of types
 embedded in its variants:
 
 ```rust
@@ -268,13 +268,13 @@ struct WriteMessage(String); // tuple struct
 struct ChangeColorMessage(i32, i32, i32); // tuple struct
 ```
 
-But if we used the different structs, we wouldn't be able to as easily define a
+But if we used the different structs, we wouldn’t be able to as easily define a
 function that could take any of these kinds of messages as we could with the
 `Message` enum defined above.
 
 One more similarity between enums and structs: just as we are able to define
 methods on structs using `impl`, we are also able to define methods on enums.
-Here's a method, `call`, that we could define on our `Message` enum:
+Here’s a method, `call`, that we could define on our `Message` enum:
 
 ```rust
 impl Message {
@@ -290,22 +290,22 @@ m.call();
 <!-- I will add wingdings here /Carol -->
 
 The body of the method would use `self` to get the value that we called the
-method on. In this example, we've created a variable `m` that has the value
+method on. In this example, we’ve created a variable `m` that has the value
 `Message::Write("hello")`, and that is what `self` will be in the body of
 the `call` method when `m.call()` runs.
 
-Let's look at another enum in the standard library that is very common and
+Let’s look at another enum in the standard library that is very common and
 useful: `Option`.
 
 ## The `Option` Enum and its Advantages Over Null Values
 
-In the previous section, we looked at how the `IpAddr` enum let us use Rust's
+In the previous section, we looked at how the `IpAddr` enum let us use Rust’s
 type system to encode more information than just the data into our program.
 This section is a case study of `Option`, which is another enum defined by the
 standard library. The `Option` type is used in many places because it encodes
 the very common scenario in which a value could be *something* or it could be
 *nothing*. Expressing this concept in terms of the type system means the
-compiler can check that you've handled all the cases you should be handling,
+compiler can check that you’ve handled all the cases you should be handling,
 which can prevent bugs that are extremely common in other programming languages.
 
 Programming language design is often thought of in terms of which features you
@@ -319,23 +319,23 @@ The inventor of null has this to say:
 > I call it my billion-dollar mistake. At that time, I was designing the first
 > comprehensive type system for references in an object-oriented language. My
 > goal was to ensure that all use of references should be absolutely safe, with
-> checking performed automatically by the compiler. But I couldn't resist the
+> checking performed automatically by the compiler. But I couldn’t resist the
 > temptation to put in a null reference, simply because it was so easy to
 > implement. This has led to innumerable errors, vulnerabilities, and system
 > crashes, which have probably caused a billion dollars of pain and damage in
 > the last forty years.
 >
-> - Tony Hoare "Null References: The Billion Dollar Mistake"
+> - Tony Hoare “Null References: The Billion Dollar Mistake”
 
-The problem with null values is that if you try to actually use a value that's
-null as if it is a not-null value, you'll get an error of some kind. Because
-this null or not-null property is pervasive, it's extremely easy to make this
+The problem with null values is that if you try to actually use a value that’s
+null as if it is a not-null value, you’ll get an error of some kind. Because
+this null or not-null property is pervasive, it’s extremely easy to make this
 kind of error.
 
 The concept that null is trying to express is still a useful one, however: a
 null is a value which is currently invalid or absent for some reason.
 
-The problem isn't with the concept itself, but with the particular
+The problem isn’t with the concept itself, but with the particular
 implementation. As such, Rust does not have nulls, but it does have an enum
 that can encode the concept of a value being present or absent. This enum is
 `Option<T>`, and it is defined by the standard library
@@ -348,21 +348,21 @@ enum Option<T> {
 }
 ```
 
-The `Option<T>` enum is so useful that it's even included in the prelude; you
-don't need to import it explicitly. Furthermore, so are its variants: you can
+The `Option<T>` enum is so useful that it’s even included in the prelude; you
+don’t need to import it explicitly. Furthermore, so are its variants: you can
 use `Some` and `None` directly, without prefixing them with `Option::`. This is
 still just a regular enum, however, `Some(T)` and `None` are still values of
 type `Option<T>`.
 
-<!-- We haven't spoken about the prelude so far in the book, I think I made a
+<!-- We haven’t spoken about the prelude so far in the book, I think I made a
 note of that in a previous chapter---we should tell the reader what it is
 before mentioning it so they know what significance it has here -->
 
 <!-- We did speak about the prelude previously, in chapter 2, the Processing a
-Guess section. I don't have any comments from you about it there... /Carol -->
+Guess section. I don’t have any comments from you about it there... /Carol -->
 
-The `<T>` syntax is a feature of Rust we haven't talked about yet. It's a
-generic type parameter, and we'll cover generics in more detail in Chapter 10.
+The `<T>` syntax is a feature of Rust we haven’t talked about yet. It’s a
+generic type parameter, and we’ll cover generics in more detail in Chapter 10.
 For now, all you need to know is that this means the `Some` variant of the
 `Option` enum can hold one piece of data of any type. Here are some examples of
 using `Option` values to hold number types and string types:
@@ -383,9 +383,9 @@ that means the same thing that null does: we do not have a valid value. So why
 is this any better than null?
 
 In short, because `Option<T>` and `T` (where `T` can be any type) are different
-types from each other, so the compiler won't let us use an `Option` value as if
-it was definitely a valid value. For example, this code won't compile because
-it's trying to compare an `Option<i8>` to an `i8`:
+types from each other, so the compiler won’t let us use an `Option` value as if
+it was definitely a valid value. For example, this code won’t compile because
+it’s trying to compare an `Option<i8>` to an `i8`:
 
 ```rust,ignore
 let x: i8 = 5;
@@ -406,29 +406,29 @@ error[E0277]: the trait bound `i8: std::ops::Add<std::option::Option<i8>>` is no
 ```
 
 Intense! What this error message is trying to say is that Rust does not
-understand how to add an `Option<i8>` and an `i8`, since they're different
+understand how to add an `Option<i8>` and an `i8`, since they’re different
 types. When we have a value of a type like `i8` in Rust, the compiler will
 ensure that we always have a valid value. We can proceed confidently without
 having to check for null before using that value. Only when we have an
-`Option<i8>` (or whatever type of value we're working with) do we have to
+`Option<i8>` (or whatever type of value we’re working with) do we have to
 worry about possibly not having a value, and the compiler will make sure we
 handle that case before using the value.
 
 In other words, you have to convert an `Option<T>` to a `T` before you can do
 `T` stuff with it. This helps catch one of the most common issues with null,
-generally: assuming that something isn't null when it actually is.
+generally: assuming that something isn’t null when it actually is.
 
 This is pretty powerful: in order to have a value that can possibly be null,
 you have to explicitly opt in by making the type of that value `Option<T>`.
 Then, when you use that value, you are required to explicitly handle the case
-when the value is null. Everywhere that a value has a type that isn't an
-`Option<T>`, you *can* safely assume that the value isn't null. This was a
-deliberate design decision for Rust to limit null's pervasiveness and increase
+when the value is null. Everywhere that a value has a type that isn’t an
+`Option<T>`, you *can* safely assume that the value isn’t null. This was a
+deliberate design decision for Rust to limit null’s pervasiveness and increase
 the safety of Rust code.
 
 <!-- So does None count as an option<T>? I lost the None thread a bit here -->
 <!-- Yes, since `Option<T>` is an enum and `None` is a variant of this enum,
-`None`'s type is `Option<T>`. I hope with the clarifications I added in the
+`None`‘s type is `Option<T>`. I hope with the clarifications I added in the
 previous section that this will be clear by this point. /Carol -->
 
 So, how _do_ you get the `T` value out of a `Some` variant when you have a
@@ -441,16 +441,16 @@ What we generally want to do in order to use an `Option<T>` value is to have
 code that will handle each variant. We want some code that will run only in the
 case that we have a `Some(T)` value, and this code _is_ allowed to use the
 inner `T`. We want some _other_ code to run if we have a `None` value, and that
-code doesn't have a `T` value available. The `match` expression is a control
+code doesn’t have a `T` value available. The `match` expression is a control
 flow construct that does just this, when used with enums: it will run different
 code depending on which variant of the enum it has, and that code can use the
 data inside the matching value.
 
-<!-- I'm not sure about this connecting paragraph, it doesn't seem like match
-and option are actually that much connected, at least not at first. That's
+<!-- I’m not sure about this connecting paragraph, it doesn’t seem like match
+and option are actually that much connected, at least not at first. That’s
 fine, this is all under the enum heading, but it might confuse if we imply
-otherwise --- unless I'm just missing the connection -->
-<!-- I've tried to make the connection more explicit, is this better? /Carol -->
+otherwise --- unless I’m just missing the connection -->
+<!-- I’ve tried to make the connection more explicit, is this better? /Carol -->
 
 ## Match
 
@@ -463,10 +463,10 @@ Think of a `match` expression kind of like a coin sorting machine: coins slide
 down a track with variously sized holes along it, and each coin falls
 through the first hole it encounters that it fits into. In the same way, values
 go through each pattern in a `match`, and at the first pattern the value
-"fits", the value will fall into the associated code block to be used during
+“fits”, the value will fall into the associated code block to be used during
 execution.
 
-Since we're already talking about coins, let's use them for an example using
+Since we’re already talking about coins, let’s use them for an example using
 `match`! We can write a function that can take an unknown American coin and, in
 a similar way as the counting machine, determine which coin it is and
 return its value in cents, shown here in Listing 6-2:
@@ -497,13 +497,13 @@ as its patterns.
 <!--- Flagging as a place to possibly put wingding numbers -- would it work to
 put two arms in this example? I think that would illustrate the control flow
 well -->
-<!-- I think we're moving away from using generic examples like this and talking
-about concrete examples instead. I've changed the text to reflect that, and I'm
-happy to add wingdings once we're in libreoffice. /Carol -->
+<!-- I think we’re moving away from using generic examples like this and talking
+about concrete examples instead. I’ve changed the text to reflect that, and I’m
+happy to add wingdings once we’re in libreoffice. /Carol -->
 
-Let's break down the `match` in the `value_in_cents` function. First, we list
+Let’s break down the `match` in the `value_in_cents` function. First, we list
 the `match` keyword followed by an expression, which in this case is the value
-`coin`. This feels very similar to an expression used with `if`, but there's a
+`coin`. This feels very similar to an expression used with `if`, but there’s a
 big difference: with `if`, the expression needs to return a boolean value.
 Here, it can be any type. The type of `coin` in this example is the `Coin` enum
 that we have defined above.
@@ -515,7 +515,7 @@ is just the value `1`. Each arm is separated from the next with a comma.
 
 When the `match` expression executes, it compares the resulting value against
 the pattern of each arm, in order. If a pattern matches the value, the code
-associated with that pattern is executed. If that pattern doesn't match the
+associated with that pattern is executed. If that pattern doesn’t match the
 value, execution continues to the next arm, much like a coin sorting machine.
 We can have as many arms as we need: our `match` above has four arms.
 
@@ -523,10 +523,10 @@ The code associated with each arm is an expression, and the resulting value of
 the expression in the matching arm is the value that gets returned for the
 entire `match` expression.
 
-Curly braces typically aren't used if the match arm code is short, as it is in
+Curly braces typically aren’t used if the match arm code is short, as it is in
 the above example where each arm just returns a value. If you wanted to run
 multiple lines of code in a match arm, you can use curly braces. For example,
-this code would print out "Lucky penny!" every time the method was called with
+this code would print out “Lucky penny!“ every time the method was called with
 a `Coin::Penny`, but would still return the last value of the block, `1`:
 
 ```rust
@@ -549,12 +549,12 @@ Another useful feature of match arms is that they can bind to parts of the
 values that match the pattern. This is how we can extract values out of enum
 variants.
 
-As an example, let's change one of our enum variants to hold data inside it.
+As an example, let’s change one of our enum variants to hold data inside it.
 From 1999 through 2008, the U.S. printed quarters with different designs for
 each of the 50 states on one side. No other coins got state designs, so only
 quarters have this extra value. We can add this information to our `enum`
 by changing the `Quarter` variant to include a `State` value stored inside it
-as we've done here in Listing 6-3:
+as we’ve done here in Listing 6-3:
 
 ```rust
 #[derive(Debug)] // So we can inspect the state in a minute
@@ -577,14 +577,14 @@ Listing 6-3: A `Coin` enum where the `Quarter` variant also holds a `UsState`
 value
 </caption>
 
-Let's imagine that a friend of ours is trying to collect all 50 state quarters.
-While we sort our loose change by coin type, we're also going to call out the
-name of the state associated with each quarter so that if it's one our friend
-doesn't have they can add it to their collection.
+Let’s imagine that a friend of ours is trying to collect all 50 state quarters.
+While we sort our loose change by coin type, we’re also going to call out the
+name of the state associated with each quarter so that if it’s one our friend
+doesn’t have they can add it to their collection.
 
 In the match expression for this, we add a variable, `state`, to the pattern
 that matches values of the variant `Coin::Quarter`. When a `Coin::Quarter`
-matches, the `state` variable will bind to the value of that quarter's state.
+matches, the `state` variable will bind to the value of that quarter’s state.
 Then we can use `state` in the code for that arm like so:
 
 ```rust
@@ -615,8 +615,8 @@ case when using `Option<T>`; we can do this in a very similar way! Instead of
 comparing coins we will be comparing the variants of `Option<T>`, but the way
 that the `match` expression works remains the same.
 
-Let's say we want to write a function that takes an `Option<i32>` and if
-there's a value inside, adds one to that value. If there isn't a value inside,
+Let’s say we want to write a function that takes an `Option<i32>` and if
+there’s a value inside, adds one to that value. If there isn’t a value inside,
 the function should return the `None` value and not attempt to perform any
 operations.
 
@@ -644,7 +644,7 @@ Listing 6-4: A function that uses a `match` expression on an `Option<i32>`
 
 #### Matching `Some(T)`
 
-Let's examine the first execution of `plus_one` in more detail. In the above
+Let’s examine the first execution of `plus_one` in more detail. In the above
 example when we call `plus_one(five)`, the variable `x` in the body of
 `plus_one` will have the value `Some(5)`. We compare that against each match
 arm:
@@ -653,7 +653,7 @@ arm:
 None => None,
 ```
 
-The `Some(5)` value doesn't match the pattern `None`, so we continue.
+The `Some(5)` value doesn’t match the pattern `None`, so we continue.
 
 ```rust,ignore
 Some(i) => Some(i + 1),
@@ -666,26 +666,26 @@ and create a new `Some` value with our total `6` inside.
 
 #### Matching `None`
 
-Now let's consider the second call of `plus_one` where `x` is `None`. We
+Now let’s consider the second call of `plus_one` where `x` is `None`. We
 enter the `match`, and compare to the first arm:
 
 ```rust,ignore
 None => None,
 ```
 
-It matches! There's no value to add to, so the program stops and returns the
+It matches! There’s no value to add to, so the program stops and returns the
 `None` value on the right side of `=>`. Since the first arm matched, no other
 arms are compared.
 
-Combining `match` and enums together is extremely powerful. You'll see this
+Combining `match` and enums together is extremely powerful. You’ll see this
 pattern a lot in Rust code: `match` against an enum, bind a variable to the
-data inside, then execute code based on it. It's a bit tricky at first, but
-once you get used to it, you'll wish you had it in all languages. It's
+data inside, then execute code based on it. It’s a bit tricky at first, but
+once you get used to it, you’ll wish you had it in all languages. It’s
 consistently a user favorite.
 
 ### Matches are Exhaustive
 
-There's one other aspect of `match` we haven't discussed. Consider this version
+There’s one other aspect of `match` we haven’t discussed. Consider this version
 of our `plus_one` function:
 
 ```rust,ignore
@@ -696,8 +696,8 @@ fn plus_one(x: Option<i32>) -> Option<i32> {
 }
 ```
 
-We didn't handle the `None` case, so this will cause a bug. Luckily, it's a bug
-Rust knows how to catch. If we try to compile this code, we'll get this error:
+We didn’t handle the `None` case, so this will cause a bug. Luckily, it’s a bug
+Rust knows how to catch. If we try to compile this code, we’ll get this error:
 
 ```bash
 error[E0004]: non-exhaustive patterns: `None` not covered
@@ -716,10 +716,10 @@ making the billion-dollar mistake discussed earlier.
 
 ### The _ Placeholder
 
-Rust also has a pattern we can use in situations when we don't want to list all
+Rust also has a pattern we can use in situations when we don’t want to list all
 possible values. For example, a `u8` can have valid values of zero through 255.
-If we only care about the values 1, 3, 5, and 7, we don't want to have to list
-out 0, 2, 4, 6, 8, 9 all the way up to 255. Thankfully, we don't have to: we
+If we only care about the values 1, 3, 5, and 7, we don’t want to have to list
+out 0, 2, 4, 6, 8, 9 all the way up to 255. Thankfully, we don’t have to: we
 can use the special pattern `_` instead.
 
 ```rust
@@ -734,9 +734,9 @@ match some_u8_value {
 ```
 
 The `_` pattern will match any value. By putting it after our other arms, the
-`_` will match all the possible cases that aren't specified before it. The `()`
+`_` will match all the possible cases that aren’t specified before it. The `()`
 is just the unit value, so nothing will happen in the `_` case. This way, we
-can say that we want to do nothing for all of the possible values that we don't
+can say that we want to do nothing for all of the possible values that we don’t
 list before the `_` placeholder.
 
 The `match` expression can be a little wordy for the case where we only care
@@ -776,8 +776,8 @@ just like a `match`, where the expression is given to the `match` and the
 pattern is its first arm.
 
 Using `if let` means you have less to type, less indentation, and less
-boilerplate. However, we've lost the exhaustiveness checking that `match`
-enforces. Choosing between `match` and `if let` depends on what you're doing in
+boilerplate. However, we’ve lost the exhaustiveness checking that `match`
+enforces. Choosing between `match` and `if let` depends on what you’re doing in
 your particular case, and if gaining conciseness is an appropriate tradeoff for
 losing exhaustiveness checking.
 
@@ -817,8 +817,8 @@ toolbox as well.
 
 ## Summary
 
-We've now covered how to use enums to create custom types that can be one of a
-set of enumerated values. We've shown how the standard library's `Option<T>`
+We’ve now covered how to use enums to create custom types that can be one of a
+set of enumerated values. We’ve shown how the standard library’s `Option<T>`
 type helps you use the type system to prevent errors. When enum values have data
 inside them, you can use `match` or `if let` to extract and use those values,
 depending on how many cases you need to handle.
@@ -829,5 +829,5 @@ compiler will make certain your functions only get values of the type each
 function expects.
 
 In order to provide a well-organized API to your users that is straightforward
-to use and only exposes exactly what your users will need, let's now turn to
-Rust's *modules*.
+to use and only exposes exactly what your users will need, let’s now turn to
+Rust’s *modules*.

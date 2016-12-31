@@ -29,7 +29,7 @@ project’s directory.
 
 Look at the generated *Cargo.toml* file:
 
-<span class="filename">Filename: Cargo.toml</span>
+<span class=“filename”>Filename: Cargo.toml</span>
 
 ```toml
 [package]
@@ -46,7 +46,7 @@ correct, fix that in the file and save it again.
 As you saw in Chapter 1, `cargo new` generates a “Hello, world!” program for
 you. Check out the *src/main.rs* file:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class=“filename”>Filename: src/main.rs</span>
 
 ```rust
 fn main() {
@@ -77,7 +77,7 @@ check that the input is in the expected form. To start, we’ll allow the player
 to input a guess. Enter the code in Listing 2-1 into *src/main.rs*.
 
 <figure>
-<span class="filename">Filename: src/main.rs</span>
+<span class=“filename”>Filename: src/main.rs</span>
 
 ```rust,ignore
 use std::io;
@@ -363,7 +363,7 @@ code that uses `rand`, we need to modify the *Cargo.toml* file to include the
 the bottom beneath the `[dependencies]` section header that Cargo created for
 you:
 
-<span class="filename">Filename: Cargo.toml</span>
+<span class=“filename”>Filename: Cargo.toml</span>
 
 ```toml
 [dependencies]
@@ -424,9 +424,9 @@ the project with the dependencies available.
 
 If you immediately run `cargo build` again without making any changes, you won’t
 get any output. Cargo knows it has already downloaded and compiled the
-dependencies, and you haven't changed anything about them in your *Cargo.toml*
-file. Cargo also knows that you haven't changed anything about your code, so it
-doesn't recompile that either. With nothing to do, it simply exits. If you open
+dependencies, and you haven’t changed anything about them in your *Cargo.toml*
+file. Cargo also knows that you haven’t changed anything about your code, so it
+doesn’t recompile that either. With nothing to do, it simply exits. If you open
 up the *src/main.rs* file, make a trivial change, then save it and build again,
 you’ll only see one line of output:
 
@@ -436,7 +436,7 @@ $ cargo build
 ```
 
 This line shows Cargo only updates the build with your tiny change to the
-*src/main.rs* file. Your dependencies haven't changed, so Cargo knows it can
+*src/main.rs* file. Your dependencies haven’t changed, so Cargo knows it can
 reuse what it has already downloaded and compiled for those. It just rebuilds
 your part of the code.
 
@@ -510,7 +510,7 @@ Let’s start *using* `rand`. The next step is to update *src/main.rs*, as shown
 in Listing 2-3:
 
 <figure>
-<span class="filename">Filename: src/main.rs</span>
+<span class=“filename”>Filename: src/main.rs</span>
 
 ```rust,ignore
 extern crate rand;
@@ -604,7 +604,7 @@ Now that we have user input and a random number, we can compare them. That
 step is shown in Listing 2-4:
 
 <figure>
-<span class="filename">Filename: src/main.rs</span>
+<span class=“filename”>Filename: src/main.rs</span>
 
 ```rust,ignore
 extern crate rand;
@@ -723,7 +723,7 @@ Ultimately, we want to convert the `String` the program reads as input into a
 real number type so we can compare it to the guess numerically. We can do
 that by adding the following two lines to the `main` function body:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class=“filename”>Filename: src/main.rs</span>
 
 ```rust,ignore
 extern crate rand;
@@ -835,7 +835,7 @@ Let’s change that by adding a loop!
 The `loop` keyword gives us an infinite loop. Add that now to give users more
 chances at guessing the number:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class=“filename”>Filename: src/main.rs</span>
 
 ```rust,ignore
 extern crate rand;
@@ -918,7 +918,7 @@ stop when the correct number is guessed.
 
 Let’s program the game to quit when the user wins by adding a `break`:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class=“filename”>Filename: src/main.rs</span>
 
 ```rust,ignore
 extern crate rand;
@@ -1030,7 +1030,7 @@ testing, but it ruins the game. Let’s delete the `println!` that outputs the
 secret number. Listing 2-5 shows the final code:
 
 <figure>
-<span class="filename">Filename: src/main.rs</span>
+<span class=“filename”>Filename: src/main.rs</span>
 
 ```rust,ignore
 extern crate rand;

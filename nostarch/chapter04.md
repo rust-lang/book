@@ -244,7 +244,7 @@ of scope, Rust calls a special function for us. This function is called `drop`,
 and it’s where the author of `String` can put the code to return the memory.
 Rust calls `drop` automatically at the closing `}`.
 
-> Note: In C++, this pattern of deallocating resources at the end of an item's
+> Note: In C++, this pattern of deallocating resources at the end of an item’s
 lifetime is sometimes called *Resource Acquisition Is Initialization (RAII)*.
 The `drop` function in Rust will be familiar to you if you’ve used RAII
 patterns.
@@ -291,7 +291,7 @@ left: a pointer to the memory that holds the contents of the string, a length,
 and a capacity. This group of data is stored on the stack. On the right is the
 memory on the heap that holds the contents.
 
-<img alt="String in memory" src="img/trpl04-01.svg" class="center" style="width: 50%;" />
+<img alt=“String in memory” src=“img/trpl04-01.svg” class=“center” style=“width: 50%;“ />
 
 <caption>
 Figure 4-3: Representation in memory of a `String` holding the value `"hello"`
@@ -309,7 +309,7 @@ pointer, the length, and the capacity that are on the stack. We do not copy the
 data on the heap that the pointer refers to. In other words, the data
 representation in memory looks like Figure 4-4.
 
-<img alt="s1 and s2 pointing to the same value" src="img/trpl04-02.svg" class="center" style="width: 50%;" />
+<img alt=“s1 and s2 pointing to the same value” src=“img/trpl04-02.svg” class=“center” style=“width: 50%;“ />
 
 <caption>
 Figure 4-4: Representation in memory of the variable `s2` that has a copy of
@@ -321,7 +321,7 @@ look like if Rust instead copied the heap data as well. If Rust did this, the
 operation `s2 = s1` could potentially be very expensive in terms of runtime
 performance if the data on the heap was large.
 
-<img alt="s1 and s2 to two places" src="img/trpl04-03.svg" class="center" style="width: 50%;" />
+<img alt=“s1 and s2 to two places” src=“img/trpl04-03.svg” class=“center” style=“width: 50%;“ />
 
 <caption>
 Figure 4-5: Another possibility of what `s2 = s1` might do if Rust copied the
@@ -370,7 +370,7 @@ also invalidates the first variable, instead of calling this a shallow copy,
 it’s known as a *move*. Here we would read this by saying that `s1` was *moved*
 into `s2`. So what actually happens is shown in Figure 4-6.
 
-<img alt="s1 moved to s2" src="img/trpl04-04.svg" class="center" style="width: 50%;" />
+<img alt=“s1 moved to s2” src=“img/trpl04-04.svg” class=“center” style=“width: 50%;“ />
 
 <caption>
 Figure 4-6: Representation in memory after `s1` has been invalidated
@@ -599,7 +599,7 @@ function return value is gone. Second, note that we pass `&s1` into
 These ampersands are *references*, and they allow you to refer to some value
 without taking ownership of it. Figure 4-8 shows a diagram.
 
-<img alt="&String s pointing at String s1" src="img/trpl04-05.svg" class="center" />
+<img alt=“&String s pointing at String s1” src=“img/trpl04-05.svg” class=“center” />
 
 <caption>
 Figure 4-8: `&String s` pointing at `String s1`
@@ -628,7 +628,7 @@ fn calculate_length(s: &String) -> usize { // s is a reference to a String
 ```
 
 The scope in which the variable `s` is valid is the same as any function
-argument's scope, but we don’t drop what the reference points to when it goes
+argument’s scope, but we don’t drop what the reference points to when it goes
 out of scope because we don’t have ownership. Functions that take references as
 arguments instead of the actual values mean we won’t need to return the values
 in order to give back ownership, since we never had ownership.
@@ -1034,7 +1034,7 @@ that contains a pointer to the 6th byte of `s` and a length value of 5.
 
 Figure 4-12 shows this in a diagram.
 
-<img alt="world containing a pointer to the 6th byte of String s and a length 5" src="img/trpl04-06.svg" class="center" style="width: 50%;" />
+<img alt=“world containing a pointer to the 6th byte of String s and a length 5” src=“img/trpl04-06.svg” class=“center” style=“width: 50%;“ />
 
 <caption>
 Figure 4-12: String slice referring to part of a `String`

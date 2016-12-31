@@ -1,4 +1,4 @@
-## Testing the Library's Functionality
+## Testing the Library’s Functionality
 
 Writing tests for the core functionality of our code is now easier since we
 extracted the logic into *src/lib.rs* and left all the argument parsing and
@@ -6,18 +6,18 @@ error handling in *src/main.rs*. We can now call our code directly with various
 arguments and check return values without having to call our binary from the
 command line.
 
-We're going to write a function named `grep` that takes our search term and the
-text to search and produces a list of search results. Let's remove that
-`println!` from `run` (and from *src/main.rs* as well, as we don't really need
-those anymore either), and call the new `grep` function with the options we've
-collected. We'll add a placeholder implementation of the function for now, and
-a test that specifies the behavior we'd like the `grep` function to have. The
+We’re going to write a function named `grep` that takes our search term and the
+text to search and produces a list of search results. Let’s remove that
+`println!` from `run` (and from *src/main.rs* as well, as we don’t really need
+those anymore either), and call the new `grep` function with the options we’ve
+collected. We’ll add a placeholder implementation of the function for now, and
+a test that specifies the behavior we’d like the `grep` function to have. The
 test will fail with our placeholder implementation, of course, but we can make
 sure the code compiles and that we get the failure message we expect. Listing
 12-14 shows these modifications:
 
 <figure>
-<span class="filename">Filename: src/lib.rs</span>
+<span class=“filename”>Filename: src/lib.rs</span>
 
 ```rust
 # use std::error::Error;
@@ -78,11 +78,11 @@ for that function
 
 Notice that we need an explicit lifetime `'a` declared in the signature of
 `grep` and used with the `contents` argument and the return value. Remember,
-lifetime parameters are used to specify which arguments' lifetimes connect to
-the lifetime of the return value. In this case, we're indicating that the
-vector we're returning is going to contain string slices that reference slices
+lifetime parameters are used to specify which arguments’ lifetimes connect to
+the lifetime of the return value. In this case, we’re indicating that the
+vector we’re returning is going to contain string slices that reference slices
 of the argument `contents`, as opposed to referencing slices of the argument
-`search`. Another way to think about what we're telling Rust is that the data
+`search`. Another way to think about what we’re telling Rust is that the data
 returned by the `grep` function will live as long as the data passed into this
 function in the `contents` argument. This is important! Given that the data a
 slice references needs to be valid in order for the reference to be valid, if
@@ -102,18 +102,18 @@ error[E0106]: missing lifetime specifier
            `contents`
 ```
 
-Rust can't possibly know which of the two arguments we need, so it needs us to
+Rust can’t possibly know which of the two arguments we need, so it needs us to
 tell it. Because `contents` is the argument that contains all of our text and
 we want to return the parts of that text that match, we know `contents` is the
 argument that should be connected to the return value using the lifetime syntax.
 
 Connecting arguments to return values in the signature is something that other
-programming languages don't make you do, so don't worry if this still feels
+programming languages don’t make you do, so don’t worry if this still feels
 strange! Knowing how to specify lifetimes gets easier over time, and practice
 makes perfect. You may want to re-read the above section or go back and compare
 this example with the Lifetime Syntax section in Chapter 10.
 
-Now let's try running our test:
+Now let’s try running our test:
 
 ```text
 $ cargo test
@@ -140,20 +140,20 @@ test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured
 error: test failed
 ```
 
-Great, our test fails, exactly as we expected. Let's get the test to pass! It's
-failing because we always return an empty vector. Here's what we're going to do
+Great, our test fails, exactly as we expected. Let’s get the test to pass! It’s
+failing because we always return an empty vector. Here’s what we’re going to do
 to implement `grep`:
 
 1. Iterate through each line of the contents.
 2. Check if the line contains our search string.
-   * If it does, add it to the list of values we're returning.
+   * If it does, add it to the list of values we’re returning.
    * If not, do nothing.
 3. Return the list of results that match.
 
-Let's take each step at a time, starting with iterating through lines. Strings
+Let’s take each step at a time, starting with iterating through lines. Strings
 have a helpful method to handle this, conveniently named `lines`:
 
-<span class="filename">Filename: src/lib.rs</span>
+<span class=“filename”>Filename: src/lib.rs</span>
 
 ```rust,ignore
 fn grep<'a>(search: &str, contents: &'a str) -> Vec<&'a str> {
@@ -165,12 +165,12 @@ fn grep<'a>(search: &str, contents: &'a str) -> Vec<&'a str> {
 
 <!-- Will add wingdings in libreoffice /Carol -->
 
-We're using a `for` loop along with the `lines` method to get each line in turn.
-Next, let's see if our line contains the search string. Luckily, strings have a
+We’re using a `for` loop along with the `lines` method to get each line in turn.
+Next, let’s see if our line contains the search string. Luckily, strings have a
 helpful method named `contains` that does this for us! Using the `contains`
 method looks like this:
 
-<span class="filename">Filename: src/lib.rs</span>
+<span class=“filename”>Filename: src/lib.rs</span>
 
 ```rust,ignore
 fn grep<'a>(search: &str, contents: &'a str) -> Vec<&'a str> {
@@ -189,7 +189,7 @@ that, we can make a mutable vector before the `for` loop and call the `push`
 method to store a `line` in the vector. After the `for` loop, we return the
 vector:
 
-<span class="filename">Filename: src/lib.rs</span>
+<span class=“filename”>Filename: src/lib.rs</span>
 
 ```rust
 fn grep<'a>(search: &str, contents: &'a str) -> Vec<&'a str> {
@@ -207,7 +207,7 @@ fn grep<'a>(search: &str, contents: &'a str) -> Vec<&'a str> {
 
 <!-- Will add ghosting and wingdings in libreoffice /Carol -->
 
-Let's give it a try:
+Let’s give it a try:
 
 ```text
 $ cargo test
@@ -231,16 +231,16 @@ test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured
 
 Great! It works. Now that our test is passing, we could consider opportunities
 for refactoring the implementation of `grep` and be certain we maintain the
-same functionality while we do so. This code isn't bad, but it isn't taking
-advantage of some useful features of iterators. We'll be coming back to this
-example in Chapter 13 where we'll explore iterators in detail and see how to
+same functionality while we do so. This code isn’t bad, but it isn’t taking
+advantage of some useful features of iterators. We’ll be coming back to this
+example in Chapter 13 where we’ll explore iterators in detail and see how to
 improve it.
 
 Now that the `grep` function is working, we need to do one last thing inside of
-the `run` function: we never printed out the results! We'll do that by adding
+the `run` function: we never printed out the results! We’ll do that by adding
 a `for` loop that prints each line returned from the `grep` function:
 
-<span class="filename">Filename: src/lib.rs</span>
+<span class=“filename”>Filename: src/lib.rs</span>
 
 ```rust,ignore
 pub fn run(config: Config) -> Result<(), Box<Error>> {
@@ -259,7 +259,7 @@ pub fn run(config: Config) -> Result<(), Box<Error>> {
 
 <!-- Will add ghosting and wingdings in libreoffice /Carol -->
 
-Now our whole program should be working! Let's try it out:
+Now our whole program should be working! Let’s try it out:
 
 ```text
 $ cargo run the poem.txt
@@ -281,6 +281,6 @@ To tell your name the livelong day
 To an admiring bog!
 ```
 
-Excellent! We've built our own version of a classic tool, and learned a lot
-about how to structure applications. We've also learned a bit about file input
+Excellent! We’ve built our own version of a classic tool, and learned a lot
+about how to structure applications. We’ve also learned a bit about file input
 and output, lifetimes, testing, and command line parsing.
