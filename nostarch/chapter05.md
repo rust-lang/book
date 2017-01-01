@@ -70,7 +70,7 @@ we want instances of this struct to own all of its data, and for that data to
 be valid for as long as the entire struct is valid.
 
 It is possible for structs to store references to data owned by something else,
-but to do so requires the use of *lifetimes*, a feature of Rust that we'll
+but to do so requires the use of *lifetimes*, a feature of Rust that we’ll
 discuss in Chapter 10. Lifetimes ensure that the data a struct references is
 valid for as long as the struct is. If you try to store a reference in a struct
 without specifying lifetimes, like this:
@@ -205,7 +205,7 @@ tuples don’t give names to their elements, so our calculation has gotten more
 confusing because we have to index into the parts of the tuple:
 
 <!-- I will change this to use wingdings instead of repeating this code once
-we're in libreoffice /Carol -->
+we’re in libreoffice /Carol -->
 
 ```rust,ignore
 dimensions.0 * dimensions.1
@@ -320,7 +320,7 @@ note: `Rectangle` cannot be formatted with the default formatter; try using
 ```
 
 Let’s try it! The `println!` will now look like
-`println!("rect1 is {:?}", rect1);`. Putting the specifier `:?` inside
+`println!(“rect1 is {:?}“, rect1);`. Putting the specifier `:?` inside
 the `{}` tells `println!` we want to use an output format called `Debug`.
 `Debug` is a trait that enables us to print out our struct in a way that is
 useful for developers so that we can see its value while we are debugging our
@@ -513,7 +513,7 @@ Let’s practice some more with methods by implementing a second method on our
 `Rectangle` struct. This time, we’d like for an instance of `Rectangle` to take
 another instance of `Rectangle` and return `true` if the second rectangle could
 fit completely within `self` and `false` if it would not. That is, if we run
-the code in Listing 5-8, once we've defined the `can_hold` method:
+the code in Listing 5-8, once we’ve defined the `can_hold` method:
 
 Filename: src/main.rs
 

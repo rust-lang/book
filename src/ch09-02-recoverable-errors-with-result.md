@@ -1,13 +1,13 @@
 ## Recoverable Errors with `Result`
 
-Most errors aren't serious enough to require the program to stop entirely.
-Sometimes, when a function fails, it's for a reason that we can easily
+Most errors aren’t serious enough to require the program to stop entirely.
+Sometimes, when a function fails, it’s for a reason that we can easily
 interpret and respond to. For example, if we try to open a file and that
-operation fails because the file doesn't exist, we might want to create the
+operation fails because the file doesn’t exist, we might want to create the
 file instead of terminating the process.
 
-Recall from Chapter 2 the section on "Handling Potential Failure with the
-`Result` Type" that the `Result` enum is defined as having two variants, `Ok`
+Recall from Chapter 2 the section on “Handling Potential Failure with the
+`Result` Type” that the `Result` enum is defined as having two variants, `Ok`
 and `Err`, as follows:
 
 ```rust
@@ -29,10 +29,10 @@ enum Result<T, E> {
 instead? Then you could concretely explain the returned result.
 -->
 <!-- This notation looks similar to a `match`, but it's not a `match`, so we
-think this would be confusing. We've tried to clarify better in the text.
+think this would be confusing. We’ve tried to clarify better in the text.
 /Carol -->
 
-The `T` and `E` are generic type parameters; we'll go into generics in more
+The `T` and `E` are generic type parameters; we’ll go into generics in more
 detail in Chapter 10. What you need to know right now is that `T` represents
 the type of the value that will be returned in a success case within the `Ok`
 variant, and `E` represents the type of the error that will be returned in a
@@ -41,7 +41,7 @@ parameters, we can use the `Result` type and the functions that the standard
 library has defined on it in many different situations where the successful
 value and error value we want to return may differ.
 
-Let's call a function that returns a `Result` value because the function could
+Let’s call a function that returns a `Result` value because the function could
 fail: opening a file, shown in Listing 9-2.
 
 <figure>
@@ -151,13 +151,13 @@ might have
 {:?} syntax, can you include a line about that? -->
 <!-- We've added an explanation that Result is like Option in that it's
 imported into the prelude, which the reader should be familiar with. We
-explained the {:?} syntax in Structs, chapter 5, in the section "Adding Useful
-Functionality with Derived Traits". It's the debug format. Having to re-explain
+explained the {:?} syntax in Structs, chapter 5, in the section “Adding Useful
+Functionality with Derived Traits”. It’s the debug format. Having to re-explain
 multiple concepts that are not the primary focus of this example really
 obscures the point of the section. /Carol -->
 
 Note that, like the `Option` enum, the `Result` enum and its variants have been
-imported in the prelude, so we don't need to specify `Result::` before the `Ok`
+imported in the prelude, so we don’t need to specify `Result::` before the `Ok`
 and `Err` variants in the `match` arms.
 
 Here we tell Rust that when the result is `Ok`, return the inner `file` value
@@ -166,9 +166,9 @@ variable `f`. After the `match`, we can then use the file handle for reading or
 writing.
 
 The other arm of the `match` handles the case where we get an `Err` value from
-`File::open`. In this example, we've chosen to call the `panic!` macro. If
-there's no file named `hello.txt` in our current directory and we run this
-code, we'll see the following output from the `panic!` macro:
+`File::open`. In this example, we’ve chosen to call the `panic!` macro. If
+there’s no file named `hello.txt` in our current directory and we run this
+code, we’ll see the following output from the `panic!` macro:
 
 ```text
 thread 'main' panicked at 'There was a problem opening the file: Error { repr:
@@ -229,12 +229,12 @@ The type of the value that `File::open` returns inside the `Err` variant is
 has a method `kind` that we can call to get an `io::ErrorKind` value.
 `io::ErrorKind` is an enum provided by the standard library that has variants
 representing the different kinds of errors that might result from an `io`
-operation. The variant we're interested in is `ErrorKind::NotFound`, which
-indicates the file we're trying to open doesn't exist yet.
+operation. The variant we’re interested in is `ErrorKind::NotFound`, which
+indicates the file we’re trying to open doesn’t exist yet.
 
 The condition `if error.kind() == ErrorKind::NotFound` is called a *match
-guard*: it's an extra condition on a `match` arm that further refines the arm's
-pattern. This condition must be true in order for that arm's code to get run;
+guard*: it’s an extra condition on a `match` arm that further refines the arm’s
+pattern. This condition must be true in order for that arm’s code to get run;
 otherwise, the pattern matching will move on to consider the next arm in the
 `match`. The `ref` in the pattern is needed so that the `error` is not moved
 into the guard condition but is merely referenced by it. The reason `ref` is
@@ -244,15 +244,15 @@ and give us its value, but `ref` matches a value and gives us a reference to it.
 
 The condition we want to check in the match guard is whether the value returned
 by `error.kind()` is the `NotFound` variant of the `ErrorKind` enum. If it is,
-we try to create the file with 'File::create'. However, since `File::create`
+we try to create the file with ‘File::create’. However, since `File::create`
 could also fail, we need to add an inner `match` statement as well! When the
-file can't be opened, a different error message will be printed. The last arm
+file can’t be opened, a different error message will be printed. The last arm
 of the outer `match` stays the same so that the program panics on any error
 besides the missing file error.
 
 ### Shortcuts for Panic on Error: `unwrap` and `expect`
 
-Using `match` works well enough, but it can be a bit verbose and doesn't always
+Using `match` works well enough, but it can be a bit verbose and doesn’t always
 communicate intent well. The `Result<T, E>` type has many helper methods
 defined on it to do various things. One of those methods, called `unwrap`, is
 a shortcut method that is implemented just like the `match` statement we wrote
@@ -263,9 +263,9 @@ call the `panic!` macro for us.
 <!-- Can you explain a bit more what unwrap() does---you mean every time we
 cause a panic it calls the unwrap method? -->
 <!-- I'm not sure how the conclusion "every time we cause a panic it calls the
-unwrap method" follows from the text that was here, but I've tried to reword.
+unwrap method” follows from the text that was here, but I’ve tried to reword.
 Please let us know what part of the text specifically is implying that here so
-that we can be sure that we've fixed it. /Carol -->
+that we can be sure that we’ve fixed it. /Carol -->
 
 <!-- I'll ghost everything except `unwrap()` in the libreoffice file /Carol -->
 
@@ -295,7 +295,7 @@ repr: Os { code: 2, message: "No such file or directory" } }',
 ../src/libcore/result.rs:837
 ```
 
-There's another method similar to `unwrap` that lets us also choose the
+There’s another method similar to `unwrap` that lets us also choose the
 `panic!` error message: `expect`. Using `expect` instead of `unwrap` and
 providing good error messages can convey your intent and make tracking down the
 source of a panic easier. The syntax of`expect` looks like this:
@@ -323,18 +323,18 @@ thread 'main' panicked at 'Failed to open hello.txt: Error { repr: Os { code:
 <!-- I added the above paragraph, can you review it and correct it as
 necessary? So this is like what we did in Listing 9-3?-->
 <!-- Yes, the implementations for both `unwrap` and `expect` are similar to 9-3,
-which we want to show so that the reader knows they don't have to write out all
+which we want to show so that the reader knows they don’t have to write out all
 of 9-3 every time they have a `Result` value. Does this comment mean your
 earlier comments in this section are moot? /Carol -->
 
 <!-- Is panic used for both types of errors? The introduction makes it seem as
-though it's only for unrecoverable errors -->
+though it’s only for unrecoverable errors -->
 <!-- When you call panic, you are causing the program to crash and therefore
 creating an unrecoverable error. You can choose to do that at any time, even
-when there are *no* errors. There's nothing that prevents you from calling
-`panic!` inappropriately, which is why the "to panic or not to panic" section
-goes over the criteria the reader should use to decide if they're in a
-situation that's recoverable or not. I've actually moved the text that was here
+when there are *no* errors. There’s nothing that prevents you from calling
+`panic!` inappropriately, which is why the “to panic or not to panic” section
+goes over the criteria the reader should use to decide if they’re in a
+situation that’s recoverable or not. I’ve actually moved the text that was here
 into that section to keep that whole discussion together. /Carol
 -->
 
@@ -350,11 +350,11 @@ handled than what you have available in the context of your code.
 <!-- What's the benefit/result of returning the error to the code that called
 the function, besides putting off handling it---can you lay that out? -->
 <!-- We're giving control/decision making ability to the code that's calling
-our code. I've tried to be more explicit here; please let me know what could be
-improved if it's still not clear. /Carol -->
+our code. I’ve tried to be more explicit here; please let me know what could be
+improved if it’s still not clear. /Carol -->
 
 For example, Listing 9-5 shows a function that reads a username from a file. If
-the file doesn't exist or can't be read, this function will return those errors
+the file doesn’t exist or can’t be read, this function will return those errors
 to the code that called this function:
 
 <figure>
@@ -482,7 +482,7 @@ will return early out of the whole function and give any `Err` value to our
 caller. The same thing applies to the `?` at the end of the `read_to_string`
 call.
 
-The `?` eliminates a lot of boilerplate and makes this function's
+The `?` eliminates a lot of boilerplate and makes this function’s
 implementation simpler. We could even shorten this code further by chaining
 method calls immediately after the `?`:
 
@@ -507,7 +507,7 @@ fn read_username_from_file() -> Result<String, io::Error> {
 We've moved the creation of the new `String` in `s` to the beginning of the
 function; that part hasn't changed. Instead of creating a variable `f`, we've
 chained the call to `read_to_string` directly onto the result of
-`File::open("hello.txt")?`. We still have a `?` at the end of the
+`File::open(“hello.txt”)?`. We still have a `?` at the end of the
 `read_to_string` call, and we still return an `Ok` value containing the
 username in `s` when both `File::open` and `read_to_string` succeed rather than
 returning errors. The functionality is again the same as in Listing 9-5 and
@@ -551,13 +551,13 @@ fn main() {
 ```
 
 <!-- NOTE: as of 2016-12-21, the error message when calling `?` in a function
-that doesn't return a result is STILL confusing. Since we want to only explain
-`?` now, I've changed the example, but if you try running this code you WON'T
+that doesn’t return a result is STILL confusing. Since we want to only explain
+`?` now, I’ve changed the example, but if you try running this code you WON’T
 get the error message below.
 
-I'm bugging people to try and get
+I’m bugging people to try and get
 https://github.com/rust-lang/rust/issues/35946 fixed soon, hopefully before this
-chapter gets through copy editing-- at that point I'll make sure to update this
+chapter gets through copy editing-- at that point I’ll make sure to update this
 error message. /Carol -->
 
 When we compile this, we get the following error message:

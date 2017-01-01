@@ -14,7 +14,7 @@
 
 ## Code
 
-* Add the file name before markdown blocks to make it clear which file we're
+* Add the file name before markdown blocks to make it clear which file we’re
   talking about, when applicable.
 * When making changes to code, make it clear which parts of the code changed
   and which stayed the same... not sure how to do this yet
@@ -25,8 +25,8 @@
 
 Once all the scripts are done:
 
-* If a link shouldn't be printed, mark it to be ignored
-  * This includes all "Chapter XX" intra-book links, which *should* be links
+* If a link shouldn’t be printed, mark it to be ignored
+  * This includes all “Chapter XX” intra-book links, which *should* be links
     for the HTML version
 * Make intra-book links and stdlib API doc links relative so they work whether
   the book is read offline or on docs.rust-lang.org

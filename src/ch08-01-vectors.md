@@ -1,6 +1,6 @@
 ## Vectors
 
-The first type we'll look at is `Vec<T>`, also known as a *vector*. Vectors
+The first type we’ll look at is `Vec<T>`, also known as a *vector*. Vectors
 allow us to store more than one value in a single data structure that puts all
 the values next to each other in memory. Vectors can only store values of the
 same type. They are useful in situations where you have a list of items, such
@@ -34,8 +34,8 @@ it. This will create a new `Vec<i32>` that holds the values `1`, `2`, and `3`:
 let v = vec![1, 2, 3];
 ```
 
-Because we've given initial `i32` values, Rust can infer that the type of `v`
-is `Vec<i32>`, and the type annotation isn't necessary. Let's look at how to
+Because we’ve given initial `i32` values, Rust can infer that the type of `v`
+is `Vec<i32>`, and the type annotation isn’t necessary. Let’s look at how to
 modify a vector next.
 
 ### Updating a Vector
@@ -72,13 +72,13 @@ Like any other `struct`, a vector will be freed when it goes out of scope:
 When the vector gets dropped, all of its contents will also be dropped, meaning
 those integers it holds will be cleaned up. This may seem like a
 straightforward point, but can get a little more complicated once we start to
-introduce references to the elements of the vector. Let's tackle that next!
+introduce references to the elements of the vector. Let’s tackle that next!
 
 ### Reading Elements of Vectors
 
 Now that you know how to create, update, and destroy vectors, knowing how to
 read their contents is a good next step. There are two ways to reference a
-value stored in a vector. In the examples, we've annotated the types of the
+value stored in a vector. In the examples, we’ve annotated the types of the
 values that are returned from these functions for extra clarity.
 
 This example shows both methods of accessing a value in a vector either with
@@ -122,7 +122,7 @@ beyond the range of the vector will happen occasionally under normal
 circumstances. Your code can then have logic to handle having either
 `Some(&element)` or `None`, as we discussed in Chapter 6. For example, the
 index could be coming from a person entering a number. If they accidentally
-enter a number that's too large and your program gets a `None` value, you could
+enter a number that’s too large and your program gets a `None` value, you could
 tell the user how many items are in the current `Vec` and give them another
 chance to enter a valid value. That would be more user-friendly than crashing
 the program for a typo!
@@ -132,7 +132,7 @@ the program for a typo!
 Once the program has a valid reference, the borrow checker will enforce the
 ownership and borrowing rules covered in Chapter 4 to ensure this reference and
 any other references to the contents of the vector stay valid. Recall the rule
-that says we can't have mutable and immutable references in the same scope.
+that says we can’t have mutable and immutable references in the same scope.
 That rule applies in this example, where we hold an immutable reference to the
 first element in a vector and try to add an element to the end:
 
@@ -160,9 +160,9 @@ error[E0502]: cannot borrow `v` as mutable because it is also borrowed as immuta
 
 This code might look like it should work: why should a reference to the first
 element care about what changes about the end of the vector? The reason why
-this code isn't allowed is due to the way vectors work. Adding a new element
+this code isn’t allowed is due to the way vectors work. Adding a new element
 onto the end of the vector might require allocating new memory and copying the
-old elements over to the new space, in the circumstance that there isn't enough
+old elements over to the new space, in the circumstance that there isn’t enough
 room to put all the elements next to each other where the vector was. In that
 case, the reference to the first element would be pointing to deallocated
 memory. The borrowing rules prevent programs from ending up in that situation.
@@ -180,7 +180,7 @@ variants of an enum are all defined under the same enum type. When we need to
 store elements of a different type in a vector this scenario, we can define and
 use an enum!
 
-For example, let's say we want to get values from a row in a spreadsheet, where
+For example, let’s say we want to get values from a row in a spreadsheet, where
 some of the columns in the row contain integers, some floating point numbers,
 and some strings. We can define an enum whose variants will hold the different
 value types, and then all of the enum variants will be considered the same

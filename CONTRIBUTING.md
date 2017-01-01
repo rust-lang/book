@@ -1,11 +1,11 @@
 # Contributing
 
-We're currently working with No Starch Press to bring the book to print. Each
+We’re currently working with No Starch Press to bring the book to print. Each
 chapter goes through [a number of stages][project]:
 
 [project]: https://github.com/rust-lang/book/projects/1
 
-* We write and edit a chapter's initial content
+* We write and edit a chapter’s initial content
 * No Starch provides a round of edits and questions
 * We revise, clarify, and check those edits
 * A Technical Reviewer checks for the accuracy of technical details
@@ -20,15 +20,15 @@ problems and not, for example, minor wording changes.
 
 The chapters we have planned but that we have not yet written appear greyed out
 in the sidebar of the rendered book. We would love issues with ideas for what,
-specifically, you'd like to see covered in those planned chapters!
+specifically, you’d like to see covered in those planned chapters!
 
-Our [open pull requests][pulls] are new chapters or edits that we're currently
+Our [open pull requests][pulls] are new chapters or edits that we’re currently
 working on. We would love if you would read through those and make comments for
 any suggestions or corrections!
 
 [pulls]: https://github.com/rust-lang/book/pulls
 
-If you're looking for ways to help that don't involve reading or writing, check
+If you’re looking for ways to help that don’t involve reading or writing, check
 out the [open issues with the E-help-wanted label][help-wanted]. These might be
 Rust code, frontend code, or shell scripts that would help us be more efficient
 or enhance the book in some way!

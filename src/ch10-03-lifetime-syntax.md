@@ -1,15 +1,15 @@
 ## Lifetime Syntax
 
 Generic type parameters let us abstract over types, and traits let us abstract
-over behavior. There's one more way that Rust allows us to do something
+over behavior. There’s one more way that Rust allows us to do something
 similar: *lifetimes* allow us to be generic over scopes of code.
 
-Scopes of code? Yes, it's a bit unusual. Lifetimes are, in some ways, Rust's
+Scopes of code? Yes, it’s a bit unusual. Lifetimes are, in some ways, Rust’s
 most distinctive feature. They are a bit different than the tools you have used
-in other programming languages. Lifetimes are a big topic, so we're not going
+in other programming languages. Lifetimes are a big topic, so we’re not going
 to cover everything about them in this chapter. What we *are* going to do is
 talk about the very basics of lifetimes, so that when you see the syntax in
-documentation or other places, you'll be familiar with the concepts. Chapter 20
+documentation or other places, you’ll be familiar with the concepts. Chapter 20
 will contain more advanced information about everything lifetimes can do.
 
 ### Core Syntax
@@ -27,7 +27,7 @@ Lifetimes have a slightly unusual syntax:
 &'a i32 // a reference with an explicit lifetime
 ```
 
-The `'a` there is a *lifetime* with the name `a`. A single apostrophe indicates
+The `‘a` there is a *lifetime* with the name `a`. A single apostrophe indicates
 that this name is for a lifetime. Lifetime names need to be declared before
 they're used. Here's a function signature with lifetime declarations and
 annotations:
@@ -46,7 +46,7 @@ fn some_function<'a, T>(argument: &'a T) {
 ```
 
 This function takes one argument, a reference to some type, `T`, and the
-reference has the lifetime `'a`. In the same way that we parameterize functions
+reference has the lifetime `‘a`. In the same way that we parameterize functions
 that take generic types, we parameterize references with lifetimes.
 
 So, that's the syntax, but *why*? What does a lifetime do, anyway?
@@ -124,14 +124,14 @@ annotations:
 }
 ```
 
-Here, we've annotated the lifetime of `r` with `'a` and the lifetime of `x`
+Here, we’ve annotated the lifetime of `r` with `'a` and the lifetime of `x`
 with `'b`. Rust looks at these lifetimes and sees that `r` has a lifetime of
 `'a`, but that it refers to something with a lifetime of `'b`. It rejects the
 program because the lifetime `'b` is shorter than the lifetime of `'a`-- the
 value that the reference is referring to does not live as long as the reference
 does.
 
-Let's look at a different example that compiles because it does not try to make
+Let’s look at a different example that compiles because it does not try to make
 a dangling reference, and see what the lifetimes look like:
 
 ```rust
@@ -146,7 +146,7 @@ a dangling reference, and see what the lifetimes look like:
 }
 ```
 
-Here, `x` lives for `'b`, which in this case is larger than `'a`. This is
+Here, `x` lives for `‘b`, which in this case is larger than `‘a`. This is
 allowed: Rust knows that the reference in `r` will always be valid, as it has a
 smaller scope than `x`, the value it refers to.
 
@@ -172,27 +172,27 @@ Again, the lifetime names are declared in the angle brackets where generic type
 parameters are declared, and this is because lifetimes are a form of generics.
 In the examples above, `'a` and `'b` were concrete lifetimes: we knew about `r`
 and `x` and how long they would live exactly. However, when we write a
-function, we can't know beforehand exactly all of the arguments that it could
+function, we can’t know beforehand exactly all of the arguments that it could
 be called with and how long they will be valid for. We have to explain to Rust
-what we expect the lifetime of the argument to be (we'll learn about how
+what we expect the lifetime of the argument to be (we’ll learn about how
 to know what you expect the lifetime to be in a bit). This is similar to
-writing a function that has an argument of a generic type: we don't know what
+writing a function that has an argument of a generic type: we don’t know what
 type the arguments will actually end up being when the function gets called.
 Lifetimes are the same idea, but they are generic over the scope of a
 reference, rather than a type.
 
 ### Lifetime Annotations in Function Signatures
 
-Lifetime annotations for functions go on the function signature, but we don't
-have to annotate any of the code in the function body with lifetimes. That's
+Lifetime annotations for functions go on the function signature, but we don’t
+have to annotate any of the code in the function body with lifetimes. That’s
 because Rust can analyze the specific code inside the function without any
 help. When a function interacts with references that come from or go to code
 outside that function, however, the lifetimes of those arguments or return
 values will potentially be different each time that function gets called. Rust
 would have to analyze every place the function is called to determine that
 there were no dangling references. That would be impossible because a library
-that you provide to someone else might be called in code that hasn't been
-written yet, at the time that you're compiling your library.
+that you provide to someone else might be called in code that hasn’t been
+written yet, at the time that you’re compiling your library.
 
 Lifetime parameters specify generic lifetimes that will apply to any specific
 lifetimes the function gets called with. The annotation of lifetime parameters
@@ -203,11 +203,11 @@ functions can accept any type when the signature specifies a generic type
 parameter, functions can accept references with any lifetime when the signature
 specifies a generic lifetime parameter.
 
-To understand lifetime annotations in context, let's write a function that will
+To understand lifetime annotations in context, let’s write a function that will
 return the longest of two string slices. The way we want to be able to call
 this function is by passing two string slices, and we want to get back a string
 slice. The code in Listing 10-9 should print `The longest string is abcd` once
-we've implemented the `longest` function:
+we’ve implemented the `longest` function:
 
 <figure>
 <span class="filename">Filename: src/main.rs</span>
@@ -304,8 +304,8 @@ knows that there is some scope that can be substituted for `'a` that will
 satisfy this signature.
 
 The exact way to specify lifetime parameters depends on what your function is
-doing. If the function didn't actually return the longest string slice but
-instead always returned the first argument, we wouldn't need to specify a
+doing. If the function didn’t actually return the longest string slice but
+instead always returned the first argument, we wouldn’t need to specify a
 lifetime on `y`. This code compiles:
 
 <span class="filename">Filename: src/main.rs</span>
@@ -332,7 +332,7 @@ fn longest<'a>(x: &str, y: &str) -> &'a str {
 }
 ```
 
-Even though we've specified a lifetime for the return type, this function fails
+Even though we’ve specified a lifetime for the return type, this function fails
 to compile with the following error message:
 
 ```text
@@ -411,14 +411,14 @@ Rust infers input lifetimes in the absence of explicit annotations:
 
 1. Each argument that is a reference and therefore needs a lifetime parameter
   gets its own. In other words, a function with one argument gets one lifetime
-  parameter: `fn foo<'a>(x: &'a i32)`, a function with two arguments gets two
-  separate lifetime parameters: `fn foo<'a, 'b>(x: &'a i32, y: &'b i32)`, and
+  parameter: `fn foo<'a>(x: &‘a i32)`, a function with two arguments gets two
+  separate lifetime parameters: `fn foo<'a, 'b>(x: &‘a i32, y: &‘b i32)`, and
   so on.
 
 And two rules related to output lifetimes:
 
 2. If there is exactly one input lifetime parameter, that lifetime is assigned
-  to all output lifetime parameters: `fn foo<'a>(x: &'a i32) -> &'a i32`.
+  to all output lifetime parameters: `fn foo<'a>(x: &‘a i32) -> &‘a i32`.
 3. If there are multiple input lifetime parameters, but one of them is `&self`
   or `&mut self`, then the lifetime of `self` is the lifetime assigned to all
   output lifetime parameters. This makes writing methods much nicer.
@@ -476,13 +476,13 @@ let s: &'static str = "I have a static lifetime.";
 
 The text of this string is stored directly in the binary of your program and
 the binary of your program is always available. Therefore, the lifetime of all
-string literals is `'static`. You may see suggestions to use the `'static`
+string literals is `‘static`. You may see suggestions to use the `‘static`
 lifetime in error message help text, but before adding it, think about whether
 the reference you have is one that actually lives the entire lifetime of your
 program or not (or even if you want it to live that long, if it could). Most of
 the time, the problem in the code is an attempt to create a dangling reference
 or a mismatch of the available lifetimes, and the solution is fixing those
-problems, not specifying the `'static` lifetime.
+problems, not specifying the `‘static` lifetime.
 
 ## Summary
 

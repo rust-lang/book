@@ -399,9 +399,9 @@ the project with the dependencies available.
 
 If you immediately run `cargo build` again without making any changes, you won’t
 get any output. Cargo knows it has already downloaded and compiled the
-dependencies, and you haven't changed anything about them in your *Cargo.toml*
-file. Cargo also knows that you haven't changed anything about your code, so it
-doesn't recompile that either. With nothing to do, it simply exits. If you open
+dependencies, and you haven’t changed anything about them in your *Cargo.toml*
+file. Cargo also knows that you haven’t changed anything about your code, so it
+doesn’t recompile that either. With nothing to do, it simply exits. If you open
 up the *src/main.rs* file, make a trivial change, then save it and build again,
 you’ll only see one line of output:
 

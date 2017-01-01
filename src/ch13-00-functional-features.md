@@ -35,5 +35,5 @@ Most complicated chain of iterator functions that compile down to the same ASM a
 
 ### Representation: Closures are a Struct
 
-Closures don't have any further performance penalty over regular fn calls
+Closures don’t have any further performance penalty over regular fn calls
 

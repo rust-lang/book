@@ -5,7 +5,7 @@ order to be pleasant for others to use.
 
 ### Re-exports with `pub use`
 
-If your internal code organization doesn't match your desired public API
+If your internal code organization doesn’t match your desired public API
 organization, you can re-export items in the way you want them to be organized.
 
 To re-export a name, combine the `pub` keyword with `use`:

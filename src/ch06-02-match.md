@@ -9,10 +9,10 @@ Think of a `match` expression kind of like a coin sorting machine: coins slide
 down a track with variously sized holes along it, and each coin falls
 through the first hole it encounters that it fits into. In the same way, values
 go through each pattern in a `match`, and at the first pattern the value
-"fits", the value will fall into the associated code block to be used during
+“fits”, the value will fall into the associated code block to be used during
 execution.
 
-Since we're already talking about coins, let's use them for an example using
+Since we’re already talking about coins, let’s use them for an example using
 `match`! We can write a function that can take an unknown American coin and, in
 a similar way as the counting machine, determine which coin it is and
 return its value in cents, shown here in Listing 6-2:
@@ -107,12 +107,12 @@ Another useful feature of match arms is that they can bind to parts of the
 values that match the pattern. This is how we can extract values out of enum
 variants.
 
-As an example, let's change one of our enum variants to hold data inside it.
+As an example, let’s change one of our enum variants to hold data inside it.
 From 1999 through 2008, the U.S. printed quarters with different designs for
 each of the 50 states on one side. No other coins got state designs, so only
 quarters have this extra value. We can add this information to our `enum`
 by changing the `Quarter` variant to include a `State` value stored inside it
-as we've done here in Listing 6-3:
+as we’ve done here in Listing 6-3:
 
 <figure>
 
@@ -191,8 +191,8 @@ case when using `Option<T>`; we can do this in a very similar way! Instead of
 comparing coins we will be comparing the variants of `Option<T>`, but the way
 that the `match` expression works remains the same.
 
-Let's say we want to write a function that takes an `Option<i32>` and if
-there's a value inside, adds one to that value. If there isn't a value inside,
+Let’s say we want to write a function that takes an `Option<i32>` and if
+there’s a value inside, adds one to that value. If there isn’t a value inside,
 the function should return the `None` value and not attempt to perform any
 operations.
 
@@ -234,7 +234,7 @@ arm:
 None => None,
 ```
 
-The `Some(5)` value doesn't match the pattern `None`, so we continue.
+The `Some(5)` value doesn’t match the pattern `None`, so we continue.
 
 ```rust,ignore
 Some(i) => Some(i + 1),
@@ -254,19 +254,19 @@ enter the `match`, and compare to the first arm:
 None => None,
 ```
 
-It matches! There's no value to add to, so the program stops and returns the
+It matches! There’s no value to add to, so the program stops and returns the
 `None` value on the right side of `=>`. Since the first arm matched, no other
 arms are compared.
 
-Combining `match` and enums together is extremely powerful. You'll see this
+Combining `match` and enums together is extremely powerful. You’ll see this
 pattern a lot in Rust code: `match` against an enum, bind a variable to the
-data inside, then execute code based on it. It's a bit tricky at first, but
-once you get used to it, you'll wish you had it in all languages. It's
+data inside, then execute code based on it. It’s a bit tricky at first, but
+once you get used to it, you’ll wish you had it in all languages. It’s
 consistently a user favorite.
 
 ### Matches are Exhaustive
 
-There's one other aspect of `match` we haven't discussed. Consider this version
+There’s one other aspect of `match` we haven’t discussed. Consider this version
 of our `plus_one` function:
 
 ```rust,ignore
@@ -297,10 +297,10 @@ making the billion-dollar mistake discussed earlier.
 
 ### The _ Placeholder
 
-Rust also has a pattern we can use in situations when we don't want to list all
+Rust also has a pattern we can use in situations when we don’t want to list all
 possible values. For example, a `u8` can have valid values of zero through 255.
-If we only care about the values 1, 3, 5, and 7, we don't want to have to list
-out 0, 2, 4, 6, 8, 9 all the way up to 255. Thankfully, we don't have to: we
+If we only care about the values 1, 3, 5, and 7, we don’t want to have to list
+out 0, 2, 4, 6, 8, 9 all the way up to 255. Thankfully, we don’t have to: we
 can use the special pattern `_` instead.
 
 ```rust

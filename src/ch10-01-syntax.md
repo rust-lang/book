@@ -1,13 +1,13 @@
 ## Generics Syntax
 
-We've already hinted at the idea of generics in previous chapters, but we
+We’ve already hinted at the idea of generics in previous chapters, but we
 never dug into what exactly they are or how to use them. In places where we
 specify a type, like function signatures or structs, instead we can use
-*generics*. Generics are stand-ins that represent an abstract set instead of something concrete. In this section, we're going to cover generic *data types*.
+*generics*. Generics are stand-ins that represent an abstract set instead of something concrete. In this section, we’re going to cover generic *data types*.
 
 You can recognize when any kind of generics are used by the way that they fit
-into Rust's syntax: any time you see angle brackets, `<>`, you're dealing with
-generics. Types we've seen before, like in Chapter 8 where we discussed vectors
+into Rust’s syntax: any time you see angle brackets, `<>`, you’re dealing with
+generics. Types we’ve seen before, like in Chapter 8 where we discussed vectors
 with types like `Vec<i32>`, employ generics. The type that the standard library
 defines for vectors is `Vec<T>`. That `T` is called a *type parameter*, and it
 serves a similar function as parameters to functions: you fill in the parameter
@@ -18,14 +18,14 @@ such as `foo(5)`, a `Vec<T>` can be created with a specific type, like
 
 ### Duplicated Enum Definitions
 
-Let's dive into generic data types in more detail. We learned about how to use
-the `Option<T>` enum in Chapter 6, but we never examined its definition. Let's
-try to imagine how we'd write it! We'll start from duplicated code like we did
-in the "Removing Duplication by Extracting a Function" section. This time,
-we'll remove the duplication by extracting a generic data type instead of
+Let’s dive into generic data types in more detail. We learned about how to use
+the `Option<T>` enum in Chapter 6, but we never examined its definition. Let’s
+try to imagine how we’d write it! We’ll start from duplicated code like we did
+in the “Removing Duplication by Extracting a Function” section. This time,
+we’ll remove the duplication by extracting a generic data type instead of
 extracting a function, but the mechanics of doing the extraction will be
-similar. First, let's consider an `Option` enum with a `Some` variant that can
-only hold an `i32`. We'll call this enum `OptionalNumber`:
+similar. First, let’s consider an `Option` enum with a `Some` variant that can
+only hold an `i32`. We’ll call this enum `OptionalNumber`:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -60,15 +60,15 @@ fn main() {
 }
 ```
 
-We've made the enum's name a bit long in order to drive the point home. With
+We’ve made the enum’s name a bit long in order to drive the point home. With
 what we currently know how to do in Rust, we would have to write a unique type
 for every single kind of value we wanted to have either `Some` or `None` of. In
-other words, the idea of "an optional value" is a more abstract concept than one
+other words, the idea of “an optional value” is a more abstract concept than one
 specific type. We want it to work for any type at all.
 
 ### Removing Duplication by Extracting a Generic Data Type
 
-Let's see how to get from duplicated types to the generic type. Here are the
+Let’s see how to get from duplicated types to the generic type. Here are the
 definitions of our two enums side-by-side:
 
 ```text
@@ -97,9 +97,9 @@ enum OptionalNumber {   enum OptionalFloatingPointNumber {
 }                       }
 ```
 
-There's one problem, though: we've *used* `T`, but not defined it. This would
+There’s one problem, though: we’ve *used* `T`, but not defined it. This would
 be similar to using an argument to a function in the body without declaring it
-in the signature. We need to tell Rust that we've introduced a generic
+in the signature. We need to tell Rust that we’ve introduced a generic
 parameter. The syntax to do that is the angle brackets, like this:
 
 ```text
@@ -122,11 +122,11 @@ enum Option<T> {    enum Option<T> {
 }                   }
 ```
 
-Now they're identical! We've made our type fully generic. This definition is
+Now they’re identical! We’ve made our type fully generic. This definition is
 also how `Option` is defined in the standard library. If we were to read this
-definition aloud, we'd say, "`Option` is an `enum` with one type parameter,
+definition aloud, we’d say, “`Option` is an `enum` with one type parameter,
 `T`. It has two variants: `Some`, which has a value with type `T`, and `None`,
-which has no value." We can now use the same `Option` type whether we're holding an `i32` or an `f64`:
+which has no value.“ We can now use the same `Option` type whether we’re holding an `i32` or an `f64`:
 
 ```rust
 let integer = Option::Some(5);
@@ -152,8 +152,8 @@ generics work behind the scenes: the compiler does the exact opposite of this
 process when compiling your code. *Monomorphization* means taking code that
 uses generic type parameters and generating code that is specific for each
 concrete type that is used with the generic code. Monomorphization is why
-Rust's generics are extremely efficient at runtime. Consider this code that
-uses the standard library's `Option`:
+Rust’s generics are extremely efficient at runtime. Consider this code that
+uses the standard library’s `Option`:
 
 ```rust
 let integer = Some(5);
@@ -189,7 +189,7 @@ fn main() {
 In other words, we can write the non-duplicated form that uses generics in our
 code, but Rust will compile that into code that acts as though we wrote the
 specific type out in each instance. This means we pay no runtime cost for using
-generics; it's just like we duplicated each particular definition.
+generics; it’s just like we duplicated each particular definition.
 
 ### Generic Structs
 
@@ -282,7 +282,7 @@ Now `x` will have the type of `X`, and `y` will have the type of `Y`, and we
 can instantiate a `Point` with an `i32` for `x` and an `f64` for `y`.
 
 We can make `enum`s with multiple type parameters as well. Recall the enum
-`Result<T, E>` from Chapter 9 that we used for recoverable errors. Here's its
+`Result<T, E>` from Chapter 9 that we used for recoverable errors. Here’s its
 definition:
 
 ```rust

@@ -11,7 +11,7 @@ Things you may do in an unsafe block that you may not in safe rust
 
 Go see other stuff
 
-Here's the syntax tho
+Here’s the syntax tho
 
 You know unsafe blocks are the cause of any crashes
 
@@ -23,7 +23,7 @@ wrap all the unsafe, make it as small as possible, present a safe public API
 
 #### `transmute`
 
-never ever. don't. stop.
+never ever. don’t. stop.
 
 #### `extern fn`
 
@@ -51,6 +51,6 @@ Two traits that impl the same method - how to disambiguate
 
 Show examples of when you control traits and types or not
 
-Ex: Cannot impl Debug on someone else's type
+Ex: Cannot impl Debug on someone else’s type
 
 Solution: newtype

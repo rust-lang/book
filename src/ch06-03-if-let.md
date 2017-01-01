@@ -34,8 +34,8 @@ just like a `match`, where the expression is given to the `match` and the
 pattern is its first arm.
 
 Using `if let` means you have less to type, less indentation, and less
-boilerplate. However, we've lost the exhaustiveness checking that `match`
-enforces. Choosing between `match` and `if let` depends on what you're doing in
+boilerplate. However, we’ve lost the exhaustiveness checking that `match`
+enforces. Choosing between `match` and `if let` depends on what you’re doing in
 your particular case, and if gaining conciseness is an appropriate tradeoff for
 losing exhaustiveness checking.
 
@@ -101,8 +101,8 @@ toolbox as well.
 
 ## Summary
 
-We've now covered how to use enums to create custom types that can be one of a
-set of enumerated values. We've shown how the standard library's `Option<T>`
+We’ve now covered how to use enums to create custom types that can be one of a
+set of enumerated values. We’ve shown how the standard library’s `Option<T>`
 type helps you use the type system to prevent errors. When enum values have data
 inside them, you can use `match` or `if let` to extract and use those values,
 depending on how many cases you need to handle.
@@ -113,5 +113,5 @@ compiler will make certain your functions only get values of the type each
 function expects.
 
 In order to provide a well-organized API to your users that is straightforward
-to use and only exposes exactly what your users will need, let's now turn to
-Rust's *modules*.
+to use and only exposes exactly what your users will need, let’s now turn to
+Rust’s *modules*.

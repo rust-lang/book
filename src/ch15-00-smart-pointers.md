@@ -2,7 +2,7 @@
 
 By smart pointers we mean a reference with more characteristics.
 
-Example of something that doesn't work
+Example of something that doesn’t work
 
 Surprise! Vec and String are technically smart pointers too!
 
@@ -12,7 +12,7 @@ ones in the standard library.
 
 ## `Box<T>`
 
-Don't use very often in your own code
+Don’t use very often in your own code
 Heap allocated
 Express Ownership of a heap allocated thing
 

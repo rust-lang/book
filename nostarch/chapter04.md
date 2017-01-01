@@ -294,7 +294,7 @@ memory on the heap that holds the contents.
 <img alt="String in memory" src="img/trpl04-01.svg" class="center" style="width: 50%;" />
 
 <caption>
-Figure 4-3: Representation in memory of a `String` holding the value `"hello"`
+Figure 4-3: Representation in memory of a `String` holding the value `“hello”`
 bound to `s1`
 </caption>
 

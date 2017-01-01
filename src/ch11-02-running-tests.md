@@ -4,7 +4,7 @@ Just like `cargo run` compiles your code and then runs the resulting binary,
 `cargo test` compiles your code in test mode and runs the resulting test
 binary. The default behavior of the binary that `cargo test` produces is to run
 all the tests in parallel and to capture output generated during test runs so
-that it's easier to read the output about the test results.
+that it’s easier to read the output about the test results.
 
 The default behavior of running tests can be changed by specifying command line
 options. Some of these options can be passed to `cargo test`, and some need to
@@ -20,7 +20,7 @@ that your tests are written in such a way as to not depend on each other or on
 any shared state. Shared state can also include the environment, such as the
 current working directory or environment variables.
 
-If you don't want this behavior, or if you want more fine-grained control over
+If you don’t want this behavior, or if you want more fine-grained control over
 the number of threads used, you can send the `--test-threads` flag and the
 number of threads to the test binary. Setting the number of test threads to 1
 means to not use any parallelism:
@@ -43,12 +43,12 @@ $ cargo test -- --nocapture
 
 ### Running a Subset of Tests by Name
 
-Sometimes, running a full test suite can take a long time. If you're only
+Sometimes, running a full test suite can take a long time. If you’re only
 working on code in a particular area, you might want to only run the tests
 having to do with that code. `cargo test` takes an argument that allows you to
 only run certain tests, specified by name.
 
-Let's create three tests with the following names as shown in Listing 11-3:
+Let’s create three tests with the following names as shown in Listing 11-3:
 
 <figure>
 <span class="filename">Filename: src/lib.rs</span>
@@ -215,7 +215,7 @@ fn expensive_test() {
 }
 ```
 
-Now if we run our tests, we'll see `it_works` is run, but `expensive_test` is
+Now if we run our tests, we’ll see `it_works` is run, but `expensive_test` is
 not:
 
 ```text
@@ -252,6 +252,6 @@ test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured
 ```
 
 This way, most of the time that you run `cargo test` the results would be fast.
-When you're at a point that it makes sense to check the results of the
+When you’re at a point that it makes sense to check the results of the
 `ignored` tests and you have time to wait for the results, you can choose to
 run `cargo test -- --ignored` instead.

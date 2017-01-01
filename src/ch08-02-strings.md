@@ -1,17 +1,17 @@
 ## Strings
 
-We've already talked about strings a bunch in Chapter 4, but let's take a more
+We’ve already talked about strings a bunch in Chapter 4, but let’s take a more
 in-depth look at them now. Strings are an area that new Rustaceans commonly get
-stuck on. This is due to a combination of three things: Rust's propensity for
+stuck on. This is due to a combination of three things: Rust’s propensity for
 making sure to expose possible errors, strings being a more complicated data
 structure than many programmers give them credit for, and UTF-8. These things
 combine in a way that can seem difficult when coming from other languages.
 
 The reason Strings are in the collections chapter is that strings are
 implemented as a collection of bytes plus some methods to provide useful
-functionality when those bytes are interpreted as text. In this section, we'll
+functionality when those bytes are interpreted as text. In this section, we’ll
 talk about the operations on `String` that every collection type has, like
-creating, updating, and reading. We'll also discuss the ways in which `String`
+creating, updating, and reading. We’ll also discuss the ways in which `String`
 is different than the other collections, namely how indexing into a `String` is
 complicated by the differences in which people and computers interpret `String`
 data.
@@ -19,26 +19,26 @@ data.
 ### What is a String?
 
 Before we can dig into those aspects, we need to talk about what exactly we
-mean by the term 'string'. Rust actually only has one string type in the core
+mean by the term ‘string’. Rust actually only has one string type in the core
 language itself: `str`, the string slice, which is usually seen in its borrowed
 form, `&str`. We talked about *string slices* in Chapter 4: these are a
 reference to some UTF-8 encoded string data stored elsewhere. String literals,
 for example, are stored in the binary output of the program, and are therefore
 string slices.
 
-The type called `String` is provided in Rust's standard library rather than
+The type called `String` is provided in Rust’s standard library rather than
 coded into the core language, and is a growable, mutable, owned, UTF-8 encoded
-string type. When Rustaceans talk about 'strings' in Rust, they usually mean
+string type. When Rustaceans talk about ‘strings’ in Rust, they usually mean
 both the `String` and the string slice `&str` types, not just one of those.
 This section is largely about `String`, but both these types are used heavily
-in Rust's standard library. Both `String` and string slices are UTF-8 encoded.
+in Rust’s standard library. Both `String` and string slices are UTF-8 encoded.
 
-Rust's standard library also includes a number of other string types, such as
+Rust’s standard library also includes a number of other string types, such as
 `OsString`, `OsStr`, `CString`, and `CStr`. Library crates may provide even
 more options for storing string data. Similar to the `*String`/`*Str` naming,
 they often provide an owned and borrowed variant, just like `String`/`&str`.
 These string types may store different encodings or be represented in memory in
-a different way, for example. We won't be talking about these other string
+a different way, for example. We won’t be talking about these other string
 types in this chapter; see their API documentation for more about how to use
 them and when each is appropriate.
 
@@ -188,8 +188,8 @@ let s3 = String::from("toe");
 let s = s1 + "-" + &s2 + "-" + &s3;
 ```
 
-`s` will be "tic-tac-toe" at this point. With all of the `+` and `"`
-characters, it gets hard to see what's going on. For more complicated string
+`s` will be “tic-tac-toe” at this point. With all of the `+` and `"`
+characters, it gets hard to see what’s going on. For more complicated string
 combining, we can use the `format!` macro:
 
 ```rust
@@ -257,7 +257,7 @@ let len = "Hola".len();
 ```
 
 In this case, `len` will be four, which means the `Vec` storing the string
-"Hola" is four bytes long: each of these letters takes one byte when encoded in
+“Hola” is four bytes long: each of these letters takes one byte when encoded in
 UTF-8. What about this example, though?
 
 ```rust
@@ -280,7 +280,7 @@ What should the value of `answer` be? Should it be `З`, the first letter? When
 encoded in UTF-8, the first byte of `З` is `208`, and the second is `151`, so
 `answer` should in fact be `208`, but `208` is not a valid character on its
 own. Returning `208` is likely not what a person would want if they asked for
-the first letter of this string, but that's the only data that Rust has at byte
+the first letter of this string, but that’s the only data that Rust has at byte
 index 0. Returning the byte value is probably not what people want, even with
 only Latin letters: `&"hello"[0]` would return `104`, not `h`. To avoid
 returning an unexpected value and causing bugs that might not be discovered
@@ -290,10 +290,10 @@ misunderstandings earlier.
 #### Bytes and Scalar Values and Grapheme Clusters! Oh my!
 
 This leads to another point about UTF-8: there are really three relevant ways
-to look at strings, from Rust's perspective: as bytes, scalar values, and
-grapheme clusters (the closest thing to what people would call 'letters').
+to look at strings, from Rust’s perspective: as bytes, scalar values, and
+grapheme clusters (the closest thing to what people would call ‘letters’).
 
-If we look at the Hindi word "नमस्ते" written in the Devanagari script, it is
+If we look at the Hindi word “नमस्ते” written in the Devanagari script, it is
 ultimately stored as a `Vec` of `u8` values that looks like this:
 
 ```text
@@ -309,8 +309,8 @@ bytes look like this:
 ```
 
 There are six `char` values here, but the fourth and sixth are not letters,
-they're diacritics that don't make sense on their own. Finally, if we look at
-them as grapheme clusters, we'd get what a person would call the four letters
+they’re diacritics that don’t make sense on their own. Finally, if we look at
+them as grapheme clusters, we’d get what a person would call the four letters
 that make up this word:
 
 ```text
@@ -344,7 +344,7 @@ let s = &hello[0..4];
 
 Here, `s` will be a `&str` that contains the first four bytes of the string.
 Earlier, we mentioned that each of these characters was two bytes, so that
-means that `s` will be "Зд".
+means that `s` will be “Зд”.
 
 What would happen if we did `&hello[0..1]`? The answer: it will panic at
 runtime, in the same way that accessing an invalid index in a vector does:
