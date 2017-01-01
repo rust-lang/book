@@ -23,7 +23,7 @@ fn main () {
         }
         else {
             let mut modified_line = &mut String::new();
-            let mut previous_char = '⌨'; // default non-alphanumeric char
+            let mut previous_char = std::char::REPLACEMENT_CHARACTER;
             let mut chars_in_line = line.chars();
 
             while let Some(possible_match) = chars_in_line.next() {
