@@ -91,7 +91,7 @@ Listing 11-5: Testing the function `add_two` in a child `tests` module
 
 Notice in addition to the test function, we also added `use add_two;` within
 the `tests` module. This brings the code we want to test into the scope of the
-inner `tests` module, just like we'd need to do for any inner module. If we run
+inner `tests` module, just like we’d need to do for any inner module. If we run
 this test now with `cargo test`, it will pass:
 
 ```text
@@ -114,13 +114,13 @@ error[E0425]: unresolved name `add_two`
 ```
 
 If this module contained lots of code we wanted to test, it would be annoying
-to list everything in the `use` statement in the tests. It's common instead to
-put `use super::*;` within a module's `test` submodule in order to bring
+to list everything in the `use` statement in the tests. It’s common instead to
+put `use super::*;` within a module’s `test` submodule in order to bring
 everything into the `test` module scope at once.
 
 #### Testing Private Functions
 
-There's controversy within the testing community about whether you should write
+There’s controversy within the testing community about whether you should write
 unit tests for private functions or not. Regardless of which testing ideology
 you adhere to, Rust does allow you to test private functions due to the way
 that the privacy rules work. Consider the code in Listing 11-6 with the private
@@ -198,19 +198,19 @@ Listing 11-7: An integration test of a function in the `adder` crate
 </figcaption>
 </figure>
 
-We now have `extern crate adder` at the top, which we didn't need in the unit
+We now have `extern crate adder` at the top, which we didn’t need in the unit
 tests. Each test in the `tests` directory is an entirely separate crate, so we
 need to import our library into each of them. This is also why `tests` is a
 suitable place to write integration-style tests: they use the library like any
 other consumer of it would, by importing the crate and using only the public
 API.
 
-We also don't need a `tests` module in this file. The whole directory won't be
-compiled unless we're running the tests, so we don't need to annotate any part
+We also don’t need a `tests` module in this file. The whole directory won’t be
+compiled unless we’re running the tests, so we don’t need to annotate any part
 of it with `#[cfg(test)]`. Also, each test file is already isolated into its
-own crate, so we don't need to separate the test code further.
+own crate, so we don’t need to separate the test code further.
 
-Let's run the integration tests, which also get run when we run `cargo test`:
+Let’s run the integration tests, which also get run when we run `cargo test`:
 
 ```text
 $ cargo test
@@ -263,7 +263,7 @@ test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured
 
 As you add more integration tests, you may want to make more than one file in
 the `tests` directory in order to group the test functions by the functionality
-they're testing, for example. As we mentioned before, that will work fine,
+they’re testing, for example. As we mentioned before, that will work fine,
 given that Cargo treats every file as its own crate.
 
 Eventually, you may have a set of helper functions that are common to all
@@ -272,7 +272,7 @@ extract these into a file in the *tests* directory, like *tests/common.rs* for
 example, this file will be compiled into a separate crate just like the Rust
 files in this directory that contain test functions are. There will be a
 separate section in the test output for this file. Since this is probably not
-what you want, it's recommended to instead use a *mod.rs* file in a
+what you want, it’s recommended to instead use a *mod.rs* file in a
 subdirectory, like *tests/common/mod.rs*, for helper functions. Files in
 subdirectories of the *tests* directory do not get compiled as separate crates
 or have sections in the test output.
@@ -291,15 +291,15 @@ need to be tested.
 
 ## Summary
 
-Rust's testing features provide a way to specify how code should function to
+Rust’s testing features provide a way to specify how code should function to
 ensure the code continues to work in the specified ways even as we make
 changes. Unit tests exercise different parts of a library separately and can
 test private implementation details. Integration tests cover the use of many
-parts of the library working together, and use the library's public API to test
-the code in the same way other code will use it. Rust's type system and
+parts of the library working together, and use the library’s public API to test
+the code in the same way other code will use it. Rust’s type system and
 ownership rules help prevent some kinds of bugs, but tests are an important
 part of reducing logic bugs having to do with how your code is expected to
 behave.
 
-Let's put together the knowledge from this chapter and other previous chapters
+Let’s put together the knowledge from this chapter and other previous chapters
 and work on a project in the next chapter!

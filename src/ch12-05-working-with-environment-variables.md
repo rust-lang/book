@@ -1,15 +1,15 @@
 ## Working with Environment Variables
 
-Let's add one more feature: case insensitive searching. In addition, this
-setting won't be a command line option: it'll be an environment variable
+Let’s add one more feature: case insensitive searching. In addition, this
+setting won’t be a command line option: it’ll be an environment variable
 instead. We could choose to make case insensitivity a command line option, but
 our users have requested an environment variable that they could set once and
 make all their searches case insensitive in that terminal session.
 
 ### Implement and Test a Case-Insensitive `grep` Function
 
-First, let's add a new function that we will call when the environment variable
-is on. Let's start by adding a new test and re-naming our existing one:
+First, let’s add a new function that we will call when the environment variable
+is on. Let’s start by adding a new test and re-naming our existing one:
 
 ```rust,ignore
 #[cfg(test)]
@@ -79,9 +79,9 @@ slice, so we need to add an ampersand when we pass `search` to `contains` since
 `contains` takes a string slice.
 
 Second, we add a call to `to_lowercase` each `line` before we check if it
-contains `search`. Since we've converted both `line` and `search` into all
-lowercase, we'll find matches no matter what case they used in the file and the
-command line arguments, respectively. Let's see if this passes the tests:
+contains `search`. Since we’ve converted both `line` and `search` into all
+lowercase, we’ll find matches no matter what case they used in the file and the
+command line arguments, respectively. Let’s see if this passes the tests:
 
 ```text
     Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs

@@ -4,21 +4,21 @@
 # Generics
 
 One of the core tools a programming language gives you is the ability to deal
-effectively with duplication of code. It's important to minimize the amount of
+effectively with duplication of code. It’s important to minimize the amount of
 code that is duplicated throughout a program to make maintenace easier and
-minimize logic errors. Maintenance will be easier if there's only one place
+minimize logic errors. Maintenance will be easier if there’s only one place
 that you need to change the code if you change your mind about how the program
-should work, rather than multiple places in the code. If your program's logic
-is duplicated in different places and those places don't match, you'll get
+should work, rather than multiple places in the code. If your program’s logic
+is duplicated in different places and those places don’t match, you’ll get
 errors or unexpected and undesired behavior from your program that could be
 hard to track down. Rust has the concept of *generics* as one way to eliminate
 duplicate code. Generics come in the form of generic types, traits that those
-generic types have, and generic lifetimes. We'll cover how to use all of these
+generic types have, and generic lifetimes. We’ll cover how to use all of these
 in this chapter.
 
 ## Removing Duplication by Extracting a Function
 
-Let's first go through a technique for dealing with duplication that you're
+Let’s first go through a technique for dealing with duplication that you’re
 probably familiar with: extracting a function. Consider a small program that
 finds the largest number in a list, shown in Listing 10-1:
 
@@ -81,7 +81,7 @@ fn main() {
 Copying code is tedious and error-prone, plus now we have two places to update
 the logic if we need it to change. Rust, like many languages, gives us a way to
 deal with this duplication by creating an abstraction, and in this case the
-abstraction we'll use is a function. Here's a program where we've extracted the
+abstraction we’ll use is a function. Here’s a program where we’ve extracted the
 code in Listing 10-1 that finds the largest number into a function named
 `largest`. This program can find the largest number in two different lists of
 numbers, but the code from Listing 10-1 only exists in one spot:
@@ -217,11 +217,11 @@ close, but still different: the line with the `Some` definitions. The only
 difference is the type of the data in that variant, `i32` and `f64`.
 
 Just like we can parameterize arguments to a function by choosing a name, we
-can parameterize the type by choosing a name. In this case, we've chosen the
+can parameterize the type by choosing a name. In this case, we’ve chosen the
 name `T`. We could choose any identifier here, but Rust style has type
 parameters follow the same style as types themselves: CamelCase. In addition,
 they tend to be short, often one letter. `T` is the traditional default choice,
-short for 'type'. Let's use that name in our `Some` variant definitions where
+short for ‘type’. Let’s use that name in our `Some` variant definitions where
 the `i32` and `f64` types were:
 
 ```text
@@ -245,8 +245,8 @@ enum OptionalNumber<T> {   enum OptionalFloatingPointNumber<T> {
 
 The `<>`s after the enum name indicate a list of type parameters, just like
 `()` after a function name indicates a list of value parameters. Now the only
-difference between our two `enum`s is the name. Since we've made them generic,
-they're not specific to integers or floating point numbers anymore, so they can
+difference between our two `enum`s is the name. Since we’ve made them generic,
+they’re not specific to integers or floating point numbers anymore, so they can
 have the same name:
 
 ```text
@@ -267,8 +267,8 @@ let integer = Option::Some(5);
 let float = Option::Some(5.0);
 ```
 
-We've left in the `Option::` namespace for consistency with the previous
-examples, but since `use Option::*` is in the prelude, it's not needed. Usually
+We’ve left in the `Option::` namespace for consistency with the previous
+examples, but since `use Option::*` is in the prelude, it’s not needed. Usually
 using `Option` looks like this:
 
 ```rust
@@ -295,7 +295,7 @@ let float = Some(5.0);
 ```
 
 When Rust compiles this code, it will perform monomorphization. What this means
-is the compiler will see that we've used two kinds of `Option<T>`: one where
+is the compiler will see that we’ve used two kinds of `Option<T>`: one where
 `T` is `i32`, and one where `T` is `f64`. As such, it will expand the generic
 definition of `Option<T>` into `Option_i32` and `Option_f64`, thereby replacing
 the generic definition with the specific ones. The more specific version looks
@@ -357,7 +357,7 @@ of a specific type.
 
 ### Multiple Type Parameters
 
-Note that in the `Point` definition in Listing 10-2, we've used the same `T`
+Note that in the `Point` definition in Listing 10-2, we’ve used the same `T`
 parameter for both fields. This means `x` and `y` must always be values of the
 same type. Trying to instantiate a `Point` that uses an `i32` for `x` and an
 `f64` for `y`, like this:
@@ -418,9 +418,9 @@ enum Result<T, E> {
 }
 ```
 
-Each variant stores a different kind of information, and they're both generic.
+Each variant stores a different kind of information, and they’re both generic.
 
-You can have as many type parameters as you'd like. Similarly to parameters of
+You can have as many type parameters as you’d like. Similarly to parameters of
 values in function signatures, if you have a lot of parameters, the code can
 get quite confusing, so try to keep the number of parameters defined in any one
 type small if you can.
@@ -466,8 +466,8 @@ fn takes<T>(value: T) {
 }
 ```
 
-There's one problem though. We've got some function *definitions* that work,
-but if we try to use `value` in code in the function body, we'll get an
+There’s one problem though. We’ve got some function *definitions* that work,
+but if we try to use `value` in code in the function body, we’ll get an
 error. For example, the function definition in Listing 10-3 tries to print out
 `value` in its body:
 
@@ -499,12 +499,12 @@ Compiling this definition results in an error:
 error: aborting due to previous error(s)
 ```
 
-This error mentions something we haven't learned about yet: traits. In the next
-section, we'll learn how to make this compile.
+This error mentions something we haven’t learned about yet: traits. In the next
+section, we’ll learn how to make this compile.
 
 ## Traits
 
-*Traits* are similar to a feature often called 'interfaces' in other languages,
+*Traits* are similar to a feature often called ‘interfaces’ in other languages,
 but are also different. Traits let us do another kind of abstraction: they let
 us abstract over *behavior* that types can have in common.
 
@@ -517,7 +517,7 @@ powerful because we can still leave our definitions generic to allow use of
 many different types, but we can constrain the type at compile-time to types
 that have the behavior we need to be able to use.
 
-Here's an example definition of a trait named `Printable` that has a method
+Here’s an example definition of a trait named `Printable` that has a method
 named `print`:
 
 Filename: src/lib.rs
@@ -567,7 +567,7 @@ impl Printable for Temperature {
 Listing 10-5: Implementing the `Printable` trait on a `Temperature` enum
 </caption>
 
-In the same way `impl` lets us define methods, we've used it to define methods
+In the same way `impl` lets us define methods, we’ve used it to define methods
 that pertain to our trait. We can call methods that our trait has defined just
 like we can call other methods:
 
@@ -654,15 +654,15 @@ error[E0277]: the trait bound `{integer}: Printable` is not satisfied
    = note: required by `print_anything`
 ```
 
-Traits are an extremely useful feature of Rust. You'll almost never see generic
+Traits are an extremely useful feature of Rust. You’ll almost never see generic
 functions without an accompanying trait bound. There are many traits in the
-standard library, and they're used for many, many different things. For
+standard library, and they’re used for many, many different things. For
 example, our `Printable` trait is similar to one of those traits, `Display`.
-And in fact, that's how `println!` decides how to format things with `{}`. The
+And in fact, that’s how `println!` decides how to format things with `{}`. The
 `Display` trait has a `fmt` method that determines how to format something.
 
 Listing 10-7 shows our original example from Listing 10-3, but this time using
-the standard library's `Display` trait in the trait bound on the generic type
+the standard library’s `Display` trait in the trait bound on the generic type
 in the `show_anything` function:
 
 Filename: src/lib.rs
@@ -694,7 +694,7 @@ fn some_function<T: Display, U: Printable>(value: T, other_value: U) {
 ```
 
 To specify multiple trait bounds on one type, list the trait bounds in a list
-with a `+` between each trait. For example, here's the signature of a function
+with a `+` between each trait. For example, here’s the signature of a function
 that takes a type `T` that implements `Display` and `Clone` (which is another
 standard library trait we have mentioned):
 
@@ -739,22 +739,22 @@ fn some_function<T, U, V>(t: T, u: U, v: V)
 {
 ```
 
-Generic type parameters and trait bounds are part of Rust's rich type system.
-Another important kind of generic in Rust interacts with Rust's ownership and
-references features, and they're called *lifetimes*.
+Generic type parameters and trait bounds are part of Rust’s rich type system.
+Another important kind of generic in Rust interacts with Rust’s ownership and
+references features, and they’re called *lifetimes*.
 
 ## Lifetime Syntax
 
 Generic type parameters let us abstract over types, and traits let us abstract
-over behavior. There's one more way that Rust allows us to do something
+over behavior. There’s one more way that Rust allows us to do something
 similar: *lifetimes* allow us to be generic over scopes of code.
 
-Scopes of code? Yes, it's a bit unusual. Lifetimes are, in some ways, Rust's
+Scopes of code? Yes, it’s a bit unusual. Lifetimes are, in some ways, Rust’s
 most distinctive feature. They are a bit different than the tools you have used
-in other programming languages. Lifetimes are a big topic, so we're not going
+in other programming languages. Lifetimes are a big topic, so we’re not going
 to cover everything about them in this chapter. What we *are* going to do is
 talk about the very basics of lifetimes, so that when you see the syntax in
-documentation or other places, you'll be familiar with the concepts. Chapter 20
+documentation or other places, you’ll be familiar with the concepts. Chapter 20
 will contain more advanced information about everything lifetimes can do.
 
 ### Core Syntax
@@ -772,7 +772,7 @@ Lifetimes have a slightly unusual syntax:
 &'a i32 // a reference with an explicit lifetime
 ```
 
-The `'a` there is a *lifetime* with the name `a`. A single apostrophe indicates
+The `‘a` there is a *lifetime* with the name `a`. A single apostrophe indicates
 that this name is for a lifetime. Lifetime names need to be declared before
 they're used. Here's a function signature with lifetime declarations and
 annotations:
@@ -791,7 +791,7 @@ fn some_function<'a, T>(argument: &'a T) {
 ```
 
 This function takes one argument, a reference to some type, `T`, and the
-reference has the lifetime `'a`. In the same way that we parameterize functions
+reference has the lifetime `‘a`. In the same way that we parameterize functions
 that take generic types, we parameterize references with lifetimes.
 
 So, that's the syntax, but *why*? What does a lifetime do, anyway?
@@ -863,14 +863,14 @@ annotations:
 }
 ```
 
-Here, we've annotated the lifetime of `r` with `'a` and the lifetime of `x`
+Here, we’ve annotated the lifetime of `r` with `'a` and the lifetime of `x`
 with `'b`. Rust looks at these lifetimes and sees that `r` has a lifetime of
 `'a`, but that it refers to something with a lifetime of `'b`. It rejects the
 program because the lifetime `'b` is shorter than the lifetime of `'a`-- the
 value that the reference is referring to does not live as long as the reference
 does.
 
-Let's look at a different example that compiles because it does not try to make
+Let’s look at a different example that compiles because it does not try to make
 a dangling reference, and see what the lifetimes look like:
 
 ```rust
@@ -885,7 +885,7 @@ a dangling reference, and see what the lifetimes look like:
 }
 ```
 
-Here, `x` lives for `'b`, which in this case is larger than `'a`. This is
+Here, `x` lives for `‘b`, which in this case is larger than `‘a`. This is
 allowed: Rust knows that the reference in `r` will always be valid, as it has a
 smaller scope than `x`, the value it refers to.
 
@@ -911,27 +911,27 @@ Again, the lifetime names are declared in the angle brackets where generic type
 parameters are declared, and this is because lifetimes are a form of generics.
 In the examples above, `'a` and `'b` were concrete lifetimes: we knew about `r`
 and `x` and how long they would live exactly. However, when we write a
-function, we can't know beforehand exactly all of the arguments that it could
+function, we can’t know beforehand exactly all of the arguments that it could
 be called with and how long they will be valid for. We have to explain to Rust
-what we expect the lifetime of the argument to be (we'll learn about how
+what we expect the lifetime of the argument to be (we’ll learn about how
 to know what you expect the lifetime to be in a bit). This is similar to
-writing a function that has an argument of a generic type: we don't know what
+writing a function that has an argument of a generic type: we don’t know what
 type the arguments will actually end up being when the function gets called.
 Lifetimes are the same idea, but they are generic over the scope of a
 reference, rather than a type.
 
 ### Lifetime Annotations in Function Signatures
 
-Lifetime annotations for functions go on the function signature, but we don't
-have to annotate any of the code in the function body with lifetimes. That's
+Lifetime annotations for functions go on the function signature, but we don’t
+have to annotate any of the code in the function body with lifetimes. That’s
 because Rust can analyze the specific code inside the function without any
 help. When a function interacts with references that come from or go to code
 outside that function, however, the lifetimes of those arguments or return
 values will potentially be different each time that function gets called. Rust
 would have to analyze every place the function is called to determine that
 there were no dangling references. That would be impossible because a library
-that you provide to someone else might be called in code that hasn't been
-written yet, at the time that you're compiling your library.
+that you provide to someone else might be called in code that hasn’t been
+written yet, at the time that you’re compiling your library.
 
 Lifetime parameters specify generic lifetimes that will apply to any specific
 lifetimes the function gets called with. The annotation of lifetime parameters
@@ -942,11 +942,11 @@ functions can accept any type when the signature specifies a generic type
 parameter, functions can accept references with any lifetime when the signature
 specifies a generic lifetime parameter.
 
-To understand lifetime annotations in context, let's write a function that will
+To understand lifetime annotations in context, let’s write a function that will
 return the longest of two string slices. The way we want to be able to call
 this function is by passing two string slices, and we want to get back a string
 slice. The code in Listing 10-9 should print `The longest string is abcd` once
-we've implemented the `longest` function:
+we’ve implemented the `longest` function:
 
 Filename: src/main.rs
 
@@ -1029,8 +1029,8 @@ knows that there is some scope that can be substituted for `'a` that will
 satisfy this signature.
 
 The exact way to specify lifetime parameters depends on what your function is
-doing. If the function didn't actually return the longest string slice but
-instead always returned the first argument, we wouldn't need to specify a
+doing. If the function didn’t actually return the longest string slice but
+instead always returned the first argument, we wouldn’t need to specify a
 lifetime on `y`. This code compiles:
 
 Filename: src/main.rs
@@ -1057,7 +1057,7 @@ fn longest<'a>(x: &str, y: &str) -> &'a str {
 }
 ```
 
-Even though we've specified a lifetime for the return type, this function fails
+Even though we’ve specified a lifetime for the return type, this function fails
 to compile with the following error message:
 
 ```text
@@ -1136,14 +1136,14 @@ Rust infers input lifetimes in the absence of explicit annotations:
 
 1. Each argument that is a reference and therefore needs a lifetime parameter
   gets its own. In other words, a function with one argument gets one lifetime
-  parameter: `fn foo<'a>(x: &'a i32)`, a function with two arguments gets two
-  separate lifetime parameters: `fn foo<'a, 'b>(x: &'a i32, y: &'b i32)`, and
+  parameter: `fn foo<'a>(x: &‘a i32)`, a function with two arguments gets two
+  separate lifetime parameters: `fn foo<'a, 'b>(x: &‘a i32, y: &‘b i32)`, and
   so on.
 
 And two rules related to output lifetimes:
 
 2. If there is exactly one input lifetime parameter, that lifetime is assigned
-  to all output lifetime parameters: `fn foo<'a>(x: &'a i32) -> &'a i32`.
+  to all output lifetime parameters: `fn foo<'a>(x: &‘a i32) -> &‘a i32`.
 3. If there are multiple input lifetime parameters, but one of them is `&self`
   or `&mut self`, then the lifetime of `self` is the lifetime assigned to all
   output lifetime parameters. This makes writing methods much nicer.
@@ -1199,13 +1199,13 @@ let s: &'static str = "I have a static lifetime.";
 
 The text of this string is stored directly in the binary of your program and
 the binary of your program is always available. Therefore, the lifetime of all
-string literals is `'static`. You may see suggestions to use the `'static`
+string literals is `‘static`. You may see suggestions to use the `‘static`
 lifetime in error message help text, but before adding it, think about whether
 the reference you have is one that actually lives the entire lifetime of your
 program or not (or even if you want it to live that long, if it could). Most of
 the time, the problem in the code is an attempt to create a dangling reference
 or a mismatch of the available lifetimes, and the solution is fixing those
-problems, not specifying the `'static` lifetime.
+problems, not specifying the `‘static` lifetime.
 
 ## Summary
 

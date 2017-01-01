@@ -2,12 +2,12 @@
 
 Our first task is to have `greprs` accept its two command line arguments. There
 are some existing libraries on crates.io that can help us do this, but since
-we're learning, we'll implement this ourselves.
+we’re learning, we’ll implement this ourselves.
 
-We'll need to call a function provided in Rust's standard library:
+We’ll need to call a function provided in Rust’s standard library:
 `std::env::args`. This function returns an *iterator* of the command line
-arguments that were given to our program. We haven't discussed iterators yet;
-Chapter 13 will cover them fully. For our purposes, though, we don't need to
+arguments that were given to our program. We haven’t discussed iterators yet;
+Chapter 13 will cover them fully. For our purposes, though, we don’t need to
 understand much about how they work in order to use them. We only need to
 understand two things:
 
@@ -15,7 +15,7 @@ understand two things:
 2. We can call the `collect` function on an iterator to turn it into a vector
    containing all of the elements the iterator produces.
 
-Let's give it a try as shown in Listing 12-1:
+Let’s give it a try as shown in Listing 12-1:
 
 <figure>
 <span class="filename">Filename: src/main.rs</span>
@@ -64,11 +64,11 @@ $ cargo run needle haystack
 ["target/debug/greprs", "needle", "haystack"]
 ```
 
-You'll notice one interesting thing: the name of the binary is the first
-argument. The reasons for this are out of the scope of this chapter, but it's
-something we'll have to remember to account for.
+You’ll notice one interesting thing: the name of the binary is the first
+argument. The reasons for this are out of the scope of this chapter, but it’s
+something we’ll have to remember to account for.
 
-Now that we have a way to access all of the arguments, let's find the ones we
+Now that we have a way to access all of the arguments, let’s find the ones we
 care about and save them in variables as shown in Listing 12-2:
 
 <figure>
@@ -111,7 +111,7 @@ Searching for test
 In file sample.txt
 ```
 
-Great! There's one problem, though. Let's try giving it no arguments:
+Great! There’s one problem, though. Let’s try giving it no arguments:
 
 ```text
 $ cargo run

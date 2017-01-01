@@ -1,4 +1,4 @@
-## Testing the Library's Functionality
+## Testing the Library’s Functionality
 
 Writing tests for the core functionality of our code is now easier since we
 extracted the logic into *src/lib.rs* and left all the argument parsing and
@@ -6,12 +6,12 @@ error handling in *src/main.rs*. We can now call our code directly with various
 arguments and check return values without having to call our binary from the
 command line.
 
-We're going to write a function named `grep` that takes our search term and the
-text to search and produces a list of search results. Let's remove that
-`println!` from `run` (and from *src/main.rs* as well, as we don't really need
-those anymore either), and call the new `grep` function with the options we've
-collected. We'll add a placeholder implementation of the function for now, and
-a test that specifies the behavior we'd like the `grep` function to have. The
+We’re going to write a function named `grep` that takes our search term and the
+text to search and produces a list of search results. Let’s remove that
+`println!` from `run` (and from *src/main.rs* as well, as we don’t really need
+those anymore either), and call the new `grep` function with the options we’ve
+collected. We’ll add a placeholder implementation of the function for now, and
+a test that specifies the behavior we’d like the `grep` function to have. The
 test will fail with our placeholder implementation, of course, but we can make
 sure the code compiles and that we get the failure message we expect. Listing
 12-14 shows these modifications:
@@ -76,7 +76,7 @@ for that function
 
 <!-- Will add ghosting and wingdings in libreoffice /Carol -->
 
-Notice that we need an explicit lifetime `'a` declared in the signature of
+Notice that we need an explicit lifetime `‘a` declared in the signature of
 `grep` and used with the `contents` argument and the return value. Remember,
 lifetime parameters are used to specify which arguments' lifetimes connect to
 the lifetime of the return value. In this case, we're indicating that the
@@ -102,18 +102,18 @@ error[E0106]: missing lifetime specifier
            `contents`
 ```
 
-Rust can't possibly know which of the two arguments we need, so it needs us to
+Rust can’t possibly know which of the two arguments we need, so it needs us to
 tell it. Because `contents` is the argument that contains all of our text and
 we want to return the parts of that text that match, we know `contents` is the
 argument that should be connected to the return value using the lifetime syntax.
 
 Connecting arguments to return values in the signature is something that other
-programming languages don't make you do, so don't worry if this still feels
+programming languages don’t make you do, so don’t worry if this still feels
 strange! Knowing how to specify lifetimes gets easier over time, and practice
 makes perfect. You may want to re-read the above section or go back and compare
 this example with the Lifetime Syntax section in Chapter 10.
 
-Now let's try running our test:
+Now let’s try running our test:
 
 ```text
 $ cargo test
@@ -165,8 +165,8 @@ fn grep<'a>(search: &str, contents: &'a str) -> Vec<&'a str> {
 
 <!-- Will add wingdings in libreoffice /Carol -->
 
-We're using a `for` loop along with the `lines` method to get each line in turn.
-Next, let's see if our line contains the search string. Luckily, strings have a
+We’re using a `for` loop along with the `lines` method to get each line in turn.
+Next, let’s see if our line contains the search string. Luckily, strings have a
 helpful method named `contains` that does this for us! Using the `contains`
 method looks like this:
 
@@ -207,7 +207,7 @@ fn grep<'a>(search: &str, contents: &'a str) -> Vec<&'a str> {
 
 <!-- Will add ghosting and wingdings in libreoffice /Carol -->
 
-Let's give it a try:
+Let’s give it a try:
 
 ```text
 $ cargo test
@@ -259,7 +259,7 @@ pub fn run(config: Config) -> Result<(), Box<Error>> {
 
 <!-- Will add ghosting and wingdings in libreoffice /Carol -->
 
-Now our whole program should be working! Let's try it out:
+Now our whole program should be working! Let’s try it out:
 
 ```text
 $ cargo run the poem.txt

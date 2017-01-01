@@ -1,10 +1,10 @@
 ## Write to `stderr` Instead of `stdout`
 
-Right now, we're writing all of our output to the terminal with `println!`.
-This works, but most terminals provide two kinds of output: "standard out" is
-used for most information, but "standard error" is used for error messages. This
-makes it easier to do things like "Print error messages to my terminal, but
-write other output to a file."
+Right now, we’re writing all of our output to the terminal with `println!`.
+This works, but most terminals provide two kinds of output: “standard out” is
+used for most information, but “standard error” is used for error messages. This
+makes it easier to do things like “Print error messages to my terminal, but
+write other output to a file.“
 
 We can see that our program is only capable of printing to `stdout` by
 redirecting it to a file using `>` on the command line, and running our program
@@ -22,8 +22,8 @@ running we'll see our error message:
 Problem parsing arguments: not enough arguments
 ```
 
-We'd like this to be printed to the screen instead, and only have the output
-from a successful run end up in the file if we run our program this way. Let's
+We’d like this to be printed to the screen instead, and only have the output
+from a successful run end up in the file if we run our program this way. Let’s
 change how error messages are printed as shown in Listing 12-15:
 
 <figure>
@@ -110,14 +110,14 @@ How dreary to be somebody!
 
 ## Summary
 
-In this chapter, we've covered how to do common I/O operations in a Rust
+In this chapter, we’ve covered how to do common I/O operations in a Rust
 context. By using command line arguments, files, environment variables, and the
-ability to write to `stderr`, you're now prepared to write command line
+ability to write to `stderr`, you’re now prepared to write command line
 applications. By using the concepts from previous chapters, your code will be
 well-organized, be able to store data effectively in the appropriate data
 structures, handle errors nicely, and be well tested. We also saw a real-world
 scenario where lifetime annotations are needed to ensure references are
 always valid.
 
-Next, let's explore how to make use of some features of Rust that were
+Next, let’s explore how to make use of some features of Rust that were
 influenced by functional languages: closures and iterators.

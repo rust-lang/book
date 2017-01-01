@@ -1,57 +1,57 @@
 ## To `panic!` or Not To `panic!`
 
 So how do you decide when you should `panic!` and when you should return
-`Result`? When code panics, there's no way to recover. You could choose to call
-`panic!` for any error situation, whether there's a possible way to recover or
-not, but then you're making the decision for your callers that a situation is
+`Result`? When code panics, there’s no way to recover. You could choose to call
+`panic!` for any error situation, whether there’s a possible way to recover or
+not, but then you’re making the decision for your callers that a situation is
 unrecoverable. When you choose to return a `Result` value, you give your caller
 options, rather than making the decision for them. They could choose to attempt
-to recover in a way that's appropriate for their situation, or they could
+to recover in a way that’s appropriate for their situation, or they could
 decide that actually, an `Err` value in this case is unrecoverable, so they can
 call `panic!` and turn your recoverable error into an unrecoverable one.
-Therefore, returning `Result` is a good default choice when you're defining a
+Therefore, returning `Result` is a good default choice when you’re defining a
 function that might fail.
 
-There are a few situations in which it's more appropriate to write code that
-panics instead of returning a `Result`, but they are less common. Let's discuss
-why it's appropriate to panic in examples, prototype code, and tests, then
-situations where you as a human can know a method won't fail that the compiler
-can't reason about, and conclude with some general guidelines on how to decide
+There are a few situations in which it’s more appropriate to write code that
+panics instead of returning a `Result`, but they are less common. Let’s discuss
+why it’s appropriate to panic in examples, prototype code, and tests, then
+situations where you as a human can know a method won’t fail that the compiler
+can’t reason about, and conclude with some general guidelines on how to decide
 whether to panic in library code.
 
 ### Examples, Prototype Code, and Tests: Perfectly Fine to Panic
 
-When you're writing an example to illustrate some concept, having robust error
+When you’re writing an example to illustrate some concept, having robust error
 handling code in the example as well can make the example less clear. In
-examples, it's understood that a call to a method like `unwrap` that could
-`panic!` is meant as a placeholder for the way that you'd actually like your
+examples, it’s understood that a call to a method like `unwrap` that could
+`panic!` is meant as a placeholder for the way that you’d actually like your
 application to handle errors, which can differ based on what the rest of your
 code is doing.
 
 Similarly, the `unwrap` and `expect` methods are very handy when prototyping,
-before you're ready to decide how to handle errors. They leave clear markers in
-your code for when you're ready to make your program more robust.
+before you’re ready to decide how to handle errors. They leave clear markers in
+your code for when you’re ready to make your program more robust.
 
-If a method call fails in a test, we'd want the whole test to fail, even if that
-method isn't the functionality under test. Because `panic!` is how a test gets
+If a method call fails in a test, we’d want the whole test to fail, even if that
+method isn’t the functionality under test. Because `panic!` is how a test gets
 marked as a failure, calling `unwrap` or `expect` is exactly what makes sense to
 do.
 
 ### Cases When You Have More Information Than The Compiler
 
 It would also be appropriate to call `unwrap` when you have some other logic
-that ensures the `Result` will have an `Ok` value, but the logic isn't
-something the compiler understands. You'll still have a `Result` value that you
-need to handle: whatever operation you're calling still has the possibility of
-failing in general, even though it's logically impossible in your particular
-situation. If you can ensure by manually inspecting the code that you'll never
-have an `Err` variant, it is perfectly acceptable to call `unwrap`. Here's an
+that ensures the `Result` will have an `Ok` value, but the logic isn’t
+something the compiler understands. You’ll still have a `Result` value that you
+need to handle: whatever operation you’re calling still has the possibility of
+failing in general, even though it’s logically impossible in your particular
+situation. If you can ensure by manually inspecting the code that you’ll never
+have an `Err` variant, it is perfectly acceptable to call `unwrap`. Here’s an
 example:
 
 <!-- If we know that there won't be an error, why do we still need to use
 unwrap()? Can you clarify that in the text? -->
 <!-- Because you still have to extract the value from the `Ok`; knowing there
-won't be an error doesn't change the types. I've tried to clarify in the
+won’t be an error doesn’t change the types. I’ve tried to clarify in the
 paragraph above and again below. /Carol-->
 
 ```rust
@@ -61,7 +61,7 @@ let home = "127.0.0.1".parse::<IpAddr>().unwrap();
 ```
 
 We're creating an `IpAddr` instance by parsing a hardcoded string. We can see
-that `"127.0.0.1"` is a valid IP address, so it's acceptable to use `unwrap`
+that `“127.0.0.1”` is a valid IP address, so it's acceptable to use `unwrap`
 here. However, having a hardcoded, valid string doesn't change the return type
 of the `parse` method: we still get a `Result` value, and the compiler will
 still make us handle the `Result` as if the `Err` variant is still a possibility
@@ -180,8 +180,8 @@ program only operated on values between 1 and 100, and it had many functions
 with this requirement, it would be tedious (and potentially impact performance)
 to have a check like this in every function.
 
-Instead, we can make a new type and put the validations in the type's
-constructor rather than repeating them. That way, it's safe for functions to
+Instead, we can make a new type and put the validations in the type’s
+constructor rather than repeating them. That way, it’s safe for functions to
 use the new type in their signatures and confidently use the values they
 receive. Listing 9-8 shows one way to define a `Guess` type that will only
 create an instance of `Guess` if the `new` function receives a value between 1

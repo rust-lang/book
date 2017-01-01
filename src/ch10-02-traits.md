@@ -1,6 +1,6 @@
 ## Traits
 
-*Traits* are similar to a feature often called 'interfaces' in other languages,
+*Traits* are similar to a feature often called ‘interfaces’ in other languages,
 but are also different. Traits let us do another kind of abstraction: they let
 us abstract over *behavior* that types can have in common.
 
@@ -76,7 +76,7 @@ Listing 10-6: Implementing the `Printable` trait on a `Temperature` enum
 </figcaption>
 </figure>
 
-In the same way `impl` lets us define methods, we've used it to define methods
+In the same way `impl` lets us define methods, we’ve used it to define methods
 that pertain to our trait. We can call methods that our trait has defined just
 like we can call other methods:
 
@@ -212,15 +212,15 @@ error[E0277]: the trait bound `{integer}: Printable` is not satisfied
    = note: required by `print_anything`
 ```
 
-Traits are an extremely useful feature of Rust. You'll almost never see generic
+Traits are an extremely useful feature of Rust. You’ll almost never see generic
 functions without an accompanying trait bound. There are many traits in the
-standard library, and they're used for many, many different things. For
+standard library, and they’re used for many, many different things. For
 example, our `Printable` trait is similar to one of those traits, `Display`.
-And in fact, that's how `println!` decides how to format things with `{}`. The
+And in fact, that’s how `println!` decides how to format things with `{}`. The
 `Display` trait has a `fmt` method that determines how to format something.
 
 Listing 10-8 shows our original example from Listing 10-3, but this time using
-the standard library's `Display` trait in the trait bound on the generic type
+the standard library’s `Display` trait in the trait bound on the generic type
 in the `show_anything` function:
 
 <figure>
@@ -256,7 +256,7 @@ fn some_function<T: Display, U: Printable>(value: T, other_value: U) {
 ```
 
 To specify multiple trait bounds on one type, list the trait bounds in a list
-with a `+` between each trait. For example, here's the signature of a function
+with a `+` between each trait. For example, here’s the signature of a function
 that takes a type `T` that implements `Display` and `Clone` (which is another
 standard library trait we have mentioned):
 
@@ -301,6 +301,6 @@ fn some_function<T, U, V>(t: T, u: U, v: V)
 {
 ```
 
-Generic type parameters and trait bounds are part of Rust's rich type system.
-Another important kind of generic in Rust interacts with Rust's ownership and
-references features, and they're called *lifetimes*.
+Generic type parameters and trait bounds are part of Rust’s rich type system.
+Another important kind of generic in Rust interacts with Rust’s ownership and
+references features, and they’re called *lifetimes*.

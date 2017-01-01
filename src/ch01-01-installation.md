@@ -5,15 +5,15 @@ connection to run the commands in this chapter, as we’ll be downloading Rust
 from the internet.
 
 We’ll be showing off a number of commands using a terminal, and those lines all
-start with `$`. You don't need to type in the `$` character; they are there to indicate
+start with `$`. You don’t need to type in the `$` character; they are there to indicate
 the start of each command. You’ll see many tutorials and examples around the web
 that follow this convention: `$` for commands run as a regular user, and `#`
-for commands you should be running as an administrator. Lines that don't start
+for commands you should be running as an administrator. Lines that don’t start
 with `$` are typically showing the output of the previous command.
 
 ### Installing on Linux or Mac
 
-If you're on Linux or a Mac, all you need to do is open a terminal and type
+If you’re on Linux or a Mac, all you need to do is open a terminal and type
 this:
 
 ```text

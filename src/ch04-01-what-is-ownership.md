@@ -295,7 +295,7 @@ memory on the heap that holds the contents.
 
 <figcaption>
 
-Figure 4-3: Representation in memory of a `String` holding the value `"hello"`
+Figure 4-3: Representation in memory of a `String` holding the value `“hello”`
 bound to `s1`
 
 </figcaption>

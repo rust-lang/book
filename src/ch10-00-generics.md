@@ -1,21 +1,21 @@
 # Generics
 
 One of the core tools a programming language gives you is the ability to deal
-effectively with duplication of code. It's important to minimize the amount of
+effectively with duplication of code. It’s important to minimize the amount of
 code that is duplicated throughout a program to make maintenance easier and
-minimize logic errors. Maintenance will be easier if there's only one place
+minimize logic errors. Maintenance will be easier if there’s only one place
 that you need to change the code if you change your mind about how the program
-should work, rather than multiple places in the code. If your program's logic
-is duplicated in different places and those places don't match, you'll get
+should work, rather than multiple places in the code. If your program’s logic
+is duplicated in different places and those places don’t match, you’ll get
 errors or unexpected and undesired behavior from your program that could be
 hard to track down. Rust has the concept of *generics* as one way to eliminate
 duplicate code. Generics come in the form of generic types, traits that those
-generic types have, and generic lifetimes. We'll cover how to use all of these
+generic types have, and generic lifetimes. We’ll cover how to use all of these
 in this chapter.
 
 ## Removing Duplication by Extracting a Function
 
-Let's first go through a technique for dealing with duplication that you're
+Let’s first go through a technique for dealing with duplication that you’re
 probably familiar with: extracting a function. Consider a small program that
 finds the largest number in a list, shown in Listing 10-1:
 
@@ -82,7 +82,7 @@ fn main() {
 Copying code is tedious and error-prone, plus now we have two places to update
 the logic if we need it to change. Rust, like many languages, gives us a way to
 deal with this duplication by creating an abstraction, and in this case the
-abstraction we'll use is a function. Here's a program where we've extracted the
+abstraction we’ll use is a function. Here’s a program where we’ve extracted the
 code in Listing 10-1 that finds the largest number into a function named
 `largest`. This program can find the largest number in two different lists of
 numbers, but the code from Listing 10-1 only exists in one spot:

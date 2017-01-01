@@ -1,6 +1,6 @@
 ## Reading a File
 
-Now that we have some variables containing the information that we need, let's
+Now that we have some variables containing the information that we need, let’s
 try using them. The next step is to open the file that we want to search. To do
 that, we need a file. Create one called `poem.txt` at the root level of your
 project, and fill it up with some Emily Dickinson:
@@ -62,16 +62,16 @@ Listing 12-3: Read the contents of the file specified by the second argument
 
 <!-- Will add ghosting and wingdings in libreoffice /Carol -->
 
-We've added a few things. First of all, we need some more `use` statements to
+We’ve added a few things. First of all, we need some more `use` statements to
 bring in the relevant parts of the standard library: we need `std::fs::File`
 for dealing with files, and `std::io::prelude::*` contains various traits that
 are useful when doing I/O, including file I/O. In the same way that Rust has a
 general prelude that brings certain things into scope automatically, the
-`std::io` module has its own prelude of common things you'll need when working
+`std::io` module has its own prelude of common things you’ll need when working
 with I/O. Unlike the default prelude, we must explicitly `use` the prelude in
 `std::io`.
 
-In `main`, we've added three things: first, we get a handle to the file and
+In `main`, we’ve added three things: first, we get a handle to the file and
 open it by using the `File::open` function and passing it the name of the file
 specified in the second argument. Second, we create a mutable, empty `String`
 in the variable `contents`, then call `read_to_string` on our file handle with
@@ -79,8 +79,8 @@ our `contents` string as the argument; `contents` is where `read_to_string`
 will place the data it reads. Finally, we print out the entire file contents,
 which is a way for us to be sure our program is working so far.
 
-Let's try running this code, specifying any string for the first argument (since
-we haven't implemented the searching part yet) and our *poem.txt* file as the
+Let’s try running this code, specifying any string for the first argument (since
+we haven’t implemented the searching part yet) and our *poem.txt* file as the
 second argument:
 
 ```text

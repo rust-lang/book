@@ -10,12 +10,12 @@ as programmers from languages like Python who are looking for ways to write more
 performant code without losing expressiveness.
 
 Rust provides the majority of its safety checks at compile time and without a
-garbage collector so that your program's runtime isn't impacted. This makes it
+garbage collector so that your program’s runtime isn’t impacted. This makes it
 useful in a number of use cases that other languages aren’t good at: embedding
 in other languages, programs with specific space and time requirements, and
-writing low-level code, like device drivers and operating systems. It's also
+writing low-level code, like device drivers and operating systems. It’s also
 great for web applications: it powers the Rust package registry site, crates.io!
-We're excited to see what _you_ create with Rust.
+We’re excited to see what _you_ create with Rust.
 
 This book is written for a reader who already knows how to program in at least
 one programming language. After reading this book, you should be comfortable
@@ -35,15 +35,15 @@ connection to run the commands in this chapter, as we’ll be downloading Rust
 from the internet.
 
 We’ll be showing off a number of commands using a terminal, and those lines all
-start with `$`. You don't need to type in the `$`s; they are there to indicate
+start with `$`. You don’t need to type in the `$`s; they are there to indicate
 the start of each command. You’ll see many tutorials and examples around the web
 that follow this convention: `$` for commands run as a regular user, and `#`
-for commands you should be running as an administrator. Lines that don't start
+for commands you should be running as an administrator. Lines that don’t start
 with `$` are typically showing the output of the previous command.
 
 ### Installing on Linux or Mac
 
-If you're on Linux or a Mac, all you need to do is open a terminal and type
+If you’re on Linux or a Mac, all you need to do is open a terminal and type
 this:
 
 ```bash
@@ -59,7 +59,7 @@ Rust is installed now. Great!
 
 ### Installing on Windows
 
-If you're on Windows, please go to *https://rustup.rs/* and follow
+If you’re on Windows, please go to *https://rustup.rs/* and follow
 the instructions to download rustup-init.exe. Run that and follow the rest of
 the instructions.
 
@@ -192,14 +192,14 @@ fn main() {
 }
 ```
 
-These lines define a *function* in Rust. The `main` function is special: it's
+These lines define a *function* in Rust. The `main` function is special: it’s
 the first thing that is run for every executable Rust program. The first line
 says, “I’m declaring a function named `main` that takes no arguments and
 returns nothing.” If there were arguments, they would go inside the parentheses,
 `(` and `)`.
 
 Also note that the function body is wrapped in curly braces, `{` and `}`. Rust
-requires these around all function bodies. It's considered good style to put
+requires these around all function bodies. It’s considered good style to put
 the opening curly brace on the same line as the function declaration, with one
 space in between.
 
@@ -220,7 +220,7 @@ Rust macros in more detail in Chapter XX, but for now you just need to know
 that when you see a `!` that means that you’re calling a macro instead of a
 normal function.
 
-Next is `"Hello, world!"` which is a *string*. We pass this string as an
+Next is `“Hello, world!“` which is a *string*. We pass this string as an
 argument to `println!()`, which prints the string to the screen. Easy enough!
 
 The line ends with a semicolon (`;`). The `;` indicates that this expression is
@@ -240,7 +240,7 @@ file, like this:
 $ rustc main.rs
 ```
 
-If you come from a C or C++ background, you'll notice that this is similar to
+If you come from a C or C++ background, you’ll notice that this is similar to
 `gcc` or `clang`. After compiling successfully, Rust should output a binary
 executable, which you can see on Linux or OSX by entering the `ls` command in
 your shell as follows:
@@ -259,7 +259,7 @@ main.rs
 ```
 
 This shows we have two files: the source code, with the `.rs` extension, and the
-executable (`main.exe` on Windows, `main` everywhere else). All that's left to
+executable (`main.exe` on Windows, `main` everywhere else). All that’s left to
 do from here is run the `main` or `main.exe` file, like this:
 
 ```bash
@@ -314,7 +314,7 @@ installation to determine how to install Cargo separately.
 
 ### Creating a Project with Cargo
 
-Let's create a new project using Cargo and look at how it differs from our
+Let’s create a new project using Cargo and look at how it differs from our
 project in `hello_world`. Go back to your projects directory (or wherever you
 decided to put your code):
 
@@ -364,7 +364,7 @@ authors = ["Your Name <you@example.com>"]
 [dependencies]
 ```
 
-This file is in the *TOML* (Tom's Obvious, Minimal Language) format. TOML is
+This file is in the *TOML* (Tom’s Obvious, Minimal Language) format. TOML is
 similar to INI but has some extra goodies and is used as Cargo’s
 configuration format.
 
@@ -380,11 +380,11 @@ file.
 
 The last line, `[dependencies]`, is the start of a section for you to list any
 *crates* (which is what we call packages of Rust code) that your project will
-depend on so that Cargo knows to download and compile those too. We won't need
+depend on so that Cargo knows to download and compile those too. We won’t need
 any other crates for this project, but we will in the guessing game tutorial in
 the next chapter.
 
-Now let's look at `src/main.rs`:
+Now let’s look at `src/main.rs`:
 
 Filename: src/main.rs
 
@@ -444,8 +444,8 @@ version = "0.1.0"
 ```
 
 Cargo uses the `Cargo.lock` file to keep track of dependencies in your
-application. This project doesn't have dependencies, so the file is a bit
-sparse. Realistically, you won't ever need to touch this file yourself; just
+application. This project doesn’t have dependencies, so the file is a bit
+sparse. Realistically, you won’t ever need to touch this file yourself; just
 let Cargo handle it.
 
 We just built a project with `cargo build` and ran it with
@@ -471,7 +471,7 @@ $ cargo run
 Hello, world!
 ```
 
-So a few more differences we've now seen:
+So a few more differences we’ve now seen:
 
 3. Instead of using `rustc`, build a project using `cargo build` (or build and
   run it in one step with `cargo run`)
@@ -479,7 +479,7 @@ So a few more differences we've now seen:
   code, Cargo will put it in the `target/debug` directory.
 
 The other advantage of using Cargo is that the commands are the same no matter
-what operating system you're on, so at this point we will no longer be
+what operating system you’re on, so at this point we will no longer be
 providing specific instructions for Linux and Mac versus Windows.
 
 ### Building for Release
@@ -490,14 +490,14 @@ executable in `target/release` instead of `target/debug`. These optimizations
 make your Rust code run faster, but turning them on makes your program take
 longer to compile. This is why there are two different profiles: one for
 development when you want to be able to rebuild quickly and often, and one for
-building the final program you’ll give to a user that won't be rebuilt and
-that we want to run as fast as possible. If you're benchmarking the running
+building the final program you’ll give to a user that won’t be rebuilt and
+that we want to run as fast as possible. If you’re benchmarking the running
 time of your code, be sure to run `cargo build --release` and benchmark with
 the executable in `target/release`.
 
 ### Cargo as Convention
 
-With simple projects, Cargo doesn't provide a whole lot of value over just
+With simple projects, Cargo doesn’t provide a whole lot of value over just
 using `rustc`, but it will prove its worth as you continue. With complex
 projects composed of multiple crates, it’s much easier to let Cargo coordinate
 the build. With Cargo, you can just run `cargo build`, and it should work the

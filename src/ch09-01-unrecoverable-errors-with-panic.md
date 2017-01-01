@@ -1,10 +1,10 @@
 ## Unrecoverable Errors with `panic!`
 
-Sometimes, bad things happen, and there's nothing that you can do about it. For
+Sometimes, bad things happen, and there’s nothing that you can do about it. For
 these cases, Rust has the `panic!` macro. When this macro executes, your
 program will print a failure message, unwind and clean up the stack, and then
 quit. The most common situation this occurs in is when a bug of some kind has
-been detected and it's not clear to the programmer how to handle the error.
+been detected and it’s not clear to the programmer how to handle the error.
 
 <!-- PROD: START BOX -->
 
@@ -27,7 +27,7 @@ been detected and it's not clear to the programmer how to handle the error.
 
 <!-- PROD: END BOX -->
 
-Let's try calling `panic!()` with a simple program:
+Let’s try calling `panic!()` with a simple program:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -51,19 +51,19 @@ error: Process didn't exit successfully: `target/debug/panic` (exit code: 101)
 
 The last three lines contain the error message caused by the call to `panic!`.
 The first line shows our panic message and the place in our source code where
-the panic occurred: `src/main.rs:2` indicates that it's the second like of our
+the panic occurred: `src/main.rs:2` indicates that it’s the second like of our
 *main.rs* file.
 
 In this case, the line indicated is part of our code, and if we go to that line
 we see the `panic!` macro call. In other cases, the `panic!` call might be in
 code that our code calls. The filename and line number reported by the error
-message will be someone else's code where the `panic!` macro is called, not the
+message will be someone else’s code where the `panic!` macro is called, not the
 line of our code that eventually led to the `panic!`. We can use the backtrace
 of the functions the `panic!` call came from to figure this out.
 
 ### Using a `panic!` Backtrace
 
-Let's look at another example to see what it's like when a `panic!` call comes
+Let’s look at another example to see what it’s like when a `panic!` call comes
 from a library because of a bug in our code instead of from our code calling
 the macro directly:
 
@@ -105,13 +105,13 @@ note: Run with `RUST_BACKTRACE=1` for a backtrace.
 error: Process didn't exit successfully: `target/debug/panic` (exit code: 101)
 ```
 
-This points at a file we didn't write, *../src/libcollections/vec.rs*. That's
+This points at a file we didn’t write, *../src/libcollections/vec.rs*. That’s
 the implementation of `Vec<T>` in the standard library. The code that gets run
 when we use `[]` on our vector `v` is in *../src/libcollections/vec.rs*, and
 that is where the `panic!` is actually happening.
 
 The next `note` line tells us that we can set the `RUST_BACKTRACE` environment
-variable to get a backtrace of exactly what happened to cause the error. Let's
+variable to get a backtrace of exactly what happened to cause the error. Let’s
 try that. Listing 9-1 shows the output:
 
 <figure>

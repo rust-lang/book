@@ -1,8 +1,8 @@
 ## Hello, World!
 
-Now that you have Rust installed, let’s write your first Rust program. It's
+Now that you have Rust installed, let’s write your first Rust program. It’s
 traditional when learning a new language to write a little program to print the
-text “Hello, world!” to the screen, and in this section, we'll follow that
+text “Hello, world!” to the screen, and in this section, we’ll follow that
 tradition.
 
 > Note: This book assumes basic familiarity with the command line. Rust itself
@@ -12,8 +12,8 @@ tradition.
 
 ### Creating a Project File
 
-First, make a file to put your Rust code in. Rust doesn't care where your code
-lives, but for this book, we'd suggest making a *projects* directory in your
+First, make a file to put your Rust code in. Rust doesn’t care where your code
+lives, but for this book, we’d suggest making a *projects* directory in your
 home directory and keeping all your projects there. Open a terminal and enter
 the following commands to make a directory for this particular project:
 
@@ -39,7 +39,7 @@ Windows:
 
 Next, make a new source file and call it *main.rs*. Rust files always end with
 the *.rs* extension. If you’re using more than one word in your filename, use
-an underscore to separate them. For example, you'd use *hello_world.rs* rather
+an underscore to separate them. For example, you’d use *hello_world.rs* rather
 than *helloworld.rs*.
 
 Now open the *main.rs* file you just created, and type the following code:
@@ -63,13 +63,13 @@ Hello, world!
 
 On Windows, just replace `./main` with `.\main.exe`. Regardless of your
 operating system, you should see the string `Hello, world!` print to the
-terminal. If you did, then congratulations! You've officially written a Rust
+terminal. If you did, then congratulations! You’ve officially written a Rust
 program. That makes you a Rust programmer! Welcome.
 
 ### Anatomy of a Rust Program
 
-Now, let’s go over what just happened in your "Hello, world!" program in
-detail. Here's the first piece of the puzzle:
+Now, let’s go over what just happened in your “Hello, world!“ program in
+detail. Here’s the first piece of the puzzle:
 
 ```rust
 fn main() {
@@ -100,7 +100,7 @@ style is to indent with four spaces, not a tab.
 
 The second important part is `println!`. This is calling a Rust *macro*,
 which is how metaprogramming is done in Rust. If it were calling a function
-instead, it would look like this: `println` (without the `!`). We'll discuss
+instead, it would look like this: `println` (without the `!`). We’ll discuss
 Rust macros in more detail in Chapter 24, but for now you just need to know
 that when you see a `!` that means that you’re calling a macro instead of a
 normal function.
@@ -114,8 +114,8 @@ over, and the next one is ready to begin. Most lines of Rust code end with a
 
 ### Compiling and Running Are Separate Steps
 
-In "Writing and Running a Rust Program", we showed you how to run a newly
-created program. We'll break that process down and examine each step now.
+In “Writing and Running a Rust Program”, we showed you how to run a newly
+created program. We’ll break that process down and examine each step now.
 
 Before running a Rust program, you have to compile it. You can use the Rust
 compiler by entering the `rustc` command and passing it the name of your source
@@ -135,7 +135,7 @@ $ ls
 main  main.rs
 ```
 
-On Windows, you'd enter:
+On Windows, you’d enter:
 
 ```cmd
 > dir /B %= the /B option says to only show the file names =%
@@ -151,7 +151,7 @@ do from here is run the *main* or *main.exe* file, like this:
 $ ./main  # or .\main.exe on Windows
 ```
 
-If *main.rs* were your "Hello, world!" program, this would print `Hello,
+If *main.rs* were your “Hello, world!“ program, this would print `Hello,
 world!` to your terminal.
 
 If you come from a dynamic language like Ruby, Python, or JavaScript, you may
@@ -164,8 +164,8 @@ hand, they need to have a Ruby, Python, or JavaScript implementation installed
 program. Everything is a tradeoff in language design.
 
 Just compiling with `rustc` is fine for simple programs, but as your project
-grows, you'll want to be able to manage all of the options your project has
-and make it easy to share your code with other people and projects. Next, we'll
+grows, you’ll want to be able to manage all of the options your project has
+and make it easy to share your code with other people and projects. Next, we’ll
 introduce you to a tool called Cargo, which will help you write real-world Rust
 programs.
 
@@ -177,8 +177,8 @@ Cargo takes care of building your code, downloading the libraries your code
 depends on, and building those libraries. We call libraries your code needs
 *dependencies*.
 
-The simplest Rust programs, like the one we've written so far, don’t have any
-dependencies, so right now, you'd only be using the part of Cargo that can take
+The simplest Rust programs, like the one we’ve written so far, don’t have any
+dependencies, so right now, you’d only be using the part of Cargo that can take
 care of building your code. As you write more complex Rust programs, you’ll
 want to add dependencies, and if you start off using Cargo, that will be a lot
 easier to do.
@@ -224,7 +224,7 @@ $ cd hello_cargo
 
 We passed the `--bin` argument to `cargo new` because our goal is to make an
 executable application, as opposed to a library. Executables are binary
-executable files often called just *binaries*. We've given `hello_cargo`
+executable files often called just *binaries*. We’ve given `hello_cargo`
 as the name for our project, and Cargo creates its files in a directory
 of the same name that we can then go into.
 
@@ -281,9 +281,9 @@ fn main() {
 }
 ```
 
-Cargo has generated a "Hello World!" for you, just like the one we wrote
+Cargo has generated a “Hello World!“ for you, just like the one we wrote
 earlier! So that part is the same. The differences between our previous project
-and the project generated by Cargo that we've seen so far are:
+and the project generated by Cargo that we’ve seen so far are:
 
 - Our code goes in the *src* directory
 - The top level contains a *Cargo.toml* configuration file
@@ -291,17 +291,17 @@ and the project generated by Cargo that we've seen so far are:
 Cargo expects your source files to live inside the *src* directory so that the
 top-level project directory is just for READMEs, license information,
 configuration files, and anything else not related to your code. In this way,
-using Cargo helps you keep your projects nice and tidy. There's a place for
+using Cargo helps you keep your projects nice and tidy. There’s a place for
 everything, and everything is in its place.
 
-If you started a project that doesn't use Cargo, as we did with our project in
+If you started a project that doesn’t use Cargo, as we did with our project in
 the *hello_world* directory, you can convert it to a project that does use
 Cargo by moving your code into the *src* directory and creating an appropriate
 *Cargo.toml*.
 
 ### Building and Running a Cargo Project
 
-Now let's look at what's different about building and running your Hello World
+Now let’s look at what’s different about building and running your Hello World
 program through Cargo! To do so, enter the following commands:
 
 ```text
@@ -345,7 +345,7 @@ $ cargo run
 Hello, world!
 ```
 
-Notice that this time, we didn't see the output telling us that Cargo was
+Notice that this time, we didn’t see the output telling us that Cargo was
 compiling `hello_cargo`. Cargo figured out that the files haven’t changed, so
 it just ran the binary. If you had modified your source code, Cargo would have
 rebuilt the project before running it, and you would have seen something like

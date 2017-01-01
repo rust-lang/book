@@ -3,15 +3,15 @@
 
 # An I/O Project
 
-We've learned a lot over the last few chapters. Let's take that new knowledge
-and apply it by building a project together. Along the way, we'll learn a bit
-more about Rust's standard library.
+We’ve learned a lot over the last few chapters. Let’s take that new knowledge
+and apply it by building a project together. Along the way, we’ll learn a bit
+more about Rust’s standard library.
 
-So what should we build? One that uses Rust's strengths. A great use of Rust is
-for command line tools: Rust's speed, safety, 'single binary' output, and
+So what should we build? One that uses Rust’s strengths. A great use of Rust is
+for command line tools: Rust’s speed, safety, ‘single binary’ output, and
 cross-platform support make it a good language choice for this kind of task. So
-we'll make our own version of a classic command line tool: `grep`. `grep` is
-short for "Globally search a Regular Expression and Print." In the
+we’ll make our own version of a classic command line tool: `grep`. `grep` is
+short for “Globally search a Regular Expression and Print.“ In the
 simplest use case, it does this:
 
 - Takes a filename and a string as arguments.
@@ -19,13 +19,13 @@ simplest use case, it does this:
 - Finds lines in the file that contain the string argument.
 - Prints out those lines.
 
-In addition, we'll add one extra feature: an environment variable that will
+In addition, we’ll add one extra feature: an environment variable that will
 allow us to search for the string argument in a case-insensitive way.
 
-There's another great reason to use `grep` as an example project: a very
+There’s another great reason to use `grep` as an example project: a very
 fully-featured version of `grep` has already been created in Rust by a
-community member, Andrew Gallant. It's called `ripgrep`, and it's very,
-very fast. While our version of `grep` will be fairly simple, you'll have
+community member, Andrew Gallant. It’s called `ripgrep`, and it’s very,
+very fast. While our version of `grep` will be fairly simple, you’ll have
 some of the background knowledge to understand that project if you want to see
 something more real-world.
 
@@ -37,10 +37,10 @@ This project will bring together a number of things we learned previously:
 - Use traits and lifetimes where appropriate (Chapter 10)
 - Have tests (Chapter 11)
 
-Additionally, we'll briefly introduce closures, iterators, and trait objects,
+Additionally, we’ll briefly introduce closures, iterators, and trait objects,
 which Chapters XX, YY, and ZZ respectively are about to cover in detail.
 
-Let's create a new project with, as always, `cargo new`:
+Let’s create a new project with, as always, `cargo new`:
 
 ```text
 $ cargo new --bin greprs
@@ -93,20 +93,20 @@ Listing 12-1: Collect the command line arguments into a vector and print them ou
 <!-- Will add wingdings in libreoffice /Carol -->
 
 First, we have a `use` statement to bring the `std::env` module into scope.
-When using a function that's nested in more than one level of module, like
-`std::env::args` is, it's conventional to use `use` to bring the parent module
+When using a function that’s nested in more than one level of module, like
+`std::env::args` is, it’s conventional to use `use` to bring the parent module
 into scope, rather than the function itself. `env::args` is less ambiguous than
 a lone `args`. Also, if we end up using more than one function in `std::env`,
 we only need a single `use`.
 
 On the first line of `main`, we call `env::args`, and immediately use `collect`
-to create a vector out of it. We're also explicitly annotating the type of
+to create a vector out of it. We’re also explicitly annotating the type of
 `args` here: `collect` can be used to create many kinds of collections. Rust
-won't be able to infer what kind of type we want, so the annotation is
+won’t be able to infer what kind of type we want, so the annotation is
 required. We very rarely need to annotate types in Rust, but `collect` is one
 function where you often need to.
 
-Finally, we print out the vector with the debug formatter, `:?`. Let's try
+Finally, we print out the vector with the debug formatter, `:?`. Let’s try
 running our code with no arguments, and then with two arguments:
 
 ```text
@@ -151,11 +151,11 @@ Listing 12-2: Create variables to hold the search argument and filename argument
 
 <!-- Will add ghosting and wingdings in libreoffice /Carol -->
 
-Remember, the program's name is the first argument, so we don't need `args[0]`.
-We've decided that the first argument will be the string we're searching for,
+Remember, the program’s name is the first argument, so we don’t need `args[0]`.
+We’ve decided that the first argument will be the string we’re searching for,
 so we put a reference to the first argument in the variable `search`. The
 second argument will be the filename, so we put a reference to the second
-argument in the variable `filename`. Let's try running this program again:
+argument in the variable `filename`. Let’s try running this program again:
 
 ```text
 $ cargo run test sample.txt
@@ -176,15 +176,15 @@ but the index is 1', ../src/libcollections\vec.rs:1307
 note: Run with `RUST_BACKTRACE=1` for a backtrace.
 ```
 
-Because our vector only has one element, the program's name, but we tried to
+Because our vector only has one element, the program’s name, but we tried to
 access the second element, our program panics with a message about the
-out-of-bound access. While this error message is _accurate_, it's not
+out-of-bound access. While this error message is _accurate_, it’s not
 meaningful to users of our program at all. We could fix this problem right now,
-but let's push forward: we'll improve this situation before we're finished.
+but let’s push forward: we’ll improve this situation before we’re finished.
 
 ## Reading a File
 
-Now that we have some variables containing the information that we need, let's
+Now that we have some variables containing the information that we need, let’s
 try using them. The next step is to open the file that we want to search. To do
 that, we need a file. Create one called `poem.txt` at the root level of your
 project, and fill it up with some Emily Dickinson:
@@ -246,16 +246,16 @@ Listing 12-3: Read the contents of the file specified by the second argument
 
 <!-- Will add ghosting and wingdings in libreoffice /Carol -->
 
-We've added a few things. First of all, we need some more `use` statements to
+We’ve added a few things. First of all, we need some more `use` statements to
 bring in the relevant parts of the standard library: we need `std::fs::File`
 for dealing with files, and `std::io::prelude::*` contains various traits that
 are useful when doing I/O, including file I/O. In the same way that Rust has a
 general prelude that brings certain things into scope automatically, the
-`std::io` module has its own prelude of common things you'll need when working
+`std::io` module has its own prelude of common things you’ll need when working
 with I/O. Unlike the default prelude, we must explicitly `use` the prelude in
 `std::io`.
 
-In `main`, we've added three things: first, we get a handle to the file and
+In `main`, we’ve added three things: first, we get a handle to the file and
 open it by using the `File::open` function and passing it the name of the file
 specified in the second argument. Second, we create a mutable, empty `String`
 in the variable `contents`, then call `read_to_string` on our file handle with
@@ -263,8 +263,8 @@ our `contents` string as the argument; `contents` is where `read_to_string`
 will place the data it reads. Finally, we print out the entire file contents,
 which is a way for us to be sure our program is working so far.
 
-Let's try running this code, specifying any string for the first argument (since
-we haven't implemented the searching part yet) and our *poem.txt* file as the
+Let’s try running this code, specifying any string for the first argument (since
+we haven’t implemented the searching part yet) and our *poem.txt* file as the
 second argument:
 
 ```text
@@ -378,25 +378,25 @@ Listing 12-4: Extract a `parse_config` function from `main`
 
 <!-- Will add ghosting and wingdings in libreoffice /Carol -->
 
-This may seem like overkill, but we're working in small steps. After making
+This may seem like overkill, but we’re working in small steps. After making
 this change, run the program again to verify that the argument parsing still
-works. It's good to check your progress often, so that you have a better idea
+works. It’s good to check your progress often, so that you have a better idea
 of which change caused a problem, should you encounter one.
 
 ### Grouping Configuration Values
 
-Now that we have a function, let's improve it. Our code still has an indication
-that there's a better design possible: we return a tuple, but then immediately
-break that tuple up into individual parts again. This code isn't bad on its
-own, but there's one other sign we have room for improvement: we called our
+Now that we have a function, let’s improve it. Our code still has an indication
+that there’s a better design possible: we return a tuple, but then immediately
+break that tuple up into individual parts again. This code isn’t bad on its
+own, but there’s one other sign we have room for improvement: we called our
 function `parse_config`. The `config` part of the name is saying the two values
-we return should really be bound together, since they're both part of one
+we return should really be bound together, since they’re both part of one
 configuration value.
 
 > Note: some people call this anti-pattern of using primitive values when a
 > complex type would be more appropriate *primitive obsession*.
 
-Let's introduce a struct to hold all of our configuration. Listing 12-5 shows
+Let’s introduce a struct to hold all of our configuration. Listing 12-5 shows
 the addition of the `Config` struct definition, the refactoring of
 `parse_config`, and updates to `main`:
 
@@ -525,15 +525,15 @@ Listing 12-6: Changing `parse_config` into `Config::new`
 
 <!-- Will add ghosting and wingdings in libreoffice /Carol -->
 
-We've changed the name of `parse_config` to `new` and moved it within  an `impl`
-block. We've also updated the callsite in `main`. Try compiling this again to
+We’ve changed the name of `parse_config` to `new` and moved it within  an `impl`
+block. We’ve also updated the callsite in `main`. Try compiling this again to
 make sure it works.
 
 ### Returning a `Result` from the Constructor
 
-Here's our last refactoring of this method: remember how accessing the vector
+Here’s our last refactoring of this method: remember how accessing the vector
 with indices 1 and 2 panics when it contains fewer than 3 items and gives a bad
-error message? Let's fix that! Listing 12-7 shows how we can check that our
+error message? Let’s fix that! Listing 12-7 shows how we can check that our
 slice is long enough before accessing those locations, and panic with a better
 error message:
 
@@ -570,9 +570,9 @@ note: Run with `RUST_BACKTRACE=1` for a backtrace.
 ```
 
 This is a bit better! We at least have a reasonable error message here.
-However, we also have a bunch of extra information that we don't want to give
+However, we also have a bunch of extra information that we don’t want to give
 to our users. We can do better by changing the type signature of `new`. Right
-now, it returns only a `Config`, so there's no way to indicate that an error
+now, it returns only a `Config`, so there’s no way to indicate that an error
 happened while creating our `Config`. Instead, we can return a `Result`, as
 shown in Listing 12-8:
 
@@ -607,8 +607,8 @@ Listing 12-8: Return a `Result` from `Config::new`
 <!-- Will add ghosting and wingdings in libreoffice /Carol -->
 
 Our `new` function now returns a `Result`, with a `Config` instance in the
-success case and a `&'static str` when an error happens. Recall from "The
-Static Lifetime" section in Chapter 10 `&'static str` is the type of string
+success case and a `&‘static str` when an error happens. Recall from "The
+Static Lifetime" section in Chapter 10 `&‘static str` is the type of string
 literals, which is what our error message is for now.
 
 We've made two changes in the body of the `new` function: instead of calling
@@ -646,28 +646,28 @@ Listing 12-9: Exiting with an error code if creating a new `Config` fails
 
 <!-- Will add ghosting and wingdings in libreoffice /Carol -->
 
-We've added a new `use` line to import `process` from the standard library.
-In the `main` function itself, we'll handle the `Result` value returned
+We’ve added a new `use` line to import `process` from the standard library.
+In the `main` function itself, we’ll handle the `Result` value returned
 from the `new` function and exit the process in a cleaner way if `Config::new`
 returns an `Err` value.
 
-We're using a method we haven't covered before that's defined on `Result<T, E>`
+We’re using a method we haven’t covered before that’s defined on `Result<T, E>`
 by the standard library: `unwrap_or_else`. This method has similar behavior as
 `unwrap` if the `Result` is an `Ok` value: it returns the inner value `Ok` is
 wrapping. Unlike `unwrap`, if the value is an `Err` value, this method calls a
 *closure* which is an anonymous function that we define and pass as an argument
-to `unwrap_or_else`. We'll be covering closures in more detail in Chapter XX;
+to `unwrap_or_else`. We’ll be covering closures in more detail in Chapter XX;
 the important part to understand in this case is that `unwrap_or_else` will
 pass the inner value of the `Err` to our closure in the argument `err` that
 appears between the vertical pipes. Using `unwrap_or_else` lets us do some
 custom, non-`panic!` error handling.
 
 Said error handling is only two lines: we print out the error, then call
-`std::process::exit`. That function will stop our program's execution
+`std::process::exit`. That function will stop our program’s execution
 immediately and return the number passed to it as a return code. By convention,
 a zero means success and any other value means failure. In the end, this has
 similar characteristics to our `panic!`-based handling we had in Listing 12-7,
-but we no longer get all the extra output. Let's try it:
+but we no longer get all the extra output. Let’s try it:
 
 ```bash
 $ cargo run
@@ -723,7 +723,7 @@ Listing 12-10: Extracting a `run` functionality for the rest of the program logi
 The contents of `run` are the previous lines that were in `main`, and the `run`
 function takes a `Config` as an argument. Now that we have a separate function,
 we can make a similar improvement to the one we made to `Config::new` in
-Listing 12-8: let's return a `Result<T, E>` instead of calling `panic!` via
+Listing 12-8: let’s return a `Result<T, E>` instead of calling `panic!` via
 `expect`. Listing 12-11 shows the addition of a `use` statement to bring
 `std::error::Error` struct into scope and the changes to the `run` function
 to return a `Result`:
@@ -789,8 +789,8 @@ warning: unused result which must be used, #[warn(unused_must_use)] on by defaul
    |     ^^^^^^^^^^^^
 ```
 
-Rust is trying to tell us that we're ignoring our `Result`, which might be an
-error value. Let's handle that now. We'll use a similar technique as the way we
+Rust is trying to tell us that we’re ignoring our `Result`, which might be an
+error value. Let’s handle that now. We’ll use a similar technique as the way we
 handled failure with `Config::new` in Listing 12-9, but with a slight
 difference:
 
@@ -891,7 +891,7 @@ Listing 12-12: Moving `Config` and `run` into *src/lib.rs*
 Notice we also made liberal use of `pub`: on `Config`, its fields and its `new`
 method, and on the `run` function.
 
-Now in *src/main.rs*, we need to bring in the code that's now in *src/lib.rs*
+Now in *src/main.rs*, we need to bring in the code that’s now in *src/lib.rs*
 through `extern crate greprs`. Then we need to add a `use greprs::Config` line
 to bring `Config` into scope, and prefix the `run` function with our crate name
 as shown in Listing 12-13:
@@ -1014,11 +1014,11 @@ for that function
 
 Notice that we need an explicit lifetime `'a` declared in the signature of
 `grep` and used with the `contents` argument and the return value. Remember,
-lifetime parameters are used to specify which arguments' lifetimes connect to
-the lifetime of the return value. In this case, we're indicating that the
-vector we're returning is going to contain string slices that reference slices
+lifetime parameters are used to specify which arguments’ lifetimes connect to
+the lifetime of the return value. In this case, we’re indicating that the
+vector we’re returning is going to contain string slices that reference slices
 of the argument `contents`, as opposed to referencing slices of the argument
-`search`. Another way to think about what we're telling Rust is that the data
+`search`. Another way to think about what we’re telling Rust is that the data
 returned by the `grep` function will live as long as the data passed into this
 function in the `contents` argument. This is important! Given that the data a
 slice references needs to be valid in order for the reference to be valid, if
@@ -1076,17 +1076,17 @@ test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured
 error: test failed
 ```
 
-Great, our test fails, exactly as we expected. Let's get the test to pass! It's
-failing because we always return an empty vector. Here's what we're going to do
+Great, our test fails, exactly as we expected. Let’s get the test to pass! It’s
+failing because we always return an empty vector. Here’s what we’re going to do
 to implement `grep`:
 
 1. Iterate through each line of the contents.
 2. Check if the line contains our search string.
-   * If it does, add it to the list of values we're returning.
+   * If it does, add it to the list of values we’re returning.
    * If not, do nothing.
 3. Return the list of results that match.
 
-Let's take each step at a time, starting with iterating through lines. Strings
+Let’s take each step at a time, starting with iterating through lines. Strings
 have a helpful method to handle this, conveniently named `lines`:
 
 <span class="filename">Filename: src/lib.rs</span>
@@ -1167,13 +1167,13 @@ test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured
 
 Great! It works. Now that our test is passing, we could consider opportunities
 for refactoring the implementation of `grep` and be certain we maintain the
-same functionality while we do so. This code isn't bad, but it isn't taking
-advantage of some useful features of iterators. We'll be coming back to this
-example in Chapter 13 where we'll explore iterators in detail and see how to
+same functionality while we do so. This code isn’t bad, but it isn’t taking
+advantage of some useful features of iterators. We’ll be coming back to this
+example in Chapter 13 where we’ll explore iterators in detail and see how to
 improve it.
 
 Now that the `grep` function is working, we need to do one last thing inside of
-the `run` function: we never printed out the results! We'll do that by adding
+the `run` function: we never printed out the results! We’ll do that by adding
 a `for` loop that prints each line returned from the `grep` function:
 
 <span class="filename">Filename: src/lib.rs</span>
@@ -1217,22 +1217,22 @@ To tell your name the livelong day
 To an admiring bog!
 ```
 
-Excellent! We've built our own version of a classic tool, and learned a lot
-about how to structure applications. We've also learned a bit about file input
+Excellent! We’ve built our own version of a classic tool, and learned a lot
+about how to structure applications. We’ve also learned a bit about file input
 and output, lifetimes, testing, and command line parsing.
 
 ## Working with Environment Variables
 
-Let's add one more feature: case insensitive searching. In addition, this
-setting won't be a command line option: it'll be an environment variable
+Let’s add one more feature: case insensitive searching. In addition, this
+setting won’t be a command line option: it’ll be an environment variable
 instead. We could choose to make case insensitivity a command line option, but
 our users have requested an environment variable that they could set once and
 make all their searches case insensitive in that terminal session.
 
 ### Implement and Test a Case-Insensitive `grep` Function
 
-First, let's add a new function that we will call when the environment variable
-is on. Let's start by adding a new test and re-naming our existing one:
+First, let’s add a new function that we will call when the environment variable
+is on. Let’s start by adding a new test and re-naming our existing one:
 
 ```rust,ignore
 #[cfg(test)]
@@ -1302,9 +1302,9 @@ slice, so we need to add an ampersand when we pass `search` to `contains` since
 `contains` takes a string slice.
 
 Second, we add a call to `to_lowercase` each `line` before we check if it
-contains `search`. Since we've converted both `line` and `search` into all
-lowercase, we'll find matches no matter what case they used in the file and the
-command line arguments, respectively. Let's see if this passes the tests:
+contains `search`. Since we’ve converted both `line` and `search` into all
+lowercase, we’ll find matches no matter what case they used in the file and the
+command line arguments, respectively. Let’s see if this passes the tests:
 
 ```text
     Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
@@ -1479,7 +1479,7 @@ $ cargo run > output.txt
 
 The `>` syntax tells the shell to write the contents of standard out to
 *output.txt* instead of the screen. However, if we open *output.txt* after
-running we'll see our error message:
+running we’ll see our error message:
 
 ```text
 Application error: No search string or filename found
@@ -1538,9 +1538,9 @@ what to write to. We can acquire a handle to standard error through the
 `std::io::stderr` function. We give a mutable reference to `stderr` to
 `writeln!`; we need it to be mutable so we can write to it! The second and
 third arguments to `writeln!` are like the first and second arguments to
-`println!`: a format string and any variables we're interpolating.
+`println!`: a format string and any variables we’re interpolating.
 
-Let's try running the program again in the same way, without any arguments and
+Let’s try running the program again in the same way, without any arguments and
 redirecting `stdout` with `>`:
 
 ```text
@@ -1555,7 +1555,7 @@ try it again with arguments that work:
 $ cargo run to poem.txt > output.txt
 ```
 
-We'll see no output to our terminal, but `output.txt` will contain
+We’ll see no output to our terminal, but `output.txt` will contain
 our results:
 
 <span class="filename">Filename: output.txt</span>
