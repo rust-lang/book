@@ -5,9 +5,9 @@
 ### What is a closure
 
 In programming languages, a closure is a lot like a function. Like a function, closures contain code
-that is executed when the closure is called. The main difference, besides syntax, from functions is
-that closures have *capture*. What this means is that closures can use variables in its surrounding
-scope. Consider the following code:
+that is executed when the closure is called. The main difference, besides syntax, between closures
+and functions is that closures have *capture*. What this means is that a closure can use variables
+in its surrounding scope. Consider the following code:
 
 ```rust,ignore
 fn main() {
