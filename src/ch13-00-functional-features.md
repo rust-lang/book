@@ -84,15 +84,16 @@ fn main() {
 
 ### `Fn` traits
 
-It's clear that closurse more than functions, because closures have to keep track of what variables
-they've captured. Closures are essentially functions that come with a struct that includes their
-captured variables (or references). This means that every closure is a different type. If we want a
-function to take a closure as an argument, we can't simply talk about a "closure" type, because each
-one is a different type. The way that Rust manages this is with traits. There are three traits that
-can be automatically applied to each closure, depending on what the closure is doing: `FnOnce`,
-`FnMut`, and `Fn`. These traits derive from each other, so if a type is `FnMut`, it must also be
-`FnOnce`, and if a type is `Fn`, it must be both `FnMut` and `FnOnce`. Closures automatically derive
-from the ones that are appropriate, and you cannot currently derive them for your custom types.
+It's clear that closures are more than functions, because closures have to keep track of what
+variables they've captured. Closures are essentially functions that come with a struct that includes
+their captured variables (or references). This means that every closure is a different type. If we
+want a function to take a closure as an argument, we can't simply talk about a "closure" type,
+because each one is a different type. The way that Rust manages this is with traits. There are three
+traits that can be automatically applied to each closure, depending on what the closure is doing:
+`FnOnce`, `FnMut`, and `Fn`. These traits derive from each other, so if a type is `FnMut`, it must
+also be `FnOnce`, and if a type is `Fn`, it must be both `FnMut` and `FnOnce`. Closures
+automatically derive from the ones that are appropriate, and you cannot currently derive them for
+your custom types.
 
 If you want to write a function such as `map` that takes in a function, you should almost always
 take in one of the `Fn` traits. The `FnOnce` trait defines a function `call_once` that consumes
@@ -108,12 +109,12 @@ also implements `Fn`. All functions also implement `Fn` because they don't captu
 ## Iterators
 
 Iterators are types that implement the `Iterator` trait. Iterators are designed to return a sequence
-of values by repetedly calling their `next()` method. Often, these values come from a data structure
-such as `Vec`. Iterators are powerful, however, because they can be used for more than that. For
-example, you can have an infinite iterator -- one whose `next()` method never returns `None`. There
-are also functions on iterators like `map`, which applies a function to each value in the iterators
-as they're requested. `map` has low memory usage because it only applies the function as elements
-are requested, so the whole sequence does not need to build up.
+of values by repeatedly calling their `next()` method. Often, these values come from a data
+structure such as `Vec`. Iterators are powerful, however, because they can be used for more than
+that. For example, you can have an infinite iterator -- one whose `next()` method never returns
+`None`. There are also functions on iterators like `map`, which applies a function to each value in
+the iterators as they're requested. `map` has low memory usage because it only applies the function
+as elements are requested, so the whole sequence does not need to build up.
 
 ### Iterator & for loop
 
@@ -136,9 +137,9 @@ Another consequence of this is that you must be careful when using the `map` fun
 that mutates things. The closure will not be executed on any elements until the resulting iterator
 is consumed.
 
-Iterator adapters are iterators that are based off of other iterators. A simple iterator adaptor in
-the standard library is the [take](https://doc.rust-lang.org/std/iter/struct.Take.html) adaptor.
-This iterator adaptor contains a counter initialized with a user-defined number and another
+Iterator adapters are iterators that are based off of other iterators. A simple iterator adapter in
+the standard library is the [take](https://doc.rust-lang.org/std/iter/struct.Take.html) adapter.
+This iterator contains a counter initialized with a user-defined number and another
 iterator. When its `next()` method is called, it decrements the count, and if it's 0, it returns
 `None`. Otherwise, it returns `next()` of its contained iterator. In this way, we _adapt_ the inner
 iterator to only return the first `n` elements rather than everything.
@@ -161,4 +162,3 @@ Most complicated chain of iterator functions that compile down to the same ASM a
 ### Representation: Closures are a Struct
 
 Closures don't have any further performance penalty over regular fn calls
-
