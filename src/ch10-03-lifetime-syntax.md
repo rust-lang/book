@@ -152,7 +152,7 @@ smaller scope than `x`, the value it refers to.
 
 Note that we didn't have to name any lifetimes in the code itself; Rust figured
 it out for us. One situation in which Rust can't figure out the lifetimes is
-for a function or method when one of the arguments or return values is a
+for a function or method when one of the parameters or return values is a
 reference, except for a few scenarios we'll discuss in the lifetime elision
 section.
 
@@ -176,8 +176,8 @@ function, we can't know beforehand exactly all of the arguments that it could
 be called with and how long they will be valid for. We have to explain to Rust
 what we expect the lifetime of the argument to be (we'll learn about how
 to know what you expect the lifetime to be in a bit). This is similar to
-writing a function that has an argument of a generic type: we don't know what
-type the arguments will actually end up being when the function gets called.
+writing a function that has a parameter of a generic type: we don't know what
+type the parameters will actually end up being when the function gets called.
 Lifetimes are the same idea, but they are generic over the scope of a
 reference, rather than a type.
 
@@ -365,7 +365,7 @@ would create dangling pointers or otherwise violate memory safety.
 ### Lifetime Elision
 
 If every reference has a lifetime, and we need to provide them for functions
-that use references as arguments or return values, then why did this function
+that use references as parameters or return values, then why did this function
 from the "String Slices" section of Chapter 4 compile? We haven't annotated any
 lifetimes here, yet Rust happily compiles this function:
 
@@ -405,15 +405,15 @@ could be ambiguity. The rules are a very basic set of particular cases, and if
 your code fits one of those cases, you don't need to write the lifetimes
 explicitly. Here are the rules:
 
-Lifetimes on function arguments are called *input lifetimes*, and lifetimes on
+Lifetimes on function parameters are called *input lifetimes*, and lifetimes on
 return values are called *output lifetimes*. There's one rule related to how
 Rust infers input lifetimes in the absence of explicit annotations:
 
-1. Each argument that is a reference and therefore needs a lifetime parameter
-  gets its own. In other words, a function with one argument gets one lifetime
-  parameter: `fn foo<'a>(x: &'a i32)`, a function with two arguments gets two
-  separate lifetime parameters: `fn foo<'a, 'b>(x: &'a i32, y: &'b i32)`, and
-  so on.
+1. Each function parameter that is a reference and therefore needs a lifetime
+  parameter gets its own. In other words, a function with one parameter gets one
+  lifetime parameter: `fn foo<'a>(x: &'a i32)`, a function with two parameters
+  gets two separate lifetime parameters:
+  `fn foo<'a, 'b>(x: &'a i32, y: &'b i32)`, and so on.
 
 And two rules related to output lifetimes:
 
@@ -443,7 +443,7 @@ any methods where the output type's lifetime is the same as that of the
 struct's because of the third elision rule. Here's a struct called `App` that
 holds a reference to another struct, `Config`, defined elsewhere. The
 `append_to_name` method does not need lifetime annotations even though the
-method has a reference as an argument and is returning a reference; the
+method has a reference as a parameter and is returning a reference; the
 lifetime of the return value will be the lifetime of `self`:
 
 <span class="filename">Filename: src/lib.rs</span>

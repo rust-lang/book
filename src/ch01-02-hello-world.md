@@ -79,9 +79,9 @@ fn main() {
 
 These lines define a *function* in Rust. The `main` function is special: it's
 the first thing that is run for every executable Rust program. The first line
-says, “I’m declaring a function named `main` that takes no arguments and
-returns nothing.” If there were arguments, they would go inside the parentheses,
-`(` and `)`.
+says, “I’m declaring a function named `main` that receives no arguments and
+returns nothing.” If there were arguments, the parameter names would go inside
+the parentheses, `(` and `)`.
 
 Also note that the function body is wrapped in curly braces, `{` and `}`. Rust
 requires these around all function bodies. It's considered good style to put

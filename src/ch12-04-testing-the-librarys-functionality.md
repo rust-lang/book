@@ -77,18 +77,18 @@ for that function
 <!-- Will add ghosting and wingdings in libreoffice /Carol -->
 
 Notice that we need an explicit lifetime `'a` declared in the signature of
-`grep` and used with the `contents` argument and the return value. Remember,
-lifetime parameters are used to specify which arguments' lifetimes connect to
-the lifetime of the return value. In this case, we're indicating that the
-vector we're returning is going to contain string slices that reference slices
-of the argument `contents`, as opposed to referencing slices of the argument
-`search`. Another way to think about what we're telling Rust is that the data
-returned by the `grep` function will live as long as the data passed into this
-function in the `contents` argument. This is important! Given that the data a
-slice references needs to be valid in order for the reference to be valid, if
-the compiler thought that we were making string slices of `search` rather than
-`contents`, it would do its safety checking incorrectly. If we tried to compile
-this function without lifetimes, we would get this error:
+`grep` and used with the `contents` parameter and the return value. Remember,
+lifetime parameters are used to specify which function parameters' lifetimes
+connect to the lifetime of the return value. In this case, we're indicating that
+the vector we're returning is going to contain string slices that reference
+slices of the parameter `contents`, as opposed to referencing slices of the
+parameter `search`. Another way to think about what we're telling Rust is that
+the data returned by the `grep` function will live as long as the data passed
+into this function in the `contents` parameter. This is important! Given that
+the data a slice references needs to be valid in order for the reference to be
+valid, if the compiler thought that we were making string slices of `search`
+rather than `contents`, it would do its safety checking incorrectly. If we tried
+to compile this function without lifetimes, we would get this error:
 
 ```text
 error[E0106]: missing lifetime specifier
@@ -102,12 +102,13 @@ error[E0106]: missing lifetime specifier
            `contents`
 ```
 
-Rust can't possibly know which of the two arguments we need, so it needs us to
-tell it. Because `contents` is the argument that contains all of our text and
+Rust can't possibly know which of the two parameters we need, so it needs us to
+tell it. Because `contents` is the parameter that contains all of our text and
 we want to return the parts of that text that match, we know `contents` is the
-argument that should be connected to the return value using the lifetime syntax.
+parameter that should be connected to the return value using the lifetime
+syntax.
 
-Connecting arguments to return values in the signature is something that other
+Connecting parameters to return values in the signature is something that other
 programming languages don't make you do, so don't worry if this still feels
 strange! Knowing how to specify lifetimes gets easier over time, and practice
 makes perfect. You may want to re-read the above section or go back and compare

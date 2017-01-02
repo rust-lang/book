@@ -225,9 +225,9 @@ First, we define a struct named `Guess` that has a field named `value` that
 holds a `u32`. This is where the number will be stored.
 
 Then we implement an associated function named `new` on `Guess` that is a
-constructor of `Guess` values. The `new` function takes one argument named
+constructor of `Guess` values. The `new` function defines one parameter named
 `value` of type `u32` and returns a `Guess`. The code in the body of the `new`
-function tests the `value` argument to make sure it is between 1 and 100. If
+function tests the `value` parameter to make sure it is between 1 and 100. If
 `value` doesn't pass this test, we call `panic!`, which will alert the
 programmer who is calling this code that they have a bug they need to fix,
 since creating a `Guess` with a `value` outside this range would violate the
@@ -236,7 +236,7 @@ might panic should be discussed in its public-facing API documentation; we'll
 cover documentation conventions around indicating the possibility of a `panic!`
 in the API documentation that you create in Chapter 14. If `value` does pass
 the test, we create a new `Guess` with its `value` field set to the `value`
-argument, and return the `Guess`.
+parameter, and return the `Guess`.
 
 <!-- I'm not sure if you mean the function that creates the guess type (so
 listing 9-8) or the function that uses the guess type, below. You mean the

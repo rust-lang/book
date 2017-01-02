@@ -272,7 +272,7 @@ Listing 10-3 referred to it:
 help: consider adding a `where T: std::fmt::Display` bound
 ```
 
-The `where` syntax moves the trait bounds after the function arguments list.
+The `where` syntax moves the trait bounds after the function parameters list.
 This definition of `show_anything` means the exact same thing as the definition
 in Listing 10-8, just said a different way:
 

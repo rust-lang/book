@@ -113,7 +113,7 @@ fn main() {
 }
 ```
 
-The function takes an argument, `numbers`, which represents any concrete
+The function defines a parameter, `numbers`, which represents any concrete
 `Vec<i32>` that we might pass into the function. The code in the function
 definition operates on the `numbers` representation of any `Vec<i32>`. When
 we call the `largest` function, the code actually runs on the specific values
