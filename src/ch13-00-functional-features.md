@@ -50,10 +50,11 @@ the closure -- by default, closures are unnamed. We also use vertical bars (`|`)
 parentheses to define the arguments to the closure, and specifying the types of the inputs and
 outputs is optional if Rust can figure them out. Finally, closures are expressions rather than
 statements. You can see here that we could assign the closure to a variable, and needed to terminate
-the line with a semicolon.
+the line with a semicolon. Frequently, closures are defined and passed into functions without ever
+giving them names.
 
 This closure is capturing the x variable. But how is it doing that? What if we define a closure in a
-function and return it?What if we change x between where the closure is defined and where it's
+function and return it? What if we change x between where the closure is defined and where it's
 executed?
 
 By default, closures capture the variables by reference. This means that closures cannot outlive
