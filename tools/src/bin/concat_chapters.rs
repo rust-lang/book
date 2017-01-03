@@ -80,21 +80,16 @@ fn group_by_target(matched_files: Vec<(PathBuf, PathBuf)>) -> BTreeMap<PathBuf, 
 fn concat_files(source_paths: Vec<PathBuf>, target_path: PathBuf) -> io::Result<()> {
     println!("Concatenating into {}:", target_path.to_string_lossy());
     let mut target = try!(File::create(target_path));
-    let mut is_first = true;
+    try!(target.write_all(b"\n[TOC]\n"));
+
     for path in source_paths {
         println!("  {}", path.to_string_lossy());
         let mut source = try!(File::open(path));
         let mut contents: Vec<u8> = Vec::new();
         try!(source.read_to_end(&mut contents));
 
-        if is_first {
-            try!(target.write_all(b"\n[TOC]\n\n"));
-        } else {
-            try!(target.write_all(b"\n"));
-        }
+        try!(target.write_all(b"\n"));
         try!(target.write_all(&contents));
-
-        is_first = false;
     }
     Ok(())
 }
