@@ -253,7 +253,7 @@ A `String` is a wrapper over a `Vec<u8>`. Let's take a look at some of our
 properly-encoded UTF-8 example strings from before. First, this one:
 
 ```rust
-let len = "Hola".len();
+let len = String::from("Hola").len();
 ```
 
 In this case, `len` will be four, which means the `Vec` storing the string
@@ -261,7 +261,7 @@ In this case, `len` will be four, which means the `Vec` storing the string
 UTF-8. What about this example, though?
 
 ```rust
-let len = "Здравствуйте".len();
+let len = String::from("Здравствуйте").len();
 ```
 
 A person asked how long the string is might say 12. However, Rust's answer
