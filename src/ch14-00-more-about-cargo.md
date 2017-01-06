@@ -602,7 +602,7 @@ $ cargo build
     Updating registry `https://github.com/rust-lang/crates.io-index`
  Downloading rand v0.3.14
    ...snip...
-   Compiling regex v0.3.14
+   Compiling rand v0.3.14
    Compiling add-one v0.1.0 (file:///projects/adder/add-one)
    Compiling adder v0.1.0 (file:///projects/adder)
     Finished debug [unoptimized + debuginfo] target(s) in 10.18 secs
@@ -669,7 +669,7 @@ indicate we want to run tests for a particular package:
 ```text
 $ cargo test -p add-one
     Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
-     Running target/debug/deps/add_one-4efddc426c52312b
+     Running target/debug/deps/add_one-abcabcabc
 
 running 1 test
 test tests::it_works ... ok

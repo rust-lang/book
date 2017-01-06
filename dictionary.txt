@@ -31,6 +31,7 @@ BuildHasher
 Cagain
 callsite
 CamelCase
+cargodoc
 ChangeColor
 ChangeColorMessage
 chXX
@@ -127,6 +128,7 @@ libc
 libcore
 librarys
 libreoffice
+libstd
 lifecycle
 login
 loopback
@@ -171,6 +173,7 @@ powi
 preprocessing
 Preprocessing
 preprocessor
+PrimaryColor
 println
 priv
 proc
@@ -193,12 +196,15 @@ Rustaceans
 rustc
 rustdoc
 rustup
+SecondaryColor
 semver
 SemVer
 shouldn
 sizeof
 someproject
 someusername
+SPDX
+spdx
 SpreadsheetCell
 sqrt
 stackoverflow
@@ -214,6 +220,7 @@ structs
 struct's
 Structs
 subcommand
+subcommands
 subdirectories
 subdirectory
 submodule
@@ -225,6 +232,7 @@ subtyping
 Supertraits
 That'd
 test's
+timeline
 TODO
 toml
 TOML
@@ -248,6 +256,7 @@ username
 USERPROFILE
 usize
 UsState
+utils
 variable's
 vers
 Versioning
