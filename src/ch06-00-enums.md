@@ -23,7 +23,7 @@ code.
 
 Enums are a feature in many languages, but their capabilities differ
 per-language. Rust’s enums are most similar to "algebraic data types" in
-functional languages like F#, OCaml, or Haskell, and they have superpowers.
+functional languages like F#, OCaml, or Haskell.
 
 ## Defining an Enum
 
@@ -33,7 +33,7 @@ looking inside it", but I've tried to clarify. Please elaborate on what you
 meant by that and why it's confusing if I haven't resolved the issue. /Carol -->
 
 Let's look at a situation we might want to express in code and see why enums are
-sometimes a more expressive choice than structs for modeling data. Say we need
+sometimes a more appropriate choice than structs for modeling data. Say we need
 to work with IP addresses. There are two major standards used for IP addresses
 today: version four and version six. These are the only possibilities for an IP
 address that our program will come across: we can *enumerate* all possible
@@ -290,9 +290,9 @@ struct ChangeColorMessage(i32, i32, i32); // tuple struct
 ```
 
 But if we used the different structs, which each have their own type, we
-wouldn't be able to as easily define a single function that could take any of
-these kinds of messages as we could with the `Message` enum defined above,
-which is a single enum type shared by multiple variants.
+wouldn't be able to as easily define a function that could take any of these
+kinds of messages as we could with the `Message` enum defined above, which is a
+single type.
 
 One more similarity between enums and structs: just as we are able to define
 methods on structs using `impl`, we are also able to define methods on enums.

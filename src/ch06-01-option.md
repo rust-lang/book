@@ -78,8 +78,8 @@ let absent_number: Option<i32> = None;
 ```
 
 If we use `None` rather than `Some`, we need to tell Rust what type of
-`Option<T>` we have, because the compiler can't infer it from the `Some`
-value.
+`Option<T>` we have, because the compiler can't infer the type that the `Some`
+variant will hold by looking at the `None` variant.
 
 When we have a `Some` value, we know that there is a value present, and the
 value is held within the `Some`. When we have a `None` value, in some sense,
