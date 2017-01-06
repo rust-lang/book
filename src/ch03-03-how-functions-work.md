@@ -52,8 +52,16 @@ called and its message is printed.
 
 ### Function Parameters
 
-Functions can also have parameters. The following rewritten version of
-`another_function` shows what parameters look like in Rust:
+Functions can also be defined to have *parameters*, which are special variables
+that are part of a function's signature. When a function has parameters, we can
+provide it with concrete values for those parameters. Technically, the concrete
+values are called *arguments*, but in casual conversation people tend to use
+the words "parameter" and "argument" interchangably for either the variables in
+a function's definition or the concrete values passed in when you call a
+function.
+
+The following rewritten version of `another_function` shows what parameters
+look like in Rust:
 
 <span class="filename">Filename: src/main.rs</span>
 
