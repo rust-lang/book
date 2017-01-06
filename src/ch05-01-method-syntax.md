@@ -52,7 +52,7 @@ Listing 5-7: Defining an `area` method on the `Rectangle` struct
 In order to make the function be defined within the context of `Rectangle`, we
 start an `impl` block (`impl` is short for *implementation*). Then we move the
 function within the `impl` curly braces, and change the first (and in this
-case, only) argument to be `self` in the signature and everywhere within the
+case, only) parameter to be `self` in the signature and everywhere within the
 body. Then in `main` where we called the `area` function and passed `rect1` as
 an argument, we can instead use *method syntax* to call the `area` method on
 our `Rectangle` instance. Method syntax is taking an instance and adding a dot
@@ -69,8 +69,8 @@ We’ve chosen `&self` here for the same reason we used `&Rectangle` in the
 function version: we don’t want to take ownership, and we just want to be able
 to read the data in the struct, not write to it. If we wanted to be able to
 change the instance that we’ve called the method on as part of what the method
-does, we’d put `&mut self` as the first argument instead. Having a method that
-takes ownership of the instance by having just `self` as the first argument is
+does, we’d put `&mut self` as the first parameter instead. Having a method that
+takes ownership of the instance by having just `self` as the first parameter is
 rarer; this is usually used when the method transforms `self` into something
 else and we want to prevent the caller from using the original instance after
 the transformation.
@@ -202,8 +202,9 @@ impl Rectangle {
 <!-- Will add ghosting here in libreoffice /Carol -->
 
 If we run this with the `main` from Listing 5-8, we will get our desired output!
-Methods can take multiple arguments that we add to the signature after the
-`self` parameter, and those arguments work just like arguments in functions do.
+Methods can have multiple parameters that we add to the signature after the
+`self` parameter, and those parameters work just like parameters in functions
+do.
 
 ### Associated Functions
 

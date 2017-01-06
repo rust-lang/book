@@ -279,7 +279,7 @@ we defined the fields to be `length` and `width`, both of which have type
 `u32`. Then in `main`, we create a particular instance of a `Rectangle` that
 has a length of 50 and a width of 30.
 
-Our `area` function now takes one argument that we’ve named `rectangle` whose
+Our `area` function now defines one parameter that we’ve named `rectangle` whose
 type is an immutable borrow of a struct `Rectangle` instance. As we covered in
 Chapter 4, we want to borrow the struct rather than take ownership of it so
 that `main` keeps its ownership and can continue using `rect1`, so that’s why

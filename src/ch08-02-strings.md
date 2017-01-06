@@ -162,7 +162,7 @@ call this method with `String` values. This signature gives us the clues we
 need to understand the tricky bits of the `+` operator.
 
 First of all, `s2` has an `&`, meaning that we are adding a *reference* of the
-second string to the first string. This is because of the `s` argument in the
+second string to the first string. This is because of the `s` parameter in the
 `add` function: we can only add a `&str` to a `String`, we can't add two
 `String`s together. Remember back in Chapter 4 when we talked about how
 `&String` will coerce to `&str`: we write `&s2` so that the `String` will

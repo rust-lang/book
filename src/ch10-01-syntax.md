@@ -98,7 +98,7 @@ enum OptionalNumber {   enum OptionalFloatingPointNumber {
 ```
 
 There's one problem, though: we've *used* `T`, but not defined it. This would
-be similar to using an argument to a function in the body without declaring it
+be similar to using a parameter of a function in the body without declaring it
 in the signature. We need to tell Rust that we've introduced a generic
 parameter. The syntax to do that is the angle brackets, like this:
 
@@ -303,7 +303,7 @@ type small if you can.
 
 In a similar way to data structures, we can use the `<>` syntax in function or
 method definitions. The angle brackets for type parameters go after the
-function or method name and before the argument list in parentheses:
+function or method name and before the parameter list in parentheses:
 
 ```rust
 fn generic_function<T>(value: T) {

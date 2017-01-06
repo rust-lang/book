@@ -127,7 +127,7 @@ fn main() {
 ```
 
 The `fn` syntax declares a new function, the `()` indicate there are no
-arguments, and `{` starts the body of the function.
+parameters, and `{` starts the body of the function.
 
 As you also learned in Chapter 1, `println!` is a macro that prints a string to
 the screen:

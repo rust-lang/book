@@ -506,7 +506,7 @@ wrapping. Unlike `unwrap`, if the value is an `Err` value, this method calls a
 *closure* which is an anonymous function that we define and pass as an argument
 to `unwrap_or_else`. We'll be covering closures in more detail in Chapter XX;
 the important part to understand in this case is that `unwrap_or_else` will
-pass the inner value of the `Err` to our closure in the argument `err` that
+pass the inner value of the `Err` to our closure into the parameter `err` that
 appears between the vertical pipes. Using `unwrap_or_else` lets us do some
 custom, non-`panic!` error handling.
 

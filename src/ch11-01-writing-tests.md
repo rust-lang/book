@@ -209,7 +209,7 @@ and includes the custom error message we specified:
     src/main.rs:4
 ```
 
-The two arguments to `assert_eq!` are named "left" and "right" rather than
+The two parameters to `assert_eq!` are named "left" and "right" rather than
 "expected" and "actual"; the order of the value that comes from your code and
 the value hardcoded into your test isn't important.
 

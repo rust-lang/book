@@ -1,7 +1,7 @@
 # Patterns
 
 We've actually used patterns a few times so far: they're used in `let`
-statements, in function arguments, and in the `match` expression. Patterns have
+statements, in function parameters, and in the `match` expression. Patterns have
 a lot more abilities than we have demonstrated so far, so we'll cover some of
 the most commonly used ones in this section. Any of these abilities work in any
 place where a pattern is used.
