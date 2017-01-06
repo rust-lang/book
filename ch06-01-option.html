@@ -2,7 +2,7 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <title>The Rust Programming Language</title>
+        <title>Option - The Rust Programming Language</title>
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -113,9 +113,9 @@ as follows:</p>
 </code></pre>
 <p>The <code>Option&lt;T&gt;</code> enum is so useful that it's even included in the prelude; you
 don't need to import it explicitly. Furthermore, so are its variants: you can
-use <code>Some</code> and <code>None</code> directly, without prefixing them with <code>Option::</code>. This is
-still just a regular enum, however, <code>Some(T)</code> and <code>None</code> are still values of
-type <code>Option&lt;T&gt;</code>.</p>
+use <code>Some</code> and <code>None</code> directly, without prefixing them with <code>Option::</code>.
+<code>Option&lt;T&gt;</code> is still just a regular enum, however, and <code>Some(T)</code> and <code>None</code> are
+still values of type <code>Option&lt;T&gt;</code>.</p>
 <!-- We haven't spoken about the prelude so far in the book, I think I made a
 note of that in a previous chapter---we should tell the reader what it is
 before mentioning it so they know what significance it has here -->
@@ -132,7 +132,8 @@ let some_string = Some(&quot;a string&quot;);
 let absent_number: Option&lt;i32&gt; = None;
 </code></pre>
 <p>If we use <code>None</code> rather than <code>Some</code>, we need to tell Rust what type of
-<code>Option&lt;T&gt;</code> we have.</p>
+<code>Option&lt;T&gt;</code> we have, because the compiler can't infer the type that the <code>Some</code>
+variant will hold by looking at the <code>None</code> variant.</p>
 <p>When we have a <code>Some</code> value, we know that there is a value present, and the
 value is held within the <code>Some</code>. When we have a <code>None</code> value, in some sense,
 that means the same thing that null does: we do not have a valid value. So why

@@ -2,7 +2,7 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <title>The Rust Programming Language</title>
+        <title>Enums - The Rust Programming Language</title>
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -95,10 +95,10 @@ functional languages like F#, OCaml, or Haskell.</p>
 clear throughout this section whether we were defining the IpAddrKind enum or
 looking inside it", but I've tried to clarify. Please elaborate on what you
 meant by that and why it's confusing if I haven't resolved the issue. /Carol -->
-<p>Let's look at a situation we might want to express in code and see why enums
-are useful and more appropriate than structs in this case. Say we need to work
-with IP addresses. There are two major standards used for IP addresses today:
-version four and version six. These are the only possibilities for an IP
+<p>Let's look at a situation we might want to express in code and see why enums are
+sometimes a more appropriate choice than structs for modeling data. Say we need
+to work with IP addresses. There are two major standards used for IP addresses
+today: version four and version six. These are the only possibilities for an IP
 address that our program will come across: we can <em>enumerate</em> all possible
 values, which is where <em>enumeration</em> gets its name.</p>
 <p>Any IP address can be either a version four or a version six address, but not
@@ -136,7 +136,7 @@ suggestions in a totally different direction! /Carol --&gt;</p>
 An `enum` definition is similar to a `struct` definition: it defines a new type
 and a template of what instances of that new type will be like. When you want to
 use a struct, you create an instance of the struct. When you want to use an
-enum, you use an instance of the enum that is one of the variants the enum
+enum, you create an instance of the enum that is one of the variants the enum
 allows.
 <!-- Option 2: -->
 When you want to use a struct, you create an instance of the *struct* itself.
@@ -214,8 +214,8 @@ data of <code>127.0.0.1</code>. The second instance, <code>loopback</code>, has 
 <code>IpAddrKind</code> as its <code>kind</code> value, <code>V6</code>, and has address <code>::1</code> associated with
 it. We’ve used a struct to bundle the <code>kind</code> and <code>address</code> values together, so
 that now the kind is associated with the value itself.</p>
-<p>We can represent the same concept in a more concise way using just an enum
-rather than an enum as part of a struct by putting data directly into each enum
+<p>We can represent the same concept in a more concise way using just an enum,
+rather than an enum inside a struct, by putting data directly into each enum
 variant. This new definition of the <code>IpAddr</code> enum says that both <code>V4</code> and <code>V6</code>
 variants will have associated <code>String</code> values:</p>
 <pre><code class="language-rust">enum IpAddr {
@@ -300,9 +300,10 @@ struct MoveMessage {
 struct WriteMessage(String); // tuple struct
 struct ChangeColorMessage(i32, i32, i32); // tuple struct
 </code></pre>
-<p>But if we used the different structs, we wouldn't be able to as easily define a
-function that could take any of these kinds of messages as we could with the
-<code>Message</code> enum defined above.</p>
+<p>But if we used the different structs, which each have their own type, we
+wouldn't be able to as easily define a function that could take any of these
+kinds of messages as we could with the <code>Message</code> enum defined above, which is a
+single type.</p>
 <p>One more similarity between enums and structs: just as we are able to define
 methods on structs using <code>impl</code>, we are also able to define methods on enums.
 Here's a method, <code>call</code>, that we could define on our <code>Message</code> enum:</p>

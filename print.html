@@ -2,7 +2,7 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <title>The Rust Programming Language</title>
+        <title>Nightly Rust - The Rust Programming Language</title>
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -3974,10 +3974,10 @@ functional languages like F#, OCaml, or Haskell.</p>
 clear throughout this section whether we were defining the IpAddrKind enum or
 looking inside it", but I've tried to clarify. Please elaborate on what you
 meant by that and why it's confusing if I haven't resolved the issue. /Carol -->
-<p>Let's look at a situation we might want to express in code and see why enums
-are useful and more appropriate than structs in this case. Say we need to work
-with IP addresses. There are two major standards used for IP addresses today:
-version four and version six. These are the only possibilities for an IP
+<p>Let's look at a situation we might want to express in code and see why enums are
+sometimes a more appropriate choice than structs for modeling data. Say we need
+to work with IP addresses. There are two major standards used for IP addresses
+today: version four and version six. These are the only possibilities for an IP
 address that our program will come across: we can <em>enumerate</em> all possible
 values, which is where <em>enumeration</em> gets its name.</p>
 <p>Any IP address can be either a version four or a version six address, but not
@@ -4015,7 +4015,7 @@ suggestions in a totally different direction! /Carol --&gt;</p>
 An `enum` definition is similar to a `struct` definition: it defines a new type
 and a template of what instances of that new type will be like. When you want to
 use a struct, you create an instance of the struct. When you want to use an
-enum, you use an instance of the enum that is one of the variants the enum
+enum, you create an instance of the enum that is one of the variants the enum
 allows.
 <!-- Option 2: -->
 When you want to use a struct, you create an instance of the *struct* itself.
@@ -4093,8 +4093,8 @@ data of <code>127.0.0.1</code>. The second instance, <code>loopback</code>, has 
 <code>IpAddrKind</code> as its <code>kind</code> value, <code>V6</code>, and has address <code>::1</code> associated with
 it. We’ve used a struct to bundle the <code>kind</code> and <code>address</code> values together, so
 that now the kind is associated with the value itself.</p>
-<p>We can represent the same concept in a more concise way using just an enum
-rather than an enum as part of a struct by putting data directly into each enum
+<p>We can represent the same concept in a more concise way using just an enum,
+rather than an enum inside a struct, by putting data directly into each enum
 variant. This new definition of the <code>IpAddr</code> enum says that both <code>V4</code> and <code>V6</code>
 variants will have associated <code>String</code> values:</p>
 <pre><code class="language-rust">enum IpAddr {
@@ -4179,9 +4179,10 @@ struct MoveMessage {
 struct WriteMessage(String); // tuple struct
 struct ChangeColorMessage(i32, i32, i32); // tuple struct
 </code></pre>
-<p>But if we used the different structs, we wouldn't be able to as easily define a
-function that could take any of these kinds of messages as we could with the
-<code>Message</code> enum defined above.</p>
+<p>But if we used the different structs, which each have their own type, we
+wouldn't be able to as easily define a function that could take any of these
+kinds of messages as we could with the <code>Message</code> enum defined above, which is a
+single type.</p>
 <p>One more similarity between enums and structs: just as we are able to define
 methods on structs using <code>impl</code>, we are also able to define methods on enums.
 Here's a method, <code>call</code>, that we could define on our <code>Message</code> enum:</p>
@@ -4254,9 +4255,9 @@ as follows:</p>
 </code></pre>
 <p>The <code>Option&lt;T&gt;</code> enum is so useful that it's even included in the prelude; you
 don't need to import it explicitly. Furthermore, so are its variants: you can
-use <code>Some</code> and <code>None</code> directly, without prefixing them with <code>Option::</code>. This is
-still just a regular enum, however, <code>Some(T)</code> and <code>None</code> are still values of
-type <code>Option&lt;T&gt;</code>.</p>
+use <code>Some</code> and <code>None</code> directly, without prefixing them with <code>Option::</code>.
+<code>Option&lt;T&gt;</code> is still just a regular enum, however, and <code>Some(T)</code> and <code>None</code> are
+still values of type <code>Option&lt;T&gt;</code>.</p>
 <!-- We haven't spoken about the prelude so far in the book, I think I made a
 note of that in a previous chapter---we should tell the reader what it is
 before mentioning it so they know what significance it has here -->
@@ -4273,7 +4274,8 @@ let some_string = Some(&quot;a string&quot;);
 let absent_number: Option&lt;i32&gt; = None;
 </code></pre>
 <p>If we use <code>None</code> rather than <code>Some</code>, we need to tell Rust what type of
-<code>Option&lt;T&gt;</code> we have.</p>
+<code>Option&lt;T&gt;</code> we have, because the compiler can't infer the type that the <code>Some</code>
+variant will hold by looking at the <code>None</code> variant.</p>
 <p>When we have a <code>Some</code> value, we know that there is a value present, and the
 value is held within the <code>Some</code>. When we have a <code>None</code> value, in some sense,
 that means the same thing that null does: we do not have a valid value. So why
