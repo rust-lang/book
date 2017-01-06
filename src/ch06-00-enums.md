@@ -23,7 +23,7 @@ code.
 
 Enums are a feature in many languages, but their capabilities differ
 per-language. Rust’s enums are most similar to "algebraic data types" in
-functional languages like F#, OCaml, or Haskell.
+functional languages like F#, OCaml, or Haskell, and they have superpowers.
 
 ## Defining an Enum
 
@@ -32,10 +32,10 @@ clear throughout this section whether we were defining the IpAddrKind enum or
 looking inside it", but I've tried to clarify. Please elaborate on what you
 meant by that and why it's confusing if I haven't resolved the issue. /Carol -->
 
-Let's look at a situation we might want to express in code and see why enums
-are useful and more appropriate than structs in this case. Say we need to work
-with IP addresses. There are two major standards used for IP addresses today:
-version four and version six. These are the only possibilities for an IP
+Let's look at a situation we might want to express in code and see why enums are
+sometimes a more expressive choice than structs for modeling data. Say we need
+to work with IP addresses. There are two major standards used for IP addresses
+today: version four and version six. These are the only possibilities for an IP
 address that our program will come across: we can *enumerate* all possible
 values, which is where *enumeration* gets its name.
 
@@ -84,7 +84,7 @@ suggestions in a totally different direction! /Carol -->
 An `enum` definition is similar to a `struct` definition: it defines a new type
 and a template of what instances of that new type will be like. When you want to
 use a struct, you create an instance of the struct. When you want to use an
-enum, you use an instance of the enum that is one of the variants the enum
+enum, you create an instance of the enum that is one of the variants the enum
 allows.
 
 <!-- Option 2: -->
@@ -183,8 +183,8 @@ data of `127.0.0.1`. The second instance, `loopback`, has the other variant of
 it. We’ve used a struct to bundle the `kind` and `address` values together, so
 that now the kind is associated with the value itself.
 
-We can represent the same concept in a more concise way using just an enum
-rather than an enum as part of a struct by putting data directly into each enum
+We can represent the same concept in a more concise way using just an enum,
+rather than an enum inside a struct, by putting data directly into each enum
 variant. This new definition of the `IpAddr` enum says that both `V4` and `V6`
 variants will have associated `String` values:
 
@@ -289,9 +289,10 @@ struct WriteMessage(String); // tuple struct
 struct ChangeColorMessage(i32, i32, i32); // tuple struct
 ```
 
-But if we used the different structs, we wouldn't be able to as easily define a
-function that could take any of these kinds of messages as we could with the
-`Message` enum defined above.
+But if we used the different structs, which each have their own type, we
+wouldn't be able to as easily define a single function that could take any of
+these kinds of messages as we could with the `Message` enum defined above,
+which is a single enum type shared by multiple variants.
 
 One more similarity between enums and structs: just as we are able to define
 methods on structs using `impl`, we are also able to define methods on enums.
