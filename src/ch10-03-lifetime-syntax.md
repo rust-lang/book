@@ -172,7 +172,7 @@ Again, the lifetime names are declared in the angle brackets where generic type
 parameters are declared, and this is because lifetimes are a form of generics.
 In the examples above, `'a` and `'b` were concrete lifetimes: we knew about `r`
 and `x` and how long they would live exactly. However, when we write a
-function, we can't know beforehand exactly all of the valuess that it could be
+function, we can't know beforehand exactly all of the values that it could be
 called with and how long they will be valid for. We have to explain to Rust
 what we expect the lifetime of the parameter to be (we'll learn about how to
 know what you expect the lifetime to be in a bit). This is similar to writing a
