@@ -73,9 +73,9 @@ we'd definitely want to handle the `Result` in a more robust way instead.
 ### Guidelines for Error Handling
 
 It's advisable to have your code `panic!` when it's possible that you could end
-up in a *bad state*---in this context, *bad state* is when some assumption,
+up in a *bad state*—in this context, *bad state* is when some assumption,
 guarantee, contract, or invariant has been broken, such as when invalid values,
-contradictory values, or missing values are passed to your code---plus one or
+contradictory values, or missing values are passed to your code—plus one or
 more of the following:
 
 * The bad state is not something that's *expected* to happen occasionally
