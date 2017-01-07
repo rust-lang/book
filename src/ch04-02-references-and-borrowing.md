@@ -5,9 +5,9 @@ have to return the `String` to the calling function so we can still use the
 `String` after the call to `calculate_length`, because the `String` was moved
 into `calculate_length`.
 
-Here is how you would define and use a `calculate_length` function that takes a
-*reference* to an object as an argument instead of taking ownership of the
-argument:
+Here is how you would define and use a `calculate_length` function that has a
+*reference* to an object as a parameter instead of taking ownership of the
+value:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -58,8 +58,8 @@ The `&s1` syntax lets us create a reference that *refers* to the value of `s1`
 but does not own it. Because it does not own it, the value it points to will
 not be dropped when the reference goes out of scope.
 
-Likewise, the signature of the function uses `&` to indicate that it takes a
-reference as an argument. Let’s add some explanatory annotations:
+Likewise, the signature of the function uses `&` to indicate that the type of
+the parameter `s` is a reference. Let’s add some explanatory annotations:
 
 ```rust
 fn calculate_length(s: &String) -> usize { // s is a reference to a String
@@ -70,11 +70,11 @@ fn calculate_length(s: &String) -> usize { // s is a reference to a String
 
 The scope in which the variable `s` is valid is the same as any function
 parameter's scope, but we don’t drop what the reference points to when it goes
-out of scope because we don’t have ownership. Functions that take references as
-arguments instead of the actual values mean we won’t need to return the values
+out of scope because we don’t have ownership. Functions that have references as
+parameters instead of the actual values mean we won’t need to return the values
 in order to give back ownership, since we never had ownership.
 
-We call taking references as function arguments *borrowing*. As in real life,
+We call having references as function parameters *borrowing*. As in real life,
 if a person owns something, you can borrow it from them. When you’re done, you
 have to give it back.
 

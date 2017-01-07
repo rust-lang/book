@@ -115,7 +115,7 @@ for the function.
 Having lots of error checks in all of your functions would be verbose and
 annoying, though. Luckily, you can use Rust's type system (and thus the type
 checking the compiler does) to do a lot of the checks for you. If your function
-takes a particular type as an argument, you can proceed with your code's logic
+has a particular type as a parameter, you can proceed with your code's logic
 knowing that the compiler has already ensured you have a valid value. For
 example, if you have a type rather than an `Option`, your program expects to
 have *something* rather than *nothing*. Your code then doesn't have to handle
@@ -123,7 +123,7 @@ two cases for the `Some` and `None` variants, it will only have one case for
 definitely having a value. Code trying to pass nothing to your function won't
 even compile, so your function doesn't have to check for that case at runtime.
 Another example is using an unsigned integer type like `u32`, which ensures the
-argument value is never negative.
+parameter is never negative.
 
 <!-- Can you go into more detail explaining this last sentence? Why is a type
 better to use than an Option?-->
@@ -225,10 +225,10 @@ First, we define a struct named `Guess` that has a field named `value` that
 holds a `u32`. This is where the number will be stored.
 
 Then we implement an associated function named `new` on `Guess` that is a
-constructor of `Guess` values. The `new` function defines one parameter named
-`value` of type `u32` and returns a `Guess`. The code in the body of the `new`
-function tests the `value` parameter to make sure it is between 1 and 100. If
-`value` doesn't pass this test, we call `panic!`, which will alert the
+constructor of `Guess` values. The `new` function is defined to have one
+parameter named `value` of type `u32` and to return a `Guess`. The code in the
+body of the `new` function tests `value` to make sure it is between 1 and 100.
+If `value` doesn't pass this test, we call `panic!`, which will alert the
 programmer who is calling this code that they have a bug they need to fix,
 since creating a `Guess` with a `value` outside this range would violate the
 contract that `Guess::new` is relying on. The conditions in which `Guess::new`
@@ -246,8 +246,8 @@ violation? -->
 "wider function". I hope the slower explanation of the code has cleared
 this up; please provide more detail on what's confusing if not. /Carol -->
 
-Next, we implement a method named `value` that borrows `self`, doesn't take any
-other arguments, and returns a `u32`. This is a kind of method sometimes called
+Next, we implement a method named `value` that borrows `self`, doesn't have any
+other parameters, and returns a `u32`. This is a kind of method sometimes called
 a *getter*, since its purpose is to get some data from its fields and return
 it. This public method is necessary because the `value` field of the `Guess`
 struct is private. It's important that the `value` field is private so that
@@ -256,8 +256,8 @@ code using the `Guess` struct is not allowed to set `value` directly: callers
 `Guess`, which ensures there's no way for a `Guess` to have a `value` that
 hasn't been checked by the conditions in the constructor.
 
-A function that takes as an argument or returns only numbers between 1 and 100
-could then declare in its signature that it takes a `Guess` rather than a
+A function that has a parameter or returns only numbers between 1 and 100 could
+then declare in its signature that it takes or returns a `Guess` rather than a
 `u32`, and wouldn't need to do any additional checks in its body.
 
 ## Summary

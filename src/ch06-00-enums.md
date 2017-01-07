@@ -111,7 +111,7 @@ Note that the variants of the enum are namespaced under its identifier, and we
 use the double colon to separate the two. The reason this is useful is that now
 both values `IpAddrKind::V4` and `IpAddrKind::V6` are of the same type:
 `IpAddrKind`. We can then, for instance, define a function that takes any
-`IpAddrKind` as an argument:
+`IpAddrKind`:
 
 ```rust
 # enum IpAddrKind {

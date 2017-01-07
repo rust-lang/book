@@ -1,18 +1,18 @@
 ## Method Syntax
 
 *Methods* are similar to functions: they’re declared with the `fn` keyword and
-their name, they can take arguments and return values, and they contain some
+their name, they can have parameters and return values, and they contain some
 code that gets run when they’re called from somewhere else. Methods are
 different from functions, however, because they’re defined within the context
 of a struct (or an enum or a trait object, which we will cover in Chapters 6
-and 13, respectively), and their first argument is always `self`, which
+and 13, respectively), and their first parameter is always `self`, which
 represents the instance of the struct that the method is being called on.
 
 ### Defining Methods
 
-Let’s change our `area` function that takes a `Rectangle` instance as an
-argument and instead make an `area` method defined on the `Rectangle` struct,
-as shown in Listing 5-7:
+Let’s change our `area` function that has a `Rectangle` instance as a parameter
+and instead make an `area` method defined on the `Rectangle` struct, as shown
+in Listing 5-7:
 
 <figure>
 <span class="filename">Filename: src/main.rs</span>
@@ -63,7 +63,7 @@ In the signature for `area`, we get to use `&self` instead of `rectangle:
 method being inside the `impl Rectangle` context. Note we still need to have
 the `&` before `self`, just like we had `&Rectangle`. Methods can choose to
 take ownership of `self`, borrow `self` immutably as we’ve done here, or borrow
-`self` mutably, just like any other argument.
+`self` mutably, just like any other parameter.
 
 We’ve chosen `&self` here for the same reason we used `&Rectangle` in the
 function version: we don’t want to take ownership, and we just want to be able
@@ -129,7 +129,7 @@ of our code search for capabilities of `Rectangle` all over the place.
 
 <!-- PROD: END BOX -->
 
-### Methods with More Arguments
+### Methods with More Parameters
 
 Let’s practice some more with methods by implementing a second method on our
 `Rectangle` struct. This time, we’d like for an instance of `Rectangle` to take
@@ -168,8 +168,8 @@ Can rect1 hold rect3? false
 
 We know we want to define a method, so it will be within the `impl Rectangle`
 block. The method name will be `can_hold`, and it will take an immutable borrow
-of another `Rectangle` as an argument. We can tell what the type of the
-argument will be by looking at a call site: `rect1.can_hold(&rect2)` passes in
+of another `Rectangle` as a parameter. We can tell what the type of the
+parameter will be by looking at a call site: `rect1.can_hold(&rect2)` passes in
 `&rect2`, which is an immutable borrow to `rect2`, an instance of `Rectangle`.
 This makes sense, since we only need to read `rect2` (rather than write, which
 would mean we’d need a mutable borrow) and we want `main` to keep ownership of
@@ -216,7 +216,7 @@ to work with. You’ve already used an associated function: `String::from`.
 
 Associated functions are often used for constructors that will return a new
 instance of the struct. For example, we could provide an associated function
-that would take one dimension argument and use that as both length and width,
+that would have one dimension parameter and use that as both length and width,
 thus making it easier to create a square `Rectangle` rather than having to
 specify the same value twice:
 

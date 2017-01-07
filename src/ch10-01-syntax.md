@@ -98,7 +98,7 @@ enum OptionalNumber {   enum OptionalFloatingPointNumber {
 ```
 
 There's one problem, though: we've *used* `T`, but not defined it. This would
-be similar to using a parameter of a function in the body without declaring it
+be similar to using a parameter name in a function body without declaring it
 in the signature. We need to tell Rust that we've introduced a generic
 parameter. The syntax to do that is the angle brackets, like this:
 

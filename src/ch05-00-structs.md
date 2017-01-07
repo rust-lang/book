@@ -182,7 +182,7 @@ fn area(length: u32, width: u32) -> u32 {
 ```
 
 The `area` function is supposed to calculate the area of one rectangle, but our
-function takes two arguments. The arguments are related, but that’s not
+function has two parameters. The parameters are related, but that’s not
 expressed anywhere in our program itself. It would be more readable and more
 manageable to group length and width together.
 
@@ -217,9 +217,10 @@ Listing 5-3: Specifying the length and width of the rectangle with a tuple
 <!-- I will add ghosting & wingdings once we're in libreoffice /Carol -->
 
 In one way, this is a little better. Tuples let us add a bit of structure, and
-we’re now passing just one argument. But in another way this method less clear:
-tuples don’t give names to their elements, so our calculation has gotten more
-confusing because we have to index into the parts of the tuple:
+we’re now passing just one argument when we call `area`. But in another way
+this method less clear: tuples don’t give names to their elements, so our
+calculation has gotten more confusing because we have to index into the parts
+of the tuple:
 
 <!-- I will change this to use wingdings instead of repeating this code once
 we're in libreoffice /Carol -->
@@ -279,18 +280,19 @@ we defined the fields to be `length` and `width`, both of which have type
 `u32`. Then in `main`, we create a particular instance of a `Rectangle` that
 has a length of 50 and a width of 30.
 
-Our `area` function now defines one parameter that we’ve named `rectangle` whose
-type is an immutable borrow of a struct `Rectangle` instance. As we covered in
-Chapter 4, we want to borrow the struct rather than take ownership of it so
-that `main` keeps its ownership and can continue using `rect1`, so that’s why
-we have the `&` in the function signature and at the call site.
+Our `area` function is now defined with one parameter that we’ve named
+`rectangle` whose type is an immutable borrow of a struct `Rectangle` instance.
+As we covered in Chapter 4, we want to borrow the struct rather than take
+ownership of it so that `main` keeps its ownership and can continue using
+`rect1`, so that’s why we have the `&` in the function signature and at the
+call site.
 
-The `area` function accesses the `length` and `width` fields of the `Rectangle`
-instance it got as an argument. Our function signature for `area` now says
-exactly what we mean: calculate the area of a `Rectangle`, using its `length`
-and `width` fields. This conveys that the length and width are related to each
-other, and gives descriptive names to the values rather than using the tuple
-index values of `0` and `1`. This is a win for clarity.
+The `area` function accesses the `length` and `width` fields of the
+`Rectangle`. Our function signature for `area` now says exactly what we mean:
+calculate the area of a `Rectangle`, using its `length` and `width` fields.
+This conveys that the length and width are related to each other, and gives
+descriptive names to the values rather than using the tuple index values of `0`
+and `1`. This is a win for clarity.
 
 ### Adding Useful Functionality with Derived Traits
 

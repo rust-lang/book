@@ -85,17 +85,17 @@ The value of x is: 5
 ```
 
 The declaration of `another_function` has one parameter named `x`. The type of
-`x` is specified as `i32`. When `5` is passed as an argument to
-`another_function`, the `println!` macro puts `5` where the pair of curly
-braces were in the format string.
+`x` is specified as `i32`. When `5` is passed to `another_function`, the
+`println!` macro puts `5` where the pair of curly braces were in the format
+string.
 
 In function signatures, you *must* declare the type of each parameter. This is
 a deliberate decision in Rust’s design: requiring type annotations in function
 definitions means the compiler almost never needs you to use them elsewhere in
 the code to figure out what you mean.
 
-When you want a function to receive multiple arguments, separate the parameters
-inside the function signature with commas, like this:
+When you want a function to have multiple parameters, separate the parameter
+declarations with commas, like this:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -111,7 +111,7 @@ fn another_function(x: i32, y: i32) {
 ```
 
 This example creates a function with two parameters, both of which are `i32`
-types. The function then prints out the values of both of its arguments. Note
+types. The function then prints out the values in both of its parameters. Note
 that function parameters don't all need to be the same type - they just happen
 to be in this example.
 
@@ -127,8 +127,8 @@ The value of x is: 5
 The value of y is: 6
 ```
 
-Because `5` is passed into the `x` parameter and `6` is passed into the `y`
-parameter, the two strings are printed with these values.
+Because we called the function with `5` as the value for `x` and `6` as the
+value for `y`, the two strings are printed using those values.
 
 ### Function Bodies
 
@@ -282,7 +282,7 @@ that line is the same as the following:
 let x = 5;
 ```
 
-Second, the `five` function requires no arguments and defines the type of the
+Second, the `five` function has no parameters and defines the type of the
 return value, but the body of the function is a lonely `5` with no semicolon
 because it’s an expression whose value we want to return. Let’s look at another
 example:

@@ -115,7 +115,7 @@ s.push_str("bar");
 
 `s` will contain "foobar" after these two lines. The `push_str` method takes a
 string slice because we don't necessarily want to take ownership of the
-argument. For example, it would be unfortunate if we weren't able to use `s2`
+parameter. For example, it would be unfortunate if we weren't able to use `s2`
 after appending its contents to `s1`:
 
 ```rust
@@ -124,7 +124,7 @@ let s2 = String::from("bar");
 s1.push_str(&s2);
 ```
 
-The `push` method is defined to take a single character as an argument and add
+The `push` method is defined to have a single character as a parameter and add
 it to the `String`:
 
 ```rust
@@ -167,7 +167,7 @@ second string to the first string. This is because of the `s` parameter in the
 `String`s together. Remember back in Chapter 4 when we talked about how
 `&String` will coerce to `&str`: we write `&s2` so that the `String` will
 coerce to the proper type, `&str`. Because this method does not take ownership
-of the argument, `s2` will still be valid after this operation.
+of the parameter, `s2` will still be valid after this operation.
 
 Second, we can see in the signature that `add` takes ownership of `self`,
 because `self` does *not* have an `&`. This means `s1` in the above example
@@ -218,7 +218,7 @@ have in the next paragraph without repeating the `println!` content too much?
 This code will also set `s` to "tic-tac-toe". The `format!` macro works in the
 same way as `println!`, but instead of printing the output to the screen, it
 returns a `String` with the contents. This version is much easier to read, and
-also does not take ownership of any of its arguments.
+also does not take ownership of any of its parameters.
 
 ### Indexing into Strings
 

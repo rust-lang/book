@@ -2,7 +2,7 @@
 
 The following keywords are reserved by the Rust language and may not be used as
 names of functions, variables, macros, modules, crates, constants, static
-values, attributes, struct fields, or arguments.
+values, attributes, struct fields, or parameters.
 
 * `abstract`
 * `alignof`

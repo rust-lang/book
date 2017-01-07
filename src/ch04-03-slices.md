@@ -15,7 +15,7 @@ Let’s think about the signature of this function:
 fn first_word(s: &String) -> ?
 ```
 
-This function, `first_word`, takes a `&String` as an argument. We don’t want
+This function, `first_word`, has a `&String` as a parameter. We don’t want
 ownership, so this is fine. But what should we return? We don’t really have a
 way to talk about *part* of a string. However, we could return the index of the
 end of the word. Let’s try that as shown in Listing 4-10:
@@ -40,7 +40,7 @@ fn first_word(s: &String) -> usize {
 <figcaption>
 
 Listing 4-10: The `first_word` function that returns a byte index value into
-the `String` argument
+the `String` parameter
 
 </figcaption>
 </figure>
@@ -308,7 +308,7 @@ The type of `s` here is `&str`: it’s a slice pointing to that specific point o
 the binary. This is also why string literals are immutable; `&str` is an
 immutable reference.
 
-#### String Slices as Arguments
+#### String Slices as Parameters
 
 Knowing that you can take slices of literals and `String`s leads us to one more
 improvement on `first_word`, and that’s its signature:
@@ -324,10 +324,10 @@ allows us to use the same function on both `String`s and `&str`s:
 fn first_word(s: &str) -> &str {
 ```
 
-If we have a string slice, we can pass that as the argument directly. If we
-have a `String`, we can pass a slice of the entire `String`. Defining a
-function to take a string slice argument instead of a reference to a String
-makes our API more general and useful without losing any functionality:
+If we have a string slice, we can pass that directly. If we have a `String`, we
+can pass a slice of the entire `String`. Defining a function to take a string
+slice instead of a reference to a String makes our API more general and useful
+without losing any functionality:
 
 <span class="filename">Filename: src/main.rs</span>
 
