@@ -41,7 +41,7 @@ in the prelude. Hash maps also have less support from the standard library;
 there's no built-in macro to construct them, for example.
 
 Just like vectors, hash maps store their data on the heap. This `HashMap` has
-keys of type `&str` and values of type `i32`. Like vectors, hash maps are
+keys of type `String` and values of type `i32`. Like vectors, hash maps are
 homogeneous: all of the keys must have the same type, and all of the values must
 have the same type.
 
