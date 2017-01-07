@@ -92,15 +92,15 @@ annotate lifetimes.</p>
 that this name is for a lifetime. Lifetime names need to be declared before
 they're used. Here's a function signature with lifetime declarations and
 annotations:</p>
-<pre><code class="language-rust,ignore">fn some_function&lt;'a&gt;(argument: &amp;'a i32) {
+<pre><code class="language-rust,ignore">fn some_function&lt;'a&gt;(parameter: &amp;'a i32) {
 </code></pre>
 <p>Notice anything? In the same way that generic type declarations go inside angle
 brackets after the function name, lifetime declarations also go inside those
 same angle brackets. We can even write functions that take both a lifetime
 declaration and a generic type declaration:</p>
-<pre><code class="language-rust,ignore">fn some_function&lt;'a, T&gt;(argument: &amp;'a T) {
+<pre><code class="language-rust,ignore">fn some_function&lt;'a, T&gt;(parameter: &amp;'a T) {
 </code></pre>
-<p>This function takes one argument, a reference to some type, <code>T</code>, and the
+<p>This function takes one parameter, a reference to some type, <code>T</code>, and the
 reference has the lifetime <code>'a</code>. In the same way that we parameterize functions
 that take generic types, we parameterize references with lifetimes.</p>
 <p>So, that's the syntax, but <em>why</em>? What does a lifetime do, anyway?</p>
@@ -185,7 +185,7 @@ allowed: Rust knows that the reference in <code>r</code> will always be valid, a
 smaller scope than <code>x</code>, the value it refers to.</p>
 <p>Note that we didn't have to name any lifetimes in the code itself; Rust figured
 it out for us. One situation in which Rust can't figure out the lifetimes is
-for a function or method when one of the arguments or return values is a
+for a function or method when one of the parameters or return values is a
 reference, except for a few scenarios we'll discuss in the lifetime elision
 section.</p>
 <h3>Lifetime Annotations in Struct Definitions</h3>
@@ -200,20 +200,20 @@ this:</p>
 parameters are declared, and this is because lifetimes are a form of generics.
 In the examples above, <code>'a</code> and <code>'b</code> were concrete lifetimes: we knew about <code>r</code>
 and <code>x</code> and how long they would live exactly. However, when we write a
-function, we can't know beforehand exactly all of the arguments that it could
-be called with and how long they will be valid for. We have to explain to Rust
-what we expect the lifetime of the argument to be (we'll learn about how
-to know what you expect the lifetime to be in a bit). This is similar to
-writing a function that has an argument of a generic type: we don't know what
-type the arguments will actually end up being when the function gets called.
-Lifetimes are the same idea, but they are generic over the scope of a
-reference, rather than a type.</p>
+function, we can't know beforehand exactly all of the values that it could be
+called with and how long they will be valid for. We have to explain to Rust
+what we expect the lifetime of the parameter to be (we'll learn about how to
+know what you expect the lifetime to be in a bit). This is similar to writing a
+function that has a parameter of a generic type: we don't know what type the
+values will actually end up being when the function gets called. Lifetimes are
+the same idea, but they are generic over the scope of a reference, rather than
+a type.</p>
 <h3>Lifetime Annotations in Function Signatures</h3>
 <p>Lifetime annotations for functions go on the function signature, but we don't
 have to annotate any of the code in the function body with lifetimes. That's
 because Rust can analyze the specific code inside the function without any
 help. When a function interacts with references that come from or go to code
-outside that function, however, the lifetimes of those arguments or return
+outside that function, however, the lifetimes of those parameters or return
 values will potentially be different each time that function gets called. Rust
 would have to analyze every place the function is called to determine that
 there were no dangling references. That would be impossible because a library
@@ -256,10 +256,10 @@ fn main() {
 </figcaption>
 </figure>
 <p>Note that we want the function to take string slices because we don't want the
-<code>longest</code> function to take ownership of its arguments, and we want the function
+<code>longest</code> function to take ownership of its parameters, and we want the function
 to be able to accept slices of a <code>String</code> (like <code>a</code>) is as well as string
-literals (<code>b</code>). Refer back to the &quot;String Slices as Arguments&quot; section of
-Chapter 4 for more discussion about why these are the arguments we want.</p>
+literals (<code>b</code>). Refer back to the &quot;String Slices as Parameters&quot; section of
+Chapter 4 for more discussion about why these are the parameters we want.</p>
 <p>Here's the start of an implementation of the <code>longest</code> function that won't
 compile yet:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
@@ -297,7 +297,7 @@ all of the input parameters and the return type:</p>
 </code></pre>
 <p>This will compile and will produce the result we want with the <code>main</code> function
 in Listing 10-9. This function signature is now saying that for some lifetime
-named <code>'a</code>, it will get two arguments, both which are string slices that live
+named <code>'a</code>, it will have two parameters, both which are string slices that live
 at least as long as the lifetime <code>'a</code>. The function will return a string slice
 that also will last at least as long as the lifetime <code>'a</code>. This is the contract
 we are telling Rust we want it to enforce. By specifying the lifetime
@@ -309,7 +309,7 @@ knows that there is some scope that can be substituted for <code>'a</code> that 
 satisfy this signature.</p>
 <p>The exact way to specify lifetime parameters depends on what your function is
 doing. If the function didn't actually return the longest string slice but
-instead always returned the first argument, we wouldn't need to specify a
+instead always returned the first parameter, we wouldn't need to specify a
 lifetime on <code>y</code>. This code compiles:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust">fn longest&lt;'a&gt;(x: &amp;'a str, y: &amp;str) -&gt; &amp;'a str {
@@ -317,11 +317,11 @@ lifetime on <code>y</code>. This code compiles:</p>
 }
 </code></pre>
 <p>The lifetime parameter for the return type needs to be specified and needs to
-match one of the arguments' lifetime parameters. If the reference returned does
-<em>not</em> refer to one of the arguments, the only other possibility is that it
-refers to a value created within this function, and that would be a dangling
-reference since the value will go out of scope at the end of the function.
-Consider this attempted implementation of <code>longest</code>:</p>
+match one of the value parameters' lifetime parameters. If the reference
+returned does <em>not</em> refer to one of the parameters, the only other possibility
+is that it refers to a value created within this function, and that would be a
+dangling reference since the value will go out of scope at the end of the
+function. Consider this attempted implementation of <code>longest</code>:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust,ignore">fn longest&lt;'a&gt;(x: &amp;str, y: &amp;str) -&gt; &amp;'a str {
     let result = String::from(&quot;really long string&quot;);
@@ -350,12 +350,12 @@ reference. In this case, the best fix would be to return an owned data type
 rather than a reference so that the calling function is then responsible for
 cleaning up the value.</p>
 <p>Ultimately, lifetime syntax is about connecting the lifetimes of various
-arguments and return values of functions. Once they're connected, Rust has
+parameters and return values of functions. Once they're connected, Rust has
 enough information to allow memory-safe operations and disallow operations that
 would create dangling pointers or otherwise violate memory safety.</p>
 <h3>Lifetime Elision</h3>
 <p>If every reference has a lifetime, and we need to provide them for functions
-that use references as arguments or return values, then why did this function
+that use references as parameters or return values, then why did this function
 from the &quot;String Slices&quot; section of Chapter 4 compile? We haven't annotated any
 lifetimes here, yet Rust happily compiles this function:</p>
 <p><span class="filename">Filename: src/lib.rs</span></p>
@@ -386,15 +386,14 @@ full inference: Rust doesn't try to guess what you meant in places where there
 could be ambiguity. The rules are a very basic set of particular cases, and if
 your code fits one of those cases, you don't need to write the lifetimes
 explicitly. Here are the rules:</p>
-<p>Lifetimes on function arguments are called <em>input lifetimes</em>, and lifetimes on
+<p>Lifetimes on function parameters are called <em>input lifetimes</em>, and lifetimes on
 return values are called <em>output lifetimes</em>. There's one rule related to how
 Rust infers input lifetimes in the absence of explicit annotations:</p>
 <ol>
-<li>Each argument that is a reference and therefore needs a lifetime parameter
-gets its own. In other words, a function with one argument gets one lifetime
-parameter: <code>fn foo&lt;'a&gt;(x: &amp;'a i32)</code>, a function with two arguments gets two
-separate lifetime parameters: <code>fn foo&lt;'a, 'b&gt;(x: &amp;'a i32, y: &amp;'b i32)</code>, and
-so on.</li>
+<li>Each function parameter that is a reference and therefore needs a lifetime
+parameter gets its own. In other words, a function with one parameter gets one
+lifetime parameter: <code>fn foo&lt;'a&gt;(x: &amp;'a i32)</code>, a function with two parameters
+gets two separate lifetime parameters: <code>fn foo&lt;'a, 'b&gt;(x: &amp;'a i32, y: &amp;'b i32)</code>, and so on.</li>
 </ol>
 <p>And two rules related to output lifetimes:</p>
 <ol start="2">
@@ -421,7 +420,7 @@ any methods where the output type's lifetime is the same as that of the
 struct's because of the third elision rule. Here's a struct called <code>App</code> that
 holds a reference to another struct, <code>Config</code>, defined elsewhere. The
 <code>append_to_name</code> method does not need lifetime annotations even though the
-method has a reference as an argument and is returning a reference; the
+method has a reference as a parameter and is returning a reference; the
 lifetime of the return value will be the lifetime of <code>self</code>:</p>
 <p><span class="filename">Filename: src/lib.rs</span></p>
 <pre><code class="language-rust"># struct Config {}

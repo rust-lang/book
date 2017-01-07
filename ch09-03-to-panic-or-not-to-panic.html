@@ -167,7 +167,7 @@ for the function.</p>
 <p>Having lots of error checks in all of your functions would be verbose and
 annoying, though. Luckily, you can use Rust's type system (and thus the type
 checking the compiler does) to do a lot of the checks for you. If your function
-takes a particular type as an argument, you can proceed with your code's logic
+has a particular type as a parameter, you can proceed with your code's logic
 knowing that the compiler has already ensured you have a valid value. For
 example, if you have a type rather than an <code>Option</code>, your program expects to
 have <em>something</em> rather than <em>nothing</em>. Your code then doesn't have to handle
@@ -175,7 +175,7 @@ two cases for the <code>Some</code> and <code>None</code> variants, it will only
 definitely having a value. Code trying to pass nothing to your function won't
 even compile, so your function doesn't have to check for that case at runtime.
 Another example is using an unsigned integer type like <code>u32</code>, which ensures the
-argument value is never negative.</p>
+parameter is never negative.</p>
 <!-- Can you go into more detail explaining this last sentence? Why is a type
 better to use than an Option?-->
 <!-- I tried to reword, but I'm not sure if I made it any clearer. You don't
@@ -258,10 +258,10 @@ impl Guess {
 <p>First, we define a struct named <code>Guess</code> that has a field named <code>value</code> that
 holds a <code>u32</code>. This is where the number will be stored.</p>
 <p>Then we implement an associated function named <code>new</code> on <code>Guess</code> that is a
-constructor of <code>Guess</code> values. The <code>new</code> function takes one argument named
-<code>value</code> of type <code>u32</code> and returns a <code>Guess</code>. The code in the body of the <code>new</code>
-function tests the <code>value</code> argument to make sure it is between 1 and 100. If
-<code>value</code> doesn't pass this test, we call <code>panic!</code>, which will alert the
+constructor of <code>Guess</code> values. The <code>new</code> function is defined to have one
+parameter named <code>value</code> of type <code>u32</code> and to return a <code>Guess</code>. The code in the
+body of the <code>new</code> function tests <code>value</code> to make sure it is between 1 and 100.
+If <code>value</code> doesn't pass this test, we call <code>panic!</code>, which will alert the
 programmer who is calling this code that they have a bug they need to fix,
 since creating a <code>Guess</code> with a <code>value</code> outside this range would violate the
 contract that <code>Guess::new</code> is relying on. The conditions in which <code>Guess::new</code>
@@ -269,7 +269,7 @@ might panic should be discussed in its public-facing API documentation; we'll
 cover documentation conventions around indicating the possibility of a <code>panic!</code>
 in the API documentation that you create in Chapter 14. If <code>value</code> does pass
 the test, we create a new <code>Guess</code> with its <code>value</code> field set to the <code>value</code>
-argument, and return the <code>Guess</code>.</p>
+parameter, and return the <code>Guess</code>.</p>
 <!-- I'm not sure if you mean the function that creates the guess type (so
 listing 9-8) or the function that uses the guess type, below. You mean the
 wider function needs a way to signal that there's a bug leading to contract
@@ -277,8 +277,8 @@ violation? -->
 <!-- I'm not sure what part is confusing, and I'm not sure what you mean by
 "wider function". I hope the slower explanation of the code has cleared
 this up; please provide more detail on what's confusing if not. /Carol -->
-<p>Next, we implement a method named <code>value</code> that borrows <code>self</code>, doesn't take any
-other arguments, and returns a <code>u32</code>. This is a kind of method sometimes called
+<p>Next, we implement a method named <code>value</code> that borrows <code>self</code>, doesn't have any
+other parameters, and returns a <code>u32</code>. This is a kind of method sometimes called
 a <em>getter</em>, since its purpose is to get some data from its fields and return
 it. This public method is necessary because the <code>value</code> field of the <code>Guess</code>
 struct is private. It's important that the <code>value</code> field is private so that
@@ -286,8 +286,8 @@ code using the <code>Guess</code> struct is not allowed to set <code>value</code
 <em>must</em> use the <code>Guess::new</code> constructor function to create an instance of
 <code>Guess</code>, which ensures there's no way for a <code>Guess</code> to have a <code>value</code> that
 hasn't been checked by the conditions in the constructor.</p>
-<p>A function that takes as an argument or returns only numbers between 1 and 100
-could then declare in its signature that it takes a <code>Guess</code> rather than a
+<p>A function that has a parameter or returns only numbers between 1 and 100 could
+then declare in its signature that it takes or returns a <code>Guess</code> rather than a
 <code>u32</code>, and wouldn't need to do any additional checks in its body.</p>
 <h2>Summary</h2>
 <p>Rust's error handling features are designed to help you write more robust code.

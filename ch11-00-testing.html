@@ -78,12 +78,12 @@ correctness is a complex topic and isn't easy to prove. Rust places a lot of
 weight on its type system to help ensure that our programs do what we intend,
 but it cannot help with everything. As such, Rust also includes support for
 writing software tests in the language itself.</p>
-<p>For example, we can write a function called <code>add_two</code> with a signature that
-accepts an integer as an argument and returns an integer as a result. We can
-implement and compile that function, and Rust can do all the type checking and
-borrow checking that we've seen it's capable of doing. What Rust <em>can't</em> check
-for us is that we've implemented this function to return the argument plus two
-and not the argument plus 10 or the argument minus 50! That's where tests come
+<p>For example, we can write a function called <code>add_two</code> with a signature that has
+an integer as a parameter and returns an integer as a result. We can implement
+and compile that function, and Rust can do all the type checking and borrow
+checking that we've seen it's capable of doing. What Rust <em>can't</em> check for us
+is that we've implemented this function to return the parameter plus two and
+not the parameter plus 10 or the parameter minus 50! That's where tests come
 in. We can write tests that, for example, pass <code>3</code> to the <code>add_two</code> function
 and check that we get <code>5</code> back. We can run the tests whenever we make changes
 to our code to make sure we didn't change any existing behavior from what the

@@ -107,9 +107,16 @@ Another function.
 <p>The lines execute in the order in which they appear in the <code>main</code> function.
 First, the “Hello, world!” message prints, and then <code>another_function</code> is
 called and its message is printed.</p>
-<h3>Function Arguments</h3>
-<p>Functions can also take arguments. The following rewritten version of
-<code>another_function</code> shows what arguments look like in Rust:</p>
+<h3>Function Parameters</h3>
+<p>Functions can also be defined to have <em>parameters</em>, which are special variables
+that are part of a function's signature. When a function has parameters, we can
+provide it with concrete values for those parameters. Technically, the concrete
+values are called <em>arguments</em>, but in casual conversation people tend to use
+the words &quot;parameter&quot; and &quot;argument&quot; interchangeably for either the variables in
+a function's definition or the concrete values passed in when you call a
+function.</p>
+<p>The following rewritten version of <code>another_function</code> shows what parameters
+look like in Rust:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust">fn main() {
     another_function(5);
@@ -125,16 +132,16 @@ fn another_function(x: i32) {
      Running `target/debug/functions`
 The value of x is: 5
 </code></pre>
-<p>The declaration of <code>another_function</code> has one argument named <code>x</code>. The type of
+<p>The declaration of <code>another_function</code> has one parameter named <code>x</code>. The type of
 <code>x</code> is specified as <code>i32</code>. When <code>5</code> is passed to <code>another_function</code>, the
 <code>println!</code> macro puts <code>5</code> where the pair of curly braces were in the format
 string.</p>
-<p>In function signatures, you <em>must</em> declare the type. This is a deliberate
-decision in Rust’s design: requiring type annotations in function definitions
-means the compiler almost never needs you to use them elsewhere in the code to
-figure out what you mean.</p>
-<p>When you want a function to have multiple arguments, separate them inside the
-function signature with commas, like this:</p>
+<p>In function signatures, you <em>must</em> declare the type of each parameter. This is
+a deliberate decision in Rust’s design: requiring type annotations in function
+definitions means the compiler almost never needs you to use them elsewhere in
+the code to figure out what you mean.</p>
+<p>When you want a function to have multiple parameters, separate the parameter
+declarations with commas, like this:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust">fn main() {
     another_function(5, 6);
@@ -145,10 +152,10 @@ fn another_function(x: i32, y: i32) {
     println!(&quot;The value of y is: {}&quot;, y);
 }
 </code></pre>
-<p>This example creates a function with two arguments, both of which are <code>i32</code>
-types. If your function has multiple arguments, the arguments don’t need to be
-the same type, but they just happen to be in this example. The function then
-prints out the values of both of its arguments.</p>
+<p>This example creates a function with two parameters, both of which are <code>i32</code>
+types. The function then prints out the values in both of its parameters. Note
+that function parameters don't all need to be the same type - they just happen
+to be in this example.</p>
 <p>Let’s try running this code. Replace the program currently in your <em>function</em>
 project’s <em>src/main.rs</em> file with the preceding example, and run it using
 <code>cargo run</code>:</p>
@@ -158,8 +165,8 @@ project’s <em>src/main.rs</em> file with the preceding example, and run it usi
 The value of x is: 5
 The value of y is: 6
 </code></pre>
-<p>Because <code>5</code> is passed as the <code>x</code> argument and <code>6</code> is passed as the <code>y</code>
-argument, the two strings are printed with these values.</p>
+<p>Because we called the function with <code>5</code> as the value for <code>x</code> and <code>6</code> as the
+value for <code>y</code>, the two strings are printed using those values.</p>
 <h3>Function Bodies</h3>
 <p>Function bodies are made up of a series of statements optionally ending in an
 expression. So far, we’ve only covered functions without an ending expression,
@@ -273,7 +280,7 @@ function to initialize a variable. Because the function <code>five</code> return
 that line is the same as the following:</p>
 <pre><code class="language-rust">let x = 5;
 </code></pre>
-<p>Second, the <code>five</code> function requires no arguments and defines the type of the
+<p>Second, the <code>five</code> function has no parameters and defines the type of the
 return value, but the body of the function is a lonely <code>5</code> with no semicolon
 because it’s an expression whose value we want to return. Let’s look at another
 example:</p>

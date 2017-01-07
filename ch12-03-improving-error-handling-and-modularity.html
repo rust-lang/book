@@ -506,7 +506,7 @@ wrapping. Unlike <code>unwrap</code>, if the value is an <code>Err</code> value,
 <em>closure</em> which is an anonymous function that we define and pass as an argument
 to <code>unwrap_or_else</code>. We'll be covering closures in more detail in Chapter XX;
 the important part to understand in this case is that <code>unwrap_or_else</code> will
-pass the inner value of the <code>Err</code> to our closure in the argument <code>err</code> that
+pass the inner value of the <code>Err</code> to our closure in the parameter <code>err</code> that
 appears between the vertical pipes. Using <code>unwrap_or_else</code> lets us do some
 custom, non-<code>panic!</code> error handling.</p>
 <p>Said error handling is only two lines: we print out the error, then call

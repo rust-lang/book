@@ -155,13 +155,13 @@ s.push_str(&quot;bar&quot;);
 </code></pre>
 <p><code>s</code> will contain &quot;foobar&quot; after these two lines. The <code>push_str</code> method takes a
 string slice because we don't necessarily want to take ownership of the
-argument. For example, it would be unfortunate if we weren't able to use <code>s2</code>
+parameter. For example, it would be unfortunate if we weren't able to use <code>s2</code>
 after appending its contents to <code>s1</code>:</p>
 <pre><code class="language-rust">let mut s1 = String::from(&quot;foo&quot;);
 let s2 = String::from(&quot;bar&quot;);
 s1.push_str(&amp;s2);
 </code></pre>
-<p>The <code>push</code> method is defined to take a single character as an argument and add
+<p>The <code>push</code> method is defined to have a single character as a parameter and add
 it to the <code>String</code>:</p>
 <pre><code class="language-rust">let mut s = String::from(&quot;lo&quot;);
 s.push('l');
@@ -187,12 +187,12 @@ concrete types substituted for the generic ones, which is what happens when we
 call this method with <code>String</code> values. This signature gives us the clues we
 need to understand the tricky bits of the <code>+</code> operator.</p>
 <p>First of all, <code>s2</code> has an <code>&amp;</code>, meaning that we are adding a <em>reference</em> of the
-second string to the first string. This is because of the <code>s</code> argument in the
+second string to the first string. This is because of the <code>s</code> parameter in the
 <code>add</code> function: we can only add a <code>&amp;str</code> to a <code>String</code>, we can't add two
 <code>String</code>s together. Remember back in Chapter 4 when we talked about how
 <code>&amp;String</code> will coerce to <code>&amp;str</code>: we write <code>&amp;s2</code> so that the <code>String</code> will
 coerce to the proper type, <code>&amp;str</code>. Because this method does not take ownership
-of the argument, <code>s2</code> will still be valid after this operation.</p>
+of the parameter, <code>s2</code> will still be valid after this operation.</p>
 <p>Second, we can see in the signature that <code>add</code> takes ownership of <code>self</code>,
 because <code>self</code> does <em>not</em> have an <code>&amp;</code>. This means <code>s1</code> in the above example
 will be moved into the <code>add</code> call and no longer be valid after that. So while
@@ -233,7 +233,7 @@ have in the next paragraph without repeating the `println!` content too much?
 <p>This code will also set <code>s</code> to &quot;tic-tac-toe&quot;. The <code>format!</code> macro works in the
 same way as <code>println!</code>, but instead of printing the output to the screen, it
 returns a <code>String</code> with the contents. This version is much easier to read, and
-also does not take ownership of any of its arguments.</p>
+also does not take ownership of any of its parameters.</p>
 <h3>Indexing into Strings</h3>
 <p>In many other languages, accessing individual characters in a string by
 referencing them by index is a valid and common operation. In Rust, however, if
@@ -256,12 +256,12 @@ bit about how Rust stores strings in memory.</p>
 <h4>Internal Representation</h4>
 <p>A <code>String</code> is a wrapper over a <code>Vec&lt;u8&gt;</code>. Let's take a look at some of our
 properly-encoded UTF-8 example strings from before. First, this one:</p>
-<pre><code class="language-rust">let len = &quot;Hola&quot;.len();
+<pre><code class="language-rust">let len = String::from(&quot;Hola&quot;).len();
 </code></pre>
 <p>In this case, <code>len</code> will be four, which means the <code>Vec</code> storing the string
 &quot;Hola&quot; is four bytes long: each of these letters takes one byte when encoded in
 UTF-8. What about this example, though?</p>
-<pre><code class="language-rust">let len = &quot;Здравствуйте&quot;.len();
+<pre><code class="language-rust">let len = String::from(&quot;Здравствуйте&quot;).len();
 </code></pre>
 <p>A person asked how long the string is might say 12. However, Rust's answer
 is 24. This is the number of bytes that it takes to encode &quot;Здравствуйте&quot; in

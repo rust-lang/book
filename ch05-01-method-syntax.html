@@ -69,16 +69,16 @@
                 <div id="content" class="content">
                     <h2>Method Syntax</h2>
 <p><em>Methods</em> are similar to functions: they’re declared with the <code>fn</code> keyword and
-their name, they can take arguments and return values, and they contain some
+their name, they can have parameters and return values, and they contain some
 code that gets run when they’re called from somewhere else. Methods are
 different from functions, however, because they’re defined within the context
 of a struct (or an enum or a trait object, which we will cover in Chapters 6
-and 13, respectively), and their first argument is always <code>self</code>, which
+and 13, respectively), and their first parameter is always <code>self</code>, which
 represents the instance of the struct that the method is being called on.</p>
 <h3>Defining Methods</h3>
-<p>Let’s change our <code>area</code> function that takes a <code>Rectangle</code> instance as an
-argument and instead make an <code>area</code> method defined on the <code>Rectangle</code> struct,
-as shown in Listing 5-7:</p>
+<p>Let’s change our <code>area</code> function that has a <code>Rectangle</code> instance as a parameter
+and instead make an <code>area</code> method defined on the <code>Rectangle</code> struct, as shown
+in Listing 5-7:</p>
 <figure>
 <span class="filename">Filename: src/main.rs</span>
 <pre><code class="language-rust">#[derive(Debug)]
@@ -110,7 +110,7 @@ fn main() {
 <p>In order to make the function be defined within the context of <code>Rectangle</code>, we
 start an <code>impl</code> block (<code>impl</code> is short for <em>implementation</em>). Then we move the
 function within the <code>impl</code> curly braces, and change the first (and in this
-case, only) argument to be <code>self</code> in the signature and everywhere within the
+case, only) parameter to be <code>self</code> in the signature and everywhere within the
 body. Then in <code>main</code> where we called the <code>area</code> function and passed <code>rect1</code> as
 an argument, we can instead use <em>method syntax</em> to call the <code>area</code> method on
 our <code>Rectangle</code> instance. Method syntax is taking an instance and adding a dot
@@ -119,13 +119,13 @@ followed by the method name, parentheses, and any arguments.</p>
 method being inside the <code>impl Rectangle</code> context. Note we still need to have
 the <code>&amp;</code> before <code>self</code>, just like we had <code>&amp;Rectangle</code>. Methods can choose to
 take ownership of <code>self</code>, borrow <code>self</code> immutably as we’ve done here, or borrow
-<code>self</code> mutably, just like any other argument.</p>
+<code>self</code> mutably, just like any other parameter.</p>
 <p>We’ve chosen <code>&amp;self</code> here for the same reason we used <code>&amp;Rectangle</code> in the
 function version: we don’t want to take ownership, and we just want to be able
 to read the data in the struct, not write to it. If we wanted to be able to
 change the instance that we’ve called the method on as part of what the method
-does, we’d put <code>&amp;mut self</code> as the first argument instead. Having a method that
-takes ownership of the instance by having just <code>self</code> as the first argument is
+does, we’d put <code>&amp;mut self</code> as the first parameter instead. Having a method that
+takes ownership of the instance by having just <code>self</code> as the first parameter is
 rarer; this is usually used when the method transforms <code>self</code> into something
 else and we want to prevent the caller from using the original instance after
 the transformation.</p>
@@ -175,7 +175,7 @@ consuming (so <code>self</code>). The fact that Rust makes borrowing implicit fo
 receivers is a big part of making ownership ergonomic in practice.</p>
 </blockquote>
 <!-- PROD: END BOX -->
-<h3>Methods with More Arguments</h3>
+<h3>Methods with More Parameters</h3>
 <p>Let’s practice some more with methods by implementing a second method on our
 <code>Rectangle</code> struct. This time, we’d like for an instance of <code>Rectangle</code> to take
 another instance of <code>Rectangle</code> and return <code>true</code> if the second rectangle could
@@ -203,8 +203,8 @@ Can rect1 hold rect3? false
 </code></pre>
 <p>We know we want to define a method, so it will be within the <code>impl Rectangle</code>
 block. The method name will be <code>can_hold</code>, and it will take an immutable borrow
-of another <code>Rectangle</code> as an argument. We can tell what the type of the
-argument will be by looking at a call site: <code>rect1.can_hold(&amp;rect2)</code> passes in
+of another <code>Rectangle</code> as a parameter. We can tell what the type of the
+parameter will be by looking at a call site: <code>rect1.can_hold(&amp;rect2)</code> passes in
 <code>&amp;rect2</code>, which is an immutable borrow to <code>rect2</code>, an instance of <code>Rectangle</code>.
 This makes sense, since we only need to read <code>rect2</code> (rather than write, which
 would mean we’d need a mutable borrow) and we want <code>main</code> to keep ownership of
@@ -232,8 +232,9 @@ impl Rectangle {
 </code></pre>
 <!-- Will add ghosting here in libreoffice /Carol -->
 <p>If we run this with the <code>main</code> from Listing 5-8, we will get our desired output!
-Methods can take multiple arguments that we add to the signature after the
-<code>self</code> parameter, and those arguments work just like arguments in functions do.</p>
+Methods can have multiple parameters that we add to the signature after the
+<code>self</code> parameter, and those parameters work just like parameters in functions
+do.</p>
 <h3>Associated Functions</h3>
 <p>One more useful feature of <code>impl</code> blocks: we’re allowed to define functions
 within <code>impl</code> blocks that <em>don’t</em> take <code>self</code> as a parameter. These are called
@@ -242,7 +243,7 @@ functions though, not methods, since they don’t have an instance of the struct
 to work with. You’ve already used an associated function: <code>String::from</code>.</p>
 <p>Associated functions are often used for constructors that will return a new
 instance of the struct. For example, we could provide an associated function
-that would take one dimension argument and use that as both length and width,
+that would have one dimension parameter and use that as both length and width,
 thus making it easier to create a square <code>Rectangle</code> rather than having to
 specify the same value twice:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>

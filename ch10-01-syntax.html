@@ -146,7 +146,7 @@ the <code>i32</code> and <code>f64</code> types were:</p>
 }                       }
 </code></pre>
 <p>There's one problem, though: we've <em>used</em> <code>T</code>, but not defined it. This would
-be similar to using an argument to a function in the body without declaring it
+be similar to using a parameter name in a function body without declaring it
 in the signature. We need to tell Rust that we've introduced a generic
 parameter. The syntax to do that is the angle brackets, like this:</p>
 <pre><code class="language-text">enum OptionalNumber&lt;T&gt; {   enum OptionalFloatingPointNumber&lt;T&gt; {
@@ -299,7 +299,7 @@ type small if you can.</p>
 <h3>Generic Functions and Methods</h3>
 <p>In a similar way to data structures, we can use the <code>&lt;&gt;</code> syntax in function or
 method definitions. The angle brackets for type parameters go after the
-function or method name and before the argument list in parentheses:</p>
+function or method name and before the parameter list in parentheses:</p>
 <pre><code class="language-rust">fn generic_function&lt;T&gt;(value: T) {
     // code goes here
 }

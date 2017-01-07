@@ -210,7 +210,7 @@ rectangle.</p>
 <pre><code class="language-rust,ignore">fn area(length: u32, width: u32) -&gt; u32 {
 </code></pre>
 <p>The <code>area</code> function is supposed to calculate the area of one rectangle, but our
-function takes two arguments. The arguments are related, but that’s not
+function has two parameters. The parameters are related, but that’s not
 expressed anywhere in our program itself. It would be more readable and more
 manageable to group length and width together.</p>
 <p>We’ve already discussed one way we might do that in Chapter 3: tuples. Listing
@@ -236,9 +236,10 @@ fn area(dimensions: (u32, u32)) -&gt; u32 {
 </figure>
 <!-- I will add ghosting & wingdings once we're in libreoffice /Carol -->
 <p>In one way, this is a little better. Tuples let us add a bit of structure, and
-we’re now passing just one argument. But in another way this method less clear:
-tuples don’t give names to their elements, so our calculation has gotten more
-confusing because we have to index into the parts of the tuple:</p>
+we’re now passing just one argument when we call <code>area</code>. But in another way
+this method less clear: tuples don’t give names to their elements, so our
+calculation has gotten more confusing because we have to index into the parts
+of the tuple:</p>
 <!-- I will change this to use wingdings instead of repeating this code once
 we're in libreoffice /Carol -->
 <pre><code class="language-rust,ignore">dimensions.0 * dimensions.1
@@ -283,17 +284,18 @@ fn area(rectangle: &amp;Rectangle) -&gt; u32 {
 we defined the fields to be <code>length</code> and <code>width</code>, both of which have type
 <code>u32</code>. Then in <code>main</code>, we create a particular instance of a <code>Rectangle</code> that
 has a length of 50 and a width of 30.</p>
-<p>Our <code>area</code> function now takes one argument that we’ve named <code>rectangle</code> whose
-type is an immutable borrow of a struct <code>Rectangle</code> instance. As we covered in
-Chapter 4, we want to borrow the struct rather than take ownership of it so
-that <code>main</code> keeps its ownership and can continue using <code>rect1</code>, so that’s why
-we have the <code>&amp;</code> in the function signature and at the call site.</p>
-<p>The <code>area</code> function accesses the <code>length</code> and <code>width</code> fields of the <code>Rectangle</code>
-instance it got as an argument. Our function signature for <code>area</code> now says
-exactly what we mean: calculate the area of a <code>Rectangle</code>, using its <code>length</code>
-and <code>width</code> fields. This conveys that the length and width are related to each
-other, and gives descriptive names to the values rather than using the tuple
-index values of <code>0</code> and <code>1</code>. This is a win for clarity.</p>
+<p>Our <code>area</code> function is now defined with one parameter that we’ve named
+<code>rectangle</code> whose type is an immutable borrow of a struct <code>Rectangle</code> instance.
+As we covered in Chapter 4, we want to borrow the struct rather than take
+ownership of it so that <code>main</code> keeps its ownership and can continue using
+<code>rect1</code>, so that’s why we have the <code>&amp;</code> in the function signature and at the
+call site.</p>
+<p>The <code>area</code> function accesses the <code>length</code> and <code>width</code> fields of the
+<code>Rectangle</code>. Our function signature for <code>area</code> now says exactly what we mean:
+calculate the area of a <code>Rectangle</code>, using its <code>length</code> and <code>width</code> fields.
+This conveys that the length and width are related to each other, and gives
+descriptive names to the values rather than using the tuple index values of <code>0</code>
+and <code>1</code>. This is a win for clarity.</p>
 <h3>Adding Useful Functionality with Derived Traits</h3>
 <p>It’d be nice to be able to print out an instance of our <code>Rectangle</code> while we’re
 debugging our program and see the values for all its fields. Listing 5-5 tries

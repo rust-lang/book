@@ -78,7 +78,7 @@ string should be returned.</p>
 <p>Let’s think about the signature of this function:</p>
 <pre><code class="language-rust,ignore">fn first_word(s: &amp;String) -&gt; ?
 </code></pre>
-<p>This function, <code>first_word</code>, takes a <code>&amp;String</code> as an argument. We don’t want
+<p>This function, <code>first_word</code>, has a <code>&amp;String</code> as a parameter. We don’t want
 ownership, so this is fine. But what should we return? We don’t really have a
 way to talk about <em>part</em> of a string. However, we could return the index of the
 end of the word. Let’s try that as shown in Listing 4-10:</p>
@@ -98,7 +98,7 @@ end of the word. Let’s try that as shown in Listing 4-10:</p>
 </code></pre>
 <figcaption>
 <p>Listing 4-10: The <code>first_word</code> function that returns a byte index value into
-the <code>String</code> argument</p>
+the <code>String</code> parameter</p>
 </figcaption>
 </figure>
 <p>Let’s break down this code a bit. Because we need to go through the <code>String</code>
@@ -298,7 +298,7 @@ that we know about slices, we can properly understand string literals:</p>
 <p>The type of <code>s</code> here is <code>&amp;str</code>: it’s a slice pointing to that specific point of
 the binary. This is also why string literals are immutable; <code>&amp;str</code> is an
 immutable reference.</p>
-<h4>String Slices as Arguments</h4>
+<h4>String Slices as Parameters</h4>
 <p>Knowing that you can take slices of literals and <code>String</code>s leads us to one more
 improvement on <code>first_word</code>, and that’s its signature:</p>
 <pre><code class="language-rust,ignore">fn first_word(s: &amp;String) -&gt; &amp;str {
@@ -307,10 +307,10 @@ improvement on <code>first_word</code>, and that’s its signature:</p>
 allows us to use the same function on both <code>String</code>s and <code>&amp;str</code>s:</p>
 <pre><code class="language-rust,ignore">fn first_word(s: &amp;str) -&gt; &amp;str {
 </code></pre>
-<p>If we have a string slice, we can pass that as the argument directly. If we
-have a <code>String</code>, we can pass a slice of the entire <code>String</code>. Defining a
-function to take a string slice argument instead of a reference to a String
-makes our API more general and useful without losing any functionality:</p>
+<p>If we have a string slice, we can pass that directly. If we have a <code>String</code>, we
+can pass a slice of the entire <code>String</code>. Defining a function to take a string
+slice instead of a reference to a String makes our API more general and useful
+without losing any functionality:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust"># fn first_word(s: &amp;str) -&gt; &amp;str {
 #     let bytes = s.as_bytes();

@@ -210,9 +210,9 @@ detail. Here's the first piece of the puzzle:</p>
 </code></pre>
 <p>These lines define a <em>function</em> in Rust. The <code>main</code> function is special: it's
 the first thing that is run for every executable Rust program. The first line
-says, “I’m declaring a function named <code>main</code> that takes no arguments and
-returns nothing.” If there were arguments, they would go inside the parentheses,
-<code>(</code> and <code>)</code>.</p>
+says, “I’m declaring a function named <code>main</code> that has no parameters and returns
+nothing.” If there were parameters, their names would go inside the
+parentheses, <code>(</code> and <code>)</code>.</p>
 <p>Also note that the function body is wrapped in curly braces, <code>{</code> and <code>}</code>. Rust
 requires these around all function bodies. It's considered good style to put
 the opening curly brace on the same line as the function declaration, with one
@@ -533,7 +533,7 @@ program:</p>
 <pre><code class="language-rust,ignore">fn main() {
 </code></pre>
 <p>The <code>fn</code> syntax declares a new function, the <code>()</code> indicate there are no
-arguments, and <code>{</code> starts the body of the function.</p>
+parameters, and <code>{</code> starts the body of the function.</p>
 <p>As you also learned in Chapter 1, <code>println!</code> is a macro that prints a string to
 the screen:</p>
 <pre><code class="language-rust,ignore">println!(&quot;Guess the number!&quot;);
@@ -1804,9 +1804,16 @@ Another function.
 <p>The lines execute in the order in which they appear in the <code>main</code> function.
 First, the “Hello, world!” message prints, and then <code>another_function</code> is
 called and its message is printed.</p>
-<h3>Function Arguments</h3>
-<p>Functions can also take arguments. The following rewritten version of
-<code>another_function</code> shows what arguments look like in Rust:</p>
+<h3>Function Parameters</h3>
+<p>Functions can also be defined to have <em>parameters</em>, which are special variables
+that are part of a function's signature. When a function has parameters, we can
+provide it with concrete values for those parameters. Technically, the concrete
+values are called <em>arguments</em>, but in casual conversation people tend to use
+the words &quot;parameter&quot; and &quot;argument&quot; interchangeably for either the variables in
+a function's definition or the concrete values passed in when you call a
+function.</p>
+<p>The following rewritten version of <code>another_function</code> shows what parameters
+look like in Rust:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust">fn main() {
     another_function(5);
@@ -1822,16 +1829,16 @@ fn another_function(x: i32) {
      Running `target/debug/functions`
 The value of x is: 5
 </code></pre>
-<p>The declaration of <code>another_function</code> has one argument named <code>x</code>. The type of
+<p>The declaration of <code>another_function</code> has one parameter named <code>x</code>. The type of
 <code>x</code> is specified as <code>i32</code>. When <code>5</code> is passed to <code>another_function</code>, the
 <code>println!</code> macro puts <code>5</code> where the pair of curly braces were in the format
 string.</p>
-<p>In function signatures, you <em>must</em> declare the type. This is a deliberate
-decision in Rust’s design: requiring type annotations in function definitions
-means the compiler almost never needs you to use them elsewhere in the code to
-figure out what you mean.</p>
-<p>When you want a function to have multiple arguments, separate them inside the
-function signature with commas, like this:</p>
+<p>In function signatures, you <em>must</em> declare the type of each parameter. This is
+a deliberate decision in Rust’s design: requiring type annotations in function
+definitions means the compiler almost never needs you to use them elsewhere in
+the code to figure out what you mean.</p>
+<p>When you want a function to have multiple parameters, separate the parameter
+declarations with commas, like this:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust">fn main() {
     another_function(5, 6);
@@ -1842,10 +1849,10 @@ fn another_function(x: i32, y: i32) {
     println!(&quot;The value of y is: {}&quot;, y);
 }
 </code></pre>
-<p>This example creates a function with two arguments, both of which are <code>i32</code>
-types. If your function has multiple arguments, the arguments don’t need to be
-the same type, but they just happen to be in this example. The function then
-prints out the values of both of its arguments.</p>
+<p>This example creates a function with two parameters, both of which are <code>i32</code>
+types. The function then prints out the values in both of its parameters. Note
+that function parameters don't all need to be the same type - they just happen
+to be in this example.</p>
 <p>Let’s try running this code. Replace the program currently in your <em>function</em>
 project’s <em>src/main.rs</em> file with the preceding example, and run it using
 <code>cargo run</code>:</p>
@@ -1855,8 +1862,8 @@ project’s <em>src/main.rs</em> file with the preceding example, and run it usi
 The value of x is: 5
 The value of y is: 6
 </code></pre>
-<p>Because <code>5</code> is passed as the <code>x</code> argument and <code>6</code> is passed as the <code>y</code>
-argument, the two strings are printed with these values.</p>
+<p>Because we called the function with <code>5</code> as the value for <code>x</code> and <code>6</code> as the
+value for <code>y</code>, the two strings are printed using those values.</p>
 <h3>Function Bodies</h3>
 <p>Function bodies are made up of a series of statements optionally ending in an
 expression. So far, we’ve only covered functions without an ending expression,
@@ -1970,7 +1977,7 @@ function to initialize a variable. Because the function <code>five</code> return
 that line is the same as the following:</p>
 <pre><code class="language-rust">let x = 5;
 </code></pre>
-<p>Second, the <code>five</code> function requires no arguments and defines the type of the
+<p>Second, the <code>five</code> function has no parameters and defines the type of the
 return value, but the body of the function is a lonely <code>5</code> with no semicolon
 because it’s an expression whose value we want to return. Let’s look at another
 example:</p>
@@ -2875,9 +2882,9 @@ common. Luckily for us, Rust has a feature for this concept, and it’s called
 have to return the <code>String</code> to the calling function so we can still use the
 <code>String</code> after the call to <code>calculate_length</code>, because the <code>String</code> was moved
 into <code>calculate_length</code>.</p>
-<p>Here is how you would define and use a <code>calculate_length</code> function that takes a
-<em>reference</em> to an object as an argument instead of taking ownership of the
-argument:</p>
+<p>Here is how you would define and use a <code>calculate_length</code> function that has a
+<em>reference</em> to an object as a parameter instead of taking ownership of the
+value:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust">fn main() {
     let s1 = String::from(&quot;hello&quot;);
@@ -2914,19 +2921,19 @@ let len = calculate_length(&amp;s1);
 <p>The <code>&amp;s1</code> syntax lets us create a reference that <em>refers</em> to the value of <code>s1</code>
 but does not own it. Because it does not own it, the value it points to will
 not be dropped when the reference goes out of scope.</p>
-<p>Likewise, the signature of the function uses <code>&amp;</code> to indicate that it takes a
-reference as an argument. Let’s add some explanatory annotations:</p>
+<p>Likewise, the signature of the function uses <code>&amp;</code> to indicate that the type of
+the parameter <code>s</code> is a reference. Let’s add some explanatory annotations:</p>
 <pre><code class="language-rust">fn calculate_length(s: &amp;String) -&gt; usize { // s is a reference to a String
     s.len()
 } // Here, s goes out of scope. But because it does not have ownership of what
   // it refers to, nothing happens.
 </code></pre>
 <p>The scope in which the variable <code>s</code> is valid is the same as any function
-argument's scope, but we don’t drop what the reference points to when it goes
-out of scope because we don’t have ownership. Functions that take references as
-arguments instead of the actual values mean we won’t need to return the values
+parameter's scope, but we don’t drop what the reference points to when it goes
+out of scope because we don’t have ownership. Functions that have references as
+parameters instead of the actual values mean we won’t need to return the values
 in order to give back ownership, since we never had ownership.</p>
-<p>We call taking references as function arguments <em>borrowing</em>. As in real life,
+<p>We call having references as function parameters <em>borrowing</em>. As in real life,
 if a person owns something, you can borrow it from them. When you’re done, you
 have to give it back.</p>
 <p>So what happens if we try to modify something we’re borrowing? Try the code in
@@ -3133,7 +3140,7 @@ string should be returned.</p>
 <p>Let’s think about the signature of this function:</p>
 <pre><code class="language-rust,ignore">fn first_word(s: &amp;String) -&gt; ?
 </code></pre>
-<p>This function, <code>first_word</code>, takes a <code>&amp;String</code> as an argument. We don’t want
+<p>This function, <code>first_word</code>, has a <code>&amp;String</code> as a parameter. We don’t want
 ownership, so this is fine. But what should we return? We don’t really have a
 way to talk about <em>part</em> of a string. However, we could return the index of the
 end of the word. Let’s try that as shown in Listing 4-10:</p>
@@ -3153,7 +3160,7 @@ end of the word. Let’s try that as shown in Listing 4-10:</p>
 </code></pre>
 <figcaption>
 <p>Listing 4-10: The <code>first_word</code> function that returns a byte index value into
-the <code>String</code> argument</p>
+the <code>String</code> parameter</p>
 </figcaption>
 </figure>
 <p>Let’s break down this code a bit. Because we need to go through the <code>String</code>
@@ -3353,7 +3360,7 @@ that we know about slices, we can properly understand string literals:</p>
 <p>The type of <code>s</code> here is <code>&amp;str</code>: it’s a slice pointing to that specific point of
 the binary. This is also why string literals are immutable; <code>&amp;str</code> is an
 immutable reference.</p>
-<h4>String Slices as Arguments</h4>
+<h4>String Slices as Parameters</h4>
 <p>Knowing that you can take slices of literals and <code>String</code>s leads us to one more
 improvement on <code>first_word</code>, and that’s its signature:</p>
 <pre><code class="language-rust,ignore">fn first_word(s: &amp;String) -&gt; &amp;str {
@@ -3362,10 +3369,10 @@ improvement on <code>first_word</code>, and that’s its signature:</p>
 allows us to use the same function on both <code>String</code>s and <code>&amp;str</code>s:</p>
 <pre><code class="language-rust,ignore">fn first_word(s: &amp;str) -&gt; &amp;str {
 </code></pre>
-<p>If we have a string slice, we can pass that as the argument directly. If we
-have a <code>String</code>, we can pass a slice of the entire <code>String</code>. Defining a
-function to take a string slice argument instead of a reference to a String
-makes our API more general and useful without losing any functionality:</p>
+<p>If we have a string slice, we can pass that directly. If we have a <code>String</code>, we
+can pass a slice of the entire <code>String</code>. Defining a function to take a string
+slice instead of a reference to a String makes our API more general and useful
+without losing any functionality:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust"># fn first_word(s: &amp;str) -&gt; &amp;str {
 #     let bytes = s.as_bytes();
@@ -3561,7 +3568,7 @@ rectangle.</p>
 <pre><code class="language-rust,ignore">fn area(length: u32, width: u32) -&gt; u32 {
 </code></pre>
 <p>The <code>area</code> function is supposed to calculate the area of one rectangle, but our
-function takes two arguments. The arguments are related, but that’s not
+function has two parameters. The parameters are related, but that’s not
 expressed anywhere in our program itself. It would be more readable and more
 manageable to group length and width together.</p>
 <p>We’ve already discussed one way we might do that in Chapter 3: tuples. Listing
@@ -3587,9 +3594,10 @@ fn area(dimensions: (u32, u32)) -&gt; u32 {
 </figure>
 <!-- I will add ghosting & wingdings once we're in libreoffice /Carol -->
 <p>In one way, this is a little better. Tuples let us add a bit of structure, and
-we’re now passing just one argument. But in another way this method less clear:
-tuples don’t give names to their elements, so our calculation has gotten more
-confusing because we have to index into the parts of the tuple:</p>
+we’re now passing just one argument when we call <code>area</code>. But in another way
+this method less clear: tuples don’t give names to their elements, so our
+calculation has gotten more confusing because we have to index into the parts
+of the tuple:</p>
 <!-- I will change this to use wingdings instead of repeating this code once
 we're in libreoffice /Carol -->
 <pre><code class="language-rust,ignore">dimensions.0 * dimensions.1
@@ -3634,17 +3642,18 @@ fn area(rectangle: &amp;Rectangle) -&gt; u32 {
 we defined the fields to be <code>length</code> and <code>width</code>, both of which have type
 <code>u32</code>. Then in <code>main</code>, we create a particular instance of a <code>Rectangle</code> that
 has a length of 50 and a width of 30.</p>
-<p>Our <code>area</code> function now takes one argument that we’ve named <code>rectangle</code> whose
-type is an immutable borrow of a struct <code>Rectangle</code> instance. As we covered in
-Chapter 4, we want to borrow the struct rather than take ownership of it so
-that <code>main</code> keeps its ownership and can continue using <code>rect1</code>, so that’s why
-we have the <code>&amp;</code> in the function signature and at the call site.</p>
-<p>The <code>area</code> function accesses the <code>length</code> and <code>width</code> fields of the <code>Rectangle</code>
-instance it got as an argument. Our function signature for <code>area</code> now says
-exactly what we mean: calculate the area of a <code>Rectangle</code>, using its <code>length</code>
-and <code>width</code> fields. This conveys that the length and width are related to each
-other, and gives descriptive names to the values rather than using the tuple
-index values of <code>0</code> and <code>1</code>. This is a win for clarity.</p>
+<p>Our <code>area</code> function is now defined with one parameter that we’ve named
+<code>rectangle</code> whose type is an immutable borrow of a struct <code>Rectangle</code> instance.
+As we covered in Chapter 4, we want to borrow the struct rather than take
+ownership of it so that <code>main</code> keeps its ownership and can continue using
+<code>rect1</code>, so that’s why we have the <code>&amp;</code> in the function signature and at the
+call site.</p>
+<p>The <code>area</code> function accesses the <code>length</code> and <code>width</code> fields of the
+<code>Rectangle</code>. Our function signature for <code>area</code> now says exactly what we mean:
+calculate the area of a <code>Rectangle</code>, using its <code>length</code> and <code>width</code> fields.
+This conveys that the length and width are related to each other, and gives
+descriptive names to the values rather than using the tuple index values of <code>0</code>
+and <code>1</code>. This is a win for clarity.</p>
 <h3>Adding Useful Functionality with Derived Traits</h3>
 <p>It’d be nice to be able to print out an instance of our <code>Rectangle</code> while we’re
 debugging our program and see the values for all its fields. Listing 5-5 tries
@@ -3744,16 +3753,16 @@ turning the <code>area</code> function into an <code>area</code> <em>method</em>
 type.</p>
 <h2>Method Syntax</h2>
 <p><em>Methods</em> are similar to functions: they’re declared with the <code>fn</code> keyword and
-their name, they can take arguments and return values, and they contain some
+their name, they can have parameters and return values, and they contain some
 code that gets run when they’re called from somewhere else. Methods are
 different from functions, however, because they’re defined within the context
 of a struct (or an enum or a trait object, which we will cover in Chapters 6
-and 13, respectively), and their first argument is always <code>self</code>, which
+and 13, respectively), and their first parameter is always <code>self</code>, which
 represents the instance of the struct that the method is being called on.</p>
 <h3>Defining Methods</h3>
-<p>Let’s change our <code>area</code> function that takes a <code>Rectangle</code> instance as an
-argument and instead make an <code>area</code> method defined on the <code>Rectangle</code> struct,
-as shown in Listing 5-7:</p>
+<p>Let’s change our <code>area</code> function that has a <code>Rectangle</code> instance as a parameter
+and instead make an <code>area</code> method defined on the <code>Rectangle</code> struct, as shown
+in Listing 5-7:</p>
 <figure>
 <span class="filename">Filename: src/main.rs</span>
 <pre><code class="language-rust">#[derive(Debug)]
@@ -3785,7 +3794,7 @@ fn main() {
 <p>In order to make the function be defined within the context of <code>Rectangle</code>, we
 start an <code>impl</code> block (<code>impl</code> is short for <em>implementation</em>). Then we move the
 function within the <code>impl</code> curly braces, and change the first (and in this
-case, only) argument to be <code>self</code> in the signature and everywhere within the
+case, only) parameter to be <code>self</code> in the signature and everywhere within the
 body. Then in <code>main</code> where we called the <code>area</code> function and passed <code>rect1</code> as
 an argument, we can instead use <em>method syntax</em> to call the <code>area</code> method on
 our <code>Rectangle</code> instance. Method syntax is taking an instance and adding a dot
@@ -3794,13 +3803,13 @@ followed by the method name, parentheses, and any arguments.</p>
 method being inside the <code>impl Rectangle</code> context. Note we still need to have
 the <code>&amp;</code> before <code>self</code>, just like we had <code>&amp;Rectangle</code>. Methods can choose to
 take ownership of <code>self</code>, borrow <code>self</code> immutably as we’ve done here, or borrow
-<code>self</code> mutably, just like any other argument.</p>
+<code>self</code> mutably, just like any other parameter.</p>
 <p>We’ve chosen <code>&amp;self</code> here for the same reason we used <code>&amp;Rectangle</code> in the
 function version: we don’t want to take ownership, and we just want to be able
 to read the data in the struct, not write to it. If we wanted to be able to
 change the instance that we’ve called the method on as part of what the method
-does, we’d put <code>&amp;mut self</code> as the first argument instead. Having a method that
-takes ownership of the instance by having just <code>self</code> as the first argument is
+does, we’d put <code>&amp;mut self</code> as the first parameter instead. Having a method that
+takes ownership of the instance by having just <code>self</code> as the first parameter is
 rarer; this is usually used when the method transforms <code>self</code> into something
 else and we want to prevent the caller from using the original instance after
 the transformation.</p>
@@ -3850,7 +3859,7 @@ consuming (so <code>self</code>). The fact that Rust makes borrowing implicit fo
 receivers is a big part of making ownership ergonomic in practice.</p>
 </blockquote>
 <!-- PROD: END BOX -->
-<h3>Methods with More Arguments</h3>
+<h3>Methods with More Parameters</h3>
 <p>Let’s practice some more with methods by implementing a second method on our
 <code>Rectangle</code> struct. This time, we’d like for an instance of <code>Rectangle</code> to take
 another instance of <code>Rectangle</code> and return <code>true</code> if the second rectangle could
@@ -3878,8 +3887,8 @@ Can rect1 hold rect3? false
 </code></pre>
 <p>We know we want to define a method, so it will be within the <code>impl Rectangle</code>
 block. The method name will be <code>can_hold</code>, and it will take an immutable borrow
-of another <code>Rectangle</code> as an argument. We can tell what the type of the
-argument will be by looking at a call site: <code>rect1.can_hold(&amp;rect2)</code> passes in
+of another <code>Rectangle</code> as a parameter. We can tell what the type of the
+parameter will be by looking at a call site: <code>rect1.can_hold(&amp;rect2)</code> passes in
 <code>&amp;rect2</code>, which is an immutable borrow to <code>rect2</code>, an instance of <code>Rectangle</code>.
 This makes sense, since we only need to read <code>rect2</code> (rather than write, which
 would mean we’d need a mutable borrow) and we want <code>main</code> to keep ownership of
@@ -3907,8 +3916,9 @@ impl Rectangle {
 </code></pre>
 <!-- Will add ghosting here in libreoffice /Carol -->
 <p>If we run this with the <code>main</code> from Listing 5-8, we will get our desired output!
-Methods can take multiple arguments that we add to the signature after the
-<code>self</code> parameter, and those arguments work just like arguments in functions do.</p>
+Methods can have multiple parameters that we add to the signature after the
+<code>self</code> parameter, and those parameters work just like parameters in functions
+do.</p>
 <h3>Associated Functions</h3>
 <p>One more useful feature of <code>impl</code> blocks: we’re allowed to define functions
 within <code>impl</code> blocks that <em>don’t</em> take <code>self</code> as a parameter. These are called
@@ -3917,7 +3927,7 @@ functions though, not methods, since they don’t have an instance of the struct
 to work with. You’ve already used an associated function: <code>String::from</code>.</p>
 <p>Associated functions are often used for constructors that will return a new
 instance of the struct. For example, we could provide an associated function
-that would take one dimension argument and use that as both length and width,
+that would have one dimension parameter and use that as both length and width,
 thus making it easier to create a square <code>Rectangle</code> rather than having to
 specify the same value twice:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
@@ -4036,7 +4046,7 @@ let six = IpAddrKind::V6;
 use the double colon to separate the two. The reason this is useful is that now
 both values <code>IpAddrKind::V4</code> and <code>IpAddrKind::V6</code> are of the same type:
 <code>IpAddrKind</code>. We can then, for instance, define a function that takes any
-<code>IpAddrKind</code> as an argument:</p>
+<code>IpAddrKind</code>:</p>
 <pre><code class="language-rust"># enum IpAddrKind {
 #     V4,
 #     V6,
@@ -4692,7 +4702,7 @@ Rust's <em>modules</em>.</p>
 <code>main</code> function. As your code grows, you’ll eventually move functionality out
 into other functions, both for re-use and for better organization. By splitting
 your code up into smaller chunks, each chunk is easier to understand on its
-own. But what happens if find yourself with too many functions? Rust has a
+own. But what happens if you find yourself with too many functions? Rust has a
 module system that handles the problem of wanting to to re-use code while
 keeping your code organized.</p>
 <p>In the same way that you extract lines of code into a function, you can extract
@@ -5835,13 +5845,13 @@ s.push_str(&quot;bar&quot;);
 </code></pre>
 <p><code>s</code> will contain &quot;foobar&quot; after these two lines. The <code>push_str</code> method takes a
 string slice because we don't necessarily want to take ownership of the
-argument. For example, it would be unfortunate if we weren't able to use <code>s2</code>
+parameter. For example, it would be unfortunate if we weren't able to use <code>s2</code>
 after appending its contents to <code>s1</code>:</p>
 <pre><code class="language-rust">let mut s1 = String::from(&quot;foo&quot;);
 let s2 = String::from(&quot;bar&quot;);
 s1.push_str(&amp;s2);
 </code></pre>
-<p>The <code>push</code> method is defined to take a single character as an argument and add
+<p>The <code>push</code> method is defined to have a single character as a parameter and add
 it to the <code>String</code>:</p>
 <pre><code class="language-rust">let mut s = String::from(&quot;lo&quot;);
 s.push('l');
@@ -5867,12 +5877,12 @@ concrete types substituted for the generic ones, which is what happens when we
 call this method with <code>String</code> values. This signature gives us the clues we
 need to understand the tricky bits of the <code>+</code> operator.</p>
 <p>First of all, <code>s2</code> has an <code>&amp;</code>, meaning that we are adding a <em>reference</em> of the
-second string to the first string. This is because of the <code>s</code> argument in the
+second string to the first string. This is because of the <code>s</code> parameter in the
 <code>add</code> function: we can only add a <code>&amp;str</code> to a <code>String</code>, we can't add two
 <code>String</code>s together. Remember back in Chapter 4 when we talked about how
 <code>&amp;String</code> will coerce to <code>&amp;str</code>: we write <code>&amp;s2</code> so that the <code>String</code> will
 coerce to the proper type, <code>&amp;str</code>. Because this method does not take ownership
-of the argument, <code>s2</code> will still be valid after this operation.</p>
+of the parameter, <code>s2</code> will still be valid after this operation.</p>
 <p>Second, we can see in the signature that <code>add</code> takes ownership of <code>self</code>,
 because <code>self</code> does <em>not</em> have an <code>&amp;</code>. This means <code>s1</code> in the above example
 will be moved into the <code>add</code> call and no longer be valid after that. So while
@@ -5913,7 +5923,7 @@ have in the next paragraph without repeating the `println!` content too much?
 <p>This code will also set <code>s</code> to &quot;tic-tac-toe&quot;. The <code>format!</code> macro works in the
 same way as <code>println!</code>, but instead of printing the output to the screen, it
 returns a <code>String</code> with the contents. This version is much easier to read, and
-also does not take ownership of any of its arguments.</p>
+also does not take ownership of any of its parameters.</p>
 <h3>Indexing into Strings</h3>
 <p>In many other languages, accessing individual characters in a string by
 referencing them by index is a valid and common operation. In Rust, however, if
@@ -5936,12 +5946,12 @@ bit about how Rust stores strings in memory.</p>
 <h4>Internal Representation</h4>
 <p>A <code>String</code> is a wrapper over a <code>Vec&lt;u8&gt;</code>. Let's take a look at some of our
 properly-encoded UTF-8 example strings from before. First, this one:</p>
-<pre><code class="language-rust">let len = &quot;Hola&quot;.len();
+<pre><code class="language-rust">let len = String::from(&quot;Hola&quot;).len();
 </code></pre>
 <p>In this case, <code>len</code> will be four, which means the <code>Vec</code> storing the string
 &quot;Hola&quot; is four bytes long: each of these letters takes one byte when encoded in
 UTF-8. What about this example, though?</p>
-<pre><code class="language-rust">let len = &quot;Здравствуйте&quot;.len();
+<pre><code class="language-rust">let len = String::from(&quot;Здравствуйте&quot;).len();
 </code></pre>
 <p>A person asked how long the string is might say 12. However, Rust's answer
 is 24. This is the number of bytes that it takes to encode &quot;Здравствуйте&quot; in
@@ -6092,7 +6102,7 @@ least often used, so it's not included in the features imported automatically
 in the prelude. Hash maps also have less support from the standard library;
 there's no built-in macro to construct them, for example.</p>
 <p>Just like vectors, hash maps store their data on the heap. This <code>HashMap</code> has
-keys of type <code>&amp;str</code> and values of type <code>i32</code>. Like vectors, hash maps are
+keys of type <code>String</code> and values of type <code>i32</code>. Like vectors, hash maps are
 homogeneous: all of the keys must have the same type, and all of the values must
 have the same type.</p>
 <p>Another way of constructing a hash map is by using the <code>collect</code> method on a
@@ -7010,7 +7020,7 @@ for the function.</p>
 <p>Having lots of error checks in all of your functions would be verbose and
 annoying, though. Luckily, you can use Rust's type system (and thus the type
 checking the compiler does) to do a lot of the checks for you. If your function
-takes a particular type as an argument, you can proceed with your code's logic
+has a particular type as a parameter, you can proceed with your code's logic
 knowing that the compiler has already ensured you have a valid value. For
 example, if you have a type rather than an <code>Option</code>, your program expects to
 have <em>something</em> rather than <em>nothing</em>. Your code then doesn't have to handle
@@ -7018,7 +7028,7 @@ two cases for the <code>Some</code> and <code>None</code> variants, it will only
 definitely having a value. Code trying to pass nothing to your function won't
 even compile, so your function doesn't have to check for that case at runtime.
 Another example is using an unsigned integer type like <code>u32</code>, which ensures the
-argument value is never negative.</p>
+parameter is never negative.</p>
 <!-- Can you go into more detail explaining this last sentence? Why is a type
 better to use than an Option?-->
 <!-- I tried to reword, but I'm not sure if I made it any clearer. You don't
@@ -7101,10 +7111,10 @@ impl Guess {
 <p>First, we define a struct named <code>Guess</code> that has a field named <code>value</code> that
 holds a <code>u32</code>. This is where the number will be stored.</p>
 <p>Then we implement an associated function named <code>new</code> on <code>Guess</code> that is a
-constructor of <code>Guess</code> values. The <code>new</code> function takes one argument named
-<code>value</code> of type <code>u32</code> and returns a <code>Guess</code>. The code in the body of the <code>new</code>
-function tests the <code>value</code> argument to make sure it is between 1 and 100. If
-<code>value</code> doesn't pass this test, we call <code>panic!</code>, which will alert the
+constructor of <code>Guess</code> values. The <code>new</code> function is defined to have one
+parameter named <code>value</code> of type <code>u32</code> and to return a <code>Guess</code>. The code in the
+body of the <code>new</code> function tests <code>value</code> to make sure it is between 1 and 100.
+If <code>value</code> doesn't pass this test, we call <code>panic!</code>, which will alert the
 programmer who is calling this code that they have a bug they need to fix,
 since creating a <code>Guess</code> with a <code>value</code> outside this range would violate the
 contract that <code>Guess::new</code> is relying on. The conditions in which <code>Guess::new</code>
@@ -7112,7 +7122,7 @@ might panic should be discussed in its public-facing API documentation; we'll
 cover documentation conventions around indicating the possibility of a <code>panic!</code>
 in the API documentation that you create in Chapter 14. If <code>value</code> does pass
 the test, we create a new <code>Guess</code> with its <code>value</code> field set to the <code>value</code>
-argument, and return the <code>Guess</code>.</p>
+parameter, and return the <code>Guess</code>.</p>
 <!-- I'm not sure if you mean the function that creates the guess type (so
 listing 9-8) or the function that uses the guess type, below. You mean the
 wider function needs a way to signal that there's a bug leading to contract
@@ -7120,8 +7130,8 @@ violation? -->
 <!-- I'm not sure what part is confusing, and I'm not sure what you mean by
 "wider function". I hope the slower explanation of the code has cleared
 this up; please provide more detail on what's confusing if not. /Carol -->
-<p>Next, we implement a method named <code>value</code> that borrows <code>self</code>, doesn't take any
-other arguments, and returns a <code>u32</code>. This is a kind of method sometimes called
+<p>Next, we implement a method named <code>value</code> that borrows <code>self</code>, doesn't have any
+other parameters, and returns a <code>u32</code>. This is a kind of method sometimes called
 a <em>getter</em>, since its purpose is to get some data from its fields and return
 it. This public method is necessary because the <code>value</code> field of the <code>Guess</code>
 struct is private. It's important that the <code>value</code> field is private so that
@@ -7129,8 +7139,8 @@ code using the <code>Guess</code> struct is not allowed to set <code>value</code
 <em>must</em> use the <code>Guess::new</code> constructor function to create an instance of
 <code>Guess</code>, which ensures there's no way for a <code>Guess</code> to have a <code>value</code> that
 hasn't been checked by the conditions in the constructor.</p>
-<p>A function that takes as an argument or returns only numbers between 1 and 100
-could then declare in its signature that it takes a <code>Guess</code> rather than a
+<p>A function that has a parameter or returns only numbers between 1 and 100 could
+then declare in its signature that it takes or returns a <code>Guess</code> rather than a
 <code>u32</code>, and wouldn't need to do any additional checks in its body.</p>
 <h2>Summary</h2>
 <p>Rust's error handling features are designed to help you write more robust code.
@@ -7241,7 +7251,7 @@ fn main() {
     largest(numbers);
 }
 </code></pre>
-<p>The function takes an argument, <code>numbers</code>, which represents any concrete
+<p>The function defines a parameter, <code>numbers</code>, which represents any concrete
 <code>Vec&lt;i32&gt;</code> that we might pass into the function. The code in the function
 definition operates on the <code>numbers</code> representation of any <code>Vec&lt;i32&gt;</code>. When
 we call the <code>largest</code> function, the code actually runs on the specific values
@@ -7337,7 +7347,7 @@ the <code>i32</code> and <code>f64</code> types were:</p>
 }                       }
 </code></pre>
 <p>There's one problem, though: we've <em>used</em> <code>T</code>, but not defined it. This would
-be similar to using an argument to a function in the body without declaring it
+be similar to using a parameter name in a function body without declaring it
 in the signature. We need to tell Rust that we've introduced a generic
 parameter. The syntax to do that is the angle brackets, like this:</p>
 <pre><code class="language-text">enum OptionalNumber&lt;T&gt; {   enum OptionalFloatingPointNumber&lt;T&gt; {
@@ -7490,7 +7500,7 @@ type small if you can.</p>
 <h3>Generic Functions and Methods</h3>
 <p>In a similar way to data structures, we can use the <code>&lt;&gt;</code> syntax in function or
 method definitions. The angle brackets for type parameters go after the
-function or method name and before the argument list in parentheses:</p>
+function or method name and before the parameter list in parentheses:</p>
 <pre><code class="language-rust">fn generic_function&lt;T&gt;(value: T) {
     // code goes here
 }
@@ -7760,7 +7770,7 @@ bit cleaner: <code>where</code>. And in fact, the error we got when we ran the c
 Listing 10-3 referred to it:</p>
 <pre><code class="language-text">help: consider adding a `where T: std::fmt::Display` bound
 </code></pre>
-<p>The <code>where</code> syntax moves the trait bounds after the function arguments list.
+<p>The <code>where</code> syntax moves the trait bounds after the function parameters list.
 This definition of <code>show_anything</code> means the exact same thing as the definition
 in Listing 10-8, just said a different way:</p>
 <p><span class="filename">Filename: src/lib.rs</span></p>
@@ -7810,15 +7820,15 @@ annotate lifetimes.</p>
 that this name is for a lifetime. Lifetime names need to be declared before
 they're used. Here's a function signature with lifetime declarations and
 annotations:</p>
-<pre><code class="language-rust,ignore">fn some_function&lt;'a&gt;(argument: &amp;'a i32) {
+<pre><code class="language-rust,ignore">fn some_function&lt;'a&gt;(parameter: &amp;'a i32) {
 </code></pre>
 <p>Notice anything? In the same way that generic type declarations go inside angle
 brackets after the function name, lifetime declarations also go inside those
 same angle brackets. We can even write functions that take both a lifetime
 declaration and a generic type declaration:</p>
-<pre><code class="language-rust,ignore">fn some_function&lt;'a, T&gt;(argument: &amp;'a T) {
+<pre><code class="language-rust,ignore">fn some_function&lt;'a, T&gt;(parameter: &amp;'a T) {
 </code></pre>
-<p>This function takes one argument, a reference to some type, <code>T</code>, and the
+<p>This function takes one parameter, a reference to some type, <code>T</code>, and the
 reference has the lifetime <code>'a</code>. In the same way that we parameterize functions
 that take generic types, we parameterize references with lifetimes.</p>
 <p>So, that's the syntax, but <em>why</em>? What does a lifetime do, anyway?</p>
@@ -7903,7 +7913,7 @@ allowed: Rust knows that the reference in <code>r</code> will always be valid, a
 smaller scope than <code>x</code>, the value it refers to.</p>
 <p>Note that we didn't have to name any lifetimes in the code itself; Rust figured
 it out for us. One situation in which Rust can't figure out the lifetimes is
-for a function or method when one of the arguments or return values is a
+for a function or method when one of the parameters or return values is a
 reference, except for a few scenarios we'll discuss in the lifetime elision
 section.</p>
 <h3>Lifetime Annotations in Struct Definitions</h3>
@@ -7918,20 +7928,20 @@ this:</p>
 parameters are declared, and this is because lifetimes are a form of generics.
 In the examples above, <code>'a</code> and <code>'b</code> were concrete lifetimes: we knew about <code>r</code>
 and <code>x</code> and how long they would live exactly. However, when we write a
-function, we can't know beforehand exactly all of the arguments that it could
-be called with and how long they will be valid for. We have to explain to Rust
-what we expect the lifetime of the argument to be (we'll learn about how
-to know what you expect the lifetime to be in a bit). This is similar to
-writing a function that has an argument of a generic type: we don't know what
-type the arguments will actually end up being when the function gets called.
-Lifetimes are the same idea, but they are generic over the scope of a
-reference, rather than a type.</p>
+function, we can't know beforehand exactly all of the values that it could be
+called with and how long they will be valid for. We have to explain to Rust
+what we expect the lifetime of the parameter to be (we'll learn about how to
+know what you expect the lifetime to be in a bit). This is similar to writing a
+function that has a parameter of a generic type: we don't know what type the
+values will actually end up being when the function gets called. Lifetimes are
+the same idea, but they are generic over the scope of a reference, rather than
+a type.</p>
 <h3>Lifetime Annotations in Function Signatures</h3>
 <p>Lifetime annotations for functions go on the function signature, but we don't
 have to annotate any of the code in the function body with lifetimes. That's
 because Rust can analyze the specific code inside the function without any
 help. When a function interacts with references that come from or go to code
-outside that function, however, the lifetimes of those arguments or return
+outside that function, however, the lifetimes of those parameters or return
 values will potentially be different each time that function gets called. Rust
 would have to analyze every place the function is called to determine that
 there were no dangling references. That would be impossible because a library
@@ -7974,10 +7984,10 @@ fn main() {
 </figcaption>
 </figure>
 <p>Note that we want the function to take string slices because we don't want the
-<code>longest</code> function to take ownership of its arguments, and we want the function
+<code>longest</code> function to take ownership of its parameters, and we want the function
 to be able to accept slices of a <code>String</code> (like <code>a</code>) is as well as string
-literals (<code>b</code>). Refer back to the &quot;String Slices as Arguments&quot; section of
-Chapter 4 for more discussion about why these are the arguments we want.</p>
+literals (<code>b</code>). Refer back to the &quot;String Slices as Parameters&quot; section of
+Chapter 4 for more discussion about why these are the parameters we want.</p>
 <p>Here's the start of an implementation of the <code>longest</code> function that won't
 compile yet:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
@@ -8015,7 +8025,7 @@ all of the input parameters and the return type:</p>
 </code></pre>
 <p>This will compile and will produce the result we want with the <code>main</code> function
 in Listing 10-9. This function signature is now saying that for some lifetime
-named <code>'a</code>, it will get two arguments, both which are string slices that live
+named <code>'a</code>, it will have two parameters, both which are string slices that live
 at least as long as the lifetime <code>'a</code>. The function will return a string slice
 that also will last at least as long as the lifetime <code>'a</code>. This is the contract
 we are telling Rust we want it to enforce. By specifying the lifetime
@@ -8027,7 +8037,7 @@ knows that there is some scope that can be substituted for <code>'a</code> that 
 satisfy this signature.</p>
 <p>The exact way to specify lifetime parameters depends on what your function is
 doing. If the function didn't actually return the longest string slice but
-instead always returned the first argument, we wouldn't need to specify a
+instead always returned the first parameter, we wouldn't need to specify a
 lifetime on <code>y</code>. This code compiles:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust">fn longest&lt;'a&gt;(x: &amp;'a str, y: &amp;str) -&gt; &amp;'a str {
@@ -8035,11 +8045,11 @@ lifetime on <code>y</code>. This code compiles:</p>
 }
 </code></pre>
 <p>The lifetime parameter for the return type needs to be specified and needs to
-match one of the arguments' lifetime parameters. If the reference returned does
-<em>not</em> refer to one of the arguments, the only other possibility is that it
-refers to a value created within this function, and that would be a dangling
-reference since the value will go out of scope at the end of the function.
-Consider this attempted implementation of <code>longest</code>:</p>
+match one of the value parameters' lifetime parameters. If the reference
+returned does <em>not</em> refer to one of the parameters, the only other possibility
+is that it refers to a value created within this function, and that would be a
+dangling reference since the value will go out of scope at the end of the
+function. Consider this attempted implementation of <code>longest</code>:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust,ignore">fn longest&lt;'a&gt;(x: &amp;str, y: &amp;str) -&gt; &amp;'a str {
     let result = String::from(&quot;really long string&quot;);
@@ -8068,12 +8078,12 @@ reference. In this case, the best fix would be to return an owned data type
 rather than a reference so that the calling function is then responsible for
 cleaning up the value.</p>
 <p>Ultimately, lifetime syntax is about connecting the lifetimes of various
-arguments and return values of functions. Once they're connected, Rust has
+parameters and return values of functions. Once they're connected, Rust has
 enough information to allow memory-safe operations and disallow operations that
 would create dangling pointers or otherwise violate memory safety.</p>
 <h3>Lifetime Elision</h3>
 <p>If every reference has a lifetime, and we need to provide them for functions
-that use references as arguments or return values, then why did this function
+that use references as parameters or return values, then why did this function
 from the &quot;String Slices&quot; section of Chapter 4 compile? We haven't annotated any
 lifetimes here, yet Rust happily compiles this function:</p>
 <p><span class="filename">Filename: src/lib.rs</span></p>
@@ -8104,15 +8114,14 @@ full inference: Rust doesn't try to guess what you meant in places where there
 could be ambiguity. The rules are a very basic set of particular cases, and if
 your code fits one of those cases, you don't need to write the lifetimes
 explicitly. Here are the rules:</p>
-<p>Lifetimes on function arguments are called <em>input lifetimes</em>, and lifetimes on
+<p>Lifetimes on function parameters are called <em>input lifetimes</em>, and lifetimes on
 return values are called <em>output lifetimes</em>. There's one rule related to how
 Rust infers input lifetimes in the absence of explicit annotations:</p>
 <ol>
-<li>Each argument that is a reference and therefore needs a lifetime parameter
-gets its own. In other words, a function with one argument gets one lifetime
-parameter: <code>fn foo&lt;'a&gt;(x: &amp;'a i32)</code>, a function with two arguments gets two
-separate lifetime parameters: <code>fn foo&lt;'a, 'b&gt;(x: &amp;'a i32, y: &amp;'b i32)</code>, and
-so on.</li>
+<li>Each function parameter that is a reference and therefore needs a lifetime
+parameter gets its own. In other words, a function with one parameter gets one
+lifetime parameter: <code>fn foo&lt;'a&gt;(x: &amp;'a i32)</code>, a function with two parameters
+gets two separate lifetime parameters: <code>fn foo&lt;'a, 'b&gt;(x: &amp;'a i32, y: &amp;'b i32)</code>, and so on.</li>
 </ol>
 <p>And two rules related to output lifetimes:</p>
 <ol start="2">
@@ -8139,7 +8148,7 @@ any methods where the output type's lifetime is the same as that of the
 struct's because of the third elision rule. Here's a struct called <code>App</code> that
 holds a reference to another struct, <code>Config</code>, defined elsewhere. The
 <code>append_to_name</code> method does not need lifetime annotations even though the
-method has a reference as an argument and is returning a reference; the
+method has a reference as a parameter and is returning a reference; the
 lifetime of the return value will be the lifetime of <code>self</code>:</p>
 <p><span class="filename">Filename: src/lib.rs</span></p>
 <pre><code class="language-rust"># struct Config {}
@@ -8187,12 +8196,12 @@ correctness is a complex topic and isn't easy to prove. Rust places a lot of
 weight on its type system to help ensure that our programs do what we intend,
 but it cannot help with everything. As such, Rust also includes support for
 writing software tests in the language itself.</p>
-<p>For example, we can write a function called <code>add_two</code> with a signature that
-accepts an integer as an argument and returns an integer as a result. We can
-implement and compile that function, and Rust can do all the type checking and
-borrow checking that we've seen it's capable of doing. What Rust <em>can't</em> check
-for us is that we've implemented this function to return the argument plus two
-and not the argument plus 10 or the argument minus 50! That's where tests come
+<p>For example, we can write a function called <code>add_two</code> with a signature that has
+an integer as a parameter and returns an integer as a result. We can implement
+and compile that function, and Rust can do all the type checking and borrow
+checking that we've seen it's capable of doing. What Rust <em>can't</em> check for us
+is that we've implemented this function to return the parameter plus two and
+not the parameter plus 10 or the parameter minus 50! That's where tests come
 in. We can write tests that, for example, pass <code>3</code> to the <code>add_two</code> function
 and check that we get <code>5</code> back. We can run the tests whenever we make changes
 to our code to make sure we didn't change any existing behavior from what the
@@ -8361,7 +8370,7 @@ and includes the custom error message we specified:</p>
     (left: `&quot;hello&quot;`, right: `&quot;world&quot;`): greeting operation failed',
     src/main.rs:4
 </code></pre>
-<p>The two arguments to <code>assert_eq!</code> are named &quot;left&quot; and &quot;right&quot; rather than
+<p>The two parameters to <code>assert_eq!</code> are named &quot;left&quot; and &quot;right&quot; rather than
 &quot;expected&quot; and &quot;actual&quot;; the order of the value that comes from your code and
 the value hardcoded into your test isn't important.</p>
 <p>Since these macros use the operators <code>==</code> and <code>!=</code> and print the values using
@@ -9533,7 +9542,7 @@ wrapping. Unlike <code>unwrap</code>, if the value is an <code>Err</code> value,
 <em>closure</em> which is an anonymous function that we define and pass as an argument
 to <code>unwrap_or_else</code>. We'll be covering closures in more detail in Chapter XX;
 the important part to understand in this case is that <code>unwrap_or_else</code> will
-pass the inner value of the <code>Err</code> to our closure in the argument <code>err</code> that
+pass the inner value of the <code>Err</code> to our closure in the parameter <code>err</code> that
 appears between the vertical pipes. Using <code>unwrap_or_else</code> lets us do some
 custom, non-<code>panic!</code> error handling.</p>
 <p>Said error handling is only two lines: we print out the error, then call
@@ -9916,18 +9925,18 @@ for that function</p>
 </figure>
 <!-- Will add ghosting and wingdings in libreoffice /Carol -->
 <p>Notice that we need an explicit lifetime <code>'a</code> declared in the signature of
-<code>grep</code> and used with the <code>contents</code> argument and the return value. Remember,
-lifetime parameters are used to specify which arguments' lifetimes connect to
-the lifetime of the return value. In this case, we're indicating that the
-vector we're returning is going to contain string slices that reference slices
-of the argument <code>contents</code>, as opposed to referencing slices of the argument
-<code>search</code>. Another way to think about what we're telling Rust is that the data
-returned by the <code>grep</code> function will live as long as the data passed into this
-function in the <code>contents</code> argument. This is important! Given that the data a
-slice references needs to be valid in order for the reference to be valid, if
-the compiler thought that we were making string slices of <code>search</code> rather than
-<code>contents</code>, it would do its safety checking incorrectly. If we tried to compile
-this function without lifetimes, we would get this error:</p>
+<code>grep</code> and used with the <code>contents</code> parameter and the return value. Remember,
+lifetime parameters are used to specify which function parameters' lifetimes
+connect to the lifetime of the return value. In this case, we're indicating that
+the vector we're returning is going to contain string slices that reference
+slices of the parameter <code>contents</code>, as opposed to referencing slices of the
+parameter <code>search</code>. Another way to think about what we're telling Rust is that
+the data returned by the <code>grep</code> function will live as long as the data passed
+into this function in the <code>contents</code> parameter. This is important! Given that
+the data a slice references needs to be valid in order for the reference to be
+valid, if the compiler thought that we were making string slices of <code>search</code>
+rather than <code>contents</code>, it would do its safety checking incorrectly. If we tried
+to compile this function without lifetimes, we would get this error:</p>
 <pre><code class="language-text">error[E0106]: missing lifetime specifier
   --&gt; src\lib.rs:37:46
    |
@@ -9938,11 +9947,12 @@ this function without lifetimes, we would get this error:</p>
        signature does not say whether it is borrowed from `search` or
            `contents`
 </code></pre>
-<p>Rust can't possibly know which of the two arguments we need, so it needs us to
-tell it. Because <code>contents</code> is the argument that contains all of our text and
+<p>Rust can't possibly know which of the two parameters we need, so it needs us to
+tell it. Because <code>contents</code> is the parameter that contains all of our text and
 we want to return the parts of that text that match, we know <code>contents</code> is the
-argument that should be connected to the return value using the lifetime syntax.</p>
-<p>Connecting arguments to return values in the signature is something that other
+parameter that should be connected to the return value using the lifetime
+syntax.</p>
+<p>Connecting parameters to return values in the signature is something that other
 programming languages don't make you do, so don't worry if this still feels
 strange! Knowing how to specify lifetimes gets easier over time, and practice
 makes perfect. You may want to re-read the above section or go back and compare
@@ -10649,7 +10659,7 @@ boilerplate. Sending messages to your components.</p>
 <p>Answer: get and set methods, this is awkward and might get better someday.</p>
 <h1>Patterns</h1>
 <p>We've actually used patterns a few times so far: they're used in <code>let</code>
-statements, in function arguments, and in the <code>match</code> expression. Patterns have
+statements, in function parameters, and in the <code>match</code> expression. Patterns have
 a lot more abilities than we have demonstrated so far, so we'll cover some of
 the most commonly used ones in this section. Any of these abilities work in any
 place where a pattern is used.</p>
@@ -10926,7 +10936,7 @@ Rust journey.</p>
 <h2>Keywords</h2>
 <p>The following keywords are reserved by the Rust language and may not be used as
 names of functions, variables, macros, modules, crates, constants, static
-values, attributes, struct fields, or arguments.</p>
+values, attributes, struct fields, or parameters.</p>
 <ul>
 <li><code>abstract</code></li>
 <li><code>alignof</code></li>
