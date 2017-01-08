@@ -6768,7 +6768,7 @@ fn read_username_from_file() -&gt; Result&lt;String, io::Error&gt; {
 <code>Result&lt;T, E&gt;</code> where the generic parameter <code>T</code> has been filled in with the
 concrete type <code>String</code>, and the generic type <code>E</code> has been filled in with the
 concrete type <code>io::Error</code>. If this function succeeds without any problems, the
-caller of this function will receive an <code>Ok</code> value that holds a <code>String</code> -- the
+caller of this function will receive an <code>Ok</code> value that holds a <code>String</code>—the
 username that this function read from the file. If this function encounters any
 problems, the caller of this function will receive an <code>Err</code> value that holds an
 instance of <code>io::Error</code> that contains more information about what the problems
@@ -6981,9 +6981,9 @@ hardcoded into the program, and therefore <em>did</em> have a possibility of fai
 we'd definitely want to handle the <code>Result</code> in a more robust way instead.</p>
 <h3>Guidelines for Error Handling</h3>
 <p>It's advisable to have your code <code>panic!</code> when it's possible that you could end
-up in a <em>bad state</em>---in this context, <em>bad state</em> is when some assumption,
+up in a <em>bad state</em>—in this context, <em>bad state</em> is when some assumption,
 guarantee, contract, or invariant has been broken, such as when invalid values,
-contradictory values, or missing values are passed to your code---plus one or
+contradictory values, or missing values are passed to your code—plus one or
 more of the following:</p>
 <ul>
 <li>The bad state is not something that's <em>expected</em> to happen occasionally</li>
@@ -7893,7 +7893,7 @@ annotations:</p>
 <p>Here, we've annotated the lifetime of <code>r</code> with <code>'a</code> and the lifetime of <code>x</code>
 with <code>'b</code>. Rust looks at these lifetimes and sees that <code>r</code> has a lifetime of
 <code>'a</code>, but that it refers to something with a lifetime of <code>'b</code>. It rejects the
-program because the lifetime <code>'b</code> is shorter than the lifetime of <code>'a</code>-- the
+program because the lifetime <code>'b</code> is shorter than the lifetime of <code>'a</code>—the
 value that the reference is referring to does not live as long as the reference
 does.</p>
 <p>Let's look at a different example that compiles because it does not try to make

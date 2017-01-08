@@ -165,7 +165,7 @@ annotations:</p>
 <p>Here, we've annotated the lifetime of <code>r</code> with <code>'a</code> and the lifetime of <code>x</code>
 with <code>'b</code>. Rust looks at these lifetimes and sees that <code>r</code> has a lifetime of
 <code>'a</code>, but that it refers to something with a lifetime of <code>'b</code>. It rejects the
-program because the lifetime <code>'b</code> is shorter than the lifetime of <code>'a</code>-- the
+program because the lifetime <code>'b</code> is shorter than the lifetime of <code>'a</code>—the
 value that the reference is referring to does not live as long as the reference
 does.</p>
 <p>Let's look at a different example that compiles because it does not try to make
