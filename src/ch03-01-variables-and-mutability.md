@@ -6,8 +6,8 @@ advantage of the safety and easy concurrency that Rust offers. However, you
 still have the option to make your variables mutable. Let’s explore how and why
 Rust encourages you to favor immutability, and why you might want to opt out.
 
-When a variable is immutable, that means mean once a value is bound to a name,
-you can’t change that value. To illustrate, let’s generate a new project called
+When a variable is immutable, that means once a value is bound to a name, you
+can’t change that value. To illustrate, let’s generate a new project called
 *variables* in your *projects* directory by using `cargo new --bin variables`.
 
 Then, in your new *variables* directory, open *src/main.rs* and replace its
