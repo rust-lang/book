@@ -127,7 +127,7 @@ annotations:
 Here, we've annotated the lifetime of `r` with `'a` and the lifetime of `x`
 with `'b`. Rust looks at these lifetimes and sees that `r` has a lifetime of
 `'a`, but that it refers to something with a lifetime of `'b`. It rejects the
-program because the lifetime `'b` is shorter than the lifetime of `'a`-- the
+program because the lifetime `'b` is shorter than the lifetime of `'a`—the
 value that the reference is referring to does not live as long as the reference
 does.
 

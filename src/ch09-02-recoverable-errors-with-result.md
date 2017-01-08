@@ -392,7 +392,7 @@ io::Error>`. This means that the function is returning a value of the type
 `Result<T, E>` where the generic parameter `T` has been filled in with the
 concrete type `String`, and the generic type `E` has been filled in with the
 concrete type `io::Error`. If this function succeeds without any problems, the
-caller of this function will receive an `Ok` value that holds a `String` -- the
+caller of this function will receive an `Ok` value that holds a `String`—the
 username that this function read from the file. If this function encounters any
 problems, the caller of this function will receive an `Err` value that holds an
 instance of `io::Error` that contains more information about what the problems
