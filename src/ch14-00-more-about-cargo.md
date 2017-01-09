@@ -694,7 +694,8 @@ often changed at the same time.
 ## Installing Binaries from Crates.io with `cargo install`
 
 The `cargo install` command allows you to install and use binary crates
-locally. It's a convenient way to install tools that others have shared on
+locally. This isn't intended to replace system packages; it's meant to be a
+convenient way for Rust developers to install tools that others have shared on
 crates.io. Only packages which have binary targets can be installed, and all
 binaries are installed into the installation root's *bin* folder. If you
 installed Rust using *rustup.rs* and don't have any custom configurations, this
