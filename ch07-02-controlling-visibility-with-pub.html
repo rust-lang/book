@@ -273,7 +273,7 @@ is allowed to access the <code>outermost</code> module since <code>outermost</co
 (root) module, as is <code>try_me</code>.</p>
 <p>The call to <code>outermost::middle_function</code> will work. This is because
 <code>middle_function</code> is public, and <code>try_me</code> is accessing <code>middle_function</code>
-through its parent module, <code>outermost</code> We determined in the previous paragraph
+through its parent module, <code>outermost</code>. We determined in the previous paragraph
 that this module is accessible.</p>
 <p>The call to <code>outermost::middle_secret_function</code> will cause a compilation error.
 <code>middle_secret_function</code> is private, so the second rule applies. The root
