@@ -68,6 +68,11 @@
 - [Functional Language Features in Rust - Iterators and Closures](ch13-00-functional-features.md)
 
 - [More about Cargo and Crates.io](ch14-00-more-about-cargo.md)
+    - [Release Profiles](ch14-01-release-profiles.md)
+    - [Publishing a Crate to Crates.io](ch14-02-publishing-to-crates-io.md)
+    - [Cargo Workspaces](ch14-03-cargo-workspaces.md)
+    - [Installing Binaries from Crates.io with `cargo install`](ch14-04-installing-binaries.md)
+    - [Extending Cargo with Custom Commands](ch14-05-extending-cargo.md)
 
 - [Smart Pointers](ch15-00-smart-pointers.md)
 

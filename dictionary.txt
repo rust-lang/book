@@ -1,6 +1,7 @@
 personal_ws-1.1 en 0 utf-8
 abcabcabc
 abcd
+abcdefghijklmnopqrstuvwxyz
 Addr
 aliasability
 alignof
@@ -30,6 +31,7 @@ BuildHasher
 Cagain
 callsite
 CamelCase
+cargodoc
 ChangeColor
 ChangeColorMessage
 chXX
@@ -126,10 +128,13 @@ libc
 libcore
 librarys
 libreoffice
+libstd
 lifecycle
+login
 loopback
 lval
 mathematic
+metadata
 Metadata
 metaprogramming
 mibbit
@@ -168,6 +173,7 @@ powi
 preprocessing
 Preprocessing
 preprocessor
+PrimaryColor
 println
 priv
 proc
@@ -190,12 +196,15 @@ Rustaceans
 rustc
 rustdoc
 rustup
+SecondaryColor
 semver
 SemVer
 shouldn
 sizeof
 someproject
 someusername
+SPDX
+spdx
 SpreadsheetCell
 sqrt
 stackoverflow
@@ -210,6 +219,8 @@ Struct
 structs
 struct's
 Structs
+subcommand
+subcommands
 subdirectories
 subdirectory
 submodule
@@ -221,6 +232,7 @@ subtyping
 Supertraits
 That'd
 test's
+timeline
 TODO
 toml
 TOML
@@ -244,7 +256,9 @@ username
 USERPROFILE
 usize
 UsState
+utils
 variable's
+vers
 Versioning
 wasn
 whitespace
