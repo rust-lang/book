@@ -5,7 +5,7 @@ When you start writing programs in Rust, your code might live solely in the
 into other functions, both for re-use and for better organization. By splitting
 your code up into smaller chunks, each chunk is easier to understand on its
 own. But what happens if you find yourself with too many functions? Rust has a
-module system that handles the problem of wanting to to re-use code while
+module system that handles the problem of wanting to re-use code while
 keeping your code organized.
 
 In the same way that you extract lines of code into a function, you can extract

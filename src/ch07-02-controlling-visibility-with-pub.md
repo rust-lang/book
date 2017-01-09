@@ -263,7 +263,7 @@ is allowed to access the `outermost` module since `outermost` is in the current
 
 The call to `outermost::middle_function` will work. This is because
 `middle_function` is public, and `try_me` is accessing `middle_function`
-through its parent module, `outermost` We determined in the previous paragraph
+through its parent module, `outermost`. We determined in the previous paragraph
 that this module is accessible.
 
 The call to `outermost::middle_secret_function` will cause a compilation error.
