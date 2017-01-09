@@ -2352,9 +2352,9 @@ the value is: 50
 will reach a value of <code>5</code> at some point, the loop stops executing before trying
 to fetch a sixth value from the array.</p>
 <p>But this approach is error prone; we could cause the program to panic if the
-index length is incorrect. It’s also slow, because the compiler needs to
-perform the conditional check on every element on every iteration through the
-loop.</p>
+index length is incorrect. It’s also slow, because the compiler adds
+runtime code to perform the conditional check on every element on every
+iteration through the loop.</p>
 <p>As a more efficient alternative, you can use a <code>for</code> loop and execute some code
 for each item in a collection. A <code>for</code> loop looks like this:</p>
 <figure>
