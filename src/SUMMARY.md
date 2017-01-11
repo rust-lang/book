@@ -88,11 +88,9 @@
 
 - [Advanced Type System Features](ch20-00-advanced-types.md) (perhaps called "Advanced Traits"?)
 
-- [Macros]() (think about making little book of rust macros the authority on this topic)
-    - [Writing Your Own Macros]()
-
 - [Appendix](appendix-00.md)
     - [Keywords](appendix-01-keywords.md)
     - [Operators](appendix-02-operators.md)
     - [Derivable Traits](appendix-03-derivable-traits.md)
     - [Nightly Rust](appendix-04-nightly-rust.md)
+    - [Macros](appendix-05-macros.md)
