@@ -218,7 +218,7 @@ Listing 5-3: Specifying the length and width of the rectangle with a tuple
 
 In one way, this is a little better. Tuples let us add a bit of structure, and
 we’re now passing just one argument when we call `area`. But in another way
-this method less clear: tuples don’t give names to their elements, so our
+this method is less clear: tuples don’t give names to their elements, so our
 calculation has gotten more confusing because we have to index into the parts
 of the tuple:
 
