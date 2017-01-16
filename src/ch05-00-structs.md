@@ -71,6 +71,28 @@ let user1 = User {
 To get a particular value out of a struct, we can use dot notation. If we
 wanted just this user’s email address, we can say `user1.email`.
 
+We can initializing a data structure (struct, enum, union) with named fields, by writing `fieldname` as a shorthand for `fieldname: fieldname`. This allows a compact syntax for initialization, with less duplication:
+
+```
+#![feature(field_init_shorthand)]
+
+#[derive(Debug)]
+struct Person<'a> {
+    name: &'a str,
+    age: u8
+}
+
+fn main() {
+    // Create struct with field init shorthand
+    let name = "Peter";
+    let age = 27;
+    let peter = Person { name, age };
+    
+    // Print debug struct
+    println!("{:?}", peter);
+}
+```
+
 ## Ownership of Struct Data
 
 In the `User` struct definition in Listing 5-1, we used the owned `String` type
