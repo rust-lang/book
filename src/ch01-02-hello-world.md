@@ -61,7 +61,7 @@ $ ./main
 Hello, world!
 ```
 
-On Windows, just replace `./main` with `.\main.exe`. Regardless of your
+On Windows, run `.\main.exe` instead of `./main`. Regardless of your
 operating system, you should see the string `Hello, world!` print to the
 terminal. If you did, then congratulations! You've officially written a Rust
 program. That makes you a Rust programmer! Welcome.
