@@ -23,8 +23,8 @@ code.
 ## Closures
 
 Rust gives you the ability to define *closures*, which are similar to
-functions. Instead of starting with a technical definintion, let's see what
-clousures look like, syntactically, and then we'll return to defining what they
+functions. Instead of starting with a technical definition, let's see what
+closures look like, syntactically, and then we'll return to defining what they
 are. Listing 13-1 shows a small closure whose definition is assigned to the
 variable `add_one`, which we can then use to call the closure:
 
@@ -194,8 +194,8 @@ scope
 
 Here, even though `x` is not one of the parameters of `equal_to_x`, the
 `equal_to_x` closure is allowed to use `x`, since `x` is a variable defined in
-the same scope that `equal_to_x` is defined. We aren't allowed to do the same
-thing that Listing 13-4 does with functions; let's see what happens if we try:
+the scope that `equal_to_x` is defined. We aren't allowed to do the same thing
+that Listing 13-4 does with functions; let's see what happens if we try:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -554,7 +554,7 @@ So, to recap:
 3. Use the `collect` adaptor to consume the iterator and make a new vector.
 
 That's how we end up with `[2, 3, 4]`. As you can see, closures are a very
-important part of using iterators; they provide the way of customizing the
+important part of using iterators; they provide a way of customizing the
 behavior of an iterator adapter like `map`.
 
 ### Iterators are Lazy
@@ -627,7 +627,7 @@ impl Counter {
 }
 ```
 
-The `new` method here isn't strictly neccesary, but we want our `Counter`
+The `new` method here isn't strictly necessary, but we want our `Counter`
 to go from one to five, so we're going to initialize it with a zero. Let's
 see why by implementing `Iterator` for it:
 
@@ -704,7 +704,7 @@ fn main() {
 ```
 
 At the time, we didn't explain the `.iter()` bit, but now you know that it
-makes an iterator. Rust's `for` loop is actually 'synatx sugar', that is, it's
+makes an iterator. Rust's `for` loop is actually 'syntax sugar', that is, it's
 special syntax, but we could write it ourselves. It's just a bit nicer to write
 by using `for`. If we took the code above and expanded it, it would look like
 this:
@@ -734,12 +734,12 @@ let result = match IntoIterator::into_iter(a) {
 ```
 
 `IntoIterator` is another trait that we haven't discussed yet. As the name
-suggests, it has an `into_iter` method that takes one argument, and turns
-that argument into an `Iterator`. This means that we can pass anything
-that's can be converted into an iterator to a `for` loop, and it will
-just work. That's nice! However, arrays do not implement `IntoIterator`,
-and so we had to call the `iter` method ourself. But since that returns
-an iterator, calling `into_iter` on it does nothing, so we're still good!
+suggests, it has an `into_iter` method that takes one argument, and turns that
+argument into an `Iterator`. This means that we can pass anything that can be
+converted into an iterator to a `for` loop, and it will just work. That's nice!
+However, arrays do not implement `IntoIterator`, and so we had to call the
+`iter` method ourselves. But since that returns an iterator, calling `into_iter`
+on it does nothing, so we're still good!
 
 We're also `match`ing on the iterator that's returned. Let's look at how
 that works:
@@ -765,7 +765,7 @@ If we got `None` back from the iterator, we `break` out of the loop.
 
 ### IntoIterator and vectors
 
-Let's talk a bit more about `IntoIterator`. As we said above, it's job is to
+Let's talk a bit more about `IntoIterator`. As we said above, its job is to
 convert something into an iterator. You'll find it implemented on all kinds of
 handy things. Consider this example:
 
@@ -789,7 +789,7 @@ for e in &mut v {
 }
 ```
 
-Whoah! The standard library implements `IntoIterator` on vectors directly,
+Cool! The standard library implements `IntoIterator` on vectors directly,
 allowing you to take ownership of each element of the vector. But it also
 implements it on `&Vec<T>` and `&mut Vec<T>`, which allow you to iterate over
 references and mutable references, respectively. Since the `for` loop
@@ -844,7 +844,7 @@ that iterator, and add the two numbers together. We then filter out only the
 sums that are less than 100, and then finally, take the first five of those
 numbers. Finally, `sum` will add up all of the numbers into one last number.
 This is kind of a silly calculation, but it shows off a few different iterator
-adaptors, you can do all kinds of things! Check the documentation of `Iterator`
+adaptors. You can do all kinds of things! Check the documentation of `Iterator`
 to see them all. Some crates you may use in the ecosystem might add even more
 adaptors as well.
 
@@ -913,17 +913,17 @@ us the next value of the iterator. Let's use that:
 impl Config {
     fn new(mut args: std::env::Args) -> Result<Config, &'static str> {
         // The first argument is the program name, let's ignore that
-	args.next();
+    	args.next();
 
         let search = match args.next() {
             Some(arg) => arg,
             None => return "Didn't get a search string",
-	};
+	    };
 
         let filename = match args.next() {
             Some(arg) => arg,
             None => return "Didn't get a file name",
-	};
+	    };
 
         Ok(Config {
             search: search,
@@ -983,7 +983,7 @@ fn grep_case_insensitive<'a>(search: &str, contents: &'a str) -> Vec<&'a str> {
 }
 ```
 
-Not too bad! So which style should you chose? Most Rust programmers prefer to
+Not too bad! So which style should you choose? Most Rust programmers prefer to
 use the iterator style. It's a bit tougher to understand at first, but once you
 gain an intuition for what the various iterator adaptors do, this is much
 easier to understand. Instead of fiddling with the various bits of looping
@@ -992,7 +992,7 @@ and building a new vector, it focuses on the high-level objective of the loop.
 But are they truly equivalent? Surely the more low-level loop will be faster?
 Let's talk about performance.
 
-## Summary: Performance
+## Performance
 
 Which version of our `grep` is faster, the one with an explicit `for` loop,
 or iterators? We ran a quick benchmark by loading the entire contents of
@@ -1005,7 +1005,7 @@ test bench_grep_iter ... bench:  19,234,900 ns/iter (+/- 657,200)
 ```
 
 That's right, the iterator version ended up slightly faster! We're not going
-to share the bencharmark code exactly here, as the point is not to prove that
+to share the benchmark code exactly here, as the point is not to prove that
 they're exactly equivalent. For a _real_ benchmark, you'd want to check various
 texts of various sizes, different words, words of different lengths, and all
 kinds of other things. The point here is this: iterators, while a high-level
@@ -1035,12 +1035,15 @@ from residues," if that means anything to you. The point is, doing math is
 something that often needs to be done very quickly, so you care about speed.
 But here, we're creating an iterator, using two adaptors, and then finally
 consuming the value. What would this code compile to? Well, as of this writing,
-this, it compiles down to the same assembly you'd write by hand: there's no
-loop at all, as it knows that there are twelve iterations, and so it "unrolls"
-the loop. All of the coefficients get stored in registers (read: they're very
-fast). There are no bounds checks on the array access. It's extremely
-efficient.
+it compiles down to the same assembly you'd write by hand: there's no loop at
+all, as it knows that there are twelve iterations, and so it "unrolls" the
+loop. All of the coefficients get stored in registers (read: they're very
+fast). There are no bounds checks on the array access. It's extremely efficient.
 
 Now that you know this, go use iterators and closures without fear! They can
 really make code feel more high-level, but don't have a performance penalty for
 doing so.
+
+## Summary
+
+TODO

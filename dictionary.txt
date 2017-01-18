@@ -2,6 +2,7 @@ personal_ws-1.1 en 0 utf-8
 abcabcabc
 abcd
 abcdefghijklmnopqrstuvwxyz
+adaptor
 Addr
 aliasability
 alignof
@@ -84,7 +85,10 @@ filename
 Filename
 filesystem
 Filesystem
+FnMut
+FnOnce
 formatter
+FromIterator
 GitHub
 gitignore
 grapheme
@@ -111,6 +115,7 @@ indices
 init
 instantiation
 internet
+IntoIterator
 InvalidDigit
 ioerror
 iokind
