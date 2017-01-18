@@ -176,9 +176,8 @@ memory. The borrowing rules prevent programs from ending up in that situation.
 At the beginning of this chapter, we said that vectors can only store values
 that are all the same type. This can be inconvenient; there are definitely use
 cases for needing to store a list of things of different types. Luckily, the
-variants of an enum are all defined under the same enum type. When we need to
-store elements of a different type in a vector this scenario, we can define and
-use an enum!
+variants of an enum are all defined under the same enum type, so when we need to
+store elements of a different type in a vector, we can define and use an enum!
 
 For example, let's say we want to get values from a row in a spreadsheet, where
 some of the columns in the row contain integers, some floating point numbers,
