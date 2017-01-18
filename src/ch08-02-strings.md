@@ -100,7 +100,7 @@ let hello = "Hola";
 
 ### Updating a String
 
-A `String` can can grow in size and its contents can change just like the
+A `String` can grow in size and its contents can change just like the
 contents of a `Vec`, by pushing more data into it. In addition, `String` has
 concatenation operations implemented with the `+` operator for convenience.
 
