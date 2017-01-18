@@ -6744,6 +6744,7 @@ the file doesn't exist or can't be read, this function will return those errors
 to the code that called this function:</p>
 <figure>
 <pre><code class="language-rust">use std::io;
+use std::io::Read;
 use std::fs::File;
 
 fn read_username_from_file() -&gt; Result&lt;String, io::Error&gt; {
