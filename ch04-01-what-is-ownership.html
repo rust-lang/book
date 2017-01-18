@@ -353,14 +353,16 @@ println!(&quot;{}&quot;, s1);
 </code></pre>
 <p>You’ll get an error like this because Rust prevents you from using the
 invalidated reference:</p>
-<pre><code class="language-text">5:22 error: use of moved value: `s1` [E0382]
-println!(&quot;{}&quot;, s1);
-               ^~
-5:24 note: in this expansion of println! (defined in &lt;std macros&gt;)
-3:11 note: `s1` moved here because it has type `collections::string::String`,
-which is moved by default
- let s2 = s1;
-     ^~
+<pre><code class="language-text">error[E0382]: use of moved value: `s1`
+ --&gt; src/main.rs:4:27
+  |
+3 |     let s2 = s1;
+  |         -- value moved here
+4 |     println!(&quot;{}, world!&quot;,s1);
+  |                           ^^ value used here after move
+  |
+  = note: move occurs because `s1` has type `std::string::String`,
+which does not implement the `Copy` trait
 </code></pre>
 <p>If you’ve heard the terms “shallow copy” and “deep copy” while working with
 other languages, the concept of copying the pointer, length, and capacity
