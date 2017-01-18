@@ -361,6 +361,7 @@ to the code that called this function:
 
 ```rust
 use std::io;
+use std::io::Read;
 use std::fs::File;
 
 fn read_username_from_file() -> Result<String, io::Error> {
