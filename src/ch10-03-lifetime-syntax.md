@@ -241,7 +241,7 @@ Listing 10-9: A `main` function that demonstrates how we'd like to use the
 
 Note that we want the function to take string slices because we don't want the
 `longest` function to take ownership of its parameters, and we want the function
-to be able to accept slices of a `String` (like `a`) is as well as string
+to be able to accept slices of a `String` (like `a` is) as well as string
 literals (`b`). Refer back to the "String Slices as Parameters" section of
 Chapter 4 for more discussion about why these are the parameters we want.
 
