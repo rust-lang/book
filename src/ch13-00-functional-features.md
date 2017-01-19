@@ -136,7 +136,7 @@ to call the same closure with an `i32`:
 
 <span class="filename">Filename: src/main.rs</span>
 
-```rust
+```rust,ignore
 let add_one = |x| x + 1;
 
 let five = add_one(4i8);

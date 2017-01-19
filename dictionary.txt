@@ -3,6 +3,7 @@ abcabcabc
 abcd
 abcdefghijklmnopqrstuvwxyz
 adaptor
+adaptors
 Addr
 aliasability
 alignof
