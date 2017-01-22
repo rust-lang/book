@@ -65,7 +65,11 @@
 
 ## Thinking in Rust
 
-- [Functional Language Features in Rust - Iterators and Closures](ch13-00-functional-features.md)
+- [Functional Language Features in Rust](ch13-00-functional-features.md)
+    - [Closures](ch13-01-closures.md)
+    - [Iterators](ch13-02-iterators.md)
+    - [Improving our I/O Project](ch13-03-improving-our-io-project.md)
+    - [Performance](ch13-04-performance.md)
 
 - [More about Cargo and Crates.io](ch14-00-more-about-cargo.md)
     - [Release Profiles](ch14-01-release-profiles.md)
