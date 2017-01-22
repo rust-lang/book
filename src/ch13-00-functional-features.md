@@ -643,13 +643,13 @@ impl Iterator for Counter {
     type Item = u32;
 
     fn next(&mut self) -> Option<Self::Item> {
+        // increment our count. This is why we started at zero.
+        self.count += 1;
+
         // check to see if we've finished counting or not.
         if self.count < 6 {
-            // if we're not done, go to the next value and return it.
-            self.count += 1;
             Some(self.count)
         } else {
-            // if we are done counting, return None.
             None
         }
     }
@@ -677,6 +677,20 @@ add one, then check to see if we're still below six. If we are, we can return
 `Some(self.count)` to produce the next value. If we're at six or more,
 iteration is over, so we return `None`.
 
+The iterator trait specifies that when an iterator returns `None`, that
+indicates iteration is finished. The trait does not mandate anything about the
+behavior an iterator must have if the `next` method is called again after
+having returned one `None` value. In this case, every time we call `next` after
+getting the first `None` value will still return `None`, but the internal
+`count` field will continue to be incremented by one each time. If we call
+`next` as many times as the maximum value a `u32` value can hold, `count` will
+oveflow (which will `panic!` in debug mode and wrap in release mode). Other
+iterator implementations choose to start iterating again. If you need to be
+sure to have an iterator that will always return `None` on subsequent calls to
+the `next` method after the first `None` value is returned, you can use the
+`fuse` method to create an iterator with that characteristic out of any other
+iterator.
+
 Once we've implemented the `Iterator` trait, we have an iterator! We can use
 the iterator functionality that our `Counter` struct now has by calling the
 `next` method on it repeatedly:
@@ -698,9 +712,13 @@ println!("{:?}", x);
 
 let x = counter.next();
 println!("{:?}", x);
+
+let x = counter.next();
+println!("{:?}", x);
 ```
 
-This will print `1` through `5`, each on their own line.
+This will print `Some(1)` through `Some(5)` and then `None`, each on their own
+line.
 
 ### All Sorts of `Iterator` Adaptors
 
