@@ -24,7 +24,7 @@ Problem parsing arguments: not enough arguments
 
 We'd like this to be printed to the screen instead, and only have the output
 from a successful run end up in the file if we run our program this way. Let's
-change how error messages are printed as shown in Listing 12-15:
+change how error messages are printed as shown in Listing 12-17:
 
 <figure>
 <span class="filename">Filename: src/main.rs</span>
@@ -67,7 +67,7 @@ fn main() {
 
 <figcaption>
 
-Listing 12-15: Writing error messages to `stderr` instead of `stdout`
+Listing 12-17: Writing error messages to `stderr` instead of `stdout`
 
 </figcaption>
 </figure>

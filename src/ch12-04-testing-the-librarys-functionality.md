@@ -188,8 +188,9 @@ fn grep<'a>(search: &str, contents: &'a str) -> Vec<&'a str> {
 Finally, we need a way to store the lines that contain our search string. For
 that, we can make a mutable vector before the `for` loop and call the `push`
 method to store a `line` in the vector. After the `for` loop, we return the
-vector:
+vector. Listing 12-15 has the full implementation:
 
+<figure>
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust
@@ -205,6 +206,13 @@ fn grep<'a>(search: &str, contents: &'a str) -> Vec<&'a str> {
     results
 }
 ```
+
+<figcaption>
+
+Listing 12-15: Fully functioning implementation of the `grep` function
+
+</figcaption>
+</figure>
 
 <!-- Will add ghosting and wingdings in libreoffice /Carol -->
 
