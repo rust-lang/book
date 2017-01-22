@@ -11,10 +11,10 @@ we'll make our own version of a classic command line tool: `grep`. `grep` is
 short for "Globally search a Regular Expression and Print." In the
 simplest use case, it does this:
 
-- Takes a filename and a string as arguments.
-- Reads the file.
-- Finds lines in the file that contain the string argument.
-- Prints out those lines.
+1. Takes a filename and a string as arguments.
+2. Reads the file.
+3. Finds lines in the file that contain the string argument.
+4. Prints out those lines.
 
 In addition, we'll add one extra feature: an environment variable that will
 allow us to search for the string argument in a case-insensitive way.
