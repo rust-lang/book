@@ -24,6 +24,7 @@ bitwise
 Bitwise
 bitxor
 BitXor
+Bjarne
 Boehm
 bool
 boolean
@@ -127,6 +128,7 @@ IpAddrKind
 irst
 isize
 iter
+iterator's
 JavaScript
 lang
 latin
@@ -220,6 +222,7 @@ Stdin
 stdlib
 stdout
 steveklabnik's
+Stroustrup
 struct
 Struct
 structs
