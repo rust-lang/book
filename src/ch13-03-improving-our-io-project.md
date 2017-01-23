@@ -89,12 +89,12 @@ impl Config {
         let search = match args.next() {
             Some(arg) => arg,
             None => return Err("Didn't get a search string"),
-	    };
+        };
 
         let filename = match args.next() {
             Some(arg) => arg,
             None => return Err("Didn't get a file name"),
-	    };
+        };
 
         Ok(Config {
             search: search,

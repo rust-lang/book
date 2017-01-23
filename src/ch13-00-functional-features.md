@@ -3,7 +3,7 @@
 Rust's design has taken inspiration from a lot of previous work. One of Rust's
 influences is functional programming, where functions are values that can be
 used as arguments or return values to other functions, assigned to variables,
-and so forth. We're going to sidestep the issue of what, exactly, function
+and so forth. We're going to sidestep the issue of what, exactly, functional
 programming is or is not, and instead show off some features of Rust that
 are similar to features in many languages referred to as functional.
 
