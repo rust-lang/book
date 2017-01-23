@@ -95,8 +95,8 @@ relevant parts:
 ```rust
 fn  add_one_v1   (x: i32) -> i32 { x + 1 }  // a function
 let add_one_v2 = |x: i32| -> i32 { x + 1 }; // the full syntax for a closure
-let add_one_v3 = |x: i32|        { x + 1 }; // a closure eliding types
-let add_one_v4 = |x: i32|          x + 1  ; // without braces
+let add_one_v3 = |x|             { x + 1 }; // a closure eliding types
+let add_one_v4 = |x|               x + 1  ; // without braces
 ```
 
 The reason type annotations are not required for defining a closure but are
