@@ -61,9 +61,9 @@ Same as Rc, but doesn't count towards the strong ref count. When you do this, th
 strong ref count goes down and the weak count goes up.
 
 Data gets cleaned up when the strong count is 0, no matter what the weak count is.
-
-Why is the weak count needed then????
-
+However, Rc structure is kept until weak reference count also goes to zero, so weak pointers do not become dangling pointers.
+At this point, attempt to upgrade Weak pointer will result into None.
+Only when weak reference counter also reduces to zero, Rc structure is freed.
 
 ## `RefCell<T>`
 
