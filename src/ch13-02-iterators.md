@@ -25,7 +25,7 @@ in a vector
 <!-- Will add wingdings in libreoffice /Carol -->
 
 The `iter` method on vectors allows us to produce an *iterator* from the
-vector. Nex, the `map` method called on the iterator allows us to process each
+vector. Next, the `map` method called on the iterator allows us to process each
 element: in this case, we've passed a closure to `map` that specifies for every
 element `x`, add one to it. `map` is one of the most basic ways of interacting
 with an iterator, as processing each element in turn is very useful! Finally,
@@ -180,7 +180,7 @@ having returned one `None` value. In this case, every time we call `next` after
 getting the first `None` value will still return `None`, but the internal
 `count` field will continue to be incremented by one each time. If we call
 `next` as many times as the maximum value a `u32` value can hold, `count` will
-oveflow (which will `panic!` in debug mode and wrap in release mode). Other
+overflow (which will `panic!` in debug mode and wrap in release mode). Other
 iterator implementations choose to start iterating again. If you need to be
 sure to have an iterator that will always return `None` on subsequent calls to
 the `next` method after the first `None` value is returned, you can use the
