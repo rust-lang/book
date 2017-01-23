@@ -1,7 +1,7 @@
 ## Iterators
 
 Iterators are a pattern in Rust that allows you to do some processing on a
-sequence of items. For example, the code in Listing 13-8 adds one to each
+sequence of items. For example, the code in Listing 13-5 adds one to each
 number in a vector:
 
 <figure>
@@ -16,7 +16,7 @@ assert_eq!(v2, [2, 3, 4]);
 
 <figcaption>
 
-Listing 13-8: Using an iterator, `map`, and `collect` to add one to each number
+Listing 13-5: Using an iterator, `map`, and `collect` to add one to each number
 in a vector
 
 </figcaption>
@@ -53,7 +53,7 @@ behavior of an iterator adaptor like `map`.
 In the previous section, you may have noticed a subtle difference in wording:
 we said that `map` *adapts* an iterator, but `collect` *consumes* one. That was
 intentional. By themselves, iterators won't do anything; they're lazy. That is,
-if we write code like Listing 13-8 except we don't call `collect`:
+if we write code like Listing 13-5 except we don't call `collect`:
 
 ```rust
 let v1: Vec<i32> = vec![1, 2, 3];
@@ -125,7 +125,7 @@ defining the body of the `next` method. The way we want our iterator to work
 is to add one to the state (which is why we initialized `count` to 0, since we
 want our iterator to return one first). If `count` is still less than six, we'll
 return the current value, but if `count` is six or higher, our iterator will
-return `None`:
+return `None`, as shown in Listing 13-6:
 
 <figure>
 
@@ -154,7 +154,7 @@ impl Iterator for Counter {
 
 <figcaption>
 
-Listing 13-9: Implementing the `Iterator` trait on our `Counter` struct
+Listing 13-6: Implementing the `Iterator` trait on our `Counter` struct
 
 </figcaption>
 </figure>
@@ -218,8 +218,8 @@ line.
 
 ### All Sorts of `Iterator` Adaptors
 
-In Listing 13-8, we had iterators and we called methods like `map` and
-`collect` on them. In Listing 13-9, however, we only implemented the `next`
+In Listing 13-5, we had iterators and we called methods like `map` and
+`collect` on them. In Listing 13-6, however, we only implemented the `next`
 method on our `Counter`. How do we get methods like `map` and `collect` on our
 `Counter`?
 
