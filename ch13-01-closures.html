@@ -1,0 +1,310 @@
+<!DOCTYPE HTML>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Closures - The Rust Programming Language</title>
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <base href="">
+
+        <link rel="stylesheet" href="book.css">
+        <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+        <link rel="shortcut icon" href="favicon.png">
+
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+
+        <!-- MathJax -->
+        <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+        <!-- Fetch JQuery from CDN but have a local fallback -->
+        <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+        <script>
+            if (typeof jQuery == 'undefined') {
+                document.write(unescape("%3Cscript src='jquery.js'%3E%3C/script%3E"));
+            }
+        </script>
+    </head>
+    <body class="light">
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme = localStorage.getItem('theme');
+            if (theme == null) { theme = 'light'; }
+            $('body').removeClass().addClass(theme);
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var sidebar = localStorage.getItem('sidebar');
+            if (sidebar === "hidden") { $("html").addClass("sidebar-hidden") }
+            else if (sidebar === "visible") { $("html").addClass("sidebar-visible") }
+        </script>
+
+        <div id="sidebar" class="sidebar">
+            <ul class="chapter"><li><a href="ch01-00-introduction.html"><strong>1.</strong> Introduction</a></li><li><ul class="section"><li><a href="ch01-01-installation.html"><strong>1.1.</strong> Installation</a></li><li><a href="ch01-02-hello-world.html"><strong>1.2.</strong> Hello, World!</a></li></ul></li><li><a href="ch02-00-guessing-game-tutorial.html"><strong>2.</strong> Guessing Game Tutorial</a></li><li><a href="ch03-00-common-programming-concepts.html"><strong>3.</strong> Common Programming Concepts</a></li><li><ul class="section"><li><a href="ch03-01-variables-and-mutability.html"><strong>3.1.</strong> Variables and Mutability</a></li><li><a href="ch03-02-data-types.html"><strong>3.2.</strong> Data Types</a></li><li><a href="ch03-03-how-functions-work.html"><strong>3.3.</strong> How Functions Work</a></li><li><a href="ch03-04-comments.html"><strong>3.4.</strong> Comments</a></li><li><a href="ch03-05-control-flow.html"><strong>3.5.</strong> Control Flow</a></li></ul></li><li><a href="ch04-00-understanding-ownership.html"><strong>4.</strong> Understanding Ownership</a></li><li><ul class="section"><li><a href="ch04-01-what-is-ownership.html"><strong>4.1.</strong> What is Ownership?</a></li><li><a href="ch04-02-references-and-borrowing.html"><strong>4.2.</strong> References &amp; Borrowing</a></li><li><a href="ch04-03-slices.html"><strong>4.3.</strong> Slices</a></li></ul></li><li><a href="ch05-00-structs.html"><strong>5.</strong> Structs</a></li><li><ul class="section"><li><a href="ch05-01-method-syntax.html"><strong>5.1.</strong> Method Syntax</a></li></ul></li><li><a href="ch06-00-enums.html"><strong>6.</strong> Enums</a></li><li><ul class="section"><li><a href="ch06-01-option.html"><strong>6.1.</strong> Option</a></li><li><a href="ch06-02-match.html"><strong>6.2.</strong> Match</a></li><li><a href="ch06-03-if-let.html"><strong>6.3.</strong> <code>if let</code></a></li></ul></li><li><a href="ch07-00-modules.html"><strong>7.</strong> Modules</a></li><li><ul class="section"><li><a href="ch07-01-mod-and-the-filesystem.html"><strong>7.1.</strong> <code>mod</code> and the Filesystem</a></li><li><a href="ch07-02-controlling-visibility-with-pub.html"><strong>7.2.</strong> Controlling Visibility with <code>pub</code></a></li><li><a href="ch07-03-importing-names-with-use.html"><strong>7.3.</strong> Importing Names with <code>use</code></a></li></ul></li><li><a href="ch08-00-fundamental-collections.html"><strong>8.</strong> Fundamental Collections</a></li><li><ul class="section"><li><a href="ch08-01-vectors.html"><strong>8.1.</strong> Vectors</a></li><li><a href="ch08-02-strings.html"><strong>8.2.</strong> Strings</a></li><li><a href="ch08-03-hash-maps.html"><strong>8.3.</strong> Hash Maps</a></li></ul></li><li><a href="ch09-00-error-handling.html"><strong>9.</strong> Error Handling</a></li><li><ul class="section"><li><a href="ch09-01-unrecoverable-errors-with-panic.html"><strong>9.1.</strong> Unrecoverable Errors with <code>panic!</code></a></li><li><a href="ch09-02-recoverable-errors-with-result.html"><strong>9.2.</strong> Recoverable Errors with <code>Result</code></a></li><li><a href="ch09-03-to-panic-or-not-to-panic.html"><strong>9.3.</strong> To <code>panic!</code> or Not To <code>panic!</code></a></li></ul></li><li><a href="ch10-00-generics.html"><strong>10.</strong> Generics</a></li><li><ul class="section"><li><a href="ch10-01-syntax.html"><strong>10.1.</strong> Syntax</a></li><li><a href="ch10-02-traits.html"><strong>10.2.</strong> Traits</a></li><li><a href="ch10-03-lifetime-syntax.html"><strong>10.3.</strong> Lifetime syntax</a></li></ul></li><li><a href="ch11-00-testing.html"><strong>11.</strong> Testing</a></li><li><ul class="section"><li><a href="ch11-01-writing-tests.html"><strong>11.1.</strong> Writing tests</a></li><li><a href="ch11-02-running-tests.html"><strong>11.2.</strong> Running tests</a></li><li><a href="ch11-03-test-organization.html"><strong>11.3.</strong> Test Organization</a></li></ul></li><li><a href="ch12-00-an-io-project.html"><strong>12.</strong> An I/O Project</a></li><li><ul class="section"><li><a href="ch12-01-accepting-command-line-arguments.html"><strong>12.1.</strong> Accepting Command Line Arguments</a></li><li><a href="ch12-02-reading-a-file.html"><strong>12.2.</strong> Reading a File</a></li><li><a href="ch12-03-improving-error-handling-and-modularity.html"><strong>12.3.</strong> Improving Error Handling and Modularity</a></li><li><a href="ch12-04-testing-the-librarys-functionality.html"><strong>12.4.</strong> Testing the Library's Functionality</a></li><li><a href="ch12-05-working-with-environment-variables.html"><strong>12.5.</strong> Working with Environment Variables</a></li><li><a href="ch12-06-writing-to-stderr-instead-of-stdout.html"><strong>12.6.</strong> Writing to <code>stderr</code> instead of <code>stdout</code></a></li></ul></li><li><a href="ch13-00-functional-features.html"><strong>13.</strong> Functional Language Features in Rust</a></li><li><ul class="section"><li><a href="ch13-01-closures.html" class="active"><strong>13.1.</strong> Closures</a></li><li><a href="ch13-02-iterators.html"><strong>13.2.</strong> Iterators</a></li><li><a href="ch13-03-improving-our-io-project.html"><strong>13.3.</strong> Improving our I/O Project</a></li><li><a href="ch13-04-performance.html"><strong>13.4.</strong> Performance</a></li></ul></li><li><a href="ch14-00-more-about-cargo.html"><strong>14.</strong> More about Cargo and Crates.io</a></li><li><ul class="section"><li><a href="ch14-01-release-profiles.html"><strong>14.1.</strong> Release Profiles</a></li><li><a href="ch14-02-publishing-to-crates-io.html"><strong>14.2.</strong> Publishing a Crate to Crates.io</a></li><li><a href="ch14-03-cargo-workspaces.html"><strong>14.3.</strong> Cargo Workspaces</a></li><li><a href="ch14-04-installing-binaries.html"><strong>14.4.</strong> Installing Binaries from Crates.io with <code>cargo install</code></a></li><li><a href="ch14-05-extending-cargo.html"><strong>14.5.</strong> Extending Cargo with Custom Commands</a></li></ul></li><li><a href="ch15-00-smart-pointers.html"><strong>15.</strong> Smart Pointers</a></li><li><a href="ch16-00-concurrency.html"><strong>16.</strong> Concurrency</a></li><li><a href="ch17-00-oop.html"><strong>17.</strong> Is Rust OOP?</a></li><li><a href="ch18-00-patterns.html"><strong>18.</strong> Patterns</a></li><li><a href="ch19-00-more-lifetimes.html"><strong>19.</strong> More Lifetimes</a></li><li><a href="ch20-00-advanced-types.html"><strong>20.</strong> Advanced Type System Features</a></li><li><a href="appendix-00.html"><strong>21.</strong> Appendix</a></li><li><ul class="section"><li><a href="appendix-01-keywords.html"><strong>21.1.</strong> Keywords</a></li><li><a href="appendix-02-operators.html"><strong>21.2.</strong> Operators</a></li><li><a href="appendix-03-derivable-traits.html"><strong>21.3.</strong> Derivable Traits</a></li><li><a href="appendix-04-nightly-rust.html"><strong>21.4.</strong> Nightly Rust</a></li><li><a href="appendix-05-macros.html"><strong>21.5.</strong> Macros</a></li></ul></li></ul>
+        </div>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar" class="menu-bar">
+                    <div class="left-buttons">
+                        <i id="sidebar-toggle" class="fa fa-bars"></i>
+                        <i id="theme-toggle" class="fa fa-paint-brush"></i>
+                    </div>
+
+                    <h1 class="menu-title">The Rust Programming Language</h1>
+
+                    <div class="right-buttons">
+                        <i id="print-button" class="fa fa-print" title="Print this book"></i>
+                    </div>
+                </div>
+
+                <div id="content" class="content">
+                    <h2>Closures</h2>
+<p>Rust gives you the ability to define <em>closures</em>, which are similar to
+functions. Instead of starting with a technical definition, let's see what
+closures look like, syntactically, and then we'll return to defining what they
+are. Listing 13-1 shows a small closure whose definition is assigned to the
+variable <code>add_one</code>, which we can then use to call the closure:</p>
+<figure>
+<span class="filename">Filename: src/main.rs</span>
+<pre><code class="language-rust">fn main() {
+    let add_one = |x| x + 1;
+
+    let five = add_one(4);
+
+    assert_eq!(5, five);
+}
+</code></pre>
+<figcaption>
+<p>Listing 13-1: A closure that takes one parameter and adds one to it, assigned to
+the variable <code>add_one</code></p>
+</figcaption>
+</figure>
+<p>The closure definition, on the first line, shows that the closure takes one
+parameter named <code>x</code>. Parameters to closures go in between vertical pipes (<code>|</code>).</p>
+<p>This is a minimal closure with only one expression as its body. Listing 13-2 has
+a closure with a bit more complexity:</p>
+<figure>
+<span class="filename">Filename: src/main.rs</span>
+<pre><code class="language-rust">fn main() {
+    let calculate = |a, b| {
+        let mut result = a * 2;
+
+        result += b;
+
+        result
+    };
+
+    assert_eq!(7, calculate(2, 3)); // 2 * 2 + 3 == 7
+    assert_eq!(13, calculate(4, 5)); // 4 * 2 + 5 == 13
+}
+</code></pre>
+<figcaption>
+<p>Listing 13-2: A closure with two parameters and multiple expressions in its body</p>
+</figcaption>
+</figure>
+<p>We can use curly brackets to define a closure body with more than one
+expression.</p>
+<p>You'll notice a few things about closures that are different from functions
+defined with the <code>fn</code> keyword. The first difference is that we did not need to
+annotate the types of the parameters the closure takes or the value it returns.
+We can choose to add type annotations if we want; Listing 13-3 shows the
+closure from Listing 13-1 with annotations for the parameter's and return
+value's types:</p>
+<figure>
+<span class="filename">Filename: src/main.rs</span>
+<pre><code class="language-rust">fn main() {
+    let add_one = |x: i32| -&gt; i32 { x + 1 };
+
+    assert_eq!(2, add_one(1));
+}
+</code></pre>
+<figcaption>
+<p>Listing 13-3: A closure definition with optional parameter and return value
+type annotations</p>
+</figcaption>
+</figure>
+<p>The syntax of closures and functions looks more similar with type annotations.
+Let's compare the different ways we can specify closures with the syntax for
+defining a function more directly. We've added some spaces here to line up the
+relevant parts:</p>
+<pre><code class="language-rust,ignore">fn  add_one_v1   (x: i32) -&gt; i32 { x + 1 }  // a function
+let add_one_v2 = |x: i32| -&gt; i32 { x + 1 }; // the full syntax for a closure
+let add_one_v3 = |x|             { x + 1 }; // a closure eliding types
+let add_one_v4 = |x|               x + 1  ; // without braces
+</code></pre>
+<p>The reason type annotations are not required for defining a closure but are
+required for defining a function is that functions are part of an explicit
+interface exposed to your users, so defining this interface rigidly is
+important for ensuring that everyone agrees on what types of values a function
+uses and returns. Closures aren't used in an exposed interface like this,
+though: they're stored in bindings and called directly. Being forced to
+annotate the types would be a significant ergonomic loss for little advantage.</p>
+<p>Closure definitions do have one type inferred for each of their parameters and
+for their return value. For instance, if we call the closure without type
+annotations from Listing 13-1 using an <code>i8</code>, we'll get an error if we then try
+to call the same closure with an <code>i32</code>:</p>
+<p><span class="filename">Filename: src/main.rs</span></p>
+<pre><code class="language-rust,ignore">let add_one = |x| x + 1;
+
+let five = add_one(4i8);
+assert_eq!(5i8, five);
+
+let three = add_one(2i32);
+</code></pre>
+<p>The compiler gives us this error:</p>
+<pre><code class="language-text">error[E0308]: mismatched types
+ --&gt;
+  |
+7 | let three = add_one(2i32);
+  |                     ^^^^ expected i8, found i32
+</code></pre>
+<p>Since closures' types can be inferred reliably since they're called directly,
+it would be tedious if we were required to annotate their types.</p>
+<p>Another reason to have a different syntax from functions for closures is that
+they have different behavior than functions: closures possess an <em>environment</em>.</p>
+<h3>Closures Can Reference Their Environment</h3>
+<p>We've learned that functions can only use variables that are in scope, either
+by being <code>const</code> or being declared as parameters. Closures can do more: they're
+allowed to access variables from their enclosing scope. Listing 13-4 has an
+example of a closure in the variable <code>equal_to_x</code> that uses the variable <code>x</code>
+from the closure's surrounding environment:</p>
+<figure>
+<span class="filename">Filename: src/main.rs</span>
+<pre><code class="language-rust">fn main() {
+    let x = 4;
+
+    let equal_to_x = |z| z == x;
+
+    let y = 4;
+
+    assert!(equal_to_x(y));
+}
+</code></pre>
+<figcaption>
+<p>Listing 13-4: Example of a closure that refers to a variable in its enclosing
+scope</p>
+</figcaption>
+</figure>
+<p>Here, even though <code>x</code> is not one of the parameters of <code>equal_to_x</code>, the
+<code>equal_to_x</code> closure is allowed to use <code>x</code>, since <code>x</code> is a variable defined in
+the scope that <code>equal_to_x</code> is defined. We aren't allowed to do the same thing
+that Listing 13-4 does with functions; let's see what happens if we try:</p>
+<p><span class="filename">Filename: src/main.rs</span></p>
+<pre><code class="language-rust,ignore">fn main() {
+    let x = 4;
+
+    fn equal_to_x(z: i32) -&gt; bool { z == x }
+
+    let y = 4;
+
+    assert!(equal_to_x(y));
+}
+</code></pre>
+<p>We get an error:</p>
+<pre><code class="language-text">error[E0434]: can't capture dynamic environment in a fn item; use the || { ... }
+closure form instead
+ --&gt;
+  |
+4 |     fn equal_to_x(z: i32) -&gt; bool { z == x }
+  |                                          ^
+</code></pre>
+<p>The compiler even reminds us that this only works with closures!</p>
+<p>Creating closures that capture values from their environment is mostly used in
+the context of starting new threads. We'll show some more examples and explain
+more detail about this feature of closures in Chapter 16 when we talk about
+concurrency.</p>
+<h3>Closures as Function Parameters Using the <code>Fn</code> Traits</h3>
+<p>While we can bind closures to variables, that's not the most useful thing we
+can do with them. We can also define functions that have closures as parameters
+by using the <code>Fn</code> traits. Here's an example of a function named <code>call_with_one</code>
+whose signature has a closure as a parameter:</p>
+<pre><code class="language-rust">fn call_with_one&lt;F&gt;(some_closure: F) -&gt; i32
+    where F: Fn(i32) -&gt; i32 {
+
+    some_closure(1)
+}
+
+let answer = call_with_one(|x| x + 2);
+
+assert_eq!(3, answer);
+</code></pre>
+<p>We pass the closure <code>|x| x + 2</code>, to <code>call_with_one</code>, and <code>call_with_one</code> calls
+that closure with <code>1</code> as an argument. The return value of the call to
+<code>some_closure</code> is then returned from <code>call_with_one</code>.</p>
+<p>The signature of <code>call_with_one</code> is using the <code>where</code> syntax discussed in the
+Traits section of Chapter 10. The <code>some_closure</code> parameter has the generic type
+<code>F</code>, which in the <code>where</code> clause is defined as having the trait bounds
+<code>Fn(i32) -&gt; i32</code>. The <code>Fn</code> trait represents a closure, and we can add types to
+the <code>Fn</code> trait to represent a specific type of closure. In this case, our
+closure has a parameter of type <code>i32</code> and returns an <code>i32</code>, so the generic bound
+we specify is <code>Fn(i32) -&gt; i32</code>.</p>
+<p>Specifying a function signature that contains a closure requires the use of
+generics and trait bounds. Each closure has a unique type, so we can't write
+the type of a closure directly, we have to use generics.</p>
+<p><code>Fn</code> isn't the only trait bound available for specifying closures, however.
+There are three: <code>Fn</code>, <code>FnMut</code>, and <code>FnOnce</code>. This continues the patterns of
+threes we've seen elsewhere in Rust: borrowing, borrowing mutably, and
+ownership. Using <code>Fn</code> specifies that the closure used may only borrow values in
+its environment. To specify a closure that mutates the environment, use
+<code>FnMut</code>, and if the closure takes ownership of the environment, <code>FnOnce</code>. Most
+of the time, you can start with <code>Fn</code>, and the compiler will tell you if you
+need <code>FnMut</code> or <code>FnOnce</code> based on what happens when the function calls the
+closure.</p>
+<p>To illustrate a situation where it's useful for a function to have a parameter
+that's a closure, let's move on to our next topic: iterators.</p>
+
+                </div>
+
+                <!-- Mobile navigation buttons -->
+                
+                    <a href="ch13-00-functional-features.html" class="mobile-nav-chapters previous">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+                    <a href="ch13-02-iterators.html" class="mobile-nav-chapters next">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                
+
+            </div>
+
+            
+                <a href="ch13-00-functional-features.html" class="nav-chapters previous" title="You can navigate through the chapters using the arrow keys">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+            
+
+            
+                <a href="ch13-02-iterators.html" class="nav-chapters next" title="You can navigate through the chapters using the arrow keys">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            
+
+        </div>
+
+
+        <!-- Local fallback for Font Awesome -->
+        <script>
+            if ($(".fa").css("font-family") !== "FontAwesome") {
+                $('<link rel="stylesheet" type="text/css" href="_FontAwesome/css/font-awesome.css">').prependTo('head');
+            }
+        </script>
+
+        <!-- Livereload script (if served using the cli tool) -->
+        
+
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+    </body>
+</html>

@@ -1,0 +1,190 @@
+<!DOCTYPE HTML>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Performance - The Rust Programming Language</title>
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <base href="">
+
+        <link rel="stylesheet" href="book.css">
+        <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+        <link rel="shortcut icon" href="favicon.png">
+
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+
+        <!-- MathJax -->
+        <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+        <!-- Fetch JQuery from CDN but have a local fallback -->
+        <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+        <script>
+            if (typeof jQuery == 'undefined') {
+                document.write(unescape("%3Cscript src='jquery.js'%3E%3C/script%3E"));
+            }
+        </script>
+    </head>
+    <body class="light">
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme = localStorage.getItem('theme');
+            if (theme == null) { theme = 'light'; }
+            $('body').removeClass().addClass(theme);
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var sidebar = localStorage.getItem('sidebar');
+            if (sidebar === "hidden") { $("html").addClass("sidebar-hidden") }
+            else if (sidebar === "visible") { $("html").addClass("sidebar-visible") }
+        </script>
+
+        <div id="sidebar" class="sidebar">
+            <ul class="chapter"><li><a href="ch01-00-introduction.html"><strong>1.</strong> Introduction</a></li><li><ul class="section"><li><a href="ch01-01-installation.html"><strong>1.1.</strong> Installation</a></li><li><a href="ch01-02-hello-world.html"><strong>1.2.</strong> Hello, World!</a></li></ul></li><li><a href="ch02-00-guessing-game-tutorial.html"><strong>2.</strong> Guessing Game Tutorial</a></li><li><a href="ch03-00-common-programming-concepts.html"><strong>3.</strong> Common Programming Concepts</a></li><li><ul class="section"><li><a href="ch03-01-variables-and-mutability.html"><strong>3.1.</strong> Variables and Mutability</a></li><li><a href="ch03-02-data-types.html"><strong>3.2.</strong> Data Types</a></li><li><a href="ch03-03-how-functions-work.html"><strong>3.3.</strong> How Functions Work</a></li><li><a href="ch03-04-comments.html"><strong>3.4.</strong> Comments</a></li><li><a href="ch03-05-control-flow.html"><strong>3.5.</strong> Control Flow</a></li></ul></li><li><a href="ch04-00-understanding-ownership.html"><strong>4.</strong> Understanding Ownership</a></li><li><ul class="section"><li><a href="ch04-01-what-is-ownership.html"><strong>4.1.</strong> What is Ownership?</a></li><li><a href="ch04-02-references-and-borrowing.html"><strong>4.2.</strong> References &amp; Borrowing</a></li><li><a href="ch04-03-slices.html"><strong>4.3.</strong> Slices</a></li></ul></li><li><a href="ch05-00-structs.html"><strong>5.</strong> Structs</a></li><li><ul class="section"><li><a href="ch05-01-method-syntax.html"><strong>5.1.</strong> Method Syntax</a></li></ul></li><li><a href="ch06-00-enums.html"><strong>6.</strong> Enums</a></li><li><ul class="section"><li><a href="ch06-01-option.html"><strong>6.1.</strong> Option</a></li><li><a href="ch06-02-match.html"><strong>6.2.</strong> Match</a></li><li><a href="ch06-03-if-let.html"><strong>6.3.</strong> <code>if let</code></a></li></ul></li><li><a href="ch07-00-modules.html"><strong>7.</strong> Modules</a></li><li><ul class="section"><li><a href="ch07-01-mod-and-the-filesystem.html"><strong>7.1.</strong> <code>mod</code> and the Filesystem</a></li><li><a href="ch07-02-controlling-visibility-with-pub.html"><strong>7.2.</strong> Controlling Visibility with <code>pub</code></a></li><li><a href="ch07-03-importing-names-with-use.html"><strong>7.3.</strong> Importing Names with <code>use</code></a></li></ul></li><li><a href="ch08-00-fundamental-collections.html"><strong>8.</strong> Fundamental Collections</a></li><li><ul class="section"><li><a href="ch08-01-vectors.html"><strong>8.1.</strong> Vectors</a></li><li><a href="ch08-02-strings.html"><strong>8.2.</strong> Strings</a></li><li><a href="ch08-03-hash-maps.html"><strong>8.3.</strong> Hash Maps</a></li></ul></li><li><a href="ch09-00-error-handling.html"><strong>9.</strong> Error Handling</a></li><li><ul class="section"><li><a href="ch09-01-unrecoverable-errors-with-panic.html"><strong>9.1.</strong> Unrecoverable Errors with <code>panic!</code></a></li><li><a href="ch09-02-recoverable-errors-with-result.html"><strong>9.2.</strong> Recoverable Errors with <code>Result</code></a></li><li><a href="ch09-03-to-panic-or-not-to-panic.html"><strong>9.3.</strong> To <code>panic!</code> or Not To <code>panic!</code></a></li></ul></li><li><a href="ch10-00-generics.html"><strong>10.</strong> Generics</a></li><li><ul class="section"><li><a href="ch10-01-syntax.html"><strong>10.1.</strong> Syntax</a></li><li><a href="ch10-02-traits.html"><strong>10.2.</strong> Traits</a></li><li><a href="ch10-03-lifetime-syntax.html"><strong>10.3.</strong> Lifetime syntax</a></li></ul></li><li><a href="ch11-00-testing.html"><strong>11.</strong> Testing</a></li><li><ul class="section"><li><a href="ch11-01-writing-tests.html"><strong>11.1.</strong> Writing tests</a></li><li><a href="ch11-02-running-tests.html"><strong>11.2.</strong> Running tests</a></li><li><a href="ch11-03-test-organization.html"><strong>11.3.</strong> Test Organization</a></li></ul></li><li><a href="ch12-00-an-io-project.html"><strong>12.</strong> An I/O Project</a></li><li><ul class="section"><li><a href="ch12-01-accepting-command-line-arguments.html"><strong>12.1.</strong> Accepting Command Line Arguments</a></li><li><a href="ch12-02-reading-a-file.html"><strong>12.2.</strong> Reading a File</a></li><li><a href="ch12-03-improving-error-handling-and-modularity.html"><strong>12.3.</strong> Improving Error Handling and Modularity</a></li><li><a href="ch12-04-testing-the-librarys-functionality.html"><strong>12.4.</strong> Testing the Library's Functionality</a></li><li><a href="ch12-05-working-with-environment-variables.html"><strong>12.5.</strong> Working with Environment Variables</a></li><li><a href="ch12-06-writing-to-stderr-instead-of-stdout.html"><strong>12.6.</strong> Writing to <code>stderr</code> instead of <code>stdout</code></a></li></ul></li><li><a href="ch13-00-functional-features.html"><strong>13.</strong> Functional Language Features in Rust</a></li><li><ul class="section"><li><a href="ch13-01-closures.html"><strong>13.1.</strong> Closures</a></li><li><a href="ch13-02-iterators.html"><strong>13.2.</strong> Iterators</a></li><li><a href="ch13-03-improving-our-io-project.html"><strong>13.3.</strong> Improving our I/O Project</a></li><li><a href="ch13-04-performance.html" class="active"><strong>13.4.</strong> Performance</a></li></ul></li><li><a href="ch14-00-more-about-cargo.html"><strong>14.</strong> More about Cargo and Crates.io</a></li><li><ul class="section"><li><a href="ch14-01-release-profiles.html"><strong>14.1.</strong> Release Profiles</a></li><li><a href="ch14-02-publishing-to-crates-io.html"><strong>14.2.</strong> Publishing a Crate to Crates.io</a></li><li><a href="ch14-03-cargo-workspaces.html"><strong>14.3.</strong> Cargo Workspaces</a></li><li><a href="ch14-04-installing-binaries.html"><strong>14.4.</strong> Installing Binaries from Crates.io with <code>cargo install</code></a></li><li><a href="ch14-05-extending-cargo.html"><strong>14.5.</strong> Extending Cargo with Custom Commands</a></li></ul></li><li><a href="ch15-00-smart-pointers.html"><strong>15.</strong> Smart Pointers</a></li><li><a href="ch16-00-concurrency.html"><strong>16.</strong> Concurrency</a></li><li><a href="ch17-00-oop.html"><strong>17.</strong> Is Rust OOP?</a></li><li><a href="ch18-00-patterns.html"><strong>18.</strong> Patterns</a></li><li><a href="ch19-00-more-lifetimes.html"><strong>19.</strong> More Lifetimes</a></li><li><a href="ch20-00-advanced-types.html"><strong>20.</strong> Advanced Type System Features</a></li><li><a href="appendix-00.html"><strong>21.</strong> Appendix</a></li><li><ul class="section"><li><a href="appendix-01-keywords.html"><strong>21.1.</strong> Keywords</a></li><li><a href="appendix-02-operators.html"><strong>21.2.</strong> Operators</a></li><li><a href="appendix-03-derivable-traits.html"><strong>21.3.</strong> Derivable Traits</a></li><li><a href="appendix-04-nightly-rust.html"><strong>21.4.</strong> Nightly Rust</a></li><li><a href="appendix-05-macros.html"><strong>21.5.</strong> Macros</a></li></ul></li></ul>
+        </div>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar" class="menu-bar">
+                    <div class="left-buttons">
+                        <i id="sidebar-toggle" class="fa fa-bars"></i>
+                        <i id="theme-toggle" class="fa fa-paint-brush"></i>
+                    </div>
+
+                    <h1 class="menu-title">The Rust Programming Language</h1>
+
+                    <div class="right-buttons">
+                        <i id="print-button" class="fa fa-print" title="Print this book"></i>
+                    </div>
+                </div>
+
+                <div id="content" class="content">
+                    <h2>Performance</h2>
+<p>Which version of our <code>grep</code> functions is faster: the version with an explicit
+<code>for</code> loop or the version with iterators? We ran a benchmark by loading the
+entire contents of &quot;The Adventures of Sherlock Holmes&quot; by Sir Arthur Conan
+Doyle into a <code>String</code> and looking for the word &quot;the&quot; in the contents. Here were
+the results of the benchmark on the version of grep using the <code>for</code> loop and the
+version using iterators:</p>
+<pre><code class="language-text">test bench_grep_for  ... bench:  19,620,300 ns/iter (+/- 915,700)
+test bench_grep_iter ... bench:  19,234,900 ns/iter (+/- 657,200)
+</code></pre>
+<p>The iterator version ended up slightly faster! We're not going to go through
+the benchmark code here, as the point is not to prove that they're exactly
+equivalent, but to get a general sense of how these two implementations
+compare. For a <em>real</em> benchmark, you'd want to check various texts of various
+sizes, different words, words of different lengths, and all kinds of other
+variations. The point is this: iterators, while a high-level abstraction, get
+compiled down to roughly the same code as if you'd written the lower-level code
+yourself. Iterators are one of Rust's <em>zero-cost abstractions</em>, by which we mean
+using the abstraction imposes no additional runtime overhead in the same way
+that Bjarne Stroustrup, the original designer and implementer of C++, defines
+<em>zero-overhead</em>:</p>
+<blockquote>
+<p>In general, C++ implementations obey the zero-overhead principle: What you
+don’t use, you don’t pay for. And further: What you do use, you couldn’t hand
+code any better.</p>
+<ul>
+<li>Bjarne Stroustrup &quot;Foundations of C++&quot;</li>
+</ul>
+</blockquote>
+<p>As another example, here is some code taken from an audio decoder. This code
+uses an iterator chain to do some math on three variables in scope: a <code>buffer</code>
+slice of data, an array of 12 <code>coefficients</code>, and an amount by which to shift
+data in <code>qlp_shift</code>. We've declared the variables within this example but not
+given them any values; while this code doesn't have much meaning outside of its
+context, it's still a concise, real-world example of how Rust translates
+high-level ideas to low-level code:</p>
+<pre><code class="language-rust,ignore">let buffer: &amp;mut [i32];
+let coefficients: [i64; 12];
+let qlp_shift: i16;
+
+for i in 12..buffer.len() {
+    let prediction = coefficients.iter()
+                                 .zip(&amp;buffer[i - 12..i])
+                                 .map(|(&amp;c, &amp;s)| c * s as i64)
+                                 .sum::&lt;i64&gt;() &gt;&gt; qlp_shift;
+    let delta = buffer[i];
+    buffer[i] = prediction as i32 + delta;
+}
+</code></pre>
+<p>In order to calculate the value of <code>prediction</code>, this code iterates through
+each of the 12 values in <code>coefficients</code>, uses the <code>zip</code> method to pair the
+coefficient values with the previous 12 values in <code>buffer</code>. Then for each pair,
+multiply the values together, sum all the results, and shift the bits in the
+sum <code>qlp_shift</code> bits to the right</p>
+<p>Calculations in applications like audio decoders often prioritize performance
+most highly. Here, we're creating an iterator, using two adaptors, then
+consuming the value. What assembly code would this Rust code compile to? Well,
+as of this writing, it compiles down to the same assembly you'd write by hand.
+There's no loop at all corresponding to the iteration over the values in
+<code>coefficients</code>: Rust knows that there are twelve iterations, so it &quot;unrolls&quot;
+the loop. All of the coefficients get stored in registers (which means
+accessing the values is very fast). There are no bounds checks on the array
+access. It's extremely efficient.</p>
+<p>Now that you know this, go use iterators and closures without fear! They make
+code feel higher-level, but don't impose a runtime performance penalty for
+doing so.</p>
+<h2>Summary</h2>
+<p>Closures and iterators are Rust features inspired by functional programming
+language ideas. They contribute to Rust's ability to clearly express high-level
+ideas. The implementations of closures and iterators, as well as other zero-cost
+abstractions in Rust, are such that runtime performance is not affected.</p>
+<p>Now that we've improved the expressiveness of our I/O project, let's look at
+some more features of <code>cargo</code> that would help us get ready to share the project
+with the world.</p>
+
+                </div>
+
+                <!-- Mobile navigation buttons -->
+                
+                    <a href="ch13-03-improving-our-io-project.html" class="mobile-nav-chapters previous">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+                    <a href="ch14-00-more-about-cargo.html" class="mobile-nav-chapters next">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                
+
+            </div>
+
+            
+                <a href="ch13-03-improving-our-io-project.html" class="nav-chapters previous" title="You can navigate through the chapters using the arrow keys">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+            
+
+            
+                <a href="ch14-00-more-about-cargo.html" class="nav-chapters next" title="You can navigate through the chapters using the arrow keys">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            
+
+        </div>
+
+
+        <!-- Local fallback for Font Awesome -->
+        <script>
+            if ($(".fa").css("font-family") !== "FontAwesome") {
+                $('<link rel="stylesheet" type="text/css" href="_FontAwesome/css/font-awesome.css">').prependTo('head');
+            }
+        </script>
+
+        <!-- Livereload script (if served using the cli tool) -->
+        
+
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+    </body>
+</html>
