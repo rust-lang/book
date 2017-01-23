@@ -11020,8 +11020,10 @@ runtime characteristics tho.</p>
 <h4>Solution: turn an Rc into a <code>Weak&lt;T&gt;</code></h4>
 <p>Same as Rc, but doesn't count towards the strong ref count. When you do this, the
 strong ref count goes down and the weak count goes up.</p>
-<p>Data gets cleaned up when the strong count is 0, no matter what the weak count is.</p>
-<p>Why is the weak count needed then????</p>
+<p>Data gets cleaned up when the strong count is 0, no matter what the weak count is.
+However, Rc structure is kept until weak reference count also goes to zero, so weak pointers do not become dangling pointers.
+At this point, attempt to upgrade Weak pointer will result into None.
+Only when weak reference counter also reduces to zero, Rc structure is freed.</p>
 <h2><code>RefCell&lt;T&gt;</code></h2>
 <p>Single owner of mutable data</p>
 <p>The ownership rules checked at runtime instead of compile time.</p>
