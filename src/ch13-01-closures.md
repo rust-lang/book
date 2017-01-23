@@ -92,7 +92,7 @@ Let's compare the different ways we can specify closures with the syntax for
 defining a function more directly. We've added some spaces here to line up the
 relevant parts:
 
-```rust
+```rust,ignore
 fn  add_one_v1   (x: i32) -> i32 { x + 1 }  // a function
 let add_one_v2 = |x: i32| -> i32 { x + 1 }; // the full syntax for a closure
 let add_one_v3 = |x|             { x + 1 }; // a closure eliding types
