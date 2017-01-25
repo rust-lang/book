@@ -1,14 +1,3 @@
-<!-- Hi Steve, Carol. I like this chapter, we're getting into some powerful
-tools here! I saw that the copyeditor has suggested listing numbers, which I
-think is a good idea. If you agree, could you suggest captions and add
-numbering to those listings we reference again in the chapter? Also, if we are
-going to include any of these in the source files can you add file names?
-Thanks! /Liz -->
-<!-- I added some listing numbers where the code examples were lengthy or
-referred to again. I haven't added any file names-- the code in this chapter is
-little snippets that would be useful in larger programs, but they could appear
-anywhere and don't have to be in any particular file. /Carol -->
-
 # Enums
 
 In this chapter we'll look at *enumerations*, also referred to as *enums*.
@@ -26,11 +15,6 @@ per-language. Rust’s enums are most similar to "algebraic data types" in
 functional languages like F#, OCaml, or Haskell.
 
 ## Defining an Enum
-
-<!-- I'm not sure what you meant by "looking inside it" when you said "I wasn't
-clear throughout this section whether we were defining the IpAddrKind enum or
-looking inside it", but I've tried to clarify. Please elaborate on what you
-meant by that and why it's confusing if I haven't resolved the issue. /Carol -->
 
 Let's look at a situation we might want to express in code and see why enums are
 sometimes a more appropriate choice than structs for modeling data. Say we need
@@ -60,25 +44,6 @@ enum IpAddrKind {
 This is now a custom data type that we can use elsewhere in our code.
 
 ### Enum Values
-
-<!-- Liz: You seemed confused at this point about the differences between an
-enum's definition, which includes its valid variants, and using the values of
-the enum. You had changed this text to be:
-
-"Enum variants can optionally have associated values. We can create values of
-`IpAddrKind` like this:"
-
-While it's strictly true that enum values are "optional", there wouldn't be any
-point in defining the enum unless you were going to use values of that type.
-Also, "associated" has other meanings in Rust that we don't want to conflate
-with.
-
-We've tried to clear up the confusion here by relating enum definition and
-instantiation to struct definition and instantiation, assuming the reader
-understands structs at this point. We're having trouble figuring out just the
-right wording here, though, so we have two options for you. Please let us
-know which is clearest, or a combination of the two, or if you have any
-suggestions in a totally different direction! /Carol -->
 
 <!-- Option 1: -->
 An `enum` definition is similar to a `struct` definition: it defines a new type
@@ -171,8 +136,6 @@ Listing 6-1: Storing the data and type of an IP address using a `struct`
 
 </figcaption>
 </figure>
-
-<!-- I will add wingdings here in libreoffice /Carol -->
 
 Here, we've defined a struct `IpAddr` that has two fields: a `kind` field that
 is of type `IpAddrKind` (the enum we defined previously), and an `address`
@@ -315,8 +278,6 @@ impl Message {
 let m = Message::Write(String::from("hello"));
 m.call();
 ```
-
-<!-- I will add wingdings here /Carol -->
 
 The body of the method would use `self` to get the value that we called the
 method on. In this example, we've created a variable `m` that has the value

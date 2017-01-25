@@ -45,13 +45,6 @@ as its patterns.
 </figcaption>
 </figure>
 
-<!--- Flagging as a place to possibly put wingding numbers -- would it work to
-put two arms in this example? I think that would illustrate the control flow
-well -->
-<!-- I think we're moving away from using generic examples like this and talking
-about concrete examples instead. I've changed the text to reflect that, and I'm
-happy to add wingdings once we're in libreoffice. /Carol -->
-
 Let's break down the `match` in the `value_in_cents` function. First, we list
 the `match` keyword followed by an expression, which in this case is the value
 `coin`. This feels very similar to an expression used with `if`, but there's a
@@ -220,8 +213,6 @@ Listing 6-4: A function that uses a `match` expression on an `Option<i32>`
 
 </figcaption>
 </figure>
-
-<!-- Flagging for wingding numbers -->
 
 #### Matching `Some(T)`
 

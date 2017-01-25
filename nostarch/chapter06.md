@@ -1,17 +1,6 @@
 
 [TOC]
 
-<!-- Hi Steve, Carol. I like this chapter, we're getting into some powerful
-tools here! I saw that the copyeditor has suggested listing numbers, which I
-think is a good idea. If you agree, could you suggest captions and add
-numbering to those listings we reference again in the chapter? Also, if we are
-going to include any of these in the source files can you add file names?
-Thanks! /Liz -->
-<!-- I added some listing numbers where the code examples were lengthy or
-referred to again. I haven't added any file names-- the code in this chapter is
-little snippets that would be useful in larger programs, but they could appear
-anywhere and don't have to be in any particular file. /Carol -->
-
 # Enums
 
 In this chapter we'll look at *enumerations*, also referred to as *enums*.
@@ -29,11 +18,6 @@ per-language. Rust’s enums are most similar to "algebraic data types" in
 functional languages like F#, OCaml, or Haskell.
 
 ## Defining an Enum
-
-<!-- I'm not sure what you meant by "looking inside it" when you said "I wasn't
-clear throughout this section whether we were defining the IpAddrKind enum or
-looking inside it", but I've tried to clarify. Please elaborate on what you
-meant by that and why it's confusing if I haven't resolved the issue. /Carol -->
 
 Let's look at a situation we might want to express in code and see why enums
 are useful and more appropriate than structs in this case. Say we need to work
@@ -63,25 +47,6 @@ enum IpAddrKind {
 This is now a custom data type that we can use elsewhere in our code.
 
 ### Enum Values
-
-<!-- Liz: You seemed confused at this point about the differences between an
-enum's definition, which includes its valid variants, and using the values of
-the enum. You had changed this text to be:
-
-"Enum variants can optionally have associated values. We can create values of
-`IpAddrKind` like this:"
-
-While it's strictly true that enum values are "optional", there wouldn't be any
-point in defining the enum unless you were going to use values of that type.
-Also, "associated" has other meanings in Rust that we don't want to conflate
-with.
-
-We've tried to clear up the confusion here by relating enum definition and
-instantiation to struct definition and instantiation, assuming the reader
-understands structs at this point. We're having trouble figuring out just the
-right wording here, though, so we have two options for you. Please let us
-know which is clearest, or a combination of the two, or if you have any
-suggestions in a totally different direction! /Carol -->
 
 <!-- Option 1: -->
 An `enum` definition is similar to a `struct` definition: it defines a new type
@@ -152,8 +117,6 @@ let loopback = IpAddr {
 <caption>
 Listing 6-1: Storing the data and type of an IP address using a `struct`
 </caption>
-
-<!-- I will add wingdings here in libreoffice /Carol -->
 
 Here, we've defined a struct `IPAddr` that has two fields: a `kind` field that
 is of type `IpAddrKind` (the enum we defined previously), and an `address`
@@ -287,8 +250,6 @@ let m = Message::Write(String::from("hello"));
 m.call();
 ```
 
-<!-- I will add wingdings here /Carol -->
-
 The body of the method would use `self` to get the value that we called the
 method on. In this example, we've created a variable `m` that has the value
 `Message::Write("hello")`, and that is what `self` will be in the body of
@@ -353,13 +314,6 @@ don't need to import it explicitly. Furthermore, so are its variants: you can
 use `Some` and `None` directly, without prefixing them with `Option::`. This is
 still just a regular enum, however, `Some(T)` and `None` are still values of
 type `Option<T>`.
-
-<!-- We haven't spoken about the prelude so far in the book, I think I made a
-note of that in a previous chapter---we should tell the reader what it is
-before mentioning it so they know what significance it has here -->
-
-<!-- We did speak about the prelude previously, in chapter 2, the Processing a
-Guess section. I don't have any comments from you about it there... /Carol -->
 
 The `<T>` syntax is a feature of Rust we haven't talked about yet. It's a
 generic type parameter, and we'll cover generics in more detail in Chapter 10.
@@ -426,11 +380,6 @@ when the value is null. Everywhere that a value has a type that isn't an
 deliberate design decision for Rust to limit null's pervasiveness and increase
 the safety of Rust code.
 
-<!-- So does None count as an option<T>? I lost the None thread a bit here -->
-<!-- Yes, since `Option<T>` is an enum and `None` is a variant of this enum,
-`None`'s type is `Option<T>`. I hope with the clarifications I added in the
-previous section that this will be clear by this point. /Carol -->
-
 So, how _do_ you get the `T` value out of a `Some` variant when you have a
 value of type `Option<T>` so that you can use that value? The `Option<T>` enum
 has a large number of methods useful in a variety of situations that you can
@@ -445,12 +394,6 @@ code doesn't have a `T` value available. The `match` expression is a control
 flow construct that does just this, when used with enums: it will run different
 code depending on which variant of the enum it has, and that code can use the
 data inside the matching value.
-
-<!-- I'm not sure about this connecting paragraph, it doesn't seem like match
-and option are actually that much connected, at least not at first. That's
-fine, this is all under the enum heading, but it might confuse if we imply
-otherwise --- unless I'm just missing the connection -->
-<!-- I've tried to make the connection more explicit, is this better? /Carol -->
 
 ## Match
 
@@ -493,13 +436,6 @@ fn value_in_cents(coin: Coin) -> i32 {
 Listing 6-2: An enum and a `match` expression that has the variants of the enum
 as its patterns.
 </caption>
-
-<!--- Flagging as a place to possibly put wingding numbers -- would it work to
-put two arms in this example? I think that would illustrate the control flow
-well -->
-<!-- I think we're moving away from using generic examples like this and talking
-about concrete examples instead. I've changed the text to reflect that, and I'm
-happy to add wingdings once we're in libreoffice. /Carol -->
 
 Let's break down the `match` in the `value_in_cents` function. First, we list
 the `match` keyword followed by an expression, which in this case is the value
@@ -639,8 +575,6 @@ let none = plus_one(None);
 <caption>
 Listing 6-4: A function that uses a `match` expression on an `Option<i32>`
 </caption>
-
-<!-- Flagging for wingding numbers -->
 
 #### Matching `Some(T)`
 

@@ -57,13 +57,6 @@ use `Some` and `None` directly, without prefixing them with `Option::`.
 `Option<T>` is still just a regular enum, however, and `Some(T)` and `None` are
 still values of type `Option<T>`.
 
-<!-- We haven't spoken about the prelude so far in the book, I think I made a
-note of that in a previous chapter---we should tell the reader what it is
-before mentioning it so they know what significance it has here -->
-
-<!-- We did speak about the prelude previously, in chapter 2, the Processing a
-Guess section. I don't have any comments from you about it there... /Carol -->
-
 The `<T>` syntax is a feature of Rust we haven't talked about yet. It's a
 generic type parameter, and we'll cover generics in more detail in Chapter 10.
 For now, all you need to know is that this means the `Some` variant of the
@@ -130,11 +123,6 @@ when the value is null. Everywhere that a value has a type that isn't an
 deliberate design decision for Rust to limit null's pervasiveness and increase
 the safety of Rust code.
 
-<!-- So does None count as an option<T>? I lost the None thread a bit here -->
-<!-- Yes, since `Option<T>` is an enum and `None` is a variant of this enum,
-`None`'s type is `Option<T>`. I hope with the clarifications I added in the
-previous section that this will be clear by this point. /Carol -->
-
 So, how *do* you get the `T` value out of a `Some` variant when you have a
 value of type `Option<T>` so that you can use that value? The `Option<T>` enum
 has a large number of methods useful in a variety of situations that you can
@@ -151,9 +139,3 @@ code doesn't have a `T` value available. The `match` expression is a control
 flow construct that does just this, when used with enums: it will run different
 code depending on which variant of the enum it has, and that code can use the
 data inside the matching value.
-
-<!-- I'm not sure about this connecting paragraph, it doesn't seem like match
-and option are actually that much connected, at least not at first. That's
-fine, this is all under the enum heading, but it might confuse if we imply
-otherwise --- unless I'm just missing the connection -->
-<!-- I've tried to make the connection more explicit, is this better? /Carol -->
