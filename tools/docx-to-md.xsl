@@ -60,13 +60,13 @@
         <xsl:text>&#10;&#10;</xsl:text>
     </xsl:template>
 
-    <xsl:template match="w:p[w:pPr/w:pStyle[@w:val = 'BulletA' or @w:val = 'BulletB']]">
+    <xsl:template match="w:p[w:pPr/w:pStyle[@w:val = 'BulletA' or @w:val = 'BulletB' or @w:val = 'ListPlainA' or @w:val = 'ListPlainB']]">
         <xsl:text>* </xsl:text>
         <xsl:apply-templates select="*" />
         <xsl:text>&#10;</xsl:text>
     </xsl:template>
 
-    <xsl:template match="w:p[w:pPr/w:pStyle[@w:val = 'BulletC']]">
+    <xsl:template match="w:p[w:pPr/w:pStyle[@w:val = 'BulletC' or @w:val = 'ListPlainC']]">
         <xsl:text>* </xsl:text>
         <xsl:apply-templates select="*" />
         <xsl:text>&#10;&#10;</xsl:text>
@@ -111,8 +111,9 @@
     </xsl:template>
 
     <xsl:template match="w:p[w:pPr/w:pStyle/@w:val = 'ProductionDirective']">
+        <xsl:text>&lt;!-- </xsl:text>
         <xsl:apply-templates select="*" />
-        <xsl:text>&#10;&#10;</xsl:text>
+        <xsl:text> -->&#10;&#10;</xsl:text>
     </xsl:template>
 
     <xsl:template match="w:p[w:pPr/w:pStyle[@w:val = 'Caption' or @w:val = 'TableTitle' or @w:val = 'Caption1']]">
@@ -120,6 +121,11 @@
         <xsl:apply-templates select="*" />
         <xsl:text>&#10;&lt;/caption></xsl:text>
         <xsl:text>&#10;&#10;</xsl:text>
+    </xsl:template>
+
+    <xsl:template match="w:p[w:pPr/w:pStyle[@w:val = 'BlockQuote']]">
+        <xsl:text>> </xsl:text>
+        <xsl:apply-templates select="*" />
     </xsl:template>
 
     <xsl:template match="w:p[w:pPr/w:pStyle/@w:val = 'Note']">
