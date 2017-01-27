@@ -59,7 +59,7 @@ Note that the variants of the enum are namespaced under its identifier, and we
 use a double colon to separate the two. The reason this is useful is that now
 both values `IpAddrKind::V4` and `IpAddrKind::V6` are of the same type:
 `IpAddrKind`. We can then, for instance, define a function that takes any
-`IpAddrKind` as an argument:
+`IpAddrKind`:
 
 ```rust
 fn route(ip_type: IpAddrKind) { }
@@ -104,7 +104,7 @@ Listing 6-1: Storing the data and `IpAddrKind` variant of an IP address using a
 `struct`
 </caption>
 
-Here, we’ve defined a struct `IPAddr` that has two fields: a `kind` field that
+Here, we’ve defined a struct `IpAddr` that has two fields: a `kind` field that
 is of type `IpAddrKind` (the enum we defined previously) and an `address` field
 of type `String`. We have two instances of this struct. The first, `home`, has
 the value `IpAddrKind::V4` as its `kind` with associated address data of
@@ -224,9 +224,10 @@ struct WriteMessage(String); // tuple struct
 struct ChangeColorMessage(i32, i32, i32); // tuple struct
 ```
 
-But if we used the different structs, we wouldn’t be able to as easily define a
-function that could take any of these kinds of messages as we could with the
-`Message` enum, defined in Listing 6-2.
+But if we used the different structs, which each have their own type, we
+wouldn’t be able to as easily define a function that could take any of these
+kinds of messages as we could with the `Message` enum defined in Listing 6-2,
+which is a single type.
 
 There is one more similarity between enums and structs: just as we’re able to
 define methods on structs using `impl`, we’re also able to define methods on
@@ -320,7 +321,8 @@ let absent_number: Option<i32> = None;
 ```
 
 If we use `None` rather than `Some`, we need to tell Rust what type of
-`Option<T>` we have.
+`Option<T>` we have, because the compiler can't infer the type that the `Some`
+variant will hold by looking only at a `None` value.
 
 When we have a `Some` value, we know that a value is present, and the value is
 held within the `Some`. When we have a `None` value, in some sense, it means
@@ -604,7 +606,7 @@ Now let’s consider the second call of `plus_one` in Listing 6-5 where `x` is
 None => None,
 ```
 
- It matches! There’s no value to add to, so the program stops and returns the
+It matches! There’s no value to add to, so the program stops and returns the
 `None` value on the right side of `=>`. Because the first arm matched, no other
 arms are compared.
 
