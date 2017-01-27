@@ -6,7 +6,7 @@
 In this chapter we’ll look at *enumerations*, also referred to as *enums*.
 Enums allow you to define a type by enumerating its possible values. First,
 we’ll define and use an enum to show how an enum can encode meaning along with
-data. Next, we’ll explore a particularly useful enum called `Option`, which
+data. Next, we’ll explore a particularly useful enum, called `Option`, which
 expresses that a value can be either something or nothing. Then we’ll look at
 how pattern matching in the `match` expression makes it easy to run different
 code for different values of an enum. Finally, we’ll cover how the `if let`
@@ -100,7 +100,8 @@ let loopback = IpAddr {
 ```
 
 <caption>
-Listing 6-1: Storing the data and variety of an IP address using a `struct`
+Listing 6-1: Storing the data and `IpAddrKind` variant of an IP address using a
+`struct`
 </caption>
 
 Here, we’ve defined a struct `IPAddr` that has two fields: a `kind` field that
@@ -234,7 +235,7 @@ enums. Here’s a method named `call` that we could define on our `Message` enum
 ```rust
 impl Message {
     fn call(&self) {
-        // body would be defined here
+        // method body would be defined here
     }
 }
 
@@ -392,8 +393,11 @@ value.
 
 Rust has an extremely powerful control-flow operator called `match` that allows
 us to compare a value against a series of patterns and then execute code based
-on which pattern matches. The power comes from the expressiveness of the
-patterns and the compiler checks that make sure all possible cases are handled.
+on which pattern matches. Patterns can be made up of literal values, variable
+names, wildcards, and many other things; Chapter 18 will be about all the
+different kinds of patterns and what they do. The power of `match` comes from
+the expressiveness of the patterns and the compiler checks that make sure all
+possible cases are handled.
 
 Think of a `match` expression kind of like a coin sorting machine: coins slide
 down a track with variously sized holes along it, and each coin falls through
@@ -402,9 +406,9 @@ through each pattern in a `match`, and at the first pattern the value “fits,�
 the value will fall into the associated code block to be used during execution.
 
 Because we just mentioned coins, let’s use them as an example using `match`! We
-can write a function that can take an unknown American coin and, in a similar
-way as the counting machine, determine which coin it is and return its value in
-cents, as shown here in Listing 6-3:
+can write a function that can take an unknown United States coin and, in a
+similar way as the counting machine, determine which coin it is and return its
+value in cents, as shown here in Listing 6-3:
 
 ```rust
 enum Coin {
@@ -536,10 +540,10 @@ that point, the binding for `state` will be the value `UsState::Alaska`. We can
 then use that binding in the `println!` expression, thus getting the inner
 state value out of the `Coin` enum variant for `Quarter`.
 
-### Matching with `Option`
+### Matching with `Option<T>`
 
 In the previous section we wanted to get the inner `T` value out of the `Some`
-case when using `Option<T>`; we can also handle `Option` using `match` as we
+case when using `Option<T>`; we can also handle `Option<T>` using `match` as we
 did with the `Coin` enum! Instead of comparing coins, we’ll compare the
 variants of `Option<T>`, but the way that the `match` expression works remains
 the same.
@@ -674,39 +678,39 @@ only care about *one* of the cases. For this situation, Rust provides `if let`.
 
 The `if let` syntax lets you combine `if` and `let` into a less verbose way to
 handle values that match one pattern and ignore the rest. Consider the program
-in Listing 6-6:
+in Listing 6-6 that matches on an `Option<u8>` value but only wants to execute
+code if the value is three:
 
 ```rust
-match some_option {
-    Some(x) => {
-        // do something with x
-    },
+let some_u8_value = Some(0u8);
+match some_u8_value {
+    Some(3) => println!("three"),
     _ => (),
 }
 ```
 
 <caption>
 Listing 6-6: A `match` that only cares about executing code when the value is
-`Some<T>`
+`Some(3)`
 </caption>
 
-We want to do something with the `Some` match but do nothing with the `None`
-case. We can do this with an `Option` but with a more complex `match` than we'd
-like. To satisfy the `match` expression, we have to add `_ => ()` after
-processing just one variant, which is a lot of boilerplate code to add.
+We want to do something with the `Some(3)` match but do nothing with any other
+`Some<u8>` value or the `None` value. To satisfy the `match` expression, we
+have to add `_ => ()` after processing just one variant, which is a lot of
+boilerplate code to add.
 
 Instead, we could write this in a shorter way using `if let`. The following
 code behaves the same as the `match` in Listing 6-6:
 
 ```rust
-if let Some(x) = some_option {
-    // do something with x
+if let Some(3) = some_u8_value {
+    println!("three");
 }
 ```
 
-`if let` takes a pattern and an expression separated by an `=`. It works just
-like a `match`, where the expression is given to the `match` and the pattern is
-its first arm.
+`if let` takes a pattern and an expression separated by an `=`. It works the
+same way as a `match`, where the expression is given to the `match` and the
+pattern is its first arm.
 
 Using `if let` means you have less to type, less indentation, and less
 boilerplate code. However, we’ve lost the exhaustive checking that `match`
