@@ -2,7 +2,7 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <title>Enums - The Rust Programming Language</title>
+        <title>Enums and Pattern Matching - The Rust Programming Language</title>
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -47,7 +47,7 @@
         </script>
 
         <div id="sidebar" class="sidebar">
-            <ul class="chapter"><li><a href="ch01-00-introduction.html"><strong>1.</strong> Introduction</a></li><li><ul class="section"><li><a href="ch01-01-installation.html"><strong>1.1.</strong> Installation</a></li><li><a href="ch01-02-hello-world.html"><strong>1.2.</strong> Hello, World!</a></li></ul></li><li><a href="ch02-00-guessing-game-tutorial.html"><strong>2.</strong> Guessing Game Tutorial</a></li><li><a href="ch03-00-common-programming-concepts.html"><strong>3.</strong> Common Programming Concepts</a></li><li><ul class="section"><li><a href="ch03-01-variables-and-mutability.html"><strong>3.1.</strong> Variables and Mutability</a></li><li><a href="ch03-02-data-types.html"><strong>3.2.</strong> Data Types</a></li><li><a href="ch03-03-how-functions-work.html"><strong>3.3.</strong> How Functions Work</a></li><li><a href="ch03-04-comments.html"><strong>3.4.</strong> Comments</a></li><li><a href="ch03-05-control-flow.html"><strong>3.5.</strong> Control Flow</a></li></ul></li><li><a href="ch04-00-understanding-ownership.html"><strong>4.</strong> Understanding Ownership</a></li><li><ul class="section"><li><a href="ch04-01-what-is-ownership.html"><strong>4.1.</strong> What is Ownership?</a></li><li><a href="ch04-02-references-and-borrowing.html"><strong>4.2.</strong> References &amp; Borrowing</a></li><li><a href="ch04-03-slices.html"><strong>4.3.</strong> Slices</a></li></ul></li><li><a href="ch05-00-structs.html"><strong>5.</strong> Structs</a></li><li><ul class="section"><li><a href="ch05-01-method-syntax.html"><strong>5.1.</strong> Method Syntax</a></li></ul></li><li><a href="ch06-00-enums.html" class="active"><strong>6.</strong> Enums</a></li><li><ul class="section"><li><a href="ch06-01-option.html"><strong>6.1.</strong> Option</a></li><li><a href="ch06-02-match.html"><strong>6.2.</strong> Match</a></li><li><a href="ch06-03-if-let.html"><strong>6.3.</strong> <code>if let</code></a></li></ul></li><li><a href="ch07-00-modules.html"><strong>7.</strong> Modules</a></li><li><ul class="section"><li><a href="ch07-01-mod-and-the-filesystem.html"><strong>7.1.</strong> <code>mod</code> and the Filesystem</a></li><li><a href="ch07-02-controlling-visibility-with-pub.html"><strong>7.2.</strong> Controlling Visibility with <code>pub</code></a></li><li><a href="ch07-03-importing-names-with-use.html"><strong>7.3.</strong> Importing Names with <code>use</code></a></li></ul></li><li><a href="ch08-00-fundamental-collections.html"><strong>8.</strong> Fundamental Collections</a></li><li><ul class="section"><li><a href="ch08-01-vectors.html"><strong>8.1.</strong> Vectors</a></li><li><a href="ch08-02-strings.html"><strong>8.2.</strong> Strings</a></li><li><a href="ch08-03-hash-maps.html"><strong>8.3.</strong> Hash Maps</a></li></ul></li><li><a href="ch09-00-error-handling.html"><strong>9.</strong> Error Handling</a></li><li><ul class="section"><li><a href="ch09-01-unrecoverable-errors-with-panic.html"><strong>9.1.</strong> Unrecoverable Errors with <code>panic!</code></a></li><li><a href="ch09-02-recoverable-errors-with-result.html"><strong>9.2.</strong> Recoverable Errors with <code>Result</code></a></li><li><a href="ch09-03-to-panic-or-not-to-panic.html"><strong>9.3.</strong> To <code>panic!</code> or Not To <code>panic!</code></a></li></ul></li><li><a href="ch10-00-generics.html"><strong>10.</strong> Generics</a></li><li><ul class="section"><li><a href="ch10-01-syntax.html"><strong>10.1.</strong> Syntax</a></li><li><a href="ch10-02-traits.html"><strong>10.2.</strong> Traits</a></li><li><a href="ch10-03-lifetime-syntax.html"><strong>10.3.</strong> Lifetime syntax</a></li></ul></li><li><a href="ch11-00-testing.html"><strong>11.</strong> Testing</a></li><li><ul class="section"><li><a href="ch11-01-writing-tests.html"><strong>11.1.</strong> Writing tests</a></li><li><a href="ch11-02-running-tests.html"><strong>11.2.</strong> Running tests</a></li><li><a href="ch11-03-test-organization.html"><strong>11.3.</strong> Test Organization</a></li></ul></li><li><a href="ch12-00-an-io-project.html"><strong>12.</strong> An I/O Project</a></li><li><ul class="section"><li><a href="ch12-01-accepting-command-line-arguments.html"><strong>12.1.</strong> Accepting Command Line Arguments</a></li><li><a href="ch12-02-reading-a-file.html"><strong>12.2.</strong> Reading a File</a></li><li><a href="ch12-03-improving-error-handling-and-modularity.html"><strong>12.3.</strong> Improving Error Handling and Modularity</a></li><li><a href="ch12-04-testing-the-librarys-functionality.html"><strong>12.4.</strong> Testing the Library's Functionality</a></li><li><a href="ch12-05-working-with-environment-variables.html"><strong>12.5.</strong> Working with Environment Variables</a></li><li><a href="ch12-06-writing-to-stderr-instead-of-stdout.html"><strong>12.6.</strong> Writing to <code>stderr</code> instead of <code>stdout</code></a></li></ul></li><li><a href="ch13-00-functional-features.html"><strong>13.</strong> Functional Language Features in Rust</a></li><li><ul class="section"><li><a href="ch13-01-closures.html"><strong>13.1.</strong> Closures</a></li><li><a href="ch13-02-iterators.html"><strong>13.2.</strong> Iterators</a></li><li><a href="ch13-03-improving-our-io-project.html"><strong>13.3.</strong> Improving our I/O Project</a></li><li><a href="ch13-04-performance.html"><strong>13.4.</strong> Performance</a></li></ul></li><li><a href="ch14-00-more-about-cargo.html"><strong>14.</strong> More about Cargo and Crates.io</a></li><li><ul class="section"><li><a href="ch14-01-release-profiles.html"><strong>14.1.</strong> Release Profiles</a></li><li><a href="ch14-02-publishing-to-crates-io.html"><strong>14.2.</strong> Publishing a Crate to Crates.io</a></li><li><a href="ch14-03-cargo-workspaces.html"><strong>14.3.</strong> Cargo Workspaces</a></li><li><a href="ch14-04-installing-binaries.html"><strong>14.4.</strong> Installing Binaries from Crates.io with <code>cargo install</code></a></li><li><a href="ch14-05-extending-cargo.html"><strong>14.5.</strong> Extending Cargo with Custom Commands</a></li></ul></li><li><a href="ch15-00-smart-pointers.html"><strong>15.</strong> Smart Pointers</a></li><li><a href="ch16-00-concurrency.html"><strong>16.</strong> Concurrency</a></li><li><a href="ch17-00-oop.html"><strong>17.</strong> Is Rust OOP?</a></li><li><a href="ch18-00-patterns.html"><strong>18.</strong> Patterns</a></li><li><a href="ch19-00-more-lifetimes.html"><strong>19.</strong> More Lifetimes</a></li><li><a href="ch20-00-advanced-types.html"><strong>20.</strong> Advanced Type System Features</a></li><li><a href="appendix-00.html"><strong>21.</strong> Appendix</a></li><li><ul class="section"><li><a href="appendix-01-keywords.html"><strong>21.1.</strong> Keywords</a></li><li><a href="appendix-02-operators.html"><strong>21.2.</strong> Operators</a></li><li><a href="appendix-03-derivable-traits.html"><strong>21.3.</strong> Derivable Traits</a></li><li><a href="appendix-04-nightly-rust.html"><strong>21.4.</strong> Nightly Rust</a></li><li><a href="appendix-05-macros.html"><strong>21.5.</strong> Macros</a></li></ul></li></ul>
+            <ul class="chapter"><li><a href="ch01-00-introduction.html"><strong>1.</strong> Introduction</a></li><li><ul class="section"><li><a href="ch01-01-installation.html"><strong>1.1.</strong> Installation</a></li><li><a href="ch01-02-hello-world.html"><strong>1.2.</strong> Hello, World!</a></li></ul></li><li><a href="ch02-00-guessing-game-tutorial.html"><strong>2.</strong> Guessing Game Tutorial</a></li><li><a href="ch03-00-common-programming-concepts.html"><strong>3.</strong> Common Programming Concepts</a></li><li><ul class="section"><li><a href="ch03-01-variables-and-mutability.html"><strong>3.1.</strong> Variables and Mutability</a></li><li><a href="ch03-02-data-types.html"><strong>3.2.</strong> Data Types</a></li><li><a href="ch03-03-how-functions-work.html"><strong>3.3.</strong> How Functions Work</a></li><li><a href="ch03-04-comments.html"><strong>3.4.</strong> Comments</a></li><li><a href="ch03-05-control-flow.html"><strong>3.5.</strong> Control Flow</a></li></ul></li><li><a href="ch04-00-understanding-ownership.html"><strong>4.</strong> Understanding Ownership</a></li><li><ul class="section"><li><a href="ch04-01-what-is-ownership.html"><strong>4.1.</strong> What is Ownership?</a></li><li><a href="ch04-02-references-and-borrowing.html"><strong>4.2.</strong> References &amp; Borrowing</a></li><li><a href="ch04-03-slices.html"><strong>4.3.</strong> Slices</a></li></ul></li><li><a href="ch05-00-structs.html"><strong>5.</strong> Structs</a></li><li><ul class="section"><li><a href="ch05-01-method-syntax.html"><strong>5.1.</strong> Method Syntax</a></li></ul></li><li><a href="ch06-00-enums.html" class="active"><strong>6.</strong> Enums and Pattern Matching</a></li><li><ul class="section"><li><a href="ch06-01-defining-an-enum.html"><strong>6.1.</strong> Defining an Enum</a></li><li><a href="ch06-02-match.html"><strong>6.2.</strong> The <code>match</code> Control Flow Operator</a></li><li><a href="ch06-03-if-let.html"><strong>6.3.</strong> Concise Control Flow with <code>if let</code></a></li></ul></li><li><a href="ch07-00-modules.html"><strong>7.</strong> Modules</a></li><li><ul class="section"><li><a href="ch07-01-mod-and-the-filesystem.html"><strong>7.1.</strong> <code>mod</code> and the Filesystem</a></li><li><a href="ch07-02-controlling-visibility-with-pub.html"><strong>7.2.</strong> Controlling Visibility with <code>pub</code></a></li><li><a href="ch07-03-importing-names-with-use.html"><strong>7.3.</strong> Importing Names with <code>use</code></a></li></ul></li><li><a href="ch08-00-fundamental-collections.html"><strong>8.</strong> Fundamental Collections</a></li><li><ul class="section"><li><a href="ch08-01-vectors.html"><strong>8.1.</strong> Vectors</a></li><li><a href="ch08-02-strings.html"><strong>8.2.</strong> Strings</a></li><li><a href="ch08-03-hash-maps.html"><strong>8.3.</strong> Hash Maps</a></li></ul></li><li><a href="ch09-00-error-handling.html"><strong>9.</strong> Error Handling</a></li><li><ul class="section"><li><a href="ch09-01-unrecoverable-errors-with-panic.html"><strong>9.1.</strong> Unrecoverable Errors with <code>panic!</code></a></li><li><a href="ch09-02-recoverable-errors-with-result.html"><strong>9.2.</strong> Recoverable Errors with <code>Result</code></a></li><li><a href="ch09-03-to-panic-or-not-to-panic.html"><strong>9.3.</strong> To <code>panic!</code> or Not To <code>panic!</code></a></li></ul></li><li><a href="ch10-00-generics.html"><strong>10.</strong> Generics</a></li><li><ul class="section"><li><a href="ch10-01-syntax.html"><strong>10.1.</strong> Syntax</a></li><li><a href="ch10-02-traits.html"><strong>10.2.</strong> Traits</a></li><li><a href="ch10-03-lifetime-syntax.html"><strong>10.3.</strong> Lifetime syntax</a></li></ul></li><li><a href="ch11-00-testing.html"><strong>11.</strong> Testing</a></li><li><ul class="section"><li><a href="ch11-01-writing-tests.html"><strong>11.1.</strong> Writing tests</a></li><li><a href="ch11-02-running-tests.html"><strong>11.2.</strong> Running tests</a></li><li><a href="ch11-03-test-organization.html"><strong>11.3.</strong> Test Organization</a></li></ul></li><li><a href="ch12-00-an-io-project.html"><strong>12.</strong> An I/O Project</a></li><li><ul class="section"><li><a href="ch12-01-accepting-command-line-arguments.html"><strong>12.1.</strong> Accepting Command Line Arguments</a></li><li><a href="ch12-02-reading-a-file.html"><strong>12.2.</strong> Reading a File</a></li><li><a href="ch12-03-improving-error-handling-and-modularity.html"><strong>12.3.</strong> Improving Error Handling and Modularity</a></li><li><a href="ch12-04-testing-the-librarys-functionality.html"><strong>12.4.</strong> Testing the Library's Functionality</a></li><li><a href="ch12-05-working-with-environment-variables.html"><strong>12.5.</strong> Working with Environment Variables</a></li><li><a href="ch12-06-writing-to-stderr-instead-of-stdout.html"><strong>12.6.</strong> Writing to <code>stderr</code> instead of <code>stdout</code></a></li></ul></li><li><a href="ch13-00-functional-features.html"><strong>13.</strong> Functional Language Features in Rust</a></li><li><ul class="section"><li><a href="ch13-01-closures.html"><strong>13.1.</strong> Closures</a></li><li><a href="ch13-02-iterators.html"><strong>13.2.</strong> Iterators</a></li><li><a href="ch13-03-improving-our-io-project.html"><strong>13.3.</strong> Improving our I/O Project</a></li><li><a href="ch13-04-performance.html"><strong>13.4.</strong> Performance</a></li></ul></li><li><a href="ch14-00-more-about-cargo.html"><strong>14.</strong> More about Cargo and Crates.io</a></li><li><ul class="section"><li><a href="ch14-01-release-profiles.html"><strong>14.1.</strong> Release Profiles</a></li><li><a href="ch14-02-publishing-to-crates-io.html"><strong>14.2.</strong> Publishing a Crate to Crates.io</a></li><li><a href="ch14-03-cargo-workspaces.html"><strong>14.3.</strong> Cargo Workspaces</a></li><li><a href="ch14-04-installing-binaries.html"><strong>14.4.</strong> Installing Binaries from Crates.io with <code>cargo install</code></a></li><li><a href="ch14-05-extending-cargo.html"><strong>14.5.</strong> Extending Cargo with Custom Commands</a></li></ul></li><li><a href="ch15-00-smart-pointers.html"><strong>15.</strong> Smart Pointers</a></li><li><a href="ch16-00-concurrency.html"><strong>16.</strong> Concurrency</a></li><li><a href="ch17-00-oop.html"><strong>17.</strong> Is Rust OOP?</a></li><li><a href="ch18-00-patterns.html"><strong>18.</strong> Patterns</a></li><li><a href="ch19-00-more-lifetimes.html"><strong>19.</strong> More Lifetimes</a></li><li><a href="ch20-00-advanced-types.html"><strong>20.</strong> Advanced Type System Features</a></li><li><a href="appendix-00.html"><strong>21.</strong> Appendix</a></li><li><ul class="section"><li><a href="appendix-01-keywords.html"><strong>21.1.</strong> Keywords</a></li><li><a href="appendix-02-operators.html"><strong>21.2.</strong> Operators</a></li><li><a href="appendix-03-derivable-traits.html"><strong>21.3.</strong> Derivable Traits</a></li><li><a href="appendix-04-nightly-rust.html"><strong>21.4.</strong> Nightly Rust</a></li><li><a href="appendix-05-macros.html"><strong>21.5.</strong> Macros</a></li></ul></li></ul>
         </div>
 
         <div id="page-wrapper" class="page-wrapper">
@@ -67,269 +67,19 @@
                 </div>
 
                 <div id="content" class="content">
-                    <!-- Hi Steve, Carol. I like this chapter, we're getting into some powerful
-tools here! I saw that the copyeditor has suggested listing numbers, which I
-think is a good idea. If you agree, could you suggest captions and add
-numbering to those listings we reference again in the chapter? Also, if we are
-going to include any of these in the source files can you add file names?
-Thanks! /Liz -->
-<!-- I added some listing numbers where the code examples were lengthy or
-referred to again. I haven't added any file names-- the code in this chapter is
-little snippets that would be useful in larger programs, but they could appear
-anywhere and don't have to be in any particular file. /Carol -->
-<h1>Enums</h1>
-<p>In this chapter we'll look at <em>enumerations</em>, also referred to as <em>enums</em>.
-Enums allow you to define a type by enumerating its possible values. First
-we'll define and use an enum to show how an enum can encode meaning along with
-data. Then we'll explore a particularly useful enum, <code>Option</code>, which expresses
-that a value can be either something or nothing. Next we'll look at how pattern
-matching in the <code>match</code> statement makes it easy to run different code for
-different values of an enum. Finally, we'll cover how the <code>if let</code> construct is
-another convenient and concise idiom you have available to handle enums in your
-code.</p>
-<p>Enums are a feature in many languages, but their capabilities differ
-per-language. Rust’s enums are most similar to &quot;algebraic data types&quot; in
-functional languages like F#, OCaml, or Haskell.</p>
-<h2>Defining an Enum</h2>
-<!-- I'm not sure what you meant by "looking inside it" when you said "I wasn't
-clear throughout this section whether we were defining the IpAddrKind enum or
-looking inside it", but I've tried to clarify. Please elaborate on what you
-meant by that and why it's confusing if I haven't resolved the issue. /Carol -->
-<p>Let's look at a situation we might want to express in code and see why enums are
-sometimes a more appropriate choice than structs for modeling data. Say we need
-to work with IP addresses. There are two major standards used for IP addresses
-today: version four and version six. These are the only possibilities for an IP
-address that our program will come across: we can <em>enumerate</em> all possible
-values, which is where <em>enumeration</em> gets its name.</p>
-<p>Any IP address can be either a version four or a version six address, but not
-both at the same time. That property of IP addresses makes the enum data
-structure appropriate for this case, since enum values can only be one of the
-variants. Both version four and version six addresses are still fundamentally
-IP addresses, though, so they should be treated as the same type when the code
-is handling situations that apply to any kind of IP address.</p>
-<p>We can express this concept in code by defining an <code>IpAddrKind</code> enumeration and
-listing the possible kinds an IP address can be, <code>V4</code> and <code>V6</code>. These are known
-as the <em>variants</em> of the enum:</p>
-<pre><code class="language-rust">enum IpAddrKind {
-    V4,
-    V6,
-}
-</code></pre>
-<p>This is now a custom data type that we can use elsewhere in our code.</p>
-<h3>Enum Values</h3>
-<!-- Liz: You seemed confused at this point about the differences between an
-enum's definition, which includes its valid variants, and using the values of
-the enum. You had changed this text to be:
-<p>&quot;Enum variants can optionally have associated values. We can create values of
-<code>IpAddrKind</code> like this:&quot;</p>
-<p>While it's strictly true that enum values are &quot;optional&quot;, there wouldn't be any
-point in defining the enum unless you were going to use values of that type.
-Also, &quot;associated&quot; has other meanings in Rust that we don't want to conflate
-with.</p>
-<p>We've tried to clear up the confusion here by relating enum definition and
-instantiation to struct definition and instantiation, assuming the reader
-understands structs at this point. We're having trouble figuring out just the
-right wording here, though, so we have two options for you. Please let us
-know which is clearest, or a combination of the two, or if you have any
-suggestions in a totally different direction! /Carol --&gt;</p>
-<!-- Option 1: -->
-An `enum` definition is similar to a `struct` definition: it defines a new type
-and a template of what instances of that new type will be like. When you want to
-use a struct, you create an instance of the struct. When you want to use an
-enum, you create an instance of the enum that is one of the variants the enum
-allows.
-<!-- Option 2: -->
-When you want to use a struct, you create an instance of the *struct* itself.
-When you want to use an enum, you create an instance of one of its *variants*.
-Each variant is defined like a struct, and you instantiate both using the same
-syntax.
-<!-- end options -->
-<p>We can create instances of each of the two variants of <code>IpAddrKind</code> like this:</p>
-<pre><code class="language-rust"># enum IpAddrKind {
-#     V4,
-#     V6,
-# }
-#
-let four = IpAddrKind::V4;
-let six = IpAddrKind::V6;
-</code></pre>
-<p>Note that the variants of the enum are namespaced under its identifier, and we
-use the double colon to separate the two. The reason this is useful is that now
-both values <code>IpAddrKind::V4</code> and <code>IpAddrKind::V6</code> are of the same type:
-<code>IpAddrKind</code>. We can then, for instance, define a function that takes any
-<code>IpAddrKind</code>:</p>
-<pre><code class="language-rust"># enum IpAddrKind {
-#     V4,
-#     V6,
-# }
-#
-fn route(ip_type: IpAddrKind) { }
-</code></pre>
-<p>And we can call this function with either variant:</p>
-<pre><code class="language-rust"># enum IpAddrKind {
-#     V4,
-#     V6,
-# }
-#
-# fn route(ip_type: IpAddrKind) { }
-#
-route(IpAddrKind::V4);
-route(IpAddrKind::V6);
-</code></pre>
-<p>Enums have more tricks up their sleeves, too. Thinking more about our IP
-address type, at the moment we don’t have a way to store the actual <em>data</em> of
-the IP address; we only know what <em>kind</em> it is. Given that you just learned
-about structs, you might tackle this problem as in Listing 6-1:</p>
-<figure>
-<pre><code class="language-rust">enum IpAddrKind {
-    V4,
-    V6,
-}
-
-struct IpAddr {
-    kind: IpAddrKind,
-    address: String,
-}
-
-let home = IpAddr {
-    kind: IpAddrKind::V4,
-    address: String::from(&quot;127.0.0.1&quot;),
-};
-
-let loopback = IpAddr {
-    kind: IpAddrKind::V6,
-    address: String::from(&quot;::1&quot;),
-};
-</code></pre>
-<figcaption>
-<p>Listing 6-1: Storing the data and type of an IP address using a <code>struct</code></p>
-</figcaption>
-</figure>
-<!-- I will add wingdings here in libreoffice /Carol -->
-<p>Here, we've defined a struct <code>IpAddr</code> that has two fields: a <code>kind</code> field that
-is of type <code>IpAddrKind</code> (the enum we defined previously), and an <code>address</code>
-field of type <code>String</code>. We have two instances of this struct. The first,
-<code>home</code>, has the value <code>IpAddrKind::V4</code> as its <code>kind</code>, with associated address
-data of <code>127.0.0.1</code>. The second instance, <code>loopback</code>, has the other variant of
-<code>IpAddrKind</code> as its <code>kind</code> value, <code>V6</code>, and has address <code>::1</code> associated with
-it. We’ve used a struct to bundle the <code>kind</code> and <code>address</code> values together, so
-that now the kind is associated with the value itself.</p>
-<p>We can represent the same concept in a more concise way using just an enum,
-rather than an enum inside a struct, by putting data directly into each enum
-variant. This new definition of the <code>IpAddr</code> enum says that both <code>V4</code> and <code>V6</code>
-variants will have associated <code>String</code> values:</p>
-<pre><code class="language-rust">enum IpAddr {
-    V4(String),
-    V6(String),
-}
-
-let home = IpAddr::V4(String::from(&quot;127.0.0.1&quot;));
-
-let loopback = IpAddr::V6(String::from(&quot;::1&quot;));
-</code></pre>
-<p>We attach data to each variant of the enum directly, no need for an extra
-struct.</p>
-<p>There's another advantage to using an enum over a struct: each variant can
-store <em>different kinds</em> of data. Version four type IP addresses will always
-have four numeric components that will have values between 0 and 255. If we
-wanted to store <code>V4</code> addresses as four <code>u8</code>s but still express <code>V6</code> addresses
-as <code>String</code>s, we wouldn't be able to with a <code>struct</code>. Enums handle this case
-with ease:</p>
-<pre><code class="language-rust">enum IpAddr {
-    V4(u8, u8, u8, u8),
-    V6(String),
-}
-
-let home = IpAddr::V4(127, 0, 0, 1);
-
-let loopback = IpAddr::V6(String::from(&quot;::1&quot;));
-</code></pre>
-<p>We've been showing a bunch of different possibilities that we could define in
-our code for storing IP addresses of the two different kinds using an enum. It
-turns out, though, that wanting to store IP addresses and encode which kind
-they are is so common that <a href="../std/net/enum.IpAddr.html">the standard library has a definition we can
-use!</a><!-- ignore --> Let's look at how the standard library defines
-<code>IpAddr</code>: it has the exact enum and variants that we've defined and used, but
-it chose to embed the address data inside the variants in the form of two
-different structs, which are defined differently for each variant:</p>
-<pre><code class="language-rust">struct Ipv4Addr {
-    // details elided
-}
-
-struct Ipv6Addr {
-    // details elided
-}
-
-enum IpAddr {
-    V4(Ipv4Addr),
-    V6(Ipv6Addr),
-}
-</code></pre>
-<p>This illustrates you can put any kind of data inside of an enum variant:
-strings, numeric types, structs, and you could even include another enum! Also,
-standard library types are often not much more complicated than what you might
-come up with.</p>
-<p>Note that even though the standard library contains a definition for <code>IpAddr</code>,
-we can still choose to create and use our own definition without conflict since
-we haven't brought the standard library's definition into our scope. We'll talk
-more about importing types in Chapter 7.</p>
-<p>Let's look at another example: here’s an enum with a wide variety of types
-embedded in its variants:</p>
-<pre><code class="language-rust">enum Message {
-    Quit,
-    Move { x: i32, y: i32 },
-    Write(String),
-    ChangeColor(i32, i32, i32),
-}
-</code></pre>
-<p>This enum has four variants with different types:</p>
-<ul>
-<li><code>Quit</code> has no data associated with it at all.</li>
-<li><code>Move</code> includes an anonymous struct inside of it.</li>
-<li><code>Write</code> includes a single <code>String</code>.</li>
-<li><code>ChangeColor</code> includes three <code>i32</code>s.</li>
-</ul>
-<p>This is similar to different kinds of struct definitions, except without the
-<code>struct</code> keyword and all grouped together under the <code>Message</code> type. The
-following structs could hold the same data that the enum variants above hold:</p>
-<pre><code class="language-rust">struct QuitMessage; // unit struct
-struct MoveMessage {
-    x: i32,
-    y: i32,
-}
-struct WriteMessage(String); // tuple struct
-struct ChangeColorMessage(i32, i32, i32); // tuple struct
-</code></pre>
-<p>But if we used the different structs, which each have their own type, we
-wouldn't be able to as easily define a function that could take any of these
-kinds of messages as we could with the <code>Message</code> enum defined above, which is a
-single type.</p>
-<p>One more similarity between enums and structs: just as we are able to define
-methods on structs using <code>impl</code>, we are also able to define methods on enums.
-Here's a method, <code>call</code>, that we could define on our <code>Message</code> enum:</p>
-<pre><code class="language-rust"># enum Message {
-#     Quit,
-#     Move { x: i32, y: i32 },
-#     Write(String),
-#     ChangeColor(i32, i32, i32),
-# }
-#
-impl Message {
-    fn call(&amp;self) {
-        // body would be defined here
-    }
-}
-
-let m = Message::Write(String::from(&quot;hello&quot;));
-m.call();
-</code></pre>
-<!-- I will add wingdings here /Carol -->
-<p>The body of the method would use <code>self</code> to get the value that we called the
-method on. In this example, we've created a variable <code>m</code> that has the value
-<code>Message::Write(&quot;hello&quot;)</code>, and that is what <code>self</code> will be in the body of
-the <code>call</code> method when <code>m.call()</code> runs.</p>
-<p>Let's look at another enum in the standard library that is very common and
-useful: <code>Option</code>.</p>
+                    <h1>Enums and Pattern Matching</h1>
+<p>In this chapter we’ll look at <em>enumerations</em>, also referred to as <em>enums</em>.
+Enums allow you to define a type by enumerating its possible values. First,
+we’ll define and use an enum to show how an enum can encode meaning along with
+data. Next, we’ll explore a particularly useful enum, called <code>Option</code>, which
+expresses that a value can be either something or nothing. Then we’ll look at
+how pattern matching in the <code>match</code> expression makes it easy to run different
+code for different values of an enum. Finally, we’ll cover how the <code>if let</code>
+construct is another convenient and concise idiom available to you to handle
+enums in your code.</p>
+<p>Enums are a feature in many languages, but their capabilities differ in each
+language. Rust’s enums are most similar to <em>algebraic data types</em> in functional
+languages like F#, OCaml, and Haskell.</p>
 
                 </div>
 
@@ -341,7 +91,7 @@ useful: <code>Option</code>.</p>
                 
 
                 
-                    <a href="ch06-01-option.html" class="mobile-nav-chapters next">
+                    <a href="ch06-01-defining-an-enum.html" class="mobile-nav-chapters next">
                         <i class="fa fa-angle-right"></i>
                     </a>
                 
@@ -355,7 +105,7 @@ useful: <code>Option</code>.</p>
             
 
             
-                <a href="ch06-01-option.html" class="nav-chapters next" title="You can navigate through the chapters using the arrow keys">
+                <a href="ch06-01-defining-an-enum.html" class="nav-chapters next" title="You can navigate through the chapters using the arrow keys">
                     <i class="fa fa-angle-right"></i>
                 </a>
             

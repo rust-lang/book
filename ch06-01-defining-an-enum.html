@@ -1,0 +1,447 @@
+<!DOCTYPE HTML>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Defining an Enum - The Rust Programming Language</title>
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <base href="">
+
+        <link rel="stylesheet" href="book.css">
+        <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+        <link rel="shortcut icon" href="favicon.png">
+
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+
+        <!-- MathJax -->
+        <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+        <!-- Fetch JQuery from CDN but have a local fallback -->
+        <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+        <script>
+            if (typeof jQuery == 'undefined') {
+                document.write(unescape("%3Cscript src='jquery.js'%3E%3C/script%3E"));
+            }
+        </script>
+    </head>
+    <body class="light">
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme = localStorage.getItem('theme');
+            if (theme == null) { theme = 'light'; }
+            $('body').removeClass().addClass(theme);
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var sidebar = localStorage.getItem('sidebar');
+            if (sidebar === "hidden") { $("html").addClass("sidebar-hidden") }
+            else if (sidebar === "visible") { $("html").addClass("sidebar-visible") }
+        </script>
+
+        <div id="sidebar" class="sidebar">
+            <ul class="chapter"><li><a href="ch01-00-introduction.html"><strong>1.</strong> Introduction</a></li><li><ul class="section"><li><a href="ch01-01-installation.html"><strong>1.1.</strong> Installation</a></li><li><a href="ch01-02-hello-world.html"><strong>1.2.</strong> Hello, World!</a></li></ul></li><li><a href="ch02-00-guessing-game-tutorial.html"><strong>2.</strong> Guessing Game Tutorial</a></li><li><a href="ch03-00-common-programming-concepts.html"><strong>3.</strong> Common Programming Concepts</a></li><li><ul class="section"><li><a href="ch03-01-variables-and-mutability.html"><strong>3.1.</strong> Variables and Mutability</a></li><li><a href="ch03-02-data-types.html"><strong>3.2.</strong> Data Types</a></li><li><a href="ch03-03-how-functions-work.html"><strong>3.3.</strong> How Functions Work</a></li><li><a href="ch03-04-comments.html"><strong>3.4.</strong> Comments</a></li><li><a href="ch03-05-control-flow.html"><strong>3.5.</strong> Control Flow</a></li></ul></li><li><a href="ch04-00-understanding-ownership.html"><strong>4.</strong> Understanding Ownership</a></li><li><ul class="section"><li><a href="ch04-01-what-is-ownership.html"><strong>4.1.</strong> What is Ownership?</a></li><li><a href="ch04-02-references-and-borrowing.html"><strong>4.2.</strong> References &amp; Borrowing</a></li><li><a href="ch04-03-slices.html"><strong>4.3.</strong> Slices</a></li></ul></li><li><a href="ch05-00-structs.html"><strong>5.</strong> Structs</a></li><li><ul class="section"><li><a href="ch05-01-method-syntax.html"><strong>5.1.</strong> Method Syntax</a></li></ul></li><li><a href="ch06-00-enums.html"><strong>6.</strong> Enums and Pattern Matching</a></li><li><ul class="section"><li><a href="ch06-01-defining-an-enum.html" class="active"><strong>6.1.</strong> Defining an Enum</a></li><li><a href="ch06-02-match.html"><strong>6.2.</strong> The <code>match</code> Control Flow Operator</a></li><li><a href="ch06-03-if-let.html"><strong>6.3.</strong> Concise Control Flow with <code>if let</code></a></li></ul></li><li><a href="ch07-00-modules.html"><strong>7.</strong> Modules</a></li><li><ul class="section"><li><a href="ch07-01-mod-and-the-filesystem.html"><strong>7.1.</strong> <code>mod</code> and the Filesystem</a></li><li><a href="ch07-02-controlling-visibility-with-pub.html"><strong>7.2.</strong> Controlling Visibility with <code>pub</code></a></li><li><a href="ch07-03-importing-names-with-use.html"><strong>7.3.</strong> Importing Names with <code>use</code></a></li></ul></li><li><a href="ch08-00-fundamental-collections.html"><strong>8.</strong> Fundamental Collections</a></li><li><ul class="section"><li><a href="ch08-01-vectors.html"><strong>8.1.</strong> Vectors</a></li><li><a href="ch08-02-strings.html"><strong>8.2.</strong> Strings</a></li><li><a href="ch08-03-hash-maps.html"><strong>8.3.</strong> Hash Maps</a></li></ul></li><li><a href="ch09-00-error-handling.html"><strong>9.</strong> Error Handling</a></li><li><ul class="section"><li><a href="ch09-01-unrecoverable-errors-with-panic.html"><strong>9.1.</strong> Unrecoverable Errors with <code>panic!</code></a></li><li><a href="ch09-02-recoverable-errors-with-result.html"><strong>9.2.</strong> Recoverable Errors with <code>Result</code></a></li><li><a href="ch09-03-to-panic-or-not-to-panic.html"><strong>9.3.</strong> To <code>panic!</code> or Not To <code>panic!</code></a></li></ul></li><li><a href="ch10-00-generics.html"><strong>10.</strong> Generics</a></li><li><ul class="section"><li><a href="ch10-01-syntax.html"><strong>10.1.</strong> Syntax</a></li><li><a href="ch10-02-traits.html"><strong>10.2.</strong> Traits</a></li><li><a href="ch10-03-lifetime-syntax.html"><strong>10.3.</strong> Lifetime syntax</a></li></ul></li><li><a href="ch11-00-testing.html"><strong>11.</strong> Testing</a></li><li><ul class="section"><li><a href="ch11-01-writing-tests.html"><strong>11.1.</strong> Writing tests</a></li><li><a href="ch11-02-running-tests.html"><strong>11.2.</strong> Running tests</a></li><li><a href="ch11-03-test-organization.html"><strong>11.3.</strong> Test Organization</a></li></ul></li><li><a href="ch12-00-an-io-project.html"><strong>12.</strong> An I/O Project</a></li><li><ul class="section"><li><a href="ch12-01-accepting-command-line-arguments.html"><strong>12.1.</strong> Accepting Command Line Arguments</a></li><li><a href="ch12-02-reading-a-file.html"><strong>12.2.</strong> Reading a File</a></li><li><a href="ch12-03-improving-error-handling-and-modularity.html"><strong>12.3.</strong> Improving Error Handling and Modularity</a></li><li><a href="ch12-04-testing-the-librarys-functionality.html"><strong>12.4.</strong> Testing the Library's Functionality</a></li><li><a href="ch12-05-working-with-environment-variables.html"><strong>12.5.</strong> Working with Environment Variables</a></li><li><a href="ch12-06-writing-to-stderr-instead-of-stdout.html"><strong>12.6.</strong> Writing to <code>stderr</code> instead of <code>stdout</code></a></li></ul></li><li><a href="ch13-00-functional-features.html"><strong>13.</strong> Functional Language Features in Rust</a></li><li><ul class="section"><li><a href="ch13-01-closures.html"><strong>13.1.</strong> Closures</a></li><li><a href="ch13-02-iterators.html"><strong>13.2.</strong> Iterators</a></li><li><a href="ch13-03-improving-our-io-project.html"><strong>13.3.</strong> Improving our I/O Project</a></li><li><a href="ch13-04-performance.html"><strong>13.4.</strong> Performance</a></li></ul></li><li><a href="ch14-00-more-about-cargo.html"><strong>14.</strong> More about Cargo and Crates.io</a></li><li><ul class="section"><li><a href="ch14-01-release-profiles.html"><strong>14.1.</strong> Release Profiles</a></li><li><a href="ch14-02-publishing-to-crates-io.html"><strong>14.2.</strong> Publishing a Crate to Crates.io</a></li><li><a href="ch14-03-cargo-workspaces.html"><strong>14.3.</strong> Cargo Workspaces</a></li><li><a href="ch14-04-installing-binaries.html"><strong>14.4.</strong> Installing Binaries from Crates.io with <code>cargo install</code></a></li><li><a href="ch14-05-extending-cargo.html"><strong>14.5.</strong> Extending Cargo with Custom Commands</a></li></ul></li><li><a href="ch15-00-smart-pointers.html"><strong>15.</strong> Smart Pointers</a></li><li><a href="ch16-00-concurrency.html"><strong>16.</strong> Concurrency</a></li><li><a href="ch17-00-oop.html"><strong>17.</strong> Is Rust OOP?</a></li><li><a href="ch18-00-patterns.html"><strong>18.</strong> Patterns</a></li><li><a href="ch19-00-more-lifetimes.html"><strong>19.</strong> More Lifetimes</a></li><li><a href="ch20-00-advanced-types.html"><strong>20.</strong> Advanced Type System Features</a></li><li><a href="appendix-00.html"><strong>21.</strong> Appendix</a></li><li><ul class="section"><li><a href="appendix-01-keywords.html"><strong>21.1.</strong> Keywords</a></li><li><a href="appendix-02-operators.html"><strong>21.2.</strong> Operators</a></li><li><a href="appendix-03-derivable-traits.html"><strong>21.3.</strong> Derivable Traits</a></li><li><a href="appendix-04-nightly-rust.html"><strong>21.4.</strong> Nightly Rust</a></li><li><a href="appendix-05-macros.html"><strong>21.5.</strong> Macros</a></li></ul></li></ul>
+        </div>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar" class="menu-bar">
+                    <div class="left-buttons">
+                        <i id="sidebar-toggle" class="fa fa-bars"></i>
+                        <i id="theme-toggle" class="fa fa-paint-brush"></i>
+                    </div>
+
+                    <h1 class="menu-title">The Rust Programming Language</h1>
+
+                    <div class="right-buttons">
+                        <i id="print-button" class="fa fa-print" title="Print this book"></i>
+                    </div>
+                </div>
+
+                <div id="content" class="content">
+                    <h2>Defining an Enum</h2>
+<p>Let’s look at a situation we might want to express in code and see why enums
+are useful and more appropriate than structs in this case. Say we need to work
+with IP addresses. Currently, two major standards are used for IP addresses:
+version four and version six. These are the only possibilities for an IP
+address that our program will come across: we can <em>enumerate</em> all possible
+values, which is where enumeration gets its name.</p>
+<p>Any IP address can be either a version four or a version six address but not
+both at the same time. That property of IP addresses makes the enum data
+structure appropriate for this case, because enum values can only be one of the
+variants. Both version four and version six addresses are still fundamentally
+IP addresses, so they should be treated as the same type when the code is
+handling situations that apply to any kind of IP address.</p>
+<p>We can express this concept in code by defining an <code>IpAddrKind</code> enumeration and
+listing the possible kinds an IP address can be, <code>V4</code> and <code>V6</code>. These are known
+as the <em>variants</em> of the enum:</p>
+<pre><code class="language-rust">enum IpAddrKind {
+    V4,
+    V6,
+}
+</code></pre>
+<p><code>IpAddrKind</code> is now a custom data type that we can use elsewhere in our code.</p>
+<h3>Enum Values</h3>
+<p>We can create instances of each of the two variants of <code>IpAddrKind</code> like this:</p>
+<pre><code class="language-rust"># enum IpAddrKind {
+#     V4,
+#     V6,
+# }
+#
+let four = IpAddrKind::V4;
+let six = IpAddrKind::V6;
+</code></pre>
+<p>Note that the variants of the enum are namespaced under its identifier, and we
+use a double colon to separate the two. The reason this is useful is that now
+both values <code>IpAddrKind::V4</code> and <code>IpAddrKind::V6</code> are of the same type:
+<code>IpAddrKind</code>. We can then, for instance, define a function that takes any
+<code>IpAddrKind</code>:</p>
+<pre><code class="language-rust"># enum IpAddrKind {
+#     V4,
+#     V6,
+# }
+#
+fn route(ip_type: IpAddrKind) { }
+</code></pre>
+<p>And we can call this function with either variant:</p>
+<pre><code class="language-rust"># enum IpAddrKind {
+#     V4,
+#     V6,
+# }
+#
+# fn route(ip_type: IpAddrKind) { }
+#
+route(IpAddrKind::V4);
+route(IpAddrKind::V6);
+</code></pre>
+<p>Using enums has even more advantages. Thinking more about our IP address type,
+at the moment we don’t have a way to store the actual IP address <em>data</em>; we
+only know what <em>kind</em> it is. Given that you just learned about structs in
+Chapter 5, you might tackle this problem as shown in Listing 6-1:</p>
+<figure>
+<pre><code class="language-rust">enum IpAddrKind {
+    V4,
+    V6,
+}
+
+struct IpAddr {
+    kind: IpAddrKind,
+    address: String,
+}
+
+let home = IpAddr {
+    kind: IpAddrKind::V4,
+    address: String::from(&quot;127.0.0.1&quot;),
+};
+
+let loopback = IpAddr {
+    kind: IpAddrKind::V6,
+    address: String::from(&quot;::1&quot;),
+};
+</code></pre>
+<figcaption>
+<p>Listing 6-1: Storing the data and <code>IpAddrKind</code> variant of an IP address using a
+<code>struct</code></p>
+</figcaption>
+</figure>
+<p>Here, we’ve defined a struct <code>IpAddr</code> that has two fields: a <code>kind</code> field that
+is of type <code>IpAddrKind</code> (the enum we defined previously) and an <code>address</code> field
+of type <code>String</code>. We have two instances of this struct. The first, <code>home</code>, has
+the value <code>IpAddrKind::V4</code> as its <code>kind</code> with associated address data of
+<code>127.0.0.1</code>. The second instance, <code>loopback</code>, has the other variant of
+<code>IpAddrKind</code> as its <code>kind</code> value, <code>V6</code>, and has address <code>::1</code> associated with
+it. We’ve used a struct to bundle the <code>kind</code> and <code>address</code> values together, so
+now the variant is associated with the value.</p>
+<p>We can represent the same concept in a more concise way using just an enum
+rather than an enum as part of a struct by putting data directly into each enum
+variant. This new definition of the <code>IpAddr</code> enum says that both <code>V4</code> and <code>V6</code>
+variants will have associated <code>String</code> values:</p>
+<pre><code class="language-rust">enum IpAddr {
+    V4(String),
+    V6(String),
+}
+
+let home = IpAddr::V4(String::from(&quot;127.0.0.1&quot;));
+
+let loopback = IpAddr::V6(String::from(&quot;::1&quot;));
+</code></pre>
+<p>We attach data to each variant of the enum directly, so there is no need for an
+extra struct.</p>
+<p>There’s another advantage to using an enum rather than a struct: each variant
+can have different types and amounts of associated data. Version four type IP
+addresses will always have four numeric components that will have values
+between 0 and 255. If we wanted to store <code>V4</code> addresses as four <code>u8</code> values but
+still express <code>V6</code> addresses as one <code>String</code> value, we wouldn’t be able to with
+a struct. Enums handle this case with ease:</p>
+<pre><code class="language-rust">enum IpAddr {
+    V4(u8, u8, u8, u8),
+    V6(String),
+}
+
+let home = IpAddr::V4(127, 0, 0, 1);
+
+let loopback = IpAddr::V6(String::from(&quot;::1&quot;));
+</code></pre>
+<p>We’ve shown several different possibilities that we could define in our code
+for storing IP addresses of the two different varieties using an enum. However,
+as it turns out, wanting to store IP addresses and encode which kind they are
+is so common that <a href="../std/net/enum.IpAddr.html">the standard library has a definition we can
+use!</a><!-- ignore --> Let’s look at how the standard library defines
+<code>IpAddr</code>: it has the exact enum and variants that we’ve defined and used, but
+it embeds the address data inside the variants in the form of two different
+structs, which are defined differently for each variant:</p>
+<pre><code class="language-rust">struct Ipv4Addr {
+    // details elided
+}
+
+struct Ipv6Addr {
+    // details elided
+}
+
+enum IpAddr {
+    V4(Ipv4Addr),
+    V6(Ipv6Addr),
+}
+</code></pre>
+<p>This code illustrates that you can put any kind of data inside an enum variant:
+strings, numeric types, or structs, for example. You can even include another
+enum! Also, standard library types are often not much more complicated than
+what you might come up with.</p>
+<p>Note that even though the standard library contains a definition for <code>IpAddr</code>,
+we can still create and use our own definition without conflict because we
+haven’t brought the standard library’s definition into our scope. We’ll talk
+more about importing types in Chapter 7.</p>
+<p>Let’s look at another example of an enum in Listing 6-2: this one has a wide
+variety of types embedded in its variants:</p>
+<figure>
+<pre><code class="language-rust">enum Message {
+    Quit,
+    Move { x: i32, y: i32 },
+    Write(String),
+    ChangeColor(i32, i32, i32),
+}
+</code></pre>
+<figcaption>
+<p>Listing 6-2: A <code>Message</code> enum whose variants each store different amounts and
+types of values</p>
+</figcaption>
+</figure>
+<p>This enum has four variants with different types:</p>
+<ul>
+<li><code>Quit</code> has no data associated with it at all.</li>
+<li><code>Move</code> includes an anonymous struct inside it.</li>
+<li><code>Write</code> includes a single <code>String</code>.</li>
+<li><code>ChangeColor</code> includes three <code>i32</code>s.</li>
+</ul>
+<p>Defining an enum with variants like the ones in Listing 6-2 is similar to
+defining different kinds of struct definitions except the enum doesn’t use the
+<code>struct</code> keyword and all the variants are grouped together under the <code>Message</code>
+type. The following structs could hold the same data that the preceding enum
+variants hold:</p>
+<pre><code class="language-rust">struct QuitMessage; // unit struct
+struct MoveMessage {
+    x: i32,
+    y: i32,
+}
+struct WriteMessage(String); // tuple struct
+struct ChangeColorMessage(i32, i32, i32); // tuple struct
+</code></pre>
+<p>But if we used the different structs, which each have their own type, we
+wouldn’t be able to as easily define a function that could take any of these
+kinds of messages as we could with the <code>Message</code> enum defined in Listing 6-2,
+which is a single type.</p>
+<p>There is one more similarity between enums and structs: just as we’re able to
+define methods on structs using <code>impl</code>, we’re also able to define methods on
+enums. Here’s a method named <code>call</code> that we could define on our <code>Message</code> enum:</p>
+<pre><code class="language-rust"># enum Message {
+#     Quit,
+#     Move { x: i32, y: i32 },
+#     Write(String),
+#     ChangeColor(i32, i32, i32),
+# }
+#
+impl Message {
+    fn call(&amp;self) {
+        // method body would be defined here
+    }
+}
+
+let m = Message::Write(String::from(&quot;hello&quot;));
+m.call();
+</code></pre>
+<p>The body of the method would use <code>self</code> to get the value that we called the
+method on. In this example, we’ve created a variable <code>m</code> that has the value
+<code>Message::Write(&quot;hello&quot;)</code>, and that is what <code>self</code> will be in the body of the
+<code>call</code> method when <code>m.call()</code> runs.</p>
+<p>Let’s look at another enum in the standard library that is very common and
+useful: <code>Option</code>.</p>
+<h3>The <code>Option</code> Enum and Its Advantages Over Null Values</h3>
+<p>In the previous section, we looked at how the <code>IpAddr</code> enum let us use Rust’s
+type system to encode more information than just the data into our program.
+This section explores a case study of <code>Option</code>, which is another enum defined
+by the standard library. The <code>Option</code> type is used in many places because it
+encodes the very common scenario in which a value could be something or it
+could be nothing. Expressing this concept in terms of the type system means the
+compiler can check that you’ve handled all the cases you should be handling,
+which can prevent bugs that are extremely common in other programming languages.</p>
+<p>Programming language design is often thought of in terms of which features you
+include, but the features you exclude are important too. Rust doesn’t have the
+null feature that many other languages have. <em>Null</em> is a value that means there
+is no value there. In languages with null, variables can always be in one of
+two states: null or not-null.</p>
+<p>In “Null References: The Billion Dollar Mistake,” Tony Hoare, the inventor of
+null, has this to say:</p>
+<blockquote>
+<p>I call it my billion-dollar mistake. At that time, I was designing the first
+comprehensive type system for references in an object-oriented language. My
+goal was to ensure that all use of references should be absolutely safe, with
+checking performed automatically by the compiler. But I couldn't resist the
+temptation to put in a null reference, simply because it was so easy to
+implement. This has led to innumerable errors, vulnerabilities, and system
+crashes, which have probably caused a billion dollars of pain and damage in
+the last forty years.</p>
+</blockquote>
+<p>The problem with null values is that if you try to actually use a value that’s
+null as if it is a not-null value, you’ll get an error of some kind. Because
+this null or not-null property is pervasive, it’s extremely easy to make this
+kind of error.</p>
+<p>However, the concept that null is trying to express is still a useful one: a
+null is a value that is currently invalid or absent for some reason.</p>
+<p>The problem isn’t with the actual concept but with the particular
+implementation. As such, Rust does not have nulls, but it does have an enum
+that can encode the concept of a value being present or absent. This enum is
+<code>Option&lt;T&gt;</code>, and it is <a href="../std/option/enum.Option.html">defined by the standard library</a><!-- ignore -->
+as follows:</p>
+<pre><code class="language-rust">enum Option&lt;T&gt; {
+    Some(T),
+    None,
+}
+</code></pre>
+<p>The <code>Option&lt;T&gt;</code> enum is so useful that it’s even included in the prelude; you
+don’t need to import it explicitly.  In addition, so are its variants: you can
+use <code>Some</code> and <code>None</code> directly without prefixing them with <code>Option::</code>.
+<code>Option&lt;T&gt;</code> is still just a regular enum, and <code>Some(T)</code> and <code>None</code> are still
+variants of type <code>Option&lt;T&gt;</code>.</p>
+<p>The <code>&lt;T&gt;</code> syntax is a feature of Rust we haven’t talked about yet. It’s a
+generic type parameter, and we’ll cover generics in more detail in Chapter 10.
+For now, all you need to know is that <code>&lt;T&gt;</code> means the <code>Some</code> variant of the
+<code>Option</code> enum can hold one piece of data of any type. Here are some examples of
+using <code>Option</code> values to hold number types and string types:</p>
+<pre><code class="language-rust">let some_number = Some(5);
+let some_string = Some(&quot;a string&quot;);
+
+let absent_number: Option&lt;i32&gt; = None;
+</code></pre>
+<p>If we use <code>None</code> rather than <code>Some</code>, we need to tell Rust what type of
+<code>Option&lt;T&gt;</code> we have, because the compiler can't infer the type that the <code>Some</code>
+variant will hold by looking only at a <code>None</code> value.</p>
+<p>When we have a <code>Some</code> value, we know that a value is present, and the value is
+held within the <code>Some</code>. When we have a <code>None</code> value, in some sense, it means
+the same thing as null: we don’t have a valid value. So why is having
+<code>Option&lt;T&gt;</code> any better than having null?</p>
+<p>In short, because <code>Option&lt;T&gt;</code> and <code>T</code> (where <code>T</code> can be any type) are different
+types, the compiler won’t let us use an <code>Option&lt;T&gt;</code> value as if it was
+definitely a valid value. For example, this code won’t compile because it’s
+trying to compare an <code>Option&lt;i8&gt;</code> to an <code>i8</code>:</p>
+<pre><code class="language-rust,ignore">let x: i8 = 5;
+let y: Option&lt;i8&gt; = Some(5);
+
+let sum = x + y;
+</code></pre>
+<p>If we run this code, we get an error message like this:</p>
+<pre><code class="language-text">error[E0277]: the trait bound `i8: std::ops::Add&lt;std::option::Option&lt;i8&gt;&gt;` is
+not satisfied
+ --&gt;
+  |
+7 | let sum = x + y;
+  |           ^^^^^
+  |
+</code></pre>
+<p>Intense! In effect, this error message means that Rust doesn’t understand how
+to add an <code>Option&lt;i8&gt;</code> and an <code>i8</code>, because they’re different types. When we
+have a value of a type like <code>i8</code> in Rust, the compiler will ensure that we
+always have a valid value. We can proceed confidently without having to check
+for null before using that value. Only when we have an <code>Option&lt;i8&gt;</code> (or
+whatever type of value we’re working with) do we have to worry about possibly
+not having a value, and the compiler will make sure we handle that case before
+using the value.</p>
+<p>In other words, you have to convert an <code>Option&lt;T&gt;</code> to a <code>T</code> before you can
+perform <code>T</code> operations with it. Generally, this helps catch one of the most
+common issues with null: assuming that something isn’t null when it actually
+is.</p>
+<p>Not having to worry about missing an assumption of having a not-null value
+helps you to be more confident in your code. In order to have a value that can
+possibly be null, you must explicitly opt in by making the type of that value
+<code>Option&lt;T&gt;</code>. Then, when you use that value, you are required to explicitly
+handle the case when the value is null. Everywhere that a value has a type that
+isn’t an <code>Option&lt;T&gt;</code>, you <em>can</em> safely assume that the value isn’t null. This
+was a deliberate design decision for Rust to limit null’s pervasiveness and
+increase the safety of Rust code.</p>
+<p>So, how do you get the <code>T</code> value out of a <code>Some</code> variant when you have a value
+of type <code>Option&lt;T&gt;</code> so you can use that value? The <code>Option&lt;T&gt;</code> enum has a large
+number of methods that are useful in a variety of situations; you can check
+them out in <a href="../std/option/enum.Option.html">its documentation</a><!-- ignore -->. Becoming familiar with
+the methods on <code>Option&lt;T&gt;</code> will be extremely useful in your journey with Rust.</p>
+<p>In general, in order to use an <code>Option&lt;T&gt;</code> value, we want to have code that
+will handle each variant. We want some code that will run only when we have a
+<code>Some(T)</code> value, and this code is allowed to use the inner <code>T</code>. We want some
+other code to run if we have a <code>None</code> value, and that code doesn’t have a <code>T</code>
+value available. The <code>match</code> expression is a control flow construct that does
+just this when used with enums: it will run different code depending on which
+variant of the enum it has, and that code can use the data inside the matching
+value.</p>
+
+                </div>
+
+                <!-- Mobile navigation buttons -->
+                
+                    <a href="ch06-00-enums.html" class="mobile-nav-chapters previous">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+                    <a href="ch06-02-match.html" class="mobile-nav-chapters next">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                
+
+            </div>
+
+            
+                <a href="ch06-00-enums.html" class="nav-chapters previous" title="You can navigate through the chapters using the arrow keys">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+            
+
+            
+                <a href="ch06-02-match.html" class="nav-chapters next" title="You can navigate through the chapters using the arrow keys">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            
+
+        </div>
+
+
+        <!-- Local fallback for Font Awesome -->
+        <script>
+            if ($(".fa").css("font-family") !== "FontAwesome") {
+                $('<link rel="stylesheet" type="text/css" href="_FontAwesome/css/font-awesome.css">').prependTo('head');
+            }
+        </script>
+
+        <!-- Livereload script (if served using the cli tool) -->
+        
+
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+    </body>
+</html>
