@@ -24,7 +24,7 @@
     - [Method Syntax](ch05-01-method-syntax.md)
 
 - [Enums](ch06-00-enums.md)
-    - [Option](ch06-01-option.md)
+    - [Defining an Enum](ch06-01-defining-an-enum.md)
     - [Match](ch06-02-match.md)
     - [`if let`](ch06-03-if-let.md)
 
