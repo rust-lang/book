@@ -168,6 +168,8 @@ number when we sent you chapter 12, we will fix it. /Carol -->
 
 ```rust
 fn grep_case_insensitive<'a>(search: &str, contents: &'a str) -> Vec<&'a str> {
+    let search = search.to_lowercase();
+
     contents.lines()
         .filter(|line| {
             line.to_lowercase().contains(&search)
