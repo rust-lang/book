@@ -10915,6 +10915,8 @@ defined in Listing 12-16 as follows:</p>
 <!-- Similarly, the code snippet that will be 12-16 didn't have a listing
 number when we sent you chapter 12, we will fix it. /Carol -->
 <pre><code class="language-rust">fn grep_case_insensitive&lt;'a&gt;(search: &amp;str, contents: &amp;'a str) -&gt; Vec&lt;&amp;'a str&gt; {
+    let search = search.to_lowercase();
+
     contents.lines()
         .filter(|line| {
             line.to_lowercase().contains(&amp;search)
