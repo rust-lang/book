@@ -170,7 +170,7 @@ multiple files to split Rust projects up so that not everything lives in
 *src/lib.rs*. For this example, we will start with this code in *src/lib.rs*:
 
 <figure>
-<span class="filename">File: src/lib.rs</span>
+<span class="filename">Filename: src/lib.rs</span>
 
 ```rust
 mod client {
@@ -213,7 +213,7 @@ This would be a good reason to pull each of the `client`, `network`, and
 extracting the `client` module into another file. First, replace the `client`
 module code in *src/lib.rs* with the following:
 
-<span class="filename">File: src/lib.rs</span>
+<span class="filename">Filename: src/lib.rs</span>
 
 ```rust,ignore
 mod client;
@@ -241,7 +241,7 @@ So now we need to create the external file with that module name. Create a
 following, which is the `connect` function in the `client` module that we
 removed in the previous step:
 
-<span class="filename">File: src/client.rs</span>
+<span class="filename">Filename: src/client.rs</span>
 
 ```rust
 fn connect() {
