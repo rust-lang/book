@@ -51,7 +51,7 @@ error: Process didn't exit successfully: `target/debug/panic` (exit code: 101)
 
 The last three lines contain the error message caused by the call to `panic!`.
 The first line shows our panic message and the place in our source code where
-the panic occurred: `src/main.rs:2` indicates that it's the second like of our
+the panic occurred: `src/main.rs:2` indicates that it's the second line of our
 *main.rs* file.
 
 In this case, the line indicated is part of our code, and if we go to that line
