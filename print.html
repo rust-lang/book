@@ -4803,7 +4803,7 @@ that you’re used to: file systems! We can use Rust’s module system along wit
 multiple files to split Rust projects up so that not everything lives in
 <em>src/lib.rs</em>. For this example, we will start with this code in <em>src/lib.rs</em>:</p>
 <figure>
-<span class="filename">File: src/lib.rs</span>
+<span class="filename">Filename: src/lib.rs</span>
 <pre><code class="language-rust">mod client {
     fn connect() {
     }
@@ -4836,7 +4836,7 @@ This would be a good reason to pull each of the <code>client</code>, <code>netwo
 <code>server</code> modules out of <em>src/lib.rs</em> and into their own files. Let’s start by
 extracting the <code>client</code> module into another file. First, replace the <code>client</code>
 module code in <em>src/lib.rs</em> with the following:</p>
-<p><span class="filename">File: src/lib.rs</span></p>
+<p><span class="filename">Filename: src/lib.rs</span></p>
 <pre><code class="language-rust,ignore">mod client;
 
 mod network {
@@ -4858,7 +4858,7 @@ defined inside that module.</p>
 <em>client.rs</em> file in your <em>src/</em> directory, then open it up and enter the
 following, which is the <code>connect</code> function in the <code>client</code> module that we
 removed in the previous step:</p>
-<p><span class="filename">File: src/client.rs</span></p>
+<p><span class="filename">Filename: src/client.rs</span></p>
 <pre><code class="language-rust">fn connect() {
 }
 </code></pre>
@@ -6305,7 +6305,7 @@ error: Process didn't exit successfully: `target/debug/panic` (exit code: 101)
 </code></pre>
 <p>The last three lines contain the error message caused by the call to <code>panic!</code>.
 The first line shows our panic message and the place in our source code where
-the panic occurred: <code>src/main.rs:2</code> indicates that it's the second like of our
+the panic occurred: <code>src/main.rs:2</code> indicates that it's the second line of our
 <em>main.rs</em> file.</p>
 <p>In this case, the line indicated is part of our code, and if we go to that line
 we see the <code>panic!</code> macro call. In other cases, the <code>panic!</code> call might be in
