@@ -240,7 +240,7 @@ otherwise, the pattern matching will move on to consider the next arm in the
 into the guard condition but is merely referenced by it. The reason `ref` is
 used to take a reference in a pattern instead of `&` will be covered in detail
 in Chapter XX. In short, in the context of a pattern, `&` matches a reference
-and give us its value, but `ref` matches a value and gives us a reference to it.
+and gives us its value, but `ref` matches a value and gives us a reference to it.
 
 The condition we want to check in the match guard is whether the value returned
 by `error.kind()` is the `NotFound` variant of the `ErrorKind` enum. If it is,
