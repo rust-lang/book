@@ -257,10 +257,10 @@ otherwise, the pattern matching will move on to consider the next arm in the
 into the guard condition but is merely referenced by it. The reason <code>ref</code> is
 used to take a reference in a pattern instead of <code>&amp;</code> will be covered in detail
 in Chapter XX. In short, in the context of a pattern, <code>&amp;</code> matches a reference
-and give us its value, but <code>ref</code> matches a value and gives us a reference to it.</p>
+and gives us its value, but <code>ref</code> matches a value and gives us a reference to it.</p>
 <p>The condition we want to check in the match guard is whether the value returned
 by <code>error.kind()</code> is the <code>NotFound</code> variant of the <code>ErrorKind</code> enum. If it is,
-we try to create the file with 'File::create'. However, since <code>File::create</code>
+we try to create the file with <code>File::create</code>. However, since <code>File::create</code>
 could also fail, we need to add an inner <code>match</code> statement as well! When the
 file can't be opened, a different error message will be printed. The last arm
 of the outer <code>match</code> stays the same so that the program panics on any error

@@ -6305,7 +6305,7 @@ error: Process didn't exit successfully: `target/debug/panic` (exit code: 101)
 </code></pre>
 <p>The last three lines contain the error message caused by the call to <code>panic!</code>.
 The first line shows our panic message and the place in our source code where
-the panic occurred: <code>src/main.rs:2</code> indicates that it's the second like of our
+the panic occurred: <code>src/main.rs:2</code> indicates that it's the second line of our
 <em>main.rs</em> file.</p>
 <p>In this case, the line indicated is part of our code, and if we go to that line
 we see the <code>panic!</code> macro call. In other cases, the <code>panic!</code> call might be in
@@ -6603,10 +6603,10 @@ otherwise, the pattern matching will move on to consider the next arm in the
 into the guard condition but is merely referenced by it. The reason <code>ref</code> is
 used to take a reference in a pattern instead of <code>&amp;</code> will be covered in detail
 in Chapter XX. In short, in the context of a pattern, <code>&amp;</code> matches a reference
-and give us its value, but <code>ref</code> matches a value and gives us a reference to it.</p>
+and gives us its value, but <code>ref</code> matches a value and gives us a reference to it.</p>
 <p>The condition we want to check in the match guard is whether the value returned
 by <code>error.kind()</code> is the <code>NotFound</code> variant of the <code>ErrorKind</code> enum. If it is,
-we try to create the file with 'File::create'. However, since <code>File::create</code>
+we try to create the file with <code>File::create</code>. However, since <code>File::create</code>
 could also fail, we need to add an inner <code>match</code> statement as well! When the
 file can't be opened, a different error message will be printed. The last arm
 of the outer <code>match</code> stays the same so that the program panics on any error
