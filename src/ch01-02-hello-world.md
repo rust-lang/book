@@ -10,9 +10,9 @@ tradition.
 > lives, so if you prefer an IDE to the command line, feel free to use your
 > favorite IDE.
 
-### Creating a Project File
+### Creating a Project Directory
 
-First, make a file to put your Rust code in. Rust doesn't care where your code
+First, make a directory to put your Rust code in. Rust doesn't care where your code
 lives, but for this book, we'd suggest making a *projects* directory in your
 home directory and keeping all your projects there. Open a terminal and enter
 the following commands to make a directory for this particular project:
