@@ -5,6 +5,7 @@ abcdefghijklmnopqrstuvwxyz
 adaptor
 adaptors
 Addr
+aggregator
 aliasability
 alignof
 Amir
@@ -69,6 +70,7 @@ Dobrý
 doccargo
 doccratesio
 doesn
+ebooks
 Edsger
 else's
 emoji
@@ -159,6 +161,7 @@ namespaced
 namespaces
 namespacing
 newfound
+NewsArticle
 newtype
 nocapture
 nomicon
@@ -197,6 +200,7 @@ refactor
 refactoring
 RefCell
 repr
+retweet
 ripgrep
 runtime
 Rustacean
@@ -238,6 +242,7 @@ Submodules
 suboptimal
 subtree
 subtyping
+Summarizable
 Supertraits
 That'd
 test's
@@ -270,6 +275,7 @@ variable's
 vers
 Versioning
 wasn
+WeatherForecast
 whitespace
 wildcards
 workspace

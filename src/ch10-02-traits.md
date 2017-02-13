@@ -1,306 +1,492 @@
-## Traits
+## Traits: Defining Shared Behavior
 
-*Traits* are similar to a feature often called 'interfaces' in other languages,
-but are also different. Traits let us do another kind of abstraction: they let
-us abstract over *behavior* that types can have in common.
+Traits allow us to use another kind of abstraction: they let us abstract over
+behavior that types can have in common. A *trait* tells the Rust compiler about
+functionality a particular type has and might share with other types. In
+situations where we use generic type parameters, we can use *trait bounds* to
+specify, at compile time, that the generic type may be any type that implements
+a trait and therefore has the behavior we want to use in that situation.
 
-When we use a generic type parameter, we are telling Rust that any type is
-valid in that location. When other code *uses* a value that could be of any
-type, we need to also tell Rust that the type has the functionality that we
-need. Traits let us specify that, for example, we need any type `T` that has
-methods defined on it that allow us to print a value of that type. This is
-powerful because we can still leave our definitions generic to allow use of
-many different types, but we can constrain the type at compile-time to types
-that have the behavior we need to be able to use.
+> Note: *Traits* are similar to a feature often called 'interfaces' in other
+> languages, though with some differences.
 
-Listing 10-5 has an example definition of a trait named `Printable` with a
-method named `print`:
+### Defining a Trait
+
+The behavior of a type consists of the methods we can call on that type.
+Different types share the same behavior if we can call the same methods on all
+of those types. Trait definitions are a way to group method signatures together
+in order to define a set of behaviors necessary to accomplish some purpose.
+
+For example, say we have multiple structs that hold various kinds and amounts
+of text: a `NewsArticle` struct that holds a news story filed in a particular
+place in the world, and a `Tweet` that can have at most 140 characters in its
+content along with has metadata like whether it was a retweet or a reply to
+another tweet.
+
+We want to make a media aggregator library that can display summaries of data
+that might be stored in a `NewsArticle` or `Tweet` instance. The behavior we
+need each struct to have is that it's able to be summarized, and that we can
+ask for that summary by calling a `summary` method on an instance. Listing
+10-11 shows the definition of a `Summarizable` trait that expresses this
+concept:
 
 <figure>
-<span class="filename">Filename: src/lib.rs</span>
+<span class="filename">Filename: lib.rs</span>
 
 ```rust
-trait Printable {
-    fn print(&self);
+pub trait Summarizable {
+    fn summary(&self) -> String;
 }
 ```
 
 <figcaption>
 
-Listing 10-5: A `Printable` trait definition with one method, `print`
+Listing 10-11: Definition of a `Summarizable` trait that consists of the
+behavior provided by a `summary` method
 
 </figcaption>
 </figure>
 
-We declare a trait with the `trait` keyword, then the trait's name. In this
-case, our trait will describe types which can be printed. Inside of curly
-braces, we declare a method signature, but instead of providing an
-implementation inside curly braces, we put a semicolon after the signature. A
-trait can have multiple methods in its body, with the method signatures listed
-one per line and each line ending in a semicolon.
+We declare a trait with the `trait` keyword, then the trait's name. Inside
+curly braces we declare the method signatures that describe the behaviors that
+types that implement this trait will need to have. After the method signature,
+instead of providing an implementation within curly braces, we put a semicolon.
+Each type that implements this trait can then provide its own custom behavior
+in the body of the method, but the compiler will enforce that any type that has
+the `Summarizable` trait will have the method `summary` defined for it with
+this signature exactly.
 
-Implementing a trait for a particular type looks similar to implementing
-methods on a type since it's also done with the `impl` keyword, but we specify
-the trait name as well. Inside the `impl` block, we specify definitions for the
-trait's methods in the context of the specific type. Listing 10-6 has an
-example of implementing the `Printable` trait from Listing 10-5 (that only has
-the `print` method) for a `Temperature` enum:
+A trait can have multiple methods in its body, with the method signatures
+listed one per line and each line ending in a semicolon.
+
+### Implementing a Trait on a Type
+
+Now that we have the `Summarizable` trait defined, we can implement it on the
+types in our media aggregator that we want to have this behavior. Listing 10-12
+shows an implementation of the `Summarizable` trait on the `NewsArticle` struct
+that uses the headline, the author, and the location to create the return value
+of `summary`. For the `Tweet` struct, we've chosen to define `summary` as the
+username followed by the whole text of the tweet, assuming that tweet content
+is already limited to 140 characters.
 
 <figure>
-<span class="filename">Filename: src/lib.rs</span>
+<span class="filename">Filename: lib.rs</span>
 
 ```rust
-# trait Printable {
-#     fn print(&self);
+# pub trait Summarizable {
+#     fn summary(&self) -> String;
 # }
 #
-enum Temperature {
-    Celsius(i32),
-    Fahrenheit(i32),
+pub struct NewsArticle {
+    pub headline: String,
+    pub location: String,
+    pub content: String,
 }
 
-impl Printable for Temperature {
-    fn print(&self) {
-        match *self {
-            Temperature::Celsius(val) => println!("{}°C", val),
-            Temperature::Fahrenheit(val) => println!("{}°F", val),
-        }
+impl Summarizable for NewsArticle {
+    fn summary(&self) -> String {
+        format!("{}, by {} ({})", self.headline, self.author, self.location)
+    }
+}
+
+pub struct Tweet {
+    pub username: String,
+    pub content: String,
+    pub reply: bool,
+    pub retweet: bool,
+}
+
+impl Summarizable for Tweet {
+    fn summary(&self) -> String {
+        format!("{}: {}", self.username, self.content)
     }
 }
 ```
 
 <figcaption>
 
-Listing 10-6: Implementing the `Printable` trait on a `Temperature` enum
+Listing 10-12: Implementing the `Summarizable` trait on the `NewsArticle` and
+`Tweet` types
 
 </figcaption>
 </figure>
 
-In the same way `impl` lets us define methods, we've used it to define methods
-that pertain to our trait. We can call methods that our trait has defined just
-like we can call other methods:
+Implementing a trait on a type is similar to implementing methods that aren't
+related to a trait. The difference is after `impl`, we put the trait name that
+we want to implement, then say `for` and the name of the type that we want to
+implement the trait for. Within the `impl` block, we put the method signatures
+that the trait definition has defined, but instead of putting a semicolon after
+the signature, we put curly braces and fill in the method body with the
+specific behavior that we want the methods of the trait to have for the
+particular type.
 
-<span class="filename">Filename: src/main.rs</span>
+Once we've implemented the trait, we can call the methods on instances of
+`NewsArticle` and `Tweet` in the same manner that we call methods that aren't
+part of a trait:
 
-```rust
-# trait Printable {
-#     fn print(&self);
-# }
-#
-# enum Temperature {
-#     Celsius(i32),
-#     Fahrenheit(i32),
-# }
-#
-# impl Printable for Temperature {
-#    fn print(&self) {
-#        match *self {
-#             Temperature::Celsius(val) => println!("{}°C", val),
-#             Temperature::Fahrenheit(val) => println!("{}°F", val),
-#         }
-#     }
-# }
-#
-fn main() {
-    let t = Temperature::Celsius(37);
+```rust,ignore
+let tweet = Tweet {
+    username: String::from("horse_ebooks"),
+    content: String::from("of course, as you probably already know, people"),
+    reply: false,
+    retweet: false,
+};
 
-    t.print();
+println!("1 new tweet: {}", tweet.summary());
+```
+
+This will print `1 new tweet: horse_ebooks: of course, as you probably already
+know, people`.
+
+Note that because we've defined the `Summarizable` trait and the `NewsArticle`
+and `Tweet` types all in the same `lib.rs` in Listing 10-12, they're all in the
+same scope. If this `lib.rs` is for a crate we've called `aggregator`, and
+someone else wants to use our crate's functionality plus implement the
+`Summarizable` trait on their `WeatherForecast` struct, their code would need
+to import the `Summarizable` trait into their scope first before they could
+implement it, like in Listing 10-13:
+
+<figure>
+<span class="filename">Filename: lib.rs</span>
+
+```rust,ignore
+extern crate aggregator;
+
+use aggregator::Summarizable;
+
+struct WeatherForecast {
+    high_temp: f64,
+    low_temp: f64,
+    chance_of_precipitation: f64,
+}
+
+impl Summarizable for WeatherForecast {
+    fn summary(&self) -> String {
+        format!("The high will be {}, and the low will be {}. The chance of
+        precipitation is {}%.", self.high_temp, self.low_temp,
+        self.chance_of_precipitation)
+    }
 }
 ```
 
-Note that in order to use a trait's methods, the trait itself must be in scope.
-If the definition of `Printable` was in a module, the definition would need to
-be defined as `pub` and we would need to `use` the trait in the scope where we
-wanted to call the `print` method. This is because it's possible to have two
-traits that both define a method named `print`, and our `Temperature` enum might
-implement both. Rust wouldn't know which `print` method we wanted unless we
-brought the trait we wanted into our current scope with `use`.
+<figcaption>
+
+Listing 10-13: Bringing the `Summarizable` trait from our `aggregator` crate
+into scope in another crate
+
+</figcaption>
+</figure>
+
+This code also assumes `Summarizable` is a public trait, which it is because we
+put the `pub` keyword before `trait` in Listing 10-11.
+
+One restriction to note with trait implementations: we may implement a trait on
+a type as long as either the trait or the type are local to our crate. In other
+words, we aren't allowed to implement external traits on external types. We
+can't implement the `Display` trait on `Vec`, for example, since both `Display`
+and `Vec` are defined in the standard library. We are allowed to implement
+standard library traits like `Display` on a custom type like `Tweet` as part of
+our `aggregator` crate functionality. We could also implement `Summarizable` on
+`Vec` in our `aggregator` crate, since we've defined `Summarizable` there. This
+restriction is part of what's called the *orphan rules*, which you can look up
+if you're interested in type theory. Briefly, [INSERT SENTENCE ABOUT WHY IT'S
+CALLED THE ORPHAN RULE AND WHY WE DON'T WANT ORPHAN IMPLEMENTATIONS HERE]
+
+### Default Implementations
+
+Sometimes it's useful to have default behavior for some or all of the methods
+in a trait, instead of making every implementation on every type define custom
+behavior. When we implement the trait on a particular type, we can choose to
+keep or override each method's default behavior.
+
+Listing 10-14 shows how we could have chosen to specify a default string for
+the `summary` method of the `Summarize` trait instead of only choosing to only
+define the method signature like we did in Listing 10-11:
+
+<figure>
+<span class="filename">Filename: lib.rs</span>
+
+```rust
+pub trait Summarizable {
+    fn summary(&self) -> String {
+        String::from("(Read more...)")
+    }
+}
+```
+
+<figcaption>
+
+Listing 10-14: Definition of a `Summarizable` trait with a default
+implementation of the `summary` method
+
+</figcaption>
+</figure>
+
+If we wanted to use this default implementation to summarize instances of
+`NewsArticle` instead of defining a custom implementation like we did in
+Listing 10-12, we would specify an empty `impl` block:
+
+```rust,ignore
+impl Summarizable for NewsArticle {}
+```
+
+Even though we're no longer choosing to define the `summary` method on
+`NewsArticle` directly, since the `summary` method has a default implementation
+and we specified that `NewsArticle` implements the `Summarizable` trait, we can
+still call the `summary` method on an instance of `NewsArticle`:
+
+```rust,ignore
+let article = NewsArticle {
+    headline: String::from("Penguins win the Stanley Cup Championship!"),
+    location: String::from("Pittsburgh, PA, USA"),
+    content: String::from("The Pittsburgh Penguins once again are the best
+    hockey team in the NHL."),
+};
+
+println!("New article available! {}", article.summary());
+```
+
+This code prints `New article available! (Read more...)`.
+
+Default implementations are allowed to call the other methods in the same
+trait, even if those other methods don't have a default implementation. In this
+way, a trait can provide a lot of useful functionality and only require
+implementers to specify a small part of it. We could choose to have the
+`Summarizable` trait also have an `author_summary` method whose implementation
+is required, then a `summary` method that has a default implementation that
+calls the `author_summary` method:
+
+```rust
+pub trait Summarizable {
+    fn author_summary(&self) -> String;
+
+    fn summary(&self) -> String {
+        format!("(Read more from {}...)", self.author_summary())
+    }
+}
+```
+
+In order to use this version of `Summarizable`, we're only required to define
+`author_summary` when we implement the trait on a type:
+
+```rust,ignore
+impl Summarizable for Tweet {
+    fn author_summary(&self) -> String {
+        format!("@{}", self.username)
+    }
+}
+```
+
+Once we define `author_summary`, we can call `summary` on instances of the
+`Tweet` struct, and the default implementation of `summary` will call the
+definition of `author_summary` that we've provided.
+
+```rust,ignore
+let tweet = Tweet {
+    username: String::from("horse_ebooks"),
+    content: String::from("of course, as you probably already know, people"),
+    reply: false,
+    retweet: false,
+};
+
+println!("1 new tweet: {}", tweet.summary());
+```
+
+This will print `1 new tweet: (Read more from @horse_ebooks...)`.
 
 ### Trait Bounds
 
-Defining traits with methods and implementing the trait methods on a particular
-type gives Rust more information than just defining methods on a type directly.
-The information Rust gets is that the type that implements the trait can be
-used in places where the code specifies that it needs some type that implements
-a trait. To illustrate this, Listing 10-7 has a `print_anything` function
-definition. This is similar to the `show_anything` function from Listing 10-4,
-but this function has a *trait bound* on the generic type `T` and uses the
-`print` function from the trait. A trait bound constrains the generic type to
-be any type that implements the trait specified, instead of any type at all.
-With the trait bound, we're then allowed to use the trait method `print` in the
-function body:
+Once we've defined traits and implemented those traits on types, we can combine
+traits with generic type parameters. We can constrain generic types so that
+rather than being any type, the compiler will ensure that the generic type will
+only be types that implement a particular trait and thus have the behavior that
+we need the types to have. This is called specifying *trait bounds* on a
+generic type.
 
-<figure>
-<span class="filename">Filename: src/lib.rs</figure>
-
-```rust
-# trait Printable {
-#     fn print(&self);
-# }
-#
-fn print_anything<T: Printable>(value: T) {
-    println!("I have something to print for you!");
-    value.print();
-}
-```
-
-<figcaption>
-
-Listing 10-7: A `print_anything` function that uses the trait bound `Printable`
-on type `T`
-
-</figcaption>
-</figure>
-
-Trait bounds are specified in the type name declarations within the angle
-brackets. After the name of the type that you want to apply the bound to, add a
-colon (`:`) and then specify the name of the trait. This function now specifies
-that it takes a `value` parameter that can be of any type, as long as that type
-implements the trait `Printable`. We need to specify the `Printable` trait in
-the type name declarations because we want to be able to call the `print`
-method that is part of the `Printable` trait.
-
-Now we are able to call the `print_anything` function from Listing 10-7 and
-pass it a `Temperature` instance as the `value` parameter, since we implemented
-the trait `Printable` on `Temperature` in Listing 10-6:
-
-<span class="filename">Filename: src/main.rs</span>
-
-```rust
-# trait Printable {
-#     fn print(&self);
-# }
-#
-# enum Temperature {
-#     Celsius(i32),
-#     Fahrenheit(i32),
-# }
-#
-# impl Printable for Temperature {
-#    fn print(&self) {
-#        match *self {
-#             Temperature::Celsius(val) => println!("{}°C", val),
-#             Temperature::Fahrenheit(val) => println!("{}°F", val),
-#         }
-#     }
-# }
-#
-# fn print_anything<T: Printable>(value: T) {
-#     println!("I have something to print for you!");
-#     value.print();
-# }
-#
-fn main() {
-    let temperature = Temperature::Fahrenheit(98);
-    print_anything(temperature);
-}
-```
-
-If we implement the `Printable` trait on other types, we can use them with the
-`print_anything` method too. If we try to call `print_anything` with an `i32`,
-which does *not* implement the `Printable` trait, we get a compile-time error
-that looks like this:
-
-```text
-error[E0277]: the trait bound `{integer}: Printable` is not satisfied
-   |
-29 | print_anything(3);
-   | ^^^^^^^^^^^^^^ trait `{integer}: Printable` not satisfied
-   |
-   = help: the following implementations were found:
-   = help:   <Point as Printable>
-   = note: required by `print_anything`
-```
-
-Traits are an extremely useful feature of Rust. You'll almost never see generic
-functions without an accompanying trait bound. There are many traits in the
-standard library, and they're used for many, many different things. For
-example, our `Printable` trait is similar to one of those traits, `Display`.
-And in fact, that's how `println!` decides how to format things with `{}`. The
-`Display` trait has a `fmt` method that determines how to format something.
-
-Listing 10-8 shows our original example from Listing 10-3, but this time using
-the standard library's `Display` trait in the trait bound on the generic type
-in the `show_anything` function:
-
-<figure>
-<span class="filename">Filename: src/lib.rs</span>
-
-```rust
-use std::fmt::Display;
-
-fn show_anything<T: Display>(value: T) {
-    println!("I have something to show you!");
-    println!("It's: {}", value);
-}
-```
-
-<figcaption>
-
-Listing 10-8: The `show_anything` function with trait bounds
-
-</figcaption>
-</figure>
-
-Now that this function specifies that `T` can be any type as long as that type
-implements the `Display` trait, this code will compile.
-
-### Multiple Trait Bounds and `where` Syntax
-
-Each generic type can have its own trait bounds. The signature for a function
-that takes a type `T` that implements `Display` and a type `U` that implements
-`Printable` looks like:
+For example, in Listing 10-12, we implemented the `Summarizable` trait on the
+types `NewsArticle` and `Tweet`. We can define a function `notify` that calls
+the `summary` method on its parameter `item`, which is of the generic type `T`.
+We can use trait bounds on `T` to specify that `item` can't be any concrete
+type; `item` can only be types that implement the `Summarizable` trait since we
+want to be able to call `summary` on `item` without getting an error:
 
 ```rust,ignore
-fn some_function<T: Display, U: Printable>(value: T, other_value: U) {
-```
-
-To specify multiple trait bounds on one type, list the trait bounds in a list
-with a `+` between each trait. For example, here's the signature of a function
-that takes a type `T` that implements `Display` and `Clone` (which is another
-standard library trait we have mentioned):
-
-```rust,ignore
-fn some_function<T: Display + Clone>(value: T) {
-```
-
-When trait bounds start getting complicated, there is another syntax that's a
-bit cleaner: `where`. And in fact, the error we got when we ran the code from
-Listing 10-3 referred to it:
-
-```text
-help: consider adding a `where T: std::fmt::Display` bound
-```
-
-The `where` syntax moves the trait bounds after the function parameters list.
-This definition of `show_anything` means the exact same thing as the definition
-in Listing 10-8, just said a different way:
-
-<span class="filename">Filename: src/lib.rs</span>
-
-```rust
-use std::fmt::Display;
-
-fn show_anything<T>(value: T) where T: Display {
-    println!("I have something to show you!");
-    println!("It's: {}", value);
+# pub trait Summarizable {
+#     fn summary(&self) -> String;
+# }
+#
+pub fn notify<T: Summarizable>(item: T) {
+    println!("Breaking news! {}", item.summary());
 }
 ```
 
-Instead of `T: Display` going inside the angle brackets, they go after the
-`where` keyword at the end of the function signature. This can make complex
-signatures easier to read. The `where` clause and its parts can also go on new
-lines. Here's the signature of a function that takes three generic type
-parameters that each have multiple trait bounds:
+Trait bounds go with the declaration of the generic type parameter, after a
+colon and within the angle brackets. Because of the trait bound on `T`, we can
+call `notify` and pass in any instance of `NewsArticle` or `Tweet`. The
+external code from Listing 10-13 that's using our `aggregator` crate can call
+our `notify` function and pass in an instance of `WeatherForecast`, since
+`Summarizable` is implemented for `WeatherForecast` as well. Attempting write
+code that calls `notify` with any other type, like a `String` or an `i32`,
+won't compile, since those types do not implement `Summarizable`.
+
+We can specify multiple trait bounds on a generic type by using `+`. If we
+needed to be able to use display formatting on the type `T` in a function as
+well as the `summary` method, we can use the trait bounds `T: Summarizable +
+Display`. This means `T` can be any type that implements both `Summarizable`
+and `Display`.
+
+For functions that have multiple generic type parameters, each generic has its
+own trait bounds. Specifying lots of trait bound information in the angle
+brackets between a function's name and its parameter list can get hard to read,
+so there's an alternate syntax for specifying trait bounds that lets us move
+them to a `where` clause after the function signature. So instead of:
 
 ```rust,ignore
-fn some_function<T, U, V>(t: T, u: U, v: V)
+fn some_function<T: Display + Clone, U: Clone + Debug>(t: T, u: U) -> i32 {
+```
+
+We can write this instead with a `where` clause:
+
+```rust,ignore
+fn some_function<T, U>(t: T, u: U) -> i32
     where T: Display + Clone,
-          U: Printable + Debug,
-          V: Clone + Printable
+          U: Clone + Debug
 {
 ```
 
-Generic type parameters and trait bounds are part of Rust's rich type system.
-Another important kind of generic in Rust interacts with Rust's ownership and
-references features, and they're called *lifetimes*.
+This is less cluttered and makes this function's signature look more similar to
+a function without lots of trait bounds, in that the function name, parameter
+list, and return type are close together.
+
+### Fixing the `largest` Function with Trait Bounds
+
+So any time you want to use behavior defined by a trait on a generic, you need
+to specify that trait in the generic type parameter's type bounds. We can now
+fix the definition of the `largest` function that uses a generic type parameter
+from Listing 10-5! When we set that code aside, we were getting this error:
+
+```text
+error[E0369]: binary operation `>` cannot be applied to type `T`
+  |
+5 |         if item > largest {
+  |            ^^^^
+  |
+note: an implementation of `std::cmp::PartialOrd` might be missing for `T`
+```
+
+In the body of `largest` we wanted to be able to compare two values of type `T`
+using the greater-than operator. That operator is defined as a default method
+on the standard library trait `std::cmp::PartialOrd`. So in order to be able to
+use the greater-than operator, we need to bring `PartialOrd` into scope and
+specify it in the trait bounds for `T` so that the `largest` function will work
+on slices of any type that can be compared.
+
+```rust,ignore
+use std::cmp::PartialOrd;
+
+fn largest<T: PartialOrd>(list: &[T]) -> T {
+```
+
+If we try to compile this, we'll get more errors:
+
+```text
+error[E0508]: cannot move out of type `[T]`, a non-copy array
+ --> src/main.rs:4:23
+  |
+4 |     let mut largest = list[0];
+  |         -----------   ^^^^^^^ cannot move out of here
+  |         |
+  |         hint: to prevent move, use `ref largest` or `ref mut largest`
+
+error[E0507]: cannot move out of borrowed content
+ --> src/main.rs:6:9
+  |
+6 |     for &item in list.iter() {
+  |         ^----
+  |         ||
+  |         |hint: to prevent move, use `ref item` or `ref mut item`
+  |         cannot move out of borrowed content
+```
+
+The key to this error is `` cannot move out of type `[T]`, a non-copy array ``.
+With our non-generic versions of the `largest` function, we were only trying to
+find the largest `i32` or `char`. As we discussed in Chapter 4, types like
+`i32` and `char` that have a known size can be stored on the stack, so they
+implement the `Copy` trait. When we changed the `largest` function to be
+generic, it's now possible that the `list` parameter could have types in it
+that don't implement the `Copy` trait, which means we wouldn't be able to move
+the value out of `list[0]` and into the `largest` variable.
+
+If we only want to be able to call this code with types that are `Copy`, we can
+add `Copy` to the trait bounds of `T`! Listing 10-15 shows the complete code of
+a generic `largest` function that will compile as long as the types of the
+values in the slice that we pass into `largest` implement both the `PartialOrd`
+and `Copy` traits, like `i32` and `char`:
+
+<figure>
+<span class="filename">Filename: src/main.rs</span>
+
+```rust
+use std::cmp::PartialOrd;
+
+fn largest<T: PartialOrd + Copy>(list: &[T]) -> T {
+    let mut largest = list[0];
+
+    for &item in list.iter() {
+        if item > largest {
+            largest = item;
+        }
+    }
+
+    largest
+}
+
+fn main() {
+    let numbers = vec![34, 50, 25, 100, 65];
+
+    let result = largest(&numbers);
+    println!("The largest number is {}", result);
+
+    let chars = vec!['y', 'm', 'a', 'q'];
+
+    let result = largest(&chars);
+    println!("The largest char is {}", result);
+}
+```
+
+<figcaption>
+
+Listing 10-15: A working definition of the `largest` function that works on any
+generic type that implements the `PartialOrd` and `Copy` traits
+
+</figcaption>
+</figure>
+
+If we don't want to restrict our `largest` function to only types that
+implement the `Copy` trait, we could specify that `T` has the trait bound
+`Clone` instead of `Copy` and clone each value in the slice when we want the
+`largest` function to have ownership. Using the `clone` function means we're
+potentially making more heap allocations, though, and heap allocations can be
+slow if we're working with large amounts of data. Another way we could
+implement `largest` is for the function to return a reference to a `T` value in
+the slice. If we change the return type to be `&T` instead of `T` and change
+the body of the function to return a reference, we wouldn't need either the
+`Clone` or `Copy` trait bounds and we wouldn't be doing any heap allocations.
+Try implementing these alternate solutions on your own!
+
+Traits and trait bounds let us write code that uses generic type parameters in
+order to reduce duplication, but still specify to the compiler exactly what
+behavior our code needs the generic type to have. Because we've given the trait
+bound information to the compiler, it can check that all the concrete types
+used with our code provide the right behavior. In dynamically typed languages,
+if we tried to call a method on a type that the type didn't implement, we'd get
+an error at runtime. Rust moves these errors to compile time so that we're
+forced to fix the problems before our code is even able to run. Additionally,
+we don't have to write code that checks for behavior at runtime since we've
+already checked at compile time, which improves performance compared to other
+languages without having to give up the flexibility of generics.
+
+There's another kind of generics that we've been using without even realizing
+it called *lifetimes*. Rather than helping us ensure that a type has the
+behavior we need it to have, lifetimes help us ensure that references are valid
+as long as we need them to be. Let's learn how lifetimes do that.
