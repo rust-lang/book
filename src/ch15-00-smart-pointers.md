@@ -354,74 +354,150 @@ other useful ones in the standard library.
 
 ## `Rc<T>`
 
-Reference counted. Rc is for *multiple ownership* - this thing should get
-deallocated when all of the owners go out of scope.
+In the majority of cases, ownership is very clear: you know exactly which
+binding owns a given bit of data. However, this isn't always the case;
+sometimes, you may actually need multiple owners. For this, Rust has a type
+called `Rc<T>`. Its name is an abbreviation for 'reference counting'.
 
-Show the data structure:
+Let's look at an example:
 
 ```rust
-struct Rc<T> {
-    data: Box<T>,
-    strong_reference_count: usize,
-    weak_reference_count: usize,
-}
+use std::rc::Rc;
+
+let r1 = Rc::new(5);
+let r2 = r1.clone();
 ```
 
-Talk through this.
+You've seen the `clone` method previously, it's usually used for making a
+complete copy of some data. With `Rc<T>`, though, it doesn't make a full copy.
+`Rc<T>` holds a 'reference count', that is, a count of how many clones exist.
+Let's look at this example in more detail:
 
-This only works if the data is immutable.
+```rust
+use std::rc::Rc;
 
-What happens when you clone an Rc: data isn't cloned, increase the strong count.
-When an Rc clone goes out of scope, the count goes down.
+let r1 = Rc::new(5); // here, we have an Rc<i32> with a reference count of one.
 
-### Rc Cycles
+let r2 = r1.clone(); // here, we increment the reference count; now both r1 and
+                     // r2 both refer to the same 5; and we have a total count
+                     // of two.
 
-This is how you leak memory in rust, which btw is totally safe.
+// Here, the scope is ending. r2 goes out of scope first. When it does, it
+// doesn't free the 5, like a Box<i32> would; it decrements the count. So after
+// r2 goes out of scope, the count is one.
 
-Is this garbage collecting? Well it's not tracing GC...  if you use Rc and had
-a cycle detector, it would be functionally equivalent to a tracing GC. Different
-runtime characteristics tho.
+// Now, r1 goes out of scope. When it does, it decrements the count. The count
+// is now zero. Since the count is zero, the value is deallocated.
+```
 
+This is the basic strategy: you make an `Rc<T>` with `new`, and then call
+`clone` for all of the other owners you need. When each `Rc<T>` goes out of
+scope, they decrease the count, and when the count is zero, the value is
+deallocated. This strategy lets us have multiple owners, as the count will
+ensure that the value remains valid as long as any of the owners still exists.
 
-#### Solution: turn an Rc into a `Weak<T>`
-
-Same as Rc, but doesn't count towards the strong ref count. When you do this, the
-strong ref count goes down and the weak count goes up.
-
-Data gets cleaned up when the strong count is 0, no matter what the weak count is.
-However, Rc structure is kept until weak reference count also goes to zero, so weak pointers do not become dangling pointers.
-At this point, attempt to upgrade Weak pointer will result into None.
-Only when weak reference counter also reduces to zero, Rc structure is freed.
+This idea is simple enough, but there are a few twists! Here's the first: In
+order for this to be okay, the data inside of an `Rc<T>` must be immutable.  If
+it were mutable, we'd run into a similar problem with borrowing: two mutable
+borrows to the same place can cause a lot of problems. There's another twist,
+too: an "`Rc<T>` cycle." While single ownership is easy to reason about,
+multiple owenership is a lot trickier. Before we cover these situations in
+detail, we need to talk about another type: `RefCell<T>`.
 
 ## `RefCell<T>`
 
-Single owner of mutable data
+Unlike `Rc<T>`, the `RefCell<T>` type represents single ownership over the
+data that it holds. So, what makes `RefCell<T>` different than a type like
+`Box<T>`? For that, we'll have to recall the borrowing rules we learned in
+Chapter 4:
 
-The ownership rules checked at runtime instead of compile time.
+1. At any given time, you can have either but not both of:
+    * One mutable reference.
+    * Any number of immutable references.
+2. References must always be valid.
 
-Only single threaded. See next chapter.
+With references, these invariants are enforced at compile time. But with
+`RefCell<T>`, these invariants are enforced *at runtime*. With references,
+if you break these rules, you'll get a compiler error. With `RefCell<T>`,
+if you break these rules, you'll get a `panic!`.
 
-### `borrow` and `borrow_mut` methods
+Before we talk about how to use `RefCell<T>`, we should mention one more thing:
+`RefCell<T>` is only useful in single-threaded scenarios; it's not threadsafe.
+We'll talk about concurrency and paralellism in the next chapter; for now, all
+you need to know is that if you try to use `RefCell<T>` in a single-threaded
+context, you'll get a compile time error.
 
-Checks all the rules and panics at runtime if the code violates them.
+### The `borrow` and `borrow_mut` methods
 
-1. The borrow checker is conservative and people can know more things. (no you
-don't, but if you really want to go back to debugging segfaults, feel free)
+With references, we use the `&` and `&mut` syntax to create references and
+mutable references, respectively. But with `RefCell<T>`, we use the `borrow`
+and `borrow_mut` methods:
 
-2. For when you're only allowed to have an immutable thing (which could be `Rc`)
-but you need to be able to mutate the underlying data.
+```rust
+use std::cell::RefCell;
+
+let five = RefCell::new(5);
+
+// we need these scopes so we don't break the rules!
+{
+    let r1 = five.borrow();
+    let r2 = five.borrow();
+    let r3 = five.borrow();
+
+    // r1, r2, and r3 are all immutable references.
+}
+
+{
+    let r = five.borrow_mut();
+
+    // r1 is a mutable reference
+}
+```
+
+If we call both `borrow` and `borrow_mut` in the same scope, we'll get a panic.
+
+So why do we need `RefCell<T>`? What good is it to enforce the rules at runtime,
+instead of compile time?
+
+Static analysis, like Rust performs, is inherently conservative. That is, if we
+accept an incorrect program, very bad things happen, but if we reject a correct
+program, the programmer will be inconvenienced, but nothing catastrophic can
+occur. `RefCell<T>` is useful in two situations:
+
+1. When you know that the borrowing rules are respected, but when the compiler
+can't understand that that's true.
+2. When you need "interior mutability."
+
+We'll cover "interior mutability" later in this chapter, but first, let's talk
+about a different kind of cell: `Cell<T>`.
 
 ## `Cell<T>`
 
-Same thing as RefCell but for types that are Copy. No borrow checking rules here
-anyway. So just reason #2 above.
+`Cell<T>` is the same as `RefCell<T>`, but only for types that are `Copy`. Instead
+of `borrow` and `borrow_mut` methods, it has `get` and `set` methods:
 
-## Is this really safe? Yes!
+```rust
+use std::cell::Cell;
 
-RefCell is still doing the checks, just at runtime
-Cell is safe bc Copy types don't need the ownership rules anyway
+let mut five = Cell::new(5);
 
-### The Interior Mutability Pattern
+five.set(6); // not five any more O_O
+
+println!("five is: {}", five.get());
+```
+
+The difference between `Cell<T>` and `RefCell<T>` mirrors the difference
+between types that are `Copy` and types that are not; if we don't need the
+ownership rules, then we can do things in a much simpler way. If we do, then we
+need to deal with borrowing, rather than just copying data around.
+
+So when should you use `Cell<T>`? Since we don't have the borrowing element,
+the advice is the same as for `RefCell<T>`, but only the second rule: use
+`Cell<T>` when you need interior mutability.
+
+But what is 'interior mutability' anyway?
+
+## The Interior Mutability Pattern
 
 The Interior Mutability Pattern is super unsafe internally but safe to use
 from the outside and is totally safe, totally, trust us, seriously, it's safe.
@@ -431,6 +507,41 @@ UnsafeCell turns off those optimizations so that everything doesn't break.
 
 This is how you can opt-out of the default of Rust's ownership rules and opt
 in to different guarantees.
+
+### Cycles
+
+We've shown that with `Rc<T>`s, when the last one goes out of scope, the value
+is deallocated. But what about this program?
+
+```rust
+use std::rc::Rc;
+
+struct Cycle {
+    really_bad: Option<Rc<Cycle>>,
+    leaked_data: i32,
+}
+
+fn main() {
+    let mut oh_no = Rc::new(Cycle {
+        really_bad: None,
+        leaked_data: 5,
+    });
+
+    let clone = oh_no.clone();        
+
+    oh_no.really_bad = Some(clone);
+}
+```
+
+#### Solution: turn an Rc into a `Weak<T>`
+
+Same as Rc, but doesn't count towards the strong ref count. When you do this, the
+strong ref count goes down and the weak count goes up.
+
+Data gets cleaned up when the strong count is 0, no matter what the weak count is.
+
+Why is the weak count needed then????
+
 
 ## Summary
 
