@@ -541,7 +541,7 @@ would create dangling pointers or otherwise violate memory safety.
 Up until now, we've only defined structs to hold owned types. It is possible
 for structs to hold references, but we need to add a lifetime annotation on
 every reference in the struct's definition. Listing 10-24 has a struct named
-`Important` that holds a string slice:
+`ImportantExcerpt` that holds a string slice:
 
 <figure>
 <span class="filename">Filename: src/main.rs</span>
@@ -556,7 +556,7 @@ fn main() {
     let first_sentence = novel.split('.')
         .next()
         .expect("Could not find a '.'");
-    let i = Important { part: first_sentence };
+    let i = ImportantExcerpt { part: first_sentence };
 }
 ```
 
@@ -574,9 +574,9 @@ the generic lifetime parameter inside angle brackets after the name of the
 struct so that we can use the lifetime parameter in the body of the struct
 definition.
 
-The `main` function here creates an instance of the `Important` struct that
-holds a reference to the first sentence of the `String` owned by the variable
-`novel`.
+The `main` function here creates an instance of the `ImportantExcerpt` struct
+that holds a reference to the first sentence of the `String` owned by the
+variable `novel`.
 
 ### Lifetime Elision
 
@@ -743,17 +743,17 @@ In method signatures inside the `impl` block, references might be tied to the
 lifetime of references in the struct's fields, or they might be independent. In
 addition, the third lifetime elision rule often makes it so that lifetime
 annotations aren't necessary in method signatures. Let's look at a few examples
-using the struct named `Important` that we defined in Listing 10-24.
+using the struct named `ImportantExcerpt` that we defined in Listing 10-24.
 
 First, here's a method named `level`. The only parameter is a reference to
 `self`, and the return value is just an `i32`, not a reference to anything:
 
 ```rust
-# struct Important<'a> {
+# struct ImportantExcerpt<'a> {
 #     part: &'a str,
 # }
 #
-impl<'a> Important<'a> {
+impl<'a> ImportantExcerpt<'a> {
     fn level(&self) -> i32 {
         3
     }
@@ -768,11 +768,11 @@ Next up is a method named `first_word_of_part` that also borrows `self` but
 returns a string slice:
 
 ```rust
-# struct Important<'a> {
+# struct ImportantExcerpt<'a> {
 #     part: &'a str,
 # }
 #
-impl<'a> Important<'a> {
+impl<'a> ImportantExcerpt<'a> {
     fn first_word_of_part(&self) -> &str {
         self.part.split_whitespace()
             .next()
@@ -788,11 +788,11 @@ used for the lifetime of the returned `&str` too.
 Here's an example where rule 3 applies:
 
 ```rust
-# struct Important<'a> {
+# struct ImportantExcerpt<'a> {
 #     part: &'a str,
 # }
 #
-impl<'a> Important<'a> {
+impl<'a> ImportantExcerpt<'a> {
     fn announce_and_return_part(&self, announcement: &str) -> &str {
         println!("Attention please: {}", announcement);
         self.part
