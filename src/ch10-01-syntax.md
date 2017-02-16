@@ -374,9 +374,14 @@ we specify that we're implementing methods on the type `Point<T>`.
 Another way to use generics in methods is with parameters and return types of
 the methods that don't have to be the same as the generic types in the type
 we're implementing methods on. Listing 10-10 has a struct `A<T>` that holds a
-value of type `Option<T>`. The method `some_if_i_am_some`, which is a little
-silly, takes a value of a different generic type `U`, and returns an
-`Option<U>` based on whether the value in the struct is `Some(T)` or `None`:
+value of type `Option<T>`, and the struct `A` has one method defined on it,
+named `some_if_i_have_some`. This example is a little silly and not very useful,
+but will fit our purposes for demonstrating how generics in struct fields and
+method signatures interact.
+
+The method `some_if_i_have_some` takes a value of a different generic type `U`
+and returns an `Option<U>` based on whether the data in the `value` field of
+the struct is `Some(T)` or `None`:
 
 <figure>
 <span class="filename">Filename: src/main.rs</span>
@@ -387,7 +392,7 @@ struct A<T> {
 }
 
 impl<T> A<T> {
-    fn some_if_i_am_some<U>(&self, other: U) -> Option<U> {
+    fn some_if_i_have_some<U>(&self, other: U) -> Option<U> {
         match self.value {
             Some(_) => Some(other),
             None => None,
@@ -396,19 +401,19 @@ impl<T> A<T> {
 }
 
 fn main() {
-    let an_a_with_some = A { value: Some(true) };
-    let an_a_with_different_some = A { value: Some(3) };
-    let an_a_with_none: A<i32> = A { value: None };
+    let a1 = A { value: Some(true) };
+    let a2 = A { value: Some(3) };
+    let a3: A<i32> = A { value: None };
 
-    let result1 = an_a_with_some.some_if_i_am_some(false);
-    let result2 = an_a_with_different_some.some_if_i_am_some(false);
-    let result3 = an_a_with_none.some_if_i_am_some(false);
+    let result1 = a1.some_if_i_have_some(false);
+    let result2 = a2.some_if_i_have_some(false);
+    let result3 = a3.some_if_i_have_some(false);
     println!("These will both print Some(false): {:?}, {:?}", result1, result2);
     println!("This will print None: {:?}", result3);
 
-    let result4 = an_a_with_some.some_if_i_am_some(5);
-    let result5 = an_a_with_different_some.some_if_i_am_some(5);
-    let result6 = an_a_with_none.some_if_i_am_some(5);
+    let result4 = a1.some_if_i_have_some(5);
+    let result5 = a2.some_if_i_have_some(5);
+    let result6 = a3.some_if_i_have_some(5);
     println!("These will both print Some(5): {:?}, {:?}", result4, result5);
     println!("This will print None: {:?}", result6);
 }
@@ -426,16 +431,16 @@ This code isn't particularly useful aside from illustrating that generic types
 of methods can be different from the generic types in the struct that the
 methods are defined on. The instance of `A<T>` in the variable `an_a_with_some`
 has the concrete type `A<bool>`, since its `value` holds `Some(true)`, which is
-of type `Option<bool>`. We can call `some_if_i_am_some` on `an_a_with_some`
+of type `Option<bool>`. We can call `some_if_i_have_some` on `an_a_with_some`
 with `false`, so that `U` also happens to be type `bool`. We can also call
-`some_if_i_am_some` and pass `5`, which means `U` will be type `i32` and
+`some_if_i_have_some` and pass `5`, which means `U` will be type `i32` and
 different from `T` in that case. No matter what the type of `value` is for
-these instances of struct `A<T>`, the method `some_if_i_am_some` takes values
+these instances of struct `A<T>`, the method `some_if_i_have_some` takes values
 of a type that can be different than `T`, and its return type is the same as
 what was passed into the method.
 
 Note the place where we declared `U`: it's in the signature of the method after
-the name `some_if_i_am_some`, not in the `struct` definition or after `impl`,
+the name `some_if_i_have_some`, not in the `struct` definition or after `impl`,
 where we declared `T`. This reflects the fact that `U` is only used in the
 method and not in the struct fields.
 

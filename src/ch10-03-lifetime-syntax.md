@@ -198,12 +198,10 @@ most readers first get into problems with lifetimes is involving string slices,
 so we wanted to demonstrate the flexibility of taking string slices as
 arguments but the issues you might run into because string slices are
 references.
-
 All of the `String`/string slice/string literal concepts here are covered
 thoroughly in Chapter 4, which is why we put two back references here (above
 and below). If these topics are confusing you in this context, I'd be
 interested to know if rereading Chapter 4 clears up that confusion.
-
 /Carol -->
 
 Refer back to the "String Slices as Arguments" section of Chapter 4 for more
@@ -625,7 +623,7 @@ After writing a lot of Rust code, the Rust team found that Rust programmers
 were typing the same lifetime annotations over and over in particular
 situations. These situations were predictable and followed a few deterministic
 patterns. The Rust team then programmed these patterns into the Rust compiler's
-code, so that the borrow checker can infer the lifetimes in these situations
+code so that the borrow checker can infer the lifetimes in these situations
 without forcing the programmer to explicitly add the annotations.
 
 We mention this piece of Rust history because it's entirely possible that more

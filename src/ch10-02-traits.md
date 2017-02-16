@@ -80,6 +80,7 @@ is already limited to 140 characters.
 pub struct NewsArticle {
     pub headline: String,
     pub location: String,
+    pub author: String,
     pub content: String,
 }
 
@@ -188,9 +189,12 @@ and `Vec` are defined in the standard library. We are allowed to implement
 standard library traits like `Display` on a custom type like `Tweet` as part of
 our `aggregator` crate functionality. We could also implement `Summarizable` on
 `Vec` in our `aggregator` crate, since we've defined `Summarizable` there. This
-restriction is part of what's called the *orphan rules*, which you can look up
-if you're interested in type theory. Briefly, [INSERT SENTENCE ABOUT WHY IT'S
-CALLED THE ORPHAN RULE AND WHY WE DON'T WANT ORPHAN IMPLEMENTATIONS HERE]
+restriction is part of what's called the *orphan rule*, which you can look up
+if you're interested in type theory. Briefly, it's called the orphan rule
+because the parent type is not present. Without this rule, two crates could
+implement the same trait for the same type, and the two implementations would
+conflict: Rust wouldn't know which implementation to use. Because Rust enforces
+the orphan rule, other people's code can't break your code and vice versa.
 
 ### Default Implementations
 
@@ -239,6 +243,7 @@ still call the `summary` method on an instance of `NewsArticle`:
 let article = NewsArticle {
     headline: String::from("Penguins win the Stanley Cup Championship!"),
     location: String::from("Pittsburgh, PA, USA"),
+    author: String::from("Iceburgh"),
     content: String::from("The Pittsburgh Penguins once again are the best
     hockey team in the NHL."),
 };
@@ -311,10 +316,6 @@ type; `item` can only be types that implement the `Summarizable` trait since we
 want to be able to call `summary` on `item` without getting an error:
 
 ```rust,ignore
-# pub trait Summarizable {
-#     fn summary(&self) -> String;
-# }
-#
 pub fn notify<T: Summarizable>(item: T) {
     println!("Breaking news! {}", item.summary());
 }
@@ -377,17 +378,16 @@ note: an implementation of `std::cmp::PartialOrd` might be missing for `T`
 In the body of `largest` we wanted to be able to compare two values of type `T`
 using the greater-than operator. That operator is defined as a default method
 on the standard library trait `std::cmp::PartialOrd`. So in order to be able to
-use the greater-than operator, we need to bring `PartialOrd` into scope and
-specify it in the trait bounds for `T` so that the `largest` function will work
-on slices of any type that can be compared.
+use the greater-than operator, we need to specify `PartialOrd` in the trait
+bounds for `T` so that the `largest` function will work on slices of any type
+that can be compared. We don't need to bring `PartialOrd` into scope because
+it's in the prelude.
 
 ```rust,ignore
-use std::cmp::PartialOrd;
-
 fn largest<T: PartialOrd>(list: &[T]) -> T {
 ```
 
-If we try to compile this, we'll get more errors:
+If we try to compile this, we'll get different errors:
 
 ```text
 error[E0508]: cannot move out of type `[T]`, a non-copy array
