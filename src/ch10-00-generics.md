@@ -1,7 +1,7 @@
 # Generic Types, Traits, and Lifetimes
 
 Every programming language has tools to deal effectively with duplication of
-code; in Rust, one of those tools is *generics*. Generics are abstract
+concepts; in Rust, one of those tools is *generics*. Generics are abstract
 stand-ins for concrete types or other properties. We can express properties of
 generics, such as their behavior or how they relate to other generics, without
 needing to know when we're writing and compiling the code what will actually be
@@ -129,10 +129,14 @@ we have multiple places to update the logic if we need to change it.
 
 To eliminate this duplication, we can create an abstraction, which in this case
 will be in the form of a function that operates on any list of integers given
-to the function in a parameter. In the program in Listing 10-3, we've extracted
-the code that finds the largest number into a function named `largest`. This
-program can find the largest number in two different lists of numbers, but the
-code from Listing 10-1 only exists in one spot:
+to the function in a parameter. This will increase the clarity of our code and
+let us communicate and reason about the concept of finding the largest number
+in a list independently of the specific places this concept is used.
+
+In the program in Listing 10-3, we've extracted the code that finds the largest
+number into a function named `largest`. This program can find the largest
+number in two different lists of numbers, but the code from Listing 10-1 only
+exists in one spot:
 
 <figure>
 <span class="filename">Filename: src/main.rs</span>
