@@ -50,6 +50,13 @@ Listing 10-16: An attempt to use a reference whose value has gone out of scope
 </figcaption>
 </figure>
 
+> #### Uninitialized Variables Cannot Be Used
+>
+> The next few examples declare variables without giving them an initial value,
+> so that the variable name exists in the outer scope. This might appear to be
+> in conflict with Rust not having null. However, if we try to use a variable
+> before giving it a value, we'll get a compile-time error. Try it out!
+
 When we compile this code, we'll get an error:
 
 ```text
