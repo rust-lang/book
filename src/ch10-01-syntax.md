@@ -153,14 +153,15 @@ error[E0369]: binary operation `>` cannot be applied to type `T`
 note: an implementation of `std::cmp::PartialOrd` might be missing for `T`
 ```
 
-The note mentions `std::cmp::PartialOrd`, which is a trait defined by the
-standard library that the operator `>` uses. What this error is saying is that
-the body of `largest` won't work for all possible types that `T` could be:
-since we want to compare values of type `T` in the body, we can only use types
-that know how to be ordered, which is what the trait `std::cmp::PartialOrd`
-defines. We're going to come back to traits and how to specify that a generic
-type has a particular trait in the next section. Let's set this example aside
-for a moment and explore other places we can use generic type parameters first.
+The note mentions `std::cmp::PartialOrd`, which is a *trait*. We're going to
+talk about traits in the next section, but briefly, what this error is saying
+is that the body of `largest` won't work for all possible types that `T` could
+be: since we want to compare values of type `T` in the body, we can only use
+types that know how to be ordered. The standard library has defined the trait
+`std::cmp::PartialOrd` that types can implement to enable comparisons. We'll
+come back to traits and how to specify that a generic type has a particular
+trait in the next section, but let's set this example aside for a moment and
+explore other places we can use generic type parameters first.
 
 <!-- Liz: this is the reason we had the topics in the order we did in the first
 draft of this chapter; it's hard to do anything interesting with generic types
