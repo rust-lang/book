@@ -748,9 +748,9 @@ of the struct's type.
 
 In method signatures inside the `impl` block, references might be tied to the
 lifetime of references in the struct's fields, or they might be independent. In
-addition, the third lifetime elision rule often makes it so that lifetime
-annotations aren't necessary in method signatures. Let's look at a few examples
-using the struct named `ImportantExcerpt` that we defined in Listing 10-24.
+addition, the lifetime elision rules often make it so that lifetime annotations
+aren't necessary in method signatures. Let's look at some examples using the
+struct named `ImportantExcerpt` that we defined in Listing 10-24.
 
 First, here's a method named `level`. The only parameter is a reference to
 `self`, and the return value is just an `i32`, not a reference to anything:
@@ -771,28 +771,7 @@ The lifetime parameter declaration after `impl` and use after the type name is
 required, but we're not required to annotate the lifetime of the reference to
 `self` because of the first elision rule.
 
-Next up is a method named `first_word_of_part` that also borrows `self` but
-returns a string slice:
-
-```rust
-# struct ImportantExcerpt<'a> {
-#     part: &'a str,
-# }
-#
-impl<'a> ImportantExcerpt<'a> {
-    fn first_word_of_part(&self) -> &str {
-        self.part.split_whitespace()
-            .next()
-            .expect("Could not find the first word of the important part")
-    }
-}
-```
-
-The `first_word_of_part` method also doesn't need explicit lifetimes, because
-of rule 2: the only input parameter is `&self`, so the lifetime of `&self` is
-used for the lifetime of the returned `&str` too.
-
-Here's an example where rule 3 applies:
+Here's an example where the third lifetime elision rule applies:
 
 ```rust
 # struct ImportantExcerpt<'a> {
@@ -807,10 +786,10 @@ impl<'a> ImportantExcerpt<'a> {
 }
 ```
 
-There are two input lifetimes, so Rust applies rule 1 and gives both `&self`
-and `announcement` their own lifetimes. Then, because one of the parameters is
-`&self`, the return type gets the lifetime of `&self`, and all lifetimes have
-been accounted for.
+There are two input lifetimes, so Rust applies the first lifetime elision rule
+and gives both `&self` and `announcement` their own lifetimes. Then, because
+one of the parameters is `&self`, the return type gets the lifetime of `&self`,
+and all lifetimes have been accounted for.
 
 ### The Static Lifetime
 
