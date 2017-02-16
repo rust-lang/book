@@ -22,7 +22,7 @@ first function is the one we extracted in Listing 10-3 that finds the largest
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-fn largest(list: &[i32]) -> i32 {
+fn largest_i32(list: &[i32]) -> i32 {
     let mut largest = list[0];
 
     for &item in list.iter() {
@@ -49,7 +49,7 @@ fn largest_char(list: &[char]) -> char {
 fn main() {
     let numbers = vec![34, 50, 25, 100, 65];
 
-    let result = largest(&numbers);
+    let result = largest_i32(&numbers);
     println!("The largest number is {}", result);
 #    assert_eq!(result, 100);
 
@@ -63,14 +63,15 @@ fn main() {
 
 <figcaption>
 
-Listing 10-4: Two functions that differ only in the types in their signatures
+Listing 10-4: Two functions that differ only in their names and the types in
+their signatures
 
 </figcaption>
 </figure>
 
-Here, the functions `largest` and `largest_char` have the exact same body, so
-it would be nice if we could turn these two functions into one and get rid of
-the duplication. Luckily, we can do that by introducing a generic type
+Here, the functions `largest_i32` and `largest_char` have the exact same body,
+so it would be nice if we could turn these two functions into one and get rid
+of the duplication. Luckily, we can do that by introducing a generic type
 parameter!
 
 To parameterize the types in the signature of the one function we're going to

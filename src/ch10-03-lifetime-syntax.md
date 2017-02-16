@@ -361,9 +361,9 @@ Let's see how this restricts the usage of the `longest` function by passing in
 references that have different concrete lifetimes. Listing 10-22 is a
 straightforward example that should match your intuition from any language:
 `string1` is valid until the end of the outer scope, `string2` is valid until
-the end of the inner scope, and `result` is also valid until the end of the
-outer scope. The borrow checker approves of this code; it will compile and
-print `The longest string is long string is long` when run:
+the end of the inner scope, and `result` references something that is valid
+until the end of the outer scope. The borrow checker approves of this code; it
+will compile and print `The longest string is long string is long` when run:
 
 <figure>
 <span class="filename">Filename: src/main.rs</span>
@@ -470,7 +470,7 @@ checker or not before you compile, then check to see if you're right!
 ### Thinking in Terms of Lifetimes
 
 The exact way to specify lifetime parameters depends on what your function is
-doing. For example, if we changed the implementation of the `largest` function
+doing. For example, if we changed the implementation of the `longest` function
 to always return the first argument rather than the longest string slice, we
 wouldn't need to specify a lifetime on the `y` parameter. This code compiles:
 
@@ -546,8 +546,8 @@ every reference in the struct's definition. Listing 10-24 has a struct named
 <figure>
 <span class="filename">Filename: src/main.rs</span>
 
-```
-struct Important<'a> {
+```rust
+struct ImportantExcerpt<'a> {
     part: &'a str,
 }
 
