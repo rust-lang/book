@@ -1,24 +1,26 @@
-# Common Programming Concepts
+# Conceitos Comuns de Programação
 
-This chapter covers concepts that appear in almost every programming language
-and how they work in Rust. Many programming languages have much in common at
-their core. None of the concepts presented in this chapter are unique to Rust,
-but we’ll discuss them in the context of Rust and explain their conventions.
+Este capítulo cobre conceitos presentes em quase todas as linguagens de
+programação, e como eles se aplicam a Rust. Muitas linguagems de programação
+compartilham os mesmos princípios centrais. Nenhum dos conceitos apresentados nesse
+capítulo é exclusivo a Rust, mas iremos discutí-los no contexto da linguagem e
+explicar as convenções adotadas.
 
-Specifically, you’ll learn about variables, basic types, functions, comments,
-and control flow. These foundations will be in every Rust program, and learning
-them early will give you a strong core to start from.
+Especificamente, você aprenderá sobre variáveis, tipos básicos, funções,
+comentários e controle de fluxo. Esses fundamentos estarão presentes em todo
+programa em Rust, e aprendê-los desde já lhe dará uma base forte para começar.
 
 <!-- PROD: START BOX -->
 
-> ### Keywords
+> ### Palavras-Chave
 >
-> The Rust language has a set of *keywords* that have been reserved for use by
-> the language only, much like other languages do. Keep in mind that you cannot
-> use these words as names of variables or functions. Most of the keywords have
-> special meanings, and you’ll be using them to do various tasks in your Rust
-> programs; a few have no current functionality associated with them but have
-> been reserved for functionality that might be added to Rust in the future. You
-> can find a list of the keywords in Appendix A.
+> Rust tem um conjunto de *palavras-chave* que foram reservadas para
+> uso da linguagem, assim como acontece em outras linguagens de programação.
+> Lembre-se de que não é possível usar essas palavras como nomes de variáveis ou
+> funções. A maior parte das palavras-chave tem significados específicos, e você as
+> usará para realizar diversas tarefas nos seus programas. Algumas não tem ainda
+> funcionalidade associada, mas foram reservadas para recursos que podem ser
+> adicionados a Rust futuramente. A lista das palavras-chave de Rust está
+> disponível no Apêndice A.
 
 <!-- PROD: END BOX -->

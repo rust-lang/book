@@ -1,33 +1,52 @@
-# Introduction
+# Introdução
 
-Welcome to “The Rust Programming Language,” an introductory book about Rust.
-Rust is a programming language that’s focused on safety, speed, and
-concurrency. Its design lets you create programs that have the performance and
-control of a low-level language, but with the powerful abstractions of a
-high-level language. These properties make Rust suitable for programmers who
-have experience in languages like C and are looking for a safer alternative, as
-well as those from languages like Python who are looking for ways to write code
-that performs better without sacrificing expressiveness.
+Seja bem vindo(a) à “Linguagem de Programação Rust”, um livro introdutório sobre Rust.
+Rust é uma linguagem de programação focada em segurança, eficiência e
+concorrência. Seu *design* lhe permite criar programas com o desempenho e
+controle de uma linguagem de baixo nível, mas com as abstrações poderosas de uma
+linguagem de alto nível. Estas propriedades tornam Rust adequado para programadores que
+tem experiência em linguagens como C e procuram por uma alternativa mais segura, bem
+como para aqueles que vem de linguagens como o Python e que procuram por maneiras de escrever código
+com melhor desempenho sem sacrificar a expressividade.
 
-Rust performs the majority of its safety checks and memory management decisions
-at compile time, so that your program's runtime performance isn't impacted. This
-makes it useful in a number of use cases that other languages aren’t good at:
-programs with predictable space and time requirements, embedding in other
-languages, and writing low-level code, like device drivers and operating
-systems. It's also great for web applications: it powers the Rust package
-registry site, [crates.io]!  We're excited to see what *you* create with Rust.
+Rust executa a maioria das suas verificações de segurança e decisões de gerenciamento de memória
+em tempo de compilação, para que o desempenho de execução do seu programa não seja impactado. Isso
+torna a linguagem útil em um número de casos para os quais outras linguagens não são adequadas:
+programas com requisitos de tempo e espaço previsíveis, incorporação de código em outras
+linguagens e a escrita de código de baixo nível, como *drivers* de dispositivo e sistemas
+operacionais. A linguagem Rust também é fantástica para aplicações web: ela está por trás do site
+do registro de pacotes do Rust, [crates.io]! Estamos curiosos para saber o que *você* fará com Rust.
 
 [crates.io]: https://crates.io/
 
-This book is written for a reader who already knows how to program in at least
-one programming language. After reading this book, you should be comfortable
-writing Rust programs. We’ll be learning Rust through small, focused examples
-that build on each other to demonstrate how to use various features of Rust as
-well as how they work behind the scenes.
+Este livro tem como público alvo um leitor que já sabe como programar em pelo menos
+uma linguagem de programação. Após ler este livro, você deve se sentir confiante para
+escrever programas em Rust. Ensinaremos Rust através de exemplos focados e pequenos,
+que se complementam gradualmente para demonstrar o uso de vários da linguagem Rust, bem
+como como eles funcionam “nos bastidores”.
 
-## Contributing to the book
+## Sobre a Tradução
 
-This book is open source. If you find an error, please don’t hesitate to file an
-issue or send a pull request [on GitHub].
+Esta é uma tradução *não oficial* da [nova versão](https://rust-lang.github.io/book) do livro  “The Rust Programming Language”.
+Várias porções desta tradução (assim como do original) ainda estão incompletas. A
+[versão antiga](https://doc.rust-lang.org/book) do livro (em inglês) ainda é a leitura
+de referência recomendada da linguagem.
 
-[on GitHub]: https://github.com/rust-lang/book
+Sempre que possível, nos exemplos de código, optamos por usar nomes de variáveis, funções
+e arquivos em português. Essa escolha foi feita para fins didáticos, e se limita às porções
+de código de exemplo apresentadas. Os nomes provenientes da biblioteca padrão da linguagem,
+bem como de *crates* já existentes são mantidos no original em inglês, para que o código
+funcione corretamente. (Ex: `Usuario` ao invés de `User`, mas manteremos
+nomes como `Box` em inglês) Para fins de compatibilidade, utilizaremos
+somente caracteres sem acento e cedilha.
+
+Apesar da escolha didática do livro, recomendamos que ao escrever código “de verdade” em Rust,
+utilize sempre que possível nomes em inglês, especialmente para projetos
+*open source* a fim de tornar seu código acessível para uma maior audiência.
+
+## Contribuindo com o Livro
+
+Este livro é *open source*. Se encontrar um erro, por favor não hesite em abrir uma *issue*
+ou enviar um *pull request* [no GitHub].
+
+[no GitHub]: https://github.com/coreh/rust-book-pt-br
