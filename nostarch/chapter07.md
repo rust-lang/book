@@ -7,8 +7,8 @@ When you start writing programs in Rust, your code might live solely in the
 `main` function. As your code grows, you’ll eventually move functionality out
 into other functions, both for re-use and for better organization. By splitting
 your code up into smaller chunks, each chunk is easier to understand on its
-own. But what happens if find yourself with too many functions? Rust has a
-module system that handles the problem of wanting to to re-use code while
+own. But what happens if you find yourself with too many functions? Rust has a
+module system that handles the problem of wanting to re-use code while
 keeping your code organized.
 
 In the same way that you extract lines of code into a function, you can extract
@@ -39,7 +39,7 @@ call our library `communicator`. By default, cargo will create a library unless
 another type of project is specified, so if we leave off the `--bin` option
 that we’ve been using so far our project will be a library:
 
-```bash
+```text
 $ cargo new communicator
 $ cd communicator
 ```
@@ -47,7 +47,7 @@ $ cd communicator
 Notice that Cargo generated *src/lib.rs* instead of *src/main.rs*. Inside
 *src/lib.rs* we’ll find this:
 
-Filename: src/lib.rs
+<span class="filename">Filename: src/lib.rs</span>
 
 ```rust
 #[cfg(test)]
@@ -78,7 +78,7 @@ named `network` that contains the definition of a function called `connect`.
 Every module definition in Rust starts with the `mod` keyword. Add this code to
 the beginning of the *lib.rs* file, above the test code:
 
-Filename: src/lib.rs
+<span class="filename">Filename: src/lib.rs</span>
 
 ```rust
 mod network {
@@ -98,7 +98,8 @@ We can also have multiple modules, side-by-side, in the same *src/lib.rs* file.
 For example, to have a `client` module too, that also has a function named
 `connect`, we can add:
 
-Filename: src/lib.rs
+<figure>
+<span class="filename">Filename: src/lib.rs</span>
 
 ```rust
 mod network {
@@ -112,23 +113,29 @@ mod client {
 }
 ```
 
-<caption>
+<figcaption>
+
 Listing 7-1: The `network` module and the `client` module defined side-by-side
 in *src/lib.rs*
-</caption>
+
+</figcaption>
+</figure>
 
 Now we have a `network::connect` function and a `client::connect` function.
 These can have completely different functionality, and the function names do
 not conflict with each other since they’re in different modules.
 
-We can also put modules inside of modules. This can be useful as your modules
+While in this case, we’re building a library, there's nothing special about
+*lib.rs*. We could also make use of submodules in a *main.rs* as well. In fact,
+we can also put modules inside of modules. This can be useful as your modules
 grow to keep related functionality organized together and separate
 functionality apart. The choice of how you organize your code depends on how
 you think about the relationship between the parts of your code. For instance,
 the `client` code and its `connect` function might make more sense to users of
 our library if it was inside the `network` namespace instead, like so:
 
-Filename: src/lib.rs
+<figure>
+<span class="filename">Filename: src/lib.rs</span>
 
 ```rust
 mod network {
@@ -142,9 +149,12 @@ mod network {
 }
 ```
 
-<caption>
+<figcaption>
+
 Listing 7-2: Moving the `client` module inside of the `network` module
-</caption>
+
+</figcaption>
+</figure>
 
 In your *src/lib.rs* file, replace the existing `mod network` and `mod client`
 definitions with this one that has the `client` module as an inner module of
@@ -152,7 +162,7 @@ definitions with this one that has the `client` module as an inner module of
 `network::client::connect`: again, the two functions named `connect` don’t
 conflict with each other since they’re in different namespaces.
 
-In this way, modules form a hierarchy. The contents of `src/lib.rs` are at the
+In this way, modules form a hierarchy. The contents of *src/lib.rs* are at the
 topmost level, and the submodules are at lower levels. Here’s what the
 organization of our example from Listing 7-1 looks like when thought of this
 way:
@@ -173,7 +183,7 @@ communicator
 
 You can see that in Listing 7-2, `client` is a child of the `network` module,
 rather than a sibling. More complicated projects can have a lot of modules, and
-they’ll need to be orgnaized logically in order to keep track of them. What
+they’ll need to be organized logically in order to keep track of them. What
 “logically” means in your project is up to you and depends on how you and users
 of your library think about your project’s domain. Use the techniques we’ve
 shown here to create side-by-side modules and nested modules in whatever
@@ -186,7 +196,8 @@ that you’re used to: file systems! We can use Rust’s module system along wit
 multiple files to split Rust projects up so that not everything lives in
 *src/lib.rs*. For this example, we will start with this code in *src/lib.rs*:
 
-File: src/lib.rs
+<figure>
+<span class="filename">Filename: src/lib.rs</span>
 
 ```rust
 mod client {
@@ -205,10 +216,13 @@ mod network {
 }
 ```
 
-<caption>
+<figcaption>
+
 Listing 7-3: Three modules, `client`, `network`, and `network::server` all
 defined in *src/lib.rs*
-</caption>
+
+</figcaption>
+</figure>
 
 which has this module hierarchy:
 
@@ -226,7 +240,7 @@ This would be a good reason to pull each of the `client`, `network`, and
 extracting the `client` module into another file. First, replace the `client`
 module code in *src/lib.rs* with the following:
 
-File: src/lib.rs
+<span class="filename">Filename: src/lib.rs</span>
 
 ```rust,ignore
 mod client;
@@ -250,11 +264,11 @@ semicolon, we’re letting Rust know to look in another location for the code
 defined inside that module.
 
 So now we need to create the external file with that module name. Create a
-`client.rs` file in your *src/* directory, then open it up and enter the
+*client.rs* file in your *src/* directory, then open it up and enter the
 following, which is the `connect` function in the `client` module that we
 removed in the previous step:
 
-File: src/client.rs
+<span class="filename">Filename: src/client.rs</span>
 
 ```rust
 fn connect() {
@@ -262,7 +276,7 @@ fn connect() {
 ```
 
 Note that we don’t need a `mod` declaration in this file; that’s because we
-already declared the `client` module with `mod` in `src/lib.rs`. This file just
+already declared the `client` module with `mod` in *src/lib.rs*. This file just
 provides the *contents* of the `client` module. If we put a `mod client` here,
 we’d be giving the `client` module its own submodule named `client`!
 
@@ -275,7 +289,7 @@ Now, everything should compile successfully, though you’ll get a few warnings.
 Remember to use `cargo build` instead of `cargo run` since we have a library
 crate rather than a binary crate:
 
-```bash
+```text
 $ cargo build
    Compiling communicator v0.1.0 (file:///projects/communicator)
 
@@ -303,10 +317,10 @@ about those warnings for now; we’ll address them later in the chapter. The goo
 news is that they’re just warnings; our project was built successfully!
 
 Let’s extract the `network` module into its own file next, using the same
-pattern. In `src/lib.rs`, delete the body of the `network` module and add a
+pattern. In *src/lib.rs*, delete the body of the `network` module and add a
 semicolon to the declaration, like so:
 
-Filename: src/lib.rs
+<span class="filename">Filename: src/lib.rs</span>
 
 ```rust,ignore
 mod client;
@@ -314,9 +328,9 @@ mod client;
 mod network;
 ```
 
-Then create a new `src/network.rs` file and enter the following:
+Then create a new *src/network.rs* file and enter the following:
 
-Filename: src/network.rs
+<span class="filename">Filename: src/network.rs</span>
 
 ```rust
 fn connect() {
@@ -338,7 +352,7 @@ work. We’re going to try anyway so that we can see the error. First change
 *src/network.rs* to have `mod server;` instead of the `server` module’s
 contents:
 
-Filename: src/network.rs
+<span class="filename">Filename: src/network.rs</span>
 
 ```rust,ignore
 fn connect() {
@@ -347,10 +361,10 @@ fn connect() {
 mod server;
 ```
 
-Then create a `src/server.rs` file and enter the contents of the `server`
+Then create a *src/server.rs* file and enter the contents of the `server`
 module that we extracted:
 
-Filename: src/server.rs
+<span class="filename">Filename: src/server.rs</span>
 
 ```rust
 fn connect() {
@@ -359,7 +373,9 @@ fn connect() {
 
 When we try to `cargo build`, we’ll get this error:
 
-```bash
+<figure>
+
+```text
 $ cargo build
    Compiling communicator v0.1.0 (file:///projects/communicator)
 error: cannot declare a new module at this location
@@ -380,14 +396,17 @@ note: ... or maybe `use` the module `server` instead of possibly redeclaring it
   |     ^^^^^^
 ```
 
-<caption>
+<figcaption>
+
 Listing 7-4: Error when trying to extract the `server` submodule into
 *src/server.rs*
-</caption>
+
+</figcaption>
+</figure>
 
 The error says we `cannot declare a new module at this location` and is
-pointing to the `mod server;` line in `src/network.rs`. So `src/network.rs` is
-different than `src/lib.rs` somehow; let’s keep reading to understand why.
+pointing to the `mod server;` line in *src/network.rs*. So *src/network.rs* is
+different than *src/lib.rs* somehow; let’s keep reading to understand why.
 
 The note in the middle of Listing 7-4 is actually pretty helpful, as it points
 out something we haven’t yet talked about doing:
@@ -405,7 +424,7 @@ previously, we can do what the note suggests:
 
 Here are commands to carry out these steps:
 
-```bash
+```text
 $ mkdir src/network
 $ mv src/network.rs src/network/mod.rs
 $ mv src/server.rs src/network
@@ -437,7 +456,7 @@ So when we wanted to extract the `network::server` module, why did we have to
 also change the *src/network.rs* file into the *src/network/mod.rs* file, and
 also put the code for `network::server` in the `network` directory in
 *src/network/server.rs*, instead of just being able to extract the
-*network::server* into *src/server.rs*? The reason is that Rust wouldn’t be
+`network::server` into *src/server.rs*? The reason is that Rust wouldn’t be
 able to tell that `server` was supposed to be a submodule of `network` if the
 *server.rs* file was in the *src* directory. To make it clearer why Rust can’t
 tell, let’s consider a different example where we have this module hierarchy
@@ -473,12 +492,12 @@ top-level *src/client.rs* is unambiguously the code that belongs to the
 In summary, these are the rules of modules with regards to files:
 
 * If a module named `foo` has no submodules, you should put the declarations
-  for `foo` in a file named `foo.rs`.
+  for `foo` in a file named *foo.rs*.
 * If a module named `foo` does have submodules, you should put the declarations
-  for `foo` in a file named `foo/mod.rs`.
+  for `foo` in a file named *foo/mod.rs*.
 * The first two rules apply recursively, so that if a module named `foo` has a
   submodule named `bar` and `bar` does not have submodules, you should have the
-  following files in your `src` directory:
+  following files in your *src* directory:
 
   ```text
   ├── foo
@@ -500,7 +519,7 @@ able to build our project, but we still get some warning messages about the
 `client::connect`, `network::connect`, and `network::server::connect` functions
 not being used:
 
-```bash
+```text
 warning: function is never used: `connect`, #[warn(dead_code)] on by default
 src/client.rs:1:1
   |
@@ -529,9 +548,9 @@ another project and not our own.
 To understand why this program invokes these warnings, let’s try using the
 `connect` library as if we were another project, calling it externally. We can
 do that by creating a binary crate in the same directory as our library crate,
-by making a `src/main.rs` file containing this code:
+by making a *src/main.rs* file containing this code:
 
-Filename: src/main.rs
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore
 extern crate communicator;
@@ -553,7 +572,7 @@ Our binary crate right now just calls our library’s `connect` function from th
 `client` module. However, invoking `cargo build` will now give us an error
 after the warnings:
 
-```bash
+```text
 error: module `client` is private
  --> src/main.rs:4:5
   |
@@ -584,9 +603,9 @@ To tell Rust to make something public, we add the `pub` keyword to the start of
 the declaration of the item we want to make public. We’ll focus on fixing the
 warning that tells us that `client::connect` has gone unused for now, as well
 as the “module `client` is private” error from our binary crate. Modify
-`src/lib.rs` to make the `client` module public, like so:
+*src/lib.rs* to make the `client` module public, like so:
 
-Filename: src/lib.rs
+<span class="filename">Filename: src/lib.rs</span>
 
 ```rust,ignore
 pub mod client;
@@ -596,7 +615,7 @@ mod network;
 
 The `pub` goes right before `mod`. Let’s try building again:
 
-```bash
+```text
 <warnings>
 error: function `connect` is private
  --> src/main.rs:4:5
@@ -609,7 +628,7 @@ Hooray! We have a different error! Yes, different error messages are a cause
 for celebration. The new error says “function `connect` is private”, so let’s
 edit `src/client.rs` to make `client::connect` public too:
 
-Filename: src/client.rs
+<span class="filename">Filename: src/client.rs</span>
 
 ```rust
 pub fn connect() {
@@ -618,7 +637,7 @@ pub fn connect() {
 
 And run `cargo build` again:
 
-```bash
+```text
 warning: function is never used: `connect`, #[warn(dead_code)] on by default
  --> src/network/mod.rs:1:1
   |
@@ -643,9 +662,9 @@ called.
 
 In our case though, we *do* want the other two functions to be part of our
 crate’s public API, so let’s mark them as `pub` as well to try to get rid of
-the remaining warnings. Modify `src/network/mod.rs` to be:
+the remaining warnings. Modify *src/network/mod.rs* to be:
 
-Filename: src/network/mod.rs
+<span class="filename">Filename: src/network/mod.rs</span>
 
 ```rust,ignore
 pub fn connect() {
@@ -656,7 +675,7 @@ mod server;
 
 And compile:
 
-```bash
+```text
 warning: function is never used: `connect`, #[warn(dead_code)] on by default
  --> src/network/mod.rs:1:1
   |
@@ -677,7 +696,7 @@ public. We’re working from the interior of the library out this time, where
 with `client::connect` we worked from the outside in. We need to change
 `src/lib.rs` to make `network` public too:
 
-Filename: src/lib.rs
+<span class="filename">Filename: src/lib.rs</span>
 
 ```rust,ignore
 pub mod client;
@@ -687,7 +706,7 @@ pub mod network;
 
 Now if we compile, that warning is gone:
 
-```bash
+```text
 warning: function is never used: `connect`, #[warn(dead_code)] on by default
  --> src/network/server.rs:1:1
   |
@@ -709,9 +728,10 @@ Overall, these are the rules for item visibility:
 ### Privacy Examples
 
 Let’s look at a few more examples to get some practice. Create a new library
-project and enter the code in Listing 7-5 into your new project’s `src/lib.rs`:
+project and enter the code in Listing 7-5 into your new project’s *src/lib.rs*:
 
-Filename: src/lib.rs
+<figure>
+<span class="filename">Filename: src/lib.rs</span>
 
 ```rust,ignore
 mod outermost {
@@ -734,6 +754,14 @@ fn try_me() {
 }
 ```
 
+<figcaption>
+
+Listing 7-5: Examples of private and public functions, some of which are
+incorrect
+
+</figcaption>
+</figure>
+
 Before you try to compile this code, make a guess about which lines in `try_me`
 function will have errors. Then try compiling to see if you were right, and read
 on for discussion of the errors!
@@ -747,7 +775,7 @@ is allowed to access the `outermost` module since `outermost` is in the current
 
 The call to `outermost::middle_function` will work. This is because
 `middle_function` is public, and `try_me` is accessing `middle_function`
-through its parent module, `outermost` We determined in the previous paragraph
+through its parent module, `outermost`. We determined in the previous paragraph
 that this module is accessible.
 
 The call to `outermost::middle_secret_function` will cause a compilation error.
@@ -768,7 +796,7 @@ errors, then compile to see if you’re right and use the privacy rules to
 understand why.
 
 * What if the `inside` module was public?
-* What if `outside` was public and `inside` was private?
+* What if `outermost` was public and `inside` was private?
 * What if, in the body of `inner_function`, you called
   `::outermost::middle_secret_function()`? (The two colons at the beginning
   mean that we want to refer to the namespaces starting from the root
@@ -784,7 +812,8 @@ We’ve covered how to call functions defined within a module using the module
 name as part of the call, as in the call to the `namespaces` function shown
 here in Listing 7-6.
 
-Filename: src/main.rs
+<figure>
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 pub mod a {
@@ -800,10 +829,13 @@ fn main() {
 }
 ```
 
-<caption>
+<figcaption>
+
 Listing 7-6: Calling a function by fully specifying its enclosing module’s
 namespaces
-</caption>
+
+</figcaption>
+</figure>
 
 As you can see, referring to the fully qualified name can get quite lengthy.
 Luckily, Rust has a keyword to make these calls more concise.
@@ -814,7 +846,7 @@ Rust’s `use` keyword works to shorten lengthy function calls by bringing the
 modules of the function you want to call into a scope. Here’s an example of
 bringing the `a::series::of` namespace into a binary crate’s root scope:
 
-Filename: src/main.rs
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 pub mod a {
@@ -912,9 +944,9 @@ might also pull in more things than you expected and cause naming conflicts.
 
 As you now know, when you create a library crate, Cargo makes a `tests` module
 for you. Let’s go into more detail about that now. In your `communicator`
-project, open `src/lib.rs`.
+project, open *src/lib.rs*.
 
-Filename: src/lib.rs
+<span class="filename">Filename: src/lib.rs</span>
 
 ```rust,ignore
 pub mod client;
@@ -943,12 +975,11 @@ communicator
  └── tests
 ```
 
-
 Tests are for exercising the code within our library, so let’s try to call
 our `client::connect` function from this `it_works` function, even though
 we’re not going to be checking any functionality right now:
 
-Filename: src/lib.rs
+<span class="filename">Filename: src/lib.rs</span>
 
 ```rust
 #[cfg(test)]
@@ -962,7 +993,7 @@ mod tests {
 
 Run the tests by invoking the `cargo test` command:
 
-```bash
+```text
 $ cargo test
    Compiling communicator v0.1.0 (file:///projects/communicator)
 error[E0433]: failed to resolve. Use of undeclared type or module `client`
@@ -1017,7 +1048,7 @@ parent module instead of to the root module.
 For these reasons, in the `tests` module especially, `use super::something` is
 usually the way to go. So now our test looks like this:
 
-Filename: src/lib.rs
+<span class="filename">Filename: src/lib.rs</span>
 
 ```rust
 #[cfg(test)]
@@ -1034,7 +1065,7 @@ mod tests {
 If we run `cargo test` again, the test will pass and the first part of the test
 result output will be:
 
-```bash
+```text
 $ cargo test
    Compiling communicator v0.1.0 (file:///projects/communicator)
      Running target/debug/communicator-92007ddb5330fa5a
