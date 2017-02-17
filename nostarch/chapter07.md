@@ -18,8 +18,9 @@ you can choose whether those definitions are visible outside their module
 (public) or not (private). Here’s an overview of how modules work:
 
 * You declare a new module with the keyword `mod`
-* By default, everything is set as private, but you can use the `pub` keyword
-  to make the module public, and therefore visible outside of the namespace.
+* By default, everything is set as private (including modules). You can use the
+  `pub` keyword to make a module public and therefore visible outside of its
+  namespace.
 * The `use` keyword allows you to bring modules, or the definitions inside
   modules, into scope so that it’s easier to refer to them.
 
