@@ -8,8 +8,8 @@ When you start writing programs in Rust, your code might live solely in the
 into other functions, both for re-use and for better organization. By splitting
 your code up into smaller chunks, each chunk is easier to understand on its
 own. But what happens if you find yourself with too many functions? Rust has a
-module system that handles the problem of wanting to re-use code while
-keeping your code organized.
+module system that handles the problem of wanting to re-use code while keeping
+your code organized.
 
 In the same way that you extract lines of code into a function, you can extract
 functions (and other code like structs and enums too) into different modules. A
@@ -58,10 +58,10 @@ mod tests {
 }
 ```
 
-Cargo creates an empty test to help us get our library started, rather
-than the “Hello, world!” binary that we get with the `--bin` option. We’ll look
-at the `#[]` and `mod tests` syntax a little later, but for now just make sure
-to leave it in your *src/lib.rs*.
+Cargo creates an empty test to help us get our library started, rather than the
+“Hello, world!” binary that we get with the `--bin` option. We’ll look at the
+`#[]` and `mod tests` syntax a little later, but for now just make sure to
+leave it in your *src/lib.rs*.
 
 Since we don’t have a *src/main.rs*, there’s nothing for Cargo to execute with
 the `cargo run` command. Therefore, we will be using the `cargo build` command
@@ -76,7 +76,7 @@ you have for your code.
 For our `communicator` networking library, we’re first going to define a module
 named `network` that contains the definition of a function called `connect`.
 Every module definition in Rust starts with the `mod` keyword. Add this code to
-the beginning of the *lib.rs* file, above the test code:
+the beginning of the *src/lib.rs* file, above the test code:
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -96,7 +96,7 @@ specify the module and use the namespace syntax `::`, like so:
 
 We can also have multiple modules, side-by-side, in the same *src/lib.rs* file.
 For example, to have a `client` module too, that also has a function named
-`connect`, we can add:
+`connect`, we can add it as shown in Listing 7-1:
 
 <figure>
 <span class="filename">Filename: src/lib.rs</span>
@@ -126,13 +126,14 @@ These can have completely different functionality, and the function names do
 not conflict with each other since they’re in different modules.
 
 While in this case, we’re building a library, there's nothing special about
-*lib.rs*. We could also make use of submodules in a *main.rs* as well. In fact,
-we can also put modules inside of modules. This can be useful as your modules
-grow to keep related functionality organized together and separate
+*src/lib.rs*. We could also make use of submodules in *src/main.rs* as well. In
+fact, we can also put modules inside of modules. This can be useful as your
+modules grow to keep related functionality organized together and separate
 functionality apart. The choice of how you organize your code depends on how
 you think about the relationship between the parts of your code. For instance,
 the `client` code and its `connect` function might make more sense to users of
-our library if it was inside the `network` namespace instead, like so:
+our library if it was inside the `network` namespace instead, like in Listing
+7-2:
 
 <figure>
 <span class="filename">Filename: src/lib.rs</span>
@@ -194,7 +195,7 @@ structure you would like.
 Modules form a hierarchical structure, much like another structure in computing
 that you’re used to: file systems! We can use Rust’s module system along with
 multiple files to split Rust projects up so that not everything lives in
-*src/lib.rs*. For this example, we will start with this code in *src/lib.rs*:
+*src/lib.rs*. For this example, we will start with the code in Listing 7-3:
 
 <figure>
 <span class="filename">Filename: src/lib.rs</span>
