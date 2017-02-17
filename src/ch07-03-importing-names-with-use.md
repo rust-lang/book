@@ -1,7 +1,7 @@
 ## Importing Names
 
 We’ve covered how to call functions defined within a module using the module
-name as part of the call, as in the call to the `namespaces` function shown
+name as part of the call, as in the call to the `nested_modules` function shown
 here in Listing 7-6.
 
 <figure>
@@ -11,13 +11,13 @@ here in Listing 7-6.
 pub mod a {
     pub mod series {
         pub mod of {
-            pub fn namespaces() {}
+            pub fn nested_modules() {}
         }
     }
 }
 
 fn main() {
-    a::series::of::namespaces();
+    a::series::of::nested_modules();
 }
 ```
 
@@ -36,7 +36,7 @@ Luckily, Rust has a keyword to make these calls more concise.
 
 Rust’s `use` keyword works to shorten lengthy function calls by bringing the
 modules of the function you want to call into a scope. Here’s an example of
-bringing the `a::series::of` namespace into a binary crate’s root scope:
+bringing the `a::series::of` module into a binary crate’s root scope:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -44,7 +44,7 @@ bringing the `a::series::of` namespace into a binary crate’s root scope:
 pub mod a {
     pub mod series {
         pub mod of {
-            pub fn namespaces() {}
+            pub fn nested_modules() {}
         }
     }
 }
@@ -52,17 +52,17 @@ pub mod a {
 use a::series::of;
 
 fn main() {
-    of::namespaces();
+    of::nested_modules();
 }
 ```
 
-The line `use a::series::of;` has made it so that anywhere in this scope that
-we would want to refer to the `of` namespace, instead of having to say
-`a::series::of`, we can replace that with `of`.
+The line `use a::series::of;` means that rather than using the full
+`a::series::of` path wherever we want to refer to the `of` module, we can use
+`of`.
 
 The `use` keyword brings only what we have specified into scope; it does not
 bring children of modules into scope. That’s why we still have to say
-`of::namespaces` when we want to call the `namespaces` function.
+`of::nested_modules` when we want to call the `nested_modules` function.
 
 We could have chosen to bring the function itself into scope, by instead
 specifying the function in the `use` as follows:
@@ -71,25 +71,25 @@ specifying the function in the `use` as follows:
 pub mod a {
     pub mod series {
         pub mod of {
-            pub fn namespaces() {}
+            pub fn nested_modules() {}
         }
     }
 }
 
-use a::series::of::namespaces;
+use a::series::of::nested_modules;
 
 fn main() {
-    namespaces();
+    nested_modules();
 }
 ```
 
-This allows us to exclude any of the modules and just reference the function at
-the callsite.
+This allows us to exclude all of the modules and reference the function
+directly.
 
-Since enums also form this kind of namespace, we can import an enum’s variants
-with `use` as well. For any kind of `use` statement, if you’re importing
-multiple items from one namespace, you can list them using curly braces and
-commas in the last position, like so:
+Since enums also form a sort of namespace like modules, we can import an enum’s
+variants with `use` as well. For any kind of `use` statement, if you’re
+importing multiple items from one namespace, you can list them using curly
+braces and commas in the last position, like so:
 
 ```rust
 enum TrafficLight {
@@ -167,9 +167,9 @@ communicator
  └── tests
 ```
 
-Tests are for exercising the code within our library, so let’s try to call
-our `client::connect` function from this `it_works` function, even though
-we’re not going to be checking any functionality right now:
+Tests are for exercising the code within our library, so let’s try to call our
+`client::connect` function from this `it_works` function, even though we’re not
+going to be checking any functionality right now:
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -202,7 +202,7 @@ warning: function is never used: `connect`, #[warn(dead_code)] on by default
 ```
 
 The compilation failed, but why? We don’t need to place `communicator::` in
-front of the function like we did in `src/main.rs` because we are definitely
+front of the function like we did in *src/main.rs* because we are definitely
 within the `communicator` library crate here. The reason is that paths are
 always relative to the current module, which here is `tests`. The only
 exception is in a `use` statement, where paths are relative to the crate root
