@@ -156,7 +156,7 @@ note: an implementation of `std::cmp::PartialOrd` might be missing for `T`
 The note mentions `std::cmp::PartialOrd`, which is a *trait*. We're going to
 talk about traits in the next section, but briefly, what this error is saying
 is that the body of `largest` won't work for all possible types that `T` could
-be: since we want to compare values of type `T` in the body, we can only use
+be; since we want to compare values of type `T` in the body, we can only use
 types that know how to be ordered. The standard library has defined the trait
 `std::cmp::PartialOrd` that types can implement to enable comparisons. We'll
 come back to traits and how to specify that a generic type has a particular
@@ -289,9 +289,9 @@ separated into smaller pieces.
 
 ### Using Generic Data Types in Enum Definitions
 
-In a similar way as structs, enums can be defined to hold generic data types in
-their variants. We used the `Option<T>` enum provided by the standard library
-in Chapter 6, and now its definition should make more sense. Let's take another
+Similarly to structs, enums can be defined to hold generic data types in their
+variants. We used the `Option<T>` enum provided by the standard library in
+Chapter 6, and now its definition should make more sense. Let's take another
 look:
 
 ```rust
@@ -373,13 +373,12 @@ will return a reference to the `x` field, which is of type `T`.
 Note that we have to declare `T` just after `impl`, so that we can use it when
 we specify that we're implementing methods on the type `Point<T>`.
 
-Another way to use generics in methods is with parameters and return types of
-the methods that don't have to be the same as the generic types in the type
-we're implementing methods on. Listing 10-10 has a struct `A<T>` that holds a
-value of type `Option<T>`, and the struct `A` has one method defined on it,
-named `some_if_i_have_some`. This example is a little silly and not very useful,
-but will fit our purposes for demonstrating how generics in struct fields and
-method signatures interact.
+Generic type parameters in a struct definition aren't always the same generic
+type parameters you want to use in that struct's method signatures. Listing
+10-10 has a struct `A<T>` that holds a value of type `Option<T>`, and the
+struct `A` has one method defined on it, named `some_if_i_have_some`. This
+example is a little silly and not very useful, but will fit our purposes for
+demonstrating how generics in struct fields and method signatures interact.
 
 The method `some_if_i_have_some` takes a value of a different generic type `U`
 and returns an `Option<U>` based on whether the data in the `value` field of
@@ -446,11 +445,11 @@ the name `some_if_i_have_some`, not in the `struct` definition or after `impl`,
 where we declared `T`. This reflects the fact that `U` is only used in the
 method and not in the struct fields.
 
-<!-- Liz: I don't think we need to review or reference why `an_a_with_none`
-needs a type annotation here since we covered that in the `Option` enum chapter
-of chapter 6, but I could be convinced we should have a reference, I guess.
-It's not the main focus of this example but needs to be there for this code to
-compile. /Carol -->
+<!-- Liz: I don't think we need to review or reference why `a3` needs a type
+annotation here since we covered that in the `Option` enum chapter of chapter
+6, but I could be convinced we should have a reference, I guess. It's not the
+main focus of this example but needs to be there for this code to compile.
+/Carol -->
 
 ### Performance of Code Using Generics
 
