@@ -573,6 +573,16 @@ quite common for executable projects: most functionality is in a library crate,
 and the binary crate uses that library crate. This way, other programs can also
 use the library crate, and it’s a nice separation of concerns.
 
+From the point of view of a crate outside of the `communicator` library looking
+in, all of the modules we've been creating are within a module that has the
+same name as the crate, `communicator`. We call the top-level module of a crate
+the *root module*.
+
+Also note that even if we're using an external crate within a submodule of our
+project, the `extern crate` should go in our root module (so in *src/main.rs*
+or *src/lib.rs*). Then, in our submodules, we can refer to items from external
+crates as if the items are top-level modules.
+
 Our binary crate right now just calls our library’s `connect` function from the
 `client` module. However, invoking `cargo build` will now give us an error
 after the warnings:
