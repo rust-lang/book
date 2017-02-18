@@ -41,7 +41,7 @@ let v: Vec<i32> = Vec::new();
 
 Note that we added a type annotation here. Since we aren't inserting any values
 into this vector, Rust doesn't know what kind of elements we intend to store.
-This is an important point. Vectors are homogenous: they may store many values,
+This is an important point. Vectors are homogeneous: they may store many values,
 but those values must all be the same type. Vectors are implemented using
 generics, which Chapter 10 will cover how to use in your own types. For now,
 all you need to know is that the `Vec` type provided by the standard library
@@ -200,9 +200,8 @@ memory. The borrowing rules prevent programs from ending up in that situation.
 At the beginning of this chapter, we said that vectors can only store values
 that are all the same type. This can be inconvenient; there are definitely use
 cases for needing to store a list of things of different types. Luckily, the
-variants of an enum are all defined under the same enum type. When we need to
-store elements of a different type in a vector this scenario, we can define and
-use an enum!
+variants of an enum are all defined under the same enum type, so when we need to
+store elements of a different type in a vector, we can define and use an enum!
 
 For example, let's say we want to get values from a row in a spreadsheet, where
 some of the columns in the row contain integers, some floating point numbers,
@@ -243,7 +242,7 @@ don't think we should repeat it here as well, but we added a reference. /Carol
 
 If you don't know at the time that you're writing a program the exhaustive set
 of types the program will get at runtime to store in a vector, the enum
-technique won't work. Insetad, you can use a trait object, which we'll cover in
+technique won't work. Instead, you can use a trait object, which we'll cover in
 Chapter 13.
 
 Now that we've gone over some of the most common ways to use vectors, be sure
@@ -257,7 +256,7 @@ in the book for space reasons? We might want to justify sending them out of the
 book if we don't want to cover it here -->
 
 <!-- Yes, there are many, many methods on Vec: https://doc.rust-lang.org/stable/std/vec/struct.Vec.html
-Also there are occcasionally new methods available with new versions of the
+Also there are occasionally new methods available with new versions of the
 language, so there's no way we can be comprehensive here. We want the reader to
 use the API documentation in these situations since the purpose of the online
 docs is to be comprehensive and up to date. I personally wouldn't expect a book
@@ -366,7 +365,7 @@ let hello = "Hola";
 
 ### Updating a String
 
-A `String` can can grow in size and its contents can change just like the
+A `String` can grow in size and its contents can change just like the
 contents of a `Vec`, by pushing more data into it. In addition, `String` has
 concatenation operations implemented with the `+` operator for convenience.
 
@@ -381,7 +380,7 @@ s.push_str("bar");
 
 `s` will contain "foobar" after these two lines. The `push_str` method takes a
 string slice because we don't necessarily want to take ownership of the
-argument. For example, it would be unfortunate if we weren't able to use `s2`
+parameter. For example, it would be unfortunate if we weren't able to use `s2`
 after appending its contents to `s1`:
 
 ```rust
@@ -390,7 +389,7 @@ let s2 = String::from("bar");
 s1.push_str(&s2);
 ```
 
-The `push` method is defined to take a single character as an argument and add
+The `push` method is defined to have a single character as a parameter and add
 it to the `String`:
 
 ```rust
@@ -428,12 +427,12 @@ call this method with `String` values. This signature gives us the clues we
 need to understand the tricky bits of the `+` operator.
 
 First of all, `s2` has an `&`, meaning that we are adding a *reference* of the
-second string to the first string. This is because of the `s` argument in the
+second string to the first string. This is because of the `s` parameter in the
 `add` function: we can only add a `&str` to a `String`, we can't add two
 `String`s together. Remember back in Chapter 4 when we talked about how
 `&String` will coerce to `&str`: we write `&s2` so that the `String` will
 coerce to the proper type, `&str`. Because this method does not take ownership
-of the argument, `s2` will still be valid after this operation.
+of the parameter, `s2` will still be valid after this operation.
 
 Second, we can see in the signature that `add` takes ownership of `self`,
 because `self` does *not* have an `&`. This means `s1` in the above example
@@ -484,7 +483,7 @@ have in the next paragraph without repeating the `println!` content too much?
 This code will also set `s` to "tic-tac-toe". The `format!` macro works in the
 same way as `println!`, but instead of printing the output to the screen, it
 returns a `String` with the contents. This version is much easier to read, and
-also does not take ownership of any of its arguments.
+also does not take ownership of any of its parameters.
 
 ### Indexing into Strings
 
@@ -519,7 +518,7 @@ A `String` is a wrapper over a `Vec<u8>`. Let's take a look at some of our
 properly-encoded UTF-8 example strings from before. First, this one:
 
 ```rust
-let len = "Hola".len();
+let len = String::from("Hola").len();
 ```
 
 In this case, `len` will be four, which means the `Vec` storing the string
@@ -527,7 +526,7 @@ In this case, `len` will be four, which means the `Vec` storing the string
 UTF-8. What about this example, though?
 
 ```rust
-let len = "Здравствуйте".len();
+let len = String::from("Здравствуйте").len();
 ```
 
 A person asked how long the string is might say 12. However, Rust's answer
@@ -548,7 +547,7 @@ encoded in UTF-8, the first byte of `З` is `208`, and the second is `151`, so
 own. Returning `208` is likely not what a person would want if they asked for
 the first letter of this string, but that's the only data that Rust has at byte
 index 0. Returning the byte value is probably not what people want, even with
-only latin letters: `&"hello"[0]` would return `104`, not `h`. To avoid
+only Latin letters: `&"hello"[0]` would return `104`, not `h`. To avoid
 returning an unexpected value and causing bugs that might not be discovered
 immediately, Rust chooses to not compile this code at all and prevent
 misunderstandings earlier.
@@ -693,7 +692,7 @@ of strings than other programming languages do, but this will prevent you from
 having to handle errors involving non-ASCII characters later in your
 development lifecycle.
 
-Let's switch to something a bit less complex: Hash Map!
+Let's switch to something a bit less complex: hash map!
 
 ## Hash Maps
 
@@ -738,8 +737,8 @@ in the prelude. Hash maps also have less support from the standard library;
 there's no built-in macro to construct them, for example.
 
 Just like vectors, hash maps store their data on the heap. This `HashMap` has
-keys of type `i32` and values of type `&str`. Like vectors, hash maps are
-homogenous: all of the keys must have the same type, and all of the values must
+keys of type `String` and values of type `i32`. Like vectors, hash maps are
+homogeneous: all of the keys must have the same type, and all of the values must
 have the same type.
 
 Another way of constructing a hash map is by using the `collect` method on a
@@ -765,7 +764,7 @@ want unless you specify. For the type parameters for the key and value types,
 however, we use underscores and Rust can infer the types that the hash map
 contains based on the types of the data in the vector.
 
-### Hashmaps and Ownership
+### Hash Maps and Ownership
 
 For types that implement the `Copy` trait, like `i32`, the values are copied
 into the hash map. For owned values like `String`, the values will be moved and
@@ -853,7 +852,7 @@ Let's look at how to do each of these!
 
 #### Overwriting a Value
 
-If we insert a key and a value into a hashmap, then insert that same key with a
+If we insert a key and a value into a hash map, then insert that same key with a
 different value, the value associated with that key will be replaced. Even
 though this following code calls `insert` twice, the hash map will only contain
 one key/value pair because we're inserting the value for the Blue team's key
@@ -870,7 +869,7 @@ scores.insert(String::from("Blue"), 25);
 println!("{:?}", scores);
 ```
 
-This will print `{"Blue": 25}`. The original value of 25 has been overwritten.
+This will print `{"Blue": 25}`. The original value of 10 has been overwritten.
 
 
 #### Only Insert If the Key Has No Value
