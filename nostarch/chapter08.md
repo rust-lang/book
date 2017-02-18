@@ -119,7 +119,7 @@ let third: Option<&i32> = v.get(2);
 There are a few things to note here. First, that we use the index value of `2`
 to get the third element: vectors are indexed by number, starting at zero.
 Second, the two different ways to get the third element are: using `&` and
-`[]`s, which gives us a reference, or using the `get` method with the index
+`[]`, which gives us a reference, or using the `get` method with the index
 passed as an argument, which gives us an `Option<&T>`.
 
 The reason Rust has two ways to reference an element is so that you can choose
@@ -142,8 +142,8 @@ element past the end of the vector to be a fatal error that should crash the
 program.
 
 When the `get` method is passed an index that is outside the array, it will
-return `None` without `panic!`ing. You would use this if accessing an element
-beyond the range of the vector will happen occasionally under normal
+return `None` without causing a `panic!` call. You would use this if accessing
+an element beyond the range of the vector will happen occasionally under normal
 circumstances. Your code can then have logic to handle having either
 `Some(&element)` or `None`, as we discussed in Chapter 6. For example, the
 index could be coming from a person entering a number. If they accidentally
@@ -411,8 +411,8 @@ need to understand the tricky bits of the `+` operator.
 
 First of all, `s2` has an `&`, meaning that we are adding a *reference* of the
 second string to the first string. This is because of the `s` parameter in the
-`add` function: we can only add a `&str` to a `String`, we can't add two
-`String`s together. Remember back in Chapter 4 when we talked about how
+`add` function: we can only add a `&str` to a `String`, we can’t add two
+`String` values together. Remember back in Chapter 4 when we talked about how
 `&String` will coerce to `&str`: we write `&s2` so that the `String` will
 coerce to the proper type, `&str`. Because this method does not take ownership
 of the parameter, `s2` will still be valid after this operation.
@@ -850,10 +850,10 @@ scores.entry(String::from("Blue")).or_insert(50);
 println!("{:?}", scores);
 ```
 
-The `or_insert` method on `Entry` returns the value for the `Entry`'s key if it
-exists, and if not, inserts its argument as the new value for the `Entry`'s key
-and returns that. This is much cleaner than writing the logic ourselves, and in
-addition, plays more nicely with the borrow checker.
+The `or_insert` method on `Entry` returns the value for the corresponding
+`Entry` key if it exists, and if not, inserts its argument as the new value for
+this key and returns the modified `Entry`. This is much cleaner than writing
+the logic ourselves, and in addition, plays more nicely with the borrow checker.
 
 This code will print `{"Yellow": 50, "Blue": 10}`. The first call to `entry`
 will insert the key for the Yellow team with the value 50, since the Yellow
