@@ -255,7 +255,7 @@ making sure to expose possible errors, strings being a more complicated data
 structure than many programmers give them credit for, and UTF-8. These things
 combine in a way that can seem difficult when coming from other languages.
 
-The reason Strings are in the collections chapter is that strings are
+The reason strings are in the collections chapter is that strings are
 implemented as a collection of bytes plus some methods to provide useful
 functionality when those bytes are interpreted as text. In this section, we’ll
 talk about the operations on `String` that every collection type has, like
@@ -267,7 +267,7 @@ data.
 ### What is a String?
 
 Before we can dig into those aspects, we need to talk about what exactly we
-mean by the term 'string'. Rust actually only has one string type in the core
+mean by the term *string*. Rust actually only has one string type in the core
 language itself: `str`, the string slice, which is usually seen in its borrowed
 form, `&str`. We talked about *string slices* in Chapter 4: these are a
 reference to some UTF-8 encoded string data stored elsewhere. String literals,
@@ -524,8 +524,8 @@ misunderstandings earlier.
 #### Bytes and Scalar Values and Grapheme Clusters! Oh my!
 
 This leads to another point about UTF-8: there are really three relevant ways
-to look at strings, from Rust's perspective: as bytes, scalar values, and
-grapheme clusters (the closest thing to what people would call 'letters').
+to look at strings, from Rust’s perspective: as bytes, scalar values, and
+grapheme clusters (the closest thing to what people would call *letters*).
 
 If we look at the Hindi word “नमस्ते” written in the Devanagari script, it is
 ultimately stored as a `Vec` of `u8` values that looks like this:
