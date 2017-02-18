@@ -13,7 +13,7 @@ converted a `String` to a numeric type using `parse` in Chapter 2, we must add
 a type annotation, like this:
 
 ```rust
-let guess: u32 = "42".parse().unwrap();
+let guess: u32 = "42".parse().expect("Not a number!");
 ```
 
 If we don’t add the type annotation here, Rust will display the following
@@ -24,7 +24,7 @@ possible type we want to use:
 error[E0282]: unable to infer enough type information about `_`
  --> src/main.rs:2:5
   |
-2 | let guess = "42".parse().unwrap();
+2 | let guess = "42".parse().expect("Not a number!");
   |     ^^^^^ cannot infer type for `_`
   |
   = note: type annotations or generic parameter binding required
