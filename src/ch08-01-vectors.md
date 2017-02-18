@@ -146,7 +146,7 @@ v.push(6);
 
 Compiling this will give us this error:
 
-```
+```text
 error[E0502]: cannot borrow `v` as mutable because it is also borrowed as
 immutable
   |
