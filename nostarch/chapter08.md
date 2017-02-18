@@ -237,8 +237,8 @@ always handle every possible case, as we discussed in Chapter 6.
 
 If you don’t know at the time that you’re writing a program the exhaustive set
 of types the program will get at runtime to store in a vector, the enum
-technique won't work. Instead, you can use a trait object, which we'll cover in
-Chapter 13.
+technique won’t work. Instead, you can use a trait object, which we’ll cover in
+Chapter 17.
 
 Now that we’ve gone over some of the most common ways to use vectors, be sure
 to take a look at the API documentation for all of the many useful methods
@@ -399,15 +399,16 @@ reference to `s2` has to do with the signature of the method that gets called
 when we use the `+` operator. The `+` operator uses the `add` method, whose
 signature looks something like this:
 
-```rust,ignore
+```
 fn add(self, s: &str) -> String {
 ```
 
 This isn’t the exact signature that’s in the standard library; there `add` is
 defined using generics. Here, we’re looking at the signature of `add` with
 concrete types substituted for the generic ones, which is what happens when we
-call this method with `String` values. This signature gives us the clues we
-need to understand the tricky bits of the `+` operator.
+call this method with `String` values. We'll be discussing generics in Chapter
+10. This signature gives us the clues we need to understand the tricky bits of
+the `+` operator.
 
 First of all, `s2` has an `&`, meaning that we are adding a *reference* of the
 second string to the first string. This is because of the `s` parameter in the
