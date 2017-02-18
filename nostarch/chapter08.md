@@ -498,10 +498,11 @@ UTF-8. What about this example, though?
 let len = String::from("Здравствуйте").len();
 ```
 
-A person asked how long the string is might say 12. However, Rust's answer
-is 24. This is the number of bytes that it takes to encode "Здравствуйте" in
-UTF-8, since each character takes two bytes of storage. Therefore, an index
-into the string's bytes will not always correlate to a valid character.
+A person asked how long the string is might say 12. However, Rust’s answer is
+24. This is the number of bytes that it takes to encode “Здравствуйте” in
+UTF-8, since each Unicode scalar value takes two bytes of storage. Therefore,
+an index into the string’s bytes will not always correlate to a valid Unicode
+scalar value.
 
 To demonstrate, consider this invalid Rust code:
 
@@ -595,10 +596,10 @@ You should use this with caution, since it can cause your program to crash.
 
 Luckily, there are other ways we can access elements in a String.
 
-If we need to perform operations on individual characters, the best way to do
-so is to use the `chars` method. Calling `chars` on "नमस्ते" separates out and
-returns six values of type `char`, and you can iterate over the result in order
-to access each element:
+If we need to perform operations on individual Unicode scalar values, the best
+way to do so is to use the `chars` method. Calling `chars` on “नमस्ते”
+separates out and returns six values of type `char`, and you can iterate over
+the result in order to access each element:
 
 ```rust
 for c in "नमस्ते".chars() {
@@ -636,8 +637,8 @@ This code will print the 18 bytes that make up this `String`, starting with:
 // ... etc
 ```
 
-But make sure to remember that valid UTF-8 characters may be made up of more
-than one byte.
+But make sure to remember that valid Unicode scalar values may be made up of
+more than one byte.
 
 Getting grapheme clusters from `String`s is complex, so this functionality is
 not provided by the standard library. There are crates available on crates.io
