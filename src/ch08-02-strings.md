@@ -151,7 +151,7 @@ reference to `s2` has to do with the signature of the method that gets called
 when we use the `+` operator. The `+` operator uses the `add` method, whose
 signature looks something like this:
 
-```
+```rust,ignore
 fn add(self, s: &str) -> String {
 ```
 
@@ -283,7 +283,7 @@ grapheme clusters (the closest thing to what people would call *letters*).
 If we look at the Hindi word “नमस्ते” written in the Devanagari script, it is
 ultimately stored as a `Vec` of `u8` values that looks like this:
 
-```
+```text
 [224, 164, 168, 224, 164, 174, 224, 164, 184, 224, 165, 141, 224, 164, 164,
 224, 165, 135]
 ```
