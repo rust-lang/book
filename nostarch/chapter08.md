@@ -900,8 +900,10 @@ hashing algorithm out there, but the tradeoff for better security that comes
 with the drop in performance is worth it. If you profile your code and find
 that the default hash function is too slow for your purposes, you can switch to
 another function by specifying a different *hasher*. A hasher is a type that
-implements the `BuildHasher` trait. We'll be talking about traits and how to
-implement them in Chapter 10.
+implements the `BuildHasher` trait. We’ll be talking about traits and how to
+implement them in Chapter 10. You don't necessarily have to implement your own
+hasher from scratch; crates.io has libraries that others have shared that
+provide hashers implementing many common hashing algorithms.
 
 ## Summary
 
