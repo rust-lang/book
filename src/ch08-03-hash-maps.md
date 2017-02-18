@@ -9,11 +9,11 @@ associative array, just to name a few.
 
 Hash maps are useful for when you want to be able to look up data not by an
 index, as you can with vectors, but by using a key that can be of any type. For
-example, in a game, you could keep track of each team's score in a hash map
-where each key is a team's name and the values are each team's score. Given a
+example, in a game, you could keep track of each team’s score in a hash map
+where each key is a team’s name and the values are each team’s score. Given a
 team name, you can retrieve their score.
 
-We'll go over the basic API of hash maps in this chapter, but there are many
+We’ll go over the basic API of hash maps in this chapter, but there are many
 more goodies hiding in the functions defined on `HashMap` by the standard
 library. As always, check the standard library documentation for more
 information.
@@ -21,7 +21,7 @@ information.
 ### Creating a New Hash Map
 
 We can create an empty `HashMap` with `new`, and add elements with `insert`.
-Here we're keeping track of the scores of two teams whose names are Blue and
+Here we’re keeping track of the scores of two teams whose names are Blue and
 Yellow. The Blue team will start with 10 points and the Yellow team starts with
 50:
 
@@ -36,21 +36,21 @@ scores.insert(String::from("Yellow"), 50);
 
 Note that we need to first `use` the `HashMap` from the collections portion of
 the standard library. Of our three fundamental collections, this one is the
-least often used, so it's not included in the features imported automatically
+least often used, so it’s not included in the features imported automatically
 in the prelude. Hash maps also have less support from the standard library;
-there's no built-in macro to construct them, for example.
+there’s no built-in macro to construct them, for example.
 
 Just like vectors, hash maps store their data on the heap. This `HashMap` has
 keys of type `String` and values of type `i32`. Like vectors, hash maps are
-homogeneous: all of the keys must have the same type, and all of the values must
-have the same type.
+homogeneous: all of the keys must have the same type, and all of the values
+must have the same type.
 
 Another way of constructing a hash map is by using the `collect` method on a
 vector of tuples, where each tuple consists of a key and its value. The
 `collect` method gathers up data into a number of collection types, including
 `HashMap`. For example, if we had the team names and initial scores in two
 separate vectors, we can use the `zip` method to create a vector of tuples
-where "Blue" is paired with 10, and so forth. Then we can use the `collect`
+where “Blue” is paired with 10, and so forth. Then we can use the `collect`
 method to turn that vector of tuples into a `HashMap`:
 
 ```rust
@@ -62,8 +62,8 @@ let initial_scores = vec![10, 50];
 let scores: HashMap<_, _> = teams.iter().zip(initial_scores.iter()).collect();
 ```
 
-The type annotation `HashMap<_, _>` is needed here because it's possible to
-`collect` into many different data structures, and Rust doesn't know which you
+The type annotation `HashMap<_, _>` is needed here because it’s possible to
+`collect` into many different data structures, and Rust doesn’t know which you
 want unless you specify. For the type parameters for the key and value types,
 however, we use underscores and Rust can infer the types that the hash map
 contains based on the types of the data in the vector.
@@ -109,11 +109,11 @@ let team_name = String::from("Blue");
 let score = scores.get(&team_name);
 ```
 
-Here, `score` will have the value that's associated with the Blue team, and the
+Here, `score` will have the value that’s associated with the Blue team, and the
 result will be `Some(10)`. The result is wrapped in `Some` because `get`
-returns an `Option<V>`; if there's no value for that key in the hash map, `get`
-will return `None`. The program will need to handle the `Option` in one of
-the ways that we covered in Chapter 6.
+returns an `Option<V>`; if there’s no value for that key in the hash map, `get`
+will return `None`. The program will need to handle the `Option` in one of the
+ways that we covered in Chapter 6.
 
 We can iterate over each key/value pair in a hash map in a similar manner as we
 do with vectors, using a `for` loop:
@@ -140,26 +140,21 @@ Blue: 10
 
 ### Updating a Hash Map
 
-<!-- So the quantity of keys must be defined up front, that's not growable?
-That could be worthy saying -->
-<!-- No, the number of keys is growable, it's just that for EACH individual
-key, there can only be one value. I've tried to clarify. /Carol -->
-
 While the number of keys and values is growable, each individual key can only
 have one value associated with it at a time. When we want to change the data in
 a hash map, we have to decide how to handle the case when a key already has a
 value assigned. We could choose to replace the old value with the new value,
 completely disregarding the old value. We could choose to keep the old value
-and ignore the new value, and only add the new value if the key *doesn't*
+and ignore the new value, and only add the new value if the key *doesn’t*
 already have a value. Or we could combine the old value and the new value.
-Let's look at how to do each of these!
+Let’s look at how to do each of these!
 
 #### Overwriting a Value
 
-If we insert a key and a value into a hash map, then insert that same key with a
-different value, the value associated with that key will be replaced. Even
+If we insert a key and a value into a hash map, then insert that same key with
+a different value, the value associated with that key will be replaced. Even
 though this following code calls `insert` twice, the hash map will only contain
-one key/value pair because we're inserting the value for the Blue team's key
+one key/value pair because we’re inserting the value for the Blue team’s key
 both times:
 
 ```rust
@@ -175,17 +170,16 @@ println!("{:?}", scores);
 
 This will print `{"Blue": 25}`. The original value of 10 has been overwritten.
 
-
 #### Only Insert If the Key Has No Value
 
-It's common to want to check if a particular key has a value and, if it does
+It’s common to want to check if a particular key has a value and, if it does
 not, insert a value for it. Hash maps have a special API for this, called
 `entry`, that takes the key we want to check as an argument. The return value
 of the `entry` function is an enum, `Entry`, that represents a value that might
-or might not exist. Let's say that we want to check if the key for the Yellow
-team has a value associated with it. If it doesn't, we want to insert the value
-50, and the same for the Blue team. With the entry API, the code for this
-looks like:
+or might not exist. Let’s say that we want to check if the key for the Yellow
+team has a value associated with it. If it doesn’t, we want to insert the value
+50, and the same for the Blue team. With the entry API, the code for this looks
+like:
 
 ```rust
 use std::collections::HashMap;
@@ -199,23 +193,23 @@ scores.entry(String::from("Blue")).or_insert(50);
 println!("{:?}", scores);
 ```
 
-The `or_insert` method on `Entry` returns the value for the `Entry`'s key if it
-exists, and if not, inserts its argument as the new value for the `Entry`'s key
-and returns that. This is much cleaner than writing the logic ourselves, and in
-addition, plays more nicely with the borrow checker.
+The `or_insert` method on `Entry` returns the value for the corresponding
+`Entry` key if it exists, and if not, inserts its argument as the new value for
+this key and returns the modified `Entry`. This is much cleaner than writing
+the logic ourselves, and in addition, plays more nicely with the borrow checker.
 
 This code will print `{"Yellow": 50, "Blue": 10}`. The first call to `entry`
 will insert the key for the Yellow team with the value 50, since the Yellow
-team doesn't have a value already. The second call to `entry` will not change
+team doesn’t have a value already. The second call to `entry` will not change
 the hash map since the Blue team already has the value 10.
 
 #### Update a Value Based on the Old Value
 
-Another common use case for hash maps is to look up a key's value then update
+Another common use case for hash maps is to look up a key’s value then update
 it, based on the old value. For instance, if we wanted to count how many times
 each word appeared in some text, we could use a hash map with the words as keys
-and increment the value to keep track of how many times we've seen that word.
-If this is the first time we've seen a word, we'll first insert the value `0`.
+and increment the value to keep track of how many times we’ve seen that word.
+If this is the first time we’ve seen a word, we’ll first insert the value `0`.
 
 ```rust
 use std::collections::HashMap;
@@ -247,8 +241,10 @@ hashing algorithm out there, but the tradeoff for better security that comes
 with the drop in performance is worth it. If you profile your code and find
 that the default hash function is too slow for your purposes, you can switch to
 another function by specifying a different *hasher*. A hasher is a type that
-implements the `BuildHasher` trait. We'll be talking about traits and how to
-implement them in Chapter 10.
+implements the `BuildHasher` trait. We’ll be talking about traits and how to
+implement them in Chapter 10. You don't necessarily have to implement your own
+hasher from scratch; crates.io has libraries that others have shared that
+provide hashers implementing many common hashing algorithms.
 
 ## Summary
 
@@ -256,21 +252,21 @@ Vectors, strings, and hash maps will take you far in programs where you need to
 store, access, and modify data. Here are some exercises you should now be
 equipped to solve:
 
-1. Given a list of integers, use a vector and return the mean (average), median
-   (when sorted, the value in the middle position), and mode (the value that
-   occurs most often; a hash map will be helpful here) of the list.
-2. Convert strings to Pig Latin, where the first consonant of each word is
-   moved to the end of the word with an added "ay", so "first" becomes
-   "irst-fay". Words that start with a vowel get "hay" added to the end instead
-   ("apple" becomes "apple-hay"). Remember about UTF-8 encoding!
-3. Using a hash map and vectors, create a text interface to allow a user to add
-   employee names to a department in the company. For example, "Add Sally to
-   Engineering" or "Add Amir to Sales". Then let the user retrieve a list of all
-   people in a department or all people in the company by department, sorted
-   alphabetically.
+* Given a list of integers, use a vector and return the mean (average), median
+  (when sorted, the value in the middle position), and mode (the value that
+  occurs most often; a hash map will be helpful here) of the list.
+* Convert strings to Pig Latin, where the first consonant of each word is moved
+  to the end of the word with an added “ay”, so “first” becomes “irst-fay”.
+  Words that start with a vowel get “hay” added to the end instead (“apple”
+  becomes “apple-hay”). Remember about UTF-8 encoding!
+* Using a hash map and vectors, create a text interface to allow a user to add
+  employee names to a department in the company. For example, “Add Sally to
+  Engineering” or “Add Amir to Sales”. Then let the user retrieve a list of all
+  people in a department or all people in the company by department, sorted
+  alphabetically.
 
 The standard library API documentation describes methods these types have that
 will be helpful for these exercises!
 
-We're getting into more complex programs where operations can fail, which means
-it's a perfect time to go over error handling next!
+We’re getting into more complex programs where operations can fail, which means
+it’s a perfect time to go over error handling next!
