@@ -375,48 +375,37 @@ we specify that we're implementing methods on the type `Point<T>`.
 
 Generic type parameters in a struct definition aren't always the same generic
 type parameters you want to use in that struct's method signatures. Listing
-10-10 has a struct `A<T>` that holds a value of type `Option<T>`, and the
-struct `A` has one method defined on it, named `some_if_i_have_some`. This
-example is a little silly and not very useful, but will fit our purposes for
-demonstrating how generics in struct fields and method signatures interact.
-
-The method `some_if_i_have_some` takes a value of a different generic type `U`
-and returns an `Option<U>` based on whether the data in the `value` field of
-the struct is `Some(T)` or `None`:
+10-10 defines a method `mix` on the `Point<T, U>` struct from Listing 10-8. The
+method takes another `Point` as a parameter, which might have different types
+than the `self` `Point` that we're calling `mix` on. The method creates a new
+`Point` instance that has the `x` value from the `self` `Point` (which is of
+type `T`) and the `y` value from the passed-in `Point` (which is of type `W`):
 
 <figure>
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-struct A<T> {
-    value: Option<T>,
+struct Point<T, U> {
+    x: T,
+    y: U,
 }
 
-impl<T> A<T> {
-    fn some_if_i_have_some<U>(&self, other: U) -> Option<U> {
-        match self.value {
-            Some(_) => Some(other),
-            None => None,
+impl<T, U> Point<T, U> {
+    fn mixup<V, W>(&self, other: &Point<V, W>) -> Point<T, W> {
+        Point {
+            x: self.x,
+            y: other.y,
         }
     }
 }
 
 fn main() {
-    let a1 = A { value: Some(true) };
-    let a2 = A { value: Some(3) };
-    let a3: A<i32> = A { value: None };
+    let p1 = Point { x: 5, y: 10.4 };
+    let p2 = Point { x: "Hello", y: 'c'};
 
-    let result1 = a1.some_if_i_have_some(false);
-    let result2 = a2.some_if_i_have_some(false);
-    let result3 = a3.some_if_i_have_some(false);
-    println!("These will both print Some(false): {:?}, {:?}", result1, result2);
-    println!("This will print None: {:?}", result3);
+    let p3 = p1.mixup(p2);
 
-    let result4 = a1.some_if_i_have_some(5);
-    let result5 = a2.some_if_i_have_some(5);
-    let result6 = a3.some_if_i_have_some(5);
-    println!("These will both print Some(5): {:?}, {:?}", result4, result5);
-    println!("This will print None: {:?}", result6);
+    println!("p3.x = {}, p3.y = {}", p3.x, p3.y);
 }
 ```
 
@@ -428,28 +417,16 @@ definition
 </figcaption>
 </figure>
 
-This code isn't particularly useful aside from illustrating that generic types
-of methods can be different from the generic types in the struct that the
-methods are defined on. The instance of `A<T>` in the variable `an_a_with_some`
-has the concrete type `A<bool>`, since its `value` holds `Some(true)`, which is
-of type `Option<bool>`. We can call `some_if_i_have_some` on `an_a_with_some`
-with `false`, so that `U` also happens to be type `bool`. We can also call
-`some_if_i_have_some` and pass `5`, which means `U` will be type `i32` and
-different from `T` in that case. No matter what the type of `value` is for
-these instances of struct `A<T>`, the method `some_if_i_have_some` takes values
-of a type that can be different than `T`, and its return type is the same as
-what was passed into the method.
+In `main`, we've defined a `Point` that has an `i32` for `x` (with value `5`)
+and an `f64` for `y` (with value `10.4`). `p2` is a `Point` that has a string
+slice for `x` (with value `"Hello"`) and a `char` for `y` (with value `c`).
+Calling `mixup` on `p1` with the argument `p2` gives us `p3`, which will have
+an `i32` for `x`, since `x` came from `p1`. `p3` will have a `char` for `y`,
+since `y` came from `p2`. The `println!` will print `p3.x = 5, p3.y = c`.
 
-Note the place where we declared `U`: it's in the signature of the method after
-the name `some_if_i_have_some`, not in the `struct` definition or after `impl`,
-where we declared `T`. This reflects the fact that `U` is only used in the
-method and not in the struct fields.
-
-<!-- Liz: I don't think we need to review or reference why `a3` needs a type
-annotation here since we covered that in the `Option` enum chapter of chapter
-6, but I could be convinced we should have a reference, I guess. It's not the
-main focus of this example but needs to be there for this code to compile.
-/Carol -->
+Note that the generic parameters `T` and `U` are declared after `impl`, since
+they go with the struct definition. The generic parameters `V` and `W` are
+declared after `fn mixup`, since they are only relevant to the method.
 
 ### Performance of Code Using Generics
 
