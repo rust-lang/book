@@ -78,7 +78,7 @@ error: Process didn't exit successfully: `target/debug/panic` (exit code: 101)
 
 The last three lines contain the error message caused by the call to `panic!`.
 The first line shows our panic message and the place in our source code where
-the panic occurred: `src/main.rs:2` indicates that it's the second like of our
+the panic occurred: `src/main.rs:2` indicates that it's the second line of our
 *main.rs* file.
 
 In this case, the line indicated is part of our code, and if we go to that line
@@ -451,11 +451,11 @@ otherwise, the pattern matching will move on to consider the next arm in the
 into the guard condition but is merely referenced by it. The reason `ref` is
 used to take a reference in a pattern instead of `&` will be covered in detail
 in Chapter XX. In short, in the context of a pattern, `&` matches a reference
-and give us its value, but `ref` matches a value and gives us a reference to it.
+and gives us its value, but `ref` matches a value and gives us a reference to it.
 
 The condition we want to check in the match guard is whether the value returned
 by `error.kind()` is the `NotFound` variant of the `ErrorKind` enum. If it is,
-we try to create the file with 'File::create'. However, since `File::create`
+we try to create the file with `File::create`. However, since `File::create`
 could also fail, we need to add an inner `match` statement as well! When the
 file can't be opened, a different error message will be printed. The last arm
 of the outer `match` stays the same so that the program panics on any error
@@ -572,6 +572,7 @@ to the code that called this function:
 
 ```rust
 use std::io;
+use std::io::Read;
 use std::fs::File;
 
 fn read_username_from_file() -> Result<String, io::Error> {
@@ -603,7 +604,7 @@ io::Error>`. This means that the function is returning a value of the type
 `Result<T, E>` where the generic parameter `T` has been filled in with the
 concrete type `String`, and the generic type `E` has been filled in with the
 concrete type `io::Error`. If this function succeeds without any problems, the
-caller of this function will receive an `Ok` value that holds a `String` -- the
+caller of this function will receive an `Ok` value that holds a `String`—the
 username that this function read from the file. If this function encounters any
 problems, the caller of this function will receive an `Err` value that holds an
 instance of `io::Error` that contains more information about what the problems
@@ -773,7 +774,7 @@ error message. /Carol -->
 
 When we compile this, we get the following error message:
 
-```bash
+```text
 error[E0308]: mismatched types
  -->
   |
@@ -869,9 +870,9 @@ we'd definitely want to handle the `Result` in a more robust way instead.
 ### Guidelines for Error Handling
 
 It's advisable to have your code `panic!` when it's possible that you could end
-up in a *bad state*---in this context, *bad state* is when some assumption,
+up in a *bad state*—in this context, *bad state* is when some assumption,
 guarantee, contract, or invariant has been broken, such as when invalid values,
-contradictory values, or missing values are passed to your code---plus one or
+contradictory values, or missing values are passed to your code—plus one or
 more of the following:
 
 * The bad state is not something that's *expected* to happen occasionally
@@ -911,7 +912,7 @@ for the function.
 Having lots of error checks in all of your functions would be verbose and
 annoying, though. Luckily, you can use Rust's type system (and thus the type
 checking the compiler does) to do a lot of the checks for you. If your function
-takes a particular type as an argument, you can proceed with your code's logic
+has a particular type as a parameter, you can proceed with your code's logic
 knowing that the compiler has already ensured you have a valid value. For
 example, if you have a type rather than an `Option`, your program expects to
 have *something* rather than *nothing*. Your code then doesn't have to handle
@@ -919,7 +920,7 @@ two cases for the `Some` and `None` variants, it will only have one case for
 definitely having a value. Code trying to pass nothing to your function won't
 even compile, so your function doesn't have to check for that case at runtime.
 Another example is using an unsigned integer type like `u32`, which ensures the
-argument value is never negative.
+parameter is never negative.
 
 <!-- Can you go into more detail explaining this last sentence? Why is a type
 better to use than an Option?-->
@@ -1021,10 +1022,10 @@ First, we define a struct named `Guess` that has a field named `value` that
 holds a `u32`. This is where the number will be stored.
 
 Then we implement an associated function named `new` on `Guess` that is a
-constructor of `Guess` values. The `new` function takes one argument named
-`value` of type `u32` and returns a `Guess`. The code in the body of the `new`
-function tests the `value` argument to make sure it is between 1 and 100. If
-`value` doesn't pass this test, we call `panic!`, which will alert the
+constructor of `Guess` values. The `new` function is defined to have one
+parameter named `value` of type `u32` and to return a `Guess`. The code in the
+body of the `new` function tests `value` to make sure it is between 1 and 100.
+If `value` doesn't pass this test, we call `panic!`, which will alert the
 programmer who is calling this code that they have a bug they need to fix,
 since creating a `Guess` with a `value` outside this range would violate the
 contract that `Guess::new` is relying on. The conditions in which `Guess::new`
@@ -1032,7 +1033,7 @@ might panic should be discussed in its public-facing API documentation; we'll
 cover documentation conventions around indicating the possibility of a `panic!`
 in the API documentation that you create in Chapter 14. If `value` does pass
 the test, we create a new `Guess` with its `value` field set to the `value`
-argument, and return the `Guess`.
+parameter, and return the `Guess`.
 
 <!-- I'm not sure if you mean the function that creates the guess type (so
 listing 9-8) or the function that uses the guess type, below. You mean the
@@ -1042,8 +1043,8 @@ violation? -->
 "wider function". I hope the slower explanation of the code has cleared
 this up; please provide more detail on what's confusing if not. /Carol -->
 
-Next, we implement a method named `value` that borrows `self`, doesn't take any
-other arguments, and returns a `u32`. This is a kind of method sometimes called
+Next, we implement a method named `value` that borrows `self`, doesn't have any
+other parameters, and returns a `u32`. This is a kind of method sometimes called
 a *getter*, since its purpose is to get some data from its fields and return
 it. This public method is necessary because the `value` field of the `Guess`
 struct is private. It's important that the `value` field is private so that
@@ -1052,8 +1053,8 @@ code using the `Guess` struct is not allowed to set `value` directly: callers
 `Guess`, which ensures there's no way for a `Guess` to have a `value` that
 hasn't been checked by the conditions in the constructor.
 
-A function that takes as an argument or returns only numbers between 1 and 100
-could then declare in its signature that it takes a `Guess` rather than a
+A function that has a parameter or returns only numbers between 1 and 100 could
+then declare in its signature that it takes or returns a `Guess` rather than a
 `u32`, and wouldn't need to do any additional checks in its body.
 
 ## Summary
