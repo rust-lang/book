@@ -312,19 +312,19 @@ overridden implementation.
 
 ### Trait Bounds
 
-Once we've defined traits and implemented those traits on types, we can combine
+Now that we've defined traits and implemented those traits on types, we can use
 traits with generic type parameters. We can constrain generic types so that
-rather than being any type, the compiler will ensure that the generic type will
-only be types that implement a particular trait and thus have the behavior that
-we need the types to have. This is called specifying *trait bounds* on a
-generic type.
+rather than being any type, the compiler will ensure that the type will be
+limited to those types that implement a particular trait and thus have the
+behavior that we need the types to have. This is called specifying *trait
+bounds* on a generic type.
 
 For example, in Listing 10-12, we implemented the `Summarizable` trait on the
 types `NewsArticle` and `Tweet`. We can define a function `notify` that calls
 the `summary` method on its parameter `item`, which is of the generic type `T`.
-We can use trait bounds on `T` to specify that `item` can't be any concrete
-type; `item` can only be types that implement the `Summarizable` trait since we
-want to be able to call `summary` on `item` without getting an error:
+To be able to call `summary` on `item` without getting an error, we can use
+trait bounds on `T` to specify that `item` must be of a type that implements
+the `Summarizable` trait:
 
 ```rust,ignore
 pub fn notify<T: Summarizable>(item: T) {
@@ -337,9 +337,9 @@ colon and within the angle brackets. Because of the trait bound on `T`, we can
 call `notify` and pass in any instance of `NewsArticle` or `Tweet`. The
 external code from Listing 10-13 that's using our `aggregator` crate can call
 our `notify` function and pass in an instance of `WeatherForecast`, since
-`Summarizable` is implemented for `WeatherForecast` as well. Attempting write
-code that calls `notify` with any other type, like a `String` or an `i32`,
-won't compile, since those types do not implement `Summarizable`.
+`Summarizable` is implemented for `WeatherForecast` as well. Code that calls
+`notify` with any other type, like a `String` or an `i32`, won't compile, since
+those types do not implement `Summarizable`.
 
 We can specify multiple trait bounds on a generic type by using `+`. If we
 needed to be able to use display formatting on the type `T` in a function as
