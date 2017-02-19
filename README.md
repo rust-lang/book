@@ -58,6 +58,17 @@ We'd love your help! Please see [CONTRIBUTING.md][contrib].
 
 [contrib]: https://github.com/rust-lang/book/blob/master/CONTRIBUTING.md
 
+We'd especially love help translating! See the [Translations][] label to join
+in efforts that are currently in progress. Open a new issue to start 
+working on a new language! We're waiting on [mdbook support][] for multiple
+languages before we merge any in, but feel free to start! The chapters in 
+[the frozen column][] of the project won't see major changes, so if you start
+with those, you won't have to redo work :)
+
+[Translations]: https://github.com/rust-lang/book/issues?q=is%3Aopen+is%3Aissue+label%3ATranslations
+[mdbook support]: https://github.com/azerupi/mdBook/issues/5
+[the frozen column]: https://github.com/rust-lang/book/projects/1
+
 ## No Starch
 
 As the book will be published by No Starch, we first iterate here, then ship the
