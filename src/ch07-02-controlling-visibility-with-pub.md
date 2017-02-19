@@ -34,8 +34,8 @@ functions go unused. The point of creating them is that they will be used by
 another project and not our own.
 
 To understand why this program invokes these warnings, let’s try using the
-`connect` library as if we were another project, calling it externally. We can
-do that by creating a binary crate in the same directory as our library crate,
+`connect` library as if we were another project, calling it externally. To do
+that, we’ll create a binary crate in the same directory as our library crate,
 by making a *src/main.rs* file containing this code:
 
 <span class="filename">Filename: src/main.rs</span>
@@ -55,6 +55,16 @@ the existing library crate whose root file is *src/lib.rs*. This pattern is
 quite common for executable projects: most functionality is in a library crate,
 and the binary crate uses that library crate. This way, other programs can also
 use the library crate, and it’s a nice separation of concerns.
+
+From the point of view of a crate outside of the `communicator` library looking
+in, all of the modules we've been creating are within a module that has the
+same name as the crate, `communicator`. We call the top-level module of a crate
+the *root module*.
+
+Also note that even if we're using an external crate within a submodule of our
+project, the `extern crate` should go in our root module (so in *src/main.rs*
+or *src/lib.rs*). Then, in our submodules, we can refer to items from external
+crates as if the items are top-level modules.
 
 Our binary crate right now just calls our library’s `connect` function from the
 `client` module. However, invoking `cargo build` will now give us an error
@@ -82,8 +92,7 @@ the function is unused will go away. Marking something public lets Rust know
 that we intend for the function to be used by code outside of our program. Rust
 considers the theoretical external usage that’s now possible as the function
 “being used.” Thus, when something is marked as public, Rust will not require
-that it’s used in our own program and will stop warning that the item is
-unused.
+that it’s used in our own program and will stop warning that the item is unused.
 
 ### Making a Function Public
 
@@ -114,7 +123,7 @@ error: function `connect` is private
 
 Hooray! We have a different error! Yes, different error messages are a cause
 for celebration. The new error says “function `connect` is private”, so let’s
-edit `src/client.rs` to make `client::connect` public too:
+edit *src/client.rs* to make `client::connect` public too:
 
 <span class="filename">Filename: src/client.rs</span>
 
@@ -182,7 +191,7 @@ Hmmm, we’re still getting an unused function warning even though
 within the module, but the `network` module that the function resides in is not
 public. We’re working from the interior of the library out this time, where
 with `client::connect` we worked from the outside in. We need to change
-`src/lib.rs` to make `network` public too:
+*src/lib.rs* to make `network` public too:
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -208,8 +217,7 @@ Only one warning left! Try to fix this one on your own!
 
 Overall, these are the rules for item visibility:
 
-1. If an item is public, it can be accessed through any of its
-  parent modules.
+1. If an item is public, it can be accessed through any of its parent modules.
 2. If an item is private, it may be accessed only by the current module and its
   child modules.
 
@@ -251,8 +259,8 @@ incorrect
 </figure>
 
 Before you try to compile this code, make a guess about which lines in `try_me`
-function will have errors. Then try compiling to see if you were right, and read
-on for discussion of the errors!
+function will have errors. Then try compiling to see if you were right, and
+read on for discussion of the errors!
 
 #### Looking at the Errors
 
@@ -286,9 +294,8 @@ understand why.
 * What if the `inside` module was public?
 * What if `outermost` was public and `inside` was private?
 * What if, in the body of `inner_function`, you called
-  `::outermost::middle_secret_function()`? (The two colons at the beginning
-  mean that we want to refer to the namespaces starting from the root
-  namespace.)
+  `::outermost::middle_secret_function()`? (The two colons at the beginning mean
+  that we want to refer to the modules starting from the root module.)
 
 Feel free to design more experiments and try them out!
 

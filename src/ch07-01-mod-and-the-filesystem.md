@@ -31,10 +31,10 @@ mod tests {
 }
 ```
 
-Cargo creates an empty test to help us get our library started, rather
-than the “Hello, world!” binary that we get with the `--bin` option. We’ll look
-at the `#[]` and `mod tests` syntax a little later, but for now just make sure
-to leave it in your *src/lib.rs*.
+Cargo creates an empty test to help us get our library started, rather than the
+“Hello, world!” binary that we get with the `--bin` option. We’ll look at the
+`#[]` and `mod tests` syntax a little later, but for now just make sure to
+leave it in your *src/lib.rs*.
 
 Since we don’t have a *src/main.rs*, there’s nothing for Cargo to execute with
 the `cargo run` command. Therefore, we will be using the `cargo build` command
@@ -49,7 +49,7 @@ you have for your code.
 For our `communicator` networking library, we’re first going to define a module
 named `network` that contains the definition of a function called `connect`.
 Every module definition in Rust starts with the `mod` keyword. Add this code to
-the beginning of the *lib.rs* file, above the test code:
+the beginning of the *src/lib.rs* file, above the test code:
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -69,7 +69,7 @@ specify the module and use the namespace syntax `::`, like so:
 
 We can also have multiple modules, side-by-side, in the same *src/lib.rs* file.
 For example, to have a `client` module too, that also has a function named
-`connect`, we can add:
+`connect`, we can add it as shown in Listing 7-1:
 
 <figure>
 <span class="filename">Filename: src/lib.rs</span>
@@ -99,13 +99,14 @@ These can have completely different functionality, and the function names do
 not conflict with each other since they’re in different modules.
 
 While in this case, we’re building a library, there's nothing special about
-*lib.rs*. We could also make use of submodules in a *main.rs* as well. In fact,
-we can also put modules inside of modules. This can be useful as your modules
-grow to keep related functionality organized together and separate
+*src/lib.rs*. We could also make use of submodules in *src/main.rs* as well. In
+fact, we can also put modules inside of modules. This can be useful as your
+modules grow to keep related functionality organized together and separate
 functionality apart. The choice of how you organize your code depends on how
 you think about the relationship between the parts of your code. For instance,
 the `client` code and its `connect` function might make more sense to users of
-our library if it was inside the `network` namespace instead, like so:
+our library if it was inside the `network` namespace instead, like in Listing
+7-2:
 
 <figure>
 <span class="filename">Filename: src/lib.rs</span>
@@ -167,7 +168,7 @@ structure you would like.
 Modules form a hierarchical structure, much like another structure in computing
 that you’re used to: file systems! We can use Rust’s module system along with
 multiple files to split Rust projects up so that not everything lives in
-*src/lib.rs*. For this example, we will start with this code in *src/lib.rs*:
+*src/lib.rs*. For this example, we will start with the code in Listing 7-3:
 
 <figure>
 <span class="filename">Filename: src/lib.rs</span>
@@ -191,7 +192,7 @@ mod network {
 
 <figcaption>
 
-Listing 7-3: Three modules, `client`, `network`, and `network::server` all
+Listing 7-3: Three modules, `client`, `network`, and `network::server`, all
 defined in *src/lib.rs*
 
 </figcaption>
@@ -206,12 +207,15 @@ communicator
      └── server
 ```
 
-If these modules had many functions, and each function was getting long, we
-would have to scroll through this file to find the code we wanted to work with.
-This would be a good reason to pull each of the `client`, `network`, and
-`server` modules out of *src/lib.rs* and into their own files. Let’s start by
-extracting the `client` module into another file. First, replace the `client`
-module code in *src/lib.rs* with the following:
+If these modules had many functions, and those functions were getting long, it
+would be difficult to scroll through this file to find the code we wanted to
+work with. Because the functions are nested inside one or more mod blocks, the
+lines of code inside the functions will start getting long as well. These would
+be good reasons to pull each of the `client`, `network`, and `server` modules
+out of *src/lib.rs* and into their own files.
+
+Let’s start by extracting the `client` module into another file. First, replace
+the `client` module code in *src/lib.rs* with the following:
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -228,8 +232,6 @@ mod network {
     }
 }
 ```
-
-<!-- I will add wingdings/ghosting in libreoffice /Carol -->
 
 We’re still *defining* the `client` module here, but by removing the curly
 braces and definitions inside the `client` module and replacing them with a
@@ -315,8 +317,8 @@ mod server {
 }
 ```
 
-Notice that we still have a `mod` declaration within this module file;
-this is because we still want `server` to be a sub-module of `network`.
+Notice that we still have a `mod` declaration within this module file; this is
+because we still want `server` to be a sub-module of `network`.
 
 Now run `cargo build` again. Success! We have one more module to extract:
 `server`. Because it’s a sub-module—that is, a module within a module—our
@@ -344,7 +346,7 @@ fn connect() {
 }
 ```
 
-When we try to `cargo build`, we’ll get this error:
+When we try to `cargo build`, we’ll get the error shown in Listing 7-4:
 
 <figure>
 
@@ -384,8 +386,9 @@ different than *src/lib.rs* somehow; let’s keep reading to understand why.
 The note in the middle of Listing 7-4 is actually pretty helpful, as it points
 out something we haven’t yet talked about doing:
 
-> note: maybe move this module `network` to its own directory via
-`network/mod.rs`
+```text
+note: maybe move this module `network` to its own directory via `network/mod.rs`
+```
 
 Instead of continuing to follow the same file naming pattern we used
 previously, we can do what the note suggests:
@@ -427,13 +430,13 @@ The corresponding file layout now looks like this:
 
 So when we wanted to extract the `network::server` module, why did we have to
 also change the *src/network.rs* file into the *src/network/mod.rs* file, and
-also put the code for `network::server` in the `network` directory in
+put the code for `network::server` in the *network* directory in
 *src/network/server.rs*, instead of just being able to extract the
-`network::server` into *src/server.rs*? The reason is that Rust wouldn’t be
-able to tell that `server` was supposed to be a submodule of `network` if the
-*server.rs* file was in the *src* directory. To make it clearer why Rust can’t
-tell, let’s consider a different example where we have this module hierarchy
-with all the definitions in *src/lib.rs*:
+`network::server` module into *src/server.rs*? The reason is that Rust wouldn’t
+be able to tell that `server` was supposed to be a submodule of `network` if
+the *server.rs* file was in the *src* directory. To make it clearer why Rust
+can’t tell, let’s consider a different example with the following module
+hierarchy, where all the definitions are in *src/lib.rs*:
 
 ```text
 communicator
@@ -468,17 +471,18 @@ In summary, these are the rules of modules with regards to files:
   for `foo` in a file named *foo.rs*.
 * If a module named `foo` does have submodules, you should put the declarations
   for `foo` in a file named *foo/mod.rs*.
-* The first two rules apply recursively, so that if a module named `foo` has a
-  submodule named `bar` and `bar` does not have submodules, you should have the
-  following files in your *src* directory:
 
-  ```text
-  ├── foo
-  │   ├── bar.rs (contains the declarations in `foo::bar`)
-  │   └── mod.rs (contains the declarations in `foo`, including `mod bar`)
-  ```
+These rules apply recursively, so that if a module named `foo` has a submodule
+named `bar` and `bar` does not have submodules, you should have the following
+files in your *src* directory:
 
-* The modules themselves should be declared in their parent module’s file using
-  the `mod` keyword.
+```text
+├── foo
+│   ├── bar.rs (contains the declarations in `foo::bar`)
+│   └── mod.rs (contains the declarations in `foo`, including `mod bar`)
+```
+
+The modules themselves should be declared in their parent module’s file using
+the `mod` keyword.
 
 Next, we’ll talk about the `pub` keyword, and get rid of those warnings!
