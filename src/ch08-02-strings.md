@@ -319,7 +319,7 @@ to the index to determine how many valid characters there were.
 
 Because it's not clear what the return type of string indexing should be, and
 it is often a bad idea to index into a string, Rust dissuades you from doing so
-by asking you to be more specific if you really need it. The way you can me
+by asking you to be more specific if you really need it. The way you can be
 more specific than indexing using `[]` with a single number is using `[]` with
 a range to create a string slice containing particular bytes:
 
