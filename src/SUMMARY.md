@@ -35,7 +35,7 @@
     - [Controlling Visibility with `pub`](ch07-02-controlling-visibility-with-pub.md)
     - [Importing Names with `use`](ch07-03-importing-names-with-use.md)
 
-- [Fundamental Collections](ch08-00-fundamental-collections.md)
+- [Common Collections](ch08-00-common-collections.md)
     - [Vectors](ch08-01-vectors.md)
     - [Strings](ch08-02-strings.md)
     - [Hash Maps](ch08-03-hash-maps.md)

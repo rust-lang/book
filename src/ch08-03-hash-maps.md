@@ -1,9 +1,9 @@
 ## Hash Maps
 
-The last of our fundamental collections is the *hash map*. The type `HashMap<K,
-V>` stores a mapping of keys of type `K` to values of type `V`. It does this
-via a *hashing function*, which determines how it places these keys and values
-into memory. Many different programming languages support this kind of data
+The last of our common collections is the *hash map*. The type `HashMap<K, V>`
+stores a mapping of keys of type `K` to values of type `V`. It does this via a
+*hashing function*, which determines how it places these keys and values into
+memory. Many different programming languages support this kind of data
 structure, but often with a different name: hash, map, object, hash table, or
 associative array, just to name a few.
 
@@ -35,10 +35,10 @@ scores.insert(String::from("Yellow"), 50);
 ```
 
 Note that we need to first `use` the `HashMap` from the collections portion of
-the standard library. Of our three fundamental collections, this one is the
-least often used, so it’s not included in the features imported automatically
-in the prelude. Hash maps also have less support from the standard library;
-there’s no built-in macro to construct them, for example.
+the standard library. Of our three common collections, this one is the least
+often used, so it’s not included in the features imported automatically in the
+prelude. Hash maps also have less support from the standard library; there’s no
+built-in macro to construct them, for example.
 
 Just like vectors, hash maps store their data on the heap. This `HashMap` has
 keys of type `String` and values of type `i32`. Like vectors, hash maps are

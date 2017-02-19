@@ -53,8 +53,8 @@ v.push(8);
 
 As with any variable as we discussed in Chapter 3, if we want to be able to
 change its value, we need to make it mutable with the `mut` keyword. The
-numbers we place inside are all `i32`s, and Rust infers this from the data, so
-we don’t need the `Vec<i32>` annotation.
+numbers we place inside are all of type `i32`, and Rust infers this from the
+data, so we don’t need the `Vec<i32>` annotation.
 
 ### Dropping a Vector Drops its Elements
 
@@ -117,8 +117,8 @@ element past the end of the vector to be a fatal error that should crash the
 program.
 
 When the `get` method is passed an index that is outside the array, it will
-return `None` without causing a `panic!` call. You would use this if accessing
-an element beyond the range of the vector will happen occasionally under normal
+return `None` without panicking. You would use this if accessing an element
+beyond the range of the vector will happen occasionally under normal
 circumstances. Your code can then have logic to handle having either
 `Some(&element)` or `None`, as we discussed in Chapter 6. For example, the
 index could be coming from a person entering a number. If they accidentally

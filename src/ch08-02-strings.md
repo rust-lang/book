@@ -174,8 +174,8 @@ Second, we can see in the signature that `add` takes ownership of `self`,
 because `self` does *not* have an `&`. This means `s1` in the above example
 will be moved into the `add` call and no longer be valid after that. So while
 `let s3 = s1 + &s2;` looks like it will copy both strings and create a new one,
-this statement actually takes ownership of `s1`, appends a copy of `s2`’s
-contents, then returns ownership of the result. In other words, it looks like
+this statement actually takes ownership of `s1`, appends a copy of the contents
+of `s2`, then returns ownership of the result. In other words, it looks like
 it’s making a lot of copies, but isn’t: the implementation is more efficient
 than copying.
 
@@ -315,14 +315,13 @@ character is that indexing operations are expected to always take constant time
 though, since Rust would have to walk through the contents from the beginning
 to the index to determine how many valid characters there were.
 
-All of these problems mean that Rust does not implement `[]` for `String`, so
-we cannot directly do this.
-
 ### Slicing Strings
 
-However, indexing the *bytes* of a string is very useful, and is not expected
-to be fast. While we can’t use `[]` with a single number, we *can* use `[]`
-with a range to create a string slice containing particular bytes:
+Because it's not clear what the return type of string indexing should be, and
+it is often a bad idea to index into a string, Rust dissuades you from doing so
+by asking you to be more specific if you really need it. The way you can me
+more specific than indexing using `[]` with a single number is using `[]` with
+a range to create a string slice containing particular bytes:
 
 ```rust
 let hello = "Здравствуйте";
@@ -392,9 +391,9 @@ This code will print the 18 bytes that make up this `String`, starting with:
 But make sure to remember that valid Unicode scalar values may be made up of
 more than one byte.
 
-Getting grapheme clusters from `String`s is complex, so this functionality is
-not provided by the standard library. There are crates available on crates.io
-if this is the functionality you need.
+Getting grapheme clusters from strings is complex, so this functionality is not
+provided by the standard library. There are crates available on crates.io if
+this is the functionality you need.
 
 ### Strings are Not so Simple
 

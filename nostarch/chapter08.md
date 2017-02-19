@@ -1,7 +1,7 @@
 
 [TOC]
 
-# Fundamental Collections
+# Common Collections
 
 Rust’s standard library includes a number of really useful data structures
 called *collections*. Most other data types represent one specific value, but
@@ -16,12 +16,14 @@ collections which are used very often in Rust programs:
 * A *vector* allows us to store a variable number of values next to each other.
 * A *string* is a collection of characters. We’ve seen the `String` type
   before, but we’ll talk about it in depth now.
-* A *hash map* allows us to associate a value with a particular key.
+* A *hash map* allows us to associate a value with a particular key. It's a
+  particular implementation of the more general data structure called a *map*.
 
-There are more specialized variants of each of these data structures for
-particular situations, but these are the most fundamental and common. We’re
-going to discuss how to create and update each of the collections, as well as
-what makes each special.
+To learn about the other kinds of collections provided by the standard library,
+see the documentation at *https://doc.rust-lang.org/stable/std/collections*.
+
+We’re going to discuss how to create and update vectors, strings, and hash
+maps, as well as what makes each special.
 
 ## Vectors
 
@@ -78,8 +80,8 @@ v.push(8);
 
 As with any variable as we discussed in Chapter 3, if we want to be able to
 change its value, we need to make it mutable with the `mut` keyword. The
-numbers we place inside are all `i32`s, and Rust infers this from the data, so
-we don’t need the `Vec<i32>` annotation.
+numbers we place inside are all of type `i32`, and Rust infers this from the
+data, so we don’t need the `Vec<i32>` annotation.
 
 ### Dropping a Vector Drops its Elements
 
@@ -142,8 +144,8 @@ element past the end of the vector to be a fatal error that should crash the
 program.
 
 When the `get` method is passed an index that is outside the array, it will
-return `None` without causing a `panic!` call. You would use this if accessing
-an element beyond the range of the vector will happen occasionally under normal
+return `None` without panicking. You would use this if accessing an element
+beyond the range of the vector will happen occasionally under normal
 circumstances. Your code can then have logic to handle having either
 `Some(&element)` or `None`, as we discussed in Chapter 6. For example, the
 index could be coming from a person entering a number. If they accidentally
@@ -422,8 +424,8 @@ Second, we can see in the signature that `add` takes ownership of `self`,
 because `self` does *not* have an `&`. This means `s1` in the above example
 will be moved into the `add` call and no longer be valid after that. So while
 `let s3 = s1 + &s2;` looks like it will copy both strings and create a new one,
-this statement actually takes ownership of `s1`, appends a copy of `s2`’s
-contents, then returns ownership of the result. In other words, it looks like
+this statement actually takes ownership of `s1`, appends a copy of the contents
+of `s2`, then returns ownership of the result. In other words, it looks like
 it’s making a lot of copies, but isn’t: the implementation is more efficient
 than copying.
 
@@ -563,14 +565,13 @@ character is that indexing operations are expected to always take constant time
 though, since Rust would have to walk through the contents from the beginning
 to the index to determine how many valid characters there were.
 
-All of these problems mean that Rust does not implement `[]` for `String`, so
-we cannot directly do this.
-
 ### Slicing Strings
 
-However, indexing the *bytes* of a string is very useful, and is not expected
-to be fast. While we can’t use `[]` with a single number, we *can* use `[]`
-with a range to create a string slice containing particular bytes:
+Because it's not clear what the return type of string indexing should be, and
+it is often a bad idea to index into a string, Rust dissuades you from doing so
+by asking you to be more specific if you really need it. The way you can me
+more specific than indexing using `[]` with a single number is using `[]` with
+a range to create a string slice containing particular bytes:
 
 ```rust
 let hello = "Здравствуйте";
@@ -640,9 +641,9 @@ This code will print the 18 bytes that make up this `String`, starting with:
 But make sure to remember that valid Unicode scalar values may be made up of
 more than one byte.
 
-Getting grapheme clusters from `String`s is complex, so this functionality is
-not provided by the standard library. There are crates available on crates.io
-if this is the functionality you need.
+Getting grapheme clusters from strings is complex, so this functionality is not
+provided by the standard library. There are crates available on crates.io if
+this is the functionality you need.
 
 ### Strings are Not so Simple
 
@@ -659,10 +660,10 @@ Let’s switch to something a bit less complex: hash map!
 
 ## Hash Maps
 
-The last of our fundamental collections is the *hash map*. The type `HashMap<K,
-V>` stores a mapping of keys of type `K` to values of type `V`. It does this
-via a *hashing function*, which determines how it places these keys and values
-into memory. Many different programming languages support this kind of data
+The last of our common collections is the *hash map*. The type `HashMap<K, V>`
+stores a mapping of keys of type `K` to values of type `V`. It does this via a
+*hashing function*, which determines how it places these keys and values into
+memory. Many different programming languages support this kind of data
 structure, but often with a different name: hash, map, object, hash table, or
 associative array, just to name a few.
 
@@ -694,10 +695,10 @@ scores.insert(String::from("Yellow"), 50);
 ```
 
 Note that we need to first `use` the `HashMap` from the collections portion of
-the standard library. Of our three fundamental collections, this one is the
-least often used, so it’s not included in the features imported automatically
-in the prelude. Hash maps also have less support from the standard library;
-there’s no built-in macro to construct them, for example.
+the standard library. Of our three common collections, this one is the least
+often used, so it’s not included in the features imported automatically in the
+prelude. Hash maps also have less support from the standard library; there’s no
+built-in macro to construct them, for example.
 
 Just like vectors, hash maps store their data on the heap. This `HashMap` has
 keys of type `String` and values of type `i32`. Like vectors, hash maps are

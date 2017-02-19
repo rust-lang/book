@@ -1,4 +1,4 @@
-# Fundamental Collections
+# Common Collections
 
 Rust’s standard library includes a number of really useful data structures
 called *collections*. Most other data types represent one specific value, but
@@ -13,9 +13,13 @@ collections which are used very often in Rust programs:
 * A *vector* allows us to store a variable number of values next to each other.
 * A *string* is a collection of characters. We’ve seen the `String` type
   before, but we’ll talk about it in depth now.
-* A *hash map* allows us to associate a value with a particular key.
+* A *hash map* allows us to associate a value with a particular key. It's a
+  particular implementation of the more general data structure called a *map*.
 
-There are more specialized variants of each of these data structures for
-particular situations, but these are the most fundamental and common. We’re
-going to discuss how to create and update each of the collections, as well as
-what makes each special.
+To learn about the other kinds of collections provided by the standard library,
+see [the documentation][collections].
+
+[collections]: ../std/collections
+
+We’re going to discuss how to create and update vectors, strings, and hash
+maps, as well as what makes each special.
