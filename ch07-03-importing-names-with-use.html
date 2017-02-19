@@ -69,20 +69,20 @@
                 <div id="content" class="content">
                     <a class="header" href="#importing-names" name="importing-names"><h2>Importing Names</h2></a>
 <p>We’ve covered how to call functions defined within a module using the module
-name as part of the call, as in the call to the <code>namespaces</code> function shown
+name as part of the call, as in the call to the <code>nested_modules</code> function shown
 here in Listing 7-6.</p>
 <figure>
 <span class="filename">Filename: src/main.rs</span>
 <pre><code class="language-rust">pub mod a {
     pub mod series {
         pub mod of {
-            pub fn namespaces() {}
+            pub fn nested_modules() {}
         }
     }
 }
 
 fn main() {
-    a::series::of::namespaces();
+    a::series::of::nested_modules();
 }
 </code></pre>
 <figcaption>
@@ -95,12 +95,12 @@ Luckily, Rust has a keyword to make these calls more concise.</p>
 <a class="header" href="#concise-imports-with-use" name="concise-imports-with-use"><h3>Concise Imports with <code>use</code></h3></a>
 <p>Rust’s <code>use</code> keyword works to shorten lengthy function calls by bringing the
 modules of the function you want to call into a scope. Here’s an example of
-bringing the <code>a::series::of</code> namespace into a binary crate’s root scope:</p>
+bringing the <code>a::series::of</code> module into a binary crate’s root scope:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust">pub mod a {
     pub mod series {
         pub mod of {
-            pub fn namespaces() {}
+            pub fn nested_modules() {}
         }
     }
 }
@@ -108,37 +108,37 @@ bringing the <code>a::series::of</code> namespace into a binary crate’s root s
 use a::series::of;
 
 fn main() {
-    of::namespaces();
+    of::nested_modules();
 }
 </code></pre>
-<p>The line <code>use a::series::of;</code> has made it so that anywhere in this scope that
-we would want to refer to the <code>of</code> namespace, instead of having to say
-<code>a::series::of</code>, we can replace that with <code>of</code>.</p>
+<p>The line <code>use a::series::of;</code> means that rather than using the full
+<code>a::series::of</code> path wherever we want to refer to the <code>of</code> module, we can use
+<code>of</code>.</p>
 <p>The <code>use</code> keyword brings only what we have specified into scope; it does not
 bring children of modules into scope. That’s why we still have to say
-<code>of::namespaces</code> when we want to call the <code>namespaces</code> function.</p>
+<code>of::nested_modules</code> when we want to call the <code>nested_modules</code> function.</p>
 <p>We could have chosen to bring the function itself into scope, by instead
 specifying the function in the <code>use</code> as follows:</p>
 <pre><code class="language-rust">pub mod a {
     pub mod series {
         pub mod of {
-            pub fn namespaces() {}
+            pub fn nested_modules() {}
         }
     }
 }
 
-use a::series::of::namespaces;
+use a::series::of::nested_modules;
 
 fn main() {
-    namespaces();
+    nested_modules();
 }
 </code></pre>
-<p>This allows us to exclude any of the modules and just reference the function at
-the callsite.</p>
-<p>Since enums also form this kind of namespace, we can import an enum’s variants
-with <code>use</code> as well. For any kind of <code>use</code> statement, if you’re importing
-multiple items from one namespace, you can list them using curly braces and
-commas in the last position, like so:</p>
+<p>This allows us to exclude all of the modules and reference the function
+directly.</p>
+<p>Since enums also form a sort of namespace like modules, we can import an enum’s
+variants with <code>use</code> as well. For any kind of <code>use</code> statement, if you’re
+importing multiple items from one namespace, you can list them using curly
+braces and commas in the last position, like so:</p>
 <pre><code class="language-rust">enum TrafficLight {
     Red,
     Yellow,
@@ -200,9 +200,9 @@ looks like this:</p>
  |   └── client
  └── tests
 </code></pre>
-<p>Tests are for exercising the code within our library, so let’s try to call
-our <code>client::connect</code> function from this <code>it_works</code> function, even though
-we’re not going to be checking any functionality right now:</p>
+<p>Tests are for exercising the code within our library, so let’s try to call our
+<code>client::connect</code> function from this <code>it_works</code> function, even though we’re not
+going to be checking any functionality right now:</p>
 <p><span class="filename">Filename: src/lib.rs</span></p>
 <pre><code class="language-rust">#[cfg(test)]
 mod tests {
@@ -228,7 +228,7 @@ warning: function is never used: `connect`, #[warn(dead_code)] on by default
   | ^
 </code></pre>
 <p>The compilation failed, but why? We don’t need to place <code>communicator::</code> in
-front of the function like we did in <code>src/main.rs</code> because we are definitely
+front of the function like we did in <em>src/main.rs</em> because we are definitely
 within the <code>communicator</code> library crate here. The reason is that paths are
 always relative to the current module, which here is <code>tests</code>. The only
 exception is in a <code>use</code> statement, where paths are relative to the crate root

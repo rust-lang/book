@@ -98,8 +98,8 @@ by us within our own project, so it shouldn’t matter that these <code>connect<
 functions go unused. The point of creating them is that they will be used by
 another project and not our own.</p>
 <p>To understand why this program invokes these warnings, let’s try using the
-<code>connect</code> library as if we were another project, calling it externally. We can
-do that by creating a binary crate in the same directory as our library crate,
+<code>connect</code> library as if we were another project, calling it externally. To do
+that, we’ll create a binary crate in the same directory as our library crate,
 by making a <em>src/main.rs</em> file containing this code:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust,ignore">extern crate communicator;
@@ -115,6 +115,14 @@ the existing library crate whose root file is <em>src/lib.rs</em>. This pattern 
 quite common for executable projects: most functionality is in a library crate,
 and the binary crate uses that library crate. This way, other programs can also
 use the library crate, and it’s a nice separation of concerns.</p>
+<p>From the point of view of a crate outside of the <code>communicator</code> library looking
+in, all of the modules we've been creating are within a module that has the
+same name as the crate, <code>communicator</code>. We call the top-level module of a crate
+the <em>root module</em>.</p>
+<p>Also note that even if we're using an external crate within a submodule of our
+project, the <code>extern crate</code> should go in our root module (so in <em>src/main.rs</em>
+or <em>src/lib.rs</em>). Then, in our submodules, we can refer to items from external
+crates as if the items are top-level modules.</p>
 <p>Our binary crate right now just calls our library’s <code>connect</code> function from the
 <code>client</code> module. However, invoking <code>cargo build</code> will now give us an error
 after the warnings:</p>
@@ -137,8 +145,7 @@ the function is unused will go away. Marking something public lets Rust know
 that we intend for the function to be used by code outside of our program. Rust
 considers the theoretical external usage that’s now possible as the function
 “being used.” Thus, when something is marked as public, Rust will not require
-that it’s used in our own program and will stop warning that the item is
-unused.</p>
+that it’s used in our own program and will stop warning that the item is unused.</p>
 <a class="header" href="#making-a-function-public" name="making-a-function-public"><h3>Making a Function Public</h3></a>
 <p>To tell Rust to make something public, we add the <code>pub</code> keyword to the start of
 the declaration of the item we want to make public. We’ll focus on fixing the
@@ -160,7 +167,7 @@ error: function `connect` is private
 </code></pre>
 <p>Hooray! We have a different error! Yes, different error messages are a cause
 for celebration. The new error says “function <code>connect</code> is private”, so let’s
-edit <code>src/client.rs</code> to make <code>client::connect</code> public too:</p>
+edit <em>src/client.rs</em> to make <code>client::connect</code> public too:</p>
 <p><span class="filename">Filename: src/client.rs</span></p>
 <pre><code class="language-rust">pub fn connect() {
 }
@@ -212,7 +219,7 @@ warning: function is never used: `connect`, #[warn(dead_code)] on by default
 within the module, but the <code>network</code> module that the function resides in is not
 public. We’re working from the interior of the library out this time, where
 with <code>client::connect</code> we worked from the outside in. We need to change
-<code>src/lib.rs</code> to make <code>network</code> public too:</p>
+<em>src/lib.rs</em> to make <code>network</code> public too:</p>
 <p><span class="filename">Filename: src/lib.rs</span></p>
 <pre><code class="language-rust,ignore">pub mod client;
 
@@ -229,8 +236,7 @@ pub mod network;
 <a class="header" href="#privacy-rules" name="privacy-rules"><h3>Privacy Rules</h3></a>
 <p>Overall, these are the rules for item visibility:</p>
 <ol>
-<li>If an item is public, it can be accessed through any of its
-parent modules.</li>
+<li>If an item is public, it can be accessed through any of its parent modules.</li>
 <li>If an item is private, it may be accessed only by the current module and its
 child modules.</li>
 </ol>
@@ -264,8 +270,8 @@ incorrect</p>
 </figcaption>
 </figure>
 <p>Before you try to compile this code, make a guess about which lines in <code>try_me</code>
-function will have errors. Then try compiling to see if you were right, and read
-on for discussion of the errors!</p>
+function will have errors. Then try compiling to see if you were right, and
+read on for discussion of the errors!</p>
 <a class="header" href="#looking-at-the-errors" name="looking-at-the-errors"><h4>Looking at the Errors</h4></a>
 <p>The <code>try_me</code> function is in the root module of our project. The module named
 <code>outermost</code> is private, but the second privacy rule says the <code>try_me</code> function
@@ -292,9 +298,8 @@ understand why.</p>
 <li>What if the <code>inside</code> module was public?</li>
 <li>What if <code>outermost</code> was public and <code>inside</code> was private?</li>
 <li>What if, in the body of <code>inner_function</code>, you called
-<code>::outermost::middle_secret_function()</code>? (The two colons at the beginning
-mean that we want to refer to the namespaces starting from the root
-namespace.)</li>
+<code>::outermost::middle_secret_function()</code>? (The two colons at the beginning mean
+that we want to refer to the modules starting from the root module.)</li>
 </ul>
 <p>Feel free to design more experiments and try them out!</p>
 <p>Next, let’s talk about bringing items into a scope with the <code>use</code> keyword.</p>
