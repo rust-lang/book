@@ -20,8 +20,8 @@ in order to define a set of behaviors necessary to accomplish some purpose.
 For example, say we have multiple structs that hold various kinds and amounts
 of text: a `NewsArticle` struct that holds a news story filed in a particular
 place in the world, and a `Tweet` that can have at most 140 characters in its
-content along with has metadata like whether it was a retweet or a reply to
-another tweet.
+content along with metadata like whether it was a retweet or a reply to another
+tweet.
 
 We want to make a media aggregator library that can display summaries of data
 that might be stored in a `NewsArticle` or `Tweet` instance. The behavior we
@@ -47,12 +47,13 @@ behavior provided by a `summary` method
 </figcaption>
 </figure>
 
-We declare a trait with the `trait` keyword, then the trait's name. Inside
-curly braces we declare the method signatures that describe the behaviors that
-types that implement this trait will need to have. After the method signature,
-instead of providing an implementation within curly braces, we put a semicolon.
-Each type that implements this trait can then provide its own custom behavior
-in the body of the method, but the compiler will enforce that any type that has
+We declare a trait with the `trait` keyword, then the trait's name, in this
+case `Summarizable`. Inside curly braces we declare the method signatures that
+describe the behaviors that types that implement this trait will need to have,
+in this case `fn summary(&self) -> String`. After the method signature, instead
+of providing an implementation within curly braces, we put a semicolon. Each
+type that implements this trait can then provide its own custom behavior for
+the body of the method, but the compiler will enforce that any type that has
 the `Summarizable` trait will have the method `summary` defined for it with
 this signature exactly.
 
@@ -61,7 +62,7 @@ listed one per line and each line ending in a semicolon.
 
 ### Implementing a Trait on a Type
 
-Now that we have the `Summarizable` trait defined, we can implement it on the
+Now that we've defined the `Summarizable` trait, we can implement it on the
 types in our media aggregator that we want to have this behavior. Listing 10-12
 shows an implementation of the `Summarizable` trait on the `NewsArticle` struct
 that uses the headline, the author, and the location to create the return value
@@ -117,7 +118,7 @@ related to a trait. The difference is after `impl`, we put the trait name that
 we want to implement, then say `for` and the name of the type that we want to
 implement the trait for. Within the `impl` block, we put the method signatures
 that the trait definition has defined, but instead of putting a semicolon after
-the signature, we put curly braces and fill in the method body with the
+each signature, we put curly braces and fill in the method body with the
 specific behavior that we want the methods of the trait to have for the
 particular type.
 
