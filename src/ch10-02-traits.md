@@ -254,6 +254,13 @@ println!("New article available! {}", article.summary());
 
 This code prints `New article available! (Read more...)`.
 
+Changing the `Summarizable` trait to have a default implementation for
+`summary` does not require us to change anything about the implementations of
+`Summarizable` on `Tweet` in Listing 10-12 or `WeatherForecast` in Listing
+10-13: the syntax for overriding a default implementation is exactly the same
+as the syntax for implementing a trait method that doesn't have a default
+implementation.
+
 Default implementations are allowed to call the other methods in the same
 trait, even if those other methods don't have a default implementation. In this
 way, a trait can provide a lot of useful functionality and only require
@@ -299,6 +306,9 @@ println!("1 new tweet: {}", tweet.summary());
 ```
 
 This will print `1 new tweet: (Read more from @horse_ebooks...)`.
+
+Note that it is not possible to call the default implementation from an
+overridden implementation.
 
 ### Trait Bounds
 
