@@ -58,6 +58,8 @@ We'd love your help! Please see [CONTRIBUTING.md][contrib].
 
 [contrib]: https://github.com/rust-lang/book/blob/master/CONTRIBUTING.md
 
+### Translations 
+
 We'd especially love help translating! See the [Translations][] label to join
 in efforts that are currently in progress. Open a new issue to start 
 working on a new language! We're waiting on [mdbook support][] for multiple
