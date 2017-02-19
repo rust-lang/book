@@ -78,7 +78,7 @@ time. The compiler can usually infer what type we want to use based on the
 value and how we use it. In cases when many types are possible, such as when we
 converted a <code>String</code> to a numeric type using <code>parse</code> in Chapter 2, we must add
 a type annotation, like this:</p>
-<pre><code class="language-rust">let guess: u32 = &quot;42&quot;.parse().unwrap();
+<pre><code class="language-rust">let guess: u32 = &quot;42&quot;.parse().expect(&quot;Not a number!&quot;);
 </code></pre>
 <p>If we don’t add the type annotation here, Rust will display the following
 error, which means the compiler needs more information from us to know which
@@ -86,7 +86,7 @@ possible type we want to use:</p>
 <pre><code class="language-text">error[E0282]: unable to infer enough type information about `_`
  --&gt; src/main.rs:2:5
   |
-2 | let guess = &quot;42&quot;.parse().unwrap();
+2 | let guess = &quot;42&quot;.parse().expect(&quot;Not a number!&quot;);
   |     ^^^^^ cannot infer type for `_`
   |
   = note: type annotations or generic parameter binding required
