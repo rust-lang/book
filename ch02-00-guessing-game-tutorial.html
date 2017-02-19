@@ -67,7 +67,7 @@
                 </div>
 
                 <div id="content" class="content">
-                    <h1>Guessing Game</h1>
+                    <a class="header" href="#guessing-game" name="guessing-game"><h1>Guessing Game</h1></a>
 <p>Let’s jump into Rust by working through a hands-on project together! This
 chapter introduces you to a few common Rust concepts by showing you how to use
 them in a real program. You’ll learn about <code>let</code>, <code>match</code>, methods, associated
@@ -78,7 +78,7 @@ how it works: the program will generate a random integer between 1 and 100. It
 will then prompt the player to enter a guess. After entering a guess, it will
 indicate whether the guess is too low or too high. If the guess is correct, the
 game will print congratulations and exit.</p>
-<h2>Setting Up a New Project</h2>
+<a class="header" href="#setting-up-a-new-project" name="setting-up-a-new-project"><h2>Setting Up a New Project</h2></a>
 <p>To set up a new project, go to the <em>projects</em> directory that you created in
 Chapter 1, and make a new project using Cargo, like so:</p>
 <pre><code class="language-text">$ cargo new guessing_game --bin
@@ -117,7 +117,7 @@ Hello, world!
 and this game is such a project: we want to quickly test each iteration
 before moving on to the next one.</p>
 <p>Reopen the <em>src/main.rs</em> file. You’ll be writing all the code in this file.</p>
-<h2>Processing a Guess</h2>
+<a class="header" href="#processing-a-guess" name="processing-a-guess"><h2>Processing a Guess</h2></a>
 <p>The first part of the program will ask for user input, process that input, and
 check that the input is in the expected form. To start, we’ll allow the player
 to input a guess. Enter the code in Listing 2-1 into <em>src/main.rs</em>.</p>
@@ -166,7 +166,7 @@ println!(&quot;Please input your guess.&quot;);
 </code></pre>
 <p>This code is just printing a prompt stating what the game is and requesting
 input from the user.</p>
-<h3>Storing Values with Variables</h3>
+<a class="header" href="#storing-values-with-variables" name="storing-values-with-variables"><h3>Storing Values with Variables</h3></a>
 <p>Next, we’ll create a place to store the user input, like this:</p>
 <pre><code class="language-rust,ignore">let mut guess = String::new();
 </code></pre>
@@ -237,7 +237,7 @@ written this code as:</p>
 </code></pre>
 <p>However, one long line is difficult to read, so it’s best to divide it, two
 lines for two method calls. Now let’s discuss what this line does.</p>
-<h3>Handling Potential Failure with the <code>Result</code> Type</h3>
+<a class="header" href="#handling-potential-failure-with-the-result-type" name="handling-potential-failure-with-the-result-type"><h3>Handling Potential Failure with the <code>Result</code> Type</h3></a>
 <p>As mentioned earlier, <code>read_line</code> puts what the user types into the string we’re
 passing it, but it also returns a value—in this case, an
 <a href="../std/io/type.Result.html"><code>io::Result</code></a><!-- ignore -->. Rust has a number of types named
@@ -275,7 +275,7 @@ indicating that the program hasn’t handled a possible error. The right way to
 suppress the warning is to actually write error handling, but since we just
 want to crash this program when a problem occurs, we can use <code>expect</code>. You’ll
 learn about recovering from errors in Chapter 9.</p>
-<h3>Printing Values with <code>println!</code> Placeholders</h3>
+<a class="header" href="#printing-values-with-println-placeholders" name="printing-values-with-println-placeholders"><h3>Printing Values with <code>println!</code> Placeholders</h3></a>
 <p>Aside from the closing curly brace, there’s only one more line to discuss in
 the code added so far, which is the following:</p>
 <pre><code class="language-rust,ignore">println!(&quot;You guessed: {}&quot;, guess);
@@ -291,7 +291,7 @@ let y = 10;
 println!(&quot;x = {} and y = {}&quot;, x, y);
 </code></pre>
 <p>This code would print out <code>x = 5 and y = 10</code>.</p>
-<h3>Testing the First Part</h3>
+<a class="header" href="#testing-the-first-part" name="testing-the-first-part"><h3>Testing the First Part</h3></a>
 <p>Let’s test the first part of the guessing game. You can run it using <code>cargo run</code>:</p>
 <pre><code class="language-text">$ cargo run
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
@@ -303,13 +303,13 @@ You guessed: 6
 </code></pre>
 <p>At this point, the first part of the game is done: we’re getting input from the
 keyboard and then printing it.</p>
-<h2>Generating a Secret Number</h2>
+<a class="header" href="#generating-a-secret-number" name="generating-a-secret-number"><h2>Generating a Secret Number</h2></a>
 <p>Next, we need to generate a secret number that the user will try to guess. The
 secret number should be different every time so the game is fun to play more
 than once. Let’s use a random number between 1 and 100 so the game isn’t too
 difficult. Rust doesn’t yet include random number functionality in its standard
 library. However, the Rust team does provide a <a href="https://crates.io/crates/rand"><code>rand</code> crate</a>.</p>
-<h3>Using a Crate to Get More Functionality</h3>
+<a class="header" href="#using-a-crate-to-get-more-functionality" name="using-a-crate-to-get-more-functionality"><h3>Using a Crate to Get More Functionality</h3></a>
 <p>Remember that a <em>crate</em> is a package of Rust code. The project we’ve been
 building is a <em>binary crate</em>, which is an executable. The <code>rand</code> crate is a
 <em>library crate</em>, which contains code intended to be used in other programs.</p>
@@ -373,7 +373,7 @@ you’ll only see one line of output:</p>
 <em>src/main.rs</em> file. Your dependencies haven't changed, so Cargo knows it can
 reuse what it has already downloaded and compiled for those. It just rebuilds
 your part of the code.</p>
-<h4>The <em>Cargo.lock</em> File Ensures Reproducible Builds</h4>
+<a class="header" href="#the-cargolock-file-ensures-reproducible-builds" name="the-cargolock-file-ensures-reproducible-builds"><h4>The <em>Cargo.lock</em> File Ensures Reproducible Builds</h4></a>
 <p>Cargo has a mechanism that ensures you can rebuild the same artifact every time
 you or anyone else builds your code: Cargo will use only the versions of the
 dependencies you specified until you indicate otherwise. For example, what
@@ -390,7 +390,7 @@ rather than doing all the work of figuring out versions again. This lets you
 have a reproducible build automatically. In other words, your project will
 remain at <code>0.3.14</code> until you explicitly upgrade, thanks to the <em>Cargo.lock</em>
 file.</p>
-<h4>Updating a Crate to Get a New Version</h4>
+<a class="header" href="#updating-a-crate-to-get-a-new-version" name="updating-a-crate-to-get-a-new-version"><h4>Updating a Crate to Get a New Version</h4></a>
 <p>When you <em>do</em> want to update a crate, Cargo provides another command, <code>update</code>,
 which will:</p>
 <ol>
@@ -421,7 +421,7 @@ ecosystem</a><!-- ignore --> that Chapter 14 will discuss, but for
 now, that’s all you need to know. Cargo makes it very easy to reuse libraries,
 so Rustaceans are able to write smaller projects that are assembled from a
 number of packages.</p>
-<h3>Generating a Random Number</h3>
+<a class="header" href="#generating-a-random-number" name="generating-a-random-number"><h3>Generating a Random Number</h3></a>
 <p>Let’s start <em>using</em> <code>rand</code>. The next step is to update <em>src/main.rs</em>, as shown
 in Listing 2-3:</p>
 <figure>
@@ -496,7 +496,7 @@ You guessed: 5
 </code></pre>
 <p>You should get different random numbers, and they should all be numbers between
 1 and 100. Great job!</p>
-<h2>Comparing the Guess to the Secret Number</h2>
+<a class="header" href="#comparing-the-guess-to-the-secret-number" name="comparing-the-guess-to-the-secret-number"><h2>Comparing the Guess to the Secret Number</h2></a>
 <p>Now that we have user input and a random number, we can compare them. That
 step is shown in Listing 2-4:</p>
 <figure>
@@ -689,7 +689,7 @@ different behavior with different kinds of input: guess the number correctly,
 guess a number that is too high, and guess a number that is too low.</p>
 <p>We have most of the game working now, but the user can make only one guess.
 Let’s change that by adding a loop!</p>
-<h2>Allowing Multiple Guesses with Looping</h2>
+<a class="header" href="#allowing-multiple-guesses-with-looping" name="allowing-multiple-guesses-with-looping"><h2>Allowing Multiple Guesses with Looping</h2></a>
 <p>The <code>loop</code> keyword gives us an infinite loop. Add that now to give users more
 chances at guessing the number:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
@@ -763,7 +763,7 @@ error: Process didn't exit successfully: `target/debug/guess` (exit code: 101)
 <p>Typing <code>quit</code> actually quits the game, but so will any other non-number input.
 However, this is suboptimal to say the least. We want the game to automatically
 stop when the correct number is guessed.</p>
-<h3>Quitting After a Correct Guess</h3>
+<a class="header" href="#quitting-after-a-correct-guess" name="quitting-after-a-correct-guess"><h3>Quitting After a Correct Guess</h3></a>
 <p>Let’s program the game to quit when the user wins by adding a <code>break</code>:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust,ignore">extern crate rand;
@@ -806,7 +806,7 @@ fn main() {
 <p>By adding the <code>break</code> line after <code>You win!</code>, the program will exit the loop
 when the user guesses the secret number correctly. Exiting the loop also means
 exiting the program, because the loop is the last part of <code>main</code>.</p>
-<h3>Handling Invalid Input</h3>
+<a class="header" href="#handling-invalid-input" name="handling-invalid-input"><h3>Handling Invalid Input</h3></a>
 <p>To further refine the game’s behavior, rather than crashing the program when
 the user inputs a non-number, let’s make the game ignore a non-number so the
 user can continue guessing. We can do that by altering the line where <code>guess</code> is
@@ -904,7 +904,7 @@ fn main() {
 <p>Listing 2-5: Complete code of the guessing game</p>
 </figcaption>
 </figure>
-<h2>Summary</h2>
+<a class="header" href="#summary" name="summary"><h2>Summary</h2></a>
 <p>At this point, you’ve successfully built the guessing game! Congratulations!</p>
 <p>This project was a hands-on way to introduce you to many new Rust concepts:
 <code>let</code>, <code>match</code>, methods, associated functions, using external crates, and more.

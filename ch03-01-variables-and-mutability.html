@@ -67,7 +67,7 @@
                 </div>
 
                 <div id="content" class="content">
-                    <h2>Variables and Mutability</h2>
+                    <a class="header" href="#variables-and-mutability" name="variables-and-mutability"><h2>Variables and Mutability</h2></a>
 <p>As mentioned in Chapter 2, by default variables are <em>immutable</em>. This is one of
 many nudges in Rust that encourages you to write your code in a way that takes
 advantage of the safety and easy concurrency that Rust offers. However, you
@@ -147,7 +147,7 @@ an instance in place may be faster than copying and returning newly allocated
 instances. With smaller data structures, always creating new instances and
 writing in a more functional programming style may be easier to reason about,
 so the lower performance penalty might be worth it to gain that clarity.</p>
-<h3>Differences Between Variables and Constants</h3>
+<a class="header" href="#differences-between-variables-and-constants" name="differences-between-variables-and-constants"><h3>Differences Between Variables and Constants</h3></a>
 <p>Not being able to change the value of a variable might have reminded you of
 another programming concept that most languages have: <em>constants</em>. Constants
 are also values bound to a name that are not allowed to change, but there are a
@@ -175,7 +175,7 @@ of seconds in a year.</p>
 constants is useful to convey the meaning of that value to future maintainers
 of the code. It also helps to have only one place in your code that you would
 need to change if the hardcoded value needed to be updated in the future.</p>
-<h3>Shadowing</h3>
+<a class="header" href="#shadowing" name="shadowing"><h3>Shadowing</h3></a>
 <p>As we saw in the guessing game tutorial in Chapter 2, we can declare new
 variables with the same name as a previous variables, and the new variable
 <em>shadows</em> the previous variable. Rustaceans say that the first variable is

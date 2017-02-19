@@ -67,7 +67,7 @@
                 </div>
 
                 <div id="content" class="content">
-                    <h2>Hash Maps</h2>
+                    <a class="header" href="#hash-maps" name="hash-maps"><h2>Hash Maps</h2></a>
 <p>The last of our fundamental collections is the <em>hash map</em>. The type <code>HashMap&lt;K, V&gt;</code> stores a mapping of keys of type <code>K</code> to values of type <code>V</code>. It does this
 via a <em>hashing function</em>, which determines how it places these keys and values
 into memory. Many different programming languages support this kind of data
@@ -82,7 +82,7 @@ team name, you can retrieve their score.</p>
 more goodies hiding in the functions defined on <code>HashMap</code> by the standard
 library. As always, check the standard library documentation for more
 information.</p>
-<h3>Creating a New Hash Map</h3>
+<a class="header" href="#creating-a-new-hash-map" name="creating-a-new-hash-map"><h3>Creating a New Hash Map</h3></a>
 <p>We can create an empty <code>HashMap</code> with <code>new</code>, and add elements with <code>insert</code>.
 Here we're keeping track of the scores of two teams whose names are Blue and
 Yellow. The Blue team will start with 10 points and the Yellow team starts with
@@ -122,7 +122,7 @@ let scores: HashMap&lt;_, _&gt; = teams.iter().zip(initial_scores.iter()).collec
 want unless you specify. For the type parameters for the key and value types,
 however, we use underscores and Rust can infer the types that the hash map
 contains based on the types of the data in the vector.</p>
-<h3>Hash Maps and Ownership</h3>
+<a class="header" href="#hash-maps-and-ownership" name="hash-maps-and-ownership"><h3>Hash Maps and Ownership</h3></a>
 <p>For types that implement the <code>Copy</code> trait, like <code>i32</code>, the values are copied
 into the hash map. For owned values like <code>String</code>, the values will be moved and
 the hash map will be the owner of those values:</p>
@@ -141,7 +141,7 @@ they have been moved into the hash map with the call to <code>insert</code>.</p>
 not be moved into the hash map. The values that the references point to must be
 valid for at least as long as the hash map is valid, though. We will talk more
 about these issues in the Lifetimes section of Chapter 10.</p>
-<h3>Accessing Values in a Hash Map</h3>
+<a class="header" href="#accessing-values-in-a-hash-map" name="accessing-values-in-a-hash-map"><h3>Accessing Values in a Hash Map</h3></a>
 <p>We can get a value out of the hash map by providing its key to the <code>get</code> method:</p>
 <pre><code class="language-rust">use std::collections::HashMap;
 
@@ -175,7 +175,7 @@ for (key, value) in &amp;scores {
 <pre><code class="language-text">Yellow: 50
 Blue: 10
 </code></pre>
-<h3>Updating a Hash Map</h3>
+<a class="header" href="#updating-a-hash-map" name="updating-a-hash-map"><h3>Updating a Hash Map</h3></a>
 <!-- So the quantity of keys must be defined up front, that's not growable?
 That could be worthy saying -->
 <!-- No, the number of keys is growable, it's just that for EACH individual
@@ -188,7 +188,7 @@ completely disregarding the old value. We could choose to keep the old value
 and ignore the new value, and only add the new value if the key <em>doesn't</em>
 already have a value. Or we could combine the old value and the new value.
 Let's look at how to do each of these!</p>
-<h4>Overwriting a Value</h4>
+<a class="header" href="#overwriting-a-value" name="overwriting-a-value"><h4>Overwriting a Value</h4></a>
 <p>If we insert a key and a value into a hash map, then insert that same key with a
 different value, the value associated with that key will be replaced. Even
 though this following code calls <code>insert</code> twice, the hash map will only contain
@@ -204,7 +204,7 @@ scores.insert(String::from(&quot;Blue&quot;), 25);
 println!(&quot;{:?}&quot;, scores);
 </code></pre>
 <p>This will print <code>{&quot;Blue&quot;: 25}</code>. The original value of 10 has been overwritten.</p>
-<h4>Only Insert If the Key Has No Value</h4>
+<a class="header" href="#only-insert-if-the-key-has-no-value" name="only-insert-if-the-key-has-no-value"><h4>Only Insert If the Key Has No Value</h4></a>
 <p>It's common to want to check if a particular key has a value and, if it does
 not, insert a value for it. Hash maps have a special API for this, called
 <code>entry</code>, that takes the key we want to check as an argument. The return value
@@ -231,7 +231,7 @@ addition, plays more nicely with the borrow checker.</p>
 will insert the key for the Yellow team with the value 50, since the Yellow
 team doesn't have a value already. The second call to <code>entry</code> will not change
 the hash map since the Blue team already has the value 10.</p>
-<h4>Update a Value Based on the Old Value</h4>
+<a class="header" href="#update-a-value-based-on-the-old-value" name="update-a-value-based-on-the-old-value"><h4>Update a Value Based on the Old Value</h4></a>
 <p>Another common use case for hash maps is to look up a key's value then update
 it, based on the old value. For instance, if we wanted to count how many times
 each word appeared in some text, we could use a hash map with the words as keys
@@ -256,7 +256,7 @@ key. Here we store that mutable reference in the <code>count</code> variable, so
 to assign to that value we must first dereference <code>count</code> using the asterisk
 (<code>*</code>). The mutable reference goes out of scope at the end of the <code>for</code> loop, so
 all of these changes are safe and allowed by the borrowing rules.</p>
-<h3>Hashing Function</h3>
+<a class="header" href="#hashing-function" name="hashing-function"><h3>Hashing Function</h3></a>
 <p>By default, <code>HashMap</code> uses a cryptographically secure hashing function that can
 provide resistance to Denial of Service (DoS) attacks. This is not the fastest
 hashing algorithm out there, but the tradeoff for better security that comes
@@ -265,7 +265,7 @@ that the default hash function is too slow for your purposes, you can switch to
 another function by specifying a different <em>hasher</em>. A hasher is a type that
 implements the <code>BuildHasher</code> trait. We'll be talking about traits and how to
 implement them in Chapter 10.</p>
-<h2>Summary</h2>
+<a class="header" href="#summary" name="summary"><h2>Summary</h2></a>
 <p>Vectors, strings, and hash maps will take you far in programs where you need to
 store, access, and modify data. Here are some exercises you should now be
 equipped to solve:</p>

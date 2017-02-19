@@ -67,7 +67,7 @@
                 </div>
 
                 <div id="content" class="content">
-                    <h2>Recoverable Errors with <code>Result</code></h2>
+                    <a class="header" href="#recoverable-errors-with-result" name="recoverable-errors-with-result"><h2>Recoverable Errors with <code>Result</code></h2></a>
 <p>Most errors aren't serious enough to require the program to stop entirely.
 Sometimes, when a function fails, it's for a reason that we can easily
 interpret and respond to. For example, if we try to open a file and that
@@ -207,7 +207,7 @@ Os { code: 2, message: &quot;No such file or directory&quot; } }', src/main.rs:8
 run the program? -->
 <!-- No, the `panic!` macro prints what we give to it, which we covered in the
 section previous to this one. /Carol -->
-<h3>Matching on Different Errors</h3>
+<a class="header" href="#matching-on-different-errors" name="matching-on-different-errors"><h3>Matching on Different Errors</h3></a>
 <p>The code in Listing 9-3 will <code>panic!</code> no matter the reason that <code>File::open</code>
 failed. What we'd really like to do instead is take different actions for
 different failure reasons: if <code>File::open</code> failed because the file doesn't
@@ -265,7 +265,7 @@ could also fail, we need to add an inner <code>match</code> statement as well! W
 file can't be opened, a different error message will be printed. The last arm
 of the outer <code>match</code> stays the same so that the program panics on any error
 besides the missing file error.</p>
-<h3>Shortcuts for Panic on Error: <code>unwrap</code> and <code>expect</code></h3>
+<a class="header" href="#shortcuts-for-panic-on-error-unwrap-and-expect" name="shortcuts-for-panic-on-error-unwrap-and-expect"><h3>Shortcuts for Panic on Error: <code>unwrap</code> and <code>expect</code></h3></a>
 <p>Using <code>match</code> works well enough, but it can be a bit verbose and doesn't always
 communicate intent well. The <code>Result&lt;T, E&gt;</code> type has many helper methods
 defined on it to do various things. One of those methods, called <code>unwrap</code>, is
@@ -334,7 +334,7 @@ goes over the criteria the reader should use to decide if they're in a
 situation that's recoverable or not. I've actually moved the text that was here
 into that section to keep that whole discussion together. /Carol
 -->
-<h3>Propagating Errors</h3>
+<a class="header" href="#propagating-errors" name="propagating-errors"><h3>Propagating Errors</h3></a>
 <p>When writing a function whose implementation calls something that might fail,
 instead of handling the error within this function, you can choose to let your
 caller know about the error so they can decide what to do. This is known as
@@ -412,7 +412,7 @@ to do, so we propagate all the success or error information upwards for them to
 handle as they see fit.</p>
 <p>This pattern of propagating errors is so common in Rust that there is dedicated
 syntax to make this easier: <code>?</code>.</p>
-<h3>A Shortcut for Propagating Errors: <code>?</code></h3>
+<a class="header" href="#a-shortcut-for-propagating-errors-" name="a-shortcut-for-propagating-errors-"><h3>A Shortcut for Propagating Errors: <code>?</code></h3></a>
 <!-- The `?` ended up stabilizing in 1.13 and is quickly becoming preferred over
 `try!`, so we decided to only cover `?`. /Carol -->
 <p>Listing 9-6 shows an implementation of <code>read_username_from_file</code> that has the
@@ -476,7 +476,7 @@ chained the call to <code>read_to_string</code> directly onto the result of
 username in <code>s</code> when both <code>File::open</code> and <code>read_to_string</code> succeed rather than
 returning errors. The functionality is again the same as in Listing 9-5 and
 Listing 9-6, this is just a different, more ergonomic way to write it.</p>
-<h4><code>?</code> Can Only Be Used in Functions That Return <code>Result</code></h4>
+<a class="header" href="#-can-only-be-used-in-functions-that-return-result" name="-can-only-be-used-in-functions-that-return-result"><h4><code>?</code> Can Only Be Used in Functions That Return <code>Result</code></h4></a>
 <!-- I think we need a new heading here, could you suggest something? I'm sure
 there's a better way to phrase this!-->
 <!-- I've tried, but I'm not really sure how to say it any more succinctly than

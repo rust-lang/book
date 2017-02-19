@@ -67,7 +67,7 @@
                 </div>
 
                 <div id="content" class="content">
-                    <h2>Slices</h2>
+                    <a class="header" href="#slices" name="slices"><h2>Slices</h2></a>
 <p>Another data type that does not have ownership is the <em>slice</em>. Slices let you
 reference a contiguous sequence of elements in a collection rather than the
 whole collection.</p>
@@ -180,7 +180,7 @@ that were calculated from data in a particular state but aren’t tied to that
 state at all. We now have three unrelated variables floating around that need
 to be kept in sync.</p>
 <p>Luckily, Rust has a solution to this problem: string slices.</p>
-<h3>String Slices</h3>
+<a class="header" href="#string-slices" name="string-slices"><h3>String Slices</h3></a>
 <p>A <em>string slice</em> is a reference to part of a <code>String</code>, and looks like this:</p>
 <pre><code class="language-rust">let s = String::from(&quot;hello world&quot;);
 
@@ -290,7 +290,7 @@ something, we cannot also take a mutable reference. Because <code>clear</code> n
 truncate the <code>String</code>, it tries to take a mutable reference, which fails. Not
 only has Rust made our API easier to use, but it has also eliminated an entire
 class of errors at compile time!</p>
-<h4>String Literals Are Slices</h4>
+<a class="header" href="#string-literals-are-slices" name="string-literals-are-slices"><h4>String Literals Are Slices</h4></a>
 <p>Recall that we talked about string literals being stored inside the binary. Now
 that we know about slices, we can properly understand string literals:</p>
 <pre><code class="language-rust">let s = &quot;Hello, world!&quot;;
@@ -298,7 +298,7 @@ that we know about slices, we can properly understand string literals:</p>
 <p>The type of <code>s</code> here is <code>&amp;str</code>: it’s a slice pointing to that specific point of
 the binary. This is also why string literals are immutable; <code>&amp;str</code> is an
 immutable reference.</p>
-<h4>String Slices as Parameters</h4>
+<a class="header" href="#string-slices-as-parameters" name="string-slices-as-parameters"><h4>String Slices as Parameters</h4></a>
 <p>Knowing that you can take slices of literals and <code>String</code>s leads us to one more
 improvement on <code>first_word</code>, and that’s its signature:</p>
 <pre><code class="language-rust,ignore">fn first_word(s: &amp;String) -&gt; &amp;str {
@@ -339,7 +339,7 @@ fn main() {
     let word = first_word(my_string_literal);
 }
 </code></pre>
-<h3>Other Slices</h3>
+<a class="header" href="#other-slices" name="other-slices"><h3>Other Slices</h3></a>
 <p>String slices, as you might imagine, are specific to strings. But there’s a
 more general slice type, too. Consider this array:</p>
 <pre><code class="language-rust">let a = [1, 2, 3, 4, 5];
@@ -354,7 +354,7 @@ let slice = &amp;a[1..3];
 storing a reference to the first element and a length. You’ll use this kind of
 slice for all sorts of other collections. We’ll discuss these collections in
 detail when we talk about vectors in Chapter 8.</p>
-<h2>Summary</h2>
+<a class="header" href="#summary" name="summary"><h2>Summary</h2></a>
 <p>The concepts of ownership, borrowing, and slices are what ensure memory safety
 in Rust programs at compile time. The Rust language gives you control over your
 memory usage like other systems programming languages, but having the owner of

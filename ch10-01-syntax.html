@@ -67,7 +67,7 @@
                 </div>
 
                 <div id="content" class="content">
-                    <h2>Generics Syntax</h2>
+                    <a class="header" href="#generics-syntax" name="generics-syntax"><h2>Generics Syntax</h2></a>
 <p>We've already hinted at the idea of generics in previous chapters, but we
 never dug into what exactly they are or how to use them. In places where we
 specify a type, like function signatures or structs, instead we can use
@@ -82,7 +82,7 @@ with a concrete type, and that determines how the overall type works. In the
 same way that a function like <code>foo(x: i32)</code> can be called with a specific value
 such as <code>foo(5)</code>, a <code>Vec&lt;T&gt;</code> can be created with a specific type, like
 <code>Vec&lt;i32&gt;</code>.</p>
-<h3>Duplicated Enum Definitions</h3>
+<a class="header" href="#duplicated-enum-definitions" name="duplicated-enum-definitions"><h3>Duplicated Enum Definitions</h3></a>
 <p>Let's dive into generic data types in more detail. We learned about how to use
 the <code>Option&lt;T&gt;</code> enum in Chapter 6, but we never examined its definition. Let's
 try to imagine how we'd write it! We'll start from duplicated code like we did
@@ -122,7 +122,7 @@ what we currently know how to do in Rust, we would have to write a unique type
 for every single kind of value we wanted to have either <code>Some</code> or <code>None</code> of. In
 other words, the idea of &quot;an optional value&quot; is a more abstract concept than one
 specific type. We want it to work for any type at all.</p>
-<h3>Removing Duplication by Extracting a Generic Data Type</h3>
+<a class="header" href="#removing-duplication-by-extracting-a-generic-data-type" name="removing-duplication-by-extracting-a-generic-data-type"><h3>Removing Duplication by Extracting a Generic Data Type</h3></a>
 <p>Let's see how to get from duplicated types to the generic type. Here are the
 definitions of our two enums side-by-side:</p>
 <pre><code class="language-text">enum OptionalNumber {   enum OptionalFloatingPointNumber {
@@ -180,7 +180,7 @@ let float = Some(5.0);
 </code></pre>
 <p>When you recognize situations with almost-duplicate types like this in your
 code, you can follow this process to reduce duplication using generics.</p>
-<h3>Monomorphization at Compile Time</h3>
+<a class="header" href="#monomorphization-at-compile-time" name="monomorphization-at-compile-time"><h3>Monomorphization at Compile Time</h3></a>
 <p>Understanding this refactoring process is also useful in understanding how
 generics work behind the scenes: the compiler does the exact opposite of this
 process when compiling your code. <em>Monomorphization</em> means taking code that
@@ -217,7 +217,7 @@ fn main() {
 code, but Rust will compile that into code that acts as though we wrote the
 specific type out in each instance. This means we pay no runtime cost for using
 generics; it's just like we duplicated each particular definition.</p>
-<h3>Generic Structs</h3>
+<a class="header" href="#generic-structs" name="generic-structs"><h3>Generic Structs</h3></a>
 <p>In a similar fashion as we did with enums, we can use <code>&lt;&gt;</code>s with structs as
 well in order to define structs that have a generic type parameter in one or
 more of their fields. Generic structs also get monomorphized into specialized
@@ -242,7 +242,7 @@ fn main() {
 <p>The syntax is the same with structs: add a <code>&lt;T&gt;</code> after the name of the struct,
 then use <code>T</code> in the definition where you want to use that generic type instead
 of a specific type.</p>
-<h3>Multiple Type Parameters</h3>
+<a class="header" href="#multiple-type-parameters" name="multiple-type-parameters"><h3>Multiple Type Parameters</h3></a>
 <p>Note that in the <code>Point</code> definition in Listing 10-2, we've used the same <code>T</code>
 parameter for both fields. This means <code>x</code> and <code>y</code> must always be values of the
 same type. Trying to instantiate a <code>Point</code> that uses an <code>i32</code> for <code>x</code> and an
@@ -296,7 +296,7 @@ definition:</p>
 values in function signatures, if you have a lot of parameters, the code can
 get quite confusing, so try to keep the number of parameters defined in any one
 type small if you can.</p>
-<h3>Generic Functions and Methods</h3>
+<a class="header" href="#generic-functions-and-methods" name="generic-functions-and-methods"><h3>Generic Functions and Methods</h3></a>
 <p>In a similar way to data structures, we can use the <code>&lt;&gt;</code> syntax in function or
 method definitions. The angle brackets for type parameters go after the
 function or method name and before the parameter list in parentheses:</p>

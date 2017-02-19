@@ -67,7 +67,7 @@
                 </div>
 
                 <div id="content" class="content">
-                    <h2>Importing Names</h2>
+                    <a class="header" href="#importing-names" name="importing-names"><h2>Importing Names</h2></a>
 <p>We’ve covered how to call functions defined within a module using the module
 name as part of the call, as in the call to the <code>namespaces</code> function shown
 here in Listing 7-6.</p>
@@ -92,7 +92,7 @@ namespaces</p>
 </figure>
 <p>As you can see, referring to the fully qualified name can get quite lengthy.
 Luckily, Rust has a keyword to make these calls more concise.</p>
-<h3>Concise Imports with <code>use</code></h3>
+<a class="header" href="#concise-imports-with-use" name="concise-imports-with-use"><h3>Concise Imports with <code>use</code></h3></a>
 <p>Rust’s <code>use</code> keyword works to shorten lengthy function calls by bringing the
 modules of the function you want to call into a scope. Here’s an example of
 bringing the <code>a::series::of</code> namespace into a binary crate’s root scope:</p>
@@ -153,7 +153,7 @@ fn main() {
     let green = TrafficLight::Green; // because we didn’t `use` TrafficLight::Green
 }
 </code></pre>
-<h3>Glob Imports with <code>*</code></h3>
+<a class="header" href="#glob-imports-with-" name="glob-imports-with-"><h3>Glob Imports with <code>*</code></h3></a>
 <p>To import all the items in a namespace at once, we can use the <code>*</code> syntax. For
 example:</p>
 <pre><code class="language-rust">enum TrafficLight {
@@ -173,7 +173,7 @@ fn main() {
 <p>The <code>*</code> is called a <em>glob</em>, and it will import everything that’s visible inside
 of the namespace. Globs should be used sparingly: they are convenient, but you
 might also pull in more things than you expected and cause naming conflicts.</p>
-<h3>Using <code>super</code> to Access a Parent Module</h3>
+<a class="header" href="#using-super-to-access-a-parent-module" name="using-super-to-access-a-parent-module"><h3>Using <code>super</code> to Access a Parent Module</h3></a>
 <p>As you now know, when you create a library crate, Cargo makes a <code>tests</code> module
 for you. Let’s go into more detail about that now. In your <code>communicator</code>
 project, open <em>src/lib.rs</em>.</p>
@@ -278,7 +278,7 @@ test tests::it_works ... ok
 
 test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured
 </code></pre>
-<h2>Summary</h2>
+<a class="header" href="#summary" name="summary"><h2>Summary</h2></a>
 <p>Now you know techniques for organizing your code! Use these to group related
 functionality together, keep files from getting too long, and present a tidy
 public API to users of your library.</p>

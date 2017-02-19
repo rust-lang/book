@@ -67,7 +67,7 @@
                 </div>
 
                 <div id="content" class="content">
-                    <h1>Structs</h1>
+                    <a class="header" href="#structs" name="structs"><h1>Structs</h1></a>
 <p>A <code>struct</code>, short for <em>structure</em>, is a custom data type that lets us name and
 package together multiple related values that make up a meaningful group. If
 you come from an object-oriented language, a <code>struct</code> is like an object’s data
@@ -126,7 +126,7 @@ let user1 = User {
 </code></pre>
 <p>To get a particular value out of a struct, we can use dot notation. If we
 wanted just this user’s email address, we can say <code>user1.email</code>.</p>
-<h2>Ownership of Struct Data</h2>
+<a class="header" href="#ownership-of-struct-data" name="ownership-of-struct-data"><h2>Ownership of Struct Data</h2></a>
 <p>In the <code>User</code> struct definition in Listing 5-1, we used the owned <code>String</code> type
 rather than the <code>&amp;str</code> string slice type. This is a deliberate choice because
 we want instances of this struct to own all of its data, and for that data to
@@ -169,7 +169,7 @@ error[E0106]: missing lifetime specifier
 <p>We will talk about how to fix these errors in order to store references in
 structs in Chapter 10, but for now, fix errors like these by switching to owned
 types like <code>String</code> instead of references like <code>&amp;str</code>.</p>
-<h2>An Example Program</h2>
+<a class="header" href="#an-example-program" name="an-example-program"><h2>An Example Program</h2></a>
 <p>To understand when we might want to use structs, let’s write a program that
 calculates the area of a rectangle. We’ll start off with single variables, then
 refactor our program until we’re using structs instead.</p>
@@ -201,7 +201,7 @@ width in separate variables</p>
 <p>Let’s try running this program with <code>cargo run</code>:</p>
 <pre><code class="language-text">The area of the rectangle is 1500 square pixels.
 </code></pre>
-<h3>Refactoring with Tuples</h3>
+<a class="header" href="#refactoring-with-tuples" name="refactoring-with-tuples"><h3>Refactoring with Tuples</h3></a>
 <p>Our little program works okay; it figures out the area of the rectangle by
 calling the <code>area</code> function with each dimension. But we can do better. The
 length and the width are related to each other since together they describe one
@@ -251,7 +251,7 @@ index <code>1</code>. If someone else was to work on this code, they would have 
 this out and remember it as well. It would be easy to forget or mix these
 values up and cause errors, since we haven’t conveyed the meaning of our data
 in our code.</p>
-<h3>Refactoring with Structs: Adding More Meaning</h3>
+<a class="header" href="#refactoring-with-structs-adding-more-meaning" name="refactoring-with-structs-adding-more-meaning"><h3>Refactoring with Structs: Adding More Meaning</h3></a>
 <p>Here is where we bring in structs. We can transform our tuple into a data type
 with a name for the whole as well as names for the parts, as shown in Listing
 5-4:</p>
@@ -296,7 +296,7 @@ calculate the area of a <code>Rectangle</code>, using its <code>length</code> an
 This conveys that the length and width are related to each other, and gives
 descriptive names to the values rather than using the tuple index values of <code>0</code>
 and <code>1</code>. This is a win for clarity.</p>
-<h3>Adding Useful Functionality with Derived Traits</h3>
+<a class="header" href="#adding-useful-functionality-with-derived-traits" name="adding-useful-functionality-with-derived-traits"><h3>Adding Useful Functionality with Derived Traits</h3></a>
 <p>It’d be nice to be able to print out an instance of our <code>Rectangle</code> while we’re
 debugging our program and see the values for all its fields. Listing 5-5 tries
 using the <code>println!</code> macro as we have been:</p>

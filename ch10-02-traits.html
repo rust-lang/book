@@ -67,7 +67,7 @@
                 </div>
 
                 <div id="content" class="content">
-                    <h2>Traits</h2>
+                    <a class="header" href="#traits" name="traits"><h2>Traits</h2></a>
 <p><em>Traits</em> are similar to a feature often called 'interfaces' in other languages,
 but are also different. Traits let us do another kind of abstraction: they let
 us abstract over <em>behavior</em> that types can have in common.</p>
@@ -162,7 +162,7 @@ wanted to call the <code>print</code> method. This is because it's possible to h
 traits that both define a method named <code>print</code>, and our <code>Temperature</code> enum might
 implement both. Rust wouldn't know which <code>print</code> method we wanted unless we
 brought the trait we wanted into our current scope with <code>use</code>.</p>
-<h3>Trait Bounds</h3>
+<a class="header" href="#trait-bounds" name="trait-bounds"><h3>Trait Bounds</h3></a>
 <p>Defining traits with methods and implementing the trait methods on a particular
 type gives Rust more information than just defining methods on a type directly.
 The information Rust gets is that the type that implements the trait can be
@@ -266,7 +266,7 @@ fn show_anything&lt;T: Display&gt;(value: T) {
 </figure>
 <p>Now that this function specifies that <code>T</code> can be any type as long as that type
 implements the <code>Display</code> trait, this code will compile.</p>
-<h3>Multiple Trait Bounds and <code>where</code> Syntax</h3>
+<a class="header" href="#multiple-trait-bounds-and-where-syntax" name="multiple-trait-bounds-and-where-syntax"><h3>Multiple Trait Bounds and <code>where</code> Syntax</h3></a>
 <p>Each generic type can have its own trait bounds. The signature for a function
 that takes a type <code>T</code> that implements <code>Display</code> and a type <code>U</code> that implements
 <code>Printable</code> looks like:</p>

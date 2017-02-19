@@ -67,8 +67,8 @@
                 </div>
 
                 <div id="content" class="content">
-                    <h1>Advanced Type System Features</h1>
-<h2>Unsafe Rust</h2>
+                    <a class="header" href="#advanced-type-system-features" name="advanced-type-system-features"><h1>Advanced Type System Features</h1></a>
+<a class="header" href="#unsafe-rust" name="unsafe-rust"><h2>Unsafe Rust</h2></a>
 <p>Things you may do in an unsafe block that you may not in safe rust</p>
 <ul>
 <li>deref a raw pointer</li>
@@ -80,22 +80,22 @@
 <p>Here's the syntax tho</p>
 <p>You know unsafe blocks are the cause of any crashes</p>
 <p>wrap all the unsafe, make it as small as possible, present a safe public API</p>
-<h3>Raw Pointers</h3>
-<h3>Unsafe Functions</h3>
-<h4><code>transmute</code></h4>
+<a class="header" href="#raw-pointers" name="raw-pointers"><h3>Raw Pointers</h3></a>
+<a class="header" href="#unsafe-functions" name="unsafe-functions"><h3>Unsafe Functions</h3></a>
+<a class="header" href="#transmute" name="transmute"><h4><code>transmute</code></h4></a>
 <p>never ever. don't. stop.</p>
-<h4><code>extern fn</code></h4>
+<a class="header" href="#extern-fn" name="extern-fn"><h4><code>extern fn</code></h4></a>
 <p>You have to write unsafe code to FFI</p>
-<h3><code>static</code></h3>
-<h3>Unsafe Traits</h3>
-<h2>Associated Types</h2>
+<a class="header" href="#static" name="static"><h3><code>static</code></h3></a>
+<a class="header" href="#unsafe-traits" name="unsafe-traits"><h3>Unsafe Traits</h3></a>
+<a class="header" href="#associated-types" name="associated-types"><h2>Associated Types</h2></a>
 <p>More common than the other things, less common than the rest of the book</p>
 <p>why this is a thing instead of a generic</p>
-<h2>The Thing Formerly Known as UFCS</h2>
+<a class="header" href="#the-thing-formerly-known-as-ufcs" name="the-thing-formerly-known-as-ufcs"><h2>The Thing Formerly Known as UFCS</h2></a>
 <p>Only needed when implementing super generic code</p>
 <p>Lots of things are syntax sugar for this</p>
 <p>Two traits that impl the same method - how to disambiguate</p>
-<h2>Coherence</h2>
+<a class="header" href="#coherence" name="coherence"><h2>Coherence</h2></a>
 <p>Show examples of when you control traits and types or not</p>
 <p>Ex: Cannot impl Debug on someone else's type</p>
 <p>Solution: newtype</p>

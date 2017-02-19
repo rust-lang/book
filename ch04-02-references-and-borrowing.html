@@ -67,7 +67,7 @@
                 </div>
 
                 <div id="content" class="content">
-                    <h2>References and Borrowing</h2>
+                    <a class="header" href="#references-and-borrowing" name="references-and-borrowing"><h2>References and Borrowing</h2></a>
 <p>The issue with the tuple code at the end of the preceding section is that we
 have to return the <code>String</code> to the calling function so we can still use the
 <code>String</code> after the call to <code>calculate_length</code>, because the <code>String</code> was moved
@@ -153,7 +153,7 @@ fn change(some_string: &amp;String) {
 </code></pre>
 <p>Just as variables are immutable by default, so are references. We’re not
 allowed to modify something we have a reference to.</p>
-<h3>Mutable References</h3>
+<a class="header" href="#mutable-references" name="mutable-references"><h3>Mutable References</h3></a>
 <p>We can fix the error in the code from Listing 4-9 with just a small tweak:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust">fn main() {
@@ -243,7 +243,7 @@ the data.</p>
 Rust compiler pointing out a potential bug early (at compile time rather than
 at runtime) and showing you exactly where the problem is instead of you having
 to track down why sometimes your data isn’t what you thought it should be.</p>
-<h3>Dangling References</h3>
+<a class="header" href="#dangling-references" name="dangling-references"><h3>Dangling References</h3></a>
 <p>In languages with pointers, it’s easy to erroneously create a <em>dangling
 pointer</em>, a pointer that references a location in memory that may have been
 given to someone else, by freeing some memory while preserving a pointer to
@@ -306,7 +306,7 @@ won’t let us do this.</p>
 </code></pre>
 <p>This works without any problems. Ownership is moved out, and nothing is
 deallocated.</p>
-<h3>The Rules of References</h3>
+<a class="header" href="#the-rules-of-references" name="the-rules-of-references"><h3>The Rules of References</h3></a>
 <p>Let’s recap what we’ve discussed about references:</p>
 <ol>
 <li>At any given time, you can have <em>either</em> but not both of:</li>

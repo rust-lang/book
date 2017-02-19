@@ -67,7 +67,7 @@
                 </div>
 
                 <div id="content" class="content">
-                    <h2>Running tests</h2>
+                    <a class="header" href="#running-tests" name="running-tests"><h2>Running tests</h2></a>
 <p>Just like <code>cargo run</code> compiles your code and then runs the resulting binary,
 <code>cargo test</code> compiles your code in test mode and runs the resulting test
 binary. The default behavior of the binary that <code>cargo test</code> produces is to run
@@ -79,7 +79,7 @@ be passed instead to the resulting test binary. The way to separate these
 arguments is with <code>--</code>: after <code>cargo test</code>, list the arguments that go to
 <code>cargo test</code>, then the separator <code>--</code>, and then the arguments that go to the
 test binary.</p>
-<h3>Tests Run in Parallel</h3>
+<a class="header" href="#tests-run-in-parallel" name="tests-run-in-parallel"><h3>Tests Run in Parallel</h3></a>
 <p>Tests are run in parallel using threads. For this reason, you should take care
 that your tests are written in such a way as to not depend on each other or on
 any shared state. Shared state can also include the environment, such as the
@@ -90,7 +90,7 @@ number of threads to the test binary. Setting the number of test threads to 1
 means to not use any parallelism:</p>
 <pre><code class="language-text">$ cargo test -- --test-threads=1
 </code></pre>
-<h3>Tests Capture Output</h3>
+<a class="header" href="#tests-capture-output" name="tests-capture-output"><h3>Tests Capture Output</h3></a>
 <p>By default, Rust's test library captures and discards output to standard out
 and standard error, unless the test fails. For example, if you call <code>println!</code>
 in a test and the test passes, you won't see the <code>println!</code> output in your
@@ -98,7 +98,7 @@ terminal. This behavior can be disabled by sending the <code>--nocapture</code> 
 the test binary:</p>
 <pre><code class="language-text">$ cargo test -- --nocapture
 </code></pre>
-<h3>Running a Subset of Tests by Name</h3>
+<a class="header" href="#running-a-subset-of-tests-by-name" name="running-a-subset-of-tests-by-name"><h3>Running a Subset of Tests by Name</h3></a>
 <p>Sometimes, running a full test suite can take a long time. If you're only
 working on code in a particular area, you might want to only run the tests
 having to do with that code. <code>cargo test</code> takes an argument that allows you to
@@ -218,7 +218,7 @@ test adding::add_two_and_two ... ok
 
 test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured
 </code></pre>
-<h3>Ignore Some Tests Unless Specifically Requested</h3>
+<a class="header" href="#ignore-some-tests-unless-specifically-requested" name="ignore-some-tests-unless-specifically-requested"><h3>Ignore Some Tests Unless Specifically Requested</h3></a>
 <p>Sometimes a few specific tests can be very time-consuming to execute, so during
 most runs of <code>cargo test</code>, we'd like to exclude them. Instead of having to
 construct an argument to <code>cargo test</code> to run all tests except these and

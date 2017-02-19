@@ -67,7 +67,7 @@
                 </div>
 
                 <div id="content" class="content">
-                    <h2>Method Syntax</h2>
+                    <a class="header" href="#method-syntax" name="method-syntax"><h2>Method Syntax</h2></a>
 <p><em>Methods</em> are similar to functions: they’re declared with the <code>fn</code> keyword and
 their name, they can have parameters and return values, and they contain some
 code that gets run when they’re called from somewhere else. Methods are
@@ -75,7 +75,7 @@ different from functions, however, because they’re defined within the context
 of a struct (or an enum or a trait object, which we will cover in Chapters 6
 and 13, respectively), and their first parameter is always <code>self</code>, which
 represents the instance of the struct that the method is being called on.</p>
-<h3>Defining Methods</h3>
+<a class="header" href="#defining-methods" name="defining-methods"><h3>Defining Methods</h3></a>
 <p>Let’s change our <code>area</code> function that has a <code>Rectangle</code> instance as a parameter
 and instead make an <code>area</code> method defined on the <code>Rectangle</code> struct, as shown
 in Listing 5-7:</p>
@@ -136,7 +136,7 @@ instance of a type together in one <code>impl</code> block, rather than make fut
 of our code search for capabilities of <code>Rectangle</code> all over the place.</p>
 <!-- PROD: START BOX -->
 <blockquote>
-<h3>Where’s the <code>-&gt;</code> operator?</h3>
+<a class="header" href="#wheres-the---operator" name="wheres-the---operator"><h3>Where’s the <code>-&gt;</code> operator?</h3></a>
 <p>In languages like C++, there are two different operators for calling methods:
 <code>.</code> if you’re calling a method on the object directly, and <code>-&gt;</code> if you’re
 calling the method on a pointer to the object and thus need to dereference the
@@ -175,7 +175,7 @@ consuming (so <code>self</code>). The fact that Rust makes borrowing implicit fo
 receivers is a big part of making ownership ergonomic in practice.</p>
 </blockquote>
 <!-- PROD: END BOX -->
-<h3>Methods with More Parameters</h3>
+<a class="header" href="#methods-with-more-parameters" name="methods-with-more-parameters"><h3>Methods with More Parameters</h3></a>
 <p>Let’s practice some more with methods by implementing a second method on our
 <code>Rectangle</code> struct. This time, we’d like for an instance of <code>Rectangle</code> to take
 another instance of <code>Rectangle</code> and return <code>true</code> if the second rectangle could
@@ -235,7 +235,7 @@ impl Rectangle {
 Methods can have multiple parameters that we add to the signature after the
 <code>self</code> parameter, and those parameters work just like parameters in functions
 do.</p>
-<h3>Associated Functions</h3>
+<a class="header" href="#associated-functions" name="associated-functions"><h3>Associated Functions</h3></a>
 <p>One more useful feature of <code>impl</code> blocks: we’re allowed to define functions
 within <code>impl</code> blocks that <em>don’t</em> take <code>self</code> as a parameter. These are called
 <em>associated functions</em>, since they’re associated with the struct. They’re still
@@ -263,7 +263,7 @@ impl Rectangle {
 <code>let sq = Rectangle::square(3);</code>, for example. This function is namespaced by
 the struct: the <code>::</code> syntax is used for both associated functions and
 namespaces created by modules, which we’ll learn about in Chapter 7.</p>
-<h2>Summary</h2>
+<a class="header" href="#summary" name="summary"><h2>Summary</h2></a>
 <p>Structs let us create custom types that are meaningful for our domain. By using
 structs, we can keep associated pieces of data connected to each other and name
 each piece to make our code clear. Methods let us specify the behavior that

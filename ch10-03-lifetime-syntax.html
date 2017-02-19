@@ -67,7 +67,7 @@
                 </div>
 
                 <div id="content" class="content">
-                    <h2>Lifetime Syntax</h2>
+                    <a class="header" href="#lifetime-syntax" name="lifetime-syntax"><h2>Lifetime Syntax</h2></a>
 <p>Generic type parameters let us abstract over types, and traits let us abstract
 over behavior. There's one more way that Rust allows us to do something
 similar: <em>lifetimes</em> allow us to be generic over scopes of code.</p>
@@ -78,7 +78,7 @@ to cover everything about them in this chapter. What we <em>are</em> going to do
 talk about the very basics of lifetimes, so that when you see the syntax in
 documentation or other places, you'll be familiar with the concepts. Chapter 20
 will contain more advanced information about everything lifetimes can do.</p>
-<h3>Core Syntax</h3>
+<a class="header" href="#core-syntax" name="core-syntax"><h3>Core Syntax</h3></a>
 <p>We talked about references in Chapter 4, but we left out an important detail.
 As it turns out, every reference in Rust has a <em>lifetime</em>, which is the scope
 for which that reference is valid. Most of the time, lifetimes are implicit,
@@ -104,7 +104,7 @@ declaration and a generic type declaration:</p>
 reference has the lifetime <code>'a</code>. In the same way that we parameterize functions
 that take generic types, we parameterize references with lifetimes.</p>
 <p>So, that's the syntax, but <em>why</em>? What does a lifetime do, anyway?</p>
-<h3>Lifetimes Prevent Dangling References</h3>
+<a class="header" href="#lifetimes-prevent-dangling-references" name="lifetimes-prevent-dangling-references"><h3>Lifetimes Prevent Dangling References</h3></a>
 <p>Consider the program in listing 10-8. There's an outer scope and an inner
 scope. The outer scope declares a variable named <code>r</code> with no initial value, and
 the inner scope declares a variable named <code>x</code> with the initial value of 5.
@@ -188,7 +188,7 @@ it out for us. One situation in which Rust can't figure out the lifetimes is
 for a function or method when one of the parameters or return values is a
 reference, except for a few scenarios we'll discuss in the lifetime elision
 section.</p>
-<h3>Lifetime Annotations in Struct Definitions</h3>
+<a class="header" href="#lifetime-annotations-in-struct-definitions" name="lifetime-annotations-in-struct-definitions"><h3>Lifetime Annotations in Struct Definitions</h3></a>
 <p>Another time that Rust can't figure out the lifetimes is when structs have a
 field that holds a reference. In that case, naming the lifetimes looks like
 this:</p>
@@ -208,7 +208,7 @@ function that has a parameter of a generic type: we don't know what type the
 values will actually end up being when the function gets called. Lifetimes are
 the same idea, but they are generic over the scope of a reference, rather than
 a type.</p>
-<h3>Lifetime Annotations in Function Signatures</h3>
+<a class="header" href="#lifetime-annotations-in-function-signatures" name="lifetime-annotations-in-function-signatures"><h3>Lifetime Annotations in Function Signatures</h3></a>
 <p>Lifetime annotations for functions go on the function signature, but we don't
 have to annotate any of the code in the function body with lifetimes. That's
 because Rust can analyze the specific code inside the function without any
@@ -353,7 +353,7 @@ cleaning up the value.</p>
 parameters and return values of functions. Once they're connected, Rust has
 enough information to allow memory-safe operations and disallow operations that
 would create dangling pointers or otherwise violate memory safety.</p>
-<h3>Lifetime Elision</h3>
+<a class="header" href="#lifetime-elision" name="lifetime-elision"><h3>Lifetime Elision</h3></a>
 <p>If every reference has a lifetime, and we need to provide them for functions
 that use references as parameters or return values, then why did this function
 from the &quot;String Slices&quot; section of Chapter 4 compile? We haven't annotated any
@@ -411,7 +411,7 @@ code without needing to specify explicit lifetimes. However, Rust is always
 checking these rules and the lifetimes in your program, and cases in which the
 lifetime elision rules do not apply are cases where you'll need to add lifetime
 parameters to help Rust understand the contracts of your code.</p>
-<h3>Lifetime Annotations in Method Definitions</h3>
+<a class="header" href="#lifetime-annotations-in-method-definitions" name="lifetime-annotations-in-method-definitions"><h3>Lifetime Annotations in Method Definitions</h3></a>
 <p>Now that we've gone over the lifetime elision rules, defining methods on
 structs that hold references will make more sense. The lifetime name needs to
 be declared after the <code>impl</code> keyword and then used after the struct's name,
@@ -437,7 +437,7 @@ impl&lt;'a&gt; App&lt;'a&gt; {
     }
 }
 </code></pre>
-<h3>The Static Lifetime</h3>
+<a class="header" href="#the-static-lifetime" name="the-static-lifetime"><h3>The Static Lifetime</h3></a>
 <p>There is <em>one</em> special lifetime that Rust knows about: <code>'static</code>. The <code>'static</code>
 lifetime is the entire duration of the program. All string literals have the
 <code>'static</code> lifetime:</p>
@@ -452,7 +452,7 @@ program or not (or even if you want it to live that long, if it could). Most of
 the time, the problem in the code is an attempt to create a dangling reference
 or a mismatch of the available lifetimes, and the solution is fixing those
 problems, not specifying the <code>'static</code> lifetime.</p>
-<h2>Summary</h2>
+<a class="header" href="#summary" name="summary"><h2>Summary</h2></a>
 <p>We've covered the basics of Rust's system of generics. Generics are the core to
 building good abstractions, and can be used in a number of ways. There's more
 to learn about them, particularly lifetimes, but we'll cover those in later

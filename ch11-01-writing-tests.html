@@ -67,13 +67,13 @@
                 </div>
 
                 <div id="content" class="content">
-                    <h2>Writing Tests</h2>
+                    <a class="header" href="#writing-tests" name="writing-tests"><h2>Writing Tests</h2></a>
 <p>Tests are Rust functions that use particular features and are written in such a
 way as to verify that non-test code is functioning in the expected manner.
 Everything we've discussed about Rust code applies to Rust tests as well! Let's
 look at the features Rust provides specifically for writing tests: the <code>test</code>
 attribute, a few macros, and the <code>should_panic</code> attribute.</p>
-<h3>The <code>test</code> attribute</h3>
+<a class="header" href="#the-test-attribute" name="the-test-attribute"><h3>The <code>test</code> attribute</h3></a>
 <p>At its simplest, a test in Rust is a function that's annotated with the <code>test</code>
 attribute. Let's make a new library project with Cargo called <code>adder</code>:</p>
 <pre><code class="language-text">$ cargo new adder
@@ -121,7 +121,7 @@ this line:</p>
 tests that we have:</p>
 <pre><code class="language-text">test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured
 </code></pre>
-<h3>The <code>assert!</code> macro</h3>
+<a class="header" href="#the-assert-macro" name="the-assert-macro"><h3>The <code>assert!</code> macro</h3></a>
 <p>The empty test function passes because any test which doesn't <code>panic!</code> passes,
 and any test that does <code>panic!</code> fails. Let's make the test fail by using the
 <code>assert!</code> macro:</p>
@@ -166,7 +166,7 @@ line 5 got a <code>false</code> value:</p>
 <p>The test failure is also reflected in the summary line:</p>
 <pre><code class="language-text">test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured
 </code></pre>
-<h3>Testing equality with the <code>assert_eq!</code> and <code>assert_ne!</code> macros</h3>
+<a class="header" href="#testing-equality-with-the-assert_eq-and-assert_ne-macros" name="testing-equality-with-the-assert_eq-and-assert_ne-macros"><h3>Testing equality with the <code>assert_eq!</code> and <code>assert_ne!</code> macros</h3></a>
 <p>A common way to test functionality is to compare the result of the code under
 test to the value you expect it to be, and check that they're equal. You can do
 this using the <code>assert!</code> macro by passing it an expression using the <code>==</code>
@@ -237,7 +237,7 @@ order to be able to print out the values in the case that the assertion fails.
 Because both of these traits are derivable traits that we mentioned in Chapter
 5, usually this is as straightforward as adding the <code>#[derive(PartialEq, Debug)]</code> annotation to your struct or enum definition. See Appendix C for more
 details about these and other derivable traits.</p>
-<h2>Test for failure with <code>should_panic</code></h2>
+<a class="header" href="#test-for-failure-with-should_panic" name="test-for-failure-with-should_panic"><h2>Test for failure with <code>should_panic</code></h2></a>
 <p>We can invert our test's failure with another attribute: <code>should_panic</code>. This
 is useful when we want to test that calling a particular function will cause an
 error. For example, let's test something that we know will panic from Chapter

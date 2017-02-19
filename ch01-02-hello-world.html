@@ -67,7 +67,7 @@
                 </div>
 
                 <div id="content" class="content">
-                    <h2>Hello, World!</h2>
+                    <a class="header" href="#hello-world" name="hello-world"><h2>Hello, World!</h2></a>
 <p>Now that you have Rust installed, let’s write your first Rust program. It's
 traditional when learning a new language to write a little program to print the
 text “Hello, world!” to the screen, and in this section, we'll follow that
@@ -78,7 +78,7 @@ makes no specific demands about your editing, tooling, or where your code
 lives, so if you prefer an IDE to the command line, feel free to use your
 favorite IDE.</p>
 </blockquote>
-<h3>Creating a Project Directory</h3>
+<a class="header" href="#creating-a-project-directory" name="creating-a-project-directory"><h3>Creating a Project Directory</h3></a>
 <p>First, make a directory to put your Rust code in. Rust doesn't care where your code
 lives, but for this book, we'd suggest making a <em>projects</em> directory in your
 home directory and keeping all your projects there. Open a terminal and enter
@@ -95,7 +95,7 @@ $ cd hello_world
 &gt; mkdir hello_world
 &gt; cd hello_world
 </code></pre>
-<h3>Writing and Running a Rust Program</h3>
+<a class="header" href="#writing-and-running-a-rust-program" name="writing-and-running-a-rust-program"><h3>Writing and Running a Rust Program</h3></a>
 <p>Next, make a new source file and call it <em>main.rs</em>. Rust files always end with
 the <em>.rs</em> extension. If you’re using more than one word in your filename, use
 an underscore to separate them. For example, you'd use <em>hello_world.rs</em> rather
@@ -116,7 +116,7 @@ Hello, world!
 operating system, you should see the string <code>Hello, world!</code> print to the
 terminal. If you did, then congratulations! You've officially written a Rust
 program. That makes you a Rust programmer! Welcome.</p>
-<h3>Anatomy of a Rust Program</h3>
+<a class="header" href="#anatomy-of-a-rust-program" name="anatomy-of-a-rust-program"><h3>Anatomy of a Rust Program</h3></a>
 <p>Now, let’s go over what just happened in your &quot;Hello, world!&quot; program in
 detail. Here's the first piece of the puzzle:</p>
 <pre><code class="language-rust">fn main() {
@@ -149,7 +149,7 @@ argument to <code>println!</code>, which prints the string to the screen. Easy e
 <p>The line ends with a semicolon (<code>;</code>). The <code>;</code> indicates that this expression is
 over, and the next one is ready to begin. Most lines of Rust code end with a
 <code>;</code>.</p>
-<h3>Compiling and Running Are Separate Steps</h3>
+<a class="header" href="#compiling-and-running-are-separate-steps" name="compiling-and-running-are-separate-steps"><h3>Compiling and Running Are Separate Steps</h3></a>
 <p>In &quot;Writing and Running a Rust Program&quot;, we showed you how to run a newly
 created program. We'll break that process down and examine each step now.</p>
 <p>Before running a Rust program, you have to compile it. You can use the Rust
@@ -188,7 +188,7 @@ grows, you'll want to be able to manage all of the options your project has
 and make it easy to share your code with other people and projects. Next, we'll
 introduce you to a tool called Cargo, which will help you write real-world Rust
 programs.</p>
-<h2>Hello, Cargo!</h2>
+<a class="header" href="#hello-cargo" name="hello-cargo"><h2>Hello, Cargo!</h2></a>
 <p>Cargo is Rust’s build system and package manager, and Rustaceans use Cargo to
 manage their Rust projects because it makes a lot of tasks easier. For example,
 Cargo takes care of building your code, downloading the libraries your code
@@ -208,7 +208,7 @@ have Cargo installed by typing the following into your terminal:</p>
 </code></pre>
 <p>If you see a version number, great! If you see an error like <code>command not found</code>, then you should look at the documentation for your method of
 installation to determine how to install Cargo separately.</p>
-<h3>Creating a Project with Cargo</h3>
+<a class="header" href="#creating-a-project-with-cargo" name="creating-a-project-with-cargo"><h3>Creating a Project with Cargo</h3></a>
 <p>Let's create a new project using Cargo and look at how it differs from our
 project in <code>hello_world</code>. Go back to your projects directory (or wherever you
 decided to put your code):</p>
@@ -281,7 +281,7 @@ everything, and everything is in its place.</p>
 the <em>hello_world</em> directory, you can convert it to a project that does use
 Cargo by moving your code into the <em>src</em> directory and creating an appropriate
 <em>Cargo.toml</em>.</p>
-<h3>Building and Running a Cargo Project</h3>
+<a class="header" href="#building-and-running-a-cargo-project" name="building-and-running-a-cargo-project"><h3>Building and Running a Cargo Project</h3></a>
 <p>Now let's look at what's different about building and running your Hello World
 program through Cargo! To do so, enter the following commands:</p>
 <pre><code class="language-text">$ cargo build
@@ -331,7 +331,7 @@ code, Cargo will put it in the <em>target/debug</em> directory.</li>
 <p>The other advantage of using Cargo is that the commands are the same no matter
 what operating system you're on, so at this point we will no longer be
 providing specific instructions for Linux and Mac versus Windows.</p>
-<h3>Building for Release</h3>
+<a class="header" href="#building-for-release" name="building-for-release"><h3>Building for Release</h3></a>
 <p>When your project is finally ready for release, you can use <code>cargo build --release</code> to compile your project with optimizations. This will create an
 executable in <em>target/release</em> instead of <em>target/debug</em>. These optimizations
 make your Rust code run faster, but turning them on makes your program take
@@ -341,7 +341,7 @@ building the final program you’ll give to a user that won't be rebuilt and
 that we want to run as fast as possible. If you're benchmarking the running
 time of your code, be sure to run <code>cargo build --release</code> and benchmark with
 the executable in <em>target/release</em>.</p>
-<h3>Cargo as Convention</h3>
+<a class="header" href="#cargo-as-convention" name="cargo-as-convention"><h3>Cargo as Convention</h3></a>
 <p>With simple projects, Cargo doesn't provide a whole lot of value over just
 using <code>rustc</code>, but it will prove its worth as you continue. With complex
 projects composed of multiple crates, it’s much easier to let Cargo coordinate

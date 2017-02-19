@@ -67,7 +67,7 @@
                 </div>
 
                 <div id="content" class="content">
-                    <h2>Unrecoverable Errors with <code>panic!</code></h2>
+                    <a class="header" href="#unrecoverable-errors-with-panic" name="unrecoverable-errors-with-panic"><h2>Unrecoverable Errors with <code>panic!</code></h2></a>
 <p>Sometimes, bad things happen, and there's nothing that you can do about it. For
 these cases, Rust has the <code>panic!</code> macro. When this macro executes, your
 program will print a failure message, unwind and clean up the stack, and then
@@ -75,7 +75,7 @@ quit. The most common situation this occurs in is when a bug of some kind has
 been detected and it's not clear to the programmer how to handle the error.</p>
 <!-- PROD: START BOX -->
 <blockquote>
-<h4>Unwinding</h4>
+<a class="header" href="#unwinding" name="unwinding"><h4>Unwinding</h4></a>
 <p>By default, when a <code>panic!</code> occurs, the program starts
 <em>unwinding</em>, which means Rust walks back up the stack and cleans up the data
 from each function it encounters, but this walking and cleanup is a lot of
@@ -116,7 +116,7 @@ code that our code calls. The filename and line number reported by the error
 message will be someone else's code where the <code>panic!</code> macro is called, not the
 line of our code that eventually led to the <code>panic!</code>. We can use the backtrace
 of the functions the <code>panic!</code> call came from to figure this out.</p>
-<h3>Using a <code>panic!</code> Backtrace</h3>
+<a class="header" href="#using-a-panic-backtrace" name="using-a-panic-backtrace"><h3>Using a <code>panic!</code> Backtrace</h3></a>
 <p>Let's look at another example to see what it's like when a <code>panic!</code> call comes
 from a library because of a bug in our code instead of from our code calling
 the macro directly:</p>
