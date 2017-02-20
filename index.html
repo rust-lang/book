@@ -94,23 +94,23 @@ issue or send a pull request <a href="https://github.com/rust-lang/book">on GitH
                 </div>
 
                 <!-- Mobile navigation buttons -->
-                
 
-                
+
+
                     <a href="ch01-01-installation.html" class="mobile-nav-chapters next">
                         <i class="fa fa-angle-right"></i>
                     </a>
-                
+
 
             </div>
 
-            
 
-            
+
+
                 <a href="ch01-01-installation.html" class="nav-chapters next" title="You can navigate through the chapters using the arrow keys">
                     <i class="fa fa-angle-right"></i>
                 </a>
-            
+
 
         </div>
 
@@ -123,9 +123,26 @@ issue or send a pull request <a href="https://github.com/rust-lang/book">on GitH
         </script>
 
         <!-- Livereload script (if served using the cli tool) -->
-        
+
 
         <script src="highlight.js"></script>
         <script src="book.js"></script>
+
+        <!-- ServiceWorker registration -->
+        <script type="text/javascript">
+            if ('serviceWorker' in navigator) {
+                window.addEventListener('load', function() {
+                    console.log('Registering ServiceWorker...');
+
+                    navigator.serviceWorker.register('/service-worker.js').then(function(registration) {
+                        // Registration was successful
+                        console.log('ServiceWorker registration successful with scope: ', registration.scope);
+                    }).catch(function(err) {
+                        // registration failed :(
+                        console.log('ServiceWorker registration failed: ', err);
+                    });
+                });
+            }
+        </script>
     </body>
 </html>
