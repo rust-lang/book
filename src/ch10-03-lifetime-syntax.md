@@ -3,7 +3,7 @@
 When we talked about references in Chapter 4, we left out an important detail:
 every reference in Rust has a *lifetime*, which is the scope for which that
 reference is valid. Most of the time lifetimes are implicit and inferred, just
-like most of time types are inferred. Similarly to when we have to annotate
+like most of the time types are inferred. Similarly to when we have to annotate
 types because multiple types are possible, there are cases where the lifetimes
 of references could be related in a few different ways, so Rust needs us to
 annotate the relationships using generic lifetime parameters so that it can
@@ -14,9 +14,9 @@ programming languages. Lifetimes are, in some ways, Rust's most distinctive
 feature.
 
 Lifetimes are a big topic that can't be covered in entirety in this chapter, so
-we'll cover the very basics of lifetimes in this chapter to get you familiar
-with the concepts. Chapter 20 will contain more advanced information about
-everything lifetimes can do.
+we'll cover common ways you might encounter lifetime syntax in this chapter to
+get you familiar with the concepts. Chapter 19 will contain more advanced
+information about everything lifetimes can do.
 
 ### Lifetimes Prevent Dangling References
 

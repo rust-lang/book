@@ -52,7 +52,7 @@ case `Summarizable`. Inside curly braces we declare the method signatures that
 describe the behaviors that types that implement this trait will need to have,
 in this case `fn summary(&self) -> String`. After the method signature, instead
 of providing an implementation within curly braces, we put a semicolon. Each
-type that implements this trait can then provide its own custom behavior for
+type that implements this trait must then provide its own custom behavior for
 the body of the method, but the compiler will enforce that any type that has
 the `Summarizable` trait will have the method `summary` defined for it with
 this signature exactly.
