@@ -2,7 +2,7 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <title>Traits - The Rust Programming Language</title>
+        <title>Traits: Defining Shared Behavior - The Rust Programming Language</title>
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -47,7 +47,7 @@
         </script>
 
         <div id="sidebar" class="sidebar">
-            <ul class="chapter"><li><a href="ch01-00-introduction.html"><strong>1.</strong> Introduction</a></li><li><ul class="section"><li><a href="ch01-01-installation.html"><strong>1.1.</strong> Installation</a></li><li><a href="ch01-02-hello-world.html"><strong>1.2.</strong> Hello, World!</a></li></ul></li><li><a href="ch02-00-guessing-game-tutorial.html"><strong>2.</strong> Guessing Game Tutorial</a></li><li><a href="ch03-00-common-programming-concepts.html"><strong>3.</strong> Common Programming Concepts</a></li><li><ul class="section"><li><a href="ch03-01-variables-and-mutability.html"><strong>3.1.</strong> Variables and Mutability</a></li><li><a href="ch03-02-data-types.html"><strong>3.2.</strong> Data Types</a></li><li><a href="ch03-03-how-functions-work.html"><strong>3.3.</strong> How Functions Work</a></li><li><a href="ch03-04-comments.html"><strong>3.4.</strong> Comments</a></li><li><a href="ch03-05-control-flow.html"><strong>3.5.</strong> Control Flow</a></li></ul></li><li><a href="ch04-00-understanding-ownership.html"><strong>4.</strong> Understanding Ownership</a></li><li><ul class="section"><li><a href="ch04-01-what-is-ownership.html"><strong>4.1.</strong> What is Ownership?</a></li><li><a href="ch04-02-references-and-borrowing.html"><strong>4.2.</strong> References &amp; Borrowing</a></li><li><a href="ch04-03-slices.html"><strong>4.3.</strong> Slices</a></li></ul></li><li><a href="ch05-00-structs.html"><strong>5.</strong> Structs</a></li><li><ul class="section"><li><a href="ch05-01-method-syntax.html"><strong>5.1.</strong> Method Syntax</a></li></ul></li><li><a href="ch06-00-enums.html"><strong>6.</strong> Enums and Pattern Matching</a></li><li><ul class="section"><li><a href="ch06-01-defining-an-enum.html"><strong>6.1.</strong> Defining an Enum</a></li><li><a href="ch06-02-match.html"><strong>6.2.</strong> The <code>match</code> Control Flow Operator</a></li><li><a href="ch06-03-if-let.html"><strong>6.3.</strong> Concise Control Flow with <code>if let</code></a></li></ul></li><li><a href="ch07-00-modules.html"><strong>7.</strong> Modules</a></li><li><ul class="section"><li><a href="ch07-01-mod-and-the-filesystem.html"><strong>7.1.</strong> <code>mod</code> and the Filesystem</a></li><li><a href="ch07-02-controlling-visibility-with-pub.html"><strong>7.2.</strong> Controlling Visibility with <code>pub</code></a></li><li><a href="ch07-03-importing-names-with-use.html"><strong>7.3.</strong> Importing Names with <code>use</code></a></li></ul></li><li><a href="ch08-00-common-collections.html"><strong>8.</strong> Common Collections</a></li><li><ul class="section"><li><a href="ch08-01-vectors.html"><strong>8.1.</strong> Vectors</a></li><li><a href="ch08-02-strings.html"><strong>8.2.</strong> Strings</a></li><li><a href="ch08-03-hash-maps.html"><strong>8.3.</strong> Hash Maps</a></li></ul></li><li><a href="ch09-00-error-handling.html"><strong>9.</strong> Error Handling</a></li><li><ul class="section"><li><a href="ch09-01-unrecoverable-errors-with-panic.html"><strong>9.1.</strong> Unrecoverable Errors with <code>panic!</code></a></li><li><a href="ch09-02-recoverable-errors-with-result.html"><strong>9.2.</strong> Recoverable Errors with <code>Result</code></a></li><li><a href="ch09-03-to-panic-or-not-to-panic.html"><strong>9.3.</strong> To <code>panic!</code> or Not To <code>panic!</code></a></li></ul></li><li><a href="ch10-00-generics.html"><strong>10.</strong> Generics</a></li><li><ul class="section"><li><a href="ch10-01-syntax.html"><strong>10.1.</strong> Syntax</a></li><li><a href="ch10-02-traits.html" class="active"><strong>10.2.</strong> Traits</a></li><li><a href="ch10-03-lifetime-syntax.html"><strong>10.3.</strong> Lifetime syntax</a></li></ul></li><li><a href="ch11-00-testing.html"><strong>11.</strong> Testing</a></li><li><ul class="section"><li><a href="ch11-01-writing-tests.html"><strong>11.1.</strong> Writing tests</a></li><li><a href="ch11-02-running-tests.html"><strong>11.2.</strong> Running tests</a></li><li><a href="ch11-03-test-organization.html"><strong>11.3.</strong> Test Organization</a></li></ul></li><li><a href="ch12-00-an-io-project.html"><strong>12.</strong> An I/O Project</a></li><li><ul class="section"><li><a href="ch12-01-accepting-command-line-arguments.html"><strong>12.1.</strong> Accepting Command Line Arguments</a></li><li><a href="ch12-02-reading-a-file.html"><strong>12.2.</strong> Reading a File</a></li><li><a href="ch12-03-improving-error-handling-and-modularity.html"><strong>12.3.</strong> Improving Error Handling and Modularity</a></li><li><a href="ch12-04-testing-the-librarys-functionality.html"><strong>12.4.</strong> Testing the Library's Functionality</a></li><li><a href="ch12-05-working-with-environment-variables.html"><strong>12.5.</strong> Working with Environment Variables</a></li><li><a href="ch12-06-writing-to-stderr-instead-of-stdout.html"><strong>12.6.</strong> Writing to <code>stderr</code> instead of <code>stdout</code></a></li></ul></li><li><a href="ch13-00-functional-features.html"><strong>13.</strong> Functional Language Features in Rust</a></li><li><ul class="section"><li><a href="ch13-01-closures.html"><strong>13.1.</strong> Closures</a></li><li><a href="ch13-02-iterators.html"><strong>13.2.</strong> Iterators</a></li><li><a href="ch13-03-improving-our-io-project.html"><strong>13.3.</strong> Improving our I/O Project</a></li><li><a href="ch13-04-performance.html"><strong>13.4.</strong> Performance</a></li></ul></li><li><a href="ch14-00-more-about-cargo.html"><strong>14.</strong> More about Cargo and Crates.io</a></li><li><ul class="section"><li><a href="ch14-01-release-profiles.html"><strong>14.1.</strong> Release Profiles</a></li><li><a href="ch14-02-publishing-to-crates-io.html"><strong>14.2.</strong> Publishing a Crate to Crates.io</a></li><li><a href="ch14-03-cargo-workspaces.html"><strong>14.3.</strong> Cargo Workspaces</a></li><li><a href="ch14-04-installing-binaries.html"><strong>14.4.</strong> Installing Binaries from Crates.io with <code>cargo install</code></a></li><li><a href="ch14-05-extending-cargo.html"><strong>14.5.</strong> Extending Cargo with Custom Commands</a></li></ul></li><li><a href="ch15-00-smart-pointers.html"><strong>15.</strong> Smart Pointers</a></li><li><a href="ch16-00-concurrency.html"><strong>16.</strong> Concurrency</a></li><li><a href="ch17-00-oop.html"><strong>17.</strong> Is Rust OOP?</a></li><li><a href="ch18-00-patterns.html"><strong>18.</strong> Patterns</a></li><li><a href="ch19-00-more-lifetimes.html"><strong>19.</strong> More Lifetimes</a></li><li><a href="ch20-00-advanced-types.html"><strong>20.</strong> Advanced Type System Features</a></li><li><a href="appendix-00.html"><strong>21.</strong> Appendix</a></li><li><ul class="section"><li><a href="appendix-01-keywords.html"><strong>21.1.</strong> Keywords</a></li><li><a href="appendix-02-operators.html"><strong>21.2.</strong> Operators</a></li><li><a href="appendix-03-derivable-traits.html"><strong>21.3.</strong> Derivable Traits</a></li><li><a href="appendix-04-nightly-rust.html"><strong>21.4.</strong> Nightly Rust</a></li><li><a href="appendix-05-macros.html"><strong>21.5.</strong> Macros</a></li></ul></li></ul>
+            <ul class="chapter"><li><a href="ch01-00-introduction.html"><strong>1.</strong> Introduction</a></li><li><ul class="section"><li><a href="ch01-01-installation.html"><strong>1.1.</strong> Installation</a></li><li><a href="ch01-02-hello-world.html"><strong>1.2.</strong> Hello, World!</a></li></ul></li><li><a href="ch02-00-guessing-game-tutorial.html"><strong>2.</strong> Guessing Game Tutorial</a></li><li><a href="ch03-00-common-programming-concepts.html"><strong>3.</strong> Common Programming Concepts</a></li><li><ul class="section"><li><a href="ch03-01-variables-and-mutability.html"><strong>3.1.</strong> Variables and Mutability</a></li><li><a href="ch03-02-data-types.html"><strong>3.2.</strong> Data Types</a></li><li><a href="ch03-03-how-functions-work.html"><strong>3.3.</strong> How Functions Work</a></li><li><a href="ch03-04-comments.html"><strong>3.4.</strong> Comments</a></li><li><a href="ch03-05-control-flow.html"><strong>3.5.</strong> Control Flow</a></li></ul></li><li><a href="ch04-00-understanding-ownership.html"><strong>4.</strong> Understanding Ownership</a></li><li><ul class="section"><li><a href="ch04-01-what-is-ownership.html"><strong>4.1.</strong> What is Ownership?</a></li><li><a href="ch04-02-references-and-borrowing.html"><strong>4.2.</strong> References &amp; Borrowing</a></li><li><a href="ch04-03-slices.html"><strong>4.3.</strong> Slices</a></li></ul></li><li><a href="ch05-00-structs.html"><strong>5.</strong> Structs</a></li><li><ul class="section"><li><a href="ch05-01-method-syntax.html"><strong>5.1.</strong> Method Syntax</a></li></ul></li><li><a href="ch06-00-enums.html"><strong>6.</strong> Enums and Pattern Matching</a></li><li><ul class="section"><li><a href="ch06-01-defining-an-enum.html"><strong>6.1.</strong> Defining an Enum</a></li><li><a href="ch06-02-match.html"><strong>6.2.</strong> The <code>match</code> Control Flow Operator</a></li><li><a href="ch06-03-if-let.html"><strong>6.3.</strong> Concise Control Flow with <code>if let</code></a></li></ul></li><li><a href="ch07-00-modules.html"><strong>7.</strong> Modules</a></li><li><ul class="section"><li><a href="ch07-01-mod-and-the-filesystem.html"><strong>7.1.</strong> <code>mod</code> and the Filesystem</a></li><li><a href="ch07-02-controlling-visibility-with-pub.html"><strong>7.2.</strong> Controlling Visibility with <code>pub</code></a></li><li><a href="ch07-03-importing-names-with-use.html"><strong>7.3.</strong> Importing Names with <code>use</code></a></li></ul></li><li><a href="ch08-00-common-collections.html"><strong>8.</strong> Common Collections</a></li><li><ul class="section"><li><a href="ch08-01-vectors.html"><strong>8.1.</strong> Vectors</a></li><li><a href="ch08-02-strings.html"><strong>8.2.</strong> Strings</a></li><li><a href="ch08-03-hash-maps.html"><strong>8.3.</strong> Hash Maps</a></li></ul></li><li><a href="ch09-00-error-handling.html"><strong>9.</strong> Error Handling</a></li><li><ul class="section"><li><a href="ch09-01-unrecoverable-errors-with-panic.html"><strong>9.1.</strong> Unrecoverable Errors with <code>panic!</code></a></li><li><a href="ch09-02-recoverable-errors-with-result.html"><strong>9.2.</strong> Recoverable Errors with <code>Result</code></a></li><li><a href="ch09-03-to-panic-or-not-to-panic.html"><strong>9.3.</strong> To <code>panic!</code> or Not To <code>panic!</code></a></li></ul></li><li><a href="ch10-00-generics.html"><strong>10.</strong> Generic Types, Traits, and Lifetimes</a></li><li><ul class="section"><li><a href="ch10-01-syntax.html"><strong>10.1.</strong> Generic Data Types</a></li><li><a href="ch10-02-traits.html" class="active"><strong>10.2.</strong> Traits: Defining Shared Behavior</a></li><li><a href="ch10-03-lifetime-syntax.html"><strong>10.3.</strong> Validating References with Lifetimes</a></li></ul></li><li><a href="ch11-00-testing.html"><strong>11.</strong> Testing</a></li><li><ul class="section"><li><a href="ch11-01-writing-tests.html"><strong>11.1.</strong> Writing tests</a></li><li><a href="ch11-02-running-tests.html"><strong>11.2.</strong> Running tests</a></li><li><a href="ch11-03-test-organization.html"><strong>11.3.</strong> Test Organization</a></li></ul></li><li><a href="ch12-00-an-io-project.html"><strong>12.</strong> An I/O Project</a></li><li><ul class="section"><li><a href="ch12-01-accepting-command-line-arguments.html"><strong>12.1.</strong> Accepting Command Line Arguments</a></li><li><a href="ch12-02-reading-a-file.html"><strong>12.2.</strong> Reading a File</a></li><li><a href="ch12-03-improving-error-handling-and-modularity.html"><strong>12.3.</strong> Improving Error Handling and Modularity</a></li><li><a href="ch12-04-testing-the-librarys-functionality.html"><strong>12.4.</strong> Testing the Library's Functionality</a></li><li><a href="ch12-05-working-with-environment-variables.html"><strong>12.5.</strong> Working with Environment Variables</a></li><li><a href="ch12-06-writing-to-stderr-instead-of-stdout.html"><strong>12.6.</strong> Writing to <code>stderr</code> instead of <code>stdout</code></a></li></ul></li><li><a href="ch13-00-functional-features.html"><strong>13.</strong> Functional Language Features in Rust</a></li><li><ul class="section"><li><a href="ch13-01-closures.html"><strong>13.1.</strong> Closures</a></li><li><a href="ch13-02-iterators.html"><strong>13.2.</strong> Iterators</a></li><li><a href="ch13-03-improving-our-io-project.html"><strong>13.3.</strong> Improving our I/O Project</a></li><li><a href="ch13-04-performance.html"><strong>13.4.</strong> Performance</a></li></ul></li><li><a href="ch14-00-more-about-cargo.html"><strong>14.</strong> More about Cargo and Crates.io</a></li><li><ul class="section"><li><a href="ch14-01-release-profiles.html"><strong>14.1.</strong> Release Profiles</a></li><li><a href="ch14-02-publishing-to-crates-io.html"><strong>14.2.</strong> Publishing a Crate to Crates.io</a></li><li><a href="ch14-03-cargo-workspaces.html"><strong>14.3.</strong> Cargo Workspaces</a></li><li><a href="ch14-04-installing-binaries.html"><strong>14.4.</strong> Installing Binaries from Crates.io with <code>cargo install</code></a></li><li><a href="ch14-05-extending-cargo.html"><strong>14.5.</strong> Extending Cargo with Custom Commands</a></li></ul></li><li><a href="ch15-00-smart-pointers.html"><strong>15.</strong> Smart Pointers</a></li><li><a href="ch16-00-concurrency.html"><strong>16.</strong> Concurrency</a></li><li><a href="ch17-00-oop.html"><strong>17.</strong> Is Rust OOP?</a></li><li><a href="ch18-00-patterns.html"><strong>18.</strong> Patterns</a></li><li><a href="ch19-00-more-lifetimes.html"><strong>19.</strong> More Lifetimes</a></li><li><a href="ch20-00-advanced-types.html"><strong>20.</strong> Advanced Type System Features</a></li><li><a href="appendix-00.html"><strong>21.</strong> Appendix</a></li><li><ul class="section"><li><a href="appendix-01-keywords.html"><strong>21.1.</strong> Keywords</a></li><li><a href="appendix-02-operators.html"><strong>21.2.</strong> Operators</a></li><li><a href="appendix-03-derivable-traits.html"><strong>21.3.</strong> Derivable Traits</a></li><li><a href="appendix-04-nightly-rust.html"><strong>21.4.</strong> Nightly Rust</a></li><li><a href="appendix-05-macros.html"><strong>21.5.</strong> Macros</a></li></ul></li></ul>
         </div>
 
         <div id="page-wrapper" class="page-wrapper">
@@ -67,247 +67,410 @@
                 </div>
 
                 <div id="content" class="content">
-                    <a class="header" href="#traits" name="traits"><h2>Traits</h2></a>
-<p><em>Traits</em> are similar to a feature often called 'interfaces' in other languages,
-but are also different. Traits let us do another kind of abstraction: they let
-us abstract over <em>behavior</em> that types can have in common.</p>
-<p>When we use a generic type parameter, we are telling Rust that any type is
-valid in that location. When other code <em>uses</em> a value that could be of any
-type, we need to also tell Rust that the type has the functionality that we
-need. Traits let us specify that, for example, we need any type <code>T</code> that has
-methods defined on it that allow us to print a value of that type. This is
-powerful because we can still leave our definitions generic to allow use of
-many different types, but we can constrain the type at compile-time to types
-that have the behavior we need to be able to use.</p>
-<p>Listing 10-5 has an example definition of a trait named <code>Printable</code> with a
-method named <code>print</code>:</p>
+                    <a class="header" href="#traits-defining-shared-behavior" name="traits-defining-shared-behavior"><h2>Traits: Defining Shared Behavior</h2></a>
+<p>Traits allow us to use another kind of abstraction: they let us abstract over
+behavior that types can have in common. A <em>trait</em> tells the Rust compiler about
+functionality a particular type has and might share with other types. In
+situations where we use generic type parameters, we can use <em>trait bounds</em> to
+specify, at compile time, that the generic type may be any type that implements
+a trait and therefore has the behavior we want to use in that situation.</p>
+<blockquote>
+<p>Note: <em>Traits</em> are similar to a feature often called 'interfaces' in other
+languages, though with some differences.</p>
+</blockquote>
+<a class="header" href="#defining-a-trait" name="defining-a-trait"><h3>Defining a Trait</h3></a>
+<p>The behavior of a type consists of the methods we can call on that type.
+Different types share the same behavior if we can call the same methods on all
+of those types. Trait definitions are a way to group method signatures together
+in order to define a set of behaviors necessary to accomplish some purpose.</p>
+<p>For example, say we have multiple structs that hold various kinds and amounts
+of text: a <code>NewsArticle</code> struct that holds a news story filed in a particular
+place in the world, and a <code>Tweet</code> that can have at most 140 characters in its
+content along with metadata like whether it was a retweet or a reply to another
+tweet.</p>
+<p>We want to make a media aggregator library that can display summaries of data
+that might be stored in a <code>NewsArticle</code> or <code>Tweet</code> instance. The behavior we
+need each struct to have is that it's able to be summarized, and that we can
+ask for that summary by calling a <code>summary</code> method on an instance. Listing
+10-11 shows the definition of a <code>Summarizable</code> trait that expresses this
+concept:</p>
 <figure>
-<span class="filename">Filename: src/lib.rs</span>
-<pre><code class="language-rust">trait Printable {
-    fn print(&amp;self);
+<span class="filename">Filename: lib.rs</span>
+<pre><code class="language-rust">pub trait Summarizable {
+    fn summary(&amp;self) -&gt; String;
 }
 </code></pre>
 <figcaption>
-<p>Listing 10-5: A <code>Printable</code> trait definition with one method, <code>print</code></p>
+<p>Listing 10-11: Definition of a <code>Summarizable</code> trait that consists of the
+behavior provided by a <code>summary</code> method</p>
 </figcaption>
 </figure>
-<p>We declare a trait with the <code>trait</code> keyword, then the trait's name. In this
-case, our trait will describe types which can be printed. Inside of curly
-braces, we declare a method signature, but instead of providing an
-implementation inside curly braces, we put a semicolon after the signature. A
-trait can have multiple methods in its body, with the method signatures listed
-one per line and each line ending in a semicolon.</p>
-<p>Implementing a trait for a particular type looks similar to implementing
-methods on a type since it's also done with the <code>impl</code> keyword, but we specify
-the trait name as well. Inside the <code>impl</code> block, we specify definitions for the
-trait's methods in the context of the specific type. Listing 10-6 has an
-example of implementing the <code>Printable</code> trait from Listing 10-5 (that only has
-the <code>print</code> method) for a <code>Temperature</code> enum:</p>
+<p>We declare a trait with the <code>trait</code> keyword, then the trait's name, in this
+case <code>Summarizable</code>. Inside curly braces we declare the method signatures that
+describe the behaviors that types that implement this trait will need to have,
+in this case <code>fn summary(&amp;self) -&gt; String</code>. After the method signature, instead
+of providing an implementation within curly braces, we put a semicolon. Each
+type that implements this trait must then provide its own custom behavior for
+the body of the method, but the compiler will enforce that any type that has
+the <code>Summarizable</code> trait will have the method <code>summary</code> defined for it with
+this signature exactly.</p>
+<p>A trait can have multiple methods in its body, with the method signatures
+listed one per line and each line ending in a semicolon.</p>
+<a class="header" href="#implementing-a-trait-on-a-type" name="implementing-a-trait-on-a-type"><h3>Implementing a Trait on a Type</h3></a>
+<p>Now that we've defined the <code>Summarizable</code> trait, we can implement it on the
+types in our media aggregator that we want to have this behavior. Listing 10-12
+shows an implementation of the <code>Summarizable</code> trait on the <code>NewsArticle</code> struct
+that uses the headline, the author, and the location to create the return value
+of <code>summary</code>. For the <code>Tweet</code> struct, we've chosen to define <code>summary</code> as the
+username followed by the whole text of the tweet, assuming that tweet content
+is already limited to 140 characters.</p>
 <figure>
-<span class="filename">Filename: src/lib.rs</span>
-<pre><code class="language-rust"># trait Printable {
-#     fn print(&amp;self);
+<span class="filename">Filename: lib.rs</span>
+<pre><code class="language-rust"># pub trait Summarizable {
+#     fn summary(&amp;self) -&gt; String;
 # }
 #
-enum Temperature {
-    Celsius(i32),
-    Fahrenheit(i32),
+pub struct NewsArticle {
+    pub headline: String,
+    pub location: String,
+    pub author: String,
+    pub content: String,
 }
 
-impl Printable for Temperature {
-    fn print(&amp;self) {
-        match *self {
-            Temperature::Celsius(val) =&gt; println!(&quot;{}°C&quot;, val),
-            Temperature::Fahrenheit(val) =&gt; println!(&quot;{}°F&quot;, val),
-        }
+impl Summarizable for NewsArticle {
+    fn summary(&amp;self) -&gt; String {
+        format!(&quot;{}, by {} ({})&quot;, self.headline, self.author, self.location)
+    }
+}
+
+pub struct Tweet {
+    pub username: String,
+    pub content: String,
+    pub reply: bool,
+    pub retweet: bool,
+}
+
+impl Summarizable for Tweet {
+    fn summary(&amp;self) -&gt; String {
+        format!(&quot;{}: {}&quot;, self.username, self.content)
     }
 }
 </code></pre>
 <figcaption>
-<p>Listing 10-6: Implementing the <code>Printable</code> trait on a <code>Temperature</code> enum</p>
+<p>Listing 10-12: Implementing the <code>Summarizable</code> trait on the <code>NewsArticle</code> and
+<code>Tweet</code> types</p>
 </figcaption>
 </figure>
-<p>In the same way <code>impl</code> lets us define methods, we've used it to define methods
-that pertain to our trait. We can call methods that our trait has defined just
-like we can call other methods:</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
-<pre><code class="language-rust"># trait Printable {
-#     fn print(&amp;self);
-# }
-#
-# enum Temperature {
-#     Celsius(i32),
-#     Fahrenheit(i32),
-# }
-#
-# impl Printable for Temperature {
-#    fn print(&amp;self) {
-#        match *self {
-#             Temperature::Celsius(val) =&gt; println!(&quot;{}°C&quot;, val),
-#             Temperature::Fahrenheit(val) =&gt; println!(&quot;{}°F&quot;, val),
-#         }
-#     }
-# }
-#
-fn main() {
-    let t = Temperature::Celsius(37);
+<p>Implementing a trait on a type is similar to implementing methods that aren't
+related to a trait. The difference is after <code>impl</code>, we put the trait name that
+we want to implement, then say <code>for</code> and the name of the type that we want to
+implement the trait for. Within the <code>impl</code> block, we put the method signatures
+that the trait definition has defined, but instead of putting a semicolon after
+each signature, we put curly braces and fill in the method body with the
+specific behavior that we want the methods of the trait to have for the
+particular type.</p>
+<p>Once we've implemented the trait, we can call the methods on instances of
+<code>NewsArticle</code> and <code>Tweet</code> in the same manner that we call methods that aren't
+part of a trait:</p>
+<pre><code class="language-rust,ignore">let tweet = Tweet {
+    username: String::from(&quot;horse_ebooks&quot;),
+    content: String::from(&quot;of course, as you probably already know, people&quot;),
+    reply: false,
+    retweet: false,
+};
 
-    t.print();
+println!(&quot;1 new tweet: {}&quot;, tweet.summary());
+</code></pre>
+<p>This will print <code>1 new tweet: horse_ebooks: of course, as you probably already know, people</code>.</p>
+<p>Note that because we've defined the <code>Summarizable</code> trait and the <code>NewsArticle</code>
+and <code>Tweet</code> types all in the same <code>lib.rs</code> in Listing 10-12, they're all in the
+same scope. If this <code>lib.rs</code> is for a crate we've called <code>aggregator</code>, and
+someone else wants to use our crate's functionality plus implement the
+<code>Summarizable</code> trait on their <code>WeatherForecast</code> struct, their code would need
+to import the <code>Summarizable</code> trait into their scope first before they could
+implement it, like in Listing 10-13:</p>
+<figure>
+<span class="filename">Filename: lib.rs</span>
+<pre><code class="language-rust,ignore">extern crate aggregator;
+
+use aggregator::Summarizable;
+
+struct WeatherForecast {
+    high_temp: f64,
+    low_temp: f64,
+    chance_of_precipitation: f64,
+}
+
+impl Summarizable for WeatherForecast {
+    fn summary(&amp;self) -&gt; String {
+        format!(&quot;The high will be {}, and the low will be {}. The chance of
+        precipitation is {}%.&quot;, self.high_temp, self.low_temp,
+        self.chance_of_precipitation)
+    }
 }
 </code></pre>
-<p>Note that in order to use a trait's methods, the trait itself must be in scope.
-If the definition of <code>Printable</code> was in a module, the definition would need to
-be defined as <code>pub</code> and we would need to <code>use</code> the trait in the scope where we
-wanted to call the <code>print</code> method. This is because it's possible to have two
-traits that both define a method named <code>print</code>, and our <code>Temperature</code> enum might
-implement both. Rust wouldn't know which <code>print</code> method we wanted unless we
-brought the trait we wanted into our current scope with <code>use</code>.</p>
+<figcaption>
+<p>Listing 10-13: Bringing the <code>Summarizable</code> trait from our <code>aggregator</code> crate
+into scope in another crate</p>
+</figcaption>
+</figure>
+<p>This code also assumes <code>Summarizable</code> is a public trait, which it is because we
+put the <code>pub</code> keyword before <code>trait</code> in Listing 10-11.</p>
+<p>One restriction to note with trait implementations: we may implement a trait on
+a type as long as either the trait or the type are local to our crate. In other
+words, we aren't allowed to implement external traits on external types. We
+can't implement the <code>Display</code> trait on <code>Vec</code>, for example, since both <code>Display</code>
+and <code>Vec</code> are defined in the standard library. We are allowed to implement
+standard library traits like <code>Display</code> on a custom type like <code>Tweet</code> as part of
+our <code>aggregator</code> crate functionality. We could also implement <code>Summarizable</code> on
+<code>Vec</code> in our <code>aggregator</code> crate, since we've defined <code>Summarizable</code> there. This
+restriction is part of what's called the <em>orphan rule</em>, which you can look up
+if you're interested in type theory. Briefly, it's called the orphan rule
+because the parent type is not present. Without this rule, two crates could
+implement the same trait for the same type, and the two implementations would
+conflict: Rust wouldn't know which implementation to use. Because Rust enforces
+the orphan rule, other people's code can't break your code and vice versa.</p>
+<a class="header" href="#default-implementations" name="default-implementations"><h3>Default Implementations</h3></a>
+<p>Sometimes it's useful to have default behavior for some or all of the methods
+in a trait, instead of making every implementation on every type define custom
+behavior. When we implement the trait on a particular type, we can choose to
+keep or override each method's default behavior.</p>
+<p>Listing 10-14 shows how we could have chosen to specify a default string for
+the <code>summary</code> method of the <code>Summarize</code> trait instead of only choosing to only
+define the method signature like we did in Listing 10-11:</p>
+<figure>
+<span class="filename">Filename: lib.rs</span>
+<pre><code class="language-rust">pub trait Summarizable {
+    fn summary(&amp;self) -&gt; String {
+        String::from(&quot;(Read more...)&quot;)
+    }
+}
+</code></pre>
+<figcaption>
+<p>Listing 10-14: Definition of a <code>Summarizable</code> trait with a default
+implementation of the <code>summary</code> method</p>
+</figcaption>
+</figure>
+<p>If we wanted to use this default implementation to summarize instances of
+<code>NewsArticle</code> instead of defining a custom implementation like we did in
+Listing 10-12, we would specify an empty <code>impl</code> block:</p>
+<pre><code class="language-rust,ignore">impl Summarizable for NewsArticle {}
+</code></pre>
+<p>Even though we're no longer choosing to define the <code>summary</code> method on
+<code>NewsArticle</code> directly, since the <code>summary</code> method has a default implementation
+and we specified that <code>NewsArticle</code> implements the <code>Summarizable</code> trait, we can
+still call the <code>summary</code> method on an instance of <code>NewsArticle</code>:</p>
+<pre><code class="language-rust,ignore">let article = NewsArticle {
+    headline: String::from(&quot;Penguins win the Stanley Cup Championship!&quot;),
+    location: String::from(&quot;Pittsburgh, PA, USA&quot;),
+    author: String::from(&quot;Iceburgh&quot;),
+    content: String::from(&quot;The Pittsburgh Penguins once again are the best
+    hockey team in the NHL.&quot;),
+};
+
+println!(&quot;New article available! {}&quot;, article.summary());
+</code></pre>
+<p>This code prints <code>New article available! (Read more...)</code>.</p>
+<p>Changing the <code>Summarizable</code> trait to have a default implementation for
+<code>summary</code> does not require us to change anything about the implementations of
+<code>Summarizable</code> on <code>Tweet</code> in Listing 10-12 or <code>WeatherForecast</code> in Listing
+10-13: the syntax for overriding a default implementation is exactly the same
+as the syntax for implementing a trait method that doesn't have a default
+implementation.</p>
+<p>Default implementations are allowed to call the other methods in the same
+trait, even if those other methods don't have a default implementation. In this
+way, a trait can provide a lot of useful functionality and only require
+implementers to specify a small part of it. We could choose to have the
+<code>Summarizable</code> trait also have an <code>author_summary</code> method whose implementation
+is required, then a <code>summary</code> method that has a default implementation that
+calls the <code>author_summary</code> method:</p>
+<pre><code class="language-rust">pub trait Summarizable {
+    fn author_summary(&amp;self) -&gt; String;
+
+    fn summary(&amp;self) -&gt; String {
+        format!(&quot;(Read more from {}...)&quot;, self.author_summary())
+    }
+}
+</code></pre>
+<p>In order to use this version of <code>Summarizable</code>, we're only required to define
+<code>author_summary</code> when we implement the trait on a type:</p>
+<pre><code class="language-rust,ignore">impl Summarizable for Tweet {
+    fn author_summary(&amp;self) -&gt; String {
+        format!(&quot;@{}&quot;, self.username)
+    }
+}
+</code></pre>
+<p>Once we define <code>author_summary</code>, we can call <code>summary</code> on instances of the
+<code>Tweet</code> struct, and the default implementation of <code>summary</code> will call the
+definition of <code>author_summary</code> that we've provided.</p>
+<pre><code class="language-rust,ignore">let tweet = Tweet {
+    username: String::from(&quot;horse_ebooks&quot;),
+    content: String::from(&quot;of course, as you probably already know, people&quot;),
+    reply: false,
+    retweet: false,
+};
+
+println!(&quot;1 new tweet: {}&quot;, tweet.summary());
+</code></pre>
+<p>This will print <code>1 new tweet: (Read more from @horse_ebooks...)</code>.</p>
+<p>Note that it is not possible to call the default implementation from an
+overridden implementation.</p>
 <a class="header" href="#trait-bounds" name="trait-bounds"><h3>Trait Bounds</h3></a>
-<p>Defining traits with methods and implementing the trait methods on a particular
-type gives Rust more information than just defining methods on a type directly.
-The information Rust gets is that the type that implements the trait can be
-used in places where the code specifies that it needs some type that implements
-a trait. To illustrate this, Listing 10-7 has a <code>print_anything</code> function
-definition. This is similar to the <code>show_anything</code> function from Listing 10-4,
-but this function has a <em>trait bound</em> on the generic type <code>T</code> and uses the
-<code>print</code> function from the trait. A trait bound constrains the generic type to
-be any type that implements the trait specified, instead of any type at all.
-With the trait bound, we're then allowed to use the trait method <code>print</code> in the
-function body:</p>
-<figure>
-<span class="filename">Filename: src/lib.rs</figure>
-<pre><code class="language-rust"># trait Printable {
-#     fn print(&amp;self);
-# }
-#
-fn print_anything&lt;T: Printable&gt;(value: T) {
-    println!(&quot;I have something to print for you!&quot;);
-    value.print();
+<p>Now that we've defined traits and implemented those traits on types, we can use
+traits with generic type parameters. We can constrain generic types so that
+rather than being any type, the compiler will ensure that the type will be
+limited to those types that implement a particular trait and thus have the
+behavior that we need the types to have. This is called specifying <em>trait
+bounds</em> on a generic type.</p>
+<p>For example, in Listing 10-12, we implemented the <code>Summarizable</code> trait on the
+types <code>NewsArticle</code> and <code>Tweet</code>. We can define a function <code>notify</code> that calls
+the <code>summary</code> method on its parameter <code>item</code>, which is of the generic type <code>T</code>.
+To be able to call <code>summary</code> on <code>item</code> without getting an error, we can use
+trait bounds on <code>T</code> to specify that <code>item</code> must be of a type that implements
+the <code>Summarizable</code> trait:</p>
+<pre><code class="language-rust,ignore">pub fn notify&lt;T: Summarizable&gt;(item: T) {
+    println!(&quot;Breaking news! {}&quot;, item.summary());
 }
 </code></pre>
-<figcaption>
-<p>Listing 10-7: A <code>print_anything</code> function that uses the trait bound <code>Printable</code>
-on type <code>T</code></p>
-</figcaption>
-</figure>
-<p>Trait bounds are specified in the type name declarations within the angle
-brackets. After the name of the type that you want to apply the bound to, add a
-colon (<code>:</code>) and then specify the name of the trait. This function now specifies
-that it takes a <code>value</code> parameter that can be of any type, as long as that type
-implements the trait <code>Printable</code>. We need to specify the <code>Printable</code> trait in
-the type name declarations because we want to be able to call the <code>print</code>
-method that is part of the <code>Printable</code> trait.</p>
-<p>Now we are able to call the <code>print_anything</code> function from Listing 10-7 and
-pass it a <code>Temperature</code> instance as the <code>value</code> parameter, since we implemented
-the trait <code>Printable</code> on <code>Temperature</code> in Listing 10-6:</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
-<pre><code class="language-rust"># trait Printable {
-#     fn print(&amp;self);
-# }
-#
-# enum Temperature {
-#     Celsius(i32),
-#     Fahrenheit(i32),
-# }
-#
-# impl Printable for Temperature {
-#    fn print(&amp;self) {
-#        match *self {
-#             Temperature::Celsius(val) =&gt; println!(&quot;{}°C&quot;, val),
-#             Temperature::Fahrenheit(val) =&gt; println!(&quot;{}°F&quot;, val),
-#         }
-#     }
-# }
-#
-# fn print_anything&lt;T: Printable&gt;(value: T) {
-#     println!(&quot;I have something to print for you!&quot;);
-#     value.print();
-# }
-#
-fn main() {
-    let temperature = Temperature::Fahrenheit(98);
-    print_anything(temperature);
-}
+<p>Trait bounds go with the declaration of the generic type parameter, after a
+colon and within the angle brackets. Because of the trait bound on <code>T</code>, we can
+call <code>notify</code> and pass in any instance of <code>NewsArticle</code> or <code>Tweet</code>. The
+external code from Listing 10-13 that's using our <code>aggregator</code> crate can call
+our <code>notify</code> function and pass in an instance of <code>WeatherForecast</code>, since
+<code>Summarizable</code> is implemented for <code>WeatherForecast</code> as well. Code that calls
+<code>notify</code> with any other type, like a <code>String</code> or an <code>i32</code>, won't compile, since
+those types do not implement <code>Summarizable</code>.</p>
+<p>We can specify multiple trait bounds on a generic type by using <code>+</code>. If we
+needed to be able to use display formatting on the type <code>T</code> in a function as
+well as the <code>summary</code> method, we can use the trait bounds <code>T: Summarizable + Display</code>. This means <code>T</code> can be any type that implements both <code>Summarizable</code>
+and <code>Display</code>.</p>
+<p>For functions that have multiple generic type parameters, each generic has its
+own trait bounds. Specifying lots of trait bound information in the angle
+brackets between a function's name and its parameter list can get hard to read,
+so there's an alternate syntax for specifying trait bounds that lets us move
+them to a <code>where</code> clause after the function signature. So instead of:</p>
+<pre><code class="language-rust,ignore">fn some_function&lt;T: Display + Clone, U: Clone + Debug&gt;(t: T, u: U) -&gt; i32 {
 </code></pre>
-<p>If we implement the <code>Printable</code> trait on other types, we can use them with the
-<code>print_anything</code> method too. If we try to call <code>print_anything</code> with an <code>i32</code>,
-which does <em>not</em> implement the <code>Printable</code> trait, we get a compile-time error
-that looks like this:</p>
-<pre><code class="language-text">error[E0277]: the trait bound `{integer}: Printable` is not satisfied
-   |
-29 | print_anything(3);
-   | ^^^^^^^^^^^^^^ trait `{integer}: Printable` not satisfied
-   |
-   = help: the following implementations were found:
-   = help:   &lt;Point as Printable&gt;
-   = note: required by `print_anything`
-</code></pre>
-<p>Traits are an extremely useful feature of Rust. You'll almost never see generic
-functions without an accompanying trait bound. There are many traits in the
-standard library, and they're used for many, many different things. For
-example, our <code>Printable</code> trait is similar to one of those traits, <code>Display</code>.
-And in fact, that's how <code>println!</code> decides how to format things with <code>{}</code>. The
-<code>Display</code> trait has a <code>fmt</code> method that determines how to format something.</p>
-<p>Listing 10-8 shows our original example from Listing 10-3, but this time using
-the standard library's <code>Display</code> trait in the trait bound on the generic type
-in the <code>show_anything</code> function:</p>
-<figure>
-<span class="filename">Filename: src/lib.rs</span>
-<pre><code class="language-rust">use std::fmt::Display;
-
-fn show_anything&lt;T: Display&gt;(value: T) {
-    println!(&quot;I have something to show you!&quot;);
-    println!(&quot;It's: {}&quot;, value);
-}
-</code></pre>
-<figcaption>
-<p>Listing 10-8: The <code>show_anything</code> function with trait bounds</p>
-</figcaption>
-</figure>
-<p>Now that this function specifies that <code>T</code> can be any type as long as that type
-implements the <code>Display</code> trait, this code will compile.</p>
-<a class="header" href="#multiple-trait-bounds-and-where-syntax" name="multiple-trait-bounds-and-where-syntax"><h3>Multiple Trait Bounds and <code>where</code> Syntax</h3></a>
-<p>Each generic type can have its own trait bounds. The signature for a function
-that takes a type <code>T</code> that implements <code>Display</code> and a type <code>U</code> that implements
-<code>Printable</code> looks like:</p>
-<pre><code class="language-rust,ignore">fn some_function&lt;T: Display, U: Printable&gt;(value: T, other_value: U) {
-</code></pre>
-<p>To specify multiple trait bounds on one type, list the trait bounds in a list
-with a <code>+</code> between each trait. For example, here's the signature of a function
-that takes a type <code>T</code> that implements <code>Display</code> and <code>Clone</code> (which is another
-standard library trait we have mentioned):</p>
-<pre><code class="language-rust,ignore">fn some_function&lt;T: Display + Clone&gt;(value: T) {
-</code></pre>
-<p>When trait bounds start getting complicated, there is another syntax that's a
-bit cleaner: <code>where</code>. And in fact, the error we got when we ran the code from
-Listing 10-3 referred to it:</p>
-<pre><code class="language-text">help: consider adding a `where T: std::fmt::Display` bound
-</code></pre>
-<p>The <code>where</code> syntax moves the trait bounds after the function parameters list.
-This definition of <code>show_anything</code> means the exact same thing as the definition
-in Listing 10-8, just said a different way:</p>
-<p><span class="filename">Filename: src/lib.rs</span></p>
-<pre><code class="language-rust">use std::fmt::Display;
-
-fn show_anything&lt;T&gt;(value: T) where T: Display {
-    println!(&quot;I have something to show you!&quot;);
-    println!(&quot;It's: {}&quot;, value);
-}
-</code></pre>
-<p>Instead of <code>T: Display</code> going inside the angle brackets, they go after the
-<code>where</code> keyword at the end of the function signature. This can make complex
-signatures easier to read. The <code>where</code> clause and its parts can also go on new
-lines. Here's the signature of a function that takes three generic type
-parameters that each have multiple trait bounds:</p>
-<pre><code class="language-rust,ignore">fn some_function&lt;T, U, V&gt;(t: T, u: U, v: V)
+<p>We can write this instead with a <code>where</code> clause:</p>
+<pre><code class="language-rust,ignore">fn some_function&lt;T, U&gt;(t: T, u: U) -&gt; i32
     where T: Display + Clone,
-          U: Printable + Debug,
-          V: Clone + Printable
+          U: Clone + Debug
 {
 </code></pre>
-<p>Generic type parameters and trait bounds are part of Rust's rich type system.
-Another important kind of generic in Rust interacts with Rust's ownership and
-references features, and they're called <em>lifetimes</em>.</p>
+<p>This is less cluttered and makes this function's signature look more similar to
+a function without lots of trait bounds, in that the function name, parameter
+list, and return type are close together.</p>
+<a class="header" href="#fixing-the-largest-function-with-trait-bounds" name="fixing-the-largest-function-with-trait-bounds"><h3>Fixing the <code>largest</code> Function with Trait Bounds</h3></a>
+<p>So any time you want to use behavior defined by a trait on a generic, you need
+to specify that trait in the generic type parameter's type bounds. We can now
+fix the definition of the <code>largest</code> function that uses a generic type parameter
+from Listing 10-5! When we set that code aside, we were getting this error:</p>
+<pre><code class="language-text">error[E0369]: binary operation `&gt;` cannot be applied to type `T`
+  |
+5 |         if item &gt; largest {
+  |            ^^^^
+  |
+note: an implementation of `std::cmp::PartialOrd` might be missing for `T`
+</code></pre>
+<p>In the body of <code>largest</code> we wanted to be able to compare two values of type <code>T</code>
+using the greater-than operator. That operator is defined as a default method
+on the standard library trait <code>std::cmp::PartialOrd</code>. So in order to be able to
+use the greater-than operator, we need to specify <code>PartialOrd</code> in the trait
+bounds for <code>T</code> so that the <code>largest</code> function will work on slices of any type
+that can be compared. We don't need to bring <code>PartialOrd</code> into scope because
+it's in the prelude.</p>
+<pre><code class="language-rust,ignore">fn largest&lt;T: PartialOrd&gt;(list: &amp;[T]) -&gt; T {
+</code></pre>
+<p>If we try to compile this, we'll get different errors:</p>
+<pre><code class="language-text">error[E0508]: cannot move out of type `[T]`, a non-copy array
+ --&gt; src/main.rs:4:23
+  |
+4 |     let mut largest = list[0];
+  |         -----------   ^^^^^^^ cannot move out of here
+  |         |
+  |         hint: to prevent move, use `ref largest` or `ref mut largest`
+
+error[E0507]: cannot move out of borrowed content
+ --&gt; src/main.rs:6:9
+  |
+6 |     for &amp;item in list.iter() {
+  |         ^----
+  |         ||
+  |         |hint: to prevent move, use `ref item` or `ref mut item`
+  |         cannot move out of borrowed content
+</code></pre>
+<p>The key to this error is <code>cannot move out of type [T], a non-copy array</code>.
+With our non-generic versions of the <code>largest</code> function, we were only trying to
+find the largest <code>i32</code> or <code>char</code>. As we discussed in Chapter 4, types like
+<code>i32</code> and <code>char</code> that have a known size can be stored on the stack, so they
+implement the <code>Copy</code> trait. When we changed the <code>largest</code> function to be
+generic, it's now possible that the <code>list</code> parameter could have types in it
+that don't implement the <code>Copy</code> trait, which means we wouldn't be able to move
+the value out of <code>list[0]</code> and into the <code>largest</code> variable.</p>
+<p>If we only want to be able to call this code with types that are <code>Copy</code>, we can
+add <code>Copy</code> to the trait bounds of <code>T</code>! Listing 10-15 shows the complete code of
+a generic <code>largest</code> function that will compile as long as the types of the
+values in the slice that we pass into <code>largest</code> implement both the <code>PartialOrd</code>
+and <code>Copy</code> traits, like <code>i32</code> and <code>char</code>:</p>
+<figure>
+<span class="filename">Filename: src/main.rs</span>
+<pre><code class="language-rust">use std::cmp::PartialOrd;
+
+fn largest&lt;T: PartialOrd + Copy&gt;(list: &amp;[T]) -&gt; T {
+    let mut largest = list[0];
+
+    for &amp;item in list.iter() {
+        if item &gt; largest {
+            largest = item;
+        }
+    }
+
+    largest
+}
+
+fn main() {
+    let numbers = vec![34, 50, 25, 100, 65];
+
+    let result = largest(&amp;numbers);
+    println!(&quot;The largest number is {}&quot;, result);
+
+    let chars = vec!['y', 'm', 'a', 'q'];
+
+    let result = largest(&amp;chars);
+    println!(&quot;The largest char is {}&quot;, result);
+}
+</code></pre>
+<figcaption>
+<p>Listing 10-15: A working definition of the <code>largest</code> function that works on any
+generic type that implements the <code>PartialOrd</code> and <code>Copy</code> traits</p>
+</figcaption>
+</figure>
+<p>If we don't want to restrict our <code>largest</code> function to only types that
+implement the <code>Copy</code> trait, we could specify that <code>T</code> has the trait bound
+<code>Clone</code> instead of <code>Copy</code> and clone each value in the slice when we want the
+<code>largest</code> function to have ownership. Using the <code>clone</code> function means we're
+potentially making more heap allocations, though, and heap allocations can be
+slow if we're working with large amounts of data. Another way we could
+implement <code>largest</code> is for the function to return a reference to a <code>T</code> value in
+the slice. If we change the return type to be <code>&amp;T</code> instead of <code>T</code> and change
+the body of the function to return a reference, we wouldn't need either the
+<code>Clone</code> or <code>Copy</code> trait bounds and we wouldn't be doing any heap allocations.
+Try implementing these alternate solutions on your own!</p>
+<p>Traits and trait bounds let us write code that uses generic type parameters in
+order to reduce duplication, but still specify to the compiler exactly what
+behavior our code needs the generic type to have. Because we've given the trait
+bound information to the compiler, it can check that all the concrete types
+used with our code provide the right behavior. In dynamically typed languages,
+if we tried to call a method on a type that the type didn't implement, we'd get
+an error at runtime. Rust moves these errors to compile time so that we're
+forced to fix the problems before our code is even able to run. Additionally,
+we don't have to write code that checks for behavior at runtime since we've
+already checked at compile time, which improves performance compared to other
+languages without having to give up the flexibility of generics.</p>
+<p>There's another kind of generics that we've been using without even realizing
+it called <em>lifetimes</em>. Rather than helping us ensure that a type has the
+behavior we need it to have, lifetimes help us ensure that references are valid
+as long as we need them to be. Let's learn how lifetimes do that.</p>
 
                 </div>
 

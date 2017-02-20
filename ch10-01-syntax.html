@@ -2,7 +2,7 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <title>Syntax - The Rust Programming Language</title>
+        <title>Generic Data Types - The Rust Programming Language</title>
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -47,7 +47,7 @@
         </script>
 
         <div id="sidebar" class="sidebar">
-            <ul class="chapter"><li><a href="ch01-00-introduction.html"><strong>1.</strong> Introduction</a></li><li><ul class="section"><li><a href="ch01-01-installation.html"><strong>1.1.</strong> Installation</a></li><li><a href="ch01-02-hello-world.html"><strong>1.2.</strong> Hello, World!</a></li></ul></li><li><a href="ch02-00-guessing-game-tutorial.html"><strong>2.</strong> Guessing Game Tutorial</a></li><li><a href="ch03-00-common-programming-concepts.html"><strong>3.</strong> Common Programming Concepts</a></li><li><ul class="section"><li><a href="ch03-01-variables-and-mutability.html"><strong>3.1.</strong> Variables and Mutability</a></li><li><a href="ch03-02-data-types.html"><strong>3.2.</strong> Data Types</a></li><li><a href="ch03-03-how-functions-work.html"><strong>3.3.</strong> How Functions Work</a></li><li><a href="ch03-04-comments.html"><strong>3.4.</strong> Comments</a></li><li><a href="ch03-05-control-flow.html"><strong>3.5.</strong> Control Flow</a></li></ul></li><li><a href="ch04-00-understanding-ownership.html"><strong>4.</strong> Understanding Ownership</a></li><li><ul class="section"><li><a href="ch04-01-what-is-ownership.html"><strong>4.1.</strong> What is Ownership?</a></li><li><a href="ch04-02-references-and-borrowing.html"><strong>4.2.</strong> References &amp; Borrowing</a></li><li><a href="ch04-03-slices.html"><strong>4.3.</strong> Slices</a></li></ul></li><li><a href="ch05-00-structs.html"><strong>5.</strong> Structs</a></li><li><ul class="section"><li><a href="ch05-01-method-syntax.html"><strong>5.1.</strong> Method Syntax</a></li></ul></li><li><a href="ch06-00-enums.html"><strong>6.</strong> Enums and Pattern Matching</a></li><li><ul class="section"><li><a href="ch06-01-defining-an-enum.html"><strong>6.1.</strong> Defining an Enum</a></li><li><a href="ch06-02-match.html"><strong>6.2.</strong> The <code>match</code> Control Flow Operator</a></li><li><a href="ch06-03-if-let.html"><strong>6.3.</strong> Concise Control Flow with <code>if let</code></a></li></ul></li><li><a href="ch07-00-modules.html"><strong>7.</strong> Modules</a></li><li><ul class="section"><li><a href="ch07-01-mod-and-the-filesystem.html"><strong>7.1.</strong> <code>mod</code> and the Filesystem</a></li><li><a href="ch07-02-controlling-visibility-with-pub.html"><strong>7.2.</strong> Controlling Visibility with <code>pub</code></a></li><li><a href="ch07-03-importing-names-with-use.html"><strong>7.3.</strong> Importing Names with <code>use</code></a></li></ul></li><li><a href="ch08-00-common-collections.html"><strong>8.</strong> Common Collections</a></li><li><ul class="section"><li><a href="ch08-01-vectors.html"><strong>8.1.</strong> Vectors</a></li><li><a href="ch08-02-strings.html"><strong>8.2.</strong> Strings</a></li><li><a href="ch08-03-hash-maps.html"><strong>8.3.</strong> Hash Maps</a></li></ul></li><li><a href="ch09-00-error-handling.html"><strong>9.</strong> Error Handling</a></li><li><ul class="section"><li><a href="ch09-01-unrecoverable-errors-with-panic.html"><strong>9.1.</strong> Unrecoverable Errors with <code>panic!</code></a></li><li><a href="ch09-02-recoverable-errors-with-result.html"><strong>9.2.</strong> Recoverable Errors with <code>Result</code></a></li><li><a href="ch09-03-to-panic-or-not-to-panic.html"><strong>9.3.</strong> To <code>panic!</code> or Not To <code>panic!</code></a></li></ul></li><li><a href="ch10-00-generics.html"><strong>10.</strong> Generics</a></li><li><ul class="section"><li><a href="ch10-01-syntax.html" class="active"><strong>10.1.</strong> Syntax</a></li><li><a href="ch10-02-traits.html"><strong>10.2.</strong> Traits</a></li><li><a href="ch10-03-lifetime-syntax.html"><strong>10.3.</strong> Lifetime syntax</a></li></ul></li><li><a href="ch11-00-testing.html"><strong>11.</strong> Testing</a></li><li><ul class="section"><li><a href="ch11-01-writing-tests.html"><strong>11.1.</strong> Writing tests</a></li><li><a href="ch11-02-running-tests.html"><strong>11.2.</strong> Running tests</a></li><li><a href="ch11-03-test-organization.html"><strong>11.3.</strong> Test Organization</a></li></ul></li><li><a href="ch12-00-an-io-project.html"><strong>12.</strong> An I/O Project</a></li><li><ul class="section"><li><a href="ch12-01-accepting-command-line-arguments.html"><strong>12.1.</strong> Accepting Command Line Arguments</a></li><li><a href="ch12-02-reading-a-file.html"><strong>12.2.</strong> Reading a File</a></li><li><a href="ch12-03-improving-error-handling-and-modularity.html"><strong>12.3.</strong> Improving Error Handling and Modularity</a></li><li><a href="ch12-04-testing-the-librarys-functionality.html"><strong>12.4.</strong> Testing the Library's Functionality</a></li><li><a href="ch12-05-working-with-environment-variables.html"><strong>12.5.</strong> Working with Environment Variables</a></li><li><a href="ch12-06-writing-to-stderr-instead-of-stdout.html"><strong>12.6.</strong> Writing to <code>stderr</code> instead of <code>stdout</code></a></li></ul></li><li><a href="ch13-00-functional-features.html"><strong>13.</strong> Functional Language Features in Rust</a></li><li><ul class="section"><li><a href="ch13-01-closures.html"><strong>13.1.</strong> Closures</a></li><li><a href="ch13-02-iterators.html"><strong>13.2.</strong> Iterators</a></li><li><a href="ch13-03-improving-our-io-project.html"><strong>13.3.</strong> Improving our I/O Project</a></li><li><a href="ch13-04-performance.html"><strong>13.4.</strong> Performance</a></li></ul></li><li><a href="ch14-00-more-about-cargo.html"><strong>14.</strong> More about Cargo and Crates.io</a></li><li><ul class="section"><li><a href="ch14-01-release-profiles.html"><strong>14.1.</strong> Release Profiles</a></li><li><a href="ch14-02-publishing-to-crates-io.html"><strong>14.2.</strong> Publishing a Crate to Crates.io</a></li><li><a href="ch14-03-cargo-workspaces.html"><strong>14.3.</strong> Cargo Workspaces</a></li><li><a href="ch14-04-installing-binaries.html"><strong>14.4.</strong> Installing Binaries from Crates.io with <code>cargo install</code></a></li><li><a href="ch14-05-extending-cargo.html"><strong>14.5.</strong> Extending Cargo with Custom Commands</a></li></ul></li><li><a href="ch15-00-smart-pointers.html"><strong>15.</strong> Smart Pointers</a></li><li><a href="ch16-00-concurrency.html"><strong>16.</strong> Concurrency</a></li><li><a href="ch17-00-oop.html"><strong>17.</strong> Is Rust OOP?</a></li><li><a href="ch18-00-patterns.html"><strong>18.</strong> Patterns</a></li><li><a href="ch19-00-more-lifetimes.html"><strong>19.</strong> More Lifetimes</a></li><li><a href="ch20-00-advanced-types.html"><strong>20.</strong> Advanced Type System Features</a></li><li><a href="appendix-00.html"><strong>21.</strong> Appendix</a></li><li><ul class="section"><li><a href="appendix-01-keywords.html"><strong>21.1.</strong> Keywords</a></li><li><a href="appendix-02-operators.html"><strong>21.2.</strong> Operators</a></li><li><a href="appendix-03-derivable-traits.html"><strong>21.3.</strong> Derivable Traits</a></li><li><a href="appendix-04-nightly-rust.html"><strong>21.4.</strong> Nightly Rust</a></li><li><a href="appendix-05-macros.html"><strong>21.5.</strong> Macros</a></li></ul></li></ul>
+            <ul class="chapter"><li><a href="ch01-00-introduction.html"><strong>1.</strong> Introduction</a></li><li><ul class="section"><li><a href="ch01-01-installation.html"><strong>1.1.</strong> Installation</a></li><li><a href="ch01-02-hello-world.html"><strong>1.2.</strong> Hello, World!</a></li></ul></li><li><a href="ch02-00-guessing-game-tutorial.html"><strong>2.</strong> Guessing Game Tutorial</a></li><li><a href="ch03-00-common-programming-concepts.html"><strong>3.</strong> Common Programming Concepts</a></li><li><ul class="section"><li><a href="ch03-01-variables-and-mutability.html"><strong>3.1.</strong> Variables and Mutability</a></li><li><a href="ch03-02-data-types.html"><strong>3.2.</strong> Data Types</a></li><li><a href="ch03-03-how-functions-work.html"><strong>3.3.</strong> How Functions Work</a></li><li><a href="ch03-04-comments.html"><strong>3.4.</strong> Comments</a></li><li><a href="ch03-05-control-flow.html"><strong>3.5.</strong> Control Flow</a></li></ul></li><li><a href="ch04-00-understanding-ownership.html"><strong>4.</strong> Understanding Ownership</a></li><li><ul class="section"><li><a href="ch04-01-what-is-ownership.html"><strong>4.1.</strong> What is Ownership?</a></li><li><a href="ch04-02-references-and-borrowing.html"><strong>4.2.</strong> References &amp; Borrowing</a></li><li><a href="ch04-03-slices.html"><strong>4.3.</strong> Slices</a></li></ul></li><li><a href="ch05-00-structs.html"><strong>5.</strong> Structs</a></li><li><ul class="section"><li><a href="ch05-01-method-syntax.html"><strong>5.1.</strong> Method Syntax</a></li></ul></li><li><a href="ch06-00-enums.html"><strong>6.</strong> Enums and Pattern Matching</a></li><li><ul class="section"><li><a href="ch06-01-defining-an-enum.html"><strong>6.1.</strong> Defining an Enum</a></li><li><a href="ch06-02-match.html"><strong>6.2.</strong> The <code>match</code> Control Flow Operator</a></li><li><a href="ch06-03-if-let.html"><strong>6.3.</strong> Concise Control Flow with <code>if let</code></a></li></ul></li><li><a href="ch07-00-modules.html"><strong>7.</strong> Modules</a></li><li><ul class="section"><li><a href="ch07-01-mod-and-the-filesystem.html"><strong>7.1.</strong> <code>mod</code> and the Filesystem</a></li><li><a href="ch07-02-controlling-visibility-with-pub.html"><strong>7.2.</strong> Controlling Visibility with <code>pub</code></a></li><li><a href="ch07-03-importing-names-with-use.html"><strong>7.3.</strong> Importing Names with <code>use</code></a></li></ul></li><li><a href="ch08-00-common-collections.html"><strong>8.</strong> Common Collections</a></li><li><ul class="section"><li><a href="ch08-01-vectors.html"><strong>8.1.</strong> Vectors</a></li><li><a href="ch08-02-strings.html"><strong>8.2.</strong> Strings</a></li><li><a href="ch08-03-hash-maps.html"><strong>8.3.</strong> Hash Maps</a></li></ul></li><li><a href="ch09-00-error-handling.html"><strong>9.</strong> Error Handling</a></li><li><ul class="section"><li><a href="ch09-01-unrecoverable-errors-with-panic.html"><strong>9.1.</strong> Unrecoverable Errors with <code>panic!</code></a></li><li><a href="ch09-02-recoverable-errors-with-result.html"><strong>9.2.</strong> Recoverable Errors with <code>Result</code></a></li><li><a href="ch09-03-to-panic-or-not-to-panic.html"><strong>9.3.</strong> To <code>panic!</code> or Not To <code>panic!</code></a></li></ul></li><li><a href="ch10-00-generics.html"><strong>10.</strong> Generic Types, Traits, and Lifetimes</a></li><li><ul class="section"><li><a href="ch10-01-syntax.html" class="active"><strong>10.1.</strong> Generic Data Types</a></li><li><a href="ch10-02-traits.html"><strong>10.2.</strong> Traits: Defining Shared Behavior</a></li><li><a href="ch10-03-lifetime-syntax.html"><strong>10.3.</strong> Validating References with Lifetimes</a></li></ul></li><li><a href="ch11-00-testing.html"><strong>11.</strong> Testing</a></li><li><ul class="section"><li><a href="ch11-01-writing-tests.html"><strong>11.1.</strong> Writing tests</a></li><li><a href="ch11-02-running-tests.html"><strong>11.2.</strong> Running tests</a></li><li><a href="ch11-03-test-organization.html"><strong>11.3.</strong> Test Organization</a></li></ul></li><li><a href="ch12-00-an-io-project.html"><strong>12.</strong> An I/O Project</a></li><li><ul class="section"><li><a href="ch12-01-accepting-command-line-arguments.html"><strong>12.1.</strong> Accepting Command Line Arguments</a></li><li><a href="ch12-02-reading-a-file.html"><strong>12.2.</strong> Reading a File</a></li><li><a href="ch12-03-improving-error-handling-and-modularity.html"><strong>12.3.</strong> Improving Error Handling and Modularity</a></li><li><a href="ch12-04-testing-the-librarys-functionality.html"><strong>12.4.</strong> Testing the Library's Functionality</a></li><li><a href="ch12-05-working-with-environment-variables.html"><strong>12.5.</strong> Working with Environment Variables</a></li><li><a href="ch12-06-writing-to-stderr-instead-of-stdout.html"><strong>12.6.</strong> Writing to <code>stderr</code> instead of <code>stdout</code></a></li></ul></li><li><a href="ch13-00-functional-features.html"><strong>13.</strong> Functional Language Features in Rust</a></li><li><ul class="section"><li><a href="ch13-01-closures.html"><strong>13.1.</strong> Closures</a></li><li><a href="ch13-02-iterators.html"><strong>13.2.</strong> Iterators</a></li><li><a href="ch13-03-improving-our-io-project.html"><strong>13.3.</strong> Improving our I/O Project</a></li><li><a href="ch13-04-performance.html"><strong>13.4.</strong> Performance</a></li></ul></li><li><a href="ch14-00-more-about-cargo.html"><strong>14.</strong> More about Cargo and Crates.io</a></li><li><ul class="section"><li><a href="ch14-01-release-profiles.html"><strong>14.1.</strong> Release Profiles</a></li><li><a href="ch14-02-publishing-to-crates-io.html"><strong>14.2.</strong> Publishing a Crate to Crates.io</a></li><li><a href="ch14-03-cargo-workspaces.html"><strong>14.3.</strong> Cargo Workspaces</a></li><li><a href="ch14-04-installing-binaries.html"><strong>14.4.</strong> Installing Binaries from Crates.io with <code>cargo install</code></a></li><li><a href="ch14-05-extending-cargo.html"><strong>14.5.</strong> Extending Cargo with Custom Commands</a></li></ul></li><li><a href="ch15-00-smart-pointers.html"><strong>15.</strong> Smart Pointers</a></li><li><a href="ch16-00-concurrency.html"><strong>16.</strong> Concurrency</a></li><li><a href="ch17-00-oop.html"><strong>17.</strong> Is Rust OOP?</a></li><li><a href="ch18-00-patterns.html"><strong>18.</strong> Patterns</a></li><li><a href="ch19-00-more-lifetimes.html"><strong>19.</strong> More Lifetimes</a></li><li><a href="ch20-00-advanced-types.html"><strong>20.</strong> Advanced Type System Features</a></li><li><a href="appendix-00.html"><strong>21.</strong> Appendix</a></li><li><ul class="section"><li><a href="appendix-01-keywords.html"><strong>21.1.</strong> Keywords</a></li><li><a href="appendix-02-operators.html"><strong>21.2.</strong> Operators</a></li><li><a href="appendix-03-derivable-traits.html"><strong>21.3.</strong> Derivable Traits</a></li><li><a href="appendix-04-nightly-rust.html"><strong>21.4.</strong> Nightly Rust</a></li><li><a href="appendix-05-macros.html"><strong>21.5.</strong> Macros</a></li></ul></li></ul>
         </div>
 
         <div id="page-wrapper" class="page-wrapper">
@@ -67,136 +67,375 @@
                 </div>
 
                 <div id="content" class="content">
-                    <a class="header" href="#generics-syntax" name="generics-syntax"><h2>Generics Syntax</h2></a>
-<p>We've already hinted at the idea of generics in previous chapters, but we
-never dug into what exactly they are or how to use them. In places where we
-specify a type, like function signatures or structs, instead we can use
-<em>generics</em>. Generics are stand-ins that represent an abstract set instead of something concrete. In this section, we're going to cover generic <em>data types</em>.</p>
-<p>You can recognize when any kind of generics are used by the way that they fit
-into Rust's syntax: any time you see angle brackets, <code>&lt;&gt;</code>, you're dealing with
-generics. Types we've seen before, like in Chapter 8 where we discussed vectors
-with types like <code>Vec&lt;i32&gt;</code>, employ generics. The type that the standard library
-defines for vectors is <code>Vec&lt;T&gt;</code>. That <code>T</code> is called a <em>type parameter</em>, and it
-serves a similar function as parameters to functions: you fill in the parameter
-with a concrete type, and that determines how the overall type works. In the
-same way that a function like <code>foo(x: i32)</code> can be called with a specific value
-such as <code>foo(5)</code>, a <code>Vec&lt;T&gt;</code> can be created with a specific type, like
-<code>Vec&lt;i32&gt;</code>.</p>
-<a class="header" href="#duplicated-enum-definitions" name="duplicated-enum-definitions"><h3>Duplicated Enum Definitions</h3></a>
-<p>Let's dive into generic data types in more detail. We learned about how to use
-the <code>Option&lt;T&gt;</code> enum in Chapter 6, but we never examined its definition. Let's
-try to imagine how we'd write it! We'll start from duplicated code like we did
-in the &quot;Removing Duplication by Extracting a Function&quot; section. This time,
-we'll remove the duplication by extracting a generic data type instead of
-extracting a function, but the mechanics of doing the extraction will be
-similar. First, let's consider an <code>Option</code> enum with a <code>Some</code> variant that can
-only hold an <code>i32</code>. We'll call this enum <code>OptionalNumber</code>:</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
-<pre><code class="language-rust">enum OptionalNumber {
-    Some(i32),
-    None,
+                    <a class="header" href="#generic-data-types" name="generic-data-types"><h2>Generic Data Types</h2></a>
+<p>Using generics where we usually place types, like in function signatures or
+structs, lets us create definitions that we can use for many different concrete
+data types. Let's take a look at how to define functions, structs, enums, and
+methods using generics, and at the end of this section we'll discuss the
+performance of code using generics.</p>
+<a class="header" href="#using-generic-data-types-in-function-definitions" name="using-generic-data-types-in-function-definitions"><h3>Using Generic Data Types in Function Definitions</h3></a>
+<p>We can define functions that use generics in the signature of the function
+where the data types of the parameters and return value go. In this way, the
+code we write can be more flexible and provide more functionality to callers of
+our function, while not introducing code duplication.</p>
+<p>Continuing with our <code>largest</code> function, Listing 10-4 shows two functions
+providing the same functionality to find the largest value in a slice. The
+first function is the one we extracted in Listing 10-3 that finds the largest
+<code>i32</code> in a slice. The second function finds the largest <code>char</code> in a slice:</p>
+<figure>
+<span class="filename">Filename: src/main.rs</span>
+<pre><code class="language-rust">fn largest_i32(list: &amp;[i32]) -&gt; i32 {
+    let mut largest = list[0];
+
+    for &amp;item in list.iter() {
+        if item &gt; largest {
+            largest = item;
+        }
+    }
+
+    largest
+}
+
+fn largest_char(list: &amp;[char]) -&gt; char {
+    let mut largest = list[0];
+
+    for &amp;item in list.iter() {
+        if item &gt; largest {
+            largest = item;
+        }
+    }
+
+    largest
 }
 
 fn main() {
-    let number = OptionalNumber::Some(5);
-    let no_number = OptionalNumber::None;
+    let numbers = vec![34, 50, 25, 100, 65];
+
+    let result = largest_i32(&amp;numbers);
+    println!(&quot;The largest number is {}&quot;, result);
+#    assert_eq!(result, 100);
+
+    let chars = vec!['y', 'm', 'a', 'q'];
+
+    let result = largest_char(&amp;chars);
+    println!(&quot;The largest char is {}&quot;, result);
+#    assert_eq!(result, 'y');
 }
 </code></pre>
-<p>This works just fine for <code>i32</code>s. But what if we also wanted to store <code>f64</code>s? We
-would have to duplicate code to define a separate <code>Option</code> enum type for each
-type we wanted to be able to hold in the <code>Some</code> variants. For example, here is
-how we could define and use <code>OptionalFloatingPointNumber</code>:</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
-<pre><code class="language-rust">enum OptionalFloatingPointNumber {
-    Some(f64),
-    None,
+<figcaption>
+<p>Listing 10-4: Two functions that differ only in their names and the types in
+their signatures</p>
+</figcaption>
+</figure>
+<p>Here, the functions <code>largest_i32</code> and <code>largest_char</code> have the exact same body,
+so it would be nice if we could turn these two functions into one and get rid
+of the duplication. Luckily, we can do that by introducing a generic type
+parameter!</p>
+<p>To parameterize the types in the signature of the one function we're going to
+define, we need to create a name for the type parameter, just like how we give
+names for the value parameters to a function. We're going to choose the name
+<code>T</code>. Any identifier can be used as a type parameter name, but we're choosing
+<code>T</code> because Rust's type naming convention is CamelCase. Generic type parameter
+names also tend to be short by convention, often just one letter. Short for
+&quot;type&quot;, <code>T</code> is the default choice of most Rust programmers.</p>
+<p>When we use a parameter in the body of the function, we have to declare the
+parameter in the signature so that the compiler knows what that name in the
+body means. Similarly, when we use a type parameter name in a function
+signature, we have to declare the type parameter name before we use it. Type
+name declarations go in angle brackets between the name of the function and the
+parameter list.</p>
+<p>The function signature of the generic <code>largest</code> function we're going to define
+will look like this:</p>
+<pre><code class="language-rust,ignore">fn largest&lt;T&gt;(list: &amp;[T]) -&gt; T {
+</code></pre>
+<p>We would read this as: the function <code>largest</code> is generic over some type <code>T</code>. It
+has one parameter named <code>list</code>, and the type of <code>list</code> is a slice of values of
+type <code>T</code>. The <code>largest</code> function will return a value of the same type <code>T</code>.</p>
+<p>Listing 10-5 shows the unified <code>largest</code> function definition using the generic
+data type in its signature, and shows how we'll be able to call <code>largest</code> with
+either a slice of <code>i32</code> values or <code>char</code> values. Note that this code won't
+compile yet!</p>
+<figure>
+<span class="filename">Filename: src/main.rs</span>
+<pre><code class="language-rust,ignore">fn largest&lt;T&gt;(list: &amp;[T]) -&gt; T {
+    let mut largest = list[0];
+
+    for &amp;item in list.iter() {
+        if item &gt; largest {
+            largest = item;
+        }
+    }
+
+    largest
 }
 
 fn main() {
-    let number = OptionalFloatingPointNumber::Some(5.0);
-    let no_number = OptionalFloatingPointNumber::None;
+    let numbers = vec![34, 50, 25, 100, 65];
+
+    let result = largest(&amp;numbers);
+    println!(&quot;The largest number is {}&quot;, result);
+
+    let chars = vec!['y', 'm', 'a', 'q'];
+
+    let result = largest(&amp;chars);
+    println!(&quot;The largest char is {}&quot;, result);
 }
 </code></pre>
-<p>We've made the enum's name a bit long in order to drive the point home. With
-what we currently know how to do in Rust, we would have to write a unique type
-for every single kind of value we wanted to have either <code>Some</code> or <code>None</code> of. In
-other words, the idea of &quot;an optional value&quot; is a more abstract concept than one
-specific type. We want it to work for any type at all.</p>
-<a class="header" href="#removing-duplication-by-extracting-a-generic-data-type" name="removing-duplication-by-extracting-a-generic-data-type"><h3>Removing Duplication by Extracting a Generic Data Type</h3></a>
-<p>Let's see how to get from duplicated types to the generic type. Here are the
-definitions of our two enums side-by-side:</p>
-<pre><code class="language-text">enum OptionalNumber {   enum OptionalFloatingPointNumber {
-    Some(i32),              Some(f64),
-    None,                   None,
-}                       }
+<figcaption>
+<p>Listing 10-5: A definition of the <code>largest</code> function that uses generic type
+parameters but doesn't compile yet</p>
+</figcaption>
+</figure>
+<p>If we try to compile this code right now, we'll get this error:</p>
+<pre><code class="language-text">error[E0369]: binary operation `&gt;` cannot be applied to type `T`
+  |
+5 |         if item &gt; largest {
+  |            ^^^^
+  |
+note: an implementation of `std::cmp::PartialOrd` might be missing for `T`
 </code></pre>
-<p>Aside from the names, we have one line where the two definitions are very
-close, but still different: the line with the <code>Some</code> definitions. The only
-difference is the type of the data in that variant, <code>i32</code> and <code>f64</code>.</p>
-<p>Just like we can parameterize arguments to a function by choosing a name, we
-can parameterize the type by choosing a name. In this case, we've chosen the
-name <code>T</code>. We could choose any identifier here, but Rust style has type
-parameters follow the same style as types themselves: CamelCase. In addition,
-they tend to be short, often one letter. <code>T</code> is the traditional default choice,
-short for 'type'. Let's use that name in our <code>Some</code> variant definitions where
-the <code>i32</code> and <code>f64</code> types were:</p>
-<pre><code class="language-text">enum OptionalNumber {   enum OptionalFloatingPointNumber {
-    Some(T),                Some(T),
-    None,                   None,
-}                       }
+<p>The note mentions <code>std::cmp::PartialOrd</code>, which is a <em>trait</em>. We're going to
+talk about traits in the next section, but briefly, what this error is saying
+is that the body of <code>largest</code> won't work for all possible types that <code>T</code> could
+be; since we want to compare values of type <code>T</code> in the body, we can only use
+types that know how to be ordered. The standard library has defined the trait
+<code>std::cmp::PartialOrd</code> that types can implement to enable comparisons. We'll
+come back to traits and how to specify that a generic type has a particular
+trait in the next section, but let's set this example aside for a moment and
+explore other places we can use generic type parameters first.</p>
+<!-- Liz: this is the reason we had the topics in the order we did in the first
+draft of this chapter; it's hard to do anything interesting with generic types
+in functions unless you also know about traits and trait bounds. I think this
+ordering could work out okay, though, and keep a stronger thread with the
+`longest` function going through the whole chapter, but we do pause with a
+not-yet-compiling example here, which I know isn't ideal either. Let us know
+what you think. /Carol -->
+<a class="header" href="#using-generic-data-types-in-struct-definitions" name="using-generic-data-types-in-struct-definitions"><h3>Using Generic Data Types in Struct Definitions</h3></a>
+<p>We can define structs to use a generic type parameter in one or more of the
+struct's fields with the <code>&lt;&gt;</code> syntax too. Listing 10-6 shows the definition and
+use of a <code>Point</code> struct that can hold <code>x</code> and <code>y</code> coordinate values of any type:</p>
+<figure>
+<span class="filename">Filename: src/main.rs</span>
+<pre><code class="language-rust">struct Point&lt;T&gt; {
+    x: T,
+    y: T,
+}
+
+fn main() {
+    let integer = Point { x: 5, y: 10 };
+    let float = Point { x: 1.0, y: 4.0 };
+}
 </code></pre>
-<p>There's one problem, though: we've <em>used</em> <code>T</code>, but not defined it. This would
-be similar to using a parameter name in a function body without declaring it
-in the signature. We need to tell Rust that we've introduced a generic
-parameter. The syntax to do that is the angle brackets, like this:</p>
-<pre><code class="language-text">enum OptionalNumber&lt;T&gt; {   enum OptionalFloatingPointNumber&lt;T&gt; {
-    Some(T),                   Some(T),
-    None,                      None,
-}                          }
+<figcaption>
+<p>Listing 10-6: A <code>Point</code> struct that holds <code>x</code> and <code>y</code> values of type <code>T</code></p>
+</figcaption>
+</figure>
+<p>The syntax is similar to using generics in function definitions. First, we have
+to declare the name of the type parameter within angle brackets just after the
+name of the struct. Then we can use the generic type in the struct definition
+where we would specify concrete data types.</p>
+<p>Note that because we've only used one generic type in the definition of
+<code>Point</code>, what we're saying is that the <code>Point</code> struct is generic over some type
+<code>T</code>, and the fields <code>x</code> and <code>y</code> are <em>both</em> that same type, whatever it ends up
+being. If we try to create an instance of a <code>Point</code> that has values of
+different types, as in Listing 10-7, our code won't compile:</p>
+<figure>
+<span class="filename">Filename: src/main.rs</span>
+<pre><code class="language-rust,ignore">struct Point&lt;T&gt; {
+    x: T,
+    y: T,
+}
+
+fn main() {
+    let wont_work = Point { x: 5, y: 4.0 };
+}
 </code></pre>
-<p>The <code>&lt;&gt;</code>s after the enum name indicate a list of type parameters, just like
-<code>()</code> after a function name indicates a list of value parameters. Now the only
-difference between our two <code>enum</code>s is the name. Since we've made them generic,
-they're not specific to integers or floating point numbers anymore, so they can
-have the same name:</p>
-<pre><code class="language-text">enum Option&lt;T&gt; {    enum Option&lt;T&gt; {
-    Some(T),            Some(T),
-    None,               None,
-}                   }
+<figcaption>
+<p>Listing 10-7: The fields <code>x</code> and <code>y</code> must be the same type because both have
+the same generic data type <code>T</code></p>
+</figcaption>
+</figure>
+<p>If we try to compile this, we'll get the following error:</p>
+<pre><code class="language-text">error[E0308]: mismatched types
+ --&gt;
+  |
+7 |     let wont_work = Point { x: 5, y: 4.0 };
+  |                                      ^^^ expected integral variable, found
+  floating-point variable
+  |
+  = note: expected type `{integer}`
+  = note:    found type `{float}`
 </code></pre>
-<p>Now they're identical! We've made our type fully generic. This definition is
-also how <code>Option</code> is defined in the standard library. If we were to read this
-definition aloud, we'd say, &quot;<code>Option</code> is an <code>enum</code> with one type parameter,
-<code>T</code>. It has two variants: <code>Some</code>, which has a value with type <code>T</code>, and <code>None</code>,
-which has no value.&quot; We can now use the same <code>Option</code> type whether we're holding an <code>i32</code> or an <code>f64</code>:</p>
-<pre><code class="language-rust">let integer = Option::Some(5);
-let float = Option::Some(5.0);
+<p>When we assigned the integer value 5 to <code>x</code>, the compiler then knows for this
+instance of <code>Point</code> that the generic type <code>T</code> will be an integer. Then when we
+specified 4.0 for <code>y</code>, which is defined to have the same type as <code>x</code>, we get a
+type mismatch error.</p>
+<p>If we wanted to define a <code>Point</code> struct where <code>x</code> and <code>y</code> could have different
+types but still have those types be generic, we can use multiple generic type
+parameters. In listing 10-8, we've changed the definition of <code>Point</code> to be
+generic over types <code>T</code> and <code>U</code>. The field <code>x</code> is of type <code>T</code>, and the field <code>y</code>
+is of type <code>U</code>:</p>
+<figure>
+<span class="filename">Filename: src/main.rs</span>
+<pre><code class="language-rust">struct Point&lt;T, U&gt; {
+    x: T,
+    y: U,
+}
+
+fn main() {
+    let both_integer = Point { x: 5, y: 10 };
+    let both_float = Point { x: 1.0, y: 4.0 };
+    let integer_and_float = Point { x: 5, y: 4.0 };
+}
 </code></pre>
-<p>We've left in the <code>Option::</code> namespace for consistency with the previous
-examples, but since <code>use Option::*</code> is in the prelude, it's not needed. Usually
-using <code>Option</code> looks like this:</p>
+<figcaption>
+<p>Listing 10-8: A <code>Point</code> generic over two types so that <code>x</code> and <code>y</code> may be
+values of different types</p>
+</figcaption>
+</figure>
+<p>Now all of these instances of <code>Point</code> are allowed! You can use as many generic
+type parameters in a definition as you want, but using more than a few gets
+hard to read and understand. If you get to a point of needing lots of generic
+types, it's probably a sign that your code could use some restructuring to be
+separated into smaller pieces.</p>
+<a class="header" href="#using-generic-data-types-in-enum-definitions" name="using-generic-data-types-in-enum-definitions"><h3>Using Generic Data Types in Enum Definitions</h3></a>
+<p>Similarly to structs, enums can be defined to hold generic data types in their
+variants. We used the <code>Option&lt;T&gt;</code> enum provided by the standard library in
+Chapter 6, and now its definition should make more sense. Let's take another
+look:</p>
+<pre><code class="language-rust">enum Option&lt;T&gt; {
+    Some(T),
+    None,
+}
+</code></pre>
+<p>In other words, <code>Option&lt;T&gt;</code> is an enum generic in type <code>T</code>. It has two
+variants: <code>Some</code>, which holds one value of type <code>T</code>, and a <code>None</code> variant that
+doesn't hold any value. The standard library only has to have this one
+definition to support the creation of values of this enum that have any
+concrete type. The idea of &quot;an optional value&quot; is a more abstract concept than
+one specific type, and Rust lets us express this abstract concept without lots
+of duplication.</p>
+<p>Enums can use multiple generic types as well. The definition of the <code>Result</code>
+enum that we used in Chapter 9 is one example:</p>
+<pre><code class="language-rust">enum Result&lt;T, E&gt; {
+    Ok(T),
+    Err(E),
+}
+</code></pre>
+<p>The <code>Result</code> enum is generic over two types, <code>T</code> and <code>E</code>. <code>Result</code> has two
+variants: <code>Ok</code>, which holds a value of type <code>T</code>, and <code>Err</code>, which holds a value
+of type <code>E</code>. This definition makes it convenient to use the <code>Result</code> enum
+anywhere we have an operation that might succeed (and return a value of some
+type <code>T</code>) or fail (and return an error of some type <code>E</code>). Recall Listing 9-2
+when we opened a file: in that case, <code>T</code> was filled in with the type
+<code>std::fs::File</code> when the file was opened successfully and <code>E</code> was filled in
+with the type <code>std::io::Error</code> when there were problems opening the file.</p>
+<p>When you recognize situations in your code with multiple struct or enum
+definitions that differ only in the types of the values they hold, you can
+remove the duplication by using the same process we used with the function
+definitions to introduce generic types instead.</p>
+<a class="header" href="#using-generic-data-types-in-method-definitions" name="using-generic-data-types-in-method-definitions"><h3>Using Generic Data Types in Method Definitions</h3></a>
+<p>Like we did in Chapter 5, we can implement methods on structs and enums that
+have generic types in their definitions. Listing 10-9 shows the <code>Point&lt;T&gt;</code>
+struct we defined in Listing 10-6. We've then defined a method named <code>x</code> on
+<code>Point&lt;T&gt;</code> that returns a reference to the data in the field <code>x</code>:</p>
+<figure>
+<span class="filename">Filename: src/main.rs</span>
+<pre><code class="language-rust">struct Point&lt;T&gt; {
+    x: T,
+    y: T,
+}
+
+impl&lt;T&gt; Point&lt;T&gt; {
+    fn x(&amp;self) -&gt; &amp;T {
+        &amp;self.x
+    }
+}
+
+fn main() {
+    let p = Point { x: 5, y: 10 };
+
+    println!(&quot;p.x = {}&quot;, p.x());
+}
+</code></pre>
+<figcaption>
+<p>Listing 10-9: Implementing a method named <code>x</code> on the <code>Point&lt;T&gt;</code> struct that
+will return a reference to the <code>x</code> field, which is of type <code>T</code>.</p>
+</figcaption>
+</figure>
+<p>Note that we have to declare <code>T</code> just after <code>impl</code>, so that we can use it when
+we specify that we're implementing methods on the type <code>Point&lt;T&gt;</code>.</p>
+<p>Generic type parameters in a struct definition aren't always the same generic
+type parameters you want to use in that struct's method signatures. Listing
+10-10 defines a method <code>mixup</code> on the <code>Point&lt;T, U&gt;</code> struct from Listing 10-8.
+The method takes another <code>Point</code> as a parameter, which might have different
+types than the <code>self</code> <code>Point</code> that we're calling <code>mixup</code> on. The method creates
+a new <code>Point</code> instance that has the <code>x</code> value from the <code>self</code> <code>Point</code> (which is
+of type <code>T</code>) and the <code>y</code> value from the passed-in <code>Point</code> (which is of type
+<code>W</code>):</p>
+<figure>
+<span class="filename">Filename: src/main.rs</span>
+<pre><code class="language-rust">struct Point&lt;T, U&gt; {
+    x: T,
+    y: U,
+}
+
+impl&lt;T, U&gt; Point&lt;T, U&gt; {
+    fn mixup&lt;V, W&gt;(&amp;self, other: &amp;Point&lt;V, W&gt;) -&gt; Point&lt;T, W&gt; {
+        Point {
+            x: self.x,
+            y: other.y,
+        }
+    }
+}
+
+fn main() {
+    let p1 = Point { x: 5, y: 10.4 };
+    let p2 = Point { x: &quot;Hello&quot;, y: 'c'};
+
+    let p3 = p1.mixup(p2);
+
+    println!(&quot;p3.x = {}, p3.y = {}&quot;, p3.x, p3.y);
+}
+</code></pre>
+<figcaption>
+<p>Listing 10-10: Methods that use different generic types than their struct's
+definition</p>
+</figcaption>
+</figure>
+<p>In <code>main</code>, we've defined a <code>Point</code> that has an <code>i32</code> for <code>x</code> (with value <code>5</code>)
+and an <code>f64</code> for <code>y</code> (with value <code>10.4</code>). <code>p2</code> is a <code>Point</code> that has a string
+slice for <code>x</code> (with value <code>&quot;Hello&quot;</code>) and a <code>char</code> for <code>y</code> (with value <code>c</code>).
+Calling <code>mixup</code> on <code>p1</code> with the argument <code>p2</code> gives us <code>p3</code>, which will have
+an <code>i32</code> for <code>x</code>, since <code>x</code> came from <code>p1</code>. <code>p3</code> will have a <code>char</code> for <code>y</code>,
+since <code>y</code> came from <code>p2</code>. The <code>println!</code> will print <code>p3.x = 5, p3.y = c</code>.</p>
+<p>Note that the generic parameters <code>T</code> and <code>U</code> are declared after <code>impl</code>, since
+they go with the struct definition. The generic parameters <code>V</code> and <code>W</code> are
+declared after <code>fn mixup</code>, since they are only relevant to the method.</p>
+<a class="header" href="#performance-of-code-using-generics" name="performance-of-code-using-generics"><h3>Performance of Code Using Generics</h3></a>
+<p>You may have been reading this section and wondering if there's a run-time cost
+to using generic type parameters. Good news: the way that Rust has implemented
+generics means that your code will not run any slower than if you had specified
+concrete types instead of generic type parameters!</p>
+<p>Rust accomplishes this by performing <em>monomorphization</em> of code using generics
+at compile time. Monomorphization is the process of turning generic code into
+specific code with the concrete types that are actually used filled in.</p>
+<p>What the compiler does is the opposite of the steps that we performed to create
+the generic function in Listing 10-5. The compiler looks at all the places that
+generic code is called and generates code for the concrete types that the
+generic code is called with.</p>
+<p>Let's work through an example that uses the standard library's <code>Option</code> enum:</p>
 <pre><code class="language-rust">let integer = Some(5);
 let float = Some(5.0);
 </code></pre>
-<p>When you recognize situations with almost-duplicate types like this in your
-code, you can follow this process to reduce duplication using generics.</p>
-<a class="header" href="#monomorphization-at-compile-time" name="monomorphization-at-compile-time"><h3>Monomorphization at Compile Time</h3></a>
-<p>Understanding this refactoring process is also useful in understanding how
-generics work behind the scenes: the compiler does the exact opposite of this
-process when compiling your code. <em>Monomorphization</em> means taking code that
-uses generic type parameters and generating code that is specific for each
-concrete type that is used with the generic code. Monomorphization is why
-Rust's generics are extremely efficient at runtime. Consider this code that
-uses the standard library's <code>Option</code>:</p>
-<pre><code class="language-rust">let integer = Some(5);
-let float = Some(5.0);
-</code></pre>
-<p>When Rust compiles this code, it will perform monomorphization. What this means
-is the compiler will see that we've used two kinds of <code>Option&lt;T&gt;</code>: one where
-<code>T</code> is <code>i32</code>, and one where <code>T</code> is <code>f64</code>. As such, it will expand the generic
-definition of <code>Option&lt;T&gt;</code> into <code>Option_i32</code> and <code>Option_f64</code>, thereby replacing
-the generic definition with the specific ones. The more specific version looks
-like the duplicated code we started with at the beginning of this section:</p>
+<p>When Rust compiles this code, it will perform monomorphization. The compiler
+will read the values that have been passed to <code>Option</code> and see that we have two
+kinds of <code>Option&lt;T&gt;</code>: one is <code>i32</code>, and one is <code>f64</code>. As such, it will expand
+the generic definition of <code>Option&lt;T&gt;</code> into <code>Option_i32</code> and <code>Option_f64</code>,
+thereby replacing the generic definition with the specific ones.</p>
+<p>The monomorphized version of our code that the compiler generates looks like
+this, with the uses of the generic <code>Option</code> replaced with the specific
+definitions created by the compiler:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust">enum Option_i32 {
     Some(i32),
@@ -213,146 +452,11 @@ fn main() {
     let float = Option_f64::Some(5.0);
 }
 </code></pre>
-<p>In other words, we can write the non-duplicated form that uses generics in our
-code, but Rust will compile that into code that acts as though we wrote the
-specific type out in each instance. This means we pay no runtime cost for using
-generics; it's just like we duplicated each particular definition.</p>
-<a class="header" href="#generic-structs" name="generic-structs"><h3>Generic Structs</h3></a>
-<p>In a similar fashion as we did with enums, we can use <code>&lt;&gt;</code>s with structs as
-well in order to define structs that have a generic type parameter in one or
-more of their fields. Generic structs also get monomorphized into specialized
-types at compile time. Listing 10-2 shows the definition and use of a <code>Point</code>
-struct that could hold <code>x</code> and <code>y</code> coordinate values that are any type:</p>
-<figure>
-<span class="filename">Filename: src/main.rs</span>
-<pre><code class="language-rust">struct Point&lt;T&gt; {
-    x: T,
-    y: T,
-}
-
-fn main() {
-    let integer = Point { x: 5, y: 10 };
-    let float = Point { x: 1.0, y: 4.0 };
-}
-</code></pre>
-<figcaption>
-<p>Listing 10-2: A <code>Point</code> struct that holds <code>x</code> and <code>y</code> values of type <code>T</code></p>
-</figcaption>
-</figure>
-<p>The syntax is the same with structs: add a <code>&lt;T&gt;</code> after the name of the struct,
-then use <code>T</code> in the definition where you want to use that generic type instead
-of a specific type.</p>
-<a class="header" href="#multiple-type-parameters" name="multiple-type-parameters"><h3>Multiple Type Parameters</h3></a>
-<p>Note that in the <code>Point</code> definition in Listing 10-2, we've used the same <code>T</code>
-parameter for both fields. This means <code>x</code> and <code>y</code> must always be values of the
-same type. Trying to instantiate a <code>Point</code> that uses an <code>i32</code> for <code>x</code> and an
-<code>f64</code> for <code>y</code>, like this:</p>
-<pre><code class="language-rust,ignore">let p = Point { x: 5, y: 20.0 };
-</code></pre>
-<p>results in a compile-time error that indicates the type of <code>y</code> must match the
-type of <code>x</code>:</p>
-<pre><code class="language-text">error[E0308]: mismatched types
-  |
-7 | let p = Point { x: 5, y: 20.0 };
-  |                          ^^^^ expected integral variable, found floating-point variable
-  |
-  = note: expected type `{integer}`
-  = note:    found type `{float}`
-</code></pre>
-<p>If we need to be able to have fields with generic but different types, we can
-declare multiple type parameters within the angle brackets, separated by a
-comma. Listing 10-3 shows how to define a <code>Point</code> that can have different types
-for <code>x</code> and <code>y</code>:</p>
-<figure>
-<span class="filename">Filename: src/main.rs</span>
-<pre><code class="language-rust">struct Point&lt;X, Y&gt; {
-    x: X,
-    y: Y,
-}
-
-fn main() {
-    let integer = Point { x: 5, y: 10 };
-    let float = Point { x: 1.0, y: 4.0 };
-    let p = Point { x: 5, y: 20.0 };
-}
-</code></pre>
-<figcaption>
-<p>Listing 10-3: A <code>Point</code> struct that holds an <code>x</code> value of type <code>X</code> and a <code>y</code>
-value of type <code>Y</code></p>
-</figcaption>
-</figure>
-<p>Now <code>x</code> will have the type of <code>X</code>, and <code>y</code> will have the type of <code>Y</code>, and we
-can instantiate a <code>Point</code> with an <code>i32</code> for <code>x</code> and an <code>f64</code> for <code>y</code>.</p>
-<p>We can make <code>enum</code>s with multiple type parameters as well. Recall the enum
-<code>Result&lt;T, E&gt;</code> from Chapter 9 that we used for recoverable errors. Here's its
-definition:</p>
-<pre><code class="language-rust">enum Result&lt;T, E&gt; {
-    Ok(T),
-    Err(E),
-}
-</code></pre>
-<p>Each variant stores a different kind of information, and they're both generic.</p>
-<p>You can have as many type parameters as you'd like. Similarly to parameters of
-values in function signatures, if you have a lot of parameters, the code can
-get quite confusing, so try to keep the number of parameters defined in any one
-type small if you can.</p>
-<a class="header" href="#generic-functions-and-methods" name="generic-functions-and-methods"><h3>Generic Functions and Methods</h3></a>
-<p>In a similar way to data structures, we can use the <code>&lt;&gt;</code> syntax in function or
-method definitions. The angle brackets for type parameters go after the
-function or method name and before the parameter list in parentheses:</p>
-<pre><code class="language-rust">fn generic_function&lt;T&gt;(value: T) {
-    // code goes here
-}
-</code></pre>
-<p>We can use the same process that we used to refactor duplicated type
-definitions using generics to refactor duplicated function definitions using
-generics. Consider these two side-by-side function signatures that differ in
-the type of <code>value</code>:</p>
-<pre><code class="language-text">fn takes_integer(value: i32) {          fn takes_float(value: f64) {
-    // code goes here                       // code goes here
-}                                       }
-</code></pre>
-<p>We can add a type parameter list that declares the generic type <code>T</code> after the
-function names, then use <code>T</code> where the specific <code>i32</code> and <code>f64</code> types were:</p>
-<pre><code class="language-text">fn takes_integer&lt;T&gt;(value: T) {       fn takes_float&lt;T&gt;(value: T) {
-    // code goes here                     // code goes here
-}                                     }
-</code></pre>
-<p>At this point, only the names differ, so we could unify the two functions into
-one:</p>
-<pre><code class="language-rust,ignore">fn takes&lt;T&gt;(value: T) {
-    // code goes here
-}
-</code></pre>
-<p>There's one problem though. We've got some function <em>definitions</em> that work,
-but if we try to use <code>value</code> in code in the function body, we'll get an
-error. For example, the function definition in Listing 10-4 tries to print out
-<code>value</code> in its body:</p>
-<figure>
-<span class="filename">Filename: src/lib.rs</span>
-<pre><code class="language-rust,ignore">fn show_anything&lt;T&gt;(value: T) {
-    println!(&quot;I have something to show you!&quot;);
-    println!(&quot;It's: {}&quot;, value);
-}
-</code></pre>
-<figcaption>
-<p>Listing 10-4: A <code>show_anything</code> function definition that does not yet compile</p>
-</figcaption>
-</figure>
-<p>Compiling this definition results in an error:</p>
-<pre><code class="language-text">    error[E0277]: the trait bound `T: std::fmt::Display` is not satisfied
- --&gt; &lt;anon&gt;:3:37
-  |
-3 |     println!(&quot;It's: {}&quot;, value);
-  |                          ^^^^^ trait `T: std::fmt::Display` not satisfied
-  |
-  = help: consider adding a `where T: std::fmt::Display` bound
-  = note: required by `std::fmt::Display::fmt`
-
-error: aborting due to previous error(s)
-</code></pre>
-<p>This error mentions something we haven't learned about yet: traits. In the next
-section, we'll learn how to make this compile.</p>
+<p>We can write the non-duplicated code using generics, and Rust will compile that
+into code that specifies the type in each instance. That means we pay no
+runtime cost for using generics; when the code runs, it performs just like it
+would if we had duplicated each particular definition by hand. The process of
+monomorphization is what makes Rust's generics extremely efficient at runtime.</p>
 
                 </div>
 
