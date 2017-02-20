@@ -1,10 +1,10 @@
 ## Unrecoverable Errors with `panic!`
 
-Sometimes, bad things happen, and there's nothing that you can do about it. For
+Sometimes, bad things happen, and there’s nothing that you can do about it. For
 these cases, Rust has the `panic!` macro. When this macro executes, your
 program will print a failure message, unwind and clean up the stack, and then
 quit. The most common situation this occurs in is when a bug of some kind has
-been detected and it's not clear to the programmer how to handle the error.
+been detected and it’s not clear to the programmer how to handle the error.
 
 > #### Unwinding
 > By default, when a `panic!` occurs, the program starts
@@ -33,7 +33,7 @@ fn main() {
 }
 ```
 
-If you run it, you'll see something like this:
+If you run it, you’ll see something like this:
 
 ```text
 $ cargo run
@@ -47,19 +47,19 @@ error: Process didn't exit successfully: `target/debug/panic` (exit code: 101)
 
 The last three lines contain the error message caused by the call to `panic!`.
 The first line shows our panic message and the place in our source code where
-the panic occurred: `src/main.rs:2` indicates that it's the second line of our
-*main.rs* file.
+the panic occurred: *src/main.rs:2* indicates that it’s the second line of our
+*src/main.rs* file.
 
 In this case, the line indicated is part of our code, and if we go to that line
 we see the `panic!` macro call. In other cases, the `panic!` call might be in
 code that our code calls. The filename and line number reported by the error
-message will be someone else's code where the `panic!` macro is called, not the
+message will be someone else’s code where the `panic!` macro is called, not the
 line of our code that eventually led to the `panic!`. We can use the backtrace
 of the functions the `panic!` call came from to figure this out.
 
 ### Using a `panic!` Backtrace
 
-Let's look at another example to see what it's like when a `panic!` call comes
+Let’s look at another example to see what it’s like when a `panic!` call comes
 from a library because of a bug in our code instead of from our code calling
 the macro directly:
 
@@ -79,7 +79,7 @@ return an element, but if you pass an invalid index, there's no element that
 Rust could return here that would be correct.
 
 Other languages like C will attempt to give you exactly what you asked for in
-this situation, even though it isn't what you want: you'll get whatever is at
+this situation, even though it isn’t what you want: you’ll get whatever is at
 the location in memory that would correspond to that element in the vector,
 even though the memory doesn't belong to the vector. This is called a *buffer
 overread*, and can lead to security vulnerabilities if an attacker can
@@ -87,8 +87,8 @@ manipulate the index in such a way as to read data they shouldn't be allowed to
 that is stored after the array.
 
 In order to protect your program from this sort of vulnerability, if you try to
-read an element at an index that doesn't exist, Rust will stop execution and
-refuse to continue. Let's try it and see:
+read an element at an index that doesn’t exist, Rust will stop execution and
+refuse to continue. Let’s try it and see:
 
 ```text
 $ cargo run
@@ -158,22 +158,22 @@ That's a lot of output! Line 11 of the backtrace points to the line in our
 project causing the problem: `src/main.rs`, line four. A backtrace is a list of
 all the functions that have been called to get to this point. Backtraces in
 Rust work like they do in other languages: the key to reading the backtrace is
-to start from the top and read until you see files you wrote. That's the spot
+to start from the top and read until you see files you wrote. That’s the spot
 where the problem originated. The lines above the lines mentioning your files
 are code that your code called; the lines below are code that called your code.
 These lines might include core Rust code, standard library code, or crates that
-you're using.
+you’re using.
 
-If we don't want our program to panic, the location pointed to by the first
+If we don’t want our program to panic, the location pointed to by the first
 line mentioning a file we wrote is where we should start investigating in order
 to figure out how we got to this location with values that caused the panic. In
 our example where we deliberately wrote code that would panic in order to
 demonstrate how to use backtraces, the way to fix the panic is to not try to
 request an element at index 100 from a vector that only contains three items.
-When your code panics in the future, you'll need to figure out for your
+When your code panics in the future, you’ll need to figure out for your
 particular case what action the code is taking with what values that causes the
 panic and what the code should do instead.
 
-We'll come back to `panic!` and when we should and should not use these methods
-later in the chapter. Next, we'll now look at how to recover from an error with
+We’ll come back to `panic!` and when we should and should not use these methods
+later in the chapter. Next, we’ll now look at how to recover from an error with
 `Result`.

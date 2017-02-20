@@ -1,13 +1,13 @@
 ## Recoverable Errors with `Result`
 
-Most errors aren't serious enough to require the program to stop entirely.
-Sometimes, when a function fails, it's for a reason that we can easily
+Most errors aren’t serious enough to require the program to stop entirely.
+Sometimes, when a function fails, it’s for a reason that we can easily
 interpret and respond to. For example, if we try to open a file and that
-operation fails because the file doesn't exist, we might want to create the
+operation fails because the file doesn’t exist, we might want to create the
 file instead of terminating the process.
 
-Recall from Chapter 2 the section on "Handling Potential Failure with the
-`Result` Type" that the `Result` enum is defined as having two variants, `Ok`
+Recall from Chapter 2 the section on “Handling Potential Failure with the
+`Result` Type” that the `Result` enum is defined as having two variants, `Ok`
 and `Err`, as follows:
 
 ```rust
@@ -17,7 +17,7 @@ enum Result<T, E> {
 }
 ```
 
-The `T` and `E` are generic type parameters; we'll go into generics in more
+The `T` and `E` are generic type parameters; we’ll go into generics in more
 detail in Chapter 10. What you need to know right now is that `T` represents
 the type of the value that will be returned in a success case within the `Ok`
 variant, and `E` represents the type of the error that will be returned in a
@@ -130,9 +130,9 @@ variable `f`. After the `match`, we can then use the file handle for reading or
 writing.
 
 The other arm of the `match` handles the case where we get an `Err` value from
-`File::open`. In this example, we've chosen to call the `panic!` macro. If
-there's no file named `hello.txt` in our current directory and we run this
-code, we'll see the following output from the `panic!` macro:
+`File::open`. In this example, we’ve chosen to call the `panic!` macro. If
+there’s no file named *hello.txt* in our current directory and we run this
+code, we’ll see the following output from the `panic!` macro:
 
 ```text
 thread 'main' panicked at 'There was a problem opening the file: Error { repr:
@@ -142,12 +142,12 @@ Os { code: 2, message: "No such file or directory" } }', src/main.rs:8
 ### Matching on Different Errors
 
 The code in Listing 9-3 will `panic!` no matter the reason that `File::open`
-failed. What we'd really like to do instead is take different actions for
-different failure reasons: if `File::open` failed because the file doesn't
+failed. What we’d really like to do instead is take different actions for
+different failure reasons: if `File::open` failed because the file doesn’t
 exist, we want to create the file and return the handle to the new file. If
-`File::open` failed for any other reason, for example because we didn't have
+`File::open` failed for any other reason, for example because we didn’t have
 permission to open the file, we still want to `panic!` in the same way as we
-did in Listing 9-3. Let's look at Listing 9-4, which adds another arm to the
+did in Listing 9-3. Let’s look at Listing 9-4, which adds another arm to the
 `match`:
 
 <figure>
@@ -186,12 +186,12 @@ The type of the value that `File::open` returns inside the `Err` variant is
 has a method `kind` that we can call to get an `io::ErrorKind` value.
 `io::ErrorKind` is an enum provided by the standard library that has variants
 representing the different kinds of errors that might result from an `io`
-operation. The variant we're interested in is `ErrorKind::NotFound`, which
-indicates the file we're trying to open doesn't exist yet.
+operation. The variant we’re interested in is `ErrorKind::NotFound`, which
+indicates the file we’re trying to open doesn’t exist yet.
 
 The condition `if error.kind() == ErrorKind::NotFound` is called a *match
-guard*: it's an extra condition on a `match` arm that further refines the arm's
-pattern. This condition must be true in order for that arm's code to get run;
+guard*: it’s an extra condition on a `match` arm that further refines the arm’s
+pattern. This condition must be true in order for that arm’s code to get run;
 otherwise, the pattern matching will move on to consider the next arm in the
 `match`. The `ref` in the pattern is needed so that the `error` is not moved
 into the guard condition but is merely referenced by it. The reason `ref` is
@@ -209,11 +209,11 @@ besides the missing file error.
 
 ### Shortcuts for Panic on Error: `unwrap` and `expect`
 
-Using `match` works well enough, but it can be a bit verbose and doesn't always
+Using `match` works well enough, but it can be a bit verbose and doesn’t always
 communicate intent well. The `Result<T, E>` type has many helper methods
-defined on it to do various things. One of those methods, called `unwrap`, is
-a shortcut method that is implemented just like the `match` statement we wrote
-in Listing 9-3. If the `Result` value is the `Ok` variant, `unwrap` will return
+defined on it to do various things. One of those methods, called `unwrap`, is a
+shortcut method that is implemented just like the `match` statement we wrote in
+Listing 9-3. If the `Result` value is the `Ok` variant, `unwrap` will return
 the value inside the `Ok`. If the `Result` is the `Err` variant, `unwrap` will
 call the `panic!` macro for us.
 
@@ -234,7 +234,7 @@ repr: Os { code: 2, message: "No such file or directory" } }',
 ../src/libcore/result.rs:837
 ```
 
-There's another method similar to `unwrap` that lets us also choose the
+There’s another method similar to `unwrap` that lets us also choose the
 `panic!` error message: `expect`. Using `expect` instead of `unwrap` and
 providing good error messages can convey your intent and make tracking down the
 source of a panic easier. The syntax of`expect` looks like this:
@@ -267,7 +267,7 @@ might be more information or logic that dictates how the error should be
 handled than what you have available in the context of your code.
 
 For example, Listing 9-5 shows a function that reads a username from a file. If
-the file doesn't exist or can't be read, this function will return those errors
+the file doesn’t exist or can’t be read, this function will return those errors
 to the code that called this function:
 
 <figure>
@@ -306,20 +306,20 @@ io::Error>`. This means that the function is returning a value of the type
 `Result<T, E>` where the generic parameter `T` has been filled in with the
 concrete type `String`, and the generic type `E` has been filled in with the
 concrete type `io::Error`. If this function succeeds without any problems, the
-caller of this function will receive an `Ok` value that holds a `String`—the
+caller of this function will receive an `Ok` value that holds a `String` — the
 username that this function read from the file. If this function encounters any
 problems, the caller of this function will receive an `Err` value that holds an
 instance of `io::Error` that contains more information about what the problems
 were. We chose `io::Error` as the return type of this function because that
 happens to be the type of the error value returned from both of the operations
-we're calling in this function's body that might fail: the `File::open`
+we’re calling in this function’s body that might fail: the `File::open`
 function and the `read_to_string` method.
 
 The body of the function starts by calling the `File::open` function. Then we
 handle the `Result` value returned with a `match` similar to the `match` in
 Listing 9-3, only instead of calling `panic!` in the `Err` case, we return
 early from this function and pass the error value from `File::open` back to the
-caller as this function's error value. If `File::open` succeeds, we store the
+caller as this function’s error value. If `File::open` succeeds, we store the
 file handle in the variable `f` and continue.
 
 Then we create a new `String` in variable `s` and call the `read_to_string`
@@ -327,18 +327,18 @@ method on the file handle in `f` in order to read the contents of the file into
 `s`. The `read_to_string` method also returns a `Result` because it might fail,
 even though `File::open` succeeded. So we need another `match` to handle that
 `Result`: if `read_to_string` succeeds, then our function has succeeded, and we
-return the username from the file that's now in `s` wrapped in an `Ok`. If
+return the username from the file that’s now in `s` wrapped in an `Ok`. If
 `read_to_string` fails, we return the error value in the same way that we
 returned the error value in the `match` that handled the return value of
-`File::open`. We don't need to explicitly say `return`, however, since this is
+`File::open`. We don’t need to explicitly say `return`, however, since this is
 the last expression in the function.
 
 The code that calls this code will then handle getting either an `Ok` value
 that contains a username or an `Err` value that contains an `io::Error`. We
-don't know what the caller will do with those values. If they get an `Err`
+don’t know what the caller will do with those values. If they get an `Err`
 value, they could choose to call `panic!` and crash their program, use a
 default username, or look up the username from somewhere other than a file, for
-example. We don't have enough information on what the caller is actually trying
+example. We don’t have enough information on what the caller is actually trying
 to do, so we propagate all the success or error information upwards for them to
 handle as they see fit.
 
@@ -373,12 +373,12 @@ Listing 9-6: A function that returns errors to the calling code using `?`
 </figure>
 
 The `?` placed after a `Result` value is defined to work the exact same way as
-the`match` expressions we defined to handle the `Result` values in Listing 9-5.
-If the value of the `Result` is an `Ok`, the value inside the `Ok` will get
-returned from this expression and the program will continue. If the value is an
-`Err`, the value inside the `Err` will be returned from the whole function as
-if we had used the `return` keyword so that the error value gets propagated to
-the caller.
+the `match` expressions we defined to handle the `Result` values in Listing
+9-5. If the value of the `Result` is an `Ok`, the value inside the `Ok` will
+get returned from this expression and the program will continue. If the value
+is an `Err`, the value inside the `Err` will be returned from the whole
+function as if we had used the `return` keyword so that the error value gets
+propagated to the caller.
 
 In the context of Listing 9-6, the `?` at the end of the `File::open` call will
 return the value inside an `Ok` to the binding `f`. If an error occurs, `?`
@@ -386,7 +386,7 @@ will return early out of the whole function and give any `Err` value to our
 caller. The same thing applies to the `?` at the end of the `read_to_string`
 call.
 
-The `?` eliminates a lot of boilerplate and makes this function's
+The `?` eliminates a lot of boilerplate and makes this function’s
 implementation simpler. We could even shorten this code further by chaining
 method calls immediately after the `?`:
 
@@ -404,8 +404,8 @@ fn read_username_from_file() -> Result<String, io::Error> {
 }
 ```
 
-We've moved the creation of the new `String` in `s` to the beginning of the
-function; that part hasn't changed. Instead of creating a variable `f`, we've
+We’ve moved the creation of the new `String` in `s` to the beginning of the
+function; that part hasn’t changed. Instead of creating a variable `f`, we’ve
 chained the call to `read_to_string` directly onto the result of
 `File::open("hello.txt")?`. We still have a `?` at the end of the
 `read_to_string` call, and we still return an `Ok` value containing the
@@ -455,10 +455,10 @@ error[E0308]: mismatched types
 
 This error is pointing out that we have mismatched types: the `main()` function
 has a return type of `()`, but the `?` might return a `Result`. In functions
-that don't return `Result`, when you call other functions that return `Result`,
-you'll need to use a `match` or one of the `Result` methods to handle it,
+that don’t return `Result`, when you call other functions that return `Result`,
+you’ll need to use a `match` or one of the `Result` methods to handle it,
 instead of using `?` to potentially propagate the error to the caller.
 
-Now that we've discussed the details of calling `panic!` or returning `Result`,
-let's return to the topic of how to decide which is appropriate to use in which
+Now that we’ve discussed the details of calling `panic!` or returning `Result`,
+let’s return to the topic of how to decide which is appropriate to use in which
 cases.
