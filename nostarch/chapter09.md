@@ -33,8 +33,6 @@ program will print a failure message, unwind and clean up the stack, and then
 quit. The most common situation this occurs in is when a bug of some kind has
 been detected and it's not clear to the programmer how to handle the error.
 
-<!-- PROD: START BOX -->
-
 > #### Unwinding
 > By default, when a `panic!` occurs, the program starts
 > *unwinding*, which means Rust walks back up the stack and cleans up the data
@@ -51,8 +49,6 @@ been detected and it's not clear to the programmer how to handle the error.
 > profile.release
 > panic = 'abort'
 > ```
-
-<!-- PROD: END BOX -->
 
 Let's try calling `panic!()` with a simple program:
 
@@ -228,21 +224,6 @@ enum Result<T, E> {
 }
 ```
 
-<!-- Would it make sense for this to be something like:
-
-```
-enum Result<T, E> {
-    Ok(T) => successful_result,
-    Err(E) => error,
-}
-```
-
-instead? Then you could concretely explain the returned result.
--->
-<!-- This notation looks similar to a `match`, but it's not a `match`, so we
-think this would be confusing. We've tried to clarify better in the text.
-/Carol -->
-
 The `T` and `E` are generic type parameters; we'll go into generics in more
 detail in Chapter 10. What you need to know right now is that `T` represents
 the type of the value that will be returned in a success case within the `Ok`
@@ -316,22 +297,10 @@ In the case where `File::open` succeeds, the value we will have in the variable
 it fails, the value in `f` will be an instance of `Err` that contains more
 information about the kind of error that happened.
 
-<!--Can you say explicitly why there being many ways things can fail means we
-use the result type? Also, are we importing the File type from the standard
-crate here? That seems worth mentioning. -->
-<!-- We think it would be repetitive to point out every example that imports a
-type from the standard library. We're past the Modules Chapter 7 "Importing
-Names With Use" section that explains the concept in depth, as well as multiple
-examples in the Hash maps section of Chapter 8 that show how and why to import
-types from the standard library. /Carol -->
-
 We need to add to the code from Listing 9-2 to take different actions depending
 on the value `File::open` returned. Listing 9-3 shows one way to handle the
 `Result` with a basic tool: the `match` expression that we learned about in
 Chapter 6.
-
-<!-- I'll ghost everything except the match statement lines in the libreoffice
-file /Carol -->
 
 <figure>
 <span class="filename">Filename: src/main.rs</span>
@@ -358,15 +327,6 @@ might have
 </figcaption>
 </figure>
 
-<!-- So we don't need the Result keyword in this code example? And what is the
-{:?} syntax, can you include a line about that? -->
-<!-- We've added an explanation that Result is like Option in that it's
-imported into the prelude, which the reader should be familiar with. We
-explained the {:?} syntax in Structs, chapter 5, in the section "Adding Useful
-Functionality with Derived Traits". It's the debug format. Having to re-explain
-multiple concepts that are not the primary focus of this example really
-obscures the point of the section. /Carol -->
-
 Note that, like the `Option` enum, the `Result` enum and its variants have been
 imported in the prelude, so we don't need to specify `Result::` before the `Ok`
 and `Err` variants in the `match` arms.
@@ -385,11 +345,6 @@ code, we'll see the following output from the `panic!` macro:
 thread 'main' panicked at 'There was a problem opening the file: Error { repr:
 Os { code: 2, message: "No such file or directory" } }', src/main.rs:8
 ```
-
-<!-- Do we have to manually print the error message, or does it show when we
-run the program? -->
-<!-- No, the `panic!` macro prints what we give to it, which we covered in the
-section previous to this one. /Carol -->
 
 ### Matching on Different Errors
 
@@ -433,8 +388,6 @@ Listing 9-4: Handling different kinds of errors in different ways
 </figcaption>
 </figure>
 
-<!-- I will add ghosting and wingdings here in libreoffice /Carol -->
-
 The type of the value that `File::open` returns inside the `Err` variant is
 `io::Error`, which is a struct provided by the standard library. This struct
 has a method `kind` that we can call to get an `io::ErrorKind` value.
@@ -471,15 +424,6 @@ in Listing 9-3. If the `Result` value is the `Ok` variant, `unwrap` will return
 the value inside the `Ok`. If the `Result` is the `Err` variant, `unwrap` will
 call the `panic!` macro for us.
 
-<!-- Can you explain a bit more what unwrap() does---you mean every time we
-cause a panic it calls the unwrap method? -->
-<!-- I'm not sure how the conclusion "every time we cause a panic it calls the
-unwrap method" follows from the text that was here, but I've tried to reword.
-Please let us know what part of the text specifically is implying that here so
-that we can be sure that we've fixed it. /Carol -->
-
-<!-- I'll ghost everything except `unwrap()` in the libreoffice file /Carol -->
-
 ```rust,should_panic
 use std::fs::File;
 
@@ -487,15 +431,6 @@ fn main() {
     let f = File::open("hello.txt").unwrap();
 }
 ```
-
-<!-- Can you talk ore about the syntax here, how it differs? It looks like
-there aren't generics here for T and E. How is this still related to Result? -->
-<!-- I'm not sure how to make this clearer. We're chaining the method call onto
-the return value of the `File::open` function, which hasn't changed. The reader
-should understand method calls by now. T and E are part of the *definition* of
-the Result type, since Listing 9-2 we've been talking about *using* a Result
-instance. Listings 9-2, 9-3, and 9-4 don't contain T and E either, so I'm not
-sure why it's confusing that this code doesn't contain T and E. /Carol -->
 
 If we run this code without a *hello.txt* file, we'll see an error message from
 the `panic` call that the `unwrap` method makes:
@@ -510,8 +445,6 @@ There's another method similar to `unwrap` that lets us also choose the
 `panic!` error message: `expect`. Using `expect` instead of `unwrap` and
 providing good error messages can convey your intent and make tracking down the
 source of a panic easier. The syntax of`expect` looks like this:
-
-<!-- I'll ghost everything except `expect(...)` in the libreoffice file /Carol -->
 
 ```rust,should_panic
 use std::fs::File;
@@ -531,24 +464,6 @@ thread 'main' panicked at 'Failed to open hello.txt: Error { repr: Os { code:
 2, message: "No such file or directory" } }', ../src/libcore/result.rs:837
 ```
 
-<!-- I added the above paragraph, can you review it and correct it as
-necessary? So this is like what we did in Listing 9-3?-->
-<!-- Yes, the implementations for both `unwrap` and `expect` are similar to 9-3,
-which we want to show so that the reader knows they don't have to write out all
-of 9-3 every time they have a `Result` value. Does this comment mean your
-earlier comments in this section are moot? /Carol -->
-
-<!-- Is panic used for both types of errors? The introduction makes it seem as
-though it's only for unrecoverable errors -->
-<!-- When you call panic, you are causing the program to crash and therefore
-creating an unrecoverable error. You can choose to do that at any time, even
-when there are *no* errors. There's nothing that prevents you from calling
-`panic!` inappropriately, which is why the "to panic or not to panic" section
-goes over the criteria the reader should use to decide if they're in a
-situation that's recoverable or not. I've actually moved the text that was here
-into that section to keep that whole discussion together. /Carol
--->
-
 ### Propagating Errors
 
 When writing a function whose implementation calls something that might fail,
@@ -557,12 +472,6 @@ caller know about the error so they can decide what to do. This is known as
 *propagating* the error, and gives more control to the calling code where there
 might be more information or logic that dictates how the error should be
 handled than what you have available in the context of your code.
-
-<!-- What's the benefit/result of returning the error to the code that called
-the function, besides putting off handling it---can you lay that out? -->
-<!-- We're giving control/decision making ability to the code that's calling
-our code. I've tried to be more explicit here; please let me know what could be
-improved if it's still not clear. /Carol -->
 
 For example, Listing 9-5 shows a function that reads a username from a file. If
 the file doesn't exist or can't be read, this function will return those errors
@@ -645,14 +554,9 @@ syntax to make this easier: `?`.
 
 ### A Shortcut for Propagating Errors: `?`
 
-<!-- The `?` ended up stabilizing in 1.13 and is quickly becoming preferred over
-`try!`, so we decided to only cover `?`. /Carol -->
-
 Listing 9-6 shows an implementation of `read_username_from_file` that has the
 same functionality as it had in Listing 9-5, but this implementation uses the
 question mark:
-
-<!-- I'll ghost everything except the question mark in libreoffice. /Carol -->
 
 <figure>
 
@@ -674,11 +578,6 @@ Listing 9-6: A function that returns errors to the calling code using `?`
 
 </figcaption>
 </figure>
-
-<!-- Below, are we talking about what just the ? operator does, or what the
-program with the ? operator does? -->
-<!-- I'm not sure what the difference is. We're talking about what the ? does
-in the context of this program... /Carol -->
 
 The `?` placed after a `Result` value is defined to work the exact same way as
 the`match` expressions we defined to handle the `Result` values in Listing 9-5.
@@ -712,10 +611,6 @@ fn read_username_from_file() -> Result<String, io::Error> {
 }
 ```
 
-<!-- Can you explain what is happening in this code and how it differs? -->
-<!-- I've tried to make it even clearer that the functionality does NOT differ
-/Carol -->
-
 We've moved the creation of the new `String` in `s` to the beginning of the
 function; that part hasn't changed. Instead of creating a variable `f`, we've
 chained the call to `read_to_string` directly onto the result of
@@ -727,31 +622,11 @@ Listing 9-6, this is just a different, more ergonomic way to write it.
 
 #### `?` Can Only Be Used in Functions That Return `Result`
 
-<!-- I think we need a new heading here, could you suggest something? I'm sure
-there's a better way to phrase this!-->
-<!-- I've tried, but I'm not really sure how to say it any more succinctly than
-this, I'm not sure if it's better than what you suggested /Carol -->
-
 The `?` can only be used in functions that have a return type of `Result`,
 since it is defined to work in exactly the same way as the `match` expression
 we defined in Listing 9-5. The part of the `match` that requires a return type
 of `Result` is `return Err(e)`, so the return type of the function must be a
 `Result` to be compatible with this `return`.
-
-<!-- Which functions return a Result and how would the reader know? I'm also not
-sure what you mean by "expand", that they have the same functionality (but
-condensed!)? -->
-<!-- You can tell what any function returns by looking at the return type
-defined in the function signature, I'm not sure what part of Chapter 3 wasn't
-clear enough to convey that. The reader should be comfortable with function
-signatures by this point, and could also use the API docs to tell what a
-function returns.
-
-I've reworded to remove the word expand, but yes, we meant "functionally
-equivalent to replacing it with the longer code"
-
-/Carol
--->
 
 Let's look at what happens if use `try!` in the `main` function, which you'll
 recall has a return type of `()`:
@@ -845,12 +720,6 @@ situation. If you can ensure by manually inspecting the code that you'll never
 have an `Err` variant, it is perfectly acceptable to call `unwrap`. Here's an
 example:
 
-<!-- If we know that there won't be an error, why do we still need to use
-unwrap()? Can you clarify that in the text? -->
-<!-- Because you still have to extract the value from the `Ok`; knowing there
-won't be an error doesn't change the types. I've tried to clarify in the
-paragraph above and again below. /Carol-->
-
 ```rust
 use std::net::IpAddr;
 
@@ -922,12 +791,6 @@ even compile, so your function doesn't have to check for that case at runtime.
 Another example is using an unsigned integer type like `u32`, which ensures the
 parameter is never negative.
 
-<!-- Can you go into more detail explaining this last sentence? Why is a type
-better to use than an Option?-->
-<!-- I tried to reword, but I'm not sure if I made it any clearer. You don't
-have to have extra checks, so your code is simpler; I'm not sure why it's not
-clear that simpler is better. /Carol -->
-
 ### Creating Custom Types for Validation
 
 Let's take the idea of using Rust's type system to ensure we have a valid value
@@ -963,8 +826,6 @@ loop {
     // snip
 }
 ```
-
-<!-- I'll add wingding numbers in the libreoffice file /Carol -->
 
 The `if` expression checks to see if our value is out of range, tells the user
 about the problem, and calls `continue` to start the next iteration of the loop
@@ -1016,8 +877,6 @@ Listing 9-8: A `Guess` type that will only continue with values between 1 and
 </figcaption>
 </figure>
 
-<!-- I'll add wingding numbers in the libreoffice file /Carol -->
-
 First, we define a struct named `Guess` that has a field named `value` that
 holds a `u32`. This is where the number will be stored.
 
@@ -1034,14 +893,6 @@ cover documentation conventions around indicating the possibility of a `panic!`
 in the API documentation that you create in Chapter 14. If `value` does pass
 the test, we create a new `Guess` with its `value` field set to the `value`
 parameter, and return the `Guess`.
-
-<!-- I'm not sure if you mean the function that creates the guess type (so
-listing 9-8) or the function that uses the guess type, below. You mean the
-wider function needs a way to signal that there's a bug leading to contract
-violation? -->
-<!-- I'm not sure what part is confusing, and I'm not sure what you mean by
-"wider function". I hope the slower explanation of the code has cleared
-this up; please provide more detail on what's confusing if not. /Carol -->
 
 Next, we implement a method named `value` that borrows `self`, doesn't have any
 other parameters, and returns a `u32`. This is a kind of method sometimes called

@@ -6,8 +6,6 @@ program will print a failure message, unwind and clean up the stack, and then
 quit. The most common situation this occurs in is when a bug of some kind has
 been detected and it's not clear to the programmer how to handle the error.
 
-<!-- PROD: START BOX -->
-
 > #### Unwinding
 > By default, when a `panic!` occurs, the program starts
 > *unwinding*, which means Rust walks back up the stack and cleans up the data
@@ -24,8 +22,6 @@ been detected and it's not clear to the programmer how to handle the error.
 > [profile.release]
 > panic = 'abort'
 > ```
-
-<!-- PROD: END BOX -->
 
 Let's try calling `panic!()` with a simple program:
 

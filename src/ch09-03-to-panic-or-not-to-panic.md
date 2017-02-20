@@ -48,12 +48,6 @@ situation. If you can ensure by manually inspecting the code that you'll never
 have an `Err` variant, it is perfectly acceptable to call `unwrap`. Here's an
 example:
 
-<!-- If we know that there won't be an error, why do we still need to use
-unwrap()? Can you clarify that in the text? -->
-<!-- Because you still have to extract the value from the `Ok`; knowing there
-won't be an error doesn't change the types. I've tried to clarify in the
-paragraph above and again below. /Carol-->
-
 ```rust
 use std::net::IpAddr;
 
@@ -125,12 +119,6 @@ even compile, so your function doesn't have to check for that case at runtime.
 Another example is using an unsigned integer type like `u32`, which ensures the
 parameter is never negative.
 
-<!-- Can you go into more detail explaining this last sentence? Why is a type
-better to use than an Option?-->
-<!-- I tried to reword, but I'm not sure if I made it any clearer. You don't
-have to have extra checks, so your code is simpler; I'm not sure why it's not
-clear that simpler is better. /Carol -->
-
 ### Creating Custom Types for Validation
 
 Let's take the idea of using Rust's type system to ensure we have a valid value
@@ -166,8 +154,6 @@ loop {
     // snip
 }
 ```
-
-<!-- I'll add wingding numbers in the libreoffice file /Carol -->
 
 The `if` expression checks to see if our value is out of range, tells the user
 about the problem, and calls `continue` to start the next iteration of the loop
@@ -219,8 +205,6 @@ Listing 9-8: A `Guess` type that will only continue with values between 1 and
 </figcaption>
 </figure>
 
-<!-- I'll add wingding numbers in the libreoffice file /Carol -->
-
 First, we define a struct named `Guess` that has a field named `value` that
 holds a `u32`. This is where the number will be stored.
 
@@ -237,14 +221,6 @@ cover documentation conventions around indicating the possibility of a `panic!`
 in the API documentation that you create in Chapter 14. If `value` does pass
 the test, we create a new `Guess` with its `value` field set to the `value`
 parameter, and return the `Guess`.
-
-<!-- I'm not sure if you mean the function that creates the guess type (so
-listing 9-8) or the function that uses the guess type, below. You mean the
-wider function needs a way to signal that there's a bug leading to contract
-violation? -->
-<!-- I'm not sure what part is confusing, and I'm not sure what you mean by
-"wider function". I hope the slower explanation of the code has cleared
-this up; please provide more detail on what's confusing if not. /Carol -->
 
 Next, we implement a method named `value` that borrows `self`, doesn't have any
 other parameters, and returns a `u32`. This is a kind of method sometimes called
