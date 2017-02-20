@@ -136,6 +136,7 @@ JavaScript
 lang
 latin
 libc
+libcollections
 libcore
 librarys
 libreoffice
