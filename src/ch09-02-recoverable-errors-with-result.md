@@ -6,9 +6,11 @@ interpret and respond to. For example, if we try to open a file and that
 operation fails because the file doesn’t exist, we might want to create the
 file instead of terminating the process.
 
-Recall from Chapter 2 the section on “Handling Potential Failure with the
-`Result` Type” that the `Result` enum is defined as having two variants, `Ok`
+Recall from Chapter 2 the section on “[Handling Potential Failure with the
+`Result` Type][handlefailure]” that the `Result` enum is defined as having two variants, `Ok`
 and `Err`, as follows:
+
+[handlefailure]: ch02-00-guessing-game-tutorial.md#handling-potential-failure-with-the-result-type
 
 ```rust
 enum Result<T, E> {
