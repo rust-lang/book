@@ -462,7 +462,7 @@ The monomorphized version of our code that the compiler generates looks like
 this, with the uses of the generic `Option` replaced with the specific
 definitions created by the compiler:
 
-Filename: src/main.rs
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 enum Option_i32 {
