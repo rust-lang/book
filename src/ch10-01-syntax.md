@@ -375,11 +375,12 @@ we specify that we're implementing methods on the type `Point<T>`.
 
 Generic type parameters in a struct definition aren't always the same generic
 type parameters you want to use in that struct's method signatures. Listing
-10-10 defines a method `mix` on the `Point<T, U>` struct from Listing 10-8. The
-method takes another `Point` as a parameter, which might have different types
-than the `self` `Point` that we're calling `mix` on. The method creates a new
-`Point` instance that has the `x` value from the `self` `Point` (which is of
-type `T`) and the `y` value from the passed-in `Point` (which is of type `W`):
+10-10 defines a method `mixup` on the `Point<T, U>` struct from Listing 10-8.
+The method takes another `Point` as a parameter, which might have different
+types than the `self` `Point` that we're calling `mixup` on. The method creates
+a new `Point` instance that has the `x` value from the `self` `Point` (which is
+of type `T`) and the `y` value from the passed-in `Point` (which is of type
+`W`):
 
 <figure>
 <span class="filename">Filename: src/main.rs</span>
