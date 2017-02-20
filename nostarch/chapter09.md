@@ -849,12 +849,12 @@ program only operated on values between 1 and 100, and it had many functions
 with this requirement, it would be tedious (and potentially impact performance)
 to have a check like this in every function.
 
-Instead, we can make a new type and put the validations in the type’s
-constructor rather than repeating them. That way, it’s safe for functions to
-use the new type in their signatures and confidently use the values they
-receive. Listing 9-8 shows one way to define a `Guess` type that will only
-create an instance of `Guess` if the `new` function receives a value between 1
-and 100:
+Instead, we can make a new type and put the validations in a function to create
+an instance of the type rather than repeating the validations everywhere. That
+way, it’s safe for functions to use the new type in their signatures and
+confidently use the values they receive. Listing 9-8 shows one way to define a
+`Guess` type that will only create an instance of `Guess` if the `new` function
+receives a value between 1 and 100:
 
 <figure>
 
@@ -891,8 +891,8 @@ Listing 9-8: A `Guess` type that will only continue with values between 1 and
 First, we define a struct named `Guess` that has a field named `value` that
 holds a `u32`. This is where the number will be stored.
 
-Then we implement an associated function named `new` on `Guess` that is a
-constructor of `Guess` values. The `new` function is defined to have one
+Then we implement an associated function named `new` on `Guess` that creates
+instances of `Guess` values. The `new` function is defined to have one
 parameter named `value` of type `u32` and to return a `Guess`. The code in the
 body of the `new` function tests `value` to make sure it is between 1 and 100.
 If `value` doesn’t pass this test, we call `panic!`, which will alert the
@@ -911,9 +911,9 @@ called a *getter*, since its purpose is to get some data from its fields and
 return it. This public method is necessary because the `value` field of the
 `Guess` struct is private. It’s important that the `value` field is private so
 that code using the `Guess` struct is not allowed to set `value` directly:
-callers *must* use the `Guess::new` constructor function to create an instance
-of `Guess`, which ensures there’s no way for a `Guess` to have a `value` that
-hasn’t been checked by the conditions in the constructor.
+callers *must* use the `Guess::new` function to create an instance of `Guess`,
+which ensures there’s no way for a `Guess` to have a `value` that hasn’t been
+checked by the conditions in the `Guess::new` function.
 
 A function that has a parameter or returns only numbers between 1 and 100 could
 then declare in its signature that it takes or returns a `Guess` rather than a
