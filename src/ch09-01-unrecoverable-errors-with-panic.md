@@ -6,16 +6,17 @@ program will print a failure message, unwind and clean up the stack, and then
 quit. The most common situation this occurs in is when a bug of some kind has
 been detected and it’s not clear to the programmer how to handle the error.
 
-> #### Unwinding
+> ### Unwinding the Stack Versus Aborting on Panic
+>
 > By default, when a `panic!` occurs, the program starts
 > *unwinding*, which means Rust walks back up the stack and cleans up the data
 > from each function it encounters, but this walking and cleanup is a lot of
-> work. The alternative is to immediately `abort`, which ends the program
+> work. The alternative is to immediately *abort*, which ends the program
 > without cleaning up. Memory that the program was using will then need to be
-> cleaned up by the operating system. If in your program you need to make
-> the resulting binary as small as possible, you can switch from unwinding to
+> cleaned up by the operating system. If in your project you need to make the
+> resulting binary as small as possible, you can switch from unwinding to
 > aborting on panic by adding `panic = 'abort'` to the appropriate `[profile]`
-> sections in your `Cargo.toml`. For example, if you want to abort on panic in
+> sections in your *Cargo.toml*. For example, if you want to abort on panic in
 > release mode:
 >
 > ```toml
@@ -23,7 +24,7 @@ been detected and it’s not clear to the programmer how to handle the error.
 > panic = 'abort'
 > ```
 
-Let's try calling `panic!()` with a simple program:
+Let’s try calling `panic!` with a simple program:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -73,17 +74,17 @@ fn main() {
 }
 ```
 
-We're attempting to access the hundredth element of our vector, but it only has
+We’re attempting to access the hundredth element of our vector, but it only has
 three elements. In this situation, Rust will panic. Using `[]` is supposed to
-return an element, but if you pass an invalid index, there's no element that
+return an element, but if you pass an invalid index, there’s no element that
 Rust could return here that would be correct.
 
 Other languages like C will attempt to give you exactly what you asked for in
 this situation, even though it isn’t what you want: you’ll get whatever is at
 the location in memory that would correspond to that element in the vector,
-even though the memory doesn't belong to the vector. This is called a *buffer
+even though the memory doesn’t belong to the vector. This is called a *buffer
 overread*, and can lead to security vulnerabilities if an attacker can
-manipulate the index in such a way as to read data they shouldn't be allowed to
+manipulate the index in such a way as to read data they shouldn’t be allowed to
 that is stored after the array.
 
 In order to protect your program from this sort of vulnerability, if you try to
@@ -96,18 +97,18 @@ $ cargo run
     Finished debug [unoptimized + debuginfo] target(s) in 0.27 secs
      Running `target/debug/panic`
 thread 'main' panicked at 'index out of bounds: the len is 3 but the index is
-100', ../src/libcollections/vec.rs:1265
+100', /stable-dist-rustc/build/src/libcollections/vec.rs:1362
 note: Run with `RUST_BACKTRACE=1` for a backtrace.
 error: Process didn't exit successfully: `target/debug/panic` (exit code: 101)
 ```
 
-This points at a file we didn't write, *../src/libcollections/vec.rs*. That's
-the implementation of `Vec<T>` in the standard library. The code that gets run
-when we use `[]` on our vector `v` is in *../src/libcollections/vec.rs*, and
-that is where the `panic!` is actually happening.
+This points at a file we didn’t write, *libcollections/vec.rs*. That’s the
+implementation of `Vec<T>` in the standard library. The code that gets run when
+we use `[]` on our vector `v` is in *libcollections/vec.rs*, and that is where
+the `panic!` is actually happening.
 
-The next `note` line tells us that we can set the `RUST_BACKTRACE` environment
-variable to get a backtrace of exactly what happened to cause the error. Let's
+The next note line tells us that we can set the `RUST_BACKTRACE` environment
+variable to get a backtrace of exactly what happened to cause the error. Let’s
 try that. Listing 9-1 shows the output:
 
 <figure>
@@ -117,45 +118,39 @@ $ RUST_BACKTRACE=1 cargo run
     Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
      Running `target/debug/panic`
 thread 'main' panicked at 'index out of bounds: the len is 3 but the index is
-100', ../src/libcollections/vec.rs:1265
+100', /stable-dist-rustc/build/src/libcollections/vec.rs:1395
 stack backtrace:
-   1:     0x560956150ae9 -
-std::sys::backtrace::tracing::imp::write::h482d45d91246faa2
-   2:     0x56095615345c -
-std::panicking::default_hook::_{{closure}}::h89158f66286b674e
-   3:     0x56095615291e - std::panicking::default_hook::h9e30d428ee3b0c43
-   4:     0x560956152f88 -
-std::panicking::rust_panic_with_hook::h2224f33fb7bf2f4c
-   5:     0x560956152e22 - std::panicking::begin_panic::hcb11a4dc6d779ae5
-   6:     0x560956152d50 - std::panicking::begin_panic_fmt::h310416c62f3935b3
-   7:     0x560956152cd1 - rust_begin_unwind
-   8:     0x560956188a2f - core::panicking::panic_fmt::hc5789f4e80194729
-   9:     0x5609561889d3 -
-core::panicking::panic_bounds_check::hb2d969c3cc11ed08
-  10:     0x56095614c075 - _<collections..vec..Vec<T> as
-core..ops..Index<usize>>::index::hb9f10d3dadbe8101
-                        at ../src/libcollections/vec.rs:1265
-  11:     0x56095614c134 - panic::main::h2d7d3751fb8705e2
-                        at /projects/panic/src/main.rs:4
-  12:     0x56095615af46 - __rust_maybe_catch_panic
-  13:     0x560956152082 - std::rt::lang_start::h352a66f5026f54bd
-  14:     0x56095614c1b3 - main
-  15:     0x7f75b88ed72f - __libc_start_main
-  16:     0x56095614b3c8 - _start
-  17:                0x0 - <unknown>
-error: Process didn't exit successfully: `target/debug/panic` (exit code: 101)
+   1:        0x10922522c -
+std::sys::imp::backtrace::tracing::imp::write::h61cce32efcf6a3d0
+   2:        0x10922649e -
+std::panicking::default_hook::{{closure}}::hdac93beb64eaf365
+   3:        0x109226140 - std::panicking::default_hook::h4a7f61136a9004ca
+   4:        0x109226897 -
+std::panicking::rust_panic_with_hook::hdf5cd951b8d6fa36
+   5:        0x1092266f4 - std::panicking::begin_panic::h1204ab053b688140
+   6:        0x109226662 - std::panicking::begin_panic_fmt::h7d4fffc79f986d3b
+   7:        0x1092265c7 - rust_begin_unwind
+   8:        0x1092486f0 - core::panicking::panic_fmt::he6eb92dab4407c61
+   9:        0x109248668 -
+core::panicking::panic_bounds_check::h37b4772a417ae8c7
+  10:        0x1092205b5 - <collections::vec::Vec<T> as
+core::ops::Index<usize>>::index::hbc2823add66bc839
+  11:        0x10922066a - aggregator::main::h977e018a69ea4690
+  12:        0x1092282ba - __rust_maybe_catch_panic
+  13:        0x109226b16 - std::rt::lang_start::h5196b70c908371ed
+  14:        0x1092206e9 - main
 ```
 
 <figcaption>
 
-Listing 9-1: The backtrace generated by a call to `panic!` displayed when
-the environment variable `RUST_BACKTRACE` is set
+Listing 9-1: The backtrace generated by a call to `panic!` displayed when the
+environment variable `RUST_BACKTRACE` is set
 
 </figcaption>
 </figure>
 
-That's a lot of output! Line 11 of the backtrace points to the line in our
-project causing the problem: `src/main.rs`, line four. A backtrace is a list of
+That’s a lot of output! Line 11 of the backtrace points to the line in our
+project causing the problem: *src/main.rs*, line four. A backtrace is a list of
 all the functions that have been called to get to this point. Backtraces in
 Rust work like they do in other languages: the key to reading the backtrace is
 to start from the top and read until you see files you wrote. That’s the spot

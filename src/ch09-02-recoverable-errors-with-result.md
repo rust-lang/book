@@ -26,7 +26,7 @@ parameters, we can use the `Result` type and the functions that the standard
 library has defined on it in many different situations where the successful
 value and error value we want to return may differ.
 
-Let's call a function that returns a `Result` value because the function could
+Let’s call a function that returns a `Result` value because the function could
 fail: opening a file, shown in Listing 9-2.
 
 <figure>
@@ -48,11 +48,11 @@ Listing 9-2: Opening a file
 </figure>
 
 How do we know `File::open` returns a `Result`? We could look at the standard
-library API documentation. We could ask the compiler! If we give `f` a type
+library API documentation, or we could ask the compiler! If we give `f` a type
 annotation of some type that we know the return type of the function is *not*,
-then we try to compile the code, the compiler will tell us that the types don't
-match. The error message will then tell us what the type of `f` *is*! Let's try
-it: we know that the return type of `File::open` isn't of type `u32`, so let's
+then we try to compile the code, the compiler will tell us that the types don’t
+match. The error message will then tell us what the type of `f` *is*! Let’s try
+it: we know that the return type of `File::open` isn’t of type `u32`, so let’s
 change the `let f` statement to:
 
 ```rust,ignore
@@ -66,7 +66,8 @@ error[E0308]: mismatched types
  --> src/main.rs:4:18
   |
 4 |     let f: u32 = File::open("hello.txt");
-  |                  ^^^^^^^^^^^^^^^^^^^^^^^ expected u32, found enum `std::result::Result`
+  |                  ^^^^^^^^^^^^^^^^^^^^^^^ expected u32, found enum
+`std::result::Result`
   |
   = note: expected type `u32`
   = note:    found type `std::result::Result<std::fs::File, std::io::Error>`
@@ -106,8 +107,9 @@ fn main() {
 
     let f = match f {
         Ok(file) => file,
-        Err(error) => panic!("There was a problem opening the file: {:?}",
-error),
+        Err(error) => {
+            panic!("There was a problem opening the file: {:?}", error)
+        },
     };
 }
 ```
@@ -121,7 +123,7 @@ might have
 </figure>
 
 Note that, like the `Option` enum, the `Result` enum and its variants have been
-imported in the prelude, so we don't need to specify `Result::` before the `Ok`
+imported in the prelude, so we don’t need to specify `Result::` before the `Ok`
 and `Err` variants in the `match` arms.
 
 Here we tell Rust that when the result is `Ok`, return the inner `file` value
@@ -165,11 +167,20 @@ fn main() {
         Err(ref error) if error.kind() == ErrorKind::NotFound => {
             match File::create("hello.txt") {
                 Ok(fc) => fc,
-                Err(e) => panic!("Tried to create file but there was a problem: {:?}", e),
+                Err(e) => {
+                    panic!(
+                        "Tried to create file but there was a problem: {:?}",
+                        e
+                    )
+                },
             }
         },
-        Err(error) => panic!("There was a problem opening the file: {:?}",
-error),
+        Err(error) => {
+            panic!(
+                "There was a problem opening the file: {:?}",
+                error
+            )
+        },
     };
 }
 ```
@@ -193,17 +204,17 @@ The condition `if error.kind() == ErrorKind::NotFound` is called a *match
 guard*: it’s an extra condition on a `match` arm that further refines the arm’s
 pattern. This condition must be true in order for that arm’s code to get run;
 otherwise, the pattern matching will move on to consider the next arm in the
-`match`. The `ref` in the pattern is needed so that the `error` is not moved
-into the guard condition but is merely referenced by it. The reason `ref` is
-used to take a reference in a pattern instead of `&` will be covered in detail
-in Chapter XX. In short, in the context of a pattern, `&` matches a reference
-and gives us its value, but `ref` matches a value and gives us a reference to it.
+`match`. The `ref` in the pattern is needed so that `error` is not moved into
+the guard condition but is merely referenced by it. The reason `ref` is used to
+take a reference in a pattern instead of `&` will be covered in detail in
+Chapter 18. In short, in the context of a pattern, `&` matches a reference and
+gives us its value, but `ref` matches a value and gives us a reference to it.
 
 The condition we want to check in the match guard is whether the value returned
 by `error.kind()` is the `NotFound` variant of the `ErrorKind` enum. If it is,
 we try to create the file with `File::create`. However, since `File::create`
 could also fail, we need to add an inner `match` statement as well! When the
-file can't be opened, a different error message will be printed. The last arm
+file can’t be opened, a different error message will be printed. The last arm
 of the outer `match` stays the same so that the program panics on any error
 besides the missing file error.
 
@@ -225,19 +236,19 @@ fn main() {
 }
 ```
 
-If we run this code without a *hello.txt* file, we'll see an error message from
-the `panic` call that the `unwrap` method makes:
+If we run this code without a *hello.txt* file, we’ll see an error message from
+the `panic!` call that the `unwrap` method makes:
 
 ```text
 thread 'main' panicked at 'called `Result::unwrap()` on an `Err` value: Error {
 repr: Os { code: 2, message: "No such file or directory" } }',
-../src/libcore/result.rs:837
+/stable-dist-rustc/build/src/libcore/result.rs:868
 ```
 
 There’s another method similar to `unwrap` that lets us also choose the
 `panic!` error message: `expect`. Using `expect` instead of `unwrap` and
 providing good error messages can convey your intent and make tracking down the
-source of a panic easier. The syntax of`expect` looks like this:
+source of a panic easier. The syntax of `expect` looks like this:
 
 ```rust,should_panic
 use std::fs::File;
@@ -250,11 +261,12 @@ fn main() {
 We use `expect` in the same way as `unwrap`: to return the file handle or call
 the `panic!` macro. The error message that `expect` uses in its call to
 `panic!` will be the parameter that we pass to `expect` instead of the default
-`panic!` message that `unwrap` uses. Here's what it looks like:
+`panic!` message that `unwrap` uses. Here’s what it looks like:
 
 ```text
 thread 'main' panicked at 'Failed to open hello.txt: Error { repr: Os { code:
-2, message: "No such file or directory" } }', ../src/libcore/result.rs:837
+2, message: "No such file or directory" } }',
+/stable-dist-rustc/build/src/libcore/result.rs:868
 ```
 
 ### Propagating Errors
@@ -301,7 +313,7 @@ Listing 9-5: A function that returns errors to the calling code using `match`
 </figcaption>
 </figure>
 
-Let's look at the return type of the function first: `Result<String,
+Let’s look at the return type of the function first: `Result<String,
 io::Error>`. This means that the function is returning a value of the type
 `Result<T, E>` where the generic parameter `T` has been filled in with the
 concrete type `String`, and the generic type `E` has been filled in with the
@@ -349,7 +361,7 @@ syntax to make this easier: `?`.
 
 Listing 9-6 shows an implementation of `read_username_from_file` that has the
 same functionality as it had in Listing 9-5, but this implementation uses the
-question mark:
+question mark operator:
 
 <figure>
 
@@ -381,7 +393,7 @@ function as if we had used the `return` keyword so that the error value gets
 propagated to the caller.
 
 In the context of Listing 9-6, the `?` at the end of the `File::open` call will
-return the value inside an `Ok` to the binding `f`. If an error occurs, `?`
+return the value inside an `Ok` to the variable `f`. If an error occurs, `?`
 will return early out of the whole function and give any `Err` value to our
 caller. The same thing applies to the `?` at the end of the `read_to_string`
 call.
@@ -413,7 +425,7 @@ username in `s` when both `File::open` and `read_to_string` succeed rather than
 returning errors. The functionality is again the same as in Listing 9-5 and
 Listing 9-6, this is just a different, more ergonomic way to write it.
 
-#### `?` Can Only Be Used in Functions That Return `Result`
+### `?` Can Only Be Used in Functions That Return `Result`
 
 The `?` can only be used in functions that have a return type of `Result`,
 since it is defined to work in exactly the same way as the `match` expression
@@ -421,10 +433,12 @@ we defined in Listing 9-5. The part of the `match` that requires a return type
 of `Result` is `return Err(e)`, so the return type of the function must be a
 `Result` to be compatible with this `return`.
 
-Let's look at what happens if use `try!` in the `main` function, which you'll
+Let’s look at what happens if use `?` in the `main` function, which you’ll
 recall has a return type of `()`:
 
 ```rust,ignore
+use std::fs::File;
+
 fn main() {
     let f = File::open("hello.txt")?;
 }
@@ -447,13 +461,14 @@ error[E0308]: mismatched types
  -->
   |
 3 |     let f = File::open("hello.txt")?;
-  |             ^^^^^^^^^^^^^^^^^^^^^^^^^ expected (), found enum `std::result::Result`
+  |             ^^^^^^^^^^^^^^^^^^^^^^^^^ expected (), found enum
+`std::result::Result`
   |
   = note: expected type `()`
   = note:    found type `std::result::Result<_, _>`
 ```
 
-This error is pointing out that we have mismatched types: the `main()` function
+This error is pointing out that we have mismatched types: the `main` function
 has a return type of `()`, but the `?` might return a `Result`. In functions
 that don’t return `Result`, when you call other functions that return `Result`,
 you’ll need to use a `match` or one of the `Result` methods to handle it,

@@ -67,8 +67,8 @@ instead.
 
 ### Guidelines for Error Handling
 
-It's advisable to have your code `panic!` when it's possible that you could end
-up in a *bad state*—in this context, *bad state* is when some assumption,
+It’s advisable to have your code `panic!` when it’s possible that you could end
+up in a bad state—in this context, bad state is when some assumption,
 guarantee, contract, or invariant has been broken, such as when invalid values,
 contradictory values, or missing values are passed to your code—plus one or
 more of the following:
@@ -104,8 +104,8 @@ makes sense because a contract violation always indicates a caller-side bug,
 and it is not a kind of error you want callers to have to explicitly handle. In
 fact, there’s no reasonable way for calling code to recover: the calling
 *programmers* need to fix the code. Contracts for a function, especially when a
-violation will cause a `panic`, should be explained in the API documentation
-for the function.
+violation will cause a panic, should be explained in the API documentation for
+the function.
 
 Having lots of error checks in all of your functions would be verbose and
 annoying, though. Luckily, you can use Rust’s type system (and thus the type
@@ -159,8 +159,8 @@ loop {
 The `if` expression checks to see if our value is out of range, tells the user
 about the problem, and calls `continue` to start the next iteration of the loop
 and ask for another guess. After the `if` expression, we can proceed with the
-comparisons between `guess` and the secret number knowing that guess is between
-1 and 100.
+comparisons between `guess` and the secret number knowing that `guess` is
+between 1 and 100.
 
 However, this is not an ideal solution: if it was absolutely critical that the
 program only operated on values between 1 and 100, and it had many functions
@@ -221,17 +221,17 @@ might panic should be discussed in its public-facing API documentation; we’ll
 cover documentation conventions around indicating the possibility of a `panic!`
 in the API documentation that you create in Chapter 14. If `value` does pass
 the test, we create a new `Guess` with its `value` field set to the `value`
-parameter, and return the `Guess`.
+parameter and return the `Guess`.
 
-Next, we implement a method named `value` that borrows `self`, doesn't have any
-other parameters, and returns a `u32`. This is a kind of method sometimes called
-a *getter*, since its purpose is to get some data from its fields and return
-it. This public method is necessary because the `value` field of the `Guess`
-struct is private. It's important that the `value` field is private so that
-code using the `Guess` struct is not allowed to set `value` directly: callers
-*must* use the `Guess::new` constructor function to create an instance of
-`Guess`, which ensures there's no way for a `Guess` to have a `value` that
-hasn't been checked by the conditions in the constructor.
+Next, we implement a method named `value` that borrows `self`, doesn’t have any
+other parameters, and returns a `u32`. This is a kind of method sometimes
+called a *getter*, since its purpose is to get some data from its fields and
+return it. This public method is necessary because the `value` field of the
+`Guess` struct is private. It’s important that the `value` field is private so
+that code using the `Guess` struct is not allowed to set `value` directly:
+callers *must* use the `Guess::new` constructor function to create an instance
+of `Guess`, which ensures there’s no way for a `Guess` to have a `value` that
+hasn’t been checked by the conditions in the constructor.
 
 A function that has a parameter or returns only numbers between 1 and 100 could
 then declare in its signature that it takes or returns a `Guess` rather than a
