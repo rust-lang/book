@@ -68,36 +68,34 @@
 
                 <div id="content" class="content">
                     <a class="header" href="#unrecoverable-errors-with-panic" name="unrecoverable-errors-with-panic"><h2>Unrecoverable Errors with <code>panic!</code></h2></a>
-<p>Sometimes, bad things happen, and there's nothing that you can do about it. For
+<p>Sometimes, bad things happen, and there’s nothing that you can do about it. For
 these cases, Rust has the <code>panic!</code> macro. When this macro executes, your
 program will print a failure message, unwind and clean up the stack, and then
 quit. The most common situation this occurs in is when a bug of some kind has
-been detected and it's not clear to the programmer how to handle the error.</p>
-<!-- PROD: START BOX -->
+been detected and it’s not clear to the programmer how to handle the error.</p>
 <blockquote>
-<a class="header" href="#unwinding" name="unwinding"><h4>Unwinding</h4></a>
+<a class="header" href="#unwinding-the-stack-versus-aborting-on-panic" name="unwinding-the-stack-versus-aborting-on-panic"><h3>Unwinding the Stack Versus Aborting on Panic</h3></a>
 <p>By default, when a <code>panic!</code> occurs, the program starts
 <em>unwinding</em>, which means Rust walks back up the stack and cleans up the data
 from each function it encounters, but this walking and cleanup is a lot of
-work. The alternative is to immediately <code>abort</code>, which ends the program
+work. The alternative is to immediately <em>abort</em>, which ends the program
 without cleaning up. Memory that the program was using will then need to be
-cleaned up by the operating system. If in your program you need to make
-the resulting binary as small as possible, you can switch from unwinding to
+cleaned up by the operating system. If in your project you need to make the
+resulting binary as small as possible, you can switch from unwinding to
 aborting on panic by adding <code>panic = 'abort'</code> to the appropriate <code>[profile]</code>
-sections in your <code>Cargo.toml</code>. For example, if you want to abort on panic in
+sections in your <em>Cargo.toml</em>. For example, if you want to abort on panic in
 release mode:</p>
 <pre><code class="language-toml">[profile.release]
 panic = 'abort'
 </code></pre>
 </blockquote>
-<!-- PROD: END BOX -->
-<p>Let's try calling <code>panic!()</code> with a simple program:</p>
+<p>Let’s try calling <code>panic!</code> with a simple program:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust,should_panic">fn main() {
     panic!(&quot;crash and burn&quot;);
 }
 </code></pre>
-<p>If you run it, you'll see something like this:</p>
+<p>If you run it, you’ll see something like this:</p>
 <pre><code class="language-text">$ cargo run
    Compiling panic v0.1.0 (file:///projects/panic)
     Finished debug [unoptimized + debuginfo] target(s) in 0.25 secs
@@ -108,16 +106,16 @@ error: Process didn't exit successfully: `target/debug/panic` (exit code: 101)
 </code></pre>
 <p>The last three lines contain the error message caused by the call to <code>panic!</code>.
 The first line shows our panic message and the place in our source code where
-the panic occurred: <code>src/main.rs:2</code> indicates that it's the second line of our
-<em>main.rs</em> file.</p>
+the panic occurred: <em>src/main.rs:2</em> indicates that it’s the second line of our
+<em>src/main.rs</em> file.</p>
 <p>In this case, the line indicated is part of our code, and if we go to that line
 we see the <code>panic!</code> macro call. In other cases, the <code>panic!</code> call might be in
 code that our code calls. The filename and line number reported by the error
-message will be someone else's code where the <code>panic!</code> macro is called, not the
+message will be someone else’s code where the <code>panic!</code> macro is called, not the
 line of our code that eventually led to the <code>panic!</code>. We can use the backtrace
 of the functions the <code>panic!</code> call came from to figure this out.</p>
 <a class="header" href="#using-a-panic-backtrace" name="using-a-panic-backtrace"><h3>Using a <code>panic!</code> Backtrace</h3></a>
-<p>Let's look at another example to see what it's like when a <code>panic!</code> call comes
+<p>Let’s look at another example to see what it’s like when a <code>panic!</code> call comes
 from a library because of a bug in our code instead of from our code calling
 the macro directly:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
@@ -127,94 +125,88 @@ the macro directly:</p>
     v[100];
 }
 </code></pre>
-<p>We're attempting to access the hundredth element of our vector, but it only has
+<p>We’re attempting to access the hundredth element of our vector, but it only has
 three elements. In this situation, Rust will panic. Using <code>[]</code> is supposed to
-return an element, but if you pass an invalid index, there's no element that
+return an element, but if you pass an invalid index, there’s no element that
 Rust could return here that would be correct.</p>
 <p>Other languages like C will attempt to give you exactly what you asked for in
-this situation, even though it isn't what you want: you'll get whatever is at
+this situation, even though it isn’t what you want: you’ll get whatever is at
 the location in memory that would correspond to that element in the vector,
-even though the memory doesn't belong to the vector. This is called a <em>buffer
+even though the memory doesn’t belong to the vector. This is called a <em>buffer
 overread</em>, and can lead to security vulnerabilities if an attacker can
-manipulate the index in such a way as to read data they shouldn't be allowed to
+manipulate the index in such a way as to read data they shouldn’t be allowed to
 that is stored after the array.</p>
 <p>In order to protect your program from this sort of vulnerability, if you try to
-read an element at an index that doesn't exist, Rust will stop execution and
-refuse to continue. Let's try it and see:</p>
+read an element at an index that doesn’t exist, Rust will stop execution and
+refuse to continue. Let’s try it and see:</p>
 <pre><code class="language-text">$ cargo run
    Compiling panic v0.1.0 (file:///projects/panic)
     Finished debug [unoptimized + debuginfo] target(s) in 0.27 secs
      Running `target/debug/panic`
 thread 'main' panicked at 'index out of bounds: the len is 3 but the index is
-100', ../src/libcollections/vec.rs:1265
+100', /stable-dist-rustc/build/src/libcollections/vec.rs:1362
 note: Run with `RUST_BACKTRACE=1` for a backtrace.
 error: Process didn't exit successfully: `target/debug/panic` (exit code: 101)
 </code></pre>
-<p>This points at a file we didn't write, <em>../src/libcollections/vec.rs</em>. That's
-the implementation of <code>Vec&lt;T&gt;</code> in the standard library. The code that gets run
-when we use <code>[]</code> on our vector <code>v</code> is in <em>../src/libcollections/vec.rs</em>, and
-that is where the <code>panic!</code> is actually happening.</p>
-<p>The next <code>note</code> line tells us that we can set the <code>RUST_BACKTRACE</code> environment
-variable to get a backtrace of exactly what happened to cause the error. Let's
+<p>This points at a file we didn’t write, <em>libcollections/vec.rs</em>. That’s the
+implementation of <code>Vec&lt;T&gt;</code> in the standard library. The code that gets run when
+we use <code>[]</code> on our vector <code>v</code> is in <em>libcollections/vec.rs</em>, and that is where
+the <code>panic!</code> is actually happening.</p>
+<p>The next note line tells us that we can set the <code>RUST_BACKTRACE</code> environment
+variable to get a backtrace of exactly what happened to cause the error. Let’s
 try that. Listing 9-1 shows the output:</p>
 <figure>
 <pre><code class="language-text">$ RUST_BACKTRACE=1 cargo run
     Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
      Running `target/debug/panic`
 thread 'main' panicked at 'index out of bounds: the len is 3 but the index is
-100', ../src/libcollections/vec.rs:1265
+100', /stable-dist-rustc/build/src/libcollections/vec.rs:1395
 stack backtrace:
-   1:     0x560956150ae9 -
-std::sys::backtrace::tracing::imp::write::h482d45d91246faa2
-   2:     0x56095615345c -
-std::panicking::default_hook::_{{closure}}::h89158f66286b674e
-   3:     0x56095615291e - std::panicking::default_hook::h9e30d428ee3b0c43
-   4:     0x560956152f88 -
-std::panicking::rust_panic_with_hook::h2224f33fb7bf2f4c
-   5:     0x560956152e22 - std::panicking::begin_panic::hcb11a4dc6d779ae5
-   6:     0x560956152d50 - std::panicking::begin_panic_fmt::h310416c62f3935b3
-   7:     0x560956152cd1 - rust_begin_unwind
-   8:     0x560956188a2f - core::panicking::panic_fmt::hc5789f4e80194729
-   9:     0x5609561889d3 -
-core::panicking::panic_bounds_check::hb2d969c3cc11ed08
-  10:     0x56095614c075 - _&lt;collections..vec..Vec&lt;T&gt; as
-core..ops..Index&lt;usize&gt;&gt;::index::hb9f10d3dadbe8101
-                        at ../src/libcollections/vec.rs:1265
-  11:     0x56095614c134 - panic::main::h2d7d3751fb8705e2
-                        at /projects/panic/src/main.rs:4
-  12:     0x56095615af46 - __rust_maybe_catch_panic
-  13:     0x560956152082 - std::rt::lang_start::h352a66f5026f54bd
-  14:     0x56095614c1b3 - main
-  15:     0x7f75b88ed72f - __libc_start_main
-  16:     0x56095614b3c8 - _start
-  17:                0x0 - &lt;unknown&gt;
-error: Process didn't exit successfully: `target/debug/panic` (exit code: 101)
+   1:        0x10922522c -
+std::sys::imp::backtrace::tracing::imp::write::h1204ab053b688140
+   2:        0x10922649e -
+std::panicking::default_hook::{{closure}}::h1204ab053b688140
+   3:        0x109226140 - std::panicking::default_hook::h1204ab053b688140
+   4:        0x109226897 -
+std::panicking::rust_panic_with_hook::h1204ab053b688140
+   5:        0x1092266f4 - std::panicking::begin_panic::h1204ab053b688140
+   6:        0x109226662 - std::panicking::begin_panic_fmt::h1204ab053b688140
+   7:        0x1092265c7 - rust_begin_unwind
+   8:        0x1092486f0 - core::panicking::panic_fmt::h1204ab053b688140
+   9:        0x109248668 -
+core::panicking::panic_bounds_check::h1204ab053b688140
+  10:        0x1092205b5 - &lt;collections::vec::Vec&lt;T&gt; as
+core::ops::Index&lt;usize&gt;&gt;::index::h1204ab053b688140
+  11:        0x10922066a - panic::main::h1204ab053b688140
+  12:        0x1092282ba - __rust_maybe_catch_panic
+  13:        0x109226b16 - std::rt::lang_start::h1204ab053b688140
+  14:        0x1092206e9 - main
 </code></pre>
 <figcaption>
-<p>Listing 9-1: The backtrace generated by a call to <code>panic!</code> displayed when
-the environment variable <code>RUST_BACKTRACE</code> is set</p>
+<p>Listing 9-1: The backtrace generated by a call to <code>panic!</code> displayed when the
+environment variable <code>RUST_BACKTRACE</code> is set</p>
 </figcaption>
 </figure>
-<p>That's a lot of output! Line 11 of the backtrace points to the line in our
-project causing the problem: <code>src/main.rs</code>, line four. A backtrace is a list of
+<p>That’s a lot of output! Line 11 of the backtrace points to the line in our
+project causing the problem: <em>src/main.rs</em>, line four. A backtrace is a list of
 all the functions that have been called to get to this point. Backtraces in
 Rust work like they do in other languages: the key to reading the backtrace is
-to start from the top and read until you see files you wrote. That's the spot
+to start from the top and read until you see files you wrote. That’s the spot
 where the problem originated. The lines above the lines mentioning your files
 are code that your code called; the lines below are code that called your code.
 These lines might include core Rust code, standard library code, or crates that
-you're using.</p>
-<p>If we don't want our program to panic, the location pointed to by the first
+you’re using.</p>
+<p>If we don’t want our program to panic, the location pointed to by the first
 line mentioning a file we wrote is where we should start investigating in order
 to figure out how we got to this location with values that caused the panic. In
 our example where we deliberately wrote code that would panic in order to
 demonstrate how to use backtraces, the way to fix the panic is to not try to
 request an element at index 100 from a vector that only contains three items.
-When your code panics in the future, you'll need to figure out for your
+When your code panics in the future, you’ll need to figure out for your
 particular case what action the code is taking with what values that causes the
 panic and what the code should do instead.</p>
-<p>We'll come back to <code>panic!</code> and when we should and should not use these methods
-later in the chapter. Next, we'll now look at how to recover from an error with
+<p>We’ll come back to <code>panic!</code> and when we should and should not use these methods
+later in the chapter. Next, we’ll now look at how to recover from an error with
 <code>Result</code>.</p>
 
                 </div>
