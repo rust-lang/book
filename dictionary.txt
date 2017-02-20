@@ -100,9 +100,8 @@ growable
 hardcoded
 hardcoding
 hasher
-hashmap
+hashers
 HashMap
-Hashmaps
 Haskell
 hasn
 helloworld
