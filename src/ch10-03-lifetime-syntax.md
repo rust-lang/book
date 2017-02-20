@@ -223,11 +223,11 @@ we've implemented the `longest` function:
 # }
 #
 fn main() {
-    let a = String::from("abcd");
-    let b = "xyz";
+    let n = String::from("abcd");
+    let m = "xyz";
 
-    let c = longest(a.as_str(), b);
-    println!("The longest string is {}", c);
+    let l = longest(n.as_str(), m);
+    println!("The longest string is {}", l);
 }
 ```
 
@@ -241,8 +241,8 @@ Listing 10-9: A `main` function that demonstrates how we'd like to use the
 
 Note that we want the function to take string slices because we don't want the
 `longest` function to take ownership of its parameters, and we want the function
-to be able to accept slices of a `String` (like `a` is) as well as string
-literals (`b`). Refer back to the "String Slices as Parameters" section of
+to be able to accept slices of a `String` (like `n` is) as well as string
+literals (`m`). Refer back to the "String Slices as Parameters" section of
 Chapter 4 for more discussion about why these are the parameters we want.
 
 Here's the start of an implementation of the `longest` function that won't
