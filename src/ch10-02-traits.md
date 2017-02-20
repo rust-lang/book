@@ -419,7 +419,7 @@ error[E0507]: cannot move out of borrowed content
   |         cannot move out of borrowed content
 ```
 
-The key to this error is `` cannot move out of type `[T]`, a non-copy array ``.
+The key to this error is `cannot move out of type [T], a non-copy array`.
 With our non-generic versions of the `largest` function, we were only trying to
 find the largest `i32` or `char`. As we discussed in Chapter 4, types like
 `i32` and `char` that have a known size can be stored on the stack, so they
