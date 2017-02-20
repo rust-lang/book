@@ -33,16 +33,17 @@ program will print a failure message, unwind and clean up the stack, and then
 quit. The most common situation this occurs in is when a bug of some kind has
 been detected and it’s not clear to the programmer how to handle the error.
 
-> #### Unwinding
+> ### Unwinding the Stack Versus Aborting on Panic
+>
 > By default, when a `panic!` occurs, the program starts
 > *unwinding*, which means Rust walks back up the stack and cleans up the data
 > from each function it encounters, but this walking and cleanup is a lot of
-> work. The alternative is to immediately `abort`, which ends the program
+> work. The alternative is to immediately *abort*, which ends the program
 > without cleaning up. Memory that the program was using will then need to be
-> cleaned up by the operating system. If in your program you need to make
-> the resulting binary as small as possible, you can switch from unwinding to
+> cleaned up by the operating system. If in your project you need to make the
+> resulting binary as small as possible, you can switch from unwinding to
 > aborting on panic by adding `panic = 'abort'` to the appropriate `[profile]`
-> sections in your `Cargo.toml`. For example, if you want to abort on panic in
+> sections in your *Cargo.toml*. For example, if you want to abort on panic in
 > release mode:
 >
 > ```toml
@@ -50,7 +51,7 @@ been detected and it’s not clear to the programmer how to handle the error.
 > panic = 'abort'
 > ```
 
-Let's try calling `panic!()` with a simple program:
+Let’s try calling `panic!` with a simple program:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -100,17 +101,17 @@ fn main() {
 }
 ```
 
-We're attempting to access the hundredth element of our vector, but it only has
+We’re attempting to access the hundredth element of our vector, but it only has
 three elements. In this situation, Rust will panic. Using `[]` is supposed to
-return an element, but if you pass an invalid index, there's no element that
+return an element, but if you pass an invalid index, there’s no element that
 Rust could return here that would be correct.
 
 Other languages like C will attempt to give you exactly what you asked for in
 this situation, even though it isn’t what you want: you’ll get whatever is at
 the location in memory that would correspond to that element in the vector,
-even though the memory doesn't belong to the vector. This is called a *buffer
+even though the memory doesn’t belong to the vector. This is called a *buffer
 overread*, and can lead to security vulnerabilities if an attacker can
-manipulate the index in such a way as to read data they shouldn't be allowed to
+manipulate the index in such a way as to read data they shouldn’t be allowed to
 that is stored after the array.
 
 In order to protect your program from this sort of vulnerability, if you try to
@@ -123,18 +124,18 @@ $ cargo run
     Finished debug [unoptimized + debuginfo] target(s) in 0.27 secs
      Running `target/debug/panic`
 thread 'main' panicked at 'index out of bounds: the len is 3 but the index is
-100', ../src/libcollections/vec.rs:1265
+100', /stable-dist-rustc/build/src/libcollections/vec.rs:1362
 note: Run with `RUST_BACKTRACE=1` for a backtrace.
 error: Process didn't exit successfully: `target/debug/panic` (exit code: 101)
 ```
 
-This points at a file we didn't write, *../src/libcollections/vec.rs*. That's
-the implementation of `Vec<T>` in the standard library. The code that gets run
-when we use `[]` on our vector `v` is in *../src/libcollections/vec.rs*, and
-that is where the `panic!` is actually happening.
+This points at a file we didn’t write, *libcollections/vec.rs*. That’s the
+implementation of `Vec<T>` in the standard library. The code that gets run when
+we use `[]` on our vector `v` is in *libcollections/vec.rs*, and that is where
+the `panic!` is actually happening.
 
-The next `note` line tells us that we can set the `RUST_BACKTRACE` environment
-variable to get a backtrace of exactly what happened to cause the error. Let's
+The next note line tells us that we can set the `RUST_BACKTRACE` environment
+variable to get a backtrace of exactly what happened to cause the error. Let’s
 try that. Listing 9-1 shows the output:
 
 <figure>
@@ -144,45 +145,39 @@ $ RUST_BACKTRACE=1 cargo run
     Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
      Running `target/debug/panic`
 thread 'main' panicked at 'index out of bounds: the len is 3 but the index is
-100', ../src/libcollections/vec.rs:1265
+100', /stable-dist-rustc/build/src/libcollections/vec.rs:1395
 stack backtrace:
-   1:     0x560956150ae9 -
-std::sys::backtrace::tracing::imp::write::h482d45d91246faa2
-   2:     0x56095615345c -
-std::panicking::default_hook::_{{closure}}::h89158f66286b674e
-   3:     0x56095615291e - std::panicking::default_hook::h9e30d428ee3b0c43
-   4:     0x560956152f88 -
-std::panicking::rust_panic_with_hook::h2224f33fb7bf2f4c
-   5:     0x560956152e22 - std::panicking::begin_panic::hcb11a4dc6d779ae5
-   6:     0x560956152d50 - std::panicking::begin_panic_fmt::h310416c62f3935b3
-   7:     0x560956152cd1 - rust_begin_unwind
-   8:     0x560956188a2f - core::panicking::panic_fmt::hc5789f4e80194729
-   9:     0x5609561889d3 -
-core::panicking::panic_bounds_check::hb2d969c3cc11ed08
-  10:     0x56095614c075 - _<collections..vec..Vec<T> as
-core..ops..Index<usize>>::index::hb9f10d3dadbe8101
-                        at ../src/libcollections/vec.rs:1265
-  11:     0x56095614c134 - panic::main::h2d7d3751fb8705e2
-                        at /projects/panic/src/main.rs:4
-  12:     0x56095615af46 - __rust_maybe_catch_panic
-  13:     0x560956152082 - std::rt::lang_start::h352a66f5026f54bd
-  14:     0x56095614c1b3 - main
-  15:     0x7f75b88ed72f - __libc_start_main
-  16:     0x56095614b3c8 - _start
-  17:                0x0 - <unknown>
-error: Process didn't exit successfully: `target/debug/panic` (exit code: 101)
+   1:        0x10922522c -
+std::sys::imp::backtrace::tracing::imp::write::h61cce32efcf6a3d0
+   2:        0x10922649e -
+std::panicking::default_hook::{{closure}}::hdac93beb64eaf365
+   3:        0x109226140 - std::panicking::default_hook::h4a7f61136a9004ca
+   4:        0x109226897 -
+std::panicking::rust_panic_with_hook::hdf5cd951b8d6fa36
+   5:        0x1092266f4 - std::panicking::begin_panic::h1204ab053b688140
+   6:        0x109226662 - std::panicking::begin_panic_fmt::h7d4fffc79f986d3b
+   7:        0x1092265c7 - rust_begin_unwind
+   8:        0x1092486f0 - core::panicking::panic_fmt::he6eb92dab4407c61
+   9:        0x109248668 -
+core::panicking::panic_bounds_check::h37b4772a417ae8c7
+  10:        0x1092205b5 - <collections::vec::Vec<T> as
+core::ops::Index<usize>>::index::hbc2823add66bc839
+  11:        0x10922066a - aggregator::main::h977e018a69ea4690
+  12:        0x1092282ba - __rust_maybe_catch_panic
+  13:        0x109226b16 - std::rt::lang_start::h5196b70c908371ed
+  14:        0x1092206e9 - main
 ```
 
 <figcaption>
 
-Listing 9-1: The backtrace generated by a call to `panic!` displayed when
-the environment variable `RUST_BACKTRACE` is set
+Listing 9-1: The backtrace generated by a call to `panic!` displayed when the
+environment variable `RUST_BACKTRACE` is set
 
 </figcaption>
 </figure>
 
-That's a lot of output! Line 11 of the backtrace points to the line in our
-project causing the problem: `src/main.rs`, line four. A backtrace is a list of
+That’s a lot of output! Line 11 of the backtrace points to the line in our
+project causing the problem: *src/main.rs*, line four. A backtrace is a list of
 all the functions that have been called to get to this point. Backtraces in
 Rust work like they do in other languages: the key to reading the backtrace is
 to start from the top and read until you see files you wrote. That’s the spot
@@ -233,7 +228,7 @@ parameters, we can use the `Result` type and the functions that the standard
 library has defined on it in many different situations where the successful
 value and error value we want to return may differ.
 
-Let's call a function that returns a `Result` value because the function could
+Let’s call a function that returns a `Result` value because the function could
 fail: opening a file, shown in Listing 9-2.
 
 <figure>
@@ -255,11 +250,11 @@ Listing 9-2: Opening a file
 </figure>
 
 How do we know `File::open` returns a `Result`? We could look at the standard
-library API documentation. We could ask the compiler! If we give `f` a type
+library API documentation, or we could ask the compiler! If we give `f` a type
 annotation of some type that we know the return type of the function is *not*,
-then we try to compile the code, the compiler will tell us that the types don't
-match. The error message will then tell us what the type of `f` *is*! Let's try
-it: we know that the return type of `File::open` isn't of type `u32`, so let's
+then we try to compile the code, the compiler will tell us that the types don’t
+match. The error message will then tell us what the type of `f` *is*! Let’s try
+it: we know that the return type of `File::open` isn’t of type `u32`, so let’s
 change the `let f` statement to:
 
 ```rust,ignore
@@ -273,7 +268,8 @@ error[E0308]: mismatched types
  --> src/main.rs:4:18
   |
 4 |     let f: u32 = File::open("hello.txt");
-  |                  ^^^^^^^^^^^^^^^^^^^^^^^ expected u32, found enum `std::result::Result`
+  |                  ^^^^^^^^^^^^^^^^^^^^^^^ expected u32, found enum
+`std::result::Result`
   |
   = note: expected type `u32`
   = note:    found type `std::result::Result<std::fs::File, std::io::Error>`
@@ -313,8 +309,9 @@ fn main() {
 
     let f = match f {
         Ok(file) => file,
-        Err(error) => panic!("There was a problem opening the file: {:?}",
-error),
+        Err(error) => {
+            panic!("There was a problem opening the file: {:?}", error)
+        },
     };
 }
 ```
@@ -328,7 +325,7 @@ might have
 </figure>
 
 Note that, like the `Option` enum, the `Result` enum and its variants have been
-imported in the prelude, so we don't need to specify `Result::` before the `Ok`
+imported in the prelude, so we don’t need to specify `Result::` before the `Ok`
 and `Err` variants in the `match` arms.
 
 Here we tell Rust that when the result is `Ok`, return the inner `file` value
@@ -372,11 +369,20 @@ fn main() {
         Err(ref error) if error.kind() == ErrorKind::NotFound => {
             match File::create("hello.txt") {
                 Ok(fc) => fc,
-                Err(e) => panic!("Tried to create file but there was a problem: {:?}", e),
+                Err(e) => {
+                    panic!(
+                        "Tried to create file but there was a problem: {:?}",
+                        e
+                    )
+                },
             }
         },
-        Err(error) => panic!("There was a problem opening the file: {:?}",
-error),
+        Err(error) => {
+            panic!(
+                "There was a problem opening the file: {:?}",
+                error
+            )
+        },
     };
 }
 ```
@@ -400,17 +406,17 @@ The condition `if error.kind() == ErrorKind::NotFound` is called a *match
 guard*: it’s an extra condition on a `match` arm that further refines the arm’s
 pattern. This condition must be true in order for that arm’s code to get run;
 otherwise, the pattern matching will move on to consider the next arm in the
-`match`. The `ref` in the pattern is needed so that the `error` is not moved
-into the guard condition but is merely referenced by it. The reason `ref` is
-used to take a reference in a pattern instead of `&` will be covered in detail
-in Chapter XX. In short, in the context of a pattern, `&` matches a reference
-and gives us its value, but `ref` matches a value and gives us a reference to it.
+`match`. The `ref` in the pattern is needed so that `error` is not moved into
+the guard condition but is merely referenced by it. The reason `ref` is used to
+take a reference in a pattern instead of `&` will be covered in detail in
+Chapter 18. In short, in the context of a pattern, `&` matches a reference and
+gives us its value, but `ref` matches a value and gives us a reference to it.
 
 The condition we want to check in the match guard is whether the value returned
 by `error.kind()` is the `NotFound` variant of the `ErrorKind` enum. If it is,
 we try to create the file with `File::create`. However, since `File::create`
 could also fail, we need to add an inner `match` statement as well! When the
-file can't be opened, a different error message will be printed. The last arm
+file can’t be opened, a different error message will be printed. The last arm
 of the outer `match` stays the same so that the program panics on any error
 besides the missing file error.
 
@@ -432,19 +438,19 @@ fn main() {
 }
 ```
 
-If we run this code without a *hello.txt* file, we'll see an error message from
-the `panic` call that the `unwrap` method makes:
+If we run this code without a *hello.txt* file, we’ll see an error message from
+the `panic!` call that the `unwrap` method makes:
 
 ```text
 thread 'main' panicked at 'called `Result::unwrap()` on an `Err` value: Error {
 repr: Os { code: 2, message: "No such file or directory" } }',
-../src/libcore/result.rs:837
+/stable-dist-rustc/build/src/libcore/result.rs:868
 ```
 
 There’s another method similar to `unwrap` that lets us also choose the
 `panic!` error message: `expect`. Using `expect` instead of `unwrap` and
 providing good error messages can convey your intent and make tracking down the
-source of a panic easier. The syntax of`expect` looks like this:
+source of a panic easier. The syntax of `expect` looks like this:
 
 ```rust,should_panic
 use std::fs::File;
@@ -457,11 +463,12 @@ fn main() {
 We use `expect` in the same way as `unwrap`: to return the file handle or call
 the `panic!` macro. The error message that `expect` uses in its call to
 `panic!` will be the parameter that we pass to `expect` instead of the default
-`panic!` message that `unwrap` uses. Here's what it looks like:
+`panic!` message that `unwrap` uses. Here’s what it looks like:
 
 ```text
 thread 'main' panicked at 'Failed to open hello.txt: Error { repr: Os { code:
-2, message: "No such file or directory" } }', ../src/libcore/result.rs:837
+2, message: "No such file or directory" } }',
+/stable-dist-rustc/build/src/libcore/result.rs:868
 ```
 
 ### Propagating Errors
@@ -508,7 +515,7 @@ Listing 9-5: A function that returns errors to the calling code using `match`
 </figcaption>
 </figure>
 
-Let's look at the return type of the function first: `Result<String,
+Let’s look at the return type of the function first: `Result<String,
 io::Error>`. This means that the function is returning a value of the type
 `Result<T, E>` where the generic parameter `T` has been filled in with the
 concrete type `String`, and the generic type `E` has been filled in with the
@@ -556,7 +563,7 @@ syntax to make this easier: `?`.
 
 Listing 9-6 shows an implementation of `read_username_from_file` that has the
 same functionality as it had in Listing 9-5, but this implementation uses the
-question mark:
+question mark operator:
 
 <figure>
 
@@ -588,7 +595,7 @@ function as if we had used the `return` keyword so that the error value gets
 propagated to the caller.
 
 In the context of Listing 9-6, the `?` at the end of the `File::open` call will
-return the value inside an `Ok` to the binding `f`. If an error occurs, `?`
+return the value inside an `Ok` to the variable `f`. If an error occurs, `?`
 will return early out of the whole function and give any `Err` value to our
 caller. The same thing applies to the `?` at the end of the `read_to_string`
 call.
@@ -620,7 +627,7 @@ username in `s` when both `File::open` and `read_to_string` succeed rather than
 returning errors. The functionality is again the same as in Listing 9-5 and
 Listing 9-6, this is just a different, more ergonomic way to write it.
 
-#### `?` Can Only Be Used in Functions That Return `Result`
+### `?` Can Only Be Used in Functions That Return `Result`
 
 The `?` can only be used in functions that have a return type of `Result`,
 since it is defined to work in exactly the same way as the `match` expression
@@ -628,10 +635,12 @@ we defined in Listing 9-5. The part of the `match` that requires a return type
 of `Result` is `return Err(e)`, so the return type of the function must be a
 `Result` to be compatible with this `return`.
 
-Let's look at what happens if use `try!` in the `main` function, which you'll
+Let’s look at what happens if use `?` in the `main` function, which you’ll
 recall has a return type of `()`:
 
 ```rust,ignore
+use std::fs::File;
+
 fn main() {
     let f = File::open("hello.txt")?;
 }
@@ -654,13 +663,14 @@ error[E0308]: mismatched types
  -->
   |
 3 |     let f = File::open("hello.txt")?;
-  |             ^^^^^^^^^^^^^^^^^^^^^^^^^ expected (), found enum `std::result::Result`
+  |             ^^^^^^^^^^^^^^^^^^^^^^^^^ expected (), found enum
+`std::result::Result`
   |
   = note: expected type `()`
   = note:    found type `std::result::Result<_, _>`
 ```
 
-This error is pointing out that we have mismatched types: the `main()` function
+This error is pointing out that we have mismatched types: the `main` function
 has a return type of `()`, but the `?` might return a `Result`. In functions
 that don’t return `Result`, when you call other functions that return `Result`,
 you’ll need to use a `match` or one of the `Result` methods to handle it,
@@ -739,8 +749,8 @@ instead.
 
 ### Guidelines for Error Handling
 
-It's advisable to have your code `panic!` when it's possible that you could end
-up in a *bad state*—in this context, *bad state* is when some assumption,
+It’s advisable to have your code `panic!` when it’s possible that you could end
+up in a bad state—in this context, bad state is when some assumption,
 guarantee, contract, or invariant has been broken, such as when invalid values,
 contradictory values, or missing values are passed to your code—plus one or
 more of the following:
@@ -776,8 +786,8 @@ makes sense because a contract violation always indicates a caller-side bug,
 and it is not a kind of error you want callers to have to explicitly handle. In
 fact, there’s no reasonable way for calling code to recover: the calling
 *programmers* need to fix the code. Contracts for a function, especially when a
-violation will cause a `panic`, should be explained in the API documentation
-for the function.
+violation will cause a panic, should be explained in the API documentation for
+the function.
 
 Having lots of error checks in all of your functions would be verbose and
 annoying, though. Luckily, you can use Rust’s type system (and thus the type
@@ -831,8 +841,8 @@ loop {
 The `if` expression checks to see if our value is out of range, tells the user
 about the problem, and calls `continue` to start the next iteration of the loop
 and ask for another guess. After the `if` expression, we can proceed with the
-comparisons between `guess` and the secret number knowing that guess is between
-1 and 100.
+comparisons between `guess` and the secret number knowing that `guess` is
+between 1 and 100.
 
 However, this is not an ideal solution: if it was absolutely critical that the
 program only operated on values between 1 and 100, and it had many functions
@@ -893,17 +903,17 @@ might panic should be discussed in its public-facing API documentation; we’ll
 cover documentation conventions around indicating the possibility of a `panic!`
 in the API documentation that you create in Chapter 14. If `value` does pass
 the test, we create a new `Guess` with its `value` field set to the `value`
-parameter, and return the `Guess`.
+parameter and return the `Guess`.
 
-Next, we implement a method named `value` that borrows `self`, doesn't have any
-other parameters, and returns a `u32`. This is a kind of method sometimes called
-a *getter*, since its purpose is to get some data from its fields and return
-it. This public method is necessary because the `value` field of the `Guess`
-struct is private. It's important that the `value` field is private so that
-code using the `Guess` struct is not allowed to set `value` directly: callers
-*must* use the `Guess::new` constructor function to create an instance of
-`Guess`, which ensures there's no way for a `Guess` to have a `value` that
-hasn't been checked by the conditions in the constructor.
+Next, we implement a method named `value` that borrows `self`, doesn’t have any
+other parameters, and returns a `u32`. This is a kind of method sometimes
+called a *getter*, since its purpose is to get some data from its fields and
+return it. This public method is necessary because the `value` field of the
+`Guess` struct is private. It’s important that the `value` field is private so
+that code using the `Guess` struct is not allowed to set `value` directly:
+callers *must* use the `Guess::new` constructor function to create an instance
+of `Guess`, which ensures there’s no way for a `Guess` to have a `value` that
+hasn’t been checked by the conditions in the constructor.
 
 A function that has a parameter or returns only numbers between 1 and 100 could
 then declare in its signature that it takes or returns a `Guess` rather than a
