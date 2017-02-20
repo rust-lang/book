@@ -47,7 +47,7 @@ been detected and it’s not clear to the programmer how to handle the error.
 > release mode:
 >
 > ```toml
-> profile.release
+> [profile.release]
 > panic = 'abort'
 > ```
 
