@@ -479,7 +479,7 @@ of `borrow` and `borrow_mut` methods, it has `get` and `set` methods:
 ```rust
 use std::cell::Cell;
 
-let mut five = Cell::new(5);
+let five = Cell::new(5);
 
 five.set(6); // not five any more O_O
 
@@ -499,14 +499,61 @@ But what is 'interior mutability' anyway?
 
 ## The Interior Mutability Pattern
 
-The Interior Mutability Pattern is super unsafe internally but safe to use
-from the outside and is totally safe, totally, trust us, seriously, it's safe.
+*Interior mutability* is a design pattern in Rust for allowing you to mutate
+something that's immutable. Wait, what? Let's compare these two pieces of code.
+What's different about them?
 
-Allude to `UnsafeCell<T>` maybe. Affects optimizations since &mut T is unique.
-UnsafeCell turns off those optimizations so that everything doesn't break.
+```rust
+use std::cell::Cell;
 
-This is how you can opt-out of the default of Rust's ownership rules and opt
-in to different guarantees.
+// one
+let mut five = 5;
+
+five = 6;
+
+// two
+let five = Cell::new(5);
+
+five.set(6);
+```
+
+There are three things that are different:
+
+1. We use `5` in sample one, but `Cell::new(5)` in sample two.
+2. We use `=` in sample one, but `set` in sample two.
+3. `five` is mutable in sample one, but not in sample two.
+
+That third difference? That's interior mutability.
+
+Why are we allowed to do this? Well, to some degree, we're not. The reason we
+call interior mutability a "pattern" is that it's not really a language
+feature, it's a design pattern for libraries. More specifically, it's a pattern
+that uses `unsafe` code inside to bend Rust's usual rules. We haven't yet covered
+unsafe code in-depth, we will in Chapter 20. Luckily for us, you don't have to
+understand how it works inside to use it. All you need to know is that the
+various family of `Cell` types, as well as some others like `Mutex<T>` (that we'll
+cover in the next chapter, on concurrency) follow this pattern.
+
+Why is this useful? Well, remember when we said that `Rc<T>` has to store
+immutable data? Given that `RefCell<T>` is immutable, but has interior mutability,
+we can combine `Rc<T>` and `RefCell<T>` to get a type that's both reference
+counted and mutable. Like this:
+
+```rust
+use std::rc::Rc;
+use std::cell::RefCell;
+
+let five = Rc::new(RefCell::new(5));
+
+let other_rc = five.clone();
+
+*other_rc.borrow_mut() = 6;
+```
+
+This is where interior mutability is useful: when you have something that
+requires immutability, but you also need to mutate something. This comes up
+with types like `Rc<T>`, but it can also come up in concurrency situations.  In
+general, it's a fairly rare thing to need, but when you need it, it does exist.
 
 ### Cycles
 
@@ -515,37 +562,92 @@ is deallocated. But what about this program?
 
 ```rust
 use std::rc::Rc;
+use std::cell::RefCell;
 
 struct Cycle {
-    really_bad: Option<Rc<Cycle>>,
+    really_bad: RefCell<Option<Rc<Cycle>>>,
     leaked_data: i32,
 }
 
 fn main() {
     let mut oh_no = Rc::new(Cycle {
-        really_bad: None,
+        really_bad: RefCell::new(None),
         leaked_data: 5,
     });
 
-    let clone = oh_no.clone();        
+    let clone = oh_no.clone();
 
-    oh_no.really_bad = Some(clone);
+    *oh_no.really_bad.borrow_mut() = Some(clone);
 }
 ```
 
+There's a lot going on here. Fundamentally, `Cycle` is a type that contains an
+`Rc<Cycle>`. This means that we can have a 'referene cycle', hence the name of
+the struct. Here, we've constructed one in `main`: we have `oh_no`, and then we
+create a clone of it, `clone`. Since we've made a clone of it, the reference
+count is two: one for the initial `Rc<T>`, and one for the clone.  When `oh_no`
+goes out of scope at the end of `main`, it will decrement the count to one. But
+that's it: `clone` never really goes out of scope, since it was moved into
+`oh_no`. This means that this memory is now unreachable, yet will never be
+cleaned up. It'll just sit there with a count of one, forever.  In this
+specific case, the program ends right away, so it's not a problem, but in a
+more complex program, it would be.
+
+Now, as you can see, doing this is very hard. To be honest, your authors had to
+look up previous discussions of an example to get this right. But it can
+happen, and the way that it happens is reasonably obvious: If you have an
+`Rc<T>` that contains an `Rc<T>`, beware.
+
 #### Solution: turn an Rc into a `Weak<T>`
 
-Same as Rc, but doesn't count towards the strong ref count. When you do this, the
-strong ref count goes down and the weak count goes up.
+To help with this problem, the Rust standard library contains a different
+type: `Weak<T>`. Let's see what that looks like:
 
-Data gets cleaned up when the strong count is 0, no matter what the weak count is.
+```rust
+use std::rc::{Rc, Weak};
+use std::cell::RefCell;
 
-Why is the weak count needed then????
+struct Cycle {
+    really_bad: RefCell<Option<Weak<Cycle>>>,
+    leaked_data: i32,
+}
+
+fn main() {
+    let mut oh_no = Rc::new(Cycle {
+        really_bad: RefCell::new(None),
+        leaked_data: 5,
+    });
+
+    let clone = Rc::downgrade(&oh_no.clone());
+
+    *oh_no.really_bad.borrow_mut() = Some(clone);
+}
+```
+
+`Weak<T>` is exactly like `Rc<T>`, except that its reference count doesn't, well,
+count when determining if something should be freed. You can turn an `Rc<T>` into
+a `Weak<T>` with the `Rc::downgrade` associated method, which takes an `&Rc<T>`
+as an argument, and gives a `Weak<T>` back.
+
+So in this example, when we call `oh_no.clone()`, we increment the count to two.
+But when we pass that clone to `downgrade`, that count goes down again, to one.
+Now, at the end of the function, when `oh_no` goes out of scope, it reduces the
+count from one to zero, and the memory is freed. Success! We've broken the cycle.
+
+If you're doing complex things with `Rc<T>`s, you should investigate if you
+have a cycle, and insert a `Weak<T>` so that your memory doesn't leak. The
+specifics depend on exactly what you're doing, but luckily, this isn't a
+Rust-specific idea; all of this translates over to other reference counting
+libraries in other languages, so doing some reading about it should help you.
 
 
 ## Summary
 
-If you want to implement your own smart pointer, go read the Nomicon.
+Whew! Smart pointers are powerful, but complex. We've covered the basics of
+smart pointers, and how to use some of the most common smart pointers.
+Implementing your own smart pointers is out of the scope of this book; you
+should check out the Nomicon if you're interested in building these kinds of
+abstractions.
 
-Now let's talk about concurrency, and some smart pointers that can be used
-with multiple threads.
+Next, let's talk about concurrency in Rust. We'll even learn aobut a few new
+smart pointers that can help us with it.
