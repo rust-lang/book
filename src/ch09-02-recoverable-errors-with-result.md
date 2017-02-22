@@ -7,8 +7,8 @@ operation fails because the file doesn’t exist, we might want to create the
 file instead of terminating the process.
 
 Recall from Chapter 2 the section on “[Handling Potential Failure with the
-`Result` Type][handle_failure]<!-- ignore -->” that the `Result` enum is defined as having two variants, `Ok`
-and `Err`, as follows:
+`Result` Type][handle_failure]<!-- ignore -->” that the `Result` enum is defined
+as having two variants, `Ok` and `Err`, as follows:
 
 [handle_failure]: ch02-00-guessing-game-tutorial.md#handling-potential-failure-with-the-result-type
 
