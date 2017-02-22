@@ -345,14 +345,14 @@ By specifying the lifetime parameters in this function signature, we are not
 changing the lifetimes of any values passed in or returned, but we are saying
 that any values that do not adhere to this contract should be rejected by the
 borrow checker. This function does not know (or need to know) exactly how long
-`x` and `y` will live, but only needs to knows that there is some scope that
+`x` and `y` will live, but only needs to know that there is some scope that
 can be substituted for `'a` that will satisfy this signature.
 
 When annotating lifetimes in functions, the annotations go on the function
 signature, and not in any of the code in the function body. This is because
-Rust is able analyze the code within the function without any help, but when a
-function has references to or from code outside that function, the lifetimes of
-the arguments or return values will potentially be different each time the
+Rust is able to analyze the code within the function without any help, but when
+a function has references to or from code outside that function, the lifetimes
+of the arguments or return values will potentially be different each time the
 function is called. This would be incredibly costly and often impossible for
 Rust to figure out. In this case, we need to annotate the lifetimes ourselves.
 
