@@ -519,13 +519,14 @@ fn main() {
 </figcaption>
 </figure>
 <p>This code contains a lot of information, so let’s go over it bit by bit. To
-obtain user input and then print the result as output, we need to import the
-<code>io</code> (input/output) library from the standard library (which is known as <code>std</code>):</p>
+obtain user input and then print the result as output, we need to bring the
+<code>io</code> (input/output) library into scope. The <code>io</code> library comes from the
+standard library (which is known as <code>std</code>):</p>
 <pre><code class="language-rust,ignore">use std::io;
 </code></pre>
-<p>By default, Rust imports only a few types into every program in <a href="https://doc.rust-lang.org/std/prelude/">the
-<em>prelude</em></a><!-- ignore -->. If a type you want to use isn’t in the
-prelude, you have to import that type into your program explicitly with a <code>use</code>
+<p>By default, Rust brings only a few types into the scope of every program in
+<a href="https://doc.rust-lang.org/std/prelude/">the <em>prelude</em></a><!-- ignore -->. If a type you want to use isn’t in the
+prelude, you have to bring that type into scope explicitly with a <code>use</code>
 statement. Using the <code>std::io</code> library provides you with a number of useful
 <code>io</code>-related features, including the functionality to accept user input.</p>
 <p>As you saw in Chapter 1, the <code>main</code> function is the entry point into the
