@@ -104,16 +104,17 @@ Listing 2-1: Code to get a guess from the user and print it out
 </figure>
 
 This code contains a lot of information, so let’s go over it bit by bit. To
-obtain user input and then print the result as output, we need to import the
-`io` (input/output) library from the standard library (which is known as `std`):
+obtain user input and then print the result as output, we need to bring the
+`io` (input/output) library into scope. The `io` library comes from the
+standard library (which is known as `std`):
 
 ```rust,ignore
 use std::io;
 ```
 
-By default, Rust imports only a few types into every program in [the
-*prelude*][prelude]<!-- ignore -->. If a type you want to use isn’t in the
-prelude, you have to import that type into your program explicitly with a `use`
+By default, Rust brings only a few types into the scope of every program in
+[the *prelude*][prelude]<!-- ignore -->. If a type you want to use isn’t in the
+prelude, you have to bring that type into scope explicitly with a `use`
 statement. Using the `std::io` library provides you with a number of useful
 `io`-related features, including the functionality to accept user input.
 
