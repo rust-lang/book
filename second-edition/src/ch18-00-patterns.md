@@ -1,14 +1,26 @@
 # Patterns
 
-We've actually used patterns a few times so far: they're used in `let`
-statements, in function parameters, and in the `match` expression. Patterns have
-a lot more abilities than we have demonstrated so far, so we'll cover some of
-the most commonly used ones in this section. Any of these abilities work in any
-place where a pattern is used.
+One of Rust's more subtle features is the simple *pattern*. Patterns let us
+pick apart complex strucutres and do all kinds of fun things with them. In this
+chapter, we'll start off by showing you some very basic patterns, and then all
+of the places that you can use patterns. Finally, we'll have a reference-like
+elaboration of all of the different kinds of patterns, with examples to show
+you how to use them.
 
-## `let` statements
+## What are patterns?
 
-A basic `let` statement has this form:
+Patterns are a special syntax within Rust for matching against the structure of
+your types, complex or simple. We take some value, compare it against the
+pattern, and then do something with it. For example, consider this simple
+variable assignment with `let`:
+
+```rust
+let x = 5;
+```
+
+We've done this hundreds of times throughout this book. Well, you didn't
+realize it, but you were using patterns! A `let` statement looks like this,
+gramatically:
 
 ```text
 let PATTERN = EXPRESSION;
@@ -17,88 +29,176 @@ let PATTERN = EXPRESSION;
 We've seen statements like `let x = 5;` with a variable name in the `PATTERN`
 slot; a variable name is just a particularly humble form of pattern.
 
-Let’s try a more complex pattern. Change our example program to this:
+With `let`, we compare the expression against the pattern, and assign any
+names we find. So for example, in our `let x = 5;` case, `x` is a pattern
+that says "bind what matches here to the variable `x`. And since that's the
+whole pattern, it effecitvely means "bind everything to the variable `x`."
 
-<span class="filename">Filename: src/main.rs</span>
+To see this a bit more clearly, consider this code:
 
 ```rust
-fn main() {
-    let (x, y) = (5, 6);
+let (x, y, z) = (1, 2, 3);
+```
 
-    println!("The value of x is: {}", x);
-    println!("The value of y is: {}", y);
+Here, we have a tuple that we're matching against a pattern. Rust will compare
+the value `(1, 2, 3)` to the pattern `(x, y, z)`, and see that it's valid. In
+this case, it will bind `x` to `1`, `y` to `2`, and `z` to `3`.
+
+We can mix and match and nest patterns: you can think of this tuple pattern as
+nesting three individual variable patterns inside of it. Or something like:
+
+```rust
+let ((one, two), name, (three, four), five) = ((1, 2), "hello", (3, 4), 5);
+```
+
+Where we nest tons of things inside of each other. 
+
+## Refutability
+
+Patterns come in two forms: refutable, and irrefutable. Patterns which cannot
+fail to match are "irrefutable", and patterns which can fail to match are said
+to be "refutable".
+
+Consider our `let x = 5;` example. `let` takes an irrefutable pattern, and this
+is true for `x`: since it matches anything, it can't fail to match. Consider
+trying to match an enum with `let`, something like
+
+```rust,ignore
+let Some(x) = some_option_value;
+```
+
+This can't work, and Rust will complain:
+
+```text
+error[E0005]: refutable pattern in local binding: `None` not covered
+ --> <anon>:3:5
+  |
+3 | let Some(x) = some_option_value;
+  |     ^^^^^^^ pattern `None` not covered
+```
+
+We didn't cover (and couldn't cover!) every valid option here, and so Rust will
+rightfully complain. What should it have done with the `None` case?
+
+On the other hand, `if let` takes a refutable pattern:
+
+```rust,ignore
+if let Some(x) = some_option_value {
+    println!("{}", x);
 }
 ```
 
-And run it with `cargo run`:
-
-```text
-$ cargo run
-   Compiling patterns v0.1.0 (file:///projects/patterns)
-     Running `target/debug/patterns`
-The value of x is: 5
-The value of y is: 6
-```
-
-We’ve created two variables with one `let`! Here’s our pattern:
-
-```text
-(x, y)
-```
-
-And here’s the value:
-
-```text
-(5, 6)
-```
-
-As you can see, the two line up visually, and so `let` binds the variable `x`
-to the value `5` and `y` to `6`. We could have used two `let` statements as
-well:
+And if you give it an irrefutable one...
 
 ```rust
-fn main() {
-    let x = 5;
-    let y = 6;
+if let x = 5 {
+    println!("{}", x);
+};
+```
+
+...it will complain:
+
+```text
+error[E0162]: irrefutable if-let pattern
+ --> <anon>:2:8
+  |
+2 | if let x = 5 {
+  |        ^ irrefutable pattern
+```
+
+In general, you shouldn't have to worry about this distinction; just be
+familliar with the word when you see it, and realize that you need to change
+either the pattern, or the construct you're using the pattern with.
+
+## Where can I use patterns?
+
+Patterns pop up in a number of places in Rust. You've been using them a lot
+without realizing it!
+
+### `let` statements
+
+We talked about this above, the basic grammar of a `let` statement is:
+
+```text
+let PATTERN = EXPRESSION;
+```
+
+Many people don't realize that you can use any patterns on the left hand side
+of a `let` statement, not just binding patterns. You'll see more examples of
+this later in this chapter.
+
+`let`, as mentioned above as well, takes an irrefutable pattern.
+
+### `match` arms
+
+Patterns are used very heavily by `match` expressions, particularly in match
+arms.
+
+```text
+match VALUE {
+    PATTERN => EXPRESSION,
+    PATTERN => EXPRESSION,
+    PATTERN => EXPRESSION,
 }
 ```
 
-In simple cases like this, two `let`s may be clearer, but in others, creating
-multiple variables at once is nice. As we become more proficient in Rust, we’ll
-figure out which style is better, but it’s mostly a judgment call.
+These patterns are refuatble. However...
 
-## Type annotations
+#### Exhaustiveness and `_`
 
-Most of the time, Rust uses *type inference*, meaning that it attempts to infer
-the types of your variables rather than you having to declare them explicitly
-even though Rust is a statically typed language. Occasionally, Rust won't have
-enough information to infer the type of your value, and you will need to add a
-type annotation in with the pattern.
+`match` expressions are required to be exhaustive. So when we put all of the
+patterns together, they must cover all of our bases. One way to ensure you have
+every possibility covered is to introduce an irrefutable pattern, like a
+binding. Since it is irrefutable, it can never fail, and so covers every case
+by definition.
 
-Here’s what a `let` statement with a *type annotation* looks like:
+There's an additional irrefutable pattern that's often used in this case
+though: `_`. It matches anything, but it never binds any variables. This can be
+useful when you only want to do things for some patterns, but ignore the rest,
+for example.
 
-```rust
-let x: i32 = 5;
-```
+#### Shadowing in patterns
 
-We can add a colon, followed by the type name. Here’s the structure of a `let`
-statement with a type annotation:
-
-```text
-let PATTERN: TYPE = VALUE;
-```
-
-Note that the colon and the `TYPE` go *after* the `PATTERN`, not in the pattern
-itself. As an example, here’s our more complex pattern with two variables:
+As with all variables, those declared by a pattern will shadow variables
+outside of the `match` construct:
 
 ```rust
-let (x, y): (i32, i32) = (5, 6);
+let x = Some(5);
+
+match x {
+    Some(x) => { }, // x is an i32 here, not an Option<i32>
+    None => (),
+}
 ```
 
-Just like we match up the `VALUE` with the `PATTERN`, we match up the `TYPE`
-with the `PATTERN`.
+### Function Arguments
 
-## Literals & _
+Similarly to `let`, function arguments are also irrefutable patterns:
+
+```rust
+fn foo(x: i32) {
+    // code goes here
+}
+```
+
+The `x` part is a pattern! If we didn't want to use the argument in the body of
+our function, we could use `_` for example:
+
+```rust
+fn foo(_: i32) {
+    // code goes here
+}
+```
+
+Normally, you just wouldn't declare an argument, but maybe you're implementing
+a trait, or need a certain type signature for some other reason. This lets you
+not have to use the argument.
+
+## Kinds of pattern
+
+Here's a list of all of the different types of patterns.
+
+### Literals & _
 
 You can match against literals directly, and `_` acts as an any case:
 
@@ -115,7 +215,9 @@ match x {
 
 This prints `one`.
 
-# Multiple patterns
+Literals are refutable patterns, but `_` is irrefutable.
+
+### Multiple patterns
 
 You can match multiple patterns with `|`:
 
@@ -131,7 +233,7 @@ match x {
 
 This prints `one or two`.
 
-## ref and ref mut
+### ref and ref mut
 
 Usually, when you match against a pattern, variables are bound to a value.
 This means you'll end up moving the value into the `match`:
@@ -178,7 +280,7 @@ match name {
 println!("name is: {:?}", name);
 ```
 
-## Destructuring
+### Destructuring
 
 Patterns can be used to destructure structs and enums:
 
@@ -210,21 +312,7 @@ match origin {
 }
 ```
 
-## Shadowing
-
-As with all variables, those declared by a pattern will shadow variables
-outside of the `match` construct:
-
-```rust
-let x = Some(5);
-
-match x {
-    Some(x) => { }, // x is an i32 here, not an Option<i32>
-    None => (),
-}
-```
-
-## Ignoring values
+### Ignoring values
 
 We discussed using `_` as a whole pattern to ignore it above, but you can
 also use `_` inside of another pattern to ignore just part of it:
@@ -264,7 +352,7 @@ match origin {
 }
 ```
 
-## Ranges
+### Ranges
 
 You can match a range of values with `...`:
 
@@ -289,7 +377,7 @@ match x {
 }
 ```
 
-## Guards
+### Guards
 
 You can introduce match guards with `if`:
 
@@ -328,6 +416,22 @@ not this:
 4 | (5 if y) => ...
 ```
 
-## Bindings
+### Bindings
 
 You can bind values to names with `@`:
+
+```rust
+enum Message {
+    Hello { id: i32 },
+}
+
+let msg = Message::Hello { id: 5 };
+
+match msg {
+    Message::Hello { id: id @ 3...7 } => println!("{}", id),
+    _ => (),
+}
+```
+
+In this case, we want to compare `id` against the range `3...7`, but we also
+want to save the actual value of `id`.
