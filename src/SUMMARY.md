@@ -81,9 +81,10 @@
 - [Smart Pointers](ch15-00-smart-pointers.md)
 
 - [Fearless Concurrency](ch16-00-concurrency.md)
-    - [Message Passing](ch16-01-message-passing.md)
-    - [Shared State](ch16-02-shared-state.md)
-    - [Extensible Concurrency: `Sync` and `Send`](ch16-03-extensible-concurrency-sync-and-send.md)
+    - [Threads](ch16-01-threads.md)
+    - [Message Passing](ch16-02-message-passing.md)
+    - [Shared State](ch16-03-shared-state.md)
+    - [Extensible Concurrency: `Sync` and `Send`](ch16-04-extensible-concurrency-sync-and-send.md)
 
 - [Is Rust OOP?](ch17-00-oop.md)
 
