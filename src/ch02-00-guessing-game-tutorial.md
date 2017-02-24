@@ -563,7 +563,7 @@ numbers as arguments and generates a random number between them. It’s inclusiv
 on the lower bound but exclusive on the upper bound, so we need to specify `1`
 and `101` to request a number between 1 and 100.
 
-Knowing which traits to `use` and which functions and methods to call from a
+Knowing which traits to use and which functions and methods to call from a
 crate isn’t something that you’ll just *know*. Instructions for using a crate
 are in each crate’s documentation. Another neat feature of Cargo is that you
 can run the `cargo doc --open` command that will build documentation provided
