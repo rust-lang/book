@@ -113,10 +113,3 @@ script. It needs a dictionary of valid words, which is provided in
 `BTreeMap` which the script considers invalid), you need to add this word to
 `dictionary.txt` (keep the sorted order for consistency).
 
-## Converting Windows newlines to Unix
-
-This is mostly for Carol's reference because she keeps having to look it up.
-
-```
-$ tr -d '\015' < DOS-file > UNIX-file
-```
