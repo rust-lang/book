@@ -563,7 +563,7 @@ numbers as arguments and generates a random number between them. It’s inclusiv
 on the lower bound but exclusive on the upper bound, so we need to specify `1`
 and `101` to request a number between 1 and 100.
 
-Knowing which traits to import and which functions and methods to use from a
+Knowing which traits to `use` and which functions and methods to call from a
 crate isn’t something that you’ll just *know*. Instructions for using a crate
 are in each crate’s documentation. Another neat feature of Cargo is that you
 can run the `cargo doc --open` command that will build documentation provided
@@ -664,7 +664,7 @@ match guess.cmp(&secret_number) {
 The `cmp` method compares two values and can be called on anything that can be
 compared. It takes a reference to whatever you want to compare with: here it’s
 comparing the `guess` to the `secret_number`. `cmp` returns a variant of the
-`Ordering` enum we imported with the `use` statement. We use a
+`Ordering` enum we brought into scope with the `use` statement. We use a
 [`match`][match]<!-- ignore --> expression to decide what to do next based on
 which variant of `Ordering` was returned from the call to `cmp` with the values
 in `guess` and `secret_number`.
