@@ -234,7 +234,7 @@ For example, if for some reason we wanted to take the first five values that
 an instance of `Counter` produces, pair those values with values produced by
 another `Counter` instance after skipping the first value that instance
 produces, multiply each pair together, keep only those results that are
-divisible by three, and add all the resulting values together, we could do:
+divisible by three, and add all the resulting values together, we could do so:
 
 ```rust,ignore
 let sum: u32 = Counter::new().take(5)
@@ -242,8 +242,12 @@ let sum: u32 = Counter::new().take(5)
                              .map(|(a, b)| a * b)
                              .filter(|x| x % 3 == 0)
                              .sum();
-assert_eq!(48, sum);
+assert_eq!(18, sum);
 ```
+
+Note that zip() produces only four pairs; the theoretical fifth pair (5, None)
+is never produced because zip() returns None when either of its input iterators
+return None.
 
 All of these method calls are possible because we implemented the `Iterator`
 trait by specifying how the `next` method works. Use the standard library
