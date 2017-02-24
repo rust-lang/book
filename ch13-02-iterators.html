@@ -256,14 +256,17 @@ have a default implementation, once you've done that, you get all of the other
 an instance of <code>Counter</code> produces, pair those values with values produced by
 another <code>Counter</code> instance after skipping the first value that instance
 produces, multiply each pair together, keep only those results that are
-divisible by three, and add all the resulting values together, we could do:</p>
+divisible by three, and add all the resulting values together, we could do so:</p>
 <pre><code class="language-rust,ignore">let sum: u32 = Counter::new().take(5)
                              .zip(Counter::new().skip(1))
                              .map(|(a, b)| a * b)
                              .filter(|x| x % 3 == 0)
                              .sum();
-assert_eq!(48, sum);
+assert_eq!(18, sum);
 </code></pre>
+<p>Note that zip() produces only four pairs; the theoretical fifth pair (5, None)
+is never produced because zip() returns None when either of its input iterators
+return None.</p>
 <p>All of these method calls are possible because we implemented the <code>Iterator</code>
 trait by specifying how the <code>next</code> method works. Use the standard library
 documentation to find more useful methods that will come in handy when you're
