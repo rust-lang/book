@@ -11249,7 +11249,33 @@ an instance of <code>Counter</code> produces, pair those values with values prod
 another <code>Counter</code> instance after skipping the first value that instance
 produces, multiply each pair together, keep only those results that are
 divisible by three, and add all the resulting values together, we could do so:</p>
-<pre><code class="language-rust,ignore">let sum: u32 = Counter::new().take(5)
+<pre><code class="language-rust"># struct Counter {
+#     count: u32,
+# }
+#
+# impl Counter {
+#     fn new() -&gt; Counter {
+#         Counter { count: 0 }
+#     }
+# }
+#
+# impl Iterator for Counter {
+#     // Our iterator will produce u32s
+#     type Item = u32;
+#
+#     fn next(&amp;mut self) -&gt; Option&lt;Self::Item&gt; {
+#         // increment our count. This is why we started at zero.
+#         self.count += 1;
+#
+#         // check to see if we've finished counting or not.
+#         if self.count &lt; 6 {
+#             Some(self.count)
+#         } else {
+#             None
+#         }
+#     }
+# }
+let sum: u32 = Counter::new().take(5)
                              .zip(Counter::new().skip(1))
                              .map(|(a, b)| a * b)
                              .filter(|x| x % 3 == 0)
