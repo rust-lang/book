@@ -33,6 +33,18 @@ You have to write unsafe code to FFI
 
 ### Unsafe Traits
 
+## More Lifetimes
+
+### Lifetimes that depend on other lifetimes
+
+'a: 'b stuff: subtyping
+
+### Higher ranked trait bounds
+
+for<'a>
+
+Needed for closures
+
 ## Associated Types
 
 More common than the other things, less common than the rest of the book
