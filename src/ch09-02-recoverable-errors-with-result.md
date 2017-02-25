@@ -450,7 +450,6 @@ fn main() {
 that doesn't return a result is STILL confusing. Since we want to only explain
 `?` now, I've changed the example, but if you try running this code you WON'T
 get the error message below.
-
 I'm bugging people to try and get
 https://github.com/rust-lang/rust/issues/35946 fixed soon, hopefully before this
 chapter gets through copy editing-- at that point I'll make sure to update this
