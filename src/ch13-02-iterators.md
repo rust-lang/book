@@ -271,9 +271,9 @@ let sum: u32 = Counter::new().take(5)
 assert_eq!(18, sum);
 ```
 
-Note that zip() produces only four pairs; the theoretical fifth pair (5, None)
-is never produced because zip() returns None when either of its input iterators
-return None.
+Note that `zip` produces only four pairs; the theoretical fifth pair `(5,
+None)` is never produced because `zip` returns `None` when either of its input
+iterators return `None`.
 
 All of these method calls are possible because we implemented the `Iterator`
 trait by specifying how the `next` method works. Use the standard library
