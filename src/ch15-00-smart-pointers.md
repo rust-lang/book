@@ -506,7 +506,8 @@ goes out of scope
 </figure>
 
 Running this code will print the following, showing that the destructor code is
-called since `Closing the socket!` is printed between `WebSocket created.` and `Wait for it...`:
+called since `Closing the socket!` is printed between `WebSocket created.` and
+`Wait for it...`:
 
 ```text
 WebSocket created.
@@ -779,11 +780,11 @@ compile time. With `RefCell<T>`, these invariants are enforced *at runtime*.
 With references, if you break these rules, you'll get a compiler error. With
 `RefCell<T>`, if you break these rules, you'll get a `panic!`.
 
-Static analysis, like Rust performs, is inherently conservative. That is, if
-Rust accepts an incorrect program, people would not be able to trust in the
-guarantees Rust makes. If Rust rejects a correct program, the programmer will
-be inconvenienced, but nothing catastrophic can occur. `RefCell<T>` is useful
-in two situations:
+Static analysis, like the Rust compiler performs, is inherently conservative.
+That is, if Rust accepts an incorrect program, people would not be able to
+trust in the guarantees Rust makes. If Rust rejects a correct program, the
+programmer will be inconvenienced, but nothing catastrophic can occur.
+`RefCell<T>` is useful in two situations:
 
 1. When you know that the borrowing rules are respected, but when the compiler
   can't understand that that's true.
@@ -799,102 +800,210 @@ With references, we use the `&` and `&mut` syntax to create references and
 mutable references, respectively. But with `RefCell<T>`, we use the `borrow`
 and `borrow_mut` methods, which are part of the safe API that `RefCell<T>` has.
 
-Listing 15-11 shows what mutating a value inside an immutable `RefCell<T>`
-looks like:
+Listing 15-11 shows what it looks like to use `RefCell<T>` with functions that
+borrow their parameters immutably and mutably. Note that the `data` variable is
+declared as immutable with `let data` rather than `let mut data`, yet we're
+allowed to mutate the value by using `a_fn_that_mutably_borrows`!
 
-~~~~ Carol is still in the process of editing beyond this point ~~~~
-
-
-
-
+<figure>
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 use std::cell::RefCell;
 
-let five = RefCell::new(5);
-
-// we need these scopes so we don't break the rules!
-{
-    let r1 = five.borrow();
-    let r2 = five.borrow();
-    let r3 = five.borrow();
-
-    // r1, r2, and r3 are all immutable references.
+fn a_fn_that_immutably_borrows(a: &i32) {
+    println!("a is {}", a);
 }
 
-{
-    let r = five.borrow_mut();
+fn a_fn_that_mutably_borrows(b: &mut i32) {
+    *b += 1;
+}
 
-    // r1 is a mutable reference
+fn main() {
+    let data = RefCell::new(5);
+    a_fn_that_immutably_borrows(&data.borrow());
+    a_fn_that_mutably_borrows(&mut data.borrow_mut());
+    a_fn_that_immutably_borrows(&data.borrow());
 }
 ```
 
-TODO: do something interesting with these
+<figcaption>
 
-If we call both `borrow` and `borrow_mut` in the same scope, we'll get a panic.
+Listing 15-11: Using `RefCell<T>`, `borrow`, and `borrow_mut`
 
-So why do we need `RefCell<T>`? What good is it to enforce the rules at runtime,
-instead of compile time?
+</figcaption>
+</figure>
 
+This example prints:
 
+```text
+a is 5
+a is 6
+```
 
+Here, we've created a new `RefCell<T>` containing the value 5. We can get an
+immutable reference to the value inside the `RefCell<T>` by calling the `borrow`
+method. More interestingly, we can get a mutable reference to the value inside
+the `RefCell<T>` with the `borrow_mut` method, and the function
+`a_fn_that_mutably_borrows` is allowed to change the value. We can see that the
+next time we print out the value, it's 6 instead of 5.
 
+Recall that because of the borrowing rules, this code trying to create two
+mutable borrows in the same scope won't compile:
 
+```rust,ignore
+let mut s = String::from("hello");
 
+let r1 = &mut s;
+let r2 = &mut s;
+```
 
+We'll get this compiler error:
 
+```text
+error[E0499]: cannot borrow `s` as mutable more than once at a time
+ -->
+  |
+5 |     let r1 = &mut s;
+  |                   - first mutable borrow occurs here
+6 |     let r2 = &mut s;
+  |                   ^ second mutable borrow occurs here
+7 | }
+  | - first borrow ends here
+```
 
+In contrast, using `RefCell<T>` and calling `borrow_mut` twice in the same
+scope *will* compile, but it will panic at runtime instead. This code:
 
+```rust,ignore
+use std::cell::RefCell;
 
-Why is this useful? Well, remember when we said that `Rc<T>` has to store
-immutable data? Given that `RefCell<T>` is immutable, but has interior
-mutability, we can combine `Rc<T>` and `RefCell<T>` to get a type that's both
-reference counted and mutable. Like this:
+fn main() {
+    let mut s = RefCell::new(String::from("hello"));
+
+    let r1 = s.borrow_mut();
+    let r2 = s.borrow_mut();
+}
+```
+
+compiles but panics with the following error when we `cargo run`:
+
+```text
+    Finished dev [unoptimized + debuginfo] target(s) in 0.83 secs
+     Running `target/debug/refcell`
+thread 'main' panicked at 'already borrowed: BorrowMutError',
+/stable-dist-rustc/build/src/libcore/result.rs:868
+note: Run with `RUST_BACKTRACE=1` for a backtrace.
+```
+
+This runtime `BorrowMutError` is similar to the compiler error: it says we've
+already borrowed `s` mutably once, so we're not allowed to borrow it again. We
+aren't getting around the borrowing rules, we're just choosing to have Rust
+enforce them at runtime instead of compile time. You could choose to use
+`RefCell<T>` everywhere all the time, but in addition to having to type
+`RefCell` a lot, you'd find out about possible problems later (possibly in
+production rather than during development). Also, checking the borrowing rules
+while your program is running has a performance penalty.
+
+So why would we choose to make the tradeoffs that using `RefCell<T>` involves?
+Well, remember when we said that `Rc<T>` has to store immutable data? Given
+that `RefCell<T>` is immutable, but has interior mutability, we can combine
+`Rc<T>` and `RefCell<T>` to get a type that's both reference counted and
+mutable. Listing 15-12 shows an example of how to do that, again going back to
+our cons list from Listing 15-9. In this example, the type we're filling in for
+`T` is `Rc<RefCell<i32>>`:
+
+<figure>
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
+#[derive(Debug)]
+enum List<T> {
+    Cons(T, Rc<List<T>>),
+    Nil,
+}
+
+use List::{Cons, Nil};
 use std::rc::Rc;
 use std::cell::RefCell;
 
-let five = Rc::new(RefCell::new(5));
+fn main() {
+    let value = Rc::new(RefCell::new(5));
 
-let other_rc = five.clone();
+    let a = Cons(value.clone(), Rc::new(Nil));
+    let shared_list = Rc::new(a);
 
-*other_rc.borrow_mut() = 6;
+    let b = Cons(Rc::new(RefCell::new(6)), shared_list.clone());
+    let c = Cons(Rc::new(RefCell::new(10)), shared_list.clone());
+
+    *value.borrow_mut() += 10;
+
+    println!("shared_list after = {:?}", shared_list);
+    println!("b after = {:?}", b);
+    println!("c after = {:?}", c);
+}
 ```
 
-This is where interior mutability is useful: when you have something that
-requires immutability, but you also need to mutate something. This comes up
-with types like `Rc<T>`, but it can also come up in concurrency situations.  In
-general, it's a fairly rare thing to need, but when you need it, it does exist.
+<figcaption>
 
+Listing 15-12: Using `Rc<RefCell<T>>` to create a `List<T>` that we can mutate
 
+</figcaption>
+</figure>
 
+We're creating a value, which is an instance of `T`. We're storing it in a
+variable named `value` because we want to be able to access it directly later.
+Then we create a `List<T>` in `a` that has a `Cons` variant that holds `value`,
+and `value` needs to be cloned since we want `value` to also have ownership in
+addition to `a`. Then we wrap `a` in an `Rc<T>` so that we can create lists `b`
+and `c` that start differently but both refer to `a`, similarly to what we did
+in Listing 15-9.
 
-There are other types with interior mutability that are similar to `RefCell<T>`: for example, `Cell<T>`
+Once we have the lists in `shared_list`, `b`, and `c` created, then we add 10
+to the 5 in `value` by dereferencing the `Rc<T>` and calling `borrow_mut` on
+the `RefCell`.
 
-1:36 PM <steveklabnik> 18:35 < aturon> steveklabnik: then i think you can just give a quick shout-out to `Cell`
-1:36 PM <steveklabnik> 18:35 < nmatsakis> but without it, I feel like I would never have fixed all the bugs we
-1:36 PM <steveklabnik>                    found :)
-1:36 PM <steveklabnik> 18:35 < aturon> steveklabnik: basically: "If you're working with `Copy` types, or othewise
-1:36 PM <steveklabnik>                 only plan to move values in and out, `Cell` is more ergonomic and lightweight"
-1:36 PM <steveklabnik> 18:35 < nmatsakis> (ps I agree with that order: RefCell as dynamic borrowing, then "oh some
-1:36 PM <steveklabnik> times cell works too"P)
-1:36 PM <steveklabnik> 18:35 < aturon> steveklabnik: with a pointer to the `std` docs
+When we print out `shared_list`, `b`, and `c`, we can see that they all have
+the modified value of 15:
 
-'Cell<T> is like RefCell<T> but the instead of giving references to the inner value, the value is copied in and out of the Cell<T>'.
+```text
+shared_list after = Cons(RefCell { value: 15 }, Nil)
+b after = Cons(RefCell { value: 6 }, Cons(RefCell { value: 15 }, Nil))
+c after = Cons(RefCell { value: 10 }, Cons(RefCell { value: 15 }, Nil))
+```
 
-All you need to know is that
-the various family of `Cell` types, as well as some others like `Mutex<T>`
-(that we'll cover in the next chapter, on concurrency) follow this pattern.
+This is pretty neat! We didn't have to modify our definition of `List<T>` at
+all, since the generic parameter lets us substitute any immutable type. By
+using `RefCell<T>`, we satisfy the immutable type requirement since
+`RefCell<T>` is outwardly immutable, but we can use the methods on `RefCell<T>`
+that provide access to its interior mutability to be able to modify our data
+when we need to. The runtime checks of the borrowing rules that `RefCell<T>`
+does protect us from data races, and we've decided that we want to trade a bit
+of speed for the flexibility in our data structures.
 
-
+`RefCell<T>` is not the only standard library type that provides interior
+mutability. `Cell<T>` is similar but instead of giving references to the inner
+value like `RefCell<T>` does, the value is copied in and out of the `Cell<T>`.
+`Mutex<T>` offers interior mutability that is safe to use across threads, and
+we'll be discussing its use in the next chapter on concurrency. Check out the
+standard library docs for more details on the differences between these types.
 
 ## Creating Reference Cycles and Leaking Memory is Safe
 
-A twist to `Rc<T>` is that it's possible to create cycles of references. This
-is bad because the reference count of each item in the cycle will never reach
-0, and the values will never be dropped. Let's take a look at how that might
-happen and how to prevent it.
+Rust makes a number of guarantees that we've talked about, for example that
+we'll never have a null value, and data races will be disallowed at compile
+time. Rust's memory safety guarantees make it more difficult to create memory
+that never gets cleaned up, which is known as a *memory leak*. Rust does not
+make memory leaks *impossible*, however, preventing memory leaks is *not* one
+of Rust's guarantees. In other words, memory leaks are memory safe.
+
+By using `Rc<T>` and `RefCell<T>`, it is possible to create cycles of
+references where items refer to each other in a cycle. This is bad because the
+reference count of each item in the cycle will never reach 0, and the values
+will never be dropped. Let's take a look at how that might happen and how to
+prevent it.
+
+In Listing 15-13, we're going to create
 
 We've shown that with `Rc<T>`s, when the last one goes out of scope, the value
 is deallocated. But what about this program?
@@ -938,8 +1047,7 @@ this would be a problem.
 Now, as you can see, creating reference cycles is difficult and inconvenient in
 Rust. To be honest, your authors had to look up previous discussions of an
 example to get this right. But it's not impossible: preventing memory leaks in
-the form of reference cycles is not one of the guarantees Rust makes. In other
-words, memory leaks are memory safe. If you have an `Rc<T>` that contains an
+the form of reference cycles is not one of the guarantees Rust makes.  If you have an `Rc<T>` that contains an
 `Rc<T>`, be aware that you'll have to ensure that you don't create cycles on
 your. One way of doing that is using `Weak<T>`.
 
