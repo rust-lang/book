@@ -88,9 +88,12 @@
 
 - [Patterns](ch18-00-patterns.md) (perhaps an appendix?)
 
-- [More Lifetimes](ch19-00-more-lifetimes.md) (perhaps merge this into advanced type system features?)
+- [Advanced Features](ch19-00-advanced-features.md)
+    - [Unsafe Rust](ch19-01-unsafe-rust.md)
+    - [Advanced Lifetimes](ch19-02-advanced-lifetimes.md)
+    - [Advanced Traits](ch19-03-advanced-traits.md)
 
-- [Advanced Type System Features](ch20-00-advanced-types.md) (perhaps called "Advanced Traits"?)
+- [Un-named project](ch20-00-unnamed-project.md)
 
 - [Appendix](appendix-00.md)
     - [Keywords](appendix-01-keywords.md)
