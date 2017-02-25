@@ -184,11 +184,9 @@ signature looks something like this:</p>
 <p>This isn’t the exact signature that’s in the standard library; there <code>add</code> is
 defined using generics. Here, we’re looking at the signature of <code>add</code> with
 concrete types substituted for the generic ones, which is what happens when we
-call this method with <code>String</code> values. We'll be discussing generics in Chapter</p>
-<ol start="10">
-<li>This signature gives us the clues we need to understand the tricky bits of
-the <code>+</code> operator.</li>
-</ol>
+call this method with <code>String</code> values. We'll be discussing generics in
+Chapter 10. This signature gives us the clues we need to understand the tricky
+bits of the <code>+</code> operator.</p>
 <p>First of all, <code>s2</code> has an <code>&amp;</code>, meaning that we are adding a <em>reference</em> of the
 second string to the first string. This is because of the <code>s</code> parameter in the
 <code>add</code> function: we can only add a <code>&amp;str</code> to a <code>String</code>, we can’t add two
@@ -253,13 +251,11 @@ properly-encoded UTF-8 example strings from before. First, this one:</p>
 UTF-8. What about this example, though?</p>
 <pre><code class="language-rust">let len = String::from(&quot;Здравствуйте&quot;).len();
 </code></pre>
-<p>A person asked how long the string is might say 12. However, Rust’s answer is</p>
-<ol start="24">
-<li>This is the number of bytes that it takes to encode “Здравствуйте” in
+<p>A person asked how long the string is might say 12. However, Rust’s answer
+is 24. This is the number of bytes that it takes to encode “Здравствуйте” in
 UTF-8, since each Unicode scalar value takes two bytes of storage. Therefore,
 an index into the string’s bytes will not always correlate to a valid Unicode
-scalar value.</li>
-</ol>
+scalar value.</p>
 <p>To demonstrate, consider this invalid Rust code:</p>
 <pre><code class="language-rust,ignore">let hello = &quot;Здравствуйте&quot;;
 let answer = &amp;hello[0];
