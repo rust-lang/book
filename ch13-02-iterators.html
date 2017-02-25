@@ -290,9 +290,8 @@ let sum: u32 = Counter::new().take(5)
                              .sum();
 assert_eq!(18, sum);
 </code></pre>
-<p>Note that zip() produces only four pairs; the theoretical fifth pair (5, None)
-is never produced because zip() returns None when either of its input iterators
-return None.</p>
+<p>Note that <code>zip</code> produces only four pairs; the theoretical fifth pair <code>(5, None)</code> is never produced because <code>zip</code> returns <code>None</code> when either of its input
+iterators return <code>None</code>.</p>
 <p>All of these method calls are possible because we implemented the <code>Iterator</code>
 trait by specifying how the <code>next</code> method works. Use the standard library
 documentation to find more useful methods that will come in handy when you're
