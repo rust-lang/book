@@ -158,9 +158,9 @@ fn add(self, s: &str) -> String {
 This isn’t the exact signature that’s in the standard library; there `add` is
 defined using generics. Here, we’re looking at the signature of `add` with
 concrete types substituted for the generic ones, which is what happens when we
-call this method with `String` values. We'll be discussing generics in Chapter
-10. This signature gives us the clues we need to understand the tricky bits of
-the `+` operator.
+call this method with `String` values. We'll be discussing generics in
+Chapter 10. This signature gives us the clues we need to understand the tricky
+bits of the `+` operator.
 
 First of all, `s2` has an `&`, meaning that we are adding a *reference* of the
 second string to the first string. This is because of the `s` parameter in the
@@ -250,8 +250,8 @@ UTF-8. What about this example, though?
 let len = String::from("Здравствуйте").len();
 ```
 
-A person asked how long the string is might say 12. However, Rust’s answer is
-24. This is the number of bytes that it takes to encode “Здравствуйте” in
+A person asked how long the string is might say 12. However, Rust’s answer
+is 24. This is the number of bytes that it takes to encode “Здравствуйте” in
 UTF-8, since each Unicode scalar value takes two bytes of storage. Therefore,
 an index into the string’s bytes will not always correlate to a valid Unicode
 scalar value.
