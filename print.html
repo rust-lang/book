@@ -6721,7 +6721,7 @@ since it is defined to work in exactly the same way as the <code>match</code> ex
 we defined in Listing 9-5. The part of the <code>match</code> that requires a return type
 of <code>Result</code> is <code>return Err(e)</code>, so the return type of the function must be a
 <code>Result</code> to be compatible with this <code>return</code>.</p>
-<p>Let’s look at what happens if use <code>?</code> in the <code>main</code> function, which you’ll
+<p>Let’s look at what happens if we use <code>?</code> in the <code>main</code> function, which you’ll
 recall has a return type of <code>()</code>:</p>
 <pre><code class="language-rust,ignore">use std::fs::File;
 
