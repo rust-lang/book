@@ -269,7 +269,7 @@ Here's a list of all of the different types of patterns.
 
 ### Literals
 
-You can match against literals directly
+You can match against literals directly:
 
 ```rust
 let x = 1;
@@ -284,10 +284,12 @@ match x {
 
 This prints `one`.
 
+TODO: but not floating point literals right?
+
 TODO: would you consider references with `&` as a sort of literal? or is that
 more like destructuring?
 
-### Named Variables and Underscore
+### Named Variables and the Underscore Pattern
 
 TODO: variable name always matches any value, underscore ignores everything
 
@@ -427,6 +429,8 @@ fn main() {
     assert_eq!(7, b);
 }
 ```
+
+TODO: add enum destructuring example
 
 We can mix, match, and nest destructuring patterns: we can do
 something complicated like this example where we nest tuples inside of
