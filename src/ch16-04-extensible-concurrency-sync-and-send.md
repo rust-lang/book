@@ -1,4 +1,4 @@
-# Extensible Concurrency with `Sync` and `Send`
+## Extensible Concurrency with `Sync` and `Send`
 
 One interesting aspect of Rust's concurrency model is that the language knows
 _very_ little about concurrency. Almost everything we've been talking about so
@@ -39,7 +39,7 @@ fn takes_marker<T: Marker>(t: T) {
 It's the same for `Send` and `Sync`: they don't add any methods, they only
 indicate concurrency properties.
 
-## `Send`
+### `Send` for Indicating Ownership May Be Transferred
 
 The `Send` marker trait indicates that a type is allowed to have ownership
 transferred between threads. Almost every Rust type is `Send`, but there are
@@ -48,7 +48,7 @@ threadsafe in many circumstances. The Rust wrappers for it need to take this
 into account. But in pure Rust code, virtually everything is `Send`, so we
 won't spend more time on it.
 
-## `Sync`
+### `Sync` for Indicating Access from Multiple Threads is Safe
 
 `Sync`, on the other hand, is more interesting. If your type is `Sync`, it's
 safe to access from multiple threads. This is why, when we tried to share our
@@ -58,6 +58,6 @@ however, is, as long as its `T` is also `Sync`. `Mutex<T>` is `Sync`, and so
 `RefCell<T>` are not `Sync`, and so `Arc<RefCell<T>>`, for example, would not
 be `Sync`.
 
-## Building your own abstractions
+## Building Your Own Abstractions
 
 Should we include crossbeam here?

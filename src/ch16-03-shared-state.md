@@ -1,4 +1,4 @@
-# Shared state
+## Shared State Concurrency
 
 While message passing is a fine way of dealing with concurrency, it's not the
 only one. Consider the slogan again:
@@ -18,7 +18,7 @@ additional complexity, as we need to manage these different owners somehow.
 Ownership can help a lot here, though. For example, let's look at one of the
 more common concurrency primitives for shared memory: mutexes.
 
-## Mutexes
+### Mutexes Allow Access to One Thread at a Time
 
 A *mutex* is a concurrency primitive for sharing memory. It's short for "mutual
 exclusion", that is, it only allows one thread to access some data at any given

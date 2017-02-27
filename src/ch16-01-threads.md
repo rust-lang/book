@@ -1,4 +1,4 @@
-# Threads
+## Threads
 
 When your program executes, the operating system runs it in the context of
 something called a "process." This is, of course, operating system dependent,
@@ -32,7 +32,7 @@ deal with these drawbacks.
 Regardless, now that we've covered the basic concepts of threads, let's check
 out the API that the standard library gives us.
 
-## spawn
+### Creating a New Thread with `spawn`
 
 To create a new thread, we pass a closure to the `thread::spawn` function:
 
@@ -51,7 +51,7 @@ fn main() {
 The code inside the closure will be executed in a new OS thread; when the
 function ends, so does the thread.
 
-### join handles
+#### Waiting for All Threads to Finish Using `join` Handles
 
 There's one trick though: if the main thread ends, the whole program ends. So
 our example program above is not guaranteed to actually execute the new thread.
@@ -92,7 +92,7 @@ fn main() {
 We would be guaranteed to see "Hello from a new thread!" before "Hello from the
 main thread"; the call to `join` ensures that.
 
-## move closures
+### Using `move` Closures with Threads
 
 There's a feature of closures that we didn't cover in Chapter 13 that's often
 useful with `thread::spawn`: `move` closures. We said this back then:

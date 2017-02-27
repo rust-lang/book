@@ -1,4 +1,4 @@
-# Message Passing
+## Message Passing
 
 One approach to concurrency that's seen a rise in popularity as of late is
 *message passing*, where threads or actors communicate by sending each other
@@ -44,7 +44,7 @@ a value is sent down the channel. Once one is, it will return it. The `try_`
 variant of `recv` will not block; it instead returns a `Result<T, E>`
 immediately.
 
-## Channels and ownership
+### Channels and Ownership
 
 These basic aspects of channels are the same in every language: send something
 down one end, receive it on the other end. Where Rust is special, though, is
@@ -89,7 +89,7 @@ Message passing enthusiasts enjoy it for similar reasons as Rustaceans enjoy
 Rust; single ownership means certain classes of problems go away. If only one
 thread at a time can own some memory, there's no chance of getting a data race.
 
-## An example
+### Using Channels to Send Data Between Threads
 
 Let's show off a slightly more realistic example. Let's make a thread that
 generates numbers. It'll then send the numbers down a channel. The main thread
@@ -327,7 +327,5 @@ fn main() {
     }
 }
 ```
-
-## Summary
 
 Now that we've seen how channels work, let's look at shared-memory concurrency.
