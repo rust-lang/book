@@ -63,6 +63,7 @@ Dereference
 dereferencing
 DerefMut
 destructure
+destructures
 destructuring
 Destructuring
 didn
