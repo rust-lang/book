@@ -194,7 +194,7 @@ explains our second difference: we no longer need an explicit `drop` of `tx`.
 
 If we run this example, we should see the same results as before. We've
 introduced a thread, but we don't see any evidence that the thread is running
-in paralell to the main thread.
+in parallel to the main thread.
 
 We can show that this is happening at the same time with a call
 `thread::sleep`:
@@ -224,7 +224,7 @@ fn main() {
 The call to `thread::sleep` will make the thread stop executing for the
 `Duration` it's been passed. In this case, we've created a duration of one
 second. When running this version of the example, you'll see the same output,
-but with a one-second pause in between. There's no pausing in our recieving
+but with a one-second pause in between. There's no pausing in our receiving
 loop, so we can tell that the main thread is waiting on the secondary thread.
 
 Near the start of this section, we mentioned that 'mpsc' stood for "multiple
