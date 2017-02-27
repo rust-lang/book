@@ -27,9 +27,13 @@ It stands for "multiple producer, single consumer." In short, you can have
 multiple *sending* ends of a channel, but only one *receiving* end.
 
 `mpsc::channel` returns a tuple: the first element is the sending end, the
-second element is the receiving end. For historical reasons, many people use
-`rx` and `tx` to abbreviate 'transmitter' and 'receiver', and so those are the
-names we're using for the variables bound to each end.
+second element is the receiving end. Here, we're using a `let` statement with a
+pattern that destructures the tuples; we'll be discussing the use of patterns
+in `let` statements and destructuring in Chapter 18.
+
+For historical reasons, many people use `rx` and `tx` to abbreviate
+'transmitter' and 'receiver', and so those are the names we're using for the
+variables bound to each end.
 
 The `tx` end has one useful method: `send`. In our example, we send a `String`
 down the channel. Doing this returns a `Result<T, E>` type, because if the
