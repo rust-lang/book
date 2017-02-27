@@ -14,7 +14,7 @@ these cases, you can use unsafe code to tell the compiler, "trust me, I know
 what I'm doing." The downside is that you're on your own; if you get it wrong,
 bad things can happen.
 
-There's another reason that Rust needs to have unsafe code: the underyling
+There's another reason that Rust needs to have unsafe code: the underlying
 hardware of computers is not safe. If Rust didn't let you do unsafe things,
 then there would be some things that you simply could not do. But Rust needs to
 be able to let you do things like directly interact with your operating system,
@@ -57,7 +57,7 @@ make a mistake and something goes wrong, you'll know that it has to be related
 to one of the places that you opted into this unsafety. That makes these bugs
 much easier to find. Because of this, it's important to contain your unsafe
 code to as small of an area as possible. Once you use unsafe inside of a
-module, any of the code in that module is supect. Keep them small and you'll
+module, any of the code in that module is suspect. Keep them small and you'll
 thank yourself later.
 
 One final note about unsafe blocks: while unsafe blocks let you do almost
@@ -159,7 +159,7 @@ By inserting the `unsafe` block, you're asserting to Rust that you've read the
 documentation for this function, you understand how to use it properly, and
 you've verified that everything is correct.
 
-Raw pointers and unsafe functions often interact, becuase unsafe functions
+Raw pointers and unsafe functions often interact, because unsafe functions
 often take raw pointers as arguments. Given that raw pointers aren't checked, a
 very common constraint on unsafe functions is "make sure the raw pointers
 you're passing to it are valid."
@@ -251,7 +251,6 @@ let address = 0x012345;
 let r = address as *mut i32;
 
 let slice = unsafe {
-    // noooooooooooo
     slice::from_raw_parts_mut(r, 10000)
 };
 ```

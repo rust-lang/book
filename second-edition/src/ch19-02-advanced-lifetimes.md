@@ -21,7 +21,7 @@ Imagine that we want to write a parser. To do this, we'll have a structure
 with the string that we're parsing, a 'context'. We'll write individual parsers
 that parse this string, and return success or failure. The parsers will need to
 borrow the context to do the parsing. We'd end up with something like the
-following. We've left off the lifetime anntations for now; this code won't
+following. We've left off the lifetime annotations for now; this code won't
 compile:
 
 ```rust,ignore
@@ -418,18 +418,18 @@ let num = 5;
 let obj = Box::new(Bar { x: &num }) as Box<Foo>;
 ```
 
-This code works. But how? We haven't said anything about the liftimes of the
+This code works. But how? We haven't said anything about the lifetimes of the
 object.
 
 Well, as it turns out, there are rules. For a trait object like `Box<Foo>`,
 we can add a lifetime bound as well, like `Box<Foo + 'a>`, for example. Just as
-with the other bounds, this means "Any implementor of `Foo` which has a
+with the other bounds, this means "Any implementer of `Foo` which has a
 lifetime inside must be `'a`." But we didn't need to explicitly write this.
 Here are the rules:
 
 * The default begins as 'static.
 * If you have `&'a X` or `&'a mut X`, then the default is `'a`.
-* If you have a single `T: 'a` clasues, then the default is `'a`.
+* If you have a single `T: 'a` clause, then the default is `'a`.
 * If you have multiple `T: 'a`-like clauses, then there is no default; you must
   be explicit.
 
@@ -460,9 +460,9 @@ You might think that you'd write it something like this:
 ```rust
 fn call_with_ref<'a, F>(some_closure:F) -> i32
     where F: Fn(&'a i32) -> i32 {
-# 
+#
 #     let value = 0;
-# 
+#
 #     some_closure(&value)
 # }
 ```
@@ -480,9 +480,9 @@ If we wanted to write it out entirely, we'd use this syntax, with `for<>`:
 ```rust
 fn call_with_ref<F>(some_closure:F) -> i32
     where F: for<'a> Fn(&'a i32) -> i32 {
-# 
+#
 #     let value = 0;
-# 
+#
 #     some_closure(&value)
 # }
 ```

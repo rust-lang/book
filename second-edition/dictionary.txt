@@ -6,6 +6,7 @@ adaptor
 adaptors
 Addr
 aggregator
+AGraph
 aliasability
 alignof
 Amir
@@ -17,6 +18,7 @@ backtrace
 backtraces
 BACKTRACE
 Backtraces
+Baz’s
 benchmarking
 bitand
 BitAnd
@@ -104,6 +106,7 @@ FnMut
 FnOnce
 formatter
 FromIterator
+GGraph
 GitHub
 gitignore
 grapheme
@@ -147,6 +150,7 @@ iter
 iterator's
 JavaScript
 JoinHandle
+kinded
 lang
 latin
 libc
@@ -188,6 +192,7 @@ namespacing
 newfound
 NewsArticle
 newtype
+nitty
 nocapture
 nomicon
 Nomicon
@@ -260,6 +265,7 @@ spdx
 SpreadsheetCell
 sqrt
 stackoverflow
+StaticRef
 stderr
 stdin
 Stdin
@@ -314,6 +320,7 @@ uninstall
 unix
 unoptimized
 UnsafeCell
+unsafety
 unsized
 unsynchronized
 username
