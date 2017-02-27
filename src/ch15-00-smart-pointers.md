@@ -30,7 +30,9 @@ most common ones from the standard library: `Box<T>`, `Rc<T>`, and
 `RefCell<T>`. Along the way, we'll also cover:
 
 * The `Deref` and `Drop` traits that make smart pointers convenient to work with
-* The *interior mutability* pattern that lets you...
+* The *interior mutability* pattern where an immutable type exposes an API for
+  mutating an interior value, and the borrowing rules apply at runtime instead
+  of compile time
 * Reference cycles, how they can leak memory, and how to prevent them
 
 Let's dive in!
