@@ -536,7 +536,8 @@ match x {
 }
 ```
 
-Ranges are usually used with integers or `char`s:
+Ranges are only allowed with numeric values or `char` values. Here's an example
+using ranges of `char` values:
 
 ```rust
 let x = 'c';
@@ -547,6 +548,8 @@ match x {
     _ => println!("something else"),
 }
 ```
+
+This will print `early ASCII letter`.
 
 ### Extra Conditionals with Match Guards
 
