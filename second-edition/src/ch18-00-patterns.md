@@ -226,7 +226,8 @@ execute. That code will only make sense and run if the value matches the
 pattern. Here's our example with `Some(x)` matching `some_option_value` that is
 allowed, since it uses `if let`:
 
-```rust,ignore
+```rust
+# let some_option_value: Option<i32> = None;
 if let Some(x) = some_option_value {
     println!("{}", x);
 }
@@ -235,7 +236,7 @@ if let Some(x) = some_option_value {
 Consequently, if we give `if let` an irrefutable pattern that will always match,
 such as `x`:
 
-```rust
+```rust,ignore
 if let x = 5 {
     println!("{}", x);
 };
