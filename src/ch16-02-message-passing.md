@@ -73,7 +73,7 @@ error[E0382]: use of moved value: `message`
   |
 7 | tx.send(message).unwrap();
   |         ------- value moved here
-8 | 
+8 |
 9 | println!("Sent {}", message);
   |                     ^^^^^^^ value used here after move
   |
@@ -152,7 +152,7 @@ we'd be waiting in this loop forever, as `tx` hasn't left scope yet!
 Since we've explicitly hung up the sending end, though, this works. Give
 it a try:
 
-```bash
+```text
 $ cargo run
 got number: 0
 got number: 1
@@ -264,7 +264,7 @@ different numbers for each.
 
 If you run this, you'll *probably* see output like this:
 
-```rust
+```text
 got number: 0
 got number: 1
 got number: 2
