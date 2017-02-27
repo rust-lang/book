@@ -269,8 +269,6 @@ that borrows `self` and returns the inner data:
 <figure>
 <span class="filename">Filename: src/main.rs</span>
 
-TODO: errors in this example aren't getting caught by mdbook test, why???
-
 ```rust
 use std::ops::Deref;
 
@@ -308,7 +306,7 @@ file data and metadata
 </figcaption>
 </figure>
 
-Most of this should look familliar: a struct, a trait implementation, and a
+Most of this should look familiar: a struct, a trait implementation, and a
 main function that creates an instance of the struct. There is one part we
 haven't explained thoroughly yet: similarly to Chapter 13 when we looked at the
 Iterator trait with the `type Item`, the `type Target = T;` syntax is defining
@@ -408,7 +406,7 @@ that smart pointers can then be treated like regular references and used in
 places that expect regular references. We don't have to redefine methods and
 functions to take smart pointers explicitly, for example.
 
-## The `Drop` trait
+## The `Drop` Trait
 
 The other trait that's important to the smart pointer pattern is the `Drop`
 trait. `Drop` lets us run some code when a value is about to go out of scope.
@@ -575,7 +573,7 @@ kick in.
 
 Note that `Rc<T>` is only for use in single-threaded scenarios; the next
 chapter on concurrency will cover how to do reference counting in
-multi-threaded programs. If you try to use `Rc<T>` with multiple threads,
+multithreaded programs. If you try to use `Rc<T>` with multiple threads,
 you'll get a compile-time error.
 
 ### Using `Rc<T>` to Share Data
@@ -792,8 +790,8 @@ programmer will be inconvenienced, but nothing catastrophic can occur.
 
 Similarly to `Rc<T>`, `RefCell<T>` is only for use in single-threaded
 scenarios. We'll talk about how to get the functionality of `RefCell<T>` in a
-multi-threaded program in the next chapter on concurrency. For now, all you
-need to know is that if you try to use `RefCell<T>` in a multi-threaded
+multithreaded program in the next chapter on concurrency. For now, all you
+need to know is that if you try to use `RefCell<T>` in a multithreaded
 context, you'll get a compile time error.
 
 With references, we use the `&` and `&mut` syntax to create references and
@@ -1273,11 +1271,23 @@ reading about it should help you.
 
 ## Summary
 
-Whew! Smart pointers are powerful, but complex. We've covered the basics of
-smart pointers, and how to use some of the most common smart pointers.
-Implementing your own smart pointers is out of the scope of this book; you
-should check out the [Nomicon] if you're interested in building these kinds of
-abstractions.
+We've now covered how you can use different kinds of smart pointers to choose
+different guarantees and tradeoffs than those Rust makes with regular
+references. `Box<T>` has a known size and points to data allocated on the heap.
+`Rc<T>` keeps track of the number of references to data on the heap so that
+data can have multiple owners. `RefCell<T>` with its interior mutability gives
+us a type that can be used where we need an immutable type, and enforces the
+borrowing rules at runtime instead of at compile time.
+
+We've also discussed the `Deref` and `Drop` traits that enable a lot of smart
+pointers' functionality. We explored how it's possible to create a reference
+cycle that would cause a memory leak, and how to prevent reference cycles by
+using `Weak<T>`.
+
+If this chapter has piqued your interest and you now want to implement your own
+smart pointers, check out [The Nomicon] for even more useful information.
+
+[The Nomicon]: https://doc.rust-lang.org/stable/nomicon/vec.html
 
 Next, let's talk about concurrency in Rust. We'll even learn about a few new
 smart pointers that can help us with it.
