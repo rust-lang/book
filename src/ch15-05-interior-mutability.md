@@ -48,8 +48,9 @@ and `borrow_mut` methods, which are part of the safe API that `RefCell<T>` has.
 
 Listing 15-11 shows what it looks like to use `RefCell<T>` with functions that
 borrow their parameters immutably and mutably. Note that the `data` variable is
-declared as immutable with `let data` rather than `let mut data`, yet we're
-allowed to mutate the value by using `a_fn_that_mutably_borrows`!
+declared as immutable with `let data` rather than `let mut data`, yet
+`a_fn_that_mutably_borrows` is allowed to borrow the data mutably and make
+changes to the data!
 
 <figure>
 <span class="filename">Filename: src/main.rs</span>

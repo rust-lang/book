@@ -16,8 +16,8 @@ prevent it.
 In Listing 15-13, we're going to continue building on the `List<T>` definition
 from Listing 15-12. We've added a `RefCell` to the `Cons` variant's definition
 so that we can modify a `Cons` instance after we've created it. We've also
-added a `next_item` method to make it convenient for us to access the second
-item, if we have a `Cons` variant:
+added a `tail` method to make it convenient for us to access the second item,
+if we have a `Cons` variant:
 
 <figure>
 <span class="filename">Filename: src/main.rs</span>
@@ -30,7 +30,7 @@ enum List<T> {
 }
 
 impl<T> List<T> {
-    fn next_item(&self) -> Option<&RefCell<Rc<List<T>>>> {
+    fn tail(&self) -> Option<&RefCell<Rc<List<T>>>> {
         match *self {
             Cons(_, ref item) => Some(item),
             Nil => None,
@@ -66,7 +66,7 @@ which will then create a cycle:
 # }
 #
 # impl<T> List<T> {
-#     fn next_item(&self) -> Option<&RefCell<Rc<List<T>>>> {
+#     fn tail(&self) -> Option<&RefCell<Rc<List<T>>>> {
 #         match *self {
 #             Cons(_, ref item) => Some(item),
 #             Nil => None,
@@ -83,15 +83,15 @@ fn main() {
     let a = Rc::new(Cons(5, RefCell::new(Rc::new(Nil))));
 
     println!("a initial rc count = {}", Rc::strong_count(&a));
-    println!("a next item = {:?}", a.next_item());
+    println!("a next item = {:?}", a.tail());
 
     let b = Rc::new(Cons(10, RefCell::new(a.clone())));
 
     println!("a rc count after b creation = {}", Rc::strong_count(&a));
     println!("b initial rc count = {}", Rc::strong_count(&b));
-    println!("b next item = {:?}", b.next_item());
+    println!("b next item = {:?}", b.tail());
 
-    if let Some(ref link) = a.next_item() {
+    if let Some(ref link) = a.tail() {
         *link.borrow_mut() = b.clone();
     }
 
@@ -100,7 +100,7 @@ fn main() {
 
     // Uncomment the next line to see that we have a cycle; it will
     // overflow the stack
-    // println!("a next item = {:?}", a.next_item());
+    // println!("a next item = {:?}", a.tail());
 }
 ```
 
@@ -112,8 +112,8 @@ each other
 </figcaption>
 </figure>
 
-We use the `next_item` method to get a reference to the `RefCell` in `a`, which
-we put in the variable `link`. Then we use the `borrow_mut` method on the
+We use the `tail` method to get a reference to the `RefCell` in `a`, which we
+put in the variable `link`. Then we use the `borrow_mut` method on the
 `RefCell` to change the value inside from an `Rc` that holds a `Nil` value to
 the `Rc` in `b`. We've created a reference cycle that looks like:
 
@@ -171,7 +171,7 @@ enum List<T> {
 }
 
 impl<T> List<T> {
-    fn next_item(&self) -> Option<Rc<List<T>>> {
+    fn tail(&self) -> Option<Rc<List<T>>> {
         match *self {
             Cons(_, ref n) => (&*n.borrow()).upgrade(),
             Nil => None,
@@ -188,11 +188,11 @@ Listing 15-15: Modifying `List<T>` to have `Weak<T>` references instead of
 </figcaption>
 </figure>
 
-We've also modified the `next_item` method: not only does it return `None` when
-`self` is `Nil` and doesn't have a `next_item`, it now also returns `None` if
-the value that the `Weak<T>` references has been dropped. The `upgrade` method
-on a `Weak<T>` value returns `Some` containing an `Rc` if the value has not yet
-been dropped and `None` if the value has been dropped.
+We've also modified the `tail` method: not only does it return `None` when
+`self` is `Nil` and doesn't have a `tail`, it now also returns `None` if the
+value that the `Weak<T>` references has been dropped. The `upgrade` method on a
+`Weak<T>` value returns `Some` containing an `Rc` if the value has not yet been
+dropped and `None` if the value has been dropped.
 
 TODO: is this bad software design, collapsing two cases that return `None` like this???
 
@@ -214,7 +214,7 @@ they go out of scope at the end of `main`:
 # }
 #
 # impl<T> List<T> {
-#     fn next_item(&self) -> Option<Rc<List<T>>> {
+#     fn tail(&self) -> Option<Rc<List<T>>> {
 #         match *self {
 #             Cons(_, ref n) => (&*n.borrow()).upgrade(),
 #             Nil => None,
@@ -231,20 +231,20 @@ fn main() {
 
     let a = Rc::new(Cons(5, RefCell::new(Rc::downgrade(&nil))));
 
-    println!("a.next_item() = {:?}", a.next_item());
+    println!("a.tail() = {:?}", a.tail());
 
     {
-        let b = Rc::new(Cons(10, RefCell::new(Rc::downgrade(&a.clone()))));
+        let b = Rc::new(Cons(10, RefCell::new(Rc::downgrade(&a))));
 
         if let Cons(_, ref link) = *a {
-            *link.borrow_mut() = Rc::downgrade(&b.clone());
+            *link.borrow_mut() = Rc::downgrade(&b);
         }
 
-        println!("a.next_item() = {:?}", a.next_item());
-        println!("b.next_item() = {:?}", b.next_item());
+        println!("a.tail() = {:?}", a.tail());
+        println!("b.tail() = {:?}", b.tail());
     }
 
-    println!("a.next_item() = {:?}", a.next_item());
+    println!("a.tail() = {:?}", a.tail());
 }
 ```
 
@@ -257,8 +257,8 @@ Listing 15-16: Creating `List<T>` values using weak references
 
 First, we create a variable for the `Rc<T>` that holds the `Nil` value, so that
 it's clearer to see that we call `Rc::downgrade` and pass a reference to `nil`
-when we create `a`. At that point, we print out the value of `a.next_item()`
-and we can see that it's `Some(Nil)`.
+when we create `a`. At that point, we print out the value of `a.tail()` and we
+can see that it's `Some(Nil)`.
 
 We've added an inner scope in order to demonstrate what happens when `b` goes
 out of scope. In the inner scope, we create `b` that has a weak reference to
@@ -270,9 +270,9 @@ At the end of the inner scope, `b` goes out of scope. The value that the
 `Rc<T>` in `b` holds gets dropped, even though `a` still references it, because
 the reference in `a` is a weak reference that doesn't count when Rust decides
 whether the value in `b` should be dropped or not. At the end of `main` when we
-print out `a.next_item()` again, we can see that we now get a `None` value
-since the value that the weak reference in `a` was pointing to has been
-dropped. Success! We've broken the cycle.
+print out `a.tail()` again, we can see that we now get a `None` value since the
+value that the weak reference in `a` was pointing to has been dropped. Success!
+We've broken the cycle.
 
 Add some `println!` statements at various places that display the values that
 `Rc::strong_count` and `Rc::weak_count` return for `a` and `b` at different
