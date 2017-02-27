@@ -442,7 +442,7 @@ Sometimes, you may write a function which accepts a closure, and that closure
 takes a reference as an argument:
 
 ```rust
-fn call_with_ref<F>(some_closure:F) -> i32
+fn call_with_ref<F>(some_closure: F) -> i32
     where F: Fn(&i32) -> i32 {
 
     let value = 0;
