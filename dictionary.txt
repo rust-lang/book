@@ -158,7 +158,12 @@ monomorphization
 Monomorphization
 monomorphized
 MoveMessage
+mpsc
+mutex
 Mutex
+mutexes
+Mutexes
+MutexGuard
 namespace
 namespaced
 namespaces
@@ -174,6 +179,7 @@ null's
 OCaml
 offsetof
 online
+OpenGL
 OptionalFloatingPointNumber
 OptionalNumber
 OsStr
@@ -197,6 +203,7 @@ RAII
 randcrate
 READMEs
 rect
+recv
 redeclaring
 Refactoring
 refactor
@@ -249,6 +256,7 @@ Summarizable
 Supertraits
 That'd
 test's
+threadsafe
 Tiếng
 timeline
 TODO

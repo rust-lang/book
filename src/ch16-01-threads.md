@@ -7,7 +7,7 @@ many processes, and this is what lets multiple programs execute at the same
 time on your computer.
 
 We can take this idea down one level of abstraction: what if your program could
-also have independent bits of execution, and allow them to run simultanously?
+also have independent bits of execution, and allow them to run simultaneously?
 This feature is called *threads*.
 
 There are a few different ways to implement threads, however. Many operating
@@ -120,7 +120,7 @@ fn main() {
 }
 ```
 
-Becuase we access `v` inside the closure, the closure will capture it into its
+Because we access `v` inside the closure, the closure will capture it into its
 environment. And because `thread::spawn` runs this closure in a new thread, we
 can access `v` inside that new thread.
 

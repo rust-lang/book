@@ -22,10 +22,10 @@ more common concurrency primitives for shared memory: mutexes.
 
 A *mutex* is a concurrency primitive for sharing memory. It's short for "mutual
 exclusion", that is, it only allows one thread to access some data at any given
-time. Mutexes have a reputation as being hard to use, becuase there's a lot you
+time. Mutexes have a reputation as being hard to use, because there's a lot you
 have to remember:
 
-1. You have to remember to actually attempt to aquire the lock.
+1. You have to remember to actually attempt to acquire the lock.
 2. One you're done with the memory that's being guarded by the mutex, you have
    to remember to unlock the memory.
 
@@ -44,15 +44,15 @@ let mut num = m.lock().unwrap();
 ```
 
 Like many types, we create a `Mutex<T>` through a `new` method. To access
-the data inside the mutex, we use the `lock` method to aquire the lock. This
+the data inside the mutex, we use the `lock` method to acquire the lock. This
 call will block until we're able to do so. This call can fail, so similar to
 the last section, we use `unwrap()` for now, rather than better error handling.
 See Chapter 9 for better tools.
 
-Once we have aquired the lock, we can treat its return value, named `num` in
+Once we have acquired the lock, we can treat its return value, named `num` in
 this case, as a mutable reference to the data inside. This is how the first
 problem with mutexes is solved; `Mutex<i32>` is not an `i32`, and so we _must_
-aquire the lock in order to use this memory. We can't forget; the type system
+acquire the lock in order to use this memory. We can't forget; the type system
 won't let us do otherwise.
 
 As you may have suspected, `Mutex<T>` is a smart pointer. Well, more
@@ -187,10 +187,10 @@ like `Rc<T>`, but made these counts thread-safe?
 
 If you thought that question sounded like a leading one, you'd be right. There
 is: `Arc<T>`. The 'a' stands for 'atomic', so it's an 'atomically reference
-counted' type. Atomics are an additional kind of concurrency primtive that we
+counted' type. Atomics are an additional kind of concurrency primitive that we
 won't cover here, see the standard library documentation for `std::atomic` for
 more. The gist of it is this: they work like primitive types, but are safe to
-share across threads. Why isn't this safety the default? Becuase it comes with
+share across threads. Why isn't this safety the default? Because it comes with
 a performance penalty.
 
 Anyway, `Arc<T>` and `Rc<T>` are identical except for the atomic internals. The
