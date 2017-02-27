@@ -291,7 +291,7 @@ more like destructuring?
 
 ### Named Variables and the Underscore Pattern
 
-TODO: variable name always matches any value, underscore ignores everything
+TODO: variable name always matches any value, underscore ignores everything, say the word "wildcard" somewhere about `_`
 
 Usually, Rust will warn you if you create a variable but don't use it anywhere,
 since that could be a bug. If you're prototyping or just starting a project,
