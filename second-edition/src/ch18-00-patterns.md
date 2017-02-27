@@ -28,7 +28,7 @@ possible failure and we wouldn't need their functionality if the pattern could
 never fail.
 
 In general, you shouldn't have to worry about the distinction between refutable
-and irrefutable patterns; just be familliar with the concept of refutability
+and irrefutable patterns; just be familiar with the concept of refutability
 when you see it mentioned in an error message. When you get an error message
 involving refutability, you'll need to change either the pattern or the
 construct you're using the pattern with, depending on your intentions for the
@@ -147,7 +147,7 @@ slot; a variable name is just a particularly humble form of pattern.
 With `let`, we compare the expression against the pattern, and assign any names
 we find. So for example, in our `let x = 5;` case, `x` is a pattern that says
 "bind what matches here to the variable `x`. And since the name `x` is the
-whole pattern, this pattern effecitvely means "bind everything to the variable
+whole pattern, this pattern effectively means "bind everything to the variable
 `x`, whatever the value is."
 
 To see the pattern matching aspect of `let` a bit more clearly, consider this
