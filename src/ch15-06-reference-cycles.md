@@ -156,7 +156,9 @@ inner value will get dropped if the `strong_count` is 0, even if the
 an `Option<T>` that will be `Some` if the `Rc` value has not been dropped yet,
 and `None` if the `Rc` value has been dropped.
 
-So in order to make it possible to create lists that point to each other but not create reference cycles, in Listing 15-15, we're going to change our definition of `List<T>` again to hold a `Weak<T>` instead of an `Rc<T>`.
+So in order to make it possible to create lists that point to each other but
+not create reference cycles, in Listing 15-15, we're going to change our
+definition of `List<T>` again to hold a `Weak<T>` instead of an `Rc<T>`.
 
 <figure>
 <span class="filename">Filename: src/main.rs</span>
@@ -197,7 +199,10 @@ TODO: is this bad software design, collapsing two cases that return `None` like 
 To create `Weak<T>` values, we call the `Rc::downgrade` associated function,
 which takes an `&Rc<T>` as an argument, and gives a `Weak<T>` back.
 
-Listing 15-16 shows a `main` method where we're trying to create `a` and `b` lists that point to each other, similarly to what we did in Listing 15-14, but this time we won't have a reference cycle and the values will be dropped when they go out of scope at the end of `main`:
+Listing 15-16 shows a `main` method where we're trying to create `a` and `b`
+lists that point to each other, similarly to what we did in Listing 15-14, but
+this time we won't have a reference cycle and the values will be dropped when
+they go out of scope at the end of `main`:
 
 <figure>
 
