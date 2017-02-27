@@ -232,7 +232,7 @@ refactoring
 refcell
 RefCell
 RefMut
-Refutability
+refutability
 repr
 retweet
 ripgrep
