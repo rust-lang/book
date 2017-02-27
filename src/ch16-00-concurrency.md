@@ -25,8 +25,8 @@ without worrying about introducing new bugs.
 
 Many languages that give you tools to deal with concurrent problems are
 strongly opinionated about them. That's a very reasonable strategy, but
-lower-level languages don't have that luxury. Rust, therefore, gives us
-a variety of tools for modelling our problems in whatever way we feel is
+lower-level languages don't have that luxury. Rust, therefore, gives us a
+variety of tools for modeling our problems in whatever way we feel is
 appropriate.
 
 Here's what we'll cover in this chapter:
