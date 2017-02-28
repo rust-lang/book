@@ -141,8 +141,17 @@ example to get this right. But it's not impossible: preventing memory leaks in
 the form of reference cycles is not one of the guarantees Rust makes. If you
 have `RefCell<T>` values that contain `Rc<T>` values or similar nested
 combinations of types with interior mutability and reference counting, be aware
-that you'll have to ensure that you don't create cycles on your. One way of
-doing that is using `Weak<T>`.
+that you'll have to ensure that you don't create cycles. In the example in
+Listing 15-14, the solution would probably be to not write code that could
+create cycles like this, since we do want `Cons` variants to own the list they
+point to.
+
+With data structures like graphs, it's sometimes necessary to have references
+that create cycles in order to have parent nodes point to their children and
+children nodes point back in the opposite direction to their parents, for
+example. If one of the directions is expressing ownership and the other isn't,
+one way of being able to model the relationship of the data without creating
+reference cycles and memory leaks is using `Weak<T>`. Let's explore that next!
 
 ### Prevent Reference Cycles: Turn an `Rc<T>` into a `Weak<T>`
 
@@ -156,6 +165,8 @@ inner value will get dropped if the `strong_count` is 0, even if the
 an `Option<T>` that will be `Some` if the `Rc` value has not been dropped yet,
 and `None` if the `Rc` value has been dropped.
 
+Instead of the list in Listing 15-14 where each element knows only about the next element, let's say we want a list where the elements know about their next element *and* their previous element.
+
 So in order to make it possible to create lists that point to each other but
 not create reference cycles, in Listing 15-15, we're going to change our
 definition of `List<T>` again to hold a `Weak<T>` instead of an `Rc<T>`.
@@ -165,25 +176,86 @@ definition of `List<T>` again to hold a `Weak<T>` instead of an `Rc<T>`.
 
 ```rust
 #[derive(Debug)]
-enum List<T> {
-    Cons(T, RefCell<Weak<List<T>>>),
-    Nil,
+enum TreePart<T> {
+    Branch(RefCell<Weak<TreePart<T>>>, T, RefCell<Rc<TreePart<T>>>),
+    Leaf(RefCell<Weak<TreePart<T>>>),
 }
 
-impl<T> List<T> {
-    fn tail(&self) -> Option<Rc<List<T>>> {
+impl<T> TreePart<T> {
+    fn parent(&self) -> Option<Rc<TreePart<T>>> {
         match *self {
-            Cons(_, ref n) => (&*n.borrow()).upgrade(),
-            Nil => None,
+            Branch(ref p, _, _) => (&*p.borrow()).upgrade(),
+            Leaf(ref p) => (&*p.borrow()).upgrade(),
         }
     }
+}
+
+use TreePart::{Branch, Leaf};
+use std::rc::{Rc, Weak};
+use std::cell::RefCell;
+
+fn main() {
+    let leaf = Rc::new(Leaf(RefCell::new(Weak::new())));
+
+    let sapling = Rc::new(Branch(
+        RefCell::new(Weak::new()),
+        10,
+        RefCell::new(leaf.clone())
+    ));
+
+    if let Leaf(ref parent) = *leaf {
+        *parent.borrow_mut() = Rc::downgrade(&sapling);
+    }
+
+    println!("leaf = {:?}", leaf);
+    println!("leaf parent = {:?}", leaf.parent());
+    println!("sapling = {:?}", sapling);
+    println!("sapling parent = {:?}", sapling.parent());
+
+    {
+        let oak = Rc::new(Branch(
+            RefCell::new(Weak::new()),
+            50,
+            RefCell::new(sapling.clone())
+        ));
+
+        if let Branch(ref parent, _, _) = *sapling {
+            *parent.borrow_mut() = Rc::downgrade(&oak);
+        }
+
+        println!("leaf = {:?}", leaf);
+        println!("leaf parent = {:?}", leaf.parent());
+        println!("sapling = {:?}", sapling);
+        println!("sapling parent = {:?}", sapling.parent());
+        println!("oak = {:?}", oak);
+        println!("oak parent = {:?}", oak.parent());
+
+        assert_eq!(2, Rc::strong_count(&leaf));
+        assert_eq!(0, Rc::weak_count(&leaf));
+
+        assert_eq!(2, Rc::strong_count(&sapling));
+        assert_eq!(1, Rc::weak_count(&sapling));
+
+        assert_eq!(1, Rc::strong_count(&oak));
+        assert_eq!(1, Rc::weak_count(&oak));
+    }
+
+    println!("leaf = {:?}", leaf);
+    println!("leaf parent = {:?}", leaf.parent());
+    println!("sapling = {:?}", sapling);
+    println!("sapling parent = {:?}", sapling.parent());
+
+    assert_eq!(2, Rc::strong_count(&leaf));
+    assert_eq!(0, Rc::weak_count(&leaf));
+
+    assert_eq!(1, Rc::strong_count(&sapling));
+    assert_eq!(1, Rc::weak_count(&sapling));
 }
 ```
 
 <figcaption>
 
-Listing 15-15: Modifying `List<T>` to have `Weak<T>` references instead of
-`Rc<T>`
+Listing 15-15: TODO rework text around here, get some reviews on this example
 
 </figcaption>
 </figure>
