@@ -329,6 +329,7 @@ wasn
 WeatherForecast
 WebSocket
 whitespace
+wildcard
 wildcards
 workflow
 workspace
