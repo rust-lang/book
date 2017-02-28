@@ -457,7 +457,7 @@ we did?
 
 You might think that you'd write it something like this:
 
-```rust
+```rust,ignore
 fn call_with_ref<'a, F>(some_closure:F) -> i32
     where F: Fn(&'a i32) -> i32 {
 #
@@ -467,18 +467,17 @@ fn call_with_ref<'a, F>(some_closure:F) -> i32
 # }
 ```
 
-This will compile, but it's actually taking advantage of one last bit of syntax
-sugar. Because our trait is generic, yet it also *contains* a generic lifetime,
-we need a way to say that our generic is generic. In general, these kinds of
-"generic of generic" issues are referred to with the words "higher", like
-"higher kinded type." In this case, it's a "higher rank type." What that means
-isn't important, but the implication is that Rust is doing something special
-here for us.
+This will not compile. Because our trait is generic, yet it also *contains* a
+generic lifetime, we need a way to say that our generic is generic. In general,
+these kinds of "generic of generic" issues are referred to with the words
+"higher", like "higher kinded type." In this case, it's a "higher rank type."
+What that means isn't important, but the implication is that Rust is doing
+something special here for us.
 
 If we wanted to write it out entirely, we'd use this syntax, with `for<>`:
 
 ```rust
-fn call_with_ref<F>(some_closure:F) -> i32
+fn call_with_ref<F>(some_closure: F) -> i32
     where F: for<'a> Fn(&'a i32) -> i32 {
 #
 #     let value = 0;
@@ -486,6 +485,12 @@ fn call_with_ref<F>(some_closure:F) -> i32
 #     some_closure(&value)
 # }
 ```
+
+failures:
+    Advanced_Lifetimes_19
+
+test result: FAILED. 11 passed; 1 failed; 9 ignored; 0 measured
+
 
 This says "for any lifetime `'a`." Think of it as similar to how a generic
 function says "for any type `T`."
