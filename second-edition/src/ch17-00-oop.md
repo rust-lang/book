@@ -8,7 +8,7 @@ oriented programming, and so we're going to, like in Chapter 13, set the
 definitions aside for now.
 
 Instead, we're going to talk about things we hear from programmers who are new
-to Rust, but worked with object-orieted languages previously. Sometimes, people
+to Rust, but worked with object-oriented languages previously. Sometimes, people
 come to Rust and get a little stuck, because Rust doesn't support a feature
 that they may rely on heavily in other languages.
 
@@ -32,9 +32,9 @@ relationships to one another. With Rust, we have two separate axes to deal
 with; we can abstract over data, or abstract over behavior, in any combination.
 This leads to extra flexibility, but also very different designs, generally.
 
-When modelling a problem in an object oriented way, a programmer asks
+When modeling a problem in an object oriented way, a programmer asks
 themselves "what objects exist, and how do they relate to one another?" When
-modelling a problem in Rust, the question is instead, what data do I need to
+modeling a problem in Rust, the question is instead, what data do I need to
 represent, and what operations are required on that data?
 
 ## An object-oriented farm
@@ -98,7 +98,7 @@ struct Record {
 ```
 
 We've created two new types here, so let's figure those out too. For an
-`Animal`, we know every speices of animal, so an `enum` is the right choice:
+`Animal`, we know every species of animal, so an `enum` is the right choice:
 
 ```rust
 enum Species {
@@ -152,7 +152,7 @@ on our `Farm`. Since it's not shared, we'll make it an inherent method:
 impl Farm {
     fn purchase(&mut self, animal: Animal) -> Record {
        // add the animal to our list of animals and generate a Record
-    } 
+    }
 }
 ```
 
@@ -239,7 +239,7 @@ What does it mean for a method to be object safe? It is safe if either:
     * It must not have any type parameters; and,
     * It must have a receiver that has type `Self` or which dereferences to the
 Self type;
-    * must not use `Self` anywhere but the reciever
+    * must not use `Self` anywhere but the receiver
 
 Those rules are a bit formal, but think of it this way: if your method requires
 `Self`, but an object forgets the exact type that it is, there's no way that it
