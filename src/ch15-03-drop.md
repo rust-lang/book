@@ -107,10 +107,12 @@ Wait for it...
 
 Note that we aren't allowed to call the `drop` method that we defined directly:
 if we replaced `drop(w)` in Listing 15-7 with `w.drop()`, we'll get a compiler
-error that says `explicit destructor calls not allowed`. TODO: why aren't we
-allowed to call the drop method directly?
-
-The definition of `std::mem::drop` is:
+error that says `explicit destructor calls not allowed`. We're not allowed to
+call `Drop::drop` directly because when Rust inserts its call to `Drop::drop`
+automatically when the value goes out of scope, then the value would get
+dropped twice. Dropping a value twice could cause an error or corrupt memory,
+so Rust doesn't let us. Instead, we can use `std::mem::drop`, whose definition
+is:
 
 ```rust
 pub mod std {
