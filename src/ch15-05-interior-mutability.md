@@ -95,8 +95,11 @@ the `RefCell<T>` with the `borrow_mut` method, and the function
 `a_fn_that_mutably_borrows` is allowed to change the value. We can see that the
 next time we print out the value, it's 6 instead of 5.
 
-Recall that because of the borrowing rules, this code trying to create two
-mutable borrows in the same scope won't compile:
+### Borrowing Rules are Checked at Runtime on `RefCell<T>`
+
+Recall from Chapter 4 that because of the borrowing rules, this code using
+regular references that tries to create two mutable borrows in the same scope
+won't compile:
 
 ```rust,ignore
 let mut s = String::from("hello");
@@ -122,11 +125,11 @@ error[E0499]: cannot borrow `s` as mutable more than once at a time
 In contrast, using `RefCell<T>` and calling `borrow_mut` twice in the same
 scope *will* compile, but it will panic at runtime instead. This code:
 
-```rust,ignore
+```rust,should_panic
 use std::cell::RefCell;
 
 fn main() {
-    let mut s = RefCell::new(String::from("hello"));
+    let s = RefCell::new(String::from("hello"));
 
     let r1 = s.borrow_mut();
     let r2 = s.borrow_mut();
