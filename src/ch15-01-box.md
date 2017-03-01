@@ -1,9 +1,9 @@
 ## `Box<T>` Points to Data on the Heap and Has a Known Size
 
 The most straightforward smart pointer is a *box*, whose type is written
-`Box<T>`. Boxes allow you to put a single value on the heap, and the pointer to
-that value lives on the stack. (We talked about the stack vs. the heap in
-Chapter 4.) Listing 15-1 shows how to use a box to store an `i32` on the heap:
+`Box<T>`. Boxes allow you to put a single value on the heap (we talked about
+the stack vs. the heap in Chapter 4). Listing 15-1 shows how to use a box to
+store an `i32` on the heap:
 
 <figure>
 <span class="filename">Filename: src/main.rs</span>
