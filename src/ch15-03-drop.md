@@ -2,14 +2,17 @@
 
 The other trait that's important to the smart pointer pattern is the `Drop`
 trait. `Drop` lets us run some code when a value is about to go out of scope.
-This is especially useful for smart pointers that manage a resource as opposed
-to those that manage memory: often resources like files or network connections
-need to be closed when our code is done with them. In other languages, we have
-to remember to call code to close these kinds of resources every time we finish
-using an instance of one. If we forget, the system our code is running on might
-get overloaded and crash.
+The `Drop` trait is more generally useful than just smart pointers. For
+example, the `Drop` trait is often used on structs that manage a resource:
+often resources like files or network connections need to be closed when our
+code is done with them. We're discussing `Drop` in the context of smart
+pointers, though, because the functionality of the `Drop` trait is almost
+always used when implementing smart pointers.
 
-In Rust, we can specify that some code should be run when a value goes out of
+In some other languages, we have to remember to call code to free the memory or
+resource every time we finish using an instance of a smart pointer. If we
+forget, the system our code is running on might get overloaded and crash. In
+Rust, we can specify that some code should be run when a value goes out of
 scope. The compiler will insert this code automatically. That means we don't
 need to remember to put this code everywhere we're done with an instance of
 these types, but we still won't leak resources!

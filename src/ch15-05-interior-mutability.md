@@ -1,11 +1,14 @@
 ## `RefCell<T>` and the Interior Mutability Pattern
 
 *Interior mutability* is a design pattern in Rust for allowing you to mutate
-data that's immutable. The interior mutability pattern involves using `unsafe`
-code inside a data structure to bend Rust's usual rules around mutation and
-borrowing. We haven't yet covered unsafe code, we will in Chapter 20. The
-`unsafe` code is then wrapped in a safe API, and the outer type is still
-immutable.
+data even though there are immutable references to that data, which would
+normally be disallowed by the borrowing rules. The interior mutability pattern
+involves using `unsafe` code inside a data structure to bend Rust's usual rules
+around mutation and borrowing. We haven't yet covered unsafe code; we will in
+Chapter 19. The interior mutability pattern is used when you can ensure that
+the borrowing rules will be followed at runtime, even though the compiler can't
+ensure that. The `unsafe` code involved is then wrapped in a safe API, and the
+outer type is still immutable.
 
 Let's explore this by looking at the `RefCell<T>` type that follows the
 interior mutability pattern.
@@ -27,14 +30,18 @@ With references, if you break these rules, you'll get a compiler error. With
 `RefCell<T>`, if you break these rules, you'll get a `panic!`.
 
 Static analysis, like the Rust compiler performs, is inherently conservative.
-That is, if Rust accepts an incorrect program, people would not be able to
-trust in the guarantees Rust makes. If Rust rejects a correct program, the
-programmer will be inconvenienced, but nothing catastrophic can occur.
-`RefCell<T>` is useful in two situations:
+There are properties of code that are impossible to detect by analyzing the
+code: the most famous is the Halting Problem, which is out of scope of this
+book but an interesting topic to research if you're interested.
 
-1. When you know that the borrowing rules are respected, but when the compiler
-  can't understand that that's true.
-2. When you need interior mutability.
+Because some analysis is impossible, the Rust compiler does not try to even
+guess if it can't be sure, so it's conservative and sometimes rejects correct
+programs that would not actually violate Rust's guarantees. Put another way, if
+Rust accepts an incorrect program, people would not be able to trust in the
+guarantees Rust makes. If Rust rejects a correct program, the programmer will
+be inconvenienced, but nothing catastrophic can occur. `RefCell<T>` is useful
+when you know that the borrowing rules are respected, but the compiler can't
+understand that that's true.
 
 Similarly to `Rc<T>`, `RefCell<T>` is only for use in single-threaded
 scenarios. We'll talk about how to get the functionality of `RefCell<T>` in a
@@ -66,11 +73,15 @@ fn a_fn_that_mutably_borrows(b: &mut i32) {
     *b += 1;
 }
 
+fn demo(r: &RefCell<i32>) {
+    a_fn_that_immutably_borrows(&r.borrow());
+    a_fn_that_mutably_borrows(&mut r.borrow_mut());
+    a_fn_that_immutably_borrows(&r.borrow());
+}
+
 fn main() {
     let data = RefCell::new(5);
-    a_fn_that_immutably_borrows(&data.borrow());
-    a_fn_that_mutably_borrows(&mut data.borrow_mut());
-    a_fn_that_immutably_borrows(&data.borrow());
+    demo(&data);
 }
 ```
 
@@ -88,12 +99,19 @@ a is 5
 a is 6
 ```
 
-Here, we've created a new `RefCell<T>` containing the value 5. We can get an
-immutable reference to the value inside the `RefCell<T>` by calling the `borrow`
-method. More interestingly, we can get a mutable reference to the value inside
-the `RefCell<T>` with the `borrow_mut` method, and the function
+In `main`, we've created a new `RefCell<T>` containing the value 5, and stored
+in the variable `data`, declared without the `mut` keyword. We then call the
+`demo` function with an immutable reference to `data`: as far as `main` is
+concerned, `data` is immutable!
+
+In the `demo` function, we get an immutable reference to the value inside the
+`RefCell<T>` by calling the `borrow` method, and we call
+`a_fn_that_immutably_borrows` with that immutable reference. More
+interestingly, we can get a *mutable* reference to the value inside the
+`RefCell<T>` with the `borrow_mut` method, and the function
 `a_fn_that_mutably_borrows` is allowed to change the value. We can see that the
-next time we print out the value, it's 6 instead of 5.
+next time we call `a_fn_that_immutably_borrows` that prints out the value, it's
+6 instead of 5.
 
 ### Borrowing Rules are Checked at Runtime on `RefCell<T>`
 
