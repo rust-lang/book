@@ -13,30 +13,35 @@ reference count of each item in the cycle will never reach 0, and the values
 will never be dropped. Let's take a look at how that might happen and how to
 prevent it.
 
-In Listing 15-13, we're going to continue building on the `List<T>` definition
-from Listing 15-12. We've added a `RefCell` to the `Cons` variant's definition
-so that we can modify a `Cons` instance after we've created it. We've also
-added a `tail` method to make it convenient for us to access the second item,
-if we have a `Cons` variant:
+In Listing 15-13, we're going to use another variation of the `List` definition
+from Listing 15-12. We're going back to storing an `i32` value as the first
+element in the `Cons` variant. The second element in the `Cons` variant is now
+`RefCell<Rc<List>>`: instead of being able to modify the `i32` value this time,
+we want to be able to modify which `List` a `Cons` variant is pointing to.
+We've also added a `tail` method to make it convenient for us to access the
+second item, if we have a `Cons` variant:
 
 <figure>
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
 #[derive(Debug)]
-enum List<T> {
-    Cons(T, RefCell<Rc<List<T>>>),
+enum List {
+    Cons(i32, RefCell<Rc<List>>),
     Nil,
 }
 
-impl<T> List<T> {
-    fn tail(&self) -> Option<&RefCell<Rc<List<T>>>> {
+impl List {
+    fn tail(&self) -> Option<&RefCell<Rc<List>>> {
         match *self {
             Cons(_, ref item) => Some(item),
             Nil => None,
         }
     }
 }
+# use std::rc::Rc;
+# use std::cell::RefCell;
+# use List::{Cons, Nil};
 ```
 
 <figcaption>
@@ -49,24 +54,24 @@ modify what a `Cons` variant is referring to
 
 TODO: insert diagram showing the "shape" of the `Cons` variant?
 
-Next, in Listing 15-14, we're going to create a `List<T>` value in the variable
-`a` that initially is a list of `5, Nil`. Then we'll create a `List<T>` value
-in the variable `b` that is a list of the value 10 and then points to the list
-in `a`. Finally, we'll modify `a` so that it points to `b` instead of `Nil`,
-which will then create a cycle:
+Next, in Listing 15-14, we're going to create a `List` value in the variable
+`a` that initially is a list of `5, Nil`. Then we'll create a `List` value in
+the variable `b` that is a list of the value 10 and then points to the list in
+`a`. Finally, we'll modify `a` so that it points to `b` instead of `Nil`, which
+will then create a cycle:
 
 <figure>
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
 # #[derive(Debug)]
-# enum List<T> {
-#     Cons(T, RefCell<Rc<List<T>>>),
+# enum List {
+#     Cons(i32, RefCell<Rc<List>>),
 #     Nil,
 # }
 #
-# impl<T> List<T> {
-#     fn tail(&self) -> Option<&RefCell<Rc<List<T>>>> {
+# impl List {
+#     fn tail(&self) -> Option<&RefCell<Rc<List>>> {
 #         match *self {
 #             Cons(_, ref item) => Some(item),
 #             Nil => None,
@@ -106,7 +111,7 @@ fn main() {
 
 <figcaption>
 
-Listing 15-14: Creating a reference cycle of two `List<T>` values pointing to
+Listing 15-14: Creating a reference cycle of two `List` values pointing to
 each other
 
 </figcaption>
@@ -159,11 +164,14 @@ the `strong_count` of references; `Weak<T>` is a way to reference an `Rc<T>`
 that does not increment the `strong_count`: instead it increments the
 `weak_count` of references to an `Rc`. When an `Rc` goes out of scope, the
 inner value will get dropped if the `strong_count` is 0, even if the
-`weak_count` is not 0. When we attempt to use a `Weak<T>` reference, we'll get
-an `Option<T>` that will be `Some` if the `Rc` value has not been dropped yet,
-and `None` if the `Rc` value has been dropped.
+`weak_count` is not 0. To be able to get the value from a `Weak<T>`, we first
+have to upgrade it to an `Option<Rc<T>>` by using the `upgrade` function. The
+result of upgrading a `Weak<T>` will be `Some` if the `Rc` value has not been
+dropped yet, and `None` if the `Rc` value has been dropped.
 
-Instead of the list in Listing 15-14 where each element knows only about the next element, let's say we want a list where the elements know about their next element *and* their previous element.
+Instead of the list in Listing 15-14 where each element knows only about the
+next element, let's say we want a list where the elements know about their next
+element *and* their previous element.
 
 So in order to make it possible to create lists that point to each other but
 not create reference cycles, in Listing 15-15, we're going to change our
@@ -175,9 +183,9 @@ definition of `List<T>` again to hold a `Weak<T>` instead of an `Rc<T>`.
 ```rust
 #[derive(Debug)]
 struct Node<T> {
+    value: T,
     parent: RefCell<Weak<Node<T>>>,
     children: RefCell<Vec<Rc<Node<T>>>>,
-    value: T,
 }
 
 impl<T> Node<T> {
@@ -191,21 +199,21 @@ use std::cell::RefCell;
 
 fn main() {
     let leaf = Rc::new(Node {
+        value: 0,
         parent: RefCell::new(Weak::new()),
         children: RefCell::new(vec![]),
-        value: 0,
     });
 
     let another_leaf = Rc::new(Node {
+        value: 10,
         parent: RefCell::new(Weak::new()),
         children: RefCell::new(vec![]),
-        value: 10,
     });
 
     let branch = Rc::new(Node {
+        value: 50,
         parent: RefCell::new(Weak::new()),
         children: RefCell::new(vec![leaf.clone(), another_leaf.clone()]),
-        value: 50,
     });
 
     *leaf.parent.borrow_mut() = Rc::downgrade(&branch);
@@ -222,9 +230,9 @@ fn main() {
 
     {
         let another_branch = Rc::new(Node {
+            value: 70,
             parent: RefCell::new(Weak::new()),
             children: RefCell::new(vec![branch.clone()]),
-            value: 70,
         });
 
         *branch.parent.borrow_mut() = Rc::downgrade(&another_branch);

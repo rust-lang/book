@@ -38,24 +38,35 @@ A cons list is a list where each item contains a value and the next item until
 the end of the list, which is signified by a value called `Nil`. Note that we
 aren't introducing the idea of "nil" or "null" that we discussed in Chapter 6,
 this is just a regular enum variant name we're using because it's the canonical
-name to use when describing the cons list data structure.
+name to use when describing the cons list data structure. Cons lists aren't
+used very often in Rust, `Vec<T>` is a better choice most of the time, but
+implementing this data structure is useful as an example.
+
+Here's our first try at defining a cons list as an enum; note that this won't
+compile quite yet:
 
 <figure>
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore
-enum List<T> {
-    Cons(T, List<T>),
+enum List {
+    Cons(i32, List),
     Nil,
 }
 ```
 
 <figcaption>
 
-Listing 15-2: An enum definition for a cons list data structure
+Listing 15-2: The first attempt of defining an enum to represent a cons list
+data structure of `i32` values
 
 </figcaption>
 </figure>
+
+We're choosing to implement a cons list that only holds `i32` values, but we
+could have chosen to implement it using generics as we discussed in Chapter 10
+to define a cons list concept independent of the type of value stored in the
+cons list.
 
 Using a cons list to store the list `1, 2, 3` would look like this:
 
@@ -67,13 +78,12 @@ fn main() {
 }
 ```
 
-The first `Cons` value holds `1` and another `List<T>` value. This `List<T>`
-value is another `Cons` value that holds `2` and another `List<T>` value. This
-is one more `Cons` value that holds `3` and a `List<T>` value, which is finally
+The first `Cons` value holds `1` and another `List` value. This `List`
+value is another `Cons` value that holds `2` and another `List` value. This
+is one more `Cons` value that holds `3` and a `List` value, which is finally
 `Nil`, the non-recursive variant that signals the end of the list.
 
-However, if we try to compile the above code, we get the error shown in Listing
-15-3:
+If we try to compile the above code, we get the error shown in Listing 15-3:
 
 <figure>
 
@@ -81,9 +91,9 @@ However, if we try to compile the above code, we get the error shown in Listing
 error[E0072]: recursive type `List` has infinite size
  -->
   |
-1 |   enum List<T> {
+1 |   enum List {
   |  _^ starting here...
-2 | |     Cons(T, List<T>),
+2 | |     Cons(i32, List),
 3 | |     Nil,
 4 | | }
   | |_^ ...ending here: recursive type has infinite size
@@ -100,10 +110,10 @@ Listing 15-3: The error we get when attempting to define a recursive enum
 </figure>
 
 The error says this type 'has infinite size'. Why is that? It's because we've
-defined `List<T>` to have a variant that is recursive: it holds another value
-of itself. This means Rust can't figure out how much space it needs in order to
-store a `List<T>` value. Let's break this down a bit: first let's look at how
-Rust decides how much space it needs to store a value of a non-recursive type.
+defined `List` to have a variant that is recursive: it holds another value of
+itself. This means Rust can't figure out how much space it needs in order to
+store a `List` value. Let's break this down a bit: first let's look at how Rust
+decides how much space it needs to store a value of a non-recursive type.
 Recall the `Message` enum we defined in Listing 6-2 when we discussed enum
 definitions in Chapter 6:
 
@@ -123,15 +133,15 @@ forth. Therefore, the most space a `Message` value will need is the space it
 would take to store the largest of its variants.
 
 Contrast this to what happens when the Rust compiler looks at a recursive type
-like `List<T>` in Listing 15-2. The compiler tries to figure out how much
-memory is needed to store value of `List<T>`, and starts by looking at the
-`Cons` variant. The `Cons` variant holds a value of type `T` and a value of
-type `List<T>`, so it can use however much the size of `T` is plus the size of
-`List<T>`. To figure out how much memory a `List<T>` needs, it looks at its
-variants, starting with the `Cons` variant. The `Cons` variant holds a value of
-type `T` and a value of type `List<T>`, and this continues infinitely. Rust
-can't figure out how much space to allocate for recursively defined types, so
-the compiler gives the error in Listing 15-3.
+like `List` in Listing 15-2. The compiler tries to figure out how much memory
+is needed to store value of `List`, and starts by looking at the `Cons`
+variant. The `Cons` variant holds a value of type `i32` and a value of type
+`List`, so `Cons` needs an amount of space equal to the size of an `i32` plus
+the size of a `List`. To figure out how much memory a `List` needs, it looks at
+its variants, starting with the `Cons` variant. The `Cons` variant holds a
+value of type `i32` and a value of type `List`, and this continues infinitely.
+Rust can't figure out how much space to allocate for recursively defined types,
+so the compiler gives the error in Listing 15-3.
 
 The compiler did give a helpful suggestion in the error output:
 
@@ -152,8 +162,8 @@ like so:
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-enum List<T> {
-    Cons(T, Box<List<T>>),
+enum List {
+    Cons(i32, Box<List>),
     Nil,
 }
 
@@ -169,22 +179,22 @@ fn main() {
 
 <figcaption>
 
-Listing 15-4: Definition of `List<T>` that uses `Box<T>` in order to have a
+Listing 15-4: Definition of `List` that uses `Box<T>` in order to have a
 known size
 
 </figcaption>
 </figure>
 
-The compiler will be able to figure out the size it needs to store a `List<T>`
-value. Rust will look at `List<T>`, and again start by looking at the `Cons`
-variant. The `Cons` variant will need the size of whatever `T` is, plus the
-space to store a `usize`, since a box always has the size of a `usize`, no
-matter what it's pointing to. Then Rust looks at the `Nil` variant, which does
-not store a value, so `Nil` doesn't need any space. We've broken the infinite,
-recursive chain by adding in a box. This is the main area where boxes are
-useful: breaking up an infinite data structure so that the compiler can know
-what size it is. We'll look at another case where Rust has data of unknown size
-in Chapter 17 when we discuss trait objects.
+The compiler will be able to figure out the size it needs to store a `List`
+value. Rust will look at `List`, and again start by looking at the `Cons`
+variant. The `Cons` variant will need the size of `i32` plus the space to store
+a `usize`, since a box always has the size of a `usize`, no matter what it's
+pointing to. Then Rust looks at the `Nil` variant, which does not store a
+value, so `Nil` doesn't need any space. We've broken the infinite, recursive
+chain by adding in a box. This is the main area where boxes are useful:
+breaking up an infinite data structure so that the compiler can know what size
+it is. We'll look at another case where Rust has data of unknown size in
+Chapter 17 when we discuss trait objects.
 
 Even though you won't be using boxes very often, they are a good way to
 understand the smart pointer pattern. Two of the aspects of `Box<T>` that are

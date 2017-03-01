@@ -141,7 +141,7 @@ error[E0499]: cannot borrow `s` as mutable more than once at a time
 ```
 
 In contrast, using `RefCell<T>` and calling `borrow_mut` twice in the same
-scope *will* compile, but it will panic at runtime instead. This code:
+scope *will* compile, but it'll panic at runtime instead. This code:
 
 ```rust,should_panic
 use std::cell::RefCell;
@@ -180,16 +180,20 @@ Well, remember when we said that `Rc<T>` has to store immutable data? Given
 that `RefCell<T>` is immutable, but has interior mutability, we can combine
 `Rc<T>` and `RefCell<T>` to get a type that's both reference counted and
 mutable. Listing 15-12 shows an example of how to do that, again going back to
-our cons list from Listing 15-9. In this example, the type we're filling in for
-`T` is `Rc<RefCell<i32>>`:
+our cons list from Listing 15-9. In this example, instead of storing `i32`
+values in the cons list, we'll be storing `Rc<RefCell<i32>>` values. We want to
+store that type so that we can have an owner of the value that's not part of
+the list (the multiple owners functionality that `Rc<T>` provides), and so we
+can mutate the inner `i32` value (the interior mutability functionality that
+`RefCell<T>` provides):
 
 <figure>
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
 #[derive(Debug)]
-enum List<T> {
-    Cons(T, Rc<List<T>>),
+enum List {
+    Cons(Rc<RefCell<i32>>, Rc<List>),
     Nil,
 }
 
@@ -216,18 +220,18 @@ fn main() {
 
 <figcaption>
 
-Listing 15-12: Using `Rc<RefCell<T>>` to create a `List<T>` that we can mutate
+Listing 15-12: Using `Rc<RefCell<i32>>` to create a `List` that we can mutate
 
 </figcaption>
 </figure>
 
-We're creating a value, which is an instance of `T`. We're storing it in a
-variable named `value` because we want to be able to access it directly later.
-Then we create a `List<T>` in `a` that has a `Cons` variant that holds `value`,
-and `value` needs to be cloned since we want `value` to also have ownership in
-addition to `a`. Then we wrap `a` in an `Rc<T>` so that we can create lists `b`
-and `c` that start differently but both refer to `a`, similarly to what we did
-in Listing 15-9.
+We're creating a value, which is an instance of `Rc<RefCell<i32>>. We're
+storing it in a variable named `value` because we want to be able to access it
+directly later. Then we create a `List` in `a` that has a `Cons` variant that
+holds `value`, and `value` needs to be cloned since we want `value` to also
+have ownership in addition to `a`. Then we wrap `a` in an `Rc<T>` so that we
+can create lists `b` and `c` that start differently but both refer to `a`,
+similarly to what we did in Listing 15-9.
 
 Once we have the lists in `shared_list`, `b`, and `c` created, then we add 10
 to the 5 in `value` by dereferencing the `Rc<T>` and calling `borrow_mut` on
@@ -242,14 +246,12 @@ b after = Cons(RefCell { value: 6 }, Cons(RefCell { value: 15 }, Nil))
 c after = Cons(RefCell { value: 10 }, Cons(RefCell { value: 15 }, Nil))
 ```
 
-This is pretty neat! We didn't have to modify our definition of `List<T>` at
-all, since the generic parameter lets us substitute any immutable type. By
-using `RefCell<T>`, we satisfy the immutable type requirement since
-`RefCell<T>` is outwardly immutable, but we can use the methods on `RefCell<T>`
-that provide access to its interior mutability to be able to modify our data
-when we need to. The runtime checks of the borrowing rules that `RefCell<T>`
-does protect us from data races, and we've decided that we want to trade a bit
-of speed for the flexibility in our data structures.
+This is pretty neat! By using `RefCell<T>`, we can have an outwardly immutable
+`List`, but we can use the methods on `RefCell<T>` that provide access to its
+interior mutability to be able to modify our data when we need to. The runtime
+checks of the borrowing rules that `RefCell<T>` does protect us from data
+races, and we've decided that we want to trade a bit of speed for the
+flexibility in our data structures.
 
 `RefCell<T>` is not the only standard library type that provides interior
 mutability. `Cell<T>` is similar but instead of giving references to the inner
