@@ -1,4 +1,4 @@
-## The Interior Mutability Pattern and `RefCell<T>`
+## `RefCell<T>` and the Interior Mutability Pattern
 
 *Interior mutability* is a design pattern in Rust for allowing you to mutate
 data that's immutable. The interior mutability pattern involves using `unsafe`
@@ -151,6 +151,8 @@ enforce them at runtime instead of compile time. You could choose to use
 `RefCell` a lot, you'd find out about possible problems later (possibly in
 production rather than during development). Also, checking the borrowing rules
 while your program is running has a performance penalty.
+
+### Multiple Owners of Mutable Data by Combining `Rc<T>` and `RefCell<T>`
 
 So why would we choose to make the tradeoffs that using `RefCell<T>` involves?
 Well, remember when we said that `Rc<T>` has to store immutable data? Given

@@ -82,8 +82,8 @@
     - [`Box<T>` Points to Data on the Heap and Has a Known Size](ch15-01-box.md)
     - [The `Deref` Trait Allows Access to the Data Through a Reference](ch15-02-deref.md)
     - [The `Drop` Trait Runs Code on Cleanup](ch15-03-drop.md)
-    - [The Reference Counted Smart Pointer `Rc<T>`](ch15-04-rc.md)
-    - [The Interior Mutability Pattern and `RefCell<T>`](ch15-05-interior-mutability.md)
+    - [`Rc<T>`, the Reference Counted Smart Pointer](ch15-04-rc.md)
+    - [`RefCell<T>` and the Interior Mutability Pattern](ch15-05-interior-mutability.md)
     - [Creating Reference Cycles and Leaking Memory is Safe](ch15-06-reference-cycles.md)
 
 - [Concurrency](ch16-00-concurrency.md)
