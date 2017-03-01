@@ -19,7 +19,7 @@ implementing the `Drop` trait. The `Drop` trait requires us to implement one
 method named `drop` that takes a mutable reference to `self`.
 
 Listing 15-6 shows a `WebSocket` struct that doesn't actually connect to
-anything, but we're printing out `Websocket created.` right after we create the
+anything, but we're printing out `WebSocket created.` right after we create the
 struct and `Closing the socket!` when the instance goes out of scope so that we
 can see when each piece of code gets run:
 
