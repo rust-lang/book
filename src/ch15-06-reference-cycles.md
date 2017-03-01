@@ -136,15 +136,13 @@ be using more memory than it needs to be, and might overwhelm the system and
 cause it to run out of memory available to use.
 
 Now, as you can see, creating reference cycles is difficult and inconvenient in
-Rust. To be honest, your authors had to look up previous discussions of an
-example to get this right. But it's not impossible: preventing memory leaks in
-the form of reference cycles is not one of the guarantees Rust makes. If you
-have `RefCell<T>` values that contain `Rc<T>` values or similar nested
-combinations of types with interior mutability and reference counting, be aware
-that you'll have to ensure that you don't create cycles. In the example in
-Listing 15-14, the solution would probably be to not write code that could
-create cycles like this, since we do want `Cons` variants to own the list they
-point to.
+Rust. But it's not impossible: preventing memory leaks in the form of reference
+cycles is not one of the guarantees Rust makes. If you have `RefCell<T>` values
+that contain `Rc<T>` values or similar nested combinations of types with
+interior mutability and reference counting, be aware that you'll have to ensure
+that you don't create cycles. In the example in Listing 15-14, the solution
+would probably be to not write code that could create cycles like this, since
+we do want `Cons` variants to own the list they point to.
 
 With data structures like graphs, it's sometimes necessary to have references
 that create cycles in order to have parent nodes point to their children and
