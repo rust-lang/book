@@ -176,80 +176,103 @@ definition of `List<T>` again to hold a `Weak<T>` instead of an `Rc<T>`.
 
 ```rust
 #[derive(Debug)]
-enum TreePart<T> {
-    Branch(RefCell<Weak<TreePart<T>>>, T, RefCell<Rc<TreePart<T>>>),
-    Leaf(RefCell<Weak<TreePart<T>>>),
+struct Node<T> {
+    parent: RefCell<Weak<Node<T>>>,
+    children: RefCell<Vec<Rc<Node<T>>>>,
+    value: T,
 }
 
-impl<T> TreePart<T> {
-    fn parent(&self) -> Option<Rc<TreePart<T>>> {
-        match *self {
-            Branch(ref p, _, _) => (&*p.borrow()).upgrade(),
-            Leaf(ref p) => (&*p.borrow()).upgrade(),
-        }
+impl<T> Node<T> {
+    fn parent(&self) -> Option<Rc<Node<T>>> {
+        self.parent.borrow().upgrade()
     }
 }
 
-use TreePart::{Branch, Leaf};
 use std::rc::{Rc, Weak};
 use std::cell::RefCell;
 
 fn main() {
-    let leaf = Rc::new(Leaf(RefCell::new(Weak::new())));
+    let leaf = Rc::new(Node {
+        parent: RefCell::new(Weak::new()),
+        children: RefCell::new(vec![]),
+        value: 0,
+    });
 
-    let sapling = Rc::new(Branch(
-        RefCell::new(Weak::new()),
-        10,
-        RefCell::new(leaf.clone())
-    ));
+    let another_leaf = Rc::new(Node {
+        parent: RefCell::new(Weak::new()),
+        children: RefCell::new(vec![]),
+        value: 10,
+    });
 
-    if let Leaf(ref parent) = *leaf {
-        *parent.borrow_mut() = Rc::downgrade(&sapling);
-    }
+    let branch = Rc::new(Node {
+        parent: RefCell::new(Weak::new()),
+        children: RefCell::new(vec![leaf.clone(), another_leaf.clone()]),
+        value: 50,
+    });
+
+    *leaf.parent.borrow_mut() = Rc::downgrade(&branch);
+    *another_leaf.parent.borrow_mut() = Rc::downgrade(&branch);
 
     println!("leaf = {:?}", leaf);
     println!("leaf parent = {:?}", leaf.parent());
-    println!("sapling = {:?}", sapling);
-    println!("sapling parent = {:?}", sapling.parent());
+
+    println!("another_leaf = {:?}", another_leaf);
+    println!("another_leaf parent = {:?}", another_leaf.parent());
+
+    println!("branch = {:?}", branch);
+    println!("branch parent = {:?}", branch.parent());
 
     {
-        let oak = Rc::new(Branch(
-            RefCell::new(Weak::new()),
-            50,
-            RefCell::new(sapling.clone())
-        ));
+        let another_branch = Rc::new(Node {
+            parent: RefCell::new(Weak::new()),
+            children: RefCell::new(vec![branch.clone()]),
+            value: 70,
+        });
 
-        if let Branch(ref parent, _, _) = *sapling {
-            *parent.borrow_mut() = Rc::downgrade(&oak);
-        }
+        *branch.parent.borrow_mut() = Rc::downgrade(&another_branch);
 
         println!("leaf = {:?}", leaf);
         println!("leaf parent = {:?}", leaf.parent());
-        println!("sapling = {:?}", sapling);
-        println!("sapling parent = {:?}", sapling.parent());
-        println!("oak = {:?}", oak);
-        println!("oak parent = {:?}", oak.parent());
+
+        println!("another_leaf = {:?}", another_leaf);
+        println!("another_leaf parent = {:?}", another_leaf.parent());
+
+        println!("branch = {:?}", branch);
+        println!("branch parent = {:?}", branch.parent());
+
+        println!("another_branch = {:?}", another_branch);
+        println!("another_branch parent = {:?}", another_branch.parent());
 
         assert_eq!(2, Rc::strong_count(&leaf));
         assert_eq!(0, Rc::weak_count(&leaf));
 
-        assert_eq!(2, Rc::strong_count(&sapling));
-        assert_eq!(1, Rc::weak_count(&sapling));
+        assert_eq!(2, Rc::strong_count(&another_leaf));
+        assert_eq!(0, Rc::weak_count(&another_leaf));
 
-        assert_eq!(1, Rc::strong_count(&oak));
-        assert_eq!(1, Rc::weak_count(&oak));
+        assert_eq!(2, Rc::strong_count(&branch));
+        assert_eq!(2, Rc::weak_count(&branch));
+
+        assert_eq!(1, Rc::strong_count(&another_branch));
+        assert_eq!(1, Rc::weak_count(&another_branch));
     }
 
     println!("leaf = {:?}", leaf);
     println!("leaf parent = {:?}", leaf.parent());
-    println!("sapling = {:?}", sapling);
-    println!("sapling parent = {:?}", sapling.parent());
+
+    println!("another_leaf = {:?}", another_leaf);
+    println!("another_leaf parent = {:?}", another_leaf.parent());
+
+    println!("branch = {:?}", branch);
+    println!("branch parent = {:?}", branch.parent());
 
     assert_eq!(2, Rc::strong_count(&leaf));
     assert_eq!(0, Rc::weak_count(&leaf));
 
-    assert_eq!(1, Rc::strong_count(&sapling));
-    assert_eq!(1, Rc::weak_count(&sapling));
+    assert_eq!(2, Rc::strong_count(&another_leaf));
+    assert_eq!(0, Rc::weak_count(&another_leaf));
+
+    assert_eq!(1, Rc::strong_count(&branch));
+    assert_eq!(2, Rc::weak_count(&branch));
 }
 ```
 
