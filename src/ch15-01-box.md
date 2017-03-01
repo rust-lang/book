@@ -1,10 +1,9 @@
 ## `Box<T>` Points to Data on the Heap and Has a Known Size
 
-The most straightforward smart pointer is a *box*, whose type is more properly
-written as `Box<T>`. Boxes allow you to put a single value on the heap, and the
-pointer to that value lives on the stack. (We talked about the stack vs. the
-heap in Chapter 4.) Listing 15-1 shows how to use a box to store an `i32` on
-the heap:
+The most straightforward smart pointer is a *box*, whose type is written
+`Box<T>`. Boxes allow you to put a single value on the heap, and the pointer to
+that value lives on the stack. (We talked about the stack vs. the heap in
+Chapter 4.) Listing 15-1 shows how to use a box to store an `i32` on the heap:
 
 <figure>
 <span class="filename">Filename: src/main.rs</span>
@@ -26,7 +25,7 @@ Listing 15-1: Storing an `i32` value on the heap using a box
 This will print `b = 5`. In this case, we can access the data in the box in a
 similar way as we would if this data was on the stack. Just like any value that
 has ownership of data, when a box goes out of scope like `b` does at the end of
-`main`, it will be deallocated. The deallocation happens for both he box
+`main`, it will be deallocated. The deallocation happens for both the box
 (stored on the stack) and the data it points to (stored on the heap).
 
 Putting a single value on the heap isn't very useful, so you won't use boxes by
@@ -124,7 +123,7 @@ forth. Therefore, the most space a `Message` value will need is the space it
 would take to store the largest of its variants.
 
 Contrast this to what happens when the Rust compiler looks at a recursive type
-like the `List<T>` in Listing 15-2. The compiler tries to figure out how much
+like `List<T>` in Listing 15-2. The compiler tries to figure out how much
 memory is needed to store value of `List<T>`, and starts by looking at the
 `Cons` variant. The `Cons` variant holds a value of type `T` and a value of
 type `List<T>`, so it can use however much the size of `T` is plus the size of

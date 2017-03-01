@@ -78,7 +78,7 @@ Most of this should look familiar: a struct, a trait implementation, and a
 main function that creates an instance of the struct. There is one part we
 haven't explained thoroughly yet: similarly to Chapter 13 when we looked at the
 Iterator trait with the `type Item`, the `type Target = T;` syntax is defining
-an associated type, which is covered in more detail in Chapter 20. Don't worry
+an associated type, which is covered in more detail in Chapter 19. Don't worry
 about that part of the example too much; it is a slightly different way of
 declaring a generic parameter.
 
@@ -112,11 +112,13 @@ why it's necessary to dereference the result of the method is that if the
 
 Rust tends to favor explicitness over implicitness, but one case where this
 does not hold true is *deref coercions* of arguments to functions and methods.
-A deref coercion will automatically convert references to pointers or smart
-pointers, when passed to functions or methods, into references to the pointer's
-contents if needed to match the types of the parameters defined in the
-signature. Deref coercion was added to Rust to make calling functions and
-methods not need as many explicit references and dereferences with `&` and `*`.
+A deref coercion will automatically convert a reference to a pointer or a smart
+pointer into a reference to that pointer's contents. A deref coercion happens
+when a value is passed to a function or method, and only happens if it's needed
+to get the type of the value passed in to match the type of the parameter
+defined in the signature. Deref coercion was added to Rust to make calling
+functions and methods not need as many explicit references and dereferences
+with `&` and `*`.
 
 Using our `Mp3` struct from Listing 15-5, here's the signature of a function to
 compress mp3 audio data that takes a slice of `u8`:
@@ -127,29 +129,39 @@ fn compress_mp3(audio: &[u8]) -> Vec<u8> {
 }
 ```
 
-Because of deref coercion and our implementation of the `Deref` trait on `Mp3`,
-we can call this function with the data in `my_favorite_song` by using this
-code:
+If Rust didn't have deref coercion, in order to call this function with the
+audio data in `my_favorite_song`, we'd have to write:
+
+```rust,ignore
+compress_mp3(my_favorite_song.audio.as_slice())
+```
+
+That is, we'd have to explicitly say that we want the data in the `audio` field
+of `my_favorite_song` and that we want a slice referring to the whole
+`Vec<u8>`. If there were a lot of places where we'd want process the `audio`
+data in a similar manner, `.audio.as_slice()` would be wordy and repetitive.
+
+However, because of deref coercion and our implementation of the `Deref` trait
+on `Mp3`, we can call this function with the data in `my_favorite_song` by
+using this code:
 
 ```rust,ignore
 let result = compress_mp3(&my_favorite_song);
 ```
 
-Without deref coercion and our `Deref` implementation on `Mp3`, we would have
-to write `compress_mp3(my_favorite_song.audio.as_slice())` in order to call
-`compress_mp3` with a slice of the audio data. Deref coercion means that Rust
-can use its knowledge of our `Deref` implementation, namely: Rust knows that
-`Mp3` implements the `Deref` trait and returns `&Vec<u8>` from the `deref`
-method. Rust also knows the standard library implements the `Deref` trait on
-`Vec<T>` to return `&[T]` from the `deref` method (and we can find that out too
-by looking at the API documentation for `Vec<T>`). So, at compile time, Rust
-will see that it can use `Deref::deref` twice to turn `&Mp3` into `&Vec<u8>`
-and then into `&[T]` to match the signature of `compress_mp3`. That means we
-get to do less typing! Rust will analyze types through `Deref::deref` as many
-times as it needs to in order to get a reference to match the parameter's type,
-when the `Deref` trait is defined for the types involved. The indirection is
-resolved at compile time, so there is no run-time penalty for taking advantage
-of deref coercion.
+Just an `&` and the instance, nice! We can treat our smart pointer as if it was
+a regular reference. Deref coercion means that Rust can use its knowledge of
+our `Deref` implementation, namely: Rust knows that `Mp3` implements the
+`Deref` trait and returns `&Vec<u8>` from the `deref` method. Rust also knows
+the standard library implements the `Deref` trait on `Vec<T>` to return `&[T]`
+from the `deref` method (and we can find that out too by looking at the API
+documentation for `Vec<T>`). So, at compile time, Rust will see that it can use
+`Deref::deref` twice to turn `&Mp3` into `&Vec<u8>` and then into `&[T]` to
+match the signature of `compress_mp3`. That means we get to do less typing!
+Rust will analyze types through `Deref::deref` as many times as it needs to in
+order to get a reference to match the parameter's type, when the `Deref` trait
+is defined for the types involved. The indirection is resolved at compile time,
+so there is no run-time penalty for taking advantage of deref coercion.
 
 There's also a `DerefMut` trait for overriding `*` on `&mut T` for use in
 assignment in the same fashion that we use `Deref` to override `*` on `&T`s.

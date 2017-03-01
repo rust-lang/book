@@ -4,9 +4,10 @@ The other trait that's important to the smart pointer pattern is the `Drop`
 trait. `Drop` lets us run some code when a value is about to go out of scope.
 This is especially useful for smart pointers that manage a resource as opposed
 to those that manage memory: often resources like files or network connections
-need to be closed when our code is done with them. In other languages, if we
-forget to call code to close these kinds of resources, the system our code is
-running on might get overloaded and crash.
+need to be closed when our code is done with them. In other languages, we have
+to remember to call code to close these kinds of resources every time we finish
+using an instance of one. If we forget, the system our code is running on might
+get overloaded and crash.
 
 In Rust, we can specify that some code should be run when a value goes out of
 scope. The compiler will insert this code automatically. That means we don't
@@ -18,8 +19,9 @@ implementing the `Drop` trait. The `Drop` trait requires us to implement one
 method named `drop` that takes a mutable reference to `self`.
 
 Listing 15-6 shows a `WebSocket` struct that doesn't actually connect to
-anything, but it prints out `Closing the socket!` when we create the struct and
-when it goes out of scope so that we can see when this code gets run:
+anything, but we're printing out `Websocket created.` right after we create the
+struct and `Closing the socket!` when the instance goes out of scope so that we
+can see when each piece of code gets run:
 
 <figure>
 <span class="filename">Filename: src/main.rs</span>
@@ -117,24 +119,25 @@ is:
 ```rust
 pub mod std {
     pub mod mem {
-        pub fn drop<T>(_x: T) { }
+        pub fn drop<T>(x: T) { }
     }
 }
 ```
 
 This function is generic over any type `T`, so we can pass any value to it. The
 function doesn't actually have anything in its body, so it doesn't use its
-parameter. The parameter is named `_x` because the `_` is a signal to the
-compiler that we're intentionally not using the parameter, so it doesn't need
-to warn us that we're not using it. The reason this empty function is useful is
-that `drop` takes ownership of its parameter, which means the value gets
-dropped at the end of this function when it goes out of scope.
+parameter. The reason this empty function is useful is that `drop` takes
+ownership of its parameter, which means the value in `x` gets dropped at the
+end of this function when `x` goes out of scope.
 
 Code specified in a `Drop` trait implementation can be used for many reasons to
 make cleanup convenient and safe: we could use it to create our own memory
 allocator, for instance! By using the `Drop` trait and Rust's ownership system,
-we can't mess up and forget to clean up, or clean up a value that's still in
-use. The ownership system makes sure that we call `drop` at the right time.
+we don't have to remember to clean up after ourselves since Rust takes care of
+it automatically. We'll get compiler errors if we write code that would clean
+up a value that's still in use, since the ownership system that makes sure
+references are always valid will also make sure that `drop` only gets called
+one time when the value is no longer being used.
 
 Now that we've gone over `Box<T>` and some of the characteristics of smart
 pointers, let's talk about a few other smart pointers defined in the standard
