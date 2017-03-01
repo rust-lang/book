@@ -15,12 +15,10 @@ though we didn't call them that by name at the time. For example, in a certain
 sense, `String` and `Vec<T>` from Chapter 8 are both smart pointers. They own
 some memory and allow you to manipulate it, and have metadata (like their
 capacity) and extra capabilities or guarantees (`String` data will always be
-valid UTF-8). Another good example is `File`, which we used for our I/O project
-in Chapter 12: it owns and manages a file handle that the operating system
-gives us, and allows us to access the data in the file. The characteristics
-that distinguish a smart pointer from an ordinary struct are that smart
-pointers implement the `Deref` and `Drop` traits, and in this chapter we'll be
-discussing both of those traits and why they're important to smart pointers.
+valid UTF-8). The characteristics that distinguish a smart pointer from an
+ordinary struct are that smart pointers implement the `Deref` and `Drop`
+traits, and in this chapter we'll be discussing both of those traits and why
+they're important to smart pointers.
 
 Given that the smart pointer pattern is a general design pattern used
 frequently in Rust, this chapter won't cover every smart pointer that exists.
