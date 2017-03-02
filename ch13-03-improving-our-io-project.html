@@ -67,17 +67,17 @@
                 </div>
 
                 <div id="content" class="content">
-                    <a class="header" href="#improving-our-io-project" name="improving-our-io-project"><h2>Improving our I/O Project</h2></a>
+                    <a class="header" href="ch13-03-improving-our-io-project.html#improving-our-io-project" name="improving-our-io-project"><h2>Improving our I/O Project</h2></a>
 <p>In our I/O project implementing <code>grep</code> in the last chapter, there are some
 places where the code could be made clearer and more concise using iterators.
 Let's take a look at how iterators can improve our implementation of the
 <code>Config::new</code> function and the <code>grep</code> function.</p>
-<a class="header" href="#removing-a-clone-by-using-an-iterator" name="removing-a-clone-by-using-an-iterator"><h3>Removing a <code>clone</code> by Using an Iterator</h3></a>
+<a class="header" href="ch13-03-improving-our-io-project.html#removing-a-clone-by-using-an-iterator" name="removing-a-clone-by-using-an-iterator"><h3>Removing a <code>clone</code> by Using an Iterator</h3></a>
 <p>Back in listing 12-8, we had this code that took a slice of <code>String</code> values and
 created an instance of the <code>Config</code> struct by checking for the right number of
 arguments, indexing into the slice, and cloning the values so that the <code>Config</code>
 struct could own those values:</p>
-<pre><code class="language-rust,ignore">impl Config {
+<pre><code class="language-rust ignore">impl Config {
     fn new(args: &amp;[String]) -&gt; Result&lt;Config, &amp;'static str&gt; {
         if args.len() &lt; 3 {
             return Err(&quot;not enough arguments&quot;);
@@ -110,7 +110,7 @@ allocation.</p>
 <p>First, let's take <code>main</code> as it was in Listing 12-6, and change it to pass the
 return value of <code>env::args</code> to <code>Config::new</code>, instead of calling <code>collect</code> and
 passing a slice:</p>
-<pre><code class="language-rust,ignore">fn main() {
+<pre><code class="language-rust ignore">fn main() {
     let config = Config::new(env::args());
     // ...snip...
 </code></pre>
@@ -119,7 +119,7 @@ passing a slice:</p>
 we'll see that its return type is <code>std::env::Args</code>. So next we'll update the
 signature of the <code>Config::new</code> function so that the parameter <code>args</code> has the
 type <code>std::env::Args</code> instead of <code>&amp;[String]</code>:</p>
-<pre><code class="language-rust,ignore">impl Config {
+<pre><code class="language-rust ignore">impl Config {
     fn new(args: std::env::Args) -&gt; Result&lt;Config, &amp;'static str&gt; {
         // ...snip...
 </code></pre>
@@ -167,7 +167,7 @@ nice if we could use <code>?</code> on the <code>Option</code> returned from <co
 works with <code>Result</code> values currently. Even if we could use <code>?</code> on <code>Option</code> like
 we can on <code>Result</code>, the value we would get would be borrowed, and we want to
 move the <code>String</code> from the iterator into <code>Config</code>.</p>
-<a class="header" href="#making-code-clearer-with-iterator-adaptors" name="making-code-clearer-with-iterator-adaptors"><h3>Making Code Clearer with Iterator Adaptors</h3></a>
+<a class="header" href="ch13-03-improving-our-io-project.html#making-code-clearer-with-iterator-adaptors" name="making-code-clearer-with-iterator-adaptors"><h3>Making Code Clearer with Iterator Adaptors</h3></a>
 <p>The other bit of code where we could take advantage of iterators was in the
 <code>grep</code> function as implemented in Listing 12-15:</p>
 <!-- We hadn't had a listing number for this code sample when we submitted

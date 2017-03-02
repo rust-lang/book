@@ -67,7 +67,7 @@
                 </div>
 
                 <div id="content" class="content">
-                    <a class="header" href="#variables-and-mutability" name="variables-and-mutability"><h2>Variables and Mutability</h2></a>
+                    <a class="header" href="ch03-01-variables-and-mutability.html#variables-and-mutability" name="variables-and-mutability"><h2>Variables and Mutability</h2></a>
 <p>As mentioned in Chapter 2, by default variables are <em>immutable</em>. This is one of
 many nudges in Rust that encourages you to write your code in a way that takes
 advantage of the safety and easy concurrency that Rust offers. However, you
@@ -79,7 +79,7 @@ can’t change that value. To illustrate, let’s generate a new project called
 <p>Then, in your new <em>variables</em> directory, open <em>src/main.rs</em> and replace its
 code with the following:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><code class="language-rust,ignore">fn main() {
+<pre><code class="language-rust ignore">fn main() {
     let x = 5;
     println!(&quot;The value of x is: {}&quot;, x);
     x = 6;
@@ -147,7 +147,7 @@ an instance in place may be faster than copying and returning newly allocated
 instances. With smaller data structures, always creating new instances and
 writing in a more functional programming style may be easier to reason about,
 so the lower performance penalty might be worth it to gain that clarity.</p>
-<a class="header" href="#differences-between-variables-and-constants" name="differences-between-variables-and-constants"><h3>Differences Between Variables and Constants</h3></a>
+<a class="header" href="ch03-01-variables-and-mutability.html#differences-between-variables-and-constants" name="differences-between-variables-and-constants"><h3>Differences Between Variables and Constants</h3></a>
 <p>Not being able to change the value of a variable might have reminded you of
 another programming concept that most languages have: <em>constants</em>. Constants
 are also values bound to a name that are not allowed to change, but there are a
@@ -175,7 +175,7 @@ of seconds in a year.</p>
 constants is useful to convey the meaning of that value to future maintainers
 of the code. It also helps to have only one place in your code that you would
 need to change if the hardcoded value needed to be updated in the future.</p>
-<a class="header" href="#shadowing" name="shadowing"><h3>Shadowing</h3></a>
+<a class="header" href="ch03-01-variables-and-mutability.html#shadowing" name="shadowing"><h3>Shadowing</h3></a>
 <p>As we saw in the guessing game tutorial in Chapter 2, we can declare new
 variables with the same name as a previous variables, and the new variable
 <em>shadows</em> the previous variable. Rustaceans say that the first variable is
@@ -221,7 +221,7 @@ have the same name as the first one, is a number type. Shadowing thus spares us
 from having to come up with different names, like <code>spaces_str</code> and
 <code>spaces_num</code>; instead, we can reuse the simpler <code>spaces</code> name. However, if we
 try to use <code>mut</code> for this, as shown here:</p>
-<pre><code class="language-rust,ignore">let mut spaces = &quot;   &quot;;
+<pre><code class="language-rust ignore">let mut spaces = &quot;   &quot;;
 spaces = spaces.len();
 </code></pre>
 <p>we’ll get a compile-time error because we’re not allowed to mutate a variable’s

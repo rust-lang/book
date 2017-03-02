@@ -67,7 +67,7 @@
                 </div>
 
                 <div id="content" class="content">
-                    <a class="header" href="#fearless-concurrency" name="fearless-concurrency"><h1>Fearless Concurrency</h1></a>
+                    <a class="header" href="ch16-00-concurrency.html#fearless-concurrency" name="fearless-concurrency"><h1>Fearless Concurrency</h1></a>
 <p>So, with Rust, it's more subtle than that. That is, while threading proper
 isn't part of the language itself, Rust's type system is structured in such a
 way as to make it possible to build those kinds of libraries. In other words,
@@ -77,8 +77,8 @@ Rust's focus on aliasability ends up solving these problems.</p>
 mutability.</p>
 <p>Ownership rules (that tame the &quot;shared&quot; aspect) enable fearless concurrency: the
 compiler is making sure you don't shoot yourself in your foot.</p>
-<a class="header" href="#what-are-threads" name="what-are-threads"><h2>What are threads</h2></a>
-<a class="header" href="#rusts-concurrency-tradeoffs" name="rusts-concurrency-tradeoffs"><h2>Rust's concurrency tradeoffs</h2></a>
+<a class="header" href="ch16-00-concurrency.html#what-are-threads" name="what-are-threads"><h2>What are threads</h2></a>
+<a class="header" href="ch16-00-concurrency.html#rusts-concurrency-tradeoffs" name="rusts-concurrency-tradeoffs"><h2>Rust's concurrency tradeoffs</h2></a>
 <p>Lots of different languages tackle this problem in different ways. We are not
 going to talk about that: exercise for the reader is investigate other languages
 and compare and contrast with Rust's approach.</p>
@@ -89,10 +89,10 @@ should integrate with your system.</p>
 to not have a heavy runtime.</p>
 <p>These are the reasons Rust's concurrency model is this way as opposed to other
 language's ways, which are optimizing for different things.</p>
-<a class="header" href="#lets-get-a-thread-threadspawn" name="lets-get-a-thread-threadspawn"><h2>Let's get a thread: <code>thread::spawn</code></h2></a>
+<a class="header" href="ch16-00-concurrency.html#lets-get-a-thread-threadspawn" name="lets-get-a-thread-threadspawn"><h2>Let's get a thread: <code>thread::spawn</code></h2></a>
 <p>Code examples - just print stuff, no data sharing</p>
-<a class="header" href="#communicating-between-threads" name="communicating-between-threads"><h2>Communicating between threads</h2></a>
-<a class="header" href="#closures-ownership-and-borrowing" name="closures-ownership-and-borrowing"><h3>Closures, Ownership, and Borrowing</h3></a>
+<a class="header" href="ch16-00-concurrency.html#communicating-between-threads" name="communicating-between-threads"><h2>Communicating between threads</h2></a>
+<a class="header" href="ch16-00-concurrency.html#closures-ownership-and-borrowing" name="closures-ownership-and-borrowing"><h3>Closures, Ownership, and Borrowing</h3></a>
 <p>The property of being allowed to use variables from the surrounding scope is
 also subject to all of the usual rules around ownership and borrowing. Since
 closures attempt to infer the types of their parameters, they also infer how
@@ -146,7 +146,7 @@ be <code>&amp;mut Foo</code>, and so on. If we try to use <code>f3</code> after 
 <code>closure_that_moves</code> in the last line of <code>main</code>, we'll get a compiler error
 since ownership of <code>f3</code> was transferred to <code>closure_that_moves</code>, which
 transferred ownership to the function <code>moves</code>.</p>
-<a class="header" href="#overriding-inferred-borrowing-with-the-move-keyword" name="overriding-inferred-borrowing-with-the-move-keyword"><h3>Overriding Inferred Borrowing with the <code>move</code> Keyword</h3></a>
+<a class="header" href="ch16-00-concurrency.html#overriding-inferred-borrowing-with-the-move-keyword" name="overriding-inferred-borrowing-with-the-move-keyword"><h3>Overriding Inferred Borrowing with the <code>move</code> Keyword</h3></a>
 <p>Rust will allow you to override the borrowing inference by using the <code>move</code>
 keyword. This will cause all of the closure's parameters to be taken by
 ownership, instead of whatever they were inferred as. Consider this example:</p>
@@ -182,10 +182,10 @@ assert_eq!(4, num);
 threads, since it's important that one thread is no longer allowed to use a
 value once the value has been transferred to another thread through a closure
 in order to prevent data races. We'll talk more about that in Chapter XX.</p>
-<a class="header" href="#closures-and-lifetimes" name="closures-and-lifetimes"><h3>Closures and Lifetimes</h3></a>
+<a class="header" href="ch16-00-concurrency.html#closures-and-lifetimes" name="closures-and-lifetimes"><h3>Closures and Lifetimes</h3></a>
 <p>Remember Listing 10-8 from the Lifetime Syntax section of Chapter 10? It looked
 like this:</p>
-<pre><code class="language-rust,ignore">{
+<pre><code class="language-rust ignore">{
     let r;
 
     {
@@ -201,7 +201,7 @@ Because closures may borrow variables from their enclosing scope, we can
 construct a similar example with a closure that borrows <code>x</code> and tries to return
 that borrowed value. The code in Listing 13-6 also won't compile:</p>
 <figure>
-<pre><code class="language-rust,ignore">{
+<pre><code class="language-rust ignore">{
     let closure;
 
     {
@@ -278,29 +278,29 @@ defining <code>calculation</code>, we declare a new variable <code>r</code> that
 in the body of the <code>calculation</code> closure, we use <code>r</code> instead of using <code>s1</code>
 directly. The closure takes ownership of <code>r</code>, but <code>r</code> is a reference, so the
 closure hasn't taken ownership of <code>s1</code> even though <code>calculation</code> uses <code>move</code>.</p>
-<a class="header" href="#channels" name="channels"><h3><code>Channels</code></h3></a>
+<a class="header" href="ch16-00-concurrency.html#channels" name="channels"><h3><code>Channels</code></h3></a>
 <p>Look up examples of cases where channels are useful</p>
 <p>Can match modeling of certain problems</p>
-<a class="header" href="#send" name="send"><h4><code>Send</code></h4></a>
+<a class="header" href="ch16-00-concurrency.html#send" name="send"><h4><code>Send</code></h4></a>
 <p>Send is a trait that means i'm allowed to transfer ownership to another thread
 down a channel</p>
 <p>What things can be send and what can't?</p>
-<a class="header" href="#sharing-data-between-threads" name="sharing-data-between-threads"><h2>Sharing data between threads</h2></a>
+<a class="header" href="ch16-00-concurrency.html#sharing-data-between-threads" name="sharing-data-between-threads"><h2>Sharing data between threads</h2></a>
 <p>Try to share data and get an error about which trait it doesn't implement</p>
-<a class="header" href="#sync" name="sync"><h3><code>Sync</code></h3></a>
+<a class="header" href="ch16-00-concurrency.html#sync" name="sync"><h3><code>Sync</code></h3></a>
 <p>It's ok to access a thing from multiple threads at once</p>
 <p>Immutable things can be sync easily.</p>
-<a class="header" href="#arct" name="arct"><h3><code>Arc&lt;T&gt;</code></h3></a>
+<a class="header" href="ch16-00-concurrency.html#arct" name="arct"><h3><code>Arc&lt;T&gt;</code></h3></a>
 <p>Atomic Reference Counting. Inner data still has to be immutable.</p>
 <p>Steve knows the motivating code that goes here.</p>
-<a class="header" href="#mutext" name="mutext"><h3><code>Mutex&lt;T&gt;</code></h3></a>
+<a class="header" href="ch16-00-concurrency.html#mutext" name="mutext"><h3><code>Mutex&lt;T&gt;</code></h3></a>
 <p>For mutable data.</p>
 <p><code>lock</code> method, you get a Mutex guard. Change, then unlock, which usually happens
 automatically when the Mutex guard goes out of scope. If you do this wrong, your
 code will hang.</p>
 <p>Deadlocks are safe, you have to manage that yourself. Deadlock bugs usually
 happen bc you forget to unlock, but drop unlocks automatically.</p>
-<a class="header" href="#maybe-make-the-io-project-concurrent" name="maybe-make-the-io-project-concurrent"><h2>Maybe make the I/O project concurrent?</h2></a>
+<a class="header" href="ch16-00-concurrency.html#maybe-make-the-io-project-concurrent" name="maybe-make-the-io-project-concurrent"><h2>Maybe make the I/O project concurrent?</h2></a>
 <p>Might be a lot of boilerplate without scoped threads, maybe just allude.</p>
 <p>This is a really rough sketch of some ideas that this chapter might cover.</p>
 <p>From a comment of steveklabnik's on <a href="https://news.ycombinator.com/item?id=13078384">the definitely not orange website</a>. &quot;that paper&quot; refers to <a href="http://www.hpl.hp.com/techreports/2004/HPL-2004-209.pdf">Boehm 2004</a>.</p>
@@ -357,7 +357,7 @@ change a call from iter() to par_iter() and you're done).</p>
 kind of reasoning, but since aliasing and concurrency are so tightly related, I
 would argue that the language could understand only aliasing, not concurrency,
 and then library abstractions are sufficient.</p>
-<a class="header" href="#arc" name="arc"><h2>Arc</h2></a>
+<a class="header" href="ch16-00-concurrency.html#arc" name="arc"><h2>Arc</h2></a>
 <p>Check out <a href="http://stackoverflow.com/a/40985661/51683">this awesome explanation of <code>Arc</code></a>.</p>
 
                 </div>

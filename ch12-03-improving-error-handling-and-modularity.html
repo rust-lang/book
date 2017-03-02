@@ -67,7 +67,7 @@
                 </div>
 
                 <div id="content" class="content">
-                    <a class="header" href="#improving-error-handling-and-modularity" name="improving-error-handling-and-modularity"><h2>Improving Error Handling and Modularity</h2></a>
+                    <a class="header" href="ch12-03-improving-error-handling-and-modularity.html#improving-error-handling-and-modularity" name="improving-error-handling-and-modularity"><h2>Improving Error Handling and Modularity</h2></a>
 <p>There are four problems that we'd like to fix to improve our program, and they
 all have to do with potential errors and the way the program is structured. The
 first problem is where we open the file: we've used <code>expect</code> to print out an
@@ -94,7 +94,7 @@ harder it is to keep track of which ones we need for which purpose. It would be
 better if we grouped the configuration variables into one structure to make
 their purpose clear.</p>
 <p>Let's address these problems by restructuring our project.</p>
-<a class="header" href="#separation-of-concerns-for-binary-projects" name="separation-of-concerns-for-binary-projects"><h3>Separation of Concerns for Binary Projects</h3></a>
+<a class="header" href="ch12-03-improving-error-handling-and-modularity.html#separation-of-concerns-for-binary-projects" name="separation-of-concerns-for-binary-projects"><h3>Separation of Concerns for Binary Projects</h3></a>
 <p>These kinds of organizational problems are common to many similar kinds of
 projects, so the Rust community has developed a pattern for organizing the
 separate concerns. This pattern is useful for organizing any binary project
@@ -160,7 +160,7 @@ fn parse_config(args: &amp;[String]) -&gt; (&amp;str, &amp;str) {
 this change, run the program again to verify that the argument parsing still
 works. It's good to check your progress often, so that you have a better idea
 of which change caused a problem, should you encounter one.</p>
-<a class="header" href="#grouping-configuration-values" name="grouping-configuration-values"><h3>Grouping Configuration Values</h3></a>
+<a class="header" href="ch12-03-improving-error-handling-and-modularity.html#grouping-configuration-values" name="grouping-configuration-values"><h3>Grouping Configuration Values</h3></a>
 <p>Now that we have a function, let's improve it. Our code still has an indication
 that there's a better design possible: we return a tuple, but then immediately
 break that tuple up into individual parts again. This code isn't bad on its
@@ -235,7 +235,7 @@ than storing a reference to the string data, but cloning the data makes our
 code very straightforward.</p>
 <!-- PROD: START BOX -->
 <blockquote>
-<a class="header" href="#the-tradeoffs-of-using-clone" name="the-tradeoffs-of-using-clone"><h4>The Tradeoffs of Using <code>clone</code></h4></a>
+<a class="header" href="ch12-03-improving-error-handling-and-modularity.html#the-tradeoffs-of-using-clone" name="the-tradeoffs-of-using-clone"><h4>The Tradeoffs of Using <code>clone</code></h4></a>
 <p>There's a tendency amongst many Rustaceans to prefer not to use <code>clone</code> to fix
 ownership problems due to its runtime cost. In Chapter XX on iterators, we'll
 learn how to make this situation more efficient. For now, it's okay to copy a
@@ -251,7 +251,7 @@ call <code>clone</code>.</p>
 returns in a variable named <code>config</code>, and we've updated the code that was using
 the separate <code>search</code> and <code>filename</code> variables to use the fields on the
 <code>Config</code> struct instead.</p>
-<a class="header" href="#creating-a-constructor-for-config" name="creating-a-constructor-for-config"><h3>Creating a Constructor for <code>Config</code></h3></a>
+<a class="header" href="ch12-03-improving-error-handling-and-modularity.html#creating-a-constructor-for-config" name="creating-a-constructor-for-config"><h3>Creating a Constructor for <code>Config</code></h3></a>
 <p>Let's now think about the purpose of <code>parse_config</code>: it's a function that
 creates a <code>Config</code> instance. We've already seen a convention for functions that
 create instances: a <code>new</code> function, like <code>String::new</code>. Listing 12-6 shows the
@@ -309,7 +309,7 @@ impl Config {
 <p>We've changed the name of <code>parse_config</code> to <code>new</code> and moved it within  an <code>impl</code>
 block. We've also updated the callsite in <code>main</code>. Try compiling this again to
 make sure it works.</p>
-<a class="header" href="#returning-a-result-from-the-constructor" name="returning-a-result-from-the-constructor"><h3>Returning a <code>Result</code> from the Constructor</h3></a>
+<a class="header" href="ch12-03-improving-error-handling-and-modularity.html#returning-a-result-from-the-constructor" name="returning-a-result-from-the-constructor"><h3>Returning a <code>Result</code> from the Constructor</h3></a>
 <p>Here's our last refactoring of this method: remember how accessing the vector
 with indices 1 and 2 panics when it contains fewer than 3 items and gives a bad
 error message? Let's fix that! Listing 12-7 shows how we can check that our
@@ -438,7 +438,7 @@ literals, which is what our error message is for now.</p>
 <code>panic!</code> if there aren't enough arguments, we now return an <code>Err</code> value. We
 wrapped the <code>Config</code> return value in an <code>Ok</code>. These changes make the function
 conform to its new type signature.</p>
-<a class="header" href="#calling-confignew-and-handling-errors" name="calling-confignew-and-handling-errors"><h3>Calling <code>Config::new</code> and Handling Errors</h3></a>
+<a class="header" href="ch12-03-improving-error-handling-and-modularity.html#calling-confignew-and-handling-errors" name="calling-confignew-and-handling-errors"><h3>Calling <code>Config::new</code> and Handling Errors</h3></a>
 <p>Now we need to make some changes to <code>main</code> as shown in Listing 12-9:</p>
 <figure>
 <span class="filename">Filename: src/main.rs</span>
@@ -522,7 +522,7 @@ but we no longer get all the extra output. Let's try it:</p>
 Problem parsing arguments: not enough arguments
 </code></pre>
 <p>Great! This output is much friendlier for our users.</p>
-<a class="header" href="#handling-errors-from-the-run-function" name="handling-errors-from-the-run-function"><h3>Handling Errors from the <code>run</code> Function</h3></a>
+<a class="header" href="ch12-03-improving-error-handling-and-modularity.html#handling-errors-from-the-run-function" name="handling-errors-from-the-run-function"><h3>Handling Errors from the <code>run</code> Function</h3></a>
 <p>Now that we're done refactoring our configuration parsing, let's improve our
 program's logic. Listing 12-10 shows the code after extracting a function named
 <code>run</code> that we'll call from <code>main</code>. The <code>run</code> function contains the code that
@@ -685,7 +685,7 @@ error value. Let's handle that now. We'll use a similar technique as the way we
 handled failure with <code>Config::new</code> in Listing 12-9, but with a slight
 difference:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><code class="language-rust,ignore">fn main() {
+<pre><code class="language-rust ignore">fn main() {
     // ...snip...
 
     println!(&quot;Searching for {}&quot;, config.search);
@@ -724,7 +724,7 @@ we care about is the first case: detecting an error. If we used
 very useful.</p>
 <p>The bodies of the <code>if let</code> and of the <code>unwrap_or_else</code> are the same in both
 cases though: we print out an error and exit.</p>
-<a class="header" href="#split-code-into-a-library-crate" name="split-code-into-a-library-crate"><h3>Split Code into a Library Crate</h3></a>
+<a class="header" href="ch12-03-improving-error-handling-and-modularity.html#split-code-into-a-library-crate" name="split-code-into-a-library-crate"><h3>Split Code into a Library Crate</h3></a>
 <p>This is looking pretty good! There's one more thing we haven't done yet: split
 the <em>src/main.rs</em> up and put some code into <em>src/lib.rs</em> Let's do that now:
 move the <code>run</code> function from <em>src/main.rs</em> to a new file, <em>src/lib.rs</em>. You'll
@@ -782,7 +782,7 @@ to bring <code>Config</code> into scope, and prefix the <code>run</code> functio
 as shown in Listing 12-13:</p>
 <figure>
 <span class="filename">Filename: src/main.rs</span>
-<pre><code class="language-rust,ignore">extern crate greprs;
+<pre><code class="language-rust ignore">extern crate greprs;
 
 use std::env;
 use std::process;

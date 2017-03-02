@@ -67,7 +67,7 @@
                 </div>
 
                 <div id="content" class="content">
-                    <a class="header" href="#performance" name="performance"><h2>Performance</h2></a>
+                    <a class="header" href="ch13-04-performance.html#performance" name="performance"><h2>Performance</h2></a>
 <p>Which version of our <code>grep</code> functions is faster: the version with an explicit
 <code>for</code> loop or the version with iterators? We ran a benchmark by loading the
 entire contents of &quot;The Adventures of Sherlock Holmes&quot; by Sir Arthur Conan
@@ -103,7 +103,7 @@ data in <code>qlp_shift</code>. We've declared the variables within this example
 given them any values; while this code doesn't have much meaning outside of its
 context, it's still a concise, real-world example of how Rust translates
 high-level ideas to low-level code:</p>
-<pre><code class="language-rust,ignore">let buffer: &amp;mut [i32];
+<pre><code class="language-rust ignore">let buffer: &amp;mut [i32];
 let coefficients: [i64; 12];
 let qlp_shift: i16;
 
@@ -133,7 +133,7 @@ access. It's extremely efficient.</p>
 <p>Now that you know this, go use iterators and closures without fear! They make
 code feel higher-level, but don't impose a runtime performance penalty for
 doing so.</p>
-<a class="header" href="#summary" name="summary"><h2>Summary</h2></a>
+<a class="header" href="ch13-04-performance.html#summary" name="summary"><h2>Summary</h2></a>
 <p>Closures and iterators are Rust features inspired by functional programming
 language ideas. They contribute to Rust's ability to clearly express high-level
 ideas. The implementations of closures and iterators, as well as other zero-cost

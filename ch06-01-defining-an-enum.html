@@ -67,7 +67,7 @@
                 </div>
 
                 <div id="content" class="content">
-                    <a class="header" href="#defining-an-enum" name="defining-an-enum"><h2>Defining an Enum</h2></a>
+                    <a class="header" href="ch06-01-defining-an-enum.html#defining-an-enum" name="defining-an-enum"><h2>Defining an Enum</h2></a>
 <p>Let’s look at a situation we might want to express in code and see why enums
 are useful and more appropriate than structs in this case. Say we need to work
 with IP addresses. Currently, two major standards are used for IP addresses:
@@ -89,7 +89,7 @@ as the <em>variants</em> of the enum:</p>
 }
 </code></pre>
 <p><code>IpAddrKind</code> is now a custom data type that we can use elsewhere in our code.</p>
-<a class="header" href="#enum-values" name="enum-values"><h3>Enum Values</h3></a>
+<a class="header" href="ch06-01-defining-an-enum.html#enum-values" name="enum-values"><h3>Enum Values</h3></a>
 <p>We can create instances of each of the two variants of <code>IpAddrKind</code> like this:</p>
 <pre><code class="language-rust"># enum IpAddrKind {
 #     V4,
@@ -283,7 +283,7 @@ method on. In this example, we’ve created a variable <code>m</code> that has t
 <code>call</code> method when <code>m.call()</code> runs.</p>
 <p>Let’s look at another enum in the standard library that is very common and
 useful: <code>Option</code>.</p>
-<a class="header" href="#the-option-enum-and-its-advantages-over-null-values" name="the-option-enum-and-its-advantages-over-null-values"><h3>The <code>Option</code> Enum and Its Advantages Over Null Values</h3></a>
+<a class="header" href="ch06-01-defining-an-enum.html#the-option-enum-and-its-advantages-over-null-values" name="the-option-enum-and-its-advantages-over-null-values"><h3>The <code>Option</code> Enum and Its Advantages Over Null Values</h3></a>
 <p>In the previous section, we looked at how the <code>IpAddr</code> enum let us use Rust’s
 type system to encode more information than just the data into our program.
 This section explores a case study of <code>Option</code>, which is another enum defined
@@ -351,7 +351,7 @@ the same thing as null: we don’t have a valid value. So why is having
 types, the compiler won’t let us use an <code>Option&lt;T&gt;</code> value as if it was
 definitely a valid value. For example, this code won’t compile because it’s
 trying to compare an <code>Option&lt;i8&gt;</code> to an <code>i8</code>:</p>
-<pre><code class="language-rust,ignore">let x: i8 = 5;
+<pre><code class="language-rust ignore">let x: i8 = 5;
 let y: Option&lt;i8&gt; = Some(5);
 
 let sum = x + y;

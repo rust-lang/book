@@ -67,8 +67,8 @@
                 </div>
 
                 <div id="content" class="content">
-                    <a class="header" href="#operators" name="operators"><h2>Operators</h2></a>
-<a class="header" href="#unary-operator-expressions" name="unary-operator-expressions"><h3>Unary operator expressions</h3></a>
+                    <a class="header" href="appendix-02-operators.html#operators" name="operators"><h2>Operators</h2></a>
+<a class="header" href="appendix-02-operators.html#unary-operator-expressions" name="unary-operator-expressions"><h3>Unary operator expressions</h3></a>
 <p>Rust defines the following unary operators. They are all written as prefix
 operators, before the expression they apply to.</p>
 <ul>
@@ -96,9 +96,9 @@ borrow (<code>&amp;</code>), this implies that the value may not be mutated, but
 it may be read or shared again. For a mutable borrow (<code>&amp;mut</code>), the
 value may not be accessed in any way until the borrow expires.</li>
 </ul>
-<a class="header" href="#binary-operator-expressions" name="binary-operator-expressions"><h3>Binary operator expressions</h3></a>
+<a class="header" href="appendix-02-operators.html#binary-operator-expressions" name="binary-operator-expressions"><h3>Binary operator expressions</h3></a>
 <p>Binary operators expressions are given in order of operator precedence.</p>
-<a class="header" href="#arithmetic-operators" name="arithmetic-operators"><h4>Arithmetic operators</h4></a>
+<a class="header" href="appendix-02-operators.html#arithmetic-operators" name="arithmetic-operators"><h4>Arithmetic operators</h4></a>
 <p>Binary arithmetic expressions are syntactic sugar for calls to built-in traits,
 defined in the <code>std::ops</code> module of the <code>std</code> library. This means arithmetic
 operators can be overridden for user-defined types. The default meaning of the
@@ -122,7 +122,7 @@ Calls the <code>rem</code> method on the <code>std::ops::Rem</code> trait.</li>
 </ul>
 <p>Note that Rust does not have a built-in operator for exponential (power)
 calculation; see the <code>pow</code> method on the numeric types.</p>
-<a class="header" href="#bitwise-operators" name="bitwise-operators"><h4>Bitwise operators</h4></a>
+<a class="header" href="appendix-02-operators.html#bitwise-operators" name="bitwise-operators"><h4>Bitwise operators</h4></a>
 <p>Like the arithmetic operators, bitwise operators are syntactic sugar for calls
 to methods of built-in traits. This means bitwise operators can be overridden
 for user-defined types. The default meaning of the operators on standard types
@@ -145,7 +145,7 @@ Calls the <code>shl</code> method of the <code>std::ops::Shl</code> trait.</li>
 : Right shift (arithmetic).
 Calls the <code>shr</code> method of the <code>std::ops::Shr</code> trait.</li>
 </ul>
-<a class="header" href="#lazy-boolean-operators" name="lazy-boolean-operators"><h4>Lazy boolean operators</h4></a>
+<a class="header" href="appendix-02-operators.html#lazy-boolean-operators" name="lazy-boolean-operators"><h4>Lazy boolean operators</h4></a>
 <p>The operators <code>||</code> and <code>&amp;&amp;</code> may be applied to operands of boolean type. The
 <code>||</code> operator denotes logical 'or', and the <code>&amp;&amp;</code> operator denotes logical
 'and'. They differ from <code>|</code> and <code>&amp;</code> in that the right-hand operand is only
@@ -153,7 +153,7 @@ evaluated when the left-hand operand does not already determine the result of
 the expression. That is, <code>||</code> only evaluates its right-hand operand when the
 left-hand operand evaluates to <code>false</code>, and <code>&amp;&amp;</code> only when it evaluates to
 <code>true</code>.</p>
-<a class="header" href="#comparison-operators" name="comparison-operators"><h4>Comparison operators</h4></a>
+<a class="header" href="appendix-02-operators.html#comparison-operators" name="comparison-operators"><h4>Comparison operators</h4></a>
 <p>Comparison operators are, like the arithmetic operators and bitwise operators,
 syntactic sugar for calls to built-in traits. This means that comparison
 operators can be overridden for user-defined types. The default meaning of the
@@ -178,7 +178,7 @@ Calls the <code>le</code> method on the <code>std::cmp::PartialOrd</code> trait.
 : Greater than or equal.
 Calls the <code>ge</code> method on the <code>std::cmp::PartialOrd</code> trait.</li>
 </ul>
-<a class="header" href="#type-cast-expressions" name="type-cast-expressions"><h4>Type cast expressions</h4></a>
+<a class="header" href="appendix-02-operators.html#type-cast-expressions" name="type-cast-expressions"><h4>Type cast expressions</h4></a>
 <p>A type cast expression is denoted with the binary operator <code>as</code>.</p>
 <p>Executing an <code>as</code> expression casts the value on the left-hand side to the type
 on the right-hand side.</p>
@@ -198,7 +198,7 @@ argument passing and assignment to a <code>let</code> binding with an explicit
 type. Implicit conversions are limited to &quot;harmless&quot; conversions that
 do not lose information and which have minimal or no risk of
 surprising side-effects on the dynamic execution semantics.</p>
-<a class="header" href="#assignment-expressions" name="assignment-expressions"><h4>Assignment expressions</h4></a>
+<a class="header" href="appendix-02-operators.html#assignment-expressions" name="assignment-expressions"><h4>Assignment expressions</h4></a>
 <p>An <em>assignment expression</em> consists of a pattern followed by an equals
 sign (<code>=</code>) and an expression.</p>
 <p>Evaluating an assignment expression either copies or
@@ -208,12 +208,12 @@ operand.</p>
 # let y = 0;
 x = y;
 </code></pre>
-<a class="header" href="#compound-assignment-expressions" name="compound-assignment-expressions"><h4>Compound assignment expressions</h4></a>
+<a class="header" href="appendix-02-operators.html#compound-assignment-expressions" name="compound-assignment-expressions"><h4>Compound assignment expressions</h4></a>
 <p>The <code>+</code>, <code>-</code>, <code>*</code>, <code>/</code>, <code>%</code>, <code>&amp;</code>, <code>|</code>, <code>^</code>, <code>&lt;&lt;</code>, and <code>&gt;&gt;</code> operators may be
 composed with the <code>=</code> operator. The expression <code>lval OP= val</code> is equivalent to
 <code>lval = lval OP val</code>. For example, <code>x = x + 1</code> may be written as <code>x += 1</code>.</p>
 <p>Any such expression always has the <code>unit</code> type.</p>
-<a class="header" href="#operator-precedence" name="operator-precedence"><h4>Operator precedence</h4></a>
+<a class="header" href="appendix-02-operators.html#operator-precedence" name="operator-precedence"><h4>Operator precedence</h4></a>
 <p>The precedence of Rust binary operators is ordered as follows, going from
 strong to weak:</p>
 <pre><code class="language-text">as :

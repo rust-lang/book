@@ -67,16 +67,16 @@
                 </div>
 
                 <div id="content" class="content">
-                    <a class="header" href="#working-with-environment-variables" name="working-with-environment-variables"><h2>Working with Environment Variables</h2></a>
+                    <a class="header" href="ch12-05-working-with-environment-variables.html#working-with-environment-variables" name="working-with-environment-variables"><h2>Working with Environment Variables</h2></a>
 <p>Let's add one more feature: case insensitive searching. In addition, this
 setting won't be a command line option: it'll be an environment variable
 instead. We could choose to make case insensitivity a command line option, but
 our users have requested an environment variable that they could set once and
 make all their searches case insensitive in that terminal session.</p>
-<a class="header" href="#implement-and-test-a-case-insensitive-grep-function" name="implement-and-test-a-case-insensitive-grep-function"><h3>Implement and Test a Case-Insensitive <code>grep</code> Function</h3></a>
+<a class="header" href="ch12-05-working-with-environment-variables.html#implement-and-test-a-case-insensitive-grep-function" name="implement-and-test-a-case-insensitive-grep-function"><h3>Implement and Test a Case-Insensitive <code>grep</code> Function</h3></a>
 <p>First, let's add a new function that we will call when the environment variable
 is on. Let's start by adding a new test and re-naming our existing one:</p>
-<pre><code class="language-rust,ignore">#[cfg(test)]
+<pre><code class="language-rust ignore">#[cfg(test)]
 mod test {
     use {grep, grep_case_insensitive};
 
@@ -178,7 +178,7 @@ First, let's add a configuration option for it to the <code>Config</code> struct
 <p>And then check for that option inside of the <code>run</code> function, and decide which
 function to call based on the value of the <code>case_sensitive</code> function:</p>
 <p><span class="filename">Filename: src/lib.rs</span></p>
-<pre><code class="language-rust,ignore">pub fn run(config: Config) -&gt; Result&lt;(), Box&lt;Error&gt;&gt;{
+<pre><code class="language-rust ignore">pub fn run(config: Config) -&gt; Result&lt;(), Box&lt;Error&gt;&gt;{
     let mut f = File::open(config.filename)?;
 
     let mut contents = String::new();

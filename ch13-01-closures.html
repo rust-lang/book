@@ -67,7 +67,7 @@
                 </div>
 
                 <div id="content" class="content">
-                    <a class="header" href="#closures" name="closures"><h2>Closures</h2></a>
+                    <a class="header" href="ch13-01-closures.html#closures" name="closures"><h2>Closures</h2></a>
 <p>Rust gives you the ability to define <em>closures</em>, which are similar to
 functions. Instead of starting with a technical definition, let's see what
 closures look like, syntactically, and then we'll return to defining what they
@@ -136,7 +136,7 @@ type annotations</p>
 Let's compare the different ways we can specify closures with the syntax for
 defining a function more directly. We've added some spaces here to line up the
 relevant parts:</p>
-<pre><code class="language-rust,ignore">fn  add_one_v1   (x: i32) -&gt; i32 { x + 1 }  // a function
+<pre><code class="language-rust ignore">fn  add_one_v1   (x: i32) -&gt; i32 { x + 1 }  // a function
 let add_one_v2 = |x: i32| -&gt; i32 { x + 1 }; // the full syntax for a closure
 let add_one_v3 = |x|             { x + 1 }; // a closure eliding types
 let add_one_v4 = |x|               x + 1  ; // without braces
@@ -153,7 +153,7 @@ for their return value. For instance, if we call the closure without type
 annotations from Listing 13-1 using an <code>i8</code>, we'll get an error if we then try
 to call the same closure with an <code>i32</code>:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><code class="language-rust,ignore">let add_one = |x| x + 1;
+<pre><code class="language-rust ignore">let add_one = |x| x + 1;
 
 let five = add_one(4i8);
 assert_eq!(5i8, five);
@@ -171,7 +171,7 @@ let three = add_one(2i32);
 it would be tedious if we were required to annotate their types.</p>
 <p>Another reason to have a different syntax from functions for closures is that
 they have different behavior than functions: closures possess an <em>environment</em>.</p>
-<a class="header" href="#closures-can-reference-their-environment" name="closures-can-reference-their-environment"><h3>Closures Can Reference Their Environment</h3></a>
+<a class="header" href="ch13-01-closures.html#closures-can-reference-their-environment" name="closures-can-reference-their-environment"><h3>Closures Can Reference Their Environment</h3></a>
 <p>We've learned that functions can only use variables that are in scope, either
 by being <code>const</code> or being declared as parameters. Closures can do more: they're
 allowed to access variables from their enclosing scope. Listing 13-4 has an
@@ -199,7 +199,7 @@ scope</p>
 the scope that <code>equal_to_x</code> is defined. We aren't allowed to do the same thing
 that Listing 13-4 does with functions; let's see what happens if we try:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><code class="language-rust,ignore">fn main() {
+<pre><code class="language-rust ignore">fn main() {
     let x = 4;
 
     fn equal_to_x(z: i32) -&gt; bool { z == x }
@@ -222,7 +222,7 @@ closure form instead
 the context of starting new threads. We'll show some more examples and explain
 more detail about this feature of closures in Chapter 16 when we talk about
 concurrency.</p>
-<a class="header" href="#closures-as-function-parameters-using-the-fn-traits" name="closures-as-function-parameters-using-the-fn-traits"><h3>Closures as Function Parameters Using the <code>Fn</code> Traits</h3></a>
+<a class="header" href="ch13-01-closures.html#closures-as-function-parameters-using-the-fn-traits" name="closures-as-function-parameters-using-the-fn-traits"><h3>Closures as Function Parameters Using the <code>Fn</code> Traits</h3></a>
 <p>While we can bind closures to variables, that's not the most useful thing we
 can do with them. We can also define functions that have closures as parameters
 by using the <code>Fn</code> traits. Here's an example of a function named <code>call_with_one</code>

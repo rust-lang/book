@@ -67,7 +67,7 @@
                 </div>
 
                 <div id="content" class="content">
-                    <a class="header" href="#validating-references-with-lifetimes" name="validating-references-with-lifetimes"><h2>Validating References with Lifetimes</h2></a>
+                    <a class="header" href="ch10-03-lifetime-syntax.html#validating-references-with-lifetimes" name="validating-references-with-lifetimes"><h2>Validating References with Lifetimes</h2></a>
 <p>When we talked about references in Chapter 4, we left out an important detail:
 every reference in Rust has a <em>lifetime</em>, which is the scope for which that
 reference is valid. Most of the time lifetimes are implicit and inferred, just
@@ -83,7 +83,7 @@ feature.</p>
 we'll cover common ways you might encounter lifetime syntax in this chapter to
 get you familiar with the concepts. Chapter 19 will contain more advanced
 information about everything lifetimes can do.</p>
-<a class="header" href="#lifetimes-prevent-dangling-references" name="lifetimes-prevent-dangling-references"><h3>Lifetimes Prevent Dangling References</h3></a>
+<a class="header" href="ch10-03-lifetime-syntax.html#lifetimes-prevent-dangling-references" name="lifetimes-prevent-dangling-references"><h3>Lifetimes Prevent Dangling References</h3></a>
 <p>The main aim of lifetimes is to prevent dangling references, which will cause a
 program to reference data other than the data we're intending to reference.
 Consider the program in Listing 10-16, with an outer scope and an inner scope.
@@ -92,7 +92,7 @@ inner scope declares a variable named <code>x</code> with the initial value of 5
 the inner scope, we attempt to set the value of <code>r</code> as a reference to <code>x</code>. Then
 the inner scope ends, and we attempt to print out the value in <code>r</code>:</p>
 <figure>
-<pre><code class="language-rust,ignore">{
+<pre><code class="language-rust ignore">{
     let r;
 
     {
@@ -108,7 +108,7 @@ the inner scope ends, and we attempt to print out the value in <code>r</code>:</
 </figcaption>
 </figure>
 <blockquote>
-<a class="header" href="#uninitialized-variables-cannot-be-used" name="uninitialized-variables-cannot-be-used"><h4>Uninitialized Variables Cannot Be Used</h4></a>
+<a class="header" href="ch10-03-lifetime-syntax.html#uninitialized-variables-cannot-be-used" name="uninitialized-variables-cannot-be-used"><h4>Uninitialized Variables Cannot Be Used</h4></a>
 <p>The next few examples declare variables without giving them an initial value,
 so that the variable name exists in the outer scope. This might appear to be
 in conflict with Rust not having null. However, if we try to use a variable
@@ -132,12 +132,12 @@ that it &quot;lives longer.&quot; If Rust allowed this code to work, <code>r</co
 referencing memory that was deallocated when <code>x</code> went out of scope, and
 anything we tried to do with <code>r</code> wouldn't work correctly. So how does Rust
 determine that this code should not be allowed?</p>
-<a class="header" href="#the-borrow-checker" name="the-borrow-checker"><h4>The Borrow Checker</h4></a>
+<a class="header" href="ch10-03-lifetime-syntax.html#the-borrow-checker" name="the-borrow-checker"><h4>The Borrow Checker</h4></a>
 <p>The part of the compiler called the <em>borrow checker</em> compares scopes to
 determine that all borrows are valid. Listing 10-17 shows the same example from
 Listing 10-16 with annotations showing the lifetimes of the variables:</p>
 <figure>
-<pre><code class="language-rust,ignore">{
+<pre><code class="language-rust ignore">{
     let r;         // -------+-- 'a
                    //        |
     {              //        |
@@ -193,7 +193,7 @@ be valid while <code>x</code> is valid.</p>
 example and discussed how Rust analyzes lifetimes to ensure references will
 always be valid, let's talk about generic lifetimes of parameters and return
 values in the context of functions.</p>
-<a class="header" href="#generic-lifetimes-in-functions" name="generic-lifetimes-in-functions"><h3>Generic Lifetimes in Functions</h3></a>
+<a class="header" href="ch10-03-lifetime-syntax.html#generic-lifetimes-in-functions" name="generic-lifetimes-in-functions"><h3>Generic Lifetimes in Functions</h3></a>
 <p>Let's write a function that will return the longest of two string slices. We
 want to be able to call this function by passing it two string slices, and we
 want to get back a string slice. The code in Listing 10-19 should print <code>The longest string is abcd</code> once we've implemented the <code>longest</code> function:</p>
@@ -239,7 +239,7 @@ discussion about why these are the arguments we want.</p>
 won't compile:</p>
 <figure>
 <span class="filename">Filename: src/main.rs</span>
-<pre><code class="language-rust,ignore">fn longest(x: &amp;str, y: &amp;str) -&gt; &amp;str {
+<pre><code class="language-rust ignore">fn longest(x: &amp;str, y: &amp;str) -&gt; &amp;str {
     if x.len() &gt; y.len() {
         x
     } else {
@@ -276,7 +276,7 @@ know how the lifetimes of <code>x</code> and <code>y</code> relate to the lifeti
 value. We're going to add generic lifetime parameters that will define the
 relationship between the references so that the borrow checker can perform its
 analysis.</p>
-<a class="header" href="#lifetime-annotation-syntax" name="lifetime-annotation-syntax"><h3>Lifetime Annotation Syntax</h3></a>
+<a class="header" href="ch10-03-lifetime-syntax.html#lifetime-annotation-syntax" name="lifetime-annotation-syntax"><h3>Lifetime Annotation Syntax</h3></a>
 <p>Lifetime annotations don't change how long any of the references involved live.
 In the same way that functions can accept any type when the signature specifies
 a generic type parameter, functions can accept references with any lifetime
@@ -291,7 +291,7 @@ annotation from the reference's type.</p>
 <p>Here's some examples: we've got a reference to an <code>i32</code> without a lifetime
 parameter, a reference to an <code>i32</code> that has a lifetime parameter named <code>'a</code>,
 and a mutable reference to an <code>i32</code> that also has the lifetime <code>'a</code>:</p>
-<pre><code class="language-rust,ignore">&amp;i32        // a reference
+<pre><code class="language-rust ignore">&amp;i32        // a reference
 &amp;'a i32     // a reference with an explicit lifetime
 &amp;'a mut i32 // a mutable reference with an explicit lifetime
 </code></pre>
@@ -303,7 +303,7 @@ function has another parameter named <code>second</code> that is another referen
 <code>i32</code> that also has the lifetime <code>'a</code>, these two lifetime annotations that have
 the same name indicate that the references <code>first</code> and <code>second</code> must both live
 as long as the same generic lifetime.</p>
-<a class="header" href="#lifetime-annotations-in-function-signatures" name="lifetime-annotations-in-function-signatures"><h3>Lifetime Annotations in Function Signatures</h3></a>
+<a class="header" href="ch10-03-lifetime-syntax.html#lifetime-annotations-in-function-signatures" name="lifetime-annotations-in-function-signatures"><h3>Lifetime Annotations in Function Signatures</h3></a>
 <p>Let's look at lifetime annotations in the context of the <code>longest</code> function
 we're working on. Just like generic type parameters, generic lifetime
 parameters need to be declared within angle brackets between the function name
@@ -443,7 +443,7 @@ reference.</p>
 references passed in to the <code>longest</code> function and how the returned reference
 is used. Make hypotheses about whether your experiments will pass the borrow
 checker or not before you compile, then check to see if you're right!</p>
-<a class="header" href="#thinking-in-terms-of-lifetimes" name="thinking-in-terms-of-lifetimes"><h3>Thinking in Terms of Lifetimes</h3></a>
+<a class="header" href="ch10-03-lifetime-syntax.html#thinking-in-terms-of-lifetimes" name="thinking-in-terms-of-lifetimes"><h3>Thinking in Terms of Lifetimes</h3></a>
 <p>The exact way to specify lifetime parameters depends on what your function is
 doing. For example, if we changed the implementation of the <code>longest</code> function
 to always return the first argument rather than the longest string slice, we
@@ -464,7 +464,7 @@ would be a dangling reference since the value will go out of scope at the end
 of the function. Consider this attempted implementation of the <code>longest</code>
 function that won't compile:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><code class="language-rust,ignore">fn longest&lt;'a&gt;(x: &amp;str, y: &amp;str) -&gt; &amp;'a str {
+<pre><code class="language-rust ignore">fn longest&lt;'a&gt;(x: &amp;str, y: &amp;str) -&gt; &amp;'a str {
     let result = String::from(&quot;really long string&quot;);
     result.as_str()
 }
@@ -497,7 +497,7 @@ cleaning up the value.</p>
 arguments and return values of functions. Once they're connected, Rust has
 enough information to allow memory-safe operations and disallow operations that
 would create dangling pointers or otherwise violate memory safety.</p>
-<a class="header" href="#lifetime-annotations-in-struct-definitions" name="lifetime-annotations-in-struct-definitions"><h3>Lifetime Annotations in Struct Definitions</h3></a>
+<a class="header" href="ch10-03-lifetime-syntax.html#lifetime-annotations-in-struct-definitions" name="lifetime-annotations-in-struct-definitions"><h3>Lifetime Annotations in Struct Definitions</h3></a>
 <p>Up until now, we've only defined structs to hold owned types. It is possible
 for structs to hold references, but we need to add a lifetime annotation on
 every reference in the struct's definition. Listing 10-24 has a struct named
@@ -529,7 +529,7 @@ definition.</p>
 <p>The <code>main</code> function here creates an instance of the <code>ImportantExcerpt</code> struct
 that holds a reference to the first sentence of the <code>String</code> owned by the
 variable <code>novel</code>.</p>
-<a class="header" href="#lifetime-elision" name="lifetime-elision"><h3>Lifetime Elision</h3></a>
+<a class="header" href="ch10-03-lifetime-syntax.html#lifetime-elision" name="lifetime-elision"><h3>Lifetime Elision</h3></a>
 <p>In this section, we've learned that every reference has a lifetime, and we need
 to specify lifetime parameters for functions or structs that use references.
 However, in Chapter 4 we had a function in the &quot;String Slices&quot; section, shown
@@ -557,7 +557,7 @@ lifetime annotations, even though the parameter and return type are references</
 in early versions of pre-1.0 Rust, this indeed wouldn't have compiled. Every
 reference needed an explicit lifetime. At that time, the function signature
 would have been written like this:</p>
-<pre><code class="language-rust,ignore">fn first_word&lt;'a&gt;(s: &amp;'a str) -&gt; &amp;'a str {
+<pre><code class="language-rust ignore">fn first_word&lt;'a&gt;(s: &amp;'a str) -&gt; &amp;'a str {
 </code></pre>
 <p>After writing a lot of Rust code, the Rust team found that Rust programmers
 were typing the same lifetime annotations over and over in particular
@@ -606,28 +606,28 @@ nicer.</p>
 lifetimes of the references in the signature of the <code>first_word</code> function in
 Listing 10-25 are. The signatures starts without any lifetimes associated with
 the references:</p>
-<pre><code class="language-rust,ignore">fn first_word(s: &amp;str) -&gt; &amp;str {
+<pre><code class="language-rust ignore">fn first_word(s: &amp;str) -&gt; &amp;str {
 </code></pre>
 <p>Then we (as the compiler) apply the first rule, which says each parameter gets
 its own lifetime. We're going to call it <code>'a</code> as usual, so now the signature is:</p>
-<pre><code class="language-rust,ignore">fn first_word&lt;'a&gt;(s: &amp;'a str) -&gt; &amp;str {
+<pre><code class="language-rust ignore">fn first_word&lt;'a&gt;(s: &amp;'a str) -&gt; &amp;str {
 </code></pre>
 <p>On to the second rule, which applies because there is exactly one input
 lifetime. The second rule says the lifetime of the one input parameter gets
 assigned to the output lifetime, so now the signature is:</p>
-<pre><code class="language-rust,ignore">fn first_word&lt;'a&gt;(s: &amp;'a str) -&gt; &amp;'a str {
+<pre><code class="language-rust ignore">fn first_word&lt;'a&gt;(s: &amp;'a str) -&gt; &amp;'a str {
 </code></pre>
 <p>Now all the references in this function signature have lifetimes, and the
 compiler can continue its analysis without needing the programmer to annotate
 the lifetimes in this function signature.</p>
 <p>Let's do another example, this time with the <code>longest</code> function that had no
 lifetime parameters when we started working with in Listing 10-20:</p>
-<pre><code class="language-rust,ignore">fn longest(x: &amp;str, y: &amp;str) -&gt; &amp;str {
+<pre><code class="language-rust ignore">fn longest(x: &amp;str, y: &amp;str) -&gt; &amp;str {
 </code></pre>
 <p>Pretending we're the compiler again, let's apply the first rule: each parameter
 gets its own lifetime. This time we have two parameters, so we have two
 lifetimes:</p>
-<pre><code class="language-rust,ignore">fn longest&lt;'a, 'b&gt;(x: &amp;'a str, y: &amp;'b str) -&gt; &amp;str {
+<pre><code class="language-rust ignore">fn longest&lt;'a, 'b&gt;(x: &amp;'a str, y: &amp;'b str) -&gt; &amp;str {
 </code></pre>
 <p>Looking at the second rule, it doesn't apply since there is more than one input
 lifetime. Looking at the third rule, this also does not apply because this is a
@@ -639,7 +639,7 @@ figure out all the lifetimes of the references in the signature.</p>
 <p>Because the third rule only really applies in method signatures, let's look at
 lifetimes in that context now, and see why the third rule means we don't have
 to annotate lifetimes in method signatures very often.</p>
-<a class="header" href="#lifetime-annotations-in-method-definitions" name="lifetime-annotations-in-method-definitions"><h3>Lifetime Annotations in Method Definitions</h3></a>
+<a class="header" href="ch10-03-lifetime-syntax.html#lifetime-annotations-in-method-definitions" name="lifetime-annotations-in-method-definitions"><h3>Lifetime Annotations in Method Definitions</h3></a>
 <!-- Is this different to the reference lifetime annotations, or just a
 finalized explanation? -->
 <!-- This is about lifetimes on references in method signatures, which is where
@@ -691,7 +691,7 @@ impl&lt;'a&gt; ImportantExcerpt&lt;'a&gt; {
 and gives both <code>&amp;self</code> and <code>announcement</code> their own lifetimes. Then, because
 one of the parameters is <code>&amp;self</code>, the return type gets the lifetime of <code>&amp;self</code>,
 and all lifetimes have been accounted for.</p>
-<a class="header" href="#the-static-lifetime" name="the-static-lifetime"><h3>The Static Lifetime</h3></a>
+<a class="header" href="ch10-03-lifetime-syntax.html#the-static-lifetime" name="the-static-lifetime"><h3>The Static Lifetime</h3></a>
 <p>There is <em>one</em> special lifetime we need to discuss: <code>'static</code>. The <code>'static</code>
 lifetime is the entire duration of the program. All string literals have the
 <code>'static</code> lifetime, which we can choose to annotate as follows:</p>
@@ -709,7 +709,7 @@ lifetime of your program or not (or even if you want it to live that long, if
 it could). Most of the time, the problem in the code is an attempt to create a
 dangling reference or a mismatch of the available lifetimes, and the solution
 is fixing those problems, not specifying the <code>'static</code> lifetime.</p>
-<a class="header" href="#generic-type-parameters-trait-bounds-and-lifetimes-together" name="generic-type-parameters-trait-bounds-and-lifetimes-together"><h3>Generic Type Parameters, Trait Bounds, and Lifetimes Together</h3></a>
+<a class="header" href="ch10-03-lifetime-syntax.html#generic-type-parameters-trait-bounds-and-lifetimes-together" name="generic-type-parameters-trait-bounds-and-lifetimes-together"><h3>Generic Type Parameters, Trait Bounds, and Lifetimes Together</h3></a>
 <p>Let's briefly look at the syntax of specifying generic type parameters, trait
 bounds, and lifetimes all in one function!</p>
 <pre><code class="language-rust">use std::fmt::Display;
@@ -734,7 +734,7 @@ which is why the <code>Display</code> trait bound is necessary. Because lifetime
 type of generic, the declarations of both the lifetime parameter <code>'a</code> and the
 generic type parameter <code>T</code> go in the same list within the angle brackets after
 the function name.</p>
-<a class="header" href="#summary" name="summary"><h2>Summary</h2></a>
+<a class="header" href="ch10-03-lifetime-syntax.html#summary" name="summary"><h2>Summary</h2></a>
 <p>We covered a lot in this chapter! Now that you know about generic type
 parameters, traits and trait bounds, and generic lifetime parameters, you're
 ready to write code that isn't duplicated but can be used in many different

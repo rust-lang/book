@@ -67,7 +67,7 @@
                 </div>
 
                 <div id="content" class="content">
-                    <a class="header" href="#iterators" name="iterators"><h2>Iterators</h2></a>
+                    <a class="header" href="ch13-02-iterators.html#iterators" name="iterators"><h2>Iterators</h2></a>
 <p>Iterators are a pattern in Rust that allows you to do some processing on a
 sequence of items. For example, the code in Listing 13-5 adds one to each
 number in a vector:</p>
@@ -105,7 +105,7 @@ the closure it's passed to create the new sequence of values.</p>
 <p>That's how we end up with <code>[2, 3, 4]</code>. As you can see, closures are a very
 important part of using iterators: they provide a way of customizing the
 behavior of an iterator adaptor like <code>map</code>.</p>
-<a class="header" href="#iterators-are-lazy" name="iterators-are-lazy"><h3>Iterators are Lazy</h3></a>
+<a class="header" href="ch13-02-iterators.html#iterators-are-lazy" name="iterators-are-lazy"><h3>Iterators are Lazy</h3></a>
 <p>In the previous section, you may have noticed a subtle difference in wording:
 we said that <code>map</code> <em>adapts</em> an iterator, but <code>collect</code> <em>consumes</em> one. That was
 intentional. By themselves, iterators won't do anything; they're lazy. That is,
@@ -128,7 +128,7 @@ chain to evaluate. We call those <em>consuming adaptors</em>, and <code>collect<
 them.</p>
 <p>So how do we tell which iterator methods consume the iterator or not? And what
 adaptors are available? For that, let's look at the <code>Iterator</code> trait.</p>
-<a class="header" href="#the-iterator-trait" name="the-iterator-trait"><h3>The <code>Iterator</code> trait</h3></a>
+<a class="header" href="ch13-02-iterators.html#the-iterator-trait" name="the-iterator-trait"><h3>The <code>Iterator</code> trait</h3></a>
 <p>Iterators all implement a trait named <code>Iterator</code> that is defined in the standard
 library. The definition of the trait looks like this:</p>
 <pre><code class="language-rust">trait Iterator {
@@ -219,7 +219,7 @@ iterator.</p>
 <p>Once we've implemented the <code>Iterator</code> trait, we have an iterator! We can use
 the iterator functionality that our <code>Counter</code> struct now has by calling the
 <code>next</code> method on it repeatedly:</p>
-<pre><code class="language-rust,ignore">let mut counter = Counter::new();
+<pre><code class="language-rust ignore">let mut counter = Counter::new();
 
 let x = counter.next();
 println!(&quot;{:?}&quot;, x);
@@ -241,7 +241,7 @@ println!(&quot;{:?}&quot;, x);
 </code></pre>
 <p>This will print <code>Some(1)</code> through <code>Some(5)</code> and then <code>None</code>, each on their own
 line.</p>
-<a class="header" href="#all-sorts-of-iterator-adaptors" name="all-sorts-of-iterator-adaptors"><h3>All Sorts of <code>Iterator</code> Adaptors</h3></a>
+<a class="header" href="ch13-02-iterators.html#all-sorts-of-iterator-adaptors" name="all-sorts-of-iterator-adaptors"><h3>All Sorts of <code>Iterator</code> Adaptors</h3></a>
 <p>In Listing 13-5, we had iterators and we called methods like <code>map</code> and
 <code>collect</code> on them. In Listing 13-6, however, we only implemented the <code>next</code>
 method on our <code>Counter</code>. How do we get methods like <code>map</code> and <code>collect</code> on our

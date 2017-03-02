@@ -67,7 +67,7 @@
                 </div>
 
                 <div id="content" class="content">
-                    <a class="header" href="#strings" name="strings"><h2>Strings</h2></a>
+                    <a class="header" href="ch08-02-strings.html#strings" name="strings"><h2>Strings</h2></a>
 <p>We’ve already talked about strings a bunch in Chapter 4, but let’s take a more
 in-depth look at them now. Strings are an area that new Rustaceans commonly get
 stuck on. This is due to a combination of three things: Rust’s propensity for
@@ -82,7 +82,7 @@ creating, updating, and reading. We’ll also discuss the ways in which <code>St
 is different than the other collections, namely how indexing into a <code>String</code> is
 complicated by the differences in which people and computers interpret <code>String</code>
 data.</p>
-<a class="header" href="#what-is-a-string" name="what-is-a-string"><h3>What is a String?</h3></a>
+<a class="header" href="ch08-02-strings.html#what-is-a-string" name="what-is-a-string"><h3>What is a String?</h3></a>
 <p>Before we can dig into those aspects, we need to talk about what exactly we
 mean by the term <em>string</em>. Rust actually only has one string type in the core
 language itself: <code>str</code>, the string slice, which is usually seen in its borrowed
@@ -104,7 +104,7 @@ These string types may store different encodings or be represented in memory in
 a different way, for example. We won’t be talking about these other string
 types in this chapter; see their API documentation for more about how to use
 them and when each is appropriate.</p>
-<a class="header" href="#creating-a-new-string" name="creating-a-new-string"><h3>Creating a New String</h3></a>
+<a class="header" href="ch08-02-strings.html#creating-a-new-string" name="creating-a-new-string"><h3>Creating a New String</h3></a>
 <p>Many of the same operations available with <code>Vec</code> are available with <code>String</code> as
 well, starting with the <code>new</code> function to create a string, like so:</p>
 <pre><code class="language-rust">let s = String::new();
@@ -144,11 +144,11 @@ let hello = &quot;Olá&quot;;
 let hello = &quot;Здравствуйте&quot;;
 let hello = &quot;Hola&quot;;
 </code></pre>
-<a class="header" href="#updating-a-string" name="updating-a-string"><h3>Updating a String</h3></a>
+<a class="header" href="ch08-02-strings.html#updating-a-string" name="updating-a-string"><h3>Updating a String</h3></a>
 <p>A <code>String</code> can grow in size and its contents can change just like the contents
 of a <code>Vec</code>, by pushing more data into it. In addition, <code>String</code> has
 concatenation operations implemented with the <code>+</code> operator for convenience.</p>
-<a class="header" href="#appending-to-a-string-with-push" name="appending-to-a-string-with-push"><h4>Appending to a String with Push</h4></a>
+<a class="header" href="ch08-02-strings.html#appending-to-a-string-with-push" name="appending-to-a-string-with-push"><h4>Appending to a String with Push</h4></a>
 <p>We can grow a <code>String</code> by using the <code>push_str</code> method to append a string slice:</p>
 <pre><code class="language-rust">let mut s = String::from(&quot;foo&quot;);
 s.push_str(&quot;bar&quot;);
@@ -167,7 +167,7 @@ it to the <code>String</code>:</p>
 s.push('l');
 </code></pre>
 <p>After this, <code>s</code> will contain “lol”.</p>
-<a class="header" href="#concatenation-with-the--operator-or-the-format-macro" name="concatenation-with-the--operator-or-the-format-macro"><h4>Concatenation with the + Operator or the <code>format!</code> Macro</h4></a>
+<a class="header" href="ch08-02-strings.html#concatenation-with-the--operator-or-the-format-macro" name="concatenation-with-the--operator-or-the-format-macro"><h4>Concatenation with the + Operator or the <code>format!</code> Macro</h4></a>
 <p>Often, we’ll want to combine two existing strings together. One way is to use
 the <code>+</code> operator like this:</p>
 <pre><code class="language-rust">let s1 = String::from(&quot;Hello, &quot;);
@@ -179,7 +179,7 @@ let s3 = s1 + &amp;s2; // Note that s1 has been moved here and can no longer be 
 reference to <code>s2</code> has to do with the signature of the method that gets called
 when we use the <code>+</code> operator. The <code>+</code> operator uses the <code>add</code> method, whose
 signature looks something like this:</p>
-<pre><code class="language-rust,ignore">fn add(self, s: &amp;str) -&gt; String {
+<pre><code class="language-rust ignore">fn add(self, s: &amp;str) -&gt; String {
 </code></pre>
 <p>This isn’t the exact signature that’s in the standard library; there <code>add</code> is
 defined using generics. Here, we’re looking at the signature of <code>add</code> with
@@ -222,12 +222,12 @@ let s = format!(&quot;{}-{}-{}&quot;, s1, s2, s3);
 same way as <code>println!</code>, but instead of printing the output to the screen, it
 returns a <code>String</code> with the contents. This version is much easier to read, and
 also does not take ownership of any of its parameters.</p>
-<a class="header" href="#indexing-into-strings" name="indexing-into-strings"><h3>Indexing into Strings</h3></a>
+<a class="header" href="ch08-02-strings.html#indexing-into-strings" name="indexing-into-strings"><h3>Indexing into Strings</h3></a>
 <p>In many other languages, accessing individual characters in a string by
 referencing them by index is a valid and common operation. In Rust, however, if
 we try to access parts of a <code>String</code> using indexing syntax, we’ll get an error.
 That is, this code:</p>
-<pre><code class="language-rust,ignore">let s1 = String::from(&quot;hello&quot;);
+<pre><code class="language-rust ignore">let s1 = String::from(&quot;hello&quot;);
 let h = s1[0];
 </code></pre>
 <p>will result in this error:</p>
@@ -241,7 +241,7 @@ note: the type `std::string::String` cannot be indexed by `_`
 <p>The error and the note tell the story: Rust strings don’t support indexing. So
 the follow-up question is, why not? In order to answer that, we have to talk a
 bit about how Rust stores strings in memory.</p>
-<a class="header" href="#internal-representation" name="internal-representation"><h4>Internal Representation</h4></a>
+<a class="header" href="ch08-02-strings.html#internal-representation" name="internal-representation"><h4>Internal Representation</h4></a>
 <p>A <code>String</code> is a wrapper over a <code>Vec&lt;u8&gt;</code>. Let’s take a look at some of our
 properly-encoded UTF-8 example strings from before. First, this one:</p>
 <pre><code class="language-rust">let len = String::from(&quot;Hola&quot;).len();
@@ -257,7 +257,7 @@ UTF-8, since each Unicode scalar value takes two bytes of storage. Therefore,
 an index into the string’s bytes will not always correlate to a valid Unicode
 scalar value.</p>
 <p>To demonstrate, consider this invalid Rust code:</p>
-<pre><code class="language-rust,ignore">let hello = &quot;Здравствуйте&quot;;
+<pre><code class="language-rust ignore">let hello = &quot;Здравствуйте&quot;;
 let answer = &amp;hello[0];
 </code></pre>
 <p>What should the value of <code>answer</code> be? Should it be <code>З</code>, the first letter? When
@@ -270,7 +270,7 @@ only Latin letters: <code>&amp;&quot;hello&quot;[0]</code> would return <code>10
 returning an unexpected value and causing bugs that might not be discovered
 immediately, Rust chooses to not compile this code at all and prevent
 misunderstandings earlier.</p>
-<a class="header" href="#bytes-and-scalar-values-and-grapheme-clusters-oh-my" name="bytes-and-scalar-values-and-grapheme-clusters-oh-my"><h4>Bytes and Scalar Values and Grapheme Clusters! Oh my!</h4></a>
+<a class="header" href="ch08-02-strings.html#bytes-and-scalar-values-and-grapheme-clusters-oh-my" name="bytes-and-scalar-values-and-grapheme-clusters-oh-my"><h4>Bytes and Scalar Values and Grapheme Clusters! Oh my!</h4></a>
 <p>This leads to another point about UTF-8: there are really three relevant ways
 to look at strings, from Rust’s perspective: as bytes, scalar values, and
 grapheme clusters (the closest thing to what people would call <em>letters</em>).</p>
@@ -298,7 +298,7 @@ character is that indexing operations are expected to always take constant time
 (O(1)). It isn’t possible to guarantee that performance with a <code>String</code>,
 though, since Rust would have to walk through the contents from the beginning
 to the index to determine how many valid characters there were.</p>
-<a class="header" href="#slicing-strings" name="slicing-strings"><h3>Slicing Strings</h3></a>
+<a class="header" href="ch08-02-strings.html#slicing-strings" name="slicing-strings"><h3>Slicing Strings</h3></a>
 <p>Because it's not clear what the return type of string indexing should be, and
 it is often a bad idea to index into a string, Rust dissuades you from doing so
 by asking you to be more specific if you really need it. The way you can be
@@ -317,7 +317,7 @@ runtime, in the same way that accessing an invalid index in a vector does:</p>
 character boundary', ../src/libcore/str/mod.rs:1694
 </code></pre>
 <p>You should use this with caution, since it can cause your program to crash.</p>
-<a class="header" href="#methods-for-iterating-over-strings" name="methods-for-iterating-over-strings"><h3>Methods for Iterating Over Strings</h3></a>
+<a class="header" href="ch08-02-strings.html#methods-for-iterating-over-strings" name="methods-for-iterating-over-strings"><h3>Methods for Iterating Over Strings</h3></a>
 <p>Luckily, there are other ways we can access elements in a String.</p>
 <p>If we need to perform operations on individual Unicode scalar values, the best
 way to do so is to use the <code>chars</code> method. Calling <code>chars</code> on “नमस्ते”
@@ -353,7 +353,7 @@ more than one byte.</p>
 <p>Getting grapheme clusters from strings is complex, so this functionality is not
 provided by the standard library. There are crates available on crates.io if
 this is the functionality you need.</p>
-<a class="header" href="#strings-are-not-so-simple" name="strings-are-not-so-simple"><h3>Strings are Not so Simple</h3></a>
+<a class="header" href="ch08-02-strings.html#strings-are-not-so-simple" name="strings-are-not-so-simple"><h3>Strings are Not so Simple</h3></a>
 <p>To summarize, strings are complicated. Different programming languages make
 different choices about how to present this complexity to the programmer. Rust
 has chosen to make the correct handling of <code>String</code> data the default behavior

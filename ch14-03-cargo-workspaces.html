@@ -67,7 +67,7 @@
                 </div>
 
                 <div id="content" class="content">
-                    <a class="header" href="#cargo-workspaces" name="cargo-workspaces"><h2>Cargo Workspaces</h2></a>
+                    <a class="header" href="ch14-03-cargo-workspaces.html#cargo-workspaces" name="cargo-workspaces"><h2>Cargo Workspaces</h2></a>
 <p>In Chapter 12, we built a package that included both a binary crate and a
 library crate. But what if the library crate continues to get bigger and we
 want to split our package up further into multiple library crates? As packages
@@ -120,7 +120,7 @@ dependencies that aren't in this workspace.</p>
 <p>Open up <em>src/main.rs</em> for <code>adder</code> and add an <code>extern crate</code> line to bring the
 new <code>add-one</code> library crate into scope, and change the <code>main</code> function to use
 the <code>add_one</code> function:</p>
-<pre><code class="language-rust,ignore">extern crate add_one;
+<pre><code class="language-rust ignore">extern crate add_one;
 
 fn main() {
     let num = 10;

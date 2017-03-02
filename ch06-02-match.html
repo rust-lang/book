@@ -67,7 +67,7 @@
                 </div>
 
                 <div id="content" class="content">
-                    <a class="header" href="#the-match-control-flow-operator" name="the-match-control-flow-operator"><h2>The <code>match</code> Control Flow Operator</h2></a>
+                    <a class="header" href="ch06-02-match.html#the-match-control-flow-operator" name="the-match-control-flow-operator"><h2>The <code>match</code> Control Flow Operator</h2></a>
 <p>Rust has an extremely powerful control-flow operator called <code>match</code> that allows
 us to compare a value against a series of patterns and then execute code based
 on which pattern matches. Patterns can be made up of literal values, variable
@@ -148,7 +148,7 @@ fn value_in_cents(coin: Coin) -&gt; i32 {
     }
 }
 </code></pre>
-<a class="header" href="#patterns-that-bind-to-values" name="patterns-that-bind-to-values"><h3>Patterns that Bind to Values</h3></a>
+<a class="header" href="ch06-02-match.html#patterns-that-bind-to-values" name="patterns-that-bind-to-values"><h3>Patterns that Bind to Values</h3></a>
 <p>Another useful feature of match arms is that they can bind to parts of the
 values that match the pattern. This is how we can extract values out of enum
 variants.</p>
@@ -217,7 +217,7 @@ of the match arms, none of them match until we reach <code>Coin::Quarter(state)<
 that point, the binding for <code>state</code> will be the value <code>UsState::Alaska</code>. We can
 then use that binding in the <code>println!</code> expression, thus getting the inner
 state value out of the <code>Coin</code> enum variant for <code>Quarter</code>.</p>
-<a class="header" href="#matching-with-optiont" name="matching-with-optiont"><h3>Matching with <code>Option&lt;T&gt;</code></h3></a>
+<a class="header" href="ch06-02-match.html#matching-with-optiont" name="matching-with-optiont"><h3>Matching with <code>Option&lt;T&gt;</code></h3></a>
 <p>In the previous section we wanted to get the inner <code>T</code> value out of the <code>Some</code>
 case when using <code>Option&lt;T&gt;</code>; we can also handle <code>Option&lt;T&gt;</code> using <code>match</code> as we
 did with the <code>Coin</code> enum! Instead of comparing coins, we’ll compare the
@@ -245,24 +245,24 @@ let none = plus_one(None);
 <p>Listing 6-5: A function that uses a <code>match</code> expression on an <code>Option&lt;i32&gt;</code></p>
 </figcaption>
 </figure>
-<a class="header" href="#matching-somet" name="matching-somet"><h4>Matching <code>Some(T)</code></h4></a>
+<a class="header" href="ch06-02-match.html#matching-somet" name="matching-somet"><h4>Matching <code>Some(T)</code></h4></a>
 <p>Let’s examine the first execution of <code>plus_one</code> in more detail. When we call
 <code>plus_one(five)</code>, the variable <code>x</code> in the body of <code>plus_one</code> will have the
 value <code>Some(5)</code>. We then compare that against each match arm.</p>
-<pre><code class="language-rust,ignore">None =&gt; None,
+<pre><code class="language-rust ignore">None =&gt; None,
 </code></pre>
 <p>The <code>Some(5)</code> value doesn’t match the pattern <code>None</code>, so we continue to the
 next arm.</p>
-<pre><code class="language-rust,ignore">Some(i) =&gt; Some(i + 1),
+<pre><code class="language-rust ignore">Some(i) =&gt; Some(i + 1),
 </code></pre>
 <p>Does <code>Some(5)</code> match <code>Some(i)</code>? Why yes it does! We have the same variant.
 The <code>i</code> binds to the value contained in <code>Some</code>, so <code>i</code> takes the value <code>5</code>. The
 code in the match arm is then executed, so we add one to the value of <code>i</code> and
 create a new <code>Some</code> value with our total <code>6</code> inside.</p>
-<a class="header" href="#matching-none" name="matching-none"><h4>Matching <code>None</code></h4></a>
+<a class="header" href="ch06-02-match.html#matching-none" name="matching-none"><h4>Matching <code>None</code></h4></a>
 <p>Now let’s consider the second call of <code>plus_one</code> in Listing 6-5 where <code>x</code> is
 <code>None</code>. We enter the <code>match</code> and compare to the first arm.</p>
-<pre><code class="language-rust,ignore">None =&gt; None,
+<pre><code class="language-rust ignore">None =&gt; None,
 </code></pre>
 <p>It matches! There’s no value to add to, so the program stops and returns the
 <code>None</code> value on the right side of <code>=&gt;</code>. Because the first arm matched, no other
@@ -272,10 +272,10 @@ pattern a lot in Rust code: <code>match</code> against an enum, bind a variable 
 data inside, and then execute code based on it. It’s a bit tricky at first, but
 once you get used to it, you’ll wish you had it in all languages. It’s
 consistently a user favorite.</p>
-<a class="header" href="#matches-are-exhaustive" name="matches-are-exhaustive"><h3>Matches Are Exhaustive</h3></a>
+<a class="header" href="ch06-02-match.html#matches-are-exhaustive" name="matches-are-exhaustive"><h3>Matches Are Exhaustive</h3></a>
 <p>There’s one other aspect of <code>match</code> we need to discuss. Consider this version
 of our <code>plus_one</code> function:</p>
-<pre><code class="language-rust,ignore">fn plus_one(x: Option&lt;i32&gt;) -&gt; Option&lt;i32&gt; {
+<pre><code class="language-rust ignore">fn plus_one(x: Option&lt;i32&gt;) -&gt; Option&lt;i32&gt; {
     match x {
         Some(i) =&gt; Some(i + 1),
     }
@@ -296,7 +296,7 @@ possibility in order for the code to be valid. Especially in the case of
 <code>Option&lt;T&gt;</code>, when Rust prevents us from forgetting to explicitly handle the
 <code>None</code> case, it protects us from assuming that we have a value when we might
 have null, thus making the billion dollar mistake discussed earlier.</p>
-<a class="header" href="#the-_-placeholder" name="the-_-placeholder"><h3>The <code>_</code> Placeholder</h3></a>
+<a class="header" href="ch06-02-match.html#the-_-placeholder" name="the-_-placeholder"><h3>The <code>_</code> Placeholder</h3></a>
 <p>Rust also has a pattern we can use in situations when we don’t want to list all
 possible values. For example, a <code>u8</code> can have valid values of 0 through 255. If
 we only care about the values 1, 3, 5, and 7, we don’t want to have to list out

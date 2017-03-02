@@ -67,7 +67,7 @@
                 </div>
 
                 <div id="content" class="content">
-                    <a class="header" href="#publishing-a-crate-to-cratesio" name="publishing-a-crate-to-cratesio"><h2>Publishing a Crate to Crates.io</h2></a>
+                    <a class="header" href="ch14-02-publishing-to-crates-io.html#publishing-a-crate-to-cratesio" name="publishing-a-crate-to-cratesio"><h2>Publishing a Crate to Crates.io</h2></a>
 <p>We've added crates from crates.io as dependencies of our project. We can choose
 to share our code for other people to use as well. Crates.io distributes the
 source code of your packages, so it is primarily used to distribute code that's
@@ -75,7 +75,7 @@ open source.</p>
 <p>Rust and Cargo have some features that can make your published package easier
 for people to find and use. We'll talk about some of those features, then cover
 how to publish a package.</p>
-<a class="header" href="#documentation-comments" name="documentation-comments"><h3>Documentation Comments</h3></a>
+<a class="header" href="ch14-02-publishing-to-crates-io.html#documentation-comments" name="documentation-comments"><h3>Documentation Comments</h3></a>
 <p>In Chapter 3, we saw comments in Rust that start with <code>//</code>. Rust also has a
 second kind of comment: the <em>documentation comment</em>. While comments can be
 useful if someone is reading your code, you can generate HTML documentation
@@ -142,7 +142,7 @@ library:</p>
 //! The Rust Standard Library provides the essential runtime
 //! functionality for building portable Rust software.
 </code></pre>
-<a class="header" href="#exporting-a-convenient-public-api-with-pub-use" name="exporting-a-convenient-public-api-with-pub-use"><h3>Exporting a Convenient Public API with <code>pub use</code></h3></a>
+<a class="header" href="ch14-02-publishing-to-crates-io.html#exporting-a-convenient-public-api-with-pub-use" name="exporting-a-convenient-public-api-with-pub-use"><h3>Exporting a Convenient Public API with <code>pub use</code></h3></a>
 <p>In Chapter 7, we covered how to organize our code into modules with the <code>mod</code>
 keyword, how to make items public with the <code>pub</code> keyword, and how to bring
 items into a scope with the <code>use</code> keyword. When publishing a crate for people
@@ -197,7 +197,7 @@ modules</p>
 Listing 14-3:</p>
 <figure>
 <span class="filename">Filename: src/main.rs</span>
-<pre><code class="language-rust,ignore">extern crate art;
+<pre><code class="language-rust ignore">extern crate art;
 
 use art::kinds::PrimaryColor;
 use art::utils::mix;
@@ -250,7 +250,7 @@ internal structure as in Listing 14-3, or they can use the more convenient
 structure from Listing 14-4, as shown in Listing 14-5:</p>
 <figure>
 <span class="filename">Filename: src/main.rs</span>
-<pre><code class="language-rust,ignore">extern crate art;
+<pre><code class="language-rust ignore">extern crate art;
 
 use art::PrimaryColor;
 use art::mix;
@@ -268,7 +268,7 @@ fn main() {
 Choosing <code>pub use</code> gives you flexibility in how you expose your crate's
 internal structure to users. Take a look at some of the code of crates you've
 installed to see if their internal structure differs from their public API.</p>
-<a class="header" href="#before-your-first-publish" name="before-your-first-publish"><h3>Before Your First Publish</h3></a>
+<a class="header" href="ch14-02-publishing-to-crates-io.html#before-your-first-publish" name="before-your-first-publish"><h3>Before Your First Publish</h3></a>
 <p>Before being able to publish any crates, you'll need to create an account on
 <a href="https://crates.io">crates.io</a> and get an API token. To do so, <a href="https://crates.io">visit the home page</a>
 and log in via a GitHub account. A GitHub account is a requirement for now, but
@@ -282,7 +282,7 @@ this:</p>
 <em>~/.cargo/config</em>. Note that this token is a <strong>secret</strong> and should not be
 shared with anyone else. If it gets shared with anyone for any reason, you
 should regenerate it immediately.</p>
-<a class="header" href="#before-publishing-a-new-crate" name="before-publishing-a-new-crate"><h3>Before Publishing a New Crate</h3></a>
+<a class="header" href="ch14-02-publishing-to-crates-io.html#before-publishing-a-new-crate" name="before-publishing-a-new-crate"><h3>Before Publishing a New Crate</h3></a>
 <p>First, your crate will need a unique name. While you're working on a crate
 locally, you may name a crate whatever you'd like, but crate names on
 <a href="https://crates.io">crates.io</a> are allocated on a first-come-first- serve basis. Once a crate name
@@ -328,7 +328,7 @@ license = &quot;MIT/Apache-2.0&quot;
 <p>Be sure to check out the <a href="http://doc.crates.io/manifest.html#package-metadata">documentation on crates.io</a> that
 describes other metadata you can specify to ensure your crate can be discovered
 and used more easily!</p>
-<a class="header" href="#publishing-to-cratesio" name="publishing-to-cratesio"><h3>Publishing to Crates.io</h3></a>
+<a class="header" href="ch14-02-publishing-to-crates-io.html#publishing-to-cratesio" name="publishing-to-cratesio"><h3>Publishing to Crates.io</h3></a>
 <p>Now that we've created an account, saved our API token, chosen a name for our
 crate, and specified the required metadata, we're ready to publish! Publishing
 a crate is when a specific version is uploaded to be hosted on crates.io.</p>
@@ -348,13 +348,13 @@ Uploading guessing_game v0.1.0 (file:///projects/guessing_game)
 </code></pre>
 <p>Congratulations! You've now shared your code with the Rust community, and
 anyone can easily add your crate as a dependency to their project.</p>
-<a class="header" href="#publishing-a-new-version-of-an-existing-crate" name="publishing-a-new-version-of-an-existing-crate"><h3>Publishing a New Version of an Existing Crate</h3></a>
+<a class="header" href="ch14-02-publishing-to-crates-io.html#publishing-a-new-version-of-an-existing-crate" name="publishing-a-new-version-of-an-existing-crate"><h3>Publishing a New Version of an Existing Crate</h3></a>
 <p>When you've made changes to your crate and are ready to release a new version,
 change the <code>version</code> value specified in your <em>Cargo.toml</em>. Use the <a href="http://semver.org/">Semantic
 Versioning rules</a> to decide what an appropriate next version number is
 based on the kinds of changes you've made. Then run <code>cargo publish</code> to upload
 the new version.</p>
-<a class="header" href="#removing-versions-from-cratesio-with-cargo-yank" name="removing-versions-from-cratesio-with-cargo-yank"><h3>Removing Versions from Crates.io with <code>cargo yank</code></h3></a>
+<a class="header" href="ch14-02-publishing-to-crates-io.html#removing-versions-from-cratesio-with-cargo-yank" name="removing-versions-from-cratesio-with-cargo-yank"><h3>Removing Versions from Crates.io with <code>cargo yank</code></h3></a>
 <p>Occasions may arise where you publish a version of a crate that actually ends
 up being broken for one reason or another, such as a syntax error or forgetting
 to include a file. For situations such as this, Cargo supports <em>yanking</em> a

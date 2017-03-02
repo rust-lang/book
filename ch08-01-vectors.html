@@ -67,13 +67,13 @@
                 </div>
 
                 <div id="content" class="content">
-                    <a class="header" href="#vectors" name="vectors"><h2>Vectors</h2></a>
+                    <a class="header" href="ch08-01-vectors.html#vectors" name="vectors"><h2>Vectors</h2></a>
 <p>The first type we’ll look at is <code>Vec&lt;T&gt;</code>, also known as a <em>vector</em>. Vectors
 allow us to store more than one value in a single data structure that puts all
 the values next to each other in memory. Vectors can only store values of the
 same type. They are useful in situations where you have a list of items, such
 as the lines of text in a file or the prices of items in a shopping cart.</p>
-<a class="header" href="#creating-a-new-vector" name="creating-a-new-vector"><h3>Creating a New Vector</h3></a>
+<a class="header" href="ch08-01-vectors.html#creating-a-new-vector" name="creating-a-new-vector"><h3>Creating a New Vector</h3></a>
 <p>To create a new, empty vector, we can call the <code>Vec::new</code> function:</p>
 <pre><code class="language-rust">let v: Vec&lt;i32&gt; = Vec::new();
 </code></pre>
@@ -96,7 +96,7 @@ it. This will create a new <code>Vec&lt;i32&gt;</code> that holds the values <co
 <p>Because we’ve given initial <code>i32</code> values, Rust can infer that the type of <code>v</code>
 is <code>Vec&lt;i32&gt;</code>, and the type annotation isn’t necessary. Let’s look at how to
 modify a vector next.</p>
-<a class="header" href="#updating-a-vector" name="updating-a-vector"><h3>Updating a Vector</h3></a>
+<a class="header" href="ch08-01-vectors.html#updating-a-vector" name="updating-a-vector"><h3>Updating a Vector</h3></a>
 <p>To create a vector then add elements to it, we can use the <code>push</code> method:</p>
 <pre><code class="language-rust">let mut v = Vec::new();
 
@@ -109,7 +109,7 @@ v.push(8);
 change its value, we need to make it mutable with the <code>mut</code> keyword. The
 numbers we place inside are all of type <code>i32</code>, and Rust infers this from the
 data, so we don’t need the <code>Vec&lt;i32&gt;</code> annotation.</p>
-<a class="header" href="#dropping-a-vector-drops-its-elements" name="dropping-a-vector-drops-its-elements"><h3>Dropping a Vector Drops its Elements</h3></a>
+<a class="header" href="ch08-01-vectors.html#dropping-a-vector-drops-its-elements" name="dropping-a-vector-drops-its-elements"><h3>Dropping a Vector Drops its Elements</h3></a>
 <p>Like any other <code>struct</code>, a vector will be freed when it goes out of scope:</p>
 <pre><code class="language-rust">{
     let v = vec![1, 2, 3, 4];
@@ -122,7 +122,7 @@ data, so we don’t need the <code>Vec&lt;i32&gt;</code> annotation.</p>
 those integers it holds will be cleaned up. This may seem like a
 straightforward point, but can get a little more complicated once we start to
 introduce references to the elements of the vector. Let’s tackle that next!</p>
-<a class="header" href="#reading-elements-of-vectors" name="reading-elements-of-vectors"><h3>Reading Elements of Vectors</h3></a>
+<a class="header" href="ch08-01-vectors.html#reading-elements-of-vectors" name="reading-elements-of-vectors"><h3>Reading Elements of Vectors</h3></a>
 <p>Now that you know how to create, update, and destroy vectors, knowing how to
 read their contents is a good next step. There are two ways to reference a
 value stored in a vector. In the examples, we’ve annotated the types of the
@@ -144,7 +144,7 @@ how the program behaves when you try to use an index value that the vector
 doesn’t have an element for. As an example, what should a program do if it has
 a vector that holds five elements then tries to access an element at index 100
 like this:</p>
-<pre><code class="language-rust,should_panic">let v = vec![1, 2, 3, 4, 5];
+<pre><code class="language-rust should_panic">let v = vec![1, 2, 3, 4, 5];
 
 let does_not_exist = &amp;v[100];
 let does_not_exist = v.get(100);
@@ -164,14 +164,14 @@ enter a number that’s too large and your program gets a <code>None</code> valu
 tell the user how many items are in the current <code>Vec</code> and give them another
 chance to enter a valid value. That would be more user-friendly than crashing
 the program for a typo!</p>
-<a class="header" href="#invalid-references" name="invalid-references"><h4>Invalid References</h4></a>
+<a class="header" href="ch08-01-vectors.html#invalid-references" name="invalid-references"><h4>Invalid References</h4></a>
 <p>Once the program has a valid reference, the borrow checker will enforce the
 ownership and borrowing rules covered in Chapter 4 to ensure this reference and
 any other references to the contents of the vector stay valid. Recall the rule
 that says we can’t have mutable and immutable references in the same scope.
 That rule applies in this example, where we hold an immutable reference to the
 first element in a vector and try to add an element to the end:</p>
-<pre><code class="language-rust,ignore">let mut v = vec![1, 2, 3, 4, 5];
+<pre><code class="language-rust ignore">let mut v = vec![1, 2, 3, 4, 5];
 
 let first = &amp;v[0];
 
@@ -201,7 +201,7 @@ memory. The borrowing rules prevent programs from ending up in that situation.</
 <p>Note: For more on this, see The Nomicon at
 <em>https://doc.rust-lang.org/stable/nomicon/vec.html</em>.</p>
 </blockquote>
-<a class="header" href="#using-an-enum-to-store-multiple-types" name="using-an-enum-to-store-multiple-types"><h3>Using an Enum to Store Multiple Types</h3></a>
+<a class="header" href="ch08-01-vectors.html#using-an-enum-to-store-multiple-types" name="using-an-enum-to-store-multiple-types"><h3>Using an Enum to Store Multiple Types</h3></a>
 <p>At the beginning of this chapter, we said that vectors can only store values
 that are all the same type. This can be inconvenient; there are definitely use
 cases for needing to store a list of things of different types. Luckily, the

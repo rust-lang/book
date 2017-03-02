@@ -67,13 +67,13 @@
                 </div>
 
                 <div id="content" class="content">
-                    <a class="header" href="#smart-pointers" name="smart-pointers"><h1>Smart Pointers</h1></a>
+                    <a class="header" href="ch15-00-smart-pointers.html#smart-pointers" name="smart-pointers"><h1>Smart Pointers</h1></a>
 <p>By smart pointers we mean a reference with more characteristics.</p>
 <p>Example of something that doesn't work</p>
 <p>Surprise! Vec and String are technically smart pointers too!</p>
 <p>This chapter is not a comprehensive list, but will give some examples of the
 ones in the standard library.</p>
-<a class="header" href="#boxt" name="boxt"><h2><code>Box&lt;T&gt;</code></h2></a>
+<a class="header" href="ch15-00-smart-pointers.html#boxt" name="boxt"><h2><code>Box&lt;T&gt;</code></h2></a>
 <p>Don't use very often in your own code
 Heap allocated
 Express Ownership of a heap allocated thing</p>
@@ -84,7 +84,7 @@ Express Ownership of a heap allocated thing</p>
 <li>Extend the lifetime of something</li>
 </ol>
 <p>How this interacts with the Drop trait</p>
-<a class="header" href="#rct" name="rct"><h2><code>Rc&lt;T&gt;</code></h2></a>
+<a class="header" href="ch15-00-smart-pointers.html#rct" name="rct"><h2><code>Rc&lt;T&gt;</code></h2></a>
 <p>Reference counted. Rc is for <em>multiple ownership</em> - this thing should get
 deallocated when all of the owners go out of scope.</p>
 <p>Show the data structure:</p>
@@ -98,23 +98,23 @@ deallocated when all of the owners go out of scope.</p>
 <p>This only works if the data is immutable.</p>
 <p>What happens when you clone an Rc: data isn't cloned, increase the strong count.
 When an Rc clone goes out of scope, the count goes down.</p>
-<a class="header" href="#rc-cycles" name="rc-cycles"><h3>Rc Cycles</h3></a>
+<a class="header" href="ch15-00-smart-pointers.html#rc-cycles" name="rc-cycles"><h3>Rc Cycles</h3></a>
 <p>This is how you leak memory in rust, which btw is totally safe.</p>
 <p>Is this garbage collecting? Well it's not tracing GC...  if you use Rc and had
 a cycle detector, it would be functionally equivalent to a tracing GC. Different
 runtime characteristics tho.</p>
-<a class="header" href="#solution-turn-an-rc-into-a-weakt" name="solution-turn-an-rc-into-a-weakt"><h4>Solution: turn an Rc into a <code>Weak&lt;T&gt;</code></h4></a>
+<a class="header" href="ch15-00-smart-pointers.html#solution-turn-an-rc-into-a-weakt" name="solution-turn-an-rc-into-a-weakt"><h4>Solution: turn an Rc into a <code>Weak&lt;T&gt;</code></h4></a>
 <p>Same as Rc, but doesn't count towards the strong ref count. When you do this, the
 strong ref count goes down and the weak count goes up.</p>
 <p>Data gets cleaned up when the strong count is 0, no matter what the weak count is.
 However, Rc structure is kept until weak reference count also goes to zero, so weak pointers do not become dangling pointers.
 At this point, attempt to upgrade Weak pointer will result into None.
 Only when weak reference counter also reduces to zero, Rc structure is freed.</p>
-<a class="header" href="#refcellt" name="refcellt"><h2><code>RefCell&lt;T&gt;</code></h2></a>
+<a class="header" href="ch15-00-smart-pointers.html#refcellt" name="refcellt"><h2><code>RefCell&lt;T&gt;</code></h2></a>
 <p>Single owner of mutable data</p>
 <p>The ownership rules checked at runtime instead of compile time.</p>
 <p>Only single threaded. See next chapter.</p>
-<a class="header" href="#borrow-and-borrow_mut-methods" name="borrow-and-borrow_mut-methods"><h3><code>borrow</code> and <code>borrow_mut</code> methods</h3></a>
+<a class="header" href="ch15-00-smart-pointers.html#borrow-and-borrow_mut-methods" name="borrow-and-borrow_mut-methods"><h3><code>borrow</code> and <code>borrow_mut</code> methods</h3></a>
 <p>Checks all the rules and panics at runtime if the code violates them.</p>
 <ol>
 <li>
@@ -126,20 +126,20 @@ don't, but if you really want to go back to debugging segfaults, feel free)</p>
 but you need to be able to mutate the underlying data.</p>
 </li>
 </ol>
-<a class="header" href="#cellt" name="cellt"><h2><code>Cell&lt;T&gt;</code></h2></a>
+<a class="header" href="ch15-00-smart-pointers.html#cellt" name="cellt"><h2><code>Cell&lt;T&gt;</code></h2></a>
 <p>Same thing as RefCell but for types that are Copy. No borrow checking rules here
 anyway. So just reason #2 above.</p>
-<a class="header" href="#is-this-really-safe-yes" name="is-this-really-safe-yes"><h2>Is this really safe? Yes!</h2></a>
+<a class="header" href="ch15-00-smart-pointers.html#is-this-really-safe-yes" name="is-this-really-safe-yes"><h2>Is this really safe? Yes!</h2></a>
 <p>RefCell is still doing the checks, just at runtime
 Cell is safe bc Copy types don't need the ownership rules anyway</p>
-<a class="header" href="#the-interior-mutability-pattern" name="the-interior-mutability-pattern"><h3>The Interior Mutability Pattern</h3></a>
+<a class="header" href="ch15-00-smart-pointers.html#the-interior-mutability-pattern" name="the-interior-mutability-pattern"><h3>The Interior Mutability Pattern</h3></a>
 <p>The Interior Mutability Pattern is super unsafe internally but safe to use
 from the outside and is totally safe, totally, trust us, seriously, it's safe.</p>
 <p>Allude to <code>UnsafeCell&lt;T&gt;</code> maybe. Affects optimizations since &amp;mut T is unique.
 UnsafeCell turns off those optimizations so that everything doesn't break.</p>
 <p>This is how you can opt-out of the default of Rust's ownership rules and opt
 in to different guarantees.</p>
-<a class="header" href="#summary" name="summary"><h2>Summary</h2></a>
+<a class="header" href="ch15-00-smart-pointers.html#summary" name="summary"><h2>Summary</h2></a>
 <p>If you want to implement your own smart pointer, go read the Nomicon.</p>
 <p>Now let's talk about concurrency, and some smart pointers that can be used
 with multiple threads.</p>

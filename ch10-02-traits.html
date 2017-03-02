@@ -67,7 +67,7 @@
                 </div>
 
                 <div id="content" class="content">
-                    <a class="header" href="#traits-defining-shared-behavior" name="traits-defining-shared-behavior"><h2>Traits: Defining Shared Behavior</h2></a>
+                    <a class="header" href="ch10-02-traits.html#traits-defining-shared-behavior" name="traits-defining-shared-behavior"><h2>Traits: Defining Shared Behavior</h2></a>
 <p>Traits allow us to use another kind of abstraction: they let us abstract over
 behavior that types can have in common. A <em>trait</em> tells the Rust compiler about
 functionality a particular type has and might share with other types. In
@@ -78,7 +78,7 @@ a trait and therefore has the behavior we want to use in that situation.</p>
 <p>Note: <em>Traits</em> are similar to a feature often called 'interfaces' in other
 languages, though with some differences.</p>
 </blockquote>
-<a class="header" href="#defining-a-trait" name="defining-a-trait"><h3>Defining a Trait</h3></a>
+<a class="header" href="ch10-02-traits.html#defining-a-trait" name="defining-a-trait"><h3>Defining a Trait</h3></a>
 <p>The behavior of a type consists of the methods we can call on that type.
 Different types share the same behavior if we can call the same methods on all
 of those types. Trait definitions are a way to group method signatures together
@@ -116,7 +116,7 @@ the <code>Summarizable</code> trait will have the method <code>summary</code> de
 this signature exactly.</p>
 <p>A trait can have multiple methods in its body, with the method signatures
 listed one per line and each line ending in a semicolon.</p>
-<a class="header" href="#implementing-a-trait-on-a-type" name="implementing-a-trait-on-a-type"><h3>Implementing a Trait on a Type</h3></a>
+<a class="header" href="ch10-02-traits.html#implementing-a-trait-on-a-type" name="implementing-a-trait-on-a-type"><h3>Implementing a Trait on a Type</h3></a>
 <p>Now that we've defined the <code>Summarizable</code> trait, we can implement it on the
 types in our media aggregator that we want to have this behavior. Listing 10-12
 shows an implementation of the <code>Summarizable</code> trait on the <code>NewsArticle</code> struct
@@ -172,7 +172,7 @@ particular type.</p>
 <p>Once we've implemented the trait, we can call the methods on instances of
 <code>NewsArticle</code> and <code>Tweet</code> in the same manner that we call methods that aren't
 part of a trait:</p>
-<pre><code class="language-rust,ignore">let tweet = Tweet {
+<pre><code class="language-rust ignore">let tweet = Tweet {
     username: String::from(&quot;horse_ebooks&quot;),
     content: String::from(&quot;of course, as you probably already know, people&quot;),
     reply: false,
@@ -191,7 +191,7 @@ to import the <code>Summarizable</code> trait into their scope first before they
 implement it, like in Listing 10-13:</p>
 <figure>
 <span class="filename">Filename: lib.rs</span>
-<pre><code class="language-rust,ignore">extern crate aggregator;
+<pre><code class="language-rust ignore">extern crate aggregator;
 
 use aggregator::Summarizable;
 
@@ -230,7 +230,7 @@ because the parent type is not present. Without this rule, two crates could
 implement the same trait for the same type, and the two implementations would
 conflict: Rust wouldn't know which implementation to use. Because Rust enforces
 the orphan rule, other people's code can't break your code and vice versa.</p>
-<a class="header" href="#default-implementations" name="default-implementations"><h3>Default Implementations</h3></a>
+<a class="header" href="ch10-02-traits.html#default-implementations" name="default-implementations"><h3>Default Implementations</h3></a>
 <p>Sometimes it's useful to have default behavior for some or all of the methods
 in a trait, instead of making every implementation on every type define custom
 behavior. When we implement the trait on a particular type, we can choose to
@@ -254,13 +254,13 @@ implementation of the <code>summary</code> method</p>
 <p>If we wanted to use this default implementation to summarize instances of
 <code>NewsArticle</code> instead of defining a custom implementation like we did in
 Listing 10-12, we would specify an empty <code>impl</code> block:</p>
-<pre><code class="language-rust,ignore">impl Summarizable for NewsArticle {}
+<pre><code class="language-rust ignore">impl Summarizable for NewsArticle {}
 </code></pre>
 <p>Even though we're no longer choosing to define the <code>summary</code> method on
 <code>NewsArticle</code> directly, since the <code>summary</code> method has a default implementation
 and we specified that <code>NewsArticle</code> implements the <code>Summarizable</code> trait, we can
 still call the <code>summary</code> method on an instance of <code>NewsArticle</code>:</p>
-<pre><code class="language-rust,ignore">let article = NewsArticle {
+<pre><code class="language-rust ignore">let article = NewsArticle {
     headline: String::from(&quot;Penguins win the Stanley Cup Championship!&quot;),
     location: String::from(&quot;Pittsburgh, PA, USA&quot;),
     author: String::from(&quot;Iceburgh&quot;),
@@ -294,7 +294,7 @@ calls the <code>author_summary</code> method:</p>
 </code></pre>
 <p>In order to use this version of <code>Summarizable</code>, we're only required to define
 <code>author_summary</code> when we implement the trait on a type:</p>
-<pre><code class="language-rust,ignore">impl Summarizable for Tweet {
+<pre><code class="language-rust ignore">impl Summarizable for Tweet {
     fn author_summary(&amp;self) -&gt; String {
         format!(&quot;@{}&quot;, self.username)
     }
@@ -303,7 +303,7 @@ calls the <code>author_summary</code> method:</p>
 <p>Once we define <code>author_summary</code>, we can call <code>summary</code> on instances of the
 <code>Tweet</code> struct, and the default implementation of <code>summary</code> will call the
 definition of <code>author_summary</code> that we've provided.</p>
-<pre><code class="language-rust,ignore">let tweet = Tweet {
+<pre><code class="language-rust ignore">let tweet = Tweet {
     username: String::from(&quot;horse_ebooks&quot;),
     content: String::from(&quot;of course, as you probably already know, people&quot;),
     reply: false,
@@ -315,7 +315,7 @@ println!(&quot;1 new tweet: {}&quot;, tweet.summary());
 <p>This will print <code>1 new tweet: (Read more from @horse_ebooks...)</code>.</p>
 <p>Note that it is not possible to call the default implementation from an
 overridden implementation.</p>
-<a class="header" href="#trait-bounds" name="trait-bounds"><h3>Trait Bounds</h3></a>
+<a class="header" href="ch10-02-traits.html#trait-bounds" name="trait-bounds"><h3>Trait Bounds</h3></a>
 <p>Now that we've defined traits and implemented those traits on types, we can use
 traits with generic type parameters. We can constrain generic types so that
 rather than being any type, the compiler will ensure that the type will be
@@ -328,7 +328,7 @@ the <code>summary</code> method on its parameter <code>item</code>, which is of 
 To be able to call <code>summary</code> on <code>item</code> without getting an error, we can use
 trait bounds on <code>T</code> to specify that <code>item</code> must be of a type that implements
 the <code>Summarizable</code> trait:</p>
-<pre><code class="language-rust,ignore">pub fn notify&lt;T: Summarizable&gt;(item: T) {
+<pre><code class="language-rust ignore">pub fn notify&lt;T: Summarizable&gt;(item: T) {
     println!(&quot;Breaking news! {}&quot;, item.summary());
 }
 </code></pre>
@@ -349,10 +349,10 @@ own trait bounds. Specifying lots of trait bound information in the angle
 brackets between a function's name and its parameter list can get hard to read,
 so there's an alternate syntax for specifying trait bounds that lets us move
 them to a <code>where</code> clause after the function signature. So instead of:</p>
-<pre><code class="language-rust,ignore">fn some_function&lt;T: Display + Clone, U: Clone + Debug&gt;(t: T, u: U) -&gt; i32 {
+<pre><code class="language-rust ignore">fn some_function&lt;T: Display + Clone, U: Clone + Debug&gt;(t: T, u: U) -&gt; i32 {
 </code></pre>
 <p>We can write this instead with a <code>where</code> clause:</p>
-<pre><code class="language-rust,ignore">fn some_function&lt;T, U&gt;(t: T, u: U) -&gt; i32
+<pre><code class="language-rust ignore">fn some_function&lt;T, U&gt;(t: T, u: U) -&gt; i32
     where T: Display + Clone,
           U: Clone + Debug
 {
@@ -360,7 +360,7 @@ them to a <code>where</code> clause after the function signature. So instead of:
 <p>This is less cluttered and makes this function's signature look more similar to
 a function without lots of trait bounds, in that the function name, parameter
 list, and return type are close together.</p>
-<a class="header" href="#fixing-the-largest-function-with-trait-bounds" name="fixing-the-largest-function-with-trait-bounds"><h3>Fixing the <code>largest</code> Function with Trait Bounds</h3></a>
+<a class="header" href="ch10-02-traits.html#fixing-the-largest-function-with-trait-bounds" name="fixing-the-largest-function-with-trait-bounds"><h3>Fixing the <code>largest</code> Function with Trait Bounds</h3></a>
 <p>So any time you want to use behavior defined by a trait on a generic, you need
 to specify that trait in the generic type parameter's type bounds. We can now
 fix the definition of the <code>largest</code> function that uses a generic type parameter
@@ -379,7 +379,7 @@ use the greater-than operator, we need to specify <code>PartialOrd</code> in the
 bounds for <code>T</code> so that the <code>largest</code> function will work on slices of any type
 that can be compared. We don't need to bring <code>PartialOrd</code> into scope because
 it's in the prelude.</p>
-<pre><code class="language-rust,ignore">fn largest&lt;T: PartialOrd&gt;(list: &amp;[T]) -&gt; T {
+<pre><code class="language-rust ignore">fn largest&lt;T: PartialOrd&gt;(list: &amp;[T]) -&gt; T {
 </code></pre>
 <p>If we try to compile this, we'll get different errors:</p>
 <pre><code class="language-text">error[E0508]: cannot move out of type `[T]`, a non-copy array

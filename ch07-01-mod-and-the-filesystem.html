@@ -67,7 +67,7 @@
                 </div>
 
                 <div id="content" class="content">
-                    <a class="header" href="#mod-and-the-filesystem" name="mod-and-the-filesystem"><h2><code>mod</code> and the Filesystem</h2></a>
+                    <a class="header" href="ch07-01-mod-and-the-filesystem.html#mod-and-the-filesystem" name="mod-and-the-filesystem"><h2><code>mod</code> and the Filesystem</h2></a>
 <p>We’ll start our module example by making a new project with Cargo, but instead
 of creating a binary crate, we’re going to make a library crate: a project that
 other people can pull into their projects as a dependency. We saw this with the
@@ -101,7 +101,7 @@ to only compile our library crate’s code.</p>
 <p>We’re going to look at different options for organizing your library’s code
 which will be suitable in a variety of situations, depending on the intentions
 you have for your code.</p>
-<a class="header" href="#module-definitions" name="module-definitions"><h3>Module Definitions</h3></a>
+<a class="header" href="ch07-01-mod-and-the-filesystem.html#module-definitions" name="module-definitions"><h3>Module Definitions</h3></a>
 <p>For our <code>communicator</code> networking library, we’re first going to define a module
 named <code>network</code> that contains the definition of a function called <code>connect</code>.
 Every module definition in Rust starts with the <code>mod</code> keyword. Add this code to
@@ -191,7 +191,7 @@ they’ll need to be organized logically in order to keep track of them. What
 of your library think about your project’s domain. Use the techniques we’ve
 shown here to create side-by-side modules and nested modules in whatever
 structure you would like.</p>
-<a class="header" href="#moving-modules-to-other-files" name="moving-modules-to-other-files"><h3>Moving Modules to Other Files</h3></a>
+<a class="header" href="ch07-01-mod-and-the-filesystem.html#moving-modules-to-other-files" name="moving-modules-to-other-files"><h3>Moving Modules to Other Files</h3></a>
 <p>Modules form a hierarchical structure, much like another structure in computing
 that you’re used to: file systems! We can use Rust’s module system along with
 multiple files to split Rust projects up so that not everything lives in
@@ -233,7 +233,7 @@ out of <em>src/lib.rs</em> and into their own files.</p>
 <p>Let’s start by extracting the <code>client</code> module into another file. First, replace
 the <code>client</code> module code in <em>src/lib.rs</em> with the following:</p>
 <p><span class="filename">Filename: src/lib.rs</span></p>
-<pre><code class="language-rust,ignore">mod client;
+<pre><code class="language-rust ignore">mod client;
 
 mod network {
     fn connect() {
@@ -296,7 +296,7 @@ news is that they’re just warnings; our project was built successfully!</p>
 pattern. In <em>src/lib.rs</em>, delete the body of the <code>network</code> module and add a
 semicolon to the declaration, like so:</p>
 <p><span class="filename">Filename: src/lib.rs</span></p>
-<pre><code class="language-rust,ignore">mod client;
+<pre><code class="language-rust ignore">mod client;
 
 mod network;
 </code></pre>
@@ -319,7 +319,7 @@ work. We’re going to try anyway so that we can see the error. First change
 <em>src/network.rs</em> to have <code>mod server;</code> instead of the <code>server</code> module’s
 contents:</p>
 <p><span class="filename">Filename: src/network.rs</span></p>
-<pre><code class="language-rust,ignore">fn connect() {
+<pre><code class="language-rust ignore">fn connect() {
 }
 
 mod server;
@@ -422,7 +422,7 @@ module then goes into the <em>src/network/mod.rs</em> file, and the submodule
 <code>network::client</code> can have its own <em>src/network/client.rs</em> file. Now the
 top-level <em>src/client.rs</em> is unambiguously the code that belongs to the
 <code>client</code> module.</p>
-<a class="header" href="#rules-of-module-file-systems" name="rules-of-module-file-systems"><h3>Rules of Module File Systems</h3></a>
+<a class="header" href="ch07-01-mod-and-the-filesystem.html#rules-of-module-file-systems" name="rules-of-module-file-systems"><h3>Rules of Module File Systems</h3></a>
 <p>In summary, these are the rules of modules with regards to files:</p>
 <ul>
 <li>If a module named <code>foo</code> has no submodules, you should put the declarations

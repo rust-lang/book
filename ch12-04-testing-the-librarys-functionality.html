@@ -67,7 +67,7 @@
                 </div>
 
                 <div id="content" class="content">
-                    <a class="header" href="#testing-the-librarys-functionality" name="testing-the-librarys-functionality"><h2>Testing the Library's Functionality</h2></a>
+                    <a class="header" href="ch12-04-testing-the-librarys-functionality.html#testing-the-librarys-functionality" name="testing-the-librarys-functionality"><h2>Testing the Library's Functionality</h2></a>
 <p>Writing tests for the core functionality of our code is now easier since we
 extracted the logic into <em>src/lib.rs</em> and left all the argument parsing and
 error handling in <em>src/main.rs</em>. We can now call our code directly with various
@@ -208,7 +208,7 @@ to implement <code>grep</code>:</p>
 <p>Let's take each step at a time, starting with iterating through lines. Strings
 have a helpful method to handle this, conveniently named <code>lines</code>:</p>
 <p><span class="filename">Filename: src/lib.rs</span></p>
-<pre><code class="language-rust,ignore">fn grep&lt;'a&gt;(search: &amp;str, contents: &amp;'a str) -&gt; Vec&lt;&amp;'a str&gt; {
+<pre><code class="language-rust ignore">fn grep&lt;'a&gt;(search: &amp;str, contents: &amp;'a str) -&gt; Vec&lt;&amp;'a str&gt; {
     for line in contents.lines() {
         // do something with line
     }
@@ -220,7 +220,7 @@ Next, let's see if our line contains the search string. Luckily, strings have a
 helpful method named <code>contains</code> that does this for us! Using the <code>contains</code>
 method looks like this:</p>
 <p><span class="filename">Filename: src/lib.rs</span></p>
-<pre><code class="language-rust,ignore">fn grep&lt;'a&gt;(search: &amp;str, contents: &amp;'a str) -&gt; Vec&lt;&amp;'a str&gt; {
+<pre><code class="language-rust ignore">fn grep&lt;'a&gt;(search: &amp;str, contents: &amp;'a str) -&gt; Vec&lt;&amp;'a str&gt; {
     for line in contents.lines() {
         if line.contains(search) {
             // do something with line
@@ -281,7 +281,7 @@ improve it.</p>
 the <code>run</code> function: we never printed out the results! We'll do that by adding
 a <code>for</code> loop that prints each line returned from the <code>grep</code> function:</p>
 <p><span class="filename">Filename: src/lib.rs</span></p>
-<pre><code class="language-rust,ignore">pub fn run(config: Config) -&gt; Result&lt;(), Box&lt;Error&gt;&gt; {
+<pre><code class="language-rust ignore">pub fn run(config: Config) -&gt; Result&lt;(), Box&lt;Error&gt;&gt; {
     let mut f = File::open(config.filename)?;
 
     let mut contents = String::new();
