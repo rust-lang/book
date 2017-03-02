@@ -36,7 +36,7 @@ to be able to use smart pointers in the same places that we can use regular
 references. To enable that, we can override the behavior of the `*` operator by
 implementing the `Deref` trait.
 
-Listing 15-5 has an example of overriding `*` using `Deref` on a struct we've
+Listing 15-7 has an example of overriding `*` using `Deref` on a struct we've
 defined to hold mp3 data and metadata. `Mp3` is, in a sense, a smart pointer:
 it owns the `Vec<u8>` data containing the audio. In addition, it holds some
 optional metadata, in this case the artist and title of the song in the audio
@@ -79,7 +79,7 @@ fn main() {
 
 <figcaption>
 
-Listing 15-5: An implementation of the `Deref` trait on a struct that holds mp3
+Listing 15-7: An implementation of the `Deref` trait on a struct that holds mp3
 file data and metadata
 
 </figcaption>

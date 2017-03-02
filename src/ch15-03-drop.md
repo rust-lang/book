@@ -21,7 +21,7 @@ The way we specify code should be run when a value goes out of scope is by
 implementing the `Drop` trait. The `Drop` trait requires us to implement one
 method named `drop` that takes a mutable reference to `self`.
 
-Listing 15-6 shows a `CustomSmartPointer` struct that doesn't actually do
+Listing 15-8 shows a `CustomSmartPointer` struct that doesn't actually do
 anything, but we're printing out `CustomSmartPointer created.` right after we
 create an instance of the struct and `Dropping CustomSmartPointer!` when the
 instance goes out of scope so that we can see when each piece of code gets run.
@@ -51,7 +51,7 @@ fn main() {
 
 <figcaption>
 
-Listing 15-6: A `CustomSmartPointer` struct that implements the `Drop` trait,
+Listing 15-8: A `CustomSmartPointer` struct that implements the `Drop` trait,
 where we could put code that would clean up after the `CustomSmartPointer`.
 
 </figcaption>
@@ -82,7 +82,7 @@ trait is that it's taken care of automatically for us. We'll see an example of
 a case when we'll need to drop a value earlier than when it goes out of scope
 in Chapter 16 when we're talking about concurrency. For now, let's just see
 that it's possible, and `std::mem::drop` is in the prelude so we can just call
-`drop` as shown in Listing 15-7:
+`drop` as shown in Listing 15-9:
 
 <figure>
 
@@ -97,7 +97,7 @@ fn main() {
 
 <figcaption>
 
-Listing 15-7: Calling `std::mem::drop` to explicitly drop a value before it
+Listing 15-9: Calling `std::mem::drop` to explicitly drop a value before it
 goes out of scope
 
 </figcaption>
@@ -114,7 +114,7 @@ Wait for it...
 ```
 
 Note that we aren't allowed to call the `drop` method that we defined directly:
-if we replaced `drop(c)` in Listing 15-7 with `c.drop()`, we'll get a compiler
+if we replaced `drop(c)` in Listing 15-9 with `c.drop()`, we'll get a compiler
 error that says `explicit destructor calls not allowed`. We're not allowed to
 call `Drop::drop` directly because when Rust inserts its call to `Drop::drop`
 automatically when the value goes out of scope, then the value would get
