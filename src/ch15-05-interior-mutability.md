@@ -52,6 +52,11 @@ context, you'll get a compile time error.
 With references, we use the `&` and `&mut` syntax to create references and
 mutable references, respectively. But with `RefCell<T>`, we use the `borrow`
 and `borrow_mut` methods, which are part of the safe API that `RefCell<T>` has.
+`borrow` returns the smart pointer type `Ref`, and `borrow_mut` returns the
+smart pointer type `RefMut`. These two types implement `Deref` so that we can
+treat them as if they're regular references. `Ref` and `RefMut` track the
+borrows dynamically, and their implementation of `Drop` releases the borrow
+dynamically.
 
 Listing 15-11 shows what it looks like to use `RefCell<T>` with functions that
 borrow their parameters immutably and mutably. Note that the `data` variable is
