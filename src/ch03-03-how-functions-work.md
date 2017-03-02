@@ -112,7 +112,7 @@ fn another_function(x: i32, y: i32) {
 
 This example creates a function with two parameters, both of which are `i32`
 types. The function then prints out the values in both of its parameters. Note
-that function parameters don't all need to be the same type - they just happen
+that the function parameters don't need to be of the same type - they just happen
 to be in this example.
 
 Let’s try running this code. Replace the program currently in your *function*
@@ -144,7 +144,7 @@ functions.
 
 We’ve actually already used statements and expressions. *Statements* are
 instructions that perform some action and do not return a value. *Expressions*
-evaluate to a resulting value. Let’s look at some examples.
+evaluate to a value. Let’s look at some examples.
 
 Creating a variable and assigning a value to it with the `let` keyword is a
 statement. In Listing 3-3, `let y = 6;` is a statement:
