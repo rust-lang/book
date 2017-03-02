@@ -181,16 +181,16 @@ while your program is running has a performance penalty.
 ### Multiple Owners of Mutable Data by Combining `Rc<T>` and `RefCell<T>`
 
 So why would we choose to make the tradeoffs that using `RefCell<T>` involves?
-Well, remember when we said that `Rc<T>` has to store immutable data? Given
-that `RefCell<T>` is immutable, but has interior mutability, we can combine
-`Rc<T>` and `RefCell<T>` to get a type that's both reference counted and
-mutable. Listing 15-12 shows an example of how to do that, again going back to
-our cons list from Listing 15-9. In this example, instead of storing `i32`
-values in the cons list, we'll be storing `Rc<RefCell<i32>>` values. We want to
-store that type so that we can have an owner of the value that's not part of
-the list (the multiple owners functionality that `Rc<T>` provides), and so we
-can mutate the inner `i32` value (the interior mutability functionality that
-`RefCell<T>` provides):
+Well, remember when we said that `Rc<T>` only lets you have an immutable
+reference to `T`? Given that `RefCell<T>` is immutable, but has interior
+mutability, we can combine `Rc<T>` and `RefCell<T>` to get a type that's both
+reference counted and mutable. Listing 15-12 shows an example of how to do
+that, again going back to our cons list from Listing 15-9. In this example,
+instead of storing `i32` values in the cons list, we'll be storing
+`Rc<RefCell<i32>>` values. We want to store that type so that we can have an
+owner of the value that's not part of the list (the multiple owners
+functionality that `Rc<T>` provides), and so we can mutate the inner `i32`
+value (the interior mutability functionality that `RefCell<T>` provides):
 
 <figure>
 <span class="filename">Filename: src/main.rs</span>
