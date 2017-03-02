@@ -158,234 +158,249 @@ reference cycles and memory leaks is using `Weak<T>`. Let's explore that next!
 
 ### Prevent Reference Cycles: Turn an `Rc<T>` into a `Weak<T>`
 
-To help with this problem, the Rust standard library contains another smart
-pointer type: `Weak<T>`. We've been showing how cloning an `Rc<T>` increases
-the `strong_count` of references; `Weak<T>` is a way to reference an `Rc<T>`
-that does not increment the `strong_count`: instead it increments the
-`weak_count` of references to an `Rc`. When an `Rc` goes out of scope, the
-inner value will get dropped if the `strong_count` is 0, even if the
-`weak_count` is not 0. To be able to get the value from a `Weak<T>`, we first
-have to upgrade it to an `Option<Rc<T>>` by using the `upgrade` function. The
-result of upgrading a `Weak<T>` will be `Some` if the `Rc` value has not been
-dropped yet, and `None` if the `Rc` value has been dropped.
+The Rust standard library provides `Weak<T>`, a smart pointer type for use in
+situations that have cycles of references but only one direction expresses
+ownership. We've been showing how cloning an `Rc<T>` increases the
+`strong_count` of references; `Weak<T>` is a way to reference an `Rc<T>` that
+does not increment the `strong_count`: instead it increments the `weak_count`
+of references to an `Rc`. When an `Rc` goes out of scope, the inner value will
+get dropped if the `strong_count` is 0, even if the `weak_count` is not 0. To
+be able to get the value from a `Weak<T>`, we first have to upgrade it to an
+`Option<Rc<T>>` by using the `upgrade` method. The result of upgrading a
+`Weak<T>` will be `Some` if the `Rc` value has not been dropped yet, and `None`
+if the `Rc` value has been dropped. Because `upgrade` returns an `Option`, we
+know Rust will make sure we handle both the `Some` case and the `None` case and
+we won't be trying to use an invalid pointer.
 
-Instead of the list in Listing 15-14 where each element knows only about the
-next element, let's say we want a list where the elements know about their next
-element *and* their previous element.
+Instead of the list in Listing 15-14 where each item knows only about the
+next item, let's say we want a tree where the items know about their children
+items *and* their parent items.
 
-So in order to make it possible to create lists that point to each other but
-not create reference cycles, in Listing 15-15, we're going to change our
-definition of `List<T>` again to hold a `Weak<T>` instead of an `Rc<T>`.
+Let's start just with a struct named `Node` that holds its own `i32` value as
+well as references to its children `Node` values:
+
+<span class="filename">Filename: src/main.rs</span>
+
+```rust
+#[derive(Debug)]
+struct Node {
+    value: i32,
+    children: RefCell<Vec<Rc<Node>>>,
+}
+```
+
+We want to be able to have a `Node` own its children, and we also want to be
+able to have variables own each node so we can access them directly. That's why
+the items in the `Vec` are `Rc<Node>` values. We want to be able to modify what
+nodes are another node's children, so that's why we have a `RefCell` in
+`children` around the `Vec`. Now let's create one instance of `Node` named
+`leaf` with the value 3 and no children, and another instance named `branch`
+with the value 5 and `leaf` as one of its children:
 
 <figure>
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-#[derive(Debug)]
-struct Node<T> {
-    value: T,
-    parent: RefCell<Weak<Node<T>>>,
-    children: RefCell<Vec<Rc<Node<T>>>>,
-}
-
-impl<T> Node<T> {
-    fn parent(&self) -> Option<Rc<Node<T>>> {
-        self.parent.borrow().upgrade()
-    }
-}
-
-use std::rc::{Rc, Weak};
-use std::cell::RefCell;
-
 fn main() {
     let leaf = Rc::new(Node {
-        value: 0,
-        parent: RefCell::new(Weak::new()),
-        children: RefCell::new(vec![]),
-    });
-
-    let another_leaf = Rc::new(Node {
-        value: 10,
-        parent: RefCell::new(Weak::new()),
+        value: 3,
         children: RefCell::new(vec![]),
     });
 
     let branch = Rc::new(Node {
-        value: 50,
+        value: 5,
+        children: RefCell::new(vec![leaf.clone()]),
+    });
+}
+```
+
+<figcaption>
+
+Listing 15-15: Creating a `leaf` node and a `branch` node where `branch` has
+`leaf` as one of its children but `leaf` has no reference to `branch`
+
+</figcaption>
+</figure>
+
+The `Node` in `leaf` now has two owners: `leaf` and `branch`, since we clone
+the `Rc` in `leaf` and store that in `branch`. The `Node` in `branch` knows
+it's related to `leaf` since `branch` has a reference to `leaf` in
+`branch.children`. However, `leaf` doesn't know that it's related to `branch`,
+and we'd like `leaf` to know that `branch` is its parent.
+
+To do that, we're going to add a `parent` field to our `Node` struct
+definition, but what should the type of `parent` be? We know it can't contain
+an `Rc<T>`, since `leaf.parent` would point to `branch` and `branch.children`
+contains a pointer to `leaf`, which makes a reference cycle. Neither `leaf` nor
+`branch` would get dropped since they would always refer to each other and
+their reference counts would never be zero.
+
+So instead of `Rc`, we're going to make the type of `parent` use `Weak<T>`,
+specifically a `RefCell<Weak<Node>>`:
+
+<span class="filename">Filename: src/main.rs</span>
+
+```rust
+#[derive(Debug)]
+struct Node {
+    value: i32,
+    parent: RefCell<Weak<Node>>,
+    children: RefCell<Vec<Rc<Node>>>,
+}
+```
+
+This way, a node will be able to refer to its parent node if it has one,
+but it does not own its parent. A parent node will be dropped even if
+it has child nodes referring to it, as long as it doesn't have a parent
+node as well. Now let's update `main` to look like this:
+
+<figure>
+<span class="filename">Filename: src/main.rs</span>
+
+```rust
+fn main() {
+    let leaf = Rc::new(Node {
+        value: 3,
         parent: RefCell::new(Weak::new()),
-        children: RefCell::new(vec![leaf.clone(), another_leaf.clone()]),
+        children: RefCell::new(vec![]),
+    });
+
+    println!("leaf parent = {:?}", leaf.parent.borrow().upgrade());
+
+    let branch = Rc::new(Node {
+        value: 5,
+        parent: RefCell::new(Weak::new()),
+        children: RefCell::new(vec![leaf.clone()]),
     });
 
     *leaf.parent.borrow_mut() = Rc::downgrade(&branch);
-    *another_leaf.parent.borrow_mut() = Rc::downgrade(&branch);
 
-    println!("leaf = {:?}", leaf);
-    println!("leaf parent = {:?}", leaf.parent());
-
-    println!("another_leaf = {:?}", another_leaf);
-    println!("another_leaf parent = {:?}", another_leaf.parent());
-
-    println!("branch = {:?}", branch);
-    println!("branch parent = {:?}", branch.parent());
-
-    {
-        let another_branch = Rc::new(Node {
-            value: 70,
-            parent: RefCell::new(Weak::new()),
-            children: RefCell::new(vec![branch.clone()]),
-        });
-
-        *branch.parent.borrow_mut() = Rc::downgrade(&another_branch);
-
-        println!("leaf = {:?}", leaf);
-        println!("leaf parent = {:?}", leaf.parent());
-
-        println!("another_leaf = {:?}", another_leaf);
-        println!("another_leaf parent = {:?}", another_leaf.parent());
-
-        println!("branch = {:?}", branch);
-        println!("branch parent = {:?}", branch.parent());
-
-        println!("another_branch = {:?}", another_branch);
-        println!("another_branch parent = {:?}", another_branch.parent());
-
-        assert_eq!(2, Rc::strong_count(&leaf));
-        assert_eq!(0, Rc::weak_count(&leaf));
-
-        assert_eq!(2, Rc::strong_count(&another_leaf));
-        assert_eq!(0, Rc::weak_count(&another_leaf));
-
-        assert_eq!(2, Rc::strong_count(&branch));
-        assert_eq!(2, Rc::weak_count(&branch));
-
-        assert_eq!(1, Rc::strong_count(&another_branch));
-        assert_eq!(1, Rc::weak_count(&another_branch));
-    }
-
-    println!("leaf = {:?}", leaf);
-    println!("leaf parent = {:?}", leaf.parent());
-
-    println!("another_leaf = {:?}", another_leaf);
-    println!("another_leaf parent = {:?}", another_leaf.parent());
-
-    println!("branch = {:?}", branch);
-    println!("branch parent = {:?}", branch.parent());
-
-    assert_eq!(2, Rc::strong_count(&leaf));
-    assert_eq!(0, Rc::weak_count(&leaf));
-
-    assert_eq!(2, Rc::strong_count(&another_leaf));
-    assert_eq!(0, Rc::weak_count(&another_leaf));
-
-    assert_eq!(1, Rc::strong_count(&branch));
-    assert_eq!(2, Rc::weak_count(&branch));
+    println!("leaf parent = {:?}", leaf.parent.borrow().upgrade());
 }
 ```
 
 <figcaption>
 
-Listing 15-15: TODO rework text around here, get some reviews on this example
+Listing 15-16: A `leaf` node and a `branch` node where `leaf` has a `Weak`
+reference to its parent, `branch`
 
 </figcaption>
 </figure>
 
-We've also modified the `tail` method: not only does it return `None` when
-`self` is `Nil` and doesn't have a `tail`, it now also returns `None` if the
-value that the `Weak<T>` references has been dropped. The `upgrade` method on a
-`Weak<T>` value returns `Some` containing an `Rc` if the value has not yet been
-dropped and `None` if the value has been dropped.
+Creating the `leaf` node looks similar; since it starts out without a parent,
+we create a new `Weak` reference instance. When we try to get a reference to
+the parent of `leaf` by using the `upgrade` method, we'll get a `None` value,
+as shown by the first `println!` that outputs:
 
-TODO: is this bad software design, collapsing two cases that return `None` like this???
+```text
+leaf parent = None
+```
 
-To create `Weak<T>` values, we call the `Rc::downgrade` associated function,
-which takes an `&Rc<T>` as an argument, and gives a `Weak<T>` back.
+Similarly, `branch` will also have a new `Weak` reference, since `branch` does
+not have a parent node. We still make `leaf` be one of the children of
+`branch`. Once we have a new `Node` instance in `branch`, we can modify `leaf`
+to have a `Weak` reference to `branch` for its parent. We use the `borrow_mut`
+method on the `RefCell` in the `parent` field of `leaf`, then we use the
+`Rc::downgrade` function to create a `Weak` reference to `branch` from the `Rc`
+in `branch.`
 
-Listing 15-16 shows a `main` method where we're trying to create `a` and `b`
-lists that point to each other, similarly to what we did in Listing 15-14, but
-this time we won't have a reference cycle and the values will be dropped when
-they go out of scope at the end of `main`:
+When we print out the parent of `leaf` again, this time we'll get a `Some`
+variant holding `branch`. Also notice we don't get a cycle printed out that
+eventually ends in a stack overflow like we did in Listing 15-14: the `Weak`
+references are just printed as `(Weak)`:
+
+```text
+leaf parent = Some(Node { value: 5, parent: RefCell { value: (Weak) },
+children: RefCell { value: [Node { value: 3, parent: RefCell { value: (Weak) },
+children: RefCell { value: [] } }] } })
+```
+
+The fact that we don't get infinite output (or at least until the stack
+overflows) is one way we can see that we don't have a reference cycle in this
+case. Another way we can tell is by looking at the values we get from calling
+`Rc::strong_count` and `Rc::weak_count`. Let's create a new inner scope and
+move the creation of `branch` in there, so that we can see what happens when
+`branch` is created and then dropped when it goes out of scope:
 
 <figure>
+<span class="filename">Filename: src/main.rs</span>
 
-```rust
-# #[derive(Debug)]
-# enum List<T> {
-#     Cons(T, RefCell<Weak<List<T>>>),
-#     Nil,
-# }
-#
-# impl<T> List<T> {
-#     fn tail(&self) -> Option<Rc<List<T>>> {
-#         match *self {
-#             Cons(_, ref n) => (&*n.borrow()).upgrade(),
-#             Nil => None,
-#         }
-#     }
-# }
-#
-use List::{Cons, Nil};
-use std::rc::{Rc, Weak};
-use std::cell::RefCell;
-
+```
 fn main() {
-    let nil = Rc::new(Nil);
+    let leaf = Rc::new(Node {
+        value: 3,
+        parent: RefCell::new(Weak::new()),
+        children: RefCell::new(vec![]),
+    });
 
-    let a = Rc::new(Cons(5, RefCell::new(Rc::downgrade(&nil))));
-
-    println!("a.tail() = {:?}", a.tail());
+    println!(
+        "leaf strong = {}, weak = {}",
+        Rc::strong_count(&leaf),
+        Rc::weak_count(&leaf),
+    );
 
     {
-        let b = Rc::new(Cons(10, RefCell::new(Rc::downgrade(&a))));
+        let branch = Rc::new(Node {
+            value: 5,
+            parent: RefCell::new(Weak::new()),
+            children: RefCell::new(vec![leaf.clone()]),
+        });
+        *leaf.parent.borrow_mut() = Rc::downgrade(&branch);
 
-        if let Cons(_, ref link) = *a {
-            *link.borrow_mut() = Rc::downgrade(&b);
-        }
+        println!(
+            "branch strong = {}, weak = {}",
+            Rc::strong_count(&branch),
+            Rc::weak_count(&branch),
+        );
 
-        println!("a.tail() = {:?}", a.tail());
-        println!("b.tail() = {:?}", b.tail());
+        println!(
+            "leaf strong = {}, weak = {}",
+            Rc::strong_count(&leaf),
+            Rc::weak_count(&leaf),
+        );
     }
 
-    println!("a.tail() = {:?}", a.tail());
+    println!("leaf parent = {:?}", leaf.parent.borrow().upgrade());
+    println!(
+        "leaf strong = {}, weak = {}",
+        Rc::strong_count(&leaf),
+        Rc::weak_count(&leaf),
+    );
 }
 ```
 
 <figcaption>
 
-Listing 15-16: Creating `List<T>` values using weak references
+Listing 15-17: Creating `branch` in an inner scope and examining strong and
+weak reference counts of `leaf` and `branch`
 
 </figcaption>
 </figure>
 
-First, we create a variable for the `Rc<T>` that holds the `Nil` value, so that
-it's clearer to see that we call `Rc::downgrade` and pass a reference to `nil`
-when we create `a`. At that point, we print out the value of `a.tail()` and we
-can see that it's `Some(Nil)`.
+Right after creating `leaf`, its strong count is 1 (for `leaf` itself) and its
+weak count is 0. In the inner scope, after we create `branch` and associate
+`leaf` and `branch`, `branch` will have a strong count of 1 (for `branch`
+itself) and a weak count of 1 (for `leaf.parent` pointing to `branch` with a
+`Weak<T>`). `leaf` will have a strong count of 2, since `branch` now has a
+clone the `Rc` of `leaf` stored in `branch.children`. `leaf` still has a weak
+count of 0.
 
-We've added an inner scope in order to demonstrate what happens when `b` goes
-out of scope. In the inner scope, we create `b` that has a weak reference to
-`a`, and then we modify `a` to have a weak reference to `b` instead of to
-`nil`. At the end of the inner scope, we can see that `a` and `b` are pointing
-to each other, but through weak references.
+When the inner scope ends, `branch` goes out of scope, and its strong count
+decreases to 0, so its `Node` gets dropped. The weak count of 1 from
+`leaf.parent` has no bearing on whether `Node` gets dropped or not, so we don't
+have a memory leak!
 
-At the end of the inner scope, `b` goes out of scope. The value that the
-`Rc<T>` in `b` holds gets dropped, even though `a` still references it, because
-the reference in `a` is a weak reference that doesn't count when Rust decides
-whether the value in `b` should be dropped or not. At the end of `main` when we
-print out `a.tail()` again, we can see that we now get a `None` value since the
-value that the weak reference in `a` was pointing to has been dropped. Success!
-We've broken the cycle.
+If we try to access the parent of `leaf` after the end of the scope, we'll get
+`None` again like we did before `leaf` had a parent. At the end of the program,
+`leaf` has a strong count of 1 and a weak count of 0, since `leaf` is now the
+only thing pointing to it again.
 
-Add some `println!` statements at various places that display the values that
-`Rc::strong_count` and `Rc::weak_count` return for `a` and `b` at different
-points in this example to see which parts of the code increase or decrease the
-strong or weak counts.
-
-If you're doing complex things with `Rc<T>`s, you should investigate if it's
-possible for you to have a cycle, and insert a `Weak<T>` so that you don't
-create cycles and leak memory. The specifics depend on exactly what you're
-doing, but luckily, this isn't a Rust-specific idea; all of this translates
-over to other reference counting libraries in other languages, so doing some
-reading about it should help you.
+All of the logic managing the counts and whether a value should be dropped or
+not was managed by `Rc` and `Weak` and their implementations of the `Drop`
+trait. By specifying that the relationship from a child to its parent should be
+a `Weak<T>` reference in the definition of `Node`, we're able to have parent
+nodes point to child nodes and vice versa without creating a reference cycle
+and memory leaks.
 
 ## Summary
 
