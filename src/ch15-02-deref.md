@@ -2,12 +2,15 @@
 
 The first important smart pointer-related trait is `Deref`, which allows us to
 override `*`, the dereference operator (as opposed to the multiplication
-operator). Overriding `*` for smart pointers makes accessing the data behind
-the smart pointer convenient, and we'll talk about what we mean by convenient
-in the next section about deref coercions. Remember using `*` when we talked
-about references, like this:
+operator or the glob operator). Overriding `*` for smart pointers makes
+accessing the data behind the smart pointer convenient, and we'll talk about
+what we mean by convenient when we get to deref coercions later in this section.
 
-TODO: put this back in ch 4
+We briefly mentioned the dereference operator in Chapter 8, in the hash map
+section titled "Update a Value Based on the Old Value". We had a mutable
+reference, and we wanted to change the value that the reference was pointing
+to. In order to do that, first we had to dereference the reference. Here's
+another example using references to `i32` values:
 
 ```rust
 let mut x = 5;
@@ -20,12 +23,20 @@ let mut x = 5;
 assert_eq!(6, x);
 ```
 
-We use `*y` to access the data that `y` refers to, rather than `y` itself,
-which is a reference.
+We use `*y` to access the data that the mutable reference in `y` refers to,
+rather than the mutable reference itself. We can then modify that data, in this
+case by adding 1.
 
-END TODO
+With references that aren't smart pointers, there's only one value that the
+reference is pointing to, so the dereference operation is straightforward.
+Smart pointers can also store metadata about the pointer or the data. When
+dereferencing a smart pointer, we only want the data, not the metadata, since
+dereferencing a regular reference only gives us data and not metadata. We want
+to be able to use smart pointers in the same places that we can use regular
+references. To enable that, we can override the behavior of the `*` operator by
+implementing the `Deref` trait.
 
-Listing 15-5 has an example of overloading `*` using `Deref` on a struct we've
+Listing 15-5 has an example of overriding `*` using `Deref` on a struct we've
 defined to hold mp3 data and metadata. `Mp3` is, in a sense, a smart pointer:
 it owns the `Vec<u8>` data containing the audio. In addition, it holds some
 optional metadata, in this case the artist and title of the song in the audio
@@ -165,8 +176,6 @@ so there is no run-time penalty for taking advantage of deref coercion.
 
 There's also a `DerefMut` trait for overriding `*` on `&mut T` for use in
 assignment in the same fashion that we use `Deref` to override `*` on `&T`s.
-
-TODO: insert x/y example here
 
 Rust does deref coercion when it finds types and trait implementations in three
 cases:
