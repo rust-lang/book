@@ -53,6 +53,7 @@ CStr
 CString
 ctrl
 Ctrl
+CustomSmartPointer
 deallocated
 deallocating
 deallocation
@@ -210,6 +211,7 @@ refactor
 refactoring
 refcell
 RefCell
+RefMut
 repr
 retweet
 ripgrep

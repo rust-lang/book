@@ -182,6 +182,9 @@ well as references to its children `Node` values:
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
+use std::rc::Rc;
+use std::cell::RefCell;
+
 #[derive(Debug)]
 struct Node {
     value: i32,
@@ -241,6 +244,9 @@ specifically a `RefCell<Weak<Node>>`:
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
+use std::rc::{Rc, Weak};
+use std::cell::RefCell;
+
 #[derive(Debug)]
 struct Node {
     value: i32,
