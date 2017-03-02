@@ -139,11 +139,23 @@ variant. The `Cons` variant holds a value of type `i32` and a value of type
 `List`, so `Cons` needs an amount of space equal to the size of an `i32` plus
 the size of a `List`. To figure out how much memory a `List` needs, it looks at
 its variants, starting with the `Cons` variant. The `Cons` variant holds a
-value of type `i32` and a value of type `List`, and this continues infinitely.
-Rust can't figure out how much space to allocate for recursively defined types,
-so the compiler gives the error in Listing 15-3.
+value of type `i32` and a value of type `List`, and this continues infinitely,
+as shown in Figure 15-4.
 
-The compiler did give a helpful suggestion in the error output:
+<figure>
+
+<img alt="Depiction of an infinite Cons list" src="img/trpl15-01.svg" class="center" style="width: 50%;" />
+
+<figcaption>
+
+Figure 15-4: An infinite `List` consisting of infinite `Cons` variants
+
+</figcaption>
+</figure>
+
+Rust can't figure out how much space to allocate for recursively defined types,
+so the compiler gives the error in Listing 15-3. The error did include this
+helpful suggestion:
 
 ```text
 = help: insert indirection (e.g., a `Box`, `Rc`, or `&`) at some point to
@@ -154,7 +166,7 @@ Because a `Box<T>` is a pointer, we always know how much space it needs: a
 pointer takes up a `usize` amount of space. The value of the `usize` will be
 the address of the heap data. The heap data can be any size, but the address to
 the start of that heap data will always fit in a `usize`. So if we change our
-definition from Listing 15-2 to look like the definition here in Listing 15-4,
+definition from Listing 15-2 to look like the definition here in Listing 15-5,
 and change `main` to use `Box::new` for the values inside the `Cons` variants
 like so:
 
@@ -179,7 +191,7 @@ fn main() {
 
 <figcaption>
 
-Listing 15-4: Definition of `List` that uses `Box<T>` in order to have a
+Listing 15-5: Definition of `List` that uses `Box<T>` in order to have a
 known size
 
 </figcaption>
@@ -191,10 +203,24 @@ variant. The `Cons` variant will need the size of `i32` plus the space to store
 a `usize`, since a box always has the size of a `usize`, no matter what it's
 pointing to. Then Rust looks at the `Nil` variant, which does not store a
 value, so `Nil` doesn't need any space. We've broken the infinite, recursive
-chain by adding in a box. This is the main area where boxes are useful:
-breaking up an infinite data structure so that the compiler can know what size
-it is. We'll look at another case where Rust has data of unknown size in
-Chapter 17 when we discuss trait objects.
+chain by adding in a box. Figure 15-6 shows what the `Cons` variant looks like
+now:
+
+<figure>
+
+<img alt="Depiction of a finite Cons list" src="img/trpl15-02.svg" class="center" />
+
+<figcaption>
+
+Figure 15-6: A `List` that is not infinitely sized since `Cons` holds a `Box`
+
+</figcaption>
+</figure>
+
+This is the main area where boxes are useful: breaking up an infinite data
+structure so that the compiler can know what size it is. We'll look at another
+case where Rust has data of unknown size in Chapter 17 when we discuss trait
+objects.
 
 Even though you won't be using boxes very often, they are a good way to
 understand the smart pointer pattern. Two of the aspects of `Box<T>` that are
