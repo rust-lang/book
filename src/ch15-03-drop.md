@@ -2,18 +2,18 @@
 
 The other trait that's important to the smart pointer pattern is the `Drop`
 trait. `Drop` lets us run some code when a value is about to go out of scope.
-The `Drop` trait is more generally useful than just smart pointers. For
-example, the `Drop` trait is often used on structs that manage a resource:
-often resources like files or network connections need to be closed when our
-code is done with them. We're discussing `Drop` in the context of smart
-pointers, though, because the functionality of the `Drop` trait is almost
-always used when implementing smart pointers.
+Smart pointers perform important cleanup when being dropped, like deallocating
+memory or decrementing a reference count. More generally, data types can manage
+resources beyond memory, like files or network connections, and use `Drop` to
+release those resources when our code is done with them. We're discussing
+`Drop` in the context of smart pointers, though, because the functionality of
+the `Drop` trait is almost always used when implementing smart pointers.
 
 In some other languages, we have to remember to call code to free the memory or
 resource every time we finish using an instance of a smart pointer. If we
 forget, the system our code is running on might get overloaded and crash. In
 Rust, we can specify that some code should be run when a value goes out of
-scope. The compiler will insert this code automatically. That means we don't
+scope, and the compiler will insert this code automatically. That means we don't
 need to remember to put this code everywhere we're done with an instance of
 these types, but we still won't leak resources!
 
@@ -21,36 +21,38 @@ The way we specify code should be run when a value goes out of scope is by
 implementing the `Drop` trait. The `Drop` trait requires us to implement one
 method named `drop` that takes a mutable reference to `self`.
 
-Listing 15-6 shows a `WebSocket` struct that doesn't actually connect to
-anything, but we're printing out `WebSocket created.` right after we create the
-struct and `Closing the socket!` when the instance goes out of scope so that we
-can see when each piece of code gets run:
+Listing 15-6 shows a `CustomSmartPointer` struct that doesn't actually do
+anything, but we're printing out `CustomSmartPointer created.` right after we
+create an instance of the struct and `Dropping CustomSmartPointer!` when the
+instance goes out of scope so that we can see when each piece of code gets run.
+Instead of a `println!` statement, you'd fill in `drop` with whatever cleanup
+code your smart pointer needs to run:
 
 <figure>
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-struct WebSocket {
-    uri: String,
+struct CustomSmartPointer {
+    data: String,
 }
 
-impl Drop for WebSocket {
+impl Drop for CustomSmartPointer {
     fn drop(&mut self) {
-        println!("Closing the socket!");
+        println!("Dropping CustomSmartPointer!");
     }
 }
 
 fn main() {
-    let w = WebSocket { uri: String::from("http://example.com/not-real") };
-    println!("WebSocket created.");
+    let c = CustomSmartPointer { data: String::from("some data") };
+    println!("CustomSmartPointer created.");
     println!("Wait for it...");
 }
 ```
 
 <figcaption>
 
-Listing 15-6: A `WebSocket` struct that implements the `Drop` trait, where we
-could put code that would close the socket.
+Listing 15-6: A `CustomSmartPointer` struct that implements the `Drop` trait,
+where we could put code that would clean up after the `CustomSmartPointer`.
 
 </figcaption>
 </figure>
@@ -58,16 +60,17 @@ could put code that would close the socket.
 The `Drop` trait is in the prelude, so we don't need to import it. The `drop`
 method implementation calls the `println!`; this is where you'd put the actual
 code needed to close the socket. In `main`, we create a new instance of
-`WebSocket` then print out `WebSocket created.` to be able to see that our code
-got to that point at runtime. At the end of `main`, our instance of `WebSocket`
-will go out of scope. Note that we didn't call the `drop` method explicitly.
+`CustomSmartPointer` then print out `CustomSmartPointer created.` to be able to
+see that our code got to that point at runtime. At the end of `main`, our
+instance of `CustomSmartPointer` will go out of scope. Note that we didn't call
+the `drop` method explicitly.
 
 When we run this program, we'll see:
 
 ```text
-WebSocket created.
+CustomSmartPointer created.
 Wait for it...
-Closing the socket!
+Dropping CustomSmartPointer!
 ```
 
 printed to the screen, which shows that Rust automatically called `drop` for us
@@ -85,9 +88,9 @@ that it's possible, and `std::mem::drop` is in the prelude so we can just call
 
 ```rust,ignore
 fn main() {
-    let w = WebSocket { uri: String::from("http://example.com/not-real") };
-    println!("WebSocket created.");
-    drop(w);
+    let c = CustomSmartPointer { data: String::from("some data") };
+    println!("CustomSmartPointer created.");
+    drop(c);
     println!("Wait for it...");
 }
 ```
@@ -101,17 +104,17 @@ goes out of scope
 </figure>
 
 Running this code will print the following, showing that the destructor code is
-called since `Closing the socket!` is printed between `WebSocket created.` and
-`Wait for it...`:
+called since `Dropping CustomSmartPointer!` is printed between
+`CustomSmartPointer created.` and `Wait for it...`:
 
 ```text
-WebSocket created.
-Closing the socket!
+CustomSmartPointer created.
+Dropping CustomSmartPointer!
 Wait for it...
 ```
 
 Note that we aren't allowed to call the `drop` method that we defined directly:
-if we replaced `drop(w)` in Listing 15-7 with `w.drop()`, we'll get a compiler
+if we replaced `drop(c)` in Listing 15-7 with `c.drop()`, we'll get a compiler
 error that says `explicit destructor calls not allowed`. We're not allowed to
 call `Drop::drop` directly because when Rust inserts its call to `Drop::drop`
 automatically when the value goes out of scope, then the value would get
