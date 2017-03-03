@@ -4,7 +4,7 @@ set -o errexit -o nounset
 
 rev=$(git rev-parse --short HEAD)
 
-cd book
+cd second-edition/book
 
 git init
 git config user.name "Steve Klabnik"
