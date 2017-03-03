@@ -1,0 +1,32 @@
+digraph {
+    rankdir="LR";
+    dpi=300.0;
+    node [shape="plaintext"];
+
+    table0[label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">
+        <TR><TD SIDES="B" PORT="ptr3">a</TD><TD SIDES="B" PORT="ptr0"></TD></TR>
+    </TABLE>>];
+
+    table1[label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">
+        <TR><TD PORT="pte0">5</TD><TD PORT="ptr1">  </TD></TR>
+    </TABLE>>];
+
+    table2[label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">
+        <TR><TD SIDES="B" PORT="pte1">b</TD><TD SIDES="B" PORT="pte2"></TD></TR>
+    </TABLE>>];
+
+    table3[label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">
+        <TR><TD PORT="ptr2">10</TD><TD PORT="pte3">  </TD></TR>
+    </TABLE>>];
+
+    edge[tailclip="false"];
+    table0:ptr0:c -> table1:pte0;
+    table1:ptr1:c -> table2:pte1;
+    table3:ptr2 -> table2:pte2 [ dir="back" ];
+    table0:ptr3 -> table3:pte3:c;
+
+    { rank="same"; table1; table2; }
+    { rank="same"; table0; table3; }
+
+}
+

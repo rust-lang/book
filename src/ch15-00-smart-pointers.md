@@ -1,112 +1,41 @@
 # Smart Pointers
 
-By smart pointers we mean a reference with more characteristics.
+*Pointer* is a generic programming term for something that refers to a location
+that stores some other data. We learned about Rust's references in Chapter 4;
+they're a plain sort of pointer indicated by the `&` symbol and borrow the
+value that they point to. *Smart pointers* are data structures that act like a
+pointer, but also have additional metadata and capabilities, such as reference
+counting. The smart pointer pattern originated in C++. In Rust, an additional
+difference between plain references and smart pointers is that references are a
+kind of pointer that only borrow data; by contrast, in many cases, smart
+pointers *own* the data that they point to.
 
-Example of something that doesn't work
+We've actually already encountered a few smart pointers in this book, even
+though we didn't call them that by name at the time. For example, in a certain
+sense, `String` and `Vec<T>` from Chapter 8 are both smart pointers. They own
+some memory and allow you to manipulate it, and have metadata (like their
+capacity) and extra capabilities or guarantees (`String` data will always be
+valid UTF-8). The characteristics that distinguish a smart pointer from an
+ordinary struct are that smart pointers implement the `Deref` and `Drop`
+traits, and in this chapter we'll be discussing both of those traits and why
+they're important to smart pointers.
 
-Surprise! Vec and String are technically smart pointers too!
+Given that the smart pointer pattern is a general design pattern used
+frequently in Rust, this chapter won't cover every smart pointer that exists.
+Many libraries have their own and you may write some yourself. The ones we
+cover here are the most common ones from the standard library:
 
-This chapter is not a comprehensive list, but will give some examples of the
-ones in the standard library.
+* `Box<T>`, for allocating values on the heap
+* `Rc<T>`, a reference counted type so data can have multiple owners
+* `RefCell<T>`, which isn't a smart pointer itself, but manages access to the
+  smart pointers `Ref` and `RefMut` to enforce the borrowing rules at runtime
+  instead of compile time
 
+Along the way, we'll also cover:
 
-## `Box<T>`
+* The *interior mutability* pattern where an immutable type exposes an API for
+  mutating an interior value, and the borrowing rules apply at runtime instead
+  of compile time
+* Reference cycles, how they can leak memory, and how to prevent them
 
-Don't use very often in your own code
-Heap allocated
-Express Ownership of a heap allocated thing
-
-The three situations to use Box
-
-1. Trait objects
-2. Recursive data structures
-3. Extend the lifetime of something
-
-How this interacts with the Drop trait
-
-## `Rc<T>`
-
-Reference counted. Rc is for *multiple ownership* - this thing should get
-deallocated when all of the owners go out of scope.
-
-Show the data structure:
-
-```rust
-struct Rc<T> {
-    data: Box<T>,
-    strong_reference_count: usize,
-    weak_reference_count: usize,
-}
-```
-
-Talk through this.
-
-This only works if the data is immutable.
-
-What happens when you clone an Rc: data isn't cloned, increase the strong count.
-When an Rc clone goes out of scope, the count goes down.
-
-### Rc Cycles
-
-This is how you leak memory in rust, which btw is totally safe.
-
-Is this garbage collecting? Well it's not tracing GC...  if you use Rc and had
-a cycle detector, it would be functionally equivalent to a tracing GC. Different
-runtime characteristics tho.
-
-
-#### Solution: turn an Rc into a `Weak<T>`
-
-Same as Rc, but doesn't count towards the strong ref count. When you do this, the
-strong ref count goes down and the weak count goes up.
-
-Data gets cleaned up when the strong count is 0, no matter what the weak count is.
-However, Rc structure is kept until weak reference count also goes to zero, so weak pointers do not become dangling pointers.
-At this point, attempt to upgrade Weak pointer will result into None.
-Only when weak reference counter also reduces to zero, Rc structure is freed.
-
-## `RefCell<T>`
-
-Single owner of mutable data
-
-The ownership rules checked at runtime instead of compile time.
-
-Only single threaded. See next chapter.
-
-### `borrow` and `borrow_mut` methods
-
-Checks all the rules and panics at runtime if the code violates them.
-
-1. The borrow checker is conservative and people can know more things. (no you
-don't, but if you really want to go back to debugging segfaults, feel free)
-
-2. For when you're only allowed to have an immutable thing (which could be `Rc`)
-but you need to be able to mutate the underlying data.
-
-## `Cell<T>`
-
-Same thing as RefCell but for types that are Copy. No borrow checking rules here
-anyway. So just reason #2 above.
-
-## Is this really safe? Yes!
-
-RefCell is still doing the checks, just at runtime
-Cell is safe bc Copy types don't need the ownership rules anyway
-
-### The Interior Mutability Pattern
-
-The Interior Mutability Pattern is super unsafe internally but safe to use
-from the outside and is totally safe, totally, trust us, seriously, it's safe.
-
-Allude to `UnsafeCell<T>` maybe. Affects optimizations since &mut T is unique.
-UnsafeCell turns off those optimizations so that everything doesn't break.
-
-This is how you can opt-out of the default of Rust's ownership rules and opt
-in to different guarantees.
-
-## Summary
-
-If you want to implement your own smart pointer, go read the Nomicon.
-
-Now let's talk about concurrency, and some smart pointers that can be used
-with multiple threads.
+Let's dive in!
