@@ -122,7 +122,7 @@ the `Rc` in `b`. We've created a reference cycle that looks like Figure 15-18:
 
 <figure>
 
-<img alt="Reference cycle of lists" src="img/trpl15-04.svg" class="center" />
+<img alt="Reference cycle of lists" src="img/trpl15-04.svg" class="center" style="width: 50%;" />
 
 <figcaption>
 
