@@ -58,7 +58,7 @@ treat them as if they're regular references. `Ref` and `RefMut` track the
 borrows dynamically, and their implementation of `Drop` releases the borrow
 dynamically.
 
-Listing 15-11 shows what it looks like to use `RefCell<T>` with functions that
+Listing 15-14 shows what it looks like to use `RefCell<T>` with functions that
 borrow their parameters immutably and mutably. Note that the `data` variable is
 declared as immutable with `let data` rather than `let mut data`, yet
 `a_fn_that_mutably_borrows` is allowed to borrow the data mutably and make
@@ -92,7 +92,7 @@ fn main() {
 
 <figcaption>
 
-Listing 15-11: Using `RefCell<T>`, `borrow`, and `borrow_mut`
+Listing 15-14: Using `RefCell<T>`, `borrow`, and `borrow_mut`
 
 </figcaption>
 </figure>
@@ -184,8 +184,8 @@ So why would we choose to make the tradeoffs that using `RefCell<T>` involves?
 Well, remember when we said that `Rc<T>` only lets you have an immutable
 reference to `T`? Given that `RefCell<T>` is immutable, but has interior
 mutability, we can combine `Rc<T>` and `RefCell<T>` to get a type that's both
-reference counted and mutable. Listing 15-12 shows an example of how to do
-that, again going back to our cons list from Listing 15-9. In this example,
+reference counted and mutable. Listing 15-15 shows an example of how to do
+that, again going back to our cons list from Listing 15-5. In this example,
 instead of storing `i32` values in the cons list, we'll be storing
 `Rc<RefCell<i32>>` values. We want to store that type so that we can have an
 owner of the value that's not part of the list (the multiple owners
@@ -225,7 +225,7 @@ fn main() {
 
 <figcaption>
 
-Listing 15-12: Using `Rc<RefCell<i32>>` to create a `List` that we can mutate
+Listing 15-15: Using `Rc<RefCell<i32>>` to create a `List` that we can mutate
 
 </figcaption>
 </figure>
@@ -236,7 +236,7 @@ directly later. Then we create a `List` in `a` that has a `Cons` variant that
 holds `value`, and `value` needs to be cloned since we want `value` to also
 have ownership in addition to `a`. Then we wrap `a` in an `Rc<T>` so that we
 can create lists `b` and `c` that start differently but both refer to `a`,
-similarly to what we did in Listing 15-9.
+similarly to what we did in Listing 15-12.
 
 Once we have the lists in `shared_list`, `b`, and `c` created, then we add 10
 to the 5 in `value` by dereferencing the `Rc<T>` and calling `borrow_mut` on

@@ -144,7 +144,7 @@ as shown in Figure 15-4.
 
 <figure>
 
-<img alt="Depiction of an infinite Cons list" src="img/trpl15-01.svg" class="center" style="width: 50%;" />
+<img alt="An infinite Cons list" src="img/trpl15-01.svg" class="center" style="width: 50%;" />
 
 <figcaption>
 
@@ -208,7 +208,7 @@ now:
 
 <figure>
 
-<img alt="Depiction of a finite Cons list" src="img/trpl15-02.svg" class="center" />
+<img alt="A finite Cons list" src="img/trpl15-02.svg" class="center" />
 
 <figcaption>
 

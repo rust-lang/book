@@ -13,8 +13,8 @@ reference count of each item in the cycle will never reach 0, and the values
 will never be dropped. Let's take a look at how that might happen and how to
 prevent it.
 
-In Listing 15-13, we're going to use another variation of the `List` definition
-from Listing 15-12. We're going back to storing an `i32` value as the first
+In Listing 15-16, we're going to use another variation of the `List` definition
+from Listing 15-5. We're going back to storing an `i32` value as the first
 element in the `Cons` variant. The second element in the `Cons` variant is now
 `RefCell<Rc<List>>`: instead of being able to modify the `i32` value this time,
 we want to be able to modify which `List` a `Cons` variant is pointing to.
@@ -46,15 +46,13 @@ impl List {
 
 <figcaption>
 
-Listing 15-13: A cons list definition that holds a `RefCell` so that we can
+Listing 15-16: A cons list definition that holds a `RefCell` so that we can
 modify what a `Cons` variant is referring to
 
 </figcaption>
 </figure>
 
-TODO: insert diagram showing the "shape" of the `Cons` variant?
-
-Next, in Listing 15-14, we're going to create a `List` value in the variable
+Next, in Listing 15-17, we're going to create a `List` value in the variable
 `a` that initially is a list of `5, Nil`. Then we'll create a `List` value in
 the variable `b` that is a list of the value 10 and then points to the list in
 `a`. Finally, we'll modify `a` so that it points to `b` instead of `Nil`, which
@@ -111,7 +109,7 @@ fn main() {
 
 <figcaption>
 
-Listing 15-14: Creating a reference cycle of two `List` values pointing to
+Listing 15-17: Creating a reference cycle of two `List` values pointing to
 each other
 
 </figcaption>
@@ -120,9 +118,18 @@ each other
 We use the `tail` method to get a reference to the `RefCell` in `a`, which we
 put in the variable `link`. Then we use the `borrow_mut` method on the
 `RefCell` to change the value inside from an `Rc` that holds a `Nil` value to
-the `Rc` in `b`. We've created a reference cycle that looks like:
+the `Rc` in `b`. We've created a reference cycle that looks like Figure 15-18:
 
-TODO: insert diagram showing b and a pointing to each other
+<figure>
+
+<img alt="Reference cycle of lists" src="img/trpl15-04.svg" class="center" />
+
+<figcaption>
+
+Figure 15-18: A reference cycle of lists `a` and `b` pointing to each other
+
+</figcaption>
+</figure>
 
 If you uncomment the last `println!`, Rust will try and print this cycle out
 with `a` pointing to `b` pointing to `a` and so forth until it overflows the
@@ -172,7 +179,7 @@ if the `Rc` value has been dropped. Because `upgrade` returns an `Option`, we
 know Rust will make sure we handle both the `Some` case and the `None` case and
 we won't be trying to use an invalid pointer.
 
-Instead of the list in Listing 15-14 where each item knows only about the
+Instead of the list in Listing 15-17 where each item knows only about the
 next item, let's say we want a tree where the items know about their children
 items *and* their parent items.
 
@@ -196,9 +203,9 @@ We want to be able to have a `Node` own its children, and we also want to be
 able to have variables own each node so we can access them directly. That's why
 the items in the `Vec` are `Rc<Node>` values. We want to be able to modify what
 nodes are another node's children, so that's why we have a `RefCell` in
-`children` around the `Vec`. Now let's create one instance of `Node` named
-`leaf` with the value 3 and no children, and another instance named `branch`
-with the value 5 and `leaf` as one of its children:
+`children` around the `Vec`. In Listing 15-19, let's create one instance of
+`Node` named `leaf` with the value 3 and no children, and another instance
+named `branch` with the value 5 and `leaf` as one of its children:
 
 <figure>
 <span class="filename">Filename: src/main.rs</span>
@@ -219,7 +226,7 @@ fn main() {
 
 <figcaption>
 
-Listing 15-15: Creating a `leaf` node and a `branch` node where `branch` has
+Listing 15-19: Creating a `leaf` node and a `branch` node where `branch` has
 `leaf` as one of its children but `leaf` has no reference to `branch`
 
 </figcaption>
@@ -258,7 +265,7 @@ struct Node {
 This way, a node will be able to refer to its parent node if it has one,
 but it does not own its parent. A parent node will be dropped even if
 it has child nodes referring to it, as long as it doesn't have a parent
-node as well. Now let's update `main` to look like this:
+node as well. Now let's update `main` to look like Listing 15-20:
 
 <figure>
 <span class="filename">Filename: src/main.rs</span>
@@ -287,7 +294,7 @@ fn main() {
 
 <figcaption>
 
-Listing 15-16: A `leaf` node and a `branch` node where `leaf` has a `Weak`
+Listing 15-20: A `leaf` node and a `branch` node where `leaf` has a `Weak`
 reference to its parent, `branch`
 
 </figcaption>
@@ -324,9 +331,9 @@ children: RefCell { value: [] } }] } })
 The fact that we don't get infinite output (or at least until the stack
 overflows) is one way we can see that we don't have a reference cycle in this
 case. Another way we can tell is by looking at the values we get from calling
-`Rc::strong_count` and `Rc::weak_count`. Let's create a new inner scope and
-move the creation of `branch` in there, so that we can see what happens when
-`branch` is created and then dropped when it goes out of scope:
+`Rc::strong_count` and `Rc::weak_count`. In Listing 15-21, let's create a new
+inner scope and move the creation of `branch` in there, so that we can see what
+happens when `branch` is created and then dropped when it goes out of scope:
 
 <figure>
 <span class="filename">Filename: src/main.rs</span>
@@ -377,7 +384,7 @@ fn main() {
 
 <figcaption>
 
-Listing 15-17: Creating `branch` in an inner scope and examining strong and
+Listing 15-21: Creating `branch` in an inner scope and examining strong and
 weak reference counts of `leaf` and `branch`
 
 </figcaption>
