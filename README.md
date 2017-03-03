@@ -55,14 +55,14 @@ $ mdbook test
 
 We'd love your help! Please see [CONTRIBUTING.md][contrib].
 
-[contrib]: https://github.com/rust-lang/book/blob/master/second-edition/CONTRIBUTING.md
+[contrib]: https://github.com/rust-lang/book/blob/master/CONTRIBUTING.md
 
-### Translations 
+### Translations
 
 We'd especially love help translating! See the [Translations][] label to join
-in efforts that are currently in progress. Open a new issue to start 
+in efforts that are currently in progress. Open a new issue to start
 working on a new language! We're waiting on [mdbook support][] for multiple
-languages before we merge any in, but feel free to start! The chapters in 
+languages before we merge any in, but feel free to start! The chapters in
 [the frozen column][] of the project won't see major changes, so if you start
 with those, you won't have to redo work :)
 
