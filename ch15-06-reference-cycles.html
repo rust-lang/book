@@ -1,0 +1,477 @@
+<!DOCTYPE HTML>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Creating Reference Cycles and Leaking Memory is Safe - The Rust Programming Language</title>
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <base href="">
+
+        <link rel="stylesheet" href="book.css">
+        <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+        <link rel="shortcut icon" href="favicon.png">
+
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+
+        <!-- MathJax -->
+        <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+        <!-- Fetch JQuery from CDN but have a local fallback -->
+        <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+        <script>
+            if (typeof jQuery == 'undefined') {
+                document.write(unescape("%3Cscript src='jquery.js'%3E%3C/script%3E"));
+            }
+        </script>
+    </head>
+    <body class="light">
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme = localStorage.getItem('theme');
+            if (theme == null) { theme = 'light'; }
+            $('body').removeClass().addClass(theme);
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var sidebar = localStorage.getItem('sidebar');
+            if (sidebar === "hidden") { $("html").addClass("sidebar-hidden") }
+            else if (sidebar === "visible") { $("html").addClass("sidebar-visible") }
+        </script>
+
+        <div id="sidebar" class="sidebar">
+            <ul class="chapter"><li><a href="ch01-00-introduction.html"><strong>1.</strong> Introduction</a></li><li><ul class="section"><li><a href="ch01-01-installation.html"><strong>1.1.</strong> Installation</a></li><li><a href="ch01-02-hello-world.html"><strong>1.2.</strong> Hello, World!</a></li></ul></li><li><a href="ch02-00-guessing-game-tutorial.html"><strong>2.</strong> Guessing Game Tutorial</a></li><li><a href="ch03-00-common-programming-concepts.html"><strong>3.</strong> Common Programming Concepts</a></li><li><ul class="section"><li><a href="ch03-01-variables-and-mutability.html"><strong>3.1.</strong> Variables and Mutability</a></li><li><a href="ch03-02-data-types.html"><strong>3.2.</strong> Data Types</a></li><li><a href="ch03-03-how-functions-work.html"><strong>3.3.</strong> How Functions Work</a></li><li><a href="ch03-04-comments.html"><strong>3.4.</strong> Comments</a></li><li><a href="ch03-05-control-flow.html"><strong>3.5.</strong> Control Flow</a></li></ul></li><li><a href="ch04-00-understanding-ownership.html"><strong>4.</strong> Understanding Ownership</a></li><li><ul class="section"><li><a href="ch04-01-what-is-ownership.html"><strong>4.1.</strong> What is Ownership?</a></li><li><a href="ch04-02-references-and-borrowing.html"><strong>4.2.</strong> References &amp; Borrowing</a></li><li><a href="ch04-03-slices.html"><strong>4.3.</strong> Slices</a></li></ul></li><li><a href="ch05-00-structs.html"><strong>5.</strong> Structs</a></li><li><ul class="section"><li><a href="ch05-01-method-syntax.html"><strong>5.1.</strong> Method Syntax</a></li></ul></li><li><a href="ch06-00-enums.html"><strong>6.</strong> Enums and Pattern Matching</a></li><li><ul class="section"><li><a href="ch06-01-defining-an-enum.html"><strong>6.1.</strong> Defining an Enum</a></li><li><a href="ch06-02-match.html"><strong>6.2.</strong> The <code>match</code> Control Flow Operator</a></li><li><a href="ch06-03-if-let.html"><strong>6.3.</strong> Concise Control Flow with <code>if let</code></a></li></ul></li><li><a href="ch07-00-modules.html"><strong>7.</strong> Modules</a></li><li><ul class="section"><li><a href="ch07-01-mod-and-the-filesystem.html"><strong>7.1.</strong> <code>mod</code> and the Filesystem</a></li><li><a href="ch07-02-controlling-visibility-with-pub.html"><strong>7.2.</strong> Controlling Visibility with <code>pub</code></a></li><li><a href="ch07-03-importing-names-with-use.html"><strong>7.3.</strong> Importing Names with <code>use</code></a></li></ul></li><li><a href="ch08-00-common-collections.html"><strong>8.</strong> Common Collections</a></li><li><ul class="section"><li><a href="ch08-01-vectors.html"><strong>8.1.</strong> Vectors</a></li><li><a href="ch08-02-strings.html"><strong>8.2.</strong> Strings</a></li><li><a href="ch08-03-hash-maps.html"><strong>8.3.</strong> Hash Maps</a></li></ul></li><li><a href="ch09-00-error-handling.html"><strong>9.</strong> Error Handling</a></li><li><ul class="section"><li><a href="ch09-01-unrecoverable-errors-with-panic.html"><strong>9.1.</strong> Unrecoverable Errors with <code>panic!</code></a></li><li><a href="ch09-02-recoverable-errors-with-result.html"><strong>9.2.</strong> Recoverable Errors with <code>Result</code></a></li><li><a href="ch09-03-to-panic-or-not-to-panic.html"><strong>9.3.</strong> To <code>panic!</code> or Not To <code>panic!</code></a></li></ul></li><li><a href="ch10-00-generics.html"><strong>10.</strong> Generic Types, Traits, and Lifetimes</a></li><li><ul class="section"><li><a href="ch10-01-syntax.html"><strong>10.1.</strong> Generic Data Types</a></li><li><a href="ch10-02-traits.html"><strong>10.2.</strong> Traits: Defining Shared Behavior</a></li><li><a href="ch10-03-lifetime-syntax.html"><strong>10.3.</strong> Validating References with Lifetimes</a></li></ul></li><li><a href="ch11-00-testing.html"><strong>11.</strong> Testing</a></li><li><ul class="section"><li><a href="ch11-01-writing-tests.html"><strong>11.1.</strong> Writing tests</a></li><li><a href="ch11-02-running-tests.html"><strong>11.2.</strong> Running tests</a></li><li><a href="ch11-03-test-organization.html"><strong>11.3.</strong> Test Organization</a></li></ul></li><li><a href="ch12-00-an-io-project.html"><strong>12.</strong> An I/O Project</a></li><li><ul class="section"><li><a href="ch12-01-accepting-command-line-arguments.html"><strong>12.1.</strong> Accepting Command Line Arguments</a></li><li><a href="ch12-02-reading-a-file.html"><strong>12.2.</strong> Reading a File</a></li><li><a href="ch12-03-improving-error-handling-and-modularity.html"><strong>12.3.</strong> Improving Error Handling and Modularity</a></li><li><a href="ch12-04-testing-the-librarys-functionality.html"><strong>12.4.</strong> Testing the Library's Functionality</a></li><li><a href="ch12-05-working-with-environment-variables.html"><strong>12.5.</strong> Working with Environment Variables</a></li><li><a href="ch12-06-writing-to-stderr-instead-of-stdout.html"><strong>12.6.</strong> Writing to <code>stderr</code> instead of <code>stdout</code></a></li></ul></li><li><a href="ch13-00-functional-features.html"><strong>13.</strong> Functional Language Features in Rust</a></li><li><ul class="section"><li><a href="ch13-01-closures.html"><strong>13.1.</strong> Closures</a></li><li><a href="ch13-02-iterators.html"><strong>13.2.</strong> Iterators</a></li><li><a href="ch13-03-improving-our-io-project.html"><strong>13.3.</strong> Improving our I/O Project</a></li><li><a href="ch13-04-performance.html"><strong>13.4.</strong> Performance</a></li></ul></li><li><a href="ch14-00-more-about-cargo.html"><strong>14.</strong> More about Cargo and Crates.io</a></li><li><ul class="section"><li><a href="ch14-01-release-profiles.html"><strong>14.1.</strong> Release Profiles</a></li><li><a href="ch14-02-publishing-to-crates-io.html"><strong>14.2.</strong> Publishing a Crate to Crates.io</a></li><li><a href="ch14-03-cargo-workspaces.html"><strong>14.3.</strong> Cargo Workspaces</a></li><li><a href="ch14-04-installing-binaries.html"><strong>14.4.</strong> Installing Binaries from Crates.io with <code>cargo install</code></a></li><li><a href="ch14-05-extending-cargo.html"><strong>14.5.</strong> Extending Cargo with Custom Commands</a></li></ul></li><li><a href="ch15-00-smart-pointers.html"><strong>15.</strong> Smart Pointers</a></li><li><ul class="section"><li><a href="ch15-01-box.html"><strong>15.1.</strong> <code>Box&lt;T&gt;</code> Points to Data on the Heap and Has a Known Size</a></li><li><a href="ch15-02-deref.html"><strong>15.2.</strong> The <code>Deref</code> Trait Allows Access to the Data Through a Reference</a></li><li><a href="ch15-03-drop.html"><strong>15.3.</strong> The <code>Drop</code> Trait Runs Code on Cleanup</a></li><li><a href="ch15-04-rc.html"><strong>15.4.</strong> <code>Rc&lt;T&gt;</code>, the Reference Counted Smart Pointer</a></li><li><a href="ch15-05-interior-mutability.html"><strong>15.5.</strong> <code>RefCell&lt;T&gt;</code> and the Interior Mutability Pattern</a></li><li><a href="ch15-06-reference-cycles.html" class="active"><strong>15.6.</strong> Creating Reference Cycles and Leaking Memory is Safe</a></li></ul></li><li><a href="ch16-00-concurrency.html"><strong>16.</strong> Concurrency</a></li><li><a href="ch17-00-oop.html"><strong>17.</strong> Is Rust OOP?</a></li><li><a href="ch18-00-patterns.html"><strong>18.</strong> Patterns</a></li><li><a href="ch19-00-advanced-features.html"><strong>19.</strong> Advanced Features</a></li><li><ul class="section"><li><a href="ch19-01-unsafe-rust.html"><strong>19.1.</strong> Unsafe Rust</a></li><li><a href="ch19-02-advanced-lifetimes.html"><strong>19.2.</strong> Advanced Lifetimes</a></li><li><a href="ch19-03-advanced-traits.html"><strong>19.3.</strong> Advanced Traits</a></li></ul></li><li><a href="ch20-00-unnamed-project.html"><strong>20.</strong> Un-named project</a></li><li><a href="appendix-00.html"><strong>21.</strong> Appendix</a></li><li><ul class="section"><li><a href="appendix-01-keywords.html"><strong>21.1.</strong> Keywords</a></li><li><a href="appendix-02-operators.html"><strong>21.2.</strong> Operators</a></li><li><a href="appendix-03-derivable-traits.html"><strong>21.3.</strong> Derivable Traits</a></li><li><a href="appendix-04-nightly-rust.html"><strong>21.4.</strong> Nightly Rust</a></li><li><a href="appendix-05-macros.html"><strong>21.5.</strong> Macros</a></li><li><a href="appendix-06-translation.html"><strong>21.6.</strong> Translations</a></li></ul></li></ul>
+        </div>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar" class="menu-bar">
+                    <div class="left-buttons">
+                        <i id="sidebar-toggle" class="fa fa-bars"></i>
+                        <i id="theme-toggle" class="fa fa-paint-brush"></i>
+                    </div>
+
+                    <h1 class="menu-title">The Rust Programming Language</h1>
+
+                    <div class="right-buttons">
+                        <i id="print-button" class="fa fa-print" title="Print this book"></i>
+                    </div>
+                </div>
+
+                <div id="content" class="content">
+                    <a class="header" href="ch15-06-reference-cycles.html#creating-reference-cycles-and-leaking-memory-is-safe" name="creating-reference-cycles-and-leaking-memory-is-safe"><h2>Creating Reference Cycles and Leaking Memory is Safe</h2></a>
+<p>Rust makes a number of guarantees that we've talked about, for example that
+we'll never have a null value, and data races will be disallowed at compile
+time. Rust's memory safety guarantees make it more difficult to create memory
+that never gets cleaned up, which is known as a <em>memory leak</em>. Rust does not
+make memory leaks <em>impossible</em>, however, preventing memory leaks is <em>not</em> one
+of Rust's guarantees. In other words, memory leaks are memory safe.</p>
+<p>By using <code>Rc&lt;T&gt;</code> and <code>RefCell&lt;T&gt;</code>, it is possible to create cycles of
+references where items refer to each other in a cycle. This is bad because the
+reference count of each item in the cycle will never reach 0, and the values
+will never be dropped. Let's take a look at how that might happen and how to
+prevent it.</p>
+<p>In Listing 15-16, we're going to use another variation of the <code>List</code> definition
+from Listing 15-5. We're going back to storing an <code>i32</code> value as the first
+element in the <code>Cons</code> variant. The second element in the <code>Cons</code> variant is now
+<code>RefCell&lt;Rc&lt;List&gt;&gt;</code>: instead of being able to modify the <code>i32</code> value this time,
+we want to be able to modify which <code>List</code> a <code>Cons</code> variant is pointing to.
+We've also added a <code>tail</code> method to make it convenient for us to access the
+second item, if we have a <code>Cons</code> variant:</p>
+<figure>
+<span class="filename">Filename: src/main.rs</span>
+<pre><code class="language-rust">#[derive(Debug)]
+enum List {
+    Cons(i32, RefCell&lt;Rc&lt;List&gt;&gt;),
+    Nil,
+}
+
+impl List {
+    fn tail(&amp;self) -&gt; Option&lt;&amp;RefCell&lt;Rc&lt;List&gt;&gt;&gt; {
+        match *self {
+            Cons(_, ref item) =&gt; Some(item),
+            Nil =&gt; None,
+        }
+    }
+}
+# use std::rc::Rc;
+# use std::cell::RefCell;
+# use List::{Cons, Nil};
+</code></pre>
+<figcaption>
+<p>Listing 15-16: A cons list definition that holds a <code>RefCell</code> so that we can
+modify what a <code>Cons</code> variant is referring to</p>
+</figcaption>
+</figure>
+<p>Next, in Listing 15-17, we're going to create a <code>List</code> value in the variable
+<code>a</code> that initially is a list of <code>5, Nil</code>. Then we'll create a <code>List</code> value in
+the variable <code>b</code> that is a list of the value 10 and then points to the list in
+<code>a</code>. Finally, we'll modify <code>a</code> so that it points to <code>b</code> instead of <code>Nil</code>, which
+will then create a cycle:</p>
+<figure>
+<span class="filename">Filename: src/main.rs</span>
+<pre><code class="language-rust"># #[derive(Debug)]
+# enum List {
+#     Cons(i32, RefCell&lt;Rc&lt;List&gt;&gt;),
+#     Nil,
+# }
+#
+# impl List {
+#     fn tail(&amp;self) -&gt; Option&lt;&amp;RefCell&lt;Rc&lt;List&gt;&gt;&gt; {
+#         match *self {
+#             Cons(_, ref item) =&gt; Some(item),
+#             Nil =&gt; None,
+#         }
+#     }
+# }
+#
+use List::{Cons, Nil};
+use std::rc::Rc;
+use std::cell::RefCell;
+
+fn main() {
+
+    let a = Rc::new(Cons(5, RefCell::new(Rc::new(Nil))));
+
+    println!(&quot;a initial rc count = {}&quot;, Rc::strong_count(&amp;a));
+    println!(&quot;a next item = {:?}&quot;, a.tail());
+
+    let b = Rc::new(Cons(10, RefCell::new(a.clone())));
+
+    println!(&quot;a rc count after b creation = {}&quot;, Rc::strong_count(&amp;a));
+    println!(&quot;b initial rc count = {}&quot;, Rc::strong_count(&amp;b));
+    println!(&quot;b next item = {:?}&quot;, b.tail());
+
+    if let Some(ref link) = a.tail() {
+        *link.borrow_mut() = b.clone();
+    }
+
+    println!(&quot;b rc count after changing a = {}&quot;, Rc::strong_count(&amp;b));
+    println!(&quot;a rc count after changing a = {}&quot;, Rc::strong_count(&amp;a));
+
+    // Uncomment the next line to see that we have a cycle; it will
+    // overflow the stack
+    // println!(&quot;a next item = {:?}&quot;, a.tail());
+}
+</code></pre>
+<figcaption>
+<p>Listing 15-17: Creating a reference cycle of two <code>List</code> values pointing to
+each other</p>
+</figcaption>
+</figure>
+<p>We use the <code>tail</code> method to get a reference to the <code>RefCell</code> in <code>a</code>, which we
+put in the variable <code>link</code>. Then we use the <code>borrow_mut</code> method on the
+<code>RefCell</code> to change the value inside from an <code>Rc</code> that holds a <code>Nil</code> value to
+the <code>Rc</code> in <code>b</code>. We've created a reference cycle that looks like Figure 15-18:</p>
+<figure>
+<p><img alt="Reference cycle of lists" src="img/trpl15-04.svg" class="center" /></p>
+<figcaption>
+<p>Figure 15-18: A reference cycle of lists <code>a</code> and <code>b</code> pointing to each other</p>
+</figcaption>
+</figure>
+<p>If you uncomment the last <code>println!</code>, Rust will try and print this cycle out
+with <code>a</code> pointing to <code>b</code> pointing to <code>a</code> and so forth until it overflows the
+stack.</p>
+<p>Looking at the results of the <code>println!</code> calls before the last one, we'll see
+that the reference count of both <code>a</code> and <code>b</code> are 2 after we change <code>a</code> to point
+to <code>b</code>. At the end of <code>main</code>, Rust will try and drop <code>b</code> first, which will
+decrease the count of the <code>Rc</code> by one. However, because <code>a</code> is still
+referencing that <code>Rc</code>, its count is 1 rather than 0, so the memory the <code>Rc</code> has
+on the heap won't be dropped. It'll just sit there with a count of one,
+forever. In this specific case, the program ends right away, so it's not a
+problem, but in a more complex program that allocates lots of memory in a cycle
+and holds onto it for a long time, this would be a problem. The program would
+be using more memory than it needs to be, and might overwhelm the system and
+cause it to run out of memory available to use.</p>
+<p>Now, as you can see, creating reference cycles is difficult and inconvenient in
+Rust. But it's not impossible: preventing memory leaks in the form of reference
+cycles is not one of the guarantees Rust makes. If you have <code>RefCell&lt;T&gt;</code> values
+that contain <code>Rc&lt;T&gt;</code> values or similar nested combinations of types with
+interior mutability and reference counting, be aware that you'll have to ensure
+that you don't create cycles. In the example in Listing 15-14, the solution
+would probably be to not write code that could create cycles like this, since
+we do want <code>Cons</code> variants to own the list they point to.</p>
+<p>With data structures like graphs, it's sometimes necessary to have references
+that create cycles in order to have parent nodes point to their children and
+children nodes point back in the opposite direction to their parents, for
+example. If one of the directions is expressing ownership and the other isn't,
+one way of being able to model the relationship of the data without creating
+reference cycles and memory leaks is using <code>Weak&lt;T&gt;</code>. Let's explore that next!</p>
+<a class="header" href="ch15-06-reference-cycles.html#prevent-reference-cycles-turn-an-rct-into-a-weakt" name="prevent-reference-cycles-turn-an-rct-into-a-weakt"><h3>Prevent Reference Cycles: Turn an <code>Rc&lt;T&gt;</code> into a <code>Weak&lt;T&gt;</code></h3></a>
+<p>The Rust standard library provides <code>Weak&lt;T&gt;</code>, a smart pointer type for use in
+situations that have cycles of references but only one direction expresses
+ownership. We've been showing how cloning an <code>Rc&lt;T&gt;</code> increases the
+<code>strong_count</code> of references; <code>Weak&lt;T&gt;</code> is a way to reference an <code>Rc&lt;T&gt;</code> that
+does not increment the <code>strong_count</code>: instead it increments the <code>weak_count</code>
+of references to an <code>Rc</code>. When an <code>Rc</code> goes out of scope, the inner value will
+get dropped if the <code>strong_count</code> is 0, even if the <code>weak_count</code> is not 0. To
+be able to get the value from a <code>Weak&lt;T&gt;</code>, we first have to upgrade it to an
+<code>Option&lt;Rc&lt;T&gt;&gt;</code> by using the <code>upgrade</code> method. The result of upgrading a
+<code>Weak&lt;T&gt;</code> will be <code>Some</code> if the <code>Rc</code> value has not been dropped yet, and <code>None</code>
+if the <code>Rc</code> value has been dropped. Because <code>upgrade</code> returns an <code>Option</code>, we
+know Rust will make sure we handle both the <code>Some</code> case and the <code>None</code> case and
+we won't be trying to use an invalid pointer.</p>
+<p>Instead of the list in Listing 15-17 where each item knows only about the
+next item, let's say we want a tree where the items know about their children
+items <em>and</em> their parent items.</p>
+<p>Let's start just with a struct named <code>Node</code> that holds its own <code>i32</code> value as
+well as references to its children <code>Node</code> values:</p>
+<p><span class="filename">Filename: src/main.rs</span></p>
+<pre><code class="language-rust">use std::rc::Rc;
+use std::cell::RefCell;
+
+#[derive(Debug)]
+struct Node {
+    value: i32,
+    children: RefCell&lt;Vec&lt;Rc&lt;Node&gt;&gt;&gt;,
+}
+</code></pre>
+<p>We want to be able to have a <code>Node</code> own its children, and we also want to be
+able to have variables own each node so we can access them directly. That's why
+the items in the <code>Vec</code> are <code>Rc&lt;Node&gt;</code> values. We want to be able to modify what
+nodes are another node's children, so that's why we have a <code>RefCell</code> in
+<code>children</code> around the <code>Vec</code>. In Listing 15-19, let's create one instance of
+<code>Node</code> named <code>leaf</code> with the value 3 and no children, and another instance
+named <code>branch</code> with the value 5 and <code>leaf</code> as one of its children:</p>
+<figure>
+<span class="filename">Filename: src/main.rs</span>
+<pre><code class="language-rust">fn main() {
+    let leaf = Rc::new(Node {
+        value: 3,
+        children: RefCell::new(vec![]),
+    });
+
+    let branch = Rc::new(Node {
+        value: 5,
+        children: RefCell::new(vec![leaf.clone()]),
+    });
+}
+</code></pre>
+<figcaption>
+<p>Listing 15-19: Creating a <code>leaf</code> node and a <code>branch</code> node where <code>branch</code> has
+<code>leaf</code> as one of its children but <code>leaf</code> has no reference to <code>branch</code></p>
+</figcaption>
+</figure>
+<p>The <code>Node</code> in <code>leaf</code> now has two owners: <code>leaf</code> and <code>branch</code>, since we clone
+the <code>Rc</code> in <code>leaf</code> and store that in <code>branch</code>. The <code>Node</code> in <code>branch</code> knows
+it's related to <code>leaf</code> since <code>branch</code> has a reference to <code>leaf</code> in
+<code>branch.children</code>. However, <code>leaf</code> doesn't know that it's related to <code>branch</code>,
+and we'd like <code>leaf</code> to know that <code>branch</code> is its parent.</p>
+<p>To do that, we're going to add a <code>parent</code> field to our <code>Node</code> struct
+definition, but what should the type of <code>parent</code> be? We know it can't contain
+an <code>Rc&lt;T&gt;</code>, since <code>leaf.parent</code> would point to <code>branch</code> and <code>branch.children</code>
+contains a pointer to <code>leaf</code>, which makes a reference cycle. Neither <code>leaf</code> nor
+<code>branch</code> would get dropped since they would always refer to each other and
+their reference counts would never be zero.</p>
+<p>So instead of <code>Rc</code>, we're going to make the type of <code>parent</code> use <code>Weak&lt;T&gt;</code>,
+specifically a <code>RefCell&lt;Weak&lt;Node&gt;&gt;</code>:</p>
+<p><span class="filename">Filename: src/main.rs</span></p>
+<pre><code class="language-rust">use std::rc::{Rc, Weak};
+use std::cell::RefCell;
+
+#[derive(Debug)]
+struct Node {
+    value: i32,
+    parent: RefCell&lt;Weak&lt;Node&gt;&gt;,
+    children: RefCell&lt;Vec&lt;Rc&lt;Node&gt;&gt;&gt;,
+}
+</code></pre>
+<p>This way, a node will be able to refer to its parent node if it has one,
+but it does not own its parent. A parent node will be dropped even if
+it has child nodes referring to it, as long as it doesn't have a parent
+node as well. Now let's update <code>main</code> to look like Listing 15-20:</p>
+<figure>
+<span class="filename">Filename: src/main.rs</span>
+<pre><code class="language-rust">fn main() {
+    let leaf = Rc::new(Node {
+        value: 3,
+        parent: RefCell::new(Weak::new()),
+        children: RefCell::new(vec![]),
+    });
+
+    println!(&quot;leaf parent = {:?}&quot;, leaf.parent.borrow().upgrade());
+
+    let branch = Rc::new(Node {
+        value: 5,
+        parent: RefCell::new(Weak::new()),
+        children: RefCell::new(vec![leaf.clone()]),
+    });
+
+    *leaf.parent.borrow_mut() = Rc::downgrade(&amp;branch);
+
+    println!(&quot;leaf parent = {:?}&quot;, leaf.parent.borrow().upgrade());
+}
+</code></pre>
+<figcaption>
+<p>Listing 15-20: A <code>leaf</code> node and a <code>branch</code> node where <code>leaf</code> has a <code>Weak</code>
+reference to its parent, <code>branch</code></p>
+</figcaption>
+</figure>
+<p>Creating the <code>leaf</code> node looks similar; since it starts out without a parent,
+we create a new <code>Weak</code> reference instance. When we try to get a reference to
+the parent of <code>leaf</code> by using the <code>upgrade</code> method, we'll get a <code>None</code> value,
+as shown by the first <code>println!</code> that outputs:</p>
+<pre><code class="language-text">leaf parent = None
+</code></pre>
+<p>Similarly, <code>branch</code> will also have a new <code>Weak</code> reference, since <code>branch</code> does
+not have a parent node. We still make <code>leaf</code> be one of the children of
+<code>branch</code>. Once we have a new <code>Node</code> instance in <code>branch</code>, we can modify <code>leaf</code>
+to have a <code>Weak</code> reference to <code>branch</code> for its parent. We use the <code>borrow_mut</code>
+method on the <code>RefCell</code> in the <code>parent</code> field of <code>leaf</code>, then we use the
+<code>Rc::downgrade</code> function to create a <code>Weak</code> reference to <code>branch</code> from the <code>Rc</code>
+in <code>branch.</code></p>
+<p>When we print out the parent of <code>leaf</code> again, this time we'll get a <code>Some</code>
+variant holding <code>branch</code>. Also notice we don't get a cycle printed out that
+eventually ends in a stack overflow like we did in Listing 15-14: the <code>Weak</code>
+references are just printed as <code>(Weak)</code>:</p>
+<pre><code class="language-text">leaf parent = Some(Node { value: 5, parent: RefCell { value: (Weak) },
+children: RefCell { value: [Node { value: 3, parent: RefCell { value: (Weak) },
+children: RefCell { value: [] } }] } })
+</code></pre>
+<p>The fact that we don't get infinite output (or at least until the stack
+overflows) is one way we can see that we don't have a reference cycle in this
+case. Another way we can tell is by looking at the values we get from calling
+<code>Rc::strong_count</code> and <code>Rc::weak_count</code>. In Listing 15-21, let's create a new
+inner scope and move the creation of <code>branch</code> in there, so that we can see what
+happens when <code>branch</code> is created and then dropped when it goes out of scope:</p>
+<figure>
+<span class="filename">Filename: src/main.rs</span>
+<pre><code>fn main() {
+    let leaf = Rc::new(Node {
+        value: 3,
+        parent: RefCell::new(Weak::new()),
+        children: RefCell::new(vec![]),
+    });
+
+    println!(
+        &quot;leaf strong = {}, weak = {}&quot;,
+        Rc::strong_count(&amp;leaf),
+        Rc::weak_count(&amp;leaf),
+    );
+
+    {
+        let branch = Rc::new(Node {
+            value: 5,
+            parent: RefCell::new(Weak::new()),
+            children: RefCell::new(vec![leaf.clone()]),
+        });
+        *leaf.parent.borrow_mut() = Rc::downgrade(&amp;branch);
+
+        println!(
+            &quot;branch strong = {}, weak = {}&quot;,
+            Rc::strong_count(&amp;branch),
+            Rc::weak_count(&amp;branch),
+        );
+
+        println!(
+            &quot;leaf strong = {}, weak = {}&quot;,
+            Rc::strong_count(&amp;leaf),
+            Rc::weak_count(&amp;leaf),
+        );
+    }
+
+    println!(&quot;leaf parent = {:?}&quot;, leaf.parent.borrow().upgrade());
+    println!(
+        &quot;leaf strong = {}, weak = {}&quot;,
+        Rc::strong_count(&amp;leaf),
+        Rc::weak_count(&amp;leaf),
+    );
+}
+</code></pre>
+<figcaption>
+<p>Listing 15-21: Creating <code>branch</code> in an inner scope and examining strong and
+weak reference counts of <code>leaf</code> and <code>branch</code></p>
+</figcaption>
+</figure>
+<p>Right after creating <code>leaf</code>, its strong count is 1 (for <code>leaf</code> itself) and its
+weak count is 0. In the inner scope, after we create <code>branch</code> and associate
+<code>leaf</code> and <code>branch</code>, <code>branch</code> will have a strong count of 1 (for <code>branch</code>
+itself) and a weak count of 1 (for <code>leaf.parent</code> pointing to <code>branch</code> with a
+<code>Weak&lt;T&gt;</code>). <code>leaf</code> will have a strong count of 2, since <code>branch</code> now has a
+clone the <code>Rc</code> of <code>leaf</code> stored in <code>branch.children</code>. <code>leaf</code> still has a weak
+count of 0.</p>
+<p>When the inner scope ends, <code>branch</code> goes out of scope, and its strong count
+decreases to 0, so its <code>Node</code> gets dropped. The weak count of 1 from
+<code>leaf.parent</code> has no bearing on whether <code>Node</code> gets dropped or not, so we don't
+have a memory leak!</p>
+<p>If we try to access the parent of <code>leaf</code> after the end of the scope, we'll get
+<code>None</code> again like we did before <code>leaf</code> had a parent. At the end of the program,
+<code>leaf</code> has a strong count of 1 and a weak count of 0, since <code>leaf</code> is now the
+only thing pointing to it again.</p>
+<p>All of the logic managing the counts and whether a value should be dropped or
+not was managed by <code>Rc</code> and <code>Weak</code> and their implementations of the <code>Drop</code>
+trait. By specifying that the relationship from a child to its parent should be
+a <code>Weak&lt;T&gt;</code> reference in the definition of <code>Node</code>, we're able to have parent
+nodes point to child nodes and vice versa without creating a reference cycle
+and memory leaks.</p>
+<a class="header" href="ch15-06-reference-cycles.html#summary" name="summary"><h2>Summary</h2></a>
+<p>We've now covered how you can use different kinds of smart pointers to choose
+different guarantees and tradeoffs than those Rust makes with regular
+references. <code>Box&lt;T&gt;</code> has a known size and points to data allocated on the heap.
+<code>Rc&lt;T&gt;</code> keeps track of the number of references to data on the heap so that
+data can have multiple owners. <code>RefCell&lt;T&gt;</code> with its interior mutability gives
+us a type that can be used where we need an immutable type, and enforces the
+borrowing rules at runtime instead of at compile time.</p>
+<p>We've also discussed the <code>Deref</code> and <code>Drop</code> traits that enable a lot of smart
+pointers' functionality. We explored how it's possible to create a reference
+cycle that would cause a memory leak, and how to prevent reference cycles by
+using <code>Weak&lt;T&gt;</code>.</p>
+<p>If this chapter has piqued your interest and you now want to implement your own
+smart pointers, check out <a href="https://doc.rust-lang.org/stable/nomicon/vec.html">The Nomicon</a> for even more useful information.</p>
+<p>Next, let's talk about concurrency in Rust. We'll even learn about a few new
+smart pointers that can help us with it.</p>
+
+                </div>
+
+                <!-- Mobile navigation buttons -->
+                
+                    <a href="ch15-05-interior-mutability.html" class="mobile-nav-chapters previous">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+                    <a href="ch16-00-concurrency.html" class="mobile-nav-chapters next">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                
+
+            </div>
+
+            
+                <a href="ch15-05-interior-mutability.html" class="nav-chapters previous" title="You can navigate through the chapters using the arrow keys">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+            
+
+            
+                <a href="ch16-00-concurrency.html" class="nav-chapters next" title="You can navigate through the chapters using the arrow keys">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            
+
+        </div>
+
+
+        <!-- Local fallback for Font Awesome -->
+        <script>
+            if ($(".fa").css("font-family") !== "FontAwesome") {
+                $('<link rel="stylesheet" type="text/css" href="_FontAwesome/css/font-awesome.css">').prependTo('head');
+            }
+        </script>
+
+        <!-- Livereload script (if served using the cli tool) -->
+        
+
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+    </body>
+</html>

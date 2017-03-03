@@ -1,0 +1,332 @@
+<!DOCTYPE HTML>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>`RefCell&lt;T&gt;` and the Interior Mutability Pattern - The Rust Programming Language</title>
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <base href="">
+
+        <link rel="stylesheet" href="book.css">
+        <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+        <link rel="shortcut icon" href="favicon.png">
+
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+
+        <!-- MathJax -->
+        <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+        <!-- Fetch JQuery from CDN but have a local fallback -->
+        <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+        <script>
+            if (typeof jQuery == 'undefined') {
+                document.write(unescape("%3Cscript src='jquery.js'%3E%3C/script%3E"));
+            }
+        </script>
+    </head>
+    <body class="light">
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme = localStorage.getItem('theme');
+            if (theme == null) { theme = 'light'; }
+            $('body').removeClass().addClass(theme);
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var sidebar = localStorage.getItem('sidebar');
+            if (sidebar === "hidden") { $("html").addClass("sidebar-hidden") }
+            else if (sidebar === "visible") { $("html").addClass("sidebar-visible") }
+        </script>
+
+        <div id="sidebar" class="sidebar">
+            <ul class="chapter"><li><a href="ch01-00-introduction.html"><strong>1.</strong> Introduction</a></li><li><ul class="section"><li><a href="ch01-01-installation.html"><strong>1.1.</strong> Installation</a></li><li><a href="ch01-02-hello-world.html"><strong>1.2.</strong> Hello, World!</a></li></ul></li><li><a href="ch02-00-guessing-game-tutorial.html"><strong>2.</strong> Guessing Game Tutorial</a></li><li><a href="ch03-00-common-programming-concepts.html"><strong>3.</strong> Common Programming Concepts</a></li><li><ul class="section"><li><a href="ch03-01-variables-and-mutability.html"><strong>3.1.</strong> Variables and Mutability</a></li><li><a href="ch03-02-data-types.html"><strong>3.2.</strong> Data Types</a></li><li><a href="ch03-03-how-functions-work.html"><strong>3.3.</strong> How Functions Work</a></li><li><a href="ch03-04-comments.html"><strong>3.4.</strong> Comments</a></li><li><a href="ch03-05-control-flow.html"><strong>3.5.</strong> Control Flow</a></li></ul></li><li><a href="ch04-00-understanding-ownership.html"><strong>4.</strong> Understanding Ownership</a></li><li><ul class="section"><li><a href="ch04-01-what-is-ownership.html"><strong>4.1.</strong> What is Ownership?</a></li><li><a href="ch04-02-references-and-borrowing.html"><strong>4.2.</strong> References &amp; Borrowing</a></li><li><a href="ch04-03-slices.html"><strong>4.3.</strong> Slices</a></li></ul></li><li><a href="ch05-00-structs.html"><strong>5.</strong> Structs</a></li><li><ul class="section"><li><a href="ch05-01-method-syntax.html"><strong>5.1.</strong> Method Syntax</a></li></ul></li><li><a href="ch06-00-enums.html"><strong>6.</strong> Enums and Pattern Matching</a></li><li><ul class="section"><li><a href="ch06-01-defining-an-enum.html"><strong>6.1.</strong> Defining an Enum</a></li><li><a href="ch06-02-match.html"><strong>6.2.</strong> The <code>match</code> Control Flow Operator</a></li><li><a href="ch06-03-if-let.html"><strong>6.3.</strong> Concise Control Flow with <code>if let</code></a></li></ul></li><li><a href="ch07-00-modules.html"><strong>7.</strong> Modules</a></li><li><ul class="section"><li><a href="ch07-01-mod-and-the-filesystem.html"><strong>7.1.</strong> <code>mod</code> and the Filesystem</a></li><li><a href="ch07-02-controlling-visibility-with-pub.html"><strong>7.2.</strong> Controlling Visibility with <code>pub</code></a></li><li><a href="ch07-03-importing-names-with-use.html"><strong>7.3.</strong> Importing Names with <code>use</code></a></li></ul></li><li><a href="ch08-00-common-collections.html"><strong>8.</strong> Common Collections</a></li><li><ul class="section"><li><a href="ch08-01-vectors.html"><strong>8.1.</strong> Vectors</a></li><li><a href="ch08-02-strings.html"><strong>8.2.</strong> Strings</a></li><li><a href="ch08-03-hash-maps.html"><strong>8.3.</strong> Hash Maps</a></li></ul></li><li><a href="ch09-00-error-handling.html"><strong>9.</strong> Error Handling</a></li><li><ul class="section"><li><a href="ch09-01-unrecoverable-errors-with-panic.html"><strong>9.1.</strong> Unrecoverable Errors with <code>panic!</code></a></li><li><a href="ch09-02-recoverable-errors-with-result.html"><strong>9.2.</strong> Recoverable Errors with <code>Result</code></a></li><li><a href="ch09-03-to-panic-or-not-to-panic.html"><strong>9.3.</strong> To <code>panic!</code> or Not To <code>panic!</code></a></li></ul></li><li><a href="ch10-00-generics.html"><strong>10.</strong> Generic Types, Traits, and Lifetimes</a></li><li><ul class="section"><li><a href="ch10-01-syntax.html"><strong>10.1.</strong> Generic Data Types</a></li><li><a href="ch10-02-traits.html"><strong>10.2.</strong> Traits: Defining Shared Behavior</a></li><li><a href="ch10-03-lifetime-syntax.html"><strong>10.3.</strong> Validating References with Lifetimes</a></li></ul></li><li><a href="ch11-00-testing.html"><strong>11.</strong> Testing</a></li><li><ul class="section"><li><a href="ch11-01-writing-tests.html"><strong>11.1.</strong> Writing tests</a></li><li><a href="ch11-02-running-tests.html"><strong>11.2.</strong> Running tests</a></li><li><a href="ch11-03-test-organization.html"><strong>11.3.</strong> Test Organization</a></li></ul></li><li><a href="ch12-00-an-io-project.html"><strong>12.</strong> An I/O Project</a></li><li><ul class="section"><li><a href="ch12-01-accepting-command-line-arguments.html"><strong>12.1.</strong> Accepting Command Line Arguments</a></li><li><a href="ch12-02-reading-a-file.html"><strong>12.2.</strong> Reading a File</a></li><li><a href="ch12-03-improving-error-handling-and-modularity.html"><strong>12.3.</strong> Improving Error Handling and Modularity</a></li><li><a href="ch12-04-testing-the-librarys-functionality.html"><strong>12.4.</strong> Testing the Library's Functionality</a></li><li><a href="ch12-05-working-with-environment-variables.html"><strong>12.5.</strong> Working with Environment Variables</a></li><li><a href="ch12-06-writing-to-stderr-instead-of-stdout.html"><strong>12.6.</strong> Writing to <code>stderr</code> instead of <code>stdout</code></a></li></ul></li><li><a href="ch13-00-functional-features.html"><strong>13.</strong> Functional Language Features in Rust</a></li><li><ul class="section"><li><a href="ch13-01-closures.html"><strong>13.1.</strong> Closures</a></li><li><a href="ch13-02-iterators.html"><strong>13.2.</strong> Iterators</a></li><li><a href="ch13-03-improving-our-io-project.html"><strong>13.3.</strong> Improving our I/O Project</a></li><li><a href="ch13-04-performance.html"><strong>13.4.</strong> Performance</a></li></ul></li><li><a href="ch14-00-more-about-cargo.html"><strong>14.</strong> More about Cargo and Crates.io</a></li><li><ul class="section"><li><a href="ch14-01-release-profiles.html"><strong>14.1.</strong> Release Profiles</a></li><li><a href="ch14-02-publishing-to-crates-io.html"><strong>14.2.</strong> Publishing a Crate to Crates.io</a></li><li><a href="ch14-03-cargo-workspaces.html"><strong>14.3.</strong> Cargo Workspaces</a></li><li><a href="ch14-04-installing-binaries.html"><strong>14.4.</strong> Installing Binaries from Crates.io with <code>cargo install</code></a></li><li><a href="ch14-05-extending-cargo.html"><strong>14.5.</strong> Extending Cargo with Custom Commands</a></li></ul></li><li><a href="ch15-00-smart-pointers.html"><strong>15.</strong> Smart Pointers</a></li><li><ul class="section"><li><a href="ch15-01-box.html"><strong>15.1.</strong> <code>Box&lt;T&gt;</code> Points to Data on the Heap and Has a Known Size</a></li><li><a href="ch15-02-deref.html"><strong>15.2.</strong> The <code>Deref</code> Trait Allows Access to the Data Through a Reference</a></li><li><a href="ch15-03-drop.html"><strong>15.3.</strong> The <code>Drop</code> Trait Runs Code on Cleanup</a></li><li><a href="ch15-04-rc.html"><strong>15.4.</strong> <code>Rc&lt;T&gt;</code>, the Reference Counted Smart Pointer</a></li><li><a href="ch15-05-interior-mutability.html" class="active"><strong>15.5.</strong> <code>RefCell&lt;T&gt;</code> and the Interior Mutability Pattern</a></li><li><a href="ch15-06-reference-cycles.html"><strong>15.6.</strong> Creating Reference Cycles and Leaking Memory is Safe</a></li></ul></li><li><a href="ch16-00-concurrency.html"><strong>16.</strong> Concurrency</a></li><li><a href="ch17-00-oop.html"><strong>17.</strong> Is Rust OOP?</a></li><li><a href="ch18-00-patterns.html"><strong>18.</strong> Patterns</a></li><li><a href="ch19-00-advanced-features.html"><strong>19.</strong> Advanced Features</a></li><li><ul class="section"><li><a href="ch19-01-unsafe-rust.html"><strong>19.1.</strong> Unsafe Rust</a></li><li><a href="ch19-02-advanced-lifetimes.html"><strong>19.2.</strong> Advanced Lifetimes</a></li><li><a href="ch19-03-advanced-traits.html"><strong>19.3.</strong> Advanced Traits</a></li></ul></li><li><a href="ch20-00-unnamed-project.html"><strong>20.</strong> Un-named project</a></li><li><a href="appendix-00.html"><strong>21.</strong> Appendix</a></li><li><ul class="section"><li><a href="appendix-01-keywords.html"><strong>21.1.</strong> Keywords</a></li><li><a href="appendix-02-operators.html"><strong>21.2.</strong> Operators</a></li><li><a href="appendix-03-derivable-traits.html"><strong>21.3.</strong> Derivable Traits</a></li><li><a href="appendix-04-nightly-rust.html"><strong>21.4.</strong> Nightly Rust</a></li><li><a href="appendix-05-macros.html"><strong>21.5.</strong> Macros</a></li><li><a href="appendix-06-translation.html"><strong>21.6.</strong> Translations</a></li></ul></li></ul>
+        </div>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar" class="menu-bar">
+                    <div class="left-buttons">
+                        <i id="sidebar-toggle" class="fa fa-bars"></i>
+                        <i id="theme-toggle" class="fa fa-paint-brush"></i>
+                    </div>
+
+                    <h1 class="menu-title">The Rust Programming Language</h1>
+
+                    <div class="right-buttons">
+                        <i id="print-button" class="fa fa-print" title="Print this book"></i>
+                    </div>
+                </div>
+
+                <div id="content" class="content">
+                    <a class="header" href="ch15-05-interior-mutability.html#refcellt-and-the-interior-mutability-pattern" name="refcellt-and-the-interior-mutability-pattern"><h2><code>RefCell&lt;T&gt;</code> and the Interior Mutability Pattern</h2></a>
+<p><em>Interior mutability</em> is a design pattern in Rust for allowing you to mutate
+data even though there are immutable references to that data, which would
+normally be disallowed by the borrowing rules. The interior mutability pattern
+involves using <code>unsafe</code> code inside a data structure to bend Rust's usual rules
+around mutation and borrowing. We haven't yet covered unsafe code; we will in
+Chapter 19. The interior mutability pattern is used when you can ensure that
+the borrowing rules will be followed at runtime, even though the compiler can't
+ensure that. The <code>unsafe</code> code involved is then wrapped in a safe API, and the
+outer type is still immutable.</p>
+<p>Let's explore this by looking at the <code>RefCell&lt;T&gt;</code> type that follows the
+interior mutability pattern.</p>
+<a class="header" href="ch15-05-interior-mutability.html#refcellt-has-interior-mutability" name="refcellt-has-interior-mutability"><h3><code>RefCell&lt;T&gt;</code> has Interior Mutability</h3></a>
+<p>Unlike <code>Rc&lt;T&gt;</code>, the <code>RefCell&lt;T&gt;</code> type represents single ownership over the data
+that it holds. So, what makes <code>RefCell&lt;T&gt;</code> different than a type like <code>Box&lt;T&gt;</code>?
+Let's recall the borrowing rules we learned in Chapter 4:</p>
+<ol>
+<li>At any given time, you can have <em>either</em> but not both of:</li>
+</ol>
+<ul>
+<li>One mutable reference.</li>
+<li>Any number of immutable references.</li>
+</ul>
+<ol start="2">
+<li>References must always be valid.</li>
+</ol>
+<p>With references and <code>Box&lt;T&gt;</code>, the borrowing rules' invariants are enforced at
+compile time. With <code>RefCell&lt;T&gt;</code>, these invariants are enforced <em>at runtime</em>.
+With references, if you break these rules, you'll get a compiler error. With
+<code>RefCell&lt;T&gt;</code>, if you break these rules, you'll get a <code>panic!</code>.</p>
+<p>Static analysis, like the Rust compiler performs, is inherently conservative.
+There are properties of code that are impossible to detect by analyzing the
+code: the most famous is the Halting Problem, which is out of scope of this
+book but an interesting topic to research if you're interested.</p>
+<p>Because some analysis is impossible, the Rust compiler does not try to even
+guess if it can't be sure, so it's conservative and sometimes rejects correct
+programs that would not actually violate Rust's guarantees. Put another way, if
+Rust accepts an incorrect program, people would not be able to trust in the
+guarantees Rust makes. If Rust rejects a correct program, the programmer will
+be inconvenienced, but nothing catastrophic can occur. <code>RefCell&lt;T&gt;</code> is useful
+when you know that the borrowing rules are respected, but the compiler can't
+understand that that's true.</p>
+<p>Similarly to <code>Rc&lt;T&gt;</code>, <code>RefCell&lt;T&gt;</code> is only for use in single-threaded
+scenarios. We'll talk about how to get the functionality of <code>RefCell&lt;T&gt;</code> in a
+multithreaded program in the next chapter on concurrency. For now, all you
+need to know is that if you try to use <code>RefCell&lt;T&gt;</code> in a multithreaded
+context, you'll get a compile time error.</p>
+<p>With references, we use the <code>&amp;</code> and <code>&amp;mut</code> syntax to create references and
+mutable references, respectively. But with <code>RefCell&lt;T&gt;</code>, we use the <code>borrow</code>
+and <code>borrow_mut</code> methods, which are part of the safe API that <code>RefCell&lt;T&gt;</code> has.
+<code>borrow</code> returns the smart pointer type <code>Ref</code>, and <code>borrow_mut</code> returns the
+smart pointer type <code>RefMut</code>. These two types implement <code>Deref</code> so that we can
+treat them as if they're regular references. <code>Ref</code> and <code>RefMut</code> track the
+borrows dynamically, and their implementation of <code>Drop</code> releases the borrow
+dynamically.</p>
+<p>Listing 15-14 shows what it looks like to use <code>RefCell&lt;T&gt;</code> with functions that
+borrow their parameters immutably and mutably. Note that the <code>data</code> variable is
+declared as immutable with <code>let data</code> rather than <code>let mut data</code>, yet
+<code>a_fn_that_mutably_borrows</code> is allowed to borrow the data mutably and make
+changes to the data!</p>
+<figure>
+<span class="filename">Filename: src/main.rs</span>
+<pre><code class="language-rust">use std::cell::RefCell;
+
+fn a_fn_that_immutably_borrows(a: &amp;i32) {
+    println!(&quot;a is {}&quot;, a);
+}
+
+fn a_fn_that_mutably_borrows(b: &amp;mut i32) {
+    *b += 1;
+}
+
+fn demo(r: &amp;RefCell&lt;i32&gt;) {
+    a_fn_that_immutably_borrows(&amp;r.borrow());
+    a_fn_that_mutably_borrows(&amp;mut r.borrow_mut());
+    a_fn_that_immutably_borrows(&amp;r.borrow());
+}
+
+fn main() {
+    let data = RefCell::new(5);
+    demo(&amp;data);
+}
+</code></pre>
+<figcaption>
+<p>Listing 15-14: Using <code>RefCell&lt;T&gt;</code>, <code>borrow</code>, and <code>borrow_mut</code></p>
+</figcaption>
+</figure>
+<p>This example prints:</p>
+<pre><code class="language-text">a is 5
+a is 6
+</code></pre>
+<p>In <code>main</code>, we've created a new <code>RefCell&lt;T&gt;</code> containing the value 5, and stored
+in the variable <code>data</code>, declared without the <code>mut</code> keyword. We then call the
+<code>demo</code> function with an immutable reference to <code>data</code>: as far as <code>main</code> is
+concerned, <code>data</code> is immutable!</p>
+<p>In the <code>demo</code> function, we get an immutable reference to the value inside the
+<code>RefCell&lt;T&gt;</code> by calling the <code>borrow</code> method, and we call
+<code>a_fn_that_immutably_borrows</code> with that immutable reference. More
+interestingly, we can get a <em>mutable</em> reference to the value inside the
+<code>RefCell&lt;T&gt;</code> with the <code>borrow_mut</code> method, and the function
+<code>a_fn_that_mutably_borrows</code> is allowed to change the value. We can see that the
+next time we call <code>a_fn_that_immutably_borrows</code> that prints out the value, it's
+6 instead of 5.</p>
+<a class="header" href="ch15-05-interior-mutability.html#borrowing-rules-are-checked-at-runtime-on-refcellt" name="borrowing-rules-are-checked-at-runtime-on-refcellt"><h3>Borrowing Rules are Checked at Runtime on <code>RefCell&lt;T&gt;</code></h3></a>
+<p>Recall from Chapter 4 that because of the borrowing rules, this code using
+regular references that tries to create two mutable borrows in the same scope
+won't compile:</p>
+<pre><code class="language-rust ignore">let mut s = String::from(&quot;hello&quot;);
+
+let r1 = &amp;mut s;
+let r2 = &amp;mut s;
+</code></pre>
+<p>We'll get this compiler error:</p>
+<pre><code class="language-text">error[E0499]: cannot borrow `s` as mutable more than once at a time
+ --&gt;
+  |
+5 |     let r1 = &amp;mut s;
+  |                   - first mutable borrow occurs here
+6 |     let r2 = &amp;mut s;
+  |                   ^ second mutable borrow occurs here
+7 | }
+  | - first borrow ends here
+</code></pre>
+<p>In contrast, using <code>RefCell&lt;T&gt;</code> and calling <code>borrow_mut</code> twice in the same
+scope <em>will</em> compile, but it'll panic at runtime instead. This code:</p>
+<pre><code class="language-rust should_panic">use std::cell::RefCell;
+
+fn main() {
+    let s = RefCell::new(String::from(&quot;hello&quot;));
+
+    let r1 = s.borrow_mut();
+    let r2 = s.borrow_mut();
+}
+</code></pre>
+<p>compiles but panics with the following error when we <code>cargo run</code>:</p>
+<pre><code class="language-text">    Finished dev [unoptimized + debuginfo] target(s) in 0.83 secs
+     Running `target/debug/refcell`
+thread 'main' panicked at 'already borrowed: BorrowMutError',
+/stable-dist-rustc/build/src/libcore/result.rs:868
+note: Run with `RUST_BACKTRACE=1` for a backtrace.
+</code></pre>
+<p>This runtime <code>BorrowMutError</code> is similar to the compiler error: it says we've
+already borrowed <code>s</code> mutably once, so we're not allowed to borrow it again. We
+aren't getting around the borrowing rules, we're just choosing to have Rust
+enforce them at runtime instead of compile time. You could choose to use
+<code>RefCell&lt;T&gt;</code> everywhere all the time, but in addition to having to type
+<code>RefCell</code> a lot, you'd find out about possible problems later (possibly in
+production rather than during development). Also, checking the borrowing rules
+while your program is running has a performance penalty.</p>
+<a class="header" href="ch15-05-interior-mutability.html#multiple-owners-of-mutable-data-by-combining-rct-and-refcellt" name="multiple-owners-of-mutable-data-by-combining-rct-and-refcellt"><h3>Multiple Owners of Mutable Data by Combining <code>Rc&lt;T&gt;</code> and <code>RefCell&lt;T&gt;</code></h3></a>
+<p>So why would we choose to make the tradeoffs that using <code>RefCell&lt;T&gt;</code> involves?
+Well, remember when we said that <code>Rc&lt;T&gt;</code> only lets you have an immutable
+reference to <code>T</code>? Given that <code>RefCell&lt;T&gt;</code> is immutable, but has interior
+mutability, we can combine <code>Rc&lt;T&gt;</code> and <code>RefCell&lt;T&gt;</code> to get a type that's both
+reference counted and mutable. Listing 15-15 shows an example of how to do
+that, again going back to our cons list from Listing 15-5. In this example,
+instead of storing <code>i32</code> values in the cons list, we'll be storing
+<code>Rc&lt;RefCell&lt;i32&gt;&gt;</code> values. We want to store that type so that we can have an
+owner of the value that's not part of the list (the multiple owners
+functionality that <code>Rc&lt;T&gt;</code> provides), and so we can mutate the inner <code>i32</code>
+value (the interior mutability functionality that <code>RefCell&lt;T&gt;</code> provides):</p>
+<figure>
+<span class="filename">Filename: src/main.rs</span>
+<pre><code class="language-rust">#[derive(Debug)]
+enum List {
+    Cons(Rc&lt;RefCell&lt;i32&gt;&gt;, Rc&lt;List&gt;),
+    Nil,
+}
+
+use List::{Cons, Nil};
+use std::rc::Rc;
+use std::cell::RefCell;
+
+fn main() {
+    let value = Rc::new(RefCell::new(5));
+
+    let a = Cons(value.clone(), Rc::new(Nil));
+    let shared_list = Rc::new(a);
+
+    let b = Cons(Rc::new(RefCell::new(6)), shared_list.clone());
+    let c = Cons(Rc::new(RefCell::new(10)), shared_list.clone());
+
+    *value.borrow_mut() += 10;
+
+    println!(&quot;shared_list after = {:?}&quot;, shared_list);
+    println!(&quot;b after = {:?}&quot;, b);
+    println!(&quot;c after = {:?}&quot;, c);
+}
+</code></pre>
+<figcaption>
+<p>Listing 15-15: Using <code>Rc&lt;RefCell&lt;i32&gt;&gt;</code> to create a <code>List</code> that we can mutate</p>
+</figcaption>
+</figure>
+<p>We're creating a value, which is an instance of <code>Rc&lt;RefCell&lt;i32&gt;&gt;. We're storing it in a variable named</code>value<code>because we want to be able to access it directly later. Then we create a</code>List<code>in</code>a<code>that has a</code>Cons<code>variant that holds</code>value<code>, and</code>value<code>needs to be cloned since we want</code>value<code>to also have ownership in addition to</code>a<code>. Then we wrap</code>a<code>in an</code>Rc<T><code>so that we can create lists</code>b<code>and</code>c<code>that start differently but both refer to</code>a`,
+similarly to what we did in Listing 15-12.</p>
+<p>Once we have the lists in <code>shared_list</code>, <code>b</code>, and <code>c</code> created, then we add 10
+to the 5 in <code>value</code> by dereferencing the <code>Rc&lt;T&gt;</code> and calling <code>borrow_mut</code> on
+the <code>RefCell</code>.</p>
+<p>When we print out <code>shared_list</code>, <code>b</code>, and <code>c</code>, we can see that they all have
+the modified value of 15:</p>
+<pre><code class="language-text">shared_list after = Cons(RefCell { value: 15 }, Nil)
+b after = Cons(RefCell { value: 6 }, Cons(RefCell { value: 15 }, Nil))
+c after = Cons(RefCell { value: 10 }, Cons(RefCell { value: 15 }, Nil))
+</code></pre>
+<p>This is pretty neat! By using <code>RefCell&lt;T&gt;</code>, we can have an outwardly immutable
+<code>List</code>, but we can use the methods on <code>RefCell&lt;T&gt;</code> that provide access to its
+interior mutability to be able to modify our data when we need to. The runtime
+checks of the borrowing rules that <code>RefCell&lt;T&gt;</code> does protect us from data
+races, and we've decided that we want to trade a bit of speed for the
+flexibility in our data structures.</p>
+<p><code>RefCell&lt;T&gt;</code> is not the only standard library type that provides interior
+mutability. <code>Cell&lt;T&gt;</code> is similar but instead of giving references to the inner
+value like <code>RefCell&lt;T&gt;</code> does, the value is copied in and out of the <code>Cell&lt;T&gt;</code>.
+<code>Mutex&lt;T&gt;</code> offers interior mutability that is safe to use across threads, and
+we'll be discussing its use in the next chapter on concurrency. Check out the
+standard library docs for more details on the differences between these types.</p>
+
+                </div>
+
+                <!-- Mobile navigation buttons -->
+                
+                    <a href="ch15-04-rc.html" class="mobile-nav-chapters previous">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+                    <a href="ch15-06-reference-cycles.html" class="mobile-nav-chapters next">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                
+
+            </div>
+
+            
+                <a href="ch15-04-rc.html" class="nav-chapters previous" title="You can navigate through the chapters using the arrow keys">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+            
+
+            
+                <a href="ch15-06-reference-cycles.html" class="nav-chapters next" title="You can navigate through the chapters using the arrow keys">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            
+
+        </div>
+
+
+        <!-- Local fallback for Font Awesome -->
+        <script>
+            if ($(".fa").css("font-family") !== "FontAwesome") {
+                $('<link rel="stylesheet" type="text/css" href="_FontAwesome/css/font-awesome.css">').prependTo('head');
+            }
+        </script>
+
+        <!-- Livereload script (if served using the cli tool) -->
+        
+
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+    </body>
+</html>

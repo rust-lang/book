@@ -1,0 +1,276 @@
+<!DOCTYPE HTML>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>The `Deref` Trait Allows Access to the Data Through a Reference - The Rust Programming Language</title>
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <base href="">
+
+        <link rel="stylesheet" href="book.css">
+        <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+        <link rel="shortcut icon" href="favicon.png">
+
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+
+        <!-- MathJax -->
+        <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+        <!-- Fetch JQuery from CDN but have a local fallback -->
+        <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+        <script>
+            if (typeof jQuery == 'undefined') {
+                document.write(unescape("%3Cscript src='jquery.js'%3E%3C/script%3E"));
+            }
+        </script>
+    </head>
+    <body class="light">
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme = localStorage.getItem('theme');
+            if (theme == null) { theme = 'light'; }
+            $('body').removeClass().addClass(theme);
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var sidebar = localStorage.getItem('sidebar');
+            if (sidebar === "hidden") { $("html").addClass("sidebar-hidden") }
+            else if (sidebar === "visible") { $("html").addClass("sidebar-visible") }
+        </script>
+
+        <div id="sidebar" class="sidebar">
+            <ul class="chapter"><li><a href="ch01-00-introduction.html"><strong>1.</strong> Introduction</a></li><li><ul class="section"><li><a href="ch01-01-installation.html"><strong>1.1.</strong> Installation</a></li><li><a href="ch01-02-hello-world.html"><strong>1.2.</strong> Hello, World!</a></li></ul></li><li><a href="ch02-00-guessing-game-tutorial.html"><strong>2.</strong> Guessing Game Tutorial</a></li><li><a href="ch03-00-common-programming-concepts.html"><strong>3.</strong> Common Programming Concepts</a></li><li><ul class="section"><li><a href="ch03-01-variables-and-mutability.html"><strong>3.1.</strong> Variables and Mutability</a></li><li><a href="ch03-02-data-types.html"><strong>3.2.</strong> Data Types</a></li><li><a href="ch03-03-how-functions-work.html"><strong>3.3.</strong> How Functions Work</a></li><li><a href="ch03-04-comments.html"><strong>3.4.</strong> Comments</a></li><li><a href="ch03-05-control-flow.html"><strong>3.5.</strong> Control Flow</a></li></ul></li><li><a href="ch04-00-understanding-ownership.html"><strong>4.</strong> Understanding Ownership</a></li><li><ul class="section"><li><a href="ch04-01-what-is-ownership.html"><strong>4.1.</strong> What is Ownership?</a></li><li><a href="ch04-02-references-and-borrowing.html"><strong>4.2.</strong> References &amp; Borrowing</a></li><li><a href="ch04-03-slices.html"><strong>4.3.</strong> Slices</a></li></ul></li><li><a href="ch05-00-structs.html"><strong>5.</strong> Structs</a></li><li><ul class="section"><li><a href="ch05-01-method-syntax.html"><strong>5.1.</strong> Method Syntax</a></li></ul></li><li><a href="ch06-00-enums.html"><strong>6.</strong> Enums and Pattern Matching</a></li><li><ul class="section"><li><a href="ch06-01-defining-an-enum.html"><strong>6.1.</strong> Defining an Enum</a></li><li><a href="ch06-02-match.html"><strong>6.2.</strong> The <code>match</code> Control Flow Operator</a></li><li><a href="ch06-03-if-let.html"><strong>6.3.</strong> Concise Control Flow with <code>if let</code></a></li></ul></li><li><a href="ch07-00-modules.html"><strong>7.</strong> Modules</a></li><li><ul class="section"><li><a href="ch07-01-mod-and-the-filesystem.html"><strong>7.1.</strong> <code>mod</code> and the Filesystem</a></li><li><a href="ch07-02-controlling-visibility-with-pub.html"><strong>7.2.</strong> Controlling Visibility with <code>pub</code></a></li><li><a href="ch07-03-importing-names-with-use.html"><strong>7.3.</strong> Importing Names with <code>use</code></a></li></ul></li><li><a href="ch08-00-common-collections.html"><strong>8.</strong> Common Collections</a></li><li><ul class="section"><li><a href="ch08-01-vectors.html"><strong>8.1.</strong> Vectors</a></li><li><a href="ch08-02-strings.html"><strong>8.2.</strong> Strings</a></li><li><a href="ch08-03-hash-maps.html"><strong>8.3.</strong> Hash Maps</a></li></ul></li><li><a href="ch09-00-error-handling.html"><strong>9.</strong> Error Handling</a></li><li><ul class="section"><li><a href="ch09-01-unrecoverable-errors-with-panic.html"><strong>9.1.</strong> Unrecoverable Errors with <code>panic!</code></a></li><li><a href="ch09-02-recoverable-errors-with-result.html"><strong>9.2.</strong> Recoverable Errors with <code>Result</code></a></li><li><a href="ch09-03-to-panic-or-not-to-panic.html"><strong>9.3.</strong> To <code>panic!</code> or Not To <code>panic!</code></a></li></ul></li><li><a href="ch10-00-generics.html"><strong>10.</strong> Generic Types, Traits, and Lifetimes</a></li><li><ul class="section"><li><a href="ch10-01-syntax.html"><strong>10.1.</strong> Generic Data Types</a></li><li><a href="ch10-02-traits.html"><strong>10.2.</strong> Traits: Defining Shared Behavior</a></li><li><a href="ch10-03-lifetime-syntax.html"><strong>10.3.</strong> Validating References with Lifetimes</a></li></ul></li><li><a href="ch11-00-testing.html"><strong>11.</strong> Testing</a></li><li><ul class="section"><li><a href="ch11-01-writing-tests.html"><strong>11.1.</strong> Writing tests</a></li><li><a href="ch11-02-running-tests.html"><strong>11.2.</strong> Running tests</a></li><li><a href="ch11-03-test-organization.html"><strong>11.3.</strong> Test Organization</a></li></ul></li><li><a href="ch12-00-an-io-project.html"><strong>12.</strong> An I/O Project</a></li><li><ul class="section"><li><a href="ch12-01-accepting-command-line-arguments.html"><strong>12.1.</strong> Accepting Command Line Arguments</a></li><li><a href="ch12-02-reading-a-file.html"><strong>12.2.</strong> Reading a File</a></li><li><a href="ch12-03-improving-error-handling-and-modularity.html"><strong>12.3.</strong> Improving Error Handling and Modularity</a></li><li><a href="ch12-04-testing-the-librarys-functionality.html"><strong>12.4.</strong> Testing the Library's Functionality</a></li><li><a href="ch12-05-working-with-environment-variables.html"><strong>12.5.</strong> Working with Environment Variables</a></li><li><a href="ch12-06-writing-to-stderr-instead-of-stdout.html"><strong>12.6.</strong> Writing to <code>stderr</code> instead of <code>stdout</code></a></li></ul></li><li><a href="ch13-00-functional-features.html"><strong>13.</strong> Functional Language Features in Rust</a></li><li><ul class="section"><li><a href="ch13-01-closures.html"><strong>13.1.</strong> Closures</a></li><li><a href="ch13-02-iterators.html"><strong>13.2.</strong> Iterators</a></li><li><a href="ch13-03-improving-our-io-project.html"><strong>13.3.</strong> Improving our I/O Project</a></li><li><a href="ch13-04-performance.html"><strong>13.4.</strong> Performance</a></li></ul></li><li><a href="ch14-00-more-about-cargo.html"><strong>14.</strong> More about Cargo and Crates.io</a></li><li><ul class="section"><li><a href="ch14-01-release-profiles.html"><strong>14.1.</strong> Release Profiles</a></li><li><a href="ch14-02-publishing-to-crates-io.html"><strong>14.2.</strong> Publishing a Crate to Crates.io</a></li><li><a href="ch14-03-cargo-workspaces.html"><strong>14.3.</strong> Cargo Workspaces</a></li><li><a href="ch14-04-installing-binaries.html"><strong>14.4.</strong> Installing Binaries from Crates.io with <code>cargo install</code></a></li><li><a href="ch14-05-extending-cargo.html"><strong>14.5.</strong> Extending Cargo with Custom Commands</a></li></ul></li><li><a href="ch15-00-smart-pointers.html"><strong>15.</strong> Smart Pointers</a></li><li><ul class="section"><li><a href="ch15-01-box.html"><strong>15.1.</strong> <code>Box&lt;T&gt;</code> Points to Data on the Heap and Has a Known Size</a></li><li><a href="ch15-02-deref.html" class="active"><strong>15.2.</strong> The <code>Deref</code> Trait Allows Access to the Data Through a Reference</a></li><li><a href="ch15-03-drop.html"><strong>15.3.</strong> The <code>Drop</code> Trait Runs Code on Cleanup</a></li><li><a href="ch15-04-rc.html"><strong>15.4.</strong> <code>Rc&lt;T&gt;</code>, the Reference Counted Smart Pointer</a></li><li><a href="ch15-05-interior-mutability.html"><strong>15.5.</strong> <code>RefCell&lt;T&gt;</code> and the Interior Mutability Pattern</a></li><li><a href="ch15-06-reference-cycles.html"><strong>15.6.</strong> Creating Reference Cycles and Leaking Memory is Safe</a></li></ul></li><li><a href="ch16-00-concurrency.html"><strong>16.</strong> Concurrency</a></li><li><a href="ch17-00-oop.html"><strong>17.</strong> Is Rust OOP?</a></li><li><a href="ch18-00-patterns.html"><strong>18.</strong> Patterns</a></li><li><a href="ch19-00-advanced-features.html"><strong>19.</strong> Advanced Features</a></li><li><ul class="section"><li><a href="ch19-01-unsafe-rust.html"><strong>19.1.</strong> Unsafe Rust</a></li><li><a href="ch19-02-advanced-lifetimes.html"><strong>19.2.</strong> Advanced Lifetimes</a></li><li><a href="ch19-03-advanced-traits.html"><strong>19.3.</strong> Advanced Traits</a></li></ul></li><li><a href="ch20-00-unnamed-project.html"><strong>20.</strong> Un-named project</a></li><li><a href="appendix-00.html"><strong>21.</strong> Appendix</a></li><li><ul class="section"><li><a href="appendix-01-keywords.html"><strong>21.1.</strong> Keywords</a></li><li><a href="appendix-02-operators.html"><strong>21.2.</strong> Operators</a></li><li><a href="appendix-03-derivable-traits.html"><strong>21.3.</strong> Derivable Traits</a></li><li><a href="appendix-04-nightly-rust.html"><strong>21.4.</strong> Nightly Rust</a></li><li><a href="appendix-05-macros.html"><strong>21.5.</strong> Macros</a></li><li><a href="appendix-06-translation.html"><strong>21.6.</strong> Translations</a></li></ul></li></ul>
+        </div>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar" class="menu-bar">
+                    <div class="left-buttons">
+                        <i id="sidebar-toggle" class="fa fa-bars"></i>
+                        <i id="theme-toggle" class="fa fa-paint-brush"></i>
+                    </div>
+
+                    <h1 class="menu-title">The Rust Programming Language</h1>
+
+                    <div class="right-buttons">
+                        <i id="print-button" class="fa fa-print" title="Print this book"></i>
+                    </div>
+                </div>
+
+                <div id="content" class="content">
+                    <a class="header" href="ch15-02-deref.html#the-deref-trait-allows-access-to-the-data-through-a-reference" name="the-deref-trait-allows-access-to-the-data-through-a-reference"><h2>The <code>Deref</code> Trait Allows Access to the Data Through a Reference</h2></a>
+<p>The first important smart pointer-related trait is <code>Deref</code>, which allows us to
+override <code>*</code>, the dereference operator (as opposed to the multiplication
+operator or the glob operator). Overriding <code>*</code> for smart pointers makes
+accessing the data behind the smart pointer convenient, and we'll talk about
+what we mean by convenient when we get to deref coercions later in this section.</p>
+<p>We briefly mentioned the dereference operator in Chapter 8, in the hash map
+section titled &quot;Update a Value Based on the Old Value&quot;. We had a mutable
+reference, and we wanted to change the value that the reference was pointing
+to. In order to do that, first we had to dereference the reference. Here's
+another example using references to <code>i32</code> values:</p>
+<pre><code class="language-rust">let mut x = 5;
+{
+    let y = &amp;mut x;
+
+    *y += 1
+}
+
+assert_eq!(6, x);
+</code></pre>
+<p>We use <code>*y</code> to access the data that the mutable reference in <code>y</code> refers to,
+rather than the mutable reference itself. We can then modify that data, in this
+case by adding 1.</p>
+<p>With references that aren't smart pointers, there's only one value that the
+reference is pointing to, so the dereference operation is straightforward.
+Smart pointers can also store metadata about the pointer or the data. When
+dereferencing a smart pointer, we only want the data, not the metadata, since
+dereferencing a regular reference only gives us data and not metadata. We want
+to be able to use smart pointers in the same places that we can use regular
+references. To enable that, we can override the behavior of the <code>*</code> operator by
+implementing the <code>Deref</code> trait.</p>
+<p>Listing 15-7 has an example of overriding <code>*</code> using <code>Deref</code> on a struct we've
+defined to hold mp3 data and metadata. <code>Mp3</code> is, in a sense, a smart pointer:
+it owns the <code>Vec&lt;u8&gt;</code> data containing the audio. In addition, it holds some
+optional metadata, in this case the artist and title of the song in the audio
+data. We want to be able to conveniently access the audio data, not the
+metadata, so we implement the <code>Deref</code> trait to return the audio data.
+Implementing the <code>Deref</code> trait requires implementing one method named <code>deref</code>
+that borrows <code>self</code> and returns the inner data:</p>
+<figure>
+<span class="filename">Filename: src/main.rs</span>
+<pre><code class="language-rust">use std::ops::Deref;
+
+struct Mp3 {
+    audio: Vec&lt;u8&gt;,
+    artist: Option&lt;String&gt;,
+    title: Option&lt;String&gt;,
+}
+
+impl Deref for Mp3 {
+    type Target = Vec&lt;u8&gt;;
+
+    fn deref(&amp;self) -&gt; &amp;Vec&lt;u8&gt; {
+        &amp;self.audio
+    }
+}
+
+fn main() {
+    let my_favorite_song = Mp3 {
+        // we would read the actual audio data from an mp3 file
+        audio: vec![1, 2, 3],
+        artist: Some(String::from(&quot;Nirvana&quot;)),
+        title: Some(String::from(&quot;Smells Like Teen Spirit&quot;)),
+    };
+
+    assert_eq!(vec![1, 2, 3], *my_favorite_song);
+}
+</code></pre>
+<figcaption>
+<p>Listing 15-7: An implementation of the <code>Deref</code> trait on a struct that holds mp3
+file data and metadata</p>
+</figcaption>
+</figure>
+<p>Most of this should look familiar: a struct, a trait implementation, and a
+main function that creates an instance of the struct. There is one part we
+haven't explained thoroughly yet: similarly to Chapter 13 when we looked at the
+Iterator trait with the <code>type Item</code>, the <code>type Target = T;</code> syntax is defining
+an associated type, which is covered in more detail in Chapter 19. Don't worry
+about that part of the example too much; it is a slightly different way of
+declaring a generic parameter.</p>
+<p>In the <code>assert_eq!</code>, we're verifying that <code>vec![1, 2, 3]</code> is the result we get
+when dereferencing the <code>Mp3</code> instance with <code>*my_favorite_song</code>, which is what
+happens since we implemented the <code>deref</code> method to return the audio data. If
+we hadn't implemented the <code>Deref</code> trait for <code>Mp3</code>, Rust wouldn't compile the
+code <code>*my_favorite_song</code>: we'd get an error saying type <code>Mp3</code> cannot be
+dereferenced.</p>
+<p>The reason this code works is that what the <code>*</code> operator is doing behind
+the scenes when we call <code>*my_favorite_song</code> is:</p>
+<pre><code class="language-rust ignore">*(my_favorite_song.deref())
+</code></pre>
+<p>This calls the <code>deref</code> method on <code>my_favorite_song</code>, which borrows
+<code>my_favorite_song</code> and returns a reference to <code>my_favorite_song.audio</code>, since
+that's what we defined <code>deref</code> to do in Listing 15-5. <code>*</code> on references is
+defined to just follow the reference and return the data, so the expansion of
+<code>*</code> doesn't recurse for the outer <code>*</code>. So we end up with data of type
+<code>Vec&lt;u8&gt;</code>, which matches the <code>vec![1, 2, 3]</code> in the <code>assert_eq!</code> in Listing
+15-5.</p>
+<p>The reason that the return type of the <code>deref</code> method is still a reference and
+why it's necessary to dereference the result of the method is that if the
+<code>deref</code> method returned just the value, using <code>*</code> would always take ownership.</p>
+<a class="header" href="ch15-02-deref.html#implicit-deref-coercions-with-functions-and-methods" name="implicit-deref-coercions-with-functions-and-methods"><h3>Implicit Deref Coercions with Functions and Methods</h3></a>
+<p>Rust tends to favor explicitness over implicitness, but one case where this
+does not hold true is <em>deref coercions</em> of arguments to functions and methods.
+A deref coercion will automatically convert a reference to a pointer or a smart
+pointer into a reference to that pointer's contents. A deref coercion happens
+when a value is passed to a function or method, and only happens if it's needed
+to get the type of the value passed in to match the type of the parameter
+defined in the signature. Deref coercion was added to Rust to make calling
+functions and methods not need as many explicit references and dereferences
+with <code>&amp;</code> and <code>*</code>.</p>
+<p>Using our <code>Mp3</code> struct from Listing 15-5, here's the signature of a function to
+compress mp3 audio data that takes a slice of <code>u8</code>:</p>
+<pre><code class="language-rust ignore">fn compress_mp3(audio: &amp;[u8]) -&gt; Vec&lt;u8&gt; {
+    // the actual implementation would go here
+}
+</code></pre>
+<p>If Rust didn't have deref coercion, in order to call this function with the
+audio data in <code>my_favorite_song</code>, we'd have to write:</p>
+<pre><code class="language-rust ignore">compress_mp3(my_favorite_song.audio.as_slice())
+</code></pre>
+<p>That is, we'd have to explicitly say that we want the data in the <code>audio</code> field
+of <code>my_favorite_song</code> and that we want a slice referring to the whole
+<code>Vec&lt;u8&gt;</code>. If there were a lot of places where we'd want process the <code>audio</code>
+data in a similar manner, <code>.audio.as_slice()</code> would be wordy and repetitive.</p>
+<p>However, because of deref coercion and our implementation of the <code>Deref</code> trait
+on <code>Mp3</code>, we can call this function with the data in <code>my_favorite_song</code> by
+using this code:</p>
+<pre><code class="language-rust ignore">let result = compress_mp3(&amp;my_favorite_song);
+</code></pre>
+<p>Just an <code>&amp;</code> and the instance, nice! We can treat our smart pointer as if it was
+a regular reference. Deref coercion means that Rust can use its knowledge of
+our <code>Deref</code> implementation, namely: Rust knows that <code>Mp3</code> implements the
+<code>Deref</code> trait and returns <code>&amp;Vec&lt;u8&gt;</code> from the <code>deref</code> method. Rust also knows
+the standard library implements the <code>Deref</code> trait on <code>Vec&lt;T&gt;</code> to return <code>&amp;[T]</code>
+from the <code>deref</code> method (and we can find that out too by looking at the API
+documentation for <code>Vec&lt;T&gt;</code>). So, at compile time, Rust will see that it can use
+<code>Deref::deref</code> twice to turn <code>&amp;Mp3</code> into <code>&amp;Vec&lt;u8&gt;</code> and then into <code>&amp;[T]</code> to
+match the signature of <code>compress_mp3</code>. That means we get to do less typing!
+Rust will analyze types through <code>Deref::deref</code> as many times as it needs to in
+order to get a reference to match the parameter's type, when the <code>Deref</code> trait
+is defined for the types involved. The indirection is resolved at compile time,
+so there is no run-time penalty for taking advantage of deref coercion.</p>
+<p>There's also a <code>DerefMut</code> trait for overriding <code>*</code> on <code>&amp;mut T</code> for use in
+assignment in the same fashion that we use <code>Deref</code> to override <code>*</code> on <code>&amp;T</code>s.</p>
+<p>Rust does deref coercion when it finds types and trait implementations in three
+cases:</p>
+<ul>
+<li>From <code>&amp;T</code> to <code>&amp;U</code> when <code>T: Deref&lt;Target=U&gt;</code>.</li>
+<li>From <code>&amp;mut T</code> to <code>&amp;mut U</code> when <code>T: DerefMut&lt;Target=U&gt;</code>.</li>
+<li>From <code>&amp;mut T</code> to <code>&amp;U</code> when <code>T: Deref&lt;Target=U&gt;</code>.</li>
+</ul>
+<p>The first two are the same, except for mutability: if you have a <code>&amp;T</code>, and
+<code>T</code> implements <code>Deref</code> to some type <code>U</code>, you can get a <code>&amp;U</code> transparently. Same
+for mutable references. The last one is more tricky: if you have a mutable
+reference, it will also coerce to an immutable one. The other case is <em>not</em>
+possible though: immutable references will never coerce to mutable ones.</p>
+<p>The reason that the <code>Deref</code> trait is important to the smart pointer pattern is
+that smart pointers can then be treated like regular references and used in
+places that expect regular references. We don't have to redefine methods and
+functions to take smart pointers explicitly, for example.</p>
+
+                </div>
+
+                <!-- Mobile navigation buttons -->
+                
+                    <a href="ch15-01-box.html" class="mobile-nav-chapters previous">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+                    <a href="ch15-03-drop.html" class="mobile-nav-chapters next">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                
+
+            </div>
+
+            
+                <a href="ch15-01-box.html" class="nav-chapters previous" title="You can navigate through the chapters using the arrow keys">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+            
+
+            
+                <a href="ch15-03-drop.html" class="nav-chapters next" title="You can navigate through the chapters using the arrow keys">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            
+
+        </div>
+
+
+        <!-- Local fallback for Font Awesome -->
+        <script>
+            if ($(".fa").css("font-family") !== "FontAwesome") {
+                $('<link rel="stylesheet" type="text/css" href="_FontAwesome/css/font-awesome.css">').prependTo('head');
+            }
+        </script>
+
+        <!-- Livereload script (if served using the cli tool) -->
+        
+
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+    </body>
+</html>

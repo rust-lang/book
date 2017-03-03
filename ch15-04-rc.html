@@ -1,0 +1,282 @@
+<!DOCTYPE HTML>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>`Rc&lt;T&gt;`, the Reference Counted Smart Pointer - The Rust Programming Language</title>
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <base href="">
+
+        <link rel="stylesheet" href="book.css">
+        <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+        <link rel="shortcut icon" href="favicon.png">
+
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+
+        <!-- MathJax -->
+        <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+        <!-- Fetch JQuery from CDN but have a local fallback -->
+        <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+        <script>
+            if (typeof jQuery == 'undefined') {
+                document.write(unescape("%3Cscript src='jquery.js'%3E%3C/script%3E"));
+            }
+        </script>
+    </head>
+    <body class="light">
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme = localStorage.getItem('theme');
+            if (theme == null) { theme = 'light'; }
+            $('body').removeClass().addClass(theme);
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var sidebar = localStorage.getItem('sidebar');
+            if (sidebar === "hidden") { $("html").addClass("sidebar-hidden") }
+            else if (sidebar === "visible") { $("html").addClass("sidebar-visible") }
+        </script>
+
+        <div id="sidebar" class="sidebar">
+            <ul class="chapter"><li><a href="ch01-00-introduction.html"><strong>1.</strong> Introduction</a></li><li><ul class="section"><li><a href="ch01-01-installation.html"><strong>1.1.</strong> Installation</a></li><li><a href="ch01-02-hello-world.html"><strong>1.2.</strong> Hello, World!</a></li></ul></li><li><a href="ch02-00-guessing-game-tutorial.html"><strong>2.</strong> Guessing Game Tutorial</a></li><li><a href="ch03-00-common-programming-concepts.html"><strong>3.</strong> Common Programming Concepts</a></li><li><ul class="section"><li><a href="ch03-01-variables-and-mutability.html"><strong>3.1.</strong> Variables and Mutability</a></li><li><a href="ch03-02-data-types.html"><strong>3.2.</strong> Data Types</a></li><li><a href="ch03-03-how-functions-work.html"><strong>3.3.</strong> How Functions Work</a></li><li><a href="ch03-04-comments.html"><strong>3.4.</strong> Comments</a></li><li><a href="ch03-05-control-flow.html"><strong>3.5.</strong> Control Flow</a></li></ul></li><li><a href="ch04-00-understanding-ownership.html"><strong>4.</strong> Understanding Ownership</a></li><li><ul class="section"><li><a href="ch04-01-what-is-ownership.html"><strong>4.1.</strong> What is Ownership?</a></li><li><a href="ch04-02-references-and-borrowing.html"><strong>4.2.</strong> References &amp; Borrowing</a></li><li><a href="ch04-03-slices.html"><strong>4.3.</strong> Slices</a></li></ul></li><li><a href="ch05-00-structs.html"><strong>5.</strong> Structs</a></li><li><ul class="section"><li><a href="ch05-01-method-syntax.html"><strong>5.1.</strong> Method Syntax</a></li></ul></li><li><a href="ch06-00-enums.html"><strong>6.</strong> Enums and Pattern Matching</a></li><li><ul class="section"><li><a href="ch06-01-defining-an-enum.html"><strong>6.1.</strong> Defining an Enum</a></li><li><a href="ch06-02-match.html"><strong>6.2.</strong> The <code>match</code> Control Flow Operator</a></li><li><a href="ch06-03-if-let.html"><strong>6.3.</strong> Concise Control Flow with <code>if let</code></a></li></ul></li><li><a href="ch07-00-modules.html"><strong>7.</strong> Modules</a></li><li><ul class="section"><li><a href="ch07-01-mod-and-the-filesystem.html"><strong>7.1.</strong> <code>mod</code> and the Filesystem</a></li><li><a href="ch07-02-controlling-visibility-with-pub.html"><strong>7.2.</strong> Controlling Visibility with <code>pub</code></a></li><li><a href="ch07-03-importing-names-with-use.html"><strong>7.3.</strong> Importing Names with <code>use</code></a></li></ul></li><li><a href="ch08-00-common-collections.html"><strong>8.</strong> Common Collections</a></li><li><ul class="section"><li><a href="ch08-01-vectors.html"><strong>8.1.</strong> Vectors</a></li><li><a href="ch08-02-strings.html"><strong>8.2.</strong> Strings</a></li><li><a href="ch08-03-hash-maps.html"><strong>8.3.</strong> Hash Maps</a></li></ul></li><li><a href="ch09-00-error-handling.html"><strong>9.</strong> Error Handling</a></li><li><ul class="section"><li><a href="ch09-01-unrecoverable-errors-with-panic.html"><strong>9.1.</strong> Unrecoverable Errors with <code>panic!</code></a></li><li><a href="ch09-02-recoverable-errors-with-result.html"><strong>9.2.</strong> Recoverable Errors with <code>Result</code></a></li><li><a href="ch09-03-to-panic-or-not-to-panic.html"><strong>9.3.</strong> To <code>panic!</code> or Not To <code>panic!</code></a></li></ul></li><li><a href="ch10-00-generics.html"><strong>10.</strong> Generic Types, Traits, and Lifetimes</a></li><li><ul class="section"><li><a href="ch10-01-syntax.html"><strong>10.1.</strong> Generic Data Types</a></li><li><a href="ch10-02-traits.html"><strong>10.2.</strong> Traits: Defining Shared Behavior</a></li><li><a href="ch10-03-lifetime-syntax.html"><strong>10.3.</strong> Validating References with Lifetimes</a></li></ul></li><li><a href="ch11-00-testing.html"><strong>11.</strong> Testing</a></li><li><ul class="section"><li><a href="ch11-01-writing-tests.html"><strong>11.1.</strong> Writing tests</a></li><li><a href="ch11-02-running-tests.html"><strong>11.2.</strong> Running tests</a></li><li><a href="ch11-03-test-organization.html"><strong>11.3.</strong> Test Organization</a></li></ul></li><li><a href="ch12-00-an-io-project.html"><strong>12.</strong> An I/O Project</a></li><li><ul class="section"><li><a href="ch12-01-accepting-command-line-arguments.html"><strong>12.1.</strong> Accepting Command Line Arguments</a></li><li><a href="ch12-02-reading-a-file.html"><strong>12.2.</strong> Reading a File</a></li><li><a href="ch12-03-improving-error-handling-and-modularity.html"><strong>12.3.</strong> Improving Error Handling and Modularity</a></li><li><a href="ch12-04-testing-the-librarys-functionality.html"><strong>12.4.</strong> Testing the Library's Functionality</a></li><li><a href="ch12-05-working-with-environment-variables.html"><strong>12.5.</strong> Working with Environment Variables</a></li><li><a href="ch12-06-writing-to-stderr-instead-of-stdout.html"><strong>12.6.</strong> Writing to <code>stderr</code> instead of <code>stdout</code></a></li></ul></li><li><a href="ch13-00-functional-features.html"><strong>13.</strong> Functional Language Features in Rust</a></li><li><ul class="section"><li><a href="ch13-01-closures.html"><strong>13.1.</strong> Closures</a></li><li><a href="ch13-02-iterators.html"><strong>13.2.</strong> Iterators</a></li><li><a href="ch13-03-improving-our-io-project.html"><strong>13.3.</strong> Improving our I/O Project</a></li><li><a href="ch13-04-performance.html"><strong>13.4.</strong> Performance</a></li></ul></li><li><a href="ch14-00-more-about-cargo.html"><strong>14.</strong> More about Cargo and Crates.io</a></li><li><ul class="section"><li><a href="ch14-01-release-profiles.html"><strong>14.1.</strong> Release Profiles</a></li><li><a href="ch14-02-publishing-to-crates-io.html"><strong>14.2.</strong> Publishing a Crate to Crates.io</a></li><li><a href="ch14-03-cargo-workspaces.html"><strong>14.3.</strong> Cargo Workspaces</a></li><li><a href="ch14-04-installing-binaries.html"><strong>14.4.</strong> Installing Binaries from Crates.io with <code>cargo install</code></a></li><li><a href="ch14-05-extending-cargo.html"><strong>14.5.</strong> Extending Cargo with Custom Commands</a></li></ul></li><li><a href="ch15-00-smart-pointers.html"><strong>15.</strong> Smart Pointers</a></li><li><ul class="section"><li><a href="ch15-01-box.html"><strong>15.1.</strong> <code>Box&lt;T&gt;</code> Points to Data on the Heap and Has a Known Size</a></li><li><a href="ch15-02-deref.html"><strong>15.2.</strong> The <code>Deref</code> Trait Allows Access to the Data Through a Reference</a></li><li><a href="ch15-03-drop.html"><strong>15.3.</strong> The <code>Drop</code> Trait Runs Code on Cleanup</a></li><li><a href="ch15-04-rc.html" class="active"><strong>15.4.</strong> <code>Rc&lt;T&gt;</code>, the Reference Counted Smart Pointer</a></li><li><a href="ch15-05-interior-mutability.html"><strong>15.5.</strong> <code>RefCell&lt;T&gt;</code> and the Interior Mutability Pattern</a></li><li><a href="ch15-06-reference-cycles.html"><strong>15.6.</strong> Creating Reference Cycles and Leaking Memory is Safe</a></li></ul></li><li><a href="ch16-00-concurrency.html"><strong>16.</strong> Concurrency</a></li><li><a href="ch17-00-oop.html"><strong>17.</strong> Is Rust OOP?</a></li><li><a href="ch18-00-patterns.html"><strong>18.</strong> Patterns</a></li><li><a href="ch19-00-advanced-features.html"><strong>19.</strong> Advanced Features</a></li><li><ul class="section"><li><a href="ch19-01-unsafe-rust.html"><strong>19.1.</strong> Unsafe Rust</a></li><li><a href="ch19-02-advanced-lifetimes.html"><strong>19.2.</strong> Advanced Lifetimes</a></li><li><a href="ch19-03-advanced-traits.html"><strong>19.3.</strong> Advanced Traits</a></li></ul></li><li><a href="ch20-00-unnamed-project.html"><strong>20.</strong> Un-named project</a></li><li><a href="appendix-00.html"><strong>21.</strong> Appendix</a></li><li><ul class="section"><li><a href="appendix-01-keywords.html"><strong>21.1.</strong> Keywords</a></li><li><a href="appendix-02-operators.html"><strong>21.2.</strong> Operators</a></li><li><a href="appendix-03-derivable-traits.html"><strong>21.3.</strong> Derivable Traits</a></li><li><a href="appendix-04-nightly-rust.html"><strong>21.4.</strong> Nightly Rust</a></li><li><a href="appendix-05-macros.html"><strong>21.5.</strong> Macros</a></li><li><a href="appendix-06-translation.html"><strong>21.6.</strong> Translations</a></li></ul></li></ul>
+        </div>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar" class="menu-bar">
+                    <div class="left-buttons">
+                        <i id="sidebar-toggle" class="fa fa-bars"></i>
+                        <i id="theme-toggle" class="fa fa-paint-brush"></i>
+                    </div>
+
+                    <h1 class="menu-title">The Rust Programming Language</h1>
+
+                    <div class="right-buttons">
+                        <i id="print-button" class="fa fa-print" title="Print this book"></i>
+                    </div>
+                </div>
+
+                <div id="content" class="content">
+                    <a class="header" href="ch15-04-rc.html#rct-the-reference-counted-smart-pointer" name="rct-the-reference-counted-smart-pointer"><h2><code>Rc&lt;T&gt;</code>, the Reference Counted Smart Pointer</h2></a>
+<p>In the majority of cases, ownership is very clear: you know exactly which
+variable owns a given value. However, this isn't always the case; sometimes,
+you may actually need multiple owners. For this, Rust has a type called
+<code>Rc&lt;T&gt;</code>. Its name is an abbreviation for <em>reference counting</em>. Reference
+counting means keeping track of the number of references to a value in order to
+know if a value is still in use or not. If there are zero references to a
+value, we know we can clean up the value without any references becoming
+invalid.</p>
+<p>To think about this in terms of a real-world scenario, it's like a TV in a
+family room. When one person comes in the room to watch TV, they turn it on.
+Others can also come in the room and watch the TV. When the last person leaves
+the room, they'll turn the TV off since it's no longer being used. If someone
+turns off the TV while others are still watching it, though, the people
+watching the TV would get mad!</p>
+<p><code>Rc&lt;T&gt;</code> is for use when we want to allocate some data on the heap for multiple
+parts of our program to read, and we can't determine at compile time which part
+of our program using this data will finish using it last. If we knew which part
+would finish last, we could make that part the owner of the data and the normal
+ownership rules enforced at compile time would kick in.</p>
+<p>Note that <code>Rc&lt;T&gt;</code> is only for use in single-threaded scenarios; the next
+chapter on concurrency will cover how to do reference counting in
+multithreaded programs. If you try to use <code>Rc&lt;T&gt;</code> with multiple threads,
+you'll get a compile-time error.</p>
+<a class="header" href="ch15-04-rc.html#using-rct-to-share-data" name="using-rct-to-share-data"><h3>Using <code>Rc&lt;T&gt;</code> to Share Data</h3></a>
+<p>Let's return to our cons list example from Listing 15-5. In Listing 15-11, we're
+going to try to use <code>List</code> as we defined it using <code>Box&lt;T&gt;</code>. First we'll create
+one list instance that contains 5 and then 10. Next, we want to create two more
+lists: one that starts with 3 and continues on to our first list containing 5
+and 10, then another list that starts with 4 and <em>also</em> continues on to our
+first list containing 5 and 10. In other words, we want two lists that both
+share ownership of the third list, which conceptually will be something like
+Figure 15-10:</p>
+<figure>
+<p><img alt="Two lists that share ownership of a third list" src="img/trpl15-03.svg" class="center" /></p>
+<figcaption>
+<p>Figure 15-10: Two lists, <code>b</code> and <code>c</code>, sharing ownership of a third list, <code>a</code></p>
+</figcaption>
+</figure>
+<p>Trying to implement this using our definition of <code>List</code> with <code>Box&lt;T&gt;</code> won't
+work, as shown in Listing 15-11:</p>
+<figure>
+<span class="filename">Filename: src/main.rs</span>
+<pre><code class="language-rust ignore">enum List {
+    Cons(i32, Box&lt;List&gt;),
+    Nil,
+}
+
+use List::{Cons, Nil};
+
+fn main() {
+    let a = Cons(5,
+        Box::new(Cons(10,
+            Box::new(Nil))));
+    let b = Cons(3, Box::new(a));
+    let c = Cons(4, Box::new(a));
+}
+</code></pre>
+<figcaption>
+<p>Listing 15-11: Having two lists using <code>Box&lt;T&gt;</code> that try to share ownership of a
+third list won't work</p>
+</figcaption>
+</figure>
+<p>If we compile this, we get this error:</p>
+<pre><code class="language-text">error[E0382]: use of moved value: `a`
+  --&gt; src/main.rs:13:30
+   |
+12 |     let b = Cons(3, Box::new(a));
+   |                              - value moved here
+13 |     let c = Cons(4, Box::new(a));
+   |                              ^ value used here after move
+   |
+   = note: move occurs because `a` has type `List`, which does not
+   implement the `Copy` trait
+</code></pre>
+<p>The <code>Cons</code> variants own the data they hold, so when we create the <code>b</code> list it
+moves <code>a</code> to be owned by <code>b</code>. Then when we try to use <code>a</code> again when creating
+<code>c</code>, we're not allowed to since <code>a</code> has been moved.</p>
+<p>We could change the definition of <code>Cons</code> to hold references instead, but then
+we'd have to specify lifetime parameters and we'd have to construct elements of
+a list such that every element lives at least as long as the list itself.
+Otherwise, the borrow checker won't even let us compile the code.</p>
+<p>Instead, we can change our definition of <code>List</code> to use <code>Rc&lt;T&gt;</code> instead of
+<code>Box&lt;T&gt;</code> as shown here in Listing 15-12:</p>
+<figure>
+<span class="filename">Filename: src/main.rs</span>
+<pre><code class="language-rust">enum List {
+    Cons(i32, Rc&lt;List&gt;),
+    Nil,
+}
+
+use List::{Cons, Nil};
+use std::rc::Rc;
+
+fn main() {
+    let a = Rc::new(Cons(5, Rc::new(Cons(10, Rc::new(Nil)))));
+    let b = Cons(3, a.clone());
+    let c = Cons(4, a.clone());
+}
+</code></pre>
+<figcaption>
+<p>Listing 15-12: A definition of <code>List</code> that uses <code>Rc&lt;T&gt;</code></p>
+</figcaption>
+</figure>
+<p>Note that we need to add a <code>use</code> statement for <code>Rc</code> because it's not in the
+prelude. In <code>main</code>, we create the list holding 5 and 10 and store it in a new
+<code>Rc</code> in <code>a</code>. Then when we create <code>b</code> and <code>c</code>, we call the <code>clone</code> method on <code>a</code>.</p>
+<a class="header" href="ch15-04-rc.html#cloning-an-rct-increases-the-reference-count" name="cloning-an-rct-increases-the-reference-count"><h3>Cloning an <code>Rc&lt;T&gt;</code> Increases the Reference Count</h3></a>
+<p>We've seen the <code>clone</code> method previously, where we used it for making a
+complete copy of some data. With <code>Rc&lt;T&gt;</code>, though, it doesn't make a full copy.
+<code>Rc&lt;T&gt;</code> holds a <em>reference count</em>, that is, a count of how many clones exist.
+Let's change <code>main</code> as shown in Listing 15-13 to have an inner scope around
+where we create <code>c</code>, and to print out the results of the <code>Rc::strong_count</code>
+associated function at various points. <code>Rc::strong_count</code> returns the reference
+count of the <code>Rc</code> value we pass to it, and we'll talk about why this function
+is named <code>strong_count</code> in the section later in this chapter about preventing
+reference cycles.</p>
+<figure>
+<span class="filename">Filename: src/main.rs</span>
+<pre><code class="language-rust"># enum List {
+#     Cons(i32, Rc&lt;List&gt;),
+#     Nil,
+# }
+#
+# use List::{Cons, Nil};
+# use std::rc::Rc;
+#
+fn main() {
+    let a = Rc::new(Cons(5, Rc::new(Cons(10, Rc::new(Nil)))));
+    println!(&quot;rc = {}&quot;, Rc::strong_count(&amp;a));
+    let b = Cons(3, a.clone());
+    println!(&quot;rc after creating b = {}&quot;, Rc::strong_count(&amp;a));
+    {
+        let c = Cons(4, a.clone());
+        println!(&quot;rc after creating c = {}&quot;, Rc::strong_count(&amp;a));
+    }
+    println!(&quot;rc after c goes out of scope = {}&quot;, Rc::strong_count(&amp;a));
+}
+</code></pre>
+<figcaption>
+<p>Listing 15-13: Printing out the reference count</p>
+</figcaption>
+</figure>
+<p>This will print out:</p>
+<pre><code class="language-text">rc = 1
+rc after creating b = 2
+rc after creating c = 3
+rc after c goes out of scope = 2
+</code></pre>
+<p>We're able to see that <code>a</code> has an initial reference count of one. Then each
+time we call <code>clone</code>, the count goes up by one. When <code>c</code> goes out of scope, the
+count is decreased by one, which happens in the implementation of the <code>Drop</code>
+trait for <code>Rc&lt;T&gt;</code>. What we can't see in this example is that when <code>b</code> and then
+<code>a</code> go out of scope at the end of <code>main</code>, the count of references to the list
+containing 5 and 10 is then 0, and the list is dropped. This strategy lets us
+have multiple owners, as the count will ensure that the value remains valid as
+long as any of the owners still exist.</p>
+<p>In the beginning of this section, we said that <code>Rc&lt;T&gt;</code> only allows you to share
+data for multiple parts of your program to read through immutable references to
+the <code>T</code> value the <code>Rc&lt;T&gt;</code> contains. If <code>Rc&lt;T&gt;</code> let us have a mutable reference,
+we'd run into the problem that the borrowing rules disallow that we discussed
+in Chapter 4: two mutable borrows to the same place can cause data races and
+inconsistencies. But mutating data is very useful! In the next section, we'll
+discuss the interior mutability pattern and the <code>RefCell&lt;T&gt;</code> type that we can
+use in conjunction with an <code>Rc&lt;T&gt;</code> to work with this restriction on
+immutability.</p>
+
+                </div>
+
+                <!-- Mobile navigation buttons -->
+                
+                    <a href="ch15-03-drop.html" class="mobile-nav-chapters previous">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+                    <a href="ch15-05-interior-mutability.html" class="mobile-nav-chapters next">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                
+
+            </div>
+
+            
+                <a href="ch15-03-drop.html" class="nav-chapters previous" title="You can navigate through the chapters using the arrow keys">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+            
+
+            
+                <a href="ch15-05-interior-mutability.html" class="nav-chapters next" title="You can navigate through the chapters using the arrow keys">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            
+
+        </div>
+
+
+        <!-- Local fallback for Font Awesome -->
+        <script>
+            if ($(".fa").css("font-family") !== "FontAwesome") {
+                $('<link rel="stylesheet" type="text/css" href="_FontAwesome/css/font-awesome.css">').prependTo('head');
+            }
+        </script>
+
+        <!-- Livereload script (if served using the cli tool) -->
+        
+
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+    </body>
+</html>
