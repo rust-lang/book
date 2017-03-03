@@ -2,7 +2,7 @@
 <html lang="{{ language }}">
     <head>
         <meta charset="UTF-8">
-        <title>{{ title }}</title>
+        <title>{{ chapter_title }} - {{ title }}</title>
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
         <meta name="description" content="{{ description }}">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -31,7 +31,7 @@
             }
         </script>
     </head>
-    <body>
+    <body class="light">
         <!-- Set the theme before any content is loaded, prevents flash -->
         <script type="text/javascript">
             var theme = localStorage.getItem('theme');
