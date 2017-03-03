@@ -85,6 +85,7 @@ that it's possible, and `std::mem::drop` is in the prelude so we can just call
 `drop` as shown in Listing 15-9:
 
 <figure>
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore
 fn main() {
