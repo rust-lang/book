@@ -451,7 +451,17 @@ in Chapter 10). If a type has the `Copy` trait, an older variable is still
 usable after assignment. Rust won’t let us annotate a type with the `Copy`
 trait if the type, or any of its parts, has implemented the `Drop` trait. If
 the type needs something special to happen when the value goes out of scope and
-we add the `Copy` annotation to that type, we’ll get a compile time error.
+we add the `Copy` annotation to that type, we’ll get a compile time error. If
+you have a data type that comprises of only `Copy` types and wish to
+annotate it as being `Copy` itself, you can do so with `#[derive(Copy, Clone)]`:
+
+```rust
+#[derive(Copy, Clone)]
+struct Point {
+  x: u32,
+  y: u32,
+}
+```
 
 So what types are `Copy`? You can check the documentation for the given type to
 be sure, but as a general rule, any group of simple scalar values can be
