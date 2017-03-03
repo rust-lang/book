@@ -23,7 +23,6 @@ digraph {
     table0:ptr0:c -> table1:pte0;
     table1:ptr1:c -> table2:pte1;
     table3:ptr2 -> table2:pte2 [ dir="back" ];
-
     table0:ptr3 -> table3:pte3:c;
 
     { rank="same"; table1; table2; }

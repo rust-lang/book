@@ -12,9 +12,7 @@ xmlns:xlink="http://www.w3.org/1999/xlink">
 <polygon fill="white" stroke="none" points="-4,4 -4,-121.536 148,-121.536 148,4 -4,4"/>
 <!-- table0 -->
 <g id="node1" class="node"><title>table0</title>
-<polyline fill="none" stroke="black" points="18,-89.5359 30,-89.5359 "/>
 <text text-anchor="start" x="20.8931" y="-95.3359" font-family="Times,serif" font-size="14.00">a</text>
-<polyline fill="none" stroke="black" points="30,-89.5359 36,-89.5359 "/>
 </g>
 <!-- table1 -->
 <g id="node2" class="node"><title>table1</title>
@@ -42,9 +40,7 @@ xmlns:xlink="http://www.w3.org/1999/xlink">
 </g>
 <!-- table2 -->
 <g id="node3" class="node"><title>table2</title>
-<polyline fill="none" stroke="black" points="108,-35.5359 121,-35.5359 "/>
 <text text-anchor="start" x="111" y="-41.3359" font-family="Times,serif" font-size="14.00">b</text>
-<polyline fill="none" stroke="black" points="121,-35.5359 127,-35.5359 "/>
 </g>
 <!-- table1&#45;&gt;table2 -->
 <g id="edge2" class="edge"><title>table1:ptr1:c&#45;&gt;table2:pte1</title>
