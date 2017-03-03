@@ -16,10 +16,7 @@ addons:
 before_script:
   - (cargo install mdbook --git https://github.com/azerupi/mdBook.git --force || true)
 script:
-  - bash spellcheck.sh list
-  - PATH=$PATH:/home/travis/.cargo/bin mdbook test
-  - PATH=$PATH:/home/travis/.cargo/bin mdbook build
-  - cargo run --bin lfp src
+  - bash ci/build.sh
 after_success:
   - test $TRAVIS_PULL_REQUEST == "false" && test $TRAVIS_BRANCH == "master" && bash deploy.sh
 env:
