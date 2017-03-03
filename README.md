@@ -55,7 +55,7 @@ $ mdbook test
 
 We'd love your help! Please see [CONTRIBUTING.md][contrib].
 
-[contrib]: https://github.com/rust-lang/book/blob/master/CONTRIBUTING.md
+[contrib]: https://github.com/rust-lang/book/blob/master/second-edition/CONTRIBUTING.md
 
 ### Translations 
 
