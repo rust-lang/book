@@ -20,6 +20,10 @@ path = "tools/src/bin/link2print.rs"
 name = "remove_links"
 path = "tools/src/bin/remove_links.rs"
 
+[[bin]]
+name = "remove_markup"
+path = "tools/src/bin/remove_markup.rs"
+
 [dependencies]
 walkdir = "0.1.5"
 docopt = "0.6.82"

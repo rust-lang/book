@@ -16,7 +16,7 @@ xargs -n 1 basename | \
 # Remove all links followed by <!-- ignore -->, then
 # Change all remaining links from markdown to italicized inline text.
 while IFS= read -r filename; do
-  < "src/$filename" cargo run --bin remove_links | cargo run --bin link2print > "tmp/$filename"
+  < "src/$filename" cargo run --bin remove_links | cargo run --bin link2print | cargo run --bin remove_markup > "tmp/$filename"
 done
 # Concat the files into the nostarch dir.
 cargo run --bin concat_chapters tmp nostarch
