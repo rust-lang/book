@@ -1,0 +1,224 @@
+<!DOCTYPE HTML>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>`unsafe` - </title>
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <base href="">
+
+        <link rel="stylesheet" href="book.css">
+        <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+        <link rel="shortcut icon" href="favicon.png">
+
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+
+        <!-- MathJax -->
+        <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+        <!-- Fetch JQuery from CDN but have a local fallback -->
+        <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+        <script>
+            if (typeof jQuery == 'undefined') {
+                document.write(unescape("%3Cscript src='jquery.js'%3E%3C/script%3E"));
+            }
+        </script>
+    </head>
+    <body class="light">
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme = localStorage.getItem('theme');
+            if (theme == null) { theme = 'light'; }
+            $('body').removeClass().addClass(theme);
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var sidebar = localStorage.getItem('sidebar');
+            if (sidebar === "hidden") { $("html").addClass("sidebar-hidden") }
+            else if (sidebar === "visible") { $("html").addClass("sidebar-visible") }
+        </script>
+
+        <div id="sidebar" class="sidebar">
+            <ul class="chapter"><li class="affix"><a href="README.html">Introduction</a></li><li><a href="getting-started.html"><strong>1.</strong> Getting Started</a></li><li><a href="guessing-game.html"><strong>2.</strong> Tutorial: Guessing Game</a></li><li><a href="syntax-and-semantics.html"><strong>3.</strong> Syntax and Semantics</a></li><li><ul class="section"><li><a href="variable-bindings.html"><strong>3.1.</strong> Variable Bindings</a></li><li><a href="functions.html"><strong>3.2.</strong> Functions</a></li><li><a href="primitive-types.html"><strong>3.3.</strong> Primitive Types</a></li><li><a href="comments.html"><strong>3.4.</strong> Comments</a></li><li><a href="if.html"><strong>3.5.</strong> if</a></li><li><a href="loops.html"><strong>3.6.</strong> Loops</a></li><li><a href="vectors.html"><strong>3.7.</strong> Vectors</a></li><li><a href="ownership.html"><strong>3.8.</strong> Ownership</a></li><li><a href="references-and-borrowing.html"><strong>3.9.</strong> References and Borrowing</a></li><li><a href="lifetimes.html"><strong>3.10.</strong> Lifetimes</a></li><li><a href="mutability.html"><strong>3.11.</strong> Mutability</a></li><li><a href="structs.html"><strong>3.12.</strong> Structs</a></li><li><a href="enums.html"><strong>3.13.</strong> Enums</a></li><li><a href="match.html"><strong>3.14.</strong> Match</a></li><li><a href="patterns.html"><strong>3.15.</strong> Patterns</a></li><li><a href="method-syntax.html"><strong>3.16.</strong> Method Syntax</a></li><li><a href="strings.html"><strong>3.17.</strong> Strings</a></li><li><a href="generics.html"><strong>3.18.</strong> Generics</a></li><li><a href="traits.html"><strong>3.19.</strong> Traits</a></li><li><a href="drop.html"><strong>3.20.</strong> Drop</a></li><li><a href="if-let.html"><strong>3.21.</strong> if let</a></li><li><a href="trait-objects.html"><strong>3.22.</strong> Trait Objects</a></li><li><a href="closures.html"><strong>3.23.</strong> Closures</a></li><li><a href="ufcs.html"><strong>3.24.</strong> Universal Function Call Syntax</a></li><li><a href="crates-and-modules.html"><strong>3.25.</strong> Crates and Modules</a></li><li><a href="const-and-static.html"><strong>3.26.</strong> <code>const</code> and <code>static</code></a></li><li><a href="attributes.html"><strong>3.27.</strong> Attributes</a></li><li><a href="type-aliases.html"><strong>3.28.</strong> <code>type</code> aliases</a></li><li><a href="casting-between-types.html"><strong>3.29.</strong> Casting between types</a></li><li><a href="associated-types.html"><strong>3.30.</strong> Associated Types</a></li><li><a href="unsized-types.html"><strong>3.31.</strong> Unsized Types</a></li><li><a href="operators-and-overloading.html"><strong>3.32.</strong> Operators and Overloading</a></li><li><a href="deref-coercions.html"><strong>3.33.</strong> Deref coercions</a></li><li><a href="macros.html"><strong>3.34.</strong> Macros</a></li><li><a href="raw-pointers.html"><strong>3.35.</strong> Raw Pointers</a></li><li><a href="unsafe.html" class="active"><strong>3.36.</strong> <code>unsafe</code></a></li></ul></li><li><a href="effective-rust.html"><strong>4.</strong> Effective Rust</a></li><li><ul class="section"><li><a href="the-stack-and-the-heap.html"><strong>4.1.</strong> The Stack and the Heap</a></li><li><a href="testing.html"><strong>4.2.</strong> Testing</a></li><li><a href="conditional-compilation.html"><strong>4.3.</strong> Conditional Compilation</a></li><li><a href="documentation.html"><strong>4.4.</strong> Documentation</a></li><li><a href="iterators.html"><strong>4.5.</strong> Iterators</a></li><li><a href="concurrency.html"><strong>4.6.</strong> Concurrency</a></li><li><a href="error-handling.html"><strong>4.7.</strong> Error Handling</a></li><li><a href="choosing-your-guarantees.html"><strong>4.8.</strong> Choosing your Guarantees</a></li><li><a href="ffi.html"><strong>4.9.</strong> FFI</a></li><li><a href="borrow-and-asref.html"><strong>4.10.</strong> Borrow and AsRef</a></li><li><a href="release-channels.html"><strong>4.11.</strong> Release Channels</a></li><li><a href="using-rust-without-the-standard-library.html"><strong>4.12.</strong> Using Rust without the standard library</a></li><li><a href="procedural-macros.html"><strong>4.13.</strong> Procedural Macros (and custom derive)</a></li></ul></li><li><a href="glossary.html"><strong>5.</strong> Glossary</a></li><li><a href="syntax-index.html"><strong>6.</strong> Syntax Index</a></li><li><a href="bibliography.html"><strong>7.</strong> Bibliography</a></li></ul>
+        </div>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar" class="menu-bar">
+                    <div class="left-buttons">
+                        <i id="sidebar-toggle" class="fa fa-bars"></i>
+                        <i id="theme-toggle" class="fa fa-paint-brush"></i>
+                    </div>
+
+                    <h1 class="menu-title"></h1>
+
+                    <div class="right-buttons">
+                        <i id="print-button" class="fa fa-print" title="Print this book"></i>
+                    </div>
+                </div>
+
+                <div id="content" class="content">
+                    <a class="header" href="unsafe.html#unsafe" name="unsafe"><h1>Unsafe</h1></a>
+<p>Rust’s main draw is its powerful static guarantees about behavior. But safety
+checks are conservative by nature: there are some programs that are actually
+safe, but the compiler is not able to verify this is true. To write these kinds
+of programs, we need to tell the compiler to relax its restrictions a bit. For
+this, Rust has a keyword, <code>unsafe</code>. Code using <code>unsafe</code> has fewer restrictions
+than normal code does.</p>
+<p>Let’s go over the syntax, and then we’ll talk semantics. <code>unsafe</code> is used in
+four contexts. The first one is to mark a function as unsafe:</p>
+<pre><code class="language-rust">unsafe fn danger_will_robinson() {
+    // Scary stuff...
+}
+</code></pre>
+<p>All functions called from <a href="ffi.html">FFI</a> must be marked as <code>unsafe</code>, for example.
+The second use of <code>unsafe</code> is an unsafe block:</p>
+<pre><code class="language-rust">unsafe {
+    // Scary stuff...
+}
+</code></pre>
+<p>The third is for unsafe traits:</p>
+<pre><code class="language-rust">unsafe trait Scary { }
+</code></pre>
+<p>And the fourth is for <code>impl</code>ementing one of those traits:</p>
+<pre><code class="language-rust"># unsafe trait Scary { }
+unsafe impl Scary for i32 {}
+</code></pre>
+<p>It’s important to be able to explicitly delineate code that may have bugs that
+cause big problems. If a Rust program segfaults, you can be sure the cause is
+related to something marked <code>unsafe</code>.</p>
+<a class="header" href="unsafe.html#what-does-safe-mean" name="what-does-safe-mean"><h1>What does ‘safe’ mean?</h1></a>
+<p>Safe, in the context of Rust, means ‘doesn’t do anything unsafe’. It’s also
+important to know that there are certain behaviors that are probably not
+desirable in your code, but are expressly <em>not</em> unsafe:</p>
+<ul>
+<li>Deadlocks</li>
+<li>Leaks of memory or other resources</li>
+<li>Exiting without calling destructors</li>
+<li>Integer overflow</li>
+</ul>
+<p>Rust cannot prevent all kinds of software problems. Buggy code can and will be
+written in Rust. These things aren’t great, but they don’t qualify as <code>unsafe</code>
+specifically.</p>
+<p>In addition, the following are all undefined behaviors in Rust, and must be
+avoided, even when writing <code>unsafe</code> code:</p>
+<ul>
+<li>Data races</li>
+<li>Dereferencing a NULL/dangling raw pointer</li>
+<li>Reads of <a href="http://llvm.org/docs/LangRef.html#undefined-values">undef</a> (uninitialized) memory</li>
+<li>Breaking the <a href="http://llvm.org/docs/LangRef.html#pointer-aliasing-rules">pointer aliasing rules</a> with raw pointers.</li>
+<li><code>&amp;mut T</code> and <code>&amp;T</code> follow LLVM’s scoped <a href="http://llvm.org/docs/LangRef.html#noalias">noalias</a> model, except if
+the <code>&amp;T</code> contains an <code>UnsafeCell&lt;U&gt;</code>. Unsafe code must not violate these
+aliasing guarantees.</li>
+<li>Mutating an immutable value/reference without <code>UnsafeCell&lt;U&gt;</code></li>
+<li>Invoking undefined behavior via compiler intrinsics:
+<ul>
+<li>Indexing outside of the bounds of an object with <code>std::ptr::offset</code>
+(<code>offset</code> intrinsic), with
+the exception of one byte past the end which is permitted.</li>
+<li>Using <code>std::ptr::copy_nonoverlapping_memory</code> (<code>memcpy32</code>/<code>memcpy64</code>
+intrinsics) on overlapping buffers</li>
+</ul>
+</li>
+<li>Invalid values in primitive types, even in private fields/locals:
+<ul>
+<li>NULL/dangling references or boxes</li>
+<li>A value other than <code>false</code> (0) or <code>true</code> (1) in a <code>bool</code></li>
+<li>A discriminant in an <code>enum</code> not included in its type definition</li>
+<li>A value in a <code>char</code> which is a surrogate or above <code>char::MAX</code></li>
+<li>Non-UTF-8 byte sequences in a <code>str</code></li>
+</ul>
+</li>
+<li>Unwinding into Rust from foreign code or unwinding from Rust into foreign
+code.</li>
+</ul>
+<a class="header" href="unsafe.html#unsafe-superpowers" name="unsafe-superpowers"><h1>Unsafe Superpowers</h1></a>
+<p>In both unsafe functions and unsafe blocks, Rust will let you do three things
+that you normally can not do. Just three. Here they are:</p>
+<ol>
+<li>Access or update a <a href="const-and-static.html#static">static mutable variable</a>.</li>
+<li>Dereference a raw pointer.</li>
+<li>Call unsafe functions. This is the most powerful ability.</li>
+</ol>
+<p>That’s it. It’s important that <code>unsafe</code> does not, for example, ‘turn off the
+borrow checker’. Adding <code>unsafe</code> to some random Rust code doesn’t change its
+semantics, it won’t start accepting anything. But it will let you write
+things that <em>do</em> break some of the rules.</p>
+<p>You will also encounter the <code>unsafe</code> keyword when writing bindings to foreign
+(non-Rust) interfaces. You're encouraged to write a safe, native Rust interface
+around the methods provided by the library.</p>
+<p>Let’s go over the basic three abilities listed, in order.</p>
+<a class="header" href="unsafe.html#access-or-update-a-static-mut" name="access-or-update-a-static-mut"><h2>Access or update a <code>static mut</code></h2></a>
+<p>Rust has a feature called ‘<code>static mut</code>’ which allows for mutable global state.
+Doing so can cause a data race, and as such is inherently not safe. For more
+details, see the <a href="const-and-static.html#static">static</a> section of the book.</p>
+<a class="header" href="unsafe.html#dereference-a-raw-pointer" name="dereference-a-raw-pointer"><h2>Dereference a raw pointer</h2></a>
+<p>Raw pointers let you do arbitrary pointer arithmetic, and can cause a number of
+different memory safety and security issues. In some senses, the ability to
+dereference an arbitrary pointer is one of the most dangerous things you can
+do. For more on raw pointers, see <a href="raw-pointers.html">their section of the book</a>.</p>
+<a class="header" href="unsafe.html#call-unsafe-functions" name="call-unsafe-functions"><h2>Call unsafe functions</h2></a>
+<p>This last ability works with both aspects of <code>unsafe</code>: you can only call
+functions marked <code>unsafe</code> from inside an unsafe block.</p>
+<p>This ability is powerful and varied. Rust exposes some <a href="../unstable-book/intrinsics.html">compiler
+intrinsics</a> as unsafe functions, and some unsafe functions bypass
+safety checks, trading safety for speed.</p>
+<p>I’ll repeat again: even though you <em>can</em> do arbitrary things in unsafe blocks
+and functions doesn’t mean you should. The compiler will act as though you’re
+upholding its invariants, so be careful!</p>
+
+                </div>
+
+                <!-- Mobile navigation buttons -->
+                
+                    <a href="raw-pointers.html" class="mobile-nav-chapters previous">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+                    <a href="effective-rust.html" class="mobile-nav-chapters next">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                
+
+            </div>
+
+            
+                <a href="raw-pointers.html" class="nav-chapters previous" title="You can navigate through the chapters using the arrow keys">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+            
+
+            
+                <a href="effective-rust.html" class="nav-chapters next" title="You can navigate through the chapters using the arrow keys">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            
+
+        </div>
+
+
+        <!-- Local fallback for Font Awesome -->
+        <script>
+            if ($(".fa").css("font-family") !== "FontAwesome") {
+                $('<link rel="stylesheet" type="text/css" href="_FontAwesome/css/font-awesome.css">').prependTo('head');
+            }
+        </script>
+
+        <!-- Livereload script (if served using the cli tool) -->
+        
+
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+    </body>
+</html>

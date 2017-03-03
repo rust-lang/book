@@ -1,0 +1,262 @@
+<!DOCTYPE HTML>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Loops - </title>
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <base href="">
+
+        <link rel="stylesheet" href="book.css">
+        <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+        <link rel="shortcut icon" href="favicon.png">
+
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+
+        <!-- MathJax -->
+        <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+        <!-- Fetch JQuery from CDN but have a local fallback -->
+        <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+        <script>
+            if (typeof jQuery == 'undefined') {
+                document.write(unescape("%3Cscript src='jquery.js'%3E%3C/script%3E"));
+            }
+        </script>
+    </head>
+    <body class="light">
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme = localStorage.getItem('theme');
+            if (theme == null) { theme = 'light'; }
+            $('body').removeClass().addClass(theme);
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var sidebar = localStorage.getItem('sidebar');
+            if (sidebar === "hidden") { $("html").addClass("sidebar-hidden") }
+            else if (sidebar === "visible") { $("html").addClass("sidebar-visible") }
+        </script>
+
+        <div id="sidebar" class="sidebar">
+            <ul class="chapter"><li class="affix"><a href="README.html">Introduction</a></li><li><a href="getting-started.html"><strong>1.</strong> Getting Started</a></li><li><a href="guessing-game.html"><strong>2.</strong> Tutorial: Guessing Game</a></li><li><a href="syntax-and-semantics.html"><strong>3.</strong> Syntax and Semantics</a></li><li><ul class="section"><li><a href="variable-bindings.html"><strong>3.1.</strong> Variable Bindings</a></li><li><a href="functions.html"><strong>3.2.</strong> Functions</a></li><li><a href="primitive-types.html"><strong>3.3.</strong> Primitive Types</a></li><li><a href="comments.html"><strong>3.4.</strong> Comments</a></li><li><a href="if.html"><strong>3.5.</strong> if</a></li><li><a href="loops.html" class="active"><strong>3.6.</strong> Loops</a></li><li><a href="vectors.html"><strong>3.7.</strong> Vectors</a></li><li><a href="ownership.html"><strong>3.8.</strong> Ownership</a></li><li><a href="references-and-borrowing.html"><strong>3.9.</strong> References and Borrowing</a></li><li><a href="lifetimes.html"><strong>3.10.</strong> Lifetimes</a></li><li><a href="mutability.html"><strong>3.11.</strong> Mutability</a></li><li><a href="structs.html"><strong>3.12.</strong> Structs</a></li><li><a href="enums.html"><strong>3.13.</strong> Enums</a></li><li><a href="match.html"><strong>3.14.</strong> Match</a></li><li><a href="patterns.html"><strong>3.15.</strong> Patterns</a></li><li><a href="method-syntax.html"><strong>3.16.</strong> Method Syntax</a></li><li><a href="strings.html"><strong>3.17.</strong> Strings</a></li><li><a href="generics.html"><strong>3.18.</strong> Generics</a></li><li><a href="traits.html"><strong>3.19.</strong> Traits</a></li><li><a href="drop.html"><strong>3.20.</strong> Drop</a></li><li><a href="if-let.html"><strong>3.21.</strong> if let</a></li><li><a href="trait-objects.html"><strong>3.22.</strong> Trait Objects</a></li><li><a href="closures.html"><strong>3.23.</strong> Closures</a></li><li><a href="ufcs.html"><strong>3.24.</strong> Universal Function Call Syntax</a></li><li><a href="crates-and-modules.html"><strong>3.25.</strong> Crates and Modules</a></li><li><a href="const-and-static.html"><strong>3.26.</strong> <code>const</code> and <code>static</code></a></li><li><a href="attributes.html"><strong>3.27.</strong> Attributes</a></li><li><a href="type-aliases.html"><strong>3.28.</strong> <code>type</code> aliases</a></li><li><a href="casting-between-types.html"><strong>3.29.</strong> Casting between types</a></li><li><a href="associated-types.html"><strong>3.30.</strong> Associated Types</a></li><li><a href="unsized-types.html"><strong>3.31.</strong> Unsized Types</a></li><li><a href="operators-and-overloading.html"><strong>3.32.</strong> Operators and Overloading</a></li><li><a href="deref-coercions.html"><strong>3.33.</strong> Deref coercions</a></li><li><a href="macros.html"><strong>3.34.</strong> Macros</a></li><li><a href="raw-pointers.html"><strong>3.35.</strong> Raw Pointers</a></li><li><a href="unsafe.html"><strong>3.36.</strong> <code>unsafe</code></a></li></ul></li><li><a href="effective-rust.html"><strong>4.</strong> Effective Rust</a></li><li><ul class="section"><li><a href="the-stack-and-the-heap.html"><strong>4.1.</strong> The Stack and the Heap</a></li><li><a href="testing.html"><strong>4.2.</strong> Testing</a></li><li><a href="conditional-compilation.html"><strong>4.3.</strong> Conditional Compilation</a></li><li><a href="documentation.html"><strong>4.4.</strong> Documentation</a></li><li><a href="iterators.html"><strong>4.5.</strong> Iterators</a></li><li><a href="concurrency.html"><strong>4.6.</strong> Concurrency</a></li><li><a href="error-handling.html"><strong>4.7.</strong> Error Handling</a></li><li><a href="choosing-your-guarantees.html"><strong>4.8.</strong> Choosing your Guarantees</a></li><li><a href="ffi.html"><strong>4.9.</strong> FFI</a></li><li><a href="borrow-and-asref.html"><strong>4.10.</strong> Borrow and AsRef</a></li><li><a href="release-channels.html"><strong>4.11.</strong> Release Channels</a></li><li><a href="using-rust-without-the-standard-library.html"><strong>4.12.</strong> Using Rust without the standard library</a></li><li><a href="procedural-macros.html"><strong>4.13.</strong> Procedural Macros (and custom derive)</a></li></ul></li><li><a href="glossary.html"><strong>5.</strong> Glossary</a></li><li><a href="syntax-index.html"><strong>6.</strong> Syntax Index</a></li><li><a href="bibliography.html"><strong>7.</strong> Bibliography</a></li></ul>
+        </div>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar" class="menu-bar">
+                    <div class="left-buttons">
+                        <i id="sidebar-toggle" class="fa fa-bars"></i>
+                        <i id="theme-toggle" class="fa fa-paint-brush"></i>
+                    </div>
+
+                    <h1 class="menu-title"></h1>
+
+                    <div class="right-buttons">
+                        <i id="print-button" class="fa fa-print" title="Print this book"></i>
+                    </div>
+                </div>
+
+                <div id="content" class="content">
+                    <a class="header" href="loops.html#loops" name="loops"><h1>Loops</h1></a>
+<p>Rust currently provides three approaches to performing some kind of iterative activity. They are: <code>loop</code>, <code>while</code> and <code>for</code>. Each approach has its own set of uses.</p>
+<a class="header" href="loops.html#loop" name="loop"><h2>loop</h2></a>
+<p>The infinite <code>loop</code> is the simplest form of loop available in Rust. Using the keyword <code>loop</code>, Rust provides a way to loop indefinitely until some terminating statement is reached. Rust's infinite <code>loop</code>s look like this:</p>
+<pre><code class="language-rust ignore">loop {
+    println!(&quot;Loop forever!&quot;);
+}
+</code></pre>
+<a class="header" href="loops.html#while" name="while"><h2>while</h2></a>
+<p>Rust also has a <code>while</code> loop. It looks like this:</p>
+<pre><code class="language-rust">let mut x = 5; // mut x: i32
+let mut done = false; // mut done: bool
+
+while !done {
+    x += x - 3;
+
+    println!(&quot;{}&quot;, x);
+
+    if x % 5 == 0 {
+        done = true;
+    }
+}
+</code></pre>
+<p><code>while</code> loops are the correct choice when you’re not sure how many times
+you need to loop.</p>
+<p>If you need an infinite loop, you may be tempted to write this:</p>
+<pre><code class="language-rust ignore">while true {
+</code></pre>
+<p>However, <code>loop</code> is far better suited to handle this case:</p>
+<pre><code class="language-rust ignore">loop {
+</code></pre>
+<p>Rust’s control-flow analysis treats this construct differently than a <code>while true</code>, since we know that it will always loop. In general, the more information
+we can give to the compiler, the better it can do with safety and code
+generation, so you should always prefer <code>loop</code> when you plan to loop
+infinitely.</p>
+<a class="header" href="loops.html#for" name="for"><h2>for</h2></a>
+<p>The <code>for</code> loop is used to loop a particular number of times. Rust’s <code>for</code> loops
+work a bit differently than in other systems languages, however. Rust’s <code>for</code>
+loop doesn’t look like this “C-style” <code>for</code> loop:</p>
+<pre><code class="language-c">for (x = 0; x &lt; 10; x++) {
+    printf( &quot;%d\n&quot;, x );
+}
+</code></pre>
+<p>Instead, it looks like this:</p>
+<pre><code class="language-rust">for x in 0..10 {
+    println!(&quot;{}&quot;, x); // x: i32
+}
+</code></pre>
+<p>In slightly more abstract terms,</p>
+<pre><code class="language-rust ignore">for var in expression {
+    code
+}
+</code></pre>
+<p>The expression is an item that can be converted into an <a href="iterators.html">iterator</a> using
+<a href="../std/iter/trait.IntoIterator.html"><code>IntoIterator</code></a>. The iterator gives back a series of elements. Each element is
+one iteration of the loop. That value is then bound to the name <code>var</code>, which is
+valid for the loop body. Once the body is over, the next value is fetched from
+the iterator, and we loop another time. When there are no more values, the <code>for</code>
+loop is over.</p>
+<p>In our example, <code>0..10</code> is an expression that takes a start and an end position,
+and gives an iterator over those values. The upper bound is exclusive, though,
+so our loop will print <code>0</code> through <code>9</code>, not <code>10</code>.</p>
+<p>Rust does not have the “C-style” <code>for</code> loop on purpose. Manually controlling
+each element of the loop is complicated and error prone, even for experienced C
+developers.</p>
+<a class="header" href="loops.html#enumerate" name="enumerate"><h3>Enumerate</h3></a>
+<p>When you need to keep track of how many times you have already looped, you can
+use the <code>.enumerate()</code> function.</p>
+<a class="header" href="loops.html#on-ranges" name="on-ranges"><h4>On ranges:</h4></a>
+<pre><code class="language-rust">for (index, value) in (5..10).enumerate() {
+    println!(&quot;index = {} and value = {}&quot;, index, value);
+}
+</code></pre>
+<p>Outputs:</p>
+<pre><code class="language-text">index = 0 and value = 5
+index = 1 and value = 6
+index = 2 and value = 7
+index = 3 and value = 8
+index = 4 and value = 9
+</code></pre>
+<p>Don't forget to add the parentheses around the range.</p>
+<a class="header" href="loops.html#on-iterators" name="on-iterators"><h4>On iterators:</h4></a>
+<pre><code class="language-rust">let lines = &quot;hello\nworld&quot;.lines();
+
+for (linenumber, line) in lines.enumerate() {
+    println!(&quot;{}: {}&quot;, linenumber, line);
+}
+</code></pre>
+<p>Outputs:</p>
+<pre><code class="language-text">0: hello
+1: world
+</code></pre>
+<a class="header" href="loops.html#ending-iteration-early" name="ending-iteration-early"><h2>Ending iteration early</h2></a>
+<p>Let’s take a look at that <code>while</code> loop we had earlier:</p>
+<pre><code class="language-rust">let mut x = 5;
+let mut done = false;
+
+while !done {
+    x += x - 3;
+
+    println!(&quot;{}&quot;, x);
+
+    if x % 5 == 0 {
+        done = true;
+    }
+}
+</code></pre>
+<p>We had to keep a dedicated <code>mut</code> boolean variable binding, <code>done</code>, to know
+when we should exit out of the loop. Rust has two keywords to help us with
+modifying iteration: <code>break</code> and <code>continue</code>.</p>
+<p>In this case, we can write the loop in a better way with <code>break</code>:</p>
+<pre><code class="language-rust">let mut x = 5;
+
+loop {
+    x += x - 3;
+
+    println!(&quot;{}&quot;, x);
+
+    if x % 5 == 0 { break; }
+}
+</code></pre>
+<p>We now loop forever with <code>loop</code> and use <code>break</code> to break out early. Issuing an explicit <code>return</code> statement will also serve to terminate the loop early.</p>
+<p><code>continue</code> is similar, but instead of ending the loop, it goes to the next
+iteration. This will only print the odd numbers:</p>
+<pre><code class="language-rust">for x in 0..10 {
+    if x % 2 == 0 { continue; }
+
+    println!(&quot;{}&quot;, x);
+}
+</code></pre>
+<a class="header" href="loops.html#loop-labels" name="loop-labels"><h2>Loop labels</h2></a>
+<p>You may also encounter situations where you have nested loops and need to
+specify which one your <code>break</code> or <code>continue</code> statement is for. Like most
+other languages, by default a <code>break</code> or <code>continue</code> will apply to innermost
+loop. In a situation where you would like to <code>break</code> or <code>continue</code> for one
+of the outer loops, you can use labels to specify which loop the <code>break</code> or
+<code>continue</code> statement applies to. This will only print when both <code>x</code> and <code>y</code> are
+odd:</p>
+<pre><code class="language-rust">'outer: for x in 0..10 {
+    'inner: for y in 0..10 {
+        if x % 2 == 0 { continue 'outer; } // Continues the loop over `x`.
+        if y % 2 == 0 { continue 'inner; } // Continues the loop over `y`.
+        println!(&quot;x: {}, y: {}&quot;, x, y);
+    }
+}
+</code></pre>
+
+                </div>
+
+                <!-- Mobile navigation buttons -->
+                
+                    <a href="if.html" class="mobile-nav-chapters previous">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+                    <a href="vectors.html" class="mobile-nav-chapters next">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                
+
+            </div>
+
+            
+                <a href="if.html" class="nav-chapters previous" title="You can navigate through the chapters using the arrow keys">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+            
+
+            
+                <a href="vectors.html" class="nav-chapters next" title="You can navigate through the chapters using the arrow keys">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            
+
+        </div>
+
+
+        <!-- Local fallback for Font Awesome -->
+        <script>
+            if ($(".fa").css("font-family") !== "FontAwesome") {
+                $('<link rel="stylesheet" type="text/css" href="_FontAwesome/css/font-awesome.css">').prependTo('head');
+            }
+        </script>
+
+        <!-- Livereload script (if served using the cli tool) -->
+        
+
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+    </body>
+</html>

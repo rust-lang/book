@@ -1,0 +1,309 @@
+<!DOCTYPE HTML>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Primitive Types - </title>
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <base href="">
+
+        <link rel="stylesheet" href="book.css">
+        <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+        <link rel="shortcut icon" href="favicon.png">
+
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+
+        <!-- MathJax -->
+        <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+        <!-- Fetch JQuery from CDN but have a local fallback -->
+        <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+        <script>
+            if (typeof jQuery == 'undefined') {
+                document.write(unescape("%3Cscript src='jquery.js'%3E%3C/script%3E"));
+            }
+        </script>
+    </head>
+    <body class="light">
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme = localStorage.getItem('theme');
+            if (theme == null) { theme = 'light'; }
+            $('body').removeClass().addClass(theme);
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var sidebar = localStorage.getItem('sidebar');
+            if (sidebar === "hidden") { $("html").addClass("sidebar-hidden") }
+            else if (sidebar === "visible") { $("html").addClass("sidebar-visible") }
+        </script>
+
+        <div id="sidebar" class="sidebar">
+            <ul class="chapter"><li class="affix"><a href="README.html">Introduction</a></li><li><a href="getting-started.html"><strong>1.</strong> Getting Started</a></li><li><a href="guessing-game.html"><strong>2.</strong> Tutorial: Guessing Game</a></li><li><a href="syntax-and-semantics.html"><strong>3.</strong> Syntax and Semantics</a></li><li><ul class="section"><li><a href="variable-bindings.html"><strong>3.1.</strong> Variable Bindings</a></li><li><a href="functions.html"><strong>3.2.</strong> Functions</a></li><li><a href="primitive-types.html" class="active"><strong>3.3.</strong> Primitive Types</a></li><li><a href="comments.html"><strong>3.4.</strong> Comments</a></li><li><a href="if.html"><strong>3.5.</strong> if</a></li><li><a href="loops.html"><strong>3.6.</strong> Loops</a></li><li><a href="vectors.html"><strong>3.7.</strong> Vectors</a></li><li><a href="ownership.html"><strong>3.8.</strong> Ownership</a></li><li><a href="references-and-borrowing.html"><strong>3.9.</strong> References and Borrowing</a></li><li><a href="lifetimes.html"><strong>3.10.</strong> Lifetimes</a></li><li><a href="mutability.html"><strong>3.11.</strong> Mutability</a></li><li><a href="structs.html"><strong>3.12.</strong> Structs</a></li><li><a href="enums.html"><strong>3.13.</strong> Enums</a></li><li><a href="match.html"><strong>3.14.</strong> Match</a></li><li><a href="patterns.html"><strong>3.15.</strong> Patterns</a></li><li><a href="method-syntax.html"><strong>3.16.</strong> Method Syntax</a></li><li><a href="strings.html"><strong>3.17.</strong> Strings</a></li><li><a href="generics.html"><strong>3.18.</strong> Generics</a></li><li><a href="traits.html"><strong>3.19.</strong> Traits</a></li><li><a href="drop.html"><strong>3.20.</strong> Drop</a></li><li><a href="if-let.html"><strong>3.21.</strong> if let</a></li><li><a href="trait-objects.html"><strong>3.22.</strong> Trait Objects</a></li><li><a href="closures.html"><strong>3.23.</strong> Closures</a></li><li><a href="ufcs.html"><strong>3.24.</strong> Universal Function Call Syntax</a></li><li><a href="crates-and-modules.html"><strong>3.25.</strong> Crates and Modules</a></li><li><a href="const-and-static.html"><strong>3.26.</strong> <code>const</code> and <code>static</code></a></li><li><a href="attributes.html"><strong>3.27.</strong> Attributes</a></li><li><a href="type-aliases.html"><strong>3.28.</strong> <code>type</code> aliases</a></li><li><a href="casting-between-types.html"><strong>3.29.</strong> Casting between types</a></li><li><a href="associated-types.html"><strong>3.30.</strong> Associated Types</a></li><li><a href="unsized-types.html"><strong>3.31.</strong> Unsized Types</a></li><li><a href="operators-and-overloading.html"><strong>3.32.</strong> Operators and Overloading</a></li><li><a href="deref-coercions.html"><strong>3.33.</strong> Deref coercions</a></li><li><a href="macros.html"><strong>3.34.</strong> Macros</a></li><li><a href="raw-pointers.html"><strong>3.35.</strong> Raw Pointers</a></li><li><a href="unsafe.html"><strong>3.36.</strong> <code>unsafe</code></a></li></ul></li><li><a href="effective-rust.html"><strong>4.</strong> Effective Rust</a></li><li><ul class="section"><li><a href="the-stack-and-the-heap.html"><strong>4.1.</strong> The Stack and the Heap</a></li><li><a href="testing.html"><strong>4.2.</strong> Testing</a></li><li><a href="conditional-compilation.html"><strong>4.3.</strong> Conditional Compilation</a></li><li><a href="documentation.html"><strong>4.4.</strong> Documentation</a></li><li><a href="iterators.html"><strong>4.5.</strong> Iterators</a></li><li><a href="concurrency.html"><strong>4.6.</strong> Concurrency</a></li><li><a href="error-handling.html"><strong>4.7.</strong> Error Handling</a></li><li><a href="choosing-your-guarantees.html"><strong>4.8.</strong> Choosing your Guarantees</a></li><li><a href="ffi.html"><strong>4.9.</strong> FFI</a></li><li><a href="borrow-and-asref.html"><strong>4.10.</strong> Borrow and AsRef</a></li><li><a href="release-channels.html"><strong>4.11.</strong> Release Channels</a></li><li><a href="using-rust-without-the-standard-library.html"><strong>4.12.</strong> Using Rust without the standard library</a></li><li><a href="procedural-macros.html"><strong>4.13.</strong> Procedural Macros (and custom derive)</a></li></ul></li><li><a href="glossary.html"><strong>5.</strong> Glossary</a></li><li><a href="syntax-index.html"><strong>6.</strong> Syntax Index</a></li><li><a href="bibliography.html"><strong>7.</strong> Bibliography</a></li></ul>
+        </div>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar" class="menu-bar">
+                    <div class="left-buttons">
+                        <i id="sidebar-toggle" class="fa fa-bars"></i>
+                        <i id="theme-toggle" class="fa fa-paint-brush"></i>
+                    </div>
+
+                    <h1 class="menu-title"></h1>
+
+                    <div class="right-buttons">
+                        <i id="print-button" class="fa fa-print" title="Print this book"></i>
+                    </div>
+                </div>
+
+                <div id="content" class="content">
+                    <a class="header" href="primitive-types.html#primitive-types" name="primitive-types"><h1>Primitive Types</h1></a>
+<p>The Rust language has a number of types that are considered ‘primitive’. This
+means that they’re built-in to the language. Rust is structured in such a way
+that the standard library also provides a number of useful types built on top
+of these ones, as well, but these are the most primitive.</p>
+<a class="header" href="primitive-types.html#booleans" name="booleans"><h1>Booleans</h1></a>
+<p>Rust has a built-in boolean type, named <code>bool</code>. It has two values, <code>true</code> and <code>false</code>:</p>
+<pre><code class="language-rust">let x = true;
+
+let y: bool = false;
+</code></pre>
+<p>A common use of booleans is in <a href="if.html"><code>if</code> conditionals</a>.</p>
+<p>You can find more documentation for <code>bool</code>s <a href="../std/primitive.bool.html">in the standard library
+documentation</a>.</p>
+<a class="header" href="primitive-types.html#char" name="char"><h1><code>char</code></h1></a>
+<p>The <code>char</code> type represents a single Unicode scalar value. You can create <code>char</code>s
+with a single tick: (<code>'</code>)</p>
+<pre><code class="language-rust">let x = 'x';
+let two_hearts = '💕';
+</code></pre>
+<p>Unlike some other languages, this means that Rust’s <code>char</code> is not a single byte,
+but four.</p>
+<p>You can find more documentation for <code>char</code>s <a href="../std/primitive.char.html">in the standard library
+documentation</a>.</p>
+<a class="header" href="primitive-types.html#numeric-types" name="numeric-types"><h1>Numeric types</h1></a>
+<p>Rust has a variety of numeric types in a few categories: signed and unsigned,
+fixed and variable, floating-point and integer.</p>
+<p>These types consist of two parts: the category, and the size. For example,
+<code>u16</code> is an unsigned type with sixteen bits of size. More bits lets you have
+bigger numbers.</p>
+<p>If a number literal has nothing to cause its type to be inferred, it defaults:</p>
+<pre><code class="language-rust">let x = 42; // `x` has type `i32`.
+
+let y = 1.0; // `y` has type `f64`.
+</code></pre>
+<p>Here’s a list of the different numeric types, with links to their documentation
+in the standard library:</p>
+<ul>
+<li><a href="../std/primitive.i8.html">i8</a></li>
+<li><a href="../std/primitive.i16.html">i16</a></li>
+<li><a href="../std/primitive.i32.html">i32</a></li>
+<li><a href="../std/primitive.i64.html">i64</a></li>
+<li><a href="../std/primitive.u8.html">u8</a></li>
+<li><a href="../std/primitive.u16.html">u16</a></li>
+<li><a href="../std/primitive.u32.html">u32</a></li>
+<li><a href="../std/primitive.u64.html">u64</a></li>
+<li><a href="../std/primitive.isize.html">isize</a></li>
+<li><a href="../std/primitive.usize.html">usize</a></li>
+<li><a href="../std/primitive.f32.html">f32</a></li>
+<li><a href="../std/primitive.f64.html">f64</a></li>
+</ul>
+<p>Let’s go over them by category:</p>
+<a class="header" href="primitive-types.html#signed-and-unsigned" name="signed-and-unsigned"><h2>Signed and Unsigned</h2></a>
+<p>Integer types come in two varieties: signed and unsigned. To understand the
+difference, let’s consider a number with four bits of size. A signed, four-bit
+number would let you store numbers from <code>-8</code> to <code>+7</code>. Signed numbers use
+“two’s complement representation”. An unsigned four bit number, since it does
+not need to store negatives, can store values from <code>0</code> to <code>+15</code>.</p>
+<p>Unsigned types use a <code>u</code> for their category, and signed types use <code>i</code>. The <code>i</code>
+is for ‘integer’. So <code>u8</code> is an eight-bit unsigned number, and <code>i8</code> is an
+eight-bit signed number.</p>
+<a class="header" href="primitive-types.html#fixed-size-types" name="fixed-size-types"><h2>Fixed-size types</h2></a>
+<p>Fixed-size types have a specific number of bits in their representation. Valid
+bit sizes are <code>8</code>, <code>16</code>, <code>32</code>, and <code>64</code>. So, <code>u32</code> is an unsigned, 32-bit integer,
+and <code>i64</code> is a signed, 64-bit integer.</p>
+<a class="header" href="primitive-types.html#variable-size-types" name="variable-size-types"><h2>Variable-size types</h2></a>
+<p>Rust also provides types whose particular size depends on the underlying machine
+architecture. Their range is sufficient to express the size of any collection, so
+these types have ‘size’ as the category. They come in signed and unsigned varieties
+which account for two types: <code>isize</code> and <code>usize</code>.</p>
+<a class="header" href="primitive-types.html#floating-point-types" name="floating-point-types"><h2>Floating-point types</h2></a>
+<p>Rust also has two floating point types: <code>f32</code> and <code>f64</code>. These correspond to
+IEEE-754 single and double precision numbers.</p>
+<a class="header" href="primitive-types.html#arrays" name="arrays"><h1>Arrays</h1></a>
+<p>Like many programming languages, Rust has list types to represent a sequence of
+things. The most basic is the <em>array</em>, a fixed-size list of elements of the
+same type. By default, arrays are immutable.</p>
+<pre><code class="language-rust">let a = [1, 2, 3]; // a: [i32; 3]
+let mut m = [1, 2, 3]; // m: [i32; 3]
+</code></pre>
+<p>Arrays have type <code>[T; N]</code>. We’ll talk about this <code>T</code> notation <a href="generics.html">in the generics
+section</a>. The <code>N</code> is a compile-time constant, for the length of the
+array.</p>
+<p>There’s a shorthand for initializing each element of an array to the same
+value. In this example, each element of <code>a</code> will be initialized to <code>0</code>:</p>
+<pre><code class="language-rust">let a = [0; 20]; // a: [i32; 20]
+</code></pre>
+<p>You can get the number of elements in an array <code>a</code> with <code>a.len()</code>:</p>
+<pre><code class="language-rust">let a = [1, 2, 3];
+
+println!(&quot;a has {} elements&quot;, a.len());
+</code></pre>
+<p>You can access a particular element of an array with <em>subscript notation</em>:</p>
+<pre><code class="language-rust">let names = [&quot;Graydon&quot;, &quot;Brian&quot;, &quot;Niko&quot;]; // names: [&amp;str; 3]
+
+println!(&quot;The second name is: {}&quot;, names[1]);
+</code></pre>
+<p>Subscripts start at zero, like in most programming languages, so the first name
+is <code>names[0]</code> and the second name is <code>names[1]</code>. The above example prints
+<code>The second name is: Brian</code>. If you try to use a subscript that is not in the
+array, you will get an error: array access is bounds-checked at run-time. Such
+errant access is the source of many bugs in other systems programming
+languages.</p>
+<p>You can find more documentation for <code>array</code>s <a href="../std/primitive.array.html">in the standard library
+documentation</a>.</p>
+<a class="header" href="primitive-types.html#slices" name="slices"><h1>Slices</h1></a>
+<p>A ‘slice’ is a reference to (or “view” into) another data structure. They are
+useful for allowing safe, efficient access to a portion of an array without
+copying. For example, you might want to reference only one line of a file read
+into memory. By nature, a slice is not created directly, but from an existing
+variable binding. Slices have a defined length, and can be mutable or immutable.</p>
+<p>Internally, slices are represented as a pointer to the beginning of the data
+and a length.</p>
+<a class="header" href="primitive-types.html#slicing-syntax" name="slicing-syntax"><h2>Slicing syntax</h2></a>
+<p>You can use a combo of <code>&amp;</code> and <code>[]</code> to create a slice from various things. The
+<code>&amp;</code> indicates that slices are similar to <a href="references-and-borrowing.html">references</a>, which we will cover in
+detail later in this section. The <code>[]</code>s, with a range, let you define the
+length of the slice:</p>
+<pre><code class="language-rust">let a = [0, 1, 2, 3, 4];
+let complete = &amp;a[..]; // A slice containing all of the elements in `a`.
+let middle = &amp;a[1..4]; // A slice of `a`: only the elements `1`, `2`, and `3`.
+</code></pre>
+<p>Slices have type <code>&amp;[T]</code>. We’ll talk about that <code>T</code> when we cover
+<a href="generics.html">generics</a>.</p>
+<p>You can find more documentation for slices <a href="../std/primitive.slice.html">in the standard library
+documentation</a>.</p>
+<a class="header" href="primitive-types.html#str" name="str"><h1><code>str</code></h1></a>
+<p>Rust’s <code>str</code> type is the most primitive string type. As an <a href="unsized-types.html">unsized type</a>,
+it’s not very useful by itself, but becomes useful when placed behind a
+reference, like <code>&amp;str</code>. We'll elaborate further when we cover
+<a href="strings.html">Strings</a> and <a href="references-and-borrowing.html">references</a>.</p>
+<p>You can find more documentation for <code>str</code> <a href="../std/primitive.str.html">in the standard library
+documentation</a>.</p>
+<a class="header" href="primitive-types.html#tuples" name="tuples"><h1>Tuples</h1></a>
+<p>A tuple is an ordered list of fixed size. Like this:</p>
+<pre><code class="language-rust">let x = (1, &quot;hello&quot;);
+</code></pre>
+<p>The parentheses and commas form this two-length tuple. Here’s the same code, but
+with the type annotated:</p>
+<pre><code class="language-rust">let x: (i32, &amp;str) = (1, &quot;hello&quot;);
+</code></pre>
+<p>As you can see, the type of a tuple looks like the tuple, but with each
+position having a type name rather than the value. Careful readers will also
+note that tuples are heterogeneous: we have an <code>i32</code> and a <code>&amp;str</code> in this tuple.
+In systems programming languages, strings are a bit more complex than in other
+languages. For now, read <code>&amp;str</code> as a <em>string slice</em>, and we’ll learn more
+soon.</p>
+<p>You can assign one tuple into another, if they have the same contained types
+and <a href="glossary.html#arity">arity</a>. Tuples have the same arity when they have the same length.</p>
+<pre><code class="language-rust">let mut x = (1, 2); // x: (i32, i32)
+let y = (2, 3); // y: (i32, i32)
+
+x = y;
+</code></pre>
+<p>You can access the fields in a tuple through a <em>destructuring let</em>. Here’s
+an example:</p>
+<pre><code class="language-rust">let (x, y, z) = (1, 2, 3);
+
+println!(&quot;x is {}&quot;, x);
+</code></pre>
+<p>Remember <a href="variable-bindings.html">before</a> when I said the left-hand side of a <code>let</code> statement was more
+powerful than assigning a binding? Here we are. We can put a pattern on
+the left-hand side of the <code>let</code>, and if it matches up to the right-hand side,
+we can assign multiple bindings at once. In this case, <code>let</code> “destructures”
+or “breaks up” the tuple, and assigns the bits to three bindings.</p>
+<p>This pattern is very powerful, and we’ll see it repeated more later.</p>
+<p>You can disambiguate a single-element tuple from a value in parentheses with a
+comma:</p>
+<pre><code class="language-rust">(0,); // A single-element tuple.
+(0); // A zero in parentheses.
+</code></pre>
+<a class="header" href="primitive-types.html#tuple-indexing" name="tuple-indexing"><h2>Tuple Indexing</h2></a>
+<p>You can also access fields of a tuple with indexing syntax:</p>
+<pre><code class="language-rust">let tuple = (1, 2, 3);
+
+let x = tuple.0;
+let y = tuple.1;
+let z = tuple.2;
+
+println!(&quot;x is {}&quot;, x);
+</code></pre>
+<p>Like array indexing, it starts at zero, but unlike array indexing, it uses a
+<code>.</code>, rather than <code>[]</code>s.</p>
+<p>You can find more documentation for tuples <a href="../std/primitive.tuple.html">in the standard library
+documentation</a>.</p>
+<a class="header" href="primitive-types.html#functions" name="functions"><h1>Functions</h1></a>
+<p>Functions also have a type! They look like this:</p>
+<pre><code class="language-rust">fn foo(x: i32) -&gt; i32 { x }
+
+let x: fn(i32) -&gt; i32 = foo;
+</code></pre>
+<p>In this case, <code>x</code> is a ‘function pointer’ to a function that takes an <code>i32</code> and
+returns an <code>i32</code>.</p>
+
+                </div>
+
+                <!-- Mobile navigation buttons -->
+                
+                    <a href="functions.html" class="mobile-nav-chapters previous">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+                    <a href="comments.html" class="mobile-nav-chapters next">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                
+
+            </div>
+
+            
+                <a href="functions.html" class="nav-chapters previous" title="You can navigate through the chapters using the arrow keys">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+            
+
+            
+                <a href="comments.html" class="nav-chapters next" title="You can navigate through the chapters using the arrow keys">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            
+
+        </div>
+
+
+        <!-- Local fallback for Font Awesome -->
+        <script>
+            if ($(".fa").css("font-family") !== "FontAwesome") {
+                $('<link rel="stylesheet" type="text/css" href="_FontAwesome/css/font-awesome.css">').prependTo('head');
+            }
+        </script>
+
+        <!-- Livereload script (if served using the cli tool) -->
+        
+
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+    </body>
+</html>

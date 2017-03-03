@@ -1,0 +1,331 @@
+<!DOCTYPE HTML>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Structs - </title>
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <base href="">
+
+        <link rel="stylesheet" href="book.css">
+        <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+        <link rel="shortcut icon" href="favicon.png">
+
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+
+        <!-- MathJax -->
+        <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+        <!-- Fetch JQuery from CDN but have a local fallback -->
+        <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+        <script>
+            if (typeof jQuery == 'undefined') {
+                document.write(unescape("%3Cscript src='jquery.js'%3E%3C/script%3E"));
+            }
+        </script>
+    </head>
+    <body class="light">
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme = localStorage.getItem('theme');
+            if (theme == null) { theme = 'light'; }
+            $('body').removeClass().addClass(theme);
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var sidebar = localStorage.getItem('sidebar');
+            if (sidebar === "hidden") { $("html").addClass("sidebar-hidden") }
+            else if (sidebar === "visible") { $("html").addClass("sidebar-visible") }
+        </script>
+
+        <div id="sidebar" class="sidebar">
+            <ul class="chapter"><li class="affix"><a href="README.html">Introduction</a></li><li><a href="getting-started.html"><strong>1.</strong> Getting Started</a></li><li><a href="guessing-game.html"><strong>2.</strong> Tutorial: Guessing Game</a></li><li><a href="syntax-and-semantics.html"><strong>3.</strong> Syntax and Semantics</a></li><li><ul class="section"><li><a href="variable-bindings.html"><strong>3.1.</strong> Variable Bindings</a></li><li><a href="functions.html"><strong>3.2.</strong> Functions</a></li><li><a href="primitive-types.html"><strong>3.3.</strong> Primitive Types</a></li><li><a href="comments.html"><strong>3.4.</strong> Comments</a></li><li><a href="if.html"><strong>3.5.</strong> if</a></li><li><a href="loops.html"><strong>3.6.</strong> Loops</a></li><li><a href="vectors.html"><strong>3.7.</strong> Vectors</a></li><li><a href="ownership.html"><strong>3.8.</strong> Ownership</a></li><li><a href="references-and-borrowing.html"><strong>3.9.</strong> References and Borrowing</a></li><li><a href="lifetimes.html"><strong>3.10.</strong> Lifetimes</a></li><li><a href="mutability.html"><strong>3.11.</strong> Mutability</a></li><li><a href="structs.html" class="active"><strong>3.12.</strong> Structs</a></li><li><a href="enums.html"><strong>3.13.</strong> Enums</a></li><li><a href="match.html"><strong>3.14.</strong> Match</a></li><li><a href="patterns.html"><strong>3.15.</strong> Patterns</a></li><li><a href="method-syntax.html"><strong>3.16.</strong> Method Syntax</a></li><li><a href="strings.html"><strong>3.17.</strong> Strings</a></li><li><a href="generics.html"><strong>3.18.</strong> Generics</a></li><li><a href="traits.html"><strong>3.19.</strong> Traits</a></li><li><a href="drop.html"><strong>3.20.</strong> Drop</a></li><li><a href="if-let.html"><strong>3.21.</strong> if let</a></li><li><a href="trait-objects.html"><strong>3.22.</strong> Trait Objects</a></li><li><a href="closures.html"><strong>3.23.</strong> Closures</a></li><li><a href="ufcs.html"><strong>3.24.</strong> Universal Function Call Syntax</a></li><li><a href="crates-and-modules.html"><strong>3.25.</strong> Crates and Modules</a></li><li><a href="const-and-static.html"><strong>3.26.</strong> <code>const</code> and <code>static</code></a></li><li><a href="attributes.html"><strong>3.27.</strong> Attributes</a></li><li><a href="type-aliases.html"><strong>3.28.</strong> <code>type</code> aliases</a></li><li><a href="casting-between-types.html"><strong>3.29.</strong> Casting between types</a></li><li><a href="associated-types.html"><strong>3.30.</strong> Associated Types</a></li><li><a href="unsized-types.html"><strong>3.31.</strong> Unsized Types</a></li><li><a href="operators-and-overloading.html"><strong>3.32.</strong> Operators and Overloading</a></li><li><a href="deref-coercions.html"><strong>3.33.</strong> Deref coercions</a></li><li><a href="macros.html"><strong>3.34.</strong> Macros</a></li><li><a href="raw-pointers.html"><strong>3.35.</strong> Raw Pointers</a></li><li><a href="unsafe.html"><strong>3.36.</strong> <code>unsafe</code></a></li></ul></li><li><a href="effective-rust.html"><strong>4.</strong> Effective Rust</a></li><li><ul class="section"><li><a href="the-stack-and-the-heap.html"><strong>4.1.</strong> The Stack and the Heap</a></li><li><a href="testing.html"><strong>4.2.</strong> Testing</a></li><li><a href="conditional-compilation.html"><strong>4.3.</strong> Conditional Compilation</a></li><li><a href="documentation.html"><strong>4.4.</strong> Documentation</a></li><li><a href="iterators.html"><strong>4.5.</strong> Iterators</a></li><li><a href="concurrency.html"><strong>4.6.</strong> Concurrency</a></li><li><a href="error-handling.html"><strong>4.7.</strong> Error Handling</a></li><li><a href="choosing-your-guarantees.html"><strong>4.8.</strong> Choosing your Guarantees</a></li><li><a href="ffi.html"><strong>4.9.</strong> FFI</a></li><li><a href="borrow-and-asref.html"><strong>4.10.</strong> Borrow and AsRef</a></li><li><a href="release-channels.html"><strong>4.11.</strong> Release Channels</a></li><li><a href="using-rust-without-the-standard-library.html"><strong>4.12.</strong> Using Rust without the standard library</a></li><li><a href="procedural-macros.html"><strong>4.13.</strong> Procedural Macros (and custom derive)</a></li></ul></li><li><a href="glossary.html"><strong>5.</strong> Glossary</a></li><li><a href="syntax-index.html"><strong>6.</strong> Syntax Index</a></li><li><a href="bibliography.html"><strong>7.</strong> Bibliography</a></li></ul>
+        </div>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar" class="menu-bar">
+                    <div class="left-buttons">
+                        <i id="sidebar-toggle" class="fa fa-bars"></i>
+                        <i id="theme-toggle" class="fa fa-paint-brush"></i>
+                    </div>
+
+                    <h1 class="menu-title"></h1>
+
+                    <div class="right-buttons">
+                        <i id="print-button" class="fa fa-print" title="Print this book"></i>
+                    </div>
+                </div>
+
+                <div id="content" class="content">
+                    <a class="header" href="structs.html#structs" name="structs"><h1>Structs</h1></a>
+<p><code>struct</code>s are a way of creating more complex data types. For example, if we were
+doing calculations involving coordinates in 2D space, we would need both an <code>x</code>
+and a <code>y</code> value:</p>
+<pre><code class="language-rust">let origin_x = 0;
+let origin_y = 0;
+</code></pre>
+<p>A <code>struct</code> lets us combine these two into a single, unified datatype with <code>x</code>
+and <code>y</code> as field labels:</p>
+<pre><code class="language-rust">struct Point {
+    x: i32,
+    y: i32,
+}
+
+fn main() {
+    let origin = Point { x: 0, y: 0 }; // origin: Point
+
+    println!(&quot;The origin is at ({}, {})&quot;, origin.x, origin.y);
+}
+</code></pre>
+<p>There’s a lot going on here, so let’s break it down. We declare a <code>struct</code> with
+the <code>struct</code> keyword, and then with a name. By convention, <code>struct</code>s begin with
+a capital letter and are camel cased: <code>PointInSpace</code>, not <code>Point_In_Space</code>.</p>
+<p>We can create an instance of our <code>struct</code> via <code>let</code>, as usual, but we use a <code>key: value</code> style syntax to set each field. The order doesn’t need to be the same as
+in the original declaration.</p>
+<p>Finally, because fields have names, we can access them through dot
+notation: <code>origin.x</code>.</p>
+<p>The values in <code>struct</code>s are immutable by default, like other bindings in Rust.
+Use <code>mut</code> to make them mutable:</p>
+<pre><code class="language-rust">struct Point {
+    x: i32,
+    y: i32,
+}
+
+fn main() {
+    let mut point = Point { x: 0, y: 0 };
+
+    point.x = 5;
+
+    println!(&quot;The point is at ({}, {})&quot;, point.x, point.y);
+}
+</code></pre>
+<p>This will print <code>The point is at (5, 0)</code>.</p>
+<p>Rust does not support field mutability at the language level, so you cannot
+write something like this:</p>
+<pre><code class="language-rust ignore">struct Point {
+    mut x: i32, // This causes an error.
+    y: i32,
+}
+</code></pre>
+<p>Mutability is a property of the binding, not of the structure itself. If you’re
+used to field-level mutability, this may seem strange at first, but it
+significantly simplifies things. It even lets you make things mutable on a temporary
+basis:</p>
+<pre><code class="language-rust ignore">struct Point {
+    x: i32,
+    y: i32,
+}
+
+fn main() {
+    let mut point = Point { x: 0, y: 0 };
+
+    point.x = 5;
+
+    let point = point; // `point` is now immutable.
+
+    point.y = 6; // This causes an error.
+}
+</code></pre>
+<p>Your structure can still contain <code>&amp;mut</code> references, which will let
+you do some kinds of mutation:</p>
+<pre><code class="language-rust">struct Point {
+    x: i32,
+    y: i32,
+}
+
+struct PointRef&lt;'a&gt; {
+    x: &amp;'a mut i32,
+    y: &amp;'a mut i32,
+}
+
+fn main() {
+    let mut point = Point { x: 0, y: 0 };
+
+    {
+        let r = PointRef { x: &amp;mut point.x, y: &amp;mut point.y };
+
+        *r.x = 5;
+        *r.y = 6;
+    }
+
+    assert_eq!(5, point.x);
+    assert_eq!(6, point.y);
+}
+</code></pre>
+<p>Initialization of a data structure (struct, enum, union) can be simplified when
+fields of the data structure are initialized with variables of the same
+names as the fields.</p>
+<pre><code>#[derive(Debug)]
+struct Person&lt;'a&gt; {
+    name: &amp;'a str,
+    age: u8
+}
+
+fn main() {
+    // Create struct with field init shorthand
+    let name = &quot;Peter&quot;;
+    let age = 27;
+    let peter = Person { name, age };
+
+    // Debug-print struct
+    println!(&quot;{:?}&quot;, peter);
+}
+</code></pre>
+<a class="header" href="structs.html#update-syntax" name="update-syntax"><h1>Update syntax</h1></a>
+<p>A <code>struct</code> can include <code>..</code> to indicate that you want to use a copy of some
+other <code>struct</code> for some of the values. For example:</p>
+<pre><code class="language-rust">struct Point3d {
+    x: i32,
+    y: i32,
+    z: i32,
+}
+
+let mut point = Point3d { x: 0, y: 0, z: 0 };
+point = Point3d { y: 1, .. point };
+</code></pre>
+<p>This gives <code>point</code> a new <code>y</code>, but keeps the old <code>x</code> and <code>z</code> values. It doesn’t
+have to be the same <code>struct</code> either, you can use this syntax when making new
+ones, and it will copy the values you don’t specify:</p>
+<pre><code class="language-rust"># struct Point3d {
+#     x: i32,
+#     y: i32,
+#     z: i32,
+# }
+let origin = Point3d { x: 0, y: 0, z: 0 };
+let point = Point3d { z: 1, x: 2, .. origin };
+</code></pre>
+<a class="header" href="structs.html#tuple-structs" name="tuple-structs"><h1>Tuple structs</h1></a>
+<p>Rust has another data type that’s like a hybrid between a <a href="primitive-types.html#tuples">tuple</a> and a
+<code>struct</code>, called a ‘tuple struct’. Tuple structs have a name, but their fields
+don't. They are declared with the <code>struct</code> keyword, and then with a name
+followed by a tuple:</p>
+<pre><code class="language-rust">struct Color(i32, i32, i32);
+struct Point(i32, i32, i32);
+
+let black = Color(0, 0, 0);
+let origin = Point(0, 0, 0);
+</code></pre>
+<p>Here, <code>black</code> and <code>origin</code> are not the same type, even though they contain the
+same values.</p>
+<p>The members of a tuple struct may be accessed by dot notation or destructuring
+<code>let</code>, just like regular tuples:</p>
+<pre><code class="language-rust"># struct Color(i32, i32, i32);
+# struct Point(i32, i32, i32);
+# let black = Color(0, 0, 0);
+# let origin = Point(0, 0, 0);
+let black_r = black.0;
+let Point(_, origin_y, origin_z) = origin;
+</code></pre>
+<p>Patterns like <code>Point(_, origin_y, origin_z)</code> are also used in
+<a href="match.html">match expressions</a>.</p>
+<p>One case when a tuple struct is very useful is when it has only one element.
+We call this the ‘newtype’ pattern, because it allows you to create a new type
+that is distinct from its contained value and also expresses its own semantic
+meaning:</p>
+<pre><code class="language-rust">struct Inches(i32);
+
+let length = Inches(10);
+
+let Inches(integer_length) = length;
+println!(&quot;length is {} inches&quot;, integer_length);
+</code></pre>
+<p>As above, you can extract the inner integer type through a destructuring <code>let</code>.
+In this case, the <code>let Inches(integer_length)</code> assigns <code>10</code> to <code>integer_length</code>.
+We could have used dot notation to do the same thing:</p>
+<pre><code class="language-rust"># struct Inches(i32);
+# let length = Inches(10);
+let integer_length = length.0;
+</code></pre>
+<p>It's always possible to use a <code>struct</code> instead of a tuple struct, and can be
+clearer. We could write <code>Color</code> and <code>Point</code> like this instead:</p>
+<pre><code class="language-rust">struct Color {
+    red: i32,
+    blue: i32,
+    green: i32,
+}
+
+struct Point {
+    x: i32,
+    y: i32,
+    z: i32,
+}
+</code></pre>
+<p>Good names are important, and while values in a tuple struct can be
+referenced with dot notation as well, a <code>struct</code> gives us actual names,
+rather than positions.</p>
+<a class="header" href="structs.html#unit-like-structs" name="unit-like-structs"><h1>Unit-like structs</h1></a>
+<p>You can define a <code>struct</code> with no members at all:</p>
+<pre><code class="language-rust compile_fail E0423">struct Electron {} // Use empty braces...
+struct Proton;     // ...or just a semicolon.
+
+// Use the same notation when creating an instance.
+let x = Electron {};
+let y = Proton;
+let z = Electron; // Error
+</code></pre>
+<p>Such a <code>struct</code> is called ‘unit-like’ because it resembles the empty
+tuple, <code>()</code>, sometimes called ‘unit’. Like a tuple struct, it defines a
+new type.</p>
+<p>This is rarely useful on its own (although sometimes it can serve as a
+marker type), but in combination with other features, it can become
+useful. For instance, a library may ask you to create a structure that
+implements a certain <a href="traits.html">trait</a> to handle events. If you don’t have
+any data you need to store in the structure, you can create a
+unit-like <code>struct</code>.</p>
+
+                </div>
+
+                <!-- Mobile navigation buttons -->
+                
+                    <a href="mutability.html" class="mobile-nav-chapters previous">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+                    <a href="enums.html" class="mobile-nav-chapters next">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                
+
+            </div>
+
+            
+                <a href="mutability.html" class="nav-chapters previous" title="You can navigate through the chapters using the arrow keys">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+            
+
+            
+                <a href="enums.html" class="nav-chapters next" title="You can navigate through the chapters using the arrow keys">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            
+
+        </div>
+
+
+        <!-- Local fallback for Font Awesome -->
+        <script>
+            if ($(".fa").css("font-family") !== "FontAwesome") {
+                $('<link rel="stylesheet" type="text/css" href="_FontAwesome/css/font-awesome.css">').prependTo('head');
+            }
+        </script>
+
+        <!-- Livereload script (if served using the cli tool) -->
+        
+
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+    </body>
+</html>

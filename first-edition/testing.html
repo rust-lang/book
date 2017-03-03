@@ -1,0 +1,623 @@
+<!DOCTYPE HTML>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Testing - </title>
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <base href="">
+
+        <link rel="stylesheet" href="book.css">
+        <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+        <link rel="shortcut icon" href="favicon.png">
+
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+
+        <!-- MathJax -->
+        <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+        <!-- Fetch JQuery from CDN but have a local fallback -->
+        <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+        <script>
+            if (typeof jQuery == 'undefined') {
+                document.write(unescape("%3Cscript src='jquery.js'%3E%3C/script%3E"));
+            }
+        </script>
+    </head>
+    <body class="light">
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme = localStorage.getItem('theme');
+            if (theme == null) { theme = 'light'; }
+            $('body').removeClass().addClass(theme);
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var sidebar = localStorage.getItem('sidebar');
+            if (sidebar === "hidden") { $("html").addClass("sidebar-hidden") }
+            else if (sidebar === "visible") { $("html").addClass("sidebar-visible") }
+        </script>
+
+        <div id="sidebar" class="sidebar">
+            <ul class="chapter"><li class="affix"><a href="README.html">Introduction</a></li><li><a href="getting-started.html"><strong>1.</strong> Getting Started</a></li><li><a href="guessing-game.html"><strong>2.</strong> Tutorial: Guessing Game</a></li><li><a href="syntax-and-semantics.html"><strong>3.</strong> Syntax and Semantics</a></li><li><ul class="section"><li><a href="variable-bindings.html"><strong>3.1.</strong> Variable Bindings</a></li><li><a href="functions.html"><strong>3.2.</strong> Functions</a></li><li><a href="primitive-types.html"><strong>3.3.</strong> Primitive Types</a></li><li><a href="comments.html"><strong>3.4.</strong> Comments</a></li><li><a href="if.html"><strong>3.5.</strong> if</a></li><li><a href="loops.html"><strong>3.6.</strong> Loops</a></li><li><a href="vectors.html"><strong>3.7.</strong> Vectors</a></li><li><a href="ownership.html"><strong>3.8.</strong> Ownership</a></li><li><a href="references-and-borrowing.html"><strong>3.9.</strong> References and Borrowing</a></li><li><a href="lifetimes.html"><strong>3.10.</strong> Lifetimes</a></li><li><a href="mutability.html"><strong>3.11.</strong> Mutability</a></li><li><a href="structs.html"><strong>3.12.</strong> Structs</a></li><li><a href="enums.html"><strong>3.13.</strong> Enums</a></li><li><a href="match.html"><strong>3.14.</strong> Match</a></li><li><a href="patterns.html"><strong>3.15.</strong> Patterns</a></li><li><a href="method-syntax.html"><strong>3.16.</strong> Method Syntax</a></li><li><a href="strings.html"><strong>3.17.</strong> Strings</a></li><li><a href="generics.html"><strong>3.18.</strong> Generics</a></li><li><a href="traits.html"><strong>3.19.</strong> Traits</a></li><li><a href="drop.html"><strong>3.20.</strong> Drop</a></li><li><a href="if-let.html"><strong>3.21.</strong> if let</a></li><li><a href="trait-objects.html"><strong>3.22.</strong> Trait Objects</a></li><li><a href="closures.html"><strong>3.23.</strong> Closures</a></li><li><a href="ufcs.html"><strong>3.24.</strong> Universal Function Call Syntax</a></li><li><a href="crates-and-modules.html"><strong>3.25.</strong> Crates and Modules</a></li><li><a href="const-and-static.html"><strong>3.26.</strong> <code>const</code> and <code>static</code></a></li><li><a href="attributes.html"><strong>3.27.</strong> Attributes</a></li><li><a href="type-aliases.html"><strong>3.28.</strong> <code>type</code> aliases</a></li><li><a href="casting-between-types.html"><strong>3.29.</strong> Casting between types</a></li><li><a href="associated-types.html"><strong>3.30.</strong> Associated Types</a></li><li><a href="unsized-types.html"><strong>3.31.</strong> Unsized Types</a></li><li><a href="operators-and-overloading.html"><strong>3.32.</strong> Operators and Overloading</a></li><li><a href="deref-coercions.html"><strong>3.33.</strong> Deref coercions</a></li><li><a href="macros.html"><strong>3.34.</strong> Macros</a></li><li><a href="raw-pointers.html"><strong>3.35.</strong> Raw Pointers</a></li><li><a href="unsafe.html"><strong>3.36.</strong> <code>unsafe</code></a></li></ul></li><li><a href="effective-rust.html"><strong>4.</strong> Effective Rust</a></li><li><ul class="section"><li><a href="the-stack-and-the-heap.html"><strong>4.1.</strong> The Stack and the Heap</a></li><li><a href="testing.html" class="active"><strong>4.2.</strong> Testing</a></li><li><a href="conditional-compilation.html"><strong>4.3.</strong> Conditional Compilation</a></li><li><a href="documentation.html"><strong>4.4.</strong> Documentation</a></li><li><a href="iterators.html"><strong>4.5.</strong> Iterators</a></li><li><a href="concurrency.html"><strong>4.6.</strong> Concurrency</a></li><li><a href="error-handling.html"><strong>4.7.</strong> Error Handling</a></li><li><a href="choosing-your-guarantees.html"><strong>4.8.</strong> Choosing your Guarantees</a></li><li><a href="ffi.html"><strong>4.9.</strong> FFI</a></li><li><a href="borrow-and-asref.html"><strong>4.10.</strong> Borrow and AsRef</a></li><li><a href="release-channels.html"><strong>4.11.</strong> Release Channels</a></li><li><a href="using-rust-without-the-standard-library.html"><strong>4.12.</strong> Using Rust without the standard library</a></li><li><a href="procedural-macros.html"><strong>4.13.</strong> Procedural Macros (and custom derive)</a></li></ul></li><li><a href="glossary.html"><strong>5.</strong> Glossary</a></li><li><a href="syntax-index.html"><strong>6.</strong> Syntax Index</a></li><li><a href="bibliography.html"><strong>7.</strong> Bibliography</a></li></ul>
+        </div>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar" class="menu-bar">
+                    <div class="left-buttons">
+                        <i id="sidebar-toggle" class="fa fa-bars"></i>
+                        <i id="theme-toggle" class="fa fa-paint-brush"></i>
+                    </div>
+
+                    <h1 class="menu-title"></h1>
+
+                    <div class="right-buttons">
+                        <i id="print-button" class="fa fa-print" title="Print this book"></i>
+                    </div>
+                </div>
+
+                <div id="content" class="content">
+                    <a class="header" href="testing.html#testing" name="testing"><h1>Testing</h1></a>
+<blockquote>
+<p>Program testing can be a very effective way to show the presence of bugs, but
+it is hopelessly inadequate for showing their absence.</p>
+<p>Edsger W. Dijkstra, &quot;The Humble Programmer&quot; (1972)</p>
+</blockquote>
+<p>Let's talk about how to test Rust code. What we will not be talking about is
+the right way to test Rust code. There are many schools of thought regarding
+the right and wrong way to write tests. All of these approaches use the same
+basic tools, and so we'll show you the syntax for using them.</p>
+<a class="header" href="testing.html#the-test-attribute" name="the-test-attribute"><h1>The <code>test</code> attribute</h1></a>
+<p>At its simplest, a test in Rust is a function that's annotated with the <code>test</code>
+attribute. Let's make a new project with Cargo called <code>adder</code>:</p>
+<pre><code class="language-bash">$ cargo new adder
+$ cd adder
+</code></pre>
+<p>Cargo will automatically generate a simple test when you make a new project.
+Here's the contents of <code>src/lib.rs</code>:</p>
+<pre><code class="language-rust ignore"># // The next line exists to trick play.rust-lang.org into running our code as a
+# // test:
+# // fn main
+#
+#[cfg(test)]
+mod tests {
+    #[test]
+    fn it_works() {
+    }
+}
+</code></pre>
+<p>For now, let's remove the <code>mod</code> bit, and focus on just the function:</p>
+<pre><code class="language-rust ignore"># // The next line exists to trick play.rust-lang.org into running our code as a
+# // test:
+# // fn main
+#
+#[test]
+fn it_works() {
+}
+</code></pre>
+<p>Note the <code>#[test]</code>. This attribute indicates that this is a test function. It
+currently has no body. That's good enough to pass! We can run the tests with
+<code>cargo test</code>:</p>
+<pre><code class="language-bash">$ cargo test
+   Compiling adder v0.1.0 (file:///home/you/projects/adder)
+    Finished debug [unoptimized + debuginfo] target(s) in 0.15 secs
+     Running target/debug/deps/adder-941f01916ca4a642
+
+running 1 test
+test it_works ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured
+
+   Doc-tests adder
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured
+</code></pre>
+<p>Cargo compiled and ran our tests. There are two sets of output here: one
+for the test we wrote, and another for documentation tests. We'll talk about
+those later. For now, see this line:</p>
+<pre><code class="language-text">test it_works ... ok
+</code></pre>
+<p>Note the <code>it_works</code>. This comes from the name of our function:</p>
+<pre><code class="language-rust"># fn main() {
+fn it_works() {
+}
+# }
+</code></pre>
+<p>We also get a summary line:</p>
+<pre><code class="language-text">test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured
+</code></pre>
+<p>So why does our do-nothing test pass? Any test which doesn't <code>panic!</code> passes,
+and any test that does <code>panic!</code> fails. Let's make our test fail:</p>
+<pre><code class="language-rust ignore"># // The next line exists to trick play.rust-lang.org into running our code as a
+# // test:
+# // fn main
+#
+#[test]
+fn it_works() {
+    assert!(false);
+}
+</code></pre>
+<p><code>assert!</code> is a macro provided by Rust which takes one argument: if the argument
+is <code>true</code>, nothing happens. If the argument is <code>false</code>, it will <code>panic!</code>. Let's
+run our tests again:</p>
+<pre><code class="language-bash">$ cargo test
+   Compiling adder v0.1.0 (file:///home/you/projects/adder)
+    Finished debug [unoptimized + debuginfo] target(s) in 0.17 secs
+     Running target/debug/deps/adder-941f01916ca4a642
+
+running 1 test
+test it_works ... FAILED
+
+failures:
+
+---- it_works stdout ----
+        thread 'it_works' panicked at 'assertion failed: false', src/lib.rs:5
+note: Run with `RUST_BACKTRACE=1` for a backtrace.
+
+
+failures:
+    it_works
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured
+
+error: test failed
+</code></pre>
+<p>Rust indicates that our test failed:</p>
+<pre><code class="language-text">test it_works ... FAILED
+</code></pre>
+<p>And that's reflected in the summary line:</p>
+<pre><code class="language-text">test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured
+</code></pre>
+<p>We also get a non-zero status code. We can use <code>$?</code> on OS X and Linux:</p>
+<pre><code class="language-bash">$ echo $?
+101
+</code></pre>
+<p>On Windows, if you’re using <code>cmd</code>:</p>
+<pre><code class="language-bash">&gt; echo %ERRORLEVEL%
+</code></pre>
+<p>And if you’re using PowerShell:</p>
+<pre><code class="language-bash">&gt; echo $LASTEXITCODE # the code itself
+&gt; echo $? # a boolean, fail or succeed
+</code></pre>
+<p>This is useful if you want to integrate <code>cargo test</code> into other tooling.</p>
+<p>We can invert our test's failure with another attribute: <code>should_panic</code>:</p>
+<pre><code class="language-rust ignore"># // The next line exists to trick play.rust-lang.org into running our code as a
+# // test:
+# // fn main
+#
+#[test]
+#[should_panic]
+fn it_works() {
+    assert!(false);
+}
+</code></pre>
+<p>This test will now succeed if we <code>panic!</code> and fail if we complete. Let's try it:</p>
+<pre><code class="language-bash">$ cargo test
+   Compiling adder v0.1.0 (file:///home/you/projects/adder)
+    Finished debug [unoptimized + debuginfo] target(s) in 0.17 secs
+     Running target/debug/deps/adder-941f01916ca4a642
+
+running 1 test
+test it_works ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured
+
+   Doc-tests adder
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured
+</code></pre>
+<p>Rust provides another macro, <code>assert_eq!</code>, that compares two arguments for
+equality:</p>
+<pre><code class="language-rust ignore"># // The next line exists to trick play.rust-lang.org into running our code as a
+# // test:
+# // fn main
+#
+#[test]
+#[should_panic]
+fn it_works() {
+    assert_eq!(&quot;Hello&quot;, &quot;world&quot;);
+}
+</code></pre>
+<p>Does this test pass or fail? Because of the <code>should_panic</code> attribute, it
+passes:</p>
+<pre><code class="language-bash">$ cargo test
+   Compiling adder v0.1.0 (file:///home/you/projects/adder)
+    Finished debug [unoptimized + debuginfo] target(s) in 0.21 secs
+     Running target/debug/deps/adder-941f01916ca4a642
+
+running 1 test
+test it_works ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured
+
+   Doc-tests adder
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured
+</code></pre>
+<p><code>should_panic</code> tests can be fragile, as it's hard to guarantee that the test
+didn't fail for an unexpected reason. To help with this, an optional <code>expected</code>
+parameter can be added to the <code>should_panic</code> attribute. The test harness will
+make sure that the failure message contains the provided text. A safer version
+of the example above would be:</p>
+<pre><code class="language-rust ignore"># // The next line exists to trick play.rust-lang.org into running our code as a
+# // test:
+# // fn main
+#
+#[test]
+#[should_panic(expected = &quot;assertion failed&quot;)]
+fn it_works() {
+    assert_eq!(&quot;Hello&quot;, &quot;world&quot;);
+}
+</code></pre>
+<p>That's all there is to the basics! Let's write one 'real' test:</p>
+<pre><code class="language-rust ignore"># // The next line exists to trick play.rust-lang.org into running our code as a
+# // test:
+# // fn main
+#
+pub fn add_two(a: i32) -&gt; i32 {
+    a + 2
+}
+
+#[test]
+fn it_works() {
+    assert_eq!(4, add_two(2));
+}
+</code></pre>
+<p>This is a very common use of <code>assert_eq!</code>: call some function with
+some known arguments and compare it to the expected output.</p>
+<a class="header" href="testing.html#the-ignore-attribute" name="the-ignore-attribute"><h1>The <code>ignore</code> attribute</h1></a>
+<p>Sometimes a few specific tests can be very time-consuming to execute. These
+can be disabled by default by using the <code>ignore</code> attribute:</p>
+<pre><code class="language-rust ignore"># // The next line exists to trick play.rust-lang.org into running our code as a
+# // test:
+# // fn main
+#
+pub fn add_two(a: i32) -&gt; i32 {
+    a + 2
+}
+
+#[test]
+fn it_works() {
+    assert_eq!(4, add_two(2));
+}
+
+#[test]
+#[ignore]
+fn expensive_test() {
+    // Code that takes an hour to run...
+}
+</code></pre>
+<p>Now we run our tests and see that <code>it_works</code> is run, but <code>expensive_test</code> is
+not:</p>
+<pre><code class="language-bash">$ cargo test
+   Compiling adder v0.1.0 (file:///home/you/projects/adder)
+    Finished debug [unoptimized + debuginfo] target(s) in 0.20 secs
+     Running target/debug/deps/adder-941f01916ca4a642
+
+running 2 tests
+test expensive_test ... ignored
+test it_works ... ok
+
+test result: ok. 1 passed; 0 failed; 1 ignored; 0 measured
+
+   Doc-tests adder
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured
+</code></pre>
+<p>The expensive tests can be run explicitly using <code>cargo test -- --ignored</code>:</p>
+<pre><code class="language-bash">$ cargo test -- --ignored
+    Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
+     Running target/debug/deps/adder-941f01916ca4a642
+
+running 1 test
+test expensive_test ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured
+
+   Doc-tests adder
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured
+</code></pre>
+<p>The <code>--ignored</code> argument is an argument to the test binary, and not to Cargo,
+which is why the command is <code>cargo test -- --ignored</code>.</p>
+<a class="header" href="testing.html#the-tests-module" name="the-tests-module"><h1>The <code>tests</code> module</h1></a>
+<p>There is one way in which our existing example is not idiomatic: it's
+missing the <code>tests</code> module. You might have noticed this test module was
+present in the code that was initially generated with <code>cargo new</code> but
+was missing from our last example. Let's explain what this does.</p>
+<p>The idiomatic way of writing our example looks like this:</p>
+<pre><code class="language-rust ignore"># // The next line exists to trick play.rust-lang.org into running our code as a
+# // test:
+# // fn main
+#
+pub fn add_two(a: i32) -&gt; i32 {
+    a + 2
+}
+
+#[cfg(test)]
+mod tests {
+    use super::add_two;
+
+    #[test]
+    fn it_works() {
+        assert_eq!(4, add_two(2));
+    }
+}
+</code></pre>
+<p>There's a few changes here. The first is the introduction of a <code>mod tests</code> with
+a <code>cfg</code> attribute. The module allows us to group all of our tests together, and
+to also define helper functions if needed, that don't become a part of the rest
+of our crate. The <code>cfg</code> attribute only compiles our test code if we're
+currently trying to run the tests. This can save compile time, and also ensures
+that our tests are entirely left out of a normal build.</p>
+<p>The second change is the <code>use</code> declaration. Because we're in an inner module,
+we need to bring the tested function into scope. This can be annoying if you have
+a large module, and so this is a common use of globs. Let's change our
+<code>src/lib.rs</code> to make use of it:</p>
+<pre><code class="language-rust ignore"># // The next line exists to trick play.rust-lang.org into running our code as a
+# // test:
+# // fn main
+#
+pub fn add_two(a: i32) -&gt; i32 {
+    a + 2
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn it_works() {
+        assert_eq!(4, add_two(2));
+    }
+}
+</code></pre>
+<p>Note the different <code>use</code> line. Now we run our tests:</p>
+<pre><code class="language-bash">$ cargo test
+    Updating registry `https://github.com/rust-lang/crates.io-index`
+   Compiling adder v0.1.0 (file:///home/you/projects/adder)
+     Running target/debug/deps/adder-91b3e234d4ed382a
+
+running 1 test
+test tests::it_works ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured
+
+   Doc-tests adder
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured
+</code></pre>
+<p>It works!</p>
+<p>The current convention is to use the <code>tests</code> module to hold your &quot;unit-style&quot;
+tests. Anything that tests one small bit of functionality makes sense to
+go here. But what about &quot;integration-style&quot; tests instead? For that, we have
+the <code>tests</code> directory.</p>
+<a class="header" href="testing.html#the-tests-directory" name="the-tests-directory"><h1>The <code>tests</code> directory</h1></a>
+<p>Each file in <code>tests/*.rs</code> directory is treated as an individual crate.
+To write an integration test, let's make a <code>tests</code> directory and
+put a <code>tests/integration_test.rs</code> file inside with this as its contents:</p>
+<pre><code class="language-rust ignore"># // The next line exists to trick play.rust-lang.org into running our code as a
+# // test:
+# // fn main
+#
+# // Sadly, this code will not work in play.rust-lang.org, because we have no
+# // crate adder to import. You'll need to try this part on your own machine.
+extern crate adder;
+
+#[test]
+fn it_works() {
+    assert_eq!(4, adder::add_two(2));
+}
+</code></pre>
+<p>This looks similar to our previous tests, but slightly different. We now have
+an <code>extern crate adder</code> at the top. This is because each test in the <code>tests</code>
+directory is an entirely separate crate, and so we need to import our library.
+This is also why <code>tests</code> is a suitable place to write integration-style tests:
+they use the library like any other consumer of it would.</p>
+<p>Let's run them:</p>
+<pre><code class="language-bash">$ cargo test
+   Compiling adder v0.1.0 (file:///home/you/projects/adder)
+     Running target/debug/deps/adder-91b3e234d4ed382a
+
+running 1 test
+test tests::it_works ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured
+
+     Running target/debug/integration_test-68064b69521c828a
+
+running 1 test
+test it_works ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured
+
+   Doc-tests adder
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured
+</code></pre>
+<p>Now we have three sections: our previous test is also run, as well as our new
+one.</p>
+<p>Cargo will ignore files in subdirectories of the <code>tests/</code> directory.
+Therefore shared modules in integrations tests are possible.
+For example <code>tests/common/mod.rs</code> is not separately compiled by cargo but can
+be imported in every test with <code>mod common;</code></p>
+<p>That's all there is to the <code>tests</code> directory. The <code>tests</code> module isn't needed
+here, since the whole thing is focused on tests.</p>
+<p>Note, when building integration tests, cargo will not pass the <code>test</code> attribute
+to the compiler. It means that all parts in <code>cfg(test)</code> won't be included in
+the build used in your integration tests.</p>
+<p>Let's finally check out that third section: documentation tests.</p>
+<a class="header" href="testing.html#documentation-tests" name="documentation-tests"><h1>Documentation tests</h1></a>
+<p>Nothing is better than documentation with examples. Nothing is worse than
+examples that don't actually work, because the code has changed since the
+documentation has been written. To this end, Rust supports automatically
+running examples in your documentation (<strong>note:</strong> this only works in library
+crates, not binary crates). Here's a fleshed-out <code>src/lib.rs</code> with examples:</p>
+<pre><code class="language-rust ignore"># // The next line exists to trick play.rust-lang.org into running our code as a
+# // test:
+# // fn main
+#
+//! The `adder` crate provides functions that add numbers to other numbers.
+//!
+//! # Examples
+//!
+//! ```
+//! assert_eq!(4, adder::add_two(2));
+//! ```
+
+/// This function adds two to its argument.
+///
+/// # Examples
+///
+/// ```
+/// use adder::add_two;
+///
+/// assert_eq!(4, add_two(2));
+/// ```
+pub fn add_two(a: i32) -&gt; i32 {
+    a + 2
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn it_works() {
+        assert_eq!(4, add_two(2));
+    }
+}
+</code></pre>
+<p>Note the module-level documentation with <code>//!</code> and the function-level
+documentation with <code>///</code>. Rust's documentation supports Markdown in comments,
+and so triple graves mark code blocks. It is conventional to include the
+<code># Examples</code> section, exactly like that, with examples following.</p>
+<p>Let's run the tests again:</p>
+<pre><code class="language-bash">$ cargo test
+   Compiling adder v0.1.0. (file:///home/you/projects/adder)
+     Running target/debug/deps/adder-91b3e234d4ed382a
+
+running 1 test
+test tests::it_works ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured
+
+     Running target/debug/integration_test-68064b69521c828a
+
+running 1 test
+test it_works ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured
+
+   Doc-tests adder
+
+running 2 tests
+test add_two_0 ... ok
+test _0 ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured
+</code></pre>
+<p>Now we have all three kinds of tests running! Note the names of the
+documentation tests: the <code>_0</code> is generated for the module test, and <code>add_two_0</code>
+for the function test. These will auto increment with names like <code>add_two_1</code> as
+you add more examples.</p>
+<p>We haven’t covered all of the details with writing documentation tests. For more,
+please see the <a href="documentation.html">Documentation chapter</a>.</p>
+<a class="header" href="testing.html#testing-and-concurrency" name="testing-and-concurrency"><h1>Testing and concurrency</h1></a>
+<p>It is important to note that tests are run concurrently using threads. For this
+reason, care should be taken to ensure your tests do not depend on each-other,
+or on any shared state. &quot;Shared state&quot; can also include the environment, such
+as the current working directory, or environment variables.</p>
+<p>If this is an issue it is possible to control this concurrency, either by
+setting the environment variable <code>RUST_TEST_THREADS</code>, or by passing the argument
+<code>--test-threads</code> to the tests:</p>
+<pre><code class="language-bash">$ RUST_TEST_THREADS=1 cargo test   # Run tests with no concurrency
+...
+$ cargo test -- --test-threads=1   # Same as above
+...
+</code></pre>
+<a class="header" href="testing.html#test-output" name="test-output"><h1>Test output</h1></a>
+<p>By default Rust's test library captures and discards output to standard
+out/error, e.g. output from <code>println!()</code>. This too can be controlled using the
+environment or a switch:</p>
+<pre><code class="language-bash">$ RUST_TEST_NOCAPTURE=1 cargo test   # Preserve stdout/stderr
+...
+$ cargo test -- --nocapture          # Same as above
+...
+</code></pre>
+<p>However a better method avoiding capture is to use logging rather than raw
+output. Rust has a <a href="https://crates.io/crates/log">standard logging API</a>, which provides a frontend to
+multiple logging implementations. This can be used in conjunction with the
+default <a href="https://crates.io/crates/env_logger">env_logger</a> to output any debugging information in a manner that can be
+controlled at runtime.</p>
+
+                </div>
+
+                <!-- Mobile navigation buttons -->
+                
+                    <a href="the-stack-and-the-heap.html" class="mobile-nav-chapters previous">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+                    <a href="conditional-compilation.html" class="mobile-nav-chapters next">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                
+
+            </div>
+
+            
+                <a href="the-stack-and-the-heap.html" class="nav-chapters previous" title="You can navigate through the chapters using the arrow keys">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+            
+
+            
+                <a href="conditional-compilation.html" class="nav-chapters next" title="You can navigate through the chapters using the arrow keys">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            
+
+        </div>
+
+
+        <!-- Local fallback for Font Awesome -->
+        <script>
+            if ($(".fa").css("font-family") !== "FontAwesome") {
+                $('<link rel="stylesheet" type="text/css" href="_FontAwesome/css/font-awesome.css">').prependTo('head');
+            }
+        </script>
+
+        <!-- Livereload script (if served using the cli tool) -->
+        
+
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+    </body>
+</html>

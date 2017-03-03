@@ -1,0 +1,546 @@
+<!DOCTYPE HTML>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Traits - </title>
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <base href="">
+
+        <link rel="stylesheet" href="book.css">
+        <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+        <link rel="shortcut icon" href="favicon.png">
+
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+
+        <!-- MathJax -->
+        <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+        <!-- Fetch JQuery from CDN but have a local fallback -->
+        <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+        <script>
+            if (typeof jQuery == 'undefined') {
+                document.write(unescape("%3Cscript src='jquery.js'%3E%3C/script%3E"));
+            }
+        </script>
+    </head>
+    <body class="light">
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme = localStorage.getItem('theme');
+            if (theme == null) { theme = 'light'; }
+            $('body').removeClass().addClass(theme);
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var sidebar = localStorage.getItem('sidebar');
+            if (sidebar === "hidden") { $("html").addClass("sidebar-hidden") }
+            else if (sidebar === "visible") { $("html").addClass("sidebar-visible") }
+        </script>
+
+        <div id="sidebar" class="sidebar">
+            <ul class="chapter"><li class="affix"><a href="README.html">Introduction</a></li><li><a href="getting-started.html"><strong>1.</strong> Getting Started</a></li><li><a href="guessing-game.html"><strong>2.</strong> Tutorial: Guessing Game</a></li><li><a href="syntax-and-semantics.html"><strong>3.</strong> Syntax and Semantics</a></li><li><ul class="section"><li><a href="variable-bindings.html"><strong>3.1.</strong> Variable Bindings</a></li><li><a href="functions.html"><strong>3.2.</strong> Functions</a></li><li><a href="primitive-types.html"><strong>3.3.</strong> Primitive Types</a></li><li><a href="comments.html"><strong>3.4.</strong> Comments</a></li><li><a href="if.html"><strong>3.5.</strong> if</a></li><li><a href="loops.html"><strong>3.6.</strong> Loops</a></li><li><a href="vectors.html"><strong>3.7.</strong> Vectors</a></li><li><a href="ownership.html"><strong>3.8.</strong> Ownership</a></li><li><a href="references-and-borrowing.html"><strong>3.9.</strong> References and Borrowing</a></li><li><a href="lifetimes.html"><strong>3.10.</strong> Lifetimes</a></li><li><a href="mutability.html"><strong>3.11.</strong> Mutability</a></li><li><a href="structs.html"><strong>3.12.</strong> Structs</a></li><li><a href="enums.html"><strong>3.13.</strong> Enums</a></li><li><a href="match.html"><strong>3.14.</strong> Match</a></li><li><a href="patterns.html"><strong>3.15.</strong> Patterns</a></li><li><a href="method-syntax.html"><strong>3.16.</strong> Method Syntax</a></li><li><a href="strings.html"><strong>3.17.</strong> Strings</a></li><li><a href="generics.html"><strong>3.18.</strong> Generics</a></li><li><a href="traits.html" class="active"><strong>3.19.</strong> Traits</a></li><li><a href="drop.html"><strong>3.20.</strong> Drop</a></li><li><a href="if-let.html"><strong>3.21.</strong> if let</a></li><li><a href="trait-objects.html"><strong>3.22.</strong> Trait Objects</a></li><li><a href="closures.html"><strong>3.23.</strong> Closures</a></li><li><a href="ufcs.html"><strong>3.24.</strong> Universal Function Call Syntax</a></li><li><a href="crates-and-modules.html"><strong>3.25.</strong> Crates and Modules</a></li><li><a href="const-and-static.html"><strong>3.26.</strong> <code>const</code> and <code>static</code></a></li><li><a href="attributes.html"><strong>3.27.</strong> Attributes</a></li><li><a href="type-aliases.html"><strong>3.28.</strong> <code>type</code> aliases</a></li><li><a href="casting-between-types.html"><strong>3.29.</strong> Casting between types</a></li><li><a href="associated-types.html"><strong>3.30.</strong> Associated Types</a></li><li><a href="unsized-types.html"><strong>3.31.</strong> Unsized Types</a></li><li><a href="operators-and-overloading.html"><strong>3.32.</strong> Operators and Overloading</a></li><li><a href="deref-coercions.html"><strong>3.33.</strong> Deref coercions</a></li><li><a href="macros.html"><strong>3.34.</strong> Macros</a></li><li><a href="raw-pointers.html"><strong>3.35.</strong> Raw Pointers</a></li><li><a href="unsafe.html"><strong>3.36.</strong> <code>unsafe</code></a></li></ul></li><li><a href="effective-rust.html"><strong>4.</strong> Effective Rust</a></li><li><ul class="section"><li><a href="the-stack-and-the-heap.html"><strong>4.1.</strong> The Stack and the Heap</a></li><li><a href="testing.html"><strong>4.2.</strong> Testing</a></li><li><a href="conditional-compilation.html"><strong>4.3.</strong> Conditional Compilation</a></li><li><a href="documentation.html"><strong>4.4.</strong> Documentation</a></li><li><a href="iterators.html"><strong>4.5.</strong> Iterators</a></li><li><a href="concurrency.html"><strong>4.6.</strong> Concurrency</a></li><li><a href="error-handling.html"><strong>4.7.</strong> Error Handling</a></li><li><a href="choosing-your-guarantees.html"><strong>4.8.</strong> Choosing your Guarantees</a></li><li><a href="ffi.html"><strong>4.9.</strong> FFI</a></li><li><a href="borrow-and-asref.html"><strong>4.10.</strong> Borrow and AsRef</a></li><li><a href="release-channels.html"><strong>4.11.</strong> Release Channels</a></li><li><a href="using-rust-without-the-standard-library.html"><strong>4.12.</strong> Using Rust without the standard library</a></li><li><a href="procedural-macros.html"><strong>4.13.</strong> Procedural Macros (and custom derive)</a></li></ul></li><li><a href="glossary.html"><strong>5.</strong> Glossary</a></li><li><a href="syntax-index.html"><strong>6.</strong> Syntax Index</a></li><li><a href="bibliography.html"><strong>7.</strong> Bibliography</a></li></ul>
+        </div>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar" class="menu-bar">
+                    <div class="left-buttons">
+                        <i id="sidebar-toggle" class="fa fa-bars"></i>
+                        <i id="theme-toggle" class="fa fa-paint-brush"></i>
+                    </div>
+
+                    <h1 class="menu-title"></h1>
+
+                    <div class="right-buttons">
+                        <i id="print-button" class="fa fa-print" title="Print this book"></i>
+                    </div>
+                </div>
+
+                <div id="content" class="content">
+                    <a class="header" href="traits.html#traits" name="traits"><h1>Traits</h1></a>
+<p>A trait is a language feature that tells the Rust compiler about
+functionality a type must provide.</p>
+<p>Recall the <code>impl</code> keyword, used to call a function with <a href="method-syntax.html">method
+syntax</a>:</p>
+<pre><code class="language-rust">struct Circle {
+    x: f64,
+    y: f64,
+    radius: f64,
+}
+
+impl Circle {
+    fn area(&amp;self) -&gt; f64 {
+        std::f64::consts::PI * (self.radius * self.radius)
+    }
+}
+</code></pre>
+<p>Traits are similar, except that we first define a trait with a method
+signature, then implement the trait for a type. In this example, we implement the trait <code>HasArea</code> for <code>Circle</code>:</p>
+<pre><code class="language-rust">struct Circle {
+    x: f64,
+    y: f64,
+    radius: f64,
+}
+
+trait HasArea {
+    fn area(&amp;self) -&gt; f64;
+}
+
+impl HasArea for Circle {
+    fn area(&amp;self) -&gt; f64 {
+        std::f64::consts::PI * (self.radius * self.radius)
+    }
+}
+</code></pre>
+<p>As you can see, the <code>trait</code> block looks very similar to the <code>impl</code> block,
+but we don’t define a body, only a type signature. When we <code>impl</code> a trait,
+we use <code>impl Trait for Item</code>, rather than only <code>impl Item</code>.</p>
+<p><code>Self</code> may be used in a type annotation to refer to an instance of the type
+implementing this trait passed as a parameter. <code>Self</code>, <code>&amp;Self</code> or <code>&amp;mut Self</code>
+may be used depending on the level of ownership required.</p>
+<pre><code class="language-rust">struct Circle {
+    x: f64,
+    y: f64,
+    radius: f64,
+}
+
+trait HasArea {
+    fn area(&amp;self) -&gt; f64;
+
+    fn is_larger(&amp;self, &amp;Self) -&gt; bool;
+}
+
+impl HasArea for Circle {
+    fn area(&amp;self) -&gt; f64 {
+        std::f64::consts::PI * (self.radius * self.radius)
+    }
+
+    fn is_larger(&amp;self, other: &amp;Self) -&gt; bool {
+        self.area() &gt; other.area()
+    }
+}
+</code></pre>
+<a class="header" href="traits.html#trait-bounds-on-generic-functions" name="trait-bounds-on-generic-functions"><h2>Trait bounds on generic functions</h2></a>
+<p>Traits are useful because they allow a type to make certain promises about its
+behavior. Generic functions can exploit this to constrain, or <a href="glossary.html#bounds">bound</a>, the types they
+accept. Consider this function, which does not compile:</p>
+<pre><code class="language-rust ignore">fn print_area&lt;T&gt;(shape: T) {
+    println!(&quot;This shape has an area of {}&quot;, shape.area());
+}
+</code></pre>
+<p>Rust complains:</p>
+<pre><code class="language-text">error: no method named `area` found for type `T` in the current scope
+</code></pre>
+<p>Because <code>T</code> can be any type, we can’t be sure that it implements the <code>area</code>
+method. But we can add a trait bound to our generic <code>T</code>, ensuring
+that it does:</p>
+<pre><code class="language-rust"># trait HasArea {
+#     fn area(&amp;self) -&gt; f64;
+# }
+fn print_area&lt;T: HasArea&gt;(shape: T) {
+    println!(&quot;This shape has an area of {}&quot;, shape.area());
+}
+</code></pre>
+<p>The syntax <code>&lt;T: HasArea&gt;</code> means “any type that implements the <code>HasArea</code> trait.”
+Because traits define function type signatures, we can be sure that any type
+which implements <code>HasArea</code> will have an <code>.area()</code> method.</p>
+<p>Here’s an extended example of how this works:</p>
+<pre><code class="language-rust">trait HasArea {
+    fn area(&amp;self) -&gt; f64;
+}
+
+struct Circle {
+    x: f64,
+    y: f64,
+    radius: f64,
+}
+
+impl HasArea for Circle {
+    fn area(&amp;self) -&gt; f64 {
+        std::f64::consts::PI * (self.radius * self.radius)
+    }
+}
+
+struct Square {
+    x: f64,
+    y: f64,
+    side: f64,
+}
+
+impl HasArea for Square {
+    fn area(&amp;self) -&gt; f64 {
+        self.side * self.side
+    }
+}
+
+fn print_area&lt;T: HasArea&gt;(shape: T) {
+    println!(&quot;This shape has an area of {}&quot;, shape.area());
+}
+
+fn main() {
+    let c = Circle {
+        x: 0.0f64,
+        y: 0.0f64,
+        radius: 1.0f64,
+    };
+
+    let s = Square {
+        x: 0.0f64,
+        y: 0.0f64,
+        side: 1.0f64,
+    };
+
+    print_area(c);
+    print_area(s);
+}
+</code></pre>
+<p>This program outputs:</p>
+<pre><code class="language-text">This shape has an area of 3.141593
+This shape has an area of 1
+</code></pre>
+<p>As you can see, <code>print_area</code> is now generic, but also ensures that we have
+passed in the correct types. If we pass in an incorrect type:</p>
+<pre><code class="language-rust ignore">print_area(5);
+</code></pre>
+<p>We get a compile-time error:</p>
+<pre><code class="language-text">error: the trait bound `_ : HasArea` is not satisfied [E0277]
+</code></pre>
+<a class="header" href="traits.html#trait-bounds-on-generic-structs" name="trait-bounds-on-generic-structs"><h2>Trait bounds on generic structs</h2></a>
+<p>Your generic structs can also benefit from trait bounds. All you need to
+do is append the bound when you declare type parameters. Here is a new
+type <code>Rectangle&lt;T&gt;</code> and its operation <code>is_square()</code>:</p>
+<pre><code class="language-rust">struct Rectangle&lt;T&gt; {
+    x: T,
+    y: T,
+    width: T,
+    height: T,
+}
+
+impl&lt;T: PartialEq&gt; Rectangle&lt;T&gt; {
+    fn is_square(&amp;self) -&gt; bool {
+        self.width == self.height
+    }
+}
+
+fn main() {
+    let mut r = Rectangle {
+        x: 0,
+        y: 0,
+        width: 47,
+        height: 47,
+    };
+
+    assert!(r.is_square());
+
+    r.height = 42;
+    assert!(!r.is_square());
+}
+</code></pre>
+<p><code>is_square()</code> needs to check that the sides are equal, so the sides must be of
+a type that implements the <a href="../core/cmp/trait.PartialEq.html"><code>core::cmp::PartialEq</code></a> trait:</p>
+<pre><code class="language-rust ignore">impl&lt;T: PartialEq&gt; Rectangle&lt;T&gt; { ... }
+</code></pre>
+<p>Now, a rectangle can be defined in terms of any type that can be compared for
+equality.</p>
+<p>Here we defined a new struct <code>Rectangle</code> that accepts numbers of any
+precision—really, objects of pretty much any type—as long as they can be
+compared for equality. Could we do the same for our <code>HasArea</code> structs, <code>Square</code>
+and <code>Circle</code>? Yes, but they need multiplication, and to work with that we need
+to know more about <a href="operators-and-overloading.html">operator traits</a>.</p>
+<a class="header" href="traits.html#rules-for-implementing-traits" name="rules-for-implementing-traits"><h1>Rules for implementing traits</h1></a>
+<p>So far, we’ve only added trait implementations to structs, but you can
+implement a trait for any type such as <code>f32</code>:</p>
+<pre><code class="language-rust">trait ApproxEqual {
+    fn approx_equal(&amp;self, other: &amp;Self) -&gt; bool;
+}
+impl ApproxEqual for f32 {
+    fn approx_equal(&amp;self, other: &amp;Self) -&gt; bool {
+        // Appropriate for `self` and `other` being close to 1.0.
+        (self - other).abs() &lt;= ::std::f32::EPSILON
+    }
+}
+
+println!(&quot;{}&quot;, 1.0.approx_equal(&amp;1.00000001));
+</code></pre>
+<p>This may seem like the Wild West, but there are two restrictions around
+implementing traits that prevent this from getting out of hand. The first is
+that if the trait isn’t defined in your scope, it doesn’t apply. Here’s an
+example: the standard library provides a <a href="../std/io/trait.Write.html"><code>Write</code></a> trait which adds
+extra functionality to <code>File</code>s, for doing file I/O. By default, a <code>File</code>
+won’t have its methods:</p>
+<pre><code class="language-rust ignore">let mut f = std::fs::File::create(&quot;foo.txt&quot;).expect(&quot;Couldn’t create foo.txt&quot;);
+let buf = b&quot;whatever&quot;; // buf: &amp;[u8; 8], a byte string literal.
+let result = f.write(buf);
+# result.unwrap(); // Ignore the error.
+</code></pre>
+<p>Here’s the error:</p>
+<pre><code class="language-text">error: type `std::fs::File` does not implement any method in scope named `write`
+let result = f.write(buf);
+               ^~~~~~~~~~
+</code></pre>
+<p>We need to <code>use</code> the <code>Write</code> trait first:</p>
+<pre><code class="language-rust no_run">use std::io::Write;
+
+let mut f = std::fs::File::create(&quot;foo.txt&quot;).expect(&quot;Couldn’t create foo.txt&quot;);
+let buf = b&quot;whatever&quot;;
+let result = f.write(buf);
+# result.unwrap(); // Ignore the error.
+</code></pre>
+<p>This will compile without error.</p>
+<p>This means that even if someone does something bad like add methods to <code>i32</code>,
+it won’t affect you, unless you <code>use</code> that trait.</p>
+<p>There’s one more restriction on implementing traits: either the trait
+or the type you’re implementing it for must be defined by you. Or more
+precisely, one of them must be defined in the same crate as the <code>impl</code>
+you're writing. For more on Rust's module and package system, see the
+chapter on <a href="crates-and-modules.html">crates and modules</a>.</p>
+<p>So, we could implement the <code>HasArea</code> type for <code>i32</code>, because we defined
+<code>HasArea</code> in our code. But if we tried to implement <code>ToString</code>, a trait
+provided by Rust, for <code>i32</code>, we could not, because neither the trait nor
+the type are defined in our crate.</p>
+<p>One last thing about traits: generic functions with a trait bound use
+‘monomorphization’ (mono: one, morph: form), so they are statically dispatched.
+What’s that mean? Check out the chapter on <a href="trait-objects.html">trait objects</a> for more details.</p>
+<a class="header" href="traits.html#multiple-trait-bounds" name="multiple-trait-bounds"><h1>Multiple trait bounds</h1></a>
+<p>You’ve seen that you can bound a generic type parameter with a trait:</p>
+<pre><code class="language-rust">fn foo&lt;T: Clone&gt;(x: T) {
+    x.clone();
+}
+</code></pre>
+<p>If you need more than one bound, you can use <code>+</code>:</p>
+<pre><code class="language-rust">use std::fmt::Debug;
+
+fn foo&lt;T: Clone + Debug&gt;(x: T) {
+    x.clone();
+    println!(&quot;{:?}&quot;, x);
+}
+</code></pre>
+<p><code>T</code> now needs to be both <code>Clone</code> as well as <code>Debug</code>.</p>
+<a class="header" href="traits.html#where-clause" name="where-clause"><h1>Where clause</h1></a>
+<p>Writing functions with only a few generic types and a small number of trait
+bounds isn’t too bad, but as the number increases, the syntax gets increasingly
+awkward:</p>
+<pre><code class="language-rust">use std::fmt::Debug;
+
+fn foo&lt;T: Clone, K: Clone + Debug&gt;(x: T, y: K) {
+    x.clone();
+    y.clone();
+    println!(&quot;{:?}&quot;, y);
+}
+</code></pre>
+<p>The name of the function is on the far left, and the parameter list is on the
+far right. The bounds are getting in the way.</p>
+<p>Rust has a solution, and it’s called a ‘<code>where</code> clause’:</p>
+<pre><code class="language-rust">use std::fmt::Debug;
+
+fn foo&lt;T: Clone, K: Clone + Debug&gt;(x: T, y: K) {
+    x.clone();
+    y.clone();
+    println!(&quot;{:?}&quot;, y);
+}
+
+fn bar&lt;T, K&gt;(x: T, y: K) where T: Clone, K: Clone + Debug {
+    x.clone();
+    y.clone();
+    println!(&quot;{:?}&quot;, y);
+}
+
+fn main() {
+    foo(&quot;Hello&quot;, &quot;world&quot;);
+    bar(&quot;Hello&quot;, &quot;world&quot;);
+}
+</code></pre>
+<p><code>foo()</code> uses the syntax we showed earlier, and <code>bar()</code> uses a <code>where</code> clause.
+All you need to do is leave off the bounds when defining your type parameters,
+and then add <code>where</code> after the parameter list. For longer lists, whitespace can
+be added:</p>
+<pre><code class="language-rust">use std::fmt::Debug;
+
+fn bar&lt;T, K&gt;(x: T, y: K)
+    where T: Clone,
+          K: Clone + Debug {
+
+    x.clone();
+    y.clone();
+    println!(&quot;{:?}&quot;, y);
+}
+</code></pre>
+<p>This flexibility can add clarity in complex situations.</p>
+<p><code>where</code> is also more powerful than the simpler syntax. For example:</p>
+<pre><code class="language-rust">trait ConvertTo&lt;Output&gt; {
+    fn convert(&amp;self) -&gt; Output;
+}
+
+impl ConvertTo&lt;i64&gt; for i32 {
+    fn convert(&amp;self) -&gt; i64 { *self as i64 }
+}
+
+// Can be called with T == i32.
+fn normal&lt;T: ConvertTo&lt;i64&gt;&gt;(x: &amp;T) -&gt; i64 {
+    x.convert()
+}
+
+// Can be called with T == i64.
+fn inverse&lt;T&gt;(x: i32) -&gt; T
+        // This is using ConvertTo as if it were &quot;ConvertTo&lt;i64&gt;&quot;.
+        where i32: ConvertTo&lt;T&gt; {
+    x.convert()
+}
+</code></pre>
+<p>This shows off the additional feature of <code>where</code> clauses: they allow bounds
+on the left-hand side not only of type parameters <code>T</code>, but also of types (<code>i32</code> in this case). In this example, <code>i32</code> must implement
+<code>ConvertTo&lt;T&gt;</code>. Rather than defining what <code>i32</code> is (since that's obvious), the
+<code>where</code> clause here constrains <code>T</code>.</p>
+<a class="header" href="traits.html#default-methods" name="default-methods"><h1>Default methods</h1></a>
+<p>A default method can be added to a trait definition if it is already known how a typical implementor will define a method. For example, <code>is_invalid()</code> is defined as the opposite of <code>is_valid()</code>:</p>
+<pre><code class="language-rust">trait Foo {
+    fn is_valid(&amp;self) -&gt; bool;
+
+    fn is_invalid(&amp;self) -&gt; bool { !self.is_valid() }
+}
+</code></pre>
+<p>Implementors of the <code>Foo</code> trait need to implement <code>is_valid()</code> but not <code>is_invalid()</code> due to the added default behavior. This default behavior can still be overridden as in:</p>
+<pre><code class="language-rust"># trait Foo {
+#     fn is_valid(&amp;self) -&gt; bool;
+#
+#     fn is_invalid(&amp;self) -&gt; bool { !self.is_valid() }
+# }
+struct UseDefault;
+
+impl Foo for UseDefault {
+    fn is_valid(&amp;self) -&gt; bool {
+        println!(&quot;Called UseDefault.is_valid.&quot;);
+        true
+    }
+}
+
+struct OverrideDefault;
+
+impl Foo for OverrideDefault {
+    fn is_valid(&amp;self) -&gt; bool {
+        println!(&quot;Called OverrideDefault.is_valid.&quot;);
+        true
+    }
+
+    fn is_invalid(&amp;self) -&gt; bool {
+        println!(&quot;Called OverrideDefault.is_invalid!&quot;);
+        true // Overrides the expected value of `is_invalid()`.
+    }
+}
+
+let default = UseDefault;
+assert!(!default.is_invalid()); // Prints &quot;Called UseDefault.is_valid.&quot;
+
+let over = OverrideDefault;
+assert!(over.is_invalid()); // Prints &quot;Called OverrideDefault.is_invalid!&quot;
+</code></pre>
+<a class="header" href="traits.html#inheritance" name="inheritance"><h1>Inheritance</h1></a>
+<p>Sometimes, implementing a trait requires implementing another trait:</p>
+<pre><code class="language-rust">trait Foo {
+    fn foo(&amp;self);
+}
+
+trait FooBar : Foo {
+    fn foobar(&amp;self);
+}
+</code></pre>
+<p>Implementors of <code>FooBar</code> must also implement <code>Foo</code>, like this:</p>
+<pre><code class="language-rust"># trait Foo {
+#     fn foo(&amp;self);
+# }
+# trait FooBar : Foo {
+#     fn foobar(&amp;self);
+# }
+struct Baz;
+
+impl Foo for Baz {
+    fn foo(&amp;self) { println!(&quot;foo&quot;); }
+}
+
+impl FooBar for Baz {
+    fn foobar(&amp;self) { println!(&quot;foobar&quot;); }
+}
+</code></pre>
+<p>If we forget to implement <code>Foo</code>, Rust will tell us:</p>
+<pre><code class="language-text">error: the trait bound `main::Baz : main::Foo` is not satisfied [E0277]
+</code></pre>
+<a class="header" href="traits.html#deriving" name="deriving"><h1>Deriving</h1></a>
+<p>Implementing traits like <code>Debug</code> and <code>Default</code> repeatedly can become
+quite tedious. For that reason, Rust provides an <a href="attributes.html">attribute</a> that
+allows you to let Rust automatically implement traits for you:</p>
+<pre><code class="language-rust">#[derive(Debug)]
+struct Foo;
+
+fn main() {
+    println!(&quot;{:?}&quot;, Foo);
+}
+</code></pre>
+<p>However, deriving is limited to a certain set of traits:</p>
+<ul>
+<li><a href="../core/clone/trait.Clone.html"><code>Clone</code></a></li>
+<li><a href="../core/marker/trait.Copy.html"><code>Copy</code></a></li>
+<li><a href="../core/fmt/trait.Debug.html"><code>Debug</code></a></li>
+<li><a href="../core/default/trait.Default.html"><code>Default</code></a></li>
+<li><a href="../core/cmp/trait.Eq.html"><code>Eq</code></a></li>
+<li><a href="../core/hash/trait.Hash.html"><code>Hash</code></a></li>
+<li><a href="../core/cmp/trait.Ord.html"><code>Ord</code></a></li>
+<li><a href="../core/cmp/trait.PartialEq.html"><code>PartialEq</code></a></li>
+<li><a href="../core/cmp/trait.PartialOrd.html"><code>PartialOrd</code></a></li>
+</ul>
+
+                </div>
+
+                <!-- Mobile navigation buttons -->
+                
+                    <a href="generics.html" class="mobile-nav-chapters previous">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+                    <a href="drop.html" class="mobile-nav-chapters next">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                
+
+            </div>
+
+            
+                <a href="generics.html" class="nav-chapters previous" title="You can navigate through the chapters using the arrow keys">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+            
+
+            
+                <a href="drop.html" class="nav-chapters next" title="You can navigate through the chapters using the arrow keys">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            
+
+        </div>
+
+
+        <!-- Local fallback for Font Awesome -->
+        <script>
+            if ($(".fa").css("font-family") !== "FontAwesome") {
+                $('<link rel="stylesheet" type="text/css" href="_FontAwesome/css/font-awesome.css">').prependTo('head');
+            }
+        </script>
+
+        <!-- Livereload script (if served using the cli tool) -->
+        
+
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+    </body>
+</html>

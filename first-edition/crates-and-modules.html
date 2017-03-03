@@ -1,0 +1,561 @@
+<!DOCTYPE HTML>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Crates and Modules - </title>
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <base href="">
+
+        <link rel="stylesheet" href="book.css">
+        <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+        <link rel="shortcut icon" href="favicon.png">
+
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+
+        <!-- MathJax -->
+        <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+        <!-- Fetch JQuery from CDN but have a local fallback -->
+        <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+        <script>
+            if (typeof jQuery == 'undefined') {
+                document.write(unescape("%3Cscript src='jquery.js'%3E%3C/script%3E"));
+            }
+        </script>
+    </head>
+    <body class="light">
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme = localStorage.getItem('theme');
+            if (theme == null) { theme = 'light'; }
+            $('body').removeClass().addClass(theme);
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var sidebar = localStorage.getItem('sidebar');
+            if (sidebar === "hidden") { $("html").addClass("sidebar-hidden") }
+            else if (sidebar === "visible") { $("html").addClass("sidebar-visible") }
+        </script>
+
+        <div id="sidebar" class="sidebar">
+            <ul class="chapter"><li class="affix"><a href="README.html">Introduction</a></li><li><a href="getting-started.html"><strong>1.</strong> Getting Started</a></li><li><a href="guessing-game.html"><strong>2.</strong> Tutorial: Guessing Game</a></li><li><a href="syntax-and-semantics.html"><strong>3.</strong> Syntax and Semantics</a></li><li><ul class="section"><li><a href="variable-bindings.html"><strong>3.1.</strong> Variable Bindings</a></li><li><a href="functions.html"><strong>3.2.</strong> Functions</a></li><li><a href="primitive-types.html"><strong>3.3.</strong> Primitive Types</a></li><li><a href="comments.html"><strong>3.4.</strong> Comments</a></li><li><a href="if.html"><strong>3.5.</strong> if</a></li><li><a href="loops.html"><strong>3.6.</strong> Loops</a></li><li><a href="vectors.html"><strong>3.7.</strong> Vectors</a></li><li><a href="ownership.html"><strong>3.8.</strong> Ownership</a></li><li><a href="references-and-borrowing.html"><strong>3.9.</strong> References and Borrowing</a></li><li><a href="lifetimes.html"><strong>3.10.</strong> Lifetimes</a></li><li><a href="mutability.html"><strong>3.11.</strong> Mutability</a></li><li><a href="structs.html"><strong>3.12.</strong> Structs</a></li><li><a href="enums.html"><strong>3.13.</strong> Enums</a></li><li><a href="match.html"><strong>3.14.</strong> Match</a></li><li><a href="patterns.html"><strong>3.15.</strong> Patterns</a></li><li><a href="method-syntax.html"><strong>3.16.</strong> Method Syntax</a></li><li><a href="strings.html"><strong>3.17.</strong> Strings</a></li><li><a href="generics.html"><strong>3.18.</strong> Generics</a></li><li><a href="traits.html"><strong>3.19.</strong> Traits</a></li><li><a href="drop.html"><strong>3.20.</strong> Drop</a></li><li><a href="if-let.html"><strong>3.21.</strong> if let</a></li><li><a href="trait-objects.html"><strong>3.22.</strong> Trait Objects</a></li><li><a href="closures.html"><strong>3.23.</strong> Closures</a></li><li><a href="ufcs.html"><strong>3.24.</strong> Universal Function Call Syntax</a></li><li><a href="crates-and-modules.html" class="active"><strong>3.25.</strong> Crates and Modules</a></li><li><a href="const-and-static.html"><strong>3.26.</strong> <code>const</code> and <code>static</code></a></li><li><a href="attributes.html"><strong>3.27.</strong> Attributes</a></li><li><a href="type-aliases.html"><strong>3.28.</strong> <code>type</code> aliases</a></li><li><a href="casting-between-types.html"><strong>3.29.</strong> Casting between types</a></li><li><a href="associated-types.html"><strong>3.30.</strong> Associated Types</a></li><li><a href="unsized-types.html"><strong>3.31.</strong> Unsized Types</a></li><li><a href="operators-and-overloading.html"><strong>3.32.</strong> Operators and Overloading</a></li><li><a href="deref-coercions.html"><strong>3.33.</strong> Deref coercions</a></li><li><a href="macros.html"><strong>3.34.</strong> Macros</a></li><li><a href="raw-pointers.html"><strong>3.35.</strong> Raw Pointers</a></li><li><a href="unsafe.html"><strong>3.36.</strong> <code>unsafe</code></a></li></ul></li><li><a href="effective-rust.html"><strong>4.</strong> Effective Rust</a></li><li><ul class="section"><li><a href="the-stack-and-the-heap.html"><strong>4.1.</strong> The Stack and the Heap</a></li><li><a href="testing.html"><strong>4.2.</strong> Testing</a></li><li><a href="conditional-compilation.html"><strong>4.3.</strong> Conditional Compilation</a></li><li><a href="documentation.html"><strong>4.4.</strong> Documentation</a></li><li><a href="iterators.html"><strong>4.5.</strong> Iterators</a></li><li><a href="concurrency.html"><strong>4.6.</strong> Concurrency</a></li><li><a href="error-handling.html"><strong>4.7.</strong> Error Handling</a></li><li><a href="choosing-your-guarantees.html"><strong>4.8.</strong> Choosing your Guarantees</a></li><li><a href="ffi.html"><strong>4.9.</strong> FFI</a></li><li><a href="borrow-and-asref.html"><strong>4.10.</strong> Borrow and AsRef</a></li><li><a href="release-channels.html"><strong>4.11.</strong> Release Channels</a></li><li><a href="using-rust-without-the-standard-library.html"><strong>4.12.</strong> Using Rust without the standard library</a></li><li><a href="procedural-macros.html"><strong>4.13.</strong> Procedural Macros (and custom derive)</a></li></ul></li><li><a href="glossary.html"><strong>5.</strong> Glossary</a></li><li><a href="syntax-index.html"><strong>6.</strong> Syntax Index</a></li><li><a href="bibliography.html"><strong>7.</strong> Bibliography</a></li></ul>
+        </div>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar" class="menu-bar">
+                    <div class="left-buttons">
+                        <i id="sidebar-toggle" class="fa fa-bars"></i>
+                        <i id="theme-toggle" class="fa fa-paint-brush"></i>
+                    </div>
+
+                    <h1 class="menu-title"></h1>
+
+                    <div class="right-buttons">
+                        <i id="print-button" class="fa fa-print" title="Print this book"></i>
+                    </div>
+                </div>
+
+                <div id="content" class="content">
+                    <a class="header" href="crates-and-modules.html#crates-and-modules" name="crates-and-modules"><h1>Crates and Modules</h1></a>
+<p>When a project starts getting large, it’s considered good software
+engineering practice to split it up into a bunch of smaller pieces, and then
+fit them together. It is also important to have a well-defined interface, so
+that some of your functionality is private, and some is public. To facilitate
+these kinds of things, Rust has a module system.</p>
+<a class="header" href="crates-and-modules.html#basic-terminology-crates-and-modules" name="basic-terminology-crates-and-modules"><h1>Basic terminology: Crates and Modules</h1></a>
+<p>Rust has two distinct terms that relate to the module system: ‘crate’ and
+‘module’. A crate is synonymous with a ‘library’ or ‘package’ in other
+languages. Hence “Cargo” as the name of Rust’s package management tool: you
+ship your crates to others with Cargo. Crates can produce an executable or a
+library, depending on the project.</p>
+<p>Each crate has an implicit <em>root module</em> that contains the code for that crate.
+You can then define a tree of sub-modules under that root module. Modules allow
+you to partition your code within the crate itself.</p>
+<p>As an example, let’s make a <em>phrases</em> crate, which will give us various phrases
+in different languages. To keep things simple, we’ll stick to ‘greetings’ and
+‘farewells’ as two kinds of phrases, and use English and Japanese (日本語) as
+two languages for those phrases to be in. We’ll use this module layout:</p>
+<pre><code class="language-text">                                    +-----------+
+                                +---| greetings |
+                  +---------+   |   +-----------+
+              +---| english |---+
+              |   +---------+   |   +-----------+
+              |                 +---| farewells |
++---------+   |                     +-----------+
+| phrases |---+
++---------+   |                     +-----------+
+              |                 +---| greetings |
+              |   +----------+  |   +-----------+
+              +---| japanese |--+
+                  +----------+  |   +-----------+
+                                +---| farewells |
+                                    +-----------+
+</code></pre>
+<p>In this example, <code>phrases</code> is the name of our crate. All of the rest are
+modules.  You can see that they form a tree, branching out from the crate
+<em>root</em>, which is the root of the tree: <code>phrases</code> itself.</p>
+<p>Now that we have a plan, let’s define these modules in code. To start,
+generate a new crate with Cargo:</p>
+<pre><code class="language-bash">$ cargo new phrases
+$ cd phrases
+</code></pre>
+<p>If you remember, this generates a simple project for us:</p>
+<pre><code class="language-bash">$ tree .
+.
+├── Cargo.toml
+└── src
+    └── lib.rs
+
+1 directory, 2 files
+</code></pre>
+<p><code>src/lib.rs</code> is our crate root, corresponding to the <code>phrases</code> in our diagram
+above.</p>
+<a class="header" href="crates-and-modules.html#defining-modules" name="defining-modules"><h1>Defining Modules</h1></a>
+<p>To define each of our modules, we use the <code>mod</code> keyword. Let’s make our
+<code>src/lib.rs</code> look like this:</p>
+<pre><code class="language-rust">mod english {
+    mod greetings {
+    }
+
+    mod farewells {
+    }
+}
+
+mod japanese {
+    mod greetings {
+    }
+
+    mod farewells {
+    }
+}
+</code></pre>
+<p>After the <code>mod</code> keyword, you give the name of the module. Module names follow
+the conventions for other Rust identifiers: <code>lower_snake_case</code>. The contents of
+each module are within curly braces (<code>{}</code>).</p>
+<p>Within a given <code>mod</code>, you can declare sub-<code>mod</code>s. We can refer to sub-modules
+with double-colon (<code>::</code>) notation: our four nested modules are
+<code>english::greetings</code>, <code>english::farewells</code>, <code>japanese::greetings</code>, and
+<code>japanese::farewells</code>. Because these sub-modules are namespaced under their
+parent module, the names don’t conflict: <code>english::greetings</code> and
+<code>japanese::greetings</code> are distinct, even though their names are both
+<code>greetings</code>.</p>
+<p>Because this crate does not have a <code>main()</code> function, and is called <code>lib.rs</code>,
+Cargo will build this crate as a library:</p>
+<pre><code class="language-bash">$ cargo build
+   Compiling phrases v0.0.1 (file:///home/you/projects/phrases)
+$ ls target/debug
+build  deps  examples  libphrases-a7448e02a0468eaa.rlib  native
+</code></pre>
+<p><code>libphrases-&lt;hash&gt;.rlib</code> is the compiled crate. Before we see how to use this
+crate from another crate, let’s break it up into multiple files.</p>
+<a class="header" href="crates-and-modules.html#multiple-file-crates" name="multiple-file-crates"><h1>Multiple File Crates</h1></a>
+<p>If each crate were just one file, these files would get very large. It’s often
+easier to split up crates into multiple files, and Rust supports this in two
+ways.</p>
+<p>Instead of declaring a module like this:</p>
+<pre><code class="language-rust ignore">mod english {
+    // Contents of our module go here.
+}
+</code></pre>
+<p>We can instead declare our module like this:</p>
+<pre><code class="language-rust ignore">mod english;
+</code></pre>
+<p>If we do that, Rust will expect to find either a <code>english.rs</code> file, or a
+<code>english/mod.rs</code> file with the contents of our module.</p>
+<p>Note that in these files, you don’t need to re-declare the module: that’s
+already been done with the initial <code>mod</code> declaration.</p>
+<p>Using these two techniques, we can break up our crate into two directories and
+seven files:</p>
+<pre><code class="language-bash">$ tree .
+.
+├── Cargo.lock
+├── Cargo.toml
+├── src
+│   ├── english
+│   │   ├── farewells.rs
+│   │   ├── greetings.rs
+│   │   └── mod.rs
+│   ├── japanese
+│   │   ├── farewells.rs
+│   │   ├── greetings.rs
+│   │   └── mod.rs
+│   └── lib.rs
+└── target
+    └── debug
+        ├── build
+        ├── deps
+        ├── examples
+        ├── libphrases-a7448e02a0468eaa.rlib
+        └── native
+</code></pre>
+<p><code>src/lib.rs</code> is our crate root, and looks like this:</p>
+<pre><code class="language-rust ignore">mod english;
+mod japanese;
+</code></pre>
+<p>These two declarations tell Rust to look for either <code>src/english.rs</code> and
+<code>src/japanese.rs</code>, or <code>src/english/mod.rs</code> and <code>src/japanese/mod.rs</code>, depending
+on our preference. In this case, because our modules have sub-modules, we’ve
+chosen the second. Both <code>src/english/mod.rs</code> and <code>src/japanese/mod.rs</code> look
+like this:</p>
+<pre><code class="language-rust ignore">mod greetings;
+mod farewells;
+</code></pre>
+<p>Again, these declarations tell Rust to look for either
+<code>src/english/greetings.rs</code>, <code>src/english/farewells.rs</code>,
+<code>src/japanese/greetings.rs</code> and <code>src/japanese/farewells.rs</code> or
+<code>src/english/greetings/mod.rs</code>, <code>src/english/farewells/mod.rs</code>,
+<code>src/japanese/greetings/mod.rs</code> and
+<code>src/japanese/farewells/mod.rs</code>. Because these sub-modules don’t have
+their own sub-modules, we’ve chosen to make them
+<code>src/english/greetings.rs</code>, <code>src/english/farewells.rs</code>,
+<code>src/japanese/greetings.rs</code> and <code>src/japanese/farewells.rs</code>. Whew!</p>
+<p>The contents of <code>src/english/greetings.rs</code>,
+<code>src/english/farewells.rs</code>, <code>src/japanese/greetings.rs</code> and
+<code>src/japanese/farewells.rs</code> are all empty at the moment. Let’s add
+some functions.</p>
+<p>Put this in <code>src/english/greetings.rs</code>:</p>
+<pre><code class="language-rust">fn hello() -&gt; String {
+    &quot;Hello!&quot;.to_string()
+}
+</code></pre>
+<p>Put this in <code>src/english/farewells.rs</code>:</p>
+<pre><code class="language-rust">fn goodbye() -&gt; String {
+    &quot;Goodbye.&quot;.to_string()
+}
+</code></pre>
+<p>Put this in <code>src/japanese/greetings.rs</code>:</p>
+<pre><code class="language-rust">fn hello() -&gt; String {
+    &quot;こんにちは&quot;.to_string()
+}
+</code></pre>
+<p>Of course, you can copy and paste this from this web page, or type
+something else. It’s not important that you actually put ‘konnichiwa’ to learn
+about the module system.</p>
+<p>Put this in <code>src/japanese/farewells.rs</code>:</p>
+<pre><code class="language-rust">fn goodbye() -&gt; String {
+    &quot;さようなら&quot;.to_string()
+}
+</code></pre>
+<p>(This is ‘Sayōnara’, if you’re curious.)</p>
+<p>Now that we have some functionality in our crate, let’s try to use it from
+another crate.</p>
+<a class="header" href="crates-and-modules.html#importing-external-crates" name="importing-external-crates"><h1>Importing External Crates</h1></a>
+<p>We have a library crate. Let’s make an executable crate that imports and uses
+our library.</p>
+<p>Make a <code>src/main.rs</code> and put this in it (it won’t quite compile yet):</p>
+<pre><code class="language-rust ignore">extern crate phrases;
+
+fn main() {
+    println!(&quot;Hello in English: {}&quot;, phrases::english::greetings::hello());
+    println!(&quot;Goodbye in English: {}&quot;, phrases::english::farewells::goodbye());
+
+    println!(&quot;Hello in Japanese: {}&quot;, phrases::japanese::greetings::hello());
+    println!(&quot;Goodbye in Japanese: {}&quot;, phrases::japanese::farewells::goodbye());
+}
+</code></pre>
+<p>The <code>extern crate</code> declaration tells Rust that we need to compile and link to
+the <code>phrases</code> crate. We can then use <code>phrases</code>’ modules in this one. As we
+mentioned earlier, you can use double colons to refer to sub-modules and the
+functions inside of them.</p>
+<p>(Note: when importing a crate that has dashes in its name &quot;like-this&quot;, which is
+not a valid Rust identifier, it will be converted by changing the dashes to
+underscores, so you would write <code>extern crate like_this;</code>.)</p>
+<p>Also, Cargo assumes that <code>src/main.rs</code> is the crate root of a binary crate,
+rather than a library crate. Our package now has two crates: <code>src/lib.rs</code> and
+<code>src/main.rs</code>. This pattern is quite common for executable crates: most
+functionality is in a library crate, and the executable crate uses that
+library. This way, other programs can also use the library crate, and it’s also
+a nice separation of concerns.</p>
+<p>This doesn’t quite work yet, though. We get four errors that look similar to
+this:</p>
+<pre><code class="language-bash">$ cargo build
+   Compiling phrases v0.0.1 (file:///home/you/projects/phrases)
+src/main.rs:4:38: 4:72 error: function `hello` is private
+src/main.rs:4     println!(&quot;Hello in English: {}&quot;, phrases::english::greetings::hello());
+                                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+note: in expansion of format_args!
+&lt;std macros&gt;:2:25: 2:58 note: expansion site
+&lt;std macros&gt;:1:1: 2:62 note: in expansion of print!
+&lt;std macros&gt;:3:1: 3:54 note: expansion site
+&lt;std macros&gt;:1:1: 3:58 note: in expansion of println!
+phrases/src/main.rs:4:5: 4:76 note: expansion site
+</code></pre>
+<p>By default, everything is private in Rust. Let’s talk about this in some more
+depth.</p>
+<a class="header" href="crates-and-modules.html#exporting-a-public-interface" name="exporting-a-public-interface"><h1>Exporting a Public Interface</h1></a>
+<p>Rust allows you to precisely control which aspects of your interface are
+public, and so private is the default. To make things public, you use the <code>pub</code>
+keyword. Let’s focus on the <code>english</code> module first, so let’s reduce our <code>src/main.rs</code>
+to only this:</p>
+<pre><code class="language-rust ignore">extern crate phrases;
+
+fn main() {
+    println!(&quot;Hello in English: {}&quot;, phrases::english::greetings::hello());
+    println!(&quot;Goodbye in English: {}&quot;, phrases::english::farewells::goodbye());
+}
+</code></pre>
+<p>In our <code>src/lib.rs</code>, let’s add <code>pub</code> to the <code>english</code> module declaration:</p>
+<pre><code class="language-rust ignore">pub mod english;
+mod japanese;
+</code></pre>
+<p>And in our <code>src/english/mod.rs</code>, let’s make both <code>pub</code>:</p>
+<pre><code class="language-rust ignore">pub mod greetings;
+pub mod farewells;
+</code></pre>
+<p>In our <code>src/english/greetings.rs</code>, let’s add <code>pub</code> to our <code>fn</code> declaration:</p>
+<pre><code class="language-rust ignore">pub fn hello() -&gt; String {
+    &quot;Hello!&quot;.to_string()
+}
+</code></pre>
+<p>And also in <code>src/english/farewells.rs</code>:</p>
+<pre><code class="language-rust ignore">pub fn goodbye() -&gt; String {
+    &quot;Goodbye.&quot;.to_string()
+}
+</code></pre>
+<p>Now, our crate compiles, albeit with warnings about not using the <code>japanese</code>
+functions:</p>
+<pre><code class="language-bash">$ cargo run
+   Compiling phrases v0.0.1 (file:///home/you/projects/phrases)
+src/japanese/greetings.rs:1:1: 3:2 warning: function is never used: `hello`, #[warn(dead_code)] on by default
+src/japanese/greetings.rs:1 fn hello() -&gt; String {
+src/japanese/greetings.rs:2     &quot;こんにちは&quot;.to_string()
+src/japanese/greetings.rs:3 }
+src/japanese/farewells.rs:1:1: 3:2 warning: function is never used: `goodbye`, #[warn(dead_code)] on by default
+src/japanese/farewells.rs:1 fn goodbye() -&gt; String {
+src/japanese/farewells.rs:2     &quot;さようなら&quot;.to_string()
+src/japanese/farewells.rs:3 }
+     Running `target/debug/phrases`
+Hello in English: Hello!
+Goodbye in English: Goodbye.
+</code></pre>
+<p><code>pub</code> also applies to <code>struct</code>s and their member fields. In keeping with Rust’s
+tendency toward safety, simply making a <code>struct</code> public won't automatically
+make its members public: you must mark the fields individually with <code>pub</code>.</p>
+<p>Now that our functions are public, we can use them. Great! However, typing out
+<code>phrases::english::greetings::hello()</code> is very long and repetitive. Rust has
+another keyword for importing names into the current scope, so that you can
+refer to them with shorter names. Let’s talk about <code>use</code>.</p>
+<a class="header" href="crates-and-modules.html#importing-modules-with-use" name="importing-modules-with-use"><h1>Importing Modules with <code>use</code></h1></a>
+<p>Rust has a <code>use</code> keyword, which allows us to import names into our local scope.
+Let’s change our <code>src/main.rs</code> to look like this:</p>
+<pre><code class="language-rust ignore">extern crate phrases;
+
+use phrases::english::greetings;
+use phrases::english::farewells;
+
+fn main() {
+    println!(&quot;Hello in English: {}&quot;, greetings::hello());
+    println!(&quot;Goodbye in English: {}&quot;, farewells::goodbye());
+}
+</code></pre>
+<p>The two <code>use</code> lines import each module into the local scope, so we can refer to
+the functions by a much shorter name. By convention, when importing functions, it’s
+considered best practice to import the module, rather than the function directly. In
+other words, you <em>can</em> do this:</p>
+<pre><code class="language-rust ignore">extern crate phrases;
+
+use phrases::english::greetings::hello;
+use phrases::english::farewells::goodbye;
+
+fn main() {
+    println!(&quot;Hello in English: {}&quot;, hello());
+    println!(&quot;Goodbye in English: {}&quot;, goodbye());
+}
+</code></pre>
+<p>But it is not idiomatic. This is significantly more likely to introduce a
+naming conflict. In our short program, it’s not a big deal, but as it grows, it
+becomes a problem. If we have conflicting names, Rust will give a compilation
+error. For example, if we made the <code>japanese</code> functions public, and tried to do
+this:</p>
+<pre><code class="language-rust ignore">extern crate phrases;
+
+use phrases::english::greetings::hello;
+use phrases::japanese::greetings::hello;
+
+fn main() {
+    println!(&quot;Hello in English: {}&quot;, hello());
+    println!(&quot;Hello in Japanese: {}&quot;, hello());
+}
+</code></pre>
+<p>Rust will give us a compile-time error:</p>
+<pre><code class="language-text">   Compiling phrases v0.0.1 (file:///home/you/projects/phrases)
+src/main.rs:4:5: 4:40 error: a value named `hello` has already been imported in this module [E0252]
+src/main.rs:4 use phrases::japanese::greetings::hello;
+                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+error: aborting due to previous error
+Could not compile `phrases`.
+</code></pre>
+<p>If we’re importing multiple names from the same module, we don’t have to type it out
+twice. Instead of this:</p>
+<pre><code class="language-rust ignore">use phrases::english::greetings;
+use phrases::english::farewells;
+</code></pre>
+<p>We can use this shortcut:</p>
+<pre><code class="language-rust ignore">use phrases::english::{greetings, farewells};
+</code></pre>
+<a class="header" href="crates-and-modules.html#re-exporting-with-pub-use" name="re-exporting-with-pub-use"><h2>Re-exporting with <code>pub use</code></h2></a>
+<p>You don’t only use <code>use</code> to shorten identifiers. You can also use it inside of your crate
+to re-export a function inside another module. This allows you to present an external
+interface that may not directly map to your internal code organization.</p>
+<p>Let’s look at an example. Modify your <code>src/main.rs</code> to read like this:</p>
+<pre><code class="language-rust ignore">extern crate phrases;
+
+use phrases::english::{greetings,farewells};
+use phrases::japanese;
+
+fn main() {
+    println!(&quot;Hello in English: {}&quot;, greetings::hello());
+    println!(&quot;Goodbye in English: {}&quot;, farewells::goodbye());
+
+    println!(&quot;Hello in Japanese: {}&quot;, japanese::hello());
+    println!(&quot;Goodbye in Japanese: {}&quot;, japanese::goodbye());
+}
+</code></pre>
+<p>Then, modify your <code>src/lib.rs</code> to make the <code>japanese</code> mod public:</p>
+<pre><code class="language-rust ignore">pub mod english;
+pub mod japanese;
+</code></pre>
+<p>Next, make the two functions public, first in <code>src/japanese/greetings.rs</code>:</p>
+<pre><code class="language-rust ignore">pub fn hello() -&gt; String {
+    &quot;こんにちは&quot;.to_string()
+}
+</code></pre>
+<p>And then in <code>src/japanese/farewells.rs</code>:</p>
+<pre><code class="language-rust ignore">pub fn goodbye() -&gt; String {
+    &quot;さようなら&quot;.to_string()
+}
+</code></pre>
+<p>Finally, modify your <code>src/japanese/mod.rs</code> to read like this:</p>
+<pre><code class="language-rust ignore">pub use self::greetings::hello;
+pub use self::farewells::goodbye;
+
+mod greetings;
+mod farewells;
+</code></pre>
+<p>The <code>pub use</code> declaration brings the function into scope at this part of our
+module hierarchy. Because we’ve <code>pub use</code>d this inside of our <code>japanese</code>
+module, we now have a <code>phrases::japanese::hello()</code> function and a
+<code>phrases::japanese::goodbye()</code> function, even though the code for them lives in
+<code>phrases::japanese::greetings::hello()</code> and
+<code>phrases::japanese::farewells::goodbye()</code>. Our internal organization doesn’t
+define our external interface.</p>
+<p>Here we have a <code>pub use</code> for each function we want to bring into the
+<code>japanese</code> scope. We could alternatively use the wildcard syntax to include
+everything from <code>greetings</code> into the current scope: <code>pub use self::greetings::*</code>.</p>
+<p>What about the <code>self</code>? Well, by default, <code>use</code> declarations are absolute paths,
+starting from your crate root. <code>self</code> makes that path relative to your current
+place in the hierarchy instead. There’s one more special form of <code>use</code>: you can
+<code>use super::</code> to reach one level up the tree from your current location. Some
+people like to think of <code>self</code> as <code>.</code> and <code>super</code> as <code>..</code>, from many shells’
+display for the current directory and the parent directory.</p>
+<p>Outside of <code>use</code>, paths are relative: <code>foo::bar()</code> refers to a function inside
+of <code>foo</code> relative to where we are. If that’s prefixed with <code>::</code>, as in
+<code>::foo::bar()</code>, it refers to a different <code>foo</code>, an absolute path from your
+crate root.</p>
+<p>This will build and run:</p>
+<pre><code class="language-bash">$ cargo run
+   Compiling phrases v0.0.1 (file:///home/you/projects/phrases)
+     Running `target/debug/phrases`
+Hello in English: Hello!
+Goodbye in English: Goodbye.
+Hello in Japanese: こんにちは
+Goodbye in Japanese: さようなら
+</code></pre>
+<a class="header" href="crates-and-modules.html#complex-imports" name="complex-imports"><h2>Complex imports</h2></a>
+<p>Rust offers several advanced options that can add compactness and
+convenience to your <code>extern crate</code> and <code>use</code> statements. Here is an example:</p>
+<pre><code class="language-rust ignore">extern crate phrases as sayings;
+
+use sayings::japanese::greetings as ja_greetings;
+use sayings::japanese::farewells::*;
+use sayings::english::{self, greetings as en_greetings, farewells as en_farewells};
+
+fn main() {
+    println!(&quot;Hello in English; {}&quot;, en_greetings::hello());
+    println!(&quot;And in Japanese: {}&quot;, ja_greetings::hello());
+    println!(&quot;Goodbye in English: {}&quot;, english::farewells::goodbye());
+    println!(&quot;Again: {}&quot;, en_farewells::goodbye());
+    println!(&quot;And in Japanese: {}&quot;, goodbye());
+}
+</code></pre>
+<p>What's going on here?</p>
+<p>First, both <code>extern crate</code> and <code>use</code> allow renaming the thing that is being
+imported. So the crate is still called &quot;phrases&quot;, but here we will refer
+to it as &quot;sayings&quot;. Similarly, the first <code>use</code> statement pulls in the
+<code>japanese::greetings</code> module from the crate, but makes it available as
+<code>ja_greetings</code> as opposed to simply <code>greetings</code>. This can help to avoid
+ambiguity when importing similarly-named items from different places.</p>
+<p>The second <code>use</code> statement uses a star glob to bring in all public symbols from
+the <code>sayings::japanese::farewells</code> module. As you can see we can later refer to
+the Japanese <code>goodbye</code> function with no module qualifiers. This kind of glob
+should be used sparingly. It’s worth noting that it only imports the public
+symbols, even if the code doing the globbing is in the same module.</p>
+<p>The third <code>use</code> statement bears more explanation. It's using &quot;brace expansion&quot;
+globbing to compress three <code>use</code> statements into one (this sort of syntax
+may be familiar if you've written Linux shell scripts before). The
+uncompressed form of this statement would be:</p>
+<pre><code class="language-rust ignore">use sayings::english;
+use sayings::english::greetings as en_greetings;
+use sayings::english::farewells as en_farewells;
+</code></pre>
+<p>As you can see, the curly brackets compress <code>use</code> statements for several items
+under the same path, and in this context <code>self</code> refers back to that path.
+Note: The curly brackets cannot be nested or mixed with star globbing.</p>
+
+                </div>
+
+                <!-- Mobile navigation buttons -->
+                
+                    <a href="ufcs.html" class="mobile-nav-chapters previous">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+                    <a href="const-and-static.html" class="mobile-nav-chapters next">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                
+
+            </div>
+
+            
+                <a href="ufcs.html" class="nav-chapters previous" title="You can navigate through the chapters using the arrow keys">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+            
+
+            
+                <a href="const-and-static.html" class="nav-chapters next" title="You can navigate through the chapters using the arrow keys">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            
+
+        </div>
+
+
+        <!-- Local fallback for Font Awesome -->
+        <script>
+            if ($(".fa").css("font-family") !== "FontAwesome") {
+                $('<link rel="stylesheet" type="text/css" href="_FontAwesome/css/font-awesome.css">').prependTo('head');
+            }
+        </script>
+
+        <!-- Livereload script (if served using the cli tool) -->
+        
+
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+    </body>
+</html>

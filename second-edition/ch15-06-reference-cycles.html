@@ -172,7 +172,7 @@ put in the variable <code>link</code>. Then we use the <code>borrow_mut</code> m
 <code>RefCell</code> to change the value inside from an <code>Rc</code> that holds a <code>Nil</code> value to
 the <code>Rc</code> in <code>b</code>. We've created a reference cycle that looks like Figure 15-18:</p>
 <figure>
-<p><img alt="Reference cycle of lists" src="img/trpl15-04.svg" class="center" /></p>
+<p><img alt="Reference cycle of lists" src="img/trpl15-04.svg" class="center" style="width: 50%;" /></p>
 <figcaption>
 <p>Figure 15-18: A reference cycle of lists <code>a</code> and <code>b</code> pointing to each other</p>
 </figcaption>

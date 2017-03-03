@@ -1,0 +1,304 @@
+<!DOCTYPE HTML>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Syntax Index - </title>
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <base href="">
+
+        <link rel="stylesheet" href="book.css">
+        <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+        <link rel="shortcut icon" href="favicon.png">
+
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+
+        <!-- MathJax -->
+        <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+        <!-- Fetch JQuery from CDN but have a local fallback -->
+        <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+        <script>
+            if (typeof jQuery == 'undefined') {
+                document.write(unescape("%3Cscript src='jquery.js'%3E%3C/script%3E"));
+            }
+        </script>
+    </head>
+    <body class="light">
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme = localStorage.getItem('theme');
+            if (theme == null) { theme = 'light'; }
+            $('body').removeClass().addClass(theme);
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var sidebar = localStorage.getItem('sidebar');
+            if (sidebar === "hidden") { $("html").addClass("sidebar-hidden") }
+            else if (sidebar === "visible") { $("html").addClass("sidebar-visible") }
+        </script>
+
+        <div id="sidebar" class="sidebar">
+            <ul class="chapter"><li class="affix"><a href="README.html">Introduction</a></li><li><a href="getting-started.html"><strong>1.</strong> Getting Started</a></li><li><a href="guessing-game.html"><strong>2.</strong> Tutorial: Guessing Game</a></li><li><a href="syntax-and-semantics.html"><strong>3.</strong> Syntax and Semantics</a></li><li><ul class="section"><li><a href="variable-bindings.html"><strong>3.1.</strong> Variable Bindings</a></li><li><a href="functions.html"><strong>3.2.</strong> Functions</a></li><li><a href="primitive-types.html"><strong>3.3.</strong> Primitive Types</a></li><li><a href="comments.html"><strong>3.4.</strong> Comments</a></li><li><a href="if.html"><strong>3.5.</strong> if</a></li><li><a href="loops.html"><strong>3.6.</strong> Loops</a></li><li><a href="vectors.html"><strong>3.7.</strong> Vectors</a></li><li><a href="ownership.html"><strong>3.8.</strong> Ownership</a></li><li><a href="references-and-borrowing.html"><strong>3.9.</strong> References and Borrowing</a></li><li><a href="lifetimes.html"><strong>3.10.</strong> Lifetimes</a></li><li><a href="mutability.html"><strong>3.11.</strong> Mutability</a></li><li><a href="structs.html"><strong>3.12.</strong> Structs</a></li><li><a href="enums.html"><strong>3.13.</strong> Enums</a></li><li><a href="match.html"><strong>3.14.</strong> Match</a></li><li><a href="patterns.html"><strong>3.15.</strong> Patterns</a></li><li><a href="method-syntax.html"><strong>3.16.</strong> Method Syntax</a></li><li><a href="strings.html"><strong>3.17.</strong> Strings</a></li><li><a href="generics.html"><strong>3.18.</strong> Generics</a></li><li><a href="traits.html"><strong>3.19.</strong> Traits</a></li><li><a href="drop.html"><strong>3.20.</strong> Drop</a></li><li><a href="if-let.html"><strong>3.21.</strong> if let</a></li><li><a href="trait-objects.html"><strong>3.22.</strong> Trait Objects</a></li><li><a href="closures.html"><strong>3.23.</strong> Closures</a></li><li><a href="ufcs.html"><strong>3.24.</strong> Universal Function Call Syntax</a></li><li><a href="crates-and-modules.html"><strong>3.25.</strong> Crates and Modules</a></li><li><a href="const-and-static.html"><strong>3.26.</strong> <code>const</code> and <code>static</code></a></li><li><a href="attributes.html"><strong>3.27.</strong> Attributes</a></li><li><a href="type-aliases.html"><strong>3.28.</strong> <code>type</code> aliases</a></li><li><a href="casting-between-types.html"><strong>3.29.</strong> Casting between types</a></li><li><a href="associated-types.html"><strong>3.30.</strong> Associated Types</a></li><li><a href="unsized-types.html"><strong>3.31.</strong> Unsized Types</a></li><li><a href="operators-and-overloading.html"><strong>3.32.</strong> Operators and Overloading</a></li><li><a href="deref-coercions.html"><strong>3.33.</strong> Deref coercions</a></li><li><a href="macros.html"><strong>3.34.</strong> Macros</a></li><li><a href="raw-pointers.html"><strong>3.35.</strong> Raw Pointers</a></li><li><a href="unsafe.html"><strong>3.36.</strong> <code>unsafe</code></a></li></ul></li><li><a href="effective-rust.html"><strong>4.</strong> Effective Rust</a></li><li><ul class="section"><li><a href="the-stack-and-the-heap.html"><strong>4.1.</strong> The Stack and the Heap</a></li><li><a href="testing.html"><strong>4.2.</strong> Testing</a></li><li><a href="conditional-compilation.html"><strong>4.3.</strong> Conditional Compilation</a></li><li><a href="documentation.html"><strong>4.4.</strong> Documentation</a></li><li><a href="iterators.html"><strong>4.5.</strong> Iterators</a></li><li><a href="concurrency.html"><strong>4.6.</strong> Concurrency</a></li><li><a href="error-handling.html"><strong>4.7.</strong> Error Handling</a></li><li><a href="choosing-your-guarantees.html"><strong>4.8.</strong> Choosing your Guarantees</a></li><li><a href="ffi.html"><strong>4.9.</strong> FFI</a></li><li><a href="borrow-and-asref.html"><strong>4.10.</strong> Borrow and AsRef</a></li><li><a href="release-channels.html"><strong>4.11.</strong> Release Channels</a></li><li><a href="using-rust-without-the-standard-library.html"><strong>4.12.</strong> Using Rust without the standard library</a></li><li><a href="procedural-macros.html"><strong>4.13.</strong> Procedural Macros (and custom derive)</a></li></ul></li><li><a href="glossary.html"><strong>5.</strong> Glossary</a></li><li><a href="syntax-index.html" class="active"><strong>6.</strong> Syntax Index</a></li><li><a href="bibliography.html"><strong>7.</strong> Bibliography</a></li></ul>
+        </div>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar" class="menu-bar">
+                    <div class="left-buttons">
+                        <i id="sidebar-toggle" class="fa fa-bars"></i>
+                        <i id="theme-toggle" class="fa fa-paint-brush"></i>
+                    </div>
+
+                    <h1 class="menu-title"></h1>
+
+                    <div class="right-buttons">
+                        <i id="print-button" class="fa fa-print" title="Print this book"></i>
+                    </div>
+                </div>
+
+                <div id="content" class="content">
+                    <a class="header" href="syntax-index.html#syntax-index" name="syntax-index"><h1>Syntax Index</h1></a>
+<a class="header" href="syntax-index.html#keywords" name="keywords"><h2>Keywords</h2></a>
+<ul>
+<li><code>as</code>: primitive casting, or disambiguating the specific trait containing an item.  See <a href="casting-between-types.html#as">Casting Between Types (<code>as</code>)</a>, <a href="ufcs.html#angle-bracket-form">Universal Function Call Syntax (Angle-bracket Form)</a>, <a href="associated-types.html">Associated Types</a>.</li>
+<li><code>break</code>: break out of loop.  See <a href="loops.html#ending-iteration-early">Loops (Ending Iteration Early)</a>.</li>
+<li><code>const</code>: constant items and constant raw pointers.  See <a href="const-and-static.html"><code>const</code> and <code>static</code></a>, <a href="raw-pointers.html">Raw Pointers</a>.</li>
+<li><code>continue</code>: continue to next loop iteration.  See <a href="loops.html#ending-iteration-early">Loops (Ending Iteration Early)</a>.</li>
+<li><code>crate</code>: external crate linkage.  See <a href="crates-and-modules.html#importing-external-crates">Crates and Modules (Importing External Crates)</a>.</li>
+<li><code>else</code>: fallback for <code>if</code> and <code>if let</code> constructs.  See <a href="if.html"><code>if</code></a>, <a href="if-let.html"><code>if let</code></a>.</li>
+<li><code>enum</code>: defining enumeration.  See <a href="enums.html">Enums</a>.</li>
+<li><code>extern</code>: external crate, function, and variable linkage.  See <a href="crates-and-modules.html#importing-external-crates">Crates and Modules (Importing External Crates)</a>, <a href="ffi.html">Foreign Function Interface</a>.</li>
+<li><code>false</code>: boolean false literal.  See <a href="primitive-types.html#booleans">Primitive Types (Booleans)</a>.</li>
+<li><code>fn</code>: function definition and function pointer types.  See <a href="functions.html">Functions</a>.</li>
+<li><code>for</code>: iterator loop, part of trait <code>impl</code> syntax, and higher-ranked lifetime syntax.  See <a href="loops.html#for">Loops (<code>for</code>)</a>, <a href="method-syntax.html">Method Syntax</a>.</li>
+<li><code>if</code>: conditional branching.  See <a href="if.html"><code>if</code></a>, <a href="if-let.html"><code>if let</code></a>.</li>
+<li><code>impl</code>: inherent and trait implementation blocks.  See <a href="method-syntax.html">Method Syntax</a>.</li>
+<li><code>in</code>: part of <code>for</code> loop syntax.  See <a href="loops.html#for">Loops (<code>for</code>)</a>.</li>
+<li><code>let</code>: variable binding.  See <a href="variable-bindings.html">Variable Bindings</a>.</li>
+<li><code>loop</code>: unconditional, infinite loop.  See <a href="loops.html#loop">Loops (<code>loop</code>)</a>.</li>
+<li><code>match</code>: pattern matching.  See <a href="match.html">Match</a>.</li>
+<li><code>mod</code>: module declaration.  See <a href="crates-and-modules.html#defining-modules">Crates and Modules (Defining Modules)</a>.</li>
+<li><code>move</code>: part of closure syntax.  See <a href="closures.html#move-closures">Closures (<code>move</code> closures)</a>.</li>
+<li><code>mut</code>: denotes mutability in pointer types and pattern bindings.  See <a href="mutability.html">Mutability</a>.</li>
+<li><code>pub</code>: denotes public visibility in <code>struct</code> fields, <code>impl</code> blocks, and modules.  See <a href="crates-and-modules.html#exporting-a-public-interface">Crates and Modules (Exporting a Public Interface)</a>.</li>
+<li><code>ref</code>: by-reference binding.  See <a href="patterns.html#ref-and-ref-mut">Patterns (<code>ref</code> and <code>ref mut</code>)</a>.</li>
+<li><code>return</code>: return from function.  See <a href="functions.html#early-returns">Functions (Early Returns)</a>.</li>
+<li><code>Self</code>: implementor type alias.  See <a href="traits.html">Traits</a>.</li>
+<li><code>self</code>: method subject.  See <a href="method-syntax.html#method-calls">Method Syntax (Method Calls)</a>.</li>
+<li><code>static</code>: global variable.  See <a href="const-and-static.html#static"><code>const</code> and <code>static</code> (<code>static</code>)</a>.</li>
+<li><code>struct</code>: structure definition.  See <a href="structs.html">Structs</a>.</li>
+<li><code>trait</code>: trait definition.  See <a href="traits.html">Traits</a>.</li>
+<li><code>true</code>: boolean true literal.  See <a href="primitive-types.html#booleans">Primitive Types (Booleans)</a>.</li>
+<li><code>type</code>: type alias, and associated type definition.  See <a href="type-aliases.html"><code>type</code> Aliases</a>, <a href="associated-types.html">Associated Types</a>.</li>
+<li><code>unsafe</code>: denotes unsafe code, functions, traits, and implementations.  See <a href="unsafe.html">Unsafe</a>.</li>
+<li><code>use</code>: import symbols into scope.  See <a href="crates-and-modules.html#importing-modules-with-use">Crates and Modules (Importing Modules with <code>use</code>)</a>.</li>
+<li><code>where</code>: type constraint clauses.  See <a href="traits.html#where-clause">Traits (<code>where</code> clause)</a>.</li>
+<li><code>while</code>: conditional loop.  See <a href="loops.html#while">Loops (<code>while</code>)</a>.</li>
+</ul>
+<a class="header" href="syntax-index.html#operators-and-symbols" name="operators-and-symbols"><h2>Operators and Symbols</h2></a>
+<ul>
+<li><code>!</code> (<code>ident!(…)</code>, <code>ident!{…}</code>, <code>ident![…]</code>): denotes macro expansion.  See <a href="macros.html">Macros</a>.</li>
+<li><code>!</code> (<code>!expr</code>): bitwise or logical complement.  Overloadable (<code>Not</code>).</li>
+<li><code>!=</code> (<code>var != expr</code>): nonequality comparison.  Overloadable (<code>PartialEq</code>).</li>
+<li><code>%</code> (<code>expr % expr</code>): arithmetic remainder.  Overloadable (<code>Rem</code>).</li>
+<li><code>%=</code> (<code>var %= expr</code>): arithmetic remainder &amp; assignment. Overloadable (<code>RemAssign</code>).</li>
+<li><code>&amp;</code> (<code>expr &amp; expr</code>): bitwise and.  Overloadable (<code>BitAnd</code>).</li>
+<li><code>&amp;</code> (<code>&amp;expr</code>, <code>&amp;mut expr</code>): borrow.  See <a href="references-and-borrowing.html">References and Borrowing</a>.</li>
+<li><code>&amp;</code> (<code>&amp;type</code>, <code>&amp;mut type</code>, <code>&amp;'a type</code>, <code>&amp;'a mut type</code>): borrowed pointer type.  See <a href="references-and-borrowing.html">References and Borrowing</a>.</li>
+<li><code>&amp;=</code> (<code>var &amp;= expr</code>): bitwise and &amp; assignment. Overloadable (<code>BitAndAssign</code>).</li>
+<li><code>&amp;&amp;</code> (<code>expr &amp;&amp; expr</code>): logical and.</li>
+<li><code>*</code> (<code>expr * expr</code>): arithmetic multiplication.  Overloadable (<code>Mul</code>).</li>
+<li><code>*</code> (<code>*expr</code>): dereference.</li>
+<li><code>*</code> (<code>*const type</code>, <code>*mut type</code>): raw pointer.  See <a href="raw-pointers.html">Raw Pointers</a>.</li>
+<li><code>*=</code> (<code>var *= expr</code>): arithmetic multiplication &amp; assignment. Overloadable (<code>MulAssign</code>).</li>
+<li><code>+</code> (<code>expr + expr</code>): arithmetic addition.  Overloadable (<code>Add</code>).</li>
+<li><code>+</code> (<code>trait + trait</code>, <code>'a + trait</code>): compound type constraint.  See <a href="traits.html#multiple-trait-bounds">Traits (Multiple Trait Bounds)</a>.</li>
+<li><code>+=</code> (<code>var += expr</code>): arithmetic addition &amp; assignment. Overloadable (<code>AddAssign</code>).</li>
+<li><code>,</code>: argument and element separator.  See <a href="attributes.html">Attributes</a>, <a href="functions.html">Functions</a>, <a href="structs.html">Structs</a>, <a href="generics.html">Generics</a>, <a href="match.html">Match</a>, <a href="closures.html">Closures</a>, <a href="crates-and-modules.html#importing-modules-with-use">Crates and Modules (Importing Modules with <code>use</code>)</a>.</li>
+<li><code>-</code> (<code>expr - expr</code>): arithmetic subtraction.  Overloadable (<code>Sub</code>).</li>
+<li><code>-</code> (<code>- expr</code>): arithmetic negation.  Overloadable (<code>Neg</code>).</li>
+<li><code>-=</code> (<code>var -= expr</code>): arithmetic subtraction &amp; assignment. Overloadable (<code>SubAssign</code>).</li>
+<li><code>-&gt;</code> (<code>fn(…) -&gt; type</code>, <code>|…| -&gt; type</code>): function and closure return type.  See <a href="functions.html">Functions</a>, <a href="closures.html">Closures</a>.</li>
+<li><code>.</code> (<code>expr.ident</code>): member access.  See <a href="structs.html">Structs</a>, <a href="method-syntax.html">Method Syntax</a>.</li>
+<li><code>..</code> (<code>..</code>, <code>expr..</code>, <code>..expr</code>, <code>expr..expr</code>): right-exclusive range literal.</li>
+<li><code>..</code> (<code>..expr</code>): struct literal update syntax.  See <a href="structs.html#update-syntax">Structs (Update syntax)</a>.</li>
+<li><code>..</code> (<code>variant(x, ..)</code>, <code>struct_type { x, .. }</code>): &quot;and the rest&quot; pattern binding.  See <a href="patterns.html#ignoring-bindings">Patterns (Ignoring bindings)</a>.</li>
+<li><code>...</code> (<code>...expr</code>, <code>expr...expr</code>) <em>in an expression</em>: inclusive range expression. See <a href="iterators.html">Iterators</a>.</li>
+<li><code>...</code> (<code>expr...expr</code>) <em>in a pattern</em>: inclusive range pattern.  See <a href="patterns.html#ranges">Patterns (Ranges)</a>.</li>
+<li><code>/</code> (<code>expr / expr</code>): arithmetic division.  Overloadable (<code>Div</code>).</li>
+<li><code>/=</code> (<code>var /= expr</code>): arithmetic division &amp; assignment. Overloadable (<code>DivAssign</code>).</li>
+<li><code>:</code> (<code>pat: type</code>, <code>ident: type</code>): constraints.  See <a href="variable-bindings.html">Variable Bindings</a>, <a href="functions.html">Functions</a>, <a href="structs.html">Structs</a>, <a href="traits.html">Traits</a>.</li>
+<li><code>:</code> (<code>ident: expr</code>): struct field initializer.  See <a href="structs.html">Structs</a>.</li>
+<li><code>:</code> (<code>'a: loop {…}</code>): loop label.  See <a href="loops.html#loop-labels">Loops (Loops Labels)</a>.</li>
+<li><code>;</code>: statement and item terminator.</li>
+<li><code>;</code> (<code>[…; len]</code>): part of fixed-size array syntax.  See <a href="primitive-types.html#arrays">Primitive Types (Arrays)</a>.</li>
+<li><code>&lt;&lt;</code> (<code>expr &lt;&lt; expr</code>): left-shift.  Overloadable (<code>Shl</code>).</li>
+<li><code>&lt;&lt;=</code> (<code>var &lt;&lt;= expr</code>): left-shift &amp; assignment. Overloadable (<code>ShlAssign</code>).</li>
+<li><code>&lt;</code> (<code>expr &lt; expr</code>): less-than comparison.  Overloadable (<code>PartialOrd</code>).</li>
+<li><code>&lt;=</code> (<code>var &lt;= expr</code>): less-than or equal-to comparison.  Overloadable (<code>PartialOrd</code>).</li>
+<li><code>=</code> (<code>var = expr</code>, <code>ident = type</code>): assignment/equivalence.  See <a href="variable-bindings.html">Variable Bindings</a>, <a href="type-aliases.html"><code>type</code> Aliases</a>, generic parameter defaults.</li>
+<li><code>==</code> (<code>var == expr</code>): equality comparison.  Overloadable (<code>PartialEq</code>).</li>
+<li><code>=&gt;</code> (<code>pat =&gt; expr</code>): part of match arm syntax.  See <a href="match.html">Match</a>.</li>
+<li><code>&gt;</code> (<code>expr &gt; expr</code>): greater-than comparison.  Overloadable (<code>PartialOrd</code>).</li>
+<li><code>&gt;=</code> (<code>var &gt;= expr</code>): greater-than or equal-to comparison.  Overloadable (<code>PartialOrd</code>).</li>
+<li><code>&gt;&gt;</code> (<code>expr &gt;&gt; expr</code>): right-shift.  Overloadable (<code>Shr</code>).</li>
+<li><code>&gt;&gt;=</code> (<code>var &gt;&gt;= expr</code>): right-shift &amp; assignment. Overloadable (<code>ShrAssign</code>).</li>
+<li><code>@</code> (<code>ident @ pat</code>): pattern binding.  See <a href="patterns.html#bindings">Patterns (Bindings)</a>.</li>
+<li><code>^</code> (<code>expr ^ expr</code>): bitwise exclusive or.  Overloadable (<code>BitXor</code>).</li>
+<li><code>^=</code> (<code>var ^= expr</code>): bitwise exclusive or &amp; assignment. Overloadable (<code>BitXorAssign</code>).</li>
+<li><code>|</code> (<code>expr | expr</code>): bitwise or.  Overloadable (<code>BitOr</code>).</li>
+<li><code>|</code> (<code>pat | pat</code>): pattern alternatives.  See <a href="patterns.html#multiple-patterns">Patterns (Multiple patterns)</a>.</li>
+<li><code>|</code> (<code>|…| expr</code>): closures.  See <a href="closures.html">Closures</a>.</li>
+<li><code>|=</code> (<code>var |= expr</code>): bitwise or &amp; assignment. Overloadable (<code>BitOrAssign</code>).</li>
+<li><code>||</code> (<code>expr || expr</code>): logical or.</li>
+<li><code>_</code>: &quot;ignored&quot; pattern binding (see <a href="patterns.html#ignoring-bindings">Patterns (Ignoring bindings)</a>). Also used to make integer-literals readable (see <a href="../reference/tokens.html#integer-literals">Reference (Integer literals)</a>).</li>
+<li><code>?</code> (<code>expr?</code>): Error propagation. Returns early when <code>Err(_)</code> is encountered, unwraps otherwise. Similar to the <a href="error-handling.html#the-try-macro"><code>try!</code> macro</a>.</li>
+</ul>
+<a class="header" href="syntax-index.html#other-syntax" name="other-syntax"><h2>Other Syntax</h2></a>
+<!-- Various bits of standalone stuff. -->
+<ul>
+<li><code>'ident</code>: named lifetime or loop label.  See <a href="lifetimes.html">Lifetimes</a>, <a href="loops.html#loop-labels">Loops (Loops Labels)</a>.</li>
+<li><code>…u8</code>, <code>…i32</code>, <code>…f64</code>, <code>…usize</code>, …: numeric literal of specific type.</li>
+<li><code>&quot;…&quot;</code>: string literal.  See <a href="strings.html">Strings</a>.</li>
+<li><code>r&quot;…&quot;</code>, <code>r#&quot;…&quot;#</code>, <code>r##&quot;…&quot;##</code>, …: raw string literal, escape characters are not processed. See <a href="../reference/tokens.html#raw-string-literals">Reference (Raw String Literals)</a>.</li>
+<li><code>b&quot;…&quot;</code>: byte string literal, constructs a <code>[u8]</code> instead of a string. See <a href="../reference/tokens.html/#byte-string-literals">Reference (Byte String Literals)</a>.</li>
+<li><code>br&quot;…&quot;</code>, <code>br#&quot;…&quot;#</code>, <code>br##&quot;…&quot;##</code>, …: raw byte string literal, combination of raw and byte string literal. See <a href="../reference/tokens.html#raw-byte-string-literals">Reference (Raw Byte String Literals)</a>.</li>
+<li><code>'…'</code>: character literal.  See <a href="primitive-types.html#char">Primitive Types (<code>char</code>)</a>.</li>
+<li><code>b'…'</code>: ASCII byte literal.</li>
+<li><code>|…| expr</code>: closure.  See <a href="closures.html">Closures</a>.</li>
+</ul>
+<!-- Path-related syntax -->
+<ul>
+<li><code>ident::ident</code>: path.  See <a href="crates-and-modules.html#defining-modules">Crates and Modules (Defining Modules)</a>.</li>
+<li><code>::path</code>: path relative to the crate root (<em>i.e.</em> an explicitly absolute path).  See <a href="crates-and-modules.html#re-exporting-with-pub-use">Crates and Modules (Re-exporting with <code>pub use</code>)</a>.</li>
+<li><code>self::path</code>: path relative to the current module (<em>i.e.</em> an explicitly relative path).  See <a href="crates-and-modules.html#re-exporting-with-pub-use">Crates and Modules (Re-exporting with <code>pub use</code>)</a>.</li>
+<li><code>super::path</code>: path relative to the parent of the current module.  See <a href="crates-and-modules.html#re-exporting-with-pub-use">Crates and Modules (Re-exporting with <code>pub use</code>)</a>.</li>
+<li><code>type::ident</code>, <code>&lt;type as trait&gt;::ident</code>: associated constants, functions, and types.  See <a href="associated-types.html">Associated Types</a>.</li>
+<li><code>&lt;type&gt;::…</code>: associated item for a type which cannot be directly named (<em>e.g.</em> <code>&lt;&amp;T&gt;::…</code>, <code>&lt;[T]&gt;::…</code>, <em>etc.</em>).  See <a href="associated-types.html">Associated Types</a>.</li>
+<li><code>trait::method(…)</code>: disambiguating a method call by naming the trait which defines it. See <a href="ufcs.html">Universal Function Call Syntax</a>.</li>
+<li><code>type::method(…)</code>: disambiguating a method call by naming the type for which it's defined. See <a href="ufcs.html">Universal Function Call Syntax</a>.</li>
+<li><code>&lt;type as trait&gt;::method(…)</code>: disambiguating a method call by naming the trait <em>and</em> type. See <a href="ufcs.html#angle-bracket-form">Universal Function Call Syntax (Angle-bracket Form)</a>.</li>
+</ul>
+<!-- Generics -->
+<ul>
+<li><code>path&lt;…&gt;</code> (<em>e.g.</em> <code>Vec&lt;u8&gt;</code>): specifies parameters to generic type <em>in a type</em>.  See <a href="generics.html">Generics</a>.</li>
+<li><code>path::&lt;…&gt;</code>, <code>method::&lt;…&gt;</code> (<em>e.g.</em> <code>&quot;42&quot;.parse::&lt;i32&gt;()</code>): specifies parameters to generic type, function, or method <em>in an expression</em>.  See <a href="generics.html#resolving-ambiguities">Generics § Resolving ambiguities</a>.</li>
+<li><code>fn ident&lt;…&gt; …</code>: define generic function.  See <a href="generics.html">Generics</a>.</li>
+<li><code>struct ident&lt;…&gt; …</code>: define generic structure.  See <a href="generics.html">Generics</a>.</li>
+<li><code>enum ident&lt;…&gt; …</code>: define generic enumeration.  See <a href="generics.html">Generics</a>.</li>
+<li><code>impl&lt;…&gt; …</code>: define generic implementation.</li>
+<li><code>for&lt;…&gt; type</code>: higher-ranked lifetime bounds.</li>
+<li><code>type&lt;ident=type&gt;</code> (<em>e.g.</em> <code>Iterator&lt;Item=T&gt;</code>): a generic type where one or more associated types have specific assignments.  See <a href="associated-types.html">Associated Types</a>.</li>
+</ul>
+<!-- Constraints -->
+<ul>
+<li><code>T: U</code>: generic parameter <code>T</code> constrained to types that implement <code>U</code>.  See <a href="traits.html">Traits</a>.</li>
+<li><code>T: 'a</code>: generic type <code>T</code> must outlive lifetime <code>'a</code>. When we say that a type 'outlives' the lifetime, we mean that it cannot transitively contain any references with lifetimes shorter than <code>'a</code>.</li>
+<li><code>T : 'static</code>: The generic type <code>T</code> contains no borrowed references other than <code>'static</code> ones.</li>
+<li><code>'b: 'a</code>: generic lifetime <code>'b</code> must outlive lifetime <code>'a</code>.</li>
+<li><code>T: ?Sized</code>: allow generic type parameter to be a dynamically-sized type.  See <a href="unsized-types.html#sized">Unsized Types (<code>?Sized</code>)</a>.</li>
+<li><code>'a + trait</code>, <code>trait + trait</code>: compound type constraint.  See <a href="traits.html#multiple-trait-bounds">Traits (Multiple Trait Bounds)</a>.</li>
+</ul>
+<!-- Macros and attributes -->
+<ul>
+<li><code>#[meta]</code>: outer attribute.  See <a href="attributes.html">Attributes</a>.</li>
+<li><code>#![meta]</code>: inner attribute.  See <a href="attributes.html">Attributes</a>.</li>
+<li><code>$ident</code>: macro substitution.  See <a href="macros.html">Macros</a>.</li>
+<li><code>$ident:kind</code>: macro capture.  See <a href="macros.html">Macros</a>.</li>
+<li><code>$(…)…</code>: macro repetition.  See <a href="macros.html">Macros</a>.</li>
+</ul>
+<!-- Comments -->
+<ul>
+<li><code>//</code>: line comment.  See <a href="comments.html">Comments</a>.</li>
+<li><code>//!</code>: inner line doc comment.  See <a href="comments.html">Comments</a>.</li>
+<li><code>///</code>: outer line doc comment.  See <a href="comments.html">Comments</a>.</li>
+<li><code>/*…*/</code>: block comment.  See <a href="comments.html">Comments</a>.</li>
+<li><code>/*!…*/</code>: inner block doc comment.  See <a href="comments.html">Comments</a>.</li>
+<li><code>/**…*/</code>: outer block doc comment.  See <a href="comments.html">Comments</a>.</li>
+</ul>
+<!-- Special types -->
+<ul>
+<li><code>!</code>: always empty Never type.  See <a href="functions.html#diverging-functions">Diverging Functions</a>.</li>
+</ul>
+<!-- Various things involving parens and tuples -->
+<ul>
+<li><code>()</code>: empty tuple (<em>a.k.a.</em> unit), both literal and type.</li>
+<li><code>(expr)</code>: parenthesized expression.</li>
+<li><code>(expr,)</code>: single-element tuple expression.  See <a href="primitive-types.html#tuples">Primitive Types (Tuples)</a>.</li>
+<li><code>(type,)</code>: single-element tuple type.  See <a href="primitive-types.html#tuples">Primitive Types (Tuples)</a>.</li>
+<li><code>(expr, …)</code>: tuple expression.  See <a href="primitive-types.html#tuples">Primitive Types (Tuples)</a>.</li>
+<li><code>(type, …)</code>: tuple type.  See <a href="primitive-types.html#tuples">Primitive Types (Tuples)</a>.</li>
+<li><code>expr(expr, …)</code>: function call expression.  Also used to initialize tuple <code>struct</code>s and tuple <code>enum</code> variants.  See <a href="functions.html">Functions</a>.</li>
+<li><code>ident!(…)</code>, <code>ident!{…}</code>, <code>ident![…]</code>: macro invocation.  See <a href="macros.html">Macros</a>.</li>
+<li><code>expr.0</code>, <code>expr.1</code>, …: tuple indexing.  See <a href="primitive-types.html#tuple-indexing">Primitive Types (Tuple Indexing)</a>.</li>
+</ul>
+<!-- Bracey things -->
+<ul>
+<li><code>{…}</code>: block expression.</li>
+<li><code>Type {…}</code>: <code>struct</code> literal.  See <a href="structs.html">Structs</a>.</li>
+</ul>
+<!-- Brackety things -->
+<ul>
+<li><code>[…]</code>: array literal.  See <a href="primitive-types.html#arrays">Primitive Types (Arrays)</a>.</li>
+<li><code>[expr; len]</code>: array literal containing <code>len</code> copies of <code>expr</code>.  See <a href="primitive-types.html#arrays">Primitive Types (Arrays)</a>.</li>
+<li><code>[type; len]</code>: array type containing <code>len</code> instances of <code>type</code>.  See <a href="primitive-types.html#arrays">Primitive Types (Arrays)</a>.</li>
+<li><code>expr[expr]</code>: collection indexing.  Overloadable (<code>Index</code>, <code>IndexMut</code>).</li>
+<li><code>expr[..]</code>, <code>expr[a..]</code>, <code>expr[..b]</code>, <code>expr[a..b]</code>: collection indexing pretending to be collection slicing, using <code>Range</code>, <code>RangeFrom</code>, <code>RangeTo</code>, <code>RangeFull</code> as the &quot;index&quot;.</li>
+</ul>
+
+                </div>
+
+                <!-- Mobile navigation buttons -->
+                
+                    <a href="glossary.html" class="mobile-nav-chapters previous">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+                    <a href="bibliography.html" class="mobile-nav-chapters next">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                
+
+            </div>
+
+            
+                <a href="glossary.html" class="nav-chapters previous" title="You can navigate through the chapters using the arrow keys">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+            
+
+            
+                <a href="bibliography.html" class="nav-chapters next" title="You can navigate through the chapters using the arrow keys">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            
+
+        </div>
+
+
+        <!-- Local fallback for Font Awesome -->
+        <script>
+            if ($(".fa").css("font-family") !== "FontAwesome") {
+                $('<link rel="stylesheet" type="text/css" href="_FontAwesome/css/font-awesome.css">').prependTo('head');
+            }
+        </script>
+
+        <!-- Livereload script (if served using the cli tool) -->
+        
+
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+    </body>
+</html>

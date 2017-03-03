@@ -1,0 +1,710 @@
+<!DOCTYPE HTML>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Macros - </title>
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <base href="">
+
+        <link rel="stylesheet" href="book.css">
+        <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+        <link rel="shortcut icon" href="favicon.png">
+
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+
+        <!-- MathJax -->
+        <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+        <!-- Fetch JQuery from CDN but have a local fallback -->
+        <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+        <script>
+            if (typeof jQuery == 'undefined') {
+                document.write(unescape("%3Cscript src='jquery.js'%3E%3C/script%3E"));
+            }
+        </script>
+    </head>
+    <body class="light">
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme = localStorage.getItem('theme');
+            if (theme == null) { theme = 'light'; }
+            $('body').removeClass().addClass(theme);
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var sidebar = localStorage.getItem('sidebar');
+            if (sidebar === "hidden") { $("html").addClass("sidebar-hidden") }
+            else if (sidebar === "visible") { $("html").addClass("sidebar-visible") }
+        </script>
+
+        <div id="sidebar" class="sidebar">
+            <ul class="chapter"><li class="affix"><a href="README.html">Introduction</a></li><li><a href="getting-started.html"><strong>1.</strong> Getting Started</a></li><li><a href="guessing-game.html"><strong>2.</strong> Tutorial: Guessing Game</a></li><li><a href="syntax-and-semantics.html"><strong>3.</strong> Syntax and Semantics</a></li><li><ul class="section"><li><a href="variable-bindings.html"><strong>3.1.</strong> Variable Bindings</a></li><li><a href="functions.html"><strong>3.2.</strong> Functions</a></li><li><a href="primitive-types.html"><strong>3.3.</strong> Primitive Types</a></li><li><a href="comments.html"><strong>3.4.</strong> Comments</a></li><li><a href="if.html"><strong>3.5.</strong> if</a></li><li><a href="loops.html"><strong>3.6.</strong> Loops</a></li><li><a href="vectors.html"><strong>3.7.</strong> Vectors</a></li><li><a href="ownership.html"><strong>3.8.</strong> Ownership</a></li><li><a href="references-and-borrowing.html"><strong>3.9.</strong> References and Borrowing</a></li><li><a href="lifetimes.html"><strong>3.10.</strong> Lifetimes</a></li><li><a href="mutability.html"><strong>3.11.</strong> Mutability</a></li><li><a href="structs.html"><strong>3.12.</strong> Structs</a></li><li><a href="enums.html"><strong>3.13.</strong> Enums</a></li><li><a href="match.html"><strong>3.14.</strong> Match</a></li><li><a href="patterns.html"><strong>3.15.</strong> Patterns</a></li><li><a href="method-syntax.html"><strong>3.16.</strong> Method Syntax</a></li><li><a href="strings.html"><strong>3.17.</strong> Strings</a></li><li><a href="generics.html"><strong>3.18.</strong> Generics</a></li><li><a href="traits.html"><strong>3.19.</strong> Traits</a></li><li><a href="drop.html"><strong>3.20.</strong> Drop</a></li><li><a href="if-let.html"><strong>3.21.</strong> if let</a></li><li><a href="trait-objects.html"><strong>3.22.</strong> Trait Objects</a></li><li><a href="closures.html"><strong>3.23.</strong> Closures</a></li><li><a href="ufcs.html"><strong>3.24.</strong> Universal Function Call Syntax</a></li><li><a href="crates-and-modules.html"><strong>3.25.</strong> Crates and Modules</a></li><li><a href="const-and-static.html"><strong>3.26.</strong> <code>const</code> and <code>static</code></a></li><li><a href="attributes.html"><strong>3.27.</strong> Attributes</a></li><li><a href="type-aliases.html"><strong>3.28.</strong> <code>type</code> aliases</a></li><li><a href="casting-between-types.html"><strong>3.29.</strong> Casting between types</a></li><li><a href="associated-types.html"><strong>3.30.</strong> Associated Types</a></li><li><a href="unsized-types.html"><strong>3.31.</strong> Unsized Types</a></li><li><a href="operators-and-overloading.html"><strong>3.32.</strong> Operators and Overloading</a></li><li><a href="deref-coercions.html"><strong>3.33.</strong> Deref coercions</a></li><li><a href="macros.html" class="active"><strong>3.34.</strong> Macros</a></li><li><a href="raw-pointers.html"><strong>3.35.</strong> Raw Pointers</a></li><li><a href="unsafe.html"><strong>3.36.</strong> <code>unsafe</code></a></li></ul></li><li><a href="effective-rust.html"><strong>4.</strong> Effective Rust</a></li><li><ul class="section"><li><a href="the-stack-and-the-heap.html"><strong>4.1.</strong> The Stack and the Heap</a></li><li><a href="testing.html"><strong>4.2.</strong> Testing</a></li><li><a href="conditional-compilation.html"><strong>4.3.</strong> Conditional Compilation</a></li><li><a href="documentation.html"><strong>4.4.</strong> Documentation</a></li><li><a href="iterators.html"><strong>4.5.</strong> Iterators</a></li><li><a href="concurrency.html"><strong>4.6.</strong> Concurrency</a></li><li><a href="error-handling.html"><strong>4.7.</strong> Error Handling</a></li><li><a href="choosing-your-guarantees.html"><strong>4.8.</strong> Choosing your Guarantees</a></li><li><a href="ffi.html"><strong>4.9.</strong> FFI</a></li><li><a href="borrow-and-asref.html"><strong>4.10.</strong> Borrow and AsRef</a></li><li><a href="release-channels.html"><strong>4.11.</strong> Release Channels</a></li><li><a href="using-rust-without-the-standard-library.html"><strong>4.12.</strong> Using Rust without the standard library</a></li><li><a href="procedural-macros.html"><strong>4.13.</strong> Procedural Macros (and custom derive)</a></li></ul></li><li><a href="glossary.html"><strong>5.</strong> Glossary</a></li><li><a href="syntax-index.html"><strong>6.</strong> Syntax Index</a></li><li><a href="bibliography.html"><strong>7.</strong> Bibliography</a></li></ul>
+        </div>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar" class="menu-bar">
+                    <div class="left-buttons">
+                        <i id="sidebar-toggle" class="fa fa-bars"></i>
+                        <i id="theme-toggle" class="fa fa-paint-brush"></i>
+                    </div>
+
+                    <h1 class="menu-title"></h1>
+
+                    <div class="right-buttons">
+                        <i id="print-button" class="fa fa-print" title="Print this book"></i>
+                    </div>
+                </div>
+
+                <div id="content" class="content">
+                    <a class="header" href="macros.html#macros" name="macros"><h1>Macros</h1></a>
+<p>By now you’ve learned about many of the tools Rust provides for abstracting and
+reusing code. These units of code reuse have a rich semantic structure. For
+example, functions have a type signature, type parameters have trait bounds,
+and overloaded functions must belong to a particular trait.</p>
+<p>This structure means that Rust’s core abstractions have powerful compile-time
+correctness checking. But this comes at the price of reduced flexibility. If
+you visually identify a pattern of repeated code, you may find it’s difficult
+or cumbersome to express that pattern as a generic function, a trait, or
+anything else within Rust’s semantics.</p>
+<p>Macros allow us to abstract at a syntactic level. A macro invocation is
+shorthand for an &quot;expanded&quot; syntactic form. This expansion happens early in
+compilation, before any static checking. As a result, macros can capture many
+patterns of code reuse that Rust’s core abstractions cannot.</p>
+<p>The drawback is that macro-based code can be harder to understand, because
+fewer of the built-in rules apply. Like an ordinary function, a well-behaved
+macro can be used without understanding its implementation. However, it can be
+difficult to design a well-behaved macro!  Additionally, compiler errors in
+macro code are harder to interpret, because they describe problems in the
+expanded code, not the source-level form that developers use.</p>
+<p>These drawbacks make macros something of a &quot;feature of last resort&quot;. That’s not
+to say that macros are bad; they are part of Rust because sometimes they’re
+needed for truly concise, well-abstracted code. Just keep this tradeoff in
+mind.</p>
+<a class="header" href="macros.html#defining-a-macro" name="defining-a-macro"><h1>Defining a macro</h1></a>
+<p>You may have seen the <code>vec!</code> macro, used to initialize a <a href="vectors.html">vector</a> with
+any number of elements.</p>
+<pre><code class="language-rust">let x: Vec&lt;u32&gt; = vec![1, 2, 3];
+# assert_eq!(x, [1, 2, 3]);
+</code></pre>
+<p>This can’t be an ordinary function, because it takes any number of arguments.
+But we can imagine it as syntactic shorthand for</p>
+<pre><code class="language-rust">let x: Vec&lt;u32&gt; = {
+    let mut temp_vec = Vec::new();
+    temp_vec.push(1);
+    temp_vec.push(2);
+    temp_vec.push(3);
+    temp_vec
+};
+# assert_eq!(x, [1, 2, 3]);
+</code></pre>
+<p>We can implement this shorthand, using a macro: <sup class="footnote-reference"><a href="macros.html#actual">1</a></sup></p>
+<div class="footnote-definition" id="actual"><sup class="footnote-definition-label">1</sup>
+<p>The actual definition of <code>vec!</code> in libcollections differs from the
+one presented here, for reasons of efficiency and reusability.</p>
+<pre><code class="language-rust">macro_rules! vec {
+    ( $( $x:expr ),* ) =&gt; {
+        {
+            let mut temp_vec = Vec::new();
+            $(
+                temp_vec.push($x);
+            )*
+            temp_vec
+        }
+    };
+}
+# fn main() {
+#     assert_eq!(vec![1,2,3], [1, 2, 3]);
+# }
+</code></pre>
+<p>Whoa, that’s a lot of new syntax! Let’s break it down.</p>
+<pre><code class="language-rust ignore">macro_rules! vec { ... }
+</code></pre>
+<p>This says we’re defining a macro named <code>vec</code>, much as <code>fn vec</code> would define a
+function named <code>vec</code>. In prose, we informally write a macro’s name with an
+exclamation point, e.g. <code>vec!</code>. The exclamation point is part of the invocation
+syntax and serves to distinguish a macro from an ordinary function.</p>
+<a class="header" href="macros.html#matching" name="matching"><h2>Matching</h2></a>
+<p>The macro is defined through a series of rules, which are pattern-matching
+cases. Above, we had</p>
+<pre><code class="language-rust ignore">( $( $x:expr ),* ) =&gt; { ... };
+</code></pre>
+<p>This is like a <code>match</code> expression arm, but the matching happens on Rust syntax
+trees, at compile time. The semicolon is optional on the last (here, only)
+case. The &quot;pattern&quot; on the left-hand side of <code>=&gt;</code> is known as a ‘matcher’.
+These have <a href="../reference/macros.html">their own little grammar</a> within the language.</p>
+<p>The matcher <code>$x:expr</code> will match any Rust expression, binding that syntax tree
+to the ‘metavariable’ <code>$x</code>. The identifier <code>expr</code> is a ‘fragment specifier’;
+the full possibilities are enumerated later in this chapter.
+Surrounding the matcher with <code>$(...),*</code> will match zero or more expressions,
+separated by commas.</p>
+<p>Aside from the special matcher syntax, any Rust tokens that appear in a matcher
+must match exactly. For example,</p>
+<pre><code class="language-rust ignore">macro_rules! foo {
+    (x =&gt; $e:expr) =&gt; (println!(&quot;mode X: {}&quot;, $e));
+    (y =&gt; $e:expr) =&gt; (println!(&quot;mode Y: {}&quot;, $e));
+}
+
+fn main() {
+    foo!(y =&gt; 3);
+}
+</code></pre>
+<p>will print</p>
+<pre><code class="language-text">mode Y: 3
+</code></pre>
+<p>With</p>
+<pre><code class="language-rust ignore">foo!(z =&gt; 3);
+</code></pre>
+<p>we get the compiler error</p>
+<pre><code class="language-text">error: no rules expected the token `z`
+</code></pre>
+<a class="header" href="macros.html#expansion" name="expansion"><h2>Expansion</h2></a>
+<p>The right-hand side of a macro rule is ordinary Rust syntax, for the most part.
+But we can splice in bits of syntax captured by the matcher. From the original
+example:</p>
+<pre><code class="language-rust ignore">$(
+    temp_vec.push($x);
+)*
+</code></pre>
+<p>Each matched expression <code>$x</code> will produce a single <code>push</code> statement in the
+macro expansion. The repetition in the expansion proceeds in &quot;lockstep&quot; with
+repetition in the matcher (more on this in a moment).</p>
+<p>Because <code>$x</code> was already declared as matching an expression, we don’t repeat
+<code>:expr</code> on the right-hand side. Also, we don’t include a separating comma as
+part of the repetition operator. Instead, we have a terminating semicolon
+within the repeated block.</p>
+<p>Another detail: the <code>vec!</code> macro has <em>two</em> pairs of braces on the right-hand
+side. They are often combined like so:</p>
+<pre><code class="language-rust ignore">macro_rules! foo {
+    () =&gt; {{
+        ...
+    }}
+}
+</code></pre>
+<p>The outer braces are part of the syntax of <code>macro_rules!</code>. In fact, you can use
+<code>()</code> or <code>[]</code> instead. They simply delimit the right-hand side as a whole.</p>
+<p>The inner braces are part of the expanded syntax. Remember, the <code>vec!</code> macro is
+used in an expression context. To write an expression with multiple statements,
+including <code>let</code>-bindings, we use a block. If your macro expands to a single
+expression, you don’t need this extra layer of braces.</p>
+<p>Note that we never <em>declared</em> that the macro produces an expression. In fact,
+this is not determined until we use the macro as an expression. With care, you
+can write a macro whose expansion works in several contexts. For example,
+shorthand for a data type could be valid as either an expression or a pattern.</p>
+<a class="header" href="macros.html#repetition" name="repetition"><h2>Repetition</h2></a>
+<p>The repetition operator follows two principal rules:</p>
+<ol>
+<li><code>$(...)*</code> walks through one &quot;layer&quot; of repetitions, for all of the <code>$name</code>s
+it contains, in lockstep, and</li>
+<li>each <code>$name</code> must be under at least as many <code>$(...)*</code>s as it was matched
+against. If it is under more, it’ll be duplicated, as appropriate.</li>
+</ol>
+<p>This baroque macro illustrates the duplication of variables from outer
+repetition levels.</p>
+<pre><code class="language-rust">macro_rules! o_O {
+    (
+        $(
+            $x:expr; [ $( $y:expr ),* ]
+        );*
+    ) =&gt; {
+        &amp;[ $($( $x + $y ),*),* ]
+    }
+}
+
+fn main() {
+    let a: &amp;[i32]
+        = o_O!(10; [1, 2, 3];
+               20; [4, 5, 6]);
+
+    assert_eq!(a, [11, 12, 13, 24, 25, 26]);
+}
+</code></pre>
+<p>That’s most of the matcher syntax. These examples use <code>$(...)*</code>, which is a
+&quot;zero or more&quot; match. Alternatively you can write <code>$(...)+</code> for a &quot;one or
+more&quot; match. Both forms optionally include a separator, which can be any token
+except <code>+</code> or <code>*</code>.</p>
+<p>This system is based on
+&quot;<a href="https://www.cs.indiana.edu/ftp/techreports/TR206.pdf">Macro-by-Example</a>&quot;
+(PDF link).</p>
+<a class="header" href="macros.html#hygiene" name="hygiene"><h1>Hygiene</h1></a>
+<p>Some languages implement macros using simple text substitution, which leads to
+various problems. For example, this C program prints <code>13</code> instead of the
+expected <code>25</code>.</p>
+<pre><code class="language-text">#define FIVE_TIMES(x) 5 * x
+
+int main() {
+    printf(&quot;%d\n&quot;, FIVE_TIMES(2 + 3));
+    return 0;
+}
+</code></pre>
+<p>After expansion we have <code>5 * 2 + 3</code>, and multiplication has greater precedence
+than addition. If you’ve used C macros a lot, you probably know the standard
+idioms for avoiding this problem, as well as five or six others. In Rust, we
+don’t have to worry about it.</p>
+<pre><code class="language-rust">macro_rules! five_times {
+    ($x:expr) =&gt; (5 * $x);
+}
+
+fn main() {
+    assert_eq!(25, five_times!(2 + 3));
+}
+</code></pre>
+<p>The metavariable <code>$x</code> is parsed as a single expression node, and keeps its
+place in the syntax tree even after substitution.</p>
+<p>Another common problem in macro systems is ‘variable capture’. Here’s a C
+macro using a block with multiple statements.</p>
+<pre><code class="language-text">#define LOG(msg) do { \
+    int state = get_log_state(); \
+    if (state &gt; 0) { \
+        printf(&quot;log(%d): %s\n&quot;, state, msg); \
+    } \
+} while (0)
+</code></pre>
+<p>Here’s a simple use case that goes terribly wrong:</p>
+<pre><code class="language-text">const char *state = &quot;reticulating splines&quot;;
+LOG(state);
+</code></pre>
+<p>This expands to</p>
+<pre><code class="language-text">const char *state = &quot;reticulating splines&quot;;
+do {
+    int state = get_log_state();
+    if (state &gt; 0) {
+        printf(&quot;log(%d): %s\n&quot;, state, state);
+    }
+} while (0);
+</code></pre>
+<p>The second variable named <code>state</code> shadows the first one.  This is a problem
+because the print statement should refer to both of them.</p>
+<p>The equivalent Rust macro has the desired behavior.</p>
+<pre><code class="language-rust"># fn get_log_state() -&gt; i32 { 3 }
+macro_rules! log {
+    ($msg:expr) =&gt; {{
+        let state: i32 = get_log_state();
+        if state &gt; 0 {
+            println!(&quot;log({}): {}&quot;, state, $msg);
+        }
+    }};
+}
+
+fn main() {
+    let state: &amp;str = &quot;reticulating splines&quot;;
+    log!(state);
+}
+</code></pre>
+<p>This works because Rust has a <a href="https://en.wikipedia.org/wiki/Hygienic_macro">hygienic macro system</a>. Each macro expansion
+happens in a distinct ‘syntax context’, and each variable is tagged with the
+syntax context where it was introduced. It’s as though the variable <code>state</code>
+inside <code>main</code> is painted a different &quot;color&quot; from the variable <code>state</code> inside
+the macro, and therefore they don’t conflict.</p>
+<p>This also restricts the ability of macros to introduce new bindings at the
+invocation site. Code such as the following will not work:</p>
+<pre><code class="language-rust ignore">macro_rules! foo {
+    () =&gt; (let x = 3;);
+}
+
+fn main() {
+    foo!();
+    println!(&quot;{}&quot;, x);
+}
+</code></pre>
+<p>Instead you need to pass the variable name into the invocation, so that it’s
+tagged with the right syntax context.</p>
+<pre><code class="language-rust">macro_rules! foo {
+    ($v:ident) =&gt; (let $v = 3;);
+}
+
+fn main() {
+    foo!(x);
+    println!(&quot;{}&quot;, x);
+}
+</code></pre>
+<p>This holds for <code>let</code> bindings and loop labels, but not for <a href="../reference/items.html">items</a>.
+So the following code does compile:</p>
+<pre><code class="language-rust">macro_rules! foo {
+    () =&gt; (fn x() { });
+}
+
+fn main() {
+    foo!();
+    x();
+}
+</code></pre>
+<a class="header" href="macros.html#recursive-macros" name="recursive-macros"><h1>Recursive macros</h1></a>
+<p>A macro’s expansion can include more macro invocations, including invocations
+of the very same macro being expanded.  These recursive macros are useful for
+processing tree-structured input, as illustrated by this (simplistic) HTML
+shorthand:</p>
+<pre><code class="language-rust"># #![allow(unused_must_use)]
+macro_rules! write_html {
+    ($w:expr, ) =&gt; (());
+
+    ($w:expr, $e:tt) =&gt; (write!($w, &quot;{}&quot;, $e));
+
+    ($w:expr, $tag:ident [ $($inner:tt)* ] $($rest:tt)*) =&gt; {{
+        write!($w, &quot;&lt;{}&gt;&quot;, stringify!($tag));
+        write_html!($w, $($inner)*);
+        write!($w, &quot;&lt;/{}&gt;&quot;, stringify!($tag));
+        write_html!($w, $($rest)*);
+    }};
+}
+
+fn main() {
+#   // FIXME(#21826)
+    use std::fmt::Write;
+    let mut out = String::new();
+
+    write_html!(&amp;mut out,
+        html[
+            head[title[&quot;Macros guide&quot;]]
+            body[h1[&quot;Macros are the best!&quot;]]
+        ]);
+
+    assert_eq!(out,
+        &quot;&lt;html&gt;&lt;head&gt;&lt;title&gt;Macros guide&lt;/title&gt;&lt;/head&gt;\
+         &lt;body&gt;&lt;h1&gt;Macros are the best!&lt;/h1&gt;&lt;/body&gt;&lt;/html&gt;&quot;);
+}
+</code></pre>
+<a class="header" href="macros.html#debugging-macro-code" name="debugging-macro-code"><h1>Debugging macro code</h1></a>
+<p>To see the results of expanding macros, run <code>rustc --pretty expanded</code>. The
+output represents a whole crate, so you can also feed it back in to <code>rustc</code>,
+which will sometimes produce better error messages than the original
+compilation. Note that the <code>--pretty expanded</code> output may have a different
+meaning if multiple variables of the same name (but different syntax contexts)
+are in play in the same scope. In this case <code>--pretty expanded,hygiene</code> will
+tell you about the syntax contexts.</p>
+<p><code>rustc</code> provides two syntax extensions that help with macro debugging. For now,
+they are unstable and require feature gates.</p>
+<ul>
+<li>
+<p><code>log_syntax!(...)</code> will print its arguments to standard output, at compile
+time, and &quot;expand&quot; to nothing.</p>
+</li>
+<li>
+<p><code>trace_macros!(true)</code> will enable a compiler message every time a macro is
+expanded. Use <code>trace_macros!(false)</code> later in expansion to turn it off.</p>
+</li>
+</ul>
+<a class="header" href="macros.html#syntactic-requirements" name="syntactic-requirements"><h1>Syntactic requirements</h1></a>
+<p>Even when Rust code contains un-expanded macros, it can be parsed as a full
+<a href="glossary.html#abstract-syntax-tree">syntax tree</a>. This property can be very useful for editors and other
+tools that process code. It also has a few consequences for the design of
+Rust’s macro system.</p>
+<p>One consequence is that Rust must determine, when it parses a macro invocation,
+whether the macro stands in for</p>
+<ul>
+<li>zero or more items,</li>
+<li>zero or more methods,</li>
+<li>an expression,</li>
+<li>a statement, or</li>
+<li>a pattern.</li>
+</ul>
+<p>A macro invocation within a block could stand for some items, or for an
+expression / statement. Rust uses a simple rule to resolve this ambiguity. A
+macro invocation that stands for items must be either</p>
+<ul>
+<li>delimited by curly braces, e.g. <code>foo! { ... }</code>, or</li>
+<li>terminated by a semicolon, e.g. <code>foo!(...);</code></li>
+</ul>
+<p>Another consequence of pre-expansion parsing is that the macro invocation must
+consist of valid Rust tokens. Furthermore, parentheses, brackets, and braces
+must be balanced within a macro invocation. For example, <code>foo!([)</code> is
+forbidden. This allows Rust to know where the macro invocation ends.</p>
+<p>More formally, the macro invocation body must be a sequence of ‘token trees’.
+A token tree is defined recursively as either</p>
+<ul>
+<li>a sequence of token trees surrounded by matching <code>()</code>, <code>[]</code>, or <code>{}</code>, or</li>
+<li>any other single token.</li>
+</ul>
+<p>Within a matcher, each metavariable has a ‘fragment specifier’, identifying
+which syntactic form it matches.</p>
+<ul>
+<li><code>ident</code>: an identifier. Examples: <code>x</code>; <code>foo</code>.</li>
+<li><code>path</code>: a qualified name. Example: <code>T::SpecialA</code>.</li>
+<li><code>expr</code>: an expression. Examples: <code>2 + 2</code>; <code>if true { 1 } else { 2 }</code>; <code>f(42)</code>.</li>
+<li><code>ty</code>: a type. Examples: <code>i32</code>; <code>Vec&lt;(char, String)&gt;</code>; <code>&amp;T</code>.</li>
+<li><code>pat</code>: a pattern. Examples: <code>Some(t)</code>; <code>(17, 'a')</code>; <code>_</code>.</li>
+<li><code>stmt</code>: a single statement. Example: <code>let x = 3</code>.</li>
+<li><code>block</code>: a brace-delimited sequence of statements and optionally an expression. Example:
+<code>{ log(error, &quot;hi&quot;); return 12; }</code>.</li>
+<li><code>item</code>: an <a href="../reference/items.html">item</a>. Examples: <code>fn foo() { }</code>; <code>struct Bar;</code>.</li>
+<li><code>meta</code>: a &quot;meta item&quot;, as found in attributes. Example: <code>cfg(target_os = &quot;windows&quot;)</code>.</li>
+<li><code>tt</code>: a single token tree.</li>
+</ul>
+<p>There are additional rules regarding the next token after a metavariable:</p>
+<ul>
+<li><code>expr</code> and <code>stmt</code> variables may only be followed by one of: <code>=&gt; , ;</code></li>
+<li><code>ty</code> and <code>path</code> variables may only be followed by one of: <code>=&gt; , = | ; : &gt; [ { as where</code></li>
+<li><code>pat</code> variables may only be followed by one of: <code>=&gt; , = | if in</code></li>
+<li>Other variables may be followed by any token.</li>
+</ul>
+<p>These rules provide some flexibility for Rust’s syntax to evolve without
+breaking existing macros.</p>
+<p>The macro system does not deal with parse ambiguity at all. For example, the
+grammar <code>$($i:ident)* $e:expr</code> will always fail to parse, because the parser would
+be forced to choose between parsing <code>$i</code> and parsing <code>$e</code>. Changing the
+invocation syntax to put a distinctive token in front can solve the problem. In
+this case, you can write <code>$(I $i:ident)* E $e:expr</code>.</p>
+<a class="header" href="macros.html#scoping-and-macro-importexport" name="scoping-and-macro-importexport"><h1>Scoping and macro import/export</h1></a>
+<p>Macros are expanded at an early stage in compilation, before name resolution.
+One downside is that scoping works differently for macros, compared to other
+constructs in the language.</p>
+<p>Definition and expansion of macros both happen in a single depth-first,
+lexical-order traversal of a crate’s source. So a macro defined at module scope
+is visible to any subsequent code in the same module, which includes the body
+of any subsequent child <code>mod</code> items.</p>
+<p>A macro defined within the body of a single <code>fn</code>, or anywhere else not at
+module scope, is visible only within that item.</p>
+<p>If a module has the <code>macro_use</code> attribute, its macros are also visible in its
+parent module after the child’s <code>mod</code> item. If the parent also has <code>macro_use</code>
+then the macros will be visible in the grandparent after the parent’s <code>mod</code>
+item, and so forth.</p>
+<p>The <code>macro_use</code> attribute can also appear on <code>extern crate</code>. In this context
+it controls which macros are loaded from the external crate, e.g.</p>
+<pre><code class="language-rust ignore">#[macro_use(foo, bar)]
+extern crate baz;
+</code></pre>
+<p>If the attribute is given simply as <code>#[macro_use]</code>, all macros are loaded. If
+there is no <code>#[macro_use]</code> attribute then no macros are loaded. Only macros
+defined with the <code>#[macro_export]</code> attribute may be loaded.</p>
+<p>To load a crate’s macros without linking it into the output, use <code>#[no_link]</code>
+as well.</p>
+<p>An example:</p>
+<pre><code class="language-rust">macro_rules! m1 { () =&gt; (()) }
+
+// Visible here: `m1`.
+
+mod foo {
+    // Visible here: `m1`.
+
+    #[macro_export]
+    macro_rules! m2 { () =&gt; (()) }
+
+    // Visible here: `m1`, `m2`.
+}
+
+// Visible here: `m1`.
+
+macro_rules! m3 { () =&gt; (()) }
+
+// Visible here: `m1`, `m3`.
+
+#[macro_use]
+mod bar {
+    // Visible here: `m1`, `m3`.
+
+    macro_rules! m4 { () =&gt; (()) }
+
+    // Visible here: `m1`, `m3`, `m4`.
+}
+
+// Visible here: `m1`, `m3`, `m4`.
+# fn main() { }
+</code></pre>
+<p>When this library is loaded with <code>#[macro_use] extern crate</code>, only <code>m2</code> will
+be imported.</p>
+<p>The Rust Reference has a <a href="../reference/attributes.html#macro-related-attributes">listing of macro-related
+attributes</a>.</p>
+<a class="header" href="macros.html#the-variable-crate" name="the-variable-crate"><h1>The variable <code>$crate</code></h1></a>
+<p>A further difficulty occurs when a macro is used in multiple crates. Say that
+<code>mylib</code> defines</p>
+<pre><code class="language-rust">pub fn increment(x: u32) -&gt; u32 {
+    x + 1
+}
+
+#[macro_export]
+macro_rules! inc_a {
+    ($x:expr) =&gt; ( ::increment($x) )
+}
+
+#[macro_export]
+macro_rules! inc_b {
+    ($x:expr) =&gt; ( ::mylib::increment($x) )
+}
+# fn main() { }
+</code></pre>
+<p><code>inc_a</code> only works within <code>mylib</code>, while <code>inc_b</code> only works outside the
+library. Furthermore, <code>inc_b</code> will break if the user imports <code>mylib</code> under
+another name.</p>
+<p>Rust does not (yet) have a hygiene system for crate references, but it does
+provide a simple workaround for this problem. Within a macro imported from a
+crate named <code>foo</code>, the special macro variable <code>$crate</code> will expand to <code>::foo</code>.
+By contrast, when a macro is defined and then used in the same crate, <code>$crate</code>
+will expand to nothing. This means we can write</p>
+<pre><code class="language-rust">#[macro_export]
+macro_rules! inc {
+    ($x:expr) =&gt; ( $crate::increment($x) )
+}
+# fn main() { }
+</code></pre>
+<p>to define a single macro that works both inside and outside our library. The
+function name will expand to either <code>::increment</code> or <code>::mylib::increment</code>.</p>
+<p>To keep this system simple and correct, <code>#[macro_use] extern crate ...</code> may
+only appear at the root of your crate, not inside <code>mod</code>.</p>
+<a class="header" href="macros.html#the-deep-end" name="the-deep-end"><h1>The deep end</h1></a>
+<p>The introductory chapter mentioned recursive macros, but it did not give the
+full story. Recursive macros are useful for another reason: Each recursive
+invocation gives you another opportunity to pattern-match the macro’s
+arguments.</p>
+<p>As an extreme example, it is possible, though hardly advisable, to implement
+the <a href="https://esolangs.org/wiki/Bitwise_Cyclic_Tag">Bitwise Cyclic Tag</a> automaton
+within Rust’s macro system.</p>
+<pre><code class="language-rust">macro_rules! bct {
+    // cmd 0:  d ... =&gt; ...
+    (0, $($ps:tt),* ; $_d:tt)
+        =&gt; (bct!($($ps),*, 0 ; ));
+    (0, $($ps:tt),* ; $_d:tt, $($ds:tt),*)
+        =&gt; (bct!($($ps),*, 0 ; $($ds),*));
+
+    // cmd 1p:  1 ... =&gt; 1 ... p
+    (1, $p:tt, $($ps:tt),* ; 1)
+        =&gt; (bct!($($ps),*, 1, $p ; 1, $p));
+    (1, $p:tt, $($ps:tt),* ; 1, $($ds:tt),*)
+        =&gt; (bct!($($ps),*, 1, $p ; 1, $($ds),*, $p));
+
+    // cmd 1p:  0 ... =&gt; 0 ...
+    (1, $p:tt, $($ps:tt),* ; $($ds:tt),*)
+        =&gt; (bct!($($ps),*, 1, $p ; $($ds),*));
+
+    // Halt on empty data string:
+    ( $($ps:tt),* ; )
+        =&gt; (());
+}
+</code></pre>
+<p>Exercise: use macros to reduce duplication in the above definition of the
+<code>bct!</code> macro.</p>
+<a class="header" href="macros.html#common-macros" name="common-macros"><h1>Common macros</h1></a>
+<p>Here are some common macros you’ll see in Rust code.</p>
+<a class="header" href="macros.html#panic" name="panic"><h2>panic!</h2></a>
+<p>This macro causes the current thread to panic. You can give it a message
+to panic with:</p>
+<pre><code class="language-rust should_panic">panic!(&quot;oh no!&quot;);
+</code></pre>
+<a class="header" href="macros.html#vec" name="vec"><h2>vec!</h2></a>
+<p>The <code>vec!</code> macro is used throughout the book, so you’ve probably seen it
+already. It creates <code>Vec&lt;T&gt;</code>s with ease:</p>
+<pre><code class="language-rust">let v = vec![1, 2, 3, 4, 5];
+</code></pre>
+<p>It also lets you make vectors with repeating values. For example, a hundred
+zeroes:</p>
+<pre><code class="language-rust">let v = vec![0; 100];
+</code></pre>
+<a class="header" href="macros.html#assert-and-assert_eq" name="assert-and-assert_eq"><h2>assert! and assert_eq!</h2></a>
+<p>These two macros are used in tests. <code>assert!</code> takes a boolean. <code>assert_eq!</code>
+takes two values and checks them for equality. <code>true</code> passes, <code>false</code> <code>panic!</code>s.
+Like this:</p>
+<pre><code class="language-rust should_panic">// A-ok!
+
+assert!(true);
+assert_eq!(5, 3 + 2);
+
+// Nope :(
+
+assert!(5 &lt; 3);
+assert_eq!(5, 3);
+</code></pre>
+<a class="header" href="macros.html#try" name="try"><h2>try!</h2></a>
+<p><code>try!</code> is used for error handling. It takes something that can return a
+<code>Result&lt;T, E&gt;</code>, and gives <code>T</code> if it’s a <code>Ok&lt;T&gt;</code>, and <code>return</code>s with the
+<code>Err(E)</code> if it’s that. Like this:</p>
+<pre><code class="language-rust no_run">use std::fs::File;
+
+fn foo() -&gt; std::io::Result&lt;()&gt; {
+    let f = try!(File::create(&quot;foo.txt&quot;));
+
+    Ok(())
+}
+</code></pre>
+<p>This is cleaner than doing this:</p>
+<pre><code class="language-rust no_run">use std::fs::File;
+
+fn foo() -&gt; std::io::Result&lt;()&gt; {
+    let f = File::create(&quot;foo.txt&quot;);
+
+    let f = match f {
+        Ok(t) =&gt; t,
+        Err(e) =&gt; return Err(e),
+    };
+
+    Ok(())
+}
+</code></pre>
+<a class="header" href="macros.html#unreachable" name="unreachable"><h2>unreachable!</h2></a>
+<p>This macro is used when you think some code should never execute:</p>
+<pre><code class="language-rust">if false {
+    unreachable!();
+}
+</code></pre>
+<p>Sometimes, the compiler may make you have a different branch that you know
+will never, ever run. In these cases, use this macro, so that if you end
+up wrong, you’ll get a <code>panic!</code> about it.</p>
+<pre><code class="language-rust">let x: Option&lt;i32&gt; = None;
+
+match x {
+    Some(_) =&gt; unreachable!(),
+    None =&gt; println!(&quot;I know x is None!&quot;),
+}
+</code></pre>
+<a class="header" href="macros.html#unimplemented" name="unimplemented"><h2>unimplemented!</h2></a>
+<p>The <code>unimplemented!</code> macro can be used when you’re trying to get your functions
+to typecheck, and don’t want to worry about writing out the body of the
+function. One example of this situation is implementing a trait with multiple
+required methods, where you want to tackle one at a time. Define the others
+as <code>unimplemented!</code> until you’re ready to write them.</p>
+</div>
+
+                </div>
+
+                <!-- Mobile navigation buttons -->
+                
+                    <a href="deref-coercions.html" class="mobile-nav-chapters previous">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+                    <a href="raw-pointers.html" class="mobile-nav-chapters next">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                
+
+            </div>
+
+            
+                <a href="deref-coercions.html" class="nav-chapters previous" title="You can navigate through the chapters using the arrow keys">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+            
+
+            
+                <a href="raw-pointers.html" class="nav-chapters next" title="You can navigate through the chapters using the arrow keys">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            
+
+        </div>
+
+
+        <!-- Local fallback for Font Awesome -->
+        <script>
+            if ($(".fa").css("font-family") !== "FontAwesome") {
+                $('<link rel="stylesheet" type="text/css" href="_FontAwesome/css/font-awesome.css">').prependTo('head');
+            }
+        </script>
+
+        <!-- Livereload script (if served using the cli tool) -->
+        
+
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+    </body>
+</html>

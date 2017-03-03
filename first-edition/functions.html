@@ -1,0 +1,359 @@
+<!DOCTYPE HTML>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Functions - </title>
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <base href="">
+
+        <link rel="stylesheet" href="book.css">
+        <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+        <link rel="shortcut icon" href="favicon.png">
+
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+
+        <!-- MathJax -->
+        <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+        <!-- Fetch JQuery from CDN but have a local fallback -->
+        <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+        <script>
+            if (typeof jQuery == 'undefined') {
+                document.write(unescape("%3Cscript src='jquery.js'%3E%3C/script%3E"));
+            }
+        </script>
+    </head>
+    <body class="light">
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme = localStorage.getItem('theme');
+            if (theme == null) { theme = 'light'; }
+            $('body').removeClass().addClass(theme);
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var sidebar = localStorage.getItem('sidebar');
+            if (sidebar === "hidden") { $("html").addClass("sidebar-hidden") }
+            else if (sidebar === "visible") { $("html").addClass("sidebar-visible") }
+        </script>
+
+        <div id="sidebar" class="sidebar">
+            <ul class="chapter"><li class="affix"><a href="README.html">Introduction</a></li><li><a href="getting-started.html"><strong>1.</strong> Getting Started</a></li><li><a href="guessing-game.html"><strong>2.</strong> Tutorial: Guessing Game</a></li><li><a href="syntax-and-semantics.html"><strong>3.</strong> Syntax and Semantics</a></li><li><ul class="section"><li><a href="variable-bindings.html"><strong>3.1.</strong> Variable Bindings</a></li><li><a href="functions.html" class="active"><strong>3.2.</strong> Functions</a></li><li><a href="primitive-types.html"><strong>3.3.</strong> Primitive Types</a></li><li><a href="comments.html"><strong>3.4.</strong> Comments</a></li><li><a href="if.html"><strong>3.5.</strong> if</a></li><li><a href="loops.html"><strong>3.6.</strong> Loops</a></li><li><a href="vectors.html"><strong>3.7.</strong> Vectors</a></li><li><a href="ownership.html"><strong>3.8.</strong> Ownership</a></li><li><a href="references-and-borrowing.html"><strong>3.9.</strong> References and Borrowing</a></li><li><a href="lifetimes.html"><strong>3.10.</strong> Lifetimes</a></li><li><a href="mutability.html"><strong>3.11.</strong> Mutability</a></li><li><a href="structs.html"><strong>3.12.</strong> Structs</a></li><li><a href="enums.html"><strong>3.13.</strong> Enums</a></li><li><a href="match.html"><strong>3.14.</strong> Match</a></li><li><a href="patterns.html"><strong>3.15.</strong> Patterns</a></li><li><a href="method-syntax.html"><strong>3.16.</strong> Method Syntax</a></li><li><a href="strings.html"><strong>3.17.</strong> Strings</a></li><li><a href="generics.html"><strong>3.18.</strong> Generics</a></li><li><a href="traits.html"><strong>3.19.</strong> Traits</a></li><li><a href="drop.html"><strong>3.20.</strong> Drop</a></li><li><a href="if-let.html"><strong>3.21.</strong> if let</a></li><li><a href="trait-objects.html"><strong>3.22.</strong> Trait Objects</a></li><li><a href="closures.html"><strong>3.23.</strong> Closures</a></li><li><a href="ufcs.html"><strong>3.24.</strong> Universal Function Call Syntax</a></li><li><a href="crates-and-modules.html"><strong>3.25.</strong> Crates and Modules</a></li><li><a href="const-and-static.html"><strong>3.26.</strong> <code>const</code> and <code>static</code></a></li><li><a href="attributes.html"><strong>3.27.</strong> Attributes</a></li><li><a href="type-aliases.html"><strong>3.28.</strong> <code>type</code> aliases</a></li><li><a href="casting-between-types.html"><strong>3.29.</strong> Casting between types</a></li><li><a href="associated-types.html"><strong>3.30.</strong> Associated Types</a></li><li><a href="unsized-types.html"><strong>3.31.</strong> Unsized Types</a></li><li><a href="operators-and-overloading.html"><strong>3.32.</strong> Operators and Overloading</a></li><li><a href="deref-coercions.html"><strong>3.33.</strong> Deref coercions</a></li><li><a href="macros.html"><strong>3.34.</strong> Macros</a></li><li><a href="raw-pointers.html"><strong>3.35.</strong> Raw Pointers</a></li><li><a href="unsafe.html"><strong>3.36.</strong> <code>unsafe</code></a></li></ul></li><li><a href="effective-rust.html"><strong>4.</strong> Effective Rust</a></li><li><ul class="section"><li><a href="the-stack-and-the-heap.html"><strong>4.1.</strong> The Stack and the Heap</a></li><li><a href="testing.html"><strong>4.2.</strong> Testing</a></li><li><a href="conditional-compilation.html"><strong>4.3.</strong> Conditional Compilation</a></li><li><a href="documentation.html"><strong>4.4.</strong> Documentation</a></li><li><a href="iterators.html"><strong>4.5.</strong> Iterators</a></li><li><a href="concurrency.html"><strong>4.6.</strong> Concurrency</a></li><li><a href="error-handling.html"><strong>4.7.</strong> Error Handling</a></li><li><a href="choosing-your-guarantees.html"><strong>4.8.</strong> Choosing your Guarantees</a></li><li><a href="ffi.html"><strong>4.9.</strong> FFI</a></li><li><a href="borrow-and-asref.html"><strong>4.10.</strong> Borrow and AsRef</a></li><li><a href="release-channels.html"><strong>4.11.</strong> Release Channels</a></li><li><a href="using-rust-without-the-standard-library.html"><strong>4.12.</strong> Using Rust without the standard library</a></li><li><a href="procedural-macros.html"><strong>4.13.</strong> Procedural Macros (and custom derive)</a></li></ul></li><li><a href="glossary.html"><strong>5.</strong> Glossary</a></li><li><a href="syntax-index.html"><strong>6.</strong> Syntax Index</a></li><li><a href="bibliography.html"><strong>7.</strong> Bibliography</a></li></ul>
+        </div>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar" class="menu-bar">
+                    <div class="left-buttons">
+                        <i id="sidebar-toggle" class="fa fa-bars"></i>
+                        <i id="theme-toggle" class="fa fa-paint-brush"></i>
+                    </div>
+
+                    <h1 class="menu-title"></h1>
+
+                    <div class="right-buttons">
+                        <i id="print-button" class="fa fa-print" title="Print this book"></i>
+                    </div>
+                </div>
+
+                <div id="content" class="content">
+                    <a class="header" href="functions.html#functions" name="functions"><h1>Functions</h1></a>
+<p>Every Rust program has at least one function, the <code>main</code> function:</p>
+<pre><code class="language-rust">fn main() {
+}
+</code></pre>
+<p>This is the simplest possible function declaration. As we mentioned before,
+<code>fn</code> says ‘this is a function’, followed by the name, some parentheses because
+this function takes no arguments, and then some curly braces to indicate the
+body. Here’s a function named <code>foo</code>:</p>
+<pre><code class="language-rust">fn foo() {
+}
+</code></pre>
+<p>So, what about taking arguments? Here’s a function that prints a number:</p>
+<pre><code class="language-rust">fn print_number(x: i32) {
+    println!(&quot;x is: {}&quot;, x);
+}
+</code></pre>
+<p>Here’s a complete program that uses <code>print_number</code>:</p>
+<pre><code class="language-rust">fn main() {
+    print_number(5);
+}
+
+fn print_number(x: i32) {
+    println!(&quot;x is: {}&quot;, x);
+}
+</code></pre>
+<p>As you can see, function arguments work very similar to <code>let</code> declarations:
+you add a type to the argument name, after a colon.</p>
+<p>Here’s a complete program that adds two numbers together and prints them:</p>
+<pre><code class="language-rust">fn main() {
+    print_sum(5, 6);
+}
+
+fn print_sum(x: i32, y: i32) {
+    println!(&quot;sum is: {}&quot;, x + y);
+}
+</code></pre>
+<p>You separate arguments with a comma, both when you call the function, as well
+as when you declare it.</p>
+<p>Unlike <code>let</code>, you <em>must</em> declare the types of function arguments. This does
+not work:</p>
+<pre><code class="language-rust ignore">fn print_sum(x, y) {
+    println!(&quot;sum is: {}&quot;, x + y);
+}
+</code></pre>
+<p>You get this error:</p>
+<pre><code class="language-text">expected one of `!`, `:`, or `@`, found `)`
+fn print_sum(x, y) {
+</code></pre>
+<p>This is a deliberate design decision. While full-program inference is possible,
+languages which have it, like Haskell, often suggest that documenting your
+types explicitly is a best-practice. We agree that forcing functions to declare
+types while allowing for inference inside of function bodies is a wonderful
+sweet spot between full inference and no inference.</p>
+<p>What about returning a value? Here’s a function that adds one to an integer:</p>
+<pre><code class="language-rust">fn add_one(x: i32) -&gt; i32 {
+    x + 1
+}
+</code></pre>
+<p>Rust functions return exactly one value, and you declare the type after an
+‘arrow’, which is a dash (<code>-</code>) followed by a greater-than sign (<code>&gt;</code>). The last
+line of a function determines what it returns. You’ll note the lack of a
+semicolon here. If we added it in:</p>
+<pre><code class="language-rust ignore">fn add_one(x: i32) -&gt; i32 {
+    x + 1;
+}
+</code></pre>
+<p>We would get an error:</p>
+<pre><code class="language-text">error: not all control paths return a value
+fn add_one(x: i32) -&gt; i32 {
+     x + 1;
+}
+
+help: consider removing this semicolon:
+     x + 1;
+          ^
+</code></pre>
+<p>This reveals two interesting things about Rust: it is an expression-based
+language, and semicolons are different from semicolons in other ‘curly brace
+and semicolon’-based languages. These two things are related.</p>
+<a class="header" href="functions.html#expressions-vs-statements" name="expressions-vs-statements"><h2>Expressions vs. Statements</h2></a>
+<p>Rust is primarily an expression-based language. There are only two kinds of
+statements, and everything else is an expression.</p>
+<p>So what's the difference? Expressions return a value, and statements do not.
+That’s why we end up with ‘not all control paths return a value’ here: the
+statement <code>x + 1;</code> doesn’t return a value. There are two kinds of statements in
+Rust: ‘declaration statements’ and ‘expression statements’. Everything else is
+an expression. Let’s talk about declaration statements first.</p>
+<p>In some languages, variable bindings can be written as expressions, not
+statements. Like Ruby:</p>
+<pre><code class="language-ruby">x = y = 5
+</code></pre>
+<p>In Rust, however, using <code>let</code> to introduce a binding is <em>not</em> an expression. The
+following will produce a compile-time error:</p>
+<pre><code class="language-rust ignore">let x = (let y = 5); // Expected identifier, found keyword `let`.
+</code></pre>
+<p>The compiler is telling us here that it was expecting to see the beginning of
+an expression, and a <code>let</code> can only begin a statement, not an expression.</p>
+<p>Note that assigning to an already-bound variable (e.g. <code>y = 5</code>) is still an
+expression, although its value is not particularly useful. Unlike other
+languages where an assignment evaluates to the assigned value (e.g. <code>5</code> in the
+previous example), in Rust the value of an assignment is an empty tuple <code>()</code>
+because the assigned value can have <a href="ownership.html">only one owner</a>, and any
+other returned value would be too surprising:</p>
+<pre><code class="language-rust">let mut y = 5;
+
+let x = (y = 6);  // `x` has the value `()`, not `6`.
+</code></pre>
+<p>The second kind of statement in Rust is the <em>expression statement</em>. Its
+purpose is to turn any expression into a statement. In practical terms, Rust's
+grammar expects statements to follow other statements. This means that you use
+semicolons to separate expressions from each other. This means that Rust
+looks a lot like most other languages that require you to use semicolons
+at the end of every line, and you will see semicolons at the end of almost
+every line of Rust code you see.</p>
+<p>What is this exception that makes us say &quot;almost&quot;? You saw it already, in this
+code:</p>
+<pre><code class="language-rust">fn add_one(x: i32) -&gt; i32 {
+    x + 1
+}
+</code></pre>
+<p>Our function claims to return an <code>i32</code>, but with a semicolon, it would return
+<code>()</code> instead. Rust realizes this probably isn’t what we want, and suggests
+removing the semicolon in the error we saw before.</p>
+<a class="header" href="functions.html#early-returns" name="early-returns"><h2>Early returns</h2></a>
+<p>But what about early returns? Rust does have a keyword for that, <code>return</code>:</p>
+<pre><code class="language-rust">fn foo(x: i32) -&gt; i32 {
+    return x;
+
+    // We never run this code!
+    x + 1
+}
+</code></pre>
+<p>Using a <code>return</code> as the last line of a function works, but is considered poor
+style:</p>
+<pre><code class="language-rust">fn foo(x: i32) -&gt; i32 {
+    return x + 1;
+}
+</code></pre>
+<p>The previous definition without <code>return</code> may look a bit strange if you haven’t
+worked in an expression-based language before, but it becomes intuitive over
+time.</p>
+<a class="header" href="functions.html#diverging-functions" name="diverging-functions"><h2>Diverging functions</h2></a>
+<p>Rust has some special syntax for ‘diverging functions’, which are functions that
+do not return:</p>
+<pre><code class="language-rust">fn diverges() -&gt; ! {
+    panic!(&quot;This function never returns!&quot;);
+}
+</code></pre>
+<p><code>panic!</code> is a macro, similar to <code>println!()</code> that we’ve already seen. Unlike
+<code>println!()</code>, <code>panic!()</code> causes the current thread of execution to crash with
+the given message. Because this function will cause a crash, it will never
+return, and so it has the type ‘<code>!</code>’, which is read ‘diverges’.</p>
+<p>If you add a main function that calls <code>diverges()</code> and run it, you’ll get
+some output that looks like this:</p>
+<pre><code class="language-text">thread ‘main’ panicked at ‘This function never returns!’, hello.rs:2
+</code></pre>
+<p>If you want more information, you can get a backtrace by setting the
+<code>RUST_BACKTRACE</code> environment variable:</p>
+<pre><code class="language-text">$ RUST_BACKTRACE=1 ./diverges
+thread 'main' panicked at 'This function never returns!', hello.rs:2
+Some details are omitted, run with `RUST_BACKTRACE=full` for a verbose backtrace.
+stack backtrace:
+  hello::diverges
+        at ./hello.rs:2
+  hello::main
+        at ./hello.rs:6
+</code></pre>
+<p>If you want the complete backtrace and filenames:</p>
+<pre><code class="language-text">$ RUST_BACKTRACE=full ./diverges
+thread 'main' panicked at 'This function never returns!', hello.rs:2
+stack backtrace:
+   1:     0x7f402773a829 - sys::backtrace::write::h0942de78b6c02817K8r
+   2:     0x7f402773d7fc - panicking::on_panic::h3f23f9d0b5f4c91bu9w
+   3:     0x7f402773960e - rt::unwind::begin_unwind_inner::h2844b8c5e81e79558Bw
+   4:     0x7f4027738893 - rt::unwind::begin_unwind::h4375279447423903650
+   5:     0x7f4027738809 - diverges::h2266b4c4b850236beaa
+   6:     0x7f40277389e5 - main::h19bb1149c2f00ecfBaa
+   7:     0x7f402773f514 - rt::unwind::try::try_fn::h13186883479104382231
+   8:     0x7f402773d1d8 - __rust_try
+   9:     0x7f402773f201 - rt::lang_start::ha172a3ce74bb453aK5w
+  10:     0x7f4027738a19 - main
+  11:     0x7f402694ab44 - __libc_start_main
+  12:     0x7f40277386c8 - &lt;unknown&gt;
+  13:                0x0 - &lt;unknown&gt;
+</code></pre>
+<p>If you need to override an already set <code>RUST_BACKTRACE</code>,
+in cases when you cannot just unset the variable,
+then set it to <code>0</code> to avoid getting a backtrace.
+Any other value (even no value at all) turns on backtrace.</p>
+<pre><code class="language-text">$ export RUST_BACKTRACE=1
+...
+$ RUST_BACKTRACE=0 ./diverges 
+thread 'main' panicked at 'This function never returns!', hello.rs:2
+note: Run with `RUST_BACKTRACE=1` for a backtrace.
+</code></pre>
+<p><code>RUST_BACKTRACE</code> also works with Cargo’s <code>run</code> command:</p>
+<pre><code class="language-text">$ RUST_BACKTRACE=full cargo run
+     Running `target/debug/diverges`
+thread 'main' panicked at 'This function never returns!', hello.rs:2
+stack backtrace:
+   1:     0x7f402773a829 - sys::backtrace::write::h0942de78b6c02817K8r
+   2:     0x7f402773d7fc - panicking::on_panic::h3f23f9d0b5f4c91bu9w
+   3:     0x7f402773960e - rt::unwind::begin_unwind_inner::h2844b8c5e81e79558Bw
+   4:     0x7f4027738893 - rt::unwind::begin_unwind::h4375279447423903650
+   5:     0x7f4027738809 - diverges::h2266b4c4b850236beaa
+   6:     0x7f40277389e5 - main::h19bb1149c2f00ecfBaa
+   7:     0x7f402773f514 - rt::unwind::try::try_fn::h13186883479104382231
+   8:     0x7f402773d1d8 - __rust_try
+   9:     0x7f402773f201 - rt::lang_start::ha172a3ce74bb453aK5w
+  10:     0x7f4027738a19 - main
+  11:     0x7f402694ab44 - __libc_start_main
+  12:     0x7f40277386c8 - &lt;unknown&gt;
+  13:                0x0 - &lt;unknown&gt;
+</code></pre>
+<p>A diverging function can be used as any type:</p>
+<pre><code class="language-rust should_panic"># fn diverges() -&gt; ! {
+#    panic!(&quot;This function never returns!&quot;);
+# }
+let x: i32 = diverges();
+let x: String = diverges();
+</code></pre>
+<a class="header" href="functions.html#function-pointers" name="function-pointers"><h2>Function pointers</h2></a>
+<p>We can also create variable bindings which point to functions:</p>
+<pre><code class="language-rust">let f: fn(i32) -&gt; i32;
+</code></pre>
+<p><code>f</code> is a variable binding which points to a function that takes an <code>i32</code> as
+an argument and returns an <code>i32</code>. For example:</p>
+<pre><code class="language-rust">fn plus_one(i: i32) -&gt; i32 {
+    i + 1
+}
+
+// Without type inference:
+let f: fn(i32) -&gt; i32 = plus_one;
+
+// With type inference:
+let f = plus_one;
+</code></pre>
+<p>We can then use <code>f</code> to call the function:</p>
+<pre><code class="language-rust"># fn plus_one(i: i32) -&gt; i32 { i + 1 }
+# let f = plus_one;
+let six = f(5);
+</code></pre>
+
+                </div>
+
+                <!-- Mobile navigation buttons -->
+                
+                    <a href="variable-bindings.html" class="mobile-nav-chapters previous">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+                    <a href="primitive-types.html" class="mobile-nav-chapters next">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                
+
+            </div>
+
+            
+                <a href="variable-bindings.html" class="nav-chapters previous" title="You can navigate through the chapters using the arrow keys">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+            
+
+            
+                <a href="primitive-types.html" class="nav-chapters next" title="You can navigate through the chapters using the arrow keys">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            
+
+        </div>
+
+
+        <!-- Local fallback for Font Awesome -->
+        <script>
+            if ($(".fa").css("font-family") !== "FontAwesome") {
+                $('<link rel="stylesheet" type="text/css" href="_FontAwesome/css/font-awesome.css">').prependTo('head');
+            }
+        </script>
+
+        <!-- Livereload script (if served using the cli tool) -->
+        
+
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+    </body>
+</html>

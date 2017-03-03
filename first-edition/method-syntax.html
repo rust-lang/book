@@ -1,0 +1,337 @@
+<!DOCTYPE HTML>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Method Syntax - </title>
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <base href="">
+
+        <link rel="stylesheet" href="book.css">
+        <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+        <link rel="shortcut icon" href="favicon.png">
+
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+
+        <!-- MathJax -->
+        <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+        <!-- Fetch JQuery from CDN but have a local fallback -->
+        <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+        <script>
+            if (typeof jQuery == 'undefined') {
+                document.write(unescape("%3Cscript src='jquery.js'%3E%3C/script%3E"));
+            }
+        </script>
+    </head>
+    <body class="light">
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme = localStorage.getItem('theme');
+            if (theme == null) { theme = 'light'; }
+            $('body').removeClass().addClass(theme);
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var sidebar = localStorage.getItem('sidebar');
+            if (sidebar === "hidden") { $("html").addClass("sidebar-hidden") }
+            else if (sidebar === "visible") { $("html").addClass("sidebar-visible") }
+        </script>
+
+        <div id="sidebar" class="sidebar">
+            <ul class="chapter"><li class="affix"><a href="README.html">Introduction</a></li><li><a href="getting-started.html"><strong>1.</strong> Getting Started</a></li><li><a href="guessing-game.html"><strong>2.</strong> Tutorial: Guessing Game</a></li><li><a href="syntax-and-semantics.html"><strong>3.</strong> Syntax and Semantics</a></li><li><ul class="section"><li><a href="variable-bindings.html"><strong>3.1.</strong> Variable Bindings</a></li><li><a href="functions.html"><strong>3.2.</strong> Functions</a></li><li><a href="primitive-types.html"><strong>3.3.</strong> Primitive Types</a></li><li><a href="comments.html"><strong>3.4.</strong> Comments</a></li><li><a href="if.html"><strong>3.5.</strong> if</a></li><li><a href="loops.html"><strong>3.6.</strong> Loops</a></li><li><a href="vectors.html"><strong>3.7.</strong> Vectors</a></li><li><a href="ownership.html"><strong>3.8.</strong> Ownership</a></li><li><a href="references-and-borrowing.html"><strong>3.9.</strong> References and Borrowing</a></li><li><a href="lifetimes.html"><strong>3.10.</strong> Lifetimes</a></li><li><a href="mutability.html"><strong>3.11.</strong> Mutability</a></li><li><a href="structs.html"><strong>3.12.</strong> Structs</a></li><li><a href="enums.html"><strong>3.13.</strong> Enums</a></li><li><a href="match.html"><strong>3.14.</strong> Match</a></li><li><a href="patterns.html"><strong>3.15.</strong> Patterns</a></li><li><a href="method-syntax.html" class="active"><strong>3.16.</strong> Method Syntax</a></li><li><a href="strings.html"><strong>3.17.</strong> Strings</a></li><li><a href="generics.html"><strong>3.18.</strong> Generics</a></li><li><a href="traits.html"><strong>3.19.</strong> Traits</a></li><li><a href="drop.html"><strong>3.20.</strong> Drop</a></li><li><a href="if-let.html"><strong>3.21.</strong> if let</a></li><li><a href="trait-objects.html"><strong>3.22.</strong> Trait Objects</a></li><li><a href="closures.html"><strong>3.23.</strong> Closures</a></li><li><a href="ufcs.html"><strong>3.24.</strong> Universal Function Call Syntax</a></li><li><a href="crates-and-modules.html"><strong>3.25.</strong> Crates and Modules</a></li><li><a href="const-and-static.html"><strong>3.26.</strong> <code>const</code> and <code>static</code></a></li><li><a href="attributes.html"><strong>3.27.</strong> Attributes</a></li><li><a href="type-aliases.html"><strong>3.28.</strong> <code>type</code> aliases</a></li><li><a href="casting-between-types.html"><strong>3.29.</strong> Casting between types</a></li><li><a href="associated-types.html"><strong>3.30.</strong> Associated Types</a></li><li><a href="unsized-types.html"><strong>3.31.</strong> Unsized Types</a></li><li><a href="operators-and-overloading.html"><strong>3.32.</strong> Operators and Overloading</a></li><li><a href="deref-coercions.html"><strong>3.33.</strong> Deref coercions</a></li><li><a href="macros.html"><strong>3.34.</strong> Macros</a></li><li><a href="raw-pointers.html"><strong>3.35.</strong> Raw Pointers</a></li><li><a href="unsafe.html"><strong>3.36.</strong> <code>unsafe</code></a></li></ul></li><li><a href="effective-rust.html"><strong>4.</strong> Effective Rust</a></li><li><ul class="section"><li><a href="the-stack-and-the-heap.html"><strong>4.1.</strong> The Stack and the Heap</a></li><li><a href="testing.html"><strong>4.2.</strong> Testing</a></li><li><a href="conditional-compilation.html"><strong>4.3.</strong> Conditional Compilation</a></li><li><a href="documentation.html"><strong>4.4.</strong> Documentation</a></li><li><a href="iterators.html"><strong>4.5.</strong> Iterators</a></li><li><a href="concurrency.html"><strong>4.6.</strong> Concurrency</a></li><li><a href="error-handling.html"><strong>4.7.</strong> Error Handling</a></li><li><a href="choosing-your-guarantees.html"><strong>4.8.</strong> Choosing your Guarantees</a></li><li><a href="ffi.html"><strong>4.9.</strong> FFI</a></li><li><a href="borrow-and-asref.html"><strong>4.10.</strong> Borrow and AsRef</a></li><li><a href="release-channels.html"><strong>4.11.</strong> Release Channels</a></li><li><a href="using-rust-without-the-standard-library.html"><strong>4.12.</strong> Using Rust without the standard library</a></li><li><a href="procedural-macros.html"><strong>4.13.</strong> Procedural Macros (and custom derive)</a></li></ul></li><li><a href="glossary.html"><strong>5.</strong> Glossary</a></li><li><a href="syntax-index.html"><strong>6.</strong> Syntax Index</a></li><li><a href="bibliography.html"><strong>7.</strong> Bibliography</a></li></ul>
+        </div>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar" class="menu-bar">
+                    <div class="left-buttons">
+                        <i id="sidebar-toggle" class="fa fa-bars"></i>
+                        <i id="theme-toggle" class="fa fa-paint-brush"></i>
+                    </div>
+
+                    <h1 class="menu-title"></h1>
+
+                    <div class="right-buttons">
+                        <i id="print-button" class="fa fa-print" title="Print this book"></i>
+                    </div>
+                </div>
+
+                <div id="content" class="content">
+                    <a class="header" href="method-syntax.html#method-syntax" name="method-syntax"><h1>Method Syntax</h1></a>
+<p>Functions are great, but if you want to call a bunch of them on some data, it
+can be awkward. Consider this code:</p>
+<pre><code class="language-rust ignore">baz(bar(foo));
+</code></pre>
+<p>We would read this left-to-right, and so we see ‘baz bar foo’. But this isn’t the
+order that the functions would get called in, that’s inside-out: ‘foo bar baz’.
+Wouldn’t it be nice if we could do this instead?</p>
+<pre><code class="language-rust ignore">foo.bar().baz();
+</code></pre>
+<p>Luckily, as you may have guessed with the leading question, you can! Rust provides
+the ability to use this ‘method call syntax’ via the <code>impl</code> keyword.</p>
+<a class="header" href="method-syntax.html#method-calls" name="method-calls"><h1>Method calls</h1></a>
+<p>Here’s how it works:</p>
+<pre><code class="language-rust">struct Circle {
+    x: f64,
+    y: f64,
+    radius: f64,
+}
+
+impl Circle {
+    fn area(&amp;self) -&gt; f64 {
+        std::f64::consts::PI * (self.radius * self.radius)
+    }
+}
+
+fn main() {
+    let c = Circle { x: 0.0, y: 0.0, radius: 2.0 };
+    println!(&quot;{}&quot;, c.area());
+}
+</code></pre>
+<p>This will print <code>12.566371</code>.</p>
+<p>We’ve made a <code>struct</code> that represents a circle. We then write an <code>impl</code> block,
+and inside it, define a method, <code>area</code>.</p>
+<p>Methods take a special first parameter, of which there are three variants:
+<code>self</code>, <code>&amp;self</code>, and <code>&amp;mut self</code>. You can think of this first parameter as
+being the <code>foo</code> in <code>foo.bar()</code>. The three variants correspond to the three
+kinds of things <code>foo</code> could be: <code>self</code> if it’s a value on the stack,
+<code>&amp;self</code> if it’s a reference, and <code>&amp;mut self</code> if it’s a mutable reference.
+Because we took the <code>&amp;self</code> parameter to <code>area</code>, we can use it like any
+other parameter. Because we know it’s a <code>Circle</code>, we can access the <code>radius</code>
+like we would with any other <code>struct</code>.</p>
+<p>We should default to using <code>&amp;self</code>, as you should prefer borrowing over taking
+ownership, as well as taking immutable references over mutable ones. Here’s an
+example of all three variants:</p>
+<pre><code class="language-rust">struct Circle {
+    x: f64,
+    y: f64,
+    radius: f64,
+}
+
+impl Circle {
+    fn reference(&amp;self) {
+       println!(&quot;taking self by reference!&quot;);
+    }
+
+    fn mutable_reference(&amp;mut self) {
+       println!(&quot;taking self by mutable reference!&quot;);
+    }
+
+    fn takes_ownership(self) {
+       println!(&quot;taking ownership of self!&quot;);
+    }
+}
+</code></pre>
+<p>You can use as many <code>impl</code> blocks as you’d like. The previous example could
+have also been written like this:</p>
+<pre><code class="language-rust">struct Circle {
+    x: f64,
+    y: f64,
+    radius: f64,
+}
+
+impl Circle {
+    fn reference(&amp;self) {
+       println!(&quot;taking self by reference!&quot;);
+    }
+}
+
+impl Circle {
+    fn mutable_reference(&amp;mut self) {
+       println!(&quot;taking self by mutable reference!&quot;);
+    }
+}
+
+impl Circle {
+    fn takes_ownership(self) {
+       println!(&quot;taking ownership of self!&quot;);
+    }
+}
+</code></pre>
+<a class="header" href="method-syntax.html#chaining-method-calls" name="chaining-method-calls"><h1>Chaining method calls</h1></a>
+<p>So, now we know how to call a method, such as <code>foo.bar()</code>. But what about our
+original example, <code>foo.bar().baz()</code>? This is called ‘method chaining’. Let’s
+look at an example:</p>
+<pre><code class="language-rust">struct Circle {
+    x: f64,
+    y: f64,
+    radius: f64,
+}
+
+impl Circle {
+    fn area(&amp;self) -&gt; f64 {
+        std::f64::consts::PI * (self.radius * self.radius)
+    }
+
+    fn grow(&amp;self, increment: f64) -&gt; Circle {
+        Circle { x: self.x, y: self.y, radius: self.radius + increment }
+    }
+}
+
+fn main() {
+    let c = Circle { x: 0.0, y: 0.0, radius: 2.0 };
+    println!(&quot;{}&quot;, c.area());
+
+    let d = c.grow(2.0).area();
+    println!(&quot;{}&quot;, d);
+}
+</code></pre>
+<p>Check the return type:</p>
+<pre><code class="language-rust"># struct Circle;
+# impl Circle {
+fn grow(&amp;self, increment: f64) -&gt; Circle {
+# Circle } }
+</code></pre>
+<p>We say we’re returning a <code>Circle</code>. With this method, we can grow a new
+<code>Circle</code> to any arbitrary size.</p>
+<a class="header" href="method-syntax.html#associated-functions" name="associated-functions"><h1>Associated functions</h1></a>
+<p>You can also define associated functions that do not take a <code>self</code> parameter.
+Here’s a pattern that’s very common in Rust code:</p>
+<pre><code class="language-rust">struct Circle {
+    x: f64,
+    y: f64,
+    radius: f64,
+}
+
+impl Circle {
+    fn new(x: f64, y: f64, radius: f64) -&gt; Circle {
+        Circle {
+            x: x,
+            y: y,
+            radius: radius,
+        }
+    }
+}
+
+fn main() {
+    let c = Circle::new(0.0, 0.0, 2.0);
+}
+</code></pre>
+<p>This ‘associated function’ builds a new <code>Circle</code> for us. Note that associated
+functions are called with the <code>Struct::function()</code> syntax, rather than the
+<code>ref.method()</code> syntax. Some other languages call associated functions ‘static
+methods’.</p>
+<a class="header" href="method-syntax.html#builder-pattern" name="builder-pattern"><h1>Builder Pattern</h1></a>
+<p>Let’s say that we want our users to be able to create <code>Circle</code>s, but we will
+allow them to only set the properties they care about. Otherwise, the <code>x</code>
+and <code>y</code> attributes will be <code>0.0</code>, and the <code>radius</code> will be <code>1.0</code>. Rust doesn’t
+have method overloading, named arguments, or variable arguments. We employ
+the builder pattern instead. It looks like this:</p>
+<pre><code class="language-rust">struct Circle {
+    x: f64,
+    y: f64,
+    radius: f64,
+}
+
+impl Circle {
+    fn area(&amp;self) -&gt; f64 {
+        std::f64::consts::PI * (self.radius * self.radius)
+    }
+}
+
+struct CircleBuilder {
+    x: f64,
+    y: f64,
+    radius: f64,
+}
+
+impl CircleBuilder {
+    fn new() -&gt; CircleBuilder {
+        CircleBuilder { x: 0.0, y: 0.0, radius: 1.0, }
+    }
+
+    fn x(&amp;mut self, coordinate: f64) -&gt; &amp;mut CircleBuilder {
+        self.x = coordinate;
+        self
+    }
+
+    fn y(&amp;mut self, coordinate: f64) -&gt; &amp;mut CircleBuilder {
+        self.y = coordinate;
+        self
+    }
+
+    fn radius(&amp;mut self, radius: f64) -&gt; &amp;mut CircleBuilder {
+        self.radius = radius;
+        self
+    }
+
+    fn finalize(&amp;self) -&gt; Circle {
+        Circle { x: self.x, y: self.y, radius: self.radius }
+    }
+}
+
+fn main() {
+    let c = CircleBuilder::new()
+                .x(1.0)
+                .y(2.0)
+                .radius(2.0)
+                .finalize();
+
+    println!(&quot;area: {}&quot;, c.area());
+    println!(&quot;x: {}&quot;, c.x);
+    println!(&quot;y: {}&quot;, c.y);
+}
+</code></pre>
+<p>What we’ve done here is make another <code>struct</code>, <code>CircleBuilder</code>. We’ve defined our
+builder methods on it. We’ve also defined our <code>area()</code> method on <code>Circle</code>. We
+also made one more method on <code>CircleBuilder</code>: <code>finalize()</code>. This method creates
+our final <code>Circle</code> from the builder. Now, we’ve used the type system to enforce
+our concerns: we can use the methods on <code>CircleBuilder</code> to constrain making
+<code>Circle</code>s in any way we choose.</p>
+
+                </div>
+
+                <!-- Mobile navigation buttons -->
+                
+                    <a href="patterns.html" class="mobile-nav-chapters previous">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+                    <a href="strings.html" class="mobile-nav-chapters next">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                
+
+            </div>
+
+            
+                <a href="patterns.html" class="nav-chapters previous" title="You can navigate through the chapters using the arrow keys">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+            
+
+            
+                <a href="strings.html" class="nav-chapters next" title="You can navigate through the chapters using the arrow keys">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            
+
+        </div>
+
+
+        <!-- Local fallback for Font Awesome -->
+        <script>
+            if ($(".fa").css("font-family") !== "FontAwesome") {
+                $('<link rel="stylesheet" type="text/css" href="_FontAwesome/css/font-awesome.css">').prependTo('head');
+            }
+        </script>
+
+        <!-- Livereload script (if served using the cli tool) -->
+        
+
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+    </body>
+</html>
