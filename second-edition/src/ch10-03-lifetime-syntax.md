@@ -104,7 +104,7 @@ Listing 10-16 with annotations showing the lifetimes of the variables:
 
 <figcaption>
 
-Listing 10-17: Annotations of the lifetimes of `x` and `r`, named `'a` and `'b`
+Listing 10-17: Annotations of the lifetimes of `r` and `x`, named `'a` and `'b`
 respectively
 
 </figcaption>
