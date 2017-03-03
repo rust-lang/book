@@ -2,6 +2,8 @@
 
 set -o errexit -o nounset
 
+export PATH=$PATH:/home/travis/.cargo/bin;
+
 rev=$(git rev-parse --short HEAD)
 
 # make a scratch directory, this will correspond to
