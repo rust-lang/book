@@ -22,7 +22,7 @@ $( document ).ready(function() {
     $('code').each(function(i, block) {
         hljs.highlightBlock(block);
     });
-    
+
     // Adding the hljs class gives code blocks the color css
     // even if highlighting doesn't apply
     $('code').addClass('hljs');
