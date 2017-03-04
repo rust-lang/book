@@ -123,7 +123,7 @@ $ cargo build
     Finished debug [unoptimized + debuginfo] target(s) in 10.18 secs
 ```
 
-The top level *Cargo.lock* now contains information about the dependency
+The top level *Cargo.lock* now contains information that the dependency
 `add-one` has on `rand`. However, even though `rand` is used somewhere in the
 workspace, we can't use it in other crates in the workspace unless we add
 `rand` to their *Cargo.toml* as well. If we add `extern crate rand;` to
