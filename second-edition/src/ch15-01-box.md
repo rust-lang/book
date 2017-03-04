@@ -63,10 +63,9 @@ data structure of `i32` values
 </figcaption>
 </figure>
 
-We're choosing to implement a cons list that only holds `i32` values, but we
-could have chosen to implement it using generics as we discussed in Chapter 10
-to define a cons list concept independent of the type of value stored in the
-cons list.
+We're implementing a cons list that holds only `i32` values. We
+could have also chosen to implement a cons list independent of the 
+type of value by using generics as discussed in Chapter 10.
 
 Using a cons list to store the list `1, 2, 3` would look like this:
 
