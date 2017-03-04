@@ -12156,10 +12156,9 @@ compile quite yet:</p>
 data structure of <code>i32</code> values</p>
 </figcaption>
 </figure>
-<p>We're choosing to implement a cons list that only holds <code>i32</code> values, but we
-could have chosen to implement it using generics as we discussed in Chapter 10
-to define a cons list concept independent of the type of value stored in the
-cons list.</p>
+<p>We're implementing a cons list that holds only <code>i32</code> values. We
+could have also chosen to implement a cons list independent of the
+type of value by using generics as discussed in Chapter 10.</p>
 <p>Using a cons list to store the list <code>1, 2, 3</code> would look like this:</p>
 <pre><code class="language-rust ignore">use List::{Cons, Nil};
 
