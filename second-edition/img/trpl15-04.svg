@@ -10,7 +10,7 @@
 <!-- table0 -->
 <g id="node2" class="node"><title>table0</title>
 <polygon fill="none" stroke="black" points="0,-75.5656 0,-111.566 54,-111.566 54,-75.5656 0,-75.5656"/>
-<text text-anchor="middle" x="27" y="-89.8656" font-family="Times,serif" font-size="14.00">a</text>
+<text text-anchor="middle" x="27" y="-87.4755" font-family="Times,serif" font-size="14.00">a</text>
 </g>
 <!-- table1 -->
 <g id="node4" class="node"><title>table1</title>
@@ -22,7 +22,7 @@
 <!-- table2 -->
 <g id="node3" class="node"><title>table2</title>
 <polygon fill="none" stroke="black" points="90,-20.5656 90,-56.5656 144,-56.5656 144,-20.5656 90,-20.5656"/>
-<text text-anchor="middle" x="117" y="-34.8656" font-family="Times,serif" font-size="14.00">b</text>
+<text text-anchor="middle" x="117" y="-32.4755" font-family="Times,serif" font-size="14.00">b</text>
 </g>
 <!-- table3 -->
 <g id="node1" class="node"><title>table3</title>
