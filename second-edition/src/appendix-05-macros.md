@@ -1,4 +1,4 @@
-# Macros
+## Appendix E: Macros
 
 ## Basics of writing your own macros
 
