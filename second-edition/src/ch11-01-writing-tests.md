@@ -215,14 +215,14 @@ the value hardcoded into your test isn't important.
 
 Since these macros use the operators `==` and `!=` and print the values using
 debug formatting, the values being compared must implement the `PartialEq` and
-`Debug` traits. Types provided by Rust implement these traits, but for structs
-and enums that you define, you'll need to add `PartialEq` in order to be able
-to assert that values of those types are equal or not equal and `Debug` in
-order to be able to print out the values in the case that the assertion fails.
-Because both of these traits are derivable traits that we mentioned in Chapter
-5, usually this is as straightforward as adding the `#[derive(PartialEq,
-Debug)]` annotation to your struct or enum definition. See Appendix C for more
-details about these and other derivable traits.
+`Debug` traits. Types provided by Rust implement these traits. For structs and
+enums that you define, you'll need to implement `PartialEq` in order to be able
+to assert that values of those types are equal or not equal. You'll need to
+implement `Debug` in order to be able to print out the values in the case that
+the assertion fails. Because both of these traits are derivable traits that we
+mentioned in Chapter 5, usually this is as straightforward as adding the
+`#[derive(PartialEq, Debug)]` annotation to your struct or enum definition. See
+Appendix C for more details about these and other derivable traits.
 
 ## Test for failure with `should_panic`
 
