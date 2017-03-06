@@ -177,8 +177,9 @@ would mean we’d need a mutable borrow) and we want `main` to keep ownership of
 value of `can_hold` will be a boolean, and the implementation will check to see
 if `self`’s length and width are both greater than the length and width of the
 other `Rectangle`, respectively. Let’s add this new method to the `impl` block
-from Listing 5-7:
+from Listing 5-7, shown in Listing 5-9:
 
+<figure>
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
@@ -198,6 +199,14 @@ impl Rectangle {
     }
 }
 ```
+
+<figcaption>
+
+Listing 5-9: Implementing the `can_hold` method on `Rectangle` that takes
+another `Rectangle` instance as an argument
+
+</figcaption>
+</figure>
 
 <!-- Will add ghosting here in libreoffice /Carol -->
 
