@@ -155,8 +155,8 @@ rand = &quot;0.3.14&quot;
    Compiling adder v0.1.0 (file:///projects/adder)
     Finished debug [unoptimized + debuginfo] target(s) in 10.18 secs
 </code></pre>
-<p>The top level <em>Cargo.lock</em> now contains information about the dependency
-<code>add-one</code> has on <code>rand</code>. However, even though <code>rand</code> is used somewhere in the
+<p>The top level <em>Cargo.lock</em> now reflects the fact that <code>add-one</code> depends
+on <code>rand</code>. However, even though <code>rand</code> is used somewhere in the
 workspace, we can't use it in other crates in the workspace unless we add
 <code>rand</code> to their <em>Cargo.toml</em> as well. If we add <code>extern crate rand;</code> to
 <em>src/main.rs</em> for the top level <code>adder</code> crate, for example, we'll get an error:</p>
