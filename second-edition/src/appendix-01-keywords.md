@@ -1,4 +1,4 @@
-## Keywords
+## Appendix A: Keywords
 
 The following keywords are reserved by the Rust language and may not be used as
 names of functions, variables, macros, modules, crates, constants, static

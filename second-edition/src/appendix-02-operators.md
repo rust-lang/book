@@ -1,4 +1,4 @@
-## Operators
+## Appendix B: Operators
 
 ### Unary operator expressions
 

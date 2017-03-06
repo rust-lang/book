@@ -1,1 +1,1 @@
-# Nightly Rust
+## Appendix D: Nightly Rust
