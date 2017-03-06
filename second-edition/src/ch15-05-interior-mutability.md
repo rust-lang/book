@@ -230,7 +230,7 @@ Listing 15-15: Using `Rc<RefCell<i32>>` to create a `List` that we can mutate
 </figcaption>
 </figure>
 
-We're creating a value, which is an instance of `Rc<RefCell<i32>>. We're
+We're creating a value, which is an instance of `Rc<RefCell<i32>>`. We're
 storing it in a variable named `value` because we want to be able to access it
 directly later. Then we create a `List` in `a` that has a `Cons` variant that
 holds `value`, and `value` needs to be cloned since we want `value` to also
