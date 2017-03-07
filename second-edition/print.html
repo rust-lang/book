@@ -3174,7 +3174,7 @@ element by element and check whether a value is a space, we’ll convert our
 <p>Next, we create an iterator over the array of bytes using the <code>iter</code> method :</p>
 <pre><code class="language-rust ignore">for (i, &amp;item) in bytes.iter().enumerate() {
 </code></pre>
-<p>We’ll discuss iterators in more detail in Chapter 16. For now, know that <code>iter</code>
+<p>We’ll discuss iterators in more detail in Chapter 13. For now, know that <code>iter</code>
 is a method that returns each element in a collection, and <code>enumerate</code> wraps
 the result of <code>iter</code> and returns each element as part of a tuple instead. The
 first element of the returned tuple is the index, and the second element is a
@@ -3760,7 +3760,7 @@ their name, they can have parameters and return values, and they contain some
 code that gets run when they’re called from somewhere else. Methods are
 different from functions, however, because they’re defined within the context
 of a struct (or an enum or a trait object, which we will cover in Chapters 6
-and 13, respectively), and their first parameter is always <code>self</code>, which
+and 17, respectively), and their first parameter is always <code>self</code>, which
 represents the instance of the struct that the method is being called on.</p>
 <a class="header" href="print.html#defining-methods" name="defining-methods"><h3>Defining Methods</h3></a>
 <p>Let’s change our <code>area</code> function that has a <code>Rectangle</code> instance as a parameter
@@ -5407,7 +5407,7 @@ mod tests {
     }
 }
 </code></pre>
-<p>We’ll explain more about testing in Chapter 12, but parts of this should make
+<p>We’ll explain more about testing in Chapter 11, but parts of this should make
 sense now: we have a module named <code>tests</code> that lives next to our other modules
 and contains one function named <code>it_works</code>. Even though there are special
 annotations, the <code>tests</code> module is just another module! So our module hierarchy
