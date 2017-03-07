@@ -802,7 +802,7 @@ The call to `parse` could easily cause an error. If, for example, the string
 contained `A👍%`, there would be no way to convert that to a number. Because it
 might fail, the `parse` method returns a `Result` type, much like the
 `read_line` method does as discussed earlier in “Handling Potential Failure
-with the Result Type” on page XX. We’ll treat this `Result` the same way by
+with the Result Type”. We’ll treat this `Result` the same way by
 using the `expect` method again. If `parse` returns an `Err` `Result` variant
 because it couldn’t create a number from the string, the `expect` call will
 crash the game and print the message we give it. If `parse` can successfully
@@ -882,7 +882,7 @@ like the user can quit!
 
 The user could always halt the program by using the keyboard shortcut `Ctrl-C`.
 But there’s another way to escape this insatiable monster that we mentioned in
-the `parse` discussion in “Comparing the Guesses” on page XX: if the user
+the `parse` discussion in “Comparing the Guess to the Secret Number”: if the user
 enters a non-number answer, the program will crash. The user can take advantage
 of that in order to quit, as shown here:
 
