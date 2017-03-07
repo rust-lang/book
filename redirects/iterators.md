@@ -1,4 +1,4 @@
-# The Rust Programming Language Has Moved
+% The Rust Programming Language Has Moved
 
 When The Rust Programming Language only had one edition, it was all hosted at
 `book/`. Now that it has two, they are properly namespaced under `first-edition/` and `second-edition/`.
