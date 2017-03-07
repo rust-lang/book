@@ -153,7 +153,7 @@ mod tests {
 }
 ```
 
-We’ll explain more about testing in Chapter 12, but parts of this should make
+We’ll explain more about testing in Chapter 11, but parts of this should make
 sense now: we have a module named `tests` that lives next to our other modules
 and contains one function named `it_works`. Even though there are special
 annotations, the `tests` module is just another module! So our module hierarchy
