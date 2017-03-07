@@ -12919,7 +12919,12 @@ fn main() {
 <p>Listing 15-15: Using <code>Rc&lt;RefCell&lt;i32&gt;&gt;</code> to create a <code>List</code> that we can mutate</p>
 </figcaption>
 </figure>
-<p>We're creating a value, which is an instance of <code>Rc&lt;RefCell&lt;i32&gt;&gt;. We're storing it in a variable named</code>value<code>because we want to be able to access it directly later. Then we create a</code>List<code>in</code>a<code>that has a</code>Cons<code>variant that holds</code>value<code>, and</code>value<code>needs to be cloned since we want</code>value<code>to also have ownership in addition to</code>a<code>. Then we wrap</code>a<code>in an</code>Rc<T><code>so that we can create lists</code>b<code>and</code>c<code>that start differently but both refer to</code>a`,
+<p>We're creating a value, which is an instance of <code>Rc&lt;RefCell&lt;i32&gt;&gt;</code>. We're
+storing it in a variable named <code>value</code> because we want to be able to access it
+directly later. Then we create a <code>List</code> in <code>a</code> that has a <code>Cons</code> variant that
+holds <code>value</code>, and <code>value</code> needs to be cloned since we want <code>value</code> to also
+have ownership in addition to <code>a</code>. Then we wrap <code>a</code> in an <code>Rc&lt;T&gt;</code> so that we
+can create lists <code>b</code> and <code>c</code> that start differently but both refer to <code>a</code>,
 similarly to what we did in Listing 15-12.</p>
 <p>Once we have the lists in <code>shared_list</code>, <code>b</code>, and <code>c</code> created, then we add 10
 to the 5 in <code>value</code> by dereferencing the <code>Rc&lt;T&gt;</code> and calling <code>borrow_mut</code> on
