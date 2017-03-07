@@ -59,7 +59,7 @@ Next, we create an iterator over the array of bytes using the `iter` method :
 for (i, &item) in bytes.iter().enumerate() {
 ```
 
-We’ll discuss iterators in more detail in Chapter 16. For now, know that `iter`
+We’ll discuss iterators in more detail in Chapter 13. For now, know that `iter`
 is a method that returns each element in a collection, and `enumerate` wraps
 the result of `iter` and returns each element as part of a tuple instead. The
 first element of the returned tuple is the index, and the second element is a
