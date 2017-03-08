@@ -16,12 +16,9 @@ addons:
 before_script:
   - (cargo install mdbook --git https://github.com/azerupi/mdBook.git --force || true)
 script:
-  - bash spellcheck.sh list
-  - PATH=$PATH:/home/travis/.cargo/bin mdbook test
-  - PATH=$PATH:/home/travis/.cargo/bin mdbook build
-  - cargo run --bin lfp src
+  - bash ci/build.sh
 after_success:
-  - test $TRAVIS_PULL_REQUEST == "false" && test $TRAVIS_BRANCH == "master" && bash deploy.sh
+  - test $TRAVIS_PULL_REQUEST == "false" && test $TRAVIS_BRANCH == "master" && bash ci/deploy.sh
 env:
   global:
     secure: BcBxhhCR2EgnZzllxXT3x2NNjAU1sjAwwjZ0lg6VqTetxh+ENHzjDsX4+mrBPXmm2vU7qZSivOHX+TEHHTUQOjHDyRdYg4PaPJxQBQ3/8hw/OEO7LwMo0FKhuixXKlBSBbhBIWomvJnGA7iRQqMabQqQyys1dYI3mb1ck8WMNwFe2ZaEe12nbvzTr0EGFRZ3bJhR0nDmvXlm2XIbwRnSfMSnWAIb/ksKEpwFfCRNwx4dMZkJzOii+rnFaNWO1KIUh4V1+Jo8GR24/2Bd/3HqAxDP+6kAYOcB1hKQuHnVOdVx0B7LUxe6Pgwq98EXaNmpgrq7YUpwwrPEExr6k9UzBkcTcz0X+U9tvaqcvDD1qlQZORdtbOPMvYVkE7uxu/d+/s6CyIaUKIb/RLrqMtdwIye0tYvdVQ8xr4h1tszCR//PwfAaK4BzPCgLPyXpHeJklPjyvKiedVyfOQywpGNRaZN2phQ8RFEN7XXw2PI1+AEZue27nWrDnCR17ExKKWdithPbIrFfi40bn03YuIgq91LURyqM6KE71IU6gNjQlRyko+F0M7W/tbELYZCOw3erctY70JBbWG3KtqW/3sXF6GoGYE4z0v206NmxwndlQ/fd3Vh05toAIqAR+Vx6lebHF7NG4Ki4b7ReuodNMjrDYo28o0EiVapQcXhU1G0FU4o=

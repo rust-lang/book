@@ -2,16 +2,15 @@
 
 [![Build Status](https://travis-ci.org/rust-lang/book.svg?branch=master)](https://travis-ci.org/rust-lang/book)
 
-This is the next iteration of “The Rust Programming Language”, which is
-currently located [in the main Rust repository][src]. If you want to read the
-book, you should check it out there or [on the web][prod].
+To read this book online, visit [rust-lang.github.io/book/][html].
+
+[html]: http://rust-lang.github.io/book/
+
+This is the next iteration of “The Rust Programming Language” ([source][src],
+[read online][prod]).
 
 [src]: https://github.com/rust-lang/rust/tree/master/src/doc/book
 [prod]: https://doc.rust-lang.org/book/
-
-If you would like to see this version rendered, it’s [on GitHub pages][html].
-
-[html]: http://rust-lang.github.io/book/
 
 ## Requirements
 
@@ -113,10 +112,3 @@ script. It needs a dictionary of valid words, which is provided in
 `BTreeMap` which the script considers invalid), you need to add this word to
 `dictionary.txt` (keep the sorted order for consistency).
 
-## Converting Windows newlines to Unix
-
-This is mostly for Carol's reference because she keeps having to look it up.
-
-```
-$ tr -d '\015' < DOS-file > UNIX-file
-```
