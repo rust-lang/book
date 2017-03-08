@@ -11621,7 +11621,7 @@ forth. Therefore, the most space a <code>Message</code> value will need is the s
 would take to store the largest of its variants.</p>
 <p>Contrast this to what happens when the Rust compiler looks at a recursive type
 like <code>List</code> in Listing 15-2. The compiler tries to figure out how much memory
-is needed to store a value of the <code>List</code> enum, and starts by looking at the <code>Cons</code>
+is needed to store value of <code>List</code>, and starts by looking at the <code>Cons</code>
 variant. The <code>Cons</code> variant holds a value of type <code>i32</code> and a value of type
 <code>List</code>, so <code>Cons</code> needs an amount of space equal to the size of an <code>i32</code> plus
 the size of a <code>List</code>. To figure out how much memory a <code>List</code> needs, it looks at
