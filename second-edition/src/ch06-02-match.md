@@ -19,8 +19,6 @@ can write a function that can take an unknown United States coin and, in a
 similar way as the counting machine, determine which coin it is and return its
 value in cents, as shown here in Listing 6-3:
 
-<figure>
-
 ```rust
 enum Coin {
     Penny,
@@ -39,13 +37,8 @@ fn value_in_cents(coin: Coin) -> i32 {
 }
 ```
 
-<figcaption>
-
-Listing 6-3: An enum and a `match` expression that has the variants of the enum
-as its patterns.
-
-</figcaption>
-</figure>
+<span class="caption">Listing 6-3: An enum and a `match` expression that has
+the variants of the enum as its patterns.</span>
 
 Let’s break down the `match` in the `value_in_cents` function. First, we list
 the `match` keyword followed by an expression, which in this case is the value
@@ -109,8 +102,6 @@ designs, so only quarters have this extra value. We can add this information to
 our `enum` by changing the `Quarter` variant to include a `State` value stored
 inside it, which we've done here in Listing 6-4:
 
-<figure>
-
 ```rust
 #[derive(Debug)] // So we can inspect the state in a minute
 enum UsState {
@@ -127,13 +118,8 @@ enum Coin {
 }
 ```
 
-<figcaption>
-
-Listing 6-4: A `Coin` enum where the `Quarter` variant also holds a `UsState`
-value
-
-</figcaption>
-</figure>
+<span class="caption">Listing 6-4: A `Coin` enum where the `Quarter` variant
+also holds a `UsState` value</span>
 
 Let’s imagine that a friend of ours is trying to collect all 50 state quarters.
 While we sort our loose change by coin type, we’ll also call out the name of
@@ -195,8 +181,6 @@ operations.
 This function is very easy to write, thanks to `match`, and will look like
 Listing 6-5:
 
-<figure>
-
 ```rust
 fn plus_one(x: Option<i32>) -> Option<i32> {
     match x {
@@ -210,12 +194,8 @@ let six = plus_one(five);
 let none = plus_one(None);
 ```
 
-<figcaption>
-
-Listing 6-5: A function that uses a `match` expression on an `Option<i32>`
-
-</figcaption>
-</figure>
+<span class="caption">Listing 6-5: A function that uses a `match` expression on
+an `Option<i32>`</span>
 
 #### Matching `Some(T)`
 

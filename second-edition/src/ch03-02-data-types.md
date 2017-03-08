@@ -48,12 +48,7 @@ as opposed to a `u` for unsigned) for a 32-bit system. Table 3-1 shows the
 built-in integer types in Rust. Each variant in the Signed and Unsigned columns
 (for example, *i32*) can be used to declare the type of an integer value.
 
-<figure>
-<figcaption>
-
-Table 3-1: Integer Types in Rust
-
-</figcaption>
+<span class="caption">Table 3-1: Integer Types in Rust</span>
 
 | Length | Signed | Unsigned |
 |--------|--------|----------|
@@ -62,8 +57,6 @@ Table 3-1: Integer Types in Rust
 | 32-bit | i32    | u32      |
 | 64-bit | i64    | u64      |
 | arch   | isize  | usize    |
-
-</figure>
 
 Each variant can be either signed or unsigned and has an explicit size.
 Signed and unsigned refers to whether it’s possible for the number to be
@@ -90,12 +83,7 @@ You can write integer literals in any of the forms shown in Table 3-2. Note
 that all number literals except the byte literal allow a type suffix, such as
 `57u8`, and `_` as a visual separator, such as `1_000`.
 
-<figure>
-<figcaption>
-
-Table 3-2: Integer Literals in Rust
-
-</figcaption>
+<span class="caption">Table 3-2: Integer Literals in Rust</span>
 
 | Number literals  | Example       |
 |------------------|---------------|
@@ -104,8 +92,6 @@ Table 3-2: Integer Literals in Rust
 | Octal            | `0o77`        |
 | Binary           | `0b1111_0000` |
 | Byte (`u8` only) | `b'A'`        |
-
-</figure>
 
 So how do you know which type of integer to use? If you’re unsure, Rust’s
 defaults are generally good choices, and integer types default to `i32`: it’s

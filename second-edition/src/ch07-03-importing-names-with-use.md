@@ -4,7 +4,6 @@ We’ve covered how to call functions defined within a module using the module
 name as part of the call, as in the call to the `nested_modules` function shown
 here in Listing 7-6.
 
-<figure>
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
@@ -21,13 +20,8 @@ fn main() {
 }
 ```
 
-<figcaption>
-
-Listing 7-6: Calling a function by fully specifying its enclosing module’s
-namespaces
-
-</figcaption>
-</figure>
+<span class="caption">Listing 7-6: Calling a function by fully specifying its
+enclosing module’s namespaces</span>
 
 As you can see, referring to the fully qualified name can get quite lengthy.
 Luckily, Rust has a keyword to make these calls more concise.

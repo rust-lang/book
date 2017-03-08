@@ -17,7 +17,6 @@ understand two things:
 
 Let's give it a try as shown in Listing 12-1:
 
-<figure>
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
@@ -29,12 +28,8 @@ fn main() {
 }
 ```
 
-<figcaption>
-
-Listing 12-1: Collect the command line arguments into a vector and print them out
-
-</figcaption>
-</figure>
+<span class="caption">Listing 12-1: Collect the command line arguments into a
+vector and print them out</span>
 
 <!-- Will add wingdings in libreoffice /Carol -->
 
@@ -71,7 +66,6 @@ something we'll have to remember to account for.
 Now that we have a way to access all of the arguments, let's find the ones we
 care about and save them in variables as shown in Listing 12-2:
 
-<figure>
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
@@ -88,12 +82,8 @@ fn main() {
 }
 ```
 
-<figcaption>
-
-Listing 12-2: Create variables to hold the search argument and filename argument
-
-</figcaption>
-</figure>
+<span class="caption">Listing 12-2: Create variables to hold the search
+argument and filename argument</span>
 
 <!-- Will add ghosting and wingdings in libreoffice /Carol -->
 

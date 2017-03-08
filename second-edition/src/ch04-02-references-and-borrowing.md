@@ -33,15 +33,9 @@ function return value is gone. Second, note that we pass `&s1` into
 These ampersands are *references*, and they allow you to refer to some value
 without taking ownership of it. Figure 4-8 shows a diagram.
 
-<figure>
 <img alt="&String s pointing at String s1" src="img/trpl04-05.svg" class="center" />
 
-<figcaption>
-
-Figure 4-8: `&String s` pointing at `String s1`
-
-</figcaption>
-</figure>
+<span class="caption">Figure 4-8: `&String s` pointing at `String s1`</span>
 
 Let’s take a closer look at the function call here:
 
@@ -81,7 +75,6 @@ have to give it back.
 So what happens if we try to modify something we’re borrowing? Try the code in
 Listing 4-9. Spoiler alert: it doesn’t work!
 
-<figure>
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore
@@ -96,12 +89,7 @@ fn change(some_string: &String) {
 }
 ```
 
-<figcaption>
-
-Listing 4-9: Attempting to modify a borrowed value
-
-</figcaption>
-</figure>
+<span class="caption">Listing 4-9: Attempting to modify a borrowed value</span>
 
 Here’s the error:
 

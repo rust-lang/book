@@ -15,8 +15,6 @@ compiler is making sure you don't shoot yourself in your foot.
 
 ## What are threads
 
-
-
 ## Rust's concurrency tradeoffs
 
 Lots of different languages tackle this problem in different ways. We are not
@@ -34,13 +32,11 @@ to not have a heavy runtime.
 These are the reasons Rust's concurrency model is this way as opposed to other
 language's ways, which are optimizing for different things.
 
-
 ## Let's get a thread: `thread::spawn`
 
 Code examples - just print stuff, no data sharing
 
 ## Communicating between threads
-
 
 ### Closures, Ownership, and Borrowing
 
@@ -53,7 +49,6 @@ borrow immutably, borrow mutably, and move their parameters, then closures that
 reference values from their environment and call each of the functions. We'll
 see how this affects inference of when a value is borrowed:
 
-<figure>
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
@@ -87,14 +82,9 @@ fn main() {
 }
 ```
 
-<figcaption>
-
-Listing 16-something: Closures that borrow, borrow mutably, and take ownership
-of their parameters, which is inferred from how the closure body uses the
-parameters
-
-</figcaption>
-</figure>
+<span class="caption">Listing 16-something: Closures that borrow, borrow
+mutably, and take ownership of their parameters, which is inferred from how the
+closure body uses the parameters</span>
 
 Here, Rust is able to look at how we use the parameters of each closure inside
 their bodies. If the closure passes its parameter it to a function that takes
@@ -174,8 +164,6 @@ Because closures may borrow variables from their enclosing scope, we can
 construct a similar example with a closure that borrows `x` and tries to return
 that borrowed value. The code in Listing 13-6 also won't compile:
 
-<figure>
-
 ```rust,ignore
 {
     let closure;
@@ -188,13 +176,8 @@ that borrowed value. The code in Listing 13-6 also won't compile:
 }
 ```
 
-<figcaption>
-
-Listing 16-something: A closure that tries to return a borrowed value that does
-not live long enough
-
-</figcaption>
-</figure>
+<span class="caption">Listing 16-something: A closure that tries to return a
+borrowed value that does not live long enough</span>
 
 We get an error because `x` does not live long enough:
 
@@ -217,8 +200,6 @@ from the last section to make the closure take ownership of `x`. Because `x` is
 a number, it is a `Copy` type and therefore will be copied into the closure.
 The code in Listing 13-7 will compile:
 
-<figure>
-
 ```rust
 {
     let closure;
@@ -235,12 +216,8 @@ The code in Listing 13-7 will compile:
 }
 ```
 
-<figcaption>
-
-Listing 16-something: Moving a value into the closure to fix the lifetime error
-
-</figcaption>
-</figure>
+<span class="caption">Listing 16-something: Moving a value into the closure to
+fix the lifetime error</span>
 
 Even though we modified `x` between the closure definition and `assert_eq!`,
 since `closure` now has its own version, the changes to `x` won't change the
@@ -313,12 +290,9 @@ code will hang.
 Deadlocks are safe, you have to manage that yourself. Deadlock bugs usually
 happen bc you forget to unlock, but drop unlocks automatically.
 
-
 ## Maybe make the I/O project concurrent?
 
 Might be a lot of boilerplate without scoped threads, maybe just allude.
-
-
 
 This is a really rough sketch of some ideas that this chapter might cover.
 
@@ -326,7 +300,6 @@ From a comment of steveklabnik's on [the definitely not orange website]. "that p
 
 [the definitely not orange website]: https://news.ycombinator.com/item?id=13078384
 [Boehm 2004]: http://www.hpl.hp.com/techreports/2004/HPL-2004-209.pdf
-
 
 So for example, in that paper, 4.1 is about the problem of concurrent
 modifiability. And indeed, it says

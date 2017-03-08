@@ -24,8 +24,6 @@ Documentation comments use `///` instead of `//` and support Markdown notation
 inside. They go just before the item they are documenting. Here's documentation
 comments for an `add_one` function:
 
-<figure>
-
 <span class="filename">Filename: src/lib.rs</span>
 
 ````rust
@@ -46,12 +44,8 @@ pub fn add_one(x: i32) -> i32 {
 }
 ````
 
-<figcaption>
-
-Listing 14-1: A documentation comment for a function
-
-</figcaption>
-</figure>
+<span class="caption">Listing 14-1: A documentation comment for a
+function</span>
 
 `cargo doc` runs a tool distributed with Rust, `rustdoc`, to generate HTML
 documentation from these comments. To try this out locally, you can run `cargo
@@ -111,7 +105,6 @@ For example, say that we made a library named `art` consisting of a `kinds`
 module containing an enum named `Color` and a `utils` module containing a
 function named `mix` as shown in Listing 14-2:
 
-<figure>
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust
@@ -147,18 +140,12 @@ pub mod utils {
 }
 ```
 
-<figcaption>
-
-Listing 14-2: An `art` library with items organized into `kinds` and `utils`
-modules
-
-</figcaption>
-</figure>
+<span class="caption">Listing 14-2: An `art` library with items organized into
+`kinds` and `utils` modules</span>
 
 In order to use this library, another crate would have `use` statements as in
 Listing 14-3:
 
-<figure>
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore
@@ -174,13 +161,8 @@ fn main() {
 }
 ```
 
-<figcaption>
-
-Listing 14-3: A program using the `art` crate's items with its internal
-structure exported
-
-</figcaption>
-</figure>
+<span class="caption">Listing 14-3: A program using the `art` crate's items
+with its internal structure exported</span>
 
 Users of this crate shouldn't need to know that `PrimaryColor` and
 `SecondaryColor` are in the `kinds` module, and `mix` is in the `utils` module;
@@ -190,7 +172,6 @@ meaning from the outside looking in.
 To change this, we can add the following `pub use` statements to the code from
 Listing 14-2 to re-export the types at the top level, as shown in Listing 14-4:
 
-<figure>
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust
@@ -213,12 +194,8 @@ pub mod kinds {
 # }
 ```
 
-<figcaption>
-
-Listing 14-4: Adding `pub use` statements to re-export items
-
-</figcaption>
-</figure>
+<span class="caption">Listing 14-4: Adding `pub use` statements to re-export
+items</span>
 
 <!-- Will add ghosting in libreoffice /Carol -->
 
@@ -227,7 +204,6 @@ documentation. Users of the `art` crate can still see and choose to use the
 internal structure as in Listing 14-3, or they can use the more convenient
 structure from Listing 14-4, as shown in Listing 14-5:
 
-<figure>
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore
@@ -241,12 +217,8 @@ fn main() {
 }
 ```
 
-<figcaption>
-
-Listing 14-5: Using the re-exported items from the `art` crate
-
-</figcaption>
-</figure>
+<span class="caption">Listing 14-5: Using the re-exported items from the `art`
+crate</span>
 
 <!-- Will add ghosting in libreoffice /Carol -->
 

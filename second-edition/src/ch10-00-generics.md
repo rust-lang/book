@@ -43,7 +43,6 @@ use generics.
 Consider a small program that finds the largest number in a list, shown in
 Listing 10-1:
 
-<figure>
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
@@ -63,12 +62,8 @@ fn main() {
 }
 ```
 
-<figcaption>
-
-Listing 10-1: Code to find the largest number in a list of numbers
-
-</figcaption>
-</figure>
+<span class="caption">Listing 10-1: Code to find the largest number in a list
+of numbers</span>
 
 This code takes a list of integers, stored here in the variable `numbers`. It
 puts the first item in the list in a variable named `largest`. Then it iterates
@@ -82,7 +77,6 @@ If we needed to find the largest number in two different lists of numbers, we
 could duplicate the code in Listing 10-1 and have the same logic exist in two
 places in the program, as in Listing 10-2:
 
-<figure>
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
@@ -113,12 +107,8 @@ fn main() {
 }
 ```
 
-<figcaption>
-
-Listing 10-2: Code to find the largest number in *two* lists of numbers
-
-</figcaption>
-</figure>
+<span class="caption">Listing 10-2: Code to find the largest number in *two*
+lists of numbers</span>
 
 While this code works, duplicating code is tedious and error-prone, and means
 we have multiple places to update the logic if we need to change it.
@@ -138,7 +128,6 @@ number into a function named `largest`. This program can find the largest
 number in two different lists of numbers, but the code from Listing 10-1 only
 exists in one spot:
 
-<figure>
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
@@ -169,12 +158,8 @@ fn main() {
 }
 ```
 
-<figcaption>
-
-Listing 10-3: Abstracted code to find the largest number in two lists
-
-</figcaption>
-</figure>
+<span class="caption">Listing 10-3: Abstracted code to find the largest number
+in two lists</span>
 
 The function has a parameter, `list`, which represents any concrete slice of
 `i32` values that we might pass into the function. The code in the function

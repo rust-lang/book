@@ -54,7 +54,6 @@ We're going to define a new function named `grep_case_insensitive`. Its
 implementation will be almost the same as the `grep` function, but with some
 minor changes as shown in Listing 12-16:
 
-<figure>
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust
@@ -72,13 +71,9 @@ fn grep_case_insensitive<'a>(search: &str, contents: &'a str) -> Vec<&'a str> {
 }
 ```
 
-<figcaption>
-
-Listing 12-16: Implementing a `grep_case_insensitive` function by changing the
-search string and the lines of the contents to lowercase before comparing them
-
-</figcaption>
-</figure>
+<span class="caption">Listing 12-16: Implementing a `grep_case_insensitive`
+function by changing the search string and the lines of the contents to
+lowercase before comparing them</span>
 
 <!-- Will add ghosting and wingdings in libreoffice /Carol -->
 

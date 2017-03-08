@@ -171,7 +171,6 @@ Rust branching construct called `match` for these cases.
 Because `if` is an expression, we can use it on the right side of a `let`
 statement, for instance in Listing 3-4:
 
-<figure>
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
@@ -187,12 +186,8 @@ fn main() {
 }
 ```
 
-<figcaption>
-
-Listing 3-4: Assigning the result of an `if` expression to a variable
-
-</figcaption>
-</figure>
+<span class="caption">Listing 3-4: Assigning the result of an `if` expression
+to a variable</span>
 
 The `number` variable will be bound to a value based on the outcome of the `if`
 expression. Run this code to see what happens:
@@ -343,7 +338,6 @@ true, the code runs; otherwise, it exits the loop.
 You could use the `while` construct to loop over the elements of a collection,
 such as an array. For example:
 
-<figure>
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
@@ -359,12 +353,8 @@ fn main() {
 }
 ```
 
-<figcaption>
-
-Listing 3-5: Looping through each element of a collection using a `while` loop
-
-</figcaption>
-</figure>
+<span class="caption">Listing 3-5: Looping through each element of a collection
+using a `while` loop</span>
 
 Here, the code counts up through the elements in the array. It starts at index
 `0`, and then loops until it reaches the final index in the array (that is,
@@ -394,7 +384,6 @@ iteration through the loop.
 As a more efficient alternative, you can use a `for` loop and execute some code
 for each item in a collection. A `for` loop looks like this:
 
-<figure>
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
@@ -407,12 +396,8 @@ fn main() {
 }
 ```
 
-<figcaption>
-
-Listing 3-6: Looping through each element of a collection using a `for` loop
-
-</figcaption>
-</figure>
+<span class="caption">Listing 3-6: Looping through each element of a collection
+using a `for` loop</span>
 
 When we run this code, we’ll see the same output as in Listing 3-5. More
 importantly, we’ve now increased the safety of the code and eliminated the

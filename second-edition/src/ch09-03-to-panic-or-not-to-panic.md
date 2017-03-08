@@ -174,8 +174,6 @@ confidently use the values they receive. Listing 9-8 shows one way to define a
 `Guess` type that will only create an instance of `Guess` if the `new` function
 receives a value between 1 and 100:
 
-<figure>
-
 ```rust
 struct Guess {
     value: u32,
@@ -198,13 +196,8 @@ impl Guess {
 }
 ```
 
-<figcaption>
-
-Listing 9-8: A `Guess` type that will only continue with values between 1 and
-100
-
-</figcaption>
-</figure>
+<span class="caption">Listing 9-8: A `Guess` type that will only continue with
+values between 1 and 100</span>
 
 First, we define a struct named `Guess` that has a field named `value` that
 holds a `u32`. This is where the number will be stored.

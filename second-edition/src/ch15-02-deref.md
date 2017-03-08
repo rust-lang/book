@@ -45,7 +45,6 @@ metadata, so we implement the `Deref` trait to return the audio data.
 Implementing the `Deref` trait requires implementing one method named `deref`
 that borrows `self` and returns the inner data:
 
-<figure>
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
@@ -77,13 +76,8 @@ fn main() {
 }
 ```
 
-<figcaption>
-
-Listing 15-7: An implementation of the `Deref` trait on a struct that holds mp3
-file data and metadata
-
-</figcaption>
-</figure>
+<span class="caption">Listing 15-7: An implementation of the `Deref` trait on a
+struct that holds mp3 file data and metadata</span>
 
 Most of this should look familiar: a struct, a trait implementation, and a
 main function that creates an instance of the struct. There is one part we

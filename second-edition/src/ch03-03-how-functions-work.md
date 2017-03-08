@@ -149,7 +149,6 @@ evaluate to a resulting value. Let’s look at some examples.
 Creating a variable and assigning a value to it with the `let` keyword is a
 statement. In Listing 3-3, `let y = 6;` is a statement:
 
-<figure>
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
@@ -158,12 +157,7 @@ fn main() {
 }
 ```
 
-<figcaption>
-
-Listing 3-3: A `main` function declaration containing one statement.
-
-</figcaption>
-</figure>
+<span class="caption">Listing 3-3: A `main` function declaration containing one statement.</span>
 
 Function definitions are also statements; the entire preceding example is a
 statement in itself.

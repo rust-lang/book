@@ -14,7 +14,6 @@ Let’s change our `area` function that has a `Rectangle` instance as a paramete
 and instead make an `area` method defined on the `Rectangle` struct, as shown
 in Listing 5-7:
 
-<figure>
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
@@ -40,12 +39,8 @@ fn main() {
 }
 ```
 
-<figcaption>
-
-Listing 5-7: Defining an `area` method on the `Rectangle` struct
-
-</figcaption>
-</figure>
+<span class="caption">Listing 5-7: Defining an `area` method on the `Rectangle`
+struct</span>
 
 <!-- Will add ghosting and wingdings here in libreoffice /Carol -->
 
@@ -137,7 +132,6 @@ another instance of `Rectangle` and return `true` if the second rectangle could
 fit completely within `self` and `false` if it would not. That is, if we run
 the code in Listing 5-8, once we've defined the `can_hold` method:
 
-<figure>
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore
@@ -151,12 +145,8 @@ fn main() {
 }
 ```
 
-<figcaption>
-
-Listing 5-8: Demonstration of using the as-yet-unwritten `can_hold` method
-
-</figcaption>
-</figure>
+<span class="caption">Listing 5-8: Demonstration of using the as-yet-unwritten
+`can_hold` method</span>
 
 We want to see this output, since both of `rect2`’s dimensions are smaller than
 `rect1`’s, but `rect3` is wider than `rect1`:

@@ -64,7 +64,6 @@ declared as immutable with `let data` rather than `let mut data`, yet
 `a_fn_that_mutably_borrows` is allowed to borrow the data mutably and make
 changes to the data!
 
-<figure>
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
@@ -90,12 +89,8 @@ fn main() {
 }
 ```
 
-<figcaption>
-
-Listing 15-14: Using `RefCell<T>`, `borrow`, and `borrow_mut`
-
-</figcaption>
-</figure>
+<span class="caption">Listing 15-14: Using `RefCell<T>`, `borrow`, and
+`borrow_mut`</span>
 
 This example prints:
 
@@ -192,7 +187,6 @@ owner of the value that's not part of the list (the multiple owners
 functionality that `Rc<T>` provides), and so we can mutate the inner `i32`
 value (the interior mutability functionality that `RefCell<T>` provides):
 
-<figure>
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
@@ -223,12 +217,8 @@ fn main() {
 }
 ```
 
-<figcaption>
-
-Listing 15-15: Using `Rc<RefCell<i32>>` to create a `List` that we can mutate
-
-</figcaption>
-</figure>
+<span class="caption">Listing 15-15: Using `Rc<RefCell<i32>>` to create a
+`List` that we can mutate</span>
 
 We're creating a value, which is an instance of `Rc<RefCell<i32>>`. We're
 storing it in a variable named `value` because we want to be able to access it
