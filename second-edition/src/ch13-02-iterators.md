@@ -4,8 +4,6 @@ Iterators are a pattern in Rust that allows you to do some processing on a
 sequence of items. For example, the code in Listing 13-5 adds one to each
 number in a vector:
 
-<figure>
-
 ```rust
 let v1 = vec![1, 2, 3];
 
@@ -14,13 +12,8 @@ let v2: Vec<i32> = v1.iter().map(|x| x + 1).collect();
 assert_eq!(v2, [2, 3, 4]);
 ```
 
-<figcaption>
-
-Listing 13-5: Using an iterator, `map`, and `collect` to add one to each number
-in a vector
-
-</figcaption>
-</figure>
+<span class="caption">Listing 13-5: Using an iterator, `map`, and `collect` to
+add one to each number in a vector</span>
 
 <!-- Will add wingdings in libreoffice /Carol -->
 
@@ -127,8 +120,6 @@ want our iterator to return one first). If `count` is still less than six, we'll
 return the current value, but if `count` is six or higher, our iterator will
 return `None`, as shown in Listing 13-6:
 
-<figure>
-
 ```rust
 # struct Counter {
 #     count: u32,
@@ -152,12 +143,8 @@ impl Iterator for Counter {
 }
 ```
 
-<figcaption>
-
-Listing 13-6: Implementing the `Iterator` trait on our `Counter` struct
-
-</figcaption>
-</figure>
+<span class="caption">Listing 13-6: Implementing the `Iterator` trait on our
+`Counter` struct</span>
 
 <!-- I will add wingdings in libreoffice /Carol -->
 

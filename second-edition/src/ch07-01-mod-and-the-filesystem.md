@@ -71,7 +71,6 @@ We can also have multiple modules, side-by-side, in the same *src/lib.rs* file.
 For example, to have a `client` module too, that also has a function named
 `connect`, we can add it as shown in Listing 7-1:
 
-<figure>
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust
@@ -86,13 +85,8 @@ mod client {
 }
 ```
 
-<figcaption>
-
-Listing 7-1: The `network` module and the `client` module defined side-by-side
-in *src/lib.rs*
-
-</figcaption>
-</figure>
+<span class="caption">Listing 7-1: The `network` module and the `client` module
+defined side-by-side in *src/lib.rs*</span>
 
 Now we have a `network::connect` function and a `client::connect` function.
 These can have completely different functionality, and the function names do
@@ -108,7 +102,6 @@ the `client` code and its `connect` function might make more sense to users of
 our library if it was inside the `network` namespace instead, like in Listing
 7-2:
 
-<figure>
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust
@@ -123,12 +116,8 @@ mod network {
 }
 ```
 
-<figcaption>
-
-Listing 7-2: Moving the `client` module inside of the `network` module
-
-</figcaption>
-</figure>
+<span class="caption">Listing 7-2: Moving the `client` module inside of the
+`network` module</span>
 
 In your *src/lib.rs* file, replace the existing `mod network` and `mod client`
 definitions with this one that has the `client` module as an inner module of
@@ -170,7 +159,6 @@ that you’re used to: file systems! We can use Rust’s module system along wit
 multiple files to split Rust projects up so that not everything lives in
 *src/lib.rs*. For this example, we will start with the code in Listing 7-3:
 
-<figure>
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust
@@ -190,13 +178,8 @@ mod network {
 }
 ```
 
-<figcaption>
-
-Listing 7-3: Three modules, `client`, `network`, and `network::server`, all
-defined in *src/lib.rs*
-
-</figcaption>
-</figure>
+<span class="caption">Listing 7-3: Three modules, `client`, `network`, and
+`network::server`, all defined in *src/lib.rs*</span>
 
 which has this module hierarchy:
 
@@ -348,8 +331,6 @@ fn connect() {
 
 When we try to `cargo build`, we’ll get the error shown in Listing 7-4:
 
-<figure>
-
 ```text
 $ cargo build
    Compiling communicator v0.1.0 (file:///projects/communicator)
@@ -371,13 +352,8 @@ note: ... or maybe `use` the module `server` instead of possibly redeclaring it
   |     ^^^^^^
 ```
 
-<figcaption>
-
-Listing 7-4: Error when trying to extract the `server` submodule into
-*src/server.rs*
-
-</figcaption>
-</figure>
+<span class="caption">Listing 7-4: Error when trying to extract the `server`
+submodule into *src/server.rs*</span>
 
 The error says we `cannot declare a new module at this location` and is
 pointing to the `mod server;` line in *src/network.rs*. So *src/network.rs* is

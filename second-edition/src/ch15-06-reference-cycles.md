@@ -21,10 +21,9 @@ we want to be able to modify which `List` a `Cons` variant is pointing to.
 We've also added a `tail` method to make it convenient for us to access the
 second item, if we have a `Cons` variant:
 
-<figure>
 <span class="filename">Filename: src/main.rs</span>
 
-```rust
+```rust,ignore
 #[derive(Debug)]
 enum List {
     Cons(i32, RefCell<Rc<List>>),
@@ -39,18 +38,10 @@ impl List {
         }
     }
 }
-# use std::rc::Rc;
-# use std::cell::RefCell;
-# use List::{Cons, Nil};
 ```
 
-<figcaption>
-
-Listing 15-16: A cons list definition that holds a `RefCell` so that we can
-modify what a `Cons` variant is referring to
-
-</figcaption>
-</figure>
+<span class="caption">Listing 15-16: A cons list definition that holds a
+`RefCell` so that we can modify what a `Cons` variant is referring to</span>
 
 Next, in Listing 15-17, we're going to create a `List` value in the variable
 `a` that initially is a list of `5, Nil`. Then we'll create a `List` value in
@@ -58,7 +49,6 @@ the variable `b` that is a list of the value 10 and then points to the list in
 `a`. Finally, we'll modify `a` so that it points to `b` instead of `Nil`, which
 will then create a cycle:
 
-<figure>
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
@@ -107,29 +97,18 @@ fn main() {
 }
 ```
 
-<figcaption>
-
-Listing 15-17: Creating a reference cycle of two `List` values pointing to
-each other
-
-</figcaption>
-</figure>
+<span class="caption">Listing 15-17: Creating a reference cycle of two `List`
+values pointing to each other</span>
 
 We use the `tail` method to get a reference to the `RefCell` in `a`, which we
 put in the variable `link`. Then we use the `borrow_mut` method on the
 `RefCell` to change the value inside from an `Rc` that holds a `Nil` value to
 the `Rc` in `b`. We've created a reference cycle that looks like Figure 15-18:
 
-<figure>
-
 <img alt="Reference cycle of lists" src="img/trpl15-04.svg" class="center" style="width: 50%;" />
 
-<figcaption>
-
-Figure 15-18: A reference cycle of lists `a` and `b` pointing to each other
-
-</figcaption>
-</figure>
+<span class="caption">Figure 15-18: A reference cycle of lists `a` and `b`
+pointing to each other</span>
 
 If you uncomment the last `println!`, Rust will try and print this cycle out
 with `a` pointing to `b` pointing to `a` and so forth until it overflows the
@@ -207,10 +186,9 @@ nodes are another node's children, so that's why we have a `RefCell` in
 `Node` named `leaf` with the value 3 and no children, and another instance
 named `branch` with the value 5 and `leaf` as one of its children:
 
-<figure>
 <span class="filename">Filename: src/main.rs</span>
 
-```rust
+```rust,ignore
 fn main() {
     let leaf = Rc::new(Node {
         value: 3,
@@ -224,13 +202,9 @@ fn main() {
 }
 ```
 
-<figcaption>
-
-Listing 15-19: Creating a `leaf` node and a `branch` node where `branch` has
-`leaf` as one of its children but `leaf` has no reference to `branch`
-
-</figcaption>
-</figure>
+<span class="caption">Listing 15-19: Creating a `leaf` node and a `branch` node
+where `branch` has `leaf` as one of its children but `leaf` has no reference to
+`branch`</span>
 
 The `Node` in `leaf` now has two owners: `leaf` and `branch`, since we clone
 the `Rc` in `leaf` and store that in `branch`. The `Node` in `branch` knows
@@ -267,10 +241,9 @@ but it does not own its parent. A parent node will be dropped even if
 it has child nodes referring to it, as long as it doesn't have a parent
 node as well. Now let's update `main` to look like Listing 15-20:
 
-<figure>
 <span class="filename">Filename: src/main.rs</span>
 
-```rust
+```rust,ignore
 fn main() {
     let leaf = Rc::new(Node {
         value: 3,
@@ -292,13 +265,8 @@ fn main() {
 }
 ```
 
-<figcaption>
-
-Listing 15-20: A `leaf` node and a `branch` node where `leaf` has a `Weak`
-reference to its parent, `branch`
-
-</figcaption>
-</figure>
+<span class="caption">Listing 15-20: A `leaf` node and a `branch` node where
+`leaf` has a `Weak` reference to its parent, `branch`</span>
 
 Creating the `leaf` node looks similar; since it starts out without a parent,
 we create a new `Weak` reference instance. When we try to get a reference to
@@ -335,10 +303,9 @@ case. Another way we can tell is by looking at the values we get from calling
 inner scope and move the creation of `branch` in there, so that we can see what
 happens when `branch` is created and then dropped when it goes out of scope:
 
-<figure>
 <span class="filename">Filename: src/main.rs</span>
 
-```
+```rust,ignore
 fn main() {
     let leaf = Rc::new(Node {
         value: 3,
@@ -382,13 +349,8 @@ fn main() {
 }
 ```
 
-<figcaption>
-
-Listing 15-21: Creating `branch` in an inner scope and examining strong and
-weak reference counts of `leaf` and `branch`
-
-</figcaption>
-</figure>
+<span class="caption">Listing 15-21: Creating `branch` in an inner scope and
+examining strong and weak reference counts of `leaf` and `branch`</span>
 
 Right after creating `leaf`, its strong count is 1 (for `leaf` itself) and its
 weak count is 0. In the inner scope, after we create `branch` and associate

@@ -20,7 +20,6 @@ ownership, so this is fine. But what should we return? We don’t really have a
 way to talk about *part* of a string. However, we could return the index of the
 end of the word. Let’s try that as shown in Listing 4-10:
 
-<figure>
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
@@ -37,13 +36,8 @@ fn first_word(s: &String) -> usize {
 }
 ```
 
-<figcaption>
-
-Listing 4-10: The `first_word` function that returns a byte index value into
-the `String` parameter
-
-</figcaption>
-</figure>
+<span class="caption">Listing 4-10: The `first_word` function that returns a
+byte index value into the `String` parameter</span>
 
 Let’s break down this code a bit. Because we need to go through the `String`
 element by element and check whether a value is a space, we’ll convert our
@@ -91,7 +85,6 @@ because it’s a separate value from the `String`, there’s no guarantee that i
 will still be valid in the future. Consider the program in Listing 4-11 that
 uses the `first_word` function from Listing 4-10:
 
-<figure>
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
@@ -119,13 +112,8 @@ fn main() {
 }
 ```
 
-<figcaption>
-
-Listing 4-11: Storing the result from calling the `first_word` function then
-changing the `String` contents
-
-</figcaption>
-</figure>
+<span class="caption">Listing 4-11: Storing the result from calling the
+`first_word` function then changing the `String` contents</span>
 
 This program compiles without any errors and also would if we used `word` after
 calling `s.clear()`. `word` isn’t connected to the state of `s` at all, so
@@ -171,15 +159,10 @@ that contains a pointer to the 6th byte of `s` and a length value of 5.
 
 Figure 4-12 shows this in a diagram.
 
-<figure>
 <img alt="world containing a pointer to the 6th byte of String s and a length 5" src="img/trpl04-06.svg" class="center" style="width: 50%;" />
 
-<figcaption>
-
-Figure 4-12: String slice referring to part of a `String`
-
-</figcaption>
-</figure>
+<span class="caption">Figure 4-12: String slice referring to part of a
+`String`</span>
 
 With Rust’s `..` range syntax, if you want to start at the first index (zero),
 you can drop the value before the two periods. In other words, these are equal:

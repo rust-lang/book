@@ -5,7 +5,6 @@ The most straightforward smart pointer is a *box*, whose type is written
 the stack vs. the heap in Chapter 4). Listing 15-1 shows how to use a box to
 store an `i32` on the heap:
 
-<figure>
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
@@ -15,12 +14,8 @@ fn main() {
 }
 ```
 
-<figcaption>
-
-Listing 15-1: Storing an `i32` value on the heap using a box
-
-</figcaption>
-</figure>
+<span class="caption">Listing 15-1: Storing an `i32` value on the heap using a
+box</span>
 
 This will print `b = 5`. In this case, we can access the data in the box in a
 similar way as we would if this data was on the stack. Just like any value that
@@ -45,7 +40,6 @@ implementing this data structure is useful as an example.
 Here's our first try at defining a cons list as an enum; note that this won't
 compile quite yet:
 
-<figure>
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore
@@ -55,16 +49,11 @@ enum List {
 }
 ```
 
-<figcaption>
-
-Listing 15-2: The first attempt of defining an enum to represent a cons list
-data structure of `i32` values
-
-</figcaption>
-</figure>
+<span class="caption">Listing 15-2: The first attempt of defining an enum to
+represent a cons list data structure of `i32` values</span>
 
 We're implementing a cons list that holds only `i32` values. We
-could have also chosen to implement a cons list independent of the 
+could have also chosen to implement a cons list independent of the
 type of value by using generics as discussed in Chapter 10.
 
 Using a cons list to store the list `1, 2, 3` would look like this:
@@ -84,8 +73,6 @@ is one more `Cons` value that holds `3` and a `List` value, which is finally
 
 If we try to compile the above code, we get the error shown in Listing 15-3:
 
-<figure>
-
 ```text
 error[E0072]: recursive type `List` has infinite size
  -->
@@ -101,12 +88,8 @@ error[E0072]: recursive type `List` has infinite size
   make `List` representable
 ```
 
-<figcaption>
-
-Listing 15-3: The error we get when attempting to define a recursive enum
-
-</figcaption>
-</figure>
+<span class="caption">Listing 15-3: The error we get when attempting to define
+a recursive enum</span>
 
 The error says this type 'has infinite size'. Why is that? It's because we've
 defined `List` to have a variant that is recursive: it holds another value of
@@ -141,16 +124,10 @@ its variants, starting with the `Cons` variant. The `Cons` variant holds a
 value of type `i32` and a value of type `List`, and this continues infinitely,
 as shown in Figure 15-4.
 
-<figure>
-
 <img alt="An infinite Cons list" src="img/trpl15-01.svg" class="center" style="width: 50%;" />
 
-<figcaption>
-
-Figure 15-4: An infinite `List` consisting of infinite `Cons` variants
-
-</figcaption>
-</figure>
+<span class="caption">Figure 15-4: An infinite `List` consisting of infinite
+`Cons` variants</span>
 
 Rust can't figure out how much space to allocate for recursively defined types,
 so the compiler gives the error in Listing 15-3. The error did include this
@@ -169,7 +146,6 @@ definition from Listing 15-2 to look like the definition here in Listing 15-5,
 and change `main` to use `Box::new` for the values inside the `Cons` variants
 like so:
 
-<figure>
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
@@ -188,13 +164,8 @@ fn main() {
 }
 ```
 
-<figcaption>
-
-Listing 15-5: Definition of `List` that uses `Box<T>` in order to have a
-known size
-
-</figcaption>
-</figure>
+<span class="caption">Listing 15-5: Definition of `List` that uses `Box<T>` in
+order to have a known size</span>
 
 The compiler will be able to figure out the size it needs to store a `List`
 value. Rust will look at `List`, and again start by looking at the `Cons`
@@ -205,16 +176,10 @@ value, so `Nil` doesn't need any space. We've broken the infinite, recursive
 chain by adding in a box. Figure 15-6 shows what the `Cons` variant looks like
 now:
 
-<figure>
-
 <img alt="A finite Cons list" src="img/trpl15-02.svg" class="center" />
 
-<figcaption>
-
-Figure 15-6: A `List` that is not infinitely sized since `Cons` holds a `Box`
-
-</figcaption>
-</figure>
+<span class="caption">Figure 15-6: A `List` that is not infinitely sized since
+`Cons` holds a `Box`</span>
 
 This is the main area where boxes are useful: breaking up an infinite data
 structure so that the compiler can know what size it is. We'll look at another

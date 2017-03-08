@@ -26,7 +26,6 @@ We'd like this to be printed to the screen instead, and only have the output
 from a successful run end up in the file if we run our program this way. Let's
 change how error messages are printed as shown in Listing 12-17:
 
-<figure>
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore
@@ -65,12 +64,8 @@ fn main() {
 }
 ```
 
-<figcaption>
-
-Listing 12-17: Writing error messages to `stderr` instead of `stdout`
-
-</figcaption>
-</figure>
+<span class="caption">Listing 12-17: Writing error messages to `stderr` instead
+of `stdout`</span>
 
 <!-- Will add ghosting and wingdings in libreoffice /Carol -->
 

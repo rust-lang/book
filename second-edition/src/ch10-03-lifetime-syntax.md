@@ -28,8 +28,6 @@ inner scope declares a variable named `x` with the initial value of 5. Inside
 the inner scope, we attempt to set the value of `r` as a reference to `x`. Then
 the inner scope ends, and we attempt to print out the value in `r`:
 
-<figure>
-
 ```rust,ignore
 {
     let r;
@@ -43,12 +41,8 @@ the inner scope ends, and we attempt to print out the value in `r`:
 }
 ```
 
-<figcaption>
-
-Listing 10-16: An attempt to use a reference whose value has gone out of scope
-
-</figcaption>
-</figure>
+<span class="caption">Listing 10-16: An attempt to use a reference whose value
+has gone out of scope</span>
 
 > #### Uninitialized Variables Cannot Be Used
 >
@@ -85,8 +79,6 @@ The part of the compiler called the *borrow checker* compares scopes to
 determine that all borrows are valid. Listing 10-17 shows the same example from
 Listing 10-16 with annotations showing the lifetimes of the variables:
 
-<figure>
-
 ```rust,ignore
 {
     let r;         // -------+-- 'a
@@ -102,13 +94,8 @@ Listing 10-16 with annotations showing the lifetimes of the variables:
 }
 ```
 
-<figcaption>
-
-Listing 10-17: Annotations of the lifetimes of `r` and `x`, named `'a` and `'b`
-respectively
-
-</figcaption>
-</figure>
+<span class="caption">Listing 10-17: Annotations of the lifetimes of `r` and
+`x`, named `'a` and `'b` respectively</span>
 
 <!-- Just checking I'm reading this right: the inside block is the b lifetime,
 correct? I want to leave a note for production, make sure we can make that
@@ -129,8 +116,6 @@ as long as the reference.
 Let's look at an example in Listing 10-18 that doesn't try to make a dangling
 reference and compiles without any errors:
 
-<figure>
-
 ```rust
 {
     let x = 5;            // -----+-- 'b
@@ -142,13 +127,8 @@ reference and compiles without any errors:
 }                         // -----+
 ```
 
-<figcaption>
-
-Listing 10-18: A valid reference because the data has a longer lifetime than
-the reference
-
-</figcaption>
-</figure>
+<span class="caption">Listing 10-18: A valid reference because the data has a
+longer lifetime than the reference</span>
 
 Here, `x` has the lifetime `'b`, which in this case is larger than `'a`. This
 means `r` can reference `x`: Rust knows that the reference in `r` will always
@@ -166,11 +146,9 @@ want to be able to call this function by passing it two string slices, and we
 want to get back a string slice. The code in Listing 10-19 should print `The
 longest string is abcd` once we've implemented the `longest` function:
 
-<figure>
-
 <span class="filename">Filename: src/main.rs</span>
 
-```rust
+```rust,ignore
 fn main() {
     let string1 = String::from("abcd");
     let string2 = "xyz";
@@ -180,13 +158,8 @@ fn main() {
 }
 ```
 
-<figcaption>
-
-Listing 10-19: A `main` function that calls the `longest` function to find the
-longest of two string slices
-
-</figcaption>
-</figure>
+<span class="caption">Listing 10-19: A `main` function that calls the `longest`
+function to find the longest of two string slices</span>
 
 Note that we want the function to take string slices (which are references, as
 we talked about in Chapter 4) since we don't want the `longest` function to
@@ -217,7 +190,6 @@ discussion about why these are the arguments we want.
 If we try to implement the `longest` function as shown in Listing 10-20, it
 won't compile:
 
-<figure>
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore
@@ -230,13 +202,9 @@ fn longest(x: &str, y: &str) -> &str {
 }
 ```
 
-<figcaption>
-
-Listing 10-20: An implementation of the `longest` function that returns the
-longest of two string slices, but does not yet compile
-
-</figcaption>
-</figure>
+<span class="caption">Listing 10-20: An implementation of the `longest`
+function that returns the longest of two string slices, but does not yet
+compile</span>
 
 Instead we get the following error that talks about lifetimes:
 
@@ -311,7 +279,6 @@ references in the parameters and the return value is that they all must have
 the same lifetime, which we'll name `'a` and add to each reference as shown in
 Listing 10-21:
 
-<figure>
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
@@ -324,13 +291,9 @@ fn longest<'a>(x: &'a str, y: &'a str) -> &'a str {
 }
 ```
 
-<figcaption>
-
-Listing 10-21: The `longest` function definition that specifies all the
-references in the signature must have the same lifetime, `'a`
-
-</figcaption>
-</figure>
+<span class="caption">Listing 10-21: The `longest` function definition that
+specifies all the references in the signature must have the same lifetime,
+`'a`</span>
 
 This will compile and will produce the result we want when used with the `main`
 function in Listing 10-19.
@@ -372,7 +335,6 @@ the end of the inner scope, and `result` references something that is valid
 until the end of the outer scope. The borrow checker approves of this code; it
 will compile and print `The longest string is long string is long` when run:
 
-<figure>
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
@@ -395,13 +357,8 @@ fn main() {
 }
 ```
 
-<figcaption>
-
-Listing 10-22: Using the `longest` function with references to `String` values
-that have different concrete lifetimes
-
-</figcaption>
-</figure>
+<span class="caption">Listing 10-22: Using the `longest` function with
+references to `String` values that have different concrete lifetimes</span>
 
 Next, let's try an example that will show that the lifetime of the reference in
 `result` must be the smaller lifetime of the two arguments. We'll move the
@@ -410,18 +367,9 @@ assignment of the value to the `result` variable inside the scope with
 `string2`. Next, we'll move the `println!` that uses `result` outside of the
 inner scope, after it has ended. The code in Listing 10-23 will not compile:
 
-<figure>
 <span class="filename">Filename: src/main.rs</span>
 
-```rust
-# fn longest<'a>(x: &'a str, y: &'a str) -> &'a str {
-#     if x.len() > y.len() {
-#         x
-#     } else {
-#         y
-#     }
-# }
-#
+```rust,ignore
 fn main() {
     let string1 = String::from("long string is long");
     let result;
@@ -433,13 +381,8 @@ fn main() {
 }
 ```
 
-<figcaption>
-
-Listing 10-23: Attempting to use `result` after `string2` has gone out of scope
-won't compile
-
-</figcaption>
-</figure>
+<span class="caption">Listing 10-23: Attempting to use `result` after `string2`
+has gone out of scope won't compile</span>
 
 If we try to compile this, we'll get this error:
 
@@ -550,7 +493,6 @@ for structs to hold references, but we need to add a lifetime annotation on
 every reference in the struct's definition. Listing 10-24 has a struct named
 `ImportantExcerpt` that holds a string slice:
 
-<figure>
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
@@ -567,13 +509,8 @@ fn main() {
 }
 ```
 
-<figcaption>
-
-Listing 10-24: A struct that holds a reference, so its definition needs a
-lifetime annotation
-
-</figcaption>
-</figure>
+<span class="caption">Listing 10-24: A struct that holds a reference, so its
+definition needs a lifetime annotation</span>
 
 This struct has one field, `part`, that holds a string slice, which is a
 reference. Just like with generic data types, we have to declare the name of
@@ -592,7 +529,6 @@ to specify lifetime parameters for functions or structs that use references.
 However, in Chapter 4 we had a function in the "String Slices" section, shown
 again in Listing 10-25, that compiled without lifetime annotations:
 
-<figure>
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust
@@ -609,13 +545,9 @@ fn first_word(s: &str) -> &str {
 }
 ```
 
-<figcaption>
-
-Listing 10-25: A function we defined in Chapter 4 that compiled without
-lifetime annotations, even though the parameter and return type are references
-
-</figcaption>
-</figure>
+<span class="caption">Listing 10-25: A function we defined in Chapter 4 that
+compiled without lifetime annotations, even though the parameter and return
+type are references</span>
 
 The reason this function compiles without lifetime annotations is historical:
 in early versions of pre-1.0 Rust, this indeed wouldn't have compiled. Every

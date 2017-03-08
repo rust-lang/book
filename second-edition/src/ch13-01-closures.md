@@ -6,7 +6,6 @@ closures look like, syntactically, and then we'll return to defining what they
 are. Listing 13-1 shows a small closure whose definition is assigned to the
 variable `add_one`, which we can then use to call the closure:
 
-<figure>
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
@@ -19,13 +18,8 @@ fn main() {
 }
 ```
 
-<figcaption>
-
-Listing 13-1: A closure that takes one parameter and adds one to it, assigned to
-the variable `add_one`
-
-</figcaption>
-</figure>
+<span class="caption">Listing 13-1: A closure that takes one parameter and adds
+one to it, assigned to the variable `add_one`</span>
 
 The closure definition, on the first line, shows that the closure takes one
 parameter named `x`. Parameters to closures go in between vertical pipes (`|`).
@@ -33,7 +27,6 @@ parameter named `x`. Parameters to closures go in between vertical pipes (`|`).
 This is a minimal closure with only one expression as its body. Listing 13-2 has
 a closure with a bit more complexity:
 
-<figure>
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
@@ -51,12 +44,8 @@ fn main() {
 }
 ```
 
-<figcaption>
-
-Listing 13-2: A closure with two parameters and multiple expressions in its body
-
-</figcaption>
-</figure>
+<span class="caption">Listing 13-2: A closure with two parameters and multiple
+expressions in its body</span>
 
 We can use curly brackets to define a closure body with more than one
 expression.
@@ -68,7 +57,6 @@ We can choose to add type annotations if we want; Listing 13-3 shows the
 closure from Listing 13-1 with annotations for the parameter's and return
 value's types:
 
-<figure>
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
@@ -79,13 +67,8 @@ fn main() {
 }
 ```
 
-<figcaption>
-
-Listing 13-3: A closure definition with optional parameter and return value
-type annotations
-
-</figcaption>
-</figure>
+<span class="caption">Listing 13-3: A closure definition with optional
+parameter and return value type annotations</span>
 
 The syntax of closures and functions looks more similar with type annotations.
 Let's compare the different ways we can specify closures with the syntax for
@@ -147,7 +130,6 @@ allowed to access variables from their enclosing scope. Listing 13-4 has an
 example of a closure in the variable `equal_to_x` that uses the variable `x`
 from the closure's surrounding environment:
 
-<figure>
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
@@ -162,13 +144,8 @@ fn main() {
 }
 ```
 
-<figcaption>
-
-Listing 13-4: Example of a closure that refers to a variable in its enclosing
-scope
-
-</figcaption>
-</figure>
+<span class="caption">Listing 13-4: Example of a closure that refers to a
+variable in its enclosing scope</span>
 
 Here, even though `x` is not one of the parameters of `equal_to_x`, the
 `equal_to_x` closure is allowed to use `x`, since `x` is a variable defined in

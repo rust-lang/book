@@ -5,8 +5,6 @@ handle values that match one pattern and ignore the rest. Consider the program
 in Listing 6-6 that matches on an `Option<u8>` value but only wants to execute
 code if the value is three:
 
-<figure>
-
 ```rust
 let some_u8_value = Some(0u8);
 match some_u8_value {
@@ -15,13 +13,8 @@ match some_u8_value {
 }
 ```
 
-<figcaption>
-
-Listing 6-6: A `match` that only cares about executing code when the value is
-`Some(3)`
-
-</figcaption>
-</figure>
+<span class="caption">Listing 6-6: A `match` that only cares about executing
+code when the value is `Some(3)`</span>
 
 We want to do something with the `Some(3)` match but do nothing with any other
 `Some<u8>` value or the `None` value. To satisfy the `match` expression, we

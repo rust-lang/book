@@ -31,7 +31,6 @@ value and error value we want to return may differ.
 Let’s call a function that returns a `Result` value because the function could
 fail: opening a file, shown in Listing 9-2.
 
-<figure>
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
@@ -42,12 +41,7 @@ fn main() {
 }
 ```
 
-<figcaption>
-
-Listing 9-2: Opening a file
-
-</figcaption>
-</figure>
+<span class="caption">Listing 9-2: Opening a file</span>
 
 How do we know `File::open` returns a `Result`? We could look at the standard
 library API documentation, or we could ask the compiler! If we give `f` a type
@@ -98,7 +92,6 @@ on the value `File::open` returned. Listing 9-3 shows one way to handle the
 `Result` with a basic tool: the `match` expression that we learned about in
 Chapter 6.
 
-<figure>
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,should_panic
@@ -116,13 +109,8 @@ fn main() {
 }
 ```
 
-<figcaption>
-
-Listing 9-3: Using a `match` expression to handle the `Result` variants we
-might have
-
-</figcaption>
-</figure>
+<span class="caption">Listing 9-3: Using a `match` expression to handle the
+`Result` variants we might have</span>
 
 Note that, like the `Option` enum, the `Result` enum and its variants have been
 imported in the prelude, so we don’t need to specify `Result::` before the `Ok`
@@ -154,7 +142,6 @@ permission to open the file, we still want to `panic!` in the same way as we
 did in Listing 9-3. Let’s look at Listing 9-4, which adds another arm to the
 `match`:
 
-<figure>
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore
@@ -187,12 +174,8 @@ fn main() {
 }
 ```
 
-<figcaption>
-
-Listing 9-4: Handling different kinds of errors in different ways
-
-</figcaption>
-</figure>
+<span class="caption">Listing 9-4: Handling different kinds of errors in
+different ways</span>
 
 The type of the value that `File::open` returns inside the `Err` variant is
 `io::Error`, which is a struct provided by the standard library. This struct
@@ -284,8 +267,6 @@ For example, Listing 9-5 shows a function that reads a username from a file. If
 the file doesn’t exist or can’t be read, this function will return those errors
 to the code that called this function:
 
-<figure>
-
 ```rust
 use std::io;
 use std::io::Read;
@@ -308,12 +289,8 @@ fn read_username_from_file() -> Result<String, io::Error> {
 }
 ```
 
-<figcaption>
-
-Listing 9-5: A function that returns errors to the calling code using `match`
-
-</figcaption>
-</figure>
+<span class="caption">Listing 9-5: A function that returns errors to the
+calling code using `match`</span>
 
 Let’s look at the return type of the function first: `Result<String,
 io::Error>`. This means that the function is returning a value of the type
@@ -365,10 +342,9 @@ Listing 9-6 shows an implementation of `read_username_from_file` that has the
 same functionality as it had in Listing 9-5, but this implementation uses the
 question mark operator:
 
-<figure>
-
 ```rust
 use std::io;
+use std::io::Read;
 use std::fs::File;
 
 fn read_username_from_file() -> Result<String, io::Error> {
@@ -379,12 +355,8 @@ fn read_username_from_file() -> Result<String, io::Error> {
 }
 ```
 
-<figcaption>
-
-Listing 9-6: A function that returns errors to the calling code using `?`
-
-</figcaption>
-</figure>
+<span class="caption">Listing 9-6: A function that returns errors to the
+calling code using `?`</span>
 
 The `?` placed after a `Result` value is defined to work the exact same way as
 the `match` expressions we defined to handle the `Result` values in Listing

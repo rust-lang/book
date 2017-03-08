@@ -16,7 +16,6 @@ test will fail with our placeholder implementation, of course, but we can make
 sure the code compiles and that we get the failure message we expect. Listing
 12-14 shows these modifications:
 
-<figure>
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust
@@ -66,13 +65,8 @@ Pick three.";
 }
 ```
 
-<figcaption>
-
-Listing 12-14: Creating a function where our logic will go and a failing test
-for that function
-
-</figcaption>
-</figure>
+<span class="caption">Listing 12-14: Creating a function where our logic will
+go and a failing test for that function</span>
 
 <!-- Will add ghosting and wingdings in libreoffice /Carol -->
 
@@ -132,7 +126,6 @@ failures:
 (left: `["safe, fast, productive."]`, right: `[]`)', src/lib.rs:16
 note: Run with `RUST_BACKTRACE=1` for a backtrace.
 
-
 failures:
     test::one_result
 
@@ -190,7 +183,6 @@ that, we can make a mutable vector before the `for` loop and call the `push`
 method to store a `line` in the vector. After the `for` loop, we return the
 vector. Listing 12-15 has the full implementation:
 
-<figure>
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust
@@ -207,12 +199,8 @@ fn grep<'a>(search: &str, contents: &'a str) -> Vec<&'a str> {
 }
 ```
 
-<figcaption>
-
-Listing 12-15: Fully functioning implementation of the `grep` function
-
-</figcaption>
-</figure>
+<span class="caption">Listing 12-15: Fully functioning implementation of the
+`grep` function</span>
 
 <!-- Will add ghosting and wingdings in libreoffice /Carol -->
 

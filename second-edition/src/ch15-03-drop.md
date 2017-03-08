@@ -28,7 +28,6 @@ instance goes out of scope so that we can see when each piece of code gets run.
 Instead of a `println!` statement, you'd fill in `drop` with whatever cleanup
 code your smart pointer needs to run:
 
-<figure>
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
@@ -49,13 +48,9 @@ fn main() {
 }
 ```
 
-<figcaption>
-
-Listing 15-8: A `CustomSmartPointer` struct that implements the `Drop` trait,
-where we could put code that would clean up after the `CustomSmartPointer`.
-
-</figcaption>
-</figure>
+<span class="caption">Listing 15-8: A `CustomSmartPointer` struct that
+implements the `Drop` trait, where we could put code that would clean up after
+the `CustomSmartPointer`.</span>
 
 The `Drop` trait is in the prelude, so we don't need to import it. The `drop`
 method implementation calls the `println!`; this is where you'd put the actual
@@ -84,7 +79,6 @@ in Chapter 16 when we're talking about concurrency. For now, let's just see
 that it's possible, and `std::mem::drop` is in the prelude so we can just call
 `drop` as shown in Listing 15-9:
 
-<figure>
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore
@@ -96,13 +90,8 @@ fn main() {
 }
 ```
 
-<figcaption>
-
-Listing 15-9: Calling `std::mem::drop` to explicitly drop a value before it
-goes out of scope
-
-</figcaption>
-</figure>
+<span class="caption">Listing 15-9: Calling `std::mem::drop` to explicitly drop
+a value before it goes out of scope</span>
 
 Running this code will print the following, showing that the destructor code is
 called since `Dropping CustomSmartPointer!` is printed between

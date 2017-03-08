@@ -76,7 +76,6 @@ The first part of the program will ask for user input, process that input, and
 check that the input is in the expected form. To start, we’ll allow the player
 to input a guess. Enter the code in Listing 2-1 into *src/main.rs*.
 
-<figure>
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore
@@ -96,12 +95,7 @@ fn main() {
 }
 ```
 
-<figcaption>
-
-Listing 2-1: Code to get a guess from the user and print it out
-
-</figcaption>
-</figure>
+<span class="caption">Listing 2-1: Code to get a guess from the user and print it out</span>
 
 This code contains a lot of information, so let’s go over it bit by bit. To
 obtain user input and then print the result as output, we need to bring the
@@ -387,8 +381,6 @@ version 0.3.14.”
 Now, without changing any of the code, let’s build the project, as shown in
 Listing 2-2:
 
-<figure>
-
 ```text
 $ cargo build
     Updating registry `https://github.com/rust-lang/crates.io-index`
@@ -399,13 +391,8 @@ $ cargo build
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
 ```
 
-<figcaption>
-
-Listing 2-2: The output from running `cargo build` after adding the rand crate
-as a dependency
-
-</figcaption>
-</figure>
+<span class="caption">Listing 2-2: The output from running `cargo build` after
+adding the rand crate as a dependency</span>
 
 You may see different version numbers (but they will all be compatible with
 the code, thanks to SemVer!), and the lines may be in a different order.
@@ -510,7 +497,6 @@ number of packages.
 Let’s start *using* `rand`. The next step is to update *src/main.rs*, as shown
 in Listing 2-3:
 
-<figure>
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore
@@ -537,12 +523,8 @@ fn main() {
 }
 ```
 
-<figcaption>
-
-Listing 2-3: Code changes needed in order to generate a random number
-
-</figcaption>
-</figure>
+<span class="caption">Listing 2-3: Code changes needed in order to generate a
+random number</span>
 
 We’re adding a `extern crate rand;` line to the top that lets Rust know we’ll be
 using that external dependency. This also does the equivalent of calling `use
@@ -604,7 +586,6 @@ You should get different random numbers, and they should all be numbers between
 Now that we have user input and a random number, we can compare them. That
 step is shown in Listing 2-4:
 
-<figure>
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore
@@ -638,12 +619,8 @@ fn main() {
 }
 ```
 
-<figcaption>
-
-Listing 2-4: Handling the possible return values of comparing two numbers
-
-</figcaption>
-</figure>
+<span class="caption">Listing 2-4: Handling the possible return values of
+comparing two numbers</span>
 
 The first new bit here is another `use`, bringing a type called
 `std::cmp::Ordering` into scope from the standard library. `Ordering` is
@@ -1030,7 +1007,6 @@ that the program is still printing out the secret number. That worked well for
 testing, but it ruins the game. Let’s delete the `println!` that outputs the
 secret number. Listing 2-5 shows the final code:
 
-<figure>
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore
@@ -1072,12 +1048,7 @@ fn main() {
 }
 ```
 
-<figcaption>
-
-Listing 2-5: Complete code of the guessing game
-
-</figcaption>
-</figure>
+<span class="caption">Listing 2-5: Complete code of the guessing game</span>
 
 ## Summary
 

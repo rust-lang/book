@@ -226,7 +226,6 @@ Overall, these are the rules for item visibility:
 Let’s look at a few more examples to get some practice. Create a new library
 project and enter the code in Listing 7-5 into your new project’s *src/lib.rs*:
 
-<figure>
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust,ignore
@@ -250,13 +249,8 @@ fn try_me() {
 }
 ```
 
-<figcaption>
-
-Listing 7-5: Examples of private and public functions, some of which are
-incorrect
-
-</figcaption>
-</figure>
+<span class="caption">Listing 7-5: Examples of private and public functions,
+some of which are incorrect</span>
 
 Before you try to compile this code, make a guess about which lines in `try_me`
 function will have errors. Then try compiling to see if you were right, and

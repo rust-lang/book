@@ -30,7 +30,6 @@ ask for that summary by calling a `summary` method on an instance. Listing
 10-11 shows the definition of a `Summarizable` trait that expresses this
 concept:
 
-<figure>
 <span class="filename">Filename: lib.rs</span>
 
 ```rust
@@ -39,13 +38,8 @@ pub trait Summarizable {
 }
 ```
 
-<figcaption>
-
-Listing 10-11: Definition of a `Summarizable` trait that consists of the
-behavior provided by a `summary` method
-
-</figcaption>
-</figure>
+<span class="caption">Listing 10-11: Definition of a `Summarizable` trait that
+consists of the behavior provided by a `summary` method</span>
 
 We declare a trait with the `trait` keyword, then the trait's name, in this
 case `Summarizable`. Inside curly braces we declare the method signatures that
@@ -70,7 +64,6 @@ of `summary`. For the `Tweet` struct, we've chosen to define `summary` as the
 username followed by the whole text of the tweet, assuming that tweet content
 is already limited to 140 characters.
 
-<figure>
 <span class="filename">Filename: lib.rs</span>
 
 ```rust
@@ -105,13 +98,8 @@ impl Summarizable for Tweet {
 }
 ```
 
-<figcaption>
-
-Listing 10-12: Implementing the `Summarizable` trait on the `NewsArticle` and
-`Tweet` types
-
-</figcaption>
-</figure>
+<span class="caption">Listing 10-12: Implementing the `Summarizable` trait on
+the `NewsArticle` and `Tweet` types</span>
 
 Implementing a trait on a type is similar to implementing methods that aren't
 related to a trait. The difference is after `impl`, we put the trait name that
@@ -148,7 +136,6 @@ someone else wants to use our crate's functionality plus implement the
 to import the `Summarizable` trait into their scope first before they could
 implement it, like in Listing 10-13:
 
-<figure>
 <span class="filename">Filename: lib.rs</span>
 
 ```rust,ignore
@@ -171,13 +158,8 @@ impl Summarizable for WeatherForecast {
 }
 ```
 
-<figcaption>
-
-Listing 10-13: Bringing the `Summarizable` trait from our `aggregator` crate
-into scope in another crate
-
-</figcaption>
-</figure>
+<span class="caption">Listing 10-13: Bringing the `Summarizable` trait from our
+`aggregator` crate into scope in another crate</span>
 
 This code also assumes `Summarizable` is a public trait, which it is because we
 put the `pub` keyword before `trait` in Listing 10-11.
@@ -208,7 +190,6 @@ Listing 10-14 shows how we could have chosen to specify a default string for
 the `summary` method of the `Summarize` trait instead of only choosing to only
 define the method signature like we did in Listing 10-11:
 
-<figure>
 <span class="filename">Filename: lib.rs</span>
 
 ```rust
@@ -219,13 +200,8 @@ pub trait Summarizable {
 }
 ```
 
-<figcaption>
-
-Listing 10-14: Definition of a `Summarizable` trait with a default
-implementation of the `summary` method
-
-</figcaption>
-</figure>
+<span class="caption">Listing 10-14: Definition of a `Summarizable` trait with
+a default implementation of the `summary` method</span>
 
 If we wanted to use this default implementation to summarize instances of
 `NewsArticle` instead of defining a custom implementation like we did in
@@ -434,7 +410,6 @@ a generic `largest` function that will compile as long as the types of the
 values in the slice that we pass into `largest` implement both the `PartialOrd`
 and `Copy` traits, like `i32` and `char`:
 
-<figure>
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
@@ -465,13 +440,9 @@ fn main() {
 }
 ```
 
-<figcaption>
-
-Listing 10-15: A working definition of the `largest` function that works on any
-generic type that implements the `PartialOrd` and `Copy` traits
-
-</figcaption>
-</figure>
+<span class="caption">Listing 10-15: A working definition of the `largest`
+function that works on any generic type that implements the `PartialOrd` and
+`Copy` traits</span>
 
 If we don't want to restrict our `largest` function to only types that
 implement the `Copy` trait, we could specify that `T` has the trait bound

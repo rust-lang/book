@@ -116,8 +116,6 @@ hardcoded into the text of our program. The variable is valid from the point at
 which it’s declared until the end of the current *scope*. Listing 4-1 has
 comments annotating where the variable `s` is valid:
 
-<figure>
-
 ```rust
 {                      // s is not valid here, it’s not yet declared
     let s = "hello";   // s is valid from this point forward
@@ -126,12 +124,8 @@ comments annotating where the variable `s` is valid:
 }                      // this scope is now over, and s is no longer valid
 ```
 
-<figcaption>
-
-Listing 4-1: A variable and the scope in which it is valid
-
-</figcaption>
-</figure>
+<span class="caption">Listing 4-1: A variable and the scope in which it is
+valid</span>
 
 In other words, there are two important points in time here:
 
@@ -253,19 +247,13 @@ we’ve allocated on the heap. Let’s explore some of those situations now.
 Multiple variables can interact with the same data in different ways in Rust.
 Let’s look at an example using an integer in Listing 4-2:
 
-<figure>
-
 ```rust
 let x = 5;
 let y = x;
 ```
 
-<figcaption>
-
-Listing 4-2: Assigning the integer value of variable `x` to `y`
-
-</figcaption>
-</figure>
+<span class="caption">Listing 4-2: Assigning the integer value of variable `x`
+to `y`</span>
 
 We can probably guess what this is doing based on our experience with other
 languages: “Bind the value `5` to `x`; then make a copy of the value in `x` and
@@ -290,16 +278,10 @@ left: a pointer to the memory that holds the contents of the string, a length,
 and a capacity. This group of data is stored on the stack. On the right is the
 memory on the heap that holds the contents.
 
-<figure>
 <img alt="String in memory" src="img/trpl04-01.svg" class="center" style="width: 50%;" />
 
-<figcaption>
-
-Figure 4-3: Representation in memory of a `String` holding the value `"hello"`
-bound to `s1`
-
-</figcaption>
-</figure>
+<span class="caption">Figure 4-3: Representation in memory of a `String`
+holding the value `"hello"` bound to `s1`</span>
 
 The length is how much memory, in bytes, the contents of the `String` is
 currently using. The capacity is the total amount of memory, in bytes, that the
@@ -312,32 +294,20 @@ pointer, the length, and the capacity that are on the stack. We do not copy the
 data on the heap that the pointer refers to. In other words, the data
 representation in memory looks like Figure 4-4.
 
-<figure>
 <img alt="s1 and s2 pointing to the same value" src="img/trpl04-02.svg" class="center" style="width: 50%;" />
 
-<figcaption>
-
-Figure 4-4: Representation in memory of the variable `s2` that has a copy of
-the pointer, length, and capacity of `s1`
-
-</figcaption>
-</figure>
+<span class="caption">Figure 4-4: Representation in memory of the variable `s2`
+that has a copy of the pointer, length, and capacity of `s1`</span>
 
 The representation does *not* look like Figure 4-5, which is what memory would
 look like if Rust instead copied the heap data as well. If Rust did this, the
 operation `s2 = s1` could potentially be very expensive in terms of runtime
 performance if the data on the heap was large.
 
-<figure>
 <img alt="s1 and s2 to two places" src="img/trpl04-03.svg" class="center" style="width: 50%;" />
 
-<figcaption>
-
-Figure 4-5: Another possibility of what `s2 = s1` might do if Rust copied the
-heap data as well
-
-</figcaption>
-</figure>
+<span class="caption">Figure 4-5: Another possibility of what `s2 = s1` might
+do if Rust copied the heap data as well</span>
 
 Earlier, we said that when a variable goes out of scope, Rust automatically
 calls the `drop` function and cleans up the heap memory for that variable. But
@@ -383,15 +353,10 @@ also invalidates the first variable, instead of calling this a shallow copy,
 it’s known as a *move*. Here we would read this by saying that `s1` was *moved*
 into `s2`. So what actually happens is shown in Figure 4-6.
 
-<figure>
 <img alt="s1 moved to s2" src="img/trpl04-04.svg" class="center" style="width: 50%;" />
 
-<figcaption>
-
-Figure 4-6: Representation in memory after `s1` has been invalidated
-
-</figcaption>
-</figure>
+<span class="caption">Figure 4-6: Representation in memory after `s1` has been
+invalidated</span>
 
 That solves our problem! With only `s2` valid, when it goes out of scope, it
 alone will free the memory, and we’re done.
@@ -471,7 +436,6 @@ value to a variable. Passing a variable to a function will move or copy, just
 like assignment. Listing 4-7 has an example with some annotations showing where
 variables go into and out of scope:
 
-<figure>
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
@@ -499,12 +463,8 @@ fn makes_copy(some_integer: i32) { // some_integer comes into scope.
 } // Here, some_integer goes out of scope. Nothing special happens.
 ```
 
-<figcaption>
-
-Listing 4-7: Functions with ownership and scope annotated
-
-</figcaption>
-</figure>
+<span class="caption">Listing 4-7: Functions with ownership and scope
+annotated</span>
 
 If we tried to use `s` after the call to `takes_ownership`, Rust would throw a
 compile time error. These static checks protect us from mistakes. Try adding

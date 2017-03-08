@@ -56,14 +56,9 @@ only to parse arguments. Listing 12-4 shows the new start of `main` that calls
 a new function `parse_config`, which we're still going to define in
 *src/main.rs*:
 
-<figure>
 <span class="filename">Filename: src/main.rs</span>
 
-```rust
-# use std::env;
-# use std::fs::File;
-# use std::io::prelude::*;
-#
+```rust,ignore
 fn main() {
     let args: Vec<String> = env::args().collect();
 
@@ -73,13 +68,6 @@ fn main() {
     println!("In file {}", filename);
 
     // ...snip...
-#
-#     let mut f = File::open(filename).expect("file not found");
-#
-#     let mut contents = String::new();
-#     f.read_to_string(&mut contents).expect("something went wrong reading the file");
-#
-#     println!("With text:\n{}", contents);
 }
 
 fn parse_config(args: &[String]) -> (&str, &str) {
@@ -90,12 +78,8 @@ fn parse_config(args: &[String]) -> (&str, &str) {
 }
 ```
 
-<figcaption>
-
-Listing 12-4: Extract a `parse_config` function from `main`
-
-</figcaption>
-</figure>
+<span class="caption">Listing 12-4: Extract a `parse_config` function from
+`main`</span>
 
 <!-- Will add ghosting and wingdings in libreoffice /Carol -->
 
@@ -121,14 +105,9 @@ Let's introduce a struct to hold all of our configuration. Listing 12-5 shows
 the addition of the `Config` struct definition, the refactoring of
 `parse_config`, and updates to `main`:
 
-<figure>
 <span class="filename">Filename: src/main.rs</span>
 
-```rust
-# use std::env;
-# use std::fs::File;
-# use std::io::prelude::*;
-#
+```rust,ignore
 fn main() {
     let args: Vec<String> = env::args().collect();
 
@@ -140,10 +119,6 @@ fn main() {
     let mut f = File::open(config.filename).expect("file not found");
 
     // ...snip...
-#     let mut contents = String::new();
-#     f.read_to_string(&mut contents).expect("something went wrong reading the file");
-#
-#    println!("With text:\n{}", contents);
 }
 
 struct Config {
@@ -162,13 +137,8 @@ fn parse_config(args: &[String]) -> Config {
 }
 ```
 
-<figcaption>
-
-Listing 12-5: Refactoring `parse_config` to return an instance of a `Config`
-struct
-
-</figcaption>
-</figure>
+<span class="caption">Listing 12-5: Refactoring `parse_config` to return an
+instance of a `Config` struct</span>
 
 <!-- Will add ghosting and wingdings in libreoffice /Carol -->
 
@@ -217,14 +187,9 @@ create instances: a `new` function, like `String::new`. Listing 12-6 shows the
 result of transforming `parse_config` into a `new` function associated with our
 `Config` struct:
 
-<figure>
 <span class="filename">Filename: src/main.rs</span>
 
-```rust
-# use std::env;
-# use std::fs::File;
-# use std::io::prelude::*;
-#
+```rust,ignore
 fn main() {
     let args: Vec<String> = env::args().collect();
 
@@ -234,21 +199,8 @@ fn main() {
     println!("In file {}", config.filename);
 
     // ...snip...
-
-#     let mut f = File::open(config.filename).expect("file not found");
-#
-#     let mut contents = String::new();
-#     f.read_to_string(&mut contents).expect("something went wrong reading the file");
-#
-#    println!("With text:\n{}", contents);
-
 }
 
-# struct Config {
-#     search: String,
-#     filename: String,
-# }
-#
 // ...snip...
 
 impl Config {
@@ -264,12 +216,8 @@ impl Config {
 }
 ```
 
-<figcaption>
-
-Listing 12-6: Changing `parse_config` into `Config::new`
-
-</figcaption>
-</figure>
+<span class="caption">Listing 12-6: Changing `parse_config` into
+`Config::new`</span>
 
 <!-- Will add ghosting and wingdings in libreoffice /Carol -->
 
@@ -285,36 +233,9 @@ error message? Let's fix that! Listing 12-7 shows how we can check that our
 slice is long enough before accessing those locations, and panic with a better
 error message:
 
-<figure>
 <span class="filename">Filename: src/main.rs</span>
 
-```rust
-# use std::env;
-# use std::fs::File;
-# use std::io::prelude::*;
-#
-# fn main() {
-#     let args: Vec<String> = env::args().collect();
-#
-#     let config = Config::new(&args);
-#
-#     println!("Searching for {}", config.search);
-#     println!("In file {}", config.filename);
-#
-#     let mut f = File::open(config.filename).expect("file not found");
-#
-#     let mut contents = String::new();
-#     f.read_to_string(&mut contents).expect("something went wrong reading the file");
-#
-#     println!("With text:\n{}", contents);
-# }
-#
-# struct Config {
-#     search: String,
-#     filename: String,
-# }
-#
-# impl Config {
+```rust,ignore
 // ...snip...
 fn new(args: &[String]) -> Config {
     if args.len() < 3 {
@@ -323,22 +244,11 @@ fn new(args: &[String]) -> Config {
 
     let search = args[1].clone();
     // ...snip...
-#     let filename = args[2].clone();
-#
-#     Config {
-#         search: search,
-#         filename: filename,
-#     }
 }
-# }
 ```
 
-<figcaption>
-
-Listing 12-7: Adding a check for the number of arguments
-
-</figcaption>
-</figure>
+<span class="caption">Listing 12-7: Adding a check for the number of
+arguments</span>
 
 <!-- Will add ghosting and wingdings in libreoffice /Carol -->
 
@@ -360,38 +270,9 @@ now, it returns only a `Config`, so there's no way to indicate that an error
 happened while creating our `Config`. Instead, we can return a `Result`, as
 shown in Listing 12-8:
 
-<figure>
 <span class="filename">Filename: src/main.rs</span>
 
-```rust
-# use std::env;
-# use std::fs::File;
-# use std::io::prelude::*;
-# use std::process;
-#
-# fn main() {
-#     let args: Vec<String> = env::args().collect();
-#
-#     let config = Config::new(&args).unwrap_or_else(|err| {
-#         println!("Problem parsing arguments: {}", err);
-#         process::exit(1);
-#     });
-#
-#     println!("Searching for {}", config.search);
-#     println!("In file {}", config.filename);
-#
-#     let mut f = File::open(config.filename).expect("file not found");
-#
-#     let mut contents = String::new();
-#     f.read_to_string(&mut contents).expect("something went wrong reading the file");
-#
-#     println!("With text:\n{}", contents);
-# }
-# struct Config {
-#     search: String,
-#     filename: String,
-# }
-#
+```rust,ignore
 impl Config {
     fn new(args: &[String]) -> Result<Config, &'static str> {
         if args.len() < 3 {
@@ -409,12 +290,7 @@ impl Config {
 }
 ```
 
-<figcaption>
-
-Listing 12-8: Return a `Result` from `Config::new`
-
-</figcaption>
-</figure>
+<span class="caption">Listing 12-8: Return a `Result` from `Config::new`</span>
 
 <!-- Will add ghosting and wingdings in libreoffice /Carol -->
 
@@ -432,13 +308,9 @@ conform to its new type signature.
 
 Now we need to make some changes to `main` as shown in Listing 12-9:
 
-<figure>
 <span class="filename">Filename: src/main.rs</span>
 
-```rust
-# use std::env;
-# use std::fs::File;
-# use std::io::prelude::*;
+```rust,ignore
 // ...snip...
 use std::process;
 
@@ -454,43 +326,10 @@ fn main() {
     println!("In file {}", config.filename);
 
     // ...snip...
-#
-#     let mut f = File::open(config.filename).expect("file not found");
-#
-#     let mut contents = String::new();
-#     f.read_to_string(&mut contents).expect("something went wrong reading the file");
-#
-#     println!("With text:\n{}", contents);
-# }
-#
-# struct Config {
-#     search: String,
-#     filename: String,
-# }
-#
-# impl Config {
-#     fn new(args: &[String]) -> Result<Config, &'static str> {
-#         if args.len() < 3 {
-#             return Err("not enough arguments");
-#         }
-#
-#         let search = args[1].clone();
-#         let filename = args[2].clone();
-#
-#         Ok(Config {
-#             search: search,
-#             filename: filename,
-#         })
-#     }
-# }
 ```
 
-<figcaption>
-
-Listing 12-9: Exiting with an error code if creating a new `Config` fails
-
-</figcaption>
-</figure>
+<span class="caption">Listing 12-9: Exiting with an error code if creating a
+new `Config` fails</span>
 
 <!-- Will add ghosting and wingdings in libreoffice /Carol -->
 
@@ -534,22 +373,10 @@ program's logic. Listing 12-10 shows the code after extracting a function named
 `run` that we'll call from `main`. The `run` function contains the code that
 was in `main`:
 
-<figure>
 <span class="filename">Filename: src/main.rs</span>
 
-```rust
-# use std::env;
-# use std::fs::File;
-# use std::io::prelude::*;
-# use std::process;
-#
+```rust,ignore
 fn main() {
-#     let args: Vec<String> = env::args().collect();
-#
-#     let config = Config::new(&args).unwrap_or_else(|err| {
-#         println!("Problem parsing arguments: {}", err);
-#         process::exit(1);
-#     });
     // ...snip...
 
     println!("Searching for {}", config.search);
@@ -568,35 +395,10 @@ fn run(config: Config) {
 }
 
 // ...snip...
-#
-# struct Config {
-#     search: String,
-#     filename: String,
-# }
-#
-# impl Config {
-#     fn new(args: &[String]) -> Result<Config, &'static str> {
-#         if args.len() < 3 {
-#             return Err("not enough arguments");
-#         }
-#
-#         let search = args[1].clone();
-#         let filename = args[2].clone();
-#
-#         Ok(Config {
-#             search: search,
-#             filename: filename,
-#         })
-#     }
-# }
 ```
 
-<figcaption>
-
-Listing 12-10: Extracting a `run` functionality for the rest of the program logic
-
-</figcaption>
-</figure>
+<span class="caption">Listing 12-10: Extracting a `run` functionality for the
+rest of the program logic</span>
 
 <!-- Will add ghosting and wingdings in libreoffice /Carol -->
 
@@ -608,31 +410,12 @@ Listing 12-8: let's return a `Result<T, E>` instead of calling `panic!` via
 `std::error::Error` struct into scope and the changes to the `run` function
 to return a `Result`:
 
-<figure>
 <span class="filename">Filename: src/main.rs</span>
 
-```rust
+```rust,ignore
 use std::error::Error;
-# use std::env;
-# use std::fs::File;
-# use std::io::prelude::*;
-# use std::process;
 
 // ...snip...
-# fn main() {
-#     let args: Vec<String> = env::args().collect();
-#
-#     let config = Config::new(&args).unwrap_or_else(|err| {
-#         println!("Problem parsing arguments: {}", err);
-#         process::exit(1);
-#     });
-#
-#     println!("Searching for {}", config.search);
-#     println!("In file {}", config.filename);
-#
-#     run(config);
-#
-# }
 
 fn run(config: Config) -> Result<(), Box<Error>> {
     let mut f = File::open(config.filename)?;
@@ -644,35 +427,10 @@ fn run(config: Config) -> Result<(), Box<Error>> {
 
     Ok(())
 }
-#
-# struct Config {
-#     search: String,
-#     filename: String,
-# }
-#
-# impl Config {
-#     fn new(args: &[String]) -> Result<Config, &'static str> {
-#         if args.len() < 3 {
-#             return Err("not enough arguments");
-#         }
-#
-#         let search = args[1].clone();
-#         let filename = args[2].clone();
-#
-#         Ok(Config {
-#             search: search,
-#             filename: filename,
-#         })
-#     }
-# }
 ```
 
-<figcaption>
-
-Listing 12-11: Changing the `run` function to return `Result`
-
-</figcaption>
-</figure>
+<span class="caption">Listing 12-11: Changing the `run` function to return
+`Result`</span>
 
 <!-- Will add ghosting and wingdings in libreoffice /Carol -->
 
@@ -768,10 +526,9 @@ also need to move the relevant `use` statements and the definition of `Config`
 and its `new` method as well. Your *src/lib.rs* should now look like Listing
 12-12:
 
-<figure>
 <span class="filename">Filename: src/lib.rs</span>
 
-```rust
+```rust,ignore
 use std::error::Error;
 use std::fs::File;
 use std::io::prelude::*;
@@ -809,12 +566,8 @@ pub fn run(config: Config) -> Result<(), Box<Error>>{
 }
 ```
 
-<figcaption>
-
-Listing 12-12: Moving `Config` and `run` into *src/lib.rs*
-
-</figcaption>
-</figure>
+<span class="caption">Listing 12-12: Moving `Config` and `run` into
+*src/lib.rs*</span>
 
 <!-- Will add ghosting and wingdings in libreoffice /Carol -->
 
@@ -826,7 +579,6 @@ through `extern crate greprs`. Then we need to add a `use greprs::Config` line
 to bring `Config` into scope, and prefix the `run` function with our crate name
 as shown in Listing 12-13:
 
-<figure>
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore
@@ -856,12 +608,8 @@ fn main() {
 }
 ```
 
-<figcaption>
-
-Listing 12-13: Bringing the `greprs` crate into the scope of *src/main.rs*
-
-</figcaption>
-</figure>
+<span class="caption">Listing 12-13: Bringing the `greprs` crate into the scope
+of *src/main.rs*</span>
 
 <!-- Will add ghosting and wingdings in libreoffice /Carol -->
 

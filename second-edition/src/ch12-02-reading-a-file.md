@@ -27,10 +27,9 @@ welcome. /Carol -->
 With that in place, let's edit *src/main.rs* and add code to open the file as
 shown in Listing 12-3:
 
-<figure>
 <span class="filename">Filename: src/main.rs</span>
 
-```rust
+```rust,ignore
 use std::env;
 use std::fs::File;
 use std::io::prelude::*;
@@ -53,12 +52,8 @@ fn main() {
 }
 ```
 
-<figcaption>
-
-Listing 12-3: Read the contents of the file specified by the second argument
-
-</figcaption>
-</figure>
+<span class="caption">Listing 12-3: Read the contents of the file specified by
+the second argument</span>
 
 <!-- Will add ghosting and wingdings in libreoffice /Carol -->
 

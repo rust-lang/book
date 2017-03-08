@@ -18,7 +18,6 @@ providing the same functionality to find the largest value in a slice. The
 first function is the one we extracted in Listing 10-3 that finds the largest
 `i32` in a slice. The second function finds the largest `char` in a slice:
 
-<figure>
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
@@ -61,13 +60,8 @@ fn main() {
 }
 ```
 
-<figcaption>
-
-Listing 10-4: Two functions that differ only in their names and the types in
-their signatures
-
-</figcaption>
-</figure>
+<span class="caption">Listing 10-4: Two functions that differ only in their
+names and the types in their signatures</span>
 
 Here, the functions `largest_i32` and `largest_char` have the exact same body,
 so it would be nice if we could turn these two functions into one and get rid
@@ -105,7 +99,6 @@ data type in its signature, and shows how we'll be able to call `largest` with
 either a slice of `i32` values or `char` values. Note that this code won't
 compile yet!
 
-<figure>
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore
@@ -134,13 +127,8 @@ fn main() {
 }
 ```
 
-<figcaption>
-
-Listing 10-5: A definition of the `largest` function that uses generic type
-parameters but doesn't compile yet
-
-</figcaption>
-</figure>
+<span class="caption">Listing 10-5: A definition of the `largest` function that
+uses generic type parameters but doesn't compile yet</span>
 
 If we try to compile this code right now, we'll get this error:
 
@@ -177,7 +165,6 @@ We can define structs to use a generic type parameter in one or more of the
 struct's fields with the `<>` syntax too. Listing 10-6 shows the definition and
 use of a `Point` struct that can hold `x` and `y` coordinate values of any type:
 
-<figure>
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
@@ -192,12 +179,8 @@ fn main() {
 }
 ```
 
-<figcaption>
-
-Listing 10-6: A `Point` struct that holds `x` and `y` values of type `T`
-
-</figcaption>
-</figure>
+<span class="caption">Listing 10-6: A `Point` struct that holds `x` and `y`
+values of type `T`</span>
 
 The syntax is similar to using generics in function definitions. First, we have
 to declare the name of the type parameter within angle brackets just after the
@@ -210,7 +193,6 @@ Note that because we've only used one generic type in the definition of
 being. If we try to create an instance of a `Point` that has values of
 different types, as in Listing 10-7, our code won't compile:
 
-<figure>
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore
@@ -224,13 +206,8 @@ fn main() {
 }
 ```
 
-<figcaption>
-
-Listing 10-7: The fields `x` and `y` must be the same type because both have
-the same generic data type `T`
-
-</figcaption>
-</figure>
+<span class="caption">Listing 10-7: The fields `x` and `y` must be the same
+type because both have the same generic data type `T`</span>
 
 If we try to compile this, we'll get the following error:
 
@@ -257,7 +234,6 @@ parameters. In listing 10-8, we've changed the definition of `Point` to be
 generic over types `T` and `U`. The field `x` is of type `T`, and the field `y`
 is of type `U`:
 
-<figure>
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
@@ -273,13 +249,8 @@ fn main() {
 }
 ```
 
-<figcaption>
-
-Listing 10-8: A `Point` generic over two types so that `x` and `y` may be
-values of different types
-
-</figcaption>
-</figure>
+<span class="caption">Listing 10-8: A `Point` generic over two types so that
+`x` and `y` may be values of different types</span>
 
 Now all of these instances of `Point` are allowed! You can use as many generic
 type parameters in a definition as you want, but using more than a few gets
@@ -340,7 +311,6 @@ have generic types in their definitions. Listing 10-9 shows the `Point<T>`
 struct we defined in Listing 10-6. We've then defined a method named `x` on
 `Point<T>` that returns a reference to the data in the field `x`:
 
-<figure>
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
@@ -362,13 +332,9 @@ fn main() {
 }
 ```
 
-<figcaption>
-
-Listing 10-9: Implementing a method named `x` on the `Point<T>` struct that
-will return a reference to the `x` field, which is of type `T`.
-
-</figcaption>
-</figure>
+<span class="caption">Listing 10-9: Implementing a method named `x` on the
+`Point<T>` struct that will return a reference to the `x` field, which is of
+type `T`.</span>
 
 Note that we have to declare `T` just after `impl`, so that we can use it when
 we specify that we're implementing methods on the type `Point<T>`.
@@ -382,7 +348,6 @@ a new `Point` instance that has the `x` value from the `self` `Point` (which is
 of type `T`) and the `y` value from the passed-in `Point` (which is of type
 `W`):
 
-<figure>
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
@@ -392,7 +357,7 @@ struct Point<T, U> {
 }
 
 impl<T, U> Point<T, U> {
-    fn mixup<V, W>(&self, other: &Point<V, W>) -> Point<T, W> {
+    fn mixup<V, W>(self, other: Point<V, W>) -> Point<T, W> {
         Point {
             x: self.x,
             y: other.y,
@@ -410,13 +375,8 @@ fn main() {
 }
 ```
 
-<figcaption>
-
-Listing 10-10: Methods that use different generic types than their struct's
-definition
-
-</figcaption>
-</figure>
+<span class="caption">Listing 10-10: Methods that use different generic types
+than their struct's definition</span>
 
 In `main`, we've defined a `Point` that has an `i32` for `x` (with value `5`)
 and an `f64` for `y` (with value `10.4`). `p2` is a `Point` that has a string
