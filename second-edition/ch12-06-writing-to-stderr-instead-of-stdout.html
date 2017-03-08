@@ -86,8 +86,7 @@ running we'll see our error message:</p>
 <p>We'd like this to be printed to the screen instead, and only have the output
 from a successful run end up in the file if we run our program this way. Let's
 change how error messages are printed as shown in Listing 12-17:</p>
-<figure>
-<span class="filename">Filename: src/main.rs</span>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust ignore">extern crate greprs;
 
 use std::env;
@@ -122,10 +121,8 @@ fn main() {
     }
 }
 </code></pre>
-<figcaption>
-<p>Listing 12-17: Writing error messages to <code>stderr</code> instead of <code>stdout</code></p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 12-17: Writing error messages to <code>stderr</code> instead
+of <code>stdout</code></span></p>
 <!-- Will add ghosting and wingdings in libreoffice /Carol -->
 <p>Rust does not have a convenient function like <code>println!</code> for writing to
 standard error. Instead, we use the <code>writeln!</code> macro, which is sort of like

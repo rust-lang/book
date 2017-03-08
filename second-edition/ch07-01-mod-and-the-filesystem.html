@@ -121,8 +121,7 @@ specify the module and use the namespace syntax <code>::</code>, like so:
 <p>We can also have multiple modules, side-by-side, in the same <em>src/lib.rs</em> file.
 For example, to have a <code>client</code> module too, that also has a function named
 <code>connect</code>, we can add it as shown in Listing 7-1:</p>
-<figure>
-<span class="filename">Filename: src/lib.rs</span>
+<p><span class="filename">Filename: src/lib.rs</span></p>
 <pre><code class="language-rust">mod network {
     fn connect() {
     }
@@ -133,11 +132,8 @@ mod client {
     }
 }
 </code></pre>
-<figcaption>
-<p>Listing 7-1: The <code>network</code> module and the <code>client</code> module defined side-by-side
-in <em>src/lib.rs</em></p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 7-1: The <code>network</code> module and the <code>client</code> module
+defined side-by-side in <em>src/lib.rs</em></span></p>
 <p>Now we have a <code>network::connect</code> function and a <code>client::connect</code> function.
 These can have completely different functionality, and the function names do
 not conflict with each other since they’re in different modules.</p>
@@ -150,8 +146,7 @@ you think about the relationship between the parts of your code. For instance,
 the <code>client</code> code and its <code>connect</code> function might make more sense to users of
 our library if it was inside the <code>network</code> namespace instead, like in Listing
 7-2:</p>
-<figure>
-<span class="filename">Filename: src/lib.rs</span>
+<p><span class="filename">Filename: src/lib.rs</span></p>
 <pre><code class="language-rust">mod network {
     fn connect() {
     }
@@ -162,10 +157,8 @@ our library if it was inside the <code>network</code> namespace instead, like in
     }
 }
 </code></pre>
-<figcaption>
-<p>Listing 7-2: Moving the <code>client</code> module inside of the <code>network</code> module</p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 7-2: Moving the <code>client</code> module inside of the
+<code>network</code> module</span></p>
 <p>In your <em>src/lib.rs</em> file, replace the existing <code>mod network</code> and <code>mod client</code>
 definitions with this one that has the <code>client</code> module as an inner module of
 <code>network</code>. Now we have the functions <code>network::connect</code> and
@@ -196,8 +189,7 @@ structure you would like.</p>
 that you’re used to: file systems! We can use Rust’s module system along with
 multiple files to split Rust projects up so that not everything lives in
 <em>src/lib.rs</em>. For this example, we will start with the code in Listing 7-3:</p>
-<figure>
-<span class="filename">Filename: src/lib.rs</span>
+<p><span class="filename">Filename: src/lib.rs</span></p>
 <pre><code class="language-rust">mod client {
     fn connect() {
     }
@@ -213,11 +205,8 @@ mod network {
     }
 }
 </code></pre>
-<figcaption>
-<p>Listing 7-3: Three modules, <code>client</code>, <code>network</code>, and <code>network::server</code>, all
-defined in <em>src/lib.rs</em></p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 7-3: Three modules, <code>client</code>, <code>network</code>, and
+<code>network::server</code>, all defined in <em>src/lib.rs</em></span></p>
 <p>which has this module hierarchy:</p>
 <pre><code class="language-text">communicator
  ├── client
@@ -331,7 +320,6 @@ module that we extracted:</p>
 }
 </code></pre>
 <p>When we try to <code>cargo build</code>, we’ll get the error shown in Listing 7-4:</p>
-<figure>
 <pre><code class="language-text">$ cargo build
    Compiling communicator v0.1.0 (file:///projects/communicator)
 error: cannot declare a new module at this location
@@ -351,11 +339,8 @@ note: ... or maybe `use` the module `server` instead of possibly redeclaring it
 4 | mod server;
   |     ^^^^^^
 </code></pre>
-<figcaption>
-<p>Listing 7-4: Error when trying to extract the <code>server</code> submodule into
-<em>src/server.rs</em></p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 7-4: Error when trying to extract the <code>server</code>
+submodule into <em>src/server.rs</em></span></p>
 <p>The error says we <code>cannot declare a new module at this location</code> and is
 pointing to the <code>mod server;</code> line in <em>src/network.rs</em>. So <em>src/network.rs</em> is
 different than <em>src/lib.rs</em> somehow; let’s keep reading to understand why.</p>

@@ -89,9 +89,8 @@ code; that gets a bit meta and possibly confusing... Changes to this are most
 welcome. /Carol -->
 <p>With that in place, let's edit <em>src/main.rs</em> and add code to open the file as
 shown in Listing 12-3:</p>
-<figure>
-<span class="filename">Filename: src/main.rs</span>
-<pre><code class="language-rust">use std::env;
+<p><span class="filename">Filename: src/main.rs</span></p>
+<pre><code class="language-rust ignore">use std::env;
 use std::fs::File;
 use std::io::prelude::*;
 
@@ -112,10 +111,8 @@ fn main() {
     println!(&quot;With text:\n{}&quot;, contents);
 }
 </code></pre>
-<figcaption>
-<p>Listing 12-3: Read the contents of the file specified by the second argument</p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 12-3: Read the contents of the file specified by
+the second argument</span></p>
 <!-- Will add ghosting and wingdings in libreoffice /Carol -->
 <p>We've added a few things. First of all, we need some more <code>use</code> statements to
 bring in the relevant parts of the standard library: we need <code>std::fs::File</code>

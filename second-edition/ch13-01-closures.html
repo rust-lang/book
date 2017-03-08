@@ -73,8 +73,7 @@ functions. Instead of starting with a technical definition, let's see what
 closures look like, syntactically, and then we'll return to defining what they
 are. Listing 13-1 shows a small closure whose definition is assigned to the
 variable <code>add_one</code>, which we can then use to call the closure:</p>
-<figure>
-<span class="filename">Filename: src/main.rs</span>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust">fn main() {
     let add_one = |x| x + 1;
 
@@ -83,17 +82,13 @@ variable <code>add_one</code>, which we can then use to call the closure:</p>
     assert_eq!(5, five);
 }
 </code></pre>
-<figcaption>
-<p>Listing 13-1: A closure that takes one parameter and adds one to it, assigned to
-the variable <code>add_one</code></p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 13-1: A closure that takes one parameter and adds
+one to it, assigned to the variable <code>add_one</code></span></p>
 <p>The closure definition, on the first line, shows that the closure takes one
 parameter named <code>x</code>. Parameters to closures go in between vertical pipes (<code>|</code>).</p>
 <p>This is a minimal closure with only one expression as its body. Listing 13-2 has
 a closure with a bit more complexity:</p>
-<figure>
-<span class="filename">Filename: src/main.rs</span>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust">fn main() {
     let calculate = |a, b| {
         let mut result = a * 2;
@@ -107,10 +102,8 @@ a closure with a bit more complexity:</p>
     assert_eq!(13, calculate(4, 5)); // 4 * 2 + 5 == 13
 }
 </code></pre>
-<figcaption>
-<p>Listing 13-2: A closure with two parameters and multiple expressions in its body</p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 13-2: A closure with two parameters and multiple
+expressions in its body</span></p>
 <p>We can use curly brackets to define a closure body with more than one
 expression.</p>
 <p>You'll notice a few things about closures that are different from functions
@@ -119,19 +112,15 @@ annotate the types of the parameters the closure takes or the value it returns.
 We can choose to add type annotations if we want; Listing 13-3 shows the
 closure from Listing 13-1 with annotations for the parameter's and return
 value's types:</p>
-<figure>
-<span class="filename">Filename: src/main.rs</span>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust">fn main() {
     let add_one = |x: i32| -&gt; i32 { x + 1 };
 
     assert_eq!(2, add_one(1));
 }
 </code></pre>
-<figcaption>
-<p>Listing 13-3: A closure definition with optional parameter and return value
-type annotations</p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 13-3: A closure definition with optional
+parameter and return value type annotations</span></p>
 <p>The syntax of closures and functions looks more similar with type annotations.
 Let's compare the different ways we can specify closures with the syntax for
 defining a function more directly. We've added some spaces here to line up the
@@ -177,8 +166,7 @@ by being <code>const</code> or being declared as parameters. Closures can do mor
 allowed to access variables from their enclosing scope. Listing 13-4 has an
 example of a closure in the variable <code>equal_to_x</code> that uses the variable <code>x</code>
 from the closure's surrounding environment:</p>
-<figure>
-<span class="filename">Filename: src/main.rs</span>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust">fn main() {
     let x = 4;
 
@@ -189,11 +177,8 @@ from the closure's surrounding environment:</p>
     assert!(equal_to_x(y));
 }
 </code></pre>
-<figcaption>
-<p>Listing 13-4: Example of a closure that refers to a variable in its enclosing
-scope</p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 13-4: Example of a closure that refers to a
+variable in its enclosing scope</span></p>
 <p>Here, even though <code>x</code> is not one of the parameters of <code>equal_to_x</code>, the
 <code>equal_to_x</code> closure is allowed to use <code>x</code>, since <code>x</code> is a variable defined in
 the scope that <code>equal_to_x</code> is defined. We aren't allowed to do the same thing

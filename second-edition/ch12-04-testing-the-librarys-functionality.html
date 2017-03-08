@@ -82,8 +82,7 @@ a test that specifies the behavior we'd like the <code>grep</code> function to h
 test will fail with our placeholder implementation, of course, but we can make
 sure the code compiles and that we get the failure message we expect. Listing
 12-14 shows these modifications:</p>
-<figure>
-<span class="filename">Filename: src/lib.rs</span>
+<p><span class="filename">Filename: src/lib.rs</span></p>
 <pre><code class="language-rust"># use std::error::Error;
 # use std::fs::File;
 # use std::io::prelude::*;
@@ -129,11 +128,8 @@ Pick three.&quot;;
     }
 }
 </code></pre>
-<figcaption>
-<p>Listing 12-14: Creating a function where our logic will go and a failing test
-for that function</p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 12-14: Creating a function where our logic will
+go and a failing test for that function</span></p>
 <!-- Will add ghosting and wingdings in libreoffice /Carol -->
 <p>Notice that we need an explicit lifetime <code>'a</code> declared in the signature of
 <code>grep</code> and used with the <code>contents</code> parameter and the return value. Remember,
@@ -184,7 +180,6 @@ failures:
 (left: `[&quot;safe, fast, productive.&quot;]`, right: `[]`)', src/lib.rs:16
 note: Run with `RUST_BACKTRACE=1` for a backtrace.
 
-
 failures:
     test::one_result
 
@@ -233,8 +228,7 @@ method looks like this:</p>
 that, we can make a mutable vector before the <code>for</code> loop and call the <code>push</code>
 method to store a <code>line</code> in the vector. After the <code>for</code> loop, we return the
 vector. Listing 12-15 has the full implementation:</p>
-<figure>
-<span class="filename">Filename: src/lib.rs</span>
+<p><span class="filename">Filename: src/lib.rs</span></p>
 <pre><code class="language-rust">fn grep&lt;'a&gt;(search: &amp;str, contents: &amp;'a str) -&gt; Vec&lt;&amp;'a str&gt; {
     let mut results = Vec::new();
 
@@ -247,10 +241,8 @@ vector. Listing 12-15 has the full implementation:</p>
     results
 }
 </code></pre>
-<figcaption>
-<p>Listing 12-15: Fully functioning implementation of the <code>grep</code> function</p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 12-15: Fully functioning implementation of the
+<code>grep</code> function</span></p>
 <!-- Will add ghosting and wingdings in libreoffice /Carol -->
 <p>Let's give it a try:</p>
 <pre><code class="language-text">$ cargo test

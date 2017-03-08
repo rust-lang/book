@@ -87,7 +87,6 @@ know how to use.</p>
 <p>Documentation comments use <code>///</code> instead of <code>//</code> and support Markdown notation
 inside. They go just before the item they are documenting. Here's documentation
 comments for an <code>add_one</code> function:</p>
-<figure>
 <p><span class="filename">Filename: src/lib.rs</span></p>
 <pre><code class="language-rust">/// Adds one to the number given.
 ///
@@ -105,10 +104,8 @@ pub fn add_one(x: i32) -&gt; i32 {
     x + 1
 }
 </code></pre>
-<figcaption>
-<p>Listing 14-1: A documentation comment for a function</p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 14-1: A documentation comment for a
+function</span></p>
 <p><code>cargo doc</code> runs a tool distributed with Rust, <code>rustdoc</code>, to generate HTML
 documentation from these comments. To try this out locally, you can run <code>cargo doc --open</code>, which will build the documentation for your current crate (as well
 as all of your crate's dependencies) and open it in a web browser. Navigate to
@@ -155,9 +152,8 @@ public structure with <code>pub use</code>.</p>
 <p>For example, say that we made a library named <code>art</code> consisting of a <code>kinds</code>
 module containing an enum named <code>Color</code> and a <code>utils</code> module containing a
 function named <code>mix</code> as shown in Listing 14-2:</p>
-<figure>
-<span class="filename">Filename: src/lib.rs</span>
-<pre><code class="language-rust">//! # Art
+<p><span class="filename">Filename: src/lib.rs</span></p>
+<pre><code class="language-rust ignore">//! # Art
 //!
 //! A library for modeling artistic concepts.
 
@@ -188,15 +184,11 @@ pub mod utils {
     }
 }
 </code></pre>
-<figcaption>
-<p>Listing 14-2: An <code>art</code> library with items organized into <code>kinds</code> and <code>utils</code>
-modules</p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 14-2: An <code>art</code> library with items organized into
+<code>kinds</code> and <code>utils</code> modules</span></p>
 <p>In order to use this library, another crate would have <code>use</code> statements as in
 Listing 14-3:</p>
-<figure>
-<span class="filename">Filename: src/main.rs</span>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust ignore">extern crate art;
 
 use art::kinds::PrimaryColor;
@@ -208,20 +200,16 @@ fn main() {
     mix(red, yellow);
 }
 </code></pre>
-<figcaption>
-<p>Listing 14-3: A program using the <code>art</code> crate's items with its internal
-structure exported</p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 14-3: A program using the <code>art</code> crate's items
+with its internal structure exported</span></p>
 <p>Users of this crate shouldn't need to know that <code>PrimaryColor</code> and
 <code>SecondaryColor</code> are in the <code>kinds</code> module, and <code>mix</code> is in the <code>utils</code> module;
 that structure might be useful for internal organization but doesn't have much
 meaning from the outside looking in.</p>
 <p>To change this, we can add the following <code>pub use</code> statements to the code from
 Listing 14-2 to re-export the types at the top level, as shown in Listing 14-4:</p>
-<figure>
-<span class="filename">Filename: src/lib.rs</span>
-<pre><code class="language-rust">//! # Art
+<p><span class="filename">Filename: src/lib.rs</span></p>
+<pre><code class="language-rust ignore">//! # Art
 //!
 //! A library for modeling artistic concepts.
 
@@ -231,25 +219,15 @@ pub use utils::mix;
 
 pub mod kinds {
     // ...snip...
-#     pub enum PrimaryColor;
-#     pub enum SecondaryColor;
-# }
-#
-# pub mod utils {
-#     pub fn mix() {}
-# }
 </code></pre>
-<figcaption>
-<p>Listing 14-4: Adding <code>pub use</code> statements to re-export items</p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 14-4: Adding <code>pub use</code> statements to re-export
+items</span></p>
 <!-- Will add ghosting in libreoffice /Carol -->
 <p>Re-exports are listed and linked on the front page of the crate's API
 documentation. Users of the <code>art</code> crate can still see and choose to use the
 internal structure as in Listing 14-3, or they can use the more convenient
 structure from Listing 14-4, as shown in Listing 14-5:</p>
-<figure>
-<span class="filename">Filename: src/main.rs</span>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust ignore">extern crate art;
 
 use art::PrimaryColor;
@@ -259,10 +237,8 @@ fn main() {
     // ...snip...
 }
 </code></pre>
-<figcaption>
-<p>Listing 14-5: Using the re-exported items from the <code>art</code> crate</p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 14-5: Using the re-exported items from the <code>art</code>
+crate</span></p>
 <!-- Will add ghosting in libreoffice /Carol -->
 <p>Creating a useful public API structure is more of an art than a science.
 Choosing <code>pub use</code> gives you flexibility in how you expose your crate's

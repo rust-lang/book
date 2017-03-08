@@ -86,9 +86,8 @@ element in the <code>Cons</code> variant. The second element in the <code>Cons</
 we want to be able to modify which <code>List</code> a <code>Cons</code> variant is pointing to.
 We've also added a <code>tail</code> method to make it convenient for us to access the
 second item, if we have a <code>Cons</code> variant:</p>
-<figure>
-<span class="filename">Filename: src/main.rs</span>
-<pre><code class="language-rust">#[derive(Debug)]
+<p><span class="filename">Filename: src/main.rs</span></p>
+<pre><code class="language-rust ignore">#[derive(Debug)]
 enum List {
     Cons(i32, RefCell&lt;Rc&lt;List&gt;&gt;),
     Nil,
@@ -102,22 +101,15 @@ impl List {
         }
     }
 }
-# use std::rc::Rc;
-# use std::cell::RefCell;
-# use List::{Cons, Nil};
 </code></pre>
-<figcaption>
-<p>Listing 15-16: A cons list definition that holds a <code>RefCell</code> so that we can
-modify what a <code>Cons</code> variant is referring to</p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 15-16: A cons list definition that holds a
+<code>RefCell</code> so that we can modify what a <code>Cons</code> variant is referring to</span></p>
 <p>Next, in Listing 15-17, we're going to create a <code>List</code> value in the variable
 <code>a</code> that initially is a list of <code>5, Nil</code>. Then we'll create a <code>List</code> value in
 the variable <code>b</code> that is a list of the value 10 and then points to the list in
 <code>a</code>. Finally, we'll modify <code>a</code> so that it points to <code>b</code> instead of <code>Nil</code>, which
 will then create a cycle:</p>
-<figure>
-<span class="filename">Filename: src/main.rs</span>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust"># #[derive(Debug)]
 # enum List {
 #     Cons(i32, RefCell&lt;Rc&lt;List&gt;&gt;),
@@ -162,21 +154,15 @@ fn main() {
     // println!(&quot;a next item = {:?}&quot;, a.tail());
 }
 </code></pre>
-<figcaption>
-<p>Listing 15-17: Creating a reference cycle of two <code>List</code> values pointing to
-each other</p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 15-17: Creating a reference cycle of two <code>List</code>
+values pointing to each other</span></p>
 <p>We use the <code>tail</code> method to get a reference to the <code>RefCell</code> in <code>a</code>, which we
 put in the variable <code>link</code>. Then we use the <code>borrow_mut</code> method on the
 <code>RefCell</code> to change the value inside from an <code>Rc</code> that holds a <code>Nil</code> value to
 the <code>Rc</code> in <code>b</code>. We've created a reference cycle that looks like Figure 15-18:</p>
-<figure>
 <p><img alt="Reference cycle of lists" src="img/trpl15-04.svg" class="center" style="width: 50%;" /></p>
-<figcaption>
-<p>Figure 15-18: A reference cycle of lists <code>a</code> and <code>b</code> pointing to each other</p>
-</figcaption>
-</figure>
+<p><span class="caption">Figure 15-18: A reference cycle of lists <code>a</code> and <code>b</code>
+pointing to each other</span></p>
 <p>If you uncomment the last <code>println!</code>, Rust will try and print this cycle out
 with <code>a</code> pointing to <code>b</code> pointing to <code>a</code> and so forth until it overflows the
 stack.</p>
@@ -241,9 +227,8 @@ nodes are another node's children, so that's why we have a <code>RefCell</code> 
 <code>children</code> around the <code>Vec</code>. In Listing 15-19, let's create one instance of
 <code>Node</code> named <code>leaf</code> with the value 3 and no children, and another instance
 named <code>branch</code> with the value 5 and <code>leaf</code> as one of its children:</p>
-<figure>
-<span class="filename">Filename: src/main.rs</span>
-<pre><code class="language-rust">fn main() {
+<p><span class="filename">Filename: src/main.rs</span></p>
+<pre><code class="language-rust ignore">fn main() {
     let leaf = Rc::new(Node {
         value: 3,
         children: RefCell::new(vec![]),
@@ -255,11 +240,9 @@ named <code>branch</code> with the value 5 and <code>leaf</code> as one of its c
     });
 }
 </code></pre>
-<figcaption>
-<p>Listing 15-19: Creating a <code>leaf</code> node and a <code>branch</code> node where <code>branch</code> has
-<code>leaf</code> as one of its children but <code>leaf</code> has no reference to <code>branch</code></p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 15-19: Creating a <code>leaf</code> node and a <code>branch</code> node
+where <code>branch</code> has <code>leaf</code> as one of its children but <code>leaf</code> has no reference to
+<code>branch</code></span></p>
 <p>The <code>Node</code> in <code>leaf</code> now has two owners: <code>leaf</code> and <code>branch</code>, since we clone
 the <code>Rc</code> in <code>leaf</code> and store that in <code>branch</code>. The <code>Node</code> in <code>branch</code> knows
 it's related to <code>leaf</code> since <code>branch</code> has a reference to <code>leaf</code> in
@@ -288,9 +271,8 @@ struct Node {
 but it does not own its parent. A parent node will be dropped even if
 it has child nodes referring to it, as long as it doesn't have a parent
 node as well. Now let's update <code>main</code> to look like Listing 15-20:</p>
-<figure>
-<span class="filename">Filename: src/main.rs</span>
-<pre><code class="language-rust">fn main() {
+<p><span class="filename">Filename: src/main.rs</span></p>
+<pre><code class="language-rust ignore">fn main() {
     let leaf = Rc::new(Node {
         value: 3,
         parent: RefCell::new(Weak::new()),
@@ -310,11 +292,8 @@ node as well. Now let's update <code>main</code> to look like Listing 15-20:</p>
     println!(&quot;leaf parent = {:?}&quot;, leaf.parent.borrow().upgrade());
 }
 </code></pre>
-<figcaption>
-<p>Listing 15-20: A <code>leaf</code> node and a <code>branch</code> node where <code>leaf</code> has a <code>Weak</code>
-reference to its parent, <code>branch</code></p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 15-20: A <code>leaf</code> node and a <code>branch</code> node where
+<code>leaf</code> has a <code>Weak</code> reference to its parent, <code>branch</code></span></p>
 <p>Creating the <code>leaf</code> node looks similar; since it starts out without a parent,
 we create a new <code>Weak</code> reference instance. When we try to get a reference to
 the parent of <code>leaf</code> by using the <code>upgrade</code> method, we'll get a <code>None</code> value,
@@ -342,9 +321,8 @@ case. Another way we can tell is by looking at the values we get from calling
 <code>Rc::strong_count</code> and <code>Rc::weak_count</code>. In Listing 15-21, let's create a new
 inner scope and move the creation of <code>branch</code> in there, so that we can see what
 happens when <code>branch</code> is created and then dropped when it goes out of scope:</p>
-<figure>
-<span class="filename">Filename: src/main.rs</span>
-<pre><code>fn main() {
+<p><span class="filename">Filename: src/main.rs</span></p>
+<pre><code class="language-rust ignore">fn main() {
     let leaf = Rc::new(Node {
         value: 3,
         parent: RefCell::new(Weak::new()),
@@ -386,11 +364,8 @@ happens when <code>branch</code> is created and then dropped when it goes out of
     );
 }
 </code></pre>
-<figcaption>
-<p>Listing 15-21: Creating <code>branch</code> in an inner scope and examining strong and
-weak reference counts of <code>leaf</code> and <code>branch</code></p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 15-21: Creating <code>branch</code> in an inner scope and
+examining strong and weak reference counts of <code>leaf</code> and <code>branch</code></span></p>
 <p>Right after creating <code>leaf</code>, its strong count is 1 (for <code>leaf</code> itself) and its
 weak count is 0. In the inner scope, after we create <code>branch</code> and associate
 <code>leaf</code> and <code>branch</code>, <code>branch</code> will have a strong count of 1 (for <code>branch</code>

@@ -218,7 +218,6 @@ way, it’s safe for functions to use the new type in their signatures and
 confidently use the values they receive. Listing 9-8 shows one way to define a
 <code>Guess</code> type that will only create an instance of <code>Guess</code> if the <code>new</code> function
 receives a value between 1 and 100:</p>
-<figure>
 <pre><code class="language-rust">struct Guess {
     value: u32,
 }
@@ -239,11 +238,8 @@ impl Guess {
     }
 }
 </code></pre>
-<figcaption>
-<p>Listing 9-8: A <code>Guess</code> type that will only continue with values between 1 and
-100</p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 9-8: A <code>Guess</code> type that will only continue with
+values between 1 and 100</span></p>
 <p>First, we define a struct named <code>Guess</code> that has a field named <code>value</code> that
 holds a <code>u32</code>. This is where the number will be stored.</p>
 <p>Then we implement an associated function named <code>new</code> on <code>Guess</code> that creates

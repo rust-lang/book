@@ -82,8 +82,7 @@ our function, while not introducing code duplication.</p>
 providing the same functionality to find the largest value in a slice. The
 first function is the one we extracted in Listing 10-3 that finds the largest
 <code>i32</code> in a slice. The second function finds the largest <code>char</code> in a slice:</p>
-<figure>
-<span class="filename">Filename: src/main.rs</span>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust">fn largest_i32(list: &amp;[i32]) -&gt; i32 {
     let mut largest = list[0];
 
@@ -122,11 +121,8 @@ fn main() {
 #    assert_eq!(result, 'y');
 }
 </code></pre>
-<figcaption>
-<p>Listing 10-4: Two functions that differ only in their names and the types in
-their signatures</p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 10-4: Two functions that differ only in their
+names and the types in their signatures</span></p>
 <p>Here, the functions <code>largest_i32</code> and <code>largest_char</code> have the exact same body,
 so it would be nice if we could turn these two functions into one and get rid
 of the duplication. Luckily, we can do that by introducing a generic type
@@ -155,8 +151,7 @@ type <code>T</code>. The <code>largest</code> function will return a value of th
 data type in its signature, and shows how we'll be able to call <code>largest</code> with
 either a slice of <code>i32</code> values or <code>char</code> values. Note that this code won't
 compile yet!</p>
-<figure>
-<span class="filename">Filename: src/main.rs</span>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust ignore">fn largest&lt;T&gt;(list: &amp;[T]) -&gt; T {
     let mut largest = list[0];
 
@@ -181,11 +176,8 @@ fn main() {
     println!(&quot;The largest char is {}&quot;, result);
 }
 </code></pre>
-<figcaption>
-<p>Listing 10-5: A definition of the <code>largest</code> function that uses generic type
-parameters but doesn't compile yet</p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 10-5: A definition of the <code>largest</code> function that
+uses generic type parameters but doesn't compile yet</span></p>
 <p>If we try to compile this code right now, we'll get this error:</p>
 <pre><code class="language-text">error[E0369]: binary operation `&gt;` cannot be applied to type `T`
   |
@@ -214,8 +206,7 @@ what you think. /Carol -->
 <p>We can define structs to use a generic type parameter in one or more of the
 struct's fields with the <code>&lt;&gt;</code> syntax too. Listing 10-6 shows the definition and
 use of a <code>Point</code> struct that can hold <code>x</code> and <code>y</code> coordinate values of any type:</p>
-<figure>
-<span class="filename">Filename: src/main.rs</span>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust">struct Point&lt;T&gt; {
     x: T,
     y: T,
@@ -226,10 +217,8 @@ fn main() {
     let float = Point { x: 1.0, y: 4.0 };
 }
 </code></pre>
-<figcaption>
-<p>Listing 10-6: A <code>Point</code> struct that holds <code>x</code> and <code>y</code> values of type <code>T</code></p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 10-6: A <code>Point</code> struct that holds <code>x</code> and <code>y</code>
+values of type <code>T</code></span></p>
 <p>The syntax is similar to using generics in function definitions. First, we have
 to declare the name of the type parameter within angle brackets just after the
 name of the struct. Then we can use the generic type in the struct definition
@@ -239,8 +228,7 @@ where we would specify concrete data types.</p>
 <code>T</code>, and the fields <code>x</code> and <code>y</code> are <em>both</em> that same type, whatever it ends up
 being. If we try to create an instance of a <code>Point</code> that has values of
 different types, as in Listing 10-7, our code won't compile:</p>
-<figure>
-<span class="filename">Filename: src/main.rs</span>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust ignore">struct Point&lt;T&gt; {
     x: T,
     y: T,
@@ -250,11 +238,8 @@ fn main() {
     let wont_work = Point { x: 5, y: 4.0 };
 }
 </code></pre>
-<figcaption>
-<p>Listing 10-7: The fields <code>x</code> and <code>y</code> must be the same type because both have
-the same generic data type <code>T</code></p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 10-7: The fields <code>x</code> and <code>y</code> must be the same
+type because both have the same generic data type <code>T</code></span></p>
 <p>If we try to compile this, we'll get the following error:</p>
 <pre><code class="language-text">error[E0308]: mismatched types
  --&gt;
@@ -275,8 +260,7 @@ types but still have those types be generic, we can use multiple generic type
 parameters. In listing 10-8, we've changed the definition of <code>Point</code> to be
 generic over types <code>T</code> and <code>U</code>. The field <code>x</code> is of type <code>T</code>, and the field <code>y</code>
 is of type <code>U</code>:</p>
-<figure>
-<span class="filename">Filename: src/main.rs</span>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust">struct Point&lt;T, U&gt; {
     x: T,
     y: U,
@@ -288,11 +272,8 @@ fn main() {
     let integer_and_float = Point { x: 5, y: 4.0 };
 }
 </code></pre>
-<figcaption>
-<p>Listing 10-8: A <code>Point</code> generic over two types so that <code>x</code> and <code>y</code> may be
-values of different types</p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 10-8: A <code>Point</code> generic over two types so that
+<code>x</code> and <code>y</code> may be values of different types</span></p>
 <p>Now all of these instances of <code>Point</code> are allowed! You can use as many generic
 type parameters in a definition as you want, but using more than a few gets
 hard to read and understand. If you get to a point of needing lots of generic
@@ -339,8 +320,7 @@ definitions to introduce generic types instead.</p>
 have generic types in their definitions. Listing 10-9 shows the <code>Point&lt;T&gt;</code>
 struct we defined in Listing 10-6. We've then defined a method named <code>x</code> on
 <code>Point&lt;T&gt;</code> that returns a reference to the data in the field <code>x</code>:</p>
-<figure>
-<span class="filename">Filename: src/main.rs</span>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust">struct Point&lt;T&gt; {
     x: T,
     y: T,
@@ -358,11 +338,9 @@ fn main() {
     println!(&quot;p.x = {}&quot;, p.x());
 }
 </code></pre>
-<figcaption>
-<p>Listing 10-9: Implementing a method named <code>x</code> on the <code>Point&lt;T&gt;</code> struct that
-will return a reference to the <code>x</code> field, which is of type <code>T</code>.</p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 10-9: Implementing a method named <code>x</code> on the
+<code>Point&lt;T&gt;</code> struct that will return a reference to the <code>x</code> field, which is of
+type <code>T</code>.</span></p>
 <p>Note that we have to declare <code>T</code> just after <code>impl</code>, so that we can use it when
 we specify that we're implementing methods on the type <code>Point&lt;T&gt;</code>.</p>
 <p>Generic type parameters in a struct definition aren't always the same generic
@@ -373,15 +351,14 @@ types than the <code>self</code> <code>Point</code> that we're calling <code>mix
 a new <code>Point</code> instance that has the <code>x</code> value from the <code>self</code> <code>Point</code> (which is
 of type <code>T</code>) and the <code>y</code> value from the passed-in <code>Point</code> (which is of type
 <code>W</code>):</p>
-<figure>
-<span class="filename">Filename: src/main.rs</span>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust">struct Point&lt;T, U&gt; {
     x: T,
     y: U,
 }
 
 impl&lt;T, U&gt; Point&lt;T, U&gt; {
-    fn mixup&lt;V, W&gt;(&amp;self, other: &amp;Point&lt;V, W&gt;) -&gt; Point&lt;T, W&gt; {
+    fn mixup&lt;V, W&gt;(self, other: Point&lt;V, W&gt;) -&gt; Point&lt;T, W&gt; {
         Point {
             x: self.x,
             y: other.y,
@@ -398,11 +375,8 @@ fn main() {
     println!(&quot;p3.x = {}, p3.y = {}&quot;, p3.x, p3.y);
 }
 </code></pre>
-<figcaption>
-<p>Listing 10-10: Methods that use different generic types than their struct's
-definition</p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 10-10: Methods that use different generic types
+than their struct's definition</span></p>
 <p>In <code>main</code>, we've defined a <code>Point</code> that has an <code>i32</code> for <code>x</code> (with value <code>5</code>)
 and an <code>f64</code> for <code>y</code> (with value <code>10.4</code>). <code>p2</code> is a <code>Point</code> that has a string
 slice for <code>x</code> (with value <code>&quot;Hello&quot;</code>) and a <code>char</code> for <code>y</code> (with value <code>c</code>).

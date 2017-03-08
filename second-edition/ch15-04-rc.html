@@ -100,16 +100,12 @@ and 10, then another list that starts with 4 and <em>also</em> continues on to o
 first list containing 5 and 10. In other words, we want two lists that both
 share ownership of the third list, which conceptually will be something like
 Figure 15-10:</p>
-<figure>
 <p><img alt="Two lists that share ownership of a third list" src="img/trpl15-03.svg" class="center" /></p>
-<figcaption>
-<p>Figure 15-10: Two lists, <code>b</code> and <code>c</code>, sharing ownership of a third list, <code>a</code></p>
-</figcaption>
-</figure>
+<p><span class="caption">Figure 15-10: Two lists, <code>b</code> and <code>c</code>, sharing ownership
+of a third list, <code>a</code></span></p>
 <p>Trying to implement this using our definition of <code>List</code> with <code>Box&lt;T&gt;</code> won't
 work, as shown in Listing 15-11:</p>
-<figure>
-<span class="filename">Filename: src/main.rs</span>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust ignore">enum List {
     Cons(i32, Box&lt;List&gt;),
     Nil,
@@ -125,11 +121,8 @@ fn main() {
     let c = Cons(4, Box::new(a));
 }
 </code></pre>
-<figcaption>
-<p>Listing 15-11: Having two lists using <code>Box&lt;T&gt;</code> that try to share ownership of a
-third list won't work</p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 15-11: Having two lists using <code>Box&lt;T&gt;</code> that try
+to share ownership of a third list won't work</span></p>
 <p>If we compile this, we get this error:</p>
 <pre><code class="language-text">error[E0382]: use of moved value: `a`
   --&gt; src/main.rs:13:30
@@ -151,8 +144,7 @@ a list such that every element lives at least as long as the list itself.
 Otherwise, the borrow checker won't even let us compile the code.</p>
 <p>Instead, we can change our definition of <code>List</code> to use <code>Rc&lt;T&gt;</code> instead of
 <code>Box&lt;T&gt;</code> as shown here in Listing 15-12:</p>
-<figure>
-<span class="filename">Filename: src/main.rs</span>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust">enum List {
     Cons(i32, Rc&lt;List&gt;),
     Nil,
@@ -167,10 +159,8 @@ fn main() {
     let c = Cons(4, a.clone());
 }
 </code></pre>
-<figcaption>
-<p>Listing 15-12: A definition of <code>List</code> that uses <code>Rc&lt;T&gt;</code></p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 15-12: A definition of <code>List</code> that uses
+<code>Rc&lt;T&gt;</code></span></p>
 <p>Note that we need to add a <code>use</code> statement for <code>Rc</code> because it's not in the
 prelude. In <code>main</code>, we create the list holding 5 and 10 and store it in a new
 <code>Rc</code> in <code>a</code>. Then when we create <code>b</code> and <code>c</code>, we call the <code>clone</code> method on <code>a</code>.</p>
@@ -184,8 +174,7 @@ associated function at various points. <code>Rc::strong_count</code> returns the
 count of the <code>Rc</code> value we pass to it, and we'll talk about why this function
 is named <code>strong_count</code> in the section later in this chapter about preventing
 reference cycles.</p>
-<figure>
-<span class="filename">Filename: src/main.rs</span>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust"># enum List {
 #     Cons(i32, Rc&lt;List&gt;),
 #     Nil,
@@ -206,10 +195,7 @@ fn main() {
     println!(&quot;rc after c goes out of scope = {}&quot;, Rc::strong_count(&amp;a));
 }
 </code></pre>
-<figcaption>
-<p>Listing 15-13: Printing out the reference count</p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 15-13: Printing out the reference count</span></p>
 <p>This will print out:</p>
 <pre><code class="language-text">rc = 1
 rc after creating b = 2

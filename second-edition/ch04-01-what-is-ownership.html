@@ -166,17 +166,14 @@ have a variable that looks like this:</p>
 hardcoded into the text of our program. The variable is valid from the point at
 which it’s declared until the end of the current <em>scope</em>. Listing 4-1 has
 comments annotating where the variable <code>s</code> is valid:</p>
-<figure>
 <pre><code class="language-rust">{                      // s is not valid here, it’s not yet declared
     let s = &quot;hello&quot;;   // s is valid from this point forward
 
     // do stuff with s
 }                      // this scope is now over, and s is no longer valid
 </code></pre>
-<figcaption>
-<p>Listing 4-1: A variable and the scope in which it is valid</p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 4-1: A variable and the scope in which it is
+valid</span></p>
 <p>In other words, there are two important points in time here:</p>
 <ol>
 <li>When <code>s</code> comes <em>into scope</em>, it is valid.</li>
@@ -275,14 +272,11 @@ we’ve allocated on the heap. Let’s explore some of those situations now.</p>
 <a class="header" href="ch04-01-what-is-ownership.html#ways-variables-and-data-interact-move" name="ways-variables-and-data-interact-move"><h4>Ways Variables and Data Interact: Move</h4></a>
 <p>Multiple variables can interact with the same data in different ways in Rust.
 Let’s look at an example using an integer in Listing 4-2:</p>
-<figure>
 <pre><code class="language-rust">let x = 5;
 let y = x;
 </code></pre>
-<figcaption>
-<p>Listing 4-2: Assigning the integer value of variable <code>x</code> to <code>y</code></p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 4-2: Assigning the integer value of variable <code>x</code>
+to <code>y</code></span></p>
 <p>We can probably guess what this is doing based on our experience with other
 languages: “Bind the value <code>5</code> to <code>x</code>; then make a copy of the value in <code>x</code> and
 bind it to <code>y</code>.” We now have two variables, <code>x</code> and <code>y</code>, and both equal <code>5</code>.
@@ -300,13 +294,9 @@ the covers in Figure 4-3. A <code>String</code> is made up of three parts, shown
 left: a pointer to the memory that holds the contents of the string, a length,
 and a capacity. This group of data is stored on the stack. On the right is the
 memory on the heap that holds the contents.</p>
-<figure>
-<img alt="String in memory" src="img/trpl04-01.svg" class="center" style="width: 50%;" />
-<figcaption>
-<p>Figure 4-3: Representation in memory of a <code>String</code> holding the value <code>&quot;hello&quot;</code>
-bound to <code>s1</code></p>
-</figcaption>
-</figure>
+<p><img alt="String in memory" src="img/trpl04-01.svg" class="center" style="width: 50%;" /></p>
+<p><span class="caption">Figure 4-3: Representation in memory of a <code>String</code>
+holding the value <code>&quot;hello&quot;</code> bound to <code>s1</code></span></p>
 <p>The length is how much memory, in bytes, the contents of the <code>String</code> is
 currently using. The capacity is the total amount of memory, in bytes, that the
 <code>String</code> has received from the operating system. The difference between length
@@ -316,24 +306,16 @@ the capacity.</p>
 pointer, the length, and the capacity that are on the stack. We do not copy the
 data on the heap that the pointer refers to. In other words, the data
 representation in memory looks like Figure 4-4.</p>
-<figure>
-<img alt="s1 and s2 pointing to the same value" src="img/trpl04-02.svg" class="center" style="width: 50%;" />
-<figcaption>
-<p>Figure 4-4: Representation in memory of the variable <code>s2</code> that has a copy of
-the pointer, length, and capacity of <code>s1</code></p>
-</figcaption>
-</figure>
+<p><img alt="s1 and s2 pointing to the same value" src="img/trpl04-02.svg" class="center" style="width: 50%;" /></p>
+<p><span class="caption">Figure 4-4: Representation in memory of the variable <code>s2</code>
+that has a copy of the pointer, length, and capacity of <code>s1</code></span></p>
 <p>The representation does <em>not</em> look like Figure 4-5, which is what memory would
 look like if Rust instead copied the heap data as well. If Rust did this, the
 operation <code>s2 = s1</code> could potentially be very expensive in terms of runtime
 performance if the data on the heap was large.</p>
-<figure>
-<img alt="s1 and s2 to two places" src="img/trpl04-03.svg" class="center" style="width: 50%;" />
-<figcaption>
-<p>Figure 4-5: Another possibility of what <code>s2 = s1</code> might do if Rust copied the
-heap data as well</p>
-</figcaption>
-</figure>
+<p><img alt="s1 and s2 to two places" src="img/trpl04-03.svg" class="center" style="width: 50%;" /></p>
+<p><span class="caption">Figure 4-5: Another possibility of what <code>s2 = s1</code> might
+do if Rust copied the heap data as well</span></p>
 <p>Earlier, we said that when a variable goes out of scope, Rust automatically
 calls the <code>drop</code> function and cleans up the heap memory for that variable. But
 Figure 4-4 shows both data pointers pointing to the same location. This is a
@@ -370,12 +352,9 @@ without copying the data probably sounds like a shallow copy. But because Rust
 also invalidates the first variable, instead of calling this a shallow copy,
 it’s known as a <em>move</em>. Here we would read this by saying that <code>s1</code> was <em>moved</em>
 into <code>s2</code>. So what actually happens is shown in Figure 4-6.</p>
-<figure>
-<img alt="s1 moved to s2" src="img/trpl04-04.svg" class="center" style="width: 50%;" />
-<figcaption>
-<p>Figure 4-6: Representation in memory after <code>s1</code> has been invalidated</p>
-</figcaption>
-</figure>
+<p><img alt="s1 moved to s2" src="img/trpl04-04.svg" class="center" style="width: 50%;" /></p>
+<p><span class="caption">Figure 4-6: Representation in memory after <code>s1</code> has been
+invalidated</span></p>
 <p>That solves our problem! With only <code>s2</code> valid, when it goes out of scope, it
 alone will free the memory, and we’re done.</p>
 <p>In addition, there’s a design choice that’s implied by this: Rust will never
@@ -436,8 +415,7 @@ be sure, but as a general rule, any group of simple scalar values can be
 value to a variable. Passing a variable to a function will move or copy, just
 like assignment. Listing 4-7 has an example with some annotations showing where
 variables go into and out of scope:</p>
-<figure>
-<span class="filename">Filename: src/main.rs</span>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust">fn main() {
     let s = String::from(&quot;hello&quot;);  // s comes into scope.
 
@@ -461,10 +439,8 @@ fn makes_copy(some_integer: i32) { // some_integer comes into scope.
     println!(&quot;{}&quot;, some_integer);
 } // Here, some_integer goes out of scope. Nothing special happens.
 </code></pre>
-<figcaption>
-<p>Listing 4-7: Functions with ownership and scope annotated</p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 4-7: Functions with ownership and scope
+annotated</span></p>
 <p>If we tried to use <code>s</code> after the call to <code>takes_ownership</code>, Rust would throw a
 compile time error. These static checks protect us from mistakes. Try adding
 code to <code>main</code> that uses <code>s</code> and <code>x</code> to see where you can use them and where

@@ -126,7 +126,6 @@ route(IpAddrKind::V6);
 at the moment we don’t have a way to store the actual IP address <em>data</em>; we
 only know what <em>kind</em> it is. Given that you just learned about structs in
 Chapter 5, you might tackle this problem as shown in Listing 6-1:</p>
-<figure>
 <pre><code class="language-rust">enum IpAddrKind {
     V4,
     V6,
@@ -147,11 +146,8 @@ let loopback = IpAddr {
     address: String::from(&quot;::1&quot;),
 };
 </code></pre>
-<figcaption>
-<p>Listing 6-1: Storing the data and <code>IpAddrKind</code> variant of an IP address using a
-<code>struct</code></p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 6-1: Storing the data and <code>IpAddrKind</code> variant of
+an IP address using a <code>struct</code></span></p>
 <p>Here, we’ve defined a struct <code>IpAddr</code> that has two fields: a <code>kind</code> field that
 is of type <code>IpAddrKind</code> (the enum we defined previously) and an <code>address</code> field
 of type <code>String</code>. We have two instances of this struct. The first, <code>home</code>, has
@@ -221,7 +217,6 @@ haven’t brought the standard library’s definition into our scope. We’ll ta
 more about importing types in Chapter 7.</p>
 <p>Let’s look at another example of an enum in Listing 6-2: this one has a wide
 variety of types embedded in its variants:</p>
-<figure>
 <pre><code class="language-rust">enum Message {
     Quit,
     Move { x: i32, y: i32 },
@@ -229,11 +224,8 @@ variety of types embedded in its variants:</p>
     ChangeColor(i32, i32, i32),
 }
 </code></pre>
-<figcaption>
-<p>Listing 6-2: A <code>Message</code> enum whose variants each store different amounts and
-types of values</p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 6-2: A <code>Message</code> enum whose variants each store
+different amounts and types of values</span></p>
 <p>This enum has four variants with different types:</p>
 <ul>
 <li><code>Quit</code> has no data associated with it at all.</li>

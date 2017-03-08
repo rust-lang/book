@@ -84,7 +84,6 @@ the value will fall into the associated code block to be used during execution.<
 can write a function that can take an unknown United States coin and, in a
 similar way as the counting machine, determine which coin it is and return its
 value in cents, as shown here in Listing 6-3:</p>
-<figure>
 <pre><code class="language-rust">enum Coin {
     Penny,
     Nickel,
@@ -101,11 +100,8 @@ fn value_in_cents(coin: Coin) -&gt; i32 {
     }
 }
 </code></pre>
-<figcaption>
-<p>Listing 6-3: An enum and a <code>match</code> expression that has the variants of the enum
-as its patterns.</p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 6-3: An enum and a <code>match</code> expression that has
+the variants of the enum as its patterns.</span></p>
 <p>Let’s break down the <code>match</code> in the <code>value_in_cents</code> function. First, we list
 the <code>match</code> keyword followed by an expression, which in this case is the value
 <code>coin</code>. This seems very similar to an expression used with <code>if</code>, but there’s a
@@ -158,7 +154,6 @@ designs for each of the 50 states on one side. No other coins got state
 designs, so only quarters have this extra value. We can add this information to
 our <code>enum</code> by changing the <code>Quarter</code> variant to include a <code>State</code> value stored
 inside it, which we've done here in Listing 6-4:</p>
-<figure>
 <pre><code class="language-rust">#[derive(Debug)] // So we can inspect the state in a minute
 enum UsState {
     Alabama,
@@ -173,11 +168,8 @@ enum Coin {
     Quarter(UsState),
 }
 </code></pre>
-<figcaption>
-<p>Listing 6-4: A <code>Coin</code> enum where the <code>Quarter</code> variant also holds a <code>UsState</code>
-value</p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 6-4: A <code>Coin</code> enum where the <code>Quarter</code> variant
+also holds a <code>UsState</code> value</span></p>
 <p>Let’s imagine that a friend of ours is trying to collect all 50 state quarters.
 While we sort our loose change by coin type, we’ll also call out the name of
 the state associated with each quarter so if it’s one our friend doesn’t have,
@@ -229,7 +221,6 @@ the function should return the <code>None</code> value and not attempt to perfor
 operations.</p>
 <p>This function is very easy to write, thanks to <code>match</code>, and will look like
 Listing 6-5:</p>
-<figure>
 <pre><code class="language-rust">fn plus_one(x: Option&lt;i32&gt;) -&gt; Option&lt;i32&gt; {
     match x {
         None =&gt; None,
@@ -241,10 +232,8 @@ let five = Some(5);
 let six = plus_one(five);
 let none = plus_one(None);
 </code></pre>
-<figcaption>
-<p>Listing 6-5: A function that uses a <code>match</code> expression on an <code>Option&lt;i32&gt;</code></p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 6-5: A function that uses a <code>match</code> expression on
+an <code>Option&lt;i32&gt;</code></span></p>
 <a class="header" href="ch06-02-match.html#matching-somet" name="matching-somet"><h4>Matching <code>Some(T)</code></h4></a>
 <p>Let’s examine the first execution of <code>plus_one</code> in more detail. When we call
 <code>plus_one(five)</code>, the variable <code>x</code> in the body of <code>plus_one</code> will have the

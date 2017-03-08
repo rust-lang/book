@@ -83,8 +83,7 @@ understand two things:</p>
 containing all of the elements the iterator produces.</li>
 </ol>
 <p>Let's give it a try as shown in Listing 12-1:</p>
-<figure>
-<span class="filename">Filename: src/main.rs</span>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust">use std::env;
 
 fn main() {
@@ -92,10 +91,8 @@ fn main() {
     println!(&quot;{:?}&quot;, args);
 }
 </code></pre>
-<figcaption>
-<p>Listing 12-1: Collect the command line arguments into a vector and print them out</p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 12-1: Collect the command line arguments into a
+vector and print them out</span></p>
 <!-- Will add wingdings in libreoffice /Carol -->
 <p>First, we have a <code>use</code> statement to bring the <code>std::env</code> module into scope.
 When using a function that's nested in more than one level of module, like
@@ -123,9 +120,8 @@ argument. The reasons for this are out of the scope of this chapter, but it's
 something we'll have to remember to account for.</p>
 <p>Now that we have a way to access all of the arguments, let's find the ones we
 care about and save them in variables as shown in Listing 12-2:</p>
-<figure>
-<span class="filename">Filename: src/main.rs</span>
-<pre><code class="language-rust">use std::env;
+<p><span class="filename">Filename: src/main.rs</span></p>
+<pre><code class="language-rust ignore">use std::env;
 
 fn main() {
     let args: Vec&lt;String&gt; = env::args().collect();
@@ -137,10 +133,8 @@ fn main() {
     println!(&quot;In file {}&quot;, filename);
 }
 </code></pre>
-<figcaption>
-<p>Listing 12-2: Create variables to hold the search argument and filename argument</p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 12-2: Create variables to hold the search
+argument and filename argument</span></p>
 <!-- Will add ghosting and wingdings in libreoffice /Carol -->
 <p>Remember, the program's name is the first argument, so we don't need <code>args[0]</code>.
 We've decided that the first argument will be the string we're searching for,

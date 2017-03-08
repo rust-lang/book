@@ -127,8 +127,7 @@ borrow their parameters immutably and mutably. Note that the <code>data</code> v
 declared as immutable with <code>let data</code> rather than <code>let mut data</code>, yet
 <code>a_fn_that_mutably_borrows</code> is allowed to borrow the data mutably and make
 changes to the data!</p>
-<figure>
-<span class="filename">Filename: src/main.rs</span>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust">use std::cell::RefCell;
 
 fn a_fn_that_immutably_borrows(a: &amp;i32) {
@@ -150,10 +149,8 @@ fn main() {
     demo(&amp;data);
 }
 </code></pre>
-<figcaption>
-<p>Listing 15-14: Using <code>RefCell&lt;T&gt;</code>, <code>borrow</code>, and <code>borrow_mut</code></p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 15-14: Using <code>RefCell&lt;T&gt;</code>, <code>borrow</code>, and
+<code>borrow_mut</code></span></p>
 <p>This example prints:</p>
 <pre><code class="language-text">a is 5
 a is 6
@@ -228,8 +225,7 @@ instead of storing <code>i32</code> values in the cons list, we'll be storing
 owner of the value that's not part of the list (the multiple owners
 functionality that <code>Rc&lt;T&gt;</code> provides), and so we can mutate the inner <code>i32</code>
 value (the interior mutability functionality that <code>RefCell&lt;T&gt;</code> provides):</p>
-<figure>
-<span class="filename">Filename: src/main.rs</span>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust">#[derive(Debug)]
 enum List {
     Cons(Rc&lt;RefCell&lt;i32&gt;&gt;, Rc&lt;List&gt;),
@@ -256,10 +252,8 @@ fn main() {
     println!(&quot;c after = {:?}&quot;, c);
 }
 </code></pre>
-<figcaption>
-<p>Listing 15-15: Using <code>Rc&lt;RefCell&lt;i32&gt;&gt;</code> to create a <code>List</code> that we can mutate</p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 15-15: Using <code>Rc&lt;RefCell&lt;i32&gt;&gt;</code> to create a
+<code>List</code> that we can mutate</span></p>
 <p>We're creating a value, which is an instance of <code>Rc&lt;RefCell&lt;i32&gt;&gt;</code>. We're
 storing it in a variable named <code>value</code> because we want to be able to access it
 directly later. Then we create a <code>List</code> in <code>a</code> that has a <code>Cons</code> variant that

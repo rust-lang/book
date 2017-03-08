@@ -121,8 +121,7 @@ before moving on to the next one.</p>
 <p>The first part of the program will ask for user input, process that input, and
 check that the input is in the expected form. To start, we’ll allow the player
 to input a guess. Enter the code in Listing 2-1 into <em>src/main.rs</em>.</p>
-<figure>
-<span class="filename">Filename: src/main.rs</span>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust ignore">use std::io;
 
 fn main() {
@@ -138,10 +137,7 @@ fn main() {
     println!(&quot;You guessed: {}&quot;, guess);
 }
 </code></pre>
-<figcaption>
-<p>Listing 2-1: Code to get a guess from the user and print it out</p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 2-1: Code to get a guess from the user and print it out</span></p>
 <p>This code contains a lot of information, so let’s go over it bit by bit. To
 obtain user input and then print the result as output, we need to bring the
 <code>io</code> (input/output) library into scope. The <code>io</code> library comes from the
@@ -335,7 +331,6 @@ for <code>^0.3.14</code>, which means “any version that has a public API compa
 version 0.3.14.”</p>
 <p>Now, without changing any of the code, let’s build the project, as shown in
 Listing 2-2:</p>
-<figure>
 <pre><code class="language-text">$ cargo build
     Updating registry `https://github.com/rust-lang/crates.io-index`
  Downloading rand v0.3.14
@@ -344,11 +339,8 @@ Listing 2-2:</p>
    Compiling rand v0.3.14
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
 </code></pre>
-<figcaption>
-<p>Listing 2-2: The output from running <code>cargo build</code> after adding the rand crate
-as a dependency</p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 2-2: The output from running <code>cargo build</code> after
+adding the rand crate as a dependency</span></p>
 <p>You may see different version numbers (but they will all be compatible with
 the code, thanks to SemVer!), and the lines may be in a different order.</p>
 <p>Now that we have an external dependency, Cargo fetches the latest versions of
@@ -425,8 +417,7 @@ number of packages.</p>
 <a class="header" href="ch02-00-guessing-game-tutorial.html#generating-a-random-number" name="generating-a-random-number"><h3>Generating a Random Number</h3></a>
 <p>Let’s start <em>using</em> <code>rand</code>. The next step is to update <em>src/main.rs</em>, as shown
 in Listing 2-3:</p>
-<figure>
-<span class="filename">Filename: src/main.rs</span>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust ignore">extern crate rand;
 
 use std::io;
@@ -449,10 +440,8 @@ fn main() {
     println!(&quot;You guessed: {}&quot;, guess);
 }
 </code></pre>
-<figcaption>
-<p>Listing 2-3: Code changes needed in order to generate a random number</p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 2-3: Code changes needed in order to generate a
+random number</span></p>
 <p>We’re adding a <code>extern crate rand;</code> line to the top that lets Rust know we’ll be
 using that external dependency. This also does the equivalent of calling <code>use rand</code>, so now we can call anything in the <code>rand</code> crate by prefixing it with
 <code>rand::</code>.</p>
@@ -500,8 +489,7 @@ You guessed: 5
 <a class="header" href="ch02-00-guessing-game-tutorial.html#comparing-the-guess-to-the-secret-number" name="comparing-the-guess-to-the-secret-number"><h2>Comparing the Guess to the Secret Number</h2></a>
 <p>Now that we have user input and a random number, we can compare them. That
 step is shown in Listing 2-4:</p>
-<figure>
-<span class="filename">Filename: src/main.rs</span>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust ignore">extern crate rand;
 
 use std::io;
@@ -531,10 +519,8 @@ fn main() {
     }
 }
 </code></pre>
-<figcaption>
-<p>Listing 2-4: Handling the possible return values of comparing two numbers</p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 2-4: Handling the possible return values of
+comparing two numbers</span></p>
 <p>The first new bit here is another <code>use</code>, bringing a type called
 <code>std::cmp::Ordering</code> into scope from the standard library. <code>Ordering</code> is
 another enum, like <code>Result</code>, but the variants for <code>Ordering</code> are <code>Less</code>,
@@ -862,8 +848,7 @@ You win!
 that the program is still printing out the secret number. That worked well for
 testing, but it ruins the game. Let’s delete the <code>println!</code> that outputs the
 secret number. Listing 2-5 shows the final code:</p>
-<figure>
-<span class="filename">Filename: src/main.rs</span>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust ignore">extern crate rand;
 
 use std::io;
@@ -901,10 +886,7 @@ fn main() {
     }
 }
 </code></pre>
-<figcaption>
-<p>Listing 2-5: Complete code of the guessing game</p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 2-5: Complete code of the guessing game</span></p>
 <a class="header" href="ch02-00-guessing-game-tutorial.html#summary" name="summary"><h2>Summary</h2></a>
 <p>At this point, you’ve successfully built the guessing game! Congratulations!</p>
 <p>This project was a hands-on way to introduce you to many new Rust concepts:

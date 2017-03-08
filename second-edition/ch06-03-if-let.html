@@ -72,18 +72,14 @@
 handle values that match one pattern and ignore the rest. Consider the program
 in Listing 6-6 that matches on an <code>Option&lt;u8&gt;</code> value but only wants to execute
 code if the value is three:</p>
-<figure>
 <pre><code class="language-rust">let some_u8_value = Some(0u8);
 match some_u8_value {
     Some(3) =&gt; println!(&quot;three&quot;),
     _ =&gt; (),
 }
 </code></pre>
-<figcaption>
-<p>Listing 6-6: A <code>match</code> that only cares about executing code when the value is
-<code>Some(3)</code></p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 6-6: A <code>match</code> that only cares about executing
+code when the value is <code>Some(3)</code></span></p>
 <p>We want to do something with the <code>Some(3)</code> match but do nothing with any other
 <code>Some&lt;u8&gt;</code> value or the <code>None</code> value. To satisfy the <code>match</code> expression, we
 have to add <code>_ =&gt; ()</code> after processing just one variant, which is a lot of

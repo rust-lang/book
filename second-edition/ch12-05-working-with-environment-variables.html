@@ -115,8 +115,7 @@ Trust me.&quot;;
 <p>We're going to define a new function named <code>grep_case_insensitive</code>. Its
 implementation will be almost the same as the <code>grep</code> function, but with some
 minor changes as shown in Listing 12-16:</p>
-<figure>
-<span class="filename">Filename: src/lib.rs</span>
+<p><span class="filename">Filename: src/lib.rs</span></p>
 <pre><code class="language-rust">fn grep_case_insensitive&lt;'a&gt;(search: &amp;str, contents: &amp;'a str) -&gt; Vec&lt;&amp;'a str&gt; {
     let search = search.to_lowercase();
     let mut results = Vec::new();
@@ -130,11 +129,9 @@ minor changes as shown in Listing 12-16:</p>
     results
 }
 </code></pre>
-<figcaption>
-<p>Listing 12-16: Implementing a <code>grep_case_insensitive</code> function by changing the
-search string and the lines of the contents to lowercase before comparing them</p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 12-16: Implementing a <code>grep_case_insensitive</code>
+function by changing the search string and the lines of the contents to
+lowercase before comparing them</span></p>
 <!-- Will add ghosting and wingdings in libreoffice /Carol -->
 <p>First, we lowercase the <code>search</code> string, and store it in a shadowed variable
 with the same name. Note that <code>search</code> is now a <code>String</code> rather than a string

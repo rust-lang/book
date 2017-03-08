@@ -82,8 +82,7 @@ string should be returned.</p>
 ownership, so this is fine. But what should we return? We don’t really have a
 way to talk about <em>part</em> of a string. However, we could return the index of the
 end of the word. Let’s try that as shown in Listing 4-10:</p>
-<figure>
-<span class="filename">Filename: src/main.rs</span>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust">fn first_word(s: &amp;String) -&gt; usize {
     let bytes = s.as_bytes();
 
@@ -96,11 +95,8 @@ end of the word. Let’s try that as shown in Listing 4-10:</p>
     s.len()
 }
 </code></pre>
-<figcaption>
-<p>Listing 4-10: The <code>first_word</code> function that returns a byte index value into
-the <code>String</code> parameter</p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 4-10: The <code>first_word</code> function that returns a
+byte index value into the <code>String</code> parameter</span></p>
 <p>Let’s break down this code a bit. Because we need to go through the <code>String</code>
 element by element and check whether a value is a space, we’ll convert our
 <code>String</code> to an array of bytes using the <code>as_bytes</code> method:</p>
@@ -135,8 +131,7 @@ only a meaningful number in the context of the <code>&amp;String</code>. In othe
 because it’s a separate value from the <code>String</code>, there’s no guarantee that it
 will still be valid in the future. Consider the program in Listing 4-11 that
 uses the <code>first_word</code> function from Listing 4-10:</p>
-<figure>
-<span class="filename">Filename: src/main.rs</span>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust"># fn first_word(s: &amp;String) -&gt; usize {
 #     let bytes = s.as_bytes();
 #
@@ -160,11 +155,8 @@ fn main() {
     // we could meaningfully use the value 5 with. word is now totally invalid!
 }
 </code></pre>
-<figcaption>
-<p>Listing 4-11: Storing the result from calling the <code>first_word</code> function then
-changing the <code>String</code> contents</p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 4-11: Storing the result from calling the
+<code>first_word</code> function then changing the <code>String</code> contents</span></p>
 <p>This program compiles without any errors and also would if we used <code>word</code> after
 calling <code>s.clear()</code>. <code>word</code> isn’t connected to the state of <code>s</code> at all, so
 <code>word</code> still contains the value <code>5</code>. We could use that value <code>5</code> with the
@@ -196,12 +188,9 @@ slice data structure actually stores the starting position and the length of
 the slice. So in the case of <code>let world = &amp;s[6..11];</code>, <code>world</code> would be a slice
 that contains a pointer to the 6th byte of <code>s</code> and a length value of 5.</p>
 <p>Figure 4-12 shows this in a diagram.</p>
-<figure>
-<img alt="world containing a pointer to the 6th byte of String s and a length 5" src="img/trpl04-06.svg" class="center" style="width: 50%;" />
-<figcaption>
-<p>Figure 4-12: String slice referring to part of a <code>String</code></p>
-</figcaption>
-</figure>
+<p><img alt="world containing a pointer to the 6th byte of String s and a length 5" src="img/trpl04-06.svg" class="center" style="width: 50%;" /></p>
+<p><span class="caption">Figure 4-12: String slice referring to part of a
+<code>String</code></span></p>
 <p>With Rust’s <code>..</code> range syntax, if you want to start at the first index (zero),
 you can drop the value before the two periods. In other words, these are equal:</p>
 <pre><code class="language-rust">let s = String::from(&quot;hello&quot;);

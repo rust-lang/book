@@ -71,8 +71,7 @@
 <p>We’ve covered how to call functions defined within a module using the module
 name as part of the call, as in the call to the <code>nested_modules</code> function shown
 here in Listing 7-6.</p>
-<figure>
-<span class="filename">Filename: src/main.rs</span>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust">pub mod a {
     pub mod series {
         pub mod of {
@@ -85,11 +84,8 @@ fn main() {
     a::series::of::nested_modules();
 }
 </code></pre>
-<figcaption>
-<p>Listing 7-6: Calling a function by fully specifying its enclosing module’s
-namespaces</p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 7-6: Calling a function by fully specifying its
+enclosing module’s namespaces</span></p>
 <p>As you can see, referring to the fully qualified name can get quite lengthy.
 Luckily, Rust has a keyword to make these calls more concise.</p>
 <a class="header" href="ch07-03-importing-names-with-use.html#concise-imports-with-use" name="concise-imports-with-use"><h3>Concise Imports with <code>use</code></h3></a>

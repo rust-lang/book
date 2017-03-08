@@ -243,8 +243,7 @@ child modules.</li>
 <a class="header" href="ch07-02-controlling-visibility-with-pub.html#privacy-examples" name="privacy-examples"><h3>Privacy Examples</h3></a>
 <p>Let’s look at a few more examples to get some practice. Create a new library
 project and enter the code in Listing 7-5 into your new project’s <em>src/lib.rs</em>:</p>
-<figure>
-<span class="filename">Filename: src/lib.rs</span>
+<p><span class="filename">Filename: src/lib.rs</span></p>
 <pre><code class="language-rust ignore">mod outermost {
     pub fn middle_function() {}
 
@@ -264,11 +263,8 @@ fn try_me() {
     outermost::inside::secret_function();
 }
 </code></pre>
-<figcaption>
-<p>Listing 7-5: Examples of private and public functions, some of which are
-incorrect</p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 7-5: Examples of private and public functions,
+some of which are incorrect</span></p>
 <p>Before you try to compile this code, make a guess about which lines in <code>try_me</code>
 function will have errors. Then try compiling to see if you were right, and
 read on for discussion of the errors!</p>

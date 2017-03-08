@@ -92,8 +92,7 @@ create an instance of the struct and <code>Dropping CustomSmartPointer!</code> w
 instance goes out of scope so that we can see when each piece of code gets run.
 Instead of a <code>println!</code> statement, you'd fill in <code>drop</code> with whatever cleanup
 code your smart pointer needs to run:</p>
-<figure>
-<span class="filename">Filename: src/main.rs</span>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust">struct CustomSmartPointer {
     data: String,
 }
@@ -110,11 +109,9 @@ fn main() {
     println!(&quot;Wait for it...&quot;);
 }
 </code></pre>
-<figcaption>
-<p>Listing 15-8: A <code>CustomSmartPointer</code> struct that implements the <code>Drop</code> trait,
-where we could put code that would clean up after the <code>CustomSmartPointer</code>.</p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 15-8: A <code>CustomSmartPointer</code> struct that
+implements the <code>Drop</code> trait, where we could put code that would clean up after
+the <code>CustomSmartPointer</code>.</span></p>
 <p>The <code>Drop</code> trait is in the prelude, so we don't need to import it. The <code>drop</code>
 method implementation calls the <code>println!</code>; this is where you'd put the actual
 code needed to close the socket. In <code>main</code>, we create a new instance of
@@ -136,8 +133,7 @@ a case when we'll need to drop a value earlier than when it goes out of scope
 in Chapter 16 when we're talking about concurrency. For now, let's just see
 that it's possible, and <code>std::mem::drop</code> is in the prelude so we can just call
 <code>drop</code> as shown in Listing 15-9:</p>
-<figure>
-<span class="filename">Filename: src/main.rs</span>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust ignore">fn main() {
     let c = CustomSmartPointer { data: String::from(&quot;some data&quot;) };
     println!(&quot;CustomSmartPointer created.&quot;);
@@ -145,11 +141,8 @@ that it's possible, and <code>std::mem::drop</code> is in the prelude so we can 
     println!(&quot;Wait for it...&quot;);
 }
 </code></pre>
-<figcaption>
-<p>Listing 15-9: Calling <code>std::mem::drop</code> to explicitly drop a value before it
-goes out of scope</p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 15-9: Calling <code>std::mem::drop</code> to explicitly drop
+a value before it goes out of scope</span></p>
 <p>Running this code will print the following, showing that the destructor code is
 called since <code>Dropping CustomSmartPointer!</code> is printed between
 <code>CustomSmartPointer created.</code> and <code>Wait for it...</code>:</p>

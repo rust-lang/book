@@ -101,8 +101,7 @@ they are used. Consider the example in Listing 13-5 that has functions that
 borrow immutably, borrow mutably, and move their parameters, then closures that
 reference values from their environment and call each of the functions. We'll
 see how this affects inference of when a value is borrowed:</p>
-<figure>
-<span class="filename">Filename: src/main.rs</span>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust">#[derive(Debug)]
 struct Foo;
 
@@ -132,12 +131,9 @@ fn main() {
     closure_that_moves(f3);
 }
 </code></pre>
-<figcaption>
-<p>Listing 16-something: Closures that borrow, borrow mutably, and take ownership
-of their parameters, which is inferred from how the closure body uses the
-parameters</p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 16-something: Closures that borrow, borrow
+mutably, and take ownership of their parameters, which is inferred from how the
+closure body uses the parameters</span></p>
 <p>Here, Rust is able to look at how we use the parameters of each closure inside
 their bodies. If the closure passes its parameter it to a function that takes
 <code>&amp;Foo</code>, then the type of the parameter must be <code>&amp;Foo</code>. If it passes the
@@ -200,7 +196,6 @@ like this:</p>
 Because closures may borrow variables from their enclosing scope, we can
 construct a similar example with a closure that borrows <code>x</code> and tries to return
 that borrowed value. The code in Listing 13-6 also won't compile:</p>
-<figure>
 <pre><code class="language-rust ignore">{
     let closure;
 
@@ -211,11 +206,8 @@ that borrowed value. The code in Listing 13-6 also won't compile:</p>
     }
 }
 </code></pre>
-<figcaption>
-<p>Listing 16-something: A closure that tries to return a borrowed value that does
-not live long enough</p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 16-something: A closure that tries to return a
+borrowed value that does not live long enough</span></p>
 <p>We get an error because <code>x</code> does not live long enough:</p>
 <pre><code class="language-text">error: `x` does not live long enough
   --&gt;
@@ -233,7 +225,6 @@ not live long enough</p>
 from the last section to make the closure take ownership of <code>x</code>. Because <code>x</code> is
 a number, it is a <code>Copy</code> type and therefore will be copied into the closure.
 The code in Listing 13-7 will compile:</p>
-<figure>
 <pre><code class="language-rust">{
     let closure;
 
@@ -248,10 +239,8 @@ The code in Listing 13-7 will compile:</p>
     }
 }
 </code></pre>
-<figcaption>
-<p>Listing 16-something: Moving a value into the closure to fix the lifetime error</p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 16-something: Moving a value into the closure to
+fix the lifetime error</span></p>
 <p>Even though we modified <code>x</code> between the closure definition and <code>assert_eq!</code>,
 since <code>closure</code> now has its own version, the changes to <code>x</code> won't change the
 version of <code>x</code> that's in the closure.</p>

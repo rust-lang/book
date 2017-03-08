@@ -103,8 +103,7 @@ to extract into a function, you'll start to recognize duplicated code that can
 use generics.</p>
 <p>Consider a small program that finds the largest number in a list, shown in
 Listing 10-1:</p>
-<figure>
-<span class="filename">Filename: src/main.rs</span>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust">fn main() {
     let numbers = vec![34, 50, 25, 100, 65];
 
@@ -120,10 +119,8 @@ Listing 10-1:</p>
 #  assert_eq!(largest, 100);
 }
 </code></pre>
-<figcaption>
-<p>Listing 10-1: Code to find the largest number in a list of numbers</p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 10-1: Code to find the largest number in a list
+of numbers</span></p>
 <p>This code takes a list of integers, stored here in the variable <code>numbers</code>. It
 puts the first item in the list in a variable named <code>largest</code>. Then it iterates
 through all the numbers in the list, and if the current value is greater than
@@ -134,8 +131,7 @@ hold the largest value, which in this case is 100.</p>
 <p>If we needed to find the largest number in two different lists of numbers, we
 could duplicate the code in Listing 10-1 and have the same logic exist in two
 places in the program, as in Listing 10-2:</p>
-<figure>
-<span class="filename">Filename: src/main.rs</span>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust">fn main() {
     let numbers = vec![34, 50, 25, 100, 65];
 
@@ -162,10 +158,8 @@ places in the program, as in Listing 10-2:</p>
     println!(&quot;The largest number is {}&quot;, largest);
 }
 </code></pre>
-<figcaption>
-<p>Listing 10-2: Code to find the largest number in <em>two</em> lists of numbers</p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 10-2: Code to find the largest number in <em>two</em>
+lists of numbers</span></p>
 <p>While this code works, duplicating code is tedious and error-prone, and means
 we have multiple places to update the logic if we need to change it.</p>
 <!-- Are we safe assuming the reader will be familiar with the term
@@ -180,8 +174,7 @@ in a list independently of the specific places this concept is used.</p>
 number into a function named <code>largest</code>. This program can find the largest
 number in two different lists of numbers, but the code from Listing 10-1 only
 exists in one spot:</p>
-<figure>
-<span class="filename">Filename: src/main.rs</span>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust">fn largest(list: &amp;[i32]) -&gt; i32 {
     let mut largest = list[0];
 
@@ -208,10 +201,8 @@ fn main() {
 #    assert_eq!(result, 6000);
 }
 </code></pre>
-<figcaption>
-<p>Listing 10-3: Abstracted code to find the largest number in two lists</p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 10-3: Abstracted code to find the largest number
+in two lists</span></p>
 <p>The function has a parameter, <code>list</code>, which represents any concrete slice of
 <code>i32</code> values that we might pass into the function. The code in the function
 definition operates on the <code>list</code> representation of any <code>&amp;[i32]</code>. When we call

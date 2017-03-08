@@ -104,10 +104,7 @@ that the value it’s associated with should be a signed integer (hence the <cod
 as opposed to a <code>u</code> for unsigned) for a 32-bit system. Table 3-1 shows the
 built-in integer types in Rust. Each variant in the Signed and Unsigned columns
 (for example, <em>i32</em>) can be used to declare the type of an integer value.</p>
-<figure>
-<figcaption>
-<p>Table 3-1: Integer Types in Rust</p>
-</figcaption>
+<p><span class="caption">Table 3-1: Integer Types in Rust</span></p>
 <table><thead><tr><td> Length </td><td> Signed </td><td> Unsigned </td></tr></thead>
 <tr><td> 8-bit  </td><td> i8     </td><td> u8       </td></tr>
 <tr><td> 16-bit </td><td> i16    </td><td> u16      </td></tr>
@@ -115,7 +112,6 @@ built-in integer types in Rust. Each variant in the Signed and Unsigned columns
 <tr><td> 64-bit </td><td> i64    </td><td> u64      </td></tr>
 <tr><td> arch   </td><td> isize  </td><td> usize    </td></tr>
 </table>
-</figure>
 <p>Each variant can be either signed or unsigned and has an explicit size.
 Signed and unsigned refers to whether it’s possible for the number to be
 negative or positive; in other words, whether the number needs to have a sign
@@ -137,10 +133,7 @@ if you’re on a 32-bit architecture.</p>
 <p>You can write integer literals in any of the forms shown in Table 3-2. Note
 that all number literals except the byte literal allow a type suffix, such as
 <code>57u8</code>, and <code>_</code> as a visual separator, such as <code>1_000</code>.</p>
-<figure>
-<figcaption>
-<p>Table 3-2: Integer Literals in Rust</p>
-</figcaption>
+<p><span class="caption">Table 3-2: Integer Literals in Rust</span></p>
 <table><thead><tr><td> Number literals  </td><td> Example       </td></tr></thead>
 <tr><td> Decimal          </td><td> <code>98_222</code>      </td></tr>
 <tr><td> Hex              </td><td> <code>0xff</code>        </td></tr>
@@ -148,7 +141,6 @@ that all number literals except the byte literal allow a type suffix, such as
 <tr><td> Binary           </td><td> <code>0b1111_0000</code> </td></tr>
 <tr><td> Byte (<code>u8</code> only) </td><td> <code>b'A'</code>        </td></tr>
 </table>
-</figure>
 <p>So how do you know which type of integer to use? If you’re unsure, Rust’s
 defaults are generally good choices, and integer types default to <code>i32</code>: it’s
 generally the fastest, even on 64-bit systems. The primary situation in which

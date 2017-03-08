@@ -91,18 +91,14 @@ library has defined on it in many different situations where the successful
 value and error value we want to return may differ.</p>
 <p>Let’s call a function that returns a <code>Result</code> value because the function could
 fail: opening a file, shown in Listing 9-2.</p>
-<figure>
-<span class="filename">Filename: src/main.rs</span>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust">use std::fs::File;
 
 fn main() {
     let f = File::open(&quot;hello.txt&quot;);
 }
 </code></pre>
-<figcaption>
-<p>Listing 9-2: Opening a file</p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 9-2: Opening a file</span></p>
 <p>How do we know <code>File::open</code> returns a <code>Result</code>? We could look at the standard
 library API documentation, or we could ask the compiler! If we give <code>f</code> a type
 annotation of some type that we know the return type of the function is <em>not</em>,
@@ -142,8 +138,7 @@ information about the kind of error that happened.</p>
 on the value <code>File::open</code> returned. Listing 9-3 shows one way to handle the
 <code>Result</code> with a basic tool: the <code>match</code> expression that we learned about in
 Chapter 6.</p>
-<figure>
-<span class="filename">Filename: src/main.rs</span>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust should_panic">use std::fs::File;
 
 fn main() {
@@ -157,11 +152,8 @@ fn main() {
     };
 }
 </code></pre>
-<figcaption>
-<p>Listing 9-3: Using a <code>match</code> expression to handle the <code>Result</code> variants we
-might have</p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 9-3: Using a <code>match</code> expression to handle the
+<code>Result</code> variants we might have</span></p>
 <p>Note that, like the <code>Option</code> enum, the <code>Result</code> enum and its variants have been
 imported in the prelude, so we don’t need to specify <code>Result::</code> before the <code>Ok</code>
 and <code>Err</code> variants in the <code>match</code> arms.</p>
@@ -185,8 +177,7 @@ exist, we want to create the file and return the handle to the new file. If
 permission to open the file, we still want to <code>panic!</code> in the same way as we
 did in Listing 9-3. Let’s look at Listing 9-4, which adds another arm to the
 <code>match</code>:</p>
-<figure>
-<span class="filename">Filename: src/main.rs</span>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust ignore">use std::fs::File;
 use std::io::ErrorKind;
 
@@ -215,10 +206,8 @@ fn main() {
     };
 }
 </code></pre>
-<figcaption>
-<p>Listing 9-4: Handling different kinds of errors in different ways</p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 9-4: Handling different kinds of errors in
+different ways</span></p>
 <p>The type of the value that <code>File::open</code> returns inside the <code>Err</code> variant is
 <code>io::Error</code>, which is a struct provided by the standard library. This struct
 has a method <code>kind</code> that we can call to get an <code>io::ErrorKind</code> value.
@@ -290,7 +279,6 @@ handled than what you have available in the context of your code.</p>
 <p>For example, Listing 9-5 shows a function that reads a username from a file. If
 the file doesn’t exist or can’t be read, this function will return those errors
 to the code that called this function:</p>
-<figure>
 <pre><code class="language-rust">use std::io;
 use std::io::Read;
 use std::fs::File;
@@ -311,10 +299,8 @@ fn read_username_from_file() -&gt; Result&lt;String, io::Error&gt; {
     }
 }
 </code></pre>
-<figcaption>
-<p>Listing 9-5: A function that returns errors to the calling code using <code>match</code></p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 9-5: A function that returns errors to the
+calling code using <code>match</code></span></p>
 <p>Let’s look at the return type of the function first: <code>Result&lt;String, io::Error&gt;</code>. This means that the function is returning a value of the type
 <code>Result&lt;T, E&gt;</code> where the generic parameter <code>T</code> has been filled in with the
 concrete type <code>String</code>, and the generic type <code>E</code> has been filled in with the
@@ -357,8 +343,8 @@ syntax to make this easier: <code>?</code>.</p>
 <p>Listing 9-6 shows an implementation of <code>read_username_from_file</code> that has the
 same functionality as it had in Listing 9-5, but this implementation uses the
 question mark operator:</p>
-<figure>
 <pre><code class="language-rust">use std::io;
+use std::io::Read;
 use std::fs::File;
 
 fn read_username_from_file() -&gt; Result&lt;String, io::Error&gt; {
@@ -368,10 +354,8 @@ fn read_username_from_file() -&gt; Result&lt;String, io::Error&gt; {
     Ok(s)
 }
 </code></pre>
-<figcaption>
-<p>Listing 9-6: A function that returns errors to the calling code using <code>?</code></p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 9-6: A function that returns errors to the
+calling code using <code>?</code></span></p>
 <p>The <code>?</code> placed after a <code>Result</code> value is defined to work the exact same way as
 the <code>match</code> expressions we defined to handle the <code>Result</code> values in Listing
 9-5. If the value of the <code>Result</code> is an <code>Ok</code>, the value inside the <code>Ok</code> will

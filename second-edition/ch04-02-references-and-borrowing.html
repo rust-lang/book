@@ -94,12 +94,8 @@ function return value is gone. Second, note that we pass <code>&amp;s1</code> in
 <code>String</code>.</p>
 <p>These ampersands are <em>references</em>, and they allow you to refer to some value
 without taking ownership of it. Figure 4-8 shows a diagram.</p>
-<figure>
-<img alt="&String s pointing at String s1" src="img/trpl04-05.svg" class="center" />
-<figcaption>
-<p>Figure 4-8: <code>&amp;String s</code> pointing at <code>String s1</code></p>
-</figcaption>
-</figure>
+<p><img alt="&String s pointing at String s1" src="img/trpl04-05.svg" class="center" /></p>
+<p><span class="caption">Figure 4-8: <code>&amp;String s</code> pointing at <code>String s1</code></span></p>
 <p>Let’s take a closer look at the function call here:</p>
 <pre><code class="language-rust"># fn calculate_length(s: &amp;String) -&gt; usize {
 #     s.len()
@@ -128,8 +124,7 @@ if a person owns something, you can borrow it from them. When you’re done, you
 have to give it back.</p>
 <p>So what happens if we try to modify something we’re borrowing? Try the code in
 Listing 4-9. Spoiler alert: it doesn’t work!</p>
-<figure>
-<span class="filename">Filename: src/main.rs</span>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust ignore">fn main() {
     let s = String::from(&quot;hello&quot;);
 
@@ -140,10 +135,7 @@ fn change(some_string: &amp;String) {
     some_string.push_str(&quot;, world&quot;);
 }
 </code></pre>
-<figcaption>
-<p>Listing 4-9: Attempting to modify a borrowed value</p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 4-9: Attempting to modify a borrowed value</span></p>
 <p>Here’s the error:</p>
 <pre><code class="language-text">error: cannot borrow immutable borrowed content `*some_string` as mutable
  --&gt; error.rs:8:5

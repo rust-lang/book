@@ -94,17 +94,13 @@ need each struct to have is that it's able to be summarized, and that we can
 ask for that summary by calling a <code>summary</code> method on an instance. Listing
 10-11 shows the definition of a <code>Summarizable</code> trait that expresses this
 concept:</p>
-<figure>
-<span class="filename">Filename: lib.rs</span>
+<p><span class="filename">Filename: lib.rs</span></p>
 <pre><code class="language-rust">pub trait Summarizable {
     fn summary(&amp;self) -&gt; String;
 }
 </code></pre>
-<figcaption>
-<p>Listing 10-11: Definition of a <code>Summarizable</code> trait that consists of the
-behavior provided by a <code>summary</code> method</p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 10-11: Definition of a <code>Summarizable</code> trait that
+consists of the behavior provided by a <code>summary</code> method</span></p>
 <p>We declare a trait with the <code>trait</code> keyword, then the trait's name, in this
 case <code>Summarizable</code>. Inside curly braces we declare the method signatures that
 describe the behaviors that types that implement this trait will need to have,
@@ -124,8 +120,7 @@ that uses the headline, the author, and the location to create the return value
 of <code>summary</code>. For the <code>Tweet</code> struct, we've chosen to define <code>summary</code> as the
 username followed by the whole text of the tweet, assuming that tweet content
 is already limited to 140 characters.</p>
-<figure>
-<span class="filename">Filename: lib.rs</span>
+<p><span class="filename">Filename: lib.rs</span></p>
 <pre><code class="language-rust"># pub trait Summarizable {
 #     fn summary(&amp;self) -&gt; String;
 # }
@@ -156,11 +151,8 @@ impl Summarizable for Tweet {
     }
 }
 </code></pre>
-<figcaption>
-<p>Listing 10-12: Implementing the <code>Summarizable</code> trait on the <code>NewsArticle</code> and
-<code>Tweet</code> types</p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 10-12: Implementing the <code>Summarizable</code> trait on
+the <code>NewsArticle</code> and <code>Tweet</code> types</span></p>
 <p>Implementing a trait on a type is similar to implementing methods that aren't
 related to a trait. The difference is after <code>impl</code>, we put the trait name that
 we want to implement, then say <code>for</code> and the name of the type that we want to
@@ -189,8 +181,7 @@ someone else wants to use our crate's functionality plus implement the
 <code>Summarizable</code> trait on their <code>WeatherForecast</code> struct, their code would need
 to import the <code>Summarizable</code> trait into their scope first before they could
 implement it, like in Listing 10-13:</p>
-<figure>
-<span class="filename">Filename: lib.rs</span>
+<p><span class="filename">Filename: lib.rs</span></p>
 <pre><code class="language-rust ignore">extern crate aggregator;
 
 use aggregator::Summarizable;
@@ -209,11 +200,8 @@ impl Summarizable for WeatherForecast {
     }
 }
 </code></pre>
-<figcaption>
-<p>Listing 10-13: Bringing the <code>Summarizable</code> trait from our <code>aggregator</code> crate
-into scope in another crate</p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 10-13: Bringing the <code>Summarizable</code> trait from our
+<code>aggregator</code> crate into scope in another crate</span></p>
 <p>This code also assumes <code>Summarizable</code> is a public trait, which it is because we
 put the <code>pub</code> keyword before <code>trait</code> in Listing 10-11.</p>
 <p>One restriction to note with trait implementations: we may implement a trait on
@@ -238,19 +226,15 @@ keep or override each method's default behavior.</p>
 <p>Listing 10-14 shows how we could have chosen to specify a default string for
 the <code>summary</code> method of the <code>Summarize</code> trait instead of only choosing to only
 define the method signature like we did in Listing 10-11:</p>
-<figure>
-<span class="filename">Filename: lib.rs</span>
+<p><span class="filename">Filename: lib.rs</span></p>
 <pre><code class="language-rust">pub trait Summarizable {
     fn summary(&amp;self) -&gt; String {
         String::from(&quot;(Read more...)&quot;)
     }
 }
 </code></pre>
-<figcaption>
-<p>Listing 10-14: Definition of a <code>Summarizable</code> trait with a default
-implementation of the <code>summary</code> method</p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 10-14: Definition of a <code>Summarizable</code> trait with
+a default implementation of the <code>summary</code> method</span></p>
 <p>If we wanted to use this default implementation to summarize instances of
 <code>NewsArticle</code> instead of defining a custom implementation like we did in
 Listing 10-12, we would specify an empty <code>impl</code> block:</p>
@@ -412,8 +396,7 @@ add <code>Copy</code> to the trait bounds of <code>T</code>! Listing 10-15 shows
 a generic <code>largest</code> function that will compile as long as the types of the
 values in the slice that we pass into <code>largest</code> implement both the <code>PartialOrd</code>
 and <code>Copy</code> traits, like <code>i32</code> and <code>char</code>:</p>
-<figure>
-<span class="filename">Filename: src/main.rs</span>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust">use std::cmp::PartialOrd;
 
 fn largest&lt;T: PartialOrd + Copy&gt;(list: &amp;[T]) -&gt; T {
@@ -440,11 +423,9 @@ fn main() {
     println!(&quot;The largest char is {}&quot;, result);
 }
 </code></pre>
-<figcaption>
-<p>Listing 10-15: A working definition of the <code>largest</code> function that works on any
-generic type that implements the <code>PartialOrd</code> and <code>Copy</code> traits</p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 10-15: A working definition of the <code>largest</code>
+function that works on any generic type that implements the <code>PartialOrd</code> and
+<code>Copy</code> traits</span></p>
 <p>If we don't want to restrict our <code>largest</code> function to only types that
 implement the <code>Copy</code> trait, we could specify that <code>T</code> has the trait bound
 <code>Clone</code> instead of <code>Copy</code> and clone each value in the slice when we want the

@@ -79,8 +79,7 @@ represents the instance of the struct that the method is being called on.</p>
 <p>Let’s change our <code>area</code> function that has a <code>Rectangle</code> instance as a parameter
 and instead make an <code>area</code> method defined on the <code>Rectangle</code> struct, as shown
 in Listing 5-7:</p>
-<figure>
-<span class="filename">Filename: src/main.rs</span>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust">#[derive(Debug)]
 struct Rectangle {
     length: u32,
@@ -102,10 +101,8 @@ fn main() {
     );
 }
 </code></pre>
-<figcaption>
-<p>Listing 5-7: Defining an <code>area</code> method on the <code>Rectangle</code> struct</p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 5-7: Defining an <code>area</code> method on the <code>Rectangle</code>
+struct</span></p>
 <!-- Will add ghosting and wingdings here in libreoffice /Carol -->
 <p>In order to make the function be defined within the context of <code>Rectangle</code>, we
 start an <code>impl</code> block (<code>impl</code> is short for <em>implementation</em>). Then we move the
@@ -181,8 +178,7 @@ receivers is a big part of making ownership ergonomic in practice.</p>
 another instance of <code>Rectangle</code> and return <code>true</code> if the second rectangle could
 fit completely within <code>self</code> and <code>false</code> if it would not. That is, if we run
 the code in Listing 5-8, once we've defined the <code>can_hold</code> method:</p>
-<figure>
-<span class="filename">Filename: src/main.rs</span>
+<p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust ignore">fn main() {
     let rect1 = Rectangle { length: 50, width: 30 };
     let rect2 = Rectangle { length: 40, width: 10 };
@@ -192,10 +188,8 @@ the code in Listing 5-8, once we've defined the <code>can_hold</code> method:</p
     println!(&quot;Can rect1 hold rect3? {}&quot;, rect1.can_hold(&amp;rect3));
 }
 </code></pre>
-<figcaption>
-<p>Listing 5-8: Demonstration of using the as-yet-unwritten <code>can_hold</code> method</p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 5-8: Demonstration of using the as-yet-unwritten
+<code>can_hold</code> method</span></p>
 <p>We want to see this output, since both of <code>rect2</code>’s dimensions are smaller than
 <code>rect1</code>’s, but <code>rect3</code> is wider than <code>rect1</code>:</p>
 <pre><code class="language-text">Can rect1 hold rect2? true

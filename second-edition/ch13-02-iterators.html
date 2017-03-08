@@ -71,18 +71,14 @@
 <p>Iterators are a pattern in Rust that allows you to do some processing on a
 sequence of items. For example, the code in Listing 13-5 adds one to each
 number in a vector:</p>
-<figure>
 <pre><code class="language-rust">let v1 = vec![1, 2, 3];
 
 let v2: Vec&lt;i32&gt; = v1.iter().map(|x| x + 1).collect();
 
 assert_eq!(v2, [2, 3, 4]);
 </code></pre>
-<figcaption>
-<p>Listing 13-5: Using an iterator, <code>map</code>, and <code>collect</code> to add one to each number
-in a vector</p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 13-5: Using an iterator, <code>map</code>, and <code>collect</code> to
+add one to each number in a vector</span></p>
 <!-- Will add wingdings in libreoffice /Carol -->
 <p>The <code>iter</code> method on vectors allows us to produce an <em>iterator</em> from the
 vector. Next, the <code>map</code> method called on the iterator allows us to process each
@@ -166,7 +162,6 @@ is to add one to the state (which is why we initialized <code>count</code> to 0,
 want our iterator to return one first). If <code>count</code> is still less than six, we'll
 return the current value, but if <code>count</code> is six or higher, our iterator will
 return <code>None</code>, as shown in Listing 13-6:</p>
-<figure>
 <pre><code class="language-rust"># struct Counter {
 #     count: u32,
 # }
@@ -188,10 +183,8 @@ impl Iterator for Counter {
     }
 }
 </code></pre>
-<figcaption>
-<p>Listing 13-6: Implementing the <code>Iterator</code> trait on our <code>Counter</code> struct</p>
-</figcaption>
-</figure>
+<p><span class="caption">Listing 13-6: Implementing the <code>Iterator</code> trait on our
+<code>Counter</code> struct</span></p>
 <!-- I will add wingdings in libreoffice /Carol -->
 <p>The <code>type Item = u32</code> line is saying that the associated <code>Item</code> type will be
 a <code>u32</code> for our iterator. Again, don't worry about associated types yet, because
