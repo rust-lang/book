@@ -10,9 +10,12 @@ attribute.
 ### The Anatomy of a Test Function
 
 At its simplest, a test in Rust is a function that's annotated with the `test`
-attribute. When we run our tests with the `cargo test` command, Rust will build
-a test runner binary that runs the functions annotated with the `test`
-attribute and reports on whether each test function passes or fails.
+attribute. Attributes are metadata about pieces of Rust code: the `derive`
+attribute that we used with structs in Chapter 5 is one example. To make a
+function into a test function, we add `#[test]` on the line before `fn`. When
+we run our tests with the `cargo test` command, Rust will build a test runner
+binary that runs the functions annotated with the `test` attribute and reports
+on whether each test function passes or fails.
 
 <!-- is it annotated with `test` by the user, or only automatically? I think
 it's the latter, and has edited with a more active tone to make that clear, but
