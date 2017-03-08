@@ -116,7 +116,7 @@ would take to store the largest of its variants.
 
 Contrast this to what happens when the Rust compiler looks at a recursive type
 like `List` in Listing 15-2. The compiler tries to figure out how much memory
-is needed to store a value of `List`, and starts by looking at the `Cons`
+is needed to store a value of the `List` enum, and starts by looking at the `Cons`
 variant. The `Cons` variant holds a value of type `i32` and a value of type
 `List`, so `Cons` needs an amount of space equal to the size of an `i32` plus
 the size of a `List`. To figure out how much memory a `List` needs, it looks at
