@@ -62,7 +62,6 @@ impossible to test private functions. Regardless of which testing ideology you
 adhere to, Rust's privacy rules do allow you to test private functions.
 Consider the code in Listing 11-12 with the private function `internal_adder`:
 
-<figure>
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust
@@ -85,12 +84,7 @@ mod tests {
 }
 ```
 
-<figcaption>
-
-Listing 11-12: Testing a private function
-
-</figcaption>
-</figure>
+<span class="caption">Listing 11-12: Testing a private function</span>
 
 <!-- I'm not clear on why we would assume this might not be fine, why are we
 highlighting this specifically? -->
@@ -128,7 +122,6 @@ Let's give it a try! Keep the code from Listing 11-12 in *src/lib.rs*. Make a
 *tests* directory, then make a new file named *tests/integration_test.rs*, and
 enter the code in Listing 11-13.
 
-<figure>
 <span class="filename">Filename: tests/integration_test.rs</span>
 
 ```rust,ignore
@@ -140,12 +133,8 @@ fn it_adds_two() {
 }
 ```
 
-<figcaption>
-
-Listing 11-13: An integration test of a function in the `adder` crate
-
-</figcaption>
-</figure>
+<span class="caption">Listing 11-13: An integration test of a function in the
+`adder` crate </span>
 
 We've added `extern crate adder` at the top, which we didn't need in the unit
 tests. This is because each test in the `tests` directory is an entirely
@@ -256,7 +245,7 @@ If we run the tests again, we'll see a new section in the test output for the
 *common.rs* file, even though this file doesn't contain any test functions, nor
 are we calling the `setup` function from anywhere:
 
-```
+```text
 running 1 test
 test tests::internal ... ok
 

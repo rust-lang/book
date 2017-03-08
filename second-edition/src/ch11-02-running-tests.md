@@ -65,10 +65,9 @@ For example, Listing 11-10 has a silly function that prints out the value of
 its parameter and then returns 10. We then have a test that passes and a test
 that fails:
 
-<figure>
 <span class="filename">Filename: src/lib.rs</span>
 
-```rust,should_panic
+```rust
 fn prints_and_returns_10(a: i32) -> i32 {
     println!("I got the value {}", a);
     10
@@ -92,12 +91,8 @@ mod tests {
 }
 ```
 
-<figcaption>
-
-Listing 11-10: Tests for a function that calls `println!`
-
-</figcaption>
-</figure>
+<span class="caption">Listing 11-10: Tests for a function that calls `println!`
+</span>
 
 The output we'll see when we run these tests with `cargo test` is:
 
@@ -113,7 +108,6 @@ failures:
 thread 'tests::this_test_will_fail' panicked at 'assertion failed: `(left ==
 right)` (left: `5`, right: `10`)', src/lib.rs:19
 note: Run with `RUST_BACKTRACE=1` for a backtrace.
-
 
 failures:
     tests::this_test_will_fail
@@ -169,7 +163,6 @@ or names of the test/s you want to run as an argument.
 To demonstrate how to run a subset of tests, we'll create three tests for our
 `add_two` function as shown in Listing 11-11 and choose which ones to run:
 
-<figure>
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust
@@ -198,12 +191,7 @@ mod tests {
 }
 ```
 
-<figcaption>
-
-Listing 11-11: Three tests with a variety of names
-
-</figcaption>
-</figure>
+<span class="caption">Listing 11-11: Three tests with a variety of names</span>
 
 If we run the tests without passing any arguments, as we've already seen, all
 the tests will run in parallel:

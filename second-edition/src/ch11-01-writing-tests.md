@@ -49,7 +49,6 @@ $ cd adder
 The contents of the `src/lib.rs` file in your adder library should be as
 follows:
 
-<figure>
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust
@@ -61,13 +60,8 @@ mod tests {
 }
 ```
 
-<figcaption>
-
-Listing 11-1: The test module and function generated automatically for us by
-`cargo new`
-
-</figcaption>
-</figure>
+<span class="caption">Listing 11-1: The test module and function generated
+automatically for us by `cargo new` </span>
 
 For now, let's ignore the top two lines and focus on the function to see how it
 works. Note the `#[test]` annotation before the `fn` line: this attribute
@@ -82,8 +76,6 @@ passes.
 
 The `cargo test` command runs all tests we have in our project, as shown in
 Listing 11-2:
-
-<figure>
 
 ```text
 $ cargo test
@@ -103,12 +95,8 @@ running 0 tests
 test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured
 ```
 
-<figcaption>
-
-Listing 11-2: The output from running the one automatically generated test
-
-</figcaption>
-</figure>
+<span class="caption">Listing 11-2: The output from running the one
+automatically generated test </span>
 
 Cargo compiled and ran our test. After the `Compiling`, `Finished`, and
 `Running` lines, we see the line `running 1 test`. The next line shows the name
@@ -169,10 +157,9 @@ when something in the test function panics. We talked about the simplest way to
 cause a panic in Chapter 9: call the `panic!` macro! Type in the new test so
 that your `src/lib.rs` now looks like Listing 11-3:
 
-<figure>
 <span class="filename">Filename: src/lib.rs</span>
 
-```rust,should_panic
+```rust
 #[cfg(test)]
 mod tests {
     #[test]
@@ -186,18 +173,11 @@ mod tests {
 }
 ```
 
-<figcaption>
-
-Listing 11-3: Adding a second test; one that will fail since we call the
-`panic!` macro
-
-</figcaption>
-</figure>
+<span class="caption">Listing 11-3: Adding a second test; one that will fail
+since we call the `panic!` macro </span>
 
 And run the tests again with `cargo test`. The output should look like Listing
 11-4, which shows that our `exploration` test passed and `another` failed:
-
-<figure>
 
 ```text
 running 2 tests
@@ -210,7 +190,6 @@ failures:
 	thread 'tests::another' panicked at 'Make this test fail', src/lib.rs:9
 note: Run with `RUST_BACKTRACE=1` for a backtrace.
 
-
 failures:
     tests::another
 
@@ -219,12 +198,8 @@ test result: FAILED. 1 passed; 1 failed; 0 ignored; 0 measured
 error: test failed
 ```
 
-<figcaption>
-
-Listing 11-4: Test results when one test passes and one test fails
-
-</figcaption>
-</figure>
+<span class="caption">Listing 11-4: Test results when one test passes and one
+test fails </span>
 
 Instead of `ok`, the line `test tests::another` says `FAILED`. We have two new
 sections between the individual results and the summary: the first section
@@ -269,7 +244,6 @@ the `assert!` macro.
 <!-- Listing 5-9 wasn't marked as such; I'll fix it the next time I get Chapter
 5 for editing. /Carol -->
 
-<figure>
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust
@@ -286,12 +260,8 @@ impl Rectangle {
 }
 ```
 
-<figcaption>
-
-Listing 11-5: The `Rectangle` struct and its `can_hold` method from Chapter 5
-
-</figcaption>
-</figure>
+<span class="caption">Listing 11-5: The `Rectangle` struct and its `can_hold`
+method from Chapter 5 </span>
 
 The `can_hold` method returns a boolean, which means it's a perfect use case
 for the `assert!` macro. In Listing 11-6, let's write a test that exercises the
@@ -299,7 +269,6 @@ for the `assert!` macro. In Listing 11-6, let's write a test that exercises the
 a width of 7, and asserting that it can hold another `Rectangle` instance that
 has a length of 5 and a width of 1:
 
-<figure>
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust
@@ -317,13 +286,8 @@ mod tests {
 }
 ```
 
-<figcaption>
-
-Listing 11-6: A test for `can_hold` that checks that a larger rectangle indeed
-holds a smaller rectangle
-
-</figcaption>
-</figure>
+<span class="caption">Listing 11-6: A test for `can_hold` that checks that a
+larger rectangle indeed holds a smaller rectangle </span>
 
 Note that we've added a new line inside the `tests` module: `use super::*;`.
 The `tests` module is a regular module that follows the usual visibility rules
@@ -417,7 +381,6 @@ failures:
     larger.can_hold(&smaller)', src/lib.rs:22
 note: Run with `RUST_BACKTRACE=1` for a backtrace.
 
-
 failures:
     tests::larger_can_hold_smaller
 
@@ -449,7 +412,6 @@ In Listing 11-7, let's write a function named `add_two` that adds two to its
 parameter and returns the result. Then let's test this function using the
 `assert_eq!` macro:
 
-<figure>
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust
@@ -468,12 +430,8 @@ mod tests {
 }
 ```
 
-<figcaption>
-
-Listing 11-7: Testing the function `add_two` using the `assert_eq!` macro
-
-</figcaption>
-</figure>
+<span class="caption">Listing 11-7: Testing the function `add_two` using the
+`assert_eq!` macro </span>
 
 Let's check that it passes!
 
@@ -510,7 +468,6 @@ failures:
 	thread 'tests::it_adds_two' panicked at 'assertion failed: `(left ==
     right)` (left: `4`, right: `5`)', src/lib.rs:11
 note: Run with `RUST_BACKTRACE=1` for a backtrace.
-
 
 failures:
     tests::it_adds_two
@@ -572,7 +529,7 @@ want to test that the name we pass into the function appears in the output:
 
 ```rust
 pub fn greeting(name: &str) -> String {
-    format!("Hello {}!", greeting_start(), name)
+    format!("Hello {}!", name)
 }
 
 #[cfg(test)]
@@ -615,7 +572,6 @@ failures:
 	thread 'tests::greeting_contains_name' panicked at 'assertion failed:
     result.contains("Carol")', src/lib.rs:12
 note: Run with `RUST_BACKTRACE=1` for a backtrace.
-
 
 failures:
     tests::greeting_contains_name
@@ -667,7 +623,6 @@ panics, and the test will fail if the code inside the function does non panic.
 Listing 11-8 shows how we'd write a test that checks the error conditions of
 `Guess::new` happen when we expect:
 
-<figure>
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust
@@ -699,12 +654,8 @@ mod tests {
 }
 ```
 
-<figcaption>
-
-Listing 11-8: Testing that a condition will cause a `panic!`
-
-</figcaption>
-</figure>
+<span class="caption">Listing 11-8: Testing that a condition will cause a
+`panic!` </span>
 
 The `#[should_panic]` attribute goes after the `#[test]` attribute and before
 the test function it applies to. Let's see what it looks like when this test
@@ -720,7 +671,11 @@ test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured
 Looks good! Now let's introduce a bug in our code, by removing the condition
 that the `new` function will panic if the value is greater than 100:
 
-```
+```rust
+# struct Guess {
+#     value: u32,
+# }
+#
 impl Guess {
     pub fn new(value: u32) -> Guess {
         if value < 1  {
@@ -762,7 +717,6 @@ the failure message contains the provided text. For example, consider the
 modified code for `Guess` in Listing 11-9 where the `new` function panics with
 different messages depending on whether the value was too small or too large:
 
-<figure>
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust
@@ -798,13 +752,8 @@ mod tests {
 }
 ```
 
-<figcaption>
-
-Listing 11-9: Testing that a condition will cause a `panic!` with a particular
-panic message
-
-</figcaption>
-</figure>
+<span class="caption">Listing 11-9: Testing that a condition will cause a
+`panic!` with a particular panic message </span>
 
 This test will pass, because the value we put in the `expected` parameter of
 the `should_panic` attribute is a substring of the message that the
@@ -829,7 +778,7 @@ if value < 1 {
 
 This time when we run the `should_panic` test, it will fail:
 
-```
+```text
 running 1 test
 test tests::greater_than_100 ... FAILED
 
