@@ -68,7 +68,7 @@ care about and save them in variables as shown in Listing 12-2:
 
 <span class="filename">Filename: src/main.rs</span>
 
-```rust
+```rust,ignore
 use std::env;
 
 fn main() {

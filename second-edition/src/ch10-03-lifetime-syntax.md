@@ -148,7 +148,7 @@ longest string is abcd` once we've implemented the `longest` function:
 
 <span class="filename">Filename: src/main.rs</span>
 
-```rust
+```rust,ignore
 fn main() {
     let string1 = String::from("abcd");
     let string2 = "xyz";
@@ -369,15 +369,7 @@ inner scope, after it has ended. The code in Listing 10-23 will not compile:
 
 <span class="filename">Filename: src/main.rs</span>
 
-```rust
-# fn longest<'a>(x: &'a str, y: &'a str) -> &'a str {
-#     if x.len() > y.len() {
-#         x
-#     } else {
-#         y
-#     }
-# }
-#
+```rust,ignore
 fn main() {
     let string1 = String::from("long string is long");
     let result;

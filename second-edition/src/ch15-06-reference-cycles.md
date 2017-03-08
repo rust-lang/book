@@ -23,7 +23,7 @@ second item, if we have a `Cons` variant:
 
 <span class="filename">Filename: src/main.rs</span>
 
-```rust
+```rust,ignore
 #[derive(Debug)]
 enum List {
     Cons(i32, RefCell<Rc<List>>),
@@ -38,9 +38,6 @@ impl List {
         }
     }
 }
-# use std::rc::Rc;
-# use std::cell::RefCell;
-# use List::{Cons, Nil};
 ```
 
 <span class="caption">Listing 15-16: A cons list definition that holds a
@@ -191,7 +188,7 @@ named `branch` with the value 5 and `leaf` as one of its children:
 
 <span class="filename">Filename: src/main.rs</span>
 
-```rust
+```rust,ignore
 fn main() {
     let leaf = Rc::new(Node {
         value: 3,
@@ -246,7 +243,7 @@ node as well. Now let's update `main` to look like Listing 15-20:
 
 <span class="filename">Filename: src/main.rs</span>
 
-```rust
+```rust,ignore
 fn main() {
     let leaf = Rc::new(Node {
         value: 3,
@@ -308,7 +305,7 @@ happens when `branch` is created and then dropped when it goes out of scope:
 
 <span class="filename">Filename: src/main.rs</span>
 
-```
+```rust,ignore
 fn main() {
     let leaf = Rc::new(Node {
         value: 3,

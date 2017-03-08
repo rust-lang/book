@@ -29,7 +29,7 @@ shown in Listing 12-3:
 
 <span class="filename">Filename: src/main.rs</span>
 
-```rust
+```rust,ignore
 use std::env;
 use std::fs::File;
 use std::io::prelude::*;

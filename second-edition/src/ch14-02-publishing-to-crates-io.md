@@ -107,7 +107,7 @@ function named `mix` as shown in Listing 14-2:
 
 <span class="filename">Filename: src/lib.rs</span>
 
-```rust
+```rust,ignore
 //! # Art
 //!
 //! A library for modeling artistic concepts.
@@ -174,7 +174,7 @@ Listing 14-2 to re-export the types at the top level, as shown in Listing 14-4:
 
 <span class="filename">Filename: src/lib.rs</span>
 
-```rust
+```rust,ignore
 //! # Art
 //!
 //! A library for modeling artistic concepts.
@@ -185,13 +185,6 @@ pub use utils::mix;
 
 pub mod kinds {
     // ...snip...
-#     pub enum PrimaryColor;
-#     pub enum SecondaryColor;
-# }
-#
-# pub mod utils {
-#     pub fn mix() {}
-# }
 ```
 
 <span class="caption">Listing 14-4: Adding `pub use` statements to re-export

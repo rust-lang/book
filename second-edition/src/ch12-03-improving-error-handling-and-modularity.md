@@ -58,11 +58,7 @@ a new function `parse_config`, which we're still going to define in
 
 <span class="filename">Filename: src/main.rs</span>
 
-```rust
-# use std::env;
-# use std::fs::File;
-# use std::io::prelude::*;
-#
+```rust,ignore
 fn main() {
     let args: Vec<String> = env::args().collect();
 
@@ -72,13 +68,6 @@ fn main() {
     println!("In file {}", filename);
 
     // ...snip...
-#
-#     let mut f = File::open(filename).expect("file not found");
-#
-#     let mut contents = String::new();
-#     f.read_to_string(&mut contents).expect("something went wrong reading the file");
-#
-#     println!("With text:\n{}", contents);
 }
 
 fn parse_config(args: &[String]) -> (&str, &str) {
@@ -118,11 +107,7 @@ the addition of the `Config` struct definition, the refactoring of
 
 <span class="filename">Filename: src/main.rs</span>
 
-```rust
-# use std::env;
-# use std::fs::File;
-# use std::io::prelude::*;
-#
+```rust,ignore
 fn main() {
     let args: Vec<String> = env::args().collect();
 
@@ -134,10 +119,6 @@ fn main() {
     let mut f = File::open(config.filename).expect("file not found");
 
     // ...snip...
-#     let mut contents = String::new();
-#     f.read_to_string(&mut contents).expect("something went wrong reading the file");
-#
-#    println!("With text:\n{}", contents);
 }
 
 struct Config {
@@ -208,11 +189,7 @@ result of transforming `parse_config` into a `new` function associated with our
 
 <span class="filename">Filename: src/main.rs</span>
 
-```rust
-# use std::env;
-# use std::fs::File;
-# use std::io::prelude::*;
-#
+```rust,ignore
 fn main() {
     let args: Vec<String> = env::args().collect();
 
@@ -222,21 +199,8 @@ fn main() {
     println!("In file {}", config.filename);
 
     // ...snip...
-
-#     let mut f = File::open(config.filename).expect("file not found");
-#
-#     let mut contents = String::new();
-#     f.read_to_string(&mut contents).expect("something went wrong reading the file");
-#
-#    println!("With text:\n{}", contents);
-
 }
 
-# struct Config {
-#     search: String,
-#     filename: String,
-# }
-#
 // ...snip...
 
 impl Config {
@@ -271,33 +235,7 @@ error message:
 
 <span class="filename">Filename: src/main.rs</span>
 
-```rust
-# use std::env;
-# use std::fs::File;
-# use std::io::prelude::*;
-#
-# fn main() {
-#     let args: Vec<String> = env::args().collect();
-#
-#     let config = Config::new(&args);
-#
-#     println!("Searching for {}", config.search);
-#     println!("In file {}", config.filename);
-#
-#     let mut f = File::open(config.filename).expect("file not found");
-#
-#     let mut contents = String::new();
-#     f.read_to_string(&mut contents).expect("something went wrong reading the file");
-#
-#     println!("With text:\n{}", contents);
-# }
-#
-# struct Config {
-#     search: String,
-#     filename: String,
-# }
-#
-# impl Config {
+```rust,ignore
 // ...snip...
 fn new(args: &[String]) -> Config {
     if args.len() < 3 {
@@ -306,14 +244,7 @@ fn new(args: &[String]) -> Config {
 
     let search = args[1].clone();
     // ...snip...
-#     let filename = args[2].clone();
-#
-#     Config {
-#         search: search,
-#         filename: filename,
-#     }
 }
-# }
 ```
 
 <span class="caption">Listing 12-7: Adding a check for the number of
@@ -341,35 +272,7 @@ shown in Listing 12-8:
 
 <span class="filename">Filename: src/main.rs</span>
 
-```rust
-# use std::env;
-# use std::fs::File;
-# use std::io::prelude::*;
-# use std::process;
-#
-# fn main() {
-#     let args: Vec<String> = env::args().collect();
-#
-#     let config = Config::new(&args).unwrap_or_else(|err| {
-#         println!("Problem parsing arguments: {}", err);
-#         process::exit(1);
-#     });
-#
-#     println!("Searching for {}", config.search);
-#     println!("In file {}", config.filename);
-#
-#     let mut f = File::open(config.filename).expect("file not found");
-#
-#     let mut contents = String::new();
-#     f.read_to_string(&mut contents).expect("something went wrong reading the file");
-#
-#     println!("With text:\n{}", contents);
-# }
-# struct Config {
-#     search: String,
-#     filename: String,
-# }
-#
+```rust,ignore
 impl Config {
     fn new(args: &[String]) -> Result<Config, &'static str> {
         if args.len() < 3 {
@@ -407,10 +310,7 @@ Now we need to make some changes to `main` as shown in Listing 12-9:
 
 <span class="filename">Filename: src/main.rs</span>
 
-```rust
-# use std::env;
-# use std::fs::File;
-# use std::io::prelude::*;
+```rust,ignore
 // ...snip...
 use std::process;
 
@@ -426,35 +326,6 @@ fn main() {
     println!("In file {}", config.filename);
 
     // ...snip...
-#
-#     let mut f = File::open(config.filename).expect("file not found");
-#
-#     let mut contents = String::new();
-#     f.read_to_string(&mut contents).expect("something went wrong reading the file");
-#
-#     println!("With text:\n{}", contents);
-# }
-#
-# struct Config {
-#     search: String,
-#     filename: String,
-# }
-#
-# impl Config {
-#     fn new(args: &[String]) -> Result<Config, &'static str> {
-#         if args.len() < 3 {
-#             return Err("not enough arguments");
-#         }
-#
-#         let search = args[1].clone();
-#         let filename = args[2].clone();
-#
-#         Ok(Config {
-#             search: search,
-#             filename: filename,
-#         })
-#     }
-# }
 ```
 
 <span class="caption">Listing 12-9: Exiting with an error code if creating a
@@ -504,19 +375,8 @@ was in `main`:
 
 <span class="filename">Filename: src/main.rs</span>
 
-```rust
-# use std::env;
-# use std::fs::File;
-# use std::io::prelude::*;
-# use std::process;
-#
+```rust,ignore
 fn main() {
-#     let args: Vec<String> = env::args().collect();
-#
-#     let config = Config::new(&args).unwrap_or_else(|err| {
-#         println!("Problem parsing arguments: {}", err);
-#         process::exit(1);
-#     });
     // ...snip...
 
     println!("Searching for {}", config.search);
@@ -535,27 +395,6 @@ fn run(config: Config) {
 }
 
 // ...snip...
-#
-# struct Config {
-#     search: String,
-#     filename: String,
-# }
-#
-# impl Config {
-#     fn new(args: &[String]) -> Result<Config, &'static str> {
-#         if args.len() < 3 {
-#             return Err("not enough arguments");
-#         }
-#
-#         let search = args[1].clone();
-#         let filename = args[2].clone();
-#
-#         Ok(Config {
-#             search: search,
-#             filename: filename,
-#         })
-#     }
-# }
 ```
 
 <span class="caption">Listing 12-10: Extracting a `run` functionality for the
@@ -573,28 +412,10 @@ to return a `Result`:
 
 <span class="filename">Filename: src/main.rs</span>
 
-```rust
+```rust,ignore
 use std::error::Error;
-# use std::env;
-# use std::fs::File;
-# use std::io::prelude::*;
-# use std::process;
 
 // ...snip...
-# fn main() {
-#     let args: Vec<String> = env::args().collect();
-#
-#     let config = Config::new(&args).unwrap_or_else(|err| {
-#         println!("Problem parsing arguments: {}", err);
-#         process::exit(1);
-#     });
-#
-#     println!("Searching for {}", config.search);
-#     println!("In file {}", config.filename);
-#
-#     run(config);
-#
-# }
 
 fn run(config: Config) -> Result<(), Box<Error>> {
     let mut f = File::open(config.filename)?;
@@ -606,27 +427,6 @@ fn run(config: Config) -> Result<(), Box<Error>> {
 
     Ok(())
 }
-#
-# struct Config {
-#     search: String,
-#     filename: String,
-# }
-#
-# impl Config {
-#     fn new(args: &[String]) -> Result<Config, &'static str> {
-#         if args.len() < 3 {
-#             return Err("not enough arguments");
-#         }
-#
-#         let search = args[1].clone();
-#         let filename = args[2].clone();
-#
-#         Ok(Config {
-#             search: search,
-#             filename: filename,
-#         })
-#     }
-# }
 ```
 
 <span class="caption">Listing 12-11: Changing the `run` function to return
@@ -728,7 +528,7 @@ and its `new` method as well. Your *src/lib.rs* should now look like Listing
 
 <span class="filename">Filename: src/lib.rs</span>
 
-```rust
+```rust,ignore
 use std::error::Error;
 use std::fs::File;
 use std::io::prelude::*;
