@@ -273,7 +273,7 @@ argument to `expect`. If the `read_line` method returns an `Err`, it would
 likely be the result of an error coming from the underlying operating system.
 If this instance of `io::Result` is an `Ok` value, `expect` will take the
 return value that `Ok` is holding and return just that value to you so you
-could use it. In this case, that value is the number of characters the user
+could use it. In this case, that value is the number of bytes in what the user
 entered into standard input.
 
 [expect]: ../std/result/enum.Result.html#method.expect
