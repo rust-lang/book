@@ -257,7 +257,7 @@ argument to <code>expect</code>. If the <code>read_line</code> method returns an
 likely be the result of an error coming from the underlying operating system.
 If this instance of <code>io::Result</code> is an <code>Ok</code> value, <code>expect</code> will take the
 return value that <code>Ok</code> is holding and return just that value to you so you
-could use it. In this case, that value is the number of characters the user
+could use it. In this case, that value is the number of bytes in what the user
 entered into standard input.</p>
 <p>If we don’t call <code>expect</code>, the program will compile, but we’ll get a warning:</p>
 <pre><code class="language-text">$ cargo build
