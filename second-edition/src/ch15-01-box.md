@@ -25,14 +25,14 @@ has ownership of data, when a box goes out of scope like `b` does at the end of
 
 Putting a single value on the heap isn't very useful, so you won't use boxes by
 themselves in the way that Listing 15-1 does very often. A time when boxes are
-useful is when you want to ensure that your type has a known size. For
-example, consider Listing 15-2, which contains an enum definition for a *cons
-list*, a type of data structure that comes from functional programming:
+useful is when you want to ensure that your type has a known size. For example,
+consider Listing 15-2, which contains an enum definition for a *cons list*, a
+type of data structure that comes from functional programming. Note that this
+won't compile quite yet:
 
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore
-// Does not yet compile!
 enum List {
     Cons(i32, List),
     Nil,
@@ -46,30 +46,29 @@ We're implementing a cons list that holds only `i32` values. We
 could have also chosen to implement a cons list independent of the
 type of value by using generics as discussed in Chapter 10.
 
-> #### The cons list
+> #### More Information About the Cons List
 >
-> A cons list is a construct that derives from the Lisp programming language
-> and its dialects. In Lisp, the cons function (for construct function)
-> constructs a new list from its two arguments, which usually are a single
-> value and another list.
+> A *cons list* is a data structure that comes from the Lisp programming
+> language and its dialects. In Lisp, the `cons` function (short for "construct
+> function") constructs a new list from its two arguments, which usually are a
+> single value and another list.
 >
-> The cons concept has made its way into the more general functional programming
-> jargon; "to cons x onto y" informally means to construct a new container
-> instance by putting the element x at the start index of this new container,
-> followed by the container y.
+> The cons function concept has made its way into more general functional
+> programming jargon; "to cons x onto y" informally means to construct a new
+> container instance by putting the element x at the start of this new
+> container, followed by the container y.
 >
-> A cons list is produced by recursively calling the cons function.
-> The canonical name to denote the base case of the recursion is `Nil`.
-> In simple terms, `Nil` announces the end of the list. Note that this is not
-> the same as the "null" or "nil" concept from Chapter 6, which is basically
-> about an invalid or absent value.
+> A cons list is produced by recursively calling the `cons` function.
+> The canonical name to denote the base case of the recursion is `Nil`, which
+> announces the end of the list. Note that this is not the same as the "null"
+> or "nil" concept from Chapter 6, which is an invalid or absent value.
 
-In other words, a cons list is a list where each element contains both a single
-value, as well as the remains of the list at that point. The remains of the list
-are defined through a recursive cons call/instantiation. The end of the list is
-signified by the value `Nil`. Cons lists aren't used very often in Rust; `Vec<T>`
-is usually a better choice. However, implementing and using this data structure
-will clarify so much more than simply talking about it, so let's get to it!
+A cons list is a list where each element contains both a single value as well
+as the remains of the list at that point. The remains of the list are defined
+by nested cons lists. The end of the list is signified by the value `Nil`. Cons
+lists aren't used very often in Rust; `Vec<T>` is usually a better choice.
+Implementing this data structure is a good example of a situation where
+`Box<T>` is useful, though. Let's find out why!
 
 Using a cons list to store the list `1, 2, 3` would look like this:
 
