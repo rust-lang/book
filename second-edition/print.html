@@ -11550,18 +11550,10 @@ has ownership of data, when a box goes out of scope like <code>b</code> does at 
 (stored on the stack) and the data it points to (stored on the heap).</p>
 <p>Putting a single value on the heap isn't very useful, so you won't use boxes by
 themselves in the way that Listing 15-1 does very often. A time when boxes are
-useful is when you want to ensure that your type has a known size. For
-example, consider Listing 15-2, which contains an enum definition for a <em>cons
-list</em>, a type of data structure that comes from functional programming.</p>
-<p>A cons list is a list where each item contains a value and the next item until
-the end of the list, which is signified by a value called <code>Nil</code>. Note that we
-aren't introducing the idea of &quot;nil&quot; or &quot;null&quot; that we discussed in Chapter 6,
-this is just a regular enum variant name we're using because it's the canonical
-name to use when describing the cons list data structure. Cons lists aren't
-used very often in Rust, <code>Vec&lt;T&gt;</code> is a better choice most of the time, but
-implementing this data structure is useful as an example.</p>
-<p>Here's our first try at defining a cons list as an enum; note that this won't
-compile quite yet:</p>
+useful is when you want to ensure that your type has a known size. For example,
+consider Listing 15-2, which contains an enum definition for a <em>cons list</em>, a
+type of data structure that comes from functional programming. Note that this
+won't compile quite yet:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust ignore">enum List {
     Cons(i32, List),
@@ -11573,6 +11565,27 @@ represent a cons list data structure of <code>i32</code> values</span></p>
 <p>We're implementing a cons list that holds only <code>i32</code> values. We
 could have also chosen to implement a cons list independent of the
 type of value by using generics as discussed in Chapter 10.</p>
+<blockquote>
+<a class="header" href="print.html#more-information-about-the-cons-list" name="more-information-about-the-cons-list"><h4>More Information About the Cons List</h4></a>
+<p>A <em>cons list</em> is a data structure that comes from the Lisp programming
+language and its dialects. In Lisp, the <code>cons</code> function (short for &quot;construct
+function&quot;) constructs a new list from its two arguments, which usually are a
+single value and another list.</p>
+<p>The cons function concept has made its way into more general functional
+programming jargon; &quot;to cons x onto y&quot; informally means to construct a new
+container instance by putting the element x at the start of this new
+container, followed by the container y.</p>
+<p>A cons list is produced by recursively calling the <code>cons</code> function.
+The canonical name to denote the base case of the recursion is <code>Nil</code>, which
+announces the end of the list. Note that this is not the same as the &quot;null&quot;
+or &quot;nil&quot; concept from Chapter 6, which is an invalid or absent value.</p>
+</blockquote>
+<p>A cons list is a list where each element contains both a single value as well
+as the remains of the list at that point. The remains of the list are defined
+by nested cons lists. The end of the list is signified by the value <code>Nil</code>. Cons
+lists aren't used very often in Rust; <code>Vec&lt;T&gt;</code> is usually a better choice.
+Implementing this data structure is a good example of a situation where
+<code>Box&lt;T&gt;</code> is useful, though. Let's find out why!</p>
 <p>Using a cons list to store the list <code>1, 2, 3</code> would look like this:</p>
 <pre><code class="language-rust ignore">use List::{Cons, Nil};
 
@@ -11621,7 +11634,7 @@ forth. Therefore, the most space a <code>Message</code> value will need is the s
 would take to store the largest of its variants.</p>
 <p>Contrast this to what happens when the Rust compiler looks at a recursive type
 like <code>List</code> in Listing 15-2. The compiler tries to figure out how much memory
-is needed to store value of <code>List</code>, and starts by looking at the <code>Cons</code>
+is needed to store a value of the <code>List</code> enum, and starts by looking at the <code>Cons</code>
 variant. The <code>Cons</code> variant holds a value of type <code>i32</code> and a value of type
 <code>List</code>, so <code>Cons</code> needs an amount of space equal to the size of an <code>i32</code> plus
 the size of a <code>List</code>. To figure out how much memory a <code>List</code> needs, it looks at
