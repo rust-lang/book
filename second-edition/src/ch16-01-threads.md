@@ -313,7 +313,10 @@ variables), use the `move` keyword, as shown:
 
 By adding the `move` keyword before the closure, we force the closure to take
 ownership of the values it's using, rather than inferring borrowing. This
-modification to the code from Listing 16-3 will compile and run as we intend:
+modification to the code from Listing 16-3 shown in Listing 16-5 will compile
+and run as we intend:
+
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 use std::thread;
@@ -328,6 +331,9 @@ fn main() {
     handle.join();
 }
 ```
+
+<span class="caption">Listing 16-5: Using the `move` keyword to force a closure
+to take ownership of the values it uses</span>
 
 What about the code in Listing 16-4 where the main thread called `drop`? If we
 add `move` to the closure, we've moved `v` into the closure's environment, and

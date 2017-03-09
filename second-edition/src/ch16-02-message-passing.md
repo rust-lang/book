@@ -19,7 +19,7 @@ generate values and send them down a channel. The main thread will receive the
 values and print them out.
 
 First, though, let's start by creating a channel but not doing anything with it
-in Listing 16-5:
+in Listing 16-6:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -32,7 +32,7 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 16-5: Creating a channel and assigning the two
+<span class="caption">Listing 16-6: Creating a channel and assigning the two
 halves to `tx` and `rx`</span>
 
 The `mpsc::channel` function crates a new channel. `mpsc` stands for *multiple
@@ -49,7 +49,7 @@ statement with a pattern that destructures the tuples; we'll be discussing the
 use of patterns in `let` statements and destructuring in Chapter 18.
 
 Let's move the transmitting end into a spawned thread and have it send one
-string, shown in Listing 16-6:
+string, shown in Listing 16-7:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -67,7 +67,7 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 16-6: Moving `tx` to a spawned thread and sending
+<span class="caption">Listing 16-7: Moving `tx` to a spawned thread and sending
 "hi"</span>
 
 We're using `thread::spawn` to create a new thread, just as we did in the
@@ -82,7 +82,7 @@ calling `unwrap` to ignore this error, but for a real application, we'd want to
 handle it properly. Chapter 9 is where you'd go to review strategies for proper
 error handling.
 
-In Listing 16-7, let's get the value from the receiving end of the channel in
+In Listing 16-8, let's get the value from the receiving end of the channel in
 the main thread:
 
 <span class="filename">Filename: src/main.rs</span>
@@ -104,7 +104,7 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 16-7: Receiving the value "hi" in the main thread
+<span class="caption">Listing 16-8: Receiving the value "hi" in the main thread
 and printing it out</span>
 
 The receiving end of a channel has two useful methods: `recv` and `try_recv`.
@@ -114,7 +114,7 @@ will return it in a `Result<T, E>`. When the sending end of the channel closes,
 `recv` will return an error. The `try_recv` method will not block; it instead
 returns a `Result<T, E>` immediately.
 
-If we run the code in Listing 16-7, we'll see the value printed out from the
+If we run the code in Listing 16-8, we'll see the value printed out from the
 main thread:
 
 ```text
@@ -125,7 +125,7 @@ Got: hi
 
 Let's do an experiment at this point to see how channels and ownership work
 together: we'll try to use `val` in the spawned thread after we've sent it down
-the channel. Try compiling the code in Listing 16-8:
+the channel. Try compiling the code in Listing 16-9:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -147,7 +147,7 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 16-8: Attempting to use `val` after we have sent
+<span class="caption">Listing 16-9: Attempting to use `val` after we have sent
 it down the channel</span>
 
 Here, we try to print out `val` after we've sent it down the channel via
@@ -184,9 +184,9 @@ chance of a data race.
 
 ### Sending Multiple Values and Seeing the Receiver Waiting
 
-The code in Listing 16-7 compiled and ran, but it wasn't very interesting: it's
+The code in Listing 16-8 compiled and ran, but it wasn't very interesting: it's
 hard to see that we have two separate threads talking to each other over a
-channel. Listing 16-9 has some modifications that will prove to us that this
+channel. Listing 16-10 has some modifications that will prove to us that this
 code is running concurrently: the spawned thread will now send multiple
 messages and pause for a second between each message.
 
@@ -220,7 +220,7 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 16-9: Sending multiple messages and pausing
+<span class="caption">Listing 16-10: Sending multiple messages and pausing
 between each one</span>
 
 This time, we have a vector of strings in the spawned thread that we want to
@@ -232,7 +232,7 @@ In the main thread, we're not calling the `recv` function explicitly anymore:
 instead we're treating `rx` as an iterator. For each value received, we're
 printing it out. When the channel is closed, iteration will end.
 
-When running the code in Listing 16-9, we'll see this output, with a one second
+When running the code in Listing 16-10, we'll see this output, with a one second
 pause in between each line:
 
 ```text
@@ -249,9 +249,9 @@ values from the spawned thread.
 ### Create Multiple Producers by Cloning the Transmitter
 
 Near the start of this section, we mentioned that `mpsc` stood for *multiple
-producer, single consumer*. We can expand the code from Listing 16-9 to create
+producer, single consumer*. We can expand the code from Listing 16-10 to create
 multiple threads that all send values to the same receiver. We do that by
-cloning the transmitting half of the channel, as shown in Listing 16-10:
+cloning the transmitting half of the channel, as shown in Listing 16-11:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -300,7 +300,7 @@ thread::spawn(move || {
 # }
 ```
 
-<span class="caption">Listing 16-9: Sending multiple messages and pausing
+<span class="caption">Listing 16-11: Sending multiple messages and pausing
 between each one</span>
 
 This time, before we create the first spawned thread, we call `clone` on the
