@@ -35,20 +35,24 @@ green thread model is called the *M:N* model, `M` green threads per `N` OS
 threads, where `M` and `N` are not the same number.
 
 Each model has its own advantages and tradeoffs. The tradeoff that's most
-important to Rust is runtime support.
+important to Rust is runtime support. *Runtime* is a confusing term; it can
+have different meaning in different contexts. Here, we mean some code included
+by the language in every binary. For some languages, this code is large, and
+for others, this code is small. Colloquially, "no runtime" is often what people
+will say when they mean "small runtime", since every non-assembly language has
+some amount of runtime. Smaller runtimes have fewer features but have the
+advantage of resulting in smaller binaries. Smaller binaries make it easier to
+combine the language with other languages in more contexts. While many
+languages are okay with increasing the runtime in exchange for more features,
+Rust needs to have nearly no runtime, and cannot compromise on being able to
+call into C in order to maintain performance.
 
-TODO: A *runtime* is...
-TODO: Runtime support is important to Rust because...
-
-The green threading model requires a larger language runtime in order to manage
-the threads and often adds overhead when calling into C code. While many
-languages are okay with this tradeoff, Rust needs to have nearly no runtime,
-and cannot compromise on calling into C for performance reasons. As such, the
-Rust standard library only provides an implementation of 1:1 threading.
-However, because Rust is such a low-level language, you can use crates that
-give you M:N threading if you would rather trade overhead for....
-
-TODO why would you want M:N
+The green threading model is a feature that requires a larger language runtime
+in order to manage the threads. As such, the Rust standard library only
+provides an implementation of 1:1 threading. Because Rust is such a low-level
+language, there are crates that implement M:N threading if you would rather
+trade overhead for aspects such as more control over which threads run when and
+lower costs of context switching, for example.
 
 Now that we've defined what threads are in Rust, let's explore how to use the
 thread-related API that the standard library provides for us.
