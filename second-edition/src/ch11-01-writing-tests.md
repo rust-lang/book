@@ -388,12 +388,8 @@ test result: FAILED. 1 passed; 1 failed; 0 ignored; 0 measured
 ```
 
 Our tests caught the bug! Since `larger.length` is 8 and `smaller.length` is 5,
-the comparison of the lengths in the `larger_can_hold_smaller` now returns
-`false` since 8 is not less than 5. Even though the comparison of the widths is
-still correct, `false && true` returns `false`. The `larger_can_hold_smaller`
-test is asserting that `larger.can_hold(&smaller)` returns `true`, which it now
-does not, so the test fails with the message `assertion failed:
-larger.can_hold(&smaller)` which happened in *src/lib.rs* on line 22.
+the comparison of the lengths in `can_hold` now returns `false` since 8 is not
+less than 5.
 
 ### Testing Equality with the `assert_eq!` and `assert_ne!` Macros
 
