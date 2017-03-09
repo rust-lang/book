@@ -29,6 +29,24 @@ useful is when you want to ensure that your type has a known size. For
 example, consider Listing 15-2, which contains an enum definition for a *cons
 list*, a type of data structure that comes from functional programming.
 
+> #### The cons list
+>
+> A cons list is a construct that derives from the Lisp programming language
+> and its dialects. In Lisp, the cons function (for construct function)
+> constructs a new list from its two arguments, which usually are a single
+> value and another list.
+>
+> The cons concept has made its way into the more general functional programming
+> jargon; "to cons x onto y" informally means to construct a new container
+> instance by putting the element x at the start index of this new container,
+> followed by the container y.
+>
+> A cons list is produced by recursively calling the cons function.
+> The canonical name to denote the base case of the recursion is `Nil`.
+> In simple terms, `Nil` announces the end of the list. Note that this is not
+> the same as the "null" or "nil" concept from Chapter 6, which is basically
+> about an invalid or absent value.
+
 A cons list is a list where each item contains a value and the next item until
 the end of the list, which is signified by a value called `Nil`. Note that we
 aren't introducing the idea of "nil" or "null" that we discussed in Chapter 6,
