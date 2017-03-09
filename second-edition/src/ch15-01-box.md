@@ -27,7 +27,24 @@ Putting a single value on the heap isn't very useful, so you won't use boxes by
 themselves in the way that Listing 15-1 does very often. A time when boxes are
 useful is when you want to ensure that your type has a known size. For
 example, consider Listing 15-2, which contains an enum definition for a *cons
-list*, a type of data structure that comes from functional programming.
+list*, a type of data structure that comes from functional programming:
+
+<span class="filename">Filename: src/main.rs</span>
+
+```rust,ignore
+// Does not yet compile!
+enum List {
+    Cons(i32, List),
+    Nil,
+}
+```
+
+<span class="caption">Listing 15-2: The first attempt of defining an enum to
+represent a cons list data structure of `i32` values</span>
+
+We're implementing a cons list that holds only `i32` values. We
+could have also chosen to implement a cons list independent of the
+type of value by using generics as discussed in Chapter 10.
 
 > #### The cons list
 >
@@ -47,32 +64,12 @@ list*, a type of data structure that comes from functional programming.
 > the same as the "null" or "nil" concept from Chapter 6, which is basically
 > about an invalid or absent value.
 
-A cons list is a list where each item contains a value and the next item until
-the end of the list, which is signified by a value called `Nil`. Note that we
-aren't introducing the idea of "nil" or "null" that we discussed in Chapter 6,
-this is just a regular enum variant name we're using because it's the canonical
-name to use when describing the cons list data structure. Cons lists aren't
-used very often in Rust, `Vec<T>` is a better choice most of the time, but
-implementing this data structure is useful as an example.
-
-Here's our first try at defining a cons list as an enum; note that this won't
-compile quite yet:
-
-<span class="filename">Filename: src/main.rs</span>
-
-```rust,ignore
-enum List {
-    Cons(i32, List),
-    Nil,
-}
-```
-
-<span class="caption">Listing 15-2: The first attempt of defining an enum to
-represent a cons list data structure of `i32` values</span>
-
-We're implementing a cons list that holds only `i32` values. We
-could have also chosen to implement a cons list independent of the
-type of value by using generics as discussed in Chapter 10.
+In other words, a cons list is a list where each element contains both a single
+value, as well as the remains of the list at that point. The remains of the list
+are defined through a recursive cons call/instantiation. The end of the list is
+signified by the value `Nil`. Cons lists aren't used very often in Rust; `Vec<T>`
+is usually a better choice. However, implementing and using this data structure
+will clarify so much more than simply talking about it, so let's get to it!
 
 Using a cons list to store the list `1, 2, 3` would look like this:
 
