@@ -24,7 +24,8 @@ $ cargo install mdbook
 
 ## Building
 
-To build the book, type:
+To build the book, first `cd` into either the `first-edition` or `second-edition` directory
+depending on which edition of the book you would like to build. Then type:
 
 ```
 $ mdbook build
