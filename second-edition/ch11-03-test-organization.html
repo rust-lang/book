@@ -68,30 +68,34 @@
 
                 <div id="content" class="content">
                     <a class="header" href="ch11-03-test-organization.html#test-organization" name="test-organization"><h2>Test Organization</h2></a>
-<p>As mentioned before, testing is a large discipline, and different people
-sometimes use different terminology and organization. The Rust community tends
-to think about tests in terms of two main categories: <em>unit tests</em> and
-<em>integration tests</em>. Unit tests tend to be smaller and more focused, testing
-one module in isolation at a time. They can also test private interfaces.
-Integration tests are entirely external to your library. They use your code in
-the same way any other code would, using only the public interface and
-exercising multiple modules per test. Both kinds of tests are important to
-ensure that the pieces of your library are doing what you expect them to
-separately and together.</p>
+<p>As mentioned at the start of the chapter, testing is a large discipline, and
+different people use different terminology and organization. The Rust community
+tends to think about tests in terms of two main categories: <em>unit tests</em> and
+<em>integration tests</em>. Unit tests are smaller and more focused, testing one
+module in isolation at a time, and can test private interfaces. Integration
+tests are entirely external to your library, and use your code in the same way
+any other external code would, using only the public interface and exercising
+multiple modules per test.</p>
+<p>Both kinds of tests are important to ensure that the pieces of your library are
+doing what you expect them to separately and together.</p>
 <a class="header" href="ch11-03-test-organization.html#unit-tests" name="unit-tests"><h3>Unit Tests</h3></a>
 <p>The purpose of unit tests is to test each unit of code in isolation from the
-rest of the code, in order to be able to quickly pinpoint where code is working
-as expected or not. Unit tests live in the <em>src</em> directory, in the same files
-as the code they are testing. They are separated into their own <code>tests</code> module
-in each file.</p>
-<a class="header" href="ch11-03-test-organization.html#the-tests-module-and-cfgtest" name="the-tests-module-and-cfgtest"><h4>The Tests Module and <code>cfg(test)</code></h4></a>
-<p>By placing tests in their own module and using the <code>cfg</code> annotation on the
-module, we can tell Rust to only compile and run the test code when we run
-<code>cargo test</code>. This saves compile time when we only want to build the library
-code with <code>cargo build</code>, and saves space in the resulting compiled artifact
-since the tests are not included.</p>
-<p>Remember when we generated the new <code>adder</code> project in the last section? Cargo
-generated this code for us:</p>
+rest of the code, in order to be able to quickly pinpoint where code is and is
+not working as expected. We put unit tests in the <em>src</em> directory, in each file
+with the code that they're testing. The convention is that we create a module
+named <code>tests</code> in each file to contain the test functions, and we annotate the
+module with <code>cfg(test)</code>.</p>
+<a class="header" href="ch11-03-test-organization.html#the-tests-module-and-cfgtest" name="the-tests-module-and-cfgtest"><h4>The Tests Module and <code>#[cfg(test)]</code></h4></a>
+<p>The <code>#[cfg(test)]</code> annotation on the tests module tells Rust to compile and run
+the test code only when we run <code>cargo test</code>, and not when we run <code>cargo build</code>.
+This saves compile time when we only want to build the library, and saves space
+in the resulting compiled artifact since the tests are not included. We'll see
+that since integration tests go in a different directory, they don't need the
+<code>#[cfg(test)]</code> annotation. Because unit tests go in the same files as the code,
+though, we use <code>#[cfg(test)]</code>to specify that they should not be included in the
+compiled result.</p>
+<p>Remember that when we generated the new <code>adder</code> project in the first section of
+this chapter, Cargo generated this code for us:</p>
 <p><span class="filename">Filename: src/lib.rs</span></p>
 <pre><code class="language-rust">#[cfg(test)]
 mod tests {
@@ -100,74 +104,19 @@ mod tests {
     }
 }
 </code></pre>
-<p>We ignored the module stuff so we could concentrate on the mechanics of the
-test code inside the module, but now let's focus on the code surrounding our
-tests.</p>
-<p>First of all, there's a new attribute, <code>cfg</code>. The <code>cfg</code> attribute lets us
-declare that something should only be included given a certain <em>configuration</em>.
-Rust provides the <code>test</code> configuration for compiling and running tests. By
-using this attribute, Cargo only compiles our test code if we're currently
-trying to run the tests.</p>
-<p>Next, the <code>tests</code> module holds all of our test functions, while our code is
-outside of the <code>tests</code> module. The name of the <code>tests</code> module is a convention;
-otherwise this is a regular module that follows the usual visibility rules we
-covered in Chapter 7. Because we're in an inner module, we need to bring the
-code under test into scope. This can be annoying if you have a large module, so
-this is a common use of globs.</p>
-<p>Up until now in this chapter, we've been writing tests in our <code>adder</code> project
-that don't actually call any code we've written. Let's change that now! In
-<em>src/lib.rs</em>, place this <code>add_two</code> function and <code>tests</code> module that has a test
-function to exercise the code, as shown in Listing 11-5:</p>
-<figure>
-<span class="filename">Filename: src/lib.rs</span>
-<pre><code class="language-rust">pub fn add_two(a: i32) -&gt; i32 {
-    a + 2
-}
-
-#[cfg(test)]
-mod tests {
-    use add_two;
-
-    #[test]
-    fn it_works() {
-        assert_eq!(4, add_two(2));
-    }
-}
-</code></pre>
-<figcaption>
-<p>Listing 11-5: Testing the function <code>add_two</code> in a child <code>tests</code> module</p>
-</figcaption>
-</figure>
-<p>Notice in addition to the test function, we also added <code>use add_two;</code> within
-the <code>tests</code> module. This brings the code we want to test into the scope of the
-inner <code>tests</code> module, just like we'd need to do for any inner module. If we run
-this test now with <code>cargo test</code>, it will pass:</p>
-<pre><code class="language-text">running 1 test
-test tests::it_works ... ok
-
-test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured
-</code></pre>
-<p>If we had forgotten to bring the <code>add_two</code> function into scope, we would get an
-unresolved name error since the <code>tests</code> module wouldn't know anything about the
-<code>add_two</code> function:</p>
-<pre><code class="language-text">error[E0425]: unresolved name `add_two`
- --&gt; src/lib.rs:9:23
-  |
-9 |         assert_eq!(4, add_two(2));
-  |                       ^^^^^^^ unresolved name
-</code></pre>
-<p>If this module contained lots of code we wanted to test, it would be annoying
-to list everything in the <code>use</code> statement in the tests. It's common instead to
-put <code>use super::*;</code> within a module's <code>test</code> submodule in order to bring
-everything into the <code>test</code> module scope at once.</p>
+<p>This is the automatically generated test module. The attribute <code>cfg</code> stands for
+<em>configruation</em>, and tells Rust that the following item should only be included
+given a certain configuration. In this case, the configuration is <code>test</code>,
+provided by Rust for compiling and running tests. By using this attribute,
+Cargo only compiles our test code if we actively run the tests with <code>cargo test</code>. This includes any helper functions that might be within this module, in
+addition to the functions annotated with <code>#[test]</code>.</p>
 <a class="header" href="ch11-03-test-organization.html#testing-private-functions" name="testing-private-functions"><h4>Testing Private Functions</h4></a>
-<p>There's controversy within the testing community about whether you should write
-unit tests for private functions or not. Regardless of which testing ideology
-you adhere to, Rust does allow you to test private functions due to the way
-that the privacy rules work. Consider the code in Listing 11-6 with the private
-function <code>internal_adder</code>:</p>
-<figure>
-<span class="filename">Filename: src/lib.rs</span>
+<p>There's debate within the testing community about whether private functions
+should be tested directly or not, and other languages make it difficult or
+impossible to test private functions. Regardless of which testing ideology you
+adhere to, Rust's privacy rules do allow you to test private functions.
+Consider the code in Listing 11-12 with the private function <code>internal_adder</code>:</p>
+<p><span class="filename">Filename: src/lib.rs</span></p>
 <pre><code class="language-rust">pub fn add_two(a: i32) -&gt; i32 {
     internal_adder(a, 2)
 }
@@ -178,7 +127,7 @@ fn internal_adder(a: i32, b: i32) -&gt; i32 {
 
 #[cfg(test)]
 mod tests {
-    use internal_adder;
+    use super::*;
 
     #[test]
     fn internal() {
@@ -186,29 +135,37 @@ mod tests {
     }
 }
 </code></pre>
-<figcaption>
-<p>Listing 11-6: Testing a private function</p>
-</figcaption>
-</figure>
-<p>Because tests are just Rust code and the <code>tests</code> module is just another module,
-we can import and call <code>internal_adder</code> in a test just fine. If you don't think
+<p><span class="caption">Listing 11-12: Testing a private function</span></p>
+<!-- I'm not clear on why we would assume this might not be fine, why are we
+highlighting this specifically? -->
+<!-- We're addressing experience that the reader might bring with them from
+other languages where this is not allowed; I added a sentence mentioning "other
+languages" at the beginning of this section. Also testing private functions
+from integration tests is not allowed, so if you did want to do this, you'd
+have to do it in unit tests. /Carol -->
+<p>Note that the <code>internal_adder</code> function is not marked as <code>pub</code>, but because
+tests are just Rust code and the <code>tests</code> module is just another module, we can
+import and call <code>internal_adder</code> in a test just fine. If you don't think
 private functions should be tested, there's nothing in Rust that will compel
 you to do so.</p>
 <a class="header" href="ch11-03-test-organization.html#integration-tests" name="integration-tests"><h3>Integration Tests</h3></a>
-<p>In Rust, integration tests are tests that are entirely external to your
-library. They use your library in the same way any other code would. Their
-purpose is to test that many parts of your library work correctly together.
-Units of code that work correctly by themselves could have problems when
-integrated, so test coverage of the integrated code is important as well.</p>
+<p>In Rust, integration tests are entirely external to your library. They use your
+library in the same way any other code would, which means they can only call
+functions that are part of your library's public API. Their purpose is to test
+that many parts of your library work correctly together. Units of code that
+work correctly by themselves could have problems when integrated, so test
+coverage of the integrated code is important as well. To create integration
+tests, you first need a <em>tests</em> directory.</p>
 <a class="header" href="ch11-03-test-organization.html#the-tests-directory" name="the-tests-directory"><h4>The <em>tests</em> Directory</h4></a>
-<p>Cargo has support for integration tests in the <em>tests</em> directory. If you make
-one and put Rust files inside, Cargo will compile each of the files as an
-individual crate. Let's give it a try!</p>
-<p>First, make a <em>tests</em> directory at the top level of your project directory,
-next to <em>src</em>. Then, make a new file, <em>tests/integration_test.rs</em>, and put the
-code in Listing 11-7 inside:</p>
-<figure>
-<span class="filename">Filename: tests/integration_test.rs</span>
+<p>To write integration tests for our code, we need to make a <em>tests</em> directory at
+the top level of our project directory, next to <em>src</em>. Cargo knows to look for
+integration test files in this directory. We can then make as many test files
+as we'd like in this directory, and Cargo will compile each of the files as an
+individual crate.</p>
+<p>Let's give it a try! Keep the code from Listing 11-12 in <em>src/lib.rs</em>. Make a
+<em>tests</em> directory, then make a new file named <em>tests/integration_test.rs</em>, and
+enter the code in Listing 11-13.</p>
+<p><span class="filename">Filename: tests/integration_test.rs</span></p>
 <pre><code class="language-rust ignore">extern crate adder;
 
 #[test]
@@ -216,31 +173,28 @@ fn it_adds_two() {
     assert_eq!(4, adder::add_two(2));
 }
 </code></pre>
-<figcaption>
-<p>Listing 11-7: An integration test of a function in the <code>adder</code> crate</p>
-</figcaption>
-</figure>
-<p>We now have <code>extern crate adder</code> at the top, which we didn't need in the unit
-tests. Each test in the <code>tests</code> directory is an entirely separate crate, so we
-need to import our library into each of them. This is also why <code>tests</code> is a
-suitable place to write integration-style tests: they use the library like any
-other consumer of it would, by importing the crate and using only the public
-API.</p>
-<p>We also don't need a <code>tests</code> module in this file. The whole directory won't be
-compiled unless we're running the tests, so we don't need to annotate any part
-of it with <code>#[cfg(test)]</code>. Also, each test file is already isolated into its
-own crate, so we don't need to separate the test code further.</p>
-<p>Let's run the integration tests, which also get run when we run <code>cargo test</code>:</p>
-<pre><code class="language-text">$ cargo test
+<p><span class="caption">Listing 11-13: An integration test of a function in the
+<code>adder</code> crate </span></p>
+<p>We've added <code>extern crate adder</code> at the top, which we didn't need in the unit
+tests. This is because each test in the <code>tests</code> directory is an entirely
+separate crate, so we need to import our library into each of them. Integration
+tests use the library like any other consumer of it would, by importing the
+crate and using only the public API.</p>
+<p>We don't need to annotate any code in <em>tests/integration_test.rs</em> with
+<code>#[cfg(test)]</code>. Cargo treats the <code>tests</code> directory specially and will only
+compile files in this directory if we run <code>cargo test</code>. Let's try running
+<code>cargo test</code> now:</p>
+<pre><code class="language-text">cargo test
    Compiling adder v0.1.0 (file:///projects/adder)
+    Finished debug [unoptimized + debuginfo] target(s) in 0.31 secs
      Running target/debug/deps/adder-abcabcabc
 
 running 1 test
-test tests::it_works ... ok
+test tests::internal ... ok
 
 test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured
 
-     Running target/debug/integration_test-952a27e0126bb565
+     Running target/debug/deps/integration_test-ce99bcc2479f4607
 
 running 1 test
 test it_adds_two ... ok
@@ -253,16 +207,27 @@ running 0 tests
 
 test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured
 </code></pre>
+<!-- what are the doc tests? How do we tell the difference between unit and
+integration tests here? -->
+<!-- We mentioned documentation tests in the beginning of this chapter /Carol
+-->
 <p>Now we have three sections of output: the unit tests, the integration test, and
-the doc tests. Note that adding more unit tests in any <em>src</em> file will add more
-lines to the unit tests section. Adding more test functions to the integration
-test file we created will add more lines to that section. If we add more
-integration test <em>files</em> in the <em>tests</em> directory, there will be more
-integration test sections: one for each file.</p>
-<p>Specifying a test function name argument with <code>cargo test</code> will also match
-against test function names in any integration test file. To run all of the
-tests in only one particular integration test file, use the <code>--test</code> argument
-of <code>cargo test</code>:</p>
+the doc tests. The first section for the unit tests is the same as we have been
+seeing: one line for each unit test (we have one named <code>internal</code> that we added
+in Listing 11-12), then a summary line for the unit tests.</p>
+<p>The integration tests section starts with the line that says <code>Running target/debug/deps/integration-test-ce99bcc2479f4607</code> (the hash at the end of
+your output will be different). Then there's a line for each test function in
+that integration test, and a summary line for the results of the integration
+test just before the <code>Doc-tests adder</code> section starts.</p>
+<p>Note that adding more unit test functions in any <em>src</em> file will add more test
+result lines to the unit tests section. Adding more test functions to the
+integration test file we created will add more lines to the integration test
+section. Each integration test file gets its own section, so if we add more
+files in the <em>tests</em> directory, there will be more integration test sections.</p>
+<p>We can still run a particular integration test function by specifying the test
+function's name as an argument to <code>cargo test</code>. To run all of the tests in a
+particular integration test file, use the <code>--test</code> argument of <code>cargo test</code>
+followed by the name of the file:</p>
 <pre><code class="language-text">$ cargo test --test integration_test
     Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
      Running target/debug/integration_test-952a27e0126bb565
@@ -272,41 +237,105 @@ test it_adds_two ... ok
 
 test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured
 </code></pre>
+<p>This tests only the file that we specified from the <em>tests</em> directory.</p>
 <a class="header" href="ch11-03-test-organization.html#submodules-in-integration-tests" name="submodules-in-integration-tests"><h4>Submodules in Integration Tests</h4></a>
 <p>As you add more integration tests, you may want to make more than one file in
-the <code>tests</code> directory in order to group the test functions by the functionality
-they're testing, for example. As we mentioned before, that will work fine,
-given that Cargo treats every file as its own crate.</p>
-<p>Eventually, you may have a set of helper functions that are common to all
-integration tests, for example, functions that set up common scenarios. If you
-extract these into a file in the <em>tests</em> directory, like <em>tests/common.rs</em> for
-example, this file will be compiled into a separate crate just like the Rust
-files in this directory that contain test functions are. There will be a
-separate section in the test output for this file. Since this is probably not
-what you want, it's recommended to instead use a <em>mod.rs</em> file in a
-subdirectory, like <em>tests/common/mod.rs</em>, for helper functions. Files in
-subdirectories of the <em>tests</em> directory do not get compiled as separate crates
-or have sections in the test output.</p>
+the <em>tests</em> directory to help organize them; for example, to group the test
+functions by the functionality they're testing. As we mentioned, each file in
+the <em>tests</em> directory is compiled as its own separate crate.</p>
+<p>Treating each integration test file as its own crate is useful to create
+separate scopes that are more like the way end users will be using your crate.
+However, this means files in the <em>tests</em> directory don't share the same
+behavior as files in <em>src</em> do that we learned about in Chapter 7 regarding how
+to separate code into modules and files.</p>
+<p>The different behavior of files in the <em>tests</em> directory is usually most
+noticeable if you have a set of helper functions that would be useful in
+multiple integration test files, and you try to follow the steps from Chapter 7
+to extract them into a common module. For example, if we create
+<em>tests/common.rs</em> and place this function named <code>setup</code> in it, where we could
+put some code that we want to be able to call from multiple test functions in
+multiple test files:</p>
+<p><span class="filename">Filename: tests/common.rs</span></p>
+<pre><code class="language-rust">pub fn setup() {
+    // setup code specific to your library's tests would go here
+}
+</code></pre>
+<p>If we run the tests again, we'll see a new section in the test output for the
+<em>common.rs</em> file, even though this file doesn't contain any test functions, nor
+are we calling the <code>setup</code> function from anywhere:</p>
+<pre><code class="language-text">running 1 test
+test tests::internal ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured
+
+     Running target/debug/deps/common-b8b07b6f1be2db70
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured
+
+     Running target/debug/deps/integration_test-d993c68b431d39df
+
+running 1 test
+test it_adds_two ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured
+
+   Doc-tests adder
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured
+</code></pre>
+<!-- The new section is lines 6-10, will ghost everything else in libreoffice
+/Carol -->
+<p>Having <code>common</code> show up in the test results with <code>running 0 tests</code> displayed
+for it is not what we wanted; we just wanted to be able to share some code with
+the other integration test files.</p>
+<p>In order to not have <code>common</code> show up in the test output, we need to use the
+other method of extracting code into a file that we learned about in Chapter 7:
+instead of creating <em>tests/common.rs</em>, we'll create <em>tests/common/mod.rs</em>. When
+we move the <code>setup</code> function code into <em>tests/common/mod.rs</em> and get rid of the
+<em>tests/common.rs</em> file, the section in the test output will no longer show up.
+Files in subdirectories of the <em>tests</em> directory do not get compiled as
+separate crates or have sections in the test output.</p>
+<p>Once we have <em>tests/common/mod.rs</em>, we can use it from any of the integration
+test files as a module. Here's an example of calling the <code>setup</code> function from
+the <code>it_adds_two</code> test in <em>tests/integration_test.rs</em>:</p>
+<p><span class="filename">Filename: tests/integration_test.rs</span></p>
+<pre><code class="language-rust ignore">extern crate adder;
+
+mod common;
+
+#[test]
+fn it_adds_two() {
+    common::setup();
+    assert_eq!(4, adder::add_two(2));
+}
+</code></pre>
+<p>Note the <code>mod common;</code> declaration is the same as the module declarations we
+did in Chapter 7. Then in the test function, we can call the <code>common::setup()</code>
+function.</p>
 <a class="header" href="ch11-03-test-organization.html#integration-tests-for-binary-crates" name="integration-tests-for-binary-crates"><h4>Integration Tests for Binary Crates</h4></a>
-<p>If your project is a binary crate that only contains a <em>src/main.rs</em> and does
-not have a <em>src/lib.rs</em>, it is not possible to create integration tests in the
-<em>tests</em> directory and use <code>extern crate</code> to import the functions in
-<em>src/main.rs</em>. This is one of the reasons Rust projects that provide a binary
-have a straightforward <em>src/main.rs</em> that calls logic that lives in
-<em>src/lib.rs</em>. With that structure, integration tests <em>can</em> test the library
-crate by using <code>extern crate</code> to cover the important functionality, and if that
-works, the small amount of code in <em>src/main.rs</em> will work as well and does not
-need to be tested.</p>
+<p>If our project is a binary crate that only contains a <em>src/main.rs</em> and does
+not have a <em>src/lib.rs</em>, we aren't able to create integration tests in the
+<em>tests</em> directory and use <code>extern crate</code> to import functions defined in
+<em>src/main.rs</em>. Only library crates expose functions that other crates are able
+to call and use; binary crates are meant to be run on their own.</p>
+<p>This is one of the reasons Rust projects that provide a binary have a
+straightforward <em>src/main.rs</em> that calls logic that lives in <em>src/lib.rs</em>. With
+that structure, integration tests <em>can</em> test the library crate by using <code>extern crate</code> to cover the important functionality. If the important functionality
+works, the small amount of code in <em>src/main.rs</em> will work as well, and that
+small amount of code does not need to be tested.</p>
 <a class="header" href="ch11-03-test-organization.html#summary" name="summary"><h2>Summary</h2></a>
 <p>Rust's testing features provide a way to specify how code should function to
-ensure the code continues to work in the specified ways even as we make
-changes. Unit tests exercise different parts of a library separately and can
-test private implementation details. Integration tests cover the use of many
-parts of the library working together, and use the library's public API to test
-the code in the same way other code will use it. Rust's type system and
-ownership rules help prevent some kinds of bugs, but tests are an important
-part of reducing logic bugs having to do with how your code is expected to
-behave.</p>
+ensure it continues to work as we expect even as we make changes. Unit tests
+exercise different parts of a library separately and can test private
+implementation details. Integration tests cover the use of many parts of the
+library working together, and they use the library's public API to test the
+code in the same way external code will use it. Even though Rust's type system
+and ownership rules help prevent some kinds of bugs, tests are still important
+to help reduce logic bugs having to do with how your code is expected to behave.</p>
 <p>Let's put together the knowledge from this chapter and other previous chapters
 and work on a project in the next chapter!</p>
 

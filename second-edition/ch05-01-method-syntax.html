@@ -206,8 +206,9 @@ would mean we’d need a mutable borrow) and we want <code>main</code> to keep o
 value of <code>can_hold</code> will be a boolean, and the implementation will check to see
 if <code>self</code>’s length and width are both greater than the length and width of the
 other <code>Rectangle</code>, respectively. Let’s add this new method to the <code>impl</code> block
-from Listing 5-7:</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+from Listing 5-7, shown in Listing 5-9:</p>
+<figure>
+<span class="filename">Filename: src/main.rs</span>
 <pre><code class="language-rust"># #[derive(Debug)]
 # struct Rectangle {
 #     length: u32,
@@ -224,6 +225,11 @@ impl Rectangle {
     }
 }
 </code></pre>
+<figcaption>
+<p>Listing 5-9: Implementing the <code>can_hold</code> method on <code>Rectangle</code> that takes
+another <code>Rectangle</code> instance as an argument</p>
+</figcaption>
+</figure>
 <!-- Will add ghosting here in libreoffice /Carol -->
 <p>If we run this with the <code>main</code> from Listing 5-8, we will get our desired output!
 Methods can have multiple parameters that we add to the signature after the

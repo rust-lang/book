@@ -3789,8 +3789,9 @@ would mean we’d need a mutable borrow) and we want <code>main</code> to keep o
 value of <code>can_hold</code> will be a boolean, and the implementation will check to see
 if <code>self</code>’s length and width are both greater than the length and width of the
 other <code>Rectangle</code>, respectively. Let’s add this new method to the <code>impl</code> block
-from Listing 5-7:</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
+from Listing 5-7, shown in Listing 5-9:</p>
+<figure>
+<span class="filename">Filename: src/main.rs</span>
 <pre><code class="language-rust"># #[derive(Debug)]
 # struct Rectangle {
 #     length: u32,
@@ -3807,6 +3808,11 @@ impl Rectangle {
     }
 }
 </code></pre>
+<figcaption>
+<p>Listing 5-9: Implementing the <code>can_hold</code> method on <code>Rectangle</code> that takes
+another <code>Rectangle</code> instance as an argument</p>
+</figcaption>
+</figure>
 <!-- Will add ghosting here in libreoffice /Carol -->
 <p>If we run this with the <code>main</code> from Listing 5-8, we will get our desired output!
 Methods can have multiple parameters that we add to the signature after the
@@ -8345,42 +8351,70 @@ features is working the way we want it to!</p>
 it is hopelessly inadequate for showing their absence.</p>
 <p>Edsger W. Dijkstra, &quot;The Humble Programmer&quot; (1972)</p>
 </blockquote>
-<p>Rust is a programming language that cares a lot about correctness, but
-correctness is a complex topic and isn't easy to prove. Rust places a lot of
-weight on its type system to help ensure that our programs do what we intend,
-but it cannot help with everything. As such, Rust also includes support for
-writing software tests in the language itself.</p>
-<p>For example, we can write a function called <code>add_two</code> with a signature that has
-an integer as a parameter and returns an integer as a result. We can implement
-and compile that function, and Rust can do all the type checking and borrow
-checking that we've seen it's capable of doing. What Rust <em>can't</em> check for us
-is that we've implemented this function to return the parameter plus two and
-not the parameter plus 10 or the parameter minus 50! That's where tests come
-in. We can write tests that, for example, pass <code>3</code> to the <code>add_two</code> function
-and check that we get <code>5</code> back. We can run the tests whenever we make changes
-to our code to make sure we didn't change any existing behavior from what the
-tests specify it should be.</p>
-<p>Testing is a skill, and we cannot hope to cover everything about how to write
-good tests in one chapter of a book. What we can discuss, however, are the
+<p>Correctness in our programs means that our code does what we intend for it to
+do. Rust is a programming language that cares a lot about correctness, but
+correctness is a complex topic and isn't easy to prove. Rust's type system
+shoulders a huge part of this burden, but the type system cannot catch every
+kind of incorrectness. As such, Rust includes support for writing software
+tests within the language itself.</p>
+<p>As an example, say we write a function called <code>add_two</code> that adds two to a
+number passed to it. This function's signature accepts an integer as a
+parameter and returns an integer as a result. When we implement and compile
+that function, Rust will do all the type checking and borrow checking that
+we've seen so far. Those checks will make sure that, for instance, we aren't
+passing a <code>String</code> value or an invalid reference to this function. What Rust
+<em>can't</em> check is that this function will do precisely what we intend: return
+the parameter plus two, rather than, say, the parameter plus 10 or the
+parameter minus 50! That's where tests come in.</p>
+<p>We can write tests that assert, for example, that when we pass <code>3</code> to the
+<code>add_two</code> function, we get <code>5</code> back. We can run these tests whenever we make
+changes to our code to make sure any existing correct behavior has not changed.</p>
+<p>Testing is a complex skill, and we cannot hope to cover everything about how to
+write good tests in one chapter of a book, so here we'll just discuss the
 mechanics of Rust's testing facilities. We'll talk about the annotations and
 macros available to you when writing your tests, the default behavior and
 options provided for running your tests, and how to organize tests into unit
 tests and integration tests.</p>
-<a class="header" href="print.html#writing-tests" name="writing-tests"><h2>Writing Tests</h2></a>
-<p>Tests are Rust functions that use particular features and are written in such a
-way as to verify that non-test code is functioning in the expected manner.
-Everything we've discussed about Rust code applies to Rust tests as well! Let's
-look at the features Rust provides specifically for writing tests: the <code>test</code>
-attribute, a few macros, and the <code>should_panic</code> attribute.</p>
-<a class="header" href="print.html#the-test-attribute" name="the-test-attribute"><h3>The <code>test</code> attribute</h3></a>
+<a class="header" href="print.html#how-to-write-tests" name="how-to-write-tests"><h2>How to Write Tests</h2></a>
+<p>Tests are Rust functions that verify non-test code is functioning in the
+program in the expected manner. The bodies of test functions typically contain
+some setup, running the code we want to test, then asserting that the results
+are what we expect. Let's look at the features Rust provides specifically for
+writing tests: the <code>test</code> attribute, a few macros, and the <code>should_panic</code>
+attribute.</p>
+<a class="header" href="print.html#the-anatomy-of-a-test-function" name="the-anatomy-of-a-test-function"><h3>The Anatomy of a Test Function</h3></a>
 <p>At its simplest, a test in Rust is a function that's annotated with the <code>test</code>
-attribute. Let's make a new library project with Cargo called <code>adder</code>:</p>
+attribute. Attributes are metadata about pieces of Rust code: the <code>derive</code>
+attribute that we used with structs in Chapter 5 is one example. To make a
+function into a test function, we add <code>#[test]</code> on the line before <code>fn</code>. When
+we run our tests with the <code>cargo test</code> command, Rust will build a test runner
+binary that runs the functions annotated with the <code>test</code> attribute and reports
+on whether each test function passes or fails.</p>
+<!-- is it annotated with `test` by the user, or only automatically? I think
+it's the latter, and has edited with a more active tone to make that clear, but
+please change if I'm wrong -->
+<!-- What do you mean by "only automatically"? The reader should be typing in
+`#[test] on their own when they add new test functions; there's nothing special
+about that text. I'm not sure what part of this chapter implied "only
+automatically", can you point out where that's happening if we haven't taken
+care of it? /Carol -->
+<p>We saw in Chapter 7 that when you make a new library project with Cargo, a test
+module with a test function in it is automatically generated for us. This is to
+help us get started writing our tests, since we don't have to go look up the
+exact structure and syntax of test functions every time we start a new project.
+We can add as many additional test functions and as many test modules as we
+want, though!</p>
+<p>We're going to explore some aspects of how tests work by experimenting with the
+template test generated for us, without actually testing any code. Then we'll
+write some real-world tests that call some code that we've written and assert
+that its behavior is correct.</p>
+<p>Let's create a new library project called <code>adder</code>:</p>
 <pre><code class="language-text">$ cargo new adder
      Created library `adder` project
 $ cd adder
 </code></pre>
-<p>Cargo will automatically generate a simple test when you make a new library
-project. Here's the contents of <code>src/lib.rs</code>:</p>
+<p>The contents of the <code>src/lib.rs</code> file in your adder library should be as
+follows:</p>
 <p><span class="filename">Filename: src/lib.rs</span></p>
 <pre><code class="language-rust">#[cfg(test)]
 mod tests {
@@ -8389,17 +8423,26 @@ mod tests {
     }
 }
 </code></pre>
-<p>For now, let's ignore the <code>tests</code> module and the <code>#[cfg(test)]</code> annotation in
-order to focus on just the function. Note the <code>#[test]</code> before it: this
-attribute indicates this is a test function. The function currently has no
-body; that's good enough to pass! We can run the tests with <code>cargo test</code>:</p>
+<p><span class="caption">Listing 11-1: The test module and function generated
+automatically for us by <code>cargo new</code> </span></p>
+<p>For now, let's ignore the top two lines and focus on the function to see how it
+works. Note the <code>#[test]</code> annotation before the <code>fn</code> line: this attribute
+indicates this is a test function, so that the test runner knows to treat this
+function as a test. We could also have non-test functions in the <code>tests</code> module
+to help set up common scenarios or perform common operations, so we need to
+indicate which functions are tests with the <code>#[test]</code> attribute.</p>
+<p>The function currently has no body, which means there is no code to fail the
+test; an empty test is a passing test! Let's run it and see that this test
+passes.</p>
+<p>The <code>cargo test</code> command runs all tests we have in our project, as shown in
+Listing 11-2:</p>
 <pre><code class="language-text">$ cargo test
    Compiling adder v0.1.0 (file:///projects/adder)
     Finished debug [unoptimized + debuginfo] target(s) in 0.22 secs
-     Running target/debug/deps/adder-abcabcabc
+     Running target/debug/deps/adder-ce99bcc2479f4607
 
 running 1 test
-test it_works ... ok
+test tests::it_works ... ok
 
 test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured
 
@@ -8409,336 +8452,786 @@ running 0 tests
 
 test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured
 </code></pre>
-<p>Cargo compiled and ran our tests. There are two sets of output here; we're
-going to focus on the first set in this chapter. The second set of output is
-for documentation tests, which we'll talk about in Chapter 14. For now, note
-this line:</p>
-<pre><code class="language-text">test it_works ... ok
-</code></pre>
-<p>The <code>it_works</code> text comes from the name of our function.</p>
-<p>We also get a summary line that tells us the aggregate results of all the
-tests that we have:</p>
-<pre><code class="language-text">test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured
-</code></pre>
-<a class="header" href="print.html#the-assert-macro" name="the-assert-macro"><h3>The <code>assert!</code> macro</h3></a>
-<p>The empty test function passes because any test which doesn't <code>panic!</code> passes,
-and any test that does <code>panic!</code> fails. Let's make the test fail by using the
-<code>assert!</code> macro:</p>
+<p><span class="caption">Listing 11-2: The output from running the one
+automatically generated test </span></p>
+<p>Cargo compiled and ran our test. After the <code>Compiling</code>, <code>Finished</code>, and
+<code>Running</code> lines, we see the line <code>running 1 test</code>. The next line shows the name
+of the generated test function, called <code>it_works</code>, and the result of running
+that test, <code>ok</code>. Then we see the overall summary of running the tests: <code>test result: ok.</code> means all the tests passed. <code>1 passed; 0 failed</code> adds up the
+number of tests that passed or failed.</p>
+<p>We don't have any tests we've marked as ignored, so the summary says <code>0 ignored</code>. We're going to talk about ignoring tests in the next section on
+different ways to run tests. The <code>0 measured</code> statistic is for benchmark tests
+that measure performance. Benchmark tests are, as of this writing, only
+available in nightly Rust. See Appendix D for more information about nightly
+Rust.</p>
+<p>The next part of the test output that starts with <code>Doc-tests adder</code> is for the
+results of any documentation tests. We don't have any documentation tests yet,
+but Rust can compile any code examples that appear in our API documentation.
+This feature helps us keep our docs and our code in sync! We'll be talking
+about how to write documentation tests in the &quot;Documentation Comments&quot; section
+of Chapter 14. We're going to ignore the <code>Doc-tests</code> output for now.</p>
+<!-- I might suggest changing the name of the function, could be misconstrued
+as part of the test output! -->
+<!-- `it_works` is always the name that `cargo new` generates for the first
+test function, though. We wanted to show the reader what happens when you run
+the tests immediately after generating a new project; they pass without you
+needing to change anything. I've added a bit to walk through changing the
+function name and seeing how the output changes; I hope that's sufficient.
+/Carol -->
+<p>Let's change the name of our test and see how that changes the test output.
+Give the <code>it_works</code> function a different name, such as <code>exploration</code>, like so:</p>
 <p><span class="filename">Filename: src/lib.rs</span></p>
-<pre><code class="language-rust">#[test]
-fn it_works() {
-    assert!(false);
+<pre><code class="language-rust">#[cfg(test)]
+mod tests {
+    #[test]
+    fn exploration() {
+    }
 }
 </code></pre>
-<p>The <code>assert!</code> macro is provided by the standard library, and it takes one
-argument. If the argument is <code>true</code>, nothing happens. If the argument is
-<code>false</code>, the macro will <code>panic!</code>. Let's run our tests again:</p>
-<pre><code class="language-text">$ cargo test
-   Compiling adder v0.1.0 (file:///projects/adder)
-    Finished debug [unoptimized + debuginfo] target(s) in 0.22 secs
-     Running target/debug/deps/adder-abcabcabc
-
-running 1 test
-test it_works ... FAILED
-
-failures:
-
----- it_works stdout ----
-    thread 'it_works' panicked at 'assertion failed: false', src/lib.rs:5
-note: Run with `RUST_BACKTRACE=1` for a backtrace.
-
-
-failures:
-    it_works
-
-test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured
-
-error: test failed
-</code></pre>
-<p>Rust indicates that our test failed:</p>
-<pre><code class="language-text">test it_works ... FAILED
-</code></pre>
-<p>And shows that the test failed because the <code>assert!</code> macro in <code>src/lib.rs</code> on
-line 5 got a <code>false</code> value:</p>
-<pre><code class="language-text">thread 'it_works' panicked at 'assertion failed: false', src/lib.rs:5
-</code></pre>
-<p>The test failure is also reflected in the summary line:</p>
-<pre><code class="language-text">test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured
-</code></pre>
-<a class="header" href="print.html#testing-equality-with-the-assert_eq-and-assert_ne-macros" name="testing-equality-with-the-assert_eq-and-assert_ne-macros"><h3>Testing equality with the <code>assert_eq!</code> and <code>assert_ne!</code> macros</h3></a>
-<p>A common way to test functionality is to compare the result of the code under
-test to the value you expect it to be, and check that they're equal. You can do
-this using the <code>assert!</code> macro by passing it an expression using the <code>==</code>
-macro. This is so common, though, that the standard library provides a pair of
-macros to do this for convenience: <code>assert_eq!</code> and <code>assert_ne!</code>. These macros
-compare two arguments for equality or inequality, respectively. The other
-advantage of using these macros is they will print out what the two values
-actually are if the assertion fails so that it's easier to see <em>why</em> the test
-failed, whereas the <code>assert!</code> macro would just print out that it got a <code>false</code>
-value for the <code>==</code> expression.</p>
-<p>Here's an example test that uses each of these macros and will pass:</p>
-<p><span class="filename">Filename: src/lib.rs</span></p>
-<pre><code class="language-rust">#[test]
-fn it_works() {
-    assert_eq!(&quot;Hello&quot;, &quot;Hello&quot;);
-
-    assert_ne!(&quot;Hello&quot;, &quot;world&quot;);
-}
-</code></pre>
-<p>You can also specify an optional third argument to each of these macros, which
-is a custom message that you'd like to be added to the failure message. The
-macros expand to logic similar to this:</p>
-<pre><code class="language-rust ignore">// assert_eq! - panic if the values aren't equal
-if left_val != right_val {
-    panic!(
-        &quot;assertion failed: `(left == right)` (left: `{:?}`, right: `{:?}`): {}&quot;
-        left_val,
-        right_val,
-        optional_custom_message
-    )
-}
-
-// assert_ne! - panic if the values are equal
-if left_val == right_val {
-    panic!(
-        &quot;assertion failed: `(left != right)` (left: `{:?}`, right: `{:?}`): {}&quot;
-        left_val,
-        right_val,
-        optional_custom_message
-    )
-}
-</code></pre>
-<p>Let's take a look at a test that will fail because <code>hello</code> is not equal to
-<code>world</code>. We've also added a custom error message, <code>greeting operation failed</code>:</p>
-<p><span class="filename">Filename: src/lib.rs</span></p>
-<pre><code class="language-rust">#[test]
-fn a_simple_case() {
-    let result = &quot;hello&quot;; // this value would come from running your code
-    assert_eq!(result, &quot;world&quot;, &quot;greeting operation failed&quot;);
-}
-</code></pre>
-<p>Running this indeed fails, and the output we get explains why the test failed
-and includes the custom error message we specified:</p>
-<pre><code class="language-text">---- a_simple_case stdout ----
-    thread 'a_simple_case' panicked at 'assertion failed: `(left == right)`
-    (left: `&quot;hello&quot;`, right: `&quot;world&quot;`): greeting operation failed',
-    src/main.rs:4
-</code></pre>
-<p>The two parameters to <code>assert_eq!</code> are named &quot;left&quot; and &quot;right&quot; rather than
-&quot;expected&quot; and &quot;actual&quot;; the order of the value that comes from your code and
-the value hardcoded into your test isn't important.</p>
-<p>Since these macros use the operators <code>==</code> and <code>!=</code> and print the values using
-debug formatting, the values being compared must implement the <code>PartialEq</code> and
-<code>Debug</code> traits. Types provided by Rust implement these traits, but for structs
-and enums that you define, you'll need to add <code>PartialEq</code> in order to be able
-to assert that values of those types are equal or not equal and <code>Debug</code> in
-order to be able to print out the values in the case that the assertion fails.
-Because both of these traits are derivable traits that we mentioned in Chapter
-5, usually this is as straightforward as adding the <code>#[derive(PartialEq, Debug)]</code> annotation to your struct or enum definition. See Appendix C for more
-details about these and other derivable traits.</p>
-<a class="header" href="print.html#test-for-failure-with-should_panic" name="test-for-failure-with-should_panic"><h2>Test for failure with <code>should_panic</code></h2></a>
-<p>We can invert our test's failure with another attribute: <code>should_panic</code>. This
-is useful when we want to test that calling a particular function will cause an
-error. For example, let's test something that we know will panic from Chapter
-8: attempting to create a slice using range syntax with byte indices that
-aren't on character boundaries. Add the <code>#[should_panic]</code> attribute before the
-function like the <code>#[test]</code> attribute, as shown in Listing 11-1:</p>
-<figure>
-<span class="filename">Filename: src/lib.rs</span>
-<pre><code class="language-rust">#[test]
-#[should_panic]
-fn slice_not_on_char_boundaries() {
-    let s = &quot;Здравствуйте&quot;;
-    &amp;s[0..1];
-}
-</code></pre>
-<figcaption>
-<p>Listing 11-1: A test expecting a <code>panic!</code></p>
-</figcaption>
-</figure>
-<p>This test will succeed, since the code panics and we said that it should. If
-this code happened to run and did not cause a <code>panic!</code>, this test would fail.</p>
-<p><code>should_panic</code> tests can be fragile, as it's hard to guarantee that the test
-didn't fail for a different reason than the one you were expecting. To help
-with this, an optional <code>expected</code> parameter can be added to the <code>should_panic</code>
-attribute. The test harness will make sure that the failure message contains
-the provided text. A more robust version of Listing 11-1 would be the
-following, in Listing 11-2:</p>
-<figure>
-<span class="filename">Filename: src/lib.rs</span>
-<pre><code class="language-rust">#[test]
-#[should_panic(expected = &quot;do not lie on character boundary&quot;)]
-fn slice_not_on_char_boundaries() {
-    let s = &quot;Здравствуйте&quot;;
-    &amp;s[0..1];
-}
-</code></pre>
-<!-- I will add ghosting in libreoffice /Carol -->
-<figcaption>
-<p>Listing 11-2: A test expecting a <code>panic!</code> with a particular message</p>
-</figcaption>
-</figure>
-<p>Try on your own to see what happens when a <code>should_panic</code> test panics but
-doesn't match the expected message: cause a <code>panic!</code> that happens for a
-different reason in this test, or change the expected panic message to
-something that doesn't match the character boundary panic message.</p>
-<a class="header" href="print.html#running-tests" name="running-tests"><h2>Running tests</h2></a>
-<p>Just like <code>cargo run</code> compiles your code and then runs the resulting binary,
-<code>cargo test</code> compiles your code in test mode and runs the resulting test
-binary. The default behavior of the binary that <code>cargo test</code> produces is to run
-all the tests in parallel and to capture output generated during test runs so
-that it's easier to read the output about the test results.</p>
-<p>The default behavior of running tests can be changed by specifying command line
-options. Some of these options can be passed to <code>cargo test</code>, and some need to
-be passed instead to the resulting test binary. The way to separate these
-arguments is with <code>--</code>: after <code>cargo test</code>, list the arguments that go to
-<code>cargo test</code>, then the separator <code>--</code>, and then the arguments that go to the
-test binary.</p>
-<a class="header" href="print.html#tests-run-in-parallel" name="tests-run-in-parallel"><h3>Tests Run in Parallel</h3></a>
-<p>Tests are run in parallel using threads. For this reason, you should take care
-that your tests are written in such a way as to not depend on each other or on
-any shared state. Shared state can also include the environment, such as the
-current working directory or environment variables.</p>
-<p>If you don't want this behavior, or if you want more fine-grained control over
-the number of threads used, you can send the <code>--test-threads</code> flag and the
-number of threads to the test binary. Setting the number of test threads to 1
-means to not use any parallelism:</p>
-<pre><code class="language-text">$ cargo test -- --test-threads=1
-</code></pre>
-<a class="header" href="print.html#tests-capture-output" name="tests-capture-output"><h3>Tests Capture Output</h3></a>
-<p>By default, Rust's test library captures and discards output to standard out
-and standard error, unless the test fails. For example, if you call <code>println!</code>
-in a test and the test passes, you won't see the <code>println!</code> output in your
-terminal. This behavior can be disabled by sending the <code>--nocapture</code> flag to
-the test binary:</p>
-<pre><code class="language-text">$ cargo test -- --nocapture
-</code></pre>
-<a class="header" href="print.html#running-a-subset-of-tests-by-name" name="running-a-subset-of-tests-by-name"><h3>Running a Subset of Tests by Name</h3></a>
-<p>Sometimes, running a full test suite can take a long time. If you're only
-working on code in a particular area, you might want to only run the tests
-having to do with that code. <code>cargo test</code> takes an argument that allows you to
-only run certain tests, specified by name.</p>
-<p>Let's create three tests with the following names as shown in Listing 11-3:</p>
-<figure>
-<span class="filename">Filename: src/lib.rs</span>
-<pre><code class="language-rust">#[test]
-fn add_two_and_two() {
-    assert_eq!(4, 2 + 2);
-}
-
-#[test]
-fn add_three_and_two() {
-    assert_eq!(5, 3 + 2);
-}
-
-#[test]
-fn one_hundred() {
-    assert_eq!(102, 100 + 2);
-}
-</code></pre>
-<figcaption>
-<p>Listing 11-3: Three tests with a variety of names</p>
-</figcaption>
-</figure>
-<p>Running with different arguments will run different subsets of the tests. No
-arguments, as we've already seen, runs all the tests:</p>
-<pre><code class="language-text">$ cargo test
-    Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
-     Running target/debug/deps/adder-abcabcabc
-
-running 3 tests
-test add_three_and_two ... ok
-test one_hundred ... ok
-test add_two_and_two ... ok
-
-test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured
-</code></pre>
-<p>We can pass the name of any test function to run only that test:</p>
-<pre><code class="language-text">$ cargo test one_hundred
-    Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
-     Running target/debug/deps/adder-abcabcabc
-
-running 1 test
-test one_hundred ... ok
+<p>And run <code>cargo test</code> again. In the output, we'll now see <code>exploration</code> instead
+of <code>it_works</code>:</p>
+<pre><code class="language-text">running 1 test
+test tests::exploration ... ok
 
 test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured
 </code></pre>
-<p>We can also pass part of a name, and <code>cargo test</code> will run all tests that match:</p>
-<pre><code class="language-text">$ cargo test add
-    Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
-     Running target/debug/deps/adder-abcabcabc
+<p>Let's add another test, but this time we'll make a test that fails! Tests fail
+when something in the test function panics. We talked about the simplest way to
+cause a panic in Chapter 9: call the <code>panic!</code> macro! Type in the new test so
+that your <code>src/lib.rs</code> now looks like Listing 11-3:</p>
+<p><span class="filename">Filename: src/lib.rs</span></p>
+<pre><code class="language-rust">#[cfg(test)]
+mod tests {
+    #[test]
+    fn exploration() {
+    }
 
-running 2 tests
-test add_three_and_two ... ok
-test add_two_and_two ... ok
+    #[test]
+    fn another() {
+        panic!(&quot;Make this test fail&quot;);
+    }
+}
+</code></pre>
+<p><span class="caption">Listing 11-3: Adding a second test; one that will fail
+since we call the <code>panic!</code> macro </span></p>
+<p>And run the tests again with <code>cargo test</code>. The output should look like Listing
+11-4, which shows that our <code>exploration</code> test passed and <code>another</code> failed:</p>
+<pre><code class="language-text">running 2 tests
+test tests::exploration ... ok
+test tests::another ... FAILED
+
+failures:
+
+---- tests::another stdout ----
+    thread 'tests::another' panicked at 'Make this test fail', src/lib.rs:9
+note: Run with `RUST_BACKTRACE=1` for a backtrace.
+
+failures:
+    tests::another
+
+test result: FAILED. 1 passed; 1 failed; 0 ignored; 0 measured
+
+error: test failed
+</code></pre>
+<p><span class="caption">Listing 11-4: Test results when one test passes and one
+test fails </span></p>
+<p>Instead of <code>ok</code>, the line <code>test tests::another</code> says <code>FAILED</code>. We have two new
+sections between the individual results and the summary: the first section
+displays the detailed reason for the test failures. In this case, <code>another</code>
+failed because it <code>panicked at 'Make this test fail'</code>, which happened on
+<em>src/lib.rs</em> line 9. The next section lists just the names of all the failing
+tests, which is useful when there are lots of tests and lots of detailed
+failing test output. We can use the name of a failing test to run just that
+test in order to more easily debug it; we'll talk more about ways to run tests
+in the next section.</p>
+<p>Finally, we have the summary line: overall, our test result is <code>FAILED</code>. We had
+1 test pass and 1 test fail.</p>
+<p>Now that we've seen what the test results look like in different scenarios,
+let's look at some macros other than <code>panic!</code> that are useful in tests.</p>
+<a class="header" href="print.html#checking-results-with-the-assert-macro" name="checking-results-with-the-assert-macro"><h3>Checking Results with the <code>assert!</code> Macro</h3></a>
+<p>The <code>assert!</code> macro, provided by the standard library, is useful when you want
+to ensure that some condition in a test evaluates to <code>true</code>. We give the
+<code>assert!</code> macro an argument that evaluates to a boolean. If the value is <code>true</code>,
+<code>assert!</code> does nothing and the test passes. If the value is <code>false</code>, <code>assert!</code>
+calls the <code>panic!</code> macro, which causes the test to fail. This is one macro that
+helps us check that our code is functioning in the way we intend.</p>
+<!-- what kind of thing can be passed as an argument? Presumably when we use it
+for real we won't pass it `true` or `false` as an argument, but some condition
+that will evaluate to true or false? In which case, should below be phrased "If
+the argument evaluates to true" and an exaplanation of that? Or maybe even a
+working example would be better, this could be misleading -->
+<!-- We were trying to really break it down, to show just how the `assert!`
+macro works and what it looks like for it to pass or fail, before we got into
+calling actual code. We've changed this section to move a bit faster and just
+write actual tests instead. /Carol -->
+<p>Remember all the way back in Chapter 5, Listing 5-9, where we had a <code>Rectangle</code>
+struct and a <code>can_hold</code> method, repeated here in Listing 11-5. Let's put this
+code in <em>src/lib.rs</em> instead of <em>src/main.rs</em> and write some tests for it using
+the <code>assert!</code> macro.</p>
+<!-- Listing 5-9 wasn't marked as such; I'll fix it the next time I get Chapter
+5 for editing. /Carol -->
+<p><span class="filename">Filename: src/lib.rs</span></p>
+<pre><code class="language-rust">#[derive(Debug)]
+pub struct Rectangle {
+    length: u32,
+    width: u32,
+}
+
+impl Rectangle {
+    pub fn can_hold(&amp;self, other: &amp;Rectangle) -&gt; bool {
+        self.length &gt; other.length &amp;&amp; self.width &gt; other.width
+    }
+}
+</code></pre>
+<p><span class="caption">Listing 11-5: The <code>Rectangle</code> struct and its <code>can_hold</code>
+method from Chapter 5 </span></p>
+<p>The <code>can_hold</code> method returns a boolean, which means it's a perfect use case
+for the <code>assert!</code> macro. In Listing 11-6, let's write a test that exercises the
+<code>can_hold</code> method by creating a <code>Rectangle</code> instance that has a length of 8 and
+a width of 7, and asserting that it can hold another <code>Rectangle</code> instance that
+has a length of 5 and a width of 1:</p>
+<p><span class="filename">Filename: src/lib.rs</span></p>
+<pre><code class="language-rust">#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn larger_can_hold_smaller() {
+        let larger = Rectangle { length: 8, width: 7 };
+        let smaller = Rectangle { length: 5, width: 1 };
+
+        assert!(larger.can_hold(&amp;smaller));
+    }
+}
+</code></pre>
+<p><span class="caption">Listing 11-6: A test for <code>can_hold</code> that checks that a
+larger rectangle indeed holds a smaller rectangle </span></p>
+<p>Note that we've added a new line inside the <code>tests</code> module: <code>use super::*;</code>.
+The <code>tests</code> module is a regular module that follows the usual visibility rules
+we covered in Chapter 7. Because we're in an inner module, we need to bring the
+code under test in the outer module into the scope of the inner module. We've
+chosen to use a glob here so that anything we define in the outer module is
+available to this <code>tests</code> module.</p>
+<p>We've named our test <code>larger_can_hold_smaller</code>, and we've created the two
+<code>Rectangle</code> instances that we need. Then we called the <code>assert!</code> macro and
+passed it the result of calling <code>larger.can_hold(&amp;smaller)</code>. This expression is
+supposed to return <code>true</code>, so our test should pass. Let's find out!</p>
+<pre><code class="language-text">running 1 test
+test tests::larger_can_hold_smaller ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured
+</code></pre>
+<p>It does pass! Let's add another test, this time asserting that a smaller
+rectangle cannot hold a larger rectangle:</p>
+<p><span class="filename">Filename: src/lib.rs</span></p>
+<pre><code class="language-rust">#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn larger_can_hold_smaller() {
+        let larger = Rectangle { length: 8, width: 7 };
+        let smaller = Rectangle { length: 5, width: 1 };
+
+        assert!(larger.can_hold(&amp;smaller));
+    }
+
+    #[test]
+    fn smaller_can_hold_larger() {
+        let larger = Rectangle { length: 8, width: 7 };
+        let smaller = Rectangle { length: 5, width: 1 };
+
+        assert!(!smaller.can_hold(&amp;larger));
+    }
+}
+</code></pre>
+<p>Because the correct result of the <code>can_hold</code> function in this case is <code>false</code>,
+we need to negate that result before we pass it to the <code>assert!</code> macro. This
+way, our test will pass if <code>can_hold</code> returns <code>false</code>:</p>
+<pre><code class="language-text">running 2 tests
+test tests::smaller_can_hold_larger ... ok
+test tests::larger_can_hold_smaller ... ok
 
 test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured
 </code></pre>
-<p>Module names become part of the test name, so module names can be used in a
-similar way to run just the tests for a particular module. For example, if our
-code was organized into a module named <code>adding</code> and a module named
-<code>subtracting</code> with tests in each, as in Listing 11-4:</p>
-<figure>
-<span class="filename">Filename: src/lib.rs</span>
-<pre><code class="language-rust">mod adding {
+<p>Two passing tests! Now let's see what happens to our test results if we
+introduce a bug in our code. Let's change the implementation of the <code>can_hold</code>
+method to have a less-than sign when it compares the lengths where it's
+supposed to have a greater-than sign:</p>
+<pre><code class="language-rust">#[derive(Debug)]
+pub struct Rectangle {
+    length: u32,
+    width: u32,
+}
+
+impl Rectangle {
+    pub fn can_hold(&amp;self, other: &amp;Rectangle) -&gt; bool {
+        self.length &lt; other.length &amp;&amp; self.width &gt; other.width
+    }
+}
+</code></pre>
+<p>Running the tests now produces:</p>
+<pre><code class="language-text">running 2 tests
+test tests::smaller_can_hold_larger ... ok
+test tests::larger_can_hold_smaller ... FAILED
+
+failures:
+
+---- tests::larger_can_hold_smaller stdout ----
+    thread 'tests::larger_can_hold_smaller' panicked at 'assertion failed:
+    larger.can_hold(&amp;smaller)', src/lib.rs:22
+note: Run with `RUST_BACKTRACE=1` for a backtrace.
+
+failures:
+    tests::larger_can_hold_smaller
+
+test result: FAILED. 1 passed; 1 failed; 0 ignored; 0 measured
+</code></pre>
+<p>Our tests caught the bug! Since <code>larger.length</code> is 8 and <code>smaller.length</code> is 5,
+the comparison of the lengths in <code>can_hold</code> now returns <code>false</code> since 8 is not
+less than 5.</p>
+<a class="header" href="print.html#testing-equality-with-the-assert_eq-and-assert_ne-macros" name="testing-equality-with-the-assert_eq-and-assert_ne-macros"><h3>Testing Equality with the <code>assert_eq!</code> and <code>assert_ne!</code> Macros</h3></a>
+<p>A common way to test functionality is to take the result of the code under test
+and the value we expect the code to return and check that they're equal. We
+could do this using the <code>assert!</code> macro and passing it an expression using the
+<code>==</code> operator. However, this is such a common test that the standard library
+provides a pair of macros to perform this test more conveniently: <code>assert_eq!</code>
+and <code>assert_ne!</code>. These macros compare two arguments for equality or
+inequality, respectively. They'll also print out the two values if the
+assertion fails, so that it's easier to see <em>why</em> the test failed, while the
+<code>assert!</code> macro only tells us that it got a <code>false</code> value for the <code>==</code>
+expression, not the values that lead to the <code>false</code> value.</p>
+<p>In Listing 11-7, let's write a function named <code>add_two</code> that adds two to its
+parameter and returns the result. Then let's test this function using the
+<code>assert_eq!</code> macro:</p>
+<p><span class="filename">Filename: src/lib.rs</span></p>
+<pre><code class="language-rust">pub fn add_two(a: i32) -&gt; i32 {
+    a + 2
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn it_adds_two() {
+        assert_eq!(4, add_two(2));
+    }
+}
+</code></pre>
+<p><span class="caption">Listing 11-7: Testing the function <code>add_two</code> using the
+<code>assert_eq!</code> macro </span></p>
+<p>Let's check that it passes!</p>
+<pre><code class="language-text">running 1 test
+test tests::it_adds_two ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured
+</code></pre>
+<p>The first argument we gave to the <code>assert_eq!</code> macro, 4, is equal to the result
+of calling <code>add_two(2)</code>. We see a line for this test that says <code>test tests::it_adds_two ... ok</code>, and the <code>ok</code> text indicates that our test passed!</p>
+<p>Let's introduce a bug into our code to see what it looks like when a test that
+uses <code>assert_eq!</code> fails. Change the implementation of the <code>add_two</code> function to
+instead add 3:</p>
+<pre><code class="language-rust">pub fn add_two(a: i32) -&gt; i32 {
+    a + 3
+}
+</code></pre>
+<p>And run the tests again:</p>
+<pre><code class="language-text">running 1 test
+test tests::it_adds_two ... FAILED
+
+failures:
+
+---- tests::it_adds_two stdout ----
+    thread 'tests::it_adds_two' panicked at 'assertion failed: `(left ==
+    right)` (left: `4`, right: `5`)', src/lib.rs:11
+note: Run with `RUST_BACKTRACE=1` for a backtrace.
+
+failures:
+    tests::it_adds_two
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured
+</code></pre>
+<p>Our test caught the bug! The <code>it_adds_two</code> test failed with the message <code>assertion failed: `(left == right)` (left: `4`, right: `5`)</code>. This message is
+useful and helps us get started debugging: it says the <code>left</code> argument to
+<code>assert_eq!</code> was 4, but the <code>right</code> argument, where we had <code>add_two(2)</code>, was 5.</p>
+<p>Note that in some languages and test frameworks, the parameters to the
+functions that assert two values are equal are called <code>expected</code> and <code>actual</code>
+and the order in which we specify the arguments matters. However, in Rust,
+they're called <code>left</code> and <code>right</code> instead, and the order in which we specify
+the value we expect and the value that the code under test produces doesn't
+matter. We could have written the assertion in this test as
+<code>assert_eq!(add_two(2), 4)</code>, which would result in a failure message that says
+<code>assertion failed: `(left == right)` (left: `5`, right: `4`)</code>.</p>
+<p>The <code>assert_ne!</code> macro will pass if the two values we give to it are not equal
+and fail if they are equal. This macro is most useful for cases when we're not
+sure exactly what a value <em>will</em> be, but we know what the value definitely
+<em>won't</em> be, if our code is functioning as we intend. For example, if we have a
+function that is guaranteed to change its input in some way, but the way in
+which the input is changed depends on the day of the week that we run our
+tests, the best thing to assert might be that the output of the function is not
+equal to the input.</p>
+<p>Under the surface, the <code>assert_eq!</code> and <code>assert_ne!</code> macros use the operators
+<code>==</code> and <code>!=</code>, respectively. When the assertions fail, these macros print their
+arguments using debug formatting, which means the values being compared must
+implement the <code>PartialEq</code> and <code>Debug</code> traits. All of the primitive types and
+most of the standard library types implement these traits. For structs and
+enums that you define, you'll need to implement <code>PartialEq</code> in order to be able
+to assert that values of those types are equal or not equal. You'll need to
+implement <code>Debug</code> in order to be able to print out the values in the case that
+the assertion fails. Because both of these traits are derivable traits, as we
+mentioned in Chapter 5, this is usually as straightforward as adding the
+<code>#[derive(PartialEq, Debug)]</code> annotation to your struct or enum definition. See
+Appendix C for more details about these and other derivable traits.</p>
+<a class="header" href="print.html#custom-failure-messages" name="custom-failure-messages"><h3>Custom Failure Messages</h3></a>
+<p>We can also add a custom message to be printed with the failure message as
+optional arguments to <code>assert!</code>, <code>assert_eq!</code>, and <code>assert_ne!</code>. Any arguments
+specified after the one required argument to <code>assert!</code> or the two required
+arguments to <code>assert_eq!</code> and <code>assert_ne!</code> are passed along to the <code>format!</code>
+macro that we talked about in Chapter 8, so you can pass a format string that
+contains <code>{}</code> placeholders and values to go in the placeholders. Custom
+messages are useful in order to document what an assertion means, so that when
+the test fails, we have a better idea of what the problem is with the code.</p>
+<p>For example, let's say we have a function that greets people by name, and we
+want to test that the name we pass into the function appears in the output:</p>
+<p><span class="filename">Filename: src/lib.rs</span></p>
+<pre><code class="language-rust">pub fn greeting(name: &amp;str) -&gt; String {
+    format!(&quot;Hello {}!&quot;, name)
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn greeting_contains_name() {
+        let result = greeting(&quot;Carol&quot;);
+        assert!(result.contains(&quot;Carol&quot;));
+    }
+}
+</code></pre>
+<p>The requirements for this program haven't been agreed upon yet, and we're
+pretty sure the <code>Hello</code> text at the beginning of the greeting will change. We
+decided we don't want to have to update the test for the name when that
+happens, so instead of checking for exact equality to the value returned from
+the <code>greeting</code> function, we're just going to assert that the output contains
+the text of the input parameter.</p>
+<p>Let's introduce a bug into this code to see what this test failure looks like,
+by changing <code>greeting</code> to not include <code>name</code>:</p>
+<pre><code class="language-rust">pub fn greeting(name: &amp;str) -&gt; String {
+    String::from(&quot;Hello!&quot;)
+}
+</code></pre>
+<p>Running this test produces:</p>
+<pre><code class="language-text">running 1 test
+test tests::greeting_contains_name ... FAILED
+
+failures:
+
+---- tests::greeting_contains_name stdout ----
+    thread 'tests::greeting_contains_name' panicked at 'assertion failed:
+    result.contains(&quot;Carol&quot;)', src/lib.rs:12
+note: Run with `RUST_BACKTRACE=1` for a backtrace.
+
+failures:
+    tests::greeting_contains_name
+</code></pre>
+<p>This just tells us that the assertion failed and which line the assertion is
+on. A more useful failure message in this case would print the value we did get
+from the <code>greeting</code> function. Let's change the test function to have a custom
+failure message made from a format string with a placeholder filled in with the
+actual value we got from the <code>greeting</code> function:</p>
+<pre><code class="language-rust ignore">#[test]
+fn greeting_contains_name() {
+    let result = greeting(&quot;Carol&quot;);
+    assert!(
+        result.contains(&quot;Carol&quot;),
+        &quot;Greeting did not contain name, value was `{}`&quot;, result
+    );
+}
+</code></pre>
+<p>Now if we run the test again, we'll get a much more informative error message:</p>
+<pre><code class="language-text">---- tests::greeting_contains_name stdout ----
+    thread 'tests::greeting_contains_name' panicked at 'Result did not contain
+    name, value was `Hello`', src/lib.rs:12
+note: Run with `RUST_BACKTRACE=1` for a backtrace.
+</code></pre>
+<p>We can see the value we actually got in the test output, which would help us
+debug what happened instead of what we were expecting to happen.</p>
+<a class="header" href="print.html#checking-for-panics-with-should_panic" name="checking-for-panics-with-should_panic"><h3>Checking for Panics with <code>should_panic</code></h3></a>
+<p>In addition to checking that our code returns the correct values we expect,
+it's also important to check that our code handles error conditions as we
+expect. For example, consider the <code>Guess</code> type that we created in Chapter 9 in
+Listing 9-8. Other code that uses <code>Guess</code> is depending on the guarantee that
+<code>Guess</code> instances will only contain values between 1 and 100. We can write a
+test that ensures that attempting to create a <code>Guess</code> instance with a value
+outside that range panics.</p>
+<p>We can do this by adding another attribute, <code>should_panic</code>, to our test
+function. This attribute makes a test pass if the code inside the function
+panics, and the test will fail if the code inside the function does non panic.</p>
+<p>Listing 11-8 shows how we'd write a test that checks the error conditions of
+<code>Guess::new</code> happen when we expect:</p>
+<p><span class="filename">Filename: src/lib.rs</span></p>
+<pre><code class="language-rust">struct Guess {
+    value: u32,
+}
+
+impl Guess {
+    pub fn new(value: u32) -&gt; Guess {
+        if value &lt; 1 || value &gt; 100 {
+            panic!(&quot;Guess value must be between 1 and 100, got {}.&quot;, value);
+        }
+
+        Guess {
+            value: value,
+        }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    #[should_panic]
+    fn greater_than_100() {
+        Guess::new(200);
+    }
+}
+</code></pre>
+<p><span class="caption">Listing 11-8: Testing that a condition will cause a
+<code>panic!</code> </span></p>
+<p>The <code>#[should_panic]</code> attribute goes after the <code>#[test]</code> attribute and before
+the test function it applies to. Let's see what it looks like when this test
+passes:</p>
+<pre><code class="language-text">running 1 test
+test tests::greater_than_100 ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured
+</code></pre>
+<p>Looks good! Now let's introduce a bug in our code, by removing the condition
+that the <code>new</code> function will panic if the value is greater than 100:</p>
+<pre><code class="language-rust"># struct Guess {
+#     value: u32,
+# }
+#
+impl Guess {
+    pub fn new(value: u32) -&gt; Guess {
+        if value &lt; 1  {
+            panic!(&quot;Guess value must be between 1 and 100, got {}.&quot;, value);
+        }
+
+        Guess {
+            value: value,
+        }
+    }
+}
+</code></pre>
+<p>If we run the test from Listing 11-8, it will fail:</p>
+<pre><code class="language-text">running 1 test
+test tests::greater_than_100 ... FAILED
+
+failures:
+
+failures:
+    tests::greater_than_100
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured
+</code></pre>
+<p>We don't get a very helpful message in this case, but once we look at the test
+function, we can see that it's annotated with <code>#[should_panic]</code>. The failure we
+got means that the code in the function, <code>Guess::new(200)</code>, did not cause a
+panic.</p>
+<p><code>should_panic</code> tests can be imprecise, however, because they only tell us that
+the code has caused some panic. A <code>should_panic</code> test would pass even if the
+test panics for a different reason than the one we were expecting to happen. To
+make <code>should_panic</code> tests more precise, we can add an optional <code>expected</code>
+parameter to the <code>should_panic</code> attribute. The test harness will make sure that
+the failure message contains the provided text. For example, consider the
+modified code for <code>Guess</code> in Listing 11-9 where the <code>new</code> function panics with
+different messages depending on whether the value was too small or too large:</p>
+<p><span class="filename">Filename: src/lib.rs</span></p>
+<pre><code class="language-rust">struct Guess {
+    value: u32,
+}
+
+impl Guess {
+    pub fn new(value: u32) -&gt; Guess {
+        if value &lt; 1 {
+            panic!(&quot;Guess value must be greater than or equal to 1, got {}.&quot;,
+                   value);
+        } else if value &gt; 100 {
+            panic!(&quot;Guess value must be less than or equal to 100, got {}.&quot;,
+                   value);
+        }
+
+        Guess {
+            value: value,
+        }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    #[should_panic(expected = &quot;Guess value must be less than or equal to 100&quot;)]
+    fn greater_than_100() {
+        Guess::new(200);
+    }
+}
+</code></pre>
+<p><span class="caption">Listing 11-9: Testing that a condition will cause a
+<code>panic!</code> with a particular panic message </span></p>
+<p>This test will pass, because the value we put in the <code>expected</code> parameter of
+the <code>should_panic</code> attribute is a substring of the message that the
+<code>Guess::new</code> function panics with. We could have specified the whole panic
+message that we expect, which in this case would be <code>Guess value must be less than or equal to 100, got 200.</code> It depends on how much of the panic message is
+unique or dynamic and how precise you want your test to be. In this case, a
+substring of the panic message is enough to ensure that the code in the
+function that gets run is the <code>else if value &gt; 100</code> case.</p>
+<p>To see what happens when a <code>should_panic</code> test with an <code>expected</code> message
+fails, let's again introduce a bug into our code by swapping the bodies of the
+<code>if value &lt; 1</code> and the <code>else if value &gt; 100</code> blocks:</p>
+<pre><code class="language-rust ignore">if value &lt; 1 {
+    panic!(&quot;Guess value must be less than or equal to 100, got {}.&quot;, value);
+} else if value &gt; 100 {
+    panic!(&quot;Guess value must be greater than or equal to 1, got {}.&quot;, value);
+}
+</code></pre>
+<p>This time when we run the <code>should_panic</code> test, it will fail:</p>
+<pre><code class="language-text">running 1 test
+test tests::greater_than_100 ... FAILED
+
+failures:
+
+---- tests::greater_than_100 stdout ----
+    thread 'tests::greater_than_100' panicked at 'Guess value must be greater
+    than or equal to 1, got 200.', src/lib.rs:10
+note: Run with `RUST_BACKTRACE=1` for a backtrace.
+note: Panic did not include expected string 'Guess value must be less than or
+equal to 100'
+
+failures:
+    tests::greater_than_100
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured
+</code></pre>
+<p>The failure message indicates that this test did indeed panic as we expected,
+but the panic message <code>did not include expected string 'Guess value must be less than or equal to 100'</code>. We can see the panic message that we did get,
+which in this case was <code>Guess value must be greater than or equal to 1, got</code> We could then start figuring out where our bug was!</p>
+<p>Now that we've gone over ways to write tests, let's look at what is happening
+when we run our tests and talk about the different options we can use with
+<code>cargo test</code>.</p>
+<a class="header" href="print.html#controlling-how-tests-are-run" name="controlling-how-tests-are-run"><h2>Controlling How Tests are Run</h2></a>
+<p>Just as <code>cargo run</code> compiles your code and then runs the resulting binary,
+<code>cargo test</code> compiles your code in test mode and runs the resulting test
+binary. There are options you can use to change the default behavior of <code>cargo test</code>. For example, the default behavior of the binary produced by <code>cargo test</code>
+is to run all the tests in parallel and capture output generated during test
+runs, preventing it from being displayed to make it easier to read the output
+related to the test results. You can change this default behavior by specifying
+command line options.</p>
+<p>Some command line options can be passed to <code>cargo test</code>, and some need to be
+passed instead to the resulting test binary. To separate these two types of
+arguments, you list the arguments that go to <code>cargo test</code>, then the separator
+<code>--</code>, and then the arguments that go to the test binary. Running <code>cargo test --help</code> will tell you about the options that go with <code>cargo test</code>, and running
+<code>cargo test -- --help</code> will tell you about the options that go after the
+separator <code>--</code>.</p>
+<a class="header" href="print.html#running-tests-in-parallel-or-consecutively" name="running-tests-in-parallel-or-consecutively"><h3>Running Tests in Parallel or Consecutively</h3></a>
+<!-- Are we safe assuming the reader will know enough about threads in this
+context? -->
+<!-- Yes /Carol -->
+<p>When multiple tests are run, by default they run in parallel using threads.
+This means the tests will finish running faster, so that we can get faster
+feedback on whether or not our code is working. Since the tests are running at
+the same time, you should take care that your tests do not depend on each other
+or on any shared state, including a shared environment such as the current
+working directory or environment variables.</p>
+<p>For example, say each of your tests runs some code that creates a file on disk
+named <code>test-output.txt</code> and writes some data to that file. Then each test reads
+the data in that file and asserts that the file contains a particular value,
+which is different in each test. Because the tests are all run at the same
+time, one test might overrwrite the file between when another test writes and
+reads the file. The second test will then fail, not because the code is
+incorrect, but because the tests have interfered with each other while running
+in parallel. One solution would be to make sure each test writes to a different
+file; another solution is to run the tests one at a time.</p>
+<p>If you don't want to run the tests in parallel, or if you want more
+fine-grained control over the number of threads used, you can send the
+<code>--test-threads</code> flag and the number of threads you want to use to the test
+binary. For example:</p>
+<pre><code class="language-text">$ cargo test -- --test-threads=1
+</code></pre>
+<p>We set the number of test threads to 1, telling the program not to use any
+parallelism. This will take longer than running them in parallel, but the tests
+won't be potentially interfering with each other if they share state.</p>
+<a class="header" href="print.html#showing-function-output" name="showing-function-output"><h3>Showing Function Output</h3></a>
+<p>By default, if a test passes, Rust's test library captures anything printed to
+standard output. For example, if we call <code>println!</code> in a test and the test
+passes, we won't see the <code>println!</code> output in the terminal: we'll only see the
+line that says the test passed. If a test fails, we'll see whatever was printed
+to standard output with the rest of the failure message.</p>
+<p>For example, Listing 11-10 has a silly function that prints out the value of
+its parameter and then returns 10. We then have a test that passes and a test
+that fails:</p>
+<p><span class="filename">Filename: src/lib.rs</span></p>
+<pre><code class="language-rust">fn prints_and_returns_10(a: i32) -&gt; i32 {
+    println!(&quot;I got the value {}&quot;, a);
+    10
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn this_test_will_pass() {
+        let value = prints_and_returns_10(4);
+        assert_eq!(10, value);
+    }
+
+    #[test]
+    fn this_test_will_fail() {
+        let value = prints_and_returns_10(8);
+        assert_eq!(5, value);
+    }
+}
+</code></pre>
+<p><span class="caption">Listing 11-10: Tests for a function that calls <code>println!</code>
+</span></p>
+<p>The output we'll see when we run these tests with <code>cargo test</code> is:</p>
+<pre><code class="language-text">running 2 tests
+test tests::this_test_will_pass ... ok
+test tests::this_test_will_fail ... FAILED
+
+failures:
+
+---- tests::this_test_will_fail stdout ----
+    I got the value 8
+thread 'tests::this_test_will_fail' panicked at 'assertion failed: `(left ==
+right)` (left: `5`, right: `10`)', src/lib.rs:19
+note: Run with `RUST_BACKTRACE=1` for a backtrace.
+
+failures:
+    tests::this_test_will_fail
+
+test result: FAILED. 1 passed; 1 failed; 0 ignored; 0 measured
+</code></pre>
+<p>Note that nowhere in this output do we see <code>I got the value 4</code>, which is what
+gets printed when the test that passes runs. That output has been captured. The
+output from the test that failed, <code>I got the value 8</code>, appears in the section
+of the test summary output that also shows the cause of the test failure.</p>
+<p>If we want to be able to see printed values for passing tests as well, the
+output capture behavior can be disabled by using the <code>--nocapture</code> flag:</p>
+<pre><code class="language-text">$ cargo test -- --nocapture
+</code></pre>
+<p>Running the tests from Listing 11-10 again with the <code>--nocapture</code> flag now
+shows:</p>
+<pre><code class="language-text">running 2 tests
+I got the value 4
+I got the value 8
+test tests::this_test_will_pass ... ok
+thread 'tests::this_test_will_fail' panicked at 'assertion failed: `(left ==
+right)` (left: `5`, right: `10`)', src/lib.rs:19
+note: Run with `RUST_BACKTRACE=1` for a backtrace.
+test tests::this_test_will_fail ... FAILED
+
+failures:
+
+failures:
+    tests::this_test_will_fail
+
+test result: FAILED. 1 passed; 1 failed; 0 ignored; 0 measured
+</code></pre>
+<p>Note that the output for the tests and the test results is interleaved; this is
+because the tests are running in parallel as we talked about in the previous
+section. Try using both the <code>--test-threads=1</code> option and the <code>--nocapture</code>
+function and see what the output looks like then!</p>
+<a class="header" href="print.html#running-a-subset-of-tests-by-name" name="running-a-subset-of-tests-by-name"><h3>Running a Subset of Tests by Name</h3></a>
+<p>Sometimes, running a full test suite can take a long time. If you're working on
+code in a particular area, you might want to run only the tests pertaining to
+that code. You can choose which tests to run by passing <code>cargo test</code> the name
+or names of the test/s you want to run as an argument.</p>
+<p>To demonstrate how to run a subset of tests, we'll create three tests for our
+<code>add_two</code> function as shown in Listing 11-11 and choose which ones to run:</p>
+<p><span class="filename">Filename: src/lib.rs</span></p>
+<pre><code class="language-rust">pub fn add_two(a: i32) -&gt; i32 {
+    a + 2
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
     #[test]
     fn add_two_and_two() {
-        assert_eq!(4, 2 + 2);
+        assert_eq!(4, add_two(2));
     }
 
     #[test]
     fn add_three_and_two() {
-        assert_eq!(5, 3 + 2);
+        assert_eq!(5, add_two(3));
     }
 
     #[test]
     fn one_hundred() {
-        assert_eq!(102, 100 + 2);
-    }
-}
-
-mod subtracting {
-    #[test]
-    fn subtract_three_and_two() {
-        assert_eq!(1, 3 - 2);
+        assert_eq!(102, add_two(100));
     }
 }
 </code></pre>
-<figcaption>
-<p>Listing 11-4: Tests in two modules named <code>adding</code> and <code>subtracting</code></p>
-</figcaption>
-</figure>
-<p>Running <code>cargo test</code> will run all of the tests, and the module names will
-appear in the test names in the output:</p>
-<pre><code class="language-text">$ cargo test
-    Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
-     Running target/debug/deps/adder-abcabcabc
-
-running 4 tests
-test adding::add_two_and_two ... ok
-test adding::add_three_and_two ... ok
-test subtracting::subtract_three_and_two ... ok
-test adding::one_hundred ... ok
-</code></pre>
-<p>Running <code>cargo test adding</code> would run just the tests in that module and not any
-of the tests in the subtracting module:</p>
-<pre><code class="language-text">$ cargo test adding
-    Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
-     Running target/debug/deps/adder-abcabcabc
-
-running 3 tests
-test adding::add_three_and_two ... ok
-test adding::one_hundred ... ok
-test adding::add_two_and_two ... ok
+<p><span class="caption">Listing 11-11: Three tests with a variety of names</span></p>
+<p>If we run the tests without passing any arguments, as we've already seen, all
+the tests will run in parallel:</p>
+<pre><code class="language-text">running 3 tests
+test tests::add_two_and_two ... ok
+test tests::add_three_and_two ... ok
+test tests::one_hundred ... ok
 
 test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured
 </code></pre>
+<a class="header" href="print.html#running-single-tests" name="running-single-tests"><h4>Running Single Tests</h4></a>
+<p>We can pass the name of any test function to <code>cargo test</code> to run only that test:</p>
+<pre><code class="language-text">$ cargo test one_hundred
+    Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
+     Running target/debug/deps/adder-06a75b4a1f2515e9
+
+running 1 test
+test tests::one_hundred ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured
+</code></pre>
+<p>We can't specify the names of multiple tests in this way, only the first value
+given to <code>cargo test</code> will be used.</p>
+<a class="header" href="print.html#filtering-to-run-multiple-tests" name="filtering-to-run-multiple-tests"><h4>Filtering to Run Multiple Tests</h4></a>
+<p>However, we can specify part of a test name, and any test whose name matches
+that value will get run. For example, since two of our tests' names contain
+<code>add</code>, we can run those two by running <code>cargo test add</code>:</p>
+<pre><code class="language-text">$ cargo test add
+    Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
+     Running target/debug/deps/adder-06a75b4a1f2515e9
+
+running 2 tests
+test tests::add_two_and_two ... ok
+test tests::add_three_and_two ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured
+</code></pre>
+<p>This ran all tests with <code>add</code> in the name. Also note that the module in which
+tests appear becomes part of the test's name, so we can run all the tests in a
+module by filtering on the module's name.</p>
+<!-- in what kind of situation might you need to run only some tests, when you
+have lots and lots in a program? -->
+<!-- We covered this in the first paragraph of the "Running a Subset of Tests
+by Name" section, do you think it should be repeated so soon? Most people who
+use tests have sufficient motivation for wanting to run a subset of the tests,
+they just need to know how to do it with Rust, so we don't think this is a
+point that needs to be emphasized multiple times. /Carol -->
 <a class="header" href="print.html#ignore-some-tests-unless-specifically-requested" name="ignore-some-tests-unless-specifically-requested"><h3>Ignore Some Tests Unless Specifically Requested</h3></a>
-<p>Sometimes a few specific tests can be very time-consuming to execute, so during
-most runs of <code>cargo test</code>, we'd like to exclude them. Instead of having to
-construct an argument to <code>cargo test</code> to run all tests except these and
-remember to use that argument every time, we can annotate these tests with the
-<code>ignore</code> attribute:</p>
+<p>Sometimes a few specific tests can be very time-consuming to execute, so you
+might want to exclude them during most runs of <code>cargo test</code>. Rather than
+listing as arguments all tests you do want to run, we can instead annotate the
+time consuming tests with the <code>ignore</code> attribute to exclude them:</p>
 <p><span class="filename">Filename: src/lib.rs</span></p>
 <pre><code class="language-rust">#[test]
 fn it_works() {
@@ -8751,12 +9244,13 @@ fn expensive_test() {
     // code that takes an hour to run
 }
 </code></pre>
-<p>Now if we run our tests, we'll see <code>it_works</code> is run, but <code>expensive_test</code> is
+<p>We add the <code>#[ignore]</code> line to the test we want to exlcude, after <code>#[test]</code>.
+Now if we run our tests, we'll see <code>it_works</code> runs, but <code>expensive_test</code> does
 not:</p>
 <pre><code class="language-text">$ cargo test
    Compiling adder v0.1.0 (file:///projects/adder)
     Finished debug [unoptimized + debuginfo] target(s) in 0.24 secs
-     Running target/debug/deps/adder-abcabcabc
+     Running target/debug/deps/adder-ce99bcc2479f4607
 
 running 2 tests
 test expensive_test ... ignored
@@ -8770,46 +9264,59 @@ running 0 tests
 
 test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured
 </code></pre>
-<p>We can run only the expensive tests by explicitly asking to run them using
-<code>cargo test -- --ignored</code>:</p>
+<p><code>expensive_test</code> is listed as <code>ignored</code>. If we want to run only the ignored
+tests, we can ask for them to be run with <code>cargo test -- --ignored</code>:</p>
+<!-- what does the double `-- --` mean? That seems interesting -->
+<!-- We covered that in the second paragraph after the "Controlling How Tests
+are Run" heading, and this section is beneath that heading, so I don't think a
+back reference is needed /Carol -->
+<!-- is that right, this way the program knows to run only the test with
+`ignore` if we add this, or it knows to run all tests? -->
+<!-- Is this unclear from the output that shows `expensive_test` was run and
+the `it_works` test does not appear? I'm not sure how to make this clearer.
+/Carol -->
 <pre><code class="language-text">$ cargo test -- --ignored
     Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
-     Running target/debug/deps/adder-abcabcabc
+     Running target/debug/deps/adder-ce99bcc2479f4607
 
 running 1 test
 test expensive_test ... ok
 
 test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured
 </code></pre>
-<p>This way, most of the time that you run <code>cargo test</code> the results would be fast.
-When you're at a point that it makes sense to check the results of the
-<code>ignored</code> tests and you have time to wait for the results, you can choose to
-run <code>cargo test -- --ignored</code> instead.</p>
+<p>By controlling which tests run, you can make sure your <code>cargo test</code> results
+will be fast. When you're at a point that it makes sense to check the results
+of the <code>ignored</code> tests and you have time to wait for the results, you can
+choose to run <code>cargo test -- --ignored</code> instead.</p>
 <a class="header" href="print.html#test-organization" name="test-organization"><h2>Test Organization</h2></a>
-<p>As mentioned before, testing is a large discipline, and different people
-sometimes use different terminology and organization. The Rust community tends
-to think about tests in terms of two main categories: <em>unit tests</em> and
-<em>integration tests</em>. Unit tests tend to be smaller and more focused, testing
-one module in isolation at a time. They can also test private interfaces.
-Integration tests are entirely external to your library. They use your code in
-the same way any other code would, using only the public interface and
-exercising multiple modules per test. Both kinds of tests are important to
-ensure that the pieces of your library are doing what you expect them to
-separately and together.</p>
+<p>As mentioned at the start of the chapter, testing is a large discipline, and
+different people use different terminology and organization. The Rust community
+tends to think about tests in terms of two main categories: <em>unit tests</em> and
+<em>integration tests</em>. Unit tests are smaller and more focused, testing one
+module in isolation at a time, and can test private interfaces. Integration
+tests are entirely external to your library, and use your code in the same way
+any other external code would, using only the public interface and exercising
+multiple modules per test.</p>
+<p>Both kinds of tests are important to ensure that the pieces of your library are
+doing what you expect them to separately and together.</p>
 <a class="header" href="print.html#unit-tests" name="unit-tests"><h3>Unit Tests</h3></a>
 <p>The purpose of unit tests is to test each unit of code in isolation from the
-rest of the code, in order to be able to quickly pinpoint where code is working
-as expected or not. Unit tests live in the <em>src</em> directory, in the same files
-as the code they are testing. They are separated into their own <code>tests</code> module
-in each file.</p>
-<a class="header" href="print.html#the-tests-module-and-cfgtest" name="the-tests-module-and-cfgtest"><h4>The Tests Module and <code>cfg(test)</code></h4></a>
-<p>By placing tests in their own module and using the <code>cfg</code> annotation on the
-module, we can tell Rust to only compile and run the test code when we run
-<code>cargo test</code>. This saves compile time when we only want to build the library
-code with <code>cargo build</code>, and saves space in the resulting compiled artifact
-since the tests are not included.</p>
-<p>Remember when we generated the new <code>adder</code> project in the last section? Cargo
-generated this code for us:</p>
+rest of the code, in order to be able to quickly pinpoint where code is and is
+not working as expected. We put unit tests in the <em>src</em> directory, in each file
+with the code that they're testing. The convention is that we create a module
+named <code>tests</code> in each file to contain the test functions, and we annotate the
+module with <code>cfg(test)</code>.</p>
+<a class="header" href="print.html#the-tests-module-and-cfgtest" name="the-tests-module-and-cfgtest"><h4>The Tests Module and <code>#[cfg(test)]</code></h4></a>
+<p>The <code>#[cfg(test)]</code> annotation on the tests module tells Rust to compile and run
+the test code only when we run <code>cargo test</code>, and not when we run <code>cargo build</code>.
+This saves compile time when we only want to build the library, and saves space
+in the resulting compiled artifact since the tests are not included. We'll see
+that since integration tests go in a different directory, they don't need the
+<code>#[cfg(test)]</code> annotation. Because unit tests go in the same files as the code,
+though, we use <code>#[cfg(test)]</code>to specify that they should not be included in the
+compiled result.</p>
+<p>Remember that when we generated the new <code>adder</code> project in the first section of
+this chapter, Cargo generated this code for us:</p>
 <p><span class="filename">Filename: src/lib.rs</span></p>
 <pre><code class="language-rust">#[cfg(test)]
 mod tests {
@@ -8818,74 +9325,19 @@ mod tests {
     }
 }
 </code></pre>
-<p>We ignored the module stuff so we could concentrate on the mechanics of the
-test code inside the module, but now let's focus on the code surrounding our
-tests.</p>
-<p>First of all, there's a new attribute, <code>cfg</code>. The <code>cfg</code> attribute lets us
-declare that something should only be included given a certain <em>configuration</em>.
-Rust provides the <code>test</code> configuration for compiling and running tests. By
-using this attribute, Cargo only compiles our test code if we're currently
-trying to run the tests.</p>
-<p>Next, the <code>tests</code> module holds all of our test functions, while our code is
-outside of the <code>tests</code> module. The name of the <code>tests</code> module is a convention;
-otherwise this is a regular module that follows the usual visibility rules we
-covered in Chapter 7. Because we're in an inner module, we need to bring the
-code under test into scope. This can be annoying if you have a large module, so
-this is a common use of globs.</p>
-<p>Up until now in this chapter, we've been writing tests in our <code>adder</code> project
-that don't actually call any code we've written. Let's change that now! In
-<em>src/lib.rs</em>, place this <code>add_two</code> function and <code>tests</code> module that has a test
-function to exercise the code, as shown in Listing 11-5:</p>
-<figure>
-<span class="filename">Filename: src/lib.rs</span>
-<pre><code class="language-rust">pub fn add_two(a: i32) -&gt; i32 {
-    a + 2
-}
-
-#[cfg(test)]
-mod tests {
-    use add_two;
-
-    #[test]
-    fn it_works() {
-        assert_eq!(4, add_two(2));
-    }
-}
-</code></pre>
-<figcaption>
-<p>Listing 11-5: Testing the function <code>add_two</code> in a child <code>tests</code> module</p>
-</figcaption>
-</figure>
-<p>Notice in addition to the test function, we also added <code>use add_two;</code> within
-the <code>tests</code> module. This brings the code we want to test into the scope of the
-inner <code>tests</code> module, just like we'd need to do for any inner module. If we run
-this test now with <code>cargo test</code>, it will pass:</p>
-<pre><code class="language-text">running 1 test
-test tests::it_works ... ok
-
-test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured
-</code></pre>
-<p>If we had forgotten to bring the <code>add_two</code> function into scope, we would get an
-unresolved name error since the <code>tests</code> module wouldn't know anything about the
-<code>add_two</code> function:</p>
-<pre><code class="language-text">error[E0425]: unresolved name `add_two`
- --&gt; src/lib.rs:9:23
-  |
-9 |         assert_eq!(4, add_two(2));
-  |                       ^^^^^^^ unresolved name
-</code></pre>
-<p>If this module contained lots of code we wanted to test, it would be annoying
-to list everything in the <code>use</code> statement in the tests. It's common instead to
-put <code>use super::*;</code> within a module's <code>test</code> submodule in order to bring
-everything into the <code>test</code> module scope at once.</p>
+<p>This is the automatically generated test module. The attribute <code>cfg</code> stands for
+<em>configruation</em>, and tells Rust that the following item should only be included
+given a certain configuration. In this case, the configuration is <code>test</code>,
+provided by Rust for compiling and running tests. By using this attribute,
+Cargo only compiles our test code if we actively run the tests with <code>cargo test</code>. This includes any helper functions that might be within this module, in
+addition to the functions annotated with <code>#[test]</code>.</p>
 <a class="header" href="print.html#testing-private-functions" name="testing-private-functions"><h4>Testing Private Functions</h4></a>
-<p>There's controversy within the testing community about whether you should write
-unit tests for private functions or not. Regardless of which testing ideology
-you adhere to, Rust does allow you to test private functions due to the way
-that the privacy rules work. Consider the code in Listing 11-6 with the private
-function <code>internal_adder</code>:</p>
-<figure>
-<span class="filename">Filename: src/lib.rs</span>
+<p>There's debate within the testing community about whether private functions
+should be tested directly or not, and other languages make it difficult or
+impossible to test private functions. Regardless of which testing ideology you
+adhere to, Rust's privacy rules do allow you to test private functions.
+Consider the code in Listing 11-12 with the private function <code>internal_adder</code>:</p>
+<p><span class="filename">Filename: src/lib.rs</span></p>
 <pre><code class="language-rust">pub fn add_two(a: i32) -&gt; i32 {
     internal_adder(a, 2)
 }
@@ -8896,7 +9348,7 @@ fn internal_adder(a: i32, b: i32) -&gt; i32 {
 
 #[cfg(test)]
 mod tests {
-    use internal_adder;
+    use super::*;
 
     #[test]
     fn internal() {
@@ -8904,29 +9356,37 @@ mod tests {
     }
 }
 </code></pre>
-<figcaption>
-<p>Listing 11-6: Testing a private function</p>
-</figcaption>
-</figure>
-<p>Because tests are just Rust code and the <code>tests</code> module is just another module,
-we can import and call <code>internal_adder</code> in a test just fine. If you don't think
+<p><span class="caption">Listing 11-12: Testing a private function</span></p>
+<!-- I'm not clear on why we would assume this might not be fine, why are we
+highlighting this specifically? -->
+<!-- We're addressing experience that the reader might bring with them from
+other languages where this is not allowed; I added a sentence mentioning "other
+languages" at the beginning of this section. Also testing private functions
+from integration tests is not allowed, so if you did want to do this, you'd
+have to do it in unit tests. /Carol -->
+<p>Note that the <code>internal_adder</code> function is not marked as <code>pub</code>, but because
+tests are just Rust code and the <code>tests</code> module is just another module, we can
+import and call <code>internal_adder</code> in a test just fine. If you don't think
 private functions should be tested, there's nothing in Rust that will compel
 you to do so.</p>
 <a class="header" href="print.html#integration-tests" name="integration-tests"><h3>Integration Tests</h3></a>
-<p>In Rust, integration tests are tests that are entirely external to your
-library. They use your library in the same way any other code would. Their
-purpose is to test that many parts of your library work correctly together.
-Units of code that work correctly by themselves could have problems when
-integrated, so test coverage of the integrated code is important as well.</p>
+<p>In Rust, integration tests are entirely external to your library. They use your
+library in the same way any other code would, which means they can only call
+functions that are part of your library's public API. Their purpose is to test
+that many parts of your library work correctly together. Units of code that
+work correctly by themselves could have problems when integrated, so test
+coverage of the integrated code is important as well. To create integration
+tests, you first need a <em>tests</em> directory.</p>
 <a class="header" href="print.html#the-tests-directory" name="the-tests-directory"><h4>The <em>tests</em> Directory</h4></a>
-<p>Cargo has support for integration tests in the <em>tests</em> directory. If you make
-one and put Rust files inside, Cargo will compile each of the files as an
-individual crate. Let's give it a try!</p>
-<p>First, make a <em>tests</em> directory at the top level of your project directory,
-next to <em>src</em>. Then, make a new file, <em>tests/integration_test.rs</em>, and put the
-code in Listing 11-7 inside:</p>
-<figure>
-<span class="filename">Filename: tests/integration_test.rs</span>
+<p>To write integration tests for our code, we need to make a <em>tests</em> directory at
+the top level of our project directory, next to <em>src</em>. Cargo knows to look for
+integration test files in this directory. We can then make as many test files
+as we'd like in this directory, and Cargo will compile each of the files as an
+individual crate.</p>
+<p>Let's give it a try! Keep the code from Listing 11-12 in <em>src/lib.rs</em>. Make a
+<em>tests</em> directory, then make a new file named <em>tests/integration_test.rs</em>, and
+enter the code in Listing 11-13.</p>
+<p><span class="filename">Filename: tests/integration_test.rs</span></p>
 <pre><code class="language-rust ignore">extern crate adder;
 
 #[test]
@@ -8934,31 +9394,28 @@ fn it_adds_two() {
     assert_eq!(4, adder::add_two(2));
 }
 </code></pre>
-<figcaption>
-<p>Listing 11-7: An integration test of a function in the <code>adder</code> crate</p>
-</figcaption>
-</figure>
-<p>We now have <code>extern crate adder</code> at the top, which we didn't need in the unit
-tests. Each test in the <code>tests</code> directory is an entirely separate crate, so we
-need to import our library into each of them. This is also why <code>tests</code> is a
-suitable place to write integration-style tests: they use the library like any
-other consumer of it would, by importing the crate and using only the public
-API.</p>
-<p>We also don't need a <code>tests</code> module in this file. The whole directory won't be
-compiled unless we're running the tests, so we don't need to annotate any part
-of it with <code>#[cfg(test)]</code>. Also, each test file is already isolated into its
-own crate, so we don't need to separate the test code further.</p>
-<p>Let's run the integration tests, which also get run when we run <code>cargo test</code>:</p>
-<pre><code class="language-text">$ cargo test
+<p><span class="caption">Listing 11-13: An integration test of a function in the
+<code>adder</code> crate </span></p>
+<p>We've added <code>extern crate adder</code> at the top, which we didn't need in the unit
+tests. This is because each test in the <code>tests</code> directory is an entirely
+separate crate, so we need to import our library into each of them. Integration
+tests use the library like any other consumer of it would, by importing the
+crate and using only the public API.</p>
+<p>We don't need to annotate any code in <em>tests/integration_test.rs</em> with
+<code>#[cfg(test)]</code>. Cargo treats the <code>tests</code> directory specially and will only
+compile files in this directory if we run <code>cargo test</code>. Let's try running
+<code>cargo test</code> now:</p>
+<pre><code class="language-text">cargo test
    Compiling adder v0.1.0 (file:///projects/adder)
+    Finished debug [unoptimized + debuginfo] target(s) in 0.31 secs
      Running target/debug/deps/adder-abcabcabc
 
 running 1 test
-test tests::it_works ... ok
+test tests::internal ... ok
 
 test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured
 
-     Running target/debug/integration_test-952a27e0126bb565
+     Running target/debug/deps/integration_test-ce99bcc2479f4607
 
 running 1 test
 test it_adds_two ... ok
@@ -8971,16 +9428,27 @@ running 0 tests
 
 test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured
 </code></pre>
+<!-- what are the doc tests? How do we tell the difference between unit and
+integration tests here? -->
+<!-- We mentioned documentation tests in the beginning of this chapter /Carol
+-->
 <p>Now we have three sections of output: the unit tests, the integration test, and
-the doc tests. Note that adding more unit tests in any <em>src</em> file will add more
-lines to the unit tests section. Adding more test functions to the integration
-test file we created will add more lines to that section. If we add more
-integration test <em>files</em> in the <em>tests</em> directory, there will be more
-integration test sections: one for each file.</p>
-<p>Specifying a test function name argument with <code>cargo test</code> will also match
-against test function names in any integration test file. To run all of the
-tests in only one particular integration test file, use the <code>--test</code> argument
-of <code>cargo test</code>:</p>
+the doc tests. The first section for the unit tests is the same as we have been
+seeing: one line for each unit test (we have one named <code>internal</code> that we added
+in Listing 11-12), then a summary line for the unit tests.</p>
+<p>The integration tests section starts with the line that says <code>Running target/debug/deps/integration-test-ce99bcc2479f4607</code> (the hash at the end of
+your output will be different). Then there's a line for each test function in
+that integration test, and a summary line for the results of the integration
+test just before the <code>Doc-tests adder</code> section starts.</p>
+<p>Note that adding more unit test functions in any <em>src</em> file will add more test
+result lines to the unit tests section. Adding more test functions to the
+integration test file we created will add more lines to the integration test
+section. Each integration test file gets its own section, so if we add more
+files in the <em>tests</em> directory, there will be more integration test sections.</p>
+<p>We can still run a particular integration test function by specifying the test
+function's name as an argument to <code>cargo test</code>. To run all of the tests in a
+particular integration test file, use the <code>--test</code> argument of <code>cargo test</code>
+followed by the name of the file:</p>
 <pre><code class="language-text">$ cargo test --test integration_test
     Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
      Running target/debug/integration_test-952a27e0126bb565
@@ -8990,41 +9458,105 @@ test it_adds_two ... ok
 
 test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured
 </code></pre>
+<p>This tests only the file that we specified from the <em>tests</em> directory.</p>
 <a class="header" href="print.html#submodules-in-integration-tests" name="submodules-in-integration-tests"><h4>Submodules in Integration Tests</h4></a>
 <p>As you add more integration tests, you may want to make more than one file in
-the <code>tests</code> directory in order to group the test functions by the functionality
-they're testing, for example. As we mentioned before, that will work fine,
-given that Cargo treats every file as its own crate.</p>
-<p>Eventually, you may have a set of helper functions that are common to all
-integration tests, for example, functions that set up common scenarios. If you
-extract these into a file in the <em>tests</em> directory, like <em>tests/common.rs</em> for
-example, this file will be compiled into a separate crate just like the Rust
-files in this directory that contain test functions are. There will be a
-separate section in the test output for this file. Since this is probably not
-what you want, it's recommended to instead use a <em>mod.rs</em> file in a
-subdirectory, like <em>tests/common/mod.rs</em>, for helper functions. Files in
-subdirectories of the <em>tests</em> directory do not get compiled as separate crates
-or have sections in the test output.</p>
+the <em>tests</em> directory to help organize them; for example, to group the test
+functions by the functionality they're testing. As we mentioned, each file in
+the <em>tests</em> directory is compiled as its own separate crate.</p>
+<p>Treating each integration test file as its own crate is useful to create
+separate scopes that are more like the way end users will be using your crate.
+However, this means files in the <em>tests</em> directory don't share the same
+behavior as files in <em>src</em> do that we learned about in Chapter 7 regarding how
+to separate code into modules and files.</p>
+<p>The different behavior of files in the <em>tests</em> directory is usually most
+noticeable if you have a set of helper functions that would be useful in
+multiple integration test files, and you try to follow the steps from Chapter 7
+to extract them into a common module. For example, if we create
+<em>tests/common.rs</em> and place this function named <code>setup</code> in it, where we could
+put some code that we want to be able to call from multiple test functions in
+multiple test files:</p>
+<p><span class="filename">Filename: tests/common.rs</span></p>
+<pre><code class="language-rust">pub fn setup() {
+    // setup code specific to your library's tests would go here
+}
+</code></pre>
+<p>If we run the tests again, we'll see a new section in the test output for the
+<em>common.rs</em> file, even though this file doesn't contain any test functions, nor
+are we calling the <code>setup</code> function from anywhere:</p>
+<pre><code class="language-text">running 1 test
+test tests::internal ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured
+
+     Running target/debug/deps/common-b8b07b6f1be2db70
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured
+
+     Running target/debug/deps/integration_test-d993c68b431d39df
+
+running 1 test
+test it_adds_two ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured
+
+   Doc-tests adder
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured
+</code></pre>
+<!-- The new section is lines 6-10, will ghost everything else in libreoffice
+/Carol -->
+<p>Having <code>common</code> show up in the test results with <code>running 0 tests</code> displayed
+for it is not what we wanted; we just wanted to be able to share some code with
+the other integration test files.</p>
+<p>In order to not have <code>common</code> show up in the test output, we need to use the
+other method of extracting code into a file that we learned about in Chapter 7:
+instead of creating <em>tests/common.rs</em>, we'll create <em>tests/common/mod.rs</em>. When
+we move the <code>setup</code> function code into <em>tests/common/mod.rs</em> and get rid of the
+<em>tests/common.rs</em> file, the section in the test output will no longer show up.
+Files in subdirectories of the <em>tests</em> directory do not get compiled as
+separate crates or have sections in the test output.</p>
+<p>Once we have <em>tests/common/mod.rs</em>, we can use it from any of the integration
+test files as a module. Here's an example of calling the <code>setup</code> function from
+the <code>it_adds_two</code> test in <em>tests/integration_test.rs</em>:</p>
+<p><span class="filename">Filename: tests/integration_test.rs</span></p>
+<pre><code class="language-rust ignore">extern crate adder;
+
+mod common;
+
+#[test]
+fn it_adds_two() {
+    common::setup();
+    assert_eq!(4, adder::add_two(2));
+}
+</code></pre>
+<p>Note the <code>mod common;</code> declaration is the same as the module declarations we
+did in Chapter 7. Then in the test function, we can call the <code>common::setup()</code>
+function.</p>
 <a class="header" href="print.html#integration-tests-for-binary-crates" name="integration-tests-for-binary-crates"><h4>Integration Tests for Binary Crates</h4></a>
-<p>If your project is a binary crate that only contains a <em>src/main.rs</em> and does
-not have a <em>src/lib.rs</em>, it is not possible to create integration tests in the
-<em>tests</em> directory and use <code>extern crate</code> to import the functions in
-<em>src/main.rs</em>. This is one of the reasons Rust projects that provide a binary
-have a straightforward <em>src/main.rs</em> that calls logic that lives in
-<em>src/lib.rs</em>. With that structure, integration tests <em>can</em> test the library
-crate by using <code>extern crate</code> to cover the important functionality, and if that
-works, the small amount of code in <em>src/main.rs</em> will work as well and does not
-need to be tested.</p>
+<p>If our project is a binary crate that only contains a <em>src/main.rs</em> and does
+not have a <em>src/lib.rs</em>, we aren't able to create integration tests in the
+<em>tests</em> directory and use <code>extern crate</code> to import functions defined in
+<em>src/main.rs</em>. Only library crates expose functions that other crates are able
+to call and use; binary crates are meant to be run on their own.</p>
+<p>This is one of the reasons Rust projects that provide a binary have a
+straightforward <em>src/main.rs</em> that calls logic that lives in <em>src/lib.rs</em>. With
+that structure, integration tests <em>can</em> test the library crate by using <code>extern crate</code> to cover the important functionality. If the important functionality
+works, the small amount of code in <em>src/main.rs</em> will work as well, and that
+small amount of code does not need to be tested.</p>
 <a class="header" href="print.html#summary" name="summary"><h2>Summary</h2></a>
 <p>Rust's testing features provide a way to specify how code should function to
-ensure the code continues to work in the specified ways even as we make
-changes. Unit tests exercise different parts of a library separately and can
-test private implementation details. Integration tests cover the use of many
-parts of the library working together, and use the library's public API to test
-the code in the same way other code will use it. Rust's type system and
-ownership rules help prevent some kinds of bugs, but tests are an important
-part of reducing logic bugs having to do with how your code is expected to
-behave.</p>
+ensure it continues to work as we expect even as we make changes. Unit tests
+exercise different parts of a library separately and can test private
+implementation details. Integration tests cover the use of many parts of the
+library working together, and they use the library's public API to test the
+code in the same way external code will use it. Even though Rust's type system
+and ownership rules help prevent some kinds of bugs, tests are still important
+to help reduce logic bugs having to do with how your code is expected to behave.</p>
 <p>Let's put together the knowledge from this chapter and other previous chapters
 and work on a project in the next chapter!</p>
 <a class="header" href="print.html#an-io-project" name="an-io-project"><h1>An I/O Project</h1></a>
