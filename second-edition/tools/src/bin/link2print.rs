@@ -46,9 +46,11 @@ fn parse_links((buffer, ref_map): (String, HashMap<String, String>)) -> String {
             None => {
                 let name = caps.name("name").expect("could not get name").to_owned();
                 // Really we should ignore text inside code blocks,
-                // this is a hack to not try to treat `#[derive()]`
-                // or `[profile]` like a link
-                if name.starts_with("derive(") || name.starts_with("profile") {
+                // this is a hack to not try to treat `#[derive()]`,
+                // `[profile]`, or `[test]` like a link
+                if name.starts_with("derive(") ||
+                   name.starts_with("profile") ||
+                   name.starts_with("test") {
                     return name
                 }
 
