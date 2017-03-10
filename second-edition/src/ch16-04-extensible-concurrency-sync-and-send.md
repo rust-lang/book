@@ -35,31 +35,49 @@ aside from `Rc<T>`.
 
 ### `Sync` for Indicating Access from Multiple Threads is Safe
 
-The `Sync` marker trait indicates that a type is safe to have references to a value from multiple threads. Another way to say this is for any type `T`, `T` is `Sync` if `&T` (a reference to `T`) is `Send` so that the reference can be sent safely to another thread. In a similar manner as `Send`, primitive types are `Sync` and types composed entirely of types that are `Sync` are also `Sync`.
+The `Sync` marker trait indicates that a type is safe to have references to a
+value from multiple threads. Another way to say this is for any type `T`, `T`
+is `Sync` if `&T` (a reference to `T`) is `Send` so that the reference can be
+sent safely to another thread. In a similar manner as `Send`, primitive types
+are `Sync` and types composed entirely of types that are `Sync` are also `Sync`.
 
+`Rc<T>` is also not `Sync`, for the same reasons that it's not `Send`.
+`RefCell<T>` (another smart pointer we talked about in Chapter 15) and the
+family of related `Cell<T>` types are not `Sync`. The implementation of the
+borrow checking at runtime that they do is not threadsafe. `Mutex<T>` is
+`Sync`, and can be used to share access with multiple threads as we saw in the
+previous section.
 
+### Implementing `Send` and `Sync` Manually is Unsafe
 
+Usually, we don't need to implement the `Send` and `Sync` traits, since types
+that are made up of `Send` and `Sync` traits are automatically also `Send` and
+`Sync`. Because they're marker traits, they don't even have any methods to
+implement. They're just useful for enforcing concurrency-related invariants.
 
-
-This is why, when we tried to share our
-`Rc<T>` across threads, we got an error: `Rc<T>` is not `Sync`. `Arc<T>`,
-however, is, as long as its `T` is also `Sync`. `Mutex<T>` is `Sync`, and so
-`Arc<Mutex<T>>` is `Sync`. Non-threadsafe types with interior mutability, like
-`RefCell<T>` are not `Sync`, and so `Arc<RefCell<T>>`, for example, would not
-be `Sync`.
-
-
-
-These two traits define two important properties when it comes to concurrency.
-All of the traits in `std::marker` are called "marker traits", and that's
-because they don't have any methods. They simply mark a type has having a given
-property.
-
-It's the same for `Send` and `Sync`: they don't add any methods, they only
-indicate concurrency properties.
+Implementing the guarantees that these traits are markers for involves
+implementing unsafe Rust code. We're going to be talking about `unsafe` in
+Chapter 19; for now, the important information is that building new concurrent
+types that aren't made up of `Send` and `Sync` parts requires careful thought
+to make sure the threadsafe guarantees are upheld.
 
 ## Summary
 
-- project at the end of the book
-- check out libraries
-- go forth and be fearlessly concurrent
+This isn't the last we'll see of concurrency in this book; the project in
+Chapter 20 will use these concepts in a more realistic situation than the
+smaller examples we discussed in this chapter.
+
+As we mentioned, since very little of how Rust deals with concurrency has to be
+part of the language, there are many concurrency solutions implemnted as
+crates. These are currently evolving more quickly than the standard library;
+search online for the current state-of-the-art crates for use in multithreaded
+situations.
+
+Rust provides channels for message passing and smart pointer types like
+`Mutex<T>` and `Arc<T>` that are safe to use in concurrent contexts. The type
+system and the borrow checker will make sure the code we write using these
+solutions won't have data races or invalid references. Once we get our code
+compiling, we can rest assured that our code will happily run on multiple
+threads without the kinds of hard-to-track-down bugs common in other
+programming languages. Concurrent programming is no longer something to be
+afraid of: go forth and make your programs concurrent, fearlessly!
