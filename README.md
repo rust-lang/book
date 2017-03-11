@@ -36,14 +36,18 @@ your web browser.
 
 _Firefox:_
 ```
-$ firefox book/index.html           # Linux
-$ open -a "Firefox" book/index.html # OS X
+$ firefox book/index.html                       # Linux
+$ open -a "Firefox" book/index.html             # OS X
+$ Start-Process "firefox.exe" .\book\index.html # Windows (PowerShell)
+$ start firefox.exe .\book\index.html           # Windows (Cmd)
 ```
 
 _Chrome:_
 ```
-$ google-chrome book/index.html           # Linux
-$ open -a "Google Chrome" book/index.html # OS X
+$ google-chrome book/index.html                 # Linux
+$ open -a "Google Chrome" book/index.html       # OS X
+$ Start-Process "chrome.exe" .\book\index.html  # Windows (PowerShell)
+$ start chrome.exe .\book\index.html            # Windows (Cmd)
 ```
 
 To run the tests:
