@@ -11,13 +11,13 @@ prone: Rust hopes to change that.
 
 Originally, we thought that memory safety and preventing concurrency problems
 were two separate challenges to be solved with different methods. However, over
-time, we discovered that ownership provides a powerful set of tools for dealing
-with concurrency problems too. By leveraging ownership, many concurrency errors
-are *compile time* errors in Rust, rather than runtime errors. We've nicknamed
-this aspect of Rust *fearless concurrency*. Fearless concurrency means Rust not
-only allows you to have confidence that your code is free of subtle bugs, but
-also lets you refactor this kind of code easily without worrying about
-introducing new bugs.
+time, we discovered that ownership and the type system are a powerful set of
+tools that help in dealing with both memory safety *and* concurrency problems!
+By leveraging ownership and type checking, many concurrency errors are *compile
+time* errors in Rust, rather than runtime errors. We've nicknamed this aspect
+of Rust *fearless concurrency*. Fearless concurrency means Rust not only allows
+you to have confidence that your code is free of subtle bugs, but also lets you
+refactor this kind of code easily without worrying about introducing new bugs.
 
 > Note: given that Rust's slogan is *fearless concurrency*, we'll be referring
 > to many of the problems here as *concurrent* rather than being more precise

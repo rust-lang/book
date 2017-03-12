@@ -16,23 +16,24 @@ improve performance, since the program will be doing multiple things at the
 same time. Programming with threads can add complexity, however. Since threads
 run simultaneously, there's no inherent guarantee about the order in which the
 parts of your code on different threads will run. This can lead to race
-conditions where threads are accessing data or resources in a consistent way,
-deadlocks where two threads both prevent each other from continuing, or bugs
-that only happen in certain situations that are hard to reproduce reliably.
-Rust lessens the effect of these and other downsides of using threads, but
-programming in a multithreaded context still takes thought and code structured
-differently than for programs only expected to run in a single thread.
+conditions where threads are accessing data or resources in an inconsistent
+order, deadlocks where two threads both prevent each other from continuing, or
+bugs that only happen in certain situations that are hard to reproduce
+reliably. Rust lessens the effect of these and other downsides of using
+threads, but programming in a multithreaded context still takes thought and
+code structured differently than for programs only expected to run in a single
+thread.
 
 There are a few different ways that programming languages implement threads.
 Many operating systems provide an API for creating new threads. In addition,
 many programming languages provide their own special implementation of threads.
-Programming language provided threads are sometimes called "lightweight" or
-"green" threads. These languages take a number of green threads and execute
+Programming language provided threads are sometimes called *lightweight* or
+*green* threads. These languages take a number of green threads and execute
 them in the context of a different number of operating system threads. For this
 reason, the model where a language calls the operating system APIs to create
 threads is sometimes called *1:1*, one OS thread per one language thread. The
-green thread model is called the *M:N* model, `M` green threads per `N` OS
-threads, where `M` and `N` are not the same number.
+green threaded model is called the *M:N* model, `M` green threads per `N` OS
+threads, where `M` and `N` are not necessarily the same number.
 
 Each model has its own advantages and tradeoffs. The tradeoff that's most
 important to Rust is runtime support. *Runtime* is a confusing term; it can
@@ -60,9 +61,9 @@ thread-related API that the standard library provides for us.
 ### Creating a New Thread with `spawn`
 
 To create a new thread, we call the `thread::spawn` function and pass it a
-closure, as discussed in Chapter 13, containing the code we want to run in the
-new thread. The example in Listing 16-1 prints some text from a new thread and
-other text from the main thread:
+closure (we talked about closures in Chapter 13), containing the code we want
+to run in the new thread. The example in Listing 16-1 prints some text from a
+new thread and other text from the main thread:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -105,7 +106,9 @@ The threads will probably take turns, but that's not guaranteed. In this run,
 the main thread printed first, even though the print statement from the spawned
 thread appears first in the code we wrote. And even though we told the spawned
 thread to print until `i` is 9, it only got to 5 before the main thread shut
-down.
+down. If you always only see one thread, or if you don't see any overlap, try
+increasing the numbers in the ranges to create more opportunities for a thread
+to take a break and give the other thread a turn.
 
 #### Waiting for All Threads to Finish Using `join` Handles
 
@@ -296,12 +299,12 @@ fn main() {
 <span class="caption">Listing 16-4: A thread with a closure that attempts to
 capture a reference to `v` from a main thread that drops `v`</span>
 
-Imagine that this code runs, and the spawned thread gets put in the background.
-The spawned thread has a reference to `v` inside, but the main thread is still
-running: it immediately drops `v`, using the `drop` function that we discussed
-in Chapter 15 that explicitly drops its argument. Then, the spawned thread
-starts to execute. `v` is now invalid, so a reference to it is also invalid. Oh
-no!
+This code could be run, and the spawned thread could immediately get put in the
+background without getting a chance to run at all. The spawned thread has a
+reference to `v` inside, but the main thread is still running: it immediately
+drops `v`, using the `drop` function that we discussed in Chapter 15 that
+explicitly drops its argument. Then, the spawned thread starts to execute. `v`
+is now invalid, so a reference to it is also invalid. Oh no!
 
 To fix this problem, we can listen to the advice of the error message:
 

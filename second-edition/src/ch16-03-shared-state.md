@@ -266,16 +266,18 @@ into the closure for the thread that goes with `handle`. That move is
 preventing us from capturing `counter` when we try to call `lock` on it and
 store the result in `num2`, which is in the second thread! So Rust is telling
 us that we can't move ownership of `counter` into multiple threads. This was
-hard to see before since we were creating the multiple threads in a loop, and
-Rust can't point to different threads in different iterations of the loop.
+hard to see before since we were creating multiple threads in a loop, and Rust
+can't point to different threads in different iterations of the loop.
 
 #### Multiple Ownership with Multiple Threads
 
 In Chapter 15, we were able to have multiple ownership of a value by using the
-smart pointer `Rc<T>` to create a reference-counted value. Let's try wrapping
-the `Mutex<T>` in `Rc<T>` in Listing 16-14, and cloning the `Rc<T>` before
-moving ownership to the thread. We'll switch back to the `for` loop for
-creating the threads, and keep the `move` keyword with the closure:
+smart pointer `Rc<T>` to create a reference-counted value. We mentioned in
+Chapter 15 that `Rc<T>` was only for single-threaded contexts, but let's try
+using `Rc<T>` in this case anyway and see what happens. We'll wrap the
+`Mutex<T>` in `Rc<T>` in Listing 16-14, and clone the `Rc<T>` before moving
+ownership to the thread. We'll switch back to the `for` loop for creating the
+threads, and keep the `move` keyword with the closure:
 
 <span class="filename">Filename: src/main.rs</span>
 

@@ -42,11 +42,10 @@ sent safely to another thread. In a similar manner as `Send`, primitive types
 are `Sync` and types composed entirely of types that are `Sync` are also `Sync`.
 
 `Rc<T>` is also not `Sync`, for the same reasons that it's not `Send`.
-`RefCell<T>` (another smart pointer we talked about in Chapter 15) and the
-family of related `Cell<T>` types are not `Sync`. The implementation of the
-borrow checking at runtime that they do is not threadsafe. `Mutex<T>` is
-`Sync`, and can be used to share access with multiple threads as we saw in the
-previous section.
+`RefCell<T>` (which we talked about in Chapter 15) and the family of related
+`Cell<T>` types are not `Sync`. The implementation of the borrow checking at
+runtime that `RefCell<T>` does is not threadsafe. `Mutex<T>` is `Sync`, and can
+be used to share access with multiple threads as we saw in the previous section.
 
 ### Implementing `Send` and `Sync` Manually is Unsafe
 
@@ -56,10 +55,13 @@ that are made up of `Send` and `Sync` traits are automatically also `Send` and
 implement. They're just useful for enforcing concurrency-related invariants.
 
 Implementing the guarantees that these traits are markers for involves
-implementing unsafe Rust code. We're going to be talking about `unsafe` in
-Chapter 19; for now, the important information is that building new concurrent
-types that aren't made up of `Send` and `Sync` parts requires careful thought
-to make sure the threadsafe guarantees are upheld.
+implementing unsafe Rust code. We're going to be talking about using unsafe
+Rust code in Chapter 19; for now, the important information is that building
+new concurrent types that aren't made up of `Send` and `Sync` parts requires
+careful thought to make sure the safety guarantees are upheld. [The Nomicon]
+has more information about these guarantees and how to uphold them.
+
+[The Nomicon]: https://doc.rust-lang.org/stable/nomicon/vec.html
 
 ## Summary
 
@@ -69,9 +71,8 @@ smaller examples we discussed in this chapter.
 
 As we mentioned, since very little of how Rust deals with concurrency has to be
 part of the language, there are many concurrency solutions implemnted as
-crates. These are currently evolving more quickly than the standard library;
-search online for the current state-of-the-art crates for use in multithreaded
-situations.
+crates. These evolve more quickly than the standard library; search online for
+the current state-of-the-art crates for use in multithreaded situations.
 
 Rust provides channels for message passing and smart pointer types like
 `Mutex<T>` and `Arc<T>` that are safe to use in concurrent contexts. The type
@@ -81,3 +82,7 @@ compiling, we can rest assured that our code will happily run on multiple
 threads without the kinds of hard-to-track-down bugs common in other
 programming languages. Concurrent programming is no longer something to be
 afraid of: go forth and make your programs concurrent, fearlessly!
+
+Next, let's talk about idiomatic ways to model problems and structure solutions
+as your Rust programs get bigger, and how Rust's idioms relate to those you
+might be familiar with from Object Oriented Programming.

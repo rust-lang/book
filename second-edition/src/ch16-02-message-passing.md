@@ -179,7 +179,7 @@ it; the ownership system checks that everything is okay.
 In this regard, message passing is very similar to single ownership in Rust.
 Message passing enthusiasts enjoy message passing for similar reasons that
 Rustaceans enjoy Rust's ownership: single ownership means certain classes of
-problems go away. If only one thread at a time can own some memory, there's no
+problems go away. If only one thread at a time can use some memory, there's no
 chance of a data race.
 
 ### Sending Multiple Values and Seeing the Receiver Waiting
