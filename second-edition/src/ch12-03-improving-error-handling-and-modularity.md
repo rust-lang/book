@@ -443,7 +443,7 @@ which we'll be covering in Chapter XX. For now, think of it like this:
 the `Error` trait, but we're not specifying what particular type the return
 value will be. This gives us flexibility to return error values that may be of
 different types in different error cases. `Box` is a smart pointer to heap
-data, and we'll be going into detail about `Box` in Chapter YY.
+data, and we'll be going into detail about `Box` in Chapter 15.
 
 The second change is that we've removed our calls to `expect` in favor of `?`,
 like we talked about in Chapter 9. Rather than `panic!` on an error, this will
