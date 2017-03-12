@@ -163,9 +163,9 @@ code very straightforward.
 > #### The Tradeoffs of Using `clone`
 >
 > There's a tendency amongst many Rustaceans to prefer not to use `clone` to fix
-> ownership problems due to its runtime cost. In Chapter XX on iterators, we'll
-> learn how to make this situation more efficient. For now, it's okay to copy a
-> few strings to keep making progress. We're only going to be making these
+> ownership problems due to its runtime cost. In Chapter 13 we'll learn how to
+> make this situation more efficient with iterators. For now, it's okay to copy
+> a few strings to keep making progress. We're only going to be making these
 > copies once, and our filename and search string are both very small. It's
 > better to have a working program that's a bit inefficient than try to
 > hyper-optimize code on your first pass. As you get more experienced with Rust,
