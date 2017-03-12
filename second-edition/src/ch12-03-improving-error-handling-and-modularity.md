@@ -343,7 +343,7 @@ by the standard library: `unwrap_or_else`. This method has similar behavior as
 `unwrap` if the `Result` is an `Ok` value: it returns the inner value `Ok` is
 wrapping. Unlike `unwrap`, if the value is an `Err` value, this method calls a
 *closure* which is an anonymous function that we define and pass as an argument
-to `unwrap_or_else`. We'll be covering closures in more detail in Chapter XX;
+to `unwrap_or_else`. We'll be covering closures in more detail in Chapter 13;
 the important part to understand in this case is that `unwrap_or_else` will
 pass the inner value of the `Err` to our closure in the parameter `err` that
 appears between the vertical pipes. Using `unwrap_or_else` lets us do some
