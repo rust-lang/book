@@ -163,9 +163,9 @@ code very straightforward.
 > #### The Tradeoffs of Using `clone`
 >
 > There's a tendency amongst many Rustaceans to prefer not to use `clone` to fix
-> ownership problems due to its runtime cost. In Chapter XX on iterators, we'll
-> learn how to make this situation more efficient. For now, it's okay to copy a
-> few strings to keep making progress. We're only going to be making these
+> ownership problems due to its runtime cost. In Chapter 13 we'll learn how to
+> make this situation more efficient with iterators. For now, it's okay to copy
+> a few strings to keep making progress. We're only going to be making these
 > copies once, and our filename and search string are both very small. It's
 > better to have a working program that's a bit inefficient than try to
 > hyper-optimize code on your first pass. As you get more experienced with Rust,
@@ -343,7 +343,7 @@ by the standard library: `unwrap_or_else`. This method has similar behavior as
 `unwrap` if the `Result` is an `Ok` value: it returns the inner value `Ok` is
 wrapping. Unlike `unwrap`, if the value is an `Err` value, this method calls a
 *closure* which is an anonymous function that we define and pass as an argument
-to `unwrap_or_else`. We'll be covering closures in more detail in Chapter XX;
+to `unwrap_or_else`. We'll be covering closures in more detail in Chapter 13;
 the important part to understand in this case is that `unwrap_or_else` will
 pass the inner value of the `Err` to our closure in the parameter `err` that
 appears between the vertical pipes. Using `unwrap_or_else` lets us do some
@@ -443,7 +443,7 @@ which we'll be covering in Chapter XX. For now, think of it like this:
 the `Error` trait, but we're not specifying what particular type the return
 value will be. This gives us flexibility to return error values that may be of
 different types in different error cases. `Box` is a smart pointer to heap
-data, and we'll be going into detail about `Box` in Chapter YY.
+data, and we'll be going into detail about `Box` in Chapter 15.
 
 The second change is that we've removed our calls to `expect` in favor of `?`,
 like we talked about in Chapter 9. Rather than `panic!` on an error, this will
