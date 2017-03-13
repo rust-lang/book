@@ -211,9 +211,9 @@ code very straightforward.</p>
 <blockquote>
 <a class="header" href="ch12-03-improving-error-handling-and-modularity.html#the-tradeoffs-of-using-clone" name="the-tradeoffs-of-using-clone"><h4>The Tradeoffs of Using <code>clone</code></h4></a>
 <p>There's a tendency amongst many Rustaceans to prefer not to use <code>clone</code> to fix
-ownership problems due to its runtime cost. In Chapter XX on iterators, we'll
-learn how to make this situation more efficient. For now, it's okay to copy a
-few strings to keep making progress. We're only going to be making these
+ownership problems due to its runtime cost. In Chapter 13 we'll learn how to
+make this situation more efficient with iterators. For now, it's okay to copy
+a few strings to keep making progress. We're only going to be making these
 copies once, and our filename and search string are both very small. It's
 better to have a working program that's a bit inefficient than try to
 hyper-optimize code on your first pass. As you get more experienced with Rust,
@@ -355,7 +355,7 @@ by the standard library: <code>unwrap_or_else</code>. This method has similar be
 <code>unwrap</code> if the <code>Result</code> is an <code>Ok</code> value: it returns the inner value <code>Ok</code> is
 wrapping. Unlike <code>unwrap</code>, if the value is an <code>Err</code> value, this method calls a
 <em>closure</em> which is an anonymous function that we define and pass as an argument
-to <code>unwrap_or_else</code>. We'll be covering closures in more detail in Chapter XX;
+to <code>unwrap_or_else</code>. We'll be covering closures in more detail in Chapter 13;
 the important part to understand in this case is that <code>unwrap_or_else</code> will
 pass the inner value of the <code>Err</code> to our closure in the parameter <code>err</code> that
 appears between the vertical pipes. Using <code>unwrap_or_else</code> lets us do some
@@ -437,7 +437,7 @@ which we'll be covering in Chapter XX. For now, think of it like this:
 the <code>Error</code> trait, but we're not specifying what particular type the return
 value will be. This gives us flexibility to return error values that may be of
 different types in different error cases. <code>Box</code> is a smart pointer to heap
-data, and we'll be going into detail about <code>Box</code> in Chapter YY.</p>
+data, and we'll be going into detail about <code>Box</code> in Chapter 15.</p>
 <p>The second change is that we've removed our calls to <code>expect</code> in favor of <code>?</code>,
 like we talked about in Chapter 9. Rather than <code>panic!</code> on an error, this will
 return the error value from the function we're in for the caller to handle.</p>
