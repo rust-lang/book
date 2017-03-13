@@ -10823,7 +10823,7 @@ fn main() {
 </code></pre>
 <p>As the error message mentions, <code>Rc</code> cannot be sent between threads safely. This
 is because the internal reference count is not maintained in a thread safe
-manner and can have a data race.</p>
+matter and can have a data race.</p>
 <p>To solve this, we'll use <code>Arc&lt;T&gt;</code>, Rust's standard atomic reference count type.</p>
 <p>The Atomic part means <code>Arc&lt;T&gt;</code> can safely be accessed from multiple threads.
 To do this the compiler guarantees that mutations of the internal count use
