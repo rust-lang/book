@@ -105,7 +105,10 @@ fn is_file_of_interest(path: &path::Path) -> bool {
 
 fn is_line_of_interest(line: &str) -> bool {
     !line.split_whitespace()
-        .filter(|sub_string| sub_string.contains("file://") && !sub_string.contains("file:///projects/"))
+        .filter(|sub_string| 
+            sub_string.contains("file://") &&
+            !sub_string.contains("file:///projects/")
+        )
         .collect::<Vec<_>>()
         .is_empty()
 }

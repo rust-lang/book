@@ -1,4 +1,13 @@
 #!/bin/bash
+# Copyright 2016 The Rust Project Developers. See the COPYRIGHT
+# file at the top-level directory of this distribution and at
+# http://rust-lang.org/COPYRIGHT.
+#
+# Licensed under the Apache License, Version 2.0 <LICENSE-APACHE or
+# http://www.apache.org/licenses/LICENSE-2.0> or the MIT license
+# <LICENSE-MIT or http://opensource.org/licenses/MIT>, at your
+# option. This file may not be copied, modified, or distributed
+# except according to those terms.
 
 set -eu
 
@@ -16,7 +25,9 @@ xargs -n 1 basename | \
 # Remove all links followed by <!-- ignore -->, then
 # Change all remaining links from markdown to italicized inline text.
 while IFS= read -r filename; do
-  < "src/$filename" cargo run --bin remove_links | cargo run --bin link2print | cargo run --bin remove_markup > "tmp/$filename"
+  < "src/$filename" cargo run --bin remove_links \
+	  | cargo run --bin link2print \
+	  | cargo run --bin remove_markup > "tmp/$filename"
 done
 # Concat the files into the nostarch dir.
 cargo run --bin concat_chapters tmp nostarch
