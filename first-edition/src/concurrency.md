@@ -238,7 +238,7 @@ This won't work, however, and will give us the error:
 
 As the error message mentions, `Rc` cannot be sent between threads safely. This
 is because the internal reference count is not maintained in a thread safe
-matter and can have a data race.
+manner and can have a data race.
 
 To solve this, we'll use `Arc<T>`, Rust's standard atomic reference count type.
 
