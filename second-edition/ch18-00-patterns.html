@@ -81,13 +81,13 @@ place where a pattern is used.</p>
 slot; a variable name is just a particularly humble form of pattern.</p>
 <p>Let’s try a more complex pattern. Change our example program to this:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><code class="language-rust">fn main() {
+<pre><pre class="playpen"><code class="language-rust">fn main() {
     let (x, y) = (5, 6);
 
     println!(&quot;The value of x is: {}&quot;, x);
     println!(&quot;The value of y is: {}&quot;, y);
 }
-</code></pre>
+</code></pre></pre>
 <p>And run it with <code>cargo run</code>:</p>
 <pre><code class="language-text">$ cargo run
    Compiling patterns v0.1.0 (file:///projects/patterns)
@@ -104,11 +104,11 @@ The value of y is: 6
 <p>As you can see, the two line up visually, and so <code>let</code> binds the variable <code>x</code>
 to the value <code>5</code> and <code>y</code> to <code>6</code>. We could have used two <code>let</code> statements as
 well:</p>
-<pre><code class="language-rust">fn main() {
+<pre><pre class="playpen"><code class="language-rust">fn main() {
     let x = 5;
     let y = 6;
 }
-</code></pre>
+</code></pre></pre>
 <p>In simple cases like this, two <code>let</code>s may be clearer, but in others, creating
 multiple variables at once is nice. As we become more proficient in Rust, we’ll
 figure out which style is better, but it’s mostly a judgment call.</p>
@@ -119,21 +119,32 @@ even though Rust is a statically typed language. Occasionally, Rust won't have
 enough information to infer the type of your value, and you will need to add a
 type annotation in with the pattern.</p>
 <p>Here’s what a <code>let</code> statement with a <em>type annotation</em> looks like:</p>
-<pre><code class="language-rust">let x: i32 = 5;
-</code></pre>
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+let x: i32 = 5;
+
+#}</code></pre></pre>
 <p>We can add a colon, followed by the type name. Here’s the structure of a <code>let</code>
 statement with a type annotation:</p>
 <pre><code class="language-text">let PATTERN: TYPE = VALUE;
 </code></pre>
 <p>Note that the colon and the <code>TYPE</code> go <em>after</em> the <code>PATTERN</code>, not in the pattern
 itself. As an example, here’s our more complex pattern with two variables:</p>
-<pre><code class="language-rust">let (x, y): (i32, i32) = (5, 6);
-</code></pre>
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+let (x, y): (i32, i32) = (5, 6);
+
+#}</code></pre></pre>
 <p>Just like we match up the <code>VALUE</code> with the <code>PATTERN</code>, we match up the <code>TYPE</code>
 with the <code>PATTERN</code>.</p>
 <a class="header" href="ch18-00-patterns.html#literals--_" name="literals--_"><h2>Literals &amp; _</h2></a>
 <p>You can match against literals directly, and <code>_</code> acts as an any case:</p>
-<pre><code class="language-rust">let x = 1;
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+let x = 1;
 
 match x {
     1 =&gt; println!(&quot;one&quot;),
@@ -141,18 +152,23 @@ match x {
     3 =&gt; println!(&quot;three&quot;),
     _ =&gt; println!(&quot;anything&quot;),
 }
-</code></pre>
+
+#}</code></pre></pre>
 <p>This prints <code>one</code>.</p>
 <a class="header" href="ch18-00-patterns.html#multiple-patterns" name="multiple-patterns"><h1>Multiple patterns</h1></a>
 <p>You can match multiple patterns with <code>|</code>:</p>
-<pre><code class="language-rust">let x = 1;
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+let x = 1;
 
 match x {
     1 | 2 =&gt; println!(&quot;one or two&quot;),
     3 =&gt; println!(&quot;three&quot;),
     _ =&gt; println!(&quot;anything&quot;),
 }
-</code></pre>
+
+#}</code></pre></pre>
 <p>This prints <code>one or two</code>.</p>
 <a class="header" href="ch18-00-patterns.html#ref-and-ref-mut" name="ref-and-ref-mut"><h2>ref and ref mut</h2></a>
 <p>Usually, when you match against a pattern, variables are bound to a value.
@@ -168,7 +184,10 @@ match name {
 println!(&quot;name is: {:?}&quot;, name);
 </code></pre>
 <p>If you'd prefer to bind <code>name</code> to a reference, use the <code>ref</code> keyword:</p>
-<pre><code class="language-rust">let name = Some(String::from(&quot;Bors&quot;));
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+let name = Some(String::from(&quot;Bors&quot;));
 
 match name {
     Some(ref name) =&gt; println!(&quot;Found a name: {}&quot;, name),
@@ -178,9 +197,13 @@ match name {
 // name is not moved here; the match only took a reference to its data rather
 // than moving it. This will work:
 println!(&quot;name is: {:?}&quot;, name);
-</code></pre>
+
+#}</code></pre></pre>
 <p>And for a mutable reference, <code>ref mut</code>:</p>
-<pre><code class="language-rust">let mut name = Some(String::from(&quot;Bors&quot;));
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+let mut name = Some(String::from(&quot;Bors&quot;));
 
 match name {
     Some(ref mut name) =&gt; *name = String::from(&quot;Another name&quot;),
@@ -190,10 +213,14 @@ match name {
 // name is not moved here; the match only took a reference to its data rather
 // than moving it
 println!(&quot;name is: {:?}&quot;, name);
-</code></pre>
+
+#}</code></pre></pre>
 <a class="header" href="ch18-00-patterns.html#destructuring" name="destructuring"><h2>Destructuring</h2></a>
 <p>Patterns can be used to destructure structs and enums:</p>
-<pre><code class="language-rust">struct Point {
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+struct Point {
     x: i32,
     y: i32,
 }
@@ -201,11 +228,15 @@ println!(&quot;name is: {:?}&quot;, name);
 let origin = Point { x: 0, y: 0 };
 
 let Point { x, y } = origin;
-</code></pre>
+
+#}</code></pre></pre>
 <p>This brings <code>x</code> and <code>y</code> variables into scope, matching the <code>x</code> and <code>y</code> of
 <code>origin</code>. While it can be unusual in <code>let</code>, this is the same principle of
 patterns in <code>match</code>:</p>
-<pre><code class="language-rust">struct Point {
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+struct Point {
     x: i32,
     y: i32,
 }
@@ -215,36 +246,52 @@ let origin = Point { x: 0, y: 0 };
 match origin {
     Point { x, y } =&gt; { }, // variables x and y are created here
 }
-</code></pre>
+
+#}</code></pre></pre>
 <a class="header" href="ch18-00-patterns.html#shadowing" name="shadowing"><h2>Shadowing</h2></a>
 <p>As with all variables, those declared by a pattern will shadow variables
 outside of the <code>match</code> construct:</p>
-<pre><code class="language-rust">let x = Some(5);
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+let x = Some(5);
 
 match x {
     Some(x) =&gt; { }, // x is an i32 here, not an Option&lt;i32&gt;
     None =&gt; (),
 }
-</code></pre>
+
+#}</code></pre></pre>
 <a class="header" href="ch18-00-patterns.html#ignoring-values" name="ignoring-values"><h2>Ignoring values</h2></a>
 <p>We discussed using <code>_</code> as a whole pattern to ignore it above, but you can
 also use <code>_</code> inside of another pattern to ignore just part of it:</p>
-<pre><code class="language-rust">let x = Some(5);
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+let x = Some(5);
 
 match x {
     Some(_) =&gt; println!(&quot;got a Some and I don't care what's inside&quot;),
     None =&gt; (),
 }
-</code></pre>
+
+#}</code></pre></pre>
 <p>Or like this:</p>
-<pre><code class="language-rust">let numbers = (2, 4, 8, 16, 32);
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+let numbers = (2, 4, 8, 16, 32);
 
 match numbers {
     (first, _, third, _, fifth) =&gt; println!(&quot;Some numbers: {}, {}, {}&quot;, first, third, fifth),
 }
-</code></pre>
+
+#}</code></pre></pre>
 <p>If you want, you can use <code>..</code> to ignore all of the parts you haven't defined:</p>
-<pre><code class="language-rust">struct Point {
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+struct Point {
     x: i32,
     y: i32,
     z: i32,
@@ -255,44 +302,61 @@ let origin = Point { x: 0, y: 0, z: 0 };
 match origin {
     Point { x, .. } =&gt; { }, // y and z are ignored
 }
-</code></pre>
+
+#}</code></pre></pre>
 <a class="header" href="ch18-00-patterns.html#ranges" name="ranges"><h2>Ranges</h2></a>
 <p>You can match a range of values with <code>...</code>:</p>
-<pre><code class="language-rust">let x = 5;
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+let x = 5;
 
 match x {
     1 ... 5 =&gt; println!(&quot;one through five&quot;),
     _ =&gt; println!(&quot;something else&quot;),
 }
-</code></pre>
+
+#}</code></pre></pre>
 <p>Ranges are usually used with integers or <code>char</code>s:</p>
-<pre><code class="language-rust">let x = 'c';
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+let x = 'c';
 
 match x {
     'a' ... 'j' =&gt; println!(&quot;early ASCII letter&quot;),
     'k' ... 'z' =&gt; println!(&quot;late ASCII letter&quot;),
     _ =&gt; println!(&quot;something else&quot;),
 }
-</code></pre>
+
+#}</code></pre></pre>
 <a class="header" href="ch18-00-patterns.html#guards" name="guards"><h2>Guards</h2></a>
 <p>You can introduce match guards with <code>if</code>:</p>
-<pre><code class="language-rust">let x = Some(5);
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+let x = Some(5);
 
 match x {
     Some(x) if x &lt; 5 =&gt; println!(&quot;less than five: {}&quot;, x),
     Some(x) =&gt; println!(&quot;{}&quot;, x),
     None =&gt; (),
 }
-</code></pre>
+
+#}</code></pre></pre>
 <p>If youre using if with multiple patterns, the if applies to both sides:</p>
-<pre><code class="language-rust">let x = 4;
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+let x = 4;
 let y = false;
 
 match x {
     4 | 5 if y =&gt; println!(&quot;yes&quot;),
     _ =&gt; println!(&quot;no&quot;),
 }
-</code></pre>
+
+#}</code></pre></pre>
 <p>This prints <code>no</code>, because the if applies to the whole of <code>4 | 5</code>, and not to only
 the <code>5</code>. In other words, the precedence of if behaves like this:</p>
 <pre><code class="language-text">(4 | 5) if y =&gt; ...

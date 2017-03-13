@@ -81,10 +81,14 @@ detail.</p>
 <p><a href="../std/boxed/struct.Box.html"><code>Box&lt;T&gt;</code></a> is an “owned” pointer, or a “box”. While it can hand
 out references to the contained data, it is the only owner of the data. In particular, consider
 the following:</p>
-<pre><code class="language-rust">let x = Box::new(1);
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+let x = Box::new(1);
 let y = x;
 // `x` is no longer accessible here.
-</code></pre>
+
+#}</code></pre></pre>
 <p>Here, the box was <em>moved</em> into <code>y</code>. As <code>x</code> no longer owns it, the compiler will no longer allow the
 programmer to use <code>x</code> after this. A box can similarly be moved <em>out</em> of a function by returning it.</p>
 <p>When a box (that hasn't been moved) goes out of scope, destructors are run. These destructors take
@@ -151,7 +155,10 @@ no worry of leaking any data behind references (or worse!) by simply replacing t
 <p>It is still possible to violate your own invariants using this wrapper, so be careful when using it.
 If a field is wrapped in <code>Cell</code>, it's a nice indicator that the chunk of data is mutable and may not
 stay the same between the time you first read it and when you intend to use it.</p>
-<pre><code class="language-rust">use std::cell::Cell;
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+use std::cell::Cell;
 
 let x = Cell::new(1);
 let y = &amp;x;
@@ -160,7 +167,8 @@ x.set(2);
 y.set(3);
 z.set(4);
 println!(&quot;{}&quot;, x.get());
-</code></pre>
+
+#}</code></pre></pre>
 <p>Note that here we were able to mutate the same value from various immutable references.</p>
 <p>This has the same runtime cost as the following:</p>
 <pre><code class="language-rust ignore">let mut x = 1;
@@ -194,7 +202,10 @@ pointers which can be dereferenced immutably and mutably respectively. The refco
 the smart pointers go out of scope. With this system, we can dynamically ensure that there are never
 any other borrows active when a mutable borrow is active. If the programmer attempts to make such a
 borrow, the thread will panic.</p>
-<pre><code class="language-rust">use std::cell::RefCell;
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+use std::cell::RefCell;
 
 let x = RefCell::new(vec![1,2,3,4]);
 {
@@ -205,7 +216,8 @@ let x = RefCell::new(vec![1,2,3,4]);
     let mut my_ref = x.borrow_mut();
     my_ref.push(1);
 }
-</code></pre>
+
+#}</code></pre></pre>
 <p>Similar to <code>Cell</code>, this is mainly useful for situations where it's hard or impossible to satisfy the
 borrow checker. Generally we know that such mutations won't happen in a nested form, but it's good
 to check.</p>

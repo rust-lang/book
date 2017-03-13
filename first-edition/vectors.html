@@ -73,14 +73,22 @@ library type <a href="../std/vec/index.html"><code>Vec&lt;T&gt;</code></a>. The 
 of any type (see the chapter on <a href="generics.html">generics</a> for more).
 Vectors always allocate their data on the heap.
 You can create them with the <code>vec!</code> macro:</p>
-<pre><code class="language-rust">let v = vec![1, 2, 3, 4, 5]; // v: Vec&lt;i32&gt;
-</code></pre>
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+let v = vec![1, 2, 3, 4, 5]; // v: Vec&lt;i32&gt;
+
+#}</code></pre></pre>
 <p>(Notice that unlike the <code>println!</code> macro we’ve used in the past, we use square
 brackets <code>[]</code> with <code>vec!</code> macro. Rust allows you to use either in either
 situation, this is just convention.)</p>
 <p>There’s an alternate form of <code>vec!</code> for repeating an initial value:</p>
-<pre><code class="language-rust">let v = vec![0; 10]; // A vector of ten zeroes.
-</code></pre>
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+let v = vec![0; 10]; // A vector of ten zeroes.
+
+#}</code></pre></pre>
 <p>Vectors store their contents as contiguous arrays of <code>T</code> on the heap. This means
 that they must be able to know the size of <code>T</code> at compile time (that is, how
 many bytes are needed to store a <code>T</code>?). The size of some things can't be known
@@ -88,10 +96,14 @@ at compile time. For these you'll have to store a pointer to that thing:
 thankfully, the <a href="../std/boxed/index.html"><code>Box</code></a> type works perfectly for this.</p>
 <a class="header" href="vectors.html#accessing-elements" name="accessing-elements"><h2>Accessing elements</h2></a>
 <p>To get the value at a particular index in the vector, we use <code>[]</code>s:</p>
-<pre><code class="language-rust">let v = vec![1, 2, 3, 4, 5];
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+let v = vec![1, 2, 3, 4, 5];
 
 println!(&quot;The third element of v is {}&quot;, v[2]);
-</code></pre>
+
+#}</code></pre></pre>
 <p>The indices count from <code>0</code>, so the third element is <code>v[2]</code>.</p>
 <p>It’s also important to note that you must index with the <code>usize</code> type:</p>
 <pre><code class="language-rust ignore">let v = vec![1, 2, 3, 4, 5];
@@ -126,16 +138,23 @@ println!(&quot;Item 7 is {}&quot;, v[7]);
 <p>If you want to handle out-of-bounds errors without panicking, you can use
 methods like <a href="../std/vec/struct.Vec.html#method.get"><code>get</code></a> or <a href="../std/vec/struct.Vec.html#method.get_mut"><code>get_mut</code></a> that return <code>None</code> when
 given an invalid index:</p>
-<pre><code class="language-rust">let v = vec![1, 2, 3];
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+let v = vec![1, 2, 3];
 match v.get(7) {
     Some(x) =&gt; println!(&quot;Item 7 is {}&quot;, x),
     None =&gt; println!(&quot;Sorry, this vector is too short.&quot;)
 }
-</code></pre>
+
+#}</code></pre></pre>
 <a class="header" href="vectors.html#iterating" name="iterating"><h2>Iterating</h2></a>
 <p>Once you have a vector, you can iterate through its elements with <code>for</code>. There
 are three versions:</p>
-<pre><code class="language-rust">let mut v = vec![1, 2, 3, 4, 5];
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+let mut v = vec![1, 2, 3, 4, 5];
 
 for i in &amp;v {
     println!(&quot;A reference to {}&quot;, i);
@@ -148,7 +167,8 @@ for i in &amp;mut v {
 for i in v {
     println!(&quot;Take ownership of the vector and its element {}&quot;, i);
 }
-</code></pre>
+
+#}</code></pre></pre>
 <p>Note: You cannot use the vector again once you have iterated by taking ownership of the vector.
 You can iterate the vector multiple times by taking a reference to the vector whilst iterating.
 For example, the following code does not compile.</p>
@@ -163,7 +183,10 @@ for i in v {
 }
 </code></pre>
 <p>Whereas the following works perfectly,</p>
-<pre><code class="language-rust">let v = vec![1, 2, 3, 4, 5];
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+let v = vec![1, 2, 3, 4, 5];
 
 for i in &amp;v {
     println!(&quot;This is a reference to {}&quot;, i);
@@ -172,7 +195,8 @@ for i in &amp;v {
 for i in &amp;v {
     println!(&quot;This is a reference to {}&quot;, i);
 }
-</code></pre>
+
+#}</code></pre></pre>
 <p>Vectors have many more useful methods, which you can read about in <a href="../std/vec/index.html">their
 API documentation</a>.</p>
 

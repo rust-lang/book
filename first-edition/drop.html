@@ -71,7 +71,7 @@
 <p>Now that we’ve discussed traits, let’s talk about a particular trait provided
 by the Rust standard library, <a href="../std/ops/trait.Drop.html"><code>Drop</code></a>. The <code>Drop</code> trait provides a way
 to run some code when a value goes out of scope. For example:</p>
-<pre><code class="language-rust">struct HasDrop;
+<pre><pre class="playpen"><code class="language-rust">struct HasDrop;
 
 impl Drop for HasDrop {
     fn drop(&amp;mut self) {
@@ -85,14 +85,14 @@ fn main() {
     // Do stuff.
 
 } // `x` goes out of scope here.
-</code></pre>
+</code></pre></pre>
 <p>When <code>x</code> goes out of scope at the end of <code>main()</code>, the code for <code>Drop</code> will
 run. <code>Drop</code> has one method, which is also called <code>drop()</code>. It takes a mutable
 reference to <code>self</code>.</p>
 <p>That’s it! The mechanics of <code>Drop</code> are very simple, but there are some
 subtleties. For example, values are dropped in the opposite order they are
 declared. Here’s another example:</p>
-<pre><code class="language-rust">struct Firework {
+<pre><pre class="playpen"><code class="language-rust">struct Firework {
     strength: i32,
 }
 
@@ -106,7 +106,7 @@ fn main() {
     let firecracker = Firework { strength: 1 };
     let tnt = Firework { strength: 100 };
 }
-</code></pre>
+</code></pre></pre>
 <p>This will output:</p>
 <pre><code class="language-text">BOOM times 100!!!
 BOOM times 1!!!

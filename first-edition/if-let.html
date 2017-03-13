@@ -73,35 +73,50 @@ This allows us to reduce the overhead of certain kinds of <a href="patterns.html
 and express them in a more convenient way.</p>
 <p>For example, let’s say we have some sort of <code>Option&lt;T&gt;</code>. We want to call a function
 on it if it’s <code>Some&lt;T&gt;</code>, but do nothing if it’s <code>None</code>. That looks like this:</p>
-<pre><code class="language-rust"># let option = Some(5);
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+# let option = Some(5);
 # fn foo(x: i32) { }
 match option {
     Some(x) =&gt; { foo(x) },
     None =&gt; {},
 }
-</code></pre>
+
+#}</code></pre></pre>
 <p>We don’t have to use <code>match</code> here, for example, we could use <code>if</code>:</p>
-<pre><code class="language-rust"># let option = Some(5);
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+# let option = Some(5);
 # fn foo(x: i32) { }
 if option.is_some() {
     let x = option.unwrap();
     foo(x);
 }
-</code></pre>
+
+#}</code></pre></pre>
 <p>Neither of these options is particularly appealing. We can use <code>if let</code> to
 do the same thing in a nicer way:</p>
-<pre><code class="language-rust"># let option = Some(5);
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+# let option = Some(5);
 # fn foo(x: i32) { }
 if let Some(x) = option {
     foo(x);
 }
-</code></pre>
+
+#}</code></pre></pre>
 <p>If a <a href="patterns.html">pattern</a> matches successfully, it binds any appropriate parts of
 the value to the identifiers in the pattern, then evaluates the expression. If
 the pattern doesn’t match, nothing happens.</p>
 <p>If you want to do something else when the pattern does not match, you can
 use <code>else</code>:</p>
-<pre><code class="language-rust"># let option = Some(5);
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+# let option = Some(5);
 # fn foo(x: i32) { }
 # fn bar() { }
 if let Some(x) = option {
@@ -109,24 +124,33 @@ if let Some(x) = option {
 } else {
     bar();
 }
-</code></pre>
+
+#}</code></pre></pre>
 <a class="header" href="if-let.html#while-let" name="while-let"><h2><code>while let</code></h2></a>
 <p>In a similar fashion, <code>while let</code> can be used when you want to conditionally
 loop  as long as a value matches a certain pattern. It turns code like this:</p>
-<pre><code class="language-rust">let mut v = vec![1, 3, 5, 7, 11];
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+let mut v = vec![1, 3, 5, 7, 11];
 loop {
     match v.pop() {
         Some(x) =&gt;  println!(&quot;{}&quot;, x),
         None =&gt; break,
     }
 }
-</code></pre>
+
+#}</code></pre></pre>
 <p>Into code like this:</p>
-<pre><code class="language-rust">let mut v = vec![1, 3, 5, 7, 11];
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+let mut v = vec![1, 3, 5, 7, 11];
 while let Some(x) = v.pop() {
     println!(&quot;{}&quot;, x);
 }
-</code></pre>
+
+#}</code></pre></pre>
 
                 </div>
 

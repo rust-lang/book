@@ -74,14 +74,14 @@ closures look like, syntactically, and then we'll return to defining what they
 are. Listing 13-1 shows a small closure whose definition is assigned to the
 variable <code>add_one</code>, which we can then use to call the closure:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><code class="language-rust">fn main() {
+<pre><pre class="playpen"><code class="language-rust">fn main() {
     let add_one = |x| x + 1;
 
     let five = add_one(4);
 
     assert_eq!(5, five);
 }
-</code></pre>
+</code></pre></pre>
 <p><span class="caption">Listing 13-1: A closure that takes one parameter and adds
 one to it, assigned to the variable <code>add_one</code></span></p>
 <p>The closure definition, on the first line, shows that the closure takes one
@@ -89,7 +89,7 @@ parameter named <code>x</code>. Parameters to closures go in between vertical pi
 <p>This is a minimal closure with only one expression as its body. Listing 13-2 has
 a closure with a bit more complexity:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><code class="language-rust">fn main() {
+<pre><pre class="playpen"><code class="language-rust">fn main() {
     let calculate = |a, b| {
         let mut result = a * 2;
 
@@ -101,7 +101,7 @@ a closure with a bit more complexity:</p>
     assert_eq!(7, calculate(2, 3)); // 2 * 2 + 3 == 7
     assert_eq!(13, calculate(4, 5)); // 4 * 2 + 5 == 13
 }
-</code></pre>
+</code></pre></pre>
 <p><span class="caption">Listing 13-2: A closure with two parameters and multiple
 expressions in its body</span></p>
 <p>We can use curly brackets to define a closure body with more than one
@@ -113,12 +113,12 @@ We can choose to add type annotations if we want; Listing 13-3 shows the
 closure from Listing 13-1 with annotations for the parameter's and return
 value's types:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><code class="language-rust">fn main() {
+<pre><pre class="playpen"><code class="language-rust">fn main() {
     let add_one = |x: i32| -&gt; i32 { x + 1 };
 
     assert_eq!(2, add_one(1));
 }
-</code></pre>
+</code></pre></pre>
 <p><span class="caption">Listing 13-3: A closure definition with optional
 parameter and return value type annotations</span></p>
 <p>The syntax of closures and functions looks more similar with type annotations.
@@ -167,7 +167,7 @@ allowed to access variables from their enclosing scope. Listing 13-4 has an
 example of a closure in the variable <code>equal_to_x</code> that uses the variable <code>x</code>
 from the closure's surrounding environment:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><code class="language-rust">fn main() {
+<pre><pre class="playpen"><code class="language-rust">fn main() {
     let x = 4;
 
     let equal_to_x = |z| z == x;
@@ -176,7 +176,7 @@ from the closure's surrounding environment:</p>
 
     assert!(equal_to_x(y));
 }
-</code></pre>
+</code></pre></pre>
 <p><span class="caption">Listing 13-4: Example of a closure that refers to a
 variable in its enclosing scope</span></p>
 <p>Here, even though <code>x</code> is not one of the parameters of <code>equal_to_x</code>, the
@@ -212,7 +212,10 @@ concurrency.</p>
 can do with them. We can also define functions that have closures as parameters
 by using the <code>Fn</code> traits. Here's an example of a function named <code>call_with_one</code>
 whose signature has a closure as a parameter:</p>
-<pre><code class="language-rust">fn call_with_one&lt;F&gt;(some_closure: F) -&gt; i32
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+fn call_with_one&lt;F&gt;(some_closure: F) -&gt; i32
     where F: Fn(i32) -&gt; i32 {
 
     some_closure(1)
@@ -221,7 +224,8 @@ whose signature has a closure as a parameter:</p>
 let answer = call_with_one(|x| x + 2);
 
 assert_eq!(3, answer);
-</code></pre>
+
+#}</code></pre></pre>
 <p>We pass the closure <code>|x| x + 2</code>, to <code>call_with_one</code>, and <code>call_with_one</code> calls
 that closure with <code>1</code> as an argument. The return value of the call to
 <code>some_closure</code> is then returned from <code>call_with_one</code>.</p>

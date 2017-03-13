@@ -119,18 +119,18 @@ place!</p>
 <a class="header" href="concurrency.html#threads" name="threads"><h2>Threads</h2></a>
 <p>Rust's standard library provides a library for threads, which allow you to
 run Rust code in parallel. Here's a basic example of using <code>std::thread</code>:</p>
-<pre><code class="language-rust">use std::thread;
+<pre><pre class="playpen"><code class="language-rust">use std::thread;
 
 fn main() {
     thread::spawn(|| {
         println!(&quot;Hello from a thread!&quot;);
     });
 }
-</code></pre>
+</code></pre></pre>
 <p>The <code>thread::spawn()</code> method accepts a <a href="closures.html">closure</a>, which is executed in a
 new thread. It returns a handle to the thread, that can be used to
 wait for the child thread to finish and extract its result:</p>
-<pre><code class="language-rust">use std::thread;
+<pre><pre class="playpen"><code class="language-rust">use std::thread;
 
 fn main() {
     let handle = thread::spawn(|| {
@@ -139,7 +139,7 @@ fn main() {
 
     println!(&quot;{}&quot;, handle.join().unwrap());
 }
-</code></pre>
+</code></pre></pre>
 <p>As closures can capture variables from their environment, we can also try to
 bring some data into the other thread:</p>
 <pre><code class="language-rust ignore">use std::thread;
@@ -167,7 +167,7 @@ thread may outlive the scope of <code>x</code>, leading to a dangling pointer.</
 <p>To fix this, we use a <code>move</code> closure as mentioned in the error message. <code>move</code>
 closures are explained in depth <a href="closures.html#move-closures">here</a>; basically
 they move variables from their environment into themselves.</p>
-<pre><code class="language-rust">use std::thread;
+<pre><pre class="playpen"><code class="language-rust">use std::thread;
 
 fn main() {
     let x = 1;
@@ -175,7 +175,7 @@ fn main() {
         println!(&quot;x is {}&quot;, x);
     });
 }
-</code></pre>
+</code></pre></pre>
 <p>Many languages have the ability to execute threads, but it's wildly unsafe.
 There are entire books about how to prevent errors that occur from shared
 mutable state. Rust helps out with its type system here as well, by preventing
@@ -300,7 +300,7 @@ across threads, for example a type that can ensure only one thread at a time is
 able to mutate the value inside it at any one time.</p>
 <p>For that, we can use the <code>Mutex&lt;T&gt;</code> type!</p>
 <p>Here's the working version:</p>
-<pre><code class="language-rust">use std::sync::{Arc, Mutex};
+<pre><pre class="playpen"><code class="language-rust">use std::sync::{Arc, Mutex};
 use std::thread;
 use std::time::Duration;
 
@@ -317,7 +317,7 @@ fn main() {
 
     thread::sleep(Duration::from_millis(50));
 }
-</code></pre>
+</code></pre></pre>
 <p>Note that the value of <code>i</code> is bound (copied) to the closure and not shared
 among the threads.</p>
 <p>We're &quot;locking&quot; the mutex here. A mutex (short for &quot;mutual exclusion&quot;), as
@@ -335,7 +335,7 @@ locked, it will wait until the other thread releases the lock.</p>
 <p>and because <code>Send</code> is not implemented for <code>MutexGuard&lt;T&gt;</code>, the guard cannot
 cross thread boundaries, ensuring thread-locality of lock acquire and release.</p>
 <p>Let's examine the body of the thread more closely:</p>
-<pre><code class="language-rust"># use std::sync::{Arc, Mutex};
+<pre><pre class="playpen"><code class="language-rust"># use std::sync::{Arc, Mutex};
 # use std::thread;
 # use std::time::Duration;
 # fn main() {
@@ -349,7 +349,7 @@ thread::spawn(move || {
 #     }
 #     thread::sleep(Duration::from_millis(50));
 # }
-</code></pre>
+</code></pre></pre>
 <p>First, we call <code>lock()</code>, which acquires the mutex's lock. Because this may fail,
 it returns a <code>Result&lt;T, E&gt;</code>, and because this is just an example, we <code>unwrap()</code>
 it to get a reference to the data. Real code would have more robust error handling
@@ -365,7 +365,7 @@ threads with each other. Let's talk about one of them: channels.</p>
 <a class="header" href="concurrency.html#channels" name="channels"><h2>Channels</h2></a>
 <p>Here's a version of our code that uses channels for synchronization, rather
 than waiting for a specific time:</p>
-<pre><code class="language-rust">use std::sync::{Arc, Mutex};
+<pre><pre class="playpen"><code class="language-rust">use std::sync::{Arc, Mutex};
 use std::thread;
 use std::sync::mpsc;
 
@@ -391,12 +391,12 @@ fn main() {
         rx.recv().unwrap();
     }
 }
-</code></pre>
+</code></pre></pre>
 <p>We use the <code>mpsc::channel()</code> method to construct a new channel. We <code>send</code>
 a simple <code>()</code> down the channel, and then wait for ten of them to come back.</p>
 <p>While this channel is sending a generic signal, we can send any data that
 is <code>Send</code> over the channel!</p>
-<pre><code class="language-rust">use std::thread;
+<pre><pre class="playpen"><code class="language-rust">use std::thread;
 use std::sync::mpsc;
 
 fn main() {
@@ -416,13 +416,16 @@ fn main() {
         println!(&quot;{}&quot;, rx.recv().unwrap());
     }
 }
-</code></pre>
+</code></pre></pre>
 <p>Here we create 10 threads, asking each to calculate the square of a number (<code>i</code>
 at the time of <code>spawn()</code>), and then <code>send()</code> back the answer over the channel.</p>
 <a class="header" href="concurrency.html#panics" name="panics"><h2>Panics</h2></a>
 <p>A <code>panic!</code> will crash the currently executing thread. You can use Rust's
 threads as a simple isolation mechanism:</p>
-<pre><code class="language-rust">use std::thread;
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+use std::thread;
 
 let handle = thread::spawn(move || {
     panic!(&quot;oops!&quot;);
@@ -431,7 +434,8 @@ let handle = thread::spawn(move || {
 let result = handle.join();
 
 assert!(result.is_err());
-</code></pre>
+
+#}</code></pre></pre>
 <p><code>Thread.join()</code> gives us a <code>Result</code> back, which allows us to check if the thread
 has panicked or not.</p>
 

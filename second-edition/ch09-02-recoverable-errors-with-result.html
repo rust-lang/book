@@ -76,11 +76,15 @@ file instead of terminating the process.</p>
 <p>Recall from Chapter 2 the section on “<a href="ch02-00-guessing-game-tutorial.md#handling-potential-failure-with-the-result-type">Handling Potential Failure with the
 <code>Result</code> Type</a><!-- ignore -->” that the <code>Result</code> enum is defined
 as having two variants, <code>Ok</code> and <code>Err</code>, as follows:</p>
-<pre><code class="language-rust">enum Result&lt;T, E&gt; {
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+enum Result&lt;T, E&gt; {
     Ok(T),
     Err(E),
 }
-</code></pre>
+
+#}</code></pre></pre>
 <p>The <code>T</code> and <code>E</code> are generic type parameters; we’ll go into generics in more
 detail in Chapter 10. What you need to know right now is that <code>T</code> represents
 the type of the value that will be returned in a success case within the <code>Ok</code>
@@ -92,12 +96,12 @@ value and error value we want to return may differ.</p>
 <p>Let’s call a function that returns a <code>Result</code> value because the function could
 fail: opening a file, shown in Listing 9-2.</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><code class="language-rust">use std::fs::File;
+<pre><pre class="playpen"><code class="language-rust">use std::fs::File;
 
 fn main() {
     let f = File::open(&quot;hello.txt&quot;);
 }
-</code></pre>
+</code></pre></pre>
 <p><span class="caption">Listing 9-2: Opening a file</span></p>
 <p>How do we know <code>File::open</code> returns a <code>Result</code>? We could look at the standard
 library API documentation, or we could ask the compiler! If we give <code>f</code> a type
@@ -139,7 +143,7 @@ on the value <code>File::open</code> returned. Listing 9-3 shows one way to hand
 <code>Result</code> with a basic tool: the <code>match</code> expression that we learned about in
 Chapter 6.</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><code class="language-rust should_panic">use std::fs::File;
+<pre><pre class="playpen"><code class="language-rust should_panic">use std::fs::File;
 
 fn main() {
     let f = File::open(&quot;hello.txt&quot;);
@@ -151,7 +155,7 @@ fn main() {
         },
     };
 }
-</code></pre>
+</code></pre></pre>
 <p><span class="caption">Listing 9-3: Using a <code>match</code> expression to handle the
 <code>Result</code> variants we might have</span></p>
 <p>Note that, like the <code>Option</code> enum, the <code>Result</code> enum and its variants have been
@@ -239,12 +243,12 @@ shortcut method that is implemented just like the <code>match</code> statement w
 Listing 9-3. If the <code>Result</code> value is the <code>Ok</code> variant, <code>unwrap</code> will return
 the value inside the <code>Ok</code>. If the <code>Result</code> is the <code>Err</code> variant, <code>unwrap</code> will
 call the <code>panic!</code> macro for us.</p>
-<pre><code class="language-rust should_panic">use std::fs::File;
+<pre><pre class="playpen"><code class="language-rust should_panic">use std::fs::File;
 
 fn main() {
     let f = File::open(&quot;hello.txt&quot;).unwrap();
 }
-</code></pre>
+</code></pre></pre>
 <p>If we run this code without a <em>hello.txt</em> file, we’ll see an error message from
 the <code>panic!</code> call that the <code>unwrap</code> method makes:</p>
 <pre><code class="language-text">thread 'main' panicked at 'called `Result::unwrap()` on an `Err` value: Error {
@@ -255,12 +259,12 @@ repr: Os { code: 2, message: &quot;No such file or directory&quot; } }',
 <code>panic!</code> error message: <code>expect</code>. Using <code>expect</code> instead of <code>unwrap</code> and
 providing good error messages can convey your intent and make tracking down the
 source of a panic easier. The syntax of <code>expect</code> looks like this:</p>
-<pre><code class="language-rust should_panic">use std::fs::File;
+<pre><pre class="playpen"><code class="language-rust should_panic">use std::fs::File;
 
 fn main() {
     let f = File::open(&quot;hello.txt&quot;).expect(&quot;Failed to open hello.txt&quot;);
 }
-</code></pre>
+</code></pre></pre>
 <p>We use <code>expect</code> in the same way as <code>unwrap</code>: to return the file handle or call
 the <code>panic!</code> macro. The error message that <code>expect</code> uses in its call to
 <code>panic!</code> will be the parameter that we pass to <code>expect</code> instead of the default
@@ -279,7 +283,10 @@ handled than what you have available in the context of your code.</p>
 <p>For example, Listing 9-5 shows a function that reads a username from a file. If
 the file doesn’t exist or can’t be read, this function will return those errors
 to the code that called this function:</p>
-<pre><code class="language-rust">use std::io;
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+use std::io;
 use std::io::Read;
 use std::fs::File;
 
@@ -298,7 +305,8 @@ fn read_username_from_file() -&gt; Result&lt;String, io::Error&gt; {
         Err(e) =&gt; Err(e),
     }
 }
-</code></pre>
+
+#}</code></pre></pre>
 <p><span class="caption">Listing 9-5: A function that returns errors to the
 calling code using <code>match</code></span></p>
 <p>Let’s look at the return type of the function first: <code>Result&lt;String, io::Error&gt;</code>. This means that the function is returning a value of the type
@@ -343,7 +351,10 @@ syntax to make this easier: <code>?</code>.</p>
 <p>Listing 9-6 shows an implementation of <code>read_username_from_file</code> that has the
 same functionality as it had in Listing 9-5, but this implementation uses the
 question mark operator:</p>
-<pre><code class="language-rust">use std::io;
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+use std::io;
 use std::io::Read;
 use std::fs::File;
 
@@ -353,7 +364,8 @@ fn read_username_from_file() -&gt; Result&lt;String, io::Error&gt; {
     f.read_to_string(&amp;mut s)?;
     Ok(s)
 }
-</code></pre>
+
+#}</code></pre></pre>
 <p><span class="caption">Listing 9-6: A function that returns errors to the
 calling code using <code>?</code></span></p>
 <p>The <code>?</code> placed after a <code>Result</code> value is defined to work the exact same way as
@@ -371,7 +383,10 @@ call.</p>
 <p>The <code>?</code> eliminates a lot of boilerplate and makes this function’s
 implementation simpler. We could even shorten this code further by chaining
 method calls immediately after the <code>?</code>:</p>
-<pre><code class="language-rust">use std::io;
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+use std::io;
 use std::io::Read;
 use std::fs::File;
 
@@ -382,7 +397,8 @@ fn read_username_from_file() -&gt; Result&lt;String, io::Error&gt; {
 
     Ok(s)
 }
-</code></pre>
+
+#}</code></pre></pre>
 <p>We’ve moved the creation of the new <code>String</code> in <code>s</code> to the beginning of the
 function; that part hasn’t changed. Instead of creating a variable <code>f</code>, we’ve
 chained the call to <code>read_to_string</code> directly onto the result of

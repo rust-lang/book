@@ -96,12 +96,16 @@ not being allowed directly through a <code>*const T</code>.</li>
 </ul>
 <a class="header" href="raw-pointers.html#basics" name="basics"><h1>Basics</h1></a>
 <p>Creating a raw pointer is perfectly safe:</p>
-<pre><code class="language-rust">let x = 5;
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+let x = 5;
 let raw = &amp;x as *const i32;
 
 let mut y = 10;
 let raw_mut = &amp;mut y as *mut i32;
-</code></pre>
+
+#}</code></pre></pre>
 <p>However, dereferencing one is not. This won’t work:</p>
 <pre><code class="language-rust ignore">let x = 5;
 let raw = &amp;x as *const i32;
@@ -115,13 +119,17 @@ println!(&quot;raw points at {}&quot;, *raw);
 </code></pre>
 <p>When you dereference a raw pointer, you’re taking responsibility that it’s not
 pointing somewhere that would be incorrect. As such, you need <code>unsafe</code>:</p>
-<pre><code class="language-rust">let x = 5;
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+let x = 5;
 let raw = &amp;x as *const i32;
 
 let points_at = unsafe { *raw };
 
 println!(&quot;raw points at {}&quot;, points_at);
-</code></pre>
+
+#}</code></pre></pre>
 <p>For more operations on raw pointers, see <a href="../std/primitive.pointer.html">their API documentation</a>.</p>
 <a class="header" href="raw-pointers.html#ffi" name="ffi"><h1>FFI</h1></a>
 <p>Raw pointers are useful for FFI: Rust’s <code>*const T</code> and <code>*mut T</code> are similar to
@@ -141,7 +149,10 @@ these properties are true for any references, no matter how they are created,
 and so any conversion from raw pointers is asserting that they hold. The
 programmer <em>must</em> guarantee this.</p>
 <p>The recommended method for the conversion is:</p>
-<pre><code class="language-rust">// Explicit cast:
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+// Explicit cast:
 let i: u32 = 1;
 let p_imm: *const u32 = &amp;i as *const u32;
 
@@ -153,7 +164,8 @@ unsafe {
     let ref_imm: &amp;u32 = &amp;*p_imm;
     let ref_mut: &amp;mut u32 = &amp;mut *p_mut;
 }
-</code></pre>
+
+#}</code></pre></pre>
 <p>The <code>&amp;*x</code> dereferencing style is preferred to using a <code>transmute</code>. The latter
 is far more powerful than necessary, and the more restricted operation is
 harder to use incorrectly; for example, it requires that <code>x</code> is a pointer

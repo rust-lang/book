@@ -69,8 +69,12 @@
                 <div id="content" class="content">
                     <a class="header" href="const-and-static.html#const-and-static" name="const-and-static"><h1>const and static</h1></a>
 <p>Rust has a way of defining constants with the <code>const</code> keyword:</p>
-<pre><code class="language-rust">const N: i32 = 5;
-</code></pre>
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+const N: i32 = 5;
+
+#}</code></pre></pre>
 <p>Unlike <a href="variable-bindings.html"><code>let</code></a> bindings, you must annotate the type of a <code>const</code>.</p>
 <p>Constants live for the entire lifetime of a program. More specifically,
 constants in Rust have no fixed address in memory. This is because they’re
@@ -83,28 +87,44 @@ similar to constants, but static items aren’t inlined upon use. This means tha
 there is only one instance for each value, and it’s at a fixed location in
 memory.</p>
 <p>Here’s an example:</p>
-<pre><code class="language-rust">static N: i32 = 5;
-</code></pre>
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+static N: i32 = 5;
+
+#}</code></pre></pre>
 <p>Unlike <a href="variable-bindings.html"><code>let</code></a> bindings, you must annotate the type of a <code>static</code>.</p>
 <p>Statics live for the entire lifetime of a program, and therefore any
 reference stored in a static has a <a href="lifetimes.html"><code>'static</code> lifetime</a>:</p>
-<pre><code class="language-rust">static NAME: &amp;'static str = &quot;Steve&quot;;
-</code></pre>
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+static NAME: &amp;'static str = &quot;Steve&quot;;
+
+#}</code></pre></pre>
 <a class="header" href="const-and-static.html#mutability" name="mutability"><h2>Mutability</h2></a>
 <p>You can introduce mutability with the <code>mut</code> keyword:</p>
-<pre><code class="language-rust">static mut N: i32 = 5;
-</code></pre>
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+static mut N: i32 = 5;
+
+#}</code></pre></pre>
 <p>Because this is mutable, one thread could be updating <code>N</code> while another is
 reading it, causing memory unsafety. As such both accessing and mutating a
 <code>static mut</code> is <a href="unsafe.html"><code>unsafe</code></a>, and so must be done in an <code>unsafe</code> block:</p>
-<pre><code class="language-rust"># static mut N: i32 = 5;
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+# static mut N: i32 = 5;
 
 unsafe {
     N += 1;
 
     println!(&quot;N: {}&quot;, N);
 }
-</code></pre>
+
+#}</code></pre></pre>
 <p>Furthermore, any type stored in a <code>static</code> must be <code>Sync</code>, and must not have
 a <a href="drop.html"><code>Drop</code></a> implementation.</p>
 <a class="header" href="const-and-static.html#initializing" name="initializing"><h1>Initializing</h1></a>

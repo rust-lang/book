@@ -169,9 +169,13 @@ error: function `connect` is private
 for celebration. The new error says “function <code>connect</code> is private”, so let’s
 edit <em>src/client.rs</em> to make <code>client::connect</code> public too:</p>
 <p><span class="filename">Filename: src/client.rs</span></p>
-<pre><code class="language-rust">pub fn connect() {
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+pub fn connect() {
 }
-</code></pre>
+
+#}</code></pre></pre>
 <p>And run <code>cargo build</code> again:</p>
 <pre><code class="language-text">warning: function is never used: `connect`, #[warn(dead_code)] on by default
  --&gt; src/network/mod.rs:1:1

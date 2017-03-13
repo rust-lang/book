@@ -94,12 +94,19 @@ mind.</p>
 <a class="header" href="macros.html#defining-a-macro" name="defining-a-macro"><h1>Defining a macro</h1></a>
 <p>You may have seen the <code>vec!</code> macro, used to initialize a <a href="vectors.html">vector</a> with
 any number of elements.</p>
-<pre><code class="language-rust">let x: Vec&lt;u32&gt; = vec![1, 2, 3];
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+let x: Vec&lt;u32&gt; = vec![1, 2, 3];
 # assert_eq!(x, [1, 2, 3]);
-</code></pre>
+
+#}</code></pre></pre>
 <p>This can’t be an ordinary function, because it takes any number of arguments.
 But we can imagine it as syntactic shorthand for</p>
-<pre><code class="language-rust">let x: Vec&lt;u32&gt; = {
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+let x: Vec&lt;u32&gt; = {
     let mut temp_vec = Vec::new();
     temp_vec.push(1);
     temp_vec.push(2);
@@ -107,12 +114,13 @@ But we can imagine it as syntactic shorthand for</p>
     temp_vec
 };
 # assert_eq!(x, [1, 2, 3]);
-</code></pre>
+
+#}</code></pre></pre>
 <p>We can implement this shorthand, using a macro: <sup class="footnote-reference"><a href="macros.html#actual">1</a></sup></p>
 <div class="footnote-definition" id="actual"><sup class="footnote-definition-label">1</sup>
 <p>The actual definition of <code>vec!</code> in libcollections differs from the
 one presented here, for reasons of efficiency and reusability.</p>
-<pre><code class="language-rust">macro_rules! vec {
+<pre><pre class="playpen"><code class="language-rust">macro_rules! vec {
     ( $( $x:expr ),* ) =&gt; {
         {
             let mut temp_vec = Vec::new();
@@ -126,7 +134,7 @@ one presented here, for reasons of efficiency and reusability.</p>
 # fn main() {
 #     assert_eq!(vec![1,2,3], [1, 2, 3]);
 # }
-</code></pre>
+</code></pre></pre>
 <p>Whoa, that’s a lot of new syntax! Let’s break it down.</p>
 <pre><code class="language-rust ignore">macro_rules! vec { ... }
 </code></pre>
@@ -211,7 +219,7 @@ against. If it is under more, it’ll be duplicated, as appropriate.</li>
 </ol>
 <p>This baroque macro illustrates the duplication of variables from outer
 repetition levels.</p>
-<pre><code class="language-rust">macro_rules! o_O {
+<pre><pre class="playpen"><code class="language-rust">macro_rules! o_O {
     (
         $(
             $x:expr; [ $( $y:expr ),* ]
@@ -228,7 +236,7 @@ fn main() {
 
     assert_eq!(a, [11, 12, 13, 24, 25, 26]);
 }
-</code></pre>
+</code></pre></pre>
 <p>That’s most of the matcher syntax. These examples use <code>$(...)*</code>, which is a
 &quot;zero or more&quot; match. Alternatively you can write <code>$(...)+</code> for a &quot;one or
 more&quot; match. Both forms optionally include a separator, which can be any token
@@ -251,14 +259,14 @@ int main() {
 than addition. If you’ve used C macros a lot, you probably know the standard
 idioms for avoiding this problem, as well as five or six others. In Rust, we
 don’t have to worry about it.</p>
-<pre><code class="language-rust">macro_rules! five_times {
+<pre><pre class="playpen"><code class="language-rust">macro_rules! five_times {
     ($x:expr) =&gt; (5 * $x);
 }
 
 fn main() {
     assert_eq!(25, five_times!(2 + 3));
 }
-</code></pre>
+</code></pre></pre>
 <p>The metavariable <code>$x</code> is parsed as a single expression node, and keeps its
 place in the syntax tree even after substitution.</p>
 <p>Another common problem in macro systems is ‘variable capture’. Here’s a C
@@ -286,7 +294,7 @@ do {
 <p>The second variable named <code>state</code> shadows the first one.  This is a problem
 because the print statement should refer to both of them.</p>
 <p>The equivalent Rust macro has the desired behavior.</p>
-<pre><code class="language-rust"># fn get_log_state() -&gt; i32 { 3 }
+<pre><pre class="playpen"><code class="language-rust"># fn get_log_state() -&gt; i32 { 3 }
 macro_rules! log {
     ($msg:expr) =&gt; {{
         let state: i32 = get_log_state();
@@ -300,7 +308,7 @@ fn main() {
     let state: &amp;str = &quot;reticulating splines&quot;;
     log!(state);
 }
-</code></pre>
+</code></pre></pre>
 <p>This works because Rust has a <a href="https://en.wikipedia.org/wiki/Hygienic_macro">hygienic macro system</a>. Each macro expansion
 happens in a distinct ‘syntax context’, and each variable is tagged with the
 syntax context where it was introduced. It’s as though the variable <code>state</code>
@@ -319,7 +327,7 @@ fn main() {
 </code></pre>
 <p>Instead you need to pass the variable name into the invocation, so that it’s
 tagged with the right syntax context.</p>
-<pre><code class="language-rust">macro_rules! foo {
+<pre><pre class="playpen"><code class="language-rust">macro_rules! foo {
     ($v:ident) =&gt; (let $v = 3;);
 }
 
@@ -327,10 +335,10 @@ fn main() {
     foo!(x);
     println!(&quot;{}&quot;, x);
 }
-</code></pre>
+</code></pre></pre>
 <p>This holds for <code>let</code> bindings and loop labels, but not for <a href="../reference/items.html">items</a>.
 So the following code does compile:</p>
-<pre><code class="language-rust">macro_rules! foo {
+<pre><pre class="playpen"><code class="language-rust">macro_rules! foo {
     () =&gt; (fn x() { });
 }
 
@@ -338,13 +346,13 @@ fn main() {
     foo!();
     x();
 }
-</code></pre>
+</code></pre></pre>
 <a class="header" href="macros.html#recursive-macros" name="recursive-macros"><h1>Recursive macros</h1></a>
 <p>A macro’s expansion can include more macro invocations, including invocations
 of the very same macro being expanded.  These recursive macros are useful for
 processing tree-structured input, as illustrated by this (simplistic) HTML
 shorthand:</p>
-<pre><code class="language-rust"># #![allow(unused_must_use)]
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_must_use)]
 macro_rules! write_html {
     ($w:expr, ) =&gt; (());
 
@@ -373,7 +381,7 @@ fn main() {
         &quot;&lt;html&gt;&lt;head&gt;&lt;title&gt;Macros guide&lt;/title&gt;&lt;/head&gt;\
          &lt;body&gt;&lt;h1&gt;Macros are the best!&lt;/h1&gt;&lt;/body&gt;&lt;/html&gt;&quot;);
 }
-</code></pre>
+</code></pre></pre>
 <a class="header" href="macros.html#debugging-macro-code" name="debugging-macro-code"><h1>Debugging macro code</h1></a>
 <p>To see the results of expanding macros, run <code>rustc --pretty expanded</code>. The
 output represents a whole crate, so you can also feed it back in to <code>rustc</code>,
@@ -479,7 +487,7 @@ defined with the <code>#[macro_export]</code> attribute may be loaded.</p>
 <p>To load a crate’s macros without linking it into the output, use <code>#[no_link]</code>
 as well.</p>
 <p>An example:</p>
-<pre><code class="language-rust">macro_rules! m1 { () =&gt; (()) }
+<pre><pre class="playpen"><code class="language-rust">macro_rules! m1 { () =&gt; (()) }
 
 // Visible here: `m1`.
 
@@ -509,7 +517,7 @@ mod bar {
 
 // Visible here: `m1`, `m3`, `m4`.
 # fn main() { }
-</code></pre>
+</code></pre></pre>
 <p>When this library is loaded with <code>#[macro_use] extern crate</code>, only <code>m2</code> will
 be imported.</p>
 <p>The Rust Reference has a <a href="../reference/attributes.html#macro-related-attributes">listing of macro-related
@@ -517,7 +525,7 @@ attributes</a>.</p>
 <a class="header" href="macros.html#the-variable-crate" name="the-variable-crate"><h1>The variable <code>$crate</code></h1></a>
 <p>A further difficulty occurs when a macro is used in multiple crates. Say that
 <code>mylib</code> defines</p>
-<pre><code class="language-rust">pub fn increment(x: u32) -&gt; u32 {
+<pre><pre class="playpen"><code class="language-rust">pub fn increment(x: u32) -&gt; u32 {
     x + 1
 }
 
@@ -531,7 +539,7 @@ macro_rules! inc_b {
     ($x:expr) =&gt; ( ::mylib::increment($x) )
 }
 # fn main() { }
-</code></pre>
+</code></pre></pre>
 <p><code>inc_a</code> only works within <code>mylib</code>, while <code>inc_b</code> only works outside the
 library. Furthermore, <code>inc_b</code> will break if the user imports <code>mylib</code> under
 another name.</p>
@@ -540,12 +548,12 @@ provide a simple workaround for this problem. Within a macro imported from a
 crate named <code>foo</code>, the special macro variable <code>$crate</code> will expand to <code>::foo</code>.
 By contrast, when a macro is defined and then used in the same crate, <code>$crate</code>
 will expand to nothing. This means we can write</p>
-<pre><code class="language-rust">#[macro_export]
+<pre><pre class="playpen"><code class="language-rust">#[macro_export]
 macro_rules! inc {
     ($x:expr) =&gt; ( $crate::increment($x) )
 }
 # fn main() { }
-</code></pre>
+</code></pre></pre>
 <p>to define a single macro that works both inside and outside our library. The
 function name will expand to either <code>::increment</code> or <code>::mylib::increment</code>.</p>
 <p>To keep this system simple and correct, <code>#[macro_use] extern crate ...</code> may
@@ -558,7 +566,10 @@ arguments.</p>
 <p>As an extreme example, it is possible, though hardly advisable, to implement
 the <a href="https://esolangs.org/wiki/Bitwise_Cyclic_Tag">Bitwise Cyclic Tag</a> automaton
 within Rust’s macro system.</p>
-<pre><code class="language-rust">macro_rules! bct {
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+macro_rules! bct {
     // cmd 0:  d ... =&gt; ...
     (0, $($ps:tt),* ; $_d:tt)
         =&gt; (bct!($($ps),*, 0 ; ));
@@ -579,7 +590,8 @@ within Rust’s macro system.</p>
     ( $($ps:tt),* ; )
         =&gt; (());
 }
-</code></pre>
+
+#}</code></pre></pre>
 <p>Exercise: use macros to reduce duplication in the above definition of the
 <code>bct!</code> macro.</p>
 <a class="header" href="macros.html#common-macros" name="common-macros"><h1>Common macros</h1></a>
@@ -587,22 +599,37 @@ within Rust’s macro system.</p>
 <a class="header" href="macros.html#panic" name="panic"><h2>panic!</h2></a>
 <p>This macro causes the current thread to panic. You can give it a message
 to panic with:</p>
-<pre><code class="language-rust should_panic">panic!(&quot;oh no!&quot;);
-</code></pre>
+<pre><pre class="playpen"><code class="language-rust should_panic"># #![allow(unused_variables)]
+# 
+#fn main() {
+panic!(&quot;oh no!&quot;);
+
+#}</code></pre></pre>
 <a class="header" href="macros.html#vec" name="vec"><h2>vec!</h2></a>
 <p>The <code>vec!</code> macro is used throughout the book, so you’ve probably seen it
 already. It creates <code>Vec&lt;T&gt;</code>s with ease:</p>
-<pre><code class="language-rust">let v = vec![1, 2, 3, 4, 5];
-</code></pre>
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+let v = vec![1, 2, 3, 4, 5];
+
+#}</code></pre></pre>
 <p>It also lets you make vectors with repeating values. For example, a hundred
 zeroes:</p>
-<pre><code class="language-rust">let v = vec![0; 100];
-</code></pre>
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+let v = vec![0; 100];
+
+#}</code></pre></pre>
 <a class="header" href="macros.html#assert-and-assert_eq" name="assert-and-assert_eq"><h2>assert! and assert_eq!</h2></a>
 <p>These two macros are used in tests. <code>assert!</code> takes a boolean. <code>assert_eq!</code>
 takes two values and checks them for equality. <code>true</code> passes, <code>false</code> <code>panic!</code>s.
 Like this:</p>
-<pre><code class="language-rust should_panic">// A-ok!
+<pre><pre class="playpen"><code class="language-rust should_panic"># #![allow(unused_variables)]
+# 
+#fn main() {
+// A-ok!
 
 assert!(true);
 assert_eq!(5, 3 + 2);
@@ -611,21 +638,29 @@ assert_eq!(5, 3 + 2);
 
 assert!(5 &lt; 3);
 assert_eq!(5, 3);
-</code></pre>
+
+#}</code></pre></pre>
 <a class="header" href="macros.html#try" name="try"><h2>try!</h2></a>
 <p><code>try!</code> is used for error handling. It takes something that can return a
 <code>Result&lt;T, E&gt;</code>, and gives <code>T</code> if it’s a <code>Ok&lt;T&gt;</code>, and <code>return</code>s with the
 <code>Err(E)</code> if it’s that. Like this:</p>
-<pre><code class="language-rust no_run">use std::fs::File;
+<pre><pre class="playpen"><code class="language-rust no_run"># #![allow(unused_variables)]
+# 
+#fn main() {
+use std::fs::File;
 
 fn foo() -&gt; std::io::Result&lt;()&gt; {
     let f = try!(File::create(&quot;foo.txt&quot;));
 
     Ok(())
 }
-</code></pre>
+
+#}</code></pre></pre>
 <p>This is cleaner than doing this:</p>
-<pre><code class="language-rust no_run">use std::fs::File;
+<pre><pre class="playpen"><code class="language-rust no_run"># #![allow(unused_variables)]
+# 
+#fn main() {
+use std::fs::File;
 
 fn foo() -&gt; std::io::Result&lt;()&gt; {
     let f = File::create(&quot;foo.txt&quot;);
@@ -637,23 +672,32 @@ fn foo() -&gt; std::io::Result&lt;()&gt; {
 
     Ok(())
 }
-</code></pre>
+
+#}</code></pre></pre>
 <a class="header" href="macros.html#unreachable" name="unreachable"><h2>unreachable!</h2></a>
 <p>This macro is used when you think some code should never execute:</p>
-<pre><code class="language-rust">if false {
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+if false {
     unreachable!();
 }
-</code></pre>
+
+#}</code></pre></pre>
 <p>Sometimes, the compiler may make you have a different branch that you know
 will never, ever run. In these cases, use this macro, so that if you end
 up wrong, you’ll get a <code>panic!</code> about it.</p>
-<pre><code class="language-rust">let x: Option&lt;i32&gt; = None;
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+let x: Option&lt;i32&gt; = None;
 
 match x {
     Some(_) =&gt; unreachable!(),
     None =&gt; println!(&quot;I know x is None!&quot;),
 }
-</code></pre>
+
+#}</code></pre></pre>
 <a class="header" href="macros.html#unimplemented" name="unimplemented"><h2>unimplemented!</h2></a>
 <p>The <code>unimplemented!</code> macro can be used when you’re trying to get your functions
 to typecheck, and don’t want to worry about writing out the body of the

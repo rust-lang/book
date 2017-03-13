@@ -81,7 +81,7 @@ Wouldn’t it be nice if we could do this instead?</p>
 the ability to use this ‘method call syntax’ via the <code>impl</code> keyword.</p>
 <a class="header" href="method-syntax.html#method-calls" name="method-calls"><h1>Method calls</h1></a>
 <p>Here’s how it works:</p>
-<pre><code class="language-rust">struct Circle {
+<pre><pre class="playpen"><code class="language-rust">struct Circle {
     x: f64,
     y: f64,
     radius: f64,
@@ -97,7 +97,7 @@ fn main() {
     let c = Circle { x: 0.0, y: 0.0, radius: 2.0 };
     println!(&quot;{}&quot;, c.area());
 }
-</code></pre>
+</code></pre></pre>
 <p>This will print <code>12.566371</code>.</p>
 <p>We’ve made a <code>struct</code> that represents a circle. We then write an <code>impl</code> block,
 and inside it, define a method, <code>area</code>.</p>
@@ -112,7 +112,10 @@ like we would with any other <code>struct</code>.</p>
 <p>We should default to using <code>&amp;self</code>, as you should prefer borrowing over taking
 ownership, as well as taking immutable references over mutable ones. Here’s an
 example of all three variants:</p>
-<pre><code class="language-rust">struct Circle {
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+struct Circle {
     x: f64,
     y: f64,
     radius: f64,
@@ -131,10 +134,14 @@ impl Circle {
        println!(&quot;taking ownership of self!&quot;);
     }
 }
-</code></pre>
+
+#}</code></pre></pre>
 <p>You can use as many <code>impl</code> blocks as you’d like. The previous example could
 have also been written like this:</p>
-<pre><code class="language-rust">struct Circle {
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+struct Circle {
     x: f64,
     y: f64,
     radius: f64,
@@ -157,12 +164,13 @@ impl Circle {
        println!(&quot;taking ownership of self!&quot;);
     }
 }
-</code></pre>
+
+#}</code></pre></pre>
 <a class="header" href="method-syntax.html#chaining-method-calls" name="chaining-method-calls"><h1>Chaining method calls</h1></a>
 <p>So, now we know how to call a method, such as <code>foo.bar()</code>. But what about our
 original example, <code>foo.bar().baz()</code>? This is called ‘method chaining’. Let’s
 look at an example:</p>
-<pre><code class="language-rust">struct Circle {
+<pre><pre class="playpen"><code class="language-rust">struct Circle {
     x: f64,
     y: f64,
     radius: f64,
@@ -185,19 +193,23 @@ fn main() {
     let d = c.grow(2.0).area();
     println!(&quot;{}&quot;, d);
 }
-</code></pre>
+</code></pre></pre>
 <p>Check the return type:</p>
-<pre><code class="language-rust"># struct Circle;
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+# struct Circle;
 # impl Circle {
 fn grow(&amp;self, increment: f64) -&gt; Circle {
 # Circle } }
-</code></pre>
+
+#}</code></pre></pre>
 <p>We say we’re returning a <code>Circle</code>. With this method, we can grow a new
 <code>Circle</code> to any arbitrary size.</p>
 <a class="header" href="method-syntax.html#associated-functions" name="associated-functions"><h1>Associated functions</h1></a>
 <p>You can also define associated functions that do not take a <code>self</code> parameter.
 Here’s a pattern that’s very common in Rust code:</p>
-<pre><code class="language-rust">struct Circle {
+<pre><pre class="playpen"><code class="language-rust">struct Circle {
     x: f64,
     y: f64,
     radius: f64,
@@ -216,7 +228,7 @@ impl Circle {
 fn main() {
     let c = Circle::new(0.0, 0.0, 2.0);
 }
-</code></pre>
+</code></pre></pre>
 <p>This ‘associated function’ builds a new <code>Circle</code> for us. Note that associated
 functions are called with the <code>Struct::function()</code> syntax, rather than the
 <code>ref.method()</code> syntax. Some other languages call associated functions ‘static
@@ -227,7 +239,7 @@ allow them to only set the properties they care about. Otherwise, the <code>x</c
 and <code>y</code> attributes will be <code>0.0</code>, and the <code>radius</code> will be <code>1.0</code>. Rust doesn’t
 have method overloading, named arguments, or variable arguments. We employ
 the builder pattern instead. It looks like this:</p>
-<pre><code class="language-rust">struct Circle {
+<pre><pre class="playpen"><code class="language-rust">struct Circle {
     x: f64,
     y: f64,
     radius: f64,
@@ -281,7 +293,7 @@ fn main() {
     println!(&quot;x: {}&quot;, c.x);
     println!(&quot;y: {}&quot;, c.y);
 }
-</code></pre>
+</code></pre></pre>
 <p>What we’ve done here is make another <code>struct</code>, <code>CircleBuilder</code>. We’ve defined our
 builder methods on it. We’ve also defined our <code>area()</code> method on <code>Circle</code>. We
 also made one more method on <code>CircleBuilder</code>: <code>finalize()</code>. This method creates

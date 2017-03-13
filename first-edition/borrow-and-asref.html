@@ -86,20 +86,27 @@ in here. It refers to a parameter of the <code>HashMap</code> itself:</p>
 the signature of <code>get()</code> again, we can use <code>get()</code> when the key implements
 <code>Borrow&lt;Q&gt;</code>. That way, we can make a <code>HashMap</code> which uses <code>String</code> keys,
 but use <code>&amp;str</code>s when we’re searching:</p>
-<pre><code class="language-rust">use std::collections::HashMap;
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+use std::collections::HashMap;
 
 let mut map = HashMap::new();
 map.insert(&quot;Foo&quot;.to_string(), 42);
 
 assert_eq!(map.get(&quot;Foo&quot;), Some(&amp;42));
-</code></pre>
+
+#}</code></pre></pre>
 <p>This is because the standard library has <code>impl Borrow&lt;str&gt; for String</code>.</p>
 <p>For most types, when you want to take an owned or borrowed type, a <code>&amp;T</code> is
 enough. But one area where <code>Borrow</code> is effective is when there’s more than one
 kind of borrowed value. This is especially true of references and slices: you
 can have both an <code>&amp;T</code> or a <code>&amp;mut T</code>. If we wanted to accept both of these types,
 <code>Borrow</code> is up for it:</p>
-<pre><code class="language-rust">use std::borrow::Borrow;
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+use std::borrow::Borrow;
 use std::fmt::Display;
 
 fn foo&lt;T: Borrow&lt;i32&gt; + Display&gt;(a: T) {
@@ -110,17 +117,22 @@ let mut i = 5;
 
 foo(&amp;i);
 foo(&amp;mut i);
-</code></pre>
+
+#}</code></pre></pre>
 <p>This will print out <code>a is borrowed: 5</code> twice.</p>
 <a class="header" href="borrow-and-asref.html#asref" name="asref"><h1>AsRef</h1></a>
 <p>The <code>AsRef</code> trait is a conversion trait. It’s used for converting some value to
 a reference in generic code. Like this:</p>
-<pre><code class="language-rust">let s = &quot;Hello&quot;.to_string();
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+let s = &quot;Hello&quot;.to_string();
 
 fn foo&lt;T: AsRef&lt;str&gt;&gt;(s: T) {
     let slice = s.as_ref();
 }
-</code></pre>
+
+#}</code></pre></pre>
 <a class="header" href="borrow-and-asref.html#which-should-i-use" name="which-should-i-use"><h1>Which should I use?</h1></a>
 <p>We can see how they’re kind of the same: they both deal with owned and borrowed
 versions of some type. However, they’re a bit different.</p>

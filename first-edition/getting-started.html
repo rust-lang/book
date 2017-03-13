@@ -176,10 +176,10 @@ use an underscore to separate them; for example, you would use
 <em>my_program.rs</em> rather than <em>myprogram.rs</em>.</p>
 <p>Now, make a new file and call it <em>main.rs</em>. Open the file and type
 the following code:</p>
-<pre><code class="language-rust">fn main() {
+<pre><pre class="playpen"><code class="language-rust">fn main() {
     println!(&quot;Hello, world!&quot;);
 }
-</code></pre>
+</code></pre></pre>
 <p>Save the file, and go back to your terminal window. On Linux or macOS, enter the
 following commands:</p>
 <pre><code class="language-bash">$ rustc main.rs
@@ -193,10 +193,10 @@ you a Rust programmer! Welcome.</p>
 <a class="header" href="getting-started.html#anatomy-of-a-rust-program" name="anatomy-of-a-rust-program"><h2>Anatomy of a Rust Program</h2></a>
 <p>Now, let’s go over what just happened in your &quot;Hello, world!&quot; program in
 detail. Here's the first piece of the puzzle:</p>
-<pre><code class="language-rust">fn main() {
+<pre><pre class="playpen"><code class="language-rust">fn main() {
 
 }
-</code></pre>
+</code></pre></pre>
 <p>These lines define a <em>function</em> in Rust. The <code>main</code> function is special: it's
 the beginning of every Rust program. The first line says, “I’m declaring a
 function named <code>main</code> that takes no arguments and returns nothing.” If there
@@ -208,8 +208,12 @@ requires these around all function bodies. It's considered good style to put
 the opening curly brace on the same line as the function declaration, with one
 space in between.</p>
 <p>Inside the <code>main()</code> function:</p>
-<pre><code class="language-rust">    println!(&quot;Hello, world!&quot;);
-</code></pre>
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+    println!(&quot;Hello, world!&quot;);
+
+#}</code></pre></pre>
 <p>This line does all of the work in this little program: it prints text to the
 screen. There are a number of details that are important here. The first is
 that it’s indented with four spaces, not tabs.</p>
@@ -424,10 +428,10 @@ authors = [&quot;Your Name &lt;you@example.com&gt;&quot;]
 you gave it and your <code>git</code> global configuration. You may notice that Cargo has
 also initialized the <code>hello_world</code> directory as a <code>git</code> repository.</p>
 <p>Here’s what should be in <code>src/main.rs</code>:</p>
-<pre><code class="language-rust">fn main() {
+<pre><pre class="playpen"><code class="language-rust">fn main() {
     println!(&quot;Hello, world!&quot;);
 }
-</code></pre>
+</code></pre></pre>
 <p>Cargo has generated a &quot;Hello World!&quot; for you, and you’re ready to start coding!</p>
 <blockquote>
 <p>Note: If you want to look at Cargo in more detail, check out the official <a href="http://doc.crates.io/guide.html">Cargo

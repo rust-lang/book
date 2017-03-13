@@ -102,10 +102,14 @@ pointers, can use this <code>impl</code>.</p>
 <a class="header" href="unsized-types.html#sized" name="sized"><h1>?Sized</h1></a>
 <p>If you want to write a function that accepts a dynamically sized type, you
 can use the special bound syntax, <code>?Sized</code>:</p>
-<pre><code class="language-rust">struct Foo&lt;T: ?Sized&gt; {
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+struct Foo&lt;T: ?Sized&gt; {
     f: T,
 }
-</code></pre>
+
+#}</code></pre></pre>
 <p>This <code>?Sized</code>, read as “T may or may not be <code>Sized</code>”, which allows us to match
 both sized and unsized types. All generic type parameters implicitly
 have the <code>Sized</code> bound, so the <code>?Sized</code> can be used to opt-out of the implicit

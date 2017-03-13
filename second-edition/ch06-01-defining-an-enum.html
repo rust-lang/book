@@ -83,36 +83,51 @@ handling situations that apply to any kind of IP address.</p>
 <p>We can express this concept in code by defining an <code>IpAddrKind</code> enumeration and
 listing the possible kinds an IP address can be, <code>V4</code> and <code>V6</code>. These are known
 as the <em>variants</em> of the enum:</p>
-<pre><code class="language-rust">enum IpAddrKind {
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+enum IpAddrKind {
     V4,
     V6,
 }
-</code></pre>
+
+#}</code></pre></pre>
 <p><code>IpAddrKind</code> is now a custom data type that we can use elsewhere in our code.</p>
 <a class="header" href="ch06-01-defining-an-enum.html#enum-values" name="enum-values"><h3>Enum Values</h3></a>
 <p>We can create instances of each of the two variants of <code>IpAddrKind</code> like this:</p>
-<pre><code class="language-rust"># enum IpAddrKind {
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+# enum IpAddrKind {
 #     V4,
 #     V6,
 # }
 #
 let four = IpAddrKind::V4;
 let six = IpAddrKind::V6;
-</code></pre>
+
+#}</code></pre></pre>
 <p>Note that the variants of the enum are namespaced under its identifier, and we
 use a double colon to separate the two. The reason this is useful is that now
 both values <code>IpAddrKind::V4</code> and <code>IpAddrKind::V6</code> are of the same type:
 <code>IpAddrKind</code>. We can then, for instance, define a function that takes any
 <code>IpAddrKind</code>:</p>
-<pre><code class="language-rust"># enum IpAddrKind {
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+# enum IpAddrKind {
 #     V4,
 #     V6,
 # }
 #
 fn route(ip_type: IpAddrKind) { }
-</code></pre>
+
+#}</code></pre></pre>
 <p>And we can call this function with either variant:</p>
-<pre><code class="language-rust"># enum IpAddrKind {
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+# enum IpAddrKind {
 #     V4,
 #     V6,
 # }
@@ -121,12 +136,16 @@ fn route(ip_type: IpAddrKind) { }
 #
 route(IpAddrKind::V4);
 route(IpAddrKind::V6);
-</code></pre>
+
+#}</code></pre></pre>
 <p>Using enums has even more advantages. Thinking more about our IP address type,
 at the moment we don’t have a way to store the actual IP address <em>data</em>; we
 only know what <em>kind</em> it is. Given that you just learned about structs in
 Chapter 5, you might tackle this problem as shown in Listing 6-1:</p>
-<pre><code class="language-rust">enum IpAddrKind {
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+enum IpAddrKind {
     V4,
     V6,
 }
@@ -145,7 +164,8 @@ let loopback = IpAddr {
     kind: IpAddrKind::V6,
     address: String::from(&quot;::1&quot;),
 };
-</code></pre>
+
+#}</code></pre></pre>
 <p><span class="caption">Listing 6-1: Storing the data and <code>IpAddrKind</code> variant of
 an IP address using a <code>struct</code></span></p>
 <p>Here, we’ve defined a struct <code>IpAddr</code> that has two fields: a <code>kind</code> field that
@@ -160,7 +180,10 @@ now the variant is associated with the value.</p>
 rather than an enum as part of a struct by putting data directly into each enum
 variant. This new definition of the <code>IpAddr</code> enum says that both <code>V4</code> and <code>V6</code>
 variants will have associated <code>String</code> values:</p>
-<pre><code class="language-rust">enum IpAddr {
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+enum IpAddr {
     V4(String),
     V6(String),
 }
@@ -168,7 +191,8 @@ variants will have associated <code>String</code> values:</p>
 let home = IpAddr::V4(String::from(&quot;127.0.0.1&quot;));
 
 let loopback = IpAddr::V6(String::from(&quot;::1&quot;));
-</code></pre>
+
+#}</code></pre></pre>
 <p>We attach data to each variant of the enum directly, so there is no need for an
 extra struct.</p>
 <p>There’s another advantage to using an enum rather than a struct: each variant
@@ -177,7 +201,10 @@ addresses will always have four numeric components that will have values
 between 0 and 255. If we wanted to store <code>V4</code> addresses as four <code>u8</code> values but
 still express <code>V6</code> addresses as one <code>String</code> value, we wouldn’t be able to with
 a struct. Enums handle this case with ease:</p>
-<pre><code class="language-rust">enum IpAddr {
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+enum IpAddr {
     V4(u8, u8, u8, u8),
     V6(String),
 }
@@ -185,7 +212,8 @@ a struct. Enums handle this case with ease:</p>
 let home = IpAddr::V4(127, 0, 0, 1);
 
 let loopback = IpAddr::V6(String::from(&quot;::1&quot;));
-</code></pre>
+
+#}</code></pre></pre>
 <p>We’ve shown several different possibilities that we could define in our code
 for storing IP addresses of the two different varieties using an enum. However,
 as it turns out, wanting to store IP addresses and encode which kind they are
@@ -194,7 +222,10 @@ use!</a><!-- ignore --> Let’s look at how the standard library defines
 <code>IpAddr</code>: it has the exact enum and variants that we’ve defined and used, but
 it embeds the address data inside the variants in the form of two different
 structs, which are defined differently for each variant:</p>
-<pre><code class="language-rust">struct Ipv4Addr {
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+struct Ipv4Addr {
     // details elided
 }
 
@@ -206,7 +237,8 @@ enum IpAddr {
     V4(Ipv4Addr),
     V6(Ipv6Addr),
 }
-</code></pre>
+
+#}</code></pre></pre>
 <p>This code illustrates that you can put any kind of data inside an enum variant:
 strings, numeric types, or structs, for example. You can even include another
 enum! Also, standard library types are often not much more complicated than
@@ -217,13 +249,17 @@ haven’t brought the standard library’s definition into our scope. We’ll ta
 more about importing types in Chapter 7.</p>
 <p>Let’s look at another example of an enum in Listing 6-2: this one has a wide
 variety of types embedded in its variants:</p>
-<pre><code class="language-rust">enum Message {
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+enum Message {
     Quit,
     Move { x: i32, y: i32 },
     Write(String),
     ChangeColor(i32, i32, i32),
 }
-</code></pre>
+
+#}</code></pre></pre>
 <p><span class="caption">Listing 6-2: A <code>Message</code> enum whose variants each store
 different amounts and types of values</span></p>
 <p>This enum has four variants with different types:</p>
@@ -238,14 +274,18 @@ defining different kinds of struct definitions except the enum doesn’t use the
 <code>struct</code> keyword and all the variants are grouped together under the <code>Message</code>
 type. The following structs could hold the same data that the preceding enum
 variants hold:</p>
-<pre><code class="language-rust">struct QuitMessage; // unit struct
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+struct QuitMessage; // unit struct
 struct MoveMessage {
     x: i32,
     y: i32,
 }
 struct WriteMessage(String); // tuple struct
 struct ChangeColorMessage(i32, i32, i32); // tuple struct
-</code></pre>
+
+#}</code></pre></pre>
 <p>But if we used the different structs, which each have their own type, we
 wouldn’t be able to as easily define a function that could take any of these
 kinds of messages as we could with the <code>Message</code> enum defined in Listing 6-2,
@@ -253,7 +293,10 @@ which is a single type.</p>
 <p>There is one more similarity between enums and structs: just as we’re able to
 define methods on structs using <code>impl</code>, we’re also able to define methods on
 enums. Here’s a method named <code>call</code> that we could define on our <code>Message</code> enum:</p>
-<pre><code class="language-rust"># enum Message {
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+# enum Message {
 #     Quit,
 #     Move { x: i32, y: i32 },
 #     Write(String),
@@ -268,7 +311,8 @@ impl Message {
 
 let m = Message::Write(String::from(&quot;hello&quot;));
 m.call();
-</code></pre>
+
+#}</code></pre></pre>
 <p>The body of the method would use <code>self</code> to get the value that we called the
 method on. In this example, we’ve created a variable <code>m</code> that has the value
 <code>Message::Write(&quot;hello&quot;)</code>, and that is what <code>self</code> will be in the body of the
@@ -312,11 +356,15 @@ implementation. As such, Rust does not have nulls, but it does have an enum
 that can encode the concept of a value being present or absent. This enum is
 <code>Option&lt;T&gt;</code>, and it is <a href="../std/option/enum.Option.html">defined by the standard library</a><!-- ignore -->
 as follows:</p>
-<pre><code class="language-rust">enum Option&lt;T&gt; {
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+enum Option&lt;T&gt; {
     Some(T),
     None,
 }
-</code></pre>
+
+#}</code></pre></pre>
 <p>The <code>Option&lt;T&gt;</code> enum is so useful that it’s even included in the prelude; you
 don’t need to import it explicitly.  In addition, so are its variants: you can
 use <code>Some</code> and <code>None</code> directly without prefixing them with <code>Option::</code>.
@@ -327,11 +375,15 @@ generic type parameter, and we’ll cover generics in more detail in Chapter 10.
 For now, all you need to know is that <code>&lt;T&gt;</code> means the <code>Some</code> variant of the
 <code>Option</code> enum can hold one piece of data of any type. Here are some examples of
 using <code>Option</code> values to hold number types and string types:</p>
-<pre><code class="language-rust">let some_number = Some(5);
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+let some_number = Some(5);
 let some_string = Some(&quot;a string&quot;);
 
 let absent_number: Option&lt;i32&gt; = None;
-</code></pre>
+
+#}</code></pre></pre>
 <p>If we use <code>None</code> rather than <code>Some</code>, we need to tell Rust what type of
 <code>Option&lt;T&gt;</code> we have, because the compiler can't infer the type that the <code>Some</code>
 variant will hold by looking only at a <code>None</code> value.</p>

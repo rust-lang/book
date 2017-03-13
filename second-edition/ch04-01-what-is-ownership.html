@@ -160,18 +160,26 @@ boilerplate code.</p>
 <p>As a first example of ownership, we’ll look at the <em>scope</em> of some variables. A
 scope is the range within a program for which an item is valid. Let’s say we
 have a variable that looks like this:</p>
-<pre><code class="language-rust">let s = &quot;hello&quot;;
-</code></pre>
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+let s = &quot;hello&quot;;
+
+#}</code></pre></pre>
 <p>The variable <code>s</code> refers to a string literal, where the value of the string is
 hardcoded into the text of our program. The variable is valid from the point at
 which it’s declared until the end of the current <em>scope</em>. Listing 4-1 has
 comments annotating where the variable <code>s</code> is valid:</p>
-<pre><code class="language-rust">{                      // s is not valid here, it’s not yet declared
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+{                      // s is not valid here, it’s not yet declared
     let s = &quot;hello&quot;;   // s is valid from this point forward
 
     // do stuff with s
 }                      // this scope is now over, and s is no longer valid
-</code></pre>
+
+#}</code></pre></pre>
 <p><span class="caption">Listing 4-1: A variable and the scope in which it is
 valid</span></p>
 <p>In other words, there are two important points in time here:</p>
@@ -201,20 +209,28 @@ these situations, Rust has a second string type, <code>String</code>. This type 
 allocated on the heap and as such is able to store an amount of text that is
 unknown to us at compile time. You can create a <code>String</code> from a string literal
 using the <code>from</code> function, like so:</p>
-<pre><code class="language-rust">let s = String::from(&quot;hello&quot;);
-</code></pre>
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+let s = String::from(&quot;hello&quot;);
+
+#}</code></pre></pre>
 <p>The double colon (<code>::</code>) is an operator that allows us to namespace this
 particular <code>from</code> function under the <code>String</code> type rather than using some sort
 of name like <code>string_from</code>. We’ll discuss this syntax more in the “Method
 Syntax” section of Chapter 5 and when we talk about namespacing with modules in
 Chapter 7.</p>
 <p>This kind of string <em>can</em> be mutated:</p>
-<pre><code class="language-rust">let mut s = String::from(&quot;hello&quot;);
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+let mut s = String::from(&quot;hello&quot;);
 
 s.push_str(&quot;, world!&quot;); // push_str() appends a literal to a String
 
 println!(&quot;{}&quot;, s); // This will print `hello, world!`
-</code></pre>
+
+#}</code></pre></pre>
 <p>So, what’s the difference here? Why can <code>String</code> be mutated but literals
 cannot? The difference is how these two types deal with memory.</p>
 <a class="header" href="ch04-01-what-is-ownership.html#memory-and-allocation" name="memory-and-allocation"><h3>Memory and Allocation</h3></a>
@@ -247,13 +263,17 @@ exactly one <code>free</code>.</p>
 <p>Rust takes a different path: the memory is automatically returned once the
 variable that owns it goes out of scope. Here’s a version of our scope example
 from Listing 4-1 using a <code>String</code> instead of a string literal:</p>
-<pre><code class="language-rust">{
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+{
     let s = String::from(&quot;hello&quot;); // s is valid from this point forward
 
     // do stuff with s
 }                                  // this scope is now over, and s is no
                                    // longer valid
-</code></pre>
+
+#}</code></pre></pre>
 <p>There is a natural point at which we can return the memory our <code>String</code> needs
 to the operating system: when <code>s</code> goes out of scope. When a variable goes out
 of scope, Rust calls a special function for us. This function is called <code>drop</code>,
@@ -272,9 +292,13 @@ we’ve allocated on the heap. Let’s explore some of those situations now.</p>
 <a class="header" href="ch04-01-what-is-ownership.html#ways-variables-and-data-interact-move" name="ways-variables-and-data-interact-move"><h4>Ways Variables and Data Interact: Move</h4></a>
 <p>Multiple variables can interact with the same data in different ways in Rust.
 Let’s look at an example using an integer in Listing 4-2:</p>
-<pre><code class="language-rust">let x = 5;
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+let x = 5;
 let y = x;
-</code></pre>
+
+#}</code></pre></pre>
 <p><span class="caption">Listing 4-2: Assigning the integer value of variable <code>x</code>
 to <code>y</code></span></p>
 <p>We can probably guess what this is doing based on our experience with other
@@ -283,9 +307,13 @@ bind it to <code>y</code>.” We now have two variables, <code>x</code> and <cod
 This is indeed what is happening because integers are simple values with a
 known, fixed size, and these two <code>5</code> values are pushed onto the stack.</p>
 <p>Now let’s look at the <code>String</code> version:</p>
-<pre><code class="language-rust">let s1 = String::from(&quot;hello&quot;);
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+let s1 = String::from(&quot;hello&quot;);
 let s2 = s1;
-</code></pre>
+
+#}</code></pre></pre>
 <p>This looks very similar to the previous code, so we might assume that the way
 it works would be the same: that is, the second line would make a copy of the
 value in <code>s1</code> and bind it to <code>s2</code>. But this isn’t quite what happens.</p>
@@ -366,11 +394,15 @@ stack data, we can use a common method called <code>clone</code>. We’ll discus
 syntax in Chapter 5, but because methods are a common feature in many
 programming languages, you’ve probably seen them before.</p>
 <p>Here’s an example of the <code>clone</code> method in action:</p>
-<pre><code class="language-rust">let s1 = String::from(&quot;hello&quot;);
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+let s1 = String::from(&quot;hello&quot;);
 let s2 = s1.clone();
 
 println!(&quot;s1 = {}, s2 = {}&quot;, s1, s2);
-</code></pre>
+
+#}</code></pre></pre>
 <p>This works just fine and is how you can explicitly produce the behavior shown
 in Figure 4-5, where the heap data <em>does</em> get copied.</p>
 <p>When you see a call to <code>clone</code>, you know that some arbitrary code is being
@@ -379,11 +411,15 @@ different is going on.</p>
 <a class="header" href="ch04-01-what-is-ownership.html#stack-only-data-copy" name="stack-only-data-copy"><h4>Stack-Only Data: Copy</h4></a>
 <p>There’s another wrinkle we haven’t talked about yet. This code using integers,
 part of which was shown earlier in Listing 4-2, works and is valid:</p>
-<pre><code class="language-rust">let x = 5;
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+let x = 5;
 let y = x;
 
 println!(&quot;x = {}, y = {}&quot;, x, y);
-</code></pre>
+
+#}</code></pre></pre>
 <p>But this code seems to contradict what we just learned: we don’t have a call to
 <code>clone</code>, but <code>x</code> is still valid and wasn’t moved into <code>y</code>.</p>
 <p>The reason is that types like integers that have a known size at compile time
@@ -416,7 +452,7 @@ value to a variable. Passing a variable to a function will move or copy, just
 like assignment. Listing 4-7 has an example with some annotations showing where
 variables go into and out of scope:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><code class="language-rust">fn main() {
+<pre><pre class="playpen"><code class="language-rust">fn main() {
     let s = String::from(&quot;hello&quot;);  // s comes into scope.
 
     takes_ownership(s);             // s's value moves into the function...
@@ -438,7 +474,7 @@ fn takes_ownership(some_string: String) { // some_string comes into scope.
 fn makes_copy(some_integer: i32) { // some_integer comes into scope.
     println!(&quot;{}&quot;, some_integer);
 } // Here, some_integer goes out of scope. Nothing special happens.
-</code></pre>
+</code></pre></pre>
 <p><span class="caption">Listing 4-7: Functions with ownership and scope
 annotated</span></p>
 <p>If we tried to use <code>s</code> after the call to <code>takes_ownership</code>, Rust would throw a
@@ -449,7 +485,7 @@ the ownership rules prevent you from doing so.</p>
 <p>Returning values can also transfer ownership. Here’s an example with similar
 annotations to those in Listing 4-7:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><code class="language-rust">fn main() {
+<pre><pre class="playpen"><code class="language-rust">fn main() {
     let s1 = gives_ownership();         // gives_ownership moves its return
                                         // value into s1.
 
@@ -478,7 +514,7 @@ fn takes_and_gives_back(a_string: String) -&gt; String { // a_string comes into
 
     a_string  // a_string is returned and moves out to the calling function.
 }
-</code></pre>
+</code></pre></pre>
 <p>The ownership of variables follows the same pattern every time: assigning a
 value to another variable moves it, and when heap data values’ variables go out
 of scope, if the data hasn’t been moved to be owned by another variable, the
@@ -490,7 +526,7 @@ want to use it again, in addition to any data resulting from the body of the
 function that we might want to return as well.</p>
 <p>It’s possible to return multiple values using a tuple, like this:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><code class="language-rust">fn main() {
+<pre><pre class="playpen"><code class="language-rust">fn main() {
     let s1 = String::from(&quot;hello&quot;);
 
     let (s2, len) = calculate_length(s1);
@@ -503,7 +539,7 @@ fn calculate_length(s: String) -&gt; (String, usize) {
 
     (s, length)
 }
-</code></pre>
+</code></pre></pre>
 <p>But this is too much ceremony and a lot of work for a concept that should be
 common. Luckily for us, Rust has a feature for this concept, and it’s called
 <em>references</em>.</p>

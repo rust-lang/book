@@ -108,10 +108,14 @@ failing in general, even though it’s logically impossible in your particular
 situation. If you can ensure by manually inspecting the code that you’ll never
 have an <code>Err</code> variant, it is perfectly acceptable to call <code>unwrap</code>. Here’s an
 example:</p>
-<pre><code class="language-rust">use std::net::IpAddr;
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+use std::net::IpAddr;
 
 let home = &quot;127.0.0.1&quot;.parse::&lt;IpAddr&gt;().unwrap();
-</code></pre>
+
+#}</code></pre></pre>
 <p>We’re creating an <code>IpAddr</code> instance by parsing a hardcoded string. We can see
 that <code>127.0.0.1</code> is a valid IP address, so it’s acceptable to use <code>unwrap</code>
 here. However, having a hardcoded, valid string doesn’t change the return type
@@ -218,7 +222,10 @@ way, it’s safe for functions to use the new type in their signatures and
 confidently use the values they receive. Listing 9-8 shows one way to define a
 <code>Guess</code> type that will only create an instance of <code>Guess</code> if the <code>new</code> function
 receives a value between 1 and 100:</p>
-<pre><code class="language-rust">struct Guess {
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+struct Guess {
     value: u32,
 }
 
@@ -237,7 +244,8 @@ impl Guess {
         self.value
     }
 }
-</code></pre>
+
+#}</code></pre></pre>
 <p><span class="caption">Listing 9-8: A <code>Guess</code> type that will only continue with
 values between 1 and 100</span></p>
 <p>First, we define a struct named <code>Guess</code> that has a field named <code>value</code> that

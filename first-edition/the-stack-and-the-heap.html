@@ -93,10 +93,10 @@ Note this meaning of heap, which allocates arbitrary-sized blocks of memory in a
 order, is quite different from the heap data structure.</p>
 <a class="header" href="the-stack-and-the-heap.html#the-stack" name="the-stack"><h1>The Stack</h1></a>
 <p>Let’s talk about this Rust program:</p>
-<pre><code class="language-rust">fn main() {
+<pre><pre class="playpen"><code class="language-rust">fn main() {
     let x = 42;
 }
-</code></pre>
+</code></pre></pre>
 <p>This program has one variable binding, <code>x</code>. This memory needs to be allocated
 from somewhere. Rust ‘stack allocates’ by default, which means that basic
 values ‘go on the stack’. What does that mean?</p>
@@ -117,7 +117,7 @@ fast too.</p>
 <p>The downside is that we can’t keep values around if we need them for longer
 than a single function. We also haven’t talked about what the word, ‘stack’,
 means. To do that, we need a slightly more complicated example:</p>
-<pre><code class="language-rust">fn foo() {
+<pre><pre class="playpen"><code class="language-rust">fn foo() {
     let y = 5;
     let z = 100;
 }
@@ -127,7 +127,7 @@ fn main() {
 
     foo();
 }
-</code></pre>
+</code></pre></pre>
 <p>This program has three variables total: two in <code>foo()</code>, one in <code>main()</code>. Just
 as before, when <code>main()</code> is called, a single integer is allocated for its stack
 frame. But before we can show what happens when <code>foo()</code> is called, we need to
@@ -169,7 +169,7 @@ plate you put down is the last plate to pick back up. Stacks are sometimes
 called ‘last in, first out queues’ for this reason, as the last value you put
 on the stack is the first one you retrieve from it.</p>
 <p>Let’s try a three-deep example:</p>
-<pre><code class="language-rust">fn italic() {
+<pre><pre class="playpen"><code class="language-rust">fn italic() {
     let i = 6;
 }
 
@@ -186,7 +186,7 @@ fn main() {
 
     bold();
 }
-</code></pre>
+</code></pre></pre>
 <p>We have some kooky function names to make the diagrams clearer.</p>
 <p>Okay, first, we call <code>main()</code>:</p>
 <table><thead><tr><td> Address </td><td> Name </td><td> Value </td></tr></thead>
@@ -228,11 +228,11 @@ you need to pass some memory between different functions, or keep it alive for
 longer than a single function’s execution. For this, we can use the heap.</p>
 <p>In Rust, you can allocate memory on the heap with the <a href="../std/boxed/index.html"><code>Box&lt;T&gt;</code> type</a>.
 Here’s an example:</p>
-<pre><code class="language-rust">fn main() {
+<pre><pre class="playpen"><code class="language-rust">fn main() {
     let x = Box::new(5);
     let y = 42;
 }
-</code></pre>
+</code></pre></pre>
 <p>Here’s what happens in memory when <code>main()</code> is called:</p>
 <table><thead><tr><td> Address </td><td> Name </td><td> Value  </td></tr></thead>
 <tr><td> 1       </td><td> y    </td><td> 42     </td></tr>
@@ -299,7 +299,7 @@ be covered later.</p>
 <a class="header" href="the-stack-and-the-heap.html#arguments-and-borrowing" name="arguments-and-borrowing"><h1>Arguments and borrowing</h1></a>
 <p>We’ve got some basic examples with the stack and the heap going, but what about
 function arguments and borrowing? Here’s a small Rust program:</p>
-<pre><code class="language-rust">fn foo(i: &amp;i32) {
+<pre><pre class="playpen"><code class="language-rust">fn foo(i: &amp;i32) {
     let z = 42;
 }
 
@@ -309,7 +309,7 @@ fn main() {
 
     foo(y);
 }
-</code></pre>
+</code></pre></pre>
 <p>When we enter <code>main()</code>, memory looks like this:</p>
 <table><thead><tr><td> Address </td><td> Name </td><td> Value  </td></tr></thead>
 <tr><td> 1       </td><td> y    </td><td> → 0    </td></tr>
@@ -333,7 +333,7 @@ value of a reference is a pointer to a memory location. If we got rid of
 the underlying memory, things wouldn’t work very well.</p>
 <a class="header" href="the-stack-and-the-heap.html#a-complex-example" name="a-complex-example"><h1>A complex example</h1></a>
 <p>Okay, let’s go through this complex program step-by-step:</p>
-<pre><code class="language-rust">fn foo(x: &amp;i32) {
+<pre><pre class="playpen"><code class="language-rust">fn foo(x: &amp;i32) {
     let y = 10;
     let z = &amp;y;
 
@@ -360,7 +360,7 @@ fn main() {
 
     foo(j);
 }
-</code></pre>
+</code></pre></pre>
 <p>First, we call <code>main()</code>:</p>
 <table><thead><tr><td> Address              </td><td> Name </td><td> Value                  </td></tr></thead>
 <tr><td> (2<sup>30</sup>) - 1 </td><td>      </td><td> 20                     </td></tr>

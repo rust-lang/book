@@ -100,10 +100,14 @@ function result.</p>
 <p>Coercion is transitive.</p>
 <a class="header" href="casting-between-types.html#as" name="as"><h1><code>as</code></h1></a>
 <p>The <code>as</code> keyword does safe casting:</p>
-<pre><code class="language-rust">let x: i32 = 5;
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+let x: i32 = 5;
 
 let y = x as i64;
-</code></pre>
+
+#}</code></pre></pre>
 <p>There are three major categories of safe cast: explicit coercions, casts
 between numeric types, and pointer casts.</p>
 <p>Casting is not transitive: even if <code>e as U1 as U2</code> is a valid
@@ -121,10 +125,14 @@ and <code>U</code> is an integer type; <em>enum-cast</em></li>
 <li><code>e</code> has type <code>u8</code> and <code>U</code> is <code>char</code>; <em>u8-char-cast</em></li>
 </ul>
 <p>For example</p>
-<pre><code class="language-rust">let one = true as u8;
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+let one = true as u8;
 let at_sign = 64 as char;
 let two_hundred = -56i8 as u8;
-</code></pre>
+
+#}</code></pre></pre>
 <p>The semantics of numeric casts are:</p>
 <ul>
 <li>Casting between two integers of the same size (e.g. i32 -&gt; u32) is a no-op</li>
@@ -161,9 +169,13 @@ be fixed.</li>
 <p>Perhaps surprisingly, it is safe to cast <a href="raw-pointers.html">raw pointers</a> to and
 from integers, and to cast between pointers to different types subject to
 some constraints. It is only unsafe to dereference the pointer:</p>
-<pre><code class="language-rust">let a = 300 as *const char; // `a` is a pointer to location 300.
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+let a = 300 as *const char; // `a` is a pointer to location 300.
 let b = a as u32;
-</code></pre>
+
+#}</code></pre></pre>
 <p><code>e as U</code> is a valid pointer cast in any of the following cases:</p>
 <ul>
 <li>
@@ -209,7 +221,7 @@ the typechecking system, and completely trusts you.</p>
 <p>In our previous example, we know that an array of four <code>u8</code>s represents a <code>u32</code>
 properly, and so we want to do the cast. Using <code>transmute</code> instead of <code>as</code>,
 Rust lets us:</p>
-<pre><code class="language-rust">use std::mem;
+<pre><pre class="playpen"><code class="language-rust">use std::mem;
 
 fn main() {
     unsafe {
@@ -221,7 +233,7 @@ fn main() {
         println!(&quot;{}&quot;, c); // 256
     }
 }
-</code></pre>
+</code></pre></pre>
 <p>We have to wrap the operation in an <code>unsafe</code> block for this to compile
 successfully. Technically, only the <code>mem::transmute</code> call itself needs to be in
 the block, but it's nice in this case to enclose everything related, so you

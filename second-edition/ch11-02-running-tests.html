@@ -119,7 +119,10 @@ to standard output with the rest of the failure message.</p>
 its parameter and then returns 10. We then have a test that passes and a test
 that fails:</p>
 <p><span class="filename">Filename: src/lib.rs</span></p>
-<pre><code class="language-rust">fn prints_and_returns_10(a: i32) -&gt; i32 {
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+fn prints_and_returns_10(a: i32) -&gt; i32 {
     println!(&quot;I got the value {}&quot;, a);
     10
 }
@@ -140,7 +143,8 @@ mod tests {
         assert_eq!(5, value);
     }
 }
-</code></pre>
+
+#}</code></pre></pre>
 <p><span class="caption">Listing 11-10: Tests for a function that calls <code>println!</code>
 </span></p>
 <p>The output we'll see when we run these tests with <code>cargo test</code> is:</p>
@@ -199,7 +203,10 @@ or names of the test/s you want to run as an argument.</p>
 <p>To demonstrate how to run a subset of tests, we'll create three tests for our
 <code>add_two</code> function as shown in Listing 11-11 and choose which ones to run:</p>
 <p><span class="filename">Filename: src/lib.rs</span></p>
-<pre><code class="language-rust">pub fn add_two(a: i32) -&gt; i32 {
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+pub fn add_two(a: i32) -&gt; i32 {
     a + 2
 }
 
@@ -222,7 +229,8 @@ mod tests {
         assert_eq!(102, add_two(100));
     }
 }
-</code></pre>
+
+#}</code></pre></pre>
 <p><span class="caption">Listing 11-11: Three tests with a variety of names</span></p>
 <p>If we run the tests without passing any arguments, as we've already seen, all
 the tests will run in parallel:</p>
@@ -276,7 +284,10 @@ might want to exclude them during most runs of <code>cargo test</code>. Rather t
 listing as arguments all tests you do want to run, we can instead annotate the
 time consuming tests with the <code>ignore</code> attribute to exclude them:</p>
 <p><span class="filename">Filename: src/lib.rs</span></p>
-<pre><code class="language-rust">#[test]
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+#[test]
 fn it_works() {
     assert!(true);
 }
@@ -286,7 +297,8 @@ fn it_works() {
 fn expensive_test() {
     // code that takes an hour to run
 }
-</code></pre>
+
+#}</code></pre></pre>
 <p>We add the <code>#[ignore]</code> line to the test we want to exlcude, after <code>#[test]</code>.
 Now if we run our tests, we'll see <code>it_works</code> runs, but <code>expensive_test</code> does
 not:</p>

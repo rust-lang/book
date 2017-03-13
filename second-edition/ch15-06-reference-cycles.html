@@ -110,7 +110,7 @@ the variable <code>b</code> that is a list of the value 10 and then points to th
 <code>a</code>. Finally, we'll modify <code>a</code> so that it points to <code>b</code> instead of <code>Nil</code>, which
 will then create a cycle:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><code class="language-rust"># #[derive(Debug)]
+<pre><pre class="playpen"><code class="language-rust"># #[derive(Debug)]
 # enum List {
 #     Cons(i32, RefCell&lt;Rc&lt;List&gt;&gt;),
 #     Nil,
@@ -153,7 +153,7 @@ fn main() {
     // overflow the stack
     // println!(&quot;a next item = {:?}&quot;, a.tail());
 }
-</code></pre>
+</code></pre></pre>
 <p><span class="caption">Listing 15-17: Creating a reference cycle of two <code>List</code>
 values pointing to each other</span></p>
 <p>We use the <code>tail</code> method to get a reference to the <code>RefCell</code> in <code>a</code>, which we
@@ -211,7 +211,10 @@ items <em>and</em> their parent items.</p>
 <p>Let's start just with a struct named <code>Node</code> that holds its own <code>i32</code> value as
 well as references to its children <code>Node</code> values:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><code class="language-rust">use std::rc::Rc;
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+use std::rc::Rc;
 use std::cell::RefCell;
 
 #[derive(Debug)]
@@ -219,7 +222,8 @@ struct Node {
     value: i32,
     children: RefCell&lt;Vec&lt;Rc&lt;Node&gt;&gt;&gt;,
 }
-</code></pre>
+
+#}</code></pre></pre>
 <p>We want to be able to have a <code>Node</code> own its children, and we also want to be
 able to have variables own each node so we can access them directly. That's why
 the items in the <code>Vec</code> are <code>Rc&lt;Node&gt;</code> values. We want to be able to modify what
@@ -257,7 +261,10 @@ their reference counts would never be zero.</p>
 <p>So instead of <code>Rc</code>, we're going to make the type of <code>parent</code> use <code>Weak&lt;T&gt;</code>,
 specifically a <code>RefCell&lt;Weak&lt;Node&gt;&gt;</code>:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><code class="language-rust">use std::rc::{Rc, Weak};
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+use std::rc::{Rc, Weak};
 use std::cell::RefCell;
 
 #[derive(Debug)]
@@ -266,7 +273,8 @@ struct Node {
     parent: RefCell&lt;Weak&lt;Node&gt;&gt;,
     children: RefCell&lt;Vec&lt;Rc&lt;Node&gt;&gt;&gt;,
 }
-</code></pre>
+
+#}</code></pre></pre>
 <p>This way, a node will be able to refer to its parent node if it has one,
 but it does not own its parent. A parent node will be dropped even if
 it has child nodes referring to it, as long as it doesn't have a parent

@@ -71,13 +71,17 @@
 <p>An <code>enum</code> in Rust is a type that represents data that is one of
 several possible variants. Each variant in the <code>enum</code> can optionally
 have data associated with it:</p>
-<pre><code class="language-rust">enum Message {
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+enum Message {
     Quit,
     ChangeColor(i32, i32, i32),
     Move { x: i32, y: i32 },
     Write(String),
 }
-</code></pre>
+
+#}</code></pre></pre>
 <p>The syntax for defining variants resembles the syntaxes used to define structs:
 you can have variants with no data (like unit-like structs), variants with named
 data, and variants with unnamed data (like tuple structs). Unlike
@@ -87,7 +91,10 @@ enum is sometimes called a ‘sum type’: the set of possible values of the
 enum is the sum of the sets of possible values for each variant.</p>
 <p>We use the <code>::</code> syntax to use the name of each variant: they’re scoped by the name
 of the <code>enum</code> itself. This allows both of these to work:</p>
-<pre><code class="language-rust"># enum Message {
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+# enum Message {
 #     Move { x: i32, y: i32 },
 # }
 let x: Message = Message::Move { x: 3, y: 4 };
@@ -98,7 +105,8 @@ enum BoardGameTurn {
 }
 
 let y: BoardGameTurn = BoardGameTurn::Move { squares: 1 };
-</code></pre>
+
+#}</code></pre></pre>
 <p>Both variants are named <code>Move</code>, but since they’re scoped to the name of
 the enum, they can both be used without conflict.</p>
 <p>A value of an <code>enum</code> type contains information about which variant it is,
@@ -119,13 +127,20 @@ learn in the next section. We don’t know enough about Rust to implement
 equality yet, but we’ll find out in the <a href="traits.html"><code>traits</code></a> section.</p>
 <a class="header" href="enums.html#constructors-as-functions" name="constructors-as-functions"><h1>Constructors as functions</h1></a>
 <p>An <code>enum</code> constructor can also be used like a function. For example:</p>
-<pre><code class="language-rust"># enum Message {
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+# enum Message {
 # Write(String),
 # }
 let m = Message::Write(&quot;Hello, world&quot;.to_string());
-</code></pre>
+
+#}</code></pre></pre>
 <p>is the same as</p>
-<pre><code class="language-rust"># enum Message {
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+# enum Message {
 # Write(String),
 # }
 fn foo(x: String) -&gt; Message {
@@ -133,19 +148,24 @@ fn foo(x: String) -&gt; Message {
 }
 
 let x = foo(&quot;Hello, world&quot;.to_string());
-</code></pre>
+
+#}</code></pre></pre>
 <p>This is not immediately useful to us, but when we get to
 <a href="closures.html"><code>closures</code></a>, we’ll talk about passing functions as arguments to
 other functions. For example, with <a href="iterators.html"><code>iterators</code></a>, we can do this
 to convert a vector of <code>String</code>s into a vector of <code>Message::Write</code>s:</p>
-<pre><code class="language-rust"># enum Message {
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+# enum Message {
 # Write(String),
 # }
 
 let v = vec![&quot;Hello&quot;.to_string(), &quot;World&quot;.to_string()];
 
 let v1: Vec&lt;Message&gt; = v.into_iter().map(Message::Write).collect();
-</code></pre>
+
+#}</code></pre></pre>
 
                 </div>
 

@@ -83,7 +83,10 @@ ownership, so this is fine. But what should we return? We don’t really have a
 way to talk about <em>part</em> of a string. However, we could return the index of the
 end of the word. Let’s try that as shown in Listing 4-10:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><code class="language-rust">fn first_word(s: &amp;String) -&gt; usize {
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+fn first_word(s: &amp;String) -&gt; usize {
     let bytes = s.as_bytes();
 
     for (i, &amp;item) in bytes.iter().enumerate() {
@@ -94,7 +97,8 @@ end of the word. Let’s try that as shown in Listing 4-10:</p>
 
     s.len()
 }
-</code></pre>
+
+#}</code></pre></pre>
 <p><span class="caption">Listing 4-10: The <code>first_word</code> function that returns a
 byte index value into the <code>String</code> parameter</span></p>
 <p>Let’s break down this code a bit. Because we need to go through the <code>String</code>
@@ -132,7 +136,7 @@ because it’s a separate value from the <code>String</code>, there’s no guara
 will still be valid in the future. Consider the program in Listing 4-11 that
 uses the <code>first_word</code> function from Listing 4-10:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><code class="language-rust"># fn first_word(s: &amp;String) -&gt; usize {
+<pre><pre class="playpen"><code class="language-rust"># fn first_word(s: &amp;String) -&gt; usize {
 #     let bytes = s.as_bytes();
 #
 #     for (i, &amp;item) in bytes.iter().enumerate() {
@@ -154,7 +158,7 @@ fn main() {
     // word still has the value 5 here, but there's no more string that
     // we could meaningfully use the value 5 with. word is now totally invalid!
 }
-</code></pre>
+</code></pre></pre>
 <p><span class="caption">Listing 4-11: Storing the result from calling the
 <code>first_word</code> function then changing the <code>String</code> contents</span></p>
 <p>This program compiles without any errors and also would if we used <code>word</code> after
@@ -174,11 +178,15 @@ to be kept in sync.</p>
 <p>Luckily, Rust has a solution to this problem: string slices.</p>
 <a class="header" href="ch04-03-slices.html#string-slices" name="string-slices"><h3>String Slices</h3></a>
 <p>A <em>string slice</em> is a reference to part of a <code>String</code>, and looks like this:</p>
-<pre><code class="language-rust">let s = String::from(&quot;hello world&quot;);
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+let s = String::from(&quot;hello world&quot;);
 
 let hello = &amp;s[0..5];
 let world = &amp;s[6..11];
-</code></pre>
+
+#}</code></pre></pre>
 <p>This is similar to taking a reference to the whole <code>String</code> but with the extra
 <code>[0..5]</code> bit. Rather than a reference to the entire <code>String</code>, it’s a reference
 to an internal position in the <code>String</code> and the number of elements that it
@@ -193,33 +201,48 @@ that contains a pointer to the 6th byte of <code>s</code> and a length value of 
 <code>String</code></span></p>
 <p>With Rust’s <code>..</code> range syntax, if you want to start at the first index (zero),
 you can drop the value before the two periods. In other words, these are equal:</p>
-<pre><code class="language-rust">let s = String::from(&quot;hello&quot;);
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+let s = String::from(&quot;hello&quot;);
 
 let slice = &amp;s[0..2];
 let slice = &amp;s[..2];
-</code></pre>
+
+#}</code></pre></pre>
 <p>By the same token, if your slice includes the last byte of the <code>String</code>, you
 can drop the trailing number. That means these are equal:</p>
-<pre><code class="language-rust">let s = String::from(&quot;hello&quot;);
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+let s = String::from(&quot;hello&quot;);
 
 let len = s.len();
 
 let slice = &amp;s[3..len];
 let slice = &amp;s[3..];
-</code></pre>
+
+#}</code></pre></pre>
 <p>You can also drop both values to take a slice of the entire string. So these
 are equal:</p>
-<pre><code class="language-rust">let s = String::from(&quot;hello&quot;);
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+let s = String::from(&quot;hello&quot;);
 
 let len = s.len();
 
 let slice = &amp;s[0..len];
 let slice = &amp;s[..];
-</code></pre>
+
+#}</code></pre></pre>
 <p>With all this information in mind, let’s rewrite <code>first_word</code> to return a
 slice. The type that signifies “string slice” is written as <code>&amp;str</code>:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><code class="language-rust">fn first_word(s: &amp;String) -&gt; &amp;str {
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+fn first_word(s: &amp;String) -&gt; &amp;str {
     let bytes = s.as_bytes();
 
     for (i, &amp;item) in bytes.iter().enumerate() {
@@ -230,7 +253,8 @@ slice. The type that signifies “string slice” is written as <code>&amp;str</
 
     &amp;s[..]
 }
-</code></pre>
+
+#}</code></pre></pre>
 <p>We get the index for the end of the word in the same way as we did in Listing
 4-10, by looking for the first occurrence of a space. When we find a space, we
 return a string slice using the start of the string and the index of the space
@@ -282,8 +306,12 @@ class of errors at compile time!</p>
 <a class="header" href="ch04-03-slices.html#string-literals-are-slices" name="string-literals-are-slices"><h4>String Literals Are Slices</h4></a>
 <p>Recall that we talked about string literals being stored inside the binary. Now
 that we know about slices, we can properly understand string literals:</p>
-<pre><code class="language-rust">let s = &quot;Hello, world!&quot;;
-</code></pre>
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+let s = &quot;Hello, world!&quot;;
+
+#}</code></pre></pre>
 <p>The type of <code>s</code> here is <code>&amp;str</code>: it’s a slice pointing to that specific point of
 the binary. This is also why string literals are immutable; <code>&amp;str</code> is an
 immutable reference.</p>
@@ -301,7 +329,7 @@ can pass a slice of the entire <code>String</code>. Defining a function to take 
 slice instead of a reference to a String makes our API more general and useful
 without losing any functionality:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><code class="language-rust"># fn first_word(s: &amp;str) -&gt; &amp;str {
+<pre><pre class="playpen"><code class="language-rust"># fn first_word(s: &amp;str) -&gt; &amp;str {
 #     let bytes = s.as_bytes();
 #
 #     for (i, &amp;item) in bytes.iter().enumerate() {
@@ -327,18 +355,26 @@ fn main() {
     // this works too, without the slice syntax!
     let word = first_word(my_string_literal);
 }
-</code></pre>
+</code></pre></pre>
 <a class="header" href="ch04-03-slices.html#other-slices" name="other-slices"><h3>Other Slices</h3></a>
 <p>String slices, as you might imagine, are specific to strings. But there’s a
 more general slice type, too. Consider this array:</p>
-<pre><code class="language-rust">let a = [1, 2, 3, 4, 5];
-</code></pre>
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+let a = [1, 2, 3, 4, 5];
+
+#}</code></pre></pre>
 <p>Just like we might want to refer to a part of a string, we might want to refer
 to part of an array and would do so like this:</p>
-<pre><code class="language-rust">let a = [1, 2, 3, 4, 5];
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+let a = [1, 2, 3, 4, 5];
 
 let slice = &amp;a[1..3];
-</code></pre>
+
+#}</code></pre></pre>
 <p>This slice has the type <code>&amp;[i32]</code>. It works the same way as string slices do, by
 storing a reference to the first element and a length. You’ll use this kind of
 slice for all sorts of other collections. We’ll discuss these collections in

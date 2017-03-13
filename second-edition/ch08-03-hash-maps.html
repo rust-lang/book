@@ -88,13 +88,17 @@ information.</p>
 Here we’re keeping track of the scores of two teams whose names are Blue and
 Yellow. The Blue team will start with 10 points and the Yellow team starts with
 50:</p>
-<pre><code class="language-rust">use std::collections::HashMap;
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+use std::collections::HashMap;
 
 let mut scores = HashMap::new();
 
 scores.insert(String::from(&quot;Blue&quot;), 10);
 scores.insert(String::from(&quot;Yellow&quot;), 50);
-</code></pre>
+
+#}</code></pre></pre>
 <p>Note that we need to first <code>use</code> the <code>HashMap</code> from the collections portion of
 the standard library. Of our three common collections, this one is the least
 often used, so it’s not included in the features imported automatically in the
@@ -111,13 +115,17 @@ vector of tuples, where each tuple consists of a key and its value. The
 separate vectors, we can use the <code>zip</code> method to create a vector of tuples
 where “Blue” is paired with 10, and so forth. Then we can use the <code>collect</code>
 method to turn that vector of tuples into a <code>HashMap</code>:</p>
-<pre><code class="language-rust">use std::collections::HashMap;
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+use std::collections::HashMap;
 
 let teams  = vec![String::from(&quot;Blue&quot;), String::from(&quot;Yellow&quot;)];
 let initial_scores = vec![10, 50];
 
 let scores: HashMap&lt;_, _&gt; = teams.iter().zip(initial_scores.iter()).collect();
-</code></pre>
+
+#}</code></pre></pre>
 <p>The type annotation <code>HashMap&lt;_, _&gt;</code> is needed here because it’s possible to
 <code>collect</code> into many different data structures, and Rust doesn’t know which you
 want unless you specify. For the type parameters for the key and value types,
@@ -127,7 +135,10 @@ contains based on the types of the data in the vector.</p>
 <p>For types that implement the <code>Copy</code> trait, like <code>i32</code>, the values are copied
 into the hash map. For owned values like <code>String</code>, the values will be moved and
 the hash map will be the owner of those values:</p>
-<pre><code class="language-rust">use std::collections::HashMap;
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+use std::collections::HashMap;
 
 let field_name = String::from(&quot;Favorite color&quot;);
 let field_value = String::from(&quot;Blue&quot;);
@@ -135,7 +146,8 @@ let field_value = String::from(&quot;Blue&quot;);
 let mut map = HashMap::new();
 map.insert(field_name, field_value);
 // field_name and field_value are invalid at this point
-</code></pre>
+
+#}</code></pre></pre>
 <p>We would not be able to use the bindings <code>field_name</code> and <code>field_value</code> after
 they have been moved into the hash map with the call to <code>insert</code>.</p>
 <p>If we insert references to values into the hash map, the values themselves will
@@ -144,7 +156,10 @@ valid for at least as long as the hash map is valid, though. We will talk more
 about these issues in the Lifetimes section of Chapter 10.</p>
 <a class="header" href="ch08-03-hash-maps.html#accessing-values-in-a-hash-map" name="accessing-values-in-a-hash-map"><h3>Accessing Values in a Hash Map</h3></a>
 <p>We can get a value out of the hash map by providing its key to the <code>get</code> method:</p>
-<pre><code class="language-rust">use std::collections::HashMap;
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+use std::collections::HashMap;
 
 let mut scores = HashMap::new();
 
@@ -153,7 +168,8 @@ scores.insert(String::from(&quot;Yellow&quot;), 50);
 
 let team_name = String::from(&quot;Blue&quot;);
 let score = scores.get(&amp;team_name);
-</code></pre>
+
+#}</code></pre></pre>
 <p>Here, <code>score</code> will have the value that’s associated with the Blue team, and the
 result will be <code>Some(10)</code>. The result is wrapped in <code>Some</code> because <code>get</code>
 returns an <code>Option&lt;V&gt;</code>; if there’s no value for that key in the hash map, <code>get</code>
@@ -161,7 +177,10 @@ will return <code>None</code>. The program will need to handle the <code>Option<
 ways that we covered in Chapter 6.</p>
 <p>We can iterate over each key/value pair in a hash map in a similar manner as we
 do with vectors, using a <code>for</code> loop:</p>
-<pre><code class="language-rust">use std::collections::HashMap;
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+use std::collections::HashMap;
 
 let mut scores = HashMap::new();
 
@@ -171,7 +190,8 @@ scores.insert(String::from(&quot;Yellow&quot;), 50);
 for (key, value) in &amp;scores {
     println!(&quot;{}: {}&quot;, key, value);
 }
-</code></pre>
+
+#}</code></pre></pre>
 <p>This will print each pair, in an arbitrary order:</p>
 <pre><code class="language-text">Yellow: 50
 Blue: 10
@@ -191,7 +211,10 @@ a different value, the value associated with that key will be replaced. Even
 though this following code calls <code>insert</code> twice, the hash map will only contain
 one key/value pair because we’re inserting the value for the Blue team’s key
 both times:</p>
-<pre><code class="language-rust">use std::collections::HashMap;
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+use std::collections::HashMap;
 
 let mut scores = HashMap::new();
 
@@ -199,7 +222,8 @@ scores.insert(String::from(&quot;Blue&quot;), 10);
 scores.insert(String::from(&quot;Blue&quot;), 25);
 
 println!(&quot;{:?}&quot;, scores);
-</code></pre>
+
+#}</code></pre></pre>
 <p>This will print <code>{&quot;Blue&quot;: 25}</code>. The original value of 10 has been overwritten.</p>
 <a class="header" href="ch08-03-hash-maps.html#only-insert-if-the-key-has-no-value" name="only-insert-if-the-key-has-no-value"><h4>Only Insert If the Key Has No Value</h4></a>
 <p>It’s common to want to check if a particular key has a value and, if it does
@@ -210,7 +234,10 @@ or might not exist. Let’s say that we want to check if the key for the Yellow
 team has a value associated with it. If it doesn’t, we want to insert the value
 50, and the same for the Blue team. With the entry API, the code for this looks
 like:</p>
-<pre><code class="language-rust">use std::collections::HashMap;
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+use std::collections::HashMap;
 
 let mut scores = HashMap::new();
 scores.insert(String::from(&quot;Blue&quot;), 10);
@@ -219,7 +246,8 @@ scores.entry(String::from(&quot;Yellow&quot;)).or_insert(50);
 scores.entry(String::from(&quot;Blue&quot;)).or_insert(50);
 
 println!(&quot;{:?}&quot;, scores);
-</code></pre>
+
+#}</code></pre></pre>
 <p>The <code>or_insert</code> method on <code>Entry</code> returns the value for the corresponding
 <code>Entry</code> key if it exists, and if not, inserts its argument as the new value for
 this key and returns the modified <code>Entry</code>. This is much cleaner than writing
@@ -234,7 +262,10 @@ it, based on the old value. For instance, if we wanted to count how many times
 each word appeared in some text, we could use a hash map with the words as keys
 and increment the value to keep track of how many times we’ve seen that word.
 If this is the first time we’ve seen a word, we’ll first insert the value <code>0</code>.</p>
-<pre><code class="language-rust">use std::collections::HashMap;
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+use std::collections::HashMap;
 
 let text = &quot;hello world wonderful world&quot;;
 
@@ -246,7 +277,8 @@ for word in text.split_whitespace() {
 }
 
 println!(&quot;{:?}&quot;, map);
-</code></pre>
+
+#}</code></pre></pre>
 <p>This will print <code>{&quot;world&quot;: 2, &quot;hello&quot;: 1, &quot;wonderful&quot;: 1}</code>. The <code>or_insert</code>
 method actually returns a mutable reference (<code>&amp;mut V</code>) to the value for this
 key. Here we store that mutable reference in the <code>count</code> variable, so in order

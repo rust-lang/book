@@ -74,19 +74,27 @@ that the standard library also provides a number of useful types built on top
 of these ones, as well, but these are the most primitive.</p>
 <a class="header" href="primitive-types.html#booleans" name="booleans"><h1>Booleans</h1></a>
 <p>Rust has a built-in boolean type, named <code>bool</code>. It has two values, <code>true</code> and <code>false</code>:</p>
-<pre><code class="language-rust">let x = true;
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+let x = true;
 
 let y: bool = false;
-</code></pre>
+
+#}</code></pre></pre>
 <p>A common use of booleans is in <a href="if.html"><code>if</code> conditionals</a>.</p>
 <p>You can find more documentation for <code>bool</code>s <a href="../std/primitive.bool.html">in the standard library
 documentation</a>.</p>
 <a class="header" href="primitive-types.html#char" name="char"><h1><code>char</code></h1></a>
 <p>The <code>char</code> type represents a single Unicode scalar value. You can create <code>char</code>s
 with a single tick: (<code>'</code>)</p>
-<pre><code class="language-rust">let x = 'x';
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+let x = 'x';
 let two_hearts = '💕';
-</code></pre>
+
+#}</code></pre></pre>
 <p>Unlike some other languages, this means that Rust’s <code>char</code> is not a single byte,
 but four.</p>
 <p>You can find more documentation for <code>char</code>s <a href="../std/primitive.char.html">in the standard library
@@ -98,10 +106,14 @@ fixed and variable, floating-point and integer.</p>
 <code>u16</code> is an unsigned type with sixteen bits of size. More bits lets you have
 bigger numbers.</p>
 <p>If a number literal has nothing to cause its type to be inferred, it defaults:</p>
-<pre><code class="language-rust">let x = 42; // `x` has type `i32`.
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+let x = 42; // `x` has type `i32`.
 
 let y = 1.0; // `y` has type `f64`.
-</code></pre>
+
+#}</code></pre></pre>
 <p>Here’s a list of the different numeric types, with links to their documentation
 in the standard library:</p>
 <ul>
@@ -144,26 +156,42 @@ IEEE-754 single and double precision numbers.</p>
 <p>Like many programming languages, Rust has list types to represent a sequence of
 things. The most basic is the <em>array</em>, a fixed-size list of elements of the
 same type. By default, arrays are immutable.</p>
-<pre><code class="language-rust">let a = [1, 2, 3]; // a: [i32; 3]
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+let a = [1, 2, 3]; // a: [i32; 3]
 let mut m = [1, 2, 3]; // m: [i32; 3]
-</code></pre>
+
+#}</code></pre></pre>
 <p>Arrays have type <code>[T; N]</code>. We’ll talk about this <code>T</code> notation <a href="generics.html">in the generics
 section</a>. The <code>N</code> is a compile-time constant, for the length of the
 array.</p>
 <p>There’s a shorthand for initializing each element of an array to the same
 value. In this example, each element of <code>a</code> will be initialized to <code>0</code>:</p>
-<pre><code class="language-rust">let a = [0; 20]; // a: [i32; 20]
-</code></pre>
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+let a = [0; 20]; // a: [i32; 20]
+
+#}</code></pre></pre>
 <p>You can get the number of elements in an array <code>a</code> with <code>a.len()</code>:</p>
-<pre><code class="language-rust">let a = [1, 2, 3];
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+let a = [1, 2, 3];
 
 println!(&quot;a has {} elements&quot;, a.len());
-</code></pre>
+
+#}</code></pre></pre>
 <p>You can access a particular element of an array with <em>subscript notation</em>:</p>
-<pre><code class="language-rust">let names = [&quot;Graydon&quot;, &quot;Brian&quot;, &quot;Niko&quot;]; // names: [&amp;str; 3]
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+let names = [&quot;Graydon&quot;, &quot;Brian&quot;, &quot;Niko&quot;]; // names: [&amp;str; 3]
 
 println!(&quot;The second name is: {}&quot;, names[1]);
-</code></pre>
+
+#}</code></pre></pre>
 <p>Subscripts start at zero, like in most programming languages, so the first name
 is <code>names[0]</code> and the second name is <code>names[1]</code>. The above example prints
 <code>The second name is: Brian</code>. If you try to use a subscript that is not in the
@@ -185,10 +213,14 @@ and a length.</p>
 <code>&amp;</code> indicates that slices are similar to <a href="references-and-borrowing.html">references</a>, which we will cover in
 detail later in this section. The <code>[]</code>s, with a range, let you define the
 length of the slice:</p>
-<pre><code class="language-rust">let a = [0, 1, 2, 3, 4];
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+let a = [0, 1, 2, 3, 4];
 let complete = &amp;a[..]; // A slice containing all of the elements in `a`.
 let middle = &amp;a[1..4]; // A slice of `a`: only the elements `1`, `2`, and `3`.
-</code></pre>
+
+#}</code></pre></pre>
 <p>Slices have type <code>&amp;[T]</code>. We’ll talk about that <code>T</code> when we cover
 <a href="generics.html">generics</a>.</p>
 <p>You can find more documentation for slices <a href="../std/primitive.slice.html">in the standard library
@@ -202,12 +234,20 @@ reference, like <code>&amp;str</code>. We'll elaborate further when we cover
 documentation</a>.</p>
 <a class="header" href="primitive-types.html#tuples" name="tuples"><h1>Tuples</h1></a>
 <p>A tuple is an ordered list of fixed size. Like this:</p>
-<pre><code class="language-rust">let x = (1, &quot;hello&quot;);
-</code></pre>
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+let x = (1, &quot;hello&quot;);
+
+#}</code></pre></pre>
 <p>The parentheses and commas form this two-length tuple. Here’s the same code, but
 with the type annotated:</p>
-<pre><code class="language-rust">let x: (i32, &amp;str) = (1, &quot;hello&quot;);
-</code></pre>
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+let x: (i32, &amp;str) = (1, &quot;hello&quot;);
+
+#}</code></pre></pre>
 <p>As you can see, the type of a tuple looks like the tuple, but with each
 position having a type name rather than the value. Careful readers will also
 note that tuples are heterogeneous: we have an <code>i32</code> and a <code>&amp;str</code> in this tuple.
@@ -216,17 +256,25 @@ languages. For now, read <code>&amp;str</code> as a <em>string slice</em>, and w
 soon.</p>
 <p>You can assign one tuple into another, if they have the same contained types
 and <a href="glossary.html#arity">arity</a>. Tuples have the same arity when they have the same length.</p>
-<pre><code class="language-rust">let mut x = (1, 2); // x: (i32, i32)
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+let mut x = (1, 2); // x: (i32, i32)
 let y = (2, 3); // y: (i32, i32)
 
 x = y;
-</code></pre>
+
+#}</code></pre></pre>
 <p>You can access the fields in a tuple through a <em>destructuring let</em>. Here’s
 an example:</p>
-<pre><code class="language-rust">let (x, y, z) = (1, 2, 3);
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+let (x, y, z) = (1, 2, 3);
 
 println!(&quot;x is {}&quot;, x);
-</code></pre>
+
+#}</code></pre></pre>
 <p>Remember <a href="variable-bindings.html">before</a> when I said the left-hand side of a <code>let</code> statement was more
 powerful than assigning a binding? Here we are. We can put a pattern on
 the left-hand side of the <code>let</code>, and if it matches up to the right-hand side,
@@ -235,29 +283,41 @@ or “breaks up” the tuple, and assigns the bits to three bindings.</p>
 <p>This pattern is very powerful, and we’ll see it repeated more later.</p>
 <p>You can disambiguate a single-element tuple from a value in parentheses with a
 comma:</p>
-<pre><code class="language-rust">(0,); // A single-element tuple.
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+(0,); // A single-element tuple.
 (0); // A zero in parentheses.
-</code></pre>
+
+#}</code></pre></pre>
 <a class="header" href="primitive-types.html#tuple-indexing" name="tuple-indexing"><h2>Tuple Indexing</h2></a>
 <p>You can also access fields of a tuple with indexing syntax:</p>
-<pre><code class="language-rust">let tuple = (1, 2, 3);
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+let tuple = (1, 2, 3);
 
 let x = tuple.0;
 let y = tuple.1;
 let z = tuple.2;
 
 println!(&quot;x is {}&quot;, x);
-</code></pre>
+
+#}</code></pre></pre>
 <p>Like array indexing, it starts at zero, but unlike array indexing, it uses a
 <code>.</code>, rather than <code>[]</code>s.</p>
 <p>You can find more documentation for tuples <a href="../std/primitive.tuple.html">in the standard library
 documentation</a>.</p>
 <a class="header" href="primitive-types.html#functions" name="functions"><h1>Functions</h1></a>
 <p>Functions also have a type! They look like this:</p>
-<pre><code class="language-rust">fn foo(x: i32) -&gt; i32 { x }
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+fn foo(x: i32) -&gt; i32 { x }
 
 let x: fn(i32) -&gt; i32 = foo;
-</code></pre>
+
+#}</code></pre></pre>
 <p>In this case, <code>x</code> is a ‘function pointer’ to a function that takes an <code>i32</code> and
 returns an <code>i32</code>.</p>
 

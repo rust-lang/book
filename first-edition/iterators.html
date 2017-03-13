@@ -70,10 +70,14 @@
                     <a class="header" href="iterators.html#iterators" name="iterators"><h1>Iterators</h1></a>
 <p>Let's talk about loops.</p>
 <p>Remember Rust's <code>for</code> loop? Here's an example:</p>
-<pre><code class="language-rust">for x in 0..10 {
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+for x in 0..10 {
     println!(&quot;{}&quot;, x);
 }
-</code></pre>
+
+#}</code></pre></pre>
 <p>Now that you know more Rust, we can talk in detail about how this works.
 Ranges (the <code>0..10</code>) are 'iterators'. An iterator is something that we can
 call the <code>.next()</code> method on repeatedly, and it gives us a sequence of things.</p>
@@ -82,7 +86,10 @@ starts at 0) and exclusive on the right (so it ends at 9). A mathematician
 would write &quot;[0, 10)&quot;. To get a range that goes all the way up to 10 you can
 write <code>0...10</code>.)</p>
 <p>Like this:</p>
-<pre><code class="language-rust">let mut range = 0..10;
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+let mut range = 0..10;
 
 loop {
     match range.next() {
@@ -92,7 +99,8 @@ loop {
         None =&gt; { break }
     }
 }
-</code></pre>
+
+#}</code></pre></pre>
 <p>We make a mutable binding to the range, which is our iterator. We then <code>loop</code>,
 with an inner <code>match</code>. This <code>match</code> is used on the result of <code>range.next()</code>,
 which gives us a reference to the next value of the iterator. <code>next</code> returns an
@@ -109,20 +117,28 @@ to accomplish various tasks. But first, a few notes about limitations of ranges.
 following Rust anti-pattern: using ranges to emulate a C-style <code>for</code> loop. Let’s
 suppose you needed to iterate over the contents of a vector. You may be tempted
 to write this:</p>
-<pre><code class="language-rust">let nums = vec![1, 2, 3];
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+let nums = vec![1, 2, 3];
 
 for i in 0..nums.len() {
     println!(&quot;{}&quot;, nums[i]);
 }
-</code></pre>
+
+#}</code></pre></pre>
 <p>This is strictly worse than using an actual iterator. You can iterate over vectors
 directly, so write this:</p>
-<pre><code class="language-rust">let nums = vec![1, 2, 3];
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+let nums = vec![1, 2, 3];
 
 for num in &amp;nums {
     println!(&quot;{}&quot;, num);
 }
-</code></pre>
+
+#}</code></pre></pre>
 <p>There are two reasons for this. First, this more directly expresses what we
 mean. We iterate through the entire vector, rather than iterating through
 indexes, and then indexing the vector. Second, this version is more efficient:
@@ -135,12 +151,16 @@ know that we're safe.</p>
 works. <code>num</code> is actually of type <code>&amp;i32</code>. That is, it's a reference to an <code>i32</code>,
 not an <code>i32</code> itself. <code>println!</code> handles the dereferencing for us, so we don't
 see it. This code works fine too:</p>
-<pre><code class="language-rust">let nums = vec![1, 2, 3];
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+let nums = vec![1, 2, 3];
 
 for num in &amp;nums {
     println!(&quot;{}&quot;, *num);
 }
-</code></pre>
+
+#}</code></pre></pre>
 <p>Now we're explicitly dereferencing <code>num</code>. Why does <code>&amp;nums</code> give us
 references?  Firstly, because we explicitly asked it to with
 <code>&amp;</code>. Secondly, if it gave us the data itself, we would have to be its
@@ -169,34 +189,50 @@ as many values as the iterator will give it, and returns a collection
 of the results. So why won't this compile? Rust can't determine what
 type of things you want to collect, and so you need to let it know.
 Here's the version that does compile:</p>
-<pre><code class="language-rust">let one_to_one_hundred = (1..101).collect::&lt;Vec&lt;i32&gt;&gt;();
-</code></pre>
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+let one_to_one_hundred = (1..101).collect::&lt;Vec&lt;i32&gt;&gt;();
+
+#}</code></pre></pre>
 <p>If you remember, the <a href="generics.html#resolving-ambiguities"><code>::&lt;&gt;</code> syntax</a>
 allows us to give a type hint that tells the compiler we want a vector of
 integers. You don't always need to use the whole type, though. Using a <code>_</code>
 will let you provide a partial hint:</p>
-<pre><code class="language-rust">let one_to_one_hundred = (1..101).collect::&lt;Vec&lt;_&gt;&gt;();
-</code></pre>
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+let one_to_one_hundred = (1..101).collect::&lt;Vec&lt;_&gt;&gt;();
+
+#}</code></pre></pre>
 <p>This says &quot;Collect into a <code>Vec&lt;T&gt;</code>, please, but infer what the <code>T</code> is for me.&quot;
 <code>_</code> is sometimes called a &quot;type placeholder&quot; for this reason.</p>
 <p><code>collect()</code> is the most common consumer, but there are others too. <code>find()</code>
 is one:</p>
-<pre><code class="language-rust">let greater_than_forty_two = (0..100)
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+let greater_than_forty_two = (0..100)
                              .find(|x| *x &gt; 42);
 
 match greater_than_forty_two {
     Some(_) =&gt; println!(&quot;Found a match!&quot;),
     None =&gt; println!(&quot;No match found :(&quot;),
 }
-</code></pre>
+
+#}</code></pre></pre>
 <p><code>find</code> takes a closure, and works on a reference to each element of an
 iterator. This closure returns <code>true</code> if the element is the element we're
 looking for, and <code>false</code> otherwise. <code>find</code> returns the first element satisfying
 the specified predicate. Because we might not find a matching element, <code>find</code>
 returns an <code>Option</code> rather than the element itself.</p>
 <p>Another important consumer is <code>fold</code>. Here's what it looks like:</p>
-<pre><code class="language-rust">let sum = (1..4).fold(0, |sum, x| sum + x);
-</code></pre>
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+let sum = (1..4).fold(0, |sum, x| sum + x);
+
+#}</code></pre></pre>
 <p><code>fold()</code> is a consumer that looks like this:
 <code>fold(base, |accumulator, element| ...)</code>. It takes two arguments: the first
 is an element called the <em>base</em>. The second is a closure that itself takes two
@@ -212,9 +248,13 @@ in this iterator:</p>
 <tr><td> 0    </td><td> 3           </td><td> 3       </td><td> 6              </td></tr>
 </table>
 <p>We called <code>fold()</code> with these arguments:</p>
-<pre><code class="language-rust"># (1..4)
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+# (1..4)
 .fold(0, |sum, x| sum + x);
-</code></pre>
+
+#}</code></pre></pre>
 <p>So, <code>0</code> is our base, <code>sum</code> is our accumulator, and <code>x</code> is our element.  On the
 first iteration, we set <code>sum</code> to <code>0</code>, and <code>x</code> is the first element of <code>nums</code>,
 <code>1</code>. We then add <code>sum</code> and <code>x</code>, which gives us <code>0 + 1 = 1</code>. On the second
@@ -236,23 +276,35 @@ Because you need to call the method, this means that iterators
 can be <em>lazy</em> and not generate all of the values upfront. This code,
 for example, does not actually generate the numbers <code>1-99</code>, instead
 creating a value that merely represents the sequence:</p>
-<pre><code class="language-rust">let nums = 1..100;
-</code></pre>
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+let nums = 1..100;
+
+#}</code></pre></pre>
 <p>Since we didn't do anything with the range, it didn't generate the sequence.
 Let's add the consumer:</p>
-<pre><code class="language-rust">let nums = (1..100).collect::&lt;Vec&lt;i32&gt;&gt;();
-</code></pre>
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+let nums = (1..100).collect::&lt;Vec&lt;i32&gt;&gt;();
+
+#}</code></pre></pre>
 <p>Now, <code>collect()</code> will require that the range gives it some numbers, and so
 it will do the work of generating the sequence.</p>
 <p>Ranges are one of two basic iterators that you'll see. The other is <code>iter()</code>.
 <code>iter()</code> can turn a vector into a simple iterator that gives you each element
 in turn:</p>
-<pre><code class="language-rust">let nums = vec![1, 2, 3];
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+let nums = vec![1, 2, 3];
 
 for num in nums.iter() {
    println!(&quot;{}&quot;, num);
 }
-</code></pre>
+
+#}</code></pre></pre>
 <p>These two basic iterators should serve you well. There are some more
 advanced iterators, including ones that are infinite.</p>
 <p>That's enough about iterators. Iterator adaptors are the last concept
@@ -280,10 +332,14 @@ use <code>for</code> instead.</p>
 <p>There are tons of interesting iterator adaptors. <code>take(n)</code> will return an
 iterator over the next <code>n</code> elements of the original iterator. Let's try it out
 with an infinite iterator:</p>
-<pre><code class="language-rust">for i in (1..).take(5) {
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+for i in (1..).take(5) {
     println!(&quot;{}&quot;, i);
 }
-</code></pre>
+
+#}</code></pre></pre>
 <p>This will print</p>
 <pre><code class="language-text">1
 2
@@ -294,10 +350,14 @@ with an infinite iterator:</p>
 <p><code>filter()</code> is an adapter that takes a closure as an argument. This closure
 returns <code>true</code> or <code>false</code>. The new iterator <code>filter()</code> produces
 only the elements that the closure returns <code>true</code> for:</p>
-<pre><code class="language-rust">for i in (1..100).filter(|&amp;x| x % 2 == 0) {
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+for i in (1..100).filter(|&amp;x| x % 2 == 0) {
     println!(&quot;{}&quot;, i);
 }
-</code></pre>
+
+#}</code></pre></pre>
 <p>This will print all of the even numbers between one and a hundred.
 (Note that, unlike <code>map</code>, the closure passed to <code>filter</code> is passed a reference
 to the element instead of the element itself. The filter predicate here uses
@@ -307,12 +367,16 @@ so the <code>filter</code> implementation must retain ownership to put the eleme
 into the newly constructed iterator.)</p>
 <p>You can chain all three things together: start with an iterator, adapt it
 a few times, and then consume the result. Check it out:</p>
-<pre><code class="language-rust">(1..)
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+(1..)
     .filter(|&amp;x| x % 2 == 0)
     .filter(|&amp;x| x % 3 == 0)
     .take(5)
     .collect::&lt;Vec&lt;i32&gt;&gt;();
-</code></pre>
+
+#}</code></pre></pre>
 <p>This will give you a vector containing <code>6</code>, <code>12</code>, <code>18</code>, <code>24</code>, and <code>30</code>.</p>
 <p>This is just a small taste of what iterators, iterator adaptors, and consumers
 can help you with. There are a number of really useful iterators, and you can

@@ -80,7 +80,7 @@ represents the instance of the struct that the method is being called on.</p>
 and instead make an <code>area</code> method defined on the <code>Rectangle</code> struct, as shown
 in Listing 5-7:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><code class="language-rust">#[derive(Debug)]
+<pre><pre class="playpen"><code class="language-rust">#[derive(Debug)]
 struct Rectangle {
     length: u32,
     width: u32,
@@ -100,7 +100,7 @@ fn main() {
         rect1.area()
     );
 }
-</code></pre>
+</code></pre></pre>
 <p><span class="caption">Listing 5-7: Defining an <code>area</code> method on the <code>Rectangle</code>
 struct</span></p>
 <!-- Will add ghosting and wingdings here in libreoffice /Carol -->
@@ -145,7 +145,10 @@ one of the few places in Rust that has behavior like this.</p>
 <p>Here’s how it works: when you call a method with <code>object.something()</code>, Rust
 will automatically add in <code>&amp;</code>, <code>&amp;mut</code>, or <code>*</code> so that <code>object</code> matches the
 signature of the method. In other words, these are the same:</p>
-<pre><code class="language-rust"># #[derive(Debug,Copy,Clone)]
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+# #[derive(Debug,Copy,Clone)]
 # struct Point {
 #     x: f64,
 #     y: f64,
@@ -163,7 +166,8 @@ signature of the method. In other words, these are the same:</p>
 # let p2 = Point { x: 5.0, y: 6.5 };
 p1.distance(&amp;p2);
 (&amp;p1).distance(&amp;p2);
-</code></pre>
+
+#}</code></pre></pre>
 <p>The first one looks much, much cleaner. This automatic referencing behavior
 works because methods have a clear receiver — the type of <code>self</code>. Given the
 receiver and name of a method, Rust can figure out definitively whether the
@@ -209,7 +213,10 @@ other <code>Rectangle</code>, respectively. Let’s add this new method to the <
 from Listing 5-7, shown in Listing 5-9:</p>
 <figure>
 <span class="filename">Filename: src/main.rs</span>
-<pre><code class="language-rust"># #[derive(Debug)]
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+# #[derive(Debug)]
 # struct Rectangle {
 #     length: u32,
 #     width: u32,
@@ -224,7 +231,8 @@ impl Rectangle {
         self.length &gt; other.length &amp;&amp; self.width &gt; other.width
     }
 }
-</code></pre>
+
+#}</code></pre></pre>
 <figcaption>
 <p>Listing 5-9: Implementing the <code>can_hold</code> method on <code>Rectangle</code> that takes
 another <code>Rectangle</code> instance as an argument</p>
@@ -247,7 +255,10 @@ that would have one dimension parameter and use that as both length and width,
 thus making it easier to create a square <code>Rectangle</code> rather than having to
 specify the same value twice:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><code class="language-rust"># #[derive(Debug)]
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+# #[derive(Debug)]
 # struct Rectangle {
 #     length: u32,
 #     width: u32,
@@ -258,7 +269,8 @@ impl Rectangle {
         Rectangle { length: size, width: size }
     }
 }
-</code></pre>
+
+#}</code></pre></pre>
 <p>To call this associated function, we use the <code>::</code> syntax with the struct name:
 <code>let sq = Rectangle::square(3);</code>, for example. This function is namespaced by
 the struct: the <code>::</code> syntax is used for both associated functions and

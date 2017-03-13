@@ -76,7 +76,7 @@ declare new functions.</p>
 names. In snake case, all letters are lowercase and underscores separate words.
 Here’s a program that contains an example function definition:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><code class="language-rust">fn main() {
+<pre><pre class="playpen"><code class="language-rust">fn main() {
     println!(&quot;Hello, world!&quot;);
 
     another_function();
@@ -85,7 +85,7 @@ Here’s a program that contains an example function definition:</p>
 fn another_function() {
     println!(&quot;Another function.&quot;);
 }
-</code></pre>
+</code></pre></pre>
 <p>Function definitions in Rust start with <code>fn</code> and have a set of parentheses
 after the function name. The curly braces tell the compiler where the function
 body begins and ends.</p>
@@ -118,14 +118,14 @@ function.</p>
 <p>The following rewritten version of <code>another_function</code> shows what parameters
 look like in Rust:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><code class="language-rust">fn main() {
+<pre><pre class="playpen"><code class="language-rust">fn main() {
     another_function(5);
 }
 
 fn another_function(x: i32) {
     println!(&quot;The value of x is: {}&quot;, x);
 }
-</code></pre>
+</code></pre></pre>
 <p>Try running this program; you should get the following output:</p>
 <pre><code class="language-text">$ cargo run
    Compiling functions v0.1.0 (file:///projects/functions)
@@ -143,7 +143,7 @@ the code to figure out what you mean.</p>
 <p>When you want a function to have multiple parameters, separate the parameter
 declarations with commas, like this:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><code class="language-rust">fn main() {
+<pre><pre class="playpen"><code class="language-rust">fn main() {
     another_function(5, 6);
 }
 
@@ -151,7 +151,7 @@ fn another_function(x: i32, y: i32) {
     println!(&quot;The value of x is: {}&quot;, x);
     println!(&quot;The value of y is: {}&quot;, y);
 }
-</code></pre>
+</code></pre></pre>
 <p>This example creates a function with two parameters, both of which are <code>i32</code>
 types. The function then prints out the values in both of its parameters. Note
 that function parameters don't all need to be the same type - they just happen
@@ -182,10 +182,10 @@ evaluate to a resulting value. Let’s look at some examples.</p>
 <p>Creating a variable and assigning a value to it with the <code>let</code> keyword is a
 statement. In Listing 3-3, <code>let y = 6;</code> is a statement:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><code class="language-rust">fn main() {
+<pre><pre class="playpen"><code class="language-rust">fn main() {
     let y = 6;
 }
-</code></pre>
+</code></pre></pre>
 <p><span class="caption">Listing 3-3: A <code>main</code> function declaration containing one statement.</span></p>
 <p>Function definitions are also statements; the entire preceding example is a
 statement in itself.</p>
@@ -220,7 +220,7 @@ expression that evaluates to the value <code>6</code>. Calling a function is an
 expression. Calling a macro is an expression. The block that we use to create
 new scopes, <code>{}</code>, is an expression, for example:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><code class="language-rust">fn main() {
+<pre><pre class="playpen"><code class="language-rust">fn main() {
     let x = 5;
 
     let y = {
@@ -230,7 +230,7 @@ new scopes, <code>{}</code>, is an expression, for example:</p>
 
     println!(&quot;The value of y is: {}&quot;, y);
 }
-</code></pre>
+</code></pre></pre>
 <p>This expression:</p>
 <pre><code class="language-rust ignore">{
     let x = 3;
@@ -250,7 +250,7 @@ value of the function is synonymous with the value of the final expression in
 the block of the body of a function. Here’s an example of a function that
 returns a value:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><code class="language-rust">fn five() -&gt; i32 {
+<pre><pre class="playpen"><code class="language-rust">fn five() -&gt; i32 {
     5
 }
 
@@ -259,7 +259,7 @@ fn main() {
 
     println!(&quot;The value of x is: {}&quot;, x);
 }
-</code></pre>
+</code></pre></pre>
 <p>There are no function calls, macros, or even <code>let</code> statements in the <code>five</code>
 function—just the number <code>5</code> by itself. That’s a perfectly valid function in
 Rust. Note that the function’s return type is specified, too, as <code>-&gt; i32</code>. Try
@@ -274,14 +274,18 @@ is <code>i32</code>. Let’s examine this in more detail. There are two importan
 first, the line <code>let x = five();</code> shows that we’re using the return value of a
 function to initialize a variable. Because the function <code>five</code> returns a <code>5</code>,
 that line is the same as the following:</p>
-<pre><code class="language-rust">let x = 5;
-</code></pre>
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+let x = 5;
+
+#}</code></pre></pre>
 <p>Second, the <code>five</code> function has no parameters and defines the type of the
 return value, but the body of the function is a lonely <code>5</code> with no semicolon
 because it’s an expression whose value we want to return. Let’s look at another
 example:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><code class="language-rust">fn main() {
+<pre><pre class="playpen"><code class="language-rust">fn main() {
     let x = plus_one(5);
 
     println!(&quot;The value of x is: {}&quot;, x);
@@ -290,7 +294,7 @@ example:</p>
 fn plus_one(x: i32) -&gt; i32 {
     x + 1
 }
-</code></pre>
+</code></pre></pre>
 <p>Running this code will print <code>The value of x is: 6</code>. What happens if we place a
 semicolon at the end of the line containing <code>x + 1</code>, changing it from an
 expression to a statement?</p>

@@ -76,7 +76,7 @@ into <code>calculate_length</code>.</p>
 <em>reference</em> to an object as a parameter instead of taking ownership of the
 value:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><code class="language-rust">fn main() {
+<pre><pre class="playpen"><code class="language-rust">fn main() {
     let s1 = String::from(&quot;hello&quot;);
 
     let len = calculate_length(&amp;s1);
@@ -87,7 +87,7 @@ value:</p>
 fn calculate_length(s: &amp;String) -&gt; usize {
     s.len()
 }
-</code></pre>
+</code></pre></pre>
 <p>First, notice that all the tuple code in the variable declaration and the
 function return value is gone. Second, note that we pass <code>&amp;s1</code> into
 <code>calculate_length</code>, and in its definition, we take <code>&amp;String</code> rather than
@@ -97,23 +97,31 @@ without taking ownership of it. Figure 4-8 shows a diagram.</p>
 <p><img alt="&String s pointing at String s1" src="img/trpl04-05.svg" class="center" /></p>
 <p><span class="caption">Figure 4-8: <code>&amp;String s</code> pointing at <code>String s1</code></span></p>
 <p>Let’s take a closer look at the function call here:</p>
-<pre><code class="language-rust"># fn calculate_length(s: &amp;String) -&gt; usize {
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+# fn calculate_length(s: &amp;String) -&gt; usize {
 #     s.len()
 # }
 let s1 = String::from(&quot;hello&quot;);
 
 let len = calculate_length(&amp;s1);
-</code></pre>
+
+#}</code></pre></pre>
 <p>The <code>&amp;s1</code> syntax lets us create a reference that <em>refers</em> to the value of <code>s1</code>
 but does not own it. Because it does not own it, the value it points to will
 not be dropped when the reference goes out of scope.</p>
 <p>Likewise, the signature of the function uses <code>&amp;</code> to indicate that the type of
 the parameter <code>s</code> is a reference. Let’s add some explanatory annotations:</p>
-<pre><code class="language-rust">fn calculate_length(s: &amp;String) -&gt; usize { // s is a reference to a String
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+fn calculate_length(s: &amp;String) -&gt; usize { // s is a reference to a String
     s.len()
 } // Here, s goes out of scope. But because it does not have ownership of what
   // it refers to, nothing happens.
-</code></pre>
+
+#}</code></pre></pre>
 <p>The scope in which the variable <code>s</code> is valid is the same as any function
 parameter's scope, but we don’t drop what the reference points to when it goes
 out of scope because we don’t have ownership. Functions that have references as
@@ -148,7 +156,7 @@ allowed to modify something we have a reference to.</p>
 <a class="header" href="ch04-02-references-and-borrowing.html#mutable-references" name="mutable-references"><h3>Mutable References</h3></a>
 <p>We can fix the error in the code from Listing 4-9 with just a small tweak:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><code class="language-rust">fn main() {
+<pre><pre class="playpen"><code class="language-rust">fn main() {
     let mut s = String::from(&quot;hello&quot;);
 
     change(&amp;mut s);
@@ -157,7 +165,7 @@ allowed to modify something we have a reference to.</p>
 fn change(some_string: &amp;mut String) {
     some_string.push_str(&quot;, world&quot;);
 }
-</code></pre>
+</code></pre></pre>
 <p>First, we had to change <code>s</code> to be <code>mut</code>. Then we had to create a mutable
 reference with <code>&amp;mut s</code> and accept a mutable reference with <code>some_string: &amp;mut String</code>.</p>
 <p>But mutable references have one big restriction: you can only have one mutable
@@ -196,7 +204,10 @@ when you’re trying to track them down at runtime; Rust prevents this problem
 from happening because it won’t even compile code with data races!</p>
 <p>As always, we can use curly brackets to create a new scope, allowing for
 multiple mutable references, just not <em>simultaneous</em> ones:</p>
-<pre><code class="language-rust">let mut s = String::from(&quot;hello&quot;);
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+let mut s = String::from(&quot;hello&quot;);
 
 {
     let r1 = &amp;mut s;
@@ -204,7 +215,8 @@ multiple mutable references, just not <em>simultaneous</em> ones:</p>
 } // r1 goes out of scope here, so we can make a new reference with no problems.
 
 let r2 = &amp;mut s;
-</code></pre>
+
+#}</code></pre></pre>
 <p>A similar rule exists for combining mutable and immutable references. This code
 results in an error:</p>
 <pre><code class="language-rust ignore">let mut s = String::from(&quot;hello&quot;);
@@ -290,12 +302,16 @@ for it to be borrowed from.
 this reference would be pointing to an invalid <code>String</code>! That’s no good. Rust
 won’t let us do this.</p>
 <p>The correct code here is to return the <code>String</code> directly:</p>
-<pre><code class="language-rust">fn no_dangle() -&gt; String {
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+fn no_dangle() -&gt; String {
     let s = String::from(&quot;hello&quot;);
 
     s
 }
-</code></pre>
+
+#}</code></pre></pre>
 <p>This works without any problems. Ownership is moved out, and nothing is
 deallocated.</p>
 <a class="header" href="ch04-02-references-and-borrowing.html#the-rules-of-references" name="the-rules-of-references"><h3>The Rules of References</h3></a>

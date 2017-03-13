@@ -71,10 +71,10 @@
 <p>Virtually every non-'Hello World’ Rust program uses <em>variable bindings</em>. They
 bind some value to a name, so it can be used later. <code>let</code> is
 used to introduce a binding, like this:</p>
-<pre><code class="language-rust">fn main() {
+<pre><pre class="playpen"><code class="language-rust">fn main() {
     let x = 5;
 }
-</code></pre>
+</code></pre></pre>
 <p>Putting <code>fn main() {</code> in each example is a bit tedious, so we’ll leave that out
 in the future. If you’re following along, make sure to edit your <code>main()</code>
 function, rather than leaving it off. Otherwise, you’ll get an error.</p>
@@ -83,8 +83,12 @@ function, rather than leaving it off. Otherwise, you’ll get an error.</p>
 variable bindings have a few tricks up their sleeves. For example the
 left-hand side of a <code>let</code> statement is a ‘<a href="patterns.html">pattern</a>’, not a
 variable name. This means we can do things like:</p>
-<pre><code class="language-rust">let (x, y) = (1, 2);
-</code></pre>
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+let (x, y) = (1, 2);
+
+#}</code></pre></pre>
 <p>After this statement is evaluated, <code>x</code> will be one, and <code>y</code> will be two.
 Patterns are really powerful, and have <a href="patterns.html">their own section</a> in the
 book. We don’t need those features for now, so we’ll keep this in the back
@@ -96,8 +100,12 @@ compile? Well, Rust has this thing called ‘type inference’. If it can figure
 out what the type of something is, Rust doesn’t require you to explicitly type
 it out.</p>
 <p>We can add the type if we want to, though. Types come after a colon (<code>:</code>):</p>
-<pre><code class="language-rust">let x: i32 = 5;
-</code></pre>
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+let x: i32 = 5;
+
+#}</code></pre></pre>
 <p>If I asked you to read this out loud to the rest of the class, you’d say “<code>x</code>
 is a binding with the type <code>i32</code> and the value <code>5</code>.”</p>
 <p>In this case we chose to represent <code>x</code> as a 32-bit signed integer. Rust has
@@ -106,10 +114,10 @@ and <code>u</code> for unsigned integers. The possible integer sizes are 8, 16, 
 bits.</p>
 <p>In future examples, we may annotate the type in a comment. The examples will
 look like this:</p>
-<pre><code class="language-rust">fn main() {
+<pre><pre class="playpen"><code class="language-rust">fn main() {
     let x = 5; // x: i32
 }
-</code></pre>
+</code></pre></pre>
 <p>Note the similarities between this annotation and the syntax you use with
 <code>let</code>. Including these kinds of comments is not idiomatic Rust, but we'll
 occasionally include them to help you understand what the types that Rust
@@ -125,9 +133,13 @@ x = 10;
      ^~~~~~~
 </code></pre>
 <p>If you want a binding to be mutable, you can use <code>mut</code>:</p>
-<pre><code class="language-rust">let mut x = 5; // mut x: i32
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+let mut x = 5; // mut x: i32
 x = 10;
-</code></pre>
+
+#}</code></pre></pre>
 <p>There is no single reason that bindings are immutable by default, but we can
 think about it through one of Rust’s primary focuses: safety. If you forget to
 say <code>mut</code>, the compiler will catch it, and let you know that you have mutated
@@ -143,12 +155,12 @@ what you need, so it’s not forbidden.</p>
 bindings are required to be initialized with a value before you're allowed to
 use them.</p>
 <p>Let’s try it out. Change your <code>src/main.rs</code> file to look like this:</p>
-<pre><code class="language-rust">fn main() {
+<pre><pre class="playpen"><code class="language-rust">fn main() {
     let x: i32;
 
     println!(&quot;Hello world!&quot;);
 }
-</code></pre>
+</code></pre></pre>
 <p>You can use <code>cargo build</code> on the command line to build it. You’ll get a
 warning, but it will still print &quot;Hello, world!&quot;:</p>
 <pre><code class="language-text">   Compiling hello_world v0.0.1 (file:///home/you/projects/hello_world)
@@ -232,7 +244,10 @@ To learn more, run the command again with --verbose.
 <p>Additionally, variable bindings can be shadowed. This means that a later
 variable binding with the same name as another binding that is currently in
 scope will override the previous binding.</p>
-<pre><code class="language-rust">let x: i32 = 8;
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+let x: i32 = 8;
 {
     println!(&quot;{}&quot;, x); // Prints &quot;8&quot;.
     let x = 12;
@@ -241,7 +256,8 @@ scope will override the previous binding.</p>
 println!(&quot;{}&quot;, x); // Prints &quot;8&quot;.
 let x =  42;
 println!(&quot;{}&quot;, x); // Prints &quot;42&quot;.
-</code></pre>
+
+#}</code></pre></pre>
 <p>Shadowing and mutable bindings may appear as two sides of the same coin, but
 they are two distinct concepts that can't always be used interchangeably. For
 one, shadowing enables us to rebind a name to a value of a different type. It
@@ -249,13 +265,17 @@ is also possible to change the mutability of a binding. Note that shadowing a
 name does not alter or destroy the value it was bound to, and the value will
 continue to exist until it goes out of scope, even if it is no longer accessible
 by any means.</p>
-<pre><code class="language-rust">let mut x: i32 = 1;
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+let mut x: i32 = 1;
 x = 7;
 let x = x; // `x` is now immutable and is bound to `7`.
 
 let y = 4;
 let y = &quot;I can also be bound to text!&quot;; // `y` is now of a different type.
-</code></pre>
+
+#}</code></pre></pre>
 
                 </div>
 

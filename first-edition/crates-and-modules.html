@@ -124,7 +124,10 @@ above.</p>
 <a class="header" href="crates-and-modules.html#defining-modules" name="defining-modules"><h1>Defining Modules</h1></a>
 <p>To define each of our modules, we use the <code>mod</code> keyword. Let’s make our
 <code>src/lib.rs</code> look like this:</p>
-<pre><code class="language-rust">mod english {
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+mod english {
     mod greetings {
     }
 
@@ -139,7 +142,8 @@ mod japanese {
     mod farewells {
     }
 }
-</code></pre>
+
+#}</code></pre></pre>
 <p>After the <code>mod</code> keyword, you give the name of the module. Module names follow
 the conventions for other Rust identifiers: <code>lower_snake_case</code>. The contents of
 each module are within curly braces (<code>{}</code>).</p>
@@ -225,28 +229,44 @@ their own sub-modules, we’ve chosen to make them
 <code>src/japanese/farewells.rs</code> are all empty at the moment. Let’s add
 some functions.</p>
 <p>Put this in <code>src/english/greetings.rs</code>:</p>
-<pre><code class="language-rust">fn hello() -&gt; String {
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+fn hello() -&gt; String {
     &quot;Hello!&quot;.to_string()
 }
-</code></pre>
+
+#}</code></pre></pre>
 <p>Put this in <code>src/english/farewells.rs</code>:</p>
-<pre><code class="language-rust">fn goodbye() -&gt; String {
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+fn goodbye() -&gt; String {
     &quot;Goodbye.&quot;.to_string()
 }
-</code></pre>
+
+#}</code></pre></pre>
 <p>Put this in <code>src/japanese/greetings.rs</code>:</p>
-<pre><code class="language-rust">fn hello() -&gt; String {
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+fn hello() -&gt; String {
     &quot;こんにちは&quot;.to_string()
 }
-</code></pre>
+
+#}</code></pre></pre>
 <p>Of course, you can copy and paste this from this web page, or type
 something else. It’s not important that you actually put ‘konnichiwa’ to learn
 about the module system.</p>
 <p>Put this in <code>src/japanese/farewells.rs</code>:</p>
-<pre><code class="language-rust">fn goodbye() -&gt; String {
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+fn goodbye() -&gt; String {
     &quot;さようなら&quot;.to_string()
 }
-</code></pre>
+
+#}</code></pre></pre>
 <p>(This is ‘Sayōnara’, if you’re curious.)</p>
 <p>Now that we have some functionality in our crate, let’s try to use it from
 another crate.</p>

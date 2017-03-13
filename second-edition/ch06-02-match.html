@@ -84,7 +84,10 @@ the value will fall into the associated code block to be used during execution.<
 can write a function that can take an unknown United States coin and, in a
 similar way as the counting machine, determine which coin it is and return its
 value in cents, as shown here in Listing 6-3:</p>
-<pre><code class="language-rust">enum Coin {
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+enum Coin {
     Penny,
     Nickel,
     Dime,
@@ -99,7 +102,8 @@ fn value_in_cents(coin: Coin) -&gt; i32 {
         Coin::Quarter =&gt; 25,
     }
 }
-</code></pre>
+
+#}</code></pre></pre>
 <p><span class="caption">Listing 6-3: An enum and a <code>match</code> expression that has
 the variants of the enum as its patterns.</span></p>
 <p>Let’s break down the <code>match</code> in the <code>value_in_cents</code> function. First, we list
@@ -125,7 +129,10 @@ Listing 6-3 where each arm just returns a value. If you want to run multiple
 lines of code in a match arm, you can use curly braces. For example, the
 following code would print out “Lucky penny!” every time the method was called
 with a <code>Coin::Penny</code> but would still return the last value of the block, <code>1</code>:</p>
-<pre><code class="language-rust"># enum Coin {
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+# enum Coin {
 #    Penny,
 #    Nickel,
 #    Dime,
@@ -143,7 +150,8 @@ fn value_in_cents(coin: Coin) -&gt; i32 {
         Coin::Quarter =&gt; 25,
     }
 }
-</code></pre>
+
+#}</code></pre></pre>
 <a class="header" href="ch06-02-match.html#patterns-that-bind-to-values" name="patterns-that-bind-to-values"><h3>Patterns that Bind to Values</h3></a>
 <p>Another useful feature of match arms is that they can bind to parts of the
 values that match the pattern. This is how we can extract values out of enum
@@ -154,7 +162,10 @@ designs for each of the 50 states on one side. No other coins got state
 designs, so only quarters have this extra value. We can add this information to
 our <code>enum</code> by changing the <code>Quarter</code> variant to include a <code>State</code> value stored
 inside it, which we've done here in Listing 6-4:</p>
-<pre><code class="language-rust">#[derive(Debug)] // So we can inspect the state in a minute
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+#[derive(Debug)] // So we can inspect the state in a minute
 enum UsState {
     Alabama,
     Alaska,
@@ -167,7 +178,8 @@ enum Coin {
     Dime,
     Quarter(UsState),
 }
-</code></pre>
+
+#}</code></pre></pre>
 <p><span class="caption">Listing 6-4: A <code>Coin</code> enum where the <code>Quarter</code> variant
 also holds a <code>UsState</code> value</span></p>
 <p>Let’s imagine that a friend of ours is trying to collect all 50 state quarters.
@@ -178,7 +190,10 @@ they can add it to their collection.</p>
 pattern that matches values of the variant <code>Coin::Quarter</code>. When a
 <code>Coin::Quarter</code> matches, the <code>state</code> variable will bind to the value of that
 quarter’s state. Then we can use <code>state</code> in the code for that arm, like so:</p>
-<pre><code class="language-rust"># #[derive(Debug)]
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+# #[derive(Debug)]
 # enum UsState {
 #    Alabama,
 #    Alaska,
@@ -202,7 +217,8 @@ fn value_in_cents(coin: Coin) -&gt; i32 {
         },
     }
 }
-</code></pre>
+
+#}</code></pre></pre>
 <p>If we were to call <code>value_in_cents(Coin::Quarter(UsState::Alaska))</code>, <code>coin</code>
 would be <code>Coin::Quarter(UsState::Alaska)</code>. When we compare that value with each
 of the match arms, none of them match until we reach <code>Coin::Quarter(state)</code>. At
@@ -221,7 +237,10 @@ the function should return the <code>None</code> value and not attempt to perfor
 operations.</p>
 <p>This function is very easy to write, thanks to <code>match</code>, and will look like
 Listing 6-5:</p>
-<pre><code class="language-rust">fn plus_one(x: Option&lt;i32&gt;) -&gt; Option&lt;i32&gt; {
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+fn plus_one(x: Option&lt;i32&gt;) -&gt; Option&lt;i32&gt; {
     match x {
         None =&gt; None,
         Some(i) =&gt; Some(i + 1),
@@ -231,7 +250,8 @@ Listing 6-5:</p>
 let five = Some(5);
 let six = plus_one(five);
 let none = plus_one(None);
-</code></pre>
+
+#}</code></pre></pre>
 <p><span class="caption">Listing 6-5: A function that uses a <code>match</code> expression on
 an <code>Option&lt;i32&gt;</code></span></p>
 <a class="header" href="ch06-02-match.html#matching-somet" name="matching-somet"><h4>Matching <code>Some(T)</code></h4></a>
@@ -291,7 +311,10 @@ possible values. For example, a <code>u8</code> can have valid values of 0 throu
 we only care about the values 1, 3, 5, and 7, we don’t want to have to list out
 0, 2, 4, 6, 8, 9 all the way up to 255. Fortunately, we don’t have to: we can
 use the special pattern <code>_</code> instead:</p>
-<pre><code class="language-rust">let some_u8_value = 0u8;
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+let some_u8_value = 0u8;
 match some_u8_value {
     1 =&gt; println!(&quot;one&quot;),
     3 =&gt; println!(&quot;three&quot;),
@@ -299,7 +322,8 @@ match some_u8_value {
     7 =&gt; println!(&quot;seven&quot;),
     _ =&gt; (),
 }
-</code></pre>
+
+#}</code></pre></pre>
 <p>The <code>_</code> pattern will match any value. By putting it after our other arms, the
 <code>_</code> will match all the possible cases that aren’t specified before it. The <code>()</code>
 is just the unit value, so nothing will happen in the <code>_</code> case. As a result, we

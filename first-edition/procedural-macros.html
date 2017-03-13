@@ -70,14 +70,21 @@
                     <a class="header" href="procedural-macros.html#procedural-macros-and-custom-derive" name="procedural-macros-and-custom-derive"><h1>Procedural Macros (and custom Derive)</h1></a>
 <p>As you've seen throughout the rest of the book, Rust provides a mechanism
 called &quot;derive&quot; that lets you implement traits easily. For example,</p>
-<pre><code class="language-rust">#[derive(Debug)]
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+#[derive(Debug)]
 struct Point {
     x: i32,
     y: i32,
 }
-</code></pre>
+
+#}</code></pre></pre>
 <p>is a lot simpler than</p>
-<pre><code class="language-rust">struct Point {
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+struct Point {
     x: i32,
     y: i32,
 }
@@ -89,7 +96,8 @@ impl fmt::Debug for Point {
         write!(f, &quot;Point {{ x: {}, y: {} }}&quot;, self.x, self.y)
     }
 }
-</code></pre>
+
+#}</code></pre></pre>
 <p>Rust includes several traits that you can derive, but it also lets you define
 your own. We can accomplish this task through a feature of Rust called
 &quot;procedural macros.&quot; Eventually, procedural macros will allow for all sorts of

@@ -70,7 +70,7 @@
                     <a class="header" href="deref-coercions.html#deref-coercions" name="deref-coercions"><h1><code>Deref</code> coercions</h1></a>
 <p>The standard library provides a special trait, <a href="../std/ops/trait.Deref.html"><code>Deref</code></a>. It’s normally
 used to overload <code>*</code>, the dereference operator:</p>
-<pre><code class="language-rust">use std::ops::Deref;
+<pre><pre class="playpen"><code class="language-rust">use std::ops::Deref;
 
 struct DerefExample&lt;T&gt; {
     value: T,
@@ -88,12 +88,15 @@ fn main() {
     let x = DerefExample { value: 'a' };
     assert_eq!('a', *x);
 }
-</code></pre>
+</code></pre></pre>
 <p>This is useful for writing custom pointer types. However, there’s a language
 feature related to <code>Deref</code>: ‘deref coercions’. Here’s the rule: If you have a
 type <code>U</code>, and it implements <code>Deref&lt;Target=T&gt;</code>, values of <code>&amp;U</code> will
 automatically coerce to a <code>&amp;T</code>. Here’s an example:</p>
-<pre><code class="language-rust">fn foo(s: &amp;str) {
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+fn foo(s: &amp;str) {
     // Borrow a string for a second.
 }
 
@@ -102,13 +105,17 @@ let owned = &quot;Hello&quot;.to_string();
 
 // Therefore, this works:
 foo(&amp;owned);
-</code></pre>
+
+#}</code></pre></pre>
 <p>Using an ampersand in front of a value takes a reference to it. So <code>owned</code> is a
 <code>String</code>, <code>&amp;owned</code> is an <code>&amp;String</code>, and since <code>impl Deref&lt;Target=str&gt; for String</code>, <code>&amp;String</code> will deref to <code>&amp;str</code>, which <code>foo()</code> takes.</p>
 <p>That’s it. This rule is one of the only places in which Rust does an automatic
 conversion for you, but it adds a lot of flexibility. For example, the <code>Rc&lt;T&gt;</code>
 type implements <code>Deref&lt;Target=T&gt;</code>, so this works:</p>
-<pre><code class="language-rust">use std::rc::Rc;
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+use std::rc::Rc;
 
 fn foo(s: &amp;str) {
     // Borrow a string for a second.
@@ -120,14 +127,18 @@ let counted = Rc::new(owned);
 
 // Therefore, this works:
 foo(&amp;counted);
-</code></pre>
+
+#}</code></pre></pre>
 <p>All we’ve done is wrap our <code>String</code> in an <code>Rc&lt;T&gt;</code>. But we can now pass the
 <code>Rc&lt;String&gt;</code> around anywhere we’d have a <code>String</code>. The signature of <code>foo</code>
 didn’t change, but works just as well with either type. This example has two
 conversions: <code>&amp;Rc&lt;String&gt;</code> to <code>&amp;String</code> and then <code>&amp;String</code> to <code>&amp;str</code>. Rust will do
 this as many times as possible until the types match.</p>
 <p>Another very common implementation provided by the standard library is:</p>
-<pre><code class="language-rust">fn foo(s: &amp;[i32]) {
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+fn foo(s: &amp;[i32]) {
     // Borrow a slice for a second.
 }
 
@@ -135,12 +146,16 @@ this as many times as possible until the types match.</p>
 let owned = vec![1, 2, 3];
 
 foo(&amp;owned);
-</code></pre>
+
+#}</code></pre></pre>
 <p>Vectors can <code>Deref</code> to a slice.</p>
 <a class="header" href="deref-coercions.html#deref-and-method-calls" name="deref-and-method-calls"><h2>Deref and method calls</h2></a>
 <p><code>Deref</code> will also kick in when calling a method. Consider the following
 example.</p>
-<pre><code class="language-rust">struct Foo;
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+struct Foo;
 
 impl Foo {
     fn foo(&amp;self) { println!(&quot;Foo&quot;); }
@@ -149,7 +164,8 @@ impl Foo {
 let f = &amp;&amp;Foo;
 
 f.foo();
-</code></pre>
+
+#}</code></pre></pre>
 <p>Even though <code>f</code> is a <code>&amp;&amp;Foo</code> and <code>foo</code> takes <code>&amp;self</code>, this works. That’s
 because these things are the same:</p>
 <pre><code class="language-rust ignore">f.foo();

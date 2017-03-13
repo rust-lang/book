@@ -91,10 +91,10 @@ panic = 'abort'
 </blockquote>
 <p>Let’s try calling <code>panic!</code> with a simple program:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><code class="language-rust should_panic">fn main() {
+<pre><pre class="playpen"><code class="language-rust should_panic">fn main() {
     panic!(&quot;crash and burn&quot;);
 }
-</code></pre>
+</code></pre></pre>
 <p>If you run it, you’ll see something like this:</p>
 <pre><code class="language-text">$ cargo run
    Compiling panic v0.1.0 (file:///projects/panic)
@@ -119,12 +119,12 @@ of the functions the <code>panic!</code> call came from to figure this out.</p>
 from a library because of a bug in our code instead of from our code calling
 the macro directly:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><code class="language-rust should_panic">fn main() {
+<pre><pre class="playpen"><code class="language-rust should_panic">fn main() {
     let v = vec![1, 2, 3];
 
     v[100];
 }
-</code></pre>
+</code></pre></pre>
 <p>We’re attempting to access the hundredth element of our vector, but it only has
 three elements. In this situation, Rust will panic. Using <code>[]</code> is supposed to
 return an element, but if you pass an invalid index, there’s no element that

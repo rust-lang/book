@@ -108,13 +108,17 @@ $ cd adder
 <p>The contents of the <code>src/lib.rs</code> file in your adder library should be as
 follows:</p>
 <p><span class="filename">Filename: src/lib.rs</span></p>
-<pre><code class="language-rust">#[cfg(test)]
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+#[cfg(test)]
 mod tests {
     #[test]
     fn it_works() {
     }
 }
-</code></pre>
+
+#}</code></pre></pre>
 <p><span class="caption">Listing 11-1: The test module and function generated
 automatically for us by <code>cargo new</code> </span></p>
 <p>For now, let's ignore the top two lines and focus on the function to see how it
@@ -173,13 +177,17 @@ function name and seeing how the output changes; I hope that's sufficient.
 <p>Let's change the name of our test and see how that changes the test output.
 Give the <code>it_works</code> function a different name, such as <code>exploration</code>, like so:</p>
 <p><span class="filename">Filename: src/lib.rs</span></p>
-<pre><code class="language-rust">#[cfg(test)]
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+#[cfg(test)]
 mod tests {
     #[test]
     fn exploration() {
     }
 }
-</code></pre>
+
+#}</code></pre></pre>
 <p>And run <code>cargo test</code> again. In the output, we'll now see <code>exploration</code> instead
 of <code>it_works</code>:</p>
 <pre><code class="language-text">running 1 test
@@ -192,7 +200,10 @@ when something in the test function panics. We talked about the simplest way to
 cause a panic in Chapter 9: call the <code>panic!</code> macro! Type in the new test so
 that your <code>src/lib.rs</code> now looks like Listing 11-3:</p>
 <p><span class="filename">Filename: src/lib.rs</span></p>
-<pre><code class="language-rust">#[cfg(test)]
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+#[cfg(test)]
 mod tests {
     #[test]
     fn exploration() {
@@ -203,7 +214,8 @@ mod tests {
         panic!(&quot;Make this test fail&quot;);
     }
 }
-</code></pre>
+
+#}</code></pre></pre>
 <p><span class="caption">Listing 11-3: Adding a second test; one that will fail
 since we call the <code>panic!</code> macro </span></p>
 <p>And run the tests again with <code>cargo test</code>. The output should look like Listing
@@ -263,7 +275,10 @@ the <code>assert!</code> macro.</p>
 <!-- Listing 5-9 wasn't marked as such; I'll fix it the next time I get Chapter
 5 for editing. /Carol -->
 <p><span class="filename">Filename: src/lib.rs</span></p>
-<pre><code class="language-rust">#[derive(Debug)]
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+#[derive(Debug)]
 pub struct Rectangle {
     length: u32,
     width: u32,
@@ -274,7 +289,8 @@ impl Rectangle {
         self.length &gt; other.length &amp;&amp; self.width &gt; other.width
     }
 }
-</code></pre>
+
+#}</code></pre></pre>
 <p><span class="caption">Listing 11-5: The <code>Rectangle</code> struct and its <code>can_hold</code>
 method from Chapter 5 </span></p>
 <p>The <code>can_hold</code> method returns a boolean, which means it's a perfect use case
@@ -283,7 +299,10 @@ for the <code>assert!</code> macro. In Listing 11-6, let's write a test that exe
 a width of 7, and asserting that it can hold another <code>Rectangle</code> instance that
 has a length of 5 and a width of 1:</p>
 <p><span class="filename">Filename: src/lib.rs</span></p>
-<pre><code class="language-rust">#[cfg(test)]
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+#[cfg(test)]
 mod tests {
     use super::*;
 
@@ -295,7 +314,8 @@ mod tests {
         assert!(larger.can_hold(&amp;smaller));
     }
 }
-</code></pre>
+
+#}</code></pre></pre>
 <p><span class="caption">Listing 11-6: A test for <code>can_hold</code> that checks that a
 larger rectangle indeed holds a smaller rectangle </span></p>
 <p>Note that we've added a new line inside the <code>tests</code> module: <code>use super::*;</code>.
@@ -316,7 +336,10 @@ test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured
 <p>It does pass! Let's add another test, this time asserting that a smaller
 rectangle cannot hold a larger rectangle:</p>
 <p><span class="filename">Filename: src/lib.rs</span></p>
-<pre><code class="language-rust">#[cfg(test)]
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+#[cfg(test)]
 mod tests {
     use super::*;
 
@@ -336,7 +359,8 @@ mod tests {
         assert!(!smaller.can_hold(&amp;larger));
     }
 }
-</code></pre>
+
+#}</code></pre></pre>
 <p>Because the correct result of the <code>can_hold</code> function in this case is <code>false</code>,
 we need to negate that result before we pass it to the <code>assert!</code> macro. This
 way, our test will pass if <code>can_hold</code> returns <code>false</code>:</p>
@@ -350,7 +374,10 @@ test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured
 introduce a bug in our code. Let's change the implementation of the <code>can_hold</code>
 method to have a less-than sign when it compares the lengths where it's
 supposed to have a greater-than sign:</p>
-<pre><code class="language-rust">#[derive(Debug)]
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+#[derive(Debug)]
 pub struct Rectangle {
     length: u32,
     width: u32,
@@ -361,7 +388,8 @@ impl Rectangle {
         self.length &lt; other.length &amp;&amp; self.width &gt; other.width
     }
 }
-</code></pre>
+
+#}</code></pre></pre>
 <p>Running the tests now produces:</p>
 <pre><code class="language-text">running 2 tests
 test tests::smaller_can_hold_larger ... ok
@@ -397,7 +425,10 @@ expression, not the values that lead to the <code>false</code> value.</p>
 parameter and returns the result. Then let's test this function using the
 <code>assert_eq!</code> macro:</p>
 <p><span class="filename">Filename: src/lib.rs</span></p>
-<pre><code class="language-rust">pub fn add_two(a: i32) -&gt; i32 {
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+pub fn add_two(a: i32) -&gt; i32 {
     a + 2
 }
 
@@ -410,7 +441,8 @@ mod tests {
         assert_eq!(4, add_two(2));
     }
 }
-</code></pre>
+
+#}</code></pre></pre>
 <p><span class="caption">Listing 11-7: Testing the function <code>add_two</code> using the
 <code>assert_eq!</code> macro </span></p>
 <p>Let's check that it passes!</p>
@@ -424,10 +456,14 @@ of calling <code>add_two(2)</code>. We see a line for this test that says <code>
 <p>Let's introduce a bug into our code to see what it looks like when a test that
 uses <code>assert_eq!</code> fails. Change the implementation of the <code>add_two</code> function to
 instead add 3:</p>
-<pre><code class="language-rust">pub fn add_two(a: i32) -&gt; i32 {
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+pub fn add_two(a: i32) -&gt; i32 {
     a + 3
 }
-</code></pre>
+
+#}</code></pre></pre>
 <p>And run the tests again:</p>
 <pre><code class="language-text">running 1 test
 test tests::it_adds_two ... FAILED
@@ -487,7 +523,10 @@ the test fails, we have a better idea of what the problem is with the code.</p>
 <p>For example, let's say we have a function that greets people by name, and we
 want to test that the name we pass into the function appears in the output:</p>
 <p><span class="filename">Filename: src/lib.rs</span></p>
-<pre><code class="language-rust">pub fn greeting(name: &amp;str) -&gt; String {
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+pub fn greeting(name: &amp;str) -&gt; String {
     format!(&quot;Hello {}!&quot;, name)
 }
 
@@ -501,7 +540,8 @@ mod tests {
         assert!(result.contains(&quot;Carol&quot;));
     }
 }
-</code></pre>
+
+#}</code></pre></pre>
 <p>The requirements for this program haven't been agreed upon yet, and we're
 pretty sure the <code>Hello</code> text at the beginning of the greeting will change. We
 decided we don't want to have to update the test for the name when that
@@ -510,10 +550,14 @@ the <code>greeting</code> function, we're just going to assert that the output c
 the text of the input parameter.</p>
 <p>Let's introduce a bug into this code to see what this test failure looks like,
 by changing <code>greeting</code> to not include <code>name</code>:</p>
-<pre><code class="language-rust">pub fn greeting(name: &amp;str) -&gt; String {
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+pub fn greeting(name: &amp;str) -&gt; String {
     String::from(&quot;Hello!&quot;)
 }
-</code></pre>
+
+#}</code></pre></pre>
 <p>Running this test produces:</p>
 <pre><code class="language-text">running 1 test
 test tests::greeting_contains_name ... FAILED
@@ -564,7 +608,10 @@ panics, and the test will fail if the code inside the function does non panic.</
 <p>Listing 11-8 shows how we'd write a test that checks the error conditions of
 <code>Guess::new</code> happen when we expect:</p>
 <p><span class="filename">Filename: src/lib.rs</span></p>
-<pre><code class="language-rust">struct Guess {
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+struct Guess {
     value: u32,
 }
 
@@ -590,7 +637,8 @@ mod tests {
         Guess::new(200);
     }
 }
-</code></pre>
+
+#}</code></pre></pre>
 <p><span class="caption">Listing 11-8: Testing that a condition will cause a
 <code>panic!</code> </span></p>
 <p>The <code>#[should_panic]</code> attribute goes after the <code>#[test]</code> attribute and before
@@ -603,7 +651,10 @@ test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured
 </code></pre>
 <p>Looks good! Now let's introduce a bug in our code, by removing the condition
 that the <code>new</code> function will panic if the value is greater than 100:</p>
-<pre><code class="language-rust"># struct Guess {
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+# struct Guess {
 #     value: u32,
 # }
 #
@@ -618,7 +669,8 @@ impl Guess {
         }
     }
 }
-</code></pre>
+
+#}</code></pre></pre>
 <p>If we run the test from Listing 11-8, it will fail:</p>
 <pre><code class="language-text">running 1 test
 test tests::greater_than_100 ... FAILED
@@ -643,7 +695,10 @@ the failure message contains the provided text. For example, consider the
 modified code for <code>Guess</code> in Listing 11-9 where the <code>new</code> function panics with
 different messages depending on whether the value was too small or too large:</p>
 <p><span class="filename">Filename: src/lib.rs</span></p>
-<pre><code class="language-rust">struct Guess {
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+struct Guess {
     value: u32,
 }
 
@@ -673,7 +728,8 @@ mod tests {
         Guess::new(200);
     }
 }
-</code></pre>
+
+#}</code></pre></pre>
 <p><span class="caption">Listing 11-9: Testing that a condition will cause a
 <code>panic!</code> with a particular panic message </span></p>
 <p>This test will pass, because the value we put in the <code>expected</code> parameter of

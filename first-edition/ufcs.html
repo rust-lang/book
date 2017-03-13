@@ -69,7 +69,10 @@
                 <div id="content" class="content">
                     <a class="header" href="ufcs.html#universal-function-call-syntax" name="universal-function-call-syntax"><h1>Universal Function Call Syntax</h1></a>
 <p>Sometimes, functions can have the same names. Consider this code:</p>
-<pre><code class="language-rust">trait Foo {
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+trait Foo {
     fn f(&amp;self);
 }
 
@@ -88,7 +91,8 @@ impl Bar for Baz {
 }
 
 let b = Baz;
-</code></pre>
+
+#}</code></pre></pre>
 <p>If we were to try to call <code>b.f()</code>, we’d get an error:</p>
 <pre><code class="language-text">error: multiple applicable methods in scope [E0034]
 b.f();
@@ -105,7 +109,10 @@ note: candidate #2 is defined in an impl of the trait `main::Bar` for the type
 </code></pre>
 <p>We need a way to disambiguate which method we need. This feature is called
 ‘universal function call syntax’, and it looks like this:</p>
-<pre><code class="language-rust"># trait Foo {
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+# trait Foo {
 #     fn f(&amp;self);
 # }
 # trait Bar {
@@ -121,7 +128,8 @@ note: candidate #2 is defined in an impl of the trait `main::Bar` for the type
 # let b = Baz;
 Foo::f(&amp;b);
 Bar::f(&amp;b);
-</code></pre>
+
+#}</code></pre></pre>
 <p>Let’s break it down.</p>
 <pre><code class="language-rust ignore">Foo::
 Bar::
@@ -148,7 +156,7 @@ the <code>&lt;&gt;</code>s. In this case, the type is <code>Type as Trait</code>
 optional if it’s not ambiguous. Same with the angle brackets, hence the
 shorter form.</p>
 <p>Here’s an example of using the longer form.</p>
-<pre><code class="language-rust">trait Foo {
+<pre><pre class="playpen"><code class="language-rust">trait Foo {
     fn foo() -&gt; i32;
 }
 
@@ -170,7 +178,7 @@ fn main() {
     assert_eq!(10, &lt;Bar as Foo&gt;::foo());
     assert_eq!(20, Bar::foo());
 }
-</code></pre>
+</code></pre></pre>
 <p>Using the angle bracket syntax lets you call the trait method instead of the
 inherent one.</p>
 

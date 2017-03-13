@@ -89,13 +89,17 @@ of data being grouped together. Then, inside curly braces, we define the names
 of the pieces of data, which we call <em>fields</em>, and specify each field’s type.
 For example, Listing 5-1 shows a struct to store information about a user
 account:</p>
-<pre><code class="language-rust">struct User {
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+struct User {
     username: String,
     email: String,
     sign_in_count: u64,
     active: bool,
 }
-</code></pre>
+
+#}</code></pre></pre>
 <p><span class="caption">Listing 5-1: A <code>User</code> struct definition</span></p>
 <p>To use a struct once we've defined it, we create an <em>instance</em> of that struct
 by specifying concrete values for each of the fields. Creating an instance is
@@ -106,7 +110,10 @@ specified in the same order in which the struct declared them. In other words,
 the struct definition is like a general template for the type, and instances
 fill in that template with particular data to create values of the type. For
 example, we can declare a particular user like this:</p>
-<pre><code class="language-rust"># struct User {
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+# struct User {
 #     username: String,
 #     email: String,
 #     sign_in_count: u64,
@@ -119,7 +126,8 @@ let user1 = User {
     active: true,
     sign_in_count: 1,
 };
-</code></pre>
+
+#}</code></pre></pre>
 <p>To get a particular value out of a struct, we can use dot notation. If we
 wanted just this user’s email address, we can say <code>user1.email</code>.</p>
 <a class="header" href="ch05-00-structs.html#ownership-of-struct-data" name="ownership-of-struct-data"><h2>Ownership of Struct Data</h2></a>
@@ -174,7 +182,7 @@ the length and width of a rectangle specified in pixels and will calculate the
 area of the rectangle. Listing 5-2 has a short program with one way of doing
 just that in our project’s <em>src/main.rs</em>:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><code class="language-rust">fn main() {
+<pre><pre class="playpen"><code class="language-rust">fn main() {
     let length1 = 50;
     let width1 = 30;
 
@@ -187,7 +195,7 @@ just that in our project’s <em>src/main.rs</em>:</p>
 fn area(length: u32, width: u32) -&gt; u32 {
     length * width
 }
-</code></pre>
+</code></pre></pre>
 <p><span class="caption">Listing 5-2: Calculating the area of a rectangle
 specified by its length and width in separate variables</span></p>
 <p>Let’s try running this program with <code>cargo run</code>:</p>
@@ -208,7 +216,7 @@ manageable to group length and width together.</p>
 <p>We’ve already discussed one way we might do that in Chapter 3: tuples. Listing
 5-3 has a version of our program which uses tuples:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><code class="language-rust">fn main() {
+<pre><pre class="playpen"><code class="language-rust">fn main() {
     let rect1 = (50, 30);
 
     println!(
@@ -220,7 +228,7 @@ manageable to group length and width together.</p>
 fn area(dimensions: (u32, u32)) -&gt; u32 {
     dimensions.0 * dimensions.1
 }
-</code></pre>
+</code></pre></pre>
 <p><span class="caption">Listing 5-3: Specifying the length and width of the
 rectangle with a tuple</span></p>
 <!-- I will add ghosting & wingdings once we're in libreoffice /Carol -->
@@ -245,7 +253,7 @@ in our code.</p>
 with a name for the whole as well as names for the parts, as shown in Listing
 5-4:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><code class="language-rust">struct Rectangle {
+<pre><pre class="playpen"><code class="language-rust">struct Rectangle {
     length: u32,
     width: u32,
 }
@@ -262,7 +270,7 @@ fn main() {
 fn area(rectangle: &amp;Rectangle) -&gt; u32 {
     rectangle.length * rectangle.width
 }
-</code></pre>
+</code></pre></pre>
 <p><span class="caption">Listing 5-4: Defining a <code>Rectangle</code> struct</span></p>
 <!-- Will add ghosting & wingdings once we're in libreoffice /Carol -->
 <p>Here we’ve defined a struct and given it the name <code>Rectangle</code>. Inside the <code>{}</code>
@@ -332,7 +340,7 @@ crate, add `#[derive(Debug)]` or manually implement it
 have to explicitly opt-in to having that functionality be available for our
 struct. To do that, we add the annotation <code>#[derive(Debug)]</code> just before our
 struct definition, as shown in Listing 5-6:</p>
-<pre><code class="language-rust">#[derive(Debug)]
+<pre><pre class="playpen"><code class="language-rust">#[derive(Debug)]
 struct Rectangle {
     length: u32,
     width: u32,
@@ -343,7 +351,7 @@ fn main() {
 
     println!(&quot;rect1 is {:?}&quot;, rect1);
 }
-</code></pre>
+</code></pre></pre>
 <p><span class="caption">Listing 5-6: Adding the annotation to derive the <code>Debug</code>
 trait and printing the <code>Rectangle</code> instance using debug formatting</span></p>
 <p>At this point, if we run this program, we won’t get any errors and we’ll see

@@ -72,7 +72,10 @@
 possible options. Also, conditions can get quite complex. Rust
 has a keyword, <code>match</code>, that allows you to replace complicated <code>if</code>/<code>else</code>
 groupings with something more powerful. Check it out:</p>
-<pre><code class="language-rust">let x = 5;
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+let x = 5;
 
 match x {
     1 =&gt; println!(&quot;one&quot;),
@@ -82,7 +85,8 @@ match x {
     5 =&gt; println!(&quot;five&quot;),
     _ =&gt; println!(&quot;something else&quot;),
 }
-</code></pre>
+
+#}</code></pre></pre>
 <p><code>match</code> takes an expression and then branches based on its value. Each ‘arm’ of
 the branch is of the form <code>val =&gt; expression</code>. When the value matches, that arm’s
 expression will be evaluated. It’s called <code>match</code> because of the term ‘pattern
@@ -100,7 +104,10 @@ an arm of <code>match</code>. As you can see in the previous example, we provide
 arms for integers 1-5, if <code>x</code> is 6 or any other value, then it is caught by <code>_</code>.</p>
 <p><code>match</code> is also an expression, which means we can use it on the right-hand
 side of a <code>let</code> binding or directly where an expression is used:</p>
-<pre><code class="language-rust">let x = 5;
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+let x = 5;
 
 let number = match x {
     1 =&gt; &quot;one&quot;,
@@ -110,13 +117,17 @@ let number = match x {
     5 =&gt; &quot;five&quot;,
     _ =&gt; &quot;something else&quot;,
 };
-</code></pre>
+
+#}</code></pre></pre>
 <p>Sometimes it’s a nice way of converting something from one type to another; in
 this example the integers are converted to <code>String</code>.</p>
 <a class="header" href="match.html#matching-on-enums" name="matching-on-enums"><h1>Matching on enums</h1></a>
 <p>Another important use of the <code>match</code> keyword is to process the possible
 variants of an enum:</p>
-<pre><code class="language-rust">enum Message {
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+enum Message {
     Quit,
     ChangeColor(i32, i32, i32),
     Move { x: i32, y: i32 },
@@ -135,7 +146,8 @@ fn process_message(msg: Message) {
         Message::Write(s) =&gt; println!(&quot;{}&quot;, s),
     };
 }
-</code></pre>
+
+#}</code></pre></pre>
 <p>Again, the Rust compiler checks exhaustiveness, so it demands that you
 have a match arm for every variant of the enum. If you leave one off, it
 will give you a compile-time error unless you use <code>_</code> or provide all possible

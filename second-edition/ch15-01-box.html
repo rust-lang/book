@@ -73,11 +73,11 @@
 the stack vs. the heap in Chapter 4). Listing 15-1 shows how to use a box to
 store an <code>i32</code> on the heap:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><code class="language-rust">fn main() {
+<pre><pre class="playpen"><code class="language-rust">fn main() {
     let b = Box::new(5);
     println!(&quot;b = {}&quot;, b);
 }
-</code></pre>
+</code></pre></pre>
 <p><span class="caption">Listing 15-1: Storing an <code>i32</code> value on the heap using a
 box</span></p>
 <p>This will print <code>b = 5</code>. In this case, we can access the data in the box in a
@@ -157,13 +157,17 @@ store a <code>List</code> value. Let's break this down a bit: first let's look a
 decides how much space it needs to store a value of a non-recursive type.
 Recall the <code>Message</code> enum we defined in Listing 6-2 when we discussed enum
 definitions in Chapter 6:</p>
-<pre><code class="language-rust">enum Message {
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+enum Message {
     Quit,
     Move { x: i32, y: i32 },
     Write(String),
     ChangeColor(i32, i32, i32),
 }
-</code></pre>
+
+#}</code></pre></pre>
 <p>When Rust needs to know how much space to allocate for a <code>Message</code> value, it
 can go through each of the variants and see that <code>Message::Quit</code> does not need
 any space, <code>Message::Move</code> needs enough space to store two <code>i32</code> values, and so
@@ -195,7 +199,7 @@ definition from Listing 15-2 to look like the definition here in Listing 15-5,
 and change <code>main</code> to use <code>Box::new</code> for the values inside the <code>Cons</code> variants
 like so:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><code class="language-rust">enum List {
+<pre><pre class="playpen"><code class="language-rust">enum List {
     Cons(i32, Box&lt;List&gt;),
     Nil,
 }
@@ -208,7 +212,7 @@ fn main() {
             Box::new(Cons(3,
                 Box::new(Nil))))));
 }
-</code></pre>
+</code></pre></pre>
 <p><span class="caption">Listing 15-5: Definition of <code>List</code> that uses <code>Box&lt;T&gt;</code> in
 order to have a known size</span></p>
 <p>The compiler will be able to figure out the size it needs to store a <code>List</code>

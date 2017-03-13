@@ -85,7 +85,7 @@ libc = &quot;0.2.0&quot;
 <a class="header" href="ffi.html#calling-foreign-functions" name="calling-foreign-functions"><h2>Calling foreign functions</h2></a>
 <p>The following is a minimal example of calling a foreign function which will
 compile if snappy is installed:</p>
-<pre><code class="language-rust no_run"># #![feature(libc)]
+<pre><pre class="playpen"><code class="language-rust no_run"># #![feature(libc)]
 extern crate libc;
 use libc::size_t;
 
@@ -98,7 +98,7 @@ fn main() {
     let x = unsafe { snappy_max_compressed_length(100) };
     println!(&quot;max compressed length of a 100 byte buffer: {}&quot;, x);
 }
-</code></pre>
+</code></pre></pre>
 <p>The <code>extern</code> block is a list of function signatures in a foreign library, in
 this case with the platform's C ABI. The <code>#[link(...)]</code> attribute is used to
 instruct the linker to link against the snappy library so the symbols are
@@ -113,7 +113,7 @@ Rust's safe memory model.</p>
 cannot check if the declaration is correct, so specifying it correctly is part
 of keeping the binding correct at runtime.</p>
 <p>The <code>extern</code> block can be extended to cover the entire snappy API:</p>
-<pre><code class="language-rust no_run"># #![feature(libc)]
+<pre><pre class="playpen"><code class="language-rust no_run"># #![feature(libc)]
 extern crate libc;
 use libc::{c_int, size_t};
 
@@ -135,7 +135,7 @@ extern {
                                          compressed_length: size_t) -&gt; c_int;
 }
 # fn main() {}
-</code></pre>
+</code></pre></pre>
 <a class="header" href="ffi.html#creating-a-safe-interface" name="creating-a-safe-interface"><h1>Creating a safe interface</h1></a>
 <p>The raw C API needs to be wrapped to provide memory safety and make use of higher-level concepts
 like vectors. A library can choose to expose only the safe, high-level interface and hide the unsafe
@@ -144,7 +144,7 @@ internal details.</p>
 vectors as pointers to memory. Rust's vectors are guaranteed to be a contiguous block of memory. The
 length is the number of elements currently contained, and the capacity is the total size in elements of
 the allocated memory. The length is less than or equal to the capacity.</p>
-<pre><code class="language-rust"># #![feature(libc)]
+<pre><pre class="playpen"><code class="language-rust"># #![feature(libc)]
 # extern crate libc;
 # use libc::{c_int, size_t};
 # unsafe fn snappy_validate_compressed_buffer(_: *const u8, _: size_t) -&gt; c_int { 0 }
@@ -154,7 +154,7 @@ pub fn validate_compressed_buffer(src: &amp;[u8]) -&gt; bool {
         snappy_validate_compressed_buffer(src.as_ptr(), src.len() as size_t) == 0
     }
 }
-</code></pre>
+</code></pre></pre>
 <p>The <code>validate_compressed_buffer</code> wrapper above makes use of an <code>unsafe</code> block, but it makes the
 guarantee that calling it is safe for all inputs by leaving off <code>unsafe</code> from the function
 signature.</p>
@@ -164,7 +164,7 @@ allocated to hold the output too.</p>
 required capacity to hold the compressed output. The vector can then be passed to the
 <code>snappy_compress</code> function as an output parameter. An output parameter is also passed to retrieve
 the true length after compression for setting the length.</p>
-<pre><code class="language-rust"># #![feature(libc)]
+<pre><pre class="playpen"><code class="language-rust"># #![feature(libc)]
 # extern crate libc;
 # use libc::{size_t, c_int};
 # unsafe fn snappy_compress(a: *const u8, b: size_t, c: *mut u8,
@@ -185,10 +185,10 @@ pub fn compress(src: &amp;[u8]) -&gt; Vec&lt;u8&gt; {
         dst
     }
 }
-</code></pre>
+</code></pre></pre>
 <p>Decompression is similar, because snappy stores the uncompressed size as part of the compression
 format and <code>snappy_uncompressed_length</code> will retrieve the exact buffer size required.</p>
-<pre><code class="language-rust"># #![feature(libc)]
+<pre><pre class="playpen"><code class="language-rust"># #![feature(libc)]
 # extern crate libc;
 # use libc::{size_t, c_int};
 # unsafe fn snappy_uncompress(compressed: *const u8,
@@ -218,9 +218,9 @@ pub fn uncompress(src: &amp;[u8]) -&gt; Option&lt;Vec&lt;u8&gt;&gt; {
         }
     }
 }
-</code></pre>
+</code></pre></pre>
 <p>Then, we can add some tests to show how to use them.</p>
-<pre><code class="language-rust"># #![feature(libc)]
+<pre><pre class="playpen"><code class="language-rust"># #![feature(libc)]
 # extern crate libc;
 # use libc::{c_int, size_t};
 # unsafe fn snappy_compress(input: *const u8,
@@ -272,7 +272,7 @@ mod tests {
         assert!(uncompress(&amp;c) == Some(d));
     }
 }
-</code></pre>
+</code></pre></pre>
 <a class="header" href="ffi.html#destructors" name="destructors"><h1>Destructors</h1></a>
 <p>Foreign libraries often hand off ownership of resources to the calling code.
 When this occurs, we must use Rust's destructors to provide safety and guarantee
@@ -288,7 +288,7 @@ with the correct calling convention to make it callable from C code.</p>
 to the C library and afterwards be invoked from there.</p>
 <p>A basic example is:</p>
 <p>Rust code:</p>
-<pre><code class="language-rust no_run">extern fn callback(a: i32) {
+<pre><pre class="playpen"><code class="language-rust no_run">extern fn callback(a: i32) {
     println!(&quot;I'm called from C with value {0}&quot;, a);
 }
 
@@ -304,7 +304,7 @@ fn main() {
         trigger_callback(); // Triggers the callback.
     }
 }
-</code></pre>
+</code></pre></pre>
 <p>C code:</p>
 <pre><code class="language-c">typedef void (*rust_callback)(int32_t);
 rust_callback cb;
@@ -330,7 +330,7 @@ C library. The C library can then include the pointer to the Rust object in
 the notification. This will allow the callback to unsafely access the
 referenced Rust object.</p>
 <p>Rust code:</p>
-<pre><code class="language-rust no_run">#[repr(C)]
+<pre><pre class="playpen"><code class="language-rust no_run">#[repr(C)]
 struct RustObject {
     a: i32,
     // Other members...
@@ -360,7 +360,7 @@ fn main() {
         trigger_callback();
     }
 }
-</code></pre>
+</code></pre></pre>
 <p>C code:</p>
 <pre><code class="language-c">typedef void (*rust_callback)(void*, int32_t);
 void* cb_target;
@@ -447,14 +447,18 @@ unsafe are only allowed inside unsafe blocks. Unsafe blocks isolate unsafety and
 the compiler that the unsafety does not leak out of the block.</p>
 <p>Unsafe functions, on the other hand, advertise it to the world. An unsafe function is written like
 this:</p>
-<pre><code class="language-rust">unsafe fn kaboom(ptr: *const i32) -&gt; i32 { *ptr }
-</code></pre>
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+unsafe fn kaboom(ptr: *const i32) -&gt; i32 { *ptr }
+
+#}</code></pre></pre>
 <p>This function can only be called from an <code>unsafe</code> block or another <code>unsafe</code> function.</p>
 <a class="header" href="ffi.html#accessing-foreign-globals" name="accessing-foreign-globals"><h1>Accessing foreign globals</h1></a>
 <p>Foreign APIs often export a global variable which could do something like track
 global state. In order to access these variables, you declare them in <code>extern</code>
 blocks with the <code>static</code> keyword:</p>
-<pre><code class="language-rust no_run"># #![feature(libc)]
+<pre><pre class="playpen"><code class="language-rust no_run"># #![feature(libc)]
 extern crate libc;
 
 #[link(name = &quot;readline&quot;)]
@@ -466,11 +470,11 @@ fn main() {
     println!(&quot;You have readline version {} installed.&quot;,
              unsafe { rl_readline_version as i32 });
 }
-</code></pre>
+</code></pre></pre>
 <p>Alternatively, you may need to alter global state provided by a foreign
 interface. To do this, statics can be declared with <code>mut</code> so we can mutate
 them.</p>
-<pre><code class="language-rust no_run"># #![feature(libc)]
+<pre><pre class="playpen"><code class="language-rust no_run"># #![feature(libc)]
 extern crate libc;
 
 use std::ffi::CString;
@@ -491,14 +495,14 @@ fn main() {
         rl_prompt = ptr::null();
     }
 }
-</code></pre>
+</code></pre></pre>
 <p>Note that all interaction with a <code>static mut</code> is unsafe, both reading and
 writing. Dealing with global mutable state requires a great deal of care.</p>
 <a class="header" href="ffi.html#foreign-calling-conventions" name="foreign-calling-conventions"><h1>Foreign calling conventions</h1></a>
 <p>Most foreign code exposes a C ABI, and Rust uses the platform's C calling convention by default when
 calling foreign functions. Some foreign functions, most notably the Windows API, use other calling
 conventions. Rust provides a way to tell the compiler which convention to use:</p>
-<pre><code class="language-rust"># #![feature(libc)]
+<pre><pre class="playpen"><code class="language-rust"># #![feature(libc)]
 extern crate libc;
 
 #[cfg(all(target_os = &quot;win32&quot;, target_arch = &quot;x86&quot;))]
@@ -508,7 +512,7 @@ extern &quot;stdcall&quot; {
     fn SetEnvironmentVariableA(n: *const u8, v: *const u8) -&gt; libc::c_int;
 }
 # fn main() { }
-</code></pre>
+</code></pre></pre>
 <p>This applies to the entire <code>extern</code> block. The list of supported ABI constraints
 are:</p>
 <ul>
@@ -590,7 +594,7 @@ to represent a nullable function pointer using the C ABI (corresponding to the C
 callback, which gets called in certain situations. The callback is passed a function pointer
 and an integer and it is supposed to run the function with the integer as a parameter. So
 we have function pointers flying across the FFI boundary in both directions.</p>
-<pre><code class="language-rust"># #![feature(libc)]
+<pre><pre class="playpen"><code class="language-rust"># #![feature(libc)]
 extern crate libc;
 use libc::c_int;
 
@@ -618,7 +622,7 @@ fn main() {
         register(Some(apply));
     }
 }
-</code></pre>
+</code></pre></pre>
 <p>And the code on the C side looks like this:</p>
 <pre><code class="language-c">void register(void (*f)(void (*)(int), int)) {
     ...
@@ -628,12 +632,12 @@ fn main() {
 <a class="header" href="ffi.html#calling-rust-code-from-c" name="calling-rust-code-from-c"><h1>Calling Rust code from C</h1></a>
 <p>You may wish to compile Rust code in a way so that it can be called from C. This is
 fairly easy, but requires a few things:</p>
-<pre><code class="language-rust">#[no_mangle]
+<pre><pre class="playpen"><code class="language-rust">#[no_mangle]
 pub extern fn hello_rust() -&gt; *const u8 {
     &quot;Hello, world!\0&quot;.as_ptr()
 }
 # fn main() {}
-</code></pre>
+</code></pre></pre>
 <p>The <code>extern</code> makes this function adhere to the C calling convention, as
 discussed above in &quot;<a href="ffi.html#foreign-calling-conventions">Foreign Calling
 Conventions</a>&quot;. The <code>no_mangle</code>
@@ -642,7 +646,7 @@ attribute turns off Rust's name mangling, so that it is easier to link to.</p>
 <p>It’s important to be mindful of <code>panic!</code>s when working with FFI. A <code>panic!</code>
 across an FFI boundary is undefined behavior. If you’re writing code that may
 panic, you should run it in a closure with <a href="../std/panic/fn.catch_unwind.html"><code>catch_unwind()</code></a>:</p>
-<pre><code class="language-rust">use std::panic::catch_unwind;
+<pre><pre class="playpen"><code class="language-rust">use std::panic::catch_unwind;
 
 #[no_mangle]
 pub extern fn oh_no() -&gt; i32 {
@@ -656,7 +660,7 @@ pub extern fn oh_no() -&gt; i32 {
 }
 
 fn main() {}
-</code></pre>
+</code></pre></pre>
 <p>Please note that <a href="../std/panic/fn.catch_unwind.html"><code>catch_unwind()</code></a> will only catch unwinding panics, not
 those who abort the process. See the documentation of <a href="../std/panic/fn.catch_unwind.html"><code>catch_unwind()</code></a>
 for more information.</p>
@@ -668,7 +672,7 @@ know the internal details of the thing it wants. The simplest way is to use a
 void bar(void *arg);
 </code></pre>
 <p>We can represent this in Rust with the <code>c_void</code> type:</p>
-<pre><code class="language-rust"># #![feature(libc)]
+<pre><pre class="playpen"><code class="language-rust"># #![feature(libc)]
 extern crate libc;
 
 extern &quot;C&quot; {
@@ -676,7 +680,7 @@ extern &quot;C&quot; {
     pub fn bar(arg: *mut libc::c_void);
 }
 # fn main() {}
-</code></pre>
+</code></pre></pre>
 <p>This is a perfectly valid way of handling the situation. However, we can do a bit
 better. To solve this, some C libraries will instead create a <code>struct</code>, where
 the details and memory layout of the struct are private. This gives some amount
@@ -687,7 +691,7 @@ void foo(struct Foo *arg);
 void bar(struct Bar *arg);
 </code></pre>
 <p>To do this in Rust, let’s create our own opaque types with <code>enum</code>:</p>
-<pre><code class="language-rust">pub enum Foo {}
+<pre><pre class="playpen"><code class="language-rust">pub enum Foo {}
 pub enum Bar {}
 
 extern &quot;C&quot; {
@@ -695,7 +699,7 @@ extern &quot;C&quot; {
     pub fn bar(arg: *mut Bar);
 }
 # fn main() {}
-</code></pre>
+</code></pre></pre>
 <p>By using an <code>enum</code> with no variants, we create an opaque type that we can’t
 instantiate, as it has no variants. But because our <code>Foo</code> and <code>Bar</code> types are
 different, we’ll get type safety between the two of them, so we cannot

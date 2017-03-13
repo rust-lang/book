@@ -84,13 +84,13 @@ containing all of the elements the iterator produces.</li>
 </ol>
 <p>Let's give it a try as shown in Listing 12-1:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><code class="language-rust">use std::env;
+<pre><pre class="playpen"><code class="language-rust">use std::env;
 
 fn main() {
     let args: Vec&lt;String&gt; = env::args().collect();
     println!(&quot;{:?}&quot;, args);
 }
-</code></pre>
+</code></pre></pre>
 <p><span class="caption">Listing 12-1: Collect the command line arguments into a
 vector and print them out</span></p>
 <!-- Will add wingdings in libreoffice /Carol -->

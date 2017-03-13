@@ -78,7 +78,10 @@ section titled &quot;Update a Value Based on the Old Value&quot;. We had a mutab
 reference, and we wanted to change the value that the reference was pointing
 to. In order to do that, first we had to dereference the reference. Here's
 another example using references to <code>i32</code> values:</p>
-<pre><code class="language-rust">let mut x = 5;
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+let mut x = 5;
 {
     let y = &amp;mut x;
 
@@ -86,7 +89,8 @@ another example using references to <code>i32</code> values:</p>
 }
 
 assert_eq!(6, x);
-</code></pre>
+
+#}</code></pre></pre>
 <p>We use <code>*y</code> to access the data that the mutable reference in <code>y</code> refers to,
 rather than the mutable reference itself. We can then modify that data, in this
 case by adding 1.</p>
@@ -107,7 +111,7 @@ metadata, so we implement the <code>Deref</code> trait to return the audio data.
 Implementing the <code>Deref</code> trait requires implementing one method named <code>deref</code>
 that borrows <code>self</code> and returns the inner data:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><code class="language-rust">use std::ops::Deref;
+<pre><pre class="playpen"><code class="language-rust">use std::ops::Deref;
 
 struct Mp3 {
     audio: Vec&lt;u8&gt;,
@@ -133,7 +137,7 @@ fn main() {
 
     assert_eq!(vec![1, 2, 3], *my_favorite_song);
 }
-</code></pre>
+</code></pre></pre>
 <p><span class="caption">Listing 15-7: An implementation of the <code>Deref</code> trait on a
 struct that holds mp3 file data and metadata</span></p>
 <p>Most of this should look familiar: a struct, a trait implementation, and a

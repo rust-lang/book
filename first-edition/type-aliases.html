@@ -69,13 +69,21 @@
                 <div id="content" class="content">
                     <a class="header" href="type-aliases.html#type-aliases" name="type-aliases"><h1>Type Aliases</h1></a>
 <p>The <code>type</code> keyword lets you declare an alias of another type:</p>
-<pre><code class="language-rust">type Name = String;
-</code></pre>
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+type Name = String;
+
+#}</code></pre></pre>
 <p>You can then use this type as if it were a real type:</p>
-<pre><code class="language-rust">type Name = String;
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+type Name = String;
 
 let x: Name = &quot;Hello&quot;.to_string();
-</code></pre>
+
+#}</code></pre></pre>
 <p>Note, however, that this is an <em>alias</em>, not a new type entirely. In other
 words, because Rust is strongly typed, you’d expect a comparison between two
 different types to fail:</p>
@@ -96,7 +104,10 @@ if x == y {
              ^
 </code></pre>
 <p>But, if we had an alias:</p>
-<pre><code class="language-rust">type Num = i32;
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+type Num = i32;
 
 let x: i32 = 5;
 let y: Num = 5;
@@ -104,11 +115,15 @@ let y: Num = 5;
 if x == y {
    // ...
 }
-</code></pre>
+
+#}</code></pre></pre>
 <p>This compiles without error. Values of a <code>Num</code> type are the same as a value of
 type <code>i32</code>, in every way. You can use <a href="structs.html#tuple-structs">tuple struct</a> to really get a new type.</p>
 <p>You can also use type aliases with generics:</p>
-<pre><code class="language-rust">use std::result;
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+use std::result;
 
 enum ConcreteError {
     Foo,
@@ -116,7 +131,8 @@ enum ConcreteError {
 }
 
 type Result&lt;T&gt; = result::Result&lt;T, ConcreteError&gt;;
-</code></pre>
+
+#}</code></pre></pre>
 <p>This creates a specialized version of the <code>Result</code> type, which always has a
 <code>ConcreteError</code> for the <code>E</code> part of <code>Result&lt;T, E&gt;</code>. This is commonly used
 in the standard library to create custom errors for each subsection. For

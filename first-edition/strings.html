@@ -80,8 +80,12 @@ strings are not NUL-terminated and can contain NUL bytes.</p>
 <p>Rust has two main types of strings: <code>&amp;str</code> and <code>String</code>. Let’s talk about
 <code>&amp;str</code> first. These are called ‘string slices’. A string slice has a fixed
 size, and cannot be mutated. It is a reference to a sequence of UTF-8 bytes.</p>
-<pre><code class="language-rust">let greeting = &quot;Hello there.&quot;; // greeting: &amp;'static str
-</code></pre>
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+let greeting = &quot;Hello there.&quot;; // greeting: &amp;'static str
+
+#}</code></pre></pre>
 <p><code>&quot;Hello there.&quot;</code> is a string literal and its type is <code>&amp;'static str</code>. A string
 literal is a string slice that is statically allocated, meaning that it’s saved
 inside our compiled program, and exists for the entire duration it runs. The
@@ -89,17 +93,25 @@ inside our compiled program, and exists for the entire duration it runs. The
 function expecting a string slice will also accept a string literal.</p>
 <p>String literals can span multiple lines. There are two forms. The first will
 include the newline and the leading spaces:</p>
-<pre><code class="language-rust">let s = &quot;foo
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+let s = &quot;foo
     bar&quot;;
 
 assert_eq!(&quot;foo\n    bar&quot;, s);
-</code></pre>
+
+#}</code></pre></pre>
 <p>The second, with a <code>\</code>, trims the spaces and the newline:</p>
-<pre><code class="language-rust">let s = &quot;foo\
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+let s = &quot;foo\
     bar&quot;;
 
 assert_eq!(&quot;foobar&quot;, s);
-</code></pre>
+
+#}</code></pre></pre>
 <p>Note that you normally cannot access a <code>str</code> directly, but only through a <code>&amp;str</code>
 reference. This is because <code>str</code> is an unsized type which requires additional
 runtime information to be usable. For more information see the chapter on
@@ -108,14 +120,18 @@ runtime information to be usable. For more information see the chapter on
 This string is growable, and is also guaranteed to be UTF-8. <code>String</code>s are
 commonly created by converting from a string slice using the <code>to_string</code>
 method.</p>
-<pre><code class="language-rust">let mut s = &quot;Hello&quot;.to_string(); // mut s: String
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+let mut s = &quot;Hello&quot;.to_string(); // mut s: String
 println!(&quot;{}&quot;, s);
 
 s.push_str(&quot;, world.&quot;);
 println!(&quot;{}&quot;, s);
-</code></pre>
+
+#}</code></pre></pre>
 <p><code>String</code>s will coerce into <code>&amp;str</code> with an <code>&amp;</code>:</p>
-<pre><code class="language-rust">fn takes_slice(slice: &amp;str) {
+<pre><pre class="playpen"><code class="language-rust">fn takes_slice(slice: &amp;str) {
     println!(&quot;Got: {}&quot;, slice);
 }
 
@@ -123,18 +139,22 @@ fn main() {
     let s = &quot;Hello&quot;.to_string();
     takes_slice(&amp;s);
 }
-</code></pre>
+</code></pre></pre>
 <p>This coercion does not happen for functions that accept one of <code>&amp;str</code>’s traits
 instead of <code>&amp;str</code>. For example, <a href="../std/net/struct.TcpStream.html#method.connect"><code>TcpStream::connect</code></a> has a parameter
 of type <code>ToSocketAddrs</code>. A <code>&amp;str</code> is okay but a <code>String</code> must be explicitly
 converted using <code>&amp;*</code>.</p>
-<pre><code class="language-rust no_run">use std::net::TcpStream;
+<pre><pre class="playpen"><code class="language-rust no_run"># #![allow(unused_variables)]
+# 
+#fn main() {
+use std::net::TcpStream;
 
 TcpStream::connect(&quot;192.168.0.1:3000&quot;); // Parameter is of type &amp;str.
 
 let addr_string = &quot;192.168.0.1:3000&quot;.to_string();
 TcpStream::connect(&amp;*addr_string); // Convert `addr_string` to &amp;str.
-</code></pre>
+
+#}</code></pre></pre>
 <p>Viewing a <code>String</code> as a <code>&amp;str</code> is cheap, but converting the <code>&amp;str</code> to a
 <code>String</code> involves allocating memory. No reason to do that unless you have to!</p>
 <a class="header" href="strings.html#indexing" name="indexing"><h2>Indexing</h2></a>
@@ -149,7 +169,10 @@ string to find the nᵗʰ letter of a string. This is a significantly more
 expensive operation, and we don’t want to be misleading. Furthermore, ‘letter’
 isn’t something defined in Unicode, exactly. We can choose to look at a string as
 individual bytes, or as codepoints:</p>
-<pre><code class="language-rust">let hachiko = &quot;忠犬ハチ公&quot;;
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+let hachiko = &quot;忠犬ハチ公&quot;;
 
 for b in hachiko.as_bytes() {
     print!(&quot;{}, &quot;, b);
@@ -162,44 +185,65 @@ for c in hachiko.chars() {
 }
 
 println!(&quot;&quot;);
-</code></pre>
+
+#}</code></pre></pre>
 <p>This prints:</p>
 <pre><code class="language-text">229, 191, 160, 231, 138, 172, 227, 131, 143, 227, 131, 129, 229, 133, 172,
 忠, 犬, ハ, チ, 公,
 </code></pre>
 <p>As you can see, there are more bytes than <code>char</code>s.</p>
 <p>You can get something similar to an index like this:</p>
-<pre><code class="language-rust"># let hachiko = &quot;忠犬ハチ公&quot;;
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+# let hachiko = &quot;忠犬ハチ公&quot;;
 let dog = hachiko.chars().nth(1); // Kinda like `hachiko[1]`.
-</code></pre>
+
+#}</code></pre></pre>
 <p>This emphasizes that we have to walk from the beginning of the list of <code>chars</code>.</p>
 <a class="header" href="strings.html#slicing" name="slicing"><h2>Slicing</h2></a>
 <p>You can get a slice of a string with the slicing syntax:</p>
-<pre><code class="language-rust">let dog = &quot;hachiko&quot;;
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+let dog = &quot;hachiko&quot;;
 let hachi = &amp;dog[0..5];
-</code></pre>
+
+#}</code></pre></pre>
 <p>But note that these are <em>byte</em> offsets, not <em>character</em> offsets. So
 this will fail at runtime:</p>
-<pre><code class="language-rust should_panic">let dog = &quot;忠犬ハチ公&quot;;
+<pre><pre class="playpen"><code class="language-rust should_panic"># #![allow(unused_variables)]
+# 
+#fn main() {
+let dog = &quot;忠犬ハチ公&quot;;
 let hachi = &amp;dog[0..2];
-</code></pre>
+
+#}</code></pre></pre>
 <p>with this error:</p>
 <pre><code class="language-text">thread 'main' panicked at 'byte index 2 is not a char boundary; it is inside '忠'
 (bytes 0..3) of `忠犬ハチ公`'
 </code></pre>
 <a class="header" href="strings.html#concatenation" name="concatenation"><h2>Concatenation</h2></a>
 <p>If you have a <code>String</code>, you can concatenate a <code>&amp;str</code> to the end of it:</p>
-<pre><code class="language-rust">let hello = &quot;Hello &quot;.to_string();
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+let hello = &quot;Hello &quot;.to_string();
 let world = &quot;world!&quot;;
 
 let hello_world = hello + world;
-</code></pre>
+
+#}</code></pre></pre>
 <p>But if you have two <code>String</code>s, you need an <code>&amp;</code>:</p>
-<pre><code class="language-rust">let hello = &quot;Hello &quot;.to_string();
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+let hello = &quot;Hello &quot;.to_string();
 let world = &quot;world!&quot;.to_string();
 
 let hello_world = hello + &amp;world;
-</code></pre>
+
+#}</code></pre></pre>
 <p>This is because <code>&amp;String</code> can automatically coerce to a <code>&amp;str</code>. This is a
 feature called ‘<a href="deref-coercions.html"><code>Deref</code> coercions</a>’.</p>
 

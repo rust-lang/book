@@ -128,7 +128,7 @@ declared as immutable with <code>let data</code> rather than <code>let mut data<
 <code>a_fn_that_mutably_borrows</code> is allowed to borrow the data mutably and make
 changes to the data!</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><code class="language-rust">use std::cell::RefCell;
+<pre><pre class="playpen"><code class="language-rust">use std::cell::RefCell;
 
 fn a_fn_that_immutably_borrows(a: &amp;i32) {
     println!(&quot;a is {}&quot;, a);
@@ -148,7 +148,7 @@ fn main() {
     let data = RefCell::new(5);
     demo(&amp;data);
 }
-</code></pre>
+</code></pre></pre>
 <p><span class="caption">Listing 15-14: Using <code>RefCell&lt;T&gt;</code>, <code>borrow</code>, and
 <code>borrow_mut</code></span></p>
 <p>This example prints:</p>
@@ -189,7 +189,7 @@ let r2 = &amp;mut s;
 </code></pre>
 <p>In contrast, using <code>RefCell&lt;T&gt;</code> and calling <code>borrow_mut</code> twice in the same
 scope <em>will</em> compile, but it'll panic at runtime instead. This code:</p>
-<pre><code class="language-rust should_panic">use std::cell::RefCell;
+<pre><pre class="playpen"><code class="language-rust should_panic">use std::cell::RefCell;
 
 fn main() {
     let s = RefCell::new(String::from(&quot;hello&quot;));
@@ -197,7 +197,7 @@ fn main() {
     let r1 = s.borrow_mut();
     let r2 = s.borrow_mut();
 }
-</code></pre>
+</code></pre></pre>
 <p>compiles but panics with the following error when we <code>cargo run</code>:</p>
 <pre><code class="language-text">    Finished dev [unoptimized + debuginfo] target(s) in 0.83 secs
      Running `target/debug/refcell`
@@ -226,7 +226,7 @@ owner of the value that's not part of the list (the multiple owners
 functionality that <code>Rc&lt;T&gt;</code> provides), and so we can mutate the inner <code>i32</code>
 value (the interior mutability functionality that <code>RefCell&lt;T&gt;</code> provides):</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><code class="language-rust">#[derive(Debug)]
+<pre><pre class="playpen"><code class="language-rust">#[derive(Debug)]
 enum List {
     Cons(Rc&lt;RefCell&lt;i32&gt;&gt;, Rc&lt;List&gt;),
     Nil,
@@ -251,7 +251,7 @@ fn main() {
     println!(&quot;b after = {:?}&quot;, b);
     println!(&quot;c after = {:?}&quot;, c);
 }
-</code></pre>
+</code></pre></pre>
 <p><span class="caption">Listing 15-15: Using <code>Rc&lt;RefCell&lt;i32&gt;&gt;</code> to create a
 <code>List</code> that we can mutate</span></p>
 <p>We're creating a value, which is an instance of <code>Rc&lt;RefCell&lt;i32&gt;&gt;</code>. We're

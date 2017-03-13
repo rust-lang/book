@@ -75,15 +75,22 @@ get the name ‘closures’ and Rust provides a really great implementation of
 them, as we’ll see.</p>
 <a class="header" href="closures.html#syntax" name="syntax"><h1>Syntax</h1></a>
 <p>Closures look like this:</p>
-<pre><code class="language-rust">let plus_one = |x: i32| x + 1;
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+let plus_one = |x: i32| x + 1;
 
 assert_eq!(2, plus_one(1));
-</code></pre>
+
+#}</code></pre></pre>
 <p>We create a binding, <code>plus_one</code>, and assign it to a closure. The closure’s
 arguments go between the pipes (<code>|</code>), and the body is an expression, in this
 case, <code>x + 1</code>. Remember that <code>{ }</code> is an expression, so we can have multi-line
 closures too:</p>
-<pre><code class="language-rust">let plus_two = |x| {
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+let plus_two = |x| {
     let mut result: i32 = x;
 
     result += 1;
@@ -93,15 +100,20 @@ closures too:</p>
 };
 
 assert_eq!(4, plus_two(2));
-</code></pre>
+
+#}</code></pre></pre>
 <p>You’ll notice a few things about closures that are a bit different from regular
 named functions defined with <code>fn</code>. The first is that we did not need to
 annotate the types of arguments the closure takes or the values it returns. We
 can:</p>
-<pre><code class="language-rust">let plus_one = |x: i32| -&gt; i32 { x + 1 };
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+let plus_one = |x: i32| -&gt; i32 { x + 1 };
 
 assert_eq!(2, plus_one(1));
-</code></pre>
+
+#}</code></pre></pre>
 <p>But we don’t have to. Why is this? Basically, it was chosen for ergonomic
 reasons. While specifying the full type for named functions is helpful with
 things like documentation and type inference, the full type signatures of
@@ -110,19 +122,27 @@ the kinds of error-at-a-distance problems that inferring named function types
 can.</p>
 <p>The second is that the syntax is similar, but a bit different. I’ve added
 spaces here for easier comparison:</p>
-<pre><code class="language-rust">fn  plus_one_v1   (x: i32) -&gt; i32 { x + 1 }
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+fn  plus_one_v1   (x: i32) -&gt; i32 { x + 1 }
 let plus_one_v2 = |x: i32| -&gt; i32 { x + 1 };
 let plus_one_v3 = |x: i32|          x + 1  ;
-</code></pre>
+
+#}</code></pre></pre>
 <p>Small differences, but they’re similar.</p>
 <a class="header" href="closures.html#closures-and-their-environment" name="closures-and-their-environment"><h1>Closures and their environment</h1></a>
 <p>The environment for a closure can include bindings from its enclosing scope in
 addition to parameters and local bindings. It looks like this:</p>
-<pre><code class="language-rust">let num = 5;
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+let num = 5;
 let plus_num = |x: i32| x + num;
 
 assert_eq!(10, plus_num(5));
-</code></pre>
+
+#}</code></pre></pre>
 <p>This closure, <code>plus_num</code>, refers to a <code>let</code> binding in its scope: <code>num</code>. More
 specifically, it borrows the binding. If we do something that would conflict
 with that binding, we get an error. Like this one:</p>
@@ -152,14 +172,18 @@ fn main() {
 <p>A verbose yet helpful error message! As it says, we can’t take a mutable borrow
 on <code>num</code> because the closure is already borrowing it. If we let the closure go
 out of scope, we can:</p>
-<pre><code class="language-rust">let mut num = 5;
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+let mut num = 5;
 {
     let plus_num = |x: i32| x + num;
 
 } // `plus_num` goes out of scope; borrow of `num` ends.
 
 let y = &amp;mut num;
-</code></pre>
+
+#}</code></pre></pre>
 <p>If your closure requires it, however, Rust will take ownership and move
 the environment instead. This doesn’t work:</p>
 <pre><code class="language-rust ignore">let nums = vec![1, 2, 3];
@@ -180,14 +204,21 @@ passed <code>nums</code> to a function that took ownership of it.</p>
 <a class="header" href="closures.html#move-closures" name="move-closures"><h2><code>move</code> closures</h2></a>
 <p>We can force our closure to take ownership of its environment with the <code>move</code>
 keyword:</p>
-<pre><code class="language-rust">let num = 5;
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+let num = 5;
 
 let owns_num = move |x: i32| x + num;
-</code></pre>
+
+#}</code></pre></pre>
 <p>Now, even though the keyword is <code>move</code>, the variables follow normal move semantics.
 In this case, <code>5</code> implements <code>Copy</code>, and so <code>owns_num</code> takes ownership of a copy
 of <code>num</code>. So what’s the difference?</p>
-<pre><code class="language-rust">let mut num = 5;
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+let mut num = 5;
 
 {
     let mut add_num = |x: i32| num += x;
@@ -196,13 +227,17 @@ of <code>num</code>. So what’s the difference?</p>
 }
 
 assert_eq!(10, num);
-</code></pre>
+
+#}</code></pre></pre>
 <p>So in this case, our closure took a mutable reference to <code>num</code>, and then when
 we called <code>add_num</code>, it mutated the underlying value, as we’d expect. We also
 needed to declare <code>add_num</code> as <code>mut</code> too, because we’re mutating its
 environment.</p>
 <p>If we change to a <code>move</code> closure, it’s different:</p>
-<pre><code class="language-rust">let mut num = 5;
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+let mut num = 5;
 
 {
     let mut add_num = move |x: i32| num += x;
@@ -211,7 +246,8 @@ environment.</p>
 }
 
 assert_eq!(5, num);
-</code></pre>
+
+#}</code></pre></pre>
 <p>We only get <code>5</code>. Rather than taking a mutable borrow out on our <code>num</code>, we took
 ownership of a copy.</p>
 <p>Another way to think about <code>move</code> closures: they give a closure its own stack
@@ -233,7 +269,10 @@ strange: Using <code>()</code> to call a function, like <code>foo()</code>, is a
 operator. From this, everything else clicks into place. In Rust, we use the
 trait system to overload operators. Calling functions is no different. We have
 three separate traits to overload with:</p>
-<pre><code class="language-rust"># #![feature(unboxed_closures)]
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+# #![feature(unboxed_closures)]
 # mod foo {
 pub trait Fn&lt;Args&gt; : FnMut&lt;Args&gt; {
     extern &quot;rust-call&quot; fn call(&amp;self, args: Args) -&gt; Self::Output;
@@ -249,7 +288,8 @@ pub trait FnOnce&lt;Args&gt; {
     extern &quot;rust-call&quot; fn call_once(self, args: Args) -&gt; Self::Output;
 }
 # }
-</code></pre>
+
+#}</code></pre></pre>
 <p>You’ll notice a few differences between these traits, but a big one is <code>self</code>:
 <code>Fn</code> takes <code>&amp;self</code>, <code>FnMut</code> takes <code>&amp;mut self</code>, and <code>FnOnce</code> takes <code>self</code>. This
 covers all three kinds of <code>self</code> via the usual method call syntax. But we’ve
@@ -264,7 +304,10 @@ return closures: the same as any other trait!</p>
 <p>This also means that we can choose static vs dynamic dispatch as well. First,
 let’s write a function which takes something callable, calls it, and returns
 the result:</p>
-<pre><code class="language-rust">fn call_with_one&lt;F&gt;(some_closure: F) -&gt; i32
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+fn call_with_one&lt;F&gt;(some_closure: F) -&gt; i32
     where F: Fn(i32) -&gt; i32 {
 
     some_closure(1)
@@ -273,20 +316,29 @@ the result:</p>
 let answer = call_with_one(|x| x + 2);
 
 assert_eq!(3, answer);
-</code></pre>
+
+#}</code></pre></pre>
 <p>We pass our closure, <code>|x| x + 2</code>, to <code>call_with_one</code>. It does what it
 suggests: it calls the closure, giving it <code>1</code> as an argument.</p>
 <p>Let’s examine the signature of <code>call_with_one</code> in more depth:</p>
-<pre><code class="language-rust">fn call_with_one&lt;F&gt;(some_closure: F) -&gt; i32
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+fn call_with_one&lt;F&gt;(some_closure: F) -&gt; i32
 #    where F: Fn(i32) -&gt; i32 {
 #    some_closure(1) }
-</code></pre>
+
+#}</code></pre></pre>
 <p>We take one parameter, and it has the type <code>F</code>. We also return an <code>i32</code>. This part
 isn’t interesting. The next part is:</p>
-<pre><code class="language-rust"># fn call_with_one&lt;F&gt;(some_closure: F) -&gt; i32
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+# fn call_with_one&lt;F&gt;(some_closure: F) -&gt; i32
     where F: Fn(i32) -&gt; i32 {
 #   some_closure(1) }
-</code></pre>
+
+#}</code></pre></pre>
 <p>Because <code>Fn</code> is a trait, we can use it as a bound for our generic type. In
 this case, our closure takes an <code>i32</code> as an argument and returns an <code>i32</code>, and
 so the generic bound we use is <code>Fn(i32) -&gt; i32</code>.</p>
@@ -299,25 +351,33 @@ call. This happens quite often with iterators and their adapters, which often
 take closures as arguments.</p>
 <p>Of course, if we want dynamic dispatch, we can get that too. A trait object
 handles this case, as usual:</p>
-<pre><code class="language-rust">fn call_with_one(some_closure: &amp;Fn(i32) -&gt; i32) -&gt; i32 {
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+fn call_with_one(some_closure: &amp;Fn(i32) -&gt; i32) -&gt; i32 {
     some_closure(1)
 }
 
 let answer = call_with_one(&amp;|x| x + 2);
 
 assert_eq!(3, answer);
-</code></pre>
+
+#}</code></pre></pre>
 <p>Now we take a trait object, a <code>&amp;Fn</code>. And we have to make a reference
 to our closure when we pass it to <code>call_with_one</code>, so we use <code>&amp;||</code>.</p>
 <p>A quick note about closures that use explicit lifetimes. Sometimes you might have a closure
 that takes a reference like so:</p>
-<pre><code class="language-rust">fn call_with_ref&lt;F&gt;(some_closure:F) -&gt; i32
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+fn call_with_ref&lt;F&gt;(some_closure:F) -&gt; i32
     where F: Fn(&amp;i32) -&gt; i32 {
 
     let value = 0;
     some_closure(&amp;value)
 }
-</code></pre>
+
+#}</code></pre></pre>
 <p>Normally you can specify the lifetime of the parameter to our closure. We
 could annotate it on the function declaration:</p>
 <pre><code class="language-rust ignore">fn call_with_ref&lt;'a, F&gt;(some_closure:F) -&gt; i32
@@ -337,18 +397,25 @@ we can use Higher-Ranked Trait Bounds with the <code>for&lt;...&gt;</code> synta
 <p>This lets the Rust compiler find the minimum lifetime to invoke our closure and
 satisfy the borrow checker's rules. Our function then compiles and executes as we
 expect.</p>
-<pre><code class="language-rust">fn call_with_ref&lt;F&gt;(some_closure:F) -&gt; i32
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+fn call_with_ref&lt;F&gt;(some_closure:F) -&gt; i32
     where F: for&lt;'a&gt; Fn(&amp;'a i32) -&gt; i32 {
 
     let value = 0;
     some_closure(&amp;value)
 }
-</code></pre>
+
+#}</code></pre></pre>
 <a class="header" href="closures.html#function-pointers-and-closures" name="function-pointers-and-closures"><h1>Function pointers and closures</h1></a>
 <p>A function pointer is kind of like a closure that has no environment. As such,
 you can pass a function pointer to any function expecting a closure argument,
 and it will work:</p>
-<pre><code class="language-rust">fn call_with_one(some_closure: &amp;Fn(i32) -&gt; i32) -&gt; i32 {
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+fn call_with_one(some_closure: &amp;Fn(i32) -&gt; i32) -&gt; i32 {
     some_closure(1)
 }
 
@@ -361,7 +428,8 @@ let f = add_one;
 let answer = call_with_one(&amp;f);
 
 assert_eq!(2, answer);
-</code></pre>
+
+#}</code></pre></pre>
 <p>In this example, we don’t strictly need the intermediate variable <code>f</code>,
 the name of the function works just fine too:</p>
 <pre><code class="language-rust ignore">let answer = call_with_one(&amp;add_one);
@@ -475,7 +543,10 @@ binding. So the borrow has a lifetime of the stack frame. So if we returned
 this closure, the function call would be over, the stack frame would go away,
 and our closure is capturing an environment of garbage memory! With one last
 fix, we can make this work:</p>
-<pre><code class="language-rust">fn factory() -&gt; Box&lt;Fn(i32) -&gt; i32&gt; {
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+fn factory() -&gt; Box&lt;Fn(i32) -&gt; i32&gt; {
     let num = 5;
 
     Box::new(move |x| x + num)
@@ -485,7 +556,8 @@ let f = factory();
 
 let answer = f(1);
 assert_eq!(6, answer);
-</code></pre>
+
+#}</code></pre></pre>
 <p>By making the inner closure a <code>move Fn</code>, we create a new stack frame for our
 closure. By <code>Box</code>ing it up, we’ve given it a known size, allowing it to
 escape our stack frame.</p>

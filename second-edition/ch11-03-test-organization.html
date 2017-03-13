@@ -97,13 +97,17 @@ compiled result.</p>
 <p>Remember that when we generated the new <code>adder</code> project in the first section of
 this chapter, Cargo generated this code for us:</p>
 <p><span class="filename">Filename: src/lib.rs</span></p>
-<pre><code class="language-rust">#[cfg(test)]
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+#[cfg(test)]
 mod tests {
     #[test]
     fn it_works() {
     }
 }
-</code></pre>
+
+#}</code></pre></pre>
 <p>This is the automatically generated test module. The attribute <code>cfg</code> stands for
 <em>configruation</em>, and tells Rust that the following item should only be included
 given a certain configuration. In this case, the configuration is <code>test</code>,
@@ -117,7 +121,10 @@ impossible to test private functions. Regardless of which testing ideology you
 adhere to, Rust's privacy rules do allow you to test private functions.
 Consider the code in Listing 11-12 with the private function <code>internal_adder</code>:</p>
 <p><span class="filename">Filename: src/lib.rs</span></p>
-<pre><code class="language-rust">pub fn add_two(a: i32) -&gt; i32 {
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+pub fn add_two(a: i32) -&gt; i32 {
     internal_adder(a, 2)
 }
 
@@ -134,7 +141,8 @@ mod tests {
         assert_eq!(4, internal_adder(2, 2));
     }
 }
-</code></pre>
+
+#}</code></pre></pre>
 <p><span class="caption">Listing 11-12: Testing a private function</span></p>
 <!-- I'm not clear on why we would assume this might not be fine, why are we
 highlighting this specifically? -->
@@ -256,10 +264,14 @@ to extract them into a common module. For example, if we create
 put some code that we want to be able to call from multiple test functions in
 multiple test files:</p>
 <p><span class="filename">Filename: tests/common.rs</span></p>
-<pre><code class="language-rust">pub fn setup() {
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+pub fn setup() {
     // setup code specific to your library's tests would go here
 }
-</code></pre>
+
+#}</code></pre></pre>
 <p>If we run the tests again, we'll see a new section in the test output for the
 <em>common.rs</em> file, even though this file doesn't contain any test functions, nor
 are we calling the <code>setup</code> function from anywhere:</p>

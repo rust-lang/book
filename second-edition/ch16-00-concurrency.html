@@ -102,7 +102,7 @@ borrow immutably, borrow mutably, and move their parameters, then closures that
 reference values from their environment and call each of the functions. We'll
 see how this affects inference of when a value is borrowed:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><code class="language-rust">#[derive(Debug)]
+<pre><pre class="playpen"><code class="language-rust">#[derive(Debug)]
 struct Foo;
 
 fn borrows(f: &amp;Foo) {
@@ -130,7 +130,7 @@ fn main() {
     let closure_that_moves = |z| moves(z);
     closure_that_moves(f3);
 }
-</code></pre>
+</code></pre></pre>
 <p><span class="caption">Listing 16-something: Closures that borrow, borrow
 mutably, and take ownership of their parameters, which is inferred from how the
 closure body uses the parameters</span></p>
@@ -146,7 +146,10 @@ transferred ownership to the function <code>moves</code>.</p>
 <p>Rust will allow you to override the borrowing inference by using the <code>move</code>
 keyword. This will cause all of the closure's parameters to be taken by
 ownership, instead of whatever they were inferred as. Consider this example:</p>
-<pre><code class="language-rust">let mut num = 4;
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+let mut num = 4;
 
 {
     let mut add_num = |x| num += x;
@@ -155,14 +158,18 @@ ownership, instead of whatever they were inferred as. Consider this example:</p>
 }
 
 assert_eq!(10, num);
-</code></pre>
+
+#}</code></pre></pre>
 <p>In this case, the <code>add_num</code> closure took a mutable reference to <code>num</code>, then
 when we called <code>add_num</code>, it mutated the underlying value. In the last line,
 <code>num</code> contains 10, as we'd expect. We also needed to declare <code>add_num</code> itself
 as <code>mut</code> too, because we're mutating its environment.</p>
 <p>If we change the definition of <code>add_num</code> to a <code>move</code> closure, the behavior is
 different:</p>
-<pre><code class="language-rust">let mut num = 4;
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+let mut num = 4;
 
 {
     let mut add_num = move |x| num += x;
@@ -171,7 +178,8 @@ different:</p>
 }
 
 assert_eq!(4, num);
-</code></pre>
+
+#}</code></pre></pre>
 <p>In the last line, <code>num</code> now contains 4: <code>add_num</code> took ownership of a copy of
 <code>num</code>, rather than mutably borrowing <code>num</code>.</p>
 <p>One of the most common places you'll see the <code>move</code> keyword used is with
@@ -225,7 +233,10 @@ borrowed value that does not live long enough</span></p>
 from the last section to make the closure take ownership of <code>x</code>. Because <code>x</code> is
 a number, it is a <code>Copy</code> type and therefore will be copied into the closure.
 The code in Listing 13-7 will compile:</p>
-<pre><code class="language-rust">{
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+{
     let closure;
 
     {
@@ -238,7 +249,8 @@ The code in Listing 13-7 will compile:</p>
         assert_eq!(closure(), 4);
     }
 }
-</code></pre>
+
+#}</code></pre></pre>
 <p><span class="caption">Listing 16-something: Moving a value into the closure to
 fix the lifetime error</span></p>
 <p>Even though we modified <code>x</code> between the closure definition and <code>assert_eq!</code>,
@@ -250,7 +262,10 @@ adding the <code>move</code> keyword. However, we can accomplish the goal of bor
 some values and taking ownership of others by combining <code>move</code> with some extra
 bindings. Consider this example where we want to borrow <code>s1</code> but take ownership
 of <code>s2</code>:</p>
-<pre><code class="language-rust">let s1 = String::from(&quot;hello&quot;);
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+let s1 = String::from(&quot;hello&quot;);
 let s2 = String::from(&quot;goodbye&quot;);
 
 let r = &amp;s1;
@@ -261,7 +276,8 @@ let calculation = move || {
 };
 
 println!(&quot;Can still use s1 here but not s2: {}&quot;, s1);
-</code></pre>
+
+#}</code></pre></pre>
 <p>We've declared <code>calculation</code> to <code>move</code> all the values it references. Before
 defining <code>calculation</code>, we declare a new variable <code>r</code> that borrows <code>s1</code>. Then
 in the body of the <code>calculation</code> closure, we use <code>r</code> instead of using <code>s1</code>

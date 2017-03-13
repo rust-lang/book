@@ -127,7 +127,10 @@ type <code>std::env::Args</code> instead of <code>&amp;[String]</code>:</p>
 <p>Next, we'll fix the body of <code>Config::new</code>. As we can also see in the standard
 library documentation, <code>std::env::Args</code> implements the <code>Iterator</code> trait, so we
 know we can call the <code>next</code> method on it! Here's the new code:</p>
-<pre><code class="language-rust"># struct Config {
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+# struct Config {
 #     search: String,
 #     filename: String,
 # }
@@ -152,7 +155,8 @@ impl Config {
         })
     }
 }
-</code></pre>
+
+#}</code></pre></pre>
 <!-- Will add ghosting and wingdings in libreoffice /Carol -->
 <p>Remember that the first value in the return value of <code>env::args</code> is the name of
 the program. We want to ignore that, so first we'll call <code>next</code> and not do
@@ -173,7 +177,10 @@ move the <code>String</code> from the iterator into <code>Config</code>.</p>
 <!-- We hadn't had a listing number for this code sample when we submitted
 chapter 12; we'll fix the listing numbers in that chapter after you've
 reviewed it. /Carol -->
-<pre><code class="language-rust">fn grep&lt;'a&gt;(search: &amp;str, contents: &amp;'a str) -&gt; Vec&lt;&amp;'a str&gt; {
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+fn grep&lt;'a&gt;(search: &amp;str, contents: &amp;'a str) -&gt; Vec&lt;&amp;'a str&gt; {
     let mut results = Vec::new();
 
     for line in contents.lines() {
@@ -184,16 +191,21 @@ reviewed it. /Carol -->
 
     results
 }
-</code></pre>
+
+#}</code></pre></pre>
 <p>We can write this code in a much shorter way, and avoiding having to have a
 mutable intermediate <code>results</code> vector, by using iterator adaptor methods like
 this instead:</p>
-<pre><code class="language-rust">fn grep&lt;'a&gt;(search: &amp;str, contents: &amp;'a str) -&gt; Vec&lt;&amp;'a str&gt; {
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+fn grep&lt;'a&gt;(search: &amp;str, contents: &amp;'a str) -&gt; Vec&lt;&amp;'a str&gt; {
     contents.lines()
         .filter(|line| line.contains(search))
         .collect()
 }
-</code></pre>
+
+#}</code></pre></pre>
 <p>Here, we use the <code>filter</code> adaptor to only keep the lines that
 <code>line.contains(search)</code> returns true for. We then collect them up into another
 vector with <code>collect</code>. Much simpler!</p>
@@ -201,7 +213,10 @@ vector with <code>collect</code>. Much simpler!</p>
 defined in Listing 12-16 as follows:</p>
 <!-- Similarly, the code snippet that will be 12-16 didn't have a listing
 number when we sent you chapter 12, we will fix it. /Carol -->
-<pre><code class="language-rust">fn grep_case_insensitive&lt;'a&gt;(search: &amp;str, contents: &amp;'a str) -&gt; Vec&lt;&amp;'a str&gt; {
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+fn grep_case_insensitive&lt;'a&gt;(search: &amp;str, contents: &amp;'a str) -&gt; Vec&lt;&amp;'a str&gt; {
     let search = search.to_lowercase();
 
     contents.lines()
@@ -209,7 +224,8 @@ number when we sent you chapter 12, we will fix it. /Carol -->
             line.to_lowercase().contains(&amp;search)
         }).collect()
 }
-</code></pre>
+
+#}</code></pre></pre>
 <p>Not too bad! So which style should you choose? Most Rust programmers prefer to
 use the iterator style. It's a bit tougher to understand at first, but once you
 gain an intuition for what the various iterator adaptors do, this is much

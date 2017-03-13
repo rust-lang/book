@@ -102,10 +102,10 @@ correct, fix that in the file and save it again.</p>
 <p>As you saw in Chapter 1, <code>cargo new</code> generates a “Hello, world!” program for
 you. Check out the <em>src/main.rs</em> file:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><code class="language-rust">fn main() {
+<pre><pre class="playpen"><code class="language-rust">fn main() {
     println!(&quot;Hello, world!&quot;);
 }
-</code></pre>
+</code></pre></pre>
 <p>Now let’s compile this “Hello, world!” program and run it in the same step
 using the <code>cargo run</code> command:</p>
 <pre><code class="language-text">$ cargo run
@@ -175,9 +175,13 @@ line. Notice that this is a <code>let</code> statement, which is used to create
 <p>This line will create a new variable named <code>foo</code> and bind it to the value
 <code>bar</code>. In Rust, variables are immutable by default. The following example shows
 how to use <code>mut</code> before the variable name to make a variable mutable:</p>
-<pre><code class="language-rust">let foo = 5; // immutable
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+let foo = 5; // immutable
 let mut bar = 5; // mutable
-</code></pre>
+
+#}</code></pre></pre>
 <blockquote>
 <p>Note: The <code>//</code> syntax starts a comment that continues until the end of the
 line. Rust ignores everything in comments.</p>
@@ -282,11 +286,15 @@ is a placeholder that holds a value in place. You can print more than one value
 using <code>{}</code>: the first set of <code>{}</code> holds the first value listed after the format
 string, the second set holds the second value, and so on. Printing out multiple
 values in one call to <code>println!</code> would look like this:</p>
-<pre><code class="language-rust">let x = 5;
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+let x = 5;
 let y = 10;
 
 println!(&quot;x = {} and y = {}&quot;, x, y);
-</code></pre>
+
+#}</code></pre></pre>
 <p>This code would print out <code>x = 5 and y = 10</code>.</p>
 <a class="header" href="ch02-00-guessing-game-tutorial.html#testing-the-first-part" name="testing-the-first-part"><h3>Testing the First Part</h3></a>
 <p>Let’s test the first part of the guessing game. You can run it using <code>cargo run</code>:</p>

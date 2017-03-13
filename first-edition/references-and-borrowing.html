@@ -101,7 +101,10 @@ checker less and less.</p>
 <a class="header" href="references-and-borrowing.html#borrowing" name="borrowing"><h1>Borrowing</h1></a>
 <p>At the end of the <a href="ownership.html">ownership</a> section, we had a nasty function that looked
 like this:</p>
-<pre><code class="language-rust">fn foo(v1: Vec&lt;i32&gt;, v2: Vec&lt;i32&gt;) -&gt; (Vec&lt;i32&gt;, Vec&lt;i32&gt;, i32) {
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+fn foo(v1: Vec&lt;i32&gt;, v2: Vec&lt;i32&gt;) -&gt; (Vec&lt;i32&gt;, Vec&lt;i32&gt;, i32) {
     // Do stuff with `v1` and `v2`.
 
     // Hand back ownership, and the result of our function.
@@ -112,10 +115,14 @@ let v1 = vec![1, 2, 3];
 let v2 = vec![1, 2, 3];
 
 let (v1, v2, answer) = foo(v1, v2);
-</code></pre>
+
+#}</code></pre></pre>
 <p>This is not idiomatic Rust, however, as it doesn’t take advantage of borrowing. Here’s
 the first step:</p>
-<pre><code class="language-rust">fn foo(v1: &amp;Vec&lt;i32&gt;, v2: &amp;Vec&lt;i32&gt;) -&gt; i32 {
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+fn foo(v1: &amp;Vec&lt;i32&gt;, v2: &amp;Vec&lt;i32&gt;) -&gt; i32 {
     // Do stuff with `v1` and `v2`.
 
     // Return the answer.
@@ -128,9 +135,10 @@ let v2 = vec![1, 2, 3];
 let answer = foo(&amp;v1, &amp;v2);
 
 // We can use `v1` and `v2` here!
-</code></pre>
+
+#}</code></pre></pre>
 <p>A more concrete example:</p>
-<pre><code class="language-rust">fn main() {
+<pre><pre class="playpen"><code class="language-rust">fn main() {
     // Don't worry if you don't understand how `fold` works, the point here is that an immutable reference is borrowed.
     fn sum_vec(v: &amp;Vec&lt;i32&gt;) -&gt; i32 {
         return v.iter().fold(0, |a, &amp;b| a + b);
@@ -151,7 +159,7 @@ let answer = foo(&amp;v1, &amp;v2);
     let answer = foo(&amp;v1, &amp;v2);
     println!(&quot;{}&quot;, answer);
 }
-</code></pre>
+</code></pre></pre>
 <p>Instead of taking <code>Vec&lt;i32&gt;</code>s as our arguments, we take a reference:
 <code>&amp;Vec&lt;i32&gt;</code>. And instead of passing <code>v1</code> and <code>v2</code> directly, we pass <code>&amp;v1</code> and
 <code>&amp;v2</code>. We call the <code>&amp;T</code> type a ‘reference’, and rather than owning the resource,
@@ -177,13 +185,17 @@ v.push(5);
 <a class="header" href="references-and-borrowing.html#mut-references" name="mut-references"><h1>&amp;mut references</h1></a>
 <p>There’s a second kind of reference: <code>&amp;mut T</code>. A ‘mutable reference’ allows you
 to mutate the resource you’re borrowing. For example:</p>
-<pre><code class="language-rust">let mut x = 5;
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+let mut x = 5;
 {
     let y = &amp;mut x;
     *y += 1;
 }
 println!(&quot;{}&quot;, x);
-</code></pre>
+
+#}</code></pre></pre>
 <p>This will print <code>6</code>. We make <code>y</code> a mutable reference to <code>x</code>, then add one to
 the thing <code>y</code> points at. You’ll notice that <code>x</code> had to be marked <code>mut</code> as well.
 If it wasn’t, we couldn’t take a mutable borrow to an immutable value.</p>
@@ -272,7 +284,10 @@ scopes look like this:</p>
 </code></pre>
 <p>The scopes conflict: we can’t make an <code>&amp;x</code> while <code>y</code> is in scope.</p>
 <p>So when we add the curly braces:</p>
-<pre><code class="language-rust">let mut x = 5;
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+let mut x = 5;
 
 {
     let y = &amp;mut x; // -+ &amp;mut borrow starts here.
@@ -280,7 +295,8 @@ scopes look like this:</p>
 }                   // -+ ... and ends here.
 
 println!(&quot;{}&quot;, x);  // &lt;- Try to borrow `x` here.
-</code></pre>
+
+#}</code></pre></pre>
 <p>There’s no problem. Our mutable borrow goes out of scope before we create an
 immutable one. So scope is the key to seeing how long a borrow lasts for.</p>
 <a class="header" href="references-and-borrowing.html#issues-borrowing-prevents" name="issues-borrowing-prevents"><h2>Issues borrowing prevents</h2></a>
@@ -290,12 +306,16 @@ races. What kinds of issues do data races cause? Here are a few.</p>
 <p>One example is ‘iterator invalidation’, which happens when you try to mutate a
 collection that you’re iterating over. Rust’s borrow checker prevents this from
 happening:</p>
-<pre><code class="language-rust">let mut v = vec![1, 2, 3];
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+let mut v = vec![1, 2, 3];
 
 for i in &amp;v {
     println!(&quot;{}&quot;, i);
 }
-</code></pre>
+
+#}</code></pre></pre>
 <p>This prints out one through three. As we iterate through the vector, we’re
 only given references to the elements. And <code>v</code> is itself borrowed as immutable,
 which means we can’t change it while we’re iterating:</p>

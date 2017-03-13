@@ -71,12 +71,16 @@
 <p>Iterators are a pattern in Rust that allows you to do some processing on a
 sequence of items. For example, the code in Listing 13-5 adds one to each
 number in a vector:</p>
-<pre><code class="language-rust">let v1 = vec![1, 2, 3];
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+let v1 = vec![1, 2, 3];
 
 let v2: Vec&lt;i32&gt; = v1.iter().map(|x| x + 1).collect();
 
 assert_eq!(v2, [2, 3, 4]);
-</code></pre>
+
+#}</code></pre></pre>
 <p><span class="caption">Listing 13-5: Using an iterator, <code>map</code>, and <code>collect</code> to
 add one to each number in a vector</span></p>
 <!-- Will add wingdings in libreoffice /Carol -->
@@ -106,10 +110,14 @@ behavior of an iterator adaptor like <code>map</code>.</p>
 we said that <code>map</code> <em>adapts</em> an iterator, but <code>collect</code> <em>consumes</em> one. That was
 intentional. By themselves, iterators won't do anything; they're lazy. That is,
 if we write code like Listing 13-5 except we don't call <code>collect</code>:</p>
-<pre><code class="language-rust">let v1: Vec&lt;i32&gt; = vec![1, 2, 3];
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+let v1: Vec&lt;i32&gt; = vec![1, 2, 3];
 
 v1.iter().map(|x| x + 1); // without collect
-</code></pre>
+
+#}</code></pre></pre>
 <p>It will compile, but it will give us a warning:</p>
 <pre><code class="language-text">warning: unused result which must be used: iterator adaptors are lazy and do
 nothing unless consumed, #[warn(unused_must_use)] on by default
@@ -127,12 +135,16 @@ adaptors are available? For that, let's look at the <code>Iterator</code> trait.
 <a class="header" href="ch13-02-iterators.html#the-iterator-trait" name="the-iterator-trait"><h3>The <code>Iterator</code> trait</h3></a>
 <p>Iterators all implement a trait named <code>Iterator</code> that is defined in the standard
 library. The definition of the trait looks like this:</p>
-<pre><code class="language-rust">trait Iterator {
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+trait Iterator {
     type Item;
 
     fn next(&amp;mut self) -&gt; Option&lt;Self::Item&gt;;
 }
-</code></pre>
+
+#}</code></pre></pre>
 <p>There's some new syntax that we haven't covered here yet: <code>type Item</code> and
 <code>Self::Item</code> are defining an <em>associated type</em> with this trait, and we'll talk
 about associated types in depth in Chapter XX. For now, all you need to know is
@@ -146,7 +158,10 @@ state of the iterator, which is one field named <code>count</code> that will hol
 We'll also define a <code>new</code> method, which isn't strictly necessary. We want our
 <code>Counter</code> to go from one to five, though, so we're always going to have it
 holding a zero to start:</p>
-<pre><code class="language-rust">struct Counter {
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+struct Counter {
     count: u32,
 }
 
@@ -155,14 +170,18 @@ impl Counter {
         Counter { count: 0 }
     }
 }
-</code></pre>
+
+#}</code></pre></pre>
 <p>Next, we're going to implement the <code>Iterator</code> trait for our <code>Counter</code> type by
 defining the body of the <code>next</code> method. The way we want our iterator to work
 is to add one to the state (which is why we initialized <code>count</code> to 0, since we
 want our iterator to return one first). If <code>count</code> is still less than six, we'll
 return the current value, but if <code>count</code> is six or higher, our iterator will
 return <code>None</code>, as shown in Listing 13-6:</p>
-<pre><code class="language-rust"># struct Counter {
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+# struct Counter {
 #     count: u32,
 # }
 #
@@ -182,7 +201,8 @@ impl Iterator for Counter {
         }
     }
 }
-</code></pre>
+
+#}</code></pre></pre>
 <p><span class="caption">Listing 13-6: Implementing the <code>Iterator</code> trait on our
 <code>Counter</code> struct</span></p>
 <!-- I will add wingdings in libreoffice /Carol -->
@@ -250,7 +270,10 @@ an instance of <code>Counter</code> produces, pair those values with values prod
 another <code>Counter</code> instance after skipping the first value that instance
 produces, multiply each pair together, keep only those results that are
 divisible by three, and add all the resulting values together, we could do so:</p>
-<pre><code class="language-rust"># struct Counter {
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+# struct Counter {
 #     count: u32,
 # }
 #
@@ -282,7 +305,8 @@ let sum: u32 = Counter::new().take(5)
                              .filter(|x| x % 3 == 0)
                              .sum();
 assert_eq!(18, sum);
-</code></pre>
+
+#}</code></pre></pre>
 <p>Note that <code>zip</code> produces only four pairs; the theoretical fifth pair <code>(5, None)</code> is never produced because <code>zip</code> returns <code>None</code> when either of its input
 iterators return <code>None</code>.</p>
 <p>All of these method calls are possible because we implemented the <code>Iterator</code>

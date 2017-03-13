@@ -95,10 +95,14 @@ ask for that summary by calling a <code>summary</code> method on an instance. Li
 10-11 shows the definition of a <code>Summarizable</code> trait that expresses this
 concept:</p>
 <p><span class="filename">Filename: lib.rs</span></p>
-<pre><code class="language-rust">pub trait Summarizable {
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+pub trait Summarizable {
     fn summary(&amp;self) -&gt; String;
 }
-</code></pre>
+
+#}</code></pre></pre>
 <p><span class="caption">Listing 10-11: Definition of a <code>Summarizable</code> trait that
 consists of the behavior provided by a <code>summary</code> method</span></p>
 <p>We declare a trait with the <code>trait</code> keyword, then the trait's name, in this
@@ -121,7 +125,10 @@ of <code>summary</code>. For the <code>Tweet</code> struct, we've chosen to defi
 username followed by the whole text of the tweet, assuming that tweet content
 is already limited to 140 characters.</p>
 <p><span class="filename">Filename: lib.rs</span></p>
-<pre><code class="language-rust"># pub trait Summarizable {
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+# pub trait Summarizable {
 #     fn summary(&amp;self) -&gt; String;
 # }
 #
@@ -150,7 +157,8 @@ impl Summarizable for Tweet {
         format!(&quot;{}: {}&quot;, self.username, self.content)
     }
 }
-</code></pre>
+
+#}</code></pre></pre>
 <p><span class="caption">Listing 10-12: Implementing the <code>Summarizable</code> trait on
 the <code>NewsArticle</code> and <code>Tweet</code> types</span></p>
 <p>Implementing a trait on a type is similar to implementing methods that aren't
@@ -227,12 +235,16 @@ keep or override each method's default behavior.</p>
 the <code>summary</code> method of the <code>Summarize</code> trait instead of only choosing to only
 define the method signature like we did in Listing 10-11:</p>
 <p><span class="filename">Filename: lib.rs</span></p>
-<pre><code class="language-rust">pub trait Summarizable {
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+pub trait Summarizable {
     fn summary(&amp;self) -&gt; String {
         String::from(&quot;(Read more...)&quot;)
     }
 }
-</code></pre>
+
+#}</code></pre></pre>
 <p><span class="caption">Listing 10-14: Definition of a <code>Summarizable</code> trait with
 a default implementation of the <code>summary</code> method</span></p>
 <p>If we wanted to use this default implementation to summarize instances of
@@ -268,14 +280,18 @@ implementers to specify a small part of it. We could choose to have the
 <code>Summarizable</code> trait also have an <code>author_summary</code> method whose implementation
 is required, then a <code>summary</code> method that has a default implementation that
 calls the <code>author_summary</code> method:</p>
-<pre><code class="language-rust">pub trait Summarizable {
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+pub trait Summarizable {
     fn author_summary(&amp;self) -&gt; String;
 
     fn summary(&amp;self) -&gt; String {
         format!(&quot;(Read more from {}...)&quot;, self.author_summary())
     }
 }
-</code></pre>
+
+#}</code></pre></pre>
 <p>In order to use this version of <code>Summarizable</code>, we're only required to define
 <code>author_summary</code> when we implement the trait on a type:</p>
 <pre><code class="language-rust ignore">impl Summarizable for Tweet {
@@ -397,7 +413,7 @@ a generic <code>largest</code> function that will compile as long as the types o
 values in the slice that we pass into <code>largest</code> implement both the <code>PartialOrd</code>
 and <code>Copy</code> traits, like <code>i32</code> and <code>char</code>:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><code class="language-rust">use std::cmp::PartialOrd;
+<pre><pre class="playpen"><code class="language-rust">use std::cmp::PartialOrd;
 
 fn largest&lt;T: PartialOrd + Copy&gt;(list: &amp;[T]) -&gt; T {
     let mut largest = list[0];
@@ -422,7 +438,7 @@ fn main() {
     let result = largest(&amp;chars);
     println!(&quot;The largest char is {}&quot;, result);
 }
-</code></pre>
+</code></pre></pre>
 <p><span class="caption">Listing 10-15: A working definition of the <code>largest</code>
 function that works on any generic type that implements the <code>PartialOrd</code> and
 <code>Copy</code> traits</span></p>

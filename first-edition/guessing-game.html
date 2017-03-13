@@ -97,10 +97,10 @@ authors = [&quot;Your Name &lt;you@example.com&gt;&quot;]
 <p>Cargo gets this information from your environment. If it’s not correct, go ahead
 and fix that.</p>
 <p>Finally, Cargo generated a ‘Hello, world!’ for us. Check out <code>src/main.rs</code>:</p>
-<pre><code class="language-rust">fn main() {
+<pre><pre class="playpen"><code class="language-rust">fn main() {
     println!(&quot;Hello, world!&quot;);
 }
-</code></pre>
+</code></pre></pre>
 <p>Let’s try compiling what Cargo gave us:</p>
 <pre><code class="language-{bash}">$ cargo build
    Compiling guessing_game v0.1.0 (file:///home/you/projects/guessing_game)
@@ -120,7 +120,7 @@ to quickly test each iteration before moving on to the next one.</p>
 <a class="header" href="guessing-game.html#processing-a-guess" name="processing-a-guess"><h1>Processing a Guess</h1></a>
 <p>Let’s get to it! The first thing we need to do for our guessing game is
 allow our player to input a guess. Put this in your <code>src/main.rs</code>:</p>
-<pre><code class="language-rust no_run">use std::io;
+<pre><pre class="playpen"><code class="language-rust no_run">use std::io;
 
 fn main() {
     println!(&quot;Guess the number!&quot;);
@@ -134,7 +134,7 @@ fn main() {
 
     println!(&quot;You guessed: {}&quot;, guess);
 }
-</code></pre>
+</code></pre></pre>
 <p>There’s a lot here! Let’s go over it, bit by bit.</p>
 <pre><code class="language-rust ignore">use std::io;
 </code></pre>
@@ -172,9 +172,13 @@ uses <code>mut</code>: it makes a binding mutable, rather than immutable. <code>
 take a name on the left hand side of the assignment, it actually accepts a
 ‘<a href="patterns.html">pattern</a>’. We’ll use patterns later. It’s easy enough
 to use for now:</p>
-<pre><code class="language-rust">let foo = 5; // `foo` is immutable.
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+let foo = 5; // `foo` is immutable.
 let mut bar = 5; // `bar` is mutable.
-</code></pre>
+
+#}</code></pre></pre>
 <p>Oh, and <code>//</code> will start a comment, until the end of the line. Rust ignores
 everything in <a href="comments.html">comments</a>.</p>
 <p>So now we know that <code>let mut guess</code> will introduce a mutable binding named
@@ -270,11 +274,15 @@ project.</p>
 <p>This prints out the string we saved our input in. The <code>{}</code>s are a placeholder,
 and so we pass it <code>guess</code> as an argument. If we had multiple <code>{}</code>s, we would
 pass multiple arguments:</p>
-<pre><code class="language-rust">let x = 5;
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+let x = 5;
 let y = 10;
 
 println!(&quot;x and y: {} and {}&quot;, x, y);
-</code></pre>
+
+#}</code></pre></pre>
 <p>Easy.</p>
 <p>Anyway, that’s the tour. We can run what we have with <code>cargo run</code>:</p>
 <pre><code class="language-bash">$ cargo run
@@ -485,11 +493,15 @@ takes a reference to the thing you want to compare it to. It returns the
 <code>Ordering</code> type we <code>use</code>d earlier. We use a <a href="match.html"><code>match</code></a> statement to
 determine exactly what kind of <code>Ordering</code> it is. <code>Ordering</code> is an
 <a href="enums.html"><code>enum</code></a>, short for ‘enumeration’, which looks like this:</p>
-<pre><code class="language-rust">enum Foo {
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+enum Foo {
     Bar,
     Baz,
 }
-</code></pre>
+
+#}</code></pre></pre>
 <p>With this definition, anything of type <code>Foo</code> can be either a
 <code>Foo::Bar</code> or a <code>Foo::Baz</code>. We use the <code>::</code> to indicate the
 namespace for a particular <code>enum</code> variant.</p>

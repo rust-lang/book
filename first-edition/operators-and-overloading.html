@@ -73,7 +73,7 @@ operators that are able to be overloaded. To support a particular operator
 between types, there’s a specific trait that you can implement, which then
 overloads the operator.</p>
 <p>For example, the <code>+</code> operator can be overloaded with the <code>Add</code> trait:</p>
-<pre><code class="language-rust">use std::ops::Add;
+<pre><pre class="playpen"><code class="language-rust">use std::ops::Add;
 
 #[derive(Debug)]
 struct Point {
@@ -97,7 +97,7 @@ fn main() {
 
     println!(&quot;{:?}&quot;, p3);
 }
-</code></pre>
+</code></pre></pre>
 <p>In <code>main</code>, we can use <code>+</code> on our two <code>Point</code>s, since we’ve implemented
 <code>Add&lt;Output=Point&gt;</code> for <code>Point</code>.</p>
 <p>There are a number of operators that can be overloaded this way, and all of
@@ -105,18 +105,25 @@ their associated traits live in the <a href="../std/ops/index.html"><code>std::o
 documentation for the full list.</p>
 <p>Implementing these traits follows a pattern. Let’s look at <a href="../std/ops/trait.Add.html"><code>Add</code></a> in more
 detail:</p>
-<pre><code class="language-rust"># mod foo {
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+# mod foo {
 pub trait Add&lt;RHS = Self&gt; {
     type Output;
 
     fn add(self, rhs: RHS) -&gt; Self::Output;
 }
 # }
-</code></pre>
+
+#}</code></pre></pre>
 <p>There’s three types in total involved here: the type you <code>impl Add</code> for, <code>RHS</code>,
 which defaults to <code>Self</code>, and <code>Output</code>. For an expression <code>let z = x + y</code>, <code>x</code>
 is the <code>Self</code> type, <code>y</code> is the RHS, and <code>z</code> is the <code>Self::Output</code> type.</p>
-<pre><code class="language-rust"># struct Point;
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+# struct Point;
 # use std::ops::Add;
 impl Add&lt;i32&gt; for Point {
     type Output = f64;
@@ -126,7 +133,8 @@ impl Add&lt;i32&gt; for Point {
 # 1.0
     }
 }
-</code></pre>
+
+#}</code></pre></pre>
 <p>will let you do this:</p>
 <pre><code class="language-rust ignore">let p: Point = // ...
 let x: f64 = p + 2i32;
@@ -134,7 +142,7 @@ let x: f64 = p + 2i32;
 <a class="header" href="operators-and-overloading.html#using-operator-traits-in-generic-structs" name="using-operator-traits-in-generic-structs"><h1>Using operator traits in generic structs</h1></a>
 <p>Now that we know how operator traits are defined, we can define our <code>HasArea</code>
 trait and <code>Square</code> struct from the <a href="traits.html">traits chapter</a> more generically:</p>
-<pre><code class="language-rust">use std::ops::Mul;
+<pre><pre class="playpen"><code class="language-rust">use std::ops::Mul;
 
 trait HasArea&lt;T&gt; {
     fn area(&amp;self) -&gt; T;
@@ -162,7 +170,7 @@ fn main() {
 
     println!(&quot;Area of s: {}&quot;, s.area());
 }
-</code></pre>
+</code></pre></pre>
 <p>For <code>HasArea</code> and <code>Square</code>, we declare a type parameter <code>T</code> and replace
 <code>f64</code> with it. The <code>impl</code> needs more involved modifications:</p>
 <pre><code class="language-rust ignore">impl&lt;T&gt; HasArea&lt;T&gt; for Square&lt;T&gt;

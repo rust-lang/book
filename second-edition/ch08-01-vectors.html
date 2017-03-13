@@ -75,8 +75,12 @@ same type. They are useful in situations where you have a list of items, such
 as the lines of text in a file or the prices of items in a shopping cart.</p>
 <a class="header" href="ch08-01-vectors.html#creating-a-new-vector" name="creating-a-new-vector"><h3>Creating a New Vector</h3></a>
 <p>To create a new, empty vector, we can call the <code>Vec::new</code> function:</p>
-<pre><code class="language-rust">let v: Vec&lt;i32&gt; = Vec::new();
-</code></pre>
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+let v: Vec&lt;i32&gt; = Vec::new();
+
+#}</code></pre></pre>
 <p>Note that we added a type annotation here. Since we aren’t inserting any values
 into this vector, Rust doesn’t know what kind of elements we intend to store.
 This is an important point. Vectors are homogeneous: they may store many
@@ -91,33 +95,45 @@ values, so you rarely need to do this type annotation. It’s more common to
 create a <code>Vec</code> that has initial values, and Rust provides the <code>vec!</code> macro for
 convenience. The macro will create a new <code>Vec</code> that holds the values we give
 it. This will create a new <code>Vec&lt;i32&gt;</code> that holds the values <code>1</code>, <code>2</code>, and <code>3</code>:</p>
-<pre><code class="language-rust">let v = vec![1, 2, 3];
-</code></pre>
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+let v = vec![1, 2, 3];
+
+#}</code></pre></pre>
 <p>Because we’ve given initial <code>i32</code> values, Rust can infer that the type of <code>v</code>
 is <code>Vec&lt;i32&gt;</code>, and the type annotation isn’t necessary. Let’s look at how to
 modify a vector next.</p>
 <a class="header" href="ch08-01-vectors.html#updating-a-vector" name="updating-a-vector"><h3>Updating a Vector</h3></a>
 <p>To create a vector then add elements to it, we can use the <code>push</code> method:</p>
-<pre><code class="language-rust">let mut v = Vec::new();
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+let mut v = Vec::new();
 
 v.push(5);
 v.push(6);
 v.push(7);
 v.push(8);
-</code></pre>
+
+#}</code></pre></pre>
 <p>As with any variable as we discussed in Chapter 3, if we want to be able to
 change its value, we need to make it mutable with the <code>mut</code> keyword. The
 numbers we place inside are all of type <code>i32</code>, and Rust infers this from the
 data, so we don’t need the <code>Vec&lt;i32&gt;</code> annotation.</p>
 <a class="header" href="ch08-01-vectors.html#dropping-a-vector-drops-its-elements" name="dropping-a-vector-drops-its-elements"><h3>Dropping a Vector Drops its Elements</h3></a>
 <p>Like any other <code>struct</code>, a vector will be freed when it goes out of scope:</p>
-<pre><code class="language-rust">{
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+{
     let v = vec![1, 2, 3, 4];
 
     // do stuff with v
 
 } // &lt;- v goes out of scope and is freed here
-</code></pre>
+
+#}</code></pre></pre>
 <p>When the vector gets dropped, all of its contents will also be dropped, meaning
 those integers it holds will be cleaned up. This may seem like a
 straightforward point, but can get a little more complicated once we start to
@@ -129,11 +145,15 @@ value stored in a vector. In the examples, we’ve annotated the types of the
 values that are returned from these functions for extra clarity.</p>
 <p>This example shows both methods of accessing a value in a vector either with
 indexing syntax or the <code>get</code> method:</p>
-<pre><code class="language-rust">let v = vec![1, 2, 3, 4, 5];
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+let v = vec![1, 2, 3, 4, 5];
 
 let third: &amp;i32 = &amp;v[2];
 let third: Option&lt;&amp;i32&gt; = v.get(2);
-</code></pre>
+
+#}</code></pre></pre>
 <p>There are a few things to note here. First, that we use the index value of <code>2</code>
 to get the third element: vectors are indexed by number, starting at zero.
 Second, the two different ways to get the third element are: using <code>&amp;</code> and
@@ -144,11 +164,15 @@ how the program behaves when you try to use an index value that the vector
 doesn’t have an element for. As an example, what should a program do if it has
 a vector that holds five elements then tries to access an element at index 100
 like this:</p>
-<pre><code class="language-rust should_panic">let v = vec![1, 2, 3, 4, 5];
+<pre><pre class="playpen"><code class="language-rust should_panic"># #![allow(unused_variables)]
+# 
+#fn main() {
+let v = vec![1, 2, 3, 4, 5];
 
 let does_not_exist = &amp;v[100];
 let does_not_exist = v.get(100);
-</code></pre>
+
+#}</code></pre></pre>
 <p>When you run this, you will find that with the first <code>[]</code> method, Rust will
 cause a <code>panic!</code> when a non-existent element is referenced. This method would
 be preferable if you want your program to consider an attempt to access an
@@ -214,7 +238,10 @@ and some strings. We can define an enum whose variants will hold the different
 value types, and then all of the enum variants will be considered the same
 type, that of the enum. Then we can create a vector that holds that enum and
 so, ultimately, holds different types:</p>
-<pre><code class="language-rust">enum SpreadsheetCell {
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+enum SpreadsheetCell {
     Int(i32),
     Float(f64),
     Text(String),
@@ -225,7 +252,8 @@ let row = vec![
     SpreadsheetCell::Text(String::from(&quot;blue&quot;)),
     SpreadsheetCell::Float(10.12),
 ];
-</code></pre>
+
+#}</code></pre></pre>
 <p>The reason Rust needs to know exactly what types will be in the vector at
 compile time is so that it knows exactly how much memory on the heap will be
 needed to store each element. A secondary advantage to this is that we can be

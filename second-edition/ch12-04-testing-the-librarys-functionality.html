@@ -83,7 +83,10 @@ test will fail with our placeholder implementation, of course, but we can make
 sure the code compiles and that we get the failure message we expect. Listing
 12-14 shows these modifications:</p>
 <p><span class="filename">Filename: src/lib.rs</span></p>
-<pre><code class="language-rust"># use std::error::Error;
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+# use std::error::Error;
 # use std::fs::File;
 # use std::io::prelude::*;
 #
@@ -127,7 +130,8 @@ Pick three.&quot;;
         );
     }
 }
-</code></pre>
+
+#}</code></pre></pre>
 <p><span class="caption">Listing 12-14: Creating a function where our logic will
 go and a failing test for that function</span></p>
 <!-- Will add ghosting and wingdings in libreoffice /Carol -->
@@ -229,7 +233,10 @@ that, we can make a mutable vector before the <code>for</code> loop and call the
 method to store a <code>line</code> in the vector. After the <code>for</code> loop, we return the
 vector. Listing 12-15 has the full implementation:</p>
 <p><span class="filename">Filename: src/lib.rs</span></p>
-<pre><code class="language-rust">fn grep&lt;'a&gt;(search: &amp;str, contents: &amp;'a str) -&gt; Vec&lt;&amp;'a str&gt; {
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+fn grep&lt;'a&gt;(search: &amp;str, contents: &amp;'a str) -&gt; Vec&lt;&amp;'a str&gt; {
     let mut results = Vec::new();
 
     for line in contents.lines() {
@@ -240,7 +247,8 @@ vector. Listing 12-15 has the full implementation:</p>
 
     results
 }
-</code></pre>
+
+#}</code></pre></pre>
 <p><span class="caption">Listing 12-15: Fully functioning implementation of the
 <code>grep</code> function</span></p>
 <!-- Will add ghosting and wingdings in libreoffice /Carol -->

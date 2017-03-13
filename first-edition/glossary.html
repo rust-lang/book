@@ -88,10 +88,14 @@ of your program. For example, <code>2 + 3</code> can be turned into a tree:</p>
 </code></pre>
 <a class="header" href="glossary.html#arity" name="arity"><h3>Arity</h3></a>
 <p>Arity refers to the number of arguments a function or operation takes.</p>
-<pre><code class="language-rust">let x = (2, 3);
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+let x = (2, 3);
 let y = (4, 6);
 let z = (8, 2, 6);
-</code></pre>
+
+#}</code></pre></pre>
 <p>In the example above <code>x</code> and <code>y</code> have arity 2. <code>z</code> has arity 3.</p>
 <a class="header" href="glossary.html#bounds" name="bounds"><h3>Bounds</h3></a>
 <p>Bounds are constraints on a type or <a href="traits.html">trait</a>. For example, if a bound

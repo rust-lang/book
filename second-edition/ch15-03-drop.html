@@ -93,7 +93,7 @@ instance goes out of scope so that we can see when each piece of code gets run.
 Instead of a <code>println!</code> statement, you'd fill in <code>drop</code> with whatever cleanup
 code your smart pointer needs to run:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><code class="language-rust">struct CustomSmartPointer {
+<pre><pre class="playpen"><code class="language-rust">struct CustomSmartPointer {
     data: String,
 }
 
@@ -108,7 +108,7 @@ fn main() {
     println!(&quot;CustomSmartPointer created.&quot;);
     println!(&quot;Wait for it...&quot;);
 }
-</code></pre>
+</code></pre></pre>
 <p><span class="caption">Listing 15-8: A <code>CustomSmartPointer</code> struct that
 implements the <code>Drop</code> trait, where we could put code that would clean up after
 the <code>CustomSmartPointer</code>.</span></p>
@@ -158,12 +158,16 @@ automatically when the value goes out of scope, then the value would get
 dropped twice. Dropping a value twice could cause an error or corrupt memory,
 so Rust doesn't let us. Instead, we can use <code>std::mem::drop</code>, whose definition
 is:</p>
-<pre><code class="language-rust">pub mod std {
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+pub mod std {
     pub mod mem {
         pub fn drop&lt;T&gt;(x: T) { }
     }
 }
-</code></pre>
+
+#}</code></pre></pre>
 <p>This function is generic over any type <code>T</code>, so we can pass any value to it. The
 function doesn't actually have anything in its body, so it doesn't use its
 parameter. The reason this empty function is useful is that <code>drop</code> takes

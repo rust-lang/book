@@ -69,41 +69,49 @@
                 <div id="content" class="content">
                     <a class="header" href="functions.html#functions" name="functions"><h1>Functions</h1></a>
 <p>Every Rust program has at least one function, the <code>main</code> function:</p>
-<pre><code class="language-rust">fn main() {
+<pre><pre class="playpen"><code class="language-rust">fn main() {
 }
-</code></pre>
+</code></pre></pre>
 <p>This is the simplest possible function declaration. As we mentioned before,
 <code>fn</code> says ‘this is a function’, followed by the name, some parentheses because
 this function takes no arguments, and then some curly braces to indicate the
 body. Here’s a function named <code>foo</code>:</p>
-<pre><code class="language-rust">fn foo() {
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+fn foo() {
 }
-</code></pre>
+
+#}</code></pre></pre>
 <p>So, what about taking arguments? Here’s a function that prints a number:</p>
-<pre><code class="language-rust">fn print_number(x: i32) {
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+fn print_number(x: i32) {
     println!(&quot;x is: {}&quot;, x);
 }
-</code></pre>
+
+#}</code></pre></pre>
 <p>Here’s a complete program that uses <code>print_number</code>:</p>
-<pre><code class="language-rust">fn main() {
+<pre><pre class="playpen"><code class="language-rust">fn main() {
     print_number(5);
 }
 
 fn print_number(x: i32) {
     println!(&quot;x is: {}&quot;, x);
 }
-</code></pre>
+</code></pre></pre>
 <p>As you can see, function arguments work very similar to <code>let</code> declarations:
 you add a type to the argument name, after a colon.</p>
 <p>Here’s a complete program that adds two numbers together and prints them:</p>
-<pre><code class="language-rust">fn main() {
+<pre><pre class="playpen"><code class="language-rust">fn main() {
     print_sum(5, 6);
 }
 
 fn print_sum(x: i32, y: i32) {
     println!(&quot;sum is: {}&quot;, x + y);
 }
-</code></pre>
+</code></pre></pre>
 <p>You separate arguments with a comma, both when you call the function, as well
 as when you declare it.</p>
 <p>Unlike <code>let</code>, you <em>must</em> declare the types of function arguments. This does
@@ -122,10 +130,14 @@ types explicitly is a best-practice. We agree that forcing functions to declare
 types while allowing for inference inside of function bodies is a wonderful
 sweet spot between full inference and no inference.</p>
 <p>What about returning a value? Here’s a function that adds one to an integer:</p>
-<pre><code class="language-rust">fn add_one(x: i32) -&gt; i32 {
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+fn add_one(x: i32) -&gt; i32 {
     x + 1
 }
-</code></pre>
+
+#}</code></pre></pre>
 <p>Rust functions return exactly one value, and you declare the type after an
 ‘arrow’, which is a dash (<code>-</code>) followed by a greater-than sign (<code>&gt;</code>). The last
 line of a function determines what it returns. You’ll note the lack of a
@@ -171,10 +183,14 @@ languages where an assignment evaluates to the assigned value (e.g. <code>5</cod
 previous example), in Rust the value of an assignment is an empty tuple <code>()</code>
 because the assigned value can have <a href="ownership.html">only one owner</a>, and any
 other returned value would be too surprising:</p>
-<pre><code class="language-rust">let mut y = 5;
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+let mut y = 5;
 
 let x = (y = 6);  // `x` has the value `()`, not `6`.
-</code></pre>
+
+#}</code></pre></pre>
 <p>The second kind of statement in Rust is the <em>expression statement</em>. Its
 purpose is to turn any expression into a statement. In practical terms, Rust's
 grammar expects statements to follow other statements. This means that you use
@@ -184,38 +200,54 @@ at the end of every line, and you will see semicolons at the end of almost
 every line of Rust code you see.</p>
 <p>What is this exception that makes us say &quot;almost&quot;? You saw it already, in this
 code:</p>
-<pre><code class="language-rust">fn add_one(x: i32) -&gt; i32 {
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+fn add_one(x: i32) -&gt; i32 {
     x + 1
 }
-</code></pre>
+
+#}</code></pre></pre>
 <p>Our function claims to return an <code>i32</code>, but with a semicolon, it would return
 <code>()</code> instead. Rust realizes this probably isn’t what we want, and suggests
 removing the semicolon in the error we saw before.</p>
 <a class="header" href="functions.html#early-returns" name="early-returns"><h2>Early returns</h2></a>
 <p>But what about early returns? Rust does have a keyword for that, <code>return</code>:</p>
-<pre><code class="language-rust">fn foo(x: i32) -&gt; i32 {
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+fn foo(x: i32) -&gt; i32 {
     return x;
 
     // We never run this code!
     x + 1
 }
-</code></pre>
+
+#}</code></pre></pre>
 <p>Using a <code>return</code> as the last line of a function works, but is considered poor
 style:</p>
-<pre><code class="language-rust">fn foo(x: i32) -&gt; i32 {
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+fn foo(x: i32) -&gt; i32 {
     return x + 1;
 }
-</code></pre>
+
+#}</code></pre></pre>
 <p>The previous definition without <code>return</code> may look a bit strange if you haven’t
 worked in an expression-based language before, but it becomes intuitive over
 time.</p>
 <a class="header" href="functions.html#diverging-functions" name="diverging-functions"><h2>Diverging functions</h2></a>
 <p>Rust has some special syntax for ‘diverging functions’, which are functions that
 do not return:</p>
-<pre><code class="language-rust">fn diverges() -&gt; ! {
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+fn diverges() -&gt; ! {
     panic!(&quot;This function never returns!&quot;);
 }
-</code></pre>
+
+#}</code></pre></pre>
 <p><code>panic!</code> is a macro, similar to <code>println!()</code> that we’ve already seen. Unlike
 <code>println!()</code>, <code>panic!()</code> causes the current thread of execution to crash with
 the given message. Because this function will cause a crash, it will never
@@ -283,19 +315,30 @@ stack backtrace:
   13:                0x0 - &lt;unknown&gt;
 </code></pre>
 <p>A diverging function can be used as any type:</p>
-<pre><code class="language-rust should_panic"># fn diverges() -&gt; ! {
+<pre><pre class="playpen"><code class="language-rust should_panic"># #![allow(unused_variables)]
+# 
+#fn main() {
+# fn diverges() -&gt; ! {
 #    panic!(&quot;This function never returns!&quot;);
 # }
 let x: i32 = diverges();
 let x: String = diverges();
-</code></pre>
+
+#}</code></pre></pre>
 <a class="header" href="functions.html#function-pointers" name="function-pointers"><h2>Function pointers</h2></a>
 <p>We can also create variable bindings which point to functions:</p>
-<pre><code class="language-rust">let f: fn(i32) -&gt; i32;
-</code></pre>
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+let f: fn(i32) -&gt; i32;
+
+#}</code></pre></pre>
 <p><code>f</code> is a variable binding which points to a function that takes an <code>i32</code> as
 an argument and returns an <code>i32</code>. For example:</p>
-<pre><code class="language-rust">fn plus_one(i: i32) -&gt; i32 {
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+fn plus_one(i: i32) -&gt; i32 {
     i + 1
 }
 
@@ -304,12 +347,17 @@ let f: fn(i32) -&gt; i32 = plus_one;
 
 // With type inference:
 let f = plus_one;
-</code></pre>
+
+#}</code></pre></pre>
 <p>We can then use <code>f</code> to call the function:</p>
-<pre><code class="language-rust"># fn plus_one(i: i32) -&gt; i32 { i + 1 }
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+# fn plus_one(i: i32) -&gt; i32 { i + 1 }
 # let f = plus_one;
 let six = f(5);
-</code></pre>
+
+#}</code></pre></pre>
 
                 </div>
 

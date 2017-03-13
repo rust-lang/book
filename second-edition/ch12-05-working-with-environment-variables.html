@@ -116,7 +116,10 @@ Trust me.&quot;;
 implementation will be almost the same as the <code>grep</code> function, but with some
 minor changes as shown in Listing 12-16:</p>
 <p><span class="filename">Filename: src/lib.rs</span></p>
-<pre><code class="language-rust">fn grep_case_insensitive&lt;'a&gt;(search: &amp;str, contents: &amp;'a str) -&gt; Vec&lt;&amp;'a str&gt; {
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+fn grep_case_insensitive&lt;'a&gt;(search: &amp;str, contents: &amp;'a str) -&gt; Vec&lt;&amp;'a str&gt; {
     let search = search.to_lowercase();
     let mut results = Vec::new();
 
@@ -128,7 +131,8 @@ minor changes as shown in Listing 12-16:</p>
 
     results
 }
-</code></pre>
+
+#}</code></pre></pre>
 <p><span class="caption">Listing 12-16: Implementing a <code>grep_case_insensitive</code>
 function by changing the search string and the lines of the contents to
 lowercase before comparing them</span></p>
@@ -165,12 +169,16 @@ test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured
 <p>Great! Now, we have to actually use the new <code>grep_case_insensitive</code> function.
 First, let's add a configuration option for it to the <code>Config</code> struct:</p>
 <p><span class="filename">Filename: src/lib.rs</span></p>
-<pre><code class="language-rust">pub struct Config {
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+pub struct Config {
     pub search: String,
     pub filename: String,
     pub case_sensitive: bool,
 }
-</code></pre>
+
+#}</code></pre></pre>
 <!-- Will add ghosting in libreoffice /Carol -->
 <p>And then check for that option inside of the <code>run</code> function, and decide which
 function to call based on the value of the <code>case_sensitive</code> function:</p>
@@ -199,11 +207,18 @@ function to call based on the value of the <code>case_sensitive</code> function:
 the <code>env</code> module from the standard library into our project, we add a <code>use</code> line
 at the top of <em>src/lib.rs</em>:</p>
 <p><span class="filename">Filename: src/lib.rs</span></p>
-<pre><code class="language-rust">use std::env;
-</code></pre>
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+use std::env;
+
+#}</code></pre></pre>
 <p>And then use the <code>vars</code> method from the <code>env</code> module inside of <code>Config::new</code>:</p>
 <p><span class="filename">Filename: src/lib.rs</span></p>
-<pre><code class="language-rust"># use std::env;
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+# use std::env;
 #
 # struct Config {
 #     search: String,
@@ -235,7 +250,8 @@ impl Config {
         })
     }
 }
-</code></pre>
+
+#}</code></pre></pre>
 <!-- Will add ghosting and wingdings in libreoffice /Carol -->
 <p>Here, we call <code>env::vars</code>, which works in a similar way as <code>env::args</code>. The
 difference is <code>env::vars</code> returns an iterator of environment variables rather

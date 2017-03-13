@@ -110,20 +110,27 @@ your reference.</li>
 <p>Uh oh! Your reference is pointing to an invalid resource. This is called a
 dangling pointer or ‘use after free’, when the resource is memory. A small
 example of such a situation would be:</p>
-<pre><code class="language-rust compile_fail">let r;              // Introduce reference: `r`.
+<pre><pre class="playpen"><code class="language-rust compile_fail"># #![allow(unused_variables)]
+# 
+#fn main() {
+let r;              // Introduce reference: `r`.
 {
     let i = 1;      // Introduce scoped value: `i`.
     r = &amp;i;         // Store reference of `i` in `r`.
 }                   // `i` goes out of scope and is dropped.
 
 println!(&quot;{}&quot;, r);  // `r` still refers to `i`.
-</code></pre>
+
+#}</code></pre></pre>
 <p>To fix this, we have to make sure that step four never happens after step
 three. In the small example above the Rust compiler is able to report the issue
 as it can see the lifetimes of the various values in the function.</p>
 <p>When we have a function that takes arguments by reference the situation becomes
 more complex. Consider the following example:</p>
-<pre><code class="language-rust compile_fail E0106">fn skip_prefix(line: &amp;str, prefix: &amp;str) -&gt; &amp;str {
+<pre><pre class="playpen"><code class="language-rust compile_fail E0106"># #![allow(unused_variables)]
+# 
+#fn main() {
+fn skip_prefix(line: &amp;str, prefix: &amp;str) -&gt; &amp;str {
     // ...
 #   line
 }
@@ -137,7 +144,8 @@ let v;
     v = skip_prefix(line, p.as_str());  //  |
 }                                       // -+ `p` goes out of scope.
 println!(&quot;{}&quot;, v);
-</code></pre>
+
+#}</code></pre></pre>
 <p>Here we have a function <code>skip_prefix</code> which takes two <code>&amp;str</code> references
 as parameters and returns a single <code>&amp;str</code> reference. We call it
 by passing in references to <code>line</code> and <code>p</code>: Two variables with different
@@ -148,11 +156,15 @@ reference returned by <code>skip_prefix</code> function references the still liv
 code. To get it to compile we need to tell the compiler more about the
 lifetimes of the references. This can be done by making the lifetimes
 explicit in the function declaration:</p>
-<pre><code class="language-rust">fn skip_prefix&lt;'a, 'b&gt;(line: &amp;'a str, prefix: &amp;'b str) -&gt; &amp;'a str {
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+fn skip_prefix&lt;'a, 'b&gt;(line: &amp;'a str, prefix: &amp;'b str) -&gt; &amp;'a str {
     // ...
 #   line
 }
-</code></pre>
+
+#}</code></pre></pre>
 <p>Let's examine the changes without going too deep into the syntax for now -
 we'll get to that later. The first change was adding the <code>&lt;'a, 'b&gt;</code> after the
 method name. This introduces two lifetime parameters: <code>'a</code> and <code>'b</code>. Next, each
@@ -202,7 +214,7 @@ reference to an <code>i32</code> with the lifetime <code>'a</code>’.</p>
 <a class="header" href="lifetimes.html#in-structs" name="in-structs"><h1>In <code>struct</code>s</h1></a>
 <p>You’ll also need explicit lifetimes when working with <a href="structs.html"><code>struct</code></a>s that
 contain references:</p>
-<pre><code class="language-rust">struct Foo&lt;'a&gt; {
+<pre><pre class="playpen"><code class="language-rust">struct Foo&lt;'a&gt; {
     x: &amp;'a i32,
 }
 
@@ -212,22 +224,30 @@ fn main() {
 
     println!(&quot;{}&quot;, f.x);
 }
-</code></pre>
+</code></pre></pre>
 <p>As you can see, <code>struct</code>s can also have lifetimes. In a similar way to functions,</p>
-<pre><code class="language-rust">struct Foo&lt;'a&gt; {
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+struct Foo&lt;'a&gt; {
 # x: &amp;'a i32,
 # }
-</code></pre>
+
+#}</code></pre></pre>
 <p>declares a lifetime, and</p>
-<pre><code class="language-rust"># struct Foo&lt;'a&gt; {
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+# struct Foo&lt;'a&gt; {
 x: &amp;'a i32,
 # }
-</code></pre>
+
+#}</code></pre></pre>
 <p>uses it. So why do we need a lifetime here? We need to ensure that any reference
 to a <code>Foo</code> cannot outlive the reference to an <code>i32</code> it contains.</p>
 <a class="header" href="lifetimes.html#impl-blocks" name="impl-blocks"><h2><code>impl</code> blocks</h2></a>
 <p>Let’s implement a method on <code>Foo</code>:</p>
-<pre><code class="language-rust">struct Foo&lt;'a&gt; {
+<pre><pre class="playpen"><code class="language-rust">struct Foo&lt;'a&gt; {
     x: &amp;'a i32,
 }
 
@@ -241,37 +261,45 @@ fn main() {
 
     println!(&quot;x is: {}&quot;, f.x());
 }
-</code></pre>
+</code></pre></pre>
 <p>As you can see, we need to declare a lifetime for <code>Foo</code> in the <code>impl</code> line. We repeat
 <code>'a</code> twice, like on functions: <code>impl&lt;'a&gt;</code> defines a lifetime <code>'a</code>, and <code>Foo&lt;'a&gt;</code>
 uses it.</p>
 <a class="header" href="lifetimes.html#multiple-lifetimes" name="multiple-lifetimes"><h2>Multiple lifetimes</h2></a>
 <p>If you have multiple references, you can use the same lifetime multiple times:</p>
-<pre><code class="language-rust">fn x_or_y&lt;'a&gt;(x: &amp;'a str, y: &amp;'a str) -&gt; &amp;'a str {
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+fn x_or_y&lt;'a&gt;(x: &amp;'a str, y: &amp;'a str) -&gt; &amp;'a str {
 #    x
 # }
-</code></pre>
+
+#}</code></pre></pre>
 <p>This says that <code>x</code> and <code>y</code> both are alive for the same scope, and that the
 return value is also alive for that scope. If you wanted <code>x</code> and <code>y</code> to have
 different lifetimes, you can use multiple lifetime parameters:</p>
-<pre><code class="language-rust">fn x_or_y&lt;'a, 'b&gt;(x: &amp;'a str, y: &amp;'b str) -&gt; &amp;'a str {
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+fn x_or_y&lt;'a, 'b&gt;(x: &amp;'a str, y: &amp;'b str) -&gt; &amp;'a str {
 #    x
 # }
-</code></pre>
+
+#}</code></pre></pre>
 <p>In this example, <code>x</code> and <code>y</code> have different valid scopes, but the return value
 has the same lifetime as <code>x</code>.</p>
 <a class="header" href="lifetimes.html#thinking-in-scopes" name="thinking-in-scopes"><h2>Thinking in scopes</h2></a>
 <p>A way to think about lifetimes is to visualize the scope that a reference is
 valid for. For example:</p>
-<pre><code class="language-rust">fn main() {
+<pre><pre class="playpen"><code class="language-rust">fn main() {
     let y = &amp;5;     // -+ `y` comes into scope.
                     //  |
     // Stuff...     //  |
                     //  |
 }                   // -+ `y` goes out of scope.
-</code></pre>
+</code></pre></pre>
 <p>Adding in our <code>Foo</code>:</p>
-<pre><code class="language-rust">struct Foo&lt;'a&gt; {
+<pre><pre class="playpen"><code class="language-rust">struct Foo&lt;'a&gt; {
     x: &amp;'a i32,
 }
 
@@ -282,7 +310,7 @@ fn main() {
     // Stuff...           //  |
                           //  |
 }                         // -+ `f` and `y` go out of scope.
-</code></pre>
+</code></pre></pre>
 <p>Our <code>f</code> lives within the scope of <code>y</code>, so everything works. What if it didn’t?
 This code won’t work:</p>
 <pre><code class="language-rust ignore">struct Foo&lt;'a&gt; {
@@ -310,14 +338,22 @@ name is the first step towards being able to talk about it.</p>
 <p>The lifetime named ‘static’ is a special lifetime. It signals that something
 has the lifetime of the entire program. Most Rust programmers first come across
 <code>'static</code> when dealing with strings:</p>
-<pre><code class="language-rust">let x: &amp;'static str = &quot;Hello, world.&quot;;
-</code></pre>
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+let x: &amp;'static str = &quot;Hello, world.&quot;;
+
+#}</code></pre></pre>
 <p>String literals have the type <code>&amp;'static str</code> because the reference is always
 alive: they are baked into the data segment of the final binary. Another
 example are globals:</p>
-<pre><code class="language-rust">static FOO: i32 = 5;
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+static FOO: i32 = 5;
 let x: &amp;'static i32 = &amp;FOO;
-</code></pre>
+
+#}</code></pre></pre>
 <p>This adds an <code>i32</code> to the data segment of the binary, and <code>x</code> is a reference
 to it.</p>
 <a class="header" href="lifetimes.html#lifetime-elision" name="lifetime-elision"><h2>Lifetime Elision</h2></a>

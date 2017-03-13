@@ -84,13 +84,17 @@ $ cd communicator
 <p>Notice that Cargo generated <em>src/lib.rs</em> instead of <em>src/main.rs</em>. Inside
 <em>src/lib.rs</em> we’ll find this:</p>
 <p><span class="filename">Filename: src/lib.rs</span></p>
-<pre><code class="language-rust">#[cfg(test)]
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+#[cfg(test)]
 mod tests {
     #[test]
     fn it_works() {
     }
 }
-</code></pre>
+
+#}</code></pre></pre>
 <p>Cargo creates an empty test to help us get our library started, rather than the
 “Hello, world!” binary that we get with the <code>--bin</code> option. We’ll look at the
 <code>#[]</code> and <code>mod tests</code> syntax a little later, but for now just make sure to
@@ -107,11 +111,15 @@ named <code>network</code> that contains the definition of a function called <co
 Every module definition in Rust starts with the <code>mod</code> keyword. Add this code to
 the beginning of the <em>src/lib.rs</em> file, above the test code:</p>
 <p><span class="filename">Filename: src/lib.rs</span></p>
-<pre><code class="language-rust">mod network {
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+mod network {
     fn connect() {
     }
 }
-</code></pre>
+
+#}</code></pre></pre>
 <p>After the <code>mod</code> keyword, we put the name of the module, <code>network</code>, then a block
 of code in curly braces. Everything inside this block is inside the namespace
 <code>network</code>. In this case, we have a single function, <code>connect</code>. If we wanted to
@@ -122,7 +130,10 @@ specify the module and use the namespace syntax <code>::</code>, like so:
 For example, to have a <code>client</code> module too, that also has a function named
 <code>connect</code>, we can add it as shown in Listing 7-1:</p>
 <p><span class="filename">Filename: src/lib.rs</span></p>
-<pre><code class="language-rust">mod network {
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+mod network {
     fn connect() {
     }
 }
@@ -131,7 +142,8 @@ mod client {
     fn connect() {
     }
 }
-</code></pre>
+
+#}</code></pre></pre>
 <p><span class="caption">Listing 7-1: The <code>network</code> module and the <code>client</code> module
 defined side-by-side in <em>src/lib.rs</em></span></p>
 <p>Now we have a <code>network::connect</code> function and a <code>client::connect</code> function.
@@ -147,7 +159,10 @@ the <code>client</code> code and its <code>connect</code> function might make mo
 our library if it was inside the <code>network</code> namespace instead, like in Listing
 7-2:</p>
 <p><span class="filename">Filename: src/lib.rs</span></p>
-<pre><code class="language-rust">mod network {
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+mod network {
     fn connect() {
     }
 
@@ -156,7 +171,8 @@ our library if it was inside the <code>network</code> namespace instead, like in
         }
     }
 }
-</code></pre>
+
+#}</code></pre></pre>
 <p><span class="caption">Listing 7-2: Moving the <code>client</code> module inside of the
 <code>network</code> module</span></p>
 <p>In your <em>src/lib.rs</em> file, replace the existing <code>mod network</code> and <code>mod client</code>
@@ -190,7 +206,10 @@ that you’re used to: file systems! We can use Rust’s module system along wit
 multiple files to split Rust projects up so that not everything lives in
 <em>src/lib.rs</em>. For this example, we will start with the code in Listing 7-3:</p>
 <p><span class="filename">Filename: src/lib.rs</span></p>
-<pre><code class="language-rust">mod client {
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+mod client {
     fn connect() {
     }
 }
@@ -204,7 +223,8 @@ mod network {
         }
     }
 }
-</code></pre>
+
+#}</code></pre></pre>
 <p><span class="caption">Listing 7-3: Three modules, <code>client</code>, <code>network</code>, and
 <code>network::server</code>, all defined in <em>src/lib.rs</em></span></p>
 <p>which has this module hierarchy:</p>
@@ -243,9 +263,13 @@ defined inside that module.</p>
 following, which is the <code>connect</code> function in the <code>client</code> module that we
 removed in the previous step:</p>
 <p><span class="filename">Filename: src/client.rs</span></p>
-<pre><code class="language-rust">fn connect() {
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+fn connect() {
 }
-</code></pre>
+
+#}</code></pre></pre>
 <p>Note that we don’t need a <code>mod</code> declaration in this file; that’s because we
 already declared the <code>client</code> module with <code>mod</code> in <em>src/lib.rs</em>. This file just
 provides the <em>contents</em> of the <code>client</code> module. If we put a <code>mod client</code> here,
@@ -291,14 +315,18 @@ mod network;
 </code></pre>
 <p>Then create a new <em>src/network.rs</em> file and enter the following:</p>
 <p><span class="filename">Filename: src/network.rs</span></p>
-<pre><code class="language-rust">fn connect() {
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+fn connect() {
 }
 
 mod server {
     fn connect() {
     }
 }
-</code></pre>
+
+#}</code></pre></pre>
 <p>Notice that we still have a <code>mod</code> declaration within this module file; this is
 because we still want <code>server</code> to be a sub-module of <code>network</code>.</p>
 <p>Now run <code>cargo build</code> again. Success! We have one more module to extract:
@@ -316,9 +344,13 @@ mod server;
 <p>Then create a <em>src/server.rs</em> file and enter the contents of the <code>server</code>
 module that we extracted:</p>
 <p><span class="filename">Filename: src/server.rs</span></p>
-<pre><code class="language-rust">fn connect() {
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+fn connect() {
 }
-</code></pre>
+
+#}</code></pre></pre>
 <p>When we try to <code>cargo build</code>, we’ll get the error shown in Listing 7-4:</p>
 <pre><code class="language-text">$ cargo build
    Compiling communicator v0.1.0 (file:///projects/communicator)

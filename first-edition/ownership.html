@@ -102,10 +102,14 @@ checker less and less.</p>
 <p><a href="variable-bindings.html">Variable bindings</a> have a property in Rust: they ‘have ownership’
 of what they’re bound to. This means that when a binding goes out of scope,
 Rust will free the bound resources. For example:</p>
-<pre><code class="language-rust">fn foo() {
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+fn foo() {
     let v = vec![1, 2, 3];
 }
-</code></pre>
+
+#}</code></pre></pre>
 <p>When <code>v</code> comes into scope, a new <a href="vectors.html">vector</a> is created on <a href="the-stack-and-the-heap.html#the-stack">the stack</a>,
 and it allocates space on <a href="the-stack-and-the-heap.html#the-heap">the heap</a> for its elements. When <code>v</code> goes out
 of scope at the end of <code>foo()</code>, Rust will clean up everything related to the
@@ -121,10 +125,14 @@ elements onto them.</p>
 <p>There’s some more subtlety here, though: Rust ensures that there is <em>exactly
 one</em> binding to any given resource. For example, if we have a vector, we can
 assign it to another binding:</p>
-<pre><code class="language-rust">let v = vec![1, 2, 3];
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+let v = vec![1, 2, 3];
 
 let v2 = v;
-</code></pre>
+
+#}</code></pre></pre>
 <p>But, if we try to use <code>v</code> afterwards, we get an error:</p>
 <pre><code class="language-rust ignore">let v = vec![1, 2, 3];
 
@@ -156,16 +164,24 @@ special annotation here, it’s the default thing that Rust does.</p>
 <p>The reason that we cannot use a binding after we’ve moved it is subtle, but
 important.</p>
 <p>When we write code like this:</p>
-<pre><code class="language-rust">let x = 10;
-</code></pre>
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+let x = 10;
+
+#}</code></pre></pre>
 <p>Rust allocates memory for an integer <a href="primitive-types.html#numeric-types">i32</a> on the <a href="the-stack-and-the-heap.html">stack</a>, copies the bit
 pattern representing the value of 10 to the allocated memory and binds the
 variable name x to this memory region for future reference.</p>
 <p>Now consider the following code fragment:</p>
-<pre><code class="language-rust">let v = vec![1, 2, 3];
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+let v = vec![1, 2, 3];
 
 let mut v2 = v;
-</code></pre>
+
+#}</code></pre></pre>
 <p>The first line allocates memory for the vector object <code>v</code> on the stack like
 it does for <code>x</code> above. But in addition to that it also allocates some memory
 on the <a href="the-stack-and-the-heap.html">heap</a> for the actual data (<code>[1, 2, 3]</code>). Rust copies the address
@@ -185,10 +201,14 @@ both pointing to the same memory allocation on the heap. It would violate
 Rust’s safety guarantees by introducing a data race if one could access both
 <code>v</code> and <code>v2</code> at the same time.</p>
 <p>For example if we truncated the vector to just two elements through <code>v2</code>:</p>
-<pre><code class="language-rust"># let v = vec![1, 2, 3];
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+# let v = vec![1, 2, 3];
 # let mut v2 = v;
 v2.truncate(2);
-</code></pre>
+
+#}</code></pre></pre>
 <p>and <code>v</code> were still accessible we'd end up with an invalid vector since <code>v</code>
 would not know that the heap data has been truncated. Now, the part of the
 vector <code>v</code> on the stack does not agree with the corresponding part on the
@@ -207,12 +227,16 @@ cannot use the original binding. However, there’s a <a href="traits.html">trai
 behavior, and it’s called <code>Copy</code>. We haven’t discussed traits yet, but for now,
 you can think of them as an annotation to a particular type that adds extra
 behavior. For example:</p>
-<pre><code class="language-rust">let v = 1;
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+let v = 1;
 
 let v2 = v;
 
 println!(&quot;v is: {}&quot;, v);
-</code></pre>
+
+#}</code></pre></pre>
 <p>In this case, <code>v</code> is an <code>i32</code>, which implements the <code>Copy</code> trait. This means
 that, just like a move, when we assign <code>v</code> to <code>v2</code>, a copy of the data is made.
 But, unlike a move, we can still use <code>v</code> afterward. This is because an <code>i32</code>
@@ -221,7 +245,7 @@ has no pointers to data somewhere else, copying it is a full copy.</p>
 therefore not moved like one would assume, following the ‘ownership rules’.
 To give an example, the two following snippets of code only compile because the
 <code>i32</code> and <code>bool</code> types implement the <code>Copy</code> trait.</p>
-<pre><code class="language-rust">fn main() {
+<pre><pre class="playpen"><code class="language-rust">fn main() {
     let a = 5;
 
     let _y = double(a);
@@ -231,8 +255,8 @@ To give an example, the two following snippets of code only compile because the
 fn double(x: i32) -&gt; i32 {
     x * 2
 }
-</code></pre>
-<pre><code class="language-rust">fn main() {
+</code></pre></pre>
+<pre><pre class="playpen"><code class="language-rust">fn main() {
     let a = true;
 
     let _y = change_truth(a);
@@ -242,7 +266,7 @@ fn double(x: i32) -&gt; i32 {
 fn change_truth(x: bool) -&gt; bool {
     !x
 }
-</code></pre>
+</code></pre></pre>
 <p>If we had used types that do not implement the <code>Copy</code> trait,
 we would have gotten a compile error because we tried to use a moved value.</p>
 <pre><code class="language-text">error: use of moved value: `a`
@@ -253,15 +277,22 @@ println!(&quot;{}&quot;, a);
 section.</p>
 <a class="header" href="ownership.html#more-than-ownership" name="more-than-ownership"><h1>More than ownership</h1></a>
 <p>Of course, if we had to hand ownership back with every function we wrote:</p>
-<pre><code class="language-rust">fn foo(v: Vec&lt;i32&gt;) -&gt; Vec&lt;i32&gt; {
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+fn foo(v: Vec&lt;i32&gt;) -&gt; Vec&lt;i32&gt; {
     // Do stuff with `v`.
 
     // Hand back ownership.
     v
 }
-</code></pre>
+
+#}</code></pre></pre>
 <p>This would get very tedious. It gets worse the more things we want to take ownership of:</p>
-<pre><code class="language-rust">fn foo(v1: Vec&lt;i32&gt;, v2: Vec&lt;i32&gt;) -&gt; (Vec&lt;i32&gt;, Vec&lt;i32&gt;, i32) {
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+fn foo(v1: Vec&lt;i32&gt;, v2: Vec&lt;i32&gt;) -&gt; (Vec&lt;i32&gt;, Vec&lt;i32&gt;, i32) {
     // Do stuff with `v1` and `v2`.
 
     // Hand back ownership, and the result of our function.
@@ -272,7 +303,8 @@ let v1 = vec![1, 2, 3];
 let v2 = vec![1, 2, 3];
 
 let (v1, v2, answer) = foo(v1, v2);
-</code></pre>
+
+#}</code></pre></pre>
 <p>Ugh! The return type, return line, and calling the function gets way more
 complicated.</p>
 <p>Luckily, Rust offers a feature which helps us solve this problem.

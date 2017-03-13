@@ -71,12 +71,16 @@
 <p><code>struct</code>s are a way of creating more complex data types. For example, if we were
 doing calculations involving coordinates in 2D space, we would need both an <code>x</code>
 and a <code>y</code> value:</p>
-<pre><code class="language-rust">let origin_x = 0;
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+let origin_x = 0;
 let origin_y = 0;
-</code></pre>
+
+#}</code></pre></pre>
 <p>A <code>struct</code> lets us combine these two into a single, unified datatype with <code>x</code>
 and <code>y</code> as field labels:</p>
-<pre><code class="language-rust">struct Point {
+<pre><pre class="playpen"><code class="language-rust">struct Point {
     x: i32,
     y: i32,
 }
@@ -86,7 +90,7 @@ fn main() {
 
     println!(&quot;The origin is at ({}, {})&quot;, origin.x, origin.y);
 }
-</code></pre>
+</code></pre></pre>
 <p>There’s a lot going on here, so let’s break it down. We declare a <code>struct</code> with
 the <code>struct</code> keyword, and then with a name. By convention, <code>struct</code>s begin with
 a capital letter and are camel cased: <code>PointInSpace</code>, not <code>Point_In_Space</code>.</p>
@@ -96,7 +100,7 @@ in the original declaration.</p>
 notation: <code>origin.x</code>.</p>
 <p>The values in <code>struct</code>s are immutable by default, like other bindings in Rust.
 Use <code>mut</code> to make them mutable:</p>
-<pre><code class="language-rust">struct Point {
+<pre><pre class="playpen"><code class="language-rust">struct Point {
     x: i32,
     y: i32,
 }
@@ -108,7 +112,7 @@ fn main() {
 
     println!(&quot;The point is at ({}, {})&quot;, point.x, point.y);
 }
-</code></pre>
+</code></pre></pre>
 <p>This will print <code>The point is at (5, 0)</code>.</p>
 <p>Rust does not support field mutability at the language level, so you cannot
 write something like this:</p>
@@ -138,7 +142,7 @@ fn main() {
 </code></pre>
 <p>Your structure can still contain <code>&amp;mut</code> references, which will let
 you do some kinds of mutation:</p>
-<pre><code class="language-rust">struct Point {
+<pre><pre class="playpen"><code class="language-rust">struct Point {
     x: i32,
     y: i32,
 }
@@ -161,7 +165,7 @@ fn main() {
     assert_eq!(5, point.x);
     assert_eq!(6, point.y);
 }
-</code></pre>
+</code></pre></pre>
 <p>Initialization of a data structure (struct, enum, union) can be simplified when
 fields of the data structure are initialized with variables of the same
 names as the fields.</p>
@@ -184,7 +188,10 @@ fn main() {
 <a class="header" href="structs.html#update-syntax" name="update-syntax"><h1>Update syntax</h1></a>
 <p>A <code>struct</code> can include <code>..</code> to indicate that you want to use a copy of some
 other <code>struct</code> for some of the values. For example:</p>
-<pre><code class="language-rust">struct Point3d {
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+struct Point3d {
     x: i32,
     y: i32,
     z: i32,
@@ -192,63 +199,87 @@ other <code>struct</code> for some of the values. For example:</p>
 
 let mut point = Point3d { x: 0, y: 0, z: 0 };
 point = Point3d { y: 1, .. point };
-</code></pre>
+
+#}</code></pre></pre>
 <p>This gives <code>point</code> a new <code>y</code>, but keeps the old <code>x</code> and <code>z</code> values. It doesn’t
 have to be the same <code>struct</code> either, you can use this syntax when making new
 ones, and it will copy the values you don’t specify:</p>
-<pre><code class="language-rust"># struct Point3d {
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+# struct Point3d {
 #     x: i32,
 #     y: i32,
 #     z: i32,
 # }
 let origin = Point3d { x: 0, y: 0, z: 0 };
 let point = Point3d { z: 1, x: 2, .. origin };
-</code></pre>
+
+#}</code></pre></pre>
 <a class="header" href="structs.html#tuple-structs" name="tuple-structs"><h1>Tuple structs</h1></a>
 <p>Rust has another data type that’s like a hybrid between a <a href="primitive-types.html#tuples">tuple</a> and a
 <code>struct</code>, called a ‘tuple struct’. Tuple structs have a name, but their fields
 don't. They are declared with the <code>struct</code> keyword, and then with a name
 followed by a tuple:</p>
-<pre><code class="language-rust">struct Color(i32, i32, i32);
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+struct Color(i32, i32, i32);
 struct Point(i32, i32, i32);
 
 let black = Color(0, 0, 0);
 let origin = Point(0, 0, 0);
-</code></pre>
+
+#}</code></pre></pre>
 <p>Here, <code>black</code> and <code>origin</code> are not the same type, even though they contain the
 same values.</p>
 <p>The members of a tuple struct may be accessed by dot notation or destructuring
 <code>let</code>, just like regular tuples:</p>
-<pre><code class="language-rust"># struct Color(i32, i32, i32);
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+# struct Color(i32, i32, i32);
 # struct Point(i32, i32, i32);
 # let black = Color(0, 0, 0);
 # let origin = Point(0, 0, 0);
 let black_r = black.0;
 let Point(_, origin_y, origin_z) = origin;
-</code></pre>
+
+#}</code></pre></pre>
 <p>Patterns like <code>Point(_, origin_y, origin_z)</code> are also used in
 <a href="match.html">match expressions</a>.</p>
 <p>One case when a tuple struct is very useful is when it has only one element.
 We call this the ‘newtype’ pattern, because it allows you to create a new type
 that is distinct from its contained value and also expresses its own semantic
 meaning:</p>
-<pre><code class="language-rust">struct Inches(i32);
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+struct Inches(i32);
 
 let length = Inches(10);
 
 let Inches(integer_length) = length;
 println!(&quot;length is {} inches&quot;, integer_length);
-</code></pre>
+
+#}</code></pre></pre>
 <p>As above, you can extract the inner integer type through a destructuring <code>let</code>.
 In this case, the <code>let Inches(integer_length)</code> assigns <code>10</code> to <code>integer_length</code>.
 We could have used dot notation to do the same thing:</p>
-<pre><code class="language-rust"># struct Inches(i32);
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+# struct Inches(i32);
 # let length = Inches(10);
 let integer_length = length.0;
-</code></pre>
+
+#}</code></pre></pre>
 <p>It's always possible to use a <code>struct</code> instead of a tuple struct, and can be
 clearer. We could write <code>Color</code> and <code>Point</code> like this instead:</p>
-<pre><code class="language-rust">struct Color {
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+struct Color {
     red: i32,
     blue: i32,
     green: i32,
@@ -259,20 +290,25 @@ struct Point {
     y: i32,
     z: i32,
 }
-</code></pre>
+
+#}</code></pre></pre>
 <p>Good names are important, and while values in a tuple struct can be
 referenced with dot notation as well, a <code>struct</code> gives us actual names,
 rather than positions.</p>
 <a class="header" href="structs.html#unit-like-structs" name="unit-like-structs"><h1>Unit-like structs</h1></a>
 <p>You can define a <code>struct</code> with no members at all:</p>
-<pre><code class="language-rust compile_fail E0423">struct Electron {} // Use empty braces...
+<pre><pre class="playpen"><code class="language-rust compile_fail E0423"># #![allow(unused_variables)]
+# 
+#fn main() {
+struct Electron {} // Use empty braces...
 struct Proton;     // ...or just a semicolon.
 
 // Use the same notation when creating an instance.
 let x = Electron {};
 let y = Proton;
 let z = Electron; // Error
-</code></pre>
+
+#}</code></pre></pre>
 <p>Such a <code>struct</code> is called ‘unit-like’ because it resembles the empty
 tuple, <code>()</code>, sometimes called ‘unit’. Like a tuple struct, it defines a
 new type.</p>

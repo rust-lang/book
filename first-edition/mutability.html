@@ -75,42 +75,62 @@ status:</p>
 x = 6; // Error!
 </code></pre>
 <p>We can introduce mutability with the <code>mut</code> keyword:</p>
-<pre><code class="language-rust">let mut x = 5;
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+let mut x = 5;
 
 x = 6; // No problem!
-</code></pre>
+
+#}</code></pre></pre>
 <p>This is a mutable <a href="variable-bindings.html">variable binding</a>. When a binding is mutable, it means
 you’re allowed to change what the binding points to. So in the above example,
 it’s not so much that the value at <code>x</code> is changing, but that the binding
 changed from one <code>i32</code> to another.</p>
 <p>You can also create a <a href="references-and-borrowing.html">reference</a> to it, using <code>&amp;x</code>, but if you want to use the reference to change it, you will need a mutable reference:</p>
-<pre><code class="language-rust">let mut x = 5;
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+let mut x = 5;
 let y = &amp;mut x;
-</code></pre>
+
+#}</code></pre></pre>
 <p><code>y</code> is an immutable binding to a mutable reference, which means that you can’t bind 'y' to something else (<code>y = &amp;mut z</code>), but <code>y</code> can be used to bind <code>x</code> to something else (<code>*y = 5</code>). A subtle distinction.</p>
 <p>Of course, if you need both:</p>
-<pre><code class="language-rust">let mut x = 5;
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+let mut x = 5;
 let mut y = &amp;mut x;
-</code></pre>
+
+#}</code></pre></pre>
 <p>Now <code>y</code> can be bound to another value, and the value it’s referencing can be
 changed.</p>
 <p>It’s important to note that <code>mut</code> is part of a <a href="patterns.html">pattern</a>, so you
 can do things like this:</p>
-<pre><code class="language-rust">let (mut x, y) = (5, 6);
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+let (mut x, y) = (5, 6);
 
 fn foo(mut x: i32) {
 # }
-</code></pre>
+
+#}</code></pre></pre>
 <p>Note that here, the <code>x</code> is mutable, but not the <code>y</code>.</p>
 <a class="header" href="mutability.html#interior-vs-exterior-mutability" name="interior-vs-exterior-mutability"><h1>Interior vs. Exterior Mutability</h1></a>
 <p>However, when we say something is ‘immutable’ in Rust, that doesn’t mean that
 it’s not able to be changed: we are referring to its ‘exterior mutability’ that
 in this case is immutable. Consider, for example, <a href="../std/sync/struct.Arc.html"><code>Arc&lt;T&gt;</code></a>:</p>
-<pre><code class="language-rust">use std::sync::Arc;
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+use std::sync::Arc;
 
 let x = Arc::new(5);
 let y = x.clone();
-</code></pre>
+
+#}</code></pre></pre>
 <p>When we call <code>clone()</code>, the <code>Arc&lt;T&gt;</code> needs to update the reference count. Yet
 we’ve not used any <code>mut</code>s here, <code>x</code> is an immutable binding, and we didn’t take
 <code>&amp;mut 5</code> or anything. So what gives?</p>
@@ -131,12 +151,16 @@ the structure itself. It’s not user facing. For this reason, it hands out <cod
 with <code>clone()</code>. If it handed out <code>&amp;mut T</code>s, though, that would be a problem.</p>
 <p>Other types, like the ones in the <a href="../std/cell/index.html"><code>std::cell</code></a> module, have the
 opposite: interior mutability. For example:</p>
-<pre><code class="language-rust">use std::cell::RefCell;
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+use std::cell::RefCell;
 
 let x = RefCell::new(42);
 
 let y = x.borrow_mut();
-</code></pre>
+
+#}</code></pre></pre>
 <p>RefCell hands out <code>&amp;mut</code> references to what’s inside of it with the
 <code>borrow_mut()</code> method. Isn’t that dangerous? What if we do:</p>
 <pre><code class="language-rust ignore">use std::cell::RefCell;
@@ -175,7 +199,10 @@ let b = Point { x: 5, y: 6};
 b.x = 10; // Error: cannot assign to immutable field `b.x`.
 </code></pre>
 <p>However, by using <a href="../std/cell/struct.Cell.html"><code>Cell&lt;T&gt;</code></a>, you can emulate field-level mutability:</p>
-<pre><code class="language-rust">use std::cell::Cell;
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+use std::cell::Cell;
 
 struct Point {
     x: i32,
@@ -187,7 +214,8 @@ let point = Point { x: 5, y: Cell::new(6) };
 point.y.set(7);
 
 println!(&quot;y: {:?}&quot;, point.y);
-</code></pre>
+
+#}</code></pre></pre>
 <p>This will print <code>y: Cell { value: 7 }</code>. We’ve successfully updated <code>y</code>.</p>
 
                 </div>

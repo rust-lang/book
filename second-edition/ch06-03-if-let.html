@@ -72,12 +72,16 @@
 handle values that match one pattern and ignore the rest. Consider the program
 in Listing 6-6 that matches on an <code>Option&lt;u8&gt;</code> value but only wants to execute
 code if the value is three:</p>
-<pre><code class="language-rust">let some_u8_value = Some(0u8);
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+let some_u8_value = Some(0u8);
 match some_u8_value {
     Some(3) =&gt; println!(&quot;three&quot;),
     _ =&gt; (),
 }
-</code></pre>
+
+#}</code></pre></pre>
 <p><span class="caption">Listing 6-6: A <code>match</code> that only cares about executing
 code when the value is <code>Some(3)</code></span></p>
 <p>We want to do something with the <code>Some(3)</code> match but do nothing with any other
@@ -86,11 +90,15 @@ have to add <code>_ =&gt; ()</code> after processing just one variant, which is 
 boilerplate code to add.</p>
 <p>Instead, we could write this in a shorter way using <code>if let</code>. The following
 code behaves the same as the <code>match</code> in Listing 6-6:</p>
-<pre><code class="language-rust"># let some_u8_value = Some(0u8);
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+# let some_u8_value = Some(0u8);
 if let Some(3) = some_u8_value {
     println!(&quot;three&quot;);
 }
-</code></pre>
+
+#}</code></pre></pre>
 <p><code>if let</code> takes a pattern and an expression separated by an <code>=</code>. It works the
 same way as a <code>match</code>, where the expression is given to the <code>match</code> and the
 pattern is its first arm.</p>
@@ -108,7 +116,10 @@ runs code when the value matches one pattern and then ignores all other values.<
 <code>UsState</code> value. If we wanted to count all non-quarter coins we see while also
 announcing the state of the quarters, we could do that with a <code>match</code>
 expression like this:</p>
-<pre><code class="language-rust"># #[derive(Debug)]
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+# #[derive(Debug)]
 # enum UsState {
 #    Alabama,
 #    Alaska,
@@ -126,9 +137,13 @@ match coin {
     Coin::Quarter(state) =&gt; println!(&quot;State quarter from {:?}!&quot;, state),
     _ =&gt; count += 1,
 }
-</code></pre>
+
+#}</code></pre></pre>
 <p>Or we could use an <code>if let</code> and <code>else</code> expression like this:</p>
-<pre><code class="language-rust"># #[derive(Debug)]
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+# #[derive(Debug)]
 # enum UsState {
 #    Alabama,
 #    Alaska,
@@ -147,7 +162,8 @@ if let Coin::Quarter(state) = coin {
 } else {
     count += 1;
 }
-</code></pre>
+
+#}</code></pre></pre>
 <p>If you have a situation in which your program has logic that is too verbose to
 express using a <code>match</code>, remember that <code>if let</code> is in your Rust toolbox as well.</p>
 <a class="header" href="ch06-03-if-let.html#summary" name="summary"><h2>Summary</h2></a>

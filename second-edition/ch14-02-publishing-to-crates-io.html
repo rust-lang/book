@@ -88,7 +88,10 @@ know how to use.</p>
 inside. They go just before the item they are documenting. Here's documentation
 comments for an <code>add_one</code> function:</p>
 <p><span class="filename">Filename: src/lib.rs</span></p>
-<pre><code class="language-rust">/// Adds one to the number given.
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+/// Adds one to the number given.
 ///
 /// # Examples
 ///
@@ -103,7 +106,8 @@ comments for an <code>add_one</code> function:</p>
 pub fn add_one(x: i32) -&gt; i32 {
     x + 1
 }
-</code></pre>
+
+#}</code></pre></pre>
 <p><span class="caption">Listing 14-1: A documentation comment for a
 function</span></p>
 <p><code>cargo doc</code> runs a tool distributed with Rust, <code>rustdoc</code>, to generate HTML

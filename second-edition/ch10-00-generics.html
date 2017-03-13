@@ -104,7 +104,7 @@ use generics.</p>
 <p>Consider a small program that finds the largest number in a list, shown in
 Listing 10-1:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><code class="language-rust">fn main() {
+<pre><pre class="playpen"><code class="language-rust">fn main() {
     let numbers = vec![34, 50, 25, 100, 65];
 
     let mut largest = numbers[0];
@@ -118,7 +118,7 @@ Listing 10-1:</p>
     println!(&quot;The largest number is {}&quot;, largest);
 #  assert_eq!(largest, 100);
 }
-</code></pre>
+</code></pre></pre>
 <p><span class="caption">Listing 10-1: Code to find the largest number in a list
 of numbers</span></p>
 <p>This code takes a list of integers, stored here in the variable <code>numbers</code>. It
@@ -132,7 +132,7 @@ hold the largest value, which in this case is 100.</p>
 could duplicate the code in Listing 10-1 and have the same logic exist in two
 places in the program, as in Listing 10-2:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><code class="language-rust">fn main() {
+<pre><pre class="playpen"><code class="language-rust">fn main() {
     let numbers = vec![34, 50, 25, 100, 65];
 
     let mut largest = numbers[0];
@@ -157,7 +157,7 @@ places in the program, as in Listing 10-2:</p>
 
     println!(&quot;The largest number is {}&quot;, largest);
 }
-</code></pre>
+</code></pre></pre>
 <p><span class="caption">Listing 10-2: Code to find the largest number in <em>two</em>
 lists of numbers</span></p>
 <p>While this code works, duplicating code is tedious and error-prone, and means
@@ -175,7 +175,7 @@ number into a function named <code>largest</code>. This program can find the lar
 number in two different lists of numbers, but the code from Listing 10-1 only
 exists in one spot:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><code class="language-rust">fn largest(list: &amp;[i32]) -&gt; i32 {
+<pre><pre class="playpen"><code class="language-rust">fn largest(list: &amp;[i32]) -&gt; i32 {
     let mut largest = list[0];
 
     for &amp;item in list.iter() {
@@ -200,7 +200,7 @@ fn main() {
     println!(&quot;The largest number is {}&quot;, result);
 #    assert_eq!(result, 6000);
 }
-</code></pre>
+</code></pre></pre>
 <p><span class="caption">Listing 10-3: Abstracted code to find the largest number
 in two lists</span></p>
 <p>The function has a parameter, <code>list</code>, which represents any concrete slice of

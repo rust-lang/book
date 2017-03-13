@@ -78,8 +78,12 @@ time. The compiler can usually infer what type we want to use based on the
 value and how we use it. In cases when many types are possible, such as when we
 converted a <code>String</code> to a numeric type using <code>parse</code> in Chapter 2, we must add
 a type annotation, like this:</p>
-<pre><code class="language-rust">let guess: u32 = &quot;42&quot;.parse().expect(&quot;Not a number!&quot;);
-</code></pre>
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+let guess: u32 = &quot;42&quot;.parse().expect(&quot;Not a number!&quot;);
+
+#}</code></pre></pre>
 <p>If we don’t add the type annotation here, Rust will display the following
 error, which means the compiler needs more information from us to know which
 possible type we want to use:</p>
@@ -157,12 +161,12 @@ should benchmark your code if you suspect floating-point size is a problem in
 your situation.</p>
 <p>Here’s an example that shows floating-point numbers in action:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><code class="language-rust">fn main() {
+<pre><pre class="playpen"><code class="language-rust">fn main() {
     let x = 2.0; // f64
 
     let y: f32 = 3.0; // f32
 }
-</code></pre>
+</code></pre></pre>
 <p>Floating-point numbers are represented according to the IEEE-754 standard. The
 <code>f32</code> type is a single-precision float, and <code>f64</code> has double precision.</p>
 <a class="header" href="ch03-02-data-types.html#numeric-operations" name="numeric-operations"><h4>Numeric Operations</h4></a>
@@ -170,7 +174,7 @@ your situation.</p>
 number types: addition, subtraction, multiplication, division, and remainder.
 The following code shows how you’d use each one in a <code>let</code> statement:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><code class="language-rust">fn main() {
+<pre><pre class="playpen"><code class="language-rust">fn main() {
     // addition
     let sum = 5 + 10;
 
@@ -186,7 +190,7 @@ The following code shows how you’d use each one in a <code>let</code> statemen
     // remainder
     let remainder = 43 % 5;
 }
-</code></pre>
+</code></pre></pre>
 <p>Each expression in these statements uses a mathematical operator and evaluates
 to a single value, which is then bound to a variable. Appendix B contains a
 list of all operators that Rust provides.</p>
@@ -195,12 +199,12 @@ list of all operators that Rust provides.</p>
 values: <code>true</code> and <code>false</code>. The boolean type in Rust is specified using <code>bool</code>.
 For example:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><code class="language-rust">fn main() {
+<pre><pre class="playpen"><code class="language-rust">fn main() {
     let t = true;
 
     let f: bool = false; // with explicit type annotation
 }
-</code></pre>
+</code></pre></pre>
 <p>The main way to consume boolean values is through conditionals, such as an <code>if</code>
 statement. We’ll cover how <code>if</code> statements work in Rust in the “Control Flow”
 section.</p>
@@ -209,12 +213,12 @@ section.</p>
 <code>char</code> type is the language’s most primitive alphabetic type, and the following
 code shows one way to use it:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><code class="language-rust">fn main() {
+<pre><pre class="playpen"><code class="language-rust">fn main() {
    let c = 'z';
    let z = 'ℤ';
    let heart_eyed_cat = '😻';
 }
-</code></pre>
+</code></pre></pre>
 <p>Rust’s <code>char</code> type represents a Unicode Scalar Value, which means it can
 represent a lot more than just ASCII. Accented letters, Chinese/Japanese/Korean
 ideographs, emoji, and zero width spaces are all valid <code>char</code> types in Rust.
@@ -234,22 +238,22 @@ parentheses. Each position in the tuple has a type, and the types of the
 different values in the tuple don’t have to be the same. We’ve added optional
 type annotations in this example:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><code class="language-rust">fn main() {
+<pre><pre class="playpen"><code class="language-rust">fn main() {
     let tup: (i32, f64, u8) = (500, 6.4, 1);
 }
-</code></pre>
+</code></pre></pre>
 <p>The variable <code>tup</code> binds to the entire tuple, since a tuple is considered a
 single compound element. To get the individual values out of a tuple, we can
 use pattern matching to destructure a tuple value, like this:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><code class="language-rust">fn main() {
+<pre><pre class="playpen"><code class="language-rust">fn main() {
     let tup = (500, 6.4, 1);
 
     let (x, y, z) = tup;
 
     println!(&quot;The value of y is: {}&quot;, y);
 }
-</code></pre>
+</code></pre></pre>
 <p>This program first creates a tuple and binds it to the variable <code>tup</code>. It then
 uses a pattern with <code>let</code> to take <code>tup</code> and turn it into three separate
 variables, <code>x</code>, <code>y</code>, and <code>z</code>. This is called <em>destructuring</em>, because it breaks
@@ -259,7 +263,7 @@ the single tuple into three parts. Finally, the program prints the value of
 tuple element directly by using a period (<code>.</code>) followed by the index of the
 value we want to access. For example:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><code class="language-rust">fn main() {
+<pre><pre class="playpen"><code class="language-rust">fn main() {
     let x: (i32, f64, u8) = (500, 6.4, 1);
 
     let five_hundred = x.0;
@@ -268,7 +272,7 @@ value we want to access. For example:</p>
 
     let one = x.2;
 }
-</code></pre>
+</code></pre></pre>
 <p>This program creates a tuple, <code>x</code>, and then makes new variables for each
 element by using their index. As with most programming languages, the first
 index in a tuple is 0.</p>
@@ -280,10 +284,10 @@ fixed length: once declared, they cannot grow or shrink in size.</p>
 <p>In Rust, the values going into an array are written as a comma-separated list
 inside square brackets:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><code class="language-rust">fn main() {
+<pre><pre class="playpen"><code class="language-rust">fn main() {
     let a = [1, 2, 3, 4, 5];
 }
-</code></pre>
+</code></pre></pre>
 <p>Arrays are useful when you want your data allocated on the stack rather than
 the heap (we will discuss the stack and the heap more in Chapter 4), or when
 you want to ensure you always have a fixed number of elements. They aren’t as
@@ -295,20 +299,24 @@ use a vector: Chapter 8 discusses vectors in more detail.</p>
 program that needs to know the names of the months of the year. It’s very
 unlikely that such a program will need to add or remove months, so you can use
 an array because you know it will always contain 12 items:</p>
-<pre><code class="language-rust">let months = [&quot;January&quot;, &quot;February&quot;, &quot;March&quot;, &quot;April&quot;, &quot;May&quot;, &quot;June&quot;, &quot;July&quot;,
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+let months = [&quot;January&quot;, &quot;February&quot;, &quot;March&quot;, &quot;April&quot;, &quot;May&quot;, &quot;June&quot;, &quot;July&quot;,
               &quot;August&quot;, &quot;September&quot;, &quot;October&quot;, &quot;November&quot;, &quot;December&quot;];
-</code></pre>
+
+#}</code></pre></pre>
 <a class="header" href="ch03-02-data-types.html#accessing-array-elements" name="accessing-array-elements"><h5>Accessing Array Elements</h5></a>
 <p>An array is a single chunk of memory allocated on the stack. We can access
 elements of an array using indexing, like this:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><code class="language-rust">fn main() {
+<pre><pre class="playpen"><code class="language-rust">fn main() {
     let a = [1, 2, 3, 4, 5];
 
     let first = a[0];
     let second = a[1];
 }
-</code></pre>
+</code></pre></pre>
 <p>In this example, the variable named <code>first</code> will get the value <code>1</code>, because
 that is the value at index <code>[0]</code> in the array. The variable named <code>second</code> will
 get the value <code>2</code> from index <code>[1]</code> in the array.</p>

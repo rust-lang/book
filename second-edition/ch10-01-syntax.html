@@ -83,7 +83,7 @@ providing the same functionality to find the largest value in a slice. The
 first function is the one we extracted in Listing 10-3 that finds the largest
 <code>i32</code> in a slice. The second function finds the largest <code>char</code> in a slice:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><code class="language-rust">fn largest_i32(list: &amp;[i32]) -&gt; i32 {
+<pre><pre class="playpen"><code class="language-rust">fn largest_i32(list: &amp;[i32]) -&gt; i32 {
     let mut largest = list[0];
 
     for &amp;item in list.iter() {
@@ -120,7 +120,7 @@ fn main() {
     println!(&quot;The largest char is {}&quot;, result);
 #    assert_eq!(result, 'y');
 }
-</code></pre>
+</code></pre></pre>
 <p><span class="caption">Listing 10-4: Two functions that differ only in their
 names and the types in their signatures</span></p>
 <p>Here, the functions <code>largest_i32</code> and <code>largest_char</code> have the exact same body,
@@ -207,7 +207,7 @@ what you think. /Carol -->
 struct's fields with the <code>&lt;&gt;</code> syntax too. Listing 10-6 shows the definition and
 use of a <code>Point</code> struct that can hold <code>x</code> and <code>y</code> coordinate values of any type:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><code class="language-rust">struct Point&lt;T&gt; {
+<pre><pre class="playpen"><code class="language-rust">struct Point&lt;T&gt; {
     x: T,
     y: T,
 }
@@ -216,7 +216,7 @@ fn main() {
     let integer = Point { x: 5, y: 10 };
     let float = Point { x: 1.0, y: 4.0 };
 }
-</code></pre>
+</code></pre></pre>
 <p><span class="caption">Listing 10-6: A <code>Point</code> struct that holds <code>x</code> and <code>y</code>
 values of type <code>T</code></span></p>
 <p>The syntax is similar to using generics in function definitions. First, we have
@@ -261,7 +261,7 @@ parameters. In listing 10-8, we've changed the definition of <code>Point</code> 
 generic over types <code>T</code> and <code>U</code>. The field <code>x</code> is of type <code>T</code>, and the field <code>y</code>
 is of type <code>U</code>:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><code class="language-rust">struct Point&lt;T, U&gt; {
+<pre><pre class="playpen"><code class="language-rust">struct Point&lt;T, U&gt; {
     x: T,
     y: U,
 }
@@ -271,7 +271,7 @@ fn main() {
     let both_float = Point { x: 1.0, y: 4.0 };
     let integer_and_float = Point { x: 5, y: 4.0 };
 }
-</code></pre>
+</code></pre></pre>
 <p><span class="caption">Listing 10-8: A <code>Point</code> generic over two types so that
 <code>x</code> and <code>y</code> may be values of different types</span></p>
 <p>Now all of these instances of <code>Point</code> are allowed! You can use as many generic
@@ -284,11 +284,15 @@ separated into smaller pieces.</p>
 variants. We used the <code>Option&lt;T&gt;</code> enum provided by the standard library in
 Chapter 6, and now its definition should make more sense. Let's take another
 look:</p>
-<pre><code class="language-rust">enum Option&lt;T&gt; {
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+enum Option&lt;T&gt; {
     Some(T),
     None,
 }
-</code></pre>
+
+#}</code></pre></pre>
 <p>In other words, <code>Option&lt;T&gt;</code> is an enum generic in type <code>T</code>. It has two
 variants: <code>Some</code>, which holds one value of type <code>T</code>, and a <code>None</code> variant that
 doesn't hold any value. The standard library only has to have this one
@@ -298,11 +302,15 @@ one specific type, and Rust lets us express this abstract concept without lots
 of duplication.</p>
 <p>Enums can use multiple generic types as well. The definition of the <code>Result</code>
 enum that we used in Chapter 9 is one example:</p>
-<pre><code class="language-rust">enum Result&lt;T, E&gt; {
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+enum Result&lt;T, E&gt; {
     Ok(T),
     Err(E),
 }
-</code></pre>
+
+#}</code></pre></pre>
 <p>The <code>Result</code> enum is generic over two types, <code>T</code> and <code>E</code>. <code>Result</code> has two
 variants: <code>Ok</code>, which holds a value of type <code>T</code>, and <code>Err</code>, which holds a value
 of type <code>E</code>. This definition makes it convenient to use the <code>Result</code> enum
@@ -321,7 +329,7 @@ have generic types in their definitions. Listing 10-9 shows the <code>Point&lt;T
 struct we defined in Listing 10-6. We've then defined a method named <code>x</code> on
 <code>Point&lt;T&gt;</code> that returns a reference to the data in the field <code>x</code>:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><code class="language-rust">struct Point&lt;T&gt; {
+<pre><pre class="playpen"><code class="language-rust">struct Point&lt;T&gt; {
     x: T,
     y: T,
 }
@@ -337,7 +345,7 @@ fn main() {
 
     println!(&quot;p.x = {}&quot;, p.x());
 }
-</code></pre>
+</code></pre></pre>
 <p><span class="caption">Listing 10-9: Implementing a method named <code>x</code> on the
 <code>Point&lt;T&gt;</code> struct that will return a reference to the <code>x</code> field, which is of
 type <code>T</code>.</span></p>
@@ -352,7 +360,7 @@ a new <code>Point</code> instance that has the <code>x</code> value from the <co
 of type <code>T</code>) and the <code>y</code> value from the passed-in <code>Point</code> (which is of type
 <code>W</code>):</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><code class="language-rust">struct Point&lt;T, U&gt; {
+<pre><pre class="playpen"><code class="language-rust">struct Point&lt;T, U&gt; {
     x: T,
     y: U,
 }
@@ -374,7 +382,7 @@ fn main() {
 
     println!(&quot;p3.x = {}, p3.y = {}&quot;, p3.x, p3.y);
 }
-</code></pre>
+</code></pre></pre>
 <p><span class="caption">Listing 10-10: Methods that use different generic types
 than their struct's definition</span></p>
 <p>In <code>main</code>, we've defined a <code>Point</code> that has an <code>i32</code> for <code>x</code> (with value <code>5</code>)
@@ -399,9 +407,13 @@ the generic function in Listing 10-5. The compiler looks at all the places that
 generic code is called and generates code for the concrete types that the
 generic code is called with.</p>
 <p>Let's work through an example that uses the standard library's <code>Option</code> enum:</p>
-<pre><code class="language-rust">let integer = Some(5);
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+let integer = Some(5);
 let float = Some(5.0);
-</code></pre>
+
+#}</code></pre></pre>
 <p>When Rust compiles this code, it will perform monomorphization. The compiler
 will read the values that have been passed to <code>Option</code> and see that we have two
 kinds of <code>Option&lt;T&gt;</code>: one is <code>i32</code>, and one is <code>f64</code>. As such, it will expand
@@ -411,7 +423,7 @@ thereby replacing the generic definition with the specific ones.</p>
 this, with the uses of the generic <code>Option</code> replaced with the specific
 definitions created by the compiler:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><code class="language-rust">enum Option_i32 {
+<pre><pre class="playpen"><code class="language-rust">enum Option_i32 {
     Some(i32),
     None,
 }
@@ -425,7 +437,7 @@ fn main() {
     let integer = Option_i32::Some(5);
     let float = Option_f64::Some(5.0);
 }
-</code></pre>
+</code></pre></pre>
 <p>We can write the non-duplicated code using generics, and Rust will compile that
 into code that specifies the type in each instance. That means we pay no
 runtime cost for using generics; when the code runs, it performs just like it

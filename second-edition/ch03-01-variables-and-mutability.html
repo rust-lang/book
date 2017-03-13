@@ -123,13 +123,13 @@ of the code by indicating that other parts of the code will be changing this
 variable value.</p>
 <p>For example, change <em>src/main.rs</em> to the following:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><code class="language-rust">fn main() {
+<pre><pre class="playpen"><code class="language-rust">fn main() {
     let mut x = 5;
     println!(&quot;The value of x is: {}&quot;, x);
     x = 6;
     println!(&quot;The value of x is: {}&quot;, x);
 }
-</code></pre>
+</code></pre></pre>
 <p>When we run this program, we get the following:</p>
 <pre><code class="language-text">$ cargo run
    Compiling variables v0.1.0 (file:///projects/variables)
@@ -183,7 +183,7 @@ variables with the same name as a previous variables, and the new variable
 we’ll see when we use the variable. We can shadow a variable by using the same
 variable’s name and repeating the use of the <code>let</code> keyword as follows:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><code class="language-rust">fn main() {
+<pre><pre class="playpen"><code class="language-rust">fn main() {
     let x = 5;
 
     let x = x + 1;
@@ -192,7 +192,7 @@ variable’s name and repeating the use of the <code>let</code> keyword as follo
 
     println!(&quot;The value of x is: {}&quot;, x);
 }
-</code></pre>
+</code></pre></pre>
 <p>This program first binds <code>x</code> to a value of <code>5</code>. Then it shadows <code>x</code> by
 repeating <code>let x =</code>, taking the original value and adding <code>1</code> so the value of
 <code>x</code> is then <code>6</code>. The third <code>let</code> statement also shadows <code>x</code>, taking the
@@ -212,9 +212,13 @@ effectively creating a new variable when we use the <code>let</code> keyword aga
 change the type of the value, but reuse the same name. For example, say our
 program asks a user to show how many spaces they want between some text by
 inputting space characters, but we really want to store that input as a number:</p>
-<pre><code class="language-rust">let spaces = &quot;   &quot;;
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+let spaces = &quot;   &quot;;
 let spaces = spaces.len();
-</code></pre>
+
+#}</code></pre></pre>
 <p>This construct is allowed because the first <code>spaces</code> variable is a string type,
 and the second <code>spaces</code> variable, which is a brand-new variable that happens to
 have the same name as the first one, is a number type. Shadowing thus spares us

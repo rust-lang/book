@@ -72,7 +72,7 @@
 name as part of the call, as in the call to the <code>nested_modules</code> function shown
 here in Listing 7-6.</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><code class="language-rust">pub mod a {
+<pre><pre class="playpen"><code class="language-rust">pub mod a {
     pub mod series {
         pub mod of {
             pub fn nested_modules() {}
@@ -83,7 +83,7 @@ here in Listing 7-6.</p>
 fn main() {
     a::series::of::nested_modules();
 }
-</code></pre>
+</code></pre></pre>
 <p><span class="caption">Listing 7-6: Calling a function by fully specifying its
 enclosing module’s namespaces</span></p>
 <p>As you can see, referring to the fully qualified name can get quite lengthy.
@@ -93,7 +93,7 @@ Luckily, Rust has a keyword to make these calls more concise.</p>
 modules of the function you want to call into a scope. Here’s an example of
 bringing the <code>a::series::of</code> module into a binary crate’s root scope:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><code class="language-rust">pub mod a {
+<pre><pre class="playpen"><code class="language-rust">pub mod a {
     pub mod series {
         pub mod of {
             pub fn nested_modules() {}
@@ -106,7 +106,7 @@ use a::series::of;
 fn main() {
     of::nested_modules();
 }
-</code></pre>
+</code></pre></pre>
 <p>The line <code>use a::series::of;</code> means that rather than using the full
 <code>a::series::of</code> path wherever we want to refer to the <code>of</code> module, we can use
 <code>of</code>.</p>
@@ -115,7 +115,7 @@ bring children of modules into scope. That’s why we still have to say
 <code>of::nested_modules</code> when we want to call the <code>nested_modules</code> function.</p>
 <p>We could have chosen to bring the function itself into scope, by instead
 specifying the function in the <code>use</code> as follows:</p>
-<pre><code class="language-rust">pub mod a {
+<pre><pre class="playpen"><code class="language-rust">pub mod a {
     pub mod series {
         pub mod of {
             pub fn nested_modules() {}
@@ -128,14 +128,14 @@ use a::series::of::nested_modules;
 fn main() {
     nested_modules();
 }
-</code></pre>
+</code></pre></pre>
 <p>This allows us to exclude all of the modules and reference the function
 directly.</p>
 <p>Since enums also form a sort of namespace like modules, we can import an enum’s
 variants with <code>use</code> as well. For any kind of <code>use</code> statement, if you’re
 importing multiple items from one namespace, you can list them using curly
 braces and commas in the last position, like so:</p>
-<pre><code class="language-rust">enum TrafficLight {
+<pre><pre class="playpen"><code class="language-rust">enum TrafficLight {
     Red,
     Yellow,
     Green,
@@ -148,11 +148,11 @@ fn main() {
     let yellow = Yellow;
     let green = TrafficLight::Green; // because we didn’t `use` TrafficLight::Green
 }
-</code></pre>
+</code></pre></pre>
 <a class="header" href="ch07-03-importing-names-with-use.html#glob-imports-with-" name="glob-imports-with-"><h3>Glob Imports with <code>*</code></h3></a>
 <p>To import all the items in a namespace at once, we can use the <code>*</code> syntax. For
 example:</p>
-<pre><code class="language-rust">enum TrafficLight {
+<pre><pre class="playpen"><code class="language-rust">enum TrafficLight {
     Red,
     Yellow,
     Green,
@@ -165,7 +165,7 @@ fn main() {
     let yellow = Yellow;
     let green = Green;
 }
-</code></pre>
+</code></pre></pre>
 <p>The <code>*</code> is called a <em>glob</em>, and it will import everything that’s visible inside
 of the namespace. Globs should be used sparingly: they are convenient, but you
 might also pull in more things than you expected and cause naming conflicts.</p>
@@ -200,14 +200,18 @@ looks like this:</p>
 <code>client::connect</code> function from this <code>it_works</code> function, even though we’re not
 going to be checking any functionality right now:</p>
 <p><span class="filename">Filename: src/lib.rs</span></p>
-<pre><code class="language-rust">#[cfg(test)]
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+#[cfg(test)]
 mod tests {
     #[test]
     fn it_works() {
         client::connect();
     }
 }
-</code></pre>
+
+#}</code></pre></pre>
 <p>Run the tests by invoking the <code>cargo test</code> command:</p>
 <pre><code class="language-text">$ cargo test
    Compiling communicator v0.1.0 (file:///projects/communicator)
@@ -253,7 +257,10 @@ parent module instead of to the root module.</p>
 <p>For these reasons, in the <code>tests</code> module especially, <code>use super::something</code> is
 usually the way to go. So now our test looks like this:</p>
 <p><span class="filename">Filename: src/lib.rs</span></p>
-<pre><code class="language-rust">#[cfg(test)]
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+#[cfg(test)]
 mod tests {
     use super::client;
 
@@ -262,7 +269,8 @@ mod tests {
         client::connect();
     }
 }
-</code></pre>
+
+#}</code></pre></pre>
 <p>If we run <code>cargo test</code> again, the test will pass and the first part of the test
 result output will be:</p>
 <pre><code class="language-text">$ cargo test

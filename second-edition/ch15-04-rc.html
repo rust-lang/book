@@ -145,7 +145,7 @@ Otherwise, the borrow checker won't even let us compile the code.</p>
 <p>Instead, we can change our definition of <code>List</code> to use <code>Rc&lt;T&gt;</code> instead of
 <code>Box&lt;T&gt;</code> as shown here in Listing 15-12:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><code class="language-rust">enum List {
+<pre><pre class="playpen"><code class="language-rust">enum List {
     Cons(i32, Rc&lt;List&gt;),
     Nil,
 }
@@ -158,7 +158,7 @@ fn main() {
     let b = Cons(3, a.clone());
     let c = Cons(4, a.clone());
 }
-</code></pre>
+</code></pre></pre>
 <p><span class="caption">Listing 15-12: A definition of <code>List</code> that uses
 <code>Rc&lt;T&gt;</code></span></p>
 <p>Note that we need to add a <code>use</code> statement for <code>Rc</code> because it's not in the
@@ -175,7 +175,7 @@ count of the <code>Rc</code> value we pass to it, and we'll talk about why this 
 is named <code>strong_count</code> in the section later in this chapter about preventing
 reference cycles.</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><code class="language-rust"># enum List {
+<pre><pre class="playpen"><code class="language-rust"># enum List {
 #     Cons(i32, Rc&lt;List&gt;),
 #     Nil,
 # }
@@ -194,7 +194,7 @@ fn main() {
     }
     println!(&quot;rc after c goes out of scope = {}&quot;, Rc::strong_count(&amp;a));
 }
-</code></pre>
+</code></pre></pre>
 <p><span class="caption">Listing 15-13: Printing out the reference count</span></p>
 <p>This will print out:</p>
 <pre><code class="language-text">rc = 1

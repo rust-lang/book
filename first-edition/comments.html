@@ -73,17 +73,24 @@ Comments are notes that you leave to other programmers to help explain things
 about your code. The compiler mostly ignores them.</p>
 <p>Rust has two kinds of comments that you should care about: <em>line comments</em>
 and <em>doc comments</em>.</p>
-<pre><code class="language-rust">// Line comments are anything after ‘//’ and extend to the end of the line.
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+// Line comments are anything after ‘//’ and extend to the end of the line.
 
 let x = 5; // This is also a line comment.
 
 // If you have a long explanation for something, you can put line comments next
 // to each other. Put a space between the // and your comment so that it’s
 // more readable.
-</code></pre>
+
+#}</code></pre></pre>
 <p>The other kind of comment is a doc comment. Doc comments use <code>///</code> instead of
 <code>//</code>, and support Markdown notation inside:</p>
-<pre><code class="language-rust">/// Adds one to the number given.
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+/// Adds one to the number given.
 ///
 /// # Examples
 ///
@@ -98,7 +105,8 @@ let x = 5; // This is also a line comment.
 fn add_one(x: i32) -&gt; i32 {
     x + 1
 }
-</code></pre>
+
+#}</code></pre></pre>
 <p>There is another style of doc comment, <code>//!</code>, to comment containing items (e.g.
 crates, modules or functions), instead of the items following it. Commonly used
 inside crates root (lib.rs) or modules root (mod.rs):</p>

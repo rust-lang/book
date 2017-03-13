@@ -77,12 +77,19 @@ called ‘trait objects’.</p>
 <p>For the rest of this chapter, we’ll need a trait and some implementations.
 Let’s make a simple one, <code>Foo</code>. It has one method that is expected to return a
 <code>String</code>.</p>
-<pre><code class="language-rust">trait Foo {
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+trait Foo {
     fn method(&amp;self) -&gt; String;
 }
-</code></pre>
+
+#}</code></pre></pre>
 <p>We’ll also implement this trait for <code>u8</code> and <code>String</code>:</p>
-<pre><code class="language-rust"># trait Foo { fn method(&amp;self) -&gt; String; }
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+# trait Foo { fn method(&amp;self) -&gt; String; }
 impl Foo for u8 {
     fn method(&amp;self) -&gt; String { format!(&quot;u8: {}&quot;, *self) }
 }
@@ -90,10 +97,11 @@ impl Foo for u8 {
 impl Foo for String {
     fn method(&amp;self) -&gt; String { format!(&quot;string: {}&quot;, *self) }
 }
-</code></pre>
+
+#}</code></pre></pre>
 <a class="header" href="trait-objects.html#static-dispatch" name="static-dispatch"><h2>Static dispatch</h2></a>
 <p>We can use this trait to perform static dispatch with trait bounds:</p>
-<pre><code class="language-rust"># trait Foo { fn method(&amp;self) -&gt; String; }
+<pre><pre class="playpen"><code class="language-rust"># trait Foo { fn method(&amp;self) -&gt; String; }
 # impl Foo for u8 { fn method(&amp;self) -&gt; String { format!(&quot;u8: {}&quot;, *self) } }
 # impl Foo for String { fn method(&amp;self) -&gt; String { format!(&quot;string: {}&quot;, *self) } }
 fn do_something&lt;T: Foo&gt;(x: T) {
@@ -107,12 +115,12 @@ fn main() {
     do_something(x);
     do_something(y);
 }
-</code></pre>
+</code></pre></pre>
 <p>Rust uses ‘monomorphization’ to perform static dispatch here. This means that
 Rust will create a special version of <code>do_something()</code> for both <code>u8</code> and
 <code>String</code>, and then replace the call sites with calls to these specialized
 functions. In other words, Rust generates something like this:</p>
-<pre><code class="language-rust"># trait Foo { fn method(&amp;self) -&gt; String; }
+<pre><pre class="playpen"><code class="language-rust"># trait Foo { fn method(&amp;self) -&gt; String; }
 # impl Foo for u8 { fn method(&amp;self) -&gt; String { format!(&quot;u8: {}&quot;, *self) } }
 # impl Foo for String { fn method(&amp;self) -&gt; String { format!(&quot;string: {}&quot;, *self) } }
 fn do_something_u8(x: u8) {
@@ -130,7 +138,7 @@ fn main() {
     do_something_u8(x);
     do_something_string(y);
 }
-</code></pre>
+</code></pre></pre>
 <p>This has a great upside: static dispatch allows function calls to be
 inlined because the callee is known at compile time, and inlining is
 the key to good optimization. Static dispatch is fast, but it comes at
@@ -162,7 +170,7 @@ specific type of the pointer, and hence trait objects are sometimes referred to
 as ‘type erasure’.</p>
 <p>Coming back to the example above, we can use the same trait to perform dynamic
 dispatch with trait objects by casting:</p>
-<pre><code class="language-rust"># trait Foo { fn method(&amp;self) -&gt; String; }
+<pre><pre class="playpen"><code class="language-rust"># trait Foo { fn method(&amp;self) -&gt; String; }
 # impl Foo for u8 { fn method(&amp;self) -&gt; String { format!(&quot;u8: {}&quot;, *self) } }
 # impl Foo for String { fn method(&amp;self) -&gt; String { format!(&quot;string: {}&quot;, *self) } }
 fn do_something(x: &amp;Foo) {
@@ -173,9 +181,9 @@ fn main() {
     let x = 5u8;
     do_something(&amp;x as &amp;Foo);
 }
-</code></pre>
+</code></pre></pre>
 <p>or by coercing:</p>
-<pre><code class="language-rust"># trait Foo { fn method(&amp;self) -&gt; String; }
+<pre><pre class="playpen"><code class="language-rust"># trait Foo { fn method(&amp;self) -&gt; String; }
 # impl Foo for u8 { fn method(&amp;self) -&gt; String { format!(&quot;u8: {}&quot;, *self) } }
 # impl Foo for String { fn method(&amp;self) -&gt; String { format!(&quot;string: {}&quot;, *self) } }
 fn do_something(x: &amp;Foo) {
@@ -186,7 +194,7 @@ fn main() {
     let x = &quot;Hello&quot;.to_string();
     do_something(&amp;x);
 }
-</code></pre>
+</code></pre></pre>
 <p>A function that takes a trait object is not specialized to each of the types
 that implements <code>Foo</code>: only one copy is generated, often (but not always)
 resulting in less code bloat. However, this comes at the cost of requiring
@@ -215,13 +223,17 @@ surprising behaviors to discover.</p>
 <p>Let’s start simple, with the runtime representation of a trait object. The
 <code>std::raw</code> module contains structs with layouts that are the same as the
 complicated built-in types, <a href="../std/raw/struct.TraitObject.html">including trait objects</a>:</p>
-<pre><code class="language-rust"># mod foo {
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+# mod foo {
 pub struct TraitObject {
     pub data: *mut (),
     pub vtable: *mut (),
 }
 # }
-</code></pre>
+
+#}</code></pre></pre>
 <p>That is, a trait object like <code>&amp;Foo</code> consists of a ‘data’ pointer and a ‘vtable’
 pointer.</p>
 <p>The data pointer addresses the data (of some unknown type <code>T</code>) that the trait
