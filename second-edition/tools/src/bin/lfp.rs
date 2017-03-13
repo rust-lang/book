@@ -1,3 +1,16 @@
+// Copyright 2012-2014 The Rust Project Developers. See the COPYRIGHT
+// file at the top-level directory of this distribution and at
+// http://rust-lang.org/COPYRIGHT.
+//
+// Licensed under the Apache License, Version 2.0 <LICENSE-APACHE or
+// http://www.apache.org/licenses/LICENSE-2.0> or the MIT license
+// <LICENSE-MIT or http://opensource.org/licenses/MIT>, at your
+// option. This file may not be copied, modified, or distributed
+// except according to those terms.
+
+// We have some long regex literals, so:
+// ignore-tidy-linelength
+
 extern crate rustc_serialize;
 extern crate docopt;
 use docopt::Docopt;
@@ -105,7 +118,10 @@ fn is_file_of_interest(path: &path::Path) -> bool {
 
 fn is_line_of_interest(line: &str) -> bool {
     !line.split_whitespace()
-        .filter(|sub_string| sub_string.contains("file://") && !sub_string.contains("file:///projects/"))
+        .filter(|sub_string| 
+            sub_string.contains("file://") &&
+            !sub_string.contains("file:///projects/")
+        )
         .collect::<Vec<_>>()
         .is_empty()
 }

@@ -1,3 +1,17 @@
+// Copyright 2012-2014 The Rust Project Developers. See the COPYRIGHT
+// file at the top-level directory of this distribution and at
+// http://rust-lang.org/COPYRIGHT.
+//
+// Licensed under the Apache License, Version 2.0 <LICENSE-APACHE or
+// http://www.apache.org/licenses/LICENSE-2.0> or the MIT license
+// <LICENSE-MIT or http://opensource.org/licenses/MIT>, at your
+// option. This file may not be copied, modified, or distributed
+// except according to those terms.
+ 
+
+// FIXME: We have some long lines that could be refactored, but it's not a big deal.
+// ignore-tidy-linelength
+
 extern crate regex;
 
 use std::collections::HashMap;
@@ -24,7 +38,7 @@ fn write_md(output: String) {
 
 fn parse_references(buffer: String) -> (String, HashMap<String, String>) {
     let mut ref_map = HashMap::new();
-    // TODO: Currently doesn't handle "title" in following line
+    // FIXME: Currently doesn't handle "title" in following line
     let re = Regex::new(r###"(?m)\n?^ {0,3}\[([^]]+)\]:[[:blank:]]*(.*)$"###).unwrap();
     let output = re.replace_all(&buffer, |caps: &Captures| {
         let key = caps.at(1).unwrap().to_owned().to_uppercase();
@@ -38,7 +52,7 @@ fn parse_references(buffer: String) -> (String, HashMap<String, String>) {
 }
 
 fn parse_links((buffer, ref_map): (String, HashMap<String, String>)) -> String {
-    // TODO: check which punctuation is allowed by spec
+    // FIXME: check which punctuation is allowed by spec
     let re = Regex::new(r###"(?:(?P<pre>(?:```(?:[^`]|`[^`])*`?\n```\n)|(?:[^[]`[^`\n]+[\n]?[^`\n]*`))|(?:\[(?P<name>[^]]+)\](?:(?:\([[:blank:]]*(?P<val>[^")]*[^ ])(?:[[:blank:]]*"[^"]*")?\))|(?:\[(?P<key>[^]]*)\]))?))"###).expect("could not create regex");
     let output = re.replace_all(&buffer, |caps: &Captures| {
         match caps.name("pre") {
