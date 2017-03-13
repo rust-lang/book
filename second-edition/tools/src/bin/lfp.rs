@@ -8,6 +8,9 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
+// We have some long regex literals, so:
+// ignore-tidy-linelength
+
 extern crate rustc_serialize;
 extern crate docopt;
 use docopt::Docopt;
