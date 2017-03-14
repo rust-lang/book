@@ -201,6 +201,9 @@ let row = vec![
 ];
 ```
 
+<span class="caption">Listing 8-1: Defining an enum to be able to hold
+different types of data in a vector</span>
+
 The reason Rust needs to know exactly what types will be in the vector at
 compile time is so that it knows exactly how much memory on the heap will be
 needed to store each element. A secondary advantage to this is that we can be
