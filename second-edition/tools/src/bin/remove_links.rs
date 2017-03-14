@@ -31,7 +31,7 @@ fn main () {
         // save the link reference we want to delete
         if let Some(reference) = caps.at(2) {
             refs.insert(reference.to_owned());
-        } 
+        }
 
         // put the link title back
         caps.at(1).unwrap().to_owned()

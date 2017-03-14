@@ -7,7 +7,7 @@
 // <LICENSE-MIT or http://opensource.org/licenses/MIT>, at your
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
- 
+
 extern crate regex;
 use std::io;
 use std::io::{Read, Write};
@@ -34,7 +34,7 @@ fn remove_markup(input: String) -> String {
 
     let lines: Vec<_> = input.lines().flat_map(|line| {
         // Remove our figure and caption markup
-        if line == "<figure>" || 
+        if line == "<figure>" ||
             line == "<figcaption>" ||
             line == "</figcaption>" ||
             line == "</figure>"
