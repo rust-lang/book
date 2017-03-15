@@ -69,6 +69,7 @@ dereferencing
 DerefMut
 destructor
 destructure
+destructures
 destructuring
 Destructuring
 didn
@@ -164,8 +165,13 @@ monomorphization
 Monomorphization
 monomorphized
 MoveMessage
+mpsc
 multithreaded
+mutex
 Mutex
+mutexes
+Mutexes
+MutexGuard
 namespace
 namespaced
 namespaces
@@ -181,6 +187,7 @@ null's
 OCaml
 offsetof
 online
+OpenGL
 OptionalFloatingPointNumber
 OptionalNumber
 OsStr
@@ -205,6 +212,7 @@ randcrate
 READMEs
 rect
 recurse
+recv
 redeclaring
 Refactoring
 refactor
@@ -259,6 +267,7 @@ Summarizable
 Supertraits
 That'd
 test's
+threadsafe
 Tiếng
 timeline
 TODO

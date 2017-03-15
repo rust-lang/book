@@ -86,7 +86,11 @@
     - [`RefCell<T>` and the Interior Mutability Pattern](ch15-05-interior-mutability.md)
     - [Creating Reference Cycles and Leaking Memory is Safe](ch15-06-reference-cycles.md)
 
-- [Concurrency](ch16-00-concurrency.md)
+- [Fearless Concurrency](ch16-00-concurrency.md)
+    - [Threads](ch16-01-threads.md)
+    - [Message Passing](ch16-02-message-passing.md)
+    - [Shared State](ch16-03-shared-state.md)
+    - [Extensible Concurrency: `Sync` and `Send`](ch16-04-extensible-concurrency-sync-and-send.md)
 
 - [Is Rust OOP?](ch17-00-oop.md)
 
