@@ -88,7 +88,7 @@ type system to help us reason about our code. As such, Rust gives us two traits
 to help us make sense of code that can possibly be concurrent.</p>
 <a class="header" href="concurrency.html#send" name="send"><h3><code>Send</code></h3></a>
 <p>The first trait we're going to talk about is
-<a href="../std/marker/trait.Send.html"><code>Send</code></a>. When a type <code>T</code> implements <code>Send</code>, it
+<a href="../../std/marker/trait.Send.html"><code>Send</code></a>. When a type <code>T</code> implements <code>Send</code>, it
 indicates that something of this type is able to have ownership transferred
 safely between threads.</p>
 <p>This is important to enforce certain restrictions. For example, if we have a
@@ -99,7 +99,7 @@ implemented for that type.</p>
 thread-safe, we wouldn't want to implement <code>Send</code>, and so the compiler will help
 us enforce that it can't leave the current thread.</p>
 <a class="header" href="concurrency.html#sync" name="sync"><h3><code>Sync</code></h3></a>
-<p>The second of these traits is called <a href="../std/marker/trait.Sync.html"><code>Sync</code></a>.
+<p>The second of these traits is called <a href="../../std/marker/trait.Sync.html"><code>Sync</code></a>.
 When a type <code>T</code> implements <code>Sync</code>, it indicates that something
 of this type has no possibility of introducing memory unsafety when used from
 multiple threads concurrently through shared references. This implies that
@@ -328,8 +328,8 @@ until we're done with it. If a thread attempts to lock a mutex which is already
 locked, it will wait until the other thread releases the lock.</p>
 <p>The lock &quot;release&quot; here is implicit; when the result of the lock (in this case,
 <code>data</code>) goes out of scope, the lock is automatically released.</p>
-<p>Note that <a href="../std/sync/struct.Mutex.html#method.lock"><code>lock</code></a> method of
-<a href="../std/sync/struct.Mutex.html"><code>Mutex</code></a> has this signature:</p>
+<p>Note that <a href="../../std/sync/struct.Mutex.html#method.lock"><code>lock</code></a> method of
+<a href="../../std/sync/struct.Mutex.html"><code>Mutex</code></a> has this signature:</p>
 <pre><code class="language-rust ignore">fn lock(&amp;self) -&gt; LockResult&lt;MutexGuard&lt;T&gt;&gt;
 </code></pre>
 <p>and because <code>Send</code> is not implemented for <code>MutexGuard&lt;T&gt;</code>, the guard cannot

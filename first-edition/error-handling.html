@@ -188,7 +188,7 @@ It would be better if we showed the code for unwrapping because it is so
 simple, but to do that, we will first need to explore the <code>Option</code> and <code>Result</code>
 types. Both of these types have a method called <code>unwrap</code> defined on them.</p>
 <a class="header" href="error-handling.html#the-option-type" name="the-option-type"><h3>The <code>Option</code> type</h3></a>
-<p>The <code>Option</code> type is <a href="../std/option/enum.Option.html">defined in the standard library</a>:</p>
+<p>The <code>Option</code> type is <a href="../../std/option/enum.Option.html">defined in the standard library</a>:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
 # 
 #fn main() {
@@ -237,7 +237,7 @@ fn main() {
     }
 }
 </code></pre></pre>
-<p>This code uses <a href="../book/patterns.html">pattern matching</a> to do <em>case
+<p>This code uses <a href="../book/first-edition/patterns.html">pattern matching</a> to do <em>case
 analysis</em> on the <code>Option&lt;usize&gt;</code> returned by the <code>find</code> function. In fact, case
 analysis is the only way to get at the value stored inside an <code>Option&lt;T&gt;</code>. This
 means that you, as the programmer, must handle the case when an <code>Option&lt;T&gt;</code> is
@@ -319,7 +319,7 @@ fn map&lt;F, T, A&gt;(option: Option&lt;T&gt;, f: F) -&gt; Option&lt;A&gt; where
 }
 
 #}</code></pre></pre>
-<p>Indeed, <code>map</code> is <a href="../std/option/enum.Option.html#method.map">defined as a method</a> on <code>Option&lt;T&gt;</code> in the standard library.
+<p>Indeed, <code>map</code> is <a href="../../std/option/enum.Option.html#method.map">defined as a method</a> on <code>Option&lt;T&gt;</code> in the standard library.
 As a method, it has a slightly different signature: methods take <code>self</code>, <code>&amp;self</code>,
 or <code>&amp;mut self</code> as their first argument.</p>
 <p>Armed with our new combinator, we can rewrite our <code>extension_explicit</code> method
@@ -373,9 +373,9 @@ fn main() {
     assert_eq!(extension(&quot;foobar&quot;).unwrap_or(&quot;rs&quot;), &quot;rs&quot;);
 }
 </code></pre></pre>
-<p>(Note that <code>unwrap_or</code> is <a href="../std/option/enum.Option.html#method.unwrap_or">defined as a method</a> on <code>Option&lt;T&gt;</code> in the
+<p>(Note that <code>unwrap_or</code> is <a href="../../std/option/enum.Option.html#method.unwrap_or">defined as a method</a> on <code>Option&lt;T&gt;</code> in the
 standard library, so we use that here instead of the free-standing function we
-defined above. Don't forget to check out the more general <a href="../std/option/enum.Option.html#method.unwrap_or_else"><code>unwrap_or_else</code></a>
+defined above. Don't forget to check out the more general <a href="../../std/option/enum.Option.html#method.unwrap_or_else"><code>unwrap_or_else</code></a>
 method.)</p>
 <p>There is one more combinator that we think is worth paying special attention to:
 <code>and_then</code>. It makes it easy to compose distinct computations that admit the
@@ -449,7 +449,7 @@ fn file_path_ext(file_path: &amp;str) -&gt; Option&lt;&amp;str&gt; {
 <p>Side note: Since <code>and_then</code> essentially works like <code>map</code> but returns an
 <code>Option&lt;_&gt;</code> instead of an <code>Option&lt;Option&lt;_&gt;&gt;</code> it is known as <code>flatmap</code> in some
 other languages.</p>
-<p>The <code>Option</code> type has many other combinators <a href="../std/option/enum.Option.html">defined in the standard
+<p>The <code>Option</code> type has many other combinators <a href="../../std/option/enum.Option.html">defined in the standard
 library</a>. It is a good idea to skim this list and familiarize
 yourself with what's available—they can often reduce case analysis
 for you. Familiarizing yourself with these combinators will pay
@@ -461,7 +461,7 @@ to handle the possibility of absence in their own way. Methods like <code>unwrap
 remove choices because they will panic if <code>Option&lt;T&gt;</code> is <code>None</code>.</p>
 <a class="header" href="error-handling.html#the-result-type" name="the-result-type"><h2>The <code>Result</code> type</h2></a>
 <p>The <code>Result</code> type is also
-<a href="../std/result/index.html">defined in the standard library</a>:</p>
+<a href="../../std/result/index.html">defined in the standard library</a>:</p>
 <p><span id="code-result-def"></span></p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
 # 
@@ -491,7 +491,7 @@ the type and value level terms have the same notation!)</p>
 computation. By convention, one outcome is meant to be expected or “<code>Ok</code>” while
 the other outcome is meant to be unexpected or “<code>Err</code>”.</p>
 <p>Just like <code>Option</code>, the <code>Result</code> type also has an
-<a href="../std/result/enum.Result.html#method.unwrap"><code>unwrap</code> method
+<a href="../../std/result/enum.Result.html#method.unwrap"><code>unwrap</code> method
 defined</a>
 in the standard library. Let's define it:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
@@ -512,7 +512,7 @@ impl&lt;T, E: ::std::fmt::Debug&gt; Result&lt;T, E&gt; {
 <p>This is effectively the same as our <a href="error-handling.html#code-option-def-unwrap">definition for
 <code>Option::unwrap</code></a>, except it includes the
 error value in the <code>panic!</code> message. This makes debugging easier, but
-it also requires us to add a <a href="../std/fmt/trait.Debug.html"><code>Debug</code></a> constraint on the <code>E</code> type
+it also requires us to add a <a href="../../std/fmt/trait.Debug.html"><code>Debug</code></a> constraint on the <code>E</code> type
 parameter (which represents our error type). Since the vast majority
 of types should satisfy the <code>Debug</code> constraint, this tends to work out
 in practice. (<code>Debug</code> on a type simply means that there's a reasonable
@@ -539,7 +539,7 @@ the string doesn't parse as a number, you'll get a panic:</p>
 using, you might be understandably annoyed. Instead, we should try to
 handle the error in our function and let the caller decide what to
 do. This means changing the return type of <code>double_number</code>. But to
-what? Well, that requires looking at the signature of the <a href="../std/primitive.str.html#method.parse"><code>parse</code>
+what? Well, that requires looking at the signature of the <a href="../../std/primitive.str.html#method.parse"><code>parse</code>
 method</a> in the standard library:</p>
 <pre><code class="language-rust ignore">impl str {
     fn parse&lt;F: FromStr&gt;(&amp;self) -&gt; Result&lt;F, F::Err&gt;;
@@ -561,7 +561,7 @@ standard library. We could (and probably should) also make our
 function generic, but let's favor explicitness for the moment. We only
 care about <code>i32</code>, so we need to <a href="../std/primitive.i32.html">find its implementation of
 <code>FromStr</code></a> (do a <code>CTRL-F</code> in your browser
-for “FromStr”) and look at its <a href="../book/associated-types.html">associated type</a> <code>Err</code>. We did
+for “FromStr”) and look at its <a href="../book/first-edition/associated-types.html">associated type</a> <code>Err</code>. We did
 this so we can find the concrete error type. In this case, it's
 <a href="../std/num/struct.ParseIntError.html"><code>std::num::ParseIntError</code></a>.
 Finally, we can rewrite our function:</p>
@@ -1071,7 +1071,7 @@ following things:</p>
 <code>Display</code>. The latter two are from the two methods defined on <code>Error</code>. The
 power of <code>Error</code> comes from the fact that all error types impl <code>Error</code>, which
 means errors can be existentially quantified as a
-<a href="../book/trait-objects.html">trait object</a>.
+<a href="../book/first-edition/trait-objects.html">trait object</a>.
 This manifests as either <code>Box&lt;Error&gt;</code> or <code>&amp;Error</code>. Indeed, the <code>cause</code> method
 returns an <code>&amp;Error</code>, which is itself a trait object. We'll revisit the
 <code>Error</code> trait's utility as a trait object later.</p>
@@ -1140,7 +1140,7 @@ different error types and satisfy the contracts defined for <code>description</c
 <code>cause</code>.</p>
 <a class="header" href="error-handling.html#the-from-trait" name="the-from-trait"><h2>The <code>From</code> trait</h2></a>
 <p>The <code>std::convert::From</code> trait is
-<a href="../std/convert/trait.From.html">defined in the standard
+<a href="../../std/convert/trait.From.html">defined in the standard
 library</a>:</p>
 <p><span id="code-from-def"></span></p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
@@ -1155,7 +1155,7 @@ trait From&lt;T&gt; {
 way to talk about conversion <em>from</em> a particular type <code>T</code> to some other type
 (in this case, “some other type” is the subject of the impl, or <code>Self</code>).
 The crux of <code>From</code> is the
-<a href="../std/convert/trait.From.html">set of implementations provided by the standard
+<a href="../../std/convert/trait.From.html">set of implementations provided by the standard
 library</a>.</p>
 <p>Here are a few simple examples demonstrating how <code>From</code> works:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
@@ -1217,7 +1217,7 @@ macro_rules! try {
 
 #}</code></pre></pre>
 <p>This is not its real definition. Its real definition is
-<a href="../std/macro.try.html">in the standard library</a>:</p>
+<a href="../../std/macro.try.html">in the standard library</a>:</p>
 <p><span id="code-try-def"></span></p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
 # 
@@ -1286,8 +1286,8 @@ combinators, calls to <code>unwrap</code> or case analysis.</p>
 return a <code>Box&lt;Error&gt;</code> to the caller, the caller can't (easily) inspect
 underlying error type. The situation is certainly better than <code>String</code>
 because the caller can call methods like
-<a href="../std/error/trait.Error.html#tymethod.description"><code>description</code></a>
-and <a href="../std/error/trait.Error.html#method.cause"><code>cause</code></a>, but the
+<a href="../../std/error/trait.Error.html#tymethod.description"><code>description</code></a>
+and <a href="../../std/error/trait.Error.html#method.cause"><code>cause</code></a>, but the
 limitation remains: <code>Box&lt;Error&gt;</code> is opaque. (N.B. This isn't entirely
 true because Rust does have runtime reflection, which is useful in
 some scenarios that are <a href="https://crates.io/crates/error">beyond the scope of this
@@ -1427,13 +1427,13 @@ impl From&lt;num::ParseFloatError&gt; for CliError {
 <p>If your library needs to report custom errors, then you should
 probably define your own error type. It's up to you whether or not to
 expose its representation (like
-<a href="../std/io/enum.ErrorKind.html"><code>ErrorKind</code></a>) or keep it hidden (like
-<a href="../std/num/struct.ParseIntError.html"><code>ParseIntError</code></a>). Regardless
+<a href="../../std/io/enum.ErrorKind.html"><code>ErrorKind</code></a>) or keep it hidden (like
+<a href="../../std/num/struct.ParseIntError.html"><code>ParseIntError</code></a>). Regardless
 of how you do it, it's usually good practice to at least provide some
 information about the error beyond its <code>String</code>
 representation. But certainly, this will vary depending on use cases.</p>
 <p>At a minimum, you should probably implement the
-<a href="../std/error/trait.Error.html"><code>Error</code></a>
+<a href="../../std/error/trait.Error.html"><code>Error</code></a>
 trait. This will give users of your library some minimum flexibility for
 <a href="error-handling.html#the-real-try-macro">composing errors</a>. Implementing the <code>Error</code> trait also
 means that users are guaranteed the ability to obtain a string representation
@@ -1447,8 +1447,8 @@ provides <code>From</code> impls for both <code>io::Error</code> and <code>byteo
 <p>Finally, depending on your tastes, you may also want to define a
 <a href="error-handling.html#the-result-type-alias-idiom"><code>Result</code> type alias</a>, particularly if your
 library defines a single error type. This is used in the standard library
-for <a href="../std/io/type.Result.html"><code>io::Result</code></a>
-and <a href="../std/fmt/type.Result.html"><code>fmt::Result</code></a>.</p>
+for <a href="../../std/io/type.Result.html"><code>io::Result</code></a>
+and <a href="../../std/fmt/type.Result.html"><code>fmt::Result</code></a>.</p>
 <a class="header" href="error-handling.html#case-study-a-program-to-read-population-data" name="case-study-a-program-to-read-population-data"><h1>Case study: A program to read population data</h1></a>
 <p>This section was long, and depending on your background, it might be
 rather dense. While there is plenty of example code to go along with
@@ -1618,9 +1618,9 @@ fn main() {
 <p>Let's outline the errors. We can start with the obvious: the three places that
 <code>unwrap</code> is called:</p>
 <ol>
-<li><a href="../std/fs/struct.File.html#method.open"><code>File::open</code></a>
+<li><a href="../../std/fs/struct.File.html#method.open"><code>File::open</code></a>
 can return an
-<a href="../std/io/struct.Error.html"><code>io::Error</code></a>.</li>
+<a href="../../std/io/struct.Error.html"><code>io::Error</code></a>.</li>
 <li><a href="http://burntsushi.net/rustdoc/csv/struct.Reader.html#method.decode"><code>csv::Reader::decode</code></a>
 decodes one record at a time, and
 <a href="http://burntsushi.net/rustdoc/csv/struct.DecodedRecords.html">decoding a
@@ -1760,7 +1760,7 @@ fn search&lt;P: AsRef&lt;Path&gt;&gt;
 <code>Result&lt;T, E&gt;</code>, the <code>try!</code> macro will return early from the function if an
 error occurs.</p>
 <p>At the end of <code>search</code> we also convert a plain string to an error type
-by using the <a href="../std/convert/trait.From.html">corresponding <code>From</code> impls</a>:</p>
+by using the <a href="../../std/convert/trait.From.html">corresponding <code>From</code> impls</a>:</p>
 <pre><code class="language-rust ignore">// We are making use of this impl in the code above, since we call `From::from`
 // on a `&amp;'static str`.
 impl&lt;'a&gt; From&lt;&amp;'a str&gt; for Box&lt;Error&gt;
@@ -2015,10 +2015,10 @@ heuristics!</p>
 <ul>
 <li>If you're writing short example code that would be overburdened by error
 handling, it's probably fine to use <code>unwrap</code> (whether that's
-<a href="../std/result/enum.Result.html#method.unwrap"><code>Result::unwrap</code></a>,
-<a href="../std/option/enum.Option.html#method.unwrap"><code>Option::unwrap</code></a>
+<a href="../../std/result/enum.Result.html#method.unwrap"><code>Result::unwrap</code></a>,
+<a href="../../std/option/enum.Option.html#method.unwrap"><code>Option::unwrap</code></a>
 or preferably
-<a href="../std/option/enum.Option.html#method.expect"><code>Option::expect</code></a>).
+<a href="../../std/option/enum.Option.html#method.expect"><code>Option::expect</code></a>).
 Consumers of your code should know to use proper error handling. (If they
 don't, send them here!)</li>
 <li>If you're writing a quick 'n' dirty program, don't feel ashamed if you use
@@ -2028,23 +2028,23 @@ surprised if they are agitated by poor error messages!</li>
 anyway, then use either a <code>String</code> or a <code>Box&lt;Error&gt;</code> for your
 error type.</li>
 <li>Otherwise, in a program, define your own error types with appropriate
-<a href="../std/convert/trait.From.html"><code>From</code></a>
+<a href="../../std/convert/trait.From.html"><code>From</code></a>
 and
-<a href="../std/error/trait.Error.html"><code>Error</code></a>
-impls to make the <a href="../std/macro.try.html"><code>try!</code></a>
+<a href="../../std/error/trait.Error.html"><code>Error</code></a>
+impls to make the <a href="../../std/macro.try.html"><code>try!</code></a>
 macro more ergonomic.</li>
 <li>If you're writing a library and your code can produce errors, define your own
 error type and implement the
-<a href="../std/error/trait.Error.html"><code>std::error::Error</code></a>
+<a href="../../std/error/trait.Error.html"><code>std::error::Error</code></a>
 trait. Where appropriate, implement
-<a href="../std/convert/trait.From.html"><code>From</code></a> to make both
+<a href="../../std/convert/trait.From.html"><code>From</code></a> to make both
 your library code and the caller's code easier to write. (Because of Rust's
 coherence rules, callers will not be able to impl <code>From</code> on your error type,
 so your library should do it.)</li>
 <li>Learn the combinators defined on
-<a href="../std/option/enum.Option.html"><code>Option</code></a>
+<a href="../../std/option/enum.Option.html"><code>Option</code></a>
 and
-<a href="../std/result/enum.Result.html"><code>Result</code></a>.
+<a href="../../std/result/enum.Result.html"><code>Result</code></a>.
 Using them exclusively can be a bit tiring at times, but I've personally
 found a healthy mix of <code>try!</code> and combinators to be quite appealing.
 <code>and_then</code>, <code>map</code> and <code>unwrap_or</code> are my favorites.</li>

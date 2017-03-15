@@ -76,7 +76,7 @@ don’t want to use the standard library via an attribute: <code>#![no_std]</cod
 <blockquote>
 <p>Note: This feature is technically stable, but there are some caveats. For
 one, you can build a <code>#![no_std]</code> <em>library</em> on stable, but not a <em>binary</em>.
-For details on binaries without the standard library, see <a href="../unstable-book/lang-items.html#using-libc">the nightly
+For details on binaries without the standard library, see <a href="../../unstable-book/lang-items.html#using-libc">the nightly
 chapter on 'lang items'</a></p>
 </blockquote>
 <p>To use <code>#![no_std]</code>, add it to your crate root:</p>
@@ -87,10 +87,10 @@ fn plus_one(x: i32) -&gt; i32 {
 }
 </code></pre>
 <p>Much of the functionality that’s exposed in the standard library is also
-available via the <a href="../core/index.html"><code>core</code> crate</a>. When we’re using the
+available via the <a href="../../core/index.html"><code>core</code> crate</a>. When we’re using the
 standard library, Rust automatically brings <code>std</code> into scope, allowing you to
 use its features without an explicit import. By the same token, when using
-<code>#![no_std]</code>, Rust will bring <code>core</code> into scope for you, as well as <a href="../core/prelude/v1/index.html">its
+<code>#![no_std]</code>, Rust will bring <code>core</code> into scope for you, as well as <a href="../../core/prelude/v1/index.html">its
 prelude</a>. This means that a lot of code will Just
 Work:</p>
 <pre><code class="language-rust ignore">#![no_std]

@@ -83,7 +83,7 @@ let y: bool = false;
 
 #}</code></pre></pre>
 <p>A common use of booleans is in <a href="if.html"><code>if</code> conditionals</a>.</p>
-<p>You can find more documentation for <code>bool</code>s <a href="../std/primitive.bool.html">in the standard library
+<p>You can find more documentation for <code>bool</code>s <a href="../../std/primitive.bool.html">in the standard library
 documentation</a>.</p>
 <a class="header" href="primitive-types.html#char" name="char"><h1><code>char</code></h1></a>
 <p>The <code>char</code> type represents a single Unicode scalar value. You can create <code>char</code>s
@@ -97,7 +97,7 @@ let two_hearts = '💕';
 #}</code></pre></pre>
 <p>Unlike some other languages, this means that Rust’s <code>char</code> is not a single byte,
 but four.</p>
-<p>You can find more documentation for <code>char</code>s <a href="../std/primitive.char.html">in the standard library
+<p>You can find more documentation for <code>char</code>s <a href="../../std/primitive.char.html">in the standard library
 documentation</a>.</p>
 <a class="header" href="primitive-types.html#numeric-types" name="numeric-types"><h1>Numeric types</h1></a>
 <p>Rust has a variety of numeric types in a few categories: signed and unsigned,
@@ -117,18 +117,18 @@ let y = 1.0; // `y` has type `f64`.
 <p>Here’s a list of the different numeric types, with links to their documentation
 in the standard library:</p>
 <ul>
-<li><a href="../std/primitive.i8.html">i8</a></li>
-<li><a href="../std/primitive.i16.html">i16</a></li>
-<li><a href="../std/primitive.i32.html">i32</a></li>
-<li><a href="../std/primitive.i64.html">i64</a></li>
-<li><a href="../std/primitive.u8.html">u8</a></li>
-<li><a href="../std/primitive.u16.html">u16</a></li>
-<li><a href="../std/primitive.u32.html">u32</a></li>
-<li><a href="../std/primitive.u64.html">u64</a></li>
-<li><a href="../std/primitive.isize.html">isize</a></li>
-<li><a href="../std/primitive.usize.html">usize</a></li>
-<li><a href="../std/primitive.f32.html">f32</a></li>
-<li><a href="../std/primitive.f64.html">f64</a></li>
+<li><a href="../../std/primitive.i8.html">i8</a></li>
+<li><a href="../../std/primitive.i16.html">i16</a></li>
+<li><a href="../../std/primitive.i32.html">i32</a></li>
+<li><a href="../../std/primitive.i64.html">i64</a></li>
+<li><a href="../../std/primitive.u8.html">u8</a></li>
+<li><a href="../../std/primitive.u16.html">u16</a></li>
+<li><a href="../../std/primitive.u32.html">u32</a></li>
+<li><a href="../../std/primitive.u64.html">u64</a></li>
+<li><a href="../../std/primitive.isize.html">isize</a></li>
+<li><a href="../../std/primitive.usize.html">usize</a></li>
+<li><a href="../../std/primitive.f32.html">f32</a></li>
+<li><a href="../../std/primitive.f64.html">f64</a></li>
 </ul>
 <p>Let’s go over them by category:</p>
 <a class="header" href="primitive-types.html#signed-and-unsigned" name="signed-and-unsigned"><h2>Signed and Unsigned</h2></a>
@@ -198,7 +198,7 @@ is <code>names[0]</code> and the second name is <code>names[1]</code>. The above
 array, you will get an error: array access is bounds-checked at run-time. Such
 errant access is the source of many bugs in other systems programming
 languages.</p>
-<p>You can find more documentation for <code>array</code>s <a href="../std/primitive.array.html">in the standard library
+<p>You can find more documentation for <code>array</code>s <a href="../../std/primitive.array.html">in the standard library
 documentation</a>.</p>
 <a class="header" href="primitive-types.html#slices" name="slices"><h1>Slices</h1></a>
 <p>A ‘slice’ is a reference to (or “view” into) another data structure. They are
@@ -223,14 +223,14 @@ let middle = &amp;a[1..4]; // A slice of `a`: only the elements `1`, `2`, and `3
 #}</code></pre></pre>
 <p>Slices have type <code>&amp;[T]</code>. We’ll talk about that <code>T</code> when we cover
 <a href="generics.html">generics</a>.</p>
-<p>You can find more documentation for slices <a href="../std/primitive.slice.html">in the standard library
+<p>You can find more documentation for slices <a href="../../std/primitive.slice.html">in the standard library
 documentation</a>.</p>
 <a class="header" href="primitive-types.html#str" name="str"><h1><code>str</code></h1></a>
 <p>Rust’s <code>str</code> type is the most primitive string type. As an <a href="unsized-types.html">unsized type</a>,
 it’s not very useful by itself, but becomes useful when placed behind a
 reference, like <code>&amp;str</code>. We'll elaborate further when we cover
 <a href="strings.html">Strings</a> and <a href="references-and-borrowing.html">references</a>.</p>
-<p>You can find more documentation for <code>str</code> <a href="../std/primitive.str.html">in the standard library
+<p>You can find more documentation for <code>str</code> <a href="../../std/primitive.str.html">in the standard library
 documentation</a>.</p>
 <a class="header" href="primitive-types.html#tuples" name="tuples"><h1>Tuples</h1></a>
 <p>A tuple is an ordered list of fixed size. Like this:</p>
@@ -306,7 +306,7 @@ println!(&quot;x is {}&quot;, x);
 #}</code></pre></pre>
 <p>Like array indexing, it starts at zero, but unlike array indexing, it uses a
 <code>.</code>, rather than <code>[]</code>s.</p>
-<p>You can find more documentation for tuples <a href="../std/primitive.tuple.html">in the standard library
+<p>You can find more documentation for tuples <a href="../../std/primitive.tuple.html">in the standard library
 documentation</a>.</p>
 <a class="header" href="primitive-types.html#functions" name="functions"><h1>Functions</h1></a>
 <p>Functions also have a type! They look like this:</p>

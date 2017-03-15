@@ -140,9 +140,9 @@ fn main() {
 </code></pre>
 <p>We’ll need to take user input, and then print the result as output. As such, we
 need the <code>io</code> library from the standard library. Rust only imports a few things
-by default into every program, <a href="../std/prelude/index.html">the ‘prelude’</a>. If it’s not in the
+by default into every program, <a href="../../std/prelude/index.html">the ‘prelude’</a>. If it’s not in the
 prelude, you’ll have to <code>use</code> it directly. There is also a second ‘prelude’, the
-<a href="../std/io/prelude/index.html"><code>io</code> prelude</a>, which serves a similar function: you import it, and it
+<a href="../../std/io/prelude/index.html"><code>io</code> prelude</a>, which serves a similar function: you import it, and it
 imports a number of useful, <code>io</code>-related things.</p>
 <pre><code class="language-rust ignore">fn main() {
 </code></pre>
@@ -185,7 +185,7 @@ everything in <a href="comments.html">comments</a>.</p>
 <code>guess</code>, but we have to look at the other side of the <code>=</code> for what it’s
 bound to: <code>String::new()</code>.</p>
 <p><code>String</code> is a string type, provided by the standard library. A
-<a href="../std/string/struct.String.html"><code>String</code></a> is a growable, UTF-8 encoded bit of text.</p>
+<a href="../../std/string/struct.String.html"><code>String</code></a> is a growable, UTF-8 encoded bit of text.</p>
 <p>The <code>::new()</code> syntax uses <code>::</code> because this is an ‘associated function’ of
 a particular type. That is to say, it’s associated with <code>String</code> itself,
 rather than a particular instance of a <code>String</code>. Some languages call this a
@@ -205,11 +205,11 @@ the first:</p>
 calling an associated function on it. If we didn’t <code>use std::io</code>, we could
 have written this line as <code>std::io::stdin()</code>.</p>
 <p>This particular function returns a handle to the standard input for your
-terminal. More specifically, a <a href="../std/io/struct.Stdin.html">std::io::Stdin</a>.</p>
+terminal. More specifically, a <a href="../../std/io/struct.Stdin.html">std::io::Stdin</a>.</p>
 <p>The next part will use this handle to get input from the user:</p>
 <pre><code class="language-rust ignore">.read_line(&amp;mut guess)
 </code></pre>
-<p>Here, we call the <a href="../std/io/struct.Stdin.html#method.read_line"><code>read_line()</code></a> method on our handle.
+<p>Here, we call the <a href="../../std/io/struct.Stdin.html#method.read_line"><code>read_line()</code></a> method on our handle.
 <a href="method-syntax.html">Methods</a> are like associated functions, but are only available on a
 particular instance of a type, rather than the type itself. We’re also passing
 one argument to <code>read_line()</code>: <code>&amp;mut guess</code>.</p>
@@ -239,12 +239,12 @@ done:</p>
 <p>But that gets hard to read. So we’ve split it up, two lines for two method
 calls. We already talked about <code>read_line()</code>, but what about <code>expect()</code>? Well,
 we already mentioned that <code>read_line()</code> puts what the user types into the <code>&amp;mut String</code> we pass it. But it also returns a value: in this case, an
-<a href="../std/io/type.Result.html"><code>io::Result</code></a>. Rust has a number of types named <code>Result</code> in its
-standard library: a generic <a href="../std/result/enum.Result.html"><code>Result</code></a>, and then specific versions for
+<a href="../../std/io/type.Result.html"><code>io::Result</code></a>. Rust has a number of types named <code>Result</code> in its
+standard library: a generic <a href="../../std/result/enum.Result.html"><code>Result</code></a>, and then specific versions for
 sub-libraries, like <code>io::Result</code>.</p>
 <p>The purpose of these <code>Result</code> types is to encode error handling information.
 Values of the <code>Result</code> type, like any type, have methods defined on them. In
-this case, <code>io::Result</code> has an <a href="../std/result/enum.Result.html#method.expect"><code>expect()</code> method</a> that takes a value
+this case, <code>io::Result</code> has an <a href="../../std/result/enum.Result.html#method.expect"><code>expect()</code> method</a> that takes a value
 it’s called on, and if it isn’t a successful one, <a href="error-handling.html"><code>panic!</code></a>s with a
 message you passed it. A <code>panic!</code> like this will cause our program to crash,
 displaying the message.</p>
@@ -505,7 +505,7 @@ enum Foo {
 <p>With this definition, anything of type <code>Foo</code> can be either a
 <code>Foo::Bar</code> or a <code>Foo::Baz</code>. We use the <code>::</code> to indicate the
 namespace for a particular <code>enum</code> variant.</p>
-<p>The <a href="../std/cmp/enum.Ordering.html"><code>Ordering</code></a> <code>enum</code> has three possible variants: <code>Less</code>, <code>Equal</code>,
+<p>The <a href="../../std/cmp/enum.Ordering.html"><code>Ordering</code></a> <code>enum</code> has three possible variants: <code>Less</code>, <code>Equal</code>,
 and <code>Greater</code>. The <code>match</code> statement takes a value of a type, and lets you
 create an ‘arm’ for each possible value. Since we have three types of
 <code>Ordering</code>, we have three arms:</p>
@@ -598,7 +598,7 @@ the beginning and end of our string. This is important, as we had to press the
 ‘return’ key to satisfy <code>read_line()</code>. This means that if we type <code>5</code> and hit
 return, <code>guess</code> looks like this: <code>5\n</code>. The <code>\n</code> represents ‘newline’, the
 enter key. <code>trim()</code> gets rid of this, leaving our string with only the <code>5</code>. The
-<a href="../std/primitive.str.html#method.parse"><code>parse()</code> method on strings</a> parses a string into some kind of number.
+<a href="../../std/primitive.str.html#method.parse"><code>parse()</code> method on strings</a> parses a string into some kind of number.
 Since it can parse a variety of numbers, we need to give Rust a hint as to the
 exact type of number we want. Hence, <code>let guess: u32</code>. The colon (<code>:</code>) after
 <code>guess</code> tells Rust we’re going to annotate its type. <code>u32</code> is an unsigned,

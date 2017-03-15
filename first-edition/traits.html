@@ -263,7 +263,7 @@ fn main() {
 }
 </code></pre></pre>
 <p><code>is_square()</code> needs to check that the sides are equal, so the sides must be of
-a type that implements the <a href="../core/cmp/trait.PartialEq.html"><code>core::cmp::PartialEq</code></a> trait:</p>
+a type that implements the <a href="../../core/cmp/trait.PartialEq.html"><code>core::cmp::PartialEq</code></a> trait:</p>
 <pre><code class="language-rust ignore">impl&lt;T: PartialEq&gt; Rectangle&lt;T&gt; { ... }
 </code></pre>
 <p>Now, a rectangle can be defined in terms of any type that can be compared for
@@ -295,7 +295,7 @@ println!(&quot;{}&quot;, 1.0.approx_equal(&amp;1.00000001));
 <p>This may seem like the Wild West, but there are two restrictions around
 implementing traits that prevent this from getting out of hand. The first is
 that if the trait isn’t defined in your scope, it doesn’t apply. Here’s an
-example: the standard library provides a <a href="../std/io/trait.Write.html"><code>Write</code></a> trait which adds
+example: the standard library provides a <a href="../../std/io/trait.Write.html"><code>Write</code></a> trait which adds
 extra functionality to <code>File</code>s, for doing file I/O. By default, a <code>File</code>
 won’t have its methods:</p>
 <pre><code class="language-rust ignore">let mut f = std::fs::File::create(&quot;foo.txt&quot;).expect(&quot;Couldn’t create foo.txt&quot;);
@@ -547,15 +547,15 @@ fn main() {
 </code></pre></pre>
 <p>However, deriving is limited to a certain set of traits:</p>
 <ul>
-<li><a href="../core/clone/trait.Clone.html"><code>Clone</code></a></li>
-<li><a href="../core/marker/trait.Copy.html"><code>Copy</code></a></li>
-<li><a href="../core/fmt/trait.Debug.html"><code>Debug</code></a></li>
-<li><a href="../core/default/trait.Default.html"><code>Default</code></a></li>
-<li><a href="../core/cmp/trait.Eq.html"><code>Eq</code></a></li>
-<li><a href="../core/hash/trait.Hash.html"><code>Hash</code></a></li>
-<li><a href="../core/cmp/trait.Ord.html"><code>Ord</code></a></li>
-<li><a href="../core/cmp/trait.PartialEq.html"><code>PartialEq</code></a></li>
-<li><a href="../core/cmp/trait.PartialOrd.html"><code>PartialOrd</code></a></li>
+<li><a href="../../core/clone/trait.Clone.html"><code>Clone</code></a></li>
+<li><a href="../../core/marker/trait.Copy.html"><code>Copy</code></a></li>
+<li><a href="../../core/fmt/trait.Debug.html"><code>Debug</code></a></li>
+<li><a href="../../core/default/trait.Default.html"><code>Default</code></a></li>
+<li><a href="../../core/cmp/trait.Eq.html"><code>Eq</code></a></li>
+<li><a href="../../core/hash/trait.Hash.html"><code>Hash</code></a></li>
+<li><a href="../../core/cmp/trait.Ord.html"><code>Ord</code></a></li>
+<li><a href="../../core/cmp/trait.PartialEq.html"><code>PartialEq</code></a></li>
+<li><a href="../../core/cmp/trait.PartialOrd.html"><code>PartialOrd</code></a></li>
 </ul>
 
                 </div>

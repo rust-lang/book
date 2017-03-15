@@ -277,7 +277,7 @@ mod tests {
 <p>Foreign libraries often hand off ownership of resources to the calling code.
 When this occurs, we must use Rust's destructors to provide safety and guarantee
 the release of these resources (especially in the case of panic).</p>
-<p>For more about destructors, see the <a href="../std/ops/trait.Drop.html">Drop trait</a>.</p>
+<p>For more about destructors, see the <a href="../../std/ops/trait.Drop.html">Drop trait</a>.</p>
 <a class="header" href="ffi.html#callbacks-from-c-code-to-rust-functions" name="callbacks-from-c-code-to-rust-functions"><h1>Callbacks from C code to Rust functions</h1></a>
 <p>Some external libraries require the usage of callbacks to report back their
 current state or intermediate data to the caller.
@@ -645,7 +645,7 @@ attribute turns off Rust's name mangling, so that it is easier to link to.</p>
 <a class="header" href="ffi.html#ffi-and-panics" name="ffi-and-panics"><h1>FFI and panics</h1></a>
 <p>It’s important to be mindful of <code>panic!</code>s when working with FFI. A <code>panic!</code>
 across an FFI boundary is undefined behavior. If you’re writing code that may
-panic, you should run it in a closure with <a href="../std/panic/fn.catch_unwind.html"><code>catch_unwind()</code></a>:</p>
+panic, you should run it in a closure with <a href="../../std/panic/fn.catch_unwind.html"><code>catch_unwind()</code></a>:</p>
 <pre><pre class="playpen"><code class="language-rust">use std::panic::catch_unwind;
 
 #[no_mangle]
@@ -661,8 +661,8 @@ pub extern fn oh_no() -&gt; i32 {
 
 fn main() {}
 </code></pre></pre>
-<p>Please note that <a href="../std/panic/fn.catch_unwind.html"><code>catch_unwind()</code></a> will only catch unwinding panics, not
-those who abort the process. See the documentation of <a href="../std/panic/fn.catch_unwind.html"><code>catch_unwind()</code></a>
+<p>Please note that <a href="../../std/panic/fn.catch_unwind.html"><code>catch_unwind()</code></a> will only catch unwinding panics, not
+those who abort the process. See the documentation of <a href="../../std/panic/fn.catch_unwind.html"><code>catch_unwind()</code></a>
 for more information.</p>
 <a class="header" href="ffi.html#representing-opaque-structs" name="representing-opaque-structs"><h1>Representing opaque structs</h1></a>
 <p>Sometimes, a C library wants to provide a pointer to something, but not let you

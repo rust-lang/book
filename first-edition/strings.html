@@ -141,7 +141,7 @@ fn main() {
 }
 </code></pre></pre>
 <p>This coercion does not happen for functions that accept one of <code>&amp;str</code>’s traits
-instead of <code>&amp;str</code>. For example, <a href="../std/net/struct.TcpStream.html#method.connect"><code>TcpStream::connect</code></a> has a parameter
+instead of <code>&amp;str</code>. For example, <a href="../../std/net/struct.TcpStream.html#method.connect"><code>TcpStream::connect</code></a> has a parameter
 of type <code>ToSocketAddrs</code>. A <code>&amp;str</code> is okay but a <code>String</code> must be explicitly
 converted using <code>&amp;*</code>.</p>
 <pre><pre class="playpen"><code class="language-rust no_run"># #![allow(unused_variables)]

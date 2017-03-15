@@ -544,9 +544,9 @@ fn main() {
 </code></pre>
 <p>We’ll need to take user input, and then print the result as output. As such, we
 need the <code>io</code> library from the standard library. Rust only imports a few things
-by default into every program, <a href="../std/prelude/index.html">the ‘prelude’</a>. If it’s not in the
+by default into every program, <a href="../../std/prelude/index.html">the ‘prelude’</a>. If it’s not in the
 prelude, you’ll have to <code>use</code> it directly. There is also a second ‘prelude’, the
-<a href="../std/io/prelude/index.html"><code>io</code> prelude</a>, which serves a similar function: you import it, and it
+<a href="../../std/io/prelude/index.html"><code>io</code> prelude</a>, which serves a similar function: you import it, and it
 imports a number of useful, <code>io</code>-related things.</p>
 <pre><code class="language-rust ignore">fn main() {
 </code></pre>
@@ -589,7 +589,7 @@ everything in <a href="comments.html">comments</a>.</p>
 <code>guess</code>, but we have to look at the other side of the <code>=</code> for what it’s
 bound to: <code>String::new()</code>.</p>
 <p><code>String</code> is a string type, provided by the standard library. A
-<a href="../std/string/struct.String.html"><code>String</code></a> is a growable, UTF-8 encoded bit of text.</p>
+<a href="../../std/string/struct.String.html"><code>String</code></a> is a growable, UTF-8 encoded bit of text.</p>
 <p>The <code>::new()</code> syntax uses <code>::</code> because this is an ‘associated function’ of
 a particular type. That is to say, it’s associated with <code>String</code> itself,
 rather than a particular instance of a <code>String</code>. Some languages call this a
@@ -609,11 +609,11 @@ the first:</p>
 calling an associated function on it. If we didn’t <code>use std::io</code>, we could
 have written this line as <code>std::io::stdin()</code>.</p>
 <p>This particular function returns a handle to the standard input for your
-terminal. More specifically, a <a href="../std/io/struct.Stdin.html">std::io::Stdin</a>.</p>
+terminal. More specifically, a <a href="../../std/io/struct.Stdin.html">std::io::Stdin</a>.</p>
 <p>The next part will use this handle to get input from the user:</p>
 <pre><code class="language-rust ignore">.read_line(&amp;mut guess)
 </code></pre>
-<p>Here, we call the <a href="../std/io/struct.Stdin.html#method.read_line"><code>read_line()</code></a> method on our handle.
+<p>Here, we call the <a href="../../std/io/struct.Stdin.html#method.read_line"><code>read_line()</code></a> method on our handle.
 <a href="method-syntax.html">Methods</a> are like associated functions, but are only available on a
 particular instance of a type, rather than the type itself. We’re also passing
 one argument to <code>read_line()</code>: <code>&amp;mut guess</code>.</p>
@@ -643,12 +643,12 @@ done:</p>
 <p>But that gets hard to read. So we’ve split it up, two lines for two method
 calls. We already talked about <code>read_line()</code>, but what about <code>expect()</code>? Well,
 we already mentioned that <code>read_line()</code> puts what the user types into the <code>&amp;mut String</code> we pass it. But it also returns a value: in this case, an
-<a href="../std/io/type.Result.html"><code>io::Result</code></a>. Rust has a number of types named <code>Result</code> in its
-standard library: a generic <a href="../std/result/enum.Result.html"><code>Result</code></a>, and then specific versions for
+<a href="../../std/io/type.Result.html"><code>io::Result</code></a>. Rust has a number of types named <code>Result</code> in its
+standard library: a generic <a href="../../std/result/enum.Result.html"><code>Result</code></a>, and then specific versions for
 sub-libraries, like <code>io::Result</code>.</p>
 <p>The purpose of these <code>Result</code> types is to encode error handling information.
 Values of the <code>Result</code> type, like any type, have methods defined on them. In
-this case, <code>io::Result</code> has an <a href="../std/result/enum.Result.html#method.expect"><code>expect()</code> method</a> that takes a value
+this case, <code>io::Result</code> has an <a href="../../std/result/enum.Result.html#method.expect"><code>expect()</code> method</a> that takes a value
 it’s called on, and if it isn’t a successful one, <a href="error-handling.html"><code>panic!</code></a>s with a
 message you passed it. A <code>panic!</code> like this will cause our program to crash,
 displaying the message.</p>
@@ -909,7 +909,7 @@ enum Foo {
 <p>With this definition, anything of type <code>Foo</code> can be either a
 <code>Foo::Bar</code> or a <code>Foo::Baz</code>. We use the <code>::</code> to indicate the
 namespace for a particular <code>enum</code> variant.</p>
-<p>The <a href="../std/cmp/enum.Ordering.html"><code>Ordering</code></a> <code>enum</code> has three possible variants: <code>Less</code>, <code>Equal</code>,
+<p>The <a href="../../std/cmp/enum.Ordering.html"><code>Ordering</code></a> <code>enum</code> has three possible variants: <code>Less</code>, <code>Equal</code>,
 and <code>Greater</code>. The <code>match</code> statement takes a value of a type, and lets you
 create an ‘arm’ for each possible value. Since we have three types of
 <code>Ordering</code>, we have three arms:</p>
@@ -1002,7 +1002,7 @@ the beginning and end of our string. This is important, as we had to press the
 ‘return’ key to satisfy <code>read_line()</code>. This means that if we type <code>5</code> and hit
 return, <code>guess</code> looks like this: <code>5\n</code>. The <code>\n</code> represents ‘newline’, the
 enter key. <code>trim()</code> gets rid of this, leaving our string with only the <code>5</code>. The
-<a href="../std/primitive.str.html#method.parse"><code>parse()</code> method on strings</a> parses a string into some kind of number.
+<a href="../../std/primitive.str.html#method.parse"><code>parse()</code> method on strings</a> parses a string into some kind of number.
 Since it can parse a variety of numbers, we need to give Rust a hint as to the
 exact type of number we want. Hence, <code>let guess: u32</code>. The colon (<code>:</code>) after
 <code>guess</code> tells Rust we’re going to annotate its type. <code>u32</code> is an unsigned,
@@ -1398,7 +1398,7 @@ want <code>x</code> to be the value we’re interpolating. The comma is used to 
 arguments we pass to functions and macros, if you’re passing more than one.</p>
 <p>When you use the curly braces, Rust will attempt to display the value in a
 meaningful way by checking out its type. If you want to specify the format in a
-more detailed manner, there are a <a href="../std/fmt/index.html">wide number of options available</a>.
+more detailed manner, there are a <a href="../../std/fmt/index.html">wide number of options available</a>.
 For now, we'll stick to the default: integers aren't very complicated to
 print.</p>
 <a class="header" href="print.html#scope-and-shadowing" name="scope-and-shadowing"><h1>Scope and shadowing</h1></a>
@@ -1780,7 +1780,7 @@ let y: bool = false;
 
 #}</code></pre></pre>
 <p>A common use of booleans is in <a href="if.html"><code>if</code> conditionals</a>.</p>
-<p>You can find more documentation for <code>bool</code>s <a href="../std/primitive.bool.html">in the standard library
+<p>You can find more documentation for <code>bool</code>s <a href="../../std/primitive.bool.html">in the standard library
 documentation</a>.</p>
 <a class="header" href="print.html#char" name="char"><h1><code>char</code></h1></a>
 <p>The <code>char</code> type represents a single Unicode scalar value. You can create <code>char</code>s
@@ -1794,7 +1794,7 @@ let two_hearts = '💕';
 #}</code></pre></pre>
 <p>Unlike some other languages, this means that Rust’s <code>char</code> is not a single byte,
 but four.</p>
-<p>You can find more documentation for <code>char</code>s <a href="../std/primitive.char.html">in the standard library
+<p>You can find more documentation for <code>char</code>s <a href="../../std/primitive.char.html">in the standard library
 documentation</a>.</p>
 <a class="header" href="print.html#numeric-types" name="numeric-types"><h1>Numeric types</h1></a>
 <p>Rust has a variety of numeric types in a few categories: signed and unsigned,
@@ -1814,18 +1814,18 @@ let y = 1.0; // `y` has type `f64`.
 <p>Here’s a list of the different numeric types, with links to their documentation
 in the standard library:</p>
 <ul>
-<li><a href="../std/primitive.i8.html">i8</a></li>
-<li><a href="../std/primitive.i16.html">i16</a></li>
-<li><a href="../std/primitive.i32.html">i32</a></li>
-<li><a href="../std/primitive.i64.html">i64</a></li>
-<li><a href="../std/primitive.u8.html">u8</a></li>
-<li><a href="../std/primitive.u16.html">u16</a></li>
-<li><a href="../std/primitive.u32.html">u32</a></li>
-<li><a href="../std/primitive.u64.html">u64</a></li>
-<li><a href="../std/primitive.isize.html">isize</a></li>
-<li><a href="../std/primitive.usize.html">usize</a></li>
-<li><a href="../std/primitive.f32.html">f32</a></li>
-<li><a href="../std/primitive.f64.html">f64</a></li>
+<li><a href="../../std/primitive.i8.html">i8</a></li>
+<li><a href="../../std/primitive.i16.html">i16</a></li>
+<li><a href="../../std/primitive.i32.html">i32</a></li>
+<li><a href="../../std/primitive.i64.html">i64</a></li>
+<li><a href="../../std/primitive.u8.html">u8</a></li>
+<li><a href="../../std/primitive.u16.html">u16</a></li>
+<li><a href="../../std/primitive.u32.html">u32</a></li>
+<li><a href="../../std/primitive.u64.html">u64</a></li>
+<li><a href="../../std/primitive.isize.html">isize</a></li>
+<li><a href="../../std/primitive.usize.html">usize</a></li>
+<li><a href="../../std/primitive.f32.html">f32</a></li>
+<li><a href="../../std/primitive.f64.html">f64</a></li>
 </ul>
 <p>Let’s go over them by category:</p>
 <a class="header" href="print.html#signed-and-unsigned" name="signed-and-unsigned"><h2>Signed and Unsigned</h2></a>
@@ -1895,7 +1895,7 @@ is <code>names[0]</code> and the second name is <code>names[1]</code>. The above
 array, you will get an error: array access is bounds-checked at run-time. Such
 errant access is the source of many bugs in other systems programming
 languages.</p>
-<p>You can find more documentation for <code>array</code>s <a href="../std/primitive.array.html">in the standard library
+<p>You can find more documentation for <code>array</code>s <a href="../../std/primitive.array.html">in the standard library
 documentation</a>.</p>
 <a class="header" href="print.html#slices" name="slices"><h1>Slices</h1></a>
 <p>A ‘slice’ is a reference to (or “view” into) another data structure. They are
@@ -1920,14 +1920,14 @@ let middle = &amp;a[1..4]; // A slice of `a`: only the elements `1`, `2`, and `3
 #}</code></pre></pre>
 <p>Slices have type <code>&amp;[T]</code>. We’ll talk about that <code>T</code> when we cover
 <a href="generics.html">generics</a>.</p>
-<p>You can find more documentation for slices <a href="../std/primitive.slice.html">in the standard library
+<p>You can find more documentation for slices <a href="../../std/primitive.slice.html">in the standard library
 documentation</a>.</p>
 <a class="header" href="print.html#str" name="str"><h1><code>str</code></h1></a>
 <p>Rust’s <code>str</code> type is the most primitive string type. As an <a href="unsized-types.html">unsized type</a>,
 it’s not very useful by itself, but becomes useful when placed behind a
 reference, like <code>&amp;str</code>. We'll elaborate further when we cover
 <a href="strings.html">Strings</a> and <a href="references-and-borrowing.html">references</a>.</p>
-<p>You can find more documentation for <code>str</code> <a href="../std/primitive.str.html">in the standard library
+<p>You can find more documentation for <code>str</code> <a href="../../std/primitive.str.html">in the standard library
 documentation</a>.</p>
 <a class="header" href="print.html#tuples" name="tuples"><h1>Tuples</h1></a>
 <p>A tuple is an ordered list of fixed size. Like this:</p>
@@ -2003,7 +2003,7 @@ println!(&quot;x is {}&quot;, x);
 #}</code></pre></pre>
 <p>Like array indexing, it starts at zero, but unlike array indexing, it uses a
 <code>.</code>, rather than <code>[]</code>s.</p>
-<p>You can find more documentation for tuples <a href="../std/primitive.tuple.html">in the standard library
+<p>You can find more documentation for tuples <a href="../../std/primitive.tuple.html">in the standard library
 documentation</a>.</p>
 <a class="header" href="print.html#functions" name="functions"><h1>Functions</h1></a>
 <p>Functions also have a type! They look like this:</p>
@@ -2208,7 +2208,7 @@ for x in 0..10 {
 }
 </code></pre>
 <p>The expression is an item that can be converted into an <a href="iterators.html">iterator</a> using
-<a href="../std/iter/trait.IntoIterator.html"><code>IntoIterator</code></a>. The iterator gives back a series of elements. Each element is
+<a href="../../std/iter/trait.IntoIterator.html"><code>IntoIterator</code></a>. The iterator gives back a series of elements. Each element is
 one iteration of the loop. That value is then bound to the name <code>var</code>, which is
 valid for the loop body. Once the body is over, the next value is fetched from
 the iterator, and we loop another time. When there are no more values, the <code>for</code>
@@ -2326,7 +2326,7 @@ odd:</p>
 #}</code></pre></pre>
 <a class="header" href="print.html#vectors" name="vectors"><h1>Vectors</h1></a>
 <p>A ‘vector’ is a dynamic or ‘growable’ array, implemented as the standard
-library type <a href="../std/vec/index.html"><code>Vec&lt;T&gt;</code></a>. The <code>T</code> means that we can have vectors
+library type <a href="../../std/vec/index.html"><code>Vec&lt;T&gt;</code></a>. The <code>T</code> means that we can have vectors
 of any type (see the chapter on <a href="generics.html">generics</a> for more).
 Vectors always allocate their data on the heap.
 You can create them with the <code>vec!</code> macro:</p>
@@ -2350,7 +2350,7 @@ let v = vec![0; 10]; // A vector of ten zeroes.
 that they must be able to know the size of <code>T</code> at compile time (that is, how
 many bytes are needed to store a <code>T</code>?). The size of some things can't be known
 at compile time. For these you'll have to store a pointer to that thing:
-thankfully, the <a href="../std/boxed/index.html"><code>Box</code></a> type works perfectly for this.</p>
+thankfully, the <a href="../../std/boxed/index.html"><code>Box</code></a> type works perfectly for this.</p>
 <a class="header" href="print.html#accessing-elements" name="accessing-elements"><h2>Accessing elements</h2></a>
 <p>To get the value at a particular index in the vector, we use <code>[]</code>s:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
@@ -2393,7 +2393,7 @@ println!(&quot;Item 7 is {}&quot;, v[7]);
 <pre><code class="language-text">thread 'main' panicked at 'index out of bounds: the len is 3 but the index is 7'
 </code></pre>
 <p>If you want to handle out-of-bounds errors without panicking, you can use
-methods like <a href="../std/vec/struct.Vec.html#method.get"><code>get</code></a> or <a href="../std/vec/struct.Vec.html#method.get_mut"><code>get_mut</code></a> that return <code>None</code> when
+methods like <a href="../../std/vec/struct.Vec.html#method.get"><code>get</code></a> or <a href="../../std/vec/struct.Vec.html#method.get_mut"><code>get_mut</code></a> that return <code>None</code> when
 given an invalid index:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
 # 
@@ -2454,7 +2454,7 @@ for i in &amp;v {
 }
 
 #}</code></pre></pre>
-<p>Vectors have many more useful methods, which you can read about in <a href="../std/vec/index.html">their
+<p>Vectors have many more useful methods, which you can read about in <a href="../../std/vec/index.html">their
 API documentation</a>.</p>
 <a class="header" href="print.html#ownership" name="ownership"><h1>Ownership</h1></a>
 <p>This is the first of three sections presenting Rust’s ownership system. This is one of
@@ -3447,7 +3447,7 @@ fn foo(mut x: i32) {
 <a class="header" href="print.html#interior-vs-exterior-mutability" name="interior-vs-exterior-mutability"><h1>Interior vs. Exterior Mutability</h1></a>
 <p>However, when we say something is ‘immutable’ in Rust, that doesn’t mean that
 it’s not able to be changed: we are referring to its ‘exterior mutability’ that
-in this case is immutable. Consider, for example, <a href="../std/sync/struct.Arc.html"><code>Arc&lt;T&gt;</code></a>:</p>
+in this case is immutable. Consider, for example, <a href="../../std/sync/struct.Arc.html"><code>Arc&lt;T&gt;</code></a>:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
 # 
 #fn main() {
@@ -3475,7 +3475,7 @@ the same time:</p>
 pointers to? In <code>Arc&lt;T&gt;</code>’s case, yes: the mutation is entirely contained inside
 the structure itself. It’s not user facing. For this reason, it hands out <code>&amp;T</code>
 with <code>clone()</code>. If it handed out <code>&amp;mut T</code>s, though, that would be a problem.</p>
-<p>Other types, like the ones in the <a href="../std/cell/index.html"><code>std::cell</code></a> module, have the
+<p>Other types, like the ones in the <a href="../../std/cell/index.html"><code>std::cell</code></a> module, have the
 opposite: interior mutability. For example:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
 # 
@@ -3524,7 +3524,7 @@ let b = Point { x: 5, y: 6};
 
 b.x = 10; // Error: cannot assign to immutable field `b.x`.
 </code></pre>
-<p>However, by using <a href="../std/cell/struct.Cell.html"><code>Cell&lt;T&gt;</code></a>, you can emulate field-level mutability:</p>
+<p>However, by using <a href="../../std/cell/struct.Cell.html"><code>Cell&lt;T&gt;</code></a>, you can emulate field-level mutability:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
 # 
 #fn main() {
@@ -4673,7 +4673,7 @@ fn main() {
 }
 </code></pre></pre>
 <p>This coercion does not happen for functions that accept one of <code>&amp;str</code>’s traits
-instead of <code>&amp;str</code>. For example, <a href="../std/net/struct.TcpStream.html#method.connect"><code>TcpStream::connect</code></a> has a parameter
+instead of <code>&amp;str</code>. For example, <a href="../../std/net/struct.TcpStream.html#method.connect"><code>TcpStream::connect</code></a> has a parameter
 of type <code>ToSocketAddrs</code>. A <code>&amp;str</code> is okay but a <code>String</code> must be explicitly
 converted using <code>&amp;*</code>.</p>
 <pre><pre class="playpen"><code class="language-rust no_run"># #![allow(unused_variables)]
@@ -4914,7 +4914,7 @@ impl&lt;T&gt; Point&lt;T&gt; {
 #}</code></pre></pre>
 <p>So far you’ve seen generics that take absolutely any type. These are useful in
 many cases: you’ve already seen <code>Option&lt;T&gt;</code>, and later you’ll meet universal
-container types like <a href="../std/vec/struct.Vec.html"><code>Vec&lt;T&gt;</code></a>. On the other hand, often you want to
+container types like <a href="../../std/vec/struct.Vec.html"><code>Vec&lt;T&gt;</code></a>. On the other hand, often you want to
 trade that flexibility for increased expressive power. Read about <a href="traits.html">trait
 bounds</a> to see why and how.</p>
 <a class="header" href="print.html#resolving-ambiguities" name="resolving-ambiguities"><h2>Resolving ambiguities</h2></a>
@@ -4948,7 +4948,7 @@ println!(&quot;{:?}&quot;, v);
 
 #}</code></pre></pre>
 <p>or by binding the generic parameter <code>T</code> via the so-called
-<a href="https://doc.rust-lang.org/std/iter/trait.Iterator.html#method.collect">‘turbofish’</a> <code>::&lt;&gt;</code> syntax:</p>
+<a href="../../std/iter/trait.Iterator.html#method.collect">‘turbofish’</a> <code>::&lt;&gt;</code> syntax:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
 # 
 #fn main() {
@@ -5156,7 +5156,7 @@ fn main() {
 }
 </code></pre></pre>
 <p><code>is_square()</code> needs to check that the sides are equal, so the sides must be of
-a type that implements the <a href="../core/cmp/trait.PartialEq.html"><code>core::cmp::PartialEq</code></a> trait:</p>
+a type that implements the <a href="../../core/cmp/trait.PartialEq.html"><code>core::cmp::PartialEq</code></a> trait:</p>
 <pre><code class="language-rust ignore">impl&lt;T: PartialEq&gt; Rectangle&lt;T&gt; { ... }
 </code></pre>
 <p>Now, a rectangle can be defined in terms of any type that can be compared for
@@ -5188,7 +5188,7 @@ println!(&quot;{}&quot;, 1.0.approx_equal(&amp;1.00000001));
 <p>This may seem like the Wild West, but there are two restrictions around
 implementing traits that prevent this from getting out of hand. The first is
 that if the trait isn’t defined in your scope, it doesn’t apply. Here’s an
-example: the standard library provides a <a href="../std/io/trait.Write.html"><code>Write</code></a> trait which adds
+example: the standard library provides a <a href="../../std/io/trait.Write.html"><code>Write</code></a> trait which adds
 extra functionality to <code>File</code>s, for doing file I/O. By default, a <code>File</code>
 won’t have its methods:</p>
 <pre><code class="language-rust ignore">let mut f = std::fs::File::create(&quot;foo.txt&quot;).expect(&quot;Couldn’t create foo.txt&quot;);
@@ -5440,15 +5440,15 @@ fn main() {
 </code></pre></pre>
 <p>However, deriving is limited to a certain set of traits:</p>
 <ul>
-<li><a href="../core/clone/trait.Clone.html"><code>Clone</code></a></li>
-<li><a href="../core/marker/trait.Copy.html"><code>Copy</code></a></li>
-<li><a href="../core/fmt/trait.Debug.html"><code>Debug</code></a></li>
-<li><a href="../core/default/trait.Default.html"><code>Default</code></a></li>
-<li><a href="../core/cmp/trait.Eq.html"><code>Eq</code></a></li>
-<li><a href="../core/hash/trait.Hash.html"><code>Hash</code></a></li>
-<li><a href="../core/cmp/trait.Ord.html"><code>Ord</code></a></li>
-<li><a href="../core/cmp/trait.PartialEq.html"><code>PartialEq</code></a></li>
-<li><a href="../core/cmp/trait.PartialOrd.html"><code>PartialOrd</code></a></li>
+<li><a href="../../core/clone/trait.Clone.html"><code>Clone</code></a></li>
+<li><a href="../../core/marker/trait.Copy.html"><code>Copy</code></a></li>
+<li><a href="../../core/fmt/trait.Debug.html"><code>Debug</code></a></li>
+<li><a href="../../core/default/trait.Default.html"><code>Default</code></a></li>
+<li><a href="../../core/cmp/trait.Eq.html"><code>Eq</code></a></li>
+<li><a href="../../core/hash/trait.Hash.html"><code>Hash</code></a></li>
+<li><a href="../../core/cmp/trait.Ord.html"><code>Ord</code></a></li>
+<li><a href="../../core/cmp/trait.PartialEq.html"><code>PartialEq</code></a></li>
+<li><a href="../../core/cmp/trait.PartialOrd.html"><code>PartialOrd</code></a></li>
 </ul>
 <a class="header" href="print.html#drop" name="drop"><h1>Drop</h1></a>
 <p>Now that we’ve discussed traits, let’s talk about a particular trait provided
@@ -5740,7 +5740,7 @@ layout is quite straight-forward, but there are some curly error messages and
 surprising behaviors to discover.</p>
 <p>Let’s start simple, with the runtime representation of a trait object. The
 <code>std::raw</code> module contains structs with layouts that are the same as the
-complicated built-in types, <a href="../std/raw/struct.TraitObject.html">including trait objects</a>:</p>
+complicated built-in types, <a href="../../std/raw/struct.TraitObject.html">including trait objects</a>:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
 # 
 #fn main() {
@@ -7147,7 +7147,7 @@ type Result&lt;T&gt; = result::Result&lt;T, ConcreteError&gt;;
 <p>This creates a specialized version of the <code>Result</code> type, which always has a
 <code>ConcreteError</code> for the <code>E</code> part of <code>Result&lt;T, E&gt;</code>. This is commonly used
 in the standard library to create custom errors for each subsection. For
-example, <a href="../std/io/type.Result.html">io::Result</a>.</p>
+example, <a href="../../std/io/type.Result.html">io::Result</a>.</p>
 <a class="header" href="print.html#casting-between-types" name="casting-between-types"><h1>Casting Between Types</h1></a>
 <p>Rust, with its focus on safety, provides two different ways of casting
 different types between each other. The first, <code>as</code>, is for safe casts.
@@ -7602,9 +7602,9 @@ fn main() {
 <p>In <code>main</code>, we can use <code>+</code> on our two <code>Point</code>s, since we’ve implemented
 <code>Add&lt;Output=Point&gt;</code> for <code>Point</code>.</p>
 <p>There are a number of operators that can be overloaded this way, and all of
-their associated traits live in the <a href="../std/ops/index.html"><code>std::ops</code></a> module. Check out its
+their associated traits live in the <a href="../../std/ops/index.html"><code>std::ops</code></a> module. Check out its
 documentation for the full list.</p>
-<p>Implementing these traits follows a pattern. Let’s look at <a href="../std/ops/trait.Add.html"><code>Add</code></a> in more
+<p>Implementing these traits follows a pattern. Let’s look at <a href="../../std/ops/trait.Add.html"><code>Add</code></a> in more
 detail:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
 # 
@@ -7874,7 +7874,7 @@ cases. Above, we had</p>
 <p>This is like a <code>match</code> expression arm, but the matching happens on Rust syntax
 trees, at compile time. The semicolon is optional on the last (here, only)
 case. The &quot;pattern&quot; on the left-hand side of <code>=&gt;</code> is known as a ‘matcher’.
-These have <a href="../reference/macros.html">their own little grammar</a> within the language.</p>
+These have <a href="../../reference/macros.html">their own little grammar</a> within the language.</p>
 <p>The matcher <code>$x:expr</code> will match any Rust expression, binding that syntax tree
 to the ‘metavariable’ <code>$x</code>. The identifier <code>expr</code> is a ‘fragment specifier’;
 the full possibilities are enumerated later in this chapter.
@@ -8060,7 +8060,7 @@ fn main() {
     println!(&quot;{}&quot;, x);
 }
 </code></pre></pre>
-<p>This holds for <code>let</code> bindings and loop labels, but not for <a href="../reference/items.html">items</a>.
+<p>This holds for <code>let</code> bindings and loop labels, but not for <a href="../../reference/items.html">items</a>.
 So the following code does compile:</p>
 <pre><pre class="playpen"><code class="language-rust">macro_rules! foo {
     () =&gt; (fn x() { });
@@ -8168,7 +8168,7 @@ which syntactic form it matches.</p>
 <li><code>stmt</code>: a single statement. Example: <code>let x = 3</code>.</li>
 <li><code>block</code>: a brace-delimited sequence of statements and optionally an expression. Example:
 <code>{ log(error, &quot;hi&quot;); return 12; }</code>.</li>
-<li><code>item</code>: an <a href="../reference/items.html">item</a>. Examples: <code>fn foo() { }</code>; <code>struct Bar;</code>.</li>
+<li><code>item</code>: an <a href="../../reference/items.html">item</a>. Examples: <code>fn foo() { }</code>; <code>struct Bar;</code>.</li>
 <li><code>meta</code>: a &quot;meta item&quot;, as found in attributes. Example: <code>cfg(target_os = &quot;windows&quot;)</code>.</li>
 <li><code>tt</code>: a single token tree.</li>
 </ul>
@@ -8244,7 +8244,7 @@ mod bar {
 </code></pre></pre>
 <p>When this library is loaded with <code>#[macro_use] extern crate</code>, only <code>m2</code> will
 be imported.</p>
-<p>The Rust Reference has a <a href="../reference/attributes.html#macro-related-attributes">listing of macro-related
+<p>The Rust Reference has a <a href="../../reference/attributes.html#macro-related-attributes">listing of macro-related
 attributes</a>.</p>
 <a class="header" href="print.html#the-variable-crate" name="the-variable-crate"><h1>The variable <code>$crate</code></h1></a>
 <p>A further difficulty occurs when a macro is used in multiple crates. Say that
@@ -8492,7 +8492,7 @@ let points_at = unsafe { *raw };
 println!(&quot;raw points at {}&quot;, points_at);
 
 #}</code></pre></pre>
-<p>For more operations on raw pointers, see <a href="../std/primitive.pointer.html">their API documentation</a>.</p>
+<p>For more operations on raw pointers, see <a href="../../std/primitive.pointer.html">their API documentation</a>.</p>
 <a class="header" href="print.html#ffi" name="ffi"><h1>FFI</h1></a>
 <p>Raw pointers are useful for FFI: Rust’s <code>*const T</code> and <code>*mut T</code> are similar to
 C’s <code>const T*</code> and <code>T*</code>, respectively. For more about this use, consult the
@@ -8650,7 +8650,7 @@ do. For more on raw pointers, see <a href="raw-pointers.html">their section of t
 <a class="header" href="print.html#call-unsafe-functions" name="call-unsafe-functions"><h2>Call unsafe functions</h2></a>
 <p>This last ability works with both aspects of <code>unsafe</code>: you can only call
 functions marked <code>unsafe</code> from inside an unsafe block.</p>
-<p>This ability is powerful and varied. Rust exposes some <a href="../unstable-book/intrinsics.html">compiler
+<p>This ability is powerful and varied. Rust exposes some <a href="../../unstable-book/intrinsics.html">compiler
 intrinsics</a> as unsafe functions, and some unsafe functions bypass
 safety checks, trading safety for speed.</p>
 <p>I’ll repeat again: even though you <em>can</em> do arbitrary things in unsafe blocks
@@ -8821,7 +8821,7 @@ add to the top, you take away from the top.</p>
 <p>Now, this works pretty well, but not everything can work like this. Sometimes,
 you need to pass some memory between different functions, or keep it alive for
 longer than a single function’s execution. For this, we can use the heap.</p>
-<p>In Rust, you can allocate memory on the heap with the <a href="../std/boxed/index.html"><code>Box&lt;T&gt;</code> type</a>.
+<p>In Rust, you can allocate memory on the heap with the <a href="../../std/boxed/index.html"><code>Box&lt;T&gt;</code> type</a>.
 Here’s an example:</p>
 <pre><pre class="playpen"><code class="language-rust">fn main() {
     let x = Box::new(5);
@@ -10634,7 +10634,7 @@ can help you with. There are a number of really useful iterators, and you can
 write your own as well. Iterators provide a safe, efficient way to manipulate
 all kinds of lists. They're a little unusual at first, but if you play with
 them, you'll get hooked. For a full list of the different iterators and
-consumers, check out the <a href="../std/iter/index.html">iterator module documentation</a>.</p>
+consumers, check out the <a href="../../std/iter/index.html">iterator module documentation</a>.</p>
 <a class="header" href="print.html#concurrency" name="concurrency"><h1>Concurrency</h1></a>
 <p>Concurrency and parallelism are incredibly important topics in computer
 science, and are also a hot topic in industry today. Computers are gaining more
@@ -10656,7 +10656,7 @@ type system to help us reason about our code. As such, Rust gives us two traits
 to help us make sense of code that can possibly be concurrent.</p>
 <a class="header" href="print.html#send" name="send"><h3><code>Send</code></h3></a>
 <p>The first trait we're going to talk about is
-<a href="../std/marker/trait.Send.html"><code>Send</code></a>. When a type <code>T</code> implements <code>Send</code>, it
+<a href="../../std/marker/trait.Send.html"><code>Send</code></a>. When a type <code>T</code> implements <code>Send</code>, it
 indicates that something of this type is able to have ownership transferred
 safely between threads.</p>
 <p>This is important to enforce certain restrictions. For example, if we have a
@@ -10667,7 +10667,7 @@ implemented for that type.</p>
 thread-safe, we wouldn't want to implement <code>Send</code>, and so the compiler will help
 us enforce that it can't leave the current thread.</p>
 <a class="header" href="print.html#sync" name="sync"><h3><code>Sync</code></h3></a>
-<p>The second of these traits is called <a href="../std/marker/trait.Sync.html"><code>Sync</code></a>.
+<p>The second of these traits is called <a href="../../std/marker/trait.Sync.html"><code>Sync</code></a>.
 When a type <code>T</code> implements <code>Sync</code>, it indicates that something
 of this type has no possibility of introducing memory unsafety when used from
 multiple threads concurrently through shared references. This implies that
@@ -10896,8 +10896,8 @@ until we're done with it. If a thread attempts to lock a mutex which is already
 locked, it will wait until the other thread releases the lock.</p>
 <p>The lock &quot;release&quot; here is implicit; when the result of the lock (in this case,
 <code>data</code>) goes out of scope, the lock is automatically released.</p>
-<p>Note that <a href="../std/sync/struct.Mutex.html#method.lock"><code>lock</code></a> method of
-<a href="../std/sync/struct.Mutex.html"><code>Mutex</code></a> has this signature:</p>
+<p>Note that <a href="../../std/sync/struct.Mutex.html#method.lock"><code>lock</code></a> method of
+<a href="../../std/sync/struct.Mutex.html"><code>Mutex</code></a> has this signature:</p>
 <pre><code class="language-rust ignore">fn lock(&amp;self) -&gt; LockResult&lt;MutexGuard&lt;T&gt;&gt;
 </code></pre>
 <p>and because <code>Send</code> is not implemented for <code>MutexGuard&lt;T&gt;</code>, the guard cannot
@@ -11127,7 +11127,7 @@ It would be better if we showed the code for unwrapping because it is so
 simple, but to do that, we will first need to explore the <code>Option</code> and <code>Result</code>
 types. Both of these types have a method called <code>unwrap</code> defined on them.</p>
 <a class="header" href="print.html#the-option-type" name="the-option-type"><h3>The <code>Option</code> type</h3></a>
-<p>The <code>Option</code> type is <a href="../std/option/enum.Option.html">defined in the standard library</a>:</p>
+<p>The <code>Option</code> type is <a href="../../std/option/enum.Option.html">defined in the standard library</a>:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
 # 
 #fn main() {
@@ -11176,7 +11176,7 @@ fn main() {
     }
 }
 </code></pre></pre>
-<p>This code uses <a href="../book/patterns.html">pattern matching</a> to do <em>case
+<p>This code uses <a href="../book/first-edition/patterns.html">pattern matching</a> to do <em>case
 analysis</em> on the <code>Option&lt;usize&gt;</code> returned by the <code>find</code> function. In fact, case
 analysis is the only way to get at the value stored inside an <code>Option&lt;T&gt;</code>. This
 means that you, as the programmer, must handle the case when an <code>Option&lt;T&gt;</code> is
@@ -11258,7 +11258,7 @@ fn map&lt;F, T, A&gt;(option: Option&lt;T&gt;, f: F) -&gt; Option&lt;A&gt; where
 }
 
 #}</code></pre></pre>
-<p>Indeed, <code>map</code> is <a href="../std/option/enum.Option.html#method.map">defined as a method</a> on <code>Option&lt;T&gt;</code> in the standard library.
+<p>Indeed, <code>map</code> is <a href="../../std/option/enum.Option.html#method.map">defined as a method</a> on <code>Option&lt;T&gt;</code> in the standard library.
 As a method, it has a slightly different signature: methods take <code>self</code>, <code>&amp;self</code>,
 or <code>&amp;mut self</code> as their first argument.</p>
 <p>Armed with our new combinator, we can rewrite our <code>extension_explicit</code> method
@@ -11312,9 +11312,9 @@ fn main() {
     assert_eq!(extension(&quot;foobar&quot;).unwrap_or(&quot;rs&quot;), &quot;rs&quot;);
 }
 </code></pre></pre>
-<p>(Note that <code>unwrap_or</code> is <a href="../std/option/enum.Option.html#method.unwrap_or">defined as a method</a> on <code>Option&lt;T&gt;</code> in the
+<p>(Note that <code>unwrap_or</code> is <a href="../../std/option/enum.Option.html#method.unwrap_or">defined as a method</a> on <code>Option&lt;T&gt;</code> in the
 standard library, so we use that here instead of the free-standing function we
-defined above. Don't forget to check out the more general <a href="../std/option/enum.Option.html#method.unwrap_or_else"><code>unwrap_or_else</code></a>
+defined above. Don't forget to check out the more general <a href="../../std/option/enum.Option.html#method.unwrap_or_else"><code>unwrap_or_else</code></a>
 method.)</p>
 <p>There is one more combinator that we think is worth paying special attention to:
 <code>and_then</code>. It makes it easy to compose distinct computations that admit the
@@ -11388,7 +11388,7 @@ fn file_path_ext(file_path: &amp;str) -&gt; Option&lt;&amp;str&gt; {
 <p>Side note: Since <code>and_then</code> essentially works like <code>map</code> but returns an
 <code>Option&lt;_&gt;</code> instead of an <code>Option&lt;Option&lt;_&gt;&gt;</code> it is known as <code>flatmap</code> in some
 other languages.</p>
-<p>The <code>Option</code> type has many other combinators <a href="../std/option/enum.Option.html">defined in the standard
+<p>The <code>Option</code> type has many other combinators <a href="../../std/option/enum.Option.html">defined in the standard
 library</a>. It is a good idea to skim this list and familiarize
 yourself with what's available—they can often reduce case analysis
 for you. Familiarizing yourself with these combinators will pay
@@ -11400,7 +11400,7 @@ to handle the possibility of absence in their own way. Methods like <code>unwrap
 remove choices because they will panic if <code>Option&lt;T&gt;</code> is <code>None</code>.</p>
 <a class="header" href="print.html#the-result-type" name="the-result-type"><h2>The <code>Result</code> type</h2></a>
 <p>The <code>Result</code> type is also
-<a href="../std/result/index.html">defined in the standard library</a>:</p>
+<a href="../../std/result/index.html">defined in the standard library</a>:</p>
 <p><span id="code-result-def"></span></p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
 # 
@@ -11430,7 +11430,7 @@ the type and value level terms have the same notation!)</p>
 computation. By convention, one outcome is meant to be expected or “<code>Ok</code>” while
 the other outcome is meant to be unexpected or “<code>Err</code>”.</p>
 <p>Just like <code>Option</code>, the <code>Result</code> type also has an
-<a href="../std/result/enum.Result.html#method.unwrap"><code>unwrap</code> method
+<a href="../../std/result/enum.Result.html#method.unwrap"><code>unwrap</code> method
 defined</a>
 in the standard library. Let's define it:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
@@ -11451,7 +11451,7 @@ impl&lt;T, E: ::std::fmt::Debug&gt; Result&lt;T, E&gt; {
 <p>This is effectively the same as our <a href="print.html#code-option-def-unwrap">definition for
 <code>Option::unwrap</code></a>, except it includes the
 error value in the <code>panic!</code> message. This makes debugging easier, but
-it also requires us to add a <a href="../std/fmt/trait.Debug.html"><code>Debug</code></a> constraint on the <code>E</code> type
+it also requires us to add a <a href="../../std/fmt/trait.Debug.html"><code>Debug</code></a> constraint on the <code>E</code> type
 parameter (which represents our error type). Since the vast majority
 of types should satisfy the <code>Debug</code> constraint, this tends to work out
 in practice. (<code>Debug</code> on a type simply means that there's a reasonable
@@ -11478,7 +11478,7 @@ the string doesn't parse as a number, you'll get a panic:</p>
 using, you might be understandably annoyed. Instead, we should try to
 handle the error in our function and let the caller decide what to
 do. This means changing the return type of <code>double_number</code>. But to
-what? Well, that requires looking at the signature of the <a href="../std/primitive.str.html#method.parse"><code>parse</code>
+what? Well, that requires looking at the signature of the <a href="../../std/primitive.str.html#method.parse"><code>parse</code>
 method</a> in the standard library:</p>
 <pre><code class="language-rust ignore">impl str {
     fn parse&lt;F: FromStr&gt;(&amp;self) -&gt; Result&lt;F, F::Err&gt;;
@@ -11500,7 +11500,7 @@ standard library. We could (and probably should) also make our
 function generic, but let's favor explicitness for the moment. We only
 care about <code>i32</code>, so we need to <a href="../std/primitive.i32.html">find its implementation of
 <code>FromStr</code></a> (do a <code>CTRL-F</code> in your browser
-for “FromStr”) and look at its <a href="../book/associated-types.html">associated type</a> <code>Err</code>. We did
+for “FromStr”) and look at its <a href="../book/first-edition/associated-types.html">associated type</a> <code>Err</code>. We did
 this so we can find the concrete error type. In this case, it's
 <a href="../std/num/struct.ParseIntError.html"><code>std::num::ParseIntError</code></a>.
 Finally, we can rewrite our function:</p>
@@ -12010,7 +12010,7 @@ following things:</p>
 <code>Display</code>. The latter two are from the two methods defined on <code>Error</code>. The
 power of <code>Error</code> comes from the fact that all error types impl <code>Error</code>, which
 means errors can be existentially quantified as a
-<a href="../book/trait-objects.html">trait object</a>.
+<a href="../book/first-edition/trait-objects.html">trait object</a>.
 This manifests as either <code>Box&lt;Error&gt;</code> or <code>&amp;Error</code>. Indeed, the <code>cause</code> method
 returns an <code>&amp;Error</code>, which is itself a trait object. We'll revisit the
 <code>Error</code> trait's utility as a trait object later.</p>
@@ -12079,7 +12079,7 @@ different error types and satisfy the contracts defined for <code>description</c
 <code>cause</code>.</p>
 <a class="header" href="print.html#the-from-trait" name="the-from-trait"><h2>The <code>From</code> trait</h2></a>
 <p>The <code>std::convert::From</code> trait is
-<a href="../std/convert/trait.From.html">defined in the standard
+<a href="../../std/convert/trait.From.html">defined in the standard
 library</a>:</p>
 <p><span id="code-from-def"></span></p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
@@ -12094,7 +12094,7 @@ trait From&lt;T&gt; {
 way to talk about conversion <em>from</em> a particular type <code>T</code> to some other type
 (in this case, “some other type” is the subject of the impl, or <code>Self</code>).
 The crux of <code>From</code> is the
-<a href="../std/convert/trait.From.html">set of implementations provided by the standard
+<a href="../../std/convert/trait.From.html">set of implementations provided by the standard
 library</a>.</p>
 <p>Here are a few simple examples demonstrating how <code>From</code> works:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
@@ -12156,7 +12156,7 @@ macro_rules! try {
 
 #}</code></pre></pre>
 <p>This is not its real definition. Its real definition is
-<a href="../std/macro.try.html">in the standard library</a>:</p>
+<a href="../../std/macro.try.html">in the standard library</a>:</p>
 <p><span id="code-try-def"></span></p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
 # 
@@ -12225,8 +12225,8 @@ combinators, calls to <code>unwrap</code> or case analysis.</p>
 return a <code>Box&lt;Error&gt;</code> to the caller, the caller can't (easily) inspect
 underlying error type. The situation is certainly better than <code>String</code>
 because the caller can call methods like
-<a href="../std/error/trait.Error.html#tymethod.description"><code>description</code></a>
-and <a href="../std/error/trait.Error.html#method.cause"><code>cause</code></a>, but the
+<a href="../../std/error/trait.Error.html#tymethod.description"><code>description</code></a>
+and <a href="../../std/error/trait.Error.html#method.cause"><code>cause</code></a>, but the
 limitation remains: <code>Box&lt;Error&gt;</code> is opaque. (N.B. This isn't entirely
 true because Rust does have runtime reflection, which is useful in
 some scenarios that are <a href="https://crates.io/crates/error">beyond the scope of this
@@ -12366,13 +12366,13 @@ impl From&lt;num::ParseFloatError&gt; for CliError {
 <p>If your library needs to report custom errors, then you should
 probably define your own error type. It's up to you whether or not to
 expose its representation (like
-<a href="../std/io/enum.ErrorKind.html"><code>ErrorKind</code></a>) or keep it hidden (like
-<a href="../std/num/struct.ParseIntError.html"><code>ParseIntError</code></a>). Regardless
+<a href="../../std/io/enum.ErrorKind.html"><code>ErrorKind</code></a>) or keep it hidden (like
+<a href="../../std/num/struct.ParseIntError.html"><code>ParseIntError</code></a>). Regardless
 of how you do it, it's usually good practice to at least provide some
 information about the error beyond its <code>String</code>
 representation. But certainly, this will vary depending on use cases.</p>
 <p>At a minimum, you should probably implement the
-<a href="../std/error/trait.Error.html"><code>Error</code></a>
+<a href="../../std/error/trait.Error.html"><code>Error</code></a>
 trait. This will give users of your library some minimum flexibility for
 <a href="print.html#the-real-try-macro">composing errors</a>. Implementing the <code>Error</code> trait also
 means that users are guaranteed the ability to obtain a string representation
@@ -12386,8 +12386,8 @@ provides <code>From</code> impls for both <code>io::Error</code> and <code>byteo
 <p>Finally, depending on your tastes, you may also want to define a
 <a href="print.html#the-result-type-alias-idiom"><code>Result</code> type alias</a>, particularly if your
 library defines a single error type. This is used in the standard library
-for <a href="../std/io/type.Result.html"><code>io::Result</code></a>
-and <a href="../std/fmt/type.Result.html"><code>fmt::Result</code></a>.</p>
+for <a href="../../std/io/type.Result.html"><code>io::Result</code></a>
+and <a href="../../std/fmt/type.Result.html"><code>fmt::Result</code></a>.</p>
 <a class="header" href="print.html#case-study-a-program-to-read-population-data" name="case-study-a-program-to-read-population-data"><h1>Case study: A program to read population data</h1></a>
 <p>This section was long, and depending on your background, it might be
 rather dense. While there is plenty of example code to go along with
@@ -12557,9 +12557,9 @@ fn main() {
 <p>Let's outline the errors. We can start with the obvious: the three places that
 <code>unwrap</code> is called:</p>
 <ol>
-<li><a href="../std/fs/struct.File.html#method.open"><code>File::open</code></a>
+<li><a href="../../std/fs/struct.File.html#method.open"><code>File::open</code></a>
 can return an
-<a href="../std/io/struct.Error.html"><code>io::Error</code></a>.</li>
+<a href="../../std/io/struct.Error.html"><code>io::Error</code></a>.</li>
 <li><a href="http://burntsushi.net/rustdoc/csv/struct.Reader.html#method.decode"><code>csv::Reader::decode</code></a>
 decodes one record at a time, and
 <a href="http://burntsushi.net/rustdoc/csv/struct.DecodedRecords.html">decoding a
@@ -12699,7 +12699,7 @@ fn search&lt;P: AsRef&lt;Path&gt;&gt;
 <code>Result&lt;T, E&gt;</code>, the <code>try!</code> macro will return early from the function if an
 error occurs.</p>
 <p>At the end of <code>search</code> we also convert a plain string to an error type
-by using the <a href="../std/convert/trait.From.html">corresponding <code>From</code> impls</a>:</p>
+by using the <a href="../../std/convert/trait.From.html">corresponding <code>From</code> impls</a>:</p>
 <pre><code class="language-rust ignore">// We are making use of this impl in the code above, since we call `From::from`
 // on a `&amp;'static str`.
 impl&lt;'a&gt; From&lt;&amp;'a str&gt; for Box&lt;Error&gt;
@@ -12954,10 +12954,10 @@ heuristics!</p>
 <ul>
 <li>If you're writing short example code that would be overburdened by error
 handling, it's probably fine to use <code>unwrap</code> (whether that's
-<a href="../std/result/enum.Result.html#method.unwrap"><code>Result::unwrap</code></a>,
-<a href="../std/option/enum.Option.html#method.unwrap"><code>Option::unwrap</code></a>
+<a href="../../std/result/enum.Result.html#method.unwrap"><code>Result::unwrap</code></a>,
+<a href="../../std/option/enum.Option.html#method.unwrap"><code>Option::unwrap</code></a>
 or preferably
-<a href="../std/option/enum.Option.html#method.expect"><code>Option::expect</code></a>).
+<a href="../../std/option/enum.Option.html#method.expect"><code>Option::expect</code></a>).
 Consumers of your code should know to use proper error handling. (If they
 don't, send them here!)</li>
 <li>If you're writing a quick 'n' dirty program, don't feel ashamed if you use
@@ -12967,23 +12967,23 @@ surprised if they are agitated by poor error messages!</li>
 anyway, then use either a <code>String</code> or a <code>Box&lt;Error&gt;</code> for your
 error type.</li>
 <li>Otherwise, in a program, define your own error types with appropriate
-<a href="../std/convert/trait.From.html"><code>From</code></a>
+<a href="../../std/convert/trait.From.html"><code>From</code></a>
 and
-<a href="../std/error/trait.Error.html"><code>Error</code></a>
-impls to make the <a href="../std/macro.try.html"><code>try!</code></a>
+<a href="../../std/error/trait.Error.html"><code>Error</code></a>
+impls to make the <a href="../../std/macro.try.html"><code>try!</code></a>
 macro more ergonomic.</li>
 <li>If you're writing a library and your code can produce errors, define your own
 error type and implement the
-<a href="../std/error/trait.Error.html"><code>std::error::Error</code></a>
+<a href="../../std/error/trait.Error.html"><code>std::error::Error</code></a>
 trait. Where appropriate, implement
-<a href="../std/convert/trait.From.html"><code>From</code></a> to make both
+<a href="../../std/convert/trait.From.html"><code>From</code></a> to make both
 your library code and the caller's code easier to write. (Because of Rust's
 coherence rules, callers will not be able to impl <code>From</code> on your error type,
 so your library should do it.)</li>
 <li>Learn the combinators defined on
-<a href="../std/option/enum.Option.html"><code>Option</code></a>
+<a href="../../std/option/enum.Option.html"><code>Option</code></a>
 and
-<a href="../std/result/enum.Result.html"><code>Result</code></a>.
+<a href="../../std/result/enum.Result.html"><code>Result</code></a>.
 Using them exclusively can be a bit tiring at times, but I've personally
 found a healthy mix of <code>try!</code> and combinators to be quite appealing.
 <code>and_then</code>, <code>map</code> and <code>unwrap_or</code> are my favorites.</li>
@@ -12999,7 +12999,7 @@ detail.</p>
 <a href="references-and-borrowing.html">borrowing</a> in Rust.</p>
 <a class="header" href="print.html#basic-pointer-types" name="basic-pointer-types"><h1>Basic pointer types</h1></a>
 <a class="header" href="print.html#boxt" name="boxt"><h2><code>Box&lt;T&gt;</code></h2></a>
-<p><a href="../std/boxed/struct.Box.html"><code>Box&lt;T&gt;</code></a> is an “owned” pointer, or a “box”. While it can hand
+<p><a href="../../std/boxed/struct.Box.html"><code>Box&lt;T&gt;</code></a> is an “owned” pointer, or a “box”. While it can hand
 out references to the contained data, it is the only owner of the data. In particular, consider
 the following:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
@@ -13032,7 +13032,7 @@ they cannot be dereferenced except in code marked <code>unsafe</code>.</p>
 safe code.</p>
 <a class="header" href="print.html#rct" name="rct"><h2><code>Rc&lt;T&gt;</code></h2></a>
 <p>This is the first wrapper we will cover that has a runtime cost.</p>
-<p><a href="../std/rc/struct.Rc.html"><code>Rc&lt;T&gt;</code></a> is a reference counted pointer. In other words, this lets us have multiple &quot;owning&quot;
+<p><a href="../../std/rc/struct.Rc.html"><code>Rc&lt;T&gt;</code></a> is a reference counted pointer. In other words, this lets us have multiple &quot;owning&quot;
 pointers to the same data, and the data will be dropped (destructors will be run) when all pointers
 are out of scope.</p>
 <p>Internally, it contains a shared “reference count” (also called “refcount”),
@@ -13066,10 +13066,10 @@ increment the inner reference count and return a copy of the <code>Rc&lt;T&gt;</
 <p><code>Cell</code>s provide interior mutability. In other words, they contain data which can be manipulated even
 if the type cannot be obtained in a mutable form (for example, when it is behind an <code>&amp;</code>-ptr or
 <code>Rc&lt;T&gt;</code>).</p>
-<p><a href="../std/cell/index.html">The documentation for the <code>cell</code> module has a pretty good explanation for these</a>.</p>
+<p><a href="../../std/cell/index.html">The documentation for the <code>cell</code> module has a pretty good explanation for these</a>.</p>
 <p>These types are <em>generally</em> found in struct fields, but they may be found elsewhere too.</p>
 <a class="header" href="print.html#cellt" name="cellt"><h2><code>Cell&lt;T&gt;</code></h2></a>
-<p><a href="../std/cell/struct.Cell.html"><code>Cell&lt;T&gt;</code></a> is a type that provides zero-cost interior mutability by moving data in and
+<p><a href="../../std/cell/struct.Cell.html"><code>Cell&lt;T&gt;</code></a> is a type that provides zero-cost interior mutability by moving data in and
 out of the cell.
 Since the compiler knows that all the data owned by the contained value is on the stack, there's
 no worry of leaking any data behind references (or worse!) by simply replacing the data.</p>
@@ -13114,7 +13114,7 @@ mutate.</p>
 structs, it might be worthwhile to instead wrap individual fields in <code>Cell&lt;T&gt;</code> since each write is
 otherwise a full copy of the struct.</p>
 <a class="header" href="print.html#refcellt" name="refcellt"><h2><code>RefCell&lt;T&gt;</code></h2></a>
-<p><a href="../std/cell/struct.RefCell.html"><code>RefCell&lt;T&gt;</code></a> also provides interior mutability, but doesn't move data in and out of the
+<p><a href="../../std/cell/struct.RefCell.html"><code>RefCell&lt;T&gt;</code></a> also provides interior mutability, but doesn't move data in and out of the
 cell.</p>
 <p>However, it has a runtime cost. <code>RefCell&lt;T&gt;</code> enforces the read-write lock pattern at runtime (it's
 like a single-threaded mutex), unlike <code>&amp;T</code>/<code>&amp;mut T</code> which do so at compile time. This is done by the
@@ -13171,10 +13171,10 @@ makes them cheaper to use, but we need thread safe versions of these too. They e
 <code>Arc&lt;T&gt;</code> and <code>Mutex&lt;T&gt;</code>/<code>RwLock&lt;T&gt;</code></p>
 <p>Note that the non-threadsafe types <em>cannot</em> be sent between threads, and this is checked at compile
 time.</p>
-<p>There are many useful wrappers for concurrent programming in the <a href="../std/sync/index.html">sync</a> module, but only the
+<p>There are many useful wrappers for concurrent programming in the <a href="../../std/sync/index.html">sync</a> module, but only the
 major ones will be covered below.</p>
 <a class="header" href="print.html#arct" name="arct"><h2><code>Arc&lt;T&gt;</code></h2></a>
-<p><a href="../std/sync/struct.Arc.html"><code>Arc&lt;T&gt;</code></a> is a version of <code>Rc&lt;T&gt;</code> that uses an atomic reference count (hence, &quot;Arc&quot;).
+<p><a href="../../std/sync/struct.Arc.html"><code>Arc&lt;T&gt;</code></a> is a version of <code>Rc&lt;T&gt;</code> that uses an atomic reference count (hence, &quot;Arc&quot;).
 This can be sent freely between threads.</p>
 <p>C++'s <code>shared_ptr</code> is similar to <code>Arc</code>, however in the case of C++ the inner data is always mutable.
 For semantics similar to that from C++, we should use <code>Arc&lt;Mutex&lt;T&gt;&gt;</code>, <code>Arc&lt;RwLock&lt;T&gt;&gt;</code>, or
@@ -13193,7 +13193,7 @@ be run when the last <code>Arc</code> goes out of scope (barring any cycles).</p
 cloned or goes out of scope). When sharing data from an <code>Arc</code> in a single thread, it is preferable
 to share <code>&amp;</code> pointers whenever possible.</p>
 <a class="header" href="print.html#mutext-and-rwlockt" name="mutext-and-rwlockt"><h2><code>Mutex&lt;T&gt;</code> and <code>RwLock&lt;T&gt;</code></h2></a>
-<p><a href="../std/sync/struct.Mutex.html"><code>Mutex&lt;T&gt;</code></a> and <a href="../std/sync/struct.RwLock.html"><code>RwLock&lt;T&gt;</code></a> provide mutual-exclusion via RAII guards (guards are
+<p><a href="../../std/sync/struct.Mutex.html"><code>Mutex&lt;T&gt;</code></a> and <a href="../../std/sync/struct.RwLock.html"><code>RwLock&lt;T&gt;</code></a> provide mutual-exclusion via RAII guards (guards are
 objects which maintain some state, like a lock, until their destructor is called). For both of
 these, the mutex is opaque until we call <code>lock()</code> on it, at which point the thread will block
 until a lock can be acquired, and then a guard will be returned. This guard can be used to access
@@ -13457,7 +13457,7 @@ mod tests {
 <p>Foreign libraries often hand off ownership of resources to the calling code.
 When this occurs, we must use Rust's destructors to provide safety and guarantee
 the release of these resources (especially in the case of panic).</p>
-<p>For more about destructors, see the <a href="../std/ops/trait.Drop.html">Drop trait</a>.</p>
+<p>For more about destructors, see the <a href="../../std/ops/trait.Drop.html">Drop trait</a>.</p>
 <a class="header" href="print.html#callbacks-from-c-code-to-rust-functions" name="callbacks-from-c-code-to-rust-functions"><h1>Callbacks from C code to Rust functions</h1></a>
 <p>Some external libraries require the usage of callbacks to report back their
 current state or intermediate data to the caller.
@@ -13825,7 +13825,7 @@ attribute turns off Rust's name mangling, so that it is easier to link to.</p>
 <a class="header" href="print.html#ffi-and-panics" name="ffi-and-panics"><h1>FFI and panics</h1></a>
 <p>It’s important to be mindful of <code>panic!</code>s when working with FFI. A <code>panic!</code>
 across an FFI boundary is undefined behavior. If you’re writing code that may
-panic, you should run it in a closure with <a href="../std/panic/fn.catch_unwind.html"><code>catch_unwind()</code></a>:</p>
+panic, you should run it in a closure with <a href="../../std/panic/fn.catch_unwind.html"><code>catch_unwind()</code></a>:</p>
 <pre><pre class="playpen"><code class="language-rust">use std::panic::catch_unwind;
 
 #[no_mangle]
@@ -13841,8 +13841,8 @@ pub extern fn oh_no() -&gt; i32 {
 
 fn main() {}
 </code></pre></pre>
-<p>Please note that <a href="../std/panic/fn.catch_unwind.html"><code>catch_unwind()</code></a> will only catch unwinding panics, not
-those who abort the process. See the documentation of <a href="../std/panic/fn.catch_unwind.html"><code>catch_unwind()</code></a>
+<p>Please note that <a href="../../std/panic/fn.catch_unwind.html"><code>catch_unwind()</code></a> will only catch unwinding panics, not
+those who abort the process. See the documentation of <a href="../../std/panic/fn.catch_unwind.html"><code>catch_unwind()</code></a>
 for more information.</p>
 <a class="header" href="print.html#representing-opaque-structs" name="representing-opaque-structs"><h1>Representing opaque structs</h1></a>
 <p>Sometimes, a C library wants to provide a pointer to something, but not let you
@@ -13885,12 +13885,12 @@ instantiate, as it has no variants. But because our <code>Foo</code> and <code>B
 different, we’ll get type safety between the two of them, so we cannot
 accidentally pass a pointer to <code>Foo</code> to <code>bar()</code>.</p>
 <a class="header" href="print.html#borrow-and-asref" name="borrow-and-asref"><h1>Borrow and AsRef</h1></a>
-<p>The <a href="../std/borrow/trait.Borrow.html"><code>Borrow</code></a> and <a href="../std/convert/trait.AsRef.html"><code>AsRef</code></a> traits are very similar, but
+<p>The <a href="../../std/borrow/trait.Borrow.html"><code>Borrow</code></a> and <a href="../../std/convert/trait.AsRef.html"><code>AsRef</code></a> traits are very similar, but
 different. Here’s a quick refresher on what these two traits mean.</p>
 <a class="header" href="print.html#borrow" name="borrow"><h1>Borrow</h1></a>
 <p>The <code>Borrow</code> trait is used when you’re writing a data structure, and you want to
 use either an owned or borrowed type as synonymous for some purpose.</p>
-<p>For example, <a href="../std/collections/struct.HashMap.html"><code>HashMap</code></a> has a <a href="../std/collections/struct.HashMap.html#method.get"><code>get</code> method</a> which uses <code>Borrow</code>:</p>
+<p>For example, <a href="../../std/collections/struct.HashMap.html"><code>HashMap</code></a> has a <a href="../../std/collections/struct.HashMap.html#method.get"><code>get</code> method</a> which uses <code>Borrow</code>:</p>
 <pre><code class="language-rust ignore">fn get&lt;Q: ?Sized&gt;(&amp;self, k: &amp;Q) -&gt; Option&lt;&amp;V&gt;
     where K: Borrow&lt;Q&gt;,
           Q: Hash + Eq
@@ -14019,7 +14019,7 @@ don’t want to use the standard library via an attribute: <code>#![no_std]</cod
 <blockquote>
 <p>Note: This feature is technically stable, but there are some caveats. For
 one, you can build a <code>#![no_std]</code> <em>library</em> on stable, but not a <em>binary</em>.
-For details on binaries without the standard library, see <a href="../unstable-book/lang-items.html#using-libc">the nightly
+For details on binaries without the standard library, see <a href="../../unstable-book/lang-items.html#using-libc">the nightly
 chapter on 'lang items'</a></p>
 </blockquote>
 <p>To use <code>#![no_std]</code>, add it to your crate root:</p>
@@ -14030,10 +14030,10 @@ fn plus_one(x: i32) -&gt; i32 {
 }
 </code></pre>
 <p>Much of the functionality that’s exposed in the standard library is also
-available via the <a href="../core/index.html"><code>core</code> crate</a>. When we’re using the
+available via the <a href="../../core/index.html"><code>core</code> crate</a>. When we’re using the
 standard library, Rust automatically brings <code>std</code> into scope, allowing you to
 use its features without an explicit import. By the same token, when using
-<code>#![no_std]</code>, Rust will bring <code>core</code> into scope for you, as well as <a href="../core/prelude/v1/index.html">its
+<code>#![no_std]</code>, Rust will bring <code>core</code> into scope for you, as well as <a href="../../core/prelude/v1/index.html">its
 prelude</a>. This means that a lot of code will Just
 Work:</p>
 <pre><code class="language-rust ignore">#![no_std]
@@ -14307,7 +14307,7 @@ must abide by that constraint.</p>
 earlier defined combinators to provide a result from its arguments.
 They can be used to manage control flow in a modular fashion.</p>
 <a class="header" href="print.html#dst-dynamically-sized-type" name="dst-dynamically-sized-type"><h3>DST (Dynamically Sized Type)</h3></a>
-<p>A type without a statically known size or alignment. (<a href="../nomicon/exotic-sizes.html#dynamically-sized-types-dsts">more info</a>)</p>
+<p>A type without a statically known size or alignment. (<a href="../../nomicon/exotic-sizes.html#dynamically-sized-types-dsts">more info</a>)</p>
 <a class="header" href="print.html#expression" name="expression"><h3>Expression</h3></a>
 <p>In computer programming, an expression is a combination of values, constants,
 variables, operators and functions that evaluate to a single value. For example,
@@ -14419,7 +14419,7 @@ programming language that commands a computer to perform an action.</p>
 <li><code>|</code> (<code>|…| expr</code>): closures.  See <a href="closures.html">Closures</a>.</li>
 <li><code>|=</code> (<code>var |= expr</code>): bitwise or &amp; assignment. Overloadable (<code>BitOrAssign</code>).</li>
 <li><code>||</code> (<code>expr || expr</code>): logical or.</li>
-<li><code>_</code>: &quot;ignored&quot; pattern binding (see <a href="patterns.html#ignoring-bindings">Patterns (Ignoring bindings)</a>). Also used to make integer-literals readable (see <a href="../reference/tokens.html#integer-literals">Reference (Integer literals)</a>).</li>
+<li><code>_</code>: &quot;ignored&quot; pattern binding (see <a href="patterns.html#ignoring-bindings">Patterns (Ignoring bindings)</a>). Also used to make integer-literals readable (see <a href="../../reference/tokens.html#integer-literals">Reference (Integer literals)</a>).</li>
 <li><code>?</code> (<code>expr?</code>): Error propagation. Returns early when <code>Err(_)</code> is encountered, unwraps otherwise. Similar to the <a href="error-handling.html#the-try-macro"><code>try!</code> macro</a>.</li>
 </ul>
 <a class="header" href="print.html#other-syntax" name="other-syntax"><h2>Other Syntax</h2></a>
@@ -14428,9 +14428,9 @@ programming language that commands a computer to perform an action.</p>
 <li><code>'ident</code>: named lifetime or loop label.  See <a href="lifetimes.html">Lifetimes</a>, <a href="loops.html#loop-labels">Loops (Loops Labels)</a>.</li>
 <li><code>…u8</code>, <code>…i32</code>, <code>…f64</code>, <code>…usize</code>, …: numeric literal of specific type.</li>
 <li><code>&quot;…&quot;</code>: string literal.  See <a href="strings.html">Strings</a>.</li>
-<li><code>r&quot;…&quot;</code>, <code>r#&quot;…&quot;#</code>, <code>r##&quot;…&quot;##</code>, …: raw string literal, escape characters are not processed. See <a href="../reference/tokens.html#raw-string-literals">Reference (Raw String Literals)</a>.</li>
-<li><code>b&quot;…&quot;</code>: byte string literal, constructs a <code>[u8]</code> instead of a string. See <a href="../reference/tokens.html/#byte-string-literals">Reference (Byte String Literals)</a>.</li>
-<li><code>br&quot;…&quot;</code>, <code>br#&quot;…&quot;#</code>, <code>br##&quot;…&quot;##</code>, …: raw byte string literal, combination of raw and byte string literal. See <a href="../reference/tokens.html#raw-byte-string-literals">Reference (Raw Byte String Literals)</a>.</li>
+<li><code>r&quot;…&quot;</code>, <code>r#&quot;…&quot;#</code>, <code>r##&quot;…&quot;##</code>, …: raw string literal, escape characters are not processed. See <a href="../../reference/tokens.html#raw-string-literals">Reference (Raw String Literals)</a>.</li>
+<li><code>b&quot;…&quot;</code>: byte string literal, constructs a <code>[u8]</code> instead of a string. See <a href="../../reference/tokens.html/#byte-string-literals">Reference (Byte String Literals)</a>.</li>
+<li><code>br&quot;…&quot;</code>, <code>br#&quot;…&quot;#</code>, <code>br##&quot;…&quot;##</code>, …: raw byte string literal, combination of raw and byte string literal. See <a href="../../reference/tokens.html#raw-byte-string-literals">Reference (Raw Byte String Literals)</a>.</li>
 <li><code>'…'</code>: character literal.  See <a href="primitive-types.html#char">Primitive Types (<code>char</code>)</a>.</li>
 <li><code>b'…'</code>: ASCII byte literal.</li>
 <li><code>|…| expr</code>: closure.  See <a href="closures.html">Closures</a>.</li>

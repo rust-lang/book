@@ -69,7 +69,7 @@
                 <div id="content" class="content">
                     <a class="header" href="vectors.html#vectors" name="vectors"><h1>Vectors</h1></a>
 <p>A ‘vector’ is a dynamic or ‘growable’ array, implemented as the standard
-library type <a href="../std/vec/index.html"><code>Vec&lt;T&gt;</code></a>. The <code>T</code> means that we can have vectors
+library type <a href="../../std/vec/index.html"><code>Vec&lt;T&gt;</code></a>. The <code>T</code> means that we can have vectors
 of any type (see the chapter on <a href="generics.html">generics</a> for more).
 Vectors always allocate their data on the heap.
 You can create them with the <code>vec!</code> macro:</p>
@@ -93,7 +93,7 @@ let v = vec![0; 10]; // A vector of ten zeroes.
 that they must be able to know the size of <code>T</code> at compile time (that is, how
 many bytes are needed to store a <code>T</code>?). The size of some things can't be known
 at compile time. For these you'll have to store a pointer to that thing:
-thankfully, the <a href="../std/boxed/index.html"><code>Box</code></a> type works perfectly for this.</p>
+thankfully, the <a href="../../std/boxed/index.html"><code>Box</code></a> type works perfectly for this.</p>
 <a class="header" href="vectors.html#accessing-elements" name="accessing-elements"><h2>Accessing elements</h2></a>
 <p>To get the value at a particular index in the vector, we use <code>[]</code>s:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
@@ -136,7 +136,7 @@ println!(&quot;Item 7 is {}&quot;, v[7]);
 <pre><code class="language-text">thread 'main' panicked at 'index out of bounds: the len is 3 but the index is 7'
 </code></pre>
 <p>If you want to handle out-of-bounds errors without panicking, you can use
-methods like <a href="../std/vec/struct.Vec.html#method.get"><code>get</code></a> or <a href="../std/vec/struct.Vec.html#method.get_mut"><code>get_mut</code></a> that return <code>None</code> when
+methods like <a href="../../std/vec/struct.Vec.html#method.get"><code>get</code></a> or <a href="../../std/vec/struct.Vec.html#method.get_mut"><code>get_mut</code></a> that return <code>None</code> when
 given an invalid index:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
 # 
@@ -197,7 +197,7 @@ for i in &amp;v {
 }
 
 #}</code></pre></pre>
-<p>Vectors have many more useful methods, which you can read about in <a href="../std/vec/index.html">their
+<p>Vectors have many more useful methods, which you can read about in <a href="../../std/vec/index.html">their
 API documentation</a>.</p>
 
                 </div>

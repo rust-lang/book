@@ -150,7 +150,7 @@ cases. Above, we had</p>
 <p>This is like a <code>match</code> expression arm, but the matching happens on Rust syntax
 trees, at compile time. The semicolon is optional on the last (here, only)
 case. The &quot;pattern&quot; on the left-hand side of <code>=&gt;</code> is known as a ‘matcher’.
-These have <a href="../reference/macros.html">their own little grammar</a> within the language.</p>
+These have <a href="../../reference/macros.html">their own little grammar</a> within the language.</p>
 <p>The matcher <code>$x:expr</code> will match any Rust expression, binding that syntax tree
 to the ‘metavariable’ <code>$x</code>. The identifier <code>expr</code> is a ‘fragment specifier’;
 the full possibilities are enumerated later in this chapter.
@@ -336,7 +336,7 @@ fn main() {
     println!(&quot;{}&quot;, x);
 }
 </code></pre></pre>
-<p>This holds for <code>let</code> bindings and loop labels, but not for <a href="../reference/items.html">items</a>.
+<p>This holds for <code>let</code> bindings and loop labels, but not for <a href="../../reference/items.html">items</a>.
 So the following code does compile:</p>
 <pre><pre class="playpen"><code class="language-rust">macro_rules! foo {
     () =&gt; (fn x() { });
@@ -444,7 +444,7 @@ which syntactic form it matches.</p>
 <li><code>stmt</code>: a single statement. Example: <code>let x = 3</code>.</li>
 <li><code>block</code>: a brace-delimited sequence of statements and optionally an expression. Example:
 <code>{ log(error, &quot;hi&quot;); return 12; }</code>.</li>
-<li><code>item</code>: an <a href="../reference/items.html">item</a>. Examples: <code>fn foo() { }</code>; <code>struct Bar;</code>.</li>
+<li><code>item</code>: an <a href="../../reference/items.html">item</a>. Examples: <code>fn foo() { }</code>; <code>struct Bar;</code>.</li>
 <li><code>meta</code>: a &quot;meta item&quot;, as found in attributes. Example: <code>cfg(target_os = &quot;windows&quot;)</code>.</li>
 <li><code>tt</code>: a single token tree.</li>
 </ul>
@@ -520,7 +520,7 @@ mod bar {
 </code></pre></pre>
 <p>When this library is loaded with <code>#[macro_use] extern crate</code>, only <code>m2</code> will
 be imported.</p>
-<p>The Rust Reference has a <a href="../reference/attributes.html#macro-related-attributes">listing of macro-related
+<p>The Rust Reference has a <a href="../../reference/attributes.html#macro-related-attributes">listing of macro-related
 attributes</a>.</p>
 <a class="header" href="macros.html#the-variable-crate" name="the-variable-crate"><h1>The variable <code>$crate</code></h1></a>
 <p>A further difficulty occurs when a macro is used in multiple crates. Say that

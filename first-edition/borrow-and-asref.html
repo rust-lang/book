@@ -68,12 +68,12 @@
 
                 <div id="content" class="content">
                     <a class="header" href="borrow-and-asref.html#borrow-and-asref" name="borrow-and-asref"><h1>Borrow and AsRef</h1></a>
-<p>The <a href="../std/borrow/trait.Borrow.html"><code>Borrow</code></a> and <a href="../std/convert/trait.AsRef.html"><code>AsRef</code></a> traits are very similar, but
+<p>The <a href="../../std/borrow/trait.Borrow.html"><code>Borrow</code></a> and <a href="../../std/convert/trait.AsRef.html"><code>AsRef</code></a> traits are very similar, but
 different. Here’s a quick refresher on what these two traits mean.</p>
 <a class="header" href="borrow-and-asref.html#borrow" name="borrow"><h1>Borrow</h1></a>
 <p>The <code>Borrow</code> trait is used when you’re writing a data structure, and you want to
 use either an owned or borrowed type as synonymous for some purpose.</p>
-<p>For example, <a href="../std/collections/struct.HashMap.html"><code>HashMap</code></a> has a <a href="../std/collections/struct.HashMap.html#method.get"><code>get</code> method</a> which uses <code>Borrow</code>:</p>
+<p>For example, <a href="../../std/collections/struct.HashMap.html"><code>HashMap</code></a> has a <a href="../../std/collections/struct.HashMap.html#method.get"><code>get</code> method</a> which uses <code>Borrow</code>:</p>
 <pre><code class="language-rust ignore">fn get&lt;Q: ?Sized&gt;(&amp;self, k: &amp;Q) -&gt; Option&lt;&amp;V&gt;
     where K: Borrow&lt;Q&gt;,
           Q: Hash + Eq

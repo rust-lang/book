@@ -121,7 +121,7 @@ fn foo(mut x: i32) {
 <a class="header" href="mutability.html#interior-vs-exterior-mutability" name="interior-vs-exterior-mutability"><h1>Interior vs. Exterior Mutability</h1></a>
 <p>However, when we say something is ‘immutable’ in Rust, that doesn’t mean that
 it’s not able to be changed: we are referring to its ‘exterior mutability’ that
-in this case is immutable. Consider, for example, <a href="../std/sync/struct.Arc.html"><code>Arc&lt;T&gt;</code></a>:</p>
+in this case is immutable. Consider, for example, <a href="../../std/sync/struct.Arc.html"><code>Arc&lt;T&gt;</code></a>:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
 # 
 #fn main() {
@@ -149,7 +149,7 @@ the same time:</p>
 pointers to? In <code>Arc&lt;T&gt;</code>’s case, yes: the mutation is entirely contained inside
 the structure itself. It’s not user facing. For this reason, it hands out <code>&amp;T</code>
 with <code>clone()</code>. If it handed out <code>&amp;mut T</code>s, though, that would be a problem.</p>
-<p>Other types, like the ones in the <a href="../std/cell/index.html"><code>std::cell</code></a> module, have the
+<p>Other types, like the ones in the <a href="../../std/cell/index.html"><code>std::cell</code></a> module, have the
 opposite: interior mutability. For example:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
 # 
@@ -198,7 +198,7 @@ let b = Point { x: 5, y: 6};
 
 b.x = 10; // Error: cannot assign to immutable field `b.x`.
 </code></pre>
-<p>However, by using <a href="../std/cell/struct.Cell.html"><code>Cell&lt;T&gt;</code></a>, you can emulate field-level mutability:</p>
+<p>However, by using <a href="../../std/cell/struct.Cell.html"><code>Cell&lt;T&gt;</code></a>, you can emulate field-level mutability:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
 # 
 #fn main() {
