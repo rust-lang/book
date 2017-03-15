@@ -1113,7 +1113,7 @@ The first two are a result of `Error` requiring impls for both `Debug` and
 `Display`. The latter two are from the two methods defined on `Error`. The
 power of `Error` comes from the fact that all error types impl `Error`, which
 means errors can be existentially quantified as a
-[trait object](/trait-objects.html).
+[trait object](trait-objects.html).
 This manifests as either `Box<Error>` or `&Error`. Indeed, the `cause` method
 returns an `&Error`, which is itself a trait object. We'll revisit the
 `Error` trait's utility as a trait object later.
