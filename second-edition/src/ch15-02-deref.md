@@ -119,11 +119,10 @@ Rust tends to favor explicitness over implicitness, but one case where this
 does not hold true is *deref coercions* of arguments to functions and methods.
 A deref coercion will automatically convert a reference to a pointer or a smart
 pointer into a reference to that pointer's contents. A deref coercion happens
-when a value is passed to a function or method, and only happens if it's needed
-to get the type of the value passed in to match the type of the parameter
-defined in the signature. Deref coercion was added to Rust to make calling
-functions and methods not need as many explicit references and dereferences
-with `&` and `*`.
+when the type of the argument passed into the function differs from the type
+of the parameter defined in that function's signature. Deref coercion was added
+to Rust to make calling functions and methods not need as many explicit references
+and dereferences with `&` and `*`.
 
 Using our `Mp3` struct from Listing 15-7, here's the signature of a function to
 compress mp3 audio data that takes a slice of `u8`:
