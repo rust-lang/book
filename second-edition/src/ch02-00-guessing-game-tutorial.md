@@ -112,7 +112,7 @@ prelude, you have to bring that type into scope explicitly with a `use`
 statement. Using the `std::io` library provides you with a number of useful
 `io`-related features, including the functionality to accept user input.
 
-[prelude]: https://doc.rust-lang.org/std/prelude/
+[prelude]: ../../std/prelude/index.html
 
 As you saw in Chapter 1, the `main` function is the entry point into the
 program:
@@ -171,7 +171,7 @@ a new instance of a `String`. [`String`][string]<!-- ignore --> is a string
 type provided by the standard library that is a growable, UTF-8 encoded bit of
 text.
 
-[string]: ../std/string/struct.String.html
+[string]: ../../std/string/struct.String.html
 
 The `::` syntax in the `::new` line indicates that `new` is an *associated
 function* of the `String` type. An associated function is implemented on a type,
@@ -199,14 +199,14 @@ could have written this function call as `std::io::stdin`. The `stdin` function
 returns an instance of [`std::io::Stdin`][iostdin]<!-- ignore -->, which is a
 type that represents a handle to the standard input for your terminal.
 
-[iostdin]: ../std/io/struct.Stdin.html
+[iostdin]: ../../std/io/struct.Stdin.html
 
 The next part of the code, `.read_line(&mut guess)`, calls the
 [`read_line`][read_line]<!-- ignore --> method on the standard input handle to
 get input from the user. We’re also passing one argument to `read_line`: `&mut
 guess`.
 
-[read_line]: ../std/io/struct.Stdin.html#method.read_line
+[read_line]: ../../std/io/struct.Stdin.html#method.read_line
 
 The job of `read_line` is to take whatever the user types into standard input
 and place that into a string, so it takes that string as an argument. The
@@ -249,8 +249,8 @@ passing it, but it also returns a value—in this case, an
 `Result` in its standard library: a generic [`Result`][result]<!-- ignore --> as
 well as specific versions for submodules, such as `io::Result`.
 
-[ioresult]: ../std/io/type.Result.html
-[result]: ../std/result/enum.Result.html
+[ioresult]: ../../std/io/type.Result.html
+[result]: ../../std/result/enum.Result.html
 
 The `Result` types are [*enumerations*][enums]<!-- ignore -->, often referred
 to as *enums*. An enumeration is a type that can have a fixed set of values,
@@ -276,7 +276,7 @@ return value that `Ok` is holding and return just that value to you so you
 could use it. In this case, that value is the number of bytes in what the user
 entered into standard input.
 
-[expect]: ../std/result/enum.Result.html#method.expect
+[expect]: ../../std/result/enum.Result.html#method.expect
 
 If we don’t call `expect`, the program will compile, but we’ll get a warning:
 
@@ -773,7 +773,7 @@ this example program and the comparison with `secret_number` means that Rust
 will infer that `secret_number` should be a `u32` as well. So now the
 comparison will be between two values of the same type!
 
-[parse]: ../std/primitive.str.html#method.parse
+[parse]: ../../std/primitive.str.html#method.parse
 
 The call to `parse` could easily cause an error. If, for example, the string
 contained `A👍%`, there would be no way to convert that to a number. Because it

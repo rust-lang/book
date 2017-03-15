@@ -155,7 +155,7 @@ use!][IpAddr]<!-- ignore --> Let’s look at how the standard library defines
 it embeds the address data inside the variants in the form of two different
 structs, which are defined differently for each variant:
 
-[IpAddr]: ../std/net/enum.IpAddr.html
+[IpAddr]: ../../std/net/enum.IpAddr.html
 
 ```rust
 struct Ipv4Addr {
@@ -298,7 +298,7 @@ that can encode the concept of a value being present or absent. This enum is
 `Option<T>`, and it is [defined by the standard library][option]<!-- ignore -->
 as follows:
 
-[option]: ../std/option/enum.Option.html
+[option]: ../../std/option/enum.Option.html
 
 ```rust
 enum Option<T> {
@@ -388,7 +388,7 @@ number of methods that are useful in a variety of situations; you can check
 them out in [its documentation][docs]<!-- ignore -->. Becoming familiar with
 the methods on `Option<T>` will be extremely useful in your journey with Rust.
 
-[docs]: ../std/option/enum.Option.html
+[docs]: ../../std/option/enum.Option.html
 
 In general, in order to use an `Option<T>` value, we want to have code that
 will handle each variant. We want some code that will run only when we have a
