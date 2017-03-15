@@ -24,7 +24,7 @@ fn main() {
 }
 ```
 
-[deref]: ../std/ops/trait.Deref.html
+[deref]: ../../std/ops/trait.Deref.html
 
 This is useful for writing custom pointer types. However, there’s a language
 feature related to `Deref`: ‘deref coercions’. Here’s the rule: If you have a

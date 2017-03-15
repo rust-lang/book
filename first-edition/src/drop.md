@@ -4,7 +4,7 @@ Now that we’ve discussed traits, let’s talk about a particular trait provide
 by the Rust standard library, [`Drop`][drop]. The `Drop` trait provides a way
 to run some code when a value goes out of scope. For example:
 
-[drop]: ../std/ops/trait.Drop.html
+[drop]: ../../std/ops/trait.Drop.html
 
 ```rust
 struct HasDrop;
@@ -64,4 +64,4 @@ reference-counted type. When `Drop` is called, it will decrement the reference
 count, and if the total number of references is zero, will clean up the
 underlying value.
 
-[arc]: ../std/sync/struct.Arc.html
+[arc]: ../../std/sync/struct.Arc.html
