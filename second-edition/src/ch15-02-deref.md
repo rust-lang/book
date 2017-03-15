@@ -164,11 +164,11 @@ documentation for `Vec<T>`). So, at compile time, Rust will see that it can use
 match the signature of `compress_mp3`. That means we get to do less typing!
 Rust will analyze types through `Deref::deref` as many times as it needs to in
 order to get a reference to match the parameter's type, when the `Deref` trait
-is defined for the types involved. The indirection is resolved at compile time,
-so there is no run-time penalty for taking advantage of deref coercion.
+is defined for the types involved. This indirection is resolved at compile time,
+so there is no run-time penalty for taking advantage of deref coercion!
 
-There's also a `DerefMut` trait for overriding `*` on `&mut T` for use in
-assignment in the same fashion that we use `Deref` to override `*` on `&T`s.
+Similar to how we use the `Deref` trait to override `*` on `&T`s, there is also
+a `DerefMut` trait for overriding `*` on `&mut T`.
 
 Rust does deref coercion when it finds types and trait implementations in three
 cases:
