@@ -103,11 +103,11 @@ the scenes when we call `*my_favorite_song` is:
 
 This calls the `deref` method on `my_favorite_song`, which borrows
 `my_favorite_song` and returns a reference to `my_favorite_song.audio`, since
-that's what we defined `deref` to do in Listing 15-5. `*` on references is
+that's what we defined `deref` to do in Listing 15-7. `*` on references is
 defined to just follow the reference and return the data, so the expansion of
 `*` doesn't recurse for the outer `*`. So we end up with data of type
 `Vec<u8>`, which matches the `vec![1, 2, 3]` in the `assert_eq!` in Listing
-15-5.
+15-7.
 
 The reason that the return type of the `deref` method is still a reference and
 why it's necessary to dereference the result of the method is that if the
@@ -125,7 +125,7 @@ defined in the signature. Deref coercion was added to Rust to make calling
 functions and methods not need as many explicit references and dereferences
 with `&` and `*`.
 
-Using our `Mp3` struct from Listing 15-5, here's the signature of a function to
+Using our `Mp3` struct from Listing 15-7, here's the signature of a function to
 compress mp3 audio data that takes a slice of `u8`:
 
 ```rust,ignore
