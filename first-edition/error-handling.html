@@ -139,7 +139,7 @@ a computation was successful or not. As you will see, the key to ergonomic error
 handling is reducing the amount of explicit case analysis the programmer has to
 do while keeping code composable.</p>
 <p>Keeping code composable is important, because without that requirement, we
-could <a href="../std/macro.panic.html"><code>panic</code></a> whenever we
+could <a href="../../std/macro.panic.html"><code>panic</code></a> whenever we
 come across something unexpected. (<code>panic</code> causes the current task to unwind,
 and in most cases, the entire program aborts.) Here's an example:</p>
 <pre><pre class="playpen"><code class="language-rust should_panic">// Guess a number between 1 and 10.
@@ -237,7 +237,7 @@ fn main() {
     }
 }
 </code></pre></pre>
-<p>This code uses <a href="../book/first-edition/patterns.html">pattern matching</a> to do <em>case
+<p>This code uses <a href="patterns.html">pattern matching</a> to do <em>case
 analysis</em> on the <code>Option&lt;usize&gt;</code> returned by the <code>find</code> function. In fact, case
 analysis is the only way to get at the value stored inside an <code>Option&lt;T&gt;</code>. This
 means that you, as the programmer, must handle the case when an <code>Option&lt;T&gt;</code> is
@@ -294,7 +294,7 @@ fn extension_explicit(file_name: &amp;str) -&gt; Option&lt;&amp;str&gt; {
 
 #}</code></pre></pre>
 <p>(Pro-tip: don't use this code. Use the
-<a href="../std/path/struct.Path.html#method.extension"><code>extension</code></a>
+<a href="../../std/path/struct.Path.html#method.extension"><code>extension</code></a>
 method in the standard library instead.)</p>
 <p>The code stays simple, but the important thing to notice is that the type of
 <code>find</code> forces us to consider the possibility of absence. This is a good thing
@@ -559,11 +559,11 @@ information, then you probably should. (We'll see more on this later.)</p>
 above is generic over all the different number types defined in the
 standard library. We could (and probably should) also make our
 function generic, but let's favor explicitness for the moment. We only
-care about <code>i32</code>, so we need to <a href="../std/primitive.i32.html">find its implementation of
+care about <code>i32</code>, so we need to <a href="../../std/primitive.i32.html">find its implementation of
 <code>FromStr</code></a> (do a <code>CTRL-F</code> in your browser
-for “FromStr”) and look at its <a href="../book/first-edition/associated-types.html">associated type</a> <code>Err</code>. We did
+for “FromStr”) and look at its <a href="associated-types.html">associated type</a> <code>Err</code>. We did
 this so we can find the concrete error type. In this case, it's
-<a href="../std/num/struct.ParseIntError.html"><code>std::num::ParseIntError</code></a>.
+<a href="../../std/num/struct.ParseIntError.html"><code>std::num::ParseIntError</code></a>.
 Finally, we can rewrite our function:</p>
 <pre><pre class="playpen"><code class="language-rust">use std::num::ParseIntError;
 
@@ -600,12 +600,12 @@ fn main() {
 }
 </code></pre></pre>
 <p>The usual suspects are all there for <code>Result</code>, including
-<a href="../std/result/enum.Result.html#method.unwrap_or"><code>unwrap_or</code></a> and
-<a href="../std/result/enum.Result.html#method.and_then"><code>and_then</code></a>.
+<a href="../../std/result/enum.Result.html#method.unwrap_or"><code>unwrap_or</code></a> and
+<a href="../../std/result/enum.Result.html#method.and_then"><code>and_then</code></a>.
 Additionally, since <code>Result</code> has a second type parameter, there are
 combinators that affect only the error type, such as
-<a href="../std/result/enum.Result.html#method.map_err"><code>map_err</code></a> (instead of
-<code>map</code>) and <a href="../std/result/enum.Result.html#method.or_else"><code>or_else</code></a>
+<a href="../../std/result/enum.Result.html#method.map_err"><code>map_err</code></a> (instead of
+<code>map</code>) and <a href="../../std/result/enum.Result.html#method.or_else"><code>or_else</code></a>
 (instead of <code>and_then</code>).</p>
 <a class="header" href="error-handling.html#the-result-type-alias-idiom" name="the-result-type-alias-idiom"><h3>The <code>Result</code> type alias idiom</h3></a>
 <p>In the standard library, you may frequently see types like
@@ -632,11 +632,11 @@ fn double_number(number_str: &amp;str) -&gt; Result&lt;i32&gt; {
 <code>ParseIntError</code>, then it's much more convenient to define an alias that always
 uses <code>ParseIntError</code> so that we don't have to write it out all the time.</p>
 <p>The most prominent place this idiom is used in the standard library is
-with <a href="../std/io/type.Result.html"><code>io::Result</code></a>. Typically, one writes
+with <a href="../../std/io/type.Result.html"><code>io::Result</code></a>. Typically, one writes
 <code>io::Result&lt;T&gt;</code>, which makes it clear that you're using the <code>io</code>
 module's type alias instead of the plain definition from
 <code>std::result</code>. (This idiom is also used for
-<a href="../std/fmt/type.Result.html"><code>fmt::Result</code></a>.)</p>
+<a href="../../std/fmt/type.Result.html"><code>fmt::Result</code></a>.)</p>
 <a class="header" href="error-handling.html#a-brief-interlude-unwrapping-isnt-evil" name="a-brief-interlude-unwrapping-isnt-evil"><h2>A brief interlude: unwrapping isn't evil</h2></a>
 <p>If you've been following along, you might have noticed that I've taken a pretty
 hard line against calling methods like <code>unwrap</code> that could <code>panic</code> and abort
@@ -657,7 +657,7 @@ failing, or it could be because your index into an array was out of bounds.</li>
 </ul>
 <p>This is probably not an exhaustive list. Moreover, when using an
 <code>Option</code>, it is often better to use its
-<a href="../std/option/enum.Option.html#method.expect"><code>expect</code></a>
+<a href="../../std/option/enum.Option.html#method.expect"><code>expect</code></a>
 method. <code>expect</code> does exactly the same thing as <code>unwrap</code>, except it
 prints a message you give to <code>expect</code>. This makes the resulting panic
 a bit nicer to deal with, since it will show your message instead of
@@ -721,7 +721,7 @@ fn main() {
 }
 </code></pre></pre>
 <p>There are a couple new things in this example. The first is the use of the
-<a href="../std/option/enum.Option.html#method.ok_or"><code>Option::ok_or</code></a>
+<a href="../../std/option/enum.Option.html#method.ok_or"><code>Option::ok_or</code></a>
 combinator. This is one way to convert an <code>Option</code> into a <code>Result</code>. The
 conversion requires you to specify what error to use if <code>Option</code> is <code>None</code>.
 Like the other combinators we've seen, its definition is very simple:</p>
@@ -737,7 +737,7 @@ fn ok_or&lt;T, E&gt;(option: Option&lt;T&gt;, err: E) -&gt; Result&lt;T, E&gt; {
 
 #}</code></pre></pre>
 <p>The other new combinator used here is
-<a href="../std/result/enum.Result.html#method.map_err"><code>Result::map_err</code></a>.
+<a href="../../std/result/enum.Result.html#method.map_err"><code>Result::map_err</code></a>.
 This is like <code>Result::map</code>, except it maps a function on to the <em>error</em>
 portion of a <code>Result</code> value. If the <code>Result</code> is an <code>Ok(...)</code> value, then it is
 returned unmodified.</p>
@@ -775,7 +775,7 @@ fn main() {
 }
 </code></pre></pre>
 <p>(N.B. The <code>AsRef&lt;Path&gt;</code> is used because those are the
-<a href="../std/fs/struct.File.html#method.open">same bounds used on
+<a href="../../std/fs/struct.File.html#method.open">same bounds used on
 <code>std::fs::File::open</code></a>.
 This makes it ergonomic to use any kind of string as a file path.)</p>
 <p>There are three different errors that can occur here:</p>
@@ -785,16 +785,16 @@ This makes it ergonomic to use any kind of string as a file path.)</p>
 <li>A problem parsing the data as a number.</li>
 </ol>
 <p>The first two problems are described via the
-<a href="../std/io/struct.Error.html"><code>std::io::Error</code></a> type. We know this
+<a href="../../std/io/struct.Error.html"><code>std::io::Error</code></a> type. We know this
 because of the return types of
-<a href="../std/fs/struct.File.html#method.open"><code>std::fs::File::open</code></a> and
-<a href="../std/io/trait.Read.html#method.read_to_string"><code>std::io::Read::read_to_string</code></a>.
+<a href="../../std/fs/struct.File.html#method.open"><code>std::fs::File::open</code></a> and
+<a href="../../std/io/trait.Read.html#method.read_to_string"><code>std::io::Read::read_to_string</code></a>.
 (Note that they both use the <a href="error-handling.html#the-result-type-alias-idiom"><code>Result</code> type alias
 idiom</a> described previously. If you
-click on the <code>Result</code> type, you'll <a href="../std/io/type.Result.html">see the type
+click on the <code>Result</code> type, you'll <a href="../../std/io/type.Result.html">see the type
 alias</a>, and consequently, the underlying
 <code>io::Error</code> type.)  The third problem is described by the
-<a href="../std/num/struct.ParseIntError.html"><code>std::num::ParseIntError</code></a>
+<a href="../../std/num/struct.ParseIntError.html"><code>std::num::ParseIntError</code></a>
 type. The <code>io::Error</code> type in particular is <em>pervasive</em> throughout the
 standard library. You will see it again and again.</p>
 <p>Let's start the process of refactoring the <code>file_double</code> function. To make this
@@ -920,7 +920,7 @@ macro_rules! try {
 }
 
 #}</code></pre></pre>
-<p>(The <a href="../std/macro.try.html">real definition</a> is a bit more
+<p>(The <a href="../../std/macro.try.html">real definition</a> is a bit more
 sophisticated. We will address that later.)</p>
 <p>Using the <code>try!</code> macro makes it very easy to simplify our last example. Since
 it does the case analysis and the early return for us, we get tighter code that
@@ -969,7 +969,7 @@ become completely opaque. The only reasonable thing the caller can do with a
 determine the type of error is not robust. (Admittedly, this downside is far
 more important inside of a library as opposed to, say, an application.)</p>
 <p>For example, the <code>io::Error</code> type embeds an
-<a href="../std/io/enum.ErrorKind.html"><code>io::ErrorKind</code></a>,
+<a href="../../std/io/enum.ErrorKind.html"><code>io::ErrorKind</code></a>,
 which is <em>structured data</em> that represents what went wrong during an IO
 operation. This is important because you might want to react differently
 depending on the error. (e.g., A <code>BrokenPipe</code> error might mean quitting your
@@ -1035,13 +1035,13 @@ writing a library, defining your own error type should be strongly preferred so
 that you don't remove choices from the caller unnecessarily.</p>
 <a class="header" href="error-handling.html#standard-library-traits-used-for-error-handling" name="standard-library-traits-used-for-error-handling"><h1>Standard library traits used for error handling</h1></a>
 <p>The standard library defines two integral traits for error handling:
-<a href="../std/error/trait.Error.html"><code>std::error::Error</code></a> and
-<a href="../std/convert/trait.From.html"><code>std::convert::From</code></a>. While <code>Error</code>
+<a href="../../std/error/trait.Error.html"><code>std::error::Error</code></a> and
+<a href="../../std/convert/trait.From.html"><code>std::convert::From</code></a>. While <code>Error</code>
 is designed specifically for generically describing errors, the <code>From</code>
 trait serves a more general role for converting values between two
 distinct types.</p>
 <a class="header" href="error-handling.html#the-error-trait" name="the-error-trait"><h2>The <code>Error</code> trait</h2></a>
-<p>The <code>Error</code> trait is <a href="../std/error/trait.Error.html">defined in the standard
+<p>The <code>Error</code> trait is <a href="../../std/error/trait.Error.html">defined in the standard
 library</a>:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
 # 
@@ -1071,7 +1071,7 @@ following things:</p>
 <code>Display</code>. The latter two are from the two methods defined on <code>Error</code>. The
 power of <code>Error</code> comes from the fact that all error types impl <code>Error</code>, which
 means errors can be existentially quantified as a
-<a href="../book/first-edition/trait-objects.html">trait object</a>.
+<a href="/trait-objects.html">trait object</a>.
 This manifests as either <code>Box&lt;Error&gt;</code> or <code>&amp;Error</code>. Indeed, the <code>cause</code> method
 returns an <code>&amp;Error</code>, which is itself a trait object. We'll revisit the
 <code>Error</code> trait's utility as a trait object later.</p>
