@@ -525,7 +525,7 @@ standard library (which is known as <code>std</code>):</p>
 <pre><code class="language-rust ignore">use std::io;
 </code></pre>
 <p>By default, Rust brings only a few types into the scope of every program in
-<a href="https://doc.rust-lang.org/std/prelude/">the <em>prelude</em></a><!-- ignore -->. If a type you want to use isn’t in the
+<a href="../../std/prelude/index.html">the <em>prelude</em></a><!-- ignore -->. If a type you want to use isn’t in the
 prelude, you have to bring that type into scope explicitly with a <code>use</code>
 statement. Using the <code>std::io</code> library provides you with a number of useful
 <code>io</code>-related features, including the functionality to accept user input.</p>
@@ -569,7 +569,7 @@ line. Rust ignores everything in comments.</p>
 <p>Now you know that <code>let mut guess</code> will introduce a mutable variable named
 <code>guess</code>. On the other side of the equal sign (<code>=</code>) is the value that <code>guess</code> is
 bound to, which is the result of calling <code>String::new</code>, a function that returns
-a new instance of a <code>String</code>. <a href="../std/string/struct.String.html"><code>String</code></a><!-- ignore --> is a string
+a new instance of a <code>String</code>. <a href="../../std/string/struct.String.html"><code>String</code></a><!-- ignore --> is a string
 type provided by the standard library that is a growable, UTF-8 encoded bit of
 text.</p>
 <p>The <code>::</code> syntax in the <code>::new</code> line indicates that <code>new</code> is an <em>associated
@@ -589,10 +589,10 @@ associated function, <code>stdin</code>, on <code>io</code>:</p>
 </code></pre>
 <p>If we didn’t have the <code>use std::io</code> line at the beginning of the program, we
 could have written this function call as <code>std::io::stdin</code>. The <code>stdin</code> function
-returns an instance of <a href="../std/io/struct.Stdin.html"><code>std::io::Stdin</code></a><!-- ignore -->, which is a
+returns an instance of <a href="../../std/io/struct.Stdin.html"><code>std::io::Stdin</code></a><!-- ignore -->, which is a
 type that represents a handle to the standard input for your terminal.</p>
 <p>The next part of the code, <code>.read_line(&amp;mut guess)</code>, calls the
-<a href="../std/io/struct.Stdin.html#method.read_line"><code>read_line</code></a><!-- ignore --> method on the standard input handle to
+<a href="../../std/io/struct.Stdin.html#method.read_line"><code>read_line</code></a><!-- ignore --> method on the standard input handle to
 get input from the user. We’re also passing one argument to <code>read_line</code>: <code>&amp;mut guess</code>.</p>
 <p>The job of <code>read_line</code> is to take whatever the user types into standard input
 and place that into a string, so it takes that string as an argument. The
@@ -621,8 +621,8 @@ lines for two method calls. Now let’s discuss what this line does.</p>
 <a class="header" href="print.html#handling-potential-failure-with-the-result-type" name="handling-potential-failure-with-the-result-type"><h3>Handling Potential Failure with the <code>Result</code> Type</h3></a>
 <p>As mentioned earlier, <code>read_line</code> puts what the user types into the string we’re
 passing it, but it also returns a value—in this case, an
-<a href="../std/io/type.Result.html"><code>io::Result</code></a><!-- ignore -->. Rust has a number of types named
-<code>Result</code> in its standard library: a generic <a href="../std/result/enum.Result.html"><code>Result</code></a><!-- ignore --> as
+<a href="../../std/io/type.Result.html"><code>io::Result</code></a><!-- ignore -->. Rust has a number of types named
+<code>Result</code> in its standard library: a generic <a href="../../std/result/enum.Result.html"><code>Result</code></a><!-- ignore --> as
 well as specific versions for submodules, such as <code>io::Result</code>.</p>
 <p>The <code>Result</code> types are <a href="ch06-00-enums.html"><em>enumerations</em></a><!-- ignore -->, often referred
 to as <em>enums</em>. An enumeration is a type that can have a fixed set of values,
@@ -634,7 +634,7 @@ successful, and inside the <code>Ok</code> variant is the successfully generated
 why the operation failed.</p>
 <p>The purpose of these <code>Result</code> types is to encode error handling information.
 Values of the <code>Result</code> type, like any type, have methods defined on them. An
-instance of <code>io::Result</code> has an <a href="../std/result/enum.Result.html#method.expect"><code>expect</code> method</a><!-- ignore --> that
+instance of <code>io::Result</code> has an <a href="../../std/result/enum.Result.html#method.expect"><code>expect</code> method</a><!-- ignore --> that
 you can call. If this instance of <code>io::Result</code> is an <code>Err</code> value, <code>expect</code> will
 cause the program to crash and display the message that you passed as an
 argument to <code>expect</code>. If the <code>read_line</code> method returns an <code>Err</code>, it would
@@ -1027,7 +1027,7 @@ Return, a newline character is added to the string. For example, if the user
 types 5 and presses return, <code>guess</code> looks like this: <code>5\n</code>. The <code>\n</code> represents
 “newline,” the return key. The <code>trim</code> method eliminates <code>\n</code>, resulting in just
 <code>5</code>.</p>
-<p>The <a href="../std/primitive.str.html#method.parse"><code>parse</code> method on strings</a><!-- ignore --> parses a string into some
+<p>The <a href="../../std/primitive.str.html#method.parse"><code>parse</code> method on strings</a><!-- ignore --> parses a string into some
 kind of number. Because this method can parse a variety of number types, we
 need to tell Rust the exact number type we want by using <code>let guess: u32</code>. The
 colon (<code>:</code>) after <code>guess</code> tells Rust we’ll annotate the variable’s type. Rust
@@ -4162,7 +4162,7 @@ let loopback = IpAddr::V6(String::from(&quot;::1&quot;));
 <p>We’ve shown several different possibilities that we could define in our code
 for storing IP addresses of the two different varieties using an enum. However,
 as it turns out, wanting to store IP addresses and encode which kind they are
-is so common that <a href="../std/net/enum.IpAddr.html">the standard library has a definition we can
+is so common that <a href="../../std/net/enum.IpAddr.html">the standard library has a definition we can
 use!</a><!-- ignore --> Let’s look at how the standard library defines
 <code>IpAddr</code>: it has the exact enum and variants that we’ve defined and used, but
 it embeds the address data inside the variants in the form of two different
@@ -4299,7 +4299,7 @@ null is a value that is currently invalid or absent for some reason.</p>
 <p>The problem isn’t with the actual concept but with the particular
 implementation. As such, Rust does not have nulls, but it does have an enum
 that can encode the concept of a value being present or absent. This enum is
-<code>Option&lt;T&gt;</code>, and it is <a href="../std/option/enum.Option.html">defined by the standard library</a><!-- ignore -->
+<code>Option&lt;T&gt;</code>, and it is <a href="../../std/option/enum.Option.html">defined by the standard library</a><!-- ignore -->
 as follows:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
 # 
@@ -4377,7 +4377,7 @@ increase the safety of Rust code.</p>
 <p>So, how do you get the <code>T</code> value out of a <code>Some</code> variant when you have a value
 of type <code>Option&lt;T&gt;</code> so you can use that value? The <code>Option&lt;T&gt;</code> enum has a large
 number of methods that are useful in a variety of situations; you can check
-them out in <a href="../std/option/enum.Option.html">its documentation</a><!-- ignore -->. Becoming familiar with
+them out in <a href="../../std/option/enum.Option.html">its documentation</a><!-- ignore -->. Becoming familiar with
 the methods on <code>Option&lt;T&gt;</code> will be extremely useful in your journey with Rust.</p>
 <p>In general, in order to use an <code>Option&lt;T&gt;</code> value, we want to have code that
 will handle each variant. We want some code that will run only when we have a
@@ -5650,7 +5650,7 @@ before, but we’ll talk about it in depth now.</li>
 particular implementation of the more general data structure called a <em>map</em>.</li>
 </ul>
 <p>To learn about the other kinds of collections provided by the standard library,
-see <a href="../std/collections">the documentation</a>.</p>
+see <a href="../../std/collections/index.html">the documentation</a>.</p>
 <p>We’re going to discuss how to create and update vectors, strings, and hash
 maps, as well as what makes each special.</p>
 <a class="header" href="print.html#vectors" name="vectors"><h2>Vectors</h2></a>
@@ -6627,7 +6627,7 @@ Sometimes, when a function fails, it’s for a reason that we can easily
 interpret and respond to. For example, if we try to open a file and that
 operation fails because the file doesn’t exist, we might want to create the
 file instead of terminating the process.</p>
-<p>Recall from Chapter 2 the section on “<a href="ch02-00-guessing-game-tutorial.md#handling-potential-failure-with-the-result-type">Handling Potential Failure with the
+<p>Recall from Chapter 2 the section on “<a href="ch02-00-guessing-game-tutorial.html#handling-potential-failure-with-the-result-type">Handling Potential Failure with the
 <code>Result</code> Type</a><!-- ignore -->” that the <code>Result</code> enum is defined
 as having two variants, <code>Ok</code> and <code>Err</code>, as follows:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
