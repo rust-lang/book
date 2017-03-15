@@ -41,7 +41,7 @@ There are a number of operators that can be overloaded this way, and all of
 their associated traits live in the [`std::ops`][stdops] module. Check out its
 documentation for the full list.
 
-[stdops]: ../std/ops/index.html
+[stdops]: ../../std/ops/index.html
 
 Implementing these traits follows a pattern. Let’s look at [`Add`][add] in more
 detail:
@@ -56,7 +56,7 @@ pub trait Add<RHS = Self> {
 # }
 ```
 
-[add]: ../std/ops/trait.Add.html
+[add]: ../../std/ops/trait.Add.html
 
 There’s three types in total involved here: the type you `impl Add` for, `RHS`,
 which defaults to `Self`, and `Output`. For an expression `let z = x + y`, `x`

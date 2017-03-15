@@ -1113,7 +1113,7 @@ The first two are a result of `Error` requiring impls for both `Debug` and
 `Display`. The latter two are from the two methods defined on `Error`. The
 power of `Error` comes from the fact that all error types impl `Error`, which
 means errors can be existentially quantified as a
-[trait object](../book/trait-objects.html).
+[trait object](../book/first-edition/trait-objects.html).
 This manifests as either `Box<Error>` or `&Error`. Indeed, the `cause` method
 returns an `&Error`, which is itself a trait object. We'll revisit the
 `Error` trait's utility as a trait object later.
@@ -1189,7 +1189,7 @@ different error types and satisfy the contracts defined for `description` and
 
 The `std::convert::From` trait is
 [defined in the standard
-library](../std/convert/trait.From.html):
+library](../../std/convert/trait.From.html):
 
 <span id="code-from-def"></span>
 
@@ -1204,7 +1204,7 @@ way to talk about conversion *from* a particular type `T` to some other type
 (in this case, “some other type” is the subject of the impl, or `Self`).
 The crux of `From` is the
 [set of implementations provided by the standard
-library](../std/convert/trait.From.html).
+library](../../std/convert/trait.From.html).
 
 Here are a few simple examples demonstrating how `From` works:
 
@@ -1271,7 +1271,7 @@ macro_rules! try {
 ```
 
 This is not its real definition. Its real definition is
-[in the standard library](../std/macro.try.html):
+[in the standard library](../../std/macro.try.html):
 
 <span id="code-try-def"></span>
 
@@ -1340,8 +1340,8 @@ There's one little nit left: the `Box<Error>` type is *opaque*. If we
 return a `Box<Error>` to the caller, the caller can't (easily) inspect
 underlying error type. The situation is certainly better than `String`
 because the caller can call methods like
-[`description`](../std/error/trait.Error.html#tymethod.description)
-and [`cause`](../std/error/trait.Error.html#method.cause), but the
+[`description`](../../std/error/trait.Error.html#tymethod.description)
+and [`cause`](../../std/error/trait.Error.html#method.cause), but the
 limitation remains: `Box<Error>` is opaque. (N.B. This isn't entirely
 true because Rust does have runtime reflection, which is useful in
 some scenarios that are [beyond the scope of this
@@ -1484,14 +1484,14 @@ And that's it!
 If your library needs to report custom errors, then you should
 probably define your own error type. It's up to you whether or not to
 expose its representation (like
-[`ErrorKind`](../std/io/enum.ErrorKind.html)) or keep it hidden (like
-[`ParseIntError`](../std/num/struct.ParseIntError.html)). Regardless
+[`ErrorKind`](../../std/io/enum.ErrorKind.html)) or keep it hidden (like
+[`ParseIntError`](../../std/num/struct.ParseIntError.html)). Regardless
 of how you do it, it's usually good practice to at least provide some
 information about the error beyond its `String`
 representation. But certainly, this will vary depending on use cases.
 
 At a minimum, you should probably implement the
-[`Error`](../std/error/trait.Error.html)
+[`Error`](../../std/error/trait.Error.html)
 trait. This will give users of your library some minimum flexibility for
 [composing errors](#the-real-try-macro). Implementing the `Error` trait also
 means that users are guaranteed the ability to obtain a string representation
@@ -1507,8 +1507,8 @@ provides `From` impls for both `io::Error` and `byteorder::Error`.
 Finally, depending on your tastes, you may also want to define a
 [`Result` type alias](#the-result-type-alias-idiom), particularly if your
 library defines a single error type. This is used in the standard library
-for [`io::Result`](../std/io/type.Result.html)
-and [`fmt::Result`](../std/fmt/type.Result.html).
+for [`io::Result`](../../std/io/type.Result.html)
+and [`fmt::Result`](../../std/fmt/type.Result.html).
 
 # Case study: A program to read population data
 
@@ -1702,9 +1702,9 @@ fn main() {
 Let's outline the errors. We can start with the obvious: the three places that
 `unwrap` is called:
 
-1. [`File::open`](../std/fs/struct.File.html#method.open)
+1. [`File::open`](../../std/fs/struct.File.html#method.open)
    can return an
-   [`io::Error`](../std/io/struct.Error.html).
+   [`io::Error`](../../std/io/struct.Error.html).
 2. [`csv::Reader::decode`](http://burntsushi.net/rustdoc/csv/struct.Reader.html#method.decode)
    decodes one record at a time, and
    [decoding a
@@ -1859,7 +1859,7 @@ Instead of `x.unwrap()`, we now have `try!(x)`. Since our function returns a
 error occurs.
 
 At the end of `search` we also convert a plain string to an error type 
-by using the [corresponding `From` impls](../std/convert/trait.From.html):
+by using the [corresponding `From` impls](../../std/convert/trait.From.html):
 
 ```rust,ignore
 // We are making use of this impl in the code above, since we call `From::from`
@@ -2162,10 +2162,10 @@ heuristics!
 
 * If you're writing short example code that would be overburdened by error
   handling, it's probably fine to use `unwrap` (whether that's
-  [`Result::unwrap`](../std/result/enum.Result.html#method.unwrap),
-  [`Option::unwrap`](../std/option/enum.Option.html#method.unwrap)
+  [`Result::unwrap`](../../std/result/enum.Result.html#method.unwrap),
+  [`Option::unwrap`](../../std/option/enum.Option.html#method.unwrap)
   or preferably
-  [`Option::expect`](../std/option/enum.Option.html#method.expect)).
+  [`Option::expect`](../../std/option/enum.Option.html#method.expect)).
   Consumers of your code should know to use proper error handling. (If they
   don't, send them here!)
 * If you're writing a quick 'n' dirty program, don't feel ashamed if you use
@@ -2175,37 +2175,37 @@ heuristics!
   anyway, then use either a `String` or a `Box<Error>` for your
   error type.
 * Otherwise, in a program, define your own error types with appropriate
-  [`From`](../std/convert/trait.From.html)
+  [`From`](../../std/convert/trait.From.html)
   and
-  [`Error`](../std/error/trait.Error.html)
-  impls to make the [`try!`](../std/macro.try.html)
+  [`Error`](../../std/error/trait.Error.html)
+  impls to make the [`try!`](../../std/macro.try.html)
   macro more ergonomic.
 * If you're writing a library and your code can produce errors, define your own
   error type and implement the
-  [`std::error::Error`](../std/error/trait.Error.html)
+  [`std::error::Error`](../../std/error/trait.Error.html)
   trait. Where appropriate, implement
-  [`From`](../std/convert/trait.From.html) to make both
+  [`From`](../../std/convert/trait.From.html) to make both
   your library code and the caller's code easier to write. (Because of Rust's
   coherence rules, callers will not be able to impl `From` on your error type,
   so your library should do it.)
 * Learn the combinators defined on
-  [`Option`](../std/option/enum.Option.html)
+  [`Option`](../../std/option/enum.Option.html)
   and
-  [`Result`](../std/result/enum.Result.html).
+  [`Result`](../../std/result/enum.Result.html).
   Using them exclusively can be a bit tiring at times, but I've personally
   found a healthy mix of `try!` and combinators to be quite appealing.
   `and_then`, `map` and `unwrap_or` are my favorites.
 
-[1]: ../book/patterns.html
-[2]: ../std/option/enum.Option.html#method.map
-[3]: ../std/option/enum.Option.html#method.unwrap_or
-[4]: ../std/option/enum.Option.html#method.unwrap_or_else
-[5]: ../std/option/enum.Option.html
-[6]: ../std/result/index.html
-[7]: ../std/result/enum.Result.html#method.unwrap
-[8]: ../std/fmt/trait.Debug.html
-[9]: ../std/primitive.str.html#method.parse
-[10]: ../book/associated-types.html
+[1]: ../book/first-edition/patterns.html
+[2]: ../../std/option/enum.Option.html#method.map
+[3]: ../../std/option/enum.Option.html#method.unwrap_or
+[4]: ../../std/option/enum.Option.html#method.unwrap_or_else
+[5]: ../../std/option/enum.Option.html
+[6]: ../../std/result/index.html
+[7]: ../../std/result/enum.Result.html#method.unwrap
+[8]: ../../std/fmt/trait.Debug.html
+[9]: ../../std/primitive.str.html#method.parse
+[10]: ../book/first-edition/associated-types.html
 [11]: https://github.com/petewarden/dstkdata
 [12]: http://burntsushi.net/stuff/worldcitiespop.csv.gz
 [13]: http://burntsushi.net/stuff/uscitiespop.csv.gz

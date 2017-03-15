@@ -106,8 +106,8 @@ prelude, you’ll have to `use` it directly. There is also a second ‘prelude�
 [`io` prelude][ioprelude], which serves a similar function: you import it, and it
 imports a number of useful, `io`-related things.
 
-[prelude]: ../std/prelude/index.html
-[ioprelude]: ../std/io/prelude/index.html
+[prelude]: ../../std/prelude/index.html
+[ioprelude]: ../../std/io/prelude/index.html
 
 ```rust,ignore
 fn main() {
@@ -177,7 +177,7 @@ bound to: `String::new()`.
 `String` is a string type, provided by the standard library. A
 [`String`][string] is a growable, UTF-8 encoded bit of text.
 
-[string]: ../std/string/struct.String.html
+[string]: ../../std/string/struct.String.html
 
 The `::new()` syntax uses `::` because this is an ‘associated function’ of
 a particular type. That is to say, it’s associated with `String` itself,
@@ -209,7 +209,7 @@ have written this line as `std::io::stdin()`.
 This particular function returns a handle to the standard input for your
 terminal. More specifically, a [std::io::Stdin][iostdin].
 
-[iostdin]: ../std/io/struct.Stdin.html
+[iostdin]: ../../std/io/struct.Stdin.html
 
 The next part will use this handle to get input from the user:
 
@@ -222,7 +222,7 @@ Here, we call the [`read_line()`][read_line] method on our handle.
 particular instance of a type, rather than the type itself. We’re also passing
 one argument to `read_line()`: `&mut guess`.
 
-[read_line]: ../std/io/struct.Stdin.html#method.read_line
+[read_line]: ../../std/io/struct.Stdin.html#method.read_line
 [method]: method-syntax.html
 
 Remember how we bound `guess` above? We said it was mutable. However,
@@ -266,8 +266,8 @@ String` we pass it. But it also returns a value: in this case, an
 standard library: a generic [`Result`][result], and then specific versions for
 sub-libraries, like `io::Result`.
 
-[ioresult]: ../std/io/type.Result.html
-[result]: ../std/result/enum.Result.html
+[ioresult]: ../../std/io/type.Result.html
+[result]: ../../std/result/enum.Result.html
 
 The purpose of these `Result` types is to encode error handling information.
 Values of the `Result` type, like any type, have methods defined on them. In
@@ -276,7 +276,7 @@ it’s called on, and if it isn’t a successful one, [`panic!`][panic]s with a
 message you passed it. A `panic!` like this will cause our program to crash,
 displaying the message.
 
-[expect]: ../std/result/enum.Result.html#method.expect
+[expect]: ../../std/result/enum.Result.html#method.expect
 [panic]: error-handling.html
 
 If we do not call `expect()`, our program will compile, but
@@ -620,7 +620,7 @@ match guess.cmp(&secret_number) {
 }
 ```
 
-[ordering]: ../std/cmp/enum.Ordering.html
+[ordering]: ../../std/cmp/enum.Ordering.html
 
 If it’s `Less`, we print `Too small!`, if it’s `Greater`, `Too big!`, and if
 `Equal`, `You win!`. `match` is really useful, and is used often in Rust.
@@ -726,7 +726,7 @@ exact type of number we want. Hence, `let guess: u32`. The colon (`:`) after
 thirty-two bit integer. Rust has [a number of built-in number types][number],
 but we’ve chosen `u32`. It’s a good default choice for a small positive number.
 
-[parse]: ../std/primitive.str.html#method.parse
+[parse]: ../../std/primitive.str.html#method.parse
 [number]: primitive-types.html#numeric-types
 
 Just like `read_line()`, our call to `parse()` could cause an error. What if

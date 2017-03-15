@@ -186,5 +186,5 @@ functions or methods. See [Iterators § Consumers](iterators.html#consumers)
 for an example.
 
 [traits]: traits.html
-[Vec]: ../std/vec/struct.Vec.html
-[turbofish]: https://doc.rust-lang.org/std/iter/trait.Iterator.html#method.collect
+[Vec]: ../../std/vec/struct.Vec.html
+[turbofish]: ../../std/iter/trait.Iterator.html#method.collect

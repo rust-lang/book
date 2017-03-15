@@ -192,4 +192,4 @@ feature called ‘[`Deref` coercions][dc]’.
 
 [ut]: unsized-types.html
 [dc]: deref-coercions.html
-[connect]: ../std/net/struct.TcpStream.html#method.connect
+[connect]: ../../std/net/struct.TcpStream.html#method.connect

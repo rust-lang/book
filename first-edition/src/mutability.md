@@ -72,7 +72,7 @@ let x = Arc::new(5);
 let y = x.clone();
 ```
 
-[arc]: ../std/sync/struct.Arc.html
+[arc]: ../../std/sync/struct.Arc.html
 
 When we call `clone()`, the `Arc<T>` needs to update the reference count. Yet
 we’ve not used any `mut`s here, `x` is an immutable binding, and we didn’t take
@@ -107,7 +107,7 @@ let x = RefCell::new(42);
 let y = x.borrow_mut();
 ```
 
-[stdcell]: ../std/cell/index.html
+[stdcell]: ../../std/cell/index.html
 
 RefCell hands out `&mut` references to what’s inside of it with the
 `borrow_mut()` method. Isn’t that dangerous? What if we do:
@@ -176,6 +176,6 @@ point.y.set(7);
 println!("y: {:?}", point.y);
 ```
 
-[cell]: ../std/cell/struct.Cell.html
+[cell]: ../../std/cell/struct.Cell.html
 
 This will print `y: Cell { value: 7 }`. We’ve successfully updated `y`.

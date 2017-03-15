@@ -38,7 +38,7 @@ This is a zero-cost abstraction for dynamic allocation. If you want to allocate 
 heap and safely pass around a pointer to that memory, this is ideal. Note that you will only be
 allowed to share references to this by the regular borrowing rules, checked at compile time.
 
-[box]: ../std/boxed/struct.Box.html
+[box]: ../../std/boxed/struct.Box.html
 
 ## `&T` and `&mut T`
 
@@ -104,7 +104,7 @@ two `usize` values) as compared to a regular `Box<T>` (for "strong" and "weak" r
 or goes out of scope respectively. Note that a clone will not do a deep copy, rather it will simply
 increment the inner reference count and return a copy of the `Rc<T>`.
 
-[rc]: ../std/rc/struct.Rc.html
+[rc]: ../../std/rc/struct.Rc.html
 
 # Cell types
 
@@ -234,9 +234,9 @@ indicator (one word in size) along with the data.
 
 At runtime each borrow causes a modification/check of the refcount.
 
-[cell-mod]: ../std/cell/index.html
-[cell]: ../std/cell/struct.Cell.html
-[refcell]: ../std/cell/struct.RefCell.html
+[cell-mod]: ../../std/cell/index.html
+[cell]: ../../std/cell/struct.Cell.html
+[refcell]: ../../std/cell/struct.RefCell.html
 
 # Synchronous types
 
@@ -252,7 +252,7 @@ time.
 There are many useful wrappers for concurrent programming in the [sync][sync] module, but only the
 major ones will be covered below.
 
-[sync]: ../std/sync/index.html
+[sync]: ../../std/sync/index.html
 
 ## `Arc<T>`
 
@@ -280,7 +280,7 @@ This has the added cost of using atomics for changing the refcount (which will h
 cloned or goes out of scope). When sharing data from an `Arc` in a single thread, it is preferable
 to share `&` pointers whenever possible.
 
-[arc]: ../std/sync/struct.Arc.html
+[arc]: ../../std/sync/struct.Arc.html
 
 ## `Mutex<T>` and `RwLock<T>`
 
@@ -316,8 +316,8 @@ These use internal atomic-like types to maintain the locks, which are pretty cos
 all memory reads across processors till they're done). Waiting on these locks can also be slow when
 there's a lot of concurrent access happening.
 
-[rwlock]: ../std/sync/struct.RwLock.html
-[mutex]: ../std/sync/struct.Mutex.html
+[rwlock]: ../../std/sync/struct.RwLock.html
+[mutex]: ../../std/sync/struct.Mutex.html
 [sessions]: https://github.com/Munksgaard/rust-sessions
 
 # Composition

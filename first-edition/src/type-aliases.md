@@ -75,4 +75,4 @@ This creates a specialized version of the `Result` type, which always has a
 in the standard library to create custom errors for each subsection. For
 example, [io::Result][ioresult].
 
-[ioresult]: ../std/io/type.Result.html
+[ioresult]: ../../std/io/type.Result.html

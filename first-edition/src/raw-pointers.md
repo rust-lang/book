@@ -72,7 +72,7 @@ println!("raw points at {}", points_at);
 For more operations on raw pointers, see [their API documentation][rawapi].
 
 [unsafe]: unsafe.html
-[rawapi]: ../std/primitive.pointer.html
+[rawapi]: ../../std/primitive.pointer.html
 
 # FFI
 

@@ -246,7 +246,7 @@ Foreign libraries often hand off ownership of resources to the calling code.
 When this occurs, we must use Rust's destructors to provide safety and guarantee
 the release of these resources (especially in the case of panic).
 
-For more about destructors, see the [Drop trait](../std/ops/trait.Drop.html).
+For more about destructors, see the [Drop trait](../../std/ops/trait.Drop.html).
 
 # Callbacks from C code to Rust functions
 
@@ -710,7 +710,7 @@ Please note that [`catch_unwind()`] will only catch unwinding panics, not
 those who abort the process. See the documentation of [`catch_unwind()`]
 for more information.
 
-[`catch_unwind()`]: ../std/panic/fn.catch_unwind.html
+[`catch_unwind()`]: ../../std/panic/fn.catch_unwind.html
 
 # Representing opaque structs
 

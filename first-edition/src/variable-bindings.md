@@ -176,7 +176,7 @@ more detailed manner, there are a [wide number of options available][format].
 For now, we'll stick to the default: integers aren't very complicated to
 print.
 
-[format]: ../std/fmt/index.html
+[format]: ../../std/fmt/index.html
 
 # Scope and shadowing
 

@@ -22,7 +22,7 @@ A common use of booleans is in [`if` conditionals][if].
 You can find more documentation for `bool`s [in the standard library
 documentation][bool].
 
-[bool]: ../std/primitive.bool.html
+[bool]: ../../std/primitive.bool.html
 
 # `char`
 
@@ -40,7 +40,7 @@ but four.
 You can find more documentation for `char`s [in the standard library
 documentation][char].
 
-[char]: ../std/primitive.char.html
+[char]: ../../std/primitive.char.html
 
 # Numeric types
 
@@ -62,18 +62,18 @@ let y = 1.0; // `y` has type `f64`.
 Here’s a list of the different numeric types, with links to their documentation
 in the standard library:
 
-* [i8](../std/primitive.i8.html)
-* [i16](../std/primitive.i16.html)
-* [i32](../std/primitive.i32.html)
-* [i64](../std/primitive.i64.html)
-* [u8](../std/primitive.u8.html)
-* [u16](../std/primitive.u16.html)
-* [u32](../std/primitive.u32.html)
-* [u64](../std/primitive.u64.html)
-* [isize](../std/primitive.isize.html)
-* [usize](../std/primitive.usize.html)
-* [f32](../std/primitive.f32.html)
-* [f64](../std/primitive.f64.html)
+* [i8](../../std/primitive.i8.html)
+* [i16](../../std/primitive.i16.html)
+* [i32](../../std/primitive.i32.html)
+* [i64](../../std/primitive.i64.html)
+* [u8](../../std/primitive.u8.html)
+* [u16](../../std/primitive.u16.html)
+* [u32](../../std/primitive.u32.html)
+* [u64](../../std/primitive.u64.html)
+* [isize](../../std/primitive.isize.html)
+* [usize](../../std/primitive.usize.html)
+* [f32](../../std/primitive.f32.html)
+* [f64](../../std/primitive.f64.html)
 
 Let’s go over them by category:
 
@@ -155,7 +155,7 @@ languages.
 You can find more documentation for `array`s [in the standard library
 documentation][array].
 
-[array]: ../std/primitive.array.html
+[array]: ../../std/primitive.array.html
 
 # Slices
 
@@ -189,7 +189,7 @@ Slices have type `&[T]`. We’ll talk about that `T` when we cover
 You can find more documentation for slices [in the standard library
 documentation][slice].
 
-[slice]: ../std/primitive.slice.html
+[slice]: ../../std/primitive.slice.html
 
 # `str`
 
@@ -205,7 +205,7 @@ reference, like `&str`. We'll elaborate further when we cover
 You can find more documentation for `str` [in the standard library
 documentation][str].
 
-[str]: ../std/primitive.str.html
+[str]: ../../std/primitive.str.html
 
 # Tuples
 
@@ -289,7 +289,7 @@ Like array indexing, it starts at zero, but unlike array indexing, it uses a
 You can find more documentation for tuples [in the standard library
 documentation][tuple].
 
-[tuple]: ../std/primitive.tuple.html
+[tuple]: ../../std/primitive.tuple.html
 
 # Functions
 

@@ -148,9 +148,9 @@ for i in &v {
 Vectors have many more useful methods, which you can read about in [their
 API documentation][vec].
 
-[vec]: ../std/vec/index.html
-[box]: ../std/boxed/index.html
+[vec]: ../../std/vec/index.html
+[box]: ../../std/boxed/index.html
 [generic]: generics.html
 [panic]: concurrency.html#panics
-[get]: ../std/vec/struct.Vec.html#method.get
-[get_mut]: ../std/vec/struct.Vec.html#method.get_mut
+[get]: ../../std/vec/struct.Vec.html#method.get
+[get_mut]: ../../std/vec/struct.Vec.html#method.get_mut

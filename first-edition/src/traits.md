@@ -230,7 +230,7 @@ impl<T: PartialEq> Rectangle<T> { ... }
 Now, a rectangle can be defined in terms of any type that can be compared for
 equality.
 
-[PartialEq]: ../core/cmp/trait.PartialEq.html
+[PartialEq]: ../../core/cmp/trait.PartialEq.html
 
 Here we defined a new struct `Rectangle` that accepts numbers of any
 precision—really, objects of pretty much any type—as long as they can be
@@ -266,7 +266,7 @@ example: the standard library provides a [`Write`][write] trait which adds
 extra functionality to `File`s, for doing file I/O. By default, a `File`
 won’t have its methods:
 
-[write]: ../std/io/trait.Write.html
+[write]: ../../std/io/trait.Write.html
 
 ```rust,ignore
 let mut f = std::fs::File::create("foo.txt").expect("Couldn’t create foo.txt");
@@ -540,12 +540,12 @@ fn main() {
 
 However, deriving is limited to a certain set of traits:
 
-- [`Clone`](../core/clone/trait.Clone.html)
-- [`Copy`](../core/marker/trait.Copy.html)
-- [`Debug`](../core/fmt/trait.Debug.html)
-- [`Default`](../core/default/trait.Default.html)
-- [`Eq`](../core/cmp/trait.Eq.html)
-- [`Hash`](../core/hash/trait.Hash.html)
-- [`Ord`](../core/cmp/trait.Ord.html)
-- [`PartialEq`](../core/cmp/trait.PartialEq.html)
-- [`PartialOrd`](../core/cmp/trait.PartialOrd.html)
+- [`Clone`](../../core/clone/trait.Clone.html)
+- [`Copy`](../../core/marker/trait.Copy.html)
+- [`Debug`](../../core/fmt/trait.Debug.html)
+- [`Default`](../../core/default/trait.Default.html)
+- [`Eq`](../../core/cmp/trait.Eq.html)
+- [`Hash`](../../core/hash/trait.Hash.html)
+- [`Ord`](../../core/cmp/trait.Ord.html)
+- [`PartialEq`](../../core/cmp/trait.PartialEq.html)
+- [`PartialOrd`](../../core/cmp/trait.PartialOrd.html)

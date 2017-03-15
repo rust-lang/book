@@ -195,7 +195,7 @@ pub struct TraitObject {
 # }
 ```
 
-[stdraw]: ../std/raw/struct.TraitObject.html
+[stdraw]: ../../std/raw/struct.TraitObject.html
 
 That is, a trait object like `&Foo` consists of a ‘data’ pointer and a ‘vtable’
 pointer.

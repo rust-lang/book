@@ -3,8 +3,8 @@
 The [`Borrow`][borrow] and [`AsRef`][asref] traits are very similar, but
 different. Here’s a quick refresher on what these two traits mean.
 
-[borrow]: ../std/borrow/trait.Borrow.html
-[asref]: ../std/convert/trait.AsRef.html
+[borrow]: ../../std/borrow/trait.Borrow.html
+[asref]: ../../std/convert/trait.AsRef.html
 
 # Borrow
 
@@ -19,8 +19,8 @@ fn get<Q: ?Sized>(&self, k: &Q) -> Option<&V>
           Q: Hash + Eq
 ```
 
-[hashmap]: ../std/collections/struct.HashMap.html
-[get]: ../std/collections/struct.HashMap.html#method.get
+[hashmap]: ../../std/collections/struct.HashMap.html
+[get]: ../../std/collections/struct.HashMap.html#method.get
 
 This signature is pretty complicated. The `K` parameter is what we’re interested
 in here. It refers to a parameter of the `HashMap` itself:

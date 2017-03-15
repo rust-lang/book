@@ -88,7 +88,7 @@ the iterator, and we loop another time. When there are no more values, the `for`
 loop is over.
 
 [iterator]: iterators.html
-[`IntoIterator`]: ../std/iter/trait.IntoIterator.html
+[`IntoIterator`]: ../../std/iter/trait.IntoIterator.html
 
 In our example, `0..10` is an expression that takes a start and an end position,
 and gives an iterator over those values. The upper bound is exclusive, though,

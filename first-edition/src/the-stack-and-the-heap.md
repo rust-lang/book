@@ -215,7 +215,7 @@ fn main() {
 }
 ```
 
-[box]: ../std/boxed/index.html
+[box]: ../../std/boxed/index.html
 
 Here’s what happens in memory when `main()` is called:
 
