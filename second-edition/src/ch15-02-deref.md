@@ -103,11 +103,11 @@ the scenes when we call `*my_favorite_song` is:
 
 This calls the `deref` method on `my_favorite_song`, which borrows
 `my_favorite_song` and returns a reference to `my_favorite_song.audio`, since
-that's what we defined `deref` to do in Listing 15-5. `*` on references is
+that's what we defined `deref` to do in Listing 15-7. `*` on references is
 defined to just follow the reference and return the data, so the expansion of
 `*` doesn't recurse for the outer `*`. So we end up with data of type
 `Vec<u8>`, which matches the `vec![1, 2, 3]` in the `assert_eq!` in Listing
-15-5.
+15-7.
 
 The reason that the return type of the `deref` method is still a reference and
 why it's necessary to dereference the result of the method is that if the
@@ -119,13 +119,12 @@ Rust tends to favor explicitness over implicitness, but one case where this
 does not hold true is *deref coercions* of arguments to functions and methods.
 A deref coercion will automatically convert a reference to a pointer or a smart
 pointer into a reference to that pointer's contents. A deref coercion happens
-when a value is passed to a function or method, and only happens if it's needed
-to get the type of the value passed in to match the type of the parameter
-defined in the signature. Deref coercion was added to Rust to make calling
-functions and methods not need as many explicit references and dereferences
-with `&` and `*`.
+when the type of the argument passed into the function differs from the type
+of the parameter defined in that function's signature. Deref coercion was added
+to Rust to make calling functions and methods not need as many explicit references
+and dereferences with `&` and `*`.
 
-Using our `Mp3` struct from Listing 15-5, here's the signature of a function to
+Using our `Mp3` struct from Listing 15-7, here's the signature of a function to
 compress mp3 audio data that takes a slice of `u8`:
 
 ```rust,ignore
@@ -143,7 +142,7 @@ compress_mp3(my_favorite_song.audio.as_slice())
 
 That is, we'd have to explicitly say that we want the data in the `audio` field
 of `my_favorite_song` and that we want a slice referring to the whole
-`Vec<u8>`. If there were a lot of places where we'd want process the `audio`
+`Vec<u8>`. If there were a lot of places where we'd want to process the `audio`
 data in a similar manner, `.audio.as_slice()` would be wordy and repetitive.
 
 However, because of deref coercion and our implementation of the `Deref` trait
@@ -165,11 +164,11 @@ documentation for `Vec<T>`). So, at compile time, Rust will see that it can use
 match the signature of `compress_mp3`. That means we get to do less typing!
 Rust will analyze types through `Deref::deref` as many times as it needs to in
 order to get a reference to match the parameter's type, when the `Deref` trait
-is defined for the types involved. The indirection is resolved at compile time,
-so there is no run-time penalty for taking advantage of deref coercion.
+is defined for the types involved. This indirection is resolved at compile time,
+so there is no run-time penalty for taking advantage of deref coercion!
 
-There's also a `DerefMut` trait for overriding `*` on `&mut T` for use in
-assignment in the same fashion that we use `Deref` to override `*` on `&T`s.
+Similar to how we use the `Deref` trait to override `*` on `&T`s, there is also
+a `DerefMut` trait for overriding `*` on `&mut T`.
 
 Rust does deref coercion when it finds types and trait implementations in three
 cases:
