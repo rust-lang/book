@@ -368,6 +368,8 @@ Back to our example: `Arc<T>` and `Rc<T>` are identical except for the atomic
 internals of `Arc<T>`. Their API is the same, so we can change the `use` line
 and the call to `new`. The code in Listing 16-15 will finally compile and run:
 
+<span class="filename">Filename: src/main.rs</span>
+
 ```rust
 use std::sync::{Mutex, Arc};
 use std::thread;
@@ -393,6 +395,9 @@ fn main() {
     println!("Result: {}", *counter.lock().unwrap());
 }
 ```
+
+<span class="caption">Listing 16-15: Using an `Arc<T>` to wrap the `Mutex<T>`
+to be able to share ownership across multiple threads</span>
 
 This will print:
 
