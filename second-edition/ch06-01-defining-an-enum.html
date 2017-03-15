@@ -217,7 +217,7 @@ let loopback = IpAddr::V6(String::from(&quot;::1&quot;));
 <p>We’ve shown several different possibilities that we could define in our code
 for storing IP addresses of the two different varieties using an enum. However,
 as it turns out, wanting to store IP addresses and encode which kind they are
-is so common that <a href="../../std/net/enum.IpAddr.html">the standard library has a definition we can
+is so common that <a href="../std/net/enum.IpAddr.html">the standard library has a definition we can
 use!</a><!-- ignore --> Let’s look at how the standard library defines
 <code>IpAddr</code>: it has the exact enum and variants that we’ve defined and used, but
 it embeds the address data inside the variants in the form of two different
@@ -354,7 +354,7 @@ null is a value that is currently invalid or absent for some reason.</p>
 <p>The problem isn’t with the actual concept but with the particular
 implementation. As such, Rust does not have nulls, but it does have an enum
 that can encode the concept of a value being present or absent. This enum is
-<code>Option&lt;T&gt;</code>, and it is <a href="../../std/option/enum.Option.html">defined by the standard library</a><!-- ignore -->
+<code>Option&lt;T&gt;</code>, and it is <a href="../std/option/enum.Option.html">defined by the standard library</a><!-- ignore -->
 as follows:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
 # 
@@ -432,7 +432,7 @@ increase the safety of Rust code.</p>
 <p>So, how do you get the <code>T</code> value out of a <code>Some</code> variant when you have a value
 of type <code>Option&lt;T&gt;</code> so you can use that value? The <code>Option&lt;T&gt;</code> enum has a large
 number of methods that are useful in a variety of situations; you can check
-them out in <a href="../../std/option/enum.Option.html">its documentation</a><!-- ignore -->. Becoming familiar with
+them out in <a href="../std/option/enum.Option.html">its documentation</a><!-- ignore -->. Becoming familiar with
 the methods on <code>Option&lt;T&gt;</code> will be extremely useful in your journey with Rust.</p>
 <p>In general, in order to use an <code>Option&lt;T&gt;</code> value, we want to have code that
 will handle each variant. We want some code that will run only when we have a
