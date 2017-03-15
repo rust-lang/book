@@ -1,0 +1,488 @@
+<!DOCTYPE HTML>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Shared State - The Rust Programming Language</title>
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <base href="">
+
+        <link rel="stylesheet" href="book.css">
+        <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+        <link rel="shortcut icon" href="favicon.png">
+
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+
+        <!-- MathJax -->
+        <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+        <!-- Fetch JQuery from CDN but have a local fallback -->
+        <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+        <script>
+            if (typeof jQuery == 'undefined') {
+                document.write(unescape("%3Cscript src='jquery.js'%3E%3C/script%3E"));
+            }
+        </script>
+    </head>
+    <body class="light">
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme = localStorage.getItem('theme');
+            if (theme == null) { theme = 'light'; }
+            $('body').removeClass().addClass(theme);
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var sidebar = localStorage.getItem('sidebar');
+            if (sidebar === "hidden") { $("html").addClass("sidebar-hidden") }
+            else if (sidebar === "visible") { $("html").addClass("sidebar-visible") }
+        </script>
+
+        <div id="sidebar" class="sidebar">
+            <ul class="chapter"><li><a href="ch01-00-introduction.html"><strong>1.</strong> Introduction</a></li><li><ul class="section"><li><a href="ch01-01-installation.html"><strong>1.1.</strong> Installation</a></li><li><a href="ch01-02-hello-world.html"><strong>1.2.</strong> Hello, World!</a></li></ul></li><li><a href="ch02-00-guessing-game-tutorial.html"><strong>2.</strong> Guessing Game Tutorial</a></li><li><a href="ch03-00-common-programming-concepts.html"><strong>3.</strong> Common Programming Concepts</a></li><li><ul class="section"><li><a href="ch03-01-variables-and-mutability.html"><strong>3.1.</strong> Variables and Mutability</a></li><li><a href="ch03-02-data-types.html"><strong>3.2.</strong> Data Types</a></li><li><a href="ch03-03-how-functions-work.html"><strong>3.3.</strong> How Functions Work</a></li><li><a href="ch03-04-comments.html"><strong>3.4.</strong> Comments</a></li><li><a href="ch03-05-control-flow.html"><strong>3.5.</strong> Control Flow</a></li></ul></li><li><a href="ch04-00-understanding-ownership.html"><strong>4.</strong> Understanding Ownership</a></li><li><ul class="section"><li><a href="ch04-01-what-is-ownership.html"><strong>4.1.</strong> What is Ownership?</a></li><li><a href="ch04-02-references-and-borrowing.html"><strong>4.2.</strong> References &amp; Borrowing</a></li><li><a href="ch04-03-slices.html"><strong>4.3.</strong> Slices</a></li></ul></li><li><a href="ch05-00-structs.html"><strong>5.</strong> Structs</a></li><li><ul class="section"><li><a href="ch05-01-method-syntax.html"><strong>5.1.</strong> Method Syntax</a></li></ul></li><li><a href="ch06-00-enums.html"><strong>6.</strong> Enums and Pattern Matching</a></li><li><ul class="section"><li><a href="ch06-01-defining-an-enum.html"><strong>6.1.</strong> Defining an Enum</a></li><li><a href="ch06-02-match.html"><strong>6.2.</strong> The <code>match</code> Control Flow Operator</a></li><li><a href="ch06-03-if-let.html"><strong>6.3.</strong> Concise Control Flow with <code>if let</code></a></li></ul></li><li><a href="ch07-00-modules.html"><strong>7.</strong> Modules</a></li><li><ul class="section"><li><a href="ch07-01-mod-and-the-filesystem.html"><strong>7.1.</strong> <code>mod</code> and the Filesystem</a></li><li><a href="ch07-02-controlling-visibility-with-pub.html"><strong>7.2.</strong> Controlling Visibility with <code>pub</code></a></li><li><a href="ch07-03-importing-names-with-use.html"><strong>7.3.</strong> Importing Names with <code>use</code></a></li></ul></li><li><a href="ch08-00-common-collections.html"><strong>8.</strong> Common Collections</a></li><li><ul class="section"><li><a href="ch08-01-vectors.html"><strong>8.1.</strong> Vectors</a></li><li><a href="ch08-02-strings.html"><strong>8.2.</strong> Strings</a></li><li><a href="ch08-03-hash-maps.html"><strong>8.3.</strong> Hash Maps</a></li></ul></li><li><a href="ch09-00-error-handling.html"><strong>9.</strong> Error Handling</a></li><li><ul class="section"><li><a href="ch09-01-unrecoverable-errors-with-panic.html"><strong>9.1.</strong> Unrecoverable Errors with <code>panic!</code></a></li><li><a href="ch09-02-recoverable-errors-with-result.html"><strong>9.2.</strong> Recoverable Errors with <code>Result</code></a></li><li><a href="ch09-03-to-panic-or-not-to-panic.html"><strong>9.3.</strong> To <code>panic!</code> or Not To <code>panic!</code></a></li></ul></li><li><a href="ch10-00-generics.html"><strong>10.</strong> Generic Types, Traits, and Lifetimes</a></li><li><ul class="section"><li><a href="ch10-01-syntax.html"><strong>10.1.</strong> Generic Data Types</a></li><li><a href="ch10-02-traits.html"><strong>10.2.</strong> Traits: Defining Shared Behavior</a></li><li><a href="ch10-03-lifetime-syntax.html"><strong>10.3.</strong> Validating References with Lifetimes</a></li></ul></li><li><a href="ch11-00-testing.html"><strong>11.</strong> Testing</a></li><li><ul class="section"><li><a href="ch11-01-writing-tests.html"><strong>11.1.</strong> Writing tests</a></li><li><a href="ch11-02-running-tests.html"><strong>11.2.</strong> Running tests</a></li><li><a href="ch11-03-test-organization.html"><strong>11.3.</strong> Test Organization</a></li></ul></li><li><a href="ch12-00-an-io-project.html"><strong>12.</strong> An I/O Project</a></li><li><ul class="section"><li><a href="ch12-01-accepting-command-line-arguments.html"><strong>12.1.</strong> Accepting Command Line Arguments</a></li><li><a href="ch12-02-reading-a-file.html"><strong>12.2.</strong> Reading a File</a></li><li><a href="ch12-03-improving-error-handling-and-modularity.html"><strong>12.3.</strong> Improving Error Handling and Modularity</a></li><li><a href="ch12-04-testing-the-librarys-functionality.html"><strong>12.4.</strong> Testing the Library's Functionality</a></li><li><a href="ch12-05-working-with-environment-variables.html"><strong>12.5.</strong> Working with Environment Variables</a></li><li><a href="ch12-06-writing-to-stderr-instead-of-stdout.html"><strong>12.6.</strong> Writing to <code>stderr</code> instead of <code>stdout</code></a></li></ul></li><li><a href="ch13-00-functional-features.html"><strong>13.</strong> Functional Language Features in Rust</a></li><li><ul class="section"><li><a href="ch13-01-closures.html"><strong>13.1.</strong> Closures</a></li><li><a href="ch13-02-iterators.html"><strong>13.2.</strong> Iterators</a></li><li><a href="ch13-03-improving-our-io-project.html"><strong>13.3.</strong> Improving our I/O Project</a></li><li><a href="ch13-04-performance.html"><strong>13.4.</strong> Performance</a></li></ul></li><li><a href="ch14-00-more-about-cargo.html"><strong>14.</strong> More about Cargo and Crates.io</a></li><li><ul class="section"><li><a href="ch14-01-release-profiles.html"><strong>14.1.</strong> Release Profiles</a></li><li><a href="ch14-02-publishing-to-crates-io.html"><strong>14.2.</strong> Publishing a Crate to Crates.io</a></li><li><a href="ch14-03-cargo-workspaces.html"><strong>14.3.</strong> Cargo Workspaces</a></li><li><a href="ch14-04-installing-binaries.html"><strong>14.4.</strong> Installing Binaries from Crates.io with <code>cargo install</code></a></li><li><a href="ch14-05-extending-cargo.html"><strong>14.5.</strong> Extending Cargo with Custom Commands</a></li></ul></li><li><a href="ch15-00-smart-pointers.html"><strong>15.</strong> Smart Pointers</a></li><li><ul class="section"><li><a href="ch15-01-box.html"><strong>15.1.</strong> <code>Box&lt;T&gt;</code> Points to Data on the Heap and Has a Known Size</a></li><li><a href="ch15-02-deref.html"><strong>15.2.</strong> The <code>Deref</code> Trait Allows Access to the Data Through a Reference</a></li><li><a href="ch15-03-drop.html"><strong>15.3.</strong> The <code>Drop</code> Trait Runs Code on Cleanup</a></li><li><a href="ch15-04-rc.html"><strong>15.4.</strong> <code>Rc&lt;T&gt;</code>, the Reference Counted Smart Pointer</a></li><li><a href="ch15-05-interior-mutability.html"><strong>15.5.</strong> <code>RefCell&lt;T&gt;</code> and the Interior Mutability Pattern</a></li><li><a href="ch15-06-reference-cycles.html"><strong>15.6.</strong> Creating Reference Cycles and Leaking Memory is Safe</a></li></ul></li><li><a href="ch16-00-concurrency.html"><strong>16.</strong> Fearless Concurrency</a></li><li><ul class="section"><li><a href="ch16-01-threads.html"><strong>16.1.</strong> Threads</a></li><li><a href="ch16-02-message-passing.html"><strong>16.2.</strong> Message Passing</a></li><li><a href="ch16-03-shared-state.html" class="active"><strong>16.3.</strong> Shared State</a></li><li><a href="ch16-04-extensible-concurrency-sync-and-send.html"><strong>16.4.</strong> Extensible Concurrency: <code>Sync</code> and <code>Send</code></a></li></ul></li><li><a href="ch17-00-oop.html"><strong>17.</strong> Is Rust OOP?</a></li><li><a href="ch18-00-patterns.html"><strong>18.</strong> Patterns</a></li><li><a href="ch19-00-advanced-features.html"><strong>19.</strong> Advanced Features</a></li><li><ul class="section"><li><a href="ch19-01-unsafe-rust.html"><strong>19.1.</strong> Unsafe Rust</a></li><li><a href="ch19-02-advanced-lifetimes.html"><strong>19.2.</strong> Advanced Lifetimes</a></li><li><a href="ch19-03-advanced-traits.html"><strong>19.3.</strong> Advanced Traits</a></li></ul></li><li><a href="ch20-00-unnamed-project.html"><strong>20.</strong> Un-named project</a></li><li><a href="appendix-00.html"><strong>21.</strong> Appendix</a></li><li><ul class="section"><li><a href="appendix-01-keywords.html"><strong>21.1.</strong> A - Keywords</a></li><li><a href="appendix-02-operators.html"><strong>21.2.</strong> B - Operators</a></li><li><a href="appendix-03-derivable-traits.html"><strong>21.3.</strong> C - Derivable Traits</a></li><li><a href="appendix-04-nightly-rust.html"><strong>21.4.</strong> D - Nightly Rust</a></li><li><a href="appendix-05-macros.html"><strong>21.5.</strong> E - Macros</a></li><li><a href="appendix-06-translation.html"><strong>21.6.</strong> F - Translations</a></li></ul></li></ul>
+        </div>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar" class="menu-bar">
+                    <div class="left-buttons">
+                        <i id="sidebar-toggle" class="fa fa-bars"></i>
+                        <i id="theme-toggle" class="fa fa-paint-brush"></i>
+                    </div>
+
+                    <h1 class="menu-title">The Rust Programming Language</h1>
+
+                    <div class="right-buttons">
+                        <i id="print-button" class="fa fa-print" title="Print this book"></i>
+                    </div>
+                </div>
+
+                <div id="content" class="content">
+                    <a class="header" href="ch16-03-shared-state.html#shared-state-concurrency" name="shared-state-concurrency"><h2>Shared State Concurrency</h2></a>
+<p>While message passing is a fine way of dealing with concurrency, it's not the
+only one. Consider this slogan again:</p>
+<blockquote>
+<p>Do not communicate by sharing memory; instead, share memory by
+communicating.</p>
+</blockquote>
+<p>What would &quot;communicate by sharing memory&quot; look like? And moreover, why would
+message passing enthusiasts dislike it, and dislike it enough to invert it
+entirely?</p>
+<p>Remember how channels are sort of like single ownership? Shared memory
+concurrency is sort of like multiple ownership: multiple threads can access the
+same memory location at the same time. As we saw with multiple ownership made
+possible by smart pointers in Chapter 15, multiple ownership can add additional
+complexity, since we need to manage these different owners somehow.</p>
+<p>Rust's type system and ownership can help a lot here in getting this management
+correct, though. For an example, let's look at one of the more common
+concurrency primitives for shared memory: mutexes.</p>
+<a class="header" href="ch16-03-shared-state.html#mutexes-allow-access-to-data-from-one-thread-at-a-time" name="mutexes-allow-access-to-data-from-one-thread-at-a-time"><h3>Mutexes Allow Access to Data from One Thread at a Time</h3></a>
+<p>A <em>mutex</em> is a concurrency primitive for sharing memory. It's short for &quot;mutual
+exclusion&quot;, that is, it only allows one thread to access some data at any given
+time. Mutexes have a reputation for being hard to use, since there's a lot you
+have to remember:</p>
+<ol>
+<li>You have to remember to attempt to acquire the lock before using the data.</li>
+<li>One you're done with the data that's being guarded by the mutex, you have
+to remember to unlock the data so other threads can acquire the lock.</li>
+</ol>
+<p>For a real-world example of a mutex, imagine a panel discussion at a conference
+where there is only one microphone. Before a panelist may speak, they have to
+ask or signal that they would like to use the microphone. Once they get the
+microphone, they may talk for as long as they would like, then hand the
+microphone to the next panelist who would like to speak. It would be rude for a
+panelist to start shouting without having the microphone or to steal the
+microphone before another panelist was finished. No one else would be able to
+speak if a panelist forgot to hand the microphone to the next person when they
+finished using it. If the management of the shared microphone went wrong in any
+of these ways, the panel would not work as planned!</p>
+<p>Management of mutexes can be incredibly tricky to get right, and that's why so
+many people are enthusiastic about channels. However, in Rust, we can't get
+locking and unlocking wrong, thanks to the type system and ownership.</p>
+<a class="header" href="ch16-03-shared-state.html#the-api-of-mutext" name="the-api-of-mutext"><h4>The API of <code>Mutex&lt;T&gt;</code></h4></a>
+<p>Let's look at an example of using a mutex in Listing 16-12, without involving
+multiple threads for the moment:</p>
+<p><span class="filename">Filename: src/main.rs</span></p>
+<pre><pre class="playpen"><code class="language-rust">use std::sync::Mutex;
+
+fn main() {
+    let m = Mutex::new(5);
+
+    {
+        let mut num = m.lock().unwrap();
+        *num = 6;
+    }
+
+    println!(&quot;m = {:?}&quot;, m);
+}
+</code></pre></pre>
+<p><span class="caption">Listing 16-12: Exploring the API of <code>Mutex&lt;T&gt;</code> in a
+single threaded context for simplicity</span></p>
+<p>Like many types, we create a <code>Mutex&lt;T&gt;</code> through an associated function named
+<code>new</code>. To access the data inside the mutex, we use the <code>lock</code> method to acquire
+the lock. This call will block until it's our turn to have the lock. This call
+can fail if another thread was holding the lock and then that thread panicked.
+In a similar way as we did in Listing 16-6 in the last section, we're using
+<code>unwrap()</code> for now, rather than better error handling. See Chapter 9 for better
+tools.</p>
+<p>Once we have acquired the lock, we can treat the return value, named <code>num</code> in
+this case, as a mutable reference to the data inside. The type system is how
+Rust ensures that we acquire a lock before using this value: <code>Mutex&lt;i32&gt;</code> is
+not an <code>i32</code>, so we <em>must</em> acquire the lock in order to be able to use the
+<code>i32</code> value. We can't forget; the type system won't let us do otherwise.</p>
+<p>As you may have suspected, <code>Mutex&lt;T&gt;</code> is a smart pointer. Well, more
+accurately, the call to <code>lock</code> returns a smart pointer called <code>MutexGuard</code>.
+This smart pointer implements <code>Deref</code> to point at our inner data, similar to
+the other smart pointers we saw in Chapter 15. In addition, <code>MutexGuard</code> has a
+<code>Drop</code> implementation that releases the lock. This way, we can't forget to
+release the lock. It happens for us automatically when the <code>MutexGuard</code> goes
+out of scope, which it does at the end of the inner scope in Listing 16-12. We
+can print out the mutex value and see that we were able to change the inner
+<code>i32</code> to 6.</p>
+<a class="header" href="ch16-03-shared-state.html#sharing-a-mutext-between-multiple-threads" name="sharing-a-mutext-between-multiple-threads"><h4>Sharing a <code>Mutex&lt;T&gt;</code> Between Multiple Threads</h4></a>
+<p>Let's now try to share a value between multiple threads using <code>Mutex&lt;T&gt;</code>. We'll
+spin up ten threads, and have them each increment a counter value by 1 so that
+the counter goes from 0 to 10. Note that the next few examples will have
+compiler errors, and we're going to use those errors to learn more about using
+<code>Mutex&lt;T&gt;</code> and how Rust helps us use it correctly. Listing 16-13 has our
+starting example:</p>
+<p><span class="filename">Filename: src/main.rs</span></p>
+<pre><code class="language-rust ignore">use std::sync::Mutex;
+use std::thread;
+
+fn main() {
+    let counter = Mutex::new(0);
+    let mut handles = vec![];
+
+    for _ in 0..10 {
+        let handle = thread::spawn(|| {
+            let mut num = counter.lock().unwrap();
+
+            *num += 1;
+        });
+        handles.push(handle);
+    }
+
+    for handle in handles {
+        handle.join().unwrap();
+    }
+
+    println!(&quot;Result: {}&quot;, *counter.lock().unwrap());
+}
+</code></pre>
+<p><span class="caption">Listing 16-13: The start of a program having 10 threads
+each increment a counter guarded by a <code>Mutex&lt;T&gt;</code></span></p>
+<p>We're creating a <code>counter</code> variable to hold an <code>i32</code> inside a <code>Mutex&lt;T&gt;</code>, like
+we did in Listing 16-12. Next, we're creating 10 threads by mapping over a
+range of numbers. We use <code>thread::spawn</code> and give all the threads the same
+closure: they're each going to acquire a lock on the <code>Mutex&lt;T&gt;</code> by calling the
+<code>lock</code> method and then add 1 to the value in the mutex. When a thread finishes
+running its closure, <code>num</code> will go out of scope and release the lock so that
+another thread can acquire it.</p>
+<p>In the main thread, we're collecting all the join handles like we did in
+Listing 16-2, and then calling <code>join</code> on each of them to make sure all the
+threads finish. At that point, the main thread will acquire the lock and print
+out the result of this program.</p>
+<p>We hinted that this example won't compile, let's find out why!</p>
+<pre><code class="language-text">error[E0373]: closure may outlive the current function, but it borrows
+`counter`, which is owned by the current function
+  --&gt;
+   |
+9  |         let handle = thread::spawn(|| {
+   |                                    ^^ may outlive borrowed value `counter`
+10 |             let mut num = counter.lock().unwrap();
+   |                           ------- `counter` is borrowed here
+   |
+help: to force the closure to take ownership of `counter` (and any other
+referenced variables), use the `move` keyword, as shown:
+   |         let handle = thread::spawn(move || {
+</code></pre>
+<p>This is similar to the problem we solved in Listing 16-5. Given that we spin up
+multiple threads, Rust can't know how long the threads will run and whether
+<code>counter</code> will still be valid when each thread tries to borrow it. The help
+message has a reminder for how to solve this: we can use <code>move</code> to give
+ownership to each thread. Let's try it by making this change to the closure:</p>
+<pre><code class="language-rust ignore">thread::spawn(move || {
+</code></pre>
+<p>And trying to compile again. We'll get different errors this time!</p>
+<pre><code class="language-text">error[E0382]: capture of moved value: `counter`
+  --&gt;
+   |
+9  |         let handle = thread::spawn(move || {
+   |                                    ------- value moved (into closure) here
+10 |             let mut num = counter.lock().unwrap();
+   |                           ^^^^^^^ value captured here after move
+   |
+   = note: move occurs because `counter` has type `std::sync::Mutex&lt;i32&gt;`,
+   which does not implement the `Copy` trait
+
+error[E0382]: use of moved value: `counter`
+  --&gt;
+   |
+9  |         let handle = thread::spawn(move || {
+   |                                    ------- value moved (into closure) here
+...
+21 |     println!(&quot;Result: {}&quot;, *counter.lock().unwrap());
+   |                             ^^^^^^^ value used here after move
+   |
+   = note: move occurs because `counter` has type `std::sync::Mutex&lt;i32&gt;`,
+   which does not implement the `Copy` trait
+
+error: aborting due to 2 previous errors
+</code></pre>
+<p><code>move</code> didn't fix this program like it fixed Listing 16-5. Why not? This error
+message is a little confusing to read, because it's saying that the <code>counter</code>
+value is moved into the closure, then is captured when we call <code>lock</code>. That
+sounds like what we wanted, but it's not allowed.</p>
+<p>Let's reason this out. Instead of making 10 threads in a <code>for</code> loop, let's just
+make two threads without a loop and see what happens then. Replace the first
+<code>for</code> loop in Listing 16-13 with this code instead:</p>
+<pre><code class="language-rust ignore">let handle = thread::spawn(move || {
+    let mut num = counter.lock().unwrap();
+
+    *num += 1;
+});
+handles.push(handle);
+
+let handle2 = thread::spawn(move || {
+    let mut num2 = counter.lock().unwrap();
+
+    *num2 += 1;
+});
+handles.push(handle2);
+</code></pre>
+<p>Here we're making 2 threads, and we changed the variable names used with the
+second thread to <code>handle2</code> and <code>num2</code>. We're simplifying our example for the
+moment to see if we can understand the error message we're getting. This time,
+compiling gives us:</p>
+<pre><code class="language-text">error[E0382]: capture of moved value: `counter`
+  --&gt;
+   |
+8  |     let handle = thread::spawn(move || {
+   |                                ------- value moved (into closure) here
+...
+16 |         let mut num2 = counter.lock().unwrap();
+   |                        ^^^^^^^ value captured here after move
+   |
+   = note: move occurs because `counter` has type `std::sync::Mutex&lt;i32&gt;`,
+   which does not implement the `Copy` trait
+
+error[E0382]: use of moved value: `counter`
+  --&gt;
+   |
+8  |     let handle = thread::spawn(move || {
+   |                                ------- value moved (into closure) here
+...
+26 |     println!(&quot;Result: {}&quot;, *counter.lock().unwrap());
+   |                             ^^^^^^^ value used here after move
+   |
+   = note: move occurs because `counter` has type `std::sync::Mutex&lt;i32&gt;`,
+   which does not implement the `Copy` trait
+
+error: aborting due to 2 previous errors
+</code></pre>
+<p>Aha! In the first error message, Rust is showing us that <code>counter</code> is moved
+into the closure for the thread that goes with <code>handle</code>. That move is
+preventing us from capturing <code>counter</code> when we try to call <code>lock</code> on it and
+store the result in <code>num2</code>, which is in the second thread! So Rust is telling
+us that we can't move ownership of <code>counter</code> into multiple threads. This was
+hard to see before since we were creating multiple threads in a loop, and Rust
+can't point to different threads in different iterations of the loop.</p>
+<a class="header" href="ch16-03-shared-state.html#multiple-ownership-with-multiple-threads" name="multiple-ownership-with-multiple-threads"><h4>Multiple Ownership with Multiple Threads</h4></a>
+<p>In Chapter 15, we were able to have multiple ownership of a value by using the
+smart pointer <code>Rc&lt;T&gt;</code> to create a reference-counted value. We mentioned in
+Chapter 15 that <code>Rc&lt;T&gt;</code> was only for single-threaded contexts, but let's try
+using <code>Rc&lt;T&gt;</code> in this case anyway and see what happens. We'll wrap the
+<code>Mutex&lt;T&gt;</code> in <code>Rc&lt;T&gt;</code> in Listing 16-14, and clone the <code>Rc&lt;T&gt;</code> before moving
+ownership to the thread. We'll switch back to the <code>for</code> loop for creating the
+threads, and keep the <code>move</code> keyword with the closure:</p>
+<p><span class="filename">Filename: src/main.rs</span></p>
+<pre><code class="language-rust ignore">use std::rc::Rc;
+use std::sync::Mutex;
+use std::thread;
+
+fn main() {
+    let counter = Rc::new(Mutex::new(0));
+    let mut handles = vec![];
+
+    for _ in 0..10 {
+        let counter = counter.clone();
+        let handle = thread::spawn(move || {
+            let mut num = counter.lock().unwrap();
+
+            *num += 1;
+        });
+        handles.push(handle);
+    }
+
+    for handle in handles {
+        handle.join().unwrap();
+    }
+
+    println!(&quot;Result: {}&quot;, *counter.lock().unwrap());
+}
+</code></pre>
+<p><span class="caption">Listing 16-14: Attempting to use <code>Rc&lt;T&gt;</code> to allow
+multiple threads to own the <code>Mutex&lt;T&gt;</code></span></p>
+<p>Once again, we compile and get... different errors! The compiler is teaching us
+a lot!</p>
+<pre><code class="language-text">error[E0277]: the trait bound `std::rc::Rc&lt;std::sync::Mutex&lt;i32&gt;&gt;:
+std::marker::Send` is not satisfied
+  --&gt;
+   |
+11 |         let handle = thread::spawn(move || {
+   |                      ^^^^^^^^^^^^^ the trait `std::marker::Send` is not
+   implemented for `std::rc::Rc&lt;std::sync::Mutex&lt;i32&gt;&gt;`
+   |
+   = note: `std::rc::Rc&lt;std::sync::Mutex&lt;i32&gt;&gt;` cannot be sent between threads
+   safely
+   = note: required because it appears within the type
+   `[closure@src/main.rs:11:36: 15:10
+   counter:std::rc::Rc&lt;std::sync::Mutex&lt;i32&gt;&gt;]`
+   = note: required by `std::thread::spawn`
+</code></pre>
+<p>Wow, that's quite wordy! Some important parts to pick out: the first note says
+<code>Rc&lt;Mutex&lt;i32&gt;&gt; cannot be sent between threads safely</code>. The reason for this is
+in the error message, which, once distilled, says <code>the trait bound Send is not satisfied</code>. We're going to talk about <code>Send</code> in the next section; it's one of
+the traits that ensures the types we use with threads are meant for use in
+concurrent situations.</p>
+<p>Unfortunately, <code>Rc&lt;T&gt;</code> is not safe to share across threads. When <code>Rc&lt;T&gt;</code>
+manages the reference count, it has to add to the count for each call to
+<code>clone</code> and subtract from the count when each clone is dropped. <code>Rc&lt;T&gt;</code> doesn't
+use any concurrency primitives to make sure that changes to the count happen in
+an operation that couldn't be interrupted by another thread. This could lead to
+subtle bugs where the counts are wrong, which could lead to memory leaks or
+dropping a value before we're done with it. So what if we had a type that was
+exactly like <code>Rc&lt;T&gt;</code>, but made changes to the reference count in a thread-safe
+way?</p>
+<a class="header" href="ch16-03-shared-state.html#atomic-reference-counting-with-arct" name="atomic-reference-counting-with-arct"><h4>Atomic Reference Counting with <code>Arc&lt;T&gt;</code></h4></a>
+<p>If you thought that question sounded like a leading one, you'd be right. There
+is a type like <code>Rc&lt;T&gt;</code> that's safe to use in concurrent situations: <code>Arc&lt;T&gt;</code>.
+The 'a' stands for <em>atomic</em>, so it's an <em>atomically reference counted</em> type.
+Atomics are an additional kind of concurrency primitive that we won't cover
+here; see the standard library documentation for <code>std::sync::atomic</code> for more
+details. The gist of it is this: atomics work like primitive types, but are
+safe to share across threads.</p>
+<p>Why aren't all primitive types atomic, and why aren't all standard library
+types implemented to use <code>Arc&lt;T&gt;</code> by default? Thread safety comes with a
+performance penalty that we only want to pay when we need it. If we're only
+doing operations on values within a single thread, our code can run faster
+since it doesn't need the guarantees that atomics give us.</p>
+<p>Back to our example: <code>Arc&lt;T&gt;</code> and <code>Rc&lt;T&gt;</code> are identical except for the atomic
+internals of <code>Arc&lt;T&gt;</code>. Their API is the same, so we can change the <code>use</code> line
+and the call to <code>new</code>. The code in Listing 16-15 will finally compile and run:</p>
+<p><span class="filename">Filename: src/main.rs</span></p>
+<pre><pre class="playpen"><code class="language-rust">use std::sync::{Mutex, Arc};
+use std::thread;
+
+fn main() {
+    let counter = Arc::new(Mutex::new(0));
+    let mut handles = vec![];
+
+    for _ in 0..10 {
+        let counter = counter.clone();
+        let handle = thread::spawn(move || {
+            let mut num = counter.lock().unwrap();
+
+            *num += 1;
+        });
+        handles.push(handle);
+    }
+
+    for handle in handles {
+        handle.join().unwrap();
+    }
+
+    println!(&quot;Result: {}&quot;, *counter.lock().unwrap());
+}
+</code></pre></pre>
+<p><span class="caption">Listing 16-15: Using an <code>Arc&lt;T&gt;</code> to wrap the <code>Mutex&lt;T&gt;</code>
+to be able to share ownership across multiple threads</span></p>
+<p>This will print:</p>
+<pre><code class="language-text">Result: 10
+</code></pre>
+<p>We did it! We counted from 0 to 10, which may not seem very impressive, but we
+learned a lot about <code>Mutex&lt;T&gt;</code> and thread safety along the way! The structure
+that we've built in this example could be used to do more complicated
+operations than just incrementing a counter. Calculations that can be divided
+up into independent parts could be split across threads in this way, and we can
+use a <code>Mutex&lt;T&gt;</code> to allow each thread to update the final result with its part.</p>
+<p>You may have noticed that, since <code>counter</code> is immutable but we could get a
+mutable reference to the value inside it, this means <code>Mutex&lt;T&gt;</code> provides
+interior mutability, like the <code>Cell</code> family does. In the same way that we used
+<code>RefCell&lt;T&gt;</code> in Chapter 15 to be able to mutate contents inside an <code>Rc&lt;T&gt;</code>, we
+use <code>Mutex&lt;T&gt;</code> to be able to mutate contents inside of an <code>Arc&lt;T&gt;</code>.</p>
+<p>Recall that <code>Rc&lt;T&gt;</code> did not prevent every possible problem: we also talked
+about the possibility of creating reference cycles where two <code>Rc&lt;T&gt;</code> values
+refer to each other, which would cause a memory leak. We have a similar problem
+with <code>Mutex&lt;T&gt;</code> that Rust also doesn't prevent: deadlocks. A <em>deadlock</em> is a
+situation in which an operation needs to lock two resources, and two threads
+have each acquired one of the locks and will now wait for each other forever.
+If you're interested in this topic, try creating a Rust program that has a
+deadlock, then research deadlock mitigation strategies that apply to the use of
+mutexes in any language and try implementing them in Rust. The standard library
+API documentation for <code>Mutex&lt;T&gt;</code> and <code>MutexGuard</code> will have useful information.</p>
+<p>Rust's type system and ownership has made sure that our threads have exclusive
+access to the shared value when they're updating it, so the threads won't
+overwrite each other's answers in unpredictable ways. It took us a while to
+work with the compiler to get everything right, but we've saved future time
+that might be spent trying to reproduce subtly incorrect scenarios that only
+happen when the threads run in a particular order.</p>
+<p>Let's round out this chapter by talking about the <code>Send</code> and <code>Sync</code> traits and
+how we could use them with custom types.</p>
+
+                </div>
+
+                <!-- Mobile navigation buttons -->
+                
+                    <a href="ch16-02-message-passing.html" class="mobile-nav-chapters previous">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+                    <a href="ch16-04-extensible-concurrency-sync-and-send.html" class="mobile-nav-chapters next">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                
+
+            </div>
+
+            
+                <a href="ch16-02-message-passing.html" class="nav-chapters previous" title="You can navigate through the chapters using the arrow keys">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+            
+
+            
+                <a href="ch16-04-extensible-concurrency-sync-and-send.html" class="nav-chapters next" title="You can navigate through the chapters using the arrow keys">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            
+
+        </div>
+
+
+        <!-- Local fallback for Font Awesome -->
+        <script>
+            if ($(".fa").css("font-family") !== "FontAwesome") {
+                $('<link rel="stylesheet" type="text/css" href="_FontAwesome/css/font-awesome.css">').prependTo('head');
+            }
+        </script>
+
+        <!-- Livereload script (if served using the cli tool) -->
+        
+
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+    </body>
+</html>

@@ -1,0 +1,385 @@
+<!DOCTYPE HTML>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Message Passing - The Rust Programming Language</title>
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <base href="">
+
+        <link rel="stylesheet" href="book.css">
+        <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+        <link rel="shortcut icon" href="favicon.png">
+
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+
+        <!-- MathJax -->
+        <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+        <!-- Fetch JQuery from CDN but have a local fallback -->
+        <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+        <script>
+            if (typeof jQuery == 'undefined') {
+                document.write(unescape("%3Cscript src='jquery.js'%3E%3C/script%3E"));
+            }
+        </script>
+    </head>
+    <body class="light">
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme = localStorage.getItem('theme');
+            if (theme == null) { theme = 'light'; }
+            $('body').removeClass().addClass(theme);
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var sidebar = localStorage.getItem('sidebar');
+            if (sidebar === "hidden") { $("html").addClass("sidebar-hidden") }
+            else if (sidebar === "visible") { $("html").addClass("sidebar-visible") }
+        </script>
+
+        <div id="sidebar" class="sidebar">
+            <ul class="chapter"><li><a href="ch01-00-introduction.html"><strong>1.</strong> Introduction</a></li><li><ul class="section"><li><a href="ch01-01-installation.html"><strong>1.1.</strong> Installation</a></li><li><a href="ch01-02-hello-world.html"><strong>1.2.</strong> Hello, World!</a></li></ul></li><li><a href="ch02-00-guessing-game-tutorial.html"><strong>2.</strong> Guessing Game Tutorial</a></li><li><a href="ch03-00-common-programming-concepts.html"><strong>3.</strong> Common Programming Concepts</a></li><li><ul class="section"><li><a href="ch03-01-variables-and-mutability.html"><strong>3.1.</strong> Variables and Mutability</a></li><li><a href="ch03-02-data-types.html"><strong>3.2.</strong> Data Types</a></li><li><a href="ch03-03-how-functions-work.html"><strong>3.3.</strong> How Functions Work</a></li><li><a href="ch03-04-comments.html"><strong>3.4.</strong> Comments</a></li><li><a href="ch03-05-control-flow.html"><strong>3.5.</strong> Control Flow</a></li></ul></li><li><a href="ch04-00-understanding-ownership.html"><strong>4.</strong> Understanding Ownership</a></li><li><ul class="section"><li><a href="ch04-01-what-is-ownership.html"><strong>4.1.</strong> What is Ownership?</a></li><li><a href="ch04-02-references-and-borrowing.html"><strong>4.2.</strong> References &amp; Borrowing</a></li><li><a href="ch04-03-slices.html"><strong>4.3.</strong> Slices</a></li></ul></li><li><a href="ch05-00-structs.html"><strong>5.</strong> Structs</a></li><li><ul class="section"><li><a href="ch05-01-method-syntax.html"><strong>5.1.</strong> Method Syntax</a></li></ul></li><li><a href="ch06-00-enums.html"><strong>6.</strong> Enums and Pattern Matching</a></li><li><ul class="section"><li><a href="ch06-01-defining-an-enum.html"><strong>6.1.</strong> Defining an Enum</a></li><li><a href="ch06-02-match.html"><strong>6.2.</strong> The <code>match</code> Control Flow Operator</a></li><li><a href="ch06-03-if-let.html"><strong>6.3.</strong> Concise Control Flow with <code>if let</code></a></li></ul></li><li><a href="ch07-00-modules.html"><strong>7.</strong> Modules</a></li><li><ul class="section"><li><a href="ch07-01-mod-and-the-filesystem.html"><strong>7.1.</strong> <code>mod</code> and the Filesystem</a></li><li><a href="ch07-02-controlling-visibility-with-pub.html"><strong>7.2.</strong> Controlling Visibility with <code>pub</code></a></li><li><a href="ch07-03-importing-names-with-use.html"><strong>7.3.</strong> Importing Names with <code>use</code></a></li></ul></li><li><a href="ch08-00-common-collections.html"><strong>8.</strong> Common Collections</a></li><li><ul class="section"><li><a href="ch08-01-vectors.html"><strong>8.1.</strong> Vectors</a></li><li><a href="ch08-02-strings.html"><strong>8.2.</strong> Strings</a></li><li><a href="ch08-03-hash-maps.html"><strong>8.3.</strong> Hash Maps</a></li></ul></li><li><a href="ch09-00-error-handling.html"><strong>9.</strong> Error Handling</a></li><li><ul class="section"><li><a href="ch09-01-unrecoverable-errors-with-panic.html"><strong>9.1.</strong> Unrecoverable Errors with <code>panic!</code></a></li><li><a href="ch09-02-recoverable-errors-with-result.html"><strong>9.2.</strong> Recoverable Errors with <code>Result</code></a></li><li><a href="ch09-03-to-panic-or-not-to-panic.html"><strong>9.3.</strong> To <code>panic!</code> or Not To <code>panic!</code></a></li></ul></li><li><a href="ch10-00-generics.html"><strong>10.</strong> Generic Types, Traits, and Lifetimes</a></li><li><ul class="section"><li><a href="ch10-01-syntax.html"><strong>10.1.</strong> Generic Data Types</a></li><li><a href="ch10-02-traits.html"><strong>10.2.</strong> Traits: Defining Shared Behavior</a></li><li><a href="ch10-03-lifetime-syntax.html"><strong>10.3.</strong> Validating References with Lifetimes</a></li></ul></li><li><a href="ch11-00-testing.html"><strong>11.</strong> Testing</a></li><li><ul class="section"><li><a href="ch11-01-writing-tests.html"><strong>11.1.</strong> Writing tests</a></li><li><a href="ch11-02-running-tests.html"><strong>11.2.</strong> Running tests</a></li><li><a href="ch11-03-test-organization.html"><strong>11.3.</strong> Test Organization</a></li></ul></li><li><a href="ch12-00-an-io-project.html"><strong>12.</strong> An I/O Project</a></li><li><ul class="section"><li><a href="ch12-01-accepting-command-line-arguments.html"><strong>12.1.</strong> Accepting Command Line Arguments</a></li><li><a href="ch12-02-reading-a-file.html"><strong>12.2.</strong> Reading a File</a></li><li><a href="ch12-03-improving-error-handling-and-modularity.html"><strong>12.3.</strong> Improving Error Handling and Modularity</a></li><li><a href="ch12-04-testing-the-librarys-functionality.html"><strong>12.4.</strong> Testing the Library's Functionality</a></li><li><a href="ch12-05-working-with-environment-variables.html"><strong>12.5.</strong> Working with Environment Variables</a></li><li><a href="ch12-06-writing-to-stderr-instead-of-stdout.html"><strong>12.6.</strong> Writing to <code>stderr</code> instead of <code>stdout</code></a></li></ul></li><li><a href="ch13-00-functional-features.html"><strong>13.</strong> Functional Language Features in Rust</a></li><li><ul class="section"><li><a href="ch13-01-closures.html"><strong>13.1.</strong> Closures</a></li><li><a href="ch13-02-iterators.html"><strong>13.2.</strong> Iterators</a></li><li><a href="ch13-03-improving-our-io-project.html"><strong>13.3.</strong> Improving our I/O Project</a></li><li><a href="ch13-04-performance.html"><strong>13.4.</strong> Performance</a></li></ul></li><li><a href="ch14-00-more-about-cargo.html"><strong>14.</strong> More about Cargo and Crates.io</a></li><li><ul class="section"><li><a href="ch14-01-release-profiles.html"><strong>14.1.</strong> Release Profiles</a></li><li><a href="ch14-02-publishing-to-crates-io.html"><strong>14.2.</strong> Publishing a Crate to Crates.io</a></li><li><a href="ch14-03-cargo-workspaces.html"><strong>14.3.</strong> Cargo Workspaces</a></li><li><a href="ch14-04-installing-binaries.html"><strong>14.4.</strong> Installing Binaries from Crates.io with <code>cargo install</code></a></li><li><a href="ch14-05-extending-cargo.html"><strong>14.5.</strong> Extending Cargo with Custom Commands</a></li></ul></li><li><a href="ch15-00-smart-pointers.html"><strong>15.</strong> Smart Pointers</a></li><li><ul class="section"><li><a href="ch15-01-box.html"><strong>15.1.</strong> <code>Box&lt;T&gt;</code> Points to Data on the Heap and Has a Known Size</a></li><li><a href="ch15-02-deref.html"><strong>15.2.</strong> The <code>Deref</code> Trait Allows Access to the Data Through a Reference</a></li><li><a href="ch15-03-drop.html"><strong>15.3.</strong> The <code>Drop</code> Trait Runs Code on Cleanup</a></li><li><a href="ch15-04-rc.html"><strong>15.4.</strong> <code>Rc&lt;T&gt;</code>, the Reference Counted Smart Pointer</a></li><li><a href="ch15-05-interior-mutability.html"><strong>15.5.</strong> <code>RefCell&lt;T&gt;</code> and the Interior Mutability Pattern</a></li><li><a href="ch15-06-reference-cycles.html"><strong>15.6.</strong> Creating Reference Cycles and Leaking Memory is Safe</a></li></ul></li><li><a href="ch16-00-concurrency.html"><strong>16.</strong> Fearless Concurrency</a></li><li><ul class="section"><li><a href="ch16-01-threads.html"><strong>16.1.</strong> Threads</a></li><li><a href="ch16-02-message-passing.html" class="active"><strong>16.2.</strong> Message Passing</a></li><li><a href="ch16-03-shared-state.html"><strong>16.3.</strong> Shared State</a></li><li><a href="ch16-04-extensible-concurrency-sync-and-send.html"><strong>16.4.</strong> Extensible Concurrency: <code>Sync</code> and <code>Send</code></a></li></ul></li><li><a href="ch17-00-oop.html"><strong>17.</strong> Is Rust OOP?</a></li><li><a href="ch18-00-patterns.html"><strong>18.</strong> Patterns</a></li><li><a href="ch19-00-advanced-features.html"><strong>19.</strong> Advanced Features</a></li><li><ul class="section"><li><a href="ch19-01-unsafe-rust.html"><strong>19.1.</strong> Unsafe Rust</a></li><li><a href="ch19-02-advanced-lifetimes.html"><strong>19.2.</strong> Advanced Lifetimes</a></li><li><a href="ch19-03-advanced-traits.html"><strong>19.3.</strong> Advanced Traits</a></li></ul></li><li><a href="ch20-00-unnamed-project.html"><strong>20.</strong> Un-named project</a></li><li><a href="appendix-00.html"><strong>21.</strong> Appendix</a></li><li><ul class="section"><li><a href="appendix-01-keywords.html"><strong>21.1.</strong> A - Keywords</a></li><li><a href="appendix-02-operators.html"><strong>21.2.</strong> B - Operators</a></li><li><a href="appendix-03-derivable-traits.html"><strong>21.3.</strong> C - Derivable Traits</a></li><li><a href="appendix-04-nightly-rust.html"><strong>21.4.</strong> D - Nightly Rust</a></li><li><a href="appendix-05-macros.html"><strong>21.5.</strong> E - Macros</a></li><li><a href="appendix-06-translation.html"><strong>21.6.</strong> F - Translations</a></li></ul></li></ul>
+        </div>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar" class="menu-bar">
+                    <div class="left-buttons">
+                        <i id="sidebar-toggle" class="fa fa-bars"></i>
+                        <i id="theme-toggle" class="fa fa-paint-brush"></i>
+                    </div>
+
+                    <h1 class="menu-title">The Rust Programming Language</h1>
+
+                    <div class="right-buttons">
+                        <i id="print-button" class="fa fa-print" title="Print this book"></i>
+                    </div>
+                </div>
+
+                <div id="content" class="content">
+                    <a class="header" href="ch16-02-message-passing.html#message-passing-to-transfer-data-between-threads" name="message-passing-to-transfer-data-between-threads"><h2>Message Passing to Transfer Data Between Threads</h2></a>
+<p>One approach to concurrency that's seen a rise in popularity as of late is
+<em>message passing</em>, where threads or actors communicate by sending each other
+messages containing data. Here's the idea in slogan form:</p>
+<blockquote>
+<p>Do not communicate by sharing memory; instead, share memory by
+communicating.</p>
+<p>--<a href="http://golang.org/doc/effective_go.html">Effective Go</a></p>
+</blockquote>
+<p>A major tool to accomplish this goal is the <em>channel</em>. A channel has two
+halves, a transmitter and a receiver. One part of our code can call methods on
+the transmitter with the data we want to send, and another part can check the
+receiving end for arriving messages.</p>
+<p>We're going to work up to an example where we have one thread that will
+generate values and send them down a channel. The main thread will receive the
+values and print them out.</p>
+<p>First, though, let's start by creating a channel but not doing anything with it
+in Listing 16-6:</p>
+<p><span class="filename">Filename: src/main.rs</span></p>
+<pre><pre class="playpen"><code class="language-rust">use std::sync::mpsc;
+
+fn main() {
+    let (tx, rx) = mpsc::channel();
+#     tx.send(()).unwrap();
+}
+</code></pre></pre>
+<p><span class="caption">Listing 16-6: Creating a channel and assigning the two
+halves to <code>tx</code> and <code>rx</code></span></p>
+<p>The <code>mpsc::channel</code> function crates a new channel. <code>mpsc</code> stands for <em>multiple
+producer, single consumer</em>. In short, we can have multiple <em>sending</em> ends of a
+channel that produce values, but only one <em>receiving</em> end that consumes those
+values. We're going to start with a single producer for now, but we'll add
+multiple producers once we get this example working.</p>
+<p><code>mpsc::channel</code> returns a tuple: the first element is the sending end, and the
+second element is the receiving end. For historical reasons, many people use
+<code>tx</code> and <code>rx</code> to abbreviate <em>transmitter</em> and <em>receiver</em>, so those are the
+names we're using for the variables bound to each end. We're using a <code>let</code>
+statement with a pattern that destructures the tuples; we'll be discussing the
+use of patterns in <code>let</code> statements and destructuring in Chapter 18.</p>
+<p>Let's move the transmitting end into a spawned thread and have it send one
+string, shown in Listing 16-7:</p>
+<p><span class="filename">Filename: src/main.rs</span></p>
+<pre><pre class="playpen"><code class="language-rust">use std::thread;
+use std::sync::mpsc;
+
+fn main() {
+    let (tx, rx) = mpsc::channel();
+
+    thread::spawn(move || {
+        let val = String::from(&quot;hi&quot;);
+        tx.send(val).unwrap();
+    });
+}
+</code></pre></pre>
+<p><span class="caption">Listing 16-7: Moving <code>tx</code> to a spawned thread and sending
+&quot;hi&quot;</span></p>
+<p>We're using <code>thread::spawn</code> to create a new thread, just as we did in the
+previous section. We use a <code>move</code> closure to make <code>tx</code> move into the closure so
+that the thread owns it.</p>
+<p>The transmitting end of a channel has the <code>send</code> method that takes the value we
+want to send down the channel. The <code>send</code> method returns a <code>Result&lt;T, E&gt;</code> type,
+because if the receiving end has already been dropped, there's nowhere to send
+a value to, so the send operation would error. In this example, we're simply
+calling <code>unwrap</code> to ignore this error, but for a real application, we'd want to
+handle it properly. Chapter 9 is where you'd go to review strategies for proper
+error handling.</p>
+<p>In Listing 16-8, let's get the value from the receiving end of the channel in
+the main thread:</p>
+<p><span class="filename">Filename: src/main.rs</span></p>
+<pre><pre class="playpen"><code class="language-rust">use std::thread;
+use std::sync::mpsc;
+
+fn main() {
+    let (tx, rx) = mpsc::channel();
+
+    thread::spawn(move || {
+        let val = String::from(&quot;hi&quot;);
+        tx.send(val).unwrap();
+    });
+
+    let received = rx.recv().unwrap();
+    println!(&quot;Got: {}&quot;, received);
+}
+</code></pre></pre>
+<p><span class="caption">Listing 16-8: Receiving the value &quot;hi&quot; in the main thread
+and printing it out</span></p>
+<p>The receiving end of a channel has two useful methods: <code>recv</code> and <code>try_recv</code>.
+Here, we're using <code>recv</code>, which is short for <em>receive</em>. This method will block
+execution until a value is sent down the channel. Once a value is sent, <code>recv</code>
+will return it in a <code>Result&lt;T, E&gt;</code>. When the sending end of the channel closes,
+<code>recv</code> will return an error. The <code>try_recv</code> method will not block; it instead
+returns a <code>Result&lt;T, E&gt;</code> immediately.</p>
+<p>If we run the code in Listing 16-8, we'll see the value printed out from the
+main thread:</p>
+<pre><code class="language-text">Got: hi
+</code></pre>
+<a class="header" href="ch16-02-message-passing.html#how-channels-interact-with-ownership" name="how-channels-interact-with-ownership"><h3>How Channels Interact with Ownership</h3></a>
+<p>Let's do an experiment at this point to see how channels and ownership work
+together: we'll try to use <code>val</code> in the spawned thread after we've sent it down
+the channel. Try compiling the code in Listing 16-9:</p>
+<p><span class="filename">Filename: src/main.rs</span></p>
+<pre><code class="language-rust ignore">use std::thread;
+use std::sync::mpsc;
+
+fn main() {
+    let (tx, rx) = mpsc::channel();
+
+    thread::spawn(move || {
+        let val = String::from(&quot;hi&quot;);
+        tx.send(val).unwrap();
+        println!(&quot;val is {}&quot;, val);
+    });
+
+    let received = rx.recv().unwrap();
+    println!(&quot;Got: {}&quot;, received);
+}
+</code></pre>
+<p><span class="caption">Listing 16-9: Attempting to use <code>val</code> after we have sent
+it down the channel</span></p>
+<p>Here, we try to print out <code>val</code> after we've sent it down the channel via
+<code>tx.send</code>. This is a bad idea: once we've sent the value to another thread,
+that thread could modify it or drop it before we try to use the value again.
+This could cause errors or unexpected results due to inconsistent or
+nonexistent data.</p>
+<p>If we try to compile this code, Rust will error:</p>
+<pre><code class="language-text">error[E0382]: use of moved value: `val`
+  --&gt; src/main.rs:10:31
+   |
+9  |         tx.send(val).unwrap();
+   |                 --- value moved here
+10 |         println!(&quot;val is {}&quot;, val);
+   |                               ^^^ value used here after move
+   |
+   = note: move occurs because `val` has type `std::string::String`, which does
+   not implement the `Copy` trait
+</code></pre>
+<p>Our concurrency mistake has caused a compile-time error! <code>send</code> takes ownership
+of its parameter and moves the value so that the value is owned by the
+receiver. This means we can't accidentally use the value again after sending
+it; the ownership system checks that everything is okay.</p>
+<p>In this regard, message passing is very similar to single ownership in Rust.
+Message passing enthusiasts enjoy message passing for similar reasons that
+Rustaceans enjoy Rust's ownership: single ownership means certain classes of
+problems go away. If only one thread at a time can use some memory, there's no
+chance of a data race.</p>
+<a class="header" href="ch16-02-message-passing.html#sending-multiple-values-and-seeing-the-receiver-waiting" name="sending-multiple-values-and-seeing-the-receiver-waiting"><h3>Sending Multiple Values and Seeing the Receiver Waiting</h3></a>
+<p>The code in Listing 16-8 compiled and ran, but it wasn't very interesting: it's
+hard to see that we have two separate threads talking to each other over a
+channel. Listing 16-10 has some modifications that will prove to us that this
+code is running concurrently: the spawned thread will now send multiple
+messages and pause for a second between each message.</p>
+<p><span class="filename">Filename: src/main.rs</span></p>
+<pre><pre class="playpen"><code class="language-rust">use std::thread;
+use std::sync::mpsc;
+use std::time::Duration;
+
+fn main() {
+    let (tx, rx) = mpsc::channel();
+
+    thread::spawn(move || {
+        let vals = vec![
+            String::from(&quot;hi&quot;),
+            String::from(&quot;from&quot;),
+            String::from(&quot;the&quot;),
+            String::from(&quot;thread&quot;),
+        ];
+
+        for val in vals {
+            tx.send(val).unwrap();
+            thread::sleep(Duration::new(1, 0));
+        }
+    });
+
+    for received in rx {
+        println!(&quot;Got: {}&quot;, received);
+    }
+}
+</code></pre></pre>
+<p><span class="caption">Listing 16-10: Sending multiple messages and pausing
+between each one</span></p>
+<p>This time, we have a vector of strings in the spawned thread that we want to
+send to the main thread. We iterate over them, sending each individually and
+then pausing by calling the <code>thread::sleep</code> function with a <code>Duration</code> value of
+one second.</p>
+<p>In the main thread, we're not calling the <code>recv</code> function explicitly anymore:
+instead we're treating <code>rx</code> as an iterator. For each value received, we're
+printing it out. When the channel is closed, iteration will end.</p>
+<p>When running the code in Listing 16-10, we'll see this output, with a one second
+pause in between each line:</p>
+<pre><code class="language-text">Got: hi
+Got: from
+Got: the
+Got: thread
+</code></pre>
+<p>We don't have any pausing or code that would take a while in the <code>for</code> loop in
+the main thread, so we can tell that the main thread is waiting to receive
+values from the spawned thread.</p>
+<a class="header" href="ch16-02-message-passing.html#create-multiple-producers-by-cloning-the-transmitter" name="create-multiple-producers-by-cloning-the-transmitter"><h3>Create Multiple Producers by Cloning the Transmitter</h3></a>
+<p>Near the start of this section, we mentioned that <code>mpsc</code> stood for <em>multiple
+producer, single consumer</em>. We can expand the code from Listing 16-10 to create
+multiple threads that all send values to the same receiver. We do that by
+cloning the transmitting half of the channel, as shown in Listing 16-11:</p>
+<p><span class="filename">Filename: src/main.rs</span></p>
+<pre><pre class="playpen"><code class="language-rust"># use std::thread;
+# use std::sync::mpsc;
+# use std::time::Duration;
+#
+# fn main() {
+// ...snip...
+let (tx, rx) = mpsc::channel();
+
+let tx1 = tx.clone();
+thread::spawn(move || {
+    let vals = vec![
+        String::from(&quot;hi&quot;),
+        String::from(&quot;from&quot;),
+        String::from(&quot;the&quot;),
+        String::from(&quot;thread&quot;),
+    ];
+
+    for val in vals {
+        tx1.send(val).unwrap();
+        thread::sleep(Duration::new(1, 0));
+    }
+});
+
+thread::spawn(move || {
+    let vals = vec![
+        String::from(&quot;more&quot;),
+        String::from(&quot;messages&quot;),
+        String::from(&quot;for&quot;),
+        String::from(&quot;you&quot;),
+    ];
+
+    for val in vals {
+        tx.send(val).unwrap();
+        thread::sleep(Duration::new(1, 0));
+    }
+});
+// ...snip...
+#
+#     for received in rx {
+#         println!(&quot;Got: {}&quot;, received);
+#     }
+# }
+</code></pre></pre>
+<p><span class="caption">Listing 16-11: Sending multiple messages and pausing
+between each one</span></p>
+<p>This time, before we create the first spawned thread, we call <code>clone</code> on the
+sending end of the channel. This will give us a new sending handle that we can
+pass to the first spawned thread. We'll pass the original sending end of the
+channel to a second spawned thread, and each thread is sending different
+messages to the receiving end of the channel.</p>
+<p>If you run this, you'll <em>probably</em> see output like this:</p>
+<pre><code class="language-text">Got: hi
+Got: more
+Got: from
+Got: messages
+Got: for
+Got: the
+Got: thread
+Got: you
+</code></pre>
+<p>You might see the values in a different order, though. It depends on your
+system! This is what makes concurrency interesting as well as difficult. If you
+play around with <code>thread::sleep</code>, giving it different values in the different
+threads, you can make the runs more non-deterministic and create different
+output each time.</p>
+<p>Now that we've seen how channels work, let's look at shared-memory concurrency.</p>
+
+                </div>
+
+                <!-- Mobile navigation buttons -->
+                
+                    <a href="ch16-01-threads.html" class="mobile-nav-chapters previous">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+                    <a href="ch16-03-shared-state.html" class="mobile-nav-chapters next">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                
+
+            </div>
+
+            
+                <a href="ch16-01-threads.html" class="nav-chapters previous" title="You can navigate through the chapters using the arrow keys">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+            
+
+            
+                <a href="ch16-03-shared-state.html" class="nav-chapters next" title="You can navigate through the chapters using the arrow keys">
+                    <i class="fa fa-angle-right"></i>
+                </a>
+            
+
+        </div>
+
+
+        <!-- Local fallback for Font Awesome -->
+        <script>
+            if ($(".fa").css("font-family") !== "FontAwesome") {
+                $('<link rel="stylesheet" type="text/css" href="_FontAwesome/css/font-awesome.css">').prependTo('head');
+            }
+        </script>
+
+        <!-- Livereload script (if served using the cli tool) -->
+        
+
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+    </body>
+</html>
