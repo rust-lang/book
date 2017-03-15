@@ -1071,7 +1071,7 @@ following things:</p>
 <code>Display</code>. The latter two are from the two methods defined on <code>Error</code>. The
 power of <code>Error</code> comes from the fact that all error types impl <code>Error</code>, which
 means errors can be existentially quantified as a
-<a href="/trait-objects.html">trait object</a>.
+<a href="trait-objects.html">trait object</a>.
 This manifests as either <code>Box&lt;Error&gt;</code> or <code>&amp;Error</code>. Indeed, the <code>cause</code> method
 returns an <code>&amp;Error</code>, which is itself a trait object. We'll revisit the
 <code>Error</code> trait's utility as a trait object later.</p>
