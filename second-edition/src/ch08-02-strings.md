@@ -164,11 +164,15 @@ bits of the `+` operator.
 
 First of all, `s2` has an `&`, meaning that we are adding a *reference* of the
 second string to the first string. This is because of the `s` parameter in the
-`add` function: we can only add a `&str` to a `String`, we can’t add two
-`String` values together. Remember back in Chapter 4 when we talked about how
-`&String` will coerce to `&str`: we write `&s2` so that the `String` will
-coerce to the proper type, `&str`. Because this method does not take ownership
-of the parameter, `s2` will still be valid after this operation.
+`add` function: we can only add a `&str` to a `String`, we can't add two
+`String` values together. But wait - the type of `&s2` is `&String`, not
+`&str`, as specified in the second parameter to `add`. Why does our example
+compile? We are able to use `&s2` in the call to `add` because a `&String`
+argument can be *coerced* into a `&str` - when the `add` function is called,
+Rust uses something called a *deref coercion*, which you could think of here as
+turning `&s2` into `&s2[..]` for use in the `add` function. We'll discuss deref
+coercion in more depth in Chapter 15. Because `add` does not take ownership of
+the parameter, `s2` will still be a valid `String` after this operation.
 
 Second, we can see in the signature that `add` takes ownership of `self`,
 because `self` does *not* have an `&`. This means `s1` in the above example
