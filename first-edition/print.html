@@ -5452,7 +5452,7 @@ fn main() {
 </ul>
 <a class="header" href="print.html#drop" name="drop"><h1>Drop</h1></a>
 <p>Now that we’ve discussed traits, let’s talk about a particular trait provided
-by the Rust standard library, <a href="../std/ops/trait.Drop.html"><code>Drop</code></a>. The <code>Drop</code> trait provides a way
+by the Rust standard library, <a href="../../std/ops/trait.Drop.html"><code>Drop</code></a>. The <code>Drop</code> trait provides a way
 to run some code when a value goes out of scope. For example:</p>
 <pre><pre class="playpen"><code class="language-rust">struct HasDrop;
 
@@ -5497,7 +5497,7 @@ BOOM times 1!!!
 <p>The <code>tnt</code> goes off before the <code>firecracker</code> does, because it was declared
 afterwards. Last in, first out.</p>
 <p>So what is <code>Drop</code> good for? Generally, <code>Drop</code> is used to clean up any resources
-associated with a <code>struct</code>. For example, the <a href="../std/sync/struct.Arc.html"><code>Arc&lt;T&gt;</code> type</a> is a
+associated with a <code>struct</code>. For example, the <a href="../../std/sync/struct.Arc.html"><code>Arc&lt;T&gt;</code> type</a> is a
 reference-counted type. When <code>Drop</code> is called, it will decrement the reference
 count, and if the total number of references is zero, will clean up the
 underlying value.</p>
@@ -7076,7 +7076,7 @@ mod macos_only {
 
 #}</code></pre></pre>
 <p>Rust attributes are used for a number of different things. There is a full list
-of attributes <a href="../reference/attributes.html">in the reference</a>. Currently, you are not allowed to
+of attributes <a href="../../reference/attributes.html">in the reference</a>. Currently, you are not allowed to
 create your own attributes, the Rust compiler defines them.</p>
 <a class="header" href="print.html#type-aliases" name="type-aliases"><h1>Type Aliases</h1></a>
 <p>The <code>type</code> keyword lets you declare an alias of another type:</p>
@@ -7683,7 +7683,7 @@ itself takes an <code>Output</code> parameter: since we know that numbers don't 
 type when multiplied, we also set it to <code>T</code>. <code>T</code> must also support copying, so
 Rust doesn't try to move <code>self.side</code> into the return value.</p>
 <a class="header" href="print.html#deref-coercions" name="deref-coercions"><h1><code>Deref</code> coercions</h1></a>
-<p>The standard library provides a special trait, <a href="../std/ops/trait.Deref.html"><code>Deref</code></a>. It’s normally
+<p>The standard library provides a special trait, <a href="../../std/ops/trait.Deref.html"><code>Deref</code></a>. It’s normally
 used to overload <code>*</code>, the dereference operator:</p>
 <pre><pre class="playpen"><code class="language-rust">use std::ops::Deref;
 
@@ -9740,7 +9740,7 @@ pub fn new(value: T) -&gt; Rc&lt;T&gt; {
     // Implementation goes here.
 }
 </code></pre>
-<p>This code generates documentation that looks <a href="../std/rc/struct.Rc.html#method.new">like this</a>. I've left the
+<p>This code generates documentation that looks <a href="../../std/rc/struct.Rc.html#method.new">like this</a>. I've left the
 implementation out, with a regular comment in its place.</p>
 <p>The first thing to notice about this annotation is that it uses
 <code>///</code> instead of <code>//</code>. The triple slash
