@@ -143,7 +143,7 @@ compress_mp3(my_favorite_song.audio.as_slice())
 
 That is, we'd have to explicitly say that we want the data in the `audio` field
 of `my_favorite_song` and that we want a slice referring to the whole
-`Vec<u8>`. If there were a lot of places where we'd want process the `audio`
+`Vec<u8>`. If there were a lot of places where we'd want to process the `audio`
 data in a similar manner, `.audio.as_slice()` would be wordy and repetitive.
 
 However, because of deref coercion and our implementation of the `Deref` trait
