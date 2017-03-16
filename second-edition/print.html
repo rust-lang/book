@@ -12966,11 +12966,11 @@ the scenes when we call <code>*my_favorite_song</code> is:</p>
 </code></pre>
 <p>This calls the <code>deref</code> method on <code>my_favorite_song</code>, which borrows
 <code>my_favorite_song</code> and returns a reference to <code>my_favorite_song.audio</code>, since
-that's what we defined <code>deref</code> to do in Listing 15-5. <code>*</code> on references is
+that's what we defined <code>deref</code> to do in Listing 15-7. <code>*</code> on references is
 defined to just follow the reference and return the data, so the expansion of
 <code>*</code> doesn't recurse for the outer <code>*</code>. So we end up with data of type
 <code>Vec&lt;u8&gt;</code>, which matches the <code>vec![1, 2, 3]</code> in the <code>assert_eq!</code> in Listing
-15-5.</p>
+15-7.</p>
 <p>The reason that the return type of the <code>deref</code> method is still a reference and
 why it's necessary to dereference the result of the method is that if the
 <code>deref</code> method returned just the value, using <code>*</code> would always take ownership.</p>
@@ -12979,12 +12979,11 @@ why it's necessary to dereference the result of the method is that if the
 does not hold true is <em>deref coercions</em> of arguments to functions and methods.
 A deref coercion will automatically convert a reference to a pointer or a smart
 pointer into a reference to that pointer's contents. A deref coercion happens
-when a value is passed to a function or method, and only happens if it's needed
-to get the type of the value passed in to match the type of the parameter
-defined in the signature. Deref coercion was added to Rust to make calling
-functions and methods not need as many explicit references and dereferences
-with <code>&amp;</code> and <code>*</code>.</p>
-<p>Using our <code>Mp3</code> struct from Listing 15-5, here's the signature of a function to
+when the type of the argument passed into the function differs from the type
+of the parameter defined in that function's signature. Deref coercion was added
+to Rust to make calling functions and methods not need as many explicit references
+and dereferences with <code>&amp;</code> and <code>*</code>.</p>
+<p>Using our <code>Mp3</code> struct from Listing 15-7, here's the signature of a function to
 compress mp3 audio data that takes a slice of <code>u8</code>:</p>
 <pre><code class="language-rust ignore">fn compress_mp3(audio: &amp;[u8]) -&gt; Vec&lt;u8&gt; {
     // the actual implementation would go here
@@ -12996,7 +12995,7 @@ audio data in <code>my_favorite_song</code>, we'd have to write:</p>
 </code></pre>
 <p>That is, we'd have to explicitly say that we want the data in the <code>audio</code> field
 of <code>my_favorite_song</code> and that we want a slice referring to the whole
-<code>Vec&lt;u8&gt;</code>. If there were a lot of places where we'd want process the <code>audio</code>
+<code>Vec&lt;u8&gt;</code>. If there were a lot of places where we'd want to process the <code>audio</code>
 data in a similar manner, <code>.audio.as_slice()</code> would be wordy and repetitive.</p>
 <p>However, because of deref coercion and our implementation of the <code>Deref</code> trait
 on <code>Mp3</code>, we can call this function with the data in <code>my_favorite_song</code> by
@@ -13014,10 +13013,10 @@ documentation for <code>Vec&lt;T&gt;</code>). So, at compile time, Rust will see
 match the signature of <code>compress_mp3</code>. That means we get to do less typing!
 Rust will analyze types through <code>Deref::deref</code> as many times as it needs to in
 order to get a reference to match the parameter's type, when the <code>Deref</code> trait
-is defined for the types involved. The indirection is resolved at compile time,
-so there is no run-time penalty for taking advantage of deref coercion.</p>
-<p>There's also a <code>DerefMut</code> trait for overriding <code>*</code> on <code>&amp;mut T</code> for use in
-assignment in the same fashion that we use <code>Deref</code> to override <code>*</code> on <code>&amp;T</code>s.</p>
+is defined for the types involved. This indirection is resolved at compile time,
+so there is no run-time penalty for taking advantage of deref coercion!</p>
+<p>Similar to how we use the <code>Deref</code> trait to override <code>*</code> on <code>&amp;T</code>s, there is also
+a <code>DerefMut</code> trait for overriding <code>*</code> on <code>&amp;mut T</code>.</p>
 <p>Rust does deref coercion when it finds types and trait implementations in three
 cases:</p>
 <ul>
