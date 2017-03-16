@@ -434,7 +434,9 @@ in Chapter 10). If a type has the <code>Copy</code> trait, an older variable is 
 usable after assignment. Rust won’t let us annotate a type with the <code>Copy</code>
 trait if the type, or any of its parts, has implemented the <code>Drop</code> trait. If
 the type needs something special to happen when the value goes out of scope and
-we add the <code>Copy</code> annotation to that type, we’ll get a compile time error.</p>
+we add the <code>Copy</code> annotation to that type, we’ll get a compile time error. To
+learn about how to add the <code>Copy</code> annotation to your type, see Appendix C on
+Derivable Traits.</p>
 <p>So what types are <code>Copy</code>? You can check the documentation for the given type to
 be sure, but as a general rule, any group of simple scalar values can be
 <code>Copy</code>, and nothing that requires allocation or is some form of resource is
