@@ -221,11 +221,15 @@ Chapter 10. This signature gives us the clues we need to understand the tricky
 bits of the <code>+</code> operator.</p>
 <p>First of all, <code>s2</code> has an <code>&amp;</code>, meaning that we are adding a <em>reference</em> of the
 second string to the first string. This is because of the <code>s</code> parameter in the
-<code>add</code> function: we can only add a <code>&amp;str</code> to a <code>String</code>, we can’t add two
-<code>String</code> values together. Remember back in Chapter 4 when we talked about how
-<code>&amp;String</code> will coerce to <code>&amp;str</code>: we write <code>&amp;s2</code> so that the <code>String</code> will
-coerce to the proper type, <code>&amp;str</code>. Because this method does not take ownership
-of the parameter, <code>s2</code> will still be valid after this operation.</p>
+<code>add</code> function: we can only add a <code>&amp;str</code> to a <code>String</code>, we can't add two
+<code>String</code> values together. But wait - the type of <code>&amp;s2</code> is <code>&amp;String</code>, not
+<code>&amp;str</code>, as specified in the second parameter to <code>add</code>. Why does our example
+compile? We are able to use <code>&amp;s2</code> in the call to <code>add</code> because a <code>&amp;String</code>
+argument can be <em>coerced</em> into a <code>&amp;str</code> - when the <code>add</code> function is called,
+Rust uses something called a <em>deref coercion</em>, which you could think of here as
+turning <code>&amp;s2</code> into <code>&amp;s2[..]</code> for use in the <code>add</code> function. We'll discuss deref
+coercion in more depth in Chapter 15. Because <code>add</code> does not take ownership of
+the parameter, <code>s2</code> will still be a valid <code>String</code> after this operation.</p>
 <p>Second, we can see in the signature that <code>add</code> takes ownership of <code>self</code>,
 because <code>self</code> does <em>not</em> have an <code>&amp;</code>. This means <code>s1</code> in the above example
 will be moved into the <code>add</code> call and no longer be valid after that. So while
