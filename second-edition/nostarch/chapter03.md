@@ -247,7 +247,7 @@ error[E0308]: mismatched types
   |              ^^^^^^^^^^^^ expected &str, found usize
   |
   = note: expected type `&str`
-  = note:    found type `usize`
+             found type `usize`
 ```
 
 Now that we’ve explored how variables work, let’s look at more data types they
@@ -277,10 +277,10 @@ possible type we want to use:
 
 ```bash
 error[E0282]: unable to infer enough type information about `_`
- --> src/main.rs:2:5
+ --> src/main.rs:2:9
   |
-2 | let guess = "42".parse().unwrap();
-  |     ^^^^^ cannot infer type for `_`
+2 |     let guess = "42".parse().unwrap();
+  |         ^^^^^ cannot infer type for `_`
   |
   = note: type annotations or generic parameter binding required
 ```
