@@ -95,7 +95,7 @@ working directory or environment variables.</p>
 named <code>test-output.txt</code> and writes some data to that file. Then each test reads
 the data in that file and asserts that the file contains a particular value,
 which is different in each test. Because the tests are all run at the same
-time, one test might overrwrite the file between when another test writes and
+time, one test might overwrite the file between when another test writes and
 reads the file. The second test will then fail, not because the code is
 incorrect, but because the tests have interfered with each other while running
 in parallel. One solution would be to make sure each test writes to a different
@@ -299,7 +299,7 @@ fn expensive_test() {
 }
 
 #}</code></pre></pre>
-<p>We add the <code>#[ignore]</code> line to the test we want to exlcude, after <code>#[test]</code>.
+<p>We add the <code>#[ignore]</code> line to the test we want to exclude, after <code>#[test]</code>.
 Now if we run our tests, we'll see <code>it_works</code> runs, but <code>expensive_test</code> does
 not:</p>
 <pre><code class="language-text">$ cargo test
