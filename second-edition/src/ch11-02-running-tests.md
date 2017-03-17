@@ -34,7 +34,7 @@ For example, say each of your tests runs some code that creates a file on disk
 named `test-output.txt` and writes some data to that file. Then each test reads
 the data in that file and asserts that the file contains a particular value,
 which is different in each test. Because the tests are all run at the same
-time, one test might overrwrite the file between when another test writes and
+time, one test might overwrite the file between when another test writes and
 reads the file. The second test will then fail, not because the code is
 incorrect, but because the tests have interfered with each other while running
 in parallel. One solution would be to make sure each test writes to a different
@@ -275,7 +275,7 @@ fn expensive_test() {
 }
 ```
 
-We add the `#[ignore]` line to the test we want to exlcude, after `#[test]`.
+We add the `#[ignore]` line to the test we want to exclude, after `#[test]`.
 Now if we run our tests, we'll see `it_works` runs, but `expensive_test` does
 not:
 

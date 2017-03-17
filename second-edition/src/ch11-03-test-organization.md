@@ -47,7 +47,7 @@ mod tests {
 ```
 
 This is the automatically generated test module. The attribute `cfg` stands for
-*configruation*, and tells Rust that the following item should only be included
+*configuration*, and tells Rust that the following item should only be included
 given a certain configuration. In this case, the configuration is `test`,
 provided by Rust for compiling and running tests. By using this attribute,
 Cargo only compiles our test code if we actively run the tests with `cargo

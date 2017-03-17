@@ -229,7 +229,7 @@ helps us check that our code is functioning in the way we intend.
 <!-- what kind of thing can be passed as an argument? Presumably when we use it
 for real we won't pass it `true` or `false` as an argument, but some condition
 that will evaluate to true or false? In which case, should below be phrased "If
-the argument evaluates to true" and an exaplanation of that? Or maybe even a
+the argument evaluates to true" and an explanation of that? Or maybe even a
 working example would be better, this could be misleading -->
 <!-- We were trying to really break it down, to show just how the `assert!`
 macro works and what it looks like for it to pass or fail, before we got into

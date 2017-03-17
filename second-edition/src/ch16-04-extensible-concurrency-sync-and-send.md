@@ -70,7 +70,7 @@ Chapter 20 will use these concepts in a more realistic situation than the
 smaller examples we discussed in this chapter.
 
 As we mentioned, since very little of how Rust deals with concurrency has to be
-part of the language, there are many concurrency solutions implemnted as
+part of the language, there are many concurrency solutions implemented as
 crates. These evolve more quickly than the standard library; search online for
 the current state-of-the-art crates for use in multithreaded situations.
 

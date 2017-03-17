@@ -114,7 +114,7 @@ to take a break and give the other thread a turn.
 
 Not only does the code in Listing 16-1 not allow the spawned thread to finish
 most of the time since the main thread ends before the spawned thread is done,
-there's actualy no guarantee that the spawned thread will get to run at all! We
+there's actually no guarantee that the spawned thread will get to run at all! We
 can fix this by saving the return value of `thread::spawn`, which is a
 `JoinHandle`. That looks like Listing 16-2:
 

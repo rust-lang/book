@@ -140,6 +140,7 @@ isize
 iter
 iterator's
 JavaScript
+JoinHandle
 lang
 latin
 libc
@@ -192,6 +193,7 @@ OptionalFloatingPointNumber
 OptionalNumber
 OsStr
 OsString
+other's
 overread
 parameterize
 ParseIntError
@@ -224,6 +226,7 @@ repr
 retweet
 ripgrep
 runtime
+runtimes
 Rustacean
 Rustaceans
 rustc
@@ -261,6 +264,7 @@ submodule
 submodules
 Submodules
 suboptimal
+substring
 subtree
 subtyping
 Summarizable
@@ -296,6 +300,7 @@ USERPROFILE
 usize
 UsState
 utils
+vals
 variable's
 variant's
 vers
