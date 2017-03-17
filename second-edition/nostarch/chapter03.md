@@ -299,9 +299,10 @@ work in Rust.
 An *integer* is a number without a fractional component. We used one integer
 type earlier in this chapter, the `i32` type. This type declaration indicates
 that the value it’s associated with should be a signed integer (hence the `i`,
-as opposed to a `u` for unsigned) for a 32-bit system. Table 3-1 shows the
-built-in integer types in Rust. Each variant in the Signed and Unsigned columns
-(for example, *i32*) can be used to declare the type of an integer value.
+as opposed to a `u` for unsigned) that takes up 32 bits of space. Table 3-1
+shows the built-in integer types in Rust. Each variant in the Signed and
+Unsigned columns (for example, *i32*) can be used to declare the type of an
+integer value.
 
 <caption>
 Table 3-1: Integer Types in Rust
