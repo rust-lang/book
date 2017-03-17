@@ -34,8 +34,8 @@ advantage of the safety and easy concurrency that Rust offers. However, you
 still have the option to make your variables mutable. Let’s explore how and why
 Rust encourages you to favor immutability, and why you might want to opt out.
 
-When a variable is immutable, that means mean once a value is bound to a name,
-you can’t change that value. To illustrate, let’s generate a new project called
+When a variable is immutable, that means once a value is bound to a name, you
+can’t change that value. To illustrate, let’s generate a new project called
 *variables* in your *projects* directory by using `cargo new --bin variables`.
 
 Then, in your new *variables* directory, open *src/main.rs* and replace its
@@ -55,9 +55,7 @@ fn main() {
 Save and run the program using `cargo run`. You should receive an error
 message, as shown in this output:
 
-```bash
-$ cargo run
-   Compiling variables v0.0.1 (file:///projects/variables)
+```
 error[E0384]: re-assignment of immutable variable `x`
  --> src/main.rs:4:5
   |
@@ -267,8 +265,8 @@ value and how we use it. In cases when many types are possible, such as when we
 converted a `String` to a numeric type using `parse` in Chapter 2, we must add
 a type annotation, like this:
 
-```rust
-let guess: u32 = "42".parse().unwrap();
+```
+let guess: u32 = "42".parse().expect("Not a number!");
 ```
 
 If we don’t add the type annotation here, Rust will display the following
@@ -279,7 +277,7 @@ possible type we want to use:
 error[E0282]: unable to infer enough type information about `_`
  --> src/main.rs:2:9
   |
-2 |     let guess = "42".parse().unwrap();
+2 |     let guess = "42".parse().expect("Not a number!");
   |         ^^^^^ cannot infer type for `_`
   |
   = note: type annotations or generic parameter binding required
@@ -677,10 +675,18 @@ The lines execute in the order in which they appear in the `main` function.
 First, the “Hello, world!” message prints, and then `another_function` is
 called and its message is printed.
 
-### Function Arguments
+### Function Parameters
 
-Functions can also take arguments. The following rewritten version of
-`another_function` shows what arguments look like in Rust:
+Functions can also be defined to have *parameters*, which are special variables
+that are part of a function's signature. When a function has parameters, we can
+provide it with concrete values for those parameters. Technically, the concrete
+values are called *arguments*, but in casual conversation people tend to use
+the words “parameter” and “argument” interchangeably for either the variables
+in a function's definition or the concrete values passed in when you call a
+function.
+
+The following rewritten version of `another_function` shows what parameters
+look like in Rust:
 
 Filename: src/main.rs
 
@@ -703,18 +709,18 @@ $ cargo run
 The value of x is: 5
 ```
 
-The declaration of `another_function` has one argument named `x`. The type of
+The declaration of `another_function` has one parameter named `x`. The type of
 `x` is specified as `i32`. When `5` is passed to `another_function`, the
 `println!` macro puts `5` where the pair of curly braces were in the format
 string.
 
-In function signatures, you *must* declare the type. This is a deliberate
-decision in Rust’s design: requiring type annotations in function definitions
-means the compiler almost never needs you to use them elsewhere in the code to
-figure out what you mean.
+In function signatures, you *must* declare the type of each parameter. This is
+a deliberate decision in Rust’s design: requiring type annotations in function
+definitions means the compiler almost never needs you to use them elsewhere in
+the code to figure out what you mean.
 
-When you want a function to have multiple arguments, separate them inside the
-function signature with commas, like this:
+When you want a function to have multiple parameters, separate the parameter
+declarations with commas, like this:
 
 Filename: src/main.rs
 
@@ -729,10 +735,10 @@ fn another_function(x: i32, y: i32) {
 }
 ```
 
-This example creates a function with two arguments, both of which are `i32`
-types. If your function has multiple arguments, the arguments don’t need to be
-the same type, but they just happen to be in this example. The function then
-prints out the values of both of its arguments.
+This example creates a function with two parameters, both of which are `i32`
+types. The function then prints out the values in both of its parameters. Note
+that function parameters don't all need to be the same type, they just happen
+to be in this example.
 
 Let’s try running this code. Replace the program currently in your *function*
 project’s *src/main.rs* file with the preceding example, and run it using
@@ -746,8 +752,8 @@ The value of x is: 5
 The value of y is: 6
 ```
 
-Because `5` is passed as the `x` argument and `6` is passed as the `y`
-argument, the two strings are printed with these values.
+Because we called the function with `5` as the value for  `x` and `6` is passed
+as the value for `y`, the two strings are printed with these values.
 
 ### Function Bodies
 
@@ -897,7 +903,7 @@ that line is the same as the following:
 let x = 5;
 ```
 
-Second, the `five` function requires no arguments and defines the type of the
+Second, the `five` function has no parameters and defines the type of the
 return value, but the body of the function is a lonely `5` with no semicolon
 because it’s an expression whose value we want to return. Let’s look at another
 example:
@@ -1387,13 +1393,13 @@ the value is: 50
 ```
 
 All five array values appear in the terminal, as expected. Even though `index`
-will reach a value of `6` at some point, the loop stops executing before trying
+will reach a value of `5` at some point, the loop stops executing before trying
 to fetch a sixth value from the array.
 
 But this approach is error prone; we could cause the program to panic if the
-index length is incorrect. It’s also slow, because the compiler needs to
-perform the conditional check on every element on every iteration through the
-loop.
+index length is incorrect. It’s also slow, because the compiler adds runtime
+code to perform the conditional check on every element on every iteration
+through the loop.
 
 As a more efficient alternative, you can use a `for` loop and execute some code
 for each item in a collection. A `for` loop looks like this:
