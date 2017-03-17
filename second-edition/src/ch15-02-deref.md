@@ -117,11 +117,11 @@ why it's necessary to dereference the result of the method is that if the
 
 Rust tends to favor explicitness over implicitness, but one case where this
 does not hold true is *deref coercions* of arguments to functions and methods.
-A deref coercion will automatically convert a reference to a pointer or a smart
-pointer into a reference to that pointer's contents. A deref coercion happens
-when the type of the argument passed into the function differs from the type
-of the parameter defined in that function's signature. Deref coercion was added
-to Rust to make calling functions and methods not need as many explicit references
+A deref coercion will automatically convert a reference to any pointer into a
+reference to that pointer's contents. A deref coercion happens when the reference
+type of the argument passed into the function differs from the reference type of
+the parameter defined in that function's signature. Deref coercion was added to
+Rust to make calling functions and methods not need as many explicit references
 and dereferences with `&` and `*`.
 
 Using our `Mp3` struct from Listing 15-7, here's the signature of a function to
