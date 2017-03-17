@@ -29,6 +29,8 @@ fn main() {
 }
 ```
 
+<!-- NEXT PARAGRAPH WRAPPED WEIRD INTENTIONALLY SEE #199 -->
+
 All `if` expressions start with the keyword `if`, which is followed by a
 condition. In this case, the condition checks whether or not the variable
 `number` has a value less than 5. The block of code we want to execute if the
@@ -87,7 +89,6 @@ The `if` condition evaluates to a value of `3` this time, and Rust throws an
 error:
 
 ```text
-   Compiling branches v0.1.0 (file:///projects/branches)
 error[E0308]: mismatched types
  --> src/main.rs:4:8
   |
@@ -95,10 +96,7 @@ error[E0308]: mismatched types
   |        ^^^^^^ expected bool, found integral variable
   |
   = note: expected type `bool`
-  = note:    found type `{integer}`
-
-error: aborting due to previous error
-Could not compile `branches`.
+             found type `{integer}`
 ```
 
 The error indicates that Rust expected a `bool` but got an integer. Rust will
@@ -223,20 +221,24 @@ fn main() {
 }
 ```
 
-When we run this code, we’ll get an error. The `if` and `else` arms have value
-types that are incompatible, and Rust indicates exactly where to find the
+When we try to run this code, we’ll get an error. The `if` and `else` arms have
+value types that are incompatible, and Rust indicates exactly where to find the
 problem in the program:
 
 ```text
-   Compiling branches v0.1.0 (file:///projects/branches)
 error[E0308]: if and else have incompatible types
  --> src/main.rs:4:18
   |
-4 |     let number = if condition {
-  |                  ^ expected integral variable, found reference
+4 |       let number = if condition {
+  |  __________________^ starting here...
+5 | |         5
+6 | |     } else {
+7 | |         "six"
+8 | |     };
+  | |_____^ ...ending here: expected integral variable, found reference
   |
   = note: expected type `{integer}`
-  = note:    found type `&’static str`
+             found type `&'static str`
 ```
 
 The expression in the `if` block evaluates to an integer, and the expression in
@@ -377,9 +379,9 @@ will reach a value of `5` at some point, the loop stops executing before trying
 to fetch a sixth value from the array.
 
 But this approach is error prone; we could cause the program to panic if the
-index length is incorrect. It’s also slow, because the compiler adds
-runtime code to perform the conditional check on every element on every
-iteration through the loop.
+index length is incorrect. It’s also slow, because the compiler adds runtime
+code to perform the conditional check on every element on every iteration
+through the loop.
 
 As a more efficient alternative, you can use a `for` loop and execute some code
 for each item in a collection. A `for` loop looks like this:

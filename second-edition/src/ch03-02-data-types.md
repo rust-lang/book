@@ -22,10 +22,10 @@ possible type we want to use:
 
 ```text
 error[E0282]: unable to infer enough type information about `_`
- --> src/main.rs:2:5
+ --> src/main.rs:2:9
   |
-2 | let guess = "42".parse().expect("Not a number!");
-  |     ^^^^^ cannot infer type for `_`
+2 |     let guess = "42".parse().expect("Not a number!");
+  |         ^^^^^ cannot infer type for `_`
   |
   = note: type annotations or generic parameter binding required
 ```
@@ -44,9 +44,10 @@ work in Rust.
 An *integer* is a number without a fractional component. We used one integer
 type earlier in this chapter, the `i32` type. This type declaration indicates
 that the value it’s associated with should be a signed integer (hence the `i`,
-as opposed to a `u` for unsigned) for a 32-bit system. Table 3-1 shows the
-built-in integer types in Rust. Each variant in the Signed and Unsigned columns
-(for example, *i32*) can be used to declare the type of an integer value.
+as opposed to a `u` for unsigned) that takes up 32 bits of space. Table 3-1
+shows the built-in integer types in Rust. Each variant in the Signed and
+Unsigned columns (for example, *i32*) can be used to declare the type of an
+integer value.
 
 <span class="caption">Table 3-1: Integer Types in Rust</span>
 
@@ -334,8 +335,9 @@ the array? Say we change the example to the following:
 ```rust,ignore
 fn main() {
     let a = [1, 2, 3, 4, 5];
+    let index = 10;
 
-    let element = a[10];
+    let element = a[index];
 
     println!("The value of element is: {}", element);
 }
@@ -348,9 +350,8 @@ $ cargo run
    Compiling arrays v0.1.0 (file:///projects/arrays)
      Running `target/debug/arrays`
 thread '<main>' panicked at 'index out of bounds: the len is 5 but the index is
- 10', src/main.rs:4
+ 10', src/main.rs:6
 note: Run with `RUST_BACKTRACE=1` for a backtrace.
-error: Process didn't exit successfully: `target/debug/arrays` (exit code: 101)
 ```
 
 The compilation didn’t produce any errors, but the program results in a

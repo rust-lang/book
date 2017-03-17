@@ -9,8 +9,6 @@ Specifically, you’ll learn about variables, basic types, functions, comments,
 and control flow. These foundations will be in every Rust program, and learning
 them early will give you a strong core to start from.
 
-<!-- PROD: START BOX -->
-
 > ### Keywords
 >
 > The Rust language has a set of *keywords* that have been reserved for use by
@@ -20,5 +18,3 @@ them early will give you a strong core to start from.
 > programs; a few have no current functionality associated with them but have
 > been reserved for functionality that might be added to Rust in the future. You
 > can find a list of the keywords in Appendix A.
-
-<!-- PROD: END BOX -->

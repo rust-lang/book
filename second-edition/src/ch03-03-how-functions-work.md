@@ -56,8 +56,8 @@ Functions can also be defined to have *parameters*, which are special variables
 that are part of a function's signature. When a function has parameters, we can
 provide it with concrete values for those parameters. Technically, the concrete
 values are called *arguments*, but in casual conversation people tend to use
-the words "parameter" and "argument" interchangeably for either the variables in
-a function's definition or the concrete values passed in when you call a
+the words “parameter” and “argument” interchangeably for either the variables
+in a function's definition or the concrete values passed in when you call a
 function.
 
 The following rewritten version of `another_function` shows what parameters
@@ -112,7 +112,7 @@ fn another_function(x: i32, y: i32) {
 
 This example creates a function with two parameters, both of which are `i32`
 types. The function then prints out the values in both of its parameters. Note
-that function parameters don't all need to be the same type - they just happen
+that function parameters don't all need to be the same type, they just happen
 to be in this example.
 
 Let’s try running this code. Replace the program currently in your *function*
@@ -127,8 +127,8 @@ The value of x is: 5
 The value of y is: 6
 ```
 
-Because we called the function with `5` as the value for `x` and `6` as the
-value for `y`, the two strings are printed using those values.
+Because we called the function with `5` as the value for  `x` and `6` is passed
+as the value for `y`, the two strings are printed with these values.
 
 ### Function Bodies
 
@@ -316,12 +316,17 @@ fn plus_one(x: i32) -> i32 {
 Running this code produces an error, as follows:
 
 ```text
-error[E0269]: not all control paths return a value
- --> src/main.rs:7:1
+error[E0308]: mismatched types
+ --> src/main.rs:7:28
   |
-7 | fn plus_one(x: i32) -> i32 {
-  | ^
+7 |   fn plus_one(x: i32) -> i32 {
+  |  ____________________________^ starting here...
+8 | |     x + 1;
+9 | | }
+  | |_^ ...ending here: expected i32, found ()
   |
+  = note: expected type `i32`
+             found type `()`
 help: consider removing this semicolon:
  --> src/main.rs:8:10
   |
@@ -329,9 +334,10 @@ help: consider removing this semicolon:
   |          ^
 ```
 
-The main error message, “not all control paths return a value,” reveals the
-core issue with this code. The definition of the function `plus_one` says that
-it will return an `i32`, but statements don’t evaluate to a value. Therefore,
-nothing is returned, which contradicts the function definition and results in
-an error. In this output, Rust provides a message to possibly help rectify this
-issue: it suggests removing the semicolon, which would fix the error.
+The main error message, “mismatched types,” reveals the core issue with this
+code. The definition of the function `plus_one` says that it will return an
+`i32`, but statements don’t evaluate to a value, which is expressed by `()`,
+the empty tuple. Therefore, nothing is returned, which contradicts the function
+definition and results in an error. In this output, Rust provides a message to
+possibly help rectify this issue: it suggests removing the semicolon, which
+would fix the error.
