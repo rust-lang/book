@@ -594,8 +594,9 @@ Filename: src/main.rs
 ```rust,ignore
 fn main() {
     let a = [1, 2, 3, 4, 5];
+    let index = 10;
 
-    let element = a[10];
+    let element = a[index];
 
     println!("The value of element is: {}", element);
 }
@@ -608,9 +609,8 @@ $ cargo run
    Compiling arrays v0.1.0 (file:///projects/arrays)
      Running `target/debug/arrays`
 thread '<main>' panicked at 'index out of bounds: the len is 5 but the index is
- 10', src/main.rs:4
+ 10', src/main.rs:6
 note: Run with `RUST_BACKTRACE=1` for a backtrace.
-error: Process didn't exit successfully: `target/debug/arrays` (exit code: 101)
 ```
 
 The compilation didn’t produce any errors, but the program results in a
@@ -936,13 +936,18 @@ fn plus_one(x: i32) -> i32 {
 
 Running this code produces an error, as follows:
 
-```bash
-error[E0269]: not all control paths return a value
- --> src/main.rs:7:1
+```
+error[E0308]: mismatched types
+ --> src/main.rs:7:28
   |
-7 | fn plus_one(x: i32) -> i32 {
-  | ^
+7 |   fn plus_one(x: i32) -> i32 {
+  |  ____________________________^ starting here...
+8 | |     x + 1;
+9 | | }
+  | |_^ ...ending here: expected i32, found ()
   |
+  = note: expected type `i32`
+             found type `()`
 help: consider removing this semicolon:
  --> src/main.rs:8:10
   |
@@ -950,12 +955,13 @@ help: consider removing this semicolon:
   |          ^
 ```
 
-The main error message, “not all control paths return a value,” reveals the
-core issue with this code. The definition of the function `plus_one` says that
-it will return an `i32`, but statements don’t evaluate to a value. Therefore,
-nothing is returned, which contradicts the function definition and results in
-an error. In this output, Rust provides a message to possibly help rectify this
-issue: it suggests removing the semicolon, which would fix the error.
+The main error message, “mismatched types,” reveals the core issue with this
+code. The definition of the function `plus_one` says that it will return an
+`i32`, but statements don’t evaluate to a value, which is expressed by `()`,
+the empty tuple. Therefore, nothing is returned, which contradicts the function
+definition and results in an error. In this output, Rust provides a message to
+possibly help rectify this issue: it suggests removing the semicolon, which
+would fix the error.
 
 ## Comments
 
@@ -1092,8 +1098,7 @@ fn main() {
 The `if` condition evaluates to a value of `3` this time, and Rust throws an
 error:
 
-```bash
-   Compiling branches v0.1.0 (file:///projects/branches)
+```
 error[E0308]: mismatched types
  --> src/main.rs:4:8
   |
@@ -1101,10 +1106,7 @@ error[E0308]: mismatched types
   |        ^^^^^^ expected bool, found integral variable
   |
   = note: expected type `bool`
-  = note:    found type `{integer}`
-
-error: aborting due to previous error
-Could not compile `branches`.
+             found type `{integer}`
 ```
 
 The error indicates that Rust expected a `bool` but got an integer. Rust will
@@ -1230,20 +1232,24 @@ fn main() {
 }
 ```
 
-When we run this code, we’ll get an error. The `if` and `else` arms have value
-types that are incompatible, and Rust indicates exactly where to find the
+When we try to run this code, we’ll get an error. The `if` and `else` arms have
+value types that are incompatible, and Rust indicates exactly where to find the
 problem in the program:
 
-```bash
-   Compiling branches v0.1.0 (file:///projects/branches)
+```
 error[E0308]: if and else have incompatible types
  --> src/main.rs:4:18
   |
-4 |     let number = if condition {
-  |                  ^ expected integral variable, found reference
+4 |       let number = if condition {
+  |  __________________^ starting here...
+5 | |         5
+6 | |     } else {
+7 | |         "six"
+8 | |     };
+  | |_____^ ...ending here: expected integral variable, found reference
   |
   = note: expected type `{integer}`
-  = note:    found type `&’static str`
+             found type `&'static str`
 ```
 
 The expression in the `if` block evaluates to an integer, and the expression in
