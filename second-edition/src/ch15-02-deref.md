@@ -94,24 +94,38 @@ we hadn't implemented the `Deref` trait for `Mp3`, Rust wouldn't compile the
 code `*my_favorite_song`: we'd get an error saying type `Mp3` cannot be
 dereferenced.
 
-The reason this code works is that what the `*` operator is doing behind
-the scenes when we call `*my_favorite_song` is:
+Theoretically speaking, the compiler can only dereference `&` pointers, which
+`my_favorite_song` is not (it is an `Mp3` struct). However, the compiler also
+knows that objects implementing the `Deref` trait have a `deref` method, which
+returns a _reference_ to something inside the object, and that this reference
+_is_ suitable for dereferencing! This brings us to another important, but rather
+counterintuitive point: the dereference method `deref` returns a reference to
+the data, but the dereference operator `*` returns the data directly! The reason
+for this decision is ownership; if the `deref` method directly returned the
+value instead of a reference to it, the value would be moved out of the object
+that owns it. Transferring ownership like that would be undesirable for various
+reasons, including performance. What's important to take away here is that the
+`*` operator is in fact syntactical sugar for "dereferencing the _result_ of the
+`deref` method". And the reason that the return type of the `deref` method is
+still a reference and why it's necessary to dereference the result of the method
+is that if the `deref` method returned just the value, using `*` would always
+take ownership.
+
+So our code in Listing 15-7 works because `*my_favorite_song` is really doing
+the following behind the scenes:
 
 ```rust,ignore
 *(my_favorite_song.deref())
 ```
 
-This calls the `deref` method on `my_favorite_song`, which borrows
-`my_favorite_song` and returns a reference to `my_favorite_song.audio`, since
-that's what we defined `deref` to do in Listing 15-7. `*` on references is
-defined to just follow the reference and return the data, so the expansion of
-`*` doesn't recurse for the outer `*`. So we end up with data of type
-`Vec<u8>`, which matches the `vec![1, 2, 3]` in the `assert_eq!` in Listing
-15-7.
-
-The reason that the return type of the `deref` method is still a reference and
-why it's necessary to dereference the result of the method is that if the
-`deref` method returned just the value, using `*` would always take ownership.
+Note that this is an explicit rule everywhere the `*` operator is applied,
+obviously ignoring the implied infinite recursion; the substitution only
+happens once. This calls the `deref` method on `my_favorite_song`, which
+borrows `my_favorite_song` and returns a reference to `my_favorite_song.audio`,
+as defined in Listing 15-7. This returned reference is then dereferenced by the `*`
+operator from the rule. So when all is said and done, `*` on references simply
+follows the reference and returns the data! That's how we end up with data of type
+`Vec<u8>`, which matches the `vec![1, 2, 3]` in the `assert_eq!` in Listing 15-7.
 
 ### Implicit Deref Coercions with Functions and Methods
 
