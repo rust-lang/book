@@ -1293,7 +1293,6 @@ but we’ll discuss them in the context of Rust and explain their conventions.</
 <p>Specifically, you’ll learn about variables, basic types, functions, comments,
 and control flow. These foundations will be in every Rust program, and learning
 them early will give you a strong core to start from.</p>
-<!-- PROD: START BOX -->
 <blockquote>
 <a class="header" href="print.html#keywords" name="keywords"><h3>Keywords</h3></a>
 <p>The Rust language has a set of <em>keywords</em> that have been reserved for use by
@@ -1304,7 +1303,6 @@ programs; a few have no current functionality associated with them but have
 been reserved for functionality that might be added to Rust in the future. You
 can find a list of the keywords in Appendix A.</p>
 </blockquote>
-<!-- PROD: END BOX -->
 <a class="header" href="print.html#variables-and-mutability" name="variables-and-mutability"><h2>Variables and Mutability</h2></a>
 <p>As mentioned in Chapter 2, by default variables are <em>immutable</em>. This is one of
 many nudges in Rust that encourages you to write your code in a way that takes
@@ -1326,9 +1324,7 @@ code with the following:</p>
 </code></pre>
 <p>Save and run the program using <code>cargo run</code>. You should receive an error
 message, as shown in this output:</p>
-<pre><code class="language-text">$ cargo run
-   Compiling variables v0.0.1 (file:///projects/variables)
-error[E0384]: re-assignment of immutable variable `x`
+<pre><code class="language-text">error[E0384]: re-assignment of immutable variable `x`
  --&gt; src/main.rs:4:5
   |
 2 |     let x = 5;
@@ -1382,37 +1378,44 @@ variables.</p>
 <p>There are multiple trade-offs to consider, in addition to the prevention of
 bugs. For example, in cases where you’re using large data structures, mutating
 an instance in place may be faster than copying and returning newly allocated
-instances. With smaller data structures, always creating new instances and
-writing in a more functional programming style may be easier to reason about,
-so the lower performance penalty might be worth it to gain that clarity.</p>
+instances. With smaller data structures, creating new instances and writing in
+a more functional programming style may be easier to reason about, so the lower
+performance might be a worthwhile penalty for gaining that clarity.</p>
 <a class="header" href="print.html#differences-between-variables-and-constants" name="differences-between-variables-and-constants"><h3>Differences Between Variables and Constants</h3></a>
-<p>Not being able to change the value of a variable might have reminded you of
-another programming concept that most languages have: <em>constants</em>. Constants
-are also values bound to a name that are not allowed to change, but there are a
-few differences between constants and variables. First, using <code>mut</code> with
-constants is not allowed: constants aren't only immutable by default, they're
-always immutable. Constants are declared using the <code>const</code> keyword instead of
-the <code>let</code> keyword, and the type of the value <em>must</em> be annotated. We're about
-to cover types and type annotations in the next section, “Data Types,” so don't
-worry about the details right now. Constants can be declared in any scope,
-including the global scope, which makes them useful for a value that many parts
-of your code need to know about. The last difference is that constants may only
-be set to a constant expression, not the result of a function call or any other
-value that could only be used at runtime.</p>
+<p>Being unable to change the value of a variable might have reminded you of
+another programming concept that most other languages have: <em>constants</em>. Like
+immutable variables, constants are also values  that are bound to a name and
+are not allowed to change, but there are a few differences between constants
+and variables.</p>
+<p>First, we aren’t allowed to use <code>mut</code> with constants: constants aren't only
+immutable by default, they're always immutable.</p>
+<p>We declare constants using the <code>const</code> keyword instead of the <code>let</code> keyword,
+and the type of the value <em>must</em> be annotated. We're about to cover types and
+type annotations in the next section, “Data Types,” so don't worry about the
+details right now, just know that we must always annotate the type.</p>
+<p>Constants can be declared in any scope, including the global scope, which makes
+them useful for values that many parts of code need to know about.</p>
+<p>The last difference is that constants may only be set to a constant expression,
+not the result of a function call or any other value that could only be
+computed at runtime.</p>
 <p>Here's an example of a constant declaration where the constant's name is
-<code>MAX_POINTS</code> and its value is set to 100,000. Rust constant naming convention
-is to use all upper case with underscores between words:</p>
-<pre><code>const MAX_POINTS: u32 = 100_000;
-</code></pre>
-<p>Constants are valid for the entire lifetime of a program, within the scope they
-were declared in. That makes constants useful for values in your application
+<code>MAX_POINTS</code> and its value is set to 100,000. (Rust constant naming convention
+is to use all upper case with underscores between words):</p>
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+const MAX_POINTS: u32 = 100_000;
+
+#}</code></pre></pre>
+<p>Constants are valid for the entire time a program runs, within the scope they
+were declared in, making them a useful choice for values in your application
 domain that multiple part of the program might need to know about, such as the
-maximum number of points any player of a game is allowed to earn or the number
-of seconds in a year.</p>
-<p>Documenting hardcoded values used throughout your program by naming them as
-constants is useful to convey the meaning of that value to future maintainers
-of the code. It also helps to have only one place in your code that you would
-need to change if the hardcoded value needed to be updated in the future.</p>
+maximum number of points any player of a game is allowed to earn or the speed
+of light.</p>
+<p>Naming hardcoded values used throughout your program as constants is useful in
+conveying the meaning of that value to future maintainers of the code. It also
+helps to have only one place in your code you would need to change if the
+hardcoded value needed to be updated in the future.</p>
 <a class="header" href="print.html#shadowing" name="shadowing"><h3>Shadowing</h3></a>
 <p>As we saw in the guessing game tutorial in Chapter 2, we can declare new
 variables with the same name as a previous variables, and the new variable
@@ -1475,7 +1478,7 @@ type:</p>
   |              ^^^^^^^^^^^^ expected &amp;str, found usize
   |
   = note: expected type `&amp;str`
-  = note:    found type `usize`
+             found type `usize`
 </code></pre>
 <p>Now that we’ve explored how variables work, let’s look at more data types they
 can have.</p>
@@ -1500,10 +1503,10 @@ let guess: u32 = &quot;42&quot;.parse().expect(&quot;Not a number!&quot;);
 error, which means the compiler needs more information from us to know which
 possible type we want to use:</p>
 <pre><code class="language-text">error[E0282]: unable to infer enough type information about `_`
- --&gt; src/main.rs:2:5
+ --&gt; src/main.rs:2:9
   |
-2 | let guess = &quot;42&quot;.parse().expect(&quot;Not a number!&quot;);
-  |     ^^^^^ cannot infer type for `_`
+2 |     let guess = &quot;42&quot;.parse().expect(&quot;Not a number!&quot;);
+  |         ^^^^^ cannot infer type for `_`
   |
   = note: type annotations or generic parameter binding required
 </code></pre>
@@ -1517,9 +1520,10 @@ work in Rust.</p>
 <p>An <em>integer</em> is a number without a fractional component. We used one integer
 type earlier in this chapter, the <code>i32</code> type. This type declaration indicates
 that the value it’s associated with should be a signed integer (hence the <code>i</code>,
-as opposed to a <code>u</code> for unsigned) for a 32-bit system. Table 3-1 shows the
-built-in integer types in Rust. Each variant in the Signed and Unsigned columns
-(for example, <em>i32</em>) can be used to declare the type of an integer value.</p>
+as opposed to a <code>u</code> for unsigned) that takes up 32 bits of space. Table 3-1
+shows the built-in integer types in Rust. Each variant in the Signed and
+Unsigned columns (for example, <em>i32</em>) can be used to declare the type of an
+integer value.</p>
 <p><span class="caption">Table 3-1: Integer Types in Rust</span></p>
 <table><thead><tr><td> Length </td><td> Signed </td><td> Unsigned </td></tr></thead>
 <tr><td> 8-bit  </td><td> i8     </td><td> u8       </td></tr>
@@ -1738,8 +1742,9 @@ the array? Say we change the example to the following:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust ignore">fn main() {
     let a = [1, 2, 3, 4, 5];
+    let index = 10;
 
-    let element = a[10];
+    let element = a[index];
 
     println!(&quot;The value of element is: {}&quot;, element);
 }
@@ -1749,9 +1754,8 @@ the array? Say we change the example to the following:</p>
    Compiling arrays v0.1.0 (file:///projects/arrays)
      Running `target/debug/arrays`
 thread '&lt;main&gt;' panicked at 'index out of bounds: the len is 5 but the index is
- 10', src/main.rs:4
+ 10', src/main.rs:6
 note: Run with `RUST_BACKTRACE=1` for a backtrace.
-error: Process didn't exit successfully: `target/debug/arrays` (exit code: 101)
 </code></pre>
 <p>The compilation didn’t produce any errors, but the program results in a
 <em>runtime</em> error and didn’t exit successfully. When you attempt to access an
@@ -1808,8 +1812,8 @@ called and its message is printed.</p>
 that are part of a function's signature. When a function has parameters, we can
 provide it with concrete values for those parameters. Technically, the concrete
 values are called <em>arguments</em>, but in casual conversation people tend to use
-the words &quot;parameter&quot; and &quot;argument&quot; interchangeably for either the variables in
-a function's definition or the concrete values passed in when you call a
+the words “parameter” and “argument” interchangeably for either the variables
+in a function's definition or the concrete values passed in when you call a
 function.</p>
 <p>The following rewritten version of <code>another_function</code> shows what parameters
 look like in Rust:</p>
@@ -1850,7 +1854,7 @@ fn another_function(x: i32, y: i32) {
 </code></pre></pre>
 <p>This example creates a function with two parameters, both of which are <code>i32</code>
 types. The function then prints out the values in both of its parameters. Note
-that function parameters don't all need to be the same type - they just happen
+that function parameters don't all need to be the same type, they just happen
 to be in this example.</p>
 <p>Let’s try running this code. Replace the program currently in your <em>function</em>
 project’s <em>src/main.rs</em> file with the preceding example, and run it using
@@ -1861,8 +1865,8 @@ project’s <em>src/main.rs</em> file with the preceding example, and run it usi
 The value of x is: 5
 The value of y is: 6
 </code></pre>
-<p>Because we called the function with <code>5</code> as the value for <code>x</code> and <code>6</code> as the
-value for <code>y</code>, the two strings are printed using those values.</p>
+<p>Because we called the function with <code>5</code> as the value for  <code>x</code> and <code>6</code> is passed
+as the value for <code>y</code>, the two strings are printed with these values.</p>
 <a class="header" href="print.html#function-bodies" name="function-bodies"><h3>Function Bodies</h3></a>
 <p>Function bodies are made up of a series of statements optionally ending in an
 expression. So far, we’ve only covered functions without an ending expression,
@@ -2006,24 +2010,30 @@ fn plus_one(x: i32) -&gt; i32 {
 }
 </code></pre>
 <p>Running this code produces an error, as follows:</p>
-<pre><code class="language-text">error[E0269]: not all control paths return a value
- --&gt; src/main.rs:7:1
+<pre><code class="language-text">error[E0308]: mismatched types
+ --&gt; src/main.rs:7:28
   |
-7 | fn plus_one(x: i32) -&gt; i32 {
-  | ^
+7 |   fn plus_one(x: i32) -&gt; i32 {
+  |  ____________________________^ starting here...
+8 | |     x + 1;
+9 | | }
+  | |_^ ...ending here: expected i32, found ()
   |
+  = note: expected type `i32`
+             found type `()`
 help: consider removing this semicolon:
  --&gt; src/main.rs:8:10
   |
 8 |     x + 1;
   |          ^
 </code></pre>
-<p>The main error message, “not all control paths return a value,” reveals the
-core issue with this code. The definition of the function <code>plus_one</code> says that
-it will return an <code>i32</code>, but statements don’t evaluate to a value. Therefore,
-nothing is returned, which contradicts the function definition and results in
-an error. In this output, Rust provides a message to possibly help rectify this
-issue: it suggests removing the semicolon, which would fix the error.</p>
+<p>The main error message, “mismatched types,” reveals the core issue with this
+code. The definition of the function <code>plus_one</code> says that it will return an
+<code>i32</code>, but statements don’t evaluate to a value, which is expressed by <code>()</code>,
+the empty tuple. Therefore, nothing is returned, which contradicts the function
+definition and results in an error. In this output, Rust provides a message to
+possibly help rectify this issue: it suggests removing the semicolon, which
+would fix the error.</p>
 <a class="header" href="print.html#comments" name="comments"><h2>Comments</h2></a>
 <p>All programmers strive to make their code easy to understand, but sometimes
 extra explanation is warranted. In these cases, programmers leave notes, or
@@ -2085,6 +2095,7 @@ the <code>if</code> expression. In the <em>src/main.rs</em> file, input the foll
     }
 }
 </code></pre></pre>
+<!-- NEXT PARAGRAPH WRAPPED WEIRD INTENTIONALLY SEE #199 -->
 <p>All <code>if</code> expressions start with the keyword <code>if</code>, which is followed by a
 condition. In this case, the condition checks whether or not the variable
 <code>number</code> has a value less than 5. The block of code we want to execute if the
@@ -2127,18 +2138,14 @@ code:</p>
 </code></pre>
 <p>The <code>if</code> condition evaluates to a value of <code>3</code> this time, and Rust throws an
 error:</p>
-<pre><code class="language-text">   Compiling branches v0.1.0 (file:///projects/branches)
-error[E0308]: mismatched types
+<pre><code class="language-text">error[E0308]: mismatched types
  --&gt; src/main.rs:4:8
   |
 4 |     if number {
   |        ^^^^^^ expected bool, found integral variable
   |
   = note: expected type `bool`
-  = note:    found type `{integer}`
-
-error: aborting due to previous error
-Could not compile `branches`.
+             found type `{integer}`
 </code></pre>
 <p>The error indicates that Rust expected a <code>bool</code> but got an integer. Rust will
 not automatically try to convert non-boolean types to a boolean, unlike
@@ -2234,18 +2241,22 @@ the following example?</p>
     println!(&quot;The value of number is: {}&quot;, number);
 }
 </code></pre>
-<p>When we run this code, we’ll get an error. The <code>if</code> and <code>else</code> arms have value
-types that are incompatible, and Rust indicates exactly where to find the
+<p>When we try to run this code, we’ll get an error. The <code>if</code> and <code>else</code> arms have
+value types that are incompatible, and Rust indicates exactly where to find the
 problem in the program:</p>
-<pre><code class="language-text">   Compiling branches v0.1.0 (file:///projects/branches)
-error[E0308]: if and else have incompatible types
+<pre><code class="language-text">error[E0308]: if and else have incompatible types
  --&gt; src/main.rs:4:18
   |
-4 |     let number = if condition {
-  |                  ^ expected integral variable, found reference
+4 |       let number = if condition {
+  |  __________________^ starting here...
+5 | |         5
+6 | |     } else {
+7 | |         &quot;six&quot;
+8 | |     };
+  | |_____^ ...ending here: expected integral variable, found reference
   |
   = note: expected type `{integer}`
-  = note:    found type `&amp;’static str`
+             found type `&amp;'static str`
 </code></pre>
 <p>The expression in the <code>if</code> block evaluates to an integer, and the expression in
 the <code>else</code> block evaluates to a string. This won’t work because variables must
@@ -2353,9 +2364,9 @@ the value is: 50
 will reach a value of <code>5</code> at some point, the loop stops executing before trying
 to fetch a sixth value from the array.</p>
 <p>But this approach is error prone; we could cause the program to panic if the
-index length is incorrect. It’s also slow, because the compiler adds
-runtime code to perform the conditional check on every element on every
-iteration through the loop.</p>
+index length is incorrect. It’s also slow, because the compiler adds runtime
+code to perform the conditional check on every element on every iteration
+through the loop.</p>
 <p>As a more efficient alternative, you can use a <code>for</code> loop and execute some code
 for each item in a collection. A <code>for</code> loop looks like this:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
@@ -6013,11 +6024,15 @@ Chapter 10. This signature gives us the clues we need to understand the tricky
 bits of the <code>+</code> operator.</p>
 <p>First of all, <code>s2</code> has an <code>&amp;</code>, meaning that we are adding a <em>reference</em> of the
 second string to the first string. This is because of the <code>s</code> parameter in the
-<code>add</code> function: we can only add a <code>&amp;str</code> to a <code>String</code>, we can’t add two
-<code>String</code> values together. Remember back in Chapter 4 when we talked about how
-<code>&amp;String</code> will coerce to <code>&amp;str</code>: we write <code>&amp;s2</code> so that the <code>String</code> will
-coerce to the proper type, <code>&amp;str</code>. Because this method does not take ownership
-of the parameter, <code>s2</code> will still be valid after this operation.</p>
+<code>add</code> function: we can only add a <code>&amp;str</code> to a <code>String</code>, we can't add two
+<code>String</code> values together. But wait - the type of <code>&amp;s2</code> is <code>&amp;String</code>, not
+<code>&amp;str</code>, as specified in the second parameter to <code>add</code>. Why does our example
+compile? We are able to use <code>&amp;s2</code> in the call to <code>add</code> because a <code>&amp;String</code>
+argument can be <em>coerced</em> into a <code>&amp;str</code> - when the <code>add</code> function is called,
+Rust uses something called a <em>deref coercion</em>, which you could think of here as
+turning <code>&amp;s2</code> into <code>&amp;s2[..]</code> for use in the <code>add</code> function. We'll discuss deref
+coercion in more depth in Chapter 15. Because <code>add</code> does not take ownership of
+the parameter, <code>s2</code> will still be a valid <code>String</code> after this operation.</p>
 <p>Second, we can see in the signature that <code>add</code> takes ownership of <code>self</code>,
 because <code>self</code> does <em>not</em> have an <code>&amp;</code>. This means <code>s1</code> in the above example
 will be moved into the <code>add</code> call and no longer be valid after that. So while

@@ -112,8 +112,8 @@ called and its message is printed.</p>
 that are part of a function's signature. When a function has parameters, we can
 provide it with concrete values for those parameters. Technically, the concrete
 values are called <em>arguments</em>, but in casual conversation people tend to use
-the words &quot;parameter&quot; and &quot;argument&quot; interchangeably for either the variables in
-a function's definition or the concrete values passed in when you call a
+the words “parameter” and “argument” interchangeably for either the variables
+in a function's definition or the concrete values passed in when you call a
 function.</p>
 <p>The following rewritten version of <code>another_function</code> shows what parameters
 look like in Rust:</p>
@@ -154,7 +154,7 @@ fn another_function(x: i32, y: i32) {
 </code></pre></pre>
 <p>This example creates a function with two parameters, both of which are <code>i32</code>
 types. The function then prints out the values in both of its parameters. Note
-that function parameters don't all need to be the same type - they just happen
+that function parameters don't all need to be the same type, they just happen
 to be in this example.</p>
 <p>Let’s try running this code. Replace the program currently in your <em>function</em>
 project’s <em>src/main.rs</em> file with the preceding example, and run it using
@@ -165,8 +165,8 @@ project’s <em>src/main.rs</em> file with the preceding example, and run it usi
 The value of x is: 5
 The value of y is: 6
 </code></pre>
-<p>Because we called the function with <code>5</code> as the value for <code>x</code> and <code>6</code> as the
-value for <code>y</code>, the two strings are printed using those values.</p>
+<p>Because we called the function with <code>5</code> as the value for  <code>x</code> and <code>6</code> is passed
+as the value for <code>y</code>, the two strings are printed with these values.</p>
 <a class="header" href="ch03-03-how-functions-work.html#function-bodies" name="function-bodies"><h3>Function Bodies</h3></a>
 <p>Function bodies are made up of a series of statements optionally ending in an
 expression. So far, we’ve only covered functions without an ending expression,
@@ -310,24 +310,30 @@ fn plus_one(x: i32) -&gt; i32 {
 }
 </code></pre>
 <p>Running this code produces an error, as follows:</p>
-<pre><code class="language-text">error[E0269]: not all control paths return a value
- --&gt; src/main.rs:7:1
+<pre><code class="language-text">error[E0308]: mismatched types
+ --&gt; src/main.rs:7:28
   |
-7 | fn plus_one(x: i32) -&gt; i32 {
-  | ^
+7 |   fn plus_one(x: i32) -&gt; i32 {
+  |  ____________________________^ starting here...
+8 | |     x + 1;
+9 | | }
+  | |_^ ...ending here: expected i32, found ()
   |
+  = note: expected type `i32`
+             found type `()`
 help: consider removing this semicolon:
  --&gt; src/main.rs:8:10
   |
 8 |     x + 1;
   |          ^
 </code></pre>
-<p>The main error message, “not all control paths return a value,” reveals the
-core issue with this code. The definition of the function <code>plus_one</code> says that
-it will return an <code>i32</code>, but statements don’t evaluate to a value. Therefore,
-nothing is returned, which contradicts the function definition and results in
-an error. In this output, Rust provides a message to possibly help rectify this
-issue: it suggests removing the semicolon, which would fix the error.</p>
+<p>The main error message, “mismatched types,” reveals the core issue with this
+code. The definition of the function <code>plus_one</code> says that it will return an
+<code>i32</code>, but statements don’t evaluate to a value, which is expressed by <code>()</code>,
+the empty tuple. Therefore, nothing is returned, which contradicts the function
+definition and results in an error. In this output, Rust provides a message to
+possibly help rectify this issue: it suggests removing the semicolon, which
+would fix the error.</p>
 
                 </div>
 

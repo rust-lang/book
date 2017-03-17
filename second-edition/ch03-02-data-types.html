@@ -88,10 +88,10 @@ let guess: u32 = &quot;42&quot;.parse().expect(&quot;Not a number!&quot;);
 error, which means the compiler needs more information from us to know which
 possible type we want to use:</p>
 <pre><code class="language-text">error[E0282]: unable to infer enough type information about `_`
- --&gt; src/main.rs:2:5
+ --&gt; src/main.rs:2:9
   |
-2 | let guess = &quot;42&quot;.parse().expect(&quot;Not a number!&quot;);
-  |     ^^^^^ cannot infer type for `_`
+2 |     let guess = &quot;42&quot;.parse().expect(&quot;Not a number!&quot;);
+  |         ^^^^^ cannot infer type for `_`
   |
   = note: type annotations or generic parameter binding required
 </code></pre>
@@ -105,9 +105,10 @@ work in Rust.</p>
 <p>An <em>integer</em> is a number without a fractional component. We used one integer
 type earlier in this chapter, the <code>i32</code> type. This type declaration indicates
 that the value it’s associated with should be a signed integer (hence the <code>i</code>,
-as opposed to a <code>u</code> for unsigned) for a 32-bit system. Table 3-1 shows the
-built-in integer types in Rust. Each variant in the Signed and Unsigned columns
-(for example, <em>i32</em>) can be used to declare the type of an integer value.</p>
+as opposed to a <code>u</code> for unsigned) that takes up 32 bits of space. Table 3-1
+shows the built-in integer types in Rust. Each variant in the Signed and
+Unsigned columns (for example, <em>i32</em>) can be used to declare the type of an
+integer value.</p>
 <p><span class="caption">Table 3-1: Integer Types in Rust</span></p>
 <table><thead><tr><td> Length </td><td> Signed </td><td> Unsigned </td></tr></thead>
 <tr><td> 8-bit  </td><td> i8     </td><td> u8       </td></tr>
@@ -326,8 +327,9 @@ the array? Say we change the example to the following:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust ignore">fn main() {
     let a = [1, 2, 3, 4, 5];
+    let index = 10;
 
-    let element = a[10];
+    let element = a[index];
 
     println!(&quot;The value of element is: {}&quot;, element);
 }
@@ -337,9 +339,8 @@ the array? Say we change the example to the following:</p>
    Compiling arrays v0.1.0 (file:///projects/arrays)
      Running `target/debug/arrays`
 thread '&lt;main&gt;' panicked at 'index out of bounds: the len is 5 but the index is
- 10', src/main.rs:4
+ 10', src/main.rs:6
 note: Run with `RUST_BACKTRACE=1` for a backtrace.
-error: Process didn't exit successfully: `target/debug/arrays` (exit code: 101)
 </code></pre>
 <p>The compilation didn’t produce any errors, but the program results in a
 <em>runtime</em> error and didn’t exit successfully. When you attempt to access an

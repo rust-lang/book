@@ -90,6 +90,7 @@ the <code>if</code> expression. In the <em>src/main.rs</em> file, input the foll
     }
 }
 </code></pre></pre>
+<!-- NEXT PARAGRAPH WRAPPED WEIRD INTENTIONALLY SEE #199 -->
 <p>All <code>if</code> expressions start with the keyword <code>if</code>, which is followed by a
 condition. In this case, the condition checks whether or not the variable
 <code>number</code> has a value less than 5. The block of code we want to execute if the
@@ -132,18 +133,14 @@ code:</p>
 </code></pre>
 <p>The <code>if</code> condition evaluates to a value of <code>3</code> this time, and Rust throws an
 error:</p>
-<pre><code class="language-text">   Compiling branches v0.1.0 (file:///projects/branches)
-error[E0308]: mismatched types
+<pre><code class="language-text">error[E0308]: mismatched types
  --&gt; src/main.rs:4:8
   |
 4 |     if number {
   |        ^^^^^^ expected bool, found integral variable
   |
   = note: expected type `bool`
-  = note:    found type `{integer}`
-
-error: aborting due to previous error
-Could not compile `branches`.
+             found type `{integer}`
 </code></pre>
 <p>The error indicates that Rust expected a <code>bool</code> but got an integer. Rust will
 not automatically try to convert non-boolean types to a boolean, unlike
@@ -239,18 +236,22 @@ the following example?</p>
     println!(&quot;The value of number is: {}&quot;, number);
 }
 </code></pre>
-<p>When we run this code, we’ll get an error. The <code>if</code> and <code>else</code> arms have value
-types that are incompatible, and Rust indicates exactly where to find the
+<p>When we try to run this code, we’ll get an error. The <code>if</code> and <code>else</code> arms have
+value types that are incompatible, and Rust indicates exactly where to find the
 problem in the program:</p>
-<pre><code class="language-text">   Compiling branches v0.1.0 (file:///projects/branches)
-error[E0308]: if and else have incompatible types
+<pre><code class="language-text">error[E0308]: if and else have incompatible types
  --&gt; src/main.rs:4:18
   |
-4 |     let number = if condition {
-  |                  ^ expected integral variable, found reference
+4 |       let number = if condition {
+  |  __________________^ starting here...
+5 | |         5
+6 | |     } else {
+7 | |         &quot;six&quot;
+8 | |     };
+  | |_____^ ...ending here: expected integral variable, found reference
   |
   = note: expected type `{integer}`
-  = note:    found type `&amp;’static str`
+             found type `&amp;'static str`
 </code></pre>
 <p>The expression in the <code>if</code> block evaluates to an integer, and the expression in
 the <code>else</code> block evaluates to a string. This won’t work because variables must
@@ -358,9 +359,9 @@ the value is: 50
 will reach a value of <code>5</code> at some point, the loop stops executing before trying
 to fetch a sixth value from the array.</p>
 <p>But this approach is error prone; we could cause the program to panic if the
-index length is incorrect. It’s also slow, because the compiler adds
-runtime code to perform the conditional check on every element on every
-iteration through the loop.</p>
+index length is incorrect. It’s also slow, because the compiler adds runtime
+code to perform the conditional check on every element on every iteration
+through the loop.</p>
 <p>As a more efficient alternative, you can use a <code>for</code> loop and execute some code
 for each item in a collection. A <code>for</code> loop looks like this:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
