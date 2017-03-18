@@ -46,6 +46,15 @@ documentation for the shell you are using.
 If you have reasons for preferring not to use rustup.rs, please see [the Rust
 installation page](https://www.rust-lang.org/install.html) for other options.
 
+### Updating
+
+Once you had Rust installed, updating to the latest version is easy.
+From your shell, run the update script:
+
+```text
+$ rustup update
+```
+
 ### Uninstalling
 
 Uninstalling Rust is as easy as installing it. From your shell, run
