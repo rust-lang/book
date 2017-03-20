@@ -106,11 +106,12 @@ instances and call `draw` on them.
 
 In Rust, though, we can define a trait that we'll name `Draw` and that will
 have one method named `draw`. Then we can define a vector that takes a *trait
-object*, which is a trait behind some sort of pointer. Rust's type system will
-ensure that any value we substitute in for the trait object will implement the
-methods of the trait. Then we don't need to know all the possible types at
-compile time, and we can treat all the instances the same way. Here's how we'd
-define a trait named `Draw` with one method named `draw`:
+object*, which is a trait behind some sort of pointer, such as a `&` reference
+or a `Box<T>` smart pointer. Rust's type system will ensure that any value we
+substitute in for the trait object will implement the methods of the trait.
+Then we don't need to know all the possible types at compile time, and we can
+treat all the instances the same way. Here's how we'd define a trait named
+`Draw` with one method named `draw`:
 
 ```rust
 trait Draw {
