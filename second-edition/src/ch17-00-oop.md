@@ -38,10 +38,6 @@ method implementations. However, if you're used to having inheritance in your
 programming toolbox, there are other solutions in Rust depending on the reason
 you want to use inheritance.
 
-TODO: should we expound more on inheritance's downsides, like inheriting too
-much, not being able to have multiple inheritance in some languages, the
-diamond problem?
-
 There are two main reasons to reach for inheritance. The first is as a type
 system: to express that a child type can be used in the same places that the
 parent type can be used. For this, Rust has *trait objects* so that we can
@@ -49,8 +45,22 @@ specify that we would like values of any type, as long as the values implement
 a particular trait. The second reason to use inheritance is to be able to
 re-use code: once a particular behavior is implemented for one type, enable
 re-using that implementation for a different type. Rust code can be shared
-using default trait method implementations or composition instead. Let's
-explore these situations and idiomatic Rust code solutions.
+using default trait method implementations or composition instead.
+
+Inheritance has recently fallen out of favor as a programming design solution
+in many programming languages. Using inheritance to re-use some code can
+require more code to be shared than you actually need. Subclasses don't always
+share all characteristics of their parent class, but inheritance means the
+subclass gets all of its parent's data and behavior. This can make a program's
+design less flexible, and create the possibility of calling methods on
+subclasses that don't make sense or cause errors since the methods don't apply
+to the subclass but must be inherited from the parent class. In addition, some
+languages only allow a subclass to inherit from one class, further restricting
+the flexibility of a program's design. For these reasons, Rust chose to take a
+different approach with its type system, traits, trait objects, and composition.
+
+Let's explore the situations in which we might use inheritance and the
+alternative solutions that are idiomatic Rust.
 
 ### Trait Objects for Using Types Interchangeably
 
