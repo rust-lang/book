@@ -157,7 +157,7 @@ the types that we want to be able to draw on the screen will implement the
 `Draw` trait with different code in the `draw` method that defines how to draw
 that type.
 
-```
+```rust
 struct Button {
     width: u32,
     height: u32,
