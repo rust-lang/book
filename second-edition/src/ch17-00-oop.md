@@ -379,10 +379,6 @@ so that you could use `Employee` everywhere you can use `Person`?
 
 TODO: Should we mention this?
 
-## Specialization
-
-TODO: Should we mention this?
-
 ## Encapsulation
 
 TODO: is it worthwhile to point this out? Seems pretty trivial/obvious
