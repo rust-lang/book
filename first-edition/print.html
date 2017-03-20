@@ -613,7 +613,7 @@ terminal. More specifically, a <a href="../../std/io/struct.Stdin.html">std::io:
 <p>The next part will use this handle to get input from the user:</p>
 <pre><code class="language-rust ignore">.read_line(&amp;mut guess)
 </code></pre>
-<p>Here, we call the <a href="../../std/io/struct.Stdin.html#method.read_line"><code>read_line()</code></a> method on our handle.
+<p>Here, we call the <a href="../../std/io/struct.Stdin.html#method.read_line"><code>read_line</code></a> method on our handle.
 <a href="method-syntax.html">Methods</a> are like associated functions, but are only available on a
 particular instance of a type, rather than the type itself. We’re also passing
 one argument to <code>read_line()</code>: <code>&amp;mut guess</code>.</p>
@@ -9238,7 +9238,7 @@ error: test failed
 <p>And that's reflected in the summary line:</p>
 <pre><code class="language-text">test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured
 </code></pre>
-<p>We also get a non-zero status code. We can use <code>$?</code> on OS X and Linux:</p>
+<p>We also get a non-zero status code. We can use <code>$?</code> on macOS and Linux:</p>
 <pre><code class="language-bash">$ echo $?
 101
 </code></pre>
@@ -9871,7 +9871,6 @@ more than one section:</p>
 # fn foo() {}
 
 #}</code></pre></pre>
-<p>Let's discuss the details of these code blocks.</p>
 <a class="header" href="print.html#code-block-annotations" name="code-block-annotations"><h4>Code block annotations</h4></a>
 <p>To write some Rust code in a comment, use the triple graves:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
@@ -9883,23 +9882,8 @@ more than one section:</p>
 # fn foo() {}
 
 #}</code></pre></pre>
-<p>If you want something that's not Rust code, you can add an annotation:</p>
-<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
-#fn main() {
-/// ```c
-/// printf(&quot;Hello, world\n&quot;);
-/// ```
-# fn foo() {}
-
-#}</code></pre></pre>
-<p>This will highlight according to whatever language you're showing off.
-If you're only showing plain text, choose <code>text</code>.</p>
-<p>It's important to choose the correct annotation here, because <code>rustdoc</code> uses it
-in an interesting way: It can be used to actually test your examples in a
-library crate, so that they don't get out of date. If you have some C code but
-<code>rustdoc</code> thinks it's Rust because you left off the annotation, <code>rustdoc</code> will
-complain when trying to generate the documentation.</p>
+<p>This will add code highlighting. If you are only showing plain text, put <code>text</code>
+instead of <code>rust</code> after the triple graves (see below).</p>
 <a class="header" href="print.html#documentation-as-tests" name="documentation-as-tests"><h2>Documentation as tests</h2></a>
 <p>Let's discuss our sample example documentation:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
@@ -13825,7 +13809,7 @@ attribute turns off Rust's name mangling, so that it is easier to link to.</p>
 <a class="header" href="print.html#ffi-and-panics" name="ffi-and-panics"><h1>FFI and panics</h1></a>
 <p>It’s important to be mindful of <code>panic!</code>s when working with FFI. A <code>panic!</code>
 across an FFI boundary is undefined behavior. If you’re writing code that may
-panic, you should run it in a closure with <a href="../../std/panic/fn.catch_unwind.html"><code>catch_unwind()</code></a>:</p>
+panic, you should run it in a closure with <a href="../../std/panic/fn.catch_unwind.html"><code>catch_unwind</code></a>:</p>
 <pre><pre class="playpen"><code class="language-rust">use std::panic::catch_unwind;
 
 #[no_mangle]
@@ -13841,8 +13825,8 @@ pub extern fn oh_no() -&gt; i32 {
 
 fn main() {}
 </code></pre></pre>
-<p>Please note that <a href="../../std/panic/fn.catch_unwind.html"><code>catch_unwind()</code></a> will only catch unwinding panics, not
-those who abort the process. See the documentation of <a href="../../std/panic/fn.catch_unwind.html"><code>catch_unwind()</code></a>
+<p>Please note that <a href="../../std/panic/fn.catch_unwind.html"><code>catch_unwind</code></a> will only catch unwinding panics, not
+those who abort the process. See the documentation of <a href="../../std/panic/fn.catch_unwind.html"><code>catch_unwind</code></a>
 for more information.</p>
 <a class="header" href="print.html#representing-opaque-structs" name="representing-opaque-structs"><h1>Representing opaque structs</h1></a>
 <p>Sometimes, a C library wants to provide a pointer to something, but not let you
@@ -14307,7 +14291,7 @@ must abide by that constraint.</p>
 earlier defined combinators to provide a result from its arguments.
 They can be used to manage control flow in a modular fashion.</p>
 <a class="header" href="print.html#dst-dynamically-sized-type" name="dst-dynamically-sized-type"><h3>DST (Dynamically Sized Type)</h3></a>
-<p>A type without a statically known size or alignment. (<a href="../../nomicon/exotic-sizes.html#dynamically-sized-types-dsts">more info</a>)</p>
+<p>A type without a statically known size or alignment. (<a href="../nomicon/exotic-sizes.html#dynamically-sized-types-dsts">more info</a>)</p>
 <a class="header" href="print.html#expression" name="expression"><h3>Expression</h3></a>
 <p>In computer programming, an expression is a combination of values, constants,
 variables, operators and functions that evaluate to a single value. For example,

@@ -645,7 +645,7 @@ attribute turns off Rust's name mangling, so that it is easier to link to.</p>
 <a class="header" href="ffi.html#ffi-and-panics" name="ffi-and-panics"><h1>FFI and panics</h1></a>
 <p>It’s important to be mindful of <code>panic!</code>s when working with FFI. A <code>panic!</code>
 across an FFI boundary is undefined behavior. If you’re writing code that may
-panic, you should run it in a closure with <a href="../../std/panic/fn.catch_unwind.html"><code>catch_unwind()</code></a>:</p>
+panic, you should run it in a closure with <a href="../../std/panic/fn.catch_unwind.html"><code>catch_unwind</code></a>:</p>
 <pre><pre class="playpen"><code class="language-rust">use std::panic::catch_unwind;
 
 #[no_mangle]
@@ -661,8 +661,8 @@ pub extern fn oh_no() -&gt; i32 {
 
 fn main() {}
 </code></pre></pre>
-<p>Please note that <a href="../../std/panic/fn.catch_unwind.html"><code>catch_unwind()</code></a> will only catch unwinding panics, not
-those who abort the process. See the documentation of <a href="../../std/panic/fn.catch_unwind.html"><code>catch_unwind()</code></a>
+<p>Please note that <a href="../../std/panic/fn.catch_unwind.html"><code>catch_unwind</code></a> will only catch unwinding panics, not
+those who abort the process. See the documentation of <a href="../../std/panic/fn.catch_unwind.html"><code>catch_unwind</code></a>
 for more information.</p>
 <a class="header" href="ffi.html#representing-opaque-structs" name="representing-opaque-structs"><h1>Representing opaque structs</h1></a>
 <p>Sometimes, a C library wants to provide a pointer to something, but not let you
