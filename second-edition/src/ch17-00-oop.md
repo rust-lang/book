@@ -62,7 +62,7 @@ different approach with its type system, traits, trait objects, and composition.
 Let's explore the situations in which we might use inheritance and the
 alternative solutions that are idiomatic Rust.
 
-### Trait Objects for Using Types Interchangeably
+### Trait Objects for Using Values of Different Types
 
 In Chapter 8, we talked about a limitation of vectors is that vectors can only
 store elements of one type. We had an example in Listing 8-1 where we defined a
