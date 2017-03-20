@@ -18,7 +18,7 @@ way:
 > data and the procedures that operate on that data. The procedures are
 > typically called *methods* or *operations*.
 
-Under this definition, then, Rust is object-oriented: structs and enums hold
+Under this definition, then, Rust is object-oriented: structs and enums have
 data and `impl` blocks provide methods on structs and enums. Even though
 structs and enums with methods aren't *called* objects, they provide the same
 functionality that objects do, using the Gang of Four's definition of objects.
