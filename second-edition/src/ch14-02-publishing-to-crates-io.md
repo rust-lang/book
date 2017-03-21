@@ -34,7 +34,7 @@ comments for an `add_one` function:
 /// ```
 /// let five = 5;
 ///
-/// assert_eq!(6, add_one(5));
+/// assert_eq!(6, add_one(five));
 /// # fn add_one(x: i32) -> i32 {
 /// #     x + 1
 /// # }
