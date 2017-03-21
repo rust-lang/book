@@ -152,6 +152,7 @@ libreoffice
 libstd
 lifecycle
 login
+lookup
 loopback
 lval
 mathematic
@@ -235,9 +236,11 @@ rustc
 rustdoc
 rustup
 SecondaryColor
+SelectBox
 semver
 SemVer
 shouldn
+Simula
 sizeof
 someproject
 someusername
@@ -272,6 +275,7 @@ subtyping
 Summarizable
 Supertraits
 test's
+TextField
 That'd
 threadsafe
 timestamp
