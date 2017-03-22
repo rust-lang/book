@@ -149,7 +149,7 @@ defined side-by-side in <em>src/lib.rs</em></span></p>
 <p>Now we have a <code>network::connect</code> function and a <code>client::connect</code> function.
 These can have completely different functionality, and the function names do
 not conflict with each other since they’re in different modules.</p>
-<p>While in this case, we’re building a library, there's nothing special about
+<p>While in this case we’re building a library, there's nothing special about
 <em>src/lib.rs</em>. We could also make use of submodules in <em>src/main.rs</em> as well. In
 fact, we can also put modules inside of modules. This can be useful as your
 modules grow to keep related functionality organized together and separate
