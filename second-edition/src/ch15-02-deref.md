@@ -107,7 +107,7 @@ that `*` can dereference, the compiler expands `*my_favorite_song` to this:
 
 The result is the value in `self.audio`. The reason `deref` returns a reference
 that we then have to dereference, rather than just returning a value directly,
-is because of onnership: if the `deref` method directly returned the value
+is because of ownership: if the `deref` method directly returned the value
 instead of a reference to it, the value would be moved out of `self`. We don't
 want to take ownership of `my_favorite_song.audio` in this case and most cases
 where we use the dereference operator.
