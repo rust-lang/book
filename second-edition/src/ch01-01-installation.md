@@ -89,7 +89,7 @@ If it still isn't working, there are a number of places where you can get help.
 The easiest is [the #rust IRC channel on irc.mozilla.org][irc]<!-- ignore -->,
 which you can access through [Mibbit][mibbit]. Go to that address, and you'll
 be chatting with other Rustaceans (a silly nickname we call ourselves) who can
-help you out. Other great resources include [the user’s forum][users] and
+help you out. Other great resources include [the Users forum][users] and
 [Stack Overflow][stackoverflow].
 
 [irc]: irc://irc.mozilla.org/#rust
