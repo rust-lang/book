@@ -47,6 +47,7 @@ const
 constant's
 copyeditor
 couldn
+CountedCollection
 cratesio
 cryptographically
 CStr
@@ -112,6 +113,7 @@ hardcoding
 hasher
 hashers
 HashMap
+HashSet
 Haskell
 hasn
 helloworld

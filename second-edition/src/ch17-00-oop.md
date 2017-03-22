@@ -195,7 +195,7 @@ Sometimes we want the set of types that we use to be extensible by the
 programmers who use our library. For example, many Graphical User Interface
 tools have a concept of a list of items that get drawn on the screen by
 iterating through the list and calling a `draw` method on each of the items.
-We're going to create a library crate conatining the structure of a GUI library
+We're going to create a library crate containing the structure of a GUI library
 called `rust_gui`. Our GUI library could include some types for people to use,
 such as `Button` or `TextField`. Programmers that use `rust_gui` will want to
 create more types that can be drawn on the screen: one programmer might add an
@@ -233,9 +233,9 @@ object. Trait objects *are* more like objects in other languages, in the sense
 that they combine the data made up of the pointer to a concrete object with the
 behavior of the methods defined in the trait. Keep in mind that trait objects
 are different from objects in other languages; we can't customize the kind of
-data held in a trait object like we can by definining struct fields, for
-example. Trait objects aren't as generally useful as objects in other
-languages: their purpose is to allow abstraction across common behavior.
+data held in a trait object like we can by defining struct fields, for example.
+Trait objects aren't as generally useful as objects in other languages: their
+purpose is to allow abstraction across common behavior.
 
 A trait defines behavior that we need in a given situation. We can then use a
 trait as a trait object in places where we would use a concrete type or a
@@ -278,7 +278,7 @@ pub struct Screen {
 `Draw` trait</span>
 
 On the `Screen` struct, we'll define a method named `run`, which will call the
-`draw` method on each of its `components` as shown in Liting 17-5:
+`draw` method on each of its `components` as shown in Listing 17-5:
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -550,7 +550,7 @@ slices, however, we need to opt out of the `Sized` trait bound, and we can do
 that by specifying `T: ?Sized` as a trait bound.
 
 Traits have a default bound of `Self: ?Sized`, which means that they can be
-impelmented on types that may or may not be `Sized`. If we create a trait `Foo`
+implemented on types that may or may not be `Sized`. If we create a trait `Foo`
 that opts out of the `Self: ?Sized` bound, that would look like the following:
 
 ```rust
@@ -642,7 +642,7 @@ this fully but it's so complicated to explain fully
 
 ## Object-Oriented Design Pattern Implementations
 
-### Creational Patterns: Builder?
+### Creation Patterns: Builder?
 
 ### Structural Patterns: Proxy?
 
