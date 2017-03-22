@@ -1,8 +1,9 @@
 ## Appendix A: Keywords
 
 The following keywords are reserved by the Rust language and may not be used as
-names of functions, variables, macros, modules, crates, constants, static
-values, attributes, struct fields, or parameters.
+identifiers such as names of functions, variables, parameters, struct fields,
+modules, crates, constants, macros, static values, attributes, types, traits,
+or lifetimes.
 
 * `abstract` - reserved for future use
 * `alignof` - reserved for future use
