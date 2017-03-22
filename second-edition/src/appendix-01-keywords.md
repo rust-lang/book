@@ -7,8 +7,8 @@ or lifetimes.
 
 ### Keywords Currently in Use
 
-* `as` - primitive casting, or disambiguating the specific trait containing an
-  item
+* `as` - primitive casting, disambiguating the specific trait containing an
+  item, or renaming items in `use` and `extern crate` statements
 * `break` - exit a loop immediately
 * `const` - constant items and constant raw pointers
 * `continue` - continue to the next loop iteration
@@ -27,14 +27,14 @@ or lifetimes.
 * `loop` - unconditional, infinite loop
 * `match` - pattern matching
 * `mod` - module declaration
-* `move` - part of closure syntax
-* `mut` - denotes mutability in pointer types and pattern bindings
+* `move` - makes a closure take ownership of all its captures
+* `mut` - denotes mutability in references, raw pointers, and pattern bindings
 * `pub` - denotes public visibility in struct fields, `impl` blocks, and modules
 * `ref` - by-reference binding
 * `return` - return from function
 * `Self` - implementor type alias
-* `self` - method subject
-* `static` - global variable
+* `self` - method subject or current module
+* `static` - global variable or lifetime lasting the entire program execution
 * `struct` - structure definition
 * `super` - parent module of the current module
 * `trait` - trait definition
