@@ -26,7 +26,7 @@ comments for an `add_one` function:
 
 <span class="filename">Filename: src/lib.rs</span>
 
-````rust,ignore
+````rust
 /// Adds one to the number given.
 ///
 /// # Examples
@@ -35,9 +35,6 @@ comments for an `add_one` function:
 /// let five = 5;
 ///
 /// assert_eq!(6, add_one(five));
-/// # fn add_one(x: i32) -> i32 {
-/// #     x + 1
-/// # }
 /// ```
 pub fn add_one(x: i32) -> i32 {
     x + 1
