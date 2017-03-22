@@ -32,7 +32,7 @@ or lifetimes.
 * `pub` - denotes public visibility in struct fields, `impl` blocks, and modules
 * `ref` - by-reference binding
 * `return` - return from function
-* `Self` - implementor type alias
+* `Self` - implementer type alias
 * `self` - method subject or current module
 * `static` - global variable or lifetime lasting the entire program execution
 * `struct` - structure definition
