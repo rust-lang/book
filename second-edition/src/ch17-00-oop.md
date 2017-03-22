@@ -530,6 +530,14 @@ to support, though, so it's a tradeoff to consider.
 
 ### Object Safety is Required for Trait Objects
 
+<!-- Liz: we're conflicted on including this section. Not being able to use a
+trait as a trait object because of object safety is something that
+beginner/intermediate Rust developers run into sometimes, but explaining it
+fully is long and complicated. Should we just cut this whole section? Leave it
+(and finish the explanation of how to fix the error at the end)? Shorten it to
+a quick caveat (do you have any suggestions on how to do that, exactly)?
+Thanks! /Carol -->
+
 Not all traits can be made into trait objects; only *object safe* traits can. A
 trait is object safe as long as both of the following are true:
 
@@ -635,10 +643,11 @@ error[E0038]: the trait `std::clone::Clone` cannot be made into an object
   = note: the trait cannot require that `Self : Sized`
 ```
 
-TODO: what do you do instead? See http://play.integer32.com/?gist=6d92a25725b556be2ac77315f1b50bbd&version=stable
-
-UGH this is making me want to cut this section, we have to be able to explain
-this fully but it's so complicated to explain fully
+<!-- If we are including this section, we would explain how to fix this
+problem. It involves adding another trait and implementing Clone manually for
+that trait. Because this section is getting long, I stopped because it feels
+like we're off in the weeds with an esoteric detail that not everyone will need
+to know about. /Carol -->
 
 ## Object-Oriented Design Pattern Implementations
 
