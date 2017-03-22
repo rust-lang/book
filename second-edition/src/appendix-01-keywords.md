@@ -12,7 +12,8 @@ or lifetimes.
 * `break` - exit a loop immediately
 * `const` - constant items and constant raw pointers
 * `continue` - continue to the next loop iteration
-* `crate` - external crate linkage
+* `crate` - external crate linkage or a macro variable representing the crate
+  in which the macro is defined
 * `else` - fallback for `if` and `if let` control flow constructs
 * `enum` - defining an enumeration
 * `extern` - external crate, function, and variable linkage
@@ -32,7 +33,7 @@ or lifetimes.
 * `pub` - denotes public visibility in struct fields, `impl` blocks, and modules
 * `ref` - by-reference binding
 * `return` - return from function
-* `Self` - implementer type alias
+* `Self` - type alias for the type implementing a trait
 * `self` - method subject or current module
 * `static` - global variable or lifetime lasting the entire program execution
 * `struct` - structure definition
