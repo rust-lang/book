@@ -26,7 +26,7 @@ comments for an `add_one` function:
 
 <span class="filename">Filename: src/lib.rs</span>
 
-````rust
+````rust,ignore
 /// Adds one to the number given.
 ///
 /// # Examples
