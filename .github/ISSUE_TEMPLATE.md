@@ -1,23 +1,16 @@
 ## What to expect when you file an issue here
 
-This is the repo for an in-progress rework of The Rust Programming Language book
-available at http://rust-lang.github.io/book/.
+This is the repo for The Rust Programming Language, available at
+https://doc.rust-lang.org/book/.
 
-If you are filing an issue about the existing book available at
-https://doc.rust-lang.org/book/, please note that we are now concentrating on
-the new version of the book.
+## Editions
 
-We would still love feedback on the existing book as well as the new book, just
-know that one of a few things may happen with your issue:
+There are two editions: first and second. The second is currently in
+a draft state, the first edition is no longer being actively worked on.
 
-- If we have not gotten to that topic in the new book, we may leave a note for
-  ourselves about this issue to address when we get there.
-- We may have already addressed this issue in a rewritten version of the topic
-  relating to this issue, so we might close it.
-- If this issue still applies to the new book, we will fix it.
-
-If you have time before filing this issue, please take a look at the new book
-to see if this issue has been addressed and include that information in the
-issue.
+Therefore, issues for the first edition of the book are worthwhile if you
+are planning to submit a pull request, and want to discuss it first. But
+as we aren't actively working on the first edition, general bugs will be
+closed.
 
 Thank you for reading, you may now delete this text!
