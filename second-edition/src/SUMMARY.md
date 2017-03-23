@@ -112,3 +112,4 @@
     - [D - Nightly Rust](appendix-04-nightly-rust.md)
     - [E - Macros](appendix-05-macros.md)
     - [F - Translations](appendix-06-translation.md)
+    - [G - Newest Features](appendix-07-newest-features.md)
