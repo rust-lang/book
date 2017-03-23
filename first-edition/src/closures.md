@@ -222,26 +222,11 @@ operator. From this, everything else clicks into place. In Rust, we use the
 trait system to overload operators. Calling functions is no different. We have
 three separate traits to overload with:
 
-```rust
-# #![feature(unboxed_closures)]
-# mod foo {
-pub trait Fn<Args> : FnMut<Args> {
-    extern "rust-call" fn call(&self, args: Args) -> Self::Output;
-}
+* `Fn`
+* `FnMut`
+* `FnOnce`
 
-pub trait FnMut<Args> : FnOnce<Args> {
-    extern "rust-call" fn call_mut(&mut self, args: Args) -> Self::Output;
-}
-
-pub trait FnOnce<Args> {
-    type Output;
-
-    extern "rust-call" fn call_once(self, args: Args) -> Self::Output;
-}
-# }
-```
-
-You’ll notice a few differences between these traits, but a big one is `self`:
+There are a few differences between these traits, but a big one is `self`:
 `Fn` takes `&self`, `FnMut` takes `&mut self`, and `FnOnce` takes `self`. This
 covers all three kinds of `self` via the usual method call syntax. But we’ve
 split them up into three traits, rather than having a single one. This gives us
