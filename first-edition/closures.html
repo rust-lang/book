@@ -269,28 +269,12 @@ strange: Using <code>()</code> to call a function, like <code>foo()</code>, is a
 operator. From this, everything else clicks into place. In Rust, we use the
 trait system to overload operators. Calling functions is no different. We have
 three separate traits to overload with:</p>
-<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
-#fn main() {
-# #![feature(unboxed_closures)]
-# mod foo {
-pub trait Fn&lt;Args&gt; : FnMut&lt;Args&gt; {
-    extern &quot;rust-call&quot; fn call(&amp;self, args: Args) -&gt; Self::Output;
-}
-
-pub trait FnMut&lt;Args&gt; : FnOnce&lt;Args&gt; {
-    extern &quot;rust-call&quot; fn call_mut(&amp;mut self, args: Args) -&gt; Self::Output;
-}
-
-pub trait FnOnce&lt;Args&gt; {
-    type Output;
-
-    extern &quot;rust-call&quot; fn call_once(self, args: Args) -&gt; Self::Output;
-}
-# }
-
-#}</code></pre></pre>
-<p>You’ll notice a few differences between these traits, but a big one is <code>self</code>:
+<ul>
+<li><code>Fn</code></li>
+<li><code>FnMut</code></li>
+<li><code>FnOnce</code></li>
+</ul>
+<p>There are a few differences between these traits, but a big one is <code>self</code>:
 <code>Fn</code> takes <code>&amp;self</code>, <code>FnMut</code> takes <code>&amp;mut self</code>, and <code>FnOnce</code> takes <code>self</code>. This
 covers all three kinds of <code>self</code> via the usual method call syntax. But we’ve
 split them up into three traits, rather than having a single one. This gives us
