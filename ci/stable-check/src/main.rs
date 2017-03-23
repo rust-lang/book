@@ -1,3 +1,4 @@
+use std::error::Error;
 use std::env;
 use std::fmt;
 use std::fs;
@@ -22,33 +23,7 @@ fn main() {
 
 }
 
-enum Error {
-    Io(io::Error),
-    LintFailure(String),
-}
-
-impl From<io::Error> for Error {
-    fn from(e: io::Error) -> Error {
-        Error::Io(e)
-    }
-}
-
-impl From<String> for Error {
-    fn from(e: String) -> Error {
-        Error::LintFailure(e)
-    }
-}
-
-impl fmt::Display for Error {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        match self {
-           &Error::Io(ref e) => write!(f, "I/O error: {}", e),
-           &Error::LintFailure(ref e) => write!(f, "Lint failed: {}", e),
-        }
-    }
-}
-
-fn check_directory(dir: &Path) -> Result<(), Error> {
+fn check_directory(dir: &Path) -> Result<(), Box<Error>> {
     for entry in fs::read_dir(dir)? {
         let entry = entry?;
         let path = entry.path();
@@ -62,7 +37,7 @@ fn check_directory(dir: &Path) -> Result<(), Error> {
         file.read_to_string(&mut contents)?;
 
         if contents.contains("#![feature") {
-            return Err(Error::LintFailure(format!("Feature flag found in {:?}", path)));
+            return Err(From::from(format!("Feature flag found in {:?}", path)));
         }
     }
 
