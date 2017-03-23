@@ -1,9 +1,7 @@
 use std::error::Error;
 use std::env;
-use std::fmt;
 use std::fs;
 use std::fs::File;
-use std::io;
 use std::io::prelude::*;
 use std::path::Path;
 
