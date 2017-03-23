@@ -15336,60 +15336,70 @@ won't find yourself reaching for them often.</p>
 Rust journey.</p>
 <a class="header" href="print.html#appendix-a-keywords" name="appendix-a-keywords"><h2>Appendix A: Keywords</h2></a>
 <p>The following keywords are reserved by the Rust language and may not be used as
-names of functions, variables, macros, modules, crates, constants, static
-values, attributes, struct fields, or parameters.</p>
+identifiers such as names of functions, variables, parameters, struct fields,
+modules, crates, constants, macros, static values, attributes, types, traits,
+or lifetimes.</p>
+<a class="header" href="print.html#keywords-currently-in-use" name="keywords-currently-in-use"><h3>Keywords Currently in Use</h3></a>
+<ul>
+<li><code>as</code> - primitive casting, disambiguating the specific trait containing an
+item, or renaming items in <code>use</code> and <code>extern crate</code> statements</li>
+<li><code>break</code> - exit a loop immediately</li>
+<li><code>const</code> - constant items and constant raw pointers</li>
+<li><code>continue</code> - continue to the next loop iteration</li>
+<li><code>crate</code> - external crate linkage or a macro variable representing the crate
+in which the macro is defined</li>
+<li><code>else</code> - fallback for <code>if</code> and <code>if let</code> control flow constructs</li>
+<li><code>enum</code> - defining an enumeration</li>
+<li><code>extern</code> - external crate, function, and variable linkage</li>
+<li><code>false</code> - boolean false literal</li>
+<li><code>fn</code> - function definition and function pointer type</li>
+<li><code>for</code> - iterator loop, part of trait impl syntax, and higher-ranked lifetime
+syntax</li>
+<li><code>if</code> - conditional branching</li>
+<li><code>impl</code> - inherent and trait implementation block</li>
+<li><code>in</code> - part of <code>for</code> loop syntax</li>
+<li><code>let</code> - variable binding</li>
+<li><code>loop</code> - unconditional, infinite loop</li>
+<li><code>match</code> - pattern matching</li>
+<li><code>mod</code> - module declaration</li>
+<li><code>move</code> - makes a closure take ownership of all its captures</li>
+<li><code>mut</code> - denotes mutability in references, raw pointers, and pattern bindings</li>
+<li><code>pub</code> - denotes public visibility in struct fields, <code>impl</code> blocks, and modules</li>
+<li><code>ref</code> - by-reference binding</li>
+<li><code>return</code> - return from function</li>
+<li><code>Self</code> - type alias for the type implementing a trait</li>
+<li><code>self</code> - method subject or current module</li>
+<li><code>static</code> - global variable or lifetime lasting the entire program execution</li>
+<li><code>struct</code> - structure definition</li>
+<li><code>super</code> - parent module of the current module</li>
+<li><code>trait</code> - trait definition</li>
+<li><code>true</code> - boolean true literal</li>
+<li><code>type</code> - type alias and associated type definition</li>
+<li><code>unsafe</code> - denotes unsafe code, functions, traits, and implementations</li>
+<li><code>use</code> - import symbols into scope</li>
+<li><code>where</code> - type constraint clauses</li>
+<li><code>while</code> - conditional loop</li>
+</ul>
+<a class="header" href="print.html#keywords-reserved-for-future-use" name="keywords-reserved-for-future-use"><h3>Keywords Reserved for Future Use</h3></a>
+<p>These keywords do not have any functionality, but are reserved by Rust for
+potential future use.</p>
 <ul>
 <li><code>abstract</code></li>
 <li><code>alignof</code></li>
-<li><code>as</code></li>
 <li><code>become</code></li>
 <li><code>box</code></li>
-<li><code>break</code></li>
-<li><code>const</code></li>
-<li><code>continue</code></li>
-<li><code>crate</code></li>
 <li><code>do</code></li>
-<li><code>else</code></li>
-<li><code>enum</code></li>
-<li><code>extern</code></li>
-<li><code>false</code></li>
 <li><code>final</code></li>
-<li><code>fn</code></li>
-<li><code>for</code></li>
-<li><code>if</code></li>
-<li><code>impl</code></li>
-<li><code>in</code></li>
-<li><code>let</code></li>
-<li><code>loop</code></li>
 <li><code>macro</code></li>
-<li><code>match</code></li>
-<li><code>mod</code></li>
-<li><code>move</code></li>
-<li><code>mut</code></li>
 <li><code>offsetof</code></li>
 <li><code>override</code></li>
 <li><code>priv</code></li>
 <li><code>proc</code></li>
-<li><code>pub</code></li>
 <li><code>pure</code></li>
-<li><code>ref</code></li>
-<li><code>return</code></li>
-<li><code>Self</code></li>
-<li><code>self</code></li>
 <li><code>sizeof</code></li>
-<li><code>static</code></li>
-<li><code>struct</code></li>
-<li><code>super</code></li>
-<li><code>trait</code></li>
-<li><code>true</code></li>
-<li><code>type</code></li>
 <li><code>typeof</code></li>
-<li><code>unsafe</code></li>
 <li><code>unsized</code></li>
-<li><code>use</code></li>
 <li><code>virtual</code></li>
-<li><code>where</code></li>
-<li><code>while</code></li>
 <li><code>yield</code></li>
 </ul>
 <a class="header" href="print.html#appendix-b-operators" name="appendix-b-operators"><h2>Appendix B: Operators</h2></a>
@@ -15579,6 +15589,32 @@ binary operators.</p>
 <a class="header" href="print.html#appendix-g---newest-features" name="appendix-g---newest-features"><h1>Appendix G - Newest Features</h1></a>
 <p>This appendix documents features that have been added to stable Rust since the
 main part of the book was completed.</p>
+<a class="header" href="print.html#field-init-shorthand" name="field-init-shorthand"><h2>Field init shorthand</h2></a>
+<p>We can initialize a data structure (struct, enum, union) with named
+fields, by writing <code>fieldname</code> as a shorthand for <code>fieldname: fieldname</code>.
+This allows a compact syntax for initialization, with less duplication:</p>
+<pre><pre class="playpen"><code class="language-rust">#[derive(Debug)]
+struct Person {
+    name: String,
+    age: u8,
+}
+
+fn main() {
+    let name = String::from(&quot;Peter&quot;);
+    let age = 27;
+
+    // Using full syntax:
+    let peter = Person { name: name, age: age };
+
+    let name = String::from(&quot;Portia&quot;);
+    let age = 27;
+
+    // Using field init shorthand:
+    let portia = Person { name, age };
+    
+    println!(&quot;{:?}&quot;, portia);
+}
+</code></pre></pre>
 
                 </div>
 

@@ -70,6 +70,32 @@
                     <a class="header" href="appendix-07-newest-features.html#appendix-g---newest-features" name="appendix-g---newest-features"><h1>Appendix G - Newest Features</h1></a>
 <p>This appendix documents features that have been added to stable Rust since the
 main part of the book was completed.</p>
+<a class="header" href="appendix-07-newest-features.html#field-init-shorthand" name="field-init-shorthand"><h2>Field init shorthand</h2></a>
+<p>We can initialize a data structure (struct, enum, union) with named
+fields, by writing <code>fieldname</code> as a shorthand for <code>fieldname: fieldname</code>.
+This allows a compact syntax for initialization, with less duplication:</p>
+<pre><pre class="playpen"><code class="language-rust">#[derive(Debug)]
+struct Person {
+    name: String,
+    age: u8,
+}
+
+fn main() {
+    let name = String::from(&quot;Peter&quot;);
+    let age = 27;
+
+    // Using full syntax:
+    let peter = Person { name: name, age: age };
+
+    let name = String::from(&quot;Portia&quot;);
+    let age = 27;
+
+    // Using field init shorthand:
+    let portia = Person { name, age };
+    
+    println!(&quot;{:?}&quot;, portia);
+}
+</code></pre></pre>
 
                 </div>
 
