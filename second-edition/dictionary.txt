@@ -93,6 +93,7 @@ extern
 FFFF
 figcaption
 filename
+fieldname
 Filename
 filesystem
 Filesystem
@@ -199,6 +200,7 @@ parameterize
 ParseIntError
 PartialEq
 PartialOrd
+portia
 powi
 preprocessing
 Preprocessing
