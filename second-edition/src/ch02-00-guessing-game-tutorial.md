@@ -662,7 +662,7 @@ number this time is 38. When the code compares 50 to 38, the `cmp` method will
 return `Ordering::Greater`, because 50 is greater than 38. `Ordering::Greater`
 is the value that the `match` expression gets. It looks at the first arm’s
 pattern, `Ordering::Less`, but the value `Ordering::Greater` does not match
-`Ordering::Less`. So it ignores the code in that arm and moves to the next arm.
+`Ordering::Less`, so it ignores the code in that arm and moves to the next arm.
 The next arm’s pattern, `Ordering::Greater`, *does* match
 `Ordering::Greater`! The associated code in that arm will execute and print
 `Too big!` to the screen. The `match` expression ends because it has no need to
