@@ -284,7 +284,7 @@ println!("1 new tweet: {}", tweet.summary());
 This will print `1 new tweet: (Read more from @horse_ebooks...)`.
 
 Note that it is not possible to call the default implementation from an
-overridden implementation.
+overriding implementation.
 
 ### Trait Bounds
 

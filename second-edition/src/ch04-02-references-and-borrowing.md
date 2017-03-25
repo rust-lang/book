@@ -291,7 +291,7 @@ Because `s` is created inside `dangle`, when the code of `dangle` is finished,
 this reference would be pointing to an invalid `String`! That’s no good. Rust
 won’t let us do this.
 
-The correct code here is to return the `String` directly:
+The solution here is to return the `String` directly:
 
 ```rust
 fn no_dangle() -> String {
