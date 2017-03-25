@@ -301,7 +301,7 @@ for it to be borrowed from.
 <code>s</code> will be deallocated. But we tried to return a reference to it. That means
 this reference would be pointing to an invalid <code>String</code>! That’s no good. Rust
 won’t let us do this.</p>
-<p>The correct code here is to return the <code>String</code> directly:</p>
+<p>The solution here is to return the <code>String</code> directly:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
 # 
 #fn main() {

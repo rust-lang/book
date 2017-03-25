@@ -3141,7 +3141,7 @@ for it to be borrowed from.
 <code>s</code> will be deallocated. But we tried to return a reference to it. That means
 this reference would be pointing to an invalid <code>String</code>! That’s no good. Rust
 won’t let us do this.</p>
-<p>The correct code here is to return the <code>String</code> directly:</p>
+<p>The solution here is to return the <code>String</code> directly:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
 # 
 #fn main() {
@@ -8026,7 +8026,7 @@ println!(&quot;1 new tweet: {}&quot;, tweet.summary());
 </code></pre>
 <p>This will print <code>1 new tweet: (Read more from @horse_ebooks...)</code>.</p>
 <p>Note that it is not possible to call the default implementation from an
-overridden implementation.</p>
+overriding implementation.</p>
 <a class="header" href="print.html#trait-bounds" id="trait-bounds"><h3>Trait Bounds</h3></a>
 <p>Now that we've defined traits and implemented those traits on types, we can use
 traits with generic type parameters. We can constrain generic types so that
