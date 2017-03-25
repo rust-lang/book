@@ -67,7 +67,7 @@
                 </div>
 
                 <div id="content" class="content">
-                    <a class="header" href="patterns.html#patterns" name="patterns"><h1>Patterns</h1></a>
+                    <a class="header" href="patterns.html#patterns" id="patterns"><h1>Patterns</h1></a>
 <p>Patterns are quite common in Rust. We use them in <a href="variable-bindings.html">variable
 bindings</a>, <a href="match.html">match expressions</a>, and other places, too. Let’s go
 on a whirlwind tour of all of the things patterns can do!</p>
@@ -137,7 +137,7 @@ x: 1
 <code>c</code>. Notice that the value of <code>x</code> outside the scope of the match has no bearing
 on the value of <code>x</code> within it. Because we already have a binding named <code>x</code>, this
 new <code>x</code> shadows it.</p>
-<a class="header" href="patterns.html#multiple-patterns" name="multiple-patterns"><h1>Multiple patterns</h1></a>
+<a class="header" href="patterns.html#multiple-patterns" id="multiple-patterns"><h1>Multiple patterns</h1></a>
 <p>You can match multiple patterns with <code>|</code>:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
 # 
@@ -152,7 +152,7 @@ match x {
 
 #}</code></pre></pre>
 <p>This prints <code>one or two</code>.</p>
-<a class="header" href="patterns.html#destructuring" name="destructuring"><h1>Destructuring</h1></a>
+<a class="header" href="patterns.html#destructuring" id="destructuring"><h1>Destructuring</h1></a>
 <p>If you have a compound data type, like a <a href="structs.html"><code>struct</code></a>, you can destructure it
 inside of a pattern:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
@@ -222,7 +222,7 @@ match point {
 <p>This prints <code>y is 3</code>.</p>
 <p>This ‘destructuring’ behavior works on any compound data type, like
 <a href="primitive-types.html#tuples">tuples</a> or <a href="enums.html">enums</a>.</p>
-<a class="header" href="patterns.html#ignoring-bindings" name="ignoring-bindings"><h1>Ignoring bindings</h1></a>
+<a class="header" href="patterns.html#ignoring-bindings" id="ignoring-bindings"><h1>Ignoring bindings</h1></a>
 <p>You can use <code>_</code> in a pattern to disregard the type and value.
 For example, here’s a <code>match</code> against a <code>Result&lt;T, E&gt;</code>:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
@@ -305,7 +305,7 @@ match x {
 
 #}</code></pre></pre>
 <p>This prints <code>Got a tuple!</code>.</p>
-<a class="header" href="patterns.html#ref-and-ref-mut" name="ref-and-ref-mut"><h1>ref and ref mut</h1></a>
+<a class="header" href="patterns.html#ref-and-ref-mut" id="ref-and-ref-mut"><h1>ref and ref mut</h1></a>
 <p>If you want to get a <a href="references-and-borrowing.html">reference</a>, use the <code>ref</code> keyword:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
 # 
@@ -331,7 +331,7 @@ match x {
 }
 
 #}</code></pre></pre>
-<a class="header" href="patterns.html#ranges" name="ranges"><h1>Ranges</h1></a>
+<a class="header" href="patterns.html#ranges" id="ranges"><h1>Ranges</h1></a>
 <p>You can match a range of values with <code>...</code>:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
 # 
@@ -359,7 +359,7 @@ match x {
 
 #}</code></pre></pre>
 <p>This prints <code>something else</code>.</p>
-<a class="header" href="patterns.html#bindings" name="bindings"><h1>Bindings</h1></a>
+<a class="header" href="patterns.html#bindings" id="bindings"><h1>Bindings</h1></a>
 <p>You can bind values to names with <code>@</code>:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
 # 
@@ -404,7 +404,7 @@ match x {
 }
 
 #}</code></pre></pre>
-<a class="header" href="patterns.html#guards" name="guards"><h1>Guards</h1></a>
+<a class="header" href="patterns.html#guards" id="guards"><h1>Guards</h1></a>
 <p>You can introduce ‘match guards’ with <code>if</code>:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
 # 
@@ -444,7 +444,7 @@ only the <code>5</code>. In other words, the precedence of <code>if</code> behav
 <p>not this:</p>
 <pre><code class="language-text">4 | (5 if y) =&gt; ...
 </code></pre>
-<a class="header" href="patterns.html#mix-and-match" name="mix-and-match"><h1>Mix and Match</h1></a>
+<a class="header" href="patterns.html#mix-and-match" id="mix-and-match"><h1>Mix and Match</h1></a>
 <p>Whew! That’s a lot of different ways to match things, and they can all be
 mixed and matched, depending on what you’re doing:</p>
 <pre><code class="language-rust ignore">match x {

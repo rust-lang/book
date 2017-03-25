@@ -67,7 +67,7 @@
                 </div>
 
                 <div id="content" class="content">
-                    <a class="header" href="conditional-compilation.html#conditional-compilation" name="conditional-compilation"><h1>Conditional Compilation</h1></a>
+                    <a class="header" href="conditional-compilation.html#conditional-compilation" id="conditional-compilation"><h1>Conditional Compilation</h1></a>
 <p>Rust has a special attribute, <code>#[cfg]</code>, which allows you to compile code
 based on a flag passed to the compiler. It has two forms:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
@@ -128,7 +128,7 @@ mod foo {
 <p>If we compile it with <code>cargo build --features &quot;foo&quot;</code>, it will send the <code>--cfg feature=&quot;foo&quot;</code> flag to <code>rustc</code>, and the output will have the <code>mod foo</code> in it.
 If we compile it with a regular <code>cargo build</code>, no extra flags get passed on,
 and so, no <code>foo</code> module will exist.</p>
-<a class="header" href="conditional-compilation.html#cfg_attr" name="cfg_attr"><h1>cfg_attr</h1></a>
+<a class="header" href="conditional-compilation.html#cfg_attr" id="cfg_attr"><h1>cfg_attr</h1></a>
 <p>You can also set another attribute based on a <code>cfg</code> variable with <code>cfg_attr</code>:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
 # 
@@ -138,7 +138,7 @@ and so, no <code>foo</code> module will exist.</p>
 
 #}</code></pre></pre>
 <p>Will be the same as <code>#[b]</code> if <code>a</code> is set by <code>cfg</code> attribute, and nothing otherwise.</p>
-<a class="header" href="conditional-compilation.html#cfg" name="cfg"><h1>cfg!</h1></a>
+<a class="header" href="conditional-compilation.html#cfg" id="cfg"><h1>cfg!</h1></a>
 <p>The <code>cfg!</code> macro lets you use these kinds of flags elsewhere in your code, too:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
 # 

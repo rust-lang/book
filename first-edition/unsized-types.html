@@ -67,7 +67,7 @@
                 </div>
 
                 <div id="content" class="content">
-                    <a class="header" href="unsized-types.html#unsized-types" name="unsized-types"><h1>Unsized Types</h1></a>
+                    <a class="header" href="unsized-types.html#unsized-types" id="unsized-types"><h1>Unsized Types</h1></a>
 <p>Most types have a particular size, in bytes, that is knowable at compile time.
 For example, an <code>i32</code> is thirty-two bits big, or four bytes. However, there are
 some types which are useful to express, but do not have a defined size. These are
@@ -99,7 +99,7 @@ this:</p>
 other types of pointers. With the <code>impl for str</code>, all pointers, including (at
 some point, there are some bugs to fix first) user-defined custom smart
 pointers, can use this <code>impl</code>.</p>
-<a class="header" href="unsized-types.html#sized" name="sized"><h1>?Sized</h1></a>
+<a class="header" href="unsized-types.html#sized" id="sized"><h1>?Sized</h1></a>
 <p>If you want to write a function that accepts a dynamically sized type, you
 can use the special bound syntax, <code>?Sized</code>:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]

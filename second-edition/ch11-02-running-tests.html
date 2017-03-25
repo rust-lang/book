@@ -67,7 +67,7 @@
                 </div>
 
                 <div id="content" class="content">
-                    <a class="header" href="ch11-02-running-tests.html#controlling-how-tests-are-run" name="controlling-how-tests-are-run"><h2>Controlling How Tests are Run</h2></a>
+                    <a class="header" href="ch11-02-running-tests.html#controlling-how-tests-are-run" id="controlling-how-tests-are-run"><h2>Controlling How Tests are Run</h2></a>
 <p>Just as <code>cargo run</code> compiles your code and then runs the resulting binary,
 <code>cargo test</code> compiles your code in test mode and runs the resulting test
 binary. There are options you can use to change the default behavior of <code>cargo test</code>. For example, the default behavior of the binary produced by <code>cargo test</code>
@@ -81,7 +81,7 @@ arguments, you list the arguments that go to <code>cargo test</code>, then the s
 <code>--</code>, and then the arguments that go to the test binary. Running <code>cargo test --help</code> will tell you about the options that go with <code>cargo test</code>, and running
 <code>cargo test -- --help</code> will tell you about the options that go after the
 separator <code>--</code>.</p>
-<a class="header" href="ch11-02-running-tests.html#running-tests-in-parallel-or-consecutively" name="running-tests-in-parallel-or-consecutively"><h3>Running Tests in Parallel or Consecutively</h3></a>
+<a class="header" href="ch11-02-running-tests.html#running-tests-in-parallel-or-consecutively" id="running-tests-in-parallel-or-consecutively"><h3>Running Tests in Parallel or Consecutively</h3></a>
 <!-- Are we safe assuming the reader will know enough about threads in this
 context? -->
 <!-- Yes /Carol -->
@@ -109,7 +109,7 @@ binary. For example:</p>
 <p>We set the number of test threads to 1, telling the program not to use any
 parallelism. This will take longer than running them in parallel, but the tests
 won't be potentially interfering with each other if they share state.</p>
-<a class="header" href="ch11-02-running-tests.html#showing-function-output" name="showing-function-output"><h3>Showing Function Output</h3></a>
+<a class="header" href="ch11-02-running-tests.html#showing-function-output" id="showing-function-output"><h3>Showing Function Output</h3></a>
 <p>By default, if a test passes, Rust's test library captures anything printed to
 standard output. For example, if we call <code>println!</code> in a test and the test
 passes, we won't see the <code>println!</code> output in the terminal: we'll only see the
@@ -195,7 +195,7 @@ test result: FAILED. 1 passed; 1 failed; 0 ignored; 0 measured
 because the tests are running in parallel as we talked about in the previous
 section. Try using both the <code>--test-threads=1</code> option and the <code>--nocapture</code>
 function and see what the output looks like then!</p>
-<a class="header" href="ch11-02-running-tests.html#running-a-subset-of-tests-by-name" name="running-a-subset-of-tests-by-name"><h3>Running a Subset of Tests by Name</h3></a>
+<a class="header" href="ch11-02-running-tests.html#running-a-subset-of-tests-by-name" id="running-a-subset-of-tests-by-name"><h3>Running a Subset of Tests by Name</h3></a>
 <p>Sometimes, running a full test suite can take a long time. If you're working on
 code in a particular area, you might want to run only the tests pertaining to
 that code. You can choose which tests to run by passing <code>cargo test</code> the name
@@ -241,7 +241,7 @@ test tests::one_hundred ... ok
 
 test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured
 </code></pre>
-<a class="header" href="ch11-02-running-tests.html#running-single-tests" name="running-single-tests"><h4>Running Single Tests</h4></a>
+<a class="header" href="ch11-02-running-tests.html#running-single-tests" id="running-single-tests"><h4>Running Single Tests</h4></a>
 <p>We can pass the name of any test function to <code>cargo test</code> to run only that test:</p>
 <pre><code class="language-text">$ cargo test one_hundred
     Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
@@ -254,7 +254,7 @@ test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured
 </code></pre>
 <p>We can't specify the names of multiple tests in this way, only the first value
 given to <code>cargo test</code> will be used.</p>
-<a class="header" href="ch11-02-running-tests.html#filtering-to-run-multiple-tests" name="filtering-to-run-multiple-tests"><h4>Filtering to Run Multiple Tests</h4></a>
+<a class="header" href="ch11-02-running-tests.html#filtering-to-run-multiple-tests" id="filtering-to-run-multiple-tests"><h4>Filtering to Run Multiple Tests</h4></a>
 <p>However, we can specify part of a test name, and any test whose name matches
 that value will get run. For example, since two of our tests' names contain
 <code>add</code>, we can run those two by running <code>cargo test add</code>:</p>
@@ -278,7 +278,7 @@ by Name" section, do you think it should be repeated so soon? Most people who
 use tests have sufficient motivation for wanting to run a subset of the tests,
 they just need to know how to do it with Rust, so we don't think this is a
 point that needs to be emphasized multiple times. /Carol -->
-<a class="header" href="ch11-02-running-tests.html#ignore-some-tests-unless-specifically-requested" name="ignore-some-tests-unless-specifically-requested"><h3>Ignore Some Tests Unless Specifically Requested</h3></a>
+<a class="header" href="ch11-02-running-tests.html#ignore-some-tests-unless-specifically-requested" id="ignore-some-tests-unless-specifically-requested"><h3>Ignore Some Tests Unless Specifically Requested</h3></a>
 <p>Sometimes a few specific tests can be very time-consuming to execute, so you
 might want to exclude them during most runs of <code>cargo test</code>. Rather than
 listing as arguments all tests you do want to run, we can instead annotate the

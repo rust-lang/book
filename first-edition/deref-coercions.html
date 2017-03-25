@@ -67,7 +67,7 @@
                 </div>
 
                 <div id="content" class="content">
-                    <a class="header" href="deref-coercions.html#deref-coercions" name="deref-coercions"><h1><code>Deref</code> coercions</h1></a>
+                    <a class="header" href="deref-coercions.html#deref-coercions" id="deref-coercions"><h1><code>Deref</code> coercions</h1></a>
 <p>The standard library provides a special trait, <a href="../../std/ops/trait.Deref.html"><code>Deref</code></a>. It’s normally
 used to overload <code>*</code>, the dereference operator:</p>
 <pre><pre class="playpen"><code class="language-rust">use std::ops::Deref;
@@ -149,7 +149,7 @@ foo(&amp;owned);
 
 #}</code></pre></pre>
 <p>Vectors can <code>Deref</code> to a slice.</p>
-<a class="header" href="deref-coercions.html#deref-and-method-calls" name="deref-and-method-calls"><h2>Deref and method calls</h2></a>
+<a class="header" href="deref-coercions.html#deref-and-method-calls" id="deref-and-method-calls"><h2>Deref and method calls</h2></a>
 <p><code>Deref</code> will also kick in when calling a method. Consider the following
 example.</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]

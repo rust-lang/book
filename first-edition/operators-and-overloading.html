@@ -67,7 +67,7 @@
                 </div>
 
                 <div id="content" class="content">
-                    <a class="header" href="operators-and-overloading.html#operators-and-overloading" name="operators-and-overloading"><h1>Operators and Overloading</h1></a>
+                    <a class="header" href="operators-and-overloading.html#operators-and-overloading" id="operators-and-overloading"><h1>Operators and Overloading</h1></a>
 <p>Rust allows for a limited form of operator overloading. There are certain
 operators that are able to be overloaded. To support a particular operator
 between types, there’s a specific trait that you can implement, which then
@@ -139,7 +139,7 @@ impl Add&lt;i32&gt; for Point {
 <pre><code class="language-rust ignore">let p: Point = // ...
 let x: f64 = p + 2i32;
 </code></pre>
-<a class="header" href="operators-and-overloading.html#using-operator-traits-in-generic-structs" name="using-operator-traits-in-generic-structs"><h1>Using operator traits in generic structs</h1></a>
+<a class="header" href="operators-and-overloading.html#using-operator-traits-in-generic-structs" id="using-operator-traits-in-generic-structs"><h1>Using operator traits in generic structs</h1></a>
 <p>Now that we know how operator traits are defined, we can define our <code>HasArea</code>
 trait and <code>Square</code> struct from the <a href="traits.html">traits chapter</a> more generically:</p>
 <pre><pre class="playpen"><code class="language-rust">use std::ops::Mul;

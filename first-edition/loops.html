@@ -67,15 +67,15 @@
                 </div>
 
                 <div id="content" class="content">
-                    <a class="header" href="loops.html#loops" name="loops"><h1>Loops</h1></a>
+                    <a class="header" href="loops.html#loops" id="loops"><h1>Loops</h1></a>
 <p>Rust currently provides three approaches to performing some kind of iterative activity. They are: <code>loop</code>, <code>while</code> and <code>for</code>. Each approach has its own set of uses.</p>
-<a class="header" href="loops.html#loop" name="loop"><h2>loop</h2></a>
+<a class="header" href="loops.html#loop" id="loop"><h2>loop</h2></a>
 <p>The infinite <code>loop</code> is the simplest form of loop available in Rust. Using the keyword <code>loop</code>, Rust provides a way to loop indefinitely until some terminating statement is reached. Rust's infinite <code>loop</code>s look like this:</p>
 <pre><code class="language-rust ignore">loop {
     println!(&quot;Loop forever!&quot;);
 }
 </code></pre>
-<a class="header" href="loops.html#while" name="while"><h2>while</h2></a>
+<a class="header" href="loops.html#while" id="while"><h2>while</h2></a>
 <p>Rust also has a <code>while</code> loop. It looks like this:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
 # 
@@ -106,7 +106,7 @@ you need to loop.</p>
 we can give to the compiler, the better it can do with safety and code
 generation, so you should always prefer <code>loop</code> when you plan to loop
 infinitely.</p>
-<a class="header" href="loops.html#for" name="for"><h2>for</h2></a>
+<a class="header" href="loops.html#for" id="for"><h2>for</h2></a>
 <p>The <code>for</code> loop is used to loop a particular number of times. Rust’s <code>for</code> loops
 work a bit differently than in other systems languages, however. Rust’s <code>for</code>
 loop doesn’t look like this “C-style” <code>for</code> loop:</p>
@@ -140,10 +140,10 @@ so our loop will print <code>0</code> through <code>9</code>, not <code>10</code
 <p>Rust does not have the “C-style” <code>for</code> loop on purpose. Manually controlling
 each element of the loop is complicated and error prone, even for experienced C
 developers.</p>
-<a class="header" href="loops.html#enumerate" name="enumerate"><h3>Enumerate</h3></a>
+<a class="header" href="loops.html#enumerate" id="enumerate"><h3>Enumerate</h3></a>
 <p>When you need to keep track of how many times you have already looped, you can
 use the <code>.enumerate()</code> function.</p>
-<a class="header" href="loops.html#on-ranges" name="on-ranges"><h4>On ranges:</h4></a>
+<a class="header" href="loops.html#on-ranges" id="on-ranges"><h4>On ranges:</h4></a>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
 # 
 #fn main() {
@@ -160,7 +160,7 @@ index = 3 and value = 8
 index = 4 and value = 9
 </code></pre>
 <p>Don't forget to add the parentheses around the range.</p>
-<a class="header" href="loops.html#on-iterators" name="on-iterators"><h4>On iterators:</h4></a>
+<a class="header" href="loops.html#on-iterators" id="on-iterators"><h4>On iterators:</h4></a>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
 # 
 #fn main() {
@@ -175,7 +175,7 @@ for (linenumber, line) in lines.enumerate() {
 <pre><code class="language-text">0: hello
 1: world
 </code></pre>
-<a class="header" href="loops.html#ending-iteration-early" name="ending-iteration-early"><h2>Ending iteration early</h2></a>
+<a class="header" href="loops.html#ending-iteration-early" id="ending-iteration-early"><h2>Ending iteration early</h2></a>
 <p>Let’s take a look at that <code>while</code> loop we had earlier:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
 # 
@@ -225,7 +225,7 @@ for x in 0..10 {
 }
 
 #}</code></pre></pre>
-<a class="header" href="loops.html#loop-labels" name="loop-labels"><h2>Loop labels</h2></a>
+<a class="header" href="loops.html#loop-labels" id="loop-labels"><h2>Loop labels</h2></a>
 <p>You may also encounter situations where you have nested loops and need to
 specify which one your <code>break</code> or <code>continue</code> statement is for. Like most
 other languages, by default a <code>break</code> or <code>continue</code> will apply to innermost

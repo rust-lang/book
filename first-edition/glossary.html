@@ -67,10 +67,10 @@
                 </div>
 
                 <div id="content" class="content">
-                    <a class="header" href="glossary.html#glossary" name="glossary"><h1>Glossary</h1></a>
+                    <a class="header" href="glossary.html#glossary" id="glossary"><h1>Glossary</h1></a>
 <p>Not every Rustacean has a background in systems programming, nor in computer
 science, so we've added explanations of terms that might be unfamiliar.</p>
-<a class="header" href="glossary.html#abstract-syntax-tree" name="abstract-syntax-tree"><h3>Abstract Syntax Tree</h3></a>
+<a class="header" href="glossary.html#abstract-syntax-tree" id="abstract-syntax-tree"><h3>Abstract Syntax Tree</h3></a>
 <p>When a compiler is compiling your program, it does a number of different things.
 One of the things that it does is turn the text of your program into an
 ‘abstract syntax tree’, or ‘AST’. This tree is a representation of the structure
@@ -86,7 +86,7 @@ of your program. For example, <code>2 + 3</code> can be turned into a tree:</p>
    / \
   3   4
 </code></pre>
-<a class="header" href="glossary.html#arity" name="arity"><h3>Arity</h3></a>
+<a class="header" href="glossary.html#arity" id="arity"><h3>Arity</h3></a>
 <p>Arity refers to the number of arguments a function or operation takes.</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
 # 
@@ -97,23 +97,23 @@ let z = (8, 2, 6);
 
 #}</code></pre></pre>
 <p>In the example above <code>x</code> and <code>y</code> have arity 2. <code>z</code> has arity 3.</p>
-<a class="header" href="glossary.html#bounds" name="bounds"><h3>Bounds</h3></a>
+<a class="header" href="glossary.html#bounds" id="bounds"><h3>Bounds</h3></a>
 <p>Bounds are constraints on a type or <a href="traits.html">trait</a>. For example, if a bound
 is placed on the argument a function takes, types passed to that function
 must abide by that constraint.</p>
-<a class="header" href="glossary.html#combinators" name="combinators"><h3>Combinators</h3></a>
+<a class="header" href="glossary.html#combinators" id="combinators"><h3>Combinators</h3></a>
 <p>Combinators are higher-order functions that apply only functions and
 earlier defined combinators to provide a result from its arguments.
 They can be used to manage control flow in a modular fashion.</p>
-<a class="header" href="glossary.html#dst-dynamically-sized-type" name="dst-dynamically-sized-type"><h3>DST (Dynamically Sized Type)</h3></a>
+<a class="header" href="glossary.html#dst-dynamically-sized-type" id="dst-dynamically-sized-type"><h3>DST (Dynamically Sized Type)</h3></a>
 <p>A type without a statically known size or alignment. (<a href="../../nomicon/exotic-sizes.html#dynamically-sized-types-dsts">more info</a>)</p>
-<a class="header" href="glossary.html#expression" name="expression"><h3>Expression</h3></a>
+<a class="header" href="glossary.html#expression" id="expression"><h3>Expression</h3></a>
 <p>In computer programming, an expression is a combination of values, constants,
 variables, operators and functions that evaluate to a single value. For example,
 <code>2 + (3 * 4)</code> is an expression that returns the value 14. It is worth noting
 that expressions can have side-effects. For example, a function included in an
 expression might perform actions other than simply returning a value.</p>
-<a class="header" href="glossary.html#expression-oriented-language" name="expression-oriented-language"><h3>Expression-Oriented Language</h3></a>
+<a class="header" href="glossary.html#expression-oriented-language" id="expression-oriented-language"><h3>Expression-Oriented Language</h3></a>
 <p>In early programming languages, <a href="glossary.html#expression">expressions</a> and
 <a href="glossary.html#statement">statements</a> were two separate syntactic categories: expressions had
 a value and statements did things. However, later languages blurred this
@@ -121,7 +121,7 @@ distinction, allowing expressions to do things and statements to have a value.
 In an expression-oriented language, (nearly) every statement is an expression
 and therefore returns a value. Consequently, these expression statements can
 themselves form part of larger expressions.</p>
-<a class="header" href="glossary.html#statement" name="statement"><h3>Statement</h3></a>
+<a class="header" href="glossary.html#statement" id="statement"><h3>Statement</h3></a>
 <p>In computer programming, a statement is the smallest standalone element of a
 programming language that commands a computer to perform an action.</p>
 

@@ -67,7 +67,7 @@
                 </div>
 
                 <div id="content" class="content">
-                    <a class="header" href="guessing-game.html#guessing-game" name="guessing-game"><h1>Guessing Game</h1></a>
+                    <a class="header" href="guessing-game.html#guessing-game" id="guessing-game"><h1>Guessing Game</h1></a>
 <p>Let’s learn some Rust! For our first project, we’ll implement a classic
 beginner programming problem: the guessing game. Here’s how it works: Our
 program will generate a random integer between one and a hundred. It will then
@@ -76,7 +76,7 @@ too low or too high. Once we guess correctly, it will congratulate us. Sounds
 good?</p>
 <p>Along the way, we’ll learn a little bit about Rust. The next chapter, ‘Syntax
 and Semantics’, will dive deeper into each part.</p>
-<a class="header" href="guessing-game.html#set-up" name="set-up"><h1>Set up</h1></a>
+<a class="header" href="guessing-game.html#set-up" id="set-up"><h1>Set up</h1></a>
 <p>Let’s set up a new project. Go to your projects directory. Remember how we had
 to create our directory structure and a <code>Cargo.toml</code> for <code>hello_world</code>? Cargo
 has a command that does that for us. Let’s give it a shot:</p>
@@ -117,7 +117,7 @@ Hello, world!
 </code></pre>
 <p>Great! Our game is just the kind of project <code>run</code> is good for: we need
 to quickly test each iteration before moving on to the next one.</p>
-<a class="header" href="guessing-game.html#processing-a-guess" name="processing-a-guess"><h1>Processing a Guess</h1></a>
+<a class="header" href="guessing-game.html#processing-a-guess" id="processing-a-guess"><h1>Processing a Guess</h1></a>
 <p>Let’s get to it! The first thing we need to do for our guessing game is
 allow our player to input a guess. Put this in your <code>src/main.rs</code>:</p>
 <pre><pre class="playpen"><code class="language-rust no_run">use std::io;
@@ -296,7 +296,7 @@ You guessed: 6
 </code></pre>
 <p>All right! Our first part is done: we can get input from the keyboard,
 and then print it back out.</p>
-<a class="header" href="guessing-game.html#generating-a-secret-number" name="generating-a-secret-number"><h1>Generating a secret number</h1></a>
+<a class="header" href="guessing-game.html#generating-a-secret-number" id="generating-a-secret-number"><h1>Generating a secret number</h1></a>
 <p>Next, we need to generate a secret number. Rust does not yet include random
 number functionality in its standard library. The Rust team does, however,
 provide a <a href="https://crates.io/crates/rand"><code>rand</code> crate</a>. A ‘crate’ is a package of Rust code.
@@ -447,7 +447,7 @@ Please input your guess.
 You guessed: 5
 </code></pre>
 <p>Great! Next up: comparing our guess to the secret number.</p>
-<a class="header" href="guessing-game.html#comparing-guesses" name="comparing-guesses"><h1>Comparing guesses</h1></a>
+<a class="header" href="guessing-game.html#comparing-guesses" id="comparing-guesses"><h1>Comparing guesses</h1></a>
 <p>Now that we’ve got user input, let’s compare our guess to the secret number.
 Here’s our next step, though it doesn’t quite compile yet:</p>
 <pre><code class="language-rust ignore">extern crate rand;
@@ -625,7 +625,7 @@ out that I guessed 76. Run the program a few times, and verify that guessing
 the number works, as well as guessing a number too small.</p>
 <p>Now we’ve got most of the game working, but we can only make one guess. Let’s
 change that by adding loops!</p>
-<a class="header" href="guessing-game.html#looping" name="looping"><h1>Looping</h1></a>
+<a class="header" href="guessing-game.html#looping" id="looping"><h1>Looping</h1></a>
 <p>The <code>loop</code> keyword gives us an infinite loop. Let’s add that in:</p>
 <pre><code class="language-rust ignore">extern crate rand;
 
@@ -849,7 +849,7 @@ fn main() {
     }
 }
 </code></pre>
-<a class="header" href="guessing-game.html#complete" name="complete"><h1>Complete!</h1></a>
+<a class="header" href="guessing-game.html#complete" id="complete"><h1>Complete!</h1></a>
 <p>This project showed you a lot: <code>let</code>, <code>match</code>, methods, associated
 functions, using external crates, and more.</p>
 <p>At this point, you have successfully built the Guessing Game! Congratulations!</p>

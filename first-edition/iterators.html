@@ -67,7 +67,7 @@
                 </div>
 
                 <div id="content" class="content">
-                    <a class="header" href="iterators.html#iterators" name="iterators"><h1>Iterators</h1></a>
+                    <a class="header" href="iterators.html#iterators" id="iterators"><h1>Iterators</h1></a>
 <p>Let's talk about loops.</p>
 <p>Remember Rust's <code>for</code> loop? Here's an example:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
@@ -177,7 +177,7 @@ different output sequence.</li>
 <li><em>consumers</em> operate on an iterator, producing some final set of values.</li>
 </ul>
 <p>Let's talk about consumers first, since you've already seen an iterator, ranges.</p>
-<a class="header" href="iterators.html#consumers" name="consumers"><h2>Consumers</h2></a>
+<a class="header" href="iterators.html#consumers" id="consumers"><h2>Consumers</h2></a>
 <p>A <em>consumer</em> operates on an iterator, returning some kind of value or values.
 The most common consumer is <code>collect()</code>. This code doesn't quite compile,
 but it shows the intention:</p>
@@ -268,7 +268,7 @@ and you want a single result, <code>fold</code> is appropriate.</p>
 <p>Consumers are important due to one additional property of iterators we haven't
 talked about yet: laziness. Let's talk some more about iterators, and you'll
 see why consumers matter.</p>
-<a class="header" href="iterators.html#iterators" name="iterators"><h2>Iterators</h2></a>
+<a class="header" href="iterators.html#iterators-1" id="iterators-1"><h2>Iterators</h2></a>
 <p>As we've said before, an iterator is something that we can call the
 <code>.next()</code> method on repeatedly, and it gives us a sequence of things.
 Because you need to call the method, this means that iterators
@@ -308,7 +308,7 @@ for num in nums.iter() {
 advanced iterators, including ones that are infinite.</p>
 <p>That's enough about iterators. Iterator adaptors are the last concept
 we need to talk about with regards to iterators. Let's get to it!</p>
-<a class="header" href="iterators.html#iterator-adaptors" name="iterator-adaptors"><h2>Iterator adaptors</h2></a>
+<a class="header" href="iterators.html#iterator-adaptors" id="iterator-adaptors"><h2>Iterator adaptors</h2></a>
 <p><em>Iterator adaptors</em> take an iterator and modify it somehow, producing
 a new iterator. The simplest one is called <code>map</code>:</p>
 <pre><code class="language-rust ignore">(1..100).map(|x| x + 1);

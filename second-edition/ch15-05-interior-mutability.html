@@ -67,7 +67,7 @@
                 </div>
 
                 <div id="content" class="content">
-                    <a class="header" href="ch15-05-interior-mutability.html#refcellt-and-the-interior-mutability-pattern" name="refcellt-and-the-interior-mutability-pattern"><h2><code>RefCell&lt;T&gt;</code> and the Interior Mutability Pattern</h2></a>
+                    <a class="header" href="ch15-05-interior-mutability.html#refcellt-and-the-interior-mutability-pattern" id="refcellt-and-the-interior-mutability-pattern"><h2><code>RefCell&lt;T&gt;</code> and the Interior Mutability Pattern</h2></a>
 <p><em>Interior mutability</em> is a design pattern in Rust for allowing you to mutate
 data even though there are immutable references to that data, which would
 normally be disallowed by the borrowing rules. The interior mutability pattern
@@ -79,7 +79,7 @@ ensure that. The <code>unsafe</code> code involved is then wrapped in a safe API
 outer type is still immutable.</p>
 <p>Let's explore this by looking at the <code>RefCell&lt;T&gt;</code> type that follows the
 interior mutability pattern.</p>
-<a class="header" href="ch15-05-interior-mutability.html#refcellt-has-interior-mutability" name="refcellt-has-interior-mutability"><h3><code>RefCell&lt;T&gt;</code> has Interior Mutability</h3></a>
+<a class="header" href="ch15-05-interior-mutability.html#refcellt-has-interior-mutability" id="refcellt-has-interior-mutability"><h3><code>RefCell&lt;T&gt;</code> has Interior Mutability</h3></a>
 <p>Unlike <code>Rc&lt;T&gt;</code>, the <code>RefCell&lt;T&gt;</code> type represents single ownership over the data
 that it holds. So, what makes <code>RefCell&lt;T&gt;</code> different than a type like <code>Box&lt;T&gt;</code>?
 Let's recall the borrowing rules we learned in Chapter 4:</p>
@@ -167,7 +167,7 @@ interestingly, we can get a <em>mutable</em> reference to the value inside the
 <code>a_fn_that_mutably_borrows</code> is allowed to change the value. We can see that the
 next time we call <code>a_fn_that_immutably_borrows</code> that prints out the value, it's
 6 instead of 5.</p>
-<a class="header" href="ch15-05-interior-mutability.html#borrowing-rules-are-checked-at-runtime-on-refcellt" name="borrowing-rules-are-checked-at-runtime-on-refcellt"><h3>Borrowing Rules are Checked at Runtime on <code>RefCell&lt;T&gt;</code></h3></a>
+<a class="header" href="ch15-05-interior-mutability.html#borrowing-rules-are-checked-at-runtime-on-refcellt" id="borrowing-rules-are-checked-at-runtime-on-refcellt"><h3>Borrowing Rules are Checked at Runtime on <code>RefCell&lt;T&gt;</code></h3></a>
 <p>Recall from Chapter 4 that because of the borrowing rules, this code using
 regular references that tries to create two mutable borrows in the same scope
 won't compile:</p>
@@ -213,7 +213,7 @@ enforce them at runtime instead of compile time. You could choose to use
 <code>RefCell</code> a lot, you'd find out about possible problems later (possibly in
 production rather than during development). Also, checking the borrowing rules
 while your program is running has a performance penalty.</p>
-<a class="header" href="ch15-05-interior-mutability.html#multiple-owners-of-mutable-data-by-combining-rct-and-refcellt" name="multiple-owners-of-mutable-data-by-combining-rct-and-refcellt"><h3>Multiple Owners of Mutable Data by Combining <code>Rc&lt;T&gt;</code> and <code>RefCell&lt;T&gt;</code></h3></a>
+<a class="header" href="ch15-05-interior-mutability.html#multiple-owners-of-mutable-data-by-combining-rct-and-refcellt" id="multiple-owners-of-mutable-data-by-combining-rct-and-refcellt"><h3>Multiple Owners of Mutable Data by Combining <code>Rc&lt;T&gt;</code> and <code>RefCell&lt;T&gt;</code></h3></a>
 <p>So why would we choose to make the tradeoffs that using <code>RefCell&lt;T&gt;</code> involves?
 Well, remember when we said that <code>Rc&lt;T&gt;</code> only lets you have an immutable
 reference to <code>T</code>? Given that <code>RefCell&lt;T&gt;</code> is immutable, but has interior

@@ -67,7 +67,7 @@
                 </div>
 
                 <div id="content" class="content">
-                    <a class="header" href="ownership.html#ownership" name="ownership"><h1>Ownership</h1></a>
+                    <a class="header" href="ownership.html#ownership" id="ownership"><h1>Ownership</h1></a>
 <p>This is the first of three sections presenting Rust’s ownership system. This is one of
 Rust’s most distinct and compelling features, with which Rust developers should
 become quite acquainted. Ownership is how Rust achieves its largest goal,
@@ -80,7 +80,7 @@ chapter:</p>
 </ul>
 <p>These three chapters are related, and in order. You’ll need all three to fully
 understand the ownership system.</p>
-<a class="header" href="ownership.html#meta" name="meta"><h1>Meta</h1></a>
+<a class="header" href="ownership.html#meta" id="meta"><h1>Meta</h1></a>
 <p>Before we get to the details, two important notes about the ownership system.</p>
 <p>Rust has a focus on safety and speed. It accomplishes these goals through many
 ‘zero-cost abstractions’, which means that in Rust, abstractions cost as little
@@ -98,7 +98,7 @@ however: more experienced Rust developers report that once they work with the
 rules of the ownership system for a period of time, they fight the borrow
 checker less and less.</p>
 <p>With that in mind, let’s learn about ownership.</p>
-<a class="header" href="ownership.html#ownership" name="ownership"><h1>Ownership</h1></a>
+<a class="header" href="ownership.html#ownership-1" id="ownership-1"><h1>Ownership</h1></a>
 <p><a href="variable-bindings.html">Variable bindings</a> have a property in Rust: they ‘have ownership’
 of what they’re bound to. This means that when a binding goes out of scope,
 Rust will free the bound resources. For example:</p>
@@ -121,7 +121,7 @@ behave like <a href="primitive-types.html#arrays">arrays</a>, except their size 
 elements onto them.</p>
 <p>Vectors have a <a href="generics.html">generic type</a> <code>Vec&lt;T&gt;</code>, so in this example <code>v</code> will have type
 <code>Vec&lt;i32&gt;</code>. We'll cover <a href="generics.html">generics</a> in detail in a later chapter.</p>
-<a class="header" href="ownership.html#move-semantics" name="move-semantics"><h1>Move semantics</h1></a>
+<a class="header" href="ownership.html#move-semantics" id="move-semantics"><h1>Move semantics</h1></a>
 <p>There’s some more subtlety here, though: Rust ensures that there is <em>exactly
 one</em> binding to any given resource. For example, if we have a vector, we can
 assign it to another binding:</p>
@@ -160,7 +160,7 @@ println!(&quot;v[0] is: {}&quot;, v[0]);
 <p>Same error: ‘use of moved value’. When we transfer ownership to something else,
 we say that we’ve ‘moved’ the thing we refer to. You don’t need some sort of
 special annotation here, it’s the default thing that Rust does.</p>
-<a class="header" href="ownership.html#the-details" name="the-details"><h2>The details</h2></a>
+<a class="header" href="ownership.html#the-details" id="the-details"><h2>The details</h2></a>
 <p>The reason that we cannot use a binding after we’ve moved it is subtle, but
 important.</p>
 <p>When we write code like this:</p>
@@ -221,7 +221,7 @@ memory to which they don't have access.</p>
 <p>It’s also important to note that optimizations may remove the actual copy of
 the bytes on the stack, depending on circumstances. So it may not be as
 inefficient as it initially seems.</p>
-<a class="header" href="ownership.html#copy-types" name="copy-types"><h2><code>Copy</code> types</h2></a>
+<a class="header" href="ownership.html#copy-types" id="copy-types"><h2><code>Copy</code> types</h2></a>
 <p>We’ve established that when ownership is transferred to another binding, you
 cannot use the original binding. However, there’s a <a href="traits.html">trait</a> that changes this
 behavior, and it’s called <code>Copy</code>. We haven’t discussed traits yet, but for now,
@@ -275,7 +275,7 @@ println!(&quot;{}&quot;, a);
 </code></pre>
 <p>We will discuss how to make your own types <code>Copy</code> in the <a href="traits.html">traits</a>
 section.</p>
-<a class="header" href="ownership.html#more-than-ownership" name="more-than-ownership"><h1>More than ownership</h1></a>
+<a class="header" href="ownership.html#more-than-ownership" id="more-than-ownership"><h1>More than ownership</h1></a>
 <p>Of course, if we had to hand ownership back with every function we wrote:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
 # 

@@ -67,12 +67,12 @@
                 </div>
 
                 <div id="content" class="content">
-                    <a class="header" href="primitive-types.html#primitive-types" name="primitive-types"><h1>Primitive Types</h1></a>
+                    <a class="header" href="primitive-types.html#primitive-types" id="primitive-types"><h1>Primitive Types</h1></a>
 <p>The Rust language has a number of types that are considered ‘primitive’. This
 means that they’re built-in to the language. Rust is structured in such a way
 that the standard library also provides a number of useful types built on top
 of these ones, as well, but these are the most primitive.</p>
-<a class="header" href="primitive-types.html#booleans" name="booleans"><h1>Booleans</h1></a>
+<a class="header" href="primitive-types.html#booleans" id="booleans"><h1>Booleans</h1></a>
 <p>Rust has a built-in boolean type, named <code>bool</code>. It has two values, <code>true</code> and <code>false</code>:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
 # 
@@ -85,7 +85,7 @@ let y: bool = false;
 <p>A common use of booleans is in <a href="if.html"><code>if</code> conditionals</a>.</p>
 <p>You can find more documentation for <code>bool</code>s <a href="../../std/primitive.bool.html">in the standard library
 documentation</a>.</p>
-<a class="header" href="primitive-types.html#char" name="char"><h1><code>char</code></h1></a>
+<a class="header" href="primitive-types.html#char" id="char"><h1><code>char</code></h1></a>
 <p>The <code>char</code> type represents a single Unicode scalar value. You can create <code>char</code>s
 with a single tick: (<code>'</code>)</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
@@ -99,7 +99,7 @@ let two_hearts = '💕';
 but four.</p>
 <p>You can find more documentation for <code>char</code>s <a href="../../std/primitive.char.html">in the standard library
 documentation</a>.</p>
-<a class="header" href="primitive-types.html#numeric-types" name="numeric-types"><h1>Numeric types</h1></a>
+<a class="header" href="primitive-types.html#numeric-types" id="numeric-types"><h1>Numeric types</h1></a>
 <p>Rust has a variety of numeric types in a few categories: signed and unsigned,
 fixed and variable, floating-point and integer.</p>
 <p>These types consist of two parts: the category, and the size. For example,
@@ -131,7 +131,7 @@ in the standard library:</p>
 <li><a href="../../std/primitive.f64.html">f64</a></li>
 </ul>
 <p>Let’s go over them by category:</p>
-<a class="header" href="primitive-types.html#signed-and-unsigned" name="signed-and-unsigned"><h2>Signed and Unsigned</h2></a>
+<a class="header" href="primitive-types.html#signed-and-unsigned" id="signed-and-unsigned"><h2>Signed and Unsigned</h2></a>
 <p>Integer types come in two varieties: signed and unsigned. To understand the
 difference, let’s consider a number with four bits of size. A signed, four-bit
 number would let you store numbers from <code>-8</code> to <code>+7</code>. Signed numbers use
@@ -140,19 +140,19 @@ not need to store negatives, can store values from <code>0</code> to <code>+15</
 <p>Unsigned types use a <code>u</code> for their category, and signed types use <code>i</code>. The <code>i</code>
 is for ‘integer’. So <code>u8</code> is an eight-bit unsigned number, and <code>i8</code> is an
 eight-bit signed number.</p>
-<a class="header" href="primitive-types.html#fixed-size-types" name="fixed-size-types"><h2>Fixed-size types</h2></a>
+<a class="header" href="primitive-types.html#fixed-size-types" id="fixed-size-types"><h2>Fixed-size types</h2></a>
 <p>Fixed-size types have a specific number of bits in their representation. Valid
 bit sizes are <code>8</code>, <code>16</code>, <code>32</code>, and <code>64</code>. So, <code>u32</code> is an unsigned, 32-bit integer,
 and <code>i64</code> is a signed, 64-bit integer.</p>
-<a class="header" href="primitive-types.html#variable-size-types" name="variable-size-types"><h2>Variable-size types</h2></a>
+<a class="header" href="primitive-types.html#variable-size-types" id="variable-size-types"><h2>Variable-size types</h2></a>
 <p>Rust also provides types whose particular size depends on the underlying machine
 architecture. Their range is sufficient to express the size of any collection, so
 these types have ‘size’ as the category. They come in signed and unsigned varieties
 which account for two types: <code>isize</code> and <code>usize</code>.</p>
-<a class="header" href="primitive-types.html#floating-point-types" name="floating-point-types"><h2>Floating-point types</h2></a>
+<a class="header" href="primitive-types.html#floating-point-types" id="floating-point-types"><h2>Floating-point types</h2></a>
 <p>Rust also has two floating point types: <code>f32</code> and <code>f64</code>. These correspond to
 IEEE-754 single and double precision numbers.</p>
-<a class="header" href="primitive-types.html#arrays" name="arrays"><h1>Arrays</h1></a>
+<a class="header" href="primitive-types.html#arrays" id="arrays"><h1>Arrays</h1></a>
 <p>Like many programming languages, Rust has list types to represent a sequence of
 things. The most basic is the <em>array</em>, a fixed-size list of elements of the
 same type. By default, arrays are immutable.</p>
@@ -200,7 +200,7 @@ errant access is the source of many bugs in other systems programming
 languages.</p>
 <p>You can find more documentation for <code>array</code>s <a href="../../std/primitive.array.html">in the standard library
 documentation</a>.</p>
-<a class="header" href="primitive-types.html#slices" name="slices"><h1>Slices</h1></a>
+<a class="header" href="primitive-types.html#slices" id="slices"><h1>Slices</h1></a>
 <p>A ‘slice’ is a reference to (or “view” into) another data structure. They are
 useful for allowing safe, efficient access to a portion of an array without
 copying. For example, you might want to reference only one line of a file read
@@ -208,7 +208,7 @@ into memory. By nature, a slice is not created directly, but from an existing
 variable binding. Slices have a defined length, and can be mutable or immutable.</p>
 <p>Internally, slices are represented as a pointer to the beginning of the data
 and a length.</p>
-<a class="header" href="primitive-types.html#slicing-syntax" name="slicing-syntax"><h2>Slicing syntax</h2></a>
+<a class="header" href="primitive-types.html#slicing-syntax" id="slicing-syntax"><h2>Slicing syntax</h2></a>
 <p>You can use a combo of <code>&amp;</code> and <code>[]</code> to create a slice from various things. The
 <code>&amp;</code> indicates that slices are similar to <a href="references-and-borrowing.html">references</a>, which we will cover in
 detail later in this section. The <code>[]</code>s, with a range, let you define the
@@ -225,14 +225,14 @@ let middle = &amp;a[1..4]; // A slice of `a`: only the elements `1`, `2`, and `3
 <a href="generics.html">generics</a>.</p>
 <p>You can find more documentation for slices <a href="../../std/primitive.slice.html">in the standard library
 documentation</a>.</p>
-<a class="header" href="primitive-types.html#str" name="str"><h1><code>str</code></h1></a>
+<a class="header" href="primitive-types.html#str" id="str"><h1><code>str</code></h1></a>
 <p>Rust’s <code>str</code> type is the most primitive string type. As an <a href="unsized-types.html">unsized type</a>,
 it’s not very useful by itself, but becomes useful when placed behind a
 reference, like <code>&amp;str</code>. We'll elaborate further when we cover
 <a href="strings.html">Strings</a> and <a href="references-and-borrowing.html">references</a>.</p>
 <p>You can find more documentation for <code>str</code> <a href="../../std/primitive.str.html">in the standard library
 documentation</a>.</p>
-<a class="header" href="primitive-types.html#tuples" name="tuples"><h1>Tuples</h1></a>
+<a class="header" href="primitive-types.html#tuples" id="tuples"><h1>Tuples</h1></a>
 <p>A tuple is an ordered list of fixed size. Like this:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
 # 
@@ -290,7 +290,7 @@ comma:</p>
 (0); // A zero in parentheses.
 
 #}</code></pre></pre>
-<a class="header" href="primitive-types.html#tuple-indexing" name="tuple-indexing"><h2>Tuple Indexing</h2></a>
+<a class="header" href="primitive-types.html#tuple-indexing" id="tuple-indexing"><h2>Tuple Indexing</h2></a>
 <p>You can also access fields of a tuple with indexing syntax:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
 # 
@@ -308,7 +308,7 @@ println!(&quot;x is {}&quot;, x);
 <code>.</code>, rather than <code>[]</code>s.</p>
 <p>You can find more documentation for tuples <a href="../../std/primitive.tuple.html">in the standard library
 documentation</a>.</p>
-<a class="header" href="primitive-types.html#functions" name="functions"><h1>Functions</h1></a>
+<a class="header" href="primitive-types.html#functions" id="functions"><h1>Functions</h1></a>
 <p>Functions also have a type! They look like this:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
 # 

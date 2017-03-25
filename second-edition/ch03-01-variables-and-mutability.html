@@ -67,7 +67,7 @@
                 </div>
 
                 <div id="content" class="content">
-                    <a class="header" href="ch03-01-variables-and-mutability.html#variables-and-mutability" name="variables-and-mutability"><h2>Variables and Mutability</h2></a>
+                    <a class="header" href="ch03-01-variables-and-mutability.html#variables-and-mutability" id="variables-and-mutability"><h2>Variables and Mutability</h2></a>
 <p>As mentioned in Chapter 2, by default variables are <em>immutable</em>. This is one of
 many nudges in Rust that encourages you to write your code in a way that takes
 advantage of the safety and easy concurrency that Rust offers. However, you
@@ -145,7 +145,7 @@ an instance in place may be faster than copying and returning newly allocated
 instances. With smaller data structures, creating new instances and writing in
 a more functional programming style may be easier to reason about, so the lower
 performance might be a worthwhile penalty for gaining that clarity.</p>
-<a class="header" href="ch03-01-variables-and-mutability.html#differences-between-variables-and-constants" name="differences-between-variables-and-constants"><h3>Differences Between Variables and Constants</h3></a>
+<a class="header" href="ch03-01-variables-and-mutability.html#differences-between-variables-and-constants" id="differences-between-variables-and-constants"><h3>Differences Between Variables and Constants</h3></a>
 <p>Being unable to change the value of a variable might have reminded you of
 another programming concept that most other languages have: <em>constants</em>. Like
 immutable variables, constants are also values  that are bound to a name and
@@ -180,7 +180,7 @@ of light.</p>
 conveying the meaning of that value to future maintainers of the code. It also
 helps to have only one place in your code you would need to change if the
 hardcoded value needed to be updated in the future.</p>
-<a class="header" href="ch03-01-variables-and-mutability.html#shadowing" name="shadowing"><h3>Shadowing</h3></a>
+<a class="header" href="ch03-01-variables-and-mutability.html#shadowing" id="shadowing"><h3>Shadowing</h3></a>
 <p>As we saw in the guessing game tutorial in Chapter 2, we can declare new
 variables with the same name as a previous variables, and the new variable
 <em>shadows</em> the previous variable. Rustaceans say that the first variable is

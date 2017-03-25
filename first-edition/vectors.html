@@ -67,7 +67,7 @@
                 </div>
 
                 <div id="content" class="content">
-                    <a class="header" href="vectors.html#vectors" name="vectors"><h1>Vectors</h1></a>
+                    <a class="header" href="vectors.html#vectors" id="vectors"><h1>Vectors</h1></a>
 <p>A ‘vector’ is a dynamic or ‘growable’ array, implemented as the standard
 library type <a href="../../std/vec/index.html"><code>Vec&lt;T&gt;</code></a>. The <code>T</code> means that we can have vectors
 of any type (see the chapter on <a href="generics.html">generics</a> for more).
@@ -94,7 +94,7 @@ that they must be able to know the size of <code>T</code> at compile time (that 
 many bytes are needed to store a <code>T</code>?). The size of some things can't be known
 at compile time. For these you'll have to store a pointer to that thing:
 thankfully, the <a href="../../std/boxed/index.html"><code>Box</code></a> type works perfectly for this.</p>
-<a class="header" href="vectors.html#accessing-elements" name="accessing-elements"><h2>Accessing elements</h2></a>
+<a class="header" href="vectors.html#accessing-elements" id="accessing-elements"><h2>Accessing elements</h2></a>
 <p>To get the value at a particular index in the vector, we use <code>[]</code>s:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
 # 
@@ -127,7 +127,7 @@ error: aborting due to previous error
 </code></pre>
 <p>There’s a lot of punctuation in that message, but the core of it makes sense:
 you cannot index with an <code>i32</code>.</p>
-<a class="header" href="vectors.html#out-of-bounds-access" name="out-of-bounds-access"><h2>Out-of-bounds Access</h2></a>
+<a class="header" href="vectors.html#out-of-bounds-access" id="out-of-bounds-access"><h2>Out-of-bounds Access</h2></a>
 <p>If you try to access an index that doesn’t exist:</p>
 <pre><code class="language-rust ignore">let v = vec![1, 2, 3];
 println!(&quot;Item 7 is {}&quot;, v[7]);
@@ -148,7 +148,7 @@ match v.get(7) {
 }
 
 #}</code></pre></pre>
-<a class="header" href="vectors.html#iterating" name="iterating"><h2>Iterating</h2></a>
+<a class="header" href="vectors.html#iterating" id="iterating"><h2>Iterating</h2></a>
 <p>Once you have a vector, you can iterate through its elements with <code>for</code>. There
 are three versions:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]

@@ -67,7 +67,7 @@
                 </div>
 
                 <div id="content" class="content">
-                    <a class="header" href="ch09-02-recoverable-errors-with-result.html#recoverable-errors-with-result" name="recoverable-errors-with-result"><h2>Recoverable Errors with <code>Result</code></h2></a>
+                    <a class="header" href="ch09-02-recoverable-errors-with-result.html#recoverable-errors-with-result" id="recoverable-errors-with-result"><h2>Recoverable Errors with <code>Result</code></h2></a>
 <p>Most errors aren’t serious enough to require the program to stop entirely.
 Sometimes, when a function fails, it’s for a reason that we can easily
 interpret and respond to. For example, if we try to open a file and that
@@ -172,7 +172,7 @@ code, we’ll see the following output from the <code>panic!</code> macro:</p>
 <pre><code class="language-text">thread 'main' panicked at 'There was a problem opening the file: Error { repr:
 Os { code: 2, message: &quot;No such file or directory&quot; } }', src/main.rs:8
 </code></pre>
-<a class="header" href="ch09-02-recoverable-errors-with-result.html#matching-on-different-errors" name="matching-on-different-errors"><h3>Matching on Different Errors</h3></a>
+<a class="header" href="ch09-02-recoverable-errors-with-result.html#matching-on-different-errors" id="matching-on-different-errors"><h3>Matching on Different Errors</h3></a>
 <p>The code in Listing 9-3 will <code>panic!</code> no matter the reason that <code>File::open</code>
 failed. What we’d really like to do instead is take different actions for
 different failure reasons: if <code>File::open</code> failed because the file doesn’t
@@ -235,7 +235,7 @@ could also fail, we need to add an inner <code>match</code> statement as well! W
 file can’t be opened, a different error message will be printed. The last arm
 of the outer <code>match</code> stays the same so that the program panics on any error
 besides the missing file error.</p>
-<a class="header" href="ch09-02-recoverable-errors-with-result.html#shortcuts-for-panic-on-error-unwrap-and-expect" name="shortcuts-for-panic-on-error-unwrap-and-expect"><h3>Shortcuts for Panic on Error: <code>unwrap</code> and <code>expect</code></h3></a>
+<a class="header" href="ch09-02-recoverable-errors-with-result.html#shortcuts-for-panic-on-error-unwrap-and-expect" id="shortcuts-for-panic-on-error-unwrap-and-expect"><h3>Shortcuts for Panic on Error: <code>unwrap</code> and <code>expect</code></h3></a>
 <p>Using <code>match</code> works well enough, but it can be a bit verbose and doesn’t always
 communicate intent well. The <code>Result&lt;T, E&gt;</code> type has many helper methods
 defined on it to do various things. One of those methods, called <code>unwrap</code>, is a
@@ -273,7 +273,7 @@ the <code>panic!</code> macro. The error message that <code>expect</code> uses i
 2, message: &quot;No such file or directory&quot; } }',
 /stable-dist-rustc/build/src/libcore/result.rs:868
 </code></pre>
-<a class="header" href="ch09-02-recoverable-errors-with-result.html#propagating-errors" name="propagating-errors"><h3>Propagating Errors</h3></a>
+<a class="header" href="ch09-02-recoverable-errors-with-result.html#propagating-errors" id="propagating-errors"><h3>Propagating Errors</h3></a>
 <p>When writing a function whose implementation calls something that might fail,
 instead of handling the error within this function, you can choose to let your
 caller know about the error so they can decide what to do. This is known as
@@ -347,7 +347,7 @@ to do, so we propagate all the success or error information upwards for them to
 handle as they see fit.</p>
 <p>This pattern of propagating errors is so common in Rust that there is dedicated
 syntax to make this easier: <code>?</code>.</p>
-<a class="header" href="ch09-02-recoverable-errors-with-result.html#a-shortcut-for-propagating-errors-" name="a-shortcut-for-propagating-errors-"><h3>A Shortcut for Propagating Errors: <code>?</code></h3></a>
+<a class="header" href="ch09-02-recoverable-errors-with-result.html#a-shortcut-for-propagating-errors-" id="a-shortcut-for-propagating-errors-"><h3>A Shortcut for Propagating Errors: <code>?</code></h3></a>
 <p>Listing 9-6 shows an implementation of <code>read_username_from_file</code> that has the
 same functionality as it had in Listing 9-5, but this implementation uses the
 question mark operator:</p>
@@ -407,7 +407,7 @@ chained the call to <code>read_to_string</code> directly onto the result of
 username in <code>s</code> when both <code>File::open</code> and <code>read_to_string</code> succeed rather than
 returning errors. The functionality is again the same as in Listing 9-5 and
 Listing 9-6, this is just a different, more ergonomic way to write it.</p>
-<a class="header" href="ch09-02-recoverable-errors-with-result.html#-can-only-be-used-in-functions-that-return-result" name="-can-only-be-used-in-functions-that-return-result"><h3><code>?</code> Can Only Be Used in Functions That Return <code>Result</code></h3></a>
+<a class="header" href="ch09-02-recoverable-errors-with-result.html#-can-only-be-used-in-functions-that-return-result" id="-can-only-be-used-in-functions-that-return-result"><h3><code>?</code> Can Only Be Used in Functions That Return <code>Result</code></h3></a>
 <p>The <code>?</code> can only be used in functions that have a return type of <code>Result</code>,
 since it is defined to work in exactly the same way as the <code>match</code> expression
 we defined in Listing 9-5. The part of the <code>match</code> that requires a return type

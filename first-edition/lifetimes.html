@@ -67,7 +67,7 @@
                 </div>
 
                 <div id="content" class="content">
-                    <a class="header" href="lifetimes.html#lifetimes" name="lifetimes"><h1>Lifetimes</h1></a>
+                    <a class="header" href="lifetimes.html#lifetimes" id="lifetimes"><h1>Lifetimes</h1></a>
 <p>This is the last of three sections presenting Rust’s ownership system. This is one of
 Rust’s most distinct and compelling features, with which Rust developers should
 become quite acquainted. Ownership is how Rust achieves its largest goal,
@@ -79,7 +79,7 @@ memory safety. There are a few distinct concepts, each with its own chapter:</p>
 </ul>
 <p>These three chapters are related, and in order. You’ll need all three to fully
 understand the ownership system.</p>
-<a class="header" href="lifetimes.html#meta" name="meta"><h1>Meta</h1></a>
+<a class="header" href="lifetimes.html#meta" id="meta"><h1>Meta</h1></a>
 <p>Before we get to the details, two important notes about the ownership system.</p>
 <p>Rust has a focus on safety and speed. It accomplishes these goals through many
 ‘zero-cost abstractions’, which means that in Rust, abstractions cost as little
@@ -97,7 +97,7 @@ however: more experienced Rust developers report that once they work with the
 rules of the ownership system for a period of time, they fight the borrow
 checker less and less.</p>
 <p>With that in mind, let’s learn about lifetimes.</p>
-<a class="header" href="lifetimes.html#lifetimes" name="lifetimes"><h1>Lifetimes</h1></a>
+<a class="header" href="lifetimes.html#lifetimes-1" id="lifetimes-1"><h1>Lifetimes</h1></a>
 <p>Lending out a reference to a resource that someone else owns can be
 complicated. For example, imagine this set of operations:</p>
 <ol>
@@ -185,7 +185,7 @@ is determined by the code, not by the annotations. The annotations, however,
 give information about lifetimes to the compiler that uses them to check the
 validity of references. The compiler can do so without annotations in simple
 cases, but needs the programmer's support in complex scenarios.</p>
-<a class="header" href="lifetimes.html#syntax" name="syntax"><h1>Syntax</h1></a>
+<a class="header" href="lifetimes.html#syntax" id="syntax"><h1>Syntax</h1></a>
 <p>The <code>'a</code> reads ‘the lifetime a’. Technically, every reference has some lifetime
 associated with it, but the compiler lets you elide (i.e. omit, see
 <a href="lifetimes.html#lifetime-elision">&quot;Lifetime Elision&quot;</a> below) them in common cases. Before we
@@ -211,7 +211,7 @@ look like this:</p>
 <p>If you compare <code>&amp;mut i32</code> to <code>&amp;'a mut i32</code>, they’re the same, it’s that
 the lifetime <code>'a</code> has snuck in between the <code>&amp;</code> and the <code>mut i32</code>. We read <code>&amp;mut i32</code> as ‘a mutable reference to an <code>i32</code>’ and <code>&amp;'a mut i32</code> as ‘a mutable
 reference to an <code>i32</code> with the lifetime <code>'a</code>’.</p>
-<a class="header" href="lifetimes.html#in-structs" name="in-structs"><h1>In <code>struct</code>s</h1></a>
+<a class="header" href="lifetimes.html#in-structs" id="in-structs"><h1>In <code>struct</code>s</h1></a>
 <p>You’ll also need explicit lifetimes when working with <a href="structs.html"><code>struct</code></a>s that
 contain references:</p>
 <pre><pre class="playpen"><code class="language-rust">struct Foo&lt;'a&gt; {
@@ -245,7 +245,7 @@ x: &amp;'a i32,
 #}</code></pre></pre>
 <p>uses it. So why do we need a lifetime here? We need to ensure that any reference
 to a <code>Foo</code> cannot outlive the reference to an <code>i32</code> it contains.</p>
-<a class="header" href="lifetimes.html#impl-blocks" name="impl-blocks"><h2><code>impl</code> blocks</h2></a>
+<a class="header" href="lifetimes.html#impl-blocks" id="impl-blocks"><h2><code>impl</code> blocks</h2></a>
 <p>Let’s implement a method on <code>Foo</code>:</p>
 <pre><pre class="playpen"><code class="language-rust">struct Foo&lt;'a&gt; {
     x: &amp;'a i32,
@@ -265,7 +265,7 @@ fn main() {
 <p>As you can see, we need to declare a lifetime for <code>Foo</code> in the <code>impl</code> line. We repeat
 <code>'a</code> twice, like on functions: <code>impl&lt;'a&gt;</code> defines a lifetime <code>'a</code>, and <code>Foo&lt;'a&gt;</code>
 uses it.</p>
-<a class="header" href="lifetimes.html#multiple-lifetimes" name="multiple-lifetimes"><h2>Multiple lifetimes</h2></a>
+<a class="header" href="lifetimes.html#multiple-lifetimes" id="multiple-lifetimes"><h2>Multiple lifetimes</h2></a>
 <p>If you have multiple references, you can use the same lifetime multiple times:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
 # 
@@ -288,7 +288,7 @@ fn x_or_y&lt;'a, 'b&gt;(x: &amp;'a str, y: &amp;'b str) -&gt; &amp;'a str {
 #}</code></pre></pre>
 <p>In this example, <code>x</code> and <code>y</code> have different valid scopes, but the return value
 has the same lifetime as <code>x</code>.</p>
-<a class="header" href="lifetimes.html#thinking-in-scopes" name="thinking-in-scopes"><h2>Thinking in scopes</h2></a>
+<a class="header" href="lifetimes.html#thinking-in-scopes" id="thinking-in-scopes"><h2>Thinking in scopes</h2></a>
 <p>A way to think about lifetimes is to visualize the scope that a reference is
 valid for. For example:</p>
 <pre><pre class="playpen"><code class="language-rust">fn main() {
@@ -334,7 +334,7 @@ of <code>x</code>. But when we do <code>x = &amp;f.x</code>, we make <code>x</co
 about to go out of scope.</p>
 <p>Named lifetimes are a way of giving these scopes a name. Giving something a
 name is the first step towards being able to talk about it.</p>
-<a class="header" href="lifetimes.html#static" name="static"><h2>'static</h2></a>
+<a class="header" href="lifetimes.html#static" id="static"><h2>'static</h2></a>
 <p>The lifetime named ‘static’ is a special lifetime. It signals that something
 has the lifetime of the entire program. Most Rust programmers first come across
 <code>'static</code> when dealing with strings:</p>
@@ -356,7 +356,7 @@ let x: &amp;'static i32 = &amp;FOO;
 #}</code></pre></pre>
 <p>This adds an <code>i32</code> to the data segment of the binary, and <code>x</code> is a reference
 to it.</p>
-<a class="header" href="lifetimes.html#lifetime-elision" name="lifetime-elision"><h2>Lifetime Elision</h2></a>
+<a class="header" href="lifetimes.html#lifetime-elision" id="lifetime-elision"><h2>Lifetime Elision</h2></a>
 <p>Rust supports powerful local type inference in the bodies of functions, but it
 deliberately does not perform any reasoning about types for item signatures.
 However, for ergonomic reasons, a very restricted secondary inference algorithm called
@@ -391,7 +391,7 @@ assigned to all elided lifetimes in the return values of that function.</p>
 </li>
 </ul>
 <p>Otherwise, it is an error to elide an output lifetime.</p>
-<a class="header" href="lifetimes.html#examples" name="examples"><h3>Examples</h3></a>
+<a class="header" href="lifetimes.html#examples" id="examples"><h3>Examples</h3></a>
 <p>Here are some examples of functions with elided lifetimes.  We’ve paired each
 example of an elided lifetime with its expanded form.</p>
 <pre><code class="language-rust ignore">fn print(s: &amp;str); // elided

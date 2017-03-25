@@ -67,7 +67,7 @@
                 </div>
 
                 <div id="content" class="content">
-                    <a class="header" href="ch16-02-message-passing.html#message-passing-to-transfer-data-between-threads" name="message-passing-to-transfer-data-between-threads"><h2>Message Passing to Transfer Data Between Threads</h2></a>
+                    <a class="header" href="ch16-02-message-passing.html#message-passing-to-transfer-data-between-threads" id="message-passing-to-transfer-data-between-threads"><h2>Message Passing to Transfer Data Between Threads</h2></a>
 <p>One approach to concurrency that's seen a rise in popularity as of late is
 <em>message passing</em>, where threads or actors communicate by sending each other
 messages containing data. Here's the idea in slogan form:</p>
@@ -163,7 +163,7 @@ returns a <code>Result&lt;T, E&gt;</code> immediately.</p>
 main thread:</p>
 <pre><code class="language-text">Got: hi
 </code></pre>
-<a class="header" href="ch16-02-message-passing.html#how-channels-interact-with-ownership" name="how-channels-interact-with-ownership"><h3>How Channels Interact with Ownership</h3></a>
+<a class="header" href="ch16-02-message-passing.html#how-channels-interact-with-ownership" id="how-channels-interact-with-ownership"><h3>How Channels Interact with Ownership</h3></a>
 <p>Let's do an experiment at this point to see how channels and ownership work
 together: we'll try to use <code>val</code> in the spawned thread after we've sent it down
 the channel. Try compiling the code in Listing 16-9:</p>
@@ -212,7 +212,7 @@ Message passing enthusiasts enjoy message passing for similar reasons that
 Rustaceans enjoy Rust's ownership: single ownership means certain classes of
 problems go away. If only one thread at a time can use some memory, there's no
 chance of a data race.</p>
-<a class="header" href="ch16-02-message-passing.html#sending-multiple-values-and-seeing-the-receiver-waiting" name="sending-multiple-values-and-seeing-the-receiver-waiting"><h3>Sending Multiple Values and Seeing the Receiver Waiting</h3></a>
+<a class="header" href="ch16-02-message-passing.html#sending-multiple-values-and-seeing-the-receiver-waiting" id="sending-multiple-values-and-seeing-the-receiver-waiting"><h3>Sending Multiple Values and Seeing the Receiver Waiting</h3></a>
 <p>The code in Listing 16-8 compiled and ran, but it wasn't very interesting: it's
 hard to see that we have two separate threads talking to each other over a
 channel. Listing 16-10 has some modifications that will prove to us that this
@@ -264,7 +264,7 @@ Got: thread
 <p>We don't have any pausing or code that would take a while in the <code>for</code> loop in
 the main thread, so we can tell that the main thread is waiting to receive
 values from the spawned thread.</p>
-<a class="header" href="ch16-02-message-passing.html#create-multiple-producers-by-cloning-the-transmitter" name="create-multiple-producers-by-cloning-the-transmitter"><h3>Create Multiple Producers by Cloning the Transmitter</h3></a>
+<a class="header" href="ch16-02-message-passing.html#create-multiple-producers-by-cloning-the-transmitter" id="create-multiple-producers-by-cloning-the-transmitter"><h3>Create Multiple Producers by Cloning the Transmitter</h3></a>
 <p>Near the start of this section, we mentioned that <code>mpsc</code> stood for <em>multiple
 producer, single consumer</em>. We can expand the code from Listing 16-10 to create
 multiple threads that all send values to the same receiver. We do that by

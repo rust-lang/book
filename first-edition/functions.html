@@ -67,7 +67,7 @@
                 </div>
 
                 <div id="content" class="content">
-                    <a class="header" href="functions.html#functions" name="functions"><h1>Functions</h1></a>
+                    <a class="header" href="functions.html#functions" id="functions"><h1>Functions</h1></a>
 <p>Every Rust program has at least one function, the <code>main</code> function:</p>
 <pre><pre class="playpen"><code class="language-rust">fn main() {
 }
@@ -159,7 +159,7 @@ help: consider removing this semicolon:
 <p>This reveals two interesting things about Rust: it is an expression-based
 language, and semicolons are different from semicolons in other ‘curly brace
 and semicolon’-based languages. These two things are related.</p>
-<a class="header" href="functions.html#expressions-vs-statements" name="expressions-vs-statements"><h2>Expressions vs. Statements</h2></a>
+<a class="header" href="functions.html#expressions-vs-statements" id="expressions-vs-statements"><h2>Expressions vs. Statements</h2></a>
 <p>Rust is primarily an expression-based language. There are only two kinds of
 statements, and everything else is an expression.</p>
 <p>So what's the difference? Expressions return a value, and statements do not.
@@ -211,7 +211,7 @@ fn add_one(x: i32) -&gt; i32 {
 <p>Our function claims to return an <code>i32</code>, but with a semicolon, it would return
 <code>()</code> instead. Rust realizes this probably isn’t what we want, and suggests
 removing the semicolon in the error we saw before.</p>
-<a class="header" href="functions.html#early-returns" name="early-returns"><h2>Early returns</h2></a>
+<a class="header" href="functions.html#early-returns" id="early-returns"><h2>Early returns</h2></a>
 <p>But what about early returns? Rust does have a keyword for that, <code>return</code>:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
 # 
@@ -237,7 +237,7 @@ fn foo(x: i32) -&gt; i32 {
 <p>The previous definition without <code>return</code> may look a bit strange if you haven’t
 worked in an expression-based language before, but it becomes intuitive over
 time.</p>
-<a class="header" href="functions.html#diverging-functions" name="diverging-functions"><h2>Diverging functions</h2></a>
+<a class="header" href="functions.html#diverging-functions" id="diverging-functions"><h2>Diverging functions</h2></a>
 <p>Rust has some special syntax for ‘diverging functions’, which are functions that
 do not return:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
@@ -325,7 +325,7 @@ let x: i32 = diverges();
 let x: String = diverges();
 
 #}</code></pre></pre>
-<a class="header" href="functions.html#function-pointers" name="function-pointers"><h2>Function pointers</h2></a>
+<a class="header" href="functions.html#function-pointers" id="function-pointers"><h2>Function pointers</h2></a>
 <p>We can also create variable bindings which point to functions:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
 # 

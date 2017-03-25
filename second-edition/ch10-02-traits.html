@@ -67,7 +67,7 @@
                 </div>
 
                 <div id="content" class="content">
-                    <a class="header" href="ch10-02-traits.html#traits-defining-shared-behavior" name="traits-defining-shared-behavior"><h2>Traits: Defining Shared Behavior</h2></a>
+                    <a class="header" href="ch10-02-traits.html#traits-defining-shared-behavior" id="traits-defining-shared-behavior"><h2>Traits: Defining Shared Behavior</h2></a>
 <p>Traits allow us to use another kind of abstraction: they let us abstract over
 behavior that types can have in common. A <em>trait</em> tells the Rust compiler about
 functionality a particular type has and might share with other types. In
@@ -78,7 +78,7 @@ a trait and therefore has the behavior we want to use in that situation.</p>
 <p>Note: <em>Traits</em> are similar to a feature often called 'interfaces' in other
 languages, though with some differences.</p>
 </blockquote>
-<a class="header" href="ch10-02-traits.html#defining-a-trait" name="defining-a-trait"><h3>Defining a Trait</h3></a>
+<a class="header" href="ch10-02-traits.html#defining-a-trait" id="defining-a-trait"><h3>Defining a Trait</h3></a>
 <p>The behavior of a type consists of the methods we can call on that type.
 Different types share the same behavior if we can call the same methods on all
 of those types. Trait definitions are a way to group method signatures together
@@ -116,7 +116,7 @@ the <code>Summarizable</code> trait will have the method <code>summary</code> de
 this signature exactly.</p>
 <p>A trait can have multiple methods in its body, with the method signatures
 listed one per line and each line ending in a semicolon.</p>
-<a class="header" href="ch10-02-traits.html#implementing-a-trait-on-a-type" name="implementing-a-trait-on-a-type"><h3>Implementing a Trait on a Type</h3></a>
+<a class="header" href="ch10-02-traits.html#implementing-a-trait-on-a-type" id="implementing-a-trait-on-a-type"><h3>Implementing a Trait on a Type</h3></a>
 <p>Now that we've defined the <code>Summarizable</code> trait, we can implement it on the
 types in our media aggregator that we want to have this behavior. Listing 10-12
 shows an implementation of the <code>Summarizable</code> trait on the <code>NewsArticle</code> struct
@@ -226,7 +226,7 @@ because the parent type is not present. Without this rule, two crates could
 implement the same trait for the same type, and the two implementations would
 conflict: Rust wouldn't know which implementation to use. Because Rust enforces
 the orphan rule, other people's code can't break your code and vice versa.</p>
-<a class="header" href="ch10-02-traits.html#default-implementations" name="default-implementations"><h3>Default Implementations</h3></a>
+<a class="header" href="ch10-02-traits.html#default-implementations" id="default-implementations"><h3>Default Implementations</h3></a>
 <p>Sometimes it's useful to have default behavior for some or all of the methods
 in a trait, instead of making every implementation on every type define custom
 behavior. When we implement the trait on a particular type, we can choose to
@@ -315,7 +315,7 @@ println!(&quot;1 new tweet: {}&quot;, tweet.summary());
 <p>This will print <code>1 new tweet: (Read more from @horse_ebooks...)</code>.</p>
 <p>Note that it is not possible to call the default implementation from an
 overridden implementation.</p>
-<a class="header" href="ch10-02-traits.html#trait-bounds" name="trait-bounds"><h3>Trait Bounds</h3></a>
+<a class="header" href="ch10-02-traits.html#trait-bounds" id="trait-bounds"><h3>Trait Bounds</h3></a>
 <p>Now that we've defined traits and implemented those traits on types, we can use
 traits with generic type parameters. We can constrain generic types so that
 rather than being any type, the compiler will ensure that the type will be
@@ -360,7 +360,7 @@ them to a <code>where</code> clause after the function signature. So instead of:
 <p>This is less cluttered and makes this function's signature look more similar to
 a function without lots of trait bounds, in that the function name, parameter
 list, and return type are close together.</p>
-<a class="header" href="ch10-02-traits.html#fixing-the-largest-function-with-trait-bounds" name="fixing-the-largest-function-with-trait-bounds"><h3>Fixing the <code>largest</code> Function with Trait Bounds</h3></a>
+<a class="header" href="ch10-02-traits.html#fixing-the-largest-function-with-trait-bounds" id="fixing-the-largest-function-with-trait-bounds"><h3>Fixing the <code>largest</code> Function with Trait Bounds</h3></a>
 <p>So any time you want to use behavior defined by a trait on a generic, you need
 to specify that trait in the generic type parameter's type bounds. We can now
 fix the definition of the <code>largest</code> function that uses a generic type parameter

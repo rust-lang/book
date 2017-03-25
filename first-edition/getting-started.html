@@ -67,7 +67,7 @@
                 </div>
 
                 <div id="content" class="content">
-                    <a class="header" href="getting-started.html#getting-started" name="getting-started"><h1>Getting Started</h1></a>
+                    <a class="header" href="getting-started.html#getting-started" id="getting-started"><h1>Getting Started</h1></a>
 <p>This first chapter of the book will get us going with Rust and its tooling.
 First, we’ll install Rust. Then, the classic ‘Hello World’ program. Finally,
 we’ll talk about Cargo, Rust’s build system and package manager.</p>
@@ -76,7 +76,7 @@ start with <code>$</code>. You don't need to type in the <code>$</code>s, they a
 the start of each command. We’ll see many tutorials and examples around the web
 that follow this convention: <code>$</code> for commands run as our regular user, and <code>#</code>
 for commands we should be running as an administrator.</p>
-<a class="header" href="getting-started.html#installing-rust" name="installing-rust"><h1>Installing Rust</h1></a>
+<a class="header" href="getting-started.html#installing-rust" id="installing-rust"><h1>Installing Rust</h1></a>
 <p>The first step to using Rust is to install it. Generally speaking, you’ll need
 an Internet connection to run the commands in this section, as we’ll be
 downloading Rust from the Internet.</p>
@@ -85,7 +85,7 @@ best supported on Linux, Mac, and Windows, on the x86 and x86-64 CPU
 architecture. There are official builds of the Rust compiler and standard
 library for these platforms and more. <a href="https://forge.rust-lang.org/platform-support.html">For full details on Rust platform support
 see the website</a>.</p>
-<a class="header" href="getting-started.html#installing-rust" name="installing-rust"><h2>Installing Rust</h2></a>
+<a class="header" href="getting-started.html#installing-rust-1" id="installing-rust-1"><h2>Installing Rust</h2></a>
 <p>All you need to do on Unix systems like Linux and macOS is open a
 terminal and type this:</p>
 <pre><code class="language-bash">$ curl https://sh.rustup.rs -sSf | sh
@@ -99,11 +99,11 @@ goes well, you’ll see this appear:</p>
 present the above message on success.</p>
 <p>For other installation options and information, visit the <a href="https://www.rust-lang.org/install.html">install</a>
 page of the Rust website.</p>
-<a class="header" href="getting-started.html#uninstalling" name="uninstalling"><h2>Uninstalling</h2></a>
+<a class="header" href="getting-started.html#uninstalling" id="uninstalling"><h2>Uninstalling</h2></a>
 <p>Uninstalling Rust is as easy as installing it:</p>
 <pre><code class="language-bash">$ rustup self uninstall
 </code></pre>
-<a class="header" href="getting-started.html#troubleshooting" name="troubleshooting"><h2>Troubleshooting</h2></a>
+<a class="header" href="getting-started.html#troubleshooting" id="troubleshooting"><h2>Troubleshooting</h2></a>
 <p>If we've got Rust installed, we can open up a shell, and type this:</p>
 <pre><code class="language-bash">$ rustc --version
 </code></pre>
@@ -136,7 +136,7 @@ Rustaceans (a silly nickname we call ourselves) who can help us out. Other great
 resources include <a href="https://users.rust-lang.org/">the user’s forum</a> and <a href="http://stackoverflow.com/questions/tagged/rust">Stack Overflow</a>.</p>
 <p>This installer also installs a copy of the documentation locally, so we can
 read it offline. It's only a <code>rustup doc</code> away!</p>
-<a class="header" href="getting-started.html#hello-world" name="hello-world"><h1>Hello, world!</h1></a>
+<a class="header" href="getting-started.html#hello-world" id="hello-world"><h1>Hello, world!</h1></a>
 <p>Now that you have Rust installed, we'll help you write your first Rust program.
 It's traditional when learning a new language to write a little program to
 print the text “Hello, world!” to the screen, and in this section, we'll follow
@@ -155,7 +155,7 @@ Rust team ships plugins for <a href="https://github.com/rust-lang/rust/blob/mast
 IDE is out of the scope of this tutorial, so check the documentation for your
 specific setup.</p>
 </blockquote>
-<a class="header" href="getting-started.html#creating-a-project-file" name="creating-a-project-file"><h2>Creating a Project File</h2></a>
+<a class="header" href="getting-started.html#creating-a-project-file" id="creating-a-project-file"><h2>Creating a Project File</h2></a>
 <p>First, make a file to put your Rust code in. Rust doesn't care where your code
 lives, but for this book, I suggest making a <em>projects</em> directory in your home
 directory, and keeping all your projects there. Open a terminal and enter the
@@ -169,7 +169,7 @@ $ cd hello_world
 <p>Note: If you’re on Windows and not using PowerShell, the <code>~</code> may not work.
 Consult the documentation for your shell for more details.</p>
 </blockquote>
-<a class="header" href="getting-started.html#writing-and-running-a-rust-program" name="writing-and-running-a-rust-program"><h2>Writing and Running a Rust Program</h2></a>
+<a class="header" href="getting-started.html#writing-and-running-a-rust-program" id="writing-and-running-a-rust-program"><h2>Writing and Running a Rust Program</h2></a>
 <p>We need to create a source file for our Rust program. Rust files always end
 in a <em>.rs</em> extension. If you are using more than one word in your filename,
 use an underscore to separate them; for example, you would use
@@ -190,7 +190,7 @@ Hello, world!
 system, you should see the string <code>Hello, world!</code> print to the terminal. If you
 did, then congratulations! You've officially written a Rust program. That makes
 you a Rust programmer! Welcome.</p>
-<a class="header" href="getting-started.html#anatomy-of-a-rust-program" name="anatomy-of-a-rust-program"><h2>Anatomy of a Rust Program</h2></a>
+<a class="header" href="getting-started.html#anatomy-of-a-rust-program" id="anatomy-of-a-rust-program"><h2>Anatomy of a Rust Program</h2></a>
 <p>Now, let’s go over what just happened in your &quot;Hello, world!&quot; program in
 detail. Here's the first piece of the puzzle:</p>
 <pre><pre class="playpen"><code class="language-rust">fn main() {
@@ -231,7 +231,7 @@ prints the string to the screen. Easy enough!</p>
 language</a></em>, which means that most things are expressions, rather than
 statements. The <code>;</code> indicates that this expression is over, and the next one is
 ready to begin. Most lines of Rust code end with a <code>;</code>.</p>
-<a class="header" href="getting-started.html#compiling-and-running-are-separate-steps" name="compiling-and-running-are-separate-steps"><h2>Compiling and Running Are Separate Steps</h2></a>
+<a class="header" href="getting-started.html#compiling-and-running-are-separate-steps" id="compiling-and-running-are-separate-steps"><h2>Compiling and Running Are Separate Steps</h2></a>
 <p>In &quot;Writing and Running a Rust Program&quot;, we showed you how to run a newly
 created program. We'll break that process down and examine each step now.</p>
 <p>Before running a Rust program, you have to compile it. You can use the Rust
@@ -270,7 +270,7 @@ grows, you'll want to be able to manage all of the options your project has,
 and make it easy to share your code with other people and projects. Next, I'll
 introduce you to a tool called Cargo, which will help you write real-world Rust
 programs.</p>
-<a class="header" href="getting-started.html#hello-cargo" name="hello-cargo"><h1>Hello, Cargo!</h1></a>
+<a class="header" href="getting-started.html#hello-cargo" id="hello-cargo"><h1>Hello, Cargo!</h1></a>
 <p>Cargo is Rust’s build system and package manager, and Rustaceans use Cargo to
 manage their Rust projects. Cargo manages three things: building your code,
 downloading the libraries your code depends on, and building those libraries.
@@ -289,7 +289,7 @@ other means, you can check if you have Cargo installed by typing:</p>
 <p>Into a terminal. If you see a version number, great! If you see an error like
 ‘<code>command not found</code>’, then you should look at the documentation for the system
 in which you installed Rust, to determine if Cargo is separate.</p>
-<a class="header" href="getting-started.html#converting-to-cargo" name="converting-to-cargo"><h2>Converting to Cargo</h2></a>
+<a class="header" href="getting-started.html#converting-to-cargo" id="converting-to-cargo"><h2>Converting to Cargo</h2></a>
 <p>Let’s convert the Hello World program to Cargo. To Cargo-fy a project, you need
 to do three things:</p>
 <ol>
@@ -299,7 +299,7 @@ else).</li>
 <li>Make a Cargo configuration file.</li>
 </ol>
 <p>Let's get started!</p>
-<a class="header" href="getting-started.html#creating-a-source-directory-and-removing-the-old-executable" name="creating-a-source-directory-and-removing-the-old-executable"><h3>Creating a Source Directory and Removing the Old Executable</h3></a>
+<a class="header" href="getting-started.html#creating-a-source-directory-and-removing-the-old-executable" id="creating-a-source-directory-and-removing-the-old-executable"><h3>Creating a Source Directory and Removing the Old Executable</h3></a>
 <p>First, go back to your terminal, move to your <em>hello_world</em> directory, and
 enter the following commands:</p>
 <pre><code class="language-bash">$ mkdir src
@@ -318,7 +318,7 @@ Windows.</p>
 executable. If you wanted to make a library instead, you'd name the file
 <code>lib.rs</code>. This convention is used by Cargo to successfully compile your
 projects, but it can be overridden if you wish.</p>
-<a class="header" href="getting-started.html#creating-a-configuration-file" name="creating-a-configuration-file"><h3>Creating a Configuration File</h3></a>
+<a class="header" href="getting-started.html#creating-a-configuration-file" id="creating-a-configuration-file"><h3>Creating a Configuration File</h3></a>
 <p>Next, create a new file inside your <em>hello_world</em> directory, and call it
 <code>Cargo.toml</code>.</p>
 <p>Make sure to capitalize the <code>C</code> in <code>Cargo.toml</code>, or Cargo won't know what to do
@@ -340,7 +340,7 @@ sections, but for now, we only have the package configuration.</p>
 know to compile your program: its name, what version it is, and who wrote it.</p>
 <p>Once you've added this information to the <em>Cargo.toml</em> file, save it to finish
 creating the configuration file.</p>
-<a class="header" href="getting-started.html#building-and-running-a-cargo-project" name="building-and-running-a-cargo-project"><h2>Building and Running a Cargo Project</h2></a>
+<a class="header" href="getting-started.html#building-and-running-a-cargo-project" id="building-and-running-a-cargo-project"><h2>Building and Running a Cargo Project</h2></a>
 <p>With your <em>Cargo.toml</em> file in place in your project's root directory, you
 should be ready to build and run your Hello World program! To do so, enter the
 following commands:</p>
@@ -375,12 +375,12 @@ but it will become useful in the future. This is especially true when you start
 using crates; these are synonymous with a ‘library’ or ‘package’ in other
 programming languages. For complex projects composed of multiple crates, it’s
 much easier to let Cargo coordinate the build. Using Cargo, you can run <code>cargo build</code>, and it should work the right way.</p>
-<a class="header" href="getting-started.html#building-for-release" name="building-for-release"><h3>Building for Release</h3></a>
+<a class="header" href="getting-started.html#building-for-release" id="building-for-release"><h3>Building for Release</h3></a>
 <p>When your project is ready for release, you can use <code>cargo build --release</code> to compile your project with optimizations. These optimizations make
 your Rust code run faster, but turning them on makes your program take longer
 to compile. This is why there are two different profiles, one for development,
 and one for building the final program you’ll give to a user.</p>
-<a class="header" href="getting-started.html#what-is-that-cargolock" name="what-is-that-cargolock"><h3>What Is That <code>Cargo.lock</code>?</h3></a>
+<a class="header" href="getting-started.html#what-is-that-cargolock" id="what-is-that-cargolock"><h3>What Is That <code>Cargo.lock</code>?</h3></a>
 <p>Running <code>cargo build</code> also causes Cargo to create a new file called
 <em>Cargo.lock</em>, which looks like this:</p>
 <pre><code class="language-toml">[root]
@@ -400,7 +400,7 @@ virtually all Rust projects with some variation on the following commands:</p>
 $ cd foo
 $ cargo build
 </code></pre>
-<a class="header" href="getting-started.html#making-a-new-cargo-project-the-easy-way" name="making-a-new-cargo-project-the-easy-way"><h2>Making A New Cargo Project the Easy Way</h2></a>
+<a class="header" href="getting-started.html#making-a-new-cargo-project-the-easy-way" id="making-a-new-cargo-project-the-easy-way"><h2>Making A New Cargo Project the Easy Way</h2></a>
 <p>You don’t have to go through that previous process every time you want to start
 a new project! Cargo can quickly make a bare-bones project directory that you
 can start developing in right away.</p>
@@ -437,7 +437,7 @@ also initialized the <code>hello_world</code> directory as a <code>git</code> re
 <p>Note: If you want to look at Cargo in more detail, check out the official <a href="http://doc.crates.io/guide.html">Cargo
 guide</a>, which covers all of its features.</p>
 </blockquote>
-<a class="header" href="getting-started.html#closing-thoughts" name="closing-thoughts"><h1>Closing Thoughts</h1></a>
+<a class="header" href="getting-started.html#closing-thoughts" id="closing-thoughts"><h1>Closing Thoughts</h1></a>
 <p>This chapter covered the basics that will serve you well through the rest of
 this book, and the rest of your time with Rust. Now that you’ve got the tools
 down, we'll cover more about the Rust language itself.</p>

@@ -67,13 +67,13 @@
                 </div>
 
                 <div id="content" class="content">
-                    <a class="header" href="closures.html#closures" name="closures"><h1>Closures</h1></a>
+                    <a class="header" href="closures.html#closures" id="closures"><h1>Closures</h1></a>
 <p>Sometimes it is useful to wrap up a function and <em>free variables</em> for better
 clarity and reuse. The free variables that can be used come from the
 enclosing scope and are ‘closed over’ when used in the function. From this, we
 get the name ‘closures’ and Rust provides a really great implementation of
 them, as we’ll see.</p>
-<a class="header" href="closures.html#syntax" name="syntax"><h1>Syntax</h1></a>
+<a class="header" href="closures.html#syntax" id="syntax"><h1>Syntax</h1></a>
 <p>Closures look like this:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
 # 
@@ -131,7 +131,7 @@ let plus_one_v3 = |x: i32|          x + 1  ;
 
 #}</code></pre></pre>
 <p>Small differences, but they’re similar.</p>
-<a class="header" href="closures.html#closures-and-their-environment" name="closures-and-their-environment"><h1>Closures and their environment</h1></a>
+<a class="header" href="closures.html#closures-and-their-environment" id="closures-and-their-environment"><h1>Closures and their environment</h1></a>
 <p>The environment for a closure can include bindings from its enclosing scope in
 addition to parameters and local bindings. It looks like this:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
@@ -201,7 +201,7 @@ let takes_nums = || nums;
 <p><code>Vec&lt;T&gt;</code> has ownership over its contents, and therefore, when we refer to it
 in our closure, we have to take ownership of <code>nums</code>. It’s the same as if we’d
 passed <code>nums</code> to a function that took ownership of it.</p>
-<a class="header" href="closures.html#move-closures" name="move-closures"><h2><code>move</code> closures</h2></a>
+<a class="header" href="closures.html#move-closures" id="move-closures"><h2><code>move</code> closures</h2></a>
 <p>We can force our closure to take ownership of its environment with the <code>move</code>
 keyword:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
@@ -258,7 +258,7 @@ generally return a non-<code>move</code> closure from a function, for example.</
 more about the way that closures are implemented. As a systems language, Rust
 gives you tons of control over what your code does, and closures are no
 different.</p>
-<a class="header" href="closures.html#closure-implementation" name="closure-implementation"><h1>Closure implementation</h1></a>
+<a class="header" href="closures.html#closure-implementation" id="closure-implementation"><h1>Closure implementation</h1></a>
 <p>Rust’s implementation of closures is a bit different than other languages. They
 are effectively syntax sugar for traits. You’ll want to make sure to have read
 the <a href="traits.html">traits</a> section before this one, as well as the section on <a href="trait-objects.html">trait
@@ -282,7 +282,7 @@ a large amount of control over what kind of closures we can take.</p>
 <p>The <code>|| {}</code> syntax for closures is sugar for these three traits. Rust will
 generate a struct for the environment, <code>impl</code> the appropriate trait, and then
 use it.</p>
-<a class="header" href="closures.html#taking-closures-as-arguments" name="taking-closures-as-arguments"><h1>Taking closures as arguments</h1></a>
+<a class="header" href="closures.html#taking-closures-as-arguments" id="taking-closures-as-arguments"><h1>Taking closures as arguments</h1></a>
 <p>Now that we know that closures are traits, we already know how to accept and
 return closures: the same as any other trait!</p>
 <p>This also means that we can choose static vs dynamic dispatch as well. First,
@@ -392,7 +392,7 @@ fn call_with_ref&lt;F&gt;(some_closure:F) -&gt; i32
 }
 
 #}</code></pre></pre>
-<a class="header" href="closures.html#function-pointers-and-closures" name="function-pointers-and-closures"><h1>Function pointers and closures</h1></a>
+<a class="header" href="closures.html#function-pointers-and-closures" id="function-pointers-and-closures"><h1>Function pointers and closures</h1></a>
 <p>A function pointer is kind of like a closure that has no environment. As such,
 you can pass a function pointer to any function expecting a closure argument,
 and it will work:</p>
@@ -418,7 +418,7 @@ assert_eq!(2, answer);
 the name of the function works just fine too:</p>
 <pre><code class="language-rust ignore">let answer = call_with_one(&amp;add_one);
 </code></pre>
-<a class="header" href="closures.html#returning-closures" name="returning-closures"><h1>Returning closures</h1></a>
+<a class="header" href="closures.html#returning-closures" id="returning-closures"><h1>Returning closures</h1></a>
 <p>It’s very common for functional-style code to return closures in various
 situations. If you try to return a closure, you may run into an error. At
 first, it may seem strange, but we’ll figure it out. Here’s how you’d probably

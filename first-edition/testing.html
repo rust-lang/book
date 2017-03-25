@@ -67,7 +67,7 @@
                 </div>
 
                 <div id="content" class="content">
-                    <a class="header" href="testing.html#testing" name="testing"><h1>Testing</h1></a>
+                    <a class="header" href="testing.html#testing" id="testing"><h1>Testing</h1></a>
 <blockquote>
 <p>Program testing can be a very effective way to show the presence of bugs, but
 it is hopelessly inadequate for showing their absence.</p>
@@ -77,7 +77,7 @@ it is hopelessly inadequate for showing their absence.</p>
 the right way to test Rust code. There are many schools of thought regarding
 the right and wrong way to write tests. All of these approaches use the same
 basic tools, and so we'll show you the syntax for using them.</p>
-<a class="header" href="testing.html#the-test-attribute" name="the-test-attribute"><h1>The <code>test</code> attribute</h1></a>
+<a class="header" href="testing.html#the-test-attribute" id="the-test-attribute"><h1>The <code>test</code> attribute</h1></a>
 <p>At its simplest, a test in Rust is a function that's annotated with the <code>test</code>
 attribute. Let's make a new project with Cargo called <code>adder</code>:</p>
 <pre><code class="language-bash">$ cargo new adder
@@ -281,7 +281,7 @@ fn it_works() {
 </code></pre>
 <p>This is a very common use of <code>assert_eq!</code>: call some function with
 some known arguments and compare it to the expected output.</p>
-<a class="header" href="testing.html#the-ignore-attribute" name="the-ignore-attribute"><h1>The <code>ignore</code> attribute</h1></a>
+<a class="header" href="testing.html#the-ignore-attribute" id="the-ignore-attribute"><h1>The <code>ignore</code> attribute</h1></a>
 <p>Sometimes a few specific tests can be very time-consuming to execute. These
 can be disabled by default by using the <code>ignore</code> attribute:</p>
 <pre><code class="language-rust ignore"># // The next line exists to trick play.rust-lang.org into running our code as a
@@ -340,7 +340,7 @@ test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured
 </code></pre>
 <p>The <code>--ignored</code> argument is an argument to the test binary, and not to Cargo,
 which is why the command is <code>cargo test -- --ignored</code>.</p>
-<a class="header" href="testing.html#the-tests-module" name="the-tests-module"><h1>The <code>tests</code> module</h1></a>
+<a class="header" href="testing.html#the-tests-module" id="the-tests-module"><h1>The <code>tests</code> module</h1></a>
 <p>There is one way in which our existing example is not idiomatic: it's
 missing the <code>tests</code> module. You might have noticed this test module was
 present in the code that was initially generated with <code>cargo new</code> but
@@ -414,7 +414,7 @@ test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured
 tests. Anything that tests one small bit of functionality makes sense to
 go here. But what about &quot;integration-style&quot; tests instead? For that, we have
 the <code>tests</code> directory.</p>
-<a class="header" href="testing.html#the-tests-directory" name="the-tests-directory"><h1>The <code>tests</code> directory</h1></a>
+<a class="header" href="testing.html#the-tests-directory" id="the-tests-directory"><h1>The <code>tests</code> directory</h1></a>
 <p>Each file in <code>tests/*.rs</code> directory is treated as an individual crate.
 To write an integration test, let's make a <code>tests</code> directory and
 put a <code>tests/integration_test.rs</code> file inside with this as its contents:</p>
@@ -471,7 +471,7 @@ here, since the whole thing is focused on tests.</p>
 to the compiler. It means that all parts in <code>cfg(test)</code> won't be included in
 the build used in your integration tests.</p>
 <p>Let's finally check out that third section: documentation tests.</p>
-<a class="header" href="testing.html#documentation-tests" name="documentation-tests"><h1>Documentation tests</h1></a>
+<a class="header" href="testing.html#documentation-tests" id="documentation-tests"><h1>Documentation tests</h1></a>
 <p>Nothing is better than documentation with examples. Nothing is worse than
 examples that don't actually work, because the code has changed since the
 documentation has been written. To this end, Rust supports automatically
@@ -547,7 +547,7 @@ for the function test. These will auto increment with names like <code>add_two_1
 you add more examples.</p>
 <p>We haven’t covered all of the details with writing documentation tests. For more,
 please see the <a href="documentation.html">Documentation chapter</a>.</p>
-<a class="header" href="testing.html#testing-and-concurrency" name="testing-and-concurrency"><h1>Testing and concurrency</h1></a>
+<a class="header" href="testing.html#testing-and-concurrency" id="testing-and-concurrency"><h1>Testing and concurrency</h1></a>
 <p>It is important to note that tests are run concurrently using threads. For this
 reason, care should be taken to ensure your tests do not depend on each-other,
 or on any shared state. &quot;Shared state&quot; can also include the environment, such
@@ -560,7 +560,7 @@ setting the environment variable <code>RUST_TEST_THREADS</code>, or by passing t
 $ cargo test -- --test-threads=1   # Same as above
 ...
 </code></pre>
-<a class="header" href="testing.html#test-output" name="test-output"><h1>Test output</h1></a>
+<a class="header" href="testing.html#test-output" id="test-output"><h1>Test output</h1></a>
 <p>By default Rust's test library captures and discards output to standard
 out/error, e.g. output from <code>println!()</code>. This too can be controlled using the
 environment or a switch:</p>

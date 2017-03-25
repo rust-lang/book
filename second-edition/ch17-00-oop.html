@@ -67,13 +67,13 @@
                 </div>
 
                 <div id="content" class="content">
-                    <a class="header" href="ch17-00-oop.html#is-rust-oop" name="is-rust-oop"><h1>Is Rust OOP?</h1></a>
+                    <a class="header" href="ch17-00-oop.html#is-rust-oop" id="is-rust-oop"><h1>Is Rust OOP?</h1></a>
 <p>Aphorism: DRY</p>
 <p>So how do you share code?</p>
 <p>I'm used to doing things to solve problems, what do i do instead?
 Why do i need to do different things in Rust? Let's look at an example
 with the Command pattern.</p>
-<a class="header" href="ch17-00-oop.html#command-pattern" name="command-pattern"><h2>Command pattern</h2></a>
+<a class="header" href="ch17-00-oop.html#command-pattern" id="command-pattern"><h2>Command pattern</h2></a>
 <p>Look up official def</p>
 <p>Want caller to be able to customize what gets done</p>
 <p>Method takes command object, calls a run fn</p>
@@ -81,12 +81,12 @@ with the Command pattern.</p>
 <p>where T: Run</p>
 <p>This is the definition of the Fn trait! So we wouldn't implement this, we'd just
 pass closures in</p>
-<a class="header" href="ch17-00-oop.html#supertraits" name="supertraits"><h2>Supertraits</h2></a>
+<a class="header" href="ch17-00-oop.html#supertraits" id="supertraits"><h2>Supertraits</h2></a>
 <p>Trait constraints that use other traits</p>
 <p>Copy requires Clone because Copy is a subset of Clone's behavior, since if you
 have one, you can trivially implement the other.</p>
 <p>Traits that need behavior of another trait in a default method or something.</p>
-<a class="header" href="ch17-00-oop.html#trait-objects" name="trait-objects"><h2>Trait objects</h2></a>
+<a class="header" href="ch17-00-oop.html#trait-objects" id="trait-objects"><h2>Trait objects</h2></a>
 <p>Runtime decisions about deciding what shared code we use</p>
 <p>Give example code</p>
 <p>With traits, libraries are extensible. This is why trait objects are different
@@ -96,21 +96,21 @@ new things to the set of possible things</p>
 <p>T: trait is a compile time decision, monomorphization == static dispatch</p>
 <p>when you implement this trait, you get this other shared behavior</p>
 <p>dynamic dispatch (C++)</p>
-<a class="header" href="ch17-00-oop.html#implementation-details" name="implementation-details"><h3>Implementation details</h3></a>
+<a class="header" href="ch17-00-oop.html#implementation-details" id="implementation-details"><h3>Implementation details</h3></a>
 <ul>
 <li>Like how other languages implement oo.</li>
 </ul>
-<a class="header" href="ch17-00-oop.html#how-to-use-it" name="how-to-use-it"><h3>How to use it</h3></a>
+<a class="header" href="ch17-00-oop.html#how-to-use-it" id="how-to-use-it"><h3>How to use it</h3></a>
 <ul>
 <li>Statically checked duck typing</li>
 </ul>
-<a class="header" href="ch17-00-oop.html#builder-pattern" name="builder-pattern"><h2>Builder pattern</h2></a>
+<a class="header" href="ch17-00-oop.html#builder-pattern" id="builder-pattern"><h2>Builder pattern</h2></a>
 <p>When you don't know how many arguments you're going to have</p>
-<a class="header" href="ch17-00-oop.html#delegation" name="delegation"><h2>Delegation</h2></a>
+<a class="header" href="ch17-00-oop.html#delegation" id="delegation"><h2>Delegation</h2></a>
 <p>Deref - be mad</p>
 <p>Deref is a way to delegate everything, if you don't want that, then write
 boilerplate. Sending messages to your components.</p>
-<a class="header" href="ch17-00-oop.html#how-do-you-share-data" name="how-do-you-share-data"><h2>How do you share data?</h2></a>
+<a class="header" href="ch17-00-oop.html#how-do-you-share-data" id="how-do-you-share-data"><h2>How do you share data?</h2></a>
 <p>Answer: get and set methods, this is awkward and might get better someday.</p>
 
                 </div>

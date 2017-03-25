@@ -67,7 +67,7 @@
                 </div>
 
                 <div id="content" class="content">
-                    <a class="header" href="generics.html#generics" name="generics"><h1>Generics</h1></a>
+                    <a class="header" href="generics.html#generics" id="generics"><h1>Generics</h1></a>
 <p>Sometimes, when writing a function or data type, we may want it to work for
 multiple types of arguments. In Rust, we can do this with generics.
 Generics are called ‘parametric polymorphism’ in type theory,
@@ -138,7 +138,7 @@ enum Result&lt;A, Z&gt; {
 <code>T</code>, for ‘type’, and that we use <code>E</code> for ‘error’. Rust doesn’t care, however.</p>
 <p>The <code>Result&lt;T, E&gt;</code> type is intended to be used to return the result of a
 computation, and to have the ability to return an error if it didn’t work out.</p>
-<a class="header" href="generics.html#generic-functions" name="generic-functions"><h2>Generic functions</h2></a>
+<a class="header" href="generics.html#generic-functions" id="generic-functions"><h2>Generic functions</h2></a>
 <p>We can write functions that take generic types with a similar syntax:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
 # 
@@ -168,7 +168,7 @@ fn takes_two_things&lt;T, U&gt;(x: T, y: U) {
 }
 
 #}</code></pre></pre>
-<a class="header" href="generics.html#generic-structs" name="generic-structs"><h2>Generic structs</h2></a>
+<a class="header" href="generics.html#generic-structs" id="generic-structs"><h2>Generic structs</h2></a>
 <p>You can store a generic type in a <code>struct</code> as well:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
 # 
@@ -206,7 +206,7 @@ many cases: you’ve already seen <code>Option&lt;T&gt;</code>, and later you’
 container types like <a href="../../std/vec/struct.Vec.html"><code>Vec&lt;T&gt;</code></a>. On the other hand, often you want to
 trade that flexibility for increased expressive power. Read about <a href="traits.html">trait
 bounds</a> to see why and how.</p>
-<a class="header" href="generics.html#resolving-ambiguities" name="resolving-ambiguities"><h2>Resolving ambiguities</h2></a>
+<a class="header" href="generics.html#resolving-ambiguities" id="resolving-ambiguities"><h2>Resolving ambiguities</h2></a>
 <p>Most of the time when generics are involved, the compiler can infer the
 generic parameters automatically:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]

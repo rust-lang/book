@@ -67,7 +67,7 @@
                 </div>
 
                 <div id="content" class="content">
-                    <a class="header" href="ch16-03-shared-state.html#shared-state-concurrency" name="shared-state-concurrency"><h2>Shared State Concurrency</h2></a>
+                    <a class="header" href="ch16-03-shared-state.html#shared-state-concurrency" id="shared-state-concurrency"><h2>Shared State Concurrency</h2></a>
 <p>While message passing is a fine way of dealing with concurrency, it's not the
 only one. Consider this slogan again:</p>
 <blockquote>
@@ -85,7 +85,7 @@ complexity, since we need to manage these different owners somehow.</p>
 <p>Rust's type system and ownership can help a lot here in getting this management
 correct, though. For an example, let's look at one of the more common
 concurrency primitives for shared memory: mutexes.</p>
-<a class="header" href="ch16-03-shared-state.html#mutexes-allow-access-to-data-from-one-thread-at-a-time" name="mutexes-allow-access-to-data-from-one-thread-at-a-time"><h3>Mutexes Allow Access to Data from One Thread at a Time</h3></a>
+<a class="header" href="ch16-03-shared-state.html#mutexes-allow-access-to-data-from-one-thread-at-a-time" id="mutexes-allow-access-to-data-from-one-thread-at-a-time"><h3>Mutexes Allow Access to Data from One Thread at a Time</h3></a>
 <p>A <em>mutex</em> is a concurrency primitive for sharing memory. It's short for &quot;mutual
 exclusion&quot;, that is, it only allows one thread to access some data at any given
 time. Mutexes have a reputation for being hard to use, since there's a lot you
@@ -108,7 +108,7 @@ of these ways, the panel would not work as planned!</p>
 <p>Management of mutexes can be incredibly tricky to get right, and that's why so
 many people are enthusiastic about channels. However, in Rust, we can't get
 locking and unlocking wrong, thanks to the type system and ownership.</p>
-<a class="header" href="ch16-03-shared-state.html#the-api-of-mutext" name="the-api-of-mutext"><h4>The API of <code>Mutex&lt;T&gt;</code></h4></a>
+<a class="header" href="ch16-03-shared-state.html#the-api-of-mutext" id="the-api-of-mutext"><h4>The API of <code>Mutex&lt;T&gt;</code></h4></a>
 <p>Let's look at an example of using a mutex in Listing 16-12, without involving
 multiple threads for the moment:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
@@ -148,7 +148,7 @@ release the lock. It happens for us automatically when the <code>MutexGuard</cod
 out of scope, which it does at the end of the inner scope in Listing 16-12. We
 can print out the mutex value and see that we were able to change the inner
 <code>i32</code> to 6.</p>
-<a class="header" href="ch16-03-shared-state.html#sharing-a-mutext-between-multiple-threads" name="sharing-a-mutext-between-multiple-threads"><h4>Sharing a <code>Mutex&lt;T&gt;</code> Between Multiple Threads</h4></a>
+<a class="header" href="ch16-03-shared-state.html#sharing-a-mutext-between-multiple-threads" id="sharing-a-mutext-between-multiple-threads"><h4>Sharing a <code>Mutex&lt;T&gt;</code> Between Multiple Threads</h4></a>
 <p>Let's now try to share a value between multiple threads using <code>Mutex&lt;T&gt;</code>. We'll
 spin up ten threads, and have them each increment a counter value by 1 so that
 the counter goes from 0 to 10. Note that the next few examples will have
@@ -297,7 +297,7 @@ store the result in <code>num2</code>, which is in the second thread! So Rust is
 us that we can't move ownership of <code>counter</code> into multiple threads. This was
 hard to see before since we were creating multiple threads in a loop, and Rust
 can't point to different threads in different iterations of the loop.</p>
-<a class="header" href="ch16-03-shared-state.html#multiple-ownership-with-multiple-threads" name="multiple-ownership-with-multiple-threads"><h4>Multiple Ownership with Multiple Threads</h4></a>
+<a class="header" href="ch16-03-shared-state.html#multiple-ownership-with-multiple-threads" id="multiple-ownership-with-multiple-threads"><h4>Multiple Ownership with Multiple Threads</h4></a>
 <p>In Chapter 15, we were able to have multiple ownership of a value by using the
 smart pointer <code>Rc&lt;T&gt;</code> to create a reference-counted value. We mentioned in
 Chapter 15 that <code>Rc&lt;T&gt;</code> was only for single-threaded contexts, but let's try
@@ -364,7 +364,7 @@ subtle bugs where the counts are wrong, which could lead to memory leaks or
 dropping a value before we're done with it. So what if we had a type that was
 exactly like <code>Rc&lt;T&gt;</code>, but made changes to the reference count in a thread-safe
 way?</p>
-<a class="header" href="ch16-03-shared-state.html#atomic-reference-counting-with-arct" name="atomic-reference-counting-with-arct"><h4>Atomic Reference Counting with <code>Arc&lt;T&gt;</code></h4></a>
+<a class="header" href="ch16-03-shared-state.html#atomic-reference-counting-with-arct" id="atomic-reference-counting-with-arct"><h4>Atomic Reference Counting with <code>Arc&lt;T&gt;</code></h4></a>
 <p>If you thought that question sounded like a leading one, you'd be right. There
 is a type like <code>Rc&lt;T&gt;</code> that's safe to use in concurrent situations: <code>Arc&lt;T&gt;</code>.
 The 'a' stands for <em>atomic</em>, so it's an <em>atomically reference counted</em> type.

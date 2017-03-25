@@ -67,7 +67,7 @@
                 </div>
 
                 <div id="content" class="content">
-                    <a class="header" href="const-and-static.html#const-and-static" name="const-and-static"><h1>const and static</h1></a>
+                    <a class="header" href="const-and-static.html#const-and-static" id="const-and-static"><h1>const and static</h1></a>
 <p>Rust has a way of defining constants with the <code>const</code> keyword:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
 # 
@@ -81,7 +81,7 @@ constants in Rust have no fixed address in memory. This is because they’re
 effectively inlined to each place that they’re used. References to the same
 constant are not necessarily guaranteed to refer to the same memory address for
 this reason.</p>
-<a class="header" href="const-and-static.html#static" name="static"><h1><code>static</code></h1></a>
+<a class="header" href="const-and-static.html#static" id="static"><h1><code>static</code></h1></a>
 <p>Rust provides a ‘global variable’ sort of facility in static items. They’re
 similar to constants, but static items aren’t inlined upon use. This means that
 there is only one instance for each value, and it’s at a fixed location in
@@ -102,7 +102,7 @@ reference stored in a static has a <a href="lifetimes.html"><code>'static</code>
 static NAME: &amp;'static str = &quot;Steve&quot;;
 
 #}</code></pre></pre>
-<a class="header" href="const-and-static.html#mutability" name="mutability"><h2>Mutability</h2></a>
+<a class="header" href="const-and-static.html#mutability" id="mutability"><h2>Mutability</h2></a>
 <p>You can introduce mutability with the <code>mut</code> keyword:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
 # 
@@ -127,11 +127,11 @@ unsafe {
 #}</code></pre></pre>
 <p>Furthermore, any type stored in a <code>static</code> must be <code>Sync</code>, and must not have
 a <a href="drop.html"><code>Drop</code></a> implementation.</p>
-<a class="header" href="const-and-static.html#initializing" name="initializing"><h1>Initializing</h1></a>
+<a class="header" href="const-and-static.html#initializing" id="initializing"><h1>Initializing</h1></a>
 <p>Both <code>const</code> and <code>static</code> have requirements for giving them a value. They must
 be given a value that’s a constant expression. In other words, you cannot use
 the result of a function call or anything similarly complex or at runtime.</p>
-<a class="header" href="const-and-static.html#which-construct-should-i-use" name="which-construct-should-i-use"><h1>Which construct should I use?</h1></a>
+<a class="header" href="const-and-static.html#which-construct-should-i-use" id="which-construct-should-i-use"><h1>Which construct should I use?</h1></a>
 <p>Almost always, if you can choose between the two, choose <code>const</code>. It’s pretty
 rare that you actually want a memory location associated with your constant,
 and using a <code>const</code> allows for optimizations like constant propagation not only

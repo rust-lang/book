@@ -67,7 +67,7 @@
                 </div>
 
                 <div id="content" class="content">
-                    <a class="header" href="ch16-01-threads.html#using-threads-to-run-code-simultaneously" name="using-threads-to-run-code-simultaneously"><h2>Using Threads to Run Code Simultaneously</h2></a>
+                    <a class="header" href="ch16-01-threads.html#using-threads-to-run-code-simultaneously" id="using-threads-to-run-code-simultaneously"><h2>Using Threads to Run Code Simultaneously</h2></a>
 <p>In most operating systems in use today, when your program executes, the context
 in which the operating system runs your code is called a <em>process</em>. The
 operating system runs many processes, and the operating system managing these
@@ -119,7 +119,7 @@ trade overhead for aspects such as more control over which threads run when and
 lower costs of context switching, for example.</p>
 <p>Now that we've defined what threads are in Rust, let's explore how to use the
 thread-related API that the standard library provides for us.</p>
-<a class="header" href="ch16-01-threads.html#creating-a-new-thread-with-spawn" name="creating-a-new-thread-with-spawn"><h3>Creating a New Thread with <code>spawn</code></h3></a>
+<a class="header" href="ch16-01-threads.html#creating-a-new-thread-with-spawn" id="creating-a-new-thread-with-spawn"><h3>Creating a New Thread with <code>spawn</code></h3></a>
 <p>To create a new thread, we call the <code>thread::spawn</code> function and pass it a
 closure (we talked about closures in Chapter 13), containing the code we want
 to run in the new thread. The example in Listing 16-1 prints some text from a
@@ -161,7 +161,7 @@ thread to print until <code>i</code> is 9, it only got to 5 before the main thre
 down. If you always only see one thread, or if you don't see any overlap, try
 increasing the numbers in the ranges to create more opportunities for a thread
 to take a break and give the other thread a turn.</p>
-<a class="header" href="ch16-01-threads.html#waiting-for-all-threads-to-finish-using-join-handles" name="waiting-for-all-threads-to-finish-using-join-handles"><h4>Waiting for All Threads to Finish Using <code>join</code> Handles</h4></a>
+<a class="header" href="ch16-01-threads.html#waiting-for-all-threads-to-finish-using-join-handles" id="waiting-for-all-threads-to-finish-using-join-handles"><h4>Waiting for All Threads to Finish Using <code>join</code> Handles</h4></a>
 <p>Not only does the code in Listing 16-1 not allow the spawned thread to finish
 most of the time since the main thread ends before the spawned thread is done,
 there's actually no guarantee that the spawned thread will get to run at all! We
@@ -244,7 +244,7 @@ hi number 4 from the main thread!
 </code></pre>
 <p>Thinking about a small thing such as where to call <code>join</code> can affect whether
 your threads are actually running at the same time or not.</p>
-<a class="header" href="ch16-01-threads.html#using-move-closures-with-threads" name="using-move-closures-with-threads"><h3>Using <code>move</code> Closures with Threads</h3></a>
+<a class="header" href="ch16-01-threads.html#using-move-closures-with-threads" id="using-move-closures-with-threads"><h3>Using <code>move</code> Closures with Threads</h3></a>
 <p>There's a feature of closures that we didn't cover in Chapter 13 that's often
 useful with <code>thread::spawn</code>: <code>move</code> closures. We said this in Chapter 13:</p>
 <blockquote>

@@ -67,7 +67,7 @@
                 </div>
 
                 <div id="content" class="content">
-                    <a class="header" href="ch04-01-what-is-ownership.html#what-is-ownership" name="what-is-ownership"><h2>What Is Ownership?</h2></a>
+                    <a class="header" href="ch04-01-what-is-ownership.html#what-is-ownership" id="what-is-ownership"><h2>What Is Ownership?</h2></a>
 <p>Rust’s central feature is <em>ownership</em>. Although the feature is straightforward
 to explain, it has deep implications for the rest of the language.</p>
 <p>All programs have to manage the way they use a computer’s memory while running.
@@ -86,7 +86,7 @@ working through some examples that focus on a very common data structure:
 strings.</p>
 <!-- PROD: START BOX -->
 <blockquote>
-<a class="header" href="ch04-01-what-is-ownership.html#the-stack-and-the-heap" name="the-stack-and-the-heap"><h3>The Stack and the Heap</h3></a>
+<a class="header" href="ch04-01-what-is-ownership.html#the-stack-and-the-heap" id="the-stack-and-the-heap"><h3>The Stack and the Heap</h3></a>
 <p>In many programming languages, we don’t have to think about the stack and the
 heap very often. But in a systems programming language like Rust, whether a
 value is on the stack or the heap has more of an effect on how the language
@@ -140,7 +140,7 @@ heap very often, but knowing that managing heap data is why ownership exists
 can help explain why it works the way it does.</p>
 </blockquote>
 <!-- PROD: END BOX -->
-<a class="header" href="ch04-01-what-is-ownership.html#ownership-rules" name="ownership-rules"><h3>Ownership Rules</h3></a>
+<a class="header" href="ch04-01-what-is-ownership.html#ownership-rules" id="ownership-rules"><h3>Ownership Rules</h3></a>
 <p>First, let’s take a look at the ownership rules. Keep these rules in mind as we
 work through the examples that illustrate the rules:</p>
 <blockquote>
@@ -150,7 +150,7 @@ work through the examples that illustrate the rules:</p>
 <li>When the owner goes out of scope, the value will be dropped.</li>
 </ol>
 </blockquote>
-<a class="header" href="ch04-01-what-is-ownership.html#variable-scope" name="variable-scope"><h3>Variable Scope</h3></a>
+<a class="header" href="ch04-01-what-is-ownership.html#variable-scope" id="variable-scope"><h3>Variable Scope</h3></a>
 <p>We’ve walked through an example of a Rust program already in Chapter 2. Now
 that we’re past basic syntax, we won’t include all the <code>fn main() {</code> code in
 examples, so if you’re following along, you’ll have to put the following
@@ -190,7 +190,7 @@ valid</span></p>
 <p>At this point, the relationship between scopes and when variables are valid is
 similar to other programming languages. Now we’ll build on top of this
 understanding by introducing the <code>String</code> type.</p>
-<a class="header" href="ch04-01-what-is-ownership.html#the-string-type" name="the-string-type"><h3>The <code>String</code> Type</h3></a>
+<a class="header" href="ch04-01-what-is-ownership.html#the-string-type" id="the-string-type"><h3>The <code>String</code> Type</h3></a>
 <p>To illustrate the rules of ownership, we need a data type that is more complex
 than the ones we covered in Chapter 3. All the data types we’ve looked at
 previously are stored on the stack and popped off the stack when their scope is
@@ -233,7 +233,7 @@ println!(&quot;{}&quot;, s); // This will print `hello, world!`
 #}</code></pre></pre>
 <p>So, what’s the difference here? Why can <code>String</code> be mutated but literals
 cannot? The difference is how these two types deal with memory.</p>
-<a class="header" href="ch04-01-what-is-ownership.html#memory-and-allocation" name="memory-and-allocation"><h3>Memory and Allocation</h3></a>
+<a class="header" href="ch04-01-what-is-ownership.html#memory-and-allocation" id="memory-and-allocation"><h3>Memory and Allocation</h3></a>
 <p>In the case of a string literal, we know the contents at compile time so the
 text is hardcoded directly into the final executable, making string literals
 fast and efficient. But these properties only come from its immutability.
@@ -289,7 +289,7 @@ patterns.</p>
 simple right now, but the behavior of code can be unexpected in more
 complicated situations when we want to have multiple variables use the data
 we’ve allocated on the heap. Let’s explore some of those situations now.</p>
-<a class="header" href="ch04-01-what-is-ownership.html#ways-variables-and-data-interact-move" name="ways-variables-and-data-interact-move"><h4>Ways Variables and Data Interact: Move</h4></a>
+<a class="header" href="ch04-01-what-is-ownership.html#ways-variables-and-data-interact-move" id="ways-variables-and-data-interact-move"><h4>Ways Variables and Data Interact: Move</h4></a>
 <p>Multiple variables can interact with the same data in different ways in Rust.
 Let’s look at an example using an integer in Listing 4-2:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
@@ -388,7 +388,7 @@ alone will free the memory, and we’re done.</p>
 <p>In addition, there’s a design choice that’s implied by this: Rust will never
 automatically create “deep” copies of your data. Therefore, any <em>automatic</em>
 copying can be assumed to be inexpensive in terms of runtime performance.</p>
-<a class="header" href="ch04-01-what-is-ownership.html#ways-variables-and-data-interact-clone" name="ways-variables-and-data-interact-clone"><h4>Ways Variables and Data Interact: Clone</h4></a>
+<a class="header" href="ch04-01-what-is-ownership.html#ways-variables-and-data-interact-clone" id="ways-variables-and-data-interact-clone"><h4>Ways Variables and Data Interact: Clone</h4></a>
 <p>If we <em>do</em> want to deeply copy the heap data of the <code>String</code>, not just the
 stack data, we can use a common method called <code>clone</code>. We’ll discuss method
 syntax in Chapter 5, but because methods are a common feature in many
@@ -408,7 +408,7 @@ in Figure 4-5, where the heap data <em>does</em> get copied.</p>
 <p>When you see a call to <code>clone</code>, you know that some arbitrary code is being
 executed and that code may be expensive. It’s a visual indicator that something
 different is going on.</p>
-<a class="header" href="ch04-01-what-is-ownership.html#stack-only-data-copy" name="stack-only-data-copy"><h4>Stack-Only Data: Copy</h4></a>
+<a class="header" href="ch04-01-what-is-ownership.html#stack-only-data-copy" id="stack-only-data-copy"><h4>Stack-Only Data: Copy</h4></a>
 <p>There’s another wrinkle we haven’t talked about yet. This code using integers,
 part of which was shown earlier in Listing 4-2, works and is valid:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
@@ -448,7 +448,7 @@ be sure, but as a general rule, any group of simple scalar values can be
 <li>Tuples, but only if they contain types that are also <code>Copy</code>. <code>(i32, i32)</code> is
 <code>Copy</code>, but <code>(i32, String)</code> is not.</li>
 </ul>
-<a class="header" href="ch04-01-what-is-ownership.html#ownership-and-functions" name="ownership-and-functions"><h3>Ownership and Functions</h3></a>
+<a class="header" href="ch04-01-what-is-ownership.html#ownership-and-functions" id="ownership-and-functions"><h3>Ownership and Functions</h3></a>
 <p>The semantics for passing a value to a function are similar to assigning a
 value to a variable. Passing a variable to a function will move or copy, just
 like assignment. Listing 4-7 has an example with some annotations showing where
@@ -483,7 +483,7 @@ annotated</span></p>
 compile time error. These static checks protect us from mistakes. Try adding
 code to <code>main</code> that uses <code>s</code> and <code>x</code> to see where you can use them and where
 the ownership rules prevent you from doing so.</p>
-<a class="header" href="ch04-01-what-is-ownership.html#return-values-and-scope" name="return-values-and-scope"><h3>Return Values and Scope</h3></a>
+<a class="header" href="ch04-01-what-is-ownership.html#return-values-and-scope" id="return-values-and-scope"><h3>Return Values and Scope</h3></a>
 <p>Returning values can also transfer ownership. Here’s an example with similar
 annotations to those in Listing 4-7:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>

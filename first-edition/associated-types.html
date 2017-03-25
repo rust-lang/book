@@ -67,7 +67,7 @@
                 </div>
 
                 <div id="content" class="content">
-                    <a class="header" href="associated-types.html#associated-types" name="associated-types"><h1>Associated Types</h1></a>
+                    <a class="header" href="associated-types.html#associated-types" id="associated-types"><h1>Associated Types</h1></a>
 <p>Associated types are a powerful part of Rust’s type system. They’re related to
 the idea of a ‘type family’, in other words, grouping multiple types together. That
 description is a bit abstract, so let’s dive right into an example. If you want
@@ -111,7 +111,7 @@ trait Graph {
 </code></pre>
 <p>No need to deal with the <code>E</code>dge type here!</p>
 <p>Let’s go over all this in more detail.</p>
-<a class="header" href="associated-types.html#defining-associated-types" name="defining-associated-types"><h2>Defining associated types</h2></a>
+<a class="header" href="associated-types.html#defining-associated-types" id="defining-associated-types"><h2>Defining associated types</h2></a>
 <p>Let’s build that <code>Graph</code> trait. Here’s the definition:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
 # 
@@ -144,7 +144,7 @@ trait Graph {
 }
 
 #}</code></pre></pre>
-<a class="header" href="associated-types.html#implementing-associated-types" name="implementing-associated-types"><h2>Implementing associated types</h2></a>
+<a class="header" href="associated-types.html#implementing-associated-types" id="implementing-associated-types"><h2>Implementing associated types</h2></a>
 <p>Just like any trait, traits that use associated types use the <code>impl</code> keyword to
 provide implementations. Here’s a simple implementation of Graph:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
@@ -186,7 +186,7 @@ use <code>struct</code>s for all three here.</p>
 goes on the left of the <code>=</code>, and the concrete type we’re <code>impl</code>ementing this
 for goes on the right. Finally, we use the concrete types in our function
 declarations.</p>
-<a class="header" href="associated-types.html#trait-objects-with-associated-types" name="trait-objects-with-associated-types"><h2>Trait objects with associated types</h2></a>
+<a class="header" href="associated-types.html#trait-objects-with-associated-types" id="trait-objects-with-associated-types"><h2>Trait objects with associated types</h2></a>
 <p>There’s one more bit of syntax we should talk about: trait objects. If you
 try to create a trait object from a trait with an associated type, like this:</p>
 <pre><code class="language-rust ignore"># trait Graph {

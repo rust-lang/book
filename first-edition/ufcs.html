@@ -67,7 +67,7 @@
                 </div>
 
                 <div id="content" class="content">
-                    <a class="header" href="ufcs.html#universal-function-call-syntax" name="universal-function-call-syntax"><h1>Universal Function Call Syntax</h1></a>
+                    <a class="header" href="ufcs.html#universal-function-call-syntax" id="universal-function-call-syntax"><h1>Universal Function Call Syntax</h1></a>
 <p>Sometimes, functions can have the same names. Consider this code:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
 # 
@@ -142,7 +142,7 @@ Rust calls the one from the trait name you use.</p>
 <p>When we call a method like <code>b.f()</code> using <a href="method-syntax.html">method syntax</a>, Rust
 will automatically borrow <code>b</code> if <code>f()</code> takes <code>&amp;self</code>. In this case, Rust will
 not, and so we need to pass an explicit <code>&amp;b</code>.</p>
-<a class="header" href="ufcs.html#angle-bracket-form" name="angle-bracket-form"><h1>Angle-bracket Form</h1></a>
+<a class="header" href="ufcs.html#angle-bracket-form" id="angle-bracket-form"><h1>Angle-bracket Form</h1></a>
 <p>The form of UFCS we just talked about:</p>
 <pre><code class="language-rust ignore">Trait::method(args);
 </code></pre>

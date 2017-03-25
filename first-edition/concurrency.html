@@ -67,7 +67,7 @@
                 </div>
 
                 <div id="content" class="content">
-                    <a class="header" href="concurrency.html#concurrency" name="concurrency"><h1>Concurrency</h1></a>
+                    <a class="header" href="concurrency.html#concurrency" id="concurrency"><h1>Concurrency</h1></a>
 <p>Concurrency and parallelism are incredibly important topics in computer
 science, and are also a hot topic in industry today. Computers are gaining more
 and more cores, yet many programmers aren't prepared to fully utilize them.</p>
@@ -82,11 +82,11 @@ if you don't like some aspect of the way Rust handles concurrency, you can
 implement an alternative way of doing things.
 <a href="https://github.com/carllerche/mio">mio</a> is a real-world example of this
 principle in action.</p>
-<a class="header" href="concurrency.html#background-send-and-sync" name="background-send-and-sync"><h2>Background: <code>Send</code> and <code>Sync</code></h2></a>
+<a class="header" href="concurrency.html#background-send-and-sync" id="background-send-and-sync"><h2>Background: <code>Send</code> and <code>Sync</code></h2></a>
 <p>Concurrency is difficult to reason about. In Rust, we have a strong, static
 type system to help us reason about our code. As such, Rust gives us two traits
 to help us make sense of code that can possibly be concurrent.</p>
-<a class="header" href="concurrency.html#send" name="send"><h3><code>Send</code></h3></a>
+<a class="header" href="concurrency.html#send" id="send"><h3><code>Send</code></h3></a>
 <p>The first trait we're going to talk about is
 <a href="../../std/marker/trait.Send.html"><code>Send</code></a>. When a type <code>T</code> implements <code>Send</code>, it
 indicates that something of this type is able to have ownership transferred
@@ -98,7 +98,7 @@ implemented for that type.</p>
 <p>In the opposite way, if we were wrapping a library with <a href="ffi.html">FFI</a> that isn't
 thread-safe, we wouldn't want to implement <code>Send</code>, and so the compiler will help
 us enforce that it can't leave the current thread.</p>
-<a class="header" href="concurrency.html#sync" name="sync"><h3><code>Sync</code></h3></a>
+<a class="header" href="concurrency.html#sync" id="sync"><h3><code>Sync</code></h3></a>
 <p>The second of these traits is called <a href="../../std/marker/trait.Sync.html"><code>Sync</code></a>.
 When a type <code>T</code> implements <code>Sync</code>, it indicates that something
 of this type has no possibility of introducing memory unsafety when used from
@@ -116,7 +116,7 @@ be transferred across threads because
 about the properties of your code under concurrency. Before we demonstrate
 why, we need to learn how to create a concurrent Rust program in the first
 place!</p>
-<a class="header" href="concurrency.html#threads" name="threads"><h2>Threads</h2></a>
+<a class="header" href="concurrency.html#threads" id="threads"><h2>Threads</h2></a>
 <p>Rust's standard library provides a library for threads, which allow you to
 run Rust code in parallel. Here's a basic example of using <code>std::thread</code>:</p>
 <pre><pre class="playpen"><code class="language-rust">use std::thread;
@@ -181,7 +181,7 @@ There are entire books about how to prevent errors that occur from shared
 mutable state. Rust helps out with its type system here as well, by preventing
 data races at compile time. Let's talk about how you actually share things
 between threads.</p>
-<a class="header" href="concurrency.html#safe-shared-mutable-state" name="safe-shared-mutable-state"><h2>Safe Shared Mutable State</h2></a>
+<a class="header" href="concurrency.html#safe-shared-mutable-state" id="safe-shared-mutable-state"><h2>Safe Shared Mutable State</h2></a>
 <p>Due to Rust's type system, we have a concept that sounds like a lie: &quot;safe
 shared mutable state.&quot; Many programmers agree that shared mutable state is
 very, very bad.</p>
@@ -362,7 +362,7 @@ threads actually take to finish computing when the program runs.</p>
 <p>A more precise alternative to the timer would be to use one of the
 mechanisms provided by the Rust standard library for synchronizing
 threads with each other. Let's talk about one of them: channels.</p>
-<a class="header" href="concurrency.html#channels" name="channels"><h2>Channels</h2></a>
+<a class="header" href="concurrency.html#channels" id="channels"><h2>Channels</h2></a>
 <p>Here's a version of our code that uses channels for synchronization, rather
 than waiting for a specific time:</p>
 <pre><pre class="playpen"><code class="language-rust">use std::sync::{Arc, Mutex};
@@ -419,7 +419,7 @@ fn main() {
 </code></pre></pre>
 <p>Here we create 10 threads, asking each to calculate the square of a number (<code>i</code>
 at the time of <code>spawn()</code>), and then <code>send()</code> back the answer over the channel.</p>
-<a class="header" href="concurrency.html#panics" name="panics"><h2>Panics</h2></a>
+<a class="header" href="concurrency.html#panics" id="panics"><h2>Panics</h2></a>
 <p>A <code>panic!</code> will crash the currently executing thread. You can use Rust's
 threads as a simple isolation mechanism:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]

@@ -67,7 +67,7 @@
                 </div>
 
                 <div id="content" class="content">
-                    <a class="header" href="ch15-04-rc.html#rct-the-reference-counted-smart-pointer" name="rct-the-reference-counted-smart-pointer"><h2><code>Rc&lt;T&gt;</code>, the Reference Counted Smart Pointer</h2></a>
+                    <a class="header" href="ch15-04-rc.html#rct-the-reference-counted-smart-pointer" id="rct-the-reference-counted-smart-pointer"><h2><code>Rc&lt;T&gt;</code>, the Reference Counted Smart Pointer</h2></a>
 <p>In the majority of cases, ownership is very clear: you know exactly which
 variable owns a given value. However, this isn't always the case; sometimes,
 you may actually need multiple owners. For this, Rust has a type called
@@ -91,7 +91,7 @@ ownership rules enforced at compile time would kick in.</p>
 chapter on concurrency will cover how to do reference counting in
 multithreaded programs. If you try to use <code>Rc&lt;T&gt;</code> with multiple threads,
 you'll get a compile-time error.</p>
-<a class="header" href="ch15-04-rc.html#using-rct-to-share-data" name="using-rct-to-share-data"><h3>Using <code>Rc&lt;T&gt;</code> to Share Data</h3></a>
+<a class="header" href="ch15-04-rc.html#using-rct-to-share-data" id="using-rct-to-share-data"><h3>Using <code>Rc&lt;T&gt;</code> to Share Data</h3></a>
 <p>Let's return to our cons list example from Listing 15-5. In Listing 15-11, we're
 going to try to use <code>List</code> as we defined it using <code>Box&lt;T&gt;</code>. First we'll create
 one list instance that contains 5 and then 10. Next, we want to create two more
@@ -164,7 +164,7 @@ fn main() {
 <p>Note that we need to add a <code>use</code> statement for <code>Rc</code> because it's not in the
 prelude. In <code>main</code>, we create the list holding 5 and 10 and store it in a new
 <code>Rc</code> in <code>a</code>. Then when we create <code>b</code> and <code>c</code>, we call the <code>clone</code> method on <code>a</code>.</p>
-<a class="header" href="ch15-04-rc.html#cloning-an-rct-increases-the-reference-count" name="cloning-an-rct-increases-the-reference-count"><h3>Cloning an <code>Rc&lt;T&gt;</code> Increases the Reference Count</h3></a>
+<a class="header" href="ch15-04-rc.html#cloning-an-rct-increases-the-reference-count" id="cloning-an-rct-increases-the-reference-count"><h3>Cloning an <code>Rc&lt;T&gt;</code> Increases the Reference Count</h3></a>
 <p>We've seen the <code>clone</code> method previously, where we used it for making a
 complete copy of some data. With <code>Rc&lt;T&gt;</code>, though, it doesn't make a full copy.
 <code>Rc&lt;T&gt;</code> holds a <em>reference count</em>, that is, a count of how many clones exist.

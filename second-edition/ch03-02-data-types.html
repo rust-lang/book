@@ -67,7 +67,7 @@
                 </div>
 
                 <div id="content" class="content">
-                    <a class="header" href="ch03-02-data-types.html#data-types" name="data-types"><h2>Data Types</h2></a>
+                    <a class="header" href="ch03-02-data-types.html#data-types" id="data-types"><h2>Data Types</h2></a>
 <p>Every value in Rust is of a certain <em>type</em>, which tells Rust what kind of data
 is being specified so it knows how to work with that data. In this section,
 we’ll look at a number of types that are built into the language. We split the
@@ -96,12 +96,12 @@ possible type we want to use:</p>
   = note: type annotations or generic parameter binding required
 </code></pre>
 <p>You’ll see different type annotations as we discuss the various data types.</p>
-<a class="header" href="ch03-02-data-types.html#scalar-types" name="scalar-types"><h3>Scalar Types</h3></a>
+<a class="header" href="ch03-02-data-types.html#scalar-types" id="scalar-types"><h3>Scalar Types</h3></a>
 <p>A <em>scalar</em> type represents a single value. Rust has four primary scalar types:
 integers, floating-point numbers, booleans, and characters. You’ll likely
 recognize these from other programming languages, but let’s jump into how they
 work in Rust.</p>
-<a class="header" href="ch03-02-data-types.html#integer-types" name="integer-types"><h4>Integer Types</h4></a>
+<a class="header" href="ch03-02-data-types.html#integer-types" id="integer-types"><h4>Integer Types</h4></a>
 <p>An <em>integer</em> is a number without a fractional component. We used one integer
 type earlier in this chapter, the <code>i32</code> type. This type declaration indicates
 that the value it’s associated with should be a signed integer (hence the <code>i</code>,
@@ -150,7 +150,7 @@ that all number literals except the byte literal allow a type suffix, such as
 defaults are generally good choices, and integer types default to <code>i32</code>: it’s
 generally the fastest, even on 64-bit systems. The primary situation in which
 you’d use <code>isize</code> or <code>usize</code> is when indexing some sort of collection.</p>
-<a class="header" href="ch03-02-data-types.html#floating-point-types" name="floating-point-types"><h4>Floating-Point Types</h4></a>
+<a class="header" href="ch03-02-data-types.html#floating-point-types" id="floating-point-types"><h4>Floating-Point Types</h4></a>
 <p>Rust also has two primitive types for <em>floating-point numbers</em>, which are
 numbers with decimal points. Rust’s floating-point types are <code>f32</code> and <code>f64</code>,
 which are 32 bits and 64 bits in size, respectively. The default type is <code>f64</code>
@@ -170,7 +170,7 @@ your situation.</p>
 </code></pre></pre>
 <p>Floating-point numbers are represented according to the IEEE-754 standard. The
 <code>f32</code> type is a single-precision float, and <code>f64</code> has double precision.</p>
-<a class="header" href="ch03-02-data-types.html#numeric-operations" name="numeric-operations"><h4>Numeric Operations</h4></a>
+<a class="header" href="ch03-02-data-types.html#numeric-operations" id="numeric-operations"><h4>Numeric Operations</h4></a>
 <p>Rust supports the usual basic mathematic operations you’d expect for all of the
 number types: addition, subtraction, multiplication, division, and remainder.
 The following code shows how you’d use each one in a <code>let</code> statement:</p>
@@ -195,7 +195,7 @@ The following code shows how you’d use each one in a <code>let</code> statemen
 <p>Each expression in these statements uses a mathematical operator and evaluates
 to a single value, which is then bound to a variable. Appendix B contains a
 list of all operators that Rust provides.</p>
-<a class="header" href="ch03-02-data-types.html#the-boolean-type" name="the-boolean-type"><h4>The Boolean Type</h4></a>
+<a class="header" href="ch03-02-data-types.html#the-boolean-type" id="the-boolean-type"><h4>The Boolean Type</h4></a>
 <p>As in most other programming languages, a boolean type in Rust has two possible
 values: <code>true</code> and <code>false</code>. The boolean type in Rust is specified using <code>bool</code>.
 For example:</p>
@@ -209,7 +209,7 @@ For example:</p>
 <p>The main way to consume boolean values is through conditionals, such as an <code>if</code>
 statement. We’ll cover how <code>if</code> statements work in Rust in the “Control Flow”
 section.</p>
-<a class="header" href="ch03-02-data-types.html#the-character-type" name="the-character-type"><h4>The Character Type</h4></a>
+<a class="header" href="ch03-02-data-types.html#the-character-type" id="the-character-type"><h4>The Character Type</h4></a>
 <p>So far we’ve only worked with numbers, but Rust supports letters too. Rust’s
 <code>char</code> type is the language’s most primitive alphabetic type, and the following
 code shows one way to use it:</p>
@@ -228,10 +228,10 @@ Unicode Scalar Values range from <code>U+0000</code> to <code>U+D7FF</code> and 
 so your human intuition for what a “character” is may not match up with what a
 <code>char</code> is in Rust. We’ll discuss this topic in detail in the “Strings” section
 in Chapter 8.</p>
-<a class="header" href="ch03-02-data-types.html#compound-types" name="compound-types"><h3>Compound Types</h3></a>
+<a class="header" href="ch03-02-data-types.html#compound-types" id="compound-types"><h3>Compound Types</h3></a>
 <p><em>Compound types</em> can group multiple values of other types into one type. Rust
 has two primitive compound types: tuples and arrays.</p>
-<a class="header" href="ch03-02-data-types.html#grouping-values-into-tuples" name="grouping-values-into-tuples"><h4>Grouping Values into Tuples</h4></a>
+<a class="header" href="ch03-02-data-types.html#grouping-values-into-tuples" id="grouping-values-into-tuples"><h4>Grouping Values into Tuples</h4></a>
 <p>A tuple is a general way of grouping together some number of other values with
 a variety of types into one compound type.</p>
 <p>We create a tuple by writing a comma-separated list of values inside
@@ -277,7 +277,7 @@ value we want to access. For example:</p>
 <p>This program creates a tuple, <code>x</code>, and then makes new variables for each
 element by using their index. As with most programming languages, the first
 index in a tuple is 0.</p>
-<a class="header" href="ch03-02-data-types.html#arrays" name="arrays"><h4>Arrays</h4></a>
+<a class="header" href="ch03-02-data-types.html#arrays" id="arrays"><h4>Arrays</h4></a>
 <p>Another way to have a collection of multiple values is with an <em>array</em>. Unlike
 a tuple, every element of an array must have the same type. Arrays in Rust are
 different than arrays in some other languages because arrays in Rust have a
@@ -307,7 +307,7 @@ let months = [&quot;January&quot;, &quot;February&quot;, &quot;March&quot;, &quo
               &quot;August&quot;, &quot;September&quot;, &quot;October&quot;, &quot;November&quot;, &quot;December&quot;];
 
 #}</code></pre></pre>
-<a class="header" href="ch03-02-data-types.html#accessing-array-elements" name="accessing-array-elements"><h5>Accessing Array Elements</h5></a>
+<a class="header" href="ch03-02-data-types.html#accessing-array-elements" id="accessing-array-elements"><h5>Accessing Array Elements</h5></a>
 <p>An array is a single chunk of memory allocated on the stack. We can access
 elements of an array using indexing, like this:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
@@ -321,7 +321,7 @@ elements of an array using indexing, like this:</p>
 <p>In this example, the variable named <code>first</code> will get the value <code>1</code>, because
 that is the value at index <code>[0]</code> in the array. The variable named <code>second</code> will
 get the value <code>2</code> from index <code>[1]</code> in the array.</p>
-<a class="header" href="ch03-02-data-types.html#invalid-array-element-access" name="invalid-array-element-access"><h5>Invalid Array Element Access</h5></a>
+<a class="header" href="ch03-02-data-types.html#invalid-array-element-access" id="invalid-array-element-access"><h5>Invalid Array Element Access</h5></a>
 <p>What happens if we try to access an element of an array that is past the end of
 the array? Say we change the example to the following:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>

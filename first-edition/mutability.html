@@ -67,7 +67,7 @@
                 </div>
 
                 <div id="content" class="content">
-                    <a class="header" href="mutability.html#mutability" name="mutability"><h1>Mutability</h1></a>
+                    <a class="header" href="mutability.html#mutability" id="mutability"><h1>Mutability</h1></a>
 <p>Mutability, the ability to change something, works a bit differently in Rust
 than in other languages. The first aspect of mutability is its non-default
 status:</p>
@@ -118,7 +118,7 @@ fn foo(mut x: i32) {
 
 #}</code></pre></pre>
 <p>Note that here, the <code>x</code> is mutable, but not the <code>y</code>.</p>
-<a class="header" href="mutability.html#interior-vs-exterior-mutability" name="interior-vs-exterior-mutability"><h1>Interior vs. Exterior Mutability</h1></a>
+<a class="header" href="mutability.html#interior-vs-exterior-mutability" id="interior-vs-exterior-mutability"><h1>Interior vs. Exterior Mutability</h1></a>
 <p>However, when we say something is ‘immutable’ in Rust, that doesn’t mean that
 it’s not able to be changed: we are referring to its ‘exterior mutability’ that
 in this case is immutable. Consider, for example, <a href="../../std/sync/struct.Arc.html"><code>Arc&lt;T&gt;</code></a>:</p>
@@ -175,7 +175,7 @@ let z = x.borrow_mut();
 Rust’s borrowing rules at runtime, and <code>panic!</code>s if they’re violated. This
 allows us to get around another aspect of Rust’s mutability rules. Let’s talk
 about it first.</p>
-<a class="header" href="mutability.html#field-level-mutability" name="field-level-mutability"><h2>Field-level mutability</h2></a>
+<a class="header" href="mutability.html#field-level-mutability" id="field-level-mutability"><h2>Field-level mutability</h2></a>
 <p>Mutability is a property of either a borrow (<code>&amp;mut</code>) or a binding (<code>let mut</code>).
 This means that, for example, you cannot have a <a href="structs.html"><code>struct</code></a> with
 some fields mutable and some immutable:</p>

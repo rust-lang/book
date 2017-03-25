@@ -67,13 +67,13 @@
                 </div>
 
                 <div id="content" class="content">
-                    <a class="header" href="ch10-01-syntax.html#generic-data-types" name="generic-data-types"><h2>Generic Data Types</h2></a>
+                    <a class="header" href="ch10-01-syntax.html#generic-data-types" id="generic-data-types"><h2>Generic Data Types</h2></a>
 <p>Using generics where we usually place types, like in function signatures or
 structs, lets us create definitions that we can use for many different concrete
 data types. Let's take a look at how to define functions, structs, enums, and
 methods using generics, and at the end of this section we'll discuss the
 performance of code using generics.</p>
-<a class="header" href="ch10-01-syntax.html#using-generic-data-types-in-function-definitions" name="using-generic-data-types-in-function-definitions"><h3>Using Generic Data Types in Function Definitions</h3></a>
+<a class="header" href="ch10-01-syntax.html#using-generic-data-types-in-function-definitions" id="using-generic-data-types-in-function-definitions"><h3>Using Generic Data Types in Function Definitions</h3></a>
 <p>We can define functions that use generics in the signature of the function
 where the data types of the parameters and return value go. In this way, the
 code we write can be more flexible and provide more functionality to callers of
@@ -202,7 +202,7 @@ ordering could work out okay, though, and keep a stronger thread with the
 `longest` function going through the whole chapter, but we do pause with a
 not-yet-compiling example here, which I know isn't ideal either. Let us know
 what you think. /Carol -->
-<a class="header" href="ch10-01-syntax.html#using-generic-data-types-in-struct-definitions" name="using-generic-data-types-in-struct-definitions"><h3>Using Generic Data Types in Struct Definitions</h3></a>
+<a class="header" href="ch10-01-syntax.html#using-generic-data-types-in-struct-definitions" id="using-generic-data-types-in-struct-definitions"><h3>Using Generic Data Types in Struct Definitions</h3></a>
 <p>We can define structs to use a generic type parameter in one or more of the
 struct's fields with the <code>&lt;&gt;</code> syntax too. Listing 10-6 shows the definition and
 use of a <code>Point</code> struct that can hold <code>x</code> and <code>y</code> coordinate values of any type:</p>
@@ -279,7 +279,7 @@ type parameters in a definition as you want, but using more than a few gets
 hard to read and understand. If you get to a point of needing lots of generic
 types, it's probably a sign that your code could use some restructuring to be
 separated into smaller pieces.</p>
-<a class="header" href="ch10-01-syntax.html#using-generic-data-types-in-enum-definitions" name="using-generic-data-types-in-enum-definitions"><h3>Using Generic Data Types in Enum Definitions</h3></a>
+<a class="header" href="ch10-01-syntax.html#using-generic-data-types-in-enum-definitions" id="using-generic-data-types-in-enum-definitions"><h3>Using Generic Data Types in Enum Definitions</h3></a>
 <p>Similarly to structs, enums can be defined to hold generic data types in their
 variants. We used the <code>Option&lt;T&gt;</code> enum provided by the standard library in
 Chapter 6, and now its definition should make more sense. Let's take another
@@ -323,7 +323,7 @@ with the type <code>std::io::Error</code> when there were problems opening the f
 definitions that differ only in the types of the values they hold, you can
 remove the duplication by using the same process we used with the function
 definitions to introduce generic types instead.</p>
-<a class="header" href="ch10-01-syntax.html#using-generic-data-types-in-method-definitions" name="using-generic-data-types-in-method-definitions"><h3>Using Generic Data Types in Method Definitions</h3></a>
+<a class="header" href="ch10-01-syntax.html#using-generic-data-types-in-method-definitions" id="using-generic-data-types-in-method-definitions"><h3>Using Generic Data Types in Method Definitions</h3></a>
 <p>Like we did in Chapter 5, we can implement methods on structs and enums that
 have generic types in their definitions. Listing 10-9 shows the <code>Point&lt;T&gt;</code>
 struct we defined in Listing 10-6. We've then defined a method named <code>x</code> on
@@ -394,7 +394,7 @@ since <code>y</code> came from <code>p2</code>. The <code>println!</code> will p
 <p>Note that the generic parameters <code>T</code> and <code>U</code> are declared after <code>impl</code>, since
 they go with the struct definition. The generic parameters <code>V</code> and <code>W</code> are
 declared after <code>fn mixup</code>, since they are only relevant to the method.</p>
-<a class="header" href="ch10-01-syntax.html#performance-of-code-using-generics" name="performance-of-code-using-generics"><h3>Performance of Code Using Generics</h3></a>
+<a class="header" href="ch10-01-syntax.html#performance-of-code-using-generics" id="performance-of-code-using-generics"><h3>Performance of Code Using Generics</h3></a>
 <p>You may have been reading this section and wondering if there's a run-time cost
 to using generic type parameters. Good news: the way that Rust has implemented
 generics means that your code will not run any slower than if you had specified

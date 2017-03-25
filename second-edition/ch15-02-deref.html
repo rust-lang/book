@@ -67,7 +67,7 @@
                 </div>
 
                 <div id="content" class="content">
-                    <a class="header" href="ch15-02-deref.html#the-deref-trait-allows-access-to-the-data-through-a-reference" name="the-deref-trait-allows-access-to-the-data-through-a-reference"><h2>The <code>Deref</code> Trait Allows Access to the Data Through a Reference</h2></a>
+                    <a class="header" href="ch15-02-deref.html#the-deref-trait-allows-access-to-the-data-through-a-reference" id="the-deref-trait-allows-access-to-the-data-through-a-reference"><h2>The <code>Deref</code> Trait Allows Access to the Data Through a Reference</h2></a>
 <p>The first important smart pointer-related trait is <code>Deref</code>, which allows us to
 override <code>*</code>, the dereference operator (as opposed to the multiplication
 operator or the glob operator). Overriding <code>*</code> for smart pointers makes
@@ -171,7 +171,7 @@ where we use the dereference operator.</p>
 <code>*</code> happens once, each time the <code>*</code> is used. The substitution of <code>*</code> does not
 recurse infinitely. That's how we end up with data of type <code>Vec&lt;u8&gt;</code>, which
 matches the <code>vec![1, 2, 3]</code> in the <code>assert_eq!</code> in Listing 15-7.</p>
-<a class="header" href="ch15-02-deref.html#implicit-deref-coercions-with-functions-and-methods" name="implicit-deref-coercions-with-functions-and-methods"><h3>Implicit Deref Coercions with Functions and Methods</h3></a>
+<a class="header" href="ch15-02-deref.html#implicit-deref-coercions-with-functions-and-methods" id="implicit-deref-coercions-with-functions-and-methods"><h3>Implicit Deref Coercions with Functions and Methods</h3></a>
 <p>Rust tends to favor explicitness over implicitness, but one case where this
 does not hold true is <em>deref coercions</em> of arguments to functions and methods.
 A deref coercion will automatically convert a reference to any pointer into a

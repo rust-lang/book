@@ -67,7 +67,7 @@
                 </div>
 
                 <div id="content" class="content">
-                    <a class="header" href="ch09-03-to-panic-or-not-to-panic.html#to-panic-or-not-to-panic" name="to-panic-or-not-to-panic"><h2>To <code>panic!</code> or Not To <code>panic!</code></h2></a>
+                    <a class="header" href="ch09-03-to-panic-or-not-to-panic.html#to-panic-or-not-to-panic" id="to-panic-or-not-to-panic"><h2>To <code>panic!</code> or Not To <code>panic!</code></h2></a>
 <p>So how do you decide when you should <code>panic!</code> and when you should return
 <code>Result</code>? When code panics, there’s no way to recover. You could choose to call
 <code>panic!</code> for any error situation, whether there’s a possible way to recover or
@@ -85,7 +85,7 @@ why it’s appropriate to panic in examples, prototype code, and tests, then
 situations where you as a human can know a method won’t fail that the compiler
 can’t reason about, and conclude with some general guidelines on how to decide
 whether to panic in library code.</p>
-<a class="header" href="ch09-03-to-panic-or-not-to-panic.html#examples-prototype-code-and-tests-perfectly-fine-to-panic" name="examples-prototype-code-and-tests-perfectly-fine-to-panic"><h3>Examples, Prototype Code, and Tests: Perfectly Fine to Panic</h3></a>
+<a class="header" href="ch09-03-to-panic-or-not-to-panic.html#examples-prototype-code-and-tests-perfectly-fine-to-panic" id="examples-prototype-code-and-tests-perfectly-fine-to-panic"><h3>Examples, Prototype Code, and Tests: Perfectly Fine to Panic</h3></a>
 <p>When you’re writing an example to illustrate some concept, having robust error
 handling code in the example as well can make the example less clear. In
 examples, it’s understood that a call to a method like <code>unwrap</code> that could
@@ -99,7 +99,7 @@ your code for when you’re ready to make your program more robust.</p>
 that method isn’t the functionality under test. Because <code>panic!</code> is how a test
 gets marked as a failure, calling <code>unwrap</code> or <code>expect</code> is exactly what makes
 sense to do.</p>
-<a class="header" href="ch09-03-to-panic-or-not-to-panic.html#cases-when-you-have-more-information-than-the-compiler" name="cases-when-you-have-more-information-than-the-compiler"><h3>Cases When You Have More Information Than The Compiler</h3></a>
+<a class="header" href="ch09-03-to-panic-or-not-to-panic.html#cases-when-you-have-more-information-than-the-compiler" id="cases-when-you-have-more-information-than-the-compiler"><h3>Cases When You Have More Information Than The Compiler</h3></a>
 <p>It would also be appropriate to call <code>unwrap</code> when you have some other logic
 that ensures the <code>Result</code> will have an <code>Ok</code> value, but the logic isn’t
 something the compiler understands. You’ll still have a <code>Result</code> value that you
@@ -126,7 +126,7 @@ always a valid IP address. If the IP address string came from a user instead of
 being hardcoded into the program, and therefore <em>did</em> have a possibility of
 failure, we’d definitely want to handle the <code>Result</code> in a more robust way
 instead.</p>
-<a class="header" href="ch09-03-to-panic-or-not-to-panic.html#guidelines-for-error-handling" name="guidelines-for-error-handling"><h3>Guidelines for Error Handling</h3></a>
+<a class="header" href="ch09-03-to-panic-or-not-to-panic.html#guidelines-for-error-handling" id="guidelines-for-error-handling"><h3>Guidelines for Error Handling</h3></a>
 <p>It’s advisable to have your code <code>panic!</code> when it’s possible that you could end
 up in a bad state—in this context, bad state is when some assumption,
 guarantee, contract, or invariant has been broken, such as when invalid values,
@@ -176,7 +176,7 @@ definitely having a value. Code trying to pass nothing to your function won’t
 even compile, so your function doesn’t have to check for that case at runtime.
 Another example is using an unsigned integer type like <code>u32</code>, which ensures the
 parameter is never negative.</p>
-<a class="header" href="ch09-03-to-panic-or-not-to-panic.html#creating-custom-types-for-validation" name="creating-custom-types-for-validation"><h3>Creating Custom Types for Validation</h3></a>
+<a class="header" href="ch09-03-to-panic-or-not-to-panic.html#creating-custom-types-for-validation" id="creating-custom-types-for-validation"><h3>Creating Custom Types for Validation</h3></a>
 <p>Let’s take the idea of using Rust’s type system to ensure we have a valid value
 one step further, and look at creating a custom type for validation. Recall the
 guessing game in Chapter 2, where our code asked the user to guess a number
@@ -275,7 +275,7 @@ checked by the conditions in the <code>Guess::new</code> function.</p>
 <p>A function that has a parameter or returns only numbers between 1 and 100 could
 then declare in its signature that it takes or returns a <code>Guess</code> rather than a
 <code>u32</code>, and wouldn’t need to do any additional checks in its body.</p>
-<a class="header" href="ch09-03-to-panic-or-not-to-panic.html#summary" name="summary"><h2>Summary</h2></a>
+<a class="header" href="ch09-03-to-panic-or-not-to-panic.html#summary" id="summary"><h2>Summary</h2></a>
 <p>Rust’s error handling features are designed to help you write more robust code.
 The <code>panic!</code> macro signals that your program is in a state it can’t handle, and
 lets you tell the process to stop instead of trying to proceed with invalid or

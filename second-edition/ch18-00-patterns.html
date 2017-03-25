@@ -67,13 +67,13 @@
                 </div>
 
                 <div id="content" class="content">
-                    <a class="header" href="ch18-00-patterns.html#patterns" name="patterns"><h1>Patterns</h1></a>
+                    <a class="header" href="ch18-00-patterns.html#patterns" id="patterns"><h1>Patterns</h1></a>
 <p>We've actually used patterns a few times so far: they're used in <code>let</code>
 statements, in function parameters, and in the <code>match</code> expression. Patterns have
 a lot more abilities than we have demonstrated so far, so we'll cover some of
 the most commonly used ones in this section. Any of these abilities work in any
 place where a pattern is used.</p>
-<a class="header" href="ch18-00-patterns.html#let-statements" name="let-statements"><h2><code>let</code> statements</h2></a>
+<a class="header" href="ch18-00-patterns.html#let-statements" id="let-statements"><h2><code>let</code> statements</h2></a>
 <p>A basic <code>let</code> statement has this form:</p>
 <pre><code class="language-text">let PATTERN = EXPRESSION;
 </code></pre>
@@ -112,7 +112,7 @@ well:</p>
 <p>In simple cases like this, two <code>let</code>s may be clearer, but in others, creating
 multiple variables at once is nice. As we become more proficient in Rust, we’ll
 figure out which style is better, but it’s mostly a judgment call.</p>
-<a class="header" href="ch18-00-patterns.html#type-annotations" name="type-annotations"><h2>Type annotations</h2></a>
+<a class="header" href="ch18-00-patterns.html#type-annotations" id="type-annotations"><h2>Type annotations</h2></a>
 <p>Most of the time, Rust uses <em>type inference</em>, meaning that it attempts to infer
 the types of your variables rather than you having to declare them explicitly
 even though Rust is a statically typed language. Occasionally, Rust won't have
@@ -139,7 +139,7 @@ let (x, y): (i32, i32) = (5, 6);
 #}</code></pre></pre>
 <p>Just like we match up the <code>VALUE</code> with the <code>PATTERN</code>, we match up the <code>TYPE</code>
 with the <code>PATTERN</code>.</p>
-<a class="header" href="ch18-00-patterns.html#literals--_" name="literals--_"><h2>Literals &amp; _</h2></a>
+<a class="header" href="ch18-00-patterns.html#literals--_" id="literals--_"><h2>Literals &amp; _</h2></a>
 <p>You can match against literals directly, and <code>_</code> acts as an any case:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
 # 
@@ -155,7 +155,7 @@ match x {
 
 #}</code></pre></pre>
 <p>This prints <code>one</code>.</p>
-<a class="header" href="ch18-00-patterns.html#multiple-patterns" name="multiple-patterns"><h1>Multiple patterns</h1></a>
+<a class="header" href="ch18-00-patterns.html#multiple-patterns" id="multiple-patterns"><h1>Multiple patterns</h1></a>
 <p>You can match multiple patterns with <code>|</code>:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
 # 
@@ -170,7 +170,7 @@ match x {
 
 #}</code></pre></pre>
 <p>This prints <code>one or two</code>.</p>
-<a class="header" href="ch18-00-patterns.html#ref-and-ref-mut" name="ref-and-ref-mut"><h2>ref and ref mut</h2></a>
+<a class="header" href="ch18-00-patterns.html#ref-and-ref-mut" id="ref-and-ref-mut"><h2>ref and ref mut</h2></a>
 <p>Usually, when you match against a pattern, variables are bound to a value.
 This means you'll end up moving the value into the <code>match</code>:</p>
 <pre><code class="language-rust ignore">let name = Some(String::from(&quot;Bors&quot;));
@@ -215,7 +215,7 @@ match name {
 println!(&quot;name is: {:?}&quot;, name);
 
 #}</code></pre></pre>
-<a class="header" href="ch18-00-patterns.html#destructuring" name="destructuring"><h2>Destructuring</h2></a>
+<a class="header" href="ch18-00-patterns.html#destructuring" id="destructuring"><h2>Destructuring</h2></a>
 <p>Patterns can be used to destructure structs and enums:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
 # 
@@ -248,7 +248,7 @@ match origin {
 }
 
 #}</code></pre></pre>
-<a class="header" href="ch18-00-patterns.html#shadowing" name="shadowing"><h2>Shadowing</h2></a>
+<a class="header" href="ch18-00-patterns.html#shadowing" id="shadowing"><h2>Shadowing</h2></a>
 <p>As with all variables, those declared by a pattern will shadow variables
 outside of the <code>match</code> construct:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
@@ -262,7 +262,7 @@ match x {
 }
 
 #}</code></pre></pre>
-<a class="header" href="ch18-00-patterns.html#ignoring-values" name="ignoring-values"><h2>Ignoring values</h2></a>
+<a class="header" href="ch18-00-patterns.html#ignoring-values" id="ignoring-values"><h2>Ignoring values</h2></a>
 <p>We discussed using <code>_</code> as a whole pattern to ignore it above, but you can
 also use <code>_</code> inside of another pattern to ignore just part of it:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
@@ -304,7 +304,7 @@ match origin {
 }
 
 #}</code></pre></pre>
-<a class="header" href="ch18-00-patterns.html#ranges" name="ranges"><h2>Ranges</h2></a>
+<a class="header" href="ch18-00-patterns.html#ranges" id="ranges"><h2>Ranges</h2></a>
 <p>You can match a range of values with <code>...</code>:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
 # 
@@ -330,7 +330,7 @@ match x {
 }
 
 #}</code></pre></pre>
-<a class="header" href="ch18-00-patterns.html#guards" name="guards"><h2>Guards</h2></a>
+<a class="header" href="ch18-00-patterns.html#guards" id="guards"><h2>Guards</h2></a>
 <p>You can introduce match guards with <code>if</code>:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
 # 
@@ -364,7 +364,7 @@ the <code>5</code>. In other words, the precedence of if behaves like this:</p>
 <p>not this:</p>
 <pre><code class="language-text">4 | (5 if y) =&gt; ...
 </code></pre>
-<a class="header" href="ch18-00-patterns.html#bindings" name="bindings"><h2>Bindings</h2></a>
+<a class="header" href="ch18-00-patterns.html#bindings" id="bindings"><h2>Bindings</h2></a>
 <p>You can bind values to names with <code>@</code>:</p>
 
                 </div>

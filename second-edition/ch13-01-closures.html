@@ -67,7 +67,7 @@
                 </div>
 
                 <div id="content" class="content">
-                    <a class="header" href="ch13-01-closures.html#closures" name="closures"><h2>Closures</h2></a>
+                    <a class="header" href="ch13-01-closures.html#closures" id="closures"><h2>Closures</h2></a>
 <p>Rust gives you the ability to define <em>closures</em>, which are similar to
 functions. Instead of starting with a technical definition, let's see what
 closures look like, syntactically, and then we'll return to defining what they
@@ -160,7 +160,7 @@ let three = add_one(2i32);
 it would be tedious if we were required to annotate their types.</p>
 <p>Another reason to have a different syntax from functions for closures is that
 they have different behavior than functions: closures possess an <em>environment</em>.</p>
-<a class="header" href="ch13-01-closures.html#closures-can-reference-their-environment" name="closures-can-reference-their-environment"><h3>Closures Can Reference Their Environment</h3></a>
+<a class="header" href="ch13-01-closures.html#closures-can-reference-their-environment" id="closures-can-reference-their-environment"><h3>Closures Can Reference Their Environment</h3></a>
 <p>We've learned that functions can only use variables that are in scope, either
 by being <code>const</code> or being declared as parameters. Closures can do more: they're
 allowed to access variables from their enclosing scope. Listing 13-4 has an
@@ -207,7 +207,7 @@ closure form instead
 the context of starting new threads. We'll show some more examples and explain
 more detail about this feature of closures in Chapter 16 when we talk about
 concurrency.</p>
-<a class="header" href="ch13-01-closures.html#closures-as-function-parameters-using-the-fn-traits" name="closures-as-function-parameters-using-the-fn-traits"><h3>Closures as Function Parameters Using the <code>Fn</code> Traits</h3></a>
+<a class="header" href="ch13-01-closures.html#closures-as-function-parameters-using-the-fn-traits" id="closures-as-function-parameters-using-the-fn-traits"><h3>Closures as Function Parameters Using the <code>Fn</code> Traits</h3></a>
 <p>While we can bind closures to variables, that's not the most useful thing we
 can do with them. We can also define functions that have closures as parameters
 by using the <code>Fn</code> traits. Here's an example of a function named <code>call_with_one</code>

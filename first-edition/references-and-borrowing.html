@@ -67,7 +67,7 @@
                 </div>
 
                 <div id="content" class="content">
-                    <a class="header" href="references-and-borrowing.html#references-and-borrowing" name="references-and-borrowing"><h1>References and Borrowing</h1></a>
+                    <a class="header" href="references-and-borrowing.html#references-and-borrowing" id="references-and-borrowing"><h1>References and Borrowing</h1></a>
 <p>This is the second of three sections presenting Rust’s ownership system. This is one of
 Rust’s most distinct and compelling features, with which Rust developers should
 become quite acquainted. Ownership is how Rust achieves its largest goal,
@@ -80,7 +80,7 @@ chapter:</p>
 </ul>
 <p>These three chapters are related, and in order. You’ll need all three to fully
 understand the ownership system.</p>
-<a class="header" href="references-and-borrowing.html#meta" name="meta"><h1>Meta</h1></a>
+<a class="header" href="references-and-borrowing.html#meta" id="meta"><h1>Meta</h1></a>
 <p>Before we get to the details, two important notes about the ownership system.</p>
 <p>Rust has a focus on safety and speed. It accomplishes these goals through many
 ‘zero-cost abstractions’, which means that in Rust, abstractions cost as little
@@ -98,7 +98,7 @@ however: more experienced Rust developers report that once they work with the
 rules of the ownership system for a period of time, they fight the borrow
 checker less and less.</p>
 <p>With that in mind, let’s learn about borrowing.</p>
-<a class="header" href="references-and-borrowing.html#borrowing" name="borrowing"><h1>Borrowing</h1></a>
+<a class="header" href="references-and-borrowing.html#borrowing" id="borrowing"><h1>Borrowing</h1></a>
 <p>At the end of the <a href="ownership.html">ownership</a> section, we had a nasty function that looked
 like this:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
@@ -182,7 +182,7 @@ v.push(5);
 ^
 </code></pre>
 <p>Pushing a value mutates the vector, and so we aren’t allowed to do it.</p>
-<a class="header" href="references-and-borrowing.html#mut-references" name="mut-references"><h1>&amp;mut references</h1></a>
+<a class="header" href="references-and-borrowing.html#mut-references" id="mut-references"><h1>&amp;mut references</h1></a>
 <p>There’s a second kind of reference: <code>&amp;mut T</code>. A ‘mutable reference’ allows you
 to mutate the resource you’re borrowing. For example:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
@@ -220,7 +220,7 @@ fn main() {
 ^
 </code></pre>
 <p>As it turns out, there are rules.</p>
-<a class="header" href="references-and-borrowing.html#the-rules" name="the-rules"><h1>The Rules</h1></a>
+<a class="header" href="references-and-borrowing.html#the-rules" id="the-rules"><h1>The Rules</h1></a>
 <p>Here are the rules for borrowing in Rust:</p>
 <p>First, any borrow must last for a scope no greater than that of the owner.
 Second, you may have one or the other of these two kinds of borrows, but not
@@ -241,7 +241,7 @@ writing. However, as we can only have one <code>&amp;mut</code> at a time, it is
 have a data race. This is how Rust prevents data races at compile time: we’ll
 get errors if we break the rules.</p>
 <p>With this in mind, let’s consider our example again.</p>
-<a class="header" href="references-and-borrowing.html#thinking-in-scopes" name="thinking-in-scopes"><h2>Thinking in scopes</h2></a>
+<a class="header" href="references-and-borrowing.html#thinking-in-scopes" id="thinking-in-scopes"><h2>Thinking in scopes</h2></a>
 <p>Here’s the code:</p>
 <pre><code class="language-rust ignore">fn main() {
     let mut x = 5;
@@ -299,10 +299,10 @@ println!(&quot;{}&quot;, x);  // &lt;- Try to borrow `x` here.
 #}</code></pre></pre>
 <p>There’s no problem. Our mutable borrow goes out of scope before we create an
 immutable one. So scope is the key to seeing how long a borrow lasts for.</p>
-<a class="header" href="references-and-borrowing.html#issues-borrowing-prevents" name="issues-borrowing-prevents"><h2>Issues borrowing prevents</h2></a>
+<a class="header" href="references-and-borrowing.html#issues-borrowing-prevents" id="issues-borrowing-prevents"><h2>Issues borrowing prevents</h2></a>
 <p>Why have these restrictive rules? Well, as we noted, these rules prevent data
 races. What kinds of issues do data races cause? Here are a few.</p>
-<a class="header" href="references-and-borrowing.html#iterator-invalidation" name="iterator-invalidation"><h3>Iterator invalidation</h3></a>
+<a class="header" href="references-and-borrowing.html#iterator-invalidation" id="iterator-invalidation"><h3>Iterator invalidation</h3></a>
 <p>One example is ‘iterator invalidation’, which happens when you try to mutate a
 collection that you’re iterating over. Rust’s borrow checker prevents this from
 happening:</p>
@@ -342,7 +342,7 @@ for i in &amp;v {
 ^
 </code></pre>
 <p>We can’t modify <code>v</code> because it’s borrowed by the loop.</p>
-<a class="header" href="references-and-borrowing.html#use-after-free" name="use-after-free"><h3>Use after free</h3></a>
+<a class="header" href="references-and-borrowing.html#use-after-free" id="use-after-free"><h3>Use after free</h3></a>
 <p>References must not live longer than the resource they refer to. Rust will
 check the scopes of your references to ensure that this is true.</p>
 <p>If Rust didn’t check this property, we could accidentally use a reference

@@ -67,7 +67,7 @@
                 </div>
 
                 <div id="content" class="content">
-                    <a class="header" href="structs.html#structs" name="structs"><h1>Structs</h1></a>
+                    <a class="header" href="structs.html#structs" id="structs"><h1>Structs</h1></a>
 <p><code>struct</code>s are a way of creating more complex data types. For example, if we were
 doing calculations involving coordinates in 2D space, we would need both an <code>x</code>
 and a <code>y</code> value:</p>
@@ -185,7 +185,7 @@ fn main() {
     println!(&quot;{:?}&quot;, peter);
 }
 </code></pre>
-<a class="header" href="structs.html#update-syntax" name="update-syntax"><h1>Update syntax</h1></a>
+<a class="header" href="structs.html#update-syntax" id="update-syntax"><h1>Update syntax</h1></a>
 <p>A <code>struct</code> can include <code>..</code> to indicate that you want to use a copy of some
 other <code>struct</code> for some of the values. For example:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
@@ -216,7 +216,7 @@ let origin = Point3d { x: 0, y: 0, z: 0 };
 let point = Point3d { z: 1, x: 2, .. origin };
 
 #}</code></pre></pre>
-<a class="header" href="structs.html#tuple-structs" name="tuple-structs"><h1>Tuple structs</h1></a>
+<a class="header" href="structs.html#tuple-structs" id="tuple-structs"><h1>Tuple structs</h1></a>
 <p>Rust has another data type that’s like a hybrid between a <a href="primitive-types.html#tuples">tuple</a> and a
 <code>struct</code>, called a ‘tuple struct’. Tuple structs have a name, but their fields
 don't. They are declared with the <code>struct</code> keyword, and then with a name
@@ -295,7 +295,7 @@ struct Point {
 <p>Good names are important, and while values in a tuple struct can be
 referenced with dot notation as well, a <code>struct</code> gives us actual names,
 rather than positions.</p>
-<a class="header" href="structs.html#unit-like-structs" name="unit-like-structs"><h1>Unit-like structs</h1></a>
+<a class="header" href="structs.html#unit-like-structs" id="unit-like-structs"><h1>Unit-like structs</h1></a>
 <p>You can define a <code>struct</code> with no members at all:</p>
 <pre><pre class="playpen"><code class="language-rust compile_fail E0423"># #![allow(unused_variables)]
 # 

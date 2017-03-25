@@ -67,14 +67,14 @@
                 </div>
 
                 <div id="content" class="content">
-                    <a class="header" href="ffi.html#foreign-function-interface" name="foreign-function-interface"><h1>Foreign Function Interface</h1></a>
-<a class="header" href="ffi.html#introduction" name="introduction"><h1>Introduction</h1></a>
+                    <a class="header" href="ffi.html#foreign-function-interface" id="foreign-function-interface"><h1>Foreign Function Interface</h1></a>
+<a class="header" href="ffi.html#introduction" id="introduction"><h1>Introduction</h1></a>
 <p>This guide will use the <a href="https://github.com/google/snappy">snappy</a>
 compression/decompression library as an introduction to writing bindings for
 foreign code. Rust is currently unable to call directly into a C++ library, but
 snappy includes a C interface (documented in
 <a href="https://github.com/google/snappy/blob/master/snappy-c.h"><code>snappy-c.h</code></a>).</p>
-<a class="header" href="ffi.html#a-note-about-libc" name="a-note-about-libc"><h2>A note about libc</h2></a>
+<a class="header" href="ffi.html#a-note-about-libc" id="a-note-about-libc"><h2>A note about libc</h2></a>
 <p>Many of these examples use <a href="https://crates.io/crates/libc">the <code>libc</code> crate</a>, which provides various
 type definitions for C types, among other things. If you’re trying these
 examples yourself, you’ll need to add <code>libc</code> to your <code>Cargo.toml</code>:</p>
@@ -82,7 +82,7 @@ examples yourself, you’ll need to add <code>libc</code> to your <code>Cargo.to
 libc = &quot;0.2.0&quot;
 </code></pre>
 <p>and add <code>extern crate libc;</code> to your crate root.</p>
-<a class="header" href="ffi.html#calling-foreign-functions" name="calling-foreign-functions"><h2>Calling foreign functions</h2></a>
+<a class="header" href="ffi.html#calling-foreign-functions" id="calling-foreign-functions"><h2>Calling foreign functions</h2></a>
 <p>The following is a minimal example of calling a foreign function which will
 compile if snappy is installed:</p>
 <pre><code class="language-rust ignore">extern crate libc;
@@ -134,7 +134,7 @@ extern {
 }
 # fn main() {}
 </code></pre>
-<a class="header" href="ffi.html#creating-a-safe-interface" name="creating-a-safe-interface"><h1>Creating a safe interface</h1></a>
+<a class="header" href="ffi.html#creating-a-safe-interface" id="creating-a-safe-interface"><h1>Creating a safe interface</h1></a>
 <p>The raw C API needs to be wrapped to provide memory safety and make use of higher-level concepts
 like vectors. A library can choose to expose only the safe, high-level interface and hide the unsafe
 internal details.</p>
@@ -267,12 +267,12 @@ mod tests {
     }
 }
 </code></pre>
-<a class="header" href="ffi.html#destructors" name="destructors"><h1>Destructors</h1></a>
+<a class="header" href="ffi.html#destructors" id="destructors"><h1>Destructors</h1></a>
 <p>Foreign libraries often hand off ownership of resources to the calling code.
 When this occurs, we must use Rust's destructors to provide safety and guarantee
 the release of these resources (especially in the case of panic).</p>
 <p>For more about destructors, see the <a href="../../std/ops/trait.Drop.html">Drop trait</a>.</p>
-<a class="header" href="ffi.html#callbacks-from-c-code-to-rust-functions" name="callbacks-from-c-code-to-rust-functions"><h1>Callbacks from C code to Rust functions</h1></a>
+<a class="header" href="ffi.html#callbacks-from-c-code-to-rust-functions" id="callbacks-from-c-code-to-rust-functions"><h1>Callbacks from C code to Rust functions</h1></a>
 <p>Some external libraries require the usage of callbacks to report back their
 current state or intermediate data to the caller.
 It is possible to pass functions defined in Rust to an external library.
@@ -314,7 +314,7 @@ void trigger_callback() {
 </code></pre>
 <p>In this example Rust's <code>main()</code> will call <code>trigger_callback()</code> in C,
 which would, in turn, call back to <code>callback()</code> in Rust.</p>
-<a class="header" href="ffi.html#targeting-callbacks-to-rust-objects" name="targeting-callbacks-to-rust-objects"><h2>Targeting callbacks to Rust objects</h2></a>
+<a class="header" href="ffi.html#targeting-callbacks-to-rust-objects" id="targeting-callbacks-to-rust-objects"><h2>Targeting callbacks to Rust objects</h2></a>
 <p>The former example showed how a global function can be called from C code.
 However it is often desired that the callback is targeted to a special
 Rust object. This could be the object that represents the wrapper for the
@@ -370,7 +370,7 @@ void trigger_callback() {
   cb(cb_target, 7); // Will call callback(&amp;rustObject, 7) in Rust.
 }
 </code></pre>
-<a class="header" href="ffi.html#asynchronous-callbacks" name="asynchronous-callbacks"><h2>Asynchronous callbacks</h2></a>
+<a class="header" href="ffi.html#asynchronous-callbacks" id="asynchronous-callbacks"><h2>Asynchronous callbacks</h2></a>
 <p>In the previously given examples the callbacks are invoked as a direct reaction
 to a function call to the external C library.
 The control over the current thread is switched from Rust to C to Rust for the
@@ -389,7 +389,7 @@ C library after the respective Rust object gets destroyed.
 This can be achieved by unregistering the callback in the object's
 destructor and designing the library in a way that guarantees that no
 callback will be performed after deregistration.</p>
-<a class="header" href="ffi.html#linking" name="linking"><h1>Linking</h1></a>
+<a class="header" href="ffi.html#linking" id="linking"><h1>Linking</h1></a>
 <p>The <code>link</code> attribute on <code>extern</code> blocks provides the basic building block for
 instructing rustc how it will link to native libraries. There are two accepted
 forms of the link attribute today:</p>
@@ -435,7 +435,7 @@ linked in.</p>
 </li>
 </ul>
 <p>On macOS, frameworks behave with the same semantics as a dynamic library.</p>
-<a class="header" href="ffi.html#unsafe-blocks" name="unsafe-blocks"><h1>Unsafe blocks</h1></a>
+<a class="header" href="ffi.html#unsafe-blocks" id="unsafe-blocks"><h1>Unsafe blocks</h1></a>
 <p>Some operations, like dereferencing raw pointers or calling functions that have been marked
 unsafe are only allowed inside unsafe blocks. Unsafe blocks isolate unsafety and are a promise to
 the compiler that the unsafety does not leak out of the block.</p>
@@ -448,7 +448,7 @@ unsafe fn kaboom(ptr: *const i32) -&gt; i32 { *ptr }
 
 #}</code></pre></pre>
 <p>This function can only be called from an <code>unsafe</code> block or another <code>unsafe</code> function.</p>
-<a class="header" href="ffi.html#accessing-foreign-globals" name="accessing-foreign-globals"><h1>Accessing foreign globals</h1></a>
+<a class="header" href="ffi.html#accessing-foreign-globals" id="accessing-foreign-globals"><h1>Accessing foreign globals</h1></a>
 <p>Foreign APIs often export a global variable which could do something like track
 global state. In order to access these variables, you declare them in <code>extern</code>
 blocks with the <code>static</code> keyword:</p>
@@ -490,7 +490,7 @@ fn main() {
 </code></pre>
 <p>Note that all interaction with a <code>static mut</code> is unsafe, both reading and
 writing. Dealing with global mutable state requires a great deal of care.</p>
-<a class="header" href="ffi.html#foreign-calling-conventions" name="foreign-calling-conventions"><h1>Foreign calling conventions</h1></a>
+<a class="header" href="ffi.html#foreign-calling-conventions" id="foreign-calling-conventions"><h1>Foreign calling conventions</h1></a>
 <p>Most foreign code exposes a C ABI, and Rust uses the platform's C calling convention by default when
 calling foreign functions. Some foreign functions, most notably the Windows API, use other calling
 conventions. Rust provides a way to tell the compiler which convention to use:</p>
@@ -527,7 +527,7 @@ architecture, this means that the abi used would be <code>stdcall</code>. On x86
 however, windows uses the <code>C</code> calling convention, so <code>C</code> would be used. This
 means that in our previous example, we could have used <code>extern &quot;system&quot; { ... }</code>
 to define a block for all windows systems, not only x86 ones.</p>
-<a class="header" href="ffi.html#interoperability-with-foreign-code" name="interoperability-with-foreign-code"><h1>Interoperability with foreign code</h1></a>
+<a class="header" href="ffi.html#interoperability-with-foreign-code" id="interoperability-with-foreign-code"><h1>Interoperability with foreign code</h1></a>
 <p>Rust guarantees that the layout of a <code>struct</code> is compatible with the platform's
 representation in C only if the <code>#[repr(C)]</code> attribute is applied to it.
 <code>#[repr(C, packed)]</code> can be used to lay out struct members without padding.
@@ -547,7 +547,7 @@ module.</p>
 <p>The <a href="https://crates.io/crates/libc"><code>libc</code> crate on crates.io</a> includes type aliases and function
 definitions for the C standard library in the <code>libc</code> module, and Rust links
 against <code>libc</code> and <code>libm</code> by default.</p>
-<a class="header" href="ffi.html#variadic-functions" name="variadic-functions"><h1>Variadic functions</h1></a>
+<a class="header" href="ffi.html#variadic-functions" id="variadic-functions"><h1>Variadic functions</h1></a>
 <p>In C, functions can be 'variadic', meaning they accept a variable number of arguments. This can
 be achieved in Rust by specifying <code>...</code> within the argument list of a foreign function declaration:</p>
 <pre><code class="language-no_run">extern {
@@ -565,7 +565,7 @@ fn main() {
 
 fn foo(x: i32, ...) { }
 </code></pre>
-<a class="header" href="ffi.html#the-nullable-pointer-optimization" name="the-nullable-pointer-optimization"><h1>The &quot;nullable pointer optimization&quot;</h1></a>
+<a class="header" href="ffi.html#the-nullable-pointer-optimization" id="the-nullable-pointer-optimization"><h1>The &quot;nullable pointer optimization&quot;</h1></a>
 <p>Certain Rust types are defined to never be <code>null</code>. This includes references (<code>&amp;T</code>,
 <code>&amp;mut T</code>), boxes (<code>Box&lt;T&gt;</code>), and function pointers (<code>extern &quot;abi&quot; fn()</code>). When
 interfacing with C, pointers that might be <code>null</code> are often used, which would seem to
@@ -619,7 +619,7 @@ fn main() {
 }
 </code></pre>
 <p>No <code>transmute</code> required!</p>
-<a class="header" href="ffi.html#calling-rust-code-from-c" name="calling-rust-code-from-c"><h1>Calling Rust code from C</h1></a>
+<a class="header" href="ffi.html#calling-rust-code-from-c" id="calling-rust-code-from-c"><h1>Calling Rust code from C</h1></a>
 <p>You may wish to compile Rust code in a way so that it can be called from C. This is
 fairly easy, but requires a few things:</p>
 <pre><pre class="playpen"><code class="language-rust">#[no_mangle]
@@ -632,7 +632,7 @@ pub extern fn hello_rust() -&gt; *const u8 {
 discussed above in &quot;<a href="ffi.html#foreign-calling-conventions">Foreign Calling
 Conventions</a>&quot;. The <code>no_mangle</code>
 attribute turns off Rust's name mangling, so that it is easier to link to.</p>
-<a class="header" href="ffi.html#ffi-and-panics" name="ffi-and-panics"><h1>FFI and panics</h1></a>
+<a class="header" href="ffi.html#ffi-and-panics" id="ffi-and-panics"><h1>FFI and panics</h1></a>
 <p>It’s important to be mindful of <code>panic!</code>s when working with FFI. A <code>panic!</code>
 across an FFI boundary is undefined behavior. If you’re writing code that may
 panic, you should run it in a closure with <a href="../../std/panic/fn.catch_unwind.html"><code>catch_unwind</code></a>:</p>
@@ -654,7 +654,7 @@ fn main() {}
 <p>Please note that <a href="../../std/panic/fn.catch_unwind.html"><code>catch_unwind</code></a> will only catch unwinding panics, not
 those who abort the process. See the documentation of <a href="../../std/panic/fn.catch_unwind.html"><code>catch_unwind</code></a>
 for more information.</p>
-<a class="header" href="ffi.html#representing-opaque-structs" name="representing-opaque-structs"><h1>Representing opaque structs</h1></a>
+<a class="header" href="ffi.html#representing-opaque-structs" id="representing-opaque-structs"><h1>Representing opaque structs</h1></a>
 <p>Sometimes, a C library wants to provide a pointer to something, but not let you
 know the internal details of the thing it wants. The simplest way is to use a
 <code>void *</code> argument:</p>

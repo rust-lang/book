@@ -67,7 +67,7 @@
                 </div>
 
                 <div id="content" class="content">
-                    <a class="header" href="the-stack-and-the-heap.html#the-stack-and-the-heap" name="the-stack-and-the-heap"><h1>The Stack and the Heap</h1></a>
+                    <a class="header" href="the-stack-and-the-heap.html#the-stack-and-the-heap" id="the-stack-and-the-heap"><h1>The Stack and the Heap</h1></a>
 <p>As a systems language, Rust operates at a low level. If you’re coming from a
 high-level language, there are some aspects of systems programming that you may
 not be familiar with. The most important one is how memory works, with a stack
@@ -81,7 +81,7 @@ accurate, but are representative for the level we’re trying to learn at right
 now. Once you have the basics down, learning more about how allocators are
 implemented, virtual memory, and other advanced topics will reveal the leaks in
 this particular abstraction.</p>
-<a class="header" href="the-stack-and-the-heap.html#memory-management" name="memory-management"><h1>Memory management</h1></a>
+<a class="header" href="the-stack-and-the-heap.html#memory-management" id="memory-management"><h1>Memory management</h1></a>
 <p>These two terms are about memory management. The stack and the heap are
 abstractions that help you determine when to allocate and deallocate memory.</p>
 <p>Here’s a high-level comparison:</p>
@@ -91,7 +91,7 @@ heap, on the other hand, is slower, and is explicitly allocated by your
 program. But it’s effectively unlimited in size, and is globally accessible.
 Note this meaning of heap, which allocates arbitrary-sized blocks of memory in arbitrary
 order, is quite different from the heap data structure.</p>
-<a class="header" href="the-stack-and-the-heap.html#the-stack" name="the-stack"><h1>The Stack</h1></a>
+<a class="header" href="the-stack-and-the-heap.html#the-stack" id="the-stack"><h1>The Stack</h1></a>
 <p>Let’s talk about this Rust program:</p>
 <pre><pre class="playpen"><code class="language-rust">fn main() {
     let x = 42;
@@ -222,7 +222,7 @@ fn main() {
 </table>
 <p>And then we’re done. Getting the hang of it? It’s like piling up dishes: you
 add to the top, you take away from the top.</p>
-<a class="header" href="the-stack-and-the-heap.html#the-heap" name="the-heap"><h1>The Heap</h1></a>
+<a class="header" href="the-stack-and-the-heap.html#the-heap" id="the-heap"><h1>The Heap</h1></a>
 <p>Now, this works pretty well, but not everything can work like this. Sometimes,
 you need to pass some memory between different functions, or keep it alive for
 longer than a single function’s execution. For this, we can use the heap.</p>
@@ -296,7 +296,7 @@ sometimes called ‘moving out of the box’. More complex examples will
 be covered later.</p>
 </div>
 <p>And then the stack frame goes away, freeing all of our memory.</p>
-<a class="header" href="the-stack-and-the-heap.html#arguments-and-borrowing" name="arguments-and-borrowing"><h1>Arguments and borrowing</h1></a>
+<a class="header" href="the-stack-and-the-heap.html#arguments-and-borrowing" id="arguments-and-borrowing"><h1>Arguments and borrowing</h1></a>
 <p>We’ve got some basic examples with the stack and the heap going, but what about
 function arguments and borrowing? Here’s a small Rust program:</p>
 <pre><pre class="playpen"><code class="language-rust">fn foo(i: &amp;i32) {
@@ -331,7 +331,7 @@ binding. <code>i</code> is a copy of the argument, <code>y</code>. Since <code>y
 <p>This is one reason why borrowing a variable doesn’t deallocate any memory: the
 value of a reference is a pointer to a memory location. If we got rid of
 the underlying memory, things wouldn’t work very well.</p>
-<a class="header" href="the-stack-and-the-heap.html#a-complex-example" name="a-complex-example"><h1>A complex example</h1></a>
+<a class="header" href="the-stack-and-the-heap.html#a-complex-example" id="a-complex-example"><h1>A complex example</h1></a>
 <p>Okay, let’s go through this complex program step-by-step:</p>
 <pre><pre class="playpen"><code class="language-rust">fn foo(x: &amp;i32) {
     let y = 10;
@@ -490,14 +490,14 @@ what it points to: (2<sup>30</sup>) - 2.</p>
 </table>
 <p>And then, finally, <code>main()</code>, which cleans the rest up. When <code>i</code> is <code>Drop</code>ped,
 it will clean up the last of the heap too.</p>
-<a class="header" href="the-stack-and-the-heap.html#what-do-other-languages-do" name="what-do-other-languages-do"><h1>What do other languages do?</h1></a>
+<a class="header" href="the-stack-and-the-heap.html#what-do-other-languages-do" id="what-do-other-languages-do"><h1>What do other languages do?</h1></a>
 <p>Most languages with a garbage collector heap-allocate by default. This means
 that every value is boxed. There are a number of reasons why this is done, but
 they’re out of scope for this tutorial. There are some possible optimizations
 that don’t make it true 100% of the time, too. Rather than relying on the stack
 and <code>Drop</code> to clean up memory, the garbage collector deals with the heap
 instead.</p>
-<a class="header" href="the-stack-and-the-heap.html#which-to-use" name="which-to-use"><h1>Which to use?</h1></a>
+<a class="header" href="the-stack-and-the-heap.html#which-to-use" id="which-to-use"><h1>Which to use?</h1></a>
 <p>So if the stack is faster and easier to manage, why do we need the heap? A big
 reason is that Stack-allocation alone means you only have 'Last In First Out (LIFO)' semantics for
 reclaiming storage. Heap-allocation is strictly more general, allowing storage
@@ -506,7 +506,7 @@ complexity cost.</p>
 <p>Generally, you should prefer stack allocation, and so, Rust stack-allocates by
 default. The LIFO model of the stack is simpler, at a fundamental level. This
 has two big impacts: runtime efficiency and semantic impact.</p>
-<a class="header" href="the-stack-and-the-heap.html#runtime-efficiency" name="runtime-efficiency"><h2>Runtime Efficiency</h2></a>
+<a class="header" href="the-stack-and-the-heap.html#runtime-efficiency" id="runtime-efficiency"><h2>Runtime Efficiency</h2></a>
 <p>Managing the memory for the stack is trivial: The machine
 increments or decrements a single value, the so-called “stack pointer”.
 Managing memory for the heap is non-trivial: heap-allocated memory is freed at
@@ -515,7 +515,7 @@ size, so the memory manager must generally work much harder to
 identify memory for reuse.</p>
 <p>If you’d like to dive into this topic in greater detail, <a href="http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.143.4688">this paper</a>
 is a great introduction.</p>
-<a class="header" href="the-stack-and-the-heap.html#semantic-impact" name="semantic-impact"><h2>Semantic impact</h2></a>
+<a class="header" href="the-stack-and-the-heap.html#semantic-impact" id="semantic-impact"><h2>Semantic impact</h2></a>
 <p>Stack-allocation impacts the Rust language itself, and thus the developer’s
 mental model. The LIFO semantics is what drives how the Rust language handles
 automatic memory management. Even the deallocation of a uniquely-owned

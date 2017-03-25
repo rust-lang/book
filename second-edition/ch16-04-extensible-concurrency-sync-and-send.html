@@ -67,7 +67,7 @@
                 </div>
 
                 <div id="content" class="content">
-                    <a class="header" href="ch16-04-extensible-concurrency-sync-and-send.html#extensible-concurrency-with-the-sync-and-send-traits" name="extensible-concurrency-with-the-sync-and-send-traits"><h2>Extensible Concurrency with the <code>Sync</code> and <code>Send</code> Traits</h2></a>
+                    <a class="header" href="ch16-04-extensible-concurrency-sync-and-send.html#extensible-concurrency-with-the-sync-and-send-traits" id="extensible-concurrency-with-the-sync-and-send-traits"><h2>Extensible Concurrency with the <code>Sync</code> and <code>Send</code> Traits</h2></a>
 <p>One interesting aspect of Rust's concurrency model is that the language knows
 <em>very</em> little about concurrency. Almost everything we've been talking about so
 far has been part of the standard library, not the language itself. Because we
@@ -77,7 +77,7 @@ standard library or language provide: we can write our own or use ones others
 have written.</p>
 <p>We said <em>almost</em> everything wasn't in the language, so what is? There are two
 traits, both in <code>std::marker</code>: <code>Sync</code> and <code>Send</code>.</p>
-<a class="header" href="ch16-04-extensible-concurrency-sync-and-send.html#send-for-indicating-ownership-may-be-transferred-to-another-thread" name="send-for-indicating-ownership-may-be-transferred-to-another-thread"><h3><code>Send</code> for Indicating Ownership May Be Transferred to Another Thread</h3></a>
+<a class="header" href="ch16-04-extensible-concurrency-sync-and-send.html#send-for-indicating-ownership-may-be-transferred-to-another-thread" id="send-for-indicating-ownership-may-be-transferred-to-another-thread"><h3><code>Send</code> for Indicating Ownership May Be Transferred to Another Thread</h3></a>
 <p>The <code>Send</code> marker trait indicates that ownership of that type may be
 transferred between threads. Almost every Rust type is <code>Send</code>, but there are
 some exceptions. One type provided by the standard library that is not <code>Send</code>
@@ -95,7 +95,7 @@ switched to <code>Arc&lt;T&gt;</code>, which is <code>Send</code>, the code comp
 <code>Send</code> as well. Almost all primitive types are <code>Send</code>, aside from raw pointers,
 which we'll discuss in Chapter 19. Most standard library types are <code>Send</code>,
 aside from <code>Rc&lt;T&gt;</code>.</p>
-<a class="header" href="ch16-04-extensible-concurrency-sync-and-send.html#sync-for-indicating-access-from-multiple-threads-is-safe" name="sync-for-indicating-access-from-multiple-threads-is-safe"><h3><code>Sync</code> for Indicating Access from Multiple Threads is Safe</h3></a>
+<a class="header" href="ch16-04-extensible-concurrency-sync-and-send.html#sync-for-indicating-access-from-multiple-threads-is-safe" id="sync-for-indicating-access-from-multiple-threads-is-safe"><h3><code>Sync</code> for Indicating Access from Multiple Threads is Safe</h3></a>
 <p>The <code>Sync</code> marker trait indicates that a type is safe to have references to a
 value from multiple threads. Another way to say this is for any type <code>T</code>, <code>T</code>
 is <code>Sync</code> if <code>&amp;T</code> (a reference to <code>T</code>) is <code>Send</code> so that the reference can be
@@ -106,7 +106,7 @@ are <code>Sync</code> and types composed entirely of types that are <code>Sync</
 <code>Cell&lt;T&gt;</code> types are not <code>Sync</code>. The implementation of the borrow checking at
 runtime that <code>RefCell&lt;T&gt;</code> does is not threadsafe. <code>Mutex&lt;T&gt;</code> is <code>Sync</code>, and can
 be used to share access with multiple threads as we saw in the previous section.</p>
-<a class="header" href="ch16-04-extensible-concurrency-sync-and-send.html#implementing-send-and-sync-manually-is-unsafe" name="implementing-send-and-sync-manually-is-unsafe"><h3>Implementing <code>Send</code> and <code>Sync</code> Manually is Unsafe</h3></a>
+<a class="header" href="ch16-04-extensible-concurrency-sync-and-send.html#implementing-send-and-sync-manually-is-unsafe" id="implementing-send-and-sync-manually-is-unsafe"><h3>Implementing <code>Send</code> and <code>Sync</code> Manually is Unsafe</h3></a>
 <p>Usually, we don't need to implement the <code>Send</code> and <code>Sync</code> traits, since types
 that are made up of <code>Send</code> and <code>Sync</code> traits are automatically also <code>Send</code> and
 <code>Sync</code>. Because they're marker traits, they don't even have any methods to
@@ -117,7 +117,7 @@ Rust code in Chapter 19; for now, the important information is that building
 new concurrent types that aren't made up of <code>Send</code> and <code>Sync</code> parts requires
 careful thought to make sure the safety guarantees are upheld. <a href="https://doc.rust-lang.org/stable/nomicon/vec.html">The Nomicon</a>
 has more information about these guarantees and how to uphold them.</p>
-<a class="header" href="ch16-04-extensible-concurrency-sync-and-send.html#summary" name="summary"><h2>Summary</h2></a>
+<a class="header" href="ch16-04-extensible-concurrency-sync-and-send.html#summary" id="summary"><h2>Summary</h2></a>
 <p>This isn't the last we'll see of concurrency in this book; the project in
 Chapter 20 will use these concepts in a more realistic situation than the
 smaller examples we discussed in this chapter.</p>

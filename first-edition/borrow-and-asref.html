@@ -67,10 +67,10 @@
                 </div>
 
                 <div id="content" class="content">
-                    <a class="header" href="borrow-and-asref.html#borrow-and-asref" name="borrow-and-asref"><h1>Borrow and AsRef</h1></a>
+                    <a class="header" href="borrow-and-asref.html#borrow-and-asref" id="borrow-and-asref"><h1>Borrow and AsRef</h1></a>
 <p>The <a href="../../std/borrow/trait.Borrow.html"><code>Borrow</code></a> and <a href="../../std/convert/trait.AsRef.html"><code>AsRef</code></a> traits are very similar, but
 different. Here’s a quick refresher on what these two traits mean.</p>
-<a class="header" href="borrow-and-asref.html#borrow" name="borrow"><h1>Borrow</h1></a>
+<a class="header" href="borrow-and-asref.html#borrow" id="borrow"><h1>Borrow</h1></a>
 <p>The <code>Borrow</code> trait is used when you’re writing a data structure, and you want to
 use either an owned or borrowed type as synonymous for some purpose.</p>
 <p>For example, <a href="../../std/collections/struct.HashMap.html"><code>HashMap</code></a> has a <a href="../../std/collections/struct.HashMap.html#method.get"><code>get</code> method</a> which uses <code>Borrow</code>:</p>
@@ -120,7 +120,7 @@ foo(&amp;mut i);
 
 #}</code></pre></pre>
 <p>This will print out <code>a is borrowed: 5</code> twice.</p>
-<a class="header" href="borrow-and-asref.html#asref" name="asref"><h1>AsRef</h1></a>
+<a class="header" href="borrow-and-asref.html#asref" id="asref"><h1>AsRef</h1></a>
 <p>The <code>AsRef</code> trait is a conversion trait. It’s used for converting some value to
 a reference in generic code. Like this:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
@@ -133,7 +133,7 @@ fn foo&lt;T: AsRef&lt;str&gt;&gt;(s: T) {
 }
 
 #}</code></pre></pre>
-<a class="header" href="borrow-and-asref.html#which-should-i-use" name="which-should-i-use"><h1>Which should I use?</h1></a>
+<a class="header" href="borrow-and-asref.html#which-should-i-use" id="which-should-i-use"><h1>Which should I use?</h1></a>
 <p>We can see how they’re kind of the same: they both deal with owned and borrowed
 versions of some type. However, they’re a bit different.</p>
 <p>Choose <code>Borrow</code> when you want to abstract over different kinds of borrowing, or

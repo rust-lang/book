@@ -67,13 +67,13 @@
                 </div>
 
                 <div id="content" class="content">
-                    <a class="header" href="ch03-05-control-flow.html#control-flow" name="control-flow"><h2>Control Flow</h2></a>
+                    <a class="header" href="ch03-05-control-flow.html#control-flow" id="control-flow"><h2>Control Flow</h2></a>
 <p>Deciding whether or not to run some code depending on if a condition is true or
 deciding to run some code repeatedly while a condition is true are basic
 building blocks in most programming languages. The most common constructs that
 let you control the flow of execution of Rust code are <code>if</code> expressions and
 loops.</p>
-<a class="header" href="ch03-05-control-flow.html#if-expressions" name="if-expressions"><h3><code>if</code> Expressions</h3></a>
+<a class="header" href="ch03-05-control-flow.html#if-expressions" id="if-expressions"><h3><code>if</code> Expressions</h3></a>
 <p>An <code>if</code> expression allows us to branch our code depending on conditions. We
 provide a condition and then state, “If this condition is met, run this block
 of code. If the condition is not met, do not run this block of code.”</p>
@@ -158,7 +158,7 @@ expression to the following:</p>
 }
 </code></pre></pre>
 <p>Running this code will print <code>number was something other than zero</code>.</p>
-<a class="header" href="ch03-05-control-flow.html#multiple-conditions-with-else-if" name="multiple-conditions-with-else-if"><h4>Multiple Conditions with <code>else if</code></h4></a>
+<a class="header" href="ch03-05-control-flow.html#multiple-conditions-with-else-if" id="multiple-conditions-with-else-if"><h4>Multiple Conditions with <code>else if</code></h4></a>
 <p>We can have multiple conditions by combining <code>if</code> and <code>else</code> in an <code>else if</code>
 expression. For example:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
@@ -192,7 +192,7 @@ and once it finds one, it won’t even check the rest.</p>
 <p>Using too many <code>else if</code> expressions can clutter your code, so if you have more
 than one, you might want to refactor your code. Chapter 6 describes a powerful
 Rust branching construct called <code>match</code> for these cases.</p>
-<a class="header" href="ch03-05-control-flow.html#using-if-in-a-let-statement" name="using-if-in-a-let-statement"><h4>Using <code>if</code> in a <code>let</code> statement</h4></a>
+<a class="header" href="ch03-05-control-flow.html#using-if-in-a-let-statement" id="using-if-in-a-let-statement"><h4>Using <code>if</code> in a <code>let</code> statement</h4></a>
 <p>Because <code>if</code> is an expression, we can use it on the right side of a <code>let</code>
 statement, for instance in Listing 3-4:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
@@ -261,13 +261,13 @@ valid everywhere we use <code>number</code>. Rust wouldn’t be able to do that 
 of <code>number</code> was only determined at runtime; the compiler would be more complex
 and would make fewer guarantees about the code if it had to keep track of
 multiple hypothetical types for any variable.</p>
-<a class="header" href="ch03-05-control-flow.html#repetition-with-loops" name="repetition-with-loops"><h3>Repetition with Loops</h3></a>
+<a class="header" href="ch03-05-control-flow.html#repetition-with-loops" id="repetition-with-loops"><h3>Repetition with Loops</h3></a>
 <p>It’s often useful to execute a block of code more than once. For this task,
 Rust provides several <em>loops</em>. A loop runs through the code inside the loop
 body to the end and then starts immediately back at the beginning. To
 experiment with loops, let’s make a new project called <em>loops</em>.</p>
 <p>Rust has three kinds of loops: <code>loop</code>, <code>while</code>, and <code>for</code>. Let’s try each one.</p>
-<a class="header" href="ch03-05-control-flow.html#repeating-code-with-loop" name="repeating-code-with-loop"><h4>Repeating Code with <code>loop</code></h4></a>
+<a class="header" href="ch03-05-control-flow.html#repeating-code-with-loop" id="repeating-code-with-loop"><h4>Repeating Code with <code>loop</code></h4></a>
 <p>The <code>loop</code> keyword tells Rust to execute a block of code over and over again
 forever or until you explicitly tell it to stop.</p>
 <p>As an example, change the <em>src/main.rs</em> file in your <em>loops</em> directory to look
@@ -299,7 +299,7 @@ You can place the <code>break</code> keyword within the loop to tell the program
 stop executing the loop. Recall that we did this in the guessing game in the
 “Quitting After a Correct Guess” section of Chapter 2 to exit the
 program when the user won the game by guessing the correct number.</p>
-<a class="header" href="ch03-05-control-flow.html#conditional-loops-with-while" name="conditional-loops-with-while"><h4>Conditional Loops with <code>while</code></h4></a>
+<a class="header" href="ch03-05-control-flow.html#conditional-loops-with-while" id="conditional-loops-with-while"><h4>Conditional Loops with <code>while</code></h4></a>
 <p>It’s often useful for a program to evaluate a condition within a loop. While
 the condition is true, the loop runs. When the condition ceases to be true, you
 call <code>break</code>, stopping the loop. This loop type could be implemented using a
@@ -325,7 +325,7 @@ prints another message and exits:</p>
 <p>This construct eliminates a lot of nesting that would be necessary if you used
 <code>loop</code>, <code>if</code>, <code>else</code>, and <code>break</code>, and it’s clearer. While a condition holds
 true, the code runs; otherwise, it exits the loop.</p>
-<a class="header" href="ch03-05-control-flow.html#looping-through-a-collection-with-for" name="looping-through-a-collection-with-for"><h4>Looping Through a Collection with <code>for</code></h4></a>
+<a class="header" href="ch03-05-control-flow.html#looping-through-a-collection-with-for" id="looping-through-a-collection-with-for"><h4>Looping Through a Collection with <code>for</code></h4></a>
 <p>You could use the <code>while</code> construct to loop over the elements of a collection,
 such as an array. For example:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
@@ -401,7 +401,7 @@ we’ve not yet talked about, <code>rev</code>, to reverse the range:</p>
 }
 </code></pre></pre>
 <p>This code is a bit nicer, isn’t it?</p>
-<a class="header" href="ch03-05-control-flow.html#summary" name="summary"><h2>Summary</h2></a>
+<a class="header" href="ch03-05-control-flow.html#summary" id="summary"><h2>Summary</h2></a>
 <p>You made it! That was a sizable chapter: you learned about variables, scalar
 and<code>if</code> expressions, and loops! If you want to practice with the concepts
 discussed in this chapter, try building programs to do the following:</p>

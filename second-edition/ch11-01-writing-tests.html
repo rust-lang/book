@@ -67,14 +67,14 @@
                 </div>
 
                 <div id="content" class="content">
-                    <a class="header" href="ch11-01-writing-tests.html#how-to-write-tests" name="how-to-write-tests"><h2>How to Write Tests</h2></a>
+                    <a class="header" href="ch11-01-writing-tests.html#how-to-write-tests" id="how-to-write-tests"><h2>How to Write Tests</h2></a>
 <p>Tests are Rust functions that verify non-test code is functioning in the
 program in the expected manner. The bodies of test functions typically contain
 some setup, running the code we want to test, then asserting that the results
 are what we expect. Let's look at the features Rust provides specifically for
 writing tests: the <code>test</code> attribute, a few macros, and the <code>should_panic</code>
 attribute.</p>
-<a class="header" href="ch11-01-writing-tests.html#the-anatomy-of-a-test-function" name="the-anatomy-of-a-test-function"><h3>The Anatomy of a Test Function</h3></a>
+<a class="header" href="ch11-01-writing-tests.html#the-anatomy-of-a-test-function" id="the-anatomy-of-a-test-function"><h3>The Anatomy of a Test Function</h3></a>
 <p>At its simplest, a test in Rust is a function that's annotated with the <code>test</code>
 attribute. Attributes are metadata about pieces of Rust code: the <code>derive</code>
 attribute that we used with structs in Chapter 5 is one example. To make a
@@ -252,7 +252,7 @@ in the next section.</p>
 1 test pass and 1 test fail.</p>
 <p>Now that we've seen what the test results look like in different scenarios,
 let's look at some macros other than <code>panic!</code> that are useful in tests.</p>
-<a class="header" href="ch11-01-writing-tests.html#checking-results-with-the-assert-macro" name="checking-results-with-the-assert-macro"><h3>Checking Results with the <code>assert!</code> Macro</h3></a>
+<a class="header" href="ch11-01-writing-tests.html#checking-results-with-the-assert-macro" id="checking-results-with-the-assert-macro"><h3>Checking Results with the <code>assert!</code> Macro</h3></a>
 <p>The <code>assert!</code> macro, provided by the standard library, is useful when you want
 to ensure that some condition in a test evaluates to <code>true</code>. We give the
 <code>assert!</code> macro an argument that evaluates to a boolean. If the value is <code>true</code>,
@@ -410,7 +410,7 @@ test result: FAILED. 1 passed; 1 failed; 0 ignored; 0 measured
 <p>Our tests caught the bug! Since <code>larger.length</code> is 8 and <code>smaller.length</code> is 5,
 the comparison of the lengths in <code>can_hold</code> now returns <code>false</code> since 8 is not
 less than 5.</p>
-<a class="header" href="ch11-01-writing-tests.html#testing-equality-with-the-assert_eq-and-assert_ne-macros" name="testing-equality-with-the-assert_eq-and-assert_ne-macros"><h3>Testing Equality with the <code>assert_eq!</code> and <code>assert_ne!</code> Macros</h3></a>
+<a class="header" href="ch11-01-writing-tests.html#testing-equality-with-the-assert_eq-and-assert_ne-macros" id="testing-equality-with-the-assert_eq-and-assert_ne-macros"><h3>Testing Equality with the <code>assert_eq!</code> and <code>assert_ne!</code> Macros</h3></a>
 <p>A common way to test functionality is to take the result of the code under test
 and the value we expect the code to return and check that they're equal. We
 could do this using the <code>assert!</code> macro and passing it an expression using the
@@ -511,7 +511,7 @@ the assertion fails. Because both of these traits are derivable traits, as we
 mentioned in Chapter 5, this is usually as straightforward as adding the
 <code>#[derive(PartialEq, Debug)]</code> annotation to your struct or enum definition. See
 Appendix C for more details about these and other derivable traits.</p>
-<a class="header" href="ch11-01-writing-tests.html#custom-failure-messages" name="custom-failure-messages"><h3>Custom Failure Messages</h3></a>
+<a class="header" href="ch11-01-writing-tests.html#custom-failure-messages" id="custom-failure-messages"><h3>Custom Failure Messages</h3></a>
 <p>We can also add a custom message to be printed with the failure message as
 optional arguments to <code>assert!</code>, <code>assert_eq!</code>, and <code>assert_ne!</code>. Any arguments
 specified after the one required argument to <code>assert!</code> or the two required
@@ -594,7 +594,7 @@ note: Run with `RUST_BACKTRACE=1` for a backtrace.
 </code></pre>
 <p>We can see the value we actually got in the test output, which would help us
 debug what happened instead of what we were expecting to happen.</p>
-<a class="header" href="ch11-01-writing-tests.html#checking-for-panics-with-should_panic" name="checking-for-panics-with-should_panic"><h3>Checking for Panics with <code>should_panic</code></h3></a>
+<a class="header" href="ch11-01-writing-tests.html#checking-for-panics-with-should_panic" id="checking-for-panics-with-should_panic"><h3>Checking for Panics with <code>should_panic</code></h3></a>
 <p>In addition to checking that our code returns the correct values we expect,
 it's also important to check that our code handles error conditions as we
 expect. For example, consider the <code>Guess</code> type that we created in Chapter 9 in

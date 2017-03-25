@@ -67,7 +67,7 @@
                 </div>
 
                 <div id="content" class="content">
-                    <a class="header" href="unsafe.html#unsafe" name="unsafe"><h1>Unsafe</h1></a>
+                    <a class="header" href="unsafe.html#unsafe" id="unsafe"><h1>Unsafe</h1></a>
 <p>Rust’s main draw is its powerful static guarantees about behavior. But safety
 checks are conservative by nature: there are some programs that are actually
 safe, but the compiler is not able to verify this is true. To write these kinds
@@ -112,7 +112,7 @@ unsafe impl Scary for i32 {}
 <p>It’s important to be able to explicitly delineate code that may have bugs that
 cause big problems. If a Rust program segfaults, you can be sure the cause is
 related to something marked <code>unsafe</code>.</p>
-<a class="header" href="unsafe.html#what-does-safe-mean" name="what-does-safe-mean"><h1>What does ‘safe’ mean?</h1></a>
+<a class="header" href="unsafe.html#what-does-safe-mean" id="what-does-safe-mean"><h1>What does ‘safe’ mean?</h1></a>
 <p>Safe, in the context of Rust, means ‘doesn’t do anything unsafe’. It’s also
 important to know that there are certain behaviors that are probably not
 desirable in your code, but are expressly <em>not</em> unsafe:</p>
@@ -157,7 +157,7 @@ intrinsics) on overlapping buffers</li>
 <li>Unwinding into Rust from foreign code or unwinding from Rust into foreign
 code.</li>
 </ul>
-<a class="header" href="unsafe.html#unsafe-superpowers" name="unsafe-superpowers"><h1>Unsafe Superpowers</h1></a>
+<a class="header" href="unsafe.html#unsafe-superpowers" id="unsafe-superpowers"><h1>Unsafe Superpowers</h1></a>
 <p>In both unsafe functions and unsafe blocks, Rust will let you do three things
 that you normally can not do. Just three. Here they are:</p>
 <ol>
@@ -173,16 +173,16 @@ things that <em>do</em> break some of the rules.</p>
 (non-Rust) interfaces. You're encouraged to write a safe, native Rust interface
 around the methods provided by the library.</p>
 <p>Let’s go over the basic three abilities listed, in order.</p>
-<a class="header" href="unsafe.html#access-or-update-a-static-mut" name="access-or-update-a-static-mut"><h2>Access or update a <code>static mut</code></h2></a>
+<a class="header" href="unsafe.html#access-or-update-a-static-mut" id="access-or-update-a-static-mut"><h2>Access or update a <code>static mut</code></h2></a>
 <p>Rust has a feature called ‘<code>static mut</code>’ which allows for mutable global state.
 Doing so can cause a data race, and as such is inherently not safe. For more
 details, see the <a href="const-and-static.html#static">static</a> section of the book.</p>
-<a class="header" href="unsafe.html#dereference-a-raw-pointer" name="dereference-a-raw-pointer"><h2>Dereference a raw pointer</h2></a>
+<a class="header" href="unsafe.html#dereference-a-raw-pointer" id="dereference-a-raw-pointer"><h2>Dereference a raw pointer</h2></a>
 <p>Raw pointers let you do arbitrary pointer arithmetic, and can cause a number of
 different memory safety and security issues. In some senses, the ability to
 dereference an arbitrary pointer is one of the most dangerous things you can
 do. For more on raw pointers, see <a href="raw-pointers.html">their section of the book</a>.</p>
-<a class="header" href="unsafe.html#call-unsafe-functions" name="call-unsafe-functions"><h2>Call unsafe functions</h2></a>
+<a class="header" href="unsafe.html#call-unsafe-functions" id="call-unsafe-functions"><h2>Call unsafe functions</h2></a>
 <p>This last ability works with both aspects of <code>unsafe</code>: you can only call
 functions marked <code>unsafe</code> from inside an unsafe block.</p>
 <p>This ability is powerful and varied. Rust exposes some <a href="../../unstable-book/intrinsics.html">compiler

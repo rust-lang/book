@@ -67,7 +67,7 @@
                 </div>
 
                 <div id="content" class="content">
-                    <a class="header" href="ch11-03-test-organization.html#test-organization" name="test-organization"><h2>Test Organization</h2></a>
+                    <a class="header" href="ch11-03-test-organization.html#test-organization" id="test-organization"><h2>Test Organization</h2></a>
 <p>As mentioned at the start of the chapter, testing is a large discipline, and
 different people use different terminology and organization. The Rust community
 tends to think about tests in terms of two main categories: <em>unit tests</em> and
@@ -78,14 +78,14 @@ any other external code would, using only the public interface and exercising
 multiple modules per test.</p>
 <p>Both kinds of tests are important to ensure that the pieces of your library are
 doing what you expect them to separately and together.</p>
-<a class="header" href="ch11-03-test-organization.html#unit-tests" name="unit-tests"><h3>Unit Tests</h3></a>
+<a class="header" href="ch11-03-test-organization.html#unit-tests" id="unit-tests"><h3>Unit Tests</h3></a>
 <p>The purpose of unit tests is to test each unit of code in isolation from the
 rest of the code, in order to be able to quickly pinpoint where code is and is
 not working as expected. We put unit tests in the <em>src</em> directory, in each file
 with the code that they're testing. The convention is that we create a module
 named <code>tests</code> in each file to contain the test functions, and we annotate the
 module with <code>cfg(test)</code>.</p>
-<a class="header" href="ch11-03-test-organization.html#the-tests-module-and-cfgtest" name="the-tests-module-and-cfgtest"><h4>The Tests Module and <code>#[cfg(test)]</code></h4></a>
+<a class="header" href="ch11-03-test-organization.html#the-tests-module-and-cfgtest" id="the-tests-module-and-cfgtest"><h4>The Tests Module and <code>#[cfg(test)]</code></h4></a>
 <p>The <code>#[cfg(test)]</code> annotation on the tests module tells Rust to compile and run
 the test code only when we run <code>cargo test</code>, and not when we run <code>cargo build</code>.
 This saves compile time when we only want to build the library, and saves space
@@ -114,7 +114,7 @@ given a certain configuration. In this case, the configuration is <code>test</co
 provided by Rust for compiling and running tests. By using this attribute,
 Cargo only compiles our test code if we actively run the tests with <code>cargo test</code>. This includes any helper functions that might be within this module, in
 addition to the functions annotated with <code>#[test]</code>.</p>
-<a class="header" href="ch11-03-test-organization.html#testing-private-functions" name="testing-private-functions"><h4>Testing Private Functions</h4></a>
+<a class="header" href="ch11-03-test-organization.html#testing-private-functions" id="testing-private-functions"><h4>Testing Private Functions</h4></a>
 <p>There's debate within the testing community about whether private functions
 should be tested directly or not, and other languages make it difficult or
 impossible to test private functions. Regardless of which testing ideology you
@@ -156,7 +156,7 @@ tests are just Rust code and the <code>tests</code> module is just another modul
 import and call <code>internal_adder</code> in a test just fine. If you don't think
 private functions should be tested, there's nothing in Rust that will compel
 you to do so.</p>
-<a class="header" href="ch11-03-test-organization.html#integration-tests" name="integration-tests"><h3>Integration Tests</h3></a>
+<a class="header" href="ch11-03-test-organization.html#integration-tests" id="integration-tests"><h3>Integration Tests</h3></a>
 <p>In Rust, integration tests are entirely external to your library. They use your
 library in the same way any other code would, which means they can only call
 functions that are part of your library's public API. Their purpose is to test
@@ -164,7 +164,7 @@ that many parts of your library work correctly together. Units of code that
 work correctly by themselves could have problems when integrated, so test
 coverage of the integrated code is important as well. To create integration
 tests, you first need a <em>tests</em> directory.</p>
-<a class="header" href="ch11-03-test-organization.html#the-tests-directory" name="the-tests-directory"><h4>The <em>tests</em> Directory</h4></a>
+<a class="header" href="ch11-03-test-organization.html#the-tests-directory" id="the-tests-directory"><h4>The <em>tests</em> Directory</h4></a>
 <p>To write integration tests for our code, we need to make a <em>tests</em> directory at
 the top level of our project directory, next to <em>src</em>. Cargo knows to look for
 integration test files in this directory. We can then make as many test files
@@ -246,7 +246,7 @@ test it_adds_two ... ok
 test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured
 </code></pre>
 <p>This tests only the file that we specified from the <em>tests</em> directory.</p>
-<a class="header" href="ch11-03-test-organization.html#submodules-in-integration-tests" name="submodules-in-integration-tests"><h4>Submodules in Integration Tests</h4></a>
+<a class="header" href="ch11-03-test-organization.html#submodules-in-integration-tests" id="submodules-in-integration-tests"><h4>Submodules in Integration Tests</h4></a>
 <p>As you add more integration tests, you may want to make more than one file in
 the <em>tests</em> directory to help organize them; for example, to group the test
 functions by the functionality they're testing. As we mentioned, each file in
@@ -328,7 +328,7 @@ fn it_adds_two() {
 <p>Note the <code>mod common;</code> declaration is the same as the module declarations we
 did in Chapter 7. Then in the test function, we can call the <code>common::setup()</code>
 function.</p>
-<a class="header" href="ch11-03-test-organization.html#integration-tests-for-binary-crates" name="integration-tests-for-binary-crates"><h4>Integration Tests for Binary Crates</h4></a>
+<a class="header" href="ch11-03-test-organization.html#integration-tests-for-binary-crates" id="integration-tests-for-binary-crates"><h4>Integration Tests for Binary Crates</h4></a>
 <p>If our project is a binary crate that only contains a <em>src/main.rs</em> and does
 not have a <em>src/lib.rs</em>, we aren't able to create integration tests in the
 <em>tests</em> directory and use <code>extern crate</code> to import functions defined in
@@ -339,7 +339,7 @@ straightforward <em>src/main.rs</em> that calls logic that lives in <em>src/lib.
 that structure, integration tests <em>can</em> test the library crate by using <code>extern crate</code> to cover the important functionality. If the important functionality
 works, the small amount of code in <em>src/main.rs</em> will work as well, and that
 small amount of code does not need to be tested.</p>
-<a class="header" href="ch11-03-test-organization.html#summary" name="summary"><h2>Summary</h2></a>
+<a class="header" href="ch11-03-test-organization.html#summary" id="summary"><h2>Summary</h2></a>
 <p>Rust's testing features provide a way to specify how code should function to
 ensure it continues to work as we expect even as we make changes. Unit tests
 exercise different parts of a library separately and can test private

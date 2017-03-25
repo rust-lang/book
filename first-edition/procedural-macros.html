@@ -67,7 +67,7 @@
                 </div>
 
                 <div id="content" class="content">
-                    <a class="header" href="procedural-macros.html#procedural-macros-and-custom-derive" name="procedural-macros-and-custom-derive"><h1>Procedural Macros (and custom Derive)</h1></a>
+                    <a class="header" href="procedural-macros.html#procedural-macros-and-custom-derive" id="procedural-macros-and-custom-derive"><h1>Procedural Macros (and custom Derive)</h1></a>
 <p>As you've seen throughout the rest of the book, Rust provides a mechanism
 called &quot;derive&quot; that lets you implement traits easily. For example,</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
@@ -103,7 +103,7 @@ your own. We can accomplish this task through a feature of Rust called
 &quot;procedural macros.&quot; Eventually, procedural macros will allow for all sorts of
 advanced metaprogramming in Rust, but today, they're only for custom derive.</p>
 <p>Let's build a very simple trait, and derive it with custom derive.</p>
-<a class="header" href="procedural-macros.html#hello-world" name="hello-world"><h2>Hello World</h2></a>
+<a class="header" href="procedural-macros.html#hello-world" id="hello-world"><h2>Hello World</h2></a>
 <p>So the first thing we need to do is start a new crate for our project.</p>
 <pre><code class="language-bash">$ cargo new --bin hello-world
 </code></pre>
@@ -236,7 +236,7 @@ proc-macro = true
 Hello, World! My name is Waffles
 </code></pre>
 <p>We've done it!</p>
-<a class="header" href="procedural-macros.html#custom-attributes" name="custom-attributes"><h2>Custom Attributes</h2></a>
+<a class="header" href="procedural-macros.html#custom-attributes" id="custom-attributes"><h2>Custom Attributes</h2></a>
 <p>In some cases it might make sense to allow users some kind of configuration.
 For example, the user might want to overwrite the name that is printed in the <code>hello_world()</code> method.</p>
 <p>This can be achieved with custom attributes:</p>
@@ -257,7 +257,7 @@ This is done in the <code>hello-world-derive</code> crate by adding <code>attrib
 pub fn hello_world(input: TokenStream) -&gt; TokenStream 
 </code></pre>
 <p>Multiple attributes can be specified that way.</p>
-<a class="header" href="procedural-macros.html#raising-errors" name="raising-errors"><h2>Raising Errors</h2></a>
+<a class="header" href="procedural-macros.html#raising-errors" id="raising-errors"><h2>Raising Errors</h2></a>
 <p>Let's assume that we do not want to accept enums as input to our custom derive method.</p>
 <p>This condition can be easily checked with the help of <code>syn</code>.
 But how do we tell the user, that we do not accept enums?

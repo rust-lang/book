@@ -67,7 +67,7 @@
                 </div>
 
                 <div id="content" class="content">
-                    <a class="header" href="variable-bindings.html#variable-bindings" name="variable-bindings"><h1>Variable Bindings</h1></a>
+                    <a class="header" href="variable-bindings.html#variable-bindings" id="variable-bindings"><h1>Variable Bindings</h1></a>
 <p>Virtually every non-'Hello World’ Rust program uses <em>variable bindings</em>. They
 bind some value to a name, so it can be used later. <code>let</code> is
 used to introduce a binding, like this:</p>
@@ -78,7 +78,7 @@ used to introduce a binding, like this:</p>
 <p>Putting <code>fn main() {</code> in each example is a bit tedious, so we’ll leave that out
 in the future. If you’re following along, make sure to edit your <code>main()</code>
 function, rather than leaving it off. Otherwise, you’ll get an error.</p>
-<a class="header" href="variable-bindings.html#patterns" name="patterns"><h1>Patterns</h1></a>
+<a class="header" href="variable-bindings.html#patterns" id="patterns"><h1>Patterns</h1></a>
 <p>In many languages, a variable binding would be called a <em>variable</em>, but Rust’s
 variable bindings have a few tricks up their sleeves. For example the
 left-hand side of a <code>let</code> statement is a ‘<a href="patterns.html">pattern</a>’, not a
@@ -93,7 +93,7 @@ let (x, y) = (1, 2);
 Patterns are really powerful, and have <a href="patterns.html">their own section</a> in the
 book. We don’t need those features for now, so we’ll keep this in the back
 of our minds as we go forward.</p>
-<a class="header" href="variable-bindings.html#type-annotations" name="type-annotations"><h1>Type annotations</h1></a>
+<a class="header" href="variable-bindings.html#type-annotations" id="type-annotations"><h1>Type annotations</h1></a>
 <p>Rust is a statically typed language, which means that we specify our types up
 front, and they’re checked at compile time. So why does our first example
 compile? Well, Rust has this thing called ‘type inference’. If it can figure
@@ -122,7 +122,7 @@ look like this:</p>
 <code>let</code>. Including these kinds of comments is not idiomatic Rust, but we'll
 occasionally include them to help you understand what the types that Rust
 infers are.</p>
-<a class="header" href="variable-bindings.html#mutability" name="mutability"><h1>Mutability</h1></a>
+<a class="header" href="variable-bindings.html#mutability" id="mutability"><h1>Mutability</h1></a>
 <p>By default, bindings are <em>immutable</em>. This code will not compile:</p>
 <pre><code class="language-rust ignore">let x = 5;
 x = 10;
@@ -150,7 +150,7 @@ mutation, then the solution is quite easy: add <code>mut</code>.</p>
 out of the scope of this guide. In general, you can often avoid explicit
 mutation, and so it is preferable in Rust. That said, sometimes, mutation is
 what you need, so it’s not forbidden.</p>
-<a class="header" href="variable-bindings.html#initializing-bindings" name="initializing-bindings"><h1>Initializing bindings</h1></a>
+<a class="header" href="variable-bindings.html#initializing-bindings" id="initializing-bindings"><h1>Initializing bindings</h1></a>
 <p>Rust variable bindings have one more aspect that differs from other languages:
 bindings are required to be initialized with a value before you're allowed to
 use them.</p>
@@ -204,7 +204,7 @@ meaningful way by checking out its type. If you want to specify the format in a
 more detailed manner, there are a <a href="../../std/fmt/index.html">wide number of options available</a>.
 For now, we'll stick to the default: integers aren't very complicated to
 print.</p>
-<a class="header" href="variable-bindings.html#scope-and-shadowing" name="scope-and-shadowing"><h1>Scope and shadowing</h1></a>
+<a class="header" href="variable-bindings.html#scope-and-shadowing" id="scope-and-shadowing"><h1>Scope and shadowing</h1></a>
 <p>Let’s get back to bindings. Variable bindings have a scope - they are
 constrained to live in the block they were defined in. A block is a collection
 of statements enclosed by <code>{</code> and <code>}</code>. Function definitions are also blocks!

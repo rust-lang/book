@@ -67,7 +67,7 @@
                 </div>
 
                 <div id="content" class="content">
-                    <a class="header" href="traits.html#traits" name="traits"><h1>Traits</h1></a>
+                    <a class="header" href="traits.html#traits" id="traits"><h1>Traits</h1></a>
 <p>A trait is a language feature that tells the Rust compiler about
 functionality a type must provide.</p>
 <p>Recall the <code>impl</code> keyword, used to call a function with <a href="method-syntax.html">method
@@ -142,7 +142,7 @@ impl HasArea for Circle {
 }
 
 #}</code></pre></pre>
-<a class="header" href="traits.html#trait-bounds-on-generic-functions" name="trait-bounds-on-generic-functions"><h2>Trait bounds on generic functions</h2></a>
+<a class="header" href="traits.html#trait-bounds-on-generic-functions" id="trait-bounds-on-generic-functions"><h2>Trait bounds on generic functions</h2></a>
 <p>Traits are useful because they allow a type to make certain promises about its
 behavior. Generic functions can exploit this to constrain, or <a href="glossary.html#bounds">bound</a>, the types they
 accept. Consider this function, which does not compile:</p>
@@ -231,7 +231,7 @@ passed in the correct types. If we pass in an incorrect type:</p>
 <p>We get a compile-time error:</p>
 <pre><code class="language-text">error: the trait bound `_ : HasArea` is not satisfied [E0277]
 </code></pre>
-<a class="header" href="traits.html#trait-bounds-on-generic-structs" name="trait-bounds-on-generic-structs"><h2>Trait bounds on generic structs</h2></a>
+<a class="header" href="traits.html#trait-bounds-on-generic-structs" id="trait-bounds-on-generic-structs"><h2>Trait bounds on generic structs</h2></a>
 <p>Your generic structs can also benefit from trait bounds. All you need to
 do is append the bound when you declare type parameters. Here is a new
 type <code>Rectangle&lt;T&gt;</code> and its operation <code>is_square()</code>:</p>
@@ -273,7 +273,7 @@ precision—really, objects of pretty much any type—as long as they can be
 compared for equality. Could we do the same for our <code>HasArea</code> structs, <code>Square</code>
 and <code>Circle</code>? Yes, but they need multiplication, and to work with that we need
 to know more about <a href="operators-and-overloading.html">operator traits</a>.</p>
-<a class="header" href="traits.html#rules-for-implementing-traits" name="rules-for-implementing-traits"><h1>Rules for implementing traits</h1></a>
+<a class="header" href="traits.html#rules-for-implementing-traits" id="rules-for-implementing-traits"><h1>Rules for implementing traits</h1></a>
 <p>So far, we’ve only added trait implementations to structs, but you can
 implement a trait for any type such as <code>f32</code>:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
@@ -335,7 +335,7 @@ the type are defined in our crate.</p>
 <p>One last thing about traits: generic functions with a trait bound use
 ‘monomorphization’ (mono: one, morph: form), so they are statically dispatched.
 What’s that mean? Check out the chapter on <a href="trait-objects.html">trait objects</a> for more details.</p>
-<a class="header" href="traits.html#multiple-trait-bounds" name="multiple-trait-bounds"><h1>Multiple trait bounds</h1></a>
+<a class="header" href="traits.html#multiple-trait-bounds" id="multiple-trait-bounds"><h1>Multiple trait bounds</h1></a>
 <p>You’ve seen that you can bound a generic type parameter with a trait:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
 # 
@@ -358,7 +358,7 @@ fn foo&lt;T: Clone + Debug&gt;(x: T) {
 
 #}</code></pre></pre>
 <p><code>T</code> now needs to be both <code>Clone</code> as well as <code>Debug</code>.</p>
-<a class="header" href="traits.html#where-clause" name="where-clause"><h1>Where clause</h1></a>
+<a class="header" href="traits.html#where-clause" id="where-clause"><h1>Where clause</h1></a>
 <p>Writing functions with only a few generic types and a small number of trait
 bounds isn’t too bad, but as the number increases, the syntax gets increasingly
 awkward:</p>
@@ -445,7 +445,7 @@ fn inverse&lt;T&gt;(x: i32) -&gt; T
 on the left-hand side not only of type parameters <code>T</code>, but also of types (<code>i32</code> in this case). In this example, <code>i32</code> must implement
 <code>ConvertTo&lt;T&gt;</code>. Rather than defining what <code>i32</code> is (since that's obvious), the
 <code>where</code> clause here constrains <code>T</code>.</p>
-<a class="header" href="traits.html#default-methods" name="default-methods"><h1>Default methods</h1></a>
+<a class="header" href="traits.html#default-methods" id="default-methods"><h1>Default methods</h1></a>
 <p>A default method can be added to a trait definition if it is already known how a typical implementor will define a method. For example, <code>is_invalid()</code> is defined as the opposite of <code>is_valid()</code>:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
 # 
@@ -496,7 +496,7 @@ let over = OverrideDefault;
 assert!(over.is_invalid()); // Prints &quot;Called OverrideDefault.is_invalid!&quot;
 
 #}</code></pre></pre>
-<a class="header" href="traits.html#inheritance" name="inheritance"><h1>Inheritance</h1></a>
+<a class="header" href="traits.html#inheritance" id="inheritance"><h1>Inheritance</h1></a>
 <p>Sometimes, implementing a trait requires implementing another trait:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
 # 
@@ -534,7 +534,7 @@ impl FooBar for Baz {
 <p>If we forget to implement <code>Foo</code>, Rust will tell us:</p>
 <pre><code class="language-text">error: the trait bound `main::Baz : main::Foo` is not satisfied [E0277]
 </code></pre>
-<a class="header" href="traits.html#deriving" name="deriving"><h1>Deriving</h1></a>
+<a class="header" href="traits.html#deriving" id="deriving"><h1>Deriving</h1></a>
 <p>Implementing traits like <code>Debug</code> and <code>Default</code> repeatedly can become
 quite tedious. For that reason, Rust provides an <a href="attributes.html">attribute</a> that
 allows you to let Rust automatically implement traits for you:</p>
