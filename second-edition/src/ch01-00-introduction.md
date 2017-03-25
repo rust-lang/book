@@ -25,9 +25,19 @@ writing Rust programs. We’ll be learning Rust through small, focused examples
 that build on each other to demonstrate how to use various features of Rust as
 well as how they work behind the scenes.
 
-## Contributing to the book
+## Open Source
 
-This book is open source. If you find an error, please don’t hesitate to file an
-issue or send a pull request [on GitHub].
+Just like the Rust Programming Language, this book is open source.
+This means you are free to modify, build, copy, and reuse to the book,
+subject to the license conditions.
+You can find the source code and license information [on GitHub].
+
+You can also report errata by filing an
+issue or sending a pull request [on GitHub].
+
+As this book is currently pre-release,
+other contributions are also appreciated.
+Please see [CONTRIBUTING.md][contrib] on GitHub for more details.
 
 [on GitHub]: https://github.com/rust-lang/book
+[contrib]: https://github.com/rust-lang/book/blob/master/CONTRIBUTING.md
