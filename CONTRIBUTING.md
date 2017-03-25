@@ -25,9 +25,8 @@ titled **Frozen**.
 
 ### New Content and Ideas
 
-The chapters we have planned but that we have not yet written appear greyed out
-in the sidebar of the rendered book. We would love issues with ideas for what,
-specifically, you'd like to see covered in those planned chapters!
+We would love your ideas.  Please open issues with ideas for what,
+specifically, you'd like to see covered!
 
 ### Review
 
