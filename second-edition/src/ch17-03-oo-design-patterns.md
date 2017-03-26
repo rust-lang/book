@@ -147,7 +147,7 @@ impl Post {
 }
 ```
 
-<span class="caption">Listing 17-13: Implemeting the `add_text` method to add
+<span class="caption">Listing 17-13: Implementing the `add_text` method to add
 text to a post's `content`</span>
 
 `add_text` takes a mutable reference to `self`, since we're changing the `Post`
@@ -163,7 +163,7 @@ support.
 After we've called `add_text` and added some content to our post, we still want
 the `content` method to return an empty string slice since the post is still in
 the draft state, as shown on line 8 of Listing 17-11. For now, let's implement
-the `content` method with the simplest thing that will fulfil this requirement:
+the `content` method with the simplest thing that will fulfill this requirement:
 always returning an empty string slice. We're going to change this later once
 we implement the ability to change a post's state to be published. With what we
 have so far, though, posts can only be in the draft state, which means the post
