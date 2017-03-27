@@ -129,8 +129,8 @@ for x in 0..10 {
 }
 </code></pre>
 <p>The expression is an item that can be converted into an <a href="iterators.html">iterator</a> using
-<a href="../../std/iter/trait.IntoIterator.html"><code>IntoIterator</code></a>. The iterator gives back a series of elements. Each element is
-one iteration of the loop. That value is then bound to the name <code>var</code>, which is
+<a href="../../std/iter/trait.IntoIterator.html"><code>IntoIterator</code></a>. The iterator gives back a series of elements, one element per
+iteration of the loop. That value is then bound to the name <code>var</code>, which is
 valid for the loop body. Once the body is over, the next value is fetched from
 the iterator, and we loop another time. When there are no more values, the <code>for</code>
 loop is over.</p>
@@ -228,11 +228,14 @@ for x in 0..10 {
 <a class="header" href="loops.html#loop-labels" id="loop-labels"><h2>Loop labels</h2></a>
 <p>You may also encounter situations where you have nested loops and need to
 specify which one your <code>break</code> or <code>continue</code> statement is for. Like most
-other languages, by default a <code>break</code> or <code>continue</code> will apply to innermost
-loop. In a situation where you would like to <code>break</code> or <code>continue</code> for one
+other languages, Rust's <code>break</code> or <code>continue</code> apply to the innermost loop.
+In a situation where you would like to <code>break</code> or <code>continue</code> for one
 of the outer loops, you can use labels to specify which loop the <code>break</code> or
-<code>continue</code> statement applies to. This will only print when both <code>x</code> and <code>y</code> are
-odd:</p>
+<code>continue</code> statement applies to.</p>
+<p>In the example below, we <code>continue</code> to the next iteration of <code>outer</code> loop
+when <code>x</code> is even, while we <code>continue</code> to the next iteration of <code>inner</code>
+loop when y is even. So it will execute the <code>println!</code> when both <code>x</code> and
+<code>y</code> are odd.</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
 # 
 #fn main() {
