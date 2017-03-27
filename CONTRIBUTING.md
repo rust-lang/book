@@ -45,10 +45,10 @@ any suggestions or corrections!
 ### Translations
 
 We'd especially love help translating the second edition of the book! See the
-[Translations][] label to join in efforts that are currently in progress. Open
+[Translations] label to join in efforts that are currently in progress. Open
 a new issue to start working on a new language! We're waiting on [mdbook
-support][] for multiple languages before we merge any in, but feel free to
-start! The chapters in [the frozen column][] of the project won't see major
+support] for multiple languages before we merge any in, but feel free to
+start! The chapters in [the frozen column] of the project won't see major
 changes, so if you start with those, you won't have to redo work :)
 
 [Translations]: https://github.com/rust-lang/book/issues?q=is%3Aopen+is%3Aissue+label%3ATranslations
