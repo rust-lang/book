@@ -247,9 +247,15 @@ impl State for PendingReview {
 `Post` and the `State` trait</span>
 
 We've added the `request_review` method to the `State` trait; all types that
-implement the trait will now need to implement the `request_review` method. The
-implementation for the `request_review` method on `Draft` is to return a new,
-boxed instance of the `PendingReview` struct, which is a new type we've
+implement the trait will now need to implement the `request_review` method.
+Note that rather than having `self`, `&self`, or `&mut self` as the first
+parameter of the method, we have `self: Box<Self>`. This syntax means the
+method is only valid when called on a `Box` holding the type. This syntax takes
+ownership of `Box<Self>`, which is what we want because we're transforming the
+old state into a new state, and we want the old state to no longer be valid.
+
+The implementation for the `request_review` method on `Draft` is to return a
+new, boxed instance of the `PendingReview` struct, which is a new type we've
 introduced that represents the state when a post is waiting for a review. The
 `PendingReview` struct also implements the `request_review` method, but it
 doesn't do any transformations. It returns itself since requesting a review on

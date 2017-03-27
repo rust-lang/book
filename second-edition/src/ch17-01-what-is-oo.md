@@ -155,14 +155,14 @@ like values of any type, as long as the values implement a particular trait.
 
 Inheritance has recently fallen out of favor as a programming design solution
 in many programming languages. Using inheritance to re-use some code can
-require more code to be shared than you actually need. Subclasses don't always
-share all characteristics of their parent class, but inheritance means the
-subclass gets all of its parent's data and behavior. This can make a program's
-design less flexible, and create the possibility of calling methods on
-subclasses that don't make sense or cause errors since the methods don't apply
-to the subclass but must be inherited from the parent class. In addition, some
-languages only allow a subclass to inherit from one class, further restricting
-the flexibility of a program's design.
+require more code to be shared than you actually need. Subclasses shouldn't
+always share all characteristics of their parent class, but inheritance means
+the subclass gets all of its parent's data and behavior. This can make a
+program's design less flexible, and creates the possibility of calling methods
+on subclasses that don't make sense or cause errors since the methods don't
+apply to the subclass but must be inherited from the parent class. In addition,
+some languages only allow a subclass to inherit from one class, further
+restricting the flexibility of a program's design.
 
 For these reasons, Rust chose to take a different approach with trait objects
 instead of inheritance. Let's take a look at how trait objects enable

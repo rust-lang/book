@@ -52,11 +52,10 @@ fields and the behavior in `impl` blocks is separated, as opposed to other
 languages that have data and behavior combined into one concept called an
 object. Trait objects *are* more like objects in other languages, in the sense
 that they combine the data made up of the pointer to a concrete object with the
-behavior of the methods defined in the trait. Keep in mind that trait objects
-are different from objects in other languages; we can't customize the kind of
-data held in a trait object like we can by defining struct fields, for example.
-Trait objects aren't as generally useful as objects in other languages: their
-purpose is to allow abstraction across common behavior.
+behavior of the methods defined in the trait. However, trait objects are
+different from objects in other languages because we can't add data to a trait
+object. Trait objects aren't as generally useful as objects in other languages:
+their purpose is to allow abstraction across common behavior.
 
 A trait defines behavior that we need in a given situation. We can then use a
 trait as a trait object in places where we would use a concrete type or a
@@ -76,11 +75,13 @@ pub trait Draw {
 
 <span class="caption">Listing 17-3: Definition of the `Draw` trait</span>
 
-This should look familiar since we talked about how to define traits in Chapter
-10. Next comes something new: Listing 17-4 has the definition of a struct named
-`Screen` that holds a vector named `components` that are of type `Box<Draw>`.
-That `Box<Draw>` is a trait object: it's a stand-in for any type inside a `Box`
-that implements the `Draw` trait.
+<!-- NEXT PARAGRAPH WRAPPED WEIRD INTENTIONALLY SEE #199 -->
+
+This should look familiar since we talked about how to define traits in
+Chapter 10. Next comes something new: Listing 17-4 has the definition of a
+struct named `Screen` that holds a vector named `components` that are of type
+`Box<Draw>`. That `Box<Draw>` is a trait object: it's a stand-in for any type
+inside a `Box` that implements the `Draw` trait.
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -276,14 +277,14 @@ because `SelectBox` implements the `Draw` type, which means it implements the
 `draw` method.
 
 Only being concerned with the messages a value responds to, rather than the
-value's concrete type, is sometimes called *duck typing*: if it walks like a
-duck, and quacks like a duck, then it must be a duck! In the implementation of
-`run` on `Screen` in Listing 17-5, `run` doesn't need to know what the
-concrete type of each component is. It doesn't check to see if a component is
-an instance of a `Button` or a `SelectBox`, it just calls the `draw` method on
-the component. By specifying `Box<Draw>` as the type of the values in the
-`components` vector, we've defined that `Screen` needs values that we can call
-the `draw` method on.
+value's concrete type, is similar to a concept called *duck typing* in
+dynamically typed languages: if it walks like a duck, and quacks like a duck,
+then it must be a duck! In the implementation of `run` on `Screen` in Listing
+17-5, `run` doesn't need to know what the concrete type of each component is.
+It doesn't check to see if a component is an instance of a `Button` or a
+`SelectBox`, it just calls the `draw` method on the component. By specifying
+`Box<Draw>` as the type of the values in the `components` vector, we've defined
+that `Screen` needs values that we can call the `draw` method on.
 
 The advantage with using trait objects and Rust's type system to do duck typing
 is that we never have to check that a value implements a particular method at
@@ -346,8 +347,10 @@ we don't know all the types that might be used with the code. Instead, Rust
 keeps track of the code that might be used when a method is called and figures
 out at runtime which code needs to be used for a particular method call. This
 is known as *dynamic dispatch*, and there's a runtime cost when this lookup
-happens. We did get extra flexibility in the code that we wrote and were able
-to support, though, so it's a tradeoff to consider.
+happens. Dynamic dispatch also prevents the compiler from choosing to inline a
+method's code, which prevents some optimizations. We did get extra flexibility
+in the code that we wrote and were able to support, though, so it's a tradeoff
+to consider.
 
 ### Object Safety is Required for Trait Objects
 
@@ -365,11 +368,11 @@ trait is object safe as long as both of the following are true:
 * The trait does not require `Self` to be `Sized`
 * All of the trait's methods are object safe.
 
-`Self` is a keyword that is an alias for the type implementing a trait. `Sized`
-is a marker trait like the `Send` and `Sync` traits that we talked about in
-Chapter 16. `Sized` is automatically implemented on types that have a known
-size at compile time, such as `i32` and references. Types that do not have a
-known size include slices and traits.
+`Self` is a keyword that is an alias for the type that we're implementing
+traits or methods on. `Sized` is a marker trait like the `Send` and `Sync`
+traits that we talked about in Chapter 16. `Sized` is automatically implemented
+on types that have a known size at compile time, such as `i32` and references.
+Types that do not have a known size include slices (`[T]`) and trait objects.
 
 `Sized` is an implicit trait bound on all generic type parameters by default.
 Most useful operations in Rust require a type to be `Sized`, so making `Sized`
@@ -423,7 +426,7 @@ An example of a trait whose methods are not object safe is the standard
 library's `Clone` trait. The signature for the `clone` method in the `Clone`
 trait looks like this:
 
-```
+```rust
 pub trait Clone {
     fn clone(&self) -> Self;
 }
