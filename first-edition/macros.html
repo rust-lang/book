@@ -120,6 +120,7 @@ let x: Vec&lt;u32&gt; = {
 <div class="footnote-definition" id="actual"><sup class="footnote-definition-label">1</sup>
 <p>The actual definition of <code>vec!</code> in libcollections differs from the
 one presented here, for reasons of efficiency and reusability.</p>
+</div>
 <pre><pre class="playpen"><code class="language-rust">macro_rules! vec {
     ( $( $x:expr ),* ) =&gt; {
         {
@@ -704,7 +705,6 @@ to typecheck, and don’t want to worry about writing out the body of the
 function. One example of this situation is implementing a trait with multiple
 required methods, where you want to tackle one at a time. Define the others
 as <code>unimplemented!</code> until you’re ready to write them.</p>
-</div>
 
                 </div>
 
