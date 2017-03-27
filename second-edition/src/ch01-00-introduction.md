@@ -28,7 +28,7 @@ well as how they work behind the scenes.
 ## Contributing to the book
 
 This book is open source. If you find an error, please don’t hesitate to file an
-issue or send a pull request [on GitHub]. Please see [CONTRIBUTING.md][] for
+issue or send a pull request [on GitHub]. Please see [CONTRIBUTING.md] for
 more details.
 
 [on GitHub]: https://github.com/rust-lang/book
