@@ -58,6 +58,7 @@ We can implement this shorthand, using a macro: [^actual]
 
 [^actual]: The actual definition of `vec!` in libcollections differs from the
            one presented here, for reasons of efficiency and reusability.
+		   
 
 ```rust
 macro_rules! vec {
