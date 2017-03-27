@@ -58,7 +58,8 @@ $ mdbook test
 
 ## Contributing
 
-We'd love your help! Please see [CONTRIBUTING.md][contrib].
+We'd love your help! Please see [CONTRIBUTING.md][contrib]
+to learn the specific ways you can get involved.
 
 [contrib]: https://github.com/rust-lang/book/blob/master/CONTRIBUTING.md
 
