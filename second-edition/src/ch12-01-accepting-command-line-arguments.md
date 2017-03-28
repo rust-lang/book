@@ -96,7 +96,7 @@ argument in the variable `filename`. Let's try running this program again:
 ```text
 $ cargo run test sample.txt
     Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
-     Running `target\debug\greprs.exe test sample.txt`
+     Running `target/debug/greprs test sample.txt`
 Searching for test
 In file sample.txt
 ```
@@ -106,9 +106,9 @@ Great! There's one problem, though. Let's try giving it no arguments:
 ```text
 $ cargo run
     Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
-     Running `target\debug\greprs.exe`
+     Running `target/debug/greprs`
 thread 'main' panicked at 'index out of bounds: the len is 1
-but the index is 1', ../src/libcollections\vec.rs:1307
+but the index is 1', /stable-dist-rustc/build/src/libcollections/vec.rs:1392
 note: Run with `RUST_BACKTRACE=1` for a backtrace.
 ```
 

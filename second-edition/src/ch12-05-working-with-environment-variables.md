@@ -89,7 +89,7 @@ command line arguments, respectively. Let's see if this passes the tests:
 
 ```text
     Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
-     Running target\debug\deps\greprs-e58e9b12d35dc861.exe
+     Running target/debug/deps/greprs-e58e9b12d35dc861
 
 running 2 tests
 test test::case_insensitive ... ok
@@ -97,7 +97,7 @@ test test::case_sensitive ... ok
 
 test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured
 
-     Running target\debug\greprs-8a7faa2662b5030a.exe
+     Running target/debug/greprs-8a7faa2662b5030a
 
 running 0 tests
 
@@ -221,7 +221,7 @@ Let's give it a try!
 ```text
 $ cargo run to poem.txt
     Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
-     Running `target\debug\greprs.exe to poem.txt`
+     Running `target/debug/greprs to poem.txt`
 Are you nobody, too?
 How dreary to be somebody!
 ```
@@ -229,7 +229,7 @@ How dreary to be somebody!
 ```text
 $ CASE_INSENSITIVE=1 cargo run to poem.txt
     Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
-     Running `target\debug\greprs.exe to poem.txt`
+     Running `target/debug/greprs to poem.txt`
 Are you nobody, too?
 How dreary to be somebody!
 To tell your name the livelong day
