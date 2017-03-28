@@ -149,7 +149,7 @@ valid, if the compiler thought that we were making string slices of <code>search
 rather than <code>contents</code>, it would do its safety checking incorrectly. If we tried
 to compile this function without lifetimes, we would get this error:</p>
 <pre><code class="language-text">error[E0106]: missing lifetime specifier
-  --&gt; src\lib.rs:37:46
+  --&gt; src/lib.rs:37:46
    |
 37 | fn grep(search: &amp;str, contents: &amp;str) -&gt; Vec&lt;&amp;str&gt; {
    |                                              ^ expected lifetime parameter
@@ -299,13 +299,13 @@ a <code>for</code> loop that prints each line returned from the <code>grep</code
 <pre><code class="language-text">$ cargo run the poem.txt
    Compiling greprs v0.1.0 (file:///projects/greprs)
     Finished debug [unoptimized + debuginfo] target(s) in 0.38 secs
-     Running `target\debug\greprs.exe the poem.txt`
+     Running `target/debug/greprs the poem.txt`
 Then there's a pair of us - don't tell!
 To tell your name the livelong day
 
 $ cargo run a poem.txt
     Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
-     Running `target\debug\greprs.exe a poem.txt`
+     Running `target/debug/greprs a poem.txt`
 I'm nobody! Who are you?
 Then there's a pair of us - don't tell!
 They'd banish us, you know.
