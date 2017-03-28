@@ -193,7 +193,7 @@ pub struct Config {
 We add the `case_sensitive` field that holds a boolean. Then we need our `run`
 function to check the `case_sensitive` field's value and use that to decide
 whether to call the `search` function or the `search_case_insensitive` function
-as shown:
+as shown in Listing 12-22:
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -218,14 +218,17 @@ pub fn run(config: Config) -> Result<(), Box<Error>>{
 }
 ```
 
+<span class="caption">Listing 12-22: Calling either `search` or
+`search_case_insensitive` based on the value in `config.case_sensitive`</span>
+
 <!-- Will add ghosting in libreoffice /Carol -->
 
 Finally, we need to actually check for the environment variable. The functions
 for working with environment variables are in the `env` module in the standard
 library, so we want to bring that module into scope with a `use sttd::env;`
-line at the top of *src/lib.rs*. Then we're going to use the `vars` method
+line at the top of *src/lib.rs*. Then we're going to use the `var` method
 from the `env` module in `Config::new` to check for an environment variable
-named `CASE_INSENSITIVE`, as shown in Listing 12-22:
+named `CASE_INSENSITIVE`, as shown in Listing 12-23:
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -243,13 +246,7 @@ impl Config {
         let query = args[1].clone();
         let filename = args[2].clone();
 
-        let mut case_sensitive = true;
-
-        for (name, _) in env::vars() {
-            if name == "CASE_INSENSITIVE" {
-                case_sensitive = false;
-            }
-        }
+        let case_sensitive = env::var("CASE_INSENSITIVE").is_err();
 
         Ok(Config {
             query: query,
@@ -260,28 +257,26 @@ impl Config {
 }
 ```
 
-<span class="caption">Listing 12-22: Checking for an environment variable named
+<span class="caption">Listing 12-23: Checking for an environment variable named
 `CASE_INSENSITIVE`</span>
 
 <!-- Will add ghosting and wingdings in libreoffice /Carol -->
 
-Here, we call `env::vars`, which returns an iterator of environment variables
-in the same way `env::args` returns an iterator of command line arguments.
-Instead of using `collect` to create a vector of all of the environment
-variables, we're using a `for` loop, since we're only concerned with finding
-the value of one environment variable rather than the value of all environment
-variables. `env::vars` returns two tuples: the name of the environment variable
-and its value.
-
-In this case we don't need to know the value of the `CASE_INSENSITIVE`
-environment variable, only whether the variable is set to some value, so we use
-the `_` placeholder instead of a name to let Rust know that it shouldn't warn
-us about an unused variable.
-
-Finally, we have a `case_sensitive` variable, which is set to true by default.
-If a `CASE_INSENSITIVE` environment variable is found, the `case_sensitive`
-variable is set to false instead. Then we return the value as part of the
-`Config`.
+Here, we create a new variable `case_sensitive`. In order to set its value, we
+call the `env::var` function and pass it the name of the environment variable
+we're looking for, `CASE_INSENSITIVE`. `env::var` returns a `Result` that will
+be the `Ok` variant containing the value if the environment variable is set,
+and will be the `Err` variant if the environment variable is not set. We're
+using the `is_err` method on the `Result` to check to see if it's an error (and
+therefore unset), which means we *should* do a case sensitive search. If the
+`CASE_INSENSITIVE` environment variable is set to anything, `is_err` will
+return false and we will do a case insensitive search. We don't care about the
+value that the environment variable is set to, just whether it's set or unset,
+so we're checking `is_err` rather than `unwrap`, `expect`, or any of the other
+methods we've seen on `Result`. We pass the value in the `case_sensitive`
+variable to the `Config` instance so that the `run` function can read that
+value and decide whether to call `search` or `search_case_insensitive` as we
+implemented in Listing 12-22.
 
 Let's give it a try! First, we'll run our program without the environment
 variable set and with the query "to", which should match any line that contains
