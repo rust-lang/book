@@ -36,7 +36,7 @@ in Listing 12-4:
 
 <span class="filename">Filename: src/main.rs</span>
 
-```rust
+```rust,should_panic
 use std::env;
 use std::fs::File;
 use std::io::prelude::*;

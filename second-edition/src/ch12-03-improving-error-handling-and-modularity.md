@@ -150,8 +150,9 @@ use the struct fields rather than having separate variables:
 
 <span class="filename">Filename: src/main.rs</span>
 
-```rust
+```rust,should_panic
 # use std::env;
+# use std::fs::File;
 #
 fn main() {
     let args: Vec<String> = env::args().collect();
@@ -266,7 +267,9 @@ the changes we'll need to make:
 
 <span class="filename">Filename: src/main.rs</span>
 
-```rust
+```rust,should_panic
+# use std::env;
+#
 fn main() {
     let args: Vec<String> = env::args().collect();
 
@@ -275,6 +278,11 @@ fn main() {
     // ...snip...
 }
 
+# struct Config {
+#     query: String,
+#     filename: String,
+# }
+#
 // ...snip...
 
 impl Config {

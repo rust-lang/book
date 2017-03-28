@@ -5,7 +5,7 @@ arguments: the filename and a string to search for. That is, we want to be able
 to run our program with `cargo run`, a string to search for, and a path to a
 file to search in, like so:
 
-```rust
+```text
 $ cargo run searchstring example-filename.txt
 ```
 
@@ -137,7 +137,7 @@ taking our word for it. I've hopefully clarified below. /Carol -->
 
 <span class="filename">Filename: src/main.rs</span>
 
-```rust
+```rust,should_panic
 use std::env;
 
 fn main() {

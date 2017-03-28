@@ -338,7 +338,7 @@ How public, like a frog
 
 Cool! Next, how about a word that will match multiple lines, like "the":
 
-```
+```text
 $ cargo run the poem.txt
     Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
      Running `target/debug/greprs the poem.txt`
@@ -349,7 +349,7 @@ To tell your name the livelong day
 And finally, let's make sure that we don't get any lines when we search for a
 word that isn't anywhere in the poem, like "monomorphization":
 
-```
+```text
 $ cargo run monomorphization poem.txt
     Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
      Running `target/debug/greprs monomorphization poem.txt`

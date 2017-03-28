@@ -28,7 +28,7 @@ between the two tests, as shown in Listing 12-20:
 
 <span class="filename">Filename: src/lib.rs</span>
 
-```rust,ignore
+```rust
 #[cfg(test)]
 mod test {
     use super::*;
@@ -197,7 +197,25 @@ as shown in Listing 12-22:
 
 <span class="filename">Filename: src/lib.rs</span>
 
-```rust,ignore
+```rust
+# use std::error::Error;
+# use std::fs::File;
+# use std::io::prelude::*;
+#
+# fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
+#      vec![]
+# }
+#
+# fn search_case_insensitive<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
+#      vec![]
+# }
+#
+# struct Config {
+#     query: String,
+#     filename: String,
+#     case_sensitive: bool,
+# }
+#
 pub fn run(config: Config) -> Result<(), Box<Error>>{
     let mut f = File::open(config.filename)?;
 
@@ -234,6 +252,11 @@ named `CASE_INSENSITIVE`, as shown in Listing 12-23:
 
 ```rust
 use std::env;
+# struct Config {
+#     query: String,
+#     filename: String,
+#     case_sensitive: bool,
+# }
 
 // ...snip...
 
