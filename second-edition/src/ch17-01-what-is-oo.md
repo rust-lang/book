@@ -11,7 +11,7 @@ those mean and whether Rust supports them.
 ### Objects Contain Data and Behavior
 
 The book "Design Patterns: Elements of Reusable Object-Oriented Software,"
-colloquially referred to as "The Gang of Four book", is a catalog of
+colloquially referred to as "The Gang of Four book," is a catalog of
 object-oriented design patterns. It defines object-oriented programming in this
 way:
 
