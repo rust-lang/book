@@ -147,6 +147,7 @@ latin
 libc
 libcollections
 libcore
+libpanic
 librarys
 libreoffice
 libstd
@@ -293,6 +294,7 @@ uncomment
 Uncomment
 Uninstalling
 uninstall
+unix
 unoptimized
 UnsafeCell
 unsized
