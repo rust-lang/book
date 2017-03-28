@@ -51,7 +51,7 @@ is something our readers will be familiar with. /Carol -->
 
 Yup, there's our error message, which means it's being printed to standard out.
 This isn't what's expected from command line programs. It's much more useful
-for error messaages like this to be printed to standard error, and only have
+for error messages like this to be printed to standard error, and only have
 data printed to standard out from a successful run end up in the file when we
 redirect standard out in this way. Let's change how error messages are printed
 as shown in Listing 12-23. Because of the refactoring we did earlier in this

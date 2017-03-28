@@ -74,8 +74,8 @@ the behavior of `std::env::args` /Carol -->
 
 <!-- PROD: START BOX -->
 
-> Note: `std::env::args` will panic if any argument contains invalid unicode.
-> If you need to accept arguments containing invalid unicode, use
+> Note: `std::env::args` will panic if any argument contains invalid Unicode.
+> If you need to accept arguments containing invalid Unicode, use
 > `std::env::args_os` instead. That function returns `OsString` values instead
 > of `String` values. We've chosen to use `std::env::args` here for simplicity
 > because `OsString` values differ per-platform and are more complex to work
@@ -89,7 +89,7 @@ the behavior of `std::env::args` /Carol -->
 On the first line of `main`, we call `env::args`, and immediately use `collect`
 to turn the iterator into a vector containing all of the iterator's values. The
 `collect` function can be used to create many kinds of collections, so we
-explictly annotate the type of `args` to specify that we want a vector of
+explicitly annotate the type of `args` to specify that we want a vector of
 strings. Though we very rarely need to annotate types in Rust, `collect` is one
 function you do often need to annotate because Rust isn't able to infer what
 kind of collection you want.
@@ -176,5 +176,5 @@ In file sample.txt
 
 Great, it's working! We're saving the values of the arguments that we need into
 the right variables. Later we'll add some error handling to deal with
-situations such as when the user provides no argmuents, but for now we'll
+situations such as when the user provides no arguments, but for now we'll
 ignore that and work on adding file reading capabilities instead.

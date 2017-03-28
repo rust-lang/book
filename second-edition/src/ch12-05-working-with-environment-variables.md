@@ -130,9 +130,9 @@ I'm not sure exactly what was unclear about it before, so I'm not sure if I've
 helped. /Carol -->
 
 First, we lowercase the `query` string, and store it in a shadowed variable
-with the same name. Lowercasing the query is necessary so that no matter if the
-user's query is "rust", "RUST", "Rust", or "rUsT", we'll treat the query as if
-it was "rust" and be insensitive to the case.
+with the same name. Calling `to_lowercase` on the query is necessary so that no
+matter if the user's query is "rust", "RUST", "Rust", or "rUsT", we'll treat
+the query as if it was "rust" and be insensitive to the case.
 
 Note that `query` is now a `String` rather than a string slice, because calling
 `to_lowercase` is creating new data, not referencing existing data. If the
@@ -175,7 +175,7 @@ test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured
 
 Great! Now, let's actually call the new `search_case_insensitive` function from
 the `run` function. First, we're going to add a configuration option for
-swiching between case sensitive and case insensitive search to the `Config`
+switching between case sensitive and case insensitive search to the `Config`
 struct:
 
 <span class="filename">Filename: src/lib.rs</span>
@@ -225,7 +225,7 @@ pub fn run(config: Config) -> Result<(), Box<Error>>{
 
 Finally, we need to actually check for the environment variable. The functions
 for working with environment variables are in the `env` module in the standard
-library, so we want to bring that module into scope with a `use sttd::env;`
+library, so we want to bring that module into scope with a `use std::env;`
 line at the top of *src/lib.rs*. Then we're going to use the `var` method
 from the `env` module in `Config::new` to check for an environment variable
 named `CASE_INSENSITIVE`, as shown in Listing 12-23:
@@ -309,11 +309,11 @@ case insensitive searching, controlled by an environment variable. Now you know
 how to manage options set using either command line arguments or environment
 variables!
 
-Some programs allow both arguments _and_ environment variables for the same
+Some programs allow both arguments *and* environment variables for the same
 configuration. In those cases, the programs decide that one or the other takes
 precedence. For another exercise on your own, try controlling case
 insensitivity through a command line argument as well as through the
-environement variabble, and decide which should take precedence the program is
+environment variable, and decide which should take precedence the program is
 run with contradictory values.
 
 The `std::env` module contains many more useful features for dealing with

@@ -276,7 +276,7 @@ running 0 tests
 test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured
 ```
 
-Our reults passed and nothing failes, great, it works!
+Our test passed, great, it works!
 
 Now that our test is passing, we could consider opportunities for refactoring
 the implementation of the `search` function while keeping the tests passing in
@@ -289,7 +289,7 @@ detail and see how to improve it.
 lot going on here as is -->
 <!-- The reason we mention refactoring here is that it's a key step in the TDD
 method that we were implicitly using before. Now that we've added text to the
-beginning of this section to explictly mention that we're doing TDD and what
+beginning of this section to explicitly mention that we're doing TDD and what
 the steps are, we want to address the "refactor" step. People who have some
 experience with Rust might also look at this example and wonder why we're not
 doing this in a different way, and be concerned that we're not teaching the
