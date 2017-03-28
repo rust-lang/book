@@ -69,6 +69,20 @@ easily use other functions from `std::env`. It's also less ambiguous than
 adding `use std::env::args;` then calling the function with just `args`; that
 might look like a function that's defined in the current module.
 
+<!-- We realized that we need to add the following caveat to fully specify
+the behavior of `std::env::args` /Carol -->
+
+<!-- PROD: START BOX -->
+
+> Note: `std::env::args` will panic if any argument contains invalid unicode.
+> If you need to accept arguments containing invalid unicode, use
+> `std::env::args_os` instead. That function returns `OsString` values instead
+> of `String` values. We've chosen to use `std::env::args` here for simplicity
+> because `OsString` values differ per-platform and are more complex to work
+> with than `String` values.
+
+<!-- PROD: END BOX -->
+
 <!--what is it we're making into a vector here, the arguments we pass?-->
 <!-- The iterator of the arguments. /Carol -->
 
