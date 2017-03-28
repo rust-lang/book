@@ -86,7 +86,7 @@ to compile this function without lifetimes, we would get this error:
 
 ```text
 error[E0106]: missing lifetime specifier
-  --> src\lib.rs:37:46
+  --> src/lib.rs:37:46
    |
 37 | fn grep(search: &str, contents: &str) -> Vec<&str> {
    |                                              ^ expected lifetime parameter
@@ -262,13 +262,13 @@ Now our whole program should be working! Let's try it out:
 $ cargo run the poem.txt
    Compiling greprs v0.1.0 (file:///projects/greprs)
     Finished debug [unoptimized + debuginfo] target(s) in 0.38 secs
-     Running `target\debug\greprs.exe the poem.txt`
+     Running `target/debug/greprs the poem.txt`
 Then there's a pair of us - don't tell!
 To tell your name the livelong day
 
 $ cargo run a poem.txt
     Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
-     Running `target\debug\greprs.exe a poem.txt`
+     Running `target/debug/greprs a poem.txt`
 I'm nobody! Who are you?
 Then there's a pair of us - don't tell!
 They'd banish us, you know.

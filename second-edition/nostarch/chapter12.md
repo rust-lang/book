@@ -160,7 +160,7 @@ argument in the variable `filename`. Let's try running this program again:
 ```text
 $ cargo run test sample.txt
     Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
-     Running `target\debug\greprs.exe test sample.txt`
+     Running `target/debug/greprs test sample.txt`
 Searching for test
 In file sample.txt
 ```
@@ -170,9 +170,9 @@ Great! There's one problem, though. Let's try giving it no arguments:
 ```text
 $ cargo run
     Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
-     Running `target\debug\greprs.exe`
+     Running `target/debug/greprs`
 thread 'main' panicked at 'index out of bounds: the len is 1
-but the index is 1', ../src/libcollections\vec.rs:1307
+but the index is 1', /stable-dist-rustc/build/src/libcollections/vec.rs:1392
 note: Run with `RUST_BACKTRACE=1` for a backtrace.
 ```
 
@@ -270,7 +270,7 @@ second argument:
 ```text
 $ cargo run the poem.txt
     Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
-     Running `target\debug\greprs.exe the poem.txt`
+     Running `target/debug/greprs the poem.txt`
 Searching for the
 In file poem.txt
 With text:
@@ -564,8 +564,8 @@ without any arguments:
 ```bash
 $ cargo run
     Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
-     Running `target\debug\greprs.exe`
-thread 'main' panicked at 'not enough arguments', src\main.rs:29
+     Running `target/debug/greprs`
+thread 'main' panicked at 'not enough arguments', src/main.rs:29
 note: Run with `RUST_BACKTRACE=1` for a backtrace.
 ```
 
@@ -673,7 +673,7 @@ but we no longer get all the extra output. Let's try it:
 $ cargo run
    Compiling greprs v0.1.0 (file:///projects/greprs)
     Finished debug [unoptimized + debuginfo] target(s) in 0.48 secs
-     Running `target\debug\greprs.exe`
+     Running `target/debug/greprs`
 Problem parsing arguments: not enough arguments
 ```
 
@@ -783,7 +783,7 @@ This will compile, but with a warning:
 
 ```text
 warning: unused result which must be used, #[warn(unused_must_use)] on by default
-  --> src\main.rs:39:5
+  --> src/main.rs:39:5
    |
 39 |     run(config);
    |     ^^^^^^^^^^^^
@@ -1028,7 +1028,7 @@ this function without lifetimes, we would get this error:
 
 ```text
 error[E0106]: missing lifetime specifier
-  --> src\lib.rs:37:46
+  --> src/lib.rs:37:46
    |
 37 | fn grep(search: &str, contents: &str) -> Vec<&str> {
    |                                              ^ expected lifetime parameter
@@ -1201,13 +1201,13 @@ Now our whole program should be working! Let's try it out:
 $ cargo run the poem.txt
    Compiling greprs v0.1.0 (file:///projects/greprs)
     Finished debug [unoptimized + debuginfo] target(s) in 0.38 secs
-     Running `target\debug\greprs.exe the poem.txt`
+     Running `target/debug/greprs the poem.txt`
 Then there's a pair of us - don't tell!
 To tell your name the livelong day
 
 $ cargo run a poem.txt
     Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
-     Running `target\debug\greprs.exe a poem.txt`
+     Running `target/debug/greprs a poem.txt`
 I'm nobody! Who are you?
 Then there's a pair of us - don't tell!
 They'd banish us, you know.
@@ -1308,7 +1308,7 @@ command line arguments, respectively. Let's see if this passes the tests:
 
 ```text
     Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
-     Running target\debug\deps\greprs-e58e9b12d35dc861.exe
+     Running target/debug/deps/greprs-e58e9b12d35dc861
 
 running 2 tests
 test test::case_insensitive ... ok
@@ -1316,7 +1316,7 @@ test test::case_sensitive ... ok
 
 test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured
 
-     Running target\debug\greprs-8a7faa2662b5030a.exe
+     Running target/debug/greprs-8a7faa2662b5030a
 
 running 0 tests
 
@@ -1432,7 +1432,7 @@ Let's give it a try!
 ```text
 $ cargo run to poem.txt
     Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
-     Running `target\debug\greprs.exe to poem.txt`
+     Running `target/debug/greprs to poem.txt`
 Are you nobody, too?
 How dreary to be somebody!
 ```
@@ -1440,7 +1440,7 @@ How dreary to be somebody!
 ```text
 $ CASE_INSENSITIVE=1 cargo run to poem.txt
     Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
-     Running `target\debug\greprs.exe to poem.txt`
+     Running `target/debug/greprs to poem.txt`
 Are you nobody, too?
 How dreary to be somebody!
 To tell your name the livelong day

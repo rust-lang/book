@@ -258,8 +258,8 @@ without any arguments:
 ```text
 $ cargo run
     Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
-     Running `target\debug\greprs.exe`
-thread 'main' panicked at 'not enough arguments', src\main.rs:29
+     Running `target/debug/greprs`
+thread 'main' panicked at 'not enough arguments', src/main.rs:29
 note: Run with `RUST_BACKTRACE=1` for a backtrace.
 ```
 
@@ -360,7 +360,7 @@ but we no longer get all the extra output. Let's try it:
 $ cargo run
    Compiling greprs v0.1.0 (file:///projects/greprs)
     Finished debug [unoptimized + debuginfo] target(s) in 0.48 secs
-     Running `target\debug\greprs.exe`
+     Running `target/debug/greprs`
 Problem parsing arguments: not enough arguments
 ```
 
@@ -460,7 +460,7 @@ This will compile, but with a warning:
 
 ```text
 warning: unused result which must be used, #[warn(unused_must_use)] on by default
-  --> src\main.rs:39:5
+  --> src/main.rs:39:5
    |
 39 |     run(config);
    |     ^^^^^^^^^^^^
