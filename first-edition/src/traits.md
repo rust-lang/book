@@ -414,7 +414,7 @@ impl ConvertTo<i64> for i32 {
 }
 
 // Can be called with T == i32.
-fn normal<T: ConvertTo<i64>>(x: &T) -> i64 {
+fn normal<T: ConvertTo<i64>>(x: T) -> i64 {
     x.convert()
 }
 
