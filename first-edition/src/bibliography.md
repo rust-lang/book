@@ -81,3 +81,4 @@ Language](http://www.cs.indiana.edu/~eholk/papers/hips2013.pdf). Early GPU work 
   Munksgaard's master's thesis. Research for Servo.
 * [Ownership is Theft: Experiences Building an Embedded OS in Rust - Amit Levy, et. al.](http://amitlevy.com/papers/tock-plos2015.pdf)
 * [You can't spell trust without Rust](https://raw.githubusercontent.com/Gankro/thesis/master/thesis.pdf). Alexis Beingessner's master's thesis.
+* [Rust as a Language for High Performance GC Implementation](http://users.cecs.anu.edu.au/~steveb/downloads/pdf/rust-ismm-2016.pdf)
