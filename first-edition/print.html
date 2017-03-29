@@ -5325,12 +5325,12 @@ impl ConvertTo&lt;i64&gt; for i32 {
 }
 
 // Can be called with T == i32.
-fn normal&lt;T: ConvertTo&lt;i64&gt;&gt;(x: &amp;T) -&gt; i64 {
+fn convert_t_to_i64&lt;T: ConvertTo&lt;i64&gt;&gt;(x: T) -&gt; i64 {
     x.convert()
 }
 
 // Can be called with T == i64.
-fn inverse&lt;T&gt;(x: i32) -&gt; T
+fn convert_i32_to_t&lt;T&gt;(x: i32) -&gt; T
         // This is using ConvertTo as if it were &quot;ConvertTo&lt;i64&gt;&quot;.
         where i32: ConvertTo&lt;T&gt; {
     x.convert()
