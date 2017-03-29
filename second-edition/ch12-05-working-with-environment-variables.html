@@ -68,21 +68,38 @@
 
                 <div id="content" class="content">
                     <a class="header" href="ch12-05-working-with-environment-variables.html#working-with-environment-variables" id="working-with-environment-variables"><h2>Working with Environment Variables</h2></a>
-<p>Let's add one more feature: case insensitive searching. In addition, this
-setting won't be a command line option: it'll be an environment variable
-instead. We could choose to make case insensitivity a command line option, but
-our users have requested an environment variable that they could set once and
-make all their searches case insensitive in that terminal session.</p>
-<a class="header" href="ch12-05-working-with-environment-variables.html#implement-and-test-a-case-insensitive-grep-function" id="implement-and-test-a-case-insensitive-grep-function"><h3>Implement and Test a Case-Insensitive <code>grep</code> Function</h3></a>
+<p>We're going to improve our tool with an extra feature: an option for case
+insensitive searching turned on via an environment variable. We could make this
+a command line option and require that users enter it each time they want it to
+apply, but instead we're going to use an environment variable. This allows our
+users to set the environment variable once and have all their searches be case
+insensitive in that terminal session.</p>
+<a class="header" href="ch12-05-working-with-environment-variables.html#writing-a-failing-test-for-the-case-insensitive-search-function" id="writing-a-failing-test-for-the-case-insensitive-search-function"><h3>Writing a Failing Test for the Case-Insensitive <code>search</code> Function</h3></a>
 <p>First, let's add a new function that we will call when the environment variable
-is on. Let's start by adding a new test and re-naming our existing one:</p>
-<pre><code class="language-rust ignore">#[cfg(test)]
+is on.</p>
+<!-- You mean, to turn the environment variable on? I'm not sure what we're
+doing here-->
+<!-- No, I'm not sure how this is unclear. We're adding a new function. We will
+call the new function when the user turns on the environment variable. Can you
+elaborate on what part of the above statement leads to the conclusion that the
+new function is going to turn the environment variable on? Can you suggest a
+rewording that makes the causality direction clearer? /Carol -->
+<p>We're going to continue following the TDD process that we started doing in the
+last section, and the first step is again to write a failing test. We'll add a
+new test for the new case insensitive search function, and rename our old test
+from <code>one_result</code> to <code>case_sensitive</code> to be clearer about the differences
+between the two tests, as shown in Listing 12-20:</p>
+<p><span class="filename">Filename: src/lib.rs</span></p>
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+#[cfg(test)]
 mod test {
-    use {grep, grep_case_insensitive};
+    use super::*;
 
     #[test]
     fn case_sensitive() {
-        let search = &quot;duct&quot;;
+        let query = &quot;duct&quot;;
         let contents = &quot;\
 Rust:
 safe, fast, productive.
@@ -91,13 +108,13 @@ Duct tape.&quot;;
 
         assert_eq!(
             vec![&quot;safe, fast, productive.&quot;],
-            grep(search, contents)
+            search(query, contents)
         );
     }
 
     #[test]
     fn case_insensitive() {
-        let search = &quot;rust&quot;;
+        let query = &quot;rUsT&quot;;
         let contents = &quot;\
 Rust:
 safe, fast, productive.
@@ -106,25 +123,48 @@ Trust me.&quot;;
 
         assert_eq!(
             vec![&quot;Rust:&quot;, &quot;Trust me.&quot;],
-            grep_case_insensitive(search, contents)
+            search_case_insensitive(query, contents)
         );
     }
 }
-</code></pre>
+
+#}</code></pre></pre>
 <!-- Will add ghosting and wingdings in libreoffice /Carol -->
-<p>We're going to define a new function named <code>grep_case_insensitive</code>. Its
-implementation will be almost the same as the <code>grep</code> function, but with some
-minor changes as shown in Listing 12-16:</p>
+<p><span class="caption">Listing 12-20: Adding a new failing test for the case
+insensitive function we're about to add</span></p>
+<p>Note that we've edited the old test's <code>query</code> and <code>contents</code> too: we changed
+the query to &quot;duct&quot;, which will match the line with the word &quot;productive&quot;.
+We've added a new line with the text &quot;Duct tape&quot;, with a capital D, that
+shouldn't match the query &quot;duct&quot; when we're searching for the query in a case
+sensitive manner. We've changed this test to ensure that we don't accidentally
+break the case sensitive search functionality that we've already implemented;
+this test should pass now and should continue to pass as we work on the case
+insensitive search.</p>
+<p>The new test for the case insensitive search uses &quot;rUsT&quot; with some capital
+letters as its query. The expected return value from the
+<code>search_case_insensitive</code> function we're going to add is that the query &quot;rust&quot;
+will match both the line containing &quot;Rust:&quot; with a capital R and also the line
+&quot;Trust me.&quot; that contains &quot;rust&quot; with a lowercase r. This test will fail to
+compile right now since we haven't yet defined the <code>search_case_insensitive</code>
+function; feel free to add a skeleton implementation that always returns an
+empty array in the same way that we did for the <code>search</code> function in Listing
+12-16 in order to see the test compile and fail.</p>
+<a class="header" href="ch12-05-working-with-environment-variables.html#implementing-the-search_case_insensitive-function" id="implementing-the-search_case_insensitive-function"><h3>Implementing the <code>search_case_insensitive</code> Function</h3></a>
+<p>The <code>search_case_insensitive</code> function, shown in Listing 12-21, will be almost
+the same as the <code>search</code> function. The difference is that we'll lowercase the
+<code>query</code> function and each <code>line</code> so that whatever the case of the input
+arguments, they will be the same case when we check whether the line contains
+the query.</p>
 <p><span class="filename">Filename: src/lib.rs</span></p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
 # 
 #fn main() {
-fn grep_case_insensitive&lt;'a&gt;(search: &amp;str, contents: &amp;'a str) -&gt; Vec&lt;&amp;'a str&gt; {
-    let search = search.to_lowercase();
+fn search_case_insensitive&lt;'a&gt;(query: &amp;str, contents: &amp;'a str) -&gt; Vec&lt;&amp;'a str&gt; {
+    let query = query.to_lowercase();
     let mut results = Vec::new();
 
     for line in contents.lines() {
-        if line.to_lowercase().contains(&amp;search) {
+        if line.to_lowercase().contains(&amp;query) {
             results.push(line);
         }
     }
@@ -133,18 +173,35 @@ fn grep_case_insensitive&lt;'a&gt;(search: &amp;str, contents: &amp;'a str) -&gt
 }
 
 #}</code></pre></pre>
-<p><span class="caption">Listing 12-16: Implementing a <code>grep_case_insensitive</code>
-function by changing the search string and the lines of the contents to
-lowercase before comparing them</span></p>
+<p><span class="caption">Listing 12-21: Defining the <code>search_case_insensitive</code>
+function to lowercase both the query and the line before comparing them</span></p>
 <!-- Will add ghosting and wingdings in libreoffice /Carol -->
-<p>First, we lowercase the <code>search</code> string, and store it in a shadowed variable
-with the same name. Note that <code>search</code> is now a <code>String</code> rather than a string
-slice, so we need to add an ampersand when we pass <code>search</code> to <code>contains</code> since
-<code>contains</code> takes a string slice.</p>
-<p>Second, we add a call to <code>to_lowercase</code> each <code>line</code> before we check if it
-contains <code>search</code>. Since we've converted both <code>line</code> and <code>search</code> into all
-lowercase, we'll find matches no matter what case they used in the file and the
-command line arguments, respectively. Let's see if this passes the tests:</p>
+<!-- why do we lowercase the search string? and why does it need to be a string
+rather than a slice? -->
+<!-- We explained this above, that in order to make the search case
+insensitive, we need to lowercase everything so that searches will always match
+no matter what case either the query or each line uses. It needs to be a
+`String` because we're creating new data, not referencing existing data, when
+we call `to_lowercase`. I've tried to make both of these points clearer, but
+I'm not sure exactly what was unclear about it before, so I'm not sure if I've
+helped. /Carol -->
+<p>First, we lowercase the <code>query</code> string, and store it in a shadowed variable
+with the same name. Calling <code>to_lowercase</code> on the query is necessary so that no
+matter if the user's query is &quot;rust&quot;, &quot;RUST&quot;, &quot;Rust&quot;, or &quot;rUsT&quot;, we'll treat
+the query as if it was &quot;rust&quot; and be insensitive to the case.</p>
+<p>Note that <code>query</code> is now a <code>String</code> rather than a string slice, because calling
+<code>to_lowercase</code> is creating new data, not referencing existing data. If the
+query is &quot;rUsT&quot;, that string slice does not contain a lowercase u or t for us
+to use, so we have to allocate a new <code>String</code> containing &quot;rust&quot;. Because
+<code>query</code> is now a <code>String</code>, when we pass <code>query</code> as an argument to the
+<code>contains</code> method, we need to add an ampersand since the signature of
+<code>contains</code> is defined to take a string slice.</p>
+<p>Next, we add a call to <code>to_lowercase</code> on each <code>line</code> before we check if it
+contains <code>query</code>. This will turn &quot;Rust:&quot; into &quot;rust:&quot; and &quot;Trust me.&quot; into
+&quot;trust me.&quot; Now that we've converted both <code>line</code> and <code>query</code> to all lowercase,
+we'll find matches no matter what case the text in the file has or the user
+entered in the query.</p>
+<p>Let's see if this implementation passes the tests:</p>
 <pre><code class="language-text">    Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
      Running target/debug/deps/greprs-e58e9b12d35dc861
 
@@ -166,33 +223,58 @@ running 0 tests
 
 test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured
 </code></pre>
-<p>Great! Now, we have to actually use the new <code>grep_case_insensitive</code> function.
-First, let's add a configuration option for it to the <code>Config</code> struct:</p>
+<p>Great! Now, let's actually call the new <code>search_case_insensitive</code> function from
+the <code>run</code> function. First, we're going to add a configuration option for
+switching between case sensitive and case insensitive search to the <code>Config</code>
+struct:</p>
 <p><span class="filename">Filename: src/lib.rs</span></p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
 # 
 #fn main() {
 pub struct Config {
-    pub search: String,
+    pub query: String,
     pub filename: String,
     pub case_sensitive: bool,
 }
 
 #}</code></pre></pre>
 <!-- Will add ghosting in libreoffice /Carol -->
-<p>And then check for that option inside of the <code>run</code> function, and decide which
-function to call based on the value of the <code>case_sensitive</code> function:</p>
+<p>We add the <code>case_sensitive</code> field that holds a boolean. Then we need our <code>run</code>
+function to check the <code>case_sensitive</code> field's value and use that to decide
+whether to call the <code>search</code> function or the <code>search_case_insensitive</code> function
+as shown in Listing 12-22:</p>
 <p><span class="filename">Filename: src/lib.rs</span></p>
-<pre><code class="language-rust ignore">pub fn run(config: Config) -&gt; Result&lt;(), Box&lt;Error&gt;&gt;{
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+# use std::error::Error;
+# use std::fs::File;
+# use std::io::prelude::*;
+#
+# fn search&lt;'a&gt;(query: &amp;str, contents: &amp;'a str) -&gt; Vec&lt;&amp;'a str&gt; {
+#      vec![]
+# }
+#
+# fn search_case_insensitive&lt;'a&gt;(query: &amp;str, contents: &amp;'a str) -&gt; Vec&lt;&amp;'a str&gt; {
+#      vec![]
+# }
+#
+# struct Config {
+#     query: String,
+#     filename: String,
+#     case_sensitive: bool,
+# }
+#
+pub fn run(config: Config) -&gt; Result&lt;(), Box&lt;Error&gt;&gt;{
     let mut f = File::open(config.filename)?;
 
     let mut contents = String::new();
     f.read_to_string(&amp;mut contents)?;
 
     let results = if config.case_sensitive {
-        grep(&amp;config.search, &amp;contents)
+        search(&amp;config.query, &amp;contents)
     } else {
-        grep_case_insensitive(&amp;config.search, &amp;contents)
+        search_case_insensitive(&amp;config.query, &amp;contents)
     };
 
     for line in results {
@@ -201,50 +283,43 @@ function to call based on the value of the <code>case_sensitive</code> function:
 
     Ok(())
 }
-</code></pre>
+
+#}</code></pre></pre>
+<p><span class="caption">Listing 12-22: Calling either <code>search</code> or
+<code>search_case_insensitive</code> based on the value in <code>config.case_sensitive</code></span></p>
 <!-- Will add ghosting in libreoffice /Carol -->
-<p>Finally, we need to actually check the environment for the variable. To bring
-the <code>env</code> module from the standard library into our project, we add a <code>use</code> line
-at the top of <em>src/lib.rs</em>:</p>
+<p>Finally, we need to actually check for the environment variable. The functions
+for working with environment variables are in the <code>env</code> module in the standard
+library, so we want to bring that module into scope with a <code>use std::env;</code>
+line at the top of <em>src/lib.rs</em>. Then we're going to use the <code>var</code> method
+from the <code>env</code> module in <code>Config::new</code> to check for an environment variable
+named <code>CASE_INSENSITIVE</code>, as shown in Listing 12-23:</p>
 <p><span class="filename">Filename: src/lib.rs</span></p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
 # 
 #fn main() {
 use std::env;
-
-#}</code></pre></pre>
-<p>And then use the <code>vars</code> method from the <code>env</code> module inside of <code>Config::new</code>:</p>
-<p><span class="filename">Filename: src/lib.rs</span></p>
-<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
-#fn main() {
-# use std::env;
-#
 # struct Config {
-#     search: String,
+#     query: String,
 #     filename: String,
 #     case_sensitive: bool,
 # }
-#
+
+// ...snip...
+
 impl Config {
     pub fn new(args: &amp;[String]) -&gt; Result&lt;Config, &amp;'static str&gt; {
         if args.len() &lt; 3 {
             return Err(&quot;not enough arguments&quot;);
         }
 
-        let search = args[1].clone();
+        let query = args[1].clone();
         let filename = args[2].clone();
 
-        let mut case_sensitive = true;
-
-        for (name, _) in env::vars() {
-            if name == &quot;CASE_INSENSITIVE&quot; {
-                case_sensitive = false;
-            }
-        }
+        let case_sensitive = env::var(&quot;CASE_INSENSITIVE&quot;).is_err();
 
         Ok(Config {
-            search: search,
+            query: query,
             filename: filename,
             case_sensitive: case_sensitive,
         })
@@ -252,25 +327,36 @@ impl Config {
 }
 
 #}</code></pre></pre>
+<p><span class="caption">Listing 12-23: Checking for an environment variable named
+<code>CASE_INSENSITIVE</code></span></p>
 <!-- Will add ghosting and wingdings in libreoffice /Carol -->
-<p>Here, we call <code>env::vars</code>, which works in a similar way as <code>env::args</code>. The
-difference is <code>env::vars</code> returns an iterator of environment variables rather
-than command line arguments. Instead of using <code>collect</code> to create a vector of
-all of the environment variables, we're using a <code>for</code> loop. <code>env::vars</code> returns
-tuples: the name of the environment variable and its value. We never care about
-the values, only if the variable is set at all, so we use the <code>_</code> placeholder
-instead of a name to let Rust know that it shouldn't warn us about an unused
-variable. Finally, we have a <code>case_sensitive</code> variable, which is set to true by
-default. If we ever find a <code>CASE_INSENSITIVE</code> environment variable, we set the
-<code>case_sensitive</code> variable to false instead. Then we return the value as part of
-the <code>Config</code>.</p>
-<p>Let's give it a try!</p>
+<p>Here, we create a new variable <code>case_sensitive</code>. In order to set its value, we
+call the <code>env::var</code> function and pass it the name of the environment variable
+we're looking for, <code>CASE_INSENSITIVE</code>. <code>env::var</code> returns a <code>Result</code> that will
+be the <code>Ok</code> variant containing the value if the environment variable is set,
+and will be the <code>Err</code> variant if the environment variable is not set. We're
+using the <code>is_err</code> method on the <code>Result</code> to check to see if it's an error (and
+therefore unset), which means we <em>should</em> do a case sensitive search. If the
+<code>CASE_INSENSITIVE</code> environment variable is set to anything, <code>is_err</code> will
+return false and we will do a case insensitive search. We don't care about the
+value that the environment variable is set to, just whether it's set or unset,
+so we're checking <code>is_err</code> rather than <code>unwrap</code>, <code>expect</code>, or any of the other
+methods we've seen on <code>Result</code>. We pass the value in the <code>case_sensitive</code>
+variable to the <code>Config</code> instance so that the <code>run</code> function can read that
+value and decide whether to call <code>search</code> or <code>search_case_insensitive</code> as we
+implemented in Listing 12-22.</p>
+<p>Let's give it a try! First, we'll run our program without the environment
+variable set and with the query &quot;to&quot;, which should match any line that contains
+the word &quot;to&quot; in all lowercase:</p>
 <pre><code class="language-text">$ cargo run to poem.txt
     Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
      Running `target/debug/greprs to poem.txt`
 Are you nobody, too?
 How dreary to be somebody!
 </code></pre>
+<p>Looks like that still works! Now, let's run the program with <code>CASE_INSENSITIVE</code>
+set to 1 but with the same query &quot;to&quot;, and we should get lines that contain
+&quot;to&quot; that might have capital letters:</p>
 <pre><code class="language-text">$ CASE_INSENSITIVE=1 cargo run to poem.txt
     Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
      Running `target/debug/greprs to poem.txt`
@@ -279,15 +365,16 @@ How dreary to be somebody!
 To tell your name the livelong day
 To an admiring bog!
 </code></pre>
-<p>Excellent! Our <code>greprs</code> program can now do case insensitive searching controlled
-by an environment variable. Now you know how to manage options set using
-either command line arguments or environment variables!</p>
+<p>Excellent, we also got lines containing &quot;To&quot;! Our <code>greprs</code> program can now do
+case insensitive searching, controlled by an environment variable. Now you know
+how to manage options set using either command line arguments or environment
+variables!</p>
 <p>Some programs allow both arguments <em>and</em> environment variables for the same
-configuration. In those cases, the programs decide that one or the other of
-arguments or environment variables take precedence. For another exercise on
-your own, try controlling case insensitivity through a command line argument as
-well, and decide which should take precedence if you run the program with
-contradictory values.</p>
+configuration. In those cases, the programs decide that one or the other takes
+precedence. For another exercise on your own, try controlling case
+insensitivity through a command line argument as well as through the
+environment variable, and decide which should take precedence the program is
+run with contradictory values.</p>
 <p>The <code>std::env</code> module contains many more useful features for dealing with
 environment variables; check out its documentation to see what's available.</p>
 

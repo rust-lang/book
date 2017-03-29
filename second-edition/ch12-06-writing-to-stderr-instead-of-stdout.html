@@ -69,23 +69,52 @@
                 <div id="content" class="content">
                     <a class="header" href="ch12-06-writing-to-stderr-instead-of-stdout.html#write-to-stderr-instead-of-stdout" id="write-to-stderr-instead-of-stdout"><h2>Write to <code>stderr</code> Instead of <code>stdout</code></h2></a>
 <p>Right now, we're writing all of our output to the terminal with <code>println!</code>.
-This works, but most terminals provide two kinds of output: &quot;standard out&quot; is
-used for most information, but &quot;standard error&quot; is used for error messages. This
-makes it easier to do things like &quot;Print error messages to my terminal, but
-write other output to a file.&quot;</p>
-<p>We can see that our program is only capable of printing to <code>stdout</code> by
-redirecting it to a file using <code>&gt;</code> on the command line, and running our program
-without any arguments, which causes an error:</p>
+Most terminals provide two kinds of output: &quot;standard out&quot; for general
+information, and &quot;standard error&quot; for error messages. This distinction is the
+behavior that's expected of command line programs: it enables users to choose
+to direct a program's successful output to a file but still print error
+messages to the screen, for example. <code>println!</code> is only capable of printing to
+standard out, though, so we have to use something else in order to print to
+standard error.</p>
+<p>We can verify that, the way we've written <code>greprs</code> so far, everything is being
+written to standard out, including error messages that should be written to
+standard error instead. We'll do that by intentionally causing an error, the
+one that happens when we run the program without any arguments. We're going to
+redirect standard output to a file, but not standard error. The way command
+line programs are expected to work is that, because the output is an error
+message, it should be shown on the screen rather than being redirected to the
+file. Let's see that our program is not currently meeting this expectation by
+using <code>&gt;</code> and specifying a filename, <em>output.txt</em>, that we want to redirect
+standard out to:</p>
 <pre><code class="language-text">$ cargo run &gt; output.txt
 </code></pre>
+<!-- why do we get an error here? Was that intentional? Does that mean it can't
+print stdout to a file? -->
+<!-- Yes, we're intentionally causing an error here to show that errors are
+currently going to the wrong place. It's showing that `println!` only prints
+to standard out, even when we're printing error messages that should go
+to standard error. /Carol-->
 <p>The <code>&gt;</code> syntax tells the shell to write the contents of standard out to
-<em>output.txt</em> instead of the screen. However, if we open <em>output.txt</em> after
-running we'll see our error message:</p>
-<pre><code class="language-text">Problem parsing arguments: not enough arguments
+<em>output.txt</em> instead of the screen. We didn't see the error message we were
+expecting printed on the screen, so that means it must have ended up in the
+file. Let's see what <em>output.txt</em> contains:</p>
+<pre><code class="language-text">Application error: No search string or filename found
 </code></pre>
-<p>We'd like this to be printed to the screen instead, and only have the output
-from a successful run end up in the file if we run our program this way. Let's
-change how error messages are printed as shown in Listing 12-17:</p>
+<!-- I don't understand why we send this output to a file to then just say we
+want it to the screen, won't it do that by default? And what has this got to do
+with our use of println? I'm finding the motives here hard to follow -->
+<!-- The point of showing this is to demonstrate that our program is NOT doing
+the correct thing by default, we need to change the places we're calling
+`println!` with error messages to print to standard error instead. When to use
+stdout vs. stderr, and why you might want to redirect stdout but not stderr,
+is something our readers will be familiar with. /Carol -->
+<p>Yup, there's our error message, which means it's being printed to standard out.
+This isn't what's expected from command line programs. It's much more useful
+for error messages like this to be printed to standard error, and only have
+data printed to standard out from a successful run end up in the file when we
+redirect standard out in this way. Let's change how error messages are printed
+as shown in Listing 12-23. Because of the refactoring we did earlier in this
+chapter, all of the code that prints error messages is in one place, in <code>main</code>:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust ignore">extern crate greprs;
 
@@ -96,8 +125,8 @@ use std::io::prelude::*;
 use greprs::Config;
 
 fn main() {
-    let mut stderr = std::io::stderr();
     let args: Vec&lt;String&gt; = env::args().collect();
+    let mut stderr = std::io::stderr();
 
     let config = Config::new(&amp;args).unwrap_or_else(|err| {
         writeln!(
@@ -105,12 +134,10 @@ fn main() {
             &quot;Problem parsing arguments: {}&quot;,
             err
         ).expect(&quot;Could not write to stderr&quot;);
-
         process::exit(1);
     });
 
     if let Err(e) = greprs::run(config) {
-
         writeln!(
             &amp;mut stderr,
             &quot;Application error: {}&quot;,
@@ -121,43 +148,46 @@ fn main() {
     }
 }
 </code></pre>
-<p><span class="caption">Listing 12-17: Writing error messages to <code>stderr</code> instead
-of <code>stdout</code></span></p>
+<p><span class="caption">Listing 12-23: Writing error messages to <code>stderr</code> instead
+of <code>stdout</code> using <code>writeln!</code></span></p>
 <!-- Will add ghosting and wingdings in libreoffice /Carol -->
 <p>Rust does not have a convenient function like <code>println!</code> for writing to
-standard error. Instead, we use the <code>writeln!</code> macro, which is sort of like
-<code>println!</code>, but it takes an extra argument. The first thing we pass to it is
-what to write to. We can acquire a handle to standard error through the
-<code>std::io::stderr</code> function. We give a mutable reference to <code>stderr</code> to
-<code>writeln!</code>; we need it to be mutable so we can write to it! The second and
-third arguments to <code>writeln!</code> are like the first and second arguments to
-<code>println!</code>: a format string and any variables we're interpolating.</p>
+standard error. Instead, we use the <code>writeln!</code> macro, which is like <code>println!</code>
+but takes an extra argument. The first thing we pass to it is what to write to.
+We can acquire a handle to standard error through the <code>std::io::stderr</code>
+function. We give a mutable reference to <code>stderr</code> to <code>writeln!</code>; we need it to
+be mutable so we can write to it! The second and third arguments to <code>writeln!</code>
+are like the first and second arguments to <code>println!</code>: a format string and any
+variables we're interpolating.</p>
 <p>Let's try running the program again in the same way, without any arguments and
 redirecting <code>stdout</code> with <code>&gt;</code>:</p>
 <pre><code class="language-text">$ cargo run &gt; output.txt
-Problem parsing arguments: not enough arguments
+Application error: No search string or filename found
 </code></pre>
-<p>Now we see our error on the screen, but <code>output.txt</code> contains nothing. If we
-try it again with arguments that work:</p>
+<p>Now we see our error on the screen, and <code>output.txt</code> contains nothing, which is
+the behavior that's expected of command line programs.</p>
+<p>If we run the program again with arguments that don't cause an error, but still
+redirecting standard out to a file:</p>
 <pre><code class="language-text">$ cargo run to poem.txt &gt; output.txt
 </code></pre>
-<p>We'll see no output to our terminal, but <code>output.txt</code> will contain
-our results:</p>
+<p>We won't see any output to our terminal, and <code>output.txt</code> will contain our
+results:</p>
 <p><span class="filename">Filename: output.txt</span></p>
 <pre><code class="language-text">Are you nobody, too?
 How dreary to be somebody!
 </code></pre>
+<p>This demonstrates that we're now using standard out for successful output and
+standard error for error output as appropriate.</p>
 <a class="header" href="ch12-06-writing-to-stderr-instead-of-stdout.html#summary" id="summary"><h2>Summary</h2></a>
-<p>In this chapter, we've covered how to do common I/O operations in a Rust
-context. By using command line arguments, files, environment variables, and the
-ability to write to <code>stderr</code>, you're now prepared to write command line
-applications. By using the concepts from previous chapters, your code will be
-well-organized, be able to store data effectively in the appropriate data
-structures, handle errors nicely, and be well tested. We also saw a real-world
-scenario where lifetime annotations are needed to ensure references are
-always valid.</p>
-<p>Next, let's explore how to make use of some features of Rust that were
-influenced by functional languages: closures and iterators.</p>
+<p>In this chapter, we've recapped on some of the major concepts so far and
+covered how to do common I/O operations in a Rust context. By using command
+line arguments, files, environment variables, and the <code>writeln!</code> macro with
+<code>stderr</code>, you're now prepared to write command line applications. By using the
+concepts from previous chapters, your code will be well-organized, be able to
+store data effectively in the appropriate data structures, handle errors
+nicely, and be well tested.</p>
+<p>Next, let's explore some functional-language influenced Rust features: closures
+and iterators.</p>
 
                 </div>
 

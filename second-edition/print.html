@@ -10158,64 +10158,97 @@ and ownership rules help prevent some kinds of bugs, tests are still important
 to help reduce logic bugs having to do with how your code is expected to behave.</p>
 <p>Let's put together the knowledge from this chapter and other previous chapters
 and work on a project in the next chapter!</p>
-<a class="header" href="print.html#an-io-project" id="an-io-project"><h1>An I/O Project</h1></a>
-<p>We've learned a lot over the last few chapters. Let's take that new knowledge
-and apply it by building a project together. Along the way, we'll learn a bit
-more about Rust's standard library.</p>
-<p>So what should we build? One that uses Rust's strengths. A great use of Rust is
-for command line tools: Rust's speed, safety, 'single binary' output, and
-cross-platform support make it a good language choice for this kind of task. So
-we'll make our own version of a classic command line tool: <code>grep</code>. <code>grep</code> is
-short for &quot;Globally search a Regular Expression and Print.&quot; In the
-simplest use case, it does this:</p>
-<ol>
-<li>Takes a filename and a string as arguments.</li>
-<li>Reads the file.</li>
-<li>Finds lines in the file that contain the string argument.</li>
-<li>Prints out those lines.</li>
-</ol>
-<p>In addition, we'll add one extra feature: an environment variable that will
-allow us to search for the string argument in a case-insensitive way.</p>
-<p>There's another great reason to use <code>grep</code> as an example project: a very
-fully-featured version of <code>grep</code> has already been created in Rust by a
-community member, Andrew Gallant. It's called <code>ripgrep</code>, and it's very,
-very fast. While our version of <code>grep</code> will be fairly simple, you'll have
-some of the background knowledge to understand that project if you want to see
-something more real-world.</p>
-<p>This project will bring together a number of things we learned previously:</p>
+<a class="header" href="print.html#an-io-project-building-a-small-grep" id="an-io-project-building-a-small-grep"><h1>An I/O Project Building a Small Grep</h1></a>
+<!-- We might need a more descriptive title, something that captures the new
+elements we're introducing -- are we going to cover things like environment
+variables more in later chapters, or is this the only place we explain how to
+use them? -->
+<!-- This is the only place we were planning on explaining both environment
+variables and printing to standard error. These are things that people commonly
+want to know how to do in Rust, but there's not much more than what we've said
+here about them, people just want to know how to do them in Rust. We realize
+that those sections make this chapter long, but think it's worth it to include
+information that people want. We've gotten really positive feedback from people
+who have read this chapter online; people who like learning through projects
+have really enjoyed this chapter. /Carol-->
+<p>This chapter is both a recap of the many skills you've learned so far and an
+exploration of a few more standard library features. We're going to build a
+command-line tool that interacts with file and command line input/output to
+practice some of the Rust you now have under your belt.</p>
+<p>Rust's speed, safety, 'single binary' output, and cross-platform support make
+it a good language for creating command line tools, so for our project we'll
+make our own version of the classic command line tool <code>grep</code>. Grep is an
+acronym for &quot;Globally search a Regular Expression and Print.&quot; In the simplest
+use case, <code>grep</code> searches a specified file for a specified string using the
+following steps:</p>
 <ul>
-<li>Organize code (using what we learned in modules, Chapter 7)</li>
-<li>Use vectors and strings (collections, Chapter 8)</li>
-<li>Handle errors (Chapter 9)</li>
-<li>Use traits and lifetimes where appropriate (Chapter 10)</li>
-<li>Have tests (Chapter 11)</li>
+<li>Take as arguments a filename and a string.</li>
+<li>Read the file.</li>
+<li>Find lines in the file that contain the string argument.</li>
+<li>Print out those lines.</li>
 </ul>
-<p>Additionally, we'll briefly introduce closures, iterators, and trait objects,
-which Chapters XX, YY, and ZZ respectively are about to cover in detail.</p>
-<p>Let's create a new project with, as always, <code>cargo new</code>:</p>
+<p>We'll also show how to use environment variables and print to standard error
+instead of standard out; these techniques are commonly used in command line
+tools.</p>
+<p>One Rust community member, Andrew Gallant, has already created a
+fully-featured, very fast version of <code>grep</code>, called <code>ripgrep</code>. By comparison,
+our version of <code>grep</code> will be fairly simple, this chapter will give you some of
+the background knowledge to help you understand a real-world project like
+<code>ripgrep</code>.</p>
+<p>This project will bring together a number of concepts you've learned so far:</p>
+<ul>
+<li>Organizing code (using what we learned in modules, Chapter 7)</li>
+<li>Using vectors and strings (collections, Chapter 8)</li>
+<li>Handling errors (Chapter 9)</li>
+<li>Using traits and lifetimes where appropriate (Chapter 10)</li>
+<li>Writing tests (Chapter 11)</li>
+</ul>
+<p>We'll also briefly introduce closures, iterators, and trait objects, which
+Chapters 13 and 17 will cover in detail.</p>
+<p>Let's create a new project with, as always, <code>cargo new</code>. We're calling our
+project <code>greprs</code> to distinguish from the <code>grep</code> tool that you may already have
+on your system:</p>
 <pre><code class="language-text">$ cargo new --bin greprs
      Created binary (application) `greprs` project
 $ cd greprs
 </code></pre>
-<p>We're calling our version of <code>grep</code> 'greprs', so that we don't confuse any of
-our users into thinking that it's the more fully-featured version of <code>grep</code>
-they may already have installed on their system.</p>
 <a class="header" href="print.html#accepting-command-line-arguments" id="accepting-command-line-arguments"><h2>Accepting Command Line Arguments</h2></a>
-<p>Our first task is to have <code>greprs</code> accept its two command line arguments. There
-are some existing libraries on crates.io that can help us do this, but since
-we're learning, we'll implement this ourselves.</p>
-<p>We'll need to call a function provided in Rust's standard library:
+<p>Our first task is to make <code>greprs</code> able to accept its two command line
+arguments: the filename and a string to search for. That is, we want to be able
+to run our program with <code>cargo run</code>, a string to search for, and a path to a
+file to search in, like so:</p>
+<pre><code class="language-text">$ cargo run searchstring example-filename.txt
+</code></pre>
+<p>Right now, the program generated by <code>cargo new</code> ignores any arguments we give
+it. There are some existing libraries on crates.io that can help us accept
+command line arguments, but since we're learning, let's implement this
+ourselves.</p>
+<!--Below -- I'm not clear what we need the args function for, yet, can you set
+it out more concretely? Otherwise, will it make more sense in context of the
+code later? Is this function needed to allow our function to accept arguments,
+is that was "args" is for? -->
+<!-- We mentioned in the intro to this chapter that grep takes as arguments a
+filename and a string. I've added an example of how we want to run our
+resulting tool and what we want the behavior to be, please let me know if this
+doesn't clear it up. /Carol-->
+<a class="header" href="print.html#reading-the-argument-values" id="reading-the-argument-values"><h3>Reading the Argument Values</h3></a>
+<p>In order to be able to get the values of command line arguments passed to our
+program, we'll need to call a function provided in Rust's standard library:
 <code>std::env::args</code>. This function returns an <em>iterator</em> of the command line
-arguments that were given to our program. We haven't discussed iterators yet;
-Chapter 13 will cover them fully. For our purposes, though, we don't need to
-understand much about how they work in order to use them. We only need to
-understand two things:</p>
+arguments that were given to our program. We haven't discussed iterators yet,
+and we'll cover them fully in Chapter 13, but for our purposes now we only need
+to know two things about iterators:</p>
 <ol>
 <li>Iterators produce a series of values.</li>
 <li>We can call the <code>collect</code> function on an iterator to turn it into a vector
 containing all of the elements the iterator produces.</li>
 </ol>
-<p>Let's give it a try as shown in Listing 12-1:</p>
+<p>Let's give it a try: use the code in Listing 12-1 to read any command line
+arguments passed to our <code>greprs</code> program and collect them into a vector.</p>
+<!-- Give what a try, here, what are we making? Can you lay that out? I've
+tried above but I'm not sure it's complete -->
+<!-- We're not creating anything, we're just reading. I'm not sure if I've made
+this clearer. /Carol -->
 <p><span class="filename">Filename: src/main.rs</span></p>
 <pre><pre class="playpen"><code class="language-rust">use std::env;
 
@@ -10224,21 +10257,38 @@ fn main() {
     println!(&quot;{:?}&quot;, args);
 }
 </code></pre></pre>
-<p><span class="caption">Listing 12-1: Collect the command line arguments into a
-vector and print them out</span></p>
+<p>Listing 12-1: Collect the command line arguments into a vector and print them
+out</p>
 <!-- Will add wingdings in libreoffice /Carol -->
-<p>First, we have a <code>use</code> statement to bring the <code>std::env</code> module into scope.
-When using a function that's nested in more than one level of module, like
-<code>std::env::args</code> is, it's conventional to use <code>use</code> to bring the parent module
-into scope, rather than the function itself. <code>env::args</code> is less ambiguous than
-a lone <code>args</code>. Also, if we end up using more than one function in <code>std::env</code>,
-we only need a single <code>use</code>.</p>
+<p>First, we bring the <code>std::env</code> module into scope with a <code>use</code> statement so that
+we can use its <code>args</code> function. Notice the <code>std::env::args</code> function is nested
+in two levels of modules. As we talked about in Chapter 7, in cases where the
+desired function is nested in more than one module, it's conventional to bring
+the parent module into scope, rather than the function itself. This lets us
+easily use other functions from <code>std::env</code>. It's also less ambiguous than
+adding <code>use std::env::args;</code> then calling the function with just <code>args</code>; that
+might look like a function that's defined in the current module.</p>
+<!-- We realized that we need to add the following caveat to fully specify
+the behavior of `std::env::args` /Carol -->
+<!-- PROD: START BOX -->
+<blockquote>
+<p>Note: <code>std::env::args</code> will panic if any argument contains invalid Unicode.
+If you need to accept arguments containing invalid Unicode, use
+<code>std::env::args_os</code> instead. That function returns <code>OsString</code> values instead
+of <code>String</code> values. We've chosen to use <code>std::env::args</code> here for simplicity
+because <code>OsString</code> values differ per-platform and are more complex to work
+with than <code>String</code> values.</p>
+</blockquote>
+<!-- PROD: END BOX -->
+<!--what is it we're making into a vector here, the arguments we pass?-->
+<!-- The iterator of the arguments. /Carol -->
 <p>On the first line of <code>main</code>, we call <code>env::args</code>, and immediately use <code>collect</code>
-to create a vector out of it. We're also explicitly annotating the type of
-<code>args</code> here: <code>collect</code> can be used to create many kinds of collections. Rust
-won't be able to infer what kind of type we want, so the annotation is
-required. We very rarely need to annotate types in Rust, but <code>collect</code> is one
-function where you often need to.</p>
+to turn the iterator into a vector containing all of the iterator's values. The
+<code>collect</code> function can be used to create many kinds of collections, so we
+explicitly annotate the type of <code>args</code> to specify that we want a vector of
+strings. Though we very rarely need to annotate types in Rust, <code>collect</code> is one
+function you do often need to annotate because Rust isn't able to infer what
+kind of collection you want.</p>
 <p>Finally, we print out the vector with the debug formatter, <code>:?</code>. Let's try
 running our code with no arguments, and then with two arguments:</p>
 <pre><code class="language-text">$ cargo run
@@ -10248,56 +10298,71 @@ $ cargo run needle haystack
 ...snip...
 [&quot;target/debug/greprs&quot;, &quot;needle&quot;, &quot;haystack&quot;]
 </code></pre>
-<p>You'll notice one interesting thing: the name of the binary is the first
-argument. The reasons for this are out of the scope of this chapter, but it's
-something we'll have to remember to account for.</p>
-<p>Now that we have a way to access all of the arguments, let's find the ones we
-care about and save them in variables as shown in Listing 12-2:</p>
+<!--Below --- This initially confused me, do you mean that the argument at
+index 0 is taken up by the name of the binary, so we start arguments at 1 when
+setting them? It seems like it's something like that, reading on, and I've
+edited as such, can you check? -->
+<!-- Mentioning the indexes here seemed repetitive with the text after Listing
+12-2. We're not "setting" arguments here, we're saving the value in variables.
+I've hopefully cleared this up without needing to introduce repetition.
+/Carol-->
+<p>You may notice that the first value in the vector is &quot;target/debug/greprs&quot;,
+which is the name of our binary. The reasons for this are out of the scope of
+this chapter, but we'll need to remember this as we save the two arguments we
+need.</p>
+<a class="header" href="print.html#saving-the-argument-values-in-variables" id="saving-the-argument-values-in-variables"><h3>Saving the Argument Values in Variables</h3></a>
+<p>Printing out the value of the vector of arguments just illustrated that we're
+able to access the values specified as command line arguments from our program.
+That's not what we actually want to do, though, we want to save the values of
+the two arguments in variables so that we can use the values in our program.
+Let's do that as shown in Listing 12-2:</p>
+<!-- By 'find the ones we care about' did you mean set particular arguments so
+the user knows what to enter? I'm a little confused about what we are doing,
+I've tried to clarify above -->
+<!-- We're incrementally adding features and adding some code that helps the
+reader be able to see and experience what the code is doing rather than just
+taking our word for it. I've hopefully clarified below. /Carol -->
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><code class="language-rust ignore">use std::env;
+<pre><pre class="playpen"><code class="language-rust should_panic">use std::env;
 
 fn main() {
     let args: Vec&lt;String&gt; = env::args().collect();
 
-    let search = &amp;args[1];
+    let query = &amp;args[1];
     let filename = &amp;args[2];
 
-    println!(&quot;Searching for {}&quot;, search);
+    println!(&quot;Searching for {}&quot;, query);
     println!(&quot;In file {}&quot;, filename);
 }
-</code></pre>
-<p><span class="caption">Listing 12-2: Create variables to hold the search
-argument and filename argument</span></p>
+</code></pre></pre>
+<p>Listing 12-2: Create variables to hold the query argument and filename argument</p>
 <!-- Will add ghosting and wingdings in libreoffice /Carol -->
-<p>Remember, the program's name is the first argument, so we don't need <code>args[0]</code>.
-We've decided that the first argument will be the string we're searching for,
-so we put a reference to the first argument in the variable <code>search</code>. The
-second argument will be the filename, so we put a reference to the second
-argument in the variable <code>filename</code>. Let's try running this program again:</p>
+<p>As we saw when we printed out the vector, the program's name takes up the first
+value in the vector at <code>args[0]</code>, so we're starting at index <code>1</code>. The first
+argument <code>greprs</code> takes is the string we're searching for, so we put a
+reference to the first argument in the variable <code>query</code>. The second argument
+will be the filename, so we put a reference to the second argument in the
+variable <code>filename</code>.</p>
+<p>We're temporarily printing out the values of these variables, again to prove to
+ourselves that our code is working as we intend. Let's try running this program
+again with the arguments <code>test</code> and <code>sample.txt</code>:</p>
 <pre><code class="language-text">$ cargo run test sample.txt
     Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
      Running `target/debug/greprs test sample.txt`
 Searching for test
 In file sample.txt
 </code></pre>
-<p>Great! There's one problem, though. Let's try giving it no arguments:</p>
-<pre><code class="language-text">$ cargo run
-    Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
-     Running `target/debug/greprs`
-thread 'main' panicked at 'index out of bounds: the len is 1
-but the index is 1', /stable-dist-rustc/build/src/libcollections/vec.rs:1392
-note: Run with `RUST_BACKTRACE=1` for a backtrace.
-</code></pre>
-<p>Because our vector only has one element, the program's name, but we tried to
-access the second element, our program panics with a message about the
-out-of-bound access. While this error message is <em>accurate</em>, it's not
-meaningful to users of our program at all. We could fix this problem right now,
-but let's push forward: we'll improve this situation before we're finished.</p>
+<p>Great, it's working! We're saving the values of the arguments that we need into
+the right variables. Later we'll add some error handling to deal with
+situations such as when the user provides no arguments, but for now we'll
+ignore that and work on adding file reading capabilities instead.</p>
 <a class="header" href="print.html#reading-a-file" id="reading-a-file"><h2>Reading a File</h2></a>
-<p>Now that we have some variables containing the information that we need, let's
-try using them. The next step is to open the file that we want to search. To do
-that, we need a file. Create one called <code>poem.txt</code> at the root level of your
-project, and fill it up with some Emily Dickinson:</p>
+<p>Next, we're going to read the file that we specify in the filename command line
+argument. First, we need a sample file to test it with---the best kind of file
+to use to make sure that <code>greprs</code> is working is one with a small amount of text
+over multiple lines with some repeated words. Listing 12-3 has an Emily
+Dickinson poem that will work well! Create a file called <code>poem.txt</code> at the root
+level of your project, and enter the poem &quot;I'm nobody! Who are you?&quot;:</p>
 <p><span class="filename">Filename: poem.txt</span></p>
 <pre><code class="language-text">I'm nobody! Who are you?
 Are you nobody, too?
@@ -10309,24 +10374,28 @@ How public, like a frog
 To tell your name the livelong day
 To an admiring bog!
 </code></pre>
+<p><span class="caption">Listing 12-3: The poem &quot;I'm nobody! Who are you?&quot; by
+Emily Dickinson that will make a good test case</span></p>
 <!-- Public domain Emily Dickinson poem. This will work best with something
 short, but that has multiple lines and some repetition. We could search through
 code; that gets a bit meta and possibly confusing... Changes to this are most
 welcome. /Carol -->
-<p>With that in place, let's edit <em>src/main.rs</em> and add code to open the file as
-shown in Listing 12-3:</p>
+<!-- :D I like it! I'm all for keeping -->
+<!-- Great! /Carol -->
+<p>With that in place, edit <em>src/main.rs</em> and add code to open the file as shown
+in Listing 12-4:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><code class="language-rust ignore">use std::env;
+<pre><pre class="playpen"><code class="language-rust should_panic">use std::env;
 use std::fs::File;
 use std::io::prelude::*;
 
 fn main() {
     let args: Vec&lt;String&gt; = env::args().collect();
 
-    let search = &amp;args[1];
+    let query = &amp;args[1];
     let filename = &amp;args[2];
 
-    println!(&quot;Searching for {}&quot;, search);
+    println!(&quot;Searching for {}&quot;, query);
     println!(&quot;In file {}&quot;, filename);
 
     let mut f = File::open(filename).expect(&quot;file not found&quot;);
@@ -10336,28 +10405,28 @@ fn main() {
 
     println!(&quot;With text:\n{}&quot;, contents);
 }
-</code></pre>
-<p><span class="caption">Listing 12-3: Read the contents of the file specified by
-the second argument</span></p>
+</code></pre></pre>
+<p>Listing 12-4: Reading the contents of the file specified by the second argument</p>
 <!-- Will add ghosting and wingdings in libreoffice /Carol -->
-<p>We've added a few things. First of all, we need some more <code>use</code> statements to
-bring in the relevant parts of the standard library: we need <code>std::fs::File</code>
-for dealing with files, and <code>std::io::prelude::*</code> contains various traits that
-are useful when doing I/O, including file I/O. In the same way that Rust has a
-general prelude that brings certain things into scope automatically, the
-<code>std::io</code> module has its own prelude of common things you'll need when working
-with I/O. Unlike the default prelude, we must explicitly <code>use</code> the prelude in
-<code>std::io</code>.</p>
-<p>In <code>main</code>, we've added three things: first, we get a handle to the file and
-open it by using the <code>File::open</code> function and passing it the name of the file
-specified in the second argument. Second, we create a mutable, empty <code>String</code>
-in the variable <code>contents</code>, then call <code>read_to_string</code> on our file handle with
-our <code>contents</code> string as the argument; <code>contents</code> is where <code>read_to_string</code>
-will place the data it reads. Finally, we print out the entire file contents,
-which is a way for us to be sure our program is working so far.</p>
-<p>Let's try running this code, specifying any string for the first argument (since
-we haven't implemented the searching part yet) and our <em>poem.txt</em> file as the
-second argument:</p>
+<p>First, we add some more <code>use</code> statements to bring in relevant parts of the
+standard library: we need <code>std::fs::File</code> for dealing with files, and
+<code>std::io::prelude::*</code> contains various traits that are useful when doing I/O,
+including file I/O. In the same way that Rust has a general prelude that brings
+certain things into scope automatically, the <code>std::io</code> module has its own
+prelude of common things you'll need when working with I/O. Unlike the default
+prelude, we must explicitly <code>use</code> the prelude in <code>std::io</code>.</p>
+<p>In <code>main</code>, we've added three things: first, we get a mutable handle to the file
+by calling the <code>File::open</code> function and passing it the value of the <code>filename</code>
+variable. Second, we create a variable called <code>contents</code> and set it to a
+mutable, empty <code>String</code>. This will hold the content of the file after we read
+it in. Third, we call <code>read_to_string</code> on our file handle and pass a mutable
+reference to <code>contents</code> as an argument.</p>
+<p>After those lines, we've again added temporary <code>println!</code> that prints out the
+value in <code>contents</code> after we've read the file so we can check that our program
+is working so far.</p>
+<p>Let's try running this code with any string as the first command line argument
+(since we haven't implemented the searching part yet) and our <em>poem.txt</em> file
+as the second argument:</p>
 <pre><code class="language-text">$ cargo run the poem.txt
     Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
      Running `target/debug/greprs the poem.txt`
@@ -10374,112 +10443,152 @@ How public, like a frog
 To tell your name the livelong day
 To an admiring bog!
 </code></pre>
-<p>Great! Our code is working. However, it's got a few flaws. Because our program
-is still small, these flaws aren't a huge deal, but as our program grows, it
-will be harder and harder to fix them in a clean way. Let's do the refactoring
-now, instead of waiting. The refactoring will be much easier to do with only
-this small amount of code.</p>
-<a class="header" href="print.html#improving-error-handling-and-modularity" id="improving-error-handling-and-modularity"><h2>Improving Error Handling and Modularity</h2></a>
+<p>Great! Our code read in and printed out the content of the file. We've got a
+few flaws though: the <code>main</code> function has multiple responsibilities, and we're
+not handling errors as well as we could be. While our program is still small,
+these flaws aren't a big problem, but as our program grows, it will be harder
+to fix them cleanly. It's good practice to begin refactoring early on when
+developing a program, as it's much easier to refactor smaller amounts of code,
+so we'll do that now.</p>
+<a class="header" href="print.html#refactoring-to-improve-modularity-and-error-handling" id="refactoring-to-improve-modularity-and-error-handling"><h2>Refactoring to Improve Modularity and Error Handling</h2></a>
 <p>There are four problems that we'd like to fix to improve our program, and they
-all have to do with potential errors and the way the program is structured. The
-first problem is where we open the file: we've used <code>expect</code> to print out an
-error message if opening the file fails, but the error message only says &quot;file
-not found&quot;. There are a number of ways that opening a file can fail, but we're
-always assuming that it's due to the file being missing. For example, the file
-could exist, but we might not have permission to open it: right now, we print
-an error message that says the wrong thing!</p>
-<p>Secondly, our use of <code>expect</code> over and over is similar to the earlier issue we
-noted with the <code>panic!</code> on indexing if we don't pass any command line
-arguments: while it <em>works</em>, it's a bit unprincipled, and we're doing it all
-throughout our program. It would be nice to put our error handling in one spot.</p>
-<p>The third problem is that our <code>main</code> function now does two things: it parses
-arguments, and it opens up files. For such a small function, this isn't a huge
-problem. However, as we keep growing our program inside of <code>main</code>, the number of
-separate tasks in the <code>main</code> function will get larger and larger. As one
-function gains many responsibilities, it gets harder to reason about, harder to
-test, and harder to change without breaking one of its parts.</p>
-<p>This also ties into our fourth problem: while <code>search</code> and <code>filename</code> are
+have to do with the way the program is structured and how it's handling
+potential errors.</p>
+<p>First, our <code>main</code> function now performs two tasks: it parses arguments and
+opens up files. For such a small function, this isn't a huge problem. However,
+if we keep growing our program inside of <code>main</code>, the number of separate tasks
+the <code>main</code> function handles will grow. As a function gains responsibilities, it
+gets harder to reason about, harder to test, and harder to change without
+breaking one of its parts. It's better to separate out functionality so that
+each function is responsible for one task.</p>
+<p>This also ties into our second problem: while <code>query</code> and <code>filename</code> are
 configuration variables to our program, variables like <code>f</code> and <code>contents</code> are
 used to perform our program's logic. The longer <code>main</code> gets, the more variables
-we're going to bring into scope, and the more variables we have in scope, the
-harder it is to keep track of which ones we need for which purpose. It would be
-better if we grouped the configuration variables into one structure to make
-their purpose clear.</p>
-<p>Let's address these problems by restructuring our project.</p>
+we're going to need to bring into scope; the more variables we have in scope,
+the harder it is to keep track of the purpose of each. It's better to group the
+configuration variables into one structure to make their purpose clear.</p>
+<p>The third problem is that we've used <code>expect</code> to print out an error message if
+opening the file fails, but the error message only says <code>file not found</code>. There
+are a number of ways that opening a file can fail besides a missing file: for
+example, the file might exist, but we might not have permission to open it.
+Right now, if we're in that situation, we'd print the <code>file not found</code> error
+message that would give the user the wrong advice!</p>
+<p>Fourth, we use <code>expect</code> repeatedly to deal with different errors, and if the
+user runs our programs without specifying enough arguments, they'll get an
+&quot;index out of bounds&quot; error from Rust that doesn't clearly explain the problem.
+It would be better if all our error handling code was in one place so that
+future maintainers only have one place to consult in the code if the error
+handling logic needs to change. Having all the error handling code in one place
+will also help us to ensure that we're printing messages that will be
+meaningful to our end users.</p>
+<p>Let's address these problems by refactoring our project.</p>
 <a class="header" href="print.html#separation-of-concerns-for-binary-projects" id="separation-of-concerns-for-binary-projects"><h3>Separation of Concerns for Binary Projects</h3></a>
-<p>These kinds of organizational problems are common to many similar kinds of
-projects, so the Rust community has developed a pattern for organizing the
-separate concerns. This pattern is useful for organizing any binary project
-you'll build in Rust, so we can justify doing this refactoring a bit earlier,
-since we know that our project fits the pattern. The pattern looks like this:</p>
+<p>The organizational problem of having the <code>main</code> function responsible for
+multiple tasks is common to many binary projects, so the Rust community has
+developed a kind of guideline process for splitting up the separate concerns of
+a binary program when <code>main</code> starts getting large. The process has the
+following steps:</p>
 <ol>
-<li>Split your program into both a <em>main.rs</em> and a <em>lib.rs</em>.</li>
-<li>Place your command line parsing logic into <em>main.rs</em>.</li>
-<li>Place your program's logic into <em>lib.rs</em>.</li>
-<li>The job of the <code>main</code> function is:
+<li>Split your program into both a <em>main.rs</em> and a <em>lib.rs</em> and move your
+program's logic into <em>lib.rs</em>.</li>
+<li>While your command line parsing logic is small, it can remain in <em>main.rs</em>.</li>
+<li>When the command line parsing logic starts getting complicated, extract it
+from <em>main.rs</em> into <em>lib.rs</em> as well.</li>
+<li>The responsibilities that remain in the <code>main</code> function after this process
+should be:
 <ul>
-<li>parse arguments</li>
-<li>set up any other configuration</li>
-<li>call a <code>run</code> function in <em>lib.rs</em></li>
-<li>if <code>run</code> returns an error, handle that error</li>
+<li>Calling the command line parsing logic with the argument values</li>
+<li>Setting up any other configuration</li>
+<li>Calling a <code>run</code> function in <em>lib.rs</em></li>
+<li>If <code>run</code> returns an error, handling that error</li>
 </ul>
 </li>
 </ol>
-<p>Whew! The pattern sounds more complicated than it is, honestly. It's all about
-separating concerns: <em>main.rs</em> handles actually running the program, and
-<em>lib.rs</em> handles all of the actual logic of the task at hand. Let's re-work our
-program into this pattern. First, let's extract a function whose purpose is
-only to parse arguments. Listing 12-4 shows the new start of <code>main</code> that calls
-a new function <code>parse_config</code>, which we're still going to define in
-<em>src/main.rs</em>:</p>
+<p>This pattern is all about separating concerns: <em>main.rs</em> handles running the
+program, and <em>lib.rs</em> handles all of the logic of the task at hand. Because we
+can't test the <code>main</code> function directly, this structure lets us test all of our
+program's logic by moving it into functions in <em>lib.rs</em>. The only code that
+remains in <em>main.rs</em> will be small enough to verify its correctness by reading
+it. Let's re-work our program by following this process.</p>
+<!--Since main is already handling the parsing of arguments, why do we need to
+add a new function for it, can you say how that improves things? -->
+<!-- Sorry, the steps we had were unclear. We've tried rewording. /Carol -->
+<a class="header" href="print.html#extracting-the-argument-parser" id="extracting-the-argument-parser"><h3>Extracting the Argument Parser</h3></a>
+<p>First, we'll extract the functionality for parsing arguments. Listing 12-5
+shows the new start of <code>main</code> that calls a new function <code>parse_config</code>, which
+we're still going to define in <em>src/main.rs</em> for the moment:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust ignore">fn main() {
     let args: Vec&lt;String&gt; = env::args().collect();
 
-    let (search, filename) = parse_config(&amp;args);
-
-    println!(&quot;Searching for {}&quot;, search);
-    println!(&quot;In file {}&quot;, filename);
+    let (query, filename) = parse_config(&amp;args);
 
     // ...snip...
 }
 
 fn parse_config(args: &amp;[String]) -&gt; (&amp;str, &amp;str) {
-    let search = &amp;args[1];
+    let query = &amp;args[1];
     let filename = &amp;args[2];
 
-    (search, filename)
+    (query, filename)
 }
 </code></pre>
-<p><span class="caption">Listing 12-4: Extract a <code>parse_config</code> function from
+<p><span class="caption">Listing 12-5: Extract a <code>parse_config</code> function from
 <code>main</code></span></p>
 <!-- Will add ghosting and wingdings in libreoffice /Carol -->
-<p>This may seem like overkill, but we're working in small steps. After making
-this change, run the program again to verify that the argument parsing still
-works. It's good to check your progress often, so that you have a better idea
-of which change caused a problem, should you encounter one.</p>
-<a class="header" href="print.html#grouping-configuration-values" id="grouping-configuration-values"><h3>Grouping Configuration Values</h3></a>
-<p>Now that we have a function, let's improve it. Our code still has an indication
-that there's a better design possible: we return a tuple, but then immediately
-break that tuple up into individual parts again. This code isn't bad on its
-own, but there's one other sign we have room for improvement: we called our
-function <code>parse_config</code>. The <code>config</code> part of the name is saying the two values
-we return should really be bound together, since they're both part of one
-configuration value.</p>
+<p>We're still collecting the command line arguments into a vector, but instead of
+assigning the argument value at index 1 to the variable <code>query</code> and the
+argument value at index 2 to the variable <code>filename</code> within the <code>main</code>
+function, we pass the whole vector to the <code>parse_config</code> function. The
+<code>parse_config</code> function then holds the logic that knows which argument goes in
+which variable, and passes the values back to <code>main</code>. We still create the
+<code>query</code> and <code>filename</code> variables in <code>main</code>, but <code>main</code> no longer has the
+responsibility of knowing how the command line arguments and variables
+correspond.</p>
+<p>This may seem like overkill for our small program, but we're refactoring in
+small, incremental steps. After making this change, run the program again to
+verify that the argument parsing still works. It's good to check your progress
+often, as that will help you identify the cause of problems when they occur.</p>
+<a class="header" href="print.html#grouping-configuration-values" id="grouping-configuration-values"><h4>Grouping Configuration Values</h4></a>
+<p>We can take another small step to improve this function further. At the moment,
+we're returning a tuple, but then we immediately break that tuple up into
+individual parts again. This is a sign that perhaps we don't have the right
+abstraction yet.</p>
+<p>Another indicator that there's room for improvement is the <code>config</code> part of
+<code>parse_config</code>, which implies that the two values we return are related and are
+both part of one configuration value. We're not currently conveying this
+meaning in the structure of the data other than grouping the two values into a
+tuple: we could put the two values into one struct and give each of the struct
+fields a meaningful name. This will make it easier for future maintainers of
+this code to understand how the different values relate to each other and what
+their purpose is.</p>
+<!-- above -- I'm not sure why this is a problem --- because they aren't
+currently bound together? And why does it imply that -->
 <blockquote>
 <p>Note: some people call this anti-pattern of using primitive values when a
 complex type would be more appropriate <em>primitive obsession</em>.</p>
 </blockquote>
-<p>Let's introduce a struct to hold all of our configuration. Listing 12-5 shows
-the addition of the <code>Config</code> struct definition, the refactoring of
-<code>parse_config</code>, and updates to <code>main</code>:</p>
+<!-- Ah, I see, so the problems here stem from using simple types to do tasks
+inefficiently, when a more complex task could handle it in ways that improve...
+behavior? Readability? Can you say as much? -->
+<!-- I've tried to clarify above. Note that when Rust programmers talk about
+"efficiency", they usually mean "run-time performance", whereas here we're
+talking about code design and maintainability and not addressing performance
+at all. /Carol -->
+<p>Listing 12-6 shows the addition of a struct named <code>Config</code> defined to have
+fields named <code>query</code> and <code>filename</code>. We've also changed the <code>parse_config</code>
+function to return an instance of the <code>Config</code> struct, and updated <code>main</code> to
+use the struct fields rather than having separate variables:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><code class="language-rust ignore">fn main() {
+<pre><pre class="playpen"><code class="language-rust should_panic"># use std::env;
+# use std::fs::File;
+#
+fn main() {
     let args: Vec&lt;String&gt; = env::args().collect();
 
     let config = parse_config(&amp;args);
 
-    println!(&quot;Searching for {}&quot;, config.search);
+    println!(&quot;Searching for {}&quot;, config.query);
     println!(&quot;In file {}&quot;, config.filename);
 
     let mut f = File::open(config.filename).expect(&quot;file not found&quot;);
@@ -10488,127 +10597,192 @@ the addition of the <code>Config</code> struct definition, the refactoring of
 }
 
 struct Config {
-    search: String,
+    query: String,
     filename: String,
 }
 
 fn parse_config(args: &amp;[String]) -&gt; Config {
-    let search = args[1].clone();
+    let query = args[1].clone();
     let filename = args[2].clone();
 
     Config {
-        search: search,
+        query: query,
         filename: filename,
     }
 }
-</code></pre>
-<p><span class="caption">Listing 12-5: Refactoring <code>parse_config</code> to return an
-instance of a <code>Config</code> struct</span></p>
+</code></pre></pre>
+<p>Listing 12-6: Refactoring <code>parse_config</code> to return an instance of a <code>Config</code>
+struct</p>
 <!-- Will add ghosting and wingdings in libreoffice /Carol -->
 <p>The signature of <code>parse_config</code> now indicates that it returns a <code>Config</code> value.
-In the body of <code>parse_config</code>, we used to be returning string slices that were
-references to <code>String</code> values in <code>args</code>, but we've defined <code>Config</code> to contain
-owned <code>String</code> values. Because the argument to <code>parse_config</code> is a slice of
-<code>String</code> values, the <code>Config</code> instance can't take ownership of the <code>String</code>
-values: that violates Rust's borrowing rules, since the <code>args</code> variable in
-<code>main</code> owns the <code>String</code> values and is only letting the <code>parse_config</code> function
-borrow them.</p>
-<p>There are a number of different ways we could manage the <code>String</code> data; for
-now, we'll take the easy but less efficient route, and call the <code>clone</code> method
-on the string slices. The call to <code>clone</code> will make a full copy of the string's
-data for the <code>Config</code> instance to own, which does take more time and memory
-than storing a reference to the string data, but cloning the data makes our
-code very straightforward.</p>
+In the body of <code>parse_config</code>, where we used to return string slices that
+reference <code>String</code> values in <code>args</code>, we've now chosen to define <code>Config</code> to
+contain owned <code>String</code> values. The <code>args</code> variable in <code>main</code> is the owner of
+the argument values and is only letting the <code>parse_config</code> function borrow
+them, though, which means we'd violate Rust's borrowing rules if <code>Config</code> tried
+to take ownership of the values in <code>args</code>.</p>
+<p>There are a number of different ways we could manage the <code>String</code> data, and the
+easiest, though somewhat inefficient, route is to call the <code>clone</code> method on
+the values. This will make a full copy of the data for the <code>Config</code> instance to
+own, which does take more time and memory than storing a reference to the
+string data. However, cloning the data also makes our code very straightforward
+since we don't have to manage the lifetimes of the references, so in this
+circumstance giving up a little performance to gain simplicity is a worthwhile
+trade-off.</p>
+<!-- This box is intended to go right after the paragraph talking about `clone`
+/Carol -->
 <!-- PROD: START BOX -->
 <blockquote>
 <a class="header" href="print.html#the-tradeoffs-of-using-clone" id="the-tradeoffs-of-using-clone"><h4>The Tradeoffs of Using <code>clone</code></h4></a>
-<p>There's a tendency amongst many Rustaceans to prefer not to use <code>clone</code> to fix
-ownership problems due to its runtime cost. In Chapter 13 we'll learn how to
-make this situation more efficient with iterators. For now, it's okay to copy
-a few strings to keep making progress. We're only going to be making these
-copies once, and our filename and search string are both very small. It's
-better to have a working program that's a bit inefficient than try to
-hyper-optimize code on your first pass. As you get more experienced with Rust,
-it'll be easier to skip this step, but for now, it's perfectly acceptable to
-call <code>clone</code>.</p>
+<p>There's a tendency amongst many Rustaceans to avoid using <code>clone</code> to fix
+ownership problems because of its runtime cost. In Chapter 13 on iterators,
+you'll learn how to use more efficient methods in this kind of situation, but
+for now, it's okay to copy a few strings to keep making progress since we'll
+only make these copies once, and our filename and query string are both very
+small. It's better to have a working program that's a bit inefficient than
+try to hyper-optimize code on your first pass. As you get more experienced
+with Rust, it'll be easier to go straight to the desirable method, but for
+now it's perfectly acceptable to call <code>clone</code>.</p>
 </blockquote>
 <!-- PROD: END BOX -->
-<p>We've updated <code>main</code> to put the instance of <code>Config</code> that <code>parse_config</code>
-returns in a variable named <code>config</code>, and we've updated the code that was using
-the separate <code>search</code> and <code>filename</code> variables to use the fields on the
-<code>Config</code> struct instead.</p>
-<a class="header" href="print.html#creating-a-constructor-for-config" id="creating-a-constructor-for-config"><h3>Creating a Constructor for <code>Config</code></h3></a>
-<p>Let's now think about the purpose of <code>parse_config</code>: it's a function that
-creates a <code>Config</code> instance. We've already seen a convention for functions that
-create instances: a <code>new</code> function, like <code>String::new</code>. Listing 12-6 shows the
-result of transforming <code>parse_config</code> into a <code>new</code> function associated with our
-<code>Config</code> struct:</p>
+<p>We've updated <code>main</code> so that it places the instance of <code>Config</code> that
+<code>parse_config</code> returns into a variable named <code>config</code>, and updated the code
+that previously used the separate <code>query</code> and <code>filename</code> variables so that is
+now uses the fields on the <code>Config</code> struct instead.</p>
+<p>Our code now more clearly conveys our intent that <code>query</code> and <code>filename</code> are
+related and their purpose is to configure how the program will work. Any code
+that uses these values knows to find them in the <code>config</code> instance in the
+fields named for their purpose.</p>
+<a class="header" href="print.html#creating-a-constructor-for-config" id="creating-a-constructor-for-config"><h4>Creating a Constructor for <code>Config</code></h4></a>
+<!-- Can you lay out what we intend to do in this section? I wasn't sure even
+at the end what we did and why --- why did we create it as parse_config to then
+change it to new? -->
+<!-- We're making small, incremental changes. In addition to being good
+software development practice, we were hoping that by changing one thing at a
+time, the process of improving code's design would be easier to follow rather
+than just jumping to the best solution. We extracted code into a function, then
+it was clearer that we should introduce a struct, then it was clear that the
+function we extracted is really a constructor of `Config` and should be written
+as such. This refactoring process should be familiar to software developers.
+I've tried to add a little recap to the start of this section, I hope that
+helps. /Carol -->
+<p>So far, we've extracted the logic responsible for parsing the command line
+arguments from <code>main</code> into the <code>parse_config</code> function, which helped us to see
+that the <code>query</code> and <code>filename</code> values were related and that relationship
+should be conveyed in our code. We then added a <code>Config</code> struct to name the
+related purpose of <code>query</code> and <code>filename</code>, and to be able to return the values'
+names as struct field names from the <code>parse_config</code> function.</p>
+<p>So now that the purpose of the <code>parse_config</code> function is to create a <code>Config</code>
+instance, we can change <code>parse_config</code> from being a plain function into a
+function named <code>new</code> that is associated with the <code>Config</code> struct. Making this
+change will make our code more idiomatic: we can create instances of types in
+the standard library like <code>String</code> by calling <code>String::new</code>, and by changing
+<code>parse_config</code> to be a <code>new</code> function associated with <code>Config</code>, we'll be able
+to create instances of <code>Config</code> by calling <code>Config::new</code>. Listing 12-7 shows
+the changes we'll need to make:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><code class="language-rust ignore">fn main() {
+<pre><pre class="playpen"><code class="language-rust should_panic"># use std::env;
+#
+fn main() {
     let args: Vec&lt;String&gt; = env::args().collect();
 
     let config = Config::new(&amp;args);
 
-    println!(&quot;Searching for {}&quot;, config.search);
-    println!(&quot;In file {}&quot;, config.filename);
-
     // ...snip...
 }
 
+# struct Config {
+#     query: String,
+#     filename: String,
+# }
+#
 // ...snip...
 
 impl Config {
     fn new(args: &amp;[String]) -&gt; Config {
-        let search = args[1].clone();
+        let query = args[1].clone();
         let filename = args[2].clone();
 
         Config {
-            search: search,
+            query: query,
             filename: filename,
         }
     }
 }
-</code></pre>
-<p><span class="caption">Listing 12-6: Changing <code>parse_config</code> into
+</code></pre></pre>
+<p><span class="caption">Listing 12-7: Changing <code>parse_config</code> into
 <code>Config::new</code></span></p>
 <!-- Will add ghosting and wingdings in libreoffice /Carol -->
-<p>We've changed the name of <code>parse_config</code> to <code>new</code> and moved it within  an <code>impl</code>
-block. We've also updated the callsite in <code>main</code>. Try compiling this again to
-make sure it works.</p>
-<a class="header" href="print.html#returning-a-result-from-the-constructor" id="returning-a-result-from-the-constructor"><h3>Returning a <code>Result</code> from the Constructor</h3></a>
-<p>Here's our last refactoring of this method: remember how accessing the vector
-with indices 1 and 2 panics when it contains fewer than 3 items and gives a bad
-error message? Let's fix that! Listing 12-7 shows how we can check that our
-slice is long enough before accessing those locations, and panic with a better
-error message:</p>
+<p>We've updated <code>main</code> where we were calling <code>parse_config</code> to instead call
+<code>Config::new</code>. We've changed the name of <code>parse_config</code> to <code>new</code> and moved it
+within an <code>impl</code> block, which makes the <code>new</code> function associated with
+<code>Config</code>. Try compiling this again to make sure it works.</p>
+<a class="header" href="print.html#fixing-the-error-handling" id="fixing-the-error-handling"><h3>Fixing the Error Handling</h3></a>
+<p>Now we'll work on fixing our error handling. Recall that we mentioned
+attempting to access the values in the <code>args</code> vector at index 1 or index 2 will
+cause the program to panic if the vector contains fewer than 3 items. Try
+running the program without any arguments; it will look like this:</p>
+<pre><code class="language-text">$ cargo run
+    Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
+     Running `target/debug/greprs`
+thread 'main' panicked at 'index out of bounds: the len is 1
+but the index is 1',  /stable-dist-rustc/build/src/libcollections/vec.rs:1307
+note: Run with `RUST_BACKTRACE=1` for a backtrace.
+</code></pre>
+<p><code>index out of bounds: the len is 1 but the index is 1</code> is an error message that
+is intended for programmers, and won't really help our end users understand
+what happened and what they should do instead. Let's fix that now.</p>
+<a class="header" href="print.html#improving-the-error-message" id="improving-the-error-message"><h4>Improving the Error Message</h4></a>
+<p>In Listing 12-8, we're adding a check in the <code>new</code> function to check that the
+slice is long enough before accessing index 1 and 2. If the slice isn't long
+enough, we panic with a better error message than the <code>index out of bounds</code>
+message:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust ignore">// ...snip...
 fn new(args: &amp;[String]) -&gt; Config {
     if args.len() &lt; 3 {
         panic!(&quot;not enough arguments&quot;);
     }
-
-    let search = args[1].clone();
     // ...snip...
-}
 </code></pre>
-<p><span class="caption">Listing 12-7: Adding a check for the number of
+<p><span class="caption">Listing 12-8: Adding a check for the number of
 arguments</span></p>
 <!-- Will add ghosting and wingdings in libreoffice /Carol -->
+<p>This is similar to the <code>Guess::new</code> function we wrote in Listing 9-8, where we
+called <code>panic!</code> if the <code>value</code> argument was out of the range of valid values.
+Instead of checking for a range of values, we're checking that the length of
+<code>args</code> is at least 3, and the rest of the function can operate under the
+assumption that this condition has been met. If <code>args</code> has fewer than 3 items,
+this condition will be true, and we call the <code>panic!</code> macro to end the program
+immediately.</p>
 <p>With these extra few lines of code in <code>new</code>, let's try running our program
-without any arguments:</p>
-<pre><code class="language-text">$ cargo run
+without any arguments again and see what the error looks like now:</p>
+<pre><code class="language-bash">$ cargo run
     Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
      Running `target/debug/greprs`
 thread 'main' panicked at 'not enough arguments', src/main.rs:29
 note: Run with `RUST_BACKTRACE=1` for a backtrace.
 </code></pre>
-<p>This is a bit better! We at least have a reasonable error message here.
-However, we also have a bunch of extra information that we don't want to give
-to our users. We can do better by changing the type signature of <code>new</code>. Right
-now, it returns only a <code>Config</code>, so there's no way to indicate that an error
-happened while creating our <code>Config</code>. Instead, we can return a <code>Result</code>, as
-shown in Listing 12-8:</p>
+<p>This output is better, we now have a reasonable error message. However, we also
+have a bunch of extra information we don't want to give to our users. So
+perhaps using the technique we used in Listing 9-8 isn't the best to use here;
+a call to <code>panic!</code> is more appropriate for a programming problem rather than a
+usage problem anyway, as we discussed in Chapter 9. Instead, we can use the
+other technique we learned about in that chapter: returning a <code>Result</code> that can
+indicate either success or an error.</p>
+<!-- Below -- how does using new fix this, can you lay that our up front? -->
+<!-- I'm not sure what you mean, we're already using `new` and the fix continues
+to use `new`... /Carol -->
+<a class="header" href="print.html#returning-a-result-from-new-instead-of-calling-panic" id="returning-a-result-from-new-instead-of-calling-panic"><h4>Returning a <code>Result</code> from <code>new</code> Instead of Calling <code>panic!</code></h4></a>
+<p>We can choose to instead return a <code>Result</code> value that will contain a <code>Config</code>
+instance in the successful case, and will describe the problem in the error
+case. When <code>Config::new</code> is communicating to <code>main</code>, we can use Rust's way of
+signaling that there was a problem using the <code>Result</code> type. Then we can change
+<code>main</code> to convert an <code>Err</code> variant into a nicer error for our users, without
+the surrounding text about <code>thread 'main'</code> and <code>RUST_BACKTRACE</code> that a call to
+<code>panic!</code> causes.</p>
+<p>Listing 12-9 shows the changes to the return value of <code>Config::new</code> and the
+body of the function needed to return a <code>Result</code>:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust ignore">impl Config {
     fn new(args: &amp;[String]) -&gt; Result&lt;Config, &amp;'static str&gt; {
@@ -10616,31 +10790,41 @@ shown in Listing 12-8:</p>
             return Err(&quot;not enough arguments&quot;);
         }
 
-        let search = args[1].clone();
+        let query = args[1].clone();
         let filename = args[2].clone();
 
         Ok(Config {
-            search: search,
+            query: query,
             filename: filename,
         })
     }
 }
 </code></pre>
-<p><span class="caption">Listing 12-8: Return a <code>Result</code> from <code>Config::new</code></span></p>
+<p><span class="caption">Listing 12-9: Return a <code>Result</code> from <code>Config::new</code></span></p>
 <!-- Will add ghosting and wingdings in libreoffice /Carol -->
+<!-- what does returning a Result rather than a Config do? -->
+<!-- This is what Chapter 9 was about, I've added a few more references
+to that chapter to reinforce the connection /Carol -->
 <p>Our <code>new</code> function now returns a <code>Result</code>, with a <code>Config</code> instance in the
-success case and a <code>&amp;'static str</code> when an error happens. Recall from &quot;The
-Static Lifetime&quot; section in Chapter 10 <code>&amp;'static str</code> is the type of string
-literals, which is what our error message is for now.</p>
+success case and a <code>&amp;'static str</code> in the error case. Recall from &quot;The Static
+Lifetime&quot; section in Chapter 10 that <code>&amp;'static str</code> is the type of string
+literals, which is our error message type for now.</p>
 <p>We've made two changes in the body of the <code>new</code> function: instead of calling
-<code>panic!</code> if there aren't enough arguments, we now return an <code>Err</code> value. We
-wrapped the <code>Config</code> return value in an <code>Ok</code>. These changes make the function
-conform to its new type signature.</p>
-<a class="header" href="print.html#calling-confignew-and-handling-errors" id="calling-confignew-and-handling-errors"><h3>Calling <code>Config::new</code> and Handling Errors</h3></a>
-<p>Now we need to make some changes to <code>main</code> as shown in Listing 12-9:</p>
+<code>panic!</code> when the user doesn't pass enough arguments, we now return an <code>Err</code>
+value, and we've wrapped the <code>Config</code> return value in an <code>Ok</code>. These changes
+make the function conform to its new type signature.</p>
+<p>By having <code>Config::new</code> return an <code>Err</code> value, it allows the <code>main</code> function to
+handle the <code>Result</code> value returned from the <code>new</code> function and exit the process
+more cleanly in the error case.</p>
+<a class="header" href="print.html#calling-confignew-and-handling-errors" id="calling-confignew-and-handling-errors"><h4>Calling <code>Config::new</code> and Handling Errors</h4></a>
+<p>In order to handle the error case and print a user-friendly message, we need to
+update <code>main</code> to handle the <code>Result</code> that <code>Config::new</code> is now returning as
+shown in Listing 12-10. We're also going to implement by hand something that
+<code>panic!</code> handled for us: exiting the command line tool with an error code of 1.
+A nonzero exit status is a convention to signal to the process that called our
+program that our program ended with an error state.</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><code class="language-rust ignore">// ...snip...
-use std::process;
+<pre><code class="language-rust ignore">use std::process;
 
 fn main() {
     let args: Vec&lt;String&gt; = env::args().collect();
@@ -10650,34 +10834,42 @@ fn main() {
         process::exit(1);
     });
 
-    println!(&quot;Searching for {}&quot;, config.search);
-    println!(&quot;In file {}&quot;, config.filename);
-
     // ...snip...
 </code></pre>
-<p><span class="caption">Listing 12-9: Exiting with an error code if creating a
+<p><span class="caption">Listing 12-10: Exiting with an error code if creating a
 new <code>Config</code> fails</span></p>
 <!-- Will add ghosting and wingdings in libreoffice /Carol -->
-<p>We've added a new <code>use</code> line to import <code>process</code> from the standard library.
-In the <code>main</code> function itself, we'll handle the <code>Result</code> value returned
-from the <code>new</code> function and exit the process in a cleaner way if <code>Config::new</code>
-returns an <code>Err</code> value.</p>
-<p>We're using a method we haven't covered before that's defined on <code>Result&lt;T, E&gt;</code>
-by the standard library: <code>unwrap_or_else</code>. This method has similar behavior as
-<code>unwrap</code> if the <code>Result</code> is an <code>Ok</code> value: it returns the inner value <code>Ok</code> is
-wrapping. Unlike <code>unwrap</code>, if the value is an <code>Err</code> value, this method calls a
-<em>closure</em> which is an anonymous function that we define and pass as an argument
-to <code>unwrap_or_else</code>. We'll be covering closures in more detail in Chapter 13;
-the important part to understand in this case is that <code>unwrap_or_else</code> will
-pass the inner value of the <code>Err</code> to our closure in the parameter <code>err</code> that
-appears between the vertical pipes. Using <code>unwrap_or_else</code> lets us do some
-custom, non-<code>panic!</code> error handling.</p>
-<p>Said error handling is only two lines: we print out the error, then call
-<code>std::process::exit</code>. That function will stop our program's execution
-immediately and return the number passed to it as a return code. By convention,
-a zero means success and any other value means failure. In the end, this has
-similar characteristics to our <code>panic!</code>-based handling we had in Listing 12-7,
-but we no longer get all the extra output. Let's try it:</p>
+<!-- In the `main` function itself, we'll handle the `Result` value returned
+from the `new` function and exit the process in a cleaner way if `Config::new`
+returns an `Err` value.-->
+<!-- I moved this line above to the previous section, it seems to at least
+partially answer some of my earlier confusions, though I'm not following this
+as well as I'd like so not sure if I have this right, can you confirm either
+way whether that move makes sense? -->
+<!-- That's fine /Carol -->
+<p>In this listing, we're using a method we haven't covered before:
+<code>unwrap_or_else</code>, which is defined on <code>Result&lt;T, E&gt;</code> by the standard library.
+Using <code>unwrap_or_else</code> allows us to define some custom, non-<code>panic!</code> error
+handling. If the <code>Result</code> is an <code>Ok</code> value, this method's behavior is similar
+to <code>unwrap</code>: it returns the inner value <code>Ok</code> is wrapping. However, if the value
+is an <code>Err</code> value, this method calls the code in the <em>closure</em>, which is an
+anonymous function we define and pass as an argument to <code>unwrap_or_else</code>. We'll
+be covering closures in more detail in Chapter 13. What you need to know for
+now is that <code>unwrap_or_else</code> will pass the inner value of the <code>Err</code>, which in
+this case is the static string <code>not enough arguments</code> that we added in Listing
+12-9, to our closure in the argument <code>err</code> that appears between the vertical
+pipes. The code in the closure can then use the <code>err</code> value when it runs.</p>
+<!--Can you give a high-level idea of what the closure does with it? -->
+<!-- Does with what? I've tried to elaborate in the above and below paragraphs,
+but I'm not sure exactly what's confusing /Carol -->
+<p>We've added a new <code>use</code> line to import <code>process</code> from the standard library. The
+code in the closure that will get run in the error case is only two lines: we
+print out the <code>err</code> value, then call <code>std::process::exit</code> (we've added a new
+<code>use</code> line at the top to import <code>process</code> from the standard library).
+<code>process::exit</code> will stop the program immediately and return the number that
+was passed as the exit status code. This is similar to the <code>panic!</code>-based
+handling we used in Listing 12-8, with the exception that we no longer get all
+the extra output. Let's try it:</p>
 <pre><code class="language-text">$ cargo run
    Compiling greprs v0.1.0 (file:///projects/greprs)
     Finished debug [unoptimized + debuginfo] target(s) in 0.48 secs
@@ -10685,16 +10877,29 @@ but we no longer get all the extra output. Let's try it:</p>
 Problem parsing arguments: not enough arguments
 </code></pre>
 <p>Great! This output is much friendlier for our users.</p>
-<a class="header" href="print.html#handling-errors-from-the-run-function" id="handling-errors-from-the-run-function"><h3>Handling Errors from the <code>run</code> Function</h3></a>
-<p>Now that we're done refactoring our configuration parsing, let's improve our
-program's logic. Listing 12-10 shows the code after extracting a function named
-<code>run</code> that we'll call from <code>main</code>. The <code>run</code> function contains the code that
-was in <code>main</code>:</p>
+<a class="header" href="print.html#extracting-a-run-function" id="extracting-a-run-function"><h3>Extracting a <code>run</code> Function</h3></a>
+<p>Now we're done refactoring our configuration parsing; let's turn to our
+program's logic. As we laid out in the process we discussed in the &quot;Separation
+of Concerns for Binary Projects&quot; section, we're going to extract a function
+named <code>run</code> that will hold all of the logic currently in the <code>main</code> function
+that isn't setting up configuration or handling errors. Once we're done, <code>main</code>
+will be concise and easy to verify by inspection, and we'll be able to write
+tests for all of the other logic.</p>
+<!-- it contains ALL the function from main? Can you say why we're doing this,
+hw this improves it? What is the run function doing? I'm afraid I feel a bit in
+the dark here-->
+<!-- This is the pattern that we explained in the Separation of Concerns for
+Binary Projects section. I've added a reference back to that and reiterated
+some of the reasoning from there, but this section isn't introducing the
+concept of the `run` function holding the logic that was in `main` /Carol -->
+<p>Listing 12-11 shows the extracted <code>run</code> function. For now, we're making only
+the small, incremental improvement of extracting the function and still
+defining the function in <em>src/main.rs</em>:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust ignore">fn main() {
     // ...snip...
 
-    println!(&quot;Searching for {}&quot;, config.search);
+    println!(&quot;Searching for {}&quot;, config.query);
     println!(&quot;In file {}&quot;, config.filename);
 
     run(config);
@@ -10711,16 +10916,20 @@ fn run(config: Config) {
 
 // ...snip...
 </code></pre>
-<p><span class="caption">Listing 12-10: Extracting a <code>run</code> functionality for the
+<p><span class="caption">Listing 12-11: Extracting a <code>run</code> function containing the
 rest of the program logic</span></p>
 <!-- Will add ghosting and wingdings in libreoffice /Carol -->
-<p>The contents of <code>run</code> are the previous lines that were in <code>main</code>, and the <code>run</code>
-function takes a <code>Config</code> as an argument. Now that we have a separate function,
-we can make a similar improvement to the one we made to <code>Config::new</code> in
-Listing 12-8: let's return a <code>Result&lt;T, E&gt;</code> instead of calling <code>panic!</code> via
-<code>expect</code>. Listing 12-11 shows the addition of a <code>use</code> statement to bring
-<code>std::error::Error</code> struct into scope and the changes to the <code>run</code> function
-to return a <code>Result</code>:</p>
+<p>The <code>run</code> function now contains all the remaining logic from <code>main</code> starting
+from reading the file. The <code>run</code> function takes the <code>Config</code> instance as an
+argument.</p>
+<a class="header" href="print.html#returning-errors-from-the-run-function" id="returning-errors-from-the-run-function"><h4>Returning Errors from the <code>run</code> Function</h4></a>
+<p>With the remaining program logic separated into the <code>run</code> function rather than
+being in <code>main</code>, we can improve the error handling like we did with
+<code>Config::new</code> in Listing 12-9. Instead of allowing the program to panic by
+calling <code>expect</code>, the <code>run</code> function will return a <code>Result&lt;T, E&gt;</code> when
+something goes wrong. This will let us further consolidate the logic around
+handling errors in a user-friendly way into <code>main</code>. Listing 12-12 shows the
+changes to the signature and body of <code>run</code>:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust ignore">use std::error::Error;
 
@@ -10737,44 +10946,51 @@ fn run(config: Config) -&gt; Result&lt;(), Box&lt;Error&gt;&gt; {
     Ok(())
 }
 </code></pre>
-<p><span class="caption">Listing 12-11: Changing the <code>run</code> function to return
+<p><span class="caption">Listing 12-12: Changing the <code>run</code> function to return
 <code>Result</code></span></p>
 <!-- Will add ghosting and wingdings in libreoffice /Carol -->
-<p>We've made three big changes here. The first is the return type of the <code>run</code>
-function is now <code>Result&lt;(), Box&lt;Error&gt;&gt;</code>. Previously, our function returned the
-unit type, <code>()</code>, so that's still the value returned in the <code>Ok</code> case. For our
-error type, we're going to use <code>Box&lt;Error&gt;</code>. This is called a <em>trait object</em>,
-which we'll be covering in Chapter XX. For now, think of it like this:
-<code>Box&lt;Error&gt;</code> means the function will return some kind of type that implements
-the <code>Error</code> trait, but we're not specifying what particular type the return
-value will be. This gives us flexibility to return error values that may be of
-different types in different error cases. <code>Box</code> is a smart pointer to heap
-data, and we'll be going into detail about <code>Box</code> in Chapter 15.</p>
-<p>The second change is that we've removed our calls to <code>expect</code> in favor of <code>?</code>,
-like we talked about in Chapter 9. Rather than <code>panic!</code> on an error, this will
-return the error value from the function we're in for the caller to handle.</p>
-<p>The third change is that we're now returning an <code>Ok</code> value from this function
-in the success case. Because we've declared the <code>run</code> function's success type
-as <code>()</code> in the signature, we need to wrap the unit type value in the <code>Ok</code>
-value. <code>Ok(())</code> looks a bit strange at first, but using <code>()</code> in this way is the
+<p>We've made three big changes here. First, we're changing the return type of the
+<code>run</code> function to <code>Result&lt;(), Box&lt;Error&gt;&gt;</code>. This function previously returned
+the unit type, <code>()</code>, and we keep that as the value returned in the <code>Ok</code> case.</p>
+<!-- is just the `Box` bit the trait object, or the whole `Box<Error>`
+syntax?-->
+<!-- The whole `Box<Error>` /Carol -->
+<p>For our error type, we're using the <em>trait object</em> <code>Box&lt;Error&gt;</code> (and we've
+brought <code>std::error::Error</code> into scope with a <code>use</code> statement at the top).
+We'll be covering trait objects in Chapter 17. For now, just know that
+<code>Box&lt;Error&gt;</code> means the function will return a type that implements the <code>Error</code>
+trait, but we don't have to specify what particular type the return value will
+be. This gives us flexibility to return error values that may be of different
+types in different error cases.</p>
+<p>The second change we're making is removing the calls to <code>expect</code> in favor of
+<code>?</code>, like we talked about in Chapter 9. Rather than <code>panic!</code> on an error, this
+will return the error value from the current function for the caller to handle.</p>
+<p>Thirdly, this function now returns an <code>Ok</code> value in the success case. We've
+declared the <code>run</code> function's success type as <code>()</code> in the signature, which
+means we need to wrap the unit type value in the <code>Ok</code> value. This <code>Ok(())</code>
+syntax may look a bit strange at first, but using <code>()</code> like this is the
 idiomatic way to indicate that we're calling <code>run</code> for its side effects only;
-it doesn't return anything interesting.</p>
-<p>This will compile, but with a warning:</p>
+it doesn't return a value we need.</p>
+<p>When you run this, it will compile, but with a warning:</p>
 <pre><code class="language-text">warning: unused result which must be used, #[warn(unused_must_use)] on by default
   --&gt; src/main.rs:39:5
    |
 39 |     run(config);
    |     ^^^^^^^^^^^^
 </code></pre>
-<p>Rust is trying to tell us that we're ignoring our <code>Result</code>, which might be an
-error value. Let's handle that now. We'll use a similar technique as the way we
-handled failure with <code>Config::new</code> in Listing 12-9, but with a slight
+<p>Rust is telling us that our code ignores the <code>Result</code> value, which might be
+indicating that there was an error. We're not checking to see if there was an
+error or not, though, and the compiler is reminding us that we probably meant
+to have some error handling code here! Let's rectify that now.</p>
+<a class="header" href="print.html#handling-errors-returned-from-run-in-main" id="handling-errors-returned-from-run-in-main"><h4>Handling Errors Returned from <code>run</code> in <code>main</code></h4></a>
+<p>We'll check for errors and handle them nicely using a similar technique to the
+way we handled errors with <code>Config::new</code> in Listing 12-10, but with a slight
 difference:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust ignore">fn main() {
     // ...snip...
 
-    println!(&quot;Searching for {}&quot;, config.search);
+    println!(&quot;Searching for {}&quot;, config.query);
     println!(&quot;In file {}&quot;, config.filename);
 
     if let Err(e) = run(config) {
@@ -10783,47 +10999,36 @@ difference:</p>
         process::exit(1);
     }
 }
-
-fn run(config: Config) -&gt; Result&lt;(), Box&lt;Error&gt;&gt; {
-    let mut f = File::open(config.filename)?;
-
-    let mut contents = String::new();
-    f.read_to_string(&amp;mut contents)?;
-
-    println!(&quot;With text:\n{}&quot;, contents);
-
-    Ok(())
-}
 </code></pre>
 <!-- Will add ghosting and wingdings in libreoffice /Carol -->
-<p>Instead of <code>unwrap_or_else</code>, we use <code>if let</code> to see if <code>run</code> returns an <code>Err</code>
-value and call <code>process::exit(1)</code> if so. Why? The distinction between this case
-and the <code>Config::new</code> case is a bit subtle. With <code>Config::new</code>, we cared about
-two things:</p>
-<ol>
-<li>Detecting any errors that happen</li>
-<li>Getting a <code>Config</code> if no errors happened</li>
-</ol>
-<p>In this case, because <code>run</code> returns a <code>()</code> in the success case, the only thing
-we care about is the first case: detecting an error. If we used
-<code>unwrap_or_else</code>, we'd get its return value, which would be <code>()</code>. That's not
-very useful.</p>
-<p>The bodies of the <code>if let</code> and of the <code>unwrap_or_else</code> are the same in both
-cases though: we print out an error and exit.</p>
+<p>We use <code>if let</code> to check whether <code>run</code> returns an <code>Err</code> value, rather than
+<code>unwrap_or_else</code>, and call <code>process::exit(1)</code> if it does. <code>run</code> doesn't return
+a value that we want to <code>unwrap</code> like <code>Config::new</code> returns the <code>Config</code>
+instance. Because <code>run</code> returns a <code>()</code> in the success case, we only care about
+detecting an error, so we don't need <code>unwrap_or_else</code> to return the unwrapped
+value as it would only be <code>()</code>.</p>
+<p>The bodies of the <code>if let</code> and the <code>unwrap_or_else</code> functions are the same in
+both cases though: we print out the error and exit.</p>
 <a class="header" href="print.html#split-code-into-a-library-crate" id="split-code-into-a-library-crate"><h3>Split Code into a Library Crate</h3></a>
-<p>This is looking pretty good! There's one more thing we haven't done yet: split
-the <em>src/main.rs</em> up and put some code into <em>src/lib.rs</em> Let's do that now:
-move the <code>run</code> function from <em>src/main.rs</em> to a new file, <em>src/lib.rs</em>. You'll
-also need to move the relevant <code>use</code> statements and the definition of <code>Config</code>
-and its <code>new</code> method as well. Your <em>src/lib.rs</em> should now look like Listing
-12-12:</p>
+<p>This is looking pretty good so far! Now we're going to split the <em>src/main.rs</em>
+file up and put some code into <em>src/lib.rs</em> so that we can test it and have a
+small <code>main</code> function.</p>
+<p>Let's move the following pieces of code from <em>src/main.rs</em> to a new file,
+<em>src/lib.rs</em>:</p>
+<ul>
+<li>The <code>run</code> function definition</li>
+<li>The relevant <code>use</code> statements</li>
+<li>The definition of <code>Config</code></li>
+<li>The <code>Config::new</code> function definition</li>
+</ul>
+<p>The contents of <em>src/lib.rs</em> should now look like Listing 12-13:</p>
 <p><span class="filename">Filename: src/lib.rs</span></p>
 <pre><code class="language-rust ignore">use std::error::Error;
 use std::fs::File;
 use std::io::prelude::*;
 
 pub struct Config {
-    pub search: String,
+    pub query: String,
     pub filename: String,
 }
 
@@ -10833,11 +11038,11 @@ impl Config {
             return Err(&quot;not enough arguments&quot;);
         }
 
-        let search = args[1].clone();
+        let query = args[1].clone();
         let filename = args[2].clone();
 
         Ok(Config {
-            search: search,
+            query: query,
             filename: filename,
         })
     }
@@ -10854,15 +11059,17 @@ pub fn run(config: Config) -&gt; Result&lt;(), Box&lt;Error&gt;&gt;{
     Ok(())
 }
 </code></pre>
-<p><span class="caption">Listing 12-12: Moving <code>Config</code> and <code>run</code> into
+<p><span class="caption">Listing 12-13: Moving <code>Config</code> and <code>run</code> into
 <em>src/lib.rs</em></span></p>
 <!-- Will add ghosting and wingdings in libreoffice /Carol -->
-<p>Notice we also made liberal use of <code>pub</code>: on <code>Config</code>, its fields and its <code>new</code>
-method, and on the <code>run</code> function.</p>
-<p>Now in <em>src/main.rs</em>, we need to bring in the code that's now in <em>src/lib.rs</em>
-through <code>extern crate greprs</code>. Then we need to add a <code>use greprs::Config</code> line
-to bring <code>Config</code> into scope, and prefix the <code>run</code> function with our crate name
-as shown in Listing 12-13:</p>
+<p>We've made liberal use of <code>pub</code> here: on <code>Config</code>, its fields and its <code>new</code>
+method, and on the <code>run</code> function. We now have a library crate that has a
+public API that we can test.</p>
+<a class="header" href="print.html#calling-the-library-crate-from-the-binary-crate" id="calling-the-library-crate-from-the-binary-crate"><h4>Calling the Library Crate from the Binary Crate</h4></a>
+<p>Now we need to bring the code we moved to <em>src/lib.rs</em> into the scope of the
+binary crate in <em>src/main.rs</em> by using <code>extern crate greprs</code>. Then we'll add a
+<code>use greprs::Config</code> line to bring the <code>Config</code> type into scope, and prefix the
+<code>run</code> function with our crate name as shown in Listing 12-14:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust ignore">extern crate greprs;
 
@@ -10879,7 +11086,7 @@ fn main() {
         process::exit(1);
     });
 
-    println!(&quot;Searching for {}&quot;, config.search);
+    println!(&quot;Searching for {}&quot;, config.query);
     println!(&quot;In file {}&quot;, config.filename);
 
     if let Err(e) = greprs::run(config) {
@@ -10889,69 +11096,68 @@ fn main() {
     }
 }
 </code></pre>
-<p><span class="caption">Listing 12-13: Bringing the <code>greprs</code> crate into the scope
+<p><span class="caption">Listing 12-14: Bringing the <code>greprs</code> crate into the scope
 of <em>src/main.rs</em></span></p>
 <!-- Will add ghosting and wingdings in libreoffice /Carol -->
-<p>With that, everything should work again. Give it a few <code>cargo run</code>s and make
-sure you haven't broken anything. Whew! That all was a lot of work, but we've
-set ourselves up for success in the future. We've set up a way to handle errors
-in a much nicer fashion, and we've made our code slightly more modular. Almost
-all of our work will be done in <em>src/lib.rs</em> from here on out.</p>
+<p>With that, all the functionality should be connected and should work. Give it a
+<code>cargo run</code> and make sure everything is wired up correctly.</p>
+<!-- any tips for if they do find something is broken, main places to check? Or
+just "diff your file against the XXX file in the book's resources to check
+where it went wrong"? -->
+<!-- We think general troubleshooting tips should be something we cover in
+Chapter 1; the tips should apply to any example in the book /Carol -->
+<p>Whew! That was a lot of work, but we've set ourselves up for success in the
+future. Now it's much easier to handle errors, and we've made our code more
+modular. Almost all of our work will be done in <em>src/lib.rs</em> from here on out.</p>
 <p>Let's take advantage of this newfound modularity by doing something that would
 have been hard with our old code, but is easy with our new code: write some
 tests!</p>
 <a class="header" href="print.html#testing-the-librarys-functionality" id="testing-the-librarys-functionality"><h2>Testing the Library's Functionality</h2></a>
-<p>Writing tests for the core functionality of our code is now easier since we
-extracted the logic into <em>src/lib.rs</em> and left all the argument parsing and
-error handling in <em>src/main.rs</em>. We can now call our code directly with various
-arguments and check return values without having to call our binary from the
-command line.</p>
-<p>We're going to write a function named <code>grep</code> that takes our search term and the
-text to search and produces a list of search results. Let's remove that
-<code>println!</code> from <code>run</code> (and from <em>src/main.rs</em> as well, as we don't really need
-those anymore either), and call the new <code>grep</code> function with the options we've
-collected. We'll add a placeholder implementation of the function for now, and
-a test that specifies the behavior we'd like the <code>grep</code> function to have. The
-test will fail with our placeholder implementation, of course, but we can make
-sure the code compiles and that we get the failure message we expect. Listing
-12-14 shows these modifications:</p>
+<p>Now that we've extracted the logic into <em>src/lib.rs</em> and left all the argument
+parsing and error handling in <em>src/main.rs</em>, it's much easier for us to write
+tests for the core functionality of our code. We can call our functions
+directly with various arguments and check return values without having to call
+our binary from the command line.</p>
+<p>In this section, we're going to follow the Test Driven Development (TDD)
+process. This is a software development technique that follows this set of
+steps:</p>
+<ol>
+<li>Write a test that fails, and run it to make sure it fails for the reason
+you expected.</li>
+<li>Write or modify just enough code to make the new test pass.</li>
+<li>Refactor the code you just added or changed, and make sure the tests
+continue to pass.</li>
+<li>Repeat!</li>
+</ol>
+<p>This is just one of many ways to write software, but TDD can help drive the
+design of code. Writing the test before writing the code that makes the test
+pass helps to maintain high test coverage throughout the process.</p>
+<p>We're going to test drive the implementation of the part of our <code>greprs</code>
+program that will actually do the searching for the query string in the file
+contents and produce a list of lines that match the query. We're going to add
+this functionality in a function called <code>search</code>.</p>
+<a class="header" href="print.html#writing-a-failing-test" id="writing-a-failing-test"><h3>Writing a Failing Test</h3></a>
+<p>First, since we don't really need them any more, let's remove the <code>println!</code>
+statements from both <em>src/lib.rs</em> and <em>src/main.rs</em>. Then we'll add a <code>test</code>
+module with a test function, like we did in Chapter 11. The test function
+specifies the behavior we'd like the <code>search</code> function to have: it will take
+a query and the text to search for the query in, and will return only the lines
+from the text that contain the query. Listing 12-15 shows this test:</p>
 <p><span class="filename">Filename: src/lib.rs</span></p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
 # 
 #fn main() {
-# use std::error::Error;
-# use std::fs::File;
-# use std::io::prelude::*;
-#
-# pub struct Config {
-#     pub search: String,
-#     pub filename: String,
+# fn search&lt;'a&gt;(query: &amp;str, contents: &amp;'a str) -&gt; Vec&lt;&amp;'a str&gt; {
+#      vec![]
 # }
 #
-// ...snip...
-
-fn grep&lt;'a&gt;(search: &amp;str, contents: &amp;'a str) -&gt; Vec&lt;&amp;'a str&gt; {
-     vec![]
-}
-
-pub fn run(config: Config) -&gt; Result&lt;(), Box&lt;Error&gt;&gt;{
-    let mut f = File::open(config.filename)?;
-
-    let mut contents = String::new();
-    f.read_to_string(&amp;mut contents)?;
-
-    grep(&amp;config.search, &amp;contents);
-
-    Ok(())
-}
-
 #[cfg(test)]
 mod test {
-    use grep;
+    use super::*;
 
     #[test]
     fn one_result() {
-        let search = &quot;duct&quot;;
+        let query = &quot;duct&quot;;
         let contents = &quot;\
 Rust:
 safe, fast, productive.
@@ -10959,48 +11165,66 @@ Pick three.&quot;;
 
         assert_eq!(
             vec![&quot;safe, fast, productive.&quot;],
-            grep(search, contents)
+            search(query, contents)
         );
     }
 }
 
 #}</code></pre></pre>
-<p><span class="caption">Listing 12-14: Creating a function where our logic will
-go and a failing test for that function</span></p>
+<p><span class="caption">Listing 12-15: Creating a failing test for the <code>search</code>
+function we wish we had</span></p>
+<p>We've chosen to use &quot;duct&quot; as the string we're looking for in this test. The
+text we're searching in is three lines, only one of which contains &quot;duct&quot;. We
+assert that the value returned from the <code>search</code> function contains only the one
+line we expect.</p>
+<p>We aren't able to run this test and watch it fail though, since this test
+doesn't even compile yet! We're going to add just enough code to get it to
+compile: a definition of the <code>search</code> function that always returns an empty
+vector, as shown in Listing 12-16. Once we have this, the test should compile
+and fail because an empty vector doesn't match a vector containing the one
+line <code>&quot;safe, fast, productive.&quot;</code>.</p>
+<p><span class="filename">Filename: src/lib.rs</span></p>
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+fn search&lt;'a&gt;(query: &amp;str, contents: &amp;'a str) -&gt; Vec&lt;&amp;'a str&gt; {
+     vec![]
+}
+
+#}</code></pre></pre>
+<p><span class="caption">Listing 12-16: Defining just enough of the <code>search</code>
+function that our test will compile</span></p>
 <!-- Will add ghosting and wingdings in libreoffice /Carol -->
-<p>Notice that we need an explicit lifetime <code>'a</code> declared in the signature of
-<code>grep</code> and used with the <code>contents</code> parameter and the return value. Remember,
-lifetime parameters are used to specify which function parameters' lifetimes
-connect to the lifetime of the return value. In this case, we're indicating that
-the vector we're returning is going to contain string slices that reference
-slices of the parameter <code>contents</code>, as opposed to referencing slices of the
-parameter <code>search</code>. Another way to think about what we're telling Rust is that
-the data returned by the <code>grep</code> function will live as long as the data passed
-into this function in the <code>contents</code> parameter. This is important! Given that
-the data a slice references needs to be valid in order for the reference to be
-valid, if the compiler thought that we were making string slices of <code>search</code>
-rather than <code>contents</code>, it would do its safety checking incorrectly. If we tried
-to compile this function without lifetimes, we would get this error:</p>
+<p>Notice that we need an explicit lifetime <code>'a</code> defined in the signature of
+<code>search</code> and used with the <code>contents</code> argument and the return value. Remember
+from Chapter 10 that the lifetime parameters specify which argument lifetime is
+connected to the lifetime of the return value. In this case, we're indicating
+that the returned vector should contain string slices that reference slices of
+the argument <code>contents</code> (rather than the argument <code>query</code>).</p>
+<p>In other words, we're telling Rust that the data returned by the <code>search</code>
+function will live as long as the data passed into the <code>search</code> function in the
+<code>contents</code> argument. This is important! The data referenced <em>by</em> a slice needs
+to be valid in order for the reference to be valid; if the compiler assumed we
+were making string slices of <code>query</code> rather than <code>contents</code>, it would do its
+safety checking incorrectly.</p>
+<p>If we tried to compile this function without lifetimes, we would get this error:</p>
 <pre><code class="language-text">error[E0106]: missing lifetime specifier
-  --&gt; src/lib.rs:37:46
-   |
-37 | fn grep(search: &amp;str, contents: &amp;str) -&gt; Vec&lt;&amp;str&gt; {
-   |                                              ^ expected lifetime parameter
-   |
-   = help: this function's return type contains a borrowed value, but the
-       signature does not say whether it is borrowed from `search` or
-           `contents`
+ --&gt; src/lib.rs:5:47
+  |
+5 | fn search(query: &amp;str, contents: &amp;str) -&gt; Vec&lt;&amp;str&gt; {
+  |                                               ^ expected lifetime parameter
+  |
+  = help: this function's return type contains a borrowed value, but the
+  signature does not say whether it is borrowed from `query` or `contents`
 </code></pre>
-<p>Rust can't possibly know which of the two parameters we need, so it needs us to
-tell it. Because <code>contents</code> is the parameter that contains all of our text and
-we want to return the parts of that text that match, we know <code>contents</code> is the
-parameter that should be connected to the return value using the lifetime
-syntax.</p>
-<p>Connecting parameters to return values in the signature is something that other
-programming languages don't make you do, so don't worry if this still feels
-strange! Knowing how to specify lifetimes gets easier over time, and practice
-makes perfect. You may want to re-read the above section or go back and compare
-this example with the Lifetime Syntax section in Chapter 10.</p>
+<p>Rust can't possibly know which of the two arguments we need, so we need to tell
+it. Because <code>contents</code> is the argument that contains all of our text and we
+want to return the parts of that text that match, we know <code>contents</code> is the
+argument that should be connected to the return value using the lifetime syntax.</p>
+<p>Other programming languages don't require you to connect arguments to return
+values in the signature, so this may still feel strange, but will get easier
+over time. You may want to compare this example with the Lifetime Syntax
+section in Chapter 10.</p>
 <p>Now let's try running our test:</p>
 <pre><code class="language-text">$ cargo test
 ...warnings...
@@ -11017,6 +11241,7 @@ failures:
 (left: `[&quot;safe, fast, productive.&quot;]`, right: `[]`)', src/lib.rs:16
 note: Run with `RUST_BACKTRACE=1` for a backtrace.
 
+
 failures:
     test::one_result
 
@@ -11024,68 +11249,84 @@ test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured
 
 error: test failed
 </code></pre>
-<p>Great, our test fails, exactly as we expected. Let's get the test to pass! It's
-failing because we always return an empty vector. Here's what we're going to do
-to implement <code>grep</code>:</p>
+<p>Great, our test fails, exactly as we expected. Let's get the test to pass!</p>
+<a class="header" href="print.html#writing-code-that-gets-the-test-to-pass" id="writing-code-that-gets-the-test-to-pass"><h3>Writing Code that Gets the Test to Pass</h3></a>
+<p>Currently, our test is failing because we always return an empty vector. To fix
+that and implement <code>search</code>, our program needs to follow these steps:</p>
 <ol>
 <li>Iterate through each line of the contents.</li>
-<li>Check if the line contains our search string.
+<li>Check if the line contains our query string.
 <ul>
 <li>If it does, add it to the list of values we're returning.</li>
-<li>If not, do nothing.</li>
+<li>If it doesn't, do nothing.</li>
 </ul>
 </li>
 <li>Return the list of results that match.</li>
 </ol>
-<p>Let's take each step at a time, starting with iterating through lines. Strings
-have a helpful method to handle this, conveniently named <code>lines</code>:</p>
+<p>Let's take each step at a time, starting with iterating through lines.</p>
+<a class="header" href="print.html#iterating-through-lines-with-the-lines-method" id="iterating-through-lines-with-the-lines-method"><h4>Iterating Through Lines with the <code>lines</code> method</h4></a>
+<p>Rust has a helpful method to handle line-by-line iteration of strings,
+conveniently named <code>lines</code>, that works as shown in Listing 12-17:</p>
 <p><span class="filename">Filename: src/lib.rs</span></p>
-<pre><code class="language-rust ignore">fn grep&lt;'a&gt;(search: &amp;str, contents: &amp;'a str) -&gt; Vec&lt;&amp;'a str&gt; {
+<pre><code class="language-rust ignore">fn search&lt;'a&gt;(query: &amp;str, contents: &amp;'a str) -&gt; Vec&lt;&amp;'a str&gt; {
     for line in contents.lines() {
         // do something with line
     }
 }
 </code></pre>
+<p><span class="caption">Listing 12-17: Iterating through each line in
+<code>contents</code></span></p>
 <!-- Will add wingdings in libreoffice /Carol -->
-<p>We're using a <code>for</code> loop along with the <code>lines</code> method to get each line in turn.
-Next, let's see if our line contains the search string. Luckily, strings have a
-helpful method named <code>contains</code> that does this for us! Using the <code>contains</code>
-method looks like this:</p>
+<p>The <code>lines</code> method returns an iterator. We'll be talking about iterators in
+depth in Chapter 13, but we've already seen this way of using an iterator in
+Listing 3-6, where we used a <code>for</code> loop with an iterator to run some code on
+each item in a collection.</p>
+<!-- so what does `lines` do on its own, if we need to use it in a for loop to
+work? -->
+<!-- It does nothing on its own, it returns an iterator for you to do something
+with. Here, the thing we're doing with it is using it with a `for` loop. I'm
+not sure exactly what you're asking or how to make the text clearer, but I
+added a reference to where we've done this in the book previously. /Carol -->
+<a class="header" href="print.html#searching-each-line-for-the-query" id="searching-each-line-for-the-query"><h4>Searching Each Line for the Query</h4></a>
+<p>Next, we'll add functionality to check if the current line contains the query
+string. Luckily, strings have another helpful method named <code>contains</code> that does
+this for us! Add the <code>contains</code> method to the <code>search</code> function as shown in
+Listing 12-18:</p>
 <p><span class="filename">Filename: src/lib.rs</span></p>
-<pre><code class="language-rust ignore">fn grep&lt;'a&gt;(search: &amp;str, contents: &amp;'a str) -&gt; Vec&lt;&amp;'a str&gt; {
+<pre><code class="language-rust ignore">fn search&lt;'a&gt;(query: &amp;str, contents: &amp;'a str) -&gt; Vec&lt;&amp;'a str&gt; {
     for line in contents.lines() {
-        if line.contains(search) {
+        if line.contains(query) {
             // do something with line
         }
     }
 }
 </code></pre>
+<p><span class="caption">Listing 12-18: Adding functionality to see if the line
+contains the string in <code>query</code></span></p>
 <!-- Will add ghosting and wingdings in libreoffice /Carol -->
-<p>Finally, we need a way to store the lines that contain our search string. For
+<a class="header" href="print.html#storing-matching-lines" id="storing-matching-lines"><h4>Storing Matching Lines</h4></a>
+<p>Finally, we need a way to store the lines that contain our query string. For
 that, we can make a mutable vector before the <code>for</code> loop and call the <code>push</code>
 method to store a <code>line</code> in the vector. After the <code>for</code> loop, we return the
-vector. Listing 12-15 has the full implementation:</p>
+vector, as shown in Listing 12-19:</p>
 <p><span class="filename">Filename: src/lib.rs</span></p>
-<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
-#fn main() {
-fn grep&lt;'a&gt;(search: &amp;str, contents: &amp;'a str) -&gt; Vec&lt;&amp;'a str&gt; {
+<pre><code class="language-rust ignore">fn search&lt;'a&gt;(query: &amp;str, contents: &amp;'a str) -&gt; Vec&lt;&amp;'a str&gt; {
     let mut results = Vec::new();
 
     for line in contents.lines() {
-        if line.contains(search) {
+        if line.contains(query) {
             results.push(line);
         }
     }
 
     results
 }
-
-#}</code></pre></pre>
-<p><span class="caption">Listing 12-15: Fully functioning implementation of the
-<code>grep</code> function</span></p>
+</code></pre>
+<p><span class="caption">Listing 12-19: Storing the lines that match so that we
+can return them</span></p>
 <!-- Will add ghosting and wingdings in libreoffice /Carol -->
-<p>Let's give it a try:</p>
+<p>Now the <code>search</code> function should be returning only the lines that contain
+<code>query</code>, and our test should pass. Let's run the tests:</p>
 <pre><code class="language-text">$ cargo test
 running 1 test
 test test::one_result ... ok
@@ -11104,15 +11345,28 @@ running 0 tests
 
 test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured
 </code></pre>
-<p>Great! It works. Now that our test is passing, we could consider opportunities
-for refactoring the implementation of <code>grep</code> and be certain we maintain the
-same functionality while we do so. This code isn't bad, but it isn't taking
-advantage of some useful features of iterators. We'll be coming back to this
-example in Chapter 13 where we'll explore iterators in detail and see how to
-improve it.</p>
-<p>Now that the <code>grep</code> function is working, we need to do one last thing inside of
-the <code>run</code> function: we never printed out the results! We'll do that by adding
-a <code>for</code> loop that prints each line returned from the <code>grep</code> function:</p>
+<p>Our test passed, great, it works!</p>
+<p>Now that our test is passing, we could consider opportunities for refactoring
+the implementation of the <code>search</code> function while keeping the tests passing in
+order to maintain the same functionality while we do so. This code isn't bad,
+but it isn't taking advantage of some useful features of iterators. We'll be
+coming back to this example in Chapter 13 where we'll explore iterators in
+detail and see how to improve it.</p>
+<!-- If we aren't going into this here, maybe just keep it focused, there's a
+lot going on here as is -->
+<!-- The reason we mention refactoring here is that it's a key step in the TDD
+method that we were implicitly using before. Now that we've added text to the
+beginning of this section to explicitly mention that we're doing TDD and what
+the steps are, we want to address the "refactor" step. People who have some
+experience with Rust might also look at this example and wonder why we're not
+doing this in a different way, and be concerned that we're not teaching the
+best way possible. This paragraph reassures them that we know what we're doing
+and we're getting to the better way in Chapter 13. /Carol -->
+<a class="header" href="print.html#using-the-search-function-in-the-run-function" id="using-the-search-function-in-the-run-function"><h4>Using the <code>search</code> Function in the <code>run</code> Function</h4></a>
+<p>Now that we have the <code>search</code> function working and tested, we need to actually
+call <code>search</code> from our <code>run</code> function. We need to pass the <code>config.query</code> value
+and the <code>contents</code> that <code>run</code> read from the file to the <code>search</code> function. Then
+<code>run</code> will print out each line returned from <code>search</code>:</p>
 <p><span class="filename">Filename: src/lib.rs</span></p>
 <pre><code class="language-rust ignore">pub fn run(config: Config) -&gt; Result&lt;(), Box&lt;Error&gt;&gt; {
     let mut f = File::open(config.filename)?;
@@ -11120,7 +11374,7 @@ a <code>for</code> loop that prints each line returned from the <code>grep</code
     let mut contents = String::new();
     f.read_to_string(&amp;mut contents)?;
 
-    for line in grep(&amp;config.search, &amp;contents) {
+    for line in search(&amp;config.query, &amp;contents) {
         println!(&quot;{}&quot;, line);
     }
 
@@ -11128,44 +11382,69 @@ a <code>for</code> loop that prints each line returned from the <code>grep</code
 }
 </code></pre>
 <!-- Will add ghosting and wingdings in libreoffice /Carol -->
-<p>Now our whole program should be working! Let's try it out:</p>
-<pre><code class="language-text">$ cargo run the poem.txt
+<p>We're again using a <code>for</code> loop to get each line returned from <code>search</code>, and
+the code that we run for each line prints it out.</p>
+<p>Now our whole program should be working! Let's try it out, first with a word
+that should return exactly one line from the Emily Dickinson poem, &quot;frog&quot;:</p>
+<pre><code class="language-text">$ cargo run frog poem.txt
    Compiling greprs v0.1.0 (file:///projects/greprs)
     Finished debug [unoptimized + debuginfo] target(s) in 0.38 secs
-     Running `target/debug/greprs the poem.txt`
-Then there's a pair of us - don't tell!
-To tell your name the livelong day
-
-$ cargo run a poem.txt
-    Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
-     Running `target/debug/greprs a poem.txt`
-I'm nobody! Who are you?
-Then there's a pair of us - don't tell!
-They'd banish us, you know.
-How dreary to be somebody!
+     Running `target/debug/greprs frog poem.txt`
 How public, like a frog
+</code></pre>
+<p>Cool! Next, how about a word that will match multiple lines, like &quot;the&quot;:</p>
+<pre><code class="language-text">$ cargo run the poem.txt
+    Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
+     Running `target/debug/greprs the poem.txt`
+Then there's a pair of us — don't tell!
 To tell your name the livelong day
-To an admiring bog!
+</code></pre>
+<p>And finally, let's make sure that we don't get any lines when we search for a
+word that isn't anywhere in the poem, like &quot;monomorphization&quot;:</p>
+<pre><code class="language-text">$ cargo run monomorphization poem.txt
+    Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
+     Running `target/debug/greprs monomorphization poem.txt`
 </code></pre>
 <p>Excellent! We've built our own version of a classic tool, and learned a lot
 about how to structure applications. We've also learned a bit about file input
 and output, lifetimes, testing, and command line parsing.</p>
+<p>Feel free to move on to Chapter 13 if you'd like at this point. To round out
+this project chapter, though, we're going to briefly demonstrate how to work
+with environment variables and printing to standard error, both of which are
+useful when writing command line programs.</p>
 <a class="header" href="print.html#working-with-environment-variables" id="working-with-environment-variables"><h2>Working with Environment Variables</h2></a>
-<p>Let's add one more feature: case insensitive searching. In addition, this
-setting won't be a command line option: it'll be an environment variable
-instead. We could choose to make case insensitivity a command line option, but
-our users have requested an environment variable that they could set once and
-make all their searches case insensitive in that terminal session.</p>
-<a class="header" href="print.html#implement-and-test-a-case-insensitive-grep-function" id="implement-and-test-a-case-insensitive-grep-function"><h3>Implement and Test a Case-Insensitive <code>grep</code> Function</h3></a>
+<p>We're going to improve our tool with an extra feature: an option for case
+insensitive searching turned on via an environment variable. We could make this
+a command line option and require that users enter it each time they want it to
+apply, but instead we're going to use an environment variable. This allows our
+users to set the environment variable once and have all their searches be case
+insensitive in that terminal session.</p>
+<a class="header" href="print.html#writing-a-failing-test-for-the-case-insensitive-search-function" id="writing-a-failing-test-for-the-case-insensitive-search-function"><h3>Writing a Failing Test for the Case-Insensitive <code>search</code> Function</h3></a>
 <p>First, let's add a new function that we will call when the environment variable
-is on. Let's start by adding a new test and re-naming our existing one:</p>
-<pre><code class="language-rust ignore">#[cfg(test)]
+is on.</p>
+<!-- You mean, to turn the environment variable on? I'm not sure what we're
+doing here-->
+<!-- No, I'm not sure how this is unclear. We're adding a new function. We will
+call the new function when the user turns on the environment variable. Can you
+elaborate on what part of the above statement leads to the conclusion that the
+new function is going to turn the environment variable on? Can you suggest a
+rewording that makes the causality direction clearer? /Carol -->
+<p>We're going to continue following the TDD process that we started doing in the
+last section, and the first step is again to write a failing test. We'll add a
+new test for the new case insensitive search function, and rename our old test
+from <code>one_result</code> to <code>case_sensitive</code> to be clearer about the differences
+between the two tests, as shown in Listing 12-20:</p>
+<p><span class="filename">Filename: src/lib.rs</span></p>
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+#[cfg(test)]
 mod test {
-    use {grep, grep_case_insensitive};
+    use super::*;
 
     #[test]
     fn case_sensitive() {
-        let search = &quot;duct&quot;;
+        let query = &quot;duct&quot;;
         let contents = &quot;\
 Rust:
 safe, fast, productive.
@@ -11174,13 +11453,13 @@ Duct tape.&quot;;
 
         assert_eq!(
             vec![&quot;safe, fast, productive.&quot;],
-            grep(search, contents)
+            search(query, contents)
         );
     }
 
     #[test]
     fn case_insensitive() {
-        let search = &quot;rust&quot;;
+        let query = &quot;rUsT&quot;;
         let contents = &quot;\
 Rust:
 safe, fast, productive.
@@ -11189,25 +11468,48 @@ Trust me.&quot;;
 
         assert_eq!(
             vec![&quot;Rust:&quot;, &quot;Trust me.&quot;],
-            grep_case_insensitive(search, contents)
+            search_case_insensitive(query, contents)
         );
     }
 }
-</code></pre>
+
+#}</code></pre></pre>
 <!-- Will add ghosting and wingdings in libreoffice /Carol -->
-<p>We're going to define a new function named <code>grep_case_insensitive</code>. Its
-implementation will be almost the same as the <code>grep</code> function, but with some
-minor changes as shown in Listing 12-16:</p>
+<p><span class="caption">Listing 12-20: Adding a new failing test for the case
+insensitive function we're about to add</span></p>
+<p>Note that we've edited the old test's <code>query</code> and <code>contents</code> too: we changed
+the query to &quot;duct&quot;, which will match the line with the word &quot;productive&quot;.
+We've added a new line with the text &quot;Duct tape&quot;, with a capital D, that
+shouldn't match the query &quot;duct&quot; when we're searching for the query in a case
+sensitive manner. We've changed this test to ensure that we don't accidentally
+break the case sensitive search functionality that we've already implemented;
+this test should pass now and should continue to pass as we work on the case
+insensitive search.</p>
+<p>The new test for the case insensitive search uses &quot;rUsT&quot; with some capital
+letters as its query. The expected return value from the
+<code>search_case_insensitive</code> function we're going to add is that the query &quot;rust&quot;
+will match both the line containing &quot;Rust:&quot; with a capital R and also the line
+&quot;Trust me.&quot; that contains &quot;rust&quot; with a lowercase r. This test will fail to
+compile right now since we haven't yet defined the <code>search_case_insensitive</code>
+function; feel free to add a skeleton implementation that always returns an
+empty array in the same way that we did for the <code>search</code> function in Listing
+12-16 in order to see the test compile and fail.</p>
+<a class="header" href="print.html#implementing-the-search_case_insensitive-function" id="implementing-the-search_case_insensitive-function"><h3>Implementing the <code>search_case_insensitive</code> Function</h3></a>
+<p>The <code>search_case_insensitive</code> function, shown in Listing 12-21, will be almost
+the same as the <code>search</code> function. The difference is that we'll lowercase the
+<code>query</code> function and each <code>line</code> so that whatever the case of the input
+arguments, they will be the same case when we check whether the line contains
+the query.</p>
 <p><span class="filename">Filename: src/lib.rs</span></p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
 # 
 #fn main() {
-fn grep_case_insensitive&lt;'a&gt;(search: &amp;str, contents: &amp;'a str) -&gt; Vec&lt;&amp;'a str&gt; {
-    let search = search.to_lowercase();
+fn search_case_insensitive&lt;'a&gt;(query: &amp;str, contents: &amp;'a str) -&gt; Vec&lt;&amp;'a str&gt; {
+    let query = query.to_lowercase();
     let mut results = Vec::new();
 
     for line in contents.lines() {
-        if line.to_lowercase().contains(&amp;search) {
+        if line.to_lowercase().contains(&amp;query) {
             results.push(line);
         }
     }
@@ -11216,18 +11518,35 @@ fn grep_case_insensitive&lt;'a&gt;(search: &amp;str, contents: &amp;'a str) -&gt
 }
 
 #}</code></pre></pre>
-<p><span class="caption">Listing 12-16: Implementing a <code>grep_case_insensitive</code>
-function by changing the search string and the lines of the contents to
-lowercase before comparing them</span></p>
+<p><span class="caption">Listing 12-21: Defining the <code>search_case_insensitive</code>
+function to lowercase both the query and the line before comparing them</span></p>
 <!-- Will add ghosting and wingdings in libreoffice /Carol -->
-<p>First, we lowercase the <code>search</code> string, and store it in a shadowed variable
-with the same name. Note that <code>search</code> is now a <code>String</code> rather than a string
-slice, so we need to add an ampersand when we pass <code>search</code> to <code>contains</code> since
-<code>contains</code> takes a string slice.</p>
-<p>Second, we add a call to <code>to_lowercase</code> each <code>line</code> before we check if it
-contains <code>search</code>. Since we've converted both <code>line</code> and <code>search</code> into all
-lowercase, we'll find matches no matter what case they used in the file and the
-command line arguments, respectively. Let's see if this passes the tests:</p>
+<!-- why do we lowercase the search string? and why does it need to be a string
+rather than a slice? -->
+<!-- We explained this above, that in order to make the search case
+insensitive, we need to lowercase everything so that searches will always match
+no matter what case either the query or each line uses. It needs to be a
+`String` because we're creating new data, not referencing existing data, when
+we call `to_lowercase`. I've tried to make both of these points clearer, but
+I'm not sure exactly what was unclear about it before, so I'm not sure if I've
+helped. /Carol -->
+<p>First, we lowercase the <code>query</code> string, and store it in a shadowed variable
+with the same name. Calling <code>to_lowercase</code> on the query is necessary so that no
+matter if the user's query is &quot;rust&quot;, &quot;RUST&quot;, &quot;Rust&quot;, or &quot;rUsT&quot;, we'll treat
+the query as if it was &quot;rust&quot; and be insensitive to the case.</p>
+<p>Note that <code>query</code> is now a <code>String</code> rather than a string slice, because calling
+<code>to_lowercase</code> is creating new data, not referencing existing data. If the
+query is &quot;rUsT&quot;, that string slice does not contain a lowercase u or t for us
+to use, so we have to allocate a new <code>String</code> containing &quot;rust&quot;. Because
+<code>query</code> is now a <code>String</code>, when we pass <code>query</code> as an argument to the
+<code>contains</code> method, we need to add an ampersand since the signature of
+<code>contains</code> is defined to take a string slice.</p>
+<p>Next, we add a call to <code>to_lowercase</code> on each <code>line</code> before we check if it
+contains <code>query</code>. This will turn &quot;Rust:&quot; into &quot;rust:&quot; and &quot;Trust me.&quot; into
+&quot;trust me.&quot; Now that we've converted both <code>line</code> and <code>query</code> to all lowercase,
+we'll find matches no matter what case the text in the file has or the user
+entered in the query.</p>
+<p>Let's see if this implementation passes the tests:</p>
 <pre><code class="language-text">    Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
      Running target/debug/deps/greprs-e58e9b12d35dc861
 
@@ -11249,33 +11568,58 @@ running 0 tests
 
 test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured
 </code></pre>
-<p>Great! Now, we have to actually use the new <code>grep_case_insensitive</code> function.
-First, let's add a configuration option for it to the <code>Config</code> struct:</p>
+<p>Great! Now, let's actually call the new <code>search_case_insensitive</code> function from
+the <code>run</code> function. First, we're going to add a configuration option for
+switching between case sensitive and case insensitive search to the <code>Config</code>
+struct:</p>
 <p><span class="filename">Filename: src/lib.rs</span></p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
 # 
 #fn main() {
 pub struct Config {
-    pub search: String,
+    pub query: String,
     pub filename: String,
     pub case_sensitive: bool,
 }
 
 #}</code></pre></pre>
 <!-- Will add ghosting in libreoffice /Carol -->
-<p>And then check for that option inside of the <code>run</code> function, and decide which
-function to call based on the value of the <code>case_sensitive</code> function:</p>
+<p>We add the <code>case_sensitive</code> field that holds a boolean. Then we need our <code>run</code>
+function to check the <code>case_sensitive</code> field's value and use that to decide
+whether to call the <code>search</code> function or the <code>search_case_insensitive</code> function
+as shown in Listing 12-22:</p>
 <p><span class="filename">Filename: src/lib.rs</span></p>
-<pre><code class="language-rust ignore">pub fn run(config: Config) -&gt; Result&lt;(), Box&lt;Error&gt;&gt;{
+<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
+# 
+#fn main() {
+# use std::error::Error;
+# use std::fs::File;
+# use std::io::prelude::*;
+#
+# fn search&lt;'a&gt;(query: &amp;str, contents: &amp;'a str) -&gt; Vec&lt;&amp;'a str&gt; {
+#      vec![]
+# }
+#
+# fn search_case_insensitive&lt;'a&gt;(query: &amp;str, contents: &amp;'a str) -&gt; Vec&lt;&amp;'a str&gt; {
+#      vec![]
+# }
+#
+# struct Config {
+#     query: String,
+#     filename: String,
+#     case_sensitive: bool,
+# }
+#
+pub fn run(config: Config) -&gt; Result&lt;(), Box&lt;Error&gt;&gt;{
     let mut f = File::open(config.filename)?;
 
     let mut contents = String::new();
     f.read_to_string(&amp;mut contents)?;
 
     let results = if config.case_sensitive {
-        grep(&amp;config.search, &amp;contents)
+        search(&amp;config.query, &amp;contents)
     } else {
-        grep_case_insensitive(&amp;config.search, &amp;contents)
+        search_case_insensitive(&amp;config.query, &amp;contents)
     };
 
     for line in results {
@@ -11284,50 +11628,43 @@ function to call based on the value of the <code>case_sensitive</code> function:
 
     Ok(())
 }
-</code></pre>
+
+#}</code></pre></pre>
+<p><span class="caption">Listing 12-22: Calling either <code>search</code> or
+<code>search_case_insensitive</code> based on the value in <code>config.case_sensitive</code></span></p>
 <!-- Will add ghosting in libreoffice /Carol -->
-<p>Finally, we need to actually check the environment for the variable. To bring
-the <code>env</code> module from the standard library into our project, we add a <code>use</code> line
-at the top of <em>src/lib.rs</em>:</p>
+<p>Finally, we need to actually check for the environment variable. The functions
+for working with environment variables are in the <code>env</code> module in the standard
+library, so we want to bring that module into scope with a <code>use std::env;</code>
+line at the top of <em>src/lib.rs</em>. Then we're going to use the <code>var</code> method
+from the <code>env</code> module in <code>Config::new</code> to check for an environment variable
+named <code>CASE_INSENSITIVE</code>, as shown in Listing 12-23:</p>
 <p><span class="filename">Filename: src/lib.rs</span></p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
 # 
 #fn main() {
 use std::env;
-
-#}</code></pre></pre>
-<p>And then use the <code>vars</code> method from the <code>env</code> module inside of <code>Config::new</code>:</p>
-<p><span class="filename">Filename: src/lib.rs</span></p>
-<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
-#fn main() {
-# use std::env;
-#
 # struct Config {
-#     search: String,
+#     query: String,
 #     filename: String,
 #     case_sensitive: bool,
 # }
-#
+
+// ...snip...
+
 impl Config {
     pub fn new(args: &amp;[String]) -&gt; Result&lt;Config, &amp;'static str&gt; {
         if args.len() &lt; 3 {
             return Err(&quot;not enough arguments&quot;);
         }
 
-        let search = args[1].clone();
+        let query = args[1].clone();
         let filename = args[2].clone();
 
-        let mut case_sensitive = true;
-
-        for (name, _) in env::vars() {
-            if name == &quot;CASE_INSENSITIVE&quot; {
-                case_sensitive = false;
-            }
-        }
+        let case_sensitive = env::var(&quot;CASE_INSENSITIVE&quot;).is_err();
 
         Ok(Config {
-            search: search,
+            query: query,
             filename: filename,
             case_sensitive: case_sensitive,
         })
@@ -11335,25 +11672,36 @@ impl Config {
 }
 
 #}</code></pre></pre>
+<p><span class="caption">Listing 12-23: Checking for an environment variable named
+<code>CASE_INSENSITIVE</code></span></p>
 <!-- Will add ghosting and wingdings in libreoffice /Carol -->
-<p>Here, we call <code>env::vars</code>, which works in a similar way as <code>env::args</code>. The
-difference is <code>env::vars</code> returns an iterator of environment variables rather
-than command line arguments. Instead of using <code>collect</code> to create a vector of
-all of the environment variables, we're using a <code>for</code> loop. <code>env::vars</code> returns
-tuples: the name of the environment variable and its value. We never care about
-the values, only if the variable is set at all, so we use the <code>_</code> placeholder
-instead of a name to let Rust know that it shouldn't warn us about an unused
-variable. Finally, we have a <code>case_sensitive</code> variable, which is set to true by
-default. If we ever find a <code>CASE_INSENSITIVE</code> environment variable, we set the
-<code>case_sensitive</code> variable to false instead. Then we return the value as part of
-the <code>Config</code>.</p>
-<p>Let's give it a try!</p>
+<p>Here, we create a new variable <code>case_sensitive</code>. In order to set its value, we
+call the <code>env::var</code> function and pass it the name of the environment variable
+we're looking for, <code>CASE_INSENSITIVE</code>. <code>env::var</code> returns a <code>Result</code> that will
+be the <code>Ok</code> variant containing the value if the environment variable is set,
+and will be the <code>Err</code> variant if the environment variable is not set. We're
+using the <code>is_err</code> method on the <code>Result</code> to check to see if it's an error (and
+therefore unset), which means we <em>should</em> do a case sensitive search. If the
+<code>CASE_INSENSITIVE</code> environment variable is set to anything, <code>is_err</code> will
+return false and we will do a case insensitive search. We don't care about the
+value that the environment variable is set to, just whether it's set or unset,
+so we're checking <code>is_err</code> rather than <code>unwrap</code>, <code>expect</code>, or any of the other
+methods we've seen on <code>Result</code>. We pass the value in the <code>case_sensitive</code>
+variable to the <code>Config</code> instance so that the <code>run</code> function can read that
+value and decide whether to call <code>search</code> or <code>search_case_insensitive</code> as we
+implemented in Listing 12-22.</p>
+<p>Let's give it a try! First, we'll run our program without the environment
+variable set and with the query &quot;to&quot;, which should match any line that contains
+the word &quot;to&quot; in all lowercase:</p>
 <pre><code class="language-text">$ cargo run to poem.txt
     Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
      Running `target/debug/greprs to poem.txt`
 Are you nobody, too?
 How dreary to be somebody!
 </code></pre>
+<p>Looks like that still works! Now, let's run the program with <code>CASE_INSENSITIVE</code>
+set to 1 but with the same query &quot;to&quot;, and we should get lines that contain
+&quot;to&quot; that might have capital letters:</p>
 <pre><code class="language-text">$ CASE_INSENSITIVE=1 cargo run to poem.txt
     Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
      Running `target/debug/greprs to poem.txt`
@@ -11362,36 +11710,66 @@ How dreary to be somebody!
 To tell your name the livelong day
 To an admiring bog!
 </code></pre>
-<p>Excellent! Our <code>greprs</code> program can now do case insensitive searching controlled
-by an environment variable. Now you know how to manage options set using
-either command line arguments or environment variables!</p>
+<p>Excellent, we also got lines containing &quot;To&quot;! Our <code>greprs</code> program can now do
+case insensitive searching, controlled by an environment variable. Now you know
+how to manage options set using either command line arguments or environment
+variables!</p>
 <p>Some programs allow both arguments <em>and</em> environment variables for the same
-configuration. In those cases, the programs decide that one or the other of
-arguments or environment variables take precedence. For another exercise on
-your own, try controlling case insensitivity through a command line argument as
-well, and decide which should take precedence if you run the program with
-contradictory values.</p>
+configuration. In those cases, the programs decide that one or the other takes
+precedence. For another exercise on your own, try controlling case
+insensitivity through a command line argument as well as through the
+environment variable, and decide which should take precedence the program is
+run with contradictory values.</p>
 <p>The <code>std::env</code> module contains many more useful features for dealing with
 environment variables; check out its documentation to see what's available.</p>
 <a class="header" href="print.html#write-to-stderr-instead-of-stdout" id="write-to-stderr-instead-of-stdout"><h2>Write to <code>stderr</code> Instead of <code>stdout</code></h2></a>
 <p>Right now, we're writing all of our output to the terminal with <code>println!</code>.
-This works, but most terminals provide two kinds of output: &quot;standard out&quot; is
-used for most information, but &quot;standard error&quot; is used for error messages. This
-makes it easier to do things like &quot;Print error messages to my terminal, but
-write other output to a file.&quot;</p>
-<p>We can see that our program is only capable of printing to <code>stdout</code> by
-redirecting it to a file using <code>&gt;</code> on the command line, and running our program
-without any arguments, which causes an error:</p>
+Most terminals provide two kinds of output: &quot;standard out&quot; for general
+information, and &quot;standard error&quot; for error messages. This distinction is the
+behavior that's expected of command line programs: it enables users to choose
+to direct a program's successful output to a file but still print error
+messages to the screen, for example. <code>println!</code> is only capable of printing to
+standard out, though, so we have to use something else in order to print to
+standard error.</p>
+<p>We can verify that, the way we've written <code>greprs</code> so far, everything is being
+written to standard out, including error messages that should be written to
+standard error instead. We'll do that by intentionally causing an error, the
+one that happens when we run the program without any arguments. We're going to
+redirect standard output to a file, but not standard error. The way command
+line programs are expected to work is that, because the output is an error
+message, it should be shown on the screen rather than being redirected to the
+file. Let's see that our program is not currently meeting this expectation by
+using <code>&gt;</code> and specifying a filename, <em>output.txt</em>, that we want to redirect
+standard out to:</p>
 <pre><code class="language-text">$ cargo run &gt; output.txt
 </code></pre>
+<!-- why do we get an error here? Was that intentional? Does that mean it can't
+print stdout to a file? -->
+<!-- Yes, we're intentionally causing an error here to show that errors are
+currently going to the wrong place. It's showing that `println!` only prints
+to standard out, even when we're printing error messages that should go
+to standard error. /Carol-->
 <p>The <code>&gt;</code> syntax tells the shell to write the contents of standard out to
-<em>output.txt</em> instead of the screen. However, if we open <em>output.txt</em> after
-running we'll see our error message:</p>
-<pre><code class="language-text">Problem parsing arguments: not enough arguments
+<em>output.txt</em> instead of the screen. We didn't see the error message we were
+expecting printed on the screen, so that means it must have ended up in the
+file. Let's see what <em>output.txt</em> contains:</p>
+<pre><code class="language-text">Application error: No search string or filename found
 </code></pre>
-<p>We'd like this to be printed to the screen instead, and only have the output
-from a successful run end up in the file if we run our program this way. Let's
-change how error messages are printed as shown in Listing 12-17:</p>
+<!-- I don't understand why we send this output to a file to then just say we
+want it to the screen, won't it do that by default? And what has this got to do
+with our use of println? I'm finding the motives here hard to follow -->
+<!-- The point of showing this is to demonstrate that our program is NOT doing
+the correct thing by default, we need to change the places we're calling
+`println!` with error messages to print to standard error instead. When to use
+stdout vs. stderr, and why you might want to redirect stdout but not stderr,
+is something our readers will be familiar with. /Carol -->
+<p>Yup, there's our error message, which means it's being printed to standard out.
+This isn't what's expected from command line programs. It's much more useful
+for error messages like this to be printed to standard error, and only have
+data printed to standard out from a successful run end up in the file when we
+redirect standard out in this way. Let's change how error messages are printed
+as shown in Listing 12-23. Because of the refactoring we did earlier in this
+chapter, all of the code that prints error messages is in one place, in <code>main</code>:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust ignore">extern crate greprs;
 
@@ -11402,8 +11780,8 @@ use std::io::prelude::*;
 use greprs::Config;
 
 fn main() {
-    let mut stderr = std::io::stderr();
     let args: Vec&lt;String&gt; = env::args().collect();
+    let mut stderr = std::io::stderr();
 
     let config = Config::new(&amp;args).unwrap_or_else(|err| {
         writeln!(
@@ -11411,12 +11789,10 @@ fn main() {
             &quot;Problem parsing arguments: {}&quot;,
             err
         ).expect(&quot;Could not write to stderr&quot;);
-
         process::exit(1);
     });
 
     if let Err(e) = greprs::run(config) {
-
         writeln!(
             &amp;mut stderr,
             &quot;Application error: {}&quot;,
@@ -11427,43 +11803,46 @@ fn main() {
     }
 }
 </code></pre>
-<p><span class="caption">Listing 12-17: Writing error messages to <code>stderr</code> instead
-of <code>stdout</code></span></p>
+<p><span class="caption">Listing 12-23: Writing error messages to <code>stderr</code> instead
+of <code>stdout</code> using <code>writeln!</code></span></p>
 <!-- Will add ghosting and wingdings in libreoffice /Carol -->
 <p>Rust does not have a convenient function like <code>println!</code> for writing to
-standard error. Instead, we use the <code>writeln!</code> macro, which is sort of like
-<code>println!</code>, but it takes an extra argument. The first thing we pass to it is
-what to write to. We can acquire a handle to standard error through the
-<code>std::io::stderr</code> function. We give a mutable reference to <code>stderr</code> to
-<code>writeln!</code>; we need it to be mutable so we can write to it! The second and
-third arguments to <code>writeln!</code> are like the first and second arguments to
-<code>println!</code>: a format string and any variables we're interpolating.</p>
+standard error. Instead, we use the <code>writeln!</code> macro, which is like <code>println!</code>
+but takes an extra argument. The first thing we pass to it is what to write to.
+We can acquire a handle to standard error through the <code>std::io::stderr</code>
+function. We give a mutable reference to <code>stderr</code> to <code>writeln!</code>; we need it to
+be mutable so we can write to it! The second and third arguments to <code>writeln!</code>
+are like the first and second arguments to <code>println!</code>: a format string and any
+variables we're interpolating.</p>
 <p>Let's try running the program again in the same way, without any arguments and
 redirecting <code>stdout</code> with <code>&gt;</code>:</p>
 <pre><code class="language-text">$ cargo run &gt; output.txt
-Problem parsing arguments: not enough arguments
+Application error: No search string or filename found
 </code></pre>
-<p>Now we see our error on the screen, but <code>output.txt</code> contains nothing. If we
-try it again with arguments that work:</p>
+<p>Now we see our error on the screen, and <code>output.txt</code> contains nothing, which is
+the behavior that's expected of command line programs.</p>
+<p>If we run the program again with arguments that don't cause an error, but still
+redirecting standard out to a file:</p>
 <pre><code class="language-text">$ cargo run to poem.txt &gt; output.txt
 </code></pre>
-<p>We'll see no output to our terminal, but <code>output.txt</code> will contain
-our results:</p>
+<p>We won't see any output to our terminal, and <code>output.txt</code> will contain our
+results:</p>
 <p><span class="filename">Filename: output.txt</span></p>
 <pre><code class="language-text">Are you nobody, too?
 How dreary to be somebody!
 </code></pre>
+<p>This demonstrates that we're now using standard out for successful output and
+standard error for error output as appropriate.</p>
 <a class="header" href="print.html#summary-10" id="summary-10"><h2>Summary</h2></a>
-<p>In this chapter, we've covered how to do common I/O operations in a Rust
-context. By using command line arguments, files, environment variables, and the
-ability to write to <code>stderr</code>, you're now prepared to write command line
-applications. By using the concepts from previous chapters, your code will be
-well-organized, be able to store data effectively in the appropriate data
-structures, handle errors nicely, and be well tested. We also saw a real-world
-scenario where lifetime annotations are needed to ensure references are
-always valid.</p>
-<p>Next, let's explore how to make use of some features of Rust that were
-influenced by functional languages: closures and iterators.</p>
+<p>In this chapter, we've recapped on some of the major concepts so far and
+covered how to do common I/O operations in a Rust context. By using command
+line arguments, files, environment variables, and the <code>writeln!</code> macro with
+<code>stderr</code>, you're now prepared to write command line applications. By using the
+concepts from previous chapters, your code will be well-organized, be able to
+store data effectively in the appropriate data structures, handle errors
+nicely, and be well tested.</p>
+<p>Next, let's explore some functional-language influenced Rust features: closures
+and iterators.</p>
 <a class="header" href="print.html#functional-language-features-in-rust---iterators-and-closures" id="functional-language-features-in-rust---iterators-and-closures"><h1>Functional Language features in Rust - Iterators and Closures</h1></a>
 <p>Rust's design has taken inspiration from a lot of previous work. One of Rust's
 influences is functional programming, where functions are values that can be

@@ -67,107 +67,145 @@
                 </div>
 
                 <div id="content" class="content">
-                    <a class="header" href="ch12-03-improving-error-handling-and-modularity.html#improving-error-handling-and-modularity" id="improving-error-handling-and-modularity"><h2>Improving Error Handling and Modularity</h2></a>
+                    <a class="header" href="ch12-03-improving-error-handling-and-modularity.html#refactoring-to-improve-modularity-and-error-handling" id="refactoring-to-improve-modularity-and-error-handling"><h2>Refactoring to Improve Modularity and Error Handling</h2></a>
 <p>There are four problems that we'd like to fix to improve our program, and they
-all have to do with potential errors and the way the program is structured. The
-first problem is where we open the file: we've used <code>expect</code> to print out an
-error message if opening the file fails, but the error message only says &quot;file
-not found&quot;. There are a number of ways that opening a file can fail, but we're
-always assuming that it's due to the file being missing. For example, the file
-could exist, but we might not have permission to open it: right now, we print
-an error message that says the wrong thing!</p>
-<p>Secondly, our use of <code>expect</code> over and over is similar to the earlier issue we
-noted with the <code>panic!</code> on indexing if we don't pass any command line
-arguments: while it <em>works</em>, it's a bit unprincipled, and we're doing it all
-throughout our program. It would be nice to put our error handling in one spot.</p>
-<p>The third problem is that our <code>main</code> function now does two things: it parses
-arguments, and it opens up files. For such a small function, this isn't a huge
-problem. However, as we keep growing our program inside of <code>main</code>, the number of
-separate tasks in the <code>main</code> function will get larger and larger. As one
-function gains many responsibilities, it gets harder to reason about, harder to
-test, and harder to change without breaking one of its parts.</p>
-<p>This also ties into our fourth problem: while <code>search</code> and <code>filename</code> are
+have to do with the way the program is structured and how it's handling
+potential errors.</p>
+<p>First, our <code>main</code> function now performs two tasks: it parses arguments and
+opens up files. For such a small function, this isn't a huge problem. However,
+if we keep growing our program inside of <code>main</code>, the number of separate tasks
+the <code>main</code> function handles will grow. As a function gains responsibilities, it
+gets harder to reason about, harder to test, and harder to change without
+breaking one of its parts. It's better to separate out functionality so that
+each function is responsible for one task.</p>
+<p>This also ties into our second problem: while <code>query</code> and <code>filename</code> are
 configuration variables to our program, variables like <code>f</code> and <code>contents</code> are
 used to perform our program's logic. The longer <code>main</code> gets, the more variables
-we're going to bring into scope, and the more variables we have in scope, the
-harder it is to keep track of which ones we need for which purpose. It would be
-better if we grouped the configuration variables into one structure to make
-their purpose clear.</p>
-<p>Let's address these problems by restructuring our project.</p>
+we're going to need to bring into scope; the more variables we have in scope,
+the harder it is to keep track of the purpose of each. It's better to group the
+configuration variables into one structure to make their purpose clear.</p>
+<p>The third problem is that we've used <code>expect</code> to print out an error message if
+opening the file fails, but the error message only says <code>file not found</code>. There
+are a number of ways that opening a file can fail besides a missing file: for
+example, the file might exist, but we might not have permission to open it.
+Right now, if we're in that situation, we'd print the <code>file not found</code> error
+message that would give the user the wrong advice!</p>
+<p>Fourth, we use <code>expect</code> repeatedly to deal with different errors, and if the
+user runs our programs without specifying enough arguments, they'll get an
+&quot;index out of bounds&quot; error from Rust that doesn't clearly explain the problem.
+It would be better if all our error handling code was in one place so that
+future maintainers only have one place to consult in the code if the error
+handling logic needs to change. Having all the error handling code in one place
+will also help us to ensure that we're printing messages that will be
+meaningful to our end users.</p>
+<p>Let's address these problems by refactoring our project.</p>
 <a class="header" href="ch12-03-improving-error-handling-and-modularity.html#separation-of-concerns-for-binary-projects" id="separation-of-concerns-for-binary-projects"><h3>Separation of Concerns for Binary Projects</h3></a>
-<p>These kinds of organizational problems are common to many similar kinds of
-projects, so the Rust community has developed a pattern for organizing the
-separate concerns. This pattern is useful for organizing any binary project
-you'll build in Rust, so we can justify doing this refactoring a bit earlier,
-since we know that our project fits the pattern. The pattern looks like this:</p>
+<p>The organizational problem of having the <code>main</code> function responsible for
+multiple tasks is common to many binary projects, so the Rust community has
+developed a kind of guideline process for splitting up the separate concerns of
+a binary program when <code>main</code> starts getting large. The process has the
+following steps:</p>
 <ol>
-<li>Split your program into both a <em>main.rs</em> and a <em>lib.rs</em>.</li>
-<li>Place your command line parsing logic into <em>main.rs</em>.</li>
-<li>Place your program's logic into <em>lib.rs</em>.</li>
-<li>The job of the <code>main</code> function is:
+<li>Split your program into both a <em>main.rs</em> and a <em>lib.rs</em> and move your
+program's logic into <em>lib.rs</em>.</li>
+<li>While your command line parsing logic is small, it can remain in <em>main.rs</em>.</li>
+<li>When the command line parsing logic starts getting complicated, extract it
+from <em>main.rs</em> into <em>lib.rs</em> as well.</li>
+<li>The responsibilities that remain in the <code>main</code> function after this process
+should be:
 <ul>
-<li>parse arguments</li>
-<li>set up any other configuration</li>
-<li>call a <code>run</code> function in <em>lib.rs</em></li>
-<li>if <code>run</code> returns an error, handle that error</li>
+<li>Calling the command line parsing logic with the argument values</li>
+<li>Setting up any other configuration</li>
+<li>Calling a <code>run</code> function in <em>lib.rs</em></li>
+<li>If <code>run</code> returns an error, handling that error</li>
 </ul>
 </li>
 </ol>
-<p>Whew! The pattern sounds more complicated than it is, honestly. It's all about
-separating concerns: <em>main.rs</em> handles actually running the program, and
-<em>lib.rs</em> handles all of the actual logic of the task at hand. Let's re-work our
-program into this pattern. First, let's extract a function whose purpose is
-only to parse arguments. Listing 12-4 shows the new start of <code>main</code> that calls
-a new function <code>parse_config</code>, which we're still going to define in
-<em>src/main.rs</em>:</p>
+<p>This pattern is all about separating concerns: <em>main.rs</em> handles running the
+program, and <em>lib.rs</em> handles all of the logic of the task at hand. Because we
+can't test the <code>main</code> function directly, this structure lets us test all of our
+program's logic by moving it into functions in <em>lib.rs</em>. The only code that
+remains in <em>main.rs</em> will be small enough to verify its correctness by reading
+it. Let's re-work our program by following this process.</p>
+<!--Since main is already handling the parsing of arguments, why do we need to
+add a new function for it, can you say how that improves things? -->
+<!-- Sorry, the steps we had were unclear. We've tried rewording. /Carol -->
+<a class="header" href="ch12-03-improving-error-handling-and-modularity.html#extracting-the-argument-parser" id="extracting-the-argument-parser"><h3>Extracting the Argument Parser</h3></a>
+<p>First, we'll extract the functionality for parsing arguments. Listing 12-5
+shows the new start of <code>main</code> that calls a new function <code>parse_config</code>, which
+we're still going to define in <em>src/main.rs</em> for the moment:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust ignore">fn main() {
     let args: Vec&lt;String&gt; = env::args().collect();
 
-    let (search, filename) = parse_config(&amp;args);
-
-    println!(&quot;Searching for {}&quot;, search);
-    println!(&quot;In file {}&quot;, filename);
+    let (query, filename) = parse_config(&amp;args);
 
     // ...snip...
 }
 
 fn parse_config(args: &amp;[String]) -&gt; (&amp;str, &amp;str) {
-    let search = &amp;args[1];
+    let query = &amp;args[1];
     let filename = &amp;args[2];
 
-    (search, filename)
+    (query, filename)
 }
 </code></pre>
-<p><span class="caption">Listing 12-4: Extract a <code>parse_config</code> function from
+<p><span class="caption">Listing 12-5: Extract a <code>parse_config</code> function from
 <code>main</code></span></p>
 <!-- Will add ghosting and wingdings in libreoffice /Carol -->
-<p>This may seem like overkill, but we're working in small steps. After making
-this change, run the program again to verify that the argument parsing still
-works. It's good to check your progress often, so that you have a better idea
-of which change caused a problem, should you encounter one.</p>
-<a class="header" href="ch12-03-improving-error-handling-and-modularity.html#grouping-configuration-values" id="grouping-configuration-values"><h3>Grouping Configuration Values</h3></a>
-<p>Now that we have a function, let's improve it. Our code still has an indication
-that there's a better design possible: we return a tuple, but then immediately
-break that tuple up into individual parts again. This code isn't bad on its
-own, but there's one other sign we have room for improvement: we called our
-function <code>parse_config</code>. The <code>config</code> part of the name is saying the two values
-we return should really be bound together, since they're both part of one
-configuration value.</p>
+<p>We're still collecting the command line arguments into a vector, but instead of
+assigning the argument value at index 1 to the variable <code>query</code> and the
+argument value at index 2 to the variable <code>filename</code> within the <code>main</code>
+function, we pass the whole vector to the <code>parse_config</code> function. The
+<code>parse_config</code> function then holds the logic that knows which argument goes in
+which variable, and passes the values back to <code>main</code>. We still create the
+<code>query</code> and <code>filename</code> variables in <code>main</code>, but <code>main</code> no longer has the
+responsibility of knowing how the command line arguments and variables
+correspond.</p>
+<p>This may seem like overkill for our small program, but we're refactoring in
+small, incremental steps. After making this change, run the program again to
+verify that the argument parsing still works. It's good to check your progress
+often, as that will help you identify the cause of problems when they occur.</p>
+<a class="header" href="ch12-03-improving-error-handling-and-modularity.html#grouping-configuration-values" id="grouping-configuration-values"><h4>Grouping Configuration Values</h4></a>
+<p>We can take another small step to improve this function further. At the moment,
+we're returning a tuple, but then we immediately break that tuple up into
+individual parts again. This is a sign that perhaps we don't have the right
+abstraction yet.</p>
+<p>Another indicator that there's room for improvement is the <code>config</code> part of
+<code>parse_config</code>, which implies that the two values we return are related and are
+both part of one configuration value. We're not currently conveying this
+meaning in the structure of the data other than grouping the two values into a
+tuple: we could put the two values into one struct and give each of the struct
+fields a meaningful name. This will make it easier for future maintainers of
+this code to understand how the different values relate to each other and what
+their purpose is.</p>
+<!-- above -- I'm not sure why this is a problem --- because they aren't
+currently bound together? And why does it imply that -->
 <blockquote>
 <p>Note: some people call this anti-pattern of using primitive values when a
 complex type would be more appropriate <em>primitive obsession</em>.</p>
 </blockquote>
-<p>Let's introduce a struct to hold all of our configuration. Listing 12-5 shows
-the addition of the <code>Config</code> struct definition, the refactoring of
-<code>parse_config</code>, and updates to <code>main</code>:</p>
+<!-- Ah, I see, so the problems here stem from using simple types to do tasks
+inefficiently, when a more complex task could handle it in ways that improve...
+behavior? Readability? Can you say as much? -->
+<!-- I've tried to clarify above. Note that when Rust programmers talk about
+"efficiency", they usually mean "run-time performance", whereas here we're
+talking about code design and maintainability and not addressing performance
+at all. /Carol -->
+<p>Listing 12-6 shows the addition of a struct named <code>Config</code> defined to have
+fields named <code>query</code> and <code>filename</code>. We've also changed the <code>parse_config</code>
+function to return an instance of the <code>Config</code> struct, and updated <code>main</code> to
+use the struct fields rather than having separate variables:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><code class="language-rust ignore">fn main() {
+<pre><pre class="playpen"><code class="language-rust should_panic"># use std::env;
+# use std::fs::File;
+#
+fn main() {
     let args: Vec&lt;String&gt; = env::args().collect();
 
     let config = parse_config(&amp;args);
 
-    println!(&quot;Searching for {}&quot;, config.search);
+    println!(&quot;Searching for {}&quot;, config.query);
     println!(&quot;In file {}&quot;, config.filename);
 
     let mut f = File::open(config.filename).expect(&quot;file not found&quot;);
@@ -176,127 +214,192 @@ the addition of the <code>Config</code> struct definition, the refactoring of
 }
 
 struct Config {
-    search: String,
+    query: String,
     filename: String,
 }
 
 fn parse_config(args: &amp;[String]) -&gt; Config {
-    let search = args[1].clone();
+    let query = args[1].clone();
     let filename = args[2].clone();
 
     Config {
-        search: search,
+        query: query,
         filename: filename,
     }
 }
-</code></pre>
-<p><span class="caption">Listing 12-5: Refactoring <code>parse_config</code> to return an
-instance of a <code>Config</code> struct</span></p>
+</code></pre></pre>
+<p>Listing 12-6: Refactoring <code>parse_config</code> to return an instance of a <code>Config</code>
+struct</p>
 <!-- Will add ghosting and wingdings in libreoffice /Carol -->
 <p>The signature of <code>parse_config</code> now indicates that it returns a <code>Config</code> value.
-In the body of <code>parse_config</code>, we used to be returning string slices that were
-references to <code>String</code> values in <code>args</code>, but we've defined <code>Config</code> to contain
-owned <code>String</code> values. Because the argument to <code>parse_config</code> is a slice of
-<code>String</code> values, the <code>Config</code> instance can't take ownership of the <code>String</code>
-values: that violates Rust's borrowing rules, since the <code>args</code> variable in
-<code>main</code> owns the <code>String</code> values and is only letting the <code>parse_config</code> function
-borrow them.</p>
-<p>There are a number of different ways we could manage the <code>String</code> data; for
-now, we'll take the easy but less efficient route, and call the <code>clone</code> method
-on the string slices. The call to <code>clone</code> will make a full copy of the string's
-data for the <code>Config</code> instance to own, which does take more time and memory
-than storing a reference to the string data, but cloning the data makes our
-code very straightforward.</p>
+In the body of <code>parse_config</code>, where we used to return string slices that
+reference <code>String</code> values in <code>args</code>, we've now chosen to define <code>Config</code> to
+contain owned <code>String</code> values. The <code>args</code> variable in <code>main</code> is the owner of
+the argument values and is only letting the <code>parse_config</code> function borrow
+them, though, which means we'd violate Rust's borrowing rules if <code>Config</code> tried
+to take ownership of the values in <code>args</code>.</p>
+<p>There are a number of different ways we could manage the <code>String</code> data, and the
+easiest, though somewhat inefficient, route is to call the <code>clone</code> method on
+the values. This will make a full copy of the data for the <code>Config</code> instance to
+own, which does take more time and memory than storing a reference to the
+string data. However, cloning the data also makes our code very straightforward
+since we don't have to manage the lifetimes of the references, so in this
+circumstance giving up a little performance to gain simplicity is a worthwhile
+trade-off.</p>
+<!-- This box is intended to go right after the paragraph talking about `clone`
+/Carol -->
 <!-- PROD: START BOX -->
 <blockquote>
 <a class="header" href="ch12-03-improving-error-handling-and-modularity.html#the-tradeoffs-of-using-clone" id="the-tradeoffs-of-using-clone"><h4>The Tradeoffs of Using <code>clone</code></h4></a>
-<p>There's a tendency amongst many Rustaceans to prefer not to use <code>clone</code> to fix
-ownership problems due to its runtime cost. In Chapter 13 we'll learn how to
-make this situation more efficient with iterators. For now, it's okay to copy
-a few strings to keep making progress. We're only going to be making these
-copies once, and our filename and search string are both very small. It's
-better to have a working program that's a bit inefficient than try to
-hyper-optimize code on your first pass. As you get more experienced with Rust,
-it'll be easier to skip this step, but for now, it's perfectly acceptable to
-call <code>clone</code>.</p>
+<p>There's a tendency amongst many Rustaceans to avoid using <code>clone</code> to fix
+ownership problems because of its runtime cost. In Chapter 13 on iterators,
+you'll learn how to use more efficient methods in this kind of situation, but
+for now, it's okay to copy a few strings to keep making progress since we'll
+only make these copies once, and our filename and query string are both very
+small. It's better to have a working program that's a bit inefficient than
+try to hyper-optimize code on your first pass. As you get more experienced
+with Rust, it'll be easier to go straight to the desirable method, but for
+now it's perfectly acceptable to call <code>clone</code>.</p>
 </blockquote>
 <!-- PROD: END BOX -->
-<p>We've updated <code>main</code> to put the instance of <code>Config</code> that <code>parse_config</code>
-returns in a variable named <code>config</code>, and we've updated the code that was using
-the separate <code>search</code> and <code>filename</code> variables to use the fields on the
-<code>Config</code> struct instead.</p>
-<a class="header" href="ch12-03-improving-error-handling-and-modularity.html#creating-a-constructor-for-config" id="creating-a-constructor-for-config"><h3>Creating a Constructor for <code>Config</code></h3></a>
-<p>Let's now think about the purpose of <code>parse_config</code>: it's a function that
-creates a <code>Config</code> instance. We've already seen a convention for functions that
-create instances: a <code>new</code> function, like <code>String::new</code>. Listing 12-6 shows the
-result of transforming <code>parse_config</code> into a <code>new</code> function associated with our
-<code>Config</code> struct:</p>
+<p>We've updated <code>main</code> so that it places the instance of <code>Config</code> that
+<code>parse_config</code> returns into a variable named <code>config</code>, and updated the code
+that previously used the separate <code>query</code> and <code>filename</code> variables so that is
+now uses the fields on the <code>Config</code> struct instead.</p>
+<p>Our code now more clearly conveys our intent that <code>query</code> and <code>filename</code> are
+related and their purpose is to configure how the program will work. Any code
+that uses these values knows to find them in the <code>config</code> instance in the
+fields named for their purpose.</p>
+<a class="header" href="ch12-03-improving-error-handling-and-modularity.html#creating-a-constructor-for-config" id="creating-a-constructor-for-config"><h4>Creating a Constructor for <code>Config</code></h4></a>
+<!-- Can you lay out what we intend to do in this section? I wasn't sure even
+at the end what we did and why --- why did we create it as parse_config to then
+change it to new? -->
+<!-- We're making small, incremental changes. In addition to being good
+software development practice, we were hoping that by changing one thing at a
+time, the process of improving code's design would be easier to follow rather
+than just jumping to the best solution. We extracted code into a function, then
+it was clearer that we should introduce a struct, then it was clear that the
+function we extracted is really a constructor of `Config` and should be written
+as such. This refactoring process should be familiar to software developers.
+I've tried to add a little recap to the start of this section, I hope that
+helps. /Carol -->
+<p>So far, we've extracted the logic responsible for parsing the command line
+arguments from <code>main</code> into the <code>parse_config</code> function, which helped us to see
+that the <code>query</code> and <code>filename</code> values were related and that relationship
+should be conveyed in our code. We then added a <code>Config</code> struct to name the
+related purpose of <code>query</code> and <code>filename</code>, and to be able to return the values'
+names as struct field names from the <code>parse_config</code> function.</p>
+<p>So now that the purpose of the <code>parse_config</code> function is to create a <code>Config</code>
+instance, we can change <code>parse_config</code> from being a plain function into a
+function named <code>new</code> that is associated with the <code>Config</code> struct. Making this
+change will make our code more idiomatic: we can create instances of types in
+the standard library like <code>String</code> by calling <code>String::new</code>, and by changing
+<code>parse_config</code> to be a <code>new</code> function associated with <code>Config</code>, we'll be able
+to create instances of <code>Config</code> by calling <code>Config::new</code>. Listing 12-7 shows
+the changes we'll need to make:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><code class="language-rust ignore">fn main() {
+<pre><pre class="playpen"><code class="language-rust should_panic"># use std::env;
+#
+fn main() {
     let args: Vec&lt;String&gt; = env::args().collect();
 
     let config = Config::new(&amp;args);
 
-    println!(&quot;Searching for {}&quot;, config.search);
-    println!(&quot;In file {}&quot;, config.filename);
-
     // ...snip...
 }
 
+# struct Config {
+#     query: String,
+#     filename: String,
+# }
+#
 // ...snip...
 
 impl Config {
     fn new(args: &amp;[String]) -&gt; Config {
-        let search = args[1].clone();
+        let query = args[1].clone();
         let filename = args[2].clone();
 
         Config {
-            search: search,
+            query: query,
             filename: filename,
         }
     }
 }
-</code></pre>
-<p><span class="caption">Listing 12-6: Changing <code>parse_config</code> into
+</code></pre></pre>
+<p><span class="caption">Listing 12-7: Changing <code>parse_config</code> into
 <code>Config::new</code></span></p>
 <!-- Will add ghosting and wingdings in libreoffice /Carol -->
-<p>We've changed the name of <code>parse_config</code> to <code>new</code> and moved it within  an <code>impl</code>
-block. We've also updated the callsite in <code>main</code>. Try compiling this again to
-make sure it works.</p>
-<a class="header" href="ch12-03-improving-error-handling-and-modularity.html#returning-a-result-from-the-constructor" id="returning-a-result-from-the-constructor"><h3>Returning a <code>Result</code> from the Constructor</h3></a>
-<p>Here's our last refactoring of this method: remember how accessing the vector
-with indices 1 and 2 panics when it contains fewer than 3 items and gives a bad
-error message? Let's fix that! Listing 12-7 shows how we can check that our
-slice is long enough before accessing those locations, and panic with a better
-error message:</p>
+<p>We've updated <code>main</code> where we were calling <code>parse_config</code> to instead call
+<code>Config::new</code>. We've changed the name of <code>parse_config</code> to <code>new</code> and moved it
+within an <code>impl</code> block, which makes the <code>new</code> function associated with
+<code>Config</code>. Try compiling this again to make sure it works.</p>
+<a class="header" href="ch12-03-improving-error-handling-and-modularity.html#fixing-the-error-handling" id="fixing-the-error-handling"><h3>Fixing the Error Handling</h3></a>
+<p>Now we'll work on fixing our error handling. Recall that we mentioned
+attempting to access the values in the <code>args</code> vector at index 1 or index 2 will
+cause the program to panic if the vector contains fewer than 3 items. Try
+running the program without any arguments; it will look like this:</p>
+<pre><code class="language-text">$ cargo run
+    Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
+     Running `target/debug/greprs`
+thread 'main' panicked at 'index out of bounds: the len is 1
+but the index is 1',  /stable-dist-rustc/build/src/libcollections/vec.rs:1307
+note: Run with `RUST_BACKTRACE=1` for a backtrace.
+</code></pre>
+<p><code>index out of bounds: the len is 1 but the index is 1</code> is an error message that
+is intended for programmers, and won't really help our end users understand
+what happened and what they should do instead. Let's fix that now.</p>
+<a class="header" href="ch12-03-improving-error-handling-and-modularity.html#improving-the-error-message" id="improving-the-error-message"><h4>Improving the Error Message</h4></a>
+<p>In Listing 12-8, we're adding a check in the <code>new</code> function to check that the
+slice is long enough before accessing index 1 and 2. If the slice isn't long
+enough, we panic with a better error message than the <code>index out of bounds</code>
+message:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust ignore">// ...snip...
 fn new(args: &amp;[String]) -&gt; Config {
     if args.len() &lt; 3 {
         panic!(&quot;not enough arguments&quot;);
     }
-
-    let search = args[1].clone();
     // ...snip...
-}
 </code></pre>
-<p><span class="caption">Listing 12-7: Adding a check for the number of
+<p><span class="caption">Listing 12-8: Adding a check for the number of
 arguments</span></p>
 <!-- Will add ghosting and wingdings in libreoffice /Carol -->
+<p>This is similar to the <code>Guess::new</code> function we wrote in Listing 9-8, where we
+called <code>panic!</code> if the <code>value</code> argument was out of the range of valid values.
+Instead of checking for a range of values, we're checking that the length of
+<code>args</code> is at least 3, and the rest of the function can operate under the
+assumption that this condition has been met. If <code>args</code> has fewer than 3 items,
+this condition will be true, and we call the <code>panic!</code> macro to end the program
+immediately.</p>
 <p>With these extra few lines of code in <code>new</code>, let's try running our program
-without any arguments:</p>
-<pre><code class="language-text">$ cargo run
+without any arguments again and see what the error looks like now:</p>
+<pre><code class="language-bash">$ cargo run
     Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
      Running `target/debug/greprs`
 thread 'main' panicked at 'not enough arguments', src/main.rs:29
 note: Run with `RUST_BACKTRACE=1` for a backtrace.
 </code></pre>
-<p>This is a bit better! We at least have a reasonable error message here.
-However, we also have a bunch of extra information that we don't want to give
-to our users. We can do better by changing the type signature of <code>new</code>. Right
-now, it returns only a <code>Config</code>, so there's no way to indicate that an error
-happened while creating our <code>Config</code>. Instead, we can return a <code>Result</code>, as
-shown in Listing 12-8:</p>
+<p>This output is better, we now have a reasonable error message. However, we also
+have a bunch of extra information we don't want to give to our users. So
+perhaps using the technique we used in Listing 9-8 isn't the best to use here;
+a call to <code>panic!</code> is more appropriate for a programming problem rather than a
+usage problem anyway, as we discussed in Chapter 9. Instead, we can use the
+other technique we learned about in that chapter: returning a <code>Result</code> that can
+indicate either success or an error.</p>
+<!-- Below -- how does using new fix this, can you lay that our up front? -->
+<!-- I'm not sure what you mean, we're already using `new` and the fix continues
+to use `new`... /Carol -->
+<a class="header" href="ch12-03-improving-error-handling-and-modularity.html#returning-a-result-from-new-instead-of-calling-panic" id="returning-a-result-from-new-instead-of-calling-panic"><h4>Returning a <code>Result</code> from <code>new</code> Instead of Calling <code>panic!</code></h4></a>
+<p>We can choose to instead return a <code>Result</code> value that will contain a <code>Config</code>
+instance in the successful case, and will describe the problem in the error
+case. When <code>Config::new</code> is communicating to <code>main</code>, we can use Rust's way of
+signaling that there was a problem using the <code>Result</code> type. Then we can change
+<code>main</code> to convert an <code>Err</code> variant into a nicer error for our users, without
+the surrounding text about <code>thread 'main'</code> and <code>RUST_BACKTRACE</code> that a call to
+<code>panic!</code> causes.</p>
+<p>Listing 12-9 shows the changes to the return value of <code>Config::new</code> and the
+body of the function needed to return a <code>Result</code>:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust ignore">impl Config {
     fn new(args: &amp;[String]) -&gt; Result&lt;Config, &amp;'static str&gt; {
@@ -304,31 +407,41 @@ shown in Listing 12-8:</p>
             return Err(&quot;not enough arguments&quot;);
         }
 
-        let search = args[1].clone();
+        let query = args[1].clone();
         let filename = args[2].clone();
 
         Ok(Config {
-            search: search,
+            query: query,
             filename: filename,
         })
     }
 }
 </code></pre>
-<p><span class="caption">Listing 12-8: Return a <code>Result</code> from <code>Config::new</code></span></p>
+<p><span class="caption">Listing 12-9: Return a <code>Result</code> from <code>Config::new</code></span></p>
 <!-- Will add ghosting and wingdings in libreoffice /Carol -->
+<!-- what does returning a Result rather than a Config do? -->
+<!-- This is what Chapter 9 was about, I've added a few more references
+to that chapter to reinforce the connection /Carol -->
 <p>Our <code>new</code> function now returns a <code>Result</code>, with a <code>Config</code> instance in the
-success case and a <code>&amp;'static str</code> when an error happens. Recall from &quot;The
-Static Lifetime&quot; section in Chapter 10 <code>&amp;'static str</code> is the type of string
-literals, which is what our error message is for now.</p>
+success case and a <code>&amp;'static str</code> in the error case. Recall from &quot;The Static
+Lifetime&quot; section in Chapter 10 that <code>&amp;'static str</code> is the type of string
+literals, which is our error message type for now.</p>
 <p>We've made two changes in the body of the <code>new</code> function: instead of calling
-<code>panic!</code> if there aren't enough arguments, we now return an <code>Err</code> value. We
-wrapped the <code>Config</code> return value in an <code>Ok</code>. These changes make the function
-conform to its new type signature.</p>
-<a class="header" href="ch12-03-improving-error-handling-and-modularity.html#calling-confignew-and-handling-errors" id="calling-confignew-and-handling-errors"><h3>Calling <code>Config::new</code> and Handling Errors</h3></a>
-<p>Now we need to make some changes to <code>main</code> as shown in Listing 12-9:</p>
+<code>panic!</code> when the user doesn't pass enough arguments, we now return an <code>Err</code>
+value, and we've wrapped the <code>Config</code> return value in an <code>Ok</code>. These changes
+make the function conform to its new type signature.</p>
+<p>By having <code>Config::new</code> return an <code>Err</code> value, it allows the <code>main</code> function to
+handle the <code>Result</code> value returned from the <code>new</code> function and exit the process
+more cleanly in the error case.</p>
+<a class="header" href="ch12-03-improving-error-handling-and-modularity.html#calling-confignew-and-handling-errors" id="calling-confignew-and-handling-errors"><h4>Calling <code>Config::new</code> and Handling Errors</h4></a>
+<p>In order to handle the error case and print a user-friendly message, we need to
+update <code>main</code> to handle the <code>Result</code> that <code>Config::new</code> is now returning as
+shown in Listing 12-10. We're also going to implement by hand something that
+<code>panic!</code> handled for us: exiting the command line tool with an error code of 1.
+A nonzero exit status is a convention to signal to the process that called our
+program that our program ended with an error state.</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
-<pre><code class="language-rust ignore">// ...snip...
-use std::process;
+<pre><code class="language-rust ignore">use std::process;
 
 fn main() {
     let args: Vec&lt;String&gt; = env::args().collect();
@@ -338,34 +451,42 @@ fn main() {
         process::exit(1);
     });
 
-    println!(&quot;Searching for {}&quot;, config.search);
-    println!(&quot;In file {}&quot;, config.filename);
-
     // ...snip...
 </code></pre>
-<p><span class="caption">Listing 12-9: Exiting with an error code if creating a
+<p><span class="caption">Listing 12-10: Exiting with an error code if creating a
 new <code>Config</code> fails</span></p>
 <!-- Will add ghosting and wingdings in libreoffice /Carol -->
-<p>We've added a new <code>use</code> line to import <code>process</code> from the standard library.
-In the <code>main</code> function itself, we'll handle the <code>Result</code> value returned
-from the <code>new</code> function and exit the process in a cleaner way if <code>Config::new</code>
-returns an <code>Err</code> value.</p>
-<p>We're using a method we haven't covered before that's defined on <code>Result&lt;T, E&gt;</code>
-by the standard library: <code>unwrap_or_else</code>. This method has similar behavior as
-<code>unwrap</code> if the <code>Result</code> is an <code>Ok</code> value: it returns the inner value <code>Ok</code> is
-wrapping. Unlike <code>unwrap</code>, if the value is an <code>Err</code> value, this method calls a
-<em>closure</em> which is an anonymous function that we define and pass as an argument
-to <code>unwrap_or_else</code>. We'll be covering closures in more detail in Chapter 13;
-the important part to understand in this case is that <code>unwrap_or_else</code> will
-pass the inner value of the <code>Err</code> to our closure in the parameter <code>err</code> that
-appears between the vertical pipes. Using <code>unwrap_or_else</code> lets us do some
-custom, non-<code>panic!</code> error handling.</p>
-<p>Said error handling is only two lines: we print out the error, then call
-<code>std::process::exit</code>. That function will stop our program's execution
-immediately and return the number passed to it as a return code. By convention,
-a zero means success and any other value means failure. In the end, this has
-similar characteristics to our <code>panic!</code>-based handling we had in Listing 12-7,
-but we no longer get all the extra output. Let's try it:</p>
+<!-- In the `main` function itself, we'll handle the `Result` value returned
+from the `new` function and exit the process in a cleaner way if `Config::new`
+returns an `Err` value.-->
+<!-- I moved this line above to the previous section, it seems to at least
+partially answer some of my earlier confusions, though I'm not following this
+as well as I'd like so not sure if I have this right, can you confirm either
+way whether that move makes sense? -->
+<!-- That's fine /Carol -->
+<p>In this listing, we're using a method we haven't covered before:
+<code>unwrap_or_else</code>, which is defined on <code>Result&lt;T, E&gt;</code> by the standard library.
+Using <code>unwrap_or_else</code> allows us to define some custom, non-<code>panic!</code> error
+handling. If the <code>Result</code> is an <code>Ok</code> value, this method's behavior is similar
+to <code>unwrap</code>: it returns the inner value <code>Ok</code> is wrapping. However, if the value
+is an <code>Err</code> value, this method calls the code in the <em>closure</em>, which is an
+anonymous function we define and pass as an argument to <code>unwrap_or_else</code>. We'll
+be covering closures in more detail in Chapter 13. What you need to know for
+now is that <code>unwrap_or_else</code> will pass the inner value of the <code>Err</code>, which in
+this case is the static string <code>not enough arguments</code> that we added in Listing
+12-9, to our closure in the argument <code>err</code> that appears between the vertical
+pipes. The code in the closure can then use the <code>err</code> value when it runs.</p>
+<!--Can you give a high-level idea of what the closure does with it? -->
+<!-- Does with what? I've tried to elaborate in the above and below paragraphs,
+but I'm not sure exactly what's confusing /Carol -->
+<p>We've added a new <code>use</code> line to import <code>process</code> from the standard library. The
+code in the closure that will get run in the error case is only two lines: we
+print out the <code>err</code> value, then call <code>std::process::exit</code> (we've added a new
+<code>use</code> line at the top to import <code>process</code> from the standard library).
+<code>process::exit</code> will stop the program immediately and return the number that
+was passed as the exit status code. This is similar to the <code>panic!</code>-based
+handling we used in Listing 12-8, with the exception that we no longer get all
+the extra output. Let's try it:</p>
 <pre><code class="language-text">$ cargo run
    Compiling greprs v0.1.0 (file:///projects/greprs)
     Finished debug [unoptimized + debuginfo] target(s) in 0.48 secs
@@ -373,16 +494,29 @@ but we no longer get all the extra output. Let's try it:</p>
 Problem parsing arguments: not enough arguments
 </code></pre>
 <p>Great! This output is much friendlier for our users.</p>
-<a class="header" href="ch12-03-improving-error-handling-and-modularity.html#handling-errors-from-the-run-function" id="handling-errors-from-the-run-function"><h3>Handling Errors from the <code>run</code> Function</h3></a>
-<p>Now that we're done refactoring our configuration parsing, let's improve our
-program's logic. Listing 12-10 shows the code after extracting a function named
-<code>run</code> that we'll call from <code>main</code>. The <code>run</code> function contains the code that
-was in <code>main</code>:</p>
+<a class="header" href="ch12-03-improving-error-handling-and-modularity.html#extracting-a-run-function" id="extracting-a-run-function"><h3>Extracting a <code>run</code> Function</h3></a>
+<p>Now we're done refactoring our configuration parsing; let's turn to our
+program's logic. As we laid out in the process we discussed in the &quot;Separation
+of Concerns for Binary Projects&quot; section, we're going to extract a function
+named <code>run</code> that will hold all of the logic currently in the <code>main</code> function
+that isn't setting up configuration or handling errors. Once we're done, <code>main</code>
+will be concise and easy to verify by inspection, and we'll be able to write
+tests for all of the other logic.</p>
+<!-- it contains ALL the function from main? Can you say why we're doing this,
+hw this improves it? What is the run function doing? I'm afraid I feel a bit in
+the dark here-->
+<!-- This is the pattern that we explained in the Separation of Concerns for
+Binary Projects section. I've added a reference back to that and reiterated
+some of the reasoning from there, but this section isn't introducing the
+concept of the `run` function holding the logic that was in `main` /Carol -->
+<p>Listing 12-11 shows the extracted <code>run</code> function. For now, we're making only
+the small, incremental improvement of extracting the function and still
+defining the function in <em>src/main.rs</em>:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust ignore">fn main() {
     // ...snip...
 
-    println!(&quot;Searching for {}&quot;, config.search);
+    println!(&quot;Searching for {}&quot;, config.query);
     println!(&quot;In file {}&quot;, config.filename);
 
     run(config);
@@ -399,16 +533,20 @@ fn run(config: Config) {
 
 // ...snip...
 </code></pre>
-<p><span class="caption">Listing 12-10: Extracting a <code>run</code> functionality for the
+<p><span class="caption">Listing 12-11: Extracting a <code>run</code> function containing the
 rest of the program logic</span></p>
 <!-- Will add ghosting and wingdings in libreoffice /Carol -->
-<p>The contents of <code>run</code> are the previous lines that were in <code>main</code>, and the <code>run</code>
-function takes a <code>Config</code> as an argument. Now that we have a separate function,
-we can make a similar improvement to the one we made to <code>Config::new</code> in
-Listing 12-8: let's return a <code>Result&lt;T, E&gt;</code> instead of calling <code>panic!</code> via
-<code>expect</code>. Listing 12-11 shows the addition of a <code>use</code> statement to bring
-<code>std::error::Error</code> struct into scope and the changes to the <code>run</code> function
-to return a <code>Result</code>:</p>
+<p>The <code>run</code> function now contains all the remaining logic from <code>main</code> starting
+from reading the file. The <code>run</code> function takes the <code>Config</code> instance as an
+argument.</p>
+<a class="header" href="ch12-03-improving-error-handling-and-modularity.html#returning-errors-from-the-run-function" id="returning-errors-from-the-run-function"><h4>Returning Errors from the <code>run</code> Function</h4></a>
+<p>With the remaining program logic separated into the <code>run</code> function rather than
+being in <code>main</code>, we can improve the error handling like we did with
+<code>Config::new</code> in Listing 12-9. Instead of allowing the program to panic by
+calling <code>expect</code>, the <code>run</code> function will return a <code>Result&lt;T, E&gt;</code> when
+something goes wrong. This will let us further consolidate the logic around
+handling errors in a user-friendly way into <code>main</code>. Listing 12-12 shows the
+changes to the signature and body of <code>run</code>:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust ignore">use std::error::Error;
 
@@ -425,44 +563,51 @@ fn run(config: Config) -&gt; Result&lt;(), Box&lt;Error&gt;&gt; {
     Ok(())
 }
 </code></pre>
-<p><span class="caption">Listing 12-11: Changing the <code>run</code> function to return
+<p><span class="caption">Listing 12-12: Changing the <code>run</code> function to return
 <code>Result</code></span></p>
 <!-- Will add ghosting and wingdings in libreoffice /Carol -->
-<p>We've made three big changes here. The first is the return type of the <code>run</code>
-function is now <code>Result&lt;(), Box&lt;Error&gt;&gt;</code>. Previously, our function returned the
-unit type, <code>()</code>, so that's still the value returned in the <code>Ok</code> case. For our
-error type, we're going to use <code>Box&lt;Error&gt;</code>. This is called a <em>trait object</em>,
-which we'll be covering in Chapter XX. For now, think of it like this:
-<code>Box&lt;Error&gt;</code> means the function will return some kind of type that implements
-the <code>Error</code> trait, but we're not specifying what particular type the return
-value will be. This gives us flexibility to return error values that may be of
-different types in different error cases. <code>Box</code> is a smart pointer to heap
-data, and we'll be going into detail about <code>Box</code> in Chapter 15.</p>
-<p>The second change is that we've removed our calls to <code>expect</code> in favor of <code>?</code>,
-like we talked about in Chapter 9. Rather than <code>panic!</code> on an error, this will
-return the error value from the function we're in for the caller to handle.</p>
-<p>The third change is that we're now returning an <code>Ok</code> value from this function
-in the success case. Because we've declared the <code>run</code> function's success type
-as <code>()</code> in the signature, we need to wrap the unit type value in the <code>Ok</code>
-value. <code>Ok(())</code> looks a bit strange at first, but using <code>()</code> in this way is the
+<p>We've made three big changes here. First, we're changing the return type of the
+<code>run</code> function to <code>Result&lt;(), Box&lt;Error&gt;&gt;</code>. This function previously returned
+the unit type, <code>()</code>, and we keep that as the value returned in the <code>Ok</code> case.</p>
+<!-- is just the `Box` bit the trait object, or the whole `Box<Error>`
+syntax?-->
+<!-- The whole `Box<Error>` /Carol -->
+<p>For our error type, we're using the <em>trait object</em> <code>Box&lt;Error&gt;</code> (and we've
+brought <code>std::error::Error</code> into scope with a <code>use</code> statement at the top).
+We'll be covering trait objects in Chapter 17. For now, just know that
+<code>Box&lt;Error&gt;</code> means the function will return a type that implements the <code>Error</code>
+trait, but we don't have to specify what particular type the return value will
+be. This gives us flexibility to return error values that may be of different
+types in different error cases.</p>
+<p>The second change we're making is removing the calls to <code>expect</code> in favor of
+<code>?</code>, like we talked about in Chapter 9. Rather than <code>panic!</code> on an error, this
+will return the error value from the current function for the caller to handle.</p>
+<p>Thirdly, this function now returns an <code>Ok</code> value in the success case. We've
+declared the <code>run</code> function's success type as <code>()</code> in the signature, which
+means we need to wrap the unit type value in the <code>Ok</code> value. This <code>Ok(())</code>
+syntax may look a bit strange at first, but using <code>()</code> like this is the
 idiomatic way to indicate that we're calling <code>run</code> for its side effects only;
-it doesn't return anything interesting.</p>
-<p>This will compile, but with a warning:</p>
+it doesn't return a value we need.</p>
+<p>When you run this, it will compile, but with a warning:</p>
 <pre><code class="language-text">warning: unused result which must be used, #[warn(unused_must_use)] on by default
   --&gt; src/main.rs:39:5
    |
 39 |     run(config);
    |     ^^^^^^^^^^^^
 </code></pre>
-<p>Rust is trying to tell us that we're ignoring our <code>Result</code>, which might be an
-error value. Let's handle that now. We'll use a similar technique as the way we
-handled failure with <code>Config::new</code> in Listing 12-9, but with a slight
+<p>Rust is telling us that our code ignores the <code>Result</code> value, which might be
+indicating that there was an error. We're not checking to see if there was an
+error or not, though, and the compiler is reminding us that we probably meant
+to have some error handling code here! Let's rectify that now.</p>
+<a class="header" href="ch12-03-improving-error-handling-and-modularity.html#handling-errors-returned-from-run-in-main" id="handling-errors-returned-from-run-in-main"><h4>Handling Errors Returned from <code>run</code> in <code>main</code></h4></a>
+<p>We'll check for errors and handle them nicely using a similar technique to the
+way we handled errors with <code>Config::new</code> in Listing 12-10, but with a slight
 difference:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust ignore">fn main() {
     // ...snip...
 
-    println!(&quot;Searching for {}&quot;, config.search);
+    println!(&quot;Searching for {}&quot;, config.query);
     println!(&quot;In file {}&quot;, config.filename);
 
     if let Err(e) = run(config) {
@@ -471,47 +616,36 @@ difference:</p>
         process::exit(1);
     }
 }
-
-fn run(config: Config) -&gt; Result&lt;(), Box&lt;Error&gt;&gt; {
-    let mut f = File::open(config.filename)?;
-
-    let mut contents = String::new();
-    f.read_to_string(&amp;mut contents)?;
-
-    println!(&quot;With text:\n{}&quot;, contents);
-
-    Ok(())
-}
 </code></pre>
 <!-- Will add ghosting and wingdings in libreoffice /Carol -->
-<p>Instead of <code>unwrap_or_else</code>, we use <code>if let</code> to see if <code>run</code> returns an <code>Err</code>
-value and call <code>process::exit(1)</code> if so. Why? The distinction between this case
-and the <code>Config::new</code> case is a bit subtle. With <code>Config::new</code>, we cared about
-two things:</p>
-<ol>
-<li>Detecting any errors that happen</li>
-<li>Getting a <code>Config</code> if no errors happened</li>
-</ol>
-<p>In this case, because <code>run</code> returns a <code>()</code> in the success case, the only thing
-we care about is the first case: detecting an error. If we used
-<code>unwrap_or_else</code>, we'd get its return value, which would be <code>()</code>. That's not
-very useful.</p>
-<p>The bodies of the <code>if let</code> and of the <code>unwrap_or_else</code> are the same in both
-cases though: we print out an error and exit.</p>
+<p>We use <code>if let</code> to check whether <code>run</code> returns an <code>Err</code> value, rather than
+<code>unwrap_or_else</code>, and call <code>process::exit(1)</code> if it does. <code>run</code> doesn't return
+a value that we want to <code>unwrap</code> like <code>Config::new</code> returns the <code>Config</code>
+instance. Because <code>run</code> returns a <code>()</code> in the success case, we only care about
+detecting an error, so we don't need <code>unwrap_or_else</code> to return the unwrapped
+value as it would only be <code>()</code>.</p>
+<p>The bodies of the <code>if let</code> and the <code>unwrap_or_else</code> functions are the same in
+both cases though: we print out the error and exit.</p>
 <a class="header" href="ch12-03-improving-error-handling-and-modularity.html#split-code-into-a-library-crate" id="split-code-into-a-library-crate"><h3>Split Code into a Library Crate</h3></a>
-<p>This is looking pretty good! There's one more thing we haven't done yet: split
-the <em>src/main.rs</em> up and put some code into <em>src/lib.rs</em> Let's do that now:
-move the <code>run</code> function from <em>src/main.rs</em> to a new file, <em>src/lib.rs</em>. You'll
-also need to move the relevant <code>use</code> statements and the definition of <code>Config</code>
-and its <code>new</code> method as well. Your <em>src/lib.rs</em> should now look like Listing
-12-12:</p>
+<p>This is looking pretty good so far! Now we're going to split the <em>src/main.rs</em>
+file up and put some code into <em>src/lib.rs</em> so that we can test it and have a
+small <code>main</code> function.</p>
+<p>Let's move the following pieces of code from <em>src/main.rs</em> to a new file,
+<em>src/lib.rs</em>:</p>
+<ul>
+<li>The <code>run</code> function definition</li>
+<li>The relevant <code>use</code> statements</li>
+<li>The definition of <code>Config</code></li>
+<li>The <code>Config::new</code> function definition</li>
+</ul>
+<p>The contents of <em>src/lib.rs</em> should now look like Listing 12-13:</p>
 <p><span class="filename">Filename: src/lib.rs</span></p>
 <pre><code class="language-rust ignore">use std::error::Error;
 use std::fs::File;
 use std::io::prelude::*;
 
 pub struct Config {
-    pub search: String,
+    pub query: String,
     pub filename: String,
 }
 
@@ -521,11 +655,11 @@ impl Config {
             return Err(&quot;not enough arguments&quot;);
         }
 
-        let search = args[1].clone();
+        let query = args[1].clone();
         let filename = args[2].clone();
 
         Ok(Config {
-            search: search,
+            query: query,
             filename: filename,
         })
     }
@@ -542,15 +676,17 @@ pub fn run(config: Config) -&gt; Result&lt;(), Box&lt;Error&gt;&gt;{
     Ok(())
 }
 </code></pre>
-<p><span class="caption">Listing 12-12: Moving <code>Config</code> and <code>run</code> into
+<p><span class="caption">Listing 12-13: Moving <code>Config</code> and <code>run</code> into
 <em>src/lib.rs</em></span></p>
 <!-- Will add ghosting and wingdings in libreoffice /Carol -->
-<p>Notice we also made liberal use of <code>pub</code>: on <code>Config</code>, its fields and its <code>new</code>
-method, and on the <code>run</code> function.</p>
-<p>Now in <em>src/main.rs</em>, we need to bring in the code that's now in <em>src/lib.rs</em>
-through <code>extern crate greprs</code>. Then we need to add a <code>use greprs::Config</code> line
-to bring <code>Config</code> into scope, and prefix the <code>run</code> function with our crate name
-as shown in Listing 12-13:</p>
+<p>We've made liberal use of <code>pub</code> here: on <code>Config</code>, its fields and its <code>new</code>
+method, and on the <code>run</code> function. We now have a library crate that has a
+public API that we can test.</p>
+<a class="header" href="ch12-03-improving-error-handling-and-modularity.html#calling-the-library-crate-from-the-binary-crate" id="calling-the-library-crate-from-the-binary-crate"><h4>Calling the Library Crate from the Binary Crate</h4></a>
+<p>Now we need to bring the code we moved to <em>src/lib.rs</em> into the scope of the
+binary crate in <em>src/main.rs</em> by using <code>extern crate greprs</code>. Then we'll add a
+<code>use greprs::Config</code> line to bring the <code>Config</code> type into scope, and prefix the
+<code>run</code> function with our crate name as shown in Listing 12-14:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
 <pre><code class="language-rust ignore">extern crate greprs;
 
@@ -567,7 +703,7 @@ fn main() {
         process::exit(1);
     });
 
-    println!(&quot;Searching for {}&quot;, config.search);
+    println!(&quot;Searching for {}&quot;, config.query);
     println!(&quot;In file {}&quot;, config.filename);
 
     if let Err(e) = greprs::run(config) {
@@ -577,14 +713,19 @@ fn main() {
     }
 }
 </code></pre>
-<p><span class="caption">Listing 12-13: Bringing the <code>greprs</code> crate into the scope
+<p><span class="caption">Listing 12-14: Bringing the <code>greprs</code> crate into the scope
 of <em>src/main.rs</em></span></p>
 <!-- Will add ghosting and wingdings in libreoffice /Carol -->
-<p>With that, everything should work again. Give it a few <code>cargo run</code>s and make
-sure you haven't broken anything. Whew! That all was a lot of work, but we've
-set ourselves up for success in the future. We've set up a way to handle errors
-in a much nicer fashion, and we've made our code slightly more modular. Almost
-all of our work will be done in <em>src/lib.rs</em> from here on out.</p>
+<p>With that, all the functionality should be connected and should work. Give it a
+<code>cargo run</code> and make sure everything is wired up correctly.</p>
+<!-- any tips for if they do find something is broken, main places to check? Or
+just "diff your file against the XXX file in the book's resources to check
+where it went wrong"? -->
+<!-- We think general troubleshooting tips should be something we cover in
+Chapter 1; the tips should apply to any example in the book /Carol -->
+<p>Whew! That was a lot of work, but we've set ourselves up for success in the
+future. Now it's much easier to handle errors, and we've made our code more
+modular. Almost all of our work will be done in <em>src/lib.rs</em> from here on out.</p>
 <p>Let's take advantage of this newfound modularity by doing something that would
 have been hard with our old code, but is easy with our new code: write some
 tests!</p>

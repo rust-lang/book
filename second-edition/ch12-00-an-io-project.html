@@ -67,48 +67,60 @@
                 </div>
 
                 <div id="content" class="content">
-                    <a class="header" href="ch12-00-an-io-project.html#an-io-project" id="an-io-project"><h1>An I/O Project</h1></a>
-<p>We've learned a lot over the last few chapters. Let's take that new knowledge
-and apply it by building a project together. Along the way, we'll learn a bit
-more about Rust's standard library.</p>
-<p>So what should we build? One that uses Rust's strengths. A great use of Rust is
-for command line tools: Rust's speed, safety, 'single binary' output, and
-cross-platform support make it a good language choice for this kind of task. So
-we'll make our own version of a classic command line tool: <code>grep</code>. <code>grep</code> is
-short for &quot;Globally search a Regular Expression and Print.&quot; In the
-simplest use case, it does this:</p>
-<ol>
-<li>Takes a filename and a string as arguments.</li>
-<li>Reads the file.</li>
-<li>Finds lines in the file that contain the string argument.</li>
-<li>Prints out those lines.</li>
-</ol>
-<p>In addition, we'll add one extra feature: an environment variable that will
-allow us to search for the string argument in a case-insensitive way.</p>
-<p>There's another great reason to use <code>grep</code> as an example project: a very
-fully-featured version of <code>grep</code> has already been created in Rust by a
-community member, Andrew Gallant. It's called <code>ripgrep</code>, and it's very,
-very fast. While our version of <code>grep</code> will be fairly simple, you'll have
-some of the background knowledge to understand that project if you want to see
-something more real-world.</p>
-<p>This project will bring together a number of things we learned previously:</p>
+                    <a class="header" href="ch12-00-an-io-project.html#an-io-project-building-a-small-grep" id="an-io-project-building-a-small-grep"><h1>An I/O Project Building a Small Grep</h1></a>
+<!-- We might need a more descriptive title, something that captures the new
+elements we're introducing -- are we going to cover things like environment
+variables more in later chapters, or is this the only place we explain how to
+use them? -->
+<!-- This is the only place we were planning on explaining both environment
+variables and printing to standard error. These are things that people commonly
+want to know how to do in Rust, but there's not much more than what we've said
+here about them, people just want to know how to do them in Rust. We realize
+that those sections make this chapter long, but think it's worth it to include
+information that people want. We've gotten really positive feedback from people
+who have read this chapter online; people who like learning through projects
+have really enjoyed this chapter. /Carol-->
+<p>This chapter is both a recap of the many skills you've learned so far and an
+exploration of a few more standard library features. We're going to build a
+command-line tool that interacts with file and command line input/output to
+practice some of the Rust you now have under your belt.</p>
+<p>Rust's speed, safety, 'single binary' output, and cross-platform support make
+it a good language for creating command line tools, so for our project we'll
+make our own version of the classic command line tool <code>grep</code>. Grep is an
+acronym for &quot;Globally search a Regular Expression and Print.&quot; In the simplest
+use case, <code>grep</code> searches a specified file for a specified string using the
+following steps:</p>
 <ul>
-<li>Organize code (using what we learned in modules, Chapter 7)</li>
-<li>Use vectors and strings (collections, Chapter 8)</li>
-<li>Handle errors (Chapter 9)</li>
-<li>Use traits and lifetimes where appropriate (Chapter 10)</li>
-<li>Have tests (Chapter 11)</li>
+<li>Take as arguments a filename and a string.</li>
+<li>Read the file.</li>
+<li>Find lines in the file that contain the string argument.</li>
+<li>Print out those lines.</li>
 </ul>
-<p>Additionally, we'll briefly introduce closures, iterators, and trait objects,
-which Chapters XX, YY, and ZZ respectively are about to cover in detail.</p>
-<p>Let's create a new project with, as always, <code>cargo new</code>:</p>
+<p>We'll also show how to use environment variables and print to standard error
+instead of standard out; these techniques are commonly used in command line
+tools.</p>
+<p>One Rust community member, Andrew Gallant, has already created a
+fully-featured, very fast version of <code>grep</code>, called <code>ripgrep</code>. By comparison,
+our version of <code>grep</code> will be fairly simple, this chapter will give you some of
+the background knowledge to help you understand a real-world project like
+<code>ripgrep</code>.</p>
+<p>This project will bring together a number of concepts you've learned so far:</p>
+<ul>
+<li>Organizing code (using what we learned in modules, Chapter 7)</li>
+<li>Using vectors and strings (collections, Chapter 8)</li>
+<li>Handling errors (Chapter 9)</li>
+<li>Using traits and lifetimes where appropriate (Chapter 10)</li>
+<li>Writing tests (Chapter 11)</li>
+</ul>
+<p>We'll also briefly introduce closures, iterators, and trait objects, which
+Chapters 13 and 17 will cover in detail.</p>
+<p>Let's create a new project with, as always, <code>cargo new</code>. We're calling our
+project <code>greprs</code> to distinguish from the <code>grep</code> tool that you may already have
+on your system:</p>
 <pre><code class="language-text">$ cargo new --bin greprs
      Created binary (application) `greprs` project
 $ cd greprs
 </code></pre>
-<p>We're calling our version of <code>grep</code> 'greprs', so that we don't confuse any of
-our users into thinking that it's the more fully-featured version of <code>grep</code>
-they may already have installed on their system.</p>
 
                 </div>
 
