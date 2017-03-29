@@ -480,6 +480,199 @@ the result. If we had a lot of methods on `Post` that followed this pattern, we
 might consider defining a macro to eliminate the repetition (see Appendix E on
 macros).
 
+A downside of implementing this object-oriented pattern exactly as it's defined
+for object-oriented languages is that we're not taking advantage of Rust's
+strengths as much as we could be. Let's take a look at some chages we can make
+to this code that can make invalid states and transitions into compile time
+errors.
+
+#### Encoding States and Behavior as Types
+
+We're going to show how to rethink the state pattern a bit in order to get a
+different set of tradeoffs. Rather than encapsulating the states and
+transitions completely so that outside code has no knowledge of them, we're
+going to encode the states into different types. When the states are types,
+Rust's type checking will make any attempt to use a draft post where we should
+only use published posts into a compiler error.
+
+Let's consider the first part of `main` from Listing 17-11:
+
+<span class="filename">Filename: src/main.rs</span>
+
+```rust,ignore
+fn main() {
+    let mut post = Post::new();
+
+    post.add_text("I ate a salad for lunch today");
+    assert_eq!("", post.content());
+}
+```
+
+We still want to create a new post in the draft state using `Post::new`, and we
+still want to be able to add text to the post's content. But instead of having
+a `content` method on a draft post that returns an empty string, we're going to
+make it so that draft posts don't have the `content` method at all. That way,
+if we try to get a draft post's content, we'll get a compiler error that the
+method doesn't exist. This will make it impossible for us to accidentally
+display draft post content in production, since that code won't even compile.
+Listing 17-19 shows the definition of a `Post` struct, a `DraftPost` struct,
+and methods on each:
+
+<span class="filename">Filename: src/lib.rs</span>
+
+```rust
+pub struct Post {
+    content: String,
+}
+
+pub struct DraftPost {
+    content: String,
+}
+
+impl Post {
+    pub fn new() -> DraftPost {
+        DraftPost {
+            content: String::new(),
+        }
+    }
+
+    pub fn content(&self) -> &str {
+       &self.content
+    }
+}
+
+impl DraftPost {
+    pub fn add_text(&mut self, text: &str) {
+        self.content.push_str(text);
+    }
+}
+```
+
+<span class="caption">Listing 17-19: A `Post` with a `content` method and a
+`DraftPost` without a `content` method</span>
+
+Both the `Post` and `DraftPost` structs have a private `content` field that stores the
+blog post text. The structs no longer have the `state` field since we're moving
+the encoding of the state to the types of the structs. `Post` will represent a
+published post, and it has a `content` method that returns the `content`.
+
+We still have a `Post::new` function, but instead of returning an instance of
+`Post`, it returns an instance of `DraftPost`. It's not possible to create an
+instance of `Post` right now since `content` is private and there aren't any
+functions that return `Post`. `DraftPost` has an `add_text` method defined on
+it so that we can add text to `content` as before, but note that `DraftPost`
+does not have a `content` method defined! So we've enforced that all posts
+start as draft posts, and draft posts don't have their content available for
+display. Any attemt to get around these constraints will be a compiler error.
+
+#### Implementing Transitions as Transformations into Different Types
+
+So how do we get a published post then? The rule we want to enforce is that a
+draft post has to be reviewed and approved before it can be published. A post
+in the pending review state should still not display any content. Let's
+implement these constraints by adding another struct, `PendingReviewPost`,
+defining the `request_review` method on `DraftPost` to return a
+`PendingReviewPost`, and defining an `approve` method on `PendingReviewPost` to
+return a `Post` as shown in Listing 17-20:
+
+<span class="filename">Filename: src/lib.rs</span>
+
+```rust
+# pub struct Post {
+#     content: String,
+# }
+#
+# pub struct DraftPost {
+#     content: String,
+# }
+#
+impl DraftPost {
+    // ...snip...
+
+    pub fn request_review(self) -> PendingReviewPost {
+        PendingReviewPost {
+            content: self.content,
+        }
+    }
+}
+
+pub struct PendingReviewPost {
+    content: String,
+}
+
+impl PendingReviewPost {
+    pub fn approve(self) -> Post {
+        Post {
+            content: self.content,
+        }
+    }
+}
+```
+
+<span class="caption">Listing 17-20: A `PendingReviewPost` that gets created by
+calling `request_review` on `DraftPost`, and an `approve` method that turns a
+`PendingReviewPost` into a published `Post`</span>
+
+The `request_review` and `approve` methods take ownership of `self`, thus
+consuming the `DraftPost` and `PendingReviewPost` instances and transforming
+them into a `PendingReviewPost` and a published `Post`, respectively. This way,
+we won't have any `DraftPost` instances lingering around after we've called
+`request_review` on them, and so forth. `PendingReviewPost` doesn't have a
+`content` method defined on it, so attempting to read its content is a compiler
+error like it is with `DraftPost`. Because the only way to get a published
+`Post` instance that does have a `content` method defined is to call the
+`approve` method on a `PendingReviewPost`, and the only way to get a
+`PendingReviewPost` is to call the `request_review` method on a `DraftPost`,
+we've now encoded the blog post workflow into the type system.
+
+This does mean we have to make some small changes to `main`. Because
+`request_review` and `approve` return new instances rather than modifying the
+struct they're called on, we need to add more `let post = ` shadowing
+assignments to save the returned instances. We also can't have the assertions
+about the draft and pending review post's contents being empty string anymore,
+nor do we need them: we can't compile code that tries to use the content of
+posts in those states any longer. The updated code in `main` is shown in
+Listing 17-21:
+
+<span class="filename">Filename: src/main.rs</span>
+
+```rust,ignore
+extern crate blog;
+use blog::Post;
+
+fn main() {
+    let mut post = Post::new();
+
+    post.add_text("I ate a salad for lunch today");
+
+    let post = post.request_review();
+
+    let post = post.approve();
+
+    assert_eq!("I ate a salad for lunch today", post.content());
+}
+```
+
+<span class="caption">Listing 17-21: Modifications to `main` to use the new
+implementation of the blog post workflow</span>
+
+Having to change `main` to reassign `post` is what makes this implementation
+not quite following the object-oriented state pattern anymore: the
+transformations between the states are no longer encapsulated entirely within
+the `Post` implementation. However, we've gained the property of having invalid
+states be impossible because of the type system and type checking that happens
+at compile time! This ensures that certain bugs, such as displaying the content
+of an unpublished post, will be discovered before they make it to production.
+
+Even though Rust is capable of implementing object-oriented design patterns,
+there are other patterns like encoding state into the type system that are
+available in Rust. These patterns have different tradeoffs than the
+object-oriented patterns do. While you may be very familiar with
+object-oriented patterns, rethinking the problem in order to take advantage of
+Rust's features can give benefits like preventing some bugs at compile-time.
+Object-oriented patterns won't always be the best solution in Rust, since Rust
+has features like ownership that object-oriented languages don't have.
+
 ## Summary
 
 No matter whether you think Rust is an object-oriented language or not after
@@ -487,7 +680,9 @@ reading this chapter, you've now seen that trait objects are a way to get some
 object-oriented features in Rust. Dynamic dispatch can give your code some
 flexibility in exchange for a bit of runtime performance. This flexibility can
 be used to implement object-oriented patterns that can help with the
-maintainability of your code.
+maintainability of your code. Rust also has different features, like ownership,
+than object-oriented languages. An object-oriented pattern won't always be the
+best way to take advantage of Rust's strengths.
 
 Next, let's look at another feature of Rust that enables lots of flexibility:
 patterns. We've looked at them briefly throughout the book, but haven't seen
