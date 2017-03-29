@@ -78,6 +78,7 @@ Dobrý
 doccargo
 doccratesio
 doesn
+DraftPost
 ebooks
 Edsger
 else's
@@ -205,6 +206,7 @@ ParseIntError
 PartialEq
 PartialOrd
 PendingReview
+PendingReviewPost
 portia
 powi
 preprocessing

@@ -482,7 +482,7 @@ macros).
 
 A downside of implementing this object-oriented pattern exactly as it's defined
 for object-oriented languages is that we're not taking advantage of Rust's
-strengths as much as we could be. Let's take a look at some chages we can make
+strengths as much as we could be. Let's take a look at some changes we can make
 to this code that can make invalid states and transitions into compile time
 errors.
 
@@ -563,7 +563,7 @@ functions that return `Post`. `DraftPost` has an `add_text` method defined on
 it so that we can add text to `content` as before, but note that `DraftPost`
 does not have a `content` method defined! So we've enforced that all posts
 start as draft posts, and draft posts don't have their content available for
-display. Any attemt to get around these constraints will be a compiler error.
+display. Any attempt to get around these constraints will be a compiler error.
 
 #### Implementing Transitions as Transformations into Different Types
 
