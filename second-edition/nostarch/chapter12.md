@@ -1,80 +1,119 @@
 
 [TOC]
 
-# An I/O Project
+# An I/O Project Building a Small Grep
 
-We've learned a lot over the last few chapters. Let's take that new knowledge
-and apply it by building a project together. Along the way, we'll learn a bit
-more about Rust's standard library.
+<!-- We might need a more descriptive title, something that captures the new
+elements we're introducing -- are we going to cover things like environment
+variables more in later chapters, or is this the only place we explain how to
+use them? -->
 
-So what should we build? One that uses Rust's strengths. A great use of Rust is
-for command line tools: Rust's speed, safety, 'single binary' output, and
-cross-platform support make it a good language choice for this kind of task. So
-we'll make our own version of a classic command line tool: `grep`. `grep` is
-short for "Globally search a Regular Expression and Print." In the
-simplest use case, it does this:
+<!-- This is the only place we were planning on explaining both environment
+variables and printing to standard error. These are things that people commonly
+want to know how to do in Rust, but there's not much more than what we've said
+here about them, people just want to know how to do them in Rust. We realize
+that those sections make this chapter long, but think it's worth it to include
+information that people want. We've gotten really positive feedback from people
+who have read this chapter online; people who like learning through projects
+have really enjoyed this chapter. /Carol-->
 
-- Takes a filename and a string as arguments.
-- Reads the file.
-- Finds lines in the file that contain the string argument.
-- Prints out those lines.
+This chapter is both a recap of the many skills you've learned so far and an
+exploration of a few more standard library features. We're going to build a
+command-line tool that interacts with file and command line input/output to
+practice some of the Rust you now have under your belt.
 
-In addition, we'll add one extra feature: an environment variable that will
-allow us to search for the string argument in a case-insensitive way.
+Rust's speed, safety, 'single binary' output, and cross-platform support make
+it a good language for creating command line tools, so for our project we'll
+make our own version of the classic command line tool `grep`. Grep is an
+acronym for "Globally search a Regular Expression and Print." In the simplest
+use case, `grep` searches a specified file for a specified string using the
+following steps:
 
-There's another great reason to use `grep` as an example project: a very
-fully-featured version of `grep` has already been created in Rust by a
-community member, Andrew Gallant. It's called `ripgrep`, and it's very,
-very fast. While our version of `grep` will be fairly simple, you'll have
-some of the background knowledge to understand that project if you want to see
-something more real-world.
+- Take as arguments a filename and a string.
+- Read the file.
+- Find lines in the file that contain the string argument.
+- Print out those lines.
 
-This project will bring together a number of things we learned previously:
+We'll also show how to use environment variables and print to standard error
+instead of standard out; these techniques are commonly used in command line
+tools.
 
-- Organize code (using what we learned in modules, Chapter 7)
-- Use vectors and strings (collections, Chapter 8)
-- Handle errors (Chapter 9)
-- Use traits and lifetimes where appropriate (Chapter 10)
-- Have tests (Chapter 11)
+One Rust community member, Andrew Gallant, has already created a
+fully-featured, very fast version of `grep`, called `ripgrep`. By comparison,
+our version of `grep` will be fairly simple, this chapter will give you some of
+the background knowledge to help you understand a real-world project like
+`ripgrep`.
 
-Additionally, we'll briefly introduce closures, iterators, and trait objects,
-which Chapters XX, YY, and ZZ respectively are about to cover in detail.
+This project will bring together a number of concepts you've learned so far:
 
-Let's create a new project with, as always, `cargo new`:
+- Organizing code (using what we learned in modules, Chapter 7)
+- Using vectors and strings (collections, Chapter 8)
+- Handling errors (Chapter 9)
+- Using traits and lifetimes where appropriate (Chapter 10)
+- Writing tests (Chapter 11)
 
-```text
+We'll also briefly introduce closures, iterators, and trait objects, which
+Chapters 13 and 17 will cover in detail.
+
+Let's create a new project with, as always, `cargo new`. We're calling our
+project `greprs` to distinguish from the `grep` tool that you may already have
+on your system:
+
+```
 $ cargo new --bin greprs
      Created binary (application) `greprs` project
 $ cd greprs
 ```
 
-We're calling our version of `grep` 'greprs', so that we don't confuse any of
-our users into thinking that it's the more fully-featured version of `grep`
-they may already have installed on their system.
-
 ## Accepting Command Line Arguments
 
-Our first task is to have `greprs` accept its two command line arguments. There
-are some existing libraries on crates.io that can help us do this, but since
-we're learning, we'll implement this ourselves.
+Our first task is to make `greprs` able to accept its two command line
+arguments: the filename and a string to search for. That is, we want to be able
+to run our program with `cargo run`, a string to search for, and a path to a
+file to search in, like so:
 
-We'll need to call a function provided in Rust's standard library:
+```
+$ cargo run searchstring example-filename.txt
+```
+
+Right now, the program generated by `cargo new` ignores any arguments we give
+it. There are some existing libraries on crates.io that can help us accept
+command line arguments, but since we're learning, let's implement this
+ourselves.
+
+<!--Below -- I'm not clear what we need the args function for, yet, can you set
+it out more concretely? Otherwise, will it make more sense in context of the
+code later? Is this function needed to allow our function to accept arguments,
+is that was "args" is for? -->
+<!-- We mentioned in the intro to this chapter that grep takes as arguments a
+filename and a string. I've added an example of how we want to run our
+resulting tool and what we want the behavior to be, please let me know if this
+doesn't clear it up. /Carol-->
+
+### Reading the Argument Values
+
+In order to be able to get the values of command line arguments passed to our
+program, we'll need to call a function provided in Rust's standard library:
 `std::env::args`. This function returns an *iterator* of the command line
-arguments that were given to our program. We haven't discussed iterators yet;
-Chapter 16 will cover them fully. For our purposes, though, we don't need to
-understand much about how they work in order to use them. We only need to
-understand two things:
+arguments that were given to our program. We haven't discussed iterators yet,
+and we'll cover them fully in Chapter 13, but for our purposes now we only need
+to know two things about iterators:
 
 1. Iterators produce a series of values.
 2. We can call the `collect` function on an iterator to turn it into a vector
    containing all of the elements the iterator produces.
 
-Let's give it a try as shown in Listing 12-1:
+Let's give it a try: use the code in Listing 12-1 to read any command line
+arguments passed to our `greprs` program and collect them into a vector.
 
-<figure>
-<span class="filename">Filename: src/main.rs</span>
+<!-- Give what a try, here, what are we making? Can you lay that out? I've
+tried above but I'm not sure it's complete -->
+<!-- We're not creating anything, we're just reading. I'm not sure if I've made
+this clearer. /Carol -->
 
-```rust
+Filename: src/main.rs
+
+```
 use std::env;
 
 fn main() {
@@ -83,33 +122,49 @@ fn main() {
 }
 ```
 
-<figcaption>
-
-Listing 12-1: Collect the command line arguments into a vector and print them out
-
-</figcaption>
-</figure>
+Listing 12-1: Collect the command line arguments into a vector and print them
+out
 
 <!-- Will add wingdings in libreoffice /Carol -->
 
-First, we have a `use` statement to bring the `std::env` module into scope.
-When using a function that's nested in more than one level of module, like
-`std::env::args` is, it's conventional to use `use` to bring the parent module
-into scope, rather than the function itself. `env::args` is less ambiguous than
-a lone `args`. Also, if we end up using more than one function in `std::env`,
-we only need a single `use`.
+First, we bring the `std::env` module into scope with a `use` statement so that
+we can use its `args` function. Notice the `std::env::args` function is nested
+in two levels of modules. As we talked about in Chapter 7, in cases where the
+desired function is nested in more than one module, it's conventional to bring
+the parent module into scope, rather than the function itself. This lets us
+easily use other functions from `std::env`. It's also less ambiguous than
+adding `use std::env::args;` then calling the function with just `args`; that
+might look like a function that's defined in the current module.
+
+<!-- We realized that we need to add the following caveat to fully specify
+the behavior of `std::env::args` /Carol -->
+
+<!-- PROD: START BOX -->
+
+> Note: `std::env::args` will panic if any argument contains invalid Unicode.
+> If you need to accept arguments containing invalid Unicode, use
+> `std::env::args_os` instead. That function returns `OsString` values instead
+> of `String` values. We've chosen to use `std::env::args` here for simplicity
+> because `OsString` values differ per-platform and are more complex to work
+> with than `String` values.
+
+<!-- PROD: END BOX -->
+
+<!--what is it we're making into a vector here, the arguments we pass?-->
+<!-- The iterator of the arguments. /Carol -->
 
 On the first line of `main`, we call `env::args`, and immediately use `collect`
-to create a vector out of it. We're also explicitly annotating the type of
-`args` here: `collect` can be used to create many kinds of collections. Rust
-won't be able to infer what kind of type we want, so the annotation is
-required. We very rarely need to annotate types in Rust, but `collect` is one
-function where you often need to.
+to turn the iterator into a vector containing all of the iterator's values. The
+`collect` function can be used to create many kinds of collections, so we
+explicitly annotate the type of `args` to specify that we want a vector of
+strings. Though we very rarely need to annotate types in Rust, `collect` is one
+function you do often need to annotate because Rust isn't able to infer what
+kind of collection you want.
 
 Finally, we print out the vector with the debug formatter, `:?`. Let's try
 running our code with no arguments, and then with two arguments:
 
-```text
+```
 $ cargo run
 ["target/debug/greprs"]
 
@@ -118,46 +173,67 @@ $ cargo run needle haystack
 ["target/debug/greprs", "needle", "haystack"]
 ```
 
-You'll notice one interesting thing: the name of the binary is the first
-argument. The reasons for this are out of the scope of this chapter, but it's
-something we'll have to remember to account for.
+<!--Below --- This initially confused me, do you mean that the argument at
+index 0 is taken up by the name of the binary, so we start arguments at 1 when
+setting them? It seems like it's something like that, reading on, and I've
+edited as such, can you check? -->
+<!-- Mentioning the indexes here seemed repetitive with the text after Listing
+12-2. We're not "setting" arguments here, we're saving the value in variables.
+I've hopefully cleared this up without needing to introduce repetition.
+/Carol-->
 
-Now that we have a way to access all of the arguments, let's find the ones we
-care about and save them in variables as shown in Listing 12-2:
+You may notice that the first value in the vector is "target/debug/greprs",
+which is the name of our binary. The reasons for this are out of the scope of
+this chapter, but we'll need to remember this as we save the two arguments we
+need.
 
-<figure>
-<span class="filename">Filename: src/main.rs</span>
+### Saving the Argument Values in Variables
 
-```rust
+Printing out the value of the vector of arguments just illustrated that we're
+able to access the values specified as command line arguments from our program.
+That's not what we actually want to do, though, we want to save the values of
+the two arguments in variables so that we can use the values in our program.
+Let's do that as shown in Listing 12-2:
+
+<!-- By 'find the ones we care about' did you mean set particular arguments so
+the user knows what to enter? I'm a little confused about what we are doing,
+I've tried to clarify above -->
+<!-- We're incrementally adding features and adding some code that helps the
+reader be able to see and experience what the code is doing rather than just
+taking our word for it. I've hopefully clarified below. /Carol -->
+
+Filename: src/main.rs
+
+```
 use std::env;
 
 fn main() {
     let args: Vec<String> = env::args().collect();
 
-    let search = &args[1];
+    let query = &args[1];
     let filename = &args[2];
 
-    println!("Searching for {}", search);
+    println!("Searching for {}", query);
     println!("In file {}", filename);
 }
 ```
 
-<figcaption>
-
-Listing 12-2: Create variables to hold the search argument and filename argument
-
-</figcaption>
-</figure>
+Listing 12-2: Create variables to hold the query argument and filename argument
 
 <!-- Will add ghosting and wingdings in libreoffice /Carol -->
 
-Remember, the program's name is the first argument, so we don't need `args[0]`.
-We've decided that the first argument will be the string we're searching for,
-so we put a reference to the first argument in the variable `search`. The
-second argument will be the filename, so we put a reference to the second
-argument in the variable `filename`. Let's try running this program again:
+As we saw when we printed out the vector, the program's name takes up the first
+value in the vector at `args[0]`, so we're starting at index `1`. The first
+argument `greprs` takes is the string we're searching for, so we put a
+reference to the first argument in the variable `query`. The second argument
+will be the filename, so we put a reference to the second argument in the
+variable `filename`.
 
-```text
+We're temporarily printing out the values of these variables, again to prove to
+ourselves that our code is working as we intend. Let's try running this program
+again with the arguments `test` and `sample.txt`:
+
+```
 $ cargo run test sample.txt
     Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
      Running `target/debug/greprs test sample.txt`
@@ -165,33 +241,23 @@ Searching for test
 In file sample.txt
 ```
 
-Great! There's one problem, though. Let's try giving it no arguments:
-
-```text
-$ cargo run
-    Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
-     Running `target/debug/greprs`
-thread 'main' panicked at 'index out of bounds: the len is 1
-but the index is 1', /stable-dist-rustc/build/src/libcollections/vec.rs:1392
-note: Run with `RUST_BACKTRACE=1` for a backtrace.
-```
-
-Because our vector only has one element, the program's name, but we tried to
-access the second element, our program panics with a message about the
-out-of-bound access. While this error message is _accurate_, it's not
-meaningful to users of our program at all. We could fix this problem right now,
-but let's push forward: we'll improve this situation before we're finished.
+Great, it's working! We're saving the values of the arguments that we need into
+the right variables. Later we'll add some error handling to deal with
+situations such as when the user provides no arguments, but for now we'll
+ignore that and work on adding file reading capabilities instead.
 
 ## Reading a File
 
-Now that we have some variables containing the information that we need, let's
-try using them. The next step is to open the file that we want to search. To do
-that, we need a file. Create one called `poem.txt` at the root level of your
-project, and fill it up with some Emily Dickinson:
+Next, we're going to read the file that we specify in the filename command line
+argument. First, we need a sample file to test it with---the best kind of file
+to use to make sure that `greprs` is working is one with a small amount of text
+over multiple lines with some repeated words. Listing 12-3 has an Emily
+Dickinson poem that will work well! Create a file called `poem.txt` at the root
+level of your project, and enter the poem "I'm nobody! Who are you?":
 
-<span class="filename">Filename: poem.txt</span>
+Filename: poem.txt
 
-```text
+```
 I'm nobody! Who are you?
 Are you nobody, too?
 Then there's a pair of us — don't tell!
@@ -203,18 +269,22 @@ To tell your name the livelong day
 To an admiring bog!
 ```
 
+Listing 12-3: The poem "I'm nobody! Who are you?" by Emily Dickinson that will
+make a good test case
+
 <!-- Public domain Emily Dickinson poem. This will work best with something
 short, but that has multiple lines and some repetition. We could search through
 code; that gets a bit meta and possibly confusing... Changes to this are most
 welcome. /Carol -->
+<!-- :D I like it! I'm all for keeping -->
+<!-- Great! /Carol -->
 
-With that in place, let's edit *src/main.rs* and add code to open the file as
-shown in Listing 12-3:
+With that in place, edit *src/main.rs* and add code to open the file as shown
+in Listing 12-4:
 
-<figure>
-<span class="filename">Filename: src/main.rs</span>
+Filename: src/main.rs
 
-```rust
+```
 use std::env;
 use std::fs::File;
 use std::io::prelude::*;
@@ -222,10 +292,10 @@ use std::io::prelude::*;
 fn main() {
     let args: Vec<String> = env::args().collect();
 
-    let search = &args[1];
+    let query = &args[1];
     let filename = &args[2];
 
-    println!("Searching for {}", search);
+    println!("Searching for {}", query);
     println!("In file {}", filename);
 
     let mut f = File::open(filename).expect("file not found");
@@ -237,37 +307,34 @@ fn main() {
 }
 ```
 
-<figcaption>
-
-Listing 12-3: Read the contents of the file specified by the second argument
-
-</figcaption>
-</figure>
+Listing 12-4: Reading the contents of the file specified by the second argument
 
 <!-- Will add ghosting and wingdings in libreoffice /Carol -->
 
-We've added a few things. First of all, we need some more `use` statements to
-bring in the relevant parts of the standard library: we need `std::fs::File`
-for dealing with files, and `std::io::prelude::*` contains various traits that
-are useful when doing I/O, including file I/O. In the same way that Rust has a
-general prelude that brings certain things into scope automatically, the
-`std::io` module has its own prelude of common things you'll need when working
-with I/O. Unlike the default prelude, we must explicitly `use` the prelude in
-`std::io`.
+First, we add some more `use` statements to bring in relevant parts of the
+standard library: we need `std::fs::File` for dealing with files, and
+`std::io::prelude::*` contains various traits that are useful when doing I/O,
+including file I/O. In the same way that Rust has a general prelude that brings
+certain things into scope automatically, the `std::io` module has its own
+prelude of common things you'll need when working with I/O. Unlike the default
+prelude, we must explicitly `use` the prelude in `std::io`.
 
-In `main`, we've added three things: first, we get a handle to the file and
-open it by using the `File::open` function and passing it the name of the file
-specified in the second argument. Second, we create a mutable, empty `String`
-in the variable `contents`, then call `read_to_string` on our file handle with
-our `contents` string as the argument; `contents` is where `read_to_string`
-will place the data it reads. Finally, we print out the entire file contents,
-which is a way for us to be sure our program is working so far.
+In `main`, we've added three things: first, we get a mutable handle to the file
+by calling the `File::open` function and passing it the value of the `filename`
+variable. Second, we create a variable called `contents` and set it to a
+mutable, empty `String`. This will hold the content of the file after we read
+it in. Third, we call `read_to_string` on our file handle and pass a mutable
+reference to `contents` as an argument.
 
-Let's try running this code, specifying any string for the first argument (since
-we haven't implemented the searching part yet) and our *poem.txt* file as the
-second argument:
+After those lines, we've again added temporary `println!` that prints out the
+value in `contents` after we've read the file so we can check that our program
+is working so far.
 
-```text
+Let's try running this code with any string as the first command line argument
+(since we haven't implemented the searching part yet) and our *poem.txt* file
+as the second argument:
+
+```
 $ cargo run the poem.txt
     Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
      Running `target/debug/greprs the poem.txt`
@@ -285,214 +352,280 @@ To tell your name the livelong day
 To an admiring bog!
 ```
 
-Great! Our code is working. However, it's got a few flaws. Because our program
-is still small, these flaws aren't a huge deal, but as our program grows, it
-will be harder and harder to fix them in a clean way. Let's do the refactoring
-now, instead of waiting. The refactoring will be much easier to do with only
-this small amount of code.
+Great! Our code read in and printed out the content of the file. We've got a
+few flaws though: the `main` function has multiple responsibilities, and we're
+not handling errors as well as we could be. While our program is still small,
+these flaws aren't a big problem, but as our program grows, it will be harder
+to fix them cleanly. It's good practice to begin refactoring early on when
+developing a program, as it's much easier to refactor smaller amounts of code,
+so we'll do that now.
 
-## Improving Error Handling and Modularity
+## Refactoring to Improve Modularity and Error Handling
 
 There are four problems that we'd like to fix to improve our program, and they
-all have to do with potential errors and the way the program is structured. The
-first problem is where we open the file: we've used `expect` to print out an
-error message if opening the file fails, but the error message only says "file
-not found". There are a number of ways that opening a file can fail, but we're
-always assuming that it's due to the file being missing. For example, the file
-could exist, but we might not have permission to open it: right now, we print
-an error message that says the wrong thing!
+have to do with the way the program is structured and how it's handling
+potential errors.
 
-Secondly, our use of `expect` over and over is similar to the earlier issue we
-noted with the `panic!` on indexing if we don't pass any command line
-arguments: while it _works_, it's a bit unprincipled, and we're doing it all
-throughout our program. It would be nice to put our error handling in one spot.
+First, our `main` function now performs two tasks: it parses arguments and
+opens up files. For such a small function, this isn't a huge problem. However,
+if we keep growing our program inside of `main`, the number of separate tasks
+the `main` function handles will grow. As a function gains responsibilities, it
+gets harder to reason about, harder to test, and harder to change without
+breaking one of its parts. It's better to separate out functionality so that
+each function is responsible for one task.
 
-The third problem is that our `main` function now does two things: it parses
-arguments, and it opens up files. For such a small function, this isn't a huge
-problem. However, as we keep growing our program inside of `main`, the number of
-separate tasks in the `main` function will get larger and larger. As one
-function gains many responsibilities, it gets harder to reason about, harder to
-test, and harder to change without breaking one of its parts.
-
-This also ties into our fourth problem: while `search` and `filename` are
+This also ties into our second problem: while `query` and `filename` are
 configuration variables to our program, variables like `f` and `contents` are
 used to perform our program's logic. The longer `main` gets, the more variables
-we're going to bring into scope, and the more variables we have in scope, the
-harder it is to keep track of which ones we need for which purpose. It would be
-better if we grouped the configuration variables into one structure to make
-their purpose clear.
+we're going to need to bring into scope; the more variables we have in scope,
+the harder it is to keep track of the purpose of each. It's better to group the
+configuration variables into one structure to make their purpose clear.
 
-Let's address these problems by restructuring our project.
+The third problem is that we've used `expect` to print out an error message if
+opening the file fails, but the error message only says `file not found`. There
+are a number of ways that opening a file can fail besides a missing file: for
+example, the file might exist, but we might not have permission to open it.
+Right now, if we're in that situation, we'd print the `file not found` error
+message that would give the user the wrong advice!
+
+Fourth, we use `expect` repeatedly to deal with different errors, and if the
+user runs our programs without specifying enough arguments, they'll get an
+"index out of bounds" error from Rust that doesn't clearly explain the problem.
+It would be better if all our error handling code was in one place so that
+future maintainers only have one place to consult in the code if the error
+handling logic needs to change. Having all the error handling code in one place
+will also help us to ensure that we're printing messages that will be
+meaningful to our end users.
+
+Let's address these problems by refactoring our project.
 
 ### Separation of Concerns for Binary Projects
 
-These kinds of organizational problems are common to many similar kinds of
-projects, so the Rust community has developed a pattern for organizing the
-separate concerns. This pattern is useful for organizing any binary project
-you'll build in Rust, so we can justify doing this refactoring a bit earlier,
-since we know that our project fits the pattern. The pattern looks like this:
+The organizational problem of having the `main` function responsible for
+multiple tasks is common to many binary projects, so the Rust community has
+developed a kind of guideline process for splitting up the separate concerns of
+a binary program when `main` starts getting large. The process has the
+following steps:
 
-1. Split your program into both a *main.rs* and a *lib.rs*.
-2. Place your command line parsing logic into *main.rs*.
-3. Place your program's logic into *lib.rs*.
-4. The job of the `main` function is:
-   * parse arguments
-   * set up any other configuration
-   * call a `run` function in *lib.rs*
-   * if `run` returns an error, handle that error
+1. Split your program into both a *main.rs* and a *lib.rs* and move your
+   program's logic into *lib.rs*.
+2. While your command line parsing logic is small, it can remain in *main.rs*.
+3. When the command line parsing logic starts getting complicated, extract it
+   from *main.rs* into *lib.rs* as well.
+4. The responsibilities that remain in the `main` function after this process
+   should be:
+   * Calling the command line parsing logic with the argument values
+   * Setting up any other configuration
+   * Calling a `run` function in *lib.rs*
+   * If `run` returns an error, handling that error
 
-Whew! The pattern sounds more complicated than it is, honestly. It's all about
-separating concerns: *main.rs* handles actually running the program, and
-*lib.rs* handles all of the actual logic of the task at hand. Let's re-work our
-program into this pattern. First, let's extract a function whose purpose is
-only to parse arguments. Listing 12-4 shows the new start of `main` that calls
-a new function `parse_config`, which we're still going to define in
-*src/main.rs*:
+This pattern is all about separating concerns: *main.rs* handles running the
+program, and *lib.rs* handles all of the logic of the task at hand. Because we
+can't test the `main` function directly, this structure lets us test all of our
+program's logic by moving it into functions in *lib.rs*. The only code that
+remains in *main.rs* will be small enough to verify its correctness by reading
+it. Let's re-work our program by following this process.
 
-<figure>
-<span class="filename">Filename: src/main.rs</span>
+<!--Since main is already handling the parsing of arguments, why do we need to
+add a new function for it, can you say how that improves things? -->
+<!-- Sorry, the steps we had were unclear. We've tried rewording. /Carol -->
 
-```rust,ignore
+### Extracting the Argument Parser
+
+First, we'll extract the functionality for parsing arguments. Listing 12-5
+shows the new start of `main` that calls a new function `parse_config`, which
+we're still going to define in *src/main.rs* for the moment:
+
+Filename: src/main.rs
+
+```
 fn main() {
     let args: Vec<String> = env::args().collect();
 
-    let (search, filename) = parse_config(&args);
+    let (query, filename) = parse_config(&args);
 
     // ...snip...
 }
 
 fn parse_config(args: &[String]) -> (&str, &str) {
-    let search = &args[1];
+    let query = &args[1];
     let filename = &args[2];
 
-    (search, filename)
+    (query, filename)
 }
 ```
 
-<figcaption>
-
-Listing 12-4: Extract a `parse_config` function from `main`
-
-</figcaption>
-</figure>
+Listing 12-5: Extract a `parse_config` function from `main`
 
 <!-- Will add ghosting and wingdings in libreoffice /Carol -->
 
-This may seem like overkill, but we're working in small steps. After making
-this change, run the program again to verify that the argument parsing still
-works. It's good to check your progress often, so that you have a better idea
-of which change caused a problem, should you encounter one.
+We're still collecting the command line arguments into a vector, but instead of
+assigning the argument value at index 1 to the variable `query` and the
+argument value at index 2 to the variable `filename` within the `main`
+function, we pass the whole vector to the `parse_config` function. The
+`parse_config` function then holds the logic that knows which argument goes in
+which variable, and passes the values back to `main`. We still create the
+`query` and `filename` variables in `main`, but `main` no longer has the
+responsibility of knowing how the command line arguments and variables
+correspond.
 
-### Grouping Configuration Values
+This may seem like overkill for our small program, but we're refactoring in
+small, incremental steps. After making this change, run the program again to
+verify that the argument parsing still works. It's good to check your progress
+often, as that will help you identify the cause of problems when they occur.
 
-Now that we have a function, let's improve it. Our code still has an indication
-that there's a better design possible: we return a tuple, but then immediately
-break that tuple up into individual parts again. This code isn't bad on its
-own, but there's one other sign we have room for improvement: we called our
-function `parse_config`. The `config` part of the name is saying the two values
-we return should really be bound together, since they're both part of one
-configuration value.
+#### Grouping Configuration Values
+
+We can take another small step to improve this function further. At the moment,
+we're returning a tuple, but then we immediately break that tuple up into
+individual parts again. This is a sign that perhaps we don't have the right
+abstraction yet.
+
+Another indicator that there's room for improvement is the `config` part of
+`parse_config`, which implies that the two values we return are related and are
+both part of one configuration value. We're not currently conveying this
+meaning in the structure of the data other than grouping the two values into a
+tuple: we could put the two values into one struct and give each of the struct
+fields a meaningful name. This will make it easier for future maintainers of
+this code to understand how the different values relate to each other and what
+their purpose is.
+
+<!-- above -- I'm not sure why this is a problem --- because they aren't
+currently bound together? And why does it imply that -->
 
 > Note: some people call this anti-pattern of using primitive values when a
 > complex type would be more appropriate *primitive obsession*.
 
-Let's introduce a struct to hold all of our configuration. Listing 12-5 shows
-the addition of the `Config` struct definition, the refactoring of
-`parse_config`, and updates to `main`:
+<!-- Ah, I see, so the problems here stem from using simple types to do tasks
+inefficiently, when a more complex task could handle it in ways that improve...
+behavior? Readability? Can you say as much? -->
+<!-- I've tried to clarify above. Note that when Rust programmers talk about
+"efficiency", they usually mean "run-time performance", whereas here we're
+talking about code design and maintainability and not addressing performance
+at all. /Carol -->
 
-<figure>
-<span class="filename">Filename: src/main.rs</span>
+Listing 12-6 shows the addition of a struct named `Config` defined to have
+fields named `query` and `filename`. We've also changed the `parse_config`
+function to return an instance of the `Config` struct, and updated `main` to
+use the struct fields rather than having separate variables:
 
-```rust
-# use std::env;
-#
+Filename: src/main.rs
+
+```
 fn main() {
     let args: Vec<String> = env::args().collect();
 
     let config = parse_config(&args);
 
-    println!("Searching for {}", config.search);
+    println!("Searching for {}", config.query);
     println!("In file {}", config.filename);
+
+    let mut f = File::open(config.filename).expect("file not found");
 
     // ...snip...
 }
 
 struct Config {
-    search: String,
+    query: String,
     filename: String,
 }
 
 fn parse_config(args: &[String]) -> Config {
-    let search = args[1].clone();
+    let query = args[1].clone();
     let filename = args[2].clone();
 
     Config {
-        search: search,
+        query: query,
         filename: filename,
     }
 }
 ```
 
-<figcaption>
-
-Listing 12-5: Refactoring `parse_config` to return an instance of a `Config`
+Listing 12-6: Refactoring `parse_config` to return an instance of a `Config`
 struct
-
-</figcaption>
-</figure>
 
 <!-- Will add ghosting and wingdings in libreoffice /Carol -->
 
 The signature of `parse_config` now indicates that it returns a `Config` value.
-In the body of `parse_config`, we used to be returning string slices that were
-references to `String` values in `args`, but we've defined `Config` to contain
-owned `String` values. Because the argument to `parse_config` is a slice of
-`String` values, the `Config` instance can't take ownership of the `String`
-values: that violates Rust's borrowing rules, since the `args` variable in
-`main` owns the `String` values and is only letting the `parse_config` function
-borrow them.
+In the body of `parse_config`, where we used to return string slices that
+reference `String` values in `args`, we've now chosen to define `Config` to
+contain owned `String` values. The `args` variable in `main` is the owner of
+the argument values and is only letting the `parse_config` function borrow
+them, though, which means we'd violate Rust's borrowing rules if `Config` tried
+to take ownership of the values in `args`.
 
-There are a number of different ways we could manage the `String` data; for
-now, we'll take the easy but less efficient route, and call the `clone` method
-on the string slices. The call to `clone` will make a full copy of the string's
-data for the `Config` instance to own, which does take more time and memory
-than storing a reference to the string data, but cloning the data makes our
-code very straightforward.
+There are a number of different ways we could manage the `String` data, and the
+easiest, though somewhat inefficient, route is to call the `clone` method on
+the values. This will make a full copy of the data for the `Config` instance to
+own, which does take more time and memory than storing a reference to the
+string data. However, cloning the data also makes our code very straightforward
+since we don't have to manage the lifetimes of the references, so in this
+circumstance giving up a little performance to gain simplicity is a worthwhile
+trade-off.
+
+<!-- This box is intended to go right after the paragraph talking about `clone`
+/Carol -->
 
 <!-- PROD: START BOX -->
 
 > #### The Tradeoffs of Using `clone`
 >
-> There's a tendency amongst many Rustaceans to prefer not to use `clone` to fix
-> ownership problems due to its runtime cost. In Chapter XX on iterators, we'll
-> learn how to make this situation more efficient. For now, it's okay to copy a
-> few strings to keep making progress. We're only going to be making these
-> copies once, and our filename and search string are both very small. It's
-> better to have a working program that's a bit inefficient than try to
-> hyper-optimize code on your first pass. As you get more experienced with Rust,
-> it'll be easier to skip this step, but for now, it's perfectly acceptable to
-> call `clone`.
+> There's a tendency amongst many Rustaceans to avoid using `clone` to fix
+> ownership problems because of its runtime cost. In Chapter 13 on iterators,
+> you'll learn how to use more efficient methods in this kind of situation, but
+> for now, it's okay to copy a few strings to keep making progress since we'll
+> only make these copies once, and our filename and query string are both very
+> small. It's better to have a working program that's a bit inefficient than
+> try to hyper-optimize code on your first pass. As you get more experienced
+> with Rust, it'll be easier to go straight to the desirable method, but for
+> now it's perfectly acceptable to call `clone`.
 
 <!-- PROD: END BOX -->
 
-We've updated `main` to put the instance of `Config` that `parse_config`
-returns in a variable named `config`, and we've updated the code that was using
-the separate `search` and `filename` variables to use the fields on the
-`Config` struct instead.
+We've updated `main` so that it places the instance of `Config` that
+`parse_config` returns into a variable named `config`, and updated the code
+that previously used the separate `query` and `filename` variables so that is
+now uses the fields on the `Config` struct instead.
 
-### Creating a Constructor for `Config`
+Our code now more clearly conveys our intent that `query` and `filename` are
+related and their purpose is to configure how the program will work. Any code
+that uses these values knows to find them in the `config` instance in the
+fields named for their purpose.
 
-Let's now think about the purpose of `parse_config`: it's a function that
-creates a `Config` instance. We've already seen a convention for functions that
-create instances: a `new` function, like `String::new`. Listing 12-6 shows the
-result of transforming `parse_config` into a `new` function associated with our
-`Config` struct:
+#### Creating a Constructor for `Config`
 
-<figure>
-<span class="filename">Filename: src/main.rs</span>
+<!-- Can you lay out what we intend to do in this section? I wasn't sure even
+at the end what we did and why --- why did we create it as parse_config to then
+change it to new? -->
+<!-- We're making small, incremental changes. In addition to being good
+software development practice, we were hoping that by changing one thing at a
+time, the process of improving code's design would be easier to follow rather
+than just jumping to the best solution. We extracted code into a function, then
+it was clearer that we should introduce a struct, then it was clear that the
+function we extracted is really a constructor of `Config` and should be written
+as such. This refactoring process should be familiar to software developers.
+I've tried to add a little recap to the start of this section, I hope that
+helps. /Carol -->
 
-```rust
+So far, we've extracted the logic responsible for parsing the command line
+arguments from `main` into the `parse_config` function, which helped us to see
+that the `query` and `filename` values were related and that relationship
+should be conveyed in our code. We then added a `Config` struct to name the
+related purpose of `query` and `filename`, and to be able to return the values'
+names as struct field names from the `parse_config` function.
 
+So now that the purpose of the `parse_config` function is to create a `Config`
+instance, we can change `parse_config` from being a plain function into a
+function named `new` that is associated with the `Config` struct. Making this
+change will make our code more idiomatic: we can create instances of types in
+the standard library like `String` by calling `String::new`, and by changing
+`parse_config` to be a `new` function associated with `Config`, we'll be able
+to create instances of `Config` by calling `Config::new`. Listing 12-7 shows
+the changes we'll need to make:
+
+Filename: src/main.rs
+
+```
 fn main() {
     let args: Vec<String> = env::args().collect();
 
@@ -505,42 +638,56 @@ fn main() {
 
 impl Config {
     fn new(args: &[String]) -> Config {
-        let search = args[1].clone();
+        let query = args[1].clone();
         let filename = args[2].clone();
 
         Config {
-            search: search,
+            query: query,
             filename: filename,
         }
     }
 }
 ```
 
-<figcaption>
-
-Listing 12-6: Changing `parse_config` into `Config::new`
-
-</figcaption>
-</figure>
+Listing 12-7: Changing `parse_config` into `Config::new`
 
 <!-- Will add ghosting and wingdings in libreoffice /Carol -->
 
-We've changed the name of `parse_config` to `new` and moved it within  an `impl`
-block. We've also updated the callsite in `main`. Try compiling this again to
-make sure it works.
+We've updated `main` where we were calling `parse_config` to instead call
+`Config::new`. We've changed the name of `parse_config` to `new` and moved it
+within an `impl` block, which makes the `new` function associated with
+`Config`. Try compiling this again to make sure it works.
 
-### Returning a `Result` from the Constructor
+### Fixing the Error Handling
 
-Here's our last refactoring of this method: remember how accessing the vector
-with indices 1 and 2 panics when it contains fewer than 3 items and gives a bad
-error message? Let's fix that! Listing 12-7 shows how we can check that our
-slice is long enough before accessing those locations, and panic with a better
-error message:
+Now we'll work on fixing our error handling. Recall that we mentioned
+attempting to access the values in the `args` vector at index 1 or index 2 will
+cause the program to panic if the vector contains fewer than 3 items. Try
+running the program without any arguments; it will look like this:
 
-<figure>
-<span class="filename">Filename: src/main.rs</span>
+```
+$ cargo run
+    Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
+     Running `target/debug/greprs`
+thread 'main' panicked at 'index out of bounds: the len is 1
+but the index is 1',  /stable-dist-rustc/build/src/libcollections/vec.rs:1307
+note: Run with `RUST_BACKTRACE=1` for a backtrace.
+```
 
-```rust,ignore
+`index out of bounds: the len is 1 but the index is 1` is an error message that
+is intended for programmers, and won't really help our end users understand
+what happened and what they should do instead. Let's fix that now.
+
+#### Improving the Error Message
+
+In Listing 12-8, we're adding a check in the `new` function to check that the
+slice is long enough before accessing index 1 and 2. If the slice isn't long
+enough, we panic with a better error message than the `index out of bounds`
+message:
+
+Filename: src/main.rs
+
+```
 // ...snip...
 fn new(args: &[String]) -> Config {
     if args.len() < 3 {
@@ -549,19 +696,22 @@ fn new(args: &[String]) -> Config {
     // ...snip...
 ```
 
-<figcaption>
-
-Listing 12-7: Adding a check for the number of arguments
-
-</figcaption>
-</figure>
+Listing 12-8: Adding a check for the number of arguments
 
 <!-- Will add ghosting and wingdings in libreoffice /Carol -->
 
-With these extra few lines of code in `new`, let's try running our program
-without any arguments:
+This is similar to the `Guess::new` function we wrote in Listing 9-8, where we
+called `panic!` if the `value` argument was out of the range of valid values.
+Instead of checking for a range of values, we're checking that the length of
+`args` is at least 3, and the rest of the function can operate under the
+assumption that this condition has been met. If `args` has fewer than 3 items,
+this condition will be true, and we call the `panic!` macro to end the program
+immediately.
 
-```bash
+With these extra few lines of code in `new`, let's try running our program
+without any arguments again and see what the error looks like now:
+
+```
 $ cargo run
     Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
      Running `target/debug/greprs`
@@ -569,61 +719,85 @@ thread 'main' panicked at 'not enough arguments', src/main.rs:29
 note: Run with `RUST_BACKTRACE=1` for a backtrace.
 ```
 
-This is a bit better! We at least have a reasonable error message here.
-However, we also have a bunch of extra information that we don't want to give
-to our users. We can do better by changing the type signature of `new`. Right
-now, it returns only a `Config`, so there's no way to indicate that an error
-happened while creating our `Config`. Instead, we can return a `Result`, as
-shown in Listing 12-8:
+This output is better, we now have a reasonable error message. However, we also
+have a bunch of extra information we don't want to give to our users. So
+perhaps using the technique we used in Listing 9-8 isn't the best to use here;
+a call to `panic!` is more appropriate for a programming problem rather than a
+usage problem anyway, as we discussed in Chapter 9. Instead, we can use the
+other technique we learned about in that chapter: returning a `Result` that can
+indicate either success or an error.
 
-<figure>
-<span class="filename">Filename: src/main.rs</span>
+<!-- Below -- how does using new fix this, can you lay that our up front? -->
+<!-- I'm not sure what you mean, we're already using `new` and the fix continues
+to use `new`... /Carol -->
 
-```rust,ignore
+#### Returning a `Result` from `new` Instead of Calling `panic!`
+
+We can choose to instead return a `Result` value that will contain a `Config`
+instance in the successful case, and will describe the problem in the error
+case. When `Config::new` is communicating to `main`, we can use Rust's way of
+signaling that there was a problem using the `Result` type. Then we can change
+`main` to convert an `Err` variant into a nicer error for our users, without
+the surrounding text about `thread 'main'` and `RUST_BACKTRACE` that a call to
+`panic!` causes.
+
+Listing 12-9 shows the changes to the return value of `Config::new` and the
+body of the function needed to return a `Result`:
+
+Filename: src/main.rs
+
+```
 impl Config {
     fn new(args: &[String]) -> Result<Config, &'static str> {
         if args.len() < 3 {
             return Err("not enough arguments");
         }
 
-        let search = args[1].clone();
+        let query = args[1].clone();
         let filename = args[2].clone();
 
         Ok(Config {
-            search: search,
+            query: query,
             filename: filename,
         })
     }
 }
 ```
 
-<figcaption>
-
-Listing 12-8: Return a `Result` from `Config::new`
-
-</figcaption>
-</figure>
+Listing 12-9: Return a `Result` from `Config::new`
 
 <!-- Will add ghosting and wingdings in libreoffice /Carol -->
 
+<!-- what does returning a Result rather than a Config do? -->
+<!-- This is what Chapter 9 was about, I've added a few more references
+to that chapter to reinforce the connection /Carol -->
+
 Our `new` function now returns a `Result`, with a `Config` instance in the
-success case and a `&'static str` when an error happens. Recall from "The
-Static Lifetime" section in Chapter 10 `&'static str` is the type of string
-literals, which is what our error message is for now.
+success case and a `&'static str` in the error case. Recall from "The Static
+Lifetime" section in Chapter 10 that `&'static str` is the type of string
+literals, which is our error message type for now.
 
 We've made two changes in the body of the `new` function: instead of calling
-`panic!` if there aren't enough arguments, we now return an `Err` value. We
-wrapped the `Config` return value in an `Ok`. These changes make the function
-conform to its new type signature.
+`panic!` when the user doesn't pass enough arguments, we now return an `Err`
+value, and we've wrapped the `Config` return value in an `Ok`. These changes
+make the function conform to its new type signature.
 
-### Calling `Config::new` and Handling Errors
+By having `Config::new` return an `Err` value, it allows the `main` function to
+handle the `Result` value returned from the `new` function and exit the process
+more cleanly in the error case.
 
-Now we need to make some changes to `main` as shown in Listing 12-9:
+#### Calling `Config::new` and Handling Errors
 
-<figure>
-<span class="filename">Filename: src/main.rs</span>
+In order to handle the error case and print a user-friendly message, we need to
+update `main` to handle the `Result` that `Config::new` is now returning as
+shown in Listing 12-10. We're also going to implement by hand something that
+`panic!` handled for us: exiting the command line tool with an error code of 1.
+A nonzero exit status is a convention to signal to the process that called our
+program that our program ended with an error state.
 
-```rust,ignore
+Filename: src/main.rs
+
+```
 use std::process;
 
 fn main() {
@@ -637,39 +811,46 @@ fn main() {
     // ...snip...
 ```
 
-<figcaption>
-
-Listing 12-9: Exiting with an error code if creating a new `Config` fails
-
-</figcaption>
-</figure>
+Listing 12-10: Exiting with an error code if creating a new `Config` fails
 
 <!-- Will add ghosting and wingdings in libreoffice /Carol -->
 
-We've added a new `use` line to import `process` from the standard library.
-In the `main` function itself, we'll handle the `Result` value returned
+<!-- In the `main` function itself, we'll handle the `Result` value returned
 from the `new` function and exit the process in a cleaner way if `Config::new`
-returns an `Err` value.
+returns an `Err` value.-->
+<!-- I moved this line above to the previous section, it seems to at least
+partially answer some of my earlier confusions, though I'm not following this
+as well as I'd like so not sure if I have this right, can you confirm either
+way whether that move makes sense? -->
+<!-- That's fine /Carol -->
 
-We're using a method we haven't covered before that's defined on `Result<T, E>`
-by the standard library: `unwrap_or_else`. This method has similar behavior as
-`unwrap` if the `Result` is an `Ok` value: it returns the inner value `Ok` is
-wrapping. Unlike `unwrap`, if the value is an `Err` value, this method calls a
-*closure* which is an anonymous function that we define and pass as an argument
-to `unwrap_or_else`. We'll be covering closures in more detail in Chapter XX;
-the important part to understand in this case is that `unwrap_or_else` will
-pass the inner value of the `Err` to our closure in the argument `err` that
-appears between the vertical pipes. Using `unwrap_or_else` lets us do some
-custom, non-`panic!` error handling.
+In this listing, we're using a method we haven't covered before:
+`unwrap_or_else`, which is defined on `Result<T, E>` by the standard library.
+Using `unwrap_or_else` allows us to define some custom, non-`panic!` error
+handling. If the `Result` is an `Ok` value, this method's behavior is similar
+to `unwrap`: it returns the inner value `Ok` is wrapping. However, if the value
+is an `Err` value, this method calls the code in the *closure*, which is an
+anonymous function we define and pass as an argument to `unwrap_or_else`. We'll
+be covering closures in more detail in Chapter 13. What you need to know for
+now is that `unwrap_or_else` will pass the inner value of the `Err`, which in
+this case is the static string `not enough arguments` that we added in Listing
+12-9, to our closure in the argument `err` that appears between the vertical
+pipes. The code in the closure can then use the `err` value when it runs.
 
-Said error handling is only two lines: we print out the error, then call
-`std::process::exit`. That function will stop our program's execution
-immediately and return the number passed to it as a return code. By convention,
-a zero means success and any other value means failure. In the end, this has
-similar characteristics to our `panic!`-based handling we had in Listing 12-7,
-but we no longer get all the extra output. Let's try it:
+<!--Can you give a high-level idea of what the closure does with it? -->
+<!-- Does with what? I've tried to elaborate in the above and below paragraphs,
+but I'm not sure exactly what's confusing /Carol -->
 
-```bash
+We've added a new `use` line to import `process` from the standard library. The
+code in the closure that will get run in the error case is only two lines: we
+print out the `err` value, then call `std::process::exit` (we've added a new
+`use` line at the top to import `process` from the standard library).
+`process::exit` will stop the program immediately and return the number that
+was passed as the exit status code. This is similar to the `panic!`-based
+handling we used in Listing 12-8, with the exception that we no longer get all
+the extra output. Let's try it:
+
+```
 $ cargo run
    Compiling greprs v0.1.0 (file:///projects/greprs)
     Finished debug [unoptimized + debuginfo] target(s) in 0.48 secs
@@ -679,21 +860,35 @@ Problem parsing arguments: not enough arguments
 
 Great! This output is much friendlier for our users.
 
-### Handling Errors from the `run` Function
+### Extracting a `run` Function
 
-Now that we're done refactoring our configuration parsing, let's improve our
-program's logic. Listing 12-10 shows the code after extracting a function named
-`run` that we'll call from `main`. The `run` function contains the code that
-was in `main`:
+Now we're done refactoring our configuration parsing; let's turn to our
+program's logic. As we laid out in the process we discussed in the "Separation
+of Concerns for Binary Projects" section, we're going to extract a function
+named `run` that will hold all of the logic currently in the `main` function
+that isn't setting up configuration or handling errors. Once we're done, `main`
+will be concise and easy to verify by inspection, and we'll be able to write
+tests for all of the other logic.
 
-<figure>
-<span class="filename">Filename: src/main.rs</span>
+<!-- it contains ALL the function from main? Can you say why we're doing this,
+hw this improves it? What is the run function doing? I'm afraid I feel a bit in
+the dark here-->
+<!-- This is the pattern that we explained in the Separation of Concerns for
+Binary Projects section. I've added a reference back to that and reiterated
+some of the reasoning from there, but this section isn't introducing the
+concept of the `run` function holding the logic that was in `main` /Carol -->
 
-```rust,ignore
+Listing 12-11 shows the extracted `run` function. For now, we're making only
+the small, incremental improvement of extracting the function and still
+defining the function in *src/main.rs*:
+
+Filename: src/main.rs
+
+```
 fn main() {
     // ...snip...
 
-    println!("Searching for {}", config.search);
+    println!("Searching for {}", config.query);
     println!("In file {}", config.filename);
 
     run(config);
@@ -711,27 +906,28 @@ fn run(config: Config) {
 // ...snip...
 ```
 
-<figcaption>
-
-Listing 12-10: Extracting a `run` functionality for the rest of the program logic
-
-</figcaption>
-</figure>
+Listing 12-11: Extracting a `run` function containing the rest of the program
+logic
 
 <!-- Will add ghosting and wingdings in libreoffice /Carol -->
 
-The contents of `run` are the previous lines that were in `main`, and the `run`
-function takes a `Config` as an argument. Now that we have a separate function,
-we can make a similar improvement to the one we made to `Config::new` in
-Listing 12-8: let's return a `Result<T, E>` instead of calling `panic!` via
-`expect`. Listing 12-11 shows the addition of a `use` statement to bring
-`std::error::Error` struct into scope and the changes to the `run` function
-to return a `Result`:
+The `run` function now contains all the remaining logic from `main` starting
+from reading the file. The `run` function takes the `Config` instance as an
+argument.
 
-<figure>
-<span class="filename">Filename: src/main.rs</span>
+#### Returning Errors from the `run` Function
 
-```rust,ignore
+With the remaining program logic separated into the `run` function rather than
+being in `main`, we can improve the error handling like we did with
+`Config::new` in Listing 12-9. Instead of allowing the program to panic by
+calling `expect`, the `run` function will return a `Result<T, E>` when
+something goes wrong. This will let us further consolidate the logic around
+handling errors in a user-friendly way into `main`. Listing 12-12 shows the
+changes to the signature and body of `run`:
+
+Filename: src/main.rs
+
+```
 use std::error::Error;
 
 // ...snip...
@@ -748,40 +944,40 @@ fn run(config: Config) -> Result<(), Box<Error>> {
 }
 ```
 
-<figcaption>
-
-Listing 12-11: Changing the `run` function to return `Result`
-
-</figcaption>
-</figure>
+Listing 12-12: Changing the `run` function to return `Result`
 
 <!-- Will add ghosting and wingdings in libreoffice /Carol -->
 
-We've made three big changes here. The first is the return type of the `run`
-function is now `Result<(), Box<Error>>`. Previously, our function returned the
-unit type, `()`, so that's still the value returned in the `Ok` case. For our
-error type, we're going to use `Box<Error>`. This is called a *trait object*,
-which we'll be covering in Chapter XX. For now, think of it like this:
-`Box<Error>` means the function will return some kind of type that implements
-the `Error` trait, but we're not specifying what particular type the return
-value will be. This gives us flexibility to return error values that may be of
-different types in different error cases. `Box` is a smart pointer to heap
-data, and we'll be going into detail about `Box` in Chapter YY.
+We've made three big changes here. First, we're changing the return type of the
+`run` function to `Result<(), Box<Error>>`. This function previously returned
+the unit type, `()`, and we keep that as the value returned in the `Ok` case.
 
-The second change is that we've removed our calls to `expect` in favor of `?`,
-like we talked about in Chapter 9. Rather than `panic!` on an error, this will
-return the error value from the function we're in for the caller to handle.
+<!-- is just the `Box` bit the trait object, or the whole `Box<Error>`
+syntax?-->
+<!-- The whole `Box<Error>` /Carol -->
 
-The third change is that we're now returning an `Ok` value from this function
-in the success case. Because we've declared the `run` function's success type
-as `()` in the signature, we need to wrap the unit type value in the `Ok`
-value. `Ok(())` looks a bit strange at first, but using `()` in this way is the
+For our error type, we're using the *trait object* `Box<Error>` (and we've
+brought `std::error::Error` into scope with a `use` statement at the top).
+We'll be covering trait objects in Chapter 17. For now, just know that
+`Box<Error>` means the function will return a type that implements the `Error`
+trait, but we don't have to specify what particular type the return value will
+be. This gives us flexibility to return error values that may be of different
+types in different error cases.
+
+The second change we're making is removing the calls to `expect` in favor of
+`?`, like we talked about in Chapter 9. Rather than `panic!` on an error, this
+will return the error value from the current function for the caller to handle.
+
+Thirdly, this function now returns an `Ok` value in the success case. We've
+declared the `run` function's success type as `()` in the signature, which
+means we need to wrap the unit type value in the `Ok` value. This `Ok(())`
+syntax may look a bit strange at first, but using `()` like this is the
 idiomatic way to indicate that we're calling `run` for its side effects only;
-it doesn't return anything interesting.
+it doesn't return a value we need.
 
-This will compile, but with a warning:
+When you run this, it will compile, but with a warning:
 
-```text
+```
 warning: unused result which must be used, #[warn(unused_must_use)] on by default
   --> src/main.rs:39:5
    |
@@ -789,18 +985,24 @@ warning: unused result which must be used, #[warn(unused_must_use)] on by defaul
    |     ^^^^^^^^^^^^
 ```
 
-Rust is trying to tell us that we're ignoring our `Result`, which might be an
-error value. Let's handle that now. We'll use a similar technique as the way we
-handled failure with `Config::new` in Listing 12-9, but with a slight
+Rust is telling us that our code ignores the `Result` value, which might be
+indicating that there was an error. We're not checking to see if there was an
+error or not, though, and the compiler is reminding us that we probably meant
+to have some error handling code here! Let's rectify that now.
+
+#### Handling Errors Returned from `run` in `main`
+
+We'll check for errors and handle them nicely using a similar technique to the
+way we handled errors with `Config::new` in Listing 12-10, but with a slight
 difference:
 
-<span class="filename">Filename: src/main.rs</span>
+Filename: src/main.rs
 
-```rust,ignore
+```
 fn main() {
     // ...snip...
 
-    println!("Searching for {}", config.search);
+    println!("Searching for {}", config.query);
     println!("In file {}", config.filename);
 
     if let Err(e) = run(config) {
@@ -813,41 +1015,41 @@ fn main() {
 
 <!-- Will add ghosting and wingdings in libreoffice /Carol -->
 
-Instead of `unwrap_or_else`, we use `if let` to see if `run` returns an `Err`
-value and call `process::exit(1)` if so. Why? The distinction between this case
-and the `Config::new` case is a bit subtle. With `Config::new`, we cared about
-two things:
+We use `if let` to check whether `run` returns an `Err` value, rather than
+`unwrap_or_else`, and call `process::exit(1)` if it does. `run` doesn't return
+a value that we want to `unwrap` like `Config::new` returns the `Config`
+instance. Because `run` returns a `()` in the success case, we only care about
+detecting an error, so we don't need `unwrap_or_else` to return the unwrapped
+value as it would only be `()`.
 
-1. Detecting any errors that happen
-2. Getting a `Config` if no errors happened
-
-In this case, because `run` returns a `()` in the success case, the only thing
-we care about is the first case: detecting an error. If we used
-`unwrap_or_else`, we'd get its return value, which would be `()`. That's not
-very useful.
-
-The bodies of the `if let` and of the `unwrap_or_else` are the same in both
-cases though: we print out an error and exit.
+The bodies of the `if let` and the `unwrap_or_else` functions are the same in
+both cases though: we print out the error and exit.
 
 ### Split Code into a Library Crate
 
-This is looking pretty good! There's one more thing we haven't done yet: split
-the *src/main.rs* up and put some code into *src/lib.rs* Let's do that now:
-move the `run` function from *src/main.rs* to a new file, *src/lib.rs*. You'll
-also need to move the relevant `use` statements and the definition of `Config`
-and its `new` method as well. Your *src/lib.rs* should now look like Listing
-12-12:
+This is looking pretty good so far! Now we're going to split the *src/main.rs*
+file up and put some code into *src/lib.rs* so that we can test it and have a
+small `main` function.
 
-<figure>
-<span class="filename">Filename: src/lib.rs</span>
+Let's move the following pieces of code from *src/main.rs* to a new file,
+*src/lib.rs*:
 
-```rust,ignore
+- The `run` function definition
+- The relevant `use` statements
+- The definition of `Config`
+- The `Config::new` function definition
+
+The contents of *src/lib.rs* should now look like Listing 12-13:
+
+Filename: src/lib.rs
+
+```
 use std::error::Error;
 use std::fs::File;
 use std::io::prelude::*;
 
 pub struct Config {
-    pub search: String,
+    pub query: String,
     pub filename: String,
 }
 
@@ -857,11 +1059,11 @@ impl Config {
             return Err("not enough arguments");
         }
 
-        let search = args[1].clone();
+        let query = args[1].clone();
         let filename = args[2].clone();
 
         Ok(Config {
-            search: search,
+            query: query,
             filename: filename,
         })
     }
@@ -879,27 +1081,24 @@ pub fn run(config: Config) -> Result<(), Box<Error>>{
 }
 ```
 
-<figcaption>
-
-Listing 12-12: Moving `Config` and `run` into *src/lib.rs*
-
-</figcaption>
-</figure>
+Listing 12-13: Moving `Config` and `run` into *src/lib.rs*
 
 <!-- Will add ghosting and wingdings in libreoffice /Carol -->
 
-Notice we also made liberal use of `pub`: on `Config`, its fields and its `new`
-method, and on the `run` function.
+We've made liberal use of `pub` here: on `Config`, its fields and its `new`
+method, and on the `run` function. We now have a library crate that has a
+public API that we can test.
 
-Now in *src/main.rs*, we need to bring in the code that's now in *src/lib.rs*
-through `extern crate greprs`. Then we need to add a `use greprs::Config` line
-to bring `Config` into scope, and prefix the `run` function with our crate name
-as shown in Listing 12-13:
+#### Calling the Library Crate from the Binary Crate
 
-<figure>
-<span class="filename">Filename: src/main.rs</span>
+Now we need to bring the code we moved to *src/lib.rs* into the scope of the
+binary crate in *src/main.rs* by using `extern crate greprs`. Then we'll add a
+`use greprs::Config` line to bring the `Config` type into scope, and prefix the
+`run` function with our crate name as shown in Listing 12-14:
 
-```rust,ignore
+Filename: src/main.rs
+
+```
 extern crate greprs;
 
 use std::env;
@@ -915,7 +1114,7 @@ fn main() {
         process::exit(1);
     });
 
-    println!("Searching for {}", config.search);
+    println!("Searching for {}", config.query);
     println!("In file {}", config.filename);
 
     if let Err(e) = greprs::run(config) {
@@ -926,20 +1125,22 @@ fn main() {
 }
 ```
 
-<figcaption>
-
-Listing 12-13: Bringing the `greprs` crate into the scope of *src/main.rs*
-
-</figcaption>
-</figure>
+Listing 12-14: Bringing the `greprs` crate into the scope of *src/main.rs*
 
 <!-- Will add ghosting and wingdings in libreoffice /Carol -->
 
-With that, everything should work again. Give it a few `cargo run`s and make
-sure you haven't broken anything. Whew! That all was a lot of work, but we've
-set ourselves up for success in the future. We've set up a way to handle errors
-in a much nicer fashion, and we've made our code slightly more modular. Almost
-all of our work will be done in *src/lib.rs* from here on out.
+With that, all the functionality should be connected and should work. Give it a
+`cargo run` and make sure everything is wired up correctly.
+
+<!-- any tips for if they do find something is broken, main places to check? Or
+just "diff your file against the XXX file in the book's resources to check
+where it went wrong"? -->
+<!-- We think general troubleshooting tips should be something we cover in
+Chapter 1; the tips should apply to any example in the book /Carol -->
+
+Whew! That was a lot of work, but we've set ourselves up for success in the
+future. Now it's much easier to handle errors, and we've made our code more
+modular. Almost all of our work will be done in *src/lib.rs* from here on out.
 
 Let's take advantage of this newfound modularity by doing something that would
 have been hard with our old code, but is easy with our new code: write some
@@ -947,48 +1148,51 @@ tests!
 
 ## Testing the Library's Functionality
 
-Writing tests for the core functionality of our code is now easier since we
-extracted the logic into *src/lib.rs* and left all the argument parsing and
-error handling in *src/main.rs*. We can now call our code directly with various
-arguments and check return values without having to call our binary from the
-command line.
+Now that we've extracted the logic into *src/lib.rs* and left all the argument
+parsing and error handling in *src/main.rs*, it's much easier for us to write
+tests for the core functionality of our code. We can call our functions
+directly with various arguments and check return values without having to call
+our binary from the command line.
 
-We're going to write a function named `grep` that takes our search term and the
-text to search and produces a list of search results. Let's remove that
-`println!` from `run` (and from *src/main.rs* as well, as we don't really need
-those anymore either), and call the new `grep` function with the options we've
-collected. We'll add a placeholder implementation of the function for now, and
-a test that specifies the behavior we'd like the `grep` function to have. The
-test will fail with our placeholder implementation, of course, but we can make
-sure the code compiles and that we get the failure message we expect. Listing
-12-14 shows these modifications:
+In this section, we're going to follow the Test Driven Development (TDD)
+process. This is a software development technique that follows this set of
+steps:
 
-<figure>
-<span class="filename">Filename: src/lib.rs</span>
+1. Write a test that fails, and run it to make sure it fails for the reason
+   you expected.
+2. Write or modify just enough code to make the new test pass.
+3. Refactor the code you just added or changed, and make sure the tests
+   continue to pass.
+4. Repeat!
 
-```rust
-fn grep<'a>(search: &str, contents: &'a str) -> Vec<&'a str> {
-     vec![]
-}
+This is just one of many ways to write software, but TDD can help drive the
+design of code. Writing the test before writing the code that makes the test
+pass helps to maintain high test coverage throughout the process.
 
-pub fn run(config: Config) -> Result<(), Box<Error>>{
-    let mut f = File::open(config.filename)?;
+We're going to test drive the implementation of the part of our `greprs`
+program that will actually do the searching for the query string in the file
+contents and produce a list of lines that match the query. We're going to add
+this functionality in a function called `search`.
 
-    let mut contents = String::new();
-    f.read_to_string(&mut contents)?;
+### Writing a Failing Test
 
-    grep(&config.search, &contents);
+First, since we don't really need them any more, let's remove the `println!`
+statements from both *src/lib.rs* and *src/main.rs*. Then we'll add a `test`
+module with a test function, like we did in Chapter 11. The test function
+specifies the behavior we'd like the `search` function to have: it will take
+a query and the text to search for the query in, and will return only the lines
+from the text that contain the query. Listing 12-15 shows this test:
 
-    Ok(())
-}
+Filename: src/lib.rs
 
+```
 #[cfg(test)]
 mod test {
-    use grep;
+    use super::*;
 
     #[test]
     fn one_result() {
-        let search = "duct";
+        let query = "duct";
         let contents = "\
 Rust:
 safe, fast, productive.
@@ -996,62 +1200,79 @@ Pick three.";
 
         assert_eq!(
             vec!["safe, fast, productive."],
-            grep(search, contents)
+            search(query, contents)
         );
     }
 }
 ```
 
-<figcaption>
+Listing 12-15: Creating a failing test for the `search` function we wish we had
 
-Listing 12-14: Creating a function where our logic will go and a failing test
-for that function
+We've chosen to use "duct" as the string we're looking for in this test. The
+text we're searching in is three lines, only one of which contains "duct". We
+assert that the value returned from the `search` function contains only the one
+line we expect.
 
-</figcaption>
-</figure>
+We aren't able to run this test and watch it fail though, since this test
+doesn't even compile yet! We're going to add just enough code to get it to
+compile: a definition of the `search` function that always returns an empty
+vector, as shown in Listing 12-16. Once we have this, the test should compile
+and fail because an empty vector doesn't match a vector containing the one
+line `"safe, fast, productive."`.
+
+Filename: src/lib.rs
+
+```
+fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
+     vec![]
+}
+```
+
+Listing 12-16: Defining just enough of the `search` function that our test will
+compile
 
 <!-- Will add ghosting and wingdings in libreoffice /Carol -->
 
-Notice that we need an explicit lifetime `'a` declared in the signature of
-`grep` and used with the `contents` argument and the return value. Remember,
-lifetime parameters are used to specify which arguments' lifetimes connect to
-the lifetime of the return value. In this case, we're indicating that the
-vector we're returning is going to contain string slices that reference slices
-of the argument `contents`, as opposed to referencing slices of the argument
-`search`. Another way to think about what we're telling Rust is that the data
-returned by the `grep` function will live as long as the data passed into this
-function in the `contents` argument. This is important! Given that the data a
-slice references needs to be valid in order for the reference to be valid, if
-the compiler thought that we were making string slices of `search` rather than
-`contents`, it would do its safety checking incorrectly. If we tried to compile
-this function without lifetimes, we would get this error:
+Notice that we need an explicit lifetime `'a` defined in the signature of
+`search` and used with the `contents` argument and the return value. Remember
+from Chapter 10 that the lifetime parameters specify which argument lifetime is
+connected to the lifetime of the return value. In this case, we're indicating
+that the returned vector should contain string slices that reference slices of
+the argument `contents` (rather than the argument `query`).
 
-```text
+In other words, we're telling Rust that the data returned by the `search`
+function will live as long as the data passed into the `search` function in the
+`contents` argument. This is important! The data referenced *by* a slice needs
+to be valid in order for the reference to be valid; if the compiler assumed we
+were making string slices of `query` rather than `contents`, it would do its
+safety checking incorrectly.
+
+If we tried to compile this function without lifetimes, we would get this error:
+
+```
 error[E0106]: missing lifetime specifier
-  --> src/lib.rs:37:46
-   |
-37 | fn grep(search: &str, contents: &str) -> Vec<&str> {
-   |                                              ^ expected lifetime parameter
-   |
-   = help: this function's return type contains a borrowed value, but the
-	   signature does not say whether it is borrowed from `search` or
-           `contents`
+ --> src/lib.rs:5:47
+  |
+5 | fn search(query: &str, contents: &str) -> Vec<&str> {
+  |                                               ^ expected lifetime parameter
+  |
+  = help: this function's return type contains a borrowed value, but the
+  signature does not say whether it is borrowed from `query` or `contents`
 ```
 
-Rust can't possibly know which of the two arguments we need, so it needs us to
-tell it. Because `contents` is the argument that contains all of our text and
-we want to return the parts of that text that match, we know `contents` is the
+Rust can't possibly know which of the two arguments we need, so we need to tell
+it. Because `contents` is the argument that contains all of our text and we
+want to return the parts of that text that match, we know `contents` is the
 argument that should be connected to the return value using the lifetime syntax.
 
-Connecting arguments to return values in the signature is something that other
-programming languages don't make you do, so don't worry if this still feels
-strange! Knowing how to specify lifetimes gets easier over time, and practice
-makes perfect. You may want to re-read the above section or go back and compare
-this example with the Lifetime Syntax section in Chapter 10.
+Other programming languages don't require you to connect arguments to return
+values in the signature, so this may still feel strange, but will get easier
+over time. You may want to compare this example with the Lifetime Syntax
+section in Chapter 10.
 
 Now let's try running our test:
 
-```text
+```
 $ cargo test
 ...warnings...
     Finished debug [unoptimized + debuginfo] target(s) in 0.43 secs
@@ -1076,63 +1297,91 @@ test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured
 error: test failed
 ```
 
-Great, our test fails, exactly as we expected. Let's get the test to pass! It's
-failing because we always return an empty vector. Here's what we're going to do
-to implement `grep`:
+Great, our test fails, exactly as we expected. Let's get the test to pass!
+
+### Writing Code that Gets the Test to Pass
+
+Currently, our test is failing because we always return an empty vector. To fix
+that and implement `search`, our program needs to follow these steps:
 
 1. Iterate through each line of the contents.
-2. Check if the line contains our search string.
+2. Check if the line contains our query string.
    * If it does, add it to the list of values we're returning.
-   * If not, do nothing.
+   * If it doesn't, do nothing.
 3. Return the list of results that match.
 
-Let's take each step at a time, starting with iterating through lines. Strings
-have a helpful method to handle this, conveniently named `lines`:
+Let's take each step at a time, starting with iterating through lines.
 
-<span class="filename">Filename: src/lib.rs</span>
+#### Iterating Through Lines with the `lines` method
 
-```rust,ignore
-fn grep<'a>(search: &str, contents: &'a str) -> Vec<&'a str> {
+Rust has a helpful method to handle line-by-line iteration of strings,
+conveniently named `lines`, that works as shown in Listing 12-17:
+
+Filename: src/lib.rs
+
+```
+fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
     for line in contents.lines() {
         // do something with line
     }
 }
 ```
 
+Listing 12-17: Iterating through each line in `contents`
+
 <!-- Will add wingdings in libreoffice /Carol -->
 
-We're using a `for` loop along with the `lines` method to get each line in turn.
-Next, let's see if our line contains the search string. Luckily, strings have a
-helpful method named `contains` that does this for us! Using the `contains`
-method looks like this:
+The `lines` method returns an iterator. We'll be talking about iterators in
+depth in Chapter 13, but we've already seen this way of using an iterator in
+Listing 3-6, where we used a `for` loop with an iterator to run some code on
+each item in a collection.
 
-<span class="filename">Filename: src/lib.rs</span>
+<!-- so what does `lines` do on its own, if we need to use it in a for loop to
+work? -->
+<!-- It does nothing on its own, it returns an iterator for you to do something
+with. Here, the thing we're doing with it is using it with a `for` loop. I'm
+not sure exactly what you're asking or how to make the text clearer, but I
+added a reference to where we've done this in the book previously. /Carol -->
 
-```rust,ignore
-fn grep<'a>(search: &str, contents: &'a str) -> Vec<&'a str> {
+#### Searching Each Line for the Query
+
+Next, we'll add functionality to check if the current line contains the query
+string. Luckily, strings have another helpful method named `contains` that does
+this for us! Add the `contains` method to the `search` function as shown in
+Listing 12-18:
+
+Filename: src/lib.rs
+
+```
+fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
     for line in contents.lines() {
-        if line.contains(search) {
+        if line.contains(query) {
             // do something with line
         }
     }
 }
 ```
 
+Listing 12-18: Adding functionality to see if the line contains the string in
+`query`
+
 <!-- Will add ghosting and wingdings in libreoffice /Carol -->
 
-Finally, we need a way to store the lines that contain our search string. For
+#### Storing Matching Lines
+
+Finally, we need a way to store the lines that contain our query string. For
 that, we can make a mutable vector before the `for` loop and call the `push`
 method to store a `line` in the vector. After the `for` loop, we return the
-vector:
+vector, as shown in Listing 12-19:
 
-<span class="filename">Filename: src/lib.rs</span>
+Filename: src/lib.rs
 
-```rust,ignore
-fn grep<'a>(search: &str, contents: &'a str) -> Vec<&'a str> {
+```
+fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
     let mut results = Vec::new();
 
     for line in contents.lines() {
-        if line.contains(search) {
+        if line.contains(query) {
             results.push(line);
         }
     }
@@ -1141,11 +1390,14 @@ fn grep<'a>(search: &str, contents: &'a str) -> Vec<&'a str> {
 }
 ```
 
+Listing 12-19: Storing the lines that match so that we can return them
+
 <!-- Will add ghosting and wingdings in libreoffice /Carol -->
 
-Let's give it a try:
+Now the `search` function should be returning only the lines that contain
+`query`, and our test should pass. Let's run the tests:
 
-```text
+```
 $ cargo test
 running 1 test
 test test::one_result ... ok
@@ -1165,27 +1417,43 @@ running 0 tests
 test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured
 ```
 
-Great! It works. Now that our test is passing, we could consider opportunities
-for refactoring the implementation of `grep` and be certain we maintain the
-same functionality while we do so. This code isn't bad, but it isn't taking
-advantage of some useful features of iterators. We'll be coming back to this
-example in Chapter 13 where we'll explore iterators in detail and see how to
-improve it.
+Our test passed, great, it works!
 
-Now that the `grep` function is working, we need to do one last thing inside of
-the `run` function: we never printed out the results! We'll do that by adding
-a `for` loop that prints each line returned from the `grep` function:
+Now that our test is passing, we could consider opportunities for refactoring
+the implementation of the `search` function while keeping the tests passing in
+order to maintain the same functionality while we do so. This code isn't bad,
+but it isn't taking advantage of some useful features of iterators. We'll be
+coming back to this example in Chapter 13 where we'll explore iterators in
+detail and see how to improve it.
 
-<span class="filename">Filename: src/lib.rs</span>
+<!-- If we aren't going into this here, maybe just keep it focused, there's a
+lot going on here as is -->
+<!-- The reason we mention refactoring here is that it's a key step in the TDD
+method that we were implicitly using before. Now that we've added text to the
+beginning of this section to explicitly mention that we're doing TDD and what
+the steps are, we want to address the "refactor" step. People who have some
+experience with Rust might also look at this example and wonder why we're not
+doing this in a different way, and be concerned that we're not teaching the
+best way possible. This paragraph reassures them that we know what we're doing
+and we're getting to the better way in Chapter 13. /Carol -->
 
-```rust,ignore
+#### Using the `search` Function in the `run` Function
+
+Now that we have the `search` function working and tested, we need to actually
+call `search` from our `run` function. We need to pass the `config.query` value
+and the `contents` that `run` read from the file to the `search` function. Then
+`run` will print out each line returned from `search`:
+
+Filename: src/lib.rs
+
+```
 pub fn run(config: Config) -> Result<(), Box<Error>> {
     let mut f = File::open(config.filename)?;
 
     let mut contents = String::new();
     f.read_to_string(&mut contents)?;
 
-    for line in grep(&config.search, &contents) {
+    for line in search(&config.query, &contents) {
         println!("{}", line);
     }
 
@@ -1195,53 +1463,86 @@ pub fn run(config: Config) -> Result<(), Box<Error>> {
 
 <!-- Will add ghosting and wingdings in libreoffice /Carol -->
 
-Now our whole program should be working! Let's try it out:
+We're again using a `for` loop to get each line returned from `search`, and
+the code that we run for each line prints it out.
 
-```text
-$ cargo run the poem.txt
+Now our whole program should be working! Let's try it out, first with a word
+that should return exactly one line from the Emily Dickinson poem, "frog":
+
+```
+$ cargo run frog poem.txt
    Compiling greprs v0.1.0 (file:///projects/greprs)
     Finished debug [unoptimized + debuginfo] target(s) in 0.38 secs
-     Running `target/debug/greprs the poem.txt`
-Then there's a pair of us - don't tell!
-To tell your name the livelong day
-
-$ cargo run a poem.txt
-    Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
-     Running `target/debug/greprs a poem.txt`
-I'm nobody! Who are you?
-Then there's a pair of us - don't tell!
-They'd banish us, you know.
-How dreary to be somebody!
+     Running `target/debug/greprs frog poem.txt`
 How public, like a frog
+```
+
+Cool! Next, how about a word that will match multiple lines, like "the":
+
+```
+$ cargo run the poem.txt
+    Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
+     Running `target/debug/greprs the poem.txt`
+Then there's a pair of us — don't tell!
 To tell your name the livelong day
-To an admiring bog!
+```
+
+And finally, let's make sure that we don't get any lines when we search for a
+word that isn't anywhere in the poem, like "monomorphization":
+
+```
+$ cargo run monomorphization poem.txt
+    Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
+     Running `target/debug/greprs monomorphization poem.txt`
 ```
 
 Excellent! We've built our own version of a classic tool, and learned a lot
 about how to structure applications. We've also learned a bit about file input
 and output, lifetimes, testing, and command line parsing.
 
+Feel free to move on to Chapter 13 if you'd like at this point. To round out
+this project chapter, though, we're going to briefly demonstrate how to work
+with environment variables and printing to standard error, both of which are
+useful when writing command line programs.
+
 ## Working with Environment Variables
 
-Let's add one more feature: case insensitive searching. In addition, this
-setting won't be a command line option: it'll be an environment variable
-instead. We could choose to make case insensitivity a command line option, but
-our users have requested an environment variable that they could set once and
-make all their searches case insensitive in that terminal session.
+We're going to improve our tool with an extra feature: an option for case
+insensitive searching turned on via an environment variable. We could make this
+a command line option and require that users enter it each time they want it to
+apply, but instead we're going to use an environment variable. This allows our
+users to set the environment variable once and have all their searches be case
+insensitive in that terminal session.
 
-### Implement and Test a Case-Insensitive `grep` Function
+### Writing a Failing Test for the Case-Insensitive `search` Function
 
 First, let's add a new function that we will call when the environment variable
-is on. Let's start by adding a new test and re-naming our existing one:
+is on.
 
-```rust,ignore
+<!-- You mean, to turn the environment variable on? I'm not sure what we're
+doing here-->
+<!-- No, I'm not sure how this is unclear. We're adding a new function. We will
+call the new function when the user turns on the environment variable. Can you
+elaborate on what part of the above statement leads to the conclusion that the
+new function is going to turn the environment variable on? Can you suggest a
+rewording that makes the causality direction clearer? /Carol -->
+
+We're going to continue following the TDD process that we started doing in the
+last section, and the first step is again to write a failing test. We'll add a
+new test for the new case insensitive search function, and rename our old test
+from `one_result` to `case_sensitive` to be clearer about the differences
+between the two tests, as shown in Listing 12-20:
+
+Filename: src/lib.rs
+
+```
 #[cfg(test)]
 mod test {
-    use {grep, grep_case_insensitive};
+    use super::*;
 
     #[test]
     fn case_sensitive() {
-        let search = "duct";
+        let query = "duct";
         let contents = "\
 Rust:
 safe, fast, productive.
@@ -1250,13 +1551,13 @@ Duct tape.";
 
         assert_eq!(
             vec!["safe, fast, productive."],
-            grep(search, contents)
+            search(query, contents)
         );
     }
 
     #[test]
     fn case_insensitive() {
-        let search = "rust";
+        let query = "rUsT";
         let contents = "\
 Rust:
 safe, fast, productive.
@@ -1265,7 +1566,7 @@ Trust me.";
 
         assert_eq!(
             vec!["Rust:", "Trust me."],
-            grep_case_insensitive(search, contents)
+            search_case_insensitive(query, contents)
         );
     }
 }
@@ -1273,19 +1574,45 @@ Trust me.";
 
 <!-- Will add ghosting and wingdings in libreoffice /Carol -->
 
-We're going to define a new function named `grep_case_insensitive`. Its
-implementation will be almost the same as the `grep` function, but with some
-minor changes:
+Listing 12-20: Adding a new failing test for the case insensitive function
+we're about to add
 
-<span class="filename">Filename: src/lib.rs</span>
+Note that we've edited the old test's `query` and `contents` too: we changed
+the query to "duct", which will match the line with the word "productive".
+We've added a new line with the text "Duct tape", with a capital D, that
+shouldn't match the query "duct" when we're searching for the query in a case
+sensitive manner. We've changed this test to ensure that we don't accidentally
+break the case sensitive search functionality that we've already implemented;
+this test should pass now and should continue to pass as we work on the case
+insensitive search.
 
-```rust
-fn grep_case_insensitive<'a>(search: &str, contents: &'a str) -> Vec<&'a str> {
-    let search = search.to_lowercase();
+The new test for the case insensitive search uses "rUsT" with some capital
+letters as its query. The expected return value from the
+`search_case_insensitive` function we're going to add is that the query "rust"
+will match both the line containing "Rust:" with a capital R and also the line
+"Trust me." that contains "rust" with a lowercase r. This test will fail to
+compile right now since we haven't yet defined the `search_case_insensitive`
+function; feel free to add a skeleton implementation that always returns an
+empty array in the same way that we did for the `search` function in Listing
+12-16 in order to see the test compile and fail.
+
+### Implementing the `search_case_insensitive` Function
+
+The `search_case_insensitive` function, shown in Listing 12-21, will be almost
+the same as the `search` function. The difference is that we'll lowercase the
+`query` function and each `line` so that whatever the case of the input
+arguments, they will be the same case when we check whether the line contains
+the query.
+
+Filename: src/lib.rs
+
+```
+fn search_case_insensitive<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
+    let query = query.to_lowercase();
     let mut results = Vec::new();
 
     for line in contents.lines() {
-        if line.to_lowercase().contains(&search) {
+        if line.to_lowercase().contains(&query) {
             results.push(line);
         }
     }
@@ -1294,19 +1621,43 @@ fn grep_case_insensitive<'a>(search: &str, contents: &'a str) -> Vec<&'a str> {
 }
 ```
 
+Listing 12-21: Defining the `search_case_insensitive` function to lowercase
+both the query and the line before comparing them
+
 <!-- Will add ghosting and wingdings in libreoffice /Carol -->
 
-First, we lowercase the `search` string, and store it in a shadowed variable
-with the same name. Note that `search` is now a `String` rather than a string
-slice, so we need to add an ampersand when we pass `search` to `contains` since
-`contains` takes a string slice.
+<!-- why do we lowercase the search string? and why does it need to be a string
+rather than a slice? -->
+<!-- We explained this above, that in order to make the search case
+insensitive, we need to lowercase everything so that searches will always match
+no matter what case either the query or each line uses. It needs to be a
+`String` because we're creating new data, not referencing existing data, when
+we call `to_lowercase`. I've tried to make both of these points clearer, but
+I'm not sure exactly what was unclear about it before, so I'm not sure if I've
+helped. /Carol -->
 
-Second, we add a call to `to_lowercase` each `line` before we check if it
-contains `search`. Since we've converted both `line` and `search` into all
-lowercase, we'll find matches no matter what case they used in the file and the
-command line arguments, respectively. Let's see if this passes the tests:
+First, we lowercase the `query` string, and store it in a shadowed variable
+with the same name. Calling `to_lowercase` on the query is necessary so that no
+matter if the user's query is "rust", "RUST", "Rust", or "rUsT", we'll treat
+the query as if it was "rust" and be insensitive to the case.
 
-```text
+Note that `query` is now a `String` rather than a string slice, because calling
+`to_lowercase` is creating new data, not referencing existing data. If the
+query is "rUsT", that string slice does not contain a lowercase u or t for us
+to use, so we have to allocate a new `String` containing "rust". Because
+`query` is now a `String`, when we pass `query` as an argument to the
+`contains` method, we need to add an ampersand since the signature of
+`contains` is defined to take a string slice.
+
+Next, we add a call to `to_lowercase` on each `line` before we check if it
+contains `query`. This will turn "Rust:" into "rust:" and "Trust me." into
+"trust me." Now that we've converted both `line` and `query` to all lowercase,
+we'll find matches no matter what case the text in the file has or the user
+entered in the query.
+
+Let's see if this implementation passes the tests:
+
+```
     Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
      Running target/debug/deps/greprs-e58e9b12d35dc861
 
@@ -1329,14 +1680,16 @@ running 0 tests
 test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured
 ```
 
-Great! Now, we have to actually use the new `grep_case_insensitive` function.
-First, let's add a configuration option for it to the `Config` struct:
+Great! Now, let's actually call the new `search_case_insensitive` function from
+the `run` function. First, we're going to add a configuration option for
+switching between case sensitive and case insensitive search to the `Config`
+struct:
 
-<span class="filename">Filename: src/lib.rs</span>
+Filename: src/lib.rs
 
-```rust
+```
 pub struct Config {
-    pub search: String,
+    pub query: String,
     pub filename: String,
     pub case_sensitive: bool,
 }
@@ -1344,12 +1697,14 @@ pub struct Config {
 
 <!-- Will add ghosting in libreoffice /Carol -->
 
-And then check for that option inside of the `run` function, and decide which
-function to call based on the value of the `case_sensitive` function:
+We add the `case_sensitive` field that holds a boolean. Then we need our `run`
+function to check the `case_sensitive` field's value and use that to decide
+whether to call the `search` function or the `search_case_insensitive` function
+as shown in Listing 12-22:
 
-<span class="filename">Filename: src/lib.rs</span>
+Filename: src/lib.rs
 
-```rust,ignore
+```
 pub fn run(config: Config) -> Result<(), Box<Error>>{
     let mut f = File::open(config.filename)?;
 
@@ -1357,9 +1712,9 @@ pub fn run(config: Config) -> Result<(), Box<Error>>{
     f.read_to_string(&mut contents)?;
 
     let results = if config.case_sensitive {
-        grep(&config.search, &contents)
+        search(&config.query, &contents)
     } else {
-        grep_case_insensitive(&config.search, &contents)
+        search_case_insensitive(&config.query, &contents)
     };
 
     for line in results {
@@ -1370,42 +1725,38 @@ pub fn run(config: Config) -> Result<(), Box<Error>>{
 }
 ```
 
+Listing 12-22: Calling either `search` or `search_case_insensitive` based on
+the value in `config.case_sensitive`
+
 <!-- Will add ghosting in libreoffice /Carol -->
 
-Finally, we need to actually check the environment for the variable. To bring
-the `env` module from the standard library into our project, we add a `use` line
-at the top of *src/lib.rs*:
+Finally, we need to actually check for the environment variable. The functions
+for working with environment variables are in the `env` module in the standard
+library, so we want to bring that module into scope with a `use std::env;`
+line at the top of *src/lib.rs*. Then we're going to use the `var` method
+from the `env` module in `Config::new` to check for an environment variable
+named `CASE_INSENSITIVE`, as shown in Listing 12-23:
 
-<span class="filename">Filename: src/lib.rs</span>
+Filename: src/lib.rs
 
-```rust
-use std::env;
 ```
+use std::env;
 
-And then use the `vars` method from the `env` module inside of `Config::new`:
+// ...snip...
 
-<span class="filename">Filename: src/lib.rs</span>
-
-```rust
 impl Config {
     pub fn new(args: &[String]) -> Result<Config, &'static str> {
         if args.len() < 3 {
             return Err("not enough arguments");
         }
 
-        let search = args[1].clone();
+        let query = args[1].clone();
         let filename = args[2].clone();
 
-        let mut case_sensitive = true;
-
-        for (name, _) in env::vars() {
-            if name == "CASE_INSENSITIVE" {
-                case_sensitive = false;
-            }
-        }
+        let case_sensitive = env::var("CASE_INSENSITIVE").is_err();
 
         Ok(Config {
-            search: search,
+            query: query,
             filename: filename,
             case_sensitive: case_sensitive,
         })
@@ -1413,23 +1764,31 @@ impl Config {
 }
 ```
 
+Listing 12-23: Checking for an environment variable named `CASE_INSENSITIVE`
+
 <!-- Will add ghosting and wingdings in libreoffice /Carol -->
 
-Here, we call `env::vars`, which works in a similar way as `env::args`. The
-difference is `env::vars` returns an iterator of environment variables rather
-than command line arguments. Instead of using `collect` to create a vector of
-all of the environment variables, we're using a `for` loop. `env::vars` returns
-tuples: the name of the environment variable and its value. We never care about
-the values, only if the variable is set at all, so we use the `_` placeholder
-instead of a name to let Rust know that it shouldn't warn us about an unused
-variable. Finally, we have a `case_sensitive` variable, which is set to true by
-default. If we ever find a `CASE_INSENSITIVE` environment variable, we set the
-`case_sensitive` variable to false instead. Then we return the value as part of
-the `Config`.
+Here, we create a new variable `case_sensitive`. In order to set its value, we
+call the `env::var` function and pass it the name of the environment variable
+we're looking for, `CASE_INSENSITIVE`. `env::var` returns a `Result` that will
+be the `Ok` variant containing the value if the environment variable is set,
+and will be the `Err` variant if the environment variable is not set. We're
+using the `is_err` method on the `Result` to check to see if it's an error (and
+therefore unset), which means we *should* do a case sensitive search. If the
+`CASE_INSENSITIVE` environment variable is set to anything, `is_err` will
+return false and we will do a case insensitive search. We don't care about the
+value that the environment variable is set to, just whether it's set or unset,
+so we're checking `is_err` rather than `unwrap`, `expect`, or any of the other
+methods we've seen on `Result`. We pass the value in the `case_sensitive`
+variable to the `Config` instance so that the `run` function can read that
+value and decide whether to call `search` or `search_case_insensitive` as we
+implemented in Listing 12-22.
 
-Let's give it a try!
+Let's give it a try! First, we'll run our program without the environment
+variable set and with the query "to", which should match any line that contains
+the word "to" in all lowercase:
 
-```text
+```
 $ cargo run to poem.txt
     Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
      Running `target/debug/greprs to poem.txt`
@@ -1437,7 +1796,11 @@ Are you nobody, too?
 How dreary to be somebody!
 ```
 
-```text
+Looks like that still works! Now, let's run the program with `CASE_INSENSITIVE`
+set to 1 but with the same query "to", and we should get lines that contain
+"to" that might have capital letters:
+
+```
 $ CASE_INSENSITIVE=1 cargo run to poem.txt
     Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
      Running `target/debug/greprs to poem.txt`
@@ -1447,16 +1810,17 @@ To tell your name the livelong day
 To an admiring bog!
 ```
 
-Excellent! Our `greprs` program can now do case insensitive searching controlled
-by an environment variable. Now you know how to manage options set using
-either command line arguments or environment variables!
+Excellent, we also got lines containing "To"! Our `greprs` program can now do
+case insensitive searching, controlled by an environment variable. Now you know
+how to manage options set using either command line arguments or environment
+variables!
 
-Some programs allow both arguments _and_ environment variables for the same
-configuration. In those cases, the programs decide that one or the other of
-arguments or environment variables take precedence. For another exercise on
-your own, try controlling case insensitivity through a command line argument as
-well, and decide which should take precedence if you run the program with
-contradictory values.
+Some programs allow both arguments *and* environment variables for the same
+configuration. In those cases, the programs decide that one or the other takes
+precedence. For another exercise on your own, try controlling case
+insensitivity through a command line argument as well as through the
+environment variable, and decide which should take precedence the program is
+run with contradictory values.
 
 The `std::env` module contains many more useful features for dealing with
 environment variables; check out its documentation to see what's available.
@@ -1464,53 +1828,87 @@ environment variables; check out its documentation to see what's available.
 ## Write to `stderr` Instead of `stdout`
 
 Right now, we're writing all of our output to the terminal with `println!`.
-This works, but most terminals provide two kinds of output: "standard out" is
-used for most information, but "standard error" is used for error messages. This
-makes it easier to do things like "Print error messages to my terminal, but
-write other output to a file."
+Most terminals provide two kinds of output: "standard out" for general
+information, and "standard error" for error messages. This distinction is the
+behavior that's expected of command line programs: it enables users to choose
+to direct a program's successful output to a file but still print error
+messages to the screen, for example. `println!` is only capable of printing to
+standard out, though, so we have to use something else in order to print to
+standard error.
 
-We can see that our program is only capable of printing to `stdout` by
-redirecting it to a file using `>` on the command line, and running our program
-without any arguments, which causes an error:
+We can verify that, the way we've written `greprs` so far, everything is being
+written to standard out, including error messages that should be written to
+standard error instead. We'll do that by intentionally causing an error, the
+one that happens when we run the program without any arguments. We're going to
+redirect standard output to a file, but not standard error. The way command
+line programs are expected to work is that, because the output is an error
+message, it should be shown on the screen rather than being redirected to the
+file. Let's see that our program is not currently meeting this expectation by
+using `>` and specifying a filename, *output.txt*, that we want to redirect
+standard out to:
 
-```text
+```
 $ cargo run > output.txt
 ```
 
-The `>` syntax tells the shell to write the contents of standard out to
-*output.txt* instead of the screen. However, if we open *output.txt* after
-running we'll see our error message:
+<!-- why do we get an error here? Was that intentional? Does that mean it can't
+print stdout to a file? -->
+<!-- Yes, we're intentionally causing an error here to show that errors are
+currently going to the wrong place. It's showing that `println!` only prints
+to standard out, even when we're printing error messages that should go
+to standard error. /Carol-->
 
-```text
+The `>` syntax tells the shell to write the contents of standard out to
+*output.txt* instead of the screen. We didn't see the error message we were
+expecting printed on the screen, so that means it must have ended up in the
+file. Let's see what *output.txt* contains:
+
+```
 Application error: No search string or filename found
 ```
 
-We'd like this to be printed to the screen instead, and only have the output
-from a successful run end up in the file if we run our program this way. Let's
-change how error messages are printed as shown in Listing 12-15:
+<!-- I don't understand why we send this output to a file to then just say we
+want it to the screen, won't it do that by default? And what has this got to do
+with our use of println? I'm finding the motives here hard to follow -->
+<!-- The point of showing this is to demonstrate that our program is NOT doing
+the correct thing by default, we need to change the places we're calling
+`println!` with error messages to print to standard error instead. When to use
+stdout vs. stderr, and why you might want to redirect stdout but not stderr,
+is something our readers will be familiar with. /Carol -->
 
-<figure>
-<span class="filename">Filename: src/main.rs</span>
+Yup, there's our error message, which means it's being printed to standard out.
+This isn't what's expected from command line programs. It's much more useful
+for error messages like this to be printed to standard error, and only have
+data printed to standard out from a successful run end up in the file when we
+redirect standard out in this way. Let's change how error messages are printed
+as shown in Listing 12-23. Because of the refactoring we did earlier in this
+chapter, all of the code that prints error messages is in one place, in `main`:
 
-```rust,ignore
+Filename: src/main.rs
+
+```
 extern crate greprs;
 
 use std::env;
 use std::process;
+use std::io::prelude::*;
 
 use greprs::Config;
 
 fn main() {
     let args: Vec<String> = env::args().collect();
+    let mut stderr = std::io::stderr();
 
     let config = Config::new(&args).unwrap_or_else(|err| {
-        println!("Problem parsing arguments: {}", err);
+        writeln!(
+            &mut stderr,
+            "Problem parsing arguments: {}",
+            err
+        ).expect("Could not write to stderr");
         process::exit(1);
     });
 
     if let Err(e) = greprs::run(config) {
-        let mut stderr = std::io::stderr();
-
         writeln!(
             &mut stderr,
             "Application error: {}",
@@ -1522,59 +1920,60 @@ fn main() {
 }
 ```
 
-<figcaption>
-
-Listing 12-15: Writing error messages to `stderr` instead of `stdout`
-
-</figcaption>
-</figure>
+Listing 12-23: Writing error messages to `stderr` instead of `stdout` using
+`writeln!`
 
 <!-- Will add ghosting and wingdings in libreoffice /Carol -->
 
 Rust does not have a convenient function like `println!` for writing to
-standard error. Instead, we use the `writeln!` macro, which is sort of like
-`println!`, but it takes an extra argument. The first thing we pass to it is
-what to write to. We can acquire a handle to standard error through the
-`std::io::stderr` function. We give a mutable reference to `stderr` to
-`writeln!`; we need it to be mutable so we can write to it! The second and
-third arguments to `writeln!` are like the first and second arguments to
-`println!`: a format string and any variables we're interpolating.
+standard error. Instead, we use the `writeln!` macro, which is like `println!`
+but takes an extra argument. The first thing we pass to it is what to write to.
+We can acquire a handle to standard error through the `std::io::stderr`
+function. We give a mutable reference to `stderr` to `writeln!`; we need it to
+be mutable so we can write to it! The second and third arguments to `writeln!`
+are like the first and second arguments to `println!`: a format string and any
+variables we're interpolating.
 
 Let's try running the program again in the same way, without any arguments and
 redirecting `stdout` with `>`:
 
-```text
+```
 $ cargo run > output.txt
 Application error: No search string or filename found
 ```
 
-Now we see our error on the screen, but `output.txt` contains nothing. If we
-try it again with arguments that work:
+Now we see our error on the screen, and `output.txt` contains nothing, which is
+the behavior that's expected of command line programs.
 
-```text
+If we run the program again with arguments that don't cause an error, but still
+redirecting standard out to a file:
+
+```
 $ cargo run to poem.txt > output.txt
 ```
 
-We'll see no output to our terminal, but `output.txt` will contain
-our results:
+We won't see any output to our terminal, and `output.txt` will contain our
+results:
 
-<span class="filename">Filename: output.txt</span>
+Filename: output.txt
 
-```text
+```
 Are you nobody, too?
 How dreary to be somebody!
 ```
 
+This demonstrates that we're now using standard out for successful output and
+standard error for error output as appropriate.
+
 ## Summary
 
-In this chapter, we've covered how to do common I/O operations in a Rust
-context. By using command line arguments, files, environment variables, and the
-ability to write to `stderr`, you're now prepared to write command line
-applications. By using the concepts from previous chapters, your code will be
-well-organized, be able to store data effectively in the appropriate data
-structures, handle errors nicely, and be well tested. We also saw a real-world
-scenario where lifetime annotations are needed to ensure references are
-always valid.
+In this chapter, we've recapped on some of the major concepts so far and
+covered how to do common I/O operations in a Rust context. By using command
+line arguments, files, environment variables, and the `writeln!` macro with
+`stderr`, you're now prepared to write command line applications. By using the
+concepts from previous chapters, your code will be well-organized, be able to
+store data effectively in the appropriate data structures, handle errors
+nicely, and be well tested.
 
-Next, let's explore how to make use of some features of Rust that were
-influenced by functional languages: closures and iterators.
+Next, let's explore some functional-language influenced Rust features: closures
+and iterators.
