@@ -359,8 +359,10 @@ trait as a trait object because of object safety is something that
 beginner/intermediate Rust developers run into sometimes, but explaining it
 fully is long and complicated. Should we just cut this whole section? Leave it
 (and finish the explanation of how to fix the error at the end)? Shorten it to
-a quick caveat (do you have any suggestions on how to do that, exactly)?
-Thanks! /Carol -->
+a quick caveat, that just says something like "Some traits can't be trait
+objects. Clone is an example of one. You'll get errors that will let you know
+if a trait can't be a trait object, look up object safety if you're interested
+in the details"? Thanks! /Carol -->
 
 Not all traits can be made into trait objects; only *object safe* traits can. A
 trait is object safe as long as both of the following are true:
