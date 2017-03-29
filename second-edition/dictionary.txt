@@ -232,9 +232,11 @@ runtime
 runtimes
 Rustacean
 Rustaceans
+rUsT
 rustc
 rustdoc
 rustup
+searchstring
 SecondaryColor
 semver
 SemVer
