@@ -37,78 +37,85 @@ needing to change the code that uses the object.
 As we discussed in Chapter 7, we can use the `pub` keyword to decide what
 modules, types, functions, and methods in our code should be public, and by
 default, everything is private. For example, we can define a struct
-`CountedCollection` that has a field containing a vector of `i32` values. The
-struct can also have a field that knows the number of values in the vector so
-that whenever anyone wants to know how many values the struct has in its
-vector, we don't have to count the values in the vector again. Listing 17-1 has
-the definition of the `CountedCollection` struct:
+`AveragedCollection` that has a field containing a vector of `i32` values. The
+struct can also have a field that knows the average of the values in the vector
+so that whenever anyone wants to know the average of the values that the struct
+has in its vector, we don't have to compute it on-demand. `AveragedCollection`
+will cache the calculated average for us. Listing 17-1 has the definition of
+the `AveragedCollection` struct:
 
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust
-pub struct CountedCollection {
+pub struct AveragedCollection {
     list: Vec<i32>,
-    count: usize,
+    average: f64,
 }
 ```
 
-<span class="caption">Listing 17-1: A `CountedCollection` struct that maintains
-a list of items and the count of how many items are in the collection.</span>
+<span class="caption">Listing 17-1: An `AveragedCollection` struct that
+maintains a list of integers and the average of the items in the
+collection.</span>
 
 Note that the struct itself is marked `pub` so that other code may use this
 struct, but the fields within the struct remain private. This is important in
 this case because we want to ensure that whenever a value is added or removed
-from the list, we also update the count. We do this by implementing `add`,
-`remove`, and `count` methods on the struct as shown in Listing 17-2:
+from the list, we also update the average. We do this by implementing `add`,
+`remove`, and `average` methods on the struct as shown in Listing 17-2:
 
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust
-# pub struct CountedCollection {
+# pub struct AveragedCollection {
 #     list: Vec<i32>,
-#     count: usize,
+#     average: f64,
 # }
-impl CountedCollection {
+impl AveragedCollection {
     pub fn add(&mut self, value: i32) {
         self.list.push(value);
-        self.count += 1;
+        self.update_average();
     }
 
     pub fn remove(&mut self) -> Option<i32> {
         let result = self.list.pop();
         match result {
             Some(value) => {
-                self.count -= 1;
+                self.update_average();
                 Some(value)
             },
             None => None,
         }
     }
 
-    pub fn count(&self) -> usize {
-        self.count
+    pub fn average(&self) -> f64 {
+        self.average
+    }
+
+    fn update_average(&mut self) {
+        let total: i32 = self.list.iter().sum();
+        self.average = total as f64 / self.list.len() as f64;
     }
 }
 ```
 
 <span class="caption">Listing 17-2: Implementations of the public methods
-`add`, `remove`, and `count` on `CountedCollection`</span>
+`add`, `remove`, and `average` on `AveragedCollection`</span>
 
-The `add`, `remove`, and `count` methods are public, and are the only way to
-modify an instance of a `CountedCollection`. When an item is added to `list`
-using the `add` method or removed using the `remove` method, the
-implementations of those methods take care of updating the `count` field as
-well. Because the `list` and `count` fields are private, there's no way for
-external code to add or remove items to the `list` field directly, which could
-cause the `count` field to get out of sync. The `count` method returns the
-value in the `count` field, which allows external code to read the `count` but
-not modify it.
+The public methods `add`, `remove`, and `average` are the only way to modify an
+instance of a `AveragedCollection`. When an item is added to `list` using the
+`add` method or removed using the `remove` method, the implementations of those
+methods call the private `update_average` method that takes care of updating
+the `average` field as well. Because the `list` and `average` fields are
+private, there's no way for external code to add or remove items to the `list`
+field directly, which could cause the `average` field to get out of sync. The
+`average` method returns the value in the `average` field, which allows
+external code to read the `average` but not modify it.
 
-Because we've encapsulated the implementation details of `CountedCollection`,
+Because we've encapsulated the implementation details of `AveragedCollection`,
 we could also change aspects like using a different data structure used for the
 `list` to use a `HashSet` instead of a `Vec`, for instance. As long as the
-signatures of the `add`, `remove`, and `count` public methods stayed the same,
-code using `CountedCollection` wouldn't need to change. This wouldn't
+signatures of the `add`, `remove`, and `average` public methods stayed the same,
+code using `AveragedCollection` wouldn't need to change. This wouldn't
 necessarily be the case if we exposed `list` to external code: `HashSet` and
 `Vec` have different methods for adding and removing items, so the external
 code would likely have to change if it was modifying `list` directly.
