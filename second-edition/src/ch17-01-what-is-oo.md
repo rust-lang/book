@@ -158,6 +158,8 @@ child type can be used in the same places that the parent type can be used.
 This is also called *polymorphism*, which means that multiple objects can be
 substituted for each other at runtime if they have the same shape.
 
+<!-- PROD: START BOX -->
+
 > While many people use "polymorphism" to describe inheritance, it's actually
 > a specific kind of polymorphism, called "sub-type polymorphism." There are
 > other forms as well; a generic parameter with a trait bound in Rust is
@@ -165,6 +167,8 @@ substituted for each other at runtime if they have the same shape.
 > details between the different kinds of polymorphism aren't crucial here,
 > so don't worry too much about the details: just know that Rust has multiple
 > polymorphism-related features, unlike many OOP languages.
+
+<!-- PROD: END BOX -->
 
 To support this sort of pattern, Rust has *trait objects* so that we can
 specify that we would like values of any type, as long as the values implement
