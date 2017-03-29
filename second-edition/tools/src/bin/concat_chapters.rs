@@ -100,6 +100,7 @@ fn concat_files(source_paths: Vec<PathBuf>, target_path: PathBuf) -> io::Result<
 
         try!(target.write_all(b"\n"));
         try!(target.write_all(&contents));
+        try!(target.write_all(b"\n"));
     }
     Ok(())
 }
