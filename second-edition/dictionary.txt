@@ -12,6 +12,7 @@ Amir
 APIs
 aren
 args
+AveragedCollection
 backtrace
 backtraces
 BACKTRACE
@@ -47,7 +48,6 @@ const
 constant's
 copyeditor
 couldn
-CountedCollection
 cratesio
 cryptographically
 CStr
