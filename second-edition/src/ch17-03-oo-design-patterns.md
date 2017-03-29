@@ -664,6 +664,10 @@ states be impossible because of the type system and type checking that happens
 at compile time! This ensures that certain bugs, such as displaying the content
 of an unpublished post, will be discovered before they make it to production.
 
+Try the tasks suggested that add additional requirements that we mentioned at
+the start of this section to see how working with this version of the code
+feels.
+
 Even though Rust is capable of implementing object-oriented design patterns,
 there are other patterns like encoding state into the type system that are
 available in Rust. These patterns have different tradeoffs than the
