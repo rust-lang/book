@@ -34,6 +34,7 @@ extern crate greprs;
 use std::env;
 use std::process;
 use std::io::prelude::*;
+use std::io::Write;
 
 use greprs::Config;
 
@@ -70,7 +71,7 @@ of `stdout`</span>
 <!-- Will add ghosting and wingdings in libreoffice /Carol -->
 
 Rust does not have a convenient function like `println!` for writing to
-standard error. Instead, we use the `writeln!` macro, which is sort of like
+standard error. Instead, we use the `writeln!` macro by `use std::io::Write;`, which is sort of like
 `println!`, but it takes an extra argument. The first thing we pass to it is
 what to write to. We can acquire a handle to standard error through the
 `std::io::stderr` function. We give a mutable reference to `stderr` to
