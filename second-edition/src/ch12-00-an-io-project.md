@@ -1,4 +1,4 @@
-# An I/O Project Using Environment Variables and Standard Error
+# An I/O Project Building a Small Grep
 
 <!-- We might need a more descriptive title, something that captures the new
 elements we're introducing -- are we going to cover things like environment
