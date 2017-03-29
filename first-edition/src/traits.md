@@ -414,12 +414,12 @@ impl ConvertTo<i64> for i32 {
 }
 
 // Can be called with T == i32.
-fn normal<T: ConvertTo<i64>>(x: &T) -> i64 {
+fn convert_t_to_i64<T: ConvertTo<i64>>(x: T) -> i64 {
     x.convert()
 }
 
 // Can be called with T == i64.
-fn inverse<T>(x: i32) -> T
+fn convert_i32_to_t<T>(x: i32) -> T
         // This is using ConvertTo as if it were "ConvertTo<i64>".
         where i32: ConvertTo<T> {
     x.convert()
