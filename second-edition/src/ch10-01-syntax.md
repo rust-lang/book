@@ -254,10 +254,9 @@ probably a sign that your code could use some restructuring.
 
 ### Using Generic Data Types in Enum Definitions
 
-Similarly to structs, enums can be defined to hold generic data types in their
-variants. We used the `Option<T>` enum provided by the standard library in
-Chapter 6, and now its definition should make more sense. Let's take another
-look:
+A *generic enum* can be defined to hold generic data types in its variants.  We
+used the `Option<T>` enum provided by the standard library in Chapter 6, and now
+its definition should make more sense.  Let's take another look:
 
 ```rust
 enum Option<T> {
@@ -266,16 +265,15 @@ enum Option<T> {
 }
 ```
 
-In other words, `Option<T>` is an enum generic in type `T`. It has two
-variants: `Some`, which holds one value of type `T`, and a `None` variant that
-doesn't hold any value. The standard library only has to have this one
-definition to support the creation of values of this enum that have any
-concrete type. The idea of "an optional value" is a more abstract concept than
-one specific type, and Rust lets us express this abstract concept without lots
-of duplication.
+In other words, `Option<T>` is an enum generic in type `T`. It has two variants:
+`Some`, which holds one value of type `T`, and `None` which doesn't hold any
+value.  The standard library only has to have this one definition to support the
+creation of values of this enum with any concrete type. The idea of "an optional
+value" is a more abstract concept than one specific type, and Rust lets us
+express this abstract concept without lots of duplication.
 
-Enums can use multiple generic types as well. The definition of the `Result`
-enum that we used in Chapter 9 is one example:
+Enums can use multiple generic types as well. The definition of the
+`Result<T, E>` enum that we used in Chapter 9 is one example:
 
 ```rust
 enum Result<T, E> {
@@ -284,19 +282,19 @@ enum Result<T, E> {
 }
 ```
 
-The `Result` enum is generic over two types, `T` and `E`. `Result` has two
-variants: `Ok`, which holds a value of type `T`, and `Err`, which holds a value
-of type `E`. This definition makes it convenient to use the `Result` enum
-anywhere we have an operation that might succeed (and return a value of some
-type `T`) or fail (and return an error of some type `E`). Recall Listing 9-2
-when we opened a file: in that case, `T` was filled in with the type
-`std::fs::File` when the file was opened successfully and `E` was filled in
-with the type `std::io::Error` when there were problems opening the file.
+The `Result<T, E>` enum is generic over two types, `T` and `E`. `Result<T, E>`
+has two variants: `Ok`, which holds a value of type `T`, and `Err`, which holds
+a value of type `E`. This definition makes it convenient to use the
+`Result<T, E>` enum anywhere we have an operation that might succeed (and return
+a value of some type `T`) or fail (and return an error of some type `E`). Recall
+opening a file in Listing 9-2: in that case, `T` was filled in with the type
+`std::fs::File` when the file was opened successfully and `E` was filled in with
+the type `std::io::Error` when there were problems opening the file.
 
-When you recognize situations in your code with multiple struct or enum
-definitions that differ only in the types of the values they hold, you can
-remove the duplication by using the same process we used with the function
-definitions to introduce generic types instead.
+When you recognize situations in your code where multiple struct or enum
+definitions differ only in the types of the values they hold, you can remove the
+duplication by using the same process we used with the function definitions to
+introduce generic types instead.
 
 ### Using Generic Data Types in Method Definitions
 
