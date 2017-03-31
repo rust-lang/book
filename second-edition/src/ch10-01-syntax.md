@@ -158,9 +158,12 @@ what you think. /Carol -->
 
 ### Using Generic Data Types in Struct Definitions
 
-We can define structs to use a generic type parameter in one or more of the
-struct's fields with the `<>` syntax too. Listing 10-6 shows the definition and
-use of a `Point` struct that can hold `x` and `y` coordinate values of any type:
+Like generic functions, a *generic struct* is a struct with a generic type
+parameter in one or more of its fields.  The generic type parameter is declared
+in angle brackets after the struct's name, and it can be used in any place where
+a concrete type can appear in a struct definition. Listing 10-6 shows the
+definition and use of a `Point<T>` struct that can hold `x` and `y` coordinate
+values of any type:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -176,18 +179,13 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 10-6: A `Point` struct that holds `x` and `y`
+<span class="caption">Listing 10-6: A `Point<T>` struct that holds `x` and `y`
 values of type `T`</span>
 
-The syntax is similar to using generics in function definitions. First, we have
-to declare the name of the type parameter within angle brackets just after the
-name of the struct. Then we can use the generic type in the struct definition
-where we would specify concrete data types.
-
 Note that because we've only used one generic type in the definition of
-`Point`, what we're saying is that the `Point` struct is generic over some type
-`T`, and the fields `x` and `y` are *both* that same type, whatever it ends up
-being. If we try to create an instance of a `Point` that has values of
+`Point<T>`, what we're saying is that the `Point<T>` struct is generic over some
+type `T`, and the fields `x` and `y` are *both* that same type, whatever it ends
+up being. If we try to create an instance of a `Point<T>` that has values of
 different types, as in Listing 10-7, our code won't compile:
 
 <span class="filename">Filename: src/main.rs</span>
@@ -220,13 +218,13 @@ error[E0308]: mismatched types
   = note:    found type `{float}`
 ```
 
-When we assigned the integer value 5 to `x`, the compiler then knows for this
-instance of `Point` that the generic type `T` will be an integer. Then when we
-specified 4.0 for `y`, which is defined to have the same type as `x`, we get a
-type mismatch error.
+When we assign the integer value 5 to `x`, the compiler then knows for this
+instance of `Point<T>` that the anything with the generic type `T` will be an
+integer.  When we specify the floating-point value 4.0 for `y`, we get a type
+mismatch error because its type does not match `T`.
 
-If we wanted to define a `Point` struct where `x` and `y` could have different
-types but still have those types be generic, we can use multiple generic type
+If we want to define a `Point` struct where `x` and `y` can have different types
+but still have those types be generic, we can use multiple generic type
 parameters. In listing 10-8, we've changed the definition of `Point` to be
 generic over types `T` and `U`. The field `x` is of type `T`, and the field `y`
 is of type `U`:
@@ -246,14 +244,13 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 10-8: A `Point` generic over two types so that
-`x` and `y` may be values of different types</span>
+<span class="caption">Listing 10-8: A `Point<T, U>` generic over two types so
+that `x` and `y` may be values of different types</span>
 
-Now all of these instances of `Point` are allowed! You can use as many generic
-type parameters in a definition as you want, but using more than a few gets
-hard to read and understand. If you get to a point of needing lots of generic
-types, it's probably a sign that your code could use some restructuring to be
-separated into smaller pieces.
+All of these instances of `Point<T, U>` are allowed! You can use as many generic
+type parameters in a definition as you want, but using more than a few gets hard
+to read and understand. If you find yourself needing lots of generic types, it's
+probably a sign that your code could use some restructuring.
 
 ### Using Generic Data Types in Enum Definitions
 
