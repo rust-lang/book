@@ -34,11 +34,11 @@ situations and still have the compiler check that references will be valid.
 ## Removing Duplication by Extracting a Function
 
 Before getting into generics syntax, let's first review a technique for dealing
-with duplication that doesn't use generic types: extracting a function. Once
-that's fresh in our minds, we'll use the same mechanics with generics to
-extract a generic function! In the same way that you recognize duplicated code
-to extract into a function, you'll start to recognize duplicated code that can
-use generics.
+with duplication that doesn't use generic types: extracting a function. While
+that's fresh in our minds, we'll use the same mechanics with generics to extract
+a generic function! In the same way that you recognize duplicated code to
+extract into a function, you'll start to recognize duplicated code that can use
+generics.
 
 Consider a small program that finds the largest number in a list, shown in
 Listing 10-1:
