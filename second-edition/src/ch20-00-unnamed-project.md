@@ -21,7 +21,7 @@ The HTTP protocol is built on top of the TCP protocol. So the first thing we nee
 to build our web server is to be able to listen to a TCP connection. The standard
 library has a `std::net` module that lets us do this. Let's make a new project:
 
-```bash
+```text
 $ cargo new hello --bin
      Created binary (application) `hello` project
 $ cd hello
@@ -87,7 +87,7 @@ Right now, "handling" a stream means `unwrap`ping it to ignore any further
 errors, and then printing a message. Let's try this code out! First invoke
 `cargo run`:
 
-```bash
+```text
 $ cargo run
     Finished dev [unoptimized + debuginfo] target(s) in 0.0 secs
 warning: unused variable: `stream`, #[warn(unused_variables)] on by default
@@ -103,7 +103,7 @@ And then load up `127.0.0.1:8080` in your web browser. Your browser will
 show an error message, something like "Connection reset", but if you look
 at your terminal...
 
-```bash
+```text
      Running `target\debug\hello.exe`
 Connection established!
 Connection established!
@@ -119,7 +119,7 @@ thing is that we've successfully gotten a handle on a TCP connection!
 In order to keep things clean, let's move our processing of the connection out
 to a function. Modify your code to look like this:
 
-```rust
+```rust,no_run
 use std::net::TcpListener;
 use std::net::TcpStream;
 
@@ -186,9 +186,9 @@ the buffer.
 
 Next, we print that stream out:
 
-```rust
+```rust,ignore
 println!("Request: {}", String::from_utf8_lossy(&buffer[..]));
-````
+```
 
 The `String::from_utf8_lossy` function will take a `&[u8]` and produce a `String`. The
 'lossy' part of its name comes from its behavior when it sees invalid UTF-8 sequences;
@@ -196,9 +196,9 @@ it replaces them with �, `U+FFFD REPLACEMENT CHARACTER`.
 
 Let's give this a try!
 
-```bash
+```text
 $ cargo run
-   Compiling hello v0.1.0 (file:///C:/Users/steve/src/hello)
+   Compiling hello v0.1.0 (file:///projects/hello/src/hello)
     Finished dev [unoptimized + debuginfo] target(s) in 0.42 secs
      Running `target\debug\hello.exe`
 Request: GET / HTTP/1.1
@@ -295,9 +295,9 @@ operating system.
 
 With these changes, let's run our code!
 
-```bash
+```text
 > cargo run
-   Compiling hello v0.1.0 (file:///C:/Users/steve/src/hello)
+   Compiling hello v0.1.0 (file:///projects/hello/src/hello)
     Finished dev [unoptimized + debuginfo] target(s) in 0.39 secs
      Running `target\debug\hello.exe`
 ```
@@ -386,7 +386,7 @@ Right now, our web server will return this HTML no matter what the request.
 Let's check that the browser is requesting `/`, and then return an error if
 it's not. First, modify `handle_connection` to look like this:
 
-```rust
+```rust,ignore
 fn handle_connection(mut stream: TcpStream) {
     let mut buffer = [0; 512];
     stream.read(&mut buffer).unwrap();
@@ -438,7 +438,7 @@ if start == get {
 
 The interesting bit is in the else case:
 
-```rust
+```rust,ignore
 let header = "HTTP/1.1 404 NOT FOUND\r\n\r\n";
 let mut file = File::open("404.html").unwrap();
 ```
@@ -466,7 +466,7 @@ our error!
 
 There's a lot of repetition in this function; let's pull it out:
 
-```rust
+```rust,ignore
    let (header, filename) = if start == get {
         ("HTTP/1.1 200 OK\r\n\r\n", "hello.html")
     } else {
@@ -567,7 +567,7 @@ drive our development. Here's the first error we get:
 
 ```text
 $ cargo check
-   Compiling hello v0.1.0 (file:///C:/Users/steve/src/hello)
+   Compiling hello v0.1.0 (file:///projects/hello/src/hello)
 error[E0433]: failed to resolve. Use of undeclared type or module `ThreadPool`
   --> src\main.rs:10:16
    |
@@ -585,9 +585,9 @@ struct ThreadPool;
 
 And try again:
 
-```bash
+```text
 $ cargo check
-   Compiling hello v0.1.0 (file:///C:/Users/steve/src/hello)
+   Compiling hello v0.1.0 (file:///projects/hello/src/hello)
 error: no associated item named `new` found for type `ThreadPool` in the current scope
   --> src\main.rs:10:16
    |
@@ -604,7 +604,7 @@ error: aborting due to previous error
 The helpful messages aren't super helpful here; we need to define our own
 `new` function, not implement a trait. Here it is:
 
-```rust
+```rust,ignore
 impl ThreadPool {
     fn new() {
     }
@@ -613,9 +613,9 @@ impl ThreadPool {
 
 Let's check it again:
 
-```bash
+```text
 > cargo check
-   Compiling hello v0.1.0 (file:///C:/Users/steve/src/hello)
+   Compiling hello v0.1.0 (file:///projects/hello/src/hello)
 error[E0061]: this function takes 0 parameters but 1 parameter was supplied
   --> src\main.rs:10:32
    |
@@ -640,7 +640,7 @@ error: aborting due to 2 previous errors
 Two errors: we need a parameter for `new`, and a type error. Let's focus
 on the first error for now:
 
-```rust
+```rust,ignore
 impl ThreadPool {
     fn new(size: u32) {
 
@@ -654,9 +654,9 @@ we'll reconsider it, but for now, we're just working through compiler errors.
 
 And check again:
 
-```bash
+```text
 > cargo check
-   Compiling hello v0.1.0 (file:///C:/Users/steve/src/hello)
+   Compiling hello v0.1.0 (file:///projects/hello/src/hello)
 error: no method named `execute` found for type `()` in the current scope
   --> src\main.rs:15:14
    |
@@ -671,7 +671,7 @@ Okay, now we only have the second error. It's slightly obtuse: because
 have an `execute` method. What we actually intended was for `new` to return
 a `ThreadPool`, so let's fix that, and then also add the `execute` method:
 
-```rust
+```rust,ignore
 impl ThreadPool {
     fn new(size: u32) -> ThreadPool {
         ThreadPool
@@ -685,9 +685,9 @@ impl ThreadPool {
 
 Let's check again:
 
-```bash
+```text
 > cargo check
-   Compiling hello v0.1.0 (file:///C:/Users/steve/src/hello)
+   Compiling hello v0.1.0 (file:///projects/hello/src/hello)
 error[E0061]: this function takes 0 parameters but 1 parameter was supplied
   --> src\main.rs:15:22
    |
@@ -724,7 +724,7 @@ In addition, we have a `Send` and `'static` bound, which also makes sense: we ne
 to transfer something from one thread to another, and `'static` because we don't know
 how long the thread will execute. Let's modify `execute` to have these bounds:
 
-```rust
+```rust,ignore
 fn execute<F>(&self, F)
     where
         F: FnOnce() + Send + 'static
@@ -735,9 +735,9 @@ fn execute<F>(&self, F)
 
 Let's check again:
 
-```bash
+```text
 > cargo check
-   Compiling hello v0.1.0 (file:///C:/Users/steve/src/hello)
+   Compiling hello v0.1.0 (file:///projects/hello/src/hello)
 warning: unused import: `std::thread`, #[warn(unused_imports)] on by default
  --> src\main.rs:5:5
   |
@@ -772,7 +772,7 @@ above: a pool with a negative number of threads makes no sense. However, a pool 
 zero threads also makes no sense, yet zero is a perfectly valid `u32`. Let's check
 that our number is greater than zero:
 
-```rust
+```rust,ignore
 /// Create a new ThreadPool.
 ///
 /// The size is the number of threads in the pool.
@@ -845,9 +845,9 @@ impl ThreadPool {
 
 We get an error:
 
-```rust
+```text
 > cargo check
-   Compiling hello v0.1.0 (file:///C:/Users/steve/src/hello)
+   Compiling hello v0.1.0 (file:///projects/hello/src/hello)
 error[E0308]: mismatched types
   --> src\main.rs:70:46
    |
@@ -1027,7 +1027,7 @@ If we try to compile this, we get this error:
 
 ```text
 > cargo check
-   Compiling hello v0.1.0 (file:///C:/Users/steve/src/hello)
+   Compiling hello v0.1.0 (file:///projects/hello/src/hello)
 error[E0382]: use of moved value: `job_receiver`
   --> src\main.rs:82:48
    |
@@ -1143,7 +1143,7 @@ Here's the error we'll get if we try to compile the above code:
 
 ```text
 > cargo check
-   Compiling hello v0.1.0 (file:///C:/Users/steve/src/hello)
+   Compiling hello v0.1.0 (file:///projects/hello/src/hello)
 error: no method named `job` found for type `Job` in the current scope
   --> src\main.rs:69:21
    |
@@ -1169,9 +1169,9 @@ that line:
 
 It looks a little funky, but it works. Well, almost. Now we get a different error:
 
-```bash
+```text
 > cargo check
-   Compiling hello v0.1.0 (file:///C:/Users/steve/src/hello)
+   Compiling hello v0.1.0 (file:///projects/hello/src/hello)
 error[E0161]: cannot move a value of type std::ops::FnOnce() + std::marker::Send + 'static: the size of std::ops::FnOnce() + std::marker::Send + 'static cannot be statically determined
   --> src\main.rs:69:17
    |
@@ -1189,7 +1189,7 @@ In the future, this code should work just fine. But that doesn't help us in the 
 
 Luckily, there's a trick. It looks like this:
 
-```rust
+```rust,ignore
 trait FnBox {
     fn call_box(self: Box<Self>);
 }
@@ -1245,9 +1245,9 @@ sense; someday, it will be completely un-needed.
 With this trick, our thread pool is in a working state! Give it a `cargo run`, and make
 some requests:
 
-```bash
+```text
 > cargo run
-   Compiling hello v0.1.0 (file:///C:/Users/steve/src/hello)
+   Compiling hello v0.1.0 (file:///projects/hello/src/hello)
 warning: field is never used: `threads`, #[warn(dead_code)] on by default
   --> src\main.rs:50:5
    |
@@ -1317,9 +1317,9 @@ disregards the errors.
 
 Here's the error we get:
 
-```rust
+```text
 > cargo run
-   Compiling hello v0.1.0 (file:///C:/Users/steve/src/hello)
+   Compiling hello v0.1.0 (file:///projects/hello/src/hello)
 error[E0507]: cannot move out of borrowed content
    --> src\main.rs:129:13
     |
@@ -1343,9 +1343,9 @@ struct Worker {
 
 And then let the compiler tell us about anything we need to fix:
 
-```bash
+```text
 > cargo check
-   Compiling hello v0.1.0 (file:///C:/Users/steve/src/hello)
+   Compiling hello v0.1.0 (file:///projects/hello/src/hello)
 error[E0308]: mismatched types
   --> src\main.rs:87:21
    |
@@ -1425,7 +1425,7 @@ struct ThreadPool {
 
 We need to adjust the `ThreadPool` to send `Message`s rather than `Job`s.
 
-```
+```rust,ignore
 impl Worker {
     fn new(id: u32, job_receiver: Arc<Mutex<mpsc::Receiver<Message>>>) -> Worker {
         let thread = thread::spawn(move ||{
@@ -1458,7 +1458,7 @@ impl Worker {
 Inside of our `Worker, instead of receiving a `Job`, we get a `Message`. We then
 execute the job if it's a `NewJob`, and break out of our `loop` if it's `Terminate`.
 
-```
+```rust,ignore
 impl ThreadPool {
     fn new(size: usize) -> ThreadPool {
         assert!(size > 0);
@@ -1530,9 +1530,9 @@ before shutting the server down:
 And then run it with `cargo run`. Load up the pages a few times, and then check
 your terminal. You'll see something like this:
 
-```bash
+```text
 > cargo run
-   Compiling hello v0.1.0 (file:///C:/Users/steve/src/hello)
+   Compiling hello v0.1.0 (file:///projects/hello/src/hello)
     Finished dev [unoptimized + debuginfo] target(s) in 1.0 secs
      Running `target\debug\hello.exe`
 Worker 0 got a job; executing.
