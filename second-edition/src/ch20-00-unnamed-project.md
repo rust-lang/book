@@ -268,7 +268,7 @@ Status-Line = HTTP-Version Status-Code Reason-Phrase CRLF
 ```
 
 We're using version 1.1 of the protocol, and `200` is the status code. `OK` is
-the "reason phrase", it's like a text description of the stauts code. Finally,
+the "reason phrase", it's like a text description of the status code. Finally,
 `\r\n` is the CRLF sequence; `\r` is a "carriage return" and `\n` is a "line
 feed"; these terms come from the typewriter days!
 
@@ -806,7 +806,7 @@ make:
 * create `size` new threads
 * store these new threads inside the `ThreadPool` and return it.
 
-This rasies a question: how do we "store" a thread? Let's turn again
+This raises a question: how do we "store" a thread? Let's turn again
 to the signature of `spawn`:
 
 ```rust,ignore
@@ -872,7 +872,7 @@ If you check this out with `cargo check`, you'll get a few more warnings, but
 it should succeed. We left a little comment above regarding the creation of
 threads. This is a tough question though... what should go in these threads we've
 created? We don't know what work they need to do, because the `execute` method
-takes the clousure and gives it to the pool.
+takes the closure and gives it to the pool.
 
 Let's refactor slightly: instead of storing a vector of `JoinHandle<()>`s, let's
 create a new `struct` to represent each of these 'workers'. We can also then
@@ -942,10 +942,10 @@ communicate between two threads, and they're perfect with our use-case. Here's
 the plan of attack:
 
 1. `ThreadPool` will hold on to a sending side of a channel.
-2. Each `Worker` will hold on to a recieving side.
+2. Each `Worker` will hold on to a receiving side.
 3. The `execute` method of `ThreadPool` will then send the closure it wants
    to execute down the sending side of the channel.
-4. The `Worker` will loop over its recieving side, and when it gets a job,
+4. The `Worker` will loop over its receiving side, and when it gets a job,
    execute it.
 
 Once we get all of this working, we should be in a good place!
@@ -989,7 +989,7 @@ recall is the type of a sending end of a channel. In `ThreadPool::new`, we
 create our new channel, and then have the pool hang on to the sending end.
 
 If you compile this, it will work, but still have warnings. Let's try passing
-the recieving end into our workers. This won't compile yet:
+the receiving end into our workers. This won't compile yet:
 
 ```rust,ignore
 impl Worker {
@@ -1131,7 +1131,7 @@ let thread = thread::spawn(move ||{
 });
 ```
 
-Here, we first call `lock` on the `job_receiver` to aquire the mutex, then
+Here, we first call `lock` on the `job_receiver` to acquire the mutex, then
 `unwrap` to panic on any errors, then `recv` to receive a `Job` from the
 channel. A final `unwrap` moves past those errors as well.
 
@@ -1329,7 +1329,7 @@ error[E0507]: cannot move out of borrowed content
 error: aborting due to previous error
 ```
 
-Becuase we only have a `&mut` in `drop`, we cannot actually call `join`, as `join`
+Because we only have a `&mut` in `drop`, we cannot actually call `join`, as `join`
 takes its argument by value. What to do? Well, we already have a way to represent
 "something or nothing", and that's `Option<T>`. Let's update the definition of
 `Worker`:

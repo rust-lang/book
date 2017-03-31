@@ -106,6 +106,7 @@ Filename
 filesystem
 Filesystem
 Firefox
+FnBox
 FnMut
 FnOnce
 formatter
@@ -195,6 +196,7 @@ namespaced
 namespaces
 namespacing
 newfound
+NewJob
 NewsArticle
 NewThread
 newtype
@@ -219,6 +221,7 @@ PartialEq
 PartialOrd
 PendingReview
 PendingReviewPost
+PoolCreationError
 portia
 powi
 preprocessing
@@ -244,6 +247,7 @@ refcell
 RefCell
 RefMut
 repr
+request's
 retweet
 ripgrep
 runtime
