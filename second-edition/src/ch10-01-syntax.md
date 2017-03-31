@@ -334,11 +334,13 @@ we specify that we're implementing methods on the type `Point<T>`.
 Generic type parameters in a struct definition aren't always the same generic
 type parameters you want to use in that struct's method signatures. Listing
 10-10 defines a method `mixup` on the `Point<T, U>` struct from Listing 10-8.
-The method takes another `Point` as a parameter, which might have different
-types than the `self` `Point` that we're calling `mixup` on. The method creates
-a new `Point` instance that has the `x` value from the `self` `Point` (which is
-of type `T`) and the `y` value from the passed-in `Point` (which is of type
-`W`):
+The method takes a point as a parameter.  This is the same struct we have been
+calling `Point<T, U>`, but with different type parameter names because `T` and
+`U` have been used already in this method. The types `V` and `W` may or may not
+be the same as the types `T` and `U` of the `Point<T, U>` we're calling `mixup`
+on.  The method creates a new point instance that has the `x` value from the
+`self` point (which is of type `T`) and the `y` value from the passed-in point
+(which is of type `W`):
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -370,12 +372,13 @@ fn main() {
 <span class="caption">Listing 10-10: Methods that use different generic types
 than their struct's definition</span>
 
-In `main`, we've defined a `Point` that has an `i32` for `x` (with value `5`)
-and an `f64` for `y` (with value `10.4`). `p2` is a `Point` that has a string
-slice for `x` (with value `"Hello"`) and a `char` for `y` (with value `c`).
-Calling `mixup` on `p1` with the argument `p2` gives us `p3`, which will have
-an `i32` for `x`, since `x` came from `p1`. `p3` will have a `char` for `y`,
-since `y` came from `p2`. The `println!` will print `p3.x = 5, p3.y = c`.
+In `main`, we've defined p1 as a `Point<T, U>` that has an `i32` for `x` (with
+value `5`) and an `f64` for `y` (with value `10.4`). `p2` is a `Point<T, U` that
+has a string slice for `x` (with value `"Hello"`) and a `char` for `y` (with
+value `c`).  Calling `mixup` on `p1` with the argument `p2` gives us `p3`, which
+will have an `i32` for `x`, since `x` came from `p1`. `p3` will have a `char`
+for `y`, since `y` came from `p2`. The `println!` will print
+`p3.x = 5, p3.y = c`.
 
 Note that the generic parameters `T` and `U` are declared after `impl`, since
 they go with the struct definition. The generic parameters `V` and `W` are
@@ -397,7 +400,7 @@ the generic function in Listing 10-5. The compiler looks at all the places that
 generic code is called and generates code for the concrete types that the
 generic code is called with.
 
-Let's work through an example that uses the standard library's `Option` enum:
+Let's work through an example that uses the standard library's `Option<T>` enum:
 
 ```rust
 let integer = Some(5);
@@ -405,13 +408,13 @@ let float = Some(5.0);
 ```
 
 When Rust compiles this code, it will perform monomorphization. The compiler
-will read the values that have been passed to `Option` and see that we have two
-kinds of `Option<T>`: one is `i32`, and one is `f64`. As such, it will expand
-the generic definition of `Option<T>` into `Option_i32` and `Option_f64`,
+will read the values that have been passed to `Option<T>` and see that we have
+two kinds of `Option<T>`: one is `i32`, and one is `f64`. As such, it will
+expand the generic definition of `Option<T>` into `Option_i32` and `Option_f64`,
 thereby replacing the generic definition with the specific ones.
 
 The monomorphized version of our code that the compiler generates looks like
-this, with the uses of the generic `Option` replaced with the specific
+this, with the uses of the generic `Option<T>` replaced with the specific
 definitions created by the compiler:
 
 <span class="filename">Filename: src/main.rs</span>
