@@ -167,8 +167,7 @@ definition operates on the `list` representation of any `&[i32]`. When we call
 the `largest` function, the code actually runs on the specific values that we
 pass in.
 
-The mechanics we went through to get from Listing 10-2 to Listing 10-3 were
-these steps:
+We performed these steps to get from Listing 10-2 to Listing 10-3:
 
 1. We noticed there was duplicate code.
 2. We extracted the duplicate code into the body of the function, and specified
