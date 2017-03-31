@@ -65,13 +65,13 @@ fn main() {
 <span class="caption">Listing 10-1: Code to find the largest number in a list
 of numbers</span>
 
-This code takes a list of integers, stored here in the variable `numbers`. It
-puts the first item in the list in a variable named `largest`. Then it iterates
-through all the numbers in the list, and if the current value is greater than
-the number stored in `largest`, it replaces the value in `largest`. If the
-current value is smaller than the largest value seen so far, `largest` is not
-changed. When all the items in the list have been considered, `largest` will
-hold the largest value, which in this case is 100.
+This code begins with a list of integers in the variable `numbers`.  It stores
+the first number in the list in the variable named `largest`.  Then it iterates
+through all the numbers in the list. If the current number is greater than the
+number stored in `largest`, it replaces the number in `largest`.  If the current
+number is smaller than the number stored in `largest`, nothing is changed.  When
+all the numbers in the list have been considered, `largest` will hold the
+largest number, which in this case is 100.
 
 If we needed to find the largest number in two different lists of numbers, we
 could duplicate the code in Listing 10-1 and have the same logic exist in two
