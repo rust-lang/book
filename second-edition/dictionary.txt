@@ -12,6 +12,7 @@ Amir
 APIs
 aren
 args
+async
 AveragedCollection
 backtrace
 backtraces
@@ -40,6 +41,7 @@ CamelCase
 cargodoc
 ChangeColor
 ChangeColorMessage
+charset
 chXX
 chYY
 config
@@ -49,6 +51,7 @@ constant's
 copyeditor
 couldn
 cratesio
+CRLF
 cryptographically
 CStr
 CString
@@ -77,6 +80,7 @@ didn
 Dobrý
 doccargo
 doccratesio
+DOCTYPE
 doesn
 DraftPost
 ebooks
@@ -92,6 +96,8 @@ Enums
 ErrorKind
 Executables
 extern
+favicon
+FFFD
 FFFF
 figcaption
 filename
@@ -99,6 +105,7 @@ fieldname
 Filename
 filesystem
 Filesystem
+Firefox
 FnMut
 FnOnce
 formatter
@@ -109,6 +116,7 @@ grapheme
 Grapheme
 greprs
 growable
+gzip
 hardcoded
 hardcoding
 hasher
@@ -159,6 +167,7 @@ lifecycle
 login
 lookup
 loopback
+lossy
 lval
 mathematic
 metadata
@@ -173,6 +182,7 @@ monomorphization
 Monomorphization
 monomorphized
 MoveMessage
+Mozilla
 mpsc
 multithreaded
 mutex
@@ -186,6 +196,7 @@ namespaces
 namespacing
 newfound
 NewsArticle
+NewThread
 newtype
 nocapture
 nomicon
@@ -283,9 +294,13 @@ subtree
 subtyping
 Summarizable
 Supertraits
+TcpListener
+TcpStream
 test's
 TextField
 That'd
+threadpool
+ThreadPool
 threadsafe
 timestamp
 Tiếng
@@ -337,3 +352,4 @@ wouldn
 writeln
 WriteMessage
 yyyy
+ZipImpl

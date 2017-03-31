@@ -56,8 +56,8 @@ fn main() {
 A `TcpListener` allows us to listen for TCP connections. We've chosen to listen
 to the address `127.0.0.1:8008`. The first four digits are an IP address
 representing our own computer, and `8080` is the port. We've chosen this port
-becuase HTTP is normally accepted on port 80, but connecting to port 80 requires
-administrator privledges. Regular users can listen on ports higher than 1024;
+because HTTP is normally accepted on port 80, but connecting to port 80 requires
+administrator privileges. Regular users can listen on ports higher than 1024;
 8080 is easy to remember since it's port 80, but twice.
 
 The `bind` method is sort of like `new`, but with a more descriptive name. In
@@ -83,7 +83,7 @@ let stream = stream.unwrap();
 println!("Connection established!");
 ```
 
-Right now, "handling" a stream means `unwrap`ping it to ignore any futher
+Right now, "handling" a stream means `unwrap`ping it to ignore any further
 errors, and then printing a message. Let's try this code out! First invoke
 `cargo run`:
 
@@ -362,7 +362,7 @@ file.read_to_string(&mut contents).unwrap();
 ```
 
 We talked about this in the I/O project chapter, so this should
-look fairly familliar. We open the file with `File::open`, and
+look fairly familiar. We open the file with `File::open`, and
 the read it into a `String` with `file.read_to_string`.
 
 Next, we write our response out:
@@ -504,14 +504,14 @@ Here's the basics: instead of waiting for each request to process before
 starting on the next one, we create a new thread for every connection, and do
 the processing inside of the thread. There's a problem with that, however: if we
 get a thousand requests, then we create a thousand threads. Someone making ten
-million requests to our server could create havok. So instead, we create a
+million requests to our server could create havoc. So instead, we create a
 'pool' of threads, with a size of our choosing. As requests come in, we send
 them to the pool for processing. The pool maintains a queue of requests. Each of
 the threads in the pool pops a request off of this queue, handles the request,
 and then asks the queue for another request. With this design, we can process N
 requests concurrently, where N is the number of threads.
 
-This design is one of many ways to improve the thouroughput of our web server.
+This design is one of many ways to improve the throughput of our web server.
 This isn't a book about web servers, though, so it's the one we're going to
 cover. Other options are the "fork/join" model, and the "single threaded async
 I/O" model. If you're interested in this topic, you may want to read more about
@@ -708,7 +708,7 @@ error: aborting due to previous error
 
 We need `execute` to take a closure parameter. If you remember from Chapter 13, we can
 take closures as arguments with three different traits: `Fn`, `FnMut`, and `FnOnce`.
-What kind of clousre should we use? Well, we know we're going to end up doing
+What kind of closure should we use? Well, we know we're going to end up doing
 something similar to `thread::spawn`; what bounds does it have?
 
 ```rust,ignore
@@ -721,7 +721,7 @@ pub fn spawn<F, T>(f: F) -> JoinHandle<T>
 `F` is the parameter we care about here; not `T`. Given that `spawn` uses `FnOnce`, it's
 probably what we want as well, given that we're eventually passing something to `spawn`.
 In addition, we have a `Send` and `'static` bound, which also makes sense: we need `Send`
-to transfer something from one thread to another, and `'static` becuase we don't know
+to transfer something from one thread to another, and `'static` because we don't know
 how long the thread will execute. Let's modify `execute` to have these bounds:
 
 ```rust
@@ -1159,7 +1159,7 @@ note: use `(job.job)(...)` if you meant to call the function stored in the `job`
 error: aborting due to previous error
 ```
 
-Rust helpfull informs us that this is ambiguous: We're trying to invoke the clousre
+Rust helpfully informs us that this is ambiguous: We're trying to invoke the closure
 that `job.job` holds, not call a method `job`. In order to fix this, we have to change
 that line:
 
