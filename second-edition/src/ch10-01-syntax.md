@@ -1,22 +1,21 @@
 ## Generic Data Types
 
 Types in places like function signatures or structs can be replaced with
-*generic type veriables* to create definitions that can be used with many
+*generic type parameters* to create definitions that can be used with many
 different concrete data types.  Let's take a look at how to define functions,
 structs, enums, and methods using generics. We'll finish off the section with a
 review of the performance implications of using generics in your code.
 
 ### Using Generic Data Types in Function Definitions
 
-We can define functions that use generics in the signature of the function
-where the data types of the parameters and return value go. In this way, the
-code we write can be more flexible and provide more functionality to callers of
-our function, while not introducing code duplication.
+A *generic function* is a function that has a generic type parameter in its
+signature.  Multiple types can be substituted in for the generic type parameter,
+allowing one function to be called with data of more than one type without code
+duplication.
 
-Continuing with our `largest` function, Listing 10-4 shows two functions
-providing the same functionality to find the largest value in a slice. The
-first function is the one we extracted in Listing 10-3 that finds the largest
-`i32` in a slice. The second function finds the largest `char` in a slice:
+Building on Listing 10-3, Listing 10-4 has added a `largest_char` function to
+find the largest character in a slice.  We've changed the original `largest`
+function to `largest_i32` for clarity:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -70,18 +69,15 @@ parameter!
 
 To parameterize the types in the signature of the one function we're going to
 define, we need to create a name for the type parameter, just like how we give
-names for the value parameters to a function. We're going to choose the name
-`T`. Any identifier can be used as a type parameter name, but we're choosing
-`T` because Rust's type naming convention is CamelCase. Generic type parameter
-names also tend to be short by convention, often just one letter. Short for
-"type", `T` is the default choice of most Rust programmers.
+names for the value parameters to a function. Rust programs typically use the
+name `T` (short for "type") by default. Any identifier can be used to name a
+generic type parameter, but it is conventional to use a single capital letter.
 
-When we use a parameter in the body of the function, we have to declare the
-parameter in the signature so that the compiler knows what that name in the
-body means. Similarly, when we use a type parameter name in a function
-signature, we have to declare the type parameter name before we use it. Type
-name declarations go in angle brackets between the name of the function and the
-parameter list.
+Generic type parameters are declared in angle brackets between the name of the
+function and the parameter list.  The compiler will recognize that all future
+instances of that name refer to a generic type. This is similar to how a regular
+parameter is declared in a function signature so the compiler knows what that
+name in the function body refers to.
 
 The function signature of the generic `largest` function we're going to define
 will look like this:
@@ -94,10 +90,9 @@ We would read this as: the function `largest` is generic over some type `T`. It
 has one parameter named `list`, and the type of `list` is a slice of values of
 type `T`. The `largest` function will return a value of the same type `T`.
 
-Listing 10-5 shows the unified `largest` function definition using the generic
-data type in its signature, and shows how we'll be able to call `largest` with
-either a slice of `i32` values or `char` values. Note that this code won't
-compile yet!
+Listing 10-5 shows the new `largest` function definition using the generic data
+type in its signature, and shows how we'll be able to call `largest` with either
+a slice of `i32` values or `char` values. Note that this code won't compile yet!
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -145,7 +140,7 @@ The note mentions `std::cmp::PartialOrd`, which is a *trait*. We're going to
 talk about traits in the next section, but briefly, what this error is saying
 is that the body of `largest` won't work for all possible types that `T` could
 be; since we want to compare values of type `T` in the body, we can only use
-types that know how to be ordered. The standard library has defined the trait
+types that know how to be compared. The standard library has defined the trait
 `std::cmp::PartialOrd` that types can implement to enable comparisons. We'll
 come back to traits and how to specify that a generic type has a particular
 trait in the next section, but let's set this example aside for a moment and
@@ -158,6 +153,8 @@ ordering could work out okay, though, and keep a stronger thread with the
 `longest` function going through the whole chapter, but we do pause with a
 not-yet-compiling example here, which I know isn't ideal either. Let us know
 what you think. /Carol -->
+
+<!-- Please leave it like this. /Reader -->
 
 ### Using Generic Data Types in Struct Definitions
 
