@@ -14102,7 +14102,7 @@ pub fn hello_world(input: TokenStream) -&gt; TokenStream {
     let s = input.to_string();
     
     // Parse the string representation
-    let ast = syn::parse_macro_input(&amp;s).unwrap();
+    let ast = syn::parse_derive_input(&amp;s).unwrap();
 
     // Build the impl
     let gen = impl_hello_world(&amp;ast);
