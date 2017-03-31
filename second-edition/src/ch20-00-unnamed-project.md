@@ -18,7 +18,7 @@ to take the easy route. So we'll be writing a basic implementation ourselves.
 # Accepting a TCP connection
 
 The HTTP protocol is built on top of the TCP protocol. So the first thing we need
-to build our webserver is to be able to listen to a TCP connection. The standard
+to build our web server is to be able to listen to a TCP connection. The standard
 library has a `std::net` module that lets us do this. Let's make a new project:
 
 ```bash
@@ -313,9 +313,9 @@ root of the project; that is, not in the `src` directory. You can put any
 HTML you want in it, here's what I put in mine:
 
 ```html
-<!DOCTYPE html> 
-<html lang="en"> 
-  <head> 
+<!DOCTYPE html>
+<html lang="en">
+  <head>
     <meta charset="utf-8">
     <title>Hello!</title>
   </head>
@@ -447,9 +447,9 @@ let mut file = File::open("404.html").unwrap();
 `404.html`, to go along with `hello.html`. Here's its contents:
 
 ```html
-<!DOCTYPE html> 
-<html lang="en"> 
-  <head> 
+<!DOCTYPE html>
+<html lang="en">
+  <head>
     <meta charset="utf-8">
     <title>Hello!</title>
   </head>
@@ -498,7 +498,7 @@ and add a feature to our web server: a threadpool.
 
 Right now, we process each request in turn. That works for small services like
 ours, but as applications get more complex, this sort of serial execution isn't
-optimal. Let's make our webserver better by adding a *thread pool*.
+optimal. Let's make our web server better by adding a *thread pool*.
 
 Here's the basics: instead of waiting for each request to process before
 starting on the next one, we create a new thread for every connection, and do
@@ -994,7 +994,7 @@ the recieving end into our workers. This won't compile yet:
 ```rust,ignore
 impl Worker {
     fn new(id: u32, job_receiver: mpsc::Receiver<Job>) -> Worker {
-        let thread = thread::spawn(||{ 
+        let thread = thread::spawn(||{
             // we want to use receiver in the closure, let's just
             // reference it for now
             job_receiver;
@@ -1053,7 +1053,7 @@ use std::sync::Mutex;
 // and then change this code
 impl Worker {
     fn new(id: u32, job: Arc<Mutex<mpsc::Receiver<Job>>>) -> Worker {
-        let thread = thread::spawn(||{ 
+        let thread = thread::spawn(||{
             // we want to use job in the closure
             job;
         });
@@ -1099,7 +1099,7 @@ impl ThreadPool {
         // no changes here
     }
 
-    fn execute<F>(&self, f: F) 
+    fn execute<F>(&self, f: F)
         where
             F: FnOnce() + Send + 'static
     {
@@ -1120,7 +1120,7 @@ Now that we've got the sending side working, let's write the logic of the worker
 Here's a first attempt, but it won't quite work:
 
 ```rust,ignore
-let thread = thread::spawn(move ||{ 
+let thread = thread::spawn(move ||{
     loop {
         let job = job_receiver.lock().unwrap().recv().unwrap();
 
@@ -1428,7 +1428,7 @@ We need to adjust the `ThreadPool` to send `Message`s rather than `Job`s.
 ```
 impl Worker {
     fn new(id: u32, job_receiver: Arc<Mutex<mpsc::Receiver<Message>>>) -> Worker {
-        let thread = thread::spawn(move ||{ 
+        let thread = thread::spawn(move ||{
             loop {
                 let message = job_receiver.lock().unwrap().recv().unwrap();
 
@@ -1468,7 +1468,7 @@ impl ThreadPool {
         // no other changes here
     }
 
-    fn execute<F>(&self, f: F) 
+    fn execute<F>(&self, f: F)
         where
             F: FnOnce() + Send + 'static
     {
@@ -1650,7 +1650,7 @@ enum Message {
 
 impl Worker {
     fn new(id: u32, job_receiver: Arc<Mutex<mpsc::Receiver<Message>>>) -> Worker {
-        let thread = thread::spawn(move ||{ 
+        let thread = thread::spawn(move ||{
             loop {
                 let message = job_receiver.lock().unwrap().recv().unwrap();
 
@@ -1696,7 +1696,7 @@ impl ThreadPool {
         }
     }
 
-    fn execute<F>(&self, f: F) 
+    fn execute<F>(&self, f: F)
         where
             F: FnOnce() + Send + 'static
     {
