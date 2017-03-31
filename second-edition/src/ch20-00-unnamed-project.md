@@ -1559,4 +1559,174 @@ told every worker to terminate, and then immediately tried to join worker zero.
 Since it had not yet gotten the terminate message, it waited, and the threads
 each acknowledged their termination.
 
-Congrats! We now have completed our project.
+Congrats! We now have completed our project. Here's the full code, for reference:
+
+```rust,no_run
+use std::io::prelude::*;
+use std::net::TcpListener;
+use std::net::TcpStream;
+use std::fs::File;
+use std::sync::mpsc;
+use std::sync::Arc;
+use std::sync::Mutex;
+use std::thread;
+
+fn main() {
+    let listener = TcpListener::bind("127.0.0.1:8080").unwrap();
+
+    let pool = ThreadPool::new(4);
+
+    let mut counter = 0;
+
+    for stream in listener.incoming() {
+        if counter == 2 {
+            println!("Shutting down.");
+            break;
+        }
+
+        counter += 1;
+
+        let stream = stream.unwrap();
+
+        pool.execute(|| {
+            handle_connection(stream);
+        });
+    }
+}
+
+fn handle_connection(mut stream: TcpStream) {
+    let mut buffer = [0; 512];
+    stream.read(&mut buffer).unwrap();
+
+    let get = b"GET / HTTP/1.1\r\n";
+
+    let start = &buffer[..get.len()];
+
+    let (header, filename) = if start == get {
+        ("HTTP/1.1 200 OK\r\n\r\n", "hello.html")
+    } else {
+        ("HTTP/1.1 404 NOT FOUND\r\n\r\n", "404.html")
+    };
+
+    let mut file = File::open(filename).unwrap();
+    let mut contents = String::new();
+
+    file.read_to_string(&mut contents).unwrap();
+
+    let response = format!("{}{}", header, contents);
+
+    stream.write(response.as_bytes()).unwrap();
+    stream.flush().unwrap();
+}
+
+struct ThreadPool {
+    threads: Vec<Worker>,
+    sender: mpsc::Sender<Message>,
+}
+
+trait FnBox {
+    fn call_box(self: Box<Self>);
+}
+
+impl<F: FnOnce()> FnBox for F {
+    fn call_box(self: Box<F>) {
+        (*self)()
+    }
+}
+
+struct Job {
+    job: Box<FnBox + Send + 'static>,
+}
+
+struct Worker {
+    id: u32,
+    thread: Option<thread::JoinHandle<()>>,
+}
+
+enum Message {
+    NewJob(Job),
+    Terminate,
+}
+
+impl Worker {
+    fn new(id: u32, job_receiver: Arc<Mutex<mpsc::Receiver<Message>>>) -> Worker {
+        let thread = thread::spawn(move ||{ 
+            loop {
+                let message = job_receiver.lock().unwrap().recv().unwrap();
+
+                match message {
+                    Message::NewJob(job) => {
+                        println!("Worker {} got a job; executing.", id);
+
+                        job.job.call_box();
+                    },
+                    Message::Terminate => {
+                        println!("Worker {} was told to terminate.", id);
+
+                        break;
+                    }
+                }
+            }
+        });
+
+        Worker {
+            id: id,
+            thread: Some(thread),
+        }
+    }
+}
+
+impl ThreadPool {
+    fn new(size: usize) -> ThreadPool {
+        assert!(size > 0);
+
+        let (job_sender, job_receiver) = mpsc::channel::<Message>();
+
+        let job_receiver = Arc::new(Mutex::new(job_receiver));
+
+        let mut threads = Vec::with_capacity(size);
+
+        for i in 0..size {
+            threads.push(Worker::new(i as u32, job_receiver.clone()));
+        }
+
+        ThreadPool {
+            threads: threads,
+            sender: job_sender,
+        }
+    }
+
+    fn execute<F>(&self, f: F) 
+        where
+            F: FnOnce() + Send + 'static
+    {
+        let job = Job {
+            job: Box::new(f),
+        };
+
+        self.sender.send(Message::NewJob(job)).unwrap();
+    }
+}
+
+impl Drop for ThreadPool {
+    fn drop(&mut self) {
+        println!("Sending terminate message to all workers.");
+
+        for _ in &mut self.threads {
+            self.sender.send(Message::Terminate).unwrap();
+        }
+
+        for worker in &mut self.threads {
+            println!("Shutting down worker {}", worker.id);
+
+            if let Some(thread) = worker.thread.take() {
+                thread.join().unwrap();
+            }
+        }
+    }
+}
+```
+
+There is still more we could do here; for example, our `ThreadPool` is not
+inherently tied to HTTP handling, so we could extract it into its own submodule,
+or maybe even its own crate!
