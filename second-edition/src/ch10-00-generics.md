@@ -172,8 +172,8 @@ We performed these steps to get from Listing 10-2 to Listing 10-3:
 1. We noticed there was duplicate code.
 2. We extracted the duplicate code into the body of the function, and specified
    the inputs and return values of that code in the function signature.
-3. We replaced the two concrete places that had the duplicated code to call the
-   function instead.
+3. We updated the two places that had the duplicated code to call the function
+   instead.
 
 We can use these same steps with generics to reduce code duplication in
 different ways in different scenarios. In the same way that the function body
