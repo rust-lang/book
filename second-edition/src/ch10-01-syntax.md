@@ -1,10 +1,10 @@
 ## Generic Data Types
 
-Using generics where we usually place types, like in function signatures or
-structs, lets us create definitions that we can use for many different concrete
-data types. Let's take a look at how to define functions, structs, enums, and
-methods using generics, and at the end of this section we'll discuss the
-performance of code using generics.
+Types in places like function signatures or structs can be replaced with
+*generic type veriables* to create definitions that can be used with many
+different concrete data types.  Let's take a look at how to define functions,
+structs, enums, and methods using generics. We'll finish off the section with a
+review of the performance implications of using generics in your code.
 
 ### Using Generic Data Types in Function Definitions
 
