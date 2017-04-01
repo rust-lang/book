@@ -81,16 +81,16 @@ Listing 10-16 with annotations showing the lifetimes of the variables:
 
 ```rust,ignore
 {
-    let r;         // -------+-- 'a
-                   //        |
-    {              //        |
-        let x = 5; // -+-----+-- 'b
-        r = &x;    //  |     |
-    }              // -+     |
-                   //        |
-    println!("r: {}", r); // |
-                   //        |
-                   // -------+
+    let r;         // --------+--'a
+                   //         |
+    {              //         |
+        let x = 5; // -+--'b  |
+        r = &x;    //  |      |
+    }              // -+      |
+                   //         |
+    println!("r: {}", r); //  |
+                   //         |
+                   // --------+
 }
 ```
 
@@ -113,22 +113,33 @@ a lifetime of `'b`. The program is rejected because the lifetime `'b` is
 shorter than the lifetime of `'a`: the subject of the reference does not live
 as long as the reference.
 
+<!-- Why do you keep saying "shorter" here, doesn't it only matter which one
+ends first? Yes, the shorter one will end first, but it is confusing to use that
+terminology unless you've explicitly justified it. As far as I know, you haven't
+explicitly explained that scopes are nested yet. -->
+
 Let's look at an example in Listing 10-18 that doesn't try to make a dangling
 reference and compiles without any errors:
 
 ```rust
 {
-    let x = 5;            // -----+-- 'b
-                          //      |
-    let r = &x;           // --+--+-- 'a
-                          //   |  |
-    println!("r: {}", r); //   |  |
-                          // --+  |
-}                         // -----+
+    let x = 5;            // --------+-- 'b
+                          //         |
+    let r = &x;           // --+--'a |
+                          //   |     |
+    println!("r: {}", r); //   |     |
+                          // --+     |
+}                         // --------+
 ```
+
+<!-- You've drawn 'b ending after 'a but have you yet explained *why*? it ends
+after 'a? -->
 
 <span class="caption">Listing 10-18: A valid reference because the data has a
 longer lifetime than the reference</span>
+
+<!-- Why did you switch 'a and 'b? Shouldn't 'a be the first one, it is first.
+-->
 
 Here, `x` has the lifetime `'b`, which in this case is larger than `'a`. This
 means `r` can reference `x`: Rust knows that the reference in `r` will always
@@ -327,6 +338,12 @@ the lifetimes of `x` and `y`. Because we've annotated the returned reference
 with the same lifetime parameter `'a`, the returned reference will therefore be
 guaranteed to be valid as long as the shorter of the lifetimes of `x` and `y`.
 
+<!-- I'm pretty sure you said "Since scopes always nest" without ever
+explaining that they do. I can't find it, at least.  This could be explained
+back where I made the previous note about 'b ending after 'a. And make sure to
+explain that's what lets you use these words like "smaller" and "shorter" all
+the time. -->
+
 Let's see how this restricts the usage of the `longest` function by passing in
 references that have different concrete lifetimes. Listing 10-22 is a
 straightforward example that should match your intuition from any language:
@@ -334,6 +351,11 @@ straightforward example that should match your intuition from any language:
 the end of the inner scope, and `result` references something that is valid
 until the end of the inner scope. The borrow checker approves of this code; it
 will compile and print `The longest string is long string is long` when run:
+
+<!-- Can you explain to me why:
+> `result references something that is valid until the end of the outer scope
+is true? I would have thought it would only be referencing something that is
+valid until the end of the inner scope. Not as intuitive as you guessed, eh? -->
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -562,7 +584,7 @@ After writing a lot of Rust code, the Rust team found that Rust programmers
 were typing the same lifetime annotations over and over in particular
 situations. These situations were predictable and followed a few deterministic
 patterns. The Rust team then programmed these patterns into the Rust compiler's
-code so that the borrow checker can infer the lifetimes in these situations
+code so that the borrow checker could infer the lifetimes in these situations
 without forcing the programmer to explicitly add the annotations.
 
 We mention this piece of Rust history because it's entirely possible that more
@@ -586,7 +608,7 @@ First, some definitions: Lifetimes on function or method parameters are called
 
 Now, on to the rules that the compiler uses to figure out what lifetimes
 references have when there aren't explicit annotations. The first rule applies
-to input lifetimes, and the second two rules apply to output lifetimes. If the
+to input lifetimes, and the next two rules apply to output lifetimes. If the
 compiler gets to the end of the three rules and there are still references that
 it can't figure out lifetimes for, the compiler will stop with an error.
 
@@ -605,7 +627,7 @@ it can't figure out lifetimes for, the compiler will stop with an error.
 
 Let's pretend we're the compiler and apply these rules to figure out what the
 lifetimes of the references in the signature of the `first_word` function in
-Listing 10-25 are. The signatures starts without any lifetimes associated with
+Listing 10-25 are. The signature starts without any lifetimes associated with
 the references:
 
 ```rust,ignore
@@ -632,7 +654,7 @@ compiler can continue its analysis without needing the programmer to annotate
 the lifetimes in this function signature.
 
 Let's do another example, this time with the `longest` function that had no
-lifetime parameters when we started working with in Listing 10-20:
+lifetime parameters when we started working with it in Listing 10-20:
 
 ```rust,ignore
 fn longest(x: &str, y: &str) -> &str {
@@ -796,3 +818,6 @@ covering more complex scenarios involving lifetime annotations. Chapter 20 will
 get to some advanced type system features. Up next, though, let's talk about
 how to write tests in Rust so that we can make sure our code using all these
 features is working the way we want it to!
+
+<!-- Aren't Chapter 20 and Chapter 19 now just Chapter 19? Or something like
+that... -->
