@@ -21,8 +21,7 @@ in order to define a set of behaviors necessary to accomplish some purpose.
 For example, say we have multiple structs that hold various kinds and amounts
 of text: a `NewsArticle` struct that holds a news story filed in a particular
 place in the world, and a `Tweet` that can have at most 140 characters in its
-content along with metadata like whether it was a retweet or a reply to another
-tweet.
+content along with a username.
 
 We want to make a media aggregator library that can display summaries of data
 that might be stored in a `NewsArticle` or `Tweet` instance. The behavior we
@@ -88,8 +87,6 @@ impl Summarizable for NewsArticle {
 pub struct Tweet {
     pub username: String,
     pub content: String,
-    pub reply: bool,
-    pub retweet: bool,
 }
 
 impl Summarizable for Tweet {
@@ -119,8 +116,6 @@ part of a trait:
 let tweet = Tweet {
     username: String::from("horse_ebooks"),
     content: String::from("of course, as you probably already know, people"),
-    reply: false,
-    retweet: false,
 };
 
 println!("1 new tweet: {}", tweet.summary());
@@ -275,8 +270,6 @@ definition of `author_summary` that we've provided.
 let tweet = Tweet {
     username: String::from("horse_ebooks"),
     content: String::from("of course, as you probably already know, people"),
-    reply: false,
-    retweet: false,
 };
 
 println!("1 new tweet: {}", tweet.summary());
