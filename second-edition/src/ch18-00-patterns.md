@@ -173,11 +173,50 @@ This will print `Current location: (3, 5)`.
 
 ### `while let`
 
-TODO: add a `while let` example
+A similar construction to `if let` is `while let`; this allows you to do
+a `while` loop while matching a pattern. For example:
+
+```rust
+let mut stack = Vec::new();
+
+stack.push(1);
+stack.push(2);
+stack.push(3);
+
+while let Some(top) = stack.pop() {
+    // Prints 3, 2, 1
+    println!("{}", top);
+}
+```
+
+Here, the `pop` method takes the last element out of the vector and returns `Some(value)`.
+If the vector is empty, it returns `None`. We can use `while let` to pop every element
+off this way.
 
 ### `for` loops
 
-TODO: add a `for` loop example
+Looping with `for`, as we discussed in Chapter 3, is the most common loop construction in
+Rust code. But what we didn't talk about in that chapter was that `for` takes a pattern.
+For example, the `enumerate` method adapts an iterator to not only produce a value, but
+a tuple with the value and its index. We can use a pattern to destructure that tuple:
+
+```rust
+let v = vec![1, 2, 3];
+
+for (index, value) in v {
+    println!("{} is at index {}", value, index);
+}
+```
+
+This will print:
+
+```text
+1 is at index 0
+2 is at index 1
+3 is at index 2
+```
+
+The `(index, value)` construction there is a pattern.
 
 ## Refutability: Whether a Pattern Might Fail to Match
 
@@ -291,8 +330,6 @@ more like destructuring?
 
 ### Named Variables and the Underscore Pattern
 
-TODO: variable name always matches any value, underscore ignores everything, say the word "wildcard" somewhere about `_`
-
 Usually, Rust will warn you if you create a variable but don't use it anywhere,
 since that could be a bug. If you're prototyping or just starting a project,
 though, you might create a variable that you'll use eventually, but temporarily
@@ -311,7 +348,8 @@ fn main() {
 ```
 
 Similarly with patterns as function parameters, if we didn't want to use the
-argument in the body of our function, we could use `_` for example:
+argument in the body of our function, we could use `_`, also known as a
+'wildcard' for example:
 
 ```rust
 fn foo(_: i32) {
@@ -325,6 +363,32 @@ not have to use the argument, and the compiler won't warn about unused function
 parameters like it would if we had given it a name.
 
 TODO: names starting with underscores behave the same as names not starting with underscores, aside from not getting an unused warning. Underscore is special; it drops right away. Example?
+
+There's one more bit of subtlety here; `_x` and `_` have different behavior. That
+is, `_x` still binds to the variable of that name, but `_` doesn't bind at all.
+
+For example, this will produce an error:
+
+```rust,ignore
+let s = String::from("Hello!");
+
+let _s = s;
+
+println!("{}", s);
+```
+
+Specifically, "use of moved value". When we assign `s` to `_s`, it moves, and so
+`s` is no longer valid. However...
+
+```rust
+let s = String::from("Hello!");
+
+let _ = s;
+
+println!("{}", s);
+```
+
+This works just fine. Becuase we never bind `s` to anything, it's not moved.
 
 ### Multiple patterns
 
@@ -430,7 +494,22 @@ fn main() {
 }
 ```
 
-TODO: add enum destructuring example
+It's also common to use destructuring with `enums`. For example, the `is_none` method
+on `Option<T>` returns `true` if the `Option<T>` is `None`, and false if it is `Some`.
+Here's what it looks like:
+
+```rust,ignore
+impl<T> Option<T> {
+    pub fn is_some(&self) -> bool {
+        match *self {
+            Some(_) => true,
+            None => false,
+        }
+    }
+}
+```
+
+The `Some(_)` pattern will match any value, as long as it's `Some`.
 
 We can mix, match, and nest destructuring patterns: we can do
 something complicated like this example where we nest tuples inside of
@@ -485,21 +564,24 @@ match origin {
 }
 ```
 
-TODO: explain this example with `..` in the middle that works:
+`..` will expand to as many values as it needs to be. For example:
 
 ```rust
 fn main() {
     let numbers = (2, 4, 8, 16, 32);
 
     match numbers {
-        (first, .., fifth) => {
-            println!("Some numbers: {}, {}", first, fifth)
+        (first, .., last) => {
+            println!("Some numbers: {}, {}", first, last);
         },
     }
 }
 ```
 
-TODO: explain this example with `..` twice that doesn't work because it's ambiguous:
+Here, we have the first and last value matched, with `first` and `last`. The `..` will
+match all of the things in the middle.
+
+This doesn't always work, though. Consider this:
 
 ```rust,ignore
 fn main() {
@@ -513,7 +595,7 @@ fn main() {
 }
 ```
 
-error:
+We get this error:
 
 ```text
 error: `..` can only be used once per tuple or tuple struct pattern
@@ -522,6 +604,10 @@ error: `..` can only be used once per tuple or tuple struct pattern
 5 |         (.., second, ..) => {
   |                      ^^
 ```
+
+It's not possible to determine that this is _actually_ the second value, like we gave
+the name. What if both `..` matched two elements? It'd be the third, value, not the second.
+Since this is ambiguous, Rust disallows it.
 
 ### Matching Ranges of Values with `...`
 
@@ -552,8 +638,6 @@ match x {
 This will print `early ASCII letter`.
 
 ### Extra Conditionals with Match Guards
-
-TODO: is this really part of pattern syntax?
 
 You can introduce *match guards* with `if`:
 
