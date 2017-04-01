@@ -4,8 +4,9 @@ Traits allow us to use another kind of abstraction: they let us abstract over
 behavior that types can have in common. A *trait* tells the Rust compiler about
 functionality a particular type has and might share with other types. In
 situations where we use generic type parameters, we can use *trait bounds* to
-specify, at compile time, that the generic type may be any type that implements
-a trait and therefore has the behavior we want to use in that situation.
+specify, at compile time, that the generic type must be a type that implements a
+particular trait and therefore has the behavior we want to use in that
+situation.
 
 > Note: *Traits* are similar to a feature often called 'interfaces' in other
 > languages, though with some differences.
