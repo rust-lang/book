@@ -9,7 +9,7 @@ of references could be related in a few different ways, so Rust needs us to
 annotate the relationships using generic lifetime parameters so that it can
 make sure the actual references used at runtime will definitely be valid.
 
-Yes, it's a bit unusual, and will be different to tools you've used in other
+Yes, it's a bit unusual, and will be different from tools you've used in other
 programming languages. Lifetimes are, in some ways, Rust's most distinctive
 feature.
 
