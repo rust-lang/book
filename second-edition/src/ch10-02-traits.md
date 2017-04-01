@@ -187,9 +187,9 @@ in a trait, instead of making every implementation on every type define custom
 behavior. When we implement the trait on a particular type, we can choose to
 keep or override each method's default behavior.
 
-Listing 10-14 shows how we could have chosen to specify a default string for
-the `summary` method of the `Summarize` trait instead of only choosing to only
-define the method signature like we did in Listing 10-11:
+Listing 10-14 shows how we could have chosen to specify a default string for the
+`summary` method of the `Summarize` trait instead of choosing to only define the
+method signature like we did in Listing 10-11:
 
 <span class="filename">Filename: lib.rs</span>
 
