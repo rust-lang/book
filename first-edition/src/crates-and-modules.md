@@ -176,23 +176,28 @@ mod english;
 mod japanese;
 ```
 
-These two declarations tell Rust to look for either `src/english.rs` and
-`src/japanese.rs`, or `src/english/mod.rs` and `src/japanese/mod.rs`, depending
-on our preference. In this case, because our modules have sub-modules, we’ve
-chosen the second. Both `src/english/mod.rs` and `src/japanese/mod.rs` look
-like this:
+These two declarations tell Rust to look for
+
+- either `src/english.rs` or `src/english/mod.rs`, and
+- either `src/japanese.rs` or `src/japanese/mod.rs`,
+
+depending on our preference. In this case, because our modules have sub-modules,
+we’ve chosen the `mod.rs` approach. Both `src/english/mod.rs` and
+`src/japanese/mod.rs` look like this:
 
 ```rust,ignore
 mod greetings;
 mod farewells;
 ```
 
-Again, these declarations tell Rust to look for either
-`src/english/greetings.rs`, `src/english/farewells.rs`,
-`src/japanese/greetings.rs` and `src/japanese/farewells.rs` or
-`src/english/greetings/mod.rs`, `src/english/farewells/mod.rs`,
-`src/japanese/greetings/mod.rs` and
-`src/japanese/farewells/mod.rs`. Because these sub-modules don’t have
+Again, these declarations tell Rust to look for
+
+- `src/english/greetings.rs` or `src/english/greetings/mod.rs`,
+- `src/english/farewells.rs` or `src/english/farewells/mod.rs`,
+- `src/japanese/greetings.rs` or `src/japanese/greetings/mod.rs`,
+- and `src/japanese/farewells.rs` or `src/japanese/farewells/mod.rs`.
+
+Because these sub-modules don’t have
 their own sub-modules, we’ve chosen to make them
 `src/english/greetings.rs`, `src/english/farewells.rs`,
 `src/japanese/greetings.rs` and `src/japanese/farewells.rs`. Whew!
