@@ -321,7 +321,7 @@ prints another message and exits:
 fn main() {
     let mut number = 3;
 
-    while number != 0  {
+    while number != 0 {
         println!("{}!", number);
 
         number = number - 1;
