@@ -207,20 +207,25 @@ seven files:</p>
 <pre><code class="language-rust ignore">mod english;
 mod japanese;
 </code></pre>
-<p>These two declarations tell Rust to look for either <code>src/english.rs</code> and
-<code>src/japanese.rs</code>, or <code>src/english/mod.rs</code> and <code>src/japanese/mod.rs</code>, depending
-on our preference. In this case, because our modules have sub-modules, we’ve
-chosen the second. Both <code>src/english/mod.rs</code> and <code>src/japanese/mod.rs</code> look
-like this:</p>
+<p>These two declarations tell Rust to look for</p>
+<ul>
+<li>either <code>src/english.rs</code> or <code>src/english/mod.rs</code>, and</li>
+<li>either <code>src/japanese.rs</code> or <code>src/japanese/mod.rs</code>,</li>
+</ul>
+<p>depending on our preference. In this case, because our modules have sub-modules,
+we’ve chosen the <code>mod.rs</code> approach. Both <code>src/english/mod.rs</code> and
+<code>src/japanese/mod.rs</code> look like this:</p>
 <pre><code class="language-rust ignore">mod greetings;
 mod farewells;
 </code></pre>
-<p>Again, these declarations tell Rust to look for either
-<code>src/english/greetings.rs</code>, <code>src/english/farewells.rs</code>,
-<code>src/japanese/greetings.rs</code> and <code>src/japanese/farewells.rs</code> or
-<code>src/english/greetings/mod.rs</code>, <code>src/english/farewells/mod.rs</code>,
-<code>src/japanese/greetings/mod.rs</code> and
-<code>src/japanese/farewells/mod.rs</code>. Because these sub-modules don’t have
+<p>Again, these declarations tell Rust to look for</p>
+<ul>
+<li><code>src/english/greetings.rs</code> or <code>src/english/greetings/mod.rs</code>,</li>
+<li><code>src/english/farewells.rs</code> or <code>src/english/farewells/mod.rs</code>,</li>
+<li><code>src/japanese/greetings.rs</code> or <code>src/japanese/greetings/mod.rs</code>,</li>
+<li>and <code>src/japanese/farewells.rs</code> or <code>src/japanese/farewells/mod.rs</code>.</li>
+</ul>
+<p>Because these sub-modules don’t have
 their own sub-modules, we’ve chosen to make them
 <code>src/english/greetings.rs</code>, <code>src/english/farewells.rs</code>,
 <code>src/japanese/greetings.rs</code> and <code>src/japanese/farewells.rs</code>. Whew!</p>
