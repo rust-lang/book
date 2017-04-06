@@ -332,7 +332,7 @@ references that have different concrete lifetimes. Listing 10-22 is a
 straightforward example that should match your intuition from any language:
 `string1` is valid until the end of the outer scope, `string2` is valid until
 the end of the inner scope, and `result` references something that is valid
-until the end of the outer scope. The borrow checker approves of this code; it
+until the end of the inner scope. The borrow checker approves of this code; it
 will compile and print `The longest string is long string is long` when run:
 
 <span class="filename">Filename: src/main.rs</span>
