@@ -9,5 +9,5 @@ probably want to visit [first-edition/] if you need the exact older page; if
 you're trying to learn Rust, checking out the [second edition] might be a
 better choice.
 
-[first-edition/]: first-edition/index.html
+[first-edition/]: first-edition/enums.html
 [second edition]: second-edition/index.html
