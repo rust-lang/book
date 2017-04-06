@@ -35,7 +35,7 @@ fn main() {
 <span class="caption">Listing 16-6: Creating a channel and assigning the two
 halves to `tx` and `rx`</span>
 
-The `mpsc::channel` function crates a new channel. `mpsc` stands for *multiple
+The `mpsc::channel` function creates a new channel. `mpsc` stands for *multiple
 producer, single consumer*. In short, we can have multiple *sending* ends of a
 channel that produce values, but only one *receiving* end that consumes those
 values. We're going to start with a single producer for now, but we'll add
