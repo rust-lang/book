@@ -10,4 +10,4 @@ you're trying to learn Rust, checking out the [second edition] might be a
 better choice.
 
 [first-edition/]: first-edition/index.html
-[second-edition]: second-edition/index.html
+[second edition]: second-edition/index.html
