@@ -28,8 +28,8 @@ time. Mutexes have a reputation for being hard to use, since there's a lot you
 have to remember:
 
 1. You have to remember to attempt to acquire the lock before using the data.
-2. One you're done with the data that's being guarded by the mutex, you have
-   to remember to unlock the data so other threads can acquire the lock.
+2. Once you're done with the data that's being guarded by the mutex, you have
+   to remember to unlock the data so that other threads can acquire the lock.
 
 For a real-world example of a mutex, imagine a panel discussion at a conference
 where there is only one microphone. Before a panelist may speak, they have to
