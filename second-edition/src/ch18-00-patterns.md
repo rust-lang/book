@@ -388,7 +388,7 @@ let _ = s;
 println!("{}", s);
 ```
 
-This works just fine. Becuase we never bind `s` to anything, it's not moved.
+This works just fine. Because we never bind `s` to anything, it's not moved.
 
 ### Multiple patterns
 
