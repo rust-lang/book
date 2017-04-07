@@ -545,7 +545,10 @@ fn main() {
 <span class="caption">Listing 18-16: Destructuring struct fields into variables
 with different names than the fields</span>
 
-We can also use destructuring with literal values in order to test and use inner parts of a value. Listing 18-17 shows a `match` statement that determines whether a point lies directly on the `x` axis (which is true when `y = 0`), on the `y` axis (`x = 0`), or neither:
+We can also use destructuring with literal values in order to test and use
+inner parts of a value. Listing 18-17 shows a `match` statement that determines
+whether a point lies directly on the `x` axis (which is true when `y = 0`), on
+the `y` axis (`x = 0`), or neither:
 
 ```
 # struct Point {
@@ -564,7 +567,8 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 18-17: Destructuring and matching literal values in one pattern</span>
+<span class="caption">Listing 18-17: Destructuring and matching literal values
+in one pattern</span>
 
 This will print `On the y axis at 7` since the value `p` matches the second arm
 by virtue of `x` having the value 0.
