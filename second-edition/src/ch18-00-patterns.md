@@ -1046,4 +1046,12 @@ Using `@` lets us test a value and save it in a variable within one pattern.
 
 ## Summary
 
-TODO: summary
+Patterns are a useful feature of Rust that help to distinguish between
+different kinds of data. When used in `match` statements, Rust makes sure that
+your patterns cover every possible value. Patterns in `let` statements and
+function parameters make those constructs more powerful, enabling the
+destructuring of values into smaller parts at the same time as assigning to
+variables.
+
+Now, for the penultimate chapter of the book, let's take a look at some
+advanced parts of a variety of Rust's features.
