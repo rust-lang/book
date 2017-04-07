@@ -345,7 +345,7 @@ references that have different concrete lifetimes. Listing 10-22 is a
 straightforward example that should match your intuition from any language:
 <code>string1</code> is valid until the end of the outer scope, <code>string2</code> is valid until
 the end of the inner scope, and <code>result</code> references something that is valid
-until the end of the outer scope. The borrow checker approves of this code; it
+until the end of the inner scope. The borrow checker approves of this code; it
 will compile and print <code>The longest string is long string is long</code> when run:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
 <pre><pre class="playpen"><code class="language-rust"># fn longest&lt;'a&gt;(x: &amp;'a str, y: &amp;'a str) -&gt; &amp;'a str {
