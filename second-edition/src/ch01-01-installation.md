@@ -48,7 +48,7 @@ installation page](https://www.rust-lang.org/install.html) for other options.
 
 ### Updating
 
-Once you had Rust installed, updating to the latest version is easy.
+Once you have Rust installed, updating to the latest version is easy.
 From your shell, run the update script:
 
 ```text
