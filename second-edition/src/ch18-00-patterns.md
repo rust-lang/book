@@ -541,6 +541,30 @@ fn main() {
 <span class="caption">Listing 18-16: Destructuring struct fields into variables
 with different names than the fields</span>
 
+We can also use destructuring with literal values in order to test and use inner parts of a value. Listing 18-17 shows a `match` statement that determines whether a point lies directly on the `x` axis (which is true when `y = 0`), on the `y` axis (`x = 0`), or neither:
+
+```
+# struct Point {
+#     x: i32,
+#     y: i32,
+# }
+#
+fn main() {
+    let p = Point { x: 0, y: 7 };
+
+    match p {
+        Point { x, y: 0 } => println!("On the x axis at {}", x),
+        Point { x: 0, y} => println!("On the y axis at {}", y),
+        Point { x, y } => println!("On neither axis: ({}, {})", x, y),
+    }
+}
+```
+
+<span class="caption">Listing 18-17: Destructuring and matching literal values in one pattern</span>
+
+This will print `On the y axis at 7` since the value `p` matches the second arm
+by virtue of `x` having the value 0.
+
 We used desctructuring on enums in Chapter 6, such as in Listing 6-5 where we
 destructured an `Option<i32>` using a `match` expression and added one to the
 inner value of the `Some` variant.
