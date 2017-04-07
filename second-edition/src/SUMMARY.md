@@ -99,7 +99,10 @@
 
 ## Advanced Topics
 
-- [Patterns](ch18-00-patterns.md) (perhaps an appendix?)
+- [Patterns Match the Structure of Values](ch18-00-patterns.md)
+    - [All the Places Patterns May be Used](ch18-01-all-the-places-for-patterns.md)
+    - [Refutability: Whether a Pattern Might Fail to Match](ch18-02-refutability.md)
+    - [All the Pattern Syntax](ch18-03-pattern-syntax.md)
 
 - [Advanced Features](ch19-00-advanced-features.md)
     - [Unsafe Rust](ch19-01-unsafe-rust.md)
