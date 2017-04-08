@@ -204,7 +204,7 @@ in one pattern</span>
 This will print `On the y axis at 7` since the value `p` matches the second arm
 by virtue of `x` having the value 0.
 
-We used desctructuring on enums in Chapter 6, such as in Listing 6-5 where we
+We used destructuring on enums in Chapter 6, such as in Listing 6-5 where we
 destructured an `Option<i32>` using a `match` expression and added one to the
 inner value of the `Some` variant.
 

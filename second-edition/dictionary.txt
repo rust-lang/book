@@ -70,6 +70,7 @@ dereferencing
 DerefMut
 destructor
 destructure
+destructured
 destructures
 destructuring
 Destructuring
@@ -299,6 +300,7 @@ tradeoff
 tradeoffs
 TrafficLight
 trpl
+tuesday
 tuple
 tuples
 typeof

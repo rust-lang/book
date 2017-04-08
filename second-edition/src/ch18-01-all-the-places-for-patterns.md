@@ -42,7 +42,7 @@ if the pattern in the `if let` doesn't match.
 Listing 18-1 shows that it's even possible to mix and match `if let`, `else
 if`, and `else if let`. This code shows a series of checks of a bunch of
 different conditions to decide what the background color should be. For the
-purposes of the examplee, we've created variables with hardcoded values that a
+purposes of the example, we've created variables with hardcoded values that a
 real program might get by asking the user. If the user has specified a favorite
 color, we'll use that as the background color. If today is Tuesday, the
 background color will be green. If the user has specified their age as a string
