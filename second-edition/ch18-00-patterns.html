@@ -2,7 +2,7 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <title>Patterns - The Rust Programming Language</title>
+        <title>Patterns Match the Structure of Values - The Rust Programming Language</title>
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -47,7 +47,7 @@
         </script>
 
         <div id="sidebar" class="sidebar">
-            <ul class="chapter"><li><a href="ch01-00-introduction.html"><strong>1.</strong> Introduction</a></li><li><ul class="section"><li><a href="ch01-01-installation.html"><strong>1.1.</strong> Installation</a></li><li><a href="ch01-02-hello-world.html"><strong>1.2.</strong> Hello, World!</a></li></ul></li><li><a href="ch02-00-guessing-game-tutorial.html"><strong>2.</strong> Guessing Game Tutorial</a></li><li><a href="ch03-00-common-programming-concepts.html"><strong>3.</strong> Common Programming Concepts</a></li><li><ul class="section"><li><a href="ch03-01-variables-and-mutability.html"><strong>3.1.</strong> Variables and Mutability</a></li><li><a href="ch03-02-data-types.html"><strong>3.2.</strong> Data Types</a></li><li><a href="ch03-03-how-functions-work.html"><strong>3.3.</strong> How Functions Work</a></li><li><a href="ch03-04-comments.html"><strong>3.4.</strong> Comments</a></li><li><a href="ch03-05-control-flow.html"><strong>3.5.</strong> Control Flow</a></li></ul></li><li><a href="ch04-00-understanding-ownership.html"><strong>4.</strong> Understanding Ownership</a></li><li><ul class="section"><li><a href="ch04-01-what-is-ownership.html"><strong>4.1.</strong> What is Ownership?</a></li><li><a href="ch04-02-references-and-borrowing.html"><strong>4.2.</strong> References &amp; Borrowing</a></li><li><a href="ch04-03-slices.html"><strong>4.3.</strong> Slices</a></li></ul></li><li><a href="ch05-00-structs.html"><strong>5.</strong> Structs</a></li><li><ul class="section"><li><a href="ch05-01-method-syntax.html"><strong>5.1.</strong> Method Syntax</a></li></ul></li><li><a href="ch06-00-enums.html"><strong>6.</strong> Enums and Pattern Matching</a></li><li><ul class="section"><li><a href="ch06-01-defining-an-enum.html"><strong>6.1.</strong> Defining an Enum</a></li><li><a href="ch06-02-match.html"><strong>6.2.</strong> The <code>match</code> Control Flow Operator</a></li><li><a href="ch06-03-if-let.html"><strong>6.3.</strong> Concise Control Flow with <code>if let</code></a></li></ul></li><li><a href="ch07-00-modules.html"><strong>7.</strong> Modules</a></li><li><ul class="section"><li><a href="ch07-01-mod-and-the-filesystem.html"><strong>7.1.</strong> <code>mod</code> and the Filesystem</a></li><li><a href="ch07-02-controlling-visibility-with-pub.html"><strong>7.2.</strong> Controlling Visibility with <code>pub</code></a></li><li><a href="ch07-03-importing-names-with-use.html"><strong>7.3.</strong> Importing Names with <code>use</code></a></li></ul></li><li><a href="ch08-00-common-collections.html"><strong>8.</strong> Common Collections</a></li><li><ul class="section"><li><a href="ch08-01-vectors.html"><strong>8.1.</strong> Vectors</a></li><li><a href="ch08-02-strings.html"><strong>8.2.</strong> Strings</a></li><li><a href="ch08-03-hash-maps.html"><strong>8.3.</strong> Hash Maps</a></li></ul></li><li><a href="ch09-00-error-handling.html"><strong>9.</strong> Error Handling</a></li><li><ul class="section"><li><a href="ch09-01-unrecoverable-errors-with-panic.html"><strong>9.1.</strong> Unrecoverable Errors with <code>panic!</code></a></li><li><a href="ch09-02-recoverable-errors-with-result.html"><strong>9.2.</strong> Recoverable Errors with <code>Result</code></a></li><li><a href="ch09-03-to-panic-or-not-to-panic.html"><strong>9.3.</strong> To <code>panic!</code> or Not To <code>panic!</code></a></li></ul></li><li><a href="ch10-00-generics.html"><strong>10.</strong> Generic Types, Traits, and Lifetimes</a></li><li><ul class="section"><li><a href="ch10-01-syntax.html"><strong>10.1.</strong> Generic Data Types</a></li><li><a href="ch10-02-traits.html"><strong>10.2.</strong> Traits: Defining Shared Behavior</a></li><li><a href="ch10-03-lifetime-syntax.html"><strong>10.3.</strong> Validating References with Lifetimes</a></li></ul></li><li><a href="ch11-00-testing.html"><strong>11.</strong> Testing</a></li><li><ul class="section"><li><a href="ch11-01-writing-tests.html"><strong>11.1.</strong> Writing tests</a></li><li><a href="ch11-02-running-tests.html"><strong>11.2.</strong> Running tests</a></li><li><a href="ch11-03-test-organization.html"><strong>11.3.</strong> Test Organization</a></li></ul></li><li><a href="ch12-00-an-io-project.html"><strong>12.</strong> An I/O Project</a></li><li><ul class="section"><li><a href="ch12-01-accepting-command-line-arguments.html"><strong>12.1.</strong> Accepting Command Line Arguments</a></li><li><a href="ch12-02-reading-a-file.html"><strong>12.2.</strong> Reading a File</a></li><li><a href="ch12-03-improving-error-handling-and-modularity.html"><strong>12.3.</strong> Improving Error Handling and Modularity</a></li><li><a href="ch12-04-testing-the-librarys-functionality.html"><strong>12.4.</strong> Testing the Library's Functionality</a></li><li><a href="ch12-05-working-with-environment-variables.html"><strong>12.5.</strong> Working with Environment Variables</a></li><li><a href="ch12-06-writing-to-stderr-instead-of-stdout.html"><strong>12.6.</strong> Writing to <code>stderr</code> instead of <code>stdout</code></a></li></ul></li><li><a href="ch13-00-functional-features.html"><strong>13.</strong> Functional Language Features in Rust</a></li><li><ul class="section"><li><a href="ch13-01-closures.html"><strong>13.1.</strong> Closures</a></li><li><a href="ch13-02-iterators.html"><strong>13.2.</strong> Iterators</a></li><li><a href="ch13-03-improving-our-io-project.html"><strong>13.3.</strong> Improving our I/O Project</a></li><li><a href="ch13-04-performance.html"><strong>13.4.</strong> Performance</a></li></ul></li><li><a href="ch14-00-more-about-cargo.html"><strong>14.</strong> More about Cargo and Crates.io</a></li><li><ul class="section"><li><a href="ch14-01-release-profiles.html"><strong>14.1.</strong> Release Profiles</a></li><li><a href="ch14-02-publishing-to-crates-io.html"><strong>14.2.</strong> Publishing a Crate to Crates.io</a></li><li><a href="ch14-03-cargo-workspaces.html"><strong>14.3.</strong> Cargo Workspaces</a></li><li><a href="ch14-04-installing-binaries.html"><strong>14.4.</strong> Installing Binaries from Crates.io with <code>cargo install</code></a></li><li><a href="ch14-05-extending-cargo.html"><strong>14.5.</strong> Extending Cargo with Custom Commands</a></li></ul></li><li><a href="ch15-00-smart-pointers.html"><strong>15.</strong> Smart Pointers</a></li><li><ul class="section"><li><a href="ch15-01-box.html"><strong>15.1.</strong> <code>Box&lt;T&gt;</code> Points to Data on the Heap and Has a Known Size</a></li><li><a href="ch15-02-deref.html"><strong>15.2.</strong> The <code>Deref</code> Trait Allows Access to the Data Through a Reference</a></li><li><a href="ch15-03-drop.html"><strong>15.3.</strong> The <code>Drop</code> Trait Runs Code on Cleanup</a></li><li><a href="ch15-04-rc.html"><strong>15.4.</strong> <code>Rc&lt;T&gt;</code>, the Reference Counted Smart Pointer</a></li><li><a href="ch15-05-interior-mutability.html"><strong>15.5.</strong> <code>RefCell&lt;T&gt;</code> and the Interior Mutability Pattern</a></li><li><a href="ch15-06-reference-cycles.html"><strong>15.6.</strong> Creating Reference Cycles and Leaking Memory is Safe</a></li></ul></li><li><a href="ch16-00-concurrency.html"><strong>16.</strong> Fearless Concurrency</a></li><li><ul class="section"><li><a href="ch16-01-threads.html"><strong>16.1.</strong> Threads</a></li><li><a href="ch16-02-message-passing.html"><strong>16.2.</strong> Message Passing</a></li><li><a href="ch16-03-shared-state.html"><strong>16.3.</strong> Shared State</a></li><li><a href="ch16-04-extensible-concurrency-sync-and-send.html"><strong>16.4.</strong> Extensible Concurrency: <code>Sync</code> and <code>Send</code></a></li></ul></li><li><a href="ch17-00-oop.html"><strong>17.</strong> Is Rust an Object-Oriented Programming Language?</a></li><li><ul class="section"><li><a href="ch17-01-what-is-oo.html"><strong>17.1.</strong> What Does Object-Oriented Mean?</a></li><li><a href="ch17-02-trait-objects.html"><strong>17.2.</strong> Trait Objects for Using Values of Different Types</a></li><li><a href="ch17-03-oo-design-patterns.html"><strong>17.3.</strong> Object-Oriented Design Pattern Implementations</a></li></ul></li><li><a href="ch18-00-patterns.html" class="active"><strong>18.</strong> Patterns</a></li><li><a href="ch19-00-advanced-features.html"><strong>19.</strong> Advanced Features</a></li><li><ul class="section"><li><a href="ch19-01-unsafe-rust.html"><strong>19.1.</strong> Unsafe Rust</a></li><li><a href="ch19-02-advanced-lifetimes.html"><strong>19.2.</strong> Advanced Lifetimes</a></li><li><a href="ch19-03-advanced-traits.html"><strong>19.3.</strong> Advanced Traits</a></li></ul></li><li><a href="ch20-00-unnamed-project.html"><strong>20.</strong> Un-named project</a></li><li><a href="appendix-00.html"><strong>21.</strong> Appendix</a></li><li><ul class="section"><li><a href="appendix-01-keywords.html"><strong>21.1.</strong> A - Keywords</a></li><li><a href="appendix-02-operators.html"><strong>21.2.</strong> B - Operators</a></li><li><a href="appendix-03-derivable-traits.html"><strong>21.3.</strong> C - Derivable Traits</a></li><li><a href="appendix-04-nightly-rust.html"><strong>21.4.</strong> D - Nightly Rust</a></li><li><a href="appendix-05-macros.html"><strong>21.5.</strong> E - Macros</a></li><li><a href="appendix-06-translation.html"><strong>21.6.</strong> F - Translations</a></li><li><a href="appendix-07-newest-features.html"><strong>21.7.</strong> G - Newest Features</a></li></ul></li></ul>
+            <ul class="chapter"><li><a href="ch01-00-introduction.html"><strong>1.</strong> Introduction</a></li><li><ul class="section"><li><a href="ch01-01-installation.html"><strong>1.1.</strong> Installation</a></li><li><a href="ch01-02-hello-world.html"><strong>1.2.</strong> Hello, World!</a></li></ul></li><li><a href="ch02-00-guessing-game-tutorial.html"><strong>2.</strong> Guessing Game Tutorial</a></li><li><a href="ch03-00-common-programming-concepts.html"><strong>3.</strong> Common Programming Concepts</a></li><li><ul class="section"><li><a href="ch03-01-variables-and-mutability.html"><strong>3.1.</strong> Variables and Mutability</a></li><li><a href="ch03-02-data-types.html"><strong>3.2.</strong> Data Types</a></li><li><a href="ch03-03-how-functions-work.html"><strong>3.3.</strong> How Functions Work</a></li><li><a href="ch03-04-comments.html"><strong>3.4.</strong> Comments</a></li><li><a href="ch03-05-control-flow.html"><strong>3.5.</strong> Control Flow</a></li></ul></li><li><a href="ch04-00-understanding-ownership.html"><strong>4.</strong> Understanding Ownership</a></li><li><ul class="section"><li><a href="ch04-01-what-is-ownership.html"><strong>4.1.</strong> What is Ownership?</a></li><li><a href="ch04-02-references-and-borrowing.html"><strong>4.2.</strong> References &amp; Borrowing</a></li><li><a href="ch04-03-slices.html"><strong>4.3.</strong> Slices</a></li></ul></li><li><a href="ch05-00-structs.html"><strong>5.</strong> Structs</a></li><li><ul class="section"><li><a href="ch05-01-method-syntax.html"><strong>5.1.</strong> Method Syntax</a></li></ul></li><li><a href="ch06-00-enums.html"><strong>6.</strong> Enums and Pattern Matching</a></li><li><ul class="section"><li><a href="ch06-01-defining-an-enum.html"><strong>6.1.</strong> Defining an Enum</a></li><li><a href="ch06-02-match.html"><strong>6.2.</strong> The <code>match</code> Control Flow Operator</a></li><li><a href="ch06-03-if-let.html"><strong>6.3.</strong> Concise Control Flow with <code>if let</code></a></li></ul></li><li><a href="ch07-00-modules.html"><strong>7.</strong> Modules</a></li><li><ul class="section"><li><a href="ch07-01-mod-and-the-filesystem.html"><strong>7.1.</strong> <code>mod</code> and the Filesystem</a></li><li><a href="ch07-02-controlling-visibility-with-pub.html"><strong>7.2.</strong> Controlling Visibility with <code>pub</code></a></li><li><a href="ch07-03-importing-names-with-use.html"><strong>7.3.</strong> Importing Names with <code>use</code></a></li></ul></li><li><a href="ch08-00-common-collections.html"><strong>8.</strong> Common Collections</a></li><li><ul class="section"><li><a href="ch08-01-vectors.html"><strong>8.1.</strong> Vectors</a></li><li><a href="ch08-02-strings.html"><strong>8.2.</strong> Strings</a></li><li><a href="ch08-03-hash-maps.html"><strong>8.3.</strong> Hash Maps</a></li></ul></li><li><a href="ch09-00-error-handling.html"><strong>9.</strong> Error Handling</a></li><li><ul class="section"><li><a href="ch09-01-unrecoverable-errors-with-panic.html"><strong>9.1.</strong> Unrecoverable Errors with <code>panic!</code></a></li><li><a href="ch09-02-recoverable-errors-with-result.html"><strong>9.2.</strong> Recoverable Errors with <code>Result</code></a></li><li><a href="ch09-03-to-panic-or-not-to-panic.html"><strong>9.3.</strong> To <code>panic!</code> or Not To <code>panic!</code></a></li></ul></li><li><a href="ch10-00-generics.html"><strong>10.</strong> Generic Types, Traits, and Lifetimes</a></li><li><ul class="section"><li><a href="ch10-01-syntax.html"><strong>10.1.</strong> Generic Data Types</a></li><li><a href="ch10-02-traits.html"><strong>10.2.</strong> Traits: Defining Shared Behavior</a></li><li><a href="ch10-03-lifetime-syntax.html"><strong>10.3.</strong> Validating References with Lifetimes</a></li></ul></li><li><a href="ch11-00-testing.html"><strong>11.</strong> Testing</a></li><li><ul class="section"><li><a href="ch11-01-writing-tests.html"><strong>11.1.</strong> Writing tests</a></li><li><a href="ch11-02-running-tests.html"><strong>11.2.</strong> Running tests</a></li><li><a href="ch11-03-test-organization.html"><strong>11.3.</strong> Test Organization</a></li></ul></li><li><a href="ch12-00-an-io-project.html"><strong>12.</strong> An I/O Project</a></li><li><ul class="section"><li><a href="ch12-01-accepting-command-line-arguments.html"><strong>12.1.</strong> Accepting Command Line Arguments</a></li><li><a href="ch12-02-reading-a-file.html"><strong>12.2.</strong> Reading a File</a></li><li><a href="ch12-03-improving-error-handling-and-modularity.html"><strong>12.3.</strong> Improving Error Handling and Modularity</a></li><li><a href="ch12-04-testing-the-librarys-functionality.html"><strong>12.4.</strong> Testing the Library's Functionality</a></li><li><a href="ch12-05-working-with-environment-variables.html"><strong>12.5.</strong> Working with Environment Variables</a></li><li><a href="ch12-06-writing-to-stderr-instead-of-stdout.html"><strong>12.6.</strong> Writing to <code>stderr</code> instead of <code>stdout</code></a></li></ul></li><li><a href="ch13-00-functional-features.html"><strong>13.</strong> Functional Language Features in Rust</a></li><li><ul class="section"><li><a href="ch13-01-closures.html"><strong>13.1.</strong> Closures</a></li><li><a href="ch13-02-iterators.html"><strong>13.2.</strong> Iterators</a></li><li><a href="ch13-03-improving-our-io-project.html"><strong>13.3.</strong> Improving our I/O Project</a></li><li><a href="ch13-04-performance.html"><strong>13.4.</strong> Performance</a></li></ul></li><li><a href="ch14-00-more-about-cargo.html"><strong>14.</strong> More about Cargo and Crates.io</a></li><li><ul class="section"><li><a href="ch14-01-release-profiles.html"><strong>14.1.</strong> Release Profiles</a></li><li><a href="ch14-02-publishing-to-crates-io.html"><strong>14.2.</strong> Publishing a Crate to Crates.io</a></li><li><a href="ch14-03-cargo-workspaces.html"><strong>14.3.</strong> Cargo Workspaces</a></li><li><a href="ch14-04-installing-binaries.html"><strong>14.4.</strong> Installing Binaries from Crates.io with <code>cargo install</code></a></li><li><a href="ch14-05-extending-cargo.html"><strong>14.5.</strong> Extending Cargo with Custom Commands</a></li></ul></li><li><a href="ch15-00-smart-pointers.html"><strong>15.</strong> Smart Pointers</a></li><li><ul class="section"><li><a href="ch15-01-box.html"><strong>15.1.</strong> <code>Box&lt;T&gt;</code> Points to Data on the Heap and Has a Known Size</a></li><li><a href="ch15-02-deref.html"><strong>15.2.</strong> The <code>Deref</code> Trait Allows Access to the Data Through a Reference</a></li><li><a href="ch15-03-drop.html"><strong>15.3.</strong> The <code>Drop</code> Trait Runs Code on Cleanup</a></li><li><a href="ch15-04-rc.html"><strong>15.4.</strong> <code>Rc&lt;T&gt;</code>, the Reference Counted Smart Pointer</a></li><li><a href="ch15-05-interior-mutability.html"><strong>15.5.</strong> <code>RefCell&lt;T&gt;</code> and the Interior Mutability Pattern</a></li><li><a href="ch15-06-reference-cycles.html"><strong>15.6.</strong> Creating Reference Cycles and Leaking Memory is Safe</a></li></ul></li><li><a href="ch16-00-concurrency.html"><strong>16.</strong> Fearless Concurrency</a></li><li><ul class="section"><li><a href="ch16-01-threads.html"><strong>16.1.</strong> Threads</a></li><li><a href="ch16-02-message-passing.html"><strong>16.2.</strong> Message Passing</a></li><li><a href="ch16-03-shared-state.html"><strong>16.3.</strong> Shared State</a></li><li><a href="ch16-04-extensible-concurrency-sync-and-send.html"><strong>16.4.</strong> Extensible Concurrency: <code>Sync</code> and <code>Send</code></a></li></ul></li><li><a href="ch17-00-oop.html"><strong>17.</strong> Is Rust an Object-Oriented Programming Language?</a></li><li><ul class="section"><li><a href="ch17-01-what-is-oo.html"><strong>17.1.</strong> What Does Object-Oriented Mean?</a></li><li><a href="ch17-02-trait-objects.html"><strong>17.2.</strong> Trait Objects for Using Values of Different Types</a></li><li><a href="ch17-03-oo-design-patterns.html"><strong>17.3.</strong> Object-Oriented Design Pattern Implementations</a></li></ul></li><li><a href="ch18-00-patterns.html" class="active"><strong>18.</strong> Patterns Match the Structure of Values</a></li><li><ul class="section"><li><a href="ch18-01-all-the-places-for-patterns.html"><strong>18.1.</strong> All the Places Patterns May be Used</a></li><li><a href="ch18-02-refutability.html"><strong>18.2.</strong> Refutability: Whether a Pattern Might Fail to Match</a></li><li><a href="ch18-03-pattern-syntax.html"><strong>18.3.</strong> All the Pattern Syntax</a></li></ul></li><li><a href="ch19-00-advanced-features.html"><strong>19.</strong> Advanced Features</a></li><li><ul class="section"><li><a href="ch19-01-unsafe-rust.html"><strong>19.1.</strong> Unsafe Rust</a></li><li><a href="ch19-02-advanced-lifetimes.html"><strong>19.2.</strong> Advanced Lifetimes</a></li><li><a href="ch19-03-advanced-traits.html"><strong>19.3.</strong> Advanced Traits</a></li></ul></li><li><a href="ch20-00-unnamed-project.html"><strong>20.</strong> Un-named project</a></li><li><a href="appendix-00.html"><strong>21.</strong> Appendix</a></li><li><ul class="section"><li><a href="appendix-01-keywords.html"><strong>21.1.</strong> A - Keywords</a></li><li><a href="appendix-02-operators.html"><strong>21.2.</strong> B - Operators</a></li><li><a href="appendix-03-derivable-traits.html"><strong>21.3.</strong> C - Derivable Traits</a></li><li><a href="appendix-04-nightly-rust.html"><strong>21.4.</strong> D - Nightly Rust</a></li><li><a href="appendix-05-macros.html"><strong>21.5.</strong> E - Macros</a></li><li><a href="appendix-06-translation.html"><strong>21.6.</strong> F - Translations</a></li><li><a href="appendix-07-newest-features.html"><strong>21.7.</strong> G - Newest Features</a></li></ul></li></ul>
         </div>
 
         <div id="page-wrapper" class="page-wrapper">
@@ -67,305 +67,22 @@
                 </div>
 
                 <div id="content" class="content">
-                    <a class="header" href="ch18-00-patterns.html#patterns" id="patterns"><h1>Patterns</h1></a>
-<p>We've actually used patterns a few times so far: they're used in <code>let</code>
-statements, in function parameters, and in the <code>match</code> expression. Patterns have
-a lot more abilities than we have demonstrated so far, so we'll cover some of
-the most commonly used ones in this section. Any of these abilities work in any
-place where a pattern is used.</p>
-<a class="header" href="ch18-00-patterns.html#let-statements" id="let-statements"><h2><code>let</code> statements</h2></a>
-<p>A basic <code>let</code> statement has this form:</p>
-<pre><code class="language-text">let PATTERN = EXPRESSION;
-</code></pre>
-<p>We've seen statements like <code>let x = 5;</code> with a variable name in the <code>PATTERN</code>
-slot; a variable name is just a particularly humble form of pattern.</p>
-<p>Let’s try a more complex pattern. Change our example program to this:</p>
-<p><span class="filename">Filename: src/main.rs</span></p>
-<pre><pre class="playpen"><code class="language-rust">fn main() {
-    let (x, y) = (5, 6);
-
-    println!(&quot;The value of x is: {}&quot;, x);
-    println!(&quot;The value of y is: {}&quot;, y);
-}
-</code></pre></pre>
-<p>And run it with <code>cargo run</code>:</p>
-<pre><code class="language-text">$ cargo run
-   Compiling patterns v0.1.0 (file:///projects/patterns)
-     Running `target/debug/patterns`
-The value of x is: 5
-The value of y is: 6
-</code></pre>
-<p>We’ve created two variables with one <code>let</code>! Here’s our pattern:</p>
-<pre><code class="language-text">(x, y)
-</code></pre>
-<p>And here’s the value:</p>
-<pre><code class="language-text">(5, 6)
-</code></pre>
-<p>As you can see, the two line up visually, and so <code>let</code> binds the variable <code>x</code>
-to the value <code>5</code> and <code>y</code> to <code>6</code>. We could have used two <code>let</code> statements as
-well:</p>
-<pre><pre class="playpen"><code class="language-rust">fn main() {
-    let x = 5;
-    let y = 6;
-}
-</code></pre></pre>
-<p>In simple cases like this, two <code>let</code>s may be clearer, but in others, creating
-multiple variables at once is nice. As we become more proficient in Rust, we’ll
-figure out which style is better, but it’s mostly a judgment call.</p>
-<a class="header" href="ch18-00-patterns.html#type-annotations" id="type-annotations"><h2>Type annotations</h2></a>
-<p>Most of the time, Rust uses <em>type inference</em>, meaning that it attempts to infer
-the types of your variables rather than you having to declare them explicitly
-even though Rust is a statically typed language. Occasionally, Rust won't have
-enough information to infer the type of your value, and you will need to add a
-type annotation in with the pattern.</p>
-<p>Here’s what a <code>let</code> statement with a <em>type annotation</em> looks like:</p>
-<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
-#fn main() {
-let x: i32 = 5;
-
-#}</code></pre></pre>
-<p>We can add a colon, followed by the type name. Here’s the structure of a <code>let</code>
-statement with a type annotation:</p>
-<pre><code class="language-text">let PATTERN: TYPE = VALUE;
-</code></pre>
-<p>Note that the colon and the <code>TYPE</code> go <em>after</em> the <code>PATTERN</code>, not in the pattern
-itself. As an example, here’s our more complex pattern with two variables:</p>
-<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
-#fn main() {
-let (x, y): (i32, i32) = (5, 6);
-
-#}</code></pre></pre>
-<p>Just like we match up the <code>VALUE</code> with the <code>PATTERN</code>, we match up the <code>TYPE</code>
-with the <code>PATTERN</code>.</p>
-<a class="header" href="ch18-00-patterns.html#literals--_" id="literals--_"><h2>Literals &amp; _</h2></a>
-<p>You can match against literals directly, and <code>_</code> acts as an any case:</p>
-<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
-#fn main() {
-let x = 1;
-
-match x {
-    1 =&gt; println!(&quot;one&quot;),
-    2 =&gt; println!(&quot;two&quot;),
-    3 =&gt; println!(&quot;three&quot;),
-    _ =&gt; println!(&quot;anything&quot;),
-}
-
-#}</code></pre></pre>
-<p>This prints <code>one</code>.</p>
-<a class="header" href="ch18-00-patterns.html#multiple-patterns" id="multiple-patterns"><h1>Multiple patterns</h1></a>
-<p>You can match multiple patterns with <code>|</code>:</p>
-<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
-#fn main() {
-let x = 1;
-
-match x {
-    1 | 2 =&gt; println!(&quot;one or two&quot;),
-    3 =&gt; println!(&quot;three&quot;),
-    _ =&gt; println!(&quot;anything&quot;),
-}
-
-#}</code></pre></pre>
-<p>This prints <code>one or two</code>.</p>
-<a class="header" href="ch18-00-patterns.html#ref-and-ref-mut" id="ref-and-ref-mut"><h2>ref and ref mut</h2></a>
-<p>Usually, when you match against a pattern, variables are bound to a value.
-This means you'll end up moving the value into the <code>match</code>:</p>
-<pre><code class="language-rust ignore">let name = Some(String::from(&quot;Bors&quot;));
-
-match name {
-    Some(name) =&gt; println!(&quot;Found a name: {}&quot;, name),
-    None =&gt; (),
-}
-
-// name is moved here. This line will fail to compile:
-println!(&quot;name is: {:?}&quot;, name);
-</code></pre>
-<p>If you'd prefer to bind <code>name</code> to a reference, use the <code>ref</code> keyword:</p>
-<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
-#fn main() {
-let name = Some(String::from(&quot;Bors&quot;));
-
-match name {
-    Some(ref name) =&gt; println!(&quot;Found a name: {}&quot;, name),
-    None =&gt; (),
-}
-
-// name is not moved here; the match only took a reference to its data rather
-// than moving it. This will work:
-println!(&quot;name is: {:?}&quot;, name);
-
-#}</code></pre></pre>
-<p>And for a mutable reference, <code>ref mut</code>:</p>
-<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
-#fn main() {
-let mut name = Some(String::from(&quot;Bors&quot;));
-
-match name {
-    Some(ref mut name) =&gt; *name = String::from(&quot;Another name&quot;),
-    None =&gt; (),
-}
-
-// name is not moved here; the match only took a reference to its data rather
-// than moving it
-println!(&quot;name is: {:?}&quot;, name);
-
-#}</code></pre></pre>
-<a class="header" href="ch18-00-patterns.html#destructuring" id="destructuring"><h2>Destructuring</h2></a>
-<p>Patterns can be used to destructure structs and enums:</p>
-<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
-#fn main() {
-struct Point {
-    x: i32,
-    y: i32,
-}
-
-let origin = Point { x: 0, y: 0 };
-
-let Point { x, y } = origin;
-
-#}</code></pre></pre>
-<p>This brings <code>x</code> and <code>y</code> variables into scope, matching the <code>x</code> and <code>y</code> of
-<code>origin</code>. While it can be unusual in <code>let</code>, this is the same principle of
-patterns in <code>match</code>:</p>
-<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
-#fn main() {
-struct Point {
-    x: i32,
-    y: i32,
-}
-
-let origin = Point { x: 0, y: 0 };
-
-match origin {
-    Point { x, y } =&gt; { }, // variables x and y are created here
-}
-
-#}</code></pre></pre>
-<a class="header" href="ch18-00-patterns.html#shadowing" id="shadowing"><h2>Shadowing</h2></a>
-<p>As with all variables, those declared by a pattern will shadow variables
-outside of the <code>match</code> construct:</p>
-<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
-#fn main() {
-let x = Some(5);
-
-match x {
-    Some(x) =&gt; { }, // x is an i32 here, not an Option&lt;i32&gt;
-    None =&gt; (),
-}
-
-#}</code></pre></pre>
-<a class="header" href="ch18-00-patterns.html#ignoring-values" id="ignoring-values"><h2>Ignoring values</h2></a>
-<p>We discussed using <code>_</code> as a whole pattern to ignore it above, but you can
-also use <code>_</code> inside of another pattern to ignore just part of it:</p>
-<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
-#fn main() {
-let x = Some(5);
-
-match x {
-    Some(_) =&gt; println!(&quot;got a Some and I don't care what's inside&quot;),
-    None =&gt; (),
-}
-
-#}</code></pre></pre>
-<p>Or like this:</p>
-<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
-#fn main() {
-let numbers = (2, 4, 8, 16, 32);
-
-match numbers {
-    (first, _, third, _, fifth) =&gt; println!(&quot;Some numbers: {}, {}, {}&quot;, first, third, fifth),
-}
-
-#}</code></pre></pre>
-<p>If you want, you can use <code>..</code> to ignore all of the parts you haven't defined:</p>
-<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
-#fn main() {
-struct Point {
-    x: i32,
-    y: i32,
-    z: i32,
-}
-
-let origin = Point { x: 0, y: 0, z: 0 };
-
-match origin {
-    Point { x, .. } =&gt; { }, // y and z are ignored
-}
-
-#}</code></pre></pre>
-<a class="header" href="ch18-00-patterns.html#ranges" id="ranges"><h2>Ranges</h2></a>
-<p>You can match a range of values with <code>...</code>:</p>
-<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
-#fn main() {
-let x = 5;
-
-match x {
-    1 ... 5 =&gt; println!(&quot;one through five&quot;),
-    _ =&gt; println!(&quot;something else&quot;),
-}
-
-#}</code></pre></pre>
-<p>Ranges are usually used with integers or <code>char</code>s:</p>
-<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
-#fn main() {
-let x = 'c';
-
-match x {
-    'a' ... 'j' =&gt; println!(&quot;early ASCII letter&quot;),
-    'k' ... 'z' =&gt; println!(&quot;late ASCII letter&quot;),
-    _ =&gt; println!(&quot;something else&quot;),
-}
-
-#}</code></pre></pre>
-<a class="header" href="ch18-00-patterns.html#guards" id="guards"><h2>Guards</h2></a>
-<p>You can introduce match guards with <code>if</code>:</p>
-<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
-#fn main() {
-let x = Some(5);
-
-match x {
-    Some(x) if x &lt; 5 =&gt; println!(&quot;less than five: {}&quot;, x),
-    Some(x) =&gt; println!(&quot;{}&quot;, x),
-    None =&gt; (),
-}
-
-#}</code></pre></pre>
-<p>If youre using if with multiple patterns, the if applies to both sides:</p>
-<pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
-#fn main() {
-let x = 4;
-let y = false;
-
-match x {
-    4 | 5 if y =&gt; println!(&quot;yes&quot;),
-    _ =&gt; println!(&quot;no&quot;),
-}
-
-#}</code></pre></pre>
-<p>This prints <code>no</code>, because the if applies to the whole of <code>4 | 5</code>, and not to only
-the <code>5</code>. In other words, the precedence of if behaves like this:</p>
-<pre><code class="language-text">(4 | 5) if y =&gt; ...
-</code></pre>
-<p>not this:</p>
-<pre><code class="language-text">4 | (5 if y) =&gt; ...
-</code></pre>
-<a class="header" href="ch18-00-patterns.html#bindings" id="bindings"><h2>Bindings</h2></a>
-<p>You can bind values to names with <code>@</code>:</p>
+                    <a class="header" href="ch18-00-patterns.html#patterns-match-the-structure-of-values" id="patterns-match-the-structure-of-values"><h1>Patterns Match the Structure of Values</h1></a>
+<p>Patterns are a special syntax within Rust for matching against the structure of
+our types, complex or simple. A pattern is made up of some combination of
+literals; destructured arrays, enums, structs, or tuples; variables, wildcards,
+and placeholders. These pieces describe the &quot;shape&quot; of the data we're working
+with.</p>
+<p>We use a pattern by taking some value and comparing it against the pattern. If
+the pattern matches our value, we do something with the value parts. Recall in
+Chapter 6 when we discussed the <code>match</code> expression that uses patterns like a
+coin sorting machine. We can name pieces within the shape, like we named the
+state that appeared on quarters in Chapter 6, and if the data fits the shape,
+we can use the named pieces.</p>
+<p>This chapter is a reference on all things related to patterns. We'll cover the
+valid places to use patterns, the difference between <em>refutable</em> and
+<em>irrefutable</em> patterns, and the different kinds of pattern syntax that you
+might see.</p>
 
                 </div>
 
@@ -377,7 +94,7 @@ the <code>5</code>. In other words, the precedence of if behaves like this:</p>
                 
 
                 
-                    <a href="ch19-00-advanced-features.html" class="mobile-nav-chapters next">
+                    <a href="ch18-01-all-the-places-for-patterns.html" class="mobile-nav-chapters next">
                         <i class="fa fa-angle-right"></i>
                     </a>
                 
@@ -391,7 +108,7 @@ the <code>5</code>. In other words, the precedence of if behaves like this:</p>
             
 
             
-                <a href="ch19-00-advanced-features.html" class="nav-chapters next" title="You can navigate through the chapters using the arrow keys">
+                <a href="ch18-01-all-the-places-for-patterns.html" class="nav-chapters next" title="You can navigate through the chapters using the arrow keys">
                     <i class="fa fa-angle-right"></i>
                 </a>
             
