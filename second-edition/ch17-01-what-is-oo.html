@@ -172,12 +172,12 @@ field directly, which could cause the <code>average</code> field to get out of s
 <code>average</code> method returns the value in the <code>average</code> field, which allows
 external code to read the <code>average</code> but not modify it.</p>
 <p>Because we've encapsulated the implementation details of <code>AveragedCollection</code>,
-we could also change aspects like using a different data structure used for the
-<code>list</code> to use a <code>HashSet</code> instead of a <code>Vec</code>, for instance. As long as the
-signatures of the <code>add</code>, <code>remove</code>, and <code>average</code> public methods stayed the same,
-code using <code>AveragedCollection</code> wouldn't need to change. This wouldn't
-necessarily be the case if we exposed <code>list</code> to external code: <code>HashSet</code> and
-<code>Vec</code> have different methods for adding and removing items, so the external
+we can easily change aspects like the data structure in the future; for
+instance, we could use a <code>HashSet</code> instead of a <code>Vec</code> for the <code>list</code> variable.
+As long as the signatures of the <code>add</code>, <code>remove</code>, and <code>average</code> public methods
+stay the same, code using <code>AveragedCollection</code> wouldn't need to change. This
+wouldn't necessarily be the case if we exposed <code>list</code> to external code: <code>HashSet</code>
+and <code>Vec</code> have different methods for adding and removing items, so the external
 code would likely have to change if it was modifying <code>list</code> directly.</p>
 <p>If encapsulation is a required aspect for a language to be considered
 object-oriented, then Rust meets that requirement. Using <code>pub</code> or not for
