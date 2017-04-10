@@ -70,6 +70,7 @@ dereferencing
 DerefMut
 destructor
 destructure
+destructured
 destructures
 destructuring
 Destructuring
@@ -232,6 +233,7 @@ refactoring
 refcell
 RefCell
 RefMut
+refutability
 repr
 retweet
 ripgrep
@@ -298,6 +300,7 @@ tradeoff
 tradeoffs
 TrafficLight
 trpl
+tuesday
 tuple
 tuples
 typeof
@@ -328,6 +331,7 @@ wasn
 WeatherForecast
 WebSocket
 whitespace
+wildcard
 wildcards
 workflow
 workspace
