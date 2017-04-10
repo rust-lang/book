@@ -153,7 +153,7 @@ This will print:
 
 The first call to `enumerate` produces the tuple `(0, 1)`. When this value is
 matched to the pattern `(index, value)`, `index` will be 0 and `value` will
-equal 1.
+be 1.
 
 ### `let` Statements
 
@@ -178,7 +178,7 @@ slot; a variable name is just a particularly humble form of pattern.
 
 With `let`, we compare the expression against the pattern, and assign any names
 we find. So for example, in our `let x = 5;` case, `x` is a pattern that says
-"bind what matches here to the variable `x`. And since the name `x` is the
+"bind what matches here to the variable `x`." And since the name `x` is the
 whole pattern, this pattern effectively means "bind everything to the variable
 `x`, whatever the value is."
 
