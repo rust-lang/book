@@ -59,7 +59,7 @@ module, any of the code in that module is suspect: keep `unsafe` blocks small
 and you'll thank yourself later.
 
 In order to isolate unsafe code as much as possible, it's a good idea to
-enclose unsafe code within a safe abstration and provide a safe API. Parts of
+enclose unsafe code within a safe abstraction and provide a safe API. Parts of
 the standard library are implemented as safe abstractions over unsafe code that
 has been audited. This prevents uses of `unsafe` from leaking out into all the
 places that you or your users might want to make use of the functionality
@@ -237,7 +237,7 @@ error[E0499]: cannot borrow `*slice` as mutable more than once at a time
 
 Rust's borrow checker can't understand that we're borrowing different parts of
 the slice; it only knows that we're borrowing from the same slice twice.
-Borrowing diffreent parts of a slice is fundamentally okay; our two `&mut
+Borrowing different parts of a slice is fundamentally okay; our two `&mut
 [i32]`s aren't overlapping. However, Rust isn't smart enough to know this. When
 we know something is okay, but Rust doesn't, it's time to reach for unsafe code.
 
