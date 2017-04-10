@@ -87,6 +87,114 @@ fn distance<G: AGraph>(graph: &G, start: &G::Node, end: &G::Node) -> u32 { ... }
 
 This is much cleaner.
 
+## Operator overloading and default type parameters
+
+We can use traits in Rust to overload certain operators. Rust does not allow you to
+create your own operators, or overload arbitrary operators: only the operations listed
+in `std::ops` can be overloaded. Here's an example:
+
+```rust
+use std::ops::Add;
+
+#[derive(Debug,PartialEq)]
+struct Point {
+    x: i32,
+    y: i32,
+}
+
+impl Add for Point {
+    type Output = Point;
+
+    fn add(self, other: Point) -> Point {
+        Point {
+            x: self.x + other.x,
+            y: self.y + other.y,
+        }
+    }
+}
+
+fn main() {
+    assert_eq!(Point { x: 1, y: 0 } + Point { x: 2, y: 3 },
+               Point { x: 3, y: 3 });
+}
+```
+
+The `Add` trait lets us overload the `+` operator. We've implemented it for
+a `Point` such that it adds the `x`s and `y`s together to make a new `Point`.
+You'll notice that the `Add` trait has an `Output` associated type; this is
+used to determine the result of the operation.
+
+Let's look at `Add` in a bit more detail. Here's its definition:
+
+```rust
+trait Add<RHS=Self> {
+    type Output;
+
+    fn add(self, rhs: RHS) -> Self::Output;
+}
+```
+
+This should look familiar; it's a trait with one method and an associated type. But
+there's one bit of syntax we haven't seen before: `RHS=Self`. What's up with that?
+
+This syntax is called 'default type parameters'. It allows you to say "If a parameter
+isn't provided, use this default instead." So in other words, these two trait definitions
+are very similar:
+
+```rust,ignore
+trait Add<RHS> {
+trait Add<RHS=Self> {
+```
+
+The only difference is, with the first definition, we are required to parameterize
+`Add` with a type for `RHS`, which is short for "right hand side." In the latter
+form, we aren't required to, and if we do not, the type of `RHS` will be the type
+of `Self`.
+
+Let's look at an example. Imagine we have two units, `Feet` and `Inches`. We can
+implement `Add` like this:
+
+```rust
+use std::ops::Add;
+
+struct Milimeters(u32);
+struct Meters(u32);
+
+impl Add for Milimeters {
+    type Output = Milimeters;
+
+    fn add(self, other: Milimeters) -> Milimeters {
+        Milimeters(self.0 + other.0)
+    }
+}
+
+impl Add<Meters> for Milimeters {
+    type Output = Milimeters;
+
+    fn add(self, other: Meters) -> Milimeters {
+        Milimeters(self.0 + (other.0 * 1000))
+    }
+}
+```
+
+If we're adding `Milimeters` to other `Milimeters`, we don't need to parameterize
+`Add`. If we want to add `Milimeters` to `Meters`, then we need to say `Add<Meters>`
+to set the value of the `RHS`.
+
+Default type parameters are used in two main ways:
+
+1. To extend a type without breaking existing code.
+2. To allow customization in a way most users don't want.
+
+This is an example of the second purpose; most of the time, you're adding two
+like types together. Using the default here makes it easier to do so without
+the extra parameter. In other words, we've removed a little bit of boilerplate.
+
+What about the first case? Well, it's sort of the same thing, but in reverse:
+because our existing users won't have written down a type parameter, if we want
+to add a type parameter to an existing trait, giving it a default will let us
+not break that code.
+
 ## Fully qualified syntax
 
 Sometimes, methods can have the same names. Consider this code:
