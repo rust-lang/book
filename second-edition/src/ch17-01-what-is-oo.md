@@ -112,13 +112,14 @@ field directly, which could cause the `average` field to get out of sync. The
 external code to read the `average` but not modify it.
 
 Because we've encapsulated the implementation details of `AveragedCollection`,
-we can easily change aspects like the data structure in the future; for
-instance, we could use a `HashSet` instead of a `Vec` for the `list` variable.
-As long as the signatures of the `add`, `remove`, and `average` public methods
+we can easily change aspects like the data structure in the future. For
+instance, we could use a `HashSet` instead of a `Vec` for the `list` field. As
+long as the signatures of the `add`, `remove`, and `average` public methods
 stay the same, code using `AveragedCollection` wouldn't need to change. This
-wouldn't necessarily be the case if we exposed `list` to external code: `HashSet`
-and `Vec` have different methods for adding and removing items, so the external
-code would likely have to change if it was modifying `list` directly.
+wouldn't necessarily be the case if we exposed `list` to external code:
+`HashSet` and `Vec` have different methods for adding and removing items, so
+the external code would likely have to change if it was modifying `list`
+directly.
 
 If encapsulation is a required aspect for a language to be considered
 object-oriented, then Rust meets that requirement. Using `pub` or not for
