@@ -157,28 +157,28 @@ implement `Add` like this:
 ```rust
 use std::ops::Add;
 
-struct Milimeters(u32);
+struct Millimeters(u32);
 struct Meters(u32);
 
-impl Add for Milimeters {
-    type Output = Milimeters;
+impl Add for Millimeters {
+    type Output = Millimeters;
 
-    fn add(self, other: Milimeters) -> Milimeters {
-        Milimeters(self.0 + other.0)
+    fn add(self, other: Millimeters) -> Millimeters {
+        Millimeters(self.0 + other.0)
     }
 }
 
-impl Add<Meters> for Milimeters {
-    type Output = Milimeters;
+impl Add<Meters> for Millimeters {
+    type Output = Millimeters;
 
-    fn add(self, other: Meters) -> Milimeters {
-        Milimeters(self.0 + (other.0 * 1000))
+    fn add(self, other: Meters) -> Millimeters {
+        Millimeters(self.0 + (other.0 * 1000))
     }
 }
 ```
 
-If we're adding `Milimeters` to other `Milimeters`, we don't need to parameterize
-`Add`. If we want to add `Milimeters` to `Meters`, then we need to say `Add<Meters>`
+If we're adding `Millimeters` to other `Millimeters`, we don't need to parameterize
+`Add`. If we want to add `Millimeters` to `Meters`, then we need to say `Add<Meters>`
 to set the value of the `RHS`.
 
 Default type parameters are used in two main ways:
@@ -442,7 +442,7 @@ trait `B`. If we could implement `B` for `A` in our code, it would work, but
 what if someone else _also_ implemented `B` for `A` in their code? Furthermore,
 what if a new release of `foo` comes out and implements `B` for `A` themselves?
 These problems are not insurmountable, of course; we could determine some kind
-of complex precedent rules to determine which `impl` 'wins' and works. 
+of complex precedent rules to determine which `impl` 'wins' and works.
 
 ## The newtype pattern
 

@@ -26,7 +26,7 @@ println!("x + y = {}", x + y);
 Since `Foo` is an alias for `i32`, they're the same type, and we can add them together.
 If you want a distinct type for `Foo`, you'd use the newtype pattern from Chapter XX.
 
-The main use-case for type synonyms is to reduce repitition. For example, you may have
+The main use-case for type synonyms is to reduce repetition. For example, you may have
 a type like this:
 
 ```rust,ignore
@@ -147,7 +147,7 @@ As you may have guessed, `continue` has a value of `!`. That is, when Rust goes 
 compute the type of `guess`, it looks at both of the match arms. The former has a
 value of `u32`, and the latter has a value of `!`. Since `!` can never have a value,
 Rust is okay with this, and decides that the type of `guess` is `u32`. The fancy way
-of saying this is that "never unifies with all other types". This works becuase
+of saying this is that "never unifies with all other types". This works because
 `continue` doesn't actually return a value; it instead moves control back to the top
 of the loop. In the `Err` case, we never actually assign a value to `guess`. So
 this is fine.
@@ -216,13 +216,13 @@ we said this about `&str`:
 > elements that it refers to.
 
 So while a `&T` is a single value, storing the memory address of where the `T`
-is located, a `&str` is _two_ values: the address of the `str`, and how long
-it is. As such, a `&str` has a size we can know at compile time: it's two
-`usizes` in length. That is, we always know the size of a `&str`, no matter
-how long the string it refers to is. This is the general way in which dynamically
-sized types are used in Rust; they have an extra bit of metadata that stores
-the dynamic information. This leads us to the golden rule of dynamically sized
-types:
+is located, a `&str` is _two_ values: the address of the `str`, and how long it
+is. As such, a `&str` has a size we can know at compile time: it's two times
+the size of a `usize` in length. That is, we always know the size of a `&str`,
+no matter how long the string it refers to is. This is the general way in which
+dynamically sized types are used in Rust; they have an extra bit of metadata
+that stores the dynamic information. This leads us to the golden rule of
+dynamically sized types:
 
 You must always put values of dynamically sized types behind a pointer of some
 kind.
