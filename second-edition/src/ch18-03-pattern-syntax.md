@@ -53,15 +53,18 @@ fn main() {
 <span class="caption">Listing 18-10: A `match` statement with an arm that
 introduces a shadowed variable `y`</span>
 
+<!-- NEXT PARAGRAPH WRAPPED WEIRD INTENTIONALLY SEE #199 -->
+
 Let's walk through what happens when the `match` statement runs. The first
 match arm has the pattern `Some(50)`, and the value in `x` (`Some(5)`) does not
 match `Some(50)`, so we continue. In the second match arm, the pattern
 `Some(y)` introduces a new variable name `y` that will match any value inside a
 `Some` value. Because we're in a new scope inside the `match` expression, this
-is a new variable, not the `y` we declared at the beginning that has the value
-10. The new `y` binding will match any value inside a `Some`, which is what we
-have in `x`, so we execute the expression for that arm and print `Matched, y =
-5` since this `y` binds to the inner value of the `Some` in `x`, which is 5.
+is a new variable, not the `y` we declared at the beginning that has the
+value 10. The new `y` binding will match any value inside a `Some`, which is
+what we have in `x`, so we execute the expression for that arm and print
+`Matched, y = 5` since this `y` binds to the inner value of the `Some` in `x`,
+which is 5.
 
 If `x` had been a `None` value instead of `Some(5)`, we would have matched the
 underscore since the other two arms' patterns would not have matched. In the
@@ -80,7 +83,8 @@ this section.
 
 ### Multiple patterns
 
-You can match multiple patterns with `|`, which means *or*:
+In `match` expressions only, you can match multiple patterns with `|`, which
+means *or*:
 
 ```rust
 let x = 1;
@@ -96,7 +100,7 @@ This prints `one or two`.
 
 ### Matching Ranges of Values with `...`
 
-You can match a range of values with `...`:
+You can match an inclusive range of values with `...`:
 
 ```rust
 let x = 5;
@@ -106,6 +110,8 @@ match x {
     _ => println!("something else"),
 }
 ```
+
+If `x` is 1, 2, 3, 4, or 5, the first arm will match.
 
 Ranges are only allowed with numeric values or `char` values. Here's an example
 using ranges of `char` values:
@@ -192,7 +198,7 @@ fn main() {
 
     match p {
         Point { x, y: 0 } => println!("On the x axis at {}", x),
-        Point { x: 0, y} => println!("On the y axis at {}", y),
+        Point { x: 0, y } => println!("On the y axis at {}", y),
         Point { x, y } => println!("On neither axis: ({}, {})", x, y),
     }
 }
@@ -223,9 +229,9 @@ order to be able to perform calculations on the `x` and `y` values easily:
 # }
 #
 let points = vec![
-    Point { x: 0, y: 0},
-    Point { x: 1, y: 5},
-    Point { x: 10, y: -3},
+    Point { x: 0, y: 0 },
+    Point { x: 1, y: 5 },
+    Point { x: 10, y: -3 },
 ];
 let sum_of_squares: i32 = points
     .iter()
@@ -367,11 +373,13 @@ Listing 18-19 shows a case where this distinction matters: `s` will still be
 moved into `_s`, which prevents us from using `s` again:
 
 ```rust,ignore
-let s = String::from("Hello!");
+let s = Some(String::from("Hello!"));
 
-let _s = s;
+if let Some(_s) = s {
+    println!("found a string");
+}
 
-println!("{}", s);
+println!("{:?}", s);
 ```
 
 <span class="caption">Listing 18-19: An unused variable starting with an
@@ -381,11 +389,13 @@ Using underscore by itself, however, doesn't ever bind to the value. Listing
 18-20 will compile without any errors since `s` does not get moved into `_`:
 
 ```rust
-let s = String::from("Hello!");
+let s = Some(String::from("Hello!"));
 
-let _ = s;
+if let Some(_) = s {
+    println!("found a string");
+}
 
-println!("{}", s);
+println!("{:?}", s);
 ```
 
 <span class="caption">Listing 18-20: Using underscore does not bind the
@@ -393,7 +403,7 @@ value</span>
 
 This works just fine. Because we never bind `s` to anything, it's not moved.
 
-### Ignoring Remaining Parts of a Value with `..`
+#### Ignoring Remaining Parts of a Value with `..`
 
 With values that have many parts, we can extract only a few parts and avoid
 having to list underscores for each remaining part by instead using `..`. The
@@ -420,9 +430,9 @@ match origin {
 <span class="caption">Listing 18-21: Ignoring all fields of a `Point` except
 for `x` by using `..`</span>
 
-Using `..` is shorter to type than having to list out `_y` and `_z`. The `..`
-pattern is especially useful when working with structs that have lots of fields
-in situations where only one or two fields are relevant.
+Using `..` is shorter to type than having to list out `y: _` and `z: _`. The
+`..` pattern is especially useful when working with structs that have lots of
+fields in situations where only one or two fields are relevant.
 
 `..` will expand to as many values as it needs to be. Listing 18-22 shows a use
 of `..` with a tuple:
@@ -507,9 +517,9 @@ This example will fail to compile since the value inside the `Some` value in
 `robot_name` is moved within the `match` when `name` binds to that value.
 
 Using `&` in a pattern matches an existing reference in the value, as we saw in
-the previous section on destructuring. If you want to create a reference
-instead in order to borrow the value in a pattern variable, use the `ref`
-keyword before the new variable, as shown in Listing 18-25:
+the "Destructuring to Break Apart Values" section. If you want to create a
+reference instead in order to borrow the value in a pattern variable, use the
+`ref` keyword before the new variable, as shown in Listing 18-25:
 
 ```rust
 let robot_name = Some(String::from("Bors"));

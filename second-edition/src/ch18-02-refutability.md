@@ -5,10 +5,9 @@ fail to match for any possible value are *irrefutable*, and patterns which can
 fail to match for some possible value are said to be *refutable*. `let`
 statements, function parameters, and `for` loops are restricted to only accept
 irrefutable patterns, since there's nothing correct the program could do if the
-pattern fails to match. `match`, `if let`, and `while let` expressions are
-restricted to only accept refutable patterns, since they're made to handle
-possible failure and we wouldn't need their functionality if the pattern could
-never fail.
+pattern fails to match. `if let`, and `while let` expressions are restricted to
+only accept refutable patterns, since they're made to handle possible failure
+and we wouldn't need their functionality if the pattern could never fail.
 
 In general, you shouldn't have to worry about the distinction between refutable
 and irrefutable patterns; just be familiar with the concept of refutability
