@@ -1,100 +1,41 @@
-## Write to `stderr` Instead of `stdout`
+## Writing to `stderr` instead of `stdout`
 
-Right now, we're writing all of our output to the terminal with `println!`.
-This works, but most terminals provide two kinds of output: "standard out" is
-used for most information, but "standard error" is used for error messages. This
-makes it easier to do things like "Print error messages to my terminal, but
-write other output to a file."
+In our program, we have been careful to use `eprintln!` for errors and
+`println!` for the matching lines. This is because, as we mentioned in Chapter
+9.3, command-line programs have two kinds of output: "standard output" is for
+the "normal output" of the program, and "standard error" is for error and
+progress messages. You may be wondering why this is an important distinction
+to make, so we're going to step up a level and illustrate how it's useful.
 
-We can see that our program is only capable of printing to `stdout` by
-redirecting it to a file using `>` on the command line, and running our program
-without any arguments, which causes an error:
-
-```text
-$ cargo run > output.txt
-```
-
-The `>` syntax tells the shell to write the contents of standard out to
-*output.txt* instead of the screen. However, if we open *output.txt* after
-running we'll see our error message:
+If you run our program with no command line arguments, it prints an error:
 
 ```text
+$ cargo run
 Problem parsing arguments: not enough arguments
 ```
 
-We'd like this to be printed to the screen instead, and only have the output
-from a successful run end up in the file if we run our program this way. Let's
-change how error messages are printed as shown in Listing 12-17:
-
-<span class="filename">Filename: src/main.rs</span>
-
-```rust,ignore
-extern crate greprs;
-
-use std::env;
-use std::process;
-use std::io::prelude::*;
-
-use greprs::Config;
-
-fn main() {
-    let mut stderr = std::io::stderr();
-    let args: Vec<String> = env::args().collect();
-
-    let config = Config::new(&args).unwrap_or_else(|err| {
-        writeln!(
-            &mut stderr,
-            "Problem parsing arguments: {}",
-            err
-        ).expect("Could not write to stderr");
-
-        process::exit(1);
-    });
-
-    if let Err(e) = greprs::run(config) {
-
-        writeln!(
-            &mut stderr,
-            "Application error: {}",
-            e
-        ).expect("Could not write to stderr");
-
-        process::exit(1);
-    }
-}
-```
-
-<span class="caption">Listing 12-17: Writing error messages to `stderr` instead
-of `stdout`</span>
-
-<!-- Will add ghosting and wingdings in libreoffice /Carol -->
-
-Rust does not have a convenient function like `println!` for writing to
-standard error. Instead, we use the `writeln!` macro, which is sort of like
-`println!`, but it takes an extra argument. The first thing we pass to it is
-what to write to. We can acquire a handle to standard error through the
-`std::io::stderr` function. We give a mutable reference to `stderr` to
-`writeln!`; we need it to be mutable so we can write to it! The second and
-third arguments to `writeln!` are like the first and second arguments to
-`println!`: a format string and any variables we're interpolating.
-
-Let's try running the program again in the same way, without any arguments and
-redirecting `stdout` with `>`:
+That error is printed with `eprintln!`, so it goes to standard error, so it is
+_not_ redirected by the shell's `>` operator (which sends standard _output_ to
+a file):
 
 ```text
 $ cargo run > output.txt
 Problem parsing arguments: not enough arguments
 ```
 
-Now we see our error on the screen, but `output.txt` contains nothing. If we
-try it again with arguments that work:
+We still see the error message in the terminal, and `output.txt` will be
+empty. If we had used `println!` for the error messages, they would have been
+redirected into `output.txt`.  We wouldn't have seen them, and `output.txt`
+would have unexpected junk in it.
+
+If we try this again with arguments that work:
 
 ```text
 $ cargo run to poem.txt > output.txt
 ```
 
-We'll see no output to our terminal, but `output.txt` will contain
-our results:
+we'll see no output to our terminal, but `output.txt` will contain our
+results:
 
 <span class="filename">Filename: output.txt</span>
 

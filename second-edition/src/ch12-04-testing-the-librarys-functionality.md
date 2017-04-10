@@ -235,7 +235,9 @@ improve it.
 
 Now that the `grep` function is working, we need to do one last thing inside of
 the `run` function: we never printed out the results! We'll do that by adding
-a `for` loop that prints each line returned from the `grep` function:
+a `for` loop that prints each line returned from the `grep` function.
+This output is the "normal" output of the program—not an error
+message—so we use `println!` for it:
 
 <span class="filename">Filename: src/lib.rs</span>
 

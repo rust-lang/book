@@ -290,9 +290,10 @@ src/main.rs:10     io::stdin().read_line(&mut guess);
 ```
 
 Rust warns that we haven’t used the `Result` value returned from `read_line`,
-indicating that the program hasn’t handled a possible error. The right way to
-suppress the warning is to actually write error handling, but since we just
-want to crash this program when a problem occurs, we can use `expect`. You’ll
+indicating that the program hasn’t handled a possible error.
+
+Normally you don’t want your program to crash just because it failed to read
+some input, but since we’re just getting started, it’s OK for now.  You’ll
 learn about recovering from errors in Chapter 9.
 
 ### Printing Values with `println!` Placeholders
@@ -304,11 +305,13 @@ the code added so far, which is the following:
 println!("You guessed: {}", guess);
 ```
 
-This line prints out the string we saved the user’s input in. The set of `{}`
-is a placeholder that holds a value in place. You can print more than one value
-using `{}`: the first set of `{}` holds the first value listed after the format
-string, the second set holds the second value, and so on. Printing out multiple
-values in one call to `println!` would look like this:
+This prints the string we read on the previous line, with `You guessed: ` in
+front.  We are now giving `println!` two arguments.  The first argument is
+called the _format string_, and the second argument is a _value_ to print.
+When used this way, `println!` prints the text of the format string, but where
+the curly braces `{}` appear, it substitutes the value.  `{}` is called a
+_placeholder_ for the value.  You can use more than one `{}`, along with more
+than one value:
 
 ```rust
 let x = 5;
@@ -317,7 +320,8 @@ let y = 10;
 println!("x = {} and y = {}", x, y);
 ```
 
-This code would print out `x = 5 and y = 10`.
+This code would print out `x = 5 and y = 10`. Notice that you can print
+numbers this way, as well as strings.
 
 ### Testing the First Part
 

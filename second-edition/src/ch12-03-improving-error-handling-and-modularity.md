@@ -318,7 +318,7 @@ fn main() {
     let args: Vec<String> = env::args().collect();
 
     let config = Config::new(&args).unwrap_or_else(|err| {
-        println!("Problem parsing arguments: {}", err);
+        eprintln!("Problem parsing arguments: {}", err);
         process::exit(1);
     });
 
@@ -349,12 +349,12 @@ pass the inner value of the `Err` to our closure in the parameter `err` that
 appears between the vertical pipes. Using `unwrap_or_else` lets us do some
 custom, non-`panic!` error handling.
 
-Said error handling is only two lines: we print out the error, then call
-`std::process::exit`. That function will stop our program's execution
-immediately and return the number passed to it as a return code. By convention,
-a zero means success and any other value means failure. In the end, this has
-similar characteristics to our `panic!`-based handling we had in Listing 12-7,
-but we no longer get all the extra output. Let's try it:
+That custom error handling is very similar to what we saw in Chapter 9.3.  We
+print out the error with `eprintln!`, so that it is not confused with the
+non-error output of the program, and then we use `std::process::exit` to end
+the program with a unsuccessful exit code.  This is not that different from
+the `panic!` we used in Listing 12-7, but we no longer get all the extra
+output. Let's try it:
 
 ```text
 $ cargo run
@@ -481,8 +481,7 @@ fn main() {
     println!("In file {}", config.filename);
 
     if let Err(e) = run(config) {
-        println!("Application error: {}", e);
-
+        eprintln!("Application error: {}", e);
         process::exit(1);
     }
 }
@@ -593,7 +592,7 @@ fn main() {
     let args: Vec<String> = env::args().collect();
 
     let config = Config::new(&args).unwrap_or_else(|err| {
-        println!("Problem parsing arguments: {}", err);
+        eprintln!("Problem parsing arguments: {}", err);
         process::exit(1);
     });
 
@@ -601,8 +600,7 @@ fn main() {
     println!("In file {}", config.filename);
 
     if let Err(e) = greprs::run(config) {
-        println!("Application error: {}", e);
-
+        eprintln!("Application error: {}", e);
         process::exit(1);
     }
 }

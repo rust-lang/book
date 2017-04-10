@@ -88,6 +88,10 @@ requires these around all function bodies. It's considered good style to put
 the opening curly brace on the same line as the function declaration, with one
 space in between.
 
+If you're familiar with languages like C, you may be wondering why `main`
+doesn't return a value.  We'll talk about that when we talk about error
+handling, in Chapter 9.3.
+
 Inside the `main` function:
 
 ```rust
@@ -95,8 +99,13 @@ Inside the `main` function:
 ```
 
 This line does all of the work in this little program: it prints text to the
-screen. There are a number of details to notice here. The first is that Rust
-style is to indent with four spaces, not a tab.
+screen.  (Technically, it prints text on the _standard output stream_, which
+is displayed on the screen by your terminal window.  You may be familiar with
+standard output already from other programming languages; if not, we will
+talk about it more in Chapters 9.3 and 12.6.)
+
+There are a number of details to notice here. The first is that Rust style is
+to indent with four spaces, not a tab.
 
 The second important part is `println!`. This is calling a Rust *macro*,
 which is how metaprogramming is done in Rust. If it were calling a function
@@ -106,7 +115,9 @@ that when you see a `!` that means that you’re calling a macro instead of a
 normal function.
 
 Next is `"Hello, world!"` which is a *string*. We pass this string as an
-argument to `println!`, which prints the string to the screen. Easy enough!
+argument to `println!`, which prints it. Easy enough!  `println!` can print
+other things as well as strings; you'll see more ways to use it as we go on.
+
 
 The line ends with a semicolon (`;`). The `;` indicates that this expression is
 over, and the next one is ready to begin. Most lines of Rust code end with a

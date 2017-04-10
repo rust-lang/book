@@ -103,7 +103,7 @@ fn main() {
     let f = match f {
         Ok(file) => file,
         Err(error) => {
-            panic!("There was a problem opening the file: {:?}", error)
+            panic!("There was a problem opening 'hello.txt': {:?}", error)
         },
     };
 }
@@ -127,7 +127,7 @@ there’s no file named *hello.txt* in our current directory and we run this
 code, we’ll see the following output from the `panic!` macro:
 
 ```text
-thread 'main' panicked at 'There was a problem opening the file: Error { repr:
+thread 'main' panicked at 'There was a problem opening 'hello.txt': Error { repr:
 Os { code: 2, message: "No such file or directory" } }', src/main.rs:8
 ```
 
@@ -158,7 +158,7 @@ fn main() {
                 Ok(fc) => fc,
                 Err(e) => {
                     panic!(
-                        "Tried to create file but there was a problem: {:?}",
+                        "Tried to create 'hello.txt' but there was a problem: {:?}",
                         e
                     )
                 },
@@ -166,7 +166,7 @@ fn main() {
         },
         Err(error) => {
             panic!(
-                "There was a problem opening the file: {:?}",
+                "There was a problem opening 'hello.txt': {:?}",
                 error
             )
         },

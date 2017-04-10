@@ -1,23 +1,119 @@
 ## To `panic!` or Not To `panic!`
 
 So how do you decide when you should `panic!` and when you should return
-`Result`? When code panics, there’s no way to recover. You could choose to call
-`panic!` for any error situation, whether there’s a possible way to recover or
-not, but then you’re making the decision for your callers that a situation is
-unrecoverable. When you choose to return a `Result` value, you give your caller
-options, rather than making the decision for them. They could choose to attempt
-to recover in a way that’s appropriate for their situation, or they could
-decide that actually, an `Err` value in this case is unrecoverable, so they can
-call `panic!` and turn your recoverable error into an unrecoverable one.
+`Result`? As a general rule, we recommend you only use `panic!` for situations
+where the error indicates a bug in the program. For instance, library
+functions often have *contracts*: their inputs must meet inputs particular
+requirements, and if they don't, the calling code has a bug. Panicking when
+the contract is violated makes sense because a contract violation always
+indicates a bug in the program, and trying to recover may only make matters
+worse. This is the main reason that the standard library will `panic!` if you
+attempt an out-of-bounds array access: trying to access memory that doesn’t
+belong to the current data structure is a common security problem. Contracts
+for a function, especially when a violation will cause a panic, should be
+explained in the API documentation for the function.
+
+If you design your API to take good advantage of Rust's type system, you will
+often find that contract checking is unnecessary, because violations cannot
+happen. If your function has a particular type as a parameter, you can proceed
+with your code’s logic knowing that the compiler has already ensured you have
+a valid value. For example, if you have a type rather than an `Option`, your
+program expects to have *something* rather than *nothing*. Your code then
+doesn’t have to handle two cases for the `Some` and `None` variants, it will
+only have one case for definitely having a value. Code trying to pass nothing
+to your function won’t even compile, so your function doesn’t have to check
+for that case at runtime.  Another example is using an unsigned integer type
+like `u32`, which ensures the parameter is never negative.
+
+On the other hand, when errors happen due to a problem _outside_ the program,
+that is almost always something you should handle with a `Result`, even if
+there's nothing more that the program can do but print an error message and
+exit. We've already seen that converting strings into numbers with `parse`
+returns a `Result`, because strings containing invalid numbers are usually
+_not_ bugs; they are usually because the _input_ to the program was
+incorrect. When you try to access files and get errors from the operating
+system, that is also not a bug in your program; at worst it indicates that
+there's something wrong with the _computer_ that a human needs to fix (Unix
+systems don't work very well if `/etc/passwd` doesn't exist). Network servers
+might be inaccessible or malfunctioning for reasons completely out of your
+control, or they might be refusing service because the user doesn't have the
+proper credentials.
+
+Another thing to keep in mind is that when you use `panic!` you are declaring
+that there is nothing a caller could possibly do to recover from the error.
+When you choose to return a `Result` value, you give your caller options,
+rather than making the decision for them. They could choose to attempt to
+recover in a way that’s appropriate for their situation, or they could decide
+that actually, an `Err` value in this case is unrecoverable, so they can call
+`panic!` and turn your recoverable error into an unrecoverable one.
 Therefore, returning `Result` is a good default choice when you’re defining a
 function that might fail.
 
-There are a few situations in which it’s more appropriate to write code that
-panics instead of returning a `Result`, but they are less common. Let’s discuss
-why it’s appropriate to panic in examples, prototype code, and tests, then
-situations where you as a human can know a method won’t fail that the compiler
-can’t reason about, and conclude with some general guidelines on how to decide
-whether to panic in library code.
+### Reporting Errors to the User
+
+At the highest levels of your program, you will need to intercept error
+`Results` and report them to a human. Exactly how to do this will depend on
+the environment in which you are running—a command-line tool is different from
+a network server or a graphical application. Rust's standard library has all
+the facilities needed to report errors in command-line tools, so we will use
+that situation for an example.
+
+Recall from the previous chapter, the function that read text from a file.
+
+``` rust
+use std::io;
+use std::io::Read;
+use std::fs::File;
+
+fn read_username_from_file() -> Result<String, io::Error> {
+    let mut s = String::new();
+
+    File::open("hello.txt")?.read_to_string(&mut s)?;
+
+    Ok(s)
+}
+```
+
+If we call this function from `main` in a command-line tool, what should we do
+when it returns an error?  It's not right to use `expect` or `panic!`, but we
+can't use the `?` operator either, because `main` doesn't return anything.
+Here's one way to handle it:
+
+``` rust,ignore
+use std::process;
+
+fn main() {
+    match read_username_from_file() {
+        Ok(s) => {
+            println!("Hello, {}.", s);
+        },
+        Err(e) => {
+            eprintln!("Failed to read from 'hello.txt': {}", e);
+            process::exit(1);
+        }
+    }
+}
+```
+
+This uses two library features we haven't seen before.  `eprintln!` is like
+`println!`, except for one thing: it prints text to the standard _error_
+stream, instead of standard output. This prevents error messages from getting
+mixed up with the "normal" output of the program—if you've ever tried to print
+a document on fancy paper, but what got printed was error messages, you'll
+understand why this is important. (The messages printed by `panic!` are
+also sent to standard error.)
+
+`process::exit(1)` ends the program with an _unsuccessful_ "exit code"
+reported to the command-line environment. (By convention, an exit code of zero
+means success, and any nonzero value is some sort of failure.) Rust doesn't
+let you do this by returning a value from `main`, the way C does, because the
+whole idea of an "exit code" is peculiar to multiprocessing operating systems
+that work essentially the same way Unix does. In other environments it isn't
+possible to return an "exit code", or it might even be a bug to return from
+`main` at all. But if you're in an environment where exit codes exist, then
+`process::exit` will be available, and the number passed to it will mean the
+same thing it does in C. And falling off the end of `main`, which is what
+happens in the `Ok` case, will be the same as calling `process::exit(0)`.
 
 ### Examples, Prototype Code, and Tests: Perfectly Fine to Panic
 
@@ -64,61 +160,6 @@ always a valid IP address. If the IP address string came from a user instead of
 being hardcoded into the program, and therefore *did* have a possibility of
 failure, we’d definitely want to handle the `Result` in a more robust way
 instead.
-
-### Guidelines for Error Handling
-
-It’s advisable to have your code `panic!` when it’s possible that you could end
-up in a bad state—in this context, bad state is when some assumption,
-guarantee, contract, or invariant has been broken, such as when invalid values,
-contradictory values, or missing values are passed to your code—plus one or
-more of the following:
-
-* The bad state is not something that’s *expected* to happen occasionally
-* Your code after this point needs to rely on not being in this bad state
-* There’s not a good way to encode this information in the types you use
-
-If someone calls your code and passes in values that don’t make sense, the best
-thing might be to `panic!` and alert the person using your library to the bug
-in their code so that they can fix it during development. Similarly, `panic!`
-is often appropriate if you’re calling external code that is out of your
-control, and it returns an invalid state that you have no way of fixing.
-
-When a bad state is reached, but it’s expected to happen no matter how well you
-write your code, it’s still more appropriate to return a `Result` rather than
-calling `panic!`. Examples of this include a parser being given malformed data,
-or an HTTP request returning a status that indicates you have hit a rate limit.
-In these cases, you should indicate that failure is an expected possibility by
-returning a `Result` in order to propagate these bad states upwards so that the
-caller can decide how they would like to handle the problem. To `panic!`
-wouldn’t be the best way to handle these cases.
-
-When your code performs operations on values, your code should verify the
-values are valid first, and `panic!` if the values aren’t valid. This is mostly
-for safety reasons: attempting to operate on invalid data can expose your code
-to vulnerabilities. This is the main reason that the standard library will
-`panic!` if you attempt an out-of-bounds array access: trying to access memory
-that doesn’t belong to the current data structure is a common security problem.
-Functions often have *contracts*: their behavior is only guaranteed if the
-inputs meet particular requirements. Panicking when the contract is violated
-makes sense because a contract violation always indicates a caller-side bug,
-and it is not a kind of error you want callers to have to explicitly handle. In
-fact, there’s no reasonable way for calling code to recover: the calling
-*programmers* need to fix the code. Contracts for a function, especially when a
-violation will cause a panic, should be explained in the API documentation for
-the function.
-
-Having lots of error checks in all of your functions would be verbose and
-annoying, though. Luckily, you can use Rust’s type system (and thus the type
-checking the compiler does) to do a lot of the checks for you. If your function
-has a particular type as a parameter, you can proceed with your code’s logic
-knowing that the compiler has already ensured you have a valid value. For
-example, if you have a type rather than an `Option`, your program expects to
-have *something* rather than *nothing*. Your code then doesn’t have to handle
-two cases for the `Some` and `None` variants, it will only have one case for
-definitely having a value. Code trying to pass nothing to your function won’t
-even compile, so your function doesn’t have to check for that case at runtime.
-Another example is using an unsigned integer type like `u32`, which ensures the
-parameter is never negative.
 
 ### Creating Custom Types for Validation
 

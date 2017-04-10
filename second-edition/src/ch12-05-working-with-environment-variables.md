@@ -163,7 +163,8 @@ at the top of *src/lib.rs*:
 use std::env;
 ```
 
-And then use the `vars` method from the `env` module inside of `Config::new`:
+And then, inside of `Config::new`, we use the `var_os` method to check
+whether the environment variable is set.
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -186,11 +187,8 @@ impl Config {
         let filename = args[2].clone();
 
         let mut case_sensitive = true;
-
-        for (name, _) in env::vars() {
-            if name == "CASE_INSENSITIVE" {
-                case_sensitive = false;
-            }
+        if let Some(_) = env::var_os("CASE_INSENSITIVE") {
+            case_sensitive = false;
         }
 
         Ok(Config {
@@ -204,17 +202,21 @@ impl Config {
 
 <!-- Will add ghosting and wingdings in libreoffice /Carol -->
 
-Here, we call `env::vars`, which works in a similar way as `env::args`. The
-difference is `env::vars` returns an iterator of environment variables rather
-than command line arguments. Instead of using `collect` to create a vector of
-all of the environment variables, we're using a `for` loop. `env::vars` returns
-tuples: the name of the environment variable and its value. We never care about
-the values, only if the variable is set at all, so we use the `_` placeholder
-instead of a name to let Rust know that it shouldn't warn us about an unused
-variable. Finally, we have a `case_sensitive` variable, which is set to true by
-default. If we ever find a `CASE_INSENSITIVE` environment variable, we set the
-`case_sensitive` variable to false instead. Then we return the value as part of
-the `Config`.
+`var_os` looks up an environment variable and returns an `Option`, which we
+saw in Chapter 6.1.  It will be `Some(value)` if the variable is set, and
+`None` if it isn't.  Since we don't care what the value of the
+`CASE_SENSITIVE` environment variable is, only whether it's set or not, we use
+`if let Some(_)` to throw away the value.  (If we _did_ want to examine the
+value, we could use `if let Some(s)` instead.)  We could also have written
+
+``` rust,ignore
+        let case_sensitive = match env::var_os("CASE_INSENSITIVE") {
+            Some(_) => false,
+            None    => true
+        };
+```
+
+Then we return the value as part of the `Config`.
 
 Let's give it a try!
 
@@ -236,9 +238,9 @@ To tell your name the livelong day
 To an admiring bog!
 ```
 
-Excellent! Our `greprs` program can now do case insensitive searching controlled
-by an environment variable. Now you know how to manage options set using
-either command line arguments or environment variables!
+Excellent! Our `greprs` program can now do case insensitive searching
+controlled by an environment variable. Now you know how to manage options set
+using either command line arguments or environment variables!
 
 Some programs allow both arguments _and_ environment variables for the same
 configuration. In those cases, the programs decide that one or the other of
