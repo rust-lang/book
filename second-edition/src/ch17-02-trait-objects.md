@@ -1,6 +1,6 @@
 ## Trait Objects for Using Values of Different Types
 
-In Chapter 8, we talked about a limitation of vectors is that vectors can only
+In Chapter 8, we said that a limitation of vectors is that vectors can only
 store elements of one type. We had an example in Listing 8-1 where we defined a
 `SpreadsheetCell` enum that had variants to hold integers, floats, and text so
 that we could store different types of data in each cell and still have a
