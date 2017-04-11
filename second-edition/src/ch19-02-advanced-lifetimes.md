@@ -1,28 +1,20 @@
-# Advanced Lifetimes
+## Advanced Lifetimes
 
-Back in Chapter 10, we learned how you can help Rust understand your references
-with the 'lifetime' syntax. As a quick recap, most of the time, Rust will let
-you elide lifetimes, but every reference has one. If you need to be explicit,
-they look like this:
+Back in Chapter 10, we learned how to annotate references with lifetime
+parameters to help Rust understand how the lifetimes of different references
+relate. We saw how most of the time, Rust will let you elide lifetimes, but
+every reference has a lifetime. There are three advanced features of lifetimes
+that we haven't covered though: *lifetime subtyping*, *trait object lifetimes*,
+and *higher ranked trait bounds*.
 
-```rust
-fn explicit_lifetime<'a>(a: &'a i32, b: &'a i32) -> &'a i32 {
-# a
-# }
-```
+### Lifetime subtyping
 
-There are three more features of lifetimes that we haven't learned yet, though:
-*lifetime subtyping*, *trait object lifetimes*, and *higher ranked trait
-bounds*.
-
-## Lifetime subtyping
-
-Imagine that we want to write a parser. To do this, we'll have a structure
-with the string that we're parsing, a 'context'. We'll write individual parsers
-that parse this string, and return success or failure. The parsers will need to
-borrow the context to do the parsing. We'd end up with something like the
-following. We've left off the lifetime annotations for now; this code won't
-compile:
+Imagine that we want to write a parser. To do this, we'll have a structure that
+holds a reference to the string that we're parsing, and we'll call that struct
+`Context`. We'll write a parser that will parse this string and return success
+or failure. The parser will need to borrow the context to do the parsing.
+Implementing this would look like the code in Listing 19-12, which won't
+compile because we've left off the lifetime annotations for now:
 
 ```rust,ignore
 struct Context(&str);
@@ -33,31 +25,29 @@ struct Parser {
 
 impl Parser {
     fn parse(&self) -> Result<(), &str> {
-        // do the parsing
+        Err(&self.context.0[1..])
     }
 }
 ```
 
-For simplicity's sake, our `parse` function returns a `Result<(), &str>`, that
-is, we don't do anything on success, and the failure is the part of our string
-that didn't parse correctly. A real implementation would have more error
-information than that, and would actually do something on success, but we're
-since this isn't relevant to our example, we're leaving that stuff off.
+<span class="caption">Listing 19-12: Defining a `Context` struct that holds a
+string slice, a `Parser` struct that holds a reference to a `Context` instance,
+and a `parse` method that always returns an error referencing the string
+slice</span>
 
-Okay, so, how do we fill in the lifetimes? The most straightforward thing to do
-is to use the same lifetime everywhere:
+For simplicity's sake, our `parse` function returns a `Result<(), &str>`. That
+is, we don't do anything on success, and on failure we return the part of the
+string slice that didn't parse correctly. A real implementation would have more
+error information than that, and would actually return something created when
+parsing succeeds, but we're leaving those parts of the implementation off since
+they aren't relevant to the lifetimes part of this example. We're also defining
+`parse` to always produce an error after the first byte. Note that this may
+panic if the first byte is not on a valid character boundary; again, we're
+simplifying the example in order to concentrate on the lifetimes involved.
 
-```rust,ignore
-struct Context<'a>(&'a str);
-
-struct Parser<'a> {
-    context: &'a Context<'a>,
-}
-```
-
-As is, this compiles.  Let's implement our `parse` method now.  Let's say that
-we always produce an error, and the error happened after the first character.
-Like this:
+So how do we fill in the lifetime parameters for the string slice in `Context`
+and the reference to the `Context` in `Parser`? The most straightforward thing
+to do is to use the same lifetime everywhere, as shown in Listing 19-13:
 
 ```rust
 struct Context<'a>(&'a str);
@@ -68,35 +58,29 @@ struct Parser<'a> {
 
 impl<'a> Parser<'a> {
     fn parse(&self) -> Result<(), &str> {
-        // a real implementation would do a lot more, of course...
         Err(&self.context.0[1..])
     }
 }
 ```
 
-So far, so good. Next, let's write a function that takes a context, and then
-uses a `Parser` to parse that context. This won't quite work...
+<span class="caption">Listing 19-13: Annotating all references in `Context` and
+`Parser` with the same lifetime parameter</span>
+
+This compiles fine. Next, in Listing 19-14, let's write a function that takes
+an instance of `Context`, uses a `Parser` to parse that context, and returns
+what `parse` returns. This won't quite work:
 
 ```rust,ignore
-struct Context<'a>(&'a str);
-
-struct Parser<'a> {
-    context: &'a Context<'a>,
-}
-
-impl<'a> Parser<'a> {
-    fn parse(&self) -> Result<(), &str> {
-        // a real implementation would do a lot more, of course...
-        Err(&self.context.0[1..])
-    }
-}
-
 fn parse_context(context: Context) -> Result<(), &str> {
     Parser { context: &context }.parse()
 }
 ```
 
-We get quite the error message:
+<span class="caption">Listing 19-14: An attempt to add a `parse_context`
+function that takes a `Context` and uses a `Parser`</span>
+
+We get two quite verbose errors when we try to compile the code with the
+addition of the `parse_context` function:
 
 ```text
 error: borrowed value does not live long enough
@@ -107,7 +91,8 @@ error: borrowed value does not live long enough
 17 | }
    | - temporary value only lives until here
    |
-note: borrowed value must be valid for the anonymous lifetime #1 defined on the body at 15:55...
+note: borrowed value must be valid for the anonymous lifetime #1 defined on the
+body at 15:55...
   --> <anon>:15:56
    |
 15 |   fn parse_context(context: Context) -> Result<(), &str> {
@@ -124,7 +109,8 @@ error: `context` does not live long enough
 17 | }
    | - borrowed value only lives until here
    |
-note: borrowed value must be valid for the anonymous lifetime #1 defined on the body at 15:55...
+note: borrowed value must be valid for the anonymous lifetime #1 defined on the
+body at 15:55...
   --> <anon>:15:56
    |
 15 |   fn parse_context(context: Context) -> Result<(), &str> {
@@ -134,106 +120,82 @@ note: borrowed value must be valid for the anonymous lifetime #1 defined on the 
    | |_^ ...ending here
 ```
 
-Let's break this error down:
+These errors are saying that both the `Parser` instance we're creating and the
+`context` parameter live from the line that the `Parser` is created until the
+end of the `parse_context` function, but they both need to live for the entire
+lifetime of the function.
 
-```text
-error: borrowed value does not live long enough
-  --> <anon>:16:5
-   |
-16 |     Parser { context: &context }.parse()
-   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ does not live long enough
-17 | }
-   | - temporary value only lives until here
-   |
-```
+In other words, `Parser` and `context` need to *outlive* the entire function
+and be valid before the function starts as well as after it ends in order for
+all the references in this code to always be valid. Both the `Parser` we're
+creating and the `context` parameter go out of scope at the end of the
+function, though (since `parse_context` takes ownership of `context`).
 
-Fundamentally, the issue is that our `Parser` is temporary, and it needs to
-live for longer than that. But why? We use it to calculate the result, but
-there's no other reason for it to stick around.
-
-For that, we need to look at the next part of the message:
-
-```text
-note: borrowed value must be valid for the anonymous lifetime #1 defined on the body at 15:55...
-  --> <anon>:15:56
-   |
-15 |   fn parse_context(context: Context) -> Result<(), &str> {
-   |  ________________________________________________________^ starting here...
-16 | |     Parser { context: &context }.parse()
-17 | | }
-   | |_^ ...ending here
-```
-
-Ah! So, Rust expects that it needs to live for the entire function, but it
-doesn't; it only lives for this one line. Why? Let's keep looking at the
-message.
-
-```text
-error: `context` does not live long enough
-  --> <anon>:16:24
-   |
-16 |     Parser { context: &context }.parse()
-   |                        ^^^^^^^ does not live long enough
-17 | }
-   | - borrowed value only lives until here
-   |
-note: borrowed value must be valid for the anonymous lifetime #1 defined on the body at 15:55...
-  --> <anon>:15:56
-   |
-15 |   fn parse_context(context: Context) -> Result<(), &str> {
-   |  ________________________________________________________^ starting here...
-16 | |     Parser { context: &context }.parse()
-17 | | }
-   | |_^ ...ending here
-```
-
-This is the same thing, but for `context` rather than for `Parser`. Rust
-expects them to live longer... let's look at their definitions again:
-
-```rust
-struct Context<'a>(&'a str);
-
-struct Parser<'a> {
-    context: &'a Context<'a>,
-}
-```
-
-Ah, right. We said `&'a Context<'a>`, that is, the `Context` has a lifetime
-that's the same as the reference to it. That's fine, but...
+Let's look at the definitions in Listing 19-13 again, especially the signature
+of the `parse` method:
 
 ```rust,ignore
     fn parse(&self) -> Result<(), &str> {
 ```
 
-Remember the elision rules? This is the same as
+Remember the elision rules? If we annotate the lifetimes of the references, the
+signature would be:
 
 ```rust,ignore
     fn parse<'a>(&'a self) -> Result<(), &'a str> {
 ```
 
-That is, the error part of `parse`'s return value is tied to the parser. That
-makes sense, as it's a pointer to the `Context that it holds. So that's the
-problem, in `parse_context`, we return this result from `parse`, which is tied
-to the lifetime of the `Parser`. But the `Parser` won't live past the end of
-the function; it's temporary. Hence the lifetime issue.
+That is, the error part of the return value of `parse` has a lifetime that is
+tied to the `Parser` instance's lifetime (that of `&self` in the `parse` method
+signature). That makes sense, as the returned string slice references the
+string slice in the `Context` instance that the `Parser` holds, and we've
+specified in the definition of the `Parser` struct that the lifetime of the
+reference to `Context` that `Parser` holds and the lifetime of the string slice
+that `Context` holds should be the same.
 
-However, this is safe: we know that the only reason that the result is tied to
-the `Parser` is because it's referencing the `Parser`'s `Context`, so it's
-_really_ the `Context` that we care about. We need a way to tell Rust that the
-`Context` and the `Parser may have different lifetimes.
+The problem is that the `parse_context` function returns the value returned
+from `parse`, so the lifetime of the return value of `parse_context` is tied to
+the lifetime of the `Parser` as well. But the `Parser` instance created in the
+`parse_context` function won't live past the end of the function (it's
+temporary), and the `context` will go out of scope at the end of the function
+(`parse_context` takes ownership of it).
 
-We could try that like this, but it doesn't quite work:
+We're not allowed to return a reference to a value that goes out of scope at
+the end of the function. Rust thinks that's what we're trying to do because we
+annotated all the lifetimes with the same lifetime parameter. That told Rust
+the lifetime of the string slice that `Context` holds is the same as that of
+the lifetime of the reference to `Context` that `Parser` holds.
+
+The `parse_context` function can't see that within the `parse` function, the
+string slice returned will outlive both `Context` and `Parser`, and that the
+reference `parse_context` returns refers to the string slice, not to `Context`
+or `Parser`.
+
+By knowing what the implementation of `parse` does, we know that the only
+reason that the return value of `parse` is tied to the `Parser` is because it's
+referencing the `Parser`'s `Context`, which is referencing the string slice, so
+it's really the lifetime of the string slice that `parse_context` needs to care
+about. We need a way to tell Rust that the string slice in `Context` and the
+reference to the `Context` in `Parser` have different lifetimes and that the
+return value of `parse_context` is tied to the lifetime of the string slice in
+`Context`.
+
+We could try only giving `Parser` and `Context` different lifetime parameters
+as shown in Listing 19-15. We've chosen the lifetime parameter names `'s` and
+`'c` here to be clearer about which lifetime goes with the string slice in
+`Context` and which goes with the reference to `Context` in `Parser`. Note that
+this won't completely fix the problem, but it's a start and we'll look at why
+this isn't sufficient when we try to compile.
 
 ```rust,ignore
-struct Context<'a>(&'a str);
+struct Context<'s>(&'s str);
 
-struct Parser<'a, 'b> {
-    context: &'a Context<'b>,
+struct Parser<'c, 's> {
+    context: &'c Context<'s>,
 }
 
-impl<'a, 'b> Parser<'a, 'b> {
-    fn parse(&self) -> Result<(), &str> {
-        // a real implementation would do a lot more, of course...
+impl<'c, 's> Parser<'c, 's> {
+    fn parse(&self) -> Result<(), &'s str> {
         Err(&self.context.0[1..])
     }
 }
@@ -243,99 +205,76 @@ fn parse_context(context: Context) -> Result<(), &str> {
 }
 ```
 
-Here's the error:
+<span class="caption">Listing 19-15: Specifying different lifetime parameters
+for the references to the string slice and to `Context`</span>
+
+We've annotated the lifetimes of the references in all the same places that we
+annotated them in Listing 19-13, but used different parameters depending on
+whether the reference goes with the string slice or with `Context`. We've also
+added an annotation to the string slice part of the return value of `parse` to
+indicate that it goes with the lifetime of the string slice in `Context`.
+
+Here's the error we get now:
 
 ```text
-error[E0491]: in type `&'a main::Context<'b>`, reference has a longer lifetime than the data it references
- --> <anon>:5:5
+error[E0491]: in type `&'c Context<'s>`, reference has a longer lifetime than the data it references
+ --> src/main.rs:4:5
   |
-5 |     context: &'a Context<'b>,
+4 |     context: &'c Context<'s>,
   |     ^^^^^^^^^^^^^^^^^^^^^^^^
   |
-note: the pointer is valid for the lifetime 'a as defined on the struct at 4:0
- --> <anon>:4:1
+note: the pointer is valid for the lifetime 'c as defined on the struct at 3:0
+ --> src/main.rs:3:1
   |
-4 |   struct Parser<'a, 'b> {
+3 |   struct Parser<'c, 's> {
   |  _^ starting here...
-5 | |     context: &'a Context<'b>,
-6 | | }
+4 | |     context: &'c Context<'s>,
+5 | | }
   | |_^ ...ending here
-note: but the referenced data is only valid for the lifetime 'b as defined on the struct at 4:0
- --> <anon>:4:1
+note: but the referenced data is only valid for the lifetime 's as defined on the struct at 3:0
+ --> src/main.rs:3:1
   |
-4 |   struct Parser<'a, 'b> {
+3 |   struct Parser<'c, 's> {
   |  _^ starting here...
-5 | |     context: &'a Context<'b>,
-6 | | }
+4 | |     context: &'c Context<'s>,
+5 | | }
   | |_^ ...ending here
-help: consider using an explicit lifetime parameter as shown: fn main()
- --> <anon>:1:1
-  |
-1 | fn main() {
-  | ^
 ```
 
-Rust doesn't know of any relationship between `'b` and `'a`, so now that we've
-said `&'a Context<'b>`, `'b` needs to _outlive_ `'a`, or else, we'd be pointing
-to invalid state.
+Rust doesn't know of any relationship between `'c` and `'s`. In order to be
+valid, the referenced data in `Context` with lifetime `'s` needs to be
+constrained to guarantee that it lives longer than the reference to `Context`
+that has lifetime `'c`. If `'s` is not longer than `'c`, then the reference to
+`Context` might not be valid.
 
-This is the feature we're talking about in this section. That was a very
-long-winded example, but like we said at the start of this chapter, the tools
-here are fairly niche. :) We need to be able to say "hey Rust: `'b` will live
-at least as long as `'a`." And we have some simple syntax for that: `'b: 'a`.
+Which gets us to the point of this section: Rust has a feature called *lifetime
+subtyping*, which is a way to specify that one lifetime parameter lives at
+least as long as another one. In the angle brackets where we declare lifetime
+parameters, we can declare a lifetime `'a` as usual, and declare a lifetime
+`'b` that lives at least as long as `'a` by declaring `'b` with the syntax `'b:
+'a`.
 
-If we add that to our definition for `Parser`...
+In our definition of `Parser`, in order to say that `'s` (the lifetime of the
+string slice) is guaranteed to live at least as long as `'c` (the lifetime of
+the reference to `Context`), we change the lifetime declarations to look like
+this:
 
 ```rust
-struct Context<'a>(&'a str);
-
-struct Parser<'a, 'b: 'a> {
-    context: &'a Context<'b>,
+# struct Context<'a>(&'a str);
+#
+struct Parser<'c, 's: 'c> {
+    context: &'c Context<'s>,
 }
 ```
 
-Now, the `Parser`'s `Context` and the reference to it have different
-lifetimes, and we've ensured that it's longer than the reference to it.
+Now, the reference to `Context` in the `Parser` and the reference to the string
+slice in the `Context` have different lifetimes, and we've ensured that the
+lifetime of the string slice is longer than the reference to the `Context`.
 
-We also need to adjust the `impl` block to take both lifetimes...
-
-```rust,ignore
-impl<'a, 'b> Parser<'a, 'b> {
-```
-
-... and then, the signature of `parse` needs to make use of `'b`, to show that
-the result comes from the `Context`:
-
-```rust,ignore
-    fn parse(&self) -> Result<(), &'b str> {
-```
-
-After those minor changes, it will work! Here's the full code:
-
-
-```rust
-struct Context<'a>(&'a str);
-
-struct Parser<'a, 'b: 'a> {
-    context: &'a Context<'b>,
-}
-
-impl<'a, 'b> Parser<'a, 'b> {
-    fn parse(&self) -> Result<(), &'b str> {
-        // a real implementation would do a lot more, of course...
-        Err(&self.context.0[1..])
-    }
-}
-
-fn parse_context<'a>(context: Context<'a>) -> Result<(), &'a str> {
-    Parser { context: &context }.parse()
-}
-```
-
-As a recap: `'b: 'a` says that "the lifetime b will live at least as long as
-the lifetime a." You don't often need this syntax, but it can come up in
-situations like this one, where you need to refer to something you have a
-reference to that also has lifetimes.
+That was a very long-winded example, but as we mentioned at the start of this
+chapter, these features are pretty niche. You won't often need this syntax, but
+it can come up in situations like this one, where you need to refer to
+something you have a reference to.
 
 ## Lifetime bounds
 
