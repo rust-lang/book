@@ -189,11 +189,19 @@ to figure out which `impl` to match this trait object to.
 
 TODO: I basically copied the last sentence from the old book but i dont really understand it /Carol
 
-### Operator overloading and default type parameters
+### Operator Overloading and Default Type Parameters
 
-We can use traits in Rust to overload certain operators. Rust does not allow you to
-create your own operators, or overload arbitrary operators: only the operations listed
-in `std::ops` can be overloaded. Here's an example:
+The `<PlaceholderType=ConcreteType>` syntax is used in another way as well: to
+specify the default type for a generic type. A great example of a situation
+where this is useful is operator overloading.
+
+Rust does not allow you to create your own operators or overload arbitrary
+operators, but the operations listed in `std::ops` can be overloaded by
+implementing the traits associated with the operator. For example, Listing
+19-25 shows how to overload the `+` operator by implementing the `Add` trait on
+a `Point` struct so that we can add two `Point` instances together:
+
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 use std::ops::Add;
@@ -221,12 +229,15 @@ fn main() {
 }
 ```
 
-The `Add` trait lets us overload the `+` operator. We've implemented it for
-a `Point` such that it adds the `x`s and `y`s together to make a new `Point`.
-You'll notice that the `Add` trait has an `Output` associated type; this is
-used to determine the result of the operation.
+<span class="caption">Listing 19-25: Implementing the `Add` trait to overload
+the `+` operator for `Point` instances</span>
 
-Let's look at `Add` in a bit more detail. Here's its definition:
+We've implemented the `add` method to add the `x` values of two `Point`
+instances together and the `y` values of two `Point` instances together to
+create a new `Point`. The `Add` trait has an `Output` associated type that's
+used to determine the type returned from `add`. result of the operation.
+
+Let's look at the `Add` trait in a bit more detail. Here's its definition:
 
 ```rust
 trait Add<RHS=Self> {
@@ -236,25 +247,18 @@ trait Add<RHS=Self> {
 }
 ```
 
-This should look familiar; it's a trait with one method and an associated type. But
-there's one bit of syntax we haven't seen before: `RHS=Self`. What's up with that?
+This should look familiar; it's a trait with one method and an associated type.
+The new part is the `RHS=Self` in the angle brackets: this syntax is called
+*default type parameters*. `RHS` is a generic type parameter (short for "right
+hand side") that's used for the type of the `rhs` parameter in the `add`
+method. If we don't specify a concrete type for `RHS` when we implement the
+`Add` trait, the type of `RHS` will default to the type of `Self` (the type
+that we're implementing `Add` on).
 
-This syntax is called 'default type parameters'. It allows you to say "If a parameter
-isn't provided, use this default instead." So in other words, these two trait definitions
-are very similar:
-
-```rust,ignore
-trait Add<RHS> {
-trait Add<RHS=Self> {
-```
-
-The only difference is, with the first definition, we are required to parameterize
-`Add` with a type for `RHS`, which is short for "right hand side." In the latter
-form, we aren't required to, and if we do not, the type of `RHS` will be the type
-of `Self`.
-
-Let's look at an example. Imagine we have two units, `Feet` and `Inches`. We can
-implement `Add` like this:
+Let's look at another example of implementing the `Add` trait. Imagine we have
+two structs holding values in different units, `Millimeters` and `Meters`. We
+can implement `Add` for `Millimeters` in different ways as shown in Listing
+19-26:
 
 ```rust
 use std::ops::Add;
@@ -279,27 +283,43 @@ impl Add<Meters> for Millimeters {
 }
 ```
 
-If we're adding `Millimeters` to other `Millimeters`, we don't need to parameterize
-`Add`. If we want to add `Millimeters` to `Meters`, then we need to say `Add<Meters>`
-to set the value of the `RHS`.
+<span class="caption">Listing 19-26: Implementing the `Add` trait on
+`Millimeters` to be able to add `Millimeters` to `Millimeters` and
+`Millimeters` to `Meters`</span>
+
+If we're adding `Millimeters` to other `Millimeters`, we don't need to
+parameterize the `RHS` type for `Add` since the default `Self` type is what we
+want. If we want to implement adding `Millimeters` and `Meters`, then we need
+to say `impl Add<Meters>` to set the value of the `RHS` type parameter.
 
 Default type parameters are used in two main ways:
 
 1. To extend a type without breaking existing code.
 2. To allow customization in a way most users don't want.
 
-This is an example of the second purpose; most of the time, you're adding two
-like types together. Using the default here makes it easier to do so without
-the extra parameter. In other words, we've removed a little bit of boilerplate.
+The `Add` trait is an example of the second purpose: most of the time, you're
+adding two like types together. Using a default type parameter in the `Add`
+trait definition makes it easier to implement the trait since you don't have to
+specify the extra parameter most of the time. In other words, we've removed a
+little bit of implementation boilerplate.
 
-What about the first case? Well, it's sort of the same thing, but in reverse:
-because our existing users won't have written down a type parameter, if we want
-to add a type parameter to an existing trait, giving it a default will let us
-not break that code.
+The first purpose is similar, but in reverse: since existing implementations of
+a trait won't have specified a type parameter, if we want to add a type
+parameter to an existing trait, giving it a default will let us extend the
+functionality of the trait without breaking the existing implementation code.
 
-### Fully qualified syntax
+### Fully Qualified Syntax for Disambiguation
 
-Sometimes, methods can have the same names. Consider this code:
+Rust cannot prevent a trait from having a method with the same name that
+another trait's method has, nor can it prevent us from implementing both of
+these traits on one type. We can also have a method implemented directly on the
+type with the same name as well! In order to be able to call each of the
+methods with the same name, then, we need to tell Rust which one we want to
+use. Consider the code in Listing 19-27 where traits `Foo` and `Bar` both have
+method `f` and we implement both traits on struct `Baz`, which also has a
+method named `f`:
+
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 trait Foo {
@@ -320,77 +340,48 @@ impl Bar for Baz {
     fn f(&self) { println!("Baz’s impl of Bar"); }
 }
 
-let b = Baz;
+impl Baz {
+    fn f(&self) { println!("Baz's impl"); }
+}
+
+fn main() {
+    let b = Baz;
+    b.f();
+}
 ```
 
-If we were to try to call `b.f()`, we’d get an error:
+<span class="caption">Listing 19-27: Implementing two traits that both have a
+method with the same name as a method defined on the struct directly</span>
 
-```text
-error[E0034]: multiple applicable items in scope
-  --> <anon>:21:3
-   |
-21 | b.f();
-   |   ^ multiple `f` found
-   |
-note: candidate #1 is defined in an impl of the trait `main::Foo` for the type `main::Baz`
-  --> <anon>:13:5
-   |
-13 |     fn f(&self) { println!("Baz’s impl of Foo"); }
-   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-note: candidate #2 is defined in an impl of the trait `main::Bar` for the type `main::Baz`
-  --> <anon>:17:5
-   |
-17 |     fn f(&self) { println!("Baz’s impl of Bar"); }
-   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-```
+For the implemetation of the `f` method for the `Foo` trait on `Baz`, we're
+printing out `Baz's impl of Foo`. For the implementation of the `f` method for
+the `Bar` trait on `Baz`, we're printing out `Baz's impl of Bar`. The
+implementation of `f` directly on `Baz` prints out `Baz's impl`. What should
+happen when we call `b.f()`? In this case, Rust will always use the
+implementation on `Baz` directly and will print out `Baz's impl`.
 
-We need a way to disambiguate which method we need. We can do that like this:
-
-```rust
-# trait Foo {
-#     fn f(&self);
-# }
-# trait Bar {
-#     fn f(&self);
-# }
-# struct Baz;
-# impl Foo for Baz {
-#     fn f(&self) { println!("Baz’s impl of Foo"); }
-# }
-# impl Bar for Baz {
-#     fn f(&self) { println!("Baz’s impl of Bar"); }
-# }
-# let b = Baz;
-<Baz as Foo>::f(&b);
-<Baz as Bar>::f(&b);
-```
-
-In other words, we can turn this:
+In order to be able to call the `f` method from `Foo` and the `f` method from
+`Baz` rather than the implementation of `f` directly on `Baz`, we need to use
+the *fully qualified syntax* for calling methods. It works like this: for any
+method call like:
 
 ```rust,ignore
-foo.bar(args);
+receiver.method(args);
 ```
 
-Into this:
-
-```rust,ignore
-<Foo as Bar>::bar(foo, args);
-```
-
-In a more generic sense,
+We can fully qualify the method call like this:
 
 ```rust,ignore
 <Type as Trait>::method(receiver, args);
 ```
 
-We only need the `Type as` part if it's ambiguous. And we only need the `<>`
-part if we need the `Type as` part. So in some cases, you could write
+So in order to disambiguate and be able to call all the `f` methods defined in
+Listing 19-27, we specify that we want to treat the type `Baz` as each trait
+within angle brackets, then use two colons, then call the `f` method and pass
+the instance of `Baz` as the first argument. Listing 19-28 shows how to call
+`f` from `Foo` and then `f` from `Bar` on `b`:
 
-```rust,ignore
-Trait::method(receiver, args);
-```
-
-This would have worked above:
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 # trait Foo {
@@ -406,41 +397,30 @@ This would have worked above:
 # impl Bar for Baz {
 #     fn f(&self) { println!("Baz’s impl of Bar"); }
 # }
-# let b = Baz;
-Foo::f(&b);
-Bar::f(&b);
-```
-
-Here's an example of where the longer form is needed. We have an inherent
-method `foo` and a trait method `foo`:
-
-
-```rust
-trait Foo {
-    fn foo() -> i32;
-}
-
-struct Bar;
-
-impl Bar {
-    fn foo() -> i32 {
-        20
-    }
-}
-
-impl Foo for Bar {
-    fn foo() -> i32 {
-        10
-    }
-}
-
 fn main() {
-    assert_eq!(10, <Bar as Foo>::foo());
-    assert_eq!(20, Bar::foo());
+    let b = Baz;
+    b.f();
+    <Baz as Foo>::f(&b);
+    <Baz as Bar>::f(&b);
 }
 ```
 
-Using this syntax lets you call the trait method instead of the inherent one.
+<span class="caption">Listing 19-28: Using fully qualified syntax to call the
+`f` methods defined as part of the `Foo` and `Bar` traits</span>
+
+This will print:
+
+```text
+Baz's impl
+Baz’s impl of Foo
+Baz’s impl of Bar
+```
+
+We only need the `Type as` part if it's ambiguous, and we only need the `<>`
+part if we need the `Type as` part. So if we only had the `f` method directly
+on `Baz` and the `Foo` trait implemented on `Baz` in scope, we could call the
+`f` method in `Foo` by using `Foo::f(&b)` since we wouldn't have to
+disambiguate from the `Bar` trait.
 
 ### Super traits
 
