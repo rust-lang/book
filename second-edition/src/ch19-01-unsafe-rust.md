@@ -271,9 +271,9 @@ a raw pointer with the type `*mut i32`, which we've stored in the variable
 `ptr`.
 
 The assertion that the `mid` index is within the slice stays the same. Then,
-the `slice::from_raw_pts_mut` function does the reverse from the `as_mut_ptr`
+the `slice::from_raw_parts_mut` function does the reverse from the `as_mut_ptr`
 and `len` methods: it takes a raw pointer and a length and creates a slice. We
-call `slice::from_raw_pts_mut` to create a slice that starts from `ptr` and is
+call `slice::from_raw_parts_mut` to create a slice that starts from `ptr` and is
 `mid` items long. Then we call the `offset` method on `ptr` with `mid` as an
 argument to get a raw pointer that starts at `mid`, and we create a slice using
 that pointer and the remaining number of items after `mid` as the length.
@@ -295,9 +295,9 @@ Rust. We've created a safe abstraction to the unsafe code by writing an
 implementation of the function that uses `unsafe` code in a safe way by only
 creating valid pointers from the data this function has access to.
 
-In contrast, the use of `slice::from_raw_parts_mut` in Listing 19-7 would *not*
-be appropriate. This code takes an arbitrary memory location and creates a
-slice ten thousand items long:
+In contrast, the use of `slice::from_raw_parts_mut` in Listing 19-7 would
+result in undefined behavior. This code takes an arbitrary memory location and
+creates a slice ten thousand items long:
 
 ```rust
 use std::slice;
@@ -359,10 +359,13 @@ block to call external functions.
 
 The `extern` keyword is also used for creating an interface that allows other
 languages to call Rust functions. Instead of an `extern` block, we can add the
-`extern` keyword and specifying the ABI to use just before the `fn` keyword.
-The `call_from_c` function in this example would be accessible from C code:
+`extern` keyword and specifying the ABI to use just before the `fn` keyword. We
+also add the `#[no_mangle]` annotation to tell the Rust compiler not to mangle
+the name of this function. The `call_from_c` function in this example would be
+accessible from C code:
 
 ```rust
+#[no_mangle]
 pub extern "C" fn call_from_c() {
     println!("Just called a Rust function from C!");
 }
