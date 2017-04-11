@@ -296,8 +296,8 @@ implementation of the function that uses `unsafe` code in a safe way by only
 creating valid pointers from the data this function has access to.
 
 In contrast, the use of `slice::from_raw_parts_mut` in Listing 19-7 would
-result in undefined behavior. This code takes an arbitrary memory location and
-creates a slice ten thousand items long:
+likely crash when the slice is used. This code takes an arbitrary memory
+location and creates a slice ten thousand items long:
 
 ```rust
 use std::slice;
