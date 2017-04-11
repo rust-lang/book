@@ -86,7 +86,7 @@ will match both the line containing "Rust:" with a capital R and also the line
 "Trust me." that contains "rust" with a lowercase r. This test will fail to
 compile right now since we haven't yet defined the `search_case_insensitive`
 function; feel free to add a skeleton implementation that always returns an
-empty array in the same way that we did for the `search` function in Listing
+empty vector in the same way that we did for the `search` function in Listing
 12-16 in order to see the test compile and fail.
 
 ### Implementing the `search_case_insensitive` Function
