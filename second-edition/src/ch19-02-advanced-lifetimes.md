@@ -7,7 +7,7 @@ every reference has a lifetime. There are three advanced features of lifetimes
 that we haven't covered though: *lifetime subtyping*, *trait object lifetimes*,
 and *higher ranked trait bounds*.
 
-### Lifetime subtyping
+### Lifetime Subtyping
 
 Imagine that we want to write a parser. To do this, we'll have a structure that
 holds a reference to the string that we're parsing, and we'll call that struct
@@ -276,17 +276,23 @@ chapter, these features are pretty niche. You won't often need this syntax, but
 it can come up in situations like this one, where you need to refer to
 something you have a reference to.
 
-## Lifetime bounds
+### Lifetime Bounds
 
-We've used traits to bound generic types before, but you can also use lifetimes
-for those bounds. For example, let's say we wanted to make a wrapper over
-references. Using no bounds at all gives an error:
+In Chapter 10, we discussed how to use trait bounds on generic types. We can
+also add lifetime parameters as constraints on generic types. For example,
+let's say we wanted to make a wrapper over references to any type in order
+to... TODO. The struct definition without lifetime parameters would look like
+Listing 19-16:
 
 ```rust,ignore
 struct Ref<T>(&T);
 ```
 
-Like this:
+<span class="caption">Listing 19-16: Defining a struct to wrap a reference to a
+generic type; without lifetime parameters to start</span>
+
+However, using no lifetime bounds at all gives an error because Rust doesn't
+know how long the generic type `T` will live:
 
 ```text
 error[E0309]: the parameter type `T` may not live long enough
@@ -303,45 +309,58 @@ note: ...so that the reference type `&'a T` does not outlive the data it points 
   |                   ^^^^^^
 ```
 
-Rust helpfully gave us good advice:
+This is the same error that we'd get if we filled in `T` with a concrete type,
+like `struct Ref(&i32)`; all references in struct definitions need a lifetime
+parameter. However, because we have a generic type parameter, we can't add a
+lifetime parameter in the same way. Defining `Ref` as `struct Ref<'a>(&'a T)`
+will result in an error because Rust can't determine that `T` lives long
+enough. Since `T` can be any type, `T` could itself be a reference or it could
+be a type that holds one or more references, each of which have their own
+lifetimes.
 
-> consider adding an explicit lifetime bound `T: 'a` so that the reference type
-> `&'a T` does not outlive the data it points to.
+Rust helpfully gave us good advice on how to specify the lifetime parameter in
+this case:
 
-This works:
+```text
+consider adding an explicit lifetime bound `T: 'a` so that the reference type
+`&'a T` does not outlive the data it points to.
+```
+
+The code in Listing 19-17 works because `T: 'a` syntax specifies that `T` can
+be any type, but if it contains any references, `T` must live as long as `'a`:
 
 ```rust
 struct Ref<'a, T: 'a>(&'a T);
 ```
 
-The `T: 'a` syntax says "T can be any type, but if it contains any references,
-it must live as long as `'a`."
+<span class="caption">Listing 19-17: Adding lifetime bounds on `T` to specify
+that any references in `T` live at least as long as `'a`</span>
 
-We could sort of do the reverse with `'static`:
+We could choose to solve this in a different way as shown in Listing 19-18 by
+bounding `T` on `'static`. This means if `T` contains any references, they must
+have the `'static` lifetime:
 
 ```rust
 struct StaticRef<T: 'static>(&'static T);
 ```
 
-This says "If `T` contains any references, they must be `'static` ones.
+<span class="caption">Listing 19-18: Adding a `'static` lifetime bound to `T`
+to constrain `T` to types that have only `'static` references or no
+references</span>
 
-Types with no references inside count as `'static`, and since `'static` is
-longer than any other lifetime, a type like `T: 'a` can be a type with no
-references.
+Types with no references inside count as `'static`. Because `'static` is longer
+than any other lifetime, a type like `T: 'a` can only be a type with no
+references. TODO CONFUSED
 
-## Lifetimes in trait objects
+### Lifetimes in Trait Objects
 
-In chapter 17, we learned about trait objects, like this:
-
-```rust
-trait Foo { }
-
-impl Foo for i32 { }
-
-let obj = Box::new(5) as Box<Foo>;
-```
-
-However, what if the type implementing our trait has a lifetime?
+In Chapter 17, we learned about trait objects that consist of putting a trait
+behind a reference in order to use dynamic dispatch. However, we didn't discuss
+what happens if the type implementing the trait used in the trait object has a
+lifetime. Consider Listing 19-19, where we have a trait `Foo` and a struct
+`Bar` that holds a reference (and thus has a lifetime parameter) that
+implements trait `Foo`, and we want to use an instance of `Bar` as the trait
+object `Box<Foo>`:
 
 ```rust
 trait Foo { }
@@ -357,28 +376,31 @@ let num = 5;
 let obj = Box::new(Bar { x: &num }) as Box<Foo>;
 ```
 
-This code works. But how? We haven't said anything about the lifetimes of the
-object.
+<span class="caption">Listing 19-19: Using a type that has a lifetime parameter
+with a trait object</span>
 
-Well, as it turns out, there are rules. For a trait object like `Box<Foo>`,
-we can add a lifetime bound as well, like `Box<Foo + 'a>`, for example. Just as
-with the other bounds, this means "Any implementer of `Foo` which has a
-lifetime inside must be `'a`." But we didn't need to explicitly write this.
-Here are the rules:
+This code compiles without any errors, even though we haven't said anything
+about the lifetimes involved in `obj`. This works because there are rules
+having to do with lifetimes and trait objects:
 
-* The default begins as 'static.
-* If you have `&'a X` or `&'a mut X`, then the default is `'a`.
-* If you have a single `T: 'a` clause, then the default is `'a`.
-* If you have multiple `T: 'a`-like clauses, then there is no default; you must
+* The default lifetime of a trait object is `'static`.
+* If we have `&'a X` or `&'a mut X`, then the default is `'a`.
+* If we have a single `T: 'a` clause, then the default is `'a`.
+* If we have multiple `T: 'a`-like clauses, then there is no default; we must
   be explicit.
 
-If you need to be explicit, `Box<Foo + 'a>` or `Box<Foo + 'static>` is the way
-to do it.
+When we must be explicit, we can add a lifetime bound on a trait object like
+`Box<Foo>` with the syntax `Box<Foo + 'a>` or `Box<Foo + 'static>`, depending
+on what's needed. Just as with the other bounds, this means that any
+implementer of the `Foo` trait that has any references inside must have the
+lifetime specified in the trait object bounds as those references.
 
-## Higher ranked trait bounds
+### Higher Ranked Trait Bounds
 
-Sometimes, you may write a function which accepts a closure, and that closure
-takes a reference as an argument:
+TODO: cut this section or work up an example that requires lifetime annotation
+
+When writing a function that accepts a closure, the closure might take a
+reference as a parameter, like so:
 
 ```rust
 fn call_with_ref<F>(some_closure: F) -> i32
