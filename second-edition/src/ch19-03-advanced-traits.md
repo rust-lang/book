@@ -1,67 +1,89 @@
-# Advanced Traits
+## Advanced Traits
 
 We covered traits in Chapter 10, but like lifetimes, we didn't get to all the
 details. Now that we know more Rust, we can get into the nitty-gritty.
 
-## Associated Types
+### Associated Types
+
+*Associated types* are a way of associating a type placeholder with a trait
+such that the trait method definitions can use these placeholder types in their
+signatures. The implementer of a trait will specify the concrete type to be
+used in this type's place for the particular implementation.
 
 We've described most of the things in this chapter as being very rare.
 Associated types are somewhere in the middle; they're more rare than the rest
 of the book, but more common than many of the things in this chapter.
 
-Associated types look like this:
+An example of a trait with an associated type is the `Iterator` trait provided
+by the standard library. It has an associated type named `Item` that stands in
+for the type of the values that we're iterating over. We mentioned in Chapter
+13 that the definition of the `Iterator` trait is as shown in Listing 19-20:
 
 ```rust
-trait Foo {
-    type Bar;
-
-    fn foo(&self) -> Self::Bar;
-}
-
-impl Foo for i32 {
-    type Bar = String;
-
-    fn foo(&self) -> Self::Bar {
-        self.to_string()
-    }
+pub trait Iterator {
+    type Item;
+    fn next(&mut self) -> Option<Self::Item>;
 }
 ```
 
-The trait `Foo` has an associated type called `Bar`. We can then use
-`Self::Bar` elsewhere in our trait definition to use that type.
+<span class="caption">Listing 19-20: The definition of the `Iterator` trait
+that has an associated type `Item`</span>
 
-This _feels_ like more generics. For example, this seems similar to
-the following code:
+This says that the `Iterator` trait has an associated type named `Item`. `Item`
+is a placeholder type, and the return value of the `next` method will return
+values of type `Option<Self::Item>`. Implementers of this trait will specify
+the concrete type for `Item`, and the `next` method will return an `Option`
+containing a value of whatever type the implementer has specified.
+
+#### Associated Types Versus Generics
+
+When we implemented the `Iterator` trait on the `Counter` struct in Listing
+13-6, we specified that the `Item` type was `u32`:
+
+```rust,ignore
+impl Iterator for Counter {
+    type Item = u32;
+
+    fn next(&mut self) -> Option<Self::Item> {
+```
+
+This feels similar to generics. So why isn't the `Iterator` trait defined as
+shown in Listing 19-21?
 
 ```rust
-trait Foo<Bar> {
-    fn foo(&self) -> Bar;
-}
-
-impl Foo<String> for i32 {
-    fn foo(&self) -> String {
-        self.to_string()
-    }
+pub trait Iterator<T> {
+    fn next(&mut self) -> Option<T>;
 }
 ```
 
-But there's one big difference: with the second definition, we could also
-implement `Foo<i32> for i32`, or anything else. In other words, with a trait
-that has a generic parameter, we can implement that trait for a type multiple
-times, changing the parameters each time. But with associated types, we can't;
-we can only define it one time: it's not actually generic.
+<span class="caption">Listing 19-21: A hypothetical definition of the
+`Iterator` trait using generics</span>
 
-There's another benefit to associated types: when using the trait, since there's
-only one possible implementation, you end up with a lot less syntax. This is
-easier with some code:
+The difference is that with the definition in Listing 19-21, we could also
+implement `Iterator<String> for Counter`, or any other type as well, so that
+we'd have multiple implementations of `Iterator` for `Counter`. In other words,
+when a trait has a generic parameter, we can implement that trait for a type
+multiple times, changing the generic type parameters' concrete types each time.
+Then when we use the `next` method on `Counter`, we'd have to provide type
+annotations to indicate which implementation of `Iterator` we wanted to use.
+
+With associated types, we can't implement a trait on a type multiple times.
+Using the actual definition of `Iterator` from Listing 19-20, we can only
+choose once what the type of `Item` will be, since there can only be one `impl
+Iterator for Counter`. We don't have to specify that we want an iterator of
+`u32` values everywhere that we call `next` on `Counter`.
+
+The benefit of not having to specify generic type parameters when a trait uses
+associated types shows up in another way as well. Consider the two traits
+defined in Listing 19-22. Both are defining a trait having to do with a graph
+structure that contains nodes of some type and edges of some type. `GGraph` is
+defined using generics, and `AGraph` is defined using associated types:
 
 ```rust
-// a generic graph
 trait GGraph<Node, Edge> {
     // methods would go here
 }
 
-// an associated graph
 trait AGraph {
     type Node;
     type Edge;
@@ -70,24 +92,104 @@ trait AGraph {
 }
 ```
 
-Let's say we wanted to compute the distance between two nodes in the graph.
-With the generic graph, you'd have to write this:
+<span class="caption">Listing 19-22: Two graph trait definitions, `GGraph`
+using generics and `AGraph` using associated types for `Node` and `Edge`</span>
 
-```rust,ignore
-fn distance<N, E, G: GGraph<N, E>>(graph: &G, start: &N, end: &N) -> u32 { ... }
+Let's say we wanted to implement a function that computes the distance between
+two nodes in any types that implement the graph trait. With the `GGraph` trait
+defined using generics, our `distance` function signature would have to look
+like Listing 19-23:
+
+```rust
+# trait GGraph<Node, Edge> {}
+#
+fn distance<N, E, G: GGraph<N, E>>(graph: &G, start: &N, end: &N) -> u32 {
+#     0
+}
 ```
 
-Even though `distance` doesn't need to know the types of the edges, we're
-forced to declare an `E` parameter, because we need to to use `Graph`. But with
-the associated type version:
+<span class="caption">Listing 19-23: The signature of a `distance` function
+that uses the trait `GGraph` and has to specify all the generic
+parameters</span>
 
-```rust,ignore
-fn distance<G: AGraph>(graph: &G, start: &G::Node, end: &G::Node) -> u32 { ... }
+Our function would need to specify the generic type parameters `N`, `E`, and
+`G`, where `G` is bound by the trait `GGraph` that has type `N` as its `Node`
+type and type `E` as its `Edge` type. Even though `distance` doesn't need to
+know the types of the edges, we're forced to declare an `E` parameter, because
+we need to to use the `GGraph` trait and that requires specifying the type for
+`Edge`.
+
+Contrast with the definition of `distance` in Listing 19-24 that uses the
+`AGraph` trait from Listing 19-22 with associated types:
+
+```rust
+# trait AGraph {
+#     type Node;
+#     type Edge;
+# }
+#
+fn distance<G: AGraph>(graph: &G, start: &G::Node, end: &G::Node) -> u32 {
+#     0
+}
 ```
 
-This is much cleaner.
+<span class="caption">Listing 19-24: The signature of a `distance` function
+that uses the trait `AGraph` and the associated type `Node`</span>
 
-## Operator overloading and default type parameters
+This is much cleaner. We only need to have one generic type parameter, `G`,
+with the trait bound `AGraph`. Since `distance` doesn't use the `Edge` type at
+all, it doesn't need to be specified anywhere. To use the `Node` type
+associated with `AGraph`, we can specify `G::Node`.
+
+#### Trait Objects with Associated Types
+
+You may have been wondering why we didn't use a trait object in the `distance`
+functions in Listing 19-23 and Listing 19-24. The signature for the `distance`
+function using the generic `GGraph` trait does get a bit more concise using a
+trait object:
+
+```rust
+# trait GGraph<Node, Edge> {}
+#
+fn distance<N, E>(graph: &GGraph<N, E>, start: &N, end: &N) -> u32 {
+#     0
+}
+```
+
+This might be a more fair comparison to Listing 19-24. Specifying the `Edge`
+type is still required, though, which means Listing 19-24 is still preferable
+since we don't have to specify something we don't use.
+
+It's not possible to change Listing 19-24 to use a trait object for the graph,
+since then there would be no way to refer to the `AGraph` trait's associated
+type.
+
+It is possible in general to use trait objects of traits that have associated
+types, though; Listing 19-25 shows a function named `traverse` that doesn't
+need to use the trait's associated types in other arguments. We do, however,
+have to specify the concrete types for the associated types in this case. Here,
+we've chosen to accept types that implement the `AGraph` trait with the
+concrete type of `usize` as their `Node` type and a tuple of two `usize` values
+for their `Edge` type:
+
+```rust
+# trait AGraph {
+#     type Node;
+#     type Edge;
+# }
+#
+fn traverse(graph: &AGraph<Node=usize, Edge=(usize, usize)>) {}
+```
+
+While trait objects mean that we don't need to know the concrete type of the
+`graph` parameter at compile time, we do need to constrain the use of the
+`AGraph` trait in the `traverse` function by the concrete types of the
+associated types. If we didn’t provide this constraint, Rust wouldn't be able
+to figure out which `impl` to match this trait object to.
+
+TODO: I basically copied the last sentence from the old book but i dont really understand it /Carol
+
+### Operator overloading and default type parameters
 
 We can use traits in Rust to overload certain operators. Rust does not allow you to
 create your own operators, or overload arbitrary operators: only the operations listed
@@ -195,7 +297,7 @@ because our existing users won't have written down a type parameter, if we want
 to add a type parameter to an existing trait, giving it a default will let us
 not break that code.
 
-## Fully qualified syntax
+### Fully qualified syntax
 
 Sometimes, methods can have the same names. Consider this code:
 
@@ -340,7 +442,7 @@ fn main() {
 
 Using this syntax lets you call the trait method instead of the inherent one.
 
-## Super traits
+### Super traits
 
 Sometimes, you may want a trait to be able to rely on another trait existing.
 For example, let's say that you have a `Foo` trait and a `Bar` trait, but you
@@ -393,7 +495,7 @@ trait Bar: Foo {
 
 This works fine.
 
-## Coherence
+### Coherence
 
 Finally, traits have a concept called 'coherence'. This governs exactly who is
 allowed to implement a trait. In short:
@@ -444,7 +546,7 @@ what if a new release of `foo` comes out and implements `B` for `A` themselves?
 These problems are not insurmountable, of course; we could determine some kind
 of complex precedent rules to determine which `impl` 'wins' and works.
 
-## The newtype pattern
+### The newtype pattern
 
 There is a way to get around this, though. We call it the 'newtype pattern'.
 You create a new type that's a thin wrapper around the type you want to
