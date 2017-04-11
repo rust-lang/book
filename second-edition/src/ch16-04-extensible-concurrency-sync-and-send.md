@@ -61,7 +61,7 @@ new concurrent types that aren't made up of `Send` and `Sync` parts requires
 careful thought to make sure the safety guarantees are upheld. [The Nomicon]
 has more information about these guarantees and how to uphold them.
 
-[The Nomicon]: https://doc.rust-lang.org/stable/nomicon/vec.html
+[The Nomicon]: https://doc.rust-lang.org/stable/nomicon/
 
 ## Summary
 
