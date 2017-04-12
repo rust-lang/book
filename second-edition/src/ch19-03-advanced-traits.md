@@ -427,7 +427,7 @@ disambiguate from the `Bar` trait.
 Sometimes, we may want a trait to be able to rely on another trait also being
 implemented wherever our trait is implemented, so that our trait can use the
 other trait's functionality. The required trait is a *super trait* of the trait
-we're implementing. TODO OR IS IT THE OTHER WAY AROUND
+we're implementing.
 
 For example, let's say we want to make an `OutlinePrint` trait with an
 `outline_print` method that will print out a value outlined in asterisks. That
