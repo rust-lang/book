@@ -422,58 +422,105 @@ on `Baz` and the `Foo` trait implemented on `Baz` in scope, we could call the
 `f` method in `Foo` by using `Foo::f(&b)` since we wouldn't have to
 disambiguate from the `Bar` trait.
 
-### Super traits
+### Super Traits
 
-Sometimes, you may want a trait to be able to rely on another trait existing.
-For example, let's say that you have a `Foo` trait and a `Bar` trait, but you
-want `Bar`'s methods to be able to call `Foo`'s methods. Let's try it. (It
-won't work just yet...)
+Sometimes, we may want a trait to be able to rely on another trait also being
+implemented wherever our trait is implemented, so that our trait can use the
+other trait's functionality. The required trait is a *super trait* of the trait
+we're implementing. TODO OR IS IT THE OTHER WAY AROUND
 
-```rust,ignore
-trait Foo {
-    fn foo(&self) {
-        println!("Foo");
-    }
-}
-
-trait Bar {
-    fn bar(&self) {
-        self.foo();
-    }
-}
-```
-
-We get this error:
+For example, let's say we want to make an `OutlinePrint` trait with an
+`outline_print` method that will print out a value outlined in asterisks. That
+is, if our `Point` struct implements `Display` to result in `(x, y)`, calling
+`outline_print` on a `Point` instance that has 1 for `x` and 3 for `y` would
+look like:
 
 ```text
-error: no method named `foo` found for type `&Self` in the current scope
-  --> <anon>:10:14
-   |
-10 |         self.foo();
-   |              ^^^
-   |
-   = help: items from traits can only be used if the trait is implemented and in scope; the following trait defines an item `foo`, perhaps you need to implement it:
-   = help: candidate #1: `main::Foo`
+**********
+*        *
+* (1, 3) *
+*        *
+**********
 ```
 
-In other words, we haven't said that anything that implements `Bar` also
-implements `Foo`. We can do that with a `:`, like this:
+In the implementation of `outline_print`, since we want to be able to use the
+`Display` trait's functionality, we need to be able to say that the
+`OutlinePrint` trait will only work for types that also implement `Display` and
+provide the functionality that `OutlinePrint` needs. We can do that in the
+trait definition by specifying `OutlinePrint: Display`. It's like adding a
+trait bound to the trait. Listing 19-29 shows an implementation of the
+`OutlinePrint` trait:
 
 ```rust
-trait Foo {
-    fn foo(&self) {
-        println!("Foo");
-    }
-}
+use std::fmt::Display;
 
-trait Bar: Foo {
-    fn bar(&self) {
-        self.foo();
+trait OutlinePrint: Display {
+    fn outline_print(&self) {
+        let output = self.to_string();
+        let len = output.len();
+        println!("{}", "*".repeat(len + 4));
+        println!("*{}*", " ".repeat(len + 2));
+        println!("* {} *", output);
+        println!("*{}*", " ".repeat(len + 2));
+        println!("{}", "*".repeat(len + 4));
     }
 }
 ```
 
-This works fine.
+<span class="caption">Listing 19-29: Implementing the `OutlinePrint` trait that
+requires the functionality from `Display`</span>
+
+Because we've specified that `OutlinePrint` requires the `Display` trait, we
+can use `to_string` in `outline_print` (`to_string` is automatically
+implemented for any type that implements `Display`). If we hadn't added the `:
+Display` after the trait name and we tried to use `to_string` in
+`outline_print`, we'd get an error that no method named `to_string` was found
+for the type `&Self` in the current scope.
+
+If we try to implement `OutlinePrint` on a type that doesn't implement
+`Display`, such as the `Point` struct:
+
+```rust
+struct Point {
+    x: i32,
+    y: i32,
+}
+
+impl OutlinePrint for Point {}
+```
+
+We'll get an error that `Display` isn't implemented and that `Display` is
+required by `OutlinePrint`:
+
+```text
+error[E0277]: the trait bound `Point: std::fmt::Display` is not satisfied
+  --> src/main.rs:20:6
+   |
+20 | impl OutlinePrint for Point {}
+   |      ^^^^^^^^^^^^ the trait `std::fmt::Display` is not implemented for
+   `Point`
+   |
+   = note: `Point` cannot be formatted with the default formatter; try using
+   `:?` instead if you are using a format string
+   = note: required by `OutlinePrint`
+```
+
+Once we implement `Display` on `Point` and satisfy the constraint that
+`OutlinePrint` requires, like so:
+
+```rust
+use std::fmt;
+
+impl fmt::Display for Point {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "({}, {})", self.x, self.y)
+    }
+}
+```
+
+then implementing the `OutlinePrint` trait on `Point` will compile successfully
+and we can call `outline_print` on a `Point` instance to display it within an
+outline of asterisks.
 
 ### Coherence
 
