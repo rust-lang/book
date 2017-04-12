@@ -536,18 +536,27 @@ and add a feature to our web server: a threadpool.
 
 Right now, we process each request in turn. That works for small services like
 ours, but as applications get more complex, this sort of serial execution isn't
-optimal. Let's make our web server better by adding a *thread pool*.
+optimal. Let's make our web server better by adding a *thread pool*. How does a
+thread pool make things better? Well, right now, we process connections
+sequentially. We need to fully process each connection before moving on to the
+next one. A thread pool allows us to process connections concurrently, that is,
+we can start processing a new connection before an older connection is finished.
+This increases the throughput of our server. This can matter even more in some
+situations, as we'll see below.
 
 Here's the basics: instead of waiting for each request to process before
 starting on the next one, we create a new thread for every connection, and do
 the processing inside of the thread. There's a problem with that, however: if we
 get a thousand requests, then we create a thousand threads. Someone making ten
-million requests to our server could create havoc. So instead, we create a
-'pool' of threads, with a size of our choosing. As requests come in, we send
-them to the pool for processing. The pool maintains a queue of requests. Each of
-the threads in the pool pops a request off of this queue, handles the request,
-and then asks the queue for another request. With this design, we can process N
-requests concurrently, where N is the number of threads.
+million requests to our server could create havoc by using up all of our
+server's resources and grinding things to a halt. So instead, we create a 'pool'
+of threads, with a size of our choosing. As requests come in, we send them to
+the pool for processing. The pool maintains a queue of requests. Each of the
+threads in the pool pops a request off of this queue, handles the request, and
+then asks the queue for another request. With this design, we can process N
+requests concurrently, where N is the number of threads. This still means that
+`N` long-running tasks can cause problems, but we've increased that number from
+one to `N`.
 
 This design is one of many ways to improve the throughput of our web server.
 This isn't a book about web servers, though, so it's the one we're going to
@@ -563,8 +572,9 @@ when trying to design some code, writing the client interface first can really
 help guide your design. Write the code you'd want to use, then implement it, rather
 than the other way around.
 
-To do this, first, let's examine what the "create a new thread for every connection"
-would look like. Here's the changes to `main.rs`:
+To do this, first, let's examine what the "create a new thread for every
+connection" would look like. It's not our final plan due to the problems we
+talked about earlier, but it's a start. Here's the changes to `main.rs`:
 
 ```rust,ignore
 // add this import at the top:
@@ -763,7 +773,7 @@ to transfer something from one thread to another, and `'static` because we don't
 how long the thread will execute. Let's modify `execute` to have these bounds:
 
 ```rust,ignore
-fn execute<F>(&self, F)
+fn execute<F>(&self, f: F)
     where
         F: FnOnce() + Send + 'static
 {
@@ -802,8 +812,9 @@ It compiles!
 > nothing! If we were building something real, this would be a great time to start
 > writing unit tests.
 
-We do have some warnings; we're no longer using `std::thread`, and we aren't doing
-anything with our arguments. Let's implement both of these methods.
+We do have some warnings; we're no longer using `std::thread`, and we aren't
+doing anything with our arguments. Let's implement both of these methods on our
+`ThreadPool`.
 
 To start, let's think about `new`. The first thing that matters is something we said
 above: a pool with a negative number of threads makes no sense. However, a pool with
@@ -819,13 +830,17 @@ that our number is greater than zero:
 ///
 /// The `new` function will panic if the size is zero.
 fn new(size: u32) -> ThreadPool {
-    assert!(size > 0)
+    assert!(size > 0);
 
     ThreadPool
 }
 ```
 
-We've added in an `assert!` to check the validity of `Size`. We could
+We've added some documentation for our `ThreadPool` with doc comments. Careful
+observers will note we called out the situations in which our function can panic
+as well; see Chapter 14 for more details on writing good documentation.
+
+We've also added in an `assert!` to check the validity of `Size`. We could
 also make `new` return a `Result` instead, but it involves a bunch
 of more code, and arguably, passing in a zero is incoherent, and therefore
 deserves to be an unrecoverable error rather than a recoverable one.
