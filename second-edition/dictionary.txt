@@ -44,6 +44,7 @@ ChangeColor
 ChangeColorMessage
 chXX
 chYY
+ConcreteType
 config
 Config
 const
@@ -193,6 +194,7 @@ namespacing
 newfound
 NewsArticle
 newtype
+newtypes
 nitty
 nocapture
 nomicon
@@ -208,6 +210,7 @@ OptionalNumber
 OsStr
 OsString
 other's
+OutlinePrint
 overread
 parameterize
 ParseIntError
@@ -215,6 +218,7 @@ PartialEq
 PartialOrd
 PendingReview
 PendingReviewPost
+PlaceholderType
 portia
 powi
 preprocessing
@@ -295,6 +299,7 @@ Supertraits
 test's
 TextField
 That'd
+there'd
 threadsafe
 timestamp
 Tiếng

@@ -282,9 +282,9 @@ said this about `&str`:
 > ... it’s a reference to an internal position in the String and the number of
 > elements that it refers to.
 
-So while a `&T` is a single value that stors the memory address of where the `T`
-is located, a `&str` is *two* values: the address of the `str` and how long it
-is. As such, a `&str` has a size we can know at compile time: it's two times
+So while a `&T` is a single value that stores the memory address of where the
+`T` is located, a `&str` is *two* values: the address of the `str` and how long
+it is. As such, a `&str` has a size we can know at compile time: it's two times
 the size of a `usize` in length. That is, we always know the size of a `&str`,
 no matter how long the string it refers to is. This is the general way in which
 dynamically sized types are used in Rust; they have an extra bit of metadata
@@ -309,7 +309,7 @@ To work with DSTs, Rust has a trait that determines if a type's size is known
 at compile time or not, which is `Sized`. This trait is automatically
 implemented for everything the compiler knows the size of at compile time. In
 addition, Rust implicitly adds a bound on `Sized` to every generic function.
-That is, a generic function definitition like this:
+That is, a generic function definition like this:
 
 ```rust,ignore
 fn generic<T>(t: T) {

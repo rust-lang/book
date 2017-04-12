@@ -354,7 +354,7 @@ fn main() {
 <span class="caption">Listing 19-27: Implementing two traits that both have a
 method with the same name as a method defined on the struct directly</span>
 
-For the implemetation of the `f` method for the `Foo` trait on `Baz`, we're
+For the implementation of the `f` method for the `Foo` trait on `Baz`, we're
 printing out `Baz's impl of Foo`. For the implementation of the `f` method for
 the `Bar` trait on `Baz`, we're printing out `Baz's impl of Bar`. The
 implementation of `f` directly on `Baz` prints out `Baz's impl`. What should
