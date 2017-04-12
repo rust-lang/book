@@ -280,9 +280,11 @@ something you have a reference to.
 
 In Chapter 10, we discussed how to use trait bounds on generic types. We can
 also add lifetime parameters as constraints on generic types. For example,
-let's say we wanted to make a wrapper over references to any type in order
-to... TODO. The struct definition without lifetime parameters would look like
-Listing 19-16:
+let's say we wanted to make a wrapper over references. Remember `RefCell<T>`
+from Chapter 15? This is how the `borrow` and `borrow_mut` methods work;
+they return wrappers over references in order to keep track of the borrowing
+rules at run time. The struct definition without lifetime parameters would look
+like Listing 19-16:
 
 ```rust,ignore
 struct Ref<T>(&T);
@@ -348,9 +350,14 @@ struct StaticRef<T: 'static>(&'static T);
 to constrain `T` to types that have only `'static` references or no
 references</span>
 
-Types with no references inside count as `'static`. Because `'static` is longer
-than any other lifetime, a type like `T: 'a` can only be a type with no
-references. TODO CONFUSED
+Types with no references count as `T: 'static`. Because `'static` means "this
+reference must live as long as the entire program," a type that contains no
+references, well, all of them live as long as the entire program. This can be
+a little bit hard to get at first, but think of it this way: if the borrow
+checker is concerned about references living long enough, then there's no
+real distinction between "this has no references" and "this has references
+that live forever"; both of them are the same for the purpose of "does this
+reference live shorter than what it refers to."
 
 ### Lifetimes in Trait Objects
 
