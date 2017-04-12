@@ -9,6 +9,14 @@ Here's what we're going to make: a web server that says hello:
 
 ![hello from rust](hello.png)
 
+To do this, we will:
+
+1. Learn a little bit about TCP and HTTP.
+2. Listen for TCP connections on a socket
+3. Parse a tiny bit of HTTP requests
+4. Create a proper HTTP response
+5. Improve the throughput of our server with a thread pool
+
 Before we get started, however, there's one thing we should mention: if you were
 writing this code in production, there are a lot of better ways to write it.
 Specifically, there are a number of robust crates on crates.io that would make
