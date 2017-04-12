@@ -25,9 +25,21 @@ to take the easy route. So we'll be writing a basic implementation ourselves.
 
 # Accepting a TCP connection
 
-The HTTP protocol is built on top of the TCP protocol. So the first thing we need
-to build our web server is to be able to listen to a TCP connection. The standard
-library has a `std::net` module that lets us do this. Let's make a new project:
+The HTTP protocol is built on top of the TCP protocol. We won't get too much
+into the details, but here's a small overview: TCP is a low-level protocol, and
+HTTP builds a higher-level one on top of it. Both protocols are what's called a
+"request-response protocol", that is, there is a *client* that initiates
+requests, and a *server* that listens to requests and provides a response to the
+client. The contents of those requests and responses are defined by the protocols
+themselves. TCP describes the low-level details of "how does this information get
+from one server to another", but doesn't specify what that information is; it's
+just a bunch of ones and zeroes. HTTP builds on top of this by defining what those
+contents should be. As such, it's technically possible to use HTTP with other
+protocols, but in the vast, vast majority of cases, it's over TCP.
+
+So the first thing we need to build our web server is to be able to listen to a
+TCP connection. The standard library has a `std::net` module that lets us do
+this. Let's make a new project:
 
 ```text
 $ cargo new hello --bin
