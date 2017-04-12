@@ -109,9 +109,16 @@ let stream = stream.unwrap();
 println!("Connection established!");
 ```
 
-Right now, "handling" a stream means `unwrap`ping it to ignore any further
-errors, and then printing a message. Let's try this code out! First invoke
-`cargo run`:
+Right now, "handling" a stream means `unwrap`ping it to terminate our program if
+it encounters any errors, and then printing a message. What kind of errors can
+happen here? Well, we're not actually interating over connections, we're
+iterating over *connection attempts*. The connection might not work for a number
+of reasons, many of them operating-system specific. For example, many operating
+systems have a limit to the number of simultaneous open connections you're
+allowed to have; new connections will then produce an error until some of them
+are closed.
+
+Let's try this code out! First invoke `cargo run`:
 
 ```text
 $ cargo run
