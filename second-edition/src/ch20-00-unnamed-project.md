@@ -364,7 +364,7 @@ HTML you want in it, here's what the authors used for theirs:
 </html>
 ```
 
-This is a minimal HTML 5 document, with a header and a little paragraph. Let's
+This is a minimal HTML 5 document, with a heading and a little paragraph. Let's
 modify `handle_connection` to read that file, append it to our header, and send
 it as the response:
 
