@@ -319,7 +319,7 @@ line, and add these below:
 ```rust,ignore
 let response = "HTTP/1.1 200 OK\r\n\r\n";
 
-stream.write(header.as_bytes()).unwrap();
+stream.write(response.as_bytes()).unwrap();
 stream.flush().unwrap();
 ```
 
