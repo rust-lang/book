@@ -522,26 +522,56 @@ then implementing the `OutlinePrint` trait on `Point` will compile successfully
 and we can call `outline_print` on a `Point` instance to display it within an
 outline of asterisks.
 
-### The newtype pattern
+### The Newtype Pattern to Implement External Traits on External Types
 
-There is a way to get around this, though. We call it the 'newtype pattern'.
-You create a new type that's a thin wrapper around the type you want to
-implement the trait for, and then implement the trait for the wrapper. This
-*will* work:
+In Chapter 10, we mentioned the orphan rule, which says we're allowed to
+implement a trait on a type as long as either the trait or the type are local
+to our crate. One way to get around this restriction is to use the *newtype
+pattern*, which involves creating a new type using a tuple struct with one
+field as a thin wrapper around the type we want to implement a trait for. Then
+the wrapper type is local to our crate, and we can implement the trait on the
+wrapper. "Newtype" is a term from Haskell, and in Rust, there's no runtime
+performance penalty for using this pattern.
+
+For example, if we wanted to implement `Display` on `Vec`, we can make a
+`Wrapper` struct that holds an instance of `Vec`. Then we can implement
+`Display` on `Wrapper` and use the `Vec` value as shown in Listing 19-30:
+
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 use std::fmt;
 
-struct Wrapper((&'static str, &'static str));
+struct Wrapper(Vec<String>);
 
 impl fmt::Display for Wrapper {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "({}, {})", (self.0).0, (self.0).1)
+        write!(f, "[{}]", self.0.join(", "))
     }
+}
+
+fn main() {
+    let w = Wrapper(vec![String::from("hello"), String::from("world")]);
+    println!("w = {}", w);
 }
 ```
 
-The downside is that since `Wrapper` is a new type, it has no methods; we'll
-have to implement them all. If you want it to have every single method that the
-inner type has, implementing `Deref` can help you there. Otherwise, you'll have
-to implement the methods yourself.
+<span class="caption">Listing 19-30: Creating a `Wrapper` type around
+`Vec<String>` to be able to implement `Display`</span>
+
+The implementation of `Display` uses `self.0` to access the inner `Vec`, and
+then we can use the functionality of the `Display` type on `Wrapper`.
+
+The downside is that since `Wrapper` is a new type, it doesn't have the methods
+of the value it's holding; we'd have to implement all the methods of `Vec` like
+`push`, `pop`, and all the rest directly on `Wrapper` to delegate to `self.0`
+in order to be able to treat `Wrapper` exactly like a `Vec`. If we wanted the
+new type to have every single method that the inner type has, implementing the
+`Deref` trait that we discussed in Chapter 15 on the wrapper to return the
+inner type can be a solution. If we don't want the wrapper type to have all the
+methods of the inner type, in order to restrict the wrapper type's behavior for
+example, we'd have to implement just the methods we do want ourselves.
+
+That's how the newtype pattern is used in relation to traits; it's also a
+useful pattern without having traits involved. Let's switch focus now to talk
+about some advanced ways to interact with Rust's type system.
