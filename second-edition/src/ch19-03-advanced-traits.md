@@ -522,57 +522,6 @@ then implementing the `OutlinePrint` trait on `Point` will compile successfully
 and we can call `outline_print` on a `Point` instance to display it within an
 outline of asterisks.
 
-### Coherence
-
-Finally, traits have a concept called 'coherence'. This governs exactly who is
-allowed to implement a trait. In short:
-
-> To implement a type for a trait, you must have defined either the type, the
-> trait, or both.
-
-Put another way:
-
-> You cannot implement a trait you didn't define for a type you didn't define.
-
-For example, defining the `Display` trait, which is defined in the standard
-library, on a tuple of string slices, which is defined in the standard library,
-won't work:
-
-```rust,ignore
-use std::fmt;
-
-impl fmt::Display for (&'static str, &'static str) {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "({}, {})", self.0, self.1)
-    }
-}
-```
-
-gives
-
-```text
-error[E0117]: only traits defined in the current crate can be implemented for arbitrary types
- --> <anon>:4:1
-  |
-4 |   impl fmt::Display for (&'static str, &'static str) {
-  |  _^ starting here...
-5 | |     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-6 | |         write!(f, "({}, {})", self.0, self.1)
-7 | |     }
-8 | | }
-  | |_^ ...ending here: impl doesn't use types inside crate
-  |
-  = note: the impl does not reference any types defined in this crate
-```
-
-Why do we have this rule? Allowing this would lead to ambiguity, confusion, and
-broken code.  Imagine that we have a crate `foo` that has a type `A` and a
-trait `B`. If we could implement `B` for `A` in our code, it would work, but
-what if someone else _also_ implemented `B` for `A` in their code? Furthermore,
-what if a new release of `foo` comes out and implements `B` for `A` themselves?
-These problems are not insurmountable, of course; we could determine some kind
-of complex precedent rules to determine which `impl` 'wins' and works.
-
 ### The newtype pattern
 
 There is a way to get around this, though. We call it the 'newtype pattern'.
