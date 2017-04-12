@@ -398,6 +398,10 @@ the instance of `Baz` as the first argument. Listing 19-28 shows how to call
 # impl Bar for Baz {
 #     fn f(&self) { println!("Baz’s impl of Bar"); }
 # }
+# impl Baz {
+#     fn f(&self) { println!("Baz's impl"); }
+# }
+#
 fn main() {
     let b = Baz;
     b.f();
@@ -423,7 +427,7 @@ on `Baz` and the `Foo` trait implemented on `Baz` in scope, we could call the
 `f` method in `Foo` by using `Foo::f(&b)` since we wouldn't have to
 disambiguate from the `Bar` trait.
 
-### Super Traits
+### Supertraits to Use One Trait's Functionality Within Another Trait
 
 Sometimes, we may want a trait to be able to rely on another trait also being
 implemented wherever our trait is implemented, so that our trait can use the
@@ -482,6 +486,7 @@ If we try to implement `OutlinePrint` on a type that doesn't implement
 `Display`, such as the `Point` struct:
 
 ```rust
+# trait OutlinePrint {}
 struct Point {
     x: i32,
     y: i32,
@@ -510,6 +515,11 @@ Once we implement `Display` on `Point` and satisfy the constraint that
 `OutlinePrint` requires, like so:
 
 ```rust
+# struct Point {
+#     x: i32,
+#     y: i32,
+# }
+#
 use std::fmt;
 
 impl fmt::Display for Point {

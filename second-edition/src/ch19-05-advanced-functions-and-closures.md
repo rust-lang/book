@@ -1,14 +1,17 @@
-# Advanced Functions & Closures
+## Advanced Functions & Closures
 
-We've talked a lot about functions in this book, and a little bit about a
-related feature, closures. There's a few bits we haven't covered yet, so let's
-go over those now.
+Finally, let's discuss some advanced features having to do with functions and
+closures: function pointers, diverging functions, and returning closures.
 
-## Function pointers
+### Function pointers
 
 We've talked about how to pass closures to functions, but you can pass regular
-functions to functions too! Functions have the type `fn()`, with a lower case 'f'.
-Don't confuse it with the `Fn()` closure trait! The syntax is similar:
+functions to functions too! Functions have the type `fn`, with a lower case 'f'
+not to be confused with the `Fn` closure trait. `fn` is called a *function
+pointer*. The syntax for specifying that a parameter is a function pointer is
+similar to that of closures, as shown in Listing 19-34:
+
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 fn add_one(x: i32) -> i32 {
@@ -26,61 +29,65 @@ fn main() {
 }
 ```
 
-This prints `The answer is: 12`. This `f(i32) -> i32` syntax is called
-a 'function pointer', and unlike closures, you don't use it as a trait,
-you use it directly, as you can see in the signature of `do_twice`.
+<span class="caption">Listing 19-34: Using the `fn` type to accept a function
+pointer as an argument</span>
 
-### Point-free style
+This prints `The answer is: 12`. We specify that the parameter `f` in
+`do_twice` is an `fn` that takes one parameter of type `i32` and returns an
+`i32`. We can then call `f` in the body of `do_twice`. In `main`, we can pass
+the function name `add_one` as the first argument to `do_twice`.
 
-Function pointers implement all three of the closure traits: `Fn`, `FnMut`, and
-`FnOnce`. So you can always pass a pointer to a function that expects a closure:
+Unlike closures, `fn` is a type rather than a trait, so we specify `fn` as the
+parameter type directly rather than declaring a generic type parameter with one
+of the `Fn` traits as a trait bound.
 
-```rust
-// fold takes a FnMut closure... but we can use this function too!
-fn add(acc: i32, x: &i32) -> i32 {
-    acc + *x
-}
+Function pointers implement all three of the closure traits (`Fn`, `FnMut`, and
+`FnOnce`), so we can always pass a function pointer as an argument when calling
+a function that expects a closure. Prefer to write functions using a generic
+type and one of the closure traits, so that your functions can accept either
+functions or closures. An example of a case where you'd only want to accept
+`fn` is when interfacing with external code that doesn't have closures: C
+functions can accept functions as arguments, but C doesn't have closures.
 
-let v = vec![1, 2, 3];
-
-let six = v.iter().fold(0, |acc, &x| acc + x);
-let six = v.iter().fold(0, add);
-```
-
-This is sometimes called 'point-free style', for fairly obscure reasons
-that don't matter. This can work for anything where the types line up.
-For example:
+For example, if we wanted to use the `map` function to turn a vector of numbers
+into a vector of strings, we could use a closure:
 
 ```rust
-let v = vec![1, 2, 3];
-
-let strings: Vec<String> = v.iter().map(|s| s.to_string()).collect();
-
-// to_string is provided by the ToString trait
-let strings: Vec<String> = v.iter().map(ToString::to_string).collect();
+let list_of_numbers = vec![1, 2, 3];
+let list_of_strings: Vec<String> = list_of_numbers
+    .iter()
+    .map(|i| i.to_string())
+    .collect();
 ```
+
+Or we could name a function as the argument to `map` instead of the closure:
+
+```rust
+let list_of_numbers = vec![1, 2, 3];
+let list_of_strings: Vec<String> = list_of_numbers
+    .iter()
+    .map(ToString::to_string)
+    .collect();
+```
+
+Note that we do have to use the fully qualified syntax that we talked about in
+the "Advanced Traits" section because there are multiple functions available
+named `to_string`; here, we're using the `to_string` function defined in the
+`ToString` trait, which the standard library has implemented for any type that
+implements `Display`.
 
 Some people prefer this style, some people prefer the closure. They end up
 with the same code, so use whichever feels more clear to you.
 
-## Diverging functions
+### Returning Closures
 
-In the previous section, we talked about the never type, `!`. Functions
-that return never are called "diverging functions":
+Because closures are represented by traits, returning closures is a little
+tricky; we can't do it directly. In most cases where we may want to return a
+trait, we can instead use the concrete type that implements the trait of what
+we're returning as the return value of the function. We can't do that with
+closures, though; we're not allowed to use `fn` as a return type, for example.
 
-```rust
-fn never_returns() -> ! {
-    panic!("oh no!");
-}
-```
-
-For more details, see the previous section.
-
-## Returning closures
-
-As we discussed before, closures are represented by traits: `Fn`, `FnMut`, and `FnOnce`.
-This means that returning them is a little tricky; you can't do it directly. This will
-give a compiler error:
+This code that tries to return a closure directly won't compile:
 
 ```rust,ignore
 fn returns_closure() -> Fn(i32) -> i32 {
@@ -88,21 +95,25 @@ fn returns_closure() -> Fn(i32) -> i32 {
 }
 ```
 
-It looks like this:
+The compiler error is:
 
 ```text
-error[E0277]: the trait bound `std::ops::Fn(i32) -> i32 + 'static: std::marker::Sized` is not satisfied
+error[E0277]: the trait bound `std::ops::Fn(i32) -> i32 + 'static:
+std::marker::Sized` is not satisfied
  --> <anon>:2:25
   |
 2 | fn returns_closure() -> Fn(i32) -> i32 {
-  |                         ^^^^^^^^^^^^^^ the trait `std::marker::Sized` is not implemented for `std::ops::Fn(i32) -> i32 + 'static`
+  |                         ^^^^^^^^^^^^^^ the trait `std::marker::Sized` is
+  not implemented for `std::ops::Fn(i32) -> i32 + 'static`
   |
-  = note: `std::ops::Fn(i32) -> i32 + 'static` does not have a constant size known at compile-time
+  = note: `std::ops::Fn(i32) -> i32 + 'static` does not have a constant size
+  known at compile-time
   = note: the return type of a function must have a statically known size
 ```
 
-What to do? With most things that implement traits, we could return them by naming
-the type, but we can't do that with closures. Instead, we need to use a trait object:
+The `Sized` trait again! Rust doesn't know much space it'll need to store the
+closure. We saw a solution to this in the previous section, though: we can use
+a trait object:
 
 ```rust
 fn returns_closure() -> Box<Fn(i32) -> i32> {
@@ -110,4 +121,14 @@ fn returns_closure() -> Box<Fn(i32) -> i32> {
 }
 ```
 
-For more about trait objects, see Chapter 18.
+For more about trait objects, refer back to Chapter 18.
+
+## Summary
+
+Whew! Now we've gone over features of Rust that aren't used very often, but are
+available if you need them. We've introduced a lot of complex topics so that
+when you encounter them in error message suggestions or when reading others'
+code, you'll at least have seen these concepts and syntax once before.
+
+Now, let's put everything we've learned throughout the book into practice with
+one more project!
