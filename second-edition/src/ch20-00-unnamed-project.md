@@ -145,9 +145,11 @@ Connection established!
 
 A bunch of messages! Why did we get multiple ones? Well, our browser is
 expecting to speak HTTP, but we aren't replying with anything, just closing the
-connection. This might be the browser making a request for the page and a
-request for a `favicon.ico`, it might be retrying on its own... the important
-thing is that we've successfully gotten a handle on a TCP connection!
+connection. We're closing it by moving on to the next loop iteration; when
+`stream` gets dropped at the end of the loop, it closes it for us. These
+connections might be the browser making a request for the page and a request for
+a `favicon.ico`, it might be retrying on its own... the important thing is that
+we've successfully gotten a handle on a TCP connection!
 
 In order to keep things clean, let's move our processing of the connection out
 to a function. Modify your code to look like this:
