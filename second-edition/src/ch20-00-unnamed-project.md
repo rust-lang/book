@@ -348,7 +348,7 @@ out, it's all just details.
 
 Let's return more than a blank page. Create a new file, `hello.html`, in the
 root of the project; that is, not in the `src` directory. You can put any
-HTML you want in it, here's what I put in mine:
+HTML you want in it, here's what the authors used for theirs:
 
 ```html
 <!DOCTYPE html>
