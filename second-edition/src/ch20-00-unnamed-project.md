@@ -74,7 +74,7 @@ fn main() {
 ```
 
 A `TcpListener` allows us to listen for TCP connections. We've chosen to listen
-to the address `127.0.0.1:8008`. The first four digits are an IP address
+to the address `127.0.0.1:8008`. The part before the colon is an IP address
 representing our own computer, and `8080` is the port. We've chosen this port
 because HTTP is normally accepted on port 80, but connecting to port 80 requires
 administrator privileges. Regular users can listen on ports higher than 1024;
@@ -84,18 +84,24 @@ The `bind` method is sort of like `new`, but with a more descriptive name. In
 networking, people will often talk about "binding to a port", and so the
 function is called `bind`. Finally, it returns a `Result<T, E>`; binding may
 fail. For example, if we had tried to connect to port 80 without being an
-administrator. Since we're writing a basic client here, we're not going to worry
-about handling these kinds of errors, and so `unwrap` lets us ignore them.
+administrator. Another example is if we tried to have two programs listening
+to the same port; for example, if we ran two instances of our program. Since
+we're writing a basic server here, we're not going to worry about handling these
+kinds of errors, and so `unwrap` lets us ignore them.
 
 ```rust,ignore
 for stream in listener.incoming() {
 ```
 
 The `incoming` method on `TcpListener` gives us an iterator that gives us a
-sequence of streams, more specifically, `TcpStream`s. This struct represents an
-open connection, and will let us read from and write to it. So this `for` loop
-will process each connection in turn, and produce a series of streams. We can
-then handle each one in turn.
+sequence of streams, more specifically, `TcpStream`s. A 'stream' represents
+represents an open connection between the client and the server. A 'connection'
+is a name for the full request/response process, that is, a client connects to
+the server, the server generates a response, and then closes the connection.
+As such, the `TcpStream` will let us read from itself to see what the client
+sent, and write our response to it. So this `for` loop will process each
+connection in turn, and produce a series of streams. We can then handle each one
+in turn.
 
 ```rust,ignore
 let stream = stream.unwrap();
