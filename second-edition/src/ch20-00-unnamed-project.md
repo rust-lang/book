@@ -265,9 +265,12 @@ Request-Line = Method Request-URI HTTP-Version CRLF
 ```
 
 First, we have a method, like `GET` or `POST`. Then, the request's URI, which is
-often a URL. Next, we have the HTTP version, and then a CRLF sequence. That's
-`\r\n` is the CRLF sequence; `\r` is a "carriage return" and `\n` is a "line
-feed"; these terms come from the typewriter days!
+a term the HTTP spec uses. You have probably heard of a 'URL'. All URLs are URIs,
+but not all URIs are URLs. Since this isn't a book about the HTTP specification,
+given this fact, we can just think "URL" when we see "URI" and move on. Next, we
+have the HTTP version, and then a CRLF sequence. That's `\r\n` is the CRLF
+sequence; `\r` is a "carriage return" and `\n` is a "line feed"; these terms
+come from the typewriter days!
 
 If we apply this to our request:
 
