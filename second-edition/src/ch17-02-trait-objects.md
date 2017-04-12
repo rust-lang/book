@@ -394,9 +394,9 @@ trait Foo: Sized {
 }
 ```
 
-The trait `Sized` is now a *super trait* of trait `Foo`, which means trait
-`Foo` requires types that implement `Foo` (that is, `Self`) to be `Sized`.
-We're going to talk about super traits in more detail in Chapter 19.
+The trait `Sized` is now a *supertrait* of trait `Foo`, which means trait `Foo`
+requires types that implement `Foo` (that is, `Self`) to be `Sized`. We're
+going to talk about supertraits in more detail in Chapter 19.
 
 The reason a trait like `Foo` that requires `Self` to be `Sized` is not allowed
 to be a trait object is that it would be impossible to implement the trait

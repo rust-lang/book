@@ -14,4 +14,10 @@ In this chapter, we're going to cover:
   tell the compiler that you will be responsible for upholding the guarantees
   instead
 * Advanced Lifetimes: Additional lifetime syntax for complex situations
-* Advanced Traits: Associated Types, coherence, and disambiguation
+* Advanced Traits: Associated Types, default type parameters, fully qualified
+  syntax, supertraits, and the newtype pattern in relation to traits
+* Advanced Types: some more about the newtype pattern, type aliases, the
+  "never" type, and dynamically sized types
+* Advanced Functions and Closures: function pointers and returning closures
+
+It's a panoply of Rust features with something for everyone! Let's dive in!

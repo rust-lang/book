@@ -431,7 +431,7 @@ disambiguate from the `Bar` trait.
 
 Sometimes, we may want a trait to be able to rely on another trait also being
 implemented wherever our trait is implemented, so that our trait can use the
-other trait's functionality. The required trait is a *super trait* of the trait
+other trait's functionality. The required trait is a *supertrait* of the trait
 we're implementing.
 
 For example, let's say we want to make an `OutlinePrint` trait with an
