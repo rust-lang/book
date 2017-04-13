@@ -1195,7 +1195,13 @@ let thread = thread::spawn(move ||{
 
 Here, we first call `lock` on the `job_receiver` to acquire the mutex, then
 `unwrap` to panic on any errors, then `recv` to receive a `Job` from the
-channel. A final `unwrap` moves past those errors as well.
+channel. A final `unwrap` moves past those errors as well. What kinds of
+errors are we ignorning here? Well, a mutex can be "poisoned", that is, if
+a thread is holding the mutex and panics, it enters a "poisoned" state.
+Almost all of the time, propogating this panic with `unwrap` is correct.
+As for `recv`, it will return `Err` if the sending side has shut down,
+similar to how the `send` method returns `Err` if the receiving side shuts
+down.
 
 The call to `recv` blocks; that is, if there's no job yet, it will sit here
 until one becomes available. The `Mutex<T>` makes sure that only one Worker
