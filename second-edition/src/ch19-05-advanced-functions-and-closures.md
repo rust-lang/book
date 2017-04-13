@@ -85,7 +85,8 @@ Because closures are represented by traits, returning closures is a little
 tricky; we can't do it directly. In most cases where we may want to return a
 trait, we can instead use the concrete type that implements the trait of what
 we're returning as the return value of the function. We can't do that with
-closures, though; we're not allowed to use `fn` as a return type, for example.
+closures, though. They don't have a concrete type that's returnable; we're not
+allowed to use the function pointer `fn` as a return type, for example.
 
 This code that tries to return a closure directly won't compile:
 
