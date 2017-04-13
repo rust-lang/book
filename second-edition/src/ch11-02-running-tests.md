@@ -57,6 +57,10 @@ won't be potentially interfering with each other if they share state.
 
 ### Showing Function Output
 
+<!-- "captures" is a terrible choice of word, "intercepts" would have been
+better, or something involving "redirect", but it seems like we have to live
+with it...  -->
+
 By default, if a test passes, Rust's test library captures anything printed to
 standard output. For example, if we call `println!` in a test and the test
 passes, we won't see the `println!` output in the terminal: we'll only see the
