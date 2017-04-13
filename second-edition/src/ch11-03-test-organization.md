@@ -104,6 +104,10 @@ languages" at the beginning of this section. Also testing private functions
 from integration tests is not allowed, so if you did want to do this, you'd
 have to do it in unit tests. /Carol -->
 
+<!-- I wonder if some of these comments were referring to previous versions of
+the text that have been revised. I guess you can ignore all the places I said
+"fine as-is". -->
+
 Note that the `internal_adder` function is not marked as `pub`, but because
 tests are just Rust code and the `tests` module is just another module, we can
 import and call `internal_adder` in a test just fine. If you don't think
