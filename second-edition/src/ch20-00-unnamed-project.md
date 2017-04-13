@@ -17,11 +17,15 @@ To do this, we will:
 4. Create a proper HTTP response
 5. Improve the throughput of our server with a thread pool
 
-Before we get started, however, there's one thing we should mention: if you were
-writing this code in production, there are a lot of better ways to write it.
-Specifically, there are a number of robust crates on crates.io that would make
-writing this easier. However, for this chapter, our intention is to learn, not
-to take the easy route. So we'll be writing a basic implementation ourselves.
+Before we get started, however, there's one thing we should mention: if you
+were writing this code in production, there are a lot of better ways to write
+it. Specifically, there are a number of robust crates on crates.io that would
+make writing this easier. However, for this chapter, our intention is to learn,
+not to take the easy route. Since Rust is a systems programming language, we're
+able to choose what level of abstraction we want to work with. We're able to go
+to a lower level than is possible or practical in other languages if we so
+choose. So we'll be writing a basic HTTP server and thread pool ourselves in
+order to learn the general idea behind the crates we might use in the future.
 
 ## Accepting a TCP Connection
 
@@ -530,7 +534,7 @@ change the call to `File::open` to use this new variable.
 Awesome! We have a simple little web server in ~40 lines of Rust code. So far,
 this project has been relatively straightforward as far as Rust code goes; we
 haven't done much of the more advanced things yet. Let's kick it up a notch
-and add a feature to our web server: a threadpool.
+and add a feature to our web server: a thread pool.
 
 ## Adding a Thread Pool
 
@@ -1356,7 +1360,7 @@ Worker 0 got a job; executing.
 Worker 2 got a job; executing.
 ```
 
-Success! We now have a threadpool executing connections asynchronously.
+Success! We now have a thread pool executing connections asynchronously.
 
 What about those warnings, though? Don't we use all those things? Well, here's
 the thing: right now, we are using all three of these things to hold onto some
@@ -1364,12 +1368,12 @@ data, but we don't actually _do_ anything with them. That is, we set up a ton
 of interesting stuff, but then it just sits there.
 
 So are these warnings wrong? In one sense yes, but in another sense, no. We
-never do anything to clean up our threadpool once it's done being used. Let's
+never do anything to clean up our thread pool once it's done being used. Let's
 implement that now.
 
 ### Implementing Drop on the Thread Pool
 
-The first thing we want to do is to implement `Drop` for our threadpool. When
+The first thing we want to do is to implement `Drop` for our thread pool. When
 the pool is dropped, we should join on all of our threads, to make sure they
 finish their work. Here's a first attempt at it; it won't quite work yet:
 
