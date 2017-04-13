@@ -818,3 +818,9 @@ which in this case was `Guess value must be greater than or equal to 1, got
 Now that we've gone over ways to write tests, let's look at what is happening
 when we run our tests and talk about the different options we can use with
 `cargo test`.
+
+<!-- Dang, this was a good section. I started off thinking "wow, this is going
+to be too long, I'll just slash out half of it.  Other than wishing to remove
+1/2 of the intro portion, the rest was pretty solid stuff. Still seem to be
+some nitpick issues with the language that I can't be bothered to care about
+right now. -->
