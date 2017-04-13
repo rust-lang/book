@@ -363,3 +363,6 @@ justify its length much better than Chapter 10 did. (It's shorter too...) Are
 there competing tests frameworks, proposed RFCs, or patterns commonly used in
 real-world rust that aren't common in other languages' test frameworks that
 readers should know about? -->
+
+<!-- Oh, also...does Rust have any support for "exhaustive" testing? I know
+there is some concept of exhaustive checking for things like match... -->
