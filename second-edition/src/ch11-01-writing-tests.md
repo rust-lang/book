@@ -1,11 +1,11 @@
 ## How to Write Tests
 
-Tests are Rust functions that verify non-test code is functioning in the
-program in the expected manner. The bodies of test functions typically contain
-some setup, running the code we want to test, then asserting that the results
-are what we expect. Let's look at the features Rust provides specifically for
-writing tests: the `test` attribute, a few macros, and the `should_panic`
-attribute.
+Tests are Rust functions that verify non-test code in the program is
+functioning in the expected manner. The bodies of test functions typically
+contain some setup, running the code we want to test, then asserting that the
+results are what we expect. Let's look at the features Rust provides
+specifically for writing tests: the `test` attribute, a few macros, and the
+`should_panic` attribute.
 
 ### The Anatomy of a Test Function
 
