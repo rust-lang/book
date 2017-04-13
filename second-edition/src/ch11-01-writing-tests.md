@@ -17,7 +17,8 @@ we run our tests with the `cargo test` command, Rust will build a test runner
 binary that runs the functions annotated with the `test` attribute and reports
 on whether each test function passes or fails.
 
-<!-- Have attributes not been defined yet in the book by this point? -->
+<!-- Have attributes not been defined yet in the book by this point? Btw, this
+is a nice paragraph... -->
 
 <!-- is it annotated with `test` by the user, or only automatically? I think
 it's the latter, and has edited with a more active tone to make that clear, but
@@ -30,10 +31,10 @@ care of it? /Carol -->
 
 We saw in Chapter 7 that when you make a new library project with Cargo, a test
 module with a test function in it is automatically generated for us. This is to
-help us get started writing our tests, since we don't have to go look up the
-exact structure and syntax of test functions every time we start a new project.
-We can add as many additional test functions and as many test modules as we
-want, though!
+help us get started writing our tests, so we don't have to go look up the exact
+structure and syntax of test functions every time we start a new project.  We
+can add as many additional test functions and as many test modules as we want,
+though!
 
 We're going to explore some aspects of how tests work by experimenting with the
 template test generated for us, without actually testing any code. Then we'll
