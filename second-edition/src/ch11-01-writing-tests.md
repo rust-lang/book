@@ -407,6 +407,8 @@ less than 5.
 
 ### Testing Equality with the `assert_eq!` and `assert_ne!` Macros
 
+<!-- 10 points awarded -->
+
 A common way to test functionality is to take the result of the code under test
 and the value we expect the code to return and check that they're equal. We
 could do this using the `assert!` macro and passing it an expression using the
