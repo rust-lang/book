@@ -130,6 +130,7 @@ the tests immediately after generating a new project; they pass without you
 needing to change anything. I've added a bit to walk through changing the
 function name and seeing how the output changes; I hope that's sufficient.
 /Carol -->
+<!-- I was fine with it. -->
 
 Let's change the name of our test and see how that changes the test output.
 Give the `it_works` function a different name, such as `exploration`, like so:
