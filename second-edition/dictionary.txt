@@ -231,11 +231,8 @@ PartialEq
 PartialOrd
 PendingReview
 PendingReviewPost
-<<<<<<< HEAD
-PoolCreationError
-=======
 PlaceholderType
->>>>>>> origin/master
+PoolCreationError
 portia
 powi
 preprocessing
