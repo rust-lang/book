@@ -1288,7 +1288,7 @@ struct Job {
 job.job.call_box();
 ```
 
-Here's how the trick works: Rust _does_ understand that when `self` is a `Box<T>`,
+Here's how the trick works: Rust *does* understand that when `self` is a `Box<T>`,
 it can be moved out of. As such, we do four things:
 
 First, we create a new trait, `FnBox`. This trait has one method, `call_box`, similar
@@ -1364,7 +1364,7 @@ Success! We now have a thread pool executing connections asynchronously.
 
 What about those warnings, though? Don't we use all those things? Well, here's
 the thing: right now, we are using all three of these things to hold onto some
-data, but we don't actually _do_ anything with them. That is, we set up a ton
+data, but we don't actually *do* anything with them. That is, we set up a ton
 of interesting stuff, but then it just sits there.
 
 So are these warnings wrong? In one sense yes, but in another sense, no. We
