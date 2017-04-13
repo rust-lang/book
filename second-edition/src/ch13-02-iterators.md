@@ -88,7 +88,7 @@ trait Iterator {
 
 There's some new syntax that we haven't covered here yet: `type Item` and
 `Self::Item` are defining an *associated type* with this trait, and we'll talk
-about associated types in depth in Chapter XX. For now, all you need to know is
+about associated types in depth in Chapter 19. For now, all you need to know is
 that this code says the `Iterator` trait requires that you also define an
 `Item` type, and this `Item` type is used in the return type of the `next`
 method. In other words, the `Item` type will be the type of element that's

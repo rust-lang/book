@@ -6,6 +6,7 @@ adaptor
 adaptors
 Addr
 aggregator
+AGraph
 aliasability
 alignof
 Amir
@@ -17,6 +18,7 @@ backtrace
 backtraces
 BACKTRACE
 Backtraces
+Baz’s
 benchmarking
 bitand
 BitAnd
@@ -42,6 +44,7 @@ ChangeColor
 ChangeColorMessage
 chXX
 chYY
+ConcreteType
 config
 Config
 const
@@ -80,6 +83,7 @@ doccargo
 doccratesio
 doesn
 DraftPost
+DSTs
 ebooks
 Edsger
 else's
@@ -104,6 +108,7 @@ FnMut
 FnOnce
 formatter
 FromIterator
+GGraph
 GitHub
 gitignore
 grapheme
@@ -147,6 +152,7 @@ iter
 iterator's
 JavaScript
 JoinHandle
+kinded
 lang
 latin
 libc
@@ -188,6 +194,8 @@ namespacing
 newfound
 NewsArticle
 newtype
+newtypes
+nitty
 nocapture
 nomicon
 Nomicon
@@ -202,6 +210,7 @@ OptionalNumber
 OsStr
 OsString
 other's
+OutlinePrint
 overread
 parameterize
 ParseIntError
@@ -209,6 +218,7 @@ PartialEq
 PartialOrd
 PendingReview
 PendingReviewPost
+PlaceholderType
 portia
 powi
 preprocessing
@@ -260,6 +270,7 @@ spdx
 SpreadsheetCell
 sqrt
 stackoverflow
+StaticRef
 stderr
 stdin
 Stdin
@@ -284,10 +295,12 @@ substring
 subtree
 subtyping
 Summarizable
-Supertraits
+supertrait
+supertraits
 test's
 TextField
 That'd
+there'd
 threadsafe
 timestamp
 Tiếng
@@ -314,6 +327,7 @@ uninstall
 unix
 unoptimized
 UnsafeCell
+unsafety
 unsized
 unsynchronized
 username
@@ -327,6 +341,7 @@ variant's
 vers
 versa
 Versioning
+vtable
 wasn
 WeatherForecast
 WebSocket

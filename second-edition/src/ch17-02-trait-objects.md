@@ -44,7 +44,8 @@ instances and call `draw` on them.
 In Rust, though, we can define a trait that we'll name `Draw` and that will
 have one method named `draw`. Then we can define a vector that takes a *trait
 object*, which is a trait behind some sort of pointer, such as a `&` reference
-or a `Box<T>` smart pointer.
+or a `Box<T>` smart pointer. We'll talk about the reason trait objects have to
+be behind a pointer in Chapter 19.
 
 We mentioned that we don't call structs and enums "objects" to distinguish
 structs and enums from other languages' objects. The data in the struct or enum
@@ -393,9 +394,9 @@ trait Foo: Sized {
 }
 ```
 
-The trait `Sized` is now a *super trait* of trait `Foo`, which means trait
-`Foo` requires types that implement `Foo` (that is, `Self`) to be `Sized`.
-We're going to talk about super traits in more detail in Chapter 19.
+The trait `Sized` is now a *supertrait* of trait `Foo`, which means trait `Foo`
+requires types that implement `Foo` (that is, `Self`) to be `Sized`. We're
+going to talk about supertraits in more detail in Chapter 19.
 
 The reason a trait like `Foo` that requires `Self` to be `Sized` is not allowed
 to be a trait object is that it would be impossible to implement the trait

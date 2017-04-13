@@ -108,6 +108,8 @@
     - [Unsafe Rust](ch19-01-unsafe-rust.md)
     - [Advanced Lifetimes](ch19-02-advanced-lifetimes.md)
     - [Advanced Traits](ch19-03-advanced-traits.md)
+    - [Advanced Types](ch19-04-advanced-types.md)
+    - [Advanced Functions & Closures](ch19-05-advanced-functions-and-closures.md)
 
 - [Un-named project](ch20-00-unnamed-project.md)
 
