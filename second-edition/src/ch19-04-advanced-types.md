@@ -292,6 +292,9 @@ that stores the size of the dynamic information. This leads us to the golden
 rule of dynamically sized types: we must always put values of dynamically sized
 types behind a pointer of some kind.
 
+<!-- Note for Carol: `Rc<str>` is only in an accepted RFC right now, check on
+its progress and pull this out if it's not going to be stable by Oct -->
+
 While we've talked a lot about `&str`, we can combine `str` with all kinds of
 pointers: `Box<str>`, for example, or `Rc<str>`. In fact, you've already seen
 this before, but with a different dynamically sized type: traits. Every trait
@@ -330,7 +333,7 @@ fn generic<T: ?Sized>(t: &T) {
 ```
 
 A trait bound on `?Sized` is the opposite of a trait bound on `Sized`; that is,
-we would read this as '`T` may or may not be `Sized`'. This syntax is only
+we would read this as "`T` may or may not be `Sized`". This syntax is only
 available for `Sized`, no other traits.
 
 Also note we switched the type of the `t` parameter from `T` to `&T`: since the

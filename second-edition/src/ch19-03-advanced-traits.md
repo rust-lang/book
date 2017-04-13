@@ -185,10 +185,9 @@ While trait objects mean that we don't need to know the concrete type of the
 `graph` parameter at compile time, we do need to constrain the use of the
 `AGraph` trait in the `traverse` function by the concrete types of the
 associated types. If we didn’t provide this constraint, Rust wouldn't be able
-to figure out which `impl` to match this trait object to. Think of it this
-way: if we didn't define the associated types, and we had multiple implementations
-of this trait for different associated types, there'd be no way to choose which
-one of those implementations to use.
+to figure out which `impl` to match this trait object to, because the
+associated types can be part of the signatures of the methods that Rust needs
+to look up in the vtable.
 
 ### Operator Overloading and Default Type Parameters
 
@@ -197,10 +196,11 @@ specify the default type for a generic type. A great example of a situation
 where this is useful is operator overloading.
 
 Rust does not allow you to create your own operators or overload arbitrary
-operators, but the operations listed in `std::ops` can be overloaded by
-implementing the traits associated with the operator. For example, Listing
-19-25 shows how to overload the `+` operator by implementing the `Add` trait on
-a `Point` struct so that we can add two `Point` instances together:
+operators, but the operations and corresponding traits listed in `std::ops` can
+be overloaded by implementing the traits associated with the operator. For
+example, Listing 19-25 shows how to overload the `+` operator by implementing
+the `Add` trait on a `Point` struct so that we can add two `Point` instances
+together:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -311,14 +311,13 @@ functionality of the trait without breaking the existing implementation code.
 
 ### Fully Qualified Syntax for Disambiguation
 
-Rust cannot prevent a trait from having a method with the same name that
-another trait's method has, nor can it prevent us from implementing both of
-these traits on one type. We can also have a method implemented directly on the
-type with the same name as well! In order to be able to call each of the
-methods with the same name, then, we need to tell Rust which one we want to
-use. Consider the code in Listing 19-27 where traits `Foo` and `Bar` both have
-method `f` and we implement both traits on struct `Baz`, which also has a
-method named `f`:
+Rust cannot prevent a trait from having a method with the same name as another
+trait's method, nor can it prevent us from implementing both of these traits on
+one type. We can also have a method implemented directly on the type with the
+same name as well! In order to be able to call each of the methods with the
+same name, then, we need to tell Rust which one we want to use. Consider the
+code in Listing 19-27 where traits `Foo` and `Bar` both have method `f` and we
+implement both traits on struct `Baz`, which also has a method named `f`:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -426,6 +425,11 @@ part if we need the `Type as` part. So if we only had the `f` method directly
 on `Baz` and the `Foo` trait implemented on `Baz` in scope, we could call the
 `f` method in `Foo` by using `Foo::f(&b)` since we wouldn't have to
 disambiguate from the `Bar` trait.
+
+We could also have called the `f` defined directly on `Baz` by using
+`Baz::f(&b)`, but since that definition of `f` is the one that gets used by
+default when we call `b.f()`, it's not required to fully specify that
+implementation if that's what we want to call.
 
 ### Supertraits to Use One Trait's Functionality Within Another Trait
 

@@ -33,7 +33,7 @@ superpowers." We haven't seen most of these features yet since they're only
 usable with `unsafe`!
 
 1. Dereferencing a raw pointer
-2. Calling an unsafe function
+2. Calling an unsafe function or method
 3. Accessing or modifying a mutable static variable
 4. Implementing an unsafe trait
 
@@ -54,14 +54,15 @@ be related to one of the places that you opted into this unsafety. That makes
 the cause of memory safety bugs much easier to find, since we know Rust is
 checking all of the other code for us. To get this benefit of only having a few
 places to investigate memory safety bugs, it's important to contain your unsafe
-code to as small of an area as possible. Once you use `unsafe` inside of a
-module, any of the code in that module is suspect: keep `unsafe` blocks small
-and you'll thank yourself later.
+code to as small of an area as possible. Any code inside of an `unsafe` block
+is suspect when debugging a memory problem: keep `unsafe` blocks small and
+you'll thank yourself later since you'll have less code to investigate.
 
 In order to isolate unsafe code as much as possible, it's a good idea to
-enclose unsafe code within a safe abstraction and provide a safe API. Parts of
-the standard library are implemented as safe abstractions over unsafe code that
-has been audited. This prevents uses of `unsafe` from leaking out into all the
+enclose unsafe code within a safe abstraction and provide a safe API, which
+we'll be discussing once we get into unsafe functions and methods. Parts of the
+standard library are implemented as safe abstractions over unsafe code that has
+been audited. This prevents uses of `unsafe` from leaking out into all the
 places that you or your users might want to make use of the functionality
 implemented with `unsafe` code, since using a safe abstraction is safe.
 
@@ -73,8 +74,9 @@ we'll look at some abstractions that provide a safe interface to unsafe code.
 Way back in Chapter 4, we first learned about references. We also learned that
 the compiler ensures that references are always valid. Unsafe Rust has two new
 types similar to references called *raw pointers*. Just like references, we can
-have an immutable raw pointer and a mutable raw pointer. Listing 19-1 shows how
-to create raw pointers from references:
+have an immutable raw pointer and a mutable raw pointer. In the context of raw
+pointers, "immutable" means that the pointer can't be directly dereferenced and
+assigned to. Listing 19-1 shows how to create raw pointers from references:
 
 ```rust
 let mut num = 5;
@@ -92,9 +94,10 @@ references, these pointers may or may not be valid.
 
 Listing 19-2 shows how to create a raw pointer to an arbitrary location in
 memory. Trying to use arbitrary memory is undefined: there may be data at that
-address, there may not be any data at that address, or your program might
-segfault. There's not usually a good reason to be writing code like this, but
-it is possible:
+address, there may not be any data at that address, the compiler might optimize
+the code so that there is no memory access, or your program might segfault.
+There's not usually a good reason to be writing code like this, but it is
+possible:
 
 ```rust
 let address = 0x012345;
@@ -133,9 +136,8 @@ tried to create an immutable and a mutable reference to `num` instead of raw
 pointers, this would not have compiled due to the rule that says we can't have
 a mutable reference at the same time as any immutable references. With raw
 pointers, we are able to create a mutable pointer and an immutable pointer to
-the same location, and change data through the mutable pointer while the
-immutable pointer expects the data not to change, potentially creating a data
-race. Be careful!
+the same location, and change data through the mutable pointer, potentially
+creating a data race. Be careful!
 
 With all of these dangers, why would we ever use raw pointers? One major use
 case is interfacing with C code, as we'll see in the next section on unsafe
@@ -143,11 +145,12 @@ functions. Another case is to build up safe abstractions that the borrow
 checker doesn't understand. Let's introduce unsafe functions then look at an
 example of a safe abstraction that uses unsafe code.
 
-### Calling an Unsafe Function
+### Calling an Unsafe Function or Method
 
 The second operation that requires an unsafe block is calling an unsafe
-function. Unsafe functions look exactly like regular functions, but they have
-an extra `unsafe` out front:
+function. Unsafe functions and methods look exactly like regular functions and
+methods, but they have an extra `unsafe` out front. Bodies of unsafe functions
+are effectively `unsafe` blocks. Here's an unsafe function named `dangerous`:
 
 ```rust
 unsafe fn dangerous() {}
@@ -205,7 +208,7 @@ fn split_at_mut(slice: &mut [i32], mid: usize) -> (&mut [i32], &mut [i32]) {
     assert!(mid <= len);
 
     (&mut slice[..mid],
-     &mut slice[(len - mid)..])
+     &mut slice[mid..])
 }
 ```
 
@@ -229,7 +232,7 @@ error[E0499]: cannot borrow `*slice` as mutable more than once at a time
   |
 5 |     (&mut slice[..mid],
   |           ----- first mutable borrow occurs here
-6 |      &mut slice[(len - mid)..])
+6 |      &mut slice[mid..])
   |           ^^^^^ second mutable borrow occurs here
 7 | }
   | - first borrow ends here
@@ -362,7 +365,8 @@ languages to call Rust functions. Instead of an `extern` block, we can add the
 `extern` keyword and specifying the ABI to use just before the `fn` keyword. We
 also add the `#[no_mangle]` annotation to tell the Rust compiler not to mangle
 the name of this function. The `call_from_c` function in this example would be
-accessible from C code:
+accessible from C code, once we've compiled to a shared library and linked from
+C:
 
 ```rust
 #[no_mangle]
@@ -404,7 +408,7 @@ type, which is `&'static str` in this case. Only references with the `'static`
 lifetime may be stored in a static variable. Accessing immutable static
 variables is safe. Values in a static variable have a fixed address in memory,
 and using the value will always access the same data. Constants, on the other
-hand, duplicate their data whenever they are used.
+hand, are allowed to duplicate their data whenever they are used.
 
 Another way in which static variables are different from constants is that
 static variables can be mutable. Both accessing and modifying mutable static
@@ -448,10 +452,10 @@ that data accessed from different threads is done safely.
 
 ### Implementing an Unsafe Trait
 
-Finally, the last action we're only allowed to take within an `unsafe` block is
-implementing an unsafe trait. We can declare that a trait is `unsafe` by adding
-the `unsafe` keyword before `trait`, and then implementing the trait must be
-marked as `unsafe` too, as shown in Listing 19-11:
+Finally, the last action we're only allowed to take when we use the `unsafe`
+keyword is implementing an unsafe trait. We can declare that a trait is
+`unsafe` by adding the `unsafe` keyword before `trait`, and then implementing
+the trait must be marked as `unsafe` too, as shown in Listing 19-11:
 
 ```rust
 unsafe trait Foo {
