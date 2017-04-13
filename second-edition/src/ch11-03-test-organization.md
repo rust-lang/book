@@ -356,3 +356,10 @@ to help reduce logic bugs having to do with how your code is expected to behave.
 
 Let's put together the knowledge from this chapter and other previous chapters
 and work on a project in the next chapter!
+
+<!-- This is a really well done chapter. It *feels* comprehensive to me, but I
+should ask, are there any quirks you chose not to cover? This chapter seems to
+justify its length much better than Chapter 10 did. (It's shorter too...) Are
+there competing tests frameworks, proposed RFCs, or patterns commonly used in
+real-world rust that aren't common in other languages' test frameworks that
+readers should know about? -->
