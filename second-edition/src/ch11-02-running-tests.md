@@ -259,6 +259,8 @@ use tests have sufficient motivation for wanting to run a subset of the tests,
 they just need to know how to do it with Rust, so we don't think this is a
 point that needs to be emphasized multiple times. /Carol -->
 
+<!-- I think it was fine as-is. -->
+
 ### Ignore Some Tests Unless Specifically Requested
 
 Sometimes a few specific tests can be very time-consuming to execute, so you
@@ -317,6 +319,8 @@ back reference is needed /Carol -->
 <!-- Is this unclear from the output that shows `expensive_test` was run and
 the `it_works` test does not appear? I'm not sure how to make this clearer.
 /Carol -->
+
+<!-- Looks clear to me as-is. -->
 
 ```text
 $ cargo test -- --ignored
