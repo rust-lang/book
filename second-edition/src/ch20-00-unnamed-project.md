@@ -937,7 +937,7 @@ Let's refactor slightly: instead of storing a vector of `JoinHandle<()>`s, let's
 create a new `struct` to represent each of these 'workers'. We can also then
 give each worker an `id` so we can tell them apart when logging or debugging.
 
-This won't compile yet, but let's start here:
+This won't work yet, but let's start here:
 
 ```rust,ignore
 struct ThreadPool {
@@ -1047,8 +1047,9 @@ execute. We have our `ThreadPool` hold onto an `mpsc::Sender`, which if you
 recall is the type of a sending end of a channel. In `ThreadPool::new`, we
 create our new channel, and then have the pool hang on to the sending end.
 
-If you compile this, it will work, but still have warnings. Let's try passing
-the receiving end into our workers. This won't compile yet:
+ If you compile this, it will successfully compile, but still have warnings. The
+ it won't do the right thing yet, but it gets past the compiler. Let's try
+ passing the receiving end into our workers. This won't compile yet:
 
 ```rust,ignore
 impl Worker {
