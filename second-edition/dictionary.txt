@@ -295,7 +295,8 @@ substring
 subtree
 subtyping
 Summarizable
-Supertraits
+supertrait
+supertraits
 test's
 TextField
 That'd
