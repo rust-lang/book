@@ -53,6 +53,8 @@ We set the number of test threads to 1, telling the program not to use any
 parallelism. This will take longer than running them in parallel, but the tests
 won't be potentially interfering with each other if they share state.
 
+<!-- This section seems to go into just the right amount of detail. Nice! -->
+
 ### Showing Function Output
 
 By default, if a test passes, Rust's test library captures anything printed to
