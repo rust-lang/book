@@ -1577,7 +1577,14 @@ impl Drop for ThreadPool {
 
 We need two loops here. Why? Well, if we send a message and then try to join,
 it's not guaranteed that that worker will be the one that gets that message.
-We'd then deadlock. So we first put all of our `Terminate` messages on the
+We'd then deadlock. Imagine this scenario: we have two worker threads. We
+send a terminate message down the channel, and then join thread one. But thread
+one is busy processing a request; thread two is idle. This means thread two would
+get the terminate message and shut down; but we're waiting for thread one to shut
+down. Since `join` blocks until shut down, we're now blocking forever, and will
+never send the second message to terminate. Deadlock!
+
+To prevent this, we first put all of our `Terminate` messages on the
 channel, and then we join on all the threads.
 
 Let's give it a try: modify `main` to only accept a small number of requests
