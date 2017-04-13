@@ -99,20 +99,25 @@
 
 ## Advanced Topics
 
-- [Patterns](ch18-00-patterns.md) (perhaps an appendix?)
+- [Patterns Match the Structure of Values](ch18-00-patterns.md)
+    - [All the Places Patterns May be Used](ch18-01-all-the-places-for-patterns.md)
+    - [Refutability: Whether a Pattern Might Fail to Match](ch18-02-refutability.md)
+    - [All the Pattern Syntax](ch18-03-pattern-syntax.md)
 
 - [Advanced Features](ch19-00-advanced-features.md)
     - [Unsafe Rust](ch19-01-unsafe-rust.md)
     - [Advanced Lifetimes](ch19-02-advanced-lifetimes.md)
     - [Advanced Traits](ch19-03-advanced-traits.md)
+    - [Advanced Types](ch19-04-advanced-types.md)
+    - [Advanced Functions & Closures](ch19-05-advanced-functions-and-closures.md)
 
 - [Un-named project](ch20-00-unnamed-project.md)
 
 - [Appendix](appendix-00.md)
     - [A - Keywords](appendix-01-keywords.md)
     - [B - Operators](appendix-02-operators.md)
-    - [C - Derivable Traits](appendix-03-derivable-traits.md)
-    - [D - Nightly Rust](appendix-04-nightly-rust.md)
-    - [E - Macros](appendix-05-macros.md)
-    - [F - Translations](appendix-06-translation.md)
+    - [C - Derivable Traits]()
+    - [D - Nightly Rust]()
+    - [E - Macros]()
+    - [F - Translations]()
     - [G - Newest Features](appendix-07-newest-features.md)

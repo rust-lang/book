@@ -512,10 +512,10 @@ fn takes_and_gives_back(a_string: String) -> String { // a_string comes into
 }
 ```
 
-The ownership of variables follows the same pattern every time: assigning a
-value to another variable moves it, and when heap data values’ variables go out
-of scope, if the data hasn’t been moved to be owned by another variable, the
-value will be cleaned up by `drop`.
+The ownership of a variable follows the same pattern every time: assigning a
+value to another variable moves it. When a variable that includes data on the
+heap goes out of scope, the value will be cleaned up by `drop` unless the data
+has been moved to be owned by another variable.
 
 Taking ownership and then returning ownership with every function is a bit
 tedious. What if we want to let a function use a value but not take ownership?

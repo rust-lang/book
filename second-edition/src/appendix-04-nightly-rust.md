@@ -1,1 +1,0 @@
-## Appendix D: Nightly Rust

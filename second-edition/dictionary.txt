@@ -6,6 +6,7 @@ adaptor
 adaptors
 Addr
 aggregator
+AGraph
 aliasability
 alignof
 Amir
@@ -18,6 +19,7 @@ backtrace
 backtraces
 BACKTRACE
 Backtraces
+Baz’s
 benchmarking
 bitand
 BitAnd
@@ -44,6 +46,7 @@ ChangeColorMessage
 charset
 chXX
 chYY
+ConcreteType
 config
 Config
 const
@@ -73,6 +76,7 @@ dereferencing
 DerefMut
 destructor
 destructure
+destructured
 destructures
 destructuring
 Destructuring
@@ -83,6 +87,7 @@ doccratesio
 DOCTYPE
 doesn
 DraftPost
+DSTs
 ebooks
 Edsger
 else's
@@ -111,6 +116,7 @@ FnMut
 FnOnce
 formatter
 FromIterator
+GGraph
 GitHub
 gitignore
 grapheme
@@ -155,6 +161,7 @@ iter
 iterator's
 JavaScript
 JoinHandle
+kinded
 lang
 latin
 libc
@@ -200,6 +207,8 @@ NewJob
 NewsArticle
 NewThread
 newtype
+newtypes
+nitty
 nocapture
 nomicon
 Nomicon
@@ -214,6 +223,7 @@ OptionalNumber
 OsStr
 OsString
 other's
+OutlinePrint
 overread
 parameterize
 ParseIntError
@@ -221,7 +231,11 @@ PartialEq
 PartialOrd
 PendingReview
 PendingReviewPost
+<<<<<<< HEAD
 PoolCreationError
+=======
+PlaceholderType
+>>>>>>> origin/master
 portia
 powi
 preprocessing
@@ -246,6 +260,7 @@ refactoring
 refcell
 RefCell
 RefMut
+refutability
 repr
 request's
 retweet
@@ -273,6 +288,7 @@ spdx
 SpreadsheetCell
 sqrt
 stackoverflow
+StaticRef
 stderr
 stdin
 Stdin
@@ -297,12 +313,14 @@ substring
 subtree
 subtyping
 Summarizable
-Supertraits
+supertrait
+supertraits
 TcpListener
 TcpStream
 test's
 TextField
 That'd
+there'd
 ThreadPool
 threadsafe
 timestamp
@@ -316,6 +334,7 @@ tradeoff
 tradeoffs
 TrafficLight
 trpl
+tuesday
 tuple
 tuples
 typeof
@@ -329,6 +348,7 @@ uninstall
 unix
 unoptimized
 UnsafeCell
+unsafety
 unsized
 unsynchronized
 username
@@ -342,10 +362,12 @@ variant's
 vers
 versa
 Versioning
+vtable
 wasn
 WeatherForecast
 WebSocket
 whitespace
+wildcard
 wildcards
 workflow
 workspace

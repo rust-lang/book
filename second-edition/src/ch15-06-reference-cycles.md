@@ -395,7 +395,7 @@ using `Weak<T>`.
 If this chapter has piqued your interest and you now want to implement your own
 smart pointers, check out [The Nomicon] for even more useful information.
 
-[The Nomicon]: https://doc.rust-lang.org/stable/nomicon/vec.html
+[The Nomicon]: https://doc.rust-lang.org/stable/nomicon/
 
 Next, let's talk about concurrency in Rust. We'll even learn about a few new
 smart pointers that can help us with it.
