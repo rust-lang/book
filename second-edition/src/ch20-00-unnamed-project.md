@@ -910,12 +910,18 @@ error[E0308]: mismatched types
 error: aborting due to previous error
 ```
 
-`size` is a `u32`, but `Vec::with_capacity` needs a `usize`. We have two options
-here: we can change our function's signature, or we can cast. If you remember when
-we defined `new`, we didn't think too hard about what number made sense, we just
-chose one. Let's give it some more thought now. Given that `size` is the length
-of a vector, `usize` makes a lot of sense. They even almost share a name! Let's
-change the signature, and this will now compile:
+`size` is a `u32`, but `Vec::with_capacity` needs a `usize`. We haven't used
+`with_capacity` in this book yet; it does the same thing as `Vec::new`, but
+with an important difference: it pre-allocates space in the vector. Since
+we know that we need to store `size` elements in the vector, doing this
+allocation up-front is slightly more efficent than only writing `Vec::new`,
+and it's not harder to write. Well, until we get an error like this!
+
+We have two options here: we can change our function's signature, or we can
+cast. If you remember when we defined `new`, we didn't think too hard about what
+number made sense, we just chose one. Let's give it some more thought now. Given
+that `size` is the length of a vector, `usize` makes a lot of sense. They even
+almost share a name! Let's change the signature, and this will now compile:
 
 ```rust,ignore
 fn new(size: usize) -> ThreadPool {
