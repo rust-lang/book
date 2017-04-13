@@ -17,6 +17,8 @@ we run our tests with the `cargo test` command, Rust will build a test runner
 binary that runs the functions annotated with the `test` attribute and reports
 on whether each test function passes or fails.
 
+<!-- Have attributes not been defined yet in the book by this point? -->
+
 <!-- is it annotated with `test` by the user, or only automatically? I think
 it's the latter, and has edited with a more active tone to make that clear, but
 please change if I'm wrong -->
