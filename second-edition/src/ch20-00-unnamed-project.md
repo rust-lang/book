@@ -531,6 +531,52 @@ Here, the only thing in our `if` is the header and the filename; we then use
 destructuring to assign these two bits to `filename` and `header`. We have to
 change the call to `File::open` to use this new variable.
 
+Here's our final code. Don't forget those two HTML files as well!
+
+```rust,ignore
+use std::fs::File;
+use std::io::prelude::*;
+use std::net::TcpListener;
+use std::net::TcpStream;
+
+fn main() {
+    let listener = TcpListener::bind("127.0.0.1:8080").unwrap();
+
+    for stream in listener.incoming() {
+        let stream = stream.unwrap();
+
+        handle_connection(stream);
+    }
+}
+
+// our new handle_connection
+fn handle_connection(mut stream: TcpStream) {
+    let mut buffer = [0; 512];
+    stream.read(&mut buffer).unwrap();
+
+    let get = b"GET / HTTP/1.1\r\n";
+
+    let start = &buffer[..get.len()];
+
+
+    let (header, filename) = if start == get {
+        ("HTTP/1.1 200 OK\r\n\r\n", "hello.html")
+    } else {
+        ("HTTP/1.1 404 NOT FOUND\r\n\r\n", "404.html")
+    };
+
+    let mut file = File::open(filename).unwrap();
+    let mut contents = String::new();
+
+    file.read_to_string(&mut contents).unwrap();
+
+    let response = format!("{}{}", header, contents);
+
+    stream.write(response.as_bytes()).unwrap();
+    stream.flush().unwrap();
+}
+```
+
 Awesome! We have a simple little web server in ~40 lines of Rust code. So far,
 this project has been relatively straightforward as far as Rust code goes; we
 haven't done much of the more advanced things yet. Let's kick it up a notch and
@@ -545,8 +591,7 @@ thread pool make things better? Well, right now, we process connections
 sequentially. We need to fully process each connection before moving on to the
 next one. A thread pool allows us to process connections concurrently, that is,
 we can start processing a new connection before an older connection is
-finished. This increases the throughput of our server. This can matter even
-more in some situations, as we'll see below.
+finished. This increases the throughput of our server.
 
 Here's the basics: instead of waiting for each request to process before
 starting on the next one, we create a new thread for every connection, and do
@@ -561,6 +606,46 @@ request, and then asks the queue for another request. With this design, we can
 process N requests concurrently, where N is the number of threads. This still
 means that `N` long-running tasks can cause problems, but we've increased that
 number from one to `N`.
+
+Let's see this in action. Let's add a new endpoint, `/sleep`. This endpoint
+will cause the server to sleep for five seconds.
+
+```rust,ignore
+// at the top of the file
+use std::thread;
+use std::time::Duration;
+
+// in handle_connection
+let get = b"GET / HTTP/1.1\r\n";
+let sleep = b"GET /sleep HTTP/1.1\r\n";
+
+let get_start = &buffer[..get.len()];
+let sleep_start = &buffer[..sleep.len()];
+
+let (header, filename) = if get_start == get {
+    ("HTTP/1.1 200 OK\r\n\r\n", "hello.html")
+} else if sleep_start == sleep {
+    thread::sleep(Duration::from_secs(5));
+    ("HTTP/1.1 200 OK\r\n\r\n", "hello.html")
+} else {
+    ("HTTP/1.1 404 NOT FOUND\r\n\r\n", "404.html")
+};
+```
+
+This code is kinda hacky, but it gets the job done! We create a second
+header, `sleep_start`, and change the `start` to `get_start` to tell the
+two apart. We add an extra layer to our `if` statement to check for `/sleep`,
+and when we hit it, sleep for five seconds, before rendering our hello page.
+
+> You can really see how primitive our server is here; real libraries would
+> handle this in a much nicer way!
+
+Start the server with `cargo run`, and then open up two browser windows; one
+for `http://localhost:8080/` and one for `http://localhost:8080/sleep`. If
+you hit `/` a few times, as before, you'll see it respond quickly. But if you
+hit `/sleep`, and then load up `/`, you'll see that `/` waits until `sleep`
+has slept for its full five seconds before going on. This is the issue we can
+improve with our thread pool.
 
 This design is one of many ways to improve the throughput of our web server.
 This isn't a book about web servers, though, so it's the one we're going to
@@ -1657,6 +1742,17 @@ you'll notice that we told every worker to terminate, and then immediately
 tried to join worker zero. Since it had not yet gotten the terminate message,
 it waited, and the threads each acknowledged their termination.
 
+Let's bump that request count up to five:
+
+```rust,ignore
+    if counter == 5 {
+```
+
+And try hitting `/slow` and `/` at the same time, as we did before. You
+should see the request for `/` complete before the request for `/slow`;
+we're doing our processing in the background, and not processing requests
+sequentially any more!
+
 Congrats! We now have completed our project. Here's the full code, for
 reference:
 
@@ -1669,6 +1765,7 @@ use std::sync::mpsc;
 use std::sync::Arc;
 use std::sync::Mutex;
 use std::thread;
+use std::time::Duration;
 
 fn main() {
     let listener = TcpListener::bind("127.0.0.1:8080").unwrap();
@@ -1678,7 +1775,7 @@ fn main() {
     let mut counter = 0;
 
     for stream in listener.incoming() {
-        if counter == 2 {
+        if counter == 5 {
             println!("Shutting down.");
             break;
         }
@@ -1698,10 +1795,15 @@ fn handle_connection(mut stream: TcpStream) {
     stream.read(&mut buffer).unwrap();
 
     let get = b"GET / HTTP/1.1\r\n";
+    let sleep = b"GET /sleep HTTP/1.1\r\n";
 
-    let start = &buffer[..get.len()];
+    let get_start = &buffer[..get.len()];
+    let sleep_start = &buffer[..sleep.len()];
 
-    let (header, filename) = if start == get {
+    let (header, filename) = if get_start == get {
+        ("HTTP/1.1 200 OK\r\n\r\n", "hello.html")
+    } else if sleep_start == sleep {
+        thread::sleep(Duration::from_secs(5));
         ("HTTP/1.1 200 OK\r\n\r\n", "hello.html")
     } else {
         ("HTTP/1.1 404 NOT FOUND\r\n\r\n", "404.html")
