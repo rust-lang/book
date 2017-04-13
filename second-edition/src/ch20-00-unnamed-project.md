@@ -1,4 +1,4 @@
-# Un-named project
+# Final Project: Building a Multithreaded Web Server
 
 It's been a long journey, but here we are! It's the end of the book. Parting is
 such sweet sorrow. But before we go, let's build one more project together, to
@@ -23,7 +23,7 @@ Specifically, there are a number of robust crates on crates.io that would make
 writing this easier. However, for this chapter, our intention is to learn, not
 to take the easy route. So we'll be writing a basic implementation ourselves.
 
-# Accepting a TCP connection
+## Accepting a TCP Connection
 
 The HTTP protocol is built on top of the TCP protocol. We won't get too much
 into the details, but here's a small overview: TCP is a low-level protocol, and
@@ -74,7 +74,7 @@ fn main() {
 ```
 
 A `TcpListener` allows us to listen for TCP connections. We've chosen to listen
-to the address `127.0.0.1:8008`. The part before the colon is an IP address
+to the address `127.0.0.1:8080`. The part before the colon is an IP address
 representing our own computer, and `8080` is the port. We've chosen this port
 because HTTP is normally accepted on port 80, but connecting to port 80 requires
 administrator privileges. Regular users can listen on ports higher than 1024;
@@ -176,7 +176,7 @@ fn handle_connection(stream: TcpStream) {
 Now we can worry about handling the `TcpStream` in `handle_connection` only, and
 not worry about all of the connection processing stuff.
 
-# Reading the request
+## Reading the Request
 
 Let's read in the request from our browser! Modify our code like this:
 
@@ -284,7 +284,7 @@ Host: 127.0.0.1:8080
 All the stuff from `Host` and after are headers. `GET` requests have no body.
 Neat!
 
-# Writing a response
+## Writing a Response
 
  Let's respond to our browser with a response. Responses look like this:
 
@@ -344,7 +344,7 @@ Once we've loaded `127.0.0.1:8080` in our web browser... we get a blank page!
 How exciting! You've just hand-coded an HTTP request and response. From here on
 out, it's all just details.
 
-## Returning real HTML
+### Returning Real HTML
 
 Let's return more than a blank page. Create a new file, `hello.html`, in the
 root of the project; that is, not in the `src` directory. You can put any
@@ -418,7 +418,7 @@ and then change `write` to write `response`. Easy! Run it with
 `cargo run`, load up `127.0.0.1:8080` in your browser, and you
 should see your HTML rendered!
 
-# Validating the request
+## Validating the Request
 
 Right now, our web server will return this HTML no matter what the request.
 Let's check that the browser is requesting `/`, and then return an error if
@@ -532,7 +532,7 @@ this project has been relatively straightforward as far as Rust code goes; we
 haven't done much of the more advanced things yet. Let's kick it up a notch
 and add a feature to our web server: a threadpool.
 
-# Thread pools
+## Adding a Thread Pool
 
 Right now, we process each request in turn. That works for small services like
 ours, but as applications get more complex, this sort of serial execution isn't
@@ -565,7 +565,7 @@ I/O" model. If you're interested in this topic, you may want to read more about
 them and try to implement them in Rust; with a low-level language like Rust, all
 of these options are possible.
 
-# The Pool interface
+### The Thread Pool Interface
 
 Let's talk about what using the pool should look like. The authors often find that
 when trying to design some code, writing the client interface first can really
@@ -1173,13 +1173,16 @@ impl ThreadPool {
 ```
 
 Here, `Job` is now holding a trait object; specifically, a boxed closure. We
-then send that `job` down the sending end of the channel. Sending may fail;
-we use `unwrap` to ignore the error. It fails if the receiving end has stopped
-receiving new messages; this would happen once we stop all of our threads from
-executing, but that doesn't happen as long as the pool exists.
+then send that `job` down the sending end of the channel. Sending may fail if
+the receiving end has stopped receiving new messages, which would happen happen
+if we stop all of our threads from executing. Our threads continue executing as
+long as the pool exists, so we use `unwrap` to panic if we get an error here
+for now. As we discussed in Chapter 9, using `unwrap` is perfectly fine while
+prototyping to get the successful case to work, and more appropriate error
+handling can be added in later.
 
-Now that we've got the sending side working, let's write the logic of the worker.
-Here's a first attempt, but it won't quite work:
+Now that we've got the sending side working, let's write the logic of the
+worker. Here's a first attempt, but it won't quite work:
 
 ```rust,ignore
 let thread = thread::spawn(move ||{
@@ -1249,13 +1252,18 @@ error[E0161]: cannot move a value of type std::ops::FnOnce() + std::marker::Send
 error: aborting due to previous error
 ```
 
-This error is fairly cryptic. And that's because the problem is fairly cryptic. Basically,
-in order to call a boxed `FnOnce`, it needs to be able to move itself out of the box. But
-the compiler doesn't understand that this is okay to do.
+This error is fairly cryptic, and that's because the problem is fairly cryptic.
+Basically, in order to call a boxed `FnOnce`, the `FnOnce` needs to be able to
+move itself out of the box. But the compiler doesn't understand that this is
+okay to do.
 
-In the future, this code should work just fine. But that doesn't help us in the present.
+In the future, this code should work just fine. Rust is still a work in
+progress with places that the compiler could be improved. There are people just
+like you working to fix this and other issues! Once you've finished the book,
+we would love for you to join in.
 
-Luckily, there's a trick. It looks like this:
+But for now, let's work around this problem. Luckily, there's a trick! It looks
+like this:
 
 ```rust,ignore
 trait FnBox {
@@ -1307,8 +1315,8 @@ We do the same thing with `()()`s as we did above, only now instead of `job.job`
 
 Finally, we use `call_box` instead of invoking the closure directly.
 
-This is a very sneaky, complicated trick. Don't worry too much if it doesn't make perfect
-sense; someday, it will be completely un-needed.
+This is a very sneaky, complicated trick. Don't worry too much if it doesn't
+make perfect sense; someday, it will be completely unnecessary.
 
 With this trick, our thread pool is in a working state! Give it a `cargo run`, and make
 some requests:
@@ -1359,7 +1367,7 @@ So are these warnings wrong? In one sense yes, but in another sense, no. We
 never do anything to clean up our threadpool once it's done being used. Let's
 implement that now.
 
-# Implementing Drop
+### Implementing Drop on the Thread Pool
 
 The first thing we want to do is to implement `Drop` for our threadpool. When
 the pool is dropped, we should join on all of our threads, to make sure they
@@ -1523,8 +1531,9 @@ impl Worker {
 }
 ```
 
-Inside of our `Worker, instead of receiving a `Job`, we get a `Message`. We then
-execute the job if it's a `NewJob`, and break out of our `loop` if it's `Terminate`.
+Inside of our `Worker`, instead of receiving a `Job`, we get a `Message`. We
+then execute the job if it's a `NewJob`, and break out of our `loop` if it's
+`Terminate`.
 
 ```rust,ignore
 impl ThreadPool {
@@ -1805,3 +1814,5 @@ impl Drop for ThreadPool {
 There is still more we could do here; for example, our `ThreadPool` is not
 inherently tied to HTTP handling, so we could extract it into its own submodule,
 or maybe even its own crate!
+
+## Summary
