@@ -497,7 +497,7 @@ functions that assert two values are equal are called `expected` and `actual`
 and the order in which we specify the arguments matters. However, in Rust,
 they're called `left` and `right` instead, and the order in which we specify
 the value we expect and the value that the code under test produces doesn't
-matter. We could have written the assertion in this test as
+matter. We could write the assertion in this test as
 `assert_eq!(add_two(2), 4)`, which would result in a failure message that says
 `` assertion failed: `(left == right)` (left: `5`, right: `4`) ``.
 
