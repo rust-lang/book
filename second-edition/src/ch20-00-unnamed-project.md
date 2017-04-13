@@ -1112,10 +1112,10 @@ use std::sync::Mutex;
 
 // and then change this code
 impl Worker {
-    fn new(id: u32, job: Arc<Mutex<mpsc::Receiver<Job>>>) -> Worker {
+    fn new(id: u32, job_receiver: Arc<Mutex<mpsc::Receiver<Job>>>) -> Worker {
         let thread = thread::spawn(||{
-            // we want to use job in the closure
-            job;
+            // we want to use the receiver in the closure
+            job_receiver;
         });
 
         Worker {
@@ -1174,7 +1174,9 @@ impl ThreadPool {
 
 Here, `Job` is now holding a trait object; specifically, a boxed closure. We
 then send that `job` down the sending end of the channel. Sending may fail;
-we use `unwrap` to ignore the error.
+we use `unwrap` to ignore the error. It fails if the receiving end has stopped
+receiving new messages; this would happen once we stop all of our threads from
+executing, but that doesn't happen as long as the pool exists.
 
 Now that we've got the sending side working, let's write the logic of the worker.
 Here's a first attempt, but it won't quite work:
