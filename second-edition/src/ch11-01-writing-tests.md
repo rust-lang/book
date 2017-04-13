@@ -130,7 +130,10 @@ the tests immediately after generating a new project; they pass without you
 needing to change anything. I've added a bit to walk through changing the
 function name and seeing how the output changes; I hope that's sufficient.
 /Carol -->
-<!-- I was fine with it. -->
+
+<!-- I was fine with it....if you added this whole following example just to
+show that part, it was a waste...could have just skipped to `it_works` and
+`another` -->
 
 Let's change the name of our test and see how that changes the test output.
 Give the `it_works` function a different name, such as `exploration`, like so:
@@ -247,6 +250,8 @@ the `assert!` macro.
 
 <!-- Listing 5-9 wasn't marked as such; I'll fix it the next time I get Chapter
 5 for editing. /Carol -->
+
+<!-- You better! -->
 
 <span class="filename">Filename: src/lib.rs</span>
 
