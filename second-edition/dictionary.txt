@@ -341,6 +341,7 @@ variant's
 vers
 versa
 Versioning
+vtable
 wasn
 WeatherForecast
 WebSocket
