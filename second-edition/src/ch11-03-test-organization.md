@@ -21,6 +21,13 @@ with the code that they're testing. The convention is that we create a module
 named `tests` in each file to contain the test functions, and we annotate the
 module with `cfg(test)`.
 
+<!-- In my limited experience modifying or reading some Rust crates, I
+frequently found myself wishing there was a way to have the internal `mod
+tests` in a separate file from the rest of the code....(ironically?) it was
+most annoying when a module had a significant number of tests.  Maybe only the
+first 100 lines of a 500 line file were the module, the rest was tests, and it
+sometimes made navigating the file more difficult. -->
+
 #### The Tests Module and `#[cfg(test)]`
 
 The `#[cfg(test)]` annotation on the tests module tells Rust to compile and run
@@ -53,6 +60,9 @@ provided by Rust for compiling and running tests. By using this attribute,
 Cargo only compiles our test code if we actively run the tests with `cargo
 test`. This includes any helper functions that might be within this module, in
 addition to the functions annotated with `#[test]`.
+
+<!-- So is `mod tests` magic or could I name it `mod junk` as long as i had the
+attriute atop? And multiple `#[cfg(test)]` in one file? -->
 
 #### Testing Private Functions
 
