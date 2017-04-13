@@ -2,7 +2,7 @@ sudo: false
 language: rust
 cache: cargo
 rust:
-  - nightly
+  - nightly-2017-04-11
 branches:
   only:
   - master
