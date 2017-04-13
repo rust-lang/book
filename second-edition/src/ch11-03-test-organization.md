@@ -191,6 +191,12 @@ integration tests here? -->
 <!-- We mentioned documentation tests in the beginning of this chapter /Carol
 -->
 
+<!-- But you only said you'd ignore them "for now"! I was expecting to find
+something more about them. Noooooooo. -->
+
+<!-- Don't add anything more. Must reduce length. Shorten. Cut. Divide. Rip.
+Remove. Reduce. Shrink. -->
+
 Now we have three sections of output: the unit tests, the integration test, and
 the doc tests. The first section for the unit tests is the same as we have been
 seeing: one line for each unit test (we have one named `internal` that we added
