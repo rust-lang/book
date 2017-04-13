@@ -1003,7 +1003,7 @@ error: aborting due to previous error
 `with_capacity` in this book yet; it does the same thing as `Vec::new`, but
 with an important difference: it pre-allocates space in the vector. Since we
 know that we need to store `size` elements in the vector, doing this allocation
-up-front is slightly more efficent than only writing `Vec::new`, and it's not
+up-front is slightly more efficient than only writing `Vec::new`, and it's not
 harder to write. Well, until we get an error like this!
 
 We have two options here: we can change our function's signature, or we can
@@ -1289,9 +1289,9 @@ let thread = thread::spawn(move ||{
 Here, we first call `lock` on the `job_receiver` to acquire the mutex, then
 `unwrap` to panic on any errors, then `recv` to receive a `Job` from the
 channel. A final `unwrap` moves past those errors as well. What kinds of errors
-are we ignorning here? Well, a mutex can be "poisoned", that is, if a thread is
+are we ignoring here? Well, a mutex can be "poisoned", that is, if a thread is
 holding the mutex and panics, it enters a "poisoned" state. Almost all of the
-time, propogating this panic with `unwrap` is correct. As for `recv`, it will
+time, propagating this panic with `unwrap` is correct. As for `recv`, it will
 return `Err` if the sending side has shut down, similar to how the `send`
 method returns `Err` if the receiving side shuts down.
 

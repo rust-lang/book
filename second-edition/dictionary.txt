@@ -348,6 +348,7 @@ UnsafeCell
 unsafety
 unsized
 unsynchronized
+URIs
 username
 USERPROFILE
 usize
