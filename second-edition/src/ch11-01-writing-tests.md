@@ -349,6 +349,11 @@ Because the correct result of the `can_hold` function in this case is `false`,
 we need to negate that result before we pass it to the `assert!` macro. This
 way, our test will pass if `can_hold` returns `false`:
 
+<!-- Around this point is where I would start to wonder if there are other
+forms of assert macros like "assert false", "assert not null" (lol?), "assert
+err", etc.  If the very next section after this goes into that topic, you get
+10 bonus points for nailing it. -->
+
 ```text
 running 2 tests
 test tests::smaller_can_hold_larger ... ok
