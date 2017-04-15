@@ -196,11 +196,11 @@ works as we intend.
 Next up is requesting a review of a post, which should change its state from
 `Draft` to `PendingReview`. We want `post` to have a public method named
 `request_review` that will take a mutable reference to `self`. Then we're going
-to call a `request_review` method on the state that we're holding, and that
-`request_review` method will consume the current state and return a new state.
-In order to be able to consume the old state, the state `request_review` method
-needs to take ownership of the state value. This is where the `Option` comes
-in: we're going to take the `Some` value out of the `state` field and leave a
+to call an internal `request_review` method on the state that we're holding, and
+this second `request_review` method will consume the current state and return a
+new state. In order to be able to consume the old state, the second `request_review`
+method needs to take ownership of the state value. This is where the `Option` comes
+in: we're going to `take` the `Some` value out of the `state` field and leave a
 `None` in its place since Rust doesn't let us have unpopulated fields in
 structs. Then we'll set the post's `state` value to the result of this
 operation. Listing 17-15 shows this code:
