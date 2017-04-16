@@ -10,7 +10,8 @@
         <base href="">
 
         <link rel="stylesheet" href="book.css">
-        <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+        <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500" rel="stylesheet" type="text/css">
 
         <link rel="shortcut icon" href="favicon.png">
 
@@ -78,7 +79,6 @@
 <a class="header" href="loops.html#while" id="while"><h2>while</h2></a>
 <p>Rust also has a <code>while</code> loop. It looks like this:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let mut x = 5; // mut x: i32
 let mut done = false; // mut done: bool
@@ -116,7 +116,6 @@ loop doesn’t look like this “C-style” <code>for</code> loop:</p>
 </code></pre>
 <p>Instead, it looks like this:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 for x in 0..10 {
     println!(&quot;{}&quot;, x); // x: i32
@@ -145,7 +144,6 @@ developers.</p>
 use the <code>.enumerate()</code> function.</p>
 <a class="header" href="loops.html#on-ranges" id="on-ranges"><h4>On ranges:</h4></a>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 for (index, value) in (5..10).enumerate() {
     println!(&quot;index = {} and value = {}&quot;, index, value);
@@ -162,7 +160,6 @@ index = 4 and value = 9
 <p>Don't forget to add the parentheses around the range.</p>
 <a class="header" href="loops.html#on-iterators" id="on-iterators"><h4>On iterators:</h4></a>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let lines = &quot;hello\nworld&quot;.lines();
 
@@ -178,7 +175,6 @@ for (linenumber, line) in lines.enumerate() {
 <a class="header" href="loops.html#ending-iteration-early" id="ending-iteration-early"><h2>Ending iteration early</h2></a>
 <p>Let’s take a look at that <code>while</code> loop we had earlier:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let mut x = 5;
 let mut done = false;
@@ -199,7 +195,6 @@ when we should exit out of the loop. Rust has two keywords to help us with
 modifying iteration: <code>break</code> and <code>continue</code>.</p>
 <p>In this case, we can write the loop in a better way with <code>break</code>:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let mut x = 5;
 
@@ -216,7 +211,6 @@ loop {
 <p><code>continue</code> is similar, but instead of ending the loop, it goes to the next
 iteration. This will only print the odd numbers:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 for x in 0..10 {
     if x % 2 == 0 { continue; }
@@ -237,7 +231,6 @@ when <code>x</code> is even, while we <code>continue</code> to the next iteratio
 loop when y is even. So it will execute the <code>println!</code> when both <code>x</code> and
 <code>y</code> are odd.</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 'outer: for x in 0..10 {
     'inner: for y in 0..10 {

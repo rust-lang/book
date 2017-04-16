@@ -119,7 +119,6 @@ as the lines of text in a file or the prices of items in a shopping cart.</p>
 <a class="header" href="ch08-01-vectors.html#creating-a-new-vector" id="creating-a-new-vector"><h3>Creating a New Vector</h3></a>
 <p>To create a new, empty vector, we can call the <code>Vec::new</code> function:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let v: Vec&lt;i32&gt; = Vec::new();
 
@@ -139,7 +138,6 @@ create a <code>Vec</code> that has initial values, and Rust provides the <code>v
 convenience. The macro will create a new <code>Vec</code> that holds the values we give
 it. This will create a new <code>Vec&lt;i32&gt;</code> that holds the values <code>1</code>, <code>2</code>, and <code>3</code>:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let v = vec![1, 2, 3];
 
@@ -150,7 +148,6 @@ modify a vector next.</p>
 <a class="header" href="ch08-01-vectors.html#updating-a-vector" id="updating-a-vector"><h3>Updating a Vector</h3></a>
 <p>To create a vector then add elements to it, we can use the <code>push</code> method:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let mut v = Vec::new();
 
@@ -167,7 +164,6 @@ data, so we don’t need the <code>Vec&lt;i32&gt;</code> annotation.</p>
 <a class="header" href="ch08-01-vectors.html#dropping-a-vector-drops-its-elements" id="dropping-a-vector-drops-its-elements"><h3>Dropping a Vector Drops its Elements</h3></a>
 <p>Like any other <code>struct</code>, a vector will be freed when it goes out of scope:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 {
     let v = vec![1, 2, 3, 4];
@@ -189,7 +185,6 @@ values that are returned from these functions for extra clarity.</p>
 <p>This example shows both methods of accessing a value in a vector either with
 indexing syntax or the <code>get</code> method:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let v = vec![1, 2, 3, 4, 5];
 
@@ -208,7 +203,6 @@ doesn’t have an element for. As an example, what should a program do if it has
 a vector that holds five elements then tries to access an element at index 100
 like this:</p>
 <pre><pre class="playpen"><code class="language-rust should_panic"># #![allow(unused_variables)]
-# 
 #fn main() {
 let v = vec![1, 2, 3, 4, 5];
 
@@ -282,7 +276,6 @@ value types, and then all of the enum variants will be considered the same
 type, that of the enum. Then we can create a vector that holds that enum and
 so, ultimately, holds different types:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 enum SpreadsheetCell {
     Int(i32),

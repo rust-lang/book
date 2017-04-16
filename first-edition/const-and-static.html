@@ -10,7 +10,8 @@
         <base href="">
 
         <link rel="stylesheet" href="book.css">
-        <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+        <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500" rel="stylesheet" type="text/css">
 
         <link rel="shortcut icon" href="favicon.png">
 
@@ -70,7 +71,6 @@
                     <a class="header" href="const-and-static.html#const-and-static" id="const-and-static"><h1>const and static</h1></a>
 <p>Rust has a way of defining constants with the <code>const</code> keyword:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 const N: i32 = 5;
 
@@ -88,7 +88,6 @@ there is only one instance for each value, and it’s at a fixed location in
 memory.</p>
 <p>Here’s an example:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 static N: i32 = 5;
 
@@ -97,7 +96,6 @@ static N: i32 = 5;
 <p>Statics live for the entire lifetime of a program, and therefore any
 reference stored in a static has a <a href="lifetimes.html"><code>'static</code> lifetime</a>:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 static NAME: &amp;'static str = &quot;Steve&quot;;
 
@@ -105,7 +103,6 @@ static NAME: &amp;'static str = &quot;Steve&quot;;
 <a class="header" href="const-and-static.html#mutability" id="mutability"><h2>Mutability</h2></a>
 <p>You can introduce mutability with the <code>mut</code> keyword:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 static mut N: i32 = 5;
 
@@ -114,7 +111,6 @@ static mut N: i32 = 5;
 reading it, causing memory unsafety. As such both accessing and mutating a
 <code>static mut</code> is <a href="unsafe.html"><code>unsafe</code></a>, and so must be done in an <code>unsafe</code> block:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 # static mut N: i32 = 5;
 

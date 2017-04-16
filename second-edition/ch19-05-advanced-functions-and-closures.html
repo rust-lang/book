@@ -153,7 +153,6 @@ functions can accept functions as arguments, but C doesn't have closures.</p>
 <p>For example, if we wanted to use the <code>map</code> function to turn a vector of numbers
 into a vector of strings, we could use a closure:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let list_of_numbers = vec![1, 2, 3];
 let list_of_strings: Vec&lt;String&gt; = list_of_numbers
@@ -164,7 +163,6 @@ let list_of_strings: Vec&lt;String&gt; = list_of_numbers
 #}</code></pre></pre>
 <p>Or we could name a function as the argument to <code>map</code> instead of the closure:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let list_of_numbers = vec![1, 2, 3];
 let list_of_strings: Vec&lt;String&gt; = list_of_numbers
@@ -209,7 +207,6 @@ std::marker::Sized` is not satisfied
 closure. We saw a solution to this in the previous section, though: we can use
 a trait object:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 fn returns_closure() -&gt; Box&lt;Fn(i32) -&gt; i32&gt; {
     Box::new(|x| x + 1)

@@ -156,7 +156,6 @@ pattern. Listing 18-8 shows how to fix the code in Listing 18-7 with <code>Some(
 matching <code>some_option_value</code>. Using the refutable pattern <code>Some(x)</code> is allowed,
 since this example uses <code>if let</code>:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 # let some_option_value: Option&lt;i32&gt; = None;
 if let Some(x) = some_option_value {

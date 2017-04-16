@@ -10,7 +10,8 @@
         <base href="">
 
         <link rel="stylesheet" href="book.css">
-        <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+        <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500" rel="stylesheet" type="text/css">
 
         <link rel="shortcut icon" href="favicon.png">
 
@@ -77,7 +78,6 @@ than normal code does.</p>
 <p>Let’s go over the syntax, and then we’ll talk semantics. <code>unsafe</code> is used in
 four contexts. The first one is to mark a function as unsafe:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 unsafe fn danger_will_robinson() {
     // Scary stuff...
@@ -87,7 +87,6 @@ unsafe fn danger_will_robinson() {
 <p>All functions called from <a href="ffi.html">FFI</a> must be marked as <code>unsafe</code>, for example.
 The second use of <code>unsafe</code> is an unsafe block:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 unsafe {
     // Scary stuff...
@@ -96,14 +95,12 @@ unsafe {
 #}</code></pre></pre>
 <p>The third is for unsafe traits:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 unsafe trait Scary { }
 
 #}</code></pre></pre>
 <p>And the fourth is for <code>impl</code>ementing one of those traits:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 # unsafe trait Scary { }
 unsafe impl Scary for i32 {}

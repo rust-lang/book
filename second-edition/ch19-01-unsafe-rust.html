@@ -180,7 +180,6 @@ have an immutable raw pointer and a mutable raw pointer. In the context of raw
 pointers, &quot;immutable&quot; means that the pointer can't be directly dereferenced and
 assigned to. Listing 19-1 shows how to create raw pointers from references:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let mut num = 5;
 
@@ -200,7 +199,6 @@ the code so that there is no memory access, or your program might segfault.
 There's not usually a good reason to be writing code like this, but it is
 possible:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let address = 0x012345;
 let r = address as *const i32;
@@ -213,7 +211,6 @@ raw pointers in safe code, but you can't <em>dereference</em> raw pointers and r
 the data being pointed to. Using the dereference operator, <code>*</code>, on a raw
 pointer requires an <code>unsafe</code> block, as shown in Listing 19-3:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let mut num = 5;
 
@@ -248,7 +245,6 @@ function. Unsafe functions and methods look exactly like regular functions and
 methods, but they have an extra <code>unsafe</code> out front. Bodies of unsafe functions
 are effectively <code>unsafe</code> blocks. Here's an unsafe function named <code>dangerous</code>:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 unsafe fn dangerous() {}
 
@@ -274,7 +270,6 @@ method is defined on mutable slices, and it takes one slice and makes it into
 two by splitting the slice at the index given as an argument, as demonstrated
 in Listing 19-4:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let mut v = vec![1, 2, 3, 4, 5, 6];
 
@@ -328,7 +323,6 @@ we know something is okay, but Rust doesn't, it's time to reach for unsafe code.
 <p>Listing 19-6 shows how to use an <code>unsafe</code> block, a raw pointer, and some calls
 to unsafe functions to make the implementation of <code>split_at_mut</code> work:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 use std::slice;
 
@@ -379,7 +373,6 @@ creating valid pointers from the data this function has access to.</p>
 likely crash when the slice is used. This code takes an arbitrary memory
 location and creates a slice ten thousand items long:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 use std::slice;
 
@@ -434,7 +427,6 @@ the name of this function. The <code>call_from_c</code> function in this example
 accessible from C code, once we've compiled to a shared library and linked from
 C:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 #[no_mangle]
 pub extern &quot;C&quot; fn call_from_c() {
@@ -506,7 +498,6 @@ keyword is implementing an unsafe trait. We can declare that a trait is
 <code>unsafe</code> by adding the <code>unsafe</code> keyword before <code>trait</code>, and then implementing
 the trait must be marked as <code>unsafe</code> too, as shown in Listing 19-11:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 unsafe trait Foo {
     // methods go here

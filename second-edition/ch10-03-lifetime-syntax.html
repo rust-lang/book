@@ -208,7 +208,6 @@ as long as the reference.</p>
 <p>Let's look at an example in Listing 10-18 that doesn't try to make a dangling
 reference and compiles without any errors:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 {
     let x = 5;            // -----+-- 'b
@@ -342,7 +341,6 @@ the same lifetime, which we'll name <code>'a</code> and add to each reference as
 Listing 10-21:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 fn longest&lt;'a&gt;(x: &amp;'a str, y: &amp;'a str) -&gt; &amp;'a str {
     if x.len() &gt; y.len() {
@@ -464,7 +462,6 @@ to always return the first argument rather than the longest string slice, we
 wouldn't need to specify a lifetime on the <code>y</code> parameter. This code compiles:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 fn longest&lt;'a&gt;(x: &amp;'a str, y: &amp;str) -&gt; &amp;'a str {
     x
@@ -550,7 +547,6 @@ However, in Chapter 4 we had a function in the &quot;String Slices&quot; section
 again in Listing 10-25, that compiled without lifetime annotations:</p>
 <p><span class="filename">Filename: src/lib.rs</span></p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 fn first_word(s: &amp;str) -&gt; &amp;str {
     let bytes = s.as_bytes();
@@ -678,7 +674,6 @@ struct named <code>ImportantExcerpt</code> that we defined in Listing 10-24.</p>
 <p>First, here's a method named <code>level</code>. The only parameter is a reference to
 <code>self</code>, and the return value is just an <code>i32</code>, not a reference to anything:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 # struct ImportantExcerpt&lt;'a&gt; {
 #     part: &amp;'a str,
@@ -696,7 +691,6 @@ required, but we're not required to annotate the lifetime of the reference to
 <code>self</code> because of the first elision rule.</p>
 <p>Here's an example where the third lifetime elision rule applies:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 # struct ImportantExcerpt&lt;'a&gt; {
 #     part: &amp;'a str,
@@ -719,7 +713,6 @@ and all lifetimes have been accounted for.</p>
 lifetime is the entire duration of the program. All string literals have the
 <code>'static</code> lifetime, which we can choose to annotate as follows:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let s: &amp;'static str = &quot;I have a static lifetime.&quot;;
 
@@ -740,7 +733,6 @@ is fixing those problems, not specifying the <code>'static</code> lifetime.</p>
 <p>Let's briefly look at the syntax of specifying generic type parameters, trait
 bounds, and lifetimes all in one function!</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 use std::fmt::Display;
 

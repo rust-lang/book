@@ -10,7 +10,8 @@
         <base href="">
 
         <link rel="stylesheet" href="book.css">
-        <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+        <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500" rel="stylesheet" type="text/css">
 
         <link rel="shortcut icon" href="favicon.png">
 
@@ -71,7 +72,6 @@
 <p>Rust has a special attribute, <code>#[cfg]</code>, which allows you to compile code
 based on a flag passed to the compiler. It has two forms:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 #[cfg(foo)]
 # fn foo() {}
@@ -82,7 +82,6 @@ based on a flag passed to the compiler. It has two forms:</p>
 #}</code></pre></pre>
 <p>They also have some helpers:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 #[cfg(any(unix, windows))]
 # fn foo() {}
@@ -96,7 +95,6 @@ based on a flag passed to the compiler. It has two forms:</p>
 #}</code></pre></pre>
 <p>These can nest arbitrarily:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 #[cfg(any(not(unix), all(target_os=&quot;macos&quot;, target_arch = &quot;powerpc&quot;)))]
 # fn foo() {}
@@ -118,7 +116,6 @@ foo = []
 <p>The sum of these <code>cfg</code> flags will determine which ones get activated, and
 therefore, which code gets compiled. Let’s take this code:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 #[cfg(feature = &quot;foo&quot;)]
 mod foo {
@@ -131,7 +128,6 @@ and so, no <code>foo</code> module will exist.</p>
 <a class="header" href="conditional-compilation.html#cfg_attr" id="cfg_attr"><h1>cfg_attr</h1></a>
 <p>You can also set another attribute based on a <code>cfg</code> variable with <code>cfg_attr</code>:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 #[cfg_attr(a, b)]
 # fn foo() {}
@@ -141,7 +137,6 @@ and so, no <code>foo</code> module will exist.</p>
 <a class="header" href="conditional-compilation.html#cfg" id="cfg"><h1>cfg!</h1></a>
 <p>The <code>cfg!</code> macro lets you use these kinds of flags elsewhere in your code, too:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 if cfg!(target_os = &quot;macos&quot;) || cfg!(target_os = &quot;ios&quot;) {
     println!(&quot;Think Different!&quot;);

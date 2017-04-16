@@ -192,7 +192,6 @@ the compiler is not checking exhaustiveness for us.</p>
 example using a <code>while let</code> loop to use a vector as a stack and print out the
 values in the vector in the opposite order that we pushed the values in:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let mut stack = Vec::new();
 
@@ -220,7 +219,6 @@ pattern in a <code>for</code> loop to destructure a tuple. The <code>enumerate</
 an iterator to produce a value and the index of the value in the iterator in a
 tuple:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let v = vec![1, 2, 3];
 
@@ -244,7 +242,6 @@ be 1.</p>
 earlier in the book, but they aren't the only places we've <em>used</em> patterns. For
 example, consider this straightforward variable assignment with <code>let</code>:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let x = 5;
 
@@ -264,7 +261,6 @@ whole pattern, this pattern effectively means &quot;bind everything to the varia
 <p>To see the pattern matching aspect of <code>let</code> a bit more clearly, consider
 Listing 18-4 where we're using a pattern with <code>let</code> to destructuring a tuple:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let (x, y, z) = (1, 2, 3);
 
@@ -284,7 +280,6 @@ where we destructured the return value of <code>mpsc::channel()</code> into the 
 Listing 18-5 declaring a function named <code>foo</code> that takes one parameter named
 <code>x</code> of type <code>i32</code> should look familiar:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 fn foo(x: i32) {
     // code goes here

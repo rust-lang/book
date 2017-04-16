@@ -10,7 +10,8 @@
         <base href="">
 
         <link rel="stylesheet" href="book.css">
-        <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+        <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500" rel="stylesheet" type="text/css">
 
         <link rel="shortcut icon" href="favicon.png">
 
@@ -101,7 +102,6 @@ function result.</p>
 <a class="header" href="casting-between-types.html#as" id="as"><h1><code>as</code></h1></a>
 <p>The <code>as</code> keyword does safe casting:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let x: i32 = 5;
 
@@ -126,7 +126,6 @@ and <code>U</code> is an integer type; <em>enum-cast</em></li>
 </ul>
 <p>For example</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let one = true as u8;
 let at_sign = 64 as char;
@@ -170,7 +169,6 @@ be fixed.</li>
 from integers, and to cast between pointers to different types subject to
 some constraints. It is only unsafe to dereference the pointer:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let a = 300 as *const char; // `a` is a pointer to location 300.
 let b = a as u32;

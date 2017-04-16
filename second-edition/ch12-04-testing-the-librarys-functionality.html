@@ -143,7 +143,6 @@ a query and the text to search for the query in, and will return only the lines
 from the text that contain the query. Listing 12-15 shows this test:</p>
 <p><span class="filename">Filename: src/lib.rs</span></p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 # fn search&lt;'a&gt;(query: &amp;str, contents: &amp;'a str) -&gt; Vec&lt;&amp;'a str&gt; {
 #      vec![]
@@ -183,7 +182,6 @@ and fail because an empty vector doesn't match a vector containing the one
 line <code>&quot;safe, fast, productive.&quot;</code>.</p>
 <p><span class="filename">Filename: src/lib.rs</span></p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 fn search&lt;'a&gt;(query: &amp;str, contents: &amp;'a str) -&gt; Vec&lt;&amp;'a str&gt; {
      vec![]

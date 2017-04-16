@@ -10,7 +10,8 @@
         <base href="">
 
         <link rel="stylesheet" href="book.css">
-        <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+        <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500" rel="stylesheet" type="text/css">
 
         <link rel="shortcut icon" href="favicon.png">
 
@@ -74,7 +75,6 @@ of any type (see the chapter on <a href="generics.html">generics</a> for more).
 Vectors always allocate their data on the heap.
 You can create them with the <code>vec!</code> macro:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let v = vec![1, 2, 3, 4, 5]; // v: Vec&lt;i32&gt;
 
@@ -84,7 +84,6 @@ brackets <code>[]</code> with <code>vec!</code> macro. Rust allows you to use ei
 situation, this is just convention.)</p>
 <p>There’s an alternate form of <code>vec!</code> for repeating an initial value:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let v = vec![0; 10]; // A vector of ten zeroes.
 
@@ -97,7 +96,6 @@ thankfully, the <a href="../../std/boxed/index.html"><code>Box</code></a> type w
 <a class="header" href="vectors.html#accessing-elements" id="accessing-elements"><h2>Accessing elements</h2></a>
 <p>To get the value at a particular index in the vector, we use <code>[]</code>s:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let v = vec![1, 2, 3, 4, 5];
 
@@ -139,7 +137,6 @@ println!(&quot;Item 7 is {}&quot;, v[7]);
 methods like <a href="../../std/vec/struct.Vec.html#method.get"><code>get</code></a> or <a href="../../std/vec/struct.Vec.html#method.get_mut"><code>get_mut</code></a> that return <code>None</code> when
 given an invalid index:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let v = vec![1, 2, 3];
 match v.get(7) {
@@ -152,7 +149,6 @@ match v.get(7) {
 <p>Once you have a vector, you can iterate through its elements with <code>for</code>. There
 are three versions:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let mut v = vec![1, 2, 3, 4, 5];
 
@@ -184,7 +180,6 @@ for i in v {
 </code></pre>
 <p>Whereas the following works perfectly,</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let v = vec![1, 2, 3, 4, 5];
 

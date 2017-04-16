@@ -10,7 +10,8 @@
         <base href="">
 
         <link rel="stylesheet" href="book.css">
-        <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+        <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500" rel="stylesheet" type="text/css">
 
         <link rel="shortcut icon" href="favicon.png">
 
@@ -84,7 +85,6 @@ variable bindings have a few tricks up their sleeves. For example the
 left-hand side of a <code>let</code> statement is a ‘<a href="patterns.html">pattern</a>’, not a
 variable name. This means we can do things like:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let (x, y) = (1, 2);
 
@@ -101,7 +101,6 @@ out what the type of something is, Rust doesn’t require you to explicitly type
 it out.</p>
 <p>We can add the type if we want to, though. Types come after a colon (<code>:</code>):</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let x: i32 = 5;
 
@@ -134,7 +133,6 @@ x = 10;
 </code></pre>
 <p>If you want a binding to be mutable, you can use <code>mut</code>:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let mut x = 5; // mut x: i32
 x = 10;
@@ -245,7 +243,6 @@ To learn more, run the command again with --verbose.
 variable binding with the same name as another binding that is currently in
 scope will override the previous binding.</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let x: i32 = 8;
 {
@@ -266,7 +263,6 @@ name does not alter or destroy the value it was bound to, and the value will
 continue to exist until it goes out of scope, even if it is no longer accessible
 by any means.</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let mut x: i32 = 1;
 x = 7;

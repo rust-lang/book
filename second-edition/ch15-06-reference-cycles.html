@@ -255,7 +255,6 @@ items <em>and</em> their parent items.</p>
 well as references to its children <code>Node</code> values:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 use std::rc::Rc;
 use std::cell::RefCell;
@@ -305,7 +304,6 @@ their reference counts would never be zero.</p>
 specifically a <code>RefCell&lt;Weak&lt;Node&gt;&gt;</code>:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 use std::rc::{Rc, Weak};
 use std::cell::RefCell;

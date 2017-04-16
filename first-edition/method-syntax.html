@@ -10,7 +10,8 @@
         <base href="">
 
         <link rel="stylesheet" href="book.css">
-        <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+        <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500" rel="stylesheet" type="text/css">
 
         <link rel="shortcut icon" href="favicon.png">
 
@@ -113,7 +114,6 @@ like we would with any other <code>struct</code>.</p>
 ownership, as well as taking immutable references over mutable ones. Here’s an
 example of all three variants:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 struct Circle {
     x: f64,
@@ -139,7 +139,6 @@ impl Circle {
 <p>You can use as many <code>impl</code> blocks as you’d like. The previous example could
 have also been written like this:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 struct Circle {
     x: f64,
@@ -196,7 +195,6 @@ fn main() {
 </code></pre></pre>
 <p>Check the return type:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 # struct Circle;
 # impl Circle {

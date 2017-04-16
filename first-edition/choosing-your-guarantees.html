@@ -10,7 +10,8 @@
         <base href="">
 
         <link rel="stylesheet" href="book.css">
-        <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+        <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500" rel="stylesheet" type="text/css">
 
         <link rel="shortcut icon" href="favicon.png">
 
@@ -82,7 +83,6 @@ detail.</p>
 out references to the contained data, it is the only owner of the data. In particular, consider
 the following:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let x = Box::new(1);
 let y = x;
@@ -156,7 +156,6 @@ no worry of leaking any data behind references (or worse!) by simply replacing t
 If a field is wrapped in <code>Cell</code>, it's a nice indicator that the chunk of data is mutable and may not
 stay the same between the time you first read it and when you intend to use it.</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 use std::cell::Cell;
 
@@ -203,7 +202,6 @@ the smart pointers go out of scope. With this system, we can dynamically ensure 
 any other borrows active when a mutable borrow is active. If the programmer attempts to make such a
 borrow, the thread will panic.</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 use std::cell::RefCell;
 

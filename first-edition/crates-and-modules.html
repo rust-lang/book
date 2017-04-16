@@ -10,7 +10,8 @@
         <base href="">
 
         <link rel="stylesheet" href="book.css">
-        <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+        <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500" rel="stylesheet" type="text/css">
 
         <link rel="shortcut icon" href="favicon.png">
 
@@ -125,7 +126,6 @@ above.</p>
 <p>To define each of our modules, we use the <code>mod</code> keyword. Let’s make our
 <code>src/lib.rs</code> look like this:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 mod english {
     mod greetings {
@@ -235,7 +235,6 @@ their own sub-modules, we’ve chosen to make them
 some functions.</p>
 <p>Put this in <code>src/english/greetings.rs</code>:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 fn hello() -&gt; String {
     &quot;Hello!&quot;.to_string()
@@ -244,7 +243,6 @@ fn hello() -&gt; String {
 #}</code></pre></pre>
 <p>Put this in <code>src/english/farewells.rs</code>:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 fn goodbye() -&gt; String {
     &quot;Goodbye.&quot;.to_string()
@@ -253,7 +251,6 @@ fn goodbye() -&gt; String {
 #}</code></pre></pre>
 <p>Put this in <code>src/japanese/greetings.rs</code>:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 fn hello() -&gt; String {
     &quot;こんにちは&quot;.to_string()
@@ -265,7 +262,6 @@ something else. It’s not important that you actually put ‘konnichiwa’ to l
 about the module system.</p>
 <p>Put this in <code>src/japanese/farewells.rs</code>:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 fn goodbye() -&gt; String {
     &quot;さようなら&quot;.to_string()

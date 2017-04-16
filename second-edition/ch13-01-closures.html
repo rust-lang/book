@@ -256,7 +256,6 @@ can do with them. We can also define functions that have closures as parameters
 by using the <code>Fn</code> traits. Here's an example of a function named <code>call_with_one</code>
 whose signature has a closure as a parameter:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 fn call_with_one&lt;F&gt;(some_closure: F) -&gt; i32
     where F: Fn(i32) -&gt; i32 {

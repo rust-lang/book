@@ -10,7 +10,8 @@
         <base href="">
 
         <link rel="stylesheet" href="book.css">
-        <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+        <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500" rel="stylesheet" type="text/css">
 
         <link rel="shortcut icon" href="favicon.png">
 
@@ -74,7 +75,6 @@ about your code. The compiler mostly ignores them.</p>
 <p>Rust has two kinds of comments that you should care about: <em>line comments</em>
 and <em>doc comments</em>.</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 // Line comments are anything after ‘//’ and extend to the end of the line.
 
@@ -88,7 +88,6 @@ let x = 5; // This is also a line comment.
 <p>The other kind of comment is a doc comment. Doc comments use <code>///</code> instead of
 <code>//</code>, and support Markdown notation inside:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 /// Adds one to the number given.
 ///

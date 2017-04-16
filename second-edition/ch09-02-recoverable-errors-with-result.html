@@ -120,7 +120,6 @@ file instead of terminating the process.</p>
 <code>Result</code> Type</a><!-- ignore -->” that the <code>Result</code> enum is defined
 as having two variants, <code>Ok</code> and <code>Err</code>, as follows:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 enum Result&lt;T, E&gt; {
     Ok(T),
@@ -327,7 +326,6 @@ handled than what you have available in the context of your code.</p>
 the file doesn’t exist or can’t be read, this function will return those errors
 to the code that called this function:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 use std::io;
 use std::io::Read;
@@ -395,7 +393,6 @@ syntax to make this easier: <code>?</code>.</p>
 same functionality as it had in Listing 9-5, but this implementation uses the
 question mark operator:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 use std::io;
 use std::io::Read;
@@ -427,7 +424,6 @@ call.</p>
 implementation simpler. We could even shorten this code further by chaining
 method calls immediately after the <code>?</code>:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 use std::io;
 use std::io::Read;

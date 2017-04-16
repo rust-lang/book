@@ -10,7 +10,8 @@
         <base href="">
 
         <link rel="stylesheet" href="book.css">
-        <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+        <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500" rel="stylesheet" type="text/css">
 
         <link rel="shortcut icon" href="favicon.png">
 
@@ -71,7 +72,6 @@
 <p>Let's talk about loops.</p>
 <p>Remember Rust's <code>for</code> loop? Here's an example:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 for x in 0..10 {
     println!(&quot;{}&quot;, x);
@@ -86,7 +86,6 @@ starts at 0) and exclusive on the right (so it ends at 9). A mathematician
 would write &quot;[0, 10)&quot;.</p>
 <p>Like this:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let mut range = 0..10;
 
@@ -117,7 +116,6 @@ following Rust anti-pattern: using ranges to emulate a C-style <code>for</code> 
 suppose you needed to iterate over the contents of a vector. You may be tempted
 to write this:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let nums = vec![1, 2, 3];
 
@@ -129,7 +127,6 @@ for i in 0..nums.len() {
 <p>This is strictly worse than using an actual iterator. You can iterate over vectors
 directly, so write this:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let nums = vec![1, 2, 3];
 
@@ -151,7 +148,6 @@ works. <code>num</code> is actually of type <code>&amp;i32</code>. That is, it's
 not an <code>i32</code> itself. <code>println!</code> handles the dereferencing for us, so we don't
 see it. This code works fine too:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let nums = vec![1, 2, 3];
 
@@ -189,7 +185,6 @@ of the results. So why won't this compile? Rust can't determine what
 type of things you want to collect, and so you need to let it know.
 Here's the version that does compile:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let one_to_one_hundred = (1..101).collect::&lt;Vec&lt;i32&gt;&gt;();
 
@@ -199,7 +194,6 @@ allows us to give a type hint that tells the compiler we want a vector of
 integers. You don't always need to use the whole type, though. Using a <code>_</code>
 will let you provide a partial hint:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let one_to_one_hundred = (1..101).collect::&lt;Vec&lt;_&gt;&gt;();
 
@@ -209,7 +203,6 @@ let one_to_one_hundred = (1..101).collect::&lt;Vec&lt;_&gt;&gt;();
 <p><code>collect()</code> is the most common consumer, but there are others too. <code>find()</code>
 is one:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let greater_than_forty_two = (0..100)
                              .find(|x| *x &gt; 42);
@@ -227,7 +220,6 @@ the specified predicate. Because we might not find a matching element, <code>fin
 returns an <code>Option</code> rather than the element itself.</p>
 <p>Another important consumer is <code>fold</code>. Here's what it looks like:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let sum = (1..4).fold(0, |sum, x| sum + x);
 
@@ -248,7 +240,6 @@ in this iterator:</p>
 </table>
 <p>We called <code>fold()</code> with these arguments:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 # (1..4)
 .fold(0, |sum, x| sum + x);
@@ -276,7 +267,6 @@ can be <em>lazy</em> and not generate all of the values upfront. This code,
 for example, does not actually generate the numbers <code>1-99</code>, instead
 creating a value that merely represents the sequence:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let nums = 1..100;
 
@@ -284,7 +274,6 @@ let nums = 1..100;
 <p>Since we didn't do anything with the range, it didn't generate the sequence.
 Let's add the consumer:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let nums = (1..100).collect::&lt;Vec&lt;i32&gt;&gt;();
 
@@ -295,7 +284,6 @@ it will do the work of generating the sequence.</p>
 <code>iter()</code> can turn a vector into a simple iterator that gives you each element
 in turn:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let nums = vec![1, 2, 3];
 
@@ -332,7 +320,6 @@ use <code>for</code> instead.</p>
 iterator over the next <code>n</code> elements of the original iterator. Let's try it out
 with an infinite iterator:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 for i in (1..).take(5) {
     println!(&quot;{}&quot;, i);
@@ -350,7 +337,6 @@ for i in (1..).take(5) {
 returns <code>true</code> or <code>false</code>. The new iterator <code>filter()</code> produces
 only the elements that the closure returns <code>true</code> for:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 for i in (1..100).filter(|&amp;x| x % 2 == 0) {
     println!(&quot;{}&quot;, i);
@@ -367,7 +353,6 @@ into the newly constructed iterator.)</p>
 <p>You can chain all three things together: start with an iterator, adapt it
 a few times, and then consume the result. Check it out:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 (1..)
     .filter(|&amp;x| x % 2 == 0)

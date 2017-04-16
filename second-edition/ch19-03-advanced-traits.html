@@ -126,7 +126,6 @@ by the standard library. It has an associated type named <code>Item</code> that 
 for the type of the values that we're iterating over. We mentioned in Chapter
 13 that the definition of the <code>Iterator</code> trait is as shown in Listing 19-20:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 pub trait Iterator {
     type Item;
@@ -152,7 +151,6 @@ containing a value of whatever type the implementer has specified.</p>
 <p>This feels similar to generics. So why isn't the <code>Iterator</code> trait defined as
 shown in Listing 19-21?</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 pub trait Iterator&lt;T&gt; {
     fn next(&amp;mut self) -&gt; Option&lt;T&gt;;
@@ -178,7 +176,6 @@ defined in Listing 19-22. Both are defining a trait having to do with a graph
 structure that contains nodes of some type and edges of some type. <code>GGraph</code> is
 defined using generics, and <code>AGraph</code> is defined using associated types:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 trait GGraph&lt;Node, Edge&gt; {
     // methods would go here
@@ -199,7 +196,6 @@ two nodes in any types that implement the graph trait. With the <code>GGraph</co
 defined using generics, our <code>distance</code> function signature would have to look
 like Listing 19-23:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 # trait GGraph&lt;Node, Edge&gt; {}
 #
@@ -220,7 +216,6 @@ we need to to use the <code>GGraph</code> trait and that requires specifying the
 <p>Contrast with the definition of <code>distance</code> in Listing 19-24 that uses the
 <code>AGraph</code> trait from Listing 19-22 with associated types:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 # trait AGraph {
 #     type Node;
@@ -244,7 +239,6 @@ functions in Listing 19-23 and Listing 19-24. The signature for the <code>distan
 function using the generic <code>GGraph</code> trait does get a bit more concise using a
 trait object:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 # trait GGraph&lt;Node, Edge&gt; {}
 #
@@ -267,7 +261,6 @@ we've chosen to accept types that implement the <code>AGraph</code> trait with t
 concrete type of <code>usize</code> as their <code>Node</code> type and a tuple of two <code>usize</code> values
 for their <code>Edge</code> type:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 # trait AGraph {
 #     type Node;
@@ -327,7 +320,6 @@ create a new <code>Point</code>. The <code>Add</code> trait has an <code>Output<
 used to determine the type returned from <code>add</code>. result of the operation.</p>
 <p>Let's look at the <code>Add</code> trait in a bit more detail. Here's its definition:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 trait Add&lt;RHS=Self&gt; {
     type Output;
@@ -348,7 +340,6 @@ two structs holding values in different units, <code>Millimeters</code> and <cod
 can implement <code>Add</code> for <code>Millimeters</code> in different ways as shown in Listing
 19-26:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 use std::ops::Add;
 
@@ -516,7 +507,6 @@ trait definition by specifying <code>OutlinePrint: Display</code>. It's like add
 trait bound to the trait. Listing 19-29 shows an implementation of the
 <code>OutlinePrint</code> trait:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 use std::fmt::Display;
 
@@ -543,7 +533,6 @@ for the type <code>&amp;Self</code> in the current scope.</p>
 <p>If we try to implement <code>OutlinePrint</code> on a type that doesn't implement
 <code>Display</code>, such as the <code>Point</code> struct:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 # trait OutlinePrint {}
 struct Point {
@@ -570,7 +559,6 @@ required by <code>OutlinePrint</code>:</p>
 <p>Once we implement <code>Display</code> on <code>Point</code> and satisfy the constraint that
 <code>OutlinePrint</code> requires, like so:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 # struct Point {
 #     x: i32,

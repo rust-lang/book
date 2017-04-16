@@ -143,7 +143,6 @@ Rust also provides the ability to declare a <em>type alias</em> with the <code>t
 keyword to give an existing type another name. For example, we can create the
 alias <code>Kilometers</code> to <code>i32</code> like so:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 type Kilometers = i32;
 
@@ -153,7 +152,6 @@ type Kilometers = i32;
 type. Values that have the type <code>Kilometers</code> will be treated exactly the same
 as values of type <code>i32</code>:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 type Kilometers = i32;
 
@@ -176,7 +174,6 @@ may have a lengthy type like this:</p>
 place can be tiresome and error-prone. Imagine having a project full of code
 like that in Listing 19-31:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let f: Box&lt;FnOnce() + Send + 'static&gt; = Box::new(|| println!(&quot;hi&quot;));
 
@@ -196,7 +193,6 @@ repetition this project has. Here, we've introduced an alias named <code>Thunk</
 the verbose type, and we can replace all uses of the type with the shorter
 <code>Thunk</code> as shown in Listing 19-32:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 type Thunk = Box&lt;FnOnce() + Send + 'static&gt;;
 
@@ -224,7 +220,6 @@ the <code>std::io</code> module in the standard library. I/O operations often re
 the functions in <code>std::io</code> will be returning <code>Result&lt;T, E&gt;</code> where the <code>E</code> is
 <code>std::io::Error</code>, such as these functions in the <code>Write</code> trait:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 use std::io::Error;
 # use std::fmt::Arguments;
@@ -271,7 +266,6 @@ so <code>bar</code> can never possibly return. What use is a type you can never 
 values for? If you think all the way back to Chapter 2, we had some code that
 looked like this, reproduced here in Listing 19-33:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 # let guess = &quot;3&quot;;
 # loop {

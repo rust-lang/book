@@ -328,7 +328,6 @@ variants. We used the <code>Option&lt;T&gt;</code> enum provided by the standard
 Chapter 6, and now its definition should make more sense. Let's take another
 look:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 enum Option&lt;T&gt; {
     Some(T),
@@ -346,7 +345,6 @@ of duplication.</p>
 <p>Enums can use multiple generic types as well. The definition of the <code>Result</code>
 enum that we used in Chapter 9 is one example:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 enum Result&lt;T, E&gt; {
     Ok(T),
@@ -451,7 +449,6 @@ generic code is called and generates code for the concrete types that the
 generic code is called with.</p>
 <p>Let's work through an example that uses the standard library's <code>Option</code> enum:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let integer = Some(5);
 let float = Some(5.0);

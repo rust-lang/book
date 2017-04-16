@@ -132,7 +132,6 @@ Here we’re keeping track of the scores of two teams whose names are Blue and
 Yellow. The Blue team will start with 10 points and the Yellow team starts with
 50:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 use std::collections::HashMap;
 
@@ -159,7 +158,6 @@ separate vectors, we can use the <code>zip</code> method to create a vector of t
 where “Blue” is paired with 10, and so forth. Then we can use the <code>collect</code>
 method to turn that vector of tuples into a <code>HashMap</code>:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 use std::collections::HashMap;
 
@@ -179,7 +177,6 @@ contains based on the types of the data in the vector.</p>
 into the hash map. For owned values like <code>String</code>, the values will be moved and
 the hash map will be the owner of those values:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 use std::collections::HashMap;
 
@@ -200,7 +197,6 @@ about these issues in the Lifetimes section of Chapter 10.</p>
 <a class="header" href="ch08-03-hash-maps.html#accessing-values-in-a-hash-map" id="accessing-values-in-a-hash-map"><h3>Accessing Values in a Hash Map</h3></a>
 <p>We can get a value out of the hash map by providing its key to the <code>get</code> method:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 use std::collections::HashMap;
 
@@ -221,7 +217,6 @@ ways that we covered in Chapter 6.</p>
 <p>We can iterate over each key/value pair in a hash map in a similar manner as we
 do with vectors, using a <code>for</code> loop:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 use std::collections::HashMap;
 
@@ -255,7 +250,6 @@ though this following code calls <code>insert</code> twice, the hash map will on
 one key/value pair because we’re inserting the value for the Blue team’s key
 both times:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 use std::collections::HashMap;
 
@@ -278,7 +272,6 @@ team has a value associated with it. If it doesn’t, we want to insert the valu
 50, and the same for the Blue team. With the entry API, the code for this looks
 like:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 use std::collections::HashMap;
 
@@ -306,7 +299,6 @@ each word appeared in some text, we could use a hash map with the words as keys
 and increment the value to keep track of how many times we’ve seen that word.
 If this is the first time we’ve seen a word, we’ll first insert the value <code>0</code>.</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 use std::collections::HashMap;
 

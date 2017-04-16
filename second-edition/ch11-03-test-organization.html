@@ -141,7 +141,6 @@ compiled result.</p>
 this chapter, Cargo generated this code for us:</p>
 <p><span class="filename">Filename: src/lib.rs</span></p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 #[cfg(test)]
 mod tests {
@@ -165,7 +164,6 @@ adhere to, Rust's privacy rules do allow you to test private functions.
 Consider the code in Listing 11-12 with the private function <code>internal_adder</code>:</p>
 <p><span class="filename">Filename: src/lib.rs</span></p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 pub fn add_two(a: i32) -&gt; i32 {
     internal_adder(a, 2)
@@ -308,7 +306,6 @@ put some code that we want to be able to call from multiple test functions in
 multiple test files:</p>
 <p><span class="filename">Filename: tests/common.rs</span></p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 pub fn setup() {
     // setup code specific to your library's tests would go here

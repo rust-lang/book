@@ -10,7 +10,8 @@
         <base href="">
 
         <link rel="stylesheet" href="book.css">
-        <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+        <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500" rel="stylesheet" type="text/css">
 
         <link rel="shortcut icon" href="favicon.png">
 
@@ -95,7 +96,6 @@ mind.</p>
 <p>You may have seen the <code>vec!</code> macro, used to initialize a <a href="vectors.html">vector</a> with
 any number of elements.</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let x: Vec&lt;u32&gt; = vec![1, 2, 3];
 # assert_eq!(x, [1, 2, 3]);
@@ -104,7 +104,6 @@ let x: Vec&lt;u32&gt; = vec![1, 2, 3];
 <p>This can’t be an ordinary function, because it takes any number of arguments.
 But we can imagine it as syntactic shorthand for</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let x: Vec&lt;u32&gt; = {
     let mut temp_vec = Vec::new();
@@ -568,7 +567,6 @@ arguments.</p>
 the <a href="https://esolangs.org/wiki/Bitwise_Cyclic_Tag">Bitwise Cyclic Tag</a> automaton
 within Rust’s macro system.</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 macro_rules! bct {
     // cmd 0:  d ... =&gt; ...
@@ -601,7 +599,6 @@ macro_rules! bct {
 <p>This macro causes the current thread to panic. You can give it a message
 to panic with:</p>
 <pre><pre class="playpen"><code class="language-rust should_panic"># #![allow(unused_variables)]
-# 
 #fn main() {
 panic!(&quot;oh no!&quot;);
 
@@ -610,7 +607,6 @@ panic!(&quot;oh no!&quot;);
 <p>The <code>vec!</code> macro is used throughout the book, so you’ve probably seen it
 already. It creates <code>Vec&lt;T&gt;</code>s with ease:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let v = vec![1, 2, 3, 4, 5];
 
@@ -618,7 +614,6 @@ let v = vec![1, 2, 3, 4, 5];
 <p>It also lets you make vectors with repeating values. For example, a hundred
 zeroes:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let v = vec![0; 100];
 
@@ -628,7 +623,6 @@ let v = vec![0; 100];
 takes two values and checks them for equality. <code>true</code> passes, <code>false</code> <code>panic!</code>s.
 Like this:</p>
 <pre><pre class="playpen"><code class="language-rust should_panic"># #![allow(unused_variables)]
-# 
 #fn main() {
 // A-ok!
 
@@ -646,7 +640,6 @@ assert_eq!(5, 3);
 <code>Result&lt;T, E&gt;</code>, and gives <code>T</code> if it’s a <code>Ok&lt;T&gt;</code>, and <code>return</code>s with the
 <code>Err(E)</code> if it’s that. Like this:</p>
 <pre><pre class="playpen"><code class="language-rust no_run"># #![allow(unused_variables)]
-# 
 #fn main() {
 use std::fs::File;
 
@@ -659,7 +652,6 @@ fn foo() -&gt; std::io::Result&lt;()&gt; {
 #}</code></pre></pre>
 <p>This is cleaner than doing this:</p>
 <pre><pre class="playpen"><code class="language-rust no_run"># #![allow(unused_variables)]
-# 
 #fn main() {
 use std::fs::File;
 
@@ -678,7 +670,6 @@ fn foo() -&gt; std::io::Result&lt;()&gt; {
 <a class="header" href="macros.html#unreachable" id="unreachable"><h2>unreachable!</h2></a>
 <p>This macro is used when you think some code should never execute:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 if false {
     unreachable!();
@@ -689,7 +680,6 @@ if false {
 will never, ever run. In these cases, use this macro, so that if you end
 up wrong, you’ll get a <code>panic!</code> about it.</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let x: Option&lt;i32&gt; = None;
 

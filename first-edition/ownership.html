@@ -10,7 +10,8 @@
         <base href="">
 
         <link rel="stylesheet" href="book.css">
-        <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+        <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500" rel="stylesheet" type="text/css">
 
         <link rel="shortcut icon" href="favicon.png">
 
@@ -103,7 +104,6 @@ checker less and less.</p>
 of what they’re bound to. This means that when a binding goes out of scope,
 Rust will free the bound resources. For example:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 fn foo() {
     let v = vec![1, 2, 3];
@@ -126,7 +126,6 @@ elements onto them.</p>
 one</em> binding to any given resource. For example, if we have a vector, we can
 assign it to another binding:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let v = vec![1, 2, 3];
 
@@ -165,7 +164,6 @@ special annotation here, it’s the default thing that Rust does.</p>
 important.</p>
 <p>When we write code like this:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let x = 10;
 
@@ -175,7 +173,6 @@ pattern representing the value of 10 to the allocated memory and binds the
 variable name x to this memory region for future reference.</p>
 <p>Now consider the following code fragment:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let v = vec![1, 2, 3];
 
@@ -202,7 +199,6 @@ Rust’s safety guarantees by introducing a data race if one could access both
 <code>v</code> and <code>v2</code> at the same time.</p>
 <p>For example if we truncated the vector to just two elements through <code>v2</code>:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 # let v = vec![1, 2, 3];
 # let mut v2 = v;
@@ -228,7 +224,6 @@ behavior, and it’s called <code>Copy</code>. We haven’t discussed traits yet
 you can think of them as an annotation to a particular type that adds extra
 behavior. For example:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let v = 1;
 
@@ -278,7 +273,6 @@ section.</p>
 <a class="header" href="ownership.html#more-than-ownership" id="more-than-ownership"><h1>More than ownership</h1></a>
 <p>Of course, if we had to hand ownership back with every function we wrote:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 fn foo(v: Vec&lt;i32&gt;) -&gt; Vec&lt;i32&gt; {
     // Do stuff with `v`.
@@ -290,7 +284,6 @@ fn foo(v: Vec&lt;i32&gt;) -&gt; Vec&lt;i32&gt; {
 #}</code></pre></pre>
 <p>This would get very tedious. It gets worse the more things we want to take ownership of:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 fn foo(v1: Vec&lt;i32&gt;, v2: Vec&lt;i32&gt;) -&gt; (Vec&lt;i32&gt;, Vec&lt;i32&gt;, i32) {
     // Do stuff with `v1` and `v2`.

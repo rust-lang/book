@@ -10,7 +10,8 @@
         <base href="">
 
         <link rel="stylesheet" href="book.css">
-        <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+        <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500" rel="stylesheet" type="text/css">
 
         <link rel="shortcut icon" href="favicon.png">
 
@@ -72,7 +73,6 @@
 doing calculations involving coordinates in 2D space, we would need both an <code>x</code>
 and a <code>y</code> value:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let origin_x = 0;
 let origin_y = 0;
@@ -189,7 +189,6 @@ fn main() {
 <p>A <code>struct</code> can include <code>..</code> to indicate that you want to use a copy of some
 other <code>struct</code> for some of the values. For example:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 struct Point3d {
     x: i32,
@@ -205,7 +204,6 @@ point = Point3d { y: 1, .. point };
 have to be the same <code>struct</code> either, you can use this syntax when making new
 ones, and it will copy the values you don’t specify:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 # struct Point3d {
 #     x: i32,
@@ -222,7 +220,6 @@ let point = Point3d { z: 1, x: 2, .. origin };
 don't. They are declared with the <code>struct</code> keyword, and then with a name
 followed by a tuple:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 struct Color(i32, i32, i32);
 struct Point(i32, i32, i32);
@@ -236,7 +233,6 @@ same values.</p>
 <p>The members of a tuple struct may be accessed by dot notation or destructuring
 <code>let</code>, just like regular tuples:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 # struct Color(i32, i32, i32);
 # struct Point(i32, i32, i32);
@@ -253,7 +249,6 @@ We call this the ‘newtype’ pattern, because it allows you to create a new ty
 that is distinct from its contained value and also expresses its own semantic
 meaning:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 struct Inches(i32);
 
@@ -267,7 +262,6 @@ println!(&quot;length is {} inches&quot;, integer_length);
 In this case, the <code>let Inches(integer_length)</code> assigns <code>10</code> to <code>integer_length</code>.
 We could have used dot notation to do the same thing:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 # struct Inches(i32);
 # let length = Inches(10);
@@ -277,7 +271,6 @@ let integer_length = length.0;
 <p>It's always possible to use a <code>struct</code> instead of a tuple struct, and can be
 clearer. We could write <code>Color</code> and <code>Point</code> like this instead:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 struct Color {
     red: i32,
@@ -298,7 +291,6 @@ rather than positions.</p>
 <a class="header" href="structs.html#unit-like-structs" id="unit-like-structs"><h1>Unit-like structs</h1></a>
 <p>You can define a <code>struct</code> with no members at all:</p>
 <pre><pre class="playpen"><code class="language-rust compile_fail E0423"># #![allow(unused_variables)]
-# 
 #fn main() {
 struct Electron {} // Use empty braces...
 struct Proton;     // ...or just a semicolon.

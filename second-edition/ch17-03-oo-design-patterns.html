@@ -188,7 +188,6 @@ we're going to start by defining just the <code>Draft</code> state since that's 
 we want to start in:</p>
 <p><span class="filename">Filename: src/lib.rs</span></p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 pub struct Post {
     state: Option&lt;Box&lt;State&gt;&gt;,
@@ -230,7 +229,6 @@ method is pretty straightforward though, let's add the implementation in
 Listing 17-13 to the <code>impl Post</code> block:</p>
 <p><span class="filename">Filename: src/lib.rs</span></p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 # pub struct Post {
 #     content: String,
@@ -265,7 +263,6 @@ content should always be empty. Listing 17-14 shows this placeholder
 implementation:</p>
 <p><span class="filename">Filename: src/lib.rs</span></p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 # pub struct Post {
 #     content: String,
@@ -287,17 +284,16 @@ works as we intend.</p>
 <p>Next up is requesting a review of a post, which should change its state from
 <code>Draft</code> to <code>PendingReview</code>. We want <code>post</code> to have a public method named
 <code>request_review</code> that will take a mutable reference to <code>self</code>. Then we're going
-to call a <code>request_review</code> method on the state that we're holding, and that
-<code>request_review</code> method will consume the current state and return a new state.
-In order to be able to consume the old state, the state <code>request_review</code> method
-needs to take ownership of the state value. This is where the <code>Option</code> comes
-in: we're going to take the <code>Some</code> value out of the <code>state</code> field and leave a
+to call an internal <code>request_review</code> method on the state that we're holding, and
+this second <code>request_review</code> method will consume the current state and return a
+new state. In order to be able to consume the old state, the second <code>request_review</code>
+method needs to take ownership of the state value. This is where the <code>Option</code> comes
+in: we're going to <code>take</code> the <code>Some</code> value out of the <code>state</code> field and leave a
 <code>None</code> in its place since Rust doesn't let us have unpopulated fields in
 structs. Then we'll set the post's <code>state</code> value to the result of this
 operation. Listing 17-15 shows this code:</p>
 <p><span class="filename">Filename: src/lib.rs</span></p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 # pub struct Post {
 #     state: Option&lt;Box&lt;State&gt;&gt;,
@@ -365,7 +361,6 @@ to the <code>State</code> trait, and we'll add a new struct that implements <cod
 <code>Published</code> state. Listing 17-16 shows the new code:</p>
 <p><span class="filename">Filename: src/lib.rs</span></p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 # pub struct Post {
 #     state: Option&lt;Box&lt;State&gt;&gt;,
@@ -442,7 +437,6 @@ an argument. Then we'll return the value returned from the <code>content</code> 
 the <code>state</code> value as shown in Listing 17-17:</p>
 <p><span class="filename">Filename: src/lib.rs</span></p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 # trait State {
 #     fn content&lt;'a&gt;(&amp;self, post: &amp;'a Post) -&gt; &amp;'a str;
@@ -477,7 +471,6 @@ struct will override the <code>content</code> method and will return the value i
 <code>post.content</code>, as shown in Listing 17-18:</p>
 <p><span class="filename">Filename: src/lib.rs</span></p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 # pub struct Post {
 #     content: String
@@ -585,7 +578,6 @@ Listing 17-19 shows the definition of a <code>Post</code> struct, a <code>DraftP
 and methods on each:</p>
 <p><span class="filename">Filename: src/lib.rs</span></p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 pub struct Post {
     content: String,
@@ -638,7 +630,6 @@ defining the <code>request_review</code> method on <code>DraftPost</code> to ret
 return a <code>Post</code> as shown in Listing 17-20:</p>
 <p><span class="filename">Filename: src/lib.rs</span></p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 # pub struct Post {
 #     content: String,

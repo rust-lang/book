@@ -139,7 +139,6 @@ ask for that summary by calling a <code>summary</code> method on an instance. Li
 concept:</p>
 <p><span class="filename">Filename: lib.rs</span></p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 pub trait Summarizable {
     fn summary(&amp;self) -&gt; String;
@@ -169,7 +168,6 @@ username followed by the whole text of the tweet, assuming that tweet content
 is already limited to 140 characters.</p>
 <p><span class="filename">Filename: lib.rs</span></p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 # pub trait Summarizable {
 #     fn summary(&amp;self) -&gt; String;
@@ -279,7 +277,6 @@ the <code>summary</code> method of the <code>Summarize</code> trait instead of o
 define the method signature like we did in Listing 10-11:</p>
 <p><span class="filename">Filename: lib.rs</span></p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 pub trait Summarizable {
     fn summary(&amp;self) -&gt; String {
@@ -324,7 +321,6 @@ implementers to specify a small part of it. We could choose to have the
 is required, then a <code>summary</code> method that has a default implementation that
 calls the <code>author_summary</code> method:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 pub trait Summarizable {
     fn author_summary(&amp;self) -&gt; String;

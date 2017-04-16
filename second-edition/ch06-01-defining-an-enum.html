@@ -127,7 +127,6 @@ handling situations that apply to any kind of IP address.</p>
 listing the possible kinds an IP address can be, <code>V4</code> and <code>V6</code>. These are known
 as the <em>variants</em> of the enum:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 enum IpAddrKind {
     V4,
@@ -139,7 +138,6 @@ enum IpAddrKind {
 <a class="header" href="ch06-01-defining-an-enum.html#enum-values" id="enum-values"><h3>Enum Values</h3></a>
 <p>We can create instances of each of the two variants of <code>IpAddrKind</code> like this:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 # enum IpAddrKind {
 #     V4,
@@ -156,7 +154,6 @@ both values <code>IpAddrKind::V4</code> and <code>IpAddrKind::V6</code> are of t
 <code>IpAddrKind</code>. We can then, for instance, define a function that takes any
 <code>IpAddrKind</code>:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 # enum IpAddrKind {
 #     V4,
@@ -168,7 +165,6 @@ fn route(ip_type: IpAddrKind) { }
 #}</code></pre></pre>
 <p>And we can call this function with either variant:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 # enum IpAddrKind {
 #     V4,
@@ -186,7 +182,6 @@ at the moment we don’t have a way to store the actual IP address <em>data</em>
 only know what <em>kind</em> it is. Given that you just learned about structs in
 Chapter 5, you might tackle this problem as shown in Listing 6-1:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 enum IpAddrKind {
     V4,
@@ -224,7 +219,6 @@ rather than an enum as part of a struct by putting data directly into each enum
 variant. This new definition of the <code>IpAddr</code> enum says that both <code>V4</code> and <code>V6</code>
 variants will have associated <code>String</code> values:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 enum IpAddr {
     V4(String),
@@ -245,7 +239,6 @@ between 0 and 255. If we wanted to store <code>V4</code> addresses as four <code
 still express <code>V6</code> addresses as one <code>String</code> value, we wouldn’t be able to with
 a struct. Enums handle this case with ease:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 enum IpAddr {
     V4(u8, u8, u8, u8),
@@ -266,7 +259,6 @@ use!</a><!-- ignore --> Let’s look at how the standard library defines
 it embeds the address data inside the variants in the form of two different
 structs, which are defined differently for each variant:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 struct Ipv4Addr {
     // details elided
@@ -293,7 +285,6 @@ more about importing types in Chapter 7.</p>
 <p>Let’s look at another example of an enum in Listing 6-2: this one has a wide
 variety of types embedded in its variants:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 enum Message {
     Quit,
@@ -318,7 +309,6 @@ defining different kinds of struct definitions except the enum doesn’t use the
 type. The following structs could hold the same data that the preceding enum
 variants hold:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 struct QuitMessage; // unit struct
 struct MoveMessage {
@@ -337,7 +327,6 @@ which is a single type.</p>
 define methods on structs using <code>impl</code>, we’re also able to define methods on
 enums. Here’s a method named <code>call</code> that we could define on our <code>Message</code> enum:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 # enum Message {
 #     Quit,
@@ -400,7 +389,6 @@ that can encode the concept of a value being present or absent. This enum is
 <code>Option&lt;T&gt;</code>, and it is <a href="../../std/option/enum.Option.html">defined by the standard library</a><!-- ignore -->
 as follows:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 enum Option&lt;T&gt; {
     Some(T),
@@ -419,7 +407,6 @@ For now, all you need to know is that <code>&lt;T&gt;</code> means the <code>Som
 <code>Option</code> enum can hold one piece of data of any type. Here are some examples of
 using <code>Option</code> values to hold number types and string types:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let some_number = Some(5);
 let some_string = Some(&quot;a string&quot;);

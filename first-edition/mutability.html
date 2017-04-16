@@ -10,7 +10,8 @@
         <base href="">
 
         <link rel="stylesheet" href="book.css">
-        <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+        <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500" rel="stylesheet" type="text/css">
 
         <link rel="shortcut icon" href="favicon.png">
 
@@ -76,7 +77,6 @@ x = 6; // Error!
 </code></pre>
 <p>We can introduce mutability with the <code>mut</code> keyword:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let mut x = 5;
 
@@ -89,7 +89,6 @@ it’s not so much that the value at <code>x</code> is changing, but that the bi
 changed from one <code>i32</code> to another.</p>
 <p>You can also create a <a href="references-and-borrowing.html">reference</a> to it, using <code>&amp;x</code>, but if you want to use the reference to change it, you will need a mutable reference:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let mut x = 5;
 let y = &amp;mut x;
@@ -98,7 +97,6 @@ let y = &amp;mut x;
 <p><code>y</code> is an immutable binding to a mutable reference, which means that you can’t bind 'y' to something else (<code>y = &amp;mut z</code>), but <code>y</code> can be used to bind <code>x</code> to something else (<code>*y = 5</code>). A subtle distinction.</p>
 <p>Of course, if you need both:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let mut x = 5;
 let mut y = &amp;mut x;
@@ -109,7 +107,6 @@ changed.</p>
 <p>It’s important to note that <code>mut</code> is part of a <a href="patterns.html">pattern</a>, so you
 can do things like this:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let (mut x, y) = (5, 6);
 
@@ -123,7 +120,6 @@ fn foo(mut x: i32) {
 it’s not able to be changed: we are referring to its ‘exterior mutability’ that
 in this case is immutable. Consider, for example, <a href="../../std/sync/struct.Arc.html"><code>Arc&lt;T&gt;</code></a>:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 use std::sync::Arc;
 
@@ -152,7 +148,6 @@ with <code>clone()</code>. If it handed out <code>&amp;mut T</code>s, though, th
 <p>Other types, like the ones in the <a href="../../std/cell/index.html"><code>std::cell</code></a> module, have the
 opposite: interior mutability. For example:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 use std::cell::RefCell;
 
@@ -200,7 +195,6 @@ b.x = 10; // Error: cannot assign to immutable field `b.x`.
 </code></pre>
 <p>However, by using <a href="../../std/cell/struct.Cell.html"><code>Cell&lt;T&gt;</code></a>, you can emulate field-level mutability:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 use std::cell::Cell;
 

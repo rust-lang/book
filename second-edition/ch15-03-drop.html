@@ -202,7 +202,6 @@ dropped twice. Dropping a value twice could cause an error or corrupt memory,
 so Rust doesn't let us. Instead, we can use <code>std::mem::drop</code>, whose definition
 is:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 pub mod std {
     pub mod mem {

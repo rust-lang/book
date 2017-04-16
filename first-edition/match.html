@@ -10,7 +10,8 @@
         <base href="">
 
         <link rel="stylesheet" href="book.css">
-        <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+        <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500" rel="stylesheet" type="text/css">
 
         <link rel="shortcut icon" href="favicon.png">
 
@@ -73,7 +74,6 @@ possible options. Also, conditions can get quite complex. Rust
 has a keyword, <code>match</code>, that allows you to replace complicated <code>if</code>/<code>else</code>
 groupings with something more powerful. Check it out:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let x = 5;
 
@@ -105,7 +105,6 @@ arms for integers 1-5, if <code>x</code> is 6 or any other value, then it is cau
 <p><code>match</code> is also an expression, which means we can use it on the right-hand
 side of a <code>let</code> binding or directly where an expression is used:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let x = 5;
 
@@ -125,7 +124,6 @@ this example the integers are converted to <code>String</code>.</p>
 <p>Another important use of the <code>match</code> keyword is to process the possible
 variants of an enum:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 enum Message {
     Quit,

@@ -189,7 +189,6 @@ one of the few places in Rust that has behavior like this.</p>
 will automatically add in <code>&amp;</code>, <code>&amp;mut</code>, or <code>*</code> so that <code>object</code> matches the
 signature of the method. In other words, these are the same:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 # #[derive(Debug,Copy,Clone)]
 # struct Point {
@@ -257,7 +256,6 @@ from Listing 5-7, shown in Listing 5-9:</p>
 <figure>
 <span class="filename">Filename: src/main.rs</span>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 # #[derive(Debug)]
 # struct Rectangle {
@@ -299,7 +297,6 @@ thus making it easier to create a square <code>Rectangle</code> rather than havi
 specify the same value twice:</p>
 <p><span class="filename">Filename: src/main.rs</span></p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 # #[derive(Debug)]
 # struct Rectangle {

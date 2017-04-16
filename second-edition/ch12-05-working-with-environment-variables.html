@@ -134,7 +134,6 @@ from <code>one_result</code> to <code>case_sensitive</code> to be clearer about 
 between the two tests, as shown in Listing 12-20:</p>
 <p><span class="filename">Filename: src/lib.rs</span></p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 #[cfg(test)]
 mod test {
@@ -200,7 +199,6 @@ arguments, they will be the same case when we check whether the line contains
 the query.</p>
 <p><span class="filename">Filename: src/lib.rs</span></p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 fn search_case_insensitive&lt;'a&gt;(query: &amp;str, contents: &amp;'a str) -&gt; Vec&lt;&amp;'a str&gt; {
     let query = query.to_lowercase();
@@ -272,7 +270,6 @@ switching between case sensitive and case insensitive search to the <code>Config
 struct:</p>
 <p><span class="filename">Filename: src/lib.rs</span></p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 pub struct Config {
     pub query: String,
@@ -288,7 +285,6 @@ whether to call the <code>search</code> function or the <code>search_case_insens
 as shown in Listing 12-22:</p>
 <p><span class="filename">Filename: src/lib.rs</span></p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 # use std::error::Error;
 # use std::fs::File;
@@ -339,7 +335,6 @@ from the <code>env</code> module in <code>Config::new</code> to check for an env
 named <code>CASE_INSENSITIVE</code>, as shown in Listing 12-23:</p>
 <p><span class="filename">Filename: src/lib.rs</span></p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 use std::env;
 # struct Config {

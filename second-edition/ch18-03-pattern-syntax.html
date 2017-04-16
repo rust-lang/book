@@ -117,7 +117,6 @@ use each of them.</p>
 <a class="header" href="ch18-03-pattern-syntax.html#literals" id="literals"><h3>Literals</h3></a>
 <p>As we saw in Chapter 6, you can match against literals directly:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let x = 1;
 
@@ -181,7 +180,6 @@ this section.</p>
 <p>In <code>match</code> expressions only, you can match multiple patterns with <code>|</code>, which
 means <em>or</em>:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let x = 1;
 
@@ -196,7 +194,6 @@ match x {
 <a class="header" href="ch18-03-pattern-syntax.html#matching-ranges-of-values-with-" id="matching-ranges-of-values-with-"><h3>Matching Ranges of Values with <code>...</code></h3></a>
 <p>You can match an inclusive range of values with <code>...</code>:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let x = 5;
 
@@ -210,7 +207,6 @@ match x {
 <p>Ranges are only allowed with numeric values or <code>char</code> values. Here's an example
 using ranges of <code>char</code> values:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let x = 'c';
 
@@ -299,7 +295,6 @@ the references. Listing 18-14 shows how to iterate over references to <code>Poin
 instances in a vector, and destructure both the reference and the struct in
 order to be able to perform calculations on the <code>x</code> and <code>y</code> values easily:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 # struct Point {
 #     x: i32,
@@ -338,7 +333,6 @@ match the value with a pattern that was a <code>Point</code> value, not a refere
 we can do something complicated like this example where we nest structs and and
 tuples inside of a tuple and destructure all the primitive values out:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 # struct Point {
 #     x: i32,
@@ -360,7 +354,6 @@ but not bind to the value. While the underscore pattern is especially useful as
 the last arm in a <code>match</code> expression, we can use it in any pattern, such as
 function arguments as shown in Listing 18-15:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 fn foo(_: i32) {
     // code goes here
@@ -377,7 +370,6 @@ about unused function parameters like it would if we had used a name instead.</p
 In Listing 18-16, the first <code>match</code> arm's pattern matches a <code>Some</code> value but
 ignores the value inside of the <code>Some</code> variant as specified by the underscore:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let x = Some(5);
 
@@ -395,7 +387,6 @@ nested part of the variable at all.</p>
 Listing 18-17 where we're ignoring the second and fourth values in a tuple of
 five items:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let numbers = (2, 4, 8, 16, 32);
 
@@ -444,7 +435,6 @@ underscore still binds the value, which may take ownership of the value</span></
 <p>Using underscore by itself, however, doesn't ever bind to the value. Listing
 18-20 will compile without any errors since <code>s</code> does not get moved into <code>_</code>:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let s = Some(String::from(&quot;Hello!&quot;));
 
@@ -467,7 +457,6 @@ that holds a coordinate in three dimensional space. In the <code>match</code> ex
 we only want to operate on the <code>x</code> coordinate and ignore the values in the <code>y</code>
 and <code>z</code> fields:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 struct Point {
     x: i32,
@@ -555,7 +544,6 @@ the &quot;Destructuring to Break Apart Values&quot; section. If you want to crea
 reference instead in order to borrow the value in a pattern variable, use the
 <code>ref</code> keyword before the new variable, as shown in Listing 18-25:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let robot_name = Some(String::from(&quot;Bors&quot;));
 
@@ -575,7 +563,6 @@ only took a reference to the data in <code>robot_name</code> rather than moving 
 <p>To create a mutable reference, use <code>ref mut</code> for the same reason as shown in
 Listing 18-26:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let mut robot_name = Some(String::from(&quot;Bors&quot;));
 
@@ -598,7 +585,6 @@ additional <code>if</code> conditional after the pattern. The conditional can us
 variables created in the pattern. Listing 18-27 has a <code>match</code> expression with a
 match guard in the first arm:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let num = Some(4);
 
@@ -641,7 +627,6 @@ match guard condition applies to all of the patterns. Listing 18-29 shows a
 match guard that applies to the value matched by all three patterns in the
 first arm:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let x = 4;
 let y = false;
@@ -668,7 +653,6 @@ want to test that a <code>Message::Hello</code> <code>id</code> field is within 
 also be able to bind to the value so that we can use it in the code associated
 with the arm:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 enum Message {
     Hello { id: i32 },

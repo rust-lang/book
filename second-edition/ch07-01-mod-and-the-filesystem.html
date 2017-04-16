@@ -128,7 +128,6 @@ $ cd communicator
 <em>src/lib.rs</em> we’ll find this:</p>
 <p><span class="filename">Filename: src/lib.rs</span></p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 #[cfg(test)]
 mod tests {
@@ -155,7 +154,6 @@ Every module definition in Rust starts with the <code>mod</code> keyword. Add th
 the beginning of the <em>src/lib.rs</em> file, above the test code:</p>
 <p><span class="filename">Filename: src/lib.rs</span></p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 mod network {
     fn connect() {
@@ -174,7 +172,6 @@ For example, to have a <code>client</code> module too, that also has a function 
 <code>connect</code>, we can add it as shown in Listing 7-1:</p>
 <p><span class="filename">Filename: src/lib.rs</span></p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 mod network {
     fn connect() {
@@ -203,7 +200,6 @@ our library if it was inside the <code>network</code> namespace instead, like in
 7-2:</p>
 <p><span class="filename">Filename: src/lib.rs</span></p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 mod network {
     fn connect() {
@@ -250,7 +246,6 @@ multiple files to split Rust projects up so that not everything lives in
 <em>src/lib.rs</em>. For this example, we will start with the code in Listing 7-3:</p>
 <p><span class="filename">Filename: src/lib.rs</span></p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 mod client {
     fn connect() {
@@ -307,7 +302,6 @@ following, which is the <code>connect</code> function in the <code>client</code>
 removed in the previous step:</p>
 <p><span class="filename">Filename: src/client.rs</span></p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 fn connect() {
 }
@@ -359,7 +353,6 @@ mod network;
 <p>Then create a new <em>src/network.rs</em> file and enter the following:</p>
 <p><span class="filename">Filename: src/network.rs</span></p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 fn connect() {
 }
@@ -388,7 +381,6 @@ mod server;
 module that we extracted:</p>
 <p><span class="filename">Filename: src/server.rs</span></p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 fn connect() {
 }

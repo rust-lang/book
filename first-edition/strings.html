@@ -10,7 +10,8 @@
         <base href="">
 
         <link rel="stylesheet" href="book.css">
-        <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+        <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500" rel="stylesheet" type="text/css">
 
         <link rel="shortcut icon" href="favicon.png">
 
@@ -81,7 +82,6 @@ strings are not NUL-terminated and can contain NUL bytes.</p>
 <code>&amp;str</code> first. These are called ‘string slices’. A string slice has a fixed
 size, and cannot be mutated. It is a reference to a sequence of UTF-8 bytes.</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let greeting = &quot;Hello there.&quot;; // greeting: &amp;'static str
 
@@ -94,7 +94,6 @@ function expecting a string slice will also accept a string literal.</p>
 <p>String literals can span multiple lines. There are two forms. The first will
 include the newline and the leading spaces:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let s = &quot;foo
     bar&quot;;
@@ -104,7 +103,6 @@ assert_eq!(&quot;foo\n    bar&quot;, s);
 #}</code></pre></pre>
 <p>The second, with a <code>\</code>, trims the spaces and the newline:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let s = &quot;foo\
     bar&quot;;
@@ -121,7 +119,6 @@ This string is growable, and is also guaranteed to be UTF-8. <code>String</code>
 commonly created by converting from a string slice using the <code>to_string</code>
 method.</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let mut s = &quot;Hello&quot;.to_string(); // mut s: String
 println!(&quot;{}&quot;, s);
@@ -145,7 +142,6 @@ instead of <code>&amp;str</code>. For example, <a href="../../std/net/struct.Tcp
 of type <code>ToSocketAddrs</code>. A <code>&amp;str</code> is okay but a <code>String</code> must be explicitly
 converted using <code>&amp;*</code>.</p>
 <pre><pre class="playpen"><code class="language-rust no_run"># #![allow(unused_variables)]
-# 
 #fn main() {
 use std::net::TcpStream;
 
@@ -170,7 +166,6 @@ expensive operation, and we don’t want to be misleading. Furthermore, ‘lette
 isn’t something defined in Unicode, exactly. We can choose to look at a string as
 individual bytes, or as codepoints:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let hachiko = &quot;忠犬ハチ公&quot;;
 
@@ -194,7 +189,6 @@ println!(&quot;&quot;);
 <p>As you can see, there are more bytes than <code>char</code>s.</p>
 <p>You can get something similar to an index like this:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 # let hachiko = &quot;忠犬ハチ公&quot;;
 let dog = hachiko.chars().nth(1); // Kinda like `hachiko[1]`.
@@ -204,7 +198,6 @@ let dog = hachiko.chars().nth(1); // Kinda like `hachiko[1]`.
 <a class="header" href="strings.html#slicing" id="slicing"><h2>Slicing</h2></a>
 <p>You can get a slice of a string with the slicing syntax:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let dog = &quot;hachiko&quot;;
 let hachi = &amp;dog[0..5];
@@ -213,7 +206,6 @@ let hachi = &amp;dog[0..5];
 <p>But note that these are <em>byte</em> offsets, not <em>character</em> offsets. So
 this will fail at runtime:</p>
 <pre><pre class="playpen"><code class="language-rust should_panic"># #![allow(unused_variables)]
-# 
 #fn main() {
 let dog = &quot;忠犬ハチ公&quot;;
 let hachi = &amp;dog[0..2];
@@ -226,7 +218,6 @@ let hachi = &amp;dog[0..2];
 <a class="header" href="strings.html#concatenation" id="concatenation"><h2>Concatenation</h2></a>
 <p>If you have a <code>String</code>, you can concatenate a <code>&amp;str</code> to the end of it:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let hello = &quot;Hello &quot;.to_string();
 let world = &quot;world!&quot;;
@@ -236,7 +227,6 @@ let hello_world = hello + world;
 #}</code></pre></pre>
 <p>But if you have two <code>String</code>s, you need an <code>&amp;</code>:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let hello = &quot;Hello &quot;.to_string();
 let world = &quot;world!&quot;.to_string();

@@ -10,7 +10,8 @@
         <base href="">
 
         <link rel="stylesheet" href="book.css">
-        <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+        <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500" rel="stylesheet" type="text/css">
 
         <link rel="shortcut icon" href="favicon.png">
 
@@ -74,7 +75,6 @@ on a whirlwind tour of all of the things patterns can do!</p>
 <p>A quick refresher: you can match against literals directly, and <code>_</code> acts as an
 ‘any’ case:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let x = 1;
 
@@ -89,7 +89,6 @@ match x {
 <p>This prints <code>one</code>.</p>
 <p>It's possible to create a binding for the value in the any case:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let x = 1;
 
@@ -103,7 +102,6 @@ match x {
 </code></pre>
 <p>Note it is an error to have both a catch-all <code>_</code> and a catch-all binding in the same match block:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let x = 1;
 
@@ -116,7 +114,6 @@ match x {
 <p>There’s one pitfall with patterns: like anything that introduces a new binding,
 they introduce shadowing. For example:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let x = 1;
 let c = 'c';
@@ -140,7 +137,6 @@ new <code>x</code> shadows it.</p>
 <a class="header" href="patterns.html#multiple-patterns" id="multiple-patterns"><h1>Multiple patterns</h1></a>
 <p>You can match multiple patterns with <code>|</code>:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let x = 1;
 
@@ -156,7 +152,6 @@ match x {
 <p>If you have a compound data type, like a <a href="structs.html"><code>struct</code></a>, you can destructure it
 inside of a pattern:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 struct Point {
     x: i32,
@@ -172,7 +167,6 @@ match origin {
 #}</code></pre></pre>
 <p>We can use <code>:</code> to give a value a different name.</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 struct Point {
     x: i32,
@@ -188,7 +182,6 @@ match origin {
 #}</code></pre></pre>
 <p>If we only care about some of the values, we don’t have to give them all names:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 struct Point {
     x: i32,
@@ -205,7 +198,6 @@ match point {
 <p>This prints <code>x is 2</code>.</p>
 <p>You can do this kind of match on any member, not only the first:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 struct Point {
     x: i32,
@@ -226,7 +218,6 @@ match point {
 <p>You can use <code>_</code> in a pattern to disregard the type and value.
 For example, here’s a <code>match</code> against a <code>Result&lt;T, E&gt;</code>:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 # let some_value: Result&lt;i32, &amp;'static str&gt; = Err(&quot;There was an error&quot;);
 match some_value {
@@ -241,7 +232,6 @@ a general error message.</p>
 <p><code>_</code> is valid in any pattern that creates a binding. This can be useful to
 ignore parts of a larger structure:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 fn coordinate() -&gt; (i32, i32, i32) {
     // Generate and return some sort of triple tuple.
@@ -256,7 +246,6 @@ ignore the middle element.</p>
 <p>It’s worth noting that using <code>_</code> never binds the value in the first place,
 which means that the value does not move:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let tuple: (u32, String) = (5, String::from(&quot;five&quot;));
 
@@ -280,7 +269,6 @@ println!(&quot;Tuple is: {:?}&quot;, tuple);
 <p>This also means that any temporary variables will be dropped at the end of the
 statement:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 // Here, the String created will be dropped immediately, as it’s not bound:
 
@@ -289,7 +277,6 @@ let _ = String::from(&quot;  hello  &quot;).trim();
 #}</code></pre></pre>
 <p>You can also use <code>..</code> in a pattern to disregard multiple values:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 enum OptionalTuple {
     Value(i32, i32, i32),
@@ -308,7 +295,6 @@ match x {
 <a class="header" href="patterns.html#ref-and-ref-mut" id="ref-and-ref-mut"><h1>ref and ref mut</h1></a>
 <p>If you want to get a <a href="references-and-borrowing.html">reference</a>, use the <code>ref</code> keyword:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let x = 5;
 
@@ -322,7 +308,6 @@ match x {
 keyword <em>creates</em> a reference, for use in the pattern. If you need a mutable
 reference, <code>ref mut</code> will work in the same way:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let mut x = 5;
 
@@ -334,7 +319,6 @@ match x {
 <a class="header" href="patterns.html#ranges" id="ranges"><h1>Ranges</h1></a>
 <p>You can match a range of values with <code>...</code>:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let x = 1;
 
@@ -347,7 +331,6 @@ match x {
 <p>This prints <code>one through five</code>.</p>
 <p>Ranges are mostly used with integers and <code>char</code>s:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let x = '💅';
 
@@ -362,7 +345,6 @@ match x {
 <a class="header" href="patterns.html#bindings" id="bindings"><h1>Bindings</h1></a>
 <p>You can bind values to names with <code>@</code>:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let x = 1;
 
@@ -375,7 +357,6 @@ match x {
 <p>This prints <code>got a range element 1</code>. This is useful when you want to
 do a complicated match of part of a data structure:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 #[derive(Debug)]
 struct Person {
@@ -394,7 +375,6 @@ match x {
 <p>If you use <code>@</code> with <code>|</code>, you need to make sure the name is bound in each part
 of the pattern:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let x = 5;
 
@@ -407,7 +387,6 @@ match x {
 <a class="header" href="patterns.html#guards" id="guards"><h1>Guards</h1></a>
 <p>You can introduce ‘match guards’ with <code>if</code>:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 enum OptionalInt {
     Value(i32),
@@ -426,7 +405,6 @@ match x {
 <p>This prints <code>Got an int!</code>.</p>
 <p>If you’re using <code>if</code> with multiple patterns, the <code>if</code> applies to both sides:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let x = 4;
 let y = false;

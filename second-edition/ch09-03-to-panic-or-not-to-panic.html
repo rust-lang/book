@@ -152,7 +152,6 @@ situation. If you can ensure by manually inspecting the code that you’ll never
 have an <code>Err</code> variant, it is perfectly acceptable to call <code>unwrap</code>. Here’s an
 example:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 use std::net::IpAddr;
 
@@ -266,7 +265,6 @@ confidently use the values they receive. Listing 9-8 shows one way to define a
 <code>Guess</code> type that will only create an instance of <code>Guess</code> if the <code>new</code> function
 receives a value between 1 and 100:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 struct Guess {
     value: u32,

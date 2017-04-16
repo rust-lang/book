@@ -163,7 +163,6 @@ its parameter and then returns 10. We then have a test that passes and a test
 that fails:</p>
 <p><span class="filename">Filename: src/lib.rs</span></p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 fn prints_and_returns_10(a: i32) -&gt; i32 {
     println!(&quot;I got the value {}&quot;, a);
@@ -247,7 +246,6 @@ or names of the test/s you want to run as an argument.</p>
 <code>add_two</code> function as shown in Listing 11-11 and choose which ones to run:</p>
 <p><span class="filename">Filename: src/lib.rs</span></p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 pub fn add_two(a: i32) -&gt; i32 {
     a + 2
@@ -328,7 +326,6 @@ listing as arguments all tests you do want to run, we can instead annotate the
 time consuming tests with the <code>ignore</code> attribute to exclude them:</p>
 <p><span class="filename">Filename: src/lib.rs</span></p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 #[test]
 fn it_works() {

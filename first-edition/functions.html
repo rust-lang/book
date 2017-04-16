@@ -10,7 +10,8 @@
         <base href="">
 
         <link rel="stylesheet" href="book.css">
-        <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+        <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500" rel="stylesheet" type="text/css">
 
         <link rel="shortcut icon" href="favicon.png">
 
@@ -77,7 +78,6 @@
 this function takes no arguments, and then some curly braces to indicate the
 body. Here’s a function named <code>foo</code>:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 fn foo() {
 }
@@ -85,7 +85,6 @@ fn foo() {
 #}</code></pre></pre>
 <p>So, what about taking arguments? Here’s a function that prints a number:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 fn print_number(x: i32) {
     println!(&quot;x is: {}&quot;, x);
@@ -131,7 +130,6 @@ types while allowing for inference inside of function bodies is a wonderful
 sweet spot between full inference and no inference.</p>
 <p>What about returning a value? Here’s a function that adds one to an integer:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 fn add_one(x: i32) -&gt; i32 {
     x + 1
@@ -184,7 +182,6 @@ previous example), in Rust the value of an assignment is an empty tuple <code>()
 because the assigned value can have <a href="ownership.html">only one owner</a>, and any
 other returned value would be too surprising:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let mut y = 5;
 
@@ -201,7 +198,6 @@ every line of Rust code you see.</p>
 <p>What is this exception that makes us say &quot;almost&quot;? You saw it already, in this
 code:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 fn add_one(x: i32) -&gt; i32 {
     x + 1
@@ -214,7 +210,6 @@ removing the semicolon in the error we saw before.</p>
 <a class="header" href="functions.html#early-returns" id="early-returns"><h2>Early returns</h2></a>
 <p>But what about early returns? Rust does have a keyword for that, <code>return</code>:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 fn foo(x: i32) -&gt; i32 {
     return x;
@@ -227,7 +222,6 @@ fn foo(x: i32) -&gt; i32 {
 <p>Using a <code>return</code> as the last line of a function works, but is considered poor
 style:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 fn foo(x: i32) -&gt; i32 {
     return x + 1;
@@ -241,7 +235,6 @@ time.</p>
 <p>Rust has some special syntax for ‘diverging functions’, which are functions that
 do not return:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 fn diverges() -&gt; ! {
     panic!(&quot;This function never returns!&quot;);
@@ -316,7 +309,6 @@ stack backtrace:
 </code></pre>
 <p>A diverging function can be used as any type:</p>
 <pre><pre class="playpen"><code class="language-rust should_panic"># #![allow(unused_variables)]
-# 
 #fn main() {
 # fn diverges() -&gt; ! {
 #    panic!(&quot;This function never returns!&quot;);
@@ -328,7 +320,6 @@ let x: String = diverges();
 <a class="header" href="functions.html#function-pointers" id="function-pointers"><h2>Function pointers</h2></a>
 <p>We can also create variable bindings which point to functions:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let f: fn(i32) -&gt; i32;
 
@@ -336,7 +327,6 @@ let f: fn(i32) -&gt; i32;
 <p><code>f</code> is a variable binding which points to a function that takes an <code>i32</code> as
 an argument and returns an <code>i32</code>. For example:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 fn plus_one(i: i32) -&gt; i32 {
     i + 1
@@ -351,7 +341,6 @@ let f = plus_one;
 #}</code></pre></pre>
 <p>We can then use <code>f</code> to call the function:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 # fn plus_one(i: i32) -&gt; i32 { i + 1 }
 # let f = plus_one;

@@ -141,7 +141,6 @@ without taking ownership of it. Figure 4-8 shows a diagram.</p>
 <p><span class="caption">Figure 4-8: <code>&amp;String s</code> pointing at <code>String s1</code></span></p>
 <p>Let’s take a closer look at the function call here:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 # fn calculate_length(s: &amp;String) -&gt; usize {
 #     s.len()
@@ -157,7 +156,6 @@ not be dropped when the reference goes out of scope.</p>
 <p>Likewise, the signature of the function uses <code>&amp;</code> to indicate that the type of
 the parameter <code>s</code> is a reference. Let’s add some explanatory annotations:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 fn calculate_length(s: &amp;String) -&gt; usize { // s is a reference to a String
     s.len()
@@ -248,7 +246,6 @@ from happening because it won’t even compile code with data races!</p>
 <p>As always, we can use curly brackets to create a new scope, allowing for
 multiple mutable references, just not <em>simultaneous</em> ones:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let mut s = String::from(&quot;hello&quot;);
 
@@ -346,7 +343,6 @@ this reference would be pointing to an invalid <code>String</code>! That’s no 
 won’t let us do this.</p>
 <p>The solution here is to return the <code>String</code> directly:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 fn no_dangle() -&gt; String {
     let s = String::from(&quot;hello&quot;);

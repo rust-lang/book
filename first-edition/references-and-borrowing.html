@@ -10,7 +10,8 @@
         <base href="">
 
         <link rel="stylesheet" href="book.css">
-        <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+        <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500" rel="stylesheet" type="text/css">
 
         <link rel="shortcut icon" href="favicon.png">
 
@@ -102,7 +103,6 @@ checker less and less.</p>
 <p>At the end of the <a href="ownership.html">ownership</a> section, we had a nasty function that looked
 like this:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 fn foo(v1: Vec&lt;i32&gt;, v2: Vec&lt;i32&gt;) -&gt; (Vec&lt;i32&gt;, Vec&lt;i32&gt;, i32) {
     // Do stuff with `v1` and `v2`.
@@ -120,7 +120,6 @@ let (v1, v2, answer) = foo(v1, v2);
 <p>This is not idiomatic Rust, however, as it doesn’t take advantage of borrowing. Here’s
 the first step:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 fn foo(v1: &amp;Vec&lt;i32&gt;, v2: &amp;Vec&lt;i32&gt;) -&gt; i32 {
     // Do stuff with `v1` and `v2`.
@@ -186,7 +185,6 @@ v.push(5);
 <p>There’s a second kind of reference: <code>&amp;mut T</code>. A ‘mutable reference’ allows you
 to mutate the resource you’re borrowing. For example:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let mut x = 5;
 {
@@ -285,7 +283,6 @@ scopes look like this:</p>
 <p>The scopes conflict: we can’t make an <code>&amp;x</code> while <code>y</code> is in scope.</p>
 <p>So when we add the curly braces:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let mut x = 5;
 
@@ -307,7 +304,6 @@ races. What kinds of issues do data races cause? Here are a few.</p>
 collection that you’re iterating over. Rust’s borrow checker prevents this from
 happening:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let mut v = vec![1, 2, 3];
 

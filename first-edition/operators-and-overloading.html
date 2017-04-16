@@ -10,7 +10,8 @@
         <base href="">
 
         <link rel="stylesheet" href="book.css">
-        <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+        <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500" rel="stylesheet" type="text/css">
 
         <link rel="shortcut icon" href="favicon.png">
 
@@ -106,7 +107,6 @@ documentation for the full list.</p>
 <p>Implementing these traits follows a pattern. Let’s look at <a href="../../std/ops/trait.Add.html"><code>Add</code></a> in more
 detail:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 # mod foo {
 pub trait Add&lt;RHS = Self&gt; {
@@ -121,7 +121,6 @@ pub trait Add&lt;RHS = Self&gt; {
 which defaults to <code>Self</code>, and <code>Output</code>. For an expression <code>let z = x + y</code>, <code>x</code>
 is the <code>Self</code> type, <code>y</code> is the RHS, and <code>z</code> is the <code>Self::Output</code> type.</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 # struct Point;
 # use std::ops::Add;

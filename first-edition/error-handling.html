@@ -10,7 +10,8 @@
         <base href="">
 
         <link rel="stylesheet" href="book.css">
-        <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+        <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500" rel="stylesheet" type="text/css">
 
         <link rel="shortcut icon" href="favicon.png">
 
@@ -190,7 +191,6 @@ types. Both of these types have a method called <code>unwrap</code> defined on t
 <a class="header" href="error-handling.html#the-option-type" id="the-option-type"><h3>The <code>Option</code> type</h3></a>
 <p>The <code>Option</code> type is <a href="../../std/option/enum.Option.html">defined in the standard library</a>:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 enum Option&lt;T&gt; {
     None,
@@ -205,7 +205,6 @@ programmer to handle that absence. Let's take a look at an example that tries
 to find a character in a string:</p>
 <p><span id="code-option-ex-string-find"></span></p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 // Searches `haystack` for the Unicode character `needle`. If one is found, the
 // byte offset of the character is returned. Otherwise, `None` is returned.
@@ -247,7 +246,6 @@ There was no case analysis there! Instead, the case analysis was put inside the
 <code>unwrap</code> method for you. You could define it yourself if you want:</p>
 <p><span id="code-option-def-unwrap"></span></p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 enum Option&lt;T&gt; {
     None,
@@ -279,7 +277,6 @@ message saying as such.</p>
 <p>Getting the extension of a file name is a pretty common operation, so it makes
 sense to put it into a function:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 # fn find(haystack: &amp;str, needle: char) -&gt; Option&lt;usize&gt; { haystack.find(needle) }
 // Returns the extension of the given file name, where the extension is defined
@@ -309,7 +306,6 @@ option is <code>None</code>, in which case, return <code>None</code>.</p>
 that abstracts this pattern:</p>
 <p><span id="code-option-map"></span></p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 fn map&lt;F, T, A&gt;(option: Option&lt;T&gt;, f: F) -&gt; Option&lt;A&gt; where F: FnOnce(T) -&gt; A {
     match option {
@@ -325,7 +321,6 @@ or <code>&amp;mut self</code> as their first argument.</p>
 <p>Armed with our new combinator, we can rewrite our <code>extension_explicit</code> method
 to get rid of the case analysis:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 # fn find(haystack: &amp;str, needle: char) -&gt; Option&lt;usize&gt; { haystack.find(needle) }
 // Returns the extension of the given file name, where the extension is defined
@@ -342,7 +337,6 @@ the extension of a file is <code>rs</code> even if none is present. As you might
 the case analysis for this is not specific to file extensions - it can work
 with any <code>Option&lt;T&gt;</code>:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 fn unwrap_or&lt;T&gt;(option: Option&lt;T&gt;, default: T) -&gt; T {
     match option {
@@ -387,7 +381,6 @@ file paths have a file name, not <em>all</em> of them do. For example, <code>.</
 <p>So, we are tasked with the challenge of finding an extension given a file
 <em>path</em>. Let's start with explicit case analysis:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 # fn extension(file_name: &amp;str) -&gt; Option&lt;&amp;str&gt; { None }
 fn file_path_ext_explicit(file_path: &amp;str) -&gt; Option&lt;&amp;str&gt; {
@@ -424,7 +417,6 @@ allows the caller to return a <code>Option&lt;_&gt;</code> directly without wrap
 another <code>Option&lt;_&gt;</code>.</p>
 <p>Its generic implementation is even simpler than <code>map</code>:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 fn and_then&lt;F, T, A&gt;(option: Option&lt;T&gt;, f: F) -&gt; Option&lt;A&gt;
         where F: FnOnce(T) -&gt; Option&lt;A&gt; {
@@ -437,7 +429,6 @@ fn and_then&lt;F, T, A&gt;(option: Option&lt;T&gt;, f: F) -&gt; Option&lt;A&gt;
 #}</code></pre></pre>
 <p>Now we can rewrite our <code>file_path_ext</code> function without explicit case analysis:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 # fn extension(file_name: &amp;str) -&gt; Option&lt;&amp;str&gt; { None }
 # fn file_name(file_path: &amp;str) -&gt; Option&lt;&amp;str&gt; { None }
@@ -464,7 +455,6 @@ remove choices because they will panic if <code>Option&lt;T&gt;</code> is <code>
 <a href="../../std/result/index.html">defined in the standard library</a>:</p>
 <p><span id="code-result-def"></span></p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 enum Result&lt;T, E&gt; {
     Ok(T),
@@ -479,7 +469,6 @@ computation failed. This is a strictly more general form of <code>Option</code>.
 the following type alias, which is semantically equivalent to the real
 <code>Option&lt;T&gt;</code> in every way:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 type Option&lt;T&gt; = Result&lt;T, ()&gt;;
 
@@ -495,7 +484,6 @@ the other outcome is meant to be unexpected or “<code>Err</code>”.</p>
 defined</a>
 in the standard library. Let's define it:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 # enum Result&lt;T, E&gt; { Ok(T), Err(E) }
 impl&lt;T, E: ::std::fmt::Debug&gt; Result&lt;T, E&gt; {
@@ -616,7 +604,6 @@ the type parameters to a particular type. Usually the fixed type is
 the error type. For example, our previous example parsing integers
 could be rewritten like this:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 use std::num::ParseIntError;
 use std::result;
@@ -726,7 +713,6 @@ combinator. This is one way to convert an <code>Option</code> into a <code>Resul
 conversion requires you to specify what error to use if <code>Option</code> is <code>None</code>.
 Like the other combinators we've seen, its definition is very simple:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 fn ok_or&lt;T, E&gt;(option: Option&lt;T&gt;, err: E) -&gt; Result&lt;T, E&gt; {
     match option {
@@ -910,7 +896,6 @@ seen above.</p>
 <p>Here is a simplified definition of a <code>try!</code> macro:</p>
 <p><span id="code-try-def-simple"></span></p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 macro_rules! try {
     ($e:expr) =&gt; (match $e {
@@ -985,7 +970,6 @@ errors in case the caller wants to inspect the details.</p>
 sum type using <code>enum</code>. In our case, an error is either an <code>io::Error</code> or a
 <code>num::ParseIntError</code>, so a natural definition arises:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 use std::io;
 use std::num;
@@ -1044,7 +1028,6 @@ distinct types.</p>
 <p>The <code>Error</code> trait is <a href="../../std/error/trait.Error.html">defined in the standard
 library</a>:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 use std::fmt::{Debug, Display};
 
@@ -1079,7 +1062,6 @@ returns an <code>&amp;Error</code>, which is itself a trait object. We'll revisi
 use the error type we defined in the
 <a href="error-handling.html#defining-your-own-error-type">previous section</a>:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 use std::io;
 use std::num;
@@ -1144,7 +1126,6 @@ different error types and satisfy the contracts defined for <code>description</c
 library</a>:</p>
 <p><span id="code-from-def"></span></p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 trait From&lt;T&gt; {
     fn from(T) -&gt; Self;
@@ -1159,7 +1140,6 @@ The crux of <code>From</code> is the
 library</a>.</p>
 <p>Here are a few simple examples demonstrating how <code>From</code> works:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let string: String = From::from(&quot;foo&quot;);
 let bytes: Vec&lt;u8&gt; = From::from(&quot;foo&quot;);
@@ -1177,7 +1157,6 @@ useful in a generic context.</p>
 <code>io::Error</code> and <code>num::ParseIntError</code>. Since both impl <code>Error</code>, they work with
 <code>From</code>:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 use std::error::Error;
 use std::fs;
@@ -1206,7 +1185,6 @@ us a way to reliably convert errors to the same type using the same function.</p
 <a class="header" href="error-handling.html#the-real-try-macro" id="the-real-try-macro"><h2>The real <code>try!</code> macro</h2></a>
 <p>Previously, we presented this definition of <code>try!</code>:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 macro_rules! try {
     ($e:expr) =&gt; (match $e {
@@ -1220,7 +1198,6 @@ macro_rules! try {
 <a href="../../std/macro.try.html">in the standard library</a>:</p>
 <p><span id="code-try-def"></span></p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 macro_rules! try {
     ($e:expr) =&gt; (match $e {
@@ -1236,7 +1213,6 @@ you automatic type conversion for free.</p>
 <p>Armed with our more powerful <code>try!</code> macro, let's take a look at code we wrote
 previously to read a file and convert its contents to an integer:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 use std::fs::File;
 use std::io::Read;
@@ -1256,7 +1232,6 @@ we have to do is pick a type that <code>From</code> works with. As we saw in the
 section, <code>From</code> has an impl that lets it convert any error type into a
 <code>Box&lt;Error&gt;</code>:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 use std::error::Error;
 use std::fs::File;
@@ -1302,7 +1277,6 @@ is opaque to callers.</p>
 error type. Once again, here is the code that reads the contents of a file and
 converts it to an integer:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 use std::fs::File;
 use std::io::{self, Read};
@@ -1333,7 +1307,6 @@ types like <code>io::Error</code> and <code>num::ParseIntError</code> to our own
 Of course, it is easy to fix this! Since we defined <code>CliError</code>, we can impl
 <code>From</code> with it:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 # #[derive(Debug)]
 # enum CliError { Io(io::Error), Parse(num::ParseIntError) }
@@ -1358,7 +1331,6 @@ other error types. In our case, construction is as simple as invoking the
 corresponding value constructor. Indeed, it is <em>typically</em> this easy.</p>
 <p>We can finally rewrite <code>file_double</code>:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 # use std::io;
 # use std::num;
@@ -1391,7 +1363,6 @@ could appear.</p>
 convert a string to a float, then we'd need to add a new variant to our error
 type:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 use std::io;
 use std::num;
@@ -1405,7 +1376,6 @@ enum CliError {
 #}</code></pre></pre>
 <p>And add a new <code>From</code> impl:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 # enum CliError {
 #     Io(::std::io::Error),

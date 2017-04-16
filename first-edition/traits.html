@@ -10,7 +10,8 @@
         <base href="">
 
         <link rel="stylesheet" href="book.css">
-        <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+        <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500" rel="stylesheet" type="text/css">
 
         <link rel="shortcut icon" href="favicon.png">
 
@@ -73,7 +74,6 @@ functionality a type must provide.</p>
 <p>Recall the <code>impl</code> keyword, used to call a function with <a href="method-syntax.html">method
 syntax</a>:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 struct Circle {
     x: f64,
@@ -91,7 +91,6 @@ impl Circle {
 <p>Traits are similar, except that we first define a trait with a method
 signature, then implement the trait for a type. In this example, we implement the trait <code>HasArea</code> for <code>Circle</code>:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 struct Circle {
     x: f64,
@@ -117,7 +116,6 @@ we use <code>impl Trait for Item</code>, rather than only <code>impl Item</code>
 implementing this trait passed as a parameter. <code>Self</code>, <code>&amp;Self</code> or <code>&amp;mut Self</code>
 may be used depending on the level of ownership required.</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 struct Circle {
     x: f64,
@@ -157,7 +155,6 @@ accept. Consider this function, which does not compile:</p>
 method. But we can add a trait bound to our generic <code>T</code>, ensuring
 that it does:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 # trait HasArea {
 #     fn area(&amp;self) -&gt; f64;
@@ -277,7 +274,6 @@ to know more about <a href="operators-and-overloading.html">operator traits</a>.
 <p>So far, we’ve only added trait implementations to structs, but you can
 implement a trait for any type such as <code>f32</code>:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 trait ApproxEqual {
     fn approx_equal(&amp;self, other: &amp;Self) -&gt; bool;
@@ -310,7 +306,6 @@ let result = f.write(buf);
 </code></pre>
 <p>We need to <code>use</code> the <code>Write</code> trait first:</p>
 <pre><pre class="playpen"><code class="language-rust no_run"># #![allow(unused_variables)]
-# 
 #fn main() {
 use std::io::Write;
 
@@ -338,7 +333,6 @@ What’s that mean? Check out the chapter on <a href="trait-objects.html">trait 
 <a class="header" href="traits.html#multiple-trait-bounds" id="multiple-trait-bounds"><h1>Multiple trait bounds</h1></a>
 <p>You’ve seen that you can bound a generic type parameter with a trait:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 fn foo&lt;T: Clone&gt;(x: T) {
     x.clone();
@@ -347,7 +341,6 @@ fn foo&lt;T: Clone&gt;(x: T) {
 #}</code></pre></pre>
 <p>If you need more than one bound, you can use <code>+</code>:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 use std::fmt::Debug;
 
@@ -363,7 +356,6 @@ fn foo&lt;T: Clone + Debug&gt;(x: T) {
 bounds isn’t too bad, but as the number increases, the syntax gets increasingly
 awkward:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 use std::fmt::Debug;
 
@@ -401,7 +393,6 @@ All you need to do is leave off the bounds when defining your type parameters,
 and then add <code>where</code> after the parameter list. For longer lists, whitespace can
 be added:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 use std::fmt::Debug;
 
@@ -418,7 +409,6 @@ fn bar&lt;T, K&gt;(x: T, y: K)
 <p>This flexibility can add clarity in complex situations.</p>
 <p><code>where</code> is also more powerful than the simpler syntax. For example:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 trait ConvertTo&lt;Output&gt; {
     fn convert(&amp;self) -&gt; Output;
@@ -448,7 +438,6 @@ on the left-hand side not only of type parameters <code>T</code>, but also of ty
 <a class="header" href="traits.html#default-methods" id="default-methods"><h1>Default methods</h1></a>
 <p>A default method can be added to a trait definition if it is already known how a typical implementor will define a method. For example, <code>is_invalid()</code> is defined as the opposite of <code>is_valid()</code>:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 trait Foo {
     fn is_valid(&amp;self) -&gt; bool;
@@ -459,7 +448,6 @@ trait Foo {
 #}</code></pre></pre>
 <p>Implementors of the <code>Foo</code> trait need to implement <code>is_valid()</code> but not <code>is_invalid()</code> due to the added default behavior. This default behavior can still be overridden as in:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 # trait Foo {
 #     fn is_valid(&amp;self) -&gt; bool;
@@ -499,7 +487,6 @@ assert!(over.is_invalid()); // Prints &quot;Called OverrideDefault.is_invalid!&q
 <a class="header" href="traits.html#inheritance" id="inheritance"><h1>Inheritance</h1></a>
 <p>Sometimes, implementing a trait requires implementing another trait:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 trait Foo {
     fn foo(&amp;self);
@@ -512,7 +499,6 @@ trait FooBar : Foo {
 #}</code></pre></pre>
 <p>Implementors of <code>FooBar</code> must also implement <code>Foo</code>, like this:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 # trait Foo {
 #     fn foo(&amp;self);

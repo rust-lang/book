@@ -10,7 +10,8 @@
         <base href="">
 
         <link rel="stylesheet" href="book.css">
-        <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+        <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500" rel="stylesheet" type="text/css">
 
         <link rel="shortcut icon" href="favicon.png">
 
@@ -70,14 +71,12 @@
                     <a class="header" href="type-aliases.html#type-aliases" id="type-aliases"><h1>Type Aliases</h1></a>
 <p>The <code>type</code> keyword lets you declare an alias of another type:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 type Name = String;
 
 #}</code></pre></pre>
 <p>You can then use this type as if it were a real type:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 type Name = String;
 
@@ -105,7 +104,6 @@ if x == y {
 </code></pre>
 <p>But, if we had an alias:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 type Num = i32;
 
@@ -121,7 +119,6 @@ if x == y {
 type <code>i32</code>, in every way. You can use <a href="structs.html#tuple-structs">tuple struct</a> to really get a new type.</p>
 <p>You can also use type aliases with generics:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 use std::result;
 

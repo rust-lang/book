@@ -153,7 +153,6 @@ simplifying the example in order to concentrate on the lifetimes involved.</p>
 and the reference to the <code>Context</code> in <code>Parser</code>? The most straightforward thing
 to do is to use the same lifetime everywhere, as shown in Listing 19-13:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 struct Context&lt;'a&gt;(&amp;'a str);
 
@@ -332,7 +331,6 @@ string slice) is guaranteed to live at least as long as <code>'c</code> (the lif
 the reference to <code>Context</code>), we change the lifetime declarations to look like
 this:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 # struct Context&lt;'a&gt;(&amp;'a str);
 #
@@ -391,7 +389,6 @@ this case:</p>
 <p>The code in Listing 19-17 works because <code>T: 'a</code> syntax specifies that <code>T</code> can
 be any type, but if it contains any references, <code>T</code> must live as long as <code>'a</code>:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 struct Ref&lt;'a, T: 'a&gt;(&amp;'a T);
 
@@ -402,7 +399,6 @@ that any references in <code>T</code> live at least as long as <code>'a</code></
 bounding <code>T</code> on <code>'static</code>. This means if <code>T</code> contains any references, they must
 have the <code>'static</code> lifetime:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 struct StaticRef&lt;T: 'static&gt;(&amp;'static T);
 
@@ -428,7 +424,6 @@ lifetime. Consider Listing 19-19, where we have a trait <code>Foo</code> and a s
 implements trait <code>Foo</code>, and we want to use an instance of <code>Bar</code> as the trait
 object <code>Box&lt;Foo&gt;</code>:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 trait Foo { }
 

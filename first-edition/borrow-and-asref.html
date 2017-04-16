@@ -10,7 +10,8 @@
         <base href="">
 
         <link rel="stylesheet" href="book.css">
-        <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+        <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500" rel="stylesheet" type="text/css">
 
         <link rel="shortcut icon" href="favicon.png">
 
@@ -87,7 +88,6 @@ the signature of <code>get()</code> again, we can use <code>get()</code> when th
 <code>Borrow&lt;Q&gt;</code>. That way, we can make a <code>HashMap</code> which uses <code>String</code> keys,
 but use <code>&amp;str</code>s when we’re searching:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 use std::collections::HashMap;
 
@@ -104,7 +104,6 @@ kind of borrowed value. This is especially true of references and slices: you
 can have both an <code>&amp;T</code> or a <code>&amp;mut T</code>. If we wanted to accept both of these types,
 <code>Borrow</code> is up for it:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 use std::borrow::Borrow;
 use std::fmt::Display;
@@ -124,7 +123,6 @@ foo(&amp;mut i);
 <p>The <code>AsRef</code> trait is a conversion trait. It’s used for converting some value to
 a reference in generic code. Like this:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let s = &quot;Hello&quot;.to_string();
 

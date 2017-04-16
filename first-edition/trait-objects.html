@@ -10,7 +10,8 @@
         <base href="">
 
         <link rel="stylesheet" href="book.css">
-        <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+        <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500" rel="stylesheet" type="text/css">
 
         <link rel="shortcut icon" href="favicon.png">
 
@@ -78,7 +79,6 @@ called ‘trait objects’.</p>
 Let’s make a simple one, <code>Foo</code>. It has one method that is expected to return a
 <code>String</code>.</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 trait Foo {
     fn method(&amp;self) -&gt; String;
@@ -87,7 +87,6 @@ trait Foo {
 #}</code></pre></pre>
 <p>We’ll also implement this trait for <code>u8</code> and <code>String</code>:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 # trait Foo { fn method(&amp;self) -&gt; String; }
 impl Foo for u8 {
@@ -224,7 +223,6 @@ surprising behaviors to discover.</p>
 <code>std::raw</code> module contains structs with layouts that are the same as the
 complicated built-in types, <a href="../../std/raw/struct.TraitObject.html">including trait objects</a>:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 # mod foo {
 pub struct TraitObject {

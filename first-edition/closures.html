@@ -10,7 +10,8 @@
         <base href="">
 
         <link rel="stylesheet" href="book.css">
-        <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+        <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500" rel="stylesheet" type="text/css">
 
         <link rel="shortcut icon" href="favicon.png">
 
@@ -76,7 +77,6 @@ them, as we’ll see.</p>
 <a class="header" href="closures.html#syntax" id="syntax"><h1>Syntax</h1></a>
 <p>Closures look like this:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let plus_one = |x: i32| x + 1;
 
@@ -88,7 +88,6 @@ arguments go between the pipes (<code>|</code>), and the body is an expression, 
 case, <code>x + 1</code>. Remember that <code>{ }</code> is an expression, so we can have multi-line
 closures too:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let plus_two = |x| {
     let mut result: i32 = x;
@@ -107,7 +106,6 @@ named functions defined with <code>fn</code>. The first is that we did not need 
 annotate the types of arguments the closure takes or the values it returns. We
 can:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let plus_one = |x: i32| -&gt; i32 { x + 1 };
 
@@ -123,7 +121,6 @@ can.</p>
 <p>The second is that the syntax is similar, but a bit different. I’ve added
 spaces here for easier comparison:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 fn  plus_one_v1   (x: i32) -&gt; i32 { x + 1 }
 let plus_one_v2 = |x: i32| -&gt; i32 { x + 1 };
@@ -135,7 +132,6 @@ let plus_one_v3 = |x: i32|          x + 1  ;
 <p>The environment for a closure can include bindings from its enclosing scope in
 addition to parameters and local bindings. It looks like this:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let num = 5;
 let plus_num = |x: i32| x + num;
@@ -173,7 +169,6 @@ fn main() {
 on <code>num</code> because the closure is already borrowing it. If we let the closure go
 out of scope, we can:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let mut num = 5;
 {
@@ -205,7 +200,6 @@ passed <code>nums</code> to a function that took ownership of it.</p>
 <p>We can force our closure to take ownership of its environment with the <code>move</code>
 keyword:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let num = 5;
 
@@ -216,7 +210,6 @@ let owns_num = move |x: i32| x + num;
 In this case, <code>5</code> implements <code>Copy</code>, and so <code>owns_num</code> takes ownership of a copy
 of <code>num</code>. So what’s the difference?</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let mut num = 5;
 
@@ -235,7 +228,6 @@ needed to declare <code>add_num</code> as <code>mut</code> too, because we’re 
 environment.</p>
 <p>If we change to a <code>move</code> closure, it’s different:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let mut num = 5;
 
@@ -289,7 +281,6 @@ return closures: the same as any other trait!</p>
 let’s write a function which takes something callable, calls it, and returns
 the result:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 fn call_with_one&lt;F&gt;(some_closure: F) -&gt; i32
     where F: Fn(i32) -&gt; i32 {
@@ -306,7 +297,6 @@ assert_eq!(3, answer);
 suggests: it calls the closure, giving it <code>1</code> as an argument.</p>
 <p>Let’s examine the signature of <code>call_with_one</code> in more depth:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 fn call_with_one&lt;F&gt;(some_closure: F) -&gt; i32
 #    where F: Fn(i32) -&gt; i32 {
@@ -316,7 +306,6 @@ fn call_with_one&lt;F&gt;(some_closure: F) -&gt; i32
 <p>We take one parameter, and it has the type <code>F</code>. We also return an <code>i32</code>. This part
 isn’t interesting. The next part is:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 # fn call_with_one&lt;F&gt;(some_closure: F) -&gt; i32
     where F: Fn(i32) -&gt; i32 {
@@ -336,7 +325,6 @@ take closures as arguments.</p>
 <p>Of course, if we want dynamic dispatch, we can get that too. A trait object
 handles this case, as usual:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 fn call_with_one(some_closure: &amp;Fn(i32) -&gt; i32) -&gt; i32 {
     some_closure(1)
@@ -352,7 +340,6 @@ to our closure when we pass it to <code>call_with_one</code>, so we use <code>&a
 <p>A quick note about closures that use explicit lifetimes. Sometimes you might have a closure
 that takes a reference like so:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 fn call_with_ref&lt;F&gt;(some_closure:F) -&gt; i32
     where F: Fn(&amp;i32) -&gt; i32 {
@@ -382,7 +369,6 @@ we can use Higher-Ranked Trait Bounds with the <code>for&lt;...&gt;</code> synta
 satisfy the borrow checker's rules. Our function then compiles and executes as we
 expect.</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 fn call_with_ref&lt;F&gt;(some_closure:F) -&gt; i32
     where F: for&lt;'a&gt; Fn(&amp;'a i32) -&gt; i32 {
@@ -397,7 +383,6 @@ fn call_with_ref&lt;F&gt;(some_closure:F) -&gt; i32
 you can pass a function pointer to any function expecting a closure argument,
 and it will work:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 fn call_with_one(some_closure: &amp;Fn(i32) -&gt; i32) -&gt; i32 {
     some_closure(1)
@@ -528,7 +513,6 @@ this closure, the function call would be over, the stack frame would go away,
 and our closure is capturing an environment of garbage memory! With one last
 fix, we can make this work:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 fn factory() -&gt; Box&lt;Fn(i32) -&gt; i32&gt; {
     let num = 5;

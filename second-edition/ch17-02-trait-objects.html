@@ -170,7 +170,6 @@ instances the same way. Listing 17-3 shows how to define a trait named <code>Dra
 with one method named <code>draw</code>:</p>
 <p><span class="filename">Filename: src/lib.rs</span></p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 pub trait Draw {
     fn draw(&amp;self);
@@ -186,7 +185,6 @@ struct named <code>Screen</code> that holds a vector named <code>components</cod
 inside a <code>Box</code> that implements the <code>Draw</code> trait.</p>
 <p><span class="filename">Filename: src/lib.rs</span></p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 # pub trait Draw {
 #     fn draw(&amp;self);
@@ -204,7 +202,6 @@ pub struct Screen {
 <code>draw</code> method on each of its <code>components</code> as shown in Listing 17-5:</p>
 <p><span class="filename">Filename: src/lib.rs</span></p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 # pub trait Draw {
 #     fn draw(&amp;self);
@@ -232,7 +229,6 @@ to fill in for the trait object at runtime. For example, we could have defined
 the <code>Screen</code> struct using a generic type and a trait bound as in Listing 17-6:</p>
 <p><span class="filename">Filename: src/lib.rs</span></p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 # pub trait Draw {
 #     fn draw(&amp;self);
@@ -271,7 +267,6 @@ struct might have fields for <code>width</code>, <code>height</code>, and <code>
 Listing 17-7:</p>
 <p><span class="filename">Filename: src/lib.rs</span></p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 # pub trait Draw {
 #     fn draw(&amp;self);
@@ -452,7 +447,6 @@ that by specifying <code>T: ?Sized</code> as a trait bound.</p>
 implemented on types that may or may not be <code>Sized</code>. If we create a trait <code>Foo</code>
 that opts out of the <code>Self: ?Sized</code> bound, that would look like the following:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 trait Foo: Sized {
     fn some_method(&amp;self);
@@ -494,7 +488,6 @@ in the generic type parameters with.</p>
 library's <code>Clone</code> trait. The signature for the <code>clone</code> method in the <code>Clone</code>
 trait looks like this:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 pub trait Clone {
     fn clone(&amp;self) -&gt; Self;

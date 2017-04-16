@@ -128,7 +128,6 @@ can write a function that can take an unknown United States coin and, in a
 similar way as the counting machine, determine which coin it is and return its
 value in cents, as shown here in Listing 6-3:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 enum Coin {
     Penny,
@@ -173,7 +172,6 @@ lines of code in a match arm, you can use curly braces. For example, the
 following code would print out “Lucky penny!” every time the method was called
 with a <code>Coin::Penny</code> but would still return the last value of the block, <code>1</code>:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 # enum Coin {
 #    Penny,
@@ -206,7 +204,6 @@ designs, so only quarters have this extra value. We can add this information to
 our <code>enum</code> by changing the <code>Quarter</code> variant to include a <code>State</code> value stored
 inside it, which we've done here in Listing 6-4:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 #[derive(Debug)] // So we can inspect the state in a minute
 enum UsState {
@@ -234,7 +231,6 @@ pattern that matches values of the variant <code>Coin::Quarter</code>. When a
 <code>Coin::Quarter</code> matches, the <code>state</code> variable will bind to the value of that
 quarter’s state. Then we can use <code>state</code> in the code for that arm, like so:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 # #[derive(Debug)]
 # enum UsState {
@@ -281,7 +277,6 @@ operations.</p>
 <p>This function is very easy to write, thanks to <code>match</code>, and will look like
 Listing 6-5:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 fn plus_one(x: Option&lt;i32&gt;) -&gt; Option&lt;i32&gt; {
     match x {
@@ -355,7 +350,6 @@ we only care about the values 1, 3, 5, and 7, we don’t want to have to list ou
 0, 2, 4, 6, 8, 9 all the way up to 255. Fortunately, we don’t have to: we can
 use the special pattern <code>_</code> instead:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let some_u8_value = 0u8;
 match some_u8_value {

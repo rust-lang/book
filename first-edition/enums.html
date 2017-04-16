@@ -10,7 +10,8 @@
         <base href="">
 
         <link rel="stylesheet" href="book.css">
-        <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+        <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500" rel="stylesheet" type="text/css">
 
         <link rel="shortcut icon" href="favicon.png">
 
@@ -72,7 +73,6 @@
 several possible variants. Each variant in the <code>enum</code> can optionally
 have data associated with it:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 enum Message {
     Quit,
@@ -92,7 +92,6 @@ enum is the sum of the sets of possible values for each variant.</p>
 <p>We use the <code>::</code> syntax to use the name of each variant: they’re scoped by the name
 of the <code>enum</code> itself. This allows both of these to work:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 # enum Message {
 #     Move { x: i32, y: i32 },
@@ -128,7 +127,6 @@ equality yet, but we’ll find out in the <a href="traits.html"><code>traits</co
 <a class="header" href="enums.html#constructors-as-functions" id="constructors-as-functions"><h1>Constructors as functions</h1></a>
 <p>An <code>enum</code> constructor can also be used like a function. For example:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 # enum Message {
 # Write(String),
@@ -138,7 +136,6 @@ let m = Message::Write(&quot;Hello, world&quot;.to_string());
 #}</code></pre></pre>
 <p>is the same as</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 # enum Message {
 # Write(String),
@@ -155,7 +152,6 @@ let x = foo(&quot;Hello, world&quot;.to_string());
 other functions. For example, with <a href="iterators.html"><code>iterators</code></a>, we can do this
 to convert a vector of <code>String</code>s into a vector of <code>Message::Write</code>s:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 # enum Message {
 # Write(String),

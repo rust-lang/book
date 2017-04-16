@@ -114,7 +114,7 @@
 <p>In our I/O project implementing <code>grep</code> in the last chapter, there are some
 places where the code could be made clearer and more concise using iterators.
 Let's take a look at how iterators can improve our implementation of the
-<code>Config::new</code> function and the <code>grep</code> function.</p>
+<code>Config::new</code> function and the <code>search</code> function.</p>
 <a class="header" href="ch13-03-improving-our-io-project.html#removing-a-clone-by-using-an-iterator" id="removing-a-clone-by-using-an-iterator"><h3>Removing a <code>clone</code> by Using an Iterator</h3></a>
 <p>Back in listing 12-8, we had this code that took a slice of <code>String</code> values and
 created an instance of the <code>Config</code> struct by checking for the right number of
@@ -126,11 +126,11 @@ struct could own those values:</p>
             return Err(&quot;not enough arguments&quot;);
         }
 
-        let search = args[1].clone();
+        let query = args[1].clone();
         let filename = args[2].clone();
 
         Ok(Config {
-            search: search,
+            query: query,
             filename: filename,
         })
     }
@@ -141,7 +141,7 @@ could remove them in the future. Well, that time is now! So, why do we need
 <code>clone</code> here? The issue is that we have a slice with <code>String</code> elements in the
 parameter <code>args</code>, and the <code>new</code> function does not own <code>args</code>. In order to be
 able to return ownership of a <code>Config</code> instance, we need to clone the values
-that we put in the <code>search</code> and <code>filename</code> fields of <code>Config</code>, so that the
+that we put in the <code>query</code> and <code>filename</code> fields of <code>Config</code>, so that the
 <code>Config</code> instance can own its values.</p>
 <p>Now that we know more about iterators, we can change the <code>new</code> function to
 instead take ownership of an iterator as its argument. We'll use the iterator
@@ -171,10 +171,9 @@ type <code>std::env::Args</code> instead of <code>&amp;[String]</code>:</p>
 library documentation, <code>std::env::Args</code> implements the <code>Iterator</code> trait, so we
 know we can call the <code>next</code> method on it! Here's the new code:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 # struct Config {
-#     search: String,
+#     query: String,
 #     filename: String,
 # }
 #
@@ -182,9 +181,9 @@ impl Config {
     fn new(mut args: std::env::Args) -&gt; Result&lt;Config, &amp;'static str&gt; {
         args.next();
 
-        let search = match args.next() {
+        let query = match args.next() {
             Some(arg) =&gt; arg,
-            None =&gt; return Err(&quot;Didn't get a search string&quot;),
+            None =&gt; return Err(&quot;Didn't get a query string&quot;),
         };
 
         let filename = match args.next() {
@@ -193,7 +192,7 @@ impl Config {
         };
 
         Ok(Config {
-            search: search,
+            query: query,
             filename: filename,
         })
     }
@@ -204,30 +203,29 @@ impl Config {
 <p>Remember that the first value in the return value of <code>env::args</code> is the name of
 the program. We want to ignore that, so first we'll call <code>next</code> and not do
 anything with the return value. The second time we call <code>next</code> should be the
-value we want to put in the <code>search</code> field of <code>Config</code>. We use a <code>match</code> to
+value we want to put in the <code>query</code> field of <code>Config</code>. We use a <code>match</code> to
 extract the value if <code>next</code> returns a <code>Some</code>, and we return early with an <code>Err</code>
 value if there weren't enough arguments (which would cause this call to <code>next</code>
 to return <code>None</code>).</p>
 <p>We do the same thing for the <code>filename</code> value. It's slightly unfortunate that
-the <code>match</code> expressions for <code>search</code> and <code>filename</code> are so similar. It would be
+the <code>match</code> expressions for <code>query</code> and <code>filename</code> are so similar. It would be
 nice if we could use <code>?</code> on the <code>Option</code> returned from <code>next</code>, but <code>?</code> only
 works with <code>Result</code> values currently. Even if we could use <code>?</code> on <code>Option</code> like
 we can on <code>Result</code>, the value we would get would be borrowed, and we want to
 move the <code>String</code> from the iterator into <code>Config</code>.</p>
 <a class="header" href="ch13-03-improving-our-io-project.html#making-code-clearer-with-iterator-adaptors" id="making-code-clearer-with-iterator-adaptors"><h3>Making Code Clearer with Iterator Adaptors</h3></a>
 <p>The other bit of code where we could take advantage of iterators was in the
-<code>grep</code> function as implemented in Listing 12-15:</p>
+<code>search</code> function as implemented in Listing 12-15:</p>
 <!-- We hadn't had a listing number for this code sample when we submitted
 chapter 12; we'll fix the listing numbers in that chapter after you've
 reviewed it. /Carol -->
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
-fn grep&lt;'a&gt;(search: &amp;str, contents: &amp;'a str) -&gt; Vec&lt;&amp;'a str&gt; {
+fn search&lt;'a&gt;(query: &amp;str, contents: &amp;'a str) -&gt; Vec&lt;&amp;'a str&gt; {
     let mut results = Vec::new();
 
     for line in contents.lines() {
-        if line.contains(search) {
+        if line.contains(query) {
             results.push(line);
         }
     }
@@ -240,31 +238,29 @@ fn grep&lt;'a&gt;(search: &amp;str, contents: &amp;'a str) -&gt; Vec&lt;&amp;'a 
 mutable intermediate <code>results</code> vector, by using iterator adaptor methods like
 this instead:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
-fn grep&lt;'a&gt;(search: &amp;str, contents: &amp;'a str) -&gt; Vec&lt;&amp;'a str&gt; {
+fn search&lt;'a&gt;(query: &amp;str, contents: &amp;'a str) -&gt; Vec&lt;&amp;'a str&gt; {
     contents.lines()
-        .filter(|line| line.contains(search))
+        .filter(|line| line.contains(query))
         .collect()
 }
 
 #}</code></pre></pre>
 <p>Here, we use the <code>filter</code> adaptor to only keep the lines that
-<code>line.contains(search)</code> returns true for. We then collect them up into another
+<code>line.contains(query)</code> returns true for. We then collect them up into another
 vector with <code>collect</code>. Much simpler!</p>
-<p>We can use the same technique in the <code>grep_case_insensitive</code> function that we
+<p>We can use the same technique in the <code>search_case_insensitive</code> function that we
 defined in Listing 12-16 as follows:</p>
 <!-- Similarly, the code snippet that will be 12-16 didn't have a listing
 number when we sent you chapter 12, we will fix it. /Carol -->
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
-fn grep_case_insensitive&lt;'a&gt;(search: &amp;str, contents: &amp;'a str) -&gt; Vec&lt;&amp;'a str&gt; {
-    let search = search.to_lowercase();
+fn search_case_insensitive&lt;'a&gt;(query: &amp;str, contents: &amp;'a str) -&gt; Vec&lt;&amp;'a str&gt; {
+    let query = query.to_lowercase();
 
     contents.lines()
         .filter(|line| {
-            line.to_lowercase().contains(&amp;search)
+            line.to_lowercase().contains(&amp;query)
         }).collect()
 }
 

@@ -10,7 +10,8 @@
         <base href="">
 
         <link rel="stylesheet" href="book.css">
-        <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+        <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500" rel="stylesheet" type="text/css">
 
         <link rel="shortcut icon" href="favicon.png">
 
@@ -173,7 +174,6 @@ take a name on the left hand side of the assignment, it actually accepts a
 ‘<a href="patterns.html">pattern</a>’. We’ll use patterns later. It’s easy enough
 to use for now:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let foo = 5; // `foo` is immutable.
 let mut bar = 5; // `bar` is mutable.
@@ -275,7 +275,6 @@ project.</p>
 and so we pass it <code>guess</code> as an argument. If we had multiple <code>{}</code>s, we would
 pass multiple arguments:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let x = 5;
 let y = 10;
@@ -494,7 +493,6 @@ takes a reference to the thing you want to compare it to. It returns the
 determine exactly what kind of <code>Ordering</code> it is. <code>Ordering</code> is an
 <a href="enums.html"><code>enum</code></a>, short for ‘enumeration’, which looks like this:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 enum Foo {
     Bar,

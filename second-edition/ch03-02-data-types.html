@@ -122,7 +122,6 @@ value and how we use it. In cases when many types are possible, such as when we
 converted a <code>String</code> to a numeric type using <code>parse</code> in Chapter 2, we must add
 a type annotation, like this:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let guess: u32 = &quot;42&quot;.parse().expect(&quot;Not a number!&quot;);
 
@@ -344,7 +343,6 @@ program that needs to know the names of the months of the year. It’s very
 unlikely that such a program will need to add or remove months, so you can use
 an array because you know it will always contain 12 items:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let months = [&quot;January&quot;, &quot;February&quot;, &quot;March&quot;, &quot;April&quot;, &quot;May&quot;, &quot;June&quot;, &quot;July&quot;,
               &quot;August&quot;, &quot;September&quot;, &quot;October&quot;, &quot;November&quot;, &quot;December&quot;];

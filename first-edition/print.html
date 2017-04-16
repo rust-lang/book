@@ -10,7 +10,8 @@
         <base href="">
 
         <link rel="stylesheet" href="book.css">
-        <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+        <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500" rel="stylesheet" type="text/css">
 
         <link rel="shortcut icon" href="favicon.png">
 
@@ -234,7 +235,6 @@ the opening curly brace on the same line as the function declaration, with one
 space in between.</p>
 <p>Inside the <code>main()</code> function:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
     println!(&quot;Hello, world!&quot;);
 
@@ -577,7 +577,6 @@ take a name on the left hand side of the assignment, it actually accepts a
 ‘<a href="patterns.html">pattern</a>’. We’ll use patterns later. It’s easy enough
 to use for now:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let foo = 5; // `foo` is immutable.
 let mut bar = 5; // `bar` is mutable.
@@ -679,7 +678,6 @@ project.</p>
 and so we pass it <code>guess</code> as an argument. If we had multiple <code>{}</code>s, we would
 pass multiple arguments:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let x = 5;
 let y = 10;
@@ -898,7 +896,6 @@ takes a reference to the thing you want to compare it to. It returns the
 determine exactly what kind of <code>Ordering</code> it is. <code>Ordering</code> is an
 <a href="enums.html"><code>enum</code></a>, short for ‘enumeration’, which looks like this:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 enum Foo {
     Bar,
@@ -1281,7 +1278,6 @@ variable bindings have a few tricks up their sleeves. For example the
 left-hand side of a <code>let</code> statement is a ‘<a href="patterns.html">pattern</a>’, not a
 variable name. This means we can do things like:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let (x, y) = (1, 2);
 
@@ -1298,7 +1294,6 @@ out what the type of something is, Rust doesn’t require you to explicitly type
 it out.</p>
 <p>We can add the type if we want to, though. Types come after a colon (<code>:</code>):</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let x: i32 = 5;
 
@@ -1331,7 +1326,6 @@ x = 10;
 </code></pre>
 <p>If you want a binding to be mutable, you can use <code>mut</code>:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let mut x = 5; // mut x: i32
 x = 10;
@@ -1442,7 +1436,6 @@ To learn more, run the command again with --verbose.
 variable binding with the same name as another binding that is currently in
 scope will override the previous binding.</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let x: i32 = 8;
 {
@@ -1463,7 +1456,6 @@ name does not alter or destroy the value it was bound to, and the value will
 continue to exist until it goes out of scope, even if it is no longer accessible
 by any means.</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let mut x: i32 = 1;
 x = 7;
@@ -1483,7 +1475,6 @@ let y = &quot;I can also be bound to text!&quot;; // `y` is now of a different t
 this function takes no arguments, and then some curly braces to indicate the
 body. Here’s a function named <code>foo</code>:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 fn foo() {
 }
@@ -1491,7 +1482,6 @@ fn foo() {
 #}</code></pre></pre>
 <p>So, what about taking arguments? Here’s a function that prints a number:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 fn print_number(x: i32) {
     println!(&quot;x is: {}&quot;, x);
@@ -1537,7 +1527,6 @@ types while allowing for inference inside of function bodies is a wonderful
 sweet spot between full inference and no inference.</p>
 <p>What about returning a value? Here’s a function that adds one to an integer:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 fn add_one(x: i32) -&gt; i32 {
     x + 1
@@ -1590,7 +1579,6 @@ previous example), in Rust the value of an assignment is an empty tuple <code>()
 because the assigned value can have <a href="ownership.html">only one owner</a>, and any
 other returned value would be too surprising:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let mut y = 5;
 
@@ -1607,7 +1595,6 @@ every line of Rust code you see.</p>
 <p>What is this exception that makes us say &quot;almost&quot;? You saw it already, in this
 code:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 fn add_one(x: i32) -&gt; i32 {
     x + 1
@@ -1620,7 +1607,6 @@ removing the semicolon in the error we saw before.</p>
 <a class="header" href="print.html#early-returns" id="early-returns"><h2>Early returns</h2></a>
 <p>But what about early returns? Rust does have a keyword for that, <code>return</code>:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 fn foo(x: i32) -&gt; i32 {
     return x;
@@ -1633,7 +1619,6 @@ fn foo(x: i32) -&gt; i32 {
 <p>Using a <code>return</code> as the last line of a function works, but is considered poor
 style:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 fn foo(x: i32) -&gt; i32 {
     return x + 1;
@@ -1647,7 +1632,6 @@ time.</p>
 <p>Rust has some special syntax for ‘diverging functions’, which are functions that
 do not return:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 fn diverges() -&gt; ! {
     panic!(&quot;This function never returns!&quot;);
@@ -1722,7 +1706,6 @@ stack backtrace:
 </code></pre>
 <p>A diverging function can be used as any type:</p>
 <pre><pre class="playpen"><code class="language-rust should_panic"># #![allow(unused_variables)]
-# 
 #fn main() {
 # fn diverges() -&gt; ! {
 #    panic!(&quot;This function never returns!&quot;);
@@ -1734,7 +1717,6 @@ let x: String = diverges();
 <a class="header" href="print.html#function-pointers" id="function-pointers"><h2>Function pointers</h2></a>
 <p>We can also create variable bindings which point to functions:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let f: fn(i32) -&gt; i32;
 
@@ -1742,7 +1724,6 @@ let f: fn(i32) -&gt; i32;
 <p><code>f</code> is a variable binding which points to a function that takes an <code>i32</code> as
 an argument and returns an <code>i32</code>. For example:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 fn plus_one(i: i32) -&gt; i32 {
     i + 1
@@ -1757,7 +1738,6 @@ let f = plus_one;
 #}</code></pre></pre>
 <p>We can then use <code>f</code> to call the function:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 # fn plus_one(i: i32) -&gt; i32 { i + 1 }
 # let f = plus_one;
@@ -1772,7 +1752,6 @@ of these ones, as well, but these are the most primitive.</p>
 <a class="header" href="print.html#booleans" id="booleans"><h1>Booleans</h1></a>
 <p>Rust has a built-in boolean type, named <code>bool</code>. It has two values, <code>true</code> and <code>false</code>:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let x = true;
 
@@ -1786,7 +1765,6 @@ documentation</a>.</p>
 <p>The <code>char</code> type represents a single Unicode scalar value. You can create <code>char</code>s
 with a single tick: (<code>'</code>)</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let x = 'x';
 let two_hearts = '💕';
@@ -1804,7 +1782,6 @@ fixed and variable, floating-point and integer.</p>
 bigger numbers.</p>
 <p>If a number literal has nothing to cause its type to be inferred, it defaults:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let x = 42; // `x` has type `i32`.
 
@@ -1854,7 +1831,6 @@ IEEE-754 single and double precision numbers.</p>
 things. The most basic is the <em>array</em>, a fixed-size list of elements of the
 same type. By default, arrays are immutable.</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let a = [1, 2, 3]; // a: [i32; 3]
 let mut m = [1, 2, 3]; // m: [i32; 3]
@@ -1866,14 +1842,12 @@ array.</p>
 <p>There’s a shorthand for initializing each element of an array to the same
 value. In this example, each element of <code>a</code> will be initialized to <code>0</code>:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let a = [0; 20]; // a: [i32; 20]
 
 #}</code></pre></pre>
 <p>You can get the number of elements in an array <code>a</code> with <code>a.len()</code>:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let a = [1, 2, 3];
 
@@ -1882,7 +1856,6 @@ println!(&quot;a has {} elements&quot;, a.len());
 #}</code></pre></pre>
 <p>You can access a particular element of an array with <em>subscript notation</em>:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let names = [&quot;Graydon&quot;, &quot;Brian&quot;, &quot;Niko&quot;]; // names: [&amp;str; 3]
 
@@ -1911,7 +1884,6 @@ and a length.</p>
 detail later in this section. The <code>[]</code>s, with a range, let you define the
 length of the slice:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let a = [0, 1, 2, 3, 4];
 let complete = &amp;a[..]; // A slice containing all of the elements in `a`.
@@ -1932,7 +1904,6 @@ documentation</a>.</p>
 <a class="header" href="print.html#tuples" id="tuples"><h1>Tuples</h1></a>
 <p>A tuple is an ordered list of fixed size. Like this:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let x = (1, &quot;hello&quot;);
 
@@ -1940,7 +1911,6 @@ let x = (1, &quot;hello&quot;);
 <p>The parentheses and commas form this two-length tuple. Here’s the same code, but
 with the type annotated:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let x: (i32, &amp;str) = (1, &quot;hello&quot;);
 
@@ -1954,7 +1924,6 @@ soon.</p>
 <p>You can assign one tuple into another, if they have the same contained types
 and <a href="glossary.html#arity">arity</a>. Tuples have the same arity when they have the same length.</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let mut x = (1, 2); // x: (i32, i32)
 let y = (2, 3); // y: (i32, i32)
@@ -1965,7 +1934,6 @@ x = y;
 <p>You can access the fields in a tuple through a <em>destructuring let</em>. Here’s
 an example:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let (x, y, z) = (1, 2, 3);
 
@@ -1981,7 +1949,6 @@ or “breaks up” the tuple, and assigns the bits to three bindings.</p>
 <p>You can disambiguate a single-element tuple from a value in parentheses with a
 comma:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 (0,); // A single-element tuple.
 (0); // A zero in parentheses.
@@ -1990,7 +1957,6 @@ comma:</p>
 <a class="header" href="print.html#tuple-indexing" id="tuple-indexing"><h2>Tuple Indexing</h2></a>
 <p>You can also access fields of a tuple with indexing syntax:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let tuple = (1, 2, 3);
 
@@ -2008,7 +1974,6 @@ documentation</a>.</p>
 <a class="header" href="print.html#functions-1" id="functions-1"><h1>Functions</h1></a>
 <p>Functions also have a type! They look like this:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 fn foo(x: i32) -&gt; i32 { x }
 
@@ -2024,7 +1989,6 @@ about your code. The compiler mostly ignores them.</p>
 <p>Rust has two kinds of comments that you should care about: <em>line comments</em>
 and <em>doc comments</em>.</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 // Line comments are anything after ‘//’ and extend to the end of the line.
 
@@ -2038,7 +2002,6 @@ let x = 5; // This is also a line comment.
 <p>The other kind of comment is a doc comment. Doc comments use <code>///</code> instead of
 <code>//</code>, and support Markdown notation inside:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 /// Adds one to the number given.
 ///
@@ -2081,7 +2044,6 @@ from a branch in a tree: a decision point, where depending on a choice,
 multiple paths can be taken.</p>
 <p>In the case of <code>if</code>, there is one choice that leads down two paths:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let x = 5;
 
@@ -2095,7 +2057,6 @@ More specifically, if the expression after the <code>if</code> evaluates to <cod
 the block is executed. If it’s <code>false</code>, then it is not.</p>
 <p>If you want something to happen in the <code>false</code> case, use an <code>else</code>:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let x = 5;
 
@@ -2108,7 +2069,6 @@ if x == 5 {
 #}</code></pre></pre>
 <p>If there is more than one case, use an <code>else if</code>:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let x = 5;
 
@@ -2123,7 +2083,6 @@ if x == 5 {
 #}</code></pre></pre>
 <p>This is all pretty standard. However, you can also do this:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let x = 5;
 
@@ -2136,7 +2095,6 @@ let y = if x == 5 {
 #}</code></pre></pre>
 <p>Which we can (and probably should) write like this:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let x = 5;
 
@@ -2157,7 +2115,6 @@ value of the last expression in whichever branch was chosen. An <code>if</code> 
 <a class="header" href="print.html#while" id="while"><h2>while</h2></a>
 <p>Rust also has a <code>while</code> loop. It looks like this:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let mut x = 5; // mut x: i32
 let mut done = false; // mut done: bool
@@ -2195,7 +2152,6 @@ loop doesn’t look like this “C-style” <code>for</code> loop:</p>
 </code></pre>
 <p>Instead, it looks like this:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 for x in 0..10 {
     println!(&quot;{}&quot;, x); // x: i32
@@ -2224,7 +2180,6 @@ developers.</p>
 use the <code>.enumerate()</code> function.</p>
 <a class="header" href="print.html#on-ranges" id="on-ranges"><h4>On ranges:</h4></a>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 for (index, value) in (5..10).enumerate() {
     println!(&quot;index = {} and value = {}&quot;, index, value);
@@ -2241,7 +2196,6 @@ index = 4 and value = 9
 <p>Don't forget to add the parentheses around the range.</p>
 <a class="header" href="print.html#on-iterators" id="on-iterators"><h4>On iterators:</h4></a>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let lines = &quot;hello\nworld&quot;.lines();
 
@@ -2257,7 +2211,6 @@ for (linenumber, line) in lines.enumerate() {
 <a class="header" href="print.html#ending-iteration-early" id="ending-iteration-early"><h2>Ending iteration early</h2></a>
 <p>Let’s take a look at that <code>while</code> loop we had earlier:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let mut x = 5;
 let mut done = false;
@@ -2278,7 +2231,6 @@ when we should exit out of the loop. Rust has two keywords to help us with
 modifying iteration: <code>break</code> and <code>continue</code>.</p>
 <p>In this case, we can write the loop in a better way with <code>break</code>:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let mut x = 5;
 
@@ -2295,7 +2247,6 @@ loop {
 <p><code>continue</code> is similar, but instead of ending the loop, it goes to the next
 iteration. This will only print the odd numbers:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 for x in 0..10 {
     if x % 2 == 0 { continue; }
@@ -2316,7 +2267,6 @@ when <code>x</code> is even, while we <code>continue</code> to the next iteratio
 loop when y is even. So it will execute the <code>println!</code> when both <code>x</code> and
 <code>y</code> are odd.</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 'outer: for x in 0..10 {
     'inner: for y in 0..10 {
@@ -2334,7 +2284,6 @@ of any type (see the chapter on <a href="generics.html">generics</a> for more).
 Vectors always allocate their data on the heap.
 You can create them with the <code>vec!</code> macro:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let v = vec![1, 2, 3, 4, 5]; // v: Vec&lt;i32&gt;
 
@@ -2344,7 +2293,6 @@ brackets <code>[]</code> with <code>vec!</code> macro. Rust allows you to use ei
 situation, this is just convention.)</p>
 <p>There’s an alternate form of <code>vec!</code> for repeating an initial value:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let v = vec![0; 10]; // A vector of ten zeroes.
 
@@ -2357,7 +2305,6 @@ thankfully, the <a href="../../std/boxed/index.html"><code>Box</code></a> type w
 <a class="header" href="print.html#accessing-elements" id="accessing-elements"><h2>Accessing elements</h2></a>
 <p>To get the value at a particular index in the vector, we use <code>[]</code>s:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let v = vec![1, 2, 3, 4, 5];
 
@@ -2399,7 +2346,6 @@ println!(&quot;Item 7 is {}&quot;, v[7]);
 methods like <a href="../../std/vec/struct.Vec.html#method.get"><code>get</code></a> or <a href="../../std/vec/struct.Vec.html#method.get_mut"><code>get_mut</code></a> that return <code>None</code> when
 given an invalid index:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let v = vec![1, 2, 3];
 match v.get(7) {
@@ -2412,7 +2358,6 @@ match v.get(7) {
 <p>Once you have a vector, you can iterate through its elements with <code>for</code>. There
 are three versions:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let mut v = vec![1, 2, 3, 4, 5];
 
@@ -2444,7 +2389,6 @@ for i in v {
 </code></pre>
 <p>Whereas the following works perfectly,</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let v = vec![1, 2, 3, 4, 5];
 
@@ -2495,7 +2439,6 @@ checker less and less.</p>
 of what they’re bound to. This means that when a binding goes out of scope,
 Rust will free the bound resources. For example:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 fn foo() {
     let v = vec![1, 2, 3];
@@ -2518,7 +2461,6 @@ elements onto them.</p>
 one</em> binding to any given resource. For example, if we have a vector, we can
 assign it to another binding:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let v = vec![1, 2, 3];
 
@@ -2557,7 +2499,6 @@ special annotation here, it’s the default thing that Rust does.</p>
 important.</p>
 <p>When we write code like this:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let x = 10;
 
@@ -2567,7 +2508,6 @@ pattern representing the value of 10 to the allocated memory and binds the
 variable name x to this memory region for future reference.</p>
 <p>Now consider the following code fragment:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let v = vec![1, 2, 3];
 
@@ -2594,7 +2534,6 @@ Rust’s safety guarantees by introducing a data race if one could access both
 <code>v</code> and <code>v2</code> at the same time.</p>
 <p>For example if we truncated the vector to just two elements through <code>v2</code>:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 # let v = vec![1, 2, 3];
 # let mut v2 = v;
@@ -2620,7 +2559,6 @@ behavior, and it’s called <code>Copy</code>. We haven’t discussed traits yet
 you can think of them as an annotation to a particular type that adds extra
 behavior. For example:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let v = 1;
 
@@ -2670,7 +2608,6 @@ section.</p>
 <a class="header" href="print.html#more-than-ownership" id="more-than-ownership"><h1>More than ownership</h1></a>
 <p>Of course, if we had to hand ownership back with every function we wrote:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 fn foo(v: Vec&lt;i32&gt;) -&gt; Vec&lt;i32&gt; {
     // Do stuff with `v`.
@@ -2682,7 +2619,6 @@ fn foo(v: Vec&lt;i32&gt;) -&gt; Vec&lt;i32&gt; {
 #}</code></pre></pre>
 <p>This would get very tedious. It gets worse the more things we want to take ownership of:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 fn foo(v1: Vec&lt;i32&gt;, v2: Vec&lt;i32&gt;) -&gt; (Vec&lt;i32&gt;, Vec&lt;i32&gt;, i32) {
     // Do stuff with `v1` and `v2`.
@@ -2736,7 +2672,6 @@ checker less and less.</p>
 <p>At the end of the <a href="ownership.html">ownership</a> section, we had a nasty function that looked
 like this:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 fn foo(v1: Vec&lt;i32&gt;, v2: Vec&lt;i32&gt;) -&gt; (Vec&lt;i32&gt;, Vec&lt;i32&gt;, i32) {
     // Do stuff with `v1` and `v2`.
@@ -2754,7 +2689,6 @@ let (v1, v2, answer) = foo(v1, v2);
 <p>This is not idiomatic Rust, however, as it doesn’t take advantage of borrowing. Here’s
 the first step:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 fn foo(v1: &amp;Vec&lt;i32&gt;, v2: &amp;Vec&lt;i32&gt;) -&gt; i32 {
     // Do stuff with `v1` and `v2`.
@@ -2820,7 +2754,6 @@ v.push(5);
 <p>There’s a second kind of reference: <code>&amp;mut T</code>. A ‘mutable reference’ allows you
 to mutate the resource you’re borrowing. For example:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let mut x = 5;
 {
@@ -2919,7 +2852,6 @@ scopes look like this:</p>
 <p>The scopes conflict: we can’t make an <code>&amp;x</code> while <code>y</code> is in scope.</p>
 <p>So when we add the curly braces:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let mut x = 5;
 
@@ -2941,7 +2873,6 @@ races. What kinds of issues do data races cause? Here are a few.</p>
 collection that you’re iterating over. Rust’s borrow checker prevents this from
 happening:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let mut v = vec![1, 2, 3];
 
@@ -3087,7 +3018,6 @@ your reference.</li>
 dangling pointer or ‘use after free’, when the resource is memory. A small
 example of such a situation would be:</p>
 <pre><pre class="playpen"><code class="language-rust compile_fail"># #![allow(unused_variables)]
-# 
 #fn main() {
 let r;              // Introduce reference: `r`.
 {
@@ -3104,7 +3034,6 @@ as it can see the lifetimes of the various values in the function.</p>
 <p>When we have a function that takes arguments by reference the situation becomes
 more complex. Consider the following example:</p>
 <pre><pre class="playpen"><code class="language-rust compile_fail E0106"># #![allow(unused_variables)]
-# 
 #fn main() {
 fn skip_prefix(line: &amp;str, prefix: &amp;str) -&gt; &amp;str {
     // ...
@@ -3133,7 +3062,6 @@ code. To get it to compile we need to tell the compiler more about the
 lifetimes of the references. This can be done by making the lifetimes
 explicit in the function declaration:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 fn skip_prefix&lt;'a, 'b&gt;(line: &amp;'a str, prefix: &amp;'b str) -&gt; &amp;'a str {
     // ...
@@ -3203,7 +3131,6 @@ fn main() {
 </code></pre></pre>
 <p>As you can see, <code>struct</code>s can also have lifetimes. In a similar way to functions,</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 struct Foo&lt;'a&gt; {
 # x: &amp;'a i32,
@@ -3212,7 +3139,6 @@ struct Foo&lt;'a&gt; {
 #}</code></pre></pre>
 <p>declares a lifetime, and</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 # struct Foo&lt;'a&gt; {
 x: &amp;'a i32,
@@ -3244,7 +3170,6 @@ uses it.</p>
 <a class="header" href="print.html#multiple-lifetimes" id="multiple-lifetimes"><h2>Multiple lifetimes</h2></a>
 <p>If you have multiple references, you can use the same lifetime multiple times:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 fn x_or_y&lt;'a&gt;(x: &amp;'a str, y: &amp;'a str) -&gt; &amp;'a str {
 #    x
@@ -3255,7 +3180,6 @@ fn x_or_y&lt;'a&gt;(x: &amp;'a str, y: &amp;'a str) -&gt; &amp;'a str {
 return value is also alive for that scope. If you wanted <code>x</code> and <code>y</code> to have
 different lifetimes, you can use multiple lifetime parameters:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 fn x_or_y&lt;'a, 'b&gt;(x: &amp;'a str, y: &amp;'b str) -&gt; &amp;'a str {
 #    x
@@ -3315,7 +3239,6 @@ name is the first step towards being able to talk about it.</p>
 has the lifetime of the entire program. Most Rust programmers first come across
 <code>'static</code> when dealing with strings:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let x: &amp;'static str = &quot;Hello, world.&quot;;
 
@@ -3324,7 +3247,6 @@ let x: &amp;'static str = &quot;Hello, world.&quot;;
 alive: they are baked into the data segment of the final binary. Another
 example are globals:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 static FOO: i32 = 5;
 let x: &amp;'static i32 = &amp;FOO;
@@ -3405,7 +3327,6 @@ x = 6; // Error!
 </code></pre>
 <p>We can introduce mutability with the <code>mut</code> keyword:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let mut x = 5;
 
@@ -3418,7 +3339,6 @@ it’s not so much that the value at <code>x</code> is changing, but that the bi
 changed from one <code>i32</code> to another.</p>
 <p>You can also create a <a href="references-and-borrowing.html">reference</a> to it, using <code>&amp;x</code>, but if you want to use the reference to change it, you will need a mutable reference:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let mut x = 5;
 let y = &amp;mut x;
@@ -3427,7 +3347,6 @@ let y = &amp;mut x;
 <p><code>y</code> is an immutable binding to a mutable reference, which means that you can’t bind 'y' to something else (<code>y = &amp;mut z</code>), but <code>y</code> can be used to bind <code>x</code> to something else (<code>*y = 5</code>). A subtle distinction.</p>
 <p>Of course, if you need both:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let mut x = 5;
 let mut y = &amp;mut x;
@@ -3438,7 +3357,6 @@ changed.</p>
 <p>It’s important to note that <code>mut</code> is part of a <a href="patterns.html">pattern</a>, so you
 can do things like this:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let (mut x, y) = (5, 6);
 
@@ -3452,7 +3370,6 @@ fn foo(mut x: i32) {
 it’s not able to be changed: we are referring to its ‘exterior mutability’ that
 in this case is immutable. Consider, for example, <a href="../../std/sync/struct.Arc.html"><code>Arc&lt;T&gt;</code></a>:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 use std::sync::Arc;
 
@@ -3481,7 +3398,6 @@ with <code>clone()</code>. If it handed out <code>&amp;mut T</code>s, though, th
 <p>Other types, like the ones in the <a href="../../std/cell/index.html"><code>std::cell</code></a> module, have the
 opposite: interior mutability. For example:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 use std::cell::RefCell;
 
@@ -3529,7 +3445,6 @@ b.x = 10; // Error: cannot assign to immutable field `b.x`.
 </code></pre>
 <p>However, by using <a href="../../std/cell/struct.Cell.html"><code>Cell&lt;T&gt;</code></a>, you can emulate field-level mutability:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 use std::cell::Cell;
 
@@ -3551,7 +3466,6 @@ println!(&quot;y: {:?}&quot;, point.y);
 doing calculations involving coordinates in 2D space, we would need both an <code>x</code>
 and a <code>y</code> value:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let origin_x = 0;
 let origin_y = 0;
@@ -3668,7 +3582,6 @@ fn main() {
 <p>A <code>struct</code> can include <code>..</code> to indicate that you want to use a copy of some
 other <code>struct</code> for some of the values. For example:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 struct Point3d {
     x: i32,
@@ -3684,7 +3597,6 @@ point = Point3d { y: 1, .. point };
 have to be the same <code>struct</code> either, you can use this syntax when making new
 ones, and it will copy the values you don’t specify:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 # struct Point3d {
 #     x: i32,
@@ -3701,7 +3613,6 @@ let point = Point3d { z: 1, x: 2, .. origin };
 don't. They are declared with the <code>struct</code> keyword, and then with a name
 followed by a tuple:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 struct Color(i32, i32, i32);
 struct Point(i32, i32, i32);
@@ -3715,7 +3626,6 @@ same values.</p>
 <p>The members of a tuple struct may be accessed by dot notation or destructuring
 <code>let</code>, just like regular tuples:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 # struct Color(i32, i32, i32);
 # struct Point(i32, i32, i32);
@@ -3732,7 +3642,6 @@ We call this the ‘newtype’ pattern, because it allows you to create a new ty
 that is distinct from its contained value and also expresses its own semantic
 meaning:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 struct Inches(i32);
 
@@ -3746,7 +3655,6 @@ println!(&quot;length is {} inches&quot;, integer_length);
 In this case, the <code>let Inches(integer_length)</code> assigns <code>10</code> to <code>integer_length</code>.
 We could have used dot notation to do the same thing:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 # struct Inches(i32);
 # let length = Inches(10);
@@ -3756,7 +3664,6 @@ let integer_length = length.0;
 <p>It's always possible to use a <code>struct</code> instead of a tuple struct, and can be
 clearer. We could write <code>Color</code> and <code>Point</code> like this instead:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 struct Color {
     red: i32,
@@ -3777,7 +3684,6 @@ rather than positions.</p>
 <a class="header" href="print.html#unit-like-structs" id="unit-like-structs"><h1>Unit-like structs</h1></a>
 <p>You can define a <code>struct</code> with no members at all:</p>
 <pre><pre class="playpen"><code class="language-rust compile_fail E0423"># #![allow(unused_variables)]
-# 
 #fn main() {
 struct Electron {} // Use empty braces...
 struct Proton;     // ...or just a semicolon.
@@ -3802,7 +3708,6 @@ unit-like <code>struct</code>.</p>
 several possible variants. Each variant in the <code>enum</code> can optionally
 have data associated with it:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 enum Message {
     Quit,
@@ -3822,7 +3727,6 @@ enum is the sum of the sets of possible values for each variant.</p>
 <p>We use the <code>::</code> syntax to use the name of each variant: they’re scoped by the name
 of the <code>enum</code> itself. This allows both of these to work:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 # enum Message {
 #     Move { x: i32, y: i32 },
@@ -3858,7 +3762,6 @@ equality yet, but we’ll find out in the <a href="traits.html"><code>traits</co
 <a class="header" href="print.html#constructors-as-functions" id="constructors-as-functions"><h1>Constructors as functions</h1></a>
 <p>An <code>enum</code> constructor can also be used like a function. For example:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 # enum Message {
 # Write(String),
@@ -3868,7 +3771,6 @@ let m = Message::Write(&quot;Hello, world&quot;.to_string());
 #}</code></pre></pre>
 <p>is the same as</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 # enum Message {
 # Write(String),
@@ -3885,7 +3787,6 @@ let x = foo(&quot;Hello, world&quot;.to_string());
 other functions. For example, with <a href="iterators.html"><code>iterators</code></a>, we can do this
 to convert a vector of <code>String</code>s into a vector of <code>Message::Write</code>s:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 # enum Message {
 # Write(String),
@@ -3902,7 +3803,6 @@ possible options. Also, conditions can get quite complex. Rust
 has a keyword, <code>match</code>, that allows you to replace complicated <code>if</code>/<code>else</code>
 groupings with something more powerful. Check it out:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let x = 5;
 
@@ -3934,7 +3834,6 @@ arms for integers 1-5, if <code>x</code> is 6 or any other value, then it is cau
 <p><code>match</code> is also an expression, which means we can use it on the right-hand
 side of a <code>let</code> binding or directly where an expression is used:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let x = 5;
 
@@ -3954,7 +3853,6 @@ this example the integers are converted to <code>String</code>.</p>
 <p>Another important use of the <code>match</code> keyword is to process the possible
 variants of an enum:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 enum Message {
     Quit,
@@ -3991,7 +3889,6 @@ on a whirlwind tour of all of the things patterns can do!</p>
 <p>A quick refresher: you can match against literals directly, and <code>_</code> acts as an
 ‘any’ case:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let x = 1;
 
@@ -4006,7 +3903,6 @@ match x {
 <p>This prints <code>one</code>.</p>
 <p>It's possible to create a binding for the value in the any case:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let x = 1;
 
@@ -4020,7 +3916,6 @@ match x {
 </code></pre>
 <p>Note it is an error to have both a catch-all <code>_</code> and a catch-all binding in the same match block:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let x = 1;
 
@@ -4033,7 +3928,6 @@ match x {
 <p>There’s one pitfall with patterns: like anything that introduces a new binding,
 they introduce shadowing. For example:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let x = 1;
 let c = 'c';
@@ -4057,7 +3951,6 @@ new <code>x</code> shadows it.</p>
 <a class="header" href="print.html#multiple-patterns" id="multiple-patterns"><h1>Multiple patterns</h1></a>
 <p>You can match multiple patterns with <code>|</code>:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let x = 1;
 
@@ -4073,7 +3966,6 @@ match x {
 <p>If you have a compound data type, like a <a href="structs.html"><code>struct</code></a>, you can destructure it
 inside of a pattern:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 struct Point {
     x: i32,
@@ -4089,7 +3981,6 @@ match origin {
 #}</code></pre></pre>
 <p>We can use <code>:</code> to give a value a different name.</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 struct Point {
     x: i32,
@@ -4105,7 +3996,6 @@ match origin {
 #}</code></pre></pre>
 <p>If we only care about some of the values, we don’t have to give them all names:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 struct Point {
     x: i32,
@@ -4122,7 +4012,6 @@ match point {
 <p>This prints <code>x is 2</code>.</p>
 <p>You can do this kind of match on any member, not only the first:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 struct Point {
     x: i32,
@@ -4143,7 +4032,6 @@ match point {
 <p>You can use <code>_</code> in a pattern to disregard the type and value.
 For example, here’s a <code>match</code> against a <code>Result&lt;T, E&gt;</code>:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 # let some_value: Result&lt;i32, &amp;'static str&gt; = Err(&quot;There was an error&quot;);
 match some_value {
@@ -4158,7 +4046,6 @@ a general error message.</p>
 <p><code>_</code> is valid in any pattern that creates a binding. This can be useful to
 ignore parts of a larger structure:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 fn coordinate() -&gt; (i32, i32, i32) {
     // Generate and return some sort of triple tuple.
@@ -4173,7 +4060,6 @@ ignore the middle element.</p>
 <p>It’s worth noting that using <code>_</code> never binds the value in the first place,
 which means that the value does not move:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let tuple: (u32, String) = (5, String::from(&quot;five&quot;));
 
@@ -4197,7 +4083,6 @@ println!(&quot;Tuple is: {:?}&quot;, tuple);
 <p>This also means that any temporary variables will be dropped at the end of the
 statement:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 // Here, the String created will be dropped immediately, as it’s not bound:
 
@@ -4206,7 +4091,6 @@ let _ = String::from(&quot;  hello  &quot;).trim();
 #}</code></pre></pre>
 <p>You can also use <code>..</code> in a pattern to disregard multiple values:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 enum OptionalTuple {
     Value(i32, i32, i32),
@@ -4225,7 +4109,6 @@ match x {
 <a class="header" href="print.html#ref-and-ref-mut" id="ref-and-ref-mut"><h1>ref and ref mut</h1></a>
 <p>If you want to get a <a href="references-and-borrowing.html">reference</a>, use the <code>ref</code> keyword:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let x = 5;
 
@@ -4239,7 +4122,6 @@ match x {
 keyword <em>creates</em> a reference, for use in the pattern. If you need a mutable
 reference, <code>ref mut</code> will work in the same way:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let mut x = 5;
 
@@ -4251,7 +4133,6 @@ match x {
 <a class="header" href="print.html#ranges" id="ranges"><h1>Ranges</h1></a>
 <p>You can match a range of values with <code>...</code>:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let x = 1;
 
@@ -4264,7 +4145,6 @@ match x {
 <p>This prints <code>one through five</code>.</p>
 <p>Ranges are mostly used with integers and <code>char</code>s:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let x = '💅';
 
@@ -4279,7 +4159,6 @@ match x {
 <a class="header" href="print.html#bindings" id="bindings"><h1>Bindings</h1></a>
 <p>You can bind values to names with <code>@</code>:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let x = 1;
 
@@ -4292,7 +4171,6 @@ match x {
 <p>This prints <code>got a range element 1</code>. This is useful when you want to
 do a complicated match of part of a data structure:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 #[derive(Debug)]
 struct Person {
@@ -4311,7 +4189,6 @@ match x {
 <p>If you use <code>@</code> with <code>|</code>, you need to make sure the name is bound in each part
 of the pattern:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let x = 5;
 
@@ -4324,7 +4201,6 @@ match x {
 <a class="header" href="print.html#guards" id="guards"><h1>Guards</h1></a>
 <p>You can introduce ‘match guards’ with <code>if</code>:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 enum OptionalInt {
     Value(i32),
@@ -4343,7 +4219,6 @@ match x {
 <p>This prints <code>Got an int!</code>.</p>
 <p>If you’re using <code>if</code> with multiple patterns, the <code>if</code> applies to both sides:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let x = 4;
 let y = false;
@@ -4415,7 +4290,6 @@ like we would with any other <code>struct</code>.</p>
 ownership, as well as taking immutable references over mutable ones. Here’s an
 example of all three variants:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 struct Circle {
     x: f64,
@@ -4441,7 +4315,6 @@ impl Circle {
 <p>You can use as many <code>impl</code> blocks as you’d like. The previous example could
 have also been written like this:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 struct Circle {
     x: f64,
@@ -4498,7 +4371,6 @@ fn main() {
 </code></pre></pre>
 <p>Check the return type:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 # struct Circle;
 # impl Circle {
@@ -4616,7 +4488,6 @@ strings are not NUL-terminated and can contain NUL bytes.</p>
 <code>&amp;str</code> first. These are called ‘string slices’. A string slice has a fixed
 size, and cannot be mutated. It is a reference to a sequence of UTF-8 bytes.</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let greeting = &quot;Hello there.&quot;; // greeting: &amp;'static str
 
@@ -4629,7 +4500,6 @@ function expecting a string slice will also accept a string literal.</p>
 <p>String literals can span multiple lines. There are two forms. The first will
 include the newline and the leading spaces:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let s = &quot;foo
     bar&quot;;
@@ -4639,7 +4509,6 @@ assert_eq!(&quot;foo\n    bar&quot;, s);
 #}</code></pre></pre>
 <p>The second, with a <code>\</code>, trims the spaces and the newline:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let s = &quot;foo\
     bar&quot;;
@@ -4656,7 +4525,6 @@ This string is growable, and is also guaranteed to be UTF-8. <code>String</code>
 commonly created by converting from a string slice using the <code>to_string</code>
 method.</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let mut s = &quot;Hello&quot;.to_string(); // mut s: String
 println!(&quot;{}&quot;, s);
@@ -4680,7 +4548,6 @@ instead of <code>&amp;str</code>. For example, <a href="../../std/net/struct.Tcp
 of type <code>ToSocketAddrs</code>. A <code>&amp;str</code> is okay but a <code>String</code> must be explicitly
 converted using <code>&amp;*</code>.</p>
 <pre><pre class="playpen"><code class="language-rust no_run"># #![allow(unused_variables)]
-# 
 #fn main() {
 use std::net::TcpStream;
 
@@ -4705,7 +4572,6 @@ expensive operation, and we don’t want to be misleading. Furthermore, ‘lette
 isn’t something defined in Unicode, exactly. We can choose to look at a string as
 individual bytes, or as codepoints:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let hachiko = &quot;忠犬ハチ公&quot;;
 
@@ -4729,7 +4595,6 @@ println!(&quot;&quot;);
 <p>As you can see, there are more bytes than <code>char</code>s.</p>
 <p>You can get something similar to an index like this:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 # let hachiko = &quot;忠犬ハチ公&quot;;
 let dog = hachiko.chars().nth(1); // Kinda like `hachiko[1]`.
@@ -4739,7 +4604,6 @@ let dog = hachiko.chars().nth(1); // Kinda like `hachiko[1]`.
 <a class="header" href="print.html#slicing" id="slicing"><h2>Slicing</h2></a>
 <p>You can get a slice of a string with the slicing syntax:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let dog = &quot;hachiko&quot;;
 let hachi = &amp;dog[0..5];
@@ -4748,7 +4612,6 @@ let hachi = &amp;dog[0..5];
 <p>But note that these are <em>byte</em> offsets, not <em>character</em> offsets. So
 this will fail at runtime:</p>
 <pre><pre class="playpen"><code class="language-rust should_panic"># #![allow(unused_variables)]
-# 
 #fn main() {
 let dog = &quot;忠犬ハチ公&quot;;
 let hachi = &amp;dog[0..2];
@@ -4761,7 +4624,6 @@ let hachi = &amp;dog[0..2];
 <a class="header" href="print.html#concatenation" id="concatenation"><h2>Concatenation</h2></a>
 <p>If you have a <code>String</code>, you can concatenate a <code>&amp;str</code> to the end of it:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let hello = &quot;Hello &quot;.to_string();
 let world = &quot;world!&quot;;
@@ -4771,7 +4633,6 @@ let hello_world = hello + world;
 #}</code></pre></pre>
 <p>But if you have two <code>String</code>s, you need an <code>&amp;</code>:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let hello = &quot;Hello &quot;.to_string();
 let world = &quot;world!&quot;.to_string();
@@ -4790,7 +4651,6 @@ is multiple, ‘morph’ is form) over a given parameter (‘parametric’).</p>
 <p>Anyway, enough type theory, let’s check out some generic code. Rust’s
 standard library provides a type, <code>Option&lt;T&gt;</code>, that’s generic:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 enum Option&lt;T&gt; {
     Some(T),
@@ -4803,7 +4663,6 @@ a generic data type. Inside the declaration of our <code>enum</code>, wherever w
 we substitute that type for the same type used in the generic. Here’s an
 example of using <code>Option&lt;T&gt;</code>, with some extra type annotations:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let x: Option&lt;i32&gt; = Some(5);
 
@@ -4820,7 +4679,6 @@ match, we’d get an error:</p>
 <p>That doesn’t mean we can’t make <code>Option&lt;T&gt;</code>s that hold an <code>f64</code>! They have
 to match up:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let x: Option&lt;i32&gt; = Some(5);
 let y: Option&lt;f64&gt; = Some(5.0f64);
@@ -4829,7 +4687,6 @@ let y: Option&lt;f64&gt; = Some(5.0f64);
 <p>This is just fine. One definition, multiple uses.</p>
 <p>Generics don’t have to only be generic over one type. Consider another type from Rust’s standard library that’s similar, <code>Result&lt;T, E&gt;</code>:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 enum Result&lt;T, E&gt; {
     Ok(T),
@@ -4840,7 +4697,6 @@ enum Result&lt;T, E&gt; {
 <p>This type is generic over <em>two</em> types: <code>T</code> and <code>E</code>. By the way, the capital letters
 can be any letter you’d like. We could define <code>Result&lt;T, E&gt;</code> as:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 enum Result&lt;A, Z&gt; {
     Ok(A),
@@ -4855,7 +4711,6 @@ computation, and to have the ability to return an error if it didn’t work out.
 <a class="header" href="print.html#generic-functions" id="generic-functions"><h2>Generic functions</h2></a>
 <p>We can write functions that take generic types with a similar syntax:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 fn takes_anything&lt;T&gt;(x: T) {
     // Do something with `x`.
@@ -4866,7 +4721,6 @@ fn takes_anything&lt;T&gt;(x: T) {
 type, <code>T</code>”, and the <code>x: T</code> says “x has the type <code>T</code>.”</p>
 <p>Multiple arguments can have the same generic type:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 fn takes_two_of_the_same_things&lt;T&gt;(x: T, y: T) {
     // ...
@@ -4875,7 +4729,6 @@ fn takes_two_of_the_same_things&lt;T&gt;(x: T, y: T) {
 #}</code></pre></pre>
 <p>We could write a version that takes multiple types:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 fn takes_two_things&lt;T, U&gt;(x: T, y: U) {
     // ...
@@ -4885,7 +4738,6 @@ fn takes_two_things&lt;T, U&gt;(x: T, y: U) {
 <a class="header" href="print.html#generic-structs" id="generic-structs"><h2>Generic structs</h2></a>
 <p>You can store a generic type in a <code>struct</code> as well:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 struct Point&lt;T&gt; {
     x: T,
@@ -4901,7 +4753,6 @@ and we then use <code>x: T</code> in the type declaration, too.</p>
 <p>When you want to add an implementation for the generic <code>struct</code>, you
 declare the type parameter after the <code>impl</code>:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 # struct Point&lt;T&gt; {
 #     x: T,
@@ -4924,7 +4775,6 @@ bounds</a> to see why and how.</p>
 <p>Most of the time when generics are involved, the compiler can infer the
 generic parameters automatically:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 // v must be a Vec&lt;T&gt; but we don't know what T is yet
 let mut v = Vec::new();
@@ -4944,7 +4794,6 @@ println!(&quot;{:?}&quot;, v);
 </code></pre>
 <p>We can solve this using either a type annotation:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let v: Vec&lt;bool&gt; = Vec::new();
 println!(&quot;{:?}&quot;, v);
@@ -4953,7 +4802,6 @@ println!(&quot;{:?}&quot;, v);
 <p>or by binding the generic parameter <code>T</code> via the so-called
 <a href="../../std/iter/trait.Iterator.html#method.collect">‘turbofish’</a> <code>::&lt;&gt;</code> syntax:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let v = Vec::&lt;bool&gt;::new();
 println!(&quot;{:?}&quot;, v);
@@ -4969,7 +4817,6 @@ functionality a type must provide.</p>
 <p>Recall the <code>impl</code> keyword, used to call a function with <a href="method-syntax.html">method
 syntax</a>:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 struct Circle {
     x: f64,
@@ -4987,7 +4834,6 @@ impl Circle {
 <p>Traits are similar, except that we first define a trait with a method
 signature, then implement the trait for a type. In this example, we implement the trait <code>HasArea</code> for <code>Circle</code>:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 struct Circle {
     x: f64,
@@ -5013,7 +4859,6 @@ we use <code>impl Trait for Item</code>, rather than only <code>impl Item</code>
 implementing this trait passed as a parameter. <code>Self</code>, <code>&amp;Self</code> or <code>&amp;mut Self</code>
 may be used depending on the level of ownership required.</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 struct Circle {
     x: f64,
@@ -5053,7 +4898,6 @@ accept. Consider this function, which does not compile:</p>
 method. But we can add a trait bound to our generic <code>T</code>, ensuring
 that it does:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 # trait HasArea {
 #     fn area(&amp;self) -&gt; f64;
@@ -5173,7 +5017,6 @@ to know more about <a href="operators-and-overloading.html">operator traits</a>.
 <p>So far, we’ve only added trait implementations to structs, but you can
 implement a trait for any type such as <code>f32</code>:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 trait ApproxEqual {
     fn approx_equal(&amp;self, other: &amp;Self) -&gt; bool;
@@ -5206,7 +5049,6 @@ let result = f.write(buf);
 </code></pre>
 <p>We need to <code>use</code> the <code>Write</code> trait first:</p>
 <pre><pre class="playpen"><code class="language-rust no_run"># #![allow(unused_variables)]
-# 
 #fn main() {
 use std::io::Write;
 
@@ -5234,7 +5076,6 @@ What’s that mean? Check out the chapter on <a href="trait-objects.html">trait 
 <a class="header" href="print.html#multiple-trait-bounds" id="multiple-trait-bounds"><h1>Multiple trait bounds</h1></a>
 <p>You’ve seen that you can bound a generic type parameter with a trait:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 fn foo&lt;T: Clone&gt;(x: T) {
     x.clone();
@@ -5243,7 +5084,6 @@ fn foo&lt;T: Clone&gt;(x: T) {
 #}</code></pre></pre>
 <p>If you need more than one bound, you can use <code>+</code>:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 use std::fmt::Debug;
 
@@ -5259,7 +5099,6 @@ fn foo&lt;T: Clone + Debug&gt;(x: T) {
 bounds isn’t too bad, but as the number increases, the syntax gets increasingly
 awkward:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 use std::fmt::Debug;
 
@@ -5297,7 +5136,6 @@ All you need to do is leave off the bounds when defining your type parameters,
 and then add <code>where</code> after the parameter list. For longer lists, whitespace can
 be added:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 use std::fmt::Debug;
 
@@ -5314,7 +5152,6 @@ fn bar&lt;T, K&gt;(x: T, y: K)
 <p>This flexibility can add clarity in complex situations.</p>
 <p><code>where</code> is also more powerful than the simpler syntax. For example:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 trait ConvertTo&lt;Output&gt; {
     fn convert(&amp;self) -&gt; Output;
@@ -5344,7 +5181,6 @@ on the left-hand side not only of type parameters <code>T</code>, but also of ty
 <a class="header" href="print.html#default-methods" id="default-methods"><h1>Default methods</h1></a>
 <p>A default method can be added to a trait definition if it is already known how a typical implementor will define a method. For example, <code>is_invalid()</code> is defined as the opposite of <code>is_valid()</code>:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 trait Foo {
     fn is_valid(&amp;self) -&gt; bool;
@@ -5355,7 +5191,6 @@ trait Foo {
 #}</code></pre></pre>
 <p>Implementors of the <code>Foo</code> trait need to implement <code>is_valid()</code> but not <code>is_invalid()</code> due to the added default behavior. This default behavior can still be overridden as in:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 # trait Foo {
 #     fn is_valid(&amp;self) -&gt; bool;
@@ -5395,7 +5230,6 @@ assert!(over.is_invalid()); // Prints &quot;Called OverrideDefault.is_invalid!&q
 <a class="header" href="print.html#inheritance" id="inheritance"><h1>Inheritance</h1></a>
 <p>Sometimes, implementing a trait requires implementing another trait:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 trait Foo {
     fn foo(&amp;self);
@@ -5408,7 +5242,6 @@ trait FooBar : Foo {
 #}</code></pre></pre>
 <p>Implementors of <code>FooBar</code> must also implement <code>Foo</code>, like this:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 # trait Foo {
 #     fn foo(&amp;self);
@@ -5511,7 +5344,6 @@ and express them in a more convenient way.</p>
 <p>For example, let’s say we have some sort of <code>Option&lt;T&gt;</code>. We want to call a function
 on it if it’s <code>Some&lt;T&gt;</code>, but do nothing if it’s <code>None</code>. That looks like this:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 # let option = Some(5);
 # fn foo(x: i32) { }
@@ -5523,7 +5355,6 @@ match option {
 #}</code></pre></pre>
 <p>We don’t have to use <code>match</code> here, for example, we could use <code>if</code>:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 # let option = Some(5);
 # fn foo(x: i32) { }
@@ -5536,7 +5367,6 @@ if option.is_some() {
 <p>Neither of these options is particularly appealing. We can use <code>if let</code> to
 do the same thing in a nicer way:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 # let option = Some(5);
 # fn foo(x: i32) { }
@@ -5551,7 +5381,6 @@ the pattern doesn’t match, nothing happens.</p>
 <p>If you want to do something else when the pattern does not match, you can
 use <code>else</code>:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 # let option = Some(5);
 # fn foo(x: i32) { }
@@ -5567,7 +5396,6 @@ if let Some(x) = option {
 <p>In a similar fashion, <code>while let</code> can be used when you want to conditionally
 loop  as long as a value matches a certain pattern. It turns code like this:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let mut v = vec![1, 3, 5, 7, 11];
 loop {
@@ -5580,7 +5408,6 @@ loop {
 #}</code></pre></pre>
 <p>Into code like this:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let mut v = vec![1, 3, 5, 7, 11];
 while let Some(x) = v.pop() {
@@ -5599,7 +5426,6 @@ called ‘trait objects’.</p>
 Let’s make a simple one, <code>Foo</code>. It has one method that is expected to return a
 <code>String</code>.</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 trait Foo {
     fn method(&amp;self) -&gt; String;
@@ -5608,7 +5434,6 @@ trait Foo {
 #}</code></pre></pre>
 <p>We’ll also implement this trait for <code>u8</code> and <code>String</code>:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 # trait Foo { fn method(&amp;self) -&gt; String; }
 impl Foo for u8 {
@@ -5745,7 +5570,6 @@ surprising behaviors to discover.</p>
 <code>std::raw</code> module contains structs with layouts that are the same as the
 complicated built-in types, <a href="../../std/raw/struct.TraitObject.html">including trait objects</a>:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 # mod foo {
 pub struct TraitObject {
@@ -5883,7 +5707,6 @@ them, as we’ll see.</p>
 <a class="header" href="print.html#syntax-1" id="syntax-1"><h1>Syntax</h1></a>
 <p>Closures look like this:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let plus_one = |x: i32| x + 1;
 
@@ -5895,7 +5718,6 @@ arguments go between the pipes (<code>|</code>), and the body is an expression, 
 case, <code>x + 1</code>. Remember that <code>{ }</code> is an expression, so we can have multi-line
 closures too:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let plus_two = |x| {
     let mut result: i32 = x;
@@ -5914,7 +5736,6 @@ named functions defined with <code>fn</code>. The first is that we did not need 
 annotate the types of arguments the closure takes or the values it returns. We
 can:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let plus_one = |x: i32| -&gt; i32 { x + 1 };
 
@@ -5930,7 +5751,6 @@ can.</p>
 <p>The second is that the syntax is similar, but a bit different. I’ve added
 spaces here for easier comparison:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 fn  plus_one_v1   (x: i32) -&gt; i32 { x + 1 }
 let plus_one_v2 = |x: i32| -&gt; i32 { x + 1 };
@@ -5942,7 +5762,6 @@ let plus_one_v3 = |x: i32|          x + 1  ;
 <p>The environment for a closure can include bindings from its enclosing scope in
 addition to parameters and local bindings. It looks like this:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let num = 5;
 let plus_num = |x: i32| x + num;
@@ -5980,7 +5799,6 @@ fn main() {
 on <code>num</code> because the closure is already borrowing it. If we let the closure go
 out of scope, we can:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let mut num = 5;
 {
@@ -6012,7 +5830,6 @@ passed <code>nums</code> to a function that took ownership of it.</p>
 <p>We can force our closure to take ownership of its environment with the <code>move</code>
 keyword:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let num = 5;
 
@@ -6023,7 +5840,6 @@ let owns_num = move |x: i32| x + num;
 In this case, <code>5</code> implements <code>Copy</code>, and so <code>owns_num</code> takes ownership of a copy
 of <code>num</code>. So what’s the difference?</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let mut num = 5;
 
@@ -6042,7 +5858,6 @@ needed to declare <code>add_num</code> as <code>mut</code> too, because we’re 
 environment.</p>
 <p>If we change to a <code>move</code> closure, it’s different:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let mut num = 5;
 
@@ -6096,7 +5911,6 @@ return closures: the same as any other trait!</p>
 let’s write a function which takes something callable, calls it, and returns
 the result:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 fn call_with_one&lt;F&gt;(some_closure: F) -&gt; i32
     where F: Fn(i32) -&gt; i32 {
@@ -6113,7 +5927,6 @@ assert_eq!(3, answer);
 suggests: it calls the closure, giving it <code>1</code> as an argument.</p>
 <p>Let’s examine the signature of <code>call_with_one</code> in more depth:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 fn call_with_one&lt;F&gt;(some_closure: F) -&gt; i32
 #    where F: Fn(i32) -&gt; i32 {
@@ -6123,7 +5936,6 @@ fn call_with_one&lt;F&gt;(some_closure: F) -&gt; i32
 <p>We take one parameter, and it has the type <code>F</code>. We also return an <code>i32</code>. This part
 isn’t interesting. The next part is:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 # fn call_with_one&lt;F&gt;(some_closure: F) -&gt; i32
     where F: Fn(i32) -&gt; i32 {
@@ -6143,7 +5955,6 @@ take closures as arguments.</p>
 <p>Of course, if we want dynamic dispatch, we can get that too. A trait object
 handles this case, as usual:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 fn call_with_one(some_closure: &amp;Fn(i32) -&gt; i32) -&gt; i32 {
     some_closure(1)
@@ -6159,7 +5970,6 @@ to our closure when we pass it to <code>call_with_one</code>, so we use <code>&a
 <p>A quick note about closures that use explicit lifetimes. Sometimes you might have a closure
 that takes a reference like so:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 fn call_with_ref&lt;F&gt;(some_closure:F) -&gt; i32
     where F: Fn(&amp;i32) -&gt; i32 {
@@ -6189,7 +5999,6 @@ we can use Higher-Ranked Trait Bounds with the <code>for&lt;...&gt;</code> synta
 satisfy the borrow checker's rules. Our function then compiles and executes as we
 expect.</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 fn call_with_ref&lt;F&gt;(some_closure:F) -&gt; i32
     where F: for&lt;'a&gt; Fn(&amp;'a i32) -&gt; i32 {
@@ -6204,7 +6013,6 @@ fn call_with_ref&lt;F&gt;(some_closure:F) -&gt; i32
 you can pass a function pointer to any function expecting a closure argument,
 and it will work:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 fn call_with_one(some_closure: &amp;Fn(i32) -&gt; i32) -&gt; i32 {
     some_closure(1)
@@ -6335,7 +6143,6 @@ this closure, the function call would be over, the stack frame would go away,
 and our closure is capturing an environment of garbage memory! With one last
 fix, we can make this work:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 fn factory() -&gt; Box&lt;Fn(i32) -&gt; i32&gt; {
     let num = 5;
@@ -6355,7 +6162,6 @@ escape our stack frame.</p>
 <a class="header" href="print.html#universal-function-call-syntax" id="universal-function-call-syntax"><h1>Universal Function Call Syntax</h1></a>
 <p>Sometimes, functions can have the same names. Consider this code:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 trait Foo {
     fn f(&amp;self);
@@ -6395,7 +6201,6 @@ note: candidate #2 is defined in an impl of the trait `main::Bar` for the type
 <p>We need a way to disambiguate which method we need. This feature is called
 ‘universal function call syntax’, and it looks like this:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 # trait Foo {
 #     fn f(&amp;self);
@@ -6524,7 +6329,6 @@ above.</p>
 <p>To define each of our modules, we use the <code>mod</code> keyword. Let’s make our
 <code>src/lib.rs</code> look like this:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 mod english {
     mod greetings {
@@ -6634,7 +6438,6 @@ their own sub-modules, we’ve chosen to make them
 some functions.</p>
 <p>Put this in <code>src/english/greetings.rs</code>:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 fn hello() -&gt; String {
     &quot;Hello!&quot;.to_string()
@@ -6643,7 +6446,6 @@ fn hello() -&gt; String {
 #}</code></pre></pre>
 <p>Put this in <code>src/english/farewells.rs</code>:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 fn goodbye() -&gt; String {
     &quot;Goodbye.&quot;.to_string()
@@ -6652,7 +6454,6 @@ fn goodbye() -&gt; String {
 #}</code></pre></pre>
 <p>Put this in <code>src/japanese/greetings.rs</code>:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 fn hello() -&gt; String {
     &quot;こんにちは&quot;.to_string()
@@ -6664,7 +6465,6 @@ something else. It’s not important that you actually put ‘konnichiwa’ to l
 about the module system.</p>
 <p>Put this in <code>src/japanese/farewells.rs</code>:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 fn goodbye() -&gt; String {
     &quot;さようなら&quot;.to_string()
@@ -6939,7 +6739,6 @@ Note: The curly brackets cannot be nested or mixed with star globbing.</p>
 <a class="header" href="print.html#const-and-static" id="const-and-static"><h1>const and static</h1></a>
 <p>Rust has a way of defining constants with the <code>const</code> keyword:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 const N: i32 = 5;
 
@@ -6957,7 +6756,6 @@ there is only one instance for each value, and it’s at a fixed location in
 memory.</p>
 <p>Here’s an example:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 static N: i32 = 5;
 
@@ -6966,7 +6764,6 @@ static N: i32 = 5;
 <p>Statics live for the entire lifetime of a program, and therefore any
 reference stored in a static has a <a href="lifetimes.html"><code>'static</code> lifetime</a>:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 static NAME: &amp;'static str = &quot;Steve&quot;;
 
@@ -6974,7 +6771,6 @@ static NAME: &amp;'static str = &quot;Steve&quot;;
 <a class="header" href="print.html#mutability-2" id="mutability-2"><h2>Mutability</h2></a>
 <p>You can introduce mutability with the <code>mut</code> keyword:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 static mut N: i32 = 5;
 
@@ -6983,7 +6779,6 @@ static mut N: i32 = 5;
 reading it, causing memory unsafety. As such both accessing and mutating a
 <code>static mut</code> is <a href="unsafe.html"><code>unsafe</code></a>, and so must be done in an <code>unsafe</code> block:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 # static mut N: i32 = 5;
 
@@ -7008,7 +6803,6 @@ in your crate but downstream crates.</p>
 <a class="header" href="print.html#attributes" id="attributes"><h1>Attributes</h1></a>
 <p>Declarations can be annotated with ‘attributes’ in Rust. They look like this:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 #[test]
 # fn foo() {}
@@ -7016,7 +6810,6 @@ in your crate but downstream crates.</p>
 #}</code></pre></pre>
 <p>or like this:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 # mod foo {
 #![test]
@@ -7038,7 +6831,6 @@ the <code>mod</code> declaration. Otherwise, they’re the same. Both change the
 the item they’re attached to somehow.</p>
 <p>For example, consider a function like this:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 #[test]
 fn check() {
@@ -7051,7 +6843,6 @@ fn check() {
 even be included. This function is now a test function.</p>
 <p>Attributes may also have additional data:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 #[inline(always)]
 fn super_fast_fn() {
@@ -7060,7 +6851,6 @@ fn super_fast_fn() {
 #}</code></pre></pre>
 <p>Or even keys and values:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 #[cfg(target_os = &quot;macos&quot;)]
 mod macos_only {
@@ -7073,14 +6863,12 @@ create your own attributes, the Rust compiler defines them.</p>
 <a class="header" href="print.html#type-aliases" id="type-aliases"><h1>Type Aliases</h1></a>
 <p>The <code>type</code> keyword lets you declare an alias of another type:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 type Name = String;
 
 #}</code></pre></pre>
 <p>You can then use this type as if it were a real type:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 type Name = String;
 
@@ -7108,7 +6896,6 @@ if x == y {
 </code></pre>
 <p>But, if we had an alias:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 type Num = i32;
 
@@ -7124,7 +6911,6 @@ if x == y {
 type <code>i32</code>, in every way. You can use <a href="structs.html#tuple-structs">tuple struct</a> to really get a new type.</p>
 <p>You can also use type aliases with generics:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 use std::result;
 
@@ -7174,7 +6960,6 @@ function result.</p>
 <a class="header" href="print.html#as" id="as"><h1><code>as</code></h1></a>
 <p>The <code>as</code> keyword does safe casting:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let x: i32 = 5;
 
@@ -7199,7 +6984,6 @@ and <code>U</code> is an integer type; <em>enum-cast</em></li>
 </ul>
 <p>For example</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let one = true as u8;
 let at_sign = 64 as char;
@@ -7243,7 +7027,6 @@ be fixed.</li>
 from integers, and to cast between pointers to different types subject to
 some constraints. It is only unsafe to dereference the pointer:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let a = 300 as *const char; // `a` is a pointer to location 300.
 let b = a as u32;
@@ -7336,7 +7119,6 @@ to write a <code>Graph</code> trait, you have two types to be generic over: the 
 and the edge type. So you might write a trait, <code>Graph&lt;N, E&gt;</code>, that looks like
 this:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 trait Graph&lt;N, E&gt; {
     fn has_edge(&amp;self, &amp;N, &amp;N) -&gt; bool;
@@ -7355,7 +7137,6 @@ this signature is a distraction.</p>
 <p>What we really want to say is that a certain <code>E</code>dge and <code>N</code>ode type come together
 to form each kind of <code>Graph</code>. We can do that with associated types:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 trait Graph {
     type N;
@@ -7375,7 +7156,6 @@ trait Graph {
 <a class="header" href="print.html#defining-associated-types" id="defining-associated-types"><h2>Defining associated types</h2></a>
 <p>Let’s build that <code>Graph</code> trait. Here’s the definition:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 trait Graph {
     type N;
@@ -7392,7 +7172,6 @@ of the trait, with the functions.</p>
 if we wanted our <code>N</code> type to implement <code>Display</code>, so we can print the nodes out,
 we could do this:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 use std::fmt;
 
@@ -7409,7 +7188,6 @@ trait Graph {
 <p>Just like any trait, traits that use associated types use the <code>impl</code> keyword to
 provide implementations. Here’s a simple implementation of Graph:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 # trait Graph {
 #     type N;
@@ -7485,7 +7263,6 @@ let obj = Box::new(graph) as Box&lt;Graph&gt;;
 <p>We can’t create a trait object like this, because we don’t know the associated
 types. Instead, we can write this:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 # trait Graph {
 #     type N;
@@ -7549,7 +7326,6 @@ pointers, can use this <code>impl</code>.</p>
 <p>If you want to write a function that accepts a dynamically sized type, you
 can use the special bound syntax, <code>?Sized</code>:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 struct Foo&lt;T: ?Sized&gt; {
     f: T,
@@ -7599,7 +7375,6 @@ documentation for the full list.</p>
 <p>Implementing these traits follows a pattern. Let’s look at <a href="../../std/ops/trait.Add.html"><code>Add</code></a> in more
 detail:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 # mod foo {
 pub trait Add&lt;RHS = Self&gt; {
@@ -7614,7 +7389,6 @@ pub trait Add&lt;RHS = Self&gt; {
 which defaults to <code>Self</code>, and <code>Output</code>. For an expression <code>let z = x + y</code>, <code>x</code>
 is the <code>Self</code> type, <code>y</code> is the RHS, and <code>z</code> is the <code>Self::Output</code> type.</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 # struct Point;
 # use std::ops::Add;
@@ -7701,7 +7475,6 @@ feature related to <code>Deref</code>: ‘deref coercions’. Here’s the rule:
 type <code>U</code>, and it implements <code>Deref&lt;Target=T&gt;</code>, values of <code>&amp;U</code> will
 automatically coerce to a <code>&amp;T</code>. Here’s an example:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 fn foo(s: &amp;str) {
     // Borrow a string for a second.
@@ -7720,7 +7493,6 @@ foo(&amp;owned);
 conversion for you, but it adds a lot of flexibility. For example, the <code>Rc&lt;T&gt;</code>
 type implements <code>Deref&lt;Target=T&gt;</code>, so this works:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 use std::rc::Rc;
 
@@ -7743,7 +7515,6 @@ conversions: <code>&amp;Rc&lt;String&gt;</code> to <code>&amp;String</code> and 
 this as many times as possible until the types match.</p>
 <p>Another very common implementation provided by the standard library is:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 fn foo(s: &amp;[i32]) {
     // Borrow a slice for a second.
@@ -7760,7 +7531,6 @@ foo(&amp;owned);
 <p><code>Deref</code> will also kick in when calling a method. Consider the following
 example.</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 struct Foo;
 
@@ -7811,7 +7581,6 @@ mind.</p>
 <p>You may have seen the <code>vec!</code> macro, used to initialize a <a href="vectors.html">vector</a> with
 any number of elements.</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let x: Vec&lt;u32&gt; = vec![1, 2, 3];
 # assert_eq!(x, [1, 2, 3]);
@@ -7820,7 +7589,6 @@ let x: Vec&lt;u32&gt; = vec![1, 2, 3];
 <p>This can’t be an ordinary function, because it takes any number of arguments.
 But we can imagine it as syntactic shorthand for</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let x: Vec&lt;u32&gt; = {
     let mut temp_vec = Vec::new();
@@ -8284,7 +8052,6 @@ arguments.</p>
 the <a href="https://esolangs.org/wiki/Bitwise_Cyclic_Tag">Bitwise Cyclic Tag</a> automaton
 within Rust’s macro system.</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 macro_rules! bct {
     // cmd 0:  d ... =&gt; ...
@@ -8317,7 +8084,6 @@ macro_rules! bct {
 <p>This macro causes the current thread to panic. You can give it a message
 to panic with:</p>
 <pre><pre class="playpen"><code class="language-rust should_panic"># #![allow(unused_variables)]
-# 
 #fn main() {
 panic!(&quot;oh no!&quot;);
 
@@ -8326,7 +8092,6 @@ panic!(&quot;oh no!&quot;);
 <p>The <code>vec!</code> macro is used throughout the book, so you’ve probably seen it
 already. It creates <code>Vec&lt;T&gt;</code>s with ease:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let v = vec![1, 2, 3, 4, 5];
 
@@ -8334,7 +8099,6 @@ let v = vec![1, 2, 3, 4, 5];
 <p>It also lets you make vectors with repeating values. For example, a hundred
 zeroes:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let v = vec![0; 100];
 
@@ -8344,7 +8108,6 @@ let v = vec![0; 100];
 takes two values and checks them for equality. <code>true</code> passes, <code>false</code> <code>panic!</code>s.
 Like this:</p>
 <pre><pre class="playpen"><code class="language-rust should_panic"># #![allow(unused_variables)]
-# 
 #fn main() {
 // A-ok!
 
@@ -8362,7 +8125,6 @@ assert_eq!(5, 3);
 <code>Result&lt;T, E&gt;</code>, and gives <code>T</code> if it’s a <code>Ok&lt;T&gt;</code>, and <code>return</code>s with the
 <code>Err(E)</code> if it’s that. Like this:</p>
 <pre><pre class="playpen"><code class="language-rust no_run"># #![allow(unused_variables)]
-# 
 #fn main() {
 use std::fs::File;
 
@@ -8375,7 +8137,6 @@ fn foo() -&gt; std::io::Result&lt;()&gt; {
 #}</code></pre></pre>
 <p>This is cleaner than doing this:</p>
 <pre><pre class="playpen"><code class="language-rust no_run"># #![allow(unused_variables)]
-# 
 #fn main() {
 use std::fs::File;
 
@@ -8394,7 +8155,6 @@ fn foo() -&gt; std::io::Result&lt;()&gt; {
 <a class="header" href="print.html#unreachable" id="unreachable"><h2>unreachable!</h2></a>
 <p>This macro is used when you think some code should never execute:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 if false {
     unreachable!();
@@ -8405,7 +8165,6 @@ if false {
 will never, ever run. In these cases, use this macro, so that if you end
 up wrong, you’ll get a <code>panic!</code> about it.</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let x: Option&lt;i32&gt; = None;
 
@@ -8451,7 +8210,6 @@ not being allowed directly through a <code>*const T</code>.</li>
 <a class="header" href="print.html#basics" id="basics"><h1>Basics</h1></a>
 <p>Creating a raw pointer is perfectly safe:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let x = 5;
 let raw = &amp;x as *const i32;
@@ -8474,7 +8232,6 @@ println!(&quot;raw points at {}&quot;, *raw);
 <p>When you dereference a raw pointer, you’re taking responsibility that it’s not
 pointing somewhere that would be incorrect. As such, you need <code>unsafe</code>:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let x = 5;
 let raw = &amp;x as *const i32;
@@ -8504,7 +8261,6 @@ and so any conversion from raw pointers is asserting that they hold. The
 programmer <em>must</em> guarantee this.</p>
 <p>The recommended method for the conversion is:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 // Explicit cast:
 let i: u32 = 1;
@@ -8534,7 +8290,6 @@ than normal code does.</p>
 <p>Let’s go over the syntax, and then we’ll talk semantics. <code>unsafe</code> is used in
 four contexts. The first one is to mark a function as unsafe:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 unsafe fn danger_will_robinson() {
     // Scary stuff...
@@ -8544,7 +8299,6 @@ unsafe fn danger_will_robinson() {
 <p>All functions called from <a href="ffi.html">FFI</a> must be marked as <code>unsafe</code>, for example.
 The second use of <code>unsafe</code> is an unsafe block:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 unsafe {
     // Scary stuff...
@@ -8553,14 +8307,12 @@ unsafe {
 #}</code></pre></pre>
 <p>The third is for unsafe traits:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 unsafe trait Scary { }
 
 #}</code></pre></pre>
 <p>And the fourth is for <code>impl</code>ementing one of those traits:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 # unsafe trait Scary { }
 unsafe impl Scary for i32 {}
@@ -9628,7 +9380,6 @@ controlled at runtime.</p>
 <p>Rust has a special attribute, <code>#[cfg]</code>, which allows you to compile code
 based on a flag passed to the compiler. It has two forms:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 #[cfg(foo)]
 # fn foo() {}
@@ -9639,7 +9390,6 @@ based on a flag passed to the compiler. It has two forms:</p>
 #}</code></pre></pre>
 <p>They also have some helpers:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 #[cfg(any(unix, windows))]
 # fn foo() {}
@@ -9653,7 +9403,6 @@ based on a flag passed to the compiler. It has two forms:</p>
 #}</code></pre></pre>
 <p>These can nest arbitrarily:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 #[cfg(any(not(unix), all(target_os=&quot;macos&quot;, target_arch = &quot;powerpc&quot;)))]
 # fn foo() {}
@@ -9675,7 +9424,6 @@ foo = []
 <p>The sum of these <code>cfg</code> flags will determine which ones get activated, and
 therefore, which code gets compiled. Let’s take this code:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 #[cfg(feature = &quot;foo&quot;)]
 mod foo {
@@ -9688,7 +9436,6 @@ and so, no <code>foo</code> module will exist.</p>
 <a class="header" href="print.html#cfg_attr" id="cfg_attr"><h1>cfg_attr</h1></a>
 <p>You can also set another attribute based on a <code>cfg</code> variable with <code>cfg_attr</code>:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 #[cfg_attr(a, b)]
 # fn foo() {}
@@ -9698,7 +9445,6 @@ and so, no <code>foo</code> module will exist.</p>
 <a class="header" href="print.html#cfg" id="cfg"><h1>cfg!</h1></a>
 <p>The <code>cfg!</code> macro lets you use these kinds of flags elsewhere in your code, too:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 if cfg!(target_os = &quot;macos&quot;) || cfg!(target_os = &quot;ios&quot;) {
     println!(&quot;Think Different!&quot;);
@@ -9741,7 +9487,6 @@ indicates a documentation comment.</p>
 <p>Rust keeps track of these comments, and uses them when generating
 documentation. This is important when documenting things like enums:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 /// The `Option` type. See [the module level documentation](index.html) for more.
 enum Option&lt;T&gt; {
@@ -9770,7 +9515,6 @@ nothing after that last comment.</p>
 <a class="header" href="print.html#writing-documentation-comments" id="writing-documentation-comments"><h3>Writing documentation comments</h3></a>
 <p>Anyway, let's cover each part of this comment in detail:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 /// Constructs a new `Rc&lt;T&gt;`.
 # fn foo() {}
@@ -9779,7 +9523,6 @@ nothing after that last comment.</p>
 <p>The first line of a documentation comment should be a short summary of its
 functionality. One sentence. Just the basics. High level.</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 ///
 /// Other details about constructing `Rc&lt;T&gt;`s, maybe describing complicated
@@ -9795,7 +9538,6 @@ we could have added more explanation in a new paragraph.</p>
 are four kinds of headers that are commonly used. They aren't special syntax,
 just convention, for now.</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 /// # Panics
 # fn foo() {}
@@ -9806,7 +9548,6 @@ usually indicated by panics, which kill the whole current thread at the very
 least. If your function has a non-trivial contract like this, that is
 detected/enforced by panics, documenting it is very important.</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 /// # Errors
 # fn foo() {}
@@ -9817,7 +9558,6 @@ conditions under which it returns <code>Err(E)</code> is a nice thing to do. Thi
 slightly less important than <code>Panics</code>, because failure is encoded into the type
 system, but it's still a good thing to do.</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 /// # Safety
 # fn foo() {}
@@ -9826,7 +9566,6 @@ system, but it's still a good thing to do.</p>
 <p>If your function is <code>unsafe</code>, you should explain which invariants the caller is
 responsible for upholding.</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 /// # Examples
 ///
@@ -9843,7 +9582,6 @@ method, and your users will love you for it. These examples go inside of
 code block annotations, which we'll talk about in a moment, and can have
 more than one section:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 /// # Examples
 ///
@@ -9866,7 +9604,6 @@ more than one section:</p>
 <a class="header" href="print.html#code-block-annotations" id="code-block-annotations"><h4>Code block annotations</h4></a>
 <p>To write some Rust code in a comment, use the triple graves:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 /// ```
 /// println!(&quot;Hello, world&quot;);
@@ -9879,7 +9616,6 @@ instead of <code>rust</code> after the triple graves (see below).</p>
 <a class="header" href="print.html#documentation-as-tests" id="documentation-as-tests"><h2>Documentation as tests</h2></a>
 <p>Let's discuss our sample example documentation:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 /// ```
 /// println!(&quot;Hello, world&quot;);
@@ -9891,7 +9627,6 @@ instead of <code>rust</code> after the triple graves (see below).</p>
 automatically add a <code>main()</code> wrapper around your code, using heuristics to attempt
 to put it in the right place. For example:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 /// ```
 /// use std::rc::Rc;
@@ -9931,7 +9666,6 @@ with <code>///</code> we've been talking about? The raw text:</p>
 </code></pre>
 <p>looks different than the output:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 /// Some documentation.
 # fn foo() {}
@@ -9948,7 +9682,6 @@ longer examples in detail, while still preserving the testability of your
 documentation.</p>
 <p>For example, imagine that we wanted to document this code:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let x = 5;
 let y = 6;
@@ -9959,7 +9692,6 @@ println!(&quot;{}&quot;, x + y);
 <blockquote>
 <p>First, we set <code>x</code> to five:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let x = 5;
 # let y = 6;
@@ -9968,7 +9700,6 @@ let x = 5;
 #}</code></pre></pre>
 <p>Next, we set <code>y</code> to six:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 # let x = 5;
 let y = 6;
@@ -9977,7 +9708,6 @@ let y = 6;
 #}</code></pre></pre>
 <p>Finally, we print the sum of <code>x</code> and <code>y</code>:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 # let x = 5;
 # let y = 6;
@@ -10080,7 +9810,6 @@ but with a binary, there’s nothing to link to.</p>
 <p>There are a few more annotations that are useful to help <code>rustdoc</code> do the right
 thing when testing your code:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 /// ```rust,ignore
 /// fn foo() {
@@ -10093,7 +9822,6 @@ what you want, as it's the most generic. Instead, consider annotating it
 with <code>text</code> if it's not code, or using <code>#</code>s to get a working example that
 only shows the part you care about.</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 /// ```rust,should_panic
 /// assert!(false);
@@ -10104,7 +9832,6 @@ only shows the part you care about.</p>
 <p><code>should_panic</code> tells <code>rustdoc</code> that the code should compile correctly, but
 not actually pass as a test.</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 /// ```rust,no_run
 /// loop {
@@ -10121,7 +9848,6 @@ environment that has no network access.</p>
 <a class="header" href="print.html#documenting-modules" id="documenting-modules"><h3>Documenting modules</h3></a>
 <p>Rust has another kind of doc comment, <code>//!</code>. This comment doesn't document the next item, but the enclosing item. In other words:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 mod foo {
     //! This is documentation for the `foo` module.
@@ -10135,7 +9861,6 @@ mod foo {
 <p>This is where you'll see <code>//!</code> used most often: for module documentation. If
 you have a module in <code>foo.rs</code>, you'll often open its code and see this:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 //! A module for using `foo`s.
 //!
@@ -10146,7 +9871,6 @@ you have a module in <code>foo.rs</code>, you'll often open its code and see thi
 <p>Crates can be documented by placing an inner doc comment (<code>//!</code>) at the
 beginning of the crate root, aka <code>lib.rs</code>:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 //! This is documentation for the `foo` crate.
 //!
@@ -10162,7 +9886,6 @@ are written in Markdown, they're often <code>.md</code> files.</p>
 <p>When you write documentation in Markdown files, you don't need to prefix
 the documentation with comments. For example:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 /// # Examples
 ///
@@ -10194,7 +9917,6 @@ This is the example documentation.
 <p>At a deeper level, documentation comments are syntactic sugar for documentation
 attributes:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 /// this
 # fn foo() {}
@@ -10205,7 +9927,6 @@ attributes:</p>
 #}</code></pre></pre>
 <p>are the same, as are these:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 //! this
 
@@ -10242,7 +9963,6 @@ To generate warnings you use <code>warn</code>:</p>
 <p>There are cases where you want to disable these warnings/errors to explicitly
 leave something undocumented. This is done by using <code>allow</code>:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 #[allow(missing_docs)]
 struct Undocumented;
@@ -10250,7 +9970,6 @@ struct Undocumented;
 #}</code></pre></pre>
 <p>You might even want to hide items from the documentation completely:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 #[doc(hidden)]
 struct Hidden;
@@ -10268,9 +9987,8 @@ struct Hidden;
 <p>You can also configure the way that <code>rustdoc</code> tests your documentation examples
 through the <code>#![doc(test(..))]</code> attribute.</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
-#fn main() {
 #![doc(test(attr(allow(unused_variables), deny(warnings))))]
+#fn main() {
 
 #}</code></pre></pre>
 <p>This allows unused variables within the examples, but will fail the test for any
@@ -10288,7 +10006,6 @@ other lint warning thrown.</p>
 <p>The Markdown in documentation comments is placed without processing into
 the final webpage. Be careful with literal HTML:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 /// &lt;script&gt;alert(document.cookie)&lt;/script&gt;
 # fn foo() {}
@@ -10298,7 +10015,6 @@ the final webpage. Be careful with literal HTML:</p>
 <p>Let's talk about loops.</p>
 <p>Remember Rust's <code>for</code> loop? Here's an example:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 for x in 0..10 {
     println!(&quot;{}&quot;, x);
@@ -10313,7 +10029,6 @@ starts at 0) and exclusive on the right (so it ends at 9). A mathematician
 would write &quot;[0, 10)&quot;.</p>
 <p>Like this:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let mut range = 0..10;
 
@@ -10344,7 +10059,6 @@ following Rust anti-pattern: using ranges to emulate a C-style <code>for</code> 
 suppose you needed to iterate over the contents of a vector. You may be tempted
 to write this:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let nums = vec![1, 2, 3];
 
@@ -10356,7 +10070,6 @@ for i in 0..nums.len() {
 <p>This is strictly worse than using an actual iterator. You can iterate over vectors
 directly, so write this:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let nums = vec![1, 2, 3];
 
@@ -10378,7 +10091,6 @@ works. <code>num</code> is actually of type <code>&amp;i32</code>. That is, it's
 not an <code>i32</code> itself. <code>println!</code> handles the dereferencing for us, so we don't
 see it. This code works fine too:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let nums = vec![1, 2, 3];
 
@@ -10416,7 +10128,6 @@ of the results. So why won't this compile? Rust can't determine what
 type of things you want to collect, and so you need to let it know.
 Here's the version that does compile:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let one_to_one_hundred = (1..101).collect::&lt;Vec&lt;i32&gt;&gt;();
 
@@ -10426,7 +10137,6 @@ allows us to give a type hint that tells the compiler we want a vector of
 integers. You don't always need to use the whole type, though. Using a <code>_</code>
 will let you provide a partial hint:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let one_to_one_hundred = (1..101).collect::&lt;Vec&lt;_&gt;&gt;();
 
@@ -10436,7 +10146,6 @@ let one_to_one_hundred = (1..101).collect::&lt;Vec&lt;_&gt;&gt;();
 <p><code>collect()</code> is the most common consumer, but there are others too. <code>find()</code>
 is one:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let greater_than_forty_two = (0..100)
                              .find(|x| *x &gt; 42);
@@ -10454,7 +10163,6 @@ the specified predicate. Because we might not find a matching element, <code>fin
 returns an <code>Option</code> rather than the element itself.</p>
 <p>Another important consumer is <code>fold</code>. Here's what it looks like:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let sum = (1..4).fold(0, |sum, x| sum + x);
 
@@ -10475,7 +10183,6 @@ in this iterator:</p>
 </table>
 <p>We called <code>fold()</code> with these arguments:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 # (1..4)
 .fold(0, |sum, x| sum + x);
@@ -10503,7 +10210,6 @@ can be <em>lazy</em> and not generate all of the values upfront. This code,
 for example, does not actually generate the numbers <code>1-99</code>, instead
 creating a value that merely represents the sequence:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let nums = 1..100;
 
@@ -10511,7 +10217,6 @@ let nums = 1..100;
 <p>Since we didn't do anything with the range, it didn't generate the sequence.
 Let's add the consumer:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let nums = (1..100).collect::&lt;Vec&lt;i32&gt;&gt;();
 
@@ -10522,7 +10227,6 @@ it will do the work of generating the sequence.</p>
 <code>iter()</code> can turn a vector into a simple iterator that gives you each element
 in turn:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let nums = vec![1, 2, 3];
 
@@ -10559,7 +10263,6 @@ use <code>for</code> instead.</p>
 iterator over the next <code>n</code> elements of the original iterator. Let's try it out
 with an infinite iterator:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 for i in (1..).take(5) {
     println!(&quot;{}&quot;, i);
@@ -10577,7 +10280,6 @@ for i in (1..).take(5) {
 returns <code>true</code> or <code>false</code>. The new iterator <code>filter()</code> produces
 only the elements that the closure returns <code>true</code> for:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 for i in (1..100).filter(|&amp;x| x % 2 == 0) {
     println!(&quot;{}&quot;, i);
@@ -10594,7 +10296,6 @@ into the newly constructed iterator.)</p>
 <p>You can chain all three things together: start with an iterator, adapt it
 a few times, and then consume the result. Check it out:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 (1..)
     .filter(|&amp;x| x % 2 == 0)
@@ -10966,7 +10667,6 @@ at the time of <code>spawn()</code>), and then <code>send()</code> back the answ
 <p>A <code>panic!</code> will crash the currently executing thread. You can use Rust's
 threads as a simple isolation mechanism:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 use std::thread;
 
@@ -11104,7 +10804,6 @@ types. Both of these types have a method called <code>unwrap</code> defined on t
 <a class="header" href="print.html#the-option-type" id="the-option-type"><h3>The <code>Option</code> type</h3></a>
 <p>The <code>Option</code> type is <a href="../../std/option/enum.Option.html">defined in the standard library</a>:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 enum Option&lt;T&gt; {
     None,
@@ -11119,7 +10818,6 @@ programmer to handle that absence. Let's take a look at an example that tries
 to find a character in a string:</p>
 <p><span id="code-option-ex-string-find"></span></p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 // Searches `haystack` for the Unicode character `needle`. If one is found, the
 // byte offset of the character is returned. Otherwise, `None` is returned.
@@ -11161,7 +10859,6 @@ There was no case analysis there! Instead, the case analysis was put inside the
 <code>unwrap</code> method for you. You could define it yourself if you want:</p>
 <p><span id="code-option-def-unwrap"></span></p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 enum Option&lt;T&gt; {
     None,
@@ -11193,7 +10890,6 @@ message saying as such.</p>
 <p>Getting the extension of a file name is a pretty common operation, so it makes
 sense to put it into a function:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 # fn find(haystack: &amp;str, needle: char) -&gt; Option&lt;usize&gt; { haystack.find(needle) }
 // Returns the extension of the given file name, where the extension is defined
@@ -11223,7 +10919,6 @@ option is <code>None</code>, in which case, return <code>None</code>.</p>
 that abstracts this pattern:</p>
 <p><span id="code-option-map"></span></p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 fn map&lt;F, T, A&gt;(option: Option&lt;T&gt;, f: F) -&gt; Option&lt;A&gt; where F: FnOnce(T) -&gt; A {
     match option {
@@ -11239,7 +10934,6 @@ or <code>&amp;mut self</code> as their first argument.</p>
 <p>Armed with our new combinator, we can rewrite our <code>extension_explicit</code> method
 to get rid of the case analysis:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 # fn find(haystack: &amp;str, needle: char) -&gt; Option&lt;usize&gt; { haystack.find(needle) }
 // Returns the extension of the given file name, where the extension is defined
@@ -11256,7 +10950,6 @@ the extension of a file is <code>rs</code> even if none is present. As you might
 the case analysis for this is not specific to file extensions - it can work
 with any <code>Option&lt;T&gt;</code>:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 fn unwrap_or&lt;T&gt;(option: Option&lt;T&gt;, default: T) -&gt; T {
     match option {
@@ -11301,7 +10994,6 @@ file paths have a file name, not <em>all</em> of them do. For example, <code>.</
 <p>So, we are tasked with the challenge of finding an extension given a file
 <em>path</em>. Let's start with explicit case analysis:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 # fn extension(file_name: &amp;str) -&gt; Option&lt;&amp;str&gt; { None }
 fn file_path_ext_explicit(file_path: &amp;str) -&gt; Option&lt;&amp;str&gt; {
@@ -11338,7 +11030,6 @@ allows the caller to return a <code>Option&lt;_&gt;</code> directly without wrap
 another <code>Option&lt;_&gt;</code>.</p>
 <p>Its generic implementation is even simpler than <code>map</code>:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 fn and_then&lt;F, T, A&gt;(option: Option&lt;T&gt;, f: F) -&gt; Option&lt;A&gt;
         where F: FnOnce(T) -&gt; Option&lt;A&gt; {
@@ -11351,7 +11042,6 @@ fn and_then&lt;F, T, A&gt;(option: Option&lt;T&gt;, f: F) -&gt; Option&lt;A&gt;
 #}</code></pre></pre>
 <p>Now we can rewrite our <code>file_path_ext</code> function without explicit case analysis:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 # fn extension(file_name: &amp;str) -&gt; Option&lt;&amp;str&gt; { None }
 # fn file_name(file_path: &amp;str) -&gt; Option&lt;&amp;str&gt; { None }
@@ -11378,7 +11068,6 @@ remove choices because they will panic if <code>Option&lt;T&gt;</code> is <code>
 <a href="../../std/result/index.html">defined in the standard library</a>:</p>
 <p><span id="code-result-def"></span></p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 enum Result&lt;T, E&gt; {
     Ok(T),
@@ -11393,7 +11082,6 @@ computation failed. This is a strictly more general form of <code>Option</code>.
 the following type alias, which is semantically equivalent to the real
 <code>Option&lt;T&gt;</code> in every way:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 type Option&lt;T&gt; = Result&lt;T, ()&gt;;
 
@@ -11409,7 +11097,6 @@ the other outcome is meant to be unexpected or “<code>Err</code>”.</p>
 defined</a>
 in the standard library. Let's define it:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 # enum Result&lt;T, E&gt; { Ok(T), Err(E) }
 impl&lt;T, E: ::std::fmt::Debug&gt; Result&lt;T, E&gt; {
@@ -11530,7 +11217,6 @@ the type parameters to a particular type. Usually the fixed type is
 the error type. For example, our previous example parsing integers
 could be rewritten like this:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 use std::num::ParseIntError;
 use std::result;
@@ -11640,7 +11326,6 @@ combinator. This is one way to convert an <code>Option</code> into a <code>Resul
 conversion requires you to specify what error to use if <code>Option</code> is <code>None</code>.
 Like the other combinators we've seen, its definition is very simple:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 fn ok_or&lt;T, E&gt;(option: Option&lt;T&gt;, err: E) -&gt; Result&lt;T, E&gt; {
     match option {
@@ -11824,7 +11509,6 @@ seen above.</p>
 <p>Here is a simplified definition of a <code>try!</code> macro:</p>
 <p><span id="code-try-def-simple"></span></p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 macro_rules! try {
     ($e:expr) =&gt; (match $e {
@@ -11899,7 +11583,6 @@ errors in case the caller wants to inspect the details.</p>
 sum type using <code>enum</code>. In our case, an error is either an <code>io::Error</code> or a
 <code>num::ParseIntError</code>, so a natural definition arises:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 use std::io;
 use std::num;
@@ -11958,7 +11641,6 @@ distinct types.</p>
 <p>The <code>Error</code> trait is <a href="../../std/error/trait.Error.html">defined in the standard
 library</a>:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 use std::fmt::{Debug, Display};
 
@@ -11993,7 +11675,6 @@ returns an <code>&amp;Error</code>, which is itself a trait object. We'll revisi
 use the error type we defined in the
 <a href="print.html#defining-your-own-error-type">previous section</a>:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 use std::io;
 use std::num;
@@ -12058,7 +11739,6 @@ different error types and satisfy the contracts defined for <code>description</c
 library</a>:</p>
 <p><span id="code-from-def"></span></p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 trait From&lt;T&gt; {
     fn from(T) -&gt; Self;
@@ -12073,7 +11753,6 @@ The crux of <code>From</code> is the
 library</a>.</p>
 <p>Here are a few simple examples demonstrating how <code>From</code> works:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let string: String = From::from(&quot;foo&quot;);
 let bytes: Vec&lt;u8&gt; = From::from(&quot;foo&quot;);
@@ -12091,7 +11770,6 @@ useful in a generic context.</p>
 <code>io::Error</code> and <code>num::ParseIntError</code>. Since both impl <code>Error</code>, they work with
 <code>From</code>:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 use std::error::Error;
 use std::fs;
@@ -12120,7 +11798,6 @@ us a way to reliably convert errors to the same type using the same function.</p
 <a class="header" href="print.html#the-real-try-macro" id="the-real-try-macro"><h2>The real <code>try!</code> macro</h2></a>
 <p>Previously, we presented this definition of <code>try!</code>:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 macro_rules! try {
     ($e:expr) =&gt; (match $e {
@@ -12134,7 +11811,6 @@ macro_rules! try {
 <a href="../../std/macro.try.html">in the standard library</a>:</p>
 <p><span id="code-try-def"></span></p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 macro_rules! try {
     ($e:expr) =&gt; (match $e {
@@ -12150,7 +11826,6 @@ you automatic type conversion for free.</p>
 <p>Armed with our more powerful <code>try!</code> macro, let's take a look at code we wrote
 previously to read a file and convert its contents to an integer:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 use std::fs::File;
 use std::io::Read;
@@ -12170,7 +11845,6 @@ we have to do is pick a type that <code>From</code> works with. As we saw in the
 section, <code>From</code> has an impl that lets it convert any error type into a
 <code>Box&lt;Error&gt;</code>:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 use std::error::Error;
 use std::fs::File;
@@ -12216,7 +11890,6 @@ is opaque to callers.</p>
 error type. Once again, here is the code that reads the contents of a file and
 converts it to an integer:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 use std::fs::File;
 use std::io::{self, Read};
@@ -12247,7 +11920,6 @@ types like <code>io::Error</code> and <code>num::ParseIntError</code> to our own
 Of course, it is easy to fix this! Since we defined <code>CliError</code>, we can impl
 <code>From</code> with it:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 # #[derive(Debug)]
 # enum CliError { Io(io::Error), Parse(num::ParseIntError) }
@@ -12272,7 +11944,6 @@ other error types. In our case, construction is as simple as invoking the
 corresponding value constructor. Indeed, it is <em>typically</em> this easy.</p>
 <p>We can finally rewrite <code>file_double</code>:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 # use std::io;
 # use std::num;
@@ -12305,7 +11976,6 @@ could appear.</p>
 convert a string to a float, then we'd need to add a new variant to our error
 type:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 use std::io;
 use std::num;
@@ -12319,7 +11989,6 @@ enum CliError {
 #}</code></pre></pre>
 <p>And add a new <code>From</code> impl:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 # enum CliError {
 #     Io(::std::io::Error),
@@ -12978,7 +12647,6 @@ detail.</p>
 out references to the contained data, it is the only owner of the data. In particular, consider
 the following:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let x = Box::new(1);
 let y = x;
@@ -13052,7 +12720,6 @@ no worry of leaking any data behind references (or worse!) by simply replacing t
 If a field is wrapped in <code>Cell</code>, it's a nice indicator that the chunk of data is mutable and may not
 stay the same between the time you first read it and when you intend to use it.</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 use std::cell::Cell;
 
@@ -13099,7 +12766,6 @@ the smart pointers go out of scope. With this system, we can dynamically ensure 
 any other borrows active when a mutable borrow is active. If the programmer attempts to make such a
 borrow, the thread will panic.</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 use std::cell::RefCell;
 
@@ -13597,7 +13263,6 @@ the compiler that the unsafety does not leak out of the block.</p>
 <p>Unsafe functions, on the other hand, advertise it to the world. An unsafe function is written like
 this:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 unsafe fn kaboom(ptr: *const i32) -&gt; i32 { *ptr }
 
@@ -13868,7 +13533,6 @@ the signature of <code>get()</code> again, we can use <code>get()</code> when th
 <code>Borrow&lt;Q&gt;</code>. That way, we can make a <code>HashMap</code> which uses <code>String</code> keys,
 but use <code>&amp;str</code>s when we’re searching:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 use std::collections::HashMap;
 
@@ -13885,7 +13549,6 @@ kind of borrowed value. This is especially true of references and slices: you
 can have both an <code>&amp;T</code> or a <code>&amp;mut T</code>. If we wanted to accept both of these types,
 <code>Borrow</code> is up for it:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 use std::borrow::Borrow;
 use std::fmt::Display;
@@ -13905,7 +13568,6 @@ foo(&amp;mut i);
 <p>The <code>AsRef</code> trait is a conversion trait. It’s used for converting some value to
 a reference in generic code. Like this:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let s = &quot;Hello&quot;.to_string();
 
@@ -14014,7 +13676,6 @@ fn may_fail(failure: bool) -&gt; Result&lt;(), &amp;'static str&gt; {
 <p>As you've seen throughout the rest of the book, Rust provides a mechanism
 called &quot;derive&quot; that lets you implement traits easily. For example,</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 #[derive(Debug)]
 struct Point {
@@ -14025,7 +13686,6 @@ struct Point {
 #}</code></pre></pre>
 <p>is a lot simpler than</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 struct Point {
     x: i32,
@@ -14254,7 +13914,6 @@ of your program. For example, <code>2 + 3</code> can be turned into a tree:</p>
 <a class="header" href="print.html#arity" id="arity"><h3>Arity</h3></a>
 <p>Arity refers to the number of arguments a function or operation takes.</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let x = (2, 3);
 let y = (4, 6);

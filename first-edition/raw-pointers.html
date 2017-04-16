@@ -10,7 +10,8 @@
         <base href="">
 
         <link rel="stylesheet" href="book.css">
-        <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+        <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500" rel="stylesheet" type="text/css">
 
         <link rel="shortcut icon" href="favicon.png">
 
@@ -97,7 +98,6 @@ not being allowed directly through a <code>*const T</code>.</li>
 <a class="header" href="raw-pointers.html#basics" id="basics"><h1>Basics</h1></a>
 <p>Creating a raw pointer is perfectly safe:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let x = 5;
 let raw = &amp;x as *const i32;
@@ -120,7 +120,6 @@ println!(&quot;raw points at {}&quot;, *raw);
 <p>When you dereference a raw pointer, you’re taking responsibility that it’s not
 pointing somewhere that would be incorrect. As such, you need <code>unsafe</code>:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let x = 5;
 let raw = &amp;x as *const i32;
@@ -150,7 +149,6 @@ and so any conversion from raw pointers is asserting that they hold. The
 programmer <em>must</em> guarantee this.</p>
 <p>The recommended method for the conversion is:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 // Explicit cast:
 let i: u32 = 1;

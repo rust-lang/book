@@ -10,7 +10,8 @@
         <base href="">
 
         <link rel="stylesheet" href="book.css">
-        <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+        <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500" rel="stylesheet" type="text/css">
 
         <link rel="shortcut icon" href="favicon.png">
 
@@ -111,7 +112,6 @@ your reference.</li>
 dangling pointer or ‘use after free’, when the resource is memory. A small
 example of such a situation would be:</p>
 <pre><pre class="playpen"><code class="language-rust compile_fail"># #![allow(unused_variables)]
-# 
 #fn main() {
 let r;              // Introduce reference: `r`.
 {
@@ -128,7 +128,6 @@ as it can see the lifetimes of the various values in the function.</p>
 <p>When we have a function that takes arguments by reference the situation becomes
 more complex. Consider the following example:</p>
 <pre><pre class="playpen"><code class="language-rust compile_fail E0106"># #![allow(unused_variables)]
-# 
 #fn main() {
 fn skip_prefix(line: &amp;str, prefix: &amp;str) -&gt; &amp;str {
     // ...
@@ -157,7 +156,6 @@ code. To get it to compile we need to tell the compiler more about the
 lifetimes of the references. This can be done by making the lifetimes
 explicit in the function declaration:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 fn skip_prefix&lt;'a, 'b&gt;(line: &amp;'a str, prefix: &amp;'b str) -&gt; &amp;'a str {
     // ...
@@ -227,7 +225,6 @@ fn main() {
 </code></pre></pre>
 <p>As you can see, <code>struct</code>s can also have lifetimes. In a similar way to functions,</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 struct Foo&lt;'a&gt; {
 # x: &amp;'a i32,
@@ -236,7 +233,6 @@ struct Foo&lt;'a&gt; {
 #}</code></pre></pre>
 <p>declares a lifetime, and</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 # struct Foo&lt;'a&gt; {
 x: &amp;'a i32,
@@ -268,7 +264,6 @@ uses it.</p>
 <a class="header" href="lifetimes.html#multiple-lifetimes" id="multiple-lifetimes"><h2>Multiple lifetimes</h2></a>
 <p>If you have multiple references, you can use the same lifetime multiple times:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 fn x_or_y&lt;'a&gt;(x: &amp;'a str, y: &amp;'a str) -&gt; &amp;'a str {
 #    x
@@ -279,7 +274,6 @@ fn x_or_y&lt;'a&gt;(x: &amp;'a str, y: &amp;'a str) -&gt; &amp;'a str {
 return value is also alive for that scope. If you wanted <code>x</code> and <code>y</code> to have
 different lifetimes, you can use multiple lifetime parameters:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 fn x_or_y&lt;'a, 'b&gt;(x: &amp;'a str, y: &amp;'b str) -&gt; &amp;'a str {
 #    x
@@ -339,7 +333,6 @@ name is the first step towards being able to talk about it.</p>
 has the lifetime of the entire program. Most Rust programmers first come across
 <code>'static</code> when dealing with strings:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let x: &amp;'static str = &quot;Hello, world.&quot;;
 
@@ -348,7 +341,6 @@ let x: &amp;'static str = &quot;Hello, world.&quot;;
 alive: they are baked into the data segment of the final binary. Another
 example are globals:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 static FOO: i32 = 5;
 let x: &amp;'static i32 = &amp;FOO;

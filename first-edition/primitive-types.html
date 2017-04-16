@@ -10,7 +10,8 @@
         <base href="">
 
         <link rel="stylesheet" href="book.css">
-        <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+        <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500" rel="stylesheet" type="text/css">
 
         <link rel="shortcut icon" href="favicon.png">
 
@@ -75,7 +76,6 @@ of these ones, as well, but these are the most primitive.</p>
 <a class="header" href="primitive-types.html#booleans" id="booleans"><h1>Booleans</h1></a>
 <p>Rust has a built-in boolean type, named <code>bool</code>. It has two values, <code>true</code> and <code>false</code>:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let x = true;
 
@@ -89,7 +89,6 @@ documentation</a>.</p>
 <p>The <code>char</code> type represents a single Unicode scalar value. You can create <code>char</code>s
 with a single tick: (<code>'</code>)</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let x = 'x';
 let two_hearts = '💕';
@@ -107,7 +106,6 @@ fixed and variable, floating-point and integer.</p>
 bigger numbers.</p>
 <p>If a number literal has nothing to cause its type to be inferred, it defaults:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let x = 42; // `x` has type `i32`.
 
@@ -157,7 +155,6 @@ IEEE-754 single and double precision numbers.</p>
 things. The most basic is the <em>array</em>, a fixed-size list of elements of the
 same type. By default, arrays are immutable.</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let a = [1, 2, 3]; // a: [i32; 3]
 let mut m = [1, 2, 3]; // m: [i32; 3]
@@ -169,14 +166,12 @@ array.</p>
 <p>There’s a shorthand for initializing each element of an array to the same
 value. In this example, each element of <code>a</code> will be initialized to <code>0</code>:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let a = [0; 20]; // a: [i32; 20]
 
 #}</code></pre></pre>
 <p>You can get the number of elements in an array <code>a</code> with <code>a.len()</code>:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let a = [1, 2, 3];
 
@@ -185,7 +180,6 @@ println!(&quot;a has {} elements&quot;, a.len());
 #}</code></pre></pre>
 <p>You can access a particular element of an array with <em>subscript notation</em>:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let names = [&quot;Graydon&quot;, &quot;Brian&quot;, &quot;Niko&quot;]; // names: [&amp;str; 3]
 
@@ -214,7 +208,6 @@ and a length.</p>
 detail later in this section. The <code>[]</code>s, with a range, let you define the
 length of the slice:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let a = [0, 1, 2, 3, 4];
 let complete = &amp;a[..]; // A slice containing all of the elements in `a`.
@@ -235,7 +228,6 @@ documentation</a>.</p>
 <a class="header" href="primitive-types.html#tuples" id="tuples"><h1>Tuples</h1></a>
 <p>A tuple is an ordered list of fixed size. Like this:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let x = (1, &quot;hello&quot;);
 
@@ -243,7 +235,6 @@ let x = (1, &quot;hello&quot;);
 <p>The parentheses and commas form this two-length tuple. Here’s the same code, but
 with the type annotated:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let x: (i32, &amp;str) = (1, &quot;hello&quot;);
 
@@ -257,7 +248,6 @@ soon.</p>
 <p>You can assign one tuple into another, if they have the same contained types
 and <a href="glossary.html#arity">arity</a>. Tuples have the same arity when they have the same length.</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let mut x = (1, 2); // x: (i32, i32)
 let y = (2, 3); // y: (i32, i32)
@@ -268,7 +258,6 @@ x = y;
 <p>You can access the fields in a tuple through a <em>destructuring let</em>. Here’s
 an example:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let (x, y, z) = (1, 2, 3);
 
@@ -284,7 +273,6 @@ or “breaks up” the tuple, and assigns the bits to three bindings.</p>
 <p>You can disambiguate a single-element tuple from a value in parentheses with a
 comma:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 (0,); // A single-element tuple.
 (0); // A zero in parentheses.
@@ -293,7 +281,6 @@ comma:</p>
 <a class="header" href="primitive-types.html#tuple-indexing" id="tuple-indexing"><h2>Tuple Indexing</h2></a>
 <p>You can also access fields of a tuple with indexing syntax:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let tuple = (1, 2, 3);
 
@@ -311,7 +298,6 @@ documentation</a>.</p>
 <a class="header" href="primitive-types.html#functions" id="functions"><h1>Functions</h1></a>
 <p>Functions also have a type! They look like this:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 fn foo(x: i32) -&gt; i32 { x }
 

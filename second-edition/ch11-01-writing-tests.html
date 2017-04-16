@@ -152,7 +152,6 @@ $ cd adder
 follows:</p>
 <p><span class="filename">Filename: src/lib.rs</span></p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 #[cfg(test)]
 mod tests {
@@ -221,7 +220,6 @@ function name and seeing how the output changes; I hope that's sufficient.
 Give the <code>it_works</code> function a different name, such as <code>exploration</code>, like so:</p>
 <p><span class="filename">Filename: src/lib.rs</span></p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 #[cfg(test)]
 mod tests {
@@ -244,7 +242,6 @@ cause a panic in Chapter 9: call the <code>panic!</code> macro! Type in the new 
 that your <code>src/lib.rs</code> now looks like Listing 11-3:</p>
 <p><span class="filename">Filename: src/lib.rs</span></p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 #[cfg(test)]
 mod tests {
@@ -319,7 +316,6 @@ the <code>assert!</code> macro.</p>
 5 for editing. /Carol -->
 <p><span class="filename">Filename: src/lib.rs</span></p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 #[derive(Debug)]
 pub struct Rectangle {
@@ -343,7 +339,6 @@ a width of 7, and asserting that it can hold another <code>Rectangle</code> inst
 has a length of 5 and a width of 1:</p>
 <p><span class="filename">Filename: src/lib.rs</span></p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 #[cfg(test)]
 mod tests {
@@ -380,7 +375,6 @@ test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured
 rectangle cannot hold a larger rectangle:</p>
 <p><span class="filename">Filename: src/lib.rs</span></p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 #[cfg(test)]
 mod tests {
@@ -418,7 +412,6 @@ introduce a bug in our code. Let's change the implementation of the <code>can_ho
 method to have a less-than sign when it compares the lengths where it's
 supposed to have a greater-than sign:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 #[derive(Debug)]
 pub struct Rectangle {
@@ -469,7 +462,6 @@ parameter and returns the result. Then let's test this function using the
 <code>assert_eq!</code> macro:</p>
 <p><span class="filename">Filename: src/lib.rs</span></p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 pub fn add_two(a: i32) -&gt; i32 {
     a + 2
@@ -500,7 +492,6 @@ of calling <code>add_two(2)</code>. We see a line for this test that says <code>
 uses <code>assert_eq!</code> fails. Change the implementation of the <code>add_two</code> function to
 instead add 3:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 pub fn add_two(a: i32) -&gt; i32 {
     a + 3
@@ -567,7 +558,6 @@ the test fails, we have a better idea of what the problem is with the code.</p>
 want to test that the name we pass into the function appears in the output:</p>
 <p><span class="filename">Filename: src/lib.rs</span></p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 pub fn greeting(name: &amp;str) -&gt; String {
     format!(&quot;Hello {}!&quot;, name)
@@ -594,7 +584,6 @@ the text of the input parameter.</p>
 <p>Let's introduce a bug into this code to see what this test failure looks like,
 by changing <code>greeting</code> to not include <code>name</code>:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 pub fn greeting(name: &amp;str) -&gt; String {
     String::from(&quot;Hello!&quot;)
@@ -652,7 +641,6 @@ panics, and the test will fail if the code inside the function does non panic.</
 <code>Guess::new</code> happen when we expect:</p>
 <p><span class="filename">Filename: src/lib.rs</span></p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 struct Guess {
     value: u32,
@@ -695,7 +683,6 @@ test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured
 <p>Looks good! Now let's introduce a bug in our code, by removing the condition
 that the <code>new</code> function will panic if the value is greater than 100:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 # struct Guess {
 #     value: u32,
@@ -739,7 +726,6 @@ modified code for <code>Guess</code> in Listing 11-9 where the <code>new</code> 
 different messages depending on whether the value was too small or too large:</p>
 <p><span class="filename">Filename: src/lib.rs</span></p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 struct Guess {
     value: u32,

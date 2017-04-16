@@ -209,7 +209,6 @@ computed at runtime.</p>
 <code>MAX_POINTS</code> and its value is set to 100,000. (Rust constant naming convention
 is to use all upper case with underscores between words):</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 const MAX_POINTS: u32 = 100_000;
 
@@ -261,7 +260,6 @@ change the type of the value, but reuse the same name. For example, say our
 program asks a user to show how many spaces they want between some text by
 inputting space characters, but we really want to store that input as a number:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
-# 
 #fn main() {
 let spaces = &quot;   &quot;;
 let spaces = spaces.len();
