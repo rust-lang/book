@@ -1,68 +1,76 @@
 ## Writing a Response
 
-Let's respond to our browser with a response. Responses look like this:
+Let's send data back to our browser in response to its request. Responses have
+this format:
 
 ```text
-Status-Line headers CRLF message-body
+HTTP-Version Status-Code Reason-Phrase CRLF
+headers CRLF
+message-body
 ```
 
-First, we need a status line. Then, any headers. Next, a CRLF sequence, and
-then, the body of the message. What's a status line? Here's an example of one:
+The first line is called a *status line* and contains the HTTP version used in
+the response, a numeric status code that summarizes the result of the request,
+and a reason phrase that provides a text description of the status code. After
+the CRLF sequence comes any headers, another CRLF sequence, and the body of the
+response.
+
+Here's an example response that uses version 1.1 of HTTP, has a status code of
+`200`, a reason phrase of `OK`, no headers, and no body:
 
 ```text
 HTTP/1.1 200 OK\r\n\r\n
 ```
 
-Status lines look like this:
+This text is a tiny successful HTTP response. Let's write this to the stream!
+Remove the `println!` that was printing the request data, and add the code in
+Listing 20-3 in its place:
 
-```text
-Status-Line = HTTP-Version Status-Code Reason-Phrase CRLF
+<span class="filename">Filename: src/main.rs</span>
+
+```rust
+# use std::io::prelude::*;
+# use std::net::TcpStream;
+fn handle_connection(mut stream: TcpStream) {
+    let mut buffer = [0; 512];
+
+    stream.read(&mut buffer).unwrap();
+
+    let response = "HTTP/1.1 200 OK\r\n\r\n";
+
+    stream.write(response.as_bytes()).unwrap();
+    stream.flush().unwrap();
+}
 ```
 
-We're using version 1.1 of the protocol, and `200` is the status code. `OK` is
-the "reason phrase", it's like a text description of the status code. Finally,
-`\r\n` is the CRLF sequence; `\r` is a "carriage return" and `\n` is a "line
-feed"; these terms come from the typewriter days!
+<span class="caption">Listing 20-3: Writing a tiny successful HTTP response to
+the stream</span>
 
-We don't have any headers, so there's nothing to put there. Next, another CRLF
-to separate the headers from the body, which is empty. Whew! With this text,
-we've got a successful, tiny, HTTP response. We have to write it to the stream
-though! Let's modify our code to write out a response. Remove the `println!`
-line, and add these below:
+The first new line defines the `response` variable that holds the data of the
+tiny success response we're sending back. Then, we call `as_bytes` on our
+`response` because the `write` method on `stream` takes a `&[u8]` and sends
+those bytes directly down the connection.
 
-```rust,ignore
-let response = "HTTP/1.1 200 OK\r\n\r\n";
+The `write` operation could fail, so `write` returns a `Result<T, E>`; we're
+continuing to use `unwrap` to make progress on the core ideas in this chapter
+rather than error handling. Finally, `flush` will wait until all of the bytes
+are written to the connection; `TcpStream` contains an internal buffer to
+minimize calls into the underlying operating system.
 
-stream.write(response.as_bytes()).unwrap();
-stream.flush().unwrap();
-```
-
-The first line defines our response. Then, we call `as_bytes` on our
-`response`, as the `write` method on `stream` takes a `&[u8]`, and writes those
-bytes directly down the connection. This could fail, so `write` returns a
-`Result<T, E>`; we continue to use `unwrap` to make progress here. Finally,
-`flush()` will wait until all of the underlying bytes are written to the
-connection; `TcpStream` contains an internal buffer to minimize calls into the
-underlying operating system.
-
-With these changes, let's run our code!
-
-```text
-> cargo run
-   Compiling hello v0.1.0 (file:///projects/hello/src/hello)
-    Finished dev [unoptimized + debuginfo] target(s) in 0.39 secs
-     Running `target\debug\hello.exe`
-```
-
-Once we've loaded `127.0.0.1:8080` in our web browser... we get a blank page!
-How exciting! You've just hand-coded an HTTP request and response. From here on
-out, it's all just details.
+With these changes, let's run our code and make a request! We're no longer
+printing any data to the terminal, so we won't see any output there other than
+the output from Cargo. When we load `127.0.0.1:8080` in a web browser, though,
+we get a blank page instead of an error. How exciting! You've just hand-coded
+an HTTP request and response.
 
 ### Returning Real HTML
 
 Let's return more than a blank page. Create a new file, `hello.html`, in the
-root of the project; that is, not in the `src` directory. You can put any HTML
-you want in it, here's what the authors used for theirs:
+root of your project directory, that is, not in the `src` directory. You can
+put any HTML you want in it. Listing 20-4 shows what the authors used for
+theirs:
+
+<span class="filename">Filename: hello.html</span>
 
 ```html
 <!DOCTYPE html>
@@ -72,61 +80,56 @@ you want in it, here's what the authors used for theirs:
     <title>Hello!</title>
   </head>
   <body>
-  <h1>Hello!</h1>
-  <p>Hi from Rust</p>
+    <h1>Hello!</h1>
+    <p>Hi from Rust</p>
   </body>
 </html>
 ```
 
-This is a minimal HTML 5 document, with a heading and a little paragraph. Let's
-modify `handle_connection` to read that file, append it to our header, and send
-it as the response:
+<span class="caption">Listing 20-4: A sample HTML file to return in a
+response</span>
 
-```rust,ignore
-// add this import at the top
+This is a minimal HTML 5 document with a heading and a little paragraph. Let's
+modify `handle_connection` as shown in Listing 20-5 to read the HTML file, add
+it to the response as a body, and send it:
+
+```rust
+# use std::io::prelude::*;
+# use std::net::TcpStream;
 use std::fs::File;
 
-// our new handle_connection
+// ...snip...
+
 fn handle_connection(mut stream: TcpStream) {
     let mut buffer = [0; 512];
     stream.read(&mut buffer).unwrap();
 
     let mut file = File::open("hello.html").unwrap();
-    let mut contents = String::new();
 
+    let mut contents = String::new();
     file.read_to_string(&mut contents).unwrap();
 
-    let header = "HTTP/1.1 200 OK\r\n\r\n";
-    let response = format!("{}{}", header, contents);
+    let response = format!("HTTP/1.1 200 OK\r\n\r\n{}", contents);
 
     stream.write(response.as_bytes()).unwrap();
     stream.flush().unwrap();
 }
 ```
 
-Here's opening and reading the file:
+We've added a line at the top to bring the standard library's `File` into
+scope, and the file opening and reading code should look familiar since we had
+similar code in Chapter 12 when we read the contents of a file for our I/O
+project in Listing 12-4.
 
-```rust,ignore
-let mut file = File::open("hello.html").unwrap();
-let mut contents = String::new();
+Next, we're using `format!` to add the file's contents as the body of the
+success response that we write to the stream.
 
-file.read_to_string(&mut contents).unwrap();
-```
+Run it with `cargo run`, load up `127.0.0.1:8080` in your browser, and you
+should see your HTML rendered!
 
-We talked about this in the I/O project chapter, so this should look fairly
-familiar. We open the file with `File::open`, and the read it into a `String`
-with `file.read_to_string`.
-
-Next, we write our response out:
-
-```rust,ignore
-let header = "HTTP/1.1 200 OK\r\n\r\n";
-let response = format!("{}{}", header, contents);
-
-stream.write(response.as_bytes()).unwrap();
-stream.flush().unwrap();
-```
-
-We use `format!` to concatenate our header onto the body, and then change
-`write` to write `response`. Easy! Run it with `cargo run`, load up
-`127.0.0.1:8080` in your browser, and you should see your HTML rendered!
+Note that we're currently ignoring the request data in `buffer` and sending
+back the contents of the HTML file unconditionally. Try requesting
+`127.0.0.1:8080/something-else` in your browser and you'll get back your HTML
+for that request too. Sending back the same response for all requests is pretty
+limited and not what most web servers do; let's examine the request and only
+send back the HTML file for a well-formed request to `/`.
