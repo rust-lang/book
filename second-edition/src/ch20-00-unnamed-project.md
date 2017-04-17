@@ -52,7 +52,11 @@ $ cargo new hello --bin
 $ cd hello
 ```
 
-We'll put this in `src/main.rs`:
+Let's put the code in Listing 20-1 in `src/main.rs` to start. This code will
+listen at the address `127.0.0.1:8080` for incoming TCP streams. When it gets
+an incoming stream, it will print `Connection established!`:
+
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust,no_run
 use std::net::TcpListener;
@@ -68,15 +72,8 @@ fn main() {
 }
 ```
 
-Let's talk about each part in turn:
-
-```rust,ignore
-use std::net::TcpListener;
-
-fn main() {
-    let listener = TcpListener::bind("127.0.0.1:8080").unwrap();
-
-```
+<span class="caption">Listing 20-1: Listening for incoming streams and printing
+a message when we receive one</span>
 
 A `TcpListener` allows us to listen for TCP connections. We've chosen to listen
 to the address `127.0.0.1:8080`. The part before the colon is an IP address
@@ -87,77 +84,63 @@ administrator privileges. Regular users can listen on ports higher than 1024;
 
 The `bind` method is sort of like `new`, but with a more descriptive name. In
 networking, people will often talk about "binding to a port", and so the
-function is called `bind`. Finally, it returns a `Result<T, E>`; binding may
-fail. For example, if we had tried to connect to port 80 without being an
-administrator. Another example is if we tried to have two programs listening
-to the same port; for example, if we ran two instances of our program. Since
-we're writing a basic server here, we're not going to worry about handling these
-kinds of errors, and so `unwrap` lets us ignore them.
+function is called `bind`. Finally, it returns a `Result<T, E>`. Binding may
+fail, for example, if we had tried to connect to port 80 without being an
+administrator. Another example is if we tried to have two programs listening to
+the same port, which would happen if we ran two instances of our program. Since
+we're writing a basic server here, we're not going to worry about handling
+these kinds of errors, and `unwrap` lets us just stop the program if they
+happen.
 
-```rust,ignore
-for stream in listener.incoming() {
-```
+The `incoming` method on `TcpListener` returns an iterator that gives us a
+sequence of streams (more specifically, streams of type `TcpStream`). A
+*stream* represents an open connection between the client and the server. A
+*connection* is the name for the full request/response process when a client
+connects to the server, the server generates a response, and the server closes
+the connection. As such, the `TcpStream` will let us read from itself to see
+what the client sent, and we can write our response to it. So this `for` loop
+will process each connection in turn and produce a series of streams for us to
+handle.
 
-The `incoming` method on `TcpListener` gives us an iterator that gives us a
-sequence of streams, more specifically, `TcpStream`s. A 'stream' represents
-represents an open connection between the client and the server. A 'connection'
-is a name for the full request/response process, that is, a client connects to
-the server, the server generates a response, and then closes the connection.
-As such, the `TcpStream` will let us read from itself to see what the client
-sent, and write our response to it. So this `for` loop will process each
-connection in turn, and produce a series of streams. We can then handle each one
-in turn.
-
-```rust,ignore
-let stream = stream.unwrap();
-
-println!("Connection established!");
-```
-
-Right now, "handling" a stream means `unwrap`ping it to terminate our program if
-it encounters any errors, and then printing a message. What kind of errors can
+Right now, "handling" a stream means calling `unwrap` to terminate our program
+if the stream has any errors, then printing a message. What kind of errors can
 happen here? Well, we're not actually iterating over connections, we're
-iterating over *connection attempts*. The connection might not work for a number
-of reasons, many of them operating-system specific. For example, many operating
-systems have a limit to the number of simultaneous open connections you're
-allowed to have; new connections will then produce an error until some of them
-are closed.
+iterating over *connection attempts*. The connection might not work for a
+number of reasons, many of them operating-system specific. For example, many
+operating systems have a limit to the number of simultaneous open connections
+you're allowed to have; new connection attempts will then produce an error
+until some of the open connections are closed.
 
-Let's try this code out! First invoke `cargo run`:
-
-```text
-$ cargo run
-    Finished dev [unoptimized + debuginfo] target(s) in 0.0 secs
-warning: unused variable: `stream`, #[warn(unused_variables)] on by default
- --> src\main.rs:8:13
-  |
-8 |         let stream = stream.unwrap();
-  |             ^^^^^^
-
-     Running `target\debug\hello.exe`
-```
-
-And then load up `127.0.0.1:8080` in your web browser. Your browser will
-show an error message, something like "Connection reset", but if you look
-at your terminal...
+Let's try this code out! First invoke `cargo run` in the terminal, then load up
+`127.0.0.1:8080` in the web browser. The browser will show an error message
+that will say something similar to "Connection reset", since we're not
+currently sending any data back. If we look at our terminal, though, we'll see
+a bunch of messages!
 
 ```text
-     Running `target\debug\hello.exe`
+     Running `target/debug/hello`
 Connection established!
 Connection established!
 Connection established!
 ```
 
-A bunch of messages! Why did we get multiple ones? Well, our browser is
-expecting to speak HTTP, but we aren't replying with anything, just closing the
-connection. We're closing it by moving on to the next loop iteration; when
-`stream` gets dropped at the end of the loop, it closes it for us. These
-connections might be the browser making a request for the page and a request for
-a `favicon.ico`, it might be retrying on its own... the important thing is that
-we've successfully gotten a handle on a TCP connection!
+Why did we get multiple messages printed out? Well, our browser is expecting to
+speak HTTP, but we aren't replying with anything, just closing the connection.
+We're closing it by moving on to the next loop iteration; when `stream` gets
+dropped at the end of the loop, it closes it for us. These connections might be
+the browser making a request for the page and a request for a `favicon.ico`, or
+the browser might be retrying the connection. The important thing is that we've
+successfully gotten a handle on a TCP connection!
+
+Remember to stop the program with `CTRL-C` when you're done running a
+particular version of the code, and restart it after you've made the each set
+of changes in order to be running the newest code.
 
 In order to keep things clean, let's move our processing of the connection out
-to a function. Modify your code to look like this:
+to a function. Modify your code to look like Listing 20-2, which starts a
+`handle_connection` function:
+
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust,no_run
 use std::net::TcpListener;
@@ -178,21 +161,29 @@ fn handle_connection(stream: TcpStream) {
 }
 ```
 
-Now we can worry about handling the `TcpStream` in `handle_connection` only,
-and not worry about all of the connection processing stuff.
+<span class="caption">Listing 20-2: Extracting a `handle_connection`
+function</span>
+
+This should have no effect on the behavior of the code; this was just a small
+refactoring. Now we can concentrate on handling the `TcpStream` in
+`handle_connection` and not worry about all of the connection processing stuff
+that we'll leave in `main`.
 
 ## Reading the Request
 
-Let's read in the request from our browser! Modify our code like this:
+Let's read in the request from our browser! Modify `handle_connection` to read
+data from the `stream` and print it out as shown in Listing 20-3. No changes to
+`main` are needed, but we will need to add the `std::io::prelude` in order to
+bring traits into scope that let us read from and write to the stream:
+
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 use std::io::prelude::*;
 use std::net::TcpListener;
 use std::net::TcpStream;
 
-fn main() {
-    // no changes in here!
-}
+// ...snip...
 
 fn handle_connection(mut stream: TcpStream) {
     let mut buffer = [0; 512];
@@ -203,36 +194,22 @@ fn handle_connection(mut stream: TcpStream) {
 }
 ```
 
-We've added one new `use` declaration, importing the `std::io` module's
-`prelude`. This will bring important traits into scope that let us read from
-and write to the stream.
+<span class="caption">Listing 20-3: Reading from the `TcpStream`</span>
 
 In `handle_connection`, we had to make `stream` mutable with the `mut` keyword.
 We're going to be reading data from the stream, so it's going to get modified.
-Next, we need to actually read from the stream; we do this in two steps:
 
-```rust,ignore
-let mut buffer = [0; 512];
-
-stream.read(&mut buffer).unwrap();
-```
-
-First, we declare a `buffer` on the stack; we've made it 512 bytes. Why 512?
-It's big enough to get a basic request, but not super huge. If we wanted to
-handle requests of an arbitrary size, this would need to be more complicated,
-but we're keeping it simple for now! We then pass that buffer to `stream.read`.
+Next, we need to actually read from the stream; we do this in two steps. First,
+we declare a `buffer` on the stack; we've made it 512 bytes. Why 512? It's big
+enough to get a basic request, but not super huge. If we wanted to handle
+requests of an arbitrary size, this would need to be more complicated, but
+we're keeping it simple for now! We then pass that buffer to `stream.read`.
 This will read bytes from the `TcpStream` and put them in the buffer.
 
-Next, we print that stream out:
-
-```rust,ignore
-println!("Request: {}", String::from_utf8_lossy(&buffer[..]));
-```
-
-The `String::from_utf8_lossy` function will take a `&[u8]` and produce a
-`String`. The 'lossy' part of its name comes from its behavior when it sees
-invalid UTF-8 sequences; it replaces them with �, `U+FFFD REPLACEMENT
-CHARACTER`.
+Next, we print that stream out. The `String::from_utf8_lossy` function takes a
+`&[u8]` and produce a `String`. The 'lossy' part of its name comes from its
+behavior when it sees invalid UTF-8 sequences; it replaces them with �, `U+FFFD
+REPLACEMENT CHARACTER`.
 
 Let's give this a try!
 
@@ -240,7 +217,7 @@ Let's give this a try!
 $ cargo run
    Compiling hello v0.1.0 (file:///projects/hello/src/hello)
     Finished dev [unoptimized + debuginfo] target(s) in 0.42 secs
-     Running `target\debug\hello.exe`
+     Running `target/debug/hello`
 Request: GET / HTTP/1.1
 Host: 127.0.0.1:8080
 User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:52.0) Gecko/20100101
@@ -254,10 +231,12 @@ Upgrade-Insecure-Requests: 1
 ```
 
 You'll probably get slightly different output depending on your browser! You
-also might see this request repeated; now we can tell that the reason we have
-multiple connections is because the browser is trying to fetch `/` repeatedly.
-Let's break this request down. HTTP is a text-based protocol, a request looks
-like this:
+also might see this request repeated; if so, we can definitively tell that the
+reason we have multiple connections is because the browser is trying to fetch
+`/` repeatedly.
+
+Let's break this request data down. HTTP is a text-based protocol, and a
+request looks like this:
 
 ```text
 Request-Line headers CRLF message-body
