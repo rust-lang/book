@@ -11,7 +11,7 @@ Here's what we're going to make: a web server that says hello:
 
 To do this, we will:
 
-1. Learn a little bit about TCP and HTTP.
+1. Learn a little bit about TCP and HTTP
 2. Listen for TCP connections on a socket
 3. Parse a tiny bit of HTTP requests
 4. Create a proper HTTP response
@@ -25,26 +25,30 @@ not to take the easy route. Since Rust is a systems programming language, we're
 able to choose what level of abstraction we want to work with. We're able to go
 to a lower level than is possible or practical in other languages if we so
 choose. So we'll be writing a basic HTTP server and thread pool ourselves in
-order to learn the general idea behind the crates we might use in the future.
+order to learn the general ideas and techniques behind the crates we might use
+in the future.
 
 ## Accepting a TCP Connection
 
-The HTTP protocol is built on top of the TCP protocol. We won't get too much
-into the details, but here's a small overview: TCP is a low-level protocol, and
-HTTP builds a higher-level one on top of it. Both protocols are what's called a
-"request-response protocol", that is, there is a *client* that initiates
+The *Hypertext Transfer Protocol* (*HTTP*) that powers the web is built on top
+of the *Transmission Control Protocol* (*TCP*). We won't get into the details
+too much, but here's a short overview: TCP is a low-level protocol, and HTTP
+builds a higher-level protocol on top of TCP. Both protocols are what's called a
+*request-response protocol*, that is, there is a *client* that initiates
 requests, and a *server* that listens to requests and provides a response to
 the client. The contents of those requests and responses are defined by the
-protocols themselves. TCP describes the low-level details of "how does this
-information get from one server to another", but doesn't specify what that
-information is; it's just a bunch of ones and zeroes. HTTP builds on top of
-this by defining what those contents should be. As such, it's technically
-possible to use HTTP with other protocols, but in the vast, vast majority of
-cases, it's over TCP.
+protocols themselves.
 
-So the first thing we need to build our web server is to be able to listen to a
-TCP connection. The standard library has a `std::net` module that lets us do
-this. Let's make a new project:
+TCP describes the low-level details of how information gets from one server to
+another, but doesn't specify what that information is; it's just a bunch of
+ones and zeroes. HTTP builds on top of TCP by defining what the content of the
+requests and responses should be. As such, it's technically possible to use
+HTTP with other protocols, but in the vast majority of cases, HTTP sends its
+data over TCP.
+
+So the first thing we need to build for our web server is to be able to listen
+to a TCP connection. The standard library has a `std::net` module that lets us
+do this. Let's make a new project:
 
 ```text
 $ cargo new hello --bin
@@ -52,7 +56,7 @@ $ cargo new hello --bin
 $ cd hello
 ```
 
-Let's put the code in Listing 20-1 in `src/main.rs` to start. This code will
+And put the code in Listing 20-1 in `src/main.rs` to start. This code will
 listen at the address `127.0.0.1:8080` for incoming TCP streams. When it gets
 an incoming stream, it will print `Connection established!`:
 
@@ -73,24 +77,28 @@ fn main() {
 ```
 
 <span class="caption">Listing 20-1: Listening for incoming streams and printing
-a message when we receive one</span>
+a message when we receive a stream</span>
 
 A `TcpListener` allows us to listen for TCP connections. We've chosen to listen
 to the address `127.0.0.1:8080`. The part before the colon is an IP address
 representing our own computer, and `8080` is the port. We've chosen this port
 because HTTP is normally accepted on port 80, but connecting to port 80 requires
 administrator privileges. Regular users can listen on ports higher than 1024;
-8080 is easy to remember since it's port 80, but twice.
+8080 is easy to remember since it's the HTTP port 80 repeated.
 
-The `bind` method is sort of like `new`, but with a more descriptive name. In
-networking, people will often talk about "binding to a port", and so the
-function is called `bind`. Finally, it returns a `Result<T, E>`. Binding may
-fail, for example, if we had tried to connect to port 80 without being an
-administrator. Another example is if we tried to have two programs listening to
-the same port, which would happen if we ran two instances of our program. Since
-we're writing a basic server here, we're not going to worry about handling
-these kinds of errors, and `unwrap` lets us just stop the program if they
-happen.
+The `bind` function is sort of like `new` in that it returns a new
+`TcpListener` instance, but `bind` is a more descriptive name that fits with
+the domain terminology. In networking, people will often talk about "binding to
+a port", so the function that the standard library defined to create a new
+`TcpListener` is called `bind`.
+
+The `bind` function returns a `Result<T, E>`. Binding may fail, for example, if
+we had tried to connect to port 80 without being an administrator. Another
+example of a case when binding would fail is if we tried to have two programs
+listening to the same port, which would happen if we ran two instances of our
+program. Since we're writing a basic server here, we're not going to worry
+about handling these kinds of errors, and `unwrap` lets us just stop the
+program if they happen.
 
 The `incoming` method on `TcpListener` returns an iterator that gives us a
 sequence of streams (more specifically, streams of type `TcpStream`). A
@@ -102,20 +110,19 @@ what the client sent, and we can write our response to it. So this `for` loop
 will process each connection in turn and produce a series of streams for us to
 handle.
 
-Right now, "handling" a stream means calling `unwrap` to terminate our program
-if the stream has any errors, then printing a message. What kind of errors can
-happen here? Well, we're not actually iterating over connections, we're
-iterating over *connection attempts*. The connection might not work for a
-number of reasons, many of them operating-system specific. For example, many
-operating systems have a limit to the number of simultaneous open connections
-you're allowed to have; new connection attempts will then produce an error
-until some of the open connections are closed.
+For now, handling a stream means calling `unwrap` to terminate our program if
+the stream has any errors, then printing a message. Errors can happen because
+we're not actually iterating over connections, we're iterating over *connection
+attempts*. The connection might not work for a number of reasons, many of them
+operating-system specific. For example, many operating systems have a limit to
+the number of simultaneous open connections; new connection attempts will then
+produce an error until some of the open connections are closed.
 
 Let's try this code out! First invoke `cargo run` in the terminal, then load up
-`127.0.0.1:8080` in the web browser. The browser will show an error message
-that will say something similar to "Connection reset", since we're not
-currently sending any data back. If we look at our terminal, though, we'll see
-a bunch of messages!
+`127.0.0.1:8080` in a web browser. The browser will show an error message that
+will say something similar to "Connection reset", since we're not currently
+sending any data back. If we look at our terminal, though, we'll see a bunch of
+messages that were printed when the browser connected to the server!
 
 ```text
      Running `target/debug/hello`
@@ -124,21 +131,26 @@ Connection established!
 Connection established!
 ```
 
-Why did we get multiple messages printed out? Well, our browser is expecting to
-speak HTTP, but we aren't replying with anything, just closing the connection.
-We're closing it by moving on to the next loop iteration; when `stream` gets
-dropped at the end of the loop, it closes it for us. These connections might be
-the browser making a request for the page and a request for a `favicon.ico`, or
-the browser might be retrying the connection. The important thing is that we've
-successfully gotten a handle on a TCP connection!
+We got multiple messages printed out for one browser request; these connections
+might be the browser making a request for the page and a request for a
+`favicon.ico` icon that appears in the browser tab, or the browser might be
+retrying the connection. Our browser is expecting to speak HTTP, but we aren't
+replying with anything, just closing the connection by moving on to the next
+loop iteration. When `stream` goes out of scope and dropped at the end of the
+loop, its connection gets closed as part of the `drop` implementation for
+`TcpStream`. Browsers sometimes deal with closed connections by retrying, since
+the problem might be temporary. The important thing is that we've successfully
+gotten a handle on a TCP connection!
 
 Remember to stop the program with `CTRL-C` when you're done running a
-particular version of the code, and restart it after you've made the each set
-of changes in order to be running the newest code.
+particular version of the code, and restart `cargo run` after you've made each
+set of code changes in order to be running the newest code.
 
-In order to keep things clean, let's move our processing of the connection out
-to a function. Modify your code to look like Listing 20-2, which starts a
-`handle_connection` function:
+In order to keep our code clean, let's move the code processing the connection
+out to a function. We're about to add more code to actually process a
+connection rather than only printing out a message, so we'll make a function to
+contain the code for this purpose. Modify your code to look like Listing 20-2,
+which starts a `handle_connection` function:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -164,10 +176,10 @@ fn handle_connection(stream: TcpStream) {
 <span class="caption">Listing 20-2: Extracting a `handle_connection`
 function</span>
 
-This should have no effect on the behavior of the code; this was just a small
-refactoring. Now we can concentrate on handling the `TcpStream` in
-`handle_connection` and not worry about all of the connection processing stuff
-that we'll leave in `main`.
+This should have no effect on the behavior of the program; this was just a
+small refactoring to set up a nice separation of concerns. Now we can
+concentrate on handling the `TcpStream` in `handle_connection` and not worry
+about all of the setup code that we'll leave in `main`.
 
 ## Reading the Request
 
