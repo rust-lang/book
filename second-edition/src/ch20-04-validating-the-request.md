@@ -1,10 +1,21 @@
-## Validating the Request
+## Validating the Request and Selectively Responding
 
-Right now, our web server will return this HTML no matter what the request.
-Let's check that the browser is requesting `/`, and then return an error if
-it's not. First, modify `handle_connection` to look like this:
+Right now, our web server will return the HTML in the file no matter what the
+client requested. Let's check that the browser is requesting `/`, and instead
+return an error if the browser requests anything else. Let's modify
+`handle_connection` as shown in Listing 20-6, which adds part of the code we'll
+need. This part checks the content of the request we received against what we
+know a request for `/` looks like and adds `if` and `else` blocks where we'll
+add code to treat requests differently:
 
-```rust,ignore
+<span class="filename">Filename: src/main.rs</span>
+
+```rust
+# use std::io::prelude::*;
+# use std::net::TcpStream;
+# use std::fs::File;
+// ...snip...
+
 fn handle_connection(mut stream: TcpStream) {
     let mut buffer = [0; 512];
     stream.read(&mut buffer).unwrap();
@@ -14,32 +25,58 @@ fn handle_connection(mut stream: TcpStream) {
     let start = &buffer[..get.len()];
 
     if start == get {
-        // success!
+        let mut file = File::open("hello.html").unwrap();
+
+        let mut contents = String::new();
+        file.read_to_string(&mut contents).unwrap();
+
+        let response = format!("HTTP/1.1 200 OK\r\n\r\n{}", contents);
+
+        stream.write(response.as_bytes()).unwrap();
+        stream.flush().unwrap();
     } else {
-        // error :(
+        // some other request
     };
+}
 ```
 
-Here, we defined the HTTP request we're looking for with `get`. Because we are
-reading raw bytes into the buffer, we use a byte string, with `b"`, to make
-this a byte string too. Then, we take a slice of the `buffer` that's the same
-length as `get`, and compare them. If they're identical, we've gotten a good
-request. If not, we've gotten a bad request.
+<span class="caption">Listing 20-6: Matching the request against the content we
+expect for a request to `/` and setting up conditionally handling requests to
+`/` differently than other requests</span>
 
-Let's add in the code to handle each side:
+Here, we hardcoded the data corresponding to the request that we're looking for
+in the variable `get`. Because we're reading raw bytes into the buffer, we use
+a byte string, created with `b""`, to make `get` a byte string too. Then, we
+take a slice of the `buffer` that's the same length as `get` and compare the
+slice to `get`. If they're identical, we've gotten a well-formed request to
+`/`, which is the success case that we want to handle in the `if` block. The
+`if` block contains the code we added in Listing 20-5 that returns the HTML
+file.
 
-```rust,ignore
-if start == get {
-    let header = "HTTP/1.1 200 OK\r\n\r\n";
-    let mut file = File::open("hello.html").unwrap();
-    let mut contents = String::new();
+If `get` and the slice of `buffer` don't match, we've gotten some other
+request. We'll respond to all other requests using the code we're about to add
+in the `else` block.
 
-    file.read_to_string(&mut contents).unwrap();
+If you run this code and request `127.0.0.1:8080`, you'll get the HTML from the
+file. If you make any other request, such as `127.0.0.1:8080/something-else`,
+you'll get a connection error like we saw when running the code in Listing 20-1
+and Listing 20-2.
 
-    let response = format!("{}{}", header, contents);
+Let's add code to the `else` block as shown in Listing 20-7 to return a
+response with the status code `404`, which signals that the content for the
+request was not found. We'll also return HTML for a page to render in the
+browser indicating as such to the end user:
 
-    stream.write(response.as_bytes()).unwrap();
-    stream.flush().unwrap();
+<span class="filename">Filename: src/main.rs</span>
+
+```rust
+# use std::io::prelude::*;
+# use std::net::TcpStream;
+# use std::fs::File;
+# fn handle_connection(mut stream: TcpStream) {
+# if true {
+// ...snip...
+
 } else {
     let header = "HTTP/1.1 404 NOT FOUND\r\n\r\n";
     let mut file = File::open("404.html").unwrap();
@@ -51,18 +88,20 @@ if start == get {
 
     stream.write(response.as_bytes()).unwrap();
     stream.flush().unwrap();
-};
+}
+# }
 ```
 
-The interesting bit is in the else case:
+<span class="caption">Listing 20-7: Responding with status code `404` and an
+error page if anything other than `/` was requested</span>
 
-```rust,ignore
-let header = "HTTP/1.1 404 NOT FOUND\r\n\r\n";
-let mut file = File::open("404.html").unwrap();
-```
+Here, our response has a header with status code `404` and the reason phrase
+`NOT FOUND`. We still aren't returning any headers, and the body of the
+response will be the HTML in the file *404.html*. Also create a *404.html* file
+next to *hello.html* for the error page; again feel free to use any HTML you'd
+like or use the example HTML in Listing 20-8:
 
-`404 NOT FOUND` is the proper error code here. And we need to make a new file,
-`404.html`, to go along with `hello.html`. Here's its contents:
+<span class="filename">Filename: 404.html</span>
 
 ```html
 <!DOCTYPE html>
@@ -72,70 +111,47 @@ let mut file = File::open("404.html").unwrap();
     <title>Hello!</title>
   </head>
   <body>
-  <h1>Oops!</h1>
-  <p>Sorry, I don't know what you're asking for.</p>
+    <h1>Oops!</h1>
+    <p>Sorry, I don't know what you're asking for.</p>
   </body>
 </html>
 ```
 
+<span class="caption">Listing 20-8: Sample content for the page to send back
+with any `404` response</span>
+
 With these changes, try running your server again. Requesting `127.0.0.1:8080`
-should return our `hello.html`, and any other request, like
-`127.0.0.1:8080/foo`, should return our error!
+should return *hello.html*, and any other request, like `127.0.0.1:8080/foo`,
+should return the error HTML!
 
-There's a lot of repetition in this function; let's pull it out:
+There's a lot of repetition between the code in the `if` and the `else` blocks:
+they're both reading files and writing the contents of the files to the stream.
+The only differences between the two cases are the status line and the
+filename. Let's pull those differences out into an `if` and `else` of one line
+each that will assign the values of the status line and the filename to
+variables; we can then use those variables unconditionally in the code to read
+the file and write the response. The resulting code after this refactoring is
+shown in Listing 20-9:
 
-```rust,ignore
-   let (header, filename) = if start == get {
-        ("HTTP/1.1 200 OK\r\n\r\n", "hello.html")
-    } else {
-        ("HTTP/1.1 404 NOT FOUND\r\n\r\n", "404.html")
-    };
+<span class="filename">Filename: src/main.rs</span>
 
-    let mut file = File::open(filename).unwrap();
-    let mut contents = String::new();
+```rust
+# use std::io::prelude::*;
+# use std::net::TcpStream;
+# use std::fs::File;
+// ...snip...
 
-    file.read_to_string(&mut contents).unwrap();
-
-    let response = format!("{}{}", header, contents);
-
-    stream.write(response.as_bytes()).unwrap();
-    stream.flush().unwrap();
-}
-```
-
-Here, the only thing in our `if` is the header and the filename; we then use
-destructuring to assign these two bits to `filename` and `header`. We have to
-change the call to `File::open` to use this new variable.
-
-Here's our final code. Don't forget those two HTML files as well!
-
-```rust,ignore
-use std::fs::File;
-use std::io::prelude::*;
-use std::net::TcpListener;
-use std::net::TcpStream;
-
-fn main() {
-    let listener = TcpListener::bind("127.0.0.1:8080").unwrap();
-
-    for stream in listener.incoming() {
-        let stream = stream.unwrap();
-
-        handle_connection(stream);
-    }
-}
-
-// our new handle_connection
 fn handle_connection(mut stream: TcpStream) {
-    let mut buffer = [0; 512];
-    stream.read(&mut buffer).unwrap();
+#     let mut buffer = [0; 512];
+#     stream.read(&mut buffer).unwrap();
+#
+#     let get = b"GET / HTTP/1.1\r\n";
+#
+#     let start = &buffer[..get.len()];
+#
+    // ...snip...
 
-    let get = b"GET / HTTP/1.1\r\n";
-
-    let start = &buffer[..get.len()];
-
-
-    let (header, filename) = if start == get {
+   let (status_line, filename) = if start == get {
         ("HTTP/1.1 200 OK\r\n\r\n", "hello.html")
     } else {
         ("HTTP/1.1 404 NOT FOUND\r\n\r\n", "404.html")
@@ -146,14 +162,32 @@ fn handle_connection(mut stream: TcpStream) {
 
     file.read_to_string(&mut contents).unwrap();
 
-    let response = format!("{}{}", header, contents);
+    let response = format!("{}{}", status_line, contents);
 
     stream.write(response.as_bytes()).unwrap();
     stream.flush().unwrap();
 }
 ```
 
-Awesome! We have a simple little web server in ~40 lines of Rust code. So far,
-this project has been relatively straightforward as far as Rust code goes; we
-haven't done much of the more advanced things yet. Let's kick it up a notch and
-add a feature to our web server: a thread pool.
+<span class="caption">Listing 20-9: Refactoring so that the `if` and `else`
+blocks only contain the code that differs between the two cases</span>
+
+Here, the only thing the `if` and `else` blocks do is return the appropriate
+values for the status line and filename in a tuple; we then use destructuring
+to assign these two bits to `filename` and `header` using a pattern in the
+`let` statement like we discussed in Chapter 18.
+
+The duplicated code to read the file and write the response is now outside the
+`if` and `else` blocks, and uses the `status_line` and `filename` variables.
+This makes it easier to see exactly what's different between the two cases, and
+makes it so that we only have one place to update the code if we want to change
+how the file reading and response writing works. The behavior of the code in
+Listing 20-9 will be exactly the same as that in Listing 20-8.
+
+Awesome! We have a simple little web server in about 40 lines of Rust code that
+responds to one request with a page of content and responds to all other
+requests with a `404` response.
+
+So far, this project has been relatively straightforward as far as Rust code
+goes; we haven't done much of the more advanced things yet. Let's kick it up a
+notch and add a feature to our web server: a thread pool.
