@@ -172,6 +172,7 @@ librarys
 libreoffice
 libstd
 lifecycle
+locators
 login
 lookup
 loopback
