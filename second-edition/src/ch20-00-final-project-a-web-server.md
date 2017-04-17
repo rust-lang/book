@@ -611,10 +611,10 @@ let (header, filename) = if get_start == get {
 };
 ```
 
-This code is kinda hacky, but it gets the job done! We create a second
-header, `sleep_start`, and change the `start` to `get_start` to tell the
-two apart. We add an extra layer to our `if` statement to check for `/sleep`,
-and when we hit it, sleep for five seconds, before rendering our hello page.
+This code is a bit messy, but it gets the job done! We create a second header,
+`sleep_start`, and change the `start` to `get_start` to tell the two apart. We
+add an extra layer to our `if` statement to check for `/sleep`, and when we hit
+it, sleep for five seconds, before rendering our hello page.
 
 > You can really see how primitive our server is here; real libraries would
 > handle this in a much nicer way!
