@@ -15970,11 +15970,11 @@ works as we intend.</p>
 <p>Next up is requesting a review of a post, which should change its state from
 <code>Draft</code> to <code>PendingReview</code>. We want <code>post</code> to have a public method named
 <code>request_review</code> that will take a mutable reference to <code>self</code>. Then we're going
-to call a <code>request_review</code> method on the state that we're holding, and that
-<code>request_review</code> method will consume the current state and return a new state.
-In order to be able to consume the old state, the state <code>request_review</code> method
-needs to take ownership of the state value. This is where the <code>Option</code> comes
-in: we're going to take the <code>Some</code> value out of the <code>state</code> field and leave a
+to call an internal <code>request_review</code> method on the state that we're holding, and
+this second <code>request_review</code> method will consume the current state and return a
+new state. In order to be able to consume the old state, the second <code>request_review</code>
+method needs to take ownership of the state value. This is where the <code>Option</code> comes
+in: we're going to <code>take</code> the <code>Some</code> value out of the <code>state</code> field and leave a
 <code>None</code> in its place since Rust doesn't let us have unpopulated fields in
 structs. Then we'll set the post's <code>state</code> value to the result of this
 operation. Listing 17-15 shows this code:</p>

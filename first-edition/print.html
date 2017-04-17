@@ -8394,7 +8394,7 @@ do. For more on raw pointers, see <a href="raw-pointers.html">their section of t
 <a class="header" href="print.html#call-unsafe-functions" id="call-unsafe-functions"><h2>Call unsafe functions</h2></a>
 <p>This last ability works with both aspects of <code>unsafe</code>: you can only call
 functions marked <code>unsafe</code> from inside an unsafe block.</p>
-<p>This ability is powerful and varied. Rust exposes some <a href="../../unstable-book/intrinsics.html">compiler
+<p>This ability is powerful and varied. Rust exposes some <a href="../../unstable-book/language-features/intrinsics.html">compiler
 intrinsics</a> as unsafe functions, and some unsafe functions bypass
 safety checks, trading safety for speed.</p>
 <p>I’ll repeat again: even though you <em>can</em> do arbitrary things in unsafe blocks
@@ -13645,7 +13645,7 @@ don’t want to use the standard library via an attribute: <code>#![no_std]</cod
 <blockquote>
 <p>Note: This feature is technically stable, but there are some caveats. For
 one, you can build a <code>#![no_std]</code> <em>library</em> on stable, but not a <em>binary</em>.
-For details on binaries without the standard library, see <a href="../../unstable-book/lang-items.html#using-libc">the nightly
+For details on binaries without the standard library, see <a href="../../unstable-book/language-features/lang-items.html#using-libc">the nightly
 chapter on 'lang items'</a></p>
 </blockquote>
 <p>To use <code>#![no_std]</code>, add it to your crate root:</p>
