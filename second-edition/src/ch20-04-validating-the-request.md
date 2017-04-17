@@ -121,8 +121,8 @@ like or use the example HTML in Listing 20-8:
 with any `404` response</span>
 
 With these changes, try running your server again. Requesting `127.0.0.1:8080`
-should return *hello.html*, and any other request, like `127.0.0.1:8080/foo`,
-should return the error HTML!
+should return the contents of *hello.html*, and any other request, like
+`127.0.0.1:8080/foo`, should return the error HTML!
 
 There's a lot of repetition between the code in the `if` and the `else` blocks:
 they're both reading files and writing the contents of the files to the stream.
