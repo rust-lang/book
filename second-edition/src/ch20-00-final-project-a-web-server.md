@@ -13,7 +13,7 @@ To do this, we will:
 
 1. Learn a little bit about TCP and HTTP
 2. Listen for TCP connections on a socket
-3. Parse a tiny bit of HTTP requests
+3. Parse a tiny number of HTTP requests
 4. Create a proper HTTP response
 5. Improve the throughput of our server with a thread pool
 
