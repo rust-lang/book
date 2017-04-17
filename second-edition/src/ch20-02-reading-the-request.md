@@ -1,9 +1,12 @@
 ## Reading the Request
 
-Let's read in the request from our browser! Modify `handle_connection` to read
-data from the `stream` and print it out as shown in Listing 20-3. No changes to
-`main` are needed, but we will need to add the `std::io::prelude` in order to
-bring traits into scope that let us read from and write to the stream:
+Let's read in the request from our browser! Since we're adding more
+functionality that has the purpose of handling the connection, let's start a
+new function to have a nice separation of the concerns around setting up the
+server and connections versus processing each connection. In this new
+`handle_connection` function, we'll read data from the `stream` and print it
+out in order to see the data that the browser is sending us. Change the code to
+look like Listing 20-2:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -12,7 +15,15 @@ use std::io::prelude::*;
 use std::net::TcpListener;
 use std::net::TcpStream;
 
-// ...snip...
+fn main() {
+    let listener = TcpListener::bind("127.0.0.1:8080").unwrap();
+
+    for stream in listener.incoming() {
+        let stream = stream.unwrap();
+
+        handle_connection(stream);
+    }
+}
 
 fn handle_connection(mut stream: TcpStream) {
     let mut buffer = [0; 512];
@@ -23,10 +34,17 @@ fn handle_connection(mut stream: TcpStream) {
 }
 ```
 
-<span class="caption">Listing 20-3: Reading from the `TcpStream`</span>
+<span class="caption">Listing 20-2: Reading from the `TcpStream` and printing
+out the data</span>
 
-In `handle_connection`, we had to make `stream` mutable with the `mut` keyword.
-We're going to be reading data from the stream, so it's going to get modified.
+We added `std::io::prelude` to the beginning in order to bring traits into
+scope that let us read from and write to the stream. Instead of printing a
+message that we got a connection in the `for` loop in `main`, we're calling the
+new `handle_connection` function and passing the `stream` to it.
+
+In `handle_connection`, we made the `stream` parameter mutable with the `mut`
+keyword. We're going to be reading data from the stream, so it's going to get
+modified.
 
 Next, we need to actually read from the stream; we do this in two steps. First,
 we declare a `buffer` on the stack; we've made it 512 bytes. Why 512? It's big

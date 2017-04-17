@@ -115,38 +115,3 @@ gotten a handle on a TCP connection!
 Remember to stop the program with `CTRL-C` when you're done running a
 particular version of the code, and restart `cargo run` after you've made each
 set of code changes in order to be running the newest code.
-
-In order to keep our code clean, let's move the code processing the connection
-out to a function. We're about to add more code to actually process a
-connection rather than only printing out a message, so we'll make a function to
-contain the code for this purpose. Modify your code to look like Listing 20-2,
-which starts a `handle_connection` function:
-
-<span class="filename">Filename: src/main.rs</span>
-
-```rust,no_run
-use std::net::TcpListener;
-use std::net::TcpStream;
-
-fn main() {
-    let listener = TcpListener::bind("127.0.0.1:8080").unwrap();
-
-    for stream in listener.incoming() {
-        let stream = stream.unwrap();
-
-        handle_connection(stream);
-    }
-}
-
-fn handle_connection(stream: TcpStream) {
-    println!("Connection established!");
-}
-```
-
-<span class="caption">Listing 20-2: Extracting a `handle_connection`
-function</span>
-
-This should have no effect on the behavior of the program; this was just a
-small refactoring to set up a nice separation of concerns. Now we can
-concentrate on handling the `TcpStream` in `handle_connection` and not worry
-about all of the setup code that we'll leave in `main`.
