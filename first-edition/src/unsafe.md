@@ -139,4 +139,4 @@ I’ll repeat again: even though you _can_ do arbitrary things in unsafe blocks
 and functions doesn’t mean you should. The compiler will act as though you’re
 upholding its invariants, so be careful!
 
-[intrinsics]: ../../unstable-book/intrinsics.html
+[intrinsics]: ../../unstable-book/language-features/intrinsics.html
