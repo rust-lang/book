@@ -10,7 +10,7 @@ look like Listing 20-2:
 
 <span class="filename">Filename: src/main.rs</span>
 
-```rust
+```rust,no_run
 use std::io::prelude::*;
 use std::net::TcpListener;
 use std::net::TcpStream;
@@ -46,19 +46,25 @@ In `handle_connection`, we made the `stream` parameter mutable with the `mut`
 keyword. We're going to be reading data from the stream, so it's going to get
 modified.
 
-Next, we need to actually read from the stream; we do this in two steps. First,
-we declare a `buffer` on the stack; we've made it 512 bytes. Why 512? It's big
-enough to get a basic request, but not super huge. If we wanted to handle
-requests of an arbitrary size, this would need to be more complicated, but
-we're keeping it simple for now! We then pass that buffer to `stream.read`.
-This will read bytes from the `TcpStream` and put them in the buffer.
+Next, we need to actually read from the stream. We do this in two steps: first,
+we declare a `buffer` on the stack to hold the data that we read in. We've made
+the buffer 512 bytes in size, which is big enough to hold the data of a basic
+request. That's sufficient for our purposes in this chapter. If we wanted to
+handle requests of an arbitrary size, managing the buffer would need to be more
+complicated, but we're keeping it simple for now. We then pass the buffer to
+`stream.read`, which will read bytes from the `TcpStream` and put them in the
+buffer.
 
-Next, we print that stream out. The `String::from_utf8_lossy` function takes a
-`&[u8]` and produce a `String`. The 'lossy' part of its name comes from its
-behavior when it sees invalid UTF-8 sequences; it replaces them with �, `U+FFFD
-REPLACEMENT CHARACTER`.
+Next, we convert the bytes in the buffer to a string and print out that string.
+The `String::from_utf8_lossy` function takes a `&[u8]` and produces a `String`.
+The 'lossy' part of the name comes from the behavior when this function sees
+invalid UTF-8 sequences: it replaces the invalid sequences with �, `U+FFFD
+REPLACEMENT CHARACTER`. You might see the replacement characters for remaining
+characters in the buffer that aren't filled by request data.
 
-Let's give this a try!
+Let's give this a try! Start up the program and make a request in a web browser
+again. Note that we'll still get an error page in the browser, but the output
+of our program in the terminal will now look similar to this:
 
 ```text
 $ cargo run
@@ -77,40 +83,53 @@ Upgrade-Insecure-Requests: 1
 ������������������������������������
 ```
 
-You'll probably get slightly different output depending on your browser! You
-also might see this request repeated; if so, we can definitively tell that the
-reason we have multiple connections is because the browser is trying to fetch
-`/` repeatedly.
+You'll probably get slightly different output depending on your browser. You
+also might see this request repeated again. Now that we're printing out the
+request data, we can see why we're getting multiple connections from one
+browser request by looking at the path after `Request: GET`. If the repeated
+connections are all requesting `/`, we know the browser is trying to fetch `/`
+repeatedly since it's not getting a response from us.
 
-Let's break this request data down. HTTP is a text-based protocol, and a
-request looks like this:
-
-```text
-Request-Line headers CRLF message-body
-```
-
-First there's a 'request line'. Then, any headers. Next, a CRLF sequence, and
-then, the body of the message. A request line looks like this:
+Let's break down this request data to understand what the browser is asking of
+us. HTTP is a text-based protocol, and a request takes this format:
 
 ```text
-Request-Line = Method Request-URI HTTP-Version CRLF
+Method Request-URI HTTP-Version CRLF
+headers CRLF
+message-body
 ```
 
-First, we have a method, like `GET` or `POST`. Then, the request's URI, which
-is a term the HTTP spec uses. You have probably heard of a 'URL'. All URLs are
-URIs, but not all URIs are URLs. Since this isn't a book about the HTTP
-specification, given this fact, we can just think "URL" when we see "URI" and
-move on. Next, we have the HTTP version, and then a CRLF sequence. That's
-`\r\n` is the CRLF sequence; `\r` is a "carriage return" and `\n` is a "line
-feed"; these terms come from the typewriter days!
+The first line is called the *request line*, and it holds information about
+what the client is requesting. The first part of the request line is a
+*method*, like `GET` or `POST`, that describes how the client is making this
+request.
 
-If we apply this to our request:
+Then comes the request's *URI*, which stands for *Uniform Resource Identifier*.
+URIs are almost, but not quite the same as URLs (*Uniform Resource Locators*),
+which is what we typically call the addresses that we enter into a web browser.
+The HTTP spec uses the term URI, and the difference between URIs and URLs isn't
+important for our purposes of this chapter, so we can just mentally substitute
+URL for URI here.
+
+Next, we have the HTTP version that the client used, and then the request line
+ends in a CRLF sequence. The CRLF sequence can also be written as `\r\n`: `\r`
+is a *carriage return* and `\n` is a *line feed*. These terms come from the
+typewriter days! The CRLF sequence separates the request line from the rest of
+the request data.
+
+Taking a look at the request line data we saw printed out by our code:
 
 ```text
 GET / HTTP/1.1
-Host: 127.0.0.1:8080
-<more headers>
 ```
 
-`GET` is our method, `/` is our Request URI, and `HTTP/1.1` is our version. All
-the stuff from `Host` and after are headers. `GET` requests have no body. Neat!
+`GET` is the method, `/` is the Request URI, and `HTTP/1.1` is the version.
+
+The remaining lines starting from `Host:` onward are headers; `GET` requests
+have no body.
+
+Try making a request from a different browser, or asking for a different
+address like `127.0.0.1:8080/test` to see how the request data changes, if
+you'd like.
+
+Now that we know what the browser is asking for, let's send some data back!
