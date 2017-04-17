@@ -50,15 +50,15 @@ a byte string, created with `b""`, to make `get` a byte string too. Then, we
 take a slice of the `buffer` that's the same length as `get` and compare the
 slice to `get`. If they're identical, we've gotten a well-formed request to
 `/`, which is the success case that we want to handle in the `if` block. The
-`if` block contains the code we added in Listing 20-5 that returns the HTML
-file.
+`if` block contains the code we added in Listing 20-5 that returns the contents
+of our HTML file.
 
 If `get` and the slice of `buffer` don't match, we've gotten some other
 request. We'll respond to all other requests using the code we're about to add
 in the `else` block.
 
-If you run this code and request `127.0.0.1:8080`, you'll get the HTML from the
-file. If you make any other request, such as `127.0.0.1:8080/something-else`,
+If you run this code and request `127.0.0.1:8080`, you'll get the HTML that's in
+*hello.html*. If you make any other request, such as `127.0.0.1:8080/something-else`,
 you'll get a connection error like we saw when running the code in Listing 20-1
 and Listing 20-2.
 
@@ -122,7 +122,7 @@ with any `404` response</span>
 
 With these changes, try running your server again. Requesting `127.0.0.1:8080`
 should return the contents of *hello.html*, and any other request, like
-`127.0.0.1:8080/foo`, should return the error HTML!
+`127.0.0.1:8080/foo`, should return the error HTML from *404.html*!
 
 There's a lot of repetition between the code in the `if` and the `else` blocks:
 they're both reading files and writing the contents of the files to the stream.
