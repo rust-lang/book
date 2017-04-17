@@ -65,9 +65,9 @@ an HTTP request and response.
 
 ### Returning Real HTML
 
-Let's return more than a blank page. Create a new file, `hello.html`, in the
+Let's return more than a blank page. Create a new file, *hello.html*, in the
 root of your project directory, that is, not in the `src` directory. You can
-put any HTML you want in it. Listing 20-4 shows what the authors used for
+put any HTML you want in it; Listing 20-4 shows what the authors used for
 theirs:
 
 <span class="filename">Filename: hello.html</span>
@@ -93,6 +93,8 @@ This is a minimal HTML 5 document with a heading and a little paragraph. Let's
 modify `handle_connection` as shown in Listing 20-5 to read the HTML file, add
 it to the response as a body, and send it:
 
+<span class="filename">Filename: src/main.rs</span>
+
 ```rust
 # use std::io::prelude::*;
 # use std::net::TcpStream;
@@ -115,6 +117,9 @@ fn handle_connection(mut stream: TcpStream) {
     stream.flush().unwrap();
 }
 ```
+
+<span class="caption">Listing 20-5: Sending the contents of *hello.html* as the
+body of the response</span>
 
 We've added a line at the top to bring the standard library's `File` into
 scope, and the file opening and reading code should look familiar since we had
