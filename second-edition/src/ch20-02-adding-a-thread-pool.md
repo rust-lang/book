@@ -1202,7 +1202,7 @@ Let's bump that request count up to five:
 ```
 
 And try hitting `/sleep` and `/` at the same time, as we did before. You
-should see the request for `/` complete before the request for `/seep`;
+should see the request for `/` complete before the request for `/sleep`;
 we're doing our processing in the background, and not processing requests
 sequentially any more!
 

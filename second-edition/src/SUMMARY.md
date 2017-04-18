@@ -112,11 +112,8 @@
     - [Advanced Functions & Closures](ch19-05-advanced-functions-and-closures.md)
 
 - [Final Project: Building a Multithreaded Web Server](ch20-00-final-project-a-web-server.md)
-    - [Accepting a TCP Connection](ch20-01-accepting-a-tcp-connection.md)
-    - [Reading the Request](ch20-02-reading-the-request.md)
-    - [Writing a Response](ch20-03-writing-a-response.md)
-    - [Validating the Request](ch20-04-validating-the-request.md)
-    - [Adding a Thread Pool](ch20-05-adding-a-thread-pool.md)
+    - [A Single Threaded Web Server](ch20-01-single-threaded.md)
+    - [Adding a Thread Pool](ch20-02-adding-a-thread-pool.md)
 
 - [Appendix](appendix-00.md)
     - [A - Keywords](appendix-01-keywords.md)
