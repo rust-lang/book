@@ -29,6 +29,8 @@ acronym for "Globally search a Regular Expression and Print." In the simplest
 use case, `grep` searches a specified file for a specified string using the
 following steps:
 
+<!-- maybe put some emphasis on the G/R/E/P in the acronym explanation? -->
+
 - Take as arguments a filename and a string.
 - Read the file.
 - Find lines in the file that contain the string argument.
