@@ -114,7 +114,9 @@
 - [Final Project: Building a Multithreaded Web Server](ch20-00-final-project-a-web-server.md)
     - [A Single Threaded Web Server](ch20-01-single-threaded.md)
     - [How Slow Requests Affect Throughput](ch20-02-slow-requests.md)
-    - [Adding a Thread Pool](ch20-03-adding-a-thread-pool.md)
+    - [Designing the Thread Pool Interface](ch20-03-designing-the-interface.md)
+    - [Storing Threads in the Pool](ch20-04-storing-threads.md)
+    - [Adding a Thread Pool](ch20-05-adding-a-thread-pool.md)
 
 - [Appendix](appendix-00.md)
     - [A - Keywords](appendix-01-keywords.md)
