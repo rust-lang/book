@@ -5,6 +5,9 @@ elements we're introducing -- are we going to cover things like environment
 variables more in later chapters, or is this the only place we explain how to
 use them? -->
 
+<!-- as long as the topics only introduced here are in the table of contents,
+that should be good enough? -->
+
 <!-- This is the only place we were planning on explaining both environment
 variables and printing to standard error. These are things that people commonly
 want to know how to do in Rust, but there's not much more than what we've said
