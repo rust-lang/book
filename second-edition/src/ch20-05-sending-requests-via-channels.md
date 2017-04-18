@@ -99,7 +99,7 @@ If we try to compile this, we get this error:
 
 ```text
 $ cargo check
-   Compiling hello v0.1.0 (file:///projects/hello/src/hello)
+   Compiling hello v0.1.0 (file:///projects/hello)
 error[E0382]: use of moved value: `job_receiver`
   --> src\main.rs:82:48
    |
@@ -225,7 +225,7 @@ Here's the error we'll get if we try to compile the above code:
 
 ```text
 $ cargo check
-   Compiling hello v0.1.0 (file:///projects/hello/src/hello)
+   Compiling hello v0.1.0 (file:///projects/hello)
 error: no method named `job` found for type `Job` in the current scope
   --> src\main.rs:69:21
    |
@@ -255,7 +255,7 @@ error:
 
 ```text
 $ cargo check
-   Compiling hello v0.1.0 (file:///projects/hello/src/hello)
+   Compiling hello v0.1.0 (file:///projects/hello)
 error[E0161]: cannot move a value of type std::ops::FnOnce() +
 std::marker::Send + 'static: the size of std::ops::FnOnce() + std::marker::Send
 + 'static cannot be statically determined
@@ -339,7 +339,7 @@ and make some requests:
 
 ```text
 $ cargo run
-   Compiling hello v0.1.0 (file:///projects/hello/src/hello)
+   Compiling hello v0.1.0 (file:///projects/hello)
 warning: field is never used: `threads`, #[warn(dead_code)] on by default
   --> src\main.rs:50:5
    |

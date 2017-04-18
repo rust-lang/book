@@ -26,7 +26,7 @@ Here's the error we get:
 
 ```text
 $ cargo run
-   Compiling hello v0.1.0 (file:///projects/hello/src/hello)
+   Compiling hello v0.1.0 (file:///projects/hello)
 error[E0507]: cannot move out of borrowed content
    --> src\main.rs:129:13
     |
@@ -52,7 +52,7 @@ And then let the compiler tell us about anything we need to fix:
 
 ```text
 $ cargo check
-   Compiling hello v0.1.0 (file:///projects/hello/src/hello)
+   Compiling hello v0.1.0 (file:///projects/hello)
 error[E0308]: mismatched types
   --> src\main.rs:87:21
    |
@@ -252,7 +252,7 @@ your terminal. You'll see something like this:
 
 ```text
 $ cargo run
-   Compiling hello v0.1.0 (file:///projects/hello/src/hello)
+   Compiling hello v0.1.0 (file:///projects/hello)
     Finished dev [unoptimized + debuginfo] target(s) in 1.0 secs
      Running `target\debug\hello.exe`
 Worker 0 got a job; executing.

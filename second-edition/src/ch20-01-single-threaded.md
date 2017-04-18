@@ -191,7 +191,7 @@ of our program in the terminal will now look similar to this:
 
 ```text
 $ cargo run
-   Compiling hello v0.1.0 (file:///projects/hello/src/hello)
+   Compiling hello v0.1.0 (file:///projects/hello)
     Finished dev [unoptimized + debuginfo] target(s) in 0.42 secs
      Running `target/debug/hello`
 Request: GET / HTTP/1.1

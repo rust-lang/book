@@ -89,7 +89,7 @@ development. Here's the first error we get:
 
 ```text
 $ cargo check
-   Compiling hello v0.1.0 (file:///projects/hello/src/hello)
+   Compiling hello v0.1.0 (file:///projects/hello)
 error[E0433]: failed to resolve. Use of undeclared type or module `ThreadPool`
   --> src\main.rs:10:16
    |
@@ -128,7 +128,7 @@ And try again in order to get the next error that we need to address:
 
 ```text
 $ cargo check
-   Compiling hello v0.1.0 (file:///projects/hello/src/hello)
+   Compiling hello v0.1.0 (file:///projects/hello)
 error: no associated item named `new` found for type `hello::ThreadPool` in the
 current scope
   --> src\main.rs:13:16
@@ -166,7 +166,7 @@ Let's check the code again:
 
 ```text
 $ cargo check
-   Compiling hello v0.1.0 (file:///projects/hello/src/hello)
+   Compiling hello v0.1.0 (file:///projects/hello)
 warning: unused variable: `size`, #[warn(unused_variables)] on by default
  --> src/lib.rs:4:16
   |
@@ -183,7 +183,7 @@ error: aborting due to previous error
 
 
 $ cargo check
-   Compiling hello v0.1.0 (file:///projects/hello/src/hello)
+   Compiling hello v0.1.0 (file:///projects/hello)
 error[E0061]: this function takes 0 parameters but 1 parameter was supplied
   --> src\main.rs:10:32
    |
@@ -221,7 +221,7 @@ And check again:
 
 ```text
 $ cargo check
-   Compiling hello v0.1.0 (file:///projects/hello/src/hello)
+   Compiling hello v0.1.0 (file:///projects/hello)
 error: no method named `execute` found for type `()` in the current scope
   --> src\main.rs:15:14
    |
@@ -252,7 +252,7 @@ Let's check again:
 
 ```text
 $ cargo check
-   Compiling hello v0.1.0 (file:///projects/hello/src/hello)
+   Compiling hello v0.1.0 (file:///projects/hello)
 error[E0061]: this function takes 0 parameters but 1 parameter was supplied
   --> src\main.rs:15:22
    |
@@ -303,7 +303,7 @@ Let's check again:
 
 ```text
 $ cargo check
-   Compiling hello v0.1.0 (file:///projects/hello/src/hello)
+   Compiling hello v0.1.0 (file:///projects/hello)
 warning: unused import: `std::thread`, #[warn(unused_imports)] on by default
  --> src\main.rs:5:5
   |
