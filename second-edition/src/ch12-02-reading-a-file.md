@@ -78,7 +78,7 @@ mutable, empty `String`. This will hold the content of the file after we read
 it in. Third, we call `read_to_string` on our file handle and pass a mutable
 reference to `contents` as an argument.
 
-After those lines, we've again added temporary `println!` that prints out the
+After those lines, we've again added a temporary `println!` that prints out the
 value in `contents` after we've read the file so we can check that our program
 is working so far.
 
