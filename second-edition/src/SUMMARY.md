@@ -116,7 +116,8 @@
     - [How Slow Requests Affect Throughput](ch20-02-slow-requests.md)
     - [Designing the Thread Pool Interface](ch20-03-designing-the-interface.md)
     - [Storing Threads in the Pool](ch20-04-storing-threads.md)
-    - [Adding a Thread Pool](ch20-05-adding-a-thread-pool.md)
+    - [Sending Requests to Threads Via Channels](ch20-05-sending-requests-via-channels.md)
+    - [Graceful Shutdown and Cleanup](ch20-06-graceful-shutdown-and-cleanup.md)
 
 - [Appendix](appendix-00.md)
     - [A - Keywords](appendix-01-keywords.md)
