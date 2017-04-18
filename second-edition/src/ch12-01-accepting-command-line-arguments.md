@@ -36,6 +36,8 @@ to know two things about iterators:
 2. We can call the `collect` function on an iterator to turn it into a vector
    containing all of the elements the iterator produces.
 
+<!-- good summary of the iterator! -->
+
 Let's give it a try: use the code in Listing 12-1 to read any command line
 arguments passed to our `greprs` program and collect them into a vector.
 
