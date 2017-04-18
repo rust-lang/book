@@ -40,6 +40,11 @@ We'll also show how to use environment variables and print to standard error
 instead of standard out; these techniques are commonly used in command line
 tools.
 
+<!-- not to take anything away from what anyone has done, but it feels a bit
+awkward calling out a specific tool by name right here...if you wanted to
+mention another implementation, i'd have expected to hear about the first one
+instead -->
+
 One Rust community member, Andrew Gallant, has already created a
 fully-featured, very fast version of `grep`, called `ripgrep`. By comparison,
 our version of `grep` will be fairly simple, this chapter will give you some of
