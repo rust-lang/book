@@ -588,6 +588,6 @@ Awesome! We have a simple little web server in about 40 lines of Rust code that
 responds to one request with a page of content and responds to all other
 requests with a `404` response.
 
-So far, this project has been relatively straightforward as far as Rust code
-goes; we haven't done much of the more advanced things yet. Let's kick it up a
-notch and add a feature to our web server: a thread pool.
+Since this server runs in a single thread, though, it can only serve one
+request at a time. Let's see how that can be a problem by simulating some
+slow requests.
