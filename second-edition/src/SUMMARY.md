@@ -113,7 +113,8 @@
 
 - [Final Project: Building a Multithreaded Web Server](ch20-00-final-project-a-web-server.md)
     - [A Single Threaded Web Server](ch20-01-single-threaded.md)
-    - [Adding a Thread Pool](ch20-02-adding-a-thread-pool.md)
+    - [How Slow Requests Affect Throughput](ch20-02-slow-requests.md)
+    - [Adding a Thread Pool](ch20-03-adding-a-thread-pool.md)
 
 - [Appendix](appendix-00.md)
     - [A - Keywords](appendix-01-keywords.md)
