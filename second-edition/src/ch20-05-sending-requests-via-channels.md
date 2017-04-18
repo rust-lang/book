@@ -1,74 +1,126 @@
 ## Sending Requests to Threads Via Channels
 
-The next problem to tackle is that our closures do absolutely nothing. This
-raises the question: what should they do? We get the actual closure we want to
-execute in the `execute` method, but we need to know it here.
+The next problem to tackle is that our closures do absolutely nothing. We've
+been working around the problem that we get the actual closure we want to
+execute in the `execute` method, but it feels like we need to know the actual
+closures when we create the `ThreadPool`.
 
-Or do we? This closure is the behavior of the *worker*, not of the work it
-does. And as we said above, our workers are going to attempt to fetch jobs off
-of a queue that the `ThreadPool` holds. We have none of that infrastructure yet.
+Let's think about what we really want to do though: we want the `Worker`
+structs that we just created to fetch jobs from a queue that the `ThreadPool`
+holds, and run those jobs in a thread.
 
 In Chapter 16, we learned about channels. Channels are a great way to
-communicate between two threads, and they're perfect with our use-case. Here's
-the plan of attack:
+communicate between two threads, and they're perfect for this use-case. The
+channel will function as the queue of jobs, and `execute` will send a job from
+the `ThreadPool` to the `Worker` instances that are checking for jobs in the
+thread they've spawned. Here's the plan:
 
-1. `ThreadPool` will hold on to a sending side of a channel.
-2. Each `Worker` will hold on to a receiving side.
-3. The `execute` method of `ThreadPool` will then send the closure it wants
+1. `ThreadPool` will create a channel and hold on to the sending side.
+2. Each `Worker` will hold on to the receiving side of the channel.
+3. A new `Job` struct will hold the closures we want to send down the channel.
+4. The `execute` method of `ThreadPool` will send the job it wants
    to execute down the sending side of the channel.
-4. The `Worker` will loop over its receiving side, and when it gets a job,
-   execute it.
+5. In a thread, the `Worker` will loop over its receiving side of the channel
+   and execute the closures of any jobs it receives.
 
-Once we get all of this working, we should be in a good place!
+Let's start by creating a channel in `ThreadPool::new` and holding the sending
+side in the `ThreadPool` instance, as shown in Listing 20-16. `Job` is the type
+of item we're going to be sending down the channel; it's a struct that doesn't
+hold anything for now:
 
-Let's start by adding the sending side to `ThreadPool`:
+<span class="filename">Filename: src/lib.rs</span>
 
-```rust,ignore
-// add this import at the top:
+```rust
+# use std::thread;
+// ...snip...
 use std::sync::mpsc;
 
-// and then modify this code below:
-struct ThreadPool {
-    threads: Vec<Worker>,
+pub struct ThreadPool {
+    workers: Vec<Worker>,
     sender: mpsc::Sender<Job>,
 }
 
 struct Job;
 
 impl ThreadPool {
-    fn new(size: usize) -> ThreadPool {
+    // ...snip...
+    pub fn new(size: usize) -> ThreadPool {
         assert!(size > 0);
 
         let (job_sender, job_receiver) = mpsc::channel::<Job>();
 
-        let mut threads = Vec::with_capacity(size);
+        let mut workers = Vec::with_capacity(size);
 
-        for i in 0..size {
-            threads.push(Worker::new(i as u32));
+        for id in 0..size {
+            workers.push(Worker::new(id));
         }
 
         ThreadPool {
-            threads: threads,
+            workers: workers,
             sender: job_sender,
         }
     }
+    // ...snip...
+}
+#
+# struct Worker {
+#     id: usize,
+#     thread: thread::JoinHandle<()>,
+# }
+#
+# impl Worker {
+#     fn new(id: usize) -> Worker {
+#         let thread = thread::spawn(|| { });
+#
+#         Worker {
+#             id: id,
+#             thread: thread,
+#         }
+#     }
+# }
 ```
 
-We've introduced a new structure, `Job`, to represent each job we want to
-execute. We have our `ThreadPool` hold onto an `mpsc::Sender`, which if you
-recall is the type of a sending end of a channel. In `ThreadPool::new`, we
-create our new channel, and then have the pool hang on to the sending end.
+<span class="caption">Listing 20-16: Modifying `ThreadPool` to store the
+sending end of a channel that sends `Job` instances</span>
 
-If you compile this, it will successfully compile, but still have warnings.
-This code doesn't do the right thing yet, but it gets past the compiler. Let's
-try passing the receiving end into our workers. This won't compile yet:
+In `ThreadPool::new`, we create our new channel, and then have the pool hang on
+to the sending end. This will successfully compile, still with warnings.
+
+Let's try passing a receiving end of the channel into each worker when the
+thread pool creates them. We know we want to use the receiving end of the
+channel in the thread that the workers spawn, so we're going to reference the
+`job_receiver` parameter in the closure. The code shown here in Listing 20-17
+won't quite compile yet:
+
+<span class="filename">Filename: src/lib.rs</span>
 
 ```rust,ignore
+impl ThreadPool {
+    // ...snip...
+    pub fn new(size: usize) -> ThreadPool {
+        assert!(size > 0);
+
+        let (job_sender, job_receiver) = mpsc::channel::<Job>();
+
+        let mut workers = Vec::with_capacity(size);
+
+        for id in 0..size {
+            workers.push(Worker::new(id, job_receiver));
+        }
+
+        ThreadPool {
+            workers: workers,
+            sender: job_sender,
+        }
+    }
+    // ...snip...
+}
+
+// ...snip...
+
 impl Worker {
-    fn new(id: u32, job_receiver: mpsc::Receiver<Job>) -> Worker {
-        let thread = thread::spawn(||{
-            // we want to use receiver in the closure, let's just
-            // reference it for now
+    fn new(id: usize, job_receiver: mpsc::Receiver<Job>) -> Worker {
+        let thread = thread::spawn(|| {
             job_receiver;
         });
 
@@ -78,135 +130,188 @@ impl Worker {
         }
     }
 }
-
-impl ThreadPool {
-    fn new(size: usize) -> ThreadPool {
-        assert!(size > 0);
-
-        let (job_sender, job_receiver) = mpsc::channel::<Job>();
-
-        let mut threads = Vec::with_capacity(size);
-
-        for i in 0..size {
-            threads.push(Worker::new(i as u32, job_receiver));
-        }
 ```
+
+<span class="caption">Listing 20-17: Passing the receiving end of the channel
+to the workers</span>
 
 These are small and straightforward changes: we pass in the receiving end of
 the channel into `Worker::new`, and then we use it inside of the closure.
 
-If we try to compile this, we get this error:
+If we try to check this, we get this error:
 
 ```text
 $ cargo check
    Compiling hello v0.1.0 (file:///projects/hello)
 error[E0382]: use of moved value: `job_receiver`
-  --> src\main.rs:82:48
+  --> src/lib.rs:27:42
    |
-82 |             threads.push(Worker::new(i as u32, job_receiver));
-   |                                                ^^^^^^^^^^^^ value moved
-   here in previous iteration of loop
+27 |             workers.push(Worker::new(id, job_receiver));
+   |                                          ^^^^^^^^^^^^ value moved here in
+   previous iteration of loop
    |
    = note: move occurs because `job_receiver` has type
    `std::sync::mpsc::Receiver<Job>`, which does not implement the `Copy` trait
-
-error: aborting due to previous error
 ```
 
-This won't quite work: we are trying to pass `job_receiver` to multiple
-`Worker`s, but that won't work. We instead need to share the single receiver
+The code as written won't quite work since it's trying to pass `job_receiver`
+to multiple `Worker` instances. We instead need to share the single receiver
 between all of our workers. If you remember Chapter 16, you'll know the answer:
-`Arc<Mutex<T>>` to the rescue! Here's the changes:
+`Arc<Mutex<T>>` to the rescue! The `Arc` will let multiple workers own the
+receiver, and the `Mutex` will make sure that only one worker is getting a job
+from the receiver at a time. Listing 20-18 shows the changes we need to make:
 
-```rust,ignore
-// add these imports to the top
+<span class="filename">Filename: src/lib.rs</span>
+
+```rust
+# use std::thread;
+# use std::sync::mpsc;
+// ...snip...
 use std::sync::Arc;
 use std::sync::Mutex;
 
-// and then change this code
-impl Worker {
-    fn new(id: u32, job_receiver: Arc<Mutex<mpsc::Receiver<Job>>>) -> Worker {
-        let thread = thread::spawn(||{
-            // we want to use the receiver in the closure
-            job_receiver;
-        });
+// ...snip...
 
-        Worker {
-            id: id,
-            thread: thread,
-        }
-    }
-}
-
+# pub struct ThreadPool {
+#     workers: Vec<Worker>,
+#     sender: mpsc::Sender<Job>,
+# }
+# struct Job;
+#
 impl ThreadPool {
-    fn new(size: usize) -> ThreadPool {
+    // ...snip...
+    pub fn new(size: usize) -> ThreadPool {
         assert!(size > 0);
 
         let (job_sender, job_receiver) = mpsc::channel::<Job>();
 
         let job_receiver = Arc::new(Mutex::new(job_receiver));
 
-        let mut threads = Vec::with_capacity(size);
+        let mut workers = Vec::with_capacity(size);
 
-        for i in 0..size {
-            threads.push(Worker::new(i as u32, job_receiver.clone()));
+        for id in 0..size {
+            workers.push(Worker::new(id, job_receiver.clone()));
         }
+
+        ThreadPool {
+            workers: workers,
+            sender: job_sender,
+        }
+    }
+
+    // ...snip...
+}
+# struct Worker {
+#     id: usize,
+#     thread: thread::JoinHandle<()>,
+# }
+#
+impl Worker {
+    fn new(id: usize, job_receiver: Arc<Mutex<mpsc::Receiver<Job>>>) -> Worker {
+        // ...snip...
+#         let thread = thread::spawn(|| {
+#            job_receiver;
+#         });
+#
+#         Worker {
+#             id: id,
+#             thread: thread,
+#         }
+    }
+}
 ```
 
-We now accept an `Arc<Mutex<Receiver>>` in `Worker::new`, and we create one in
-`ThreadPool::new`. Finally, when we call `Worker::new`, we use the `clone`
-method of the `Arc<T>` to bump the reference count for each new `Worker`.
+<span class="caption">Listing 20-18: Sharing the receiving end of the channel
+between the workers by using `Arc` and `Mutex`</span>
+
+In `ThreadPool::new`, we put the receiving end of the channel in an `Arc` and a
+`Mutex`. For each new worker, we clone the `Arc` to bump the reference count so
+the workers can share ownership of the receiving end.
 
 With these changes, things compile! We're getting there!
 
-Let's finally implement the `execute` method. It looks like this:
+Let's finally implement the `execute` method on `ThreadPool`. We're also going
+to change the `Job` struct: instead of being a struct, `Job` is going to be a
+type alias for a trait object that holds the type of closure that `execute`
+receives. We discussed how type aliases can help make long types shorter, and
+this is such a case! Take a look at Listing 20-19:
 
-```rust,ignore
-struct Job {
-    job: Box<FnOnce() + Send + 'static>,
-}
+<span class="filename">Filename: src/lib.rs</span>
+
+```rust
+// ...snip...
+# pub struct ThreadPool {
+#     workers: Vec<Worker>,
+#     sender: mpsc::Sender<Job>,
+# }
+# use std::sync::mpsc;
+# struct Worker {}
+
+type Job = Box<FnOnce() + Send + 'static>;
 
 impl ThreadPool {
-    fn new(size: usize) -> ThreadPool {
-        // no changes here
-    }
+    // ...snip...
 
     fn execute<F>(&self, f: F)
         where
             F: FnOnce() + Send + 'static
     {
-        let job = Job {
-            job: Box::new(f),
-        };
+        let job = Box::new(f);
 
         self.sender.send(job).unwrap();
     }
 }
+
+// ...snip...
 ```
 
-Here, `Job` is now holding a trait object; specifically, a boxed closure. We
-then send that `job` down the sending end of the channel. Sending may fail if
-the receiving end has stopped receiving new messages, which would happen happen
-if we stop all of our threads from executing. Our threads continue executing as
-long as the pool exists, so we use `unwrap` to panic if we get an error here
-for now. As we discussed in Chapter 9, using `unwrap` is perfectly fine while
-prototyping to get the successful case to work, and more appropriate error
-handling can be added in later.
+<span class="caption">Listing 20-19: Creating a `Job` type alias for a `Box`
+that holds each closure, then sending the job down the channel</span>
 
-Now that we've got the sending side working, let's write the logic of the
-worker. Here's a first attempt, but it won't quite work:
+After creating a new `Job` instance using the closure we get in
+`execute`, we send that job down the sending end of the channel. We're calling
+`unwrap` on `send` since sending may fail if the receiving end has stopped
+receiving new messages, which would happen if we stop all of our threads from
+executing. This isn't possible right now, though, since our threads continue
+executing as long as the pool exists. We use `unwrap` since we know the failure
+case won't happen even though the compiler can't tell that, which is an
+appropriate use of `unwrap` as we discussed in Chapter 9.
+
+Are we done yet? Not quite! We've still got a closure that only references the
+receiving end of the channel in the worker, and instead we need the closure to
+loop forever, asking the receiving end of the channel for a job, and running
+the job when it gets one. Let's make the change shown in Listing 20-20 to
+`Worker::new`:
+
+<span class="filename">Filename: src/lib.rs</span>
 
 ```rust,ignore
-let thread = thread::spawn(move ||{
-    loop {
-        let job = job_receiver.lock().unwrap().recv().unwrap();
+// ...snip...
 
-        println!("Worker {} got a job; executing.", id);
+impl Worker {
+    fn new(id: usize, job_receiver: Arc<Mutex<mpsc::Receiver<Job>>>) -> Worker {
+        let thread = thread::spawn(move || {
+            loop {
+                let job = job_receiver.lock().unwrap().recv().unwrap();
 
-        job.job();
+                println!("Worker {} got a job; executing.", id);
+
+                (*job)();
+            }
+        });
+
+        Worker {
+            id: id,
+            thread: thread,
+        }
     }
-});
+}
 ```
+
+<span class="caption">Listing 20-20: Receiving and executing the jobs in the
+worker's thread</span>
+
+TODO: CAROL EDITED UP TO HERE
 
 Here, we first call `lock` on the `job_receiver` to acquire the mutex, then
 `unwrap` to panic on any errors, then `recv` to receive a `Job` from the
