@@ -1201,8 +1201,8 @@ Let's bump that request count up to five:
     if counter == 5 {
 ```
 
-And try hitting `/slow` and `/` at the same time, as we did before. You
-should see the request for `/` complete before the request for `/slow`;
+And try hitting `/sleep` and `/` at the same time, as we did before. You
+should see the request for `/` complete before the request for `/seep`;
 we're doing our processing in the background, and not processing requests
 sequentially any more!
 
