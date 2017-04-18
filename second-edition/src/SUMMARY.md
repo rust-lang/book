@@ -115,7 +115,7 @@
     - [A Single Threaded Web Server](ch20-01-single-threaded.md)
     - [How Slow Requests Affect Throughput](ch20-02-slow-requests.md)
     - [Designing the Thread Pool Interface](ch20-03-designing-the-interface.md)
-    - [Storing Threads in the Pool](ch20-04-storing-threads.md)
+    - [Creating the Thread Pool and Storing Threads](ch20-04-storing-threads.md)
     - [Sending Requests to Threads Via Channels](ch20-05-sending-requests-via-channels.md)
     - [Graceful Shutdown and Cleanup](ch20-06-graceful-shutdown-and-cleanup.md)
 

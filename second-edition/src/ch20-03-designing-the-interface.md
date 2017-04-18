@@ -7,6 +7,8 @@ the way you'd want to call it, then implement the functionality within that
 structure rather than implementing the functionality then desiging the public
 API.
 
+### Code Structure if We Could Use `thread::spawn`
+
 First, let's explore what the code to create a new thread for every connection
 could look like. This isn't our final plan due to the problems with potentially
 spawning an unlimited number of threads that we talked about earlier, but it's
@@ -44,7 +46,9 @@ then `/` in two browser tabs, you'll indeed see the request to `/` doesn't have
 to wait for `/sleep` to finish. But as we mentioned, this will eventually
 overwhelm the system since we're making new threads without any limit.
 
-We'd want our thread pool to work in a similar, familiar way so that switching
+### Creating a Similar Interface for `ThreadPool`
+
+We want our thread pool to work in a similar, familiar way so that switching
 from threads to a thread pool doesn't require large changes to the code we want
 to run in the pool. Listing 20-12 shows the hypothetical interface for a
 `ThreadPool` struct we'd like to use instead of `thread::spawn`:
@@ -83,9 +87,12 @@ fn main() {
 
 We use `ThreadPool::new` to create a new thread pool with a configurable number
 of threads, in this case four. Then, in the `for` loop, `pool.execute` will
-work in a similar way to `thread::spawn`. Go ahead and make the changes in
-Listing 20-12 to *src/main.rs*, and let's use the compiler errors to drive our
-development. Here's the first error we get:
+work in a similar way to `thread::spawn`.
+
+### Compiler Driven Development to Get the API Compiling
+
+Go ahead and make the changes in Listing 20-12 to *src/main.rs*, and let's use
+the compiler errors to drive our development. Here's the first error we get:
 
 ```text
 $ cargo check
@@ -100,12 +107,12 @@ error[E0433]: failed to resolve. Use of undeclared type or module `ThreadPool`
 error: aborting due to previous error
 ```
 
-Great, we need a `ThreadPool`. Let's start a library crate alongside our binary
-crate to hold our `ThreadPool` implementation, since the thread pool
-implementation will be independent of the particular kind of work that we're
-doing in our web server. Once we've got the thread pool library written, we
-could use that functionality to do whatever work we want to do, not just serve
-web requests.
+Great, we need a `ThreadPool`. Let's switch the `hello` crate from a binary
+crate to a library crate to hold our `ThreadPool` implementation, since the
+thread pool implementation will be independent of the particular kind of work
+that we're doing in our web server. Once we've got the thread pool library
+written, we could use that functionality to do whatever work we want to do, not
+just serve web requests.
 
 So create *src/lib.rs* that contains the simplest definition of a `ThreadPool`
 struct that we can have for now:
@@ -116,8 +123,14 @@ struct that we can have for now:
 pub struct ThreadPool;
 ```
 
-Then bring the library crate into the binary crate and bring `ThreadPool` into
-scope by adding this at the top of *src/main.rs*:
+Then create a new directory, *src/bin*, and move the binary crate rooted in
+*src/main.rs* into *src/bin/main.rs*. This will make the library crate be the
+primary crate in the *hello* directory; we can still run the binary in
+*src/bin/main.rs* using `cargo run` though. After moving the *main.rs* file,
+edit it to bring the library crate in and bring `ThreadPool` into scope by
+adding this at the top of *src/bin/main.rs*:
+
+<span class="filename">Filename: src/bin/main.rs</span>
 
 ```rust,ignore
 extern crate hello;
@@ -173,108 +186,22 @@ warning: unused variable: `size`, #[warn(unused_variables)] on by default
 4 |     pub fn new(size: u32) -> ThreadPool {
   |                ^^^^
 
-error: no method named `execute` found for type `hello::ThreadPool` in the current scope
+error: no method named `execute` found for type `hello::ThreadPool` in the
+current scope
   --> src/main.rs:18:14
    |
 18 |         pool.execute(|| {
    |              ^^^^^^^
-
-error: aborting due to previous error
-
-
-$ cargo check
-   Compiling hello v0.1.0 (file:///projects/hello)
-error[E0061]: this function takes 0 parameters but 1 parameter was supplied
-  --> src\main.rs:10:32
-   |
-10 |       let pool = ThreadPool::new(4);
-   |                                  ^ expected 0 parameters
-...
-49 |       fn new() {
-   |  _____- starting here...
-50 | |
-51 | |     }
-   | |_____- ...ending here: defined here
-
-error: no method named `execute` found for type `()` in the current scope
-  --> src\main.rs:15:14
-   |
-15 |         pool.execute(|| {
-   |              ^^^^^^^
-
-error: aborting due to 2 previous errors
 ```
 
-Two errors: we need a parameter for `new`, and a type error. Let's focus on the
-first error for now:
-
-```rust,ignore
-impl ThreadPool {
-    fn new(size: u32) {
-
-    }
-}
-```
-
-
-And check again:
-
-```text
-$ cargo check
-   Compiling hello v0.1.0 (file:///projects/hello)
-error: no method named `execute` found for type `()` in the current scope
-  --> src\main.rs:15:14
-   |
-15 |         pool.execute(|| {
-   |              ^^^^^^^
-
-error: aborting due to previous error
-```
-
-Okay, now we only have the second error. It's slightly obtuse: because `new`
-doesn't return anything, `pool` has the type unit. And unit doesn't have an
-`execute` method. What we actually intended was for `new` to return a
-`ThreadPool`, so let's fix that, and then also add the `execute` method:
-
-```rust,ignore
-impl ThreadPool {
-    fn new(size: u32) -> ThreadPool {
-        ThreadPool
-    }
-
-    fn execute(&self) {
-
-    }
-}
-```
-
-Let's check again:
-
-```text
-$ cargo check
-   Compiling hello v0.1.0 (file:///projects/hello)
-error[E0061]: this function takes 0 parameters but 1 parameter was supplied
-  --> src\main.rs:15:22
-   |
-15 |           pool.execute(|| {
-   |  ______________________^ starting here...
-16 | |             handle_connection(stream);
-17 | |         });
-   | |_________^ ...ending here: expected 0 parameters
-...
-53 |       fn execute(&self) {
-   |  _____- starting here...
-54 | |
-55 | |     }
-   | |_____- ...ending here: defined here
-
-error: aborting due to previous error
-```
-
-We need `execute` to take a closure parameter. If you remember from Chapter 13,
-we can take closures as arguments with three different traits: `Fn`, `FnMut`,
-and `FnOnce`. What kind of closure should we use? Well, we know we're going to
-end up doing something similar to `thread::spawn`; what bounds does it have?
+Okay, a warning and an error. Ignoring the warning for a moment, the error is
+because we don't have an `execute` method on `ThreadPool`. Let's define one,
+and we need it to take a closure. If you remember from Chapter 13, we can take
+closures as arguments with three different traits: `Fn`, `FnMut`, and `FnOnce`.
+What kind of closure should we use? Well, we know we're going to end up doing
+something similar to `thread::spawn`; what bounds does the signature of
+`thread::spawn` have on its argument? Let's look at the documentation, which
+says:
 
 ```rust,ignore
 pub fn spawn<F, T>(f: F) -> JoinHandle<T>
@@ -283,89 +210,62 @@ pub fn spawn<F, T>(f: F) -> JoinHandle<T>
         T: Send + 'static
 ```
 
-`F` is the parameter we care about here; not `T`. Given that `spawn` uses
-`FnOnce`, it's probably what we want as well, given that we're eventually
-passing something to `spawn`. In addition, we have a `Send` and `'static`
-bound, which also makes sense: we need `Send` to transfer something from one
-thread to another, and `'static` because we don't know how long the thread will
-execute. Let's modify `execute` to have these bounds:
+`F` is the parameter we care about here; `T` is related to the return value and
+we're not concerned with that. Given that `spawn` uses `FnOnce` as the trait
+bound on `F`, it's probably what we want as well, given that we'll eventually
+be passing the argument we get in `execute` to `spawn`.
 
-```rust,ignore
-fn execute<F>(&self, f: F)
-    where
-        F: FnOnce() + Send + 'static
-{
+`F` also has the trait bound `Send` and the lifetime bound `'static`, which
+also make sense for our situation: we need `Send` to transfer the closure from
+one thread to another, and `'static` because we don't know how long the thread
+will execute. Let's create an `execute` method on `ThreadPool` that will take a
+generic parameter `F` with these bounds:
 
+<span class="filename">Filename: src/lib.rs</span>
+
+```rust
+# pub struct ThreadPool;
+impl ThreadPool {
+    // ...snip...
+
+    pub fn execute<F>(&self, f: F)
+        where
+            F: FnOnce() + Send + 'static
+    {
+
+    }
 }
 ```
 
-Let's check again:
+Again, since we're working on getting the interface compiling, we're adding the
+simplest implementation of the `execute` method, which does nothing. Let's
+check again:
 
 ```text
 $ cargo check
    Compiling hello v0.1.0 (file:///projects/hello)
-warning: unused import: `std::thread`, #[warn(unused_imports)] on by default
- --> src\main.rs:5:5
-  |
-5 | use std::thread;
-  |     ^^^^^^^^^^^
-
 warning: unused variable: `size`, #[warn(unused_variables)] on by default
-  --> src\main.rs:49:12
-   |
-49 |     fn new(size: usize) -> ThreadPool {
-   |            ^^^^
+ --> src/lib.rs:4:16
+  |
+4 |     pub fn new(size: u32) -> ThreadPool {
+  |                ^^^^
 
 warning: unused variable: `f`, #[warn(unused_variables)] on by default
-  --> src\main.rs:53:26
-   |
-53 |     fn execute<F>(&self, f: F)
-   |                          ^
+ --> src/lib.rs:8:30
+  |
+8 |     pub fn execute<F>(&self, f: F)
+  |                              ^
 ```
 
-It compiles!
+Only warnings now! It compiles! Note that if you try `cargo run` and making a
+request in the browser, though, you'll see the errors in the browser again that
+we saw in the beginning of the chapter. Our library isn't actually calling the
+closure passed to `execute` yet!
 
-> This is a good time to remember that while "if it compiles, it works" is
-> often true of Rust code, it's not universal. Our project compiles, but does
-> absolutely nothing! If we were building something real, this would be a great
-> time to start writing unit tests.
-
-We do have some warnings; we're no longer using `std::thread`, and we aren't
-doing anything with our arguments. Let's implement both of these methods on our
-`ThreadPool`.
-
-To start, let's think about `new`. The first thing that matters is something we
-said above: a pool with a negative number of threads makes no sense. However, a
-pool with zero threads also makes no sense, yet zero is a perfectly valid
-`u32`. Let's check that our number is greater than zero:
-
-```rust,ignore
-/// Create a new ThreadPool.
-///
-/// The size is the number of threads in the pool.
-///
-/// # Panics
-///
-/// The `new` function will panic if the size is zero.
-fn new(size: u32) -> ThreadPool {
-    assert!(size > 0);
-
-    ThreadPool
-}
-```
-
-We've added some documentation for our `ThreadPool` with doc comments. Careful
-observers will note we called out the situations in which our function can
-panic as well; see Chapter 14 for more details on writing good documentation.
-
-We've also added in an `assert!` to check the validity of `Size`. We could also
-make `new` return a `Result` instead, but it involves a bunch of more code, and
-arguably, passing in a zero is incoherent, and therefore deserves to be an
-unrecoverable error rather than a recoverable one. If you're feeling ambitious,
-try to write a version of `new` with this signature:
-
-```rust,ignore
-fn new(size: u32) -> Result<ThreadPool, PoolCreationError> {
-```
-
-See how you feel about both versions.
+> A saying you might hear about languages with strict compilers like Haskell
+> and Rust is "if the code compiles, it works." This is a good time to remember
+> that this is just a phrase and a feeling people sometimes have, it's not
+> actually universally true. Our project compiles, but it does absolutely
+> nothing! If we were building a real, complete project, this would be a great
+> time to start writing unit tests to check that the code compiles *and* has
+> the behavior we want.
