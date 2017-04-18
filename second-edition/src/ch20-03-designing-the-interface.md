@@ -137,7 +137,7 @@ through compiler errors.
 And check again:
 
 ```text
-> cargo check
+$ cargo check
    Compiling hello v0.1.0 (file:///projects/hello/src/hello)
 error: no method named `execute` found for type `()` in the current scope
   --> src\main.rs:15:14
@@ -168,7 +168,7 @@ impl ThreadPool {
 Let's check again:
 
 ```text
-> cargo check
+$ cargo check
    Compiling hello v0.1.0 (file:///projects/hello/src/hello)
 error[E0061]: this function takes 0 parameters but 1 parameter was supplied
   --> src\main.rs:15:22
@@ -219,7 +219,7 @@ fn execute<F>(&self, f: F)
 Let's check again:
 
 ```text
-> cargo check
+$ cargo check
    Compiling hello v0.1.0 (file:///projects/hello/src/hello)
 warning: unused import: `std::thread`, #[warn(unused_imports)] on by default
  --> src\main.rs:5:5

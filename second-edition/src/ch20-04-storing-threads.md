@@ -45,7 +45,7 @@ impl ThreadPool {
 We get an error:
 
 ```text
-> cargo check
+$ cargo check
    Compiling hello v0.1.0 (file:///projects/hello/src/hello)
 error[E0308]: mismatched types
   --> src\main.rs:70:46

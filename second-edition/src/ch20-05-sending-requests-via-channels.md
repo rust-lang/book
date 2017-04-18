@@ -98,7 +98,7 @@ the channel into `Worker::new`, and then we use it inside of the closure.
 If we try to compile this, we get this error:
 
 ```text
-> cargo check
+$ cargo check
    Compiling hello v0.1.0 (file:///projects/hello/src/hello)
 error[E0382]: use of moved value: `job_receiver`
   --> src\main.rs:82:48
@@ -224,7 +224,7 @@ a time tries to request a job.
 Here's the error we'll get if we try to compile the above code:
 
 ```text
-> cargo check
+$ cargo check
    Compiling hello v0.1.0 (file:///projects/hello/src/hello)
 error: no method named `job` found for type `Job` in the current scope
   --> src\main.rs:69:21
@@ -254,7 +254,7 @@ It looks a little funky, but it works. Well, almost. Now we get a different
 error:
 
 ```text
-> cargo check
+$ cargo check
    Compiling hello v0.1.0 (file:///projects/hello/src/hello)
 error[E0161]: cannot move a value of type std::ops::FnOnce() +
 std::marker::Send + 'static: the size of std::ops::FnOnce() + std::marker::Send
@@ -338,7 +338,7 @@ With this trick, our thread pool is in a working state! Give it a `cargo run`,
 and make some requests:
 
 ```text
-> cargo run
+$ cargo run
    Compiling hello v0.1.0 (file:///projects/hello/src/hello)
 warning: field is never used: `threads`, #[warn(dead_code)] on by default
   --> src\main.rs:50:5

@@ -25,7 +25,7 @@ worker's thread. An `unwrap` disregards the errors.
 Here's the error we get:
 
 ```text
-> cargo run
+$ cargo run
    Compiling hello v0.1.0 (file:///projects/hello/src/hello)
 error[E0507]: cannot move out of borrowed content
    --> src\main.rs:129:13
@@ -51,7 +51,7 @@ struct Worker {
 And then let the compiler tell us about anything we need to fix:
 
 ```text
-> cargo check
+$ cargo check
    Compiling hello v0.1.0 (file:///projects/hello/src/hello)
 error[E0308]: mismatched types
   --> src\main.rs:87:21
@@ -251,7 +251,7 @@ And then run it with `cargo run`. Load up the pages a few times, and then check
 your terminal. You'll see something like this:
 
 ```text
-> cargo run
+$ cargo run
    Compiling hello v0.1.0 (file:///projects/hello/src/hello)
     Finished dev [unoptimized + debuginfo] target(s) in 1.0 secs
      Running `target\debug\hello.exe`
