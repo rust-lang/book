@@ -68,6 +68,8 @@ Let's create a new project with, as always, `cargo new`. We're calling our
 project `greprs` to distinguish from the `grep` tool that you may already have
 on your system:
 
+<!-- move the project creation to the next section maybe? -->
+
 ```text
 $ cargo new --bin greprs
      Created binary (application) `greprs` project
