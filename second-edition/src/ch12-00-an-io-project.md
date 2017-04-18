@@ -51,6 +51,8 @@ our version of `grep` will be fairly simple, this chapter will give you some of
 the background knowledge to help you understand a real-world project like
 `ripgrep`.
 
+<!-- if you're sticking with it, best attach a link to `ripgrep`? -->
+
 This project will bring together a number of concepts you've learned so far:
 
 - Organizing code (using what we learned in modules, Chapter 7)
