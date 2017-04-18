@@ -126,9 +126,7 @@ need.
 
 Printing out the value of the vector of arguments just illustrated that we're
 able to access the values specified as command line arguments from our program.
-That's not what we actually want to do, though, we want to save the values of
-the two arguments in variables so that we can use the values in our program.
-Let's do that as shown in Listing 12-2:
+Now we need to save them in variables. Let's do that as shown in Listing 12-2:
 
 <!-- By 'find the ones we care about' did you mean set particular arguments so
 the user knows what to enter? I'm a little confused about what we are doing,
