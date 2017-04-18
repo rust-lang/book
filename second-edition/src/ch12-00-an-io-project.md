@@ -19,8 +19,8 @@ have really enjoyed this chapter. /Carol-->
 
 This chapter is both a recap of the many skills you've learned so far and an
 exploration of a few more standard library features. We're going to build a
-command-line tool that interacts with file and command line input/output to
-practice some of the Rust you now have under your belt.
+command-line tool that performs file and command line input/output to practice
+some of the Rust you now have under your belt.
 
 Rust's speed, safety, 'single binary' output, and cross-platform support make
 it a good language for creating command line tools, so for our project we'll
