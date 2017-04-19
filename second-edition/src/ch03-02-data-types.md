@@ -174,7 +174,7 @@ fn main() {
 ```
 
 The main way to consume boolean values is through conditionals, such as an `if`
-statement. We’ll cover how `if` statements work in Rust in the “Control Flow”
+expression. We’ll cover how `if` expressions work in Rust in the “Control Flow”
 section.
 
 #### The Character Type
