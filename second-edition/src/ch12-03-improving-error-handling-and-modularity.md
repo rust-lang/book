@@ -66,6 +66,9 @@ program's logic by moving it into functions in *lib.rs*. The only code that
 remains in *main.rs* will be small enough to verify its correctness by reading
 it. Let's re-work our program by following this process.
 
+<!-- can you specify somewhere in here whether this is going for level 2 or 3
+from the list above? -->
+
 <!--Since main is already handling the parsing of arguments, why do we need to
 add a new function for it, can you say how that improves things? -->
 <!-- Sorry, the steps we had were unclear. We've tried rewording. /Carol -->
