@@ -512,6 +512,9 @@ program immediately and return the number that was passed as the exit status
 code. This is similar to the `panic!`-based handling we used in Listing 12-8,
 with the exception that we no longer get all the extra output.  Let's try it:
 
+<!-- Be careful using the word "exception" when dealing with code like this!
+Could be confusing.-->
+
 ```text
 $ cargo run
    Compiling greprs v0.1.0 (file:///projects/greprs)
