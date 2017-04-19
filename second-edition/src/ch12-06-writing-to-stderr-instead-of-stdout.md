@@ -1,4 +1,4 @@
-## Write to `stderr` Instead of `stdout`
+## Writing to `stderr` Instead of `stdout`
 
 Right now, we're writing all of our output to the terminal with `println!`.
 Most terminals provide two kinds of output: "standard out" for general
