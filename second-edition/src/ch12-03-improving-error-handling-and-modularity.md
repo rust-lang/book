@@ -540,6 +540,10 @@ that isn't setting up configuration or handling errors. Once we're done, `main`
 will be concise and easy to verify by inspection, and we'll be able to write
 tests for all of the other logic.
 
+<!-- Do sections get numbers and whatnot? Seems a little goofy to refer to a
+section by name...I don't know where to look to find it. Maybe I just read too
+slowly. -->
+
 <!-- it contains ALL the function from main? Can you say why we're doing this,
 hw this improves it? What is the run function doing? I'm afraid I feel a bit in
 the dark here-->
