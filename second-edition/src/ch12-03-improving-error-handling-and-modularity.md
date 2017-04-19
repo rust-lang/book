@@ -266,14 +266,14 @@ should be conveyed in our code. We then added a `Config` struct to name the
 related purpose of `query` and `filename`, and to be able to return the values'
 names as struct field names from the `parse_config` function.
 
-So now that the purpose of the `parse_config` function is to create a `Config`
-instance, we can change `parse_config` from being a plain function into a
-function named `new` that is associated with the `Config` struct. Making this
-change will make our code more idiomatic: we can create instances of types in
-the standard library like `String` by calling `String::new`, and by changing
-`parse_config` to be a `new` function associated with `Config`, we'll be able
-to create instances of `Config` by calling `Config::new`. Listing 12-7 shows
-the changes we'll need to make:
+At this point, `parse_config` just creates a `Config` instance.  It's just a
+constructor! To better convey this, we can change `parse_config` from a plain
+function into a function named `new` that is associated with the `Config`
+struct. Making this change will make our code more idiomatic: we can create
+instances of types in the standard library like `String` by calling
+`String::new`, and by changing `parse_config` to be a `new` function associated
+with `Config`, we'll be able to create instances of `Config` by calling
+`Config::new`. Listing 12-7 shows the changes we'll need to make:
 
 <span class="filename">Filename: src/main.rs</span>
 
