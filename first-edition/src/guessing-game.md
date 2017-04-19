@@ -356,7 +356,7 @@ add these few lines at the bottom:
 ```toml
 [dependencies]
 
-rand="0.3.0"
+rand = "0.3.0"
 ```
 
 The `[dependencies]` section of `Cargo.toml` is like the `[package]` section:
@@ -367,7 +367,7 @@ which Cargo understands to be any release that’s compatible with this specific
 Cargo understands [Semantic Versioning][semver], which is a standard for writing version
 numbers. A bare number like above is actually shorthand for `^0.3.0`,
 meaning "anything compatible with 0.3.0".
-If we wanted to use only `0.3.0` exactly, we could say `rand="=0.3.0"`
+If we wanted to use only `0.3.0` exactly, we could say `rand = "=0.3.0"`
 (note the two equal signs).
 We could also use a range of versions.
 [Cargo’s documentation][cargodoc] contains more details.
