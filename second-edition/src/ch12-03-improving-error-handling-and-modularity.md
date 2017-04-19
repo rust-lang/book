@@ -503,6 +503,8 @@ pipes. The code in the closure can then use the `err` value when it runs.
 <!-- Does with what? I've tried to elaborate in the above and below paragraphs,
 but I'm not sure exactly what's confusing /Carol -->
 
+<!-- I'm fine with it as-is! -->
+
 We've added a new `use` line to import `process` from the standard library. The
 code in the closure that will get run in the error case is only two lines: we
 print out the `err` value, then call `std::process::exit` (we've added a new
