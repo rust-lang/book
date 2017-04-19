@@ -346,5 +346,7 @@ insensitivity through a command line argument as well as through the
 environment variable, and decide which should take precedence the program is
 run with contradictory values.
 
+<!-- Something is broken about the last sentence of the above paragraph -->
+
 The `std::env` module contains many more useful features for dealing with
 environment variables; check out its documentation to see what's available.
