@@ -554,9 +554,9 @@ concept of the `run` function holding the logic that was in `main` /Carol -->
 
 <!-- Seems fine to me as-is. -->
 
-Listing 12-11 shows the extracted `run` function. For now, we're making only
-the small, incremental improvement of extracting the function and still
-defining the function in *src/main.rs*:
+Listing 12-11 shows the extracted `run` function. For now, we're making only the
+small, incremental improvement of extracting the function.  It is still defined
+in *src/main.rs*:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -600,6 +600,8 @@ calling `expect`, the `run` function will return a `Result<T, E>` when
 something goes wrong. This will let us further consolidate the logic around
 handling errors in a user-friendly way into `main`. Listing 12-12 shows the
 changes to the signature and body of `run`:
+
+<!-- I think "into" is too far away from "consolidate" above. -->
 
 <span class="filename">Filename: src/main.rs</span>
 
