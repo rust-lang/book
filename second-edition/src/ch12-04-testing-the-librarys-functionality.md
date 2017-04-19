@@ -334,6 +334,10 @@ pub fn run(config: Config) -> Result<(), Box<Error>> {
 We're again using a `for` loop to get each line returned from `search`, and
 the code that we run for each line prints it out.
 
+<!-- My first and second parsings of the above sentence considered the portion
+before the comma to be a full sentence and expected the portion after "and" to
+also be complete.  Consider rework. Brain = dead. -->
+
 Now our whole program should be working! Let's try it out, first with a word
 that should return exactly one line from the Emily Dickinson poem, "frog":
 
