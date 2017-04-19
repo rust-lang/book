@@ -45,6 +45,8 @@ developed a kind of guideline process for splitting up the separate concerns of
 a binary program when `main` starts getting large. The process has the
 following steps:
 
+<!-- ok this is a cool thing right here... -->
+
 1. Split your program into both a *main.rs* and a *lib.rs* and move your
    program's logic into *lib.rs*.
 2. While your command line parsing logic is small, it can remain in *main.rs*.
