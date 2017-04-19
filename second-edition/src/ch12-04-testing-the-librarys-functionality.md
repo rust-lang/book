@@ -303,6 +303,8 @@ doing this in a different way, and be concerned that we're not teaching the
 best way possible. This paragraph reassures them that we know what we're doing
 and we're getting to the better way in Chapter 13. /Carol -->
 
+<!-- Keep it as-is!! -->
+
 #### Using the `search` Function in the `run` Function
 
 Now that we have the `search` function working and tested, we need to actually
