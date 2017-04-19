@@ -8,6 +8,10 @@ direct a program's successful output to a file but still print error messages to
 the screen, for example. `println!` is only capable of printing to standard out,
 though, so we have to use something else in order to print to standard error.
 
+<!-- Dang, looks like you used "standard out" throughout the entire section. I'm
+sticking to my opinion that "standard output" is a better term. I don't even
+care that it makes the section longer! -->
+
 We can verify that, the way we've written `greprs` so far, everything is being
 written to standard out, including error messages that should be written to
 standard error instead. We'll do that by intentionally causing an error, the
