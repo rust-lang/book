@@ -454,7 +454,7 @@ update `main` to handle the `Result` that `Config::new` is now returning as
 shown in Listing 12-10. We're also going to implement by hand something that
 `panic!` handled for us: exiting the command line tool with an error code of 1.
 A nonzero exit status is a convention to signal to the process that called our
-program that our program ended with an error state.
+program that our program exited with an error state.
 
 <span class="filename">Filename: src/main.rs</span>
 
