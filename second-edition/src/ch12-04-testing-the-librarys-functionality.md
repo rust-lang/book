@@ -134,6 +134,8 @@ section in Chapter 10.
 
 Now let's try running our test:
 
+<!-- "greprs-abcabcabcc"..... :D -->
+
 ```text
 $ cargo test
 ...warnings...
