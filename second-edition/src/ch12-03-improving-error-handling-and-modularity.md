@@ -525,6 +525,11 @@ Problem parsing arguments: not enough arguments
 
 Great! This output is much friendlier for our users.
 
+<!-- Serious question: is it really worth 500 lines of text in the book to
+explain something that a program of a certain size will probably shift off to a
+command line parsing library? This seems like a potential case of "bad habit
+picked up from the book" but I don't know enough about Rust yet to know. -->
+
 ### Extracting a `run` Function
 
 Now we're done refactoring our configuration parsing; let's turn to our
