@@ -671,7 +671,7 @@ to have some error handling code here! Let's rectify that now.
 
 #### Handling Errors Returned from `run` in `main`
 
-We'll check for errors and handle them nicely using a similar technique to the
+We'll check for errors and handle them nicely using a technique similar to the
 way we handled errors with `Config::new` in Listing 12-10, but with a slight
 difference:
 
