@@ -156,3 +156,5 @@ nicely, and be well tested.
 
 Next, let's explore some functional-language influenced Rust features: closures
 and iterators.
+
+<!-- Too bad the example didn't at least include 1 line of legitimate output -->
