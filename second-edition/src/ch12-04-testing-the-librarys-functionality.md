@@ -19,6 +19,9 @@ steps:
    continue to pass.
 4. Repeat!
 
+<!-- *Rolleyes* WE JUST SPENT AN ENTIRE CHAPTER ON TESTING IVE HAD ENOUGH!!!!!
+AND BESIDES, YOU ALREADY WROTE CODE WITHOUT TESTS. YOU'RE CAUGHT! \s -->
+
 This is just one of many ways to write software, but TDD can help drive the
 design of code. Writing the test before writing the code that makes the test
 pass helps to maintain high test coverage throughout the process.
