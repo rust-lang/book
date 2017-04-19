@@ -6,6 +6,8 @@ tests for the core functionality of our code. We can call our functions
 directly with various arguments and check return values without having to call
 our binary from the command line.
 
+<!-- Hey! I thought you moved argument parsing into *src/lib.rs*... -->
+
 In this section, we're going to follow the Test Driven Development (TDD)
 process. This is a software development technique that follows this set of
 steps:
