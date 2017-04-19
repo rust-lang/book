@@ -229,6 +229,9 @@ trade-off.
 > with Rust, it'll be easier to go straight to the desirable method, but for
 > now it's perfectly acceptable to call `clone`.
 
+<!-- i would have expected it to say "than to try..." to match with "better to",
+but maybe this is fine -->
+
 <!-- PROD: END BOX -->
 
 We've updated `main` so that it places the instance of `Config` that
