@@ -378,3 +378,6 @@ with environment variables and printing to standard error, both of which are
 useful when writing command line programs.
 
 <!-- I didn't expect "printing" to follow after "demonstrate how to work" -->
+
+<!-- I like the ending here, BUT..BUT..BUT I don't like how all the actual work
+of the program was developed in secret behind the section title "Testing..." -->
