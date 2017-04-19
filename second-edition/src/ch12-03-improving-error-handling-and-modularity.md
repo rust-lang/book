@@ -396,11 +396,11 @@ to use `new`... /Carol -->
 
 We can choose to instead return a `Result` value that will contain a `Config`
 instance in the successful case, and will describe the problem in the error
-case. When `Config::new` is communicating to `main`, we can use Rust's way of
-signaling that there was a problem using the `Result` type. Then we can change
-`main` to convert an `Err` variant into a nicer error for our users, without
-the surrounding text about `thread 'main'` and `RUST_BACKTRACE` that a call to
-`panic!` causes.
+case. When `Config::new` is communicating to `main`, we can follow Rust's
+convention of signaling that there was a problem using the `Result` type. Then
+we can change `main` to convert an `Err` variant into a nicer error for our
+users, without the surrounding text about `thread 'main'` and `RUST_BACKTRACE`
+that a call to `panic!` causes.
 
 Listing 12-9 shows the changes to the return value of `Config::new` and the
 body of the function needed to return a `Result`:
