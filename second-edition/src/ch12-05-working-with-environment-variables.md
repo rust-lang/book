@@ -26,6 +26,9 @@ new test for the new case insensitive search function, and rename our old test
 from `one_result` to `case_sensitive` to be clearer about the differences
 between the two tests, as shown in Listing 12-20:
 
+<!-- There is something satisfying about seeing the previous test name changed,
+rather than just starting with a "great" name. -->
+
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust
