@@ -552,6 +552,8 @@ Binary Projects section. I've added a reference back to that and reiterated
 some of the reasoning from there, but this section isn't introducing the
 concept of the `run` function holding the logic that was in `main` /Carol -->
 
+<!-- Seems fine to me as-is. -->
+
 Listing 12-11 shows the extracted `run` function. For now, we're making only
 the small, incremental improvement of extracting the function and still
 defining the function in *src/main.rs*:
