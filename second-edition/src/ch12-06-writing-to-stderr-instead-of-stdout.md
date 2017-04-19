@@ -23,6 +23,9 @@ file. Let's see that our program is not currently meeting this expectation by
 using `>` and specifying a filename, *output.txt*, that we want to redirect
 standard out to:
 
+<!-- This is a wonderful idea for a short section, but do we need to specify any
+popular shells that don't use the same conventions? -->
+
 ```text
 $ cargo run > output.txt
 ```
