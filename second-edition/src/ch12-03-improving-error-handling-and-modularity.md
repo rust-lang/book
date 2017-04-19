@@ -188,6 +188,8 @@ fn parse_config(args: &[String]) -> Config {
 }
 ```
 
+<!-- is it normal to put main on top or bottom? -->
+
 Listing 12-6: Refactoring `parse_config` to return an instance of a `Config`
 struct
 
