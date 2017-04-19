@@ -212,8 +212,8 @@ added a reference to where we've done this in the book previously. /Carol -->
 
 Next, we'll add functionality to check if the current line contains the query
 string. Luckily, strings have another helpful method named `contains` that does
-this for us! Add the `contains` method to the `search` function as shown in
-Listing 12-18:
+this for us! Add a call to the `contains` method to the `search` function as
+shown in Listing 12-18:
 
 <span class="filename">Filename: src/lib.rs</span>
 
