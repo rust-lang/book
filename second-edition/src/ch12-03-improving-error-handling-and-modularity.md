@@ -443,9 +443,9 @@ We've made two changes in the body of the `new` function: instead of calling
 value, and we've wrapped the `Config` return value in an `Ok`. These changes
 make the function conform to its new type signature.
 
-By having `Config::new` return an `Err` value, it allows the `main` function to
-handle the `Result` value returned from the `new` function and exit the process
-more cleanly in the error case.
+Returning an `Err` value from `Config::new` allows the `main` function to handle
+the `Result` value returned from the `new` function and exit the process more
+cleanly in the error case.
 
 #### Calling `Config::new` and Handling Errors
 
