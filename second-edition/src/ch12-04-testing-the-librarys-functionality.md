@@ -376,3 +376,5 @@ Feel free to move on to Chapter 13 if you'd like at this point. To round out
 this project chapter, though, we're going to briefly demonstrate how to work
 with environment variables and printing to standard error, both of which are
 useful when writing command line programs.
+
+<!-- I didn't expect "printing" to follow after "demonstrate how to work" -->
