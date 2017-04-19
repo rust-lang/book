@@ -507,12 +507,11 @@ but I'm not sure exactly what's confusing /Carol -->
 
 We've added a new `use` line to import `process` from the standard library. The
 code in the closure that will get run in the error case is only two lines: we
-print out the `err` value, then call `std::process::exit` (we've added a new
-`use` line at the top to import `process` from the standard library).
-`process::exit` will stop the program immediately and return the number that
-was passed as the exit status code. This is similar to the `panic!`-based
-handling we used in Listing 12-8, with the exception that we no longer get all
-the extra output. Let's try it:
+print out the `err` value, then call `std::process::exit`. `process::exit` will
+stop the program immediately and return the number that was passed as the exit
+status code. This is similar to the `panic!`-based handling we used in Listing
+12-8, with the exception that we no longer get all the extra output.  Let's try
+it:
 
 ```text
 $ cargo run
