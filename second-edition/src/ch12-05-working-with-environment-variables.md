@@ -330,6 +330,10 @@ To tell your name the livelong day
 To an admiring bog!
 ```
 
+<!-- Are there any relatively popular shells that would use a different syntax
+to set an environment variable? If so, you might need to specify that this one
+works for X, Y, and Z. -->
+
 Excellent, we also got lines containing "To"! Our `greprs` program can now do
 case insensitive searching, controlled by an environment variable. Now you know
 how to manage options set using either command line arguments or environment
