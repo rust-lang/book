@@ -279,7 +279,7 @@ fn main() {
 
 When we run this program, we’ll see `again!` printed over and over continuously
 until we stop the program manually. Most terminals support a keyboard shortcut,
- ctrl-C, to halt a program that is stuck in a continual loop. Give it a try:
+ `Ctrl-C`, to halt a program that is stuck in a continual loop. Give it a try:
 
 ```text
 $ cargo run
@@ -292,7 +292,7 @@ again!
 ^Cagain!
 ```
 
-The symbol `^C` represents where you pressed ctrl-C. You may or may not see the
+The symbol `^C` represents where you pressed `Ctrl-C`. You may or may not see the
 word `again!` printed after the `^C`, depending on where the code was in the
 loop when it received the halt signal.
 
