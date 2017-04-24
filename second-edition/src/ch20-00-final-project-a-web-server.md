@@ -20,7 +20,7 @@ To do this, we will:
 Before we get started, however, there's one thing we should mention: if you
 were writing this code in production, there are a lot of better ways to write
 it. Specifically, there are a number of robust crates on crates.io that provide
-much more complete web server and threadpool implementations than we are going
+much more complete web server and thread pool implementations than we are going
 to build.
 
 However, for this chapter, our intention is to learn, not to take the easy
