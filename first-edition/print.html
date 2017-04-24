@@ -710,7 +710,7 @@ the code using <code>rand</code>, we need to modify our <code>Cargo.toml</code>.
 add these few lines at the bottom:</p>
 <pre><code class="language-toml">[dependencies]
 
-rand=&quot;0.3.0&quot;
+rand = &quot;0.3.0&quot;
 </code></pre>
 <p>The <code>[dependencies]</code> section of <code>Cargo.toml</code> is like the <code>[package]</code> section:
 everything that follows it is part of it, until the next section starts.
@@ -720,7 +720,7 @@ which Cargo understands to be any release that’s compatible with this specific
 Cargo understands <a href="http://semver.org">Semantic Versioning</a>, which is a standard for writing version
 numbers. A bare number like above is actually shorthand for <code>^0.3.0</code>,
 meaning &quot;anything compatible with 0.3.0&quot;.
-If we wanted to use only <code>0.3.0</code> exactly, we could say <code>rand=&quot;=0.3.0&quot;</code>
+If we wanted to use only <code>0.3.0</code> exactly, we could say <code>rand = &quot;=0.3.0&quot;</code>
 (note the two equal signs).
 We could also use a range of versions.
 <a href="http://doc.crates.io/specifying-dependencies.html">Cargo’s documentation</a> contains more details.</p>
