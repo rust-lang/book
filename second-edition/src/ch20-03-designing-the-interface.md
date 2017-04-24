@@ -4,7 +4,7 @@ Let's talk about what using the pool should look like. The authors often find
 that when trying to design some code, writing the client interface first can
 really help guide your design. Write the API of the code to be structured in
 the way you'd want to call it, then implement the functionality within that
-structure rather than implementing the functionality then desiging the public
+structure rather than implementing the functionality then designing the public
 API.
 
 ### Code Structure if We Could Use `thread::spawn`

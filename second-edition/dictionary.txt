@@ -261,6 +261,7 @@ RefMut
 refutability
 repr
 request's
+resizes
 retweet
 ripgrep
 runtime
