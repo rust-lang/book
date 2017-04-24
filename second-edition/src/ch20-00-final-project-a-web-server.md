@@ -19,11 +19,13 @@ To do this, we will:
 
 Before we get started, however, there's one thing we should mention: if you
 were writing this code in production, there are a lot of better ways to write
-it. Specifically, there are a number of robust crates on crates.io that would
-make writing this easier. However, for this chapter, our intention is to learn,
-not to take the easy route. Since Rust is a systems programming language, we're
-able to choose what level of abstraction we want to work with. We're able to go
-to a lower level than is possible or practical in other languages if we so
-choose. So we'll be writing a basic HTTP server and thread pool ourselves in
-order to learn the general ideas and techniques behind the crates we might use
-in the future.
+it. Specifically, there are a number of robust crates on crates.io that provide
+much more complete web server and threadpool implementations than we are going
+to build.
+
+However, for this chapter, our intention is to learn, not to take the easy
+route. Since Rust is a systems programming language, we're able to choose what
+level of abstraction we want to work with. We're able to go to a lower level
+than is possible or practical in other languages if we so choose. So we'll be
+writing a basic HTTP server and thread pool ourselves in order to learn the
+general ideas and techniques behind the crates we might use in the future.

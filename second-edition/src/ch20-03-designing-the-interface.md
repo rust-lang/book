@@ -5,7 +5,13 @@ that when trying to design some code, writing the client interface first can
 really help guide your design. Write the API of the code to be structured in
 the way you'd want to call it, then implement the functionality within that
 structure rather than implementing the functionality then designing the public
-API.
+API. 
+
+Similar to how we used Test Driven Development in the project in Chapter 12,
+we're going to use Compiler Driven Development here. We're going to write the
+code that calls the functions we wish we had, then we'll lean on the compiler
+to tell us what we should change next. The compiler error messages will guide
+our implementation.
 
 ### Code Structure if We Could Use `thread::spawn`
 

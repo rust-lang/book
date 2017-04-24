@@ -468,7 +468,8 @@ impl Drop for ThreadPool {
 
 There is still more we could do here; for example, our `ThreadPool` is not
 inherently tied to HTTP handling, so we could extract it into its own
-submodule, or maybe even its own crate!
+submodule, or maybe even its own crate! Extracting the code would make the
+`ThreadPool` code more easily reusable in another context.
 
 ## Summary
 
