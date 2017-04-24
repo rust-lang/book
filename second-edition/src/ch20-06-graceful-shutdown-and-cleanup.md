@@ -1,13 +1,30 @@
 ## Graceful Shutdown and Cleanup
 
-The first thing we want to do is to implement `Drop` for our thread pool. When
-the pool is dropped, we should join on all of our threads, to make sure they
-finish their work. Here's a first attempt at it; it won't quite work yet:
+The code in Listing 20-21 is responding to requests asynchronously through the
+use of a thread pool, as we intended. We get some warnings about fields that
+we're not using in a direct way, which are a reminder that we're not cleaning
+anything up. When we use `CTRL-C` to halt the main thread, all the other
+threads are stopped immediately as well, even if they're in the middle of
+serving a request.
+
+We're now going to implement the `Drop` trait for `ThreadPool` to call `join`
+on each of the threads in the pool so that the threads will finish the requests
+they're working on. Then we'll implement a way for the `ThreadPool` to tell the
+threads they should stop accepting new requests and shut down. To see this code
+in action, we'll modify our server to only accept two requests before
+gracefully shutting down its thread pool.
+
+Let's start with implementing `Drop` for our thread pool. When the pool is
+dropped, we should join on all of our threads to make sure they finish their
+work. Listing 20-22 shows a first attempt at a `Drop` implementation; this code
+won't quite work yet:
+
+<span class="filename">Filename: src/lib.rs</span>
 
 ```rust,ignore
 impl Drop for ThreadPool {
     fn drop(&mut self) {
-        for worker in &mut self.threads {
+        for worker in &mut self.workers {
             println!("Shutting down worker {}", worker.id);
 
             worker.thread.join().unwrap();
@@ -16,73 +33,86 @@ impl Drop for ThreadPool {
 }
 ```
 
-Here's the idea: we loop through each of our `threads`, using `&mut` because
-`self` is itself a mutable reference. If we tried to iterate over the threads
-directly, we'd get an error about moving. Anyway, we print out a message saying
-that that particular worker is shutting down, and then we call `join` on that
-worker's thread. An `unwrap` disregards the errors.
+<span class="caption">Listing 20-22: Joining each thread when the thread pool
+goes out of scope</span>
 
-Here's the error we get:
+We loop through each of the thread pool `workers`, using `&mut` because `self`
+is itself a mutable reference and we also need to be able to mutate `worker`.
+We print out a message saying that this particular worker is shutting down, and
+then we call `join` on that worker's thread. If the call to `join` fails, we
+`unwrap` the error to panic and go into an ungraceful shutdown.
+
+Here's the error we get if we compile this code:
 
 ```text
-$ cargo run
-   Compiling hello v0.1.0 (file:///projects/hello)
 error[E0507]: cannot move out of borrowed content
-   --> src\main.rs:129:13
-    |
-129 |             worker.thread.join();
-    |             ^^^^^^ cannot move out of borrowed content
-
-error: aborting due to previous error
+  --> src/lib.rs:65:13
+   |
+65 |             worker.thread.join().unwrap();
+   |             ^^^^^^ cannot move out of borrowed content
 ```
 
-Because we only have a `&mut` in `drop`, we cannot actually call `join`, as
-`join` takes its argument by value. What to do? Well, we already have a way to
-represent "something or nothing", and that's `Option<T>`. Let's update the
-definition of `Worker`:
+Because we only have a mutable borrow of each `worker`, we can't call `join`:
+`join` takes ownership of its argument. In order to solve this, we need a way
+to move the `thread` out of the `Worker` instance that owns `thread` so that
+`join` can consume the thread. We saw a way to do this in Listing 17-15: if the
+`Worker` holds an `Option<thread::JoinHandle<()>` instead, we can call the
+`take` method on the `Option` to move the value out of the `Some` variant and
+leave a `None` variant in its place. In other words, a `Worker` that is running
+will have a `Some` variant in `thread`, and when we want to clean up a worker,
+we'll replace `Some` with `None` so the worker doesn't have a thread to run.
 
-```rust,ignore
+So we know we want to update the definition of `Worker` like this:
+
+```rust
+# use std::thread;
 struct Worker {
     id: u32,
     thread: Option<thread::JoinHandle<()>>,
 }
 ```
 
-And then let the compiler tell us about anything we need to fix:
+Now let's lean on the compiler to find the other places that need to change. We
+get two errors:
 
 ```text
-$ cargo check
-   Compiling hello v0.1.0 (file:///projects/hello)
-error[E0308]: mismatched types
-  --> src\main.rs:87:21
+error: no method named `join` found for type
+`std::option::Option<std::thread::JoinHandle<()>>` in the current scope
+  --> src/lib.rs:65:27
    |
-87 |             thread: thread,
+65 |             worker.thread.join().unwrap();
+   |                           ^^^^
+
+error[E0308]: mismatched types
+  --> src/lib.rs:89:21
+   |
+89 |             thread: thread,
    |                     ^^^^^^ expected enum `std::option::Option`, found
    struct `std::thread::JoinHandle`
    |
    = note: expected type `std::option::Option<std::thread::JoinHandle<()>>`
               found type `std::thread::JoinHandle<_>`
-
-error: no method named `join` found for type
-`std::option::Option<std::thread::JoinHandle<()>>` in the current scope
-   --> src\main.rs:129:27
-    |
-129 |             worker.thread.join();
-    |                           ^^^^
-
 ```
 
-The first error is easy to fix; we need to add a `Some` at the end of
-`ThreadPool::new`:
+The second error is pointing to the code at the end of `Worker::new`; we need
+to wrap the `thread` value in `Some` when we create a new `Worker`:
 
 ```rust,ignore
-Worker {
-        id: id,
-        thread: Some(thread),
+impl Worker {
+    fn new(id: usize, job_receiver: Arc<Mutex<mpsc::Receiver<Job>>>) -> Worker {
+        // ...snip...
+
+        Worker {
+            id: id,
+            thread: Some(thread),
+        }
     }
+}
 ```
 
-The second one is in our `Drop` implementation. Here's one that works:
+The first error is in our `Drop` implementation, and we mentioned that we'll be
+calling `take` on the `Option` value to move `thread` out of `worker`. Here's
+what that looks like:
 
 ```rust,ignore
 impl Drop for ThreadPool {
@@ -98,33 +128,39 @@ impl Drop for ThreadPool {
 }
 ```
 
-The `take` method on `Option`, well, takes something out of it. That is, if the
-`Option` is `Some(T)`, it will set the original option to `None`, and then
-return that `Some(T)`. If the option is `None`, it will return `None`.
+As we saw in Chapter 17, the `take` method on `Option` takes the `Some` variant
+out and leaves `None` in its place. We're using `if let` to destructure the
+`Some` and get the thread, then call `join` on the thread. If a worker's thread
+is already `None`, then we know this worker has already had its thread cleaned
+up so we don't do anything in that case.
 
-We use `if let` to check if the return value of `take` is `Some`, and if it is,
-we call `join` on that thread.
+With this, our code compiles without any warnings. Bad news though, this code
+doesn't function the way we want it to yet. The key is the logic in the
+closures that the spawned threads of the `Worker` instances run: calling `join`
+won't shut down the threads since they `loop` forever looking for jobs. If we
+try to drop our `ThreadPool` with this implementation, the main thread will
+block forever waiting for the first thread to finish.
 
-With this, our code compiles without any warnings, and still works!
+To fix this, we're going to modify the threads to listen for either a `Job` to
+run or a signal that they should stop listening and exit the infinite loop. So
+instead of `Job` instances, our channel will send one of these two enum
+variants:
 
-... or does it? There's one last issue we haven't handled yet: this `Drop`
-implementation doesn't actually work. The key is the logic of our `Worker`s.
-There's no way to shut them down; they only loop forever looking for jobs. If
-we try to drop our `ThreadPool` with this implementation, it will block forever
-on the first thread.
-
-So what do we do? We need to modify our channel to take a `Message` instead of
-a `Job`. Like this:
-
-```rust,ignore
+```rust
+# struct Job;
 enum Message {
     NewJob(Job),
     Terminate,
 }
 ```
 
-First, we have a new `Message` enum. We have two kinds of messages: "here's a
-new `Job`" and "please terminate execution."
+This `Message` enum will either be a `NewJob` variant that holds the `Job` the
+thread should run, or it will be a `Terminate` variant that will cause the
+thread to exit its loop and stop.
+
+TODO CAROL STOPPED EDITING HERE
+
+We need to adjust the
 
 ```rust,ignore
 struct ThreadPool {
@@ -470,6 +506,8 @@ There is still more we could do here; for example, our `ThreadPool` is not
 inherently tied to HTTP handling, so we could extract it into its own
 submodule, or maybe even its own crate! Extracting the code would make the
 `ThreadPool` code more easily reusable in another context.
+
+Also more docs, better error handling
 
 ## Summary
 
