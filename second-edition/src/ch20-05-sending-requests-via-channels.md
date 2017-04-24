@@ -155,11 +155,25 @@ error[E0382]: use of moved value: `job_receiver`
 ```
 
 The code as written won't quite work since it's trying to pass `job_receiver`
-to multiple `Worker` instances. We instead need to share the single receiver
-between all of our workers. If you remember Chapter 16, you'll know the answer:
-`Arc<Mutex<T>>` to the rescue! The `Arc` will let multiple workers own the
-receiver, and the `Mutex` will make sure that only one worker is getting a job
-from the receiver at a time. Listing 20-18 shows the changes we need to make:
+to multiple `Worker` instances. Recall from Chapter 16 that the channel
+implementation provided by Rust is multiple *producer*, single *consumer*, so
+we can't just clone the consuming end of the channel to fix this. We also don't
+want to clone the consuming end even if we wanted to; sharing the single
+`job_receiver` between all of the workers is the mechanism by which we'd like
+to distribute the jobs across the threads.
+
+Additionally, taking a job off the channel queue involves mutating
+`job_receiver`, so the threads need a safe way to share `job_receiver` and be
+allowed to modify it. If the modifications weren't threadsafe, we might get
+race conditions such as two threads executing the same job if they both take
+the same job off the queue at the same time.
+
+So remembering the threadsafe smart pointers that we discussed in Chapter 16,
+in order to share ownership across multiple threads and allow the threads to
+mutate the value, we need to use `Arc<Mutex<T>>`. `Arc` will let multiple
+workers own the receiver, and `Mutex` will make sure that only one worker is
+getting a job from the receiver at a time. Listing 20-18 shows the changes we
+need to make:
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -228,7 +242,7 @@ In `ThreadPool::new`, we put the receiving end of the channel in an `Arc` and a
 `Mutex`. For each new worker, we clone the `Arc` to bump the reference count so
 the workers can share ownership of the receiving end.
 
-With these changes, things compile! We're getting there!
+With these changes, the code compiles! We're getting there!
 
 Let's finally implement the `execute` method on `ThreadPool`. We're also going
 to change the `Job` struct: instead of being a struct, `Job` is going to be a
@@ -277,11 +291,11 @@ executing as long as the pool exists. We use `unwrap` since we know the failure
 case won't happen even though the compiler can't tell that, which is an
 appropriate use of `unwrap` as we discussed in Chapter 9.
 
-Are we done yet? Not quite! We've still got a closure that only references the
-receiving end of the channel in the worker, and instead we need the closure to
-loop forever, asking the receiving end of the channel for a job, and running
-the job when it gets one. Let's make the change shown in Listing 20-20 to
-`Worker::new`:
+Are we done yet? Not quite! In the worker, we've still got a closure being
+passed to `thread::spawn` that only *references* the receiving end of the
+channel. Instead, we need the closure to loop forever, asking the receiving end
+of the channel for a job, and running the job when it gets one. Let's make the
+change shown in Listing 20-20 to `Worker::new`:
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -311,79 +325,69 @@ impl Worker {
 <span class="caption">Listing 20-20: Receiving and executing the jobs in the
 worker's thread</span>
 
-TODO: CAROL EDITED UP TO HERE
-
 Here, we first call `lock` on the `job_receiver` to acquire the mutex, then
-`unwrap` to panic on any errors, then `recv` to receive a `Job` from the
-channel. A final `unwrap` moves past those errors as well. What kinds of errors
-are we ignoring here? Well, a mutex can be "poisoned", that is, if a thread is
-holding the mutex and panics, it enters a "poisoned" state. Almost all of the
-time, propagating this panic with `unwrap` is correct. As for `recv`, it will
-return `Err` if the sending side has shut down, similar to how the `send`
-method returns `Err` if the receiving side shuts down.
+`unwrap` to panic on any errors. Acquiring a lock might fail if the mutex is in
+a state called *poisoned*, which can happen if some other thread panicked while
+holding the lock rather than releasing it. If this thread can't get the lock
+for that reason, calling `unwrap` to have this thread panic is the correct
+action to take as well. Feel free to change this `unwrap` to an `expect` with
+an error message that is meaningful to you if you'd like.
 
-The call to `recv` blocks; that is, if there's no job yet, it will sit here
-until one becomes available. The `Mutex<T>` makes sure that only one Worker at
-a time tries to request a job.
+If we get the lock on the mutex, then we call `recv` to receive a `Job` from
+the channel. A final `unwrap` moves past those errors as well. `recv` will
+return `Err` if the thread holding the sending side of the channel has shut
+down, similar to how the `send` method returns `Err` if the receiving side
+shuts down.
 
-Here's the error we'll get if we try to compile the above code:
+The call to `recv` blocks; that is, if there's no job yet, this thread will sit
+here until a job becomes available. The `Mutex<T>` makes sure that only one
+`Worker` thread at a time is trying to request a job.
 
-```text
-$ cargo check
-   Compiling hello v0.1.0 (file:///projects/hello)
-error: no method named `job` found for type `Job` in the current scope
-  --> src\main.rs:69:21
-   |
-69 |                 job.job();
-   |                     ^^^
-   |
-note: use `(job.job)(...)` if you meant to call the function stored in the
-`job` field
-  --> src\main.rs:69:21
-   |
-69 |                 job.job();
-   |                     ^^^
-
-error: aborting due to previous error
-```
-
-Rust helpfully informs us that this is ambiguous: We're trying to invoke the
-closure that `job.job` holds, not call a method `job`. In order to fix this, we
-have to change that line:
-
-```rust,ignore
-(job.job)();
-```
-
-It looks a little funky, but it works. Well, almost. Now we get a different
-error:
+Theoretically, this code should compile. Unfortunately, the Rust compiler isn't
+perfect yet, and we get this error:
 
 ```text
-$ cargo check
-   Compiling hello v0.1.0 (file:///projects/hello)
 error[E0161]: cannot move a value of type std::ops::FnOnce() +
-std::marker::Send + 'static: the size of std::ops::FnOnce() + std::marker::Send
-+ 'static cannot be statically determined
-  --> src\main.rs:69:17
+std::marker::Send: the size of std::ops::FnOnce() + std::marker::Send cannot be
+statically determined
+  --> src/lib.rs:63:17
    |
-69 |                 (job.job)();
-   |                 ^^^^^^^^^
-
-error: aborting due to previous error
+63 |                 (*job)();
+   |                 ^^^^^^
 ```
 
 This error is fairly cryptic, and that's because the problem is fairly cryptic.
-Basically, in order to call a boxed `FnOnce`, the `FnOnce` needs to be able to
-move itself out of the box. But the compiler doesn't understand that this is
-okay to do.
+In order to call a `FnOnce` closure that is stored in a `Box<T>` (which is what
+our `Job` type alias is), the closure needs to be able to move itself out of
+the `Box<T>` since when we call the closure, it takes ownership of `self`. In
+general, moving a value out of a `Box<T>` isn't allowed since Rust doesn't know
+how big the value inside the `Box<T>` is going to be; recall in Chapter 15 that
+we used `Box<T>` precisely because we had something of an unknown size that we
+wanted to store in a `Box<T>` to get a value of a known size.
 
-In the future, this code should work just fine. Rust is still a work in
-progress with places that the compiler could be improved. There are people just
-like you working to fix this and other issues! Once you've finished the book,
-we would love for you to join in.
+We saw in Chapter 17, Listing 17-15 that we can write methods that use the
+syntax `self: Box<Self>` so that the method takes ownership of a `Self` value
+that is stored in a `Box<T>`. That's what we want to do here, but unfortunately
+the part of Rust that implements what happens when we call a closure isn't
+implemented using `self: Box<Self>`. So Rust doesn't yet understand that it
+could use `self: Box<Self>` in this situation in order to take ownership of the
+closure and move the closure out of the `Box<T>`.
 
-But for now, let's work around this problem. Luckily, there's a trick! It looks
-like this:
+In the future, the code in Listing 20-20 should work just fine. Rust is still a
+work in progress with places that the compiler could be improved. There are
+people just like you working to fix this and other issues! Once you've finished
+the book, we would love for you to join in.
+
+But for now, let's work around this problem. Luckily, there's a trick that
+involves telling Rust explicitly that we're in a case where we can take
+ownership of the value inside the `Box<T>` using `self: Box<Self>`, and once we
+have ownership of the closure, we can call it. This involves defining a new
+trait that has a method `call_box` that uses `self: Box<Self>` in its
+signature, defining that trait for any type that implements `FnOnce()`,
+changing our type alias to use the new trait, and changing `Worker` to use the
+`call_box` method. These changes are shown in Listing 20-21:
+
+<span class="filename">Filename: src/lib.rs</span>
 
 ```rust,ignore
 trait FnBox {
@@ -396,45 +400,52 @@ impl<F: FnOnce()> FnBox for F {
     }
 }
 
-struct Job {
-    job: Box<FnBox + Send + 'static>,
-}
+type Job = Box<FnBox + Send + 'static>;
 
-// we use this instead of (job.job)();
-job.job.call_box();
-```
+// ...snip...
 
-Here's how the trick works: Rust *does* understand that when `self` is a
-`Box<T>`, it can be moved out of. As such, we do four things:
+impl Worker {
+    fn new(id: usize, job_receiver: Arc<Mutex<mpsc::Receiver<Job>>>) -> Worker {
+        let thread = thread::spawn(move || {
+            loop {
+                let job = job_receiver.lock().unwrap().recv().unwrap();
 
-First, we create a new trait, `FnBox`. This trait has one method, `call_box`,
-similar to the `call` methods on the other `Fn*` traits. This method takes
-`Box<Self>`.
+                println!("Worker {} got a job; executing.", id);
 
-Next, we implement `FnBox` for all things that implement `FnOnce()`:
+                job.call_box();
+            }
+        });
 
-```rust,ignore
-impl<F: FnOnce()> FnBox for F {
-```
-
-That's what this line says: for any type `F` that implements `FnOnce()`, we are
-going to implement `FnBox` for that type. Effectively, this means that any
-`FnOnce()` closures can use our `call_box` method. Tricky!
-
-Here's the implementation of `call_box`:
-
-```rust,ignore
-    fn call_box(self: Box<F>) {
-        (*self)()
+        Worker {
+            id: id,
+            thread: thread,
+        }
     }
 }
 ```
 
-We do the same thing with `()()`s as we did above, only now instead of
-`job.job`, it's `self`. And the dereference of self is what moves the contents
-out of the box.
+<span class="caption">Listing 20-21: Adding a new trait `FnBox` to work around
+the current limitations of `Box<FnOnce()>`</span>
 
-Finally, we use `call_box` instead of invoking the closure directly.
+First, we create a new trait named `FnBox`. This trait has one method,
+`call_box`, similar to the `call` methods on the other `Fn*` traits, except
+this method takes `self: Box<Self>` in order to take ownership of `self` and
+move the value out of the `Box<T>`.
+
+Next, we implement the `FnBox` trait for any type `F` that implements the
+`FnOnce()` trait. Effectively, this means that any `FnOnce()` closures can use
+our `call_box` method. The implementation of `call_box` uses `(*self)()` to
+move the closure out of the `Box<T>` and call the closure.
+
+Instead of `FnOnce()`, we now want our `Job` type alias to be a `Box` of
+anything that implements our new trait `FnBox`. This will allow us to use
+`call_box` in `Worker` when we get a `Job` value. Because we implemented the
+`FnBox` trait for any `FnOnce()` closure, we don't have to change anything
+about the actual values we're sending down the channel.
+
+Finally, in the closure run in the thread in `Worker::new`, we use `call_box`
+instead of invoking the closure directly. Now Rust is able to understand that
+what we want to do is fine.
 
 This is a very sneaky, complicated trick. Don't worry too much if it doesn't
 make perfect sense; someday, it will be completely unnecessary.
@@ -445,26 +456,32 @@ and make some requests:
 ```text
 $ cargo run
    Compiling hello v0.1.0 (file:///projects/hello)
-warning: field is never used: `threads`, #[warn(dead_code)] on by default
-  --> src\main.rs:50:5
-   |
-50 |     threads: Vec<Worker>,
-   |     ^^^^^^^^^^^^^^^^^^^^
+warning: field is never used: `workers`
+ --> src/lib.rs:7:5
+  |
+7 |     workers: Vec<Worker>,
+  |     ^^^^^^^^^^^^^^^^^^^^
+  |
+  = note: #[warn(dead_code)] on by default
 
-warning: field is never used: `id`, #[warn(dead_code)] on by default
-  --> src\main.rs:69:5
+warning: field is never used: `id`
+  --> src/lib.rs:61:5
    |
-69 |     id: u32,
-   |     ^^^^^^^
+61 |     id: usize,
+   |     ^^^^^^^^^
+   |
+   = note: #[warn(dead_code)] on by default
 
-warning: field is never used: `thread`, #[warn(dead_code)] on by default
-  --> src\main.rs:70:5
+warning: field is never used: `thread`
+  --> src/lib.rs:62:5
    |
-70 |     thread: thread::JoinHandle<()>,
+62 |     thread: thread::JoinHandle<()>,
    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: #[warn(dead_code)] on by default
 
     Finished dev [unoptimized + debuginfo] target(s) in 0.99 secs
-     Running `target\debug\hello.exe`
+     Running `target/debug/hello`
      Worker 0 got a job; executing.
 Worker 2 got a job; executing.
 Worker 1 got a job; executing.
@@ -477,13 +494,24 @@ Worker 0 got a job; executing.
 Worker 2 got a job; executing.
 ```
 
-Success! We now have a thread pool executing connections asynchronously.
+Success! We now have a thread pool executing connections asynchronously. We
+never create more than four threads, so our system won't get overloaded if the
+server gets a lot of requests. If we make a request to `/sleep`, the server
+will be able to serve other requests by having another thread run them.
 
-What about those warnings, though? Don't we use all those things? Well, here's
-the thing: right now, we are using all three of these things to hold onto some
-data, but we don't actually *do* anything with them. That is, we set up a ton
-of interesting stuff, but then it just sits there.
+What about those warnings, though? Don't we use the `workers`, `id`, and
+`thread` fields? Well, right now, we're using all three of these fields to hold
+onto some data, but we don't actually *do* anything with the data once we've
+set up the thread pool and started running the code that sends jobs down the
+channel to the threads. If we didn't hold onto these values, though, they'd go
+out of scope: for example, if we didn't return the `Vec<Worker>` value as part
+of the `ThreadPool`, the vector would get cleaned up at the end of
+`ThreadPool::new`.
 
-So are these warnings wrong? In one sense yes, but in another sense, no. We
-never do anything to clean up our thread pool once it's done being used. Let's
-implement that now.
+So are these warnings wrong? In one sense yes, the warnings are wrong, since we
+are using the fields to store data we need to keep around. In another sense,
+no, the warnings aren't wrong, and they're telling us that we've forgotten to
+do something: we never do anything to clean up our thread pool once it's done
+being used, we just use `CTRL-C` to stop the program and let the operating
+system clean up after us. Let's implement a graceful shutdown that cleans up
+everything we've created instead.

@@ -5,7 +5,7 @@ that when trying to design some code, writing the client interface first can
 really help guide your design. Write the API of the code to be structured in
 the way you'd want to call it, then implement the functionality within that
 structure rather than implementing the functionality then designing the public
-API. 
+API.
 
 Similar to how we used Test Driven Development in the project in Chapter 12,
 we're going to use Compiler Driven Development here. We're going to write the
@@ -218,8 +218,10 @@ pub fn spawn<F, T>(f: F) -> JoinHandle<T>
 
 `F` is the parameter we care about here; `T` is related to the return value and
 we're not concerned with that. Given that `spawn` uses `FnOnce` as the trait
-bound on `F`, it's probably what we want as well, given that we'll eventually
-be passing the argument we get in `execute` to `spawn`.
+bound on `F`, it's probably what we want as well, since we'll eventually be
+passing the argument we get in `execute` to `spawn`. We can be further
+confident that `FnOnce` is the trait that we want to use since the thread for
+running a request is only going to execute that request's closure one time.
 
 `F` also has the trait bound `Send` and the lifetime bound `'static`, which
 also make sense for our situation: we need `Send` to transfer the closure from
@@ -242,6 +244,11 @@ impl ThreadPool {
     }
 }
 ```
+
+The `FnOnce` trait still needs the `()` after it since this `FnOnce` is
+representing a closure that takes no parameters and doesn't return a value.
+Just like function definitions, the return type can be omitted from the
+signature, but even if we have no parameters, we still need the parentheses.
 
 Again, since we're working on getting the interface compiling, we're adding the
 simplest implementation of the `execute` method, which does nothing. Let's
