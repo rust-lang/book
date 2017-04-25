@@ -64,6 +64,8 @@ we'll replace `Some` with `None` so the worker doesn't have a thread to run.
 
 So we know we want to update the definition of `Worker` like this:
 
+<span class="filename">Filename: src/lib.rs</span>
+
 ```rust
 # use std::thread;
 struct Worker {
@@ -97,6 +99,8 @@ error[E0308]: mismatched types
 The second error is pointing to the code at the end of `Worker::new`; we need
 to wrap the `thread` value in `Some` when we create a new `Worker`:
 
+<span class="filename">Filename: src/lib.rs</span>
+
 ```rust,ignore
 impl Worker {
     fn new(id: usize, job_receiver: Arc<Mutex<mpsc::Receiver<Job>>>) -> Worker {
@@ -113,6 +117,8 @@ impl Worker {
 The first error is in our `Drop` implementation, and we mentioned that we'll be
 calling `take` on the `Option` value to move `thread` out of `worker`. Here's
 what that looks like:
+
+<span class="filename">Filename: src/lib.rs</span>
 
 ```rust,ignore
 impl Drop for ThreadPool {
@@ -146,6 +152,8 @@ run or a signal that they should stop listening and exit the infinite loop. So
 instead of `Job` instances, our channel will send one of these two enum
 variants:
 
+<span class="filename">Filename: src/lib.rs</span>
+
 ```rust
 # struct Job;
 enum Message {
@@ -158,94 +166,78 @@ This `Message` enum will either be a `NewJob` variant that holds the `Job` the
 thread should run, or it will be a `Terminate` variant that will cause the
 thread to exit its loop and stop.
 
-TODO CAROL STOPPED EDITING HERE
+We need to adjust the channel to use values of type `Message` rather than type
+`Job`, as shown in Listing 20-23:
 
-We need to adjust the
+<span class="filename">Filename: src/lib.rs</span>
 
 ```rust,ignore
 struct ThreadPool {
     threads: Vec<Worker>,
     sender: mpsc::Sender<Message>,
 }
-```
 
-We need to adjust the `ThreadPool` to send `Message`s rather than `Job`s.
+// ...snip...
 
-```rust,ignore
-impl Worker {
-    fn new(id: u32, job_receiver: Arc<Mutex<mpsc::Receiver<Message>>>) ->
-        Worker {
-        let thread = thread::spawn(move ||{
-            loop {
-                let message = job_receiver.lock().unwrap().recv().unwrap();
-
-                match message {
-                    Message::NewJob(job) => {
-                        println!("Worker {} got a job; executing.", id);
-
-                        job.job.call_box();
-                    },
-                    Message::Terminate => {
-                        println!("Worker {} was told to terminate.", id);
-
-                        break;
-                    }
-                }
-            }
-        });
-
-        Worker {
-            id: id,
-            thread: Some(thread),
-        }
-    }
-}
-```
-
-Inside of our `Worker`, instead of receiving a `Job`, we get a `Message`. We
-then execute the job if it's a `NewJob`, and break out of our `loop` if it's
-`Terminate`.
-
-```rust,ignore
 impl ThreadPool {
-    fn new(size: usize) -> ThreadPool {
+    // ...snip...
+    pub fn new(size: usize) -> ThreadPool {
         assert!(size > 0);
 
         let (job_sender, job_receiver) = mpsc::channel::<Message>();
 
-        // no other changes here
+        // ...snip...
     }
 
-    fn execute<F>(&self, f: F)
+    pub fn execute<F>(&self, f: F)
         where
             F: FnOnce() + Send + 'static
     {
-        let job = Job {
-            job: Box::new(f),
-        };
+        let job = Box::new(f);
 
         self.sender.send(Message::NewJob(job)).unwrap();
     }
 }
+
+// ...snip...
+
+impl Worker {
+    fn new(id: usize, job_receiver: Arc<Mutex<mpsc::Receiver<Message>>>) ->
+        Worker {
+        // ...snip...
+    }
+}
 ```
 
-`ThreadPool` has two changes: first, we need our channel to be of `Message`s
-instead of `Job`s. Then, in `execute`, we need to send a `NewJob` rather than
-just a `Job`.
+<span class="caption">Listing 20-23: Sending and receiving `Message` values and
+exiting the loop if a `Worker` receives `Message::Terminate`</span>
 
-With these changes, things compile again. But we haven't sent any `Terminate`
-messages. Let's change our `Drop` implementation:
+We need to change `Job` to `Message` in the definition of `ThreadPool`, in
+`ThreadPool::new` where we create the channel, and in the signature of
+`Worker::new`. The `execute` method of `ThreadPool` needs to send jobs wrapped
+in the `Message::NewJob` variant. Then, in `Worker::new` where we receive a
+`Message` from the channel, we'll process the job if we get the `NewJob`
+variant and break out of the loop if we get the `Terminate` variant.
+
+With these changes, the code will compile again and continue to function in the
+same way as it has been. We'll get a warning, though, because we aren't using
+the `Terminate` variant in any messages. Let's change our `Drop` implementation
+to look like Listing 20-24:
+
+<span class="filename">Filename: src/lib.rs</span>
 
 ```rust,ignore
 impl Drop for ThreadPool {
     fn drop(&mut self) {
         println!("Sending terminate message to all workers.");
 
-        for _ in &mut self.threads {
+        for _ in &mut self.workers {
             self.sender.send(Message::Terminate).unwrap();
         }
 
-        for worker in &mut self.threads {
+        println!("Shutting down all workers.");
+
+        for worker in &mut self.workers {
             println!("Shutting down worker {}", worker.id);
 
             if let Some(thread) = worker.thread.take() {
@@ -256,22 +248,42 @@ impl Drop for ThreadPool {
 }
 ```
 
-We need two loops here. Why? Well, if we send a message and then try to join,
-it's not guaranteed that that worker will be the one that gets that message.
-We'd then deadlock. Imagine this scenario: we have two worker threads. We send
-a terminate message down the channel, and then join thread one. But thread one
-is busy processing a request; thread two is idle. This means thread two would
-get the terminate message and shut down; but we're waiting for thread one to
-shut down. Since `join` blocks until shut down, we're now blocking forever, and
-will never send the second message to terminate. Deadlock!
+<span class="caption">Listing 20-24: Sending `Message::Terminate` to the
+workers before calling `join` on each worker thread</span>
+
+We're now iterating over the workers twice, once to send one `Terminate`
+message for each worker, and once to call `join` on each worker's thread. If we
+tried to send a message and join immediately in the same loop, it's not
+guaranteed that the worker in the current iteration will be the one that gets
+the message from the channel.
+
+To understand better why we need two separate loops, imagine a scenario with
+two workers. If we iterated through each worker in one loop, on the first
+iteration where `worker` is the first worker, we'd send a terminate message
+down the channel and call `join` on the first worker's thread. If the first
+worker was busy processing a request at that moment, the second worker would
+pick up the terminate message from the channel and shut down. We're waiting on
+the first worker to shut down, but it never will since the second thread picked
+up the terminate message. We're now blocking forever waiting for the first
+worker to shut down, and we'll never send the second message to terminate.
+Deadlock!
 
 To prevent this, we first put all of our `Terminate` messages on the channel,
-and then we join on all the threads.
+and then we join on all the threads. Because each worker will stop receiving
+requests on the channel once it gets a terminate message, we can be sure that
+if we send the same number of terminate messages as there are workers, each
+worker will receive a terminate message before we call `join` on its thread.
 
-Let's give it a try: modify `main` to only accept a small number of requests
-before shutting the server down:
+In order to see this code in action, let's modify `main` to only accept two
+requests before gracefully shutting the server down as shown in Listing 20-25:
+
+<span class="filename">Filename: src/bin/main.rs</span>
 
 ```rust,ignore
+fn main() {
+    let listener = TcpListener::bind("127.0.0.1:8080").unwrap();
+    let pool = ThreadPool::new(4);
+
     let mut counter = 0;
 
     for stream in listener.incoming() {
@@ -281,74 +293,94 @@ before shutting the server down:
         }
 
         counter += 1;
+
+        let stream = stream.unwrap();
+
+        pool.execute(|| {
+            handle_connection(stream);
+        });
+    }
+}
 ```
 
-And then run it with `cargo run`. Load up the pages a few times, and then check
-your terminal. You'll see something like this:
+<span class="caption">Listing 20-25: Shut down the server after serving two
+requests by exiting the loop</span>
+
+Only serving two requests isn't behavior you'd like a production web server to
+have, but this will let us see the graceful shutdown and cleanup working since
+we won't be stopping the server with `CTRL-C`.
+
+We've added a `counter` variable that we'll increment every time we receive an
+incoming TCP stream. If that counter reaches 2, we'll stop serving requests and
+instead break out of the `for` loop. The `ThreadPool` will go out of scope at
+the end of `main`, and we'll see the `drop` implementation run.
+
+Start the server with `cargo run`, and make three requests. The third request
+should error, and in your terminal you should see output that looks like:
 
 ```text
 $ cargo run
    Compiling hello v0.1.0 (file:///projects/hello)
     Finished dev [unoptimized + debuginfo] target(s) in 1.0 secs
-     Running `target\debug\hello.exe`
+     Running `target/debug/hello`
 Worker 0 got a job; executing.
-Worker 1 got a job; executing.
+Worker 3 got a job; executing.
 Shutting down.
 Sending terminate message to all workers.
+Shutting down all workers.
 Shutting down worker 0
-Worker 2 was told to terminate.
-Worker 3 was told to terminate.
-Worker 0 was told to terminate.
 Worker 1 was told to terminate.
+Worker 2 was told to terminate.
+Worker 0 was told to terminate.
+Worker 3 was told to terminate.
 Shutting down worker 1
 Shutting down worker 2
 Shutting down worker 3
 ```
 
-You may get a different ordering of course. We can see how this works from the
-messages though; workers zero and one get the two page loads, and then, we stop
-accepting connections. When the `Pool` goes out of scope at the end of `main`,
-its `Drop` implementation kicks in, and tells all workers to terminate. They
-then each print the message that they have seen the terminate message, and then
-they all get shut down. One interesting thing about this particular execution:
-you'll notice that we told every worker to terminate, and then immediately
-tried to join worker zero. Since it had not yet gotten the terminate message,
-it waited, and the threads each acknowledged their termination.
+You may get a different ordering, of course. We can see how this works from the
+messages: workers zero and three got the first two requests, and then on the
+third request, we stop accepting connections. When the `ThreadPool` goes out of
+scope at the end of `main`, its `Drop` implementation kicks in, and the pool
+tells all workers to terminate. The workers each print a message when they see
+the terminate message, and then the thread pool calls `join` to shut down each
+worker thread.
 
-Let's bump that request count up to five:
+One interesting aspect of this particular execution: notice that we sent the
+terminate messages down the channel, and before any worker received the
+messages, we tried to join worker zero. Worker zero had not yet gotten the
+terminate message, so the main thread blocked waiting for worker zero to
+finish. In the meantime, each of the workers received the termination messages.
+Once worker zero finished, the main thread waited for the rest of the workers
+to finish, and they had all received the termination message and were able to
+shut down at that point.
+
+Congrats! We now have completed our project, and we have a basic web server
+that uses a thread pool to respond asynchronously. We're able to perform a
+graceful shutdown of the server, which cleans up all the threads in the pool.
+Here's the full code for reference:
+
+<span class="filename">Filename: src/bin/main.rs</span>
 
 ```rust,ignore
-    if counter == 5 {
-```
+extern crate hello;
+use hello::ThreadPool;
 
-And try hitting `/sleep` and `/` at the same time, as we did before. You
-should see the request for `/` complete before the request for `/sleep`;
-we're doing our processing in the background, and not processing requests
-sequentially any more!
-
-Congrats! We now have completed our project. Here's the full code, for
-reference:
-
-```rust,no_run
 use std::io::prelude::*;
 use std::net::TcpListener;
 use std::net::TcpStream;
 use std::fs::File;
-use std::sync::mpsc;
-use std::sync::Arc;
-use std::sync::Mutex;
 use std::thread;
 use std::time::Duration;
 
 fn main() {
     let listener = TcpListener::bind("127.0.0.1:8080").unwrap();
-
     let pool = ThreadPool::new(4);
 
     let mut counter = 0;
 
     for stream in listener.incoming() {
-        if counter == 5 {
+        if counter == 2 {
             println!("Shutting down.");
             break;
         }
@@ -373,7 +405,7 @@ fn handle_connection(mut stream: TcpStream) {
     let get_start = &buffer[..get.len()];
     let sleep_start = &buffer[..sleep.len()];
 
-    let (header, filename) = if get_start == get {
+    let (status_line, filename) = if get_start == get {
         ("HTTP/1.1 200 OK\r\n\r\n", "hello.html")
     } else if sleep_start == sleep {
         thread::sleep(Duration::from_secs(5));
@@ -382,19 +414,33 @@ fn handle_connection(mut stream: TcpStream) {
         ("HTTP/1.1 404 NOT FOUND\r\n\r\n", "404.html")
     };
 
-    let mut file = File::open(filename).unwrap();
-    let mut contents = String::new();
+     let mut file = File::open(filename).unwrap();
+     let mut contents = String::new();
 
-    file.read_to_string(&mut contents).unwrap();
+     file.read_to_string(&mut contents).unwrap();
 
-    let response = format!("{}{}", header, contents);
+     let response = format!("{}{}", status_line, contents);
 
-    stream.write(response.as_bytes()).unwrap();
-    stream.flush().unwrap();
+     stream.write(response.as_bytes()).unwrap();
+     stream.flush().unwrap();
+}
+```
+
+<span class="filename">Filename: src/lib.rs</span>
+
+```rust
+use std::thread;
+use std::sync::mpsc;
+use std::sync::Arc;
+use std::sync::Mutex;
+
+enum Message {
+    NewJob(Job),
+    Terminate,
 }
 
-struct ThreadPool {
-    threads: Vec<Worker>,
+pub struct ThreadPool {
+    workers: Vec<Worker>,
     sender: mpsc::Sender<Message>,
 }
 
@@ -408,22 +454,72 @@ impl<F: FnOnce()> FnBox for F {
     }
 }
 
-struct Job {
-    job: Box<FnBox + Send + 'static>,
+type Job = Box<FnBox + Send + 'static>;
+
+impl ThreadPool {
+    /// Create a new ThreadPool.
+    ///
+    /// The size is the number of threads in the pool.
+    ///
+    /// # Panics
+    ///
+    /// The `new` function will panic if the size is zero.
+    pub fn new(size: usize) -> ThreadPool {
+        assert!(size > 0);
+
+        let (job_sender, job_receiver) = mpsc::channel::<Message>();
+
+        let job_receiver = Arc::new(Mutex::new(job_receiver));
+
+        let mut workers = Vec::with_capacity(size);
+
+        for id in 0..size {
+            workers.push(Worker::new(id, job_receiver.clone()));
+        }
+
+        ThreadPool {
+            workers: workers,
+            sender: job_sender,
+        }
+    }
+
+    pub fn execute<F>(&self, f: F)
+        where
+            F: FnOnce() + Send + 'static
+    {
+        let job = Box::new(f);
+
+        self.sender.send(Message::NewJob(job)).unwrap();
+    }
+}
+
+impl Drop for ThreadPool {
+    fn drop(&mut self) {
+        println!("Sending terminate message to all workers.");
+
+        for _ in &mut self.workers {
+            self.sender.send(Message::Terminate).unwrap();
+        }
+
+        println!("Shutting down all workers.");
+
+        for worker in &mut self.workers {
+            println!("Shutting down worker {}", worker.id);
+
+            if let Some(thread) = worker.thread.take() {
+                thread.join().unwrap();
+            }
+        }
+    }
 }
 
 struct Worker {
-    id: u32,
+    id: usize,
     thread: Option<thread::JoinHandle<()>>,
 }
 
-enum Message {
-    NewJob(Job),
-    Terminate,
-}
-
 impl Worker {
-    fn new(id: u32, job_receiver: Arc<Mutex<mpsc::Receiver<Message>>>) ->
+    fn new(id: usize, job_receiver: Arc<Mutex<mpsc::Receiver<Message>>>) ->
         Worker {
         let thread = thread::spawn(move ||{
             loop {
@@ -433,13 +529,13 @@ impl Worker {
                     Message::NewJob(job) => {
                         println!("Worker {} got a job; executing.", id);
 
-                        job.job.call_box();
+                        job.call_box();
                     },
                     Message::Terminate => {
                         println!("Worker {} was told to terminate.", id);
 
                         break;
-                    }
+                    },
                 }
             }
         });
@@ -450,65 +546,19 @@ impl Worker {
         }
     }
 }
-
-impl ThreadPool {
-    fn new(size: usize) -> ThreadPool {
-        assert!(size > 0);
-
-        let (job_sender, job_receiver) = mpsc::channel::<Message>();
-
-        let job_receiver = Arc::new(Mutex::new(job_receiver));
-
-        let mut threads = Vec::with_capacity(size);
-
-        for i in 0..size {
-            threads.push(Worker::new(i as u32, job_receiver.clone()));
-        }
-
-        ThreadPool {
-            threads: threads,
-            sender: job_sender,
-        }
-    }
-
-    fn execute<F>(&self, f: F)
-        where
-            F: FnOnce() + Send + 'static
-    {
-        let job = Job {
-            job: Box::new(f),
-        };
-
-        self.sender.send(Message::NewJob(job)).unwrap();
-    }
-}
-
-impl Drop for ThreadPool {
-    fn drop(&mut self) {
-        println!("Sending terminate message to all workers.");
-
-        for _ in &mut self.threads {
-            self.sender.send(Message::Terminate).unwrap();
-        }
-
-        for worker in &mut self.threads {
-            println!("Shutting down worker {}", worker.id);
-
-            if let Some(thread) = worker.thread.take() {
-                thread.join().unwrap();
-            }
-        }
-    }
-}
 ```
 
-There is still more we could do here; for example, our `ThreadPool` is not
-inherently tied to HTTP handling, so we could extract it into its own
-submodule, or maybe even its own crate! Extracting the code would make the
-`ThreadPool` code more easily reusable in another context.
+There's more we could do here! If you'd like to continue enhancing this
+project, here are some ideas:
 
-Also more docs, better error handling
+- Add more documentation to `ThreadPool` and its public methods
+- Add tests of the library's functionality
+- Change calls to `unwrap` to more robust error handling
+- Use `ThreadPool` to perform some other task rather than serving web requests
 
 ## Summary
 
-TODO
+Well done! You've made it to the end of the book! We'd like to thank you for
+joining us on this tour of Rust. You're now ready to go out and implement your
+own Rust projects. Remember there's a community of other Rustaceans who would
+love to help you with any challenges you encounter on your Rust journey.

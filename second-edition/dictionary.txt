@@ -262,6 +262,7 @@ refutability
 repr
 request's
 resizes
+resizing
 retweet
 ripgrep
 runtime
