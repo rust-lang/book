@@ -149,8 +149,7 @@ let world = &s[6..11];
 
 This is similar to taking a reference to the whole `String` but with the extra
 `[0..5]` bit. Rather than a reference to the entire `String`, it’s a reference
-to an internal position in the `String` and the number of elements that it
-refers to.
+to a portion of the `String`.
 
 We create slices with a range of `[starting_index..ending_index]`, but the
 slice data structure actually stores the starting position and the length of
