@@ -241,4 +241,3 @@ available.
 
 But structs aren’t the only way we can create custom types: let’s turn to
 Rust’s enum feature to add another tool to our toolbox.
-
