@@ -3562,7 +3562,7 @@ fn main() {
 <p>Initialization of a data structure (struct, enum, union) can be simplified when
 fields of the data structure are initialized with variables of the same
 names as the fields.</p>
-<pre><code>#[derive(Debug)]
+<pre><pre class="playpen"><code class="language-rust">#[derive(Debug)]
 struct Person&lt;'a&gt; {
     name: &amp;'a str,
     age: u8
@@ -3577,7 +3577,7 @@ fn main() {
     // Debug-print struct
     println!(&quot;{:?}&quot;, peter);
 }
-</code></pre>
+</code></pre></pre>
 <a class="header" href="print.html#update-syntax" id="update-syntax"><h1>Update syntax</h1></a>
 <p>A <code>struct</code> can include <code>..</code> to indicate that you want to use a copy of some
 other <code>struct</code> for some of the values. For example:</p>
