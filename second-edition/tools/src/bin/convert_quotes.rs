@@ -26,7 +26,7 @@ fn main () {
             if possible_match == '<' && !is_in_inline_code {
                 is_in_html_tag = true;
             }
-            if possible_match == '>' && !is_in_inline_code {
+            if possible_match == '>' {
                 is_in_html_tag = false;
             }
 
