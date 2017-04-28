@@ -91,7 +91,9 @@ error[E0162]: irrefutable if-let pattern
 Generally, match arms use refutable patterns, except for the last arm that
 might match any remaining values with an irrefutable pattern. A `match` with
 only one arm whose pattern is irrefutable is allowed, but it's not particularly
-useful and could be replaced with a simpler `if let` statement.
+useful and could be replaced with a simpler `let` statement. Both the expressions
+associated with a `let` statement and a single arm irrefutable match will
+unconditionally be run, so the end result is the same if their expressions are.
 
 Now that we've discussed all the places that patterns can be used and the
 difference between refutable and irrefutable patterns, let's go over all the
