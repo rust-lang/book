@@ -121,7 +121,7 @@ Initialization of a data structure (struct, enum, union) can be simplified when
 fields of the data structure are initialized with variables of the same
 names as the fields.
 
-```
+```rust
 #[derive(Debug)]
 struct Person<'a> {
     name: &'a str,
