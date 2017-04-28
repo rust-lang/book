@@ -23,8 +23,11 @@ fn main () {
                 is_in_inline_code = !is_in_inline_code;
             }
             // check if inside html tag
-            if ((possible_match == '<') || (possible_match == '>')) && !is_in_inline_code {
-                is_in_html_tag = !is_in_html_tag;
+            if possible_match == '<' && !is_in_inline_code {
+                is_in_html_tag = true;
+            }
+            if possible_match == '<' && !is_in_inline_code {
+                is_in_html_tag = false;
             }
 
             // replace with right/left apostrophe/quote
