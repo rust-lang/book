@@ -3,6 +3,7 @@ use std::io::{Read, Write};
 
 fn main () {
     let mut is_in_inline_code = false;
+    let mut is_in_html_tag = false;
 
     let mut buffer = String::new();
     if let Err(e) = io::stdin().read_to_string(&mut buffer) {
@@ -10,8 +11,6 @@ fn main () {
     }
 
     for line in buffer.lines() {
-        // only checks for " in html tag on a single line, otherwise lots of formatting breaks.
-        let mut is_in_html_tag = false;
         let mut modified_line = &mut String::new();
         let mut previous_char = std::char::REPLACEMENT_CHARACTER;
         let mut chars_in_line = line.chars();
