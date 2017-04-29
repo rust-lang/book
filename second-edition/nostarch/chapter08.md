@@ -16,7 +16,7 @@ collections which are used very often in Rust programs:
 * A *vector* allows us to store a variable number of values next to each other.
 * A *string* is a collection of characters. We’ve seen the `String` type
   before, but we’ll talk about it in depth now.
-* A *hash map* allows us to associate a value with a particular key. It's a
+* A *hash map* allows us to associate a value with a particular key. It’s a
   particular implementation of the more general data structure called a *map*.
 
 To learn about the other kinds of collections provided by the standard library,
@@ -408,7 +408,7 @@ fn add(self, s: &str) -> String {
 This isn’t the exact signature that’s in the standard library; there `add` is
 defined using generics. Here, we’re looking at the signature of `add` with
 concrete types substituted for the generic ones, which is what happens when we
-call this method with `String` values. We'll be discussing generics in Chapter
+call this method with `String` values. We’ll be discussing generics in Chapter
 10. This signature gives us the clues we need to understand the tricky bits of
 the `+` operator.
 
@@ -567,7 +567,7 @@ to the index to determine how many valid characters there were.
 
 ### Slicing Strings
 
-Because it's not clear what the return type of string indexing should be, and
+Because it’s not clear what the return type of string indexing should be, and
 it is often a bad idea to index into a string, Rust dissuades you from doing so
 by asking you to be more specific if you really need it. The way you can be
 more specific than indexing using `[]` with a single number is using `[]` with
@@ -902,7 +902,7 @@ with the drop in performance is worth it. If you profile your code and find
 that the default hash function is too slow for your purposes, you can switch to
 another function by specifying a different *hasher*. A hasher is a type that
 implements the `BuildHasher` trait. We’ll be talking about traits and how to
-implement them in Chapter 10. You don't necessarily have to implement your own
+implement them in Chapter 10. You don’t necessarily have to implement your own
 hasher from scratch; crates.io has libraries that others have shared that
 provide hashers implementing many common hashing algorithms.
 
