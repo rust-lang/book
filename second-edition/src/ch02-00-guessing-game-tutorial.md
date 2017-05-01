@@ -112,7 +112,7 @@ prelude, you have to bring that type into scope explicitly with a `use`
 statement. Using the `std::io` library provides you with a number of useful
 `io`-related features, including the functionality to accept user input.
 
-[prelude]: ../../std/prelude/index.html
+[prelude]: https://doc.rust-lang.org/std/prelude
 
 As you saw in Chapter 1, the `main` function is the entry point into the
 program:

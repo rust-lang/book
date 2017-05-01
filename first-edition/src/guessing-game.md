@@ -106,8 +106,8 @@ prelude, you’ll have to `use` it directly. There is also a second ‘prelude�
 [`io` prelude][ioprelude], which serves a similar function: you import it, and it
 imports a number of useful, `io`-related things.
 
-[prelude]: ../../std/prelude/index.html
-[ioprelude]: ../../std/io/prelude/index.html
+[prelude]: https://doc.rust-lang.org/std/prelude
+[ioprelude]: https://doc.rust-lang.org/std/io/prelude
 
 ```rust,ignore
 fn main() {
