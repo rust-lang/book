@@ -438,7 +438,7 @@ This code is a bit nicer, isn’t it?
 ## Summary
 
 You made it! That was a sizable chapter: you learned about variables, scalar
-and`if` expressions, and loops! If you want to practice with the concepts
+and `if` expressions, and loops! If you want to practice with the concepts
 discussed in this chapter, try building programs to do the following:
 
 * Convert temperatures between Fahrenheit and Celsius.
