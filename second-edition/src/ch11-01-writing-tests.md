@@ -614,7 +614,7 @@ outside that range panics.
 
 We can do this by adding another attribute, `should_panic`, to our test
 function. This attribute makes a test pass if the code inside the function
-panics, and the test will fail if the code inside the function does non panic.
+panics, and the test will fail if the code inside the function does not panic.
 
 Listing 11-8 shows how we'd write a test that checks the error conditions of
 `Guess::new` happen when we expect:
