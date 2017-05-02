@@ -20,7 +20,12 @@
         <link rel="stylesheet" href="highlight.css">
         <link rel="stylesheet" href="tomorrow-night.css">
         <style>
-            p.warning {	
+            .page-wrapper.has-warning > .nav-chapters {
+              /* add height for warning content & margin */
+              top: 120px;
+            }
+
+            p.warning {
                 background-color: rgb(242, 222, 222);
                 border-bottom-color: rgb(238, 211, 215);
                 border-bottom-left-radius: 4px;
@@ -91,7 +96,7 @@
             {{#toc}}{{/toc}}
         </div>
 
-        <div id="page-wrapper" class="page-wrapper">
+        <div id="page-wrapper" class="page-wrapper has-warning">
 
             <div class="page">
                 <header><p class="warning">You are reading a <strong>draft</strong> of the next edition of TRPL. For more, go <a href="../index.html">here</a>.</p></header>
