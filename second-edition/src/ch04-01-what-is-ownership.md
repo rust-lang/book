@@ -339,8 +339,8 @@ error[E0382]: use of moved value: `s1`
   |
 3 |     let s2 = s1;
   |         -- value moved here
-4 |     println!("{}, world!",s1);
-  |                           ^^ value used here after move
+4 |     println!("{}, world!", s1);
+  |                            ^^ value used here after move
   |
   = note: move occurs because `s1` has type `std::string::String`,
 which does not implement the `Copy` trait
