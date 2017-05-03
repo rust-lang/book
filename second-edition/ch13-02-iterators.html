@@ -308,11 +308,11 @@ defined on it that come with default implementations that call the <code>next</c
 method. Since <code>next</code> is the only method of the <code>Iterator</code> trait that does not
 have a default implementation, once you've done that, you get all of the other
 <code>Iterator</code> adaptors for free. There are a lot of them!</p>
-<p>For example, if for some reason we wanted to take the first five values that
-an instance of <code>Counter</code> produces, pair those values with values produced by
-another <code>Counter</code> instance after skipping the first value that instance
-produces, multiply each pair together, keep only those results that are
-divisible by three, and add all the resulting values together, we could do so:</p>
+<p>For example, if for some reason we wanted to take the values that an instance of
+<code>Counter</code> produces, pair those values with values produced by another <code>Counter</code>
+instance after skipping the first value that instance produces, multiply each
+pair together, keep only those results that are divisible by three, and add all
+the resulting values together, we could do so:</p>
 <pre><pre class="playpen"><code class="language-rust"># #![allow(unused_variables)]
 #fn main() {
 # struct Counter {
@@ -341,8 +341,7 @@ divisible by three, and add all the resulting values together, we could do so:</
 #         }
 #     }
 # }
-let sum: u32 = Counter::new().take(5)
-                             .zip(Counter::new().skip(1))
+let sum: u32 = Counter::new().zip(Counter::new().skip(1))
                              .map(|(a, b)| a * b)
                              .filter(|x| x % 3 == 0)
                              .sum();
