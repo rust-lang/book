@@ -181,7 +181,7 @@ mod network {
 <span class="caption">Listing 7-3: Three modules, `client`, `network`, and
 `network::server`, all defined in *src/lib.rs*</span>
 
-which has this module hierarchy:
+Which has this module hierarchy:
 
 ```text
 communicator
