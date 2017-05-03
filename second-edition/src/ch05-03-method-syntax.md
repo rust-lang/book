@@ -122,7 +122,7 @@ provide.
 
 Let’s practice using methods by implementing a second method on the `Rectangle`
 struct. This time, we want an instance of `Rectangle` to take another instance
-of `Rectangle` and return `true` if the second `R``ectangle` can fit completely
+of `Rectangle` and return `true` if the second `Rectangle` can fit completely
 within `self`; otherwise it should return `false`. That is, we want to be able
 to write the program shown in Listing 5-8, once we’ve defined the `can_hold`
 method:
