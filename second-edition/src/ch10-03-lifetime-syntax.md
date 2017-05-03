@@ -605,7 +605,7 @@ it can't figure out lifetimes for, the compiler will stop with an error.
 
 Let's pretend we're the compiler and apply these rules to figure out what the
 lifetimes of the references in the signature of the `first_word` function in
-Listing 10-25 are. The signatures starts without any lifetimes associated with
+Listing 10-25 are. The signature starts without any lifetimes associated with
 the references:
 
 ```rust,ignore
