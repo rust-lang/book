@@ -594,7 +594,7 @@ Now if we run the test again, we'll get a much more informative error message:
 
 ```text
 ---- tests::greeting_contains_name stdout ----
-	thread 'tests::greeting_contains_name' panicked at 'Result did not contain
+	thread 'tests::greeting_contains_name' panicked at 'Greeting did not contain
     name, value was `Hello`', src/lib.rs:12
 note: Run with `RUST_BACKTRACE=1` for a backtrace.
 ```
