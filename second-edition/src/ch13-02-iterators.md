@@ -217,11 +217,11 @@ method. Since `next` is the only method of the `Iterator` trait that does not
 have a default implementation, once you've done that, you get all of the other
 `Iterator` adaptors for free. There are a lot of them!
 
-For example, if for some reason we wanted to take the first five values that
-an instance of `Counter` produces, pair those values with values produced by
-another `Counter` instance after skipping the first value that instance
-produces, multiply each pair together, keep only those results that are
-divisible by three, and add all the resulting values together, we could do so:
+For example, if for some reason we wanted to take the values that an instance of
+`Counter` produces, pair those values with values produced by another `Counter`
+instance after skipping the first value that instance produces, multiply each
+pair together, keep only those results that are divisible by three, and add all
+the resulting values together, we could do so:
 
 ```rust
 # struct Counter {
@@ -250,8 +250,7 @@ divisible by three, and add all the resulting values together, we could do so:
 #         }
 #     }
 # }
-let sum: u32 = Counter::new().take(5)
-                             .zip(Counter::new().skip(1))
+let sum: u32 = Counter::new().zip(Counter::new().skip(1))
                              .map(|(a, b)| a * b)
                              .filter(|x| x % 3 == 0)
                              .sum();
