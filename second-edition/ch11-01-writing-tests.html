@@ -641,7 +641,7 @@ test that ensures that attempting to create a <code>Guess</code> instance with a
 outside that range panics.</p>
 <p>We can do this by adding another attribute, <code>should_panic</code>, to our test
 function. This attribute makes a test pass if the code inside the function
-panics, and the test will fail if the code inside the function does non panic.</p>
+panics, and the test will fail if the code inside the function does not panic.</p>
 <p>Listing 11-8 shows how we'd write a test that checks the error conditions of
 <code>Guess::new</code> happen when we expect:</p>
 <p><span class="filename">Filename: src/lib.rs</span></p>
