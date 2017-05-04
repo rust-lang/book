@@ -338,7 +338,7 @@ the same thing as null: we don’t have a valid value. So why is having
 In short, because `Option<T>` and `T` (where `T` can be any type) are different
 types, the compiler won’t let us use an `Option<T>` value as if it was
 definitely a valid value. For example, this code won’t compile because it’s
-trying to compare an `Option<i8>` to an `i8`:
+trying to add an `i8` to an `Option<i8>`:
 
 ```rust,ignore
 let x: i8 = 5;
