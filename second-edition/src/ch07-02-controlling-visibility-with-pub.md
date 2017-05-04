@@ -113,7 +113,6 @@ mod network;
 The `pub` goes right before `mod`. Let’s try building again:
 
 ```text
-<warnings>
 error: function `connect` is private
  --> src/main.rs:4:5
   |
