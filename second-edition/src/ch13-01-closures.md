@@ -241,14 +241,13 @@ the type of a closure directly, we have to use generics.
 detail? Is it saying `|x| x + 1` has a different type than `|x| x + 2`? -->
 
 `Fn` isn't the only trait bound available for specifying closures, however.
-There are three: `Fn`, `FnMut`, and `FnOnce`. This continues the patterns of
-threes we've seen elsewhere in Rust: borrowing, borrowing mutably, and
-ownership. Using `Fn` specifies that the closure used may only borrow values in
-its environment. To specify a closure that mutates the environment, use
-`FnMut`, and if the closure takes ownership of the environment, `FnOnce`. Most
-of the time, you can start with `Fn`, and the compiler will tell you if you
-need `FnMut` or `FnOnce` based on what happens when the function calls the
-closure.
+There are three: `Fn`, `FnMut`, and `FnOnce`. This continues the pattern of
+threes we've seen elsewhere in Rust: borrowing, borrowing mutably, and owning.
+Using `Fn` specifies that the closure used may only borrow values in its
+environment. To specify a closure that mutates the environment, use `FnMut`, and
+if the closure takes ownership of the environment, `FnOnce`. Most of the time
+you can start with `Fn`, and the compiler will tell you if you need `FnMut`
+or `FnOnce` based on what happens when the function calls the closure.
 
 To illustrate a situation where it's useful for a function to have a parameter
 that's a closure, let's move on to our next topic: iterators.
