@@ -158,8 +158,8 @@ variable in its enclosing scope</span>
 
 Here, even though `x` is not one of the parameters of `equal_to_x`, the
 `equal_to_x` closure is allowed to use `x`, since `x` is a variable defined in
-the scope that `equal_to_x` is defined. We aren't allowed to do the same thing
-that Listing 13-4 does with functions; let's see what happens if we try:
+the same scope that `equal_to_x` is defined in. We aren't allowed to do the same
+thing that Listing 13-4 does with functions; let's see what happens if we try:
 
 <span class="filename">Filename: src/main.rs</span>
 
