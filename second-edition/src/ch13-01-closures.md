@@ -122,8 +122,8 @@ error[E0308]: mismatched types
   |                     ^^^^ expected i8, found i32
 ```
 
-Since closures' types can be inferred reliably since they're called directly,
-it would be tedious if we were required to annotate their types.
+Closures' types can be inferred reliably since they're called directly, so it
+would be tedious if we were required to annotate their types.
 
 Another reason to have a different syntax from functions for closures is that
 they have different behavior than functions: closures possess an *environment*.
