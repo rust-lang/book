@@ -204,6 +204,11 @@ can do with them. We can also define functions that have closures as parameters
 by using the `Fn` traits. Here's an example of a function named `call_with_one`
 whose signature has a closure as a parameter:
 
+<!-- "the `Fn` traits" makes it sound like this is something you've already
+introduced earlier in the book. If so, maybe reference where, or if not, maybe
+reword it....I had to pause, look around, consider, reconsider, and read the
+following example before feeling confident that I understood what that meant -->
+
 ```rust
 fn call_with_one<F>(some_closure: F) -> i32
     where F: Fn(i32) -> i32 {
