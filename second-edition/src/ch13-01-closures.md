@@ -44,6 +44,9 @@ fn main() {
 }
 ```
 
+<!-- any difference if you changed the last two lines of the closure to instead
+be one line, `result + b` ? is one more rustic than the other? -->
+
 <span class="caption">Listing 13-2: A closure with two parameters and multiple
 expressions in its body</span>
 
