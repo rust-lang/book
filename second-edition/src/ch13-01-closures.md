@@ -73,10 +73,10 @@ fn main() {
 <span class="caption">Listing 13-3: A closure definition with optional
 parameter and return value type annotations</span>
 
-The syntax of closures and functions looks more similar with type annotations.
-Let's compare the different ways we can specify closures with the syntax for
-defining a function more directly. We've added some spaces here to line up the
-relevant parts:
+Closures look like functions when type annotations are included. Let's compare
+the different ways we can specify closures with the syntax for defining a
+function more directly. We've added some spaces here to line up the relevant
+parts:
 
 ```rust,ignore
 fn  add_one_v1   (x: i32) -> i32 { x + 1 }  // a function
