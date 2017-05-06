@@ -78,7 +78,7 @@ struct without specifying lifetimes, like this:
 
 Filename: src/main.rs
 
-```rust
+```rust,ignore
 struct User {
     username: &str,
     email: &str,
@@ -267,7 +267,7 @@ chapters:
 
 Filename: src/main.rs
 
-```rust
+```rust,ignore
 struct Rectangle {
     length: u32,
     width: u32,
