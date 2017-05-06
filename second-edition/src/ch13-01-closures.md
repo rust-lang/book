@@ -87,11 +87,14 @@ let add_one_v4 = |x|               x + 1  ; // without braces
 
 The reason type annotations are not required for defining a closure but are
 required for defining a function is that functions are part of an explicit
-interface exposed to your users, so defining this interface rigidly is
-important for ensuring that everyone agrees on what types of values a function
-uses and returns. Closures aren't used in an exposed interface like this,
-though: they're stored in bindings and called directly. Being forced to
-annotate the types would be a significant ergonomic loss for little advantage.
+interface exposed to your users. Defining this interface rigidly is important
+for ensuring that everyone agrees on what types of values a function uses and
+returns. Closures aren't used in an exposed interface like this, though:
+they're stored in bindings and called directly. Being forced to annotate the
+types would be a significant ergonomic loss for little advantage.
+
+<!-- have we given any hint before this as to what "stored in bindings" means?
+-->
 
 Closure definitions do have one type inferred for each of their parameters and
 for their return value. For instance, if we call the closure without type
