@@ -136,6 +136,9 @@ allowed to access variables from their enclosing scope. Listing 13-4 has an
 example of a closure in the variable `equal_to_x` that uses the variable `x`
 from the closure's surrounding environment:
 
+<!-- First thing that comes to mind: is this only the *immediate* surrounding
+scope, or any surrounding scope? -->
+
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
