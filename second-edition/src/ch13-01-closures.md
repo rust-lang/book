@@ -249,5 +249,10 @@ if the closure takes ownership of the environment, `FnOnce`. Most of the time
 you can start with `Fn`, and the compiler will tell you if you need `FnMut`
 or `FnOnce` based on what happens when the function calls the closure.
 
+<!-- I haven't learned anything from this paragraph about how FnMut and FnOnce
+differ from Fn. It's only left me confused. It says Fn borrows "values" from its
+environment, while the other two "mutate" or "own" the "environment" rather than
+"values" from it. -->
+
 To illustrate a situation where it's useful for a function to have a parameter
 that's a closure, let's move on to our next topic: iterators.
