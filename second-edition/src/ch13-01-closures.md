@@ -237,6 +237,9 @@ Specifying a function signature that contains a closure requires the use of
 generics and trait bounds. Each closure has a unique type, so we can't write
 the type of a closure directly, we have to use generics.
 
+<!-- "Each closure has a unique type" - can you elaborate on this in any more
+detail? Is it saying `|x| x + 1` has a different type than `|x| x + 2`? -->
+
 `Fn` isn't the only trait bound available for specifying closures, however.
 There are three: `Fn`, `FnMut`, and `FnOnce`. This continues the patterns of
 threes we've seen elsewhere in Rust: borrowing, borrowing mutably, and
