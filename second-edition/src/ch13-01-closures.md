@@ -225,13 +225,13 @@ We pass the closure `|x| x + 2`, to `call_with_one`, and `call_with_one` calls
 that closure with `1` as an argument. The return value of the call to
 `some_closure` is then returned from `call_with_one`.
 
-The signature of `call_with_one` is using the `where` syntax discussed in the
-Traits section of Chapter 10. The `some_closure` parameter has the generic type
-`F`, which in the `where` clause is defined as having the trait bounds
-`Fn(i32) -> i32`. The `Fn` trait represents a closure, and we can add types to
-the `Fn` trait to represent a specific type of closure. In this case, our
-closure has a parameter of type `i32` and returns an `i32`, so the generic bound
-we specify is `Fn(i32) -> i32`.
+The signature of `call_with_one` uses the `where` syntax discussed in the Traits
+section of Chapter 10. The `some_closure` parameter has the generic type `F`,
+which in the `where` clause is defined as having the trait bounds `Fn(i32) ->
+i32`. The `Fn` trait represents a closure, and we can add types to the `Fn`
+trait to represent a specific type of closure. In this case, our closure has a
+parameter of type `i32` and returns an `i32`, so the generic bound we specify is
+`Fn(i32) -> i32`.
 
 Specifying a function signature that contains a closure requires the use of
 generics and trait bounds. Each closure has a unique type, so we can't write
