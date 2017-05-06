@@ -193,6 +193,10 @@ the context of starting new threads. We'll show some more examples and explain
 more detail about this feature of closures in Chapter 16 when we talk about
 concurrency.
 
+<!-- this dismissal of the section as something with only limited use here, then
+repeating it in the next paragraph saying it was not the most useful thing,
+leads me to wonder whether these two sections can be reordered -->
+
 ### Closures as Function Parameters Using the `Fn` Traits
 
 While we can bind closures to variables, that's not the most useful thing we
