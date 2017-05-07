@@ -45,6 +45,11 @@ behavior of an iterator adaptor like `map`.
 *iterator*, but I feel not enough has been explained about this mysterious
 thing, `map`, and what kinds of closures can go in there -->
 
+<!-- after writing that, I went to check out the documentation here:
+https://doc.rust-lang.org/std/iter/trait.Iterator.html#method.map and then
+everything was clear...so we can certainly do better here if the real docs made
+it easier to understand than the book, in a very short format -->
+
 ### Iterators are Lazy
 
 In the previous section, you may have noticed a subtle difference in wording:
