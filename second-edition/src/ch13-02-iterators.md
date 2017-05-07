@@ -160,9 +160,9 @@ The `next` method is the main interface into an iterator, and it returns an
 `Option`. If the option is `Some(value)`, we have gotten another value from the
 iterator. If it's `None`, iteration is finished. Inside of the `next` method,
 we do whatever kind of calculation our iterator needs to do. In this case, we
-add one, then check to see if we're still below six. If we are, we can return
-`Some(self.count)` to produce the next value. If we're at six or more,
-iteration is over, so we return `None`.
+add one, then check to see if we're still below six. If we are, we return
+`Some(self.count)` to produce the next value. If we're at six or more, iteration
+is over, so we return `None`.
 
 The iterator trait specifies that when an iterator returns `None`, that
 indicates iteration is finished. The trait does not mandate anything about the
