@@ -1,7 +1,7 @@
 ## Improving our I/O Project
 
 In our I/O project implementing `grep` in the last chapter, there are some
-places where the code could be made clearer and more concise using iterators.
+places where the code could be made clearer and more concise with iterators.
 Let's take a look at how iterators can improve our implementation of the
 `Config::new` function and the `search` function.
 
