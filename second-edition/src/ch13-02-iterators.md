@@ -41,6 +41,10 @@ That's how we end up with `[2, 3, 4]`. As you can see, closures are a very
 important part of using iterators: they provide a way of customizing the
 behavior of an iterator adaptor like `map`.
 
+<!-- so far you've said 4 or 5 times that we used `map` and `collect` and
+*iterator*, but I feel not enough has been explained about this mysterious
+thing, `map`, and what kinds of closures can go in there -->
+
 ### Iterators are Lazy
 
 In the previous section, you may have noticed a subtle difference in wording:
