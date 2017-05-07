@@ -144,9 +144,9 @@ fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
 }
 ```
 
-We can write this code in a much shorter way, and avoiding having to have a
-mutable intermediate `results` vector, by using iterator adaptor methods like
-this instead:
+We can write this code in a much shorter way, and avoiding needing a mutable
+intermediate `results` vector, by using iterator adaptor methods like this
+instead:
 
 ```rust
 fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
