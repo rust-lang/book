@@ -74,8 +74,8 @@ processing on their own. They need some other method that causes the iterator
 chain to evaluate. We call those *consuming adaptors*, and `collect` is one of
 them.
 
-So how do we tell which iterator methods consume the iterator or not? And what
-adaptors are available? For that, let's look at the `Iterator` trait.
+So how do we tell which iterator methods consume the iterator and which do not?
+And what adaptors are available? For that, let's look at the `Iterator` trait.
 
 ### The `Iterator` trait
 
