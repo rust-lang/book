@@ -7,7 +7,7 @@ Let's take a look at how iterators can improve our implementation of the
 
 ### Removing a `clone` by Using an Iterator
 
-Back in listing 12-8, we had this code that took a slice of `String` values and
+Back in Listing 12-8, we had this code that took a slice of `String` values and
 created an instance of the `Config` struct by checking for the right number of
 arguments, indexing into the slice, and cloning the values so that the `Config`
 struct could own those values:
