@@ -91,12 +91,10 @@ If we try to compile the above code, we get the error shown in Listing 15-3:
 error[E0072]: recursive type `List` has infinite size
  -->
   |
-1 |   enum List {
-  |  _^ starting here...
-2 | |     Cons(i32, List),
-3 | |     Nil,
-4 | | }
-  | |_^ ...ending here: recursive type has infinite size
+1 | enum List {
+  | ^^^^^^^^^ recursive type has infinite size
+2 |     Cons(i32, List),
+  |     --------------- recursive without indirection
   |
   = help: insert indirection (e.g., a `Box`, `Rc`, or `&`) at some point to
   make `List` representable
