@@ -59,7 +59,63 @@ let user1 = User {
 
 To get a specific value from a struct, we can use dot notation. If we wanted
 just this user’s email address, we can use `user1.email` wherever we want to
-use this value.
+use this value. To change a value in a struct, if the instance is mutable, we
+can use the dot notation and assign into a particular field, such as
+`user1.email = String::from("someone-else@example.com");`
+
+A convenient way to create a new instance from an old instance, using most of
+the old instance's values but changing some values, uses `..` and is known as
+*struct update syntax* in this context. For example, to create `user2` by
+copying the data from the `user1` instance and changing the values of `email`
+and username at the same time, we can specify the new values and then use `..`
+to use the remaining values from `user1`:
+
+```rust
+let user2 = User {
+    email: String::from("another@example.com"),
+    username: String::from("anotherusername567"),
+    ..user1
+};
+```
+
+The struct update syntax is a more concise way of setting each field explicitly
+from another instance, since creating new instances that are almost like
+existing instances is common. That is, this code is equivalent:
+
+```rust
+let user2 = User {
+    email: String::from(""),
+    username: String::from("anotherusername567"),
+    active: user1.active,
+    sign_in_count: user1.sign_in_count,
+};
+```
+
+We can also define structs that look similar to tuples, called *tuple structs*,
+that have the added meaning the struct name provides, but don't have names
+associated with their fields, just the types of the fields. The definition of a
+tuple struct still starts with the `struct` keyword and the struct name, which
+are followed by the types in the tuple. For example, here are definitions and
+usages of tuple structs named `Color` and `Point`:
+
+```rust
+struct Color(i32, i32, i32);
+struct Point(i32, i32, i32);
+
+let black = Color(0, 0, 0);
+let origin = Point(0, 0, 0);
+```
+
+Note that the `black` and `origin` values are different types, since they're
+instances of different tuple structs. Each struct we define is its own type,
+even though the fields within the struct have the same types. Otherwise, tuple
+struct instances behave like tuples, which we covered in Chapter 3.
+
+We can also define structs that don't have any fields! These are called
+*unit-like structs* since they behave similarly to `()`, the unit type.
+Unit-like structs can be useful in situations such as when you need to
+implement a trait on some type, but you don't have any data that you want to
+store in the type itself. We'll be discussing traits in Chapter 10.
 
 PROD: START BOX
 
