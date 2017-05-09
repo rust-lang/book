@@ -149,15 +149,16 @@ let world = &s[6..11];
 
 This is similar to taking a reference to the whole `String` but with the extra
 `[0..5]` bit. Rather than a reference to the entire `String`, it’s a reference
-to a portion of the `String`.
+to a portion of the `String`. The `start..end` syntax is a range that begins at
+`start` and continues up to, but not including, `end`.
 
-We create slices with a range of `[starting_index..ending_index]`, where
-`starting_index` is the first position included in the slice and
-`ending_index` is the one more than the last position included in the slice.
-Internally, the slice data structure actually stores the starting position and
-the length of the slice, which corresponds to `starting_index` minus
-`ending_index`. So in the case of `let world = &s[6..11];`, `world` would be a
-slice that contains a pointer to the 6th byte of `s` and a length value of 5.
+We can create slices using a range within brackets by specifying
+`[starting_index..ending_index]`, where `starting_index` is the first position
+included in the slice and `ending_index` is one more than the last position
+included in the slice. Internally, the slice data structure stores the starting
+position and the length of the slice, which corresponds to `ending_index` minus
+`starting_index`. So in the case of `let world = &s[6..11];`, `world` would be
+a slice that contains a pointer to the 6th byte of `s` and a length value of 5.
 
 Figure 4-12 shows this in a diagram.
 
