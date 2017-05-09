@@ -175,21 +175,26 @@ confidently use the values they receive. Listing 9-8 shows one way to define a
 receives a value between 1 and 100:
 
 ```rust
-struct Guess {
-    value: u32,
-}
-
-impl Guess {
-    pub fn new(value: u32) -> Guess {
-        if value < 1 || value > 100 {
-            panic!("Guess value must be between 1 and 100, got {}.", value);
-        }
-
-        Guess {
-            value: value,
-        }
+mod Guessing {
+    struct Guess {
+        value: u32,
     }
 
+    impl Guess {
+        pub fn new(value: u32) -> Guess {
+            if value < 1 || value > 100 {
+                panic!("Guess value must be between 1 and 100, got {}.", value);
+            }
+
+            Guess {
+                value: value,
+            }
+        }
+
+        pub fn value(&self) -> u32 {
+            self.value
+        }
+    }
 }
 ```
 
@@ -219,9 +224,9 @@ called a *getter*, since its purpose is to get some data from its fields and
 return it. This public method is necessary because the `value` field of the
 `Guess` struct is private. It’s important that the `value` field is private so
 that code using the `Guess` struct is not allowed to set `value` directly:
-callers *must* use the `Guess::new` function to create an instance of `Guess`,
-which ensures there’s no way for a `Guess` to have a `value` that hasn’t been
-checked by the conditions in the `Guess::new` function.
+callers outside the module *must* use the `Guess::new` function to create an
+instance of `Guess`,  which ensures there’s no way for a `Guess` to have a
+`value` that hasn’t been checked by the conditions in the `Guess::new` function.  
 
 A function that has a parameter or returns only numbers between 1 and 100 could
 then declare in its signature that it takes or returns a `Guess` rather than a
