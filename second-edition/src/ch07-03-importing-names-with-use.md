@@ -187,12 +187,6 @@ error[E0433]: failed to resolve. Use of undeclared type or module `client`
   |
 9 |         client::connect();
   |         ^^^^^^^^^^^^^^^ Use of undeclared type or module `client`
-
-warning: function is never used: `connect`, #[warn(dead_code)] on by default
- --> src/network/server.rs:1:1
-  |
-1 | fn connect() {
-  | ^
 ```
 
 The compilation failed, but why? We don’t need to place `communicator::` in
