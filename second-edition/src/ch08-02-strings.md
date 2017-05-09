@@ -48,7 +48,7 @@ Many of the same operations available with `Vec` are available with `String` as
 well, starting with the `new` function to create a string, like so:
 
 ```rust
-let s = String::new();
+let mut s = String::new();
 ```
 
 This creates a new empty string called `s` that we can then load data into.
