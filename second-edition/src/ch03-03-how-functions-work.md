@@ -320,10 +320,10 @@ error[E0308]: mismatched types
  --> src/main.rs:7:28
   |
 7 |   fn plus_one(x: i32) -> i32 {
-  |  ____________________________^ starting here...
+  |  ____________________________^
 8 | |     x + 1;
 9 | | }
-  | |_^ ...ending here: expected i32, found ()
+  | |_^ expected i32, found ()
   |
   = note: expected type `i32`
              found type `()`

@@ -96,10 +96,10 @@ body at 15:55...
   --> <anon>:15:56
    |
 15 |   fn parse_context(context: Context) -> Result<(), &str> {
-   |  ________________________________________________________^ starting here...
+   |  ________________________________________________________^
 16 | |     Parser { context: &context }.parse()
 17 | | }
-   | |_^ ...ending here
+   | |_^
 
 error: `context` does not live long enough
   --> <anon>:16:24
@@ -114,10 +114,10 @@ body at 15:55...
   --> <anon>:15:56
    |
 15 |   fn parse_context(context: Context) -> Result<(), &str> {
-   |  ________________________________________________________^ starting here...
+   |  ________________________________________________________^
 16 | |     Parser { context: &context }.parse()
 17 | | }
-   | |_^ ...ending here
+   | |_^
 ```
 
 These errors are saying that both the `Parser` instance we're creating and the
@@ -226,19 +226,17 @@ error[E0491]: in type `&'c Context<'s>`, reference has a longer lifetime than th
 note: the pointer is valid for the lifetime 'c as defined on the struct at 3:0
  --> src/main.rs:3:1
   |
-3 |   struct Parser<'c, 's> {
-  |  _^ starting here...
+3 | / struct Parser<'c, 's> {
 4 | |     context: &'c Context<'s>,
 5 | | }
-  | |_^ ...ending here
+  | |_^
 note: but the referenced data is only valid for the lifetime 's as defined on the struct at 3:0
  --> src/main.rs:3:1
   |
-3 |   struct Parser<'c, 's> {
-  |  _^ starting here...
+3 | / struct Parser<'c, 's> {
 4 | |     context: &'c Context<'s>,
 5 | | }
-  | |_^ ...ending here
+  | |_^
 ```
 
 Rust doesn't know of any relationship between `'c` and `'s`. In order to be
