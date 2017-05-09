@@ -2,10 +2,10 @@
 
 Every programming language has tools to deal effectively with duplication of
 concepts; in Rust, one of those tools is *generics*. Generics are abstract
-stand-ins for concrete types or other properties. We can express properties of
-generics, such as their behavior or how they relate to other generics, without
-needing to know when we're writing and compiling the code what will actually be
-in their place.
+stand-ins for concrete types or other properties. When we're writing and
+compiling the code we can express properties of generics, such as their
+behavior or how they relate to other generics, without needing to know what
+will actually be in their place.
 
 In the same way that a function takes parameters whose value we don't know in
 order to write code once that will be run on multiple concrete values, we can
