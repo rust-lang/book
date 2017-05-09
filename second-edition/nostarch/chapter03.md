@@ -136,12 +136,12 @@ immutable variables, constants are also values  that are bound to a name and
 are not allowed to change, but there are a few differences between constants
 and variables.
 
-First, we aren’t allowed to use `mut` with constants: constants aren't only
-immutable by default, they're always immutable.
+First, we aren’t allowed to use `mut` with constants: constants aren’t only
+immutable by default, they’re always immutable.
 
 We declare constants using the `const` keyword instead of the `let` keyword,
-and the type of the value *must* be annotated. We're about to cover types and
-type annotations in the next section, “Data Types,” so don't worry about the
+and the type of the value *must* be annotated. We’re about to cover types and
+type annotations in the next section, “Data Types,” so don’t worry about the
 details right now, just know that we must always annotate the type.
 
 Constants can be declared in any scope, including the global scope, which makes
@@ -151,7 +151,7 @@ The last difference is that constants may only be set to a constant expression,
 not the result of a function call or any other value that could only be
 computed at runtime.
 
-Here's an example of a constant declaration where the constant's name is
+Here’s an example of a constant declaration where the constant’s name is
 `MAX_POINTS` and its value is set to 100,000. (Rust constant naming convention
 is to use all upper case with underscores between words):
 
@@ -678,11 +678,11 @@ called and its message is printed.
 ### Function Parameters
 
 Functions can also be defined to have *parameters*, which are special variables
-that are part of a function's signature. When a function has parameters, we can
+that are part of a function’s signature. When a function has parameters, we can
 provide it with concrete values for those parameters. Technically, the concrete
 values are called *arguments*, but in casual conversation people tend to use
 the words “parameter” and “argument” interchangeably for either the variables
-in a function's definition or the concrete values passed in when you call a
+in a function’s definition or the concrete values passed in when you call a
 function.
 
 The following rewritten version of `another_function` shows what parameters
@@ -737,7 +737,7 @@ fn another_function(x: i32, y: i32) {
 
 This example creates a function with two parameters, both of which are `i32`
 types. The function then prints out the values in both of its parameters. Note
-that function parameters don't all need to be the same type, they just happen
+that function parameters don’t all need to be the same type, they just happen
 to be in this example.
 
 Let’s try running this code. Replace the program currently in your *function*
@@ -1003,7 +1003,7 @@ fn main() {
 ```
 
 But you’ll more often see them used in this format, with the comment on a
-separate line above the code it's annotating:
+separate line above the code it’s annotating:
 
 Filename: src/main.rs
 
@@ -1255,7 +1255,7 @@ error[E0308]: if and else have incompatible types
   | |_____^ ...ending here: expected integral variable, found reference
   |
   = note: expected type `{integer}`
-             found type `&'static str`
+             found type `&‘static str`
 ```
 
 The expression in the `if` block evaluates to an integer, and the expression in

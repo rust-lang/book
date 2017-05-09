@@ -40,7 +40,7 @@ struct User {
 Listing 5-1: A `User` struct definition
 </caption>
 
-To use a struct once we've defined it, we create an *instance* of that struct
+To use a struct once we’ve defined it, we create an *instance* of that struct
 by specifying concrete values for each of the fields. Creating an instance is
 done by stating the name of the struct, then curly braces with `key: value`
 pairs inside it where the keys are the names of the fields and the values are
@@ -70,7 +70,7 @@ we want instances of this struct to own all of its data, and for that data to
 be valid for as long as the entire struct is valid.
 
 It is possible for structs to store references to data owned by something else,
-but to do so requires the use of *lifetimes*, a feature of Rust that we'll
+but to do so requires the use of *lifetimes*, a feature of Rust that we’ll
 discuss in Chapter 10. Lifetimes ensure that the data a struct references is
 valid for as long as the struct is. If you try to store a reference in a struct
 without specifying lifetimes, like this:
@@ -513,7 +513,7 @@ Let’s practice some more with methods by implementing a second method on our
 `Rectangle` struct. This time, we’d like for an instance of `Rectangle` to take
 another instance of `Rectangle` and return `true` if the second rectangle could
 fit completely within `self` and `false` if it would not. That is, if we run
-the code in Listing 5-8, once we've defined the `can_hold` method:
+the code in Listing 5-8, once we’ve defined the `can_hold` method:
 
 Filename: src/main.rs
 

@@ -126,7 +126,7 @@ Now we have a `network::connect` function and a `client::connect` function.
 These can have completely different functionality, and the function names do
 not conflict with each other since they’re in different modules.
 
-While in this case, we’re building a library, there's nothing special about
+While in this case, we’re building a library, there’s nothing special about
 *src/lib.rs*. We could also make use of submodules in *src/main.rs* as well. In
 fact, we can also put modules inside of modules. This can be useful as your
 modules grow to keep related functionality organized together and separate
@@ -574,11 +574,11 @@ and the binary crate uses that library crate. This way, other programs can also
 use the library crate, and it’s a nice separation of concerns.
 
 From the point of view of a crate outside of the `communicator` library looking
-in, all of the modules we've been creating are within a module that has the
+in, all of the modules we’ve been creating are within a module that has the
 same name as the crate, `communicator`. We call the top-level module of a crate
 the *root module*.
 
-Also note that even if we're using an external crate within a submodule of our
+Also note that even if we’re using an external crate within a submodule of our
 project, the `extern crate` should go in our root module (so in *src/main.rs*
 or *src/lib.rs*). Then, in our submodules, we can refer to items from external
 crates as if the items are top-level modules.

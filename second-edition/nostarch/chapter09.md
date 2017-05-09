@@ -136,7 +136,7 @@ the `panic!` is actually happening.
 
 The next note line tells us that we can set the `RUST_BACKTRACE` environment
 variable to get a backtrace of exactly what happened to cause the error. Let’s
-try that. Listing 9-1 shows output similar to what you'll see:
+try that. Listing 9-1 shows output similar to what you’ll see:
 
 <figure>
 
