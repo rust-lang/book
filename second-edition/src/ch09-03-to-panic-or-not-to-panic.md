@@ -190,9 +190,6 @@ impl Guess {
         }
     }
 
-    pub fn value(&self) -> u32 {
-        self.value
-    }
 }
 ```
 
