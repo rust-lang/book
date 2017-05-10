@@ -110,8 +110,8 @@ let score = scores.get(&team_name);
 ```
 
 Here, `score` will have the value that’s associated with the Blue team, and the
-result will be `Some(10)`. The result is wrapped in `Some` because `get`
-returns an `Option<V>`; if there’s no value for that key in the hash map, `get`
+result will be `Some(&10)`. The result is wrapped in `Some` because `get`
+returns an `Option<&V>`; if there’s no value for that key in the hash map, `get`
 will return `None`. The program will need to handle the `Option` in one of the
 ways that we covered in Chapter 6.
 
