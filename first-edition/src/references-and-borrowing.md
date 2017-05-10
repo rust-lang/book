@@ -83,7 +83,7 @@ A more concrete example:
 fn main() {
     // Don't worry if you don't understand how `fold` works, the point here is that an immutable reference is borrowed.
     fn sum_vec(v: &Vec<i32>) -> i32 {
-        return v.iter().fold(0, |a, &b| a + b);
+        v.iter().fold(0, |a, &b| a + b)
     }
     // Borrow two vectors and sum them.
     // This kind of borrowing does not allow mutation through the borrowed reference.
