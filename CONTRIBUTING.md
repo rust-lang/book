@@ -23,6 +23,17 @@ book to print. Each chapter goes through [a number of stages][project]:
 * We revise, clarify, and check the copyedits
 * The chapter goes to layout, at which point only minor changes should be made
 
+### Documenting newly stabilized features
+
+New features added to Rust will be documented in the ["Newest Features"
+Appendix][new] per [RFC 1636][rfc]. We'd love pull requests adding new
+sections! These sections may be incorporated into the book at some point, but
+we have no timeline for doing so; see the Post-publication section below for
+more details.
+
+[new]: https://github.com/rust-lang/book/blob/master/second-edition/src/appendix-07-newest-features.md
+[rfc]: https://github.com/rust-lang/rfcs/pull/1636#issuecomment-247325313
+
 ### Corrections and Modifications
 
 We would love issues and pull requests to the Markdown files in the src
@@ -84,13 +95,5 @@ changes:
   second edition or a ground-up rewrite. Until we have plans for that, we won't
   be accepting pull requests that aren't fixing errors, for example, changing
   the way something is worded.
-* New features added to Rust will be documented in the ["Newest Features"
-  Appendix][new] per [RFC 1636][rfc]. We'd love pull requests adding new
-  sections! These sections may be incorporated into the book at some point, but
-  we have no timeline for doing so. Incorporating these sections might be what
-  the third edition ends up being, we're not sure yet.
-
-[new]: https://github.com/rust-lang/book/blob/master/second-edition/src/appendix-07-newest-features.md
-[rfc]: https://github.com/rust-lang/rfcs/pull/1636#issuecomment-247325313
 
 This repository is under the same license as Rust itself, MIT/Apache2.
