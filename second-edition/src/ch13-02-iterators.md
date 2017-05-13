@@ -150,7 +150,7 @@ impl Iterator for Counter {
 
 The `type Item = u32` line is saying that the associated `Item` type will be
 a `u32` for our iterator. Again, don't worry about associated types yet, because
-we'll be covering them in Chapter XX.
+we'll be covering them in Chapter 19.
 
 The `next` method is the main interface into an iterator, and it returns an
 `Option`. If the option is `Some(value)`, we have gotten another value from the
