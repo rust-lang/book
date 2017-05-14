@@ -89,7 +89,7 @@ Let's build it!
 $ cargo build
    Compiling add-one v0.1.0 (file:///projects/adder/add-one)
    Compiling adder v0.1.0 (file:///projects/adder)
-    Finished debug [unoptimized + debuginfo] target(s) in 0.68 secs
+    Finished dev [unoptimized + debuginfo] target(s) in 0.68 secs
 ```
 
 Note that running `cargo build` in the *adder* directory built both that crate
@@ -120,7 +120,7 @@ $ cargo build
    Compiling rand v0.3.14
    Compiling add-one v0.1.0 (file:///projects/adder/add-one)
    Compiling adder v0.1.0 (file:///projects/adder)
-    Finished debug [unoptimized + debuginfo] target(s) in 10.18 secs
+    Finished dev [unoptimized + debuginfo] target(s) in 10.18 secs
 ```
 
 The top level *Cargo.lock* now reflects the fact that `add-one` depends
@@ -168,7 +168,7 @@ Now run `cargo test` in the top-level *adder* directory:
 ```text
 $ cargo test
    Compiling adder v0.1.0 (file:///projects/adder)
-    Finished debug [unoptimized + debuginfo] target(s) in 0.27 secs
+    Finished dev [unoptimized + debuginfo] target(s) in 0.27 secs
      Running target/debug/adder-f0253159197f7841
 
 running 0 tests
@@ -183,7 +183,7 @@ indicate we want to run tests for a particular package:
 
 ```text
 $ cargo test -p add-one
-    Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
+    Finished dev [unoptimized + debuginfo] target(s) in 0.0 secs
      Running target/debug/deps/add_one-abcabcabc
 
 running 1 test

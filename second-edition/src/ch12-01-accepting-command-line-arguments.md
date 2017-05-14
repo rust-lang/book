@@ -168,7 +168,7 @@ again with the arguments `test` and `sample.txt`:
 
 ```text
 $ cargo run test sample.txt
-    Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
+    Finished dev [unoptimized + debuginfo] target(s) in 0.0 secs
      Running `target/debug/greprs test sample.txt`
 Searching for test
 In file sample.txt

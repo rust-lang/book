@@ -317,7 +317,7 @@ running the program without any arguments; it will look like this:
 
 ```text
 $ cargo run
-    Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
+    Finished dev [unoptimized + debuginfo] target(s) in 0.0 secs
      Running `target/debug/greprs`
 thread 'main' panicked at 'index out of bounds: the len is 1
 but the index is 1',  /stable-dist-rustc/build/src/libcollections/vec.rs:1307
@@ -364,7 +364,7 @@ without any arguments again and see what the error looks like now:
 
 ```bash
 $ cargo run
-    Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
+    Finished dev [unoptimized + debuginfo] target(s) in 0.0 secs
      Running `target/debug/greprs`
 thread 'main' panicked at 'not enough arguments', src/main.rs:29
 note: Run with `RUST_BACKTRACE=1` for a backtrace.
@@ -505,7 +505,7 @@ the extra output. Let's try it:
 ```text
 $ cargo run
    Compiling greprs v0.1.0 (file:///projects/greprs)
-    Finished debug [unoptimized + debuginfo] target(s) in 0.48 secs
+    Finished dev [unoptimized + debuginfo] target(s) in 0.48 secs
      Running `target/debug/greprs`
 Problem parsing arguments: not enough arguments
 ```

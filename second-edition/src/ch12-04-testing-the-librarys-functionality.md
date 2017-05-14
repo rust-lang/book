@@ -132,7 +132,7 @@ Now let's try running our test:
 ```text
 $ cargo test
 ...warnings...
-    Finished debug [unoptimized + debuginfo] target(s) in 0.43 secs
+    Finished dev [unoptimized + debuginfo] target(s) in 0.43 secs
      Running target/debug/deps/greprs-abcabcabc
 
 running 1 test
@@ -331,7 +331,7 @@ that should return exactly one line from the Emily Dickinson poem, "frog":
 ```text
 $ cargo run frog poem.txt
    Compiling greprs v0.1.0 (file:///projects/greprs)
-    Finished debug [unoptimized + debuginfo] target(s) in 0.38 secs
+    Finished dev [unoptimized + debuginfo] target(s) in 0.38 secs
      Running `target/debug/greprs frog poem.txt`
 How public, like a frog
 ```
@@ -340,7 +340,7 @@ Cool! Next, how about a word that will match multiple lines, like "the":
 
 ```text
 $ cargo run the poem.txt
-    Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
+    Finished dev [unoptimized + debuginfo] target(s) in 0.0 secs
      Running `target/debug/greprs the poem.txt`
 Then there's a pair of us — don't tell!
 To tell your name the livelong day
@@ -351,7 +351,7 @@ word that isn't anywhere in the poem, like "monomorphization":
 
 ```text
 $ cargo run monomorphization poem.txt
-    Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
+    Finished dev [unoptimized + debuginfo] target(s) in 0.0 secs
      Running `target/debug/greprs monomorphization poem.txt`
 ```
 
