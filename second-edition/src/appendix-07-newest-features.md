@@ -33,3 +33,27 @@ fn main() {
     println!("{:?}", portia);
 }
 ```
+
+
+## Returning from loops
+
+One of the uses of a `loop` is to retry an operation you know can fail, such as
+checking if a thread completed its job. However, you might need to pass the
+result of that operation to the rest of your code. If you add it to the `break`
+expression you use to stop the loop, it will be returned by the broken loop:
+
+```rust
+fn main() {
+    let mut counter = 0;
+
+    let result = loop {
+        counter += 1;
+
+        if counter == 10 {
+            break counter * 2;
+        }
+    };
+
+    assert_eq!(result, 20);
+}
+```
