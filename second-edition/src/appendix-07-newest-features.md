@@ -29,7 +29,7 @@ fn main() {
 
     // Using field init shorthand:
     let portia = Person { name, age };
-    
+
     println!("{:?}", portia);
 }
 ```
