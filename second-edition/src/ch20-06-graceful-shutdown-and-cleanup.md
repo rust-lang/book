@@ -576,6 +576,9 @@ project, here are some ideas:
 - Add tests of the library's functionality
 - Change calls to `unwrap` to more robust error handling
 - Use `ThreadPool` to perform some other task rather than serving web requests
+- Find a thread pool crate on crates.io and implement a similar web server
+  using the crate instead and compare its API and robustness to the thread pool
+  we implemented
 
 ## Summary
 
