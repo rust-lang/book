@@ -103,7 +103,7 @@ impl ThreadPool {
         }
 
         ThreadPool {
-            threads: threads,
+            threads
         }
     }
 
@@ -205,7 +205,7 @@ impl ThreadPool {
         }
 
         ThreadPool {
-            workers: workers,
+            workers
         }
     }
     // ...snip...
@@ -221,8 +221,8 @@ impl Worker {
         let thread = thread::spawn(|| { });
 
         Worker {
-            id: id,
-            thread: thread,
+            id,
+            thread,
         }
     }
 }

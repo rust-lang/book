@@ -69,7 +69,7 @@ So we know we want to update the definition of `Worker` like this:
 ```rust
 # use std::thread;
 struct Worker {
-    id: u32,
+    id: usize,
     thread: Option<thread::JoinHandle<()>>,
 }
 ```
@@ -88,8 +88,8 @@ error: no method named `join` found for type
 error[E0308]: mismatched types
   --> src/lib.rs:89:21
    |
-89 |             thread: thread,
-   |                     ^^^^^^ expected enum `std::option::Option`, found
+89 |             thread,
+   |             ^^^^^^ expected enum `std::option::Option`, found
    struct `std::thread::JoinHandle`
    |
    = note: expected type `std::option::Option<std::thread::JoinHandle<()>>`
@@ -103,11 +103,11 @@ to wrap the `thread` value in `Some` when we create a new `Worker`:
 
 ```rust,ignore
 impl Worker {
-    fn new(id: usize, job_receiver: Arc<Mutex<mpsc::Receiver<Job>>>) -> Worker {
+    fn new(id: usize, receiver: Arc<Mutex<mpsc::Receiver<Job>>>) -> Worker {
         // ...snip...
 
         Worker {
-            id: id,
+            id,
             thread: Some(thread),
         }
     }
@@ -123,7 +123,7 @@ what that looks like:
 ```rust,ignore
 impl Drop for ThreadPool {
     fn drop(&mut self) {
-        for worker in &mut self.threads {
+        for worker in &mut self.workers {
             println!("Shutting down worker {}", worker.id);
 
             if let Some(thread) = worker.thread.take() {
@@ -172,8 +172,8 @@ We need to adjust the channel to use values of type `Message` rather than type
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust,ignore
-struct ThreadPool {
-    threads: Vec<Worker>,
+pub struct ThreadPool {
+    workers: Vec<Worker>,
     sender: mpsc::Sender<Message>,
 }
 
@@ -184,7 +184,7 @@ impl ThreadPool {
     pub fn new(size: usize) -> ThreadPool {
         assert!(size > 0);
 
-        let (job_sender, job_receiver) = mpsc::channel::<Message>();
+        let (sender, receiver) = mpsc::channel::<Message>();
 
         // ...snip...
     }
@@ -202,9 +202,32 @@ impl ThreadPool {
 // ...snip...
 
 impl Worker {
-    fn new(id: usize, job_receiver: Arc<Mutex<mpsc::Receiver<Message>>>) ->
+    fn new(id: usize, receiver: Arc<Mutex<mpsc::Receiver<Message>>>) ->
         Worker {
-        // ...snip...
+
+        let thread = thread::spawn(move ||{
+            loop {
+                let message = receiver.lock().unwrap().recv().unwrap();
+
+                match message {
+                    Message::NewJob(job) => {
+                        println!("Worker {} got a job; executing.", id);
+
+                        job.call_box();
+                    },
+                    Message::Terminate => {
+                        println!("Worker {} was told to terminate.", id);
+
+                        break;
+                    },
+                }
+            }
+        });
+
+        Worker {
+            id,
+            thread: Some(thread),
+        }
     }
 }
 ```
@@ -464,19 +487,19 @@ impl ThreadPool {
     pub fn new(size: usize) -> ThreadPool {
         assert!(size > 0);
 
-        let (job_sender, job_receiver) = mpsc::channel::<Message>();
+        let (sender, receiver) = mpsc::channel::<Message>();
 
-        let job_receiver = Arc::new(Mutex::new(job_receiver));
+        let receiver = Arc::new(Mutex::new(receiver));
 
         let mut workers = Vec::with_capacity(size);
 
         for id in 0..size {
-            workers.push(Worker::new(id, job_receiver.clone()));
+            workers.push(Worker::new(id, receiver.clone()));
         }
 
         ThreadPool {
-            workers: workers,
-            sender: job_sender,
+            workers,
+            sender,
         }
     }
 
@@ -516,11 +539,12 @@ struct Worker {
 }
 
 impl Worker {
-    fn new(id: usize, job_receiver: Arc<Mutex<mpsc::Receiver<Message>>>) ->
+    fn new(id: usize, receiver: Arc<Mutex<mpsc::Receiver<Message>>>) ->
         Worker {
+
         let thread = thread::spawn(move ||{
             loop {
-                let message = job_receiver.lock().unwrap().recv().unwrap();
+                let message = receiver.lock().unwrap().recv().unwrap();
 
                 match message {
                     Message::NewJob(job) => {
@@ -538,7 +562,7 @@ impl Worker {
         });
 
         Worker {
-            id: id,
+            id,
             thread: Some(thread),
         }
     }

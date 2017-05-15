@@ -47,7 +47,7 @@ impl ThreadPool {
     pub fn new(size: usize) -> ThreadPool {
         assert!(size > 0);
 
-        let (job_sender, job_receiver) = mpsc::channel::<Job>();
+        let (sender, receiver) = mpsc::channel::<Job>();
 
         let mut workers = Vec::with_capacity(size);
 
@@ -56,8 +56,8 @@ impl ThreadPool {
         }
 
         ThreadPool {
-            workers: workers,
-            sender: job_sender,
+            workers,
+            sender,
         }
     }
     // ...snip...
@@ -73,8 +73,8 @@ impl ThreadPool {
 #         let thread = thread::spawn(|| { });
 #
 #         Worker {
-#             id: id,
-#             thread: thread,
+#             id,
+#             thread,
 #         }
 #     }
 # }
@@ -89,7 +89,7 @@ to the sending end. This will successfully compile, still with warnings.
 Let's try passing a receiving end of the channel into each worker when the
 thread pool creates them. We know we want to use the receiving end of the
 channel in the thread that the workers spawn, so we're going to reference the
-`job_receiver` parameter in the closure. The code shown here in Listing 20-17
+`receiver` parameter in the closure. The code shown here in Listing 20-17
 won't quite compile yet:
 
 <span class="filename">Filename: src/lib.rs</span>
@@ -100,17 +100,17 @@ impl ThreadPool {
     pub fn new(size: usize) -> ThreadPool {
         assert!(size > 0);
 
-        let (job_sender, job_receiver) = mpsc::channel::<Job>();
+        let (sender, receiver) = mpsc::channel::<Job>();
 
         let mut workers = Vec::with_capacity(size);
 
         for id in 0..size {
-            workers.push(Worker::new(id, job_receiver));
+            workers.push(Worker::new(id, receiver));
         }
 
         ThreadPool {
-            workers: workers,
-            sender: job_sender,
+            workers,
+            sender,
         }
     }
     // ...snip...
@@ -119,14 +119,14 @@ impl ThreadPool {
 // ...snip...
 
 impl Worker {
-    fn new(id: usize, job_receiver: mpsc::Receiver<Job>) -> Worker {
+    fn new(id: usize, receiver: mpsc::Receiver<Job>) -> Worker {
         let thread = thread::spawn(|| {
-            job_receiver;
+            receiver;
         });
 
         Worker {
-            id: id,
-            thread: thread,
+            id,
+            thread,
         }
     }
 }
@@ -143,30 +143,30 @@ If we try to check this, we get this error:
 ```text
 $ cargo check
    Compiling hello v0.1.0 (file:///projects/hello)
-error[E0382]: use of moved value: `job_receiver`
+error[E0382]: use of moved value: `receiver`
   --> src/lib.rs:27:42
    |
-27 |             workers.push(Worker::new(id, job_receiver));
-   |                                          ^^^^^^^^^^^^ value moved here in
+27 |             workers.push(Worker::new(id, receiver));
+   |                                          ^^^^^^^^ value moved here in
    previous iteration of loop
    |
-   = note: move occurs because `job_receiver` has type
+   = note: move occurs because `receiver` has type
    `std::sync::mpsc::Receiver<Job>`, which does not implement the `Copy` trait
 ```
 
-The code as written won't quite work since it's trying to pass `job_receiver`
-to multiple `Worker` instances. Recall from Chapter 16 that the channel
+The code as written won't quite work since it's trying to pass `receiver` to
+multiple `Worker` instances. Recall from Chapter 16 that the channel
 implementation provided by Rust is multiple *producer*, single *consumer*, so
 we can't just clone the consuming end of the channel to fix this. We also don't
 want to clone the consuming end even if we wanted to; sharing the single
-`job_receiver` between all of the workers is the mechanism by which we'd like
-to distribute the jobs across the threads.
+`receiver` between all of the workers is the mechanism by which we'd like to
+distribute the jobs across the threads.
 
-Additionally, taking a job off the channel queue involves mutating
-`job_receiver`, so the threads need a safe way to share `job_receiver` and be
-allowed to modify it. If the modifications weren't threadsafe, we might get
-race conditions such as two threads executing the same job if they both take
-the same job off the queue at the same time.
+Additionally, taking a job off the channel queue involves mutating `receiver`,
+so the threads need a safe way to share `receiver` and be allowed to modify it.
+If the modifications weren't threadsafe, we might get race conditions such as
+two threads executing the same job if they both take the same job off the queue
+at the same time.
 
 So remembering the threadsafe smart pointers that we discussed in Chapter 16,
 in order to share ownership across multiple threads and allow the threads to
@@ -180,7 +180,6 @@ need to make:
 ```rust
 # use std::thread;
 # use std::sync::mpsc;
-// ...snip...
 use std::sync::Arc;
 use std::sync::Mutex;
 
@@ -197,19 +196,19 @@ impl ThreadPool {
     pub fn new(size: usize) -> ThreadPool {
         assert!(size > 0);
 
-        let (job_sender, job_receiver) = mpsc::channel::<Job>();
+        let (sender, receiver) = mpsc::channel::<Job>();
 
-        let job_receiver = Arc::new(Mutex::new(job_receiver));
+        let receiver = Arc::new(Mutex::new(receiver));
 
         let mut workers = Vec::with_capacity(size);
 
         for id in 0..size {
-            workers.push(Worker::new(id, job_receiver.clone()));
+            workers.push(Worker::new(id, receiver.clone()));
         }
 
         ThreadPool {
-            workers: workers,
-            sender: job_sender,
+            workers,
+            sender,
         }
     }
 
@@ -221,15 +220,15 @@ impl ThreadPool {
 # }
 #
 impl Worker {
-    fn new(id: usize, job_receiver: Arc<Mutex<mpsc::Receiver<Job>>>) -> Worker {
+    fn new(id: usize, receiver: Arc<Mutex<mpsc::Receiver<Job>>>) -> Worker {
         // ...snip...
 #         let thread = thread::spawn(|| {
-#            job_receiver;
+#            receiver;
 #         });
 #
 #         Worker {
-#             id: id,
-#             thread: thread,
+#             id,
+#             thread,
 #         }
     }
 }
@@ -266,7 +265,7 @@ type Job = Box<FnOnce() + Send + 'static>;
 impl ThreadPool {
     // ...snip...
 
-    fn execute<F>(&self, f: F)
+    pub fn execute<F>(&self, f: F)
         where
             F: FnOnce() + Send + 'static
     {
@@ -303,10 +302,10 @@ change shown in Listing 20-20 to `Worker::new`:
 // ...snip...
 
 impl Worker {
-    fn new(id: usize, job_receiver: Arc<Mutex<mpsc::Receiver<Job>>>) -> Worker {
+    fn new(id: usize, receiver: Arc<Mutex<mpsc::Receiver<Job>>>) -> Worker {
         let thread = thread::spawn(move || {
             loop {
-                let job = job_receiver.lock().unwrap().recv().unwrap();
+                let job = receiver.lock().unwrap().recv().unwrap();
 
                 println!("Worker {} got a job; executing.", id);
 
@@ -315,8 +314,8 @@ impl Worker {
         });
 
         Worker {
-            id: id,
-            thread: thread,
+            id,
+            thread,
         }
     }
 }
@@ -325,7 +324,7 @@ impl Worker {
 <span class="caption">Listing 20-20: Receiving and executing the jobs in the
 worker's thread</span>
 
-Here, we first call `lock` on the `job_receiver` to acquire the mutex, then
+Here, we first call `lock` on the `receiver` to acquire the mutex, then
 `unwrap` to panic on any errors. Acquiring a lock might fail if the mutex is in
 a state called *poisoned*, which can happen if some other thread panicked while
 holding the lock rather than releasing it. If this thread can't get the lock
@@ -405,10 +404,10 @@ type Job = Box<FnBox + Send + 'static>;
 // ...snip...
 
 impl Worker {
-    fn new(id: usize, job_receiver: Arc<Mutex<mpsc::Receiver<Job>>>) -> Worker {
+    fn new(id: usize, receiver: Arc<Mutex<mpsc::Receiver<Job>>>) -> Worker {
         let thread = thread::spawn(move || {
             loop {
-                let job = job_receiver.lock().unwrap().recv().unwrap();
+                let job = receiver.lock().unwrap().recv().unwrap();
 
                 println!("Worker {} got a job; executing.", id);
 
@@ -417,8 +416,8 @@ impl Worker {
         });
 
         Worker {
-            id: id,
-            thread: thread,
+            id,
+            thread,
         }
     }
 }
