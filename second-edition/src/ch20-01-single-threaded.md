@@ -178,7 +178,7 @@ complicated, but we're keeping it simple for now. We then pass the buffer to
 `stream.read`, which will read bytes from the `TcpStream` and put them in the
 buffer.
 
-Next, we convert the bytes in the buffer to a string and print out that string.
+Then we convert the bytes in the buffer to a string and print out that string.
 The `String::from_utf8_lossy` function takes a `&[u8]` and produces a `String`.
 The 'lossy' part of the name comes from the behavior when this function sees
 invalid UTF-8 sequences: it replaces the invalid sequences with �, `U+FFFD
@@ -424,7 +424,7 @@ fn handle_connection(mut stream: TcpStream) {
 
     let start = &buffer[..get.len()];
 
-    if start == get {
+    if buffer.starts_with(get) {
         let mut file = File::open("hello.html").unwrap();
 
         let mut contents = String::new();
@@ -447,20 +447,19 @@ expect for a request to `/` and setting up conditionally handling requests to
 Here, we hardcoded the data corresponding to the request that we're looking for
 in the variable `get`. Because we're reading raw bytes into the buffer, we use
 a byte string, created with `b""`, to make `get` a byte string too. Then, we
-take a slice of the `buffer` that's the same length as `get` and compare the
-slice to `get`. If they're identical, we've gotten a well-formed request to
-`/`, which is the success case that we want to handle in the `if` block. The
-`if` block contains the code we added in Listing 20-5 that returns the contents
-of our HTML file.
+check to see if `buffer` starts with the bytes in `get`. If it does, we've
+gotten a well-formed request to `/`, which is the success case that we want to
+handle in the `if` block. The `if` block contains the code we added in Listing
+20-5 that returns the contents of our HTML file.
 
-If `get` and the slice of `buffer` don't match, we've gotten some other
+If `buffer` does not start with the bytes in `get`, we've gotten some other
 request. We'll respond to all other requests using the code we're about to add
 in the `else` block.
 
-If you run this code and request `127.0.0.1:8080`, you'll get the HTML that's in
-*hello.html*. If you make any other request, such as `127.0.0.1:8080/something-else`,
-you'll get a connection error like we saw when running the code in Listing 20-1
-and Listing 20-2.
+If you run this code and request `127.0.0.1:8080`, you'll get the HTML that's
+in *hello.html*. If you make any other request, such as
+`127.0.0.1:8080/something-else`, you'll get a connection error like we saw when
+running the code in Listing 20-1 and Listing 20-2.
 
 Let's add code to the `else` block as shown in Listing 20-7 to return a
 response with the status code `404`, which signals that the content for the
@@ -546,12 +545,9 @@ fn handle_connection(mut stream: TcpStream) {
 #     stream.read(&mut buffer).unwrap();
 #
 #     let get = b"GET / HTTP/1.1\r\n";
-#
-#     let start = &buffer[..get.len()];
-#
     // ...snip...
 
-   let (status_line, filename) = if start == get {
+   let (status_line, filename) = if buffer.starts_with(get) {
         ("HTTP/1.1 200 OK\r\n\r\n", "hello.html")
     } else {
         ("HTTP/1.1 404 NOT FOUND\r\n\r\n", "404.html")
