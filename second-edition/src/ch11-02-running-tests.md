@@ -211,7 +211,7 @@ We can pass the name of any test function to `cargo test` to run only that test:
 
 ```text
 $ cargo test one_hundred
-    Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
+    Finished dev [unoptimized + debuginfo] target(s) in 0.0 secs
      Running target/debug/deps/adder-06a75b4a1f2515e9
 
 running 1 test
@@ -231,7 +231,7 @@ that value will get run. For example, since two of our tests' names contain
 
 ```text
 $ cargo test add
-    Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
+    Finished dev [unoptimized + debuginfo] target(s) in 0.0 secs
      Running target/debug/deps/adder-06a75b4a1f2515e9
 
 running 2 tests
@@ -282,7 +282,7 @@ not:
 ```text
 $ cargo test
    Compiling adder v0.1.0 (file:///projects/adder)
-    Finished debug [unoptimized + debuginfo] target(s) in 0.24 secs
+    Finished dev [unoptimized + debuginfo] target(s) in 0.24 secs
      Running target/debug/deps/adder-ce99bcc2479f4607
 
 running 2 tests
@@ -314,7 +314,7 @@ the `it_works` test does not appear? I'm not sure how to make this clearer.
 
 ```text
 $ cargo test -- --ignored
-    Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
+    Finished dev [unoptimized + debuginfo] target(s) in 0.0 secs
      Running target/debug/deps/adder-ce99bcc2479f4607
 
 running 1 test

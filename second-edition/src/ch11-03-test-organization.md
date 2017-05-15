@@ -150,7 +150,7 @@ compile files in this directory if we run `cargo test`. Let's try running
 ```text
 cargo test
    Compiling adder v0.1.0 (file:///projects/adder)
-    Finished debug [unoptimized + debuginfo] target(s) in 0.31 secs
+    Finished dev [unoptimized + debuginfo] target(s) in 0.31 secs
      Running target/debug/deps/adder-abcabcabc
 
 running 1 test
@@ -201,7 +201,7 @@ followed by the name of the file:
 
 ```text
 $ cargo test --test integration_test
-    Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
+    Finished dev [unoptimized + debuginfo] target(s) in 0.0 secs
      Running target/debug/integration_test-952a27e0126bb565
 
 running 1 test

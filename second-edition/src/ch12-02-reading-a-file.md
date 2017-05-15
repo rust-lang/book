@@ -88,7 +88,7 @@ as the second argument:
 
 ```text
 $ cargo run the poem.txt
-    Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
+    Finished dev [unoptimized + debuginfo] target(s) in 0.0 secs
      Running `target/debug/greprs the poem.txt`
 Searching for the
 In file poem.txt

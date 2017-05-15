@@ -320,7 +320,7 @@ Packaging guessing_game v0.1.0 (file:///projects/guessing_game)
 Verifying guessing_game v0.1.0 (file:///projects/guessing_game)
 Compiling guessing_game v0.1.0
 (file:///projects/guessing_game/target/package/guessing_game-0.1.0)
- Finished debug [unoptimized + debuginfo] target(s) in 0.19 secs
+ Finished dev [unoptimized + debuginfo] target(s) in 0.19 secs
 Uploading guessing_game v0.1.0 (file:///projects/guessing_game)
 ```
 

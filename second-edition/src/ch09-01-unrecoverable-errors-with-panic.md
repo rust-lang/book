@@ -39,7 +39,7 @@ If you run it, you’ll see something like this:
 ```text
 $ cargo run
    Compiling panic v0.1.0 (file:///projects/panic)
-    Finished debug [unoptimized + debuginfo] target(s) in 0.25 secs
+    Finished dev [unoptimized + debuginfo] target(s) in 0.25 secs
      Running `target/debug/panic`
 thread 'main' panicked at 'crash and burn', src/main.rs:2
 note: Run with `RUST_BACKTRACE=1` for a backtrace.
@@ -94,7 +94,7 @@ refuse to continue. Let’s try it and see:
 ```text
 $ cargo run
    Compiling panic v0.1.0 (file:///projects/panic)
-    Finished debug [unoptimized + debuginfo] target(s) in 0.27 secs
+    Finished dev [unoptimized + debuginfo] target(s) in 0.27 secs
      Running `target/debug/panic`
 thread 'main' panicked at 'index out of bounds: the len is 3 but the index is
 100', /stable-dist-rustc/build/src/libcollections/vec.rs:1362
@@ -113,7 +113,7 @@ try that. Listing 9-1 shows the output:
 
 ```text
 $ RUST_BACKTRACE=1 cargo run
-    Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
+    Finished dev [unoptimized + debuginfo] target(s) in 0.0 secs
      Running `target/debug/panic`
 thread 'main' panicked at 'index out of bounds: the len is 3 but the index is 100', /stable-dist-rustc/build/src/libcollections/vec.rs:1392
 stack backtrace:

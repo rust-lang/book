@@ -151,7 +151,7 @@ entered in the query.
 Let's see if this implementation passes the tests:
 
 ```text
-    Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
+    Finished dev [unoptimized + debuginfo] target(s) in 0.0 secs
      Running target/debug/deps/greprs-e58e9b12d35dc861
 
 running 2 tests
@@ -307,7 +307,7 @@ the word "to" in all lowercase:
 
 ```text
 $ cargo run to poem.txt
-    Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
+    Finished dev [unoptimized + debuginfo] target(s) in 0.0 secs
      Running `target/debug/greprs to poem.txt`
 Are you nobody, too?
 How dreary to be somebody!
@@ -319,7 +319,7 @@ set to 1 but with the same query "to", and we should get lines that contain
 
 ```text
 $ CASE_INSENSITIVE=1 cargo run to poem.txt
-    Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
+    Finished dev [unoptimized + debuginfo] target(s) in 0.0 secs
      Running `target/debug/greprs to poem.txt`
 Are you nobody, too?
 How dreary to be somebody!

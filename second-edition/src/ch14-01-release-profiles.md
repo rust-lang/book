@@ -7,12 +7,12 @@ of your builds:
 
 ```text
 $ cargo build
-    Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
+    Finished dev [unoptimized + debuginfo] target(s) in 0.0 secs
 $ cargo build --release
     Finished release [optimized] target(s) in 0.0 secs
 ```
 
-The "debug" and "release" notifications here indicate that the compiler is
+The "dev" and "release" notifications here indicate that the compiler is
 using different profiles. Cargo supports four profiles:
 
 * `dev`: used for `cargo build`
