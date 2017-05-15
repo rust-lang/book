@@ -584,5 +584,6 @@ project, here are some ideas:
 
 Well done! You've made it to the end of the book! We'd like to thank you for
 joining us on this tour of Rust. You're now ready to go out and implement your
-own Rust projects. Remember there's a community of other Rustaceans who would
-love to help you with any challenges you encounter on your Rust journey.
+own Rust projects or help with other people's. Remember there's a community of
+other Rustaceans who would love to help you with any challenges you encounter
+on your Rust journey.
