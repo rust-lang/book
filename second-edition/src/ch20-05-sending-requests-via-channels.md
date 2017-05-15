@@ -70,7 +70,7 @@ impl ThreadPool {
 #
 # impl Worker {
 #     fn new(id: usize) -> Worker {
-#         let thread = thread::spawn(|| { });
+#         let thread = thread::spawn(|| {});
 #
 #         Worker {
 #             id,
