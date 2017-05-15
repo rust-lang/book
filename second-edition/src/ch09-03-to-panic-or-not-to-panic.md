@@ -175,25 +175,23 @@ confidently use the values they receive. Listing 9-8 shows one way to define a
 receives a value between 1 and 100:
 
 ```rust
-mod Guessing {
-    struct Guess {
-        value: u32,
+pub struct Guess {
+    value: u32,
+}
+
+impl Guess {
+    pub fn new(value: u32) -> Guess {
+        if value < 1 || value > 100 {
+            panic!("Guess value must be between 1 and 100, got {}.", value);
+        }
+
+        Guess {
+            value: value,
+        }
     }
 
-    impl Guess {
-        pub fn new(value: u32) -> Guess {
-            if value < 1 || value > 100 {
-                panic!("Guess value must be between 1 and 100, got {}.", value);
-            }
-
-            Guess {
-                value: value,
-            }
-        }
-
-        pub fn value(&self) -> u32 {
-            self.value
-        }
+    pub fn value(&self) -> u32 {
+        self.value
     }
 }
 ```
@@ -226,7 +224,7 @@ return it. This public method is necessary because the `value` field of the
 that code using the `Guess` struct is not allowed to set `value` directly:
 callers outside the module *must* use the `Guess::new` function to create an
 instance of `Guess`,  which ensures there’s no way for a `Guess` to have a
-`value` that hasn’t been checked by the conditions in the `Guess::new` function.  
+`value` that hasn’t been checked by the conditions in the `Guess::new` function.
 
 A function that has a parameter or returns only numbers between 1 and 100 could
 then declare in its signature that it takes or returns a `Guess` rather than a
