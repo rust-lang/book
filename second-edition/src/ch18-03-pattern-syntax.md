@@ -262,7 +262,7 @@ match the value with a pattern that was a `Point` value, not a reference to a
 `Point`.
 
 We can mix, match, and nest destructuring patterns in even more complex ways:
-we can do something complicated like this example where we nest structs and and
+we can do something complicated like this example where we nest structs and 
 tuples inside of a tuple and destructure all the primitive values out:
 
 ```rust
