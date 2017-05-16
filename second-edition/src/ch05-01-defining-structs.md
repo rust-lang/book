@@ -31,7 +31,7 @@ data we want to store in those fields. We don’t have to specify the fields in
 the same order in which we declared them in the struct. In other words, the
 struct definition is like a general template for the type, and instances fill
 in that template with particular data to create values of the type. For
-example, we can declare a particular user like this:
+example, we can declare a particular user as shown in Listing 5-2:
 
 ```rust
 # struct User {
@@ -49,18 +49,113 @@ let user1 = User {
 };
 ```
 
+<span class="caption">Listing 5-2: Creating an instance of the `User`
+struct</span>
+
 To get a specific value from a struct, we can use dot notation. If we wanted
 just this user’s email address, we can use `user1.email` wherever we want to
 use this value. To change a value in a struct, if the instance is mutable, we
 can use the dot notation and assign into a particular field, such as
 `user1.email = String::from("someone-else@example.com");`
 
-A convenient way to create a new instance from an old instance, using most of
-the old instance's values but changing some values, uses `..` and is known as
-*struct update syntax* in this context. For example, to create `user2` by
-copying the data from the `user1` instance and changing the values of `email`
-and username at the same time, we can specify the new values and then use `..`
-to use the remaining values from `user1`:
+### Field Init Shorthand when Variables Have the Same Name as Fields
+
+If you have variables with the same names as struct fields, you can use *field
+init shorthand*. This can make functions that create new instances of structs
+more concise. The function named `build_user` shown here in Listing 5-3 has
+parameters named `email` and `username`. The function creates and returns a
+`User` instance:
+
+```rust
+# struct User {
+#     username: String,
+#     email: String,
+#     sign_in_count: u64,
+#     active: bool,
+# }
+#
+fn build_user(email: String, username: String) -> User {
+    User {
+        email: email,
+        username: username,
+        active: true,
+        sign_in_count: 1,
+    }
+}
+```
+
+<span class="caption">Listing 5-3: A `build_user` function that takes an email
+and username and returns a `User` instance</span>
+
+Because the parameter names `email` and `username` are the same as the `User`
+struct's field names `email` and `username`, we can write `build_user` without
+the repetition of `email` and `username` as shown in Listing 5-4. This version
+of `build_user` behaves the same way as the one in Listing 5-3. The field init
+syntax can make cases like this shorter to write, especially when structs have
+many fields.
+
+```rust
+# struct User {
+#     username: String,
+#     email: String,
+#     sign_in_count: u64,
+#     active: bool,
+# }
+#
+fn build_user(email: String, username: String) -> User {
+    User {
+        email,
+        username,
+        active: true,
+        sign_in_count: 1,
+    }
+}
+```
+
+<span class="caption">Listing 5-4: A `build_user` function that uses field init
+syntax since the `email` and `username` parameters have the same name as struct
+fields</span>
+
+### Creating Instances From Other Instances With Struct Update Syntax
+
+It's often useful to create a new instance from an old instance, using most of
+the old instance's values but changing some. Listing 5-5 shows an example of
+creating a new `User` instance in `user2` by setting the values of `email` and
+`username` but using the same values for the rest of the fields from the
+`user1` instance we created in Listing 5-2:
+
+```rust
+# struct User {
+#     username: String,
+#     email: String,
+#     sign_in_count: u64,
+#     active: bool,
+# }
+#
+# let user1 = User {
+#     email: String::from("someone@example.com"),
+#     username: String::from("someusername123"),
+#     active: true,
+#     sign_in_count: 1,
+# };
+#
+let user2 = User {
+    email: String::from("another@example.com"),
+    username: String::from("anotherusername567"),
+    active: user1.active,
+    sign_in_count: user1.sign_in_count,
+};
+```
+
+<span class="caption">Listing 5-5: Creating a new `User` instance, `user2`, and
+setting some fields to the values of the same fields from `user1`</span>
+
+  The *struct update syntax* achieves the same effect as the code in Listing
+5-5 using less code. The struct update syntax uses `..` to specify that the
+remaining fields not set explicitly should have the same value as the fields in
+the given instance. The code in Listing 5-6 also creates an instance in `user2`
+that has a different value for `email` and `username` but has the same values
+for the `active` and `sign_in_count` fields that `user1` has:
 
 ```rust
 # struct User {
@@ -84,32 +179,11 @@ let user2 = User {
 };
 ```
 
-The struct update syntax is a more concise way of setting each field explicitly
-from another instance, since creating new instances that are almost like
-existing instances is common. That is, this code is equivalent:
+<span class="caption">Listing5-6: Using struct update syntax to set a new
+`email` and `username` values for a `User` instance but use the rest of the
+values from the fields of the instance in the `user1` variable</span>
 
-```rust
-# struct User {
-#     username: String,
-#     email: String,
-#     sign_in_count: u64,
-#     active: bool,
-# }
-#
-# let user1 = User {
-#     email: String::from("someone@example.com"),
-#     username: String::from("someusername123"),
-#     active: true,
-#     sign_in_count: 1,
-# };
-#
-let user2 = User {
-    email: String::from(""),
-    username: String::from("anotherusername567"),
-    active: user1.active,
-    sign_in_count: user1.sign_in_count,
-};
-```
+### Tuple Structs without Named Fields to Create Different Types
 
 We can also define structs that look similar to tuples, called *tuple structs*,
 that have the added meaning the struct name provides, but don't have names
@@ -130,6 +204,8 @@ Note that the `black` and `origin` values are different types, since they're
 instances of different tuple structs. Each struct we define is its own type,
 even though the fields within the struct have the same types. Otherwise, tuple
 struct instances behave like tuples, which we covered in Chapter 3.
+
+### Unit-Like Structs without Any Fields
 
 We can also define structs that don't have any fields! These are called
 *unit-like structs* since they behave similarly to `()`, the unit type.
