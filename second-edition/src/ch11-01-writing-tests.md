@@ -633,7 +633,7 @@ impl Guess {
         }
 
         Guess {
-            value: value,
+            value
         }
     }
 }
@@ -679,7 +679,7 @@ impl Guess {
         }
 
         Guess {
-            value: value,
+            value
         }
     }
 }
@@ -731,7 +731,7 @@ impl Guess {
         }
 
         Guess {
-            value: value,
+            value
         }
     }
 }

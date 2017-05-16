@@ -186,7 +186,7 @@ impl Guess {
         }
 
         Guess {
-            value: value,
+            value
         }
     }
 

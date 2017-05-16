@@ -177,8 +177,7 @@ fn parse_config(args: &[String]) -> Config {
     let filename = args[2].clone();
 
     Config {
-        query: query,
-        filename: filename,
+        query, filename
     }
 }
 ```
@@ -291,8 +290,7 @@ impl Config {
         let filename = args[2].clone();
 
         Config {
-            query: query,
-            filename: filename,
+            query, filename
         }
     }
 }
@@ -408,8 +406,7 @@ impl Config {
         let filename = args[2].clone();
 
         Ok(Config {
-            query: query,
-            filename: filename,
+            query, filename
         })
     }
 }
@@ -716,8 +713,7 @@ impl Config {
         let filename = args[2].clone();
 
         Ok(Config {
-            query: query,
-            filename: filename,
+            query, filename
         })
     }
 }

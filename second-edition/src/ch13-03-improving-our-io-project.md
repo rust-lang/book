@@ -23,8 +23,7 @@ impl Config {
         let filename = args[2].clone();
 
         Ok(Config {
-            query: query,
-            filename: filename,
+            query, filename
         })
     }
 }
@@ -97,8 +96,7 @@ impl Config {
         };
 
         Ok(Config {
-            query: query,
-            filename: filename,
+            query, filename
         })
     }
 }
