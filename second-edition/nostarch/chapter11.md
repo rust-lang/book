@@ -1108,7 +1108,7 @@ fn expensive_test() {
 }
 ```
 
-We add the `#[ignore]` line to the test we want to exlcude, after `#[test]`.
+We add the `#[ignore]` line to the test we want to exclude, after `#[test]`.
 Now if we run our tests, we'll see `it_works` runs, but `expensive_test` does
 not:
 
