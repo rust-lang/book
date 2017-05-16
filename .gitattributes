@@ -2,3 +2,5 @@
 * text=auto eol=lf
 *.docx binary
 *.odt binary
+*.png binary
+

@@ -14,6 +14,7 @@ anotherusername
 APIs
 aren
 args
+async
 AveragedCollection
 backtrace
 backtraces
@@ -43,6 +44,7 @@ CamelCase
 cargodoc
 ChangeColor
 ChangeColorMessage
+charset
 chXX
 chYY
 ConcreteType
@@ -53,6 +55,7 @@ constant's
 copyeditor
 couldn
 cratesio
+CRLF
 cryptographically
 CStr
 CString
@@ -82,6 +85,7 @@ didn
 Dobrý
 doccargo
 doccratesio
+DOCTYPE
 doesn
 DraftPost
 DSTs
@@ -98,6 +102,8 @@ Enums
 ErrorKind
 Executables
 extern
+favicon
+FFFD
 FFFF
 figcaption
 filename
@@ -105,6 +111,8 @@ fieldname
 Filename
 filesystem
 Filesystem
+Firefox
+FnBox
 FnMut
 FnOnce
 formatter
@@ -116,6 +124,7 @@ grapheme
 Grapheme
 greprs
 growable
+gzip
 hardcoded
 hardcoding
 hasher
@@ -164,9 +173,11 @@ librarys
 libreoffice
 libstd
 lifecycle
+locators
 login
 lookup
 loopback
+lossy
 lval
 mathematic
 metadata
@@ -181,6 +192,7 @@ monomorphization
 Monomorphization
 monomorphized
 MoveMessage
+Mozilla
 mpsc
 multithreaded
 mutex
@@ -193,7 +205,9 @@ namespaced
 namespaces
 namespacing
 newfound
+NewJob
 NewsArticle
+NewThread
 newtype
 newtypes
 nitty
@@ -220,6 +234,7 @@ PartialOrd
 PendingReview
 PendingReviewPost
 PlaceholderType
+PoolCreationError
 portia
 powi
 preprocessing
@@ -246,6 +261,9 @@ RefCell
 RefMut
 refutability
 repr
+request's
+resizes
+resizing
 retweet
 ripgrep
 runtime
@@ -298,10 +316,13 @@ subtyping
 Summarizable
 supertrait
 supertraits
+TcpListener
+TcpStream
 test's
 TextField
 That'd
 there'd
+ThreadPool
 threadsafe
 timestamp
 Tiếng
@@ -331,6 +352,7 @@ UnsafeCell
 unsafety
 unsized
 unsynchronized
+URIs
 username
 USERPROFILE
 usize
@@ -357,3 +379,4 @@ wouldn
 writeln
 WriteMessage
 yyyy
+ZipImpl

@@ -113,7 +113,13 @@
     - [Advanced Types](ch19-04-advanced-types.md)
     - [Advanced Functions & Closures](ch19-05-advanced-functions-and-closures.md)
 
-- [Final project: a web server](ch20-00-final-project-a-web-server.md)
+- [Final Project: Building a Multithreaded Web Server](ch20-00-final-project-a-web-server.md)
+    - [A Single Threaded Web Server](ch20-01-single-threaded.md)
+    - [How Slow Requests Affect Throughput](ch20-02-slow-requests.md)
+    - [Designing the Thread Pool Interface](ch20-03-designing-the-interface.md)
+    - [Creating the Thread Pool and Storing Threads](ch20-04-storing-threads.md)
+    - [Sending Requests to Threads Via Channels](ch20-05-sending-requests-via-channels.md)
+    - [Graceful Shutdown and Cleanup](ch20-06-graceful-shutdown-and-cleanup.md)
 
 - [Appendix](appendix-00.md)
     - [A - Keywords](appendix-01-keywords.md)
