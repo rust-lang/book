@@ -377,7 +377,7 @@ trait Iterator {
 
 There's some new syntax that we haven't covered here yet: `type Item` and
 `Self::Item` are defining an *associated type* with this trait, and we'll talk
-about associated types in depth in Chapter XX. For now, all you need to know is
+about associated types in depth in Chapter 19. For now, all you need to know is
 that this code says the `Iterator` trait requires that you also define an
 `Item` type, and this `Item` type is used in the return type of the `next`
 method. In other words, the `Item` type will be the type of element that's
@@ -441,7 +441,7 @@ Listing 13-6: Implementing the `Iterator` trait on our `Counter` struct
 
 The `type Item = u32` line is saying that the associated `Item` type will be
 a `u32` for our iterator. Again, don't worry about associated types yet, because
-we'll be covering them in Chapter XX.
+we'll be covering them in Chapter 19.
 
 The `next` method is the main interface into an iterator, and it returns an
 `Option`. If the option is `Some(value)`, we have gotten another value from the
@@ -508,20 +508,49 @@ method. Since `next` is the only method of the `Iterator` trait that does not
 have a default implementation, once you've done that, you get all of the other
 `Iterator` adaptors for free. There are a lot of them!
 
-For example, if for some reason we wanted to take the first five values that
-an instance of `Counter` produces, pair those values with values produced by
-another `Counter` instance after skipping the first value that instance
-produces, multiply each pair together, keep only those results that are
-divisible by three, and add all the resulting values together, we could do:
+For example, if for some reason we wanted to take the values that an instance of
+`Counter` produces, pair those values with values produced by another `Counter`
+instance after skipping the first value that instance produces, multiply each
+pair together, keep only those results that are divisible by three, and add all
+the resulting values together, we could do so:
 
-```rust,ignore
-let sum: u32 = Counter::new().take(5)
-                             .zip(Counter::new().skip(1))
+```rust
+# struct Counter {
+#     count: u32,
+# }
+#
+# impl Counter {
+#     fn new() -> Counter {
+#         Counter { count: 0 }
+#     }
+# }
+#
+# impl Iterator for Counter {
+#     // Our iterator will produce u32s
+#     type Item = u32;
+#
+#     fn next(&mut self) -> Option<Self::Item> {
+#         // increment our count. This is why we started at zero.
+#         self.count += 1;
+#
+#         // check to see if we've finished counting or not.
+#         if self.count < 6 {
+#             Some(self.count)
+#         } else {
+#             None
+#         }
+#     }
+# }
+let sum: u32 = Counter::new().zip(Counter::new().skip(1))
                              .map(|(a, b)| a * b)
                              .filter(|x| x % 3 == 0)
                              .sum();
-assert_eq!(48, sum);
+assert_eq!(18, sum);
 ```
+
+Note that `zip` produces only four pairs; the theoretical fifth pair `(5,
+None)` is never produced because `zip` returns `None` when either of its input
+iterators return `None`.
 
 All of these method calls are possible because we implemented the `Iterator`
 trait by specifying how the `next` method works. Use the standard library
@@ -533,7 +562,7 @@ working with iterators.
 In our I/O project implementing `grep` in the last chapter, there are some
 places where the code could be made clearer and more concise using iterators.
 Let's take a look at how iterators can improve our implementation of the
-`Config::new` function and the `grep` function.
+`Config::new` function and the `search` function.
 
 ### Removing a `clone` by Using an Iterator
 
@@ -549,12 +578,11 @@ impl Config {
             return Err("not enough arguments");
         }
 
-        let search = args[1].clone();
+        let query = args[1].clone();
         let filename = args[2].clone();
 
         Ok(Config {
-            search: search,
-            filename: filename,
+            query, filename
         })
     }
 }
@@ -565,7 +593,7 @@ could remove them in the future. Well, that time is now! So, why do we need
 `clone` here? The issue is that we have a slice with `String` elements in the
 parameter `args`, and the `new` function does not own `args`. In order to be
 able to return ownership of a `Config` instance, we need to clone the values
-that we put in the `search` and `filename` fields of `Config`, so that the
+that we put in the `query` and `filename` fields of `Config`, so that the
 `Config` instance can own its values.
 
 Now that we know more about iterators, we can change the `new` function to
@@ -607,13 +635,18 @@ library documentation, `std::env::Args` implements the `Iterator` trait, so we
 know we can call the `next` method on it! Here's the new code:
 
 ```rust
+# struct Config {
+#     query: String,
+#     filename: String,
+# }
+#
 impl Config {
     fn new(mut args: std::env::Args) -> Result<Config, &'static str> {
     	args.next();
 
-        let search = match args.next() {
+        let query = match args.next() {
             Some(arg) => arg,
-            None => return Err("Didn't get a search string"),
+            None => return Err("Didn't get a query string"),
         };
 
         let filename = match args.next() {
@@ -622,8 +655,7 @@ impl Config {
         };
 
         Ok(Config {
-            search: search,
-            filename: filename,
+            query, filename
         })
     }
 }
@@ -634,13 +666,13 @@ impl Config {
 Remember that the first value in the return value of `env::args` is the name of
 the program. We want to ignore that, so first we'll call `next` and not do
 anything with the return value. The second time we call `next` should be the
-value we want to put in the `search` field of `Config`. We use a `match` to
+value we want to put in the `query` field of `Config`. We use a `match` to
 extract the value if `next` returns a `Some`, and we return early with an `Err`
 value if there weren't enough arguments (which would cause this call to `next`
 to return `None`).
 
 We do the same thing for the `filename` value. It's slightly unfortunate that
-the `match` expressions for `search` and `filename` are so similar. It would be
+the `match` expressions for `query` and `filename` are so similar. It would be
 nice if we could use `?` on the `Option` returned from `next`, but `?` only
 works with `Result` values currently. Even if we could use `?` on `Option` like
 we can on `Result`, the value we would get would be borrowed, and we want to
@@ -649,18 +681,18 @@ move the `String` from the iterator into `Config`.
 ### Making Code Clearer with Iterator Adaptors
 
 The other bit of code where we could take advantage of iterators was in the
-`grep` function as implemented in Listing 12-15:
+`search` function as implemented in Listing 12-15:
 
 <!-- We hadn't had a listing number for this code sample when we submitted
 chapter 12; we'll fix the listing numbers in that chapter after you've
 reviewed it. /Carol -->
 
 ```rust
-fn grep<'a>(search: &str, contents: &'a str) -> Vec<&'a str> {
+fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
     let mut results = Vec::new();
 
     for line in contents.lines() {
-        if line.contains(search) {
+        if line.contains(query) {
             results.push(line);
         }
     }
@@ -674,28 +706,30 @@ mutable intermediate `results` vector, by using iterator adaptor methods like
 this instead:
 
 ```rust
-fn grep<'a>(search: &str, contents: &'a str) -> Vec<&'a str> {
+fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
     contents.lines()
-        .filter(|line| line.contains(search))
+        .filter(|line| line.contains(query))
         .collect()
 }
 ```
 
 Here, we use the `filter` adaptor to only keep the lines that
-`line.contains(search)` returns true for. We then collect them up into another
+`line.contains(query)` returns true for. We then collect them up into another
 vector with `collect`. Much simpler!
 
-We can use the same technique in the `grep_case_insensitive` function that we
+We can use the same technique in the `search_case_insensitive` function that we
 defined in Listing 12-16 as follows:
 
 <!-- Similarly, the code snippet that will be 12-16 didn't have a listing
 number when we sent you chapter 12, we will fix it. /Carol -->
 
 ```rust
-fn grep_case_insensitive<'a>(search: &str, contents: &'a str) -> Vec<&'a str> {
+fn search_case_insensitive<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
+    let query = query.to_lowercase();
+
     contents.lines()
         .filter(|line| {
-            line.to_lowercase().contains(&search)
+            line.to_lowercase().contains(&query)
         }).collect()
 }
 ```
