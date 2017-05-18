@@ -18,21 +18,253 @@ More specifically, we're going to cover:
 * The performance of these features. Spoiler alert: they're faster than you
   might think!
 
-This is not a complete list of Rust's influence from the functional style:
-pattern matching, enums, and many other features are too. But mastering
-closures and iterators are an important part of writing idiomatic, fast Rust
-code.
+There are other Rust features influenced by the functional style, like pattern
+matching and enums, that we've covered in other chapters as well. Mastering
+closures and iterators is an important part of writing idiomatic, fast Rust
+code, so we're devoting an entire chapter to them here.
 
-## Closures
+## Closures: Anonymous Functions that can Capture their Environment
 
-Rust gives you the ability to define *closures*, which are similar to
-functions. Instead of starting with a technical definition, let's see what
-closures look like, syntactically, and then we'll return to defining what they
-are. Listing 13-1 shows a small closure whose definition is assigned to the
-variable `add_one`, which we can then use to call the closure:
+<!-- Bill's suggested we flesh out some of these subtitles, which I think we
+did more with earlier chapters but we (I, included!) have got a bit lax with. I
+don't think this is quite right, is there a shorter heading we could use to
+capture what a closure is/is for? -->
+<!-- I've attempted a more descriptive subtitle, what do you think? /Carol -->
 
-<figure>
-<span class="filename">Filename: src/main.rs</span>
+Rust's *closures* are anonymous functions that you can save in a variable or
+pass as arguments to other functions. You can create the closure in one place,
+and then call the closure to evaluate it in a different context. Unlike
+functions, closures are allowed to capture values from the scope in which they
+are called. We're going to demonstrate how these features of closures allow for
+code reuse and customization of behavior.
+
+<!-- Can you say what sets closures apart from functions, explicitly, above? I
+can't see it clearly enough to be confident, after one read through this
+chapter. I think it would help to have the closure definition up front, to help
+to let the reader know what they are looking out for in the examples. When
+would you use a closure, for example, rather than using a function? And is it
+the closure that's stored in the variable, or is it the result of applying the
+closure to a value passed as an argument? -->
+<!-- I've tried reworking the above paragraph and restructuring the examples to
+be more motivating. I've also tried to make it clear throughout that storing a
+closure is storing the *unevaluated* code, and then you call the closure in
+order to get the result. /Carol -->
+
+### An Example Situation where Closures are Useful
+
+Example of a simplified workout plan generator. Details of the program's behavior
+isn't important; the `simulated_expensive_calculation` represents your company's
+proprietary Workout Science Algorithm (patent pending) that calculates a
+workout plan based on a number of factors like the user's BMI, preferences, etc
+that are stored elsewhere. The part of this theoretical program that is important
+is that these calculations take a while, and we don't want to make the user wait
+if they don't have to. This has been simulated by calling `sleep`
+
+This example has multiple calls to the slow calculation function. The first
+`if` block calls it twice, the `if` inside the `else` doesn't call it at all,
+and the code inside the `else` case in the `else` calls it once:
+
+```
+use std::thread;
+use std::time::Duration;
+
+fn main() {
+    let simulated_user_specified_value = 10;
+    let simulated_random_number = 7;
+
+    if simulated_user_specified_value < 25 {
+        println!(
+            "Today, do {} pushups!",
+            simulated_expensive_calculation(simulated_user_specified_value)
+        );
+        println!(
+            "Next, do {} situps!",
+            simulated_expensive_calculation(simulated_user_specified_value)
+        );
+    } else {
+        if simulated_random_number == 3 {
+            println!("Remember to stay hydrated!");
+        } else {
+            println!(
+                "Today, run for {} minutes!",
+                simulated_expensive_calculation(simulated_user_specified_value)
+            )
+        }
+    }
+}
+
+fn simulated_expensive_calculation(num: i32) -> i32 {
+    println!("calculating slowly...");
+    thread::sleep(Duration::new(2, 0));
+    num
+}
+```
+
+Many ways to refactor this program. The way we're going to try is extract the
+duplicated call to the expensive calculation function into a variable:
+
+```
+fn main() {
+    let simulated_user_specified_value = 10;
+    let simulated_random_number = 7;
+
+    let expensive_result =
+        simulated_expensive_calculation(simulated_user_specified_value);
+
+    if simulated_user_specified_value < 25 {
+        println!(
+            "Today, do {} pushups!",
+            expensive_result
+        );
+        println!(
+            "Next, do {} situps!",
+            expensive_result
+        );
+    } else {
+        if simulated_random_number == 3 {
+            println!("Remember to stay hydrated!");
+        } else {
+            println!(
+                "Today, run for {} minutes!",
+                expensive_result
+            )
+        }
+    }
+}
+```
+
+gets rid of the duplication, stores the result for the two calls in the `if`
+case, but now we're calling the expensive function all the time, even when we
+don't need it for the hydration reminder case.
+
+Instead, we can define a closure:
+
+```
+let expensive_result = |num| {
+    simulated_expensive_calculation(num)
+};
+```
+
+Explain syntax here: pipes, braces, elision of parameter types and return type
+
+Then only execute the closure when we need it:
+
+```
+    let expensive_result = |num| {
+        simulated_expensive_calculation(num)
+    };
+
+    if simulated_user_specified_value < 25 {
+        println!(
+            "Today, do {} pushups!",
+            expensive_result(simulated_user_specified_value)
+        );
+        println!(
+            "Next, do {} situps!",
+            expensive_result(simulated_user_specified_value)
+        );
+    } else {
+        if simulated_random_number == 3 {
+            println!("Remember to stay hydrated!");
+        } else {
+            println!(
+                "Today, run for {} minutes!",
+                expensive_result(simulated_user_specified_value)
+            )
+        }
+    }
+```
+
+Explain syntax of calling a closure here, reiterate that `expensive_result`
+holds the *code* not the resulting value
+
+Reiterate that we can't just use a function call here, since we want the logic
+to be extracted but the execution to happen later, which is why this needs to
+be a closure that lets us pass functions around
+
+Fixes the case where we don't need to call it at all, but now we're back to the
+pushups and situps case calling the expensive function twice. We could make a
+local variable to store the result, but we'd have to do that everywhere we want
+to be able to use the result more than once (pretend there's more code like
+this throughout the program)
+
+Better would be create a struct that will hold the closure, only execute it if
+necessary, and then cache the result so that our workout calculation code
+doesn't have to worry about saving and reusing the result at all; we've
+abstracted the logic away.
+
+Now introduce the Fn traits, relate back to the generics/traits chapters
+
+Concern: uses `Box` that won't be introduced for 2 more chapters :-/
+
+```
+use std::thread;
+use std::time::Duration;
+
+struct Cacher {
+    value: Option<i32>,
+    calculation: Box<Fn(i32) -> i32>,
+}
+
+impl Cacher {
+    fn new(calculation: Box<Fn(i32) -> i32>) -> Cacher {
+        Cacher {
+            value: None,
+            calculation
+        }
+    }
+
+    fn value(&mut self, arg: i32) -> i32 {
+        match self.value {
+            Some(v) => v,
+            None => {
+                let v = (self.calculation)(arg);
+                self.value = Some(v);
+                v
+            },
+        }
+    }
+}
+
+fn main() {
+    let simulated_user_specified_value = 10;
+    let simulated_random_number = 7;
+
+    let mut expensive_result = Cacher::new(Box::new(|arg| {
+        simulated_expensive_calculation(arg)
+    }));
+
+    if simulated_user_specified_value < 25 {
+        println!(
+            "Today, do {} pushups!",
+            expensive_result.value(simulated_user_specified_value)
+        );
+        println!(
+            "Next, do {} situps!",
+            expensive_result.value(simulated_user_specified_value)
+        );
+    } else {
+        if simulated_random_number == 3 {
+            println!("Remember to stay hydrated!");
+        } else {
+            println!(
+                "Today, run for {} minutes!",
+                expensive_result.value(simulated_user_specified_value)
+            )
+        }
+    }
+}
+
+fn simulated_expensive_calculation(n: i32) -> i32 {
+    thread::sleep(Duration::new(2, 0));
+    println!("calculating...");
+    n
+}
+```
+
+Exercise for the reader: Make the `value` field generic
+
+Filename: src/main.rs
 
 ```rust
 fn main() {
