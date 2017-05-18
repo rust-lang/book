@@ -201,13 +201,18 @@ Concern: uses `Box` that won't be introduced for 2 more chapters :-/
 use std::thread;
 use std::time::Duration;
 
-struct Cacher {
+struct Cacher<T>
+    where T: Fn(i32) -> i32
+{
     value: Option<i32>,
-    calculation: Box<Fn(i32) -> i32>,
+    calculation: T,
 }
 
-impl Cacher {
-    fn new(calculation: Box<Fn(i32) -> i32>) -> Cacher {
+impl<T> Cacher<T>
+    where T: Fn(i32) -> i32
+{
+
+    fn new(calculation: T) -> Cacher<T> {
         Cacher {
             value: None,
             calculation
@@ -230,9 +235,9 @@ fn main() {
     let simulated_user_specified_value = 10;
     let simulated_random_number = 7;
 
-    let mut expensive_result = Cacher::new(Box::new(|arg| {
+    let mut expensive_result = Cacher::new(|arg| {
         simulated_expensive_calculation(arg)
-    }));
+    });
 
     if simulated_user_specified_value < 25 {
         println!(
