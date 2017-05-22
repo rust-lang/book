@@ -47,5 +47,5 @@ reading the second edition and then checking out the first edition later to pick
 up some of the more esoteric parts of the language.
 
 [book]: https://github.com/rust-lang/book/tree/master/first-edition/src
-[first-edition]: https://doc.rust-lang.org/book/
-[second-edition]: https://doc.rust-lang.org/nightly/book/second-edition/
+[first-edition]: first-edition/index.html
+[second-edition]: second-edition/index.html
