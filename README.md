@@ -2,24 +2,13 @@
 
 [![Build Status](https://travis-ci.org/rust-lang/book.svg?branch=master)](https://travis-ci.org/rust-lang/book)
 
-This repo contains two editions of “The Rust Programming Language”.
+This repo contains the translation of “The Rust Programming Language” - second edition.
 
-The second edition is a rewrite that will be printed by NoStarch Press,
-available around October 2017.
+La seconda edizione è una riscrittura del testo e sarà stampata da NoStarch Press, disponibile verso Ottobre 2017.
 
-[You can read it online][html]; the last few chapters aren't completed yet, but
-the first half of the book is much improved from the first edition. We recommend
-starting with the second edition.
+## Requisiti
 
-[html]: http://rust-lang.github.io/book/
-
-[The first edition is still available to read online][first].
-
-[first]: https://doc.rust-lang.org/book/
-
-## Requirements
-
-Building the book requires [mdBook] >= v0.0.13. To get it:
+Per costruire questo libro ti serve [mdBook] >= v0.0.13. Per installarlo:
 
 [mdBook]: https://github.com/azerupi/mdBook
 
@@ -29,18 +18,22 @@ $ cargo install mdbook
 
 ## Building
 
-To build the book, first `cd` into either the `first-edition` or
-`second-edition` directory depending on which edition of the book you would
-like to build. Then type:
+Per costruire il libro entra nella directory della seconda edizione:
+ 
+```bash
+$ cd second-edition
+``` 
+Poi:
 
 ```bash
 $ mdbook build
 ```
 
-The output will be in the `book` subdirectory. To check it out, open it in
-your web browser.
+Il risultato sarà nella subdirectory `book`.
+Per leggerlo vai nel tuo browser:
 
 _Firefox:_
+
 ```bash
 $ firefox book/index.html                       # Linux
 $ open -a "Firefox" book/index.html             # OS X
@@ -49,6 +42,7 @@ $ start firefox.exe .\book\index.html           # Windows (Cmd)
 ```
 
 _Chrome:_
+
 ```bash
 $ google-chrome book/index.html                 # Linux
 $ open -a "Google Chrome" book/index.html       # OS X
@@ -56,30 +50,27 @@ $ Start-Process "chrome.exe" .\book\index.html  # Windows (PowerShell)
 $ start chrome.exe .\book\index.html            # Windows (Cmd)
 ```
 
-To run the tests:
+Per eseguire i test:
 
 ```bash
 $ mdbook test
 ```
 
-## Contributing
+## Contribuire
 
-We'd love your help! Please see [CONTRIBUTING.md][contrib] to learn about the
-kinds of contributions we're looking for.
+Apprezzeremmo molto il tuo aiuto! Leggi [CONTRIBUTING.md][contrib] per sapere i generi di contributo che stiamo cercando.
 
 [contrib]: https://github.com/rust-lang/book/blob/master/CONTRIBUTING.md
 
-### Translations
+### Traduzioni
 
-We'd especially love help translating the second edition of the book! See the
-[Translations] label to join in efforts that are currently in progress. Open
-a new issue to start working on a new language! We're waiting on [mdbook
-support] for multiple languages before we merge any in, but feel free to
-start! The chapters in [the frozen column] of the project won't see major
-changes, so if you start with those, you won't have to redo work :)
+Ci piacerebbe soprattutto aiutare a tradurre la seconda edizione del libro! Guarda le etichette
+[Translations] per partecipare agli sforzi attualmente in corso. 
+
+Apri una nuova segnalazione per iniziare a lavorare su una nuova lingua! Stiamo aspettando il [supporto di mdbook] per linguaggi multipli prima di unirli, ma sentiti libero di iniziare! I capitoli in [the frozen column] non subiranno più grossi cambiamenti, quindi se inizi da quelli, non dovrai rifare il lavoro :)
 
 [Translations]: https://github.com/rust-lang/book/issues?q=is%3Aopen+is%3Aissue+label%3ATranslations
-[mdbook support]: https://github.com/azerupi/mdBook/issues/5
+[supporto di mdbook]: https://github.com/azerupi/mdBook/issues/5
 [the frozen column]: https://github.com/rust-lang/book/projects/1
 
 ## No Starch
