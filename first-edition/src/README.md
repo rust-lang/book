@@ -36,4 +36,16 @@ is the first. After this:
 The source files from which this book is generated can be found on
 [GitHub][book].
 
+### Second edition of this book
+
+There are two editions of "The Rust Programming Language", this being the
+[first edition][first-edition].
+
+The [second edition][second-edition] is a complete re-write. It is still under
+construction, though it is far enough along to learn most of Rust. We suggest
+reading the second edition and then checking out the first edition later to pick
+up some of the more esoteric parts of the language.
+
 [book]: https://github.com/rust-lang/book/tree/master/first-edition/src
+[first-edition]: first-edition/index.html
+[second-edition]: second-edition/index.html
