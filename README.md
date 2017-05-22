@@ -2,9 +2,11 @@
 
 [![Build Status](https://travis-ci.org/rust-lang/book.svg?branch=master)](https://travis-ci.org/rust-lang/book)
 
-This repo contains the translation of “The Rust Programming Language” - second edition.
+This repo contains the italian translation of “The Rust Programming Language” - second edition.
 
-La seconda edizione è una riscrittura del testo e sarà stampata da NoStarch Press, disponibile verso Ottobre 2017.
+Questo archivio contiene la traduzione in italiano della seconda edizione del libro "Linguaggio di Programmazione Rust"
+
+Questa seconda edizione è una riscrittura del testo e sarà stampata da NoStarch Press, disponibile verso Ottobre 2017.
 
 ## Requisiti
 
@@ -16,7 +18,7 @@ Per costruire questo libro ti serve [mdBook] >= v0.0.13. Per installarlo:
 $ cargo install mdbook
 ```
 
-## Building
+## Costruire
 
 Per costruire il libro entra nella directory della seconda edizione:
  
