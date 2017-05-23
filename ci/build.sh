@@ -15,7 +15,6 @@ export PATH=$PATH:/home/travis/.cargo/bin;
 # feature check
 cd ci/stable-check
 
-cargo run -- ../../first-edition/src
 cargo run -- ../../second-edition/src
 
 cd ../..
