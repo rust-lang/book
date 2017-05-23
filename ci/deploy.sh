@@ -22,11 +22,6 @@ mkdir book
 # build the index page into it
 rustdoc index.md -o book/
 
-# build the first edition into it
-mdbook build first-edition
-mv first-edition/book book/first-edition/
-
-
 # build the second edition into it
 mdbook build second-edition
 mv second-edition/book book/second-edition/
@@ -36,10 +31,10 @@ mv second-edition/book book/second-edition/
 cd book
 
 git init
-git config user.name "Steve Klabnik"
-git config user.email "steve@steveklabnik.com"
+git config user.name "Massimiliano Bertinetti"
+git config user.email "massimiliano@codelessfuture.com"
 
-git remote add upstream "https://$GH_TOKEN@github.com/rust-lang/book.git"
+git remote add upstream "https://$GH_TOKEN@github.comCodelessFuture/trpl2-it.git"
 git fetch upstream
 git reset upstream/gh-pages
 
