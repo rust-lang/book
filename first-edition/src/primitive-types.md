@@ -148,7 +148,7 @@ println!("The second name is: {}", names[1]);
 Subscripts start at zero, like in most programming languages, so the first name
 is `names[0]` and the second name is `names[1]`. The above example prints
 `The second name is: Brian`. If you try to use a subscript that is not in the
-array, you will get an error: array access is bounds-checked at run-time. Such
+array, you will get an error: array access is bounds-checked at compile-time. Such
 errant access is the source of many bugs in other systems programming
 languages.
 
