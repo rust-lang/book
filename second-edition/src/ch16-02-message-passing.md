@@ -210,7 +210,7 @@ fn main() {
 
         for val in vals {
             tx.send(val).unwrap();
-            thread::sleep(Duration::new(1, 0));
+            thread::sleep(Duration::from_secs(1));
         }
     });
 
@@ -275,7 +275,7 @@ thread::spawn(move || {
 
     for val in vals {
         tx1.send(val).unwrap();
-        thread::sleep(Duration::new(1, 0));
+        thread::sleep(Duration::from_secs(1));
     }
 });
 
@@ -289,7 +289,7 @@ thread::spawn(move || {
 
     for val in vals {
         tx.send(val).unwrap();
-        thread::sleep(Duration::new(1, 0));
+        thread::sleep(Duration::from_secs(1));
     }
 });
 // ...snip...
