@@ -859,10 +859,54 @@ values are encoded in the three `Fn` traits as follows:
 * `Fn` borrows values from the environment immutably
 * `FnMut` can change the environment since it mutably borrows values
 
-Creating `FnOnce` closures that capture values from their environment is mostly
-used in the context of starting new threads. We'll show some examples and
-explain more detail about this feature of closures in Chapter 16 when we talk
-about concurrency.
+When we create a closure, Rust infers how we want to reference the environment
+based on how the closure uses the values from the environment. In Listing
+13-12, the `equal_to_x` closure borrows `x` immutably (so `equal_to_x` has the
+`Fn` trait) since the body of the closure only needs to read the value in `x`.
+
+If we want to force the closure to take ownership of the values it uses in the
+environment, we can use the `move` keyword before the parameter list. This is
+mostly useful when passing a closure to a new thread in order to move the data
+to be owned by the new thread. We'll have more examples of `move` closures in
+Chapter 16 when we talk about concurrency, but for now here's the code from
+Listing 13-12 with the `move` keyword added to the closure definition and using
+vectors instead of integers, since integers can be copied rather than moved:
+
+<span class="filename">Filename: src/main.rs</span>
+
+```rust
+fn main() {
+    let x = vec![1, 2, 3];
+
+    let equal_to_x = move |z| z == x;
+
+    println!("can't use x here: {:?}", x);
+
+    let y = vec![1, 2, 3];
+
+    assert!(equal_to_x(y));
+}
+```
+
+This example doesn't compile:
+
+```text
+error[E0382]: use of moved value: `x`
+ --> src/main.rs:6:40
+  |
+4 |     let equal_to_x = move |z| z == x;
+  |                      -------- value moved (into closure) here
+5 |
+6 |     println!("can't use x here: {:?}", x);
+  |                                        ^ value used here after move
+  |
+  = note: move occurs because `x` has type `std::vec::Vec<i32>`, which does not
+    implement the `Copy` trait
+```
+
+The `x` value is moved into the closure when the closure is defined because of
+the `move` keyword. The closure then has ownership of `x`, and `main` isn't
+allowed to use `x` anymore. Removing the `println!` will fix this example.
 
 Most of the time when specifying one of the `Fn` trait bounds, you can start
 with `Fn` and the compiler will tell you if you need `FnMut` or `FnOnce` based
