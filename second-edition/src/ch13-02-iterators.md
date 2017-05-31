@@ -41,6 +41,15 @@ That's how we end up with `[2, 3, 4]`. As you can see, closures are a very
 important part of using iterators: they provide a way of customizing the
 behavior of an iterator adaptor like `map`.
 
+<!-- so far you've said 4 or 5 times that we used `map` and `collect` and
+*iterator*, but I feel not enough has been explained about this mysterious
+thing, `map`, and what kinds of closures can go in there -->
+
+<!-- after writing that, I went to check out the documentation here:
+https://doc.rust-lang.org/std/iter/trait.Iterator.html#method.map and then
+everything was clear...so we can certainly do better here if the real docs made
+it easier to understand than the book, in a very short format -->
+
 ### Iterators are Lazy
 
 In the previous section, you may have noticed a subtle difference in wording:
@@ -70,8 +79,8 @@ processing on their own. They need some other method that causes the iterator
 chain to evaluate. We call those *consuming adaptors*, and `collect` is one of
 them.
 
-So how do we tell which iterator methods consume the iterator or not? And what
-adaptors are available? For that, let's look at the `Iterator` trait.
+So how do we tell which iterator methods consume the iterator and which do not?
+And what adaptors are available? For that, let's look at the `Iterator` trait.
 
 ### The `Iterator` trait
 
@@ -156,9 +165,9 @@ The `next` method is the main interface into an iterator, and it returns an
 `Option`. If the option is `Some(value)`, we have gotten another value from the
 iterator. If it's `None`, iteration is finished. Inside of the `next` method,
 we do whatever kind of calculation our iterator needs to do. In this case, we
-add one, then check to see if we're still below six. If we are, we can return
-`Some(self.count)` to produce the next value. If we're at six or more,
-iteration is over, so we return `None`.
+add one, then check to see if we're still below six. If we are, we return
+`Some(self.count)` to produce the next value. If we're at six or more, iteration
+is over, so we return `None`.
 
 The iterator trait specifies that when an iterator returns `None`, that
 indicates iteration is finished. The trait does not mandate anything about the

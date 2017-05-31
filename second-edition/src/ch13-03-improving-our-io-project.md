@@ -1,13 +1,13 @@
 ## Improving our I/O Project
 
 In our I/O project implementing `grep` in the last chapter, there are some
-places where the code could be made clearer and more concise using iterators.
+places where the code could be made clearer and more concise with iterators.
 Let's take a look at how iterators can improve our implementation of the
 `Config::new` function and the `search` function.
 
 ### Removing a `clone` by Using an Iterator
 
-Back in listing 12-8, we had this code that took a slice of `String` values and
+Back in Listing 12-8, we had this code that took a slice of `String` values and
 created an instance of the `Config` struct by checking for the right number of
 arguments, indexing into the slice, and cloning the values so that the `Config`
 struct could own those values:
@@ -142,9 +142,9 @@ fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
 }
 ```
 
-We can write this code in a much shorter way, and avoiding having to have a
-mutable intermediate `results` vector, by using iterator adaptor methods like
-this instead:
+We can write this code in a much shorter way, and avoiding needing a mutable
+intermediate `results` vector, by using iterator adaptor methods like this
+instead:
 
 ```rust
 fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {

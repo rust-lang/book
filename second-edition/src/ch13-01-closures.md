@@ -44,6 +44,9 @@ fn main() {
 }
 ```
 
+<!-- any difference if you changed the last two lines of the closure to instead
+be one line, `result + b` ? is one more rustic than the other? -->
+
 <span class="caption">Listing 13-2: A closure with two parameters and multiple
 expressions in its body</span>
 
@@ -70,10 +73,10 @@ fn main() {
 <span class="caption">Listing 13-3: A closure definition with optional
 parameter and return value type annotations</span>
 
-The syntax of closures and functions looks more similar with type annotations.
-Let's compare the different ways we can specify closures with the syntax for
-defining a function more directly. We've added some spaces here to line up the
-relevant parts:
+Closures look like functions when type annotations are included. Let's compare
+the different ways we can specify closures with the syntax for defining a
+function more directly. We've added some spaces here to line up the relevant
+parts:
 
 ```rust,ignore
 fn  add_one_v1   (x: i32) -> i32 { x + 1 }  // a function
@@ -84,11 +87,14 @@ let add_one_v4 = |x|               x + 1  ; // without braces
 
 The reason type annotations are not required for defining a closure but are
 required for defining a function is that functions are part of an explicit
-interface exposed to your users, so defining this interface rigidly is
-important for ensuring that everyone agrees on what types of values a function
-uses and returns. Closures aren't used in an exposed interface like this,
-though: they're stored in bindings and called directly. Being forced to
-annotate the types would be a significant ergonomic loss for little advantage.
+interface exposed to your users. Defining this interface rigidly is important
+for ensuring that everyone agrees on what types of values a function uses and
+returns. Closures aren't used in an exposed interface like this, though:
+they're stored in bindings and called directly. Being forced to annotate the
+types would be a significant ergonomic loss for little advantage.
+
+<!-- have we given any hint before this as to what "stored in bindings" means?
+-->
 
 Closure definitions do have one type inferred for each of their parameters and
 for their return value. For instance, if we call the closure without type
@@ -116,8 +122,8 @@ error[E0308]: mismatched types
   |                     ^^^^ expected i8, found i32
 ```
 
-Since closures' types can be inferred reliably since they're called directly,
-it would be tedious if we were required to annotate their types.
+Closures' types can be inferred reliably since they're called directly, so it
+would be tedious if we were required to annotate their types.
 
 Another reason to have a different syntax from functions for closures is that
 they have different behavior than functions: closures possess an *environment*.
@@ -129,6 +135,9 @@ by being `const` or being declared as parameters. Closures can do more: they're
 allowed to access variables from their enclosing scope. Listing 13-4 has an
 example of a closure in the variable `equal_to_x` that uses the variable `x`
 from the closure's surrounding environment:
+
+<!-- First thing that comes to mind: is this only the *immediate* surrounding
+scope, or any surrounding scope? -->
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -149,8 +158,8 @@ variable in its enclosing scope</span>
 
 Here, even though `x` is not one of the parameters of `equal_to_x`, the
 `equal_to_x` closure is allowed to use `x`, since `x` is a variable defined in
-the scope that `equal_to_x` is defined. We aren't allowed to do the same thing
-that Listing 13-4 does with functions; let's see what happens if we try:
+the same scope that `equal_to_x` is defined in. We aren't allowed to do the same
+thing that Listing 13-4 does with functions; let's see what happens if we try:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -184,12 +193,21 @@ the context of starting new threads. We'll show some more examples and explain
 more detail about this feature of closures in Chapter 16 when we talk about
 concurrency.
 
+<!-- this dismissal of the section as something with only limited use here, then
+repeating it in the next paragraph saying it was not the most useful thing,
+leads me to wonder whether these two sections can be reordered -->
+
 ### Closures as Function Parameters Using the `Fn` Traits
 
 While we can bind closures to variables, that's not the most useful thing we
 can do with them. We can also define functions that have closures as parameters
 by using the `Fn` traits. Here's an example of a function named `call_with_one`
 whose signature has a closure as a parameter:
+
+<!-- "the `Fn` traits" makes it sound like this is something you've already
+introduced earlier in the book. If so, maybe reference where, or if not, maybe
+reword it....I had to pause, look around, consider, reconsider, and read the
+following example before feeling confident that I understood what that meant -->
 
 ```rust
 fn call_with_one<F>(some_closure: F) -> i32
@@ -207,27 +225,34 @@ We pass the closure `|x| x + 2`, to `call_with_one`, and `call_with_one` calls
 that closure with `1` as an argument. The return value of the call to
 `some_closure` is then returned from `call_with_one`.
 
-The signature of `call_with_one` is using the `where` syntax discussed in the
-Traits section of Chapter 10. The `some_closure` parameter has the generic type
-`F`, which in the `where` clause is defined as having the trait bounds
-`Fn(i32) -> i32`. The `Fn` trait represents a closure, and we can add types to
-the `Fn` trait to represent a specific type of closure. In this case, our
-closure has a parameter of type `i32` and returns an `i32`, so the generic bound
-we specify is `Fn(i32) -> i32`.
+The signature of `call_with_one` uses the `where` syntax discussed in the Traits
+section of Chapter 10. The `some_closure` parameter has the generic type `F`,
+which in the `where` clause is defined as having the trait bounds `Fn(i32) ->
+i32`. The `Fn` trait represents a closure, and we can add types to the `Fn`
+trait to represent a specific type of closure. In this case, our closure has a
+parameter of type `i32` and returns an `i32`, so the generic bound we specify is
+`Fn(i32) -> i32`.
 
 Specifying a function signature that contains a closure requires the use of
 generics and trait bounds. Each closure has a unique type, so we can't write
 the type of a closure directly, we have to use generics.
 
+<!-- "Each closure has a unique type" - can you elaborate on this in any more
+detail? Is it saying `|x| x + 1` has a different type than `|x| x + 2`? -->
+
 `Fn` isn't the only trait bound available for specifying closures, however.
-There are three: `Fn`, `FnMut`, and `FnOnce`. This continues the patterns of
-threes we've seen elsewhere in Rust: borrowing, borrowing mutably, and
-ownership. Using `Fn` specifies that the closure used may only borrow values in
-its environment. To specify a closure that mutates the environment, use
-`FnMut`, and if the closure takes ownership of the environment, `FnOnce`. Most
-of the time, you can start with `Fn`, and the compiler will tell you if you
-need `FnMut` or `FnOnce` based on what happens when the function calls the
-closure.
+There are three: `Fn`, `FnMut`, and `FnOnce`. This continues the pattern of
+threes we've seen elsewhere in Rust: borrowing, borrowing mutably, and owning.
+Using `Fn` specifies that the closure used may only borrow values in its
+environment. To specify a closure that mutates the environment, use `FnMut`, and
+if the closure takes ownership of the environment, `FnOnce`. Most of the time
+you can start with `Fn`, and the compiler will tell you if you need `FnMut`
+or `FnOnce` based on what happens when the function calls the closure.
+
+<!-- I haven't learned anything from this paragraph about how FnMut and FnOnce
+differ from Fn. It's only left me confused. It says Fn borrows "values" from its
+environment, while the other two "mutate" or "own" the "environment" rather than
+"values" from it. -->
 
 To illustrate a situation where it's useful for a function to have a parameter
 that's a closure, let's move on to our next topic: iterators.

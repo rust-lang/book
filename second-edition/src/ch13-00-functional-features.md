@@ -1,4 +1,8 @@
-# Functional Language features in Rust - Iterators and Closures
+# Functional Language Features in Rust - Iterators and Closures
+
+<!-- This top level heading doesn't match the section title in the table of
+contents, which leaves off the " - Iterators and Closures" part. A couple other
+chapters do the same. Is that intentional? -->
 
 Rust's design has taken inspiration from a lot of previous work. One of Rust's
 influences is functional programming, where functions are values that can be
