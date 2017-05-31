@@ -249,6 +249,7 @@ let expensive_closure = |num| {
     thread::sleep(Duration::from_secs(2));
     num
 };
+# expensive_closure(5);
 ```
 
 <span class="caption">Listing 13-5: Defining a closure with the body that was
@@ -874,7 +875,7 @@ vectors instead of integers, since integers can be copied rather than moved:
 
 <span class="filename">Filename: src/main.rs</span>
 
-```rust
+```rust,ignore
 fn main() {
     let x = vec![1, 2, 3];
 
