@@ -327,7 +327,7 @@ mod tests {
     }
 
     #[test]
-    fn smaller_can_hold_larger() {
+    fn smaller_can_not_hold_larger() {
         let larger = Rectangle { length: 8, width: 7 };
         let smaller = Rectangle { length: 5, width: 1 };
 
@@ -342,7 +342,7 @@ way, our test will pass if `can_hold` returns `false`:
 
 ```text
 running 2 tests
-test tests::smaller_can_hold_larger ... ok
+test tests::smaller_can_not_hold_larger ... ok
 test tests::larger_can_hold_smaller ... ok
 
 test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured
@@ -371,7 +371,7 @@ Running the tests now produces:
 
 ```text
 running 2 tests
-test tests::smaller_can_hold_larger ... ok
+test tests::smaller_can_not_hold_larger ... ok
 test tests::larger_can_hold_smaller ... FAILED
 
 failures:
