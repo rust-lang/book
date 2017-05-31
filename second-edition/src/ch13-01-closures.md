@@ -608,7 +608,7 @@ in the `value` field, since we haven't executed the closure yet.
 
 When the calling code wants the result of evaluating the closure, instead of
 calling the closure directly, it will call the `value` method. This method
-checks to see if we alreaday have a resulting value in `self.value` in a `Some`;
+checks to see if we already have a resulting value in `self.value` in a `Some`;
 if we do, it returns the value within the `Some` without executing the closure
 again.
 
