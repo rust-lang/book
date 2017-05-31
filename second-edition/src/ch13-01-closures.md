@@ -86,15 +86,6 @@ input values:
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-# use std::thread;
-# use std::time::Duration;
-#
-# fn simulated_expensive_calculation(num: i32) -> i32 {
-#     println!("calculating slowly...");
-#     thread::sleep(Duration::from_secs(2));
-#     num
-# }
-#
 fn main() {
     let simulated_user_specified_value = 10;
     let simulated_random_number = 7;
@@ -243,7 +234,9 @@ our program. This is a use case for closures!
 
 Instead of always calling the `simulated_expensive_calculation` function before
 the `if` blocks, we can define a closure and store the closure in a variable
-instead of the result as shown in Listing 13-5:
+instead of the result as shown in Listing 13-5. We can actually choose to move
+the whole body of `simulated_expensive_calculation` within the closure we're
+introducing here:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -251,17 +244,15 @@ instead of the result as shown in Listing 13-5:
 # use std::thread;
 # use std::time::Duration;
 #
-# fn simulated_expensive_calculation(num: i32) -> i32 {
-#     println!("calculating slowly...");
-#     thread::sleep(Duration::from_secs(2));
-#     num
-# }
-#
-let expensive_closure = |num| simulated_expensive_calculation(num);
+let expensive_closure = |num| {
+    println!("calculating slowly...");
+    thread::sleep(Duration::from_secs(2));
+    num
+};
 ```
 
-<span class="caption">Listing 13-5: Defining a closure that will call the
-expensive function and store the closure in the `expensive_closure`
+<span class="caption">Listing 13-5: Defining a closure with the body that was
+in the expensive function and store the closure in the `expensive_closure`
 variable</span>
 
 <!-- Can you elaborate on *how* to define the closure first? I've had a go here
@@ -278,36 +269,12 @@ definitions in Smalltalk and Ruby. This closure has one parameter named `num`;
 if we had more than one parameter, we would separate them with commas, like
 `|param1, param2|`.
 
-After the parameters, we define the body of the closure. This closure has only
-one line in its body, `simulated_expensive_calculation(num)`. If we had more
-than one line, we must surround the body of the closure with curly braces. We
-can choose to do that with only one line in the body, which we can do on the
-same line as teh assignment, or we can insert more whitespace as shown in these
-two variations:
-
-<span class="filename">Filename: src/main.rs</span>
-
-```rust
-# use std::thread;
-# use std::time::Duration;
-#
-# fn simulated_expensive_calculation(num: i32) -> i32 {
-#     println!("calculating slowly...");
-#     thread::sleep(Duration::from_secs(2));
-#     num
-# }
-#
-let expensive_closure = |num| { simulated_expensive_calculation(num) };
-
-let expensive_closure = |num| {
-    simulated_expensive_calculation(num)
-};
-```
-
-The semicolon at the end goes with the `let` statement. The value returned from
-the call to `simulated_expensive_calculation(num)`, since it's the last line in
-the closure body and that line doesn't end in a semicolon, will be the value
-returned from the closure when it's called, just like in function bodies.
+After the parameters, we put curly braces that hold the body of the closure.
+The curly braces are optional if the closure body only has one line. After the
+curly braces, we need a semicolon to go with the `let` statement. The value
+returned from the last line in the closure body (`num`), since that line
+doesn't end in a semicolon, will be the value returned from the closure when
+it's called, just like in function bodies.
 
 Note that this `let` statement means `expensive_closure` contains the
 *definition* of an anonymous function, not the *resulting value* of calling the
@@ -328,14 +295,12 @@ containing the argument values we want to use for that call as shown in Listing
 # use std::thread;
 # use std::time::Duration;
 #
-# fn simulated_expensive_calculation(num: i32) -> i32 {
-#     println!("calculating slowly...");
-#     thread::sleep(Duration::from_secs(2));
-#     num
-# }
-#
 fn generate_workout(intensity: i32, random_number: i32) {
-    let expensive_closure = |num| simulated_expensive_calculation(num);
+    let expensive_closure = |num| {
+        println!("calculating slowly...");
+        thread::sleep(Duration::from_secs(2));
+        num
+    };
 
     if intensity < 25 {
         println!(
@@ -362,16 +327,16 @@ fn generate_workout(intensity: i32, random_number: i32) {
 <span class="caption">Listing 13-6: Calling the `expensive_closure` we've
 defined</span>
 
-Now we've achieved the goal of unifying where `simulated_expensive_calculation`
-is called to one place, and we're only executing that code where we need the
+Now we've achieved the goal of unifying where the expensive calculation is
+called to one place, and we're only executing that code where we need the
 results. However, we've reintroduced one of the problems from Listing 13-3:
 we're still calling the closure twice in the first `if` block, which will call
-the expensive function twice and make the user wait twice as long as they need
-to. We could fix this problem by creating a variable local to that `if` block
-to hold the result of calling the closure, but there's another solution we can
-use since we have a closure. We'll get back to that solution in a bit; let's
-first talk about why there aren't type annotations in the closure definition
-and the traits involved with closures.
+the expensive code twice and make the user wait twice as long as they need to.
+We could fix this problem by creating a variable local to that `if` block to
+hold the result of calling the closure, but there's another solution we can use
+since we have a closure. We'll get back to that solution in a bit; let's first
+talk about why there aren't type annotations in the closure definition and the
+traits involved with closures.
 
 ### Closure Type Inference and Annotation
 
@@ -419,14 +384,10 @@ would look like the definition shown here in Listing 13-7:
 # use std::thread;
 # use std::time::Duration;
 #
-# fn simulated_expensive_calculation(num: i32) -> i32 {
-#     println!("calculating slowly...");
-#     thread::sleep(Duration::from_secs(2));
-#     num
-# }
-#
 let expensive_closure = |num: i32| -> i32 {
-     simulated_expensive_calculation(num)
+    println!("calculating slowly...");
+    thread::sleep(Duration::from_secs(2));
+    num
 };
 ```
 
@@ -441,12 +402,11 @@ thing as the functions? -->
 <!-- Yes /Carol -->
 
 The syntax of closures and functions looks more similar with type annotations.
-Here's a vertical comparison of the syntax for function definitions and the
-syntax for closure definitions that all perform the same task as the closure
-from Listing 13-4 (we've added some spaces here to line up the relevant parts).
-This illustrates how closure syntax is similar to function syntax except for
-the use of pipes rather than parentheses and the amount of syntax that is
-optional:
+Here's a vertical comparison of the syntax for the definition of a function
+that adds one to its parameter, and a closure that has the same behavior. We've
+added some spaces here to line up the relevant parts). This illustrates how
+closure syntax is similar to function syntax except for the use of pipes rather
+than parentheses and the amount of syntax that is optional:
 
 <!-- Prod: can you align this as shown in the text? -->
 <!-- I'm confused, does this note mean that production *won't* be aligning all
@@ -455,10 +415,10 @@ trying to illustrate idiomatic Rust style in all the code examples, so our
 alignment is always intentional... /Carol -->
 
 ```rust,ignore
-fn  expensive_function  (num: i32) -> i32 { simulated_expensive_calculation(num) }
-let expensive_closure = |num: i32| -> i32 { simulated_expensive_calculation(num) };
-let expensive_closure = |num|             { simulated_expensive_calculation(num) };
-let expensive_closure = |num|               simulated_expensive_calculation(num)  ;
+fn  add_one_v1   (x: i32) -> i32 { x + 1 }
+let add_one_v2 = |x: i32| -> i32 { x + 1 };
+let add_one_v3 = |x|             { x + 1 };
+let add_one_v4 = |x|               x + 1  ;
 ```
 
 <!-- Can you point out where we're looking at here, where the important
@@ -664,12 +624,6 @@ Listing 13-11 shows how we can use this `Cacher` struct in the
 # use std::thread;
 # use std::time::Duration;
 #
-# fn simulated_expensive_calculation(num: i32) -> i32 {
-#     println!("calculating slowly...");
-#     thread::sleep(Duration::from_secs(2));
-#     num
-# }
-#
 # struct Cacher<T>
 #     where T: Fn(i32) -> i32
 # {
@@ -700,8 +654,10 @@ Listing 13-11 shows how we can use this `Cacher` struct in the
 # }
 #
 fn generate_workout(intensity: i32, random_number: i32) {
-    let mut expensive_result = Cacher::new(|arg| {
-        simulated_expensive_calculation(arg)
+    let mut expensive_result = Cacher::new(|num| {
+        println!("calculating slowly...");
+        thread::sleep(Duration::from_secs(2));
+        num
     });
 
     if intensity < 25 {
@@ -731,16 +687,15 @@ function to abstract away the caching logic</span>
 
 <!-- Will add ghosting and wingdings in libreoffice /Carol -->
 
-Instead of saving the closure that calls the expensive calculation in a
-variable directly, we save a new instance of `Cacher` that holds the closure.
-Then, in each place we want the result, we call the `value` method on the
-`Cacher` instance. We can call the `value` method as many times as we want, or
-not call it at all, and the expensive calculation will be run a maximum of
-once. Try running this program with the `main` function from Listing 13-2, and
-change the values in the `simulated_user_specified_value` and
-`simulated_random_number` variables to verify that in all of the cases in the
-various `if` and `else` blocks, `calculating slowly...` printed by the
-`simulated_expensive_calculation` function only shows up once and only when
+Instead of saving the closure in a variable directly, we save a new instance of
+`Cacher` that holds the closure. Then, in each place we want the result, we
+call the `value` method on the `Cacher` instance. We can call the `value`
+method as many times as we want, or not call it at all, and the expensive
+calculation will be run a maximum of once. Try running this program with the
+`main` function from Listing 13-2, and change the values in the
+`simulated_user_specified_value` and `simulated_random_number` variables to
+verify that in all of the cases in the various `if` and `else` blocks,
+`calculating slowly...` printed by the closure only shows up once and only when
 needed.
 
 The `Cacher` takes care of the logic necessary to ensure we aren't calling the
@@ -756,7 +711,7 @@ value for the parameter `arg` to the `value` method. That is, this test of
 
 ```rust,ignore
 #[test]
-fn call_with_different_arg_values() {
+fn call_with_different_values() {
     let mut c = Cacher::new(|a| a);
 
     let v1 = c.value(1);
