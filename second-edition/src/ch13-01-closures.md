@@ -305,7 +305,7 @@ let expensive_closure = |num| {
 ```
 
 The semicolon at the end goes with the `let` statement. The value returned from
-the call to `simulated_expensive_caluclation(num)`, since it's the last line in
+the call to `simulated_expensive_calculation(num)`, since it's the last line in
 the closure body and that line doesn't end in a semicolon, will be the value
 returned from the closure when it's called, just like in function bodies.
 
@@ -805,7 +805,7 @@ functions. Closures have an additional ability we can use that functions don't
 have, however: they can capture their environment and access variables from the
 scope in which they're defined.
 
-<!-- To clairfy, by enclosing scope, do you mean the scope that the closure is
+<!-- To clarify, by enclosing scope, do you mean the scope that the closure is
 inside? Can you expand on that?-->
 <!-- Yes, I've tried here to clarify that it's the scope in which the closure
 is defined /Carol -->

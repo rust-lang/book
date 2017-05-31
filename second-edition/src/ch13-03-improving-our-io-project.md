@@ -34,8 +34,8 @@ impl Config {
 <span class="caption">Listing 13-23: Reproduction of the `Config::new` function
 from Listing 12-13</span>
 
-<!--Is this why we didnt want to use clone calls, they were inefficient, or was
-it that stacking clone calls can become confusing/is bad practice? -->
+<!--Is this why we didn't want to use clone calls, they were inefficient, or
+was it that stacking clone calls can become confusing/is bad practice? -->
 <!-- Yep, it's for performance reasons /Carol -->
 
 At the time, we said not to worry about the inefficient `clone` calls here
@@ -49,8 +49,8 @@ need to clone the values that we put in the `query` and `filename` fields of
 
 With our new knowledge about iterators, we can change the `new` function to
 take ownership of an iterator as its argument instead of borrowing a slice.
-We'll use the interator functionality instead of the code we had that checks
-the length of the slice and indexes into specific locations. This will clear up
+We'll use the iterator functionality instead of the code we had that checks the
+length of the slice and indexes into specific locations. This will clear up
 what the `Config::new` function is doing since the iterator will take care of
 accessing the values.
 
@@ -112,7 +112,7 @@ fn main() {
 `Config::new`</span>
 
 <!-- I think, if we're going to be building this up bit by bit, it might be
-worth adding listing numbers and filenames to each, can you add those? Don't
+worth adding listing numbers and file names to each, can you add those? Don't
 worry about being accurate with the numbers, we can update them more easily
 later -->
 <!-- That's nice of you to offer, but since we're maintaining an online version

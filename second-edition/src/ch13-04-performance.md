@@ -17,7 +17,7 @@ test bench_search_iter ... bench:  19,234,900 ns/iter (+/- 657,200)
 The iterator version ended up slightly faster! We're not going to go through
 the benchmark code here, as the point is not to prove that they're exactly
 equivalent, but to get a general sense of how these two implementations compare
-perfromance-wise. For a more comprehensive benchmark, you'd want to check
+performance-wise. For a more comprehensive benchmark, you'd want to check
 various texts of various sizes, different words, words of different lengths,
 and all kinds of other variations. The point is this: iterators, while a
 high-level abstraction, get compiled down to roughly the same code as if you'd

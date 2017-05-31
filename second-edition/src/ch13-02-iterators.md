@@ -80,7 +80,7 @@ the `next` method. In other words, the `Item` type will be the type of element
 that's returned from the iterator.
 
 The `next` method is the only method that the `Iterator` trait requires
-implementors of the trait to define. `next` returns one item of the iterator
+implementers of the trait to define. `next` returns one item of the iterator
 at a time wrapped in `Some`, and when iteration is over, it returns `None`.
 We can call the `next` method on iterators directly if we'd like; Listing 13-14
 has a test that demonstrates the values we'd get on repeated calls to `next`
@@ -128,11 +128,11 @@ catalyst? -->
 <!-- I hope this section addresses these comments you had /Carol -->
 
 The `Iterator` trait has a number of different methods with default
-implementatitons provided for us by the standard library; you can find out all
+implementations provided for us by the standard library; you can find out all
 about these methods by looking in the standard library API documentation for
 the `Iterator` trait. Some of these methods call the `next` method in their
 definition, which is why we're required to implement the `next` method when
-implementing thie `Iterator` trait.
+implementing the `Iterator` trait.
 
 <!-- Is there somewhere they can learn about all the methods and what they do,
 how to use them? This seems like a good sample example, and if we can broaden
@@ -250,7 +250,7 @@ which applies the closure?
 
 Also, to generalize this discussion a bit, would you ever use iter without map?
 -->
-<!-- I hope this new breakdown/rearranging has cleared up these commments you
+<!-- I hope this new breakdown/rearranging has cleared up these comments you
 had on the last version of this chapter about the difference between
 iter and map. I hope the added examples where we've used iter without map have
 cleared up the last question. /Carol -->
@@ -366,10 +366,10 @@ impl Counter {
 function that creates instances of `Counter` with an initial value of 0 for
 `count`</span>
 
-<!-- Could you add a filename here? I think that'll help the reader keep track
-of what they're working on. Can you also just sum up in a line what this code
-has accomplished so far? I moved this down from above the code, if this will
-do? -->
+<!-- Could you add a filename here? I think that will help the reader keep
+track of what they're working on. Can you also just sum up in a line what this
+code has accomplished so far? I moved this down from above the code, if this
+will do? -->
 <!-- Done /Carol -->
 
 The `Counter` struct has one field named `count`. This field holds a `u32`
