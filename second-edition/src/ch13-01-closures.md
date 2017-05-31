@@ -52,7 +52,7 @@ use std::time::Duration;
 
 fn simulated_expensive_calculation(intensity: i32) -> i32 {
     println!("calculating slowly...");
-    thread::sleep(Duration::new(2, 0));
+    thread::sleep(Duration::from_secs(2));
     intensity
 }
 ```
@@ -91,7 +91,7 @@ input values:
 #
 # fn simulated_expensive_calculation(num: i32) -> i32 {
 #     println!("calculating slowly...");
-#     thread::sleep(Duration::new(2, 0));
+#     thread::sleep(Duration::from_secs(2));
 #     num
 # }
 #
@@ -121,7 +121,7 @@ to this function:
 #
 # fn simulated_expensive_calculation(num: i32) -> i32 {
 #     println!("calculating slowly...");
-#     thread::sleep(Duration::new(2, 0));
+#     thread::sleep(Duration::from_secs(2));
 #     num
 # }
 #
@@ -193,7 +193,7 @@ function into a variable, as shown in Listing 13-4:
 #
 # fn simulated_expensive_calculation(num: i32) -> i32 {
 #     println!("calculating slowly...");
-#     thread::sleep(Duration::new(2, 0));
+#     thread::sleep(Duration::from_secs(2));
 #     num
 # }
 #
@@ -253,7 +253,7 @@ instead of the result as shown in Listing 13-5:
 #
 # fn simulated_expensive_calculation(num: i32) -> i32 {
 #     println!("calculating slowly...");
-#     thread::sleep(Duration::new(2, 0));
+#     thread::sleep(Duration::from_secs(2));
 #     num
 # }
 #
@@ -293,7 +293,7 @@ two variations:
 #
 # fn simulated_expensive_calculation(num: i32) -> i32 {
 #     println!("calculating slowly...");
-#     thread::sleep(Duration::new(2, 0));
+#     thread::sleep(Duration::from_secs(2));
 #     num
 # }
 #
@@ -330,7 +330,7 @@ containing the argument values we want to use for that call as shown in Listing
 #
 # fn simulated_expensive_calculation(num: i32) -> i32 {
 #     println!("calculating slowly...");
-#     thread::sleep(Duration::new(2, 0));
+#     thread::sleep(Duration::from_secs(2));
 #     num
 # }
 #
@@ -421,7 +421,7 @@ would look like the definition shown here in Listing 13-7:
 #
 # fn simulated_expensive_calculation(num: i32) -> i32 {
 #     println!("calculating slowly...");
-#     thread::sleep(Duration::new(2, 0));
+#     thread::sleep(Duration::from_secs(2));
 #     num
 # }
 #
@@ -666,7 +666,7 @@ Listing 13-11 shows how we can use this `Cacher` struct in the
 #
 # fn simulated_expensive_calculation(num: i32) -> i32 {
 #     println!("calculating slowly...");
-#     thread::sleep(Duration::new(2, 0));
+#     thread::sleep(Duration::from_secs(2));
 #     num
 # }
 #
