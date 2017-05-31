@@ -502,7 +502,29 @@ constructs in the language.
 Definition and expansion of macros both happen in a single depth-first,
 lexical-order traversal of a crate’s source. So a macro defined at module scope
 is visible to any subsequent code in the same module, which includes the body
-of any subsequent child `mod` items.
+of any subsequent child `mod` items. If you want to use your macro, which is
+defined in a different module, you need to use `macro_use` attribute **before**
+using the macro. Let's say we'll have our macros defined in module `macros` and
+we would like to use them inside module `client`. This is the required module
+definition order:
+
+```rust
+#[macro_use]
+mod macros;
+mod client;
+```
+
+Opposite order would resulted in a compilation failure:
+
+```rust
+mod client;
+#[macro_use]
+mod macros;
+```
+
+```shell
+error: cannot find macro `my_macro!` in this scope
+```
 
 A macro defined within the body of a single `fn`, or anywhere else not at
 module scope, is visible only within that item.
