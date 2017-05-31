@@ -133,7 +133,7 @@ const MAX_POINTS: u32 = 100_000;
 
 Constants are valid for the entire time a program runs, within the scope they
 were declared in, making them a useful choice for values in your application
-domain that multiple part of the program might need to know about, such as the
+domain that multiple parts of the program might need to know about, such as the
 maximum number of points any player of a game is allowed to earn or the speed
 of light.
 
