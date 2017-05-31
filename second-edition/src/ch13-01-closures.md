@@ -382,12 +382,12 @@ parameters or the return value like `fn` functions do.
 <!-- I've suggested moving this next paragraph up from below, I found this
 section difficult to follow with this next paragraph -->
 
-This is because functions are part of an explicit interface exposed to your
-users, so defining this interface rigidly is important for ensuring that
-everyone agrees on what types of values a function uses and returns. Closures
-aren't used in an exposed interface like this, though: they're stored in
-variables and used without naming them and exposing them to be invoked by users
-of our library.
+Type annotations are required on functions because they're are part of an
+explicit interface exposed to your users. Defining this interface rigidly is
+important for ensuring that everyone agrees on what types of values a function
+uses and returns. Closures aren't used in an exposed interface like this,
+though: they're stored in variables and used without naming them and exposing
+them to be invoked by users of our library.
 
 Additionally, closures are usually short and only relevant within a narrow
 context rather than in any arbitrary scenario. Within these limited contexts,
@@ -528,9 +528,9 @@ error if we try to use a different type with the same closure.
 Returning to our workout generation app, in Listing 13-6 we left our code still
 calling the expensive calculation closure more times than it needs to. In each
 place throughout our code, if we need the results of the expensive closure more
-than once, we could save the result in a variable for reuse and use the variable
-instead of calling the closure again. This could be a lot of repeated code saving
-the results in a variety of places.
+than once, we could save the result in a variable for reuse and use the
+variable instead of calling the closure again. This could be a lot of repeated
+code saving the results in a variety of places.
 
 However, because we have a closure for the expensive calculation, we have
 another solution available to us. We can create a struct that will hold the
@@ -542,8 +542,10 @@ saving and reusing the result. You may know this pattern as *memoization* or
 
 In order to make a struct that holds a closure, we need to be able to specify
 the type of the closure. Each closure instance has its own unique anonymous
-type, so in order to define structs, enums, or function parameters that use
-closures, we use generics and trait bounds like we discussed in Chapter 10.
+type: that is, even if two closures have the same signature, their types are
+still considered to be different. In order to define structs, enums, or
+function parameters that use closures, we use generics and trait bounds like we
+discussed in Chapter 10.
 
 <!-- So Fn is a trait built into the language, is that right? I wasn't sure if
 it was just a placeholder here -->

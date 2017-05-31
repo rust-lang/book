@@ -231,10 +231,10 @@ fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
 function from Listing 12-19</span>
 
 We can write this code in a much shorter way by using iterator adaptor methods
-instead. This also lets us avoid having to have a mutable intermediate
-`results` vector. The functional programming style prefers to minimize the
-amount of mutable state to make code clearer. Removing the mutable state might
-make it easier for us to make a future enhancement to make searching happen in
+instead. This also lets us avoid having a mutable intermediate `results`
+vector. The functional programming style prefers to minimize the amount of
+mutable state to make code clearer. Removing the mutable state might make it
+easier for us to make a future enhancement to make searching happen in
 parallel, since we wouldn't have to manage concurrent access to the `results`
 vector. Listing 13-28 shows this change:
 

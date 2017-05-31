@@ -421,7 +421,7 @@ yet, we'll be covering them in Chapter 19. We want our iterator to add one to
 the current state, which is why we initialized `count` to 0: we want our
 iterator to return one first. If the value of `count` is less than six, `next`
 will return the current value wrapped in `Some`, but if `count` is six or
-higher, our iterator will return `None`
+higher, our iterator will return `None`.
 
 #### Using Our `Counter` Iterator's `next` Method
 
