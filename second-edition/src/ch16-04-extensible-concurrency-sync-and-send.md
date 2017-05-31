@@ -65,7 +65,7 @@ has more information about these guarantees and how to uphold them.
 
 ## Summary
 
-This isn't the last we'll see of concurrency in this book; the project in
+This isn't the last time we'll see concurrency in this book; the project in
 Chapter 20 will use these concepts in a more realistic situation than the
 smaller examples we discussed in this chapter.
 
