@@ -31,9 +31,13 @@ let v1_iter = v1.iter();
 useful</span>
 
 After creating an iterator, we can choose to use it in a variety of ways. In
-Chapter 3, we saw that we can use iterators with `for` loops to execute some
-code on each item. The example in Listing 13-14 uses a `for` loop to print out
-each value in the vector:
+Listing 3-6, we actually used iterators with `for` loops to execute some code
+on each item, though we glossed over what the call to `iter` did until now. The
+example in Listing 13-14 separates the creation of the iterator from the use of
+the iterator in the `for` loop. The iterator is stored in the `v1_iter`
+variable, and no iteration takes place at that time. Once the `for` loop is
+called using the iterator in `v1_iter`, then each element in the iterator is
+used in one iteration of the loop, which prints out each value:
 
 ```rust
 let v1 = vec![1, 2, 3];
@@ -68,6 +72,8 @@ trait Iterator {
     type Item;
 
     fn next(&mut self) -> Option<Self::Item>;
+
+    // methods with default implementations elided
 }
 ```
 
@@ -88,7 +94,7 @@ on the iterator created from the vector:
 
 <span class="filename">Filename: src/lib.rs</span>
 
-```rust
+```rust,test_harness
 #[test]
 fn iterator_demonstration() {
     let v1 = vec![1, 2, 3];
@@ -269,7 +275,7 @@ struct instances in order to return only shoes that are the specified size:
 
 <span class="filename">Filename: src/lib.rs</span>
 
-```
+```rust,test_harness
 #[derive(PartialEq, Debug)]
 struct Shoe {
     size: i32,
@@ -340,10 +346,12 @@ for is the `next` method. Once we've done that, we can use all the other
 methods that have default implementations provided by the `Iterator` trait on
 our iterator!
 
-The iterator we're going to create is one that will only ever count from 1 to
-5. First, we'll create a struct to hold on to some values, and then we'll make
-this struct into an iterator by implementing the `Iterator` trait and use the
-values in that implementation.
+<!-- NEXT PARAGRAPH WRAPPED WEIRD INTENTIONALLY SEE #199 -->
+
+The iterator we're going to create is one that will only ever count from 1
+to 5. First, we'll create a struct to hold on to some values, and then we'll
+make this struct into an iterator by implementing the `Iterator` trait and use
+the values in that implementation.
 
 Listing 13-19 has the definition of the `Counter` struct and an associated
 `new` function to create instances of `Counter`:
