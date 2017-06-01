@@ -54,6 +54,7 @@ fn parse_references(buffer: String) -> (String, HashMap<String, String>) {
 fn parse_links((buffer, ref_map): (String, HashMap<String, String>)) -> String {
     // FIXME: check which punctuation is allowed by spec
     let re = Regex::new(r###"(?:(?P<pre>(?:```(?:[^`]|`[^`])*`?\n```\n)|(?:[^[]`[^`\n]+[\n]?[^`\n]*`))|(?:\[(?P<name>[^]]+)\](?:(?:\([[:blank:]]*(?P<val>[^")]*[^ ])(?:[[:blank:]]*"[^"]*")?\))|(?:\[(?P<key>[^]]*)\]))?))"###).expect("could not create regex");
+    let error_code = Regex::new(r###"^E\d{4}$"###).expect("could not create regex");
     let output = re.replace_all(&buffer, |caps: &Captures| {
         match caps.name("pre") {
             Some(pre_section) => format!("{}", pre_section.to_owned()),
@@ -61,10 +62,11 @@ fn parse_links((buffer, ref_map): (String, HashMap<String, String>)) -> String {
                 let name = caps.name("name").expect("could not get name").to_owned();
                 // Really we should ignore text inside code blocks,
                 // this is a hack to not try to treat `#[derive()]`,
-                // `[profile]`, or `[test]` like a link
+                // `[profile]`, `[test]`, or `[E\d\d\d\d]` like a link
                 if name.starts_with("derive(") ||
                    name.starts_with("profile") ||
-                   name.starts_with("test") {
+                   name.starts_with("test") ||
+                   error_code.is_match(&name) {
                     return name
                 }
 
