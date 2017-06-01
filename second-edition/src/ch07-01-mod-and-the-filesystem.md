@@ -93,7 +93,7 @@ These can have completely different functionality, and the function names do
 not conflict with each other since they’re in different modules.
 
 While in this case we’re building a library, there's nothing special about
-*src/lib.rs*. We could also make use of submodules in *src/main.rs* as well. In
+*src/lib.rs*. We could also make use of modules in *src/main.rs* as well. In
 fact, we can also put modules inside of modules. This can be useful as your
 modules grow to keep related functionality organized together and separate
 functionality apart. The choice of how you organize your code depends on how
@@ -216,10 +216,10 @@ mod network {
 }
 ```
 
-We’re still *defining* the `client` module here, but by removing the curly
-braces and definitions inside the `client` module and replacing them with a
-semicolon, we’re letting Rust know to look in another location for the code
-defined inside that module.
+We’re still *defining* the `client` module here, but by replacing the block
+with a semicolon, we're letting Rust know to look in another location for
+the definition of the module. The line `mod client;` will be expanded to
+`mod client { /* contents of client.rs */ }`.
 
 So now we need to create the external file with that module name. Create a
 *client.rs* file in your *src/* directory, then open it up and enter the
