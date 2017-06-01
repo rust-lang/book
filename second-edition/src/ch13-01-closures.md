@@ -855,10 +855,12 @@ directly map to the three ways a function can take a parameter: taking
 ownership, borrowing immutably, and borrowing mutably. These ways of capturing
 values are encoded in the three `Fn` traits as follows:
 
-* `FnOnce` takes ownership of the environment, and therefore cannot be called
-  more than once in the same context
-* `Fn` borrows values from the environment immutably
-* `FnMut` can change the environment since it mutably borrows values
+* `FnOnce` takes ownership of the variables it captures from the environment
+  and moves those variables into the closure when the closure is defined.
+  Therefore, a `FnOnce` closure cannot be called more than once in the same
+  context.
+* `Fn` borrows values from the environment immutably.
+* `FnMut` can change the environment since it mutably borrows values.
 
 When we create a closure, Rust infers how we want to reference the environment
 based on how the closure uses the values from the environment. In Listing
@@ -911,7 +913,7 @@ allowed to use `x` anymore. Removing the `println!` will fix this example.
 
 Most of the time when specifying one of the `Fn` trait bounds, you can start
 with `Fn` and the compiler will tell you if you need `FnMut` or `FnOnce` based
-on what happens when the closure is called.
+on what happens in the closure body.
 
 To illustrate situations where closures that can capture their environment are
 useful as function parameters, let's move on to our next topic: iterators.
