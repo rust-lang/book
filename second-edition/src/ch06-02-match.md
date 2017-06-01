@@ -96,7 +96,7 @@ values that match the pattern. This is how we can extract values out of enum
 variants.
 
 As an example, let’s change one of our enum variants to hold data inside it.
-From 1999 through 2008, the United States printed quarters with different
+From 1999 through 2008, the United States minted quarters with different
 designs for each of the 50 states on one side. No other coins got state
 designs, so only quarters have this extra value. We can add this information to
 our `enum` by changing the `Quarter` variant to include a `State` value stored
