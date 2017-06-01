@@ -53,10 +53,7 @@ fn handle_connection(mut stream: TcpStream) {
 `/sleep` and sleeping for 5 seconds</span>
 
 This code is a bit messy, but it's good enough for our simulation purposes! We
-created a second request whose data we'll recognize, `sleep`, and a second
-slice of `buffer` that's the same size as `sleep` to try comparing with
-`sleep`. We called the new slice `sleep_start` and changed the `start` slice
-variable name to `get_start` to tell the two slices apart. We added an `else
+created a second request `sleep`, whose data we'll recognize. We added an `else
 if` after the `if` block to check for the request to `/sleep`, and when we see
 that request, we'll sleep for five seconds before rendering the hello page.
 
