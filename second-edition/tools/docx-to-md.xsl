@@ -111,15 +111,12 @@
     </xsl:template>
 
     <xsl:template match="w:p[w:pPr/w:pStyle/@w:val = 'ProductionDirective']">
-        <xsl:text>&lt;!-- </xsl:text>
         <xsl:apply-templates select="*" />
-        <xsl:text> -->&#10;&#10;</xsl:text>
+        <xsl:text>&#10;&#10;</xsl:text>
     </xsl:template>
 
     <xsl:template match="w:p[w:pPr/w:pStyle[@w:val = 'Caption' or @w:val = 'TableTitle' or @w:val = 'Caption1']]">
-        <xsl:text>&lt;caption>&#10;</xsl:text>
         <xsl:apply-templates select="*" />
-        <xsl:text>&#10;&lt;/caption></xsl:text>
         <xsl:text>&#10;&#10;</xsl:text>
     </xsl:template>
 
@@ -163,7 +160,7 @@ Unmatched: <xsl:value-of select="w:pPr/w:pStyle/@w:val" />
         </xsl:choose>
     </xsl:template>
 
-    <xsl:template match="w:r[w:rPr/w:rStyle[@w:val = 'EmphasisItalic' or @w:val = 'EmphasisItalicBox' or @w:val = 'EmphasisNote']]">
+    <xsl:template match="w:r[w:rPr/w:rStyle[@w:val = 'EmphasisItalic' or @w:val = 'EmphasisItalicBox' or @w:val = 'EmphasisNote' or @w:val = 'EmphasisRevCaption']]">
         <xsl:choose>
             <xsl:when test="normalize-space(w:t) != ''">
                 <xsl:if test="starts-with(w:t, ' ')">
