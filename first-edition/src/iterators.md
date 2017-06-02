@@ -177,7 +177,7 @@ is an element called the *base*. The second is a closure that itself takes two
 arguments: the first is called the *accumulator*, and the second is an
 *element*. Upon each iteration, the closure is called, and the result is the
 value of the accumulator on the next iteration. On the first iteration, the
-base is the value of the accumulator.
+base is assigned the value of the accumulator.
 
 Okay, that's a bit confusing. Let's examine the values of all of these things
 in this iterator:
