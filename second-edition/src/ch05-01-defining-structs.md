@@ -56,7 +56,7 @@ To get a specific value from a struct, we can use dot notation. If we wanted
 just this user’s email address, we can use `user1.email` wherever we want to
 use this value. To change a value in a struct, if the instance is mutable, we
 can use the dot notation and assign into a particular field, such as
-`user1.email = String::from("someone-else@example.com");`
+`user1.email = String::from("someone-else@example.com");`.
 
 ### Field Init Shorthand when Variables Have the Same Name as Fields
 
