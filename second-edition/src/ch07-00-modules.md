@@ -14,8 +14,8 @@ functions (and other code like structs and enums too) into different modules. A
 you can choose whether those definitions are visible outside their module
 (public) or not (private). Here’s an overview of how modules work:
 
-* The mod keyword declares a module, defined by either the following code block
-  or the contents of another file.
+* The `mod` keyword declares a module. Code within a module appears either
+  immediately following this declaration within curly braces or in another file.
 * By default, everything is set as private (including modules). You can use the
   `pub` keyword to make a module public and therefore visible outside of its
   namespace.

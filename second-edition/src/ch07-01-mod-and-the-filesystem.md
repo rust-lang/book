@@ -197,8 +197,8 @@ lines of code inside the functions will start getting long as well. These would
 be good reasons to pull each of the `client`, `network`, and `server` modules
 out of *src/lib.rs* and into their own files.
 
-Let’s start by extracting the `client` module into another file. First, replace
-the `client` module code in *src/lib.rs* with the following:
+First, replace the `client` module code with only the declaration of the `client`
+module, so that your *src/lib.rs* looks like the following:
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -216,10 +216,15 @@ mod network {
 }
 ```
 
-We’re still *defining* the `client` module here, but by replacing the block
+We’re still *declaring* the `client` module here, but by replacing the block
 with a semicolon, we're letting Rust know to look in another location for
-the definition of the module. The line `mod client;` will be expanded to
-`mod client { /* contents of client.rs */ }`.
+the definition of the module. The line `mod client;` means:
+
+```rust,ignore
+mod client {
+    // contents of client.rs
+}
+```
 
 So now we need to create the external file with that module name. Create a
 *client.rs* file in your *src/* directory, then open it up and enter the
