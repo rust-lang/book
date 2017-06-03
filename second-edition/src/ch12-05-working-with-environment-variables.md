@@ -335,7 +335,7 @@ Some programs allow both arguments *and* environment variables for the same
 configuration. In those cases, the programs decide that one or the other takes
 precedence. For another exercise on your own, try controlling case
 insensitivity through a command line argument as well as through the
-environment variable, and decide which should take precedence the program is
+environment variable, and decide which should take precedence if the program is
 run with contradictory values.
 
 The `std::env` module contains many more useful features for dealing with
