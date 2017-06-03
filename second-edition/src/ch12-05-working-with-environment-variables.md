@@ -70,8 +70,7 @@ Trust me.";
 <span class="caption">Listing 12-20: Adding a new failing test for the case
 insensitive function we're about to add</span>
 
-Note that we've edited the old test's `query` and `contents` too: we changed
-the query to "duct", which will match the line with the word "productive".
+Note that we've edited the old test's `contents` too.
 We've added a new line with the text "Duct tape", with a capital D, that
 shouldn't match the query "duct" when we're searching for the query in a case
 sensitive manner. We've changed this test to ensure that we don't accidentally
