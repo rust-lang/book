@@ -106,7 +106,9 @@ When `foo()` is called, a new stack frame is allocated:
 | 0       | x    | 42    |
 
 Because `0` was taken by the first frame, `1` and `2` are used for `foo()`’s
-stack frame. It grows upward, the more functions we call.
+stack frame. It grows upward, the more functions we call. Notice that we are **not**
+taking into account the size of each variable (for example, a 32 bit variable would
+use the memory addresses from 0 to 3, or 4 bytes).
 
 
 There are some important things we have to take note of here. The numbers 0, 1,
