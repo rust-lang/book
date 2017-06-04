@@ -99,7 +99,7 @@ internal organization: you can choose to re-export items to make a different
 public structure with `pub use`.
 
 For example, say that we made a library named `art` consisting of a `kinds`
-module containing an enum named `Color` and a `utils` module containing a
+module containing two enums named `PrimaryColor` and `SecondaryColor`, and a `utils` module containing a
 function named `mix` as shown in Listing 14-2:
 
 <span class="filename">Filename: src/lib.rs</span>
