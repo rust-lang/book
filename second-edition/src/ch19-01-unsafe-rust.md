@@ -392,7 +392,7 @@ declaration and use of a static variable with a string slice as a value:
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-static HELLO_WORLD: &'static str = "Hello, world!";
+static HELLO_WORLD: &str = "Hello, world!";
 
 fn main() {
     println!("name is: {}", HELLO_WORLD);
@@ -405,10 +405,12 @@ variable</span>
 `static` variables are similar to constants: their names are also in
 `SCREAMING_SNAKE_CASE` by convention, and we *must* annotate the variable's
 type, which is `&'static str` in this case. Only references with the `'static`
-lifetime may be stored in a static variable. Accessing immutable static
-variables is safe. Values in a static variable have a fixed address in memory,
-and using the value will always access the same data. Constants, on the other
-hand, are allowed to duplicate their data whenever they are used.
+lifetime may be stored in a static variable. Because of this, the Rust compiler
+can figure out the lifetime by itself and we don't need to annotate it explicitly.
+Accessing immutable static variables is safe. Values in a static variable have a
+fixed address in memory, and using the value will always access the same data.
+Constants, on the other hand, are allowed to duplicate their data whenever they
+are used.
 
 Another way in which static variables are different from constants is that
 static variables can be mutable. Both accessing and modifying mutable static
