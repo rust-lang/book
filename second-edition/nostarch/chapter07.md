@@ -16,12 +16,13 @@ functions (and other code, like structs and enums) into different modules. A
 you can choose whether those definitions are visible outside their module
 (public) or not (private). Here’s an overview of how modules work:
 
-* You declare a new module using the keyword `mod`.
-* By default, functions, types, constants, and modules are private. You can use
-  the `pub` keyword to make an item public and therefore visible outside its
-  namespace.
-* The `use` keyword allows you to bring modules, or the definitions inside
-  modules, into scope so it’s easier to refer to them.
+* The `mod` keyword declares a new module. Code within the module appears
+  either immediately following this declaration within curly braces or in
+  another file.
+* By default, functions, types, constants, and modules are private. The `pub`
+  keyword makes an item public and therefore visible outside its namespace.
+* The `use` keyword brings modules, or the definitions inside modules, into
+  scope so it’s easier to refer to them.
 
 We’ll look at each of these parts to see how they fit into the whole.
 
@@ -125,12 +126,12 @@ Now we have a `network::connect` function and a `client::connect` function.
 These can have completely different functionality, and the function names do
 not conflict with each other because they’re in different modules.
 
-In this case, because we’re building a library, so the file that serves as the
+In this case, because we’re building a library, the file that serves as the
 entry point for building our library is *src/lib.rs*. However, in respect to
 creating modules, there’s nothing special about *src/lib.rs*. We could also
 create modules in *src/main.rs* for a binary crate in the same way as we're
-creating modules in *src/lib.rs* for our example library crate. In fact, we can
-put modules inside of modules, which can be useful as your modules grow to keep
+creating modules in *src/lib.rs* for the library crate. In fact, we can put
+modules inside of modules, which can be useful as your modules grow to keep
 related functionality organized together and separate functionality apart. The
 choice of how you organize your code depends on how you think about the
 relationship between the parts of your code. For instance, the `client` code
@@ -232,8 +233,8 @@ lines of code inside the functions will start getting lengthy as well. These
 would be good reasons to separate the `client`, `network`, and `server` modules
 from *src/lib.rs* and place them into their own files.
 
-Let’s start by extracting the `client` module into another file. First, replace
-the `client` module code in *src/lib.rs* with the following:
+First, replace the `client` module code with only the declaration of the
+`client` module, so that your *src/lib.rs* looks like the following:
 
 Filename: src/lib.rs
 
@@ -251,10 +252,16 @@ mod network {
 }
 ```
 
-We’re still *defining* the `client` module here, but by removing the curly
-braces and definitions inside the `client` module and replacing them with a
-semicolon, we’re telling Rust to look in another location for the code defined
-inside that module.
+We’re still *declaring* the `client` module here, but by replacing the block
+with a semicolon, we’re telling Rust to look in another location for the code
+defined within the scope of the `client` module. In other words, the line `mod
+client;` means:
+
+```
+mod client {
+    // contents of client.rs
+}
+```
 
 Now we need to create the external file with that module name. Create a
 *client.rs* file in your *src/* directory and open it. Then enter the

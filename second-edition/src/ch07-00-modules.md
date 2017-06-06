@@ -13,10 +13,11 @@ functions (and other code, like structs and enums) into different modules. A
 you can choose whether those definitions are visible outside their module
 (public) or not (private). Here’s an overview of how modules work:
 
-* The `mod` keyword declares a module. Code within a module appears either
-  immediately following this declaration within curly braces or in another file.
+* The `mod` keyword declares a new module. Code within the module appears
+  either immediately following this declaration within curly braces or in
+  another file.
 * By default, functions, types, constants, and modules are private. The `pub`
-  keyword makes an item public and therefore visible outside of its namespace.
+  keyword makes an item public and therefore visible outside its namespace.
 * The `use` keyword brings modules, or the definitions inside modules, into
   scope so it’s easier to refer to them.
 
