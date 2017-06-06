@@ -70,13 +70,12 @@ Trust me.";
 <span class="caption">Listing 12-20: Adding a new failing test for the case
 insensitive function we're about to add</span>
 
-Note that we've edited the old test's `contents` too.
-We've added a new line with the text "Duct tape", with a capital D, that
-shouldn't match the query "duct" when we're searching for the query in a case
-sensitive manner. We've changed this test to ensure that we don't accidentally
-break the case sensitive search functionality that we've already implemented;
-this test should pass now and should continue to pass as we work on the case
-insensitive search.
+Note that we've edited the old test's `contents` too. We've added a new line
+with the text "Duct tape", with a capital D, that shouldn't match the query
+"duct" when we're searching for the query in a case sensitive manner. We've
+changed this test to ensure that we don't accidentally break the case sensitive
+search functionality that we've already implemented; this test should pass now
+and should continue to pass as we work on the case insensitive search.
 
 The new test for the case insensitive search uses "rUsT" with some capital
 letters as its query. The expected return value from the
