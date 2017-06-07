@@ -153,7 +153,7 @@ In this case, we're keeping it as simple as possible.
 Great, so let's write `impl_hello_world(&ast)`.
 
 ```rust,ignore
-fn impl_hello_world(ast: &syn::MacroInput) -> quote::Tokens {
+fn impl_hello_world(ast: &syn::DeriveInput) -> quote::Tokens {
     let name = &ast.ident;
     quote! {
         impl HelloWorld for #name {
@@ -167,7 +167,7 @@ fn impl_hello_world(ast: &syn::MacroInput) -> quote::Tokens {
 
 So this is where quotes comes in. The `ast` argument is a struct that gives us
 a representation of our type (which can be either a `struct` or an `enum`).
-Check out the [docs](https://docs.rs/syn/0.10.5/syn/struct.MacroInput.html),
+Check out the [docs](https://docs.rs/syn/0.11.11/syn/struct.DeriveInput.html),
 there is some useful information there. We are able to get the name of the
 type using `ast.ident`. The `quote!` macro lets us write up the Rust code
 that we wish to return and convert it into `Tokens`. `quote!` lets us use some
@@ -181,8 +181,8 @@ So I think that's it. Oh, well, we do need to add dependencies for `syn` and
 
 ```toml
 [dependencies]
-syn = "0.10.5"
-quote = "0.3.10"
+syn = "0.11.11"
+quote = "0.3.15"
 ```
 
 That should be it. Let's try to compile `hello-world`.
@@ -254,7 +254,7 @@ But how do we tell the user, that we do not accept enums?
 The idiomatic way to report errors in procedural macros is to panic:
 
 ```rust,ignore
-fn impl_hello_world(ast: &syn::MacroInput) -> quote::Tokens {
+fn impl_hello_world(ast: &syn::DeriveInput) -> quote::Tokens {
     let name = &ast.ident;
     // Check if derive(HelloWorld) was specified for a struct
     if let syn::Body::Struct(_) = ast.body {
