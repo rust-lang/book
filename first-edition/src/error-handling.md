@@ -217,7 +217,7 @@ not all file names have a `.` in them, so it's possible that the file name has
 no extension. This *possibility of absence* is encoded into the types using
 `Option<T>`. In other words, the compiler will force us to address the
 possibility that an extension does not exist. In our case, we only print out a
-message saying as such.
+message saying as much.
 
 Getting the extension of a file name is a pretty common operation, so it makes
 sense to put it into a function:
