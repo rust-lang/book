@@ -752,15 +752,15 @@ to another type. Shadowing lets us reuse the `guess` variable name rather than
 forcing us to create two unique variables, like `guess_str` and `guess` for
 example. (Chapter 3 covers shadowing in more detail.)
 
-We bind `guess` to the expression `guess.trim().parse()`. The `guess` in the
-expression refers to the original `guess` that was a `String` with the input in
-it. The `trim` method on a `String` instance will eliminate any whitespace at
-the beginning and end. `u32` can only contain numerical characters, but the
-user must press the Return key to satisfy `read_line`. When the user presses
-Return, a newline character is added to the string. For example, if the user
-types 5 and presses return, `guess` looks like this: `5\n`. The `\n` represents
-“newline,” the return key. The `trim` method eliminates `\n`, resulting in just
-`5`.
+We bind `guess` to the value of the expression `guess.trim().parse()`. The
+`guess` in the expression refers to the original `guess` that was a `String`
+with the input in it. The `trim` method on a `String` instance will eliminate
+any whitespace at the beginning and end. `u32` can only contain numerical
+characters, but the user must press the Return key to satisfy `read_line`.
+When the user presses Return, a newline character is added to the string.
+For example, if the user types 5 and presses return, `guess` looks like this:
+`5\n`. The `\n` represents the “newline” character that results from pressing
+the return key. The `trim` method eliminates `\n`, resulting in just `5`.
 
 The [`parse` method on strings][parse]<!-- ignore --> parses a string into some
 kind of number. Because this method can parse a variety of number types, we
@@ -778,7 +778,7 @@ comparison will be between two values of the same type!
 The call to `parse` could easily cause an error. If, for example, the string
 contained `A👍%`, there would be no way to convert that to a number. Because it
 might fail, the `parse` method returns a `Result` type, much like the
-`read_line` method does as discussed earlier in “Handling Potential Failure
+`read_line` method does, as discussed earlier in “Handling Potential Failure
 with the Result Type”. We’ll treat this `Result` the same way by
 using the `expect` method again. If `parse` returns an `Err` `Result` variant
 because it couldn’t create a number from the string, the `expect` call will

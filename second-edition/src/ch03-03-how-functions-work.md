@@ -101,19 +101,17 @@ declarations with commas, like this:
 
 ```rust
 fn main() {
-    another_function(5, 6);
+    another_function(5, 'd');
 }
 
-fn another_function(x: i32, y: i32) {
+fn another_function(x: i32, c: char) {
     println!("The value of x is: {}", x);
-    println!("The value of y is: {}", y);
+    println!("The value of c is: {}", c);
 }
 ```
 
-This example creates a function with two parameters, both of which are `i32`
-types. The function then prints out the values in both of its parameters. Note
-that function parameters don't all need to be the same type, they just happen
-to be in this example.
+This example creates a function with two parameters, of type `i32` and `char`
+respectively. The function then prints out the values in both of its parameters.
 
 Let’s try running this code. Replace the program currently in your *function*
 project’s *src/main.rs* file with the preceding example, and run it using
@@ -124,11 +122,11 @@ $ cargo run
    Compiling functions v0.1.0 (file:///projects/functions)
      Running `target/debug/functions`
 The value of x is: 5
-The value of y is: 6
+The value of c is: d
 ```
 
-Because we called the function with `5` as the value for  `x` and `6` is passed
-as the value for `y`, the two strings are printed with these values.
+Because we called the function with `5` as the value for  `x` and `d` is passed
+as the value for `c`, the two strings are printed with these values.
 
 ### Function Bodies
 
@@ -142,9 +140,11 @@ functions.
 
 ### Statements and Expressions
 
-We’ve actually already used statements and expressions. *Statements* are
-instructions that perform some action and do not return a value. *Expressions*
-evaluate to a resulting value. Let’s look at some examples.
+We’ve actually already used statements and expressions. *Expressions* evaluate
+to a resulting value. *Statements* are instructions that perform some action
+and either have no value or have value unit.  The unit value is the empty
+tuple, denoted as `()`, and since it has no useful content it is used as the
+result of some statements. Let’s look at some examples.
 
 Creating a variable and assigning a value to it with the `let` keyword is a
 statement. In Listing 3-3, `let y = 6;` is a statement:
@@ -162,7 +162,7 @@ fn main() {
 Function definitions are also statements; the entire preceding example is a
 statement in itself.
 
-Statements do not return values. Therefore, you can’t assign a `let` statement
+The `let` statement do not return a value. Therefore, you can’t assign a `let` statement
 to another variable, as the following code tries to do:
 
 <span class="filename">Filename: src/main.rs</span>
@@ -193,13 +193,32 @@ where the assignment returns the value of the assignment. In those languages,
 you can write `x = y = 6` and have both `x` and `y` have the value `6`; that is
 not the case in Rust.
 
-Expressions evaluate to something and make up most of the rest of the code that
-you’ll write in Rust. Consider a simple math operation, such as `5 + 6`, which
-is an expression that evaluates to the value `11`. Expressions can be part of
-statements: in Listing 3-3 that had the statement `let y = 6;`, `6` is an
-expression that evaluates to the value `6`. Calling a function is an
-expression. Calling a macro is an expression. The block that we use to create
-new scopes, `{}`, is an expression, for example:
+While the `let` statement does not evaluate to any value, some other statements
+will evaluate to the unit value (`()`), which can be convenient because they
+can be used in any place where an expression can. (Technically these statements
+are expressions, they are just of type unit.) For these statements you can see
+that they have a value, it is just not a value that you can do anything useful
+with:
+
+<span class="filename">Filename: src/main.rs</span>
+
+```rust
+fn main() {
+    let mut x = 0;
+    let y: () = (x = 6);
+}
+```
+
+The assignment statement is of type `()`, as can be seen by the explicit type
+annotation in the second `let`.
+
+Expressions make up most of the rest of the code that you’ll write in Rust.
+Consider a simple math operation, such as `5 + 6`, which is an expression
+that evaluates to the value `11`. Expressions can be part of statements: in
+Listing 3-3 that had the statement `let y = 6;`, `6` is an expression that
+evaluates to the value `6`. Calling a function is an expression. Calling a
+macro is an expression. The block that we use to create new scopes, `{}`,
+is an expression, for example:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -229,8 +248,8 @@ is a block that, in this case, evaluates to `4`. That value gets bound to `y`
 as part of the `let` statement. Note the line without a semicolon at the end,
 unlike most of the lines you’ve seen so far. Expressions do not include ending
 semicolons. If you add a semicolon to the end of an expression, you turn it
-into a statement, which will then not return a value. Keep this in mind as you
-explore function return values and expressions next.
+into a statement, which will evaluate to `()`. Keep this in mind as you explore
+function return values and expressions next.
 
 ### Functions with Return Values
 
@@ -299,15 +318,7 @@ Running this code will print `The value of x is: 6`. What happens if we place a
 semicolon at the end of the line containing `x + 1`, changing it from an
 expression to a statement?
 
-<span class="filename">Filename: src/main.rs</span>
-
 ```rust,ignore
-fn main() {
-    let x = plus_one(5);
-
-    println!("The value of x is: {}", x);
-}
-
 fn plus_one(x: i32) -> i32 {
     x + 1;
 }
@@ -336,8 +347,7 @@ help: consider removing this semicolon:
 
 The main error message, “mismatched types,” reveals the core issue with this
 code. The definition of the function `plus_one` says that it will return an
-`i32`, but statements don’t evaluate to a value, which is expressed by `()`,
-the empty tuple. Therefore, nothing is returned, which contradicts the function
-definition and results in an error. In this output, Rust provides a message to
+`i32`, but the statement evaluate to `()`. This contradicts the return type
+declared and results in an error. In this output, Rust provides a message to
 possibly help rectify this issue: it suggests removing the semicolon, which
 would fix the error.
