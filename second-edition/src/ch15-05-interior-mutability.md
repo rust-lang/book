@@ -99,16 +99,16 @@ a is 5
 a is 6
 ```
 
-In `main`, we've created a new `RefCell<T>` containing the value 5, and stored
+In `main`, we've created a new `RefCell<i32>` containing the value 5, and stored
 in the variable `data`, declared without the `mut` keyword. We then call the
 `demo` function with an immutable reference to `data`: as far as `main` is
 concerned, `data` is immutable!
 
 In the `demo` function, we get an immutable reference to the value inside the
-`RefCell<T>` by calling the `borrow` method, and we call
+`RefCell<i32>` by calling the `borrow` method, and we call
 `a_fn_that_immutably_borrows` with that immutable reference. More
 interestingly, we can get a *mutable* reference to the value inside the
-`RefCell<T>` with the `borrow_mut` method, and the function
+`RefCell<i32>` with the `borrow_mut` method, and the function
 `a_fn_that_mutably_borrows` is allowed to change the value. We can see that the
 next time we call `a_fn_that_immutably_borrows` that prints out the value, it's
 6 instead of 5.
@@ -230,7 +230,7 @@ similarly to what we did in Listing 15-12.
 
 Once we have the lists in `shared_list`, `b`, and `c` created, then we add 10
 to the 5 in `value` by dereferencing the `Rc<T>` and calling `borrow_mut` on
-the `RefCell`.
+the `RefCell<T>`.
 
 When we print out `shared_list`, `b`, and `c`, we can see that they all have
 the modified value of 15:
