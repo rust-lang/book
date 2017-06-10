@@ -37,7 +37,7 @@ Windows CMD:
 
 Windows PowerShell:
 
-```cmd
+```powershell
 > mkdir $env:USERPROFILE\projects
 > cd $env:USERPROFILE\projects
 > mkdir hello_world
