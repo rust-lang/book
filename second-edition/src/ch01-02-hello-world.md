@@ -26,11 +26,20 @@ $ mkdir hello_world
 $ cd hello_world
 ```
 
-Windows:
+Windows CMD:
 
 ```cmd
 > mkdir %USERPROFILE%\projects
 > cd %USERPROFILE%\projects
+> mkdir hello_world
+> cd hello_world
+```
+
+Windows PowerShell:
+
+```cmd
+> mkdir $env:USERPROFILE\projects
+> cd $env:USERPROFILE\projects
 > mkdir hello_world
 > cd hello_world
 ```
