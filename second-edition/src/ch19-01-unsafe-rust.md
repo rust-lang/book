@@ -326,7 +326,7 @@ Sometimes, your Rust code may need to interact with code written in another
 language. To do this, Rust has a keyword, `extern`, that facilitates creating
 and using a *Foreign Function Interface* (FFI). Listing 19-8 demonstrates how
 to set up an integration with a function named `some_function` defined in an
-external library written in a language other tha Rust. Functions declared
+external library written in a language other than Rust. Functions declared
 within `extern` blocks are always unsafe to call from Rust code:
 
 <span class="filename">Filename: src/main.rs</span>
