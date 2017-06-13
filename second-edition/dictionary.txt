@@ -245,6 +245,7 @@ PlaceholderType
 PoolCreationError
 portia
 powershell
+PowerShell
 powi
 preprocessing
 Preprocessing
