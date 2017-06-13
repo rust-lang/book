@@ -37,7 +37,7 @@ expecting printed on the screen, so that means it must have ended up in the
 file. Let's see what *output.txt* contains:
 
 ```text
-Application error: No search string or filename found
+Problem parsing arguments: not enough arguments
 ```
 
 <!-- I don't understand why we send this output to a file to then just say we
@@ -112,7 +112,7 @@ redirecting `stdout` with `>`:
 
 ```text
 $ cargo run > output.txt
-Application error: No search string or filename found
+Problem parsing arguments: not enough arguments
 ```
 
 Now we see our error on the screen, and `output.txt` contains nothing, which is
