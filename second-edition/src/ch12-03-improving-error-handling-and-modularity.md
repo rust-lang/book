@@ -209,7 +209,7 @@ trade-off.
 
 > #### The Tradeoffs of Using `clone`
 >
-> There's a tendency amongst many Rustaceans to avoid using `clone` to fix
+> There's a tendency among many Rustaceans to avoid using `clone` to fix
 > ownership problems because of its runtime cost. In Chapter 13 on iterators,
 > you'll learn how to use more efficient methods in this kind of situation, but
 > for now, it's okay to copy a few strings to keep making progress since we'll
