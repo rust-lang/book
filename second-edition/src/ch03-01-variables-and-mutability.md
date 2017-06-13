@@ -144,8 +144,8 @@ hardcoded value needed to be updated in the future.
 
 ### Shadowing
 
-As we saw in the guessing game tutorial in Chapter 2, we can declare new
-variables with the same name as a previous variables, and the new variable
+As we saw in the guessing game tutorial in Chapter 2, we can declare a new
+variable with the same name as a previous variable, and the new variable
 *shadows* the previous variable. Rustaceans say that the first variable is
 *shadowed* by the second, which means that the second variable’s value is what
 we’ll see when we use the variable. We can shadow a variable by using the same
