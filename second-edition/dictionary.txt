@@ -244,6 +244,7 @@ PendingReviewPost
 PlaceholderType
 PoolCreationError
 portia
+powershell
 powi
 preprocessing
 Preprocessing
