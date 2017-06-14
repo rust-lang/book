@@ -1,13 +1,12 @@
-% The Rust Programming Language Has Moved
+% There is a new edition of the book
 
-When The Rust Programming Language only had one edition, it was all hosted at
-`book/`. Now that it has two, they are properly namespaced under
-`first-edition/` and `second-edition/`.
+This is an old link. You can [continue to the exact older page][1].
+If you're trying to learn Rust, checking out [the second edition][2] might be a better choice.
 
-You've found this page because you have a link to the older URL structure; you
-probably want to visit [first-edition/] if you need the exact older page; if
-you're trying to learn Rust, checking out the [second edition] might be a
-better choice.
+* [This page in the first edition of the The Rust Programming Language][1]
 
-[first-edition/]: first-edition/syntax-index.html
-[second edition]: second-edition/index.html
+* [Index of the second edition of The Rust Programming Language][2]
+
+
+[1]: first-edition/syntax-index.html
+[2]: second-edition/index.html
