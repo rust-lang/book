@@ -163,10 +163,10 @@ another `Result<T, E>`, which means we can use any methods that work on
 
 ### The Never Type, `!`, that Never Returns
 
-Rust has a special type named `!`. In type theory lingo, it's called the
-*bottom type*, but we prefer to call it the *never type*. The name describes
-what it does: it stands in the place of the return type when a function will
-never return. For example:
+Rust has a special type named `!`. In type theory lingo, it's called the *empty
+type*, because it has no values. We prefer to call it the *never type*. The name
+describes what it does: it stands in the place of the return type when a
+function will never return. For example:
 
 ```rust,ignore
 fn bar() -> ! {
