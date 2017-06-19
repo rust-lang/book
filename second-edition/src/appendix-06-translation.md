@@ -11,3 +11,4 @@ For resources in languages other than English. Most are still in progress; see
 - [українська мова](https://github.com/pavloslav/rust-book-uk-ua)
 - [Español](https://github.com/z1mvader/book)
 - [Italiano](https://github.com/CodelessFuture/trpl2-it)
+- [Русский](https://github.com/iDeBugger/rust-book-ru)
