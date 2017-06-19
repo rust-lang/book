@@ -15,7 +15,7 @@ starting with the second edition.
 
 [The first edition is still available to read online][first].
 
-[first]: https://doc.rust-lang.org/book/
+[first]: https://doc.rust-lang.org/stable/book/first-edition/
 
 ## Requirements
 
