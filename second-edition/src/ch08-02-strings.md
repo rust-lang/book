@@ -410,4 +410,4 @@ of strings than other programming languages do, but this will prevent you from
 having to handle errors involving non-ASCII characters later in your
 development lifecycle.
 
-Let’s switch to something a bit less complex: hash map!
+Let’s switch to something a bit less complex: hash maps!
