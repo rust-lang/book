@@ -59,7 +59,7 @@ on whether each test function passes or fails.
 it's the latter, and has edited with a more active tone to make that clear, but
 please change if I'm wrong -->
 <!-- What do you mean by "only automatically"? The reader should be typing in
-`#test on their own when they add new test functions; there's nothing special
+`#test` on their own when they add new test functions; there's nothing special
 about that text. I'm not sure what part of this chapter implied "only
 automatically", can you point out where that's happening if we haven't taken
 care of it? /Carol -->
