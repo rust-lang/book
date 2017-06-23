@@ -229,8 +229,8 @@ can create lists `b` and `c` that start differently but both refer to `a`,
 similarly to what we did in Listing 15-12.
 
 Once we have the lists in `shared_list`, `b`, and `c` created, then we add 10
-to the 5 in `value` by dereferencing the `Rc<T>` and calling `borrow_mut` on
-the `RefCell<T>`.
+to the 5 in `value` by dereferencing the `Rc<i32>` and calling `borrow_mut` on
+the `RefCell<i32>`.
 
 When we print out `shared_list`, `b`, and `c`, we can see that they all have
 the modified value of 15:
