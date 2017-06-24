@@ -281,15 +281,15 @@ also add lifetime parameters as constraints on generic types. For example,
 let's say we wanted to make a wrapper over references. Remember `RefCell<T>`
 from Chapter 15? This is how the `borrow` and `borrow_mut` methods work; they
 return wrappers over references in order to keep track of the borrowing rules
-at runtime. The struct definition, without lifetime parameters for now, would
+at runtime. The struct definition, without lifetime bounds for now, would
 look like Listing 19-16:
 
 ```rust,ignore
-struct Ref<T>(&T);
+struct Ref<'a, T>(&'a T);
 ```
 
 <span class="caption">Listing 19-16: Defining a struct to wrap a reference to a
-generic type; without lifetime parameters to start</span>
+generic type; without lifetime bounds to start</span>
 
 However, using no lifetime bounds at all gives an error because Rust doesn't
 know how long the generic type `T` will live:
@@ -309,16 +309,12 @@ note: ...so that the reference type `&'a T` does not outlive the data it points 
   |                   ^^^^^^
 ```
 
-This is the same error that we'd get if we filled in `T` with a concrete type,
-like `struct Ref(&i32)`; all references in struct definitions need a lifetime
-parameter. However, because we have a generic type parameter, we can't add a
-lifetime parameter in the same way. Defining `Ref` as `struct Ref<'a>(&'a T)`
-will result in an error because Rust can't determine that `T` lives long
-enough. Since `T` can be any type, `T` could itself be a reference or it could
+Because we have a generic type parameter, we can't add a lifetime parameter in the 
+same way. Since `T` can be any type, `T` could itself be a reference or it could
 be a type that holds one or more references, each of which have their own
-lifetimes.
+lifetimes, and the compiler cannot determine that the contents of `T` outlive `'a`.
 
-Rust helpfully gave us good advice on how to specify the lifetime parameter in
+Rust gave us helpful advice on how to specify the lifetime parameter in
 this case:
 
 ```text
