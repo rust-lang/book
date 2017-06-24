@@ -309,17 +309,16 @@ note: ...so that the reference type `&'a T` does not outlive the data it points 
   |                   ^^^^^^
 ```
 
-Because we have a generic type parameter, we can't add a lifetime parameter in the 
-same way. Since `T` can be any type, `T` could itself be a reference or it could
+Since `T` can be any type, `T` could itself be a reference or it could
 be a type that holds one or more references, each of which have their own
-lifetimes, and the compiler cannot determine that the contents of `T` outlive `'a`.
+lifetimes, and the compiler can't be sure `T` will live for the entirety of `'a`.
 
-Rust gave us helpful advice on how to specify the lifetime parameter in
+Rust gave us helpful advice on how to specify the lifetime bound in
 this case:
 
 ```text
 consider adding an explicit lifetime bound `T: 'a` so that the reference type
-`&'a T` does not outlive the data it points to.
+`&'a T` does not outlive the data it points at.
 ```
 
 The code in Listing 19-17 works because `T: 'a` syntax specifies that `T` can
