@@ -311,9 +311,9 @@ note: ...so that the reference type `&'a T` does not outlive the data it points 
 
 Since `T` can be any type, `T` could itself be a reference or it could
 be a type that holds one or more references, each of which have their own
-lifetimes, and the compiler can't be sure `T` will live for the entirety of `'a`.
+lifetimes, and Rust can't be sure `T` will live for the entirety of `'a`.
 
-Rust gave us helpful advice on how to specify the lifetime bound in
+Fortunately, Rust gave us helpful advice on how to specify the lifetime bound in
 this case:
 
 ```text
