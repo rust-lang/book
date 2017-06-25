@@ -45,7 +45,7 @@ fn main () {
 
                 // replace with right/left apostrophe/quote
                 if possible_match == '\'' && !is_in_inline_code && !is_in_html_tag {
-                    if !previous_char.is_whitespace() || previous_char == '‘' {
+                    if (previous_char != std::char::REPLACEMENT_CHARACTER && !previous_char.is_whitespace()) || previous_char == '‘' {
                         char_to_push = '’';
                     }
                     else {
@@ -53,7 +53,7 @@ fn main () {
                     }
                 }
                 else if possible_match == '"'  && !is_in_inline_code && !is_in_html_tag {
-                    if !previous_char.is_whitespace() || previous_char == '“' {
+                    if (previous_char != std::char::REPLACEMENT_CHARACTER && !previous_char.is_whitespace()) || previous_char == '“' {
                         char_to_push = '”';
                     }
                     else {
