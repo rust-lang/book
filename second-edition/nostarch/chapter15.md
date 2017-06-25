@@ -4,8 +4,8 @@
 # Smart Pointers
 
 *Pointer* is a generic programming term for something that refers to a location
-that stores some other data. We learned about Rust's references in Chapter 4;
-they're a plain sort of pointer indicated by the `&` symbol and borrow the
+that stores some other data. We learned about Rust’s references in Chapter 4;
+they’re a plain sort of pointer indicated by the `&` symbol and borrow the
 value that they point to. *Smart pointers* are data structures that act like a
 pointer, but also have additional metadata and capabilities, such as reference
 counting. The smart pointer pattern originated in C++. In Rust, an additional
@@ -13,35 +13,35 @@ difference between plain references and smart pointers is that references are a
 kind of pointer that only borrow data; by contrast, in many cases, smart
 pointers *own* the data that they point to.
 
-We've actually already encountered a few smart pointers in this book, even
-though we didn't call them that by name at the time. For example, in a certain
+We’ve actually already encountered a few smart pointers in this book, even
+though we didn’t call them that by name at the time. For example, in a certain
 sense, `String` and `Vec<T>` from Chapter 8 are both smart pointers. They own
 some memory and allow you to manipulate it, and have metadata (like their
 capacity) and extra capabilities or guarantees (`String` data will always be
 valid UTF-8). The characteristics that distinguish a smart pointer from an
 ordinary struct are that smart pointers implement the `Deref` and `Drop`
-traits, and in this chapter we'll be discussing both of those traits and why
-they're important to smart pointers.
+traits, and in this chapter we’ll be discussing both of those traits and why
+they’re important to smart pointers.
 
 Given that the smart pointer pattern is a general design pattern used
-frequently in Rust, this chapter won't cover every smart pointer that exists.
+frequently in Rust, this chapter won’t cover every smart pointer that exists.
 Many libraries have their own and you may write some yourself. The ones we
 cover here are the most common ones from the standard library:
 
 * `Box<T>`, for allocating values on the heap
 * `Rc<T>`, a reference counted type so data can have multiple owners
-* `RefCell<T>`, which isn't a smart pointer itself, but manages access to the
+* `RefCell<T>`, which isn’t a smart pointer itself, but manages access to the
   smart pointers `Ref` and `RefMut` to enforce the borrowing rules at runtime
   instead of compile time
 
-Along the way, we'll also cover:
+Along the way, we’ll also cover:
 
 * The *interior mutability* pattern where an immutable type exposes an API for
   mutating an interior value, and the borrowing rules apply at runtime instead
   of compile time
 * Reference cycles, how they can leak memory, and how to prevent them
 
-Let's dive in!
+Let’s dive in!
 
 ## `Box<T>` Points to Data on the Heap and Has a Known Size
 
@@ -67,7 +67,7 @@ has ownership of data, when a box goes out of scope like `b` does at the end of
 `main`, it will be deallocated. The deallocation happens for both the box
 (stored on the stack) and the data it points to (stored on the heap).
 
-Putting a single value on the heap isn't very useful, so you won't use boxes by
+Putting a single value on the heap isn’t very useful, so you won’t use boxes by
 themselves in the way that Listing 15-1 does very often. A time when boxes are
 useful is when you want to ensure that your type has a known size. For
 example, consider Listing 15-2, which contains an enum definition for a *cons
@@ -75,13 +75,13 @@ list*, a type of data structure that comes from functional programming.
 
 A cons list is a list where each item contains a value and the next item until
 the end of the list, which is signified by a value called `Nil`. Note that we
-aren't introducing the idea of "nil" or "null" that we discussed in Chapter 6,
-this is just a regular enum variant name we're using because it's the canonical
-name to use when describing the cons list data structure. Cons lists aren't
+aren’t introducing the idea of “nil” or “null” that we discussed in Chapter 6,
+this is just a regular enum variant name we’re using because it’s the canonical
+name to use when describing the cons list data structure. Cons lists aren’t
 used very often in Rust, `Vec<T>` is a better choice most of the time, but
 implementing this data structure is useful as an example.
 
-Here's our first try at defining a cons list as an enum; note that this won't
+Here’s our first try at defining a cons list as an enum; note that this won’t
 compile quite yet:
 
 Filename: src/main.rs
@@ -96,7 +96,7 @@ enum List {
 Listing 15-2: The first attempt of defining an enum to represent a cons list
 data structure of `i32` values
 
-We're choosing to implement a cons list that only holds `i32` values, but we
+We’re choosing to implement a cons list that only holds `i32` values, but we
 could have chosen to implement it using generics as we discussed in Chapter 10
 to define a cons list concept independent of the type of value stored in the
 cons list.
@@ -135,10 +135,10 @@ error[E0072]: recursive type `List` has infinite size
 
 Listing 15-3: The error we get when attempting to define a recursive enum
 
-The error says this type 'has infinite size'. Why is that? It's because we've
+The error says this type ‘has infinite size’. Why is that? It’s because we’ve
 defined `List` to have a variant that is recursive: it holds another value of
-itself. This means Rust can't figure out how much space it needs in order to
-store a `List` value. Let's break this down a bit: first let's look at how Rust
+itself. This means Rust can’t figure out how much space it needs in order to
+store a `List` value. Let’s break this down a bit: first let’s look at how Rust
 decides how much space it needs to store a value of a non-recursive type.
 Recall the `Message` enum we defined in Listing 6-2 when we discussed enum
 definitions in Chapter 6:
@@ -172,7 +172,7 @@ as shown in Figure 15-4.
 
 Figure 15-4: An infinite `List` consisting of infinite `Cons` variants
 
-Rust can't figure out how much space to allocate for recursively defined types,
+Rust can’t figure out how much space to allocate for recursively defined types,
 so the compiler gives the error in Listing 15-3. The error did include this
 helpful suggestion:
 
@@ -213,9 +213,9 @@ known size
 The compiler will be able to figure out the size it needs to store a `List`
 value. Rust will look at `List`, and again start by looking at the `Cons`
 variant. The `Cons` variant will need the size of `i32` plus the space to store
-a `usize`, since a box always has the size of a `usize`, no matter what it's
+a `usize`, since a box always has the size of a `usize`, no matter what it’s
 pointing to. Then Rust looks at the `Nil` variant, which does not store a
-value, so `Nil` doesn't need any space. We've broken the infinite, recursive
+value, so `Nil` doesn’t need any space. We’ve broken the infinite, recursive
 chain by adding in a box. Figure 15-6 shows what the `Cons` variant looks like
 now:
 
@@ -224,14 +224,14 @@ now:
 Figure 15-6: A `List` that is not infinitely sized since `Cons` holds a `Box`
 
 This is the main area where boxes are useful: breaking up an infinite data
-structure so that the compiler can know what size it is. We'll look at another
+structure so that the compiler can know what size it is. We’ll look at another
 case where Rust has data of unknown size in Chapter 17 when we discuss trait
 objects.
 
-Even though you won't be using boxes very often, they are a good way to
+Even though you won’t be using boxes very often, they are a good way to
 understand the smart pointer pattern. Two of the aspects of `Box<T>` that are
 commonly used with smart pointers are its implementations of the `Deref` trait
-and the `Drop` trait. Let's investigate how these traits work and how smart
+and the `Drop` trait. Let’s investigate how these traits work and how smart
 pointers use them.
 
 ## The `Deref` Trait Allows Access to the Data Through a Reference
@@ -239,13 +239,13 @@ pointers use them.
 The first important smart pointer-related trait is `Deref`, which allows us to
 override `*`, the dereference operator (as opposed to the multiplication
 operator or the glob operator). Overriding `*` for smart pointers makes
-accessing the data behind the smart pointer convenient, and we'll talk about
+accessing the data behind the smart pointer convenient, and we’ll talk about
 what we mean by convenient when we get to deref coercions later in this section.
 
 We briefly mentioned the dereference operator in Chapter 8, in the hash map
-section titled "Update a Value Based on the Old Value". We had a mutable
+section titled “Update a Value Based on the Old Value”. We had a mutable
 reference, and we wanted to change the value that the reference was pointing
-to. In order to do that, first we had to dereference the reference. Here's
+to. In order to do that, first we had to dereference the reference. Here’s
 another example using references to `i32` values:
 
 ```
@@ -263,7 +263,7 @@ We use `*y` to access the data that the mutable reference in `y` refers to,
 rather than the mutable reference itself. We can then modify that data, in this
 case by adding 1.
 
-With references that aren't smart pointers, there's only one value that the
+With references that aren’t smart pointers, there’s only one value that the
 reference is pointing to, so the dereference operation is straightforward.
 Smart pointers can also store metadata about the pointer or the data. When
 dereferencing a smart pointer, we only want the data, not the metadata, since
@@ -272,7 +272,7 @@ to be able to use smart pointers in the same places that we can use regular
 references. To enable that, we can override the behavior of the `*` operator by
 implementing the `Deref` trait.
 
-Listing 15-7 has an example of overriding `*` using `Deref` on a struct we've
+Listing 15-7 has an example of overriding `*` using `Deref` on a struct we’ve
 defined to hold mp3 data and metadata. `Mp3` is, in a sense, a smart pointer:
 it owns the `Vec<u8>` data containing the audio. In addition, it holds some
 optional metadata, in this case the artist and title of the song in the audio
@@ -317,17 +317,17 @@ file data and metadata
 
 Most of this should look familiar: a struct, a trait implementation, and a
 main function that creates an instance of the struct. There is one part we
-haven't explained thoroughly yet: similarly to Chapter 13 when we looked at the
+haven’t explained thoroughly yet: similarly to Chapter 13 when we looked at the
 Iterator trait with the `type Item`, the `type Target = T;` syntax is defining
-an associated type, which is covered in more detail in Chapter 19. Don't worry
+an associated type, which is covered in more detail in Chapter 19. Don’t worry
 about that part of the example too much; it is a slightly different way of
 declaring a generic parameter.
 
-In the `assert_eq!`, we're verifying that `vec![1, 2, 3]` is the result we get
+In the `assert_eq!`, we’re verifying that `vec![1, 2, 3]` is the result we get
 when dereferencing the `Mp3` instance with `*my_favorite_song`, which is what
 happens since we implemented the `deref` method to return the audio data. If
-we hadn't implemented the `Deref` trait for `Mp3`, Rust wouldn't compile the
-code `*my_favorite_song`: we'd get an error saying type `Mp3` cannot be
+we hadn’t implemented the `Deref` trait for `Mp3`, Rust wouldn’t compile the
+code `*my_favorite_song`: we’d get an error saying type `Mp3` cannot be
 dereferenced.
 
 The reason this code works is that what the `*` operator is doing behind
@@ -339,14 +339,14 @@ the scenes when we call `*my_favorite_song` is:
 
 This calls the `deref` method on `my_favorite_song`, which borrows
 `my_favorite_song` and returns a reference to `my_favorite_song.audio`, since
-that's what we defined `deref` to do in Listing 15-5. `*` on references is
+that’s what we defined `deref` to do in Listing 15-5. `*` on references is
 defined to just follow the reference and return the data, so the expansion of
-`*` doesn't recurse for the outer `*`. So we end up with data of type
+`*` doesn’t recurse for the outer `*`. So we end up with data of type
 `Vec<u8>`, which matches the `vec![1, 2, 3]` in the `assert_eq!` in Listing
 15-5.
 
 The reason that the return type of the `deref` method is still a reference and
-why it's necessary to dereference the result of the method is that if the
+why it’s necessary to dereference the result of the method is that if the
 `deref` method returned just the value, using `*` would always take ownership.
 
 ### Implicit Deref Coercions with Functions and Methods
@@ -354,14 +354,14 @@ why it's necessary to dereference the result of the method is that if the
 Rust tends to favor explicitness over implicitness, but one case where this
 does not hold true is *deref coercions* of arguments to functions and methods.
 A deref coercion will automatically convert a reference to a pointer or a smart
-pointer into a reference to that pointer's contents. A deref coercion happens
-when a value is passed to a function or method, and only happens if it's needed
+pointer into a reference to that pointer’s contents. A deref coercion happens
+when a value is passed to a function or method, and only happens if it’s needed
 to get the type of the value passed in to match the type of the parameter
 defined in the signature. Deref coercion was added to Rust to make calling
 functions and methods not need as many explicit references and dereferences
 with `&` and `*`.
 
-Using our `Mp3` struct from Listing 15-5, here's the signature of a function to
+Using our `Mp3` struct from Listing 15-5, here’s the signature of a function to
 compress mp3 audio data that takes a slice of `u8`:
 
 ```
@@ -370,16 +370,16 @@ fn compress_mp3(audio: &[u8]) -> Vec<u8> {
 }
 ```
 
-If Rust didn't have deref coercion, in order to call this function with the
-audio data in `my_favorite_song`, we'd have to write:
+If Rust didn’t have deref coercion, in order to call this function with the
+audio data in `my_favorite_song`, we’d have to write:
 
 ```
 compress_mp3(my_favorite_song.audio.as_slice())
 ```
 
-That is, we'd have to explicitly say that we want the data in the `audio` field
+That is, we’d have to explicitly say that we want the data in the `audio` field
 of `my_favorite_song` and that we want a slice referring to the whole
-`Vec<u8>`. If there were a lot of places where we'd want process the `audio`
+`Vec<u8>`. If there were a lot of places where we’d want process the `audio`
 data in a similar manner, `.audio.as_slice()` would be wordy and repetitive.
 
 However, because of deref coercion and our implementation of the `Deref` trait
@@ -400,11 +400,11 @@ documentation for `Vec<T>`). So, at compile time, Rust will see that it can use
 `Deref::deref` twice to turn `&Mp3` into `&Vec<u8>` and then into `&[T]` to
 match the signature of `compress_mp3`. That means we get to do less typing!
 Rust will analyze types through `Deref::deref` as many times as it needs to in
-order to get a reference to match the parameter's type, when the `Deref` trait
+order to get a reference to match the parameter’s type, when the `Deref` trait
 is defined for the types involved. The indirection is resolved at compile time,
 so there is no run-time penalty for taking advantage of deref coercion.
 
-There's also a `DerefMut` trait for overriding `*` on `&mut T` for use in
+There’s also a `DerefMut` trait for overriding `*` on `&mut T` for use in
 assignment in the same fashion that we use `Deref` to override `*` on `&T`s.
 
 Rust does deref coercion when it finds types and trait implementations in three
@@ -422,17 +422,17 @@ possible though: immutable references will never coerce to mutable ones.
 
 The reason that the `Deref` trait is important to the smart pointer pattern is
 that smart pointers can then be treated like regular references and used in
-places that expect regular references. We don't have to redefine methods and
+places that expect regular references. We don’t have to redefine methods and
 functions to take smart pointers explicitly, for example.
 
 ## The `Drop` Trait Runs Code on Cleanup
 
-The other trait that's important to the smart pointer pattern is the `Drop`
+The other trait that’s important to the smart pointer pattern is the `Drop`
 trait. `Drop` lets us run some code when a value is about to go out of scope.
 Smart pointers perform important cleanup when being dropped, like deallocating
 memory or decrementing a reference count. More generally, data types can manage
 resources beyond memory, like files or network connections, and use `Drop` to
-release those resources when our code is done with them. We're discussing
+release those resources when our code is done with them. We’re discussing
 `Drop` in the context of smart pointers, though, because the functionality of
 the `Drop` trait is almost always used when implementing smart pointers.
 
@@ -440,19 +440,19 @@ In some other languages, we have to remember to call code to free the memory or
 resource every time we finish using an instance of a smart pointer. If we
 forget, the system our code is running on might get overloaded and crash. In
 Rust, we can specify that some code should be run when a value goes out of
-scope, and the compiler will insert this code automatically. That means we don't
-need to remember to put this code everywhere we're done with an instance of
-these types, but we still won't leak resources!
+scope, and the compiler will insert this code automatically. That means we don’t
+need to remember to put this code everywhere we’re done with an instance of
+these types, but we still won’t leak resources!
 
 The way we specify code should be run when a value goes out of scope is by
 implementing the `Drop` trait. The `Drop` trait requires us to implement one
 method named `drop` that takes a mutable reference to `self`.
 
-Listing 15-8 shows a `CustomSmartPointer` struct that doesn't actually do
-anything, but we're printing out `CustomSmartPointer created.` right after we
+Listing 15-8 shows a `CustomSmartPointer` struct that doesn’t actually do
+anything, but we’re printing out `CustomSmartPointer created.` right after we
 create an instance of the struct and `Dropping CustomSmartPointer!` when the
 instance goes out of scope so that we can see when each piece of code gets run.
-Instead of a `println!` statement, you'd fill in `drop` with whatever cleanup
+Instead of a `println!` statement, you’d fill in `drop` with whatever cleanup
 code your smart pointer needs to run:
 
 Filename: src/main.rs
@@ -478,15 +478,15 @@ fn main() {
 Listing 15-8: A `CustomSmartPointer` struct that implements the `Drop` trait,
 where we could put code that would clean up after the `CustomSmartPointer`.
 
-The `Drop` trait is in the prelude, so we don't need to import it. The `drop`
-method implementation calls the `println!`; this is where you'd put the actual
+The `Drop` trait is in the prelude, so we don’t need to import it. The `drop`
+method implementation calls the `println!`; this is where you’d put the actual
 code needed to close the socket. In `main`, we create a new instance of
 `CustomSmartPointer` then print out `CustomSmartPointer created.` to be able to
 see that our code got to that point at runtime. At the end of `main`, our
-instance of `CustomSmartPointer` will go out of scope. Note that we didn't call
+instance of `CustomSmartPointer` will go out of scope. Note that we didn’t call
 the `drop` method explicitly.
 
-When we run this program, we'll see:
+When we run this program, we’ll see:
 
 ```
 CustomSmartPointer created.
@@ -498,11 +498,11 @@ printed to the screen, which shows that Rust automatically called `drop` for us
 when our instance went out of scope.
 
 We can use the `std::mem::drop` function to drop a value earlier than when it
-goes out of scope. This isn't usually necessary; the whole point of the `Drop`
-trait is that it's taken care of automatically for us. We'll see an example of
-a case when we'll need to drop a value earlier than when it goes out of scope
-in Chapter 16 when we're talking about concurrency. For now, let's just see
-that it's possible, and `std::mem::drop` is in the prelude so we can just call
+goes out of scope. This isn’t usually necessary; the whole point of the `Drop`
+trait is that it’s taken care of automatically for us. We’ll see an example of
+a case when we’ll need to drop a value earlier than when it goes out of scope
+in Chapter 16 when we’re talking about concurrency. For now, let’s just see
+that it’s possible, and `std::mem::drop` is in the prelude so we can just call
 `drop` as shown in Listing 15-9:
 
 Filename: src/main.rs
@@ -529,13 +529,13 @@ Dropping CustomSmartPointer!
 Wait for it...
 ```
 
-Note that we aren't allowed to call the `drop` method that we defined directly:
-if we replaced `drop(c)` in Listing 15-9 with `c.drop()`, we'll get a compiler
-error that says `explicit destructor calls not allowed`. We're not allowed to
+Note that we aren’t allowed to call the `drop` method that we defined directly:
+if we replaced `drop(c)` in Listing 15-9 with `c.drop()`, we’ll get a compiler
+error that says `explicit destructor calls not allowed`. We’re not allowed to
 call `Drop::drop` directly because when Rust inserts its call to `Drop::drop`
 automatically when the value goes out of scope, then the value would get
 dropped twice. Dropping a value twice could cause an error or corrupt memory,
-so Rust doesn't let us. Instead, we can use `std::mem::drop`, whose definition
+so Rust doesn’t let us. Instead, we can use `std::mem::drop`, whose definition
 is:
 
 ```
@@ -547,28 +547,28 @@ pub mod std {
 ```
 
 This function is generic over any type `T`, so we can pass any value to it. The
-function doesn't actually have anything in its body, so it doesn't use its
+function doesn’t actually have anything in its body, so it doesn’t use its
 parameter. The reason this empty function is useful is that `drop` takes
 ownership of its parameter, which means the value in `x` gets dropped at the
 end of this function when `x` goes out of scope.
 
 Code specified in a `Drop` trait implementation can be used for many reasons to
 make cleanup convenient and safe: we could use it to create our own memory
-allocator, for instance! By using the `Drop` trait and Rust's ownership system,
-we don't have to remember to clean up after ourselves since Rust takes care of
-it automatically. We'll get compiler errors if we write code that would clean
-up a value that's still in use, since the ownership system that makes sure
+allocator, for instance! By using the `Drop` trait and Rust’s ownership system,
+we don’t have to remember to clean up after ourselves since Rust takes care of
+it automatically. We’ll get compiler errors if we write code that would clean
+up a value that’s still in use, since the ownership system that makes sure
 references are always valid will also make sure that `drop` only gets called
 one time when the value is no longer being used.
 
-Now that we've gone over `Box<T>` and some of the characteristics of smart
-pointers, let's talk about a few other smart pointers defined in the standard
+Now that we’ve gone over `Box<T>` and some of the characteristics of smart
+pointers, let’s talk about a few other smart pointers defined in the standard
 library that add different kinds of useful functionality.
 
 ## `Rc<T>`, the Reference Counted Smart Pointer
 
 In the majority of cases, ownership is very clear: you know exactly which
-variable owns a given value. However, this isn't always the case; sometimes,
+variable owns a given value. However, this isn’t always the case; sometimes,
 you may actually need multiple owners. For this, Rust has a type called
 `Rc<T>`. Its name is an abbreviation for *reference counting*. Reference
 counting means keeping track of the number of references to a value in order to
@@ -576,15 +576,15 @@ know if a value is still in use or not. If there are zero references to a
 value, we know we can clean up the value without any references becoming
 invalid.
 
-To think about this in terms of a real-world scenario, it's like a TV in a
+To think about this in terms of a real-world scenario, it’s like a TV in a
 family room. When one person comes in the room to watch TV, they turn it on.
 Others can also come in the room and watch the TV. When the last person leaves
-the room, they'll turn the TV off since it's no longer being used. If someone
+the room, they’ll turn the TV off since it’s no longer being used. If someone
 turns off the TV while others are still watching it, though, the people
 watching the TV would get mad!
 
 `Rc<T>` is for use when we want to allocate some data on the heap for multiple
-parts of our program to read, and we can't determine at compile time which part
+parts of our program to read, and we can’t determine at compile time which part
 of our program using this data will finish using it last. If we knew which part
 would finish last, we could make that part the owner of the data and the normal
 ownership rules enforced at compile time would kick in.
@@ -592,12 +592,12 @@ ownership rules enforced at compile time would kick in.
 Note that `Rc<T>` is only for use in single-threaded scenarios; the next
 chapter on concurrency will cover how to do reference counting in
 multithreaded programs. If you try to use `Rc<T>` with multiple threads,
-you'll get a compile-time error.
+you’ll get a compile-time error.
 
 ### Using `Rc<T>` to Share Data
 
-Let's return to our cons list example from Listing 15-5. In Listing 15-11, we're
-going to try to use `List` as we defined it using `Box<T>`. First we'll create
+Let’s return to our cons list example from Listing 15-5. In Listing 15-11, we’re
+going to try to use `List` as we defined it using `Box<T>`. First we’ll create
 one list instance that contains 5 and then 10. Next, we want to create two more
 lists: one that starts with 3 and continues on to our first list containing 5
 and 10, then another list that starts with 4 and *also* continues on to our
@@ -609,7 +609,7 @@ Figure 15-10:
 
 Figure 15-10: Two lists, `b` and `c`, sharing ownership of a third list, `a`
 
-Trying to implement this using our definition of `List` with `Box<T>` won't
+Trying to implement this using our definition of `List` with `Box<T>` won’t
 work, as shown in Listing 15-11:
 
 Filename: src/main.rs
@@ -632,7 +632,7 @@ fn main() {
 ```
 
 Listing 15-11: Having two lists using `Box<T>` that try to share ownership of a
-third list won't work
+third list won’t work
 
 If we compile this, we get this error:
 
@@ -651,12 +651,12 @@ error[E0382]: use of moved value: `a`
 
 The `Cons` variants own the data they hold, so when we create the `b` list it
 moves `a` to be owned by `b`. Then when we try to use `a` again when creating
-`c`, we're not allowed to since `a` has been moved.
+`c`, we’re not allowed to since `a` has been moved.
 
 We could change the definition of `Cons` to hold references instead, but then
-we'd have to specify lifetime parameters and we'd have to construct elements of
+we’d have to specify lifetime parameters and we’d have to construct elements of
 a list such that every element lives at least as long as the list itself.
-Otherwise, the borrow checker won't even let us compile the code.
+Otherwise, the borrow checker won’t even let us compile the code.
 
 Instead, we can change our definition of `List` to use `Rc<T>` instead of
 `Box<T>` as shown here in Listing 15-12:
@@ -681,19 +681,19 @@ fn main() {
 
 Listing 15-12: A definition of `List` that uses `Rc<T>`
 
-Note that we need to add a `use` statement for `Rc` because it's not in the
+Note that we need to add a `use` statement for `Rc` because it’s not in the
 prelude. In `main`, we create the list holding 5 and 10 and store it in a new
 `Rc` in `a`. Then when we create `b` and `c`, we call the `clone` method on `a`.
 
 ### Cloning an `Rc<T>` Increases the Reference Count
 
-We've seen the `clone` method previously, where we used it for making a
-complete copy of some data. With `Rc<T>`, though, it doesn't make a full copy.
+We’ve seen the `clone` method previously, where we used it for making a
+complete copy of some data. With `Rc<T>`, though, it doesn’t make a full copy.
 `Rc<T>` holds a *reference count*, that is, a count of how many clones exist.
-Let's change `main` as shown in Listing 15-13 to have an inner scope around
+Let’s change `main` as shown in Listing 15-13 to have an inner scope around
 where we create `c`, and to print out the results of the `Rc::strong_count`
 associated function at various points. `Rc::strong_count` returns the reference
-count of the `Rc` value we pass to it, and we'll talk about why this function
+count of the `Rc` value we pass to it, and we’ll talk about why this function
 is named `strong_count` in the section later in this chapter about preventing
 reference cycles.
 
@@ -724,10 +724,10 @@ rc after creating c = 3
 rc after c goes out of scope = 2
 ```
 
-We're able to see that `a` has an initial reference count of one. Then each
+We’re able to see that `a` has an initial reference count of one. Then each
 time we call `clone`, the count goes up by one. When `c` goes out of scope, the
 count is decreased by one, which happens in the implementation of the `Drop`
-trait for `Rc<T>`. What we can't see in this example is that when `b` and then
+trait for `Rc<T>`. What we can’t see in this example is that when `b` and then
 `a` go out of scope at the end of `main`, the count of references to the list
 containing 5 and 10 is then 0, and the list is dropped. This strategy lets us
 have multiple owners, as the count will ensure that the value remains valid as
@@ -736,9 +736,9 @@ long as any of the owners still exist.
 In the beginning of this section, we said that `Rc<T>` only allows you to share
 data for multiple parts of your program to read through immutable references to
 the `T` value the `Rc<T>` contains. If `Rc<T>` let us have a mutable reference,
-we'd run into the problem that the borrowing rules disallow that we discussed
+we’d run into the problem that the borrowing rules disallow that we discussed
 in Chapter 4: two mutable borrows to the same place can cause data races and
-inconsistencies. But mutating data is very useful! In the next section, we'll
+inconsistencies. But mutating data is very useful! In the next section, we’ll
 discuss the interior mutability pattern and the `RefCell<T>` type that we can
 use in conjunction with an `Rc<T>` to work with this restriction on
 immutability.
@@ -748,58 +748,58 @@ immutability.
 *Interior mutability* is a design pattern in Rust for allowing you to mutate
 data even though there are immutable references to that data, which would
 normally be disallowed by the borrowing rules. The interior mutability pattern
-involves using `unsafe` code inside a data structure to bend Rust's usual rules
-around mutation and borrowing. We haven't yet covered unsafe code; we will in
+involves using `unsafe` code inside a data structure to bend Rust’s usual rules
+around mutation and borrowing. We haven’t yet covered unsafe code; we will in
 Chapter 19. The interior mutability pattern is used when you can ensure that
-the borrowing rules will be followed at runtime, even though the compiler can't
+the borrowing rules will be followed at runtime, even though the compiler can’t
 ensure that. The `unsafe` code involved is then wrapped in a safe API, and the
 outer type is still immutable.
 
-Let's explore this by looking at the `RefCell<T>` type that follows the
+Let’s explore this by looking at the `RefCell<T>` type that follows the
 interior mutability pattern.
 
 ### `RefCell<T>` has Interior Mutability
 
 Unlike `Rc<T>`, the `RefCell<T>` type represents single ownership over the data
 that it holds. So, what makes `RefCell<T>` different than a type like `Box<T>`?
-Let's recall the borrowing rules we learned in Chapter 4:
+Let’s recall the borrowing rules we learned in Chapter 4:
 
 1. At any given time, you can have *either* but not both of:
   * One mutable reference.
   * Any number of immutable references.
 2. References must always be valid.
 
-With references and `Box<T>`, the borrowing rules' invariants are enforced at
+With references and `Box<T>`, the borrowing rules’ invariants are enforced at
 compile time. With `RefCell<T>`, these invariants are enforced *at runtime*.
-With references, if you break these rules, you'll get a compiler error. With
-`RefCell<T>`, if you break these rules, you'll get a `panic!`.
+With references, if you break these rules, you’ll get a compiler error. With
+`RefCell<T>`, if you break these rules, you’ll get a `panic!`.
 
 Static analysis, like the Rust compiler performs, is inherently conservative.
 There are properties of code that are impossible to detect by analyzing the
 code: the most famous is the Halting Problem, which is out of scope of this
-book but an interesting topic to research if you're interested.
+book but an interesting topic to research if you’re interested.
 
 Because some analysis is impossible, the Rust compiler does not try to even
-guess if it can't be sure, so it's conservative and sometimes rejects correct
-programs that would not actually violate Rust's guarantees. Put another way, if
+guess if it can’t be sure, so it’s conservative and sometimes rejects correct
+programs that would not actually violate Rust’s guarantees. Put another way, if
 Rust accepts an incorrect program, people would not be able to trust in the
 guarantees Rust makes. If Rust rejects a correct program, the programmer will
 be inconvenienced, but nothing catastrophic can occur. `RefCell<T>` is useful
-when you know that the borrowing rules are respected, but the compiler can't
-understand that that's true.
+when you know that the borrowing rules are respected, but the compiler can’t
+understand that that’s true.
 
 Similarly to `Rc<T>`, `RefCell<T>` is only for use in single-threaded
-scenarios. We'll talk about how to get the functionality of `RefCell<T>` in a
+scenarios. We’ll talk about how to get the functionality of `RefCell<T>` in a
 multithreaded program in the next chapter on concurrency. For now, all you
 need to know is that if you try to use `RefCell<T>` in a multithreaded
-context, you'll get a compile time error.
+context, you’ll get a compile time error.
 
 With references, we use the `&` and `&mut` syntax to create references and
 mutable references, respectively. But with `RefCell<T>`, we use the `borrow`
 and `borrow_mut` methods, which are part of the safe API that `RefCell<T>` has.
 `borrow` returns the smart pointer type `Ref`, and `borrow_mut` returns the
 smart pointer type `RefMut`. These two types implement `Deref` so that we can
-treat them as if they're regular references. `Ref` and `RefMut` track the
+treat them as if they’re regular references. `Ref` and `RefMut` track the
 borrows dynamically, and their implementation of `Drop` releases the borrow
 dynamically.
 
@@ -843,7 +843,7 @@ a is 5
 a is 6
 ```
 
-In `main`, we've created a new `RefCell<T>` containing the value 5, and stored
+In `main`, we’ve created a new `RefCell<T>` containing the value 5, and stored
 in the variable `data`, declared without the `mut` keyword. We then call the
 `demo` function with an immutable reference to `data`: as far as `main` is
 concerned, `data` is immutable!
@@ -854,14 +854,14 @@ In the `demo` function, we get an immutable reference to the value inside the
 interestingly, we can get a *mutable* reference to the value inside the
 `RefCell<T>` with the `borrow_mut` method, and the function
 `a_fn_that_mutably_borrows` is allowed to change the value. We can see that the
-next time we call `a_fn_that_immutably_borrows` that prints out the value, it's
+next time we call `a_fn_that_immutably_borrows` that prints out the value, it’s
 6 instead of 5.
 
 ### Borrowing Rules are Checked at Runtime on `RefCell<T>`
 
 Recall from Chapter 4 that because of the borrowing rules, this code using
 regular references that tries to create two mutable borrows in the same scope
-won't compile:
+won’t compile:
 
 ```
 let mut s = String::from("hello");
@@ -870,7 +870,7 @@ let r1 = &mut s;
 let r2 = &mut s;
 ```
 
-We'll get this compiler error:
+We’ll get this compiler error:
 
 ```
 error[E0499]: cannot borrow `s` as mutable more than once at a time
@@ -885,7 +885,7 @@ error[E0499]: cannot borrow `s` as mutable more than once at a time
 ```
 
 In contrast, using `RefCell<T>` and calling `borrow_mut` twice in the same
-scope *will* compile, but it'll panic at runtime instead. This code:
+scope *will* compile, but it’ll panic at runtime instead. This code:
 
 ```
 use std::cell::RefCell;
@@ -908,12 +908,12 @@ thread 'main' panicked at 'already borrowed: BorrowMutError',
 note: Run with `RUST_BACKTRACE=1` for a backtrace.
 ```
 
-This runtime `BorrowMutError` is similar to the compiler error: it says we've
-already borrowed `s` mutably once, so we're not allowed to borrow it again. We
-aren't getting around the borrowing rules, we're just choosing to have Rust
+This runtime `BorrowMutError` is similar to the compiler error: it says we’ve
+already borrowed `s` mutably once, so we’re not allowed to borrow it again. We
+aren’t getting around the borrowing rules, we’re just choosing to have Rust
 enforce them at runtime instead of compile time. You could choose to use
 `RefCell<T>` everywhere all the time, but in addition to having to type
-`RefCell` a lot, you'd find out about possible problems later (possibly in
+`RefCell` a lot, you’d find out about possible problems later (possibly in
 production rather than during development). Also, checking the borrowing rules
 while your program is running has a performance penalty.
 
@@ -922,12 +922,12 @@ while your program is running has a performance penalty.
 So why would we choose to make the tradeoffs that using `RefCell<T>` involves?
 Well, remember when we said that `Rc<T>` only lets you have an immutable
 reference to `T`? Given that `RefCell<T>` is immutable, but has interior
-mutability, we can combine `Rc<T>` and `RefCell<T>` to get a type that's both
+mutability, we can combine `Rc<T>` and `RefCell<T>` to get a type that’s both
 reference counted and mutable. Listing 15-15 shows an example of how to do
 that, again going back to our cons list from Listing 15-5. In this example,
-instead of storing `i32` values in the cons list, we'll be storing
+instead of storing `i32` values in the cons list, we’ll be storing
 `Rc<RefCell<i32>>` values. We want to store that type so that we can have an
-owner of the value that's not part of the list (the multiple owners
+owner of the value that’s not part of the list (the multiple owners
 functionality that `Rc<T>` provides), and so we can mutate the inner `i32`
 value (the interior mutability functionality that `RefCell<T>` provides):
 
@@ -963,7 +963,7 @@ fn main() {
 
 Listing 15-15: Using `Rc<RefCell<i32>>` to create a `List` that we can mutate
 
-We're creating a value, which is an instance of `Rc<RefCell<i32>>`. We're
+We’re creating a value, which is an instance of `Rc<RefCell<i32>>`. We’re
 storing it in a variable named `value` because we want to be able to access it
 directly later. Then we create a `List` in `a` that has a `Cons` variant that
 holds `value`, and `value` needs to be cloned since we want `value` to also
@@ -988,37 +988,37 @@ This is pretty neat! By using `RefCell<T>`, we can have an outwardly immutable
 `List`, but we can use the methods on `RefCell<T>` that provide access to its
 interior mutability to be able to modify our data when we need to. The runtime
 checks of the borrowing rules that `RefCell<T>` does protect us from data
-races, and we've decided that we want to trade a bit of speed for the
+races, and we’ve decided that we want to trade a bit of speed for the
 flexibility in our data structures.
 
 `RefCell<T>` is not the only standard library type that provides interior
 mutability. `Cell<T>` is similar but instead of giving references to the inner
 value like `RefCell<T>` does, the value is copied in and out of the `Cell<T>`.
 `Mutex<T>` offers interior mutability that is safe to use across threads, and
-we'll be discussing its use in the next chapter on concurrency. Check out the
+we’ll be discussing its use in the next chapter on concurrency. Check out the
 standard library docs for more details on the differences between these types.
 
 ## Creating Reference Cycles and Leaking Memory is Safe
 
-Rust makes a number of guarantees that we've talked about, for example that
-we'll never have a null value, and data races will be disallowed at compile
-time. Rust's memory safety guarantees make it more difficult to create memory
+Rust makes a number of guarantees that we’ve talked about, for example that
+we’ll never have a null value, and data races will be disallowed at compile
+time. Rust’s memory safety guarantees make it more difficult to create memory
 that never gets cleaned up, which is known as a *memory leak*. Rust does not
 make memory leaks *impossible*, however, preventing memory leaks is *not* one
-of Rust's guarantees. In other words, memory leaks are memory safe.
+of Rust’s guarantees. In other words, memory leaks are memory safe.
 
 By using `Rc<T>` and `RefCell<T>`, it is possible to create cycles of
 references where items refer to each other in a cycle. This is bad because the
 reference count of each item in the cycle will never reach 0, and the values
-will never be dropped. Let's take a look at how that might happen and how to
+will never be dropped. Let’s take a look at how that might happen and how to
 prevent it.
 
-In Listing 15-16, we're going to use another variation of the `List` definition
-from Listing 15-5. We're going back to storing an `i32` value as the first
+In Listing 15-16, we’re going to use another variation of the `List` definition
+from Listing 15-5. We’re going back to storing an `i32` value as the first
 element in the `Cons` variant. The second element in the `Cons` variant is now
 `RefCell<Rc<List>>`: instead of being able to modify the `i32` value this time,
 we want to be able to modify which `List` a `Cons` variant is pointing to.
-We've also added a `tail` method to make it convenient for us to access the
+We’ve also added a `tail` method to make it convenient for us to access the
 second item, if we have a `Cons` variant:
 
 Filename: src/main.rs
@@ -1043,10 +1043,10 @@ impl List {
 Listing 15-16: A cons list definition that holds a `RefCell` so that we can
 modify what a `Cons` variant is referring to
 
-Next, in Listing 15-17, we're going to create a `List` value in the variable
-`a` that initially is a list of `5, Nil`. Then we'll create a `List` value in
+Next, in Listing 15-17, we’re going to create a `List` value in the variable
+`a` that initially is a list of `5, Nil`. Then we’ll create a `List` value in
 the variable `b` that is a list of the value 10 and then points to the list in
-`a`. Finally, we'll modify `a` so that it points to `b` instead of `Nil`, which
+`a`. Finally, we’ll modify `a` so that it points to `b` instead of `Nil`, which
 will then create a cycle:
 
 Filename: src/main.rs
@@ -1088,7 +1088,7 @@ each other
 We use the `tail` method to get a reference to the `RefCell` in `a`, which we
 put in the variable `link`. Then we use the `borrow_mut` method on the
 `RefCell` to change the value inside from an `Rc` that holds a `Nil` value to
-the `Rc` in `b`. We've created a reference cycle that looks like Figure 15-18:
+the `Rc` in `b`. We’ve created a reference cycle that looks like Figure 15-18:
 
 <img alt="Reference cycle of lists" src="img/trpl15-04.svg" class="center" />
 
@@ -1098,39 +1098,39 @@ If you uncomment the last `println!`, Rust will try and print this cycle out
 with `a` pointing to `b` pointing to `a` and so forth until it overflows the
 stack.
 
-Looking at the results of the `println!` calls before the last one, we'll see
+Looking at the results of the `println!` calls before the last one, we’ll see
 that the reference count of both `a` and `b` are 2 after we change `a` to point
 to `b`. At the end of `main`, Rust will try and drop `b` first, which will
 decrease the count of the `Rc` by one. However, because `a` is still
 referencing that `Rc`, its count is 1 rather than 0, so the memory the `Rc` has
-on the heap won't be dropped. It'll just sit there with a count of one,
-forever. In this specific case, the program ends right away, so it's not a
+on the heap won’t be dropped. It’ll just sit there with a count of one,
+forever. In this specific case, the program ends right away, so it’s not a
 problem, but in a more complex program that allocates lots of memory in a cycle
 and holds onto it for a long time, this would be a problem. The program would
 be using more memory than it needs to be, and might overwhelm the system and
 cause it to run out of memory available to use.
 
 Now, as you can see, creating reference cycles is difficult and inconvenient in
-Rust. But it's not impossible: preventing memory leaks in the form of reference
+Rust. But it’s not impossible: preventing memory leaks in the form of reference
 cycles is not one of the guarantees Rust makes. If you have `RefCell<T>` values
 that contain `Rc<T>` values or similar nested combinations of types with
-interior mutability and reference counting, be aware that you'll have to ensure
-that you don't create cycles. In the example in Listing 15-14, the solution
+interior mutability and reference counting, be aware that you’ll have to ensure
+that you don’t create cycles. In the example in Listing 15-14, the solution
 would probably be to not write code that could create cycles like this, since
 we do want `Cons` variants to own the list they point to.
 
-With data structures like graphs, it's sometimes necessary to have references
+With data structures like graphs, it’s sometimes necessary to have references
 that create cycles in order to have parent nodes point to their children and
 children nodes point back in the opposite direction to their parents, for
-example. If one of the directions is expressing ownership and the other isn't,
+example. If one of the directions is expressing ownership and the other isn’t,
 one way of being able to model the relationship of the data without creating
-reference cycles and memory leaks is using `Weak<T>`. Let's explore that next!
+reference cycles and memory leaks is using `Weak<T>`. Let’s explore that next!
 
 ### Prevent Reference Cycles: Turn an `Rc<T>` into a `Weak<T>`
 
 The Rust standard library provides `Weak<T>`, a smart pointer type for use in
 situations that have cycles of references but only one direction expresses
-ownership. We've been showing how cloning an `Rc<T>` increases the
+ownership. We’ve been showing how cloning an `Rc<T>` increases the
 `strong_count` of references; `Weak<T>` is a way to reference an `Rc<T>` that
 does not increment the `strong_count`: instead it increments the `weak_count`
 of references to an `Rc`. When an `Rc` goes out of scope, the inner value will
@@ -1140,13 +1140,13 @@ be able to get the value from a `Weak<T>`, we first have to upgrade it to an
 `Weak<T>` will be `Some` if the `Rc` value has not been dropped yet, and `None`
 if the `Rc` value has been dropped. Because `upgrade` returns an `Option`, we
 know Rust will make sure we handle both the `Some` case and the `None` case and
-we won't be trying to use an invalid pointer.
+we won’t be trying to use an invalid pointer.
 
 Instead of the list in Listing 15-17 where each item knows only about the
-next item, let's say we want a tree where the items know about their children
+next item, let’s say we want a tree where the items know about their children
 items *and* their parent items.
 
-Let's start just with a struct named `Node` that holds its own `i32` value as
+Let’s start just with a struct named `Node` that holds its own `i32` value as
 well as references to its children `Node` values:
 
 Filename: src/main.rs
@@ -1163,10 +1163,10 @@ struct Node {
 ```
 
 We want to be able to have a `Node` own its children, and we also want to be
-able to have variables own each node so we can access them directly. That's why
+able to have variables own each node so we can access them directly. That’s why
 the items in the `Vec` are `Rc<Node>` values. We want to be able to modify what
-nodes are another node's children, so that's why we have a `RefCell` in
-`children` around the `Vec`. In Listing 15-19, let's create one instance of
+nodes are another node’s children, so that’s why we have a `RefCell` in
+`children` around the `Vec`. In Listing 15-19, let’s create one instance of
 `Node` named `leaf` with the value 3 and no children, and another instance
 named `branch` with the value 5 and `leaf` as one of its children:
 
@@ -1191,18 +1191,18 @@ Listing 15-19: Creating a `leaf` node and a `branch` node where `branch` has
 
 The `Node` in `leaf` now has two owners: `leaf` and `branch`, since we clone
 the `Rc` in `leaf` and store that in `branch`. The `Node` in `branch` knows
-it's related to `leaf` since `branch` has a reference to `leaf` in
-`branch.children`. However, `leaf` doesn't know that it's related to `branch`,
-and we'd like `leaf` to know that `branch` is its parent.
+it’s related to `leaf` since `branch` has a reference to `leaf` in
+`branch.children`. However, `leaf` doesn’t know that it’s related to `branch`,
+and we’d like `leaf` to know that `branch` is its parent.
 
-To do that, we're going to add a `parent` field to our `Node` struct
-definition, but what should the type of `parent` be? We know it can't contain
+To do that, we’re going to add a `parent` field to our `Node` struct
+definition, but what should the type of `parent` be? We know it can’t contain
 an `Rc<T>`, since `leaf.parent` would point to `branch` and `branch.children`
 contains a pointer to `leaf`, which makes a reference cycle. Neither `leaf` nor
 `branch` would get dropped since they would always refer to each other and
 their reference counts would never be zero.
 
-So instead of `Rc`, we're going to make the type of `parent` use `Weak<T>`,
+So instead of `Rc`, we’re going to make the type of `parent` use `Weak<T>`,
 specifically a `RefCell<Weak<Node>>`:
 
 Filename: src/main.rs
@@ -1221,8 +1221,8 @@ struct Node {
 
 This way, a node will be able to refer to its parent node if it has one,
 but it does not own its parent. A parent node will be dropped even if
-it has child nodes referring to it, as long as it doesn't have a parent
-node as well. Now let's update `main` to look like Listing 15-20:
+it has child nodes referring to it, as long as it doesn’t have a parent
+node as well. Now let’s update `main` to look like Listing 15-20:
 
 Filename: src/main.rs
 
@@ -1253,7 +1253,7 @@ reference to its parent, `branch`
 
 Creating the `leaf` node looks similar; since it starts out without a parent,
 we create a new `Weak` reference instance. When we try to get a reference to
-the parent of `leaf` by using the `upgrade` method, we'll get a `None` value,
+the parent of `leaf` by using the `upgrade` method, we’ll get a `None` value,
 as shown by the first `println!` that outputs:
 
 ```
@@ -1268,8 +1268,8 @@ method on the `RefCell` in the `parent` field of `leaf`, then we use the
 `Rc::downgrade` function to create a `Weak` reference to `branch` from the `Rc`
 in `branch.`
 
-When we print out the parent of `leaf` again, this time we'll get a `Some`
-variant holding `branch`. Also notice we don't get a cycle printed out that
+When we print out the parent of `leaf` again, this time we’ll get a `Some`
+variant holding `branch`. Also notice we don’t get a cycle printed out that
 eventually ends in a stack overflow like we did in Listing 15-14: the `Weak`
 references are just printed as `(Weak)`:
 
@@ -1279,10 +1279,10 @@ children: RefCell { value: [Node { value: 3, parent: RefCell { value: (Weak) },
 children: RefCell { value: [] } }] } })
 ```
 
-The fact that we don't get infinite output (or at least until the stack
-overflows) is one way we can see that we don't have a reference cycle in this
+The fact that we don’t get infinite output (or at least until the stack
+overflows) is one way we can see that we don’t have a reference cycle in this
 case. Another way we can tell is by looking at the values we get from calling
-`Rc::strong_count` and `Rc::weak_count`. In Listing 15-21, let's create a new
+`Rc::strong_count` and `Rc::weak_count`. In Listing 15-21, let’s create a new
 inner scope and move the creation of `branch` in there, so that we can see what
 happens when `branch` is created and then dropped when it goes out of scope:
 
@@ -1345,10 +1345,10 @@ count of 0.
 
 When the inner scope ends, `branch` goes out of scope, and its strong count
 decreases to 0, so its `Node` gets dropped. The weak count of 1 from
-`leaf.parent` has no bearing on whether `Node` gets dropped or not, so we don't
+`leaf.parent` has no bearing on whether `Node` gets dropped or not, so we don’t
 have a memory leak!
 
-If we try to access the parent of `leaf` after the end of the scope, we'll get
+If we try to access the parent of `leaf` after the end of the scope, we’ll get
 `None` again like we did before `leaf` had a parent. At the end of the program,
 `leaf` has a strong count of 1 and a weak count of 0, since `leaf` is now the
 only thing pointing to it again.
@@ -1356,13 +1356,13 @@ only thing pointing to it again.
 All of the logic managing the counts and whether a value should be dropped or
 not was managed by `Rc` and `Weak` and their implementations of the `Drop`
 trait. By specifying that the relationship from a child to its parent should be
-a `Weak<T>` reference in the definition of `Node`, we're able to have parent
+a `Weak<T>` reference in the definition of `Node`, we’re able to have parent
 nodes point to child nodes and vice versa without creating a reference cycle
 and memory leaks.
 
 ## Summary
 
-We've now covered how you can use different kinds of smart pointers to choose
+We’ve now covered how you can use different kinds of smart pointers to choose
 different guarantees and tradeoffs than those Rust makes with regular
 references. `Box<T>` has a known size and points to data allocated on the heap.
 `Rc<T>` keeps track of the number of references to data on the heap so that
@@ -1370,8 +1370,8 @@ data can have multiple owners. `RefCell<T>` with its interior mutability gives
 us a type that can be used where we need an immutable type, and enforces the
 borrowing rules at runtime instead of at compile time.
 
-We've also discussed the `Deref` and `Drop` traits that enable a lot of smart
-pointers' functionality. We explored how it's possible to create a reference
+We’ve also discussed the `Deref` and `Drop` traits that enable a lot of smart
+pointers’ functionality. We explored how it’s possible to create a reference
 cycle that would cause a memory leak, and how to prevent reference cycles by
 using `Weak<T>`.
 
@@ -1380,5 +1380,5 @@ smart pointers, check out The Nomicon at
 *https://doc.rust-lang.org/stable/nomicon/vec.html* for even more useful
 information.
 
-Next, let's talk about concurrency in Rust. We'll even learn about a few new
+Next, let’s talk about concurrency in Rust. We’ll even learn about a few new
 smart pointers that can help us with it.

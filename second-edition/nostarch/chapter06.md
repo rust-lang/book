@@ -275,7 +275,7 @@ null, has this to say:
 > I call it my billion-dollar mistake. At that time, I was designing the first
 > comprehensive type system for references in an object-oriented language. My
 > goal was to ensure that all use of references should be absolutely safe, with
-> checking performed automatically by the compiler. But I couldn't resist the
+> checking performed automatically by the compiler. But I couldn’t resist the
 > temptation to put in a null reference, simply because it was so easy to
 > implement. This has led to innumerable errors, vulnerabilities, and system
 > crashes, which have probably caused a billion dollars of pain and damage in
@@ -321,7 +321,7 @@ let absent_number: Option<i32> = None;
 ```
 
 If we use `None` rather than `Some`, we need to tell Rust what type of
-`Option<T>` we have, because the compiler can't infer the type that the `Some`
+`Option<T>` we have, because the compiler can’t infer the type that the `Some`
 variant will hold by looking only at a `None` value.
 
 When we have a `Some` value, we know that a value is present, and the value is
@@ -488,7 +488,7 @@ From 1999 through 2008, the United States printed quarters with different
 designs for each of the 50 states on one side. No other coins got state
 designs, so only quarters have this extra value. We can add this information to
 our `enum` by changing the `Quarter` variant to include a `State` value stored
-inside it, which we've done here in Listing 6-4:
+inside it, which we’ve done here in Listing 6-4:
 
 ```rust
 #[derive(Debug)] // So we can inspect the state in a minute
