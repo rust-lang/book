@@ -13,11 +13,15 @@ fn main () {
 
     for line in buffer.lines() {
 
-        // check if inside code block
+        if line.is_empty() {
+            is_in_inline_code = false;
+        }
         if line.starts_with("```") {
             is_in_code_block = !is_in_code_block;
         }
         if is_in_code_block {
+            is_in_inline_code = false;
+            is_in_html_tag = false;
             write!(io::stdout(), "{}\n", line).unwrap();
         }
         else {
@@ -35,13 +39,13 @@ fn main () {
                 if possible_match == '<' && !is_in_inline_code {
                     is_in_html_tag = true;
                 }
-                if possible_match == '>' {
+                if possible_match == '>' && !is_in_inline_code {
                     is_in_html_tag = false;
                 }
 
                 // replace with right/left apostrophe/quote
                 if possible_match == '\'' && !is_in_inline_code && !is_in_html_tag {
-                    if previous_char.is_alphanumeric() || previous_char == '‘' {
+                    if !previous_char.is_whitespace() || previous_char == '‘' {
                         char_to_push = '’';
                     }
                     else {
@@ -49,7 +53,7 @@ fn main () {
                     }
                 }
                 else if possible_match == '"'  && !is_in_inline_code && !is_in_html_tag {
-                    if previous_char.is_alphanumeric() || previous_char == '“' {
+                    if !previous_char.is_whitespace() || previous_char == '“' {
                         char_to_push = '”';
                     }
                     else {
