@@ -1,7 +1,7 @@
 ## Method Syntax
 
 *Methods* are similar to functions: they’re declared with the `fn` keyword and
-their name, they can have parameters and return values, and they contain some
+their names, they can have parameters and return values, and they contain some
 code that is run when they’re called from somewhere else. However, methods are
 different from functions in that they’re defined within the context of a struct
 (or an enum or a trait object, which we cover in Chapters 6 and 17,
