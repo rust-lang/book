@@ -194,7 +194,7 @@ works as we intend.
 ### Requesting a Review of the Post Changes its State
 
 Next up is requesting a review of a post, which should change its state from
-`Draft` to `PendingReview`. We want `post` to have a public method named
+`Draft` to `PendingReview`. We want `Post` to have a public method named
 `request_review` that will take a mutable reference to `self`. Then we're going
 to call an internal `request_review` method on the state that we're holding, and
 this second `request_review` method will consume the current state and return a
