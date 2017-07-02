@@ -5,8 +5,8 @@ Most terminals provide two kinds of output: "standard out" for general
 information, and "standard error" for error messages. This distinction is the
 behavior that's expected of command line programs: it enables users to choose
 to direct a program's successful output to a file but still print error
-messages to the screen, for example. `println!` is only capable of printing to
-standard out, though, so we have to use something else in order to print to
+messages to the screen. For example, `println!` is only capable of printing to
+standard out, so we have to use something else in order to print to
 standard error.
 
 We can verify that, the way we've written `greprs` so far, everything is being
