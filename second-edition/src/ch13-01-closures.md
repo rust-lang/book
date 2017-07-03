@@ -570,7 +570,7 @@ impl<T> Cacher<T>
 {
     fn new(calculation: T) -> Cacher<T> {
         Cacher {
-            calculation,
+            calculation:calculation,
             value: None,
         }
     }
@@ -637,7 +637,7 @@ Listing 13-11 shows how we can use this `Cacher` struct in the
 # {
 #     fn new(calculation: T) -> Cacher<T> {
 #         Cacher {
-#             calculation,
+#             calculation:calculation,
 #             value: None,
 #         }
 #     }
