@@ -31,16 +31,16 @@ Of course, if you disapprove of the `curl | sh` pattern, you can download, inspe
 and run the script however you like.
 
 The installation script automatically adds Rust to your system PATH after your next login. 
-If you want to start using Rust right away, run the following command in terminal:
+If you want to start using Rust right away, run the following command in your shell:
 
 ```text
-source $HOME/.cargo/env
+$ source $HOME/.cargo/env
 ```
 
 Alternatively, add the following line to your `~/.bash_profile`:
 
 ```text
-export PATH="$HOME/.cargo/bin:$PATH"
+$ export PATH="$HOME/.cargo/bin:$PATH"
 ```
 
 ### Installing on Windows
