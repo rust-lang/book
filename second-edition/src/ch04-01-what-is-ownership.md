@@ -51,7 +51,7 @@ strings.
 > an empty spot somewhere in the heap that is big enough, marks it as being in
 > use, and returns to us a pointer to that location. This process is called
 > *allocating on the heap*, and sometimes we abbreviate the phrase as just
-> “allocating.” Pushing values onto the stack is not considered allocating.
+> “allocating”. Pushing values onto the stack is not considered allocating.
 > Because the pointer is a known, fixed size, we can store the pointer on the
 > stack, but when we want the actual data, we have to follow the pointer.
 >
