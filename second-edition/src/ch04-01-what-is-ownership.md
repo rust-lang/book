@@ -327,7 +327,7 @@ use `s1` after `s2` is created:
 let s1 = String::from("hello");
 let s2 = s1;
 
-println!("{}", s1);
+println!("{}, world! ", s1);
 ```
 
 You’ll get an error like this because Rust prevents you from using the
