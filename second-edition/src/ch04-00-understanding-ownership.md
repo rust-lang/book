@@ -4,12 +4,3 @@
 하게 해줍니다. 그러므로, 소유권이 러스트 내에서 어떻게 동작하는지 이해하는 것은 중요합니다. 이 장에서는
 소유권 뿐만 아니라 이와 관련된 특성들: 빌림, 슬라이스, 그리고 러스트가 메모리에 데이터를 저장하는지 등을
 알아보겠습니다.
-<!--
-# Understanding Ownership
-
-Ownership is Rust’s most unique feature, and it enables Rust to make memory
-safety guarantees without needing a garbage collector. Therefore, it’s
-important to understand how ownership works in Rust. In this chapter we’ll talk
-about ownership as well as several related features: borrowing, slices, and how
-Rust lays data out in memory.
--->
