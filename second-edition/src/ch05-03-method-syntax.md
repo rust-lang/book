@@ -12,7 +12,7 @@ instance of the struct the method is being called on.
 
 Let’s change the `area` function that has a `Rectangle` instance as a parameter
 and instead make an `area` method defined on the `Rectangle` struct, as shown
-in Listing 5-12:
+in Listing 5-13:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -39,7 +39,7 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 5-12: Defining an `area` method on the
+<span class="caption">Listing 5-13: Defining an `area` method on the
 `Rectangle` struct</span>
 
 To define the function within the context of `Rectangle`, we start an `impl`
@@ -124,7 +124,7 @@ Let’s practice using methods by implementing a second method on the `Rectangle
 struct. This time, we want an instance of `Rectangle` to take another instance
 of `Rectangle` and return `true` if the second `Rectangle` can fit completely
 within `self`; otherwise it should return `false`. That is, we want to be able
-to write the program shown in Listing 5-13, once we’ve defined the `can_hold`
+to write the program shown in Listing 5-14, once we’ve defined the `can_hold`
 method:
 
 <span class="filename">Filename: src/main.rs</span>
@@ -140,7 +140,7 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 5-13: Demonstration of using the as-yet-unwritten
+<span class="caption">Listing 5-14: Demonstration of using the as-yet-unwritten
 `can_hold` method</span>
 
 And the expected output would look like the following, because both dimensions
@@ -164,7 +164,7 @@ calling the `can_hold` method. The return value of `can_hold` will be a
 boolean, and the implementation will check whether the length and width of
 `self` are both greater than the length and width of the other `Rectangle`,
 respectively. Let’s add the new `can_hold` method to the `impl` block from
-Listing 5-12, shown in Listing 5-14:
+Listing 5-13, shown in Listing 5-15:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -186,10 +186,10 @@ impl Rectangle {
 }
 ```
 
-<span class="caption">Listing 5-14: Implementing the `can_hold` method on
+<span class="caption">Listing 5-15: Implementing the `can_hold` method on
 `Rectangle` that takes another `Rectangle` instance as a parameter</span>
 
-When we run this code with the `main` function in Listing 5-13, we’ll get our
+When we run this code with the `main` function in Listing 5-14, we’ll get our
 desired output. Methods can take multiple parameters that we add to the
 signature after the `self` parameter, and those parameters work just like
 parameters in functions.

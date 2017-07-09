@@ -62,14 +62,27 @@ Listing 5-2: Creating an instance of the `User` struct
 To get a specific value from a struct, we can use dot notation. If we wanted
 just this user’s email address, we can use `user1.email` wherever we want to
 use this value. To change a value in a struct, if the instance is mutable, we
-can use the dot notation and assign into a particular field, such as
-`user1.email = String::from("someone-else@example.com");`.
+can use the dot notation and assign into a particular field. Listing 5-3 shows
+how to change the value in the `email` field of a mutable `User` instance:
+
+```
+let mut user1 = User {
+    email: String::from("someone@example.com"),
+    username: String::from("someusername123"),
+    active: true,
+    sign_in_count: 1,
+};
+
+user1.email = String::from("anotheremail@example.com");
+```
+
+Listing 5-3: Changing the value in the `email` field of a `User` instance
 
 ### Field Init Shorthand when Variables Have the Same Name as Fields
 
 If you have variables with the same names as struct fields, you can use *field
 init shorthand*. This can make functions that create new instances of structs
-more concise. The function named `build_user` shown here in Listing 5-3 has
+more concise. The function named `build_user` shown here in Listing 5-4 has
 parameters named `email` and `username`. The function creates and returns a
 `User` instance:
 
@@ -84,13 +97,13 @@ fn build_user(email: String, username: String) -> User {
 }
 ```
 
-Listing 5-3: A `build_user` function that takes an email and username and
+Listing 5-4: A `build_user` function that takes an email and username and
 returns a `User` instance
 
 Because the parameter names `email` and `username` are the same as the `User`
 struct's field names `email` and `username`, we can write `build_user` without
-the repetition of `email` and `username` as shown in Listing 5-4. This version
-of `build_user` behaves the same way as the one in Listing 5-3. The field init
+the repetition of `email` and `username` as shown in Listing 5-5. This version
+of `build_user` behaves the same way as the one in Listing 5-4. The field init
 syntax can make cases like this shorter to write, especially when structs have
 many fields.
 
@@ -105,13 +118,13 @@ fn build_user(email: String, username: String) -> User {
 }
 ```
 
-Listing 5-4: A `build_user` function that uses field init syntax since the
+Listing 5-5: A `build_user` function that uses field init syntax since the
 `email` and `username` parameters have the same name as struct fields
 
 ### Creating Instances From Other Instances With Struct Update Syntax
 
 It's often useful to create a new instance from an old instance, using most of
-the old instance's values but changing some. Listing 5-5 shows an example of
+the old instance's values but changing some. Listing 5-6 shows an example of
 creating a new `User` instance in `user2` by setting the values of `email` and
 `username` but using the same values for the rest of the fields from the
 `user1` instance we created in Listing 5-2:
@@ -125,13 +138,13 @@ let user2 = User {
 };
 ```
 
-Listing 5-5: Creating a new `User` instance, `user2`, and setting some fields
+Listing 5-6: Creating a new `User` instance, `user2`, and setting some fields
 to the values of the same fields from `user1`
 
   The *struct update syntax* achieves the same effect as the code in Listing
-5-5 using less code. The struct update syntax uses `..` to specify that the
+5-6 using less code. The struct update syntax uses `..` to specify that the
 remaining fields not set explicitly should have the same value as the fields in
-the given instance. The code in Listing 5-6 also creates an instance in `user2`
+the given instance. The code in Listing 5-7 also creates an instance in `user2`
 that has a different value for `email` and `username` but has the same values
 for the `active` and `sign_in_count` fields that `user1` has:
 
@@ -143,7 +156,7 @@ let user2 = User {
 };
 ```
 
-Listing 5-6: Using struct update syntax to set a new `email` and `username`
+Listing 5-7: Using struct update syntax to set a new `email` and `username`
 values for a `User` instance but use the rest of the values from the fields of
 the instance in the `user1` variable
 
@@ -242,7 +255,7 @@ refactor the program until we’re using structs instead.
 
 Let’s make a new binary project with Cargo called *rectangles* that will take
 the length and width of a rectangle specified in pixels and will calculate the
-area of the rectangle. Listing 5-7 shows a short program with one way of doing
+area of the rectangle. Listing 5-8 shows a short program with one way of doing
 just that in our project’s *src/main.rs*:
 
 Filename: src/main.rs
@@ -263,7 +276,7 @@ fn area(length: u32, width: u32) -> u32 {
 }
 ```
 
-Listing 5-7: Calculating the area of a rectangle specified by its length and
+Listing 5-8: Calculating the area of a rectangle specified by its length and
 width in separate variables
 
 Now, run this program using `cargo run`:
@@ -274,7 +287,7 @@ The area of the rectangle is 1500 square pixels.
 
 ### Refactoring with Tuples
 
-Even though Listing 5-7 works and figures out the area of the rectangle by
+Even though Listing 5-8 works and figures out the area of the rectangle by
 calling the `area` function with each dimension, we can do better. The length
 and the width are related to each other because together they describe one
 rectangle.
@@ -290,7 +303,7 @@ function we wrote has two parameters. The parameters are related, but that’s
 not expressed anywhere in our program. It would be more readable and more
 manageable to group length and width together. We’ve already discussed one way
 we might do that in the Grouping Values into Tuples section of Chapter 3 on
-page XX: by using tuples. Listing 5-8 shows another version of our program that
+page XX: by using tuples. Listing 5-9 shows another version of our program that
 uses tuples:
 
 Filename: src/main.rs
@@ -329,7 +342,7 @@ our code.
 
 We use structs to add meaning by labeling the data. We can transform the tuple
 we’re using into a data type with a name for the whole as well as names for the
-parts, as shown in Listing 5-9:
+parts, as shown in Listing 5-10:
 
 Filename: src/main.rs
 
@@ -353,7 +366,7 @@ fn area(rectangle: &Rectangle) -> u32 {
 }
 ```
 
-Listing 5-9: Defining a `Rectangle` struct
+Listing 5-10: Defining a `Rectangle` struct
 
 Here we’ve defined a struct and named it `Rectangle`. Inside the `{}` we
 defined the fields as `length` and `width`, both of which have type `u32`. Then
@@ -378,7 +391,7 @@ of `0` and `1`—a win for clarity.
 
 It would be helpful to be able to print out an instance of the `Rectangle`
 while we’re debugging our program in order to see the values for all its
-fields. Listing 5-10 uses the `println!` macro as we have been in earlier
+fields. Listing 5-11 uses the `println!` macro as we have been in earlier
 chapters:
 
 Filename: src/main.rs
@@ -396,7 +409,7 @@ fn main() {
 }
 ```
 
-Listing 5-10: Attempting to print a `Rectangle` instance
+Listing 5-11: Attempting to print a `Rectangle` instance
 
 When we run this code, we get an error with this core message:
 
@@ -443,7 +456,7 @@ crate, add `#[derive(Debug)]` or manually implement it
 Rust *does* include functionality to print out debugging information, but we
 have to explicitly opt-in to make that functionality available for our struct.
 To do that, we add the annotation `#[derive(Debug)]` just before the struct
-definition, as shown in Listing 5-11:
+definition, as shown in Listing 5-12:
 
 Filename: src/main.rs
 
@@ -461,7 +474,7 @@ fn main() {
 }
 ```
 
-Listing 5-11: Adding the annotation to derive the `Debug` trait and printing
+Listing 5-12: Adding the annotation to derive the `Debug` trait and printing
 the `Rectangle` instance using debug formatting
 
 Now when we run the program, we won’t get any errors and we’ll see the
@@ -498,7 +511,7 @@ continue to refactor this code by turning the `area` function into an `area`
 ## Method Syntax
 
 *Methods* are similar to functions: they’re declared with the `fn` keyword and
-their name, they can have parameters and return values, and they contain some
+their name, they can have parameters and a return value, and they contain some
 code that is run when they’re called from somewhere else. However, methods are
 different from functions in that they’re defined within the context of a struct
 (or an enum or a trait object, which we cover in Chapters 6 and 17,
@@ -509,7 +522,7 @@ instance of the struct the method is being called on.
 
 Let’s change the `area` function that has a `Rectangle` instance as a parameter
 and instead make an `area` method defined on the `Rectangle` struct, as shown
-in Listing 5-12:
+in Listing 5-13:
 
 Filename: src/main.rs
 
@@ -536,7 +549,7 @@ fn main() {
 }
 ```
 
-Listing 5-12: Defining an `area` method on the `Rectangle` struct
+Listing 5-13: Defining an `area` method on the `Rectangle` struct
 
 To define the function within the context of `Rectangle`, we start an `impl`
 (*implementation*) block. Then we move the `area` function within the `impl`
@@ -608,7 +621,7 @@ Let’s practice using methods by implementing a second method on the `Rectangle
 struct. This time, we want an instance of `Rectangle` to take another instance
 of `Rectangle` and return `true` if the second `Rectangle` can fit completely
 within `self`; otherwise it should return `false`. That is, we want to be able
-to write the program shown in Listing 5-13, once we’ve defined the `can_hold`
+to write the program shown in Listing 5-14, once we’ve defined the `can_hold`
 method:
 
 Filename: src/main.rs
@@ -624,7 +637,7 @@ fn main() {
 }
 ```
 
-Listing 5-13: Demonstration of using the as-yet-unwritten `can_hold` method
+Listing 5-14: Demonstration of using the as-yet-unwritten `can_hold` method
 
 And the expected output would look like the following, because both dimensions
 of `rect2` are smaller than the dimensions of `rect1`, but `rect3` is wider
@@ -647,7 +660,7 @@ calling the `can_hold` method. The return value of `can_hold` will be a
 boolean, and the implementation will check whether the length and width of
 `self` are both greater than the length and width of the other `Rectangle`,
 respectively. Let’s add the new `can_hold` method to the `impl` block from
-Listing 5-12, shown in Listing 5-14:
+Listing 5-13, shown in Listing 5-15:
 
 Filename: src/main.rs
 
@@ -663,10 +676,10 @@ impl Rectangle {
 }
 ```
 
-Listing 5-14: Implementing the `can_hold` method on `Rectangle` that takes
+Listing 5-15: Implementing the `can_hold` method on `Rectangle` that takes
 another `Rectangle` instance as a parameter
 
-When we run this code with the `main` function in Listing 5-13, we’ll get our
+When we run this code with the `main` function in Listing 5-14, we’ll get our
 desired output. Methods can take multiple parameters that we add to the
 signature after the `self` parameter, and those parameters work just like
 parameters in functions.
