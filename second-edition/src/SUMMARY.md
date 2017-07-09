@@ -15,8 +15,8 @@
     - [Comments](ch03-04-comments.md)
     - [Control Flow](ch03-05-control-flow.md)
 
-- [Understanding Ownership](ch04-00-understanding-ownership.md)
-    - [What is Ownership?](ch04-01-what-is-ownership.md)
+- [소유권 이해하기](ch04-00-understanding-ownership.md)
+    - [소유권이 뭔가요?](ch04-01-what-is-ownership.md)
     - [References & Borrowing](ch04-02-references-and-borrowing.md)
     - [Slices](ch04-03-slices.md)
 

@@ -1,186 +1,155 @@
-## What Is Ownership?
+## 소유권이 뭔가요?
 
-Rust’s central feature is *ownership*. Although the feature is straightforward
-to explain, it has deep implications for the rest of the language.
+러스트의 핵심 기능은 바로 소유권입니다. 이 기능은 직관적으로 설명할 수 있지만, 언어의 나머지 부분에
+깊은 영향을 끼칩니다.
 
-All programs have to manage the way they use a computer’s memory while running.
-Some languages have garbage collection that constantly looks for no longer used
-memory as the program runs; in other languages, the programmer must explicitly
-allocate and free the memory. Rust uses a third approach: memory is managed
-through a system of ownership with a set of rules that the compiler checks at
-compile time. No run-time costs are incurred for any of the ownership features.
+모든 프로그램은 실행하는 동안 컴퓨터의 메모리를 사용하는 방법을 관리해야 합니다. 몇몇 언어들은 프로그램이
+실행될 때 더이상 사용하지 않는 메모리를 끊임없이 찾는 가비지 콜렉션을 갖고 있습니다; 다른 언어들에서는
+프로그래머가 직접 명시적으로 메모리를 할당하고 해제해야 합니다. 러스트는 제 3의 접근법을 이용합니다:
+메모리는 컴파일 타임에 컴파일러가 체크할 규칙들로 구성된 소유권 시스템을 통해 관리됩니다. 소유권 기능들의
+어떤 것도 런타임 비용이 발생하지 않습니다.
 
-Because ownership is a new concept for many programmers, it does take some time
-to get used to. The good news is that the more experienced you become with Rust
-and the rules of the ownership system, the more you’ll be able to naturally
-develop code that is safe and efficient. Keep at it!
+소유권이란 개념이 많은 프로그래머들에게 새로운 것이기 때문에, 이해하고 사용하는 데에는 약간의 시간이
+걸립니다만, 좋은 소식은 여러분이 러스트와 소유권 시스템의 규칙에 더 많은 경험을 할수록, 여러분은 더
+안전하고 더 효율적인 코드를 자연스럽게 개발할 수 있게될 것이라는 거죠. 견뎌내세요!
 
-When you understand ownership, you’ll have a solid foundation for understanding
-the features that make Rust unique. In this chapter, you’ll learn ownership by
-working through some examples that focus on a very common data structure:
-strings.
+여러분이 소유권을 이해했을 때, 여러분은 러스트를 유니크하게 만드는 기능들을 이해하기 위한 견고한 기초를
+가지게 될 것입니다. 이 장에서, 여러분은 매우 흔한 데이터 구조인 문자열에 집중된 몇가지 예제를 통해
+소유권에 대해 배우게 될 것입니다.
+
 
 <!-- PROD: START BOX -->
 
-> ### The Stack and the Heap
+> ### 스택과 힙
 >
-> In many programming languages, we don’t have to think about the stack and the
-> heap very often. But in a systems programming language like Rust, whether a
-> value is on the stack or the heap has more of an effect on how the language
-> behaves and why we have to make certain decisions. We’ll describe parts of
-> ownership in relation to the stack and the heap later in this chapter, so here
-> is a brief explanation in preparation.
+> 많은 프로그래밍 언어들 안에서, 우리는 그렇게 자주 스택과 힙에 대한 생각을 할 필요가 없습니다. 그렇지만
+> 러스트와 같은 시스템 프로그래밍 언어에서는, 값이 스택에 있는지 힙에 있는지의 여부가 언어의 동작 방식과
+> 우리의 결단에 더 큰 영향을 줍니다. 우리는 이 장의 뒤쪽에서 스택과 힙에 관계된 소유권의 일부분을 기술할
+> 것이기에, 여기서는 준비 삼아 간략한 설명만 하겠습니다.
 >
-> Both the stack and the heap are parts of memory that is available to your code
-> to use at runtime, but they are structured in different ways. The stack stores
-> values in the order it gets them and removes the values in the opposite order.
-> This is referred to as *last in, first out*. Think of a stack of plates: when
-> you add more plates, you put them on top of the pile, and when you need a
-> plate, you take one off the top. Adding or removing plates from the middle or
-> bottom wouldn’t work as well! Adding data is called *pushing onto the stack*,
-> and removing data is called *popping off the stack*.
+> 스택과 힙 둘다 여러분의 코드상에서 런타임에 사용할 수 있는 메모리의 부분입니다만, 이들은 각기 다른
+> 방식으로 구조화 되어 있습니다. 스택은 값을 받아들인 순서대로 값을 저장하고 반대 방향으로 값을 지웁니다.
+> 이것을 *last in, first out*이라고 하죠. 쌓여있는 접시를 생각해보세요; 여러분이 접시를 더 추가하려면
+> 접시더미의 꼭대기에 쌓아올리고, 여러분이 접시가 필요해지면 꼭대기에서부터 한장 꺼내게 됩니다. 중간이나
+> 밑에서부터 접시를 추가하거나 제거하는 건 잘 안될겁니다! 데이터를 추가하는 것을 *스택에 푸시하기
+> (pushing on the stack)*라고 부르고, 데이터를 제거하는 것을 *스택을 팝하기 (popping off the
+> stack)*라고 부릅니다.
 >
-> The stack is fast because of the way it accesses the data: it never has to
-> search for a place to put new data or a place to get data from because that
-> place is always the top. Another property that makes the stack fast is that all
-> data on the stack must take up a known, fixed size.
+> 스택은 데이터에 접근하는 방식 덕택에 빠릅니다: 이 방식은 새로운 데이터를 넣어두기 위한 공간 혹은 데이터를
+> 가져올 공간을 검색할 필요가 전혀 없는데, 바로 그 공간이 항상 스택의 꼭대기(top)이기 때문입니다. 스택을
+> 빠르게 해주는 또다른 특성은 스택에 담긴 모든 데이터가 결정되어 있는 고정된 크기를 갖고 있어야 한다는
+> 점입니다.
 >
-> For data with a size unknown to us at compile time or a size that might change,
-> we can store data on the heap instead. The heap is less organized: when we put
-> data on the heap, we ask for some amount of space. The operating system finds
-> an empty spot somewhere in the heap that is big enough, marks it as being in
-> use, and returns to us a pointer to that location. This process is called
-> *allocating on the heap*, and sometimes we abbreviate the phrase as just
-> “allocating.” Pushing values onto the stack is not considered allocating.
-> Because the pointer is a known, fixed size, we can store the pointer on the
-> stack, but when we want the actual data, we have to follow the pointer.
+> 컴파일 타임에 크기가 결정되어 있지 않거나 크기가 변경될 수 있는 데이터를 위해서는, 힙에 데이터를 저장할
+> 수 있습니다. 힙은 조금 더 복잡합니다: 데이터를 힙에 넣을때, 먼저 저장할 공간이 있는지 물어봅니다. 그러면
+> 운영체제가 충분히 커다란 힙 안의 빈 어떤 지점을 찾아서 이 곳을 사용중이라고 표시하고, 해당 지점의 포인터를
+> 우리에게 돌려주죠. 이 절차를 *힙 공간 할당하기(allocating on the heap)*이라 부르고, 종종 그냥
+> "할당(allocating)"으로 줄여 부릅니다. 스택에 포인터를 푸싱하는 것은 할당에 해당되지 않습니다. 포인터는
+> 결정되어 있는 고정된 크기의 값이므로, 우리는 스택에 포인터를 저장할 수 있지만, 실제 데이터를 사용하고자
+> 할 때는 포인터를 따라가야 합니다.
 >
-> Think of being seated at a restaurant. When you enter, you state the number of
-> people in your group, and the staff finds an empty table that fits everyone and
-> leads you there. If someone in your group comes late, they can ask where you’ve
-> been seated to find you.
+> 힙에 저장된 데이터에 접근하는 것은 스택에 저장된 데이터에 접근하는 것보다 느린데, 그 이유는 포인터가
+> 가리킨 곳을 따라가야 하기 때문입니다. 현대 프로세서들은 메모리 내부를 덜 뛰어다닐 때 더 빨라집니다. 유사한
+> 예로, 여러 테이블로부터 주문을 받는 레스토랑의 웨이터를 생각해보세요. 다음 테이블로 움직이기 전에 지금
+> 테이블에서 모든 주문을 다 받는 것이 가장 효율적이겠죠. A 테이블에서 하나 주문 받고, 다시 B 테이블로
+> 가서 하나 주문 받고, 다시 A로, 다시 B로 가며 하나씩 주문을 받으면 훨씬 느려질 겁니다. 이와 마찬가지로,
+> 프로세서는 (힙에 있는 데이터와 같이) 멀리 떨어져 있는 데이터들 보다는 (스택에 있는 것과 같이) 붙어있는
+> 데이터들에 대한 작업을 하면 더 빨라집니다. 힙으로부터 큰 공간을 할당받는것 또한 시간이 걸릴 수 있습니다.
 >
-> Accessing data in the heap is slower than accessing data on the stack because
-> we have to follow a pointer to get there. Contemporary processors are faster if
-> they jump around less in memory. Continuing the analogy, consider a server at a
-> restaurant taking orders from many tables. It’s most efficient to get all the
-> orders at one table before moving on to the next table. Taking an order from
-> table A, then an order from table B, then one from A again, and then one from B
-> again would be a much slower process. By the same token, a processor can do its
-> job better if it works on data that’s close to other data (as it is on the
-> stack) rather than farther away (as it can be on the heap). Allocating a large
-> amount of space on the heap can also take time.
->
-> When our code calls a function, the values passed into the function (including,
-> potentially, pointers to data on the heap) and the function’s local variables
-> get pushed onto the stack. When the function is over, those values get popped
-> off the stack.
->
-> Keeping track of what parts of code are using what data on the heap, minimizing
-> the amount of duplicate data on the heap, and cleaning up unused data on the
-> heap so we don’t run out of space are all problems that ownership addresses.
-> Once you understand ownership, you won’t need to think about the stack and the
-> heap very often, but knowing that managing heap data is why ownership exists
-> can help explain why it works the way it does.
+> 코드의 어느 부분이 힙의 어떤 데이터를 사용하는지 추적하는 것, 힙의 중복된 데이터의 양을 최소화하는 것,
+> 그리고 힙 내에 사용하지 않는 데이터를 제거하여 공간이 모자라지 않게 하는 것은 모두 소유권과 관계된
+> 문제들입니다. 여러분이 소유권을 이해하고 나면, 여러분은 더이상 스택과 힙에 대한 생각이 자주 필요치 않게
+> 될겁니다만, 힙 데이터를 관리하는 것이 곧 소유권의 존재 이유임을 알게 되는 것은 이것이 어떤 방식으로
+> 작동하는지 설명하는데 도움을 줄 수 있습니다.
 >
 <!-- PROD: END BOX -->
 
-### Ownership Rules
 
-First, let’s take a look at the ownership rules. Keep these rules in mind as we
-work through the examples that illustrate the rules:
+### 소유권 규칙
 
-> 1. Each value in Rust has a variable that’s called its *owner*.
-> 2. There can only be one owner at a time.
-> 3. When the owner goes out of scope, the value will be dropped.
+먼저, 소유권 규칙을 알아봅시다. 이것들을 설명할 예제들을 보는 내내 다음의 소유권 규칙들을 명심하세요:
 
-### Variable Scope
+> 1. 러스트의 각각의 값은 해당값의 *오너(owner)*라고 불리우는 변수를 갖고 있다.
+> 2. 한번에 딱 하나의 오너만 존재할 수 있다.
+> 3. 오너가 스코프 밖으로 벗어나는 때, 값은 내려간다(dropped).
 
-We’ve walked through an example of a Rust program already in Chapter 2. Now
-that we’re past basic syntax, we won’t include all the `fn main() {` code in
-examples, so if you’re following along, you’ll have to put the following
-examples inside a `main` function manually. As a result, our examples will be a
-bit more concise, letting us focus on the actual details rather than
-boilerplate code.
 
-As a first example of ownership, we’ll look at the *scope* of some variables. A
-scope is the range within a program for which an item is valid. Let’s say we
-have a variable that looks like this:
+### 변수의 스코프
+
+우리는 이미 2장에서 완성된 형태의 러스트 프로그램 예제를 살펴봤습니다. 이제 과거의 기초 문법 형태로
+돌아가서, `fn main() {` 코드를 예제에 붙이지 않을테니, 여러분들이 코드를 따라하려면 `main` 함수에
+직접 예제들을 넣어야 할 겁니다. 결과적으로, 우리의 예제들은 좀더 간략해저셔 보일러 플레이트 코드에 비해
+실제 디테일에 초점을 맞출 수 있도록 해줄 것입니다.
+
+소유권에 대한 첫 예제로서, 변수들의 스코프를 보겠습니다. 스코프란 프로그램 내에서 아이템이 유효함을
+표시하기 위한 범위입니다. 아래처럼 생긴 변수가 있다고 해봅시다:
 
 ```rust
 let s = "hello";
 ```
 
-The variable `s` refers to a string literal, where the value of the string is
-hardcoded into the text of our program. The variable is valid from the point at
-which it’s declared until the end of the current *scope*. Listing 4-1 has
-comments annotating where the variable `s` is valid:
+변수 `s`는 문자열 리터럴을 나타내는데, 문자열 리터럴의 값은 우리의 프로그램의 텍스트 내에 하드코딩되어
+있습니다. 변수는 선언된 시점부터 현재의 *스코프*가 끝날 때까지 유효합니다. 아래 예제 Listing 4-1은
+변수 `s`가 유효한 지점을 주석으로 표시했습니다:
 
 ```rust
-{                      // s is not valid here, it’s not yet declared
-    let s = "hello";   // s is valid from this point forward
+{                      // s는 유효하지 않습니다. 아직 선언이 안됐거든요.
+    let s = "hello";   // s는 이 지점부터 유효합니다.
 
-    // do stuff with s
-}                      // this scope is now over, and s is no longer valid
+    // s를 가지고 뭔가 합니다.
+}                      // 이 스코프는 이제 끝이므로, s는 더이상 유효하지 않습니다.
 ```
 
-<span class="caption">Listing 4-1: A variable and the scope in which it is
-valid</span>
+<span class="caption">Listing 4-1: 변수와 이 변수가 유효한 스코프</span>
 
-In other words, there are two important points in time here:
+바꿔 말하면, 두가지 중요한 지점이 있습니다:
 
-1. When `s` comes *into scope*, it is valid.
-1. It remains so until it goes *out of scope*.
+1. 스코프 *안에서* `s`가 등장하면, 유효합니다.
+1. 이 유효기간은 스코프 *밖으로* 벗어날 때까지 지속됩니다.
 
-At this point, the relationship between scopes and when variables are valid is
-similar to other programming languages. Now we’ll build on top of this
-understanding by introducing the `String` type.
+이 지점에서, 스코프와 변수가 유효한 시점 간의 관계는 다른 프로그래밍 언어와 비슷합니다. 이제 우리는
+이에 대한 이해를 기초로 하여 `String` 타입을 소개함으로써 계속 쌓아나갈 것입니다.
 
-### The `String` Type
+### `String` 타입
 
-To illustrate the rules of ownership, we need a data type that is more complex
-than the ones we covered in Chapter 3. All the data types we’ve looked at
-previously are stored on the stack and popped off the stack when their scope is
-over, but we want to look at data that is stored on the heap and explore how
-Rust knows when to clean up that data.
+소유권 규칙을 설명하기 위하여, 우리는 3장에서 다룬 바 있는 타입보다 더 복잡한 데이터 타입이
+필요합니다. 우리가 이전에 봐온 모든 데이터 타입들은 스텍에 저장되었다가 스코프를 벗어날 때
+스택으로부터 팝 됩니다만, 우리는 이제 힙에 저장되는 데이터를 관찰하고 러스트는 과연 어떻게 이
+데이터를 비워내는지 설명할 필요가 있습니다.
 
-We’ll use `String` as the example here and concentrate on the parts of `String`
-that relate to ownership. These aspects also apply to other complex data types
-provided by the standard library and that you create. We’ll discuss `String` in
-more depth in Chapter 8.
+우리는 여기서 `String`을 예제로 활용하되, 소유권과 관련된 `String` 내용의 일부분에 집중할
+것입니다. 이러한 관점은 표준 라이브러리나 여러분들이 만들 다른 복잡한 데이터 타입에도 적용됩니다.
+`String`에 대해서는 8장에서 더 자세히 다루겠습니다.
 
-We’ve already seen string literals, where a string value is hardcoded into our
-program. String literals are convenient, but they aren’t always suitable for
-every situation in which you want to use text. One reason is that they’re
-immutable. Another is that not every string value can be known when we write
-our code: for example, what if we want to take user input and store it? For
-these situations, Rust has a second string type, `String`. This type is
-allocated on the heap and as such is able to store an amount of text that is
-unknown to us at compile time. You can create a `String` from a string literal
-using the `from` function, like so:
+문자열 리터럴을 이미 봤는데, 이 값은 프로그램 안에 하드코딩 되어 있습니다. 문자열 값은 편리하지만,
+여러분이 텍스트를 필요로 하는 모든 경우에 대해 항상 적절하진 않습니다. 그 중 한가지 이유로, 문자열
+값은 불변입니다(immutable). 또다른 이유는 모든 문자열이 우리가 프로그래밍 하는 시점에서 다 알수
+있는 것이 아니란 점입니다: 예를 들면, 사용자의 입력을 받아 저장하고 싶다면요? 이러한 경우들에 대해서,
+러스트는 두번째 문자열 타입인 `String`을 제공합니다. 이 타입은 힙에 할당되고 그런고로 컴파일 타임에는
+우리가 알 수 없는 양의 텍스트를 저장할 수 있습니다. 여러분은 문자열 리터럴로부터 `from`이라는 함수를
+이용해서 `String`을 아래처럼 만들 수 있습니다:
 
 ```rust
 let s = String::from("hello");
 ```
 
-The double colon (`::`) is an operator that allows us to namespace this
-particular `from` function under the `String` type rather than using some sort
-of name like `string_from`. We’ll discuss this syntax more in the “Method
-Syntax” section of Chapter 5 and when we talk about namespacing with modules in
-Chapter 7.
+더블 콜론(`::`)은 우리가 `string_from`과 같은 이름을 쓰기 보다는 `String` 타입 아래의
+`from` 함수를 특정지을 수 있도록 해주는 네임스페이스 연산자입니다. 우리는 이러한 문접에 대해 5장의
+"메소드 문법" 부분에서 더 자세히 다룰 것이고, 모듈에서의 네임스페이스와 관련한 이야기는 7장에서 할
+것입니다.
 
-This kind of string *can* be mutated:
+이러한 종류의 문자열은 변경 가능합니다:
 
 ```rust
 let mut s = String::from("hello");
 
-s.push_str(", world!"); // push_str() appends a literal to a String
+s.push_str(", world!"); // push_str()은 해당 스트링 리터럴을 스트링에 붙여줍니다.
 
-println!("{}", s); // This will print `hello, world!`
+println!("{}", s); // 이 부분이 `hello, world!`를 출력할 겁니다.
 ```
 
-So, what’s the difference here? Why can `String` be mutated but literals
-cannot? The difference is how these two types deal with memory.
+그러니까, 여기서 어떤게 달라졌나요?, 왜 `String`은 변할 수 있는데 스트링 리터럴은 안될까요?
+차이점은 두 타입이 메모리를 쓰는 방식에 있습니다.
 
 ### Memory and Allocation
 
