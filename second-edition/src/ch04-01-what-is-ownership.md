@@ -151,48 +151,44 @@ println!("{}", s); // 이 부분이 `hello, world!`를 출력할 겁니다.
 그러니까, 여기서 어떤게 달라졌나요?, 왜 `String`은 변할 수 있는데 스트링 리터럴은 안될까요?
 차이점은 두 타입이 메모리를 쓰는 방식에 있습니다.
 
-### Memory and Allocation
+### 메모리와 할당
 
-In the case of a string literal, we know the contents at compile time so the
-text is hardcoded directly into the final executable, making string literals
-fast and efficient. But these properties only come from its immutability.
-Unfortunately, we can’t put a blob of memory into the binary for each piece of
-text whose size is unknown at compile time and whose size might change while
-running the program.
+스트링 리터럴의 경우, 우리는 내용물을 컴파일 타임에 알 수 있으므로 텍스트가 최종
+실행파일에 직접 하드코딩 되었고, 이렇게 하면 스트링 리터럴이 빠르고 효율적이 됩니다.
+그러나 이는 문자열이 변경되지 않는 것을 전재로 하는 특성입니다. 불행하게도, 우리는
+컴파일 타임에 크기를 알 수 없는 경우 및 실행 중 크기가 변할 수도 있는 경우의 텍스트
+조각을 바이너리 파일에 집어넣을 수 없습니다.
 
-With the `String` type, in order to support a mutable, growable piece of text,
-we need to allocate an amount of memory on the heap, unknown at compile time,
-to hold the contents. This means:
+`String` 타입은 변경 가능하고 커질 수 있는 텍스트를 지원하기 위해 만들어졌고, 우리는
+힙에서 컴파일 타임에는 알 수 없는 어느 정도 크기의 메모리 공간을 할당받아 내용물을
+저장할 필요가 있습니다. 이는 즉 다음을 의미합니다:
 
-1. The memory must be requested from the operating system at runtime.
-2. We need a way of returning this memory to the operating system when we’re
-done with our `String`.
+1. 런타임에 운영체제로부터 메모리가 요정되어야 한다.
+2. `String`의 사용이 끝났을 때 운영체제에게 메모리를 반납할 방법이 필요하다.
 
-That first part is done by us: when we call `String::from`, its implementation
-requests the memory it needs. This is pretty much universal in programming
-languages.
+첫번째는 우리가 직접 수행합니다: 우리가 `String::from`을 호출하면, 구현부분에서
+필요한 만큼의 메모리를 요청합니다. 이는 프로그래밍 언어들 사이에서 매우 일반적입니다.
 
-However, the second part is different. In languages with a *garbage collector
-(GC)*, the GC keeps track and cleans up memory that isn’t being used anymore,
-and we, as the programmer, don’t need to think about it. Without a GC, it’s the
-programmer’s responsibility to identify when memory is no longer being used and
-call code to explicitly return it, just as we did to request it. Doing this
-correctly has historically been a difficult programming problem. If we forget,
-we’ll waste memory. If we do it too early, we’ll have an invalid variable. If
-we do it twice, that’s a bug too. We need to pair exactly one `allocate` with
-exactly one `free`.
+하지만, 두번째는 다릅니다. *가비지 콜렉터(GC)*를 갖고 있는 언어들의 경우, GC가
+더이상 사용하지 않는 메모리 조각을 계속해서 찾고 지워주며, 우리는 프로그래머로서
+이와 관련한 생각을 안해도 됩니다. GC가 없을 경우, 할당받은 메모리가 더 필요없는
+시점을 알아서 명시적으로 이를 반납하는 코드를 호출하는 것은 프로그래머의 책임입니다.
+이를 올바르게 하는 것은 역사적으로 어려운 문제로 취급받았습니다. 우리가 잊어먹으면?
+메모리를 낭비하는 것이죠. 너무 빨리 반납해버리면? 유효하지 않은 변수를 갖게 될 겁니다.
+만일 반납을 두번하면? 이것도 버그죠. 우리는 딱 한번의 `allocate`와 한번의 `free` 쌍을
+사용해야 합니다.
 
-Rust takes a different path: the memory is automatically returned once the
-variable that owns it goes out of scope. Here’s a version of our scope example
-from Listing 4-1 using a `String` instead of a string literal:
+러스트는 다른 방식으로 이 문제를 다룹니다: 메모리는 변수가 소속되어 있는 스코프 밖으로
+벗어나는 순간 자동으로 반납됩니다. 여기 스트링 리터럴 대신 `String`을 사용한 Listing
+4-1의 스코프 예제가 있습니다:
 
 ```rust
 {
-    let s = String::from("hello"); // s is valid from this point forward
+    let s = String::from("hello"); // s는 여기서부터 유효합니다
 
-    // do stuff with s
-}                                  // this scope is now over, and s is no
-                                   // longer valid
+    // s를 가지고 뭔가 합니다
+}                                  // 이 스코프는 끝났고, s는 더 이상 
+                                   // 유효하지 않습니다
 ```
 
 There is a natural point at which we can return the memory our `String` needs
