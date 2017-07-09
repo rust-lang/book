@@ -277,12 +277,13 @@ something you have a reference to.
 ### Lifetime Bounds
 
 In Chapter 10, we discussed how to use trait bounds on generic types. We can
-also add lifetime parameters as constraints on generic types. For example,
-let's say we wanted to make a wrapper over references. Remember `RefCell<T>`
-from Chapter 15? This is how the `borrow` and `borrow_mut` methods work; they
-return wrappers over references in order to keep track of the borrowing rules
-at runtime. The struct definition, without lifetime bounds for now, would
-look like Listing 19-16:
+also add lifetime parameters as constraints on generic types, which are called
+*lifetime bounds*. For example, consider a type that is a wrapper over
+references. Recall the `RefCell<T>` type from Chapter 15: its `borrow` and
+`borrow_mut` methods return the types `Ref` and `RefMut`, respectively. These
+types are wrappers over references that keep track of the borrowing rules at
+runtime. The definition of the `Ref` struct is shown in Listing 19-16, without
+lifetime bounds for now:
 
 ```rust,ignore
 struct Ref<'a, T>(&'a T);
@@ -291,27 +292,28 @@ struct Ref<'a, T>(&'a T);
 <span class="caption">Listing 19-16: Defining a struct to wrap a reference to a
 generic type; without lifetime bounds to start</span>
 
-However, using no lifetime bounds at all gives an error because Rust doesn't
-know how long the generic type `T` will live:
+Without constraining the lifetime `'a` in relation to the generic parameter
+`T`, we get an error because Rust doesn't know how long the generic type `T`
+will live:
 
 ```text
 error[E0309]: the parameter type `T` may not live long enough
- --> <anon>:2:19
+ --> <anon>:1:19
   |
-2 | struct Ref<'a, T>(&'a T);
+1 | struct Ref<'a, T>(&'a T);
   |                   ^^^^^^
   |
   = help: consider adding an explicit lifetime bound `T: 'a`...
 note: ...so that the reference type `&'a T` does not outlive the data it points at
- --> <anon>:2:19
+ --> <anon>:1:19
   |
-2 | struct Ref<'a, T>(&'a T);
+1 | struct Ref<'a, T>(&'a T);
   |                   ^^^^^^
 ```
 
-Since `T` can be any type, `T` could itself be a reference or it could
-be a type that holds one or more references, each of which have their own
-lifetimes, and Rust can't be sure `T` will live for the entirety of `'a`.
+Since `T` can be any type, `T` could itself be a reference or a type that holds
+one or more references, each of which could have their own lifetimes. Rust
+can't be sure `T` will live as long as `'a`.
 
 Fortunately, Rust gave us helpful advice on how to specify the lifetime bound in
 this case:
@@ -321,8 +323,10 @@ consider adding an explicit lifetime bound `T: 'a` so that the reference type
 `&'a T` does not outlive the data it points at.
 ```
 
-The code in Listing 19-17 works because `T: 'a` syntax specifies that `T` can
-be any type, but if it contains any references, `T` must live as long as `'a`:
+Listing 19-17 shows how to apply this advice by specifying the lifetime bound
+when we declare the generic type `T`. This code now compiles because the `T:
+'a` syntax specifies that `T` can be any type, but if it contains any
+references, the references must live at least as long as `'a`:
 
 ```rust
 struct Ref<'a, T: 'a>(&'a T);
@@ -331,9 +335,10 @@ struct Ref<'a, T: 'a>(&'a T);
 <span class="caption">Listing 19-17: Adding lifetime bounds on `T` to specify
 that any references in `T` live at least as long as `'a`</span>
 
-We could choose to solve this in a different way as shown in Listing 19-18 by
-bounding `T` on `'static`. This means if `T` contains any references, they must
-have the `'static` lifetime:
+We could choose to solve this in a different way, shown in the definition of a
+`StaticRef` struct in Listing 19-18, by adding the `'static` lifetime bound on
+`T`. This means if `T` contains any references, they must have the `'static`
+lifetime:
 
 ```rust
 struct StaticRef<T: 'static>(&'static T);
@@ -343,7 +348,7 @@ struct StaticRef<T: 'static>(&'static T);
 to constrain `T` to types that have only `'static` references or no
 references</span>
 
-Types with no references count as `T: 'static`. Because `'static` means the
+Types without any references count as `T: 'static`. Because `'static` means the
 reference must live as long as the entire program, a type that contains no
 references meets the criteria of all references living as long as the entire
 program (since there are no references). Think of it this way: if the borrow
