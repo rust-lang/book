@@ -36,7 +36,7 @@ incorrect, but because the tests have interfered with each other while running
 in parallel. One solution would be to make sure each test writes to a different
 file; another solution is to run the tests one at a time.
 
-If you don't want to run the tests in parallel, or if you want more
+If you don’t want to run the tests in parallel, or if you want more
 fine-grained control over the number of threads used, you can send the
 `--test-threads` flag and the number of threads you want to use to the test
 binary. For example:
@@ -47,14 +47,14 @@ $ cargo test -- --test-threads=1
 
 We set the number of test threads to 1, telling the program not to use any
 parallelism. This will take longer than running them in parallel, but the tests
-won't be potentially interfering with each other if they share state.
+won’t be potentially interfering with each other if they share state.
 
 ### Showing Function Output
 
-By default, if a test passes, Rust's test library captures anything printed to
+By default, if a test passes, Rust’s test library captures anything printed to
 standard output. For example, if we call `println!` in a test and the test
-passes, we won't see the `println!` output in the terminal: we'll only see the
-line that says the test passed. If a test fails, we'll see whatever was printed
+passes, we won’t see the `println!` output in the terminal: we’ll only see the
+line that says the test passed. If a test fails, we’ll see whatever was printed
 to standard output with the rest of the failure message.
 
 For example, Listing 11-10 has a silly function that prints out the value of
@@ -90,7 +90,7 @@ mod tests {
 <span class="caption">Listing 11-10: Tests for a function that calls `println!`
 </span>
 
-The output we'll see when we run these tests with `cargo test` is:
+The output we’ll see when we run these tests with `cargo test` is:
 
 ```text
 running 2 tests
@@ -151,12 +151,12 @@ function and see what the output looks like then!
 
 ### Running a Subset of Tests by Name
 
-Sometimes, running a full test suite can take a long time. If you're working on
+Sometimes, running a full test suite can take a long time. If you’re working on
 code in a particular area, you might want to run only the tests pertaining to
 that code. You can choose which tests to run by passing `cargo test` the name
 or names of the test/s you want to run as an argument.
 
-To demonstrate how to run a subset of tests, we'll create three tests for our
+To demonstrate how to run a subset of tests, we’ll create three tests for our
 `add_two` function as shown in Listing 11-11 and choose which ones to run:
 
 <span class="filename">Filename: src/lib.rs</span>
@@ -189,7 +189,7 @@ mod tests {
 
 <span class="caption">Listing 11-11: Three tests with a variety of names</span>
 
-If we run the tests without passing any arguments, as we've already seen, all
+If we run the tests without passing any arguments, as we’ve already seen, all
 the tests will run in parallel:
 
 ```text
@@ -216,13 +216,13 @@ test tests::one_hundred ... ok
 test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured
 ```
 
-We can't specify the names of multiple tests in this way, only the first value
+We can’t specify the names of multiple tests in this way, only the first value
 given to `cargo test` will be used.
 
 #### Filtering to Run Multiple Tests
 
 However, we can specify part of a test name, and any test whose name matches
-that value will get run. For example, since two of our tests' names contain
+that value will get run. For example, since two of our tests’ names contain
 `add`, we can run those two by running `cargo test add`:
 
 ```text
@@ -238,8 +238,8 @@ test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured
 ```
 
 This ran all tests with `add` in the name. Also note that the module in which
-tests appear becomes part of the test's name, so we can run all the tests in a
-module by filtering on the module's name.
+tests appear becomes part of the test’s name, so we can run all the tests in a
+module by filtering on the module’s name.
 
 ### Ignore Some Tests Unless Specifically Requested
 
@@ -264,7 +264,7 @@ fn expensive_test() {
 ```
 
 We add the `#[ignore]` line to the test we want to exclude, after `#[test]`.
-Now if we run our tests, we'll see `it_works` runs, but `expensive_test` does
+Now if we run our tests, we’ll see `it_works` runs, but `expensive_test` does
 not:
 
 ```text
@@ -301,6 +301,6 @@ test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured
 ```
 
 By controlling which tests run, you can make sure your `cargo test` results
-will be fast. When you're at a point that it makes sense to check the results
+will be fast. When you’re at a point that it makes sense to check the results
 of the `ignored` tests and you have time to wait for the results, you can
 choose to run `cargo test -- --ignored` instead.
