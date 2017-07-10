@@ -55,15 +55,6 @@ we run our tests with the `cargo test` command, Rust will build a test runner
 binary that runs the functions annotated with the `test` attribute and reports
 on whether each test function passes or fails.
 
-<!-- is it annotated with `test` by the user, or only automatically? I think
-it's the latter, and has edited with a more active tone to make that clear, but
-please change if I'm wrong -->
-<!-- What do you mean by "only automatically"? The reader should be typing in
-`#test on their own when they add new test functions; there's nothing special
-about that text. I'm not sure what part of this chapter implied "only
-automatically", can you point out where that's happening if we haven't taken
-care of it? /Carol -->
-
 We saw in Chapter 7 that when you make a new library project with Cargo, a test
 module with a test function in it is automatically generated for us. This is to
 help us get started writing our tests, since we don't have to go look up the
@@ -155,15 +146,6 @@ but Rust can compile any code examples that appear in our API documentation.
 This feature helps us keep our docs and our code in sync! We'll be talking
 about how to write documentation tests in the "Documentation Comments" section
 of Chapter 14. We're going to ignore the `Doc-tests` output for now.
-
-<!-- I might suggest changing the name of the function, could be misconstrued
-as part of the test output! -->
-<!-- `it_works` is always the name that `cargo new` generates for the first
-test function, though. We wanted to show the reader what happens when you run
-the tests immediately after generating a new project; they pass without you
-needing to change anything. I've added a bit to walk through changing the
-function name and seeing how the output changes; I hope that's sufficient.
-/Carol -->
 
 Let's change the name of our test and see how that changes the test output.
 Give the `it_works` function a different name, such as `exploration`, like so:
@@ -262,23 +244,10 @@ to ensure that some condition in a test evaluates to `true`. We give the
 calls the `panic!` macro, which causes the test to fail. This is one macro that
 helps us check that our code is functioning in the way we intend.
 
-<!-- what kind of thing can be passed as an argument? Presumably when we use it
-for real we won't pass it `true` or `false` as an argument, but some condition
-that will evaluate to true or false? In which case, should below be phrased "If
-the argument evaluates to true" and an exaplanation of that? Or maybe even a
-working example would be better, this could be misleading -->
-<!-- We were trying to really break it down, to show just how the `assert!`
-macro works and what it looks like for it to pass or fail, before we got into
-calling actual code. We've changed this section to move a bit faster and just
-write actual tests instead. /Carol -->
-
 Remember all the way back in Chapter 5, Listing 5-9, where we had a `Rectangle`
 struct and a `can_hold` method, repeated here in Listing 11-5. Let's put this
 code in *src/lib.rs* instead of *src/main.rs* and write some tests for it using
 the `assert!` macro.
-
-<!-- Listing 5-9 wasn't marked as such; I'll fix it the next time I get Chapter
-5 for editing. /Carol -->
 
 Filename: src/lib.rs
 
@@ -853,10 +822,6 @@ separator `--`.
 
 ### Running Tests in Parallel or Consecutively
 
-<!-- Are we safe assuming the reader will know enough about threads in this
-context? -->
-<!-- Yes /Carol -->
-
 When multiple tests are run, by default they run in parallel using threads.
 This means the tests will finish running faster, so that we can get faster
 feedback on whether or not our code is working. Since the tests are running at
@@ -1078,14 +1043,6 @@ This ran all tests with `add` in the name. Also note that the module in which
 tests appear becomes part of the test's name, so we can run all the tests in a
 module by filtering on the module's name.
 
-<!-- in what kind of situation might you need to run only some tests, when you
-have lots and lots in a program? -->
-<!-- We covered this in the first paragraph of the "Running a Subset of Tests
-by Name" section, do you think it should be repeated so soon? Most people who
-use tests have sufficient motivation for wanting to run a subset of the tests,
-they just need to know how to do it with Rust, so we don't think this is a
-point that needs to be emphasized multiple times. /Carol -->
-
 ### Ignore Some Tests Unless Specifically Requested
 
 Sometimes a few specific tests can be very time-consuming to execute, so you
@@ -1133,17 +1090,6 @@ test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured
 
 `expensive_test` is listed as `ignored`. If we want to run only the ignored
 tests, we can ask for them to be run with `cargo test -- --ignored`:
-
-<!-- what does the double `-- --` mean? That seems interesting -->
-<!-- We covered that in the second paragraph after the "Controlling How Tests
-are Run" heading, and this section is beneath that heading, so I don't think a
-back reference is needed /Carol -->
-
-<!-- is that right, this way the program knows to run only the test with
-`ignore` if we add this, or it knows to run all tests? -->
-<!-- Is this unclear from the output that shows `expensive_test` was run and
-the `it_works` test does not appear? I'm not sure how to make this clearer.
-/Carol -->
 
 ```
 $ cargo test -- --ignored
@@ -1249,14 +1195,6 @@ mod tests {
 
 Listing 11-12: Testing a private function
 
-<!-- I'm not clear on why we would assume this might not be fine, why are we
-highlighting this specifically? -->
-<!-- We're addressing experience that the reader might bring with them from
-other languages where this is not allowed; I added a sentence mentioning "other
-languages" at the beginning of this section. Also testing private functions
-from integration tests is not allowed, so if you did want to do this, you'd
-have to do it in unit tests. /Carol -->
-
 Note that the `internal_adder` function is not marked as `pub`, but because
 tests are just Rust code and the `tests` module is just another module, we can
 import and call `internal_adder` in a test just fine. If you don't think
@@ -1333,11 +1271,6 @@ running 0 tests
 
 test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured
 ```
-
-<!-- what are the doc tests? How do we tell the difference between unit and
-integration tests here? -->
-<!-- We mentioned documentation tests in the beginning of this chapter /Carol
--->
 
 Now we have three sections of output: the unit tests, the integration test, and
 the doc tests. The first section for the unit tests is the same as we have been
@@ -1432,9 +1365,6 @@ running 0 tests
 
 test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured
 ```
-
-<!-- The new section is lines 6-10, will ghost everything else in libreoffice
-/Carol -->
 
 Having `common` show up in the test results with `running 0 tests` displayed
 for it is not what we wanted; we just wanted to be able to share some code with

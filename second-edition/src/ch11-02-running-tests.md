@@ -19,10 +19,6 @@ separator `--`.
 
 ### Running Tests in Parallel or Consecutively
 
-<!-- Are we safe assuming the reader will know enough about threads in this
-context? -->
-<!-- Yes /Carol -->
-
 When multiple tests are run, by default they run in parallel using threads.
 This means the tests will finish running faster, so that we can get faster
 feedback on whether or not our code is working. Since the tests are running at
@@ -245,14 +241,6 @@ This ran all tests with `add` in the name. Also note that the module in which
 tests appear becomes part of the test's name, so we can run all the tests in a
 module by filtering on the module's name.
 
-<!-- in what kind of situation might you need to run only some tests, when you
-have lots and lots in a program? -->
-<!-- We covered this in the first paragraph of the "Running a Subset of Tests
-by Name" section, do you think it should be repeated so soon? Most people who
-use tests have sufficient motivation for wanting to run a subset of the tests,
-they just need to know how to do it with Rust, so we don't think this is a
-point that needs to be emphasized multiple times. /Carol -->
-
 ### Ignore Some Tests Unless Specifically Requested
 
 Sometimes a few specific tests can be very time-consuming to execute, so you
@@ -300,17 +288,6 @@ test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured
 
 `expensive_test` is listed as `ignored`. If we want to run only the ignored
 tests, we can ask for them to be run with `cargo test -- --ignored`:
-
-<!-- what does the double `-- --` mean? That seems interesting -->
-<!-- We covered that in the second paragraph after the "Controlling How Tests
-are Run" heading, and this section is beneath that heading, so I don't think a
-back reference is needed /Carol -->
-
-<!-- is that right, this way the program knows to run only the test with
-`ignore` if we add this, or it knows to run all tests? -->
-<!-- Is this unclear from the output that shows `expensive_test` was run and
-the `it_works` test does not appear? I'm not sure how to make this clearer.
-/Carol -->
 
 ```text
 $ cargo test -- --ignored

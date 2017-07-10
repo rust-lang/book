@@ -17,15 +17,6 @@ we run our tests with the `cargo test` command, Rust will build a test runner
 binary that runs the functions annotated with the `test` attribute and reports
 on whether each test function passes or fails.
 
-<!-- is it annotated with `test` by the user, or only automatically? I think
-it's the latter, and has edited with a more active tone to make that clear, but
-please change if I'm wrong -->
-<!-- What do you mean by "only automatically"? The reader should be typing in
-`#[test] on their own when they add new test functions; there's nothing special
-about that text. I'm not sure what part of this chapter implied "only
-automatically", can you point out where that's happening if we haven't taken
-care of it? /Carol -->
-
 We saw in Chapter 7 that when you make a new library project with Cargo, a test
 module with a test function in it is automatically generated for us. This is to
 help us get started writing our tests, since we don't have to go look up the
@@ -118,15 +109,6 @@ but Rust can compile any code examples that appear in our API documentation.
 This feature helps us keep our docs and our code in sync! We'll be talking
 about how to write documentation tests in the "Documentation Comments" section
 of Chapter 14. We're going to ignore the `Doc-tests` output for now.
-
-<!-- I might suggest changing the name of the function, could be misconstrued
-as part of the test output! -->
-<!-- `it_works` is always the name that `cargo new` generates for the first
-test function, though. We wanted to show the reader what happens when you run
-the tests immediately after generating a new project; they pass without you
-needing to change anything. I've added a bit to walk through changing the
-function name and seeing how the output changes; I hope that's sufficient.
-/Carol -->
 
 Let's change the name of our test and see how that changes the test output.
 Give the `it_works` function a different name, such as `exploration`, like so:
@@ -226,23 +208,10 @@ to ensure that some condition in a test evaluates to `true`. We give the
 calls the `panic!` macro, which causes the test to fail. This is one macro that
 helps us check that our code is functioning in the way we intend.
 
-<!-- what kind of thing can be passed as an argument? Presumably when we use it
-for real we won't pass it `true` or `false` as an argument, but some condition
-that will evaluate to true or false? In which case, should below be phrased "If
-the argument evaluates to true" and an explanation of that? Or maybe even a
-working example would be better, this could be misleading -->
-<!-- We were trying to really break it down, to show just how the `assert!`
-macro works and what it looks like for it to pass or fail, before we got into
-calling actual code. We've changed this section to move a bit faster and just
-write actual tests instead. /Carol -->
-
 Remember all the way back in Chapter 5, Listing 5-9, where we had a `Rectangle`
 struct and a `can_hold` method, repeated here in Listing 11-5. Let's put this
 code in *src/lib.rs* instead of *src/main.rs* and write some tests for it using
 the `assert!` macro.
-
-<!-- Listing 5-9 wasn't marked as such; I'll fix it the next time I get Chapter
-5 for editing. /Carol -->
 
 <span class="filename">Filename: src/lib.rs</span>
 

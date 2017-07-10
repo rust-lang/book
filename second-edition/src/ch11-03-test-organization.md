@@ -86,14 +86,6 @@ mod tests {
 
 <span class="caption">Listing 11-12: Testing a private function</span>
 
-<!-- I'm not clear on why we would assume this might not be fine, why are we
-highlighting this specifically? -->
-<!-- We're addressing experience that the reader might bring with them from
-other languages where this is not allowed; I added a sentence mentioning "other
-languages" at the beginning of this section. Also testing private functions
-from integration tests is not allowed, so if you did want to do this, you'd
-have to do it in unit tests. /Carol -->
-
 Note that the `internal_adder` function is not marked as `pub`, but because
 tests are just Rust code and the `tests` module is just another module, we can
 import and call `internal_adder` in a test just fine. If you don't think
@@ -171,11 +163,6 @@ running 0 tests
 
 test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured
 ```
-
-<!-- what are the doc tests? How do we tell the difference between unit and
-integration tests here? -->
-<!-- We mentioned documentation tests in the beginning of this chapter /Carol
--->
 
 Now we have three sections of output: the unit tests, the integration test, and
 the doc tests. The first section for the unit tests is the same as we have been
@@ -270,9 +257,6 @@ running 0 tests
 
 test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured
 ```
-
-<!-- The new section is lines 6-10, will ghost everything else in libreoffice
-/Carol -->
 
 Having `common` show up in the test results with `running 0 tests` displayed
 for it is not what we wanted; we just wanted to be able to share some code with
