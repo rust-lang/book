@@ -1,11 +1,11 @@
 ## How to Write Tests
 
-Tests are Rust functions that verify non-test code is functioning in the
-program in the expected manner. The bodies of test functions typically contain
-some setup, running the code we want to test, then asserting that the results
-are what we expect. Let's look at the features Rust provides specifically for
-writing tests: the `test` attribute, a few macros, and the `should_panic`
-attribute.
+Tests are Rust functions that verify that the non-test code in the program is
+functioning in the expected manner. The bodies of test functions typically run
+some setup code, then run the code we want to test, then assert whether the
+results are what we expect. Let’s look at the features Rust provides
+specifically for writing tests: the `test` attribute, a few macros, and the
+`should_panic` attribute.
 
 ### The Anatomy of a Test Function
 
@@ -296,7 +296,7 @@ mod tests {
     }
 
     #[test]
-    fn smaller_can_not_hold_larger() {
+    fn smaller_cannot_hold_larger() {
         let larger = Rectangle { length: 8, width: 7 };
         let smaller = Rectangle { length: 5, width: 1 };
 
@@ -309,9 +309,9 @@ Because the correct result of the `can_hold` function in this case is `false`,
 we need to negate that result before we pass it to the `assert!` macro. This
 way, our test will pass if `can_hold` returns `false`:
 
-```text
+```
 running 2 tests
-test tests::smaller_can_not_hold_larger ... ok
+test tests::smaller_cannot_hold_larger ... ok
 test tests::larger_can_hold_smaller ... ok
 
 test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured
@@ -340,7 +340,7 @@ Running the tests now produces:
 
 ```text
 running 2 tests
-test tests::smaller_can_not_hold_larger ... ok
+test tests::smaller_cannot_hold_larger ... ok
 test tests::larger_can_hold_smaller ... FAILED
 
 failures:
@@ -583,7 +583,7 @@ outside that range panics.
 
 We can do this by adding another attribute, `should_panic`, to our test
 function. This attribute makes a test pass if the code inside the function
-panics, and the test will fail if the code inside the function does not panic.
+panics, and the test will fail if the code inside the function doesn't panic.
 
 Listing 11-8 shows how we’d write a test that checks the error conditions of
 `Guess::new` happen when we expect:

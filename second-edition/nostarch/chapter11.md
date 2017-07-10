@@ -1,7 +1,7 @@
 
 [TOC]
 
-# Testing
+# Writing Automated Tests
 
 > Program testing can be a very effective way to show the presence of bugs, but
 > it is hopelessly inadequate for showing their absence.
@@ -14,15 +14,15 @@ shoulders a huge part of this burden, but the type system cannot catch every
 kind of incorrectness. As such, Rust includes support for writing software
 tests within the language itself.
 
-As an example, say we write a function called `add_two` that adds two to a
-number passed to it. This function's signature accepts an integer as a
-parameter and returns an integer as a result. When we implement and compile
-that function, Rust will do all the type checking and borrow checking that
-we've seen so far. Those checks will make sure that, for instance, we aren't
-passing a `String` value or an invalid reference to this function. What Rust
-*can't* check is that this function will do precisely what we intend: return
-the parameter plus two, rather than, say, the parameter plus 10 or the
-parameter minus 50! That's where tests come in.
+As an example, say we write a function called `add_two` that adds two to
+whatever number is passed to it. This function’s signature accepts an integer
+as a parameter and returns an integer as a result. When we implement and
+compile that function, Rust will do all the type checking and borrow checking
+that we’ve seen so far to make sure that, for instance, we aren’t passing a
+`String` value or an invalid reference to this function. What Rust *can’t*
+check is that this function will do precisely what we intend: return the
+parameter plus two, rather than, say, the parameter plus 10 or the parameter
+minus 50! That’s where tests come in.
 
 We can write tests that assert, for example, that when we pass `3` to the
 `add_two` function, we get `5` back. We can run these tests whenever we make
@@ -37,12 +37,12 @@ tests and integration tests.
 
 ## How to Write Tests
 
-Tests are Rust functions that verify non-test code is functioning in the
-program in the expected manner. The bodies of test functions typically contain
-some setup, running the code we want to test, then asserting that the results
-are what we expect. Let's look at the features Rust provides specifically for
-writing tests: the `test` attribute, a few macros, and the `should_panic`
-attribute.
+Tests are Rust functions that verify that the non-test code in the program is
+functioning in the expected manner. The bodies of test functions typically run
+some setup code, then run the code we want to test, then assert whether the
+results are what we expect. Let’s look at the features Rust provides
+specifically for writing tests: the `test` attribute, a few macros, and the
+`should_panic` attribute.
 
 ### The Anatomy of a Test Function
 
@@ -330,7 +330,7 @@ mod tests {
     }
 
     #[test]
-    fn smaller_can_hold_larger() {
+    fn smaller_cannot_hold_larger() {
         let larger = Rectangle { length: 8, width: 7 };
         let smaller = Rectangle { length: 5, width: 1 };
 
@@ -345,7 +345,7 @@ way, our test will pass if `can_hold` returns `false`:
 
 ```
 running 2 tests
-test tests::smaller_can_hold_larger ... ok
+test tests::smaller_cannot_hold_larger ... ok
 test tests::larger_can_hold_smaller ... ok
 
 test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured
@@ -374,7 +374,7 @@ Running the tests now produces:
 
 ```
 running 2 tests
-test tests::smaller_can_hold_larger ... ok
+test tests::smaller_cannot_hold_larger ... ok
 test tests::larger_can_hold_smaller ... FAILED
 
 failures:
@@ -596,7 +596,7 @@ Now if we run the test again, we’ll get a much more informative error message:
 
 ```
 ---- tests::greeting_contains_name stdout ----
-	thread 'tests::greeting_contains_name' panicked at 'Result did not contain
+    thread 'tests::greeting_contains_name' panicked at 'Greeting did not contain
     name, value was `Hello`', src/lib.rs:12
 note: Run with `RUST_BACKTRACE=1` for a backtrace.
 ```
@@ -616,7 +616,7 @@ outside that range panics.
 
 We can do this by adding another attribute, `should_panic`, to our test
 function. This attribute makes a test pass if the code inside the function
-panics, and the test will fail if the code inside the function does non panic.
+panics, and the test will fail if the code inside the function doesn't panic.
 
 Listing 11-8 shows how we’d write a test that checks the error conditions of
 `Guess::new` happen when we expect:
@@ -832,7 +832,7 @@ For example, say each of your tests runs some code that creates a file on disk
 named `test-output.txt` and writes some data to that file. Then each test reads
 the data in that file and asserts that the file contains a particular value,
 which is different in each test. Because the tests are all run at the same
-time, one test might overrwrite the file between when another test writes and
+time, one test might overwrite the file between when another test writes and
 reads the file. The second test will then fail, not because the code is
 incorrect, but because the tests have interfered with each other while running
 in parallel. One solution would be to make sure each test writes to a different

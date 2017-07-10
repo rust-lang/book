@@ -1,4 +1,4 @@
-# Testing
+# Writing Automated Tests
 
 > Program testing can be a very effective way to show the presence of bugs, but
 > it is hopelessly inadequate for showing their absence.
@@ -11,15 +11,15 @@ shoulders a huge part of this burden, but the type system cannot catch every
 kind of incorrectness. As such, Rust includes support for writing software
 tests within the language itself.
 
-As an example, say we write a function called `add_two` that adds two to a
-number passed to it. This function's signature accepts an integer as a
-parameter and returns an integer as a result. When we implement and compile
-that function, Rust will do all the type checking and borrow checking that
-we've seen so far. Those checks will make sure that, for instance, we aren't
-passing a `String` value or an invalid reference to this function. What Rust
-*can't* check is that this function will do precisely what we intend: return
-the parameter plus two, rather than, say, the parameter plus 10 or the
-parameter minus 50! That's where tests come in.
+As an example, say we write a function called `add_two` that adds two to
+whatever number is passed to it. This function’s signature accepts an integer
+as a parameter and returns an integer as a result. When we implement and
+compile that function, Rust will do all the type checking and borrow checking
+that we’ve seen so far to make sure that, for instance, we aren’t passing a
+`String` value or an invalid reference to this function. What Rust *can’t*
+check is that this function will do precisely what we intend: return the
+parameter plus two, rather than, say, the parameter plus 10 or the parameter
+minus 50! That’s where tests come in.
 
 We can write tests that assert, for example, that when we pass `3` to the
 `add_two` function, we get `5` back. We can run these tests whenever we make
