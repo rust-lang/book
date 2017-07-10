@@ -115,7 +115,7 @@
         <xsl:text>&#10;&#10;</xsl:text>
     </xsl:template>
 
-    <xsl:template match="w:p[w:pPr/w:pStyle[@w:val = 'Caption' or @w:val = 'TableTitle' or @w:val = 'Caption1']]">
+    <xsl:template match="w:p[w:pPr/w:pStyle[@w:val = 'Caption' or @w:val = 'TableTitle' or @w:val = 'Caption1' or @w:val = 'Listing']]">
         <xsl:apply-templates select="*" />
         <xsl:text>&#10;&#10;</xsl:text>
     </xsl:template>
@@ -123,6 +123,13 @@
     <xsl:template match="w:p[w:pPr/w:pStyle[@w:val = 'BlockQuote']]">
         <xsl:text>> </xsl:text>
         <xsl:apply-templates select="*" />
+    </xsl:template>
+
+    <xsl:template match="w:p[w:pPr/w:pStyle[@w:val = 'BlockText']]">
+        <xsl:text>&#10;</xsl:text>
+        <xsl:text>> </xsl:text>
+        <xsl:apply-templates select="*" />
+        <xsl:text>&#10;&#10;</xsl:text>
     </xsl:template>
 
     <xsl:template match="w:p[w:pPr/w:pStyle/@w:val = 'Note']">
