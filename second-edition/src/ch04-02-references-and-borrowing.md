@@ -1,13 +1,11 @@
-## References and Borrowing
+## 참조자(References)와 빌림(Borrowing)
 
-The issue with the tuple code at the end of the preceding section is that we
-have to return the `String` to the calling function so we can still use the
-`String` after the call to `calculate_length`, because the `String` was moved
-into `calculate_length`.
+앞 절의 마지막에 등장한 튜플을 이용하는 이슈는 `String`을 호출하는 함수 쪽으로
+반환함으로써 `calculate_length`를 호출한 이후에도 여전히 `String`을 이용할 수 있도록
+하는 것인데, 그 이유는 `String`이 `calculate_length` 안쪽으로 이동되었기 때문입니다.
 
-Here is how you would define and use a `calculate_length` function that has a
-*reference* to an object as a parameter instead of taking ownership of the
-value:
+여기 값의 소유권을 넘기는 대신 개체에 대한 *참조자*(*reference*)를 인자로 사용하는
+`calculate_length` 함수를 정의하고 이용하는 방법이 있습니다:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -25,19 +23,18 @@ fn calculate_length(s: &String) -> usize {
 }
 ```
 
-First, notice that all the tuple code in the variable declaration and the
-function return value is gone. Second, note that we pass `&s1` into
-`calculate_length`, and in its definition, we take `&String` rather than
-`String`.
+첫번째로, 변수 선언부와 함수 반환값에 있던 튜플 코드가 모두 없어진 것에 주목하세요.
+두번째로, `calculaate_length` 함수에 `&s1`를 넘기고, 함수의 정의 부분에는
+`String`이 아니라 `&String`을 이용했다는 점을 기억하세요.
 
-These ampersands are *references*, and they allow you to refer to some value
-without taking ownership of it. Figure 4-8 shows a diagram.
+이 엠퍼센드(&) 기호가 *참조자*이며, 이는 여러분이 어떤 값을 소유권을 넘기지 않고
+참조할수 있도록 해줍니다. Figure 4-8은 이에 대한 다이어그램입니다.
 
 <img alt="&String s pointing at String s1" src="img/trpl04-05.svg" class="center" />
 
-<span class="caption">Figure 4-8: `&String s` pointing at `String s1`</span>
+<span class="caption">Figure 4-8: `String s1`을 가리키고 있는 `&String s`</span>
 
-Let’s take a closer look at the function call here:
+함수 호출 부분을 좀더 자세히 봅시다:
 
 ```rust
 # fn calculate_length(s: &String) -> usize {
@@ -48,18 +45,18 @@ let s1 = String::from("hello");
 let len = calculate_length(&s1);
 ```
 
-The `&s1` syntax lets us create a reference that *refers* to the value of `s1`
-but does not own it. Because it does not own it, the value it points to will
-not be dropped when the reference goes out of scope.
+`&s1` 문법은 우리가 `s1`의 값을 *참조*하지만 소유하지는 않는 참조자를 생성하도록
+해줍니다. 소유권을 갖고 있지는 않기 때문에, 이 참조자가 가리키는 값은 참조자가 스코프
+밖으로 벗어났을 때도 메모리가 반납되지 않을 것입니다.
 
-Likewise, the signature of the function uses `&` to indicate that the type of
-the parameter `s` is a reference. Let’s add some explanatory annotations:
+비슷한 이치로, 함수 시그니처도 `&`를 사용하여 인자 `s`의 타입이 참조자라는 것을 나타내고
+있습니다. 설명을 위한 주석을 달아봅시다:
 
 ```rust
-fn calculate_length(s: &String) -> usize { // s is a reference to a String
+fn calculate_length(s: &String) -> usize { // s는 String의 참조자입니다
     s.len()
-} // Here, s goes out of scope. But because it does not have ownership of what
-  // it refers to, nothing happens.
+} // 여기서 s는 스코프 밖으로 벗어났습니다. 하지만 가리키고 있는 값에 대한 소유권이 없기
+  // 때문에, 아무런 일도 발생하지 않습니다.
 ```
 
 The scope in which the variable `s` is valid is the same as any function
