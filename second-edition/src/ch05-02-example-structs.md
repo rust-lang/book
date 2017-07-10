@@ -6,7 +6,7 @@ refactor the program until we’re using structs instead.
 
 Let’s make a new binary project with Cargo called *rectangles* that will take
 the length and width of a rectangle specified in pixels and will calculate the
-area of the rectangle. Listing 5-7 shows a short program with one way of doing
+area of the rectangle. Listing 5-8 shows a short program with one way of doing
 just that in our project’s *src/main.rs*:
 
 <span class="filename">Filename: src/main.rs</span>
@@ -27,7 +27,7 @@ fn area(length: u32, width: u32) -> u32 {
 }
 ```
 
-<span class="caption">Listing 5-7: Calculating the area of a rectangle
+<span class="caption">Listing 5-8: Calculating the area of a rectangle
 specified by its length and width in separate variables</span>
 
 Now, run this program using `cargo run`:
@@ -38,7 +38,7 @@ The area of the rectangle is 1500 square pixels.
 
 ### Refactoring with Tuples
 
-Even though Listing 5-7 works and figures out the area of the rectangle by
+Even though Listing 5-8 works and figures out the area of the rectangle by
 calling the `area` function with each dimension, we can do better. The length
 and the width are related to each other because together they describe one
 rectangle.
@@ -54,7 +54,7 @@ function we wrote has two parameters. The parameters are related, but that’s
 not expressed anywhere in our program. It would be more readable and more
 manageable to group length and width together. We’ve already discussed one way
 we might do that in the Grouping Values into Tuples section of Chapter 3 on
-page XX: by using tuples. Listing 5-8 shows another version of our program that
+page XX: by using tuples. Listing 5-9 shows another version of our program that
 uses tuples:
 
 <span class="filename">Filename: src/main.rs</span>
@@ -94,7 +94,7 @@ our code.
 
 We use structs to add meaning by labeling the data. We can transform the tuple
 we’re using into a data type with a name for the whole as well as names for the
-parts, as shown in Listing 5-9:
+parts, as shown in Listing 5-10:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -118,7 +118,7 @@ fn area(rectangle: &Rectangle) -> u32 {
 }
 ```
 
-<span class="caption">Listing 5-9: Defining a `Rectangle` struct</span>
+<span class="caption">Listing 5-10: Defining a `Rectangle` struct</span>
 
 Here we’ve defined a struct and named it `Rectangle`. Inside the `{}` we
 defined the fields as `length` and `width`, both of which have type `u32`. Then
@@ -143,7 +143,7 @@ and `1`—a win for clarity.
 
 It would be helpful to be able to print out an instance of the `Rectangle`
 while we’re debugging our program in order to see the values for all its
-fields. Listing 5-10 uses the `println!` macro as we have been in earlier
+fields. Listing 5-11 uses the `println!` macro as we have been in earlier
 chapters:
 
 <span class="filename">Filename: src/main.rs</span>
@@ -161,7 +161,7 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 5-10: Attempting to print a `Rectangle`
+<span class="caption">Listing 5-11: Attempting to print a `Rectangle`
 instance</span>
 
 When we run this code, we get an error with this core message:
@@ -209,7 +209,7 @@ crate, add `#[derive(Debug)]` or manually implement it
 Rust *does* include functionality to print out debugging information, but we
 have to explicitly opt-in to make that functionality available for our struct.
 To do that, we add the annotation `#[derive(Debug)]` just before the struct
-definition, as shown in Listing 5-11:
+definition, as shown in Listing 5-12:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -227,7 +227,7 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing5-11: Adding the annotation to derive the `Debug`
+<span class="caption">Listing 5-12: Adding the annotation to derive the `Debug`
 trait and printing the `Rectangle` instance using debug formatting</span>
 
 Now when we run the program, we won’t get any errors and we’ll see the

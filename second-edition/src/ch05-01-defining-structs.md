@@ -55,14 +55,35 @@ struct</span>
 To get a specific value from a struct, we can use dot notation. If we wanted
 just this user’s email address, we can use `user1.email` wherever we want to
 use this value. To change a value in a struct, if the instance is mutable, we
-can use the dot notation and assign into a particular field, such as
-`user1.email = String::from("someone-else@example.com");`.
+can use the dot notation and assign into a particular field. Listing 5-3 shows
+how to change the value in the `email` field of a mutable `User` instance:
+
+```rust
+# struct User {
+#     username: String,
+#     email: String,
+#     sign_in_count: u64,
+#     active: bool,
+# }
+#
+let mut user1 = User {
+    email: String::from("someone@example.com"),
+    username: String::from("someusername123"),
+    active: true,
+    sign_in_count: 1,
+};
+
+user1.email = String::from("anotheremail@example.com");
+```
+
+<span class="caption">Listing 5-3: Changing the value in the `email` field of a
+`User` instance</span>
 
 ### Field Init Shorthand when Variables Have the Same Name as Fields
 
 If you have variables with the same names as struct fields, you can use *field
 init shorthand*. This can make functions that create new instances of structs
-more concise. The function named `build_user` shown here in Listing 5-3 has
+more concise. The function named `build_user` shown here in Listing 5-4 has
 parameters named `email` and `username`. The function creates and returns a
 `User` instance:
 
@@ -84,13 +105,13 @@ fn build_user(email: String, username: String) -> User {
 }
 ```
 
-<span class="caption">Listing 5-3: A `build_user` function that takes an email
+<span class="caption">Listing 5-4: A `build_user` function that takes an email
 and username and returns a `User` instance</span>
 
 Because the parameter names `email` and `username` are the same as the `User`
 struct's field names `email` and `username`, we can write `build_user` without
-the repetition of `email` and `username` as shown in Listing 5-4. This version
-of `build_user` behaves the same way as the one in Listing 5-3. The field init
+the repetition of `email` and `username` as shown in Listing 5-5. This version
+of `build_user` behaves the same way as the one in Listing 5-4. The field init
 syntax can make cases like this shorter to write, especially when structs have
 many fields.
 
@@ -112,14 +133,14 @@ fn build_user(email: String, username: String) -> User {
 }
 ```
 
-<span class="caption">Listing 5-4: A `build_user` function that uses field init
+<span class="caption">Listing 5-5: A `build_user` function that uses field init
 syntax since the `email` and `username` parameters have the same name as struct
 fields</span>
 
 ### Creating Instances From Other Instances With Struct Update Syntax
 
 It's often useful to create a new instance from an old instance, using most of
-the old instance's values but changing some. Listing 5-5 shows an example of
+the old instance's values but changing some. Listing 5-6 shows an example of
 creating a new `User` instance in `user2` by setting the values of `email` and
 `username` but using the same values for the rest of the fields from the
 `user1` instance we created in Listing 5-2:
@@ -147,13 +168,13 @@ let user2 = User {
 };
 ```
 
-<span class="caption">Listing 5-5: Creating a new `User` instance, `user2`, and
+<span class="caption">Listing 5-6: Creating a new `User` instance, `user2`, and
 setting some fields to the values of the same fields from `user1`</span>
 
-  The *struct update syntax* achieves the same effect as the code in Listing
-5-5 using less code. The struct update syntax uses `..` to specify that the
+The *struct update syntax* achieves the same effect as the code in Listing 5-6
+using less code. The struct update syntax uses `..` to specify that the
 remaining fields not set explicitly should have the same value as the fields in
-the given instance. The code in Listing 5-6 also creates an instance in `user2`
+the given instance. The code in Listing 5-7 also creates an instance in `user2`
 that has a different value for `email` and `username` but has the same values
 for the `active` and `sign_in_count` fields that `user1` has:
 
@@ -179,7 +200,7 @@ let user2 = User {
 };
 ```
 
-<span class="caption">Listing5-6: Using struct update syntax to set a new
+<span class="caption">Listing 5-7: Using struct update syntax to set a new
 `email` and `username` values for a `User` instance but use the rest of the
 values from the fields of the instance in the `user1` variable</span>
 
