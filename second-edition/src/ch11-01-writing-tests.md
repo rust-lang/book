@@ -309,7 +309,7 @@ Because the correct result of the `can_hold` function in this case is `false`,
 we need to negate that result before we pass it to the `assert!` macro. This
 way, our test will pass if `can_hold` returns `false`:
 
-```
+```text
 running 2 tests
 test tests::smaller_cannot_hold_larger ... ok
 test tests::larger_can_hold_smaller ... ok
