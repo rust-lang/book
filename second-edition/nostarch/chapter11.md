@@ -108,7 +108,7 @@ Listing 11-2:
 ```
 $ cargo test
    Compiling adder v0.1.0 (file:///projects/adder)
-    Finished debug [unoptimized + debuginfo] target(s) in 0.22 secs
+    Finished dev [unoptimized + debuginfo] target(s) in 0.22 secs
      Running target/debug/deps/adder-ce99bcc2479f4607
 
 running 1 test
@@ -1008,7 +1008,7 @@ We can pass the name of any test function to `cargo test` to run only that test:
 
 ```
 $ cargo test one_hundred
-    Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
+    Finished dev [unoptimized + debuginfo] target(s) in 0.0 secs
      Running target/debug/deps/adder-06a75b4a1f2515e9
 
 running 1 test
@@ -1028,7 +1028,7 @@ that value will get run. For example, since two of our tests’ names contain
 
 ```
 $ cargo test add
-    Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
+    Finished dev [unoptimized + debuginfo] target(s) in 0.0 secs
      Running target/debug/deps/adder-06a75b4a1f2515e9
 
 running 2 tests
@@ -1071,7 +1071,7 @@ not:
 ```
 $ cargo test
    Compiling adder v0.1.0 (file:///projects/adder)
-    Finished debug [unoptimized + debuginfo] target(s) in 0.24 secs
+    Finished dev [unoptimized + debuginfo] target(s) in 0.24 secs
      Running target/debug/deps/adder-ce99bcc2479f4607
 
 running 2 tests
@@ -1092,7 +1092,7 @@ tests, we can ask for them to be run with `cargo test -- --ignored`:
 
 ```
 $ cargo test -- --ignored
-    Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
+    Finished dev [unoptimized + debuginfo] target(s) in 0.0 secs
      Running target/debug/deps/adder-ce99bcc2479f4607
 
 running 1 test
@@ -1249,7 +1249,7 @@ compile files in this directory if we run `cargo test`. Let’s try running
 ```
 cargo test
    Compiling adder v0.1.0 (file:///projects/adder)
-    Finished debug [unoptimized + debuginfo] target(s) in 0.31 secs
+    Finished dev [unoptimized + debuginfo] target(s) in 0.31 secs
      Running target/debug/deps/adder-abcabcabc
 
 running 1 test
@@ -1295,7 +1295,7 @@ followed by the name of the file:
 
 ```
 $ cargo test --test integration_test
-    Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
+    Finished dev [unoptimized + debuginfo] target(s) in 0.0 secs
      Running target/debug/integration_test-952a27e0126bb565
 
 running 1 test
