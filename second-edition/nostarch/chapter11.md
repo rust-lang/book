@@ -1155,12 +1155,12 @@ mod tests {
 ```
 
 This is the automatically generated test module. The attribute `cfg` stands for
-*configruation*, and tells Rust that the following item should only be included
-given a certain configuration. In this case, the configuration is `test`,
-provided by Rust for compiling and running tests. By using this attribute,
-Cargo only compiles our test code if we actively run the tests with `cargo
-test`. This includes any helper functions that might be within this module, in
-addition to the functions annotated with `#[test]`.
+*configuration*, and tells Rust that the following item should only be included
+given a certain configuration option. In this case, the configuration option is
+`test`, provided by Rust for compiling and running tests. By using this
+attribute, Cargo only compiles our test code if we actively run the tests with
+`cargo test`. This includes any helper functions that might be within this
+module, in addition to the functions annotated with `#[test]`.
 
 #### Testing Private Functions
 
