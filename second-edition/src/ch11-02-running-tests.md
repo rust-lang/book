@@ -53,7 +53,13 @@ We set the number of test threads to 1, telling the program not to use any
 parallelism. This will take longer than running them in parallel, but the tests
 won't be potentially interfering with each other if they share state.
 
+<!-- This section seems to go into just the right amount of detail. Nice! -->
+
 ### Showing Function Output
+
+<!-- "captures" is a terrible choice of word, "intercepts" would have been
+better, or something involving "redirect", but it seems like we have to live
+with it...  -->
 
 By default, if a test passes, Rust's test library captures anything printed to
 standard output. For example, if we call `println!` in a test and the test
@@ -158,7 +164,7 @@ function and see what the output looks like then!
 Sometimes, running a full test suite can take a long time. If you're working on
 code in a particular area, you might want to run only the tests pertaining to
 that code. You can choose which tests to run by passing `cargo test` the name
-or names of the test/s you want to run as an argument.
+or names of the test(s) you want to run as an argument.
 
 To demonstrate how to run a subset of tests, we'll create three tests for our
 `add_two` function as shown in Listing 11-11 and choose which ones to run:
@@ -253,6 +259,8 @@ use tests have sufficient motivation for wanting to run a subset of the tests,
 they just need to know how to do it with Rust, so we don't think this is a
 point that needs to be emphasized multiple times. /Carol -->
 
+<!-- I think it was fine as-is. -->
+
 ### Ignore Some Tests Unless Specifically Requested
 
 Sometimes a few specific tests can be very time-consuming to execute, so you
@@ -311,6 +319,8 @@ back reference is needed /Carol -->
 <!-- Is this unclear from the output that shows `expensive_test` was run and
 the `it_works` test does not appear? I'm not sure how to make this clearer.
 /Carol -->
+
+<!-- Looks clear to me as-is. -->
 
 ```text
 $ cargo test -- --ignored

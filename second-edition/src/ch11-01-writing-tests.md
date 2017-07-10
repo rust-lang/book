@@ -1,8 +1,8 @@
 ## How to Write Tests
 
-Tests are Rust functions that verify non-test code is functioning in the
-program in the expected manner. The bodies of test functions typically contain
-some setup, running the code we want to test, then asserting that the results
+Tests are Rust functions that verify non-test code in the program is
+functioning in the expected manner. The bodies of test functions typically
+perform some setup, run the code we want to test, then assert that the results
 are what we expect. Let's look at the features Rust provides specifically for
 writing tests: the `test` attribute, a few macros, and the `should_panic`
 attribute.
@@ -17,6 +17,9 @@ we run our tests with the `cargo test` command, Rust will build a test runner
 binary that runs the functions annotated with the `test` attribute and reports
 on whether each test function passes or fails.
 
+<!-- Have attributes not been defined yet in the book by this point? Btw, this
+is a nice paragraph... -->
+
 <!-- is it annotated with `test` by the user, or only automatically? I think
 it's the latter, and has edited with a more active tone to make that clear, but
 please change if I'm wrong -->
@@ -28,10 +31,10 @@ care of it? /Carol -->
 
 We saw in Chapter 7 that when you make a new library project with Cargo, a test
 module with a test function in it is automatically generated for us. This is to
-help us get started writing our tests, since we don't have to go look up the
-exact structure and syntax of test functions every time we start a new project.
-We can add as many additional test functions and as many test modules as we
-want, though!
+help us get started writing our tests, so we don't have to go look up the exact
+structure and syntax of test functions every time we start a new project.  We
+can add as many additional test functions and as many test modules as we want,
+though!
 
 We're going to explore some aspects of how tests work by experimenting with the
 template test generated for us, without actually testing any code. Then we'll
@@ -127,6 +130,10 @@ the tests immediately after generating a new project; they pass without you
 needing to change anything. I've added a bit to walk through changing the
 function name and seeing how the output changes; I hope that's sufficient.
 /Carol -->
+
+<!-- I was fine with it....if you added this whole following example just to
+show that part, it was a waste...could have just skipped to `it_works` and
+`another` -->
 
 Let's change the name of our test and see how that changes the test output.
 Give the `it_works` function a different name, such as `exploration`, like so:
@@ -244,6 +251,8 @@ the `assert!` macro.
 <!-- Listing 5-9 wasn't marked as such; I'll fix it the next time I get Chapter
 5 for editing. /Carol -->
 
+<!-- You better! -->
+
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust
@@ -340,6 +349,11 @@ Because the correct result of the `can_hold` function in this case is `false`,
 we need to negate that result before we pass it to the `assert!` macro. This
 way, our test will pass if `can_hold` returns `false`:
 
+<!-- Around this point is where I would start to wonder if there are other
+forms of assert macros like "assert false", "assert not null" (lol?), "assert
+err", etc.  If the very next section after this goes into that topic, you get
+10 bonus points for nailing it. -->
+
 ```text
 running 2 tests
 test tests::smaller_can_not_hold_larger ... ok
@@ -392,6 +406,8 @@ the comparison of the lengths in `can_hold` now returns `false` since 8 is not
 less than 5.
 
 ### Testing Equality with the `assert_eq!` and `assert_ne!` Macros
+
+<!-- 10 points awarded -->
 
 A common way to test functionality is to take the result of the code under test
 and the value we expect the code to return and check that they're equal. We
@@ -481,7 +497,7 @@ functions that assert two values are equal are called `expected` and `actual`
 and the order in which we specify the arguments matters. However, in Rust,
 they're called `left` and `right` instead, and the order in which we specify
 the value we expect and the value that the code under test produces doesn't
-matter. We could have written the assertion in this test as
+matter. We could write the assertion in this test as
 `assert_eq!(add_two(2), 4)`, which would result in a failure message that says
 `` assertion failed: `(left == right)` (left: `5`, right: `4`) ``.
 
@@ -802,3 +818,9 @@ which in this case was `Guess value must be greater than or equal to 1, got
 Now that we've gone over ways to write tests, let's look at what is happening
 when we run our tests and talk about the different options we can use with
 `cargo test`.
+
+<!-- Dang, this was a good section. I started off thinking "wow, this is going
+to be too long, I'll just slash out half of it.  Other than wishing to remove
+1/2 of the intro portion, the rest was pretty solid stuff. Still seem to be
+some nitpick issues with the language that I can't be bothered to care about
+right now. -->

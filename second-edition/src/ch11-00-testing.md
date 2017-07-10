@@ -13,14 +13,18 @@ kind of incorrectness. As such, Rust includes support for writing software
 tests within the language itself.
 
 As an example, say we write a function called `add_two` that adds two to a
-number passed to it. This function's signature accepts an integer as a
-parameter and returns an integer as a result. When we implement and compile
-that function, Rust will do all the type checking and borrow checking that
-we've seen so far. Those checks will make sure that, for instance, we aren't
-passing a `String` value or an invalid reference to this function. What Rust
-*can't* check is that this function will do precisely what we intend: return
-the parameter plus two, rather than, say, the parameter plus 10 or the
-parameter minus 50! That's where tests come in.
+number passed to it. This function's signature accepts an integer as a parameter
+and returns an integer as a result. When we implement and compile that function,
+Rust will do all the type checking and borrow checking that we've seen so far.
+Those checks will make sure that, for instance, we aren't passing a `String`
+value or an invalid reference to this function. What Rust *can't* check is that
+this function will do precisely what we intend: return the parameter plus two,
+rather than, say, the parameter plus 10 or the parameter minus 50! That's where
+tests come in.
+
+<!-- Not sure if `add_two` is a great choice of example here...all I thought
+when reading this paragraph was that it would overflow if you gave it MAX-1 and
+just a standard test like the one described below wouldn't catch that.  -->
 
 We can write tests that assert, for example, that when we pass `3` to the
 `add_two` function, we get `5` back. We can run these tests whenever we make

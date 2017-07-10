@@ -9,8 +9,8 @@ tests are entirely external to your library, and use your code in the same way
 any other external code would, using only the public interface and exercising
 multiple modules per test.
 
-Both kinds of tests are important to ensure that the pieces of your library are
-doing what you expect them to separately and together.
+Writing both kinds of tests are important to ensure that the pieces of your
+library are doing what you expect them to separately and together.
 
 ### Unit Tests
 
@@ -20,6 +20,13 @@ not working as expected. We put unit tests in the *src* directory, in each file
 with the code that they're testing. The convention is that we create a module
 named `tests` in each file to contain the test functions, and we annotate the
 module with `cfg(test)`.
+
+<!-- In my limited experience modifying or reading some Rust crates, I
+frequently found myself wishing there was a way to have the internal `mod
+tests` in a separate file from the rest of the code....(ironically?) it was
+most annoying when a module had a significant number of tests.  Maybe only the
+first 100 lines of a 500 line file were the module, the rest was tests, and it
+sometimes made navigating the file more difficult. -->
 
 #### The Tests Module and `#[cfg(test)]`
 
@@ -53,6 +60,9 @@ provided by Rust for compiling and running tests. By using this attribute,
 Cargo only compiles our test code if we actively run the tests with `cargo
 test`. This includes any helper functions that might be within this module, in
 addition to the functions annotated with `#[test]`.
+
+<!-- So is `mod tests` magic or could I name it `mod junk` as long as i had the
+attriute atop? And multiple `#[cfg(test)]` in one file? -->
 
 #### Testing Private Functions
 
@@ -93,6 +103,10 @@ other languages where this is not allowed; I added a sentence mentioning "other
 languages" at the beginning of this section. Also testing private functions
 from integration tests is not allowed, so if you did want to do this, you'd
 have to do it in unit tests. /Carol -->
+
+<!-- I wonder if some of these comments were referring to previous versions of
+the text that have been revised. I guess you can ignore all the places I said
+"fine as-is". -->
 
 Note that the `internal_adder` function is not marked as `pub`, but because
 tests are just Rust code and the `tests` module is just another module, we can
@@ -176,6 +190,12 @@ test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured
 integration tests here? -->
 <!-- We mentioned documentation tests in the beginning of this chapter /Carol
 -->
+
+<!-- But you only said you'd ignore them "for now"! I was expecting to find
+something more about them. Noooooooo. -->
+
+<!-- Don't add anything more. Must reduce length. Shorten. Cut. Divide. Rip.
+Remove. Reduce. Shrink. -->
 
 Now we have three sections of output: the unit tests, the integration test, and
 the doc tests. The first section for the unit tests is the same as we have been
@@ -336,3 +356,13 @@ to help reduce logic bugs having to do with how your code is expected to behave.
 
 Let's put together the knowledge from this chapter and other previous chapters
 and work on a project in the next chapter!
+
+<!-- This is a really well done chapter. It *feels* comprehensive to me, but I
+should ask, are there any quirks you chose not to cover? This chapter seems to
+justify its length much better than Chapter 10 did. (It's shorter too...) Are
+there competing tests frameworks, proposed RFCs, or patterns commonly used in
+real-world rust that aren't common in other languages' test frameworks that
+readers should know about? -->
+
+<!-- Oh, also...does Rust have any support for "exhaustive" testing? I know
+there is some concept of exhaustive checking for things like match... -->
