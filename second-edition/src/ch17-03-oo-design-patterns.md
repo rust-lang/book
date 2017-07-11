@@ -318,7 +318,7 @@ struct PendingReview {}
 
 impl State for PendingReview {
 #     fn request_review(self: Box<Self>) -> Box<State> {
-#         Box::new(PendingReview {})
+#         self
 #     }
 #
     // ...snip...
