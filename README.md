@@ -12,7 +12,7 @@ https://www.penflip.com/sarojaba/rust-doc-korean/blob/master/About.txt)에
 번역본들도 함께 합쳐질 예정이라고 합니다. 한편, 2번째 판의 내용은 1번째 판과 많은 부분이 달라졌기에
 새로 번역해볼 필요 겸 공부할 차원에서 만들어진 저장소라고 보시면 되겠습니다.
 
-현재 2번째 판의 문서는 수시로 고쳐지고 있는 상태지만, [원본 저장소](https://github/rust-lang/book)에
+현재 2번째 판의 문서는 수시로 고쳐지고 있는 상태지만, [원본 저장소](https://github.com/rust-lang/book)에
 프로젝트란을 보시면 frozen column이라고 되어 있는 부분들은 거의 완성되어 많은 수정이 이루어지지 않을 것이라고
 언급되고 있기에, 이런 부분들을 위주로 먼저 번역해보고자 합니다.
 
