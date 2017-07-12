@@ -235,7 +235,7 @@ again with the arguments `test` and `sample.txt`:
 
 ```
 $ cargo run test sample.txt
-    Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
+    Finished dev [unoptimized + debuginfo] target(s) in 0.0 secs
      Running `target/debug/greprs test sample.txt`
 Searching for test
 In file sample.txt
@@ -336,7 +336,7 @@ as the second argument:
 
 ```
 $ cargo run the poem.txt
-    Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
+    Finished dev [unoptimized + debuginfo] target(s) in 0.0 secs
      Running `target/debug/greprs the poem.txt`
 Searching for the
 In file poem.txt
@@ -534,10 +534,7 @@ fn parse_config(args: &[String]) -> Config {
     let query = args[1].clone();
     let filename = args[2].clone();
 
-    Config {
-        query: query,
-        filename: filename,
-    }
+    Config { query, filename }
 }
 ```
 
@@ -570,7 +567,7 @@ trade-off.
 
 > #### The Tradeoffs of Using `clone`
 >
-> There's a tendency amongst many Rustaceans to avoid using `clone` to fix
+> There's a tendency among many Rustaceans to avoid using `clone` to fix
 > ownership problems because of its runtime cost. In Chapter 13 on iterators,
 > you'll learn how to use more efficient methods in this kind of situation, but
 > for now, it's okay to copy a few strings to keep making progress since we'll
@@ -641,10 +638,7 @@ impl Config {
         let query = args[1].clone();
         let filename = args[2].clone();
 
-        Config {
-            query: query,
-            filename: filename,
-        }
+        Config { query, filename }
     }
 }
 ```
@@ -667,7 +661,7 @@ running the program without any arguments; it will look like this:
 
 ```
 $ cargo run
-    Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
+    Finished dev [unoptimized + debuginfo] target(s) in 0.0 secs
      Running `target/debug/greprs`
 thread 'main' panicked at 'index out of bounds: the len is 1
 but the index is 1',  /stable-dist-rustc/build/src/libcollections/vec.rs:1307
@@ -713,7 +707,7 @@ without any arguments again and see what the error looks like now:
 
 ```
 $ cargo run
-    Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
+    Finished dev [unoptimized + debuginfo] target(s) in 0.0 secs
      Running `target/debug/greprs`
 thread 'main' panicked at 'not enough arguments', src/main.rs:29
 note: Run with `RUST_BACKTRACE=1` for a backtrace.
@@ -756,10 +750,7 @@ impl Config {
         let query = args[1].clone();
         let filename = args[2].clone();
 
-        Ok(Config {
-            query: query,
-            filename: filename,
-        })
+        Ok(Config { query, filename })
     }
 }
 ```
@@ -853,7 +844,7 @@ the extra output. Let's try it:
 ```
 $ cargo run
    Compiling greprs v0.1.0 (file:///projects/greprs)
-    Finished debug [unoptimized + debuginfo] target(s) in 0.48 secs
+    Finished dev [unoptimized + debuginfo] target(s) in 0.48 secs
      Running `target/debug/greprs`
 Problem parsing arguments: not enough arguments
 ```
@@ -1062,10 +1053,7 @@ impl Config {
         let query = args[1].clone();
         let filename = args[2].clone();
 
-        Ok(Config {
-            query: query,
-            filename: filename,
-        })
+        Ok(Config { query, filename })
     }
 }
 
@@ -1275,7 +1263,7 @@ Now let's try running our test:
 ```
 $ cargo test
 ...warnings...
-    Finished debug [unoptimized + debuginfo] target(s) in 0.43 secs
+    Finished dev [unoptimized + debuginfo] target(s) in 0.43 secs
      Running target/debug/deps/greprs-abcabcabc
 
 running 1 test
@@ -1472,7 +1460,7 @@ that should return exactly one line from the Emily Dickinson poem, "frog":
 ```
 $ cargo run frog poem.txt
    Compiling greprs v0.1.0 (file:///projects/greprs)
-    Finished debug [unoptimized + debuginfo] target(s) in 0.38 secs
+    Finished dev [unoptimized + debuginfo] target(s) in 0.38 secs
      Running `target/debug/greprs frog poem.txt`
 How public, like a frog
 ```
@@ -1481,7 +1469,7 @@ Cool! Next, how about a word that will match multiple lines, like "the":
 
 ```
 $ cargo run the poem.txt
-    Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
+    Finished dev [unoptimized + debuginfo] target(s) in 0.0 secs
      Running `target/debug/greprs the poem.txt`
 Then there's a pair of us — don't tell!
 To tell your name the livelong day
@@ -1492,7 +1480,7 @@ word that isn't anywhere in the poem, like "monomorphization":
 
 ```
 $ cargo run monomorphization poem.txt
-    Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
+    Finished dev [unoptimized + debuginfo] target(s) in 0.0 secs
      Running `target/debug/greprs monomorphization poem.txt`
 ```
 
@@ -1577,14 +1565,12 @@ Trust me.";
 Listing 12-20: Adding a new failing test for the case insensitive function
 we're about to add
 
-Note that we've edited the old test's `query` and `contents` too: we changed
-the query to "duct", which will match the line with the word "productive".
-We've added a new line with the text "Duct tape", with a capital D, that
-shouldn't match the query "duct" when we're searching for the query in a case
-sensitive manner. We've changed this test to ensure that we don't accidentally
-break the case sensitive search functionality that we've already implemented;
-this test should pass now and should continue to pass as we work on the case
-insensitive search.
+Note that we've edited the old test's `contents` too. We've added a new line
+with the text "Duct tape", with a capital D, that shouldn't match the query
+"duct" when we're searching for the query in a case sensitive manner. We've
+changed this test to ensure that we don't accidentally break the case sensitive
+search functionality that we've already implemented; this test should pass now
+and should continue to pass as we work on the case insensitive search.
 
 The new test for the case insensitive search uses "rUsT" with some capital
 letters as its query. The expected return value from the
@@ -1593,7 +1579,7 @@ will match both the line containing "Rust:" with a capital R and also the line
 "Trust me." that contains "rust" with a lowercase r. This test will fail to
 compile right now since we haven't yet defined the `search_case_insensitive`
 function; feel free to add a skeleton implementation that always returns an
-empty array in the same way that we did for the `search` function in Listing
+empty vector in the same way that we did for the `search` function in Listing
 12-16 in order to see the test compile and fail.
 
 ### Implementing the `search_case_insensitive` Function
@@ -1658,7 +1644,7 @@ entered in the query.
 Let's see if this implementation passes the tests:
 
 ```
-    Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
+    Finished dev [unoptimized + debuginfo] target(s) in 0.0 secs
      Running target/debug/deps/greprs-e58e9b12d35dc861
 
 running 2 tests
@@ -1790,7 +1776,7 @@ the word "to" in all lowercase:
 
 ```
 $ cargo run to poem.txt
-    Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
+    Finished dev [unoptimized + debuginfo] target(s) in 0.0 secs
      Running `target/debug/greprs to poem.txt`
 Are you nobody, too?
 How dreary to be somebody!
@@ -1802,7 +1788,7 @@ set to 1 but with the same query "to", and we should get lines that contain
 
 ```
 $ CASE_INSENSITIVE=1 cargo run to poem.txt
-    Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
+    Finished dev [unoptimized + debuginfo] target(s) in 0.0 secs
      Running `target/debug/greprs to poem.txt`
 Are you nobody, too?
 How dreary to be somebody!
@@ -1819,7 +1805,7 @@ Some programs allow both arguments *and* environment variables for the same
 configuration. In those cases, the programs decide that one or the other takes
 precedence. For another exercise on your own, try controlling case
 insensitivity through a command line argument as well as through the
-environment variable, and decide which should take precedence the program is
+environment variable, and decide which should take precedence if the program is
 run with contradictory values.
 
 The `std::env` module contains many more useful features for dealing with
@@ -1864,7 +1850,7 @@ expecting printed on the screen, so that means it must have ended up in the
 file. Let's see what *output.txt* contains:
 
 ```
-Application error: No search string or filename found
+Problem parsing arguments: not enough arguments
 ```
 
 <!-- I don't understand why we send this output to a file to then just say we
@@ -1939,7 +1925,7 @@ redirecting `stdout` with `>`:
 
 ```
 $ cargo run > output.txt
-Application error: No search string or filename found
+Problem parsing arguments: not enough arguments
 ```
 
 Now we see our error on the screen, and `output.txt` contains nothing, which is
