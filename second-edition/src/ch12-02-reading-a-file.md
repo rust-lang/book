@@ -24,13 +24,6 @@ To an admiring bog!
 <span class="caption">Listing 12-3: The poem "I'm nobody! Who are you?" by
 Emily Dickinson that will make a good test case</span>
 
-<!-- Public domain Emily Dickinson poem. This will work best with something
-short, but that has multiple lines and some repetition. We could search through
-code; that gets a bit meta and possibly confusing... Changes to this are most
-welcome. /Carol -->
-<!-- :D I like it! I'm all for keeping -->
-<!-- Great! /Carol -->
-
 With that in place, edit *src/main.rs* and add code to open the file as shown
 in Listing 12-4:
 
@@ -60,8 +53,6 @@ fn main() {
 ```
 
 Listing 12-4: Reading the contents of the file specified by the second argument
-
-<!-- Will add ghosting and wingdings in libreoffice /Carol -->
 
 First, we add some more `use` statements to bring in relevant parts of the
 standard library: we need `std::fs::File` for dealing with files, and

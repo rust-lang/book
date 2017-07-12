@@ -24,13 +24,6 @@ standard out to:
 $ cargo run > output.txt
 ```
 
-<!-- why do we get an error here? Was that intentional? Does that mean it can't
-print stdout to a file? -->
-<!-- Yes, we're intentionally causing an error here to show that errors are
-currently going to the wrong place. It's showing that `println!` only prints
-to standard out, even when we're printing error messages that should go
-to standard error. /Carol-->
-
 The `>` syntax tells the shell to write the contents of standard out to
 *output.txt* instead of the screen. We didn't see the error message we were
 expecting printed on the screen, so that means it must have ended up in the
@@ -39,15 +32,6 @@ file. Let's see what *output.txt* contains:
 ```text
 Problem parsing arguments: not enough arguments
 ```
-
-<!-- I don't understand why we send this output to a file to then just say we
-want it to the screen, won't it do that by default? And what has this got to do
-with our use of println? I'm finding the motives here hard to follow -->
-<!-- The point of showing this is to demonstrate that our program is NOT doing
-the correct thing by default, we need to change the places we're calling
-`println!` with error messages to print to standard error instead. When to use
-stdout vs. stderr, and why you might want to redirect stdout but not stderr,
-is something our readers will be familiar with. /Carol -->
 
 Yup, there's our error message, which means it's being printed to standard out.
 This isn't what's expected from command line programs. It's much more useful
@@ -95,8 +79,6 @@ fn main() {
 
 <span class="caption">Listing 12-23: Writing error messages to `stderr` instead
 of `stdout` using `writeln!`</span>
-
-<!-- Will add ghosting and wingdings in libreoffice /Carol -->
 
 Rust does not have a convenient function like `println!` for writing to
 standard error. Instead, we use the `writeln!` macro, which is like `println!`

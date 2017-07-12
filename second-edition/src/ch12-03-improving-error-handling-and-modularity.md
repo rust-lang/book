@@ -64,10 +64,6 @@ program's logic by moving it into functions in *lib.rs*. The only code that
 remains in *main.rs* will be small enough to verify its correctness by reading
 it. Let's re-work our program by following this process.
 
-<!--Since main is already handling the parsing of arguments, why do we need to
-add a new function for it, can you say how that improves things? -->
-<!-- Sorry, the steps we had were unclear. We've tried rewording. /Carol -->
-
 ### Extracting the Argument Parser
 
 First, we'll extract the functionality for parsing arguments. Listing 12-5
@@ -95,8 +91,6 @@ fn parse_config(args: &[String]) -> (&str, &str) {
 
 <span class="caption">Listing 12-5: Extract a `parse_config` function from
 `main`</span>
-
-<!-- Will add ghosting and wingdings in libreoffice /Carol -->
 
 We're still collecting the command line arguments into a vector, but instead of
 assigning the argument value at index 1 to the variable `query` and the
@@ -129,19 +123,8 @@ fields a meaningful name. This will make it easier for future maintainers of
 this code to understand how the different values relate to each other and what
 their purpose is.
 
-<!-- above -- I'm not sure why this is a problem --- because they aren't
-currently bound together? And why does it imply that -->
-
 > Note: some people call this anti-pattern of using primitive values when a
 > complex type would be more appropriate *primitive obsession*.
-
-<!-- Ah, I see, so the problems here stem from using simple types to do tasks
-inefficiently, when a more complex task could handle it in ways that improve...
-behavior? Readability? Can you say as much? -->
-<!-- I've tried to clarify above. Note that when Rust programmers talk about
-"efficiency", they usually mean "run-time performance", whereas here we're
-talking about code design and maintainability and not addressing performance
-at all. /Carol -->
 
 Listing 12-6 shows the addition of a struct named `Config` defined to have
 fields named `query` and `filename`. We've also changed the `parse_config`
@@ -183,8 +166,6 @@ fn parse_config(args: &[String]) -> Config {
 Listing 12-6: Refactoring `parse_config` to return an instance of a `Config`
 struct
 
-<!-- Will add ghosting and wingdings in libreoffice /Carol -->
-
 The signature of `parse_config` now indicates that it returns a `Config` value.
 In the body of `parse_config`, where we used to return string slices that
 reference `String` values in `args`, we've now chosen to define `Config` to
@@ -202,11 +183,6 @@ since we don't have to manage the lifetimes of the references, so in this
 circumstance giving up a little performance to gain simplicity is a worthwhile
 trade-off.
 
-<!-- This box is intended to go right after the paragraph talking about `clone`
-/Carol -->
-
-<!-- PROD: START BOX -->
-
 > #### The Tradeoffs of Using `clone`
 >
 > There's a tendency among many Rustaceans to avoid using `clone` to fix
@@ -219,8 +195,6 @@ trade-off.
 > with Rust, it'll be easier to go straight to the desirable method, but for
 > now it's perfectly acceptable to call `clone`.
 
-<!-- PROD: END BOX -->
-
 We've updated `main` so that it places the instance of `Config` that
 `parse_config` returns into a variable named `config`, and updated the code
 that previously used the separate `query` and `filename` variables so that is
@@ -232,19 +206,6 @@ that uses these values knows to find them in the `config` instance in the
 fields named for their purpose.
 
 #### Creating a Constructor for `Config`
-
-<!-- Can you lay out what we intend to do in this section? I wasn't sure even
-at the end what we did and why --- why did we create it as parse_config to then
-change it to new? -->
-<!-- We're making small, incremental changes. In addition to being good
-software development practice, we were hoping that by changing one thing at a
-time, the process of improving code's design would be easier to follow rather
-than just jumping to the best solution. We extracted code into a function, then
-it was clearer that we should introduce a struct, then it was clear that the
-function we extracted is really a constructor of `Config` and should be written
-as such. This refactoring process should be familiar to software developers.
-I've tried to add a little recap to the start of this section, I hope that
-helps. /Carol -->
 
 So far, we've extracted the logic responsible for parsing the command line
 arguments from `main` into the `parse_config` function, which helped us to see
@@ -295,8 +256,6 @@ impl Config {
 <span class="caption">Listing 12-7: Changing `parse_config` into
 `Config::new`</span>
 
-<!-- Will add ghosting and wingdings in libreoffice /Carol -->
-
 We've updated `main` where we were calling `parse_config` to instead call
 `Config::new`. We've changed the name of `parse_config` to `new` and moved it
 within an `impl` block, which makes the `new` function associated with
@@ -343,8 +302,6 @@ fn new(args: &[String]) -> Config {
 <span class="caption">Listing 12-8: Adding a check for the number of
 arguments</span>
 
-<!-- Will add ghosting and wingdings in libreoffice /Carol -->
-
 This is similar to the `Guess::new` function we wrote in Listing 9-8, where we
 called `panic!` if the `value` argument was out of the range of valid values.
 Instead of checking for a range of values, we're checking that the length of
@@ -371,10 +328,6 @@ a call to `panic!` is more appropriate for a programming problem rather than a
 usage problem anyway, as we discussed in Chapter 9. Instead, we can use the
 other technique we learned about in that chapter: returning a `Result` that can
 indicate either success or an error.
-
-<!-- Below -- how does using new fix this, can you lay that our up front? -->
-<!-- I'm not sure what you mean, we're already using `new` and the fix continues
-to use `new`... /Carol -->
 
 #### Returning a `Result` from `new` Instead of Calling `panic!`
 
@@ -407,12 +360,6 @@ impl Config {
 ```
 
 <span class="caption">Listing 12-9: Return a `Result` from `Config::new`</span>
-
-<!-- Will add ghosting and wingdings in libreoffice /Carol -->
-
-<!-- what does returning a Result rather than a Config do? -->
-<!-- This is what Chapter 9 was about, I've added a few more references
-to that chapter to reinforce the connection /Carol -->
 
 Our `new` function now returns a `Result`, with a `Config` instance in the
 success case and a `&'static str` in the error case. Recall from "The Static
@@ -456,17 +403,6 @@ fn main() {
 <span class="caption">Listing 12-10: Exiting with an error code if creating a
 new `Config` fails</span>
 
-<!-- Will add ghosting and wingdings in libreoffice /Carol -->
-
-<!-- In the `main` function itself, we'll handle the `Result` value returned
-from the `new` function and exit the process in a cleaner way if `Config::new`
-returns an `Err` value.-->
-<!-- I moved this line above to the previous section, it seems to at least
-partially answer some of my earlier confusions, though I'm not following this
-as well as I'd like so not sure if I have this right, can you confirm either
-way whether that move makes sense? -->
-<!-- That's fine /Carol -->
-
 In this listing, we're using a method we haven't covered before:
 `unwrap_or_else`, which is defined on `Result<T, E>` by the standard library.
 Using `unwrap_or_else` allows us to define some custom, non-`panic!` error
@@ -479,10 +415,6 @@ now is that `unwrap_or_else` will pass the inner value of the `Err`, which in
 this case is the static string `not enough arguments` that we added in Listing
 12-9, to our closure in the argument `err` that appears between the vertical
 pipes. The code in the closure can then use the `err` value when it runs.
-
-<!--Can you give a high-level idea of what the closure does with it? -->
-<!-- Does with what? I've tried to elaborate in the above and below paragraphs,
-but I'm not sure exactly what's confusing /Carol -->
 
 We've added a new `use` line to import `process` from the standard library. The
 code in the closure that will get run in the error case is only two lines: we
@@ -512,14 +444,6 @@ named `run` that will hold all of the logic currently in the `main` function
 that isn't setting up configuration or handling errors. Once we're done, `main`
 will be concise and easy to verify by inspection, and we'll be able to write
 tests for all of the other logic.
-
-<!-- it contains ALL the function from main? Can you say why we're doing this,
-hw this improves it? What is the run function doing? I'm afraid I feel a bit in
-the dark here-->
-<!-- This is the pattern that we explained in the Separation of Concerns for
-Binary Projects section. I've added a reference back to that and reiterated
-some of the reasoning from there, but this section isn't introducing the
-concept of the `run` function holding the logic that was in `main` /Carol -->
 
 Listing 12-11 shows the extracted `run` function. For now, we're making only
 the small, incremental improvement of extracting the function and still
@@ -551,8 +475,6 @@ fn run(config: Config) {
 
 <span class="caption">Listing 12-11: Extracting a `run` function containing the
 rest of the program logic</span>
-
-<!-- Will add ghosting and wingdings in libreoffice /Carol -->
 
 The `run` function now contains all the remaining logic from `main` starting
 from reading the file. The `run` function takes the `Config` instance as an
@@ -590,15 +512,9 @@ fn run(config: Config) -> Result<(), Box<Error>> {
 <span class="caption">Listing 12-12: Changing the `run` function to return
 `Result`</span>
 
-<!-- Will add ghosting and wingdings in libreoffice /Carol -->
-
 We've made three big changes here. First, we're changing the return type of the
 `run` function to `Result<(), Box<Error>>`. This function previously returned
 the unit type, `()`, and we keep that as the value returned in the `Ok` case.
-
-<!-- is just the `Box` bit the trait object, or the whole `Box<Error>`
-syntax?-->
-<!-- The whole `Box<Error>` /Carol -->
 
 For our error type, we're using the *trait object* `Box<Error>` (and we've
 brought `std::error::Error` into scope with a `use` statement at the top).
@@ -656,8 +572,6 @@ fn main() {
     }
 }
 ```
-
-<!-- Will add ghosting and wingdings in libreoffice /Carol -->
 
 We use `if let` to check whether `run` returns an `Err` value, rather than
 `unwrap_or_else`, and call `process::exit(1)` if it does. `run` doesn't return
@@ -725,8 +639,6 @@ pub fn run(config: Config) -> Result<(), Box<Error>>{
 <span class="caption">Listing 12-13: Moving `Config` and `run` into
 *src/lib.rs*</span>
 
-<!-- Will add ghosting and wingdings in libreoffice /Carol -->
-
 We've made liberal use of `pub` here: on `Config`, its fields and its `new`
 method, and on the `run` function. We now have a library crate that has a
 public API that we can test.
@@ -770,16 +682,8 @@ fn main() {
 <span class="caption">Listing 12-14: Bringing the `greprs` crate into the scope
 of *src/main.rs*</span>
 
-<!-- Will add ghosting and wingdings in libreoffice /Carol -->
-
 With that, all the functionality should be connected and should work. Give it a
 `cargo run` and make sure everything is wired up correctly.
-
-<!-- any tips for if they do find something is broken, main places to check? Or
-just "diff your file against the XXX file in the book's resources to check
-where it went wrong"? -->
-<!-- We think general troubleshooting tips should be something we cover in
-Chapter 1; the tips should apply to any example in the book /Carol -->
 
 Whew! That was a lot of work, but we've set ourselves up for success in the
 future. Now it's much easier to handle errors, and we've made our code more

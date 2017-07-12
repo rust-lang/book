@@ -12,14 +12,6 @@ insensitive in that terminal session.
 First, let's add a new function that we will call when the environment variable
 is on.
 
-<!-- You mean, to turn the environment variable on? I'm not sure what we're
-doing here-->
-<!-- No, I'm not sure how this is unclear. We're adding a new function. We will
-call the new function when the user turns on the environment variable. Can you
-elaborate on what part of the above statement leads to the conclusion that the
-new function is going to turn the environment variable on? Can you suggest a
-rewording that makes the causality direction clearer? /Carol -->
-
 We're going to continue following the TDD process that we started doing in the
 last section, and the first step is again to write a failing test. We'll add a
 new test for the new case insensitive search function, and rename our old test
@@ -64,8 +56,6 @@ Trust me.";
     }
 }
 ```
-
-<!-- Will add ghosting and wingdings in libreoffice /Carol -->
 
 <span class="caption">Listing 12-20: Adding a new failing test for the case
 insensitive function we're about to add</span>
@@ -114,18 +104,6 @@ fn search_case_insensitive<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
 
 <span class="caption">Listing 12-21: Defining the `search_case_insensitive`
 function to lowercase both the query and the line before comparing them</span>
-
-<!-- Will add ghosting and wingdings in libreoffice /Carol -->
-
-<!-- why do we lowercase the search string? and why does it need to be a string
-rather than a slice? -->
-<!-- We explained this above, that in order to make the search case
-insensitive, we need to lowercase everything so that searches will always match
-no matter what case either the query or each line uses. It needs to be a
-`String` because we're creating new data, not referencing existing data, when
-we call `to_lowercase`. I've tried to make both of these points clearer, but
-I'm not sure exactly what was unclear about it before, so I'm not sure if I've
-helped. /Carol -->
 
 First, we lowercase the `query` string, and store it in a shadowed variable
 with the same name. Calling `to_lowercase` on the query is necessary so that no
@@ -186,8 +164,6 @@ pub struct Config {
 }
 ```
 
-<!-- Will add ghosting in libreoffice /Carol -->
-
 We add the `case_sensitive` field that holds a boolean. Then we need our `run`
 function to check the `case_sensitive` field's value and use that to decide
 whether to call the `search` function or the `search_case_insensitive` function
@@ -237,8 +213,6 @@ pub fn run(config: Config) -> Result<(), Box<Error>>{
 <span class="caption">Listing 12-22: Calling either `search` or
 `search_case_insensitive` based on the value in `config.case_sensitive`</span>
 
-<!-- Will add ghosting in libreoffice /Carol -->
-
 Finally, we need to actually check for the environment variable. The functions
 for working with environment variables are in the `env` module in the standard
 library, so we want to bring that module into scope with a `use std::env;`
@@ -280,8 +254,6 @@ impl Config {
 
 <span class="caption">Listing 12-23: Checking for an environment variable named
 `CASE_INSENSITIVE`</span>
-
-<!-- Will add ghosting and wingdings in libreoffice /Carol -->
 
 Here, we create a new variable `case_sensitive`. In order to set its value, we
 call the `env::var` function and pass it the name of the environment variable

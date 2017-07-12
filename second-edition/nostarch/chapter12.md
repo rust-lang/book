@@ -3,20 +3,6 @@
 
 # An I/O Project Building a Small Grep
 
-<!-- We might need a more descriptive title, something that captures the new
-elements we're introducing -- are we going to cover things like environment
-variables more in later chapters, or is this the only place we explain how to
-use them? -->
-
-<!-- This is the only place we were planning on explaining both environment
-variables and printing to standard error. These are things that people commonly
-want to know how to do in Rust, but there's not much more than what we've said
-here about them, people just want to know how to do them in Rust. We realize
-that those sections make this chapter long, but think it's worth it to include
-information that people want. We've gotten really positive feedback from people
-who have read this chapter online; people who like learning through projects
-have really enjoyed this chapter. /Carol-->
-
 This chapter is both a recap of the many skills you've learned so far and an
 exploration of a few more standard library features. We're going to build a
 command-line tool that interacts with file and command line input/output to
@@ -81,15 +67,6 @@ it. There are some existing libraries on crates.io that can help us accept
 command line arguments, but since we're learning, let's implement this
 ourselves.
 
-<!--Below -- I'm not clear what we need the args function for, yet, can you set
-it out more concretely? Otherwise, will it make more sense in context of the
-code later? Is this function needed to allow our function to accept arguments,
-is that was "args" is for? -->
-<!-- We mentioned in the intro to this chapter that grep takes as arguments a
-filename and a string. I've added an example of how we want to run our
-resulting tool and what we want the behavior to be, please let me know if this
-doesn't clear it up. /Carol-->
-
 ### Reading the Argument Values
 
 In order to be able to get the values of command line arguments passed to our
@@ -106,11 +83,6 @@ to know two things about iterators:
 Let's give it a try: use the code in Listing 12-1 to read any command line
 arguments passed to our `greprs` program and collect them into a vector.
 
-<!-- Give what a try, here, what are we making? Can you lay that out? I've
-tried above but I'm not sure it's complete -->
-<!-- We're not creating anything, we're just reading. I'm not sure if I've made
-this clearer. /Carol -->
-
 Filename: src/main.rs
 
 ```
@@ -125,8 +97,6 @@ fn main() {
 Listing 12-1: Collect the command line arguments into a vector and print them
 out
 
-<!-- Will add wingdings in libreoffice /Carol -->
-
 First, we bring the `std::env` module into scope with a `use` statement so that
 we can use its `args` function. Notice the `std::env::args` function is nested
 in two levels of modules. As we talked about in Chapter 7, in cases where the
@@ -136,22 +106,12 @@ easily use other functions from `std::env`. It's also less ambiguous than
 adding `use std::env::args;` then calling the function with just `args`; that
 might look like a function that's defined in the current module.
 
-<!-- We realized that we need to add the following caveat to fully specify
-the behavior of `std::env::args` /Carol -->
-
-<!-- PROD: START BOX -->
-
 > Note: `std::env::args` will panic if any argument contains invalid Unicode.
 > If you need to accept arguments containing invalid Unicode, use
 > `std::env::args_os` instead. That function returns `OsString` values instead
 > of `String` values. We've chosen to use `std::env::args` here for simplicity
 > because `OsString` values differ per-platform and are more complex to work
 > with than `String` values.
-
-<!-- PROD: END BOX -->
-
-<!--what is it we're making into a vector here, the arguments we pass?-->
-<!-- The iterator of the arguments. /Carol -->
 
 On the first line of `main`, we call `env::args`, and immediately use `collect`
 to turn the iterator into a vector containing all of the iterator's values. The
@@ -173,15 +133,6 @@ $ cargo run needle haystack
 ["target/debug/greprs", "needle", "haystack"]
 ```
 
-<!--Below --- This initially confused me, do you mean that the argument at
-index 0 is taken up by the name of the binary, so we start arguments at 1 when
-setting them? It seems like it's something like that, reading on, and I've
-edited as such, can you check? -->
-<!-- Mentioning the indexes here seemed repetitive with the text after Listing
-12-2. We're not "setting" arguments here, we're saving the value in variables.
-I've hopefully cleared this up without needing to introduce repetition.
-/Carol-->
-
 You may notice that the first value in the vector is "target/debug/greprs",
 which is the name of our binary. The reasons for this are out of the scope of
 this chapter, but we'll need to remember this as we save the two arguments we
@@ -194,13 +145,6 @@ able to access the values specified as command line arguments from our program.
 That's not what we actually want to do, though, we want to save the values of
 the two arguments in variables so that we can use the values in our program.
 Let's do that as shown in Listing 12-2:
-
-<!-- By 'find the ones we care about' did you mean set particular arguments so
-the user knows what to enter? I'm a little confused about what we are doing,
-I've tried to clarify above -->
-<!-- We're incrementally adding features and adding some code that helps the
-reader be able to see and experience what the code is doing rather than just
-taking our word for it. I've hopefully clarified below. /Carol -->
 
 Filename: src/main.rs
 
@@ -219,8 +163,6 @@ fn main() {
 ```
 
 Listing 12-2: Create variables to hold the query argument and filename argument
-
-<!-- Will add ghosting and wingdings in libreoffice /Carol -->
 
 As we saw when we printed out the vector, the program's name takes up the first
 value in the vector at `args[0]`, so we're starting at index `1`. The first
@@ -272,13 +214,6 @@ To an admiring bog!
 Listing 12-3: The poem "I'm nobody! Who are you?" by Emily Dickinson that will
 make a good test case
 
-<!-- Public domain Emily Dickinson poem. This will work best with something
-short, but that has multiple lines and some repetition. We could search through
-code; that gets a bit meta and possibly confusing... Changes to this are most
-welcome. /Carol -->
-<!-- :D I like it! I'm all for keeping -->
-<!-- Great! /Carol -->
-
 With that in place, edit *src/main.rs* and add code to open the file as shown
 in Listing 12-4:
 
@@ -308,8 +243,6 @@ fn main() {
 ```
 
 Listing 12-4: Reading the contents of the file specified by the second argument
-
-<!-- Will add ghosting and wingdings in libreoffice /Carol -->
 
 First, we add some more `use` statements to bring in relevant parts of the
 standard library: we need `std::fs::File` for dealing with files, and
@@ -426,10 +359,6 @@ program's logic by moving it into functions in *lib.rs*. The only code that
 remains in *main.rs* will be small enough to verify its correctness by reading
 it. Let's re-work our program by following this process.
 
-<!--Since main is already handling the parsing of arguments, why do we need to
-add a new function for it, can you say how that improves things? -->
-<!-- Sorry, the steps we had were unclear. We've tried rewording. /Carol -->
-
 ### Extracting the Argument Parser
 
 First, we'll extract the functionality for parsing arguments. Listing 12-5
@@ -456,8 +385,6 @@ fn parse_config(args: &[String]) -> (&str, &str) {
 ```
 
 Listing 12-5: Extract a `parse_config` function from `main`
-
-<!-- Will add ghosting and wingdings in libreoffice /Carol -->
 
 We're still collecting the command line arguments into a vector, but instead of
 assigning the argument value at index 1 to the variable `query` and the
@@ -490,19 +417,8 @@ fields a meaningful name. This will make it easier for future maintainers of
 this code to understand how the different values relate to each other and what
 their purpose is.
 
-<!-- above -- I'm not sure why this is a problem --- because they aren't
-currently bound together? And why does it imply that -->
-
 > Note: some people call this anti-pattern of using primitive values when a
 > complex type would be more appropriate *primitive obsession*.
-
-<!-- Ah, I see, so the problems here stem from using simple types to do tasks
-inefficiently, when a more complex task could handle it in ways that improve...
-behavior? Readability? Can you say as much? -->
-<!-- I've tried to clarify above. Note that when Rust programmers talk about
-"efficiency", they usually mean "run-time performance", whereas here we're
-talking about code design and maintainability and not addressing performance
-at all. /Carol -->
 
 Listing 12-6 shows the addition of a struct named `Config` defined to have
 fields named `query` and `filename`. We've also changed the `parse_config`
@@ -541,8 +457,6 @@ fn parse_config(args: &[String]) -> Config {
 Listing 12-6: Refactoring `parse_config` to return an instance of a `Config`
 struct
 
-<!-- Will add ghosting and wingdings in libreoffice /Carol -->
-
 The signature of `parse_config` now indicates that it returns a `Config` value.
 In the body of `parse_config`, where we used to return string slices that
 reference `String` values in `args`, we've now chosen to define `Config` to
@@ -560,11 +474,6 @@ since we don't have to manage the lifetimes of the references, so in this
 circumstance giving up a little performance to gain simplicity is a worthwhile
 trade-off.
 
-<!-- This box is intended to go right after the paragraph talking about `clone`
-/Carol -->
-
-<!-- PROD: START BOX -->
-
 > #### The Tradeoffs of Using `clone`
 >
 > There's a tendency among many Rustaceans to avoid using `clone` to fix
@@ -577,8 +486,6 @@ trade-off.
 > with Rust, it'll be easier to go straight to the desirable method, but for
 > now it's perfectly acceptable to call `clone`.
 
-<!-- PROD: END BOX -->
-
 We've updated `main` so that it places the instance of `Config` that
 `parse_config` returns into a variable named `config`, and updated the code
 that previously used the separate `query` and `filename` variables so that is
@@ -590,19 +497,6 @@ that uses these values knows to find them in the `config` instance in the
 fields named for their purpose.
 
 #### Creating a Constructor for `Config`
-
-<!-- Can you lay out what we intend to do in this section? I wasn't sure even
-at the end what we did and why --- why did we create it as parse_config to then
-change it to new? -->
-<!-- We're making small, incremental changes. In addition to being good
-software development practice, we were hoping that by changing one thing at a
-time, the process of improving code's design would be easier to follow rather
-than just jumping to the best solution. We extracted code into a function, then
-it was clearer that we should introduce a struct, then it was clear that the
-function we extracted is really a constructor of `Config` and should be written
-as such. This refactoring process should be familiar to software developers.
-I've tried to add a little recap to the start of this section, I hope that
-helps. /Carol -->
 
 So far, we've extracted the logic responsible for parsing the command line
 arguments from `main` into the `parse_config` function, which helped us to see
@@ -644,8 +538,6 @@ impl Config {
 ```
 
 Listing 12-7: Changing `parse_config` into `Config::new`
-
-<!-- Will add ghosting and wingdings in libreoffice /Carol -->
 
 We've updated `main` where we were calling `parse_config` to instead call
 `Config::new`. We've changed the name of `parse_config` to `new` and moved it
@@ -692,8 +584,6 @@ fn new(args: &[String]) -> Config {
 
 Listing 12-8: Adding a check for the number of arguments
 
-<!-- Will add ghosting and wingdings in libreoffice /Carol -->
-
 This is similar to the `Guess::new` function we wrote in Listing 9-8, where we
 called `panic!` if the `value` argument was out of the range of valid values.
 Instead of checking for a range of values, we're checking that the length of
@@ -720,10 +610,6 @@ a call to `panic!` is more appropriate for a programming problem rather than a
 usage problem anyway, as we discussed in Chapter 9. Instead, we can use the
 other technique we learned about in that chapter: returning a `Result` that can
 indicate either success or an error.
-
-<!-- Below -- how does using new fix this, can you lay that our up front? -->
-<!-- I'm not sure what you mean, we're already using `new` and the fix continues
-to use `new`... /Carol -->
 
 #### Returning a `Result` from `new` Instead of Calling `panic!`
 
@@ -756,12 +642,6 @@ impl Config {
 ```
 
 Listing 12-9: Return a `Result` from `Config::new`
-
-<!-- Will add ghosting and wingdings in libreoffice /Carol -->
-
-<!-- what does returning a Result rather than a Config do? -->
-<!-- This is what Chapter 9 was about, I've added a few more references
-to that chapter to reinforce the connection /Carol -->
 
 Our `new` function now returns a `Result`, with a `Config` instance in the
 success case and a `&'static str` in the error case. Recall from "The Static
@@ -804,17 +684,6 @@ fn main() {
 
 Listing 12-10: Exiting with an error code if creating a new `Config` fails
 
-<!-- Will add ghosting and wingdings in libreoffice /Carol -->
-
-<!-- In the `main` function itself, we'll handle the `Result` value returned
-from the `new` function and exit the process in a cleaner way if `Config::new`
-returns an `Err` value.-->
-<!-- I moved this line above to the previous section, it seems to at least
-partially answer some of my earlier confusions, though I'm not following this
-as well as I'd like so not sure if I have this right, can you confirm either
-way whether that move makes sense? -->
-<!-- That's fine /Carol -->
-
 In this listing, we're using a method we haven't covered before:
 `unwrap_or_else`, which is defined on `Result<T, E>` by the standard library.
 Using `unwrap_or_else` allows us to define some custom, non-`panic!` error
@@ -827,10 +696,6 @@ now is that `unwrap_or_else` will pass the inner value of the `Err`, which in
 this case is the static string `not enough arguments` that we added in Listing
 12-9, to our closure in the argument `err` that appears between the vertical
 pipes. The code in the closure can then use the `err` value when it runs.
-
-<!--Can you give a high-level idea of what the closure does with it? -->
-<!-- Does with what? I've tried to elaborate in the above and below paragraphs,
-but I'm not sure exactly what's confusing /Carol -->
 
 We've added a new `use` line to import `process` from the standard library. The
 code in the closure that will get run in the error case is only two lines: we
@@ -860,14 +725,6 @@ named `run` that will hold all of the logic currently in the `main` function
 that isn't setting up configuration or handling errors. Once we're done, `main`
 will be concise and easy to verify by inspection, and we'll be able to write
 tests for all of the other logic.
-
-<!-- it contains ALL the function from main? Can you say why we're doing this,
-hw this improves it? What is the run function doing? I'm afraid I feel a bit in
-the dark here-->
-<!-- This is the pattern that we explained in the Separation of Concerns for
-Binary Projects section. I've added a reference back to that and reiterated
-some of the reasoning from there, but this section isn't introducing the
-concept of the `run` function holding the logic that was in `main` /Carol -->
 
 Listing 12-11 shows the extracted `run` function. For now, we're making only
 the small, incremental improvement of extracting the function and still
@@ -899,8 +756,6 @@ fn run(config: Config) {
 
 Listing 12-11: Extracting a `run` function containing the rest of the program
 logic
-
-<!-- Will add ghosting and wingdings in libreoffice /Carol -->
 
 The `run` function now contains all the remaining logic from `main` starting
 from reading the file. The `run` function takes the `Config` instance as an
@@ -937,15 +792,9 @@ fn run(config: Config) -> Result<(), Box<Error>> {
 
 Listing 12-12: Changing the `run` function to return `Result`
 
-<!-- Will add ghosting and wingdings in libreoffice /Carol -->
-
 We've made three big changes here. First, we're changing the return type of the
 `run` function to `Result<(), Box<Error>>`. This function previously returned
 the unit type, `()`, and we keep that as the value returned in the `Ok` case.
-
-<!-- is just the `Box` bit the trait object, or the whole `Box<Error>`
-syntax?-->
-<!-- The whole `Box<Error>` /Carol -->
 
 For our error type, we're using the *trait object* `Box<Error>` (and we've
 brought `std::error::Error` into scope with a `use` statement at the top).
@@ -1003,8 +852,6 @@ fn main() {
     }
 }
 ```
-
-<!-- Will add ghosting and wingdings in libreoffice /Carol -->
 
 We use `if let` to check whether `run` returns an `Err` value, rather than
 `unwrap_or_else`, and call `process::exit(1)` if it does. `run` doesn't return
@@ -1071,8 +918,6 @@ pub fn run(config: Config) -> Result<(), Box<Error>>{
 
 Listing 12-13: Moving `Config` and `run` into *src/lib.rs*
 
-<!-- Will add ghosting and wingdings in libreoffice /Carol -->
-
 We've made liberal use of `pub` here: on `Config`, its fields and its `new`
 method, and on the `run` function. We now have a library crate that has a
 public API that we can test.
@@ -1115,16 +960,8 @@ fn main() {
 
 Listing 12-14: Bringing the `greprs` crate into the scope of *src/main.rs*
 
-<!-- Will add ghosting and wingdings in libreoffice /Carol -->
-
 With that, all the functionality should be connected and should work. Give it a
 `cargo run` and make sure everything is wired up correctly.
-
-<!-- any tips for if they do find something is broken, main places to check? Or
-just "diff your file against the XXX file in the book's resources to check
-where it went wrong"? -->
-<!-- We think general troubleshooting tips should be something we cover in
-Chapter 1; the tips should apply to any example in the book /Carol -->
 
 Whew! That was a lot of work, but we've set ourselves up for success in the
 future. Now it's much easier to handle errors, and we've made our code more
@@ -1218,8 +1055,6 @@ fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
 
 Listing 12-16: Defining just enough of the `search` function that our test will
 compile
-
-<!-- Will add ghosting and wingdings in libreoffice /Carol -->
 
 Notice that we need an explicit lifetime `'a` defined in the signature of
 `search` and used with the `contents` argument and the return value. Remember
@@ -1317,19 +1152,10 @@ fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
 
 Listing 12-17: Iterating through each line in `contents`
 
-<!-- Will add wingdings in libreoffice /Carol -->
-
 The `lines` method returns an iterator. We'll be talking about iterators in
 depth in Chapter 13, but we've already seen this way of using an iterator in
 Listing 3-6, where we used a `for` loop with an iterator to run some code on
 each item in a collection.
-
-<!-- so what does `lines` do on its own, if we need to use it in a for loop to
-work? -->
-<!-- It does nothing on its own, it returns an iterator for you to do something
-with. Here, the thing we're doing with it is using it with a `for` loop. I'm
-not sure exactly what you're asking or how to make the text clearer, but I
-added a reference to where we've done this in the book previously. /Carol -->
 
 #### Searching Each Line for the Query
 
@@ -1352,8 +1178,6 @@ fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
 
 Listing 12-18: Adding functionality to see if the line contains the string in
 `query`
-
-<!-- Will add ghosting and wingdings in libreoffice /Carol -->
 
 #### Storing Matching Lines
 
@@ -1379,8 +1203,6 @@ fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
 ```
 
 Listing 12-19: Storing the lines that match so that we can return them
-
-<!-- Will add ghosting and wingdings in libreoffice /Carol -->
 
 Now the `search` function should be returning only the lines that contain
 `query`, and our test should pass. Let's run the tests:
@@ -1414,17 +1236,6 @@ but it isn't taking advantage of some useful features of iterators. We'll be
 coming back to this example in Chapter 13 where we'll explore iterators in
 detail and see how to improve it.
 
-<!-- If we aren't going into this here, maybe just keep it focused, there's a
-lot going on here as is -->
-<!-- The reason we mention refactoring here is that it's a key step in the TDD
-method that we were implicitly using before. Now that we've added text to the
-beginning of this section to explicitly mention that we're doing TDD and what
-the steps are, we want to address the "refactor" step. People who have some
-experience with Rust might also look at this example and wonder why we're not
-doing this in a different way, and be concerned that we're not teaching the
-best way possible. This paragraph reassures them that we know what we're doing
-and we're getting to the better way in Chapter 13. /Carol -->
-
 #### Using the `search` Function in the `run` Function
 
 Now that we have the `search` function working and tested, we need to actually
@@ -1448,8 +1259,6 @@ pub fn run(config: Config) -> Result<(), Box<Error>> {
     Ok(())
 }
 ```
-
-<!-- Will add ghosting and wingdings in libreoffice /Carol -->
 
 We're again using a `for` loop to get each line returned from `search`, and
 the code that we run for each line prints it out.
@@ -1507,14 +1316,6 @@ insensitive in that terminal session.
 First, let's add a new function that we will call when the environment variable
 is on.
 
-<!-- You mean, to turn the environment variable on? I'm not sure what we're
-doing here-->
-<!-- No, I'm not sure how this is unclear. We're adding a new function. We will
-call the new function when the user turns on the environment variable. Can you
-elaborate on what part of the above statement leads to the conclusion that the
-new function is going to turn the environment variable on? Can you suggest a
-rewording that makes the causality direction clearer? /Carol -->
-
 We're going to continue following the TDD process that we started doing in the
 last section, and the first step is again to write a failing test. We'll add a
 new test for the new case insensitive search function, and rename our old test
@@ -1559,8 +1360,6 @@ Trust me.";
     }
 }
 ```
-
-<!-- Will add ghosting and wingdings in libreoffice /Carol -->
 
 Listing 12-20: Adding a new failing test for the case insensitive function
 we're about to add
@@ -1609,18 +1408,6 @@ fn search_case_insensitive<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
 
 Listing 12-21: Defining the `search_case_insensitive` function to lowercase
 both the query and the line before comparing them
-
-<!-- Will add ghosting and wingdings in libreoffice /Carol -->
-
-<!-- why do we lowercase the search string? and why does it need to be a string
-rather than a slice? -->
-<!-- We explained this above, that in order to make the search case
-insensitive, we need to lowercase everything so that searches will always match
-no matter what case either the query or each line uses. It needs to be a
-`String` because we're creating new data, not referencing existing data, when
-we call `to_lowercase`. I've tried to make both of these points clearer, but
-I'm not sure exactly what was unclear about it before, so I'm not sure if I've
-helped. /Carol -->
 
 First, we lowercase the `query` string, and store it in a shadowed variable
 with the same name. Calling `to_lowercase` on the query is necessary so that no
@@ -1681,8 +1468,6 @@ pub struct Config {
 }
 ```
 
-<!-- Will add ghosting in libreoffice /Carol -->
-
 We add the `case_sensitive` field that holds a boolean. Then we need our `run`
 function to check the `case_sensitive` field's value and use that to decide
 whether to call the `search` function or the `search_case_insensitive` function
@@ -1713,8 +1498,6 @@ pub fn run(config: Config) -> Result<(), Box<Error>>{
 
 Listing 12-22: Calling either `search` or `search_case_insensitive` based on
 the value in `config.case_sensitive`
-
-<!-- Will add ghosting in libreoffice /Carol -->
 
 Finally, we need to actually check for the environment variable. The functions
 for working with environment variables are in the `env` module in the standard
@@ -1751,8 +1534,6 @@ impl Config {
 ```
 
 Listing 12-23: Checking for an environment variable named `CASE_INSENSITIVE`
-
-<!-- Will add ghosting and wingdings in libreoffice /Carol -->
 
 Here, we create a new variable `case_sensitive`. In order to set its value, we
 call the `env::var` function and pass it the name of the environment variable
@@ -1837,13 +1618,6 @@ standard out to:
 $ cargo run > output.txt
 ```
 
-<!-- why do we get an error here? Was that intentional? Does that mean it can't
-print stdout to a file? -->
-<!-- Yes, we're intentionally causing an error here to show that errors are
-currently going to the wrong place. It's showing that `println!` only prints
-to standard out, even when we're printing error messages that should go
-to standard error. /Carol-->
-
 The `>` syntax tells the shell to write the contents of standard out to
 *output.txt* instead of the screen. We didn't see the error message we were
 expecting printed on the screen, so that means it must have ended up in the
@@ -1852,15 +1626,6 @@ file. Let's see what *output.txt* contains:
 ```
 Problem parsing arguments: not enough arguments
 ```
-
-<!-- I don't understand why we send this output to a file to then just say we
-want it to the screen, won't it do that by default? And what has this got to do
-with our use of println? I'm finding the motives here hard to follow -->
-<!-- The point of showing this is to demonstrate that our program is NOT doing
-the correct thing by default, we need to change the places we're calling
-`println!` with error messages to print to standard error instead. When to use
-stdout vs. stderr, and why you might want to redirect stdout but not stderr,
-is something our readers will be familiar with. /Carol -->
 
 Yup, there's our error message, which means it's being printed to standard out.
 This isn't what's expected from command line programs. It's much more useful
@@ -1908,8 +1673,6 @@ fn main() {
 
 Listing 12-23: Writing error messages to `stderr` instead of `stdout` using
 `writeln!`
-
-<!-- Will add ghosting and wingdings in libreoffice /Carol -->
 
 Rust does not have a convenient function like `println!` for writing to
 standard error. Instead, we use the `writeln!` macro, which is like `println!`

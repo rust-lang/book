@@ -88,8 +88,6 @@ fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
 <span class="caption">Listing 12-16: Defining just enough of the `search`
 function that our test will compile</span>
 
-<!-- Will add ghosting and wingdings in libreoffice /Carol -->
-
 Notice that we need an explicit lifetime `'a` defined in the signature of
 `search` and used with the `contents` argument and the return value. Remember
 from Chapter 10 that the lifetime parameters specify which argument lifetime is
@@ -187,19 +185,10 @@ fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
 <span class="caption">Listing 12-17: Iterating through each line in
 `contents`</span>
 
-<!-- Will add wingdings in libreoffice /Carol -->
-
 The `lines` method returns an iterator. We'll be talking about iterators in
 depth in Chapter 13, but we've already seen this way of using an iterator in
 Listing 3-6, where we used a `for` loop with an iterator to run some code on
 each item in a collection.
-
-<!-- so what does `lines` do on its own, if we need to use it in a for loop to
-work? -->
-<!-- It does nothing on its own, it returns an iterator for you to do something
-with. Here, the thing we're doing with it is using it with a `for` loop. I'm
-not sure exactly what you're asking or how to make the text clearer, but I
-added a reference to where we've done this in the book previously. /Carol -->
 
 #### Searching Each Line for the Query
 
@@ -222,8 +211,6 @@ fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
 
 <span class="caption">Listing 12-18: Adding functionality to see if the line
 contains the string in `query`</span>
-
-<!-- Will add ghosting and wingdings in libreoffice /Carol -->
 
 #### Storing Matching Lines
 
@@ -250,8 +237,6 @@ fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
 
 <span class="caption">Listing 12-19: Storing the lines that match so that we
 can return them</span>
-
-<!-- Will add ghosting and wingdings in libreoffice /Carol -->
 
 Now the `search` function should be returning only the lines that contain
 `query`, and our test should pass. Let's run the tests:
@@ -285,17 +270,6 @@ but it isn't taking advantage of some useful features of iterators. We'll be
 coming back to this example in Chapter 13 where we'll explore iterators in
 detail and see how to improve it.
 
-<!-- If we aren't going into this here, maybe just keep it focused, there's a
-lot going on here as is -->
-<!-- The reason we mention refactoring here is that it's a key step in the TDD
-method that we were implicitly using before. Now that we've added text to the
-beginning of this section to explicitly mention that we're doing TDD and what
-the steps are, we want to address the "refactor" step. People who have some
-experience with Rust might also look at this example and wonder why we're not
-doing this in a different way, and be concerned that we're not teaching the
-best way possible. This paragraph reassures them that we know what we're doing
-and we're getting to the better way in Chapter 13. /Carol -->
-
 #### Using the `search` Function in the `run` Function
 
 Now that we have the `search` function working and tested, we need to actually
@@ -319,8 +293,6 @@ pub fn run(config: Config) -> Result<(), Box<Error>> {
     Ok(())
 }
 ```
-
-<!-- Will add ghosting and wingdings in libreoffice /Carol -->
 
 We're again using a `for` loop to get each line returned from `search`, and
 the code that we run for each line prints it out.

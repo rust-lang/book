@@ -1,19 +1,5 @@
 # An I/O Project Building a Small Grep
 
-<!-- We might need a more descriptive title, something that captures the new
-elements we're introducing -- are we going to cover things like environment
-variables more in later chapters, or is this the only place we explain how to
-use them? -->
-
-<!-- This is the only place we were planning on explaining both environment
-variables and printing to standard error. These are things that people commonly
-want to know how to do in Rust, but there's not much more than what we've said
-here about them, people just want to know how to do them in Rust. We realize
-that those sections make this chapter long, but think it's worth it to include
-information that people want. We've gotten really positive feedback from people
-who have read this chapter online; people who like learning through projects
-have really enjoyed this chapter. /Carol-->
-
 This chapter is both a recap of the many skills you've learned so far and an
 exploration of a few more standard library features. We're going to build a
 command-line tool that interacts with file and command line input/output to
