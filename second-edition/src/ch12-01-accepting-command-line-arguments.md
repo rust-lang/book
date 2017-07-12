@@ -1,6 +1,6 @@
 ## Accepting Command Line Arguments
 
-Our first task is to make `greprs` able to accept its two command line
+Our first task is to make `minigrep` able to accept its two command line
 arguments: the filename and a string to search for. That is, we want to be able
 to run our program with `cargo run`, a string to search for, and a path to a
 file to search in, like so:
@@ -28,7 +28,7 @@ to know two things about iterators:
    containing all of the elements the iterator produces.
 
 Let's give it a try: use the code in Listing 12-1 to read any command line
-arguments passed to our `greprs` program and collect them into a vector.
+arguments passed to our `minigrep` program and collect them into a vector.
 
 
 <span class="filename">Filename: src/main.rs</span>
@@ -74,14 +74,14 @@ running our code with no arguments, and then with two arguments:
 
 ```text
 $ cargo run
-["target/debug/greprs"]
+["target/debug/minigrep"]
 
 $ cargo run needle haystack
 ...snip...
-["target/debug/greprs", "needle", "haystack"]
+["target/debug/minigrep", "needle", "haystack"]
 ```
 
-You may notice that the first value in the vector is "target/debug/greprs",
+You may notice that the first value in the vector is "target/debug/minigrep",
 which is the name of our binary. The reasons for this are out of the scope of
 this chapter, but we'll need to remember this as we save the two arguments we
 need.
@@ -114,7 +114,7 @@ Listing 12-2: Create variables to hold the query argument and filename argument
 
 As we saw when we printed out the vector, the program's name takes up the first
 value in the vector at `args[0]`, so we're starting at index `1`. The first
-argument `greprs` takes is the string we're searching for, so we put a
+argument `minigrep` takes is the string we're searching for, so we put a
 reference to the first argument in the variable `query`. The second argument
 will be the filename, so we put a reference to the second argument in the
 variable `filename`.
@@ -126,7 +126,7 @@ again with the arguments `test` and `sample.txt`:
 ```text
 $ cargo run test sample.txt
     Finished dev [unoptimized + debuginfo] target(s) in 0.0 secs
-     Running `target/debug/greprs test sample.txt`
+     Running `target/debug/minigrep test sample.txt`
 Searching for test
 In file sample.txt
 ```

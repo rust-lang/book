@@ -21,7 +21,7 @@ This is just one of many ways to write software, but TDD can help drive the
 design of code. Writing the test before writing the code that makes the test
 pass helps to maintain high test coverage throughout the process.
 
-We're going to test drive the implementation of the part of our `greprs`
+We're going to test drive the implementation of the part of our `minigrep`
 program that will actually do the searching for the query string in the file
 contents and produce a list of lines that match the query. We're going to add
 this functionality in a function called `search`.
@@ -131,7 +131,7 @@ Now let's try running our test:
 $ cargo test
 ...warnings...
     Finished dev [unoptimized + debuginfo] target(s) in 0.43 secs
-     Running target/debug/deps/greprs-abcabcabc
+     Running target/debug/deps/minigrep-abcabcabc
 
 running 1 test
 test test::one_result ... FAILED
@@ -248,13 +248,13 @@ test test::one_result ... ok
 
 test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured
 
-     Running target/debug/greprs-2f55ee8cd1721808
+     Running target/debug/minigrep-2f55ee8cd1721808
 
 running 0 tests
 
 test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured
 
-   Doc-tests greprs
+   Doc-tests minigrep
 
 running 0 tests
 
@@ -302,9 +302,9 @@ that should return exactly one line from the Emily Dickinson poem, "frog":
 
 ```text
 $ cargo run frog poem.txt
-   Compiling greprs v0.1.0 (file:///projects/greprs)
+   Compiling minigrep v0.1.0 (file:///projects/minigrep)
     Finished dev [unoptimized + debuginfo] target(s) in 0.38 secs
-     Running `target/debug/greprs frog poem.txt`
+     Running `target/debug/minigrep frog poem.txt`
 How public, like a frog
 ```
 
@@ -313,7 +313,7 @@ Cool! Next, how about a word that will match multiple lines, like "the":
 ```text
 $ cargo run the poem.txt
     Finished dev [unoptimized + debuginfo] target(s) in 0.0 secs
-     Running `target/debug/greprs the poem.txt`
+     Running `target/debug/minigrep the poem.txt`
 Then there's a pair of us — don't tell!
 To tell your name the livelong day
 ```
@@ -324,7 +324,7 @@ word that isn't anywhere in the poem, like "monomorphization":
 ```text
 $ cargo run monomorphization poem.txt
     Finished dev [unoptimized + debuginfo] target(s) in 0.0 secs
-     Running `target/debug/greprs monomorphization poem.txt`
+     Running `target/debug/minigrep monomorphization poem.txt`
 ```
 
 Excellent! We've built our own version of a classic tool, and learned a lot

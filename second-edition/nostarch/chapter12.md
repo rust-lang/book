@@ -42,18 +42,18 @@ We'll also briefly introduce closures, iterators, and trait objects, which
 Chapters 13 and 17 will cover in detail.
 
 Let's create a new project with, as always, `cargo new`. We're calling our
-project `greprs` to distinguish from the `grep` tool that you may already have
+project `minigrep` to distinguish from the `grep` tool that you may already have
 on your system:
 
 ```
-$ cargo new --bin greprs
-     Created binary (application) `greprs` project
-$ cd greprs
+$ cargo new --bin minigrep
+     Created binary (application) `minigrep` project
+$ cd minigrep
 ```
 
 ## Accepting Command Line Arguments
 
-Our first task is to make `greprs` able to accept its two command line
+Our first task is to make `minigrep` able to accept its two command line
 arguments: the filename and a string to search for. That is, we want to be able
 to run our program with `cargo run`, a string to search for, and a path to a
 file to search in, like so:
@@ -81,7 +81,7 @@ to know two things about iterators:
    containing all of the elements the iterator produces.
 
 Let's give it a try: use the code in Listing 12-1 to read any command line
-arguments passed to our `greprs` program and collect them into a vector.
+arguments passed to our `minigrep` program and collect them into a vector.
 
 Filename: src/main.rs
 
@@ -126,14 +126,14 @@ running our code with no arguments, and then with two arguments:
 
 ```
 $ cargo run
-["target/debug/greprs"]
+["target/debug/minigrep"]
 
 $ cargo run needle haystack
 ...snip...
-["target/debug/greprs", "needle", "haystack"]
+["target/debug/minigrep", "needle", "haystack"]
 ```
 
-You may notice that the first value in the vector is "target/debug/greprs",
+You may notice that the first value in the vector is "target/debug/minigrep",
 which is the name of our binary. The reasons for this are out of the scope of
 this chapter, but we'll need to remember this as we save the two arguments we
 need.
@@ -166,7 +166,7 @@ Listing 12-2: Create variables to hold the query argument and filename argument
 
 As we saw when we printed out the vector, the program's name takes up the first
 value in the vector at `args[0]`, so we're starting at index `1`. The first
-argument `greprs` takes is the string we're searching for, so we put a
+argument `minigrep` takes is the string we're searching for, so we put a
 reference to the first argument in the variable `query`. The second argument
 will be the filename, so we put a reference to the second argument in the
 variable `filename`.
@@ -178,7 +178,7 @@ again with the arguments `test` and `sample.txt`:
 ```
 $ cargo run test sample.txt
     Finished dev [unoptimized + debuginfo] target(s) in 0.0 secs
-     Running `target/debug/greprs test sample.txt`
+     Running `target/debug/minigrep test sample.txt`
 Searching for test
 In file sample.txt
 ```
@@ -192,7 +192,7 @@ ignore that and work on adding file reading capabilities instead.
 
 Next, we're going to read the file that we specify in the filename command line
 argument. First, we need a sample file to test it with---the best kind of file
-to use to make sure that `greprs` is working is one with a small amount of text
+to use to make sure that `minigrep` is working is one with a small amount of text
 over multiple lines with some repeated words. Listing 12-3 has an Emily
 Dickinson poem that will work well! Create a file called `poem.txt` at the root
 level of your project, and enter the poem "I'm nobody! Who are you?":
@@ -270,7 +270,7 @@ as the second argument:
 ```
 $ cargo run the poem.txt
     Finished dev [unoptimized + debuginfo] target(s) in 0.0 secs
-     Running `target/debug/greprs the poem.txt`
+     Running `target/debug/minigrep the poem.txt`
 Searching for the
 In file poem.txt
 With text:
@@ -554,7 +554,7 @@ running the program without any arguments; it will look like this:
 ```
 $ cargo run
     Finished dev [unoptimized + debuginfo] target(s) in 0.0 secs
-     Running `target/debug/greprs`
+     Running `target/debug/minigrep`
 thread 'main' panicked at 'index out of bounds: the len is 1
 but the index is 1',  /stable-dist-rustc/build/src/libcollections/vec.rs:1307
 note: Run with `RUST_BACKTRACE=1` for a backtrace.
@@ -598,7 +598,7 @@ without any arguments again and see what the error looks like now:
 ```
 $ cargo run
     Finished dev [unoptimized + debuginfo] target(s) in 0.0 secs
-     Running `target/debug/greprs`
+     Running `target/debug/minigrep`
 thread 'main' panicked at 'not enough arguments', src/main.rs:29
 note: Run with `RUST_BACKTRACE=1` for a backtrace.
 ```
@@ -708,9 +708,9 @@ the extra output. Let's try it:
 
 ```
 $ cargo run
-   Compiling greprs v0.1.0 (file:///projects/greprs)
+   Compiling minigrep v0.1.0 (file:///projects/minigrep)
     Finished dev [unoptimized + debuginfo] target(s) in 0.48 secs
-     Running `target/debug/greprs`
+     Running `target/debug/minigrep`
 Problem parsing arguments: not enough arguments
 ```
 
@@ -925,19 +925,19 @@ public API that we can test.
 #### Calling the Library Crate from the Binary Crate
 
 Now we need to bring the code we moved to *src/lib.rs* into the scope of the
-binary crate in *src/main.rs* by using `extern crate greprs`. Then we'll add a
-`use greprs::Config` line to bring the `Config` type into scope, and prefix the
+binary crate in *src/main.rs* by using `extern crate minigrep`. Then we'll add a
+`use minigrep::Config` line to bring the `Config` type into scope, and prefix the
 `run` function with our crate name as shown in Listing 12-14:
 
 Filename: src/main.rs
 
 ```
-extern crate greprs;
+extern crate minigrep;
 
 use std::env;
 use std::process;
 
-use greprs::Config;
+use minigrep::Config;
 
 fn main() {
     let args: Vec<String> = env::args().collect();
@@ -950,7 +950,7 @@ fn main() {
     println!("Searching for {}", config.query);
     println!("In file {}", config.filename);
 
-    if let Err(e) = greprs::run(config) {
+    if let Err(e) = minigrep::run(config) {
         println!("Application error: {}", e);
 
         process::exit(1);
@@ -958,7 +958,7 @@ fn main() {
 }
 ```
 
-Listing 12-14: Bringing the `greprs` crate into the scope of *src/main.rs*
+Listing 12-14: Bringing the `minigrep` crate into the scope of *src/main.rs*
 
 With that, all the functionality should be connected and should work. Give it a
 `cargo run` and make sure everything is wired up correctly.
@@ -994,7 +994,7 @@ This is just one of many ways to write software, but TDD can help drive the
 design of code. Writing the test before writing the code that makes the test
 pass helps to maintain high test coverage throughout the process.
 
-We're going to test drive the implementation of the part of our `greprs`
+We're going to test drive the implementation of the part of our `minigrep`
 program that will actually do the searching for the query string in the file
 contents and produce a list of lines that match the query. We're going to add
 this functionality in a function called `search`.
@@ -1099,7 +1099,7 @@ Now let's try running our test:
 $ cargo test
 ...warnings...
     Finished dev [unoptimized + debuginfo] target(s) in 0.43 secs
-     Running target/debug/deps/greprs-abcabcabc
+     Running target/debug/deps/minigrep-abcabcabc
 
 running 1 test
 test test::one_result ... FAILED
@@ -1214,13 +1214,13 @@ test test::one_result ... ok
 
 test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured
 
-     Running target/debug/greprs-2f55ee8cd1721808
+     Running target/debug/minigrep-2f55ee8cd1721808
 
 running 0 tests
 
 test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured
 
-   Doc-tests greprs
+   Doc-tests minigrep
 
 running 0 tests
 
@@ -1268,9 +1268,9 @@ that should return exactly one line from the Emily Dickinson poem, "frog":
 
 ```
 $ cargo run frog poem.txt
-   Compiling greprs v0.1.0 (file:///projects/greprs)
+   Compiling minigrep v0.1.0 (file:///projects/minigrep)
     Finished dev [unoptimized + debuginfo] target(s) in 0.38 secs
-     Running `target/debug/greprs frog poem.txt`
+     Running `target/debug/minigrep frog poem.txt`
 How public, like a frog
 ```
 
@@ -1279,7 +1279,7 @@ Cool! Next, how about a word that will match multiple lines, like "the":
 ```
 $ cargo run the poem.txt
     Finished dev [unoptimized + debuginfo] target(s) in 0.0 secs
-     Running `target/debug/greprs the poem.txt`
+     Running `target/debug/minigrep the poem.txt`
 Then there's a pair of us — don't tell!
 To tell your name the livelong day
 ```
@@ -1290,7 +1290,7 @@ word that isn't anywhere in the poem, like "monomorphization":
 ```
 $ cargo run monomorphization poem.txt
     Finished dev [unoptimized + debuginfo] target(s) in 0.0 secs
-     Running `target/debug/greprs monomorphization poem.txt`
+     Running `target/debug/minigrep monomorphization poem.txt`
 ```
 
 Excellent! We've built our own version of a classic tool, and learned a lot
@@ -1432,7 +1432,7 @@ Let's see if this implementation passes the tests:
 
 ```
     Finished dev [unoptimized + debuginfo] target(s) in 0.0 secs
-     Running target/debug/deps/greprs-e58e9b12d35dc861
+     Running target/debug/deps/minigrep-e58e9b12d35dc861
 
 running 2 tests
 test test::case_insensitive ... ok
@@ -1440,13 +1440,13 @@ test test::case_sensitive ... ok
 
 test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured
 
-     Running target/debug/greprs-8a7faa2662b5030a
+     Running target/debug/minigrep-8a7faa2662b5030a
 
 running 0 tests
 
 test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured
 
-   Doc-tests greprs
+   Doc-tests minigrep
 
 running 0 tests
 
@@ -1558,7 +1558,7 @@ the word "to" in all lowercase:
 ```
 $ cargo run to poem.txt
     Finished dev [unoptimized + debuginfo] target(s) in 0.0 secs
-     Running `target/debug/greprs to poem.txt`
+     Running `target/debug/minigrep to poem.txt`
 Are you nobody, too?
 How dreary to be somebody!
 ```
@@ -1570,14 +1570,14 @@ set to 1 but with the same query "to", and we should get lines that contain
 ```
 $ CASE_INSENSITIVE=1 cargo run to poem.txt
     Finished dev [unoptimized + debuginfo] target(s) in 0.0 secs
-     Running `target/debug/greprs to poem.txt`
+     Running `target/debug/minigrep to poem.txt`
 Are you nobody, too?
 How dreary to be somebody!
 To tell your name the livelong day
 To an admiring bog!
 ```
 
-Excellent, we also got lines containing "To"! Our `greprs` program can now do
+Excellent, we also got lines containing "To"! Our `minigrep` program can now do
 case insensitive searching, controlled by an environment variable. Now you know
 how to manage options set using either command line arguments or environment
 variables!
@@ -1603,7 +1603,7 @@ messages to the screen, for example. `println!` is only capable of printing to
 standard out, though, so we have to use something else in order to print to
 standard error.
 
-We can verify that, the way we've written `greprs` so far, everything is being
+We can verify that, the way we've written `minigrep` so far, everything is being
 written to standard out, including error messages that should be written to
 standard error instead. We'll do that by intentionally causing an error, the
 one that happens when we run the program without any arguments. We're going to
@@ -1638,13 +1638,13 @@ chapter, all of the code that prints error messages is in one place, in `main`:
 Filename: src/main.rs
 
 ```
-extern crate greprs;
+extern crate minigrep;
 
 use std::env;
 use std::process;
 use std::io::prelude::*;
 
-use greprs::Config;
+use minigrep::Config;
 
 fn main() {
     let args: Vec<String> = env::args().collect();
@@ -1659,7 +1659,7 @@ fn main() {
         process::exit(1);
     });
 
-    if let Err(e) = greprs::run(config) {
+    if let Err(e) = minigrep::run(config) {
         writeln!(
             &mut stderr,
             "Application error: {}",

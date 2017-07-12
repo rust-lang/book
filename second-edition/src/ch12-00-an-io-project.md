@@ -39,11 +39,11 @@ We'll also briefly introduce closures, iterators, and trait objects, which
 Chapters 13 and 17 will cover in detail.
 
 Let's create a new project with, as always, `cargo new`. We're calling our
-project `greprs` to distinguish from the `grep` tool that you may already have
+project `minigrep` to distinguish from the `grep` tool that you may already have
 on your system:
 
 ```text
-$ cargo new --bin greprs
-     Created binary (application) `greprs` project
-$ cd greprs
+$ cargo new --bin minigrep
+     Created binary (application) `minigrep` project
+$ cd minigrep
 ```

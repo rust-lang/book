@@ -271,7 +271,7 @@ running the program without any arguments; it will look like this:
 ```text
 $ cargo run
     Finished dev [unoptimized + debuginfo] target(s) in 0.0 secs
-     Running `target/debug/greprs`
+     Running `target/debug/minigrep`
 thread 'main' panicked at 'index out of bounds: the len is 1
 but the index is 1',  /stable-dist-rustc/build/src/libcollections/vec.rs:1307
 note: Run with `RUST_BACKTRACE=1` for a backtrace.
@@ -316,7 +316,7 @@ without any arguments again and see what the error looks like now:
 ```bash
 $ cargo run
     Finished dev [unoptimized + debuginfo] target(s) in 0.0 secs
-     Running `target/debug/greprs`
+     Running `target/debug/minigrep`
 thread 'main' panicked at 'not enough arguments', src/main.rs:29
 note: Run with `RUST_BACKTRACE=1` for a backtrace.
 ```
@@ -427,9 +427,9 @@ the extra output. Let's try it:
 
 ```text
 $ cargo run
-   Compiling greprs v0.1.0 (file:///projects/greprs)
+   Compiling minigrep v0.1.0 (file:///projects/minigrep)
     Finished dev [unoptimized + debuginfo] target(s) in 0.48 secs
-     Running `target/debug/greprs`
+     Running `target/debug/minigrep`
 Problem parsing arguments: not enough arguments
 ```
 
@@ -646,19 +646,19 @@ public API that we can test.
 #### Calling the Library Crate from the Binary Crate
 
 Now we need to bring the code we moved to *src/lib.rs* into the scope of the
-binary crate in *src/main.rs* by using `extern crate greprs`. Then we'll add a
-`use greprs::Config` line to bring the `Config` type into scope, and prefix the
+binary crate in *src/main.rs* by using `extern crate minigrep`. Then we'll add a
+`use minigrep::Config` line to bring the `Config` type into scope, and prefix the
 `run` function with our crate name as shown in Listing 12-14:
 
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore
-extern crate greprs;
+extern crate minigrep;
 
 use std::env;
 use std::process;
 
-use greprs::Config;
+use minigrep::Config;
 
 fn main() {
     let args: Vec<String> = env::args().collect();
@@ -671,7 +671,7 @@ fn main() {
     println!("Searching for {}", config.query);
     println!("In file {}", config.filename);
 
-    if let Err(e) = greprs::run(config) {
+    if let Err(e) = minigrep::run(config) {
         println!("Application error: {}", e);
 
         process::exit(1);
@@ -679,7 +679,7 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 12-14: Bringing the `greprs` crate into the scope
+<span class="caption">Listing 12-14: Bringing the `minigrep` crate into the scope
 of *src/main.rs*</span>
 
 With that, all the functionality should be connected and should work. Give it a

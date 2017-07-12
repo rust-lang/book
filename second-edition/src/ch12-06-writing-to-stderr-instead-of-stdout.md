@@ -9,7 +9,7 @@ messages to the screen, for example. `println!` is only capable of printing to
 standard out, though, so we have to use something else in order to print to
 standard error.
 
-We can verify that, the way we've written `greprs` so far, everything is being
+We can verify that, the way we've written `minigrep` so far, everything is being
 written to standard out, including error messages that should be written to
 standard error instead. We'll do that by intentionally causing an error, the
 one that happens when we run the program without any arguments. We're going to
@@ -44,13 +44,13 @@ chapter, all of the code that prints error messages is in one place, in `main`:
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore
-extern crate greprs;
+extern crate minigrep;
 
 use std::env;
 use std::process;
 use std::io::prelude::*;
 
-use greprs::Config;
+use minigrep::Config;
 
 fn main() {
     let args: Vec<String> = env::args().collect();
@@ -65,7 +65,7 @@ fn main() {
         process::exit(1);
     });
 
-    if let Err(e) = greprs::run(config) {
+    if let Err(e) = minigrep::run(config) {
         writeln!(
             &mut stderr,
             "Application error: {}",

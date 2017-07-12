@@ -128,7 +128,7 @@ Let's see if this implementation passes the tests:
 
 ```text
     Finished dev [unoptimized + debuginfo] target(s) in 0.0 secs
-     Running target/debug/deps/greprs-e58e9b12d35dc861
+     Running target/debug/deps/minigrep-e58e9b12d35dc861
 
 running 2 tests
 test test::case_insensitive ... ok
@@ -136,13 +136,13 @@ test test::case_sensitive ... ok
 
 test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured
 
-     Running target/debug/greprs-8a7faa2662b5030a
+     Running target/debug/minigrep-8a7faa2662b5030a
 
 running 0 tests
 
 test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured
 
-   Doc-tests greprs
+   Doc-tests minigrep
 
 running 0 tests
 
@@ -278,7 +278,7 @@ the word "to" in all lowercase:
 ```text
 $ cargo run to poem.txt
     Finished dev [unoptimized + debuginfo] target(s) in 0.0 secs
-     Running `target/debug/greprs to poem.txt`
+     Running `target/debug/minigrep to poem.txt`
 Are you nobody, too?
 How dreary to be somebody!
 ```
@@ -290,14 +290,14 @@ set to 1 but with the same query "to", and we should get lines that contain
 ```text
 $ CASE_INSENSITIVE=1 cargo run to poem.txt
     Finished dev [unoptimized + debuginfo] target(s) in 0.0 secs
-     Running `target/debug/greprs to poem.txt`
+     Running `target/debug/minigrep to poem.txt`
 Are you nobody, too?
 How dreary to be somebody!
 To tell your name the livelong day
 To an admiring bog!
 ```
 
-Excellent, we also got lines containing "To"! Our `greprs` program can now do
+Excellent, we also got lines containing "To"! Our `minigrep` program can now do
 case insensitive searching, controlled by an environment variable. Now you know
 how to manage options set using either command line arguments or environment
 variables!

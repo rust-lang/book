@@ -2,7 +2,7 @@
 
 Next, we're going to read the file that we specify in the filename command line
 argument. First, we need a sample file to test it with---the best kind of file
-to use to make sure that `greprs` is working is one with a small amount of text
+to use to make sure that `minigrep` is working is one with a small amount of text
 over multiple lines with some repeated words. Listing 12-3 has an Emily
 Dickinson poem that will work well! Create a file called `poem.txt` at the root
 level of your project, and enter the poem "I'm nobody! Who are you?":
@@ -80,7 +80,7 @@ as the second argument:
 ```text
 $ cargo run the poem.txt
     Finished dev [unoptimized + debuginfo] target(s) in 0.0 secs
-     Running `target/debug/greprs the poem.txt`
+     Running `target/debug/minigrep the poem.txt`
 Searching for the
 In file poem.txt
 With text:

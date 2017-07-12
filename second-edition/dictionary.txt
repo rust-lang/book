@@ -127,7 +127,6 @@ GitHub
 gitignore
 grapheme
 Grapheme
-greprs
 growable
 gzip
 hardcode
@@ -192,6 +191,7 @@ Metadata
 metaprogramming
 mibbit
 Mibbit
+minigrep
 mixup
 mkdir
 modifiability
