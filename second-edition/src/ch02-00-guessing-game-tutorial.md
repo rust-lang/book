@@ -337,7 +337,7 @@ usando `cargo run`.
 
 ```text
 $ cargo run
-   Compiling guessing_game v0.1.0 (file:///proyectos/adivinanza)
+   Compiling adivinanza v0.1.0 (file:///proyectos/adivinanza)
      Running `target/debug/adivinanza`
 ¡Adivina el número!
 Por favor escribe una suposición.
@@ -402,7 +402,7 @@ $ cargo build
  Downloading libc v0.2.14
    Compiling libc v0.2.14
    Compiling rand v0.3.14
-   Compiling guessing_game v0.1.0 (file:///proyectos/adivinanza)
+   Compiling adivinanza v0.1.0 (file:///proyectos/adivinanza)
 ```
 
 <span class="caption">Código 2-2: El resultado de ejecutar `cargo build` tras
@@ -419,29 +419,32 @@ de software libre, para que otros desarrollares los reutilicen.
 
 [cratesio]: https://crates.io
 
-After updating the registry, Cargo checks the `[dependencies]` section and
-downloads any you don’t have yet. In this case, although we only listed `rand`
-as a dependency, Cargo also grabbed a copy of `libc`, because `rand` depends on
-`libc` to work. After downloading them, Rust compiles them and then compiles
-the project with the dependencies available.
+Tras actualizar el registro, Cargo comprueba la sección de `[dependencias]` y
+descarga las que no estan aún en el proyecto. En este caso, aunque sólo hemos
+puesto `rand` como dependencia, Cargo también descarga una copia de `libc`, ya
+que `rand` necesita la librería `libc` para funcionar. Tras la descarga, Rust
+compila las librerías y después compila el proyecto completo junto con las
+dependencias disponibles.
 
-If you immediately run `cargo build` again without making any changes, you won’t
-get any output. Cargo knows it has already downloaded and compiled the
-dependencies, and you haven't changed anything about them in your *Cargo.toml*
-file. Cargo also knows that you haven't changed anything about your code, so it
-doesn't recompile that either. With nothing to do, it simply exits. If you open
-up the *src/main.rs* file, make a trivial change, then save it and build again,
-you’ll only see one line of output:
+Si ejecutas directamente `cargo build` de nuevo sin hacer ningún cambio, no 
+aparecerá nada en la consola. Cargo sabe que ha descargado y compilado las 
+dependencias, y que no has hecho cambios en el archivo *Cargo.toml*. Cargo
+también sabe que no has tocado nada en tu código, por lo que no necesita
+volver a compilarlo. Sin más por hacer, la ejecución simplemente acaba. Si por
+ejemplo abres el archivo *src/main.rs* y realizar cualquier pequeño cambio, lo
+guardas, y vuelves a compilar, verás una sola línea en la consola:
+
 
 ```text
 $ cargo build
-   Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
+   Compiling adivinanza v0.1.0 (file:///proyectos/adivinanza)
 ```
 
-This line shows Cargo only updates the build with your tiny change to the
-*src/main.rs* file. Your dependencies haven't changed, so Cargo knows it can
-reuse what it has already downloaded and compiled for those. It just rebuilds
-your part of the code.
+Esta línea muestra que Cargo sólamente realiza una compilación tras tu ligero
+cambio en el archivo *src/main.rs*. Las dependencias no han cambiado, así que
+que Cargo puede reutilizar lo que ya ha descargado y compilado previamente.
+Simplemente vuelve a compilar tus cambios en el código.
+
 
 #### The *Cargo.lock* File Ensures Reproducible Builds
 
