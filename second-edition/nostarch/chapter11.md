@@ -1,11 +1,10 @@
 
 [TOC]
 
-# Testing
+# Writing Automated Tests
 
 > Program testing can be a very effective way to show the presence of bugs, but
 > it is hopelessly inadequate for showing their absence.
->
 > Edsger W. Dijkstra, “The Humble Programmer” (1972)
 
 Correctness in our programs means that our code does what we intend for it to
@@ -15,15 +14,15 @@ shoulders a huge part of this burden, but the type system cannot catch every
 kind of incorrectness. As such, Rust includes support for writing software
 tests within the language itself.
 
-As an example, say we write a function called `add_two` that adds two to a
-number passed to it. This function’s signature accepts an integer as a
-parameter and returns an integer as a result. When we implement and compile
-that function, Rust will do all the type checking and borrow checking that
-we’ve seen so far. Those checks will make sure that, for instance, we aren’t
-passing a `String` value or an invalid reference to this function. What Rust
-*can’t* check is that this function will do precisely what we intend: return
-the parameter plus two, rather than, say, the parameter plus 10 or the
-parameter minus 50! That’s where tests come in.
+As an example, say we write a function called `add_two` that adds two to
+whatever number is passed to it. This function’s signature accepts an integer
+as a parameter and returns an integer as a result. When we implement and
+compile that function, Rust will do all the type checking and borrow checking
+that we’ve seen so far to make sure that, for instance, we aren’t passing a
+`String` value or an invalid reference to this function. What Rust *can’t*
+check is that this function will do precisely what we intend: return the
+parameter plus two, rather than, say, the parameter plus 10 or the parameter
+minus 50! That’s where tests come in.
 
 We can write tests that assert, for example, that when we pass `3` to the
 `add_two` function, we get `5` back. We can run these tests whenever we make
@@ -38,12 +37,12 @@ tests and integration tests.
 
 ## How to Write Tests
 
-Tests are Rust functions that verify non-test code is functioning in the
-program in the expected manner. The bodies of test functions typically contain
-some setup, running the code we want to test, then asserting that the results
-are what we expect. Let’s look at the features Rust provides specifically for
-writing tests: the `test` attribute, a few macros, and the `should_panic`
-attribute.
+Tests are Rust functions that verify that the non-test code in the program is
+functioning in the expected manner. The bodies of test functions typically run
+some setup code, then run the code we want to test, then assert whether the
+results are what we expect. Let’s look at the features Rust provides
+specifically for writing tests: the `test` attribute, a few macros, and the
+`should_panic` attribute.
 
 ### The Anatomy of a Test Function
 
@@ -54,15 +53,6 @@ function into a test function, we add `#[test]` on the line before `fn`. When
 we run our tests with the `cargo test` command, Rust will build a test runner
 binary that runs the functions annotated with the `test` attribute and reports
 on whether each test function passes or fails.
-
-<!-- is it annotated with `test` by the user, or only automatically? I think
-it's the latter, and has edited with a more active tone to make that clear, but
-please change if I'm wrong -->
-<!-- What do you mean by "only automatically"? The reader should be typing in
-`#test` on their own when they add new test functions; there's nothing special
-about that text. I'm not sure what part of this chapter implied "only
-automatically", can you point out where that's happening if we haven't taken
-care of it? /Carol -->
 
 We saw in Chapter 7 that when you make a new library project with Cargo, a test
 module with a test function in it is automatically generated for us. This is to
@@ -118,7 +108,7 @@ Listing 11-2:
 ```
 $ cargo test
    Compiling adder v0.1.0 (file:///projects/adder)
-    Finished debug [unoptimized + debuginfo] target(s) in 0.22 secs
+    Finished dev [unoptimized + debuginfo] target(s) in 0.22 secs
      Running target/debug/deps/adder-ce99bcc2479f4607
 
 running 1 test
@@ -155,15 +145,6 @@ but Rust can compile any code examples that appear in our API documentation.
 This feature helps us keep our docs and our code in sync! We’ll be talking
 about how to write documentation tests in the “Documentation Comments” section
 of Chapter 14. We’re going to ignore the `Doc-tests` output for now.
-
-<!-- I might suggest changing the name of the function, could be misconstrued
-as part of the test output! -->
-<!-- `it_works` is always the name that `cargo new` generates for the first
-test function, though. We wanted to show the reader what happens when you run
-the tests immediately after generating a new project; they pass without you
-needing to change anything. I've added a bit to walk through changing the
-function name and seeing how the output changes; I hope that's sufficient.
-/Carol -->
 
 Let’s change the name of our test and see how that changes the test output.
 Give the `it_works` function a different name, such as `exploration`, like so:
@@ -262,23 +243,10 @@ to ensure that some condition in a test evaluates to `true`. We give the
 calls the `panic!` macro, which causes the test to fail. This is one macro that
 helps us check that our code is functioning in the way we intend.
 
-<!-- what kind of thing can be passed as an argument? Presumably when we use it
-for real we won't pass it `true` or `false` as an argument, but some condition
-that will evaluate to true or false? In which case, should below be phrased "If
-the argument evaluates to true" and an exaplanation of that? Or maybe even a
-working example would be better, this could be misleading -->
-<!-- We were trying to really break it down, to show just how the `assert!`
-macro works and what it looks like for it to pass or fail, before we got into
-calling actual code. We've changed this section to move a bit faster and just
-write actual tests instead. /Carol -->
-
 Remember all the way back in Chapter 5, Listing 5-9, where we had a `Rectangle`
 struct and a `can_hold` method, repeated here in Listing 11-5. Let’s put this
 code in *src/lib.rs* instead of *src/main.rs* and write some tests for it using
 the `assert!` macro.
-
-<!-- Listing 5-9 wasn't marked as such; I'll fix it the next time I get Chapter
-5 for editing. /Carol -->
 
 Filename: src/lib.rs
 
@@ -362,7 +330,7 @@ mod tests {
     }
 
     #[test]
-    fn smaller_can_hold_larger() {
+    fn smaller_cannot_hold_larger() {
         let larger = Rectangle { length: 8, width: 7 };
         let smaller = Rectangle { length: 5, width: 1 };
 
@@ -377,7 +345,7 @@ way, our test will pass if `can_hold` returns `false`:
 
 ```
 running 2 tests
-test tests::smaller_can_hold_larger ... ok
+test tests::smaller_cannot_hold_larger ... ok
 test tests::larger_can_hold_smaller ... ok
 
 test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured
@@ -406,7 +374,7 @@ Running the tests now produces:
 
 ```
 running 2 tests
-test tests::smaller_can_hold_larger ... ok
+test tests::smaller_cannot_hold_larger ... ok
 test tests::larger_can_hold_smaller ... FAILED
 
 failures:
@@ -628,7 +596,7 @@ Now if we run the test again, we’ll get a much more informative error message:
 
 ```
 ---- tests::greeting_contains_name stdout ----
-	thread 'tests::greeting_contains_name' panicked at 'Result did not contain
+    thread 'tests::greeting_contains_name' panicked at 'Greeting did not contain
     name, value was `Hello`', src/lib.rs:12
 note: Run with `RUST_BACKTRACE=1` for a backtrace.
 ```
@@ -648,7 +616,7 @@ outside that range panics.
 
 We can do this by adding another attribute, `should_panic`, to our test
 function. This attribute makes a test pass if the code inside the function
-panics, and the test will fail if the code inside the function does non panic.
+panics, and the test will fail if the code inside the function doesn't panic.
 
 Listing 11-8 shows how we’d write a test that checks the error conditions of
 `Guess::new` happen when we expect:
@@ -667,7 +635,7 @@ impl Guess {
         }
 
         Guess {
-            value: value,
+            value
         }
     }
 }
@@ -708,7 +676,7 @@ impl Guess {
         }
 
         Guess {
-            value: value,
+            value
         }
     }
 }
@@ -760,7 +728,7 @@ impl Guess {
         }
 
         Guess {
-            value: value,
+            value
         }
     }
 }
@@ -853,10 +821,6 @@ separator `--`.
 
 ### Running Tests in Parallel or Consecutively
 
-<!-- Are we safe assuming the reader will know enough about threads in this
-context? -->
-<!-- Yes /Carol -->
-
 When multiple tests are run, by default they run in parallel using threads.
 This means the tests will finish running faster, so that we can get faster
 feedback on whether or not our code is working. Since the tests are running at
@@ -868,7 +832,7 @@ For example, say each of your tests runs some code that creates a file on disk
 named `test-output.txt` and writes some data to that file. Then each test reads
 the data in that file and asserts that the file contains a particular value,
 which is different in each test. Because the tests are all run at the same
-time, one test might overrwrite the file between when another test writes and
+time, one test might overwrite the file between when another test writes and
 reads the file. The second test will then fail, not because the code is
 incorrect, but because the tests have interfered with each other while running
 in parallel. One solution would be to make sure each test writes to a different
@@ -1044,7 +1008,7 @@ We can pass the name of any test function to `cargo test` to run only that test:
 
 ```
 $ cargo test one_hundred
-    Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
+    Finished dev [unoptimized + debuginfo] target(s) in 0.0 secs
      Running target/debug/deps/adder-06a75b4a1f2515e9
 
 running 1 test
@@ -1064,7 +1028,7 @@ that value will get run. For example, since two of our tests’ names contain
 
 ```
 $ cargo test add
-    Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
+    Finished dev [unoptimized + debuginfo] target(s) in 0.0 secs
      Running target/debug/deps/adder-06a75b4a1f2515e9
 
 running 2 tests
@@ -1077,14 +1041,6 @@ test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured
 This ran all tests with `add` in the name. Also note that the module in which
 tests appear becomes part of the test’s name, so we can run all the tests in a
 module by filtering on the module’s name.
-
-<!-- in what kind of situation might you need to run only some tests, when you
-have lots and lots in a program? -->
-<!-- We covered this in the first paragraph of the "Running a Subset of Tests
-by Name" section, do you think it should be repeated so soon? Most people who
-use tests have sufficient motivation for wanting to run a subset of the tests,
-they just need to know how to do it with Rust, so we don't think this is a
-point that needs to be emphasized multiple times. /Carol -->
 
 ### Ignore Some Tests Unless Specifically Requested
 
@@ -1115,7 +1071,7 @@ not:
 ```
 $ cargo test
    Compiling adder v0.1.0 (file:///projects/adder)
-    Finished debug [unoptimized + debuginfo] target(s) in 0.24 secs
+    Finished dev [unoptimized + debuginfo] target(s) in 0.24 secs
      Running target/debug/deps/adder-ce99bcc2479f4607
 
 running 2 tests
@@ -1134,20 +1090,9 @@ test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured
 `expensive_test` is listed as `ignored`. If we want to run only the ignored
 tests, we can ask for them to be run with `cargo test -- --ignored`:
 
-<!-- what does the double `-- --` mean? That seems interesting -->
-<!-- We covered that in the second paragraph after the "Controlling How Tests
-are Run" heading, and this section is beneath that heading, so I don't think a
-back reference is needed /Carol -->
-
-<!-- is that right, this way the program knows to run only the test with
-`ignore` if we add this, or it knows to run all tests? -->
-<!-- Is this unclear from the output that shows `expensive_test` was run and
-the `it_works` test does not appear? I'm not sure how to make this clearer.
-/Carol -->
-
 ```
 $ cargo test -- --ignored
-    Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
+    Finished dev [unoptimized + debuginfo] target(s) in 0.0 secs
      Running target/debug/deps/adder-ce99bcc2479f4607
 
 running 1 test
@@ -1210,12 +1155,12 @@ mod tests {
 ```
 
 This is the automatically generated test module. The attribute `cfg` stands for
-*configruation*, and tells Rust that the following item should only be included
-given a certain configuration. In this case, the configuration is `test`,
-provided by Rust for compiling and running tests. By using this attribute,
-Cargo only compiles our test code if we actively run the tests with `cargo
-test`. This includes any helper functions that might be within this module, in
-addition to the functions annotated with `#[test]`.
+*configuration*, and tells Rust that the following item should only be included
+given a certain configuration option. In this case, the configuration option is
+`test`, provided by Rust for compiling and running tests. By using this
+attribute, Cargo only compiles our test code if we actively run the tests with
+`cargo test`. This includes any helper functions that might be within this
+module, in addition to the functions annotated with `#[test]`.
 
 #### Testing Private Functions
 
@@ -1248,14 +1193,6 @@ mod tests {
 ```
 
 Listing 11-12: Testing a private function
-
-<!-- I'm not clear on why we would assume this might not be fine, why are we
-highlighting this specifically? -->
-<!-- We're addressing experience that the reader might bring with them from
-other languages where this is not allowed; I added a sentence mentioning "other
-languages" at the beginning of this section. Also testing private functions
-from integration tests is not allowed, so if you did want to do this, you'd
-have to do it in unit tests. /Carol -->
 
 Note that the `internal_adder` function is not marked as `pub`, but because
 tests are just Rust code and the `tests` module is just another module, we can
@@ -1312,7 +1249,7 @@ compile files in this directory if we run `cargo test`. Let’s try running
 ```
 cargo test
    Compiling adder v0.1.0 (file:///projects/adder)
-    Finished debug [unoptimized + debuginfo] target(s) in 0.31 secs
+    Finished dev [unoptimized + debuginfo] target(s) in 0.31 secs
      Running target/debug/deps/adder-abcabcabc
 
 running 1 test
@@ -1333,11 +1270,6 @@ running 0 tests
 
 test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured
 ```
-
-<!-- what are the doc tests? How do we tell the difference between unit and
-integration tests here? -->
-<!-- We mentioned documentation tests in the beginning of this chapter /Carol
--->
 
 Now we have three sections of output: the unit tests, the integration test, and
 the doc tests. The first section for the unit tests is the same as we have been
@@ -1363,7 +1295,7 @@ followed by the name of the file:
 
 ```
 $ cargo test --test integration_test
-    Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
+    Finished dev [unoptimized + debuginfo] target(s) in 0.0 secs
      Running target/debug/integration_test-952a27e0126bb565
 
 running 1 test
@@ -1432,9 +1364,6 @@ running 0 tests
 
 test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured
 ```
-
-<!-- The new section is lines 6-10, will ghost everything else in libreoffice
-/Carol -->
 
 Having `common` show up in the test results with `running 0 tests` displayed
 for it is not what we wanted; we just wanted to be able to share some code with
