@@ -1,20 +1,16 @@
-# Common Programming Concepts
+# 보편적인 프로그래밍 개념
 
-This chapter covers concepts that appear in almost every programming language
-and how they work in Rust. Many programming languages have much in common at
-their core. None of the concepts presented in this chapter are unique to Rust,
-but we’ll discuss them in the context of Rust and explain their conventions.
+이번 챕터에서는 모든 프로그래밍 언어가 대부분 가진 개념이 Rust에서는 어떻게 다루어지는지 알아보고자 합니다.
+많은 프로그래밍 언어가 보편적인 핵심요소를 갖습니다. 이번 챕터에서 Rust 고유의 개념은 다루지 않을테지만, 
+보편적인 프로그래밍 개념을 Rust의 문법을 설명하는 과정에서 토의하고자 합니다. 
 
-Specifically, you’ll learn about variables, basic types, functions, comments,
-and control flow. These foundations will be in every Rust program, and learning
-them early will give you a strong core to start from.
+특히 변수, 기본 타입들, 함수, 주석, 그리고 제어문에 대해서 배울 수 있을 것 입니다. 이 기본 사항들은 
+모든 Rust 프로그램에서 사용되며 이들을 조기에 숙지하는 것은 Rust를 시작하는데 큰 바탕이 되줄 겁니다.
 
 > ### Keywords
 >
-> The Rust language has a set of *keywords* that have been reserved for use by
-> the language only, much like other languages do. Keep in mind that you cannot
-> use these words as names of variables or functions. Most of the keywords have
-> special meanings, and you’ll be using them to do various tasks in your Rust
-> programs; a few have no current functionality associated with them but have
-> been reserved for functionality that might be added to Rust in the future. You
-> can find a list of the keywords in Appendix A.
+> 다른 언어들과 마찬가지로 Rust에도 고정된 의미를 갖는 *Keywords*가 있습니다. 이들은 변수나 함수명으로
+> 사용될 수 없다는 점을 명심하세요. 대부분의 keywords가 특별한 의미를 갖고, 이들을 통해 다양한 작업을 
+> Rust를 통해 수행할 수 있습니다; 소수의 keywords는 현재는 아무 기능도 없지만 향후 추가될 기능을 위해
+> 예약되어 있습니다. 이들은 목록은 Appendix A에서 찾아볼 수 있습니다. 
+
