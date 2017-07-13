@@ -19,12 +19,12 @@ we’re going to need to bring into scope; the more variables we have in scope,
 the harder it is to keep track of the purpose of each. It’s better to group the
 configuration variables into one structure to make their purpose clear.
 
-The third problem is that we've used `expect` to print out an error message if
-opening the file fails, but the error message only says `file not found`. There
-are a number of ways that opening a file can fail besides a missing file: for
-example, the file might exist, but we might not have permission to open it.
-Right now, if we're in that situation, we'd print the `file not found` error
-message that would give the user the wrong advice!
+The third problem is that we’ve used `expect` to print out an error message
+when opening the file fails, but the error message only says `file not found`.
+There are a number of ways that opening a file can fail besides the file being
+missing: for example, the file might exist, but we might not have permission to
+open it. Right now, if we’re in that situation, we’d print the `file not found`
+error message that would give the user the wrong advice!
 
 Fourth, we use `expect` repeatedly to deal with different errors, and if the
 user runs our programs without specifying enough arguments, they’ll get an
@@ -39,23 +39,23 @@ Let’s address these problems by refactoring our project.
 
 ### Separation of Concerns for Binary Projects
 
-The organizational problem of having the `main` function responsible for
-multiple tasks is common to many binary projects, so the Rust community has
-developed a kind of guideline process for splitting up the separate concerns of
-a binary program when `main` starts getting large. The process has the
-following steps:
+The organizational problem of allocating responsibility for multiple tasks to
+the `main` function responsible is common to many binary projects, so the Rust
+community has developed a kind of guideline process for splitting up the
+separate concerns of a binary program when `main` starts getting large. The
+process has the following steps:
 
-1. Split your program into both a *main.rs* and a *lib.rs* and move your
-   program's logic into *lib.rs*.
-2. While your command line parsing logic is small, it can remain in *main.rs*.
-3. When the command line parsing logic starts getting complicated, extract it
-   from *main.rs* into *lib.rs* as well.
-4. The responsibilities that remain in the `main` function after this process
-   should be:
-   * Calling the command line parsing logic with the argument values
-   * Setting up any other configuration
-   * Calling a `run` function in *lib.rs*
-   * If `run` returns an error, handling that error
+* Split your program into both a *main.rs* and a *lib.rs* and move your
+program’s logic into *lib.rs*.
+* While your command line parsing logic is small, it can remain in *main.rs*.
+* When the command line parsing logic starts getting complicated, extract it
+from *main.rs* into *lib.rs* as well.
+* The responsibilities that remain in the `main` function after this process
+should be limited to:
+  * Calling the command line parsing logic with the argument values
+  * Setting up any other configuration
+  * Calling a `run` function in *lib.rs*
+  * If `run` returns an error, handling that error
 
 This pattern is all about separating concerns: *main.rs* handles running the
 program, and *lib.rs* handles all of the logic of the task at hand. Because we
@@ -64,7 +64,7 @@ program’s logic by moving it into functions in *lib.rs*. The only code that
 remains in *main.rs* will be small enough to verify its correctness by reading
 it. Let’s re-work our program by following this process.
 
-### Extracting the Argument Parser
+#### Extracting the Argument Parser
 
 First, we’ll extract the functionality for parsing arguments. Listing 12-5
 shows the new start of `main` that calls a new function `parse_config`, which
@@ -96,10 +96,10 @@ We’re still collecting the command line arguments into a vector, but instead o
 assigning the argument value at index `1` to the variable `query` and the
 argument value at index `2` to the variable `filename` within the `main`
 function, we pass the whole vector to the `parse_config` function. The
-`parse_config` function then holds the logic that knows which argument goes in
-which variable, and passes the values back to `main`. We still create the
-`query` and `filename` variables in `main`, but `main` no longer has the
-responsibility of knowing how the command line arguments and variables
+`parse_config` function then holds the logic that determines which argument
+goes in which variable, and passes the values back to `main`. We still create
+the `query` and `filename` variables in `main`, but `main` no longer has the
+responsibility of determining how the command line arguments and variables
 correspond.
 
 This may seem like overkill for our small program, but we’re refactoring in
@@ -183,7 +183,7 @@ since we don’t have to manage the lifetimes of the references, so in this
 circumstance giving up a little performance to gain simplicity is a worthwhile
 trade-off.
 
-> #### The Tradeoffs of Using `clone`
+> ### The Tradeoffs of Using `clone`
 >
 > There’s a tendency among many Rustaceans to avoid using `clone` to fix
 > ownership problems because of its runtime cost. In Chapter 13 on iterators,
@@ -195,15 +195,15 @@ trade-off.
 > Rust, it’ll be easier to go straight to the desirable method, but for now it’s
 > perfectly acceptable to call `clone`.
 
-We've updated `main` so that it places the instance of `Config` that
-`parse_config` returns into a variable named `config`, and updated the code
-that previously used the separate `query` and `filename` variables so that is
-now uses the fields on the `Config` struct instead.
+We’ve updated `main` so that it places the instance of `Config` returned by
+`parse_config` into a variable named `config`, and updated the code that
+previously used the separate `query` and `filename` variables so that it now
+uses the fields on the `Config` struct instead.
 
-Our code now more clearly conveys our intent that `query` and `filename` are
-related and their purpose is to configure how the program will work. Any code
-that uses these values knows to find them in the `config` instance in the
-fields named for their purpose.
+Our code now more clearly conveys that `query` and `filename` are related and
+their purpose is to configure how the program will work. Any code that uses
+these values knows to find them in the `config` instance in the fields named
+for their purpose.
 
 #### Creating a Constructor for `Config`
 
@@ -219,9 +219,9 @@ instance, we can change `parse_config` from being a plain function into a
 function named `new` that is associated with the `Config` struct. Making this
 change will make our code more idiomatic: we can create instances of types in
 the standard library like `String` by calling `String::new`, and by changing
-`parse_config` to be a `new` function associated with `Config`, we'll be able
-to create instances of `Config` by calling `Config::new`. Listing 12-7 shows
-the changes we'll need to make:
+`parse_config` into a `new` function associated with `Config`, we’ll be able to
+create instances of `Config` by calling `Config::new`. Listing 12-7 shows the
+changes we’ll need to make:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -277,16 +277,16 @@ but the index is 1', /stable-dist-rustc/build/src/libcollections/vec.rs:1307
 note: Run with `RUST_BACKTRACE=1` for a backtrace.
 ```
 
-`index out of bounds: the len is 1 but the index is 1` is an error message that
-is intended for programmers, and won't really help our end users understand
-what happened and what they should do instead. Let's fix that now.
+The line that states `index out of bounds: the len is 1 but the index is 1` is
+an error message intended for programmers, and won’t really help our end users
+understand what happened and what they should do instead. Let’s fix that now.
 
 #### Improving the Error Message
 
-In Listing 12-8, we're adding a check in the `new` function to check that the
-slice is long enough before accessing index 1 and 2. If the slice isn't long
-enough, we panic with a better error message than the `index out of bounds`
-message:
+In Listing 12-8, we’re adding a check in the `new` function that will check
+that the slice is long enough before accessing index `1` and `2`. If the slice
+isn’t long enough, the program panics, with a better error message than the
+`index out of bounds` message:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -302,13 +302,13 @@ fn new(args: &[String]) -> Config {
 <span class="caption">Listing 12-8: Adding a check for the number of
 arguments</span>
 
-This is similar to the `Guess::new` function we wrote in Listing 9-8, where we
-called `panic!` if the `value` argument was out of the range of valid values.
-Instead of checking for a range of values, we're checking that the length of
-`args` is at least 3, and the rest of the function can operate under the
-assumption that this condition has been met. If `args` has fewer than 3 items,
-this condition will be true, and we call the `panic!` macro to end the program
-immediately.
+This is similar to the `Guess::new` function we wrote in Listing 9-8, where
+`panic!` was called when the `value` argument was out of the range of valid
+values. Instead of checking for a range of values here, we’re checking that the
+length of `args` is at least 3, and the rest of the function can operate under
+the assumption that this condition has been met. If `args` has fewer than 3
+items, this condition will be true, and we call the `panic!` macro to end the
+program immediately.
 
 With these extra few lines of code in `new`, let’s try running our program
 without any arguments again and see what the error looks like now:
@@ -325,22 +325,22 @@ This output is better, we now have a reasonable error message. However, we also
 have a bunch of extra information we don’t want to give to our users. So
 perhaps using the technique we used in Listing 9-8 isn’t the best to use here;
 a call to `panic!` is more appropriate for a programming problem rather than a
-usage problem anyway, as we discussed in Chapter 9. Instead, we can use the
-other technique we learned about in that chapter: returning a `Result` that can
+usage problem, as we discussed in Chapter 9. Instead, we can use the other
+technique you also learned about in Chapter 9: returning a `Result` that can
 indicate either success or an error.
 
 #### Returning a `Result` from `new` Instead of Calling `panic!`
 
 We can choose to instead return a `Result` value that will contain a `Config`
 instance in the successful case, and will describe the problem in the error
-case. When `Config::new` is communicating to `main`, we can use Rust's way of
-signaling that there was a problem using the `Result` type. Then we can change
-`main` to convert an `Err` variant into a nicer error for our users, without
-the surrounding text about `thread 'main'` and `RUST_BACKTRACE` that a call to
+case. When `Config::new` is communicating to `main`, we can use the `Result`
+type to signal that there was a problem. Then we can change `main` to convert
+an `Err` variant into a more practical error for our users, without the
+surrounding text about `thread 'main'` and `RUST_BACKTRACE` that a call to
 `panic!` causes.
 
-Listing 12-9 shows the changes to the return value of `Config::new` and the
-body of the function needed to return a `Result`:
+Listing 12-9 shows the changes you need to make to the return value of
+`Config::new` and the body of the function needed to return a `Result`:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -378,11 +378,11 @@ more cleanly in the error case.
 #### Calling `Config::new` and Handling Errors
 
 In order to handle the error case and print a user-friendly message, we need to
-update `main` to handle the `Result` that `Config::new` is now returning as
-shown in Listing 12-10. We're also going to implement by hand something that
-`panic!` handled for us: exiting the command line tool with an error code of 1.
-A nonzero exit status is a convention to signal to the process that called our
-program that our program ended with an error state.
+update `main` to handle the `Result` being returned by `Config::new`, as shown
+in Listing 12-10. We’re also going to take the responsibility of exiting the
+command line tool with a nonzero error code from `panic!` and implement it by
+hand. A nonzero exit status is a convention to signal to the process that
+called our program that our program ended with an error state.
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -418,12 +418,11 @@ pipes. The code in the closure can then use the `err` value when it runs.
 
 We’ve added a new `use` line to import `process` from the standard library. The
 code in the closure that will get run in the error case is only two lines: we
-print out the `err` value, then call `std::process::exit` (we've added a new
-`use` line at the top to import `process` from the standard library).
-`process::exit` will stop the program immediately and return the number that
-was passed as the exit status code. This is similar to the `panic!`-based
-handling we used in Listing 12-8, with the exception that we no longer get all
-the extra output. Let's try it:
+print out the `err` value, then call `process::exit`. The `process::exit`
+function will stop the program immediately and return the number that was
+passed as the exit status code. This is similar to the `panic!`-based handling
+we used in Listing 12-8, with the exception that we no longer get all the extra
+output. Let’s try it:
 
 ```text
 $ cargo run
@@ -435,18 +434,18 @@ Problem parsing arguments: not enough arguments
 
 Great! This output is much friendlier for our users.
 
-### Extracting a `run` Function
+### Extracting Logic from `main`
 
-Now we're done refactoring our configuration parsing; let's turn to our
-program's logic. As we laid out in the process we discussed in the "Separation
-of Concerns for Binary Projects" section, we're going to extract a function
-named `run` that will hold all of the logic currently in the `main` function
-that isn't setting up configuration or handling errors. Once we're done, `main`
-will be concise and easy to verify by inspection, and we'll be able to write
-tests for all of the other logic.
+Now we’re done refactoring our configuration parsing; let’s turn to our
+program’s logic. As we laid out in the “Separation of Concerns for Binary
+Projects” section, we’re going to extract a function named `run` that will hold
+all of the logic currently in the `main` function not involved with setting up
+configuration or handling errors. Once we’re done, `main` will be concise and
+easy to verify by inspection, and we’ll be able to write tests for all of the
+other logic.
 
-Listing 12-11 shows the extracted `run` function. For now, we're making only
-the small, incremental improvement of extracting the function and still
+Listing 12-11 shows the extracted `run` function. For now, we’re making only
+the small, incremental improvement of extracting the function. We’re still
 defining the function in *src/main.rs*:
 
 <span class="filename">Filename: src/main.rs</span>
@@ -483,13 +482,13 @@ argument.
 
 #### Returning Errors from the `run` Function
 
-With the remaining program logic separated into the `run` function rather than
-being in `main`, we can improve the error handling like we did with
-`Config::new` in Listing 12-9. Instead of allowing the program to panic by
-calling `expect`, the `run` function will return a `Result<T, E>` when
-something goes wrong. This will let us further consolidate the logic around
-handling errors in a user-friendly way into `main`. Listing 12-12 shows the
-changes to the signature and body of `run`:
+With the remaining program logic separated into the `run` function, we can
+improve the error handling like we did with `Config::new` in Listing 12-9.
+Instead of allowing the program to panic by calling `expect`, the `run`
+function will return a `Result<T, E>` when something goes wrong. This will let
+us further consolidate the logic around handling errors in a user-friendly way
+into `main`. Listing 12-12 shows the changes you need to make to the signature
+and body of `run`:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -554,8 +553,8 @@ to have some error handling code here! Let’s rectify that now.
 
 #### Handling Errors Returned from `run` in `main`
 
-We'll check for errors and handle them nicely using a similar technique to the
-way we handled errors with `Config::new` in Listing 12-10, but with a slight
+We’ll check for errors and handle them using a similar technique to the way we
+handled errors with `Config::new` in Listing 12-10, but with a slight
 difference:
 
 <span class="filename">Filename: src/main.rs</span>
@@ -585,21 +584,22 @@ value as it would only be `()`.
 The bodies of the `if let` and the `unwrap_or_else` functions are the same in
 both cases though: we print out the error and exit.
 
-### Split Code into a Library Crate
+### Splitting Code into a Library Crate
 
 This is looking pretty good so far! Now we’re going to split the *src/main.rs*
 file up and put some code into *src/lib.rs* so that we can test it and have a
-small `main` function.
+*src/main.rs* file with fewer responsibilities.
 
-Let's move the following pieces of code from *src/main.rs* to a new file,
-*src/lib.rs*:
+Let’s move everything that isn't the `main` function from *src/main.rs* to a
+new file, *src/lib.rs*:
 
 * The `run` function definition
 * The relevant `use` statements
 * The definition of `Config`
 * The `Config::new` function definition
 
-The contents of *src/lib.rs* should now look like Listing 12-13:
+The contents of *src/lib.rs* should have the signatures shown in Listing 12-13
+(we've omitted the bodies of the functions for brevity):
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -615,26 +615,12 @@ pub struct Config {
 
 impl Config {
     pub fn new(args: &[String]) -> Result<Config, &'static str> {
-        if args.len() < 3 {
-            return Err("not enough arguments");
-        }
-
-        let query = args[1].clone();
-        let filename = args[2].clone();
-
-        Ok(Config { query, filename })
+        // ...snip...
     }
 }
 
-pub fn run(config: Config) -> Result<(), Box<Error>>{
-    let mut f = File::open(config.filename)?;
-
-    let mut contents = String::new();
-    f.read_to_string(&mut contents)?;
-
-    println!("With text:\n{}", contents);
-
-    Ok(())
+pub fn run(config: Config) -> Result<(), Box<Error>> {
+    // ...snip...
 }
 ```
 
@@ -643,14 +629,12 @@ pub fn run(config: Config) -> Result<(), Box<Error>>{
 
 We’ve made liberal use of `pub` here: on `Config`, its fields and its `new`
 method, and on the `run` function. We now have a library crate that has a
-public API that we can test.
-
-#### Calling the Library Crate from the Binary Crate
+public API that we can test!
 
 Now we need to bring the code we moved to *src/lib.rs* into the scope of the
-binary crate in *src/main.rs* by using `extern crate minigrep`. Then we’ll add a
-`use minigrep::Config` line to bring the `Config` type into scope, and prefix the
-`run` function with our crate name as shown in Listing 12-14:
+binary crate in *src/main.rs* by using `extern crate minigrep`. Then we’ll add
+a `use minigrep::Config` line to bring the `Config` type into scope, and prefix
+the `run` function with our crate name as shown in Listing 12-14:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -663,20 +647,9 @@ use std::process;
 use minigrep::Config;
 
 fn main() {
-    let args: Vec<String> = env::args().collect();
-
-    let config = Config::new(&args).unwrap_or_else(|err| {
-        println!("Problem parsing arguments: {}", err);
-        process::exit(1);
-    });
-
-    println!("Searching for {}", config.query);
-    println!("In file {}", config.filename);
-
+    // ...snip...
     if let Err(e) = minigrep::run(config) {
-        println!("Application error: {}", e);
-
-        process::exit(1);
+        // ...snip...
     }
 }
 ```
@@ -684,8 +657,11 @@ fn main() {
 <span class="caption">Listing 12-14: Bringing the `minigrep` crate into the
 scope of *src/main.rs*</span>
 
-With that, all the functionality should be connected and should work. Give it a
-`cargo run` and make sure everything is wired up correctly.
+To bring the library crate into the binary crate, we use `extern crate`
+`minigrep`. Then we’ll add a `use` `minigrep``::Config` line to bring the
+`Config` type into scope, and we'll prefix the `run` function with our crate
+name. With that, all the functionality should be connected and should work.
+Give it a `cargo run` and make sure everything is wired up correctly.
 
 Whew! That was a lot of work, but we’ve set ourselves up for success in the
 future. Now it’s much easier to handle errors, and we’ve made our code more
