@@ -48,16 +48,16 @@ out
 First, we bring the `std::env` module into scope with a `use` statement so that
 we can use its `args` function. Notice the `std::env::args` function is nested
 in two levels of modules. As we talked about in Chapter 7, in cases where the
-desired function is nested in more than one module, it's conventional to bring
+desired function is nested in more than one module, it’s conventional to bring
 the parent module into scope, rather than the function itself. This lets us
-easily use other functions from `std::env`. It's also less ambiguous than
+easily use other functions from `std::env`. It’s also less ambiguous than
 adding `use std::env::args;` then calling the function with just `args`; that
 might look like a function that's defined in the current module.
 
 > Note: `std::env::args` will panic if any argument contains invalid Unicode.
 > If you need to accept arguments containing invalid Unicode, use
 > `std::env::args_os` instead. That function returns `OsString` values instead
-> of `String` values. We've chosen to use `std::env::args` here for simplicity
+> of `String` values. We’ve chosen to use `std::env::args` here for simplicity
 > because `OsString` values differ per-platform and are more complex to work
 > with than `String` values.
 
@@ -81,7 +81,7 @@ $ cargo run needle haystack
 ["target/debug/minigrep", "needle", "haystack"]
 ```
 
-You may notice that the first value in the vector is "target/debug/minigrep",
+You may notice that the first value in the vector is `"target/debug/minigrep"`,
 which is the name of our binary. The reasons for this are out of the scope of
 this chapter, but we'll need to remember this as we save the two arguments we
 need.
@@ -119,8 +119,8 @@ reference to the first argument in the variable `query`. The second argument
 will be the filename, so we put a reference to the second argument in the
 variable `filename`.
 
-We're temporarily printing out the values of these variables, again to prove to
-ourselves that our code is working as we intend. Let's try running this program
+We’re temporarily printing out the values of these variables, again to prove to
+ourselves that our code is working as we intend. Let’s try running this program
 again with the arguments `test` and `sample.txt`:
 
 ```text

@@ -3,13 +3,13 @@
 
 # An I/O Project Building a Small Grep
 
-This chapter is both a recap of the many skills you've learned so far and an
-exploration of a few more standard library features. We're going to build a
-command-line tool that interacts with file and command line input/output to
+This chapter is both a recap of the many skills you’ve learned so far and an
+exploration of a few more standard library features. We’re going to build a
+command line tool that interacts with file and command line input/output to
 practice some of the Rust you now have under your belt.
 
-Rust's speed, safety, 'single binary' output, and cross-platform support make
-it a good language for creating command line tools, so for our project we'll
+Rust’s speed, safety, *single binary* output, and cross-platform support make
+it a good language for creating command line tools, so for our project we’ll
 make our own version of the classic command line tool `grep`. Grep is an
 acronym for "Globally search a Regular Expression and Print." In the simplest
 use case, `grep` searches a specified file for a specified string using the
@@ -30,20 +30,20 @@ our version of `grep` will be fairly simple, this chapter will give you some of
 the background knowledge to help you understand a real-world project like
 `ripgrep`.
 
-This project will bring together a number of concepts you've learned so far:
+This project will bring together a number of concepts you’ve learned so far:
 
-- Organizing code (using what we learned in modules, Chapter 7)
-- Using vectors and strings (collections, Chapter 8)
-- Handling errors (Chapter 9)
-- Using traits and lifetimes where appropriate (Chapter 10)
-- Writing tests (Chapter 11)
+* Organizing code (using what we learned in modules, Chapter 7)
+* Using vectors and strings (collections, Chapter 8)
+* Handling errors (Chapter 9)
+* Using traits and lifetimes where appropriate (Chapter 10)
+* Writing tests (Chapter 11)
 
-We'll also briefly introduce closures, iterators, and trait objects, which
+We’ll also briefly introduce closures, iterators, and trait objects, which
 Chapters 13 and 17 will cover in detail.
 
-Let's create a new project with, as always, `cargo new`. We're calling our
-project `minigrep` to distinguish from the `grep` tool that you may already have
-on your system:
+Let’s create a new project with, as always, `cargo new`. We’re calling our
+project `minigrep` to distinguish from the `grep` tool that you may already
+have on your system:
 
 ```
 $ cargo new --bin minigrep
@@ -100,16 +100,16 @@ out
 First, we bring the `std::env` module into scope with a `use` statement so that
 we can use its `args` function. Notice the `std::env::args` function is nested
 in two levels of modules. As we talked about in Chapter 7, in cases where the
-desired function is nested in more than one module, it's conventional to bring
+desired function is nested in more than one module, it’s conventional to bring
 the parent module into scope, rather than the function itself. This lets us
-easily use other functions from `std::env`. It's also less ambiguous than
+easily use other functions from `std::env`. It’s also less ambiguous than
 adding `use std::env::args;` then calling the function with just `args`; that
 might look like a function that's defined in the current module.
 
 > Note: `std::env::args` will panic if any argument contains invalid Unicode.
 > If you need to accept arguments containing invalid Unicode, use
 > `std::env::args_os` instead. That function returns `OsString` values instead
-> of `String` values. We've chosen to use `std::env::args` here for simplicity
+> of `String` values. We’ve chosen to use `std::env::args` here for simplicity
 > because `OsString` values differ per-platform and are more complex to work
 > with than `String` values.
 
@@ -133,7 +133,7 @@ $ cargo run needle haystack
 ["target/debug/minigrep", "needle", "haystack"]
 ```
 
-You may notice that the first value in the vector is "target/debug/minigrep",
+You may notice that the first value in the vector is `"target/debug/minigrep"`,
 which is the name of our binary. The reasons for this are out of the scope of
 this chapter, but we'll need to remember this as we save the two arguments we
 need.
@@ -171,8 +171,8 @@ reference to the first argument in the variable `query`. The second argument
 will be the filename, so we put a reference to the second argument in the
 variable `filename`.
 
-We're temporarily printing out the values of these variables, again to prove to
-ourselves that our code is working as we intend. Let's try running this program
+We’re temporarily printing out the values of these variables, again to prove to
+ourselves that our code is working as we intend. Let’s try running this program
 again with the arguments `test` and `sample.txt`:
 
 ```
@@ -200,10 +200,10 @@ level of your project, and enter the poem "I'm nobody! Who are you?":
 Filename: poem.txt
 
 ```
-I'm nobody! Who are you?
+I’m nobody! Who are you?
 Are you nobody, too?
-Then there's a pair of us — don't tell!
-They'd banish us, you know.
+Then there’s a pair of us — don’t tell!
+They’d banish us, you know.
 
 How dreary to be somebody!
 How public, like a frog
@@ -211,7 +211,7 @@ To tell your name the livelong day
 To an admiring bog!
 ```
 
-Listing 12-3: The poem "I'm nobody! Who are you?" by Emily Dickinson that will
+Listing 12-3: The poem “I’m nobody! Who are you?” by Emily Dickinson that will
 make a good test case
 
 With that in place, edit *src/main.rs* and add code to open the file as shown
@@ -252,7 +252,7 @@ certain things into scope automatically, the `std::io` module has its own
 prelude of common things you'll need when working with I/O. Unlike the default
 prelude, we must explicitly `use` the prelude in `std::io`.
 
-In `main`, we've added three things: first, we get a mutable handle to the file
+In `main`, we’ve added three things: first, we get a mutable handle to the file
 by calling the `File::open` function and passing it the value of the `filename`
 variable. Second, we create a variable called `contents` and set it to a
 mutable, empty `String`. This will hold the content of the file after we read
@@ -263,8 +263,8 @@ After those lines, we've again added temporary `println!` that prints out the
 value in `contents` after we've read the file so we can check that our program
 is working so far.
 
-Let's try running this code with any string as the first command line argument
-(since we haven't implemented the searching part yet) and our *poem.txt* file
+Let’s try running this code with any string as the first command line argument
+(since we haven’t implemented the searching part yet) and our *poem.txt* file
 as the second argument:
 
 ```
@@ -274,10 +274,10 @@ $ cargo run the poem.txt
 Searching for the
 In file poem.txt
 With text:
-I'm nobody! Who are you?
+I’m nobody! Who are you?
 Are you nobody, too?
-Then there's a pair of us — don't tell!
-They'd banish us, you know.
+Then there’s a pair of us — don’t tell!
+They’d banish us, you know.
 
 How dreary to be somebody!
 How public, like a frog
@@ -295,23 +295,23 @@ so we'll do that now.
 
 ## Refactoring to Improve Modularity and Error Handling
 
-There are four problems that we'd like to fix to improve our program, and they
-have to do with the way the program is structured and how it's handling
+There are four problems that we’d like to fix to improve our program, and they
+have to do with the way the program is structured and how it’s handling
 potential errors.
 
 First, our `main` function now performs two tasks: it parses arguments and
-opens up files. For such a small function, this isn't a huge problem. However,
+opens up files. For such a small function, this isn’t a huge problem. However,
 if we keep growing our program inside of `main`, the number of separate tasks
 the `main` function handles will grow. As a function gains responsibilities, it
 gets harder to reason about, harder to test, and harder to change without
-breaking one of its parts. It's better to separate out functionality so that
+breaking one of its parts. It’s better to separate out functionality so that
 each function is responsible for one task.
 
 This also ties into our second problem: while `query` and `filename` are
 configuration variables to our program, variables like `f` and `contents` are
-used to perform our program's logic. The longer `main` gets, the more variables
-we're going to need to bring into scope; the more variables we have in scope,
-the harder it is to keep track of the purpose of each. It's better to group the
+used to perform our program’s logic. The longer `main` gets, the more variables
+we’re going to need to bring into scope; the more variables we have in scope,
+the harder it is to keep track of the purpose of each. It’s better to group the
 configuration variables into one structure to make their purpose clear.
 
 The third problem is that we've used `expect` to print out an error message if
@@ -322,15 +322,15 @@ Right now, if we're in that situation, we'd print the `file not found` error
 message that would give the user the wrong advice!
 
 Fourth, we use `expect` repeatedly to deal with different errors, and if the
-user runs our programs without specifying enough arguments, they'll get an
-"index out of bounds" error from Rust that doesn't clearly explain the problem.
+user runs our programs without specifying enough arguments, they’ll get an
+“index out of bounds” error from Rust that doesn’t clearly explain the problem.
 It would be better if all our error handling code was in one place so that
 future maintainers only have one place to consult in the code if the error
 handling logic needs to change. Having all the error handling code in one place
-will also help us to ensure that we're printing messages that will be
+will also help us to ensure that we’re printing messages that will be
 meaningful to our end users.
 
-Let's address these problems by refactoring our project.
+Let’s address these problems by refactoring our project.
 
 ### Separation of Concerns for Binary Projects
 
@@ -354,16 +354,16 @@ following steps:
 
 This pattern is all about separating concerns: *main.rs* handles running the
 program, and *lib.rs* handles all of the logic of the task at hand. Because we
-can't test the `main` function directly, this structure lets us test all of our
-program's logic by moving it into functions in *lib.rs*. The only code that
+can’t test the `main` function directly, this structure lets us test all of our
+program’s logic by moving it into functions in *lib.rs*. The only code that
 remains in *main.rs* will be small enough to verify its correctness by reading
-it. Let's re-work our program by following this process.
+it. Let’s re-work our program by following this process.
 
 ### Extracting the Argument Parser
 
-First, we'll extract the functionality for parsing arguments. Listing 12-5
+First, we’ll extract the functionality for parsing arguments. Listing 12-5
 shows the new start of `main` that calls a new function `parse_config`, which
-we're still going to define in *src/main.rs* for the moment:
+we’re still going to define in *src/main.rs* for the moment:
 
 Filename: src/main.rs
 
@@ -386,9 +386,9 @@ fn parse_config(args: &[String]) -> (&str, &str) {
 
 Listing 12-5: Extract a `parse_config` function from `main`
 
-We're still collecting the command line arguments into a vector, but instead of
-assigning the argument value at index 1 to the variable `query` and the
-argument value at index 2 to the variable `filename` within the `main`
+We’re still collecting the command line arguments into a vector, but instead of
+assigning the argument value at index `1` to the variable `query` and the
+argument value at index `2` to the variable `filename` within the `main`
 function, we pass the whole vector to the `parse_config` function. The
 `parse_config` function then holds the logic that knows which argument goes in
 which variable, and passes the values back to `main`. We still create the
@@ -396,21 +396,21 @@ which variable, and passes the values back to `main`. We still create the
 responsibility of knowing how the command line arguments and variables
 correspond.
 
-This may seem like overkill for our small program, but we're refactoring in
+This may seem like overkill for our small program, but we’re refactoring in
 small, incremental steps. After making this change, run the program again to
-verify that the argument parsing still works. It's good to check your progress
+verify that the argument parsing still works. It’s good to check your progress
 often, as that will help you identify the cause of problems when they occur.
 
 #### Grouping Configuration Values
 
 We can take another small step to improve this function further. At the moment,
-we're returning a tuple, but then we immediately break that tuple up into
-individual parts again. This is a sign that perhaps we don't have the right
+we’re returning a tuple, but then we immediately break that tuple up into
+individual parts again. This is a sign that perhaps we don’t have the right
 abstraction yet.
 
-Another indicator that there's room for improvement is the `config` part of
+Another indicator that there’s room for improvement is the `config` part of
 `parse_config`, which implies that the two values we return are related and are
-both part of one configuration value. We're not currently conveying this
+both part of one configuration value. We’re not currently conveying this
 meaning in the structure of the data other than grouping the two values into a
 tuple: we could put the two values into one struct and give each of the struct
 fields a meaningful name. This will make it easier for future maintainers of
@@ -421,7 +421,7 @@ their purpose is.
 > complex type would be more appropriate *primitive obsession*.
 
 Listing 12-6 shows the addition of a struct named `Config` defined to have
-fields named `query` and `filename`. We've also changed the `parse_config`
+fields named `query` and `filename`. We’ve also changed the `parse_config`
 function to return an instance of the `Config` struct, and updated `main` to
 use the struct fields rather than having separate variables:
 
@@ -459,10 +459,10 @@ struct
 
 The signature of `parse_config` now indicates that it returns a `Config` value.
 In the body of `parse_config`, where we used to return string slices that
-reference `String` values in `args`, we've now chosen to define `Config` to
+reference `String` values in `args`, we’ve now chosen to define `Config` to
 contain owned `String` values. The `args` variable in `main` is the owner of
 the argument values and is only letting the `parse_config` function borrow
-them, though, which means we'd violate Rust's borrowing rules if `Config` tried
+them, though, which means we’d violate Rust’s borrowing rules if `Config` tried
 to take ownership of the values in `args`.
 
 There are a number of different ways we could manage the `String` data, and the
@@ -470,21 +470,21 @@ easiest, though somewhat inefficient, route is to call the `clone` method on
 the values. This will make a full copy of the data for the `Config` instance to
 own, which does take more time and memory than storing a reference to the
 string data. However, cloning the data also makes our code very straightforward
-since we don't have to manage the lifetimes of the references, so in this
+since we don’t have to manage the lifetimes of the references, so in this
 circumstance giving up a little performance to gain simplicity is a worthwhile
 trade-off.
 
 > #### The Tradeoffs of Using `clone`
 >
-> There's a tendency among many Rustaceans to avoid using `clone` to fix
+> There’s a tendency among many Rustaceans to avoid using `clone` to fix
 > ownership problems because of its runtime cost. In Chapter 13 on iterators,
-> you'll learn how to use more efficient methods in this kind of situation, but
-> for now, it's okay to copy a few strings to keep making progress since we'll
+> you’ll learn how to use more efficient methods in this kind of situation, but
+> for now, it’s okay to copy a few strings to keep making progress since we’ll
 > only make these copies once, and our filename and query string are both very
-> small. It's better to have a working program that's a bit inefficient than
-> try to hyper-optimize code on your first pass. As you get more experienced
-> with Rust, it'll be easier to go straight to the desirable method, but for
-> now it's perfectly acceptable to call `clone`.
+> small. It’s better to have a working program that’s a bit inefficient than try
+> to hyper-optimize code on your first pass. As you get more experienced with
+> Rust, it’ll be easier to go straight to the desirable method, but for now it’s
+> perfectly acceptable to call `clone`.
 
 We've updated `main` so that it places the instance of `Config` that
 `parse_config` returns into a variable named `config`, and updated the code
@@ -498,11 +498,11 @@ fields named for their purpose.
 
 #### Creating a Constructor for `Config`
 
-So far, we've extracted the logic responsible for parsing the command line
+So far, we’ve extracted the logic responsible for parsing the command line
 arguments from `main` into the `parse_config` function, which helped us to see
 that the `query` and `filename` values were related and that relationship
 should be conveyed in our code. We then added a `Config` struct to name the
-related purpose of `query` and `filename`, and to be able to return the values'
+related purpose of `query` and `filename`, and to be able to return the values’
 names as struct field names from the `parse_config` function.
 
 So now that the purpose of the `parse_config` function is to create a `Config`
@@ -539,16 +539,16 @@ impl Config {
 
 Listing 12-7: Changing `parse_config` into `Config::new`
 
-We've updated `main` where we were calling `parse_config` to instead call
-`Config::new`. We've changed the name of `parse_config` to `new` and moved it
+We’ve updated `main` where we were calling `parse_config` to instead call
+`Config::new`. We’ve changed the name of `parse_config` to `new` and moved it
 within an `impl` block, which makes the `new` function associated with
 `Config`. Try compiling this again to make sure it works.
 
 ### Fixing the Error Handling
 
-Now we'll work on fixing our error handling. Recall that we mentioned
-attempting to access the values in the `args` vector at index 1 or index 2 will
-cause the program to panic if the vector contains fewer than 3 items. Try
+Now we’ll work on fixing our error handling. Recall that we mentioned that
+attempting to access the values in the `args` vector at index `1` or index `2`
+will cause the program to panic if the vector contains fewer than 3 items. Try
 running the program without any arguments; it will look like this:
 
 ```
@@ -556,7 +556,7 @@ $ cargo run
     Finished dev [unoptimized + debuginfo] target(s) in 0.0 secs
      Running `target/debug/minigrep`
 thread 'main' panicked at 'index out of bounds: the len is 1
-but the index is 1',  /stable-dist-rustc/build/src/libcollections/vec.rs:1307
+but the index is 1', /stable-dist-rustc/build/src/libcollections/vec.rs:1307
 note: Run with `RUST_BACKTRACE=1` for a backtrace.
 ```
 
@@ -592,7 +592,7 @@ assumption that this condition has been met. If `args` has fewer than 3 items,
 this condition will be true, and we call the `panic!` macro to end the program
 immediately.
 
-With these extra few lines of code in `new`, let's try running our program
+With these extra few lines of code in `new`, let’s try running our program
 without any arguments again and see what the error looks like now:
 
 ```
@@ -604,8 +604,8 @@ note: Run with `RUST_BACKTRACE=1` for a backtrace.
 ```
 
 This output is better, we now have a reasonable error message. However, we also
-have a bunch of extra information we don't want to give to our users. So
-perhaps using the technique we used in Listing 9-8 isn't the best to use here;
+have a bunch of extra information we don’t want to give to our users. So
+perhaps using the technique we used in Listing 9-8 isn’t the best to use here;
 a call to `panic!` is more appropriate for a programming problem rather than a
 usage problem anyway, as we discussed in Chapter 9. Instead, we can use the
 other technique we learned about in that chapter: returning a `Result` that can
@@ -644,13 +644,13 @@ impl Config {
 Listing 12-9: Return a `Result` from `Config::new`
 
 Our `new` function now returns a `Result`, with a `Config` instance in the
-success case and a `&'static str` in the error case. Recall from "The Static
-Lifetime" section in Chapter 10 that `&'static str` is the type of string
+success case and a `&'static str` in the error case. Recall from “The Static
+Lifetime” section in Chapter 10 that `&'static str` is the type of string
 literals, which is our error message type for now.
 
-We've made two changes in the body of the `new` function: instead of calling
-`panic!` when the user doesn't pass enough arguments, we now return an `Err`
-value, and we've wrapped the `Config` return value in an `Ok`. These changes
+We’ve made two changes in the body of the `new` function: instead of calling
+`panic!` when the user doesn’t pass enough arguments, we now return an `Err`
+value, and we’ve wrapped the `Config` return value in an `Ok`. These changes
 make the function conform to its new type signature.
 
 By having `Config::new` return an `Err` value, it allows the `main` function to
@@ -684,20 +684,20 @@ fn main() {
 
 Listing 12-10: Exiting with an error code if creating a new `Config` fails
 
-In this listing, we're using a method we haven't covered before:
+In this listing, we’re using a method we haven’t covered before:
 `unwrap_or_else`, which is defined on `Result<T, E>` by the standard library.
 Using `unwrap_or_else` allows us to define some custom, non-`panic!` error
-handling. If the `Result` is an `Ok` value, this method's behavior is similar
+handling. If the `Result` is an `Ok` value, this method’s behavior is similar
 to `unwrap`: it returns the inner value `Ok` is wrapping. However, if the value
 is an `Err` value, this method calls the code in the *closure*, which is an
-anonymous function we define and pass as an argument to `unwrap_or_else`. We'll
+anonymous function we define and pass as an argument to `unwrap_or_else`. We’ll
 be covering closures in more detail in Chapter 13. What you need to know for
 now is that `unwrap_or_else` will pass the inner value of the `Err`, which in
 this case is the static string `not enough arguments` that we added in Listing
 12-9, to our closure in the argument `err` that appears between the vertical
 pipes. The code in the closure can then use the `err` value when it runs.
 
-We've added a new `use` line to import `process` from the standard library. The
+We’ve added a new `use` line to import `process` from the standard library. The
 code in the closure that will get run in the error case is only two lines: we
 print out the `err` value, then call `std::process::exit` (we've added a new
 `use` line at the top to import `process` from the standard library).
@@ -746,7 +746,8 @@ fn run(config: Config) {
     let mut f = File::open(config.filename).expect("file not found");
 
     let mut contents = String::new();
-    f.read_to_string(&mut contents).expect("something went wrong reading the file");
+    f.read_to_string(&mut contents)
+        .expect("something went wrong reading the file");
 
     println!("With text:\n{}", contents);
 }
@@ -792,33 +793,34 @@ fn run(config: Config) -> Result<(), Box<Error>> {
 
 Listing 12-12: Changing the `run` function to return `Result`
 
-We've made three big changes here. First, we're changing the return type of the
+We’ve made three big changes here. First, we’re changing the return type of the
 `run` function to `Result<(), Box<Error>>`. This function previously returned
 the unit type, `()`, and we keep that as the value returned in the `Ok` case.
 
-For our error type, we're using the *trait object* `Box<Error>` (and we've
+For our error type, we’re using the *trait object* `Box<Error>` (and we’ve
 brought `std::error::Error` into scope with a `use` statement at the top).
-We'll be covering trait objects in Chapter 17. For now, just know that
+We’ll be covering trait objects in Chapter 17. For now, just know that
 `Box<Error>` means the function will return a type that implements the `Error`
-trait, but we don't have to specify what particular type the return value will
+trait, but we don’t have to specify what particular type the return value will
 be. This gives us flexibility to return error values that may be of different
 types in different error cases.
 
-The second change we're making is removing the calls to `expect` in favor of
+The second change we’re making is removing the calls to `expect` in favor of
 `?`, like we talked about in Chapter 9. Rather than `panic!` on an error, this
 will return the error value from the current function for the caller to handle.
 
-Thirdly, this function now returns an `Ok` value in the success case. We've
-declared the `run` function's success type as `()` in the signature, which
+Thirdly, this function now returns an `Ok` value in the success case. We’ve
+declared the `run` function’s success type as `()` in the signature, which
 means we need to wrap the unit type value in the `Ok` value. This `Ok(())`
 syntax may look a bit strange at first, but using `()` like this is the
-idiomatic way to indicate that we're calling `run` for its side effects only;
-it doesn't return a value we need.
+idiomatic way to indicate that we’re calling `run` for its side effects only;
+it doesn’t return a value we need.
 
 When you run this, it will compile, but with a warning:
 
 ```
-warning: unused result which must be used, #[warn(unused_must_use)] on by default
+warning: unused result which must be used, #[warn(unused_must_use)] on by
+default
   --> src/main.rs:39:5
    |
 39 |     run(config);
@@ -826,9 +828,9 @@ warning: unused result which must be used, #[warn(unused_must_use)] on by defaul
 ```
 
 Rust is telling us that our code ignores the `Result` value, which might be
-indicating that there was an error. We're not checking to see if there was an
+indicating that there was an error. We’re not checking to see if there was an
 error or not, though, and the compiler is reminding us that we probably meant
-to have some error handling code here! Let's rectify that now.
+to have some error handling code here! Let’s rectify that now.
 
 #### Handling Errors Returned from `run` in `main`
 
@@ -854,10 +856,10 @@ fn main() {
 ```
 
 We use `if let` to check whether `run` returns an `Err` value, rather than
-`unwrap_or_else`, and call `process::exit(1)` if it does. `run` doesn't return
+`unwrap_or_else`, and call `process::exit(1)` if it does. `run` doesn’t return
 a value that we want to `unwrap` like `Config::new` returns the `Config`
 instance. Because `run` returns a `()` in the success case, we only care about
-detecting an error, so we don't need `unwrap_or_else` to return the unwrapped
+detecting an error, so we don’t need `unwrap_or_else` to return the unwrapped
 value as it would only be `()`.
 
 The bodies of the `if let` and the `unwrap_or_else` functions are the same in
@@ -865,17 +867,17 @@ both cases though: we print out the error and exit.
 
 ### Split Code into a Library Crate
 
-This is looking pretty good so far! Now we're going to split the *src/main.rs*
+This is looking pretty good so far! Now we’re going to split the *src/main.rs*
 file up and put some code into *src/lib.rs* so that we can test it and have a
 small `main` function.
 
 Let's move the following pieces of code from *src/main.rs* to a new file,
 *src/lib.rs*:
 
-- The `run` function definition
-- The relevant `use` statements
-- The definition of `Config`
-- The `Config::new` function definition
+* The `run` function definition
+* The relevant `use` statements
+* The definition of `Config`
+* The `Config::new` function definition
 
 The contents of *src/lib.rs* should now look like Listing 12-13:
 
@@ -918,14 +920,14 @@ pub fn run(config: Config) -> Result<(), Box<Error>>{
 
 Listing 12-13: Moving `Config` and `run` into *src/lib.rs*
 
-We've made liberal use of `pub` here: on `Config`, its fields and its `new`
+We’ve made liberal use of `pub` here: on `Config`, its fields and its `new`
 method, and on the `run` function. We now have a library crate that has a
 public API that we can test.
 
 #### Calling the Library Crate from the Binary Crate
 
 Now we need to bring the code we moved to *src/lib.rs* into the scope of the
-binary crate in *src/main.rs* by using `extern crate minigrep`. Then we'll add a
+binary crate in *src/main.rs* by using `extern crate minigrep`. Then we’ll add a
 `use minigrep::Config` line to bring the `Config` type into scope, and prefix the
 `run` function with our crate name as shown in Listing 12-14:
 
@@ -963,23 +965,23 @@ Listing 12-14: Bringing the `minigrep` crate into the scope of *src/main.rs*
 With that, all the functionality should be connected and should work. Give it a
 `cargo run` and make sure everything is wired up correctly.
 
-Whew! That was a lot of work, but we've set ourselves up for success in the
-future. Now it's much easier to handle errors, and we've made our code more
+Whew! That was a lot of work, but we’ve set ourselves up for success in the
+future. Now it’s much easier to handle errors, and we’ve made our code more
 modular. Almost all of our work will be done in *src/lib.rs* from here on out.
 
-Let's take advantage of this newfound modularity by doing something that would
+Let’s take advantage of this newfound modularity by doing something that would
 have been hard with our old code, but is easy with our new code: write some
 tests!
 
-## Testing the Library's Functionality
+## Testing the Library’s Functionality
 
-Now that we've extracted the logic into *src/lib.rs* and left all the argument
-parsing and error handling in *src/main.rs*, it's much easier for us to write
+Now that we’ve extracted the logic into *src/lib.rs* and left all the argument
+parsing and error handling in *src/main.rs*, it’s much easier for us to write
 tests for the core functionality of our code. We can call our functions
 directly with various arguments and check return values without having to call
 our binary from the command line.
 
-In this section, we're going to follow the Test Driven Development (TDD)
+In this section, we’re going to follow the Test Driven Development (TDD)
 process. This is a software development technique that follows this set of
 steps:
 
@@ -1001,11 +1003,11 @@ this functionality in a function called `search`.
 
 ### Writing a Failing Test
 
-First, since we don't really need them any more, let's remove the `println!`
-statements from both *src/lib.rs* and *src/main.rs*. Then we'll add a `test`
-module with a test function, like we did in Chapter 11. The test function
-specifies the behavior we'd like the `search` function to have: it will take
-a query and the text to search for the query in, and will return only the lines
+First, since we don’t really need them any more, let’s remove the `println!`
+statements from both *src/lib.rs* and *src/main.rs*. Then we’ll add a `test`
+module with a test function like we did in Chapter 11. The test function
+specifies the behavior we’d like the `search` function to have: it will take a
+query and the text to search for the query in, and will return only the lines
 from the text that contain the query. Listing 12-15 shows this test:
 
 Filename: src/lib.rs
@@ -1033,8 +1035,8 @@ Pick three.";
 
 Listing 12-15: Creating a failing test for the `search` function we wish we had
 
-We've chosen to use "duct" as the string we're looking for in this test. The
-text we're searching in is three lines, only one of which contains "duct". We
+We've chosen to use “duct” as the string we're looking for in this test. The
+text we're searching in is three lines, only one of which contains “duct”. We
 assert that the value returned from the `search` function contains only the one
 line we expect.
 
@@ -1059,11 +1061,11 @@ compile
 Notice that we need an explicit lifetime `'a` defined in the signature of
 `search` and used with the `contents` argument and the return value. Remember
 from Chapter 10 that the lifetime parameters specify which argument lifetime is
-connected to the lifetime of the return value. In this case, we're indicating
+connected to the lifetime of the return value. In this case, we’re indicating
 that the returned vector should contain string slices that reference slices of
 the argument `contents` (rather than the argument `query`).
 
-In other words, we're telling Rust that the data returned by the `search`
+In other words, we’re telling Rust that the data returned by the `search`
 function will live as long as the data passed into the `search` function in the
 `contents` argument. This is important! The data referenced *by* a slice needs
 to be valid in order for the reference to be valid; if the compiler assumed we
@@ -1083,17 +1085,17 @@ error[E0106]: missing lifetime specifier
   signature does not say whether it is borrowed from `query` or `contents`
 ```
 
-Rust can't possibly know which of the two arguments we need, so we need to tell
+Rust can’t possibly know which of the two arguments we need, so we need to tell
 it. Because `contents` is the argument that contains all of our text and we
 want to return the parts of that text that match, we know `contents` is the
 argument that should be connected to the return value using the lifetime syntax.
 
-Other programming languages don't require you to connect arguments to return
+Other programming languages don’t require you to connect arguments to return
 values in the signature, so this may still feel strange, but will get easier
 over time. You may want to compare this example with the Lifetime Syntax
 section in Chapter 10.
 
-Now let's try running our test:
+Now let’s try running our test:
 
 ```
 $ cargo test
@@ -1120,7 +1122,7 @@ test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured
 error: test failed
 ```
 
-Great, our test fails, exactly as we expected. Let's get the test to pass!
+Great, our test fails, exactly as we expected. Let’s get the test to pass!
 
 ### Writing Code that Gets the Test to Pass
 
@@ -1133,9 +1135,9 @@ that and implement `search`, our program needs to follow these steps:
    * If it doesn't, do nothing.
 3. Return the list of results that match.
 
-Let's take each step at a time, starting with iterating through lines.
+Let’s take each step at a time, starting with iterating through lines.
 
-#### Iterating Through Lines with the `lines` method
+#### Iterating Through Lines with the `lines` Method
 
 Rust has a helpful method to handle line-by-line iteration of strings,
 conveniently named `lines`, that works as shown in Listing 12-17:
@@ -1152,14 +1154,14 @@ fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
 
 Listing 12-17: Iterating through each line in `contents`
 
-The `lines` method returns an iterator. We'll be talking about iterators in
-depth in Chapter 13, but we've already seen this way of using an iterator in
+The `lines` method returns an iterator. We’ll be talking about iterators in
+depth in Chapter 13, but we’ve already seen this way of using an iterator in
 Listing 3-6, where we used a `for` loop with an iterator to run some code on
 each item in a collection.
 
 #### Searching Each Line for the Query
 
-Next, we'll add functionality to check if the current line contains the query
+Next, we’ll add functionality to check if the current line contains the query
 string. Luckily, strings have another helpful method named `contains` that does
 this for us! Add the `contains` method to the `search` function as shown in
 Listing 12-18:
@@ -1205,7 +1207,7 @@ fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
 Listing 12-19: Storing the lines that match so that we can return them
 
 Now the `search` function should be returning only the lines that contain
-`query`, and our test should pass. Let's run the tests:
+`query`, and our test should pass. Let’s run the tests:
 
 ```
 $ cargo test
@@ -1263,8 +1265,8 @@ pub fn run(config: Config) -> Result<(), Box<Error>> {
 We're again using a `for` loop to get each line returned from `search`, and
 the code that we run for each line prints it out.
 
-Now our whole program should be working! Let's try it out, first with a word
-that should return exactly one line from the Emily Dickinson poem, "frog":
+Now our whole program should be working! Let’s try it out, first with a word
+that should return exactly one line from the Emily Dickinson poem, “frog”:
 
 ```
 $ cargo run frog poem.txt
@@ -1274,18 +1276,18 @@ $ cargo run frog poem.txt
 How public, like a frog
 ```
 
-Cool! Next, how about a word that will match multiple lines, like "the":
+Cool! Next, how about a word that will match multiple lines, like “the”:
 
 ```
 $ cargo run the poem.txt
     Finished dev [unoptimized + debuginfo] target(s) in 0.0 secs
      Running `target/debug/minigrep the poem.txt`
-Then there's a pair of us — don't tell!
+Then there’s a pair of us — don’t tell!
 To tell your name the livelong day
 ```
 
-And finally, let's make sure that we don't get any lines when we search for a
-word that isn't anywhere in the poem, like "monomorphization":
+And finally, let’s make sure that we don’t get any lines when we search for a
+word that isn’t anywhere in the poem, like “monomorphization”:
 
 ```
 $ cargo run monomorphization poem.txt
@@ -1362,7 +1364,7 @@ Trust me.";
 ```
 
 Listing 12-20: Adding a new failing test for the case insensitive function
-we're about to add
+we’re about to add
 
 Note that we've edited the old test's `contents` too. We've added a new line
 with the text "Duct tape", with a capital D, that shouldn't match the query
@@ -1411,8 +1413,8 @@ both the query and the line before comparing them
 
 First, we lowercase the `query` string, and store it in a shadowed variable
 with the same name. Calling `to_lowercase` on the query is necessary so that no
-matter if the user's query is "rust", "RUST", "Rust", or "rUsT", we'll treat
-the query as if it was "rust" and be insensitive to the case.
+matter if the user’s query is “rust”, “RUST”, “Rust”, or “rUsT”, we’ll treat
+the query as if it was “rust” and be insensitive to the case.
 
 Note that `query` is now a `String` rather than a string slice, because calling
 `to_lowercase` is creating new data, not referencing existing data. If the
@@ -1428,7 +1430,7 @@ contains `query`. This will turn "Rust:" into "rust:" and "Trust me." into
 we'll find matches no matter what case the text in the file has or the user
 entered in the query.
 
-Let's see if this implementation passes the tests:
+Let’s see if this implementation passes the tests:
 
 ```
     Finished dev [unoptimized + debuginfo] target(s) in 0.0 secs
@@ -1453,8 +1455,8 @@ running 0 tests
 test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured
 ```
 
-Great! Now, let's actually call the new `search_case_insensitive` function from
-the `run` function. First, we're going to add a configuration option for
+Great! Now, let’s actually call the new `search_case_insensitive` function from
+the `run` function. First, we’re going to add a configuration option for
 switching between case sensitive and case insensitive search to the `Config`
 struct:
 
@@ -1469,7 +1471,7 @@ pub struct Config {
 ```
 
 We add the `case_sensitive` field that holds a boolean. Then we need our `run`
-function to check the `case_sensitive` field's value and use that to decide
+function to check the `case_sensitive` field’s value and use that to decide
 whether to call the `search` function or the `search_case_insensitive` function
 as shown in Listing 12-22:
 
@@ -1577,7 +1579,7 @@ To tell your name the livelong day
 To an admiring bog!
 ```
 
-Excellent, we also got lines containing "To"! Our `minigrep` program can now do
+Excellent, we also got lines containing “To”! Our `minigrep` program can now do
 case insensitive searching, controlled by an environment variable. Now you know
 how to manage options set using either command line arguments or environment
 variables!
@@ -1619,9 +1621,9 @@ $ cargo run > output.txt
 ```
 
 The `>` syntax tells the shell to write the contents of standard out to
-*output.txt* instead of the screen. We didn't see the error message we were
+*output.txt* instead of the screen. We didn’t see the error message we were
 expecting printed on the screen, so that means it must have ended up in the
-file. Let's see what *output.txt* contains:
+file. Let’s see what *output.txt* contains:
 
 ```
 Problem parsing arguments: not enough arguments
@@ -1701,7 +1703,7 @@ redirecting standard out to a file:
 $ cargo run to poem.txt > output.txt
 ```
 
-We won't see any output to our terminal, and `output.txt` will contain our
+We won’t see any output to our terminal, and `output.txt` will contain our
 results:
 
 Filename: output.txt
@@ -1716,7 +1718,7 @@ standard error for error output as appropriate.
 
 ## Summary
 
-In this chapter, we've recapped on some of the major concepts so far and
+In this chapter, we’ve recapped on some of the major concepts so far and
 covered how to do common I/O operations in a Rust context. By using command
 line arguments, files, environment variables, and the `writeln!` macro with
 `stderr`, you're now prepared to write command line applications. By using the
@@ -1724,5 +1726,5 @@ concepts from previous chapters, your code will be well-organized, be able to
 store data effectively in the appropriate data structures, handle errors
 nicely, and be well tested.
 
-Next, let's explore some functional-language influenced Rust features: closures
+Next, let’s explore some functional-language influenced Rust features: closures
 and iterators.

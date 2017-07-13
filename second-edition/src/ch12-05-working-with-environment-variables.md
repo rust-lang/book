@@ -58,7 +58,7 @@ Trust me.";
 ```
 
 <span class="caption">Listing 12-20: Adding a new failing test for the case
-insensitive function we're about to add</span>
+insensitive function we’re about to add</span>
 
 Note that we've edited the old test's `contents` too. We've added a new line
 with the text "Duct tape", with a capital D, that shouldn't match the query
@@ -107,8 +107,8 @@ function to lowercase both the query and the line before comparing them</span>
 
 First, we lowercase the `query` string, and store it in a shadowed variable
 with the same name. Calling `to_lowercase` on the query is necessary so that no
-matter if the user's query is "rust", "RUST", "Rust", or "rUsT", we'll treat
-the query as if it was "rust" and be insensitive to the case.
+matter if the user’s query is “rust”, “RUST”, “Rust”, or “rUsT”, we’ll treat
+the query as if it was “rust” and be insensitive to the case.
 
 Note that `query` is now a `String` rather than a string slice, because calling
 `to_lowercase` is creating new data, not referencing existing data. If the
@@ -124,7 +124,7 @@ contains `query`. This will turn "Rust:" into "rust:" and "Trust me." into
 we'll find matches no matter what case the text in the file has or the user
 entered in the query.
 
-Let's see if this implementation passes the tests:
+Let’s see if this implementation passes the tests:
 
 ```text
     Finished dev [unoptimized + debuginfo] target(s) in 0.0 secs
@@ -149,8 +149,8 @@ running 0 tests
 test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured
 ```
 
-Great! Now, let's actually call the new `search_case_insensitive` function from
-the `run` function. First, we're going to add a configuration option for
+Great! Now, let’s actually call the new `search_case_insensitive` function from
+the `run` function. First, we’re going to add a configuration option for
 switching between case sensitive and case insensitive search to the `Config`
 struct:
 
@@ -165,7 +165,7 @@ pub struct Config {
 ```
 
 We add the `case_sensitive` field that holds a boolean. Then we need our `run`
-function to check the `case_sensitive` field's value and use that to decide
+function to check the `case_sensitive` field’s value and use that to decide
 whether to call the `search` function or the `search_case_insensitive` function
 as shown in Listing 12-22:
 
@@ -297,7 +297,7 @@ To tell your name the livelong day
 To an admiring bog!
 ```
 
-Excellent, we also got lines containing "To"! Our `minigrep` program can now do
+Excellent, we also got lines containing “To”! Our `minigrep` program can now do
 case insensitive searching, controlled by an environment variable. Now you know
 how to manage options set using either command line arguments or environment
 variables!

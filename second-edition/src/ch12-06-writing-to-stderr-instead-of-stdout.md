@@ -25,9 +25,9 @@ $ cargo run > output.txt
 ```
 
 The `>` syntax tells the shell to write the contents of standard out to
-*output.txt* instead of the screen. We didn't see the error message we were
+*output.txt* instead of the screen. We didn’t see the error message we were
 expecting printed on the screen, so that means it must have ended up in the
-file. Let's see what *output.txt* contains:
+file. Let’s see what *output.txt* contains:
 
 ```text
 Problem parsing arguments: not enough arguments
@@ -107,7 +107,7 @@ redirecting standard out to a file:
 $ cargo run to poem.txt > output.txt
 ```
 
-We won't see any output to our terminal, and `output.txt` will contain our
+We won’t see any output to our terminal, and `output.txt` will contain our
 results:
 
 <span class="filename">Filename: output.txt</span>
@@ -122,7 +122,7 @@ standard error for error output as appropriate.
 
 ## Summary
 
-In this chapter, we've recapped on some of the major concepts so far and
+In this chapter, we’ve recapped on some of the major concepts so far and
 covered how to do common I/O operations in a Rust context. By using command
 line arguments, files, environment variables, and the `writeln!` macro with
 `stderr`, you're now prepared to write command line applications. By using the
@@ -130,5 +130,5 @@ concepts from previous chapters, your code will be well-organized, be able to
 store data effectively in the appropriate data structures, handle errors
 nicely, and be well tested.
 
-Next, let's explore some functional-language influenced Rust features: closures
+Next, let’s explore some functional-language influenced Rust features: closures
 and iterators.

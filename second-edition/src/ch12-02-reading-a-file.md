@@ -10,10 +10,10 @@ level of your project, and enter the poem "I'm nobody! Who are you?":
 <span class="filename">Filename: poem.txt</span>
 
 ```text
-I'm nobody! Who are you?
+I’m nobody! Who are you?
 Are you nobody, too?
-Then there's a pair of us — don't tell!
-They'd banish us, you know.
+Then there’s a pair of us — don’t tell!
+They’d banish us, you know.
 
 How dreary to be somebody!
 How public, like a frog
@@ -21,7 +21,7 @@ To tell your name the livelong day
 To an admiring bog!
 ```
 
-<span class="caption">Listing 12-3: The poem "I'm nobody! Who are you?" by
+<span class="caption">Listing 12-3: The poem “I’m nobody! Who are you?” by
 Emily Dickinson that will make a good test case</span>
 
 With that in place, edit *src/main.rs* and add code to open the file as shown
@@ -52,7 +52,8 @@ fn main() {
 }
 ```
 
-Listing 12-4: Reading the contents of the file specified by the second argument
+<span class="caption">Listing 12-4: Reading the contents of the file specified
+by the second argument</span>
 
 First, we add some more `use` statements to bring in relevant parts of the
 standard library: we need `std::fs::File` for dealing with files, and
@@ -62,7 +63,7 @@ certain things into scope automatically, the `std::io` module has its own
 prelude of common things you'll need when working with I/O. Unlike the default
 prelude, we must explicitly `use` the prelude in `std::io`.
 
-In `main`, we've added three things: first, we get a mutable handle to the file
+In `main`, we’ve added three things: first, we get a mutable handle to the file
 by calling the `File::open` function and passing it the value of the `filename`
 variable. Second, we create a variable called `contents` and set it to a
 mutable, empty `String`. This will hold the content of the file after we read
@@ -73,8 +74,8 @@ After those lines, we've again added temporary `println!` that prints out the
 value in `contents` after we've read the file so we can check that our program
 is working so far.
 
-Let's try running this code with any string as the first command line argument
-(since we haven't implemented the searching part yet) and our *poem.txt* file
+Let’s try running this code with any string as the first command line argument
+(since we haven’t implemented the searching part yet) and our *poem.txt* file
 as the second argument:
 
 ```text
@@ -84,10 +85,10 @@ $ cargo run the poem.txt
 Searching for the
 In file poem.txt
 With text:
-I'm nobody! Who are you?
+I’m nobody! Who are you?
 Are you nobody, too?
-Then there's a pair of us — don't tell!
-They'd banish us, you know.
+Then there’s a pair of us — don’t tell!
+They’d banish us, you know.
 
 How dreary to be somebody!
 How public, like a frog

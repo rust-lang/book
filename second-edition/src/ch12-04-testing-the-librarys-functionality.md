@@ -1,12 +1,12 @@
-## Testing the Library's Functionality
+## Testing the Library’s Functionality
 
-Now that we've extracted the logic into *src/lib.rs* and left all the argument
-parsing and error handling in *src/main.rs*, it's much easier for us to write
+Now that we’ve extracted the logic into *src/lib.rs* and left all the argument
+parsing and error handling in *src/main.rs*, it’s much easier for us to write
 tests for the core functionality of our code. We can call our functions
 directly with various arguments and check return values without having to call
 our binary from the command line.
 
-In this section, we're going to follow the Test Driven Development (TDD)
+In this section, we’re going to follow the Test Driven Development (TDD)
 process. This is a software development technique that follows this set of
 steps:
 
@@ -28,11 +28,11 @@ this functionality in a function called `search`.
 
 ### Writing a Failing Test
 
-First, since we don't really need them any more, let's remove the `println!`
-statements from both *src/lib.rs* and *src/main.rs*. Then we'll add a `test`
-module with a test function, like we did in Chapter 11. The test function
-specifies the behavior we'd like the `search` function to have: it will take
-a query and the text to search for the query in, and will return only the lines
+First, since we don’t really need them any more, let’s remove the `println!`
+statements from both *src/lib.rs* and *src/main.rs*. Then we’ll add a `test`
+module with a test function like we did in Chapter 11. The test function
+specifies the behavior we’d like the `search` function to have: it will take a
+query and the text to search for the query in, and will return only the lines
 from the text that contain the query. Listing 12-15 shows this test:
 
 <span class="filename">Filename: src/lib.rs</span>
@@ -91,11 +91,11 @@ function that our test will compile</span>
 Notice that we need an explicit lifetime `'a` defined in the signature of
 `search` and used with the `contents` argument and the return value. Remember
 from Chapter 10 that the lifetime parameters specify which argument lifetime is
-connected to the lifetime of the return value. In this case, we're indicating
+connected to the lifetime of the return value. In this case, we’re indicating
 that the returned vector should contain string slices that reference slices of
 the argument `contents` (rather than the argument `query`).
 
-In other words, we're telling Rust that the data returned by the `search`
+In other words, we’re telling Rust that the data returned by the `search`
 function will live as long as the data passed into the `search` function in the
 `contents` argument. This is important! The data referenced *by* a slice needs
 to be valid in order for the reference to be valid; if the compiler assumed we
@@ -115,17 +115,17 @@ error[E0106]: missing lifetime specifier
   signature does not say whether it is borrowed from `query` or `contents`
 ```
 
-Rust can't possibly know which of the two arguments we need, so we need to tell
+Rust can’t possibly know which of the two arguments we need, so we need to tell
 it. Because `contents` is the argument that contains all of our text and we
 want to return the parts of that text that match, we know `contents` is the
 argument that should be connected to the return value using the lifetime syntax.
 
-Other programming languages don't require you to connect arguments to return
+Other programming languages don’t require you to connect arguments to return
 values in the signature, so this may still feel strange, but will get easier
 over time. You may want to compare this example with the Lifetime Syntax
 section in Chapter 10.
 
-Now let's try running our test:
+Now let’s try running our test:
 
 ```text
 $ cargo test
@@ -152,7 +152,7 @@ test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured
 error: test failed
 ```
 
-Great, our test fails, exactly as we expected. Let's get the test to pass!
+Great, our test fails, exactly as we expected. Let’s get the test to pass!
 
 ### Writing Code that Gets the Test to Pass
 
@@ -165,9 +165,9 @@ that and implement `search`, our program needs to follow these steps:
    * If it doesn't, do nothing.
 3. Return the list of results that match.
 
-Let's take each step at a time, starting with iterating through lines.
+Let’s take each step at a time, starting with iterating through lines.
 
-#### Iterating Through Lines with the `lines` method
+#### Iterating Through Lines with the `lines` Method
 
 Rust has a helpful method to handle line-by-line iteration of strings,
 conveniently named `lines`, that works as shown in Listing 12-17:
@@ -185,14 +185,14 @@ fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
 <span class="caption">Listing 12-17: Iterating through each line in
 `contents`</span>
 
-The `lines` method returns an iterator. We'll be talking about iterators in
-depth in Chapter 13, but we've already seen this way of using an iterator in
+The `lines` method returns an iterator. We’ll be talking about iterators in
+depth in Chapter 13, but we’ve already seen this way of using an iterator in
 Listing 3-6, where we used a `for` loop with an iterator to run some code on
 each item in a collection.
 
 #### Searching Each Line for the Query
 
-Next, we'll add functionality to check if the current line contains the query
+Next, we’ll add functionality to check if the current line contains the query
 string. Luckily, strings have another helpful method named `contains` that does
 this for us! Add the `contains` method to the `search` function as shown in
 Listing 12-18:
@@ -239,7 +239,7 @@ fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
 can return them</span>
 
 Now the `search` function should be returning only the lines that contain
-`query`, and our test should pass. Let's run the tests:
+`query`, and our test should pass. Let’s run the tests:
 
 ```text
 $ cargo test
@@ -297,8 +297,8 @@ pub fn run(config: Config) -> Result<(), Box<Error>> {
 We're again using a `for` loop to get each line returned from `search`, and
 the code that we run for each line prints it out.
 
-Now our whole program should be working! Let's try it out, first with a word
-that should return exactly one line from the Emily Dickinson poem, "frog":
+Now our whole program should be working! Let’s try it out, first with a word
+that should return exactly one line from the Emily Dickinson poem, “frog”:
 
 ```text
 $ cargo run frog poem.txt
@@ -308,18 +308,18 @@ $ cargo run frog poem.txt
 How public, like a frog
 ```
 
-Cool! Next, how about a word that will match multiple lines, like "the":
+Cool! Next, how about a word that will match multiple lines, like “the”:
 
 ```text
 $ cargo run the poem.txt
     Finished dev [unoptimized + debuginfo] target(s) in 0.0 secs
      Running `target/debug/minigrep the poem.txt`
-Then there's a pair of us — don't tell!
+Then there’s a pair of us — don’t tell!
 To tell your name the livelong day
 ```
 
-And finally, let's make sure that we don't get any lines when we search for a
-word that isn't anywhere in the poem, like "monomorphization":
+And finally, let’s make sure that we don’t get any lines when we search for a
+word that isn’t anywhere in the poem, like “monomorphization”:
 
 ```text
 $ cargo run monomorphization poem.txt
