@@ -41,14 +41,20 @@ PR 리뷰를 통해 통합하고, 그 외에 오탈자 수정 등 자잘한 수�
 
 - assign: 대입하다
 - bind: 묶다
+- borrowing: 빌림
 - clone: 클론
 - copy: 복사
+- dangling reference: 허상 참조자
+- data race: 데이터 레이스
 - `drop`: `drop`한다, 버리다
 - heap: 힙
+- immutable: 불변
 - move: 이동
+- mutable: 가변
 - ownership: 소유권
 - pointer: 포인터
 - reference: 참조자
+- rust: 러스트
 - scope: 스코프
 - stack: 스택
 - string literal: 스트링 리터럴
