@@ -47,15 +47,19 @@ PR 리뷰를 통해 통합하고, 그 외에 오탈자 수정 등 자잘한 수�
 - dangling reference: 허상 참조자
 - data race: 데이터 레이스
 - `drop`: `drop`한다, 버리다
+- feature: 특성
 - heap: 힙
 - immutable: 불변
+- lifetime: 라이프타임
 - move: 이동
 - mutable: 가변
 - ownership: 소유권
 - pointer: 포인터
 - reference: 참조자
+- return: 반환
 - rust: 러스트
 - scope: 스코프
+- slice: 슬라이스
 - stack: 스택
 - string literal: 스트링 리터럴
 - variable: 변수

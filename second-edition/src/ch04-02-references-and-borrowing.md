@@ -216,15 +216,14 @@ immutable
 
 ### 허상 참조자(Dangling References)
 
-In languages with pointers, it’s easy to erroneously create a *dangling
-pointer*, a pointer that references a location in memory that may have been
-given to someone else, by freeing some memory while preserving a pointer to
-that memory. In Rust, by contrast, the compiler guarantees that references will
-never be dangling references: if we have a reference to some data, the compiler
-will ensure that the data will not go out of scope before the reference to the
-data does.
+포인터가 있는 언어에서는 자칫 잘못하면 *허상 포인터(dangling pointer)* 를 만들기 쉬운데, 허상
+포인터란 어떤 메모리를 가리키는 포인터를 보존하는 동안, 그 메모리를 해제함으로써 다른 개체에게
+사용하도록 줘버렸을 지도 모를 메모리를 참조하고 있는 포인터를 말합니다. 이와는 반대로, 러스트에서는
+컴파일러가 모든 참조자들이 허상 참조자가 되지 않도록 보장해 줍니다: 만일 우리가 어떤 데이터의 참조자를
+만들었다면, 컴파일러는 그 참조자가 스코프 밖으로 벗어나기 전에는 데이터가 스코프 밖으로 벗어나지 않을
+것임을 확인해 줄 것입니다.
 
-Let’s try to create a dangling reference:
+허상 참조자를 만드는 시도를 해봅시다:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -240,7 +239,7 @@ fn dangle() -> &String {
 }
 ```
 
-Here’s the error:
+위 코드의 오류 메세지입니다:
 
 ```text
 error[E0106]: missing lifetime specifier
@@ -256,35 +255,33 @@ error[E0106]: missing lifetime specifier
 error: aborting due to previous error
 ```
 
-This error message refers to a feature we haven’t covered yet: *lifetimes*.
-We’ll discuss lifetimes in detail in Chapter 10. But, if you disregard the
-parts about lifetimes, the message does contain the key to why this code is a
-problem:
+이 오류 메세지는 우리가 아직 다루지 못한 특성을 인용하고 있습니다: 바로 *라이프타임(lifetime)* 입니다.
+생애주기에 대한 것은 10장에서 자세히 다룰 것입니다. 하지만 여러분이 라이프타임에 대한 부분을 무시한다면,
+이 메세지는 이 코드가 왜 문제인지를 알려줄 열쇠를 쥐고 있습니다:
 
 ```text
 this function's return type contains a borrowed value, but there is no value
 for it to be borrowed from.
+(해석: 이 함수의 반환 타입은 빌린 값을 포함하고 있는데, 빌려온 실제 값은 없습니다.)
 ```
 
-Let’s take a closer look at exactly what’s happening at each stage of our
-`dangle` code:
+`dangle` 코드 부분의 각 단계에서 어떤 일이 벌어지는지 더 면밀히 들여다봅시다:
 
 ```rust,ignore
-fn dangle() -> &String { // dangle returns a reference to a String
+fn dangle() -> &String { // dangle은 String의 참조자를 반환합니다
 
-    let s = String::from("hello"); // s is a new String
+    let s = String::from("hello"); // s는 새로운 String입니다
 
-    &s // we return a reference to the String, s
-} // Here, s goes out of scope, and is dropped. Its memory goes away.
-  // Danger!
+    &s // 우리는 String s의 참조자를 반환합니다.
+} // 여기서 s는 스코프를 벗어나고 버려집니다. 이것의 메모리는 사라집니다.
+  // 위험하군요!
 ```
 
-Because `s` is created inside `dangle`, when the code of `dangle` is finished,
-`s` will be deallocated. But we tried to return a reference to it. That means
-this reference would be pointing to an invalid `String`! That’s no good. Rust
-won’t let us do this.
+`s`가 `dangle`안에서 만들어졌기 때문에, `dangle`의 코드가 끝이나면 `s`는 할당 해제됩니다.
+하지만 우리는 이것의 참조자를 반환하려고 했습니다. 이는 곧 이 참조자가 어떤 무효화된 `String`을
+가리키게 될 것이란 뜻이 아닙니까! 별로 안 좋죠. 러스트는 우리가 이런 짓을 못하게 합니다.
 
-The solution here is to return the `String` directly:
+여기서의 해법은 `String`을 직접 반환하는 것입니다:
 
 ```rust
 fn no_dangle() -> String {
@@ -294,16 +291,16 @@ fn no_dangle() -> String {
 }
 ```
 
-This works without any problems. Ownership is moved out, and nothing is
-deallocated.
+이 코드는 아무런 문제없이 동작합니다. 소유권이 밖으로 이동되었고, 아무것도 할당 해제되지 않습니다.
 
-### The Rules of References
+### 참조자의 규칙
 
-Let’s recap what we’ve discussed about references:
+우리가 참조자에 대해 논의한 것들을 정리해 봅시다:
 
-1. At any given time, you can have *either* but not both of:
-  * One mutable reference.
-  * Any number of immutable references.
-2. References must always be valid.
+1. 어떠한 경우이든 간에, 여러분은 아래 둘 다는 아니고 *둘 중 하나만* 가질 수 있습니다:
+  * 하나의 가변 참조자
+  * 임의 개수의 불변 참조자들
+2. 참조자는 항상 유효하다.
 
-Next, we’ll look at a different kind of reference: slices.
+다음으로, 우리는 다른 종류의 참조자인 슬라이스(slice)를 볼 것입니다.
+
