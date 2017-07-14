@@ -57,13 +57,13 @@
     - [Running tests](ch11-02-running-tests.md)
     - [Test Organization](ch11-03-test-organization.md)
 
-- [An I/O Project](ch12-00-an-io-project.md)
+- [An I/O Project: Building a Command Line Program](ch12-00-an-io-project.md)
     - [Accepting Command Line Arguments](ch12-01-accepting-command-line-arguments.md)
     - [Reading a File](ch12-02-reading-a-file.md)
-    - [Improving Error Handling and Modularity](ch12-03-improving-error-handling-and-modularity.md)
+    - [Refactoring to Improve Modularity and Error Handling](ch12-03-improving-error-handling-and-modularity.md)
     - [Testing the Library's Functionality](ch12-04-testing-the-librarys-functionality.md)
     - [Working with Environment Variables](ch12-05-working-with-environment-variables.md)
-    - [Writing to `stderr` instead of `stdout`](ch12-06-writing-to-stderr-instead-of-stdout.md)
+    - [Writing Error Messages to `stderr` Instead of `stdout`](ch12-06-writing-to-stderr-instead-of-stdout.md)
 
 ## Thinking in Rust
 
