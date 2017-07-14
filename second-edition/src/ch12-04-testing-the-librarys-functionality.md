@@ -6,6 +6,8 @@ tests for the core functionality of our code. We can call our functions
 directly with various arguments and check return values without having to call
 our binary from the command line.
 
+<!-- Hey! I thought you moved argument parsing into *src/lib.rs*... -->
+
 In this section, we're going to follow the Test Driven Development (TDD)
 process. This is a software development technique that follows this set of
 steps:
@@ -16,6 +18,9 @@ steps:
 3. Refactor the code you just added or changed, and make sure the tests
    continue to pass.
 4. Repeat!
+
+<!-- *Rolleyes* WE JUST SPENT AN ENTIRE CHAPTER ON TESTING IVE HAD ENOUGH!!!!!
+AND BESIDES, YOU ALREADY WROTE CODE WITHOUT TESTS. YOU'RE CAUGHT! \s -->
 
 This is just one of many ways to write software, but TDD can help drive the
 design of code. Writing the test before writing the code that makes the test
@@ -129,6 +134,8 @@ section in Chapter 10.
 
 Now let's try running our test:
 
+<!-- "greprs-abcabcabcc"..... :D -->
+
 ```text
 $ cargo test
 ...warnings...
@@ -205,8 +212,8 @@ added a reference to where we've done this in the book previously. /Carol -->
 
 Next, we'll add functionality to check if the current line contains the query
 string. Luckily, strings have another helpful method named `contains` that does
-this for us! Add the `contains` method to the `search` function as shown in
-Listing 12-18:
+this for us! Add a call to the `contains` method to the `search` function as
+shown in Listing 12-18:
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -296,6 +303,8 @@ doing this in a different way, and be concerned that we're not teaching the
 best way possible. This paragraph reassures them that we know what we're doing
 and we're getting to the better way in Chapter 13. /Carol -->
 
+<!-- Keep it as-is!! -->
+
 #### Using the `search` Function in the `run` Function
 
 Now that we have the `search` function working and tested, we need to actually
@@ -324,6 +333,10 @@ pub fn run(config: Config) -> Result<(), Box<Error>> {
 
 We're again using a `for` loop to get each line returned from `search`, and
 the code that we run for each line prints it out.
+
+<!-- My first and second parsings of the above sentence considered the portion
+before the comma to be a full sentence and expected the portion after "and" to
+also be complete.  Consider rework. Brain = dead. -->
 
 Now our whole program should be working! Let's try it out, first with a word
 that should return exactly one line from the Emily Dickinson poem, "frog":
@@ -363,3 +376,8 @@ Feel free to move on to Chapter 13 if you'd like at this point. To round out
 this project chapter, though, we're going to briefly demonstrate how to work
 with environment variables and printing to standard error, both of which are
 useful when writing command line programs.
+
+<!-- I didn't expect "printing" to follow after "demonstrate how to work" -->
+
+<!-- I like the ending here, BUT..BUT..BUT I don't like how all the actual work
+of the program was developed in secret behind the section title "Testing..." -->

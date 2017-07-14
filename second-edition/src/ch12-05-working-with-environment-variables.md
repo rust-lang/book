@@ -26,6 +26,9 @@ new test for the new case insensitive search function, and rename our old test
 from `one_result` to `case_sensitive` to be clearer about the differences
 between the two tests, as shown in Listing 12-20:
 
+<!-- There is something satisfying about seeing the previous test name changed,
+rather than just starting with a "great" name. -->
+
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust
@@ -325,6 +328,10 @@ To tell your name the livelong day
 To an admiring bog!
 ```
 
+<!-- Are there any relatively popular shells that would use a different syntax
+to set an environment variable? If so, you might need to specify that this one
+works for X, Y, and Z. -->
+
 Excellent, we also got lines containing "To"! Our `greprs` program can now do
 case insensitive searching, controlled by an environment variable. Now you know
 how to manage options set using either command line arguments or environment
@@ -336,6 +343,8 @@ precedence. For another exercise on your own, try controlling case
 insensitivity through a command line argument as well as through the
 environment variable, and decide which should take precedence if the program is
 run with contradictory values.
+
+<!-- Something is broken about the last sentence of the above paragraph -->
 
 The `std::env` module contains many more useful features for dealing with
 environment variables; check out its documentation to see what's available.

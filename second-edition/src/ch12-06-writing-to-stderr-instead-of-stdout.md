@@ -1,13 +1,16 @@
-## Write to `stderr` Instead of `stdout`
+## Writing to `stderr` Instead of `stdout`
 
 Right now, we're writing all of our output to the terminal with `println!`.
-Most terminals provide two kinds of output: "standard out" for general
+Most terminals provide two kinds of output: "standard output" for general
 information, and "standard error" for error messages. This distinction is the
-behavior that's expected of command line programs: it enables users to choose
-to direct a program's successful output to a file but still print error
-messages to the screen, for example. `println!` is only capable of printing to
-standard out, though, so we have to use something else in order to print to
-standard error.
+behavior that's expected of command line programs: it enables users to choose to
+direct a program's successful output to a file but still print error messages to
+the screen, for example. `println!` is only capable of printing to standard out,
+though, so we have to use something else in order to print to standard error.
+
+<!-- Dang, looks like you used "standard out" throughout the entire section. I'm
+sticking to my opinion that "standard output" is a better term. I don't even
+care that it makes the section longer! -->
 
 We can verify that, the way we've written `greprs` so far, everything is being
 written to standard out, including error messages that should be written to
@@ -19,6 +22,9 @@ message, it should be shown on the screen rather than being redirected to the
 file. Let's see that our program is not currently meeting this expectation by
 using `>` and specifying a filename, *output.txt*, that we want to redirect
 standard out to:
+
+<!-- This is a wonderful idea for a short section, but do we need to specify any
+popular shells that don't use the same conventions? -->
 
 ```text
 $ cargo run > output.txt
@@ -150,3 +156,5 @@ nicely, and be well tested.
 
 Next, let's explore some functional-language influenced Rust features: closures
 and iterators.
+
+<!-- Too bad the example didn't at least include 1 line of legitimate output -->

@@ -45,6 +45,8 @@ developed a kind of guideline process for splitting up the separate concerns of
 a binary program when `main` starts getting large. The process has the
 following steps:
 
+<!-- ok this is a cool thing right here... -->
+
 1. Split your program into both a *main.rs* and a *lib.rs* and move your
    program's logic into *lib.rs*.
 2. While your command line parsing logic is small, it can remain in *main.rs*.
@@ -63,6 +65,9 @@ can't test the `main` function directly, this structure lets us test all of our
 program's logic by moving it into functions in *lib.rs*. The only code that
 remains in *main.rs* will be small enough to verify its correctness by reading
 it. Let's re-work our program by following this process.
+
+<!-- can you specify somewhere in here whether this is going for level 2 or 3
+from the list above? -->
 
 <!--Since main is already handling the parsing of arguments, why do we need to
 add a new function for it, can you say how that improves things? -->
@@ -180,6 +185,8 @@ fn parse_config(args: &[String]) -> Config {
 }
 ```
 
+<!-- is it normal to put main on top or bottom? -->
+
 Listing 12-6: Refactoring `parse_config` to return an instance of a `Config`
 struct
 
@@ -219,6 +226,9 @@ trade-off.
 > with Rust, it'll be easier to go straight to the desirable method, but for
 > now it's perfectly acceptable to call `clone`.
 
+<!-- i would have expected it to say "than to try..." to match with "better to",
+but maybe this is fine -->
+
 <!-- PROD: END BOX -->
 
 We've updated `main` so that it places the instance of `Config` that
@@ -253,14 +263,14 @@ should be conveyed in our code. We then added a `Config` struct to name the
 related purpose of `query` and `filename`, and to be able to return the values'
 names as struct field names from the `parse_config` function.
 
-So now that the purpose of the `parse_config` function is to create a `Config`
-instance, we can change `parse_config` from being a plain function into a
-function named `new` that is associated with the `Config` struct. Making this
-change will make our code more idiomatic: we can create instances of types in
-the standard library like `String` by calling `String::new`, and by changing
-`parse_config` to be a `new` function associated with `Config`, we'll be able
-to create instances of `Config` by calling `Config::new`. Listing 12-7 shows
-the changes we'll need to make:
+At this point, `parse_config` just creates a `Config` instance.  It's just a
+constructor! To better convey this, we can change `parse_config` from a plain
+function into a function named `new` that is associated with the `Config`
+struct. Making this change will make our code more idiomatic: we can create
+instances of types in the standard library like `String` by calling
+`String::new`, and by changing `parse_config` to be a `new` function associated
+with `Config`, we'll be able to create instances of `Config` by calling
+`Config::new`. Listing 12-7 shows the changes we'll need to make:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -380,11 +390,11 @@ to use `new`... /Carol -->
 
 We can choose to instead return a `Result` value that will contain a `Config`
 instance in the successful case, and will describe the problem in the error
-case. When `Config::new` is communicating to `main`, we can use Rust's way of
-signaling that there was a problem using the `Result` type. Then we can change
-`main` to convert an `Err` variant into a nicer error for our users, without
-the surrounding text about `thread 'main'` and `RUST_BACKTRACE` that a call to
-`panic!` causes.
+case. When `Config::new` is communicating to `main`, we can follow Rust's
+convention of signaling that there was a problem using the `Result` type. Then
+we can change `main` to convert an `Err` variant into a nicer error for our
+users, without the surrounding text about `thread 'main'` and `RUST_BACKTRACE`
+that a call to `panic!` causes.
 
 Listing 12-9 shows the changes to the return value of `Config::new` and the
 body of the function needed to return a `Result`:
@@ -424,9 +434,9 @@ We've made two changes in the body of the `new` function: instead of calling
 value, and we've wrapped the `Config` return value in an `Ok`. These changes
 make the function conform to its new type signature.
 
-By having `Config::new` return an `Err` value, it allows the `main` function to
-handle the `Result` value returned from the `new` function and exit the process
-more cleanly in the error case.
+Returning an `Err` value from `Config::new` allows the `main` function to handle
+the `Result` value returned from the `new` function and exit the process more
+cleanly in the error case.
 
 #### Calling `Config::new` and Handling Errors
 
@@ -435,7 +445,7 @@ update `main` to handle the `Result` that `Config::new` is now returning as
 shown in Listing 12-10. We're also going to implement by hand something that
 `panic!` handled for us: exiting the command line tool with an error code of 1.
 A nonzero exit status is a convention to signal to the process that called our
-program that our program ended with an error state.
+program that our program exited with an error state.
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -484,14 +494,17 @@ pipes. The code in the closure can then use the `err` value when it runs.
 <!-- Does with what? I've tried to elaborate in the above and below paragraphs,
 but I'm not sure exactly what's confusing /Carol -->
 
+<!-- I'm fine with it as-is! -->
+
 We've added a new `use` line to import `process` from the standard library. The
 code in the closure that will get run in the error case is only two lines: we
-print out the `err` value, then call `std::process::exit` (we've added a new
-`use` line at the top to import `process` from the standard library).
-`process::exit` will stop the program immediately and return the number that
-was passed as the exit status code. This is similar to the `panic!`-based
-handling we used in Listing 12-8, with the exception that we no longer get all
-the extra output. Let's try it:
+print out the `err` value, then call `std::process::exit`, which will stop the
+program immediately and return the number that was passed as the exit status
+code. This is similar to the `panic!`-based handling we used in Listing 12-8,
+with the exception that we no longer get all the extra output.  Let's try it:
+
+<!-- Be careful using the word "exception" when dealing with code like this!
+Could be confusing.-->
 
 ```text
 $ cargo run
@@ -503,6 +516,11 @@ Problem parsing arguments: not enough arguments
 
 Great! This output is much friendlier for our users.
 
+<!-- Serious question: is it really worth 500 lines of text in the book to
+explain something that a program of a certain size will probably shift off to a
+command line parsing library? This seems like a potential case of "bad habit
+picked up from the book" but I don't know enough about Rust yet to know. -->
+
 ### Extracting a `run` Function
 
 Now we're done refactoring our configuration parsing; let's turn to our
@@ -513,6 +531,10 @@ that isn't setting up configuration or handling errors. Once we're done, `main`
 will be concise and easy to verify by inspection, and we'll be able to write
 tests for all of the other logic.
 
+<!-- Do sections get numbers and whatnot? Seems a little goofy to refer to a
+section by name...I don't know where to look to find it. Maybe I just read too
+slowly. -->
+
 <!-- it contains ALL the function from main? Can you say why we're doing this,
 hw this improves it? What is the run function doing? I'm afraid I feel a bit in
 the dark here-->
@@ -521,9 +543,11 @@ Binary Projects section. I've added a reference back to that and reiterated
 some of the reasoning from there, but this section isn't introducing the
 concept of the `run` function holding the logic that was in `main` /Carol -->
 
-Listing 12-11 shows the extracted `run` function. For now, we're making only
-the small, incremental improvement of extracting the function and still
-defining the function in *src/main.rs*:
+<!-- Seems fine to me as-is. -->
+
+Listing 12-11 shows the extracted `run` function. For now, we're making only the
+small, incremental improvement of extracting the function.  It is still defined
+in *src/main.rs*:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -567,6 +591,8 @@ calling `expect`, the `run` function will return a `Result<T, E>` when
 something goes wrong. This will let us further consolidate the logic around
 handling errors in a user-friendly way into `main`. Listing 12-12 shows the
 changes to the signature and body of `run`:
+
+<!-- I think "into" is too far away from "consolidate" above. -->
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -636,7 +662,7 @@ to have some error handling code here! Let's rectify that now.
 
 #### Handling Errors Returned from `run` in `main`
 
-We'll check for errors and handle them nicely using a similar technique to the
+We'll check for errors and handle them nicely using a technique similar to the
 way we handled errors with `Config::new` in Listing 12-10, but with a slight
 difference:
 
