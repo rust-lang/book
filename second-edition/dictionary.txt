@@ -102,6 +102,7 @@ Enum
 enums
 enum's
 Enums
+eprintln
 ErrorKind
 Executables
 extern
