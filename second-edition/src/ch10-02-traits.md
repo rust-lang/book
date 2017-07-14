@@ -4,8 +4,9 @@ Traits allow us to use another kind of abstraction: they let us abstract over
 behavior that types can have in common. A *trait* tells the Rust compiler about
 functionality a particular type has and might share with other types. In
 situations where we use generic type parameters, we can use *trait bounds* to
-specify, at compile time, that the generic type may be any type that implements
-a trait and therefore has the behavior we want to use in that situation.
+specify, at compile time, that the generic type must be a type that implements a
+particular trait and therefore has the behavior we want to use in that
+situation.
 
 > Note: *Traits* are similar to a feature often called 'interfaces' in other
 > languages, though with some differences.
@@ -20,8 +21,7 @@ in order to define a set of behaviors necessary to accomplish some purpose.
 For example, say we have multiple structs that hold various kinds and amounts
 of text: a `NewsArticle` struct that holds a news story filed in a particular
 place in the world, and a `Tweet` that can have at most 140 characters in its
-content along with metadata like whether it was a retweet or a reply to another
-tweet.
+content along with a username.
 
 We want to make a media aggregator library that can display summaries of data
 that might be stored in a `NewsArticle` or `Tweet` instance. The behavior we
@@ -87,8 +87,6 @@ impl Summarizable for NewsArticle {
 pub struct Tweet {
     pub username: String,
     pub content: String,
-    pub reply: bool,
-    pub retweet: bool,
 }
 
 impl Summarizable for Tweet {
@@ -118,8 +116,6 @@ part of a trait:
 let tweet = Tweet {
     username: String::from("horse_ebooks"),
     content: String::from("of course, as you probably already know, people"),
-    reply: false,
-    retweet: false,
 };
 
 println!("1 new tweet: {}", tweet.summary());
@@ -186,9 +182,9 @@ in a trait, instead of making every implementation on every type define custom
 behavior. When we implement the trait on a particular type, we can choose to
 keep or override each method's default behavior.
 
-Listing 10-14 shows how we could have chosen to specify a default string for
-the `summary` method of the `Summarize` trait instead of only choosing to only
-define the method signature like we did in Listing 10-11:
+Listing 10-14 shows how we could have chosen to specify a default string for the
+`summary` method of the `Summarize` trait instead of choosing to only define the
+method signature like we did in Listing 10-11:
 
 <span class="filename">Filename: lib.rs</span>
 
@@ -237,13 +233,13 @@ Changing the `Summarizable` trait to have a default implementation for
 as the syntax for implementing a trait method that doesn't have a default
 implementation.
 
-Default implementations are allowed to call the other methods in the same
-trait, even if those other methods don't have a default implementation. In this
-way, a trait can provide a lot of useful functionality and only require
-implementers to specify a small part of it. We could choose to have the
-`Summarizable` trait also have an `author_summary` method whose implementation
-is required, then a `summary` method that has a default implementation that
-calls the `author_summary` method:
+Default implementations are allowed to call other methods in the same trait,
+even if those other methods don't have a default implementation. In this way, a
+trait can provide a lot of useful functionality and only require implementers to
+specify a small part of it. We could choose to also give the `Summarizable`
+trait an `author_summary` method whose implementation is required, then a
+`summary` method that has a default implementation that calls the
+`author_summary` method:
 
 ```rust
 pub trait Summarizable {
@@ -274,8 +270,6 @@ definition of `author_summary` that we've provided.
 let tweet = Tweet {
     username: String::from("horse_ebooks"),
     content: String::from("of course, as you probably already know, people"),
-    reply: false,
-    retweet: false,
 };
 
 println!("1 new tweet: {}", tweet.summary());
@@ -317,11 +311,11 @@ our `notify` function and pass in an instance of `WeatherForecast`, since
 `notify` with any other type, like a `String` or an `i32`, won't compile, since
 those types do not implement `Summarizable`.
 
-We can specify multiple trait bounds on a generic type by using `+`. If we
-needed to be able to use display formatting on the type `T` in a function as
-well as the `summary` method, we can use the trait bounds `T: Summarizable +
-Display`. This means `T` can be any type that implements both `Summarizable`
-and `Display`.
+We can specify multiple trait bounds on a generic type by using `+`. If we need
+to be able to use display formatting on the type `T` in a function as well as
+the `summary` method, we can use the trait bounds `T: Summarizable + Display`.
+This means `T` can be any type that implements both `Summarizable` and
+`Display`.
 
 For functions that have multiple generic type parameters, each generic has its
 own trait bounds. Specifying lots of trait bound information in the angle
@@ -399,10 +393,10 @@ The key to this error is `cannot move out of type [T], a non-copy array`.
 With our non-generic versions of the `largest` function, we were only trying to
 find the largest `i32` or `char`. As we discussed in Chapter 4, types like
 `i32` and `char` that have a known size can be stored on the stack, so they
-implement the `Copy` trait. When we changed the `largest` function to be
-generic, it's now possible that the `list` parameter could have types in it
-that don't implement the `Copy` trait, which means we wouldn't be able to move
-the value out of `list[0]` and into the `largest` variable.
+implement the `Copy` trait. Since we changed the `largest` function to be
+generic, it's now possible that the `list` parameter could have types in it that
+don't implement the `Copy` trait, which means we wouldn't be able to move the
+value out of `list[0]` and into the `largest` variable.
 
 If we only want to be able to call this code with types that are `Copy`, we can
 add `Copy` to the trait bounds of `T`! Listing 10-15 shows the complete code of
@@ -444,17 +438,17 @@ fn main() {
 function that works on any generic type that implements the `PartialOrd` and
 `Copy` traits</span>
 
-If we don't want to restrict our `largest` function to only types that
-implement the `Copy` trait, we could specify that `T` has the trait bound
-`Clone` instead of `Copy` and clone each value in the slice when we want the
-`largest` function to have ownership. Using the `clone` function means we're
-potentially making more heap allocations, though, and heap allocations can be
-slow if we're working with large amounts of data. Another way we could
-implement `largest` is for the function to return a reference to a `T` value in
-the slice. If we change the return type to be `&T` instead of `T` and change
-the body of the function to return a reference, we wouldn't need either the
-`Clone` or `Copy` trait bounds and we wouldn't be doing any heap allocations.
-Try implementing these alternate solutions on your own!
+If we don't want to restrict our `largest` function to only types that implement
+the `Copy` trait, we can could specify that `T` has the trait bound `Clone`
+instead of `Copy` and clone each value in the slice when we want the `largest`
+function to have ownership. Using the `clone` function means we're potentially
+making more heap allocations, though, and heap allocations can be slow if we're
+working with large amounts of data. Another way we could implement `largest` is
+for the function to return a reference to a `T` value in the slice. If we change
+the return type to be `&T` instead of `T` and change the body of the function to
+return a reference, we wouldn't need either the `Clone` or `Copy` trait bounds
+and we wouldn't be doing any heap allocations.  Try implementing these alternate
+solutions on your own!
 
 Traits and trait bounds let us write code that uses generic type parameters in
 order to reduce duplication, but still specify to the compiler exactly what

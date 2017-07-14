@@ -34,11 +34,11 @@ situations and still have the compiler check that references will be valid.
 ## Removing Duplication by Extracting a Function
 
 Before getting into generics syntax, let's first review a technique for dealing
-with duplication that doesn't use generic types: extracting a function. Once
-that's fresh in our minds, we'll use the same mechanics with generics to
-extract a generic function! In the same way that you recognize duplicated code
-to extract into a function, you'll start to recognize duplicated code that can
-use generics.
+with duplication that doesn't use generic types: extracting a function. While
+that's fresh in our minds, we'll use the same mechanics with generics to extract
+a generic function! In the same way that you recognize duplicated code to
+extract into a function, you'll start to recognize duplicated code that can use
+generics.
 
 Consider a small program that finds the largest number in a list, shown in
 Listing 10-1:
@@ -65,13 +65,13 @@ fn main() {
 <span class="caption">Listing 10-1: Code to find the largest number in a list
 of numbers</span>
 
-This code takes a list of integers, stored here in the variable `numbers`. It
-puts the first item in the list in a variable named `largest`. Then it iterates
-through all the numbers in the list, and if the current value is greater than
-the number stored in `largest`, it replaces the value in `largest`. If the
-current value is smaller than the largest value seen so far, `largest` is not
-changed. When all the items in the list have been considered, `largest` will
-hold the largest value, which in this case is 100.
+This code begins with a list of integers in the variable `numbers`.  It stores
+the first number in the list in the variable named `largest`.  Then it iterates
+through all the numbers in the list. If the current number is greater than the
+number stored in `largest`, it replaces the number in `largest`.  If the current
+number is smaller than the number stored in `largest`, nothing is changed.  When
+all the numbers in the list have been considered, `largest` will hold the
+largest number, which in this case is 100.
 
 If we needed to find the largest number in two different lists of numbers, we
 could duplicate the code in Listing 10-1 and have the same logic exist in two
@@ -167,14 +167,13 @@ definition operates on the `list` representation of any `&[i32]`. When we call
 the `largest` function, the code actually runs on the specific values that we
 pass in.
 
-The mechanics we went through to get from Listing 10-2 to Listing 10-3 were
-these steps:
+We performed these steps to get from Listing 10-2 to Listing 10-3:
 
 1. We noticed there was duplicate code.
 2. We extracted the duplicate code into the body of the function, and specified
    the inputs and return values of that code in the function signature.
-3. We replaced the two concrete places that had the duplicated code to call the
-   function instead.
+3. We updated the two places that had the duplicated code to call the function
+   instead.
 
 We can use these same steps with generics to reduce code duplication in
 different ways in different scenarios. In the same way that the function body
