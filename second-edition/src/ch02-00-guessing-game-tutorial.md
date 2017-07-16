@@ -446,38 +446,39 @@ que Cargo puede reutilizar lo que ya ha descargado y compilado previamente.
 Simplemente vuelve a compilar tus cambios en el código.
 
 
-#### The *Cargo.lock* File Ensures Reproducible Builds
+#### El archivo *Cargo.lock* asegura compilaciones reproducibles
 
-Cargo has a mechanism that ensures you can rebuild the same artifact every time
-you or anyone else builds your code: Cargo will use only the versions of the
-dependencies you specified until you indicate otherwise. For example, what
-happens if next week version `v0.3.15` of the `rand` crate comes out and
-contains an important bug fix but also contains a regression that will break
-your code?
+Cargo tiene un mecanismo que permite asegurarte de que puedes crear de nuevo el
+mismo artefacto, cada vez que tú o alguien más compila tu código: Cargo solo va
+a utilizar las dependencias especificadas, a menos que indiques lo contrario.
+Por ejemplo, ¿Qué pasa si sale una nueva versión de `rand` con número `v0.3.15`,
+que continene un bug fix importante, pero que al mismo tiempo continene una
+regresión que va a provocar errores en tu código?
 
-The answer to this problem is the *Cargo.lock* file, which was created the
-first time you ran `cargo build` and is now in your *guessing_game* directory.
-When you build a project for the first time, Cargo figures out all the
-versions of the dependencies that fit the criteria and then writes them to
-the *Cargo.lock* file. When you build your project in the future, Cargo will
-see that the *Cargo.lock* file exists and use the versions specified there
-rather than doing all the work of figuring out versions again. This lets you
-have a reproducible build automatically. In other words, your project will
-remain at `0.3.14` until you explicitly upgrade, thanks to the *Cargo.lock*
-file.
+La respuesta a este problema es el fichero *Cargo.lock*, que se crea al mismo
+tiempo que utilizas `cargo build` por primera vez, y que se encuentra en el 
+directorio *guessing_game*. Cuando compilas un proyecto por primera vez, Cargo
+busca automáticamente la versión más indicada de las dependencias de tu proyecto,
+y las guarda en el fichero *Cargo.lock*. En posteriores compilaciones, Cargo
+buscará primero si existe este fichero *Cargo.lock*, y usará las versiones de
+las dependencias que estén ahí escritas, en lugar de buscar de nuevo cuál es
+la versión más adecuada. Esto nos permite hacer un build reproducible de 
+manera automática. Dicho de otro modo, tu proyecto continuará con la versión
+`0.3.14` de `rand` a menos que actualices a mano, gracias al fichero *Cargo.lock*.
 
-#### Updating a Crate to Get a New Version
+#### Actualizar un Crate para obtener una versión nueva
 
-When you *do* want to update a crate, Cargo provides another command, `update`,
-which will:
+Cuando *quieres* actualizar un crate, Cargo usa un comando diferente, `update`,
+que hace lo siguiente:
 
-1. Ignore the *Cargo.lock* file and figure out all the latest versions that fit
-your specifications in *Cargo.toml*.
-1. If that works, Cargo will write those versions to the *Cargo.lock* file.
+1. Ignorar el fichero *Cargo.lock*, ya que va a buscar de nueva las últimas
+versiones que encajas con nuestras especificaciones en *Cargo.toml*.
+2. Si no hay problemas, Cargo escribe las nuevas versiones en el fichero
+*Cargo.lock*.
 
-But by default, Cargo will only look for versions larger than `0.3.0` and
-smaller than `0.4.0`. If the `rand` crate has released two new versions,
-`0.3.15` and `0.4.0`, you would see the following if you ran `cargo update`:
+Por defecto, Cargo sólo buscará versiones mayores a `0.3.0` y menores que `0.4.0`.
+Si el crate de `rand` ha sacado dos nuevas versiones, `0.3.15` y `0.4.0`, cuando
+hagas `cargo update` verás este mensaje en la consola:
 
 ```text
 $ cargo update
@@ -485,11 +486,11 @@ $ cargo update
     Updating rand v0.3.14 -> v0.3.15
 ```
 
-At this point, you would also notice a change in your *Cargo.lock* file noting
-that the version of the `rand` crate you are now using is `0.3.15`.
+En este momento, verás que el fichero *Cargo.lock* también ha cambiado. Ahora
+aparece la versión `0.3.15` del crate `rand` que estamos usando.
 
-If you wanted to use `rand` version `0.4.0` or any version in the `0.4.x`
-series, you’d have to update the *Cargo.toml* file to look like this instead:
+Si quieres usar la versión `0.4.0` de `rand`, o cualquier versión de la serie
+`0.4.x`, tendrás que actualizar el fichero *Cargo.toml* y poner lo siguiente:
 
 ```toml
 [dependencies]
@@ -497,15 +498,15 @@ series, you’d have to update the *Cargo.toml* file to look like this instead:
 rand = "0.4.0"
 ```
 
-The next time you run `cargo build`, Cargo will update the registry of crates
-available and reevaluate your `rand` requirements according to the new version
-you specified.
+La siguiente vez que ejecutes `cargo build`, Cargo actalizará el registro de
+crates disponibles, y eveluará de nuevo los requisitos para `rand` de acuerdo
+a la versión nueva que hayas especificado.
 
-There’s a lot more to say about [Cargo][doccargo]<!-- ignore --> and [its
-ecosystem][doccratesio]<!-- ignore --> that Chapter 14 will discuss, but for
-now, that’s all you need to know. Cargo makes it very easy to reuse libraries,
-so Rustaceans are able to write smaller projects that are assembled from a
-number of packages.
+Hay mucho más por descubrir sobre [Cargo][doccargo]<!-- ignore --> y [su
+ecosistema][doccratesio]<!-- ignore --> que veremos en más profundidad
+llegado el Capítulo 14. De momento, con lo que sabes hasta ahora es más que
+suficiente. Reutilizar librerías es muy facil con Cargo, lo que permite a los
+Rusteros usar diferentes paquetes para sus proyectos.
 
 [doccargo]: http://doc.crates.io
 [doccratesio]: http://doc.crates.io/crates-io.html
