@@ -43,6 +43,7 @@ PR 리뷰를 통해 통합하고, 그 외에 오탈자 수정 등 자잘한 수�
 - bind: 묶다
 - borrowing: 빌림
 - clone: 클론
+- collection: 콜렉션
 - copy: 복사
 - dangling reference: 댕글링 참조자
 - data race: 데이터 레이스
@@ -50,6 +51,7 @@ PR 리뷰를 통해 통합하고, 그 외에 오탈자 수정 등 자잘한 수�
 - feature: 특성
 - heap: 힙
 - immutable: 불변
+- iterator: 반복자
 - lifetime: 라이프타임
 - move: 이동
 - mutable: 가변
@@ -61,6 +63,7 @@ PR 리뷰를 통해 통합하고, 그 외에 오탈자 수정 등 자잘한 수�
 - scope: 스코프
 - slice: 슬라이스
 - stack: 스택
+- signature: 시그니처
 - string literal: 스트링 리터럴
 - variable: 변수
 

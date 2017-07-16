@@ -1,24 +1,21 @@
-## Slices
+## 슬라이스(Slices)
 
-Another data type that does not have ownership is the *slice*. Slices let you
-reference a contiguous sequence of elements in a collection rather than the
-whole collection.
+소유권을 갖지 않는 또다른 데이터 타입은 *슬라이스*입니다. 슬라이스는 여러분이 콜렉션(collection)
+전체가 아닌 콜렉션의 연속된 구성요소들의 나열을 참조할 수 있게 합니다.
 
-Here’s a small programming problem: write a function that takes a string and
-returns the first word it finds in that string. If the function doesn’t find a
-space in the string, it means the whole string is one word, so the entire
-string should be returned.
+여기 작은 프로그래밍 문제가 있습니다: 스트링을 입력 받아 그 스트링에서 찾은 첫번째 단어를 반환하는
+함수를 작성하세요. 만일 함수가 공백문자를 찾지 못한다면, 이는 전체 스트링이 한 단어라는 의미이고,
+이때는 전체 스트링이 반환되어야 합니다.
 
-Let’s think about the signature of this function:
+이 함수의 시그니처에 대해 생각해봅시다:
 
 ```rust,ignore
 fn first_word(s: &String) -> ?
 ```
 
-This function, `first_word`, has a `&String` as a parameter. We don’t want
-ownership, so this is fine. But what should we return? We don’t really have a
-way to talk about *part* of a string. However, we could return the index of the
-end of the word. Let’s try that as shown in Listing 4-10:
+이 함수 `first_word`는 `&String`을 파라미터로 갖습니다. 우리는 소유권을 원하지 않으므로, 이는
+괜찮습니다. 하지만 뭘 반환해야할까요? 우리는 스트링의 *일부*에 대해 표현할 방법이 없습니다. 하지만
+단어의 끝부분의 인덱스를 반환할 수는 있겠습니다. Listing 4-10의 코드를 시도해봅시다:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -36,39 +33,34 @@ fn first_word(s: &String) -> usize {
 }
 ```
 
-<span class="caption">Listing 4-10: The `first_word` function that returns a
-byte index value into the `String` parameter</span>
+<span class="caption">Listing 4-10: `String` 파라미터의 바이트 인덱스 값을 반환하는
+`first_word` 함수</span>
 
-Let’s break down this code a bit. Because we need to go through the `String`
-element by element and check whether a value is a space, we’ll convert our
-`String` to an array of bytes using the `as_bytes` method:
+이 코드를 쪼개서 봅시다. 입력된 `String`를 원소 단위 보면서 그 값이 공백인지 확인할 필요가 있기
+때문에, `String`은 `as_bytes` 메소드를 이용하여 바이트 배열로 변환됩니다:
 
 ```rust,ignore
 let bytes = s.as_bytes();
 ```
 
-Next, we create an iterator over the array of bytes using the `iter` method :
+다음으로, `iter` 메소드를 이용하여 바이트 배열의 반복자(iterator)를 생성합니다:
 
 ```rust,ignore
 for (i, &item) in bytes.iter().enumerate() {
 ```
 
-We’ll discuss iterators in more detail in Chapter 13. For now, know that `iter`
-is a method that returns each element in a collection, and `enumerate` wraps
-the result of `iter` and returns each element as part of a tuple instead. The
-first element of the returned tuple is the index, and the second element is a
-reference to the element. This is a bit more convenient than calculating the
-index ourselves.
+반복자에 대한 것은 13장에서 더 자세히 다루겠습니다. 지금은 `iter`가 콜렉션의 각 원소를 반환하는 함수이며,
+`enumerate`은 `iter`의 결과값을 직접 반환하는 대신 이를 감싸서 튜플의 일부로 만들어 반환한다는 정도만
+알아두세요. 반환된 튜플의 첫번째 원소는 인덱스이며, 두번째 원소는 원소에 대한 참조값입니다. 이는 우리 스스로
+인덱스를 계산하는 것보다 살짝 더 편리합니다.
 
-Because the `enumerate` method returns a tuple, we can use patterns to
-destructure that tuple, just like everywhere else in Rust. So in the `for`
-loop, we specify a pattern that has `i` for the index in the tuple and `&item`
-for the single byte in the tuple. Because we get a reference to the element
-from `.iter().enumerate()`, we use `&` in the pattern.
+`enumerate` 메소드가 튜플을 반환하기 때문에, 우리는 러스트의 다른 모든 부분에서 그러하듯이 이 튜플을
+해체하기 위해 패턴을 이용할 수 있습니다. 따라서 `for` 루프 내에서, `i`는 튜플 내의 인덱스에 대응하고
+`&item`은 튜플 내의 한 바이트에 대응하는 패턴을 특정하는 것입니다. `.iter().enumerate()`의
+원소에 대한 참조자를 갖는 것이므로, `&`을 패턴 내에 사용했습니다.
 
-We search for the byte that represents the space by using the byte literal
-syntax. If we find a space, we return the position. Otherwise, we return the
-length of the string by using `s.len()`:
+우리는 바이트 리터럴 문법을 이용하여 공백 문자를 나타내는 바이트를 찾습니다. 공백 문자를 찾았다면,
+이 위치를 반환합니다. 그렇지 않으면 `s.len()`을 통해 스트링의 길이값을 반환합니다:
 
 ```rust,ignore
     if item == b' ' {
@@ -78,12 +70,11 @@ length of the string by using `s.len()`:
 s.len()
 ```
 
-We now have a way to find out the index of the end of the first word in the
-string, but there’s a problem. We’re returning a `usize` on its own, but it’s
-only a meaningful number in the context of the `&String`. In other words,
-because it’s a separate value from the `String`, there’s no guarantee that it
-will still be valid in the future. Consider the program in Listing 4-11 that
-uses the `first_word` function from Listing 4-10:
+이제 우리에게 스트링의 첫번째 단어의 끝부분의 인덱스를 찾아낼 방법이 생겼습니다. 소유권이 포함된
+`usize`를 반환하고 있지만, 이는 `&string`의 내용물 내에서만 의미가 있습니다. 바꿔 말하면,
+이것이 `String`로부터 분리되어 있는 숫자이기 때문에, 이것이 나중에도 여전히 유효한지를 보장할
+길이 없습니다. Listing 4-10의 `first_word` 함수를 사용하는 Listing 4-11의 프로그램을
+보시죠:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -103,23 +94,22 @@ uses the `first_word` function from Listing 4-10:
 fn main() {
     let mut s = String::from("hello world");
 
-    let word = first_word(&s); // word will get the value 5.
+    let word = first_word(&s); // word는 5를 갖게 될 것입니다.
 
-    s.clear(); // This empties the String, making it equal to "".
+    s.clear(); // 이 코드는 String을 비워서 ""로 만들게 됩니다.
 
-    // word still has the value 5 here, but there's no more string that
-    // we could meaningfully use the value 5 with. word is now totally invalid!
+    // word는 여기서 여전히 5를 갖고 있지만, 5라는 값을 의미있게 쓸 수 있는 스트링은 이제 없습니다.
+    // word는 이제 완전 유효하지 않습니다!
 }
 ```
 
-<span class="caption">Listing 4-11: Storing the result from calling the
-`first_word` function then changing the `String` contents</span>
+<span class="caption">Listing 4-11: `first_word` 함수를 호출하여 결과를 저장한 뒤
+`String`의 내용물을 바꾸기</span>
 
-This program compiles without any errors and also would if we used `word` after
-calling `s.clear()`. `word` isn’t connected to the state of `s` at all, so
-`word` still contains the value `5`. We could use that value `5` with the
-variable `s` to try to extract the first word out, but this would be a bug
-because the contents of `s` have changed since we saved `5` in `word`.
+이 프로그램은 아무런 오류 없이 컴파일되고, `s.clear()`을 호출한 뒤 `word`를 사용한다 해도
+역시 컴파일될 것입니다. `word`는 `s`의 상태와 전혀 연결되어 있지 않으므로, `word`는 여전히 값
+`5`를 담고 있습니다. 우리는 첫번째 단어를 추출하고자 하기 위해 `s`와 값 `5`를 사용할 수 있지만,
+`word에 `5`를 저장한 뒤 `s`의 내용물이 변경되었기 때문에 이러한 사용은 버그가 될 것입니다.
 
 Having to worry about the index in `word` getting out of sync with the data in
 `s` is tedious and error prone! Managing these indices is even more brittle if
