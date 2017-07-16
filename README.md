@@ -44,7 +44,7 @@ PR 리뷰를 통해 통합하고, 그 외에 오탈자 수정 등 자잘한 수�
 - borrowing: 빌림
 - clone: 클론
 - copy: 복사
-- dangling reference: 허상 참조자
+- dangling reference: 댕글링 참조자
 - data race: 데이터 레이스
 - `drop`: `drop`한다, 버리다
 - feature: 특성
