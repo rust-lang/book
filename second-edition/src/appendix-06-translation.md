@@ -13,3 +13,5 @@ For resources in languages other than English. Most are still in progress; see
 - [Italiano](https://github.com/CodelessFuture/trpl2-it)
 - [Русский](https://github.com/iDeBugger/rust-book-ru)
 - [한국어](https://github.com/rinthel/rust-lang-book-ko)
+- [日本語](https://github.com/hazama-yuinyan/book)
+- [Français](https://github.com/quadrifoglio/rust-book-fr)

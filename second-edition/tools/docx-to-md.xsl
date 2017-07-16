@@ -72,6 +72,12 @@
         <xsl:text>&#10;&#10;</xsl:text>
     </xsl:template>
 
+    <xsl:template match="w:p[w:pPr/w:pStyle[@w:val = 'SubBullet']]">
+        <xsl:text>  * </xsl:text>
+        <xsl:apply-templates select="*" />
+        <xsl:text>&#10;</xsl:text>
+    </xsl:template>
+
     <xsl:template match="w:p[w:pPr/w:pStyle[@w:val = 'BodyFirst' or @w:val = 'Body' or @w:val = 'BodyFirstBox' or @w:val = 'BodyBox' or @w:val = '1stPara']]">
         <xsl:if test=".//w:t">
             <xsl:apply-templates select="*" />

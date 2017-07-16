@@ -102,6 +102,7 @@ Enum
 enums
 enum's
 Enums
+eprintln
 ErrorKind
 Executables
 extern
@@ -127,7 +128,6 @@ GitHub
 gitignore
 grapheme
 Grapheme
-greprs
 growable
 gzip
 hardcode
@@ -192,6 +192,7 @@ Metadata
 metaprogramming
 mibbit
 Mibbit
+minigrep
 mixup
 mkdir
 modifiability
