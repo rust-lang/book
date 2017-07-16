@@ -1,13 +1,11 @@
-## References and Borrowing
+## 참조자(References)와 빌림(Borrowing)
 
-The issue with the tuple code at the end of the preceding section is that we
-have to return the `String` to the calling function so we can still use the
-`String` after the call to `calculate_length`, because the `String` was moved
-into `calculate_length`.
+앞 절의 마지막에 등장한 튜플을 이용하는 이슈는 `String`을 호출하는 함수 쪽으로
+반환함으로써 `calculate_length`를 호출한 이후에도 여전히 `String`을 이용할 수 있도록
+하는 것인데, 그 이유는 `String`이 `calculate_length` 안쪽으로 이동되었기 때문입니다.
 
-Here is how you would define and use a `calculate_length` function that has a
-*reference* to an object as a parameter instead of taking ownership of the
-value:
+여기 값의 소유권을 넘기는 대신 개체에 대한 *참조자*(*reference*)를 인자로 사용하는
+`calculate_length` 함수를 정의하고 이용하는 방법이 있습니다:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -25,19 +23,18 @@ fn calculate_length(s: &String) -> usize {
 }
 ```
 
-First, notice that all the tuple code in the variable declaration and the
-function return value is gone. Second, note that we pass `&s1` into
-`calculate_length`, and in its definition, we take `&String` rather than
-`String`.
+첫번째로, 변수 선언부와 함수 반환값에 있던 튜플 코드가 모두 없어진 것에 주목하세요.
+두번째로, `calculate_length` 함수에 `&s1`를 넘기고, 함수의 정의 부분에는
+`String`이 아니라 `&String`을 이용했다는 점을 기억하세요.
 
-These ampersands are *references*, and they allow you to refer to some value
-without taking ownership of it. Figure 4-8 shows a diagram.
+이 엠퍼센드(&) 기호가 *참조자*이며, 이는 여러분이 어떤 값을 소유권을 넘기지 않고
+참조할수 있도록 해줍니다. Figure 4-8은 이에 대한 다이어그램입니다.
 
 <img alt="&String s pointing at String s1" src="img/trpl04-05.svg" class="center" />
 
-<span class="caption">Figure 4-8: `&String s` pointing at `String s1`</span>
+<span class="caption">Figure 4-8: `String s1`을 가리키고 있는 `&String s`</span>
 
-Let’s take a closer look at the function call here:
+함수 호출 부분을 좀더 자세히 봅시다:
 
 ```rust
 # fn calculate_length(s: &String) -> usize {
@@ -48,32 +45,31 @@ let s1 = String::from("hello");
 let len = calculate_length(&s1);
 ```
 
-The `&s1` syntax lets us create a reference that *refers* to the value of `s1`
-but does not own it. Because it does not own it, the value it points to will
-not be dropped when the reference goes out of scope.
+`&s1` 문법은 우리가 `s1`의 값을 *참조*하지만 소유하지는 않는 참조자를 생성하도록
+해줍니다. 소유권을 갖고 있지는 않기 때문에, 이 참조자가 가리키는 값은 참조자가 스코프
+밖으로 벗어났을 때도 메모리가 반납되지 않을 것입니다.
 
-Likewise, the signature of the function uses `&` to indicate that the type of
-the parameter `s` is a reference. Let’s add some explanatory annotations:
+비슷한 이치로, 함수 시그니처도 `&`를 사용하여 인자 `s`의 타입이 참조자라는 것을 나타내고
+있습니다. 설명을 위한 주석을 달아봅시다:
 
 ```rust
-fn calculate_length(s: &String) -> usize { // s is a reference to a String
+fn calculate_length(s: &String) -> usize { // s는 String의 참조자입니다
     s.len()
-} // Here, s goes out of scope. But because it does not have ownership of what
-  // it refers to, nothing happens.
+} // 여기서 s는 스코프 밖으로 벗어났습니다. 하지만 가리키고 있는 값에 대한 소유권이 없기
+  // 때문에, 아무런 일도 발생하지 않습니다.
 ```
 
-The scope in which the variable `s` is valid is the same as any function
-parameter's scope, but we don’t drop what the reference points to when it goes
-out of scope because we don’t have ownership. Functions that have references as
-parameters instead of the actual values mean we won’t need to return the values
-in order to give back ownership, since we never had ownership.
+변수 `s`가 유효한 스코프는 여느 함수의 파라미터의 스코프와 동일하지만, 소유권을 갖고
+있지 않으므로 이 참조자가 스코프 밖으로 벗어났을 때 참조자가 가리키고 있는 값은 버리지
+않습니다. 또한 실제 값 대신 참조자를 파라미터로 갖고 있는 함수는 소유권을 갖고 있지
+않기 때문에 소유권을 되돌려주기 위해 값을 다시 반환할 필요도 없다는 뜻이 됩니다.
 
-We call having references as function parameters *borrowing*. As in real life,
-if a person owns something, you can borrow it from them. When you’re done, you
-have to give it back.
+함수의 파라미터로 참조자를 만드는 것을 *빌림*이라고 부릅니다. 실제 생활에서 만일
+어떤 사람이 뭔가를 소유하고 있다면, 여러분은 그걸 빌릴 수 있습니다. 여러분의 용무가
+끝났을 때는 그것을 돌려주어야 합니다.
 
-So what happens if we try to modify something we’re borrowing? Try the code in
-Listing 4-9. Spoiler alert: it doesn’t work!
+그러니까 만일 우리가 빌린 무언가를 고치려고 시도한다면 무슨 일이 생길까요? Listing 4-9의
+코드를 시험해보세요. 스포일러 경고: 작동이 안될겁니다!
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -89,9 +85,9 @@ fn change(some_string: &String) {
 }
 ```
 
-<span class="caption">Listing 4-9: Attempting to modify a borrowed value</span>
+<span class="caption">Listing 4-9: 빌린 값을 고치려 해보기</span>
 
-Here’s the error:
+여기 오류를 보시죠:
 
 ```text
 error: cannot borrow immutable borrowed content `*some_string` as mutable
@@ -101,12 +97,12 @@ error: cannot borrow immutable borrowed content `*some_string` as mutable
   |     ^^^^^^^^^^^
 ```
 
-Just as variables are immutable by default, so are references. We’re not
-allowed to modify something we have a reference to.
+변수가 기본적으로 불변인 것처럼, 참조자도 마찬가지입니다. 우리가 참조하는 어떤 것을
+변경하는 것은 허용되지 않습니다.
 
-### Mutable References
+### 가변 참조자(Mutable References)
 
-We can fix the error in the code from Listing 4-9 with just a small tweak:
+Listing 4-9의 코드를 살짝만 바꾸면 오류를 고칠 수 있습니다:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -122,13 +118,11 @@ fn change(some_string: &mut String) {
 }
 ```
 
-First, we had to change `s` to be `mut`. Then we had to create a mutable
-reference with `&mut s` and accept a mutable reference with `some_string: &mut
-String`.
+먼저 `s`를 `mut`로 바꿔야 합니다. 그리고 `&mut s`로 가변 참조자를 생성하고
+`some_string: &mut String`으로 이 가변 참조자를 받아야 합니다.
 
-But mutable references have one big restriction: you can only have one mutable
-reference to a particular piece of data in a particular scope. This code will
-fail:
+하지만 가변 참조자는 딱 한가지 큰 제한이 있습니다: 특정한 스코프 내에 특정한 데이터
+조각에 대한 가변 참조자를 딱 하나만 만들 수 있다는 겁니다. 아래 코드는 실패할 겁니다:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -153,24 +147,24 @@ error[E0499]: cannot borrow `s` as mutable more than once at a time
   | - first borrow ends here
 ```
 
-This restriction allows for mutation but in a very controlled fashion. It’s
-something that new Rustaceans struggle with, because most languages let you
-mutate whenever you’d like. The benefit of having this restriction is that Rust
-can prevent data races at compile time.
+이 제한 사항은 가변을 허용하긴 하지만 매우 통제된 형식으로 허용합니다. 이것이 새로운
+러스트인들이 힘들어하는 부분인데, 대부분의 언어들은 여러분이 원하는대로 값을 변형하도록
+해주기 때문입니다. 하지만 이러한 제한이 가지는 이점은 바로 러스트가 컴파일 타임에
+데이터 레이스(data race)를 방지할 수 있도록 해준다는 것입니다.
 
-A *data race* is a particular type of race condition in which these three
-behaviors occur:
+*데이터 레이스*는 아래에 정리된 세 가지 동작이 발생했을때 나타나는 특정한 레이스
+조건입니다:
 
-1. Two or more pointers access the same data at the same time.
-1. At least one of the pointers is being used to write to the data.
-1. There’s no mechanism being used to synchronize access to the data.
+1. 두 개 이상의 포인터가 동시에 같은 데이터에 접근한다.
+1. 그 중 적어도 하나의 포인터가 데이터를 쓴다.
+1. 데이터에 접근하는데 동기화를 하는 어떠한 메커니즘도 없다.
 
-Data races cause undefined behavior and can be difficult to diagnose and fix
-when you’re trying to track them down at runtime; Rust prevents this problem
-from happening because it won’t even compile code with data races!
+데이터 레이스는 정의되지 않은 동작을 일으키고 런타임에 이를 추적하고자 할 때는
+이를 진단하고 고치기 어려울 수 있습니다; 러스트는 데이터 레이스가 발생할 수 있는
+코드가 컴파일 조차 안되기 때문에 이 문제의 발생을 막아버립니다!
 
-As always, we can use curly brackets to create a new scope, allowing for
-multiple mutable references, just not *simultaneous* ones:
+항상 우리는 새로운 스코프를 만들기 위해 중괄호를 사용하는데, 이는 그저 *동시*에
+만드는 것이 아니게 해줌으로써, 여러 개의 가변 참조자를 만들 수 있도록 해줍니다.
 
 ```rust
 let mut s = String::from("hello");
@@ -178,60 +172,58 @@ let mut s = String::from("hello");
 {
     let r1 = &mut s;
 
-} // r1 goes out of scope here, so we can make a new reference with no problems.
+} // 여기서 r1은 스코프 밖으로 벗어났으므로, 우리는 아무 문제 없이 새로운 참조자를 만들 수 있습니다.
 
 let r2 = &mut s;
 ```
 
-A similar rule exists for combining mutable and immutable references. This code
-results in an error:
+가변 참조자와 불변 참조자를 혼용할 경우에 대한 비슷한 규칙이 있습니다. 아래 코드는
+컴파일 오류가 발생합니다:
 
 ```rust,ignore
 let mut s = String::from("hello");
 
-let r1 = &s; // no problem
-let r2 = &s; // no problem
-let r3 = &mut s; // BIG PROBLEM
+let r1 = &s; // 문제 없음
+let r2 = &s; // 문제 없음
+let r3 = &mut s; // 큰 문제
 ```
 
-Here’s the error:
+여기 오류 메세지를 보시죠:
 
 ```text
 error[E0502]: cannot borrow `s` as mutable because it is also borrowed as
 immutable
  --> borrow_thrice.rs:6:19
   |
-4 |     let r1 = &s; // no problem
+4 |     let r1 = &s; // 문제 없음
   |               - immutable borrow occurs here
-5 |     let r2 = &s; // no problem
-6 |     let r3 = &mut s; // BIG PROBLEM
+5 |     let r2 = &s; // 문제 없음
+6 |     let r3 = &mut s; // 큰 문제
   |                   ^ mutable borrow occurs here
 7 | }
   | - immutable borrow ends here
 ```
 
-Whew! We *also* cannot have a mutable reference while we have an immutable one.
-Users of an immutable reference don’t expect the values to suddenly change out
-from under them! However, multiple immutable references are okay because no one
-who is just reading the data has the ability to affect anyone else’s reading of
-the data.
+어휴! 우리는 불변 참조자를 가지고 있을 동안에도 *역시* 가변 참조자를 만들 수 없습니다.
+불변 참조자의 사용자는 사용중인 동안에 값이 값자기 바뀌리라 예상하지 않습니다! 하지만
+여러 개의 불변 참조자는 만들 수 있는데, 데이터를 그냥 읽기만하는 것은 다른 것들이 그
+데이터를 읽는데에 어떠한 영향도 주지 못하기 때문입니다.
 
-Even though these errors may be frustrating at times, remember that it’s the
-Rust compiler pointing out a potential bug early (at compile time rather than
-at runtime) and showing you exactly where the problem is instead of you having
-to track down why sometimes your data isn’t what you thought it should be.
+때때로 이러한 오류들이 여러분을 좌절시킬지라도, 이것이 러스트 컴파일러가 (런타임이 아니라
+컴파일 타임에) 일찌감치 잠재된 버그를 찾아내고, 왜 여러분의 데이터가 여러분 생각대로의
+값을 갖고 있지 않은지 추적해 내려가는 대신 어느 지점이 문제인지를 정확히 보여주는
+기능이란 점을 기억하세요.
 
-### Dangling References
+### 댕글링 참조자(Dangling References)
 
-In languages with pointers, it’s easy to erroneously create a *dangling
-pointer*, a pointer that references a location in memory that may have been
-given to someone else, by freeing some memory while preserving a pointer to
-that memory. In Rust, by contrast, the compiler guarantees that references will
-never be dangling references: if we have a reference to some data, the compiler
-will ensure that the data will not go out of scope before the reference to the
-data does.
+포인터가 있는 언어에서는 자칫 잘못하면 *댕글링 포인터(dangling pointer)* 를 만들기 쉬운데, 허상
+포인터란 어떤 메모리를 가리키는 포인터를 보존하는 동안, 그 메모리를 해제함으로써 다른 개체에게
+사용하도록 줘버렸을 지도 모를 메모리를 참조하고 있는 포인터를 말합니다. 이와는 반대로, 러스트에서는
+컴파일러가 모든 참조자들이 댕글링 참조자가 되지 않도록 보장해 줍니다: 만일 우리가 어떤 데이터의 참조자를
+만들었다면, 컴파일러는 그 참조자가 스코프 밖으로 벗어나기 전에는 데이터가 스코프 밖으로 벗어나지 않을
+것임을 확인해 줄 것입니다.
 
-Let’s try to create a dangling reference:
+댕글링 참조자를 만드는 시도를 해봅시다:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -247,7 +239,7 @@ fn dangle() -> &String {
 }
 ```
 
-Here’s the error:
+위 코드의 오류 메세지입니다:
 
 ```text
 error[E0106]: missing lifetime specifier
@@ -263,35 +255,33 @@ error[E0106]: missing lifetime specifier
 error: aborting due to previous error
 ```
 
-This error message refers to a feature we haven’t covered yet: *lifetimes*.
-We’ll discuss lifetimes in detail in Chapter 10. But, if you disregard the
-parts about lifetimes, the message does contain the key to why this code is a
-problem:
+이 오류 메세지는 우리가 아직 다루지 못한 특성을 인용하고 있습니다: 바로 *라이프타임(lifetime)*
+입니다. 라이프타임에 대한 것은 10장에서 자세히 다룰 것입니다. 하지만 여러분이 라이프타임에 대한
+부분을 무시한다면, 이 메세지는 이 코드가 왜 문제인지를 알려줄 열쇠를 쥐고 있습니다:
 
 ```text
 this function's return type contains a borrowed value, but there is no value
 for it to be borrowed from.
+(해석: 이 함수의 반환 타입은 빌린 값을 포함하고 있는데, 빌려온 실제 값은 없습니다.)
 ```
 
-Let’s take a closer look at exactly what’s happening at each stage of our
-`dangle` code:
+`dangle` 코드 부분의 각 단계에서 어떤 일이 벌어지는지 더 면밀히 들여다봅시다:
 
 ```rust,ignore
-fn dangle() -> &String { // dangle returns a reference to a String
+fn dangle() -> &String { // dangle은 String의 참조자를 반환합니다
 
-    let s = String::from("hello"); // s is a new String
+    let s = String::from("hello"); // s는 새로운 String입니다
 
-    &s // we return a reference to the String, s
-} // Here, s goes out of scope, and is dropped. Its memory goes away.
-  // Danger!
+    &s // 우리는 String s의 참조자를 반환합니다.
+} // 여기서 s는 스코프를 벗어나고 버려집니다. 이것의 메모리는 사라집니다.
+  // 위험하군요!
 ```
 
-Because `s` is created inside `dangle`, when the code of `dangle` is finished,
-`s` will be deallocated. But we tried to return a reference to it. That means
-this reference would be pointing to an invalid `String`! That’s no good. Rust
-won’t let us do this.
+`s`가 `dangle`안에서 만들어졌기 때문에, `dangle`의 코드가 끝이나면 `s`는 할당 해제됩니다.
+하지만 우리는 이것의 참조자를 반환하려고 했습니다. 이는 곧 이 참조자가 어떤 무효화된 `String`을
+가리키게 될 것이란 뜻이 아닙니까! 별로 안 좋죠. 러스트는 우리가 이런 짓을 못하게 합니다.
 
-The solution here is to return the `String` directly:
+여기서의 해법은 `String`을 직접 반환하는 것입니다:
 
 ```rust
 fn no_dangle() -> String {
@@ -301,16 +291,16 @@ fn no_dangle() -> String {
 }
 ```
 
-This works without any problems. Ownership is moved out, and nothing is
-deallocated.
+이 코드는 아무런 문제없이 동작합니다. 소유권이 밖으로 이동되었고, 아무것도 할당 해제되지 않습니다.
 
-### The Rules of References
+### 참조자의 규칙
 
-Let’s recap what we’ve discussed about references:
+우리가 참조자에 대해 논의한 것들을 정리해 봅시다:
 
-1. At any given time, you can have *either* but not both of:
-  * One mutable reference.
-  * Any number of immutable references.
-2. References must always be valid.
+1. 어떠한 경우이든 간에, 여러분은 아래 둘 다는 아니고 *둘 중 하나만* 가질 수 있습니다:
+  * 하나의 가변 참조자
+  * 임의 개수의 불변 참조자들
+2. 참조자는 항상 유효하다.
 
-Next, we’ll look at a different kind of reference: slices.
+다음으로, 우리는 다른 종류의 참조자인 슬라이스(slice)를 볼 것입니다.
+
