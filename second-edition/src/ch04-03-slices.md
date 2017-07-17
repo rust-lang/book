@@ -111,24 +111,24 @@ fn main() {
 `5`를 담고 있습니다. 우리는 첫번째 단어를 추출하고자 하기 위해 `s`와 값 `5`를 사용할 수 있지만,
 `word에 `5`를 저장한 뒤 `s`의 내용물이 변경되었기 때문에 이러한 사용은 버그가 될 것입니다.
 
-Having to worry about the index in `word` getting out of sync with the data in
-`s` is tedious and error prone! Managing these indices is even more brittle if
-we write a `second_word` function. Its signature would have to look like this:
+`word`의 인덱스가 `s`의 데이터와 싱크가 안맞을 것을 걱정하는 건 지겹고 쉽게 발생할 수 있는 오류입니다!
+이러한 인덱스들을 관리하는 것은 우리가 `second_word` 함수를 작성했을 때 더더욱 다루기 어려워집니다.
+이 함수의 시그니처는 아래와 같은 모양이 되어야 할 것입니다:
 
 ```rust,ignore
 fn second_word(s: &String) -> (usize, usize) {
 ```
 
-Now we’re tracking a start *and* an ending index, and we have even more values
-that were calculated from data in a particular state but aren’t tied to that
-state at all. We now have three unrelated variables floating around that need
-to be kept in sync.
+이제 우리는 시작, *그리고* 끝 인덱스를 추적하고 있고, 특정 상태에 있는 데이터로부터 계산되었지만
+그 상태와 전혀 묶여있지 않은 더 많은 값들을 갖게 됩니다. 이제 우리는 동기화를 유지할 필요가 있는
+주위를 떠다니는 세 개의 관련없는 변수들을 갖게 되었습니다.
 
-Luckily, Rust has a solution to this problem: string slices.
+운좋게도, 러스트는 이러한 문제에 대한 해결책을 갖고 있습니다: 바로 스트링 슬라이스(string slice)
+입니다.
 
-### String Slices
+###  스트링 슬라이스
 
-A *string slice* is a reference to part of a `String`, and looks like this:
+*스트링 슬라이스*는 `String`의 일부분에 대한 참조자고, 아래와 같이 생겼습니다:
 
 ```rust
 let s = String::from("hello world");
@@ -137,28 +137,25 @@ let hello = &s[0..5];
 let world = &s[6..11];
 ```
 
-This is similar to taking a reference to the whole `String` but with the extra
-`[0..5]` bit. Rather than a reference to the entire `String`, it’s a reference
-to a portion of the `String`. The `start..end` syntax is a range that begins at
-`start` and continues up to, but not including, `end`.
+이는 전체 `String`의 참조자를 갖는 것과 비슷하지만, 추가적으로 `[0..5]`라는 코드가 붙어 있습니다.
+전체 `String`에 대한 참조자 보다는, `String`의 일부분에 대한 참조자입니다. `start..end` 문법은
+`start`부터 시작하여 `end`를 포함하지 않는 연속된 범위를 기술합니다.
 
-We can create slices using a range within brackets by specifying
-`[starting_index..ending_index]`, where `starting_index` is the first position
-included in the slice and `ending_index` is one more than the last position
-included in the slice. Internally, the slice data structure stores the starting
-position and the length of the slice, which corresponds to `ending_index` minus
-`starting_index`. So in the case of `let world = &s[6..11];`, `world` would be
-a slice that contains a pointer to the 6th byte of `s` and a length value of 5.
+우리는 대괄호 내에 `[starting_index..ending_index]`를 특정한 범위를 이용하여 슬라이스를 만들
+수 있는데, 여기서 `starting_index`는 슬라이스에 포함되는 첫번째 위치이고 `ending_index`는
+슬라이스에 포함될 마지막 위치보다 1을 더한 값입니다. 내부적으로 슬라이스 데이터 구조는 시작 위치와
+슬라이스의 길이를 저장하는데, 이 길이 갚은 `ending_index`에서 `starting_index`를 뺸 값입니다.
+따라서 `let world = &[6..11];`의 경우, `world`는 `s`의 6번째 바이트를 가리키고 있는 포인터와
+길이값 5를 갖고 있는 슬라이스가 될 것입니다.
 
-Figure 4-12 shows this in a diagram.
+Figure 4-12는 이를 다이어그램으로 보여줍니다.
 
 <img alt="world containing a pointer to the 6th byte of String s and a length 5" src="img/trpl04-06.svg" class="center" style="width: 50%;" />
 
-<span class="caption">Figure 4-12: String slice referring to part of a
-`String`</span>
+<span class="caption">Figure 4-12: `String`의 일부를 참조하는 스트링 슬라이스</span>
 
-With Rust’s `..` range syntax, if you want to start at the first index (zero),
-you can drop the value before the two periods. In other words, these are equal:
+러스트의 `..` 범위 문법을 사용하여, 여러분이 만일 첮번째 인덱스(즉 0)에서부터 시작하길 원한다면,
+두 개의 마침표 전의 값은 생략할 수 있습니다. 다시 말하면, 아래의 두 줄은 동일한 표현입니다:
 
 ```rust
 let s = String::from("hello");
@@ -167,8 +164,8 @@ let slice = &s[0..2];
 let slice = &s[..2];
 ```
 
-By the same token, if your slice includes the last byte of the `String`, you
-can drop the trailing number. That means these are equal:
+비슷한 이치로, 만일 여러분의 슬라이스가 `String`의 마지막 바이트까지 포함한다면, 여러분은 끝의
+숫자를 생략할 수 있습니다. 이는 아래 두 줄의 표현이 동일하다는 의미입니다:
 
 ```rust
 let s = String::from("hello");
@@ -179,8 +176,8 @@ let slice = &s[3..len];
 let slice = &s[3..];
 ```
 
-You can also drop both values to take a slice of the entire string. So these
-are equal:
+여러분은 또한 전체 스트링의 슬라이스를 만들기 위해 양쪽 값을 모두 생략할 수 있습니다. 따라서 아래
+두 줄의 표현은 동일합니다:
 
 ```rust
 let s = String::from("hello");
@@ -191,8 +188,8 @@ let slice = &s[0..len];
 let slice = &s[..];
 ```
 
-With all this information in mind, let’s rewrite `first_word` to return a
-slice. The type that signifies “string slice” is written as `&str`:
+이 모든 정보를 잘 기억하시고, `first_word`가 슬라이스를 반환하도록 다시 작성해봅시다.
+“스트링 슬라이스”를  나타내는 타입은 `&str`로 씁니다:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -210,30 +207,26 @@ fn first_word(s: &String) -> &str {
 }
 ```
 
-We get the index for the end of the word in the same way as we did in Listing
-4-10, by looking for the first occurrence of a space. When we find a space, we
-return a string slice using the start of the string and the index of the space
-as the starting and ending indices.
+우리는 Listing 4-10에서 작성한 것과 같은 방법으로 공백 문자가 첫번째로 나타난 지점을 찾아서 단어의
+끝 인덱스를 얻어냅니다. 공백 문자를 찾으면, 스트링의 시작과 공백 문자의 인덱스를 각각 시작과 끝 인덱스로
+사용하여 스트링 슬라이스를 반환합니다.
 
-Now when we call `first_word`, we get back a single value that is tied to the
-underlying data. The value is made up of a reference to the starting point of
-the slice and the number of elements in the slice.
+이제 `first_word`가 호출되면, 해당 데이터와 묶여있는 하나의 값을 반환받게 되었습니다. 이 값은
+슬라이스의 시작 위치에 대한 참조자와 슬라이스의 원소 개수로 이루어져 있습니다.
 
-Returning a slice would also work for a `second_word` function:
+`second_word` 함수에 대해서도 마찬가지로 슬라이스를 반환하는 형식이 잘 동작할 것입니다:
 
 ```rust,ignore
 fn second_word(s: &String) -> &str {
 ```
 
-We now have a straightforward API that’s much harder to mess up, since the
-compiler will ensure the references into the `String` remain valid. Remember
-the bug in the program in Listing 4-11, when we got the index to the end of the
-first word but then cleared the string so our index was invalid? That code was
-logically incorrect but didn’t show any immediate errors. The problems would
-show up later if we kept trying to use the first word index with an emptied
-string. Slices make this bug impossible and let us know we have a problem with
-our code much sooner. Using the slice version of `first_word` will throw a
-compile time error:
+우리는 이제 엉망이 되기 훨씬 힘든 직관적인 API를 갖게 되었는데, 이는 컴파일러가 `String`에 대한
+참조자들이 유효한 상태로 남아있게끔 보장할 것이기 때문입니다. 첫번째 단어의 끝 인덱스를 찾았지만,
+그 후 스트링을 비워버려서 인덱스가 유효하지 않게되는 Listing 4-11의 프로그램 내의 버그를 기억하시나요?
+그런 코드는 논리적으로 맞지 않지만 어떠한 즉각적인 오류도 보여주지 못합니다. 그런 문제는 우리가
+비어 있는 스트링에 대해 첫번째 단어의 인덱스를 사용하고자 시도할 경우에나 나타나게 될 것입니다.
+슬라이스는 이러한 버그를 불가능하게 만들고 우리가 코드 내에서 발생할 수 있는 문제를 훨씬 일찍 알게
+해줍니다. `first_word`의 슬라이스 버젼을 이용하는 것은 컴파일 타임 오류를 발생시킬 것입니다:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -247,7 +240,7 @@ fn main() {
 }
 ```
 
-Here’s the compiler error:
+여기 컴파일 오류 메세지를 보시죠:
 
 ```text
 17:6 error: cannot borrow `s` as mutable because it is also borrowed as
@@ -265,45 +258,42 @@ fn main() {
 ^
 ```
 
-Recall from the borrowing rules that if we have an immutable reference to
-something, we cannot also take a mutable reference. Because `clear` needs to
-truncate the `String`, it tries to take a mutable reference, which fails. Not
-only has Rust made our API easier to use, but it has also eliminated an entire
-class of errors at compile time!
+빌림 규칙에서 우리가 만일 무언가에 대한 불변 참조자를 만들었을 경우, 가변 참조자를 만들 수 없다는
+점을 상기해보세요. `clear` 함수가 `String`을 잘라낼 필요가 있기 때문에, 이 함수는 가변 참조자를
+갖기 위한 시도를 할 것이고, 이는 실패하게 됩니다. 러스트는 우리의 API를 사용하기 쉽게 해줄 뿐만 아니라
+이러한 종류의 오류 전체를 컴파일 타임에 제거해 줍니다!
 
-#### String Literals Are Slices
+#### 스트링 리터럴은 슽라이스입니다
 
-Recall that we talked about string literals being stored inside the binary. Now
-that we know about slices, we can properly understand string literals:
+스트링 리터럴이 바이너리 안에 저장된다고 하는 얘기를 상기해봅시다. 이제 슬라이스에 대해 알았으니,
+우리는 스트링 리터럴을 적합하게 이해할 수 있습니다:
 
 ```rust
 let s = "Hello, world!";
 ```
 
-The type of `s` here is `&str`: it’s a slice pointing to that specific point of
-the binary. This is also why string literals are immutable; `&str` is an
-immutable reference.
+여기서 `s`의 타입은 `&str`입니다: 이것은 바이너리의 특정 지점을 가리키고 있는 슬라이스입니다.
+이는 왜 스트링 리터럴이 불변인가도 설명해줍니다; `&str`은 불번 참조자이기 때문입니다.
 
-#### String Slices as Parameters
+#### 파라미터로서의 스트링 슬라이스
 
-Knowing that you can take slices of literals and `String`s leads us to one more
-improvement on `first_word`, and that’s its signature:
+여러분이 리터럴과 `String`의 슬라이스를 얻을 수 있다는 것을 알게 되었다면 `first_word` 함수를
+한번 더 개선시킬 수 있는데, 바로 이 함수의 시그니처입니다:
 
 ```rust,ignore
 fn first_word(s: &String) -> &str {
 ```
 
-A more experienced Rustacean would write the following line instead because it
-allows us to use the same function on both `String`s and `&str`s:
+더 경험이 많은 러스트인이라면 대신 아래와 같이 작성하는데, 그 이유는 `String`과 `&str` 둘 모두에
+대한 같은 함수를 사용할 수 있도록 해주기 때문입니다.
 
 ```rust,ignore
 fn first_word(s: &str) -> &str {
 ```
 
-If we have a string slice, we can pass that directly. If we have a `String`, we
-can pass a slice of the entire `String`. Defining a function to take a string
-slice instead of a reference to a String makes our API more general and useful
-without losing any functionality:
+만일 우리가 스트링 슬라이스를 갖고 있다면, 이를 바로 넘길 수 있습니다. `String`을 갖고 있다면,
+이 `String`의 전체 슬라이스를 넘길 수 있습니다. 함수가 `String`의 참조자 대신 스트링 슬라이스를
+갖도록 정의하는 것은 우리의 API를 어떠한 기능적인 손실 없이도 더 일반적이고 유용하게 해줍니다:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -322,31 +312,31 @@ without losing any functionality:
 fn main() {
     let my_string = String::from("hello world");
 
-    // first_word works on slices of `String`s
+    // first_word가 `String`의 슬라이스로 동작합니다.
     let word = first_word(&my_string[..]);
 
     let my_string_literal = "hello world";
 
-    // first_word works on slices of string literals
+    // first_word가 스트링 리터럴의 슬라이스로 동작합니다.
     let word = first_word(&my_string_literal[..]);
 
-    // since string literals *are* string slices already,
-    // this works too, without the slice syntax!
+    // 스트링 리터럴은 *또한* 스트링 슬라이스이기 때문에,
+    // 아래 코드도 슬라이스 문법 없이 동작합니다!
     let word = first_word(my_string_literal);
 }
 ```
 
-### Other Slices
+### 그 밖의 슬라이스들
 
-String slices, as you might imagine, are specific to strings. But there’s a
-more general slice type, too. Consider this array:
+스트링 슬라이스는 여러분이 상상하는 바와 같이, 스트링에 특정되어 있습니다. 하지만 더 일반적인
+슬라이스 타입도 역시 있습니다. 아래 배열을 보시죠:
 
 ```rust
 let a = [1, 2, 3, 4, 5];
 ```
 
-Just like we might want to refer to a part of a string, we might want to refer
-to part of an array and would do so like this:
+우리가 스트링의 일부를 참조하고 싶어할 수 있는 것처럼, 배열의 일부를 참조하고 싶을 수 있고, 그러면
+아래와 같이 쓸 수 있습니다:
 
 ```rust
 let a = [1, 2, 3, 4, 5];
@@ -354,19 +344,18 @@ let a = [1, 2, 3, 4, 5];
 let slice = &a[1..3];
 ```
 
-This slice has the type `&[i32]`. It works the same way as string slices do, by
-storing a reference to the first element and a length. You’ll use this kind of
-slice for all sorts of other collections. We’ll discuss these collections in
-detail when we talk about vectors in Chapter 8.
+이 슬라이스는 `&[i32]` 타입을 갖습니다. 이는 스트링 슬라이스가 동작하는 방법과 똑같이, 슬라이스의
+첫번째 원소에 대한 참조자와 슬라이스의 길이를 저장하는 방식으로 동작합니다. 여러분은 다른 모든 종류의
+콜렉션들에 대하여 이런 종류의 슬라이스를 이용할 수 있습니다. 벡터에 대해서 8장에서 이야기할 때 이러한
+콜렉션에 대해 더 자세히 다루겠습니다.
 
-## Summary
+## 정리
 
-The concepts of ownership, borrowing, and slices are what ensure memory safety
-in Rust programs at compile time. The Rust language gives you control over your
-memory usage like other systems programming languages, but having the owner of
-data automatically clean up that data when the owner goes out of scope means
-you don’t have to write and debug extra code to get this control.
+소유권, 빌림, 그리고 슬라이스의 개념은 러스트 프로그램의 메모리 안정성을 컴파일 타임에 보장하는 것입니다.
+러스트 언어는 다른 시스템 프로그래밍 언어와 같이 여러분의 메모리 사용에 대한 제어권을 주지만, 데이터의
+소유자가 스코프 밖으로 벗어났을 때 소유자가 자동적으로 데이터를 버리도록 하는 것은 곧 여러분이 이러한
+제어를 위해 추가적인 코드 작성이나 디버깅을 하지 않아도 된다는 뜻입니다.
 
-Ownership affects how lots of other parts of Rust work, so we’ll talk about
-these concepts further throughout the rest of the book. Let’s move on to the
-next chapter and look at grouping pieces of data together in a `struct`.
+소유권은 러스트의 다른 수많은 부분이 어떻게 동작하는지에 영향을 주므로, 이 책의 남은 부분 전체에 걸쳐
+이 개념들에 대해 더 이야기할 것입니다. 다음 장으로 넘어가서 데이터들을 함께 그룹짓는 `struct`를
+보겠습니다.
