@@ -1,17 +1,13 @@
-## Variables and Mutability
+## 변수와 가변성
 
-As mentioned in Chapter 2, by default variables are *immutable*. This is one of
-many nudges in Rust that encourages you to write your code in a way that takes
-advantage of the safety and easy concurrency that Rust offers. However, you
-still have the option to make your variables mutable. Let’s explore how and why
-Rust encourages you to favor immutability, and why you might want to opt out.
+2 장에서 언급했듯이, 기본 변수는 *불변성* 입니다. 이것은 Rust가 제공하는 안전성과 손쉬운 동시성이라는 장점을
+취할 수 있도록 코드를 작성하게끔 강제하는 요소 중 하나 입니다. 하지만 여전히 당신은 가변 변수를 사용하고 싶을테죠. 
+어떻게 그리고 왜 Rust에서 불변성을 애호해주길 권장하는지 알아보면 그런 생각을 포기할 수 있을지도 모르겠습니다.
 
-When a variable is immutable, that means once a value is bound to a name, you
-can’t change that value. To illustrate, let’s generate a new project called
-*variables* in your *projects* directory by using `cargo new --bin variables`.
-
-Then, in your new *variables* directory, open *src/main.rs* and replace its
-code with the following:
+변수가 불변성인 경우, 일단 값이 이름에 bound되면 해당 값을 변경할 수 없습니다. 시험 삼아 
+`cargo new --bin variables`을 실행해서 * projects * 디렉토리에 * variables *라는 새 프로젝트를 
+생성 해 봅시다. 그런 다음 새 * variables * 디렉토리에서 * src / main.rs *를 열고 코드를 다음과 같이 
+바꿉니다.
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -24,8 +20,7 @@ fn main() {
 }
 ```
 
-Save and run the program using `cargo run`. You should receive an error
-message, as shown in this output:
+저장하고 `cargo run` 명령을 통해 실행시켜 봅시다. 당신은 다음과 같이 출력되는 에러를 확인하게 될 겁니다.
 
 ```text
 error[E0384]: re-assignment of immutable variable `x`
@@ -38,34 +33,26 @@ error[E0384]: re-assignment of immutable variable `x`
   |     ^^^^^ re-assignment of immutable variable
 ```
 
-This example shows how the compiler helps you find errors in your programs.
-Even though compiler errors can be frustrating, they only mean your program
-isn’t safely doing what you want it to do yet; they do *not* mean that you’re
-not a good programmer! Experienced Rustaceans still get compiler errors. The
-error indicates that the cause of the error is `re-assignment of immutable
-variable`, because we tried to assign a second value to the immutable `x`
-variable.
+위의 예제는 컴파일러가 당신이 만든 프로그램에서 당신을 도와 에러를 찾아주는 방법에 대해 보여주고 있습니다.
+컴파일러 에러가 힘빠지게 만들 수도 있지만, 단지 당신의 프로그램이 아직 안전하게 수행되긴 미흡하다는 뜻이지,
+당신의 소양이 부족함을 의미하는건 아닙니다. 숙련된 Rustacean들도 여전히 에러를 발생시키니까요. 에러가 
+나타내는 것은 `불변성 변수에 재할당`이고, 원인은 우리가 불변성 변수 `x`에 두 번째로 값을 할당했기 때문입니다.
 
-It’s important that we get compile-time errors when we attempt to change a
-value that we previously designated as immutable because this very situation
-can lead to bugs. If one part of our code operates on the assumption that a
-value will never change and another part of our code changes that value, it’s
-possible that the first part of the code won’t do what it was designed to do.
-This cause of bugs can be difficult to track down after the fact, especially
-when the second piece of code changes the value only *sometimes*.
+우리가 이전에 불변성으로 선언한 것의 값을 변경하고자 하는 시도를 하면 컴파일 타임의 에러를 얻게 되고 이로 인해 
+버그가 발생할 수 있기 때문에 중요합니다. 만약 우리 코드의 일부는 값이 변경되지 않는다는 것을 가정하는데 다른 코드는 
+이와 다르게 값을 변경한다면, 전자에 해당하는 코드는 우리가 의도한 대로 수행되지 않을 수 있습니다. 특히 후자에 
+해당되는 코드가 항상 그렇지 않고 *가끔* 값을 변경하는 경우 나중에 버그의 원인을 추적하기가 매우 어렵습니다.
 
-In Rust the compiler guarantees that when we state that a value won’t change,
-it really won’t change. That means that when you’re reading and writing code,
-you don’t have to keep track of how and where a value might change, which can
-make code easier to reason about.
+Rust에서는 컴파일러가 변경되지 않은 값에 대한 보증을 해주고, 실제로 이는 바뀌지 않습니다. 이것이 의미하는
+바는 당신이 코드를 작성하거나 분석할 시에 변수의 값이 어떻게 변경되는지 추적할 필요가 없기 때문에 코드를 더
+합리적으로 만들어줍니다. 
 
-But mutability can be very useful. Variables are immutable only by default; we
-can make them mutable by adding `mut` in front of the variable name. In
-addition to allowing this value to change, it conveys intent to future readers
-of the code by indicating that other parts of the code will be changing this
-variable value.
+하지만 가변성은 매우 유용하게 사용될 수 있습니다. 변수는 기본적으로 불변성이지만 우리는 변수명의 접두어로 
+`mut`을 추가하는 것을 통해 가변성 변수를 선언할 수 있습니다. 이 변수의 값이 변경을 허용하는 것에 추가로
+향후 코드를 보는 사람에게 코드의 다른 부분에서 해당 변수의 값을 변경할 것이라는 의도를 주지시킵니다.
 
-For example, change *src/main.rs* to the following:
+예를 들어, *src/main.rs*를 다음과 같이 변경해보도록 합니다.
+
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -78,7 +65,7 @@ fn main() {
 }
 ```
 
-When we run this program, we get the following:
+위의 프로그램을 수행하면 다음과 같은 결과를 얻게 됩니다:
 
 ```text
 $ cargo run
@@ -88,68 +75,55 @@ The value of x is: 5
 The value of x is: 6
 ```
 
-Using `mut`, we’re allowed to change the value that `x` binds to from `5` to
-`6`. In some cases, you’ll want to make a variable mutable because it makes the
-code more convenient to write than an implementation that only uses immutable
-variables.
+`mut`를 사용하여, `x`에 bind된 값을 `5`에서 `6`으로 변경할 수 있습니다. 불변성 변수만을 사용하는 것보다 
+가변성 변수를 사용하여 보다 쉽게 구현할 수 있을 경우 가변성 변수를 만들어 사용할 수도 있습니다.
 
-There are multiple trade-offs to consider, in addition to the prevention of
-bugs. For example, in cases where you’re using large data structures, mutating
-an instance in place may be faster than copying and returning newly allocated
-instances. With smaller data structures, creating new instances and writing in
-a more functional programming style may be easier to reason about, so the lower
-performance might be a worthwhile penalty for gaining that clarity.
+이런 의사 결정에 있어서 버그를 예방하는 것 외에도 고려해야 할 요소들이 있습니다. 예를 들어, 대규모 데이터 구조체를
+다루는 경우 가변한 인스턴스를 사용하는 것이 새로 인스턴스를 할당하고 반환하는 것보다 빠를 수 있습니다. 데이터 규모가
+작을수록 새 인스턴스를 생성하고 함수적 프로그래밍 스타일로 작성하는 것이 더 합리적이고, 그렇기에 약간의 성능 하락을
+통해 가독성을 확보할 수 있다면 더 가치있는 선택입니다.
 
-### Differences Between Variables and Constants
 
-Being unable to change the value of a variable might have reminded you of
-another programming concept that most other languages have: *constants*. Like
-immutable variables, constants are also values  that are bound to a name and
-are not allowed to change, but there are a few differences between constants
-and variables.
+### 변수와 상수 간의 차이점들 
 
-First, we aren’t allowed to use `mut` with constants: constants aren't only
-immutable by default, they're always immutable.
+변수의 값을 변경할 수 없다는 사항이 아마 당신에게 다른 언어가 가진 프로그래밍 개념을 떠오르게 하지 않나요: *상수*
+불변성 변수와 마찬가지로 상수 또한 이름으로 bound된 후에는 값의 변경이 허용되지 않지만, 상수와 변수는 조금
+다릅니다. 
 
-We declare constants using the `const` keyword instead of the `let` keyword,
-and the type of the value *must* be annotated. We're about to cover types and
-type annotations in the next section, “Data Types,” so don't worry about the
-details right now, just know that we must always annotate the type.
+첫 째로, 상수에 대해서는 `mut`을 사용하는 것이 허용되지 않습니다: 상수는 기본 설정이 불변성인 것이 아니고
+불변성 그 자체 입니다.
 
-Constants can be declared in any scope, including the global scope, which makes
-them useful for values that many parts of code need to know about.
+우리가 상수를 사용하고자 하면 `let`키워드 대신 `const`키워드를 사용해야 하고, 값의 유형을 선언해야 
+합니다. 우리가 사용할 수 있는 유형들과 유형의 선언을 챕터 “Data Types,”에서 다루게 될 것이므로 자세한 
+사항은 지금 걱정하지 말고, 우리는 반드시 값의 유형을 선언해야 한다는 것을 알고 지나갑시다. 
 
-The last difference is that constants may only be set to a constant expression,
-not the result of a function call or any other value that could only be
-computed at runtime.
+상수는 전체 영역을 포함하여 어떤 영역에서도 선언될 수 있습니다. 이는 코드의 많은 부분에서 사용될 필요가 있는
+값을 다루는데 유용합니다.
 
-Here's an example of a constant declaration where the constant's name is
-`MAX_POINTS` and its value is set to 100,000. (Rust constant naming convention
-is to use all upper case with underscores between words):
+마지막 차이점은 상수는 오직 상수를 표현하는 값만 설정될 수 있지 함수 호출의 결과같은 실행 시간에 결정되는 값이
+설정될 수는 없다는 점 입니다.
+
+아래의 `MAX_POINTS`라는 이름을 갖는 상수를 선언하는 예제에서는 값을 100,000으로 설정합니다. (Rust의 
+상수 명명 규칙에 따라 모든 단어를 대문자로 사용합니다.)
 
 ```rust
 const MAX_POINTS: u32 = 100_000;
 ```
 
-Constants are valid for the entire time a program runs, within the scope they
-were declared in, making them a useful choice for values in your application
-domain that multiple parts of the program might need to know about, such as the
-maximum number of points any player of a game is allowed to earn or the speed
-of light.
+상수는 자신이 선언되어 있는 영역 내에서 프로그램이 실행되는 시간 동안 유효하기에, 당신의 어플리케이션 도메인 전체에
+걸쳐 프로그램의 다양한 곳에서 사용되는 값을 상수로 하면 유용합니다. 사용자가 한 게임에서 획득할 수 있는 최대 포인트,
+빛의 속도 같은 값 등등...
 
-Naming hardcoded values used throughout your program as constants is useful in
-conveying the meaning of that value to future maintainers of the code. It also
-helps to have only one place in your code you would need to change if the
-hardcoded value needed to be updated in the future.
+당신의 프로그램 전체에 걸쳐 하드코드 해야 하는 값을 이름지어 상수로 사용하면 향후 코드를 유지보수 하게 될 사람에게
+그 의미를 전달할 수 있으므로 유용하다. 또한 향후 해당 값을 변경해야 하는 경우에 상수로 선언된 값 한 곳만 변경하면
+되므로 도움이 될 겁니다. 
 
 ### Shadowing
 
-As we saw in the guessing game tutorial in Chapter 2, we can declare a new
-variable with the same name as a previous variable, and the new variable
-*shadows* the previous variable. Rustaceans say that the first variable is
-*shadowed* by the second, which means that the second variable’s value is what
-we’ll see when we use the variable. We can shadow a variable by using the same
-variable’s name and repeating the use of the `let` keyword as follows:
+앞서 우리가 2장에서 추측 게임 예제를 통해 봤듯이, 이전에 선언한 변수와 같은 이름의 새 변수를 선언할 수 있고, 
+새 변수는 이전 변수를 *shadows*하게 된다. Rustaceans들은 이를 첫 변수가 두 번째에 의해 *shadowed*
+됐다고 표현하게 됩니다. 해당 변수명은 두 번째 변수의 값을 갖게 된다는 뜻이죠. `let`키워드를 사용해서 다음처럼 
+반복하여 같은 변수 명으로 변수를 shadow 할 수 있다. 
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -165,11 +139,9 @@ fn main() {
 }
 ```
 
-This program first binds `x` to a value of `5`. Then it shadows `x` by
-repeating `let x =`, taking the original value and adding `1` so the value of
-`x` is then `6`. The third `let` statement also shadows `x`, taking the
-previous value and multiplying it by `2` to give `x` a final value of `12`.
-When you run this program, it will output the following:
+이 프로그램은 처음 `x`에 값 `5`를 bind 합니다. 이후 반복된 `let x =` 구문으로 `x`를 shadow하고 
+원본 값에 `1`을 더해서 `x`의 값은 `6`이 됩니다. 세 번째 `let` 문으로 또 `x`를 shadow하고, 이전 
+값에 `2`를 곱하여 `x`의 최종값은 `12`가 됩니다. 이 프로그램을 실행하면 다음과 같은 결과를 볼 수 있습니다.
 
 ```text
 $ cargo run
@@ -178,36 +150,32 @@ $ cargo run
 The value of x is: 12
 ```
 
-This is different than marking a variable as `mut`, because unless we use the
-`let` keyword again, we’ll get a compile-time error if we accidentally try to
-reassign to this variable. We can perform a few transformations on a value but
-have the variable be immutable after those transformations have been completed.
+이와 같은 사용은 변수를 `mut`으로 선언하는 것과는 차이가 있게 됩니다. 왜냐면 `let`키워드를 사용하지 않고 변수에 
+새로 값을 대입하려고 하면 컴파일-시에 에러를 얻게 되기 때문이죠. 우리가 몇 번 값을 변경할 수는 있지만 그 이후에 
+변수는 불변성을 갖게 됩니다. 
 
-The other difference between `mut` and shadowing is that because we’re
-effectively creating a new variable when we use the `let` keyword again, we can
-change the type of the value, but reuse the same name. For example, say our
-program asks a user to show how many spaces they want between some text by
-inputting space characters, but we really want to store that input as a number:
+또 다른 `mut`과 shadowing의 차이는 `let`키워드를 다시 사용하여 효과적으로 새 변수를 선언하고, 값의 유형을
+변경할 수 있으면서도 동일 이름을 사용할 수 있다는 점 입니다. 예를 들어, 공백 문자들을 입력받아 얼마나 많은 공백 
+문자가 있는지 보여주고자 할 때, 실제로는 저장하고자 하는 것은 공백의 갯수일테죠. 
+
 
 ```rust
 let spaces = "   ";
 let spaces = spaces.len();
 ```
 
-This construct is allowed because the first `spaces` variable is a string type,
-and the second `spaces` variable, which is a brand-new variable that happens to
-have the same name as the first one, is a number type. Shadowing thus spares us
-from having to come up with different names, like `spaces_str` and
-`spaces_num`; instead, we can reuse the simpler `spaces` name. However, if we
-try to use `mut` for this, as shown here:
+이와 같은 구조가 허용되는 이유는 첫 `spaces` 변수가 문자열 유형이고 두 번째 `spaces` 변수는 첫 번째 것과 
+동일한 이름을 가진 새롭게 정의된 숫자 유형의 변수이기 때문입니다. Shadowing은 `space_str`이나 `space_num`
+과 같이 대체된 이름을 사용는 대신 간단히 `spaces` 이름을 사용할 수 있게 해줍니다. 그러나 우리가 `mut`을 사용하려고 
+했다면:
 
 ```rust,ignore
 let mut spaces = "   ";
 spaces = spaces.len();
 ```
 
-we’ll get a compile-time error because we’re not allowed to mutate a variable’s
-type:
+우리는 다음처럼 변수의 유형을 변경할 수 없다는 컴파일-시의 에러를 얻게 될 겁니다:
+
 
 ```text
 error[E0308]: mismatched types
@@ -220,5 +188,4 @@ error[E0308]: mismatched types
              found type `usize`
 ```
 
-Now that we’ve explored how variables work, let’s look at more data types they
-can have.
+이제 우리는 변수가 어떻게 동작하는지 탐색했다, 당신이 사용할 수 있는 더 많은 데이터 유형을 살펴보자.
