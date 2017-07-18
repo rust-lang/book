@@ -18,9 +18,9 @@ finds lines in that file that contain the string argument. It’ll then print ou
 those lines.
 
 Along the way, we’ll show how to make our command line tool use features of the
-terminal that many command line tools use. We'll read the value of an
+terminal that many command line tools use. We’ll read the value of an
 environment variable in order to allow the user to configure the behavior of
-our tool. We'll print to the standard error console stream (`stderr`) instead
+our tool. We’ll print to the standard error console stream (`stderr`) instead
 of standard output (`stdout`) so that, for example, the user can choose to
 redirect successful output to a file while still seeing error messages on the
 screen.
@@ -139,10 +139,10 @@ $ cargo run needle haystack
 You may notice that the first value in the vector is `"target/debug/minigrep"`,
 which is the name of our binary. This matches the behavior of the arguments
 list in C, and lets programs use the name by which they were invoked in their
-execution. It's convenient to have access to the program name in case we want
+execution. It’s convenient to have access to the program name in case we want
 to print it in messages or change behavior of the program based on what command
 line alias was used to invoke the program, but for the purposes of this chapter
-we're going to ignore it and only save the two arguments we need.
+we’re going to ignore it and only save the two arguments we need.
 
 ### Saving the Argument Values in Variables
 
@@ -874,7 +874,7 @@ This is looking pretty good so far! Now we’re going to split the *src/main.rs*
 file up and put some code into *src/lib.rs* so that we can test it and have a
 *src/main.rs* file with fewer responsibilities.
 
-Let’s move everything that isn't the `main` function from *src/main.rs* to a
+Let’s move everything that isn’t the `main` function from *src/main.rs* to a
 new file, *src/lib.rs*:
 
 * The `run` function definition
@@ -883,7 +883,7 @@ new file, *src/lib.rs*:
 * The `Config::new` function definition
 
 The contents of *src/lib.rs* should have the signatures shown in Listing 12-13
-(we've omitted the bodies of the functions for brevity):
+(we’ve omitted the bodies of the functions for brevity):
 
 Filename: src/lib.rs
 
@@ -941,7 +941,7 @@ Listing 12-14: Bringing the `minigrep` crate into the scope of *src/main.rs*
 
 To bring the library crate into the binary crate, we use `extern crate`
 `minigrep`. Then we’ll add a `use` `minigrep``::Config` line to bring the
-`Config` type into scope, and we'll prefix the `run` function with our crate
+`Config` type into scope, and we’ll prefix the `run` function with our crate
 name. With that, all the functionality should be connected and should work.
 Give it a `cargo run` and make sure everything is wired up correctly.
 
@@ -1020,7 +1020,7 @@ searching is three lines, only one of which contains “duct”. We assert that 
 value returned from the `search` function contains only the line we expect.
 
 We aren’t able to run this test and watch it fail though, since this test
-doesn’t even compile–the search function doesn't exist yet! So now we’ll add
+doesn’t even compile–the search function doesn’t exist yet! So now we’ll add
 just enough code to get the tests to compile and run: a definition of the
 `search` function that always returns an empty vector, as shown in Listing
 12-16. Once we have this, the test should compile and fail because an empty
@@ -1333,7 +1333,7 @@ Trust me.";
 Listing 12-20: Adding a new failing test for the case insensitive function
 we’re about to add
 
-Note that we’ve edited the old test’s `contents` too. We've added a new line
+Note that we’ve edited the old test’s `contents` too. We’ve added a new line
 with the text “Duct tape”, with a capital D, that shouldn’t match the query
 “duct” when we’re searching in a case sensitive manner. Changing the old test
 in this way helps ensure that we don’t accidentally break the case sensitive
@@ -1559,17 +1559,17 @@ we have to use something else in order to print to standard error.
 First, let’s observe how all content printed by `minigrep` is currently being
 written to standard out, including error messages that we want to write to
 standard error instead. We’ll do that by redirecting the standard output stream
-to a file while we also intentionally cause an error. We won't redirect the
+to a file while we also intentionally cause an error. We won’t redirect the
 standard error stream, so any content sent to standard error will continue to
 display on the screen.  Command line programs are expected to send error
 messages to the standard error stream so that we can still see error messages
 on the screen even if we choose to redirect the standard output stream to a
-file. Our program is not currently well-behaved; we're about to see that it
+file. Our program is not currently well-behaved; we’re about to see that it
 saves the error message output to the file instead!
 
 The way to demonstrate this behavior is by running the program with `>` and the
 filename, *output.txt*, that we want to redirect the standard output stream to.
-We're not going to pass any arguments, which should cause an error:
+We’re not going to pass any arguments, which should cause an error:
 
 ```
 $ cargo run > output.txt
@@ -1595,7 +1595,7 @@ Let’s change how error messages are printed using the code in Listing 12-24.
 Because of the refactoring we did earlier in this chapter, all the code that
 prints error messages is in one function, in `main`. The standard library
 provides the `eprintln!` macro that prints to the standard error stream, so
-let's change the two places we were calling `println!` to print errors so that
+let’s change the two places we were calling `println!` to print errors so that
 these spots use `eprintln!` instead:
 
 Filename: src/main.rs
