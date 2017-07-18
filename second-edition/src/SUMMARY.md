@@ -18,7 +18,7 @@
 - [소유권 이해하기](ch04-00-understanding-ownership.md)
     - [소유권이 뭔가요?](ch04-01-what-is-ownership.md)
     - [참조자와 빌림](ch04-02-references-and-borrowing.md)
-    - [Slices](ch04-03-slices.md)
+    - [슬라이스](ch04-03-slices.md)
 
 - [Using Structs to Structure Related Data](ch05-00-structs.md)
     - [Defining and Instantiating Structs](ch05-01-defining-structs.md)
