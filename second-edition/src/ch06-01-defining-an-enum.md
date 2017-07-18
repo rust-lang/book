@@ -27,9 +27,9 @@ enum IpAddrKind {
 
 `IpAddrKind` is now a custom data type that we can use elsewhere in our code.
 
-### Enum Values
+### 열거형 값
 
-We can create instances of each of the two variants of `IpAddrKind` like this:
+아래 처럼 `IpAddrKind` 의 두개의 variants 에 대한 인스턴스를 만들 수 있습니다:
 
 ```rust
 # enum IpAddrKind {
@@ -41,11 +41,10 @@ let four = IpAddrKind::V4;
 let six = IpAddrKind::V6;
 ```
 
-Note that the variants of the enum are namespaced under its identifier, and we
-use a double colon to separate the two. The reason this is useful is that now
-both values `IpAddrKind::V4` and `IpAddrKind::V6` are of the same type:
-`IpAddrKind`. We can then, for instance, define a function that takes any
-`IpAddrKind`:
+열거형의 variants 는 열거형을 정의한 식별자에 의해 이름 공간이 생기며, 두개의 콜론을 사용하여 둘을 
+구분할 수 있습니다. `IpAddrKind::V4` 와 `IpAddrKind::V6` 의 값은 동일한 타입이기
+때문에, 이 방식이 유용 합니다: `IpAddrKind`
+이제 `IpAddrKind` 타입을 인자로 받는 함수를 정의할 수 있습니다:
 
 ```rust
 # enum IpAddrKind {
@@ -56,7 +55,7 @@ both values `IpAddrKind::V4` and `IpAddrKind::V6` are of the same type:
 fn route(ip_type: IpAddrKind) { }
 ```
 
-And we can call this function with either variant:
+그리고, variant 중 하나를 사용해서 함수를 호출 할 수 있습니다:
 
 ```rust
 # enum IpAddrKind {
@@ -70,10 +69,9 @@ route(IpAddrKind::V4);
 route(IpAddrKind::V6);
 ```
 
-Using enums has even more advantages. Thinking more about our IP address type,
-at the moment we don’t have a way to store the actual IP address *data*; we
-only know what *kind* it is. Given that you just learned about structs in
-Chapter 5, you might tackle this problem as shown in Listing 6-1:
+열거형을 사용하면 잇점이 더 있습니다. IP 주소 타입에 대해 더 생각해 볼 때, 지금으로써는 실제 IP 주소 
+*데이터*를 저장할 방법이 없습니다; 단지 어떤 *종류* 인지만 알 뿐 입니다. 5장에서 구조체에 대해 방금
+공부 했다고 한다면, 이 문제를 Listing 6-1 에서 보여지는 것 처럼 풀려고 할 것 입니다:
 
 ```rust
 enum IpAddrKind {
@@ -97,22 +95,19 @@ let loopback = IpAddr {
 };
 ```
 
-<span class="caption">Listing 6-1: Storing the data and `IpAddrKind` variant of
-an IP address using a `struct`</span>
+<span class="caption">Listing 6-1: `struct` 를 사용해서 IP 주소의 데이터와 `IpAddrKind` 
+variant 저장하기</span>
 
-Here, we’ve defined a struct `IpAddr` that has two fields: a `kind` field that
-is of type `IpAddrKind` (the enum we defined previously) and an `address` field
-of type `String`. We have two instances of this struct. The first, `home`, has
-the value `IpAddrKind::V4` as its `kind` with associated address data of
-`127.0.0.1`. The second instance, `loopback`, has the other variant of
-`IpAddrKind` as its `kind` value, `V6`, and has address `::1` associated with
-it. We’ve used a struct to bundle the `kind` and `address` values together, so
-now the variant is associated with the value.
+여기서 두 개의 필드를 갖는 `IpAddr` 를 정의 했습니다: `IpAddrKind` 타입(이전에 정의한 열거형)인 
+`kind` 필드와 `String` 타입인 `address` 필드 입니다. 구조체에 대한 두 개의 인스턴스가 있습니다.
+첫번째 `home` 은 `kind` 의 값으로 `IpAddrKind::V4` 을 갖고 연관된 주소 데이터로 `127.0.0.1`
+를 갖습니다. 두번째 `loopback` 은 `IpAddrKind` 의 다른 variant 인 `V6` 을 값으로 갖고,
+연관된 주소로 `::1` 를 갖습니다. `kind` 와 `address` 의 값을 함쎄 사용하기 위해 구조체를 사용
+했습니다. 그렇게 함으로써 variant 가 연관된 값을 갖게 되었습니다.
 
-We can represent the same concept in a more concise way using just an enum
-rather than an enum as part of a struct by putting data directly into each enum
-variant. This new definition of the `IpAddr` enum says that both `V4` and `V6`
-variants will have associated `String` values:
+각 열거형 variant 에 데이터를 직접 넣는 방식을 사용해서 열거형을 구조체의 일부로 사용하는 방식 보다 
+더 간결하게 동일한 개념을 표현할 수 있습니다. `IpAddr` 얼거형의 새로운 정의에서는 두 개의 `V4` 와
+`V6` variant 는 연관된 `String` 타입의 값을 갖게 됩니다:
 
 ```rust
 enum IpAddr {
