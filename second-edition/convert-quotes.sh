@@ -11,9 +11,11 @@
 
 set -eu
 
-mkdir -p tmp/nostarch
+dir=$1
 
-for f in nostarch/*.md
+mkdir -p "tmp/$dir"
+
+for f in $dir/*.md
 do
     cat "$f" | cargo run --bin convert_quotes > "tmp/$f"
     mv "tmp/$f" "$f"
