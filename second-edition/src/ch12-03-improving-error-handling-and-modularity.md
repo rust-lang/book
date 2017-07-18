@@ -590,7 +590,7 @@ This is looking pretty good so far! Now we’re going to split the *src/main.rs*
 file up and put some code into *src/lib.rs* so that we can test it and have a
 *src/main.rs* file with fewer responsibilities.
 
-Let’s move everything that isn't the `main` function from *src/main.rs* to a
+Let’s move everything that isn’t the `main` function from *src/main.rs* to a
 new file, *src/lib.rs*:
 
 * The `run` function definition
@@ -599,7 +599,7 @@ new file, *src/lib.rs*:
 * The `Config::new` function definition
 
 The contents of *src/lib.rs* should have the signatures shown in Listing 12-13
-(we've omitted the bodies of the functions for brevity):
+(we’ve omitted the bodies of the functions for brevity):
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -659,7 +659,7 @@ scope of *src/main.rs*</span>
 
 To bring the library crate into the binary crate, we use `extern crate`
 `minigrep`. Then we’ll add a `use` `minigrep``::Config` line to bring the
-`Config` type into scope, and we'll prefix the `run` function with our crate
+`Config` type into scope, and we’ll prefix the `run` function with our crate
 name. With that, all the functionality should be connected and should work.
 Give it a `cargo run` and make sure everything is wired up correctly.
 

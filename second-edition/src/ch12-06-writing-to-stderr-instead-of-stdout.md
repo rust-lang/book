@@ -14,17 +14,17 @@ we have to use something else in order to print to standard error.
 First, let’s observe how all content printed by `minigrep` is currently being
 written to standard out, including error messages that we want to write to
 standard error instead. We’ll do that by redirecting the standard output stream
-to a file while we also intentionally cause an error. We won't redirect the
+to a file while we also intentionally cause an error. We won’t redirect the
 standard error stream, so any content sent to standard error will continue to
 display on the screen.  Command line programs are expected to send error
 messages to the standard error stream so that we can still see error messages
 on the screen even if we choose to redirect the standard output stream to a
-file. Our program is not currently well-behaved; we're about to see that it
+file. Our program is not currently well-behaved; we’re about to see that it
 saves the error message output to the file instead!
 
 The way to demonstrate this behavior is by running the program with `>` and the
 filename, *output.txt*, that we want to redirect the standard output stream to.
-We're not going to pass any arguments, which should cause an error:
+We’re not going to pass any arguments, which should cause an error:
 
 ```text
 $ cargo run > output.txt
@@ -50,7 +50,7 @@ Let’s change how error messages are printed using the code in Listing 12-24.
 Because of the refactoring we did earlier in this chapter, all the code that
 prints error messages is in one function, in `main`. The standard library
 provides the `eprintln!` macro that prints to the standard error stream, so
-let's change the two places we were calling `println!` to print errors so that
+let’s change the two places we were calling `println!` to print errors so that
 these spots use `eprintln!` instead:
 
 <span class="filename">Filename: src/main.rs</span>

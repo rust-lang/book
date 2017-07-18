@@ -109,7 +109,7 @@ fn build_user(email: String, username: String) -> User {
 and username and returns a `User` instance</span>
 
 Because the parameter names `email` and `username` are the same as the `User`
-struct's field names `email` and `username`, we can write `build_user` without
+struct’s field names `email` and `username`, we can write `build_user` without
 the repetition of `email` and `username` as shown in Listing 5-5. This version
 of `build_user` behaves the same way as the one in Listing 5-4. The field init
 syntax can make cases like this shorter to write, especially when structs have
@@ -139,8 +139,8 @@ fields</span>
 
 ### Creating Instances From Other Instances With Struct Update Syntax
 
-It's often useful to create a new instance from an old instance, using most of
-the old instance's values but changing some. Listing 5-6 shows an example of
+It’s often useful to create a new instance from an old instance, using most of
+the old instance’s values but changing some. Listing 5-6 shows an example of
 creating a new `User` instance in `user2` by setting the values of `email` and
 `username` but using the same values for the rest of the fields from the
 `user1` instance we created in Listing 5-2:
@@ -207,7 +207,7 @@ values from the fields of the instance in the `user1` variable</span>
 ### Tuple Structs without Named Fields to Create Different Types
 
 We can also define structs that look similar to tuples, called *tuple structs*,
-that have the added meaning the struct name provides, but don't have names
+that have the added meaning the struct name provides, but don’t have names
 associated with their fields, just the types of the fields. The definition of a
 tuple struct still starts with the `struct` keyword and the struct name, which
 are followed by the types in the tuple. For example, here are definitions and
@@ -221,18 +221,18 @@ let black = Color(0, 0, 0);
 let origin = Point(0, 0, 0);
 ```
 
-Note that the `black` and `origin` values are different types, since they're
+Note that the `black` and `origin` values are different types, since they’re
 instances of different tuple structs. Each struct we define is its own type,
 even though the fields within the struct have the same types. Otherwise, tuple
 struct instances behave like tuples, which we covered in Chapter 3.
 
 ### Unit-Like Structs without Any Fields
 
-We can also define structs that don't have any fields! These are called
+We can also define structs that don’t have any fields! These are called
 *unit-like structs* since they behave similarly to `()`, the unit type.
 Unit-like structs can be useful in situations such as when you need to
-implement a trait on some type, but you don't have any data that you want to
-store in the type itself. We'll be discussing traits in Chapter 10.
+implement a trait on some type, but you don’t have any data that you want to
+store in the type itself. We’ll be discussing traits in Chapter 10.
 
 > ### Ownership of Struct Data
 >

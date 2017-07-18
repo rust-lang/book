@@ -1,7 +1,7 @@
 ## Improving our I/O Project
 
 We can improve our implementation of the I/O project in Chapter 12 by using
-iterators to make places in the code clearer and more concise. Let's take a
+iterators to make places in the code clearer and more concise. Let’s take a
 look at how iterators can improve our implementation of both the `Config::new`
 function and the `search` function.
 
@@ -10,7 +10,7 @@ function and the `search` function.
 In Listing 12-13, we had code that took a slice of `String` values and created
 an instance of the `Config` struct by checking for the right number of
 arguments, indexing into the slice, and cloning the values so that the `Config`
-struct could own those values. We've reproduced the code here in Listing 13-23:
+struct could own those values. We’ve reproduced the code here in Listing 13-23:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -49,7 +49,7 @@ need to clone the values that we put in the `query` and `filename` fields of
 
 With our new knowledge about iterators, we can change the `new` function to
 take ownership of an iterator as its argument instead of borrowing a slice.
-We'll use the iterator functionality instead of the code we had that checks the
+We’ll use the iterator functionality instead of the code we had that checks the
 length of the slice and indexes into specific locations. This will clear up
 what the `Config::new` function is doing since the iterator will take care of
 accessing the values.
@@ -68,7 +68,7 @@ operations that borrow, we can move the `String` values from the iterator into
 
 #### Using the Iterator Returned by `env::args` Directly
 
-In your I/O project's *src/main.rs*, let's change the start of the `main`
+In your I/O project’s *src/main.rs*, let’s change the start of the `main`
 function from this code that we had in Listing 12-23:
 
 ```rust,ignore
@@ -121,11 +121,11 @@ listing numbers making sense as well. We'll just take care of them. /Carol -->
 
 The `env::args` function returns an iterator! Rather than collecting the
 iterator values into a vector and then passing a slice to `Config::new`, now
-we're passing ownership of the iterator returned from `env::args` to
+we’re passing ownership of the iterator returned from `env::args` to
 `Config::new` directly.
 
-Next, we need to update the definition of `Config::new`. In your I/O project's
-*src/lib.rs*, let's change the signature of `Config::new` to look like Listing
+Next, we need to update the definition of `Config::new`. In your I/O project’s
+*src/lib.rs*, let’s change the signature of `Config::new` to look like Listing
 13-25:
 
 <!-- can you give the filename here too? -->
@@ -143,13 +143,13 @@ impl Config {
 expect an iterator</span>
 
 The standard library documentation for the `env::args` function shows that the
-type of the iterator it returns is `std::env::Args`. We've updated the
+type of the iterator it returns is `std::env::Args`. We’ve updated the
 signature of the `Config::new` function so that the parameter `args` has the
 type `std::env::Args` instead of `&[String]`.
 
 #### Using `Iterator` Trait Methods Instead of Indexing
 
-Next, we'll fix the body of `Config::new`. The standard library documentation
+Next, we’ll fix the body of `Config::new`. The standard library documentation
 also mentions that `std::env::Args` implements the `Iterator` trait, so we know
 we can call the `next` method on it! Listing 13-26 has the new code:
 
@@ -235,7 +235,7 @@ instead. This also lets us avoid having a mutable intermediate `results`
 vector. The functional programming style prefers to minimize the amount of
 mutable state to make code clearer. Removing the mutable state might make it
 easier for us to make a future enhancement to make searching happen in
-parallel, since we wouldn't have to manage concurrent access to the `results`
+parallel, since we wouldn’t have to manage concurrent access to the `results`
 vector. Listing 13-28 shows this change:
 
 <!-- Remind us why we want to avoid the mutable results vector? -->
@@ -267,15 +267,15 @@ details I'm afraid -->
 
 The next logical question is which style you should choose in your own code:
 the original implementation in Listing 13-27, or the version using iterators in
-Listing 13-28. Most Rust programmers prefer to use the iterator style. It's a
+Listing 13-28. Most Rust programmers prefer to use the iterator style. It’s a
 bit tougher to get the hang of at first, but once you get a feel for the
 various iterator adaptors and what they do, iterators can be easier to
 understand. Instead of fiddling with the various bits of looping and building
 new vectors, the code focuses on the high-level objective of the loop. This
-abstracts away some of the commonplace code so that it's easier to see the
+abstracts away some of the commonplace code so that it’s easier to see the
 concepts that are unique to this code, like the filtering condition each
 element in the iterator must pass.
 
 But are the two implementations truly equivalent? The intuitive assumption
-might be that the more low-level loop will be faster. Let's talk about
+might be that the more low-level loop will be faster. Let’s talk about
 performance.

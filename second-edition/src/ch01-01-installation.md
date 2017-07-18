@@ -5,15 +5,15 @@ connection to run the commands in this chapter, as we’ll be downloading Rust
 from the internet.
 
 We’ll be showing off a number of commands using a terminal, and those lines all
-start with `$`. You don't need to type in the `$` character; they are there to indicate
+start with `$`. You don’t need to type in the `$` character; they are there to indicate
 the start of each command. You’ll see many tutorials and examples around the web
 that follow this convention: `$` for commands run as a regular user, and `#`
-for commands you should be running as an administrator. Lines that don't start
+for commands you should be running as an administrator. Lines that don’t start
 with `$` are typically showing the output of the previous command.
 
 ### Installing on Linux or Mac
 
-If you're on Linux or a Mac, all you need to do is open a terminal and type
+If you’re on Linux or a Mac, all you need to do is open a terminal and type
 this:
 
 ```text
@@ -79,7 +79,7 @@ $ rustup self uninstall
 
 ### Troubleshooting
 
-If you've got Rust installed, you can open up a shell, and type this:
+If you’ve got Rust installed, you can open up a shell, and type this:
 
 ```text
 $ rustc --version
@@ -95,12 +95,12 @@ rustc x.y.z (abcabcabc yyyy-mm-dd)
 If you see this, Rust has been installed successfully!
 Congrats!
 
-If you don't and you're on Windows, check that Rust is in your `%PATH%` system
+If you don’t and you’re on Windows, check that Rust is in your `%PATH%` system
 variable.
 
-If it still isn't working, there are a number of places where you can get help.
+If it still isn’t working, there are a number of places where you can get help.
 The easiest is [the #rust IRC channel on irc.mozilla.org][irc]<!-- ignore -->,
-which you can access through [Mibbit][mibbit]. Go to that address, and you'll
+which you can access through [Mibbit][mibbit]. Go to that address, and you’ll
 be chatting with other Rustaceans (a silly nickname we call ourselves) who can
 help you out. Other great resources include [the Users forum][users] and
 [Stack Overflow][stackoverflow].
@@ -116,5 +116,5 @@ The installer also includes a copy of the documentation locally, so you can
 read it offline. Run `rustup doc` to open the local documentation in your
 browser.
 
-Any time there's a type or function provided by the standard library and you're
+Any time there’s a type or function provided by the standard library and you’re
 not sure what it does, use the API documentation to find out!

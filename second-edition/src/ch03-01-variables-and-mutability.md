@@ -108,12 +108,12 @@ immutable variables, constants are also values  that are bound to a name and
 are not allowed to change, but there are a few differences between constants
 and variables.
 
-First, we aren’t allowed to use `mut` with constants: constants aren't only
-immutable by default, they're always immutable.
+First, we aren’t allowed to use `mut` with constants: constants aren’t only
+immutable by default, they’re always immutable.
 
 We declare constants using the `const` keyword instead of the `let` keyword,
-and the type of the value *must* be annotated. We're about to cover types and
-type annotations in the next section, “Data Types,” so don't worry about the
+and the type of the value *must* be annotated. We’re about to cover types and
+type annotations in the next section, “Data Types,” so don’t worry about the
 details right now, just know that we must always annotate the type.
 
 Constants can be declared in any scope, including the global scope, which makes
@@ -123,7 +123,7 @@ The last difference is that constants may only be set to a constant expression,
 not the result of a function call or any other value that could only be
 computed at runtime.
 
-Here's an example of a constant declaration where the constant's name is
+Here’s an example of a constant declaration where the constant’s name is
 `MAX_POINTS` and its value is set to 100,000. (Rust constant naming convention
 is to use all upper case with underscores between words):
 

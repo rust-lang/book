@@ -15,9 +15,9 @@ finds lines in that file that contain the string argument. It’ll then print ou
 those lines.
 
 Along the way, we’ll show how to make our command line tool use features of the
-terminal that many command line tools use. We'll read the value of an
+terminal that many command line tools use. We’ll read the value of an
 environment variable in order to allow the user to configure the behavior of
-our tool. We'll print to the standard error console stream (`stderr`) instead
+our tool. We’ll print to the standard error console stream (`stderr`) instead
 of standard output (`stdout`) so that, for example, the user can choose to
 redirect successful output to a file while still seeing error messages on the
 screen.

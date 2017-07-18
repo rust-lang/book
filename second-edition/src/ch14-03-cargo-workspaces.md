@@ -8,10 +8,10 @@ Cargo has a feature called *workspaces* that can help us manage multiple
 related packages that are developed in tandem.
 
 A *workspace* is a set of packages that will all share the same *Cargo.lock*
-and output directory. Let's make a project using a workspace where the code
+and output directory. Let’s make a project using a workspace where the code
 will be trivial so that we can concentrate on the structure of a workspace.
-We'll have a binary that uses two libraries: one that will provide an `add_one`
-method and a second that will provide an `add_two` method. Let's start by
+We’ll have a binary that uses two libraries: one that will provide an `add_one`
+method and a second that will provide an `add_two` method. Let’s start by
 creating a new crate for the binary:
 
 ```text
@@ -20,7 +20,7 @@ $ cargo new --bin adder
 $ cd adder
 ```
 
-We need to modify the binary package's *Cargo.toml* to tell Cargo the `adder`
+We need to modify the binary package’s *Cargo.toml* to tell Cargo the `adder`
 package is a workspace. Add this at the bottom of the file:
 
 ```toml
@@ -28,9 +28,9 @@ package is a workspace. Add this at the bottom of the file:
 ```
 
 Like many Cargo features, workspaces support convention over configuration: we
-don't need to say anything more than this as long as we follow the convention.
+don’t need to say anything more than this as long as we follow the convention.
 The convention is that any crates that we depend on as sub-directories will be
-part of the workspace. Let's add a path dependency to the `adder` crate by
+part of the workspace. Let’s add a path dependency to the `adder` crate by
 changing the `[dependencies]` section of *Cargo.toml* to look like this:
 
 ```toml
@@ -38,8 +38,8 @@ changing the `[dependencies]` section of *Cargo.toml* to look like this:
 add-one = { path = "add-one" }
 ```
 
-If we add dependencies that don't have a `path` specified, those will be normal
-dependencies that aren't in this workspace.
+If we add dependencies that don’t have a `path` specified, those will be normal
+dependencies that aren’t in this workspace.
 
 Next, generate the `add-one` crate within the `adder` directory:
 
@@ -60,7 +60,7 @@ Your `adder` directory should now have these directories and files:
     └── main.rs
 ```
 
-In *add-one/src/lib.rs*, let's add an implementation of an `add_one` function:
+In *add-one/src/lib.rs*, let’s add an implementation of an `add_one` function:
 
 <span class="filename">Filename: add-one/src/lib.rs</span>
 
@@ -83,7 +83,7 @@ fn main() {
 }
 ```
 
-Let's build it!
+Let’s build it!
 
 ```text
 $ cargo build
@@ -97,8 +97,8 @@ and the `add-one` crate in *adder/add-one*, but created only one *Cargo.lock*
 and one *target* directory, both in the *adder* directory. See if you can add
 an `add-two` crate in the same way.
 
-Let's now say that we'd like to use the `rand` crate in our `add-one` crate.
-As usual, we'll add it to the `[dependencies]` section in the `Cargo.toml` for
+Let’s now say that we’d like to use the `rand` crate in our `add-one` crate.
+As usual, we’ll add it to the `[dependencies]` section in the `Cargo.toml` for
 that crate:
 
 <span class="filename">Filename: add-one/Cargo.toml</span>
@@ -125,9 +125,9 @@ $ cargo build
 
 The top level *Cargo.lock* now reflects the fact that `add-one` depends
 on `rand`. However, even though `rand` is used somewhere in the
-workspace, we can't use it in other crates in the workspace unless we add
+workspace, we can’t use it in other crates in the workspace unless we add
 `rand` to their *Cargo.toml* as well. If we add `extern crate rand;` to
-*src/main.rs* for the top level `adder` crate, for example, we'll get an error:
+*src/main.rs* for the top level `adder` crate, for example, we’ll get an error:
 
 ```text
 $ cargo build
@@ -142,7 +142,7 @@ error[E0463]: can't find crate for `rand`
 To fix this, edit *Cargo.toml* for the top level and indicate that `rand` is a
 dependency for the `adder` crate.
 
-For another enhancement, let's add a test of the `add_one::add_one` function
+For another enhancement, let’s add a test of the `add_one::add_one` function
 within that crate:
 
 <span class="filename">Filename: add-one/src/lib.rs</span>

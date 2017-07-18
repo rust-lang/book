@@ -70,7 +70,7 @@ searching is three lines, only one of which contains “duct”. We assert that
 the value returned from the `search` function contains only the line we expect.
 
 We aren’t able to run this test and watch it fail though, since this test
-doesn’t even compile–the search function doesn't exist yet! So now we’ll add
+doesn’t even compile–the search function doesn’t exist yet! So now we’ll add
 just enough code to get the tests to compile and run: a definition of the
 `search` function that always returns an empty vector, as shown in Listing
 12-16. Once we have this, the test should compile and fail because an empty

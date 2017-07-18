@@ -158,19 +158,19 @@ fn add(self, s: &str) -> String {
 This isn’t the exact signature that’s in the standard library; there `add` is
 defined using generics. Here, we’re looking at the signature of `add` with
 concrete types substituted for the generic ones, which is what happens when we
-call this method with `String` values. We'll be discussing generics in
+call this method with `String` values. We’ll be discussing generics in
 Chapter 10. This signature gives us the clues we need to understand the tricky
 bits of the `+` operator.
 
 First of all, `s2` has an `&`, meaning that we are adding a *reference* of the
 second string to the first string. This is because of the `s` parameter in the
-`add` function: we can only add a `&str` to a `String`, we can't add two
+`add` function: we can only add a `&str` to a `String`, we can’t add two
 `String` values together. But wait - the type of `&s2` is `&String`, not
 `&str`, as specified in the second parameter to `add`. Why does our example
 compile? We are able to use `&s2` in the call to `add` because a `&String`
 argument can be *coerced* into a `&str` - when the `add` function is called,
 Rust uses something called a *deref coercion*, which you could think of here as
-turning `&s2` into `&s2[..]` for use in the `add` function. We'll discuss deref
+turning `&s2` into `&s2[..]` for use in the `add` function. We’ll discuss deref
 coercion in more depth in Chapter 15. Because `add` does not take ownership of
 the parameter, `s2` will still be a valid `String` after this operation.
 
@@ -321,7 +321,7 @@ to the index to determine how many valid characters there were.
 
 ### Slicing Strings
 
-Because it's not clear what the return type of string indexing should be, and
+Because it’s not clear what the return type of string indexing should be, and
 it is often a bad idea to index into a string, Rust dissuades you from doing so
 by asking you to be more specific if you really need it. The way you can be
 more specific than indexing using `[]` with a single number is using `[]` with

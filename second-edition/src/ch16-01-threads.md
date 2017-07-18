@@ -14,7 +14,7 @@ this functionality is called *threads*.
 Splitting up the computation your program needs to do into multiple threads can
 improve performance, since the program will be doing multiple things at the
 same time. Programming with threads can add complexity, however. Since threads
-run simultaneously, there's no inherent guarantee about the order in which the
+run simultaneously, there’s no inherent guarantee about the order in which the
 parts of your code on different threads will run. This can lead to race
 conditions where threads are accessing data or resources in an inconsistent
 order, deadlocks where two threads both prevent each other from continuing, or
@@ -35,12 +35,12 @@ threads is sometimes called *1:1*, one OS thread per one language thread. The
 green threaded model is called the *M:N* model, `M` green threads per `N` OS
 threads, where `M` and `N` are not necessarily the same number.
 
-Each model has its own advantages and tradeoffs. The tradeoff that's most
+Each model has its own advantages and tradeoffs. The tradeoff that’s most
 important to Rust is runtime support. *Runtime* is a confusing term; it can
 have different meaning in different contexts. Here, we mean some code included
 by the language in every binary. For some languages, this code is large, and
-for others, this code is small. Colloquially, "no runtime" is often what people
-will say when they mean "small runtime", since every non-assembly language has
+for others, this code is small. Colloquially, “no runtime” is often what people
+will say when they mean “small runtime”, since every non-assembly language has
 some amount of runtime. Smaller runtimes have fewer features but have the
 advantage of resulting in smaller binaries. Smaller binaries make it easier to
 combine the language with other languages in more contexts. While many
@@ -55,7 +55,7 @@ language, there are crates that implement M:N threading if you would rather
 trade overhead for aspects such as more control over which threads run when and
 lower costs of context switching, for example.
 
-Now that we've defined what threads are in Rust, let's explore how to use the
+Now that we’ve defined what threads are in Rust, let’s explore how to use the
 thread-related API that the standard library provides for us.
 
 ### Creating a New Thread with `spawn`
@@ -102,11 +102,11 @@ hi number 4 from the spawned thread!
 hi number 5 from the spawned thread!
 ```
 
-The threads will probably take turns, but that's not guaranteed. In this run,
+The threads will probably take turns, but that’s not guaranteed. In this run,
 the main thread printed first, even though the print statement from the spawned
 thread appears first in the code we wrote. And even though we told the spawned
 thread to print until `i` is 9, it only got to 5 before the main thread shut
-down. If you always only see one thread, or if you don't see any overlap, try
+down. If you always only see one thread, or if you don’t see any overlap, try
 increasing the numbers in the ranges to create more opportunities for a thread
 to take a break and give the other thread a turn.
 
@@ -114,7 +114,7 @@ to take a break and give the other thread a turn.
 
 Not only does the code in Listing 16-1 not allow the spawned thread to finish
 most of the time since the main thread ends before the spawned thread is done,
-there's actually no guarantee that the spawned thread will get to run at all! We
+there’s actually no guarantee that the spawned thread will get to run at all! We
 can fix this by saving the return value of `thread::spawn`, which is a
 `JoinHandle`. That looks like Listing 16-2:
 
@@ -144,7 +144,7 @@ to guarantee the thread is run to completion</span>
 A `JoinHandle` is an owned value that can wait for a thread to finish, which is
 what the `join` method does. By calling `join` on the handle, the current
 thread will block until the thread that the handle represents terminates. Since
-we've put the call to `join` after the main thread's `for` loop, running this
+we’ve put the call to `join` after the main thread’s `for` loop, running this
 example should produce output that looks something like this:
 
 ```text
@@ -189,7 +189,7 @@ fn main() {
 ```
 
 The main thread will wait for the spawned thread to finish before the main
-thread starts running its `for` loop, so the output won't be interleaved
+thread starts running its `for` loop, so the output won’t be interleaved
 anymore:
 
 ```text
@@ -213,21 +213,21 @@ your threads are actually running at the same time or not.
 
 ### Using `move` Closures with Threads
 
-There's a feature of closures that we didn't cover in Chapter 13 that's often
+There’s a feature of closures that we didn’t cover in Chapter 13 that’s often
 useful with `thread::spawn`: `move` closures. We said this in Chapter 13:
 
 > Creating closures that capture values from their environment is mostly used
 > in the context of starting new threads.
 
-Now we're creating new threads, so let's talk about capturing values in
+Now we’re creating new threads, so let’s talk about capturing values in
 closures!
 
 Notice the closure that we pass to `thread::spawn` in Listing 16-1 takes no
-arguments: we're not using any data from the main thread in the spawned
-thread's code. In order to use data in the spawned thread that comes from the
-main thread, we need the spawned thread's closure to capture the values it
+arguments: we’re not using any data from the main thread in the spawned
+thread’s code. In order to use data in the spawned thread that comes from the
+main thread, we need the spawned thread’s closure to capture the values it
 needs. Listing 16-3 shows an attempt to create a vector in the main thread and
-use it in the spawned thread, which won't work the way this example is written:
+use it in the spawned thread, which won’t work the way this example is written:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -249,10 +249,10 @@ fn main() {
 main thread from another thread</span>
 
 The closure uses `v`, so the closure will capture `v` and make `v` part of the
-closure's environment. Because `thread::spawn` runs this closure in a new
+closure’s environment. Because `thread::spawn` runs this closure in a new
 thread, we can access `v` inside that new thread.
 
-When we compile this example, however, we'll get the following error:
+When we compile this example, however, we’ll get the following error:
 
 ```text
 error[E0373]: closure may outlive the current function, but it borrows `v`,
@@ -269,14 +269,14 @@ variables), use the `move` keyword, as shown:
   |     let handle = thread::spawn(move || {
 ```
 
-When we capture something in a closure's environment, Rust will try to infer
+When we capture something in a closure’s environment, Rust will try to infer
 how to capture it. `println!` only needs a reference to `v`, so the closure
-tries to borrow `v`. There's a problem, though: we don't know how long the
-spawned thread will run, so we don't know if the reference to `v` will always
+tries to borrow `v`. There’s a problem, though: we don’t know how long the
+spawned thread will run, so we don’t know if the reference to `v` will always
 be valid.
 
-Consider the code in Listing 16-4 that shows a scenario where it's more likely
-that the reference to `v` won't be valid:
+Consider the code in Listing 16-4 that shows a scenario where it’s more likely
+that the reference to `v` won’t be valid:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -315,7 +315,7 @@ variables), use the `move` keyword, as shown:
 ```
 
 By adding the `move` keyword before the closure, we force the closure to take
-ownership of the values it's using, rather than inferring borrowing. This
+ownership of the values it’s using, rather than inferring borrowing. This
 modification to the code from Listing 16-3 shown in Listing 16-5 will compile
 and run as we intend:
 
@@ -339,7 +339,7 @@ fn main() {
 to take ownership of the values it uses</span>
 
 What about the code in Listing 16-4 where the main thread called `drop`? If we
-add `move` to the closure, we've moved `v` into the closure's environment, and
+add `move` to the closure, we’ve moved `v` into the closure’s environment, and
 we can no longer call `drop` on it. We get this compiler error instead:
 
 ```text
@@ -356,7 +356,7 @@ error[E0382]: use of moved value: `v`
    not implement the `Copy` trait
 ```
 
-Rust's ownership rules have saved us again!
+Rust’s ownership rules have saved us again!
 
-Now that we have a basic understanding of threads and the thread API, let's
+Now that we have a basic understanding of threads and the thread API, let’s
 talk about what we can actually *do* with threads.

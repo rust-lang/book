@@ -2,22 +2,22 @@
 
 The code in Listing 20-21 is responding to requests asynchronously through the
 use of a thread pool, as we intended. We get some warnings about fields that
-we're not using in a direct way, which are a reminder that we're not cleaning
+we’re not using in a direct way, which are a reminder that we’re not cleaning
 anything up. When we use `CTRL-C` to halt the main thread, all the other
-threads are stopped immediately as well, even if they're in the middle of
+threads are stopped immediately as well, even if they’re in the middle of
 serving a request.
 
-We're now going to implement the `Drop` trait for `ThreadPool` to call `join`
+We’re now going to implement the `Drop` trait for `ThreadPool` to call `join`
 on each of the threads in the pool so that the threads will finish the requests
-they're working on. Then we'll implement a way for the `ThreadPool` to tell the
+they’re working on. Then we’ll implement a way for the `ThreadPool` to tell the
 threads they should stop accepting new requests and shut down. To see this code
-in action, we'll modify our server to only accept two requests before
+in action, we’ll modify our server to only accept two requests before
 gracefully shutting down its thread pool.
 
-Let's start with implementing `Drop` for our thread pool. When the pool is
+Let’s start with implementing `Drop` for our thread pool. When the pool is
 dropped, we should join on all of our threads to make sure they finish their
 work. Listing 20-22 shows a first attempt at a `Drop` implementation; this code
-won't quite work yet:
+won’t quite work yet:
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -39,10 +39,10 @@ goes out of scope</span>
 We loop through each of the thread pool `workers`, using `&mut` because `self`
 is itself a mutable reference and we also need to be able to mutate `worker`.
 We print out a message saying that this particular worker is shutting down, and
-then we call `join` on that worker's thread. If the call to `join` fails, we
+then we call `join` on that worker’s thread. If the call to `join` fails, we
 `unwrap` the error to panic and go into an ungraceful shutdown.
 
-Here's the error we get if we compile this code:
+Here’s the error we get if we compile this code:
 
 ```text
 error[E0507]: cannot move out of borrowed content
@@ -52,7 +52,7 @@ error[E0507]: cannot move out of borrowed content
    |             ^^^^^^ cannot move out of borrowed content
 ```
 
-Because we only have a mutable borrow of each `worker`, we can't call `join`:
+Because we only have a mutable borrow of each `worker`, we can’t call `join`:
 `join` takes ownership of its argument. In order to solve this, we need a way
 to move the `thread` out of the `Worker` instance that owns `thread` so that
 `join` can consume the thread. We saw a way to do this in Listing 17-15: if the
@@ -60,7 +60,7 @@ to move the `thread` out of the `Worker` instance that owns `thread` so that
 `take` method on the `Option` to move the value out of the `Some` variant and
 leave a `None` variant in its place. In other words, a `Worker` that is running
 will have a `Some` variant in `thread`, and when we want to clean up a worker,
-we'll replace `Some` with `None` so the worker doesn't have a thread to run.
+we’ll replace `Some` with `None` so the worker doesn’t have a thread to run.
 
 So we know we want to update the definition of `Worker` like this:
 
@@ -74,7 +74,7 @@ struct Worker {
 }
 ```
 
-Now let's lean on the compiler to find the other places that need to change. We
+Now let’s lean on the compiler to find the other places that need to change. We
 get two errors:
 
 ```text
@@ -114,8 +114,8 @@ impl Worker {
 }
 ```
 
-The first error is in our `Drop` implementation, and we mentioned that we'll be
-calling `take` on the `Option` value to move `thread` out of `worker`. Here's
+The first error is in our `Drop` implementation, and we mentioned that we’ll be
+calling `take` on the `Option` value to move `thread` out of `worker`. Here’s
 what that looks like:
 
 <span class="filename">Filename: src/lib.rs</span>
@@ -135,19 +135,19 @@ impl Drop for ThreadPool {
 ```
 
 As we saw in Chapter 17, the `take` method on `Option` takes the `Some` variant
-out and leaves `None` in its place. We're using `if let` to destructure the
-`Some` and get the thread, then call `join` on the thread. If a worker's thread
+out and leaves `None` in its place. We’re using `if let` to destructure the
+`Some` and get the thread, then call `join` on the thread. If a worker’s thread
 is already `None`, then we know this worker has already had its thread cleaned
-up so we don't do anything in that case.
+up so we don’t do anything in that case.
 
 With this, our code compiles without any warnings. Bad news though, this code
-doesn't function the way we want it to yet. The key is the logic in the
+doesn’t function the way we want it to yet. The key is the logic in the
 closures that the spawned threads of the `Worker` instances run: calling `join`
-won't shut down the threads since they `loop` forever looking for jobs. If we
+won’t shut down the threads since they `loop` forever looking for jobs. If we
 try to drop our `ThreadPool` with this implementation, the main thread will
 block forever waiting for the first thread to finish.
 
-To fix this, we're going to modify the threads to listen for either a `Job` to
+To fix this, we’re going to modify the threads to listen for either a `Job` to
 run or a signal that they should stop listening and exit the infinite loop. So
 instead of `Job` instances, our channel will send one of these two enum
 variants:
@@ -239,12 +239,12 @@ We need to change `Job` to `Message` in the definition of `ThreadPool`, in
 `ThreadPool::new` where we create the channel, and in the signature of
 `Worker::new`. The `execute` method of `ThreadPool` needs to send jobs wrapped
 in the `Message::NewJob` variant. Then, in `Worker::new` where we receive a
-`Message` from the channel, we'll process the job if we get the `NewJob`
+`Message` from the channel, we’ll process the job if we get the `NewJob`
 variant and break out of the loop if we get the `Terminate` variant.
 
 With these changes, the code will compile again and continue to function in the
-same way as it has been. We'll get a warning, though, because we aren't using
-the `Terminate` variant in any messages. Let's change our `Drop` implementation
+same way as it has been. We’ll get a warning, though, because we aren’t using
+the `Terminate` variant in any messages. Let’s change our `Drop` implementation
 to look like Listing 20-24:
 
 <span class="filename">Filename: src/lib.rs</span>
@@ -274,21 +274,21 @@ impl Drop for ThreadPool {
 <span class="caption">Listing 20-24: Sending `Message::Terminate` to the
 workers before calling `join` on each worker thread</span>
 
-We're now iterating over the workers twice, once to send one `Terminate`
-message for each worker, and once to call `join` on each worker's thread. If we
-tried to send a message and join immediately in the same loop, it's not
+We’re now iterating over the workers twice, once to send one `Terminate`
+message for each worker, and once to call `join` on each worker’s thread. If we
+tried to send a message and join immediately in the same loop, it’s not
 guaranteed that the worker in the current iteration will be the one that gets
 the message from the channel.
 
 To understand better why we need two separate loops, imagine a scenario with
 two workers. If we iterated through each worker in one loop, on the first
-iteration where `worker` is the first worker, we'd send a terminate message
-down the channel and call `join` on the first worker's thread. If the first
+iteration where `worker` is the first worker, we’d send a terminate message
+down the channel and call `join` on the first worker’s thread. If the first
 worker was busy processing a request at that moment, the second worker would
-pick up the terminate message from the channel and shut down. We're waiting on
+pick up the terminate message from the channel and shut down. We’re waiting on
 the first worker to shut down, but it never will since the second thread picked
-up the terminate message. We're now blocking forever waiting for the first
-worker to shut down, and we'll never send the second message to terminate.
+up the terminate message. We’re now blocking forever waiting for the first
+worker to shut down, and we’ll never send the second message to terminate.
 Deadlock!
 
 To prevent this, we first put all of our `Terminate` messages on the channel,
@@ -297,7 +297,7 @@ requests on the channel once it gets a terminate message, we can be sure that
 if we send the same number of terminate messages as there are workers, each
 worker will receive a terminate message before we call `join` on its thread.
 
-In order to see this code in action, let's modify `main` to only accept two
+In order to see this code in action, let’s modify `main` to only accept two
 requests before gracefully shutting the server down as shown in Listing 20-25:
 
 <span class="filename">Filename: src/bin/main.rs</span>
@@ -329,14 +329,14 @@ fn main() {
 <span class="caption">Listing 20-25: Shut down the server after serving two
 requests by exiting the loop</span>
 
-Only serving two requests isn't behavior you'd like a production web server to
+Only serving two requests isn’t behavior you’d like a production web server to
 have, but this will let us see the graceful shutdown and cleanup working since
-we won't be stopping the server with `CTRL-C`.
+we won’t be stopping the server with `CTRL-C`.
 
-We've added a `counter` variable that we'll increment every time we receive an
-incoming TCP stream. If that counter reaches 2, we'll stop serving requests and
+We’ve added a `counter` variable that we’ll increment every time we receive an
+incoming TCP stream. If that counter reaches 2, we’ll stop serving requests and
 instead break out of the `for` loop. The `ThreadPool` will go out of scope at
-the end of `main`, and we'll see the `drop` implementation run.
+the end of `main`, and we’ll see the `drop` implementation run.
 
 Start the server with `cargo run`, and make three requests. The third request
 should error, and in your terminal you should see output that looks like:
@@ -379,9 +379,9 @@ to finish, and they had all received the termination message and were able to
 shut down at that point.
 
 Congrats! We now have completed our project, and we have a basic web server
-that uses a thread pool to respond asynchronously. We're able to perform a
+that uses a thread pool to respond asynchronously. We’re able to perform a
 graceful shutdown of the server, which cleans up all the threads in the pool.
-Here's the full code for reference:
+Here’s the full code for reference:
 
 <span class="filename">Filename: src/bin/main.rs</span>
 
@@ -569,11 +569,11 @@ impl Worker {
 }
 ```
 
-There's more we could do here! If you'd like to continue enhancing this
+There’s more we could do here! If you’d like to continue enhancing this
 project, here are some ideas:
 
 - Add more documentation to `ThreadPool` and its public methods
-- Add tests of the library's functionality
+- Add tests of the library’s functionality
 - Change calls to `unwrap` to more robust error handling
 - Use `ThreadPool` to perform some other task rather than serving web requests
 - Find a thread pool crate on crates.io and implement a similar web server
@@ -582,8 +582,8 @@ project, here are some ideas:
 
 ## Summary
 
-Well done! You've made it to the end of the book! We'd like to thank you for
-joining us on this tour of Rust. You're now ready to go out and implement your
-own Rust projects or help with other people's. Remember there's a community of
+Well done! You’ve made it to the end of the book! We’d like to thank you for
+joining us on this tour of Rust. You’re now ready to go out and implement your
+own Rust projects or help with other people’s. Remember there’s a community of
 other Rustaceans who would love to help you with any challenges you encounter
 on your Rust journey.

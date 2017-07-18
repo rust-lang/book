@@ -228,7 +228,7 @@ impl Rectangle {
 To call this associated function, we use the `::` syntax with the struct name,
 like `let sq = Rectangle::square(3);`, for example. This function is
 namespaced by the struct: the `::` syntax is used for both associated functions
-and namespaces created by modules, which we'll discuss in Chapter 7.
+and namespaces created by modules, which we’ll discuss in Chapter 7.
 
 ## Summary
 

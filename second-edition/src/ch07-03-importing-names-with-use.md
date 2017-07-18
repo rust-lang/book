@@ -101,8 +101,8 @@ fn main() {
 }
 ```
 
-We're still specifying the `TrafficLight` namespace for the `Green` variant
-because we didn't include `Green` in the `use` statement.
+We’re still specifying the `TrafficLight` namespace for the `Green` variant
+because we didn’t include `Green` in the `use` statement.
 
 ### Glob Imports with `*`
 

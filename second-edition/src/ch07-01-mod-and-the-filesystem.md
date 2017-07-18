@@ -97,7 +97,7 @@ not conflict with each other because they’re in different modules.
 In this case, because we’re building a library, the file that serves as the
 entry point for building our library is *src/lib.rs*. However, in respect to
 creating modules, there’s nothing special about *src/lib.rs*. We could also
-create modules in *src/main.rs* for a binary crate in the same way as we're
+create modules in *src/main.rs* for a binary crate in the same way as we’re
 creating modules in *src/lib.rs* for the library crate. In fact, we can put
 modules inside of modules, which can be useful as your modules grow to keep
 related functionality organized together and separate functionality apart. The

@@ -1,6 +1,6 @@
 ## All the Pattern Syntax
 
-We've seen some examples of different kinds of patterns throughout the book.
+We’ve seen some examples of different kinds of patterns throughout the book.
 This section lists all the syntax valid in patterns and why you might want to
 use each of them.
 
@@ -55,11 +55,11 @@ introduces a shadowed variable `y`</span>
 
 <!-- NEXT PARAGRAPH WRAPPED WEIRD INTENTIONALLY SEE #199 -->
 
-Let's walk through what happens when the `match` statement runs. The first
+Let’s walk through what happens when the `match` statement runs. The first
 match arm has the pattern `Some(50)`, and the value in `x` (`Some(5)`) does not
 match `Some(50)`, so we continue. In the second match arm, the pattern
 `Some(y)` introduces a new variable name `y` that will match any value inside a
-`Some` value. Because we're in a new scope inside the `match` expression, this
+`Some` value. Because we’re in a new scope inside the `match` expression, this
 is a new variable, not the `y` we declared at the beginning that has the
 value 10. The new `y` binding will match any value inside a `Some`, which is
 what we have in `x`, so we execute the expression for that arm and print
@@ -67,7 +67,7 @@ what we have in `x`, so we execute the expression for that arm and print
 which is 5.
 
 If `x` had been a `None` value instead of `Some(5)`, we would have matched the
-underscore since the other two arms' patterns would not have matched. In the
+underscore since the other two arms’ patterns would not have matched. In the
 expression for that match arm, since we did not introduce an `x` variable in
 the pattern of the arm, this `x` is still the outer `x` that has not been
 shadowed. In this hypothetical case, the `match` would print `Default case, x =
@@ -78,7 +78,7 @@ the inner `y`. The last `println!` produces `at the end: x = Some(5), y = 10`.
 
 In order to make a `match` expression that compares the values of the outer `x`
 and `y` rather than introducing a shadowed variable, we would need to use a
-match guard conditional instead. We'll be talking about match guards later in
+match guard conditional instead. We’ll be talking about match guards later in
 this section.
 
 ### Multiple patterns
@@ -113,7 +113,7 @@ match x {
 
 If `x` is 1, 2, 3, 4, or 5, the first arm will match.
 
-Ranges are only allowed with numeric values or `char` values. Here's an example
+Ranges are only allowed with numeric values or `char` values. Here’s an example
 using ranges of `char` values:
 
 ```rust
@@ -159,7 +159,7 @@ This creates the variables `x` and `y` that match the `x` and `y` of `p`. The
 names of the variables must match the names of the fields to use this
 shorthand. If we wanted to use names different than the variable names, we can
 specify `field_name: variable_name` in the pattern. In Listing 18-12, `a` will
-have the value in the `Point` instance's `x` field and `b` will have the value
+have the value in the `Point` instance’s `x` field and `b` will have the value
 in the `y` field:
 
 <span class="filename">Filename: src/main.rs</span>
@@ -214,7 +214,7 @@ We used destructuring on enums in Chapter 6, such as in Listing 6-5 where we
 destructured an `Option<i32>` using a `match` expression and added one to the
 inner value of the `Some` variant.
 
-When the value we're matching against a pattern contains a reference, we can
+When the value we’re matching against a pattern contains a reference, we can
 specify a `&` in the pattern in order to separate the reference and the value.
 This is especially useful in closures used with iterators that iterate over
 references to values when we want to use the values in the closure rather than
@@ -243,7 +243,7 @@ let sum_of_squares: i32 = points
 the struct field values</span>
 
 Because `iter` iterates over references to the items in the vector, if we
-forgot the `&` in the closure arguments in the `map`, we'd get a type mismatch
+forgot the `&` in the closure arguments in the `map`, we’d get a type mismatch
 error like this:
 
 ```text
@@ -281,11 +281,11 @@ This lets us break complex types into their component parts.
 There are a few ways to ignore entire values or parts of values: using the `_`
 pattern, using the `_` pattern within another pattern, using a name that starts
 with an underscore, or using `..` to ignore all remaining parts of a value.
-Let's explore how and why to do each of these.
+Let’s explore how and why to do each of these.
 
 #### Ignoring an Entire Value with `_`
 
-We've seen the use of underscore as a wildcard pattern that will match any value
+We’ve seen the use of underscore as a wildcard pattern that will match any value
 but not bind to the value. While the underscore pattern is especially useful as
 the last arm in a `match` expression, we can use it in any pattern, such as
 function arguments as shown in Listing 18-15:
@@ -300,13 +300,13 @@ fn foo(_: i32) {
 
 Normally, you would change the signature to not have the unused parameter. In
 cases such as implementing a trait, where you need a certain type signature,
-using an underscore lets you ignore a parameter, and the compiler won't warn
+using an underscore lets you ignore a parameter, and the compiler won’t warn
 about unused function parameters like it would if we had used a name instead.
 
 #### Ignoring Parts of a Value with a Nested `_`
 
 We can also use `_` inside of another pattern to ignore just part of a value.
-In Listing 18-16, the first `match` arm's pattern matches a `Some` value but
+In Listing 18-16, the first `match` arm’s pattern matches a `Some` value but
 ignores the value inside of the `Some` variant as specified by the underscore:
 
 ```rust
@@ -321,11 +321,11 @@ match x {
 <span class="caption">Listing 18-16: Ignoring the value inside of the `Some`
 variant by using a nested underscore</span>
 
-This is useful when the code associated with the `match` arm doesn't use the
+This is useful when the code associated with the `match` arm doesn’t use the
 nested part of the variable at all.
 
 We can also use underscores in multiple places within one pattern, as shown in
-Listing 18-17 where we're ignoring the second and fourth values in a tuple of
+Listing 18-17 where we’re ignoring the second and fourth values in a tuple of
 five items:
 
 ```rust
@@ -345,14 +345,14 @@ ignored.
 
 #### Ignoring an Unused Variable by Starting its Name with an Underscore
 
-Usually, Rust will warn you if you create a variable but don't use it anywhere,
-since that could be a bug. If you're prototyping or just starting a project,
-though, you might create a variable that you'll use eventually, but temporarily
-it will be unused. If you're in this situation and would like to tell Rust not
+Usually, Rust will warn you if you create a variable but don’t use it anywhere,
+since that could be a bug. If you’re prototyping or just starting a project,
+though, you might create a variable that you’ll use eventually, but temporarily
+it will be unused. If you’re in this situation and would like to tell Rust not
 to warn you about the unused variable, you can start the name of the variable
 with an underscore. This works just like a variable name in any pattern, only
-Rust won't warn you if the variable goes unused. In Listing 18-18, we
-do get a warning about not using the variable `y`, but we don't get a warning
+Rust won’t warn you if the variable goes unused. In Listing 18-18, we
+do get a warning about not using the variable `y`, but we don’t get a warning
 about not using the variable `_x`:
 
 ```rust
@@ -367,7 +367,7 @@ in order to not get unused variable warnings</span>
 
 Note that there is a subtle difference between using only `_` and using a name
 that starts with an underscore like `_x`: `_x` still binds the value to the
-variable, but `_` doesn't bind at all.
+variable, but `_` doesn’t bind at all.
 
 Listing 18-19 shows a case where this distinction matters: `s` will still be
 moved into `_s`, which prevents us from using `s` again:
@@ -385,7 +385,7 @@ println!("{:?}", s);
 <span class="caption">Listing 18-19: An unused variable starting with an
 underscore still binds the value, which may take ownership of the value</span>
 
-Using underscore by itself, however, doesn't ever bind to the value. Listing
+Using underscore by itself, however, doesn’t ever bind to the value. Listing
 18-20 will compile without any errors since `s` does not get moved into `_`:
 
 ```rust
@@ -401,13 +401,13 @@ println!("{:?}", s);
 <span class="caption">Listing 18-20: Using underscore does not bind the
 value</span>
 
-This works just fine. Because we never bind `s` to anything, it's not moved.
+This works just fine. Because we never bind `s` to anything, it’s not moved.
 
 #### Ignoring Remaining Parts of a Value with `..`
 
 With values that have many parts, we can extract only a few parts and avoid
 having to list underscores for each remaining part by instead using `..`. The
-`..` pattern will ignore any parts of a value that we haven't explicitly
+`..` pattern will ignore any parts of a value that we haven’t explicitly
 matched in the rest of the pattern. In Listing 18-21, we have a `Point` struct
 that holds a coordinate in three dimensional space. In the `match` expression,
 we only want to operate on the `x` coordinate and ignore the values in the `y`
@@ -456,7 +456,7 @@ Here, we have the first and last value matched, with `first` and `last`. The
 `..` will match and ignore all of the things in the middle.
 
 Using `..` must be unambiguous, however. Listing 18-23 shows an example where
-it's not clear to Rust which values we want to match and which values we want
+it’s not clear to Rust which values we want to match and which values we want
 to ignore:
 
 ```rust,ignore
@@ -484,19 +484,19 @@ error: `..` can only be used once per tuple or tuple struct pattern
   |                      ^^
 ```
 
-It's not possible to determine how many values in the tuple should be ignored
+It’s not possible to determine how many values in the tuple should be ignored
 before one value is matched with `second`, and then how many further values are
 ignored after that. We could mean that we want to ignore 2, bind `second` to 4,
 then ignore 8, 16, and 32, or we could mean that we want to ignore 2 and 4,
 bind `second` to 8, then ignore 16 and 32, and so forth. The variable name
-`second` doesn't mean anything special to Rust, so we get a compiler error
+`second` doesn’t mean anything special to Rust, so we get a compiler error
 since using `..` in two places like this is ambiguous.
 
 ### `ref` and `ref mut` to Create References in Patterns
 
 Usually, when you match against a pattern, the variables that the pattern
-introduces are bound to a value. This means you'll end up moving the value into
-the `match` (or wherever you're using the pattern) since the ownership rules
+introduces are bound to a value. This means you’ll end up moving the value into
+the `match` (or wherever you’re using the pattern) since the ownership rules
 apply. Listing 18-24 shows an example:
 
 ```rust,ignore
@@ -517,7 +517,7 @@ This example will fail to compile since the value inside the `Some` value in
 `robot_name` is moved within the `match` when `name` binds to that value.
 
 Using `&` in a pattern matches an existing reference in the value, as we saw in
-the "Destructuring to Break Apart Values" section. If you want to create a
+the “Destructuring to Break Apart Values” section. If you want to create a
 reference instead in order to borrow the value in a pattern variable, use the
 `ref` keyword before the new variable, as shown in Listing 18-25:
 
@@ -583,7 +583,7 @@ This example will print `less than five: 4`. If `num` was instead `Some(7)`,
 this example would print `7`. Match guards allow you to express more complexity
 than patterns alone give you.
 
-In Listing 18-10, we saw that since patterns shadow variables, we weren't able
+In Listing 18-10, we saw that since patterns shadow variables, we weren’t able
 to specify a pattern to express the case when a value was equal to a variable
 outside the `match`. Listing 18-28 shows how we can use a match guard to
 accomplish this:
@@ -608,10 +608,10 @@ with an outer variable</span>
 
 This will now print `Default case, x = Some(5)`. Because the second match arm
 is not introducing a new variable `y` that shadows the outer `y` in the
-pattern, we can use `y` in the match guard. We're still destructuring `x` to
+pattern, we can use `y` in the match guard. We’re still destructuring `x` to
 get the inner value `n`, and then we can compare `n` and `y` in the match guard.
 
-If you're using a match guard with multiple patterns specified by `|`, the
+If you’re using a match guard with multiple patterns specified by `|`, the
 match guard condition applies to all of the patterns. Listing 18-29 shows a
 match guard that applies to the value matched by all three patterns in the
 first arm:
@@ -675,13 +675,13 @@ match msg {
 while also testing it</span>
 
 This example will print `Found an id in range: 5`. By specifying `id @` before
-the range, we're capturing whatever value matched the range while also testing
+the range, we’re capturing whatever value matched the range while also testing
 it. In the second arm where we only have a range specified in the pattern, the
-code associated with the arm doesn't know if `id` is 10, 11, or 12, since we
-haven't saved the `id` value in a variable: we only know that the value matched
-something in that range if that arm's code is executed. In the last arm where
-we've specified a variable without a range, we do have the value available to
-use in the arm's code, but we haven't applied any other test to the value.
+code associated with the arm doesn’t know if `id` is 10, 11, or 12, since we
+haven’t saved the `id` value in a variable: we only know that the value matched
+something in that range if that arm’s code is executed. In the last arm where
+we’ve specified a variable without a range, we do have the value available to
+use in the arm’s code, but we haven’t applied any other test to the value.
 Using `@` lets us test a value and save it in a variable within one pattern.
 
 ## Summary
@@ -693,5 +693,5 @@ function parameters make those constructs more powerful, enabling the
 destructuring of values into smaller parts at the same time as assigning to
 variables.
 
-Now, for the penultimate chapter of the book, let's take a look at some
-advanced parts of a variety of Rust's features.
+Now, for the penultimate chapter of the book, let’s take a look at some
+advanced parts of a variety of Rust’s features.

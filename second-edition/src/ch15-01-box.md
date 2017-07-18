@@ -23,12 +23,12 @@ has ownership of data, when a box goes out of scope like `b` does at the end of
 `main`, it will be deallocated. The deallocation happens for both the box
 (stored on the stack) and the data it points to (stored on the heap).
 
-Putting a single value on the heap isn't very useful, so you won't use boxes by
+Putting a single value on the heap isn’t very useful, so you won’t use boxes by
 themselves in the way that Listing 15-1 does very often. A time when boxes are
 useful is when you want to ensure that your type has a known size. For example,
 consider Listing 15-2, which contains an enum definition for a *cons list*, a
 type of data structure that comes from functional programming. Note that this
-won't compile quite yet:
+won’t compile quite yet:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -42,33 +42,33 @@ enum List {
 <span class="caption">Listing 15-2: The first attempt of defining an enum to
 represent a cons list data structure of `i32` values</span>
 
-We're implementing a cons list that holds only `i32` values. We
+We’re implementing a cons list that holds only `i32` values. We
 could have also chosen to implement a cons list independent of the
 type of value by using generics as discussed in Chapter 10.
 
 > #### More Information About the Cons List
 >
 > A *cons list* is a data structure that comes from the Lisp programming
-> language and its dialects. In Lisp, the `cons` function (short for "construct
-> function") constructs a new list from its two arguments, which usually are a
+> language and its dialects. In Lisp, the `cons` function (short for “construct
+> function”) constructs a new list from its two arguments, which usually are a
 > single value and another list.
 >
 > The cons function concept has made its way into more general functional
-> programming jargon; "to cons x onto y" informally means to construct a new
+> programming jargon; “to cons x onto y” informally means to construct a new
 > container instance by putting the element x at the start of this new
 > container, followed by the container y.
 >
 > A cons list is produced by recursively calling the `cons` function.
 > The canonical name to denote the base case of the recursion is `Nil`, which
-> announces the end of the list. Note that this is not the same as the "null"
-> or "nil" concept from Chapter 6, which is an invalid or absent value.
+> announces the end of the list. Note that this is not the same as the “null”
+> or “nil” concept from Chapter 6, which is an invalid or absent value.
 
 A cons list is a list where each element contains both a single value as well
 as the remains of the list at that point. The remains of the list are defined
 by nested cons lists. The end of the list is signified by the value `Nil`. Cons
-lists aren't used very often in Rust; `Vec<T>` is usually a better choice.
+lists aren’t used very often in Rust; `Vec<T>` is usually a better choice.
 Implementing this data structure is a good example of a situation where
-`Box<T>` is useful, though. Let's find out why!
+`Box<T>` is useful, though. Let’s find out why!
 
 Using a cons list to store the list `1, 2, 3` would look like this:
 
@@ -103,10 +103,10 @@ error[E0072]: recursive type `List` has infinite size
 <span class="caption">Listing 15-3: The error we get when attempting to define
 a recursive enum</span>
 
-The error says this type 'has infinite size'. Why is that? It's because we've
+The error says this type ‘has infinite size’. Why is that? It’s because we’ve
 defined `List` to have a variant that is recursive: it holds another value of
-itself. This means Rust can't figure out how much space it needs in order to
-store a `List` value. Let's break this down a bit: first let's look at how Rust
+itself. This means Rust can’t figure out how much space it needs in order to
+store a `List` value. Let’s break this down a bit: first let’s look at how Rust
 decides how much space it needs to store a value of a non-recursive type.
 Recall the `Message` enum we defined in Listing 6-2 when we discussed enum
 definitions in Chapter 6:
@@ -141,7 +141,7 @@ as shown in Figure 15-4.
 <span class="caption">Figure 15-4: An infinite `List` consisting of infinite
 `Cons` variants</span>
 
-Rust can't figure out how much space to allocate for recursively defined types,
+Rust can’t figure out how much space to allocate for recursively defined types,
 so the compiler gives the error in Listing 15-3. The error did include this
 helpful suggestion:
 
@@ -182,9 +182,9 @@ order to have a known size</span>
 The compiler will be able to figure out the size it needs to store a `List`
 value. Rust will look at `List`, and again start by looking at the `Cons`
 variant. The `Cons` variant will need the size of `i32` plus the space to store
-a `usize`, since a box always has the size of a `usize`, no matter what it's
+a `usize`, since a box always has the size of a `usize`, no matter what it’s
 pointing to. Then Rust looks at the `Nil` variant, which does not store a
-value, so `Nil` doesn't need any space. We've broken the infinite, recursive
+value, so `Nil` doesn’t need any space. We’ve broken the infinite, recursive
 chain by adding in a box. Figure 15-6 shows what the `Cons` variant looks like
 now:
 
@@ -194,12 +194,12 @@ now:
 `Cons` holds a `Box`</span>
 
 This is the main area where boxes are useful: breaking up an infinite data
-structure so that the compiler can know what size it is. We'll look at another
+structure so that the compiler can know what size it is. We’ll look at another
 case where Rust has data of unknown size in Chapter 17 when we discuss trait
 objects.
 
-Even though you won't be using boxes very often, they are a good way to
+Even though you won’t be using boxes very often, they are a good way to
 understand the smart pointer pattern. Two of the aspects of `Box<T>` that are
 commonly used with smart pointers are its implementations of the `Deref` trait
-and the `Drop` trait. Let's investigate how these traits work and how smart
+and the `Drop` trait. Let’s investigate how these traits work and how smart
 pointers use them.

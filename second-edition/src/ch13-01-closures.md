@@ -6,11 +6,11 @@ don't think this is quite right, is there a shorter heading we could use to
 capture what a closure is/is for? -->
 <!-- I've attempted a more descriptive subtitle, what do you think? /Carol -->
 
-Rust's *closures* are anonymous functions that you can save in a variable or
+Rust’s *closures* are anonymous functions that you can save in a variable or
 pass as arguments to other functions. You can create the closure in one place,
 and then call the closure to evaluate it in a different context. Unlike
 functions, closures are allowed to capture values from the scope in which they
-are called. We're going to demonstrate how these features of closures allow for
+are called. We’re going to demonstrate how these features of closures allow for
 code reuse and customization of behavior.
 
 <!-- Can you say what sets closures apart from functions, explicitly, above? I
@@ -27,19 +27,19 @@ order to get the result. /Carol -->
 
 ### Creating an Abstraction of Behavior Using a Closure
 
-Let's work on an example that will show a situation where storing a closure to
-be executed at a later time is useful. We'll talk about the syntax of closures,
+Let’s work on an example that will show a situation where storing a closure to
+be executed at a later time is useful. We’ll talk about the syntax of closures,
 type inference, and traits along the way.
 
-The hypothetical situation is this: we're working at a startup that's making an
+The hypothetical situation is this: we’re working at a startup that’s making an
 app to generate custom exercise workout plans. The backend is written in Rust,
 and the algorithm that generates the workout plan takes into account many
-different factors like the app user's age, their Body Mass Index, their
+different factors like the app user’s age, their Body Mass Index, their
 preferences, their recent workouts, and an intensity number they specify. The
-actual algorithm used isn't important in this example; what's important is that
+actual algorithm used isn’t important in this example; what’s important is that
 this calculation takes a few seconds. We only want to call this algorithm if we
-need to, and we only want to call it once, so that we aren't making the user
-wait more than they need to. We're going to simulate calling this hypothetical
+need to, and we only want to call it once, so that we aren’t making the user
+wait more than they need to. We’re going to simulate calling this hypothetical
 algorithm by calling the `simulated_expensive_calculation` function shown in
 Listing 13-1 instead, which will print `calculating slowly...`, wait for two
 seconds, and then return whatever number we passed in:
@@ -57,28 +57,28 @@ fn simulated_expensive_calculation(intensity: i32) -> i32 {
 }
 ```
 
-<span class="caption">Listing 13-1: A function we'll use to stand in for a
+<span class="caption">Listing 13-1: A function we’ll use to stand in for a
 hypothetical calculation that takes about two seconds to run</span>
 
 Next, we have a `main` function that contains the parts of the workout app that
 are important for this example. This represents the code that the app would
 call when a user asks for a workout plan. Because the interaction with the
-app's frontend isn't relevant to the use of closures, we're going to hardcode
+app’s frontend isn’t relevant to the use of closures, we’re going to hardcode
 values representing inputs to our program and print the outputs.
 
 The inputs to the program are:
 
 - An `intensity` number from the user, specified when they request a workout,
-  so they can indicate whether they'd like a low intensity workout or a high
+  so they can indicate whether they’d like a low intensity workout or a high
   intensity workout
 - A random number that will generate some variety in the workout plans
 
 The output the program prints will be the recommended workout plan.
 
-Listing 13-2 shows the `main` function we're going to use. We've hardcoded the
+Listing 13-2 shows the `main` function we’re going to use. We’ve hardcoded the
 variable `simulated_user_specified_value` to 10 and the variable
-`simulated_random_number` to 7 for simplicity's sake; in an actual program we'd
-get the intensity number from the app frontend and we'd use the `rand` crate to
+`simulated_random_number` to 7 for simplicity’s sake; in an actual program we’d
+get the intensity number from the app frontend and we’d use the `rand` crate to
 generate a random number like we did in the Guessing Game example in Chapter 2.
 The `main` function calls a `generate_workout` function with the simulated
 input values:
@@ -99,8 +99,8 @@ fn main() {
 values to simulate user input and random number generation inputs to the
 `generate_workout` function</span>
 
-That's the context of what we're working on. The `generate_workout` function in
-Listing 13-3 contains the business logic of the app that we're most concerned
+That’s the context of what we’re working on. The `generate_workout` function in
+Listing 13-3 contains the business logic of the app that we’re most concerned
 with in this example. The rest of the code changes in this example will be made
 to this function:
 
@@ -145,7 +145,7 @@ prints the workout plans based on the inputs and calls to the
 
 The code in Listing 13-3 has multiple calls to the slow calculation function.
 The first `if` block calls `simulated_expensive_calculation` twice, the `if`
-inside the outer `else` doesn't call it at all, and the code inside the `else`
+inside the outer `else` doesn’t call it at all, and the code inside the `else`
 case inside the outer `else` calls it once.
 
 <!-- Will add wingdings in libreoffice /Carol -->
@@ -153,11 +153,11 @@ case inside the outer `else` calls it once.
 The desired behavior of the `generate_workout` function is to first check if
 the user wants a low intensity workout (indicated by a number less than 25) or
 a high intensity workout (25 or more). Low intensity workout plans will
-recommend a number of pushups and situps based on the complex algorithm we're
+recommend a number of pushups and situps based on the complex algorithm we’re
 simulating with the `simulated_expensive_calculation` function, which needs the
 intensity number as an input.
 
-If the user wants a high intensity workout, there's some additional logic: if
+If the user wants a high intensity workout, there’s some additional logic: if
 the value of the random number generated by the app happens to be 3, the app
 will recommend a break and hydration instead. If not, the user will get a high
 intensity workout of a number of minutes of running that comes from the complex
@@ -167,12 +167,12 @@ The data science team has let us know that there are going to be some changes
 to the way we have to call the algorithm, so we want to refactor this code to
 have only one place that calls the `simulated_expensive_calculation` function
 to update when those changes happen. We also want to get rid of the spot where
-we're currently calling the function twice unnecessarily, and we don't want to
-add any other calls to that function in the process. That is, we don't want to
-call it if we're in the case where the result isn't needed at all, and we still
+we’re currently calling the function twice unnecessarily, and we don’t want to
+add any other calls to that function in the process. That is, we don’t want to
+call it if we’re in the case where the result isn’t needed at all, and we still
 want to call it only once in the last case.
 
-There are many ways we could restructure this program. The way we're going to
+There are many ways we could restructure this program. The way we’re going to
 try first is extracting the duplicated call to the expensive calculation
 function into a variable, as shown in Listing 13-4:
 
@@ -222,8 +222,8 @@ storing the result in the `expensive_result` variable</span>
 
 This change unifies all the calls to `simulated_expensive_calculation` and
 solves the problem of the first `if` block calling the function twice
-unnecessarily. Unfortunately, we're now calling this function and waiting for
-the result in all cases, which includes the inner `if` block that doesn't use
+unnecessarily. Unfortunately, we’re now calling this function and waiting for
+the result in all cases, which includes the inner `if` block that doesn’t use
 the result value at all.
 
 We want to be able to specify some code in one place in our program, but then
@@ -235,7 +235,7 @@ our program. This is a use case for closures!
 Instead of always calling the `simulated_expensive_calculation` function before
 the `if` blocks, we can define a closure and store the closure in a variable
 instead of the result as shown in Listing 13-5. We can actually choose to move
-the whole body of `simulated_expensive_calculation` within the closure we're
+the whole body of `simulated_expensive_calculation` within the closure we’re
 introducing here:
 
 <span class="filename">Filename: src/main.rs</span>
@@ -262,7 +262,7 @@ is function that assigned its result to a variable you can then use? -->
 <!-- I've attempted to elaborate on defining a closure in the next few
 paragraphs starting here, is this better? /Carol -->
 
-The closure definition is the part after the `=` that we're assigning to the
+The closure definition is the part after the `=` that we’re assigning to the
 variable `expensive_closure`. To define a closure, we start with a pair of
 vertical pipes (`|`). Inside the pipes is where we specify the parameters to
 the closure; this syntax was chosen because of its similarity to closure
@@ -274,12 +274,12 @@ After the parameters, we put curly braces that hold the body of the closure.
 The curly braces are optional if the closure body only has one line. After the
 curly braces, we need a semicolon to go with the `let` statement. The value
 returned from the last line in the closure body (`num`), since that line
-doesn't end in a semicolon, will be the value returned from the closure when
-it's called, just like in function bodies.
+doesn’t end in a semicolon, will be the value returned from the closure when
+it’s called, just like in function bodies.
 
 Note that this `let` statement means `expensive_closure` contains the
 *definition* of an anonymous function, not the *resulting value* of calling the
-anonymous function. Recall the reason we're using a closure is because we want
+anonymous function. Recall the reason we’re using a closure is because we want
 to define the code to call at one point, store that code, and actually call it
 at a later point; the code we want to call is now stored in `expensive_closure`.
 
@@ -325,40 +325,40 @@ fn generate_workout(intensity: i32, random_number: i32) {
 }
 ```
 
-<span class="caption">Listing 13-6: Calling the `expensive_closure` we've
+<span class="caption">Listing 13-6: Calling the `expensive_closure` we’ve
 defined</span>
 
-Now we've achieved the goal of unifying where the expensive calculation is
-called to one place, and we're only executing that code where we need the
-results. However, we've reintroduced one of the problems from Listing 13-3:
-we're still calling the closure twice in the first `if` block, which will call
+Now we’ve achieved the goal of unifying where the expensive calculation is
+called to one place, and we’re only executing that code where we need the
+results. However, we’ve reintroduced one of the problems from Listing 13-3:
+we’re still calling the closure twice in the first `if` block, which will call
 the expensive code twice and make the user wait twice as long as they need to.
 We could fix this problem by creating a variable local to that `if` block to
-hold the result of calling the closure, but there's another solution we can use
-since we have a closure. We'll get back to that solution in a bit; let's first
-talk about why there aren't type annotations in the closure definition and the
+hold the result of calling the closure, but there’s another solution we can use
+since we have a closure. We’ll get back to that solution in a bit; let’s first
+talk about why there aren’t type annotations in the closure definition and the
 traits involved with closures.
 
 ### Closure Type Inference and Annotation
 
 Closure are different than functions defined with the `fn` keyword in a few
-ways. The first is that closures don't require you to annotate the types of the
+ways. The first is that closures don’t require you to annotate the types of the
 parameters or the return value like `fn` functions do.
 
 <!-- I've suggested moving this next paragraph up from below, I found this
 section difficult to follow with this next paragraph -->
 
-Type annotations are required on functions because they're are part of an
+Type annotations are required on functions because they’re are part of an
 explicit interface exposed to your users. Defining this interface rigidly is
 important for ensuring that everyone agrees on what types of values a function
-uses and returns. Closures aren't used in an exposed interface like this,
-though: they're stored in variables and used without naming them and exposing
+uses and returns. Closures aren’t used in an exposed interface like this,
+though: they’re stored in variables and used without naming them and exposing
 them to be invoked by users of our library.
 
 Additionally, closures are usually short and only relevant within a narrow
 context rather than in any arbitrary scenario. Within these limited contexts,
 the compiler is reliably able to infer the types of the parameters and return
-type similarly to how it's able to infer the types of most variables. Being
+type similarly to how it’s able to infer the types of most variables. Being
 forced to annotate the types in these small, anonymous functions would be
 annoying and largely redundant with the information the compiler already has
 available.
@@ -403,8 +403,8 @@ thing as the functions? -->
 <!-- Yes /Carol -->
 
 The syntax of closures and functions looks more similar with type annotations.
-Here's a vertical comparison of the syntax for the definition of a function
-that adds one to its parameter, and a closure that has the same behavior. We've
+Here’s a vertical comparison of the syntax for the definition of a function
+that adds one to its parameter, and a closure that has the same behavior. We’ve
 added some spaces here to line up the relevant parts). This illustrates how
 closure syntax is similar to function syntax except for the use of pipes rather
 than parentheses and the amount of syntax that is optional:
@@ -433,7 +433,7 @@ The first line shows a function definition, and the second line shows a fully
 annotated closure definition. The third line removes the type annotations from
 the closure definition, and the fourth line removes the braces that are
 optional since the closure body only has one line. These are all valid
-definitions that will produce the same behavior when they're called.
+definitions that will produce the same behavior when they’re called.
 
 <!--Below--I'm not sure I'm following, is the i8 type being inferred? It seems
 like we're annotating it. -->
@@ -446,10 +446,10 @@ confusing and convey our point better. /Carol -->
 Closure definitions will have one concrete type inferred for each of their
 parameters and for their return value. For instance, Listing 13-8 shows the
 definition of a short closure that just returns the value it gets as a
-parameter. This closure isn't very useful except for the purposes of this
-example. Note that we haven't added any type annotations to the definition: if
+parameter. This closure isn’t very useful except for the purposes of this
+example. Note that we haven’t added any type annotations to the definition: if
 we then try to call the closure twice, using a `String` as an argument the
-first time and an `i32` the second time, we'll get an error:
+first time and an `i32` the second time, we’ll get an error:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -497,7 +497,7 @@ However, because we have a closure for the expensive calculation, we have
 another solution available to us. We can create a struct that will hold the
 closure and the resulting value of calling the closure. The struct will only
 execute the closure if we need the resulting value, and it will cache the
-resulting value so that the rest of our code doesn't have to be responsible for
+resulting value so that the rest of our code doesn’t have to be responsible for
 saving and reusing the result. You may know this pattern as *memoization* or
 *lazy evaluation*.
 
@@ -513,7 +513,7 @@ it was just a placeholder here -->
 <!-- Fn is provided by the standard library; I've clarified here. /Carol -->
 
 The `Fn` traits are provided by the standard library. All closures implement
-one of the traits `Fn`, `FnMut`, or `FnOnce`. We'll discuss the difference
+one of the traits `Fn`, `FnMut`, or `FnOnce`. We’ll discuss the difference
 between these traits in the next section on capturing the environment; in this
 example, we can use the `Fn` trait.
 
@@ -547,12 +547,12 @@ return an `i32` (specified after the `->`).
 
 The `value` field is of type `Option<i32>`. Before we execute the closure,
 `value` will be `None`. If the code using a `Cacher` asks for the result of the
-closure, we'll execute the closure at that time and store the result within a
+closure, we’ll execute the closure at that time and store the result within a
 `Some` variant in the `value` field. Then if the code asks for the result of
-the closure again, instead of executing the closure again, we'll return the
-result that we're holding in the `Some` variant.
+the closure again, instead of executing the closure again, we’ll return the
+result that we’re holding in the `Some` variant.
 
-The logic around the `value` field that we've just described is defined in
+The logic around the `value` field that we’ve just described is defined in
 Listing 13-10:
 
 <span class="filename">Filename: src/main.rs</span>
@@ -602,10 +602,10 @@ caching logic</span>
 The fields on the `Cacher` struct are private since we want `Cacher` to manage
 their values rather than letting the calling code potentially change the values
 in these fields directly. The `Cacher::new` function takes a generic parameter
-`T`, which we've defined in the context of the `impl` block to have the same
+`T`, which we’ve defined in the context of the `impl` block to have the same
 trait bound as the `Cacher` struct. `Cacher::new` returns a `Cacher` instance
 that holds the closure specified in the `calculation` field and a `None` value
-in the `value` field, since we haven't executed the closure yet.
+in the `value` field, since we haven’t executed the closure yet.
 
 When the calling code wants the result of evaluating the closure, instead of
 calling the closure directly, it will call the `value` method. This method
@@ -699,7 +699,7 @@ verify that in all of the cases in the various `if` and `else` blocks,
 `calculating slowly...` printed by the closure only shows up once and only when
 needed.
 
-The `Cacher` takes care of the logic necessary to ensure we aren't calling the
+The `Cacher` takes care of the logic necessary to ensure we aren’t calling the
 expensive calculation more than we need to be so that `generate_workout` can
 focus on the business logic. Caching values is a more generally useful behavior
 that we might want to use in other parts of our code with other closures as
@@ -744,7 +744,7 @@ of the hash map will be the `arg` values that are passed in, and the values of
 the hash map will be the result of calling the closure on that key. Instead of
 looking at whether `self.value` directly has a `Some` or a `None` value, the
 `value` function will look up the `arg` in the hash map and return the value if
-it's present. If it's not present, the `Cacher` will call the closure and save
+it’s present. If it’s not present, the `Cacher` will call the closure and save
 the resulting value in the hash map associated with its `arg` value.
 
 Another problem with the current `Cacher` implementation that restricts its use
@@ -757,9 +757,9 @@ functionality.
 ### Closures Can Capture Their Environment
 
 In the workout generator example, we only used closures as inline anonymous
-functions. Closures have an additional ability we can use that functions don't
+functions. Closures have an additional ability we can use that functions don’t
 have, however: they can capture their environment and access variables from the
-scope in which they're defined.
+scope in which they’re defined.
 
 <!-- To clarify, by enclosing scope, do you mean the scope that the closure is
 inside? Can you expand on that?-->
@@ -767,7 +767,7 @@ inside? Can you expand on that?-->
 is defined /Carol -->
 
 Listing 13-12 has an example of a closure stored in the variable `equal_to_x`
-that uses the variable `x` from the closure's surrounding environment:
+that uses the variable `x` from the closure’s surrounding environment:
 
 <!-- To clarify how we talk about a closure, does the closure include the
 variable name, or are we referring to the closure as the functionality that is
@@ -798,7 +798,7 @@ fn main() {
 variable in its enclosing scope</span>
 
 Here, even though `x` is not one of the parameters of `equal_to_x`, the
-`equal_to_x` closure is allowed to use the `x` variable that's defined in the
+`equal_to_x` closure is allowed to use the `x` variable that’s defined in the
 same scope that `equal_to_x` is defined in.
 
 <!-- So *why* is this allowed with closures and not functions, what about
@@ -810,7 +810,7 @@ that aspect. Can you elaborate on what led to the conclusion that allowing
 captures with functions wouldn't be safe and what you mean by "safe" here?
 /Carol -->
 
-We can't do the same with functions; let's see what happens if we try:
+We can’t do the same with functions; let’s see what happens if we try:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -841,8 +841,8 @@ The compiler even reminds us that this only works with closures!
 
 When a closure captures a value from its environment, the closure uses memory
 to store the values for use in the closure body. This use of memory is overhead
-that we don't want pay for in the more common case where we want to execute
-code that doesn't capture its environment. Because functions are never allowed
+that we don’t want pay for in the more common case where we want to execute
+code that doesn’t capture its environment. Because functions are never allowed
 to capture their environment, defining and using functions will never incur
 this overhead.
 
@@ -870,8 +870,8 @@ based on how the closure uses the values from the environment. In Listing
 If we want to force the closure to take ownership of the values it uses in the
 environment, we can use the `move` keyword before the parameter list. This is
 mostly useful when passing a closure to a new thread in order to move the data
-to be owned by the new thread. We'll have more examples of `move` closures in
-Chapter 16 when we talk about concurrency, but for now here's the code from
+to be owned by the new thread. We’ll have more examples of `move` closures in
+Chapter 16 when we talk about concurrency, but for now here’s the code from
 Listing 13-12 with the `move` keyword added to the closure definition and using
 vectors instead of integers, since integers can be copied rather than moved:
 
@@ -891,7 +891,7 @@ fn main() {
 }
 ```
 
-This example doesn't compile:
+This example doesn’t compile:
 
 ```text
 error[E0382]: use of moved value: `x`
@@ -908,7 +908,7 @@ error[E0382]: use of moved value: `x`
 ```
 
 The `x` value is moved into the closure when the closure is defined because of
-the `move` keyword. The closure then has ownership of `x`, and `main` isn't
+the `move` keyword. The closure then has ownership of `x`, and `main` isn’t
 allowed to use `x` anymore. Removing the `println!` will fix this example.
 
 Most of the time when specifying one of the `Fn` trait bounds, you can start
@@ -916,4 +916,4 @@ with `Fn` and the compiler will tell you if you need `FnMut` or `FnOnce` based
 on what happens in the closure body.
 
 To illustrate situations where closures that can capture their environment are
-useful as function parameters, let's move on to our next topic: iterators.
+useful as function parameters, let’s move on to our next topic: iterators.

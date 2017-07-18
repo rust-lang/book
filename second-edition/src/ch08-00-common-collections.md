@@ -13,7 +13,7 @@ collections which are used very often in Rust programs:
 * A *vector* allows us to store a variable number of values next to each other.
 * A *string* is a collection of characters. We’ve seen the `String` type
   before, but we’ll talk about it in depth now.
-* A *hash map* allows us to associate a value with a particular key. It's a
+* A *hash map* allows us to associate a value with a particular key. It’s a
   particular implementation of the more general data structure called a *map*.
 
 To learn about the other kinds of collections provided by the standard library,

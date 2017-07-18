@@ -53,11 +53,11 @@ called and its message is printed.
 ### Function Parameters
 
 Functions can also be defined to have *parameters*, which are special variables
-that are part of a function's signature. When a function has parameters, we can
+that are part of a function’s signature. When a function has parameters, we can
 provide it with concrete values for those parameters. Technically, the concrete
 values are called *arguments*, but in casual conversation people tend to use
 the words “parameter” and “argument” interchangeably for either the variables
-in a function's definition or the concrete values passed in when you call a
+in a function’s definition or the concrete values passed in when you call a
 function.
 
 The following rewritten version of `another_function` shows what parameters
@@ -112,7 +112,7 @@ fn another_function(x: i32, y: i32) {
 
 This example creates a function with two parameters, both of which are `i32`
 types. The function then prints out the values in both of its parameters. Note
-that function parameters don't all need to be the same type, they just happen
+that function parameters don’t all need to be the same type, they just happen
 to be in this example.
 
 Let’s try running this code. Replace the program currently in your *function*

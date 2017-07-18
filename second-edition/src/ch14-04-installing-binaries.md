@@ -1,15 +1,15 @@
 ## Installing Binaries from Crates.io with `cargo install`
 
 The `cargo install` command allows you to install and use binary crates
-locally. This isn't intended to replace system packages; it's meant to be a
+locally. This isn’t intended to replace system packages; it’s meant to be a
 convenient way for Rust developers to install tools that others have shared on
 crates.io. Only packages which have binary targets can be installed, and all
-binaries are installed into the installation root's *bin* folder. If you
-installed Rust using *rustup.rs* and don't have any custom configurations, this
+binaries are installed into the installation root’s *bin* folder. If you
+installed Rust using *rustup.rs* and don’t have any custom configurations, this
 will be `$HOME/.cargo/bin`. Add that directory to your `$PATH` to be able to
-run programs you've gotten through `cargo install`.
+run programs you’ve gotten through `cargo install`.
 
-For example, we mentioned in Chapter 12 that there's a Rust implementation of
+For example, we mentioned in Chapter 12 that there’s a Rust implementation of
 the `grep` tool for searching files called `ripgrep`. If we want to install
 `ripgrep`, we can run:
 

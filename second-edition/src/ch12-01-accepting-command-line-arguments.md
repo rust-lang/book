@@ -86,10 +86,10 @@ $ cargo run needle haystack
 You may notice that the first value in the vector is `"target/debug/minigrep"`,
 which is the name of our binary. This matches the behavior of the arguments
 list in C, and lets programs use the name by which they were invoked in their
-execution. It's convenient to have access to the program name in case we want
+execution. It’s convenient to have access to the program name in case we want
 to print it in messages or change behavior of the program based on what command
 line alias was used to invoke the program, but for the purposes of this chapter
-we're going to ignore it and only save the two arguments we need.
+we’re going to ignore it and only save the two arguments we need.
 
 ### Saving the Argument Values in Variables
 
