@@ -244,7 +244,7 @@ of scope, Rust calls a special function for us. This function is called `drop`,
 and it’s where the author of `String` can put the code to return the memory.
 Rust calls `drop` automatically at the closing `}`.
 
-> Note: In C++, this pattern of deallocating resources at the end of an item's
+> Note: In C++, this pattern of deallocating resources at the end of an item’s
 lifetime is sometimes called *Resource Acquisition Is Initialization (RAII)*.
 The `drop` function in Rust will be familiar to you if you’ve used RAII
 patterns.
@@ -628,7 +628,7 @@ fn calculate_length(s: &String) -> usize { // s is a reference to a String
 ```
 
 The scope in which the variable `s` is valid is the same as any function
-argument's scope, but we don’t drop what the reference points to when it goes
+argument’s scope, but we don’t drop what the reference points to when it goes
 out of scope because we don’t have ownership. Functions that take references as
 arguments instead of the actual values mean we won’t need to return the values
 in order to give back ownership, since we never had ownership.

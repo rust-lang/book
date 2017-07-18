@@ -6,9 +6,9 @@
 A *struct*, or *structure*, is a custom data type that lets us name and package
 together multiple related values that make up a meaningful group. If you’re
 familiar with an object-oriented language, a *struct* is like an object’s data
-attributes. In this chapter, we'll compare and contrast tuples with structs,
+attributes. In this chapter, we’ll compare and contrast tuples with structs,
 demonstrate how to use structs, and discuss how to define methods and
-associated functions on structs to specify behavior associated with a struct's
+associated functions on structs to specify behavior associated with a struct’s
 data. The struct and *enum* (which is discussed in Chapter 6) concepts are the
 building blocks for creating new types in your program’s domain to take full
 advantage of Rust’s compile time type checking.
@@ -101,7 +101,8 @@ Listing 5-4: A `build_user` function that takes an email and username and
 returns a `User` instance
 
 Because the parameter names `email` and `username` are the same as the `User`
-struct's field names `email` and `username`, we can write `build_user` without
+
+struct’s field names `email` and `username`, we can write `build_user` without
 the repetition of `email` and `username` as shown in Listing 5-5. This version
 of `build_user` behaves the same way as the one in Listing 5-4. The field init
 syntax can make cases like this shorter to write, especially when structs have
@@ -123,8 +124,8 @@ Listing 5-5: A `build_user` function that uses field init syntax since the
 
 ### Creating Instances From Other Instances With Struct Update Syntax
 
-It's often useful to create a new instance from an old instance, using most of
-the old instance's values but changing some. Listing 5-6 shows an example of
+It’s often useful to create a new instance from an old instance, using most of
+the old instance’s values but changing some. Listing 5-6 shows an example of
 creating a new `User` instance in `user2` by setting the values of `email` and
 `username` but using the same values for the rest of the fields from the
 `user1` instance we created in Listing 5-2:
@@ -163,7 +164,7 @@ the instance in the `user1` variable
 ### Tuple Structs without Named Fields to Create Different Types
 
 We can also define structs that look similar to tuples, called *tuple structs*,
-that have the added meaning the struct name provides, but don't have names
+that have the added meaning the struct name provides, but don’t have names
 associated with their fields, just the types of the fields. The definition of a
 tuple struct still starts with the `struct` keyword and the struct name, which
 are followed by the types in the tuple. For example, here are definitions and
@@ -177,18 +178,18 @@ let black = Color(0, 0, 0);
 let origin = Point(0, 0, 0);
 ```
 
-Note that the `black` and `origin` values are different types, since they're
+Note that the `black` and `origin` values are different types, since they’re
 instances of different tuple structs. Each struct we define is its own type,
 even though the fields within the struct have the same types. Otherwise, tuple
 struct instances behave like tuples, which we covered in Chapter 3.
 
 ### Unit-Like Structs without Any Fields
 
-We can also define structs that don't have any fields! These are called
+We can also define structs that don’t have any fields! These are called
 *unit-like structs* since they behave similarly to `()`, the unit type.
 Unit-like structs can be useful in situations such as when you need to
-implement a trait on some type, but you don't have any data that you want to
-store in the type itself. We'll be discussing traits in Chapter 10.
+implement a trait on some type, but you don’t have any data that you want to
+store in the type itself. We’ll be discussing traits in Chapter 10.
 
 PROD: START BOX
 
@@ -504,7 +505,7 @@ with custom behavior as well as how to create your own traits in Chapter 10.
 
 Our `area` function is very specific: it only computes the area of rectangles.
 It would be helpful to tie this behavior more closely to our `Rectangle`
-struct, because it won't work with any other type. Let’s look at how we can
+struct, because it won’t work with any other type. Let’s look at how we can
 continue to refactor this code by turning the `area` function into an `area`
 *method* defined on our `Rectangle` type.
 
@@ -712,7 +713,7 @@ impl Rectangle {
 To call this associated function, we use the `::` syntax with the struct name,
 like `let sq = Rectangle::square(3);`, for example. This function is namespaced
 by the struct: the `::` syntax is used for both associated functions and
-namespaces created by modules, which we'll discuss in Chapter 7.
+namespaces created by modules, which we’ll discuss in Chapter 7.
 
 ## Summary
 
