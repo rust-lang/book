@@ -112,7 +112,7 @@ std::marker::Sized` is not satisfied
   = note: the return type of a function must have a statically known size
 ```
 
-The `Sized` trait again! Rust doesn’t know much space it’ll need to store the
+The `Sized` trait again! Rust doesn’t know how much space it’ll need to store the
 closure. We saw a solution to this in the previous section, though: we can use
 a trait object:
 
