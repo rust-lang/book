@@ -398,11 +398,11 @@ The trait `Sized` is now a *supertrait* of trait `Foo`, which means trait `Foo`
 requires types that implement `Foo` (that is, `Self`) to be `Sized`. We’re
 going to talk about supertraits in more detail in Chapter 19.
 
-`Foo` requires `Self` to be `Sized`, and therefore is not allowed to be a trait
-object. This is because it wold be impossible to implement the trait `Foo` for
-a trait object like `Box<Foo>`: trait objects aren’t sized, but `Foo`
-requires `Self` to be `Sized`. A type can’t be both sized and unsized at the
-same time!
+`Foo` requires `Self` to be `Sized`, and therefore is not allowed to be used in 
+a trait object like `Box<Foo>`. This is because it wold be impossible to implement
+the trait `Foo` for a trait object like `Box<Foo>`: trait objects aren’t sized, 
+but `Foo` requires `Self` to be `Sized`. A type can’t be both sized and unsized
+at the same time!
 
 For the second object safety requirement that says all of a trait’s methods
 must be object safe, a method is object safe if either:
