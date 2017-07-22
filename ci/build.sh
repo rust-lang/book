@@ -20,8 +20,14 @@ cargo run -- ../../second-edition/src
 
 cd ../..
 
-# tests for the second edition
+# tests for the first edition
+cd first-edition
+mdbook test
+mdbook build
 
+cd ..
+
+# tests for the second edition
 cd second-edition
 bash spellcheck.sh list
 mdbook test
