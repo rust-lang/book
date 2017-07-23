@@ -1,26 +1,25 @@
-## `mod` and the Filesystem
+## `mod`와 파일 시스템
 
-We’ll start our module example by making a new project with Cargo, but instead
-of creating a binary crate, we’ll make a library crate: a project that other
-people can pull into their projects as a dependency. For example, the `rand`
-crate in Chapter 2 is a library crate that we used as a dependency in the
-guessing game project.
+먼저 카고를 이용해서 새로운 프로젝트를 만드는 것으로 모듈 예제를 시작하려고 하는데,
+바이너리 크레잇(crate)을 만드는 대신에 라이브러리 크레잇을 만들 것입니다. 여기서
+라이브러리 크레잇이란 다른 사람들이 자신들의 프로젝트에 디펜던시(dependency)로 추가할
+수 있는 프로젝트를 말합니다. 예를 들어, 2장의 `rand` 크레잇은 우리가 추측 게임
+프로젝트에서 디펜던시로 사용했던 라이브러리 크레잇입니다.
 
-We’ll create a skeleton of a library that provides some general networking
-functionality; we’ll concentrate on the organization of the modules and
-functions but we won’t worry about what code goes in the function bodies. We’ll
-call our library `communicator`. By default, Cargo will create a library unless
-another type of project is specified: if we omit the `--bin` option that we’ve
-been using in all of the chapters preceding this one, our project will be a
-library:
+우리는 몇가지 일반적인 네트워크 기능을 제공하는 라이브러리의 뼈대를 만들 것입니다;
+여기서는 모듈들과 함수들의 조직화에 집중할 것이고, 함수의 본체에 어떤 코드가 들어가야
+하는지는 신경쓰지 않겠습니다. 이 라이브러리를 `communicator`라고 부르겠습니다.
+기본적으로, 카고는 다른 타입의 프로젝트로 특정하지 않는 이상 라이브러리를 만들
+것입니다: 이전의 모든 장들에서 사용해왔던 `--bin` 옵션을 제거하면, 프로젝트는
+라이브러리가 될 것입니다:
 
 ```text
 $ cargo new communicator
 $ cd communicator
 ```
 
-Notice that Cargo generated *src/lib.rs* instead of *src/main.rs*. Inside
-*src/lib.rs* we’ll find the following:
+카고가 *src/main.rs* 대신 *src/lib.rs*을 생성했음을 주목하세요. *src/lib.rs*
+내부를 보면 다음과 같은 코드를 찾을 수 있습니다:
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -33,25 +32,25 @@ mod tests {
 }
 ```
 
-Cargo creates an empty test to help us get our library started, rather than the
-“Hello, world!” binary that we get when we use the `--bin` option. We’ll look
-at the `#[]` and `mod tests` syntax in the “Using `super` to Access a Parent
-Module” section later in this chapter, but for now, leave this code at the
-bottom of *src/lib.rs*.
+카고는 우리가 만든 라이브러리의 작성 시작을 돕기 위해 빈 테스트를 만드는데,
+이는 `--bin` 옵션을 사용했을때 “Hello, world!” 바이너리를 만들어준 것과 사뭇
+다릅니다. `#[]`와 `mod tests` 문법은 이 장의 “`super`를 이용하여 부모 모듈에
+접근하기”절에서 더 자세히 다룰 것이지만, 당장은 *src/lib.rs*의 아래쪽에 이 코드를
+남겨두겠습니다.
 
-Because we don’t have a *src/main.rs* file, there’s nothing for Cargo to
-execute with the `cargo run` command. Therefore, we’ll use the `cargo build`
-command to compile our library crate’s code.
+*src/main.rs* 파일이 없기 떄문에, `cargo run` 커맨드로 카고가 실행할 것이 없습니다.
+따라서, 여기서는 라이브러리 크레잇의 코드를 컴파일하기 위해 `cargo build`를 사용할
+것입니다.
 
-We’ll look at different options for organizing your library’s code that will be
-suitable in a variety of situations, depending on the intent of the code.
+이제 여러분이 작성하는 코드의 의도에 따라 만들어지는 다양한 상황에 알맞도록 라이브러리
+코드를 조직화하는 다양한 옵션들을 살펴보겠습니다.
 
-### Module Definitions
+### 모듈 정의
 
-For our `communicator` networking library, we’ll first define a module named
-`network` that contains the definition of a function called `connect`. Every
-module definition in Rust starts with the `mod` keyword. Add this code to the
-beginning of the *src/lib.rs* file, above the test code:
+우리의 `communicator` 네트워크 라이브러리를 위해서, 먼저 `connect`라는 이름의 함수가
+정의되어 있는 `network`라는 이름의 모듈을 정의하겠습니다. 러스트 내 모듈 정의는 모두
+`mod`로 시작됩니다. 이 코드를 *src/lib.rs*의 시작 부분, 즉 테스트 코드의 윗 쪽에
+추가해봅시다:
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -62,16 +61,15 @@ mod network {
 }
 ```
 
-After the `mod` keyword, we put the name of the module, `network`, and then a
-block of code in curly braces. Everything inside this block is inside the
-namespace `network`. In this case, we have a single function, `connect`. If we
-wanted to call this function from a script outside the `network` module, we
-would need to specify the module and use the namespace syntax `::`, like so:
-`network::connect()` rather than just `connect()`.
+`mod` 키워드 뒤에, 모듈의 이름 `network`가 쓰여지고 중괄호 안에 코드 블록이 옵니다.
+이 블록 안의 모든 것은 이름공간 `network` 안에 있습니다. 위의 경우 `connect`라는
+이름의 함수 하나가 있습니다. 이 함수를 `network` 모듈 바깥의 스크립트에서 호출하고자
+한다면, 우리는 모듈을 특정할 필요가 있으므로 이름공간 문법 `::`를 이용해야 합니다:
+`connect()` 이렇게만 하지 않고 `network::connect()` 이런 식으로요.
 
-We can also have multiple modules, side by side, in the same *src/lib.rs* file.
-For example, to also have a `client` module that has a function named `connect`
-as well, we can add it as shown in Listing 7-1:
+또한 같은 *src/lib.rs* 파일 내에 여러 개의 모듈을 나란히 정의할 수도 있습니다.
+예를 들어, `connect`라는 이름의 함수를 갖고 있는 `client` 모듈을 정의하려면,
+Listing 7-1에 보시는 바와 같이 이를 추가할 수 있습니다:
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -87,24 +85,23 @@ mod client {
 }
 ```
 
-<span class="caption">Listing 7-1: The `network` module and the `client` module
-defined side-by-side in *src/lib.rs*</span>
+<span class="caption">Listing 7-1: *src/lib.rs* 내에 나란히 정의된 `network`
+모듈과 `client` 모듈</span>
 
-Now we have a `network::connect` function and a `client::connect` function.
-These can have completely different functionality, and the function names do
-not conflict with each other because they’re in different modules.
+이제 우리는 `network::connect` 함수와 `client::connect` 함수를 갖게 되었습니다.
+이들은 완전히 다른 기능을 갖고 있을 수 있고, 서로 다른 모듈에 정의되어 있기 때문에
+함수 이름이 서로 부딪힐 일은 없습니다.
 
-In this case, because we’re building a library, the file that serves as the
-entry point for building our library is *src/lib.rs*. However, in respect to
-creating modules, there’s nothing special about *src/lib.rs*. We could also
-create modules in *src/main.rs* for a binary crate in the same way as we're
-creating modules in *src/lib.rs* for the library crate. In fact, we can put
-modules inside of modules, which can be useful as your modules grow to keep
-related functionality organized together and separate functionality apart. The
-choice of how you organize your code depends on how you think about the
-relationship between the parts of your code. For instance, the `client` code
-and its `connect` function might make more sense to users of our library if
-they were inside the `network` namespace instead, as in Listing 7-2:
+이 경우, 우리가 라이브러리를 만드는 중이기 때문에, 라이브러리의 시작 지점으로서
+제공되는 파일은 *src/lib.rs* 입니다. 하지만 모듈을 만드는 것에 관하여
+*src/lib.rs*는 특별할 것이 없습니다. 우리는 라이브러리 크레잇의 *src/lib.rs* 내에
+모듈을 만드는 것과 똑같은 방식으로 바이너리 크레잇의 *src/main.rs* 내에도 모듈을
+만들 수 있습니다. 사실 모듈 안에 다른 모듈을 집어넣는 것도 가능한데, 이는 여러분의
+모듈이 커짐에 따라 관련된 기능이 잘 조직화 되도록 하는 한편 각각의 기능을 잘 나누도록
+하는데 유용할 수 있습니다. 여러분의 코드를 어떻게 조직화 할 것인가에 대한 선택은
+여러분이 코드의 각 부분 간의 관계에 대해 어떻게 생각하고 있는지에 따라 달린 문제입니다.
+예를 들어, Listing 7-2와 같이 `client` 모듈과 `connect` 함수가 `network` 이름공간
+내에 있다면 우리의 라이브러리 사용자가 더 쉽게 이해할지도 모릅니다:
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -120,19 +117,21 @@ mod network {
 }
 ```
 
-<span class="caption">Listing 7-2: Moving the `client` module inside the
-`network` module</span>
+<span class="caption">Listing 7-2: `client` 모듈을 `network` 모듈 안으로 이동</span>
 
-In your *src/lib.rs* file, replace the existing `mod network` and `mod client`
-definitions with the ones in Listing 7-2, which have the `client` module as an
-inner module of `network`. Now we have the functions `network::connect` and
-`network::client::connect`: again, the two functions named `connect` don’t
-conflict with each other because they’re in different namespaces.
+*src/lib.rs* 파일에서 Listing 7-2와 같이 `client` 모듈이 `network` 모듈의
+내부 모듈이 되도록 `mod network`와 `mod client`의 위치를 바꿔 봅시다. 이제
+우리는 `network::connect`와 `network::client::connect` 함수를 갖게 되었습니다:
+다시 말하지만, `connect`라는 이름의 두 함수는 서로 다른 이름공간에 있으므로
+부딪힐 일이 없습니다.
 
 In this way, modules form a hierarchy. The contents of *src/lib.rs* are at the
 topmost level, and the submodules are at lower levels. Here’s what the
 organization of our example in Listing 7-1 looks like when thought of as a
 hierarchy:
+이런 식으로 모듈들은 계층을 구성하게 됩니다. *src/lib.rs*의 내용은 가장 위의 층을
+이루고, 서브 모듈들은 그보다 낮은 층에 있습니다. Listing 7-1 예제에서의 조직화는
+계층 구조로 생각하면 어떻게 생겼을지를 봅시다:
 
 ```text
 communicator
@@ -140,7 +139,7 @@ communicator
  └── client
 ```
 
-And here’s the hierarchy corresponding to the example in Listing 7-2:
+그리고 Listing 7-2 예제에 대응되는 계층 구조는 이렇습니다:
 
 ```text
 communicator
@@ -148,13 +147,13 @@ communicator
      └── client
 ```
 
-The hierarchy shows that in Listing 7-2, `client` is a child of the `network`
-module rather than a sibling. More complicated projects can have many modules,
-and they’ll need to be organized logically in order to keep track of them. What
-“logically” means in your project is up to you and depends on how you and your
-library’s users think about your project’s domain. Use the techniques shown
-here to create side-by-side modules and nested modules in whatever structure
-you would like.
+Listing 7-2에서 계층 구조는 `client`가 `network`의 형제이기 보다는 자식임을
+보여줍니다. 더 복잡한 프로젝트는 많은 수의 모듈을 갖고 있을 수 있고, 이들은 지속적인
+트래킹을 위해 논리적으로 잘 조직화될 필요가 있을 것입니다. 여러분의 프로젝트 내에서
+“논리적으로”가 의미하는 것은 여러분에게 달려 있는 것이며, 여러분과 여러분의 라이브러리
+사용자들이 프로젝트 도메인에 대해 어떻게 생각하는지에 따라 달라집니다. 여러분이 선호하는
+어떤 형태의 구조이건 간에 여기서 보여준 나란한 모듈 및 중첩된(nested) 모듈을 만드는
+테크닉을 이용해 보세요.
 
 ### Moving Modules to Other Files
 

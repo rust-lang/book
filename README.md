@@ -40,21 +40,28 @@ PR 리뷰를 통해 통합하고, 그 외에 오탈자 수정 등 자잘한 수�
 ### 현재까지 번역 용어 정리 (abc순)
 
 - assign: 대입하다
+- binary: 바이너리
 - bind: 묶다
 - borrowing: 빌림
+- cargo: 카고
 - clone: 클론
 - collection: 컬렉션
+- crate: 크레잇
 - copy: 복사
 - dangling reference: 댕글링 참조자
 - data race: 데이터 레이스
+- dependency: 디펜던시
 - `drop`: `drop`한다, 버리다
 - feature: 특성
 - heap: 힙
 - immutable: 불변
 - iterator: 반복자
 - lifetime: 라이프타임
+- library: 라이브러리
+- module: 모듈
 - move: 이동
 - mutable: 가변
+- namespace: 이름공간
 - ownership: 소유권
 - pointer: 포인터
 - reference: 참조자
