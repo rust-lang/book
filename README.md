@@ -40,15 +40,20 @@ PR 리뷰를 통해 통합하고, 그 외에 오탈자 수정 등 자잘한 수�
 ### 현재까지 번역 용어 정리 (abc순)
 
 - assign: 대입하다
+- associated function: 연관함수
 - bind: 묶다
 - borrowing: 빌림
 - clone: 클론
 - collection: 컬렉션
 - copy: 복사
+- crate: 크래이트
 - dangling reference: 댕글링 참조자
 - data race: 데이터 레이스
 - `drop`: `drop`한다, 버리다
 - feature: 특성
+- format string: 형식 문자열
+- generic: 제네릭
+- handle: 핸들
 - heap: 힙
 - immutable: 불변
 - iterator: 반복자
@@ -56,6 +61,7 @@ PR 리뷰를 통해 통합하고, 그 외에 오탈자 수정 등 자잘한 수�
 - move: 이동
 - mutable: 가변
 - ownership: 소유권
+- placeholder: 변경자
 - pointer: 포인터
 - reference: 참조자
 - return: 반환
