@@ -461,9 +461,9 @@ trait bound to the trait. Listing 19-29 shows an implementation of the
 `OutlinePrint` trait:
 
 ```rust
-use std::fmt::Display;
+use std::fmt;
 
-trait OutlinePrint: Display {
+trait OutlinePrint: fmt::Display {
     fn outline_print(&self) {
         let output = self.to_string();
         let len = output.len();
