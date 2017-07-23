@@ -49,7 +49,7 @@ for val in v1_iter {
 }
 ```
 
-<span class="caption">Listing 13-13: Making use of an iterator in a `for`
+<span class="caption">Listing 13-14: Making use of an iterator in a `for`
 loop</span>
 
 In languages that don’t have iterators provided by their standard libraries, we
@@ -88,7 +88,7 @@ that’s returned from the iterator.
 The `next` method is the only method that the `Iterator` trait requires
 implementers of the trait to define. `next` returns one item of the iterator
 at a time wrapped in `Some`, and when iteration is over, it returns `None`.
-We can call the `next` method on iterators directly if we’d like; Listing 13-14
+We can call the `next` method on iterators directly if we’d like; Listing 13-15
 has a test that demonstrates the values we’d get on repeated calls to `next`
 on the iterator created from the vector:
 
@@ -108,7 +108,7 @@ fn iterator_demonstration() {
 }
 ```
 
-<span class="caption">Listing 13-14: Calling the `next` method on an
+<span class="caption">Listing 13-15: Calling the `next` method on an
 iterator</span>
 
 Note that we needed to make `v1_iter` mutable: calling the `next` method on an
@@ -157,7 +157,7 @@ calling them uses up the iterator. An example of a consuming adaptor is the
 `sum` method. This method takes ownership of the iterator and iterates through
 the items by repeatedly calling `next`, thus consuming the iterator. As it
 iterates through each item, it adds each item to a running total and returns
-the total when iteration has completed. Listing 13-15 has a test illustrating a
+the total when iteration has completed. Listing 13-16 has a test illustrating a
 use of the `sum` method:
 
 <span class="filename">Filename: src/lib.rs</span>
@@ -175,7 +175,7 @@ fn iterator_sum() {
 }
 ```
 
-<span class="caption">Listing 13-15: Calling the `sum` method to get the total
+<span class="caption">Listing 13-16: Calling the `sum` method to get the total
 of all items in the iterator</span>
 
 We aren’t allowed to use `v1_iter` after the call to `sum` since `sum` takes
@@ -188,7 +188,7 @@ other iterators. These methods are called *iterator adaptors* and allow us to
 change iterators into different kind of iterators. We can chain multiple calls
 to iterator adaptors. Because all iterators are lazy, however, we have to
 call one of the consuming adaptor methods in order to get results from calls
-to iterator adaptors. Listing 13-16 shows an example of calling the iterator
+to iterator adaptors. Listing 13-17 shows an example of calling the iterator
 adaptor method `map`, which takes a closure that `map` will call on each
 item in order to produce a new iterator in which each item from the vector has
 been incremented by 1. This code produces a warning, though:
@@ -201,7 +201,7 @@ let v1: Vec<i32> = vec![1, 2, 3];
 v1.iter().map(|x| x + 1);
 ```
 
-<span class="caption">Listing 13-16: Calling the iterator adapter `map` to
+<span class="caption">Listing 13-17: Calling the iterator adapter `map` to
 create a new iterator</span>
 
 The warning we get is:
@@ -217,14 +217,14 @@ nothing unless consumed
   = note: #[warn(unused_must_use)] on by default
 ```
 
-The code in Listing 13-16 isn’t actually doing anything; the closure we’ve
+The code in Listing 13-17 isn’t actually doing anything; the closure we’ve
 specified never gets called. The warning reminds us why: iterator adaptors are
 lazy, and we probably meant to consume the iterator here.
 
 In order to fix this warning and consume the iterator to get a useful result,
 we’re going to use the `collect` method, which we saw briefly in Chapter 12.
 This method consumes the iterator and collects the resulting values into a
-data structure. In Listing 13-17, we’re going to collect the results of
+data structure. In Listing 13-18, we’re going to collect the results of
 iterating over the iterator returned from the call to `map` into a vector that
 will contain each item from the original vector incremented by 1:
 
@@ -238,7 +238,7 @@ let v2: Vec<_> = v1.iter().map(|x| x + 1).collect();
 assert_eq!(v2, vec![2, 3, 4]);
 ```
 
-<span class="caption">Listing 13-17: Calling the `map` method to create a new
+<span class="caption">Listing 13-18: Calling the `map` method to create a new
 iterator, then calling the `collect` method to consume the new iterator and
 create a vector</span>
 
@@ -268,7 +268,7 @@ closures that capture their environment by using the `filter` iterator adapter.
 The `filter` method on an iterator takes a closure that takes each item from
 the iterator and returns a boolean. If the closure returns `true`, the value
 will be included in the iterator produced by `filter`. If the closure returns
-`false`, the value won’t be included in the resulting iterator. Listing 13-18
+`false`, the value won’t be included in the resulting iterator. Listing 13-19
 demonstrates using `filter` with a closure that captures the `shoe_size`
 variable from its environment in order to iterate over a collection of `Shoe`
 struct instances in order to return only shoes that are the specified size:
@@ -308,7 +308,7 @@ fn filters_by_size() {
 }
 ```
 
-<span class="caption">Listing 13-18: Using the `filter` method with a closure
+<span class="caption">Listing 13-19: Using the `filter` method with a closure
 that captures `shoe_size`</span>
 
 <!-- Will add wingdings in libreoffice /Carol -->
@@ -353,7 +353,7 @@ to 5. First, we’ll create a struct to hold on to some values, and then we’ll
 make this struct into an iterator by implementing the `Iterator` trait and use
 the values in that implementation.
 
-Listing 13-19 has the definition of the `Counter` struct and an associated
+Listing 13-20 has the definition of the `Counter` struct and an associated
 `new` function to create instances of `Counter`:
 
 <span class="filename">Filename: src/lib.rs</span>
@@ -370,7 +370,7 @@ impl Counter {
 }
 ```
 
-<span class="caption">Listing 13-19: Defining the `Counter` struct and a `new`
+<span class="caption">Listing 13-20: Defining the `Counter` struct and a `new`
 function that creates instances of `Counter` with an initial value of 0 for
 `count`</span>
 
@@ -394,7 +394,7 @@ does?-->
 
 Next, we’re going to implement the `Iterator` trait for our `Counter` type by
 defining the body of the `next` method to specify what we want to happen when
-this iterator is used, as shown in Listing 13-20:
+this iterator is used, as shown in Listing 13-21:
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -418,7 +418,7 @@ impl Iterator for Counter {
 }
 ```
 
-<span class="caption">Listing 13-20: Implementing the `Iterator` trait on our
+<span class="caption">Listing 13-21: Implementing the `Iterator` trait on our
 `Counter` struct</span>
 
 <!-- I will add wingdings in libreoffice /Carol -->
@@ -433,7 +433,7 @@ higher, our iterator will return `None`.
 
 #### Using Our `Counter` Iterator’s `next` Method
 
-Once we’ve implemented the `Iterator` trait, we have an iterator! Listing 13-21
+Once we’ve implemented the `Iterator` trait, we have an iterator! Listing 13-22
 shows a test demonstrating that we can use the iterator functionality our
 `Counter` struct now has by calling the `next` method on it directly, just like
 we did with the iterator created from a vector in Listing 13-14:
@@ -472,7 +472,7 @@ fn calling_next_directly() {
 }
 ```
 
-<span class="caption">Listing 13-21: Testing the functionality of the `next`
+<span class="caption">Listing 13-22: Testing the functionality of the `next`
 method implementation</span>
 
 This test creates a new `Counter` instance in the `counter` variable and then
@@ -511,7 +511,7 @@ of `Counter` produces, pair those values with values produced by another
 `Counter` instance after skipping the first value that instance produces,
 multiply each pair together, keep only those results that are divisible by
 three, and add all the resulting values together, we could do so as shown in
-the test in Listing 13-22:
+the test in Listing 13-23:
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -553,7 +553,7 @@ fn using_other_iterator_trait_methods() {
 }
 ```
 
-<span class="caption">Listing 13-22: Using a variety of `Iterator` trait
+<span class="caption">Listing 13-23: Using a variety of `Iterator` trait
 methods on our `Counter` iterator</span>
 
 Note that `zip` produces only four pairs; the theoretical fifth pair `(5,
