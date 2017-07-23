@@ -123,14 +123,14 @@ the functions in `std::io` will be returning `Result<T, E>` where the `E` is
 
 ```rust
 use std::io::Error;
-# use std::fmt::Arguments;
+use std::fmt;
 
 pub trait Write {
     fn write(&mut self, buf: &[u8]) -> Result<usize, Error>;
     fn flush(&mut self) -> Result<(), Error>;
 
     fn write_all(&mut self, buf: &[u8]) -> Result<(), Error>;
-    fn write_fmt(&mut self, fmt: Arguments) -> Result<(), Error>;
+    fn write_fmt(&mut self, fmt: fmt::Arguments) -> Result<(), Error>;
 }
 ```
 
