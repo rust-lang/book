@@ -156,6 +156,8 @@ we can call the `next` method on it! Listing 13-26 has the new code:
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust
+# use std::env;
+#
 # struct Config {
 #     query: String,
 #     filename: String,
