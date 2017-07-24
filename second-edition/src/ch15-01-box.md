@@ -153,9 +153,9 @@ helpful suggestion:
 Because a `Box<T>` is a pointer, we always know how much space it needs: a
 pointer takes up a `usize` amount of space. The value of the `usize` will be
 the address of the heap data. The heap data can be any size, but the address to
-the start of that heap data will always fit in a `usize`. So if we change our
+the start of that heap data will always fit in a `usize`. So we change our
 definition from Listing 15-2 to look like the definition here in Listing 15-5,
-and change `main` to use `Box::new` for the values inside the `Cons` variants
+and change `main` to use `Box::new` for the values inside the `Cons` variants,
 like so:
 
 <span class="filename">Filename: src/main.rs</span>
