@@ -164,13 +164,13 @@ intensity workout of a number of minutes of running that comes from the complex
 algorithm.
 
 The data science team has let us know that there are going to be some changes
-to the way we have to call the algorithm, so we want to refactor this code to
-have only one place that calls the `simulated_expensive_calculation` function
-to update when those changes happen. We also want to get rid of the spot where
-we’re currently calling the function twice unnecessarily, and we don’t want to
-add any other calls to that function in the process. That is, we don’t want to
-call it if we’re in the case where the result isn’t needed at all, and we still
-want to call it only once in the last case.
+to the way we have to call the algorithm. To simplify the update when those
+changes happen, we would like to refactor this code to have only a single call
+to the `simulated_expensive_calculation` function. We also want to get rid of
+the spot where we’re currently calling the function twice unnecessarily, and
+we don’t want to add any other calls to that function in the process. That is,
+we don’t want to call it if we’re in the case where the result isn’t needed at
+all, and we still want to call it only once in the last case.
 
 There are many ways we could restructure this program. The way we’re going to
 try first is extracting the duplicated call to the expensive calculation
