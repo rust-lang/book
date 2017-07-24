@@ -341,7 +341,7 @@ traits involved with closures.
 
 ### Closure Type Inference and Annotation
 
-Closures are different than functions defined with the `fn` keyword in a few
+Closures differ from functions defined with the `fn` keyword in a few
 ways. The first is that closures don’t require you to annotate the types of the
 parameters or the return value like `fn` functions do.
 
