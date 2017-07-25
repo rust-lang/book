@@ -7,8 +7,9 @@ still have the option to make your variables mutable. Let’s explore how and wh
 Rust encourages you to favor immutability, and why you might want to opt out.
 
 When a variable is immutable, that means once a value is bound to a name, you
-can’t change that value. To illustrate, let’s generate a new project called
-*variables* in your *projects* directory by using `cargo new --bin variables`.
+can’t bind anything to that variable again. To illustrate, let’s generate a new
+project called *variables* in your *projects* directory by using
+`cargo new --bin variables`.
 
 Then, in your new *variables* directory, open *src/main.rs* and replace its
 code with the following:
