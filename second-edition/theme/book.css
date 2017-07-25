@@ -829,5 +829,5 @@ table thead td {
 
  /* Styles keystrokes such as ctrl-C */
 .keystroke {
-	font-variant-caps: small-caps;
+	font-variant: small-caps;
 }
