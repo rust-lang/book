@@ -511,6 +511,6 @@ So are these warnings wrong? In one sense yes, the warnings are wrong, since we
 are using the fields to store data we need to keep around. In another sense,
 no, the warnings aren’t wrong, and they’re telling us that we’ve forgotten to
 do something: we never do anything to clean up our thread pool once it’s done
-being used, we just use `CTRL-C` to stop the program and let the operating
+being used, we just use <span class="keystroke">ctrl-C</span> to stop the program and let the operating
 system clean up after us. Let’s implement a graceful shutdown that cleans up
 everything we’ve created instead.
