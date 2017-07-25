@@ -700,7 +700,7 @@ verify that in all of the cases in the various `if` and `else` blocks,
 needed.
 
 The `Cacher` takes care of the logic necessary to ensure we aren’t calling the
-expensive calculation more than we need to be so that `generate_workout` can
+expensive calculation more than we need to, so that `generate_workout` can
 focus on the business logic. Caching values is a more generally useful behavior
 that we might want to use in other parts of our code with other closures as
 well. However, there are a few problems with the current implementation of
