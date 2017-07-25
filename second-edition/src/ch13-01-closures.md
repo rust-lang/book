@@ -841,7 +841,7 @@ The compiler even reminds us that this only works with closures!
 
 When a closure captures a value from its environment, the closure uses memory
 to store the values for use in the closure body. This use of memory is overhead
-that we don’t want pay for in the more common case where we want to execute
+that we don’t want to pay for in the more common case where we want to execute
 code that doesn’t capture its environment. Because functions are never allowed
 to capture their environment, defining and using functions will never incur
 this overhead.
