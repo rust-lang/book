@@ -456,6 +456,54 @@ the body of the function to return a reference, we wouldn’t need either the
 `Clone` or `Copy` trait bounds and we wouldn’t be doing any heap allocations.
 Try implementing these alternate solutions on your own!
 
+### Using trait bounds to conditionally implement methods
+
+By setting a trait bound on a generic `impl` block, one can make sure that a set
+of methods will only be implemented for types which meet certain trait bounds.
+For example, the type Pair that is presented in listing 10-17 always implements
+the method new(), but only implements the method cmp_display if its inner type
+implements comparison operators and can be printed:
+
+```rust
+use std::fmt::Display;
+
+struct Pair<T> {
+    x: T,
+    y: T,
+}
+
+impl<T> Pair<T> {
+    fn new(x: T, y: T) -> Self {
+        Self {
+            x,
+            y,
+        }
+    }
+}
+
+impl<T: Display + PartialOrd> Pair<T> {
+    fn cmp_display(&self) {
+        if self.x >= self.y {
+            println!("The largest member is x = {}", self.x);
+        } else {
+            println!("The largest member is y = {}", self.y);
+        }
+    }
+}
+```
+
+<span class="caption">Listing 10-17: Conditionally implement methods on a
+generic type depending on the trait bounds of its contents</span>
+
+In fact, one can even conditionally implement a trait for every type which
+implements a set of trait bounds. Such “blanket impls” are extensively used in
+the Rust standard library, for example to state that every type which can be
+printed can also be converted into a string:
+
+```rust
+impl<T: Display + ?Sized> ToString for T { /* ... */}
+```
+
 Traits and trait bounds let us write code that uses generic type parameters in
 order to reduce duplication, but still specify to the compiler exactly what
 behavior our code needs the generic type to have. Because we’ve given the trait
