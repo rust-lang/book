@@ -500,8 +500,8 @@ implements a set of trait bounds. Such “blanket impls” are extensively used 
 the Rust standard library, for example to state that every type which can be
 printed can also be converted into a string:
 
-```rust
-impl<T: Display + ?Sized> ToString for T { /* ... */}
+```rust,ignore
+impl<T: Display + ?Sized> ToString for T {
 ```
 
 Traits and trait bounds let us write code that uses generic type parameters in
