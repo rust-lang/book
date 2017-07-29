@@ -73,6 +73,7 @@ PR 리뷰를 통해 통합하고, 그 외에 오탈자 수정 등 자잘한 수�
 - signature: 시그니처
 - string literal: 스트링 리터럴
 - variable: 변수
+- visibility: 가시성
 
 더 좋은 번역 용어가 있으신 분들 의견 주시면 반영하겠습니다!
 

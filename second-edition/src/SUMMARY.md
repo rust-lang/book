@@ -33,7 +33,7 @@
 ## Basic Rust Literacy
 
 - [모듈](ch07-00-modules.md)
-    - [`mod` and the Filesystem](ch07-01-mod-and-the-filesystem.md)
+    - [`mod`와 파일 시스템](ch07-01-mod-and-the-filesystem.md)
     - [Controlling Visibility with `pub`](ch07-02-controlling-visibility-with-pub.md)
     - [Importing Names with `use`](ch07-03-importing-names-with-use.md)
 
