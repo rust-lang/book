@@ -46,7 +46,7 @@ PR 리뷰를 통해 통합하고, 그 외에 오탈자 수정 등 자잘한 수�
 - cargo: 카고
 - clone: 클론
 - collection: 컬렉션
-- crate: 크레잇
+- crate: 크레이트
 - copy: 복사
 - dangling reference: 댕글링 참조자
 - data race: 데이터 레이스
