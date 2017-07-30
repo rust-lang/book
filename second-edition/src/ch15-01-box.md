@@ -153,10 +153,9 @@ helpful suggestion:
 Because a `Box<T>` is a pointer, we always know how much space it needs: a
 pointer takes up a `usize` amount of space. The value of the `usize` will be
 the address of the heap data. The heap data can be any size, but the address to
-the start of that heap data will always fit in a `usize`. So we change our
-definition from Listing 15-2 to look like the definition here in Listing 15-5,
-and change `main` to use `Box::new` for the values inside the `Cons` variants,
-like so:
+the start of that heap data will always fit in a `usize`. We can change our
+definition from Listing 15-2 to look like the definition in Listing 15-5 by
+changing `main` to use `Box::new` for the values inside the `Cons` variants:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -179,7 +178,7 @@ fn main() {
 <span class="caption">Listing 15-5: Definition of `List` that uses `Box<T>` in
 order to have a known size</span>
 
-The compiler will be able to figure out the size it needs to store a `List`
+The compiler will now be able to figure out the size it needs to store a `List`
 value. Rust will look at `List`, and again start by looking at the `Cons`
 variant. The `Cons` variant will need the size of `i32` plus the space to store
 a `usize`, since a box always has the size of a `usize`, no matter what it’s
