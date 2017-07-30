@@ -657,8 +657,8 @@ fn main() {
 <span class="caption">Listing 12-14: Bringing the `minigrep` crate into the
 scope of *src/main.rs*</span>
 
-To bring the library crate into the binary crate, we use `extern crate`
-`minigrep`. Then we’ll add a `use` `minigrep``::Config` line to bring the
+To bring the library crate into the binary crate, we use `extern crate
+minigrep`. Then we’ll add a `use minigrep::Config` line to bring the
 `Config` type into scope, and we’ll prefix the `run` function with our crate
 name. With that, all the functionality should be connected and should work.
 Give it a `cargo run` and make sure everything is wired up correctly.
