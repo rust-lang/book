@@ -235,8 +235,8 @@ the `+` operator for `Point` instances</span>
 
 We’ve implemented the `add` method to add the `x` values of two `Point`
 instances together and the `y` values of two `Point` instances together to
-create a new `Point`. The `Add` trait has an `Output` associated type that’s
-used to determine the type returned from `add`. result of the operation.
+create a new `Point`. The `Add` trait has an associated type named `Output`
+that’s used to determine the type returned from the `add` method.
 
 Let’s look at the `Add` trait in a bit more detail. Here’s its definition:
 
