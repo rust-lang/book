@@ -13,8 +13,8 @@ functionality when those bytes are interpreted as text. In this section, we’ll
 talk about the operations on `String` that every collection type has, like
 creating, updating, and reading. We’ll also discuss the ways in which `String`
 is different than the other collections, namely how indexing into a `String` is
-complicated by the differences in which people and computers interpret `String`
-data.
+complicated by the differences between how people and computers interpret
+`String` data.
 
 ### What is a String?
 
