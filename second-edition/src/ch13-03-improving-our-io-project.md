@@ -151,7 +151,8 @@ type `std::env::Args` instead of `&[String]`.
 
 Next, we’ll fix the body of `Config::new`. The standard library documentation
 also mentions that `std::env::Args` implements the `Iterator` trait, so we know
-we can call the `next` method on it! Listing 13-27 has the new code:
+we can call the `next` method on it! Listing 13-27 has updated the the code
+from Listing 12-23 to use the `next` method:
 
 <span class="filename">Filename: src/lib.rs</span>
 
