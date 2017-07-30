@@ -156,9 +156,12 @@ we can call the `next` method on it! Listing 13-27 has the new code:
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust
+# use std::env;
+#
 # struct Config {
 #     query: String,
 #     filename: String,
+#     case_sensitive: bool,
 # }
 #
 impl Config {
@@ -175,8 +178,10 @@ impl Config {
             None => return Err("Didn't get a file name"),
         };
 
+        let case_sensitive = env::var("CASE_INSENSITIVE").is_err();
+
         Ok(Config {
-            query, filename
+            query, filename, case_sensitive
         })
     }
 }
