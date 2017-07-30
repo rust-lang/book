@@ -27,8 +27,7 @@ let v1 = vec![1, 2, 3];
 let v1_iter = v1.iter();
 ```
 
-<span class="caption">Listing 13-13: Creating an iterator; this by itself isn’t
-useful</span>
+<span class="caption">Listing 13-13: Creating an iterator</span>
 
 After creating an iterator, we can choose to use it in a variety of ways. In
 Listing 3-6, we actually used iterators with `for` loops to execute some code
