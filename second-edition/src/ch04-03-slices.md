@@ -276,7 +276,7 @@ fn main() {
 ```
 
 Recall from the borrowing rules that if we have an immutable reference to
-something, we cannot also take a mutable reference. Because `clear` needs to
+something, we cannot also take a mutable reference. The reference &s to first_word is immutable as definition of first_word states that reference passed to it will be immutable. Because `clear` needs to
 truncate the `String`, it tries to take a mutable reference, which fails. Not
 only has Rust made our API easier to use, but it has also eliminated an entire
 class of errors at compile time!
