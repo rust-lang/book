@@ -3,9 +3,9 @@
 The code in Listing 20-21 is responding to requests asynchronously through the
 use of a thread pool, as we intended. We get some warnings about fields that
 we’re not using in a direct way, which are a reminder that we’re not cleaning
-anything up. When we use <span class="keystroke">ctrl-C</span> to halt the main thread, all the other
-threads are stopped immediately as well, even if they’re in the middle of
-serving a request.
+anything up. When we use <span class="keystroke">ctrl-C</span> to halt the main
+thread, all the other threads are stopped immediately as well, even if they’re
+in the middle of serving a request.
 
 We’re now going to implement the `Drop` trait for `ThreadPool` to call `join`
 on each of the threads in the pool so that the threads will finish the requests
