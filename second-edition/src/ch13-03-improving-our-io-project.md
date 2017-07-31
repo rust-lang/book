@@ -10,7 +10,7 @@ function and the `search` function.
 In Listing 12-13, we had code that took a slice of `String` values and created
 an instance of the `Config` struct by checking for the right number of
 arguments, indexing into the slice, and cloning the values so that the `Config`
-struct could own those values. We’ve reproduced the code here in Listing 13-23:
+struct could own those values. We’ve reproduced the code here in Listing 13-24:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -31,7 +31,7 @@ impl Config {
 }
 ```
 
-<span class="caption">Listing 13-23: Reproduction of the `Config::new` function
+<span class="caption">Listing 13-24: Reproduction of the `Config::new` function
 from Listing 12-13</span>
 
 <!--Is this why we didn't want to use clone calls, they were inefficient, or
@@ -88,7 +88,7 @@ fn main() {
 }
 ```
 
-To the code in Listing 13-24:
+To the code in Listing 13-25:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -108,7 +108,7 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 13-24: Passing the return value of `env::args` to
+<span class="caption">Listing 13-25: Passing the return value of `env::args` to
 `Config::new`</span>
 
 <!-- I think, if we're going to be building this up bit by bit, it might be
@@ -126,7 +126,7 @@ we’re passing ownership of the iterator returned from `env::args` to
 
 Next, we need to update the definition of `Config::new`. In your I/O project’s
 *src/lib.rs*, let’s change the signature of `Config::new` to look like Listing
-13-25:
+13-26:
 
 <!-- can you give the filename here too? -->
 <!-- done /Carol -->
@@ -139,7 +139,7 @@ impl Config {
         // ...snip...
 ```
 
-<span class="caption">Listing 13-25: Updating the signature of `Config::new` to
+<span class="caption">Listing 13-26: Updating the signature of `Config::new` to
 expect an iterator</span>
 
 The standard library documentation for the `env::args` function shows that the
@@ -151,14 +151,18 @@ type `std::env::Args` instead of `&[String]`.
 
 Next, we’ll fix the body of `Config::new`. The standard library documentation
 also mentions that `std::env::Args` implements the `Iterator` trait, so we know
-we can call the `next` method on it! Listing 13-26 has the new code:
+we can call the `next` method on it! Listing 13-27 has updated the the code
+from Listing 12-23 to use the `next` method:
 
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust
+# use std::env;
+#
 # struct Config {
 #     query: String,
 #     filename: String,
+#     case_sensitive: bool,
 # }
 #
 impl Config {
@@ -175,14 +179,16 @@ impl Config {
             None => return Err("Didn't get a file name"),
         };
 
+        let case_sensitive = env::var("CASE_INSENSITIVE").is_err();
+
         Ok(Config {
-            query, filename
+            query, filename, case_sensitive
         })
     }
 }
 ```
 
-<span class="caption">Listing 13-26: Changing the body of `Config::new` to use
+<span class="caption">Listing 13-27: Changing the body of `Config::new` to use
 iterator methods</span>
 
 <!-- is this the *full* new lib.rs code? Worth noting for ghosting purposes -->
@@ -209,7 +215,7 @@ probably just distracting to most people /Carol -->
 
 The other place in our I/O project we could take advantage of iterators is in
 the `search` function, as implemented in Listing 12-19 and reproduced here in
-Listing 13-27:
+Listing 13-28:
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -227,7 +233,7 @@ fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
 }
 ```
 
-<span class="caption">Listing 13-27: The implementation of the `search`
+<span class="caption">Listing 13-28: The implementation of the `search`
 function from Listing 12-19</span>
 
 We can write this code in a much shorter way by using iterator adaptor methods
@@ -236,7 +242,7 @@ vector. The functional programming style prefers to minimize the amount of
 mutable state to make code clearer. Removing the mutable state might make it
 easier for us to make a future enhancement to make searching happen in
 parallel, since we wouldn’t have to manage concurrent access to the `results`
-vector. Listing 13-28 shows this change:
+vector. Listing 13-29 shows this change:
 
 <!-- Remind us why we want to avoid the mutable results vector? -->
 <!-- done /Carol -->
@@ -251,12 +257,12 @@ fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
 }
 ```
 
-<span class="caption">Listing 13-28: Using iterator adaptor methods in the
+<span class="caption">Listing 13-29: Using iterator adaptor methods in the
 implementation of the `search` function</span>
 
 Recall that the purpose of the `search` function is to return all lines in
 `contents` that contain the `query`. Similarly to the `filter` example in
-Listing 13-18, we can use the `filter` adaptor to keep only the lines that
+Listing 13-19, we can use the `filter` adaptor to keep only the lines that
 `line.contains(query)` returns true for. We then collect the matching lines up
 into another vector with `collect`. Much simpler!
 
@@ -266,8 +272,8 @@ details I'm afraid -->
 <!-- done /Carol -->
 
 The next logical question is which style you should choose in your own code:
-the original implementation in Listing 13-27, or the version using iterators in
-Listing 13-28. Most Rust programmers prefer to use the iterator style. It’s a
+the original implementation in Listing 13-28, or the version using iterators in
+Listing 13-29. Most Rust programmers prefer to use the iterator style. It’s a
 bit tougher to get the hang of at first, but once you get a feel for the
 various iterator adaptors and what they do, iterators can be easier to
 understand. Instead of fiddling with the various bits of looping and building

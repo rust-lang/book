@@ -337,7 +337,7 @@ extern "C" {
 }
 
 fn main() {
-    unsafe { some_function() };
+    unsafe { some_function(); }
 }
 ```
 

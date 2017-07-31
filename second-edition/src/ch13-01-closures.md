@@ -164,13 +164,13 @@ intensity workout of a number of minutes of running that comes from the complex
 algorithm.
 
 The data science team has let us know that there are going to be some changes
-to the way we have to call the algorithm, so we want to refactor this code to
-have only one place that calls the `simulated_expensive_calculation` function
-to update when those changes happen. We also want to get rid of the spot where
-we’re currently calling the function twice unnecessarily, and we don’t want to
-add any other calls to that function in the process. That is, we don’t want to
-call it if we’re in the case where the result isn’t needed at all, and we still
-want to call it only once in the last case.
+to the way we have to call the algorithm. To simplify the update when those
+changes happen, we would like to refactor this code to have only a single call
+to the `simulated_expensive_calculation` function. We also want to get rid of
+the spot where we’re currently calling the function twice unnecessarily, and
+we don’t want to add any other calls to that function in the process. That is,
+we don’t want to call it if we’re in the case where the result isn’t needed at
+all, and we still want to call it only once in the last case.
 
 There are many ways we could restructure this program. The way we’re going to
 try first is extracting the duplicated call to the expensive calculation
@@ -341,7 +341,7 @@ traits involved with closures.
 
 ### Closure Type Inference and Annotation
 
-Closure are different than functions defined with the `fn` keyword in a few
+Closures differ from functions defined with the `fn` keyword in a few
 ways. The first is that closures don’t require you to annotate the types of the
 parameters or the return value like `fn` functions do.
 
@@ -700,7 +700,7 @@ verify that in all of the cases in the various `if` and `else` blocks,
 needed.
 
 The `Cacher` takes care of the logic necessary to ensure we aren’t calling the
-expensive calculation more than we need to be so that `generate_workout` can
+expensive calculation more than we need to, so that `generate_workout` can
 focus on the business logic. Caching values is a more generally useful behavior
 that we might want to use in other parts of our code with other closures as
 well. However, there are a few problems with the current implementation of
@@ -841,7 +841,7 @@ The compiler even reminds us that this only works with closures!
 
 When a closure captures a value from its environment, the closure uses memory
 to store the values for use in the closure body. This use of memory is overhead
-that we don’t want pay for in the more common case where we want to execute
+that we don’t want to pay for in the more common case where we want to execute
 code that doesn’t capture its environment. Because functions are never allowed
 to capture their environment, defining and using functions will never incur
 this overhead.
