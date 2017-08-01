@@ -99,7 +99,7 @@ mod client {
 만들 수 있습니다. 사실 모듈 안에 다른 모듈을 집어넣는 것도 가능한데, 이는 여러분의
 모듈이 커짐에 따라 관련된 기능이 잘 조직화 되도록 하는 한편 각각의 기능을 잘 나누도록
 하는데 유용할 수 있습니다. 여러분의 코드를 어떻게 조직화 할 것인가에 대한 선택은
-여러분이 코드의 각 부분 간의 관계에 대해 어떻게 생각하고 있는지에 따라 달린 문제입니다.
+여러분이 코드의 각 부분 간의 관계에 대해 어떻게 생각하고 있는지에 따라 달라집니다.
 예를 들어, Listing 7-2와 같이 `client` 모듈과 `connect` 함수가 `network` 이름공간
 내에 있다면 우리의 라이브러리 사용자가 더 쉽게 이해할지도 모릅니다:
 
@@ -126,8 +126,8 @@ mod network {
 부딪힐 일이 없습니다.
 
 이런 식으로 모듈들은 계층을 구성하게 됩니다. *src/lib.rs*의 내용은 가장 위의 층을
-이루고, 서브 모듈들은 그보다 낮은 층에 있습니다. Listing 7-1 예제에서의 조직화는
-계층 구조로 생각하면 어떻게 생겼을지를 봅시다:
+이루고, 서브 모듈들은 그보다 낮은 층에 있습니다. Listing 7-1 예제에서의 조직화가
+계층 구조를 생각했을 때 어떻게 보일지 살펴봅시다:
 
 ```text
 communicator
@@ -315,9 +315,9 @@ of extracting a module into a file named after that module won’t work. We’ll
 try anyway so you can see the error. First, change *src/network.rs* to have
 `mod server;` instead of the `server` module’s contents:
 `cargo build`를 다시 실행시키세요. 성공! 여기 또 추출할만한 모듈이 하나 더 있습니다: `server` 말이죠.
-이것이 서브모듈(즉, 모듈 내의 모듈)이기 때문에, 어떤 모듈로 추출한 파일 내에 있는 모듈을 추출하는 것을
-현재의 전략으로 하기는 힘들겠습니다. 어쨌든 시도해서 에러를 확인해보겠습니다. 먼저, *src/network.rs*
-내에서 `server` 모듈의 내용물 대신에 `mod server`을 쓰세요:
+이것이 서브모듈(즉, 모듈 내의 모듈)이기 때문에, 모듈을 파일로 추출해서 파일 이름을 모듈 이름으로 사용하는
+전략은 사용하기 힘듭니다. 어쨌든 시도해서 에러를 확인해보겠습니다. 먼저, *src/network.rs* 내에서
+`server` 모듈의 내용물 대신에 `mod server`을 쓰세요:
 
 <span class="filename">Filename: src/network.rs</span>
 
@@ -366,8 +366,8 @@ note: ... or maybe `use` the module `server` instead of possibly redeclaring it
 발생하는 에러</span>
 
 에러는 `이 위치에 새로운 모듈을 선언할수 없다`고 말해주며 *src/network.rs*의 `mod server;`
-라인을 지적하고 있습니다. 그러니까 어쩐지 *src/network.rs*는 *src/lib.rs*와는 다릅니다: 왜
-그런지 이해하려면 계속 읽어주세요.
+라인을 지적하고 있습니다. *src/network.rs*는 *src/lib.rs*와는 다소 다릅니다: 왜 그런지
+이해하려면 계속 읽어주세요.
 
 Listing 7-4의 중간의 노트는 실질적으로 매우 도움이 되는데, 그 이유는 우리가 아직 설명하지 않은
 무언가를 지적하고 있기 때문입니다:
@@ -377,7 +377,7 @@ note: maybe move this module `network` to its own directory via
 `network/mod.rs`
 ```
 
-전에 사용했던 똑같은 파일 이름 쓰기 패턴을 계속해서 따르는 대신, 우리가 노트가 제안하는 것을 할
+전에 사용했던 똑같은 파일 이름 쓰기 패턴을 계속해서 따르는 대신, 아래 노트에서 제안하는 것을 해볼
 수 있습니다:
 
 1. 부모 모듈의 이름에 해당하는, *network*라는 이름의 새로운 *디렉토리*를 만드세요.
@@ -418,8 +418,8 @@ communicator
 *src/server.rs*로 추출하는 대신, *src/network.rs* 파일에 *src/network/mod.rs*로 옮기고
 `network::server` 코드를 *network* 디렉토리 안에 있는 *src/network/server.rs*에 넣었을까요?
 그 이유는 *src* 디렉토리 안에 *server.rs* 파일이 있으면, 러스트는 `server`가 `network`의
-서브모듈이라고 인식할 수 없기 때문입니다. 러스트의 행동 양식을 밝혀내기 위해서, 아래와 같은 모듈 계층
-구조를 가진, *src/lib.rs* 내에 모든 정의가 다 들어있는 다른 예제를 봅시다:
+서브모듈이라고 인식할 수 없기 때문입니다. 러스트가 동작하는 방식을 명확하게 알기 위해서, 아래와 같은 모듈
+계층 구조를 가진, *src/lib.rs* 내에 모든 정의가 다 들어있는 다른 예제를 봅시다:
 
 ```text
 communicator
@@ -429,7 +429,7 @@ communicator
 ```
 
 이 예제에는 또다시 `client`, `network`, 그리고 `network::client`라는 세 개의 모듈이 있습니다.
-모듈을 파이롤 추출하기 위해 앞서 했던 단계를 따르면, `client` 모듈을 위한 *src/client.rs*을
+모듈을 파일로 추출하기 위해 앞서 했던 단계를 따르면, `client` 모듈을 위한 *src/client.rs*을
 만들게 될 것입니다. `network` 모듈을 위해서는 *src/network.rs* 파일을 만들게 될 것입니다.
 하지만 `network::client` 모듈을 *src/client.rs*로 추출하는 것은 불가능한데, 그 이유는
 최상위 층에 `client` 모듈이 이미 있기 때문이죠! 만일 `client`와 `network::client` 모듈
