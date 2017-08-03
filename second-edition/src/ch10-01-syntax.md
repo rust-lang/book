@@ -46,9 +46,9 @@ fn largest_char(list: &[char]) -> char {
 }
 
 fn main() {
-    let numbers = vec![34, 50, 25, 100, 65];
+    let number_list = vec![34, 50, 25, 100, 65];
 
-    let result = largest_i32(&numbers);
+    let result = largest_i32(&number_list);
     println!("The largest number is {}", result);
 #    assert_eq!(result, 100);
 
@@ -115,9 +115,9 @@ fn largest<T>(list: &[T]) -> T {
 }
 
 fn main() {
-    let numbers = vec![34, 50, 25, 100, 65];
+    let number_list = vec![34, 50, 25, 100, 65];
 
-    let result = largest(&numbers);
+    let result = largest(&number_list);
     println!("The largest number is {}", result);
 
     let chars = vec!['y', 'm', 'a', 'q'];
