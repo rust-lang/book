@@ -433,9 +433,9 @@ fn main() {
     let result = largest(&number_list);
     println!("The largest number is {}", result);
 
-    let chars = vec!['y', 'm', 'a', 'q'];
+    let char_list = vec!['y', 'm', 'a', 'q'];
 
-    let result = largest(&chars);
+    let result = largest(&char_list);
     println!("The largest char is {}", result);
 }
 ```
