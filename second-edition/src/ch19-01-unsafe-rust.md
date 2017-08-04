@@ -100,7 +100,7 @@ There’s not usually a good reason to be writing code like this, but it is
 possible:
 
 ```rust
-let address = 0x012345;
+let address = 0x012345isize;
 let r = address as *const i32;
 ```
 
@@ -305,7 +305,7 @@ location and creates a slice ten thousand items long:
 ```rust
 use std::slice;
 
-let address = 0x012345;
+let address = 0x012345isize;
 let r = address as *mut i32;
 
 let slice = unsafe {
