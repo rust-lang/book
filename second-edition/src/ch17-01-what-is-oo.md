@@ -144,7 +144,7 @@ There are two main reasons to reach for inheritance. The first is to be able to
 re-use code: once a particular behavior is implemented for one type,
 inheritance can enable re-using that implementation for a different type. Rust
 code can be shared using default trait method implementations instead, which we
-saw in Listing 10-14 when we added a default implementation of the `summary`
+saw in Listing 10-15 when we added a default implementation of the `summary`
 method on the `Summarizable` trait. Any type implementing the `Summarizable`
 trait would have the `summary` method available on it without any further code.
 This is similar to a parent class having an implementation of a method, and a

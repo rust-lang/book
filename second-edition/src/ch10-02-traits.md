@@ -27,7 +27,7 @@ We want to make a media aggregator library that can display summaries of data
 that might be stored in a `NewsArticle` or `Tweet` instance. The behavior we
 need each struct to have is that it’s able to be summarized, and that we can
 ask for that summary by calling a `summary` method on an instance. Listing
-10-11 shows the definition of a `Summarizable` trait that expresses this
+10-12 shows the definition of a `Summarizable` trait that expresses this
 concept:
 
 <span class="filename">Filename: lib.rs</span>
@@ -38,7 +38,7 @@ pub trait Summarizable {
 }
 ```
 
-<span class="caption">Listing 10-11: Definition of a `Summarizable` trait that
+<span class="caption">Listing 10-12: Definition of a `Summarizable` trait that
 consists of the behavior provided by a `summary` method</span>
 
 We declare a trait with the `trait` keyword, then the trait’s name, in this
@@ -57,7 +57,7 @@ listed one per line and each line ending in a semicolon.
 ### Implementing a Trait on a Type
 
 Now that we’ve defined the `Summarizable` trait, we can implement it on the
-types in our media aggregator that we want to have this behavior. Listing 10-12
+types in our media aggregator that we want to have this behavior. Listing 10-13
 shows an implementation of the `Summarizable` trait on the `NewsArticle` struct
 that uses the headline, the author, and the location to create the return value
 of `summary`. For the `Tweet` struct, we’ve chosen to define `summary` as the
@@ -98,7 +98,7 @@ impl Summarizable for Tweet {
 }
 ```
 
-<span class="caption">Listing 10-12: Implementing the `Summarizable` trait on
+<span class="caption">Listing 10-13: Implementing the `Summarizable` trait on
 the `NewsArticle` and `Tweet` types</span>
 
 Implementing a trait on a type is similar to implementing methods that aren’t
@@ -129,12 +129,12 @@ This will print `1 new tweet: horse_ebooks: of course, as you probably already
 know, people`.
 
 Note that because we’ve defined the `Summarizable` trait and the `NewsArticle`
-and `Tweet` types all in the same `lib.rs` in Listing 10-12, they’re all in the
+and `Tweet` types all in the same `lib.rs` in Listing 10-13, they’re all in the
 same scope. If this `lib.rs` is for a crate we’ve called `aggregator`, and
 someone else wants to use our crate’s functionality plus implement the
 `Summarizable` trait on their `WeatherForecast` struct, their code would need
 to import the `Summarizable` trait into their scope first before they could
-implement it, like in Listing 10-13:
+implement it, like in Listing 10-14:
 
 <span class="filename">Filename: lib.rs</span>
 
@@ -158,11 +158,11 @@ impl Summarizable for WeatherForecast {
 }
 ```
 
-<span class="caption">Listing 10-13: Bringing the `Summarizable` trait from our
+<span class="caption">Listing 10-14: Bringing the `Summarizable` trait from our
 `aggregator` crate into scope in another crate</span>
 
 This code also assumes `Summarizable` is a public trait, which it is because we
-put the `pub` keyword before `trait` in Listing 10-11.
+put the `pub` keyword before `trait` in Listing 10-12.
 
 One restriction to note with trait implementations: we may implement a trait on
 a type as long as either the trait or the type are local to our crate. In other
@@ -186,9 +186,9 @@ in a trait, instead of making every implementation on every type define custom
 behavior. When we implement the trait on a particular type, we can choose to
 keep or override each method’s default behavior.
 
-Listing 10-14 shows how we could have chosen to specify a default string for
+Listing 10-15 shows how we could have chosen to specify a default string for
 the `summary` method of the `Summarize` trait instead of only choosing to only
-define the method signature like we did in Listing 10-11:
+define the method signature like we did in Listing 10-12:
 
 <span class="filename">Filename: lib.rs</span>
 
@@ -200,12 +200,12 @@ pub trait Summarizable {
 }
 ```
 
-<span class="caption">Listing 10-14: Definition of a `Summarizable` trait with
+<span class="caption">Listing 10-15: Definition of a `Summarizable` trait with
 a default implementation of the `summary` method</span>
 
 If we wanted to use this default implementation to summarize instances of
 `NewsArticle` instead of defining a custom implementation like we did in
-Listing 10-12, we would specify an empty `impl` block:
+Listing 10-13, we would specify an empty `impl` block:
 
 ```rust,ignore
 impl Summarizable for NewsArticle {}
@@ -232,8 +232,8 @@ This code prints `New article available! (Read more...)`.
 
 Changing the `Summarizable` trait to have a default implementation for
 `summary` does not require us to change anything about the implementations of
-`Summarizable` on `Tweet` in Listing 10-12 or `WeatherForecast` in Listing
-10-13: the syntax for overriding a default implementation is exactly the same
+`Summarizable` on `Tweet` in Listing 10-13 or `WeatherForecast` in Listing
+10-14: the syntax for overriding a default implementation is exactly the same
 as the syntax for implementing a trait method that doesn’t have a default
 implementation.
 
@@ -295,7 +295,7 @@ limited to those types that implement a particular trait and thus have the
 behavior that we need the types to have. This is called specifying *trait
 bounds* on a generic type.
 
-For example, in Listing 10-12, we implemented the `Summarizable` trait on the
+For example, in Listing 10-13, we implemented the `Summarizable` trait on the
 types `NewsArticle` and `Tweet`. We can define a function `notify` that calls
 the `summary` method on its parameter `item`, which is of the generic type `T`.
 To be able to call `summary` on `item` without getting an error, we can use
@@ -311,7 +311,7 @@ pub fn notify<T: Summarizable>(item: T) {
 Trait bounds go with the declaration of the generic type parameter, after a
 colon and within the angle brackets. Because of the trait bound on `T`, we can
 call `notify` and pass in any instance of `NewsArticle` or `Tweet`. The
-external code from Listing 10-13 that’s using our `aggregator` crate can call
+external code from Listing 10-14 that’s using our `aggregator` crate can call
 our `notify` function and pass in an instance of `WeatherForecast`, since
 `Summarizable` is implemented for `WeatherForecast` as well. Code that calls
 `notify` with any other type, like a `String` or an `i32`, won’t compile, since
@@ -405,7 +405,7 @@ that don’t implement the `Copy` trait, which means we wouldn’t be able to mo
 the value out of `list[0]` and into the `largest` variable.
 
 If we only want to be able to call this code with types that are `Copy`, we can
-add `Copy` to the trait bounds of `T`! Listing 10-15 shows the complete code of
+add `Copy` to the trait bounds of `T`! Listing 10-16 shows the complete code of
 a generic `largest` function that will compile as long as the types of the
 values in the slice that we pass into `largest` implement both the `PartialOrd`
 and `Copy` traits, like `i32` and `char`:
@@ -440,7 +440,7 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 10-15: A working definition of the `largest`
+<span class="caption">Listing 10-16: A working definition of the `largest`
 function that works on any generic type that implements the `PartialOrd` and
 `Copy` traits</span>
 
@@ -455,6 +455,54 @@ the slice. If we change the return type to be `&T` instead of `T` and change
 the body of the function to return a reference, we wouldn’t need either the
 `Clone` or `Copy` trait bounds and we wouldn’t be doing any heap allocations.
 Try implementing these alternate solutions on your own!
+
+### Using trait bounds to conditionally implement methods
+
+By setting a trait bound on a generic `impl` block, one can make sure that a set
+of methods will only be implemented for types which meet certain trait bounds.
+For example, the type Pair that is presented in listing 10-17 always implements
+the method new(), but only implements the method cmp_display if its inner type
+implements comparison operators and can be printed:
+
+```rust
+use std::fmt::Display;
+
+struct Pair<T> {
+    x: T,
+    y: T,
+}
+
+impl<T> Pair<T> {
+    fn new(x: T, y: T) -> Self {
+        Self {
+            x,
+            y,
+        }
+    }
+}
+
+impl<T: Display + PartialOrd> Pair<T> {
+    fn cmp_display(&self) {
+        if self.x >= self.y {
+            println!("The largest member is x = {}", self.x);
+        } else {
+            println!("The largest member is y = {}", self.y);
+        }
+    }
+}
+```
+
+<span class="caption">Listing 10-17: Conditionally implement methods on a
+generic type depending on the trait bounds of its contents</span>
+
+In fact, one can even conditionally implement a trait for every type which
+implements a set of trait bounds. Such “blanket impls” are extensively used in
+the Rust standard library, for example to state that every type which can be
+printed can also be converted into a string:
+
+```rust,ignore
+impl<T: Display + ?Sized> ToString for T {
+```
 
 Traits and trait bounds let us write code that uses generic type parameters in
 order to reduce duplication, but still specify to the compiler exactly what

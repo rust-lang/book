@@ -230,6 +230,40 @@ like `let sq = Rectangle::square(3);`, for example. This function is
 namespaced by the struct: the `::` syntax is used for both associated functions
 and namespaces created by modules, which we’ll discuss in Chapter 7.
 
+### Multiple impl blocks
+
+A given struct is allowed to have multiple `impl` blocks. For example,
+Listing 5-15 could be rewritten into the rigorously equivalent (although
+slightly more verbose) Listing 5-16:
+
+```rust
+# #[derive(Debug)]
+# struct Rectangle {
+#     length: u32,
+#     width: u32,
+# }
+#
+impl Rectangle {
+    fn area(&self) -> u32 {
+        self.length * self.width
+    }
+}
+
+impl Rectangle {
+    fn can_hold(&self, other: &Rectangle) -> bool {
+        self.length > other.length && self.width > other.width
+    }
+}
+```
+
+<span class="caption">Listing 5-16: Rewriting Listing 5-15 using multiple `impl`
+blocks</span>
+
+Although this possibility may not appear particularly interesting at this point,
+its full potential will be revealed once we will dive into generic types and
+traits, where multiple `impl` blocks can be used to conditionally implement
+functionalities for some types, but not others.
+
 ## Summary
 
 Structs let us create custom types that are meaningful for our domain. By using

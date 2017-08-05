@@ -337,11 +337,42 @@ fn main() {
 type `T`.</span>
 
 Note that we have to declare `T` just after `impl`, so that we can use it when
-we specify that we’re implementing methods on the type `Point<T>`.
+we specify that we’re implementing methods on the type `Point<T>`. The reason
+why we need to clarify this is that the generic parameters of an `impl` block do
+not need to be the same as those of the underlying generic struct. In
+particular, nothing prevents us from defining an `impl` block which only applies
+to a certain instance of a generic struct, as in Listing 10-10:
+
+```rust
+# struct Point<T> {
+#     x: T,
+#     y: T,
+# }
+#
+# impl<T> Point<T> {
+#     fn x(&self) -> &T {
+#         &self.x
+#     }
+# }
+#
+impl Point<f32> {
+    fn distance_from_origin(&self) -> f32 {
+        (self.x.powi(2) + self.y.powi(2)).sqrt()
+    }
+}
+```
+
+<span class="caption">Listing 10-10: Building an `impl` block which only applies
+to a specific generic struct instance.</span>
+
+If we do this, the type `Point<f32>` will have a method named
+`distance_from_origin`, which other instances of `Point<T>` do not have. This
+method measures how far our point is from the point of coordinates (0., 0.),
+using mathematical operations which are only available for floating-point types.
 
 Generic type parameters in a struct definition aren’t always the same generic
 type parameters you want to use in that struct’s method signatures. Listing
-10-10 defines a method `mixup` on the `Point<T, U>` struct from Listing 10-8.
+10-11 defines a method `mixup` on the `Point<T, U>` struct from Listing 10-8.
 The method takes another `Point` as a parameter, which might have different
 types than the `self` `Point` that we’re calling `mixup` on. The method creates
 a new `Point` instance that has the `x` value from the `self` `Point` (which is
@@ -375,7 +406,7 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 10-10: Methods that use different generic types
+<span class="caption">Listing 10-11: Methods that use different generic types
 than their struct’s definition</span>
 
 In `main`, we’ve defined a `Point` that has an `i32` for `x` (with value `5`)
