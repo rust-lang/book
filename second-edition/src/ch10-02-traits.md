@@ -496,9 +496,9 @@ impl<T: Display + PartialOrd> Pair<T> {
 generic type depending on the trait bounds of its contents</span>
 
 In fact, one can even conditionally implement a trait for every type which
-implements a set of trait bounds. Such “blanket impls” are extensively used in
-the Rust standard library, for example to state that every type which can be
-printed can also be converted into a string:
+implements a set of trait bounds. Such *blanket implementations* are
+extensively used in the Rust standard library, for example to state that every
+type which can be printed can also be converted into a string:
 
 ```rust,ignore
 impl<T: Display + ?Sized> ToString for T {

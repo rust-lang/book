@@ -262,7 +262,7 @@ blocks</span>
 Although this possibility may not appear particularly interesting at this point,
 its full potential will be revealed once we will dive into generic types and
 traits, where multiple `impl` blocks can be used to conditionally implement
-functionalities for some types, but not others.
+functionality for some types, but not others.
 
 ## Summary
 
