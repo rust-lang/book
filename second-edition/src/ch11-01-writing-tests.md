@@ -1,11 +1,10 @@
 ## How to Write Tests
 
-Tests are Rust functions that verify that the non-test code in the program is
-functioning in the expected manner. The bodies of test functions typically run
-some setup code, then run the code we want to test, then assert whether the
-results are what we expect. Let’s look at the features Rust provides
-specifically for writing tests: the `test` attribute, a few macros, and the
-`should_panic` attribute.
+Tests are Rust functions that verify that the non-test code is functioning in
+the expected manner. The bodies of test functions typically perform some setup,
+run the code we want to test, then assert whether the results are what we
+expect. Let’s look at the features Rust provides specifically for writing
+tests: the `test` attribute, a few macros, and the `should_panic` attribute.
 
 ### The Anatomy of a Test Function
 
@@ -19,7 +18,7 @@ on whether each test function passes or fails.
 
 We saw in Chapter 7 that when you make a new library project with Cargo, a test
 module with a test function in it is automatically generated for us. This is to
-help us get started writing our tests, since we don’t have to go look up the
+help us get started writing our tests so we don’t have to go look up the
 exact structure and syntax of test functions every time we start a new project.
 We can add as many additional test functions and as many test modules as we
 want, though!
@@ -450,7 +449,7 @@ functions that assert two values are equal are called `expected` and `actual`
 and the order in which we specify the arguments matters. However, in Rust,
 they’re called `left` and `right` instead, and the order in which we specify
 the value we expect and the value that the code under test produces doesn’t
-matter. We could have written the assertion in this test as
+matter. We could write the assertion in this test as
 `assert_eq!(add_two(2), 4)`, which would result in a failure message that says
 `` assertion failed: `(left == right)` (left: `5`, right: `4`) ``.
 
