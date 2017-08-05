@@ -519,7 +519,7 @@ let s = 3.to_string();
 ```
 
 Blanket implementations appear in the documentation for the trait in the
-"Implementors" section.
+“Implementors” section.
 
 Traits and trait bounds let us write code that uses generic type parameters in
 order to reduce duplication, but still specify to the compiler exactly what

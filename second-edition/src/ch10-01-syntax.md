@@ -340,7 +340,7 @@ Note that we have to declare `T` just after `impl` in order to use `T` in the
 type `Point<T>`. In contrast, we could choose to implement methods on
 `Point<f32>` instances rather than `Point` instances with any generic type.
 Listing 10-10 shows that we do not need to declare the generic type `T` after
-the `impl` in this case, since we've filled in the generic type with the
+the `impl` in this case, since we’ve filled in the generic type with the
 concrete type `f32`:
 
 ```rust

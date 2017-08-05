@@ -259,8 +259,8 @@ impl Rectangle {
 <span class="caption">Listing 5-16: Rewriting Listing 5-15 using multiple `impl`
 blocks</span>
 
-There's no reason to separate these methods into multiple `impl` blocks here,
-but it's valid syntax. We will see a case when multiple `impl` blocks are useful
+There’s no reason to separate these methods into multiple `impl` blocks here,
+but it’s valid syntax. We will see a case when multiple `impl` blocks are useful
 in Chapter 10 when we discuss generic types and traits.
 
 ## Summary
