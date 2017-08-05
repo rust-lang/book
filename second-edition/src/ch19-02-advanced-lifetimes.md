@@ -4,8 +4,8 @@ Back in Chapter 10, we learned how to annotate references with lifetime
 parameters to help Rust understand how the lifetimes of different references
 relate. We saw how most of the time, Rust will let you elide lifetimes, but
 every reference has a lifetime. There are three advanced features of lifetimes
-that we haven’t covered though: *lifetime subtyping*, *lifetime
-bounds*, and *trait object lifetimes*.
+that we haven’t covered though: *lifetime subtyping*, *lifetime bounds*, and
+*trait object lifetimes*.
 
 ### Lifetime Subtyping
 

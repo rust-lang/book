@@ -76,11 +76,11 @@ like that in Listing 19-31:
 let f: Box<FnOnce() + Send + 'static> = Box::new(|| println!("hi"));
 
 fn takes_long_type(f: Box<FnOnce() + Send + 'static>) {
-    // ...
+    // ...snip...
 }
 
 fn returns_long_type() -> Box<FnOnce() + Send + 'static> {
-    // ...
+    // ...snip...
 #     Box::new(|| ())
 }
 ```
@@ -98,11 +98,11 @@ type Thunk = Box<FnOnce() + Send + 'static>;
 let f: Thunk = Box::new(|| println!("hi"));
 
 fn takes_long_type(f: Thunk) {
-    // ...
+    // ...snip...
 }
 
 fn returns_long_type() -> Thunk {
-    // ...
+    // ...snip...
 #     Box::new(|| ())
 }
 ```
@@ -170,6 +170,8 @@ function will never return. For example:
 
 ```rust,ignore
 fn bar() -> ! {
+    // ...snip...
+}
 ```
 
 This is read as “the function `bar` returns never,” and functions that return
@@ -316,12 +318,16 @@ That is, a generic function definition like this:
 
 ```rust,ignore
 fn generic<T>(t: T) {
+    // ...snip...
+}
 ```
 
 is actually treated as if we had written this:
 
 ```rust,ignore
 fn generic<T: Sized>(t: T) {
+    // ...snip...
+}
 ```
 
 By default, generic functions will only work on types that have a known size at
@@ -330,6 +336,8 @@ restriction:
 
 ```rust,ignore
 fn generic<T: ?Sized>(t: &T) {
+    // ...snip...
+}
 ```
 
 A trait bound on `?Sized` is the opposite of a trait bound on `Sized`; that is,
