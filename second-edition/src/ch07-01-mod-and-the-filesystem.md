@@ -88,7 +88,7 @@ mod client {
 ```
 
 <span class="caption">Listing 7-1: The `network` module and the `client` module
-defined side-by-side in *src/lib.rs*</span>
+defined side by side in *src/lib.rs*</span>
 
 Now we have a `network::connect` function and a `client::connect` function.
 These can have completely different functionality, and the function names do
