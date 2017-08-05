@@ -348,7 +348,7 @@ parameters or the return value like `fn` functions do.
 <!-- I've suggested moving this next paragraph up from below, I found this
 section difficult to follow with this next paragraph -->
 
-Type annotations are required on functions because they’re are part of an
+Type annotations are required on functions because they are part of an
 explicit interface exposed to your users. Defining this interface rigidly is
 important for ensuring that everyone agrees on what types of values a function
 uses and returns. Closures aren’t used in an exposed interface like this,
