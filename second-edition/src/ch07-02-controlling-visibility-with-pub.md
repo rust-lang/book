@@ -220,7 +220,7 @@ Overall, these are the rules for item visibility:
 
 1. If an item is public, it can be accessed through any of its parent modules.
 2. If an item is private, it can be accessed only by its immediate parent
-   module and any of the parent's child modules.
+   module and any of the parent’s child modules.
 
 ### Privacy Examples
 
