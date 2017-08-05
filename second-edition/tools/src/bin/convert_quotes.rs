@@ -1,7 +1,17 @@
+// Copyright 2017 The Rust Project Developers. See the COPYRIGHT
+// file at the top-level directory of this distribution and at
+// http://rust-lang.org/COPYRIGHT.
+//
+// Licensed under the Apache License, Version 2.0 <LICENSE-APACHE or
+// http://www.apache.org/licenses/LICENSE-2.0> or the MIT license
+// <LICENSE-MIT or http://opensource.org/licenses/MIT>, at your
+// option. This file may not be copied, modified, or distributed
+// except according to those terms.
+
 use std::io;
 use std::io::{Read, Write};
 
-fn main () {
+fn main() {
     let mut is_in_code_block = false;
     let mut is_in_inline_code = false;
     let mut is_in_html_tag = false;
@@ -23,14 +33,12 @@ fn main () {
             is_in_inline_code = false;
             is_in_html_tag = false;
             write!(io::stdout(), "{}\n", line).unwrap();
-        }
-        else {
+        } else {
             let mut modified_line = &mut String::new();
             let mut previous_char = std::char::REPLACEMENT_CHARACTER;
             let mut chars_in_line = line.chars();
 
             while let Some(possible_match) = chars_in_line.next() {
-                let char_to_push;
                 // check if inside inline code
                 if possible_match == '`' {
                     is_in_inline_code = !is_in_inline_code;
@@ -44,26 +52,29 @@ fn main () {
                 }
 
                 // replace with right/left apostrophe/quote
-                if possible_match == '\'' && !is_in_inline_code && !is_in_html_tag {
-                    if (previous_char != std::char::REPLACEMENT_CHARACTER && !previous_char.is_whitespace()) || previous_char == '‘' {
-                        char_to_push = '’';
-                    }
-                    else {
-                        char_to_push = '‘';
-                    }
-                }
-                else if possible_match == '"'  && !is_in_inline_code && !is_in_html_tag {
-                    if (previous_char != std::char::REPLACEMENT_CHARACTER && !previous_char.is_whitespace()) || previous_char == '“' {
-                        char_to_push = '”';
-                    }
-                    else {
-                        char_to_push = '“';
-                    }
-                }
-                // leave untouched
-                else {
-                    char_to_push = possible_match;
-                }
+                let char_to_push =
+                    if possible_match == '\'' && !is_in_inline_code && !is_in_html_tag {
+                        if (previous_char != std::char::REPLACEMENT_CHARACTER &&
+                                !previous_char.is_whitespace()) ||
+                            previous_char == '‘'
+                        {
+                            '’'
+                        } else {
+                            '‘'
+                        }
+                    } else if possible_match == '"' && !is_in_inline_code && !is_in_html_tag {
+                        if (previous_char != std::char::REPLACEMENT_CHARACTER &&
+                                !previous_char.is_whitespace()) ||
+                            previous_char == '“'
+                        {
+                            '”'
+                        } else {
+                            '“'
+                        }
+                    } else {
+                        // leave untouched
+                        possible_match
+                    };
                 modified_line.push(char_to_push);
                 previous_char = char_to_push;
             }
@@ -71,5 +82,3 @@ fn main () {
         }
     }
 }
-
-
