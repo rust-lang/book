@@ -1,24 +1,23 @@
-# Using Modules to Reuse and Organize Code
+# 모듈을 사용하여 코드를 재사용하고 조직화하기
 
-When you start writing programs in Rust, your code might live solely in the
-`main` function. As your code grows, you’ll eventually move functionality into
-other functions for reuse and better organization. By splitting your code into
-smaller chunks, each chunk is easier to understand on its own. But what happens
-if you have too many functions? Rust has a module system that enables the reuse
-of code in an organized fashion.
+여러분이 러스트로 프로그램을 작성하기 시작했을 때, 여러분의 코드는 오로지 `main` 함수
+안에만 있을지도 모르겠습니다. 코드가 커짐에 따라서, 여러분은 재사용 및 더 나은 조직화를
+위하여 결국 어떤 기능을 다른 함수로 이동시킬 것입니다. 코드를 더 작은 덩어리로 쪼갬으로서,
+각각의 덩어리들은 개별적으로 이해하기 더 수월해집니다. 하지만 함수가 너무 많으면 어떤
+일이 벌어질까요? 러스트는 조직화된 방식으로 코드의 재사용을 할 수 있게 해주는 모듈(module)
+시스템을 갖추고 있습니다.
 
-In the same way that you extract lines of code into a function, you can extract
-functions (and other code, like structs and enums) into different modules. A
-*module* is a namespace that contains definitions of functions or types, and
-you can choose whether those definitions are visible outside their module
-(public) or not (private). Here’s an overview of how modules work:
+코드 몇줄을 함수로 추출하는 것과 같은 방식으로, 여러분은 함수 (혹은 구조체나 열거형
+같은 다른 코드들)를 다른 모듈로 뽑아낼 수 있으며, 여러분은 이것들의 정의가 모듈의
+바깥쪽에서 볼 수 있도록 하거나(public) 혹은 보이지 않게 하도록 (private) 선택할
+수 있습니다. 모듈이 어떤 식으로 동작하는지에 대한 개요를 봅시다:
 
-* The `mod` keyword declares a new module. Code within the module appears
-  either immediately following this declaration within curly braces or in
-  another file.
-* By default, functions, types, constants, and modules are private. The `pub`
-  keyword makes an item public and therefore visible outside its namespace.
-* The `use` keyword brings modules, or the definitions inside modules, into
-  scope so it’s easier to refer to them.
+* `mod` 키워드는 새로운 모듈을 선언합니다. 모듈 내의 코드는 이 선언 바로 뒤에
+  중괄호 로 묶여서 따라오거나 다른 파일에 놓일 수 있습니다.
+* 기본적으로, 함수, 타입, 상수, 그리고 모듈은 private입니다. `pub` 키워드가
+  어떤 아이템을 public하게 만들어줘서 이것의 네임스페이스 바깥쪽에서도 볼 수
+  있도록 합니다.
+* `use` 키워드는 모듈이나 모듈 내의 정의들을 스코프 안으로 가져와서 이들을
+  더 쉽게 참조할 수 있도록 합니다. 
 
-We’ll look at each of these parts to see how they fit into the whole.
+각각의 부분들을 살펴보면서 이것들이 전체적으로 어떻게 맞물리는지 살펴봅시다.
