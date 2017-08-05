@@ -27,7 +27,7 @@ grouped together. Then, inside curly braces, we define the names and types of
 the pieces of data, which we call *fields*. For example, Listing 5-1 shows a
 struct to store information about a user account:
 
-```rust
+```
 struct User {
     username: String,
     email: String,
@@ -48,7 +48,7 @@ struct definition is like a general template for the type, and instances fill
 in that template with particular data to create values of the type. For
 example, we can declare a particular user as shown in Listing 5-2:
 
-```rust
+```
 let user1 = User {
     email: String::from("someone@example.com"),
     username: String::from("someusername123"),
@@ -82,11 +82,12 @@ Listing 5-3: Changing the value in the `email` field of a `User` instance
 
 If you have variables with the same names as struct fields, you can use *field
 init shorthand*. This can make functions that create new instances of structs
-more concise. The function named `build_user` shown here in Listing 5-4 has
+more concise. First, let’s look at the more verbose way to initialize a struct
+instance. The function named `build_user` shown here in Listing 5-4 has
 parameters named `email` and `username`. The function creates and returns a
 `User` instance:
 
-```rust
+```
 fn build_user(email: String, username: String) -> User {
     User {
         email: email,
@@ -101,14 +102,13 @@ Listing 5-4: A `build_user` function that takes an email and username and
 returns a `User` instance
 
 Because the parameter names `email` and `username` are the same as the `User`
-
 struct’s field names `email` and `username`, we can write `build_user` without
 the repetition of `email` and `username` as shown in Listing 5-5. This version
 of `build_user` behaves the same way as the one in Listing 5-4. The field init
 syntax can make cases like this shorter to write, especially when structs have
 many fields.
 
-```rust
+```
 fn build_user(email: String, username: String) -> User {
     User {
         email,
@@ -130,7 +130,7 @@ creating a new `User` instance in `user2` by setting the values of `email` and
 `username` but using the same values for the rest of the fields from the
 `user1` instance we created in Listing 5-2:
 
-```rust
+```
 let user2 = User {
     email: String::from("another@example.com"),
     username: String::from("anotherusername567"),
@@ -142,14 +142,14 @@ let user2 = User {
 Listing 5-6: Creating a new `User` instance, `user2`, and setting some fields
 to the values of the same fields from `user1`
 
-  The *struct update syntax* achieves the same effect as the code in Listing
-5-6 using less code. The struct update syntax uses `..` to specify that the
+The *struct update syntax* achieves the same effect as the code in Listing 5-6
+using less code. The struct update syntax uses `..` to specify that the
 remaining fields not set explicitly should have the same value as the fields in
 the given instance. The code in Listing 5-7 also creates an instance in `user2`
 that has a different value for `email` and `username` but has the same values
 for the `active` and `sign_in_count` fields that `user1` has:
 
-```rust
+```
 let user2 = User {
     email: String::from("another@example.com"),
     username: String::from("anotherusername567"),
@@ -170,7 +170,7 @@ tuple struct still starts with the `struct` keyword and the struct name, which
 are followed by the types in the tuple. For example, here are definitions and
 usages of tuple structs named `Color` and `Point`:
 
-```rust
+```
 struct Color(i32, i32, i32);
 struct Point(i32, i32, i32);
 
@@ -195,10 +195,10 @@ PROD: START BOX
 
 ### Ownership of Struct Data
 
-In the `User` struct definition in Listing 5-1, we used the owned `String` type
-rather than the `&str` string slice type. This is a deliberate choice because
-we want instances of this struct to own all of its data and for that data to be
-valid for as long as the entire struct is valid.
+In the `User` struct definition in Listing 5-1, we used the owned `String`
+type rather than the `&str` string slice type. This is a deliberate choice
+because we want instances of this struct to own all of its data and for that
+data to be valid for as long as the entire struct is valid.
 
 It’s possible for structs to store references to data owned by something else,
 but to do so requires the use of *lifetimes*, a Rust feature that is discussed
@@ -208,7 +208,7 @@ struct without specifying lifetimes, like this:
 
 Filename: src/main.rs
 
-```rust,ignore
+```
 struct User {
     username: &str,
     email: &str,
@@ -228,7 +228,7 @@ fn main() {
 
 The compiler will complain that it needs lifetime specifiers:
 
-```text
+```
 error[E0106]: missing lifetime specifier
  -->
   |
@@ -242,8 +242,8 @@ error[E0106]: missing lifetime specifier
   |            ^ expected lifetime parameter
 ```
 
-We’ll discuss how to fix these errors so you can store references in structs in
-Chapter 10, but for now, we’ll fix errors like these using owned types like
+We’ll discuss how to fix these errors so you can store references in structs
+in Chapter 10, but for now, we’ll fix errors like these using owned types like
 `String` instead of references like `&str`.
 
 PROD: END BOX
@@ -261,7 +261,7 @@ just that in our project’s *src/main.rs*:
 
 Filename: src/main.rs
 
-```rust
+```
 fn main() {
     let length1 = 50;
     let width1 = 30;
@@ -282,7 +282,7 @@ width in separate variables
 
 Now, run this program using `cargo run`:
 
-```text
+```
 The area of the rectangle is 1500 square pixels.
 ```
 
@@ -295,7 +295,7 @@ rectangle.
 
 The issue with this method is evident in the signature of `area`:
 
-```rust
+```
 fn area(length: u32, width: u32) -> u32 {
 ```
 
@@ -309,7 +309,7 @@ uses tuples:
 
 Filename: src/main.rs
 
-```rust
+```
 fn main() {
     let rect1 = (50, 30);
 
@@ -347,7 +347,7 @@ parts, as shown in Listing 5-10:
 
 Filename: src/main.rs
 
-```rust
+```
 struct Rectangle {
     length: u32,
     width: u32,
@@ -382,11 +382,11 @@ using `rect1`, which is the reason we use the `&` in the function signature and
 where we call the function.
 
 The `area` function accesses the `length` and `width` fields of the `Rectangle`
-instance. Our function signature for `area` now indicates exactly what we
-mean: calculate the area of a `Rectangle` using its `length` and `width`
-fields. This conveys that the length and width are related to each other, and
-gives descriptive names to the values rather than using the tuple index values
-of `0` and `1`—a win for clarity.
+instance. Our function signature for `area` now indicates exactly what we mean:
+calculate the area of a `Rectangle` using its `length` and `width` fields. This
+conveys that the length and width are related to each other, and gives
+descriptive names to the values rather than using the tuple index values of `0`
+and `1`—a win for clarity.
 
 ### Adding Useful Functionality with Derived Traits
 
@@ -397,7 +397,7 @@ chapters:
 
 Filename: src/main.rs
 
-```rust,ignore
+```
 struct Rectangle {
     length: u32,
     width: u32,
@@ -414,7 +414,7 @@ Listing 5-11: Attempting to print a `Rectangle` instance
 
 When we run this code, we get an error with this core message:
 
-```text
+```
 error[E0277]: the trait bound `Rectangle: std::fmt::Display` is not satisfied
 ```
 
@@ -430,7 +430,7 @@ want and structs don’t have a provided implementation of `Display`.
 
 If we continue reading the errors, we’ll find this helpful note:
 
-```text
+```
 note: `Rectangle` cannot be formatted with the default formatter; try using
 `:?` instead if you are using a format string
 ```
@@ -443,13 +443,13 @@ its value while we’re debugging our code.
 
 Run the code with this change. Drat! We still get an error:
 
-```text
+```
 error: the trait bound `Rectangle: std::fmt::Debug` is not satisfied
 ```
 
 But again, the compiler gives us a helpful note:
 
-```text
+```
 note: `Rectangle` cannot be formatted using `:?`; if it is defined in your
 crate, add `#[derive(Debug)]` or manually implement it
 ```
@@ -461,7 +461,7 @@ definition, as shown in Listing 5-12:
 
 Filename: src/main.rs
 
-```rust
+```
 #[derive(Debug)]
 struct Rectangle {
     length: u32,
@@ -481,7 +481,7 @@ the `Rectangle` instance using debug formatting
 Now when we run the program, we won’t get any errors and we’ll see the
 following output:
 
-```text
+```
 rect1 is Rectangle { length: 50, width: 30 }
 ```
 
@@ -491,7 +491,7 @@ larger structs, it’s useful to have output that’s a bit easier to read; in
 those cases, we can use `{:#?}` instead of `{:?}` in the `println!` string.
 When we use the `{:#?}` style in the example, the output will look like this:
 
-```text
+```
 rect1 is Rectangle {
     length: 50,
     width: 30
@@ -527,7 +527,7 @@ in Listing 5-13:
 
 Filename: src/main.rs
 
-```rust
+```
 #[derive(Debug)]
 struct Rectangle {
     length: u32,
@@ -602,7 +602,7 @@ Here’s how it works: when you call a method with `object.something()`, Rust
 automatically adds in `&`, `&mut`, or `*` so `object` matches the signature of
 the method. In other words, the following are the same:
 
-```rust
+```
 p1.distance(&p2);
 (&p1).distance(&p2);
 ```
@@ -610,9 +610,9 @@ p1.distance(&p2);
 The first one looks much cleaner. This automatic referencing behavior works
 because methods have a clear receiver—the type of `self`. Given the receiver
 and name of a method, Rust can figure out definitively whether the method is
-reading (`&self`), mutating (`&mut self`), or consuming (`self`). The fact that
-Rust makes borrowing implicit for method receivers is a big part of making
-ownership ergonomic in practice.
+reading (`&self`), mutating (`&mut self`), or consuming (`self`). The fact
+that Rust makes borrowing implicit for method receivers is a big part of
+making ownership ergonomic in practice.
 
 PROD: END BOX
 
@@ -627,7 +627,7 @@ method:
 
 Filename: src/main.rs
 
-```rust
+```
 fn main() {
     let rect1 = Rectangle { length: 50, width: 30 };
     let rect2 = Rectangle { length: 40, width: 10 };
@@ -644,7 +644,7 @@ And the expected output would look like the following, because both dimensions
 of `rect2` are smaller than the dimensions of `rect1`, but `rect3` is wider
 than `rect1`:
 
-```text
+```
 Can rect1 hold rect2? true
 Can rect1 hold rect3? false
 ```
@@ -665,7 +665,7 @@ Listing 5-13, shown in Listing 5-15:
 
 Filename: src/main.rs
 
-```rust
+```
 impl Rectangle {
     fn area(&self) -> u32 {
         self.length * self.width
@@ -702,7 +702,7 @@ specify the same value twice:
 
 Filename: src/main.rs
 
-```rust
+```
 impl Rectangle {
     fn square(size: u32) -> Rectangle {
         Rectangle { length: size, width: size }
@@ -711,9 +711,35 @@ impl Rectangle {
 ```
 
 To call this associated function, we use the `::` syntax with the struct name,
-like `let sq = Rectangle::square(3);`, for example. This function is namespaced
-by the struct: the `::` syntax is used for both associated functions and
-namespaces created by modules, which we’ll discuss in Chapter 7.
+like `let sq = Rectangle::square(3);`, for example. This function is
+namespaced by the struct: the `::` syntax is used for both associated functions
+and namespaces created by modules, which we’ll discuss in Chapter 7.
+
+### Multiple `impl` Blocks
+
+Each struct is allowed to have multiple `impl` blocks. For example, Listing
+5-15 is equivalent to the code shown in Listing 5-16, which has each method
+in its own `impl` block:
+
+```
+impl Rectangle {
+    fn area(&self) -> u32 {
+        self.length * self.width
+    }
+}
+
+impl Rectangle {
+    fn can_hold(&self, other: &Rectangle) -> bool {
+        self.length > other.length && self.width > other.width
+    }
+}
+```
+
+Listing 5-16: Rewriting Listing 5-15 using multiple `impl` blocks
+
+There’s no reason to separate these methods into multiple `impl` blocks here,
+but it’s valid syntax. We will see a case when multiple `impl` blocks are useful
+in Chapter 10 when we discuss generic types and traits.
 
 ## Summary
 
