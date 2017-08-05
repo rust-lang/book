@@ -230,11 +230,11 @@ like `let sq = Rectangle::square(3);`, for example. This function is
 namespaced by the struct: the `::` syntax is used for both associated functions
 and namespaces created by modules, which we’ll discuss in Chapter 7.
 
-### Multiple impl blocks
+### Multiple `impl` Blocks
 
-A given struct is allowed to have multiple `impl` blocks. For example,
-Listing 5-15 could be rewritten into the rigorously equivalent (although
-slightly more verbose) Listing 5-16:
+Each struct is allowed to have multiple `impl` blocks. For example, Listing
+5-15 is equivalent to the code shown in Listing 5-16, which has each method
+in its own `impl` block:
 
 ```rust
 # #[derive(Debug)]
@@ -259,10 +259,9 @@ impl Rectangle {
 <span class="caption">Listing 5-16: Rewriting Listing 5-15 using multiple `impl`
 blocks</span>
 
-Although this possibility may not appear particularly interesting at this point,
-its full potential will be revealed once we will dive into generic types and
-traits, where multiple `impl` blocks can be used to conditionally implement
-functionality for some types, but not others.
+There's no reason to separate these methods into multiple `impl` blocks here,
+but it's valid syntax. We will see a case when multiple `impl` blocks are useful
+in Chapter 10 when we discuss generic types and traits.
 
 ## Summary
 

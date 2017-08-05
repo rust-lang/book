@@ -456,13 +456,14 @@ the body of the function to return a reference, we wouldn’t need either the
 `Clone` or `Copy` trait bounds and we wouldn’t be doing any heap allocations.
 Try implementing these alternate solutions on your own!
 
-### Using trait bounds to conditionally implement methods
+### Using Trait Bounds to Conditionally Implement Methods
 
-By setting a trait bound on a generic `impl` block, one can make sure that a set
-of methods will only be implemented for types which meet certain trait bounds.
-For example, the type Pair that is presented in listing 10-17 always implements
-the method new(), but only implements the method cmp_display if its inner type
-implements comparison operators and can be printed:
+By using a trait bound with an `impl` block that uses generic type parameters,
+we can conditionally implement methods only for types that implement the
+specified traits. For example, the type `Pair<T>` in listing 10-17 always
+implements the `new` method, but `Pair<T>` only implements the `cmp_display` if
+its inner type `T` implements the `PartialOrd` trait that enables comparison
+and the `Display` trait that enables printing:
 
 ```rust
 use std::fmt::Display;
@@ -493,16 +494,32 @@ impl<T: Display + PartialOrd> Pair<T> {
 ```
 
 <span class="caption">Listing 10-17: Conditionally implement methods on a
-generic type depending on the trait bounds of its contents</span>
+generic type depending on trait bounds</span>
 
-In fact, one can even conditionally implement a trait for every type which
-implements a set of trait bounds. Such *blanket implementations* are
-extensively used in the Rust standard library, for example to state that every
-type which can be printed can also be converted into a string:
+We can also conditionally implement a trait for any type that implements a
+trait. Implementations of a trait on any type that satisfies the trait bounds
+are called *blanket implementations*, and are extensively used in the Rust
+standard library. For example, the standard library implements the `ToString`
+trait on any type that implements the `Display` trait. This `impl` block looks
+similar to this code:
 
 ```rust,ignore
-impl<T: Display + ?Sized> ToString for T {
+impl<T: Display> ToString for T {
+    // ...snip...
+}
 ```
+
+Because the standard library has this blanket implementation, we can call the
+`to_string` method defined by the `ToString` type on any type that implements
+the `Display` trait. For example, we can turn integers into their corresponding
+`String` values like this since integers implement `Display`:
+
+```rust
+let s = 3.to_string();
+```
+
+Blanket implementations appear in the documentation for the trait in the
+"Implementors" section.
 
 Traits and trait bounds let us write code that uses generic type parameters in
 order to reduce duplication, but still specify to the compiler exactly what

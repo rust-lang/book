@@ -336,23 +336,17 @@ fn main() {
 `Point<T>` struct that will return a reference to the `x` field, which is of
 type `T`.</span>
 
-Note that we have to declare `T` just after `impl`, so that we can use it when
-we specify that we’re implementing methods on the type `Point<T>`. The reason
-why we need to clarify this is that the generic parameters of an `impl` block do
-not need to be the same as those of the underlying generic struct. In
-particular, nothing prevents us from defining an `impl` block which only applies
-to a certain instance of a generic struct, as in Listing 10-10:
+Note that we have to declare `T` just after `impl` in order to use `T` in the
+type `Point<T>`. In contrast, we could choose to implement methods on
+`Point<f32>` instances rather than `Point` instances with any generic type.
+Listing 10-10 shows that we do not need to declare the generic type `T` after
+the `impl` in this case, since we've filled in the generic type with the
+concrete type `f32`:
 
 ```rust
 # struct Point<T> {
 #     x: T,
 #     y: T,
-# }
-#
-# impl<T> Point<T> {
-#     fn x(&self) -> &T {
-#         &self.x
-#     }
 # }
 #
 impl Point<f32> {
@@ -362,13 +356,15 @@ impl Point<f32> {
 }
 ```
 
-<span class="caption">Listing 10-10: Building an `impl` block which only applies
-to a specific generic struct instance.</span>
+<span class="caption">Listing 10-10: Building an `impl` block which only
+applies to a struct with a specific type is used for the generic type parameter
+`T`</span>
 
-If we do this, the type `Point<f32>` will have a method named
-`distance_from_origin`, which other instances of `Point<T>` do not have. This
-method measures how far our point is from the point of coordinates (0., 0.),
-using mathematical operations which are only available for floating-point types.
+This code means the type `Point<f32>` will have a method named
+`distance_from_origin`, and other instances of `Point<T>` where `T` is not of
+type `f32` will not have this method defined. This method measures how far our
+point is from the point of coordinates (0.0, 0.0) and uses mathematical
+operations which are only available for floating-point types.
 
 Generic type parameters in a struct definition aren’t always the same generic
 type parameters you want to use in that struct’s method signatures. Listing
