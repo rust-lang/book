@@ -134,9 +134,11 @@ test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured
 ```
 
 Let’s add another test, but this time we’ll make a test that fails! Tests fail
-when something in the test function panics. We talked about the simplest way to
-cause a panic in Chapter 9: call the `panic!` macro! Type in the new test so
-that your `src/lib.rs` now looks like Listing 11-3:
+when something in the test function panics. Each test is run in a new thread,
+and when the main thread sees that a test thread has died, the test is marked
+as failed. We talked about the simplest way to cause a panic in Chapter 9: call
+the `panic!` macro! Type in the new test so that your `src/lib.rs` now looks
+like Listing 11-3:
 
 <span class="filename">Filename: src/lib.rs</span>
 
