@@ -428,14 +428,14 @@ fn largest<T: PartialOrd + Copy>(list: &[T]) -> T {
 }
 
 fn main() {
-    let numbers = vec![34, 50, 25, 100, 65];
+    let number_list = vec![34, 50, 25, 100, 65];
 
-    let result = largest(&numbers);
+    let result = largest(&number_list);
     println!("The largest number is {}", result);
 
-    let chars = vec!['y', 'm', 'a', 'q'];
+    let char_list = vec!['y', 'm', 'a', 'q'];
 
-    let result = largest(&chars);
+    let result = largest(&char_list);
     println!("The largest char is {}", result);
 }
 ```
