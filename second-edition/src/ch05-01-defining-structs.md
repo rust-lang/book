@@ -83,7 +83,8 @@ user1.email = String::from("anotheremail@example.com");
 
 If you have variables with the same names as struct fields, you can use *field
 init shorthand*. This can make functions that create new instances of structs
-more concise. The function named `build_user` shown here in Listing 5-4 has
+more concise. First, let's look at the more verbose way to initialize a struct
+instance. The function named `build_user` shown here in Listing 5-4 has
 parameters named `email` and `username`. The function creates and returns a
 `User` instance:
 
