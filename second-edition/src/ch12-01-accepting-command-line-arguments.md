@@ -1,5 +1,15 @@
 ## Accepting Command Line Arguments
 
+Let’s create a new project with, as always, `cargo new`. We’re calling our
+project `minigrep` to distinguish from the `grep` tool that you may already
+have on your system:
+
+```text
+$ cargo new --bin minigrep
+     Created binary (application) `minigrep` project
+$ cd minigrep
+```
+
 Our first task is to make `minigrep` able to accept its two command line
 arguments: the filename and a string to search for. That is, we want to be able
 to run our program with `cargo run`, a string to search for, and a path to a
@@ -94,10 +104,10 @@ we’re going to ignore it and only save the two arguments we need.
 ### Saving the Argument Values in Variables
 
 Printing out the value of the vector of arguments has illustrated that the
-program is able to access the values specified as command line arguments.
-That’s not actually our end goal, though: we want to save the values of the two
-arguments in variables so that we can use the values in our program. Let’s do
-that as shown in Listing 12-2:
+program is able to access the values specified as command line arguments. Now
+we need to save the values of the two arguments in variables so that we can use
+the values throughout the rest of the program. Let’s do that as shown in
+Listing 12-2:
 
 <span class="filename">Filename: src/main.rs</span>
 

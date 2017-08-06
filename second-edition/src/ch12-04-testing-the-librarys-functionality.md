@@ -1,8 +1,8 @@
-## Testing the Library’s Functionality
+## Developing the Library’s Functionality with TDD
 
-Now that we’ve extracted the logic into *src/lib.rs* and left all the argument
-parsing and error handling in *src/main.rs*, it’s much easier for us to write
-tests for the core functionality of our code. We can call our functions
+Now that we’ve extracted the logic into *src/lib.rs* and left the argument
+collecting and error handling in *src/main.rs*, it’s much easier for us to
+write tests for the core functionality of our code. We can call our functions
 directly with various arguments and check return values without having to call
 our binary from the command line.
 
@@ -193,8 +193,8 @@ each item in a collection.
 
 Next, we’ll add functionality to check if the current line contains the query
 string. Luckily, strings have another helpful method named `contains` that does
-this for us! Add the `contains` method to the `search` function as shown in
-Listing 12-18:
+this for us! Add a call to the `contains` method to the `search` function as
+shown in Listing 12-18:
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -282,7 +282,7 @@ pub fn run(config: Config) -> Result<(), Box<Error>> {
 ```
 
 We’re still using a `for` loop to get each line returned from `search` and
-printing out each line.
+print it out.
 
 Now our whole program should be working! Let’s try it out, first with a word
 that should return exactly one line from the Emily Dickinson poem, “frog”:

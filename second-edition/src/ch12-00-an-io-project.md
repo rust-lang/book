@@ -23,7 +23,8 @@ redirect successful output to a file while still seeing error messages on the
 screen.
 
 One Rust community member, Andrew Gallant, has already created a
-fully-featured, very fast version of `grep`, called `ripgrep`. By comparison,
+fully-featured, very fast version of `grep`, called
+[`ripgrep`](https://github.com/BurntSushi/ripgrep)<!--ignore-->. By comparison,
 our version of `grep` will be fairly simple, but this chapter will give you
 some of the background knowledge to help you understand a real-world project
 like `ripgrep`.
@@ -38,13 +39,3 @@ This project will bring together a number of concepts you’ve learned so far:
 
 We’ll also briefly introduce closures, iterators, and trait objects, which
 Chapters 13 and 17 will cover in detail.
-
-Let’s create a new project with, as always, `cargo new`. We’re calling our
-project `minigrep` to distinguish from the `grep` tool that you may already
-have on your system:
-
-```text
-$ cargo new --bin minigrep
-     Created binary (application) `minigrep` project
-$ cd minigrep
-```
