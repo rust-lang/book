@@ -1118,7 +1118,7 @@ tests are entirely external to your library, and use your code in the same way
 any other external code would, using only the public interface and exercising
 multiple modules per test.
 
-Writing both kinds of tests are important to ensure that the pieces of your
+Writing both kinds of tests is important to ensure that the pieces of your
 library are doing what you expect them to separately and together.
 
 ### Unit Tests
