@@ -51,7 +51,7 @@ mod tests {
 ```
 
 <span class="caption">Listing 11-1: The test module and function generated
-automatically for us by `cargo new` </span>
+automatically for us by `cargo new`</span>
 
 For now, let’s ignore the top two lines and focus on the function to see how it
 works. Note the `#[test]` annotation before the `fn` line: this attribute
@@ -86,7 +86,7 @@ test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured
 ```
 
 <span class="caption">Listing 11-2: The output from running the one
-automatically generated test </span>
+automatically generated test</span>
 
 Cargo compiled and ran our test. After the `Compiling`, `Finished`, and
 `Running` lines, we see the line `running 1 test`. The next line shows the name
@@ -157,7 +157,7 @@ mod tests {
 ```
 
 <span class="caption">Listing 11-3: Adding a second test; one that will fail
-since we call the `panic!` macro </span>
+since we call the `panic!` macro</span>
 
 And run the tests again with `cargo test`. The output should look like Listing
 11-4, which shows that our `exploration` test passed and `another` failed:
@@ -182,7 +182,7 @@ error: test failed
 ```
 
 <span class="caption">Listing 11-4: Test results when one test passes and one
-test fails </span>
+test fails</span>
 
 Instead of `ok`, the line `test tests::another` says `FAILED`. We have two new
 sections between the individual results and the summary: the first section
@@ -231,7 +231,7 @@ impl Rectangle {
 ```
 
 <span class="caption">Listing 11-5: The `Rectangle` struct and its `can_hold`
-method from Chapter 5 </span>
+method from Chapter 5</span>
 
 The `can_hold` method returns a boolean, which means it’s a perfect use case
 for the `assert!` macro. In Listing 11-6, let’s write a test that exercises the
@@ -257,7 +257,7 @@ mod tests {
 ```
 
 <span class="caption">Listing 11-6: A test for `can_hold` that checks that a
-larger rectangle indeed holds a smaller rectangle </span>
+larger rectangle indeed holds a smaller rectangle</span>
 
 Note that we’ve added a new line inside the `tests` module: `use super::*;`.
 The `tests` module is a regular module that follows the usual visibility rules
@@ -397,7 +397,7 @@ mod tests {
 ```
 
 <span class="caption">Listing 11-7: Testing the function `add_two` using the
-`assert_eq!` macro </span>
+`assert_eq!` macro</span>
 
 Let’s check that it passes!
 
@@ -621,7 +621,7 @@ mod tests {
 ```
 
 <span class="caption">Listing 11-8: Testing that a condition will cause a
-`panic!` </span>
+`panic!`</span>
 
 The `#[should_panic]` attribute goes after the `#[test]` attribute and before
 the test function it applies to. Let’s see what it looks like when this test
@@ -719,7 +719,7 @@ mod tests {
 ```
 
 <span class="caption">Listing 11-9: Testing that a condition will cause a
-`panic!` with a particular panic message </span>
+`panic!` with a particular panic message</span>
 
 This test will pass, because the value we put in the `expected` parameter of
 the `should_panic` attribute is a substring of the message that the

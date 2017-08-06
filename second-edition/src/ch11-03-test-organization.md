@@ -126,7 +126,7 @@ fn it_adds_two() {
 ```
 
 <span class="caption">Listing 11-13: An integration test of a function in the
-`adder` crate </span>
+`adder` crate</span>
 
 We’ve added `extern crate adder` at the top, which we didn’t need in the unit
 tests. This is because each test in the `tests` directory is an entirely

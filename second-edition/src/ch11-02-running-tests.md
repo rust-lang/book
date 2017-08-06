@@ -87,8 +87,8 @@ mod tests {
 }
 ```
 
-<span class="caption">Listing 11-10: Tests for a function that calls `println!`
-</span>
+<span class="caption">Listing 11-10: Tests for a function that calls
+`println!`</span>
 
 The output we’ll see when we run these tests with `cargo test` is:
 
