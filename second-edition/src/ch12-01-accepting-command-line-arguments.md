@@ -146,7 +146,4 @@ In file sample.txt
 ```
 
 Great, it’s working! The values of the arguments we need are being saved into
-the right variables. Later we’ll add some error handling to deal with certain
-potential erroneous situations, such as when the user provides no arguments,
-but for now we’ll ignore that and work on adding file reading capabilities
-instead.
+the right variables. Let's read the contents of the file specified next.
