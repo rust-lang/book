@@ -1,6 +1,6 @@
 ## Reading a File
 
-Next, we’re going to add functionality to read the file that specified in the
+We’re going to add functionality to read the file that specified in the
 `filename` command line argument. First, we need a sample file to test it
 with—the best kind of file to use to make sure that `minigrep` is working is
 one with a small amount of text over multiple lines with some repeated words.
@@ -99,11 +99,6 @@ To tell your name the livelong day
 To an admiring bog!
 ```
 
-Great! Our code read in and printed out the content of the file. We’ve got a
-few flaws though. The `main` function has multiple responsibilities; generally
-functions are clearer and easier to maintain if each function is responsible
-for only one idea. The other problem is that we’re not handling errors as well
-as we could be. While our program is still small, these flaws aren’t a big
-problem, but as our program grows, it will be harder to fix them cleanly. It’s
-good practice to begin refactoring early on when developing a program, as it’s
-much easier to refactor smaller amounts of code, so we’ll do that now.
+Great! Our code read in and printed out the content of the file. Next, let's
+create a *src/lib.rs* file to hold the part of `minigrep` that will search for
+the query string.
