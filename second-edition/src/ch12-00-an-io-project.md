@@ -8,11 +8,11 @@ practice some of the Rust you now have under your belt.
 Rust’s speed, safety, *single binary* output, and cross-platform support make
 it a good language for creating command line tools, so for our project we’ll
 make our own version of the classic command line tool `grep`. Grep is an
-acronym for “Globally search a Regular Expression and Print.” In the simplest
-use case, `grep` searches a specified file for a specified string. To do so,
-`grep` takes a filename and a string as its arguments, then reads the file and
-finds lines in that file that contain the string argument. It’ll then print out
-those lines.
+acronym for “**G**lobally search a **R**egular **E**xpression and **P**rint.”
+In the simplest use case, `grep` searches a specified file for a specified
+string. To do so, `grep` takes a filename and a string as its arguments, then
+reads the file and finds lines in that file that contain the string argument.
+It’ll then print out those lines.
 
 Along the way, we’ll show how to make our command line tool use features of the
 terminal that many command line tools use. We’ll read the value of an

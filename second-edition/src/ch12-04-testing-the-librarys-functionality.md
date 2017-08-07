@@ -1,4 +1,4 @@
-## Developing the Library’s Functionality with TDD
+## Developing the Library’s Functionality with Test Driven Development
 
 Now that we’ve extracted the logic into *src/lib.rs* and left the argument
 collecting and error handling in *src/main.rs*, it’s much easier for us to
