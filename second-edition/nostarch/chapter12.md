@@ -11,11 +11,11 @@ practice some of the Rust you now have under your belt.
 Rust’s speed, safety, *single binary* output, and cross-platform support make
 it a good language for creating command line tools, so for our project we’ll
 make our own version of the classic command line tool `grep`. Grep is an
-acronym for “Globally search a Regular Expression and Print.” In the simplest
-use case, `grep` searches a specified file for a specified string. To do so,
-`grep` takes a filename and a string as its arguments, then reads the file and
-finds lines in that file that contain the string argument. It’ll then print out
-those lines.
+acronym for “**G**lobally search a **R**egular **E**xpression and **P**rint.”
+In the simplest use case, `grep` searches a specified file for a specified
+string. To do so, `grep` takes a filename and a string as its arguments, then
+reads the file and finds lines in that file that contain the string argument.
+It’ll then print out those lines.
 
 Along the way, we’ll show how to make our command line tool use features of the
 terminal that many command line tools use. We’ll read the value of an
@@ -42,6 +42,8 @@ This project will bring together a number of concepts you’ve learned so far:
 We’ll also briefly introduce closures, iterators, and trait objects, which
 Chapters 13 and 17 will cover in detail.
 
+## Accepting Command Line Arguments
+
 Let’s create a new project with, as always, `cargo new`. We’re calling our
 project `minigrep` to distinguish from the `grep` tool that you may already
 have on your system:
@@ -51,8 +53,6 @@ $ cargo new --bin minigrep
      Created binary (application) `minigrep` project
 $ cd minigrep
 ```
-
-## Accepting Command Line Arguments
 
 Our first task is to make `minigrep` able to accept its two command line
 arguments: the filename and a string to search for. That is, we want to be able
@@ -147,10 +147,10 @@ we’re going to ignore it and only save the two arguments we need.
 ### Saving the Argument Values in Variables
 
 Printing out the value of the vector of arguments has illustrated that the
-program is able to access the values specified as command line arguments.
-That’s not actually our end goal, though: we want to save the values of the two
-arguments in variables so that we can use the values in our program. Let’s do
-that as shown in Listing 12-2:
+program is able to access the values specified as command line arguments. Now
+we need to save the values of the two arguments in variables so that we can use
+the values throughout the rest of the program. Let’s do that as shown in
+Listing 12-2:
 
 Filename: src/main.rs
 
@@ -235,6 +235,7 @@ use std::io::prelude::*;
 fn main() {
     // ...snip...
     println!("In file {}", filename);
+
     let mut f = File::open(filename).expect("file not found");
 
     let mut contents = String::new();
@@ -365,9 +366,11 @@ it. Let’s re-work our program by following this process.
 
 #### Extracting the Argument Parser
 
-First, we’ll extract the functionality for parsing arguments. Listing 12-5
-shows the new start of `main` that calls a new function `parse_config`, which
-we’re still going to define in *src/main.rs* for the moment:
+First, we’ll extract the functionality for parsing arguments into a function
+that `main` will call to prepare for moving the command line parsing logic to
+*lib.rs*. Listing 12-5 shows the new start of `main` that calls a new function
+`parse_config`, which we’re still going to define in *src/main.rs* for the
+moment:
 
 Filename: src/main.rs
 
@@ -657,7 +660,7 @@ We’ve made two changes in the body of the `new` function: instead of calling
 value, and we’ve wrapped the `Config` return value in an `Ok`. These changes
 make the function conform to its new type signature.
 
-By having `Config::new` return an `Err` value, it allows the `main` function to
+Returning an `Err` value from `Config::new` allows the `main` function to
 handle the `Result` value returned from the `new` function and exit the process
 more cleanly in the error case.
 
@@ -668,7 +671,7 @@ update `main` to handle the `Result` being returned by `Config::new`, as shown
 in Listing 12-10. We’re also going to take the responsibility of exiting the
 command line tool with a nonzero error code from `panic!` and implement it by
 hand. A nonzero exit status is a convention to signal to the process that
-called our program that our program ended with an error state.
+called our program that our program exited with an error state.
 
 Filename: src/main.rs
 
@@ -706,8 +709,8 @@ code in the closure that will get run in the error case is only two lines: we
 print out the `err` value, then call `process::exit`. The `process::exit`
 function will stop the program immediately and return the number that was
 passed as the exit status code. This is similar to the `panic!`-based handling
-we used in Listing 12-8, with the exception that we no longer get all the extra
-output. Let’s try it:
+we used in Listing 12-8, but we no longer get all the extra output. Let’s try
+it:
 
 ```
 $ cargo run
@@ -771,9 +774,9 @@ With the remaining program logic separated into the `run` function, we can
 improve the error handling like we did with `Config::new` in Listing 12-9.
 Instead of allowing the program to panic by calling `expect`, the `run`
 function will return a `Result<T, E>` when something goes wrong. This will let
-us further consolidate the logic around handling errors in a user-friendly way
-into `main`. Listing 12-12 shows the changes you need to make to the signature
-and body of `run`:
+us further consolidate into `main` the logic around handling errors in a
+user-friendly way. Listing 12-12 shows the changes you need to make to the
+signature and body of `run`:
 
 Filename: src/main.rs
 
@@ -837,7 +840,7 @@ to have some error handling code here! Let’s rectify that now.
 
 #### Handling Errors Returned from `run` in `main`
 
-We’ll check for errors and handle them using a similar technique to the way we
+We’ll check for errors and handle them using a technique similar to the way we
 handled errors with `Config::new` in Listing 12-10, but with a slight
 difference:
 
@@ -939,8 +942,8 @@ fn main() {
 
 Listing 12-14: Bringing the `minigrep` crate into the scope of *src/main.rs*
 
-To bring the library crate into the binary crate, we use `extern crate`
-`minigrep`. Then we’ll add a `use` `minigrep``::Config` line to bring the
+To bring the library crate into the binary crate, we use `extern crate
+minigrep`. Then we’ll add a `use minigrep::Config` line to bring the
 `Config` type into scope, and we’ll prefix the `run` function with our crate
 name. With that, all the functionality should be connected and should work.
 Give it a `cargo run` and make sure everything is wired up correctly.
@@ -953,11 +956,11 @@ Let’s take advantage of this newfound modularity by doing something that would
 have been hard with our old code, but is easy with our new code: write some
 tests!
 
-## Testing the Library’s Functionality
+## Developing the Library’s Functionality with Test Driven Development
 
-Now that we’ve extracted the logic into *src/lib.rs* and left all the argument
-parsing and error handling in *src/main.rs*, it’s much easier for us to write
-tests for the core functionality of our code. We can call our functions
+Now that we’ve extracted the logic into *src/lib.rs* and left the argument
+collecting and error handling in *src/main.rs*, it’s much easier for us to
+write tests for the core functionality of our code. We can call our functions
 directly with various arguments and check return values without having to call
 our binary from the command line.
 
@@ -966,10 +969,10 @@ process. This is a software development technique that follows this set of
 steps:
 
 * Write a test that fails, and run it to make sure it fails for the reason you
-expected.
+  expected.
 * Write or modify just enough code to make the new test pass.
 * Refactor the code you just added or changed, and make sure the tests continue
-to pass.
+  to pass.
 * Repeat!
 
 This is just one of many ways to write software, but TDD can help drive the
@@ -1016,8 +1019,8 @@ Pick three.";
 Listing 12-15: Creating a failing test for the `search` function we wish we had
 
 The string we are searching for is “duct” in this test. The text we’re
-searching is three lines, only one of which contains “duct”. We assert that the
-value returned from the `search` function contains only the line we expect.
+searching is three lines, only one of which contains “duct”. We assert that
+the value returned from the `search` function contains only the line we expect.
 
 We aren’t able to run this test and watch it fail though, since this test
 doesn’t even compile–the search function doesn’t exist yet! So now we’ll add
@@ -1034,8 +1037,8 @@ pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
 }
 ```
 
-Listing 12-16: Defining just enough of the `search` function so that our test
-will compile
+Listing 12-16: Defining just enough of the `search` function that our test will
+compile
 
 Notice that we need an explicit lifetime `'a` defined in the signature of
 `search` and used with the `contents` argument and the return value. Remember
@@ -1088,7 +1091,7 @@ test test::one_result ... FAILED
 failures:
 
 ---- test::one_result stdout ----
-    thread 'test::one_result' panicked at 'assertion failed: `(left == right)`
+	thread 'test::one_result' panicked at 'assertion failed: `(left == right)`
 (left: `["safe, fast, productive."]`, right: `[]`)', src/lib.rs:16
 note: Run with `RUST_BACKTRACE=1` for a backtrace.
 
@@ -1142,8 +1145,8 @@ each item in a collection.
 
 Next, we’ll add functionality to check if the current line contains the query
 string. Luckily, strings have another helpful method named `contains` that does
-this for us! Add the `contains` method to the `search` function as shown in
-Listing 12-18:
+this for us! Add a call to the `contains` method to the `search` function as
+shown in Listing 12-18:
 
 Filename: src/lib.rs
 
@@ -1230,7 +1233,7 @@ pub fn run(config: Config) -> Result<(), Box<Error>> {
 ```
 
 We’re still using a `for` loop to get each line returned from `search` and
-printing out each line.
+print it out.
 
 Now our whole program should be working! Let’s try it out, first with a word
 that should return exactly one line from the Emily Dickinson poem, “frog”:
@@ -1536,9 +1539,10 @@ variables!
 Some programs allow both arguments *and* environment variables for the same
 configuration. In those cases, the programs decide that one or the other takes
 precedence. For another exercise on your own, try controlling case
-insensitivity through a command line argument as well as through the
-environment variable, and decide which should take precedence if the program is
-run with contradictory values.
+insensitivity through either a command line argument or an environment
+variable. Decide whether the command line argument or the environment variable
+should take precedence if the program is run with one set to case sensitive and
+one set to case insensitive.
 
 The `std::env` module contains many more useful features for dealing with
 environment variables; check out its documentation to see what’s available.
@@ -1546,22 +1550,22 @@ environment variables; check out its documentation to see what’s available.
 ## Writing Error Messages to `stderr` Instead of `stdout`
 
 At the moment we’re writing all of our output to the terminal with the
-`println!` function. Most terminals provide two kinds of output: *standard out*
-for general information, and *standard error* for error messages. This
+`println!` function. Most terminals provide two kinds of output: *standard
+output* for general information, and *standard error* for error messages. This
 distinction enables users to choose whether to direct a the successful output
 of a program to a file but still print error messages to the screen.
 
-The `println!` function is only capable of printing to standard out, though, so
-we have to use something else in order to print to standard error.
+The `println!` function is only capable of printing to standard output, though,
+so we have to use something else in order to print to standard error.
 
 ### Checking Where Errors are Written to
 
 First, let’s observe how all content printed by `minigrep` is currently being
-written to standard out, including error messages that we want to write to
+written to standard output, including error messages that we want to write to
 standard error instead. We’ll do that by redirecting the standard output stream
 to a file while we also intentionally cause an error. We won’t redirect the
 standard error stream, so any content sent to standard error will continue to
-display on the screen.  Command line programs are expected to send error
+display on the screen. Command line programs are expected to send error
 messages to the standard error stream so that we can still see error messages
 on the screen even if we choose to redirect the standard output stream to a
 file. Our program is not currently well-behaved; we’re about to see that it
@@ -1575,7 +1579,7 @@ We’re not going to pass any arguments, which should cause an error:
 $ cargo run > output.txt
 ```
 
-The `>` syntax tells the shell to write the contents of standard out to
+The `>` syntax tells the shell to write the contents of standard output to
 *output.txt* instead of the screen. We didn’t see the error message we were
 expecting printed on the screen, so that means it must have ended up in the
 file. Let’s see what *output.txt* contains:
@@ -1584,10 +1588,10 @@ file. Let’s see what *output.txt* contains:
 Problem parsing arguments: not enough arguments
 ```
 
-Yup, our error message is being printed to standard out. It’s much more useful
-for error messages like this to be printed to standard error, and have only
-data from a successful run end up in the file when we redirect standard out in
-this way. We’ll change that.
+Yup, our error message is being printed to standard output. It’s much more
+useful for error messages like this to be printed to standard error, and have
+only data from a successful run end up in the file when we redirect standard
+output in this way. We’ll change that.
 
 ### Printing Errors to Standard Error
 
@@ -1632,7 +1636,7 @@ Now we see our error on the screen and `output.txt` contains nothing, which is
 the behavior expected of command line programs.
 
 If we run the program again with arguments that don’t cause an error, but still
-redirect standard out to a file:
+redirect standard output to a file:
 
 ```
 $ cargo run to poem.txt > output.txt
@@ -1663,4 +1667,3 @@ nicely, and be well tested.
 
 Next, let’s explore some functional-language influenced Rust features: closures
 and iterators.
-
