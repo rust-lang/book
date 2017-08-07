@@ -4,11 +4,13 @@ Now that we’ve extracted the logic into *src/lib.rs* and left the argument
 collecting and error handling in *src/main.rs*, it’s much easier for us to
 write tests for the core functionality of our code. We can call our functions
 directly with various arguments and check return values without having to call
-our binary from the command line.
+our binary from the command line. Feel free to write some tests for the
+functionality in the `Config::new` and `run` functions on your own if you’d
+like.
 
-In this section, we’re going to follow the Test Driven Development (TDD)
-process. This is a software development technique that follows this set of
-steps:
+In this section, we’re going to move on to adding the searching logic of
+`minigrep` by following the Test Driven Development (TDD) process. This is a
+software development technique that follows this set of steps:
 
 * Write a test that fails, and run it to make sure it fails for the reason you
 expected.
@@ -66,8 +68,8 @@ Pick three.";
 function we wish we had</span>
 
 The string we are searching for is “duct” in this test. The text we’re
-searching is three lines, only one of which contains “duct”. We assert that
-the value returned from the `search` function contains only the line we expect.
+searching is three lines, only one of which contains “duct”. We assert that the
+value returned from the `search` function contains only the line we expect.
 
 We aren’t able to run this test and watch it fail though, since this test
 doesn’t even compile–the search function doesn’t exist yet! So now we’ll add
@@ -85,7 +87,7 @@ pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
 ```
 
 <span class="caption">Listing 12-16: Defining just enough of the `search`
-function that our test will compile</span>
+function so that our test will compile</span>
 
 Notice that we need an explicit lifetime `'a` defined in the signature of
 `search` and used with the `contents` argument and the return value. Remember
@@ -193,7 +195,7 @@ each item in a collection.
 
 Next, we’ll add functionality to check if the current line contains the query
 string. Luckily, strings have another helpful method named `contains` that does
-this for us! Add a call to the `contains` method to the `search` function as
+this for us! Add a call to the `contains` method in the `search` function as
 shown in Listing 12-18:
 
 <span class="filename">Filename: src/lib.rs</span>

@@ -68,9 +68,9 @@ it. Let’s re-work our program by following this process.
 
 First, we’ll extract the functionality for parsing arguments into a function
 that `main` will call to prepare for moving the command line parsing logic to
-*lib.rs*. Listing 12-5 shows the new start of `main` that calls a new function
-`parse_config`, which we’re still going to define in *src/main.rs* for the
-moment:
+*src/lib.rs*. Listing 12-5 shows the new start of `main` that calls a new
+function `parse_config`, which we’re still going to define in *src/main.rs* for
+the moment:
 
 <span class="filename">Filename: src/main.rs</span>
 
