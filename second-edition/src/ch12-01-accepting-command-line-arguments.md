@@ -40,7 +40,6 @@ Let’s give it a try: use the code in Listing 12-1 to allow your `minigrep`
 program to read any command line arguments passed it and then collect the
 values into a vector.
 
-
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
