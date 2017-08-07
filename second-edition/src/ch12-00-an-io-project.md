@@ -24,10 +24,10 @@ screen.
 
 One Rust community member, Andrew Gallant, has already created a
 fully-featured, very fast version of `grep`, called
-[`ripgrep`](https://github.com/BurntSushi/ripgrep)<!--ignore-->. By comparison,
-our version of `grep` will be fairly simple, but this chapter will give you
-some of the background knowledge to help you understand a real-world project
-like `ripgrep`.
+[`ripgrep`](https://github.com/BurntSushi/ripgrep)<!-- ignore -->. By
+comparison, our version of `grep` will be fairly simple, but this chapter will
+give you some of the background knowledge to help you understand a real-world
+project like `ripgrep`.
 
 This project will bring together a number of concepts you’ve learned so far:
 
