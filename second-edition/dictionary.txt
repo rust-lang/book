@@ -94,6 +94,7 @@ DraftPost
 DSTs
 ebooks
 Edsger
+egular
 else's
 emoji
 encodings
@@ -179,6 +180,7 @@ librarys
 libreoffice
 libstd
 lifecycle
+lobally
 locators
 login
 lookup
@@ -278,6 +280,7 @@ request's
 resizes
 resizing
 retweet
+rint
 ripgrep
 runtime
 runtimes
@@ -393,5 +396,6 @@ Workspaces
 wouldn
 writeln
 WriteMessage
+xpression
 yyyy
 ZipImpl

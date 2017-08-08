@@ -100,7 +100,7 @@ There’s not usually a good reason to be writing code like this, but it is
 possible:
 
 ```rust
-let address = 0x012345;
+let address = 0x012345usize;
 let r = address as *const i32;
 ```
 
@@ -241,8 +241,9 @@ error[E0499]: cannot borrow `*slice` as mutable more than once at a time
 Rust’s borrow checker can’t understand that we’re borrowing different parts of
 the slice; it only knows that we’re borrowing from the same slice twice.
 Borrowing different parts of a slice is fundamentally okay; our two `&mut
-[i32]`s aren’t overlapping. However, Rust isn’t smart enough to know this. When
-we know something is okay, but Rust doesn’t, it’s time to reach for unsafe code.
+[i32]` slices aren’t overlapping. However, Rust isn’t smart enough to know
+this. When we know something is okay, but Rust doesn’t, it’s time to reach for
+unsafe code.
 
 Listing 19-6 shows how to use an `unsafe` block, a raw pointer, and some calls
 to unsafe functions to make the implementation of `split_at_mut` work:
@@ -305,7 +306,7 @@ location and creates a slice ten thousand items long:
 ```rust
 use std::slice;
 
-let address = 0x012345;
+let address = 0x012345usize;
 let r = address as *mut i32;
 
 let slice = unsafe {
@@ -406,7 +407,9 @@ variable</span>
 `SCREAMING_SNAKE_CASE` by convention, and we *must* annotate the variable’s
 type, which is `&'static str` in this case. Only references with the `'static`
 lifetime may be stored in a static variable. Because of this, the Rust compiler
-can figure out the lifetime by itself and we don’t need to annotate it explicitly.
+can figure out the lifetime by itself and we don’t need to annotate it
+explicitly.
+
 Accessing immutable static variables is safe. Values in a static variable have a
 fixed address in memory, and using the value will always access the same data.
 Constants, on the other hand, are allowed to duplicate their data whenever they

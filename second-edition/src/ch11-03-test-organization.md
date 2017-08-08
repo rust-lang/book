@@ -9,8 +9,8 @@ tests are entirely external to your library, and use your code in the same way
 any other external code would, using only the public interface and exercising
 multiple modules per test.
 
-Both kinds of tests are important to ensure that the pieces of your library are
-doing what you expect them to separately and together.
+Writing both kinds of tests is important to ensure that the pieces of your
+library are doing what you expect them to separately and together.
 
 ### Unit Tests
 
@@ -126,7 +126,7 @@ fn it_adds_two() {
 ```
 
 <span class="caption">Listing 11-13: An integration test of a function in the
-`adder` crate </span>
+`adder` crate</span>
 
 We’ve added `extern crate adder` at the top, which we didn’t need in the unit
 tests. This is because each test in the `tests` directory is an entirely

@@ -95,7 +95,8 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 2-1: Code to get a guess from the user and print it out</span>
+<span class="caption">Listing 2-1: Code to get a guess from the user and print
+it out</span>
 
 This code contains a lot of information, so let’s go over it bit by bit. To
 obtain user input and then print the result as output, we need to bring the
@@ -321,7 +322,8 @@ This code would print out `x = 5 and y = 10`.
 
 ### Testing the First Part
 
-Let’s test the first part of the guessing game. You can run it using `cargo run`:
+Let’s test the first part of the guessing game. You can run it using
+`cargo run`:
 
 ```text
 $ cargo run
@@ -756,11 +758,13 @@ We bind `guess` to the expression `guess.trim().parse()`. The `guess` in the
 expression refers to the original `guess` that was a `String` with the input in
 it. The `trim` method on a `String` instance will eliminate any whitespace at
 the beginning and end. `u32` can only contain numerical characters, but the
-user must press the Return key to satisfy `read_line`. When the user presses
-Return, a newline character is added to the string. For example, if the user
-types 5 and presses return, `guess` looks like this: `5\n`. The `\n` represents
-“newline,” the return key. The `trim` method eliminates `\n`, resulting in just
-`5`.
+user must press the <span class="keystroke">return</span> key to satisfy
+`read_line`. When the user presses <span class="keystroke">return</span>, a
+newline character is added to the string. For example, if the user types
+<span class="keystroke">5</span> and presses <span class="keystroke">
+return</span>, `guess` looks like this: `5\n`. The `\n` represents “newline,”
+the <span class="keystroke">return</span> key. The `trim` method eliminates
+`\n`, resulting in just `5`.
 
 The [`parse` method on strings][parse]<!-- ignore --> parses a string into some
 kind of number. Because this method can parse a variety of number types, we
@@ -857,11 +861,11 @@ program again. Notice that there is a new problem because the program is doing
 exactly what we told it to do: ask for another guess forever! It doesn’t seem
 like the user can quit!
 
-The user could always halt the program by using the keyboard shortcut `Ctrl-C`.
-But there’s another way to escape this insatiable monster that we mentioned in
-the `parse` discussion in “Comparing the Guess to the Secret Number”: if the user
-enters a non-number answer, the program will crash. The user can take advantage
-of that in order to quit, as shown here:
+The user could always halt the program by using the keyboard shortcut
+<span class="keystroke">ctrl-C</span>. But there’s another way to escape this
+insatiable monster that we mentioned in the `parse` discussion in “Comparing the
+Guess to the Secret Number”: if the user enters a non-number answer, the program
+will crash. The user can take advantage of that in order to quit, as shown here:
 
 ```text
 $ cargo run

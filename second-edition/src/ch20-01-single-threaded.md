@@ -117,9 +117,10 @@ loop, its connection gets closed as part of the `drop` implementation for
 the problem might be temporary. The important thing is that we’ve successfully
 gotten a handle on a TCP connection!
 
-Remember to stop the program with `CTRL-C` when you’re done running a
-particular version of the code, and restart `cargo run` after you’ve made each
-set of code changes in order to be running the newest code.
+Remember to stop the program with <span class="keystroke">ctrl-C</span> when
+you’re done running a particular version of the code, and restart `cargo run`
+after you’ve made each set of code changes in order to be running the newest
+code.
 
 ### Reading the Request
 

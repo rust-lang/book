@@ -47,11 +47,11 @@ Listing 10-1:
 
 ```rust
 fn main() {
-    let numbers = vec![34, 50, 25, 100, 65];
+    let number_list = vec![34, 50, 25, 100, 65];
 
-    let mut largest = numbers[0];
+    let mut largest = number_list[0];
 
-    for number in numbers {
+    for number in number_list {
         if number > largest {
             largest = number;
         }
@@ -65,7 +65,7 @@ fn main() {
 <span class="caption">Listing 10-1: Code to find the largest number in a list
 of numbers</span>
 
-This code takes a list of integers, stored here in the variable `numbers`. It
+This code takes a list of integers, stored here in the variable `number_list`. It
 puts the first item in the list in a variable named `largest`. Then it iterates
 through all the numbers in the list, and if the current value is greater than
 the number stored in `largest`, it replaces the value in `largest`. If the
@@ -81,11 +81,11 @@ places in the program, as in Listing 10-2:
 
 ```rust
 fn main() {
-    let numbers = vec![34, 50, 25, 100, 65];
+    let number_list = vec![34, 50, 25, 100, 65];
 
-    let mut largest = numbers[0];
+    let mut largest = number_list[0];
 
-    for number in numbers {
+    for number in number_list {
         if number > largest {
             largest = number;
         }
@@ -93,11 +93,11 @@ fn main() {
 
     println!("The largest number is {}", largest);
 
-    let numbers = vec![102, 34, 6000, 89, 54, 2, 43, 8];
+    let number_list = vec![102, 34, 6000, 89, 54, 2, 43, 8];
 
-    let mut largest = numbers[0];
+    let mut largest = number_list[0];
 
-    for number in numbers {
+    for number in number_list {
         if number > largest {
             largest = number;
         }
@@ -144,15 +144,15 @@ fn largest(list: &[i32]) -> i32 {
 }
 
 fn main() {
-    let numbers = vec![34, 50, 25, 100, 65];
+    let number_list = vec![34, 50, 25, 100, 65];
 
-    let result = largest(&numbers);
+    let result = largest(&number_list);
     println!("The largest number is {}", result);
 #    assert_eq!(result, 100);
 
-    let numbers = vec![102, 34, 6000, 89, 54, 2, 43, 8];
+    let number_list = vec![102, 34, 6000, 89, 54, 2, 43, 8];
 
-    let result = largest(&numbers);
+    let result = largest(&number_list);
     println!("The largest number is {}", result);
 #    assert_eq!(result, 6000);
 }

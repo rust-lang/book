@@ -3,9 +3,9 @@
 The code in Listing 20-21 is responding to requests asynchronously through the
 use of a thread pool, as we intended. We get some warnings about fields that
 we’re not using in a direct way, which are a reminder that we’re not cleaning
-anything up. When we use `CTRL-C` to halt the main thread, all the other
-threads are stopped immediately as well, even if they’re in the middle of
-serving a request.
+anything up. When we use <span class="keystroke">ctrl-C</span> to halt the main
+thread, all the other threads are stopped immediately as well, even if they’re
+in the middle of serving a request.
 
 We’re now going to implement the `Drop` trait for `ThreadPool` to call `join`
 on each of the threads in the pool so that the threads will finish the requests
@@ -331,7 +331,7 @@ requests by exiting the loop</span>
 
 Only serving two requests isn’t behavior you’d like a production web server to
 have, but this will let us see the graceful shutdown and cleanup working since
-we won’t be stopping the server with `CTRL-C`.
+we won’t be stopping the server with <span class="keystroke">ctrl-C</span>.
 
 We’ve added a `counter` variable that we’ll increment every time we receive an
 incoming TCP stream. If that counter reaches 2, we’ll stop serving requests and

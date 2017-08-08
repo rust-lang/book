@@ -87,8 +87,8 @@ mod tests {
 }
 ```
 
-<span class="caption">Listing 11-10: Tests for a function that calls `println!`
-</span>
+<span class="caption">Listing 11-10: Tests for a function that calls
+`println!`</span>
 
 The output we’ll see when we run these tests with `cargo test` is:
 
@@ -154,7 +154,7 @@ function and see what the output looks like then!
 Sometimes, running a full test suite can take a long time. If you’re working on
 code in a particular area, you might want to run only the tests pertaining to
 that code. You can choose which tests to run by passing `cargo test` the name
-or names of the test/s you want to run as an argument.
+or names of the test(s) you want to run as an argument.
 
 To demonstrate how to run a subset of tests, we’ll create three tests for our
 `add_two` function as shown in Listing 11-11 and choose which ones to run:

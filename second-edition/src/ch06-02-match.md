@@ -214,7 +214,7 @@ next arm.
 Some(i) => Some(i + 1),
 ```
 
-Does `Some(5)` match `Some(i)`? Why yes it does! We have the same variant.
+Does `Some(5)` match `Some(i)`? Well yes it does! We have the same variant.
 The `i` binds to the value contained in `Some`, so `i` takes the value `5`. The
 code in the match arm is then executed, so we add one to the value of `i` and
 create a new `Some` value with our total `6` inside.

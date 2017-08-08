@@ -24,14 +24,14 @@ options for compiling your code and let you configure each profile
 independently of the others. You’ve seen a hint of this feature in the output
 of your builds:
 
-```text
+```
 $ cargo build
-    Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
+    Finished dev [unoptimized + debuginfo] target(s) in 0.0 secs
 $ cargo build --release
     Finished release [optimized] target(s) in 0.0 secs
 ```
 
-The “debug” and “release” notifications here indicate that the compiler is
+The “dev” and “release” notifications here indicate that the compiler is
 using different profiles. Cargo supports four profiles:
 
 * `dev`: used for `cargo build`
@@ -43,7 +43,7 @@ We can customize our `Cargo.toml` file with `[profile.*]` sections to tweak
 various compiler options for these profiles. For example, here’s one of the
 default options for the `dev` and `release` profiles:
 
-```toml
+```
 [profile.dev]
 opt-level = 0
 
@@ -62,7 +62,7 @@ you use that compiled code.
 We could override these defaults by changing them in `Cargo.toml`. For example,
 if we wanted to use optimization level 1 in development:
 
-```toml
+```
 [profile.dev]
 opt-level = 1
 ```
@@ -72,6 +72,7 @@ use more optimizations. Not as much as a release build, but a little bit more.
 
 For the full list of settings and the defaults for each profile, see Cargo’s
 documentation. at *http://doc.crates.io/*
+
 
 ## Publishing a Crate to Crates.io
 
@@ -99,11 +100,9 @@ Documentation comments use `///` instead of `//` and support Markdown notation
 inside. They go just before the item they are documenting. Here’s documentation
 comments for an `add_one` function:
 
-<figure>
+Filename: src/lib.rs
 
-<span class="filename">Filename: src/lib.rs</span>
-
-````rust
+```
 /// Adds one to the number given.
 ///
 /// # Examples
@@ -111,22 +110,14 @@ comments for an `add_one` function:
 /// ```
 /// let five = 5;
 ///
-/// assert_eq!(6, add_one(5));
-/// # fn add_one(x: i32) -> i32 {
-/// #     x + 1
-/// # }
+/// assert_eq!(6, add_one(five));
 /// ```
 pub fn add_one(x: i32) -> i32 {
     x + 1
 }
-````
-
-<figcaption>
+```
 
 Listing 14-1: A documentation comment for a function
-
-</figcaption>
-</figure>
 
 `cargo doc` runs a tool distributed with Rust, `rustdoc`, to generate HTML
 documentation from these comments. To try this out locally, you can run `cargo
@@ -144,7 +135,7 @@ documentation has been written. Try running `cargo test` with the documentation
 for the `add_one` function in Listing 14-1; you’ll see a section in the test
 results like this:
 
-```test
+```
    Doc-tests add-one
 
 running 1 test
@@ -183,13 +174,12 @@ internal organization: you can choose to re-export items to make a different
 public structure with `pub use`.
 
 For example, say that we made a library named `art` consisting of a `kinds`
-module containing an enum named `Color` and a `utils` module containing a
-function named `mix` as shown in Listing 14-2:
+module containing two enums named `PrimaryColor` and `SecondaryColor`, and a
+`utils` module containing a function named `mix` as shown in Listing 14-2:
 
-<figure>
-<span class="filename">Filename: src/lib.rs</span>
+Filename: src/lib.rs
 
-```rust
+```
 //! # Art
 //!
 //! A library for modeling artistic concepts.
@@ -221,21 +211,15 @@ pub mod utils {
 }
 ```
 
-<figcaption>
-
 Listing 14-2: An `art` library with items organized into `kinds` and `utils`
 modules
-
-</figcaption>
-</figure>
 
 In order to use this library, another crate would have `use` statements as in
 Listing 14-3:
 
-<figure>
-<span class="filename">Filename: src/main.rs</span>
+Filename: src/main.rs
 
-```rust,ignore
+```
 extern crate art;
 
 use art::kinds::PrimaryColor;
@@ -248,13 +232,8 @@ fn main() {
 }
 ```
 
-<figcaption>
-
 Listing 14-3: A program using the `art` crate’s items with its internal
 structure exported
-
-</figcaption>
-</figure>
 
 Users of this crate shouldn’t need to know that `PrimaryColor` and
 `SecondaryColor` are in the `kinds` module, and `mix` is in the `utils` module;
@@ -264,10 +243,9 @@ meaning from the outside looking in.
 To change this, we can add the following `pub use` statements to the code from
 Listing 14-2 to re-export the types at the top level, as shown in Listing 14-4:
 
-<figure>
-<span class="filename">Filename: src/lib.rs</span>
+Filename: src/lib.rs
 
-```rust
+```
 //! # Art
 //!
 //! A library for modeling artistic concepts.
@@ -280,12 +258,7 @@ pub mod kinds {
     // ...snip...
 ```
 
-<figcaption>
-
 Listing 14-4: Adding `pub use` statements to re-export items
-
-</figcaption>
-</figure>
 
 <!-- Will add ghosting in libreoffice /Carol -->
 
@@ -294,10 +267,9 @@ documentation. Users of the `art` crate can still see and choose to use the
 internal structure as in Listing 14-3, or they can use the more convenient
 structure from Listing 14-4, as shown in Listing 14-5:
 
-<figure>
-<span class="filename">Filename: src/main.rs</span>
+Filename: src/main.rs
 
-```rust,ignore
+```
 extern crate art;
 
 use art::PrimaryColor;
@@ -308,12 +280,7 @@ fn main() {
 }
 ```
 
-<figcaption>
-
 Listing 14-5: Using the re-exported items from the `art` crate
-
-</figcaption>
-</figure>
 
 <!-- Will add ghosting in libreoffice /Carol -->
 
@@ -333,7 +300,7 @@ command with the API key as the page specifies, which will look something like
 this:
 
 
-```text
+```
 $ cargo login abcdefghijklmnopqrstuvwxyz012345
 ```
 
@@ -353,7 +320,7 @@ name you’d like is available.
 If you try to publish a crate as generated by `cargo new`, you’ll get a warning
 and then an error:
 
-```text
+```
 $ cargo publish
     Updating registry `https://github.com/rust-lang/crates.io-index`
 warning: manifest has no description, license, license-file, documentation,
@@ -385,7 +352,7 @@ slash. So the *Cargo.toml* for a project that is ready to publish might look
 like this:
 
 
-```toml
+```
 [package]
 name = "guessing_game"
 version = "0.1.0"
@@ -414,14 +381,14 @@ there is no limit to the number of versions which can be published.
 Let’s run the `cargo publish` command, which should succeed this time since
 we’ve now specified the required metadata:
 
-```text
+```
 $ cargo publish
  Updating registry `https://github.com/rust-lang/crates.io-index`
 Packaging guessing_game v0.1.0 (file:///projects/guessing_game)
 Verifying guessing_game v0.1.0 (file:///projects/guessing_game)
 Compiling guessing_game v0.1.0
 (file:///projects/guessing_game/target/package/guessing_game-0.1.0)
- Finished debug [unoptimized + debuginfo] target(s) in 0.19 secs
+ Finished dev [unoptimized + debuginfo] target(s) in 0.19 secs
 Uploading guessing_game v0.1.0 (file:///projects/guessing_game)
 ```
 
@@ -432,10 +399,9 @@ anyone can easily add your crate as a dependency to their project.
 
 When you’ve made changes to your crate and are ready to release a new version,
 change the `version` value specified in your *Cargo.toml*. Use the Semantic
-Versioning rules at *http://semver.org/* to decide what an appropriate next version number is
-based on the kinds of changes you’ve made. Then run `cargo publish` to upload
-the new version.
-
+Versioning rules at *http://semver.org/* to decide what an appropriate next
+version number is based on the kinds of changes you’ve made. Then run `cargo
+publish` to upload the new version.
 
 ### Removing Versions from Crates.io with `cargo yank`
 
@@ -460,14 +426,14 @@ reset those secrets immediately.
 To yank a version of a crate, run `cargo yank` and specify which version you
 want to yank:
 
-```text
+```
 $ cargo yank --vers 1.0.1
 ```
 
 You can also undo a yank, and allow projects to start depending on a version
 again, by adding `--undo` to the command:
 
-```text
+```
 $ cargo yank --vers 1.0.1 --undo
 ```
 
@@ -487,7 +453,7 @@ We’ll have a binary that uses two libraries: one that will provide an `add_one
 method and a second that will provide an `add_two` method. Let’s start by
 creating a new crate for the binary:
 
-```text
+```
 $ cargo new --bin adder
      Created binary (application) `adder` project
 $ cd adder
@@ -496,7 +462,7 @@ $ cd adder
 We need to modify the binary package’s *Cargo.toml* to tell Cargo the `adder`
 package is a workspace. Add this at the bottom of the file:
 
-```toml
+```
 [workspace]
 ```
 
@@ -506,7 +472,7 @@ The convention is that any crates that we depend on as sub-directories will be
 part of the workspace. Let’s add a path dependency to the `adder` crate by
 changing the `[dependencies]` section of *Cargo.toml* to look like this:
 
-```toml
+```
 [dependencies]
 add-one = { path = "add-one" }
 ```
@@ -516,14 +482,14 @@ dependencies that aren’t in this workspace.
 
 Next, generate the `add-one` crate within the `adder` directory:
 
-```text
+```
 $ cargo new add-one
      Created library `add-one` project
 ```
 
 Your `adder` directory should now have these directories and files:
 
-```text
+```
 ├── Cargo.toml
 ├── add-one
 │   ├── Cargo.toml
@@ -535,9 +501,9 @@ Your `adder` directory should now have these directories and files:
 
 In *add-one/src/lib.rs*, let’s add an implementation of an `add_one` function:
 
-<span class="filename">Filename: add-one/src/lib.rs</span>
+Filename: add-one/src/lib.rs
 
-```rust
+```
 pub fn add_one(x: i32) -> i32 {
     x + 1
 }
@@ -547,7 +513,7 @@ Open up *src/main.rs* for `adder` and add an `extern crate` line to bring the
 new `add-one` library crate into scope, and change the `main` function to use
 the `add_one` function:
 
-```rust,ignore
+```
 extern crate add_one;
 
 fn main() {
@@ -558,11 +524,11 @@ fn main() {
 
 Let’s build it!
 
-```text
+```
 $ cargo build
    Compiling add-one v0.1.0 (file:///projects/adder/add-one)
    Compiling adder v0.1.0 (file:///projects/adder)
-    Finished debug [unoptimized + debuginfo] target(s) in 0.68 secs
+    Finished dev [unoptimized + debuginfo] target(s) in 0.68 secs
 ```
 
 Note that running `cargo build` in the *adder* directory built both that crate
@@ -574,9 +540,9 @@ Let’s now say that we’d like to use the `rand` crate in our `add-one` crate.
 As usual, we’ll add it to the `[dependencies]` section in the `Cargo.toml` for
 that crate:
 
-<span class="filename">Filename: add-one/Cargo.toml</span>
+Filename: add-one/Cargo.toml
 
-```toml
+```
 [dependencies]
 
 rand = "0.3.14"
@@ -585,7 +551,7 @@ rand = "0.3.14"
 And if we add `extern crate rand;` to *add-one/src/lib.rs* then run `cargo
 build`, it will succeed:
 
-```text
+```
 $ cargo build
     Updating registry `https://github.com/rust-lang/crates.io-index`
  Downloading rand v0.3.14
@@ -593,16 +559,16 @@ $ cargo build
    Compiling rand v0.3.14
    Compiling add-one v0.1.0 (file:///projects/adder/add-one)
    Compiling adder v0.1.0 (file:///projects/adder)
-    Finished debug [unoptimized + debuginfo] target(s) in 10.18 secs
+    Finished dev [unoptimized + debuginfo] target(s) in 10.18 secs
 ```
 
-The top level *Cargo.lock* now contains information about the dependency
-`add-one` has on `rand`. However, even though `rand` is used somewhere in the
+The top level *Cargo.lock* now reflects the fact that `add-one` depends
+on `rand`. However, even though `rand` is used somewhere in the
 workspace, we can’t use it in other crates in the workspace unless we add
 `rand` to their *Cargo.toml* as well. If we add `extern crate rand;` to
 *src/main.rs* for the top level `adder` crate, for example, we’ll get an error:
 
-```text
+```
 $ cargo build
    Compiling adder v0.1.0 (file:///projects/adder)
 error[E0463]: can't find crate for `rand`
@@ -618,9 +584,9 @@ dependency for the `adder` crate.
 For another enhancement, let’s add a test of the `add_one::add_one` function
 within that crate:
 
-<span class="filename">Filename: add-one/src/lib.rs</span>
+Filename: add-one/src/lib.rs
 
-```rust
+```
 pub fn add_one(x: i32) -> i32 {
     x + 1
 }
@@ -638,10 +604,10 @@ mod tests {
 
 Now run `cargo test` in the top-level *adder* directory:
 
-```text
+```
 $ cargo test
    Compiling adder v0.1.0 (file:///projects/adder)
-    Finished debug [unoptimized + debuginfo] target(s) in 0.27 secs
+    Finished dev [unoptimized + debuginfo] target(s) in 0.27 secs
      Running target/debug/adder-f0253159197f7841
 
 running 0 tests
@@ -654,9 +620,9 @@ see that `cargo test` in a workspace only runs the tests for the top level
 crate. To run tests for the other crates, we need to use the `-p` argument to
 indicate we want to run tests for a particular package:
 
-```text
+```
 $ cargo test -p add-one
-    Finished debug [unoptimized + debuginfo] target(s) in 0.0 secs
+    Finished dev [unoptimized + debuginfo] target(s) in 0.0 secs
      Running target/debug/deps/add_one-abcabcabc
 
 running 1 test
@@ -694,7 +660,7 @@ For example, we mentioned in Chapter 12 that there’s a Rust implementation of
 the `grep` tool for searching files called `ripgrep`. If we want to install
 `ripgrep`, we can run:
 
-```text
+```
 $ cargo install ripgrep
 Updating registry `https://github.com/rust-lang/crates.io-index`
  Downloading ripgrep v0.3.2

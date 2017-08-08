@@ -37,12 +37,11 @@ tests and integration tests.
 
 ## How to Write Tests
 
-Tests are Rust functions that verify that the non-test code in the program is
-functioning in the expected manner. The bodies of test functions typically run
-some setup code, then run the code we want to test, then assert whether the
-results are what we expect. Let’s look at the features Rust provides
-specifically for writing tests: the `test` attribute, a few macros, and the
-`should_panic` attribute.
+Tests are Rust functions that verify that the non-test code is functioning in
+the expected manner. The bodies of test functions typically perform some setup,
+run the code we want to test, then assert whether the results are what we
+expect. Let’s look at the features Rust provides specifically for writing
+tests: the `test` attribute, a few macros, and the `should_panic` attribute.
 
 ### The Anatomy of a Test Function
 
@@ -56,7 +55,7 @@ on whether each test function passes or fails.
 
 We saw in Chapter 7 that when you make a new library project with Cargo, a test
 module with a test function in it is automatically generated for us. This is to
-help us get started writing our tests, since we don’t have to go look up the
+help us get started writing our tests so we don’t have to go look up the
 exact structure and syntax of test functions every time we start a new project.
 We can add as many additional test functions and as many test modules as we
 want, though!
@@ -171,9 +170,11 @@ test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured
 ```
 
 Let’s add another test, but this time we’ll make a test that fails! Tests fail
-when something in the test function panics. We talked about the simplest way to
-cause a panic in Chapter 9: call the `panic!` macro! Type in the new test so
-that your `src/lib.rs` now looks like Listing 11-3:
+when something in the test function panics. Each test is run in a new thread,
+and when the main thread sees that a test thread has died, the test is marked
+as failed. We talked about the simplest way to cause a panic in Chapter 9: call
+the `panic!` macro! Type in the new test so that your `src/lib.rs` now looks
+like Listing 11-3:
 
 Filename: src/lib.rs
 
@@ -483,7 +484,7 @@ functions that assert two values are equal are called `expected` and `actual`
 and the order in which we specify the arguments matters. However, in Rust,
 they’re called `left` and `right` instead, and the order in which we specify
 the value we expect and the value that the code under test produces doesn’t
-matter. We could have written the assertion in this test as
+matter. We could write the assertion in this test as
 `assert_eq!(add_two(2), 4)`, which would result in a failure message that says
 `` assertion failed: `(left == right)` (left: `5`, right: `4`) ``.
 
@@ -596,7 +597,7 @@ Now if we run the test again, we’ll get a much more informative error message:
 
 ```
 ---- tests::greeting_contains_name stdout ----
-    thread 'tests::greeting_contains_name' panicked at 'Greeting did not contain
+	thread 'tests::greeting_contains_name' panicked at 'Greeting did not contain
     name, value was `Hello`', src/lib.rs:12
 note: Run with `RUST_BACKTRACE=1` for a backtrace.
 ```
@@ -955,7 +956,7 @@ function and see what the output looks like then!
 Sometimes, running a full test suite can take a long time. If you’re working on
 code in a particular area, you might want to run only the tests pertaining to
 that code. You can choose which tests to run by passing `cargo test` the name
-or names of the test/s you want to run as an argument.
+or names of the test(s) you want to run as an argument.
 
 To demonstrate how to run a subset of tests, we’ll create three tests for our
 `add_two` function as shown in Listing 11-11 and choose which ones to run:
@@ -1117,8 +1118,8 @@ tests are entirely external to your library, and use your code in the same way
 any other external code would, using only the public interface and exercising
 multiple modules per test.
 
-Both kinds of tests are important to ensure that the pieces of your library are
-doing what you expect them to separately and together.
+Writing both kinds of tests is important to ensure that the pieces of your
+library are doing what you expect them to separately and together.
 
 ### Unit Tests
 

@@ -8,11 +8,11 @@ practice some of the Rust you now have under your belt.
 Rust’s speed, safety, *single binary* output, and cross-platform support make
 it a good language for creating command line tools, so for our project we’ll
 make our own version of the classic command line tool `grep`. Grep is an
-acronym for “Globally search a Regular Expression and Print.” In the simplest
-use case, `grep` searches a specified file for a specified string. To do so,
-`grep` takes a filename and a string as its arguments, then reads the file and
-finds lines in that file that contain the string argument. It’ll then print out
-those lines.
+acronym for “**G**lobally search a **R**egular **E**xpression and **P**rint.”
+In the simplest use case, `grep` searches a specified file for a specified
+string. To do so, `grep` takes a filename and a string as its arguments, then
+reads the file and finds lines in that file that contain the string argument.
+It’ll then print out those lines.
 
 Along the way, we’ll show how to make our command line tool use features of the
 terminal that many command line tools use. We’ll read the value of an
@@ -23,10 +23,11 @@ redirect successful output to a file while still seeing error messages on the
 screen.
 
 One Rust community member, Andrew Gallant, has already created a
-fully-featured, very fast version of `grep`, called `ripgrep`. By comparison,
-our version of `grep` will be fairly simple, but this chapter will give you
-some of the background knowledge to help you understand a real-world project
-like `ripgrep`.
+fully-featured, very fast version of `grep`, called
+[`ripgrep`](https://github.com/BurntSushi/ripgrep)<!-- ignore -->. By
+comparison, our version of `grep` will be fairly simple, but this chapter will
+give you some of the background knowledge to help you understand a real-world
+project like `ripgrep`.
 
 This project will bring together a number of concepts you’ve learned so far:
 
@@ -38,13 +39,3 @@ This project will bring together a number of concepts you’ve learned so far:
 
 We’ll also briefly introduce closures, iterators, and trait objects, which
 Chapters 13 and 17 will cover in detail.
-
-Let’s create a new project with, as always, `cargo new`. We’re calling our
-project `minigrep` to distinguish from the `grep` tool that you may already
-have on your system:
-
-```text
-$ cargo new --bin minigrep
-     Created binary (application) `minigrep` project
-$ cd minigrep
-```

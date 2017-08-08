@@ -104,6 +104,7 @@ like Listing 19-23:
 # trait GGraph<Node, Edge> {}
 #
 fn distance<N, E, G: GGraph<N, E>>(graph: &G, start: &N, end: &N) -> u32 {
+    // ...snip...
 #     0
 }
 ```
@@ -129,6 +130,7 @@ Contrast with the definition of `distance` in Listing 19-24 that uses the
 # }
 #
 fn distance<G: AGraph>(graph: &G, start: &G::Node, end: &G::Node) -> u32 {
+    // ...snip...
 #     0
 }
 ```
@@ -152,6 +154,7 @@ trait object:
 # trait GGraph<Node, Edge> {}
 #
 fn distance<N, E>(graph: &GGraph<N, E>, start: &N, end: &N) -> u32 {
+    // ...snip...
 #     0
 }
 ```
@@ -178,7 +181,9 @@ for their `Edge` type:
 #     type Edge;
 # }
 #
-fn traverse(graph: &AGraph<Node=usize, Edge=(usize, usize)>) {}
+fn traverse(graph: &AGraph<Node=usize, Edge=(usize, usize)>) {
+    // ...snip...
+}
 ```
 
 While trait objects mean that we don’t need to know the concrete type of the
