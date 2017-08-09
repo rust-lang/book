@@ -1,10 +1,11 @@
-## Writing Error Messages to `stderr` Instead of `stdout`
+## Writing Error Messages to Standard Error Instead of Standard Output
 
 At the moment we’re writing all of our output to the terminal with the
 `println!` function. Most terminals provide two kinds of output: *standard
-output* for general information, and *standard error* for error messages. This
-distinction enables users to choose whether to direct a the successful output
-of a program to a file but still print error messages to the screen.
+output* for general information (sometimes abbreviated as `stdout` in code),
+and *standard error* for error messages (`stderr`). This distinction enables
+users to choose whether to direct a the successful output of a program to a
+file but still print error messages to the screen.
 
 The `println!` function is only capable of printing to standard output, though,
 so we have to use something else in order to print to standard error.
@@ -72,11 +73,11 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 12-24: Writing error messages to `stderr` instead
-of `stdout` using `eprintln!`</span>
+<span class="caption">Listing 12-24: Writing error messages to standard error
+instead of standard output using `eprintln!`</span>
 
 After changing `println!` to `eprintln!`, let’s try running the program again
-in the same way, without any arguments and redirecting `stdout` with `>`:
+in the same way, without any arguments and redirecting standard output with `>`:
 
 ```text
 $ cargo run > output.txt
@@ -103,18 +104,18 @@ Are you nobody, too?
 How dreary to be somebody!
 ```
 
-This demonstrates that we’re now using `stdout` for successful output and
-`stderr` for error output as appropriate.
+This demonstrates that we’re now using standard output for successful output and
+standard error for error output as appropriate.
 
 ## Summary
 
 In this chapter, we’ve recapped on some of the major concepts so far and
 covered how to do common I/O operations in a Rust context. By using command
-line arguments, files, environment variables, and the `eprintln!` macro with
-`stderr`, you’re now prepared to write command line applications. By using the
-concepts from previous chapters, your code will be well-organized, be able to
-store data effectively in the appropriate data structures, handle errors
-nicely, and be well tested.
+line arguments, files, environment variables, and the `eprintln!` macro for
+printing errors, you’re now prepared to write command line applications. By
+using the concepts from previous chapters, your code will be well-organized, be
+able to store data effectively in the appropriate data structures, handle
+errors nicely, and be well tested.
 
 Next, let’s explore some functional-language influenced Rust features: closures
 and iterators.
