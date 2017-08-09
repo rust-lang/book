@@ -12,7 +12,7 @@ what they actually are. -->
 <!-- They are pre-defined, we've tried to clarify /Carol -->
 
 Cargo has four profiles defined with good default configurations for each use
-case. Cargo uses the different profiles based on which command you're running.
+case. Cargo uses the different profiles based on which command you’re running.
 The commands correspond to the profiles as shown in Table 14-1:
 
 <!-- Hm, so these profiles aren't built-in, just supported? and used for what
@@ -44,7 +44,7 @@ $ cargo build --release
     Finished release [optimized] target(s) in 0.0 secs
 ```
 
-The "dev" and "release" notifications here indicate that the compiler is
+The “dev” and “release” notifications here indicate that the compiler is
 using different profiles.
 
 <!-- which profile is "debug" associated with? As you can probably tell, I'm
@@ -64,7 +64,7 @@ If you have multiple profiles in the toml, how do you choose which one to use?
 I'm confused about how you're drawing your conclusions. /Carol -->
 
 Cargo has default settings for each of the profiles that apply when there
-aren't any `[profile.*]` sections in the project's *Cargo.toml* file. By adding
+aren’t any `[profile.*]` sections in the project’s *Cargo.toml* file. By adding
 `[profile.*]` sections for any profile we want to customize, we can choose to
 override any subset of the default settings. For example, here are the default
 values for the `opt-level` setting for the `dev` and `release` profiles:
@@ -79,17 +79,17 @@ opt-level = 3
 
 The `opt-level` setting controls how many optimizations Rust will apply to your
 code, with a range of zero to three. Applying more optimizations makes
-compilation take longer, so if you're in development and compiling very often,
-you'd want compiling to be fast at the expense of the resulting code running
-slower. That's why the default `opt-level` for `dev` is `0`. When you're ready
-to release, it's better to spend more time compiling. You'll only be compiling
+compilation take longer, so if you’re in development and compiling very often,
+you’d want compiling to be fast at the expense of the resulting code running
+slower. That’s why the default `opt-level` for `dev` is `0`. When you’re ready
+to release, it’s better to spend more time compiling. You’ll only be compiling
 in release mode once, and running the compiled program many times, so release
-mode trades longer compile time for code that runs faster. That's why the
+mode trades longer compile time for code that runs faster. That’s why the
 default `opt-level` for the `release` profile is `3`.
 
 We can choose to override any default setting by adding a different value for
 them in *Cargo.toml*. If we wanted to use optimization level 1 in the
-development profile, for example, we can add these two lines to our project's
+development profile, for example, we can add these two lines to our project’s
 *Cargo.toml*:
 
 <!-- So do we choose which profile to use when? How do we do that? Or is that
@@ -114,4 +114,4 @@ will use the defaults for the `dev` profile plus our customization to
 optimizations than the default, but not as many as a release build.
 
 For the full list of configuration options and defaults for each profile, see
-[Cargo's documentation](http://doc.crates.io/).
+[Cargo’s documentation](http://doc.crates.io/).

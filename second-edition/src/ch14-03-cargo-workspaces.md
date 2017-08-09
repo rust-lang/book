@@ -8,11 +8,11 @@ multiple library crates. In this situation, Cargo has a feature called
 in tandem.
 
 A *workspace* is a set of packages that will all share the same *Cargo.lock*
-and output directory. Let's make a project using a workspace, using trivial
-code so we can concentrate on the structure of a workspace. We'll have a binary
+and output directory. Let’s make a project using a workspace, using trivial
+code so we can concentrate on the structure of a workspace. We’ll have a binary
 that uses two libraries: one library that will provide an `add_one` function
 and a second library that will provide an `add_two` function. These three
-crates will all be part of the same workspace. We'll start by creating a new
+crates will all be part of the same workspace. We’ll start by creating a new
 crate for the binary:
 
 ```text
@@ -21,7 +21,7 @@ $ cargo new --bin adder
 $ cd adder
 ```
 
-We need to modify the binary package's *Cargo.toml* and add a `[workspace]`
+We need to modify the binary package’s *Cargo.toml* and add a `[workspace]`
 section to tell Cargo the `adder` package is a workspace. Add this at the
 bottom of the file:
 
@@ -30,7 +30,7 @@ bottom of the file:
 ```
 
 Like many Cargo features, workspaces support convention over configuration: we
-don't need to add anything more than this to *Cargo.toml* to define our
+don’t need to add anything more than this to *Cargo.toml* to define our
 workspace as long as we follow the convention.
 
 <!-- Below -- any crates what depends on, specifically? The program? -->
@@ -44,8 +44,8 @@ top-level crate depends on are part of the workspace. Any crate, whether in a
 workspace or not, can specify that it has a dependency on a crate in a local
 directory by using the `path` attribute on the dependency specification in
 *Cargo.toml*. If a crate has the `[workspace]` key and we specify path
-dependencies where the paths are subdirectories of the crate's directory, those
-dependent crates will be considered part of the workspace. Let's specify in the
+dependencies where the paths are subdirectories of the crate’s directory, those
+dependent crates will be considered part of the workspace. Let’s specify in the
 *Cargo.toml* for the top-level `adder` crate that it will have a dependency on
 an `add-one` crate that will be in the `add-one` subdirectory, by changing
 *Cargo.toml* to look like this:
@@ -59,8 +59,8 @@ the paragraph above? -->
 add-one = { path = "add-one" }
 ```
 
-If we add dependencies to *Cargo.toml* that don't have a `path` specified,
-those dependencies will be normal dependencies that aren't in this workspace
+If we add dependencies to *Cargo.toml* that don’t have a `path` specified,
+those dependencies will be normal dependencies that aren’t in this workspace
 and are assumed to come from Crates.io.
 
 ### Creating the Second Crate in the Workspace
@@ -88,7 +88,7 @@ Your `adder` directory should now have these directories and files:
     └── main.rs
 ```
 
-In *add-one/src/lib.rs*, let's add an `add_one` function:
+In *add-one/src/lib.rs*, let’s add an `add_one` function:
 
 <span class="filename">Filename: add-one/src/lib.rs</span>
 
@@ -117,7 +117,7 @@ fn main() {
 <span class="caption">Listing 14-12: Using the `add-one` library crate from the
 `adder` crate</span>
 
-Let's build the `adder` crate by running `cargo build` in the *adder* directory!
+Let’s build the `adder` crate by running `cargo build` in the *adder* directory!
 
 ```text
 $ cargo build
@@ -141,7 +141,7 @@ Note that this builds both the `adder` crate and the `add-one` crate in
 └── target
 ```
 
-The workspace has one *target* directory at the top level; *add-one* doesn't
+The workspace has one *target* directory at the top level; *add-one* doesn’t
 have its own *target* directory. Even if we go into the `add-one` directory and
 run `cargo build`, the compiled artifacts end up in *adder/target* rather than
 *adder/add-one/target*. The crates in a workspace depend on each other. If each
@@ -167,9 +167,9 @@ are using the same version of all dependencies. If we add the `rand` crate to
 both *Cargo.toml* and *add-one/Cargo.toml*, Cargo will resolve both of those to
 one version of `rand` and record that in the one *Cargo.lock*. Making all
 crates in the workspace use the same dependencies means the crates in the
-workspace will always be compatible with each other. Let's try this out now.
+workspace will always be compatible with each other. Let’s try this out now.
 
-Let's add the `rand` crate to the `[dependencies]` section in
+Let’s add the `rand` crate to the `[dependencies]` section in
 *add-one/Cargo.toml* in order to be able to use the `rand` crate in the
 `add-one` crate:
 
@@ -196,11 +196,11 @@ $ cargo build
     Finished dev [unoptimized + debuginfo] target(s) in 10.18 secs
 ```
 
-The top level *Cargo.lock* now contains information about `add-one`'s
+The top level *Cargo.lock* now contains information about `add-one`’s
 dependency on `rand`. However, even though `rand` is used somewhere in the
-workspace, we can't use it in other crates in the workspace unless we add
+workspace, we can’t use it in other crates in the workspace unless we add
 `rand` to their *Cargo.toml* as well. If we add `extern crate rand;` to
-*src/main.rs* for the top level `adder` crate, for example, we'll get an error:
+*src/main.rs* for the top level `adder` crate, for example, we’ll get an error:
 
 ```text
 $ cargo build
@@ -218,12 +218,12 @@ will add `rand` to the list of dependencies for `adder` in *Cargo.lock*, but no
 additional copies of `rand` will be downloaded. Cargo has ensured for us that
 any crate in the workspace using the `rand` crate will be using the same
 version. Using the same version of `rand` across the workspace saves space
-since we won't have multiple copies and ensures that the crates in the
+since we won’t have multiple copies and ensures that the crates in the
 workspace will be compatible with each other.
 
 #### Adding a Test to a Workspace
 
-For another enhancement, let's add a test of the `add_one::add_one` function
+For another enhancement, let’s add a test of the `add_one::add_one` function
 within the `add_one` crate:
 
 <span class="filename">Filename: add-one/src/lib.rs</span>
@@ -313,7 +313,7 @@ didn’t run the `adder` crate tests.
 If you choose to publish the crates in the workspace to crates.io, each crate
 in the workspace will get published separately. The `cargo publish` command
 does not have an `--all` flag or a `-p` flag, so it is necessary to change to
-each crate's directory and run `cargo publish` on each crate in the workspace
+each crate’s directory and run `cargo publish` on each crate in the workspace
 in order to publish them.
 
 <!-- What does that mean, we have to publish them all one at a time?-->

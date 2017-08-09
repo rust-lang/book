@@ -1,7 +1,7 @@
 # More about Cargo and Crates.io
 
-So far we've used only the most basic features of Cargo to build, run, and test
-our code, but it can do a lot more. Here we'll go over some of its other, more
+So far we’ve used only the most basic features of Cargo to build, run, and test
+our code, but it can do a lot more. Here we’ll go over some of its other, more
 advanced features to show you how to:
 
 * Customize your build through release profiles
