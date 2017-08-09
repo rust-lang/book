@@ -262,6 +262,7 @@ pushups
 QuitMessage
 RAII
 randcrate
+README
 READMEs
 rect
 recurse
@@ -290,6 +291,7 @@ rUsT
 rustc
 rustdoc
 rustup
+screenshot
 searchstring
 SecondaryColor
 SelectBox
@@ -371,6 +373,7 @@ unsafety
 unsized
 unsynchronized
 URIs
+UsefulType
 username
 USERPROFILE
 usize
