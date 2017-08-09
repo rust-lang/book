@@ -337,11 +337,12 @@ fn main() {
 type `T`.</span>
 
 Note that we have to declare `T` just after `impl` in order to use `T` in the
-type `Point<T>`. In contrast, we could choose to implement methods on
+type `Point<T>`. Declaring `T` as a generic type after the `impl` is how Rust
+knows the type in the angle brackets in `Point` is a generic type rather than a
+concrete type. For example, we could choose to implement methods on
 `Point<f32>` instances rather than `Point` instances with any generic type.
-Listing 10-10 shows that we do not need to declare the generic type `T` after
-the `impl` in this case, since we’ve filled in the generic type with the
-concrete type `f32`:
+Listing 10-10 shows that we don't declare anything after the `impl` in this
+case, since we’re using a concrete type, `f32`:
 
 ```rust
 # struct Point<T> {
