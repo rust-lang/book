@@ -7,16 +7,17 @@ function and the `search` function.
 
 ### Removing a `clone` Using an Iterator
 
-In Listing 12-13, we had code that took a slice of `String` values and created
-an instance of the `Config` struct by checking for the right number of
-arguments, indexing into the slice, and cloning the values so that the `Config`
-struct could own those values. We’ve reproduced the code here in Listing 13-24:
+In Listing 12-6, we added code that took a slice of `String` values and created
+an instance of the `Config` struct by indexing into the slice and cloning the
+values so that the `Config` struct could own those values. We’ve reproduced the
+implementation of the `Config::new` function as it was at the end of Chapter 12
+in Listing 13-24:
 
-<span class="filename">Filename: src/main.rs</span>
+<span class="filename">Filename: src/lib.rs</span>
 
 ```rust,ignore
 impl Config {
-    fn new(args: &[String]) -> Result<Config, &'static str> {
+    pub fn new(args: &[String]) -> Result<Config, &'static str> {
         if args.len() < 3 {
             return Err("not enough arguments");
         }
@@ -24,15 +25,15 @@ impl Config {
         let query = args[1].clone();
         let filename = args[2].clone();
 
-        Ok(Config {
-            query, filename
-        })
+        let case_sensitive = env::var("CASE_INSENSITIVE").is_err();
+
+        Ok(Config { query, filename, case_sensitive })
     }
 }
 ```
 
 <span class="caption">Listing 13-24: Reproduction of the `Config::new` function
-from Listing 12-13</span>
+from the end of Chapter 12</span>
 
 <!--Is this why we didn't want to use clone calls, they were inefficient, or
 was it that stacking clone calls can become confusing/is bad practice? -->
@@ -69,21 +70,17 @@ operations that borrow, we can move the `String` values from the iterator into
 #### Using the Iterator Returned by `env::args` Directly
 
 In your I/O project’s *src/main.rs*, let’s change the start of the `main`
-function from this code that we had in Listing 12-23:
+function from this code that we had at the end of Chapter 12:
 
 ```rust,ignore
 fn main() {
     let args: Vec<String> = env::args().collect();
-    let mut stderr = std::io::stderr();
 
     let config = Config::new(&args).unwrap_or_else(|err| {
-        writeln!(
-            &mut stderr,
-            "Problem parsing arguments: {}",
-            err
-        ).expect("Could not write to stderr");
+        eprintln!("Problem parsing arguments: {}", err);
         process::exit(1);
     });
+
     // ...snip...
 }
 ```
@@ -94,16 +91,11 @@ To the code in Listing 13-25:
 
 ```rust,ignore
 fn main() {
-    let mut stderr = std::io::stderr();
-
     let config = Config::new(env::args()).unwrap_or_else(|err| {
-        writeln!(
-            &mut stderr,
-            "Problem parsing arguments: {}",
-            err
-        ).expect("Could not write to stderr");
+        eprintln!("Problem parsing arguments: {}", err);
         process::exit(1);
     });
+
     // ...snip...
 }
 ```
@@ -135,7 +127,7 @@ Next, we need to update the definition of `Config::new`. In your I/O project’s
 
 ```rust,ignore
 impl Config {
-    fn new(args: std::env::Args) -> Result<Config, &'static str> {
+    pub fn new(args: std::env::Args) -> Result<Config, &'static str> {
         // ...snip...
 ```
 
@@ -166,7 +158,7 @@ from Listing 12-23 to use the `next` method:
 # }
 #
 impl Config {
-    fn new(mut args: std::env::Args) -> Result<Config, &'static str> {
+    pub fn new(mut args: std::env::Args) -> Result<Config, &'static str> {
     	args.next();
 
         let query = match args.next() {
@@ -214,13 +206,13 @@ probably just distracting to most people /Carol -->
 ### Making Code Clearer with Iterator Adaptors
 
 The other place in our I/O project we could take advantage of iterators is in
-the `search` function, as implemented in Listing 12-19 and reproduced here in
-Listing 13-28:
+the `search` function, reproduced here in Listing 13-28 as it was at the end of
+Chapter 12:
 
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust,ignore
-fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
+pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
     let mut results = Vec::new();
 
     for line in contents.lines() {
@@ -234,7 +226,7 @@ fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
 ```
 
 <span class="caption">Listing 13-28: The implementation of the `search`
-function from Listing 12-19</span>
+function from Chapter 12</span>
 
 We can write this code in a much shorter way by using iterator adaptor methods
 instead. This also lets us avoid having a mutable intermediate `results`
@@ -250,7 +242,7 @@ vector. Listing 13-29 shows this change:
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust,ignore
-fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
+pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
     contents.lines()
         .filter(|line| line.contains(query))
         .collect()
@@ -264,7 +256,9 @@ Recall that the purpose of the `search` function is to return all lines in
 `contents` that contain the `query`. Similarly to the `filter` example in
 Listing 13-19, we can use the `filter` adaptor to keep only the lines that
 `line.contains(query)` returns true for. We then collect the matching lines up
-into another vector with `collect`. Much simpler!
+into another vector with `collect`. Much simpler! Feel free to make the same
+change to use iterator methods in the `search_case_insensitive` function as
+well.
 
 <!-- what is that, here, only lines that contain a matching string? A bit more
 context would help out, we probably can't rely on readers remembering all the
