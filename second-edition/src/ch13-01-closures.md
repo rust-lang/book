@@ -855,10 +855,12 @@ directly map to the three ways a function can take a parameter: taking
 ownership, borrowing immutably, and borrowing mutably. These ways of capturing
 values are encoded in the three `Fn` traits as follows:
 
-* `FnOnce` takes ownership of the variables it captures from the environment
-  and moves those variables into the closure when the closure is defined.
-  Therefore, a `FnOnce` closure cannot be called more than once in the same
-  context.
+* `FnOnce` consumes the variables it captures from its enclosing scope (the
+  enclosing scope is called the closure's *environment*). In order to consume
+  the captured variables, the closure must therefore take ownership of these
+  variables and moves them into the closure when the closure is defined. The
+  `Once` part of the name is because the closure can't take ownership of the
+  same variables more than once, so it can only be called one time.
 * `Fn` borrows values from the environment immutably.
 * `FnMut` can change the environment since it mutably borrows values.
 
