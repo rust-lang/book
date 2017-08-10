@@ -78,14 +78,11 @@ user1.email = String::from("anotheremail@example.com");
 
 Listing 5-3: Changing the value in the `email` field of a `User` instance
 
-### Field Init Shorthand when Variables Have the Same Name as Fields
-
-If you have variables with the same names as struct fields, you can use *field
-init shorthand*. This can make functions that create new instances of structs
-more concise. First, let’s look at the more verbose way to initialize a struct
-instance. The function named `build_user` shown here in Listing 5-4 has
-parameters named `email` and `username`. The function creates and returns a
-`User` instance:
+Like any expression, we can implicitly return a new instance of a struct from a
+function by constructing the new instance as the last expression in the
+function body. Listing 5-4 shows a `build_user` function that returns a `User`
+instance with the given `email` and `username`. The `active` field gets the
+value of `true`, and the `sign_in_count` gets a value of `1`.
 
 ```
 fn build_user(email: String, username: String) -> User {
@@ -101,12 +98,24 @@ fn build_user(email: String, username: String) -> User {
 Listing 5-4: A `build_user` function that takes an email and username and
 returns a `User` instance
 
-Because the parameter names `email` and `username` are the same as the `User`
-struct’s field names `email` and `username`, we can write `build_user` without
-the repetition of `email` and `username` as shown in Listing 5-5. This version
-of `build_user` behaves the same way as the one in Listing 5-4. The field init
-syntax can make cases like this shorter to write, especially when structs have
-many fields.
+Repeating the `email` field name and `email` variable, and the same for
+`username`, is a bit tedious, though. It makes sense to name the function
+arguments with the same name as the struct fields, but if the struct had more
+fields, repeating each name would get even more annoying. Luckily, there's a
+convenient shorthand!
+
+### Field Init Shorthand when Variables Have the Same Name as Fields
+
+If you have variables with the same names as struct fields, you can use *field
+init shorthand*. This can make functions that create new instances of structs
+more concise.
+
+In Listing 5-4, the parameter names `email` and `username` are the same as the
+`User` struct’s field names `email` and `username`. Because the names are
+exactly the same, we can write `build_user` without the repetition of `email`
+and `username` as shown in Listing 5-5. This version of `build_user` behaves
+the same way as the one in Listing 5-4. The field init syntax can make cases
+like this shorter to write, especially when structs have many fields.
 
 ```
 fn build_user(email: String, username: String) -> User {
