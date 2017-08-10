@@ -14,7 +14,7 @@ advanced features to show you how to:
 * Extend Cargo with your own custom commands
 
 Cargo can do even more than what we can cover in this chapter too, so for a
-full explanation, see its documentation at *http://doc.crates.io/*.
+full explanation, see its documentation at *http://doc.rust-lang.org/cargo/*.
 
 <!--can you give a link to the documentation?-->
 <!-- done /Carol -->
@@ -134,12 +134,12 @@ will use the defaults for the `dev` profile plus our customization to
 optimizations than the default, but not as many as a release build.
 
 For the full list of configuration options and defaults for each profile, see
-Cargo’s documentation at *http://doc.crates.io/*.
+Cargo’s documentation at *http://doc.rust-lang.org/cargo/*.
 
 ## Publishing a Crate to Crates.io
 
-We’ve used crates from crates.io as dependencies of our project, but you can
-also share your code for other people to use by publishing your own crates.
+We’ve used packages from crates.io as dependencies of our project, but you can
+also share your code for other people to use by publishing your own packages.
 Crates.io distributes the source code of your packages, so it primarily hosts
 code that’s open source.
 
@@ -164,8 +164,8 @@ Just wanted to make that distinction -->
 
 Documentation comments use `///` instead of `//` and support Markdown notation
 for formatting the text if you’d like. You place documentation comments just
-before the item they are documenting. Listing 14-2 shows documentation
-comments for an `add_one` function in a crate named `my_crate`:
+before the item they are documenting. Listing 14-2 shows documentation comments
+for an `add_one` function in a crate named `my_crate`:
 
 Filename: src/lib.rs
 
@@ -561,8 +561,6 @@ warning: manifest has no description, license, license-file, documentation,
 homepage or repository.
 ...snip...
 error: api errors: missing or empty metadata fields: description, license.
-Please see http://doc.crates.io/manifest.html#package-metadata for how to
-upload metadata
 ```
 
 This is because we’re missing some crucial information: a description and
@@ -613,10 +611,9 @@ license = "MIT/Apache-2.0"
 [dependencies]
 ```
 
-Be sure to check out the documentation on crates.io at
-*http://doc.crates.io/manifest.html#package-metadata*. That page describes
-other metadata you can specify to ensure your crate can be discovered and used
-more easily!
+Cargo's documentation at *http://doc.rust-lang.org/cargo/* describes other
+metadata you can specify to ensure your crate can be discovered and used more
+easily!
 
 ### Publishing to Crates.io
 
