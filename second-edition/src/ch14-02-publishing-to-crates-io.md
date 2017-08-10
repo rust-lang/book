@@ -1,7 +1,7 @@
 ## Publishing a Crate to Crates.io
 
-We’ve used crates from crates.io as dependencies of our project, but you can
-also share your code for other people to use by publishing your own crates.
+We’ve used packages from crates.io as dependencies of our project, but you can
+also share your code for other people to use by publishing your own packages.
 Crates.io distributes the source code of your packages, so it primarily hosts
 code that’s open source.
 
@@ -428,8 +428,6 @@ warning: manifest has no description, license, license-file, documentation,
 homepage or repository.
 ...snip...
 error: api errors: missing or empty metadata fields: description, license.
-Please see http://doc.crates.io/manifest.html#package-metadata for how to
-upload metadata
 ```
 
 This is because we’re missing some crucial information: a description and
@@ -480,10 +478,9 @@ license = "MIT/Apache-2.0"
 [dependencies]
 ```
 
-Be sure to check out the documentation on crates.io at
-*http://doc.crates.io/manifest.html#package-metadata*. That page describes
-other metadata you can specify to ensure your crate can be discovered and used
-more easily!
+[Cargo's documentation](http://doc.rust-lang.org/cargo/) describes other
+metadata you can specify to ensure your crate can be discovered and used more
+easily!
 
 ### Publishing to Crates.io
 

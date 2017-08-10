@@ -114,4 +114,4 @@ will use the defaults for the `dev` profile plus our customization to
 optimizations than the default, but not as many as a release build.
 
 For the full list of configuration options and defaults for each profile, see
-[Cargo’s documentation](http://doc.crates.io/).
+[Cargo’s documentation](http://doc.rust-lang.org/cargo/).
