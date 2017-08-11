@@ -74,7 +74,7 @@
     - [Performance](ch13-04-performance.md)
 
 - [More about Cargo and Crates.io](ch14-00-more-about-cargo.md)
-    - [Release Profiles](ch14-01-release-profiles.md)
+    - [Customizing Builds with Release Profiles](ch14-01-release-profiles.md)
     - [Publishing a Crate to Crates.io](ch14-02-publishing-to-crates-io.md)
     - [Cargo Workspaces](ch14-03-cargo-workspaces.md)
     - [Installing Binaries from Crates.io with `cargo install`](ch14-04-installing-binaries.md)
