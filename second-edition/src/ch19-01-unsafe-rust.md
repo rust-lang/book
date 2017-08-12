@@ -78,9 +78,11 @@ have an immutable raw pointer and a mutable raw pointer, written as `*const T`
 and `*mut T`, respectively. In the context of raw pointers, “immutable” means
 that the pointer can’t be directly assigned to after being dereferenced.
 
-Raw pointers are different than references and smart pointers in a few ways. Raw pointers:
+Raw pointers are different than references and smart pointers in a few ways.
+Raw pointers:
 
-- Are allowed to ignore the borrowing rules and have both immutable and a mutable pointer or multiple mutable pointers to the same location
+- Are allowed to ignore the borrowing rules and have both immutable and a
+  mutable pointer or multiple mutable pointers to the same location
 - Aren't guaranteed to point to valid memory
 - Are allowed to be null
 - Don't implement any automatic clean-up

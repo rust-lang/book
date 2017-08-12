@@ -101,9 +101,20 @@ we’ll look at some abstractions that provide a safe interface to unsafe code.
 Way back in Chapter 4, we first learned about references. We also learned that
 the compiler ensures that references are always valid. Unsafe Rust has two new
 types similar to references called *raw pointers*. Just like references, we can
-have an immutable raw pointer and a mutable raw pointer. In the context of raw
-pointers, “immutable” means that the pointer can’t be directly dereferenced and
-assigned to. Listing 19-1 shows how to create raw pointers from references:
+have an immutable raw pointer and a mutable raw pointer, written as `*const T`
+and `*mut T`, respectively. In the context of raw pointers, “immutable” means
+that the pointer can’t be directly assigned to after being dereferenced.
+
+Raw pointers are different than references and smart pointers in a few ways.
+Raw pointers:
+
+- Are allowed to ignore the borrowing rules and have both immutable and a
+  mutable pointer or multiple mutable pointers to the same location
+- Aren't guaranteed to point to valid memory
+- Are allowed to be null
+- Don't implement any automatic clean-up
+
+Listing 19-1 shows how to create raw pointers from references:
 
 ```
 let mut num = 5;
@@ -116,8 +127,10 @@ Listing 19-1: Creating raw pointers from references
 
 The `*const T` type is an immutable raw pointer, and `*mut T` is a mutable raw
 pointer. We’ve created raw pointers by using `as` to cast an immutable and a
-mutable reference into their corresponding raw pointer types. Unlike
-references, these pointers may or may not be valid.
+mutable reference into their corresponding raw pointer types. These particular
+raw pointers will be valid since we created them directly from references that
+are guaranteed to be valid, but we can't make that assumption about any raw
+pointer.
 
 Listing 19-2 shows how to create a raw pointer to an arbitrary location in
 memory. Trying to use arbitrary memory is undefined: there may be data at that
@@ -349,19 +362,21 @@ that the slice this code creates contains valid `i32` values. Attempting to use
 Sometimes, your Rust code may need to interact with code written in another
 language. To do this, Rust has a keyword, `extern`, that facilitates creating
 and using a *Foreign Function Interface* (FFI). Listing 19-8 demonstrates how
-to set up an integration with a function named `some_function` defined in an
-external library written in a language other than Rust. Functions declared
-within `extern` blocks are always unsafe to call from Rust code:
+to set up an integration with the `abs` function defined in the C standard
+library. Functions declared within `extern` blocks are always unsafe to call
+from Rust code:
 
 Filename: src/main.rs
 
 ```
 extern "C" {
-    fn some_function();
+    fn abs(input: i32) -> i32;
 }
 
 fn main() {
-    unsafe { some_function(); }
+    unsafe {
+        println!("Absolute value of -3 according to C: {}", abs(-3));
+    }
 }
 ```
 
@@ -1087,9 +1102,7 @@ While trait objects mean that we don’t need to know the concrete type of the
 `graph` parameter at compile time, we do need to constrain the use of the
 `AGraph` trait in the `traverse` function by the concrete types of the
 associated types. If we didn’t provide this constraint, Rust wouldn’t be able
-to figure out which `impl` to match this trait object to, because the
-associated types can be part of the signatures of the methods that Rust needs
-to look up in the vtable.
+to figure out which `impl` to match this trait object to.
 
 ### Operator Overloading and Default Type Parameters
 
@@ -1537,7 +1550,7 @@ The main use case for type synonyms is to reduce repetition. For example, we
 may have a lengthy type like this:
 
 ```
-Box<FnOnce() + Send + 'static>
+Box<Fn() + Send + 'static>
 ```
 
 Writing this out in function signatures and as type annotations all over the
@@ -1545,13 +1558,13 @@ place can be tiresome and error-prone. Imagine having a project full of code
 like that in Listing 19-31:
 
 ```
-let f: Box<FnOnce() + Send + 'static> = Box::new(|| println!("hi"));
+let f: Box<Fn() + Send + 'static> = Box::new(|| println!("hi"));
 
-fn takes_long_type(f: Box<FnOnce() + Send + 'static>) {
+fn takes_long_type(f: Box<Fn() + Send + 'static>) {
     // ...snip...
 }
 
-fn returns_long_type() -> Box<FnOnce() + Send + 'static> {
+fn returns_long_type() -> Box<Fn() + Send + 'static> {
     // ...snip...
 }
 ```
@@ -1564,7 +1577,7 @@ the verbose type, and we can replace all uses of the type with the shorter
 `Thunk` as shown in Listing 19-32:
 
 ```
-type Thunk = Box<FnOnce() + Send + 'static>;
+type Thunk = Box<Fn() + Send + 'static>;
 
 let f: Thunk = Box::new(|| println!("hi"));
 
@@ -1822,10 +1835,10 @@ closures: function pointers, diverging functions, and returning closures.
 ### Function pointers
 
 We’ve talked about how to pass closures to functions, but you can pass regular
-functions to functions too! Functions have the type `fn`, with a lower case ‘f’
-not to be confused with the `Fn` closure trait. `fn` is called a *function
-pointer*. The syntax for specifying that a parameter is a function pointer is
-similar to that of closures, as shown in Listing 19-34:
+functions to functions too! Functions coerce to the type `fn`, with a lower
+case ‘f’ not to be confused with the `Fn` closure trait. `fn` is called a
+*function pointer*. The syntax for specifying that a parameter is a function
+pointer is similar to that of closures, as shown in Listing 19-34:
 
 Filename: src/main.rs
 
@@ -1927,7 +1940,7 @@ std::marker::Sized` is not satisfied
   = note: the return type of a function must have a statically known size
 ```
 
-The `Sized` trait again! Rust doesn’t know much space it’ll need to store the
+The `Sized` trait again! Rust doesn’t know how much space it’ll need to store the
 closure. We saw a solution to this in the previous section, though: we can use
 a trait object:
 
