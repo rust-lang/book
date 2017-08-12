@@ -74,9 +74,18 @@ we’ll look at some abstractions that provide a safe interface to unsafe code.
 Way back in Chapter 4, we first learned about references. We also learned that
 the compiler ensures that references are always valid. Unsafe Rust has two new
 types similar to references called *raw pointers*. Just like references, we can
-have an immutable raw pointer and a mutable raw pointer. In the context of raw
-pointers, “immutable” means that the pointer can’t be directly dereferenced and
-assigned to. Listing 19-1 shows how to create raw pointers from references:
+have an immutable raw pointer and a mutable raw pointer, written as `*const T`
+and `*mut T`, respectively. In the context of raw pointers, “immutable” means
+that the pointer can’t be directly assigned to after being dereferenced.
+
+Raw pointers are different than references and smart pointers in a few ways. Raw pointers:
+
+- Are allowed to ignore the borrowing rules and have both immutable and a mutable pointer or multiple mutable pointers to the same location
+- Aren't guaranteed to point to valid memory
+- Are allowed to be null
+- Don't implement any automatic clean-up
+
+Listing 19-1 shows how to create raw pointers from references:
 
 ```rust
 let mut num = 5;
@@ -89,8 +98,10 @@ let r2 = &mut num as *mut i32;
 
 The `*const T` type is an immutable raw pointer, and `*mut T` is a mutable raw
 pointer. We’ve created raw pointers by using `as` to cast an immutable and a
-mutable reference into their corresponding raw pointer types. Unlike
-references, these pointers may or may not be valid.
+mutable reference into their corresponding raw pointer types. These particular
+raw pointers will be valid since we created them directly from references that
+are guaranteed to be valid, but we can't make that assumption about any raw
+pointer.
 
 Listing 19-2 shows how to create a raw pointer to an arbitrary location in
 memory. Trying to use arbitrary memory is undefined: there may be data at that
