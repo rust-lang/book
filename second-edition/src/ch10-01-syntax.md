@@ -341,7 +341,7 @@ type `Point<T>`. Declaring `T` as a generic type after the `impl` is how Rust
 knows the type in the angle brackets in `Point` is a generic type rather than a
 concrete type. For example, we could choose to implement methods on
 `Point<f32>` instances rather than `Point` instances with any generic type.
-Listing 10-10 shows that we don't declare anything after the `impl` in this
+Listing 10-10 shows that we don’t declare anything after the `impl` in this
 case, since we’re using a concrete type, `f32`:
 
 ```rust

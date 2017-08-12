@@ -478,7 +478,7 @@ license = "MIT/Apache-2.0"
 [dependencies]
 ```
 
-[Cargo's documentation](http://doc.rust-lang.org/cargo/) describes other
+[Cargo’s documentation](http://doc.rust-lang.org/cargo/) describes other
 metadata you can specify to ensure your crate can be discovered and used more
 easily!
 
