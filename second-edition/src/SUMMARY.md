@@ -6,9 +6,9 @@
     - [Installation](ch01-01-installation.md)
     - [Hello, World!](ch01-02-hello-world.md)
 
-- [Guessing Game Tutorial](ch02-00-guessing-game-tutorial.md)
+- [추리 게임 튜토리얼](ch02-00-guessing-game-tutorial.md)
 
-- [Common Programming Concepts](ch03-00-common-programming-concepts.md)
+- [보편적인 프로그래밍 개념](ch03-00-common-programming-concepts.md)
     - [Variables and Mutability](ch03-01-variables-and-mutability.md)
     - [Data Types](ch03-02-data-types.md)
     - [How Functions Work](ch03-03-how-functions-work.md)
@@ -20,12 +20,12 @@
     - [참조자와 빌림](ch04-02-references-and-borrowing.md)
     - [슬라이스](ch04-03-slices.md)
 
-- [Using Structs to Structure Related Data](ch05-00-structs.md)
-    - [Defining and Instantiating Structs](ch05-01-defining-structs.md)
+- [연관된 데이터들을 구조체로 다루기](ch05-00-structs.md)
+    - [구조체를 정의하고 생성하기](ch05-01-defining-structs.md)
     - [An Example Program Using Structs](ch05-02-example-structs.md)
     - [Method Syntax](ch05-03-method-syntax.md)
 
-- [Enums and Pattern Matching](ch06-00-enums.md)
+- [열거형과 패턴 매칭](ch06-00-enums.md)
     - [Defining an Enum](ch06-01-defining-an-enum.md)
     - [The `match` Control Flow Operator](ch06-02-match.md)
     - [Concise Control Flow with `if let`](ch06-03-if-let.md)
