@@ -167,8 +167,11 @@ message that we got a connection in the `for` loop in `main`, we’re calling th
 new `handle_connection` function and passing the `stream` to it.
 
 In `handle_connection`, we made the `stream` parameter mutable with the `mut`
-keyword. We’re going to be reading data from the stream, so it’s going to get
-modified.
+keyword. As we read from a stream, the `TcpStream` instance might read more
+than what we ask for into a buffer. Internally, it keeps track of what data it
+has returned to us. It needs to be `mut` because of that state changing, so
+even though we usually think of “reading” as not needing mutation, in this
+case, we do need to use the `mut` keyword.
 
 Next, we need to actually read from the stream. We do this in two steps: first,
 we declare a `buffer` on the stack to hold the data that we read in. We’ve made
