@@ -7,7 +7,7 @@ re-cap some of the earlier ones.
 
 Here’s what we’re going to make: a web server that says hello:
 
-![hello from rust](img/hello.png)
+![hello from rust](img/trpl20-01.png)
 
 To do this, we will:
 
