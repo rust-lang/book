@@ -1,25 +1,23 @@
-# Common Collections
+# 보편적인 컬렉션
 
-Rust’s standard library includes a number of really useful data structures
-called *collections*. Most other data types represent one specific value, but
-collections can contain multiple values. Unlike the built-in array and tuple
-types, the data these collections point to is stored on the heap, which means
-the amount of data does not need to be known at compile time and can grow or
-shrink as the program runs. Each kind of collection has different capabilities
-and costs, and choosing an appropriate one for the situation you’re in is a
-skill you’ll develop over time. In this chapter, we’ll go over three
-collections which are used very often in Rust programs:
+러스트의 표준 라이브러리에는 *컬렉션*이라 불리는 여러 개의 정말 유용한 데이터 구조들이 포함되어 있습니다.
+대부분의 다른 데이터 타입들은 하나의 특정한 값을 나타내지만, 컬렉션은 다수의 값을 담을 수 있습니다.
+내장된 배열(build-in array)와 튜플 타입과는 달리, 이 컬렉션들이 가리키고 있는 데이터들은 힙에
+저장되는데, 이는 즉 데이터량이 컴파일 타임에 결정되지 않아도 되며 프로그램이 실행될 때 늘어나거나
+줄어들 수 있다는 의미입니다. 각각의 컬렉션 종류는 서로 다른 용량과 비용을 가지고 있으며, 여러분의 상황에
+따라 적절한 컬렉션을 선택하는 것은 여러분이 개발하는 내내 갖춰야 할 기술입니다. 이번 장에서는 러스트
+프로그램에서 굉장히 자주 사용되는 세 가지 컬렉션을 살펴보겠습니다:
 
-* A *vector* allows us to store a variable number of values next to each other.
-* A *string* is a collection of characters. We’ve seen the `String` type
-  before, but we’ll talk about it in depth now.
-* A *hash map* allows us to associate a value with a particular key. It's a
-  particular implementation of the more general data structure called a *map*.
+* *벡터(vector)* 는 여러 개의 값을 서로 붙어 있게 저장할 수 있도록 해줍니다.
+* *스트링(string)* 은 문자(character)의 모음입니다. `String` 타입은 전에 봤지만, 여기서는
+  더 깊이 있게 이야기해 보겠습니다.
+* *해쉬맵(hash map* 은 어떤 값을 특정한 키와 연관지어 주도록 해줍니다. 이는 *맵(map)* 이라
+ 일컫는 좀더 일반적인 데이터 구조의 특정한 구현 형태입니다.
 
-To learn about the other kinds of collections provided by the standard library,
-see [the documentation][collections].
+표준 라이브러리가 제공해주는 다른 종류의 컬렉션에 대해 알고 싶으시면,
+[the documentation][collections]를 봐 주세요.
 
 [collections]: ../../std/collections/index.html
 
-We’re going to discuss how to create and update vectors, strings, and hash
-maps, as well as what makes each special.
+이제부터 어떻게 벡터, 스트링, 해쉬맵을 만들고 업데이트하는지 뿐만 아니라 어떤 것이 각각의 컬렉션을
+특별하게 해주는지에 대해 논의해 보겠습니다.
