@@ -1,11 +1,10 @@
-## Controlling Visibility with `pub`
+## `pub`으로 가시성(visibility) 제어하기
 
-We resolved the error messages shown in Listing 7-4 by moving the `network` and
-`network::server` code into the *src/network/mod.rs* and
-*src/network/server.rs* files, respectively. At that point, `cargo build` was
-able to build our project, but we still get warning messages about the
-`client::connect`, `network::connect`, and `network::server::connect` functions
-not being used:
+우리는 `network`와 `network::server` 코드를 각각 *src/network/mod.rs*와
+*src/network/server.rs* 파일 안으로 이동시켜서 Listing 7-4에 나온 에러 메세지를
+해결했습니다. 이 지점에서 `cargo build`로 프로젝트를 빌드할 수 있긴 했지만,
+사용하지 않고 있는 `client::connect`, `network::connect`, 그리고
+`network::server::connect` 함수에 대한 경고 메세지를 보게 됩니다:
 
 ```text
 warning: function is never used: `connect`, #[warn(dead_code)] on by default
@@ -27,16 +26,16 @@ warning: function is never used: `connect`, #[warn(dead_code)] on by default
   | ^
 ```
 
-So why are we receiving these warnings? After all, we’re building a library
-with functions that are intended to be used by our *users*, not necessarily by
-us within our own project, so it shouldn’t matter that these `connect`
-functions go unused. The point of creating them is that they will be used by
-another project, not our own.
+그럼 이런 경고들은 왜 나오는 걸까요? 결국, 우리는 우리 자신의 프로젝트 내에서
+사용할 필요가 있는 것이 아닌, *사용자*가 사용할 수 있도록 만들어진 함수들의
+라이브러리를 만드는 중이므로, 이런 `connect` 함수 등이 사용되지 않는 것은
+큰 문제가 아닙니다. 이 함수들을 만든 의도는 함수들이 우리의 지금 이 프로젝트가
+아닌 또다른 프로젝트에 사용될 것이란 점입니다.
 
-To understand why this program invokes these warnings, let’s try using the
-`connect` library from another project, calling it externally. To do that,
-we’ll create a binary crate in the same directory as our library crate by
-making a *src/main.rs* file containing this code:
+이 프로그램이 이러한 경고들을 들먹이는 이유를 이해하기 위해, `connect` 라이브러리
+를 다른 프로젝트에서 사용하기를 시도해 봅시다. 이를 위해서, 아래의 코드를 담은
+*src/main.rs* 파일을 만듦으로서 같은 디렉토리에 라이브러리 크레이트와 마찬가지로
+바이너리 크레이트를 만들겠습니다:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -48,27 +47,30 @@ fn main() {
 }
 ```
 
-We use the `extern crate` command to bring the `communicator` library crate
-into scope. Our package now contains *two* crates. Cargo treats *src/main.rs*
-as the root file of a binary crate, which is separate from the existing library
-crate whose root file is *src/lib.rs*. This pattern is quite common for
-executable projects: most functionality is in a library crate, and the binary
-crate uses that library crate. As a result, other programs can also use the
-library crate, and it’s a nice separation of concerns.
+`communicator` 라이브러리 크레이트를 가져오기 위해 `extern crate` 명령어를
+사용합니다. 우리의 패키지는 이제 *두 개의* 크레이트를 담고 있습니다. 카고는
+*src/main.rs*를 바이너리 크레이트의 루트 파일로 취급하는데, 이 바이너리 크레이트는
+*src/lib.rs*가 루트 파일인 이미 있던 라이브러리 크레이트는 별개입니다. 이러한 패턴은
+실행 가능한 프로젝트에서 꽤 흔합니다: 대부분의 기능은 라이브러리 크레이트 안에 있고,
+바이너리 크레이트는 이 라이브러리 크레이트를 이용합니다. 결과적으로, 다른 프로그램 또한
+그 라이브러리 크레이트를 이용할 수 있고, 이는 멋지게 근심을 덜어줍니다.
 
 From the point of view of a crate outside the `communicator` library looking
 in, all the modules we’ve been creating are within a module that has the same
 name as the crate, `communicator`. We call the top-level module of a crate the
 *root module*.
+`communicator` 라이브러리 밖의 크레이트가 안을 들여다 보는 시점에서, 우리가 만들어왔던
+모든 모듈들은 `communicator`라는 이름을 갖는 모듈 내에 있습니다. 크레이트의 최상위
+모듈을 *루트 모듈 (root module)* 이라 부릅니다.
 
-Also note that even if we’re using an external crate within a submodule of our
-project, the `extern crate` should go in our root module (so in *src/main.rs*
-or *src/lib.rs*). Then, in our submodules, we can refer to items from external
-crates as if the items are top-level modules.
+또한. 비록 우리의 프로젝트의 서브모듈 내에서 외부 크레이트를 이용하고 있을지라도,
+`extern create`이 루트 모듈에 와 있어야 한다는 점(즉 *src/main.rs* 혹은
+*src/lib.rs*)을 기억하세요. 그러면 서브모듈 안에서 마치 최상위 모듈의 아이템을 참조하듯
+외부 크레이트로부터 아이템들을 참조할 수 있습니다.
 
-Right now, our binary crate just calls our library’s `connect` function from
-the `client` module. However, invoking `cargo build` will now give us an error
-after the warnings:
+현시점에서 우리의 바이너리 크레이트는 고작 라이브러리의 `client` 모듈로부터 `connect`
+함수를 호출할 뿐입니다. 하지만 `cargo build`을 실행하면 경고들 이후에 에러를 표시할
+것입니다:
 
 ```text
 error: module `client` is private
@@ -78,30 +80,27 @@ error: module `client` is private
   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 ```
 
-Ah ha! This error tells us that the `client` module is private, which is the
-crux of the warnings. It’s also the first time we’ve run into the concepts of
-*public* and *private* in the context of Rust. The default state of all code in
-Rust is private: no one else is allowed to use the code. If you don’t use a
-private function within your program, because your program is the only code
-allowed to use that function, Rust will warn you that the function has gone
-unused.
+아하! 이 에러는 `client` 모듈이 비공개(private) 임을 알려주고 있는데, 이는 그 경고들의
+요점입니다. 또한 러스트의 내용 중에서 *공개(public)* 그리고 *비공개(private)* 에 대한
+개념에 대해 알아보게 될 첫번째 시간입니다. 러스트의 모든 코드의 기본 상태는 비공개입니다:
+즉, 다른 사람은 이 코드를 사용할 수 없습니다. 만일 여러분의 프로그램 내에서 비공개 함수를
+이용하지 않는다면, 여러분의 프로그램이 그 함수를 이용할 수 있는 유일한 곳이기 때문에,
+러스트는 그 함수가 사용된 적이 없다며 경고해줄 것입니다.
 
-After we specify that a function like `client::connect` is public, not only
-will our call to that function from our binary crate be allowed, but the
-warning that the function is unused will go away. Marking a function as public
-lets Rust know that the function will be used by code outside of our program.
-Rust considers the theoretical external usage that’s now possible as the
-function “being used.” Thus, when something is marked public, Rust will not
-require that it be used in our program and will stop warning that the item is
-unused.
+`client::connect`와 같은 함수를 공개로 지정한 뒤에는 우리의 바이너리 크레이트 상에서
+이 함수를 호출하는 것이 가능해질 뿐만 아니라, 그 함수가 사용된 적이 없다는 경고 또한
+사라질 것입니다. 함수를 공개로 표시하는 것은 러스트로 하여금 그 함수가 우리 프로그램
+외부의 코드에 의해 사용될 것이라는 점을 알게끔 해줍니다. 러스트는 이제부터 가능하게
+된 이론적인 외부 사용에 대해 이 함수가 “사용되었다”라고 간주합니다. 따라서, 어떤 것이
+공개로 표시될 때, 러스트는 그것이 우리 프로그램 내에서 이용되는 것을 요구하지
+않으며 해당 아이템이 미사용에 대한 경고를 멈출 것입니다.
 
-### Making a Function Public
+### 함수를 공개로 만들기
 
-To tell Rust to make something public, we add the `pub` keyword to the start of
-the declaration of the item we want to make public. We’ll focus on fixing the
-warning that indicates `client::connect` has gone unused for now, as well as
-the `` module `client` is private `` error from our binary crate. Modify
-*src/lib.rs* to make the `client` module public, like so:
+러스트에게 어떤 것을 공개하도록 말하기 위해서는, 공개하길 원하는 아이템의 선언 시작
+부분에 `pub` 키워드를 추가합니다. 지금은 `client::connect`가 사용된 적 없음을 알리는
+경고와 바이너리 크레이트에서 나온 `` module `client` is private `` 에러를 제거하는데
+집중하겠습니다. 아래와 같이 *src/lib.rs*을 수정하여 `client` 모듈을 공개로 만드세요:
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -111,7 +110,7 @@ pub mod client;
 mod network;
 ```
 
-The `pub` keyword is placed right before `mod`. Let’s try building again:
+`pub` 키워드는 `mod` 바로 전에 위치합니다. 다시 빌드를 시도해봅시다:
 
 ```text
 error: function `connect` is private
@@ -121,9 +120,9 @@ error: function `connect` is private
   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 ```
 
-Hooray! We have a different error! Yes, different error messages are a cause
-for celebration. The new error shows `` function `connect` is private ``, so
-let’s edit *src/client.rs* to make `client::connect` public too:
+만세! 다른 에러가 나왔습니다! 네, 다른 에러 메세지라는건 축하할만한 이유죠. 새로운
+에러는 `` function `connect` is private ``라고 하고 있으므로, *src/client.rs*를
+수정해서 `client::connect`도 공개로 만듭시다:
 
 <span class="filename">Filename: src/client.rs</span>
 
@@ -132,7 +131,7 @@ pub fn connect() {
 }
 ```
 
-Now run `cargo build` again:
+이제 `cargo build`를 다시 실행하면:
 
 ```text
 warning: function is never used: `connect`, #[warn(dead_code)] on by default
@@ -148,19 +147,18 @@ warning: function is never used: `connect`, #[warn(dead_code)] on by default
   | ^
 ```
 
-The code compiled, and the warning about `client::connect` not being used is
-gone!
+코드가 컴파일되었고, `client::connect`가 사용된 적 없다는 것에 대한 경고도 사라집니다!
 
-Unused code warnings don’t always indicate that an item in your code needs to
-be made public: if you *didn’t* want these functions to be part of your public
-API, unused code warnings could be alerting you to code you no longer need that
-you can safely delete. They could also be alerting you to a bug if you had just
-accidentally removed all places within your library where this function is
-called.
+미사용 코드 경고가 항상 여러분의 코드에 있는 아이템이 공개로 만들
+필요가 있음을 나타내는 것은 아닙니다: 이 함수들이 여러분의 공개 API의 일부분으로서
+들어가길 원하지 *않는다면*, 미사용 코드 경고는 여러분에게 해당 코드가 더이상 필요
+없고 안전하게 지울 수 있음을 알려줄 수 있습니다. 또한 이 경고는 여러분의 라이브러리
+내에서 해당 함수가 호출된 모든 곳을 실수로 지웠을 경우 발생할 수 있는 버그를 알려줄
+수도 있습니다.
 
-But in this case, we *do* want the other two functions to be part of our
-crate’s public API, so let’s mark them as `pub` as well to get rid of the
-remaining warnings. Modify *src/network/mod.rs* to look like the following:
+하지만 지금의 경우, 우리는 다른 두 함수들이 우리 크레이트의 공개 API의 일부분이
+되길 원하고 있으므로, 이들에게 `pub`를 표시해줘서 남은 경고들을 제거합시다.
+*src/network/mod.rs*를 아래와 같이 수정하세요:
 
 <span class="filename">Filename: src/network/mod.rs</span>
 
@@ -171,7 +169,7 @@ pub fn connect() {
 mod server;
 ```
 
-Then compile the code:
+그리고 컴파일하면:
 
 ```text
 warning: function is never used: `connect`, #[warn(dead_code)] on by default
@@ -187,12 +185,11 @@ warning: function is never used: `connect`, #[warn(dead_code)] on by default
   | ^
 ```
 
-Hmmm, we’re still getting an unused function warning, even though
-`network::connect` is set to `pub`. The reason is that the function is public
-within the module, but the `network` module that the function resides in is not
-public. We’re working from the interior of the library out this time, whereas
-with `client::connect` we worked from the outside in. We need to change
-*src/lib.rs* to make `network` public too, like so:
+흠, `network::connect`가 `pub`으로 설정되어 있음에도, 여전히 미사용 함수 경고가
+나옵니다. 그 이유는 함수가 모듈 내에서 공개지만, 함수가 상주해 있는 `network` 모듈은
+공개가 아니기 때문입니다. 이번에는 모듈의 안쪽에서 작업하고 있지만,
+`client::connect`에서는 바깥쪽에서 작업을 했었죠. *src/lib.rs*을 수정하여 `network`가
+공개가 되도록 할 필요가 있습니다. 이렇게요:
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -202,7 +199,7 @@ pub mod client;
 pub mod network;
 ```
 
-Now when we compile, that warning is gone:
+이제 컴파일하면, 그 경고는 사라집니다:
 
 ```text
 warning: function is never used: `connect`, #[warn(dead_code)] on by default
@@ -212,21 +209,19 @@ warning: function is never used: `connect`, #[warn(dead_code)] on by default
   | ^
 ```
 
-Only one warning is left! Try to fix this one on your own!
+경고 딱 하나 남았네요! 여러분이 직접 고쳐보세요!
 
-### Privacy Rules
+### 비공개 규칙(Privacy Rules)
 
-Overall, these are the rules for item visibility:
+종합해보면, 아이템 가시성에 관한 규칙은 다음과 같습니다:
 
-1. If an item is public, it can be accessed through any of its parent modules.
-2. If an item is private, it can be accessed only by the current module and its
-   child modules.
+1. 만일 어떤 아이템이 공개라면, 이는 부모 모듈의 어디에서건 접근 가능합니다.
+2. 만일 어떤 아이템이 비공개라면, 이는 현재 모듈 및 자식 모듈에서만 접근 가능합니다.
 
-### Privacy Examples
+### 비공개 예제(Privacy Examples)
 
-Let’s look at a few more privacy examples to get some practice. Create a new
-library project and enter the code in Listing 7-5 into your new project’s
-*src/lib.rs*:
+연습을 위해 몇 가지 비공개에 관한 예제를 봅시다. 새로운 라이브러리 프로젝트를 만들고
+이 새로운 프로젝트의 *src/lib.rs*에 Listing 7-5와 같이 코드를 넣으세요:
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -251,48 +246,46 @@ fn try_me() {
 }
 ```
 
-<span class="caption">Listing 7-5: Examples of private and public functions,
-some of which are incorrect</span>
+<span class="caption">Listing 7-5: 비공개 및 공개 함수 예제. 몇 가지는 잘못되었음.</span>
 
-Before you try to compile this code, make a guess about which lines in the
-`try_me` function will have errors. Then, try compiling the code to see whether
-you were right, and read on for the discussion of the errors!
+이 코드를 컴파일하기 전에, `try_me` 함수의 어떤 라인이 에러를 발생시킬지 추측해보세요.
+그리고나서 컴파일을 하여 여러분이 맞았는지 확인하고, 에러에 대한 논의를 위해 계속
+읽어주세요!
 
-#### Looking at the Errors
+#### 에러 보기
 
-The `try_me` function is in the root module of our project. The module named
-`outermost` is private, but the second privacy rule states that the `try_me`
-function is allowed to access the `outermost` module because `outermost` is in
-the current (root) module, as is `try_me`.
+`try_me` 함수는 우리 프로젝트의 루트 모듈 내에 있습니다. `outermost` 모듈은
+비공개지만, 두 번째 비공개 규칙은 `try_me`함수가 `outermost` 모듈에 접근하는 것이
+허용됨을 알려주는데, 이는 `outermost`가 `try_me` 함수와 마찬가지로 현재의 (루트)
+모듈 내에 있기 때문입니다.
 
-The call to `outermost::middle_function` will work because `middle_function` is
-public, and `try_me` is accessing `middle_function` through its parent module
-`outermost`. We determined in the previous paragraph that this module is
-accessible.
+`middle_function`이 공개이므로 `outermost::middle_function` 호출은 작동할 것이며,
+`try_me`는 `middle_function`의 부모 모듈인 `outermost`를 통해 `middle_function`에
+접근하고 있습니다. 이 모듈에 접근 가능하하는 것은 이전 문단에서 알아냈죠.
 
-The call to `outermost::middle_secret_function` will cause a compilation error.
-`middle_secret_function` is private, so the second rule applies. The root
-module is neither the current module of `middle_secret_function` (`outermost`
-is), nor is it a child module of the current module of `middle_secret_function`.
+`outermost::middle_secret_function` 호출은 컴파일 에러를 일으킬 것입니다.
+`middle_secret_function`는 비공개이므로, 두번째 규칙이 적용됩니다. 루트 모듈은
+`middle_secret_function`의 현재 모듈도 아니고 (`outermost`가 현재 모듈입니다),
+`middle_secret_function`의 현재 모듈의 자식 모듈도 아닙니다.
 
-The module named `inside` is private and has no child modules, so it can only
-be accessed by its current module `outermost`. That means the `try_me` function
-is not allowed to call `outermost::inside::inner_function` or
-`outermost::inside::secret_function`.
+`inside` 모듈은 비공개고 자식 모듈이 없으므로, 이것의 현재 모듈인 `outermost`에 의해서만
+접근될 수 있습니다. 이는 즉 `try_me` 함수는 `outermost::inside::inner_function`나 
+`outermost::inside::secret_function`를 호출할 수 없음을 의미합니다.
 
-#### Fixing the Errors
+#### 에러 고치기
 
-Here are some suggestions for changing the code in an attempt to fix the
-errors. Before you try each one, make a guess as to whether it will fix the
-errors, and then compile the code to see whether or not you’re right, using the
-privacy rules to understand why.
+여기 이 에러들을 고치기 위해 코드를 수정하는것에 관한 몇 가지 제안이 있습니다.
+각각을 시도해보기 전에, 이 시도가 에러를 고칠지 그렇지 않을지 추측해 보고,
+컴파일을 해서 여러분이 맞췄는지 그렇지 않은지 확인하고, 왜 그랬는지 이해하기 위해
+비공개 규칙을 이용해보세요.
 
-* What if the `inside` module was public?
-* What if `outermost` was public and `inside` was private?
-* What if, in the body of `inner_function`, you called
-  `::outermost::middle_secret_function()`? (The two colons at the beginning mean
-  that we want to refer to the modules starting from the root module.)
+* `inside` 모듈이 공개라면 어떨까요?
+* `outermost`가 공개고 `inside`가 비공개면 어떨까요?
+* `inner_function`의 내부에서 `::outermost::middle_secret_function()`을
+  호출한다면 어떨까요? (시작 부분의 콜론 두개는 루트 모듈로부터 시작하여 모듈을 참조하고
+  싶음을 나타냅니다)
 
-Feel free to design more experiments and try them out!
+자유롭게 더 많은 실험을 설계하고 시도해 보세요!
 
-Next, let’s talk about bringing items into scope with the `use` keyword.
+다음으로, `use` 키워드를 사용하여 아이템을 스코프 내로 가져오는 것에 대해 이야기해
+봅시다.
