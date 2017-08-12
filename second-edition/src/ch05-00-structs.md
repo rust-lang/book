@@ -1,11 +1,8 @@
-# Using Structs to Structure Related Data
+# 연관된 데이터들을 구조체로 다루기
 
-A *struct*, or *structure*, is a custom data type that lets us name and package
-together multiple related values that make up a meaningful group. If you’re
-familiar with an object-oriented language, a *struct* is like an object’s data
-attributes. In this chapter, we'll compare and contrast tuples with structs,
-demonstrate how to use structs, and discuss how to define methods and
-associated functions on structs to specify behavior associated with a struct's
-data. The struct and *enum* (which is discussed in Chapter 6) concepts are the
-building blocks for creating new types in your program’s domain to take full
-advantage of Rust’s compile time type checking.
+구조체(*struct*)는 사용자들이 연관된 여러 값들을 묶어서 의미있는 데이터 단위를 정의할 수 있게 합니다.
+객체지향 언어를 사용해 본 경험이 있으시다면, 구조체(*struct*)는 객체의 데이터 속성 같은 것으로 보시면
+됩니다. 이번 장에서는 튜플과 구조체를 비교해 보고, 구조체를 어떻게 사용하는지 알아보며, 메소드와
+구조체 데이터의 동작과 관련된 연관함수(associated functions)의 정의 방법에 대해 알아보도록
+하겠습니다. 구조체와 열거형(6장에서 살펴볼 것입니다)에 대한 개념은 여러분의 프로그램 도메인 상에서
+새로운 타입을 만들기 위한 기초 재료로서, 러스트의 컴파일 시점 타입 검사 기능을 최대한 활용합니다.
