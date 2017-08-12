@@ -35,7 +35,7 @@
 - [모듈](ch07-00-modules.md)
     - [`mod`와 파일 시스템](ch07-01-mod-and-the-filesystem.md)
     - [`pub`으로 가시성 제어하기](ch07-02-controlling-visibility-with-pub.md)
-    - [Importing Names with `use`](ch07-03-importing-names-with-use.md)
+    - [`use`로 이름 가져오기](ch07-03-importing-names-with-use.md)
 
 - [Common Collections](ch08-00-common-collections.md)
     - [Vectors](ch08-01-vectors.md)
