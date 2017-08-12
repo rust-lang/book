@@ -4,7 +4,7 @@ Rust makes a number of guarantees that we’ve talked about, for example that
 we’ll never have a null value, and data races will be disallowed at compile
 time. Rust’s memory safety guarantees make it more difficult to create memory
 that never gets cleaned up, which is known as a *memory leak*. Rust does not
-make memory leaks *impossible*, however, preventing memory leaks is *not* one
+make memory leaks *impossible*, however: preventing memory leaks is *not* one
 of Rust’s guarantees. In other words, memory leaks are memory safe.
 
 By using `Rc<T>` and `RefCell<T>`, it is possible to create cycles of
