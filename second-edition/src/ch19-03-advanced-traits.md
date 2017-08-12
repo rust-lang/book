@@ -190,9 +190,7 @@ While trait objects mean that we don’t need to know the concrete type of the
 `graph` parameter at compile time, we do need to constrain the use of the
 `AGraph` trait in the `traverse` function by the concrete types of the
 associated types. If we didn’t provide this constraint, Rust wouldn’t be able
-to figure out which `impl` to match this trait object to, because the
-associated types can be part of the signatures of the methods that Rust needs
-to look up in the vtable.
+to figure out which `impl` to match this trait object to.
 
 ### Operator Overloading and Default Type Parameters
 
