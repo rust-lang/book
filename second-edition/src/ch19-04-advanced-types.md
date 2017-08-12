@@ -65,7 +65,7 @@ The main use case for type synonyms is to reduce repetition. For example, we
 may have a lengthy type like this:
 
 ```rust,ignore
-Box<FnOnce() + Send + 'static>
+Box<Fn() + Send + 'static>
 ```
 
 Writing this out in function signatures and as type annotations all over the
@@ -73,13 +73,13 @@ place can be tiresome and error-prone. Imagine having a project full of code
 like that in Listing 19-31:
 
 ```rust
-let f: Box<FnOnce() + Send + 'static> = Box::new(|| println!("hi"));
+let f: Box<Fn() + Send + 'static> = Box::new(|| println!("hi"));
 
-fn takes_long_type(f: Box<FnOnce() + Send + 'static>) {
+fn takes_long_type(f: Box<Fn() + Send + 'static>) {
     // ...snip...
 }
 
-fn returns_long_type() -> Box<FnOnce() + Send + 'static> {
+fn returns_long_type() -> Box<Fn() + Send + 'static> {
     // ...snip...
 #     Box::new(|| ())
 }
@@ -93,7 +93,7 @@ the verbose type, and we can replace all uses of the type with the shorter
 `Thunk` as shown in Listing 19-32:
 
 ```rust
-type Thunk = Box<FnOnce() + Send + 'static>;
+type Thunk = Box<Fn() + Send + 'static>;
 
 let f: Thunk = Box::new(|| println!("hi"));
 
