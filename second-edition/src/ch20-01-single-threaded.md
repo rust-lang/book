@@ -476,13 +476,13 @@ browser indicating as such to the end user:
 // ...snip...
 
 } else {
-    let header = "HTTP/1.1 404 NOT FOUND\r\n\r\n";
+    let status_line = "HTTP/1.1 404 NOT FOUND\r\n\r\n";
     let mut file = File::open("404.html").unwrap();
     let mut contents = String::new();
 
     file.read_to_string(&mut contents).unwrap();
 
-    let response = format!("{}{}", header, contents);
+    let response = format!("{}{}", status_line, contents);
 
     stream.write(response.as_bytes()).unwrap();
     stream.flush().unwrap();
@@ -493,7 +493,7 @@ browser indicating as such to the end user:
 <span class="caption">Listing 20-7: Responding with status code `404` and an
 error page if anything other than `/` was requested</span>
 
-Here, our response has a header with status code `404` and the reason phrase
+Here, our response has a status line with status code `404` and the reason phrase
 `NOT FOUND`. We still aren’t returning any headers, and the body of the
 response will be the HTML in the file *404.html*. Also create a *404.html* file
 next to *hello.html* for the error page; again feel free to use any HTML you’d
@@ -569,8 +569,8 @@ blocks only contain the code that differs between the two cases</span>
 
 Here, the only thing the `if` and `else` blocks do is return the appropriate
 values for the status line and filename in a tuple; we then use destructuring
-to assign these two bits to `filename` and `header` using a pattern in the
-`let` statement like we discussed in Chapter 18.
+to assign these two values to `status_line` and `filename` using a pattern in
+the `let` statement like we discussed in Chapter 18.
 
 The duplicated code to read the file and write the response is now outside the
 `if` and `else` blocks, and uses the `status_line` and `filename` variables.
