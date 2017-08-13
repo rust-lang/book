@@ -38,7 +38,7 @@
     - [`use`로 이름 가져오기](ch07-03-importing-names-with-use.md)
 
 - [보편적인 컬렉션](ch08-00-common-collections.md)
-    - [Vectors](ch08-01-vectors.md)
+    - [벡터](ch08-01-vectors.md)
     - [Strings](ch08-02-strings.md)
     - [Hash Maps](ch08-03-hash-maps.md)
 
