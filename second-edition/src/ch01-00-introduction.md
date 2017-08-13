@@ -49,4 +49,4 @@ utilize sempre que possível nomes em inglês, especialmente para projetos
 Este livro é *open source*. Se encontrar um erro, por favor não hesite em abrir uma *issue*
 ou enviar um *pull request* [no GitHub].
 
-[no GitHub]: https://github.com/coreh/rust-book-pt-br
+[no GitHub]: https://github.com/rust-br/rust-book-pt-br
