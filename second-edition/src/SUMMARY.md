@@ -39,7 +39,7 @@
 
 - [보편적인 컬렉션](ch08-00-common-collections.md)
     - [벡터](ch08-01-vectors.md)
-    - [Strings](ch08-02-strings.md)
+    - [스트링](ch08-02-strings.md)
     - [Hash Maps](ch08-03-hash-maps.md)
 
 - [Error Handling](ch09-00-error-handling.md)
