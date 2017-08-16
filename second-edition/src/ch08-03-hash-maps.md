@@ -1,29 +1,25 @@
-## Hash Maps
+## 해쉬맵(hash map)
 
-The last of our common collections is the *hash map*. The type `HashMap<K, V>`
-stores a mapping of keys of type `K` to values of type `V`. It does this via a
-*hashing function*, which determines how it places these keys and values into
-memory. Many different programming languages support this kind of data
-structure, but often with a different name: hash, map, object, hash table, or
-associative array, just to name a few.
+마지막으로 볼 보편적인 컬렉션은 *해쉬맵*입니다. `HashMap<K, V>` 타입은 `K` 타입의 키에
+`V` 타입의 값을 매핑한 것을 저장합니다. 이 매핑은 *해쉬 함수(hashing function)* 을 통해
+동작하는데, 해쉬 함수는 이 키와 값을 메모리 어디에 저장할지 결정합니다. 많은 다른 프로그래밍 언어들도
+이러한 종류의 데이터 구조를 지원하지만, 종종 다른 이름으로 제공됩니다: 해쉬, 맵, 오브젝트, 해쉬 테이블,
+혹은 연관 배열(associative) 등 그저 몇몇 이름으로 불리지요.
 
-Hash maps are useful for when you want to be able to look up data not by an
-index, as you can with vectors, but by using a key that can be of any type. For
-example, in a game, you could keep track of each team’s score in a hash map
-where each key is a team’s name and the values are each team’s score. Given a
-team name, you can retrieve their score.
+해쉬맵은 여러분이 벡터를 이용하듯 인덱스를 이용하는 것이 아니라 임의의 타입으로 된 키를 이용하여
+데이터를 찾을 수 있기를 원할때 유용합니다. 예를 들면, 게임 상에서는 각 팀의 점수를 해쉬맵에 유지할
+수 있는데, 여기서 키는 팀의 이름이고 값은 팀의 점수가 될 수 있습니다. 팀의 이름을 주면, 여러분은
+그 팀의 점수를 찾을 수 있습니다.
 
-We’ll go over the basic API of hash maps in this chapter, but there are many
-more goodies hiding in the functions defined on `HashMap` by the standard
-library. As always, check the standard library documentation for more
-information.
+이 장에서는 해쉬맵의 기본 API를 다룰 것이지만, 표준 라이브러리의 `HashMap`에 정의되어 있는
+함수 중에는 더 좋은 것들이 숨어있습니다. 항상 말했듯이, 더 많은 정보를 원하신다면 표준 라이브러리
+문서를 확인하세요.
 
-### Creating a New Hash Map
+### 새로운 해쉬맵 생성하기
 
-We can create an empty `HashMap` with `new`, and add elements with `insert`.
-Here we’re keeping track of the scores of two teams whose names are Blue and
-Yellow. The Blue team will start with 10 points and the Yellow team starts with
-50:
+우리는 빈 `HashMap`를 `new`로 생성할 수 있고, `insert`를 이용하여 요소를 추가할 수 있습니다.
+여기서 우리는 팀 이름이 각각 블루(Blue)와 옐로우(Yellow)인 두 팀의 점수를 유지하고 있습니다. 블루
+팀은 10점, 옐로우 팀은 50점으로 시작할 것입니다:
 
 ```rust
 use std::collections::HashMap;
@@ -34,24 +30,21 @@ scores.insert(String::from("Blue"), 10);
 scores.insert(String::from("Yellow"), 50);
 ```
 
-Note that we need to first `use` the `HashMap` from the collections portion of
-the standard library. Of our three common collections, this one is the least
-often used, so it’s not included in the features imported automatically in the
-prelude. Hash maps also have less support from the standard library; there’s no
-built-in macro to construct them, for example.
+먼저 표준 라이브러리의 컬렉션 부분으로부터 `HashMap`을 `use`로 가져와야할 필요가 있음을 주목하세요.
+우리가 보고 있는 세 가지 보편적인 컬렉션 중에서 이 해쉬맵이 제일 덜 자주 사용되는 것이기 때문에,
+프렐루드(prelude) 내에 자동으로 가져와지는 기능에 포함되어 있지 않습니다. 또한 해쉬맵은 표준
+라이브러리로부터 덜 지원을 받습니다; 예를 들면 해쉬맵을 생성하는 빌트인 매크로가 없습니다.
 
-Just like vectors, hash maps store their data on the heap. This `HashMap` has
-keys of type `String` and values of type `i32`. Like vectors, hash maps are
-homogeneous: all of the keys must have the same type, and all of the values
-must have the same type.
+벡터와 마찬가지로, 해쉬도 데이터를 힙에 저장합니다. 이 `HashMap`은 `String` 타입의 키와 `i32`
+타입의 값을 갖습니다. 벡터와 비슷하게 해쉬맵도 동질적입니다: 모든 키는 같은 타입이어야 하고, 모든
+값도 같은 타입이여야 합니다.
 
-Another way of constructing a hash map is by using the `collect` method on a
-vector of tuples, where each tuple consists of a key and its value. The
-`collect` method gathers up data into a number of collection types, including
-`HashMap`. For example, if we had the team names and initial scores in two
-separate vectors, we can use the `zip` method to create a vector of tuples
-where “Blue” is paired with 10, and so forth. Then we can use the `collect`
-method to turn that vector of tuples into a `HashMap`:
+해쉬맵을 생성하는 또다른 방법은 튜플의 벡터에 대해 `collect` 메소드를 사용하는 것인데, 이 벡터의
+각 튜플은 키와 키에 대한 값으로 구성되어 있습니다. `collect` 메소드는 데이터를 모아서 `HashMap`을
+포함한 여러 컬렉션 타입으로 만들어줍니다. 예를 들면, 만약 두 개의 분리된 벡터에 각각 팀 이름과 초기
+점수를 갖고 있다면, 우리는 `zip` 메소드를 이용하여 “Blue”와 10이 한 쌍이 되는 식으로 튜플의
+벡터를 생성할 수 있습니다. 그 다음 `collect` 메소드를 사용하여 튜플의 벡터를 `HashMap`으로 바꿀
+수 있습니다:
 
 ```rust
 use std::collections::HashMap;
@@ -62,17 +55,15 @@ let initial_scores = vec![10, 50];
 let scores: HashMap<_, _> = teams.iter().zip(initial_scores.iter()).collect();
 ```
 
-The type annotation `HashMap<_, _>` is needed here because it’s possible to
-`collect` into many different data structures, and Rust doesn’t know which you
-want unless you specify. For the type parameters for the key and value types,
-however, we use underscores and Rust can infer the types that the hash map
-contains based on the types of the data in the vector.
+타입 명시 `HashMap<_, _>`이 필요한데 이는 `collect`가 다른 많은 데이터 구조로 바뀔 수 있고,
+러스트는 여러분이 특정하지 않으면 어떤 것을 원하는지 모르기 때문입니다. 그러나 키와 값의 타입에 대한
+타입 파라미터에 대해서는 밑줄을 쓸 수 있으며 러스트는 벡터에 담긴 데이터의 타입에 기초하여 해쉬에
+담길 타입을 추론할 수 있습니다.
 
-### Hash Maps and Ownership
+### 해쉬맵과 소유권
 
-For types that implement the `Copy` trait, like `i32`, the values are copied
-into the hash map. For owned values like `String`, the values will be moved and
-the hash map will be the owner of those values:
+`i32`와 같이 `Copy` 트레잇을 구현한 테입에 대하여, 그 값들은 해쉬맵 안으로 복사됩니다. `String`과
+같이 소유된 값들에 대해서는, 값들이 이동되어 해쉬맵이 그 값들에 대한 소유자가 될 것입니다:
 
 ```rust
 use std::collections::HashMap;
@@ -82,20 +73,19 @@ let field_value = String::from("Blue");
 
 let mut map = HashMap::new();
 map.insert(field_name, field_value);
-// field_name and field_value are invalid at this point
+// field_name과 field_value은 이 지점부터 유효하지 않습니다
 ```
 
-We would not be able to use the bindings `field_name` and `field_value` after
-they have been moved into the hash map with the call to `insert`.
+`insert`를 호출하여 `field_name`과 `field_value`를 해쉬맵으로 이동시킨 후에는 더 이상 이 둘을
+사용할 수 없을 것입니다.
 
-If we insert references to values into the hash map, the values themselves will
-not be moved into the hash map. The values that the references point to must be
-valid for at least as long as the hash map is valid, though. We will talk more
-about these issues in the Lifetimes section of Chapter 10.
+만일 우리가 해쉬맵에 값들의 참조자들을 삽입한다면, 값들 자체는 해쉬맵으로 이동되지 않을 것입니다. 하지만
+참조자가 가리키고 있는 값은 해쉬맵이 유효할 때까지 계속 유효해야합니다. 이것과 관련하여 10장의 라이프타임
+절에서 더 자세히 이야기할 것입니다.
 
-### Accessing Values in a Hash Map
+### 해쉬맵 내의 값 접근하기
 
-We can get a value out of the hash map by providing its key to the `get` method:
+해쉬맵의 `get` 메소드에 키를 제공하여 해쉬맵으로부터 값을 얻어올 수 있습니다:
 
 ```rust
 use std::collections::HashMap;
@@ -109,14 +99,13 @@ let team_name = String::from("Blue");
 let score = scores.get(&team_name);
 ```
 
-Here, `score` will have the value that’s associated with the Blue team, and the
-result will be `Some(&10)`. The result is wrapped in `Some` because `get`
-returns an `Option<&V>`; if there’s no value for that key in the hash map, `get`
-will return `None`. The program will need to handle the `Option` in one of the
-ways that we covered in Chapter 6.
+여기서 `score`는 블루 팀과 연관된 값을 가지고 있을 것이고, 결과값은 `Some(&10)`일 것입니다.
+결과값은 `Some`으로 감싸져 있는데 왜냐하면 `get`이 `Option<&V>`를 반환하기 때문입니다; 만일
+해쉬맵 내에 해당 키에 대한 값이 없다면 `get`은 `None`을 반환합니다. 프로그램은 우리가 6장에서 다루었던
+방법 중 하나로 `Option`을 처리해야 할 것입니다.
 
-We can iterate over each key/value pair in a hash map in a similar manner as we
-do with vectors, using a `for` loop:
+우리는 벡터에서 했던 방법과 유사한 식으로 `for` 루프를 이용하여 해쉬맵에서도 각각의 키/값 쌍에 대한 반복작업을
+할 수 있습니다:
 
 ```rust
 use std::collections::HashMap;
@@ -131,31 +120,27 @@ for (key, value) in &scores {
 }
 ```
 
-This will print each pair, in an arbitrary order:
+이 코드는 각각의 쌍을 임의의 순서로 출력할 것입니다:
 
 ```text
 Yellow: 50
 Blue: 10
 ```
 
-### Updating a Hash Map
+### 해쉬맵 갱신하기
 
-While the number of keys and values is growable, each individual key can only
-have one value associated with it at a time. When we want to change the data in
-a hash map, we have to decide how to handle the case when a key already has a
-value assigned. We could choose to replace the old value with the new value,
-completely disregarding the old value. We could choose to keep the old value
-and ignore the new value, and only add the new value if the key *doesn’t*
-already have a value. Or we could combine the old value and the new value.
-Let’s look at how to do each of these!
+키와 값의 개수가 커질 수 있는 반면, 각각의 개별적인 키는 한번에 연관된 값 하나만을 가질 수 있습니다.
+해쉬맵 내의 데이터를 변경하길 원한다면, 키에 이미 값이 할당되어 있을 경우에 대한 처리를 어떻게 할지
+결정해야 합니다. 예전 값을 완전히 무시하면서 예전 값을 새 값으로 대신하는 방법을 선택할 수도 있습니다.
+혹은 예전 값을 계속 유지하면서 새 값은 무시하고, 해당 키에 값이 할당되지 *않을* 경우에만 새 값을
+추가하는 방법을 선택할 수도 있습니다. 또는 예전 값과 새 값을 조합할 수도 있습니다. 각각의 경우를
+어떻게 할지 살펴봅시다!
 
-#### Overwriting a Value
+#### 값을 덮어쓰기
 
-If we insert a key and a value into a hash map, then insert that same key with
-a different value, the value associated with that key will be replaced. Even
-though this following code calls `insert` twice, the hash map will only contain
-one key/value pair because we’re inserting the value for the Blue team’s key
-both times:
+만일 해쉬맵에 키와 값을 삽입하고, 그 후 똑같은 키에 다른 값을 십입하면, 키에 연관지어진 값은 새 값으로
+대신될 것입니다. 아래 코드가 `insert`를 두 번 호출함에도, 해쉬맵은 딱 하나의 키/값 쌍을 담게 될 것인데
+그 이유는 두 번 모두 블루 팀의 키에 대한 값을 삽입하고 있기 때문입니다:
 
 ```rust
 use std::collections::HashMap;
@@ -168,18 +153,16 @@ scores.insert(String::from("Blue"), 25);
 println!("{:?}", scores);
 ```
 
-This will print `{"Blue": 25}`. The original value of 10 has been overwritten.
+이 코드는 `{"Blue": 25}`를 출력할 것입니다. 원래의 값 10은 덮어써졌습니다.
 
-#### Only Insert If the Key Has No Value
+#### 키에 할당된 값이 없을 경우에만 삽입하기
 
-It’s common to want to check if a particular key has a value and, if it does
-not, insert a value for it. Hash maps have a special API for this, called
-`entry`, that takes the key we want to check as an argument. The return value
-of the `entry` function is an enum, `Entry`, that represents a value that might
-or might not exist. Let’s say that we want to check if the key for the Yellow
-team has a value associated with it. If it doesn’t, we want to insert the value
-50, and the same for the Blue team. With the entry API, the code for this looks
-like:
+특정 키가 값을 가지고 있는지 검사하고, 만일 가지고 있지 않다면 이 키에 대한 값을 삽입하고자 하는 경우는
+흔히 발생합니다. 해쉬맵은 이를 위하여 `entry`라고 하는 특별한 API를 가지고 있는데, 이는 우리가 검사하고자
+하는 키를 인자로 받습니다. `entry` 함수의 리턴값은 열거형 `Entry`인데, 해당 키가 있는지 혹은 없는지를
+나타냅니다. 우리가 옐로우 팀에 대한 키가 연관된 값을 가지고 있는지 검사하고 싶어한다고 해봅시다. 만일
+없다면, 값 50을 합입하고, 블루팀에 대해서도 똑같이 하고 싶습니다. 엔트리 API를 사용한 코드는 아래와
+같습니다:
 
 ```rust
 use std::collections::HashMap;
@@ -193,23 +176,21 @@ scores.entry(String::from("Blue")).or_insert(50);
 println!("{:?}", scores);
 ```
 
-The `or_insert` method on `Entry` returns the value for the corresponding
-`Entry` key if it exists, and if not, inserts its argument as the new value for
-this key and returns the modified `Entry`. This is much cleaner than writing
-the logic ourselves, and in addition, plays more nicely with the borrow checker.
+`Entry`에 대한 `or_insert` 메소드는 해당 키가 존재할 경우 관련된 `Entry` 키에 대한 값을 반환하고,
+그렇지 않을 경우에는 인자로 주어진 값을 해당 키에 대한 새 값을 삽입하고 수정된 `Entry`에 대한 값을
+반환합니다. 이는 우리가 직접 로직을 작성하는 것보다 훨씬 깔끔하고, 게다가 빌림 검사기와 잘 어울려
+동작합니다.
 
-This code will print `{"Yellow": 50, "Blue": 10}`. The first call to `entry`
-will insert the key for the Yellow team with the value 50, since the Yellow
-team doesn’t have a value already. The second call to `entry` will not change
-the hash map since the Blue team already has the value 10.
+이 코드는 `{"Yellow": 50, "Blue": 10}`를 출력할 것입니다. 첫번째 `entry` 호출은 옐로우
+팀에 대한 키에 대하여 값 50을 삽입하는데, 이는 옐로우 팀이 값을 가지고 있지 않기 떄문입니다. 두번째
+`entry` 호출은 해쉬맵을 변경하지 않는데, 왜냐하면 블루 팀은 이미 값 10을 가지고 있기 때문입니다.
 
-#### Update a Value Based on the Old Value
+#### 예전 값을 기초로 값을 갱신하기
 
-Another common use case for hash maps is to look up a key’s value then update
-it, based on the old value. For instance, if we wanted to count how many times
-each word appeared in some text, we could use a hash map with the words as keys
-and increment the value to keep track of how many times we’ve seen that word.
-If this is the first time we’ve seen a word, we’ll first insert the value `0`.
+해쉬맵에 대한 또다른 흔한 사용 방식은 키에 대한 값을 찾아서 예전 값에 기초하여 값을 갱신하는 것입니다.
+예를 들어, 만일 우리가 어떤 텍스트에 대해 각 단어가 몇번이나 나오는지 세어보고 싶어한다면, 단어를 키로
+사용하는 해쉬맵을 이용하여 해당 단어가 몇번이나 나왔는지를 유지하기 위해 값을 증가시킬 수 있습니다.
+만일 어던 단어를 처음 본 것이라면, 값 `0`을 삽입할 것입니다.
 
 ```rust
 use std::collections::HashMap;
@@ -226,47 +207,39 @@ for word in text.split_whitespace() {
 println!("{:?}", map);
 ```
 
-This will print `{"world": 2, "hello": 1, "wonderful": 1}`. The `or_insert`
-method actually returns a mutable reference (`&mut V`) to the value for this
-key. Here we store that mutable reference in the `count` variable, so in order
-to assign to that value we must first dereference `count` using the asterisk
-(`*`). The mutable reference goes out of scope at the end of the `for` loop, so
-all of these changes are safe and allowed by the borrowing rules.
+이 코드는 `{"world": 2, "hello": 1, "wonderful": 1}`를 출력할 것입니다. `or_insert`
+메소드는 실제로는 해당 키에 대한 값의 가변 참조자 (`&mut V`)를 반환합니다. 여기서는 `count` 변수에
+가변 참조자를 저장하였고, 여기에 값을 할당하기 위해 먼저 애스터리스크 (`*`)를 사용하여 `count`를
+역참조해야 합니다. 가변 참조자는 `for` 루프의 끝에서 스코프 밖으로 벗어나고, 따라서 모든 값들의 변경은
+안전하며 빌림 규칙에 위배되지 않습니다.
 
-### Hashing Function
+### 해쉬 함수
 
-By default, `HashMap` uses a cryptographically secure hashing function that can
-provide resistance to Denial of Service (DoS) attacks. This is not the fastest
-hashing algorithm out there, but the tradeoff for better security that comes
-with the drop in performance is worth it. If you profile your code and find
-that the default hash function is too slow for your purposes, you can switch to
-another function by specifying a different *hasher*. A hasher is a type that
-implements the `BuildHasher` trait. We’ll be talking about traits and how to
-implement them in Chapter 10. You don't necessarily have to implement your own
-hasher from scratch; crates.io has libraries that others have shared that
-provide hashers implementing many common hashing algorithms.
+기본적으로, `HashMap`은 서비스 거부 공격(Denial of Service(DoS) attack)에 저항 기능을 제공할
+수 있는 암호학적으로 보안되는 해쉬 함수를 사용합니다. 이는 찾을 수 있는 가장 빠른 해쉬 알고리즘은 아니지만,
+성능을 떨어트리면서 더 나은 보안을 취하는 거래는 가치가 있습니다. 만일 여러분이 여러분의 코드를 프로파일하여
+기본 해쉬 함수가 여러분의 목표에 관해서는 너무 느리다면, 다른 *해쉬어(hasher)* 를 특정하여 다른 함수로
+바꿀 수 있습니다. 해쉬어는 `BuildHasher` 트레잇을 구현한 타입을 말합니다. 트레잇과 이를 어떻게
+구현하는지에 대해서는 10장에서 다룰 것입니다. 여러분의 해쉬어를 바닥부터 새로 구현해야할 필요는 없습니다;
+crates.io에서는 많은 수의 범용적인 해쉬 알고리즘을 구현한 해쉬어를 제공하는 공유 라이브러리를 제공합니다.
 
-## Summary
+## 정리
 
-Vectors, strings, and hash maps will take you far in programs where you need to
-store, access, and modify data. Here are some exercises you should now be
-equipped to solve:
+벡터, 스트링, 그리고 해쉬맵은 프로그램 내에서 여러분이 데이터를 저장하고, 접근하고, 수정하고 싶어하는
+곳마다 여러분을 인도해줄 것입니다. 이제 여러분이 풀 준비가 되어있어야 할만한 몇가지 연습문제를 소개합니다:
 
-* Given a list of integers, use a vector and return the mean (average), median
-  (when sorted, the value in the middle position), and mode (the value that
-  occurs most often; a hash map will be helpful here) of the list.
-* Convert strings to Pig Latin, where the first consonant of each word is moved
-  to the end of the word with an added “ay”, so “first” becomes “irst-fay”.
-  Words that start with a vowel get “hay” added to the end instead (“apple”
-  becomes “apple-hay”). Remember about UTF-8 encoding!
-* Using a hash map and vectors, create a text interface to allow a user to add
-  employee names to a department in the company. For example, “Add Sally to
-  Engineering” or “Add Amir to Sales”. Then let the user retrieve a list of all
-  people in a department or all people in the company by department, sorted
-  alphabetically.
+* 정수 리스트가 주어졌을 때, 벡터를 이용하여 이 리스트의 평균값(mean, average), 중간값(median,
+  정렬했을 때 가장 가운데 위치한 값), 그리고 최빈값(mode, 가장 많이 발생한 값; 해쉬맵이 여기서 도움이
+  될 것입니다)를 반환해보세요.
+* 스트링을 피그 라틴(Pig Latin)으로 변경해보세요. 피그 라틴은 각 단어의 첫번째 자음을 단어의 끝에 붙이고
+  “ay”를 붙이고, 모음으로 시작하는 단어는 대신 끝에 “hay”를 붙이는 것입니다. (따라서 “first”는
+  “irst-fay”, “apple”은 “apple-hay”가 됩니다.) UTF-8 인코딩에 대해 기억하세요!
+* 해쉬맵과 벡터를 이용하여, 사용자가 회사 내의 부서에 대한 피고용인 이름을 추가할 수 있도록 하는 텍스트
+  인터페이스를 만들어보세요. 예를들어 “Add Sally to Engineering”이나 “Add Amir to Sales”
+  같은 식으로요. 그후 사용자 각 부터의 모든 사람들에 대한 리스트나 알파벳 순으로 정렬된 부서별 모든
+  사람에 대한 리스트를 조회할 수 있도록 해보세요.
 
-The standard library API documentation describes methods these types have that
-will be helpful for these exercises!
+표준 라이브러리 API 문서는 이 연습문제들에 대해 도움이 될만한 타입들과 메소드들을 설명해줍니다!
 
-We’re getting into more complex programs where operations can fail, which means
-it’s a perfect time to go over error handling next!
+우리는 연산이 실패할 수 있는 더 복잡한 프로그램으로 진입하고 있는 상황이고, 이는 다음으로 에러 처리에
+대해 다룰 완벽한 시간이란 뜻이죠!

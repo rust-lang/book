@@ -40,7 +40,7 @@
 - [보편적인 컬렉션](ch08-00-common-collections.md)
     - [벡터](ch08-01-vectors.md)
     - [스트링](ch08-02-strings.md)
-    - [Hash Maps](ch08-03-hash-maps.md)
+    - [해쉬맵](ch08-03-hash-maps.md)
 
 - [Error Handling](ch09-00-error-handling.md)
     - [Unrecoverable Errors with `panic!`](ch09-01-unrecoverable-errors-with-panic.md)
