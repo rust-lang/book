@@ -549,7 +549,7 @@ fn handle_connection(mut stream: TcpStream) {
 #     let get = b"GET / HTTP/1.1\r\n";
     // ...snip...
 
-   let (status_line, filename) = if buffer.starts_with(get) {
+    let (status_line, filename) = if buffer.starts_with(get) {
         ("HTTP/1.1 200 OK\r\n\r\n", "hello.html")
     } else {
         ("HTTP/1.1 404 NOT FOUND\r\n\r\n", "404.html")
