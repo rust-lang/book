@@ -42,7 +42,7 @@
     - [스트링](ch08-02-strings.md)
     - [해쉬맵](ch08-03-hash-maps.md)
 
-- [Error Handling](ch09-00-error-handling.md)
+- [에러 처리](ch09-00-error-handling.md)
     - [Unrecoverable Errors with `panic!`](ch09-01-unrecoverable-errors-with-panic.md)
     - [Recoverable Errors with `Result`](ch09-02-recoverable-errors-with-result.md)
     - [To `panic!` or Not To `panic!`](ch09-03-to-panic-or-not-to-panic.md)

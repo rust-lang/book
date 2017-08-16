@@ -1,30 +1,27 @@
-## Unrecoverable Errors with `panic!`
+## `panic!`과 함께하는 회복 불가능한 에러
 
-Sometimes, bad things happen, and there’s nothing that you can do about it. For
-these cases, Rust has the `panic!` macro. When this macro executes, your
-program will print a failure message, unwind and clean up the stack, and then
-quit. The most common situation this occurs in is when a bug of some kind has
-been detected and it’s not clear to the programmer how to handle the error.
+가끔씩 나쁜 일은 일어나고, 이에 대해 여러분이 할 수 있는 것이 없을 수도 있습니다. 이러한 경우를 위하여
+러스트는 `panic!` 매크로를 가지고 있습니다. 이 매크로가 실행되면, 여러분의 프로그램은 실패 메세지를
+출력하고, 스택을 되감고 청소하고, 그후 종료됩니다. 이런 일이 발생하는 가장 흔한 상황은 어떤 종류의
+버그가 발견되었고 프로그래머가 이 에러를 어떻게 처리할지가 명확하지 않을 때 입니다. 
 
-> ### Unwinding the Stack Versus Aborting on Panic
+> ### 패닉 상에서 스택 되감기 v.s. 그만두기
 >
-> By default, when a `panic!` occurs, the program starts
-> *unwinding*, which means Rust walks back up the stack and cleans up the data
-> from each function it encounters, but this walking and cleanup is a lot of
-> work. The alternative is to immediately *abort*, which ends the program
-> without cleaning up. Memory that the program was using will then need to be
-> cleaned up by the operating system. If in your project you need to make the
-> resulting binary as small as possible, you can switch from unwinding to
-> aborting on panic by adding `panic = 'abort'` to the appropriate `[profile]`
-> sections in your *Cargo.toml*. For example, if you want to abort on panic in
-> release mode:
+> 기본적으로, `panic!`이 발생하면, 프로그램은 *되감기(unwinding)* 를 시작하는데, 이는 러스트가
+> 패닉을 마주친 각 함수로부터 스택을 거꾸로 훑어가면서 데이터를 제거한다는 뜻이지만, 이 훑어가기 및
+> 제거는 일이 많습니다. 다른 대안으로는 즉시 *그만두기(about)* 가 있는데, 이는 데이터 제거 없이
+> 프로그램을 끝내는 것입니다. 프로그램이 사용하고 있던 메모리는 운영체제에 의해 청소될 필요가 있을
+> 것입니다. 여러분의 프로젝트 내에서 결과 바이너리가 가능한 작아지기를 원한다면, 여러분의
+> *Cargo.toml* 내에서 적합한 `[profile]` 섹션에 `panic = 'abort'`를 추가함으로써 되감기를
+> 그만두기로 바꿀 수 있습니다. 예를 들면, 여러분이 릴리즈 모드 내에서는 패닉 상에서 그만두기를
+> 쓰고 싶다면 아래와 같이 합니다:
 >
 > ```toml
 > [profile.release]
 > panic = 'abort'
 > ```
 
-Let’s try calling `panic!` with a simple program:
+단순한 프로그램으로 `panic!` 호출을 시도해 봅시다:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -34,7 +31,7 @@ fn main() {
 }
 ```
 
-If you run it, you’ll see something like this:
+이걸 실행하면 다음과 같은 것을 보게 될 것입니다:
 
 ```text
 $ cargo run
@@ -46,23 +43,20 @@ note: Run with `RUST_BACKTRACE=1` for a backtrace.
 error: Process didn't exit successfully: `target/debug/panic` (exit code: 101)
 ```
 
-The last three lines contain the error message caused by the call to `panic!`.
-The first line shows our panic message and the place in our source code where
-the panic occurred: *src/main.rs:2* indicates that it’s the second line of our
-*src/main.rs* file.
+마지막 세 줄이 `panic!`을 호출함으로 인해 생긴 에러 메세지를 담고 있습니다. 첫번째 줄은 우리의 패닉
+메세지와 소스 코드에서 패닉이 발생한 지점을 보여줍니다: *src/main.rs:2*는 *src/main.rs* 파일의
+두번째 줄을 가리킵니다.
 
-In this case, the line indicated is part of our code, and if we go to that line
-we see the `panic!` macro call. In other cases, the `panic!` call might be in
-code that our code calls. The filename and line number reported by the error
-message will be someone else’s code where the `panic!` macro is called, not the
-line of our code that eventually led to the `panic!`. We can use the backtrace
-of the functions the `panic!` call came from to figure this out.
+위 예제의 경우, 가리키고 있는 줄은 우리 코드 부분이고, 해당 줄로 가면 `panic!` 매크로 호출을 보게 됩니다.
+그 외의 경우들에서는, `panic!` 호출이 우리 코드가 호출한 코드 내에 있을 수도 있습니다. 에러 메세지에
+의해 보고되는 파일 이름과 라인 번호는 `panic!` 매크로가 호출된 다른 누군가의 코드일 것이며, 궁극적으로
+`panic!`을 이끌어낸 것이 우리 코드 라인이 아닐 것입니다. 이를 발견하기 위해서 `panic!` 호출이
+발생된 함수에 대한 백트레이스(backtrace)를 사용할 수 있습니다.
 
-### Using a `panic!` Backtrace
+### `panic!` 백트레이스 사용하기
 
-Let’s look at another example to see what it’s like when a `panic!` call comes
-from a library because of a bug in our code instead of from our code calling
-the macro directly:
+다른 예를 통해서, 우리 코드가 직접 매크로를 호출하는 대신 우리 코드의 버그 때문에 `panic!` 호출이
+라이브러리로부터 발생될 때는 어떻게 되는지 살펴봅시다:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -74,22 +68,18 @@ fn main() {
 }
 ```
 
-We’re attempting to access the hundredth element of our vector, but it only has
-three elements. In this situation, Rust will panic. Using `[]` is supposed to
-return an element, but if you pass an invalid index, there’s no element that
-Rust could return here that would be correct.
+우리는 벡터의 100번째 요소에 접근하기를 시도하고 있지만, 벡터는 오직 3개의 요소만 가지고 있습니다.
+이러한 상황이면 러스트는 패닉을 일으킬 것입니다. `[]`를 사용하는 것은 어떤 요소를 반환하기를 가정하지만,
+유효하지 않은 인덱스를 넘기게 되면 러스트가 반환할 올바른 요소는 없습니다.
 
-Other languages like C will attempt to give you exactly what you asked for in
-this situation, even though it isn’t what you want: you’ll get whatever is at
-the location in memory that would correspond to that element in the vector,
-even though the memory doesn’t belong to the vector. This is called a *buffer
-overread*, and can lead to security vulnerabilities if an attacker can
-manipulate the index in such a way as to read data they shouldn’t be allowed to
-that is stored after the array.
+이러한 상황에서 C 같은 다른 언어들은 여러분이 원하는 것이 아닐지라도, 여러분이 요청한 것을 정확히 주려고
+시도할 것입니다: 여러분은 벡터 내에 해당 요소와 상응하는 위치의 메모리에 들어있는 무언가를 얻을 것입니다.
+설령 그 메모리 영역이 벡터 소유가 아닐지라도 말이죠. 이러한 것을 *버퍼 오버리드(buffer overread)*
+라고 부르며, 만일 어떤 공격자가 읽도록 허용되어선 안되지만 배열 뒤에 저장되어 있는 데이터를 읽어낼
+방법으로서 인덱스를 다룰 수 있게 된다면, 이는 보안 취약점을 발생시킬 수 있습니다.
 
-In order to protect your program from this sort of vulnerability, if you try to
-read an element at an index that doesn’t exist, Rust will stop execution and
-refuse to continue. Let’s try it and see:
+여러분의 프로그램을 이러한 종류의 취약점으로부터 보호하기 위해서, 여러분이 존재하지 않는 인덱스 상의
+요소를 읽으려 시도한다면, 려스트는 실행을 멈추고 계속하기를 거부할 것입니다. 한번 시도해 봅시다:
 
 ```text
 $ cargo run
@@ -102,14 +92,12 @@ note: Run with `RUST_BACKTRACE=1` for a backtrace.
 error: Process didn't exit successfully: `target/debug/panic` (exit code: 101)
 ```
 
-This points at a file we didn’t write, *libcollections/vec.rs*. That’s the
-implementation of `Vec<T>` in the standard library. The code that gets run when
-we use `[]` on our vector `v` is in *libcollections/vec.rs*, and that is where
-the `panic!` is actually happening.
+위 에러는 우리가 작성하지 않은 파일인 *libcollections/vec.rs*를 가리키고 있습니다. 이는
+표준 라이브러리 내에 있는 `Vec<T>`의 구현 부분입니다. 우리가 벡터 `v`에 `[]`를 사용할 때 실행되는
+코드는 *libcollections/vec.rs* 안에 있으며, 그곳이 바로 `panic!`이 실제 발생한 곳입니다.
 
-The next note line tells us that we can set the `RUST_BACKTRACE` environment
-variable to get a backtrace of exactly what happened to cause the error. Let’s
-try that. Listing 9-1 shows the output:
+그 다음 노트는 `RUST_BACKTRACE` 환경 변수를 설정하여 에러의 원인이 된 것이 무엇인지 정확하게
+백트레이스할 수 있다고 말해주고 있습니다. 이를 시도해봅시다. Listing 9-1은 결과를 보여줍니다:
 
 ```text
 $ RUST_BACKTRACE=1 cargo run
@@ -151,29 +139,23 @@ stack backtrace:
   17:                0x0 - <unknown>
 ```
 
-<span class="caption">Listing 9-1: The backtrace generated by a call to
-`panic!` displayed when the environment variable `RUST_BACKTRACE` is set</span>
+<span class="caption">Listing 9-1: 환경 변수 `RUST_BACKTRACE`가 설정되었을 때 `panic!`의
+호출에 의해 발생되는 백트레이스 출력</span>
 
-That’s a lot of output! Line 11 of the backtrace points to the line in our
-project causing the problem: *src/main.rs*, line four. A backtrace is a list of
-all the functions that have been called to get to this point. Backtraces in
-Rust work like they do in other languages: the key to reading the backtrace is
-to start from the top and read until you see files you wrote. That’s the spot
-where the problem originated. The lines above the lines mentioning your files
-are code that your code called; the lines below are code that called your code.
-These lines might include core Rust code, standard library code, or crates that
-you’re using.
+출력이 엄청 많군요! 백트레이스의 11번 라인이 문제를 일으킨 우리 프로젝트의 라인을 가리키고 있습니다:
+*src/main.rs*, 4번 라인입니다. 백트레이스는 이 지점에서 호출되었던 모든 함수들의 리스트입니다.
+러스트의 백트레이스는 다른 언어 내에서의 백트레이스와 비슷하게 동작합니다: 백트레이스를 읽는 열쇠는
+여러분이 작성한 파일을 볼때까지 위에서부터 읽어내려가기 시작하는 것입니다. 그곳이 바로 문제가 시작된
+지점입니다. 여러분의 파일이 언급된 라인의 윗 라인들은 여러분의 코드가 호출한 코드입니다; 밑의 라인들은
+여러분의 코드를 호출한 코드입니다. 이 라인들은 핵심 러스트 코드, 표준 라이브러리 코드, 혹은 여러분이
+사용중인 크레이트를 포함할 수도 있습니다.
 
-If we don’t want our program to panic, the location pointed to by the first
-line mentioning a file we wrote is where we should start investigating in order
-to figure out how we got to this location with values that caused the panic. In
-our example where we deliberately wrote code that would panic in order to
-demonstrate how to use backtraces, the way to fix the panic is to not try to
-request an element at index 100 from a vector that only contains three items.
-When your code panics in the future, you’ll need to figure out for your
-particular case what action the code is taking with what values that causes the
-panic and what the code should do instead.
+만일 프로그램이 패닉에 빠지지 않도록 하고 싶다면, 우리가 작성한 파일이 언급된 첫 라인으로 지적된 위치가
+바로 패닉을 일으킨 값을 가지고 있는 위치를 찾아내기 위해 수하기 시작할 지점입니다. 백트레이스를 어떻게
+사용하는지 시범을 보이기 위해 고의로 패닉을 일으키는 코드를 작성한 우리의 예제에서, 패닉을 고칠 방법은
+고작 3개의 아이템을 가진 벡터로부터 인덱스 100에서의 요소를 요청하지 않도록 하는 것입니다. 여러분의
+코드가 추후 패닉에 빠졌을 때, 여러분의 특정한 경우에 대하여 어떤 코드가 패닉을 일으키는 값을 만드는지와
+코드는 대신 어떻게 되어야 할지를 알아낼 필요가 있을 것입니다.
 
-We’ll come back to `panic!` and when we should and should not use these methods
-later in the chapter. Next, we’ll now look at how to recover from an error with
-`Result`.
+우리는 `panic!`으로 다시 돌아올 것이며 언제 이 메소드를 써야하는지, 혹은 쓰지 말아야 하는지에 대해
+이 장의 뒷 부분에서 알아보겠습니다. 다음으로 `Result`를 이용한 에러로부터 어떻게 회복하는지를 보겠습니다.
