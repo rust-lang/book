@@ -99,7 +99,7 @@ As an example, let’s change one of our enum variants to hold data inside it.
 From 1999 through 2008, the United States minted quarters with different
 designs for each of the 50 states on one side. No other coins got state
 designs, so only quarters have this extra value. We can add this information to
-our `enum` by changing the `Quarter` variant to include a `State` value stored
+our `enum` by changing the `Quarter` variant to include a `UsState` value stored
 inside it, which we’ve done here in Listing 6-4:
 
 ```rust
