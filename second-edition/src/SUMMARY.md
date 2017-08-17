@@ -37,10 +37,10 @@
     - [`pub`으로 가시성 제어하기](ch07-02-controlling-visibility-with-pub.md)
     - [`use`로 이름 가져오기](ch07-03-importing-names-with-use.md)
 
-- [Common Collections](ch08-00-common-collections.md)
-    - [Vectors](ch08-01-vectors.md)
-    - [Strings](ch08-02-strings.md)
-    - [Hash Maps](ch08-03-hash-maps.md)
+- [일반적인 컬렉션](ch08-00-common-collections.md)
+    - [벡터](ch08-01-vectors.md)
+    - [스트링](ch08-02-strings.md)
+    - [해쉬맵](ch08-03-hash-maps.md)
 
 - [Error Handling](ch09-00-error-handling.md)
     - [Unrecoverable Errors with `panic!`](ch09-01-unrecoverable-errors-with-panic.md)
