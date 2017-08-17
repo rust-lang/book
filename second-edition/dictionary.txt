@@ -224,6 +224,7 @@ Mutex
 mutexes
 Mutexes
 MutexGuard
+MyBox
 namespace
 namespaced
 namespaces
