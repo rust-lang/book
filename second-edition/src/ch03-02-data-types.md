@@ -320,8 +320,6 @@ note: Run with `RUST_BACKTRACE=1` for a backtrace.
 
 컴파일 시에는 아무런 에러도 발생시키지 않습니다만, 프로그램의 결과는 *실행간에* 에러가 발생했고 성공적으로 종료되지 
 못했다고 나옵니다. 
-The compilation didn’t produce any errors, but the program results in a
-*runtime* error and didn’t exit successfully. 
 
 색인을 사용하여 요소에 접근하려고 하면 Rust는 지정한 색인이 배열 길이보다 작은지 확인합니다. 색인이 길이보다 길면 
 Rust는 프로그램이 오류와 함께 종료 될 때 Rust가 사용하는 용어인 *panic*합니다.
