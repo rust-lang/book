@@ -44,7 +44,7 @@
 
 - [에러 처리](ch09-00-error-handling.md)
     - [`panic!`과 함께하는 회복 불가능한 에러](ch09-01-unrecoverable-errors-with-panic.md)
-    - [Recoverable Errors with `Result`](ch09-02-recoverable-errors-with-result.md)
+    - [`Result`와 함께하는 회복 가능한 에러](ch09-02-recoverable-errors-with-result.md)
     - [To `panic!` or Not To `panic!`](ch09-03-to-panic-or-not-to-panic.md)
 
 - [Generic Types, Traits, and Lifetimes](ch10-00-generics.md)
