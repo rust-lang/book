@@ -41,6 +41,7 @@ PR 리뷰를 통해 통합하고, 그 외에 오탈자 수정 등 자잘한 수�
 
 ### 현재까지 번역 용어 정리 (abc순)
 
+- annotation: 어노테이션
 - arm: (match 문에서의 arm) 갈래
 - assign: 대입하다
 - associated function: 연관함수
