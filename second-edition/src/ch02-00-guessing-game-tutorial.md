@@ -969,7 +969,7 @@ If `parse` is able to successfully turn the string into a number, it will return
 an `Ok` value that contains the resulting number. That `Ok` value will match the
 first arm’s pattern, and the `match` expression will just return the `num` value
 that `parse` produced and put inside the `Ok` value. That number will end up
-right where we want it in the new `guess` variable we’re creating.
+right where we want it: in the new `guess` variable we’re creating.
 
 If `parse` is *not* able to turn the string into a number, it will return an
 `Err` value that contains more information about the error. The `Err` value
