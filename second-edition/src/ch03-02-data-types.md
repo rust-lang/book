@@ -104,12 +104,8 @@ you’d use `isize` or `usize` is when indexing some sort of collection.
 Rust also has two primitive types for *floating-point numbers*, which are
 numbers with decimal points. Rust’s floating-point types are `f32` and `f64`,
 which are 32 bits and 64 bits in size, respectively. The default type is `f64`
-because it’s roughly the same speed as `f32` but is capable of more precision.
-It’s possible to use an `f64` type on 32-bit systems, but it will be slower
-than using an `f32` type on those systems. Most of the time, trading potential
-worse performance for better precision is a reasonable initial choice, and you
-should benchmark your code if you suspect floating-point size is a problem in
-your situation.
+because on modern CPUs it’s roughly the same speed as `f32` but is capable of
+more precision.
 
 Here’s an example that shows floating-point numbers in action:
 
