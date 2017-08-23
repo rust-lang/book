@@ -319,7 +319,7 @@ $ cargo build
 ```
 
 This should have created an executable file in *target/debug/hello_cargo* (or
-*target\debug\hello_cargo.exe* on Windows), which you can run with this command:
+*target\\debug\\hello_cargo.exe* on Windows), which you can run with this command:
 
 ```text
 $ ./target/debug/hello_cargo # or .\target\debug\hello_cargo.exe on Windows
