@@ -1,22 +1,22 @@
-## Defining an Enum
+## 열거형 정의하기
 
-Let’s look at a situation we might want to express in code and see why enums
-are useful and more appropriate than structs in this case. Say we need to work
-with IP addresses. Currently, two major standards are used for IP addresses:
-version four and version six. These are the only possibilities for an IP
-address that our program will come across: we can *enumerate* all possible
-values, which is where enumeration gets its name.
+코드를 작성 할 때, 어떻게 열거형이 구조체 보다 더 적절하고 유용한지 살펴 볼 
+것입니다. IP 주소를 다뤄야 하는 경우를 생각해 봅시다.
+현재 IP 주소에는 두개의 주요한 표준이 있습니다: 버전 4와 버전 6 입니다. 
+프로그램에서 IP 주소에 대해 다룰 때 이 두 가지가 유일한 경우들 입니다:
+모든 가능한 값들을 *나열(enumerate)* 할 수 있으며, 이 경우를 열거라고 부를 수 
+있습니다.
 
-Any IP address can be either a version four or a version six address but not
-both at the same time. That property of IP addresses makes the enum data
-structure appropriate for this case, because enum values can only be one of the
-variants. Both version four and version six addresses are still fundamentally
-IP addresses, so they should be treated as the same type when the code is
-handling situations that apply to any kind of IP address.
+어떤 IP 주소는 버전 4나 버전 6이 될 수 있으며, 동시에 두 버전이 될 수는 
+없습니다.
+IP 주소의 속성을 보면 열거형 자료 구조가 적절합니다. 
+왜냐하면, 열거형의 값은 variants 중 하나만 될 수 있기 때문 입니다.
+버전 4나 버전 6은 근본적으로 IP 주소이기 때문에, 이 둘은 코드에서 모든 종류의 
+IP 주소에 적용되는 상황을 다룰 때 동일한 타입으로 처리되는 것이 좋습니다.
 
-We can express this concept in code by defining an `IpAddrKind` enumeration and
-listing the possible kinds an IP address can be, `V4` and `V6`. These are known
-as the *variants* of the enum:
+`IpAddrKind` 이라는 열거형을 정의하면서 포함할 수 있는 IP 주소인 `V4` 과 `V6` 를
+나열함으로써 이 개념을 코드에 표현할 수 있습니다.
+이것들은 열거형의 *variants* 라고 합니다:
 
 ```rust
 enum IpAddrKind {
@@ -41,9 +41,9 @@ let four = IpAddrKind::V4;
 let six = IpAddrKind::V6;
 ```
 
-열거형의 variants 는 열거형을 정의한 식별자에 의해 이름 공간이 생기며, 두개의 콜론을 사용하여 둘을 
-구분할 수 있습니다. `IpAddrKind::V4` 와 `IpAddrKind::V6` 의 값은 동일한 타입이기
-때문에, 이 방식이 유용 합니다: `IpAddrKind`
+열거형의 variants 는 열거형을 정의한 식별자에 의해 이름 공간이 생기며, 두개의 
+콜론을 사용하여 둘을 구분할 수 있습니다. `IpAddrKind::V4` 와 `IpAddrKind::V6` 의
+값은 동일한 타입이기 때문에, 이 방식이 유용 합니다: `IpAddrKind`
 이제 `IpAddrKind` 타입을 인자로 받는 함수를 정의할 수 있습니다:
 
 ```rust
@@ -69,9 +69,10 @@ route(IpAddrKind::V4);
 route(IpAddrKind::V6);
 ```
 
-열거형을 사용하면 잇점이 더 있습니다. IP 주소 타입에 대해 더 생각해 볼 때, 지금으로써는 실제 IP 주소 
-*데이터*를 저장할 방법이 없습니다; 단지 어떤 *종류* 인지만 알 뿐 입니다. 5장에서 구조체에 대해 방금
-공부 했다고 한다면, 이 문제를 Listing 6-1 에서 보여지는 것 처럼 풀려고 할 것 입니다:
+열거형을 사용하면 잇점이 더 있습니다. IP 주소 타입에 대해 더 생각해 볼 때, 
+지금으로써는 실제 IP 주소 *데이터*를 저장할 방법이 없습니다; 단지 어떤 *종류* 
+인지만 알 뿐 입니다. 5장에서 구조체에 대해 방금 공부 했다고 한다면, 이 문제를 
+Listing 6-1 에서 보여지는 것 처럼 풀려고 할 것 입니다:
 
 ```rust
 enum IpAddrKind {
@@ -95,19 +96,22 @@ let loopback = IpAddr {
 };
 ```
 
-<span class="caption">Listing 6-1: `struct` 를 사용해서 IP 주소의 데이터와 `IpAddrKind` 
-variant 저장하기</span>
+<span class="caption">Listing 6-1: `struct` 를 사용해서 IP 주소의 데이터와 
+`IpAddrKind` variant 저장하기</span>
 
-여기서 두 개의 필드를 갖는 `IpAddr` 를 정의 했습니다: `IpAddrKind` 타입(이전에 정의한 열거형)인 
-`kind` 필드와 `String` 타입인 `address` 필드 입니다. 구조체에 대한 두 개의 인스턴스가 있습니다.
-첫번째 `home` 은 `kind` 의 값으로 `IpAddrKind::V4` 을 갖고 연관된 주소 데이터로 `127.0.0.1`
-를 갖습니다. 두번째 `loopback` 은 `IpAddrKind` 의 다른 variant 인 `V6` 을 값으로 갖고,
-연관된 주소로 `::1` 를 갖습니다. `kind` 와 `address` 의 값을 함께 사용하기 위해 구조체를 사용
-했습니다. 그렇게 함으로써 variant 가 연관된 값을 갖게 되었습니다.
+여기서 두 개의 필드를 갖는 `IpAddr` 를 정의 했습니다: `IpAddrKind` 타입(이전에 
+정의한 열거형)인 `kind` 필드와 `String` 타입인 `address` 필드 입니다. 구조체에 
+대한 두 개의 인스턴스가 있습니다.
+첫번째 `home` 은 `kind` 의 값으로 `IpAddrKind::V4` 을 갖고 연관된 주소 데이터로
+`127.0.0.1` 를 갖습니다. 두번째 `loopback` 은 `IpAddrKind` 의 다른 variant 인 
+`V6` 을 값으로 갖고, 연관된 주소로 `::1` 를 갖습니다. `kind` 와 `address` 의 
+값을 함께 사용하기 위해 구조체를 사용 했습니다. 그렇게 함으로써 variant 가 
+연관된 값을 갖게 되었습니다.
 
-각 열거형 variant 에 데이터를 직접 넣는 방식을 사용해서 열거형을 구조체의 일부로 사용하는 방식 보다 
-더 간결하게 동일한 개념을 표현할 수 있습니다. `IpAddr` 얼거형의 새로운 정의에서는 두 개의 `V4` 와
-`V6` variant 는 연관된 `String` 타입의 값을 갖게 됩니다:
+각 열거형 variant 에 데이터를 직접 넣는 방식을 사용해서 열거형을 구조체의 일부로
+사용하는 방식 보다 더 간결하게 동일한 개념을 표현할 수 있습니다. 
+`IpAddr` 얼거형의 새로운 정의에서는 두 개의 `V4` 와 `V6` variant 는 연관된 
+`String` 타입의 값을 갖게 됩니다:
 
 ```rust
 enum IpAddr {
@@ -120,15 +124,14 @@ let home = IpAddr::V4(String::from("127.0.0.1"));
 let loopback = IpAddr::V6(String::from("::1"));
 ```
 
-We attach data to each variant of the enum directly, so there is no need for an
-extra struct.
+열거형의 각 variant 에 직접 데이터를 붙임으로써, 구조체를 사용할 필요가 없어
+졌습니다.
 
-There’s another advantage to using an enum rather than a struct: each variant
-can have different types and amounts of associated data. Version four type IP
-addresses will always have four numeric components that will have values
-between 0 and 255. If we wanted to store `V4` addresses as four `u8` values but
-still express `V6` addresses as one `String` value, we wouldn’t be able to with
-a struct. Enums handle this case with ease:
+구조체 보다 열거형을 사용할 때 다른 장점이 있습니다: 각 variant 는 다른 타입과 
+다른 양의 연관된 데이터를 가질 수 있습니다. 버전 4 타입의 IP 주소는 항상 0 ~ 255
+사이의 숫자 4개로 된 구성요소를 갖게 될 것 입니다. `V4` 주소에 4개의 `u8` 값을
+저장하길 원하지만, V6 주소는 하나의 String 값으로 표현되길 원한다면, 구조체로는
+이렇게 할 수 없습니다. 열거형은 이런 경우를 쉽게 처리합니다:
 
 ```rust
 enum IpAddr {
@@ -141,14 +144,13 @@ let home = IpAddr::V4(127, 0, 0, 1);
 let loopback = IpAddr::V6(String::from("::1"));
 ```
 
-We’ve shown several different possibilities that we could define in our code
-for storing IP addresses of the two different varieties using an enum. However,
-as it turns out, wanting to store IP addresses and encode which kind they are
-is so common that [the standard library has a definition we can
-use!][IpAddr]<!-- ignore --> Let’s look at how the standard library defines
-`IpAddr`: it has the exact enum and variants that we’ve defined and used, but
-it embeds the address data inside the variants in the form of two different
-structs, which are defined differently for each variant:
+두가지 다른 종류의 IP 주소를 저장하기 위해 코드상에서 열거형을 정의하는 몇가지
+방법을 살펴 봤습니다. 그러나, 누구나 알듯이 IP 주소와 그 종류를 저장하는 것은
+흔하기 때문에, [표준 라이브러리에 사용할 수 있는 정의가 있습니다!][IpAddr]
+<!-- ignore --> 표준 라이브러리에서 `IpAddr` 를 어떻게 정의하고 있는지 살펴봅시
+다. 위에서 정의하고 사용했던 것과 동일한 열거형과 variant 를 갖고 있지만,
+variant 에 포함된 주소 데이터는 두 가지 다른 구조체로 되어 있으며, 각 variant 
+마다 다르게 정의하고 있습니다:
 
 [IpAddr]: ../../std/net/enum.IpAddr.html
 
@@ -167,18 +169,17 @@ enum IpAddr {
 }
 ```
 
-This code illustrates that you can put any kind of data inside an enum variant:
-strings, numeric types, or structs, for example. You can even include another
-enum! Also, standard library types are often not much more complicated than
-what you might come up with.
+이 코드에서 보듯이 열거형 variant 에 어떤 종류의 데이터라도 넣을 수 있습니다:
+예를 들면 문자열, 숫자 타입, 혹은 구조체. 다른 열거형 조차도 포함할 수 있습니다!
+또한 표준 라이브러리 타입들은 어떤 경우에는 해결책으로 생각한 것보다 훨씬 더
+복잡하지 않습니다.
 
-Note that even though the standard library contains a definition for `IpAddr`,
-we can still create and use our own definition without conflict because we
-haven’t brought the standard library’s definition into our scope. We’ll talk
-more about importing types in Chapter 7.
+현재 스코프에 표준 라이브러리를 가져오지 않았기 때문에, 표준 라이브러리에 
+`IpAddr` 정의가 있더라도, 동일한 이름의 타입을 만들고 사용할 수 있습니다.
+타입을 가져오는 것에 대해서는 7장에서 더 살펴볼 것 입니다.
 
-Let’s look at another example of an enum in Listing 6-2: this one has a wide
-variety of types embedded in its variants:
+Listing 6-2 에 있는 열거형의 다른 예제를 살펴 봅시다: 이 예제에서는 각 variants
+에 다양한 유형의 타입들이 포함되어 있습니다:
 
 ```rust
 enum Message {
@@ -189,40 +190,39 @@ enum Message {
 }
 ```
 
-<span class="caption">Listing 6-2: A `Message` enum whose variants each store
-different amounts and types of values</span>
+<span class="caption">Listing 6-2: `Message` 열거형은 각 variants 가 다른 타입과
+다른 양의 값을 저장함.</span>
 
-This enum has four variants with different types:
+이 열거형에는 다른 데이터 타입을 갖는 네 개의 variants 가 있습니다:
 
-* `Quit` has no data associated with it at all.
-* `Move` includes an anonymous struct inside it.
-* `Write` includes a single `String`.
-* `ChangeColor` includes three `i32`s.
+* `Quit` 은 연관된 데이터가 전혀 없습니다.
+* `Move` 은 익명 구조체를 포함 합니다.
+* `Write` 은 하나의 `String` 을 포함 합니다.
+* `ChangeColor` 는 세 개의 `i32` 을 포함 합니다.
 
-Defining an enum with variants like the ones in Listing 6-2 is similar to
-defining different kinds of struct definitions except the enum doesn’t use the
-`struct` keyword and all the variants are grouped together under the `Message`
-type. The following structs could hold the same data that the preceding enum
-variants hold:
+Listing 6-2 에서 처럼 variants 로 열거형을 정의하는 것은 다른 종류의 구조체들을
+정의하는 것과 비슷합니다. 열거형과 다른 점은 `struct` 키워드를 사용하지 않는
+다는 것과 모든 variants 가 `Message` 타입으로 그룹화 된다는 것 입니다.
+아래 구조체들은 이전 열거형의 variants 가 갖는 것과 동일한 데이터를 포함할 수
+있습니다:
 
 ```rust
-struct QuitMessage; // unit struct
+struct QuitMessage; // 유닛 구조체
 struct MoveMessage {
     x: i32,
     y: i32,
 }
-struct WriteMessage(String); // tuple struct
-struct ChangeColorMessage(i32, i32, i32); // tuple struct
+struct WriteMessage(String); // 튜플 구조체
+struct ChangeColorMessage(i32, i32, i32); // 튜플 구조체
 ```
 
-But if we used the different structs, which each have their own type, we
-wouldn’t be able to as easily define a function that could take any of these
-kinds of messages as we could with the `Message` enum defined in Listing 6-2,
-which is a single type.
+각기 다른 타입을 갖는 여러 개의 구조체를 사용한다면, 이 메세지 중 어떤 한가지를
+인자로 받는 함수를 정의하기 힘들 것 입니다. Listing 6-2 에 정의한 `Message`
+열거형은 하나의 타입으로 이것이 가능 합니다.
 
-There is one more similarity between enums and structs: just as we’re able to
-define methods on structs using `impl`, we’re also able to define methods on
-enums. Here’s a method named `call` that we could define on our `Message` enum:
+열거형과 구조체는 한가지 더 유사한 점이 있습니다: 구조체에 `impl` 을 사용해서
+메서드를 정의한 것 처럼, 열거형에도 정의할 수 있습니다. 여기 `Message` 열거형에
+에 정의한 `call` 이라는 메서드가 있습니다:
 
 ```rust
 # enum Message {
@@ -234,7 +234,7 @@ enums. Here’s a method named `call` that we could define on our `Message` enum
 #
 impl Message {
     fn call(&self) {
-        // method body would be defined here
+        // 메서드 내용은 여기 정의할 수 있습니다.
     }
 }
 
@@ -242,56 +242,53 @@ let m = Message::Write(String::from("hello"));
 m.call();
 ```
 
-The body of the method would use `self` to get the value that we called the
-method on. In this example, we’ve created a variable `m` that has the value
-`Message::Write("hello")`, and that is what `self` will be in the body of the
-`call` method when `m.call()` runs.
+열거형의 값을 가져오기 위해 메서드 안에서 `self` 를 사용할 것 입니다.
+이 에제에서 생성한 변수 `m` 은 `Message::Write("hello")` 값을 갖게 되고,
+이 값은  `m.call()` 이 실행될 때, `call` 메서드 안에서 `self` 가 될 것입니다.
 
-Let’s look at another enum in the standard library that is very common and
-useful: `Option`.
+표준 라이브러리에 있는 매우 흔하게 사용하고 유용한 열거형을 살펴 봅시다:
+`Option`.
 
-### The `Option` Enum and Its Advantages Over Null Values
+### `Option` 열거형과 Null 값 보다 좋은 점들.
 
-In the previous section, we looked at how the `IpAddr` enum let us use Rust’s
-type system to encode more information than just the data into our program.
-This section explores a case study of `Option`, which is another enum defined
-by the standard library. The `Option` type is used in many places because it
-encodes the very common scenario in which a value could be something or it
-could be nothing. Expressing this concept in terms of the type system means the
-compiler can check that you’ve handled all the cases you should be handling,
-which can prevent bugs that are extremely common in other programming languages.
+이전 절에서, `IpAddr` 열거형을 사용하여 작성한 프로그램에서는 러스트 타입 
+시스템을 사용하여 데이터 뿐만 아니라 더 많은 정보를 담을 수 있는 방법을 살펴
+보았습니다.
 
-Programming language design is often thought of in terms of which features you
-include, but the features you exclude are important too. Rust doesn’t have the
-null feature that many other languages have. *Null* is a value that means there
-is no value there. In languages with null, variables can always be in one of
-two states: null or not-null.
+이번 절에서는 표준 라이브러리에서 열거형으로 정의된 또다른 타입인 `Option` 에 
+대한 사용예를 살펴볼 것 입니다. `Option` 타입은 많이 사용되는데, 값이 있거나
+없을 수도 있는 아주 흔한 상황을 나타내기 때문 입니다. 이 개념을 타입 시스템의
+관점으로 표현하자면, 컴파일러가 발생할 수 있는 모든 경우를 처리했는지 체크 할 수
+있습니다. 이렇게 함으로써 버그를 방지할 수 있고, 이것은 다른 프로그래밍 언어에서
+매우 흔합니다.
 
-In “Null References: The Billion Dollar Mistake,” Tony Hoare, the inventor of
-null, has this to say:
+프로그래밍 언어 디자인은 가끔 어떤 특성들이 포함되었는지의 관점에서 생각되기도
+하지만, 포함되지 않은 특성들도 역시 중요 합니다. 러스트는 다른 언어에 있는지
+null 특성이 없습니다. *Null* 은 값이 없다는 것을 표현하는 하나의 값 입니다.
+null 을 허용하는 언어에서는, 변수는 항상 두 상태중 하나가 될 수 있습니다:
+null 혹은 null 이 아님.
 
-> I call it my billion-dollar mistake. At that time, I was designing the first
-> comprehensive type system for references in an object-oriented language. My
-> goal was to ensure that all use of references should be absolutely safe, with
-> checking performed automatically by the compiler. But I couldn't resist the
-> temptation to put in a null reference, simply because it was so easy to
-> implement. This has led to innumerable errors, vulnerabilities, and system
-> crashes, which have probably caused a billion dollars of pain and damage in
-> the last forty years.
+null 을 고안한 Tony Hoare 의 "Null 참조 : 10 억 달러의 실수" 에서 다음과 같이
+말합니다:
 
-The problem with null values is that if you try to actually use a value that’s
-null as if it is a not-null value, you’ll get an error of some kind. Because
-this null or not-null property is pervasive, it’s extremely easy to make this
-kind of error.
+> 나는 그것을 나의 10억 달러의 실수라고 생각한다. 그 당시 객체지향 언어에서
+> 처음 참조를 위한 포괄적인 타입 시스템을 디자인 하고 있었다. 내 목표는
+> 컴파일러에 의해 자동으로 수행되는 체크를 통해 모든 참조의 사용은 절대적으로 
+> 안전하다는 것을 확인하는 것이었다. 그러나 null 참조를 넣고 싶은 유혹을 참을
+> 수 없었다. 간단한 이유는 구현이 쉽다는 것이었다. 이것은 수없이 많은 오류와
+> 취약점들, 시스템 종료를 유발 했고, 지난 40년간 10억 달러의 고통과
+> 손실을 초래했을 수도 있다.
 
-However, the concept that null is trying to express is still a useful one: a
-null is a value that is currently invalid or absent for some reason.
+null 값으로 발생하는 문제는, null 값을 null 이 아닌 값 처럼 사용하려고 할 때 여러 종류의 오류가
+발생할 수 있다는 것입니다. null 이나 null 이 아닌 속성은 어디에나 있을 수 있고, 너무나도 쉽게 이런
+종류의 오류를 만들어 냅니다.
 
-The problem isn’t with the actual concept but with the particular
-implementation. As such, Rust does not have nulls, but it does have an enum
-that can encode the concept of a value being present or absent. This enum is
-`Option<T>`, and it is [defined by the standard library][option]<!-- ignore -->
-as follows:
+그러나, null 이 표현하려고 하는 것은 아직까지도 유용합니다: null 은 현재 어떤 이유로 유효하지 않고, 
+존재하지 않는 하나의 값 입니다.
+
+문제는 실제 개념에 있기 보다, 특정 구현에 있습니다. 이와 같이 러스트에는 null 이 없지만, 값의 존재
+혹은 부재의 개념을 표현할 수 있는 열거형이 있습니다. 이 열거형은 `Option<T>` 이며, 다음과 같이
+[표준 라이브러리에 정의되어][option]<!-- ignore --> 있습니다:
 
 [option]: ../../std/option/enum.Option.html
 
@@ -302,17 +299,17 @@ enum Option<T> {
 }
 ```
 
-The `Option<T>` enum is so useful that it’s even included in the prelude; you
-don’t need to import it explicitly.  In addition, so are its variants: you can
-use `Some` and `None` directly without prefixing them with `Option::`.
-`Option<T>` is still just a regular enum, and `Some(T)` and `None` are still
-variants of type `Option<T>`.
+`Option<T>` 열거형은 매우 유용하며 기본적으로 포함되어 있기 때문에, 명시적으로 가져오지 않아도
+사용할 수 있습니다. 또한 variants 도 마찬가지 입니다: `Option::` 를 앞에 붙이지 않고,
+`Some` 과 `None` 을 바로 사용할 수 있습니다.
+`Option<T>` 는 여전히 일반적인 열거형이고, `Some(T)` 과 `None` 도 여전히 `Option<T>` 의
+variants 입니다.
 
-The `<T>` syntax is a feature of Rust we haven’t talked about yet. It’s a
-generic type parameter, and we’ll cover generics in more detail in Chapter 10.
-For now, all you need to know is that `<T>` means the `Some` variant of the
-`Option` enum can hold one piece of data of any type. Here are some examples of
-using `Option` values to hold number types and string types:
+`<T>` 는 러스트의 문법이며 아직 다루지 않았습니다. 제너릭 타입 파라미터 이며, 제너릭에 대해서는
+10 장에서 더 자세히 다룰 것 입니다.
+지금은 단지 `<T>` 가 `Option` 열거형의 `Some` variant 가 어떤 타입의 데이터라도 가질 수 있다는
+것을 의미한다는 것을 알고 있으면 됩니다. 여기 숫자 타입과 문자열 타입을 갖는 `Option` 값에 대한
+예들이 있습니다:
 
 ```rust
 let some_number = Some(5);
@@ -321,19 +318,16 @@ let some_string = Some("a string");
 let absent_number: Option<i32> = None;
 ```
 
-If we use `None` rather than `Some`, we need to tell Rust what type of
-`Option<T>` we have, because the compiler can't infer the type that the `Some`
-variant will hold by looking only at a `None` value.
+`Some` 이 아닌 `None` 을 사용한다면, `Option<T>` 이 어떤 타입을 가질지 러스트에게 알려줄 필요가
+있습니다. 컴파일러는 `None` 만 보고는 `Some` variant 가 어떤 타입인지 추론할 수 없습니다.
 
-When we have a `Some` value, we know that a value is present, and the value is
-held within the `Some`. When we have a `None` value, in some sense, it means
-the same thing as null: we don’t have a valid value. So why is having
-`Option<T>` any better than having null?
+`Some` 값을 얻게 되면, 값이 있다는 것과 `Some` 이 갖고 있는 값에 대해 알 수 있습니다.
+`None` 값을 사용하면, 어떤 면에서는 null 과 같은 의미를 갖게 됩니다: 유효한 값을 갖지 않습니다.
+그렇다면 왜 `Option<T>` 가 null 을 갖는 것 보다 나을까요?
 
-In short, because `Option<T>` and `T` (where `T` can be any type) are different
-types, the compiler won’t let us use an `Option<T>` value as if it was
-definitely a valid value. For example, this code won’t compile because it’s
-trying to add an `i8` to an `Option<i8>`:
+간단하게 말하면, `Option<T>` 와 `T` (`T` 는 어떤 타입이던 될 수 있음)는 다른 타입이며,
+컴파일러는 `Option<T>` 값을 명확하게 유효한 값 처럼 사용하지 못하도록 합니다. 예를 들면,
+아래 코드는 `Option<i8>` 에 `i8` 을 더하려고 하기 때문에 컴파일 되지 않습니다:
 
 ```rust,ignore
 let x: i8 = 5;
@@ -342,7 +336,7 @@ let y: Option<i8> = Some(5);
 let sum = x + y;
 ```
 
-If we run this code, we get an error message like this:
+이 코드를 실행하면, 아래와 같은 에러 메세지가 출력 됩니다:
 
 ```text
 error[E0277]: the trait bound `i8: std::ops::Add<std::option::Option<i8>>` is
@@ -354,42 +348,39 @@ not satisfied
   |
 ```
 
-Intense! In effect, this error message means that Rust doesn’t understand how
-to add an `Option<i8>` and an `i8`, because they’re different types. When we
-have a value of a type like `i8` in Rust, the compiler will ensure that we
-always have a valid value. We can proceed confidently without having to check
-for null before using that value. Only when we have an `Option<i8>` (or
-whatever type of value we’re working with) do we have to worry about possibly
-not having a value, and the compiler will make sure we handle that case before
-using the value.
+주목하세요! 실제로, 이 에러 메세지는 러스트가 `Option<i8>` 와 `i8` 를 어떻게
+더해야 하는지 모른다는 것을 의미 하는데, 둘은 다른 타입이기 때문 입니다. 
+러스트에서 `i8` 과 같은 타입의 값을 가질 때, 컴파일러는 항상 유효한 값을 갖고
+있다는 것을 보장할 것 입니다. 값을 사용하기 전에 null 인지 확인할 필요도 없이 
+자신있게 사용할 수 있습니다. 단지 `Option<i8>` 을 사용할 경우엔 (혹은 어떤 타입
+이건 간에) 값이 있을지 없을지에 대해 걱정할 필요가 있으며, 컴파일러는 값을
+사용하기 전에 이런 케이스가 처리되었는지 확인해 줄 것입니다.
 
-In other words, you have to convert an `Option<T>` to a `T` before you can
-perform `T` operations with it. Generally, this helps catch one of the most
-common issues with null: assuming that something isn’t null when it actually
-is.
+다르게 얘기 하자면, `T` 에 대한 연산을 수행하기 전에 `Option<T>` 를 `T` 로
+변환해야 합니다. 일반적으로, 이런 방식은 null 과 관련된 가장 흔한 이슈 중 하나를
+발견하는데 도움을 줍니다: 실제로 null 일 때, null 이 아니라고 가정하는 경우
+입니다.
 
-Not having to worry about missing an assumption of having a not-null value
-helps you to be more confident in your code. In order to have a value that can
-possibly be null, you must explicitly opt in by making the type of that value
-`Option<T>`. Then, when you use that value, you are required to explicitly
-handle the case when the value is null. Everywhere that a value has a type that
-isn’t an `Option<T>`, you *can* safely assume that the value isn’t null. This
-was a deliberate design decision for Rust to limit null’s pervasiveness and
-increase the safety of Rust code.
+null 이 아닌 값을 갖는 다는 가정을 놓치는 경우에 대해 걱정 할 필요가 없게되면,
+코드에 더 확신을 갖게 됩니다. null 일 수 있는 값을 사용하기 위해서,
+명시적으로 값의 타입을 `Option<T>` 로 만들어 줘야 합니다. 그다음엔 값을 사용할
+때 명시적으로 null 인 경우를 처리해야 합니다. 값의 타입이 `Option<T>` 가 아닌 
+모든 곳은 값이 null 아 아니라고 안전하게 가정 *할 수 있습니다*.
+이것은 null을 너무 많이 사용하는 문제를 제한하고 러스트 코드의 안정성을 높이기 위한 러스트의 의도된
+디자인 결정사항 입니다.
 
-So, how do you get the `T` value out of a `Some` variant when you have a value
-of type `Option<T>` so you can use that value? The `Option<T>` enum has a large
-number of methods that are useful in a variety of situations; you can check
-them out in [its documentation][docs]<!-- ignore -->. Becoming familiar with
-the methods on `Option<T>` will be extremely useful in your journey with Rust.
+그럼 `Option<T>` 타입인 값을 사용할 때, `Some` variant 에서 `T` 값을 어떻게
+가져와서 사용할 수 있을까요? `Option<T>` 열거형에서 다양한 상황에서 유용하게
+사용할 수 있는 많은 메소드들이 있습니다; [문서에서][docs]<!-- ignore --> 확인할
+수 있습니다. `Option<T>` 의 메소드들에 익숙해 지는 것은 러스트를 사용하는데
+매우 유용할 것 입니다.
 
 [docs]: ../../std/option/enum.Option.html
 
-In general, in order to use an `Option<T>` value, we want to have code that
-will handle each variant. We want some code that will run only when we have a
-`Some(T)` value, and this code is allowed to use the inner `T`. We want some
-other code to run if we have a `None` value, and that code doesn’t have a `T`
-value available. The `match` expression is a control flow construct that does
-just this when used with enums: it will run different code depending on which
-variant of the enum it has, and that code can use the data inside the matching
-value.
+일반적으로, `Option<T>` 값을 사용하기 위해서는 각 variant 를 처리할 코드가 필요
+할 것입니다. `Some(T)` 값일 경우만 실행되는 코드가 필요하고, 이 코드는 안에있는
+`T` 를 사용할 수 있습니다. 다른 코드에서는 `None` 값일 때 실행되는 코드가 필요가
+하기도 하며, 이 코드에서는 사용할 수 있는 `T` 값이 없습니다.
+`match` 표현식은 제어 흐름을 위한 구분으로, 열거형과 함께 사용하면 이런 일들을
+할 수 있습니다: 열거형이 갖는 variant 에 따라 다른 코드를 실행할 것이고, 그 코드
+는 매칭된 값에 있는 데이터를 사용할 수 있습니다.
