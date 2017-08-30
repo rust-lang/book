@@ -1,19 +1,16 @@
-## Control Flow
+## 제어문 
 
-Deciding whether or not to run some code depending on if a condition is true or
-deciding to run some code repeatedly while a condition is true are basic
-building blocks in most programming languages. The most common constructs that
-let you control the flow of execution of Rust code are `if` expressions and
-loops.
+조건의 상태가 참인지에 따라 어떤 코드의 실행 여부를 결정하거나 조건이 만족되는 동안 반복 수행을 하는 것은
+대부분의 프로그래밍 언어에서 기초적인 문법입니다. 가장 보편적인 작성 방식으로 우리가 실행 흐름을 제어할 수 
+있는 Rust의 코드는 `if`식과 반복문 입니다.
 
-### `if` Expressions
+### `if`식
 
-An `if` expression allows us to branch our code depending on conditions. We
-provide a condition and then state, “If this condition is met, run this block
-of code. If the condition is not met, do not run this block of code.”
+`if`식은 우리의 코드가 조건에 따라 분기할 수 있게 합니다. 우리가 제공한 조건에 따른 상태에 따라, 
+“만약 조건이 충족되면, 이 코드 블럭을 실행하세요. 만약 충족되지 않았다면 코드 블럭을 실행하지 마세요."
 
-Create a new project called *branches* in your *projects* directory to explore
-the `if` expression. In the *src/main.rs* file, input the following:
+*분기들*로 명명된 새 프로젝트를 우리의 *프로젝트들* 디렉토리에 생성하고 `if`식을 탐구합시다.
+*src/main.rs* 파일에 다음의 내용을 기입하세요:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -31,20 +28,14 @@ fn main() {
 
 <!-- NEXT PARAGRAPH WRAPPED WEIRD INTENTIONALLY SEE #199 -->
 
-All `if` expressions start with the keyword `if`, which is followed by a
-condition. In this case, the condition checks whether or not the variable
-`number` has a value less than 5. The block of code we want to execute if the
-condition is true is placed immediately after the condition inside curly
-braces. Blocks of code associated with the conditions in `if` expressions are
-sometimes called *arms*, just like the arms in `match` expressions that we
-discussed in the “Comparing the Guess to the Secret Number” section of
-Chapter 2. Optionally, we can also include an `else` expression, which we chose
-to do here, to give the program an alternative block of code to execute should
-the condition evaluate to false. If you don’t provide an `else` expression and
-the condition is false, the program will just skip the `if` block and move on
-to the next bit of code.
+모든 `if`식은 `if`란 키워드로 시작하며 뒤이어 조건이 옵니다. 이번 경우에 조건은 변수 `number`가 5보다 작은 값을 가지는지 
+여부를 검사합니다. 조건이 참이면 실행하려는 코드 블록은 조건 바로 뒤 중괄호로 된 블록에 배치됩니다. `if`식의 조건과 관련된 코드
+블럭은 우리가 2장의 “비밀번호 추리 게임”에서 다뤘던 `match`식의 arms와 마찬가지로 *arms*로 불립니다. 선택적으로, 우리는
+이번 경우에서 처럼 `else`식을 포함시킬 수 있는데, 이는 조건이 거짓으로 산출될 경우 실행시킬 코드 블럭을 프로그램에 제공합니다.
+당신이 `else`식을 제공하지 않는데 조건이 거짓이 되면, 프로그램은 `if`블록을 생략하고 다음 순서의 코드를 실행하게 될 겁니다.
 
-Try running this code; you should see the following output:
+
+이 코드를 실행해보세요; 다음과 같은 결과를 얻을 수 있을 겁니다:
 
 ```text
 $ cargo run
@@ -53,14 +44,13 @@ $ cargo run
 condition was true
 ```
 
-Let’s try changing the value of `number` to a value that makes the condition
-`false` to see what happens:
+`number`의 값을 조건을 `거짓`으로 만들 값으로 변경하면 무슨 일이 일어날지 살펴보도록 합시다:
 
 ```rust,ignore
 let number = 7;
 ```
 
-Run the program again, and look at the output:
+프로그램을 다시 실행시키면, 다음과 같은 결과를 보게 됩니다:
 
 ```text
 $ cargo run
@@ -69,9 +59,8 @@ $ cargo run
 condition was false
 ```
 
-It’s also worth noting that the condition in this code *must* be a `bool`. To
-see what happens if the condition isn’t a `bool`, try running the following
-code:
+또한 알아야 할 중요한 것은 이번 코드의 조건은 *반드시* `bool`이어야 합니다. 만약 `bool`이 아닐 경우 어떤 일이 
+일어나는지는 다음의 코드를 실행하면 알 수 있을 겁니다:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -85,8 +74,8 @@ fn main() {
 }
 ```
 
-The `if` condition evaluates to a value of `3` this time, and Rust throws an
-error:
+`if` 조건이 `3`으로 산출되게 되고, Rust는 에러를 발생시킵니다.
+
 
 ```text
 error[E0308]: mismatched types
@@ -99,12 +88,10 @@ error[E0308]: mismatched types
              found type `{integer}`
 ```
 
-The error indicates that Rust expected a `bool` but got an integer. Rust will
-not automatically try to convert non-boolean types to a boolean, unlike
-languages such as Ruby and JavaScript. You must be explicit and always provide
-`if` with a `boolean` as its condition. If we want the `if` code block to run
-only when a number is not equal to `0`, for example, we can change the `if`
-expression to the following:
+이 에러가 나타내는 것은 Rust가 `bool`을 기대하였으나 정수형이 왔다는 겁니다. Rust는 boolean 유형이 아닌
+것을 boolean 유형으로 자동 변환하지 않습니다. Ruby나 Javascript와는 다르죠. 우리는 반드시 명시적으로 
+`boolean`을 `if`의 조건으로 함께 사용해야 합니다. 만약 우리가 `if` 코드 블록을 숫자가 `0`이 아닐 시에
+실행하고 싶다면, 다음처럼, 우리는 `if`식을 변경할 수 있습니다. 
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -118,12 +105,11 @@ fn main() {
 }
 ```
 
-Running this code will print `number was something other than zero`.
+이번 코드를 실행시키면 `number was something other than zero`가 출력 될 겁니다.
 
-#### Multiple Conditions with `else if`
+#### `else if`와 다수 조건 
 
-We can have multiple conditions by combining `if` and `else` in an `else if`
-expression. For example:
+우리는 `if`와 `else` 사이에 `else if`식을 결합하여 다수의 조건을 다룰 수 있습니다. 예제를 보시죠:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -143,8 +129,7 @@ fn main() {
 }
 ```
 
-This program has four possible paths it can take. After running it, you should
-see the following output:
+이번 프로그램은 분기할 수 있는 네 개의 경로를 갖습니다. 이를 수행하면, 다음과 같은 결과를 얻게 될 겁니다:
 
 ```text
 $ cargo run
@@ -153,21 +138,17 @@ $ cargo run
 number is divisible by 3
 ```
 
-When this program executes, it checks each `if` expression in turn and executes
-the first body for which the condition holds true. Note that even though 6 is
-divisible by 2, we don’t see the output `number is divisible by 2`, nor do we
-see the `number is not divisible by 4, 3, or 2` text from the `else` block. The
-reason is that Rust will only execute the block for the first true condition,
-and once it finds one, it won’t even check the rest.
+이 프로그램이 실행될 때, 각 `if`식을 검사하고 검사 조건이 참일 때의 첫 번째 본문을 실행합니다. 주목할 점은 
+6을 2로 나누었을 때도 결과에 `number is divisible by 2`이 출력되지 않는데, `else`의 블럭에 위치한
+`number is not divisible by 4, 3, or 2`도 마찬가지입니다. 이렇게 되는 이유는 Rust가 조건이 참인
+첫 번째 블록만 실행하고, 한번 찾게 되면 나머지는 검사하지 않기 때문입니다. 
 
-Using too many `else if` expressions can clutter your code, so if you have more
-than one, you might want to refactor your code. Chapter 6 describes a powerful
-Rust branching construct called `match` for these cases.
+너무 많은 `else if`식의 사용은 당신의 코드를 이해하기 어렵게 하므로, 둘 이상일 경우 코드를 리팩토링하게 될 수도
+있습니다. 이런 경우를 위해 6장에서 `match`라 불리는 강력한 분기 생성자를 다룹니다. 
 
-#### Using `if` in a `let` statement
+#### `let`서술문에서 `if` 사용하기 
 
-Because `if` is an expression, we can use it on the right side of a `let`
-statement, for instance in Listing 3-4:
+`if`가 식이기 때문에, 항목 3-4에서 처럼, 우리는 이를 `let` 서술문의 우측에 사용할 수 있죠. 
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -187,8 +168,7 @@ fn main() {
 <span class="caption">Listing 3-4: Assigning the result of an `if` expression
 to a variable</span>
 
-The `number` variable will be bound to a value based on the outcome of the `if`
-expression. Run this code to see what happens:
+변수 `number`에는 `if`식에서 산출된 값이 bound되게 됩니다. 어떤 일이 일어날지 코드를 실행해보죠:
 
 ```text
 $ cargo run
@@ -197,13 +177,10 @@ $ cargo run
 The value of number is: 5
 ```
 
-Remember that blocks of code evaluate to the last expression in them, and
-numbers by themselves are also expressions. In this case, the value of the
-whole `if` expression depends on which block of code executes. This means the
-values that have the potential to be results from each arm of the `if` must be
-the same type; in Listing 3-4, the results of both the `if` arm and the `else`
-arm were `i32` integers. But what happens if the types are mismatched, as in
-the following example?
+기억해두실 것은 코드 블럭은 그 마지막 식의 산출이고, 그로 인한 숫자 자신 또한 식입니다. 이 경우 전체 `if`식의
+값은 실행되는 코드 블럭에 따라 다릅니다. 그렇기에 각 `if`문의 결과는 반드시 같은 유형이여야 합니다. 항목 3-4
+에서 `if` arm과 `else` arm은 모두 `i32` 정수형을 결과 값으로 갖습니다. 하지만 만약 다음 예제처럼 유형이
+다르면 어떻게 될까요?
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -221,9 +198,8 @@ fn main() {
 }
 ```
 
-When we try to run this code, we’ll get an error. The `if` and `else` arms have
-value types that are incompatible, and Rust indicates exactly where to find the
-problem in the program:
+우리가 이번 코드를 실행시키려고 하면 에러를 얻게 됩니다. `if`와 `else` arms의 값 유형이 호환되지 않고, 
+Rust는 정확히 프로그램의 어느 지점에 문제가 있는지 보여줍니다. 
 
 ```text
 error[E0308]: if and else have incompatible types
@@ -241,31 +217,25 @@ error[E0308]: if and else have incompatible types
              found type `&'static str`
 ```
 
-The expression in the `if` block evaluates to an integer, and the expression in
-the `else` block evaluates to a string. This won’t work because variables must
-have a single type. Rust needs to know at compile time what type the `number`
-variable is, definitively, so it can verify at compile time that its type is
-valid everywhere we use `number`. Rust wouldn’t be able to do that if the type
-of `number` was only determined at runtime; the compiler would be more complex
-and would make fewer guarantees about the code if it had to keep track of
-multiple hypothetical types for any variable.
+`if` 블록이 정수형을 산출하는 식이고 `else` 블록은 문자열을 산출하는 식 입니다. 이는 성립하지 않는데 이유는 
+변수가 가질 수 있는 유형은 오직 하나이기 때문입니다. Rust는 컴파일 시에 `number` 변수의 유형이 뭔지 확실히,
+정의해야 합니다, 그래야 `number`가 사용되는 모든 곳에서 유효성을 검증할 수 있으니까요. Rust는 `number`의
+유형을 실행 시에만 정의되도록 할 수 없습니다. 컴파일러가 모든 변수의 다양한 유형을 추적해야 한다면 컴파일러는 보다 
+복잡해지고 보증할 수 있는 것은 적어지게 됩니다.
 
-### Repetition with Loops
+### 반복문과 반복
 
-It’s often useful to execute a block of code more than once. For this task,
-Rust provides several *loops*. A loop runs through the code inside the loop
-body to the end and then starts immediately back at the beginning. To
-experiment with loops, let’s make a new project called *loops*.
+자주 코드 블록을 한 번 이상 수행하는 것이 유용할 때가 있습니다. 이런 작업을 위해서, Rust는 몇 가지 *반복문*을
+제공합니다. 반복문은 반복문 시작부터 끝까지 수행하고 다시 처음부터 수행합니다. 반복문의 실험해보기 위해 *반복문*으로
+명명된 새 프로젝트를 작성해 봅시다.
 
-Rust has three kinds of loops: `loop`, `while`, and `for`. Let’s try each one.
+Rust가 제공하는 세 가지 반복문: `loop`, `while`, 그리고 `for`. 각각을 사용해 봅시다.
 
-#### Repeating Code with `loop`
 
-The `loop` keyword tells Rust to execute a block of code over and over again
-forever or until you explicitly tell it to stop.
+#### `loop`와 함께 코드의 반복 수행 
 
-As an example, change the *src/main.rs* file in your *loops* directory to look
-like this:
+`loop` keyword는 Rust에게 그만두라고 명시적으로 알려주기 전까지 코드 블럭을 반복 수행합니다. 
+예제로, 우리의 *loops*디렉토리에 *src/main.rs*를 다음처럼 변경하세요:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -277,9 +247,8 @@ fn main() {
 }
 ```
 
-When we run this program, we’ll see `again!` printed over and over continuously
-until we stop the program manually. Most terminals support a keyboard shortcut,
- ctrl-C, to halt a program that is stuck in a continual loop. Give it a try:
+이 프로그램을 실행시키면, 우리는 `again!`이 프로그램을 강제 정지하기 전까지 반복 출력되는 것을 보게 됩니다.
+대부분의 터미널은 ctrl-C를 통해 프로그램을 정지시키는 기능을 지원하니 이를 시도해 보세요:
 
 ```text
 $ cargo run
@@ -292,28 +261,23 @@ again!
 ^Cagain!
 ```
 
-The symbol `^C` represents where you pressed ctrl-C. You may or may not see the
-word `again!` printed after the `^C`, depending on where the code was in the
-loop when it received the halt signal.
 
-Fortunately, Rust provides another, more reliable way to break out of a loop.
-You can place the `break` keyword within the loop to tell the program when to
-stop executing the loop. Recall that we did this in the guessing game in the
-“Quitting After a Correct Guess” section of Chapter 2 to exit the
-program when the user won the game by guessing the correct number.
+기호 `^C`는 우리가 ctrl-C를 눌렀을 때의 위치입니다. 코드가 정지 신호를 받은 시점에 따라 `^C` 이후에 
+`again!`이 출력될 수도 아닐 수도 있습니다. 
 
-#### Conditional Loops with `while`
+다행스럽게도, Rust는 보다 안정적으로 루프에서 벗어날 수 있는 방법을 제공합니다. 우리는 `break` keyword
+를 위치시켜 프로그램이 언제 루프를 멈춰야 하는지 알려줄 수 있습니다. 상기시켜 드리자면 2장 “추리 게임”에서 
+사용자가 모든 숫자를 정확히 추리했을 경우 프로그램을 종료시키기 위해 사용했었습니다. 
 
-It’s often useful for a program to evaluate a condition within a loop. While
-the condition is true, the loop runs. When the condition ceases to be true, you
-call `break`, stopping the loop. This loop type could be implemented using a
-combination of `loop`, `if`, `else`, and `break`; you could try that now in a
-program, if you’d like.
+#### `while`와 함께하는 조건부 반복 
 
-However, this pattern is so common that Rust has a built-in language construct
-for it, and it’s called a `while` loop. The following example uses `while`: the
-program loops three times, counting down each time. Then, after the loop, it
-prints another message and exits:
+반복문 내에서 조건을 산출하는 것은 종종 유용합니다. 조건이 참인 동안 반복문을 수행합니다. 조건이 참일 경우에 `break`
+을 호출하여 반복을 정지시킬 수 있습니다. 이런 식의 반복문을 구현하자면 `loop`, `if`, `else`, 그리고 `break`
+를 혼합해야 합니다; 원한다면 이를 시도해 볼 수도 있습니다.
+
+하지만, 이런 형식은 매우 보편적으로 사용되기에 이를 위해 Rust는 내장된 구조자가 있으며, 이를 `while` 반복문이라
+부릅니다. 다음의 예제를 통해 `while`을 사용해 봅시다: 프로그램은 세 번 반복되고, 반복 때마다 카운트 다운됩니다.
+마침내 반복이 끝나면 다른 메시지를 출력하고 종료됩니다:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -331,14 +295,15 @@ fn main() {
 }
 ```
 
-This construct eliminates a lot of nesting that would be necessary if you used
-`loop`, `if`, `else`, and `break`, and it’s clearer. While a condition holds
-true, the code runs; otherwise, it exits the loop.
+이 구조는 당신이 사용하는 경우 필요하다 중첩을 많이 제거 loop, if, else, 그리고 break, 그것이 명확의를. 
+조건이 true 인 동안 코드가 실행됩니다. 그렇지 않으면 루프를 종료합니다.
 
-#### Looping Through a Collection with `for`
+이 구조는 당신이 사용했어야 할 다수의 `loop`, `if`, `else`, 그리고 `break`의 중복을 제거하고 명확하게
+한다. 조건이 참이면, 코드는 동작한다; 다른 경우, 반복은 종료된다.
 
-You could use the `while` construct to loop over the elements of a collection,
-such as an array. For example:
+#### `for`와 함께하는 콜렉션 반복하기
+
+우리는 `while` 구조자를 통해 배열과 같은, 콜렉션의 각 요소에 걸쳐 반복 수행 할 수 있습니다. 예:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -358,10 +323,13 @@ fn main() {
 <span class="caption">Listing 3-5: Looping through each element of a collection
 using a `while` loop</span>
 
-Here, the code counts up through the elements in the array. It starts at index
-`0`, and then loops until it reaches the final index in the array (that is,
-when `index < 5` is no longer true). Running this code will print out every
-element in the array:
+
+여기에서 코드는 배열의 요소를 통해 카운트 업합니다. 
+이 인덱스에서 시작 0, 다음이 배열의 마지막 인덱스 (때 즉, 도달 할 때까지 루프를 index < 5더 이상 사실 없음). 
+이 코드를 실행하면 배열의 모든 요소가 출력됩니다.
+
+여기서, 코드는 배열의 요소에 걸쳐 카운트를 증가시킵니다. 이 색인은 `0`에서 시작하고, 배열의 마지막 순서까지 반복됩니다
+(즉, `index < 5`가 참이 아닐 때까지). 이 코드를 수행하면 배열의 모든 요소가 출력되게 됩니다. 
 
 ```text
 $ cargo run
@@ -374,17 +342,15 @@ the value is: 40
 the value is: 50
 ```
 
-All five array values appear in the terminal, as expected. Even though `index`
-will reach a value of `5` at some point, the loop stops executing before trying
-to fetch a sixth value from the array.
+예상했던 대로, 5개의 모든 배열 값이 터미널에 표시됩니다. `index` 값이 `5`에 오는 시점에, 배열의 6번째 값에 
+접근하기 전에 반복은 중지되어야 합니다. 
 
-But this approach is error prone; we could cause the program to panic if the
-index length is incorrect. It’s also slow, because the compiler adds runtime
-code to perform the conditional check on every element on every iteration
-through the loop.
+그러나 이런 방식은 에러가 발생하기 쉽습니다; 우리가 정확한 길이의 색인을 사용하지 못하면 프로그램은 패닉하죠. 
+또한 느린데, 이유는 컴파일러가 실행 간에 반복문을 통해 반복될 때마다 요소에 대한 조건 검사를 수행하는 런타임
+코드를 추가하기 때문입니다.
 
-As a more efficient alternative, you can use a `for` loop and execute some code
-for each item in a collection. A `for` loop looks like this:
+보다 효율적은 대안으로, 우리는 `for` 반복문을 사용하여 콜렉션의 각 요소에 대한 코드를 수행할 수 있습니다.
+`for`반복문은 다음과 같습니다:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -401,26 +367,33 @@ fn main() {
 <span class="caption">Listing 3-6: Looping through each element of a collection
 using a `for` loop</span>
 
-When we run this code, we’ll see the same output as in Listing 3-5. More
-importantly, we’ve now increased the safety of the code and eliminated the
-chance of bugs that might result from going beyond the end of the array or not
-going far enough and missing some items.
 
-For example, in the code in Listing 3-5, if you removed an item from the `a`
-array but forgot to update the condition to `while index < 4`, the code would
-panic. Using the `for` loop, you don’t need to remember to change any other
-code if you changed the number of values in the array.
+이 코드를 실행하면 코드 3-5와 같은 출력이 표시됩니다. 
+더 중요한 것은, 우리는 이제 코드의 안전성을 높이고 어레이의 끝을 넘어가거나 충분히 멀리 가지 않고 일부 항목을 놓치기 때문에 발생할 수있는 버그의 가능성을 제거했습니다.
 
-The safety and conciseness of `for` loops make them the most commonly used loop
-construct in Rust. Even in situations in which you want to run some code a
-certain number of times, as in the countdown example that used a `while` loop
-in Listing 3-5, most Rustaceans would use a `for` loop. The way to do that
-would be to use a `Range`, which is a type provided by the standard library
-that generates all numbers in sequence starting from one number and ending
-before another number.
+예를 들어 코드 3-5의 코드에서 a 배열 에서 항목을 제거 했지만 조건을 업데이트 while index < 4하지 않으면 코드가 패닉합니다. 
+은 Using for루프를, 당신은 당신이 배열 값의 수를 변경 한 경우 다른 코드를 변경해야 할 필요가 없습니다.
 
-Here’s what the countdown would look like using a `for` loop and another method
-we’ve not yet talked about, `rev`, to reverse the range:
+for루프 의 안전성과 간결함은 Rust에서 가장 일반적으로 사용되는 루프 구조로 만듭니다. 
+whileListing 3-5에서 루프 를 사용하는 카운트 다운 예제에서와 같이 특정 코드를 특정 횟수만큼 실행하려는 경우에도 대부분의 녹스니아는 for루프를 사용합니다 . 
+이를 수행하는 방법 Range은 a 를 사용하는 것 입니다. a는 하나의 숫자에서 시작하여 다른 숫자보다 먼저 끝나는 모든 숫자를 생성하는 표준 라이브러리가 제공하는 유형입니다.
+
+카운트 다운이 for루프를 사용하는 것처럼 보이고 rev범위를 뒤집기 위해 우리가 아직 이야기하지 않은 다른 방법 은 다음과 같습니다 .
+
+
+우리가 이 코드를 수행하면, 항목 3-5와 같은 결과를 볼 수 있습니다. 더 중요한 것은, 우리가 이번에 배열의 
+끝을 넘기는 경우가 생겨 발생 할 수 있는 버그를 종결시켜 코드의 안전성을 증가시켰다는 겁니다. 
+
+예를 들어, 항목 3-5에서 보면, 만약 배열에서 `a`를 제거했는데 `while index < 4`의 조건을 변경하는 걸
+잊었을 경우 코드는 패닉됩니다. `for`반복문을 사용하면, 배열의 숫자 갯수를 변경했을 경우 갱신해줘야할 코드의 
+위치를 기억하지 않아도 되죠. 
+
+`for`반복문이 안전하로 간결하기 때문에 이들은 가장 보편적으로 사용되는 반복문 구조자입니다. 항목 3-5에서처럼 
+`while`반복문을 사용하여 특정 횟수만큼 코드를 반복하려는 경우에도, 대부분의 Rust 사용자들은 `for`반복문
+을 사용하고자 할 것 입니다. 이런 사용을 위해 Rust에서 기본 라이브러리로 제공하는 `Range`를 사용하게 됩니다.
+`Range`는 한 숫자에서 다른 숫자 전까지 모든 숫자를 차례로 생성합니다. 
+
+이게 `for`반복문과 아직 설명하지 않은 range를 역순하는 `rev`를 사용하여 카운트다운 프로그램 입니다:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -433,18 +406,16 @@ fn main() {
 }
 ```
 
-This code is a bit nicer, isn’t it?
+꽤 괜찮은 코드인것 같죠? 
 
-## Summary
+## 결론 
 
-You made it! That was a sizable chapter: you learned about variables, scalar
-and `if` expressions, and loops! If you want to practice with the concepts
-discussed in this chapter, try building programs to do the following:
+해냈어요! 무지 긴 장이었어: 우리는 변수, 스칼라, `if`식과 반복문까지 배웠어요! 혹시 이번 장에서 나온 내용을
+연습해보고 싶으면 다음을 수행하는 프로그램을 만들어 보세요.
 
-* Convert temperatures between Fahrenheit and Celsius.
-* Generate the nth Fibonacci number.
-* Print the lyrics to the Christmas carol “The Twelve Days of Christmas,”
-taking advantage of the repetition in the song.
+* 화씨와 섭씨를 상호 변환.
+* n번째 피보나치 수열 생성.
+* 크리스마스 캐롤 “The Twelve Days of Christmas”의 가사를 반복문을 활용해 출력.
 
-When you’re ready to move on, we’ll talk about a concept in Rust that *doesn’t*
-commonly exist in other programming languages: ownership.
+다음으로 넘어갈 준비가 되셨습니까? 우리는 이제 일반적인 다른 언어에는 존재하지 않는 개념에 대해서 다루고자 합니다
+: 소유권.
