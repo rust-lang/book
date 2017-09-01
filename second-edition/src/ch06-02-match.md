@@ -103,7 +103,7 @@ our `enum` by changing the `Quarter` variant to include a `UsState` value stored
 inside it, which we’ve done here in Listing 6-4:
 
 ```rust
-#[derive(Debug)] // So we can inspect the state in a minute
+#[derive(Debug)] // So we can inspect the state later on
 enum UsState {
     Alabama,
     Alaska,
