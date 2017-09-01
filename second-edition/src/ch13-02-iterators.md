@@ -85,7 +85,7 @@ the `next` method. In other words, the `Item` type will be the type of element
 that’s returned from the iterator.
 
 The `next` method is the only method that the `Iterator` trait requires
-implementers of the trait to define. `next` returns one item of the iterator
+implementors of the trait to define. `next` returns one item of the iterator
 at a time wrapped in `Some`, and when iteration is over, it returns `None`.
 We can call the `next` method on iterators directly if we’d like; Listing 13-15
 has a test that demonstrates the values we’d get on repeated calls to `next`

@@ -7,7 +7,7 @@ details. Now that we know more Rust, we can get into the nitty-gritty.
 
 *Associated types* are a way of associating a type placeholder with a trait
 such that the trait method definitions can use these placeholder types in their
-signatures. The implementer of a trait will specify the concrete type to be
+signatures. The implementor of a trait will specify the concrete type to be
 used in this type’s place for the particular implementation.
 
 We’ve described most of the things in this chapter as being very rare.
@@ -31,9 +31,9 @@ that has an associated type `Item`</span>
 
 This says that the `Iterator` trait has an associated type named `Item`. `Item`
 is a placeholder type, and the return value of the `next` method will return
-values of type `Option<Self::Item>`. Implementers of this trait will specify
+values of type `Option<Self::Item>`. Implementors of this trait will specify
 the concrete type for `Item`, and the `next` method will return an `Option`
-containing a value of whatever type the implementer has specified.
+containing a value of whatever type the implementor has specified.
 
 #### Associated Types Versus Generics
 

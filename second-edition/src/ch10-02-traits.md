@@ -240,7 +240,7 @@ implementation.
 Default implementations are allowed to call the other methods in the same
 trait, even if those other methods don’t have a default implementation. In this
 way, a trait can provide a lot of useful functionality and only require
-implementers to specify a small part of it. We could choose to have the
+implementors to specify a small part of it. We could choose to have the
 `Summarizable` trait also have an `author_summary` method whose implementation
 is required, then a `summary` method that has a default implementation that
 calls the `author_summary` method:
@@ -519,7 +519,7 @@ let s = 3.to_string();
 ```
 
 Blanket implementations appear in the documentation for the trait in the
-“Implementers” section.
+“Implementors” section.
 
 Traits and trait bounds let us write code that uses generic type parameters in
 order to reduce duplication, but still specify to the compiler exactly what
