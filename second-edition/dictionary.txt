@@ -9,6 +9,7 @@ aggregator
 AGraph
 aliasability
 alignof
+allocator
 Amir
 anotherusername
 APIs
@@ -16,6 +17,7 @@ app's
 aren
 args
 async
+atomics
 AveragedCollection
 backend
 backtrace
@@ -50,6 +52,7 @@ ChangeColorMessage
 charset
 chXX
 chYY
+coercions
 ConcreteType
 config
 Config
@@ -64,11 +67,13 @@ CStr
 CString
 ctrl
 Ctrl
+customizable
 CustomSmartPointer
 deallocated
 deallocating
 deallocation
 debuginfo
+decrementing
 deps
 deref
 Deref
@@ -84,12 +89,14 @@ destructured
 destructures
 destructuring
 Destructuring
+deterministically
 didn
 Dobrý
 doccargo
 doccratesio
 DOCTYPE
 doesn
+disambiguating
 DraftPost
 DSTs
 ebooks
@@ -124,6 +131,7 @@ FnOnce
 formatter
 FromIterator
 frontend
+getter
 GGraph
 GitHub
 gitignore
@@ -152,6 +160,7 @@ impl
 implementor
 implementors
 ImportantExcerpt
+incrementing
 indices
 init
 inline
@@ -159,6 +168,7 @@ instantiation
 internet
 IntoIterator
 InvalidDigit
+invariants
 ioerror
 iokind
 ioresult
@@ -200,6 +210,7 @@ minigrep
 mixup
 mkdir
 modifiability
+modularity
 monomorphization
 Monomorphization
 monomorphized
@@ -232,6 +243,7 @@ OCaml
 offsetof
 online
 OpenGL
+optimizations
 OptionalFloatingPointNumber
 OptionalNumber
 OsStr
@@ -247,6 +259,7 @@ PartialOrd
 PendingReview
 PendingReviewPost
 PlaceholderType
+polymorphism
 PoolCreationError
 portia
 powershell
@@ -279,12 +292,15 @@ RefMut
 refutability
 reimplement
 repr
+representable
 request's
 resizes
 resizing
 retweet
+rewordings
 rint
 ripgrep
+runnable
 runtime
 runtimes
 Rustacean
@@ -303,6 +319,7 @@ shouldn
 Simula
 situps
 sizeof
+Smalltalk
 someproject
 someusername
 SPDX
@@ -324,6 +341,7 @@ Struct
 structs
 struct's
 Structs
+subclasses
 subcommand
 subcommands
 subdirectories
@@ -366,9 +384,11 @@ unary
 Unary
 uncomment
 Uncomment
+unevaluated
 Uninstalling
 uninstall
 unix
+unpopulated
 unoptimized
 UnsafeCell
 unsafety
