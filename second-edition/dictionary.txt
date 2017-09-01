@@ -149,6 +149,8 @@ html
 Iceburgh
 IEEE
 impl
+implementor
+implementors
 ImportantExcerpt
 indices
 init

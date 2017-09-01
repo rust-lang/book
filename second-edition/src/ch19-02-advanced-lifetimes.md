@@ -398,7 +398,7 @@ having to do with lifetimes and trait objects:
 When we must be explicit, we can add a lifetime bound on a trait object like
 `Box<Foo>` with the syntax `Box<Foo + 'a>` or `Box<Foo + 'static>`, depending
 on what’s needed. Just as with the other bounds, this means that any
-implementer of the `Foo` trait that has any references inside must have the
+implementor of the `Foo` trait that has any references inside must have the
 lifetime specified in the trait object bounds as those references.
 
 Next, let’s take a look at some other advanced features dealing with traits!
