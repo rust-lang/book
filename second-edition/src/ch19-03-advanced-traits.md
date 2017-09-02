@@ -314,125 +314,162 @@ functionality of the trait without breaking the existing implementation code.
 
 ### Fully Qualified Syntax for Disambiguation
 
-Rust cannot prevent a trait from having a method with the same name as another
-trait’s method, nor can it prevent us from implementing both of these traits on
-one type. We can also have a method implemented directly on the type with the
-same name as well! In order to be able to call each of the methods with the
-same name, then, we need to tell Rust which one we want to use. Consider the
-code in Listing 19-27 where traits `Foo` and `Bar` both have method `f` and we
-implement both traits on struct `Baz`, which also has a method named `f`:
-
-<span class="filename">Filename: src/main.rs</span>
-
-```rust
-trait Foo {
-    fn f(&self);
-}
-
-trait Bar {
-    fn f(&self);
-}
-
-struct Baz;
-
-impl Foo for Baz {
-    fn f(&self) { println!("Baz’s impl of Foo"); }
-}
-
-impl Bar for Baz {
-    fn f(&self) { println!("Baz’s impl of Bar"); }
-}
-
-impl Baz {
-    fn f(&self) { println!("Baz's impl"); }
-}
-
-fn main() {
-    let b = Baz;
-    b.f();
-}
-```
-
-<span class="caption">Listing 19-27: Implementing two traits that both have a
-method with the same name as a method defined on the struct directly</span>
-
-For the implementation of the `f` method for the `Foo` trait on `Baz`, we’re
-printing out `Baz's impl of Foo`. For the implementation of the `f` method for
-the `Bar` trait on `Baz`, we’re printing out `Baz's impl of Bar`. The
-implementation of `f` directly on `Baz` prints out `Baz's impl`. What should
-happen when we call `b.f()`? In this case, Rust will always use the
-implementation on `Baz` directly and will print out `Baz's impl`.
-
-In order to be able to call the `f` method from `Foo` and the `f` method from
-`Baz` rather than the implementation of `f` directly on `Baz`, we need to use
-the *fully qualified syntax* for calling methods. It works like this: for any
-method call like:
+Let's imagine two traits, `Pilot` and `Wizard`, that both have a method called
+`fly`. We now want to implement both of them on a type `Man` that itself
+already has a method with the same name implemented on it.
 
 ```rust,ignore
-receiver.method(args);
+trait Pilot {
+    fn fly(&self);
+}
+
+trait Wizard {
+    fn fly(&self);
+}
+
+struct Man;
+
+impl Pilot for Man {
+    fn fly(&self) {
+        println!("This is your captain speaking.");
+    }
+}
+
+impl Wizard for Man {
+    fn fly(&self) {
+        println!("Up!");
+    }
+}
+
+impl Man {
+    fn fly(&self) {
+        println!("*waving arms furiously*");
+    }
+}
 ```
 
-We can fully qualify the method call like this:
-
-```rust,ignore
-<Type as Trait>::method(receiver, args);
-```
-
-So in order to disambiguate and be able to call all the `f` methods defined in
-Listing 19-27, we specify that we want to treat the type `Baz` as each trait
-within angle brackets, then use two colons, then call the `f` method and pass
-the instance of `Baz` as the first argument. Listing 19-28 shows how to call
-`f` from `Foo` and then `f` from `Bar` on `b`:
-
-<span class="filename">Filename: src/main.rs</span>
+If we now call `fly` on an instance of `Man`, the compiler defaults to call the
+method that is directly implemented on the type.
 
 ```rust
-# trait Foo {
-#     fn f(&self);
+# trait Pilot {
+#     fn fly(&self);
 # }
-# trait Bar {
-#     fn f(&self);
+#
+# trait Wizard {
+#     fn fly(&self);
 # }
-# struct Baz;
-# impl Foo for Baz {
-#     fn f(&self) { println!("Baz’s impl of Foo"); }
+#
+# struct Man;
+#
+# impl Pilot for Man {
+#     fn fly(&self) {
+#         println!("This is your captain speaking.");
+#     }
 # }
-# impl Bar for Baz {
-#     fn f(&self) { println!("Baz’s impl of Bar"); }
+#
+# impl Wizard for Man {
+#     fn fly(&self) {
+#         println!("Up!");
+#     }
 # }
-# impl Baz {
-#     fn f(&self) { println!("Baz's impl"); }
+#
+# impl Man {
+#     fn fly(&self) {
+#         println!("*waving arms furiously*");
+#     }
 # }
 #
 fn main() {
-    let b = Baz;
-    b.f();
-    <Baz as Foo>::f(&b);
-    <Baz as Bar>::f(&b);
+    let man = Man;
+    man.fly(); // prints "*waving arms furiously*"
 }
 ```
 
-<span class="caption">Listing 19-28: Using fully qualified syntax to call the
-`f` methods defined as part of the `Foo` and `Bar` traits</span>
+For calling any of the trait's methods we need a more explicit syntax:
 
-This will print:
+```rust
+# trait Pilot {
+#     fn fly(&self);
+# }
+#
+# trait Wizard {
+#     fn fly(&self);
+# }
+#
+# struct Man;
+#
+# impl Pilot for Man {
+#     fn fly(&self) {
+#         println!("This is your captain speaking.");
+#     }
+# }
+#
+# impl Wizard for Man {
+#     fn fly(&self) {
+#         println!("Up!");
+#     }
+# }
+#
+# impl Man {
+#     fn fly(&self) {
+#         println!("*waving arms furiously*");
+#     }
+# }
+#
+fn main() {
+    let man = Man;
+    Pilot::fly(&man); // prints "This is your captain speaking."
+    Wizard::fly(&man); // prints "Up!"
 
-```text
-Baz's impl
-Baz’s impl of Foo
-Baz’s impl of Bar
+    man.fly(); // same as Man::fly(&man);
+}
 ```
 
-We only need the `Type as` part if it’s ambiguous, and we only need the `<>`
-part if we need the `Type as` part. So if we only had the `f` method directly
-on `Baz` and the `Foo` trait implemented on `Baz` in scope, we could call the
-`f` method in `Foo` by using `Foo::f(&b)` since we wouldn’t have to
-disambiguate from the `Bar` trait.
+If we further have another type `Woman` that also implements `Pilot` and call
+`Pilot::fly`, it's still not clear which exact method we mean. We can use an
+even more elaborate form called the “fully qualified syntax” to make that clear
+again:
 
-We could also have called the `f` defined directly on `Baz` by using
-`Baz::f(&b)`, but since that definition of `f` is the one that gets used by
-default when we call `b.f()`, it’s not required to fully specify that
-implementation if that’s what we want to call.
+```rust
+# trait Pilot {
+#     fn fly(&self);
+# }
+#
+# struct Man;
+#
+# impl Pilot for Man {
+#     fn fly(&self) {
+#         println!("This is your captain speaking.");
+#     }
+# }
+#
+# impl Man {
+#    fn fly(&self) {
+#        println!("*waving arms furiously*");
+#    }
+# }
+#
+struct Woman;
+
+impl Pilot for Woman {
+    fn fly(&self) {
+        println!("Welcome on board!");
+    }
+}
+
+fn main() {
+    let man = Man;
+    <Man as Pilot>::fly(&man);
+
+    let woman = Woman;
+    <Woman as Pilot>::fly(&woman);
+}
+```
+
+Even here the compiler could infer which method to call from the argument
+passed in as `&self`. Although, this is no longer possible for methods that
+don't take `&self`.
 
 ### Supertraits to Use One Trait’s Functionality Within Another Trait
 
