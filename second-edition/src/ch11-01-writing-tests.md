@@ -1,21 +1,20 @@
-## How to Write Tests
+## 테스트를 작성하는 방법
 
-Tests are Rust functions that verify non-test code is functioning in the
-program in the expected manner. The bodies of test functions typically contain
-some setup, running the code we want to test, then asserting that the results
-are what we expect. Let's look at the features Rust provides specifically for
-writing tests: the `test` attribute, a few macros, and the `should_panic`
-attribute.
+테스트는 테스트 아닌 코드가 프로그램 내에서 기대했던 대로 기능을 하는지 검증하는 러스트
+함수입니다. 테스트 함수의 본체는 통상적으로 셋업, 우리가 테스트하고 싶은 코드의 실행,
+그런 다음 그 결과가 우리 예상대로인지 확고히 하는(assert) 단계를 담고 있습니다. 테스트
+작성을 위해 러스트가 특별히 제공하는 기능들을 살펴봅시다: `test` 속성, 몇 가지 매크로,
+그리고 `should_panic` 속성들을 말이죠.
 
-### The Anatomy of a Test Function
+### 테스트 함수의 해부
 
-At its simplest, a test in Rust is a function that's annotated with the `test`
-attribute. Attributes are metadata about pieces of Rust code: the `derive`
-attribute that we used with structs in Chapter 5 is one example. To make a
-function into a test function, we add `#[test]` on the line before `fn`. When
-we run our tests with the `cargo test` command, Rust will build a test runner
-binary that runs the functions annotated with the `test` attribute and reports
-on whether each test function passes or fails.
+가장 단순하게 말하면, 러스트 내의 테스트란 `test` 속성(attribute)이 주석으로 달려진
+(annotated) 함수입니다. 속성은 러스트 코드 조각에 대한 메타데이터입니다: 5장에서
+우리가 구조체와 함께 사용했던 `derive` 속성이 한가지 예입니다. 함수를 테스트 함수로
+만들기 위해서는, `fn` 전 라인에 `#[test]`를 추가합니다. `cargo test` 커맨드를
+사용하여 테스트를 실행시키면, 러스트는 `test` 속성이 달려있는 함수들을 실행하고
+각 테스트 함수가 성공 혹은 실패했는지를 보고하는 테스트 실행용 바이너리를 빌드할
+것입니다.
 
 <!-- is it annotated with `test` by the user, or only automatically? I think
 it's the latter, and has edited with a more active tone to make that clear, but
@@ -26,19 +25,18 @@ about that text. I'm not sure what part of this chapter implied "only
 automatically", can you point out where that's happening if we haven't taken
 care of it? /Carol -->
 
-We saw in Chapter 7 that when you make a new library project with Cargo, a test
-module with a test function in it is automatically generated for us. This is to
-help us get started writing our tests, since we don't have to go look up the
-exact structure and syntax of test functions every time we start a new project.
-We can add as many additional test functions and as many test modules as we
-want, though!
+7장에서 여러분이 카고를 통해 새로운 라이브러리 프로젝트를 만들었을 때, 테스트 함수를
+갖고 있는 테스트 모듈이 자동으로 생성되는 것을 보았습니다. 이는 우리의 테스트를 작성하기
+시작하도록 돕기 위한 것인데, 이렇게 하면 우리가 새로운 프로젝트를 시작할 때마다
+매번 테스트 함수를 위한 추가적인 구조 및 문법을 찾아보지 않아도 되기 때문입니다.
+하지만, 우리는 원하는만큼 추가적인 테스트 함수들과 테스트 모듈들을 추가할 수 있습니다!
 
-We're going to explore some aspects of how tests work by experimenting with the
-template test generated for us, without actually testing any code. Then we'll
-write some real-world tests that call some code that we've written and assert
-that its behavior is correct.
+우리는 실제 코드를 테스팅하지는 않으면서 자동으로 만들어진 템플릿 테스트를 가지고
+실험하는 식으로 테스트가 어떻게 동작하는지를 몇가지 관점에서 탐구할 것입니다.
+그리고나서 우리가 작성한 몇몇 코드를 호출하고 동작이 정확한지를 확고히하는
+실제의 테스트를 작성해 볼 것입니다.
 
-Let's create a new library project called `adder`:
+`adder`라고 하는 새로운 라이브러리 프로젝트를 만듭시다:
 
 ```text
 $ cargo new adder
@@ -46,8 +44,8 @@ $ cargo new adder
 $ cd adder
 ```
 
-The contents of the `src/lib.rs` file in your adder library should be as
-follows:
+여러분의 adder 라이브러리 내에 있는 `src/lib.rs` 파일의 내용물은 아래와 같아야
+합니다:
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -60,22 +58,21 @@ mod tests {
 }
 ```
 
-<span class="caption">Listing 11-1: The test module and function generated
-automatically for us by `cargo new` </span>
+<span class="caption">Listing 11-1: `cargo new`를 이용하여 자동으로 생성된
+테스트 모듈과 함수 </span>
 
-For now, let's ignore the top two lines and focus on the function to see how it
-works. Note the `#[test]` annotation before the `fn` line: this attribute
-indicates this is a test function, so that the test runner knows to treat this
-function as a test. We could also have non-test functions in the `tests` module
-to help set up common scenarios or perform common operations, so we need to
-indicate which functions are tests with the `#[test]` attribute.
+지금은 제일 위의 두 줄은 무시하고 함수가 어떻게 작동하는지 알아보는데 집중합시다.
+`fn` 라인 전의 `#[test]` 어노테이션을 주목하세요: 이 속성이 바로 이것이 테스트 함수임을
+나타내므로, 테스트 실행기는 이 함수를 테스트로 다루어야 한다는 것을 알게 됩니다.
+또한 우리는 `tests` 모듈 내에 일반적인 시나리오를 셋업하거나 일반적인 연산을 수행하는
+것을 돕기 위한 테스트 아닌 함수를 넣을 수 있으므로, 어떤 함수가 테스트 함수인지
+`#[test]`를 가지고 표시할 필요가 있습니다.
 
-The function currently has no body, which means there is no code to fail the
-test; an empty test is a passing test! Let's run it and see that this test
-passes.
+이 함수는 현재 본체가 없는데, 이는 테스트에 실패할 코드가 없다는 의미입니다;
+빈 테스트는 통과하는 테스트입니다! 이걸 실행하여 이 테스트가 통과하는지 봅시다.
 
-The `cargo test` command runs all tests we have in our project, as shown in
-Listing 11-2:
+`cargo test` 커맨드는 Listing 11-2에서 보는 바와 같이 우리 프로젝트에 있는
+모든 테스트를 실행합니다:
 
 ```text
 $ cargo test
@@ -95,29 +92,26 @@ running 0 tests
 test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured
 ```
 
-<span class="caption">Listing 11-2: The output from running the one
-automatically generated test </span>
+<span class="caption">Listing 11-2: 자동으로 생성된 테스트를 실행한 결과 </span>
 
-Cargo compiled and ran our test. After the `Compiling`, `Finished`, and
-`Running` lines, we see the line `running 1 test`. The next line shows the name
-of the generated test function, called `it_works`, and the result of running
-that test, `ok`. Then we see the overall summary of running the tests: `test
-result: ok.` means all the tests passed. `1 passed; 0 failed` adds up the
-number of tests that passed or failed.
+카고는 우리의 테스트를 컴파일하고 실행했습니다. `Compiling`, `Finished`, 그리고
+`Running` 라인 이후에, `running 1 test` 라인을 보게 됩니다. 그 다음 라인에는
+생성된 테스트 함수의 이름인 `it_works`가 나타나고, 테스트의 실행 결과 `ok`가
+나타납니다. 그리고나서 테스트 실행의 전체 요약을 보게 됩니다:
+`test result: ok.`는 모든 테스트가 통과했다는 뜻입니다. `1 passed; 0 failed`는
+통과하거나 실패한 테스트의 개수를 추가적으로 보여줍니다.
 
-We don't have any tests we've marked as ignored, so the summary says `0
-ignored`. We're going to talk about ignoring tests in the next section on
-different ways to run tests. The `0 measured` statistic is for benchmark tests
-that measure performance. Benchmark tests are, as of this writing, only
-available in nightly Rust. See Appendix D for more information about nightly
-Rust.
+우리가 무시하라고 표시한 테스트가 없으므로, 요약문에 `0 ignored`라고 표시됩니다.
+테스트를 실행하는 다른 방법에 대하여 다루는 다음 절에서 테스트를 무시하는 것에 대해
+다룰 것입니다. `0 measured` 통계는 성능을 측정하는 벤치마크 테스트를 위한 것입니다.
+벤치마크 테스트는 이 글이 쓰여진 시점에서는 오직 나이틀리(nightly) 러스트에서만 사용
+가능합니다. 나이틀리 러스트에 대한 정보는 부록 D에 나와있습니다.
 
-The next part of the test output that starts with `Doc-tests adder` is for the
-results of any documentation tests. We don't have any documentation tests yet,
-but Rust can compile any code examples that appear in our API documentation.
-This feature helps us keep our docs and our code in sync! We'll be talking
-about how to write documentation tests in the "Documentation Comments" section
-of Chapter 14. We're going to ignore the `Doc-tests` output for now.
+`Doc-tests adder`로 시작하는 테스트 출력의 다음 부분은 문서 테스트의 결과를 보여주기
+위한 것입니다. 아직 어떠한 문서 테스트도 없긴 하지만, 러스트는 우리의 API 문서 내에
+나타난 어떠한 코드 예제라도 컴파일 할 수 있습니다. 이 기능은 우리의 문서와 코드가
+동기화를 유지하도록 돕습니다! 우리는 14장의 "문서 주석"절 에서 문서 테스트를 작성하는
+방법에 대해 이야기할 것입니다. 지금은 `Doc-tests` 출력을 무시할 것입니다.
 
 <!-- I might suggest changing the name of the function, could be misconstrued
 as part of the test output! -->
@@ -128,8 +122,8 @@ needing to change anything. I've added a bit to walk through changing the
 function name and seeing how the output changes; I hope that's sufficient.
 /Carol -->
 
-Let's change the name of our test and see how that changes the test output.
-Give the `it_works` function a different name, such as `exploration`, like so:
+우리의 테스트의 이름을 변경하고 테스트 출력이 어떻게 변하는지를 살펴봅시다.
+다음과 같이 `it_works` 함수의 이름을 `exploration`으로 변경하세요:
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -142,8 +136,8 @@ mod tests {
 }
 ```
 
-And run `cargo test` again. In the output, we'll now see `exploration` instead
-of `it_works`:
+그리고 `cargo test`를 다시 실행시킵니다. 이제 출력 부분에서 `it_works` 대신
+`exploration`을 볼 수 있을 것입니다:
 
 ```text
 running 1 test
@@ -152,10 +146,11 @@ test tests::exploration ... ok
 test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured
 ```
 
-Let's add another test, but this time we'll make a test that fails! Tests fail
-when something in the test function panics. We talked about the simplest way to
-cause a panic in Chapter 9: call the `panic!` macro! Type in the new test so
-that your `src/lib.rs` now looks like Listing 11-3:
+다른 테스트를 추가해봅시다. 하지만 이번에는 실패하는 테스트를 만들 것입니다! 테스트
+함수 내의 무언가가 패닉을 일으키면 테스트는 실패합니다. 9장에서 패닉을 유발하는
+가장 단순한 방법에 대해 이야기했었습니다: 바로 `panic!` 매크로를 호출하는 것이죠!
+새로운 테스트를 입력하여 여러분의 `src/lib.rs`가 Listing 11-3과 같은 모양이
+되게 해보세요:
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -173,11 +168,12 @@ mod tests {
 }
 ```
 
-<span class="caption">Listing 11-3: Adding a second test; one that will fail
-since we call the `panic!` macro </span>
+<span class="caption">Listing 11-3: 두번째 테스트 추가; `panic!` 매크로를
+호출하기 떄문에 실패할 테스트 </span>
 
-And run the tests again with `cargo test`. The output should look like Listing
-11-4, which shows that our `exploration` test passed and `another` failed:
+그리고 `cargo test`를 이용하여 다시 한번 테스트를 실행시키세요. 결과 출력은
+Listing 11-4와 같이 나올 것인데, 이는 `exploration` 테스트는 통과하고 `another`는
+실패했음을 보여줍니다:
 
 ```text
 running 2 tests
@@ -198,26 +194,25 @@ test result: FAILED. 1 passed; 1 failed; 0 ignored; 0 measured
 error: test failed
 ```
 
-<span class="caption">Listing 11-4: Test results when one test passes and one
-test fails </span>
+<span class="caption">Listing 11-4: 한 테스트는 통과하고 다른 한 테스트는
+실패할 때의 테스트 결과 </span>
 
-Instead of `ok`, the line `test tests::another` says `FAILED`. We have two new
-sections between the individual results and the summary: the first section
-displays the detailed reason for the test failures. In this case, `another`
-failed because it `panicked at 'Make this test fail'`, which happened on
-*src/lib.rs* line 9. The next section lists just the names of all the failing
-tests, which is useful when there are lots of tests and lots of detailed
-failing test output. We can use the name of a failing test to run just that
-test in order to more easily debug it; we'll talk more about ways to run tests
-in the next section.
+`test tests::another` 라인은 `ok` 대신 `FAILED`이라 말해줍니다. 우리는 개별 결과
+부분과 요약 부분 사이에 새로운 두개의 섹션을 보게 됩니다: 첫번째 섹션은 테스트 실패에
+대한 구체적인 이유를 표시합니다. 이 경우, `another`는 `panicked at 'Make this test fail'`
+때문에 실패했는데, 이는 *src/lib.rs*의 9번 라인에서 발생했습니다. 다음 섹션은
+실패한 모든 테스트의 이름만 목록화한 것인데, 이는 테스트들이 많이 있고 구체적인 테스트
+실패 출력이 많을 때 유용합니다. 실패하는 테스트의 이름은 이를 더 쉽게 디버깅하기 위해서
+해당 테스트만을 실행시키는데 사용될 수 있습니다; 다음 절에서 테스트를 실행시키는 방법에
+대한 더 많은 내용을 이야기할 것입니다.
 
-Finally, we have the summary line: overall, our test result is `FAILED`. We had
-1 test pass and 1 test fail.
+마지막으로, 요약 라인입니다: 전체적으로, 우리의 테스트 결과는 `FAILED`입니다.
+우리는 1개의 테스트에 통과했고 1개의 테스트에 실패했습니다.
 
-Now that we've seen what the test results look like in different scenarios,
-let's look at some macros other than `panic!` that are useful in tests.
+이제 서로 다른 시나리오에서 테스트 결과가 어떻게 보이는지를 알았으니,
+`panic!` 외에 테스트 내에서 유용하게 쓰일 수 있는 몇가지 매크로를 봅시다.
 
-### Checking Results with the `assert!` Macro
+### `assert!` 매크로를 이용하여 결과 확인하기
 
 The `assert!` macro, provided by the standard library, is useful when you want
 to ensure that some condition in a test evaluates to `true`. We give the
