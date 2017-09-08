@@ -147,7 +147,7 @@ test result: FAILED. 1 passed; 1 failed; 0 ignored; 0 measured
 Note that the output for the tests and the test results is interleaved; this is
 because the tests are running in parallel as we talked about in the previous
 section. Try using both the `--test-threads=1` option and the `--nocapture`
-function and see what the output looks like then!
+flag and see what the output looks like then!
 
 ### Running a Subset of Tests by Name
 
