@@ -95,6 +95,7 @@ Chapter 6.
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust,should_panic
+#![allow(unused_variables)]
 use std::fs::File;
 
 fn main() {
@@ -214,6 +215,7 @@ the value inside the `Ok`. If the `Result` is the `Err` variant, `unwrap` will
 call the `panic!` macro for us.
 
 ```rust,should_panic
+#![allow(unused_variables)]
 use std::fs::File;
 
 fn main() {
@@ -236,6 +238,7 @@ providing good error messages can convey your intent and make tracking down the
 source of a panic easier. The syntax of `expect` looks like this:
 
 ```rust,should_panic
+#![allow(unused_variables)]
 use std::fs::File;
 
 fn main() {
