@@ -437,9 +437,15 @@ unfortunate if we weren’t able to use `s2` after appending its contents to `s1
 
 ```rust
 let mut s1 = String::from("foo");
-let s2 = String::from("bar");
+let s2 = "bar";
 s1.push_str(&s2);
+println!("s2 is {}", s2);
 ```
+
+Listing 8-14: Using a string slice after appending its contents to a `String`
+
+If the `push_str` method took ownership of `s2`, we wouldn’t be able to print
+out its value on the last line. However, this code works as we’d expect!
 
 The `push` method takes a single character as a parameter and adds it to the
 `String`. Listing 8-15 shows code that adds an l to a `String` using the `push`
