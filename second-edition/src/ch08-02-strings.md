@@ -357,7 +357,7 @@ Indexing into a string is often a bad idea because it’s not clear what the
 return type of the string indexing operation should be: a byte value, a
 character, a grapheme cluster, or a string slice. Therefore, Rust asks you to
 be more specific if you really need to use indices to create string slices. To
-be more specific in your indexing and indincate that you want a string slice,
+be more specific in your indexing and indicate that you want a string slice,
 rather than indexing using `[]` with a single number, you can use `[]` with a
 range to create a string slice containing particular bytes:
 
