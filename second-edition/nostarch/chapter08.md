@@ -217,6 +217,39 @@ rules prevent programs from ending up in that situation.
 > Note: For more on the implementation details of the `Vec<T>` type, see “The
 > Nomicon” at https://doc.rust-lang.org/stable/nomicon/vec.html.
 
+### Iterating Over the Values in a Vector
+
+If we want to access each element in a vector in turn, rather than using
+indexing to access one element, we can iterate through all of the elements.
+Listing 8-8 shows how to use a `for` loop to get immutable references to each
+element in a vector of `i32` values and print them out:
+
+```rust
+let v = vec![100, 32, 57];
+for i in &v {
+    println!("{}", i);
+}
+```
+
+Listing 8-8: Printing each element in a vector by iterating over the elements
+using a `for` loop
+
+We can also iterate over mutable references to each element in a mutable vector
+if we want to make changes to all the elements. The `for` loop in Listing 8-9
+will add `50` to each element:
+
+```rust
+let mut v = vec![100, 32, 57];
+for i in &mut v {
+    *i += 50;
+}
+```
+
+Listing 8-9: Iterating over mutable references to elements in a vector
+
+In order to change the value that the mutable reference refers to, before we
+can use the `+=` operator with `i`, we have to use the dereference operator
+(`*`) to get to the value.
 
 ### Using an Enum to Store Multiple Types
 
