@@ -184,7 +184,7 @@ and below). If these topics are confusing you in this context, I'd be
 interested to know if rereading Chapter 4 clears up that confusion.
 /Carol -->
 
-Refer back to the “String Slices as Arguments” section of Chapter 4 for more
+Refer back to the “String Slices as Parameters” section of Chapter 4 for more
 discussion about why these are the arguments we want.
 
 If we try to implement the `longest` function as shown in Listing 10-22, it
