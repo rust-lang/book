@@ -214,12 +214,11 @@ error: test failed
 
 ### `assert!` 매크로를 이용하여 결과 확인하기
 
-The `assert!` macro, provided by the standard library, is useful when you want
-to ensure that some condition in a test evaluates to `true`. We give the
-`assert!` macro an argument that evaluates to a boolean. If the value is `true`,
-`assert!` does nothing and the test passes. If the value is `false`, `assert!`
-calls the `panic!` macro, which causes the test to fail. This is one macro that
-helps us check that our code is functioning in the way we intend.
+표준 라이브러리에서 제공하는 `assert!` 매크로는 여러분이 테스트이 어떤 조건이 `true`임을 보장하기를
+원하는 경우 유용합니다. `assert!` 매크로에는 부울린 타입으로 계산되는 인자가 제공됩니다. 만일 값이
+`true`라면 `assert!`는 아무일도 하지 않고 테스트는 통과됩니다. 만일 값이 `false`라면, `assert!`는
+`panic!` 매크로를 호출하는데, 이것이 테스트를 실패하게 합니다. 이는 우리의 코드가 우리 의도대로
+기능하고 있는지를 체크하는 것을 도와주는 매크로 중 하나입니다.
 
 <!-- what kind of thing can be passed as an argument? Presumably when we use it
 for real we won't pass it `true` or `false` as an argument, but some condition
@@ -231,10 +230,9 @@ macro works and what it looks like for it to pass or fail, before we got into
 calling actual code. We've changed this section to move a bit faster and just
 write actual tests instead. /Carol -->
 
-Remember all the way back in Chapter 5, Listing 5-9, where we had a `Rectangle`
-struct and a `can_hold` method, repeated here in Listing 11-5. Let's put this
-code in *src/lib.rs* instead of *src/main.rs* and write some tests for it using
-the `assert!` macro.
+5장에 있는 Listing 5-9에 대한 기억을 완전히 떠올리시면, 거기서 `Rectangle` 구조체와 `can_hold`
+메소드를 다루었는데 여기 Listing 11-5에 다시 등장했습니다. 이 코드를 *src/main.rs* 대신
+*src/lib.rs*에 넣고, `assert!` 매크로를 사용하여 테스트를 작성해봅시다.
 
 <!-- Listing 5-9 wasn't marked as such; I'll fix it the next time I get Chapter
 5 for editing. /Carol -->
@@ -255,14 +253,13 @@ impl Rectangle {
 }
 ```
 
-<span class="caption">Listing 11-5: The `Rectangle` struct and its `can_hold`
-method from Chapter 5 </span>
+<span class="caption">Listing 11-5: 5장의 `Rectangle` 구조체와 `can_hold` 메소드
+</span>
 
-The `can_hold` method returns a boolean, which means it's a perfect use case
-for the `assert!` macro. In Listing 11-6, let's write a test that exercises the
-`can_hold` method by creating a `Rectangle` instance that has a length of 8 and
-a width of 7, and asserting that it can hold another `Rectangle` instance that
-has a length of 5 and a width of 1:
+`can_hold` 메소드는 부울린 값을 반환하는데, 이는 `assert!` 매크로를 위한 완벽한 사용 사례라는
+의미입니다! Listing 11-6에서, 길이 8에 너비 7인 `Rectangle` 인스턴스를 만들고, 이것이
+길이 5에 너비 1인 다른 `Rectangle` 인스턴스를 포함할 수 있는지 단언(assert)해보는 것으로
+`can_hold` 메소드를 시험하는 테스트를 작성해봅시다:
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -281,20 +278,18 @@ mod tests {
 }
 ```
 
-<span class="caption">Listing 11-6: A test for `can_hold` that checks that a
-larger rectangle indeed holds a smaller rectangle </span>
+<span class="caption">Listing 11-6: 큰 사각형이 작은 사각형을 정말로 담을 수 있는지 검사하는
+`can_hold`를 위한 테스트 </span>
 
-Note that we've added a new line inside the `tests` module: `use super::*;`.
-The `tests` module is a regular module that follows the usual visibility rules
-we covered in Chapter 7. Because we're in an inner module, we need to bring the
-code under test in the outer module into the scope of the inner module. We've
-chosen to use a glob here so that anything we define in the outer module is
-available to this `tests` module.
+`tests` 모듈 내에 새로운 라인이 추가된 것을 주목하세요: `use super::*;`. `tests` 모듈은
+우리가 7장에서 다루었던 보통의 가시성 규칙을 따르는 일반적인 모듈입니다. 우리가 내부 모듈 내에 있기
+때문에, 외부 모듈에 있는 코드를 내부 모듈의 스코프로 가져올 필요가 있습니다. 여기서는 글롭(`*`)을
+사용하기로 선택했고 따라서 우리가 외부 모듈에 정의한 어떠한 것이듯 이 `tests`모듈에서 사용 가능합니다.
 
-We've named our test `larger_can_hold_smaller`, and we've created the two
-`Rectangle` instances that we need. Then we called the `assert!` macro and
-passed it the result of calling `larger.can_hold(&smaller)`. This expression is
-supposed to return `true`, so our test should pass. Let's find out!
+우리의 테스트는 `larger_can_hold_smaller`로 명명되었고, 요구된 바와 같이 `Rectangle`
+인스턴스를 두 개 생성했습니다. 그 뒤 `assert!` 매크로를 호출하고 `larger.can_hold(&smaller)`
+호출의 결과값을 인자로서 넘겼습니다. 이 표현식은 `true`를 반환할 예정이므로, 우리의 테스트는
+통과해야 합니다. 자, 이제 알아봅시다!
 
 ```text
 running 1 test
@@ -303,8 +298,8 @@ test tests::larger_can_hold_smaller ... ok
 test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured
 ```
 
-It does pass! Let's add another test, this time asserting that a smaller
-rectangle cannot hold a larger rectangle:
+통과되었군요! 이번에는 작은 사각형이 큰 사각형을 포함시킬수 없음을 단언하는 또다른 테스트를
+추가합시다:
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -331,9 +326,9 @@ mod tests {
 }
 ```
 
-Because the correct result of the `can_hold` function in this case is `false`,
-we need to negate that result before we pass it to the `assert!` macro. This
-way, our test will pass if `can_hold` returns `false`:
+이 경우 `can_hold` 함수의 올바른 결과값은 `false`이므로, `assert!` 매크로에게 넘기기 전에
+이 결과를 반대로 만들 필요가 있습니다. 이러한 방식으로, 우리의 테스트는 `can_hold`가 `false`를
+반환할 경우에만 통과할 것입니다:
 
 ```text
 running 2 tests
@@ -343,10 +338,9 @@ test tests::larger_can_hold_smaller ... ok
 test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured
 ```
 
-Two passing tests! Now let's see what happens to our test results if we
-introduce a bug in our code. Let's change the implementation of the `can_hold`
-method to have a less-than sign when it compares the lengths where it's
-supposed to have a greater-than sign:
+통과하는 테스트가 두개가 되었습니다! 이제는 만약 우리의 코드에 버그가 있다면 테스트 결과가 어찌되는지
+봅시다. `can_hold` 메소드의 구현 부분 중 큰(>) 부등호를 이용해 길이를 비교하는 부분을 작은(<)
+부등호로 바꿔봅시다:
 
 ```rust
 #[derive(Debug)]
@@ -362,7 +356,7 @@ impl Rectangle {
 }
 ```
 
-Running the tests now produces:
+테스트를 실행시키면 이제 아래와 같이 출력됩니다:
 
 ```text
 running 2 tests
@@ -382,26 +376,22 @@ failures:
 test result: FAILED. 1 passed; 1 failed; 0 ignored; 0 measured
 ```
 
-Our tests caught the bug! Since `larger.length` is 8 and `smaller.length` is 5,
-the comparison of the lengths in `can_hold` now returns `false` since 8 is not
-less than 5.
+우리의 테스트가 버그를 찾았습니다! `larger.length`는 8이고 `smaller.length`는 5이므로,
+`can_hold`의 길이 부분에 대한 비교값은 이제 `false`를 반환하는데, 이는 8이 5보다 작지 않기
+때문입니다.
 
-### Testing Equality with the `assert_eq!` and `assert_ne!` Macros
+### `aseert_eq!`와 `assert_ne!`를 이용한 동치(equality) 테스트
 
-A common way to test functionality is to take the result of the code under test
-and the value we expect the code to return and check that they're equal. We
-could do this using the `assert!` macro and passing it an expression using the
-`==` operator. However, this is such a common test that the standard library
-provides a pair of macros to perform this test more conveniently: `assert_eq!`
-and `assert_ne!`. These macros compare two arguments for equality or
-inequality, respectively. They'll also print out the two values if the
-assertion fails, so that it's easier to see *why* the test failed, while the
-`assert!` macro only tells us that it got a `false` value for the `==`
-expression, not the values that lead to the `false` value.
+기능성을 테스트하는 일반적인 방법은 테스트 내의 코드의 결과값과 우리가 기대하는 값을 얻어서 이 둘이
+서로 같은지를 비교하는 것입니다. 이를 `assert!` 매크로에 `==`를 이용한 표현식을 넘기는 식으로
+할 수도 있습니다. 그러나 이러한 테스트를 더 편리하게 수행해주는 표준 라이브러리가 제공하는 한 쌍의
+매크로가 있습니다: `assert_eq!`와 `assert_ne!`입니다. 이 매크로들은 각각 동치(equality)와
+부동(inequality)을 위해 두 인자를 비교합니다. 또한 이들은 만일 단언에 실패한다면 두 값을 출력해
+줄 것이므로, *왜* 테스트가 실패했는지를 포기 더 쉬워지는데, 반면 `assert!`는 `==` 표현식에 대해
+`false` 값을 얻었음을 알려줄 뿐, 어떤 값이 `false`값을 야기했는지는 알려주지 않습니다.
 
-In Listing 11-7, let's write a function named `add_two` that adds two to its
-parameter and returns the result. Then let's test this function using the
-`assert_eq!` macro:
+Listing 11-7와 같이, 파라미터에 2를 더하여 결과를 반환하는 `add_two` 함수를 작성합시다. 그 후
+`assert_eq!` 매크로를 이용하여 이 함수를 테스트합시다:
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -421,10 +411,10 @@ mod tests {
 }
 ```
 
-<span class="caption">Listing 11-7: Testing the function `add_two` using the
-`assert_eq!` macro </span>
+<span class="caption">Listing 11-7: `assert_eq!` 매크로를 이용하는 `add_two` 함수 테스트
+</span>
 
-Let's check that it passes!
+이게 통과하는지 확인해 봅시다!
 
 ```text
 running 1 test
@@ -433,13 +423,12 @@ test tests::it_adds_two ... ok
 test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured
 ```
 
-The first argument we gave to the `assert_eq!` macro, 4, is equal to the result
-of calling `add_two(2)`. We see a line for this test that says `test
-tests::it_adds_two ... ok`, and the `ok` text indicates that our test passed!
+`assert_eq!` 매크로에 제공한 첫번째 인자 4는 `add_two(2)` 호출의 결과와 동일합니다.
+이 테스트가 `test tests::it_adds_two ... ok`라고 하는 줄을 보았고, `ok` 문자열은 테스트가
+통과했음을 나타냅니다!
 
-Let's introduce a bug into our code to see what it looks like when a test that
-uses `assert_eq!` fails. Change the implementation of the `add_two` function to
-instead add 3:
+`assert_eq!`를 이용하는 테스트가 실패했을때는 어떻게 보이는지를 알아보기 위해 테스트에 버그를 집어넣어
+봅시다. `add_two` 함수에 3을 대신 더하는 형태로 구현을 변경해보세요:
 
 ```rust
 pub fn add_two(a: i32) -> i32 {
@@ -447,7 +436,7 @@ pub fn add_two(a: i32) -> i32 {
 }
 ```
 
-And run the tests again:
+그리고 테스트를 다시 실행해보시요:
 
 ```text
 running 1 test
@@ -466,55 +455,44 @@ failures:
 test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured
 ```
 
-Our test caught the bug! The `it_adds_two` test failed with the message ``
-assertion failed: `(left == right)` (left: `4`, right: `5`) ``. This message is
-useful and helps us get started debugging: it says the `left` argument to
-`assert_eq!` was 4, but the `right` argument, where we had `add_two(2)`, was 5.
+우리의 테스트가 버그를 잡았어요! `it_adds_two` 테스트는
+`` assertion failed: `(left == right)` (left: `4`, right: `5`) ``라는 메세지와 함께
+실패했습니다. 이 메세지는 우리가 디버깅을 시작하는데 유용한 도움을 줍니다: `assert_eq!`의 `left`
+인자는 4였는데, `add_two(2)`를 넣은 right` 인자는 5라고 말해주고 있습니다. 
 
-Note that in some languages and test frameworks, the parameters to the
-functions that assert two values are equal are called `expected` and `actual`
-and the order in which we specify the arguments matters. However, in Rust,
-they're called `left` and `right` instead, and the order in which we specify
-the value we expect and the value that the code under test produces doesn't
-matter. We could have written the assertion in this test as
-`assert_eq!(add_two(2), 4)`, which would result in a failure message that says
-`` assertion failed: `(left == right)` (left: `5`, right: `4`) ``.
+몇몇 언어와 테스트 프레임워크 내에서는, 두 값이 같은지를 단언하는 함수의 파라미터를 `expected`와
+`actual`로 부르며 우리가 인자를 넣는 순서가 중요하다는 점을 기억하세요. 하지만 러스트에서는
+그대신 `left`와 `right`라고 불리우며 우리가 기대한 값과 테스트 내의 코드가 생성하는 값을
+지정하는 순서는 중요치 않습니다. 이 테스트의 단언을 `assert_eq!(add_two(2), 4)`로 작성할
+수도 있는데, 이는 `` assertion failed: `(left == right)` (left: `5`, right: `4`) ``
+와 같은 실패 메세지를 만들어낼 것입니다.
 
-The `assert_ne!` macro will pass if the two values we give to it are not equal
-and fail if they are equal. This macro is most useful for cases when we're not
-sure exactly what a value *will* be, but we know what the value definitely
-*won't* be, if our code is functioning as we intend. For example, if we have a
-function that is guaranteed to change its input in some way, but the way in
-which the input is changed depends on the day of the week that we run our
-tests, the best thing to assert might be that the output of the function is not
-equal to the input.
+`assert_ne!` 매크로는 우리가 제공한 두 개의 값이 서로 갖지 않으면 통과하고 동일하면 실패할 것입니다.
+이 매크로는 어떤 값이 *될 것인지*는 정확히 확신하지 못하지만, 어떤 값이라면 절대로 *될 수 없는지*는
+알고 있을 경우에 가장 유용합니다. 예를 들면, 만일 어떤 함수가 입력값을 어떤 방식으로든 변경한다는 것을
+보장하지만, 그 입력값이 우리가 테스트를 실행한 요일에 따라 달라지는 형태라면, 단언을 하는 가장 좋은
+방법은 함수의 결과값이 입력값과 같지 않다는 것일지도 모릅니다.
 
-Under the surface, the `assert_eq!` and `assert_ne!` macros use the operators
-`==` and `!=`, respectively. When the assertions fail, these macros print their
-arguments using debug formatting, which means the values being compared must
-implement the `PartialEq` and `Debug` traits. All of the primitive types and
-most of the standard library types implement these traits. For structs and
-enums that you define, you'll need to implement `PartialEq` in order to be able
-to assert that values of those types are equal or not equal. You'll need to
-implement `Debug` in order to be able to print out the values in the case that
-the assertion fails. Because both of these traits are derivable traits, as we
-mentioned in Chapter 5, this is usually as straightforward as adding the
-`#[derive(PartialEq, Debug)]` annotation to your struct or enum definition. See
-Appendix C for more details about these and other derivable traits.
+표면 아래에서, `assert_eq!`와 `assert_ne!` 매크로는 각각 `==`과 `!=` 연산자를 이용합니다.
+단언에 실패하면, 이 매크로들은 디버그 포맷팅을 사용하여 인자들을 출력하는데, 이는 비교되는 값들이
+`PartialEq`와 `Debug` 트레잇을 구현해야 한다는 의미입니다. 모든 기본 타입과 표준 라이브러리가
+제공하는 대부분의 타입들은 이 트레잇들을 구현하고 있습니다. 여러분이 정의한 구조체나 열거형에 대해서,
+단언에 실패할 경우에 값을 출력하기 위해서는 `Debug`를 구현해야 합니다. 5장에서 설명한 바와 같이
+두 트레잇 모두 추론 가능한(derivable) 트레잇이기 때문에, 이 트레잇의 구현은 보통
+`#[derive(PartialEq, Debug)]` 어노테이션을 여러분의 구조체나 열거형 정의부에 추가하는 정도로
+간단합니다. 이에 대한 것과 다른 추론 가능한 트레잇에 대한 더 자세한 내용은 부록 C를 참고하세요.
 
-### Custom Failure Messages
+### Custom Failure Messages 커스텀 실패 메세지
 
-We can also add a custom message to be printed with the failure message as
-optional arguments to `assert!`, `assert_eq!`, and `assert_ne!`. Any arguments
-specified after the one required argument to `assert!` or the two required
-arguments to `assert_eq!` and `assert_ne!` are passed along to the `format!`
-macro that we talked about in Chapter 8, so you can pass a format string that
-contains `{}` placeholders and values to go in the placeholders. Custom
-messages are useful in order to document what an assertion means, so that when
-the test fails, we have a better idea of what the problem is with the code.
+또한 우리는 `assert!`, `assert_eq!` 및 `assert_ne!`의 추가 인자로서 커스텀 메세지를 입력하여
+실패 메세지와 함께 출력되도록 할 수 있습니다. `assert!`가 요구하는 하나의 인자 후에 지정된 인자들이나
+`assert_eq!`와 `assert_ne!`가 요구하는 두개의 인자 후에 지정된 인자들은 우리가 8장에서 다루었던
+`format!` 매크로에 넘겨지므로, 여러분은 `{}` 변경자(placeholder)를 갖는 포맷 스트링과 이 변경자에
+입력될 값들을 넘길 수 있습니다. 커스텀 메세지는 해당 단언의 의미를 문서화하기 위한 용도로서 유용하므로,
+테스트가 실패했을 때, 코드에 어떤 문제가 있는지에 대해 더 좋은 생각을 가질 수 있습니다.
 
-For example, let's say we have a function that greets people by name, and we
-want to test that the name we pass into the function appears in the output:
+예를 들어, 이름을 부르며 사람들을 환영하는 함수가 있고, 이 함수에 넘겨주는 이름이 출력 내에 있는지
+테스트하고 싶다고 칩시다:
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -535,15 +513,13 @@ mod tests {
 }
 ```
 
-The requirements for this program haven't been agreed upon yet, and we're
-pretty sure the `Hello` text at the beginning of the greeting will change. We
-decided we don't want to have to update the test for the name when that
-happens, so instead of checking for exact equality to the value returned from
-the `greeting` function, we're just going to assert that the output contains
-the text of the input parameter.
+여기서 이 프로그램의 요구사항은 아직 합의되지 않았고, 인삿말의 시작지점에 있는 `Hello` 텍스트가
+변경될 것이라는 점이 꽤나 확실한 상태라고 칩시다. 우리는 그런 변경사항이 생기더라도 이름에 대한 테스트를
+갱신할 필요는 없다고 결정했고, 따라서 `greeting` 함수로부터 반환된 값과 정확히 일치하는 체크 대신,
+출력값이 입력 파라미터의 텍스트를 포함하고 있는지만 단언할 것입니다.
 
-Let's introduce a bug into this code to see what this test failure looks like,
-by changing `greeting` to not include `name`:
+`greeting`이 `name`을 포함하지 않도록 변경하는 것으로 버그를 집어넣어 테스트 실패가 어떻게 보이는지
+살펴봅시다:
 
 ```rust
 pub fn greeting(name: &str) -> String {
@@ -568,11 +544,10 @@ failures:
     tests::greeting_contains_name
 ```
 
-This just tells us that the assertion failed and which line the assertion is
-on. A more useful failure message in this case would print the value we did get
-from the `greeting` function. Let's change the test function to have a custom
-failure message made from a format string with a placeholder filled in with the
-actual value we got from the `greeting` function:
+이 메세지는 그저 단언이 실패했으며 몇번째 줄의 단언이 실패했는지만을 알려주고 있습니다. 이 경우에서
+더 유용한 실패 메세지는 `greeting` 함수로부터 얻은 값을 출력하는 것일테지요. 테스트 함수를 바꿔서
+`greeting` 함수로부터 얻은 실제 값으로 채워질 변경자를 이용한 포맷 스트링으로부터 만들어지는 커스텀
+실패 메세지를 갖도록 해봅시다:
 
 ```rust,ignore
 #[test]
@@ -585,7 +560,7 @@ fn greeting_contains_name() {
 }
 ```
 
-Now if we run the test again, we'll get a much more informative error message:
+이제 테스트를 다시 실행시키면, 더 많은 정보를 가진 에러메세지를 얻을 것입니다:
 
 ```text
 ---- tests::greeting_contains_name stdout ----
@@ -594,25 +569,24 @@ Now if we run the test again, we'll get a much more informative error message:
 note: Run with `RUST_BACKTRACE=1` for a backtrace.
 ```
 
-We can see the value we actually got in the test output, which would help us
-debug what happened instead of what we were expecting to happen.
+이제 실제로 테스트 출력에서 얻어진 값을 볼 수 있고, 이는 우리가 기대했던 일 대신 실제 어떤 일이
+일어났는지 디버깅하는데 도움을 줄 것입니다.
 
-### Checking for Panics with `should_panic`
+### `should_panic`을 이용한 패닉에 대한 체크
 
-In addition to checking that our code returns the correct values we expect,
-it's also important to check that our code handles error conditions as we
-expect. For example, consider the `Guess` type that we created in Chapter 9 in
-Listing 9-8. Other code that uses `Guess` is depending on the guarantee that
-`Guess` instances will only contain values between 1 and 100. We can write a
-test that ensures that attempting to create a `Guess` instance with a value
-outside that range panics.
+우리의 코드가 우리가 기대한 정확한 값을 반환하는 것을 체크하는 것에 더하여, 우리의 코드가
+우리가 기대한대로 에러가 나는 경우를 처리할 수 있는지 체크하는 것 또한 중요합니다. 예를 들어,
+9장의 Listing 9-8에서 우리가 만들었던 `Guess` 타입을 떠올려보세요. `Guess`를 이용하는
+다른 코드는 `Guess` 인스턴스가 1과 100 사이의 값만 가질 것이라는 보장에 의존하고 있습니다.
+우리는 범위 밖의 값으로 `Guess` 인스턴스를 만드는 시도가 패닉을 일으킨다는 것을 확실히하는
+테스트를 작성할 수 있습니다.
 
-We can do this by adding another attribute, `should_panic`, to our test
-function. This attribute makes a test pass if the code inside the function
-panics, and the test will fail if the code inside the function does not panic.
+이는 또다른 속성인 `should_panic`를 테스트 함수에 추가함으로써 할 수 있습니다. 이 속성은
+함수 내의 코드가 패닉을 일으키면 테스트가 통과하도록 만들어주며, 함수 내의 코드가 패닉을 일으키지
+않는다면 테스트는 실패할 것입니다.
 
-Listing 11-8 shows how we'd write a test that checks the error conditions of
-`Guess::new` happen when we expect:
+Listing 11-8은 `Guess::new`의 에러 조건이 우리 예상대로 발동되는지를 검사하는 테스트를
+작성하는 방법을 보여줍니다:
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -645,12 +619,11 @@ mod tests {
 }
 ```
 
-<span class="caption">Listing 11-8: Testing that a condition will cause a
-`panic!` </span>
+<span class="caption">Listing 11-8: 어떤 조건이 `panic!`을 일으키는지에 대한 테스트
+</span>
 
-The `#[should_panic]` attribute goes after the `#[test]` attribute and before
-the test function it applies to. Let's see what it looks like when this test
-passes:
+`#[should_panic]` 속성이 `#[test]` 속성 뒤, 그리고 적용될 테스트 함수 앞에 붙었습니다.
+이 테스트가 통과될 때는 어떻게 보이는지 봅시다:
 
 ```text
 running 1 test
@@ -659,8 +632,8 @@ test tests::greater_than_100 ... ok
 test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured
 ```
 
-Looks good! Now let's introduce a bug in our code, by removing the condition
-that the `new` function will panic if the value is greater than 100:
+좋아 보이는군요! 이제 `new` 함수가 100 이상의 값일때 패닉을 발생시키는 조건을 제거함으로써 코드에
+버그를 넣어봅시다:
 
 ```rust
 # struct Guess {
@@ -680,7 +653,7 @@ impl Guess {
 }
 ```
 
-If we run the test from Listing 11-8, it will fail:
+Listing 11-8의 테스트를 실행시키면, 아래와 같이 실패할 것입니다:
 
 ```text
 running 1 test
@@ -694,19 +667,17 @@ failures:
 test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured
 ```
 
-We don't get a very helpful message in this case, but once we look at the test
-function, we can see that it's annotated with `#[should_panic]`. The failure we
-got means that the code in the function, `Guess::new(200)`, did not cause a
-panic.
+이 경우에는 그다지 쓸모있는 메세지를 얻지 못하지만, 한번 테스트 함수를 살펴보게 되면,
+함수가 `#[should_panic]`으로 어노테이션 되었다는 것을 볼 수 있습니다. 우리가 얻은 실패는
+함수 내의 코드 `Guess::new(200)`가 패닉을 일으키지 않았다는 의미가 됩니다.
 
-`should_panic` tests can be imprecise, however, because they only tell us that
-the code has caused some panic. A `should_panic` test would pass even if the
-test panics for a different reason than the one we were expecting to happen. To
-make `should_panic` tests more precise, we can add an optional `expected`
-parameter to the `should_panic` attribute. The test harness will make sure that
-the failure message contains the provided text. For example, consider the
-modified code for `Guess` in Listing 11-9 where the `new` function panics with
-different messages depending on whether the value was too small or too large:
+하지만 `should_panic` 테스트는 애매할 수 있는데, 그 이유는 이 속성이 단지 코드에서 어떤 패닉이
+유발되었음만을 알려줄 뿐이기 때문입니다. `should_panic` 테스트는 일어날 것으로 예상한 것 외의
+다른 이유로 인한 패닉이 일어날 지라도 통과할 것입니다. `should_panic` 테스트를 더 엄밀하게 만들기
+위해서, `should_panic` 속성에 `expected` 파라미터를 추가할 수 있습니다. 이 테스트 도구는
+실패 메세지가 제공된 텍스트를 담고 있는지 확실히 할 것입니다. 예를 들면, Listing 11-9와 같이
+입력된 값이 너무 작거나 혹은 너무 클 경우에 대해 서로 다른 메세지를 가진 패닉을 일으키는 `new` 함수를
+갖고 있는 수정된 `Guess` 코드를 고려해봅시다:
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -743,21 +714,20 @@ mod tests {
 }
 ```
 
-<span class="caption">Listing 11-9: Testing that a condition will cause a
-`panic!` with a particular panic message </span>
+<span class="caption">Listing 11-9: 어떤 조건이 특정 패닉 메세지를 가진 `panic!`을
+일으키는 테스트 </span>
 
-This test will pass, because the value we put in the `expected` parameter of
-the `should_panic` attribute is a substring of the message that the
-`Guess::new` function panics with. We could have specified the whole panic
-message that we expect, which in this case would be `Guess value must be less
-than or equal to 100, got 200.` It depends on how much of the panic message is
-unique or dynamic and how precise you want your test to be. In this case, a
-substring of the panic message is enough to ensure that the code in the
-function that gets run is the `else if value > 100` case.
+이 테스트는 통과할 것인데, 그 이유는 `should_panic` 속성에 추가한 `expected` 파라미터 값이
+`Guess::new` 함수가 패닉을 일으킬 때의 메세지의 서브스트링이기 때문입니다. 우리가 예상하는
+전체 패닉 메세지로 특정할 수도 있는데, 그러한 경우에는 `Guess value must be less
+than or equal to 100, got 200.`이 되겠지요. 이는 패닉 메세지가 얼마나 유일한지 혹은
+유동적인지, 그리고 여러분의 테스트가 얼마나 정확하기를 원하는지에 따라서 달라집니다. 위의 경우,
+패닉 메세지의 서브스트링은 실행된 함수의 코드가 `else if value > 100` 경우에 해당함을
+확신하기에 충분합니다.
 
-To see what happens when a `should_panic` test with an `expected` message
-fails, let's again introduce a bug into our code by swapping the bodies of the
-`if value < 1` and the `else if value > 100` blocks:
+`expect` 메세지를 가진 `should_panic` 테스트가 실패하면 어떻게 되는지 보기 위해서, 다시 한번
+`if value < 1` 아래 코드 블록과 `else if value > 100` 아래 코드 블록을 바꿔서 버그를
+만들어봅시다:
 
 ```rust,ignore
 if value < 1 {
@@ -767,7 +737,7 @@ if value < 1 {
 }
 ```
 
-This time when we run the `should_panic` test, it will fail:
+이번에는 `should_panic` 테스트를 실행하면, 아래와 같이 실패합니다:
 
 ```text
 running 1 test
@@ -788,12 +758,11 @@ failures:
 test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured
 ```
 
-The failure message indicates that this test did indeed panic as we expected,
-but the panic message `did not include expected string 'Guess value must be
-less than or equal to 100'`. We can see the panic message that we did get,
-which in this case was `Guess value must be greater than or equal to 1, got
-200.` We could then start figuring out where our bug was!
+실패 메세지는 이 테스트가 우리 예상에 맞게 실제로 패닉에 빠지기는 했으나, 패닉 메세지가 예상하는
+스트링을 포함하지 않고있다고 말하고 있습니다 (`did not include expected string 'Guess
+value must be less than or equal to 100'`.) 우리가 얻어낸 패닉 메세지를 볼 수 이는데,
+이 경우에는 `Guess value must be greater than or equal to 1, got 200.` 이었습니다.
+그러면 우리는 어디에 우리의 버그가 있었는지를 찾아내기 시작할 수 있습니다!
 
-Now that we've gone over ways to write tests, let's look at what is happening
-when we run our tests and talk about the different options we can use with
-`cargo test`.
+이제까지 테스트를 작성하는 방법을 조사했으니, 우리의 테스트를 실행할 때 어떤 일이 벌어지는지를
+살펴보고 `cargo test`와 함꼐 사용할 수 있는 어려가지 옵션들에 대해서 이야기해 봅시다.
