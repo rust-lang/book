@@ -242,7 +242,7 @@ enum Message {
 
 To determine how much space to allocate for a `Message` value, Rust goes
 through each of the variants to see which variant needs the most space. Rust
-sees that `Message::Quit` does not need any space, `Message::Move` needs enough
+sees that `Message::Quit` doesn't need any space, `Message::Move` needs enough
 space to store two `i32` values, and so forth. Since only one variant will end
 up being used, the most space a `Message` value will need is the space it would
 take to store the largest of its variants.
@@ -313,11 +313,13 @@ fn main() {
 order to have a known size</span>
 
 The `Cons` variant will need the size of an `i32` plus the space to store a
-`usize`, since a box always has the size of a `usize`, no matter what it's
-pointing to. The `Nil` variant stores no values and doesn't need any space. By
-using a box, we've broken the infinite, recursive chain so the compiler is able
-to figure out the size it needs to store a `List` value. Figure 15-7 shows what
-the `Cons` variant looks like now:
+`usize`, since a box is a pointer that is always a `usize`, no matter what it's
+pointing to. The `Nil` variant stores no values, so it needs less space than
+the `Cons` variant. We now know that any `List` value will take up the size of
+an `i32` plus the size of a `usize` amount of data. By using a box, we've
+broken the infinite, recursive chain so the compiler is able to figure out the
+size it needs to store a `List` value. Figure 15-7 shows what the `Cons`
+variant looks like now:
 
 <img alt="A finite Cons list" src="img/trpl15-02.svg" class="center" />
 
