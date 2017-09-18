@@ -315,8 +315,8 @@ fn main() {
 and a `branch` node with `leaf` as one of its children</span>
 
 We clone the `Rc` in `leaf` and store that in `branch`, meaning the `Node` in
-`leaf` now has two owners: `leaf` and `branch`. We can get to `leaf` from
-`branch` through `branch.children`, but there's no way to get from `leaf` to
+`leaf` now has two owners: `leaf` and `branch`. We can get from `branch` to
+`leaf` through `branch.children`, but there's no way to get from `leaf` to
 `branch`. `leaf` has no reference to `branch` and doesn't know they are
 related. We'd like `leaf` to know that `branch` is its parent.
 

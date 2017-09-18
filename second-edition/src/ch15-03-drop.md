@@ -20,9 +20,9 @@ up, or that this code that can be run is specifically always for clean up? -->
 <!-- I don't understand what the difference between those two choices are?
 /Carol -->
 
-This means we don't need be careful about placing clean up code everywhere in a
-program that an instance of a particular type is finished with, but we still
-won't leak resources!
+This means we don't need to be careful about placing clean up code everywhere
+in a program that an instance of a particular type is finished with, but we
+still won't leak resources!
 
 We specify the code to run when a value goes out of scope by implementing the
 `Drop` trait. The `Drop` trait requires us to implement one method named `drop`
@@ -111,15 +111,14 @@ drop method and why?-->
 <!-- This is a new function. /Carol -->
 
 Rust inserts the call to `drop` automatically when a value goes out of scope,
-and there's no way to disable this functionality if we want to force a value to
-clean itself up early. This isn't usually necessary; the whole point of the
-`Drop` trait is that it's taken care of automatically for us. Occasionally you
-may find that you want to clean up a value early. One example is when using
-smart pointers that manage locks; you may want to force the `drop` method that
-releases the lock to run so that other code in the same scope can acquire the
-lock. First, let's see what happens if we try to call the `Drop` trait's `drop`
-method ourselves by modifying the `main` function from Listing 15-8 as shown in
-Listing 15-9:
+and it's not straightforward to disable this functionality. Disabling `drop`
+isn't usually necessary; the whole point of the `Drop` trait is that it's taken
+care of automatically for us. Occasionally you may find that you want to clean
+up a value early. One example is when using smart pointers that manage locks;
+you may want to force the `drop` method that releases the lock to run so that
+other code in the same scope can acquire the lock. First, let's see what
+happens if we try to call the `Drop` trait's `drop` method ourselves by
+modifying the `main` function from Listing 15-8 as shown in Listing 15-9:
 
 <!-- Above: I'm not following why we are doing this, if it's not necessary and
 we aren't going to cover it now anyway -- can you lay out why we're discussing

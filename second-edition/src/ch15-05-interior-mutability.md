@@ -57,7 +57,7 @@ The advantage to checking the borrowing rules at runtime instead is that
 certain memory safe scenarios are then allowed, whereas they are disallowed by
 the compile time checks. Static analysis, like the Rust compiler, is inherently
 conservative. Some properties of code are impossible to detect by analyzing the
-code: the most famous exampled is the Halting Problem, which is out of scope of
+code: the most famous example is the Halting Problem, which is out of scope of
 this book but an interesting topic to research if you're interested.
 
 <!--below: can't be sure of what, exactly? Sure that the code complies with the
@@ -67,7 +67,7 @@ ownership rules? -->
 Because some analysis is impossible, if the Rust compiler can't be sure the
 code complies with the ownership rules, it may reject a correct program; in
 this way, it is conservative. If Rust were to accept an incorrect program,
-users would not be able to trust in the guarantees Rust makes, but if Rust
+users would not be able to trust in the guarantees Rust makes. However, if Rust
 rejects a correct program, the programmer will be inconvenienced, but nothing
 catastrophic can occur. `RefCell<T>` is useful when you yourself are sure that
 your code follows the borrowing rules, but the compiler is not able to
@@ -134,10 +134,10 @@ possible to mutate an immutable value and see why that's useful.
 
 #### A Use Case for Interior Mutability: Mock Objects
 
-A *mock object* is the general programming concept for a type that stands in
-the place of another type during testing. Mock objects simulate real objects,
-and they can record what happens during a test so that we can assert that the
-correct actions took place.
+A *test double* is the general programming concept for a type that stands in
+the place of another type during testing. *Mock objects* are specific types of
+test doubles that record what happens during a test so that we can assert that
+the correct actions took place.
 
 While Rust doesn't have objects in the exact same sense that other languages
 have objects, and Rust doesn't have mock object functionality built into the

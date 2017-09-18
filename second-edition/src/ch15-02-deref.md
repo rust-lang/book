@@ -3,8 +3,8 @@
 Implementing `Deref` trait allows us to customize the behavior of the
 *dereference operator* `*`(as opposed to the multiplication or glob operator).
 By implementing `Deref` in such a way that a smart pointer can be treated like
-a regular reference, we can write code that is able to operate on either smart
-pointers or regular references.
+a regular reference, we can write code that operates on references and use that
+code with smart pointers too.
 
 <!-- Why would we want to override the dereference operator? Can you lay that
 out? -->
@@ -268,15 +268,14 @@ not, can you change this to an active tone? -->
 <!-- Yes, it is something that happens behind the scenes, which is why we
 describe it as implicit. /Carol -->
 
-Rust tends to favor explicitness over implicitness, but one exception is deref
-coercions of arguments to functions and methods. Rust performs *deref coercion*
-to convert a reference to a type that implements `Deref` into a reference to a
-type that `Deref` can convert the original type into. Deref coercion happens
-automatically when we pass a reference to a value of a particular type as an
-argument to a function or method that doesn't match the type of the parameter
-in the function or method definition, and there's a sequence of calls to the
-`deref` method that will convert the type we provided into the type that the
-parameter needs.
+*Deref coercion* is a convenience that Rust performs on arguments to functions
+and methods. Deref coercion converts a reference to a type that implements
+`Deref` into a reference to a type that `Deref` can convert the original type
+into. Deref coercion happens automatically when we pass a reference to a value
+of a particular type as an argument to a function or method that doesn't match
+the type of the parameter in the function or method definition, and there's a
+sequence of calls to the `deref` method that will convert the type we provided
+into the type that the parameter needs.
 
 Deref coercion was added to Rust so that programmers writing function and
 method calls don't need to add as many explicit references and dereferences

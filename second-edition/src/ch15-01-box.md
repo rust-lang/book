@@ -1,18 +1,18 @@
 ## `Box<T>` Points to Data on the Heap and Has a Known Size
 
 The most straightforward smart pointer is a *box*, whose type is written
-`Box<T>`. Boxes allow you to store a value on the heap rather than the stack.
-The box data consisting of the pointer to the heap will be stored on the stack.
-Refer back to Chapter 4 if you'd like to review the difference between the
-stack and the heap.
+`Box<T>`. Boxes allow you to store data on the heap rather than the stack. What
+remains on the stack is the pointer to the heap data. Refer back to Chapter 4
+if you'd like to review the difference between the stack and the heap.
 
 <!-- do we mean, allows you to place a value on the heap rather than the
 default behavior of placing it on the stack? Can you quickly recap on what the
 advantage to this can be, help them know when they'd use this? -->
 <!-- Correct! Recap below: /Carol -->
 
-Boxes don't have a lot of performance overhead, but they don't have a lot of
-extra abilities either. They're most often used in these situations:
+Boxes don't have performance overhead other than their data being on the heap
+instead of on the stack, but they don't have a lot of extra abilities either.
+They're most often used in these situations:
 
 - When you have a type whose size can't be known at compile time, and you want
   to use a value of that type in a context that needs to know an exact size
@@ -22,18 +22,19 @@ extra abilities either. They're most often used in these situations:
   particular trait rather than knowing the concrete type itself
 
 We're going to demonstrate the first case in the rest of this section. To
-elaborate on the other two situations a bit more: in the second case when you
-have a lot of data that you don't want to be copied when you move the value to
-be owned by another part of code, boxes make it so that the data stays in one
-place on the heap and only the pointer data in the box is copied around on the
-stack. The third case is known as a *trait object*, and Chapter 17 has an entire
-section devoted just to that topic. So know that what you learn here will be
-applied again in Chapter 17!
+elaborate on the other two situations a bit more: in the second case,
+transfering ownership of a large amount of data can take a long time because
+the data gets copied around on the stack. To improve performance in this
+situation, we can store the large amount of data on the heap in a box. Then,
+only the small amount of pointer data is copied around on the stack, and the
+data stays in one place on the heap. The third case is known as a *trait
+object*, and Chapter 17 has an entire section devoted just to that topic. So
+know that what you learn here will be applied again in Chapter 17!
 
-### Using a `Box` to Store Data on the Heap
+### Using a `Box<T>` to Store Data on the Heap
 
-Before we get into a use case for `Box`, let's get familiar with the syntax and
-how to interact with values stored within a `Box`.
+Before we get into a use case for `Box<T>`, let's get familiar with the syntax
+and how to interact with values stored within a `Box<T>`.
 
 Listing 15-1 shows how to use a box to store an `i32` on the heap:
 

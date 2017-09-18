@@ -1,12 +1,11 @@
 # Smart Pointers
 
-A *pointer* is the generic programming concept for an address to a location
-that stores some data. The most common kind of pointer in Rust is a
-*reference*, which we learned about in Chapter 4. References are indicated by
-the `&` symbol and borrow the value that they point to. They don't have any
-special abilities other than referring to data, but they also don't have any
-more overhead than they need to do straightforward referencing, so they're used
-the most often.
+A *pointer* is a general concept for a variable that contains an address in
+memory. This address refers to, or "points at", some other data. The most
+common kind of pointer in Rust is a *reference*, which we learned about in
+Chapter 4. References are indicated by the `&` symbol and borrow the value that
+they point to. They don't have any special abilities other than referring to
+data. They also don't have any overhead, so they're used the most often.
 
 *Smart pointers*, on the other hand, are data structures that act like a
 pointer, but they also have additional metadata and capabilities. The concept
@@ -84,8 +83,8 @@ http://researcher.watson.ibm.com/researcher/files/us-bacon/Bacon01Concurrent.pdf
 
 * `Box<T>` for allocating values on the heap
 * `Rc<T>`, a reference counted type that enables multiple ownership
-* `Ref` and `RefMut`, accessed through `RefCell<T>`, a type that enforces the
-   borrowing rules at runtime instead of compile time
+* `Ref<T>` and `RefMut<T>`, accessed through `RefCell<T>`, a type that enforces
+  the borrowing rules at runtime instead of compile time
 
 <!-- Should we add Ref and RefMut to this list, too? -->
 <!-- They were already sort of in the list; we've flipped the order to make it
