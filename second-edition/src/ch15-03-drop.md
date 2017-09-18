@@ -4,7 +4,7 @@ The second trait important to the smart pointer pattern is `Drop`, which lets
 us customize what happens when a value is about to go out of scope. We can
 provide an implementation for the `Drop` trait on any type, and the code we
 specify can be used to release resources like files or network connections.
-We're introducing `Drop` in the context of smart pointers because the
+We’re introducing `Drop` in the context of smart pointers because the
 functionality of the `Drop` trait is almost always used when implementing a
 smart pointer. For example, `Box<T>` customizes `Drop` in order to deallocate
 the space on the heap that the box points to.
@@ -20,14 +20,14 @@ up, or that this code that can be run is specifically always for clean up? -->
 <!-- I don't understand what the difference between those two choices are?
 /Carol -->
 
-This means we don't need to be careful about placing clean up code everywhere
+This means we don’t need to be careful about placing clean up code everywhere
 in a program that an instance of a particular type is finished with, but we
-still won't leak resources!
+still won’t leak resources!
 
 We specify the code to run when a value goes out of scope by implementing the
 `Drop` trait. The `Drop` trait requires us to implement one method named `drop`
 that takes a mutable reference to `self`. In order to be able to see when Rust
-calls `drop`, let's implement `drop` with `println!` statements for now.
+calls `drop`, let’s implement `drop` with `println!` statements for now.
 
 <!-- Why are we showing this as an example and not an example of it being used
 for clean up? -->
@@ -72,11 +72,11 @@ fn main() {
 <span class="caption">Listing 15-8: A `CustomSmartPointer` struct that
 implements the `Drop` trait, where we would put our clean up code.</span>
 
-The `Drop` trait is included in the prelude, so we don't need to import it. We
+The `Drop` trait is included in the prelude, so we don’t need to import it. We
 implement the `Drop` trait on `CustomSmartPointer`, and provide an
 implementation for the `drop` method that calls `println!`. The body of the
-`drop` function is where you'd put any logic that you wanted to run when an
-instance of your type goes out of scope. We're choosing to print out some text
+`drop` function is where you’d put any logic that you wanted to run when an
+instance of your type goes out of scope. We’re choosing to print out some text
 here in order to demonstrate when Rust will call `drop`.
 
 <!-- Where you'd put this code, or where this code would be called? It seems
@@ -87,10 +87,10 @@ elaborate? /Carol -->
 In `main`, we create a new instance of `CustomSmartPointer` and then print out
 `CustomSmartPointer created.`. At the end of `main`, our instance of
 `CustomSmartPointer` will go out of scope, and Rust will call the code we put
-in the `drop` method, printing our final message. Note that we didn't need to
+in the `drop` method, printing our final message. Note that we didn’t need to
 call the `drop` method explicitly.
 
-When we run this program, we'll see the following output:
+When we run this program, we’ll see the following output:
 
 ```text
 CustomSmartPointers created.
@@ -115,13 +115,13 @@ drop method and why?-->
 <!-- This is a new function. /Carol -->
 
 Rust inserts the call to `drop` automatically when a value goes out of scope,
-and it's not straightforward to disable this functionality. Disabling `drop`
-isn't usually necessary; the whole point of the `Drop` trait is that it's taken
+and it’s not straightforward to disable this functionality. Disabling `drop`
+isn’t usually necessary; the whole point of the `Drop` trait is that it’s taken
 care of automatically for us. Occasionally you may find that you want to clean
 up a value early. One example is when using smart pointers that manage locks;
 you may want to force the `drop` method that releases the lock to run so that
-other code in the same scope can acquire the lock. First, let's see what
-happens if we try to call the `Drop` trait's `drop` method ourselves by
+other code in the same scope can acquire the lock. First, let’s see what
+happens if we try to call the `Drop` trait’s `drop` method ourselves by
 modifying the `main` function from Listing 15-8 as shown in Listing 15-9:
 
 <!-- Above: I'm not following why we are doing this, if it's not necessary and
@@ -143,7 +143,7 @@ fn main() {
 <span class="caption">Listing 15-9: Attempting to call the `drop` method from
 the `Drop` trait manually to clean up early</span>
 
-If we try to compile this, we'll get this error:
+If we try to compile this, we’ll get this error:
 
 ```text
 error[E0040]: explicit use of destructor method
@@ -153,19 +153,19 @@ error[E0040]: explicit use of destructor method
    |       ^^^^ explicit destructor calls not allowed
 ```
 
-This error message says we're not allowed to explicitly call `drop`. The error
+This error message says we’re not allowed to explicitly call `drop`. The error
 message uses the term *destructor*, which is the general programming term for a
 function that cleans up an instance. A *destructor* is analogous to a
 *constructor* that creates an instance. The `drop` function in Rust is one
 particular destructor.
 
-Rust doesn't let us call `drop` explicitly because Rust would still
+Rust doesn’t let us call `drop` explicitly because Rust would still
 automatically call `drop` on the value at the end of `main`, and this would be
 a *double free* error since Rust would be trying to clean up the same value
 twice.
 
-Because we can't disable the automatic insertion of `drop` when a value goes
-out of scope, and we can't call the `drop` method explicitly, if we need to
+Because we can’t disable the automatic insertion of `drop` when a value goes
+out of scope, and we can’t call the `drop` method explicitly, if we need to
 force a value to be cleaned up early, we can use the `std::mem::drop` function.
 
 The `std::mem::drop` function is different than the `drop` method in the `Drop`
@@ -221,15 +221,15 @@ this correct, above?-->
 
 Code specified in a `Drop` trait implementation can be used in many ways to
 make cleanup convenient and safe: we could use it to create our own memory
-allocator, for instance! With the `Drop` trait and Rust's ownership system, you
-don't have to remember to clean up after yourself, Rust takes care of it
+allocator, for instance! With the `Drop` trait and Rust’s ownership system, you
+don’t have to remember to clean up after yourself, Rust takes care of it
 automatically.
 
-We also don't have to worry about accidentally cleaning up values still in use
+We also don’t have to worry about accidentally cleaning up values still in use
 because that would cause a compiler error: the ownership system that makes sure
 references are always valid will also make sure that `drop` only gets called
 once when the value is no longer being used.
 
-Now that we've gone over `Box<T>` and some of the characteristics of smart
-pointers, let's talk about a few other smart pointers defined in the standard
+Now that we’ve gone over `Box<T>` and some of the characteristics of smart
+pointers, let’s talk about a few other smart pointers defined in the standard
 library.

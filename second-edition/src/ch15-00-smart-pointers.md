@@ -1,21 +1,21 @@
 # Smart Pointers
 
 A *pointer* is a general concept for a variable that contains an address in
-memory. This address refers to, or "points at", some other data. The most
+memory. This address refers to, or “points at”, some other data. The most
 common kind of pointer in Rust is a *reference*, which we learned about in
 Chapter 4. References are indicated by the `&` symbol and borrow the value that
-they point to. They don't have any special abilities other than referring to
-data. They also don't have any overhead, so they're used the most often.
+they point to. They don’t have any special abilities other than referring to
+data. They also don’t have any overhead, so they’re used the most often.
 
 *Smart pointers*, on the other hand, are data structures that act like a
 pointer, but they also have additional metadata and capabilities. The concept
-of smart pointers isn't unique to Rust; it originated in C++ and exists in
-other languages as well. The different smart pointers defined in Rust's
+of smart pointers isn’t unique to Rust; it originated in C++ and exists in
+other languages as well. The different smart pointers defined in Rust’s
 standard library provide extra functionality beyond what references provide.
-One example that we'll explore in this chapter is the *reference counting*
+One example that we’ll explore in this chapter is the *reference counting*
 smart pointer type, which enables you to have multiple owners of data. The
 reference counting smart pointer keeps track of how many owners there are, and
-when there aren't any remaining, the smart pointer takes care of cleaning up
+when there aren’t any remaining, the smart pointer takes care of cleaning up
 the data.
 
 <!-- maybe a brief explanation what deref and drop? I'm not really sure what
@@ -33,8 +33,8 @@ difference between references and smart pointers is that references are a kind
 of pointer that only borrow data; by contrast, in many cases, smart pointers
 *own* the data that they point to.
 
-We've actually already encountered a few smart pointers in this book, such as
-`String` and `Vec<T>` from Chapter 8, though we didn't call them smart pointers
+We’ve actually already encountered a few smart pointers in this book, such as
+`String` and `Vec<T>` from Chapter 8, though we didn’t call them smart pointers
 at the time. Both these types count as smart pointers because they own some
 memory and allow you to manipulate it. They also have metadata (such as their
 capacity) and extra capabilities or guarantees (such as `String` ensuring its
@@ -67,9 +67,9 @@ pointer goes out of scope. In this chapter, we’ll be discussing both of those
 traits and demonstrating why they’re important to smart pointers.
 
 Given that the smart pointer pattern is a general design pattern used
-frequently in Rust, this chapter won't cover every smart pointer that exists.
+frequently in Rust, this chapter won’t cover every smart pointer that exists.
 Many libraries have their own smart pointers and you can even write some
-yourself. We'll just cover the most common smart pointers from the standard
+yourself. We’ll just cover the most common smart pointers from the standard
 library:
 
 <!-- Would it make sense to hyphenate reference-counted (and its derivations)
@@ -91,7 +91,7 @@ http://researcher.watson.ibm.com/researcher/files/us-bacon/Bacon01Concurrent.pdf
 clearer /Carol-->
 
 Along the way, we’ll cover the *interior mutability* pattern where an immutable
-type exposes an API for mutating an interior value. We'll also discuss
+type exposes an API for mutating an interior value. We’ll also discuss
 *reference cycles*, how they can leak memory, and how to prevent them.
 
 Let’s dive in!
