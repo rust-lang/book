@@ -23,7 +23,7 @@ They're most often used in these situations:
 
 We're going to demonstrate the first case in the rest of this section. To
 elaborate on the other two situations a bit more: in the second case,
-transfering ownership of a large amount of data can take a long time because
+transferring ownership of a large amount of data can take a long time because
 the data gets copied around on the stack. To improve performance in this
 situation, we can store the large amount of data on the heap in a box. Then,
 only the small amount of pointer data is copied around on the stack, and the
