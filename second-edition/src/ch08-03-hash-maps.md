@@ -14,12 +14,12 @@ a team’s name and the values are each team’s score. Given a team name, you c
 retrieve its score.
 
 We’ll go over the basic API of hash maps in this section, but many more goodies
-are hiding in the functions defined on `HashMap` by the standard library. As
-always, check the standard library documentation for more information.
+are hiding in the functions defined on `HashMap<K, V>` by the standard library.
+As always, check the standard library documentation for more information.
 
 ### Creating a New Hash Map
 
-We can create an empty `HashMap` with `new` and add elements with `insert`. In
+We can create an empty hash map with `new` and add elements with `insert`. In
 Listing 8-18, we’re keeping track of the scores of two teams whose names are
 Blue and Yellow. The Blue team will start with 10 points, and the Yellow team
 starts with 50:

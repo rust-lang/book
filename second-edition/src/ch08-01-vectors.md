@@ -23,17 +23,17 @@ Note that we added a type annotation here. Because we aren’t inserting any
 values into this vector, Rust doesn’t know what kind of elements we intend to
 store. This is an important point. Vectors are implemented using generics;
 we’ll cover how to use generics with your own types in Chapter 10. For now,
-know that the `Vec` type provided by the standard library can hold any type,
-and when a specific `Vec` holds a specific type, the type is specified within
-angle brackets. In Listing 8-1, we’ve told Rust that the `Vec` in `v` will hold
-elements of the `i32` type.
+know that the `Vec<T>` type provided by the standard library can hold any type,
+and when a specific vector holds a specific type, the type is specified within
+angle brackets. In Listing 8-1, we’ve told Rust that the `Vec<T>` in `v` will
+hold elements of the `i32` type.
 
 In more realistic code, Rust can often infer the type of value we want to store
 once we insert values, so you rarely need to do this type annotation. It’s more
-common to create a `Vec` that has initial values, and Rust provides the `vec!`
-macro for convenience. The macro will create a new `Vec` that holds the values
-we give it. Listing 8-2 creates a new `Vec<i32>` that holds the values `1`,
-`2`, and `3`:
+common to create a `Vec<T>` that has initial values, and Rust provides the
+`vec!` macro for convenience. The macro will create a new vector that holds the
+values we give it. Listing 8-2 creates a new `Vec<i32>` that holds the values
+`1`, `2`, and `3`:
 
 ```rust
 let v = vec![1, 2, 3];

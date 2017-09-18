@@ -86,7 +86,7 @@ a `String` from a string literal</span>
 Because strings are used for so many things, we can use many different generic
 APIs for strings, providing us with a lot of options. Some of them can seem
 redundant, but they all have their place! In this case, `String::from` and
-`.to_string` do the same thing, so which you choose is a matter of style.
+`to_string` do the same thing, so which you choose is a matter of style.
 
 Remember that strings are UTF-8 encoded, so we can include any properly encoded
 data in them, as shown in Listing 8-12:
