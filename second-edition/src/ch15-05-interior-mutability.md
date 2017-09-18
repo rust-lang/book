@@ -490,7 +490,11 @@ We wrap the list `a` in an `Rc<T>` so that when we create lists `b` and
 `c`, they can both refer to `a`, the same as we did in Listing 15-13.
 
 Once we have the lists in `a`, `b`, and `c` created, we add 10 to the value in
-`value` by dereferencing the `Rc<T>` and calling `borrow_mut` on the `RefCell`.
+`value`. We do this by calling `borrow_mut` on `value`, which uses the
+automatic dereferencing feature we discussed in Chapter 5 ("Where's the `->`
+Operator?") to dereference the `Rc<T>` to the inner `RefCell<T>` value. The
+`borrow_mut` method returns a `RefMut<T>` smart pointer, and we use the
+dereference operator on it and change the inner value.
 
 When we print out `a`, `b`, and `c`, we can see that they all have the modified
 value of 15 rather than 5:
