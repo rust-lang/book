@@ -1,4 +1,4 @@
-## Creating Reference Cycles and Leaking Memory is Safe
+## Reference Cycles Can Leak Memory
 
 Rust's memory safety guarantees make it *difficult* to accidentally create
 memory that's never cleaned up, known as a *memory leak*, but not impossible.
