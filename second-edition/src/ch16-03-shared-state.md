@@ -291,7 +291,7 @@ fn main() {
     let mut handles = vec![];
 
     for _ in 0..10 {
-    	let counter = counter.clone();
+    	let counter = Rc::clone(&counter);
         let handle = thread::spawn(move || {
             let mut num = counter.lock().unwrap();
 
@@ -379,7 +379,7 @@ fn main() {
     let mut handles = vec![];
 
     for _ in 0..10 {
-    	let counter = counter.clone();
+    	let counter = Arc::clone(&counter);
         let handle = thread::spawn(move || {
             let mut num = counter.lock().unwrap();
 

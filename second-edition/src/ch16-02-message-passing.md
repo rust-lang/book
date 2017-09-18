@@ -264,7 +264,7 @@ cloning the transmitting half of the channel, as shown in Listing 16-11:
 // ...snip...
 let (tx, rx) = mpsc::channel();
 
-let tx1 = tx.clone();
+let tx1 = mpsc::Sender::clone(&tx);
 thread::spawn(move || {
     let vals = vec![
         String::from("hi"),
