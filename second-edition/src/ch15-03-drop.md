@@ -58,13 +58,14 @@ struct CustomSmartPointer {
 
 impl Drop for CustomSmartPointer {
     fn drop(&mut self) {
-        println!("Dropping CustomSmartPointer!");
+        println!("Dropping CustomSmartPointer with data `{}`!", self.data);
     }
 }
 
 fn main() {
-    let c = CustomSmartPointer { data: String::from("some data") };
-    println!("CustomSmartPointer created.");
+    let c = CustomSmartPointer { data: String::from("my stuff") };
+    let d = CustomSmartPointer { data: String::from("other stuff") };
+    println!("CustomSmartPointers created.");
 }
 ```
 
@@ -92,14 +93,17 @@ call the `drop` method explicitly.
 When we run this program, we'll see the following output:
 
 ```text
-CustomSmartPointer created.
-Dropping CustomSmartPointer!
+CustomSmartPointers created.
+Dropping CustomSmartPointer with data `other stuff`!
+Dropping CustomSmartPointer with data `my stuff`!
 ```
 
 Rust automatically called `drop` for us when our instance went out of scope,
-calling the code we specified. This is just to give you a visual guide to how
-the drop method works, but usually you would specify the cleanup code that your
-type needs to run rather than a print message.
+calling the code we specified. Variables are dropped in the reverse order of
+the order in which they were created, so `d` was dropped before `c`. This is
+just to give you a visual guide to how the drop method works, but usually you
+would specify the cleanup code that your type needs to run rather than a print
+message.
 
 <!-- Can you wrap this example up by saying what you would actually put in a
 drop method and why?-->
