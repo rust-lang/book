@@ -277,9 +277,8 @@ directly, we're going to store the value indirectly by storing a pointer to
 the value instead.
 
 Because a `Box<T>` is a pointer, Rust always knows how much space a `Box<T>`
-needs: a pointer takes up a `usize` amount of space. The value of the `usize`
-will be the address of the heap data. The heap data can be any size, but the
-address to the start of that heap data will always fit in a `usize`.
+needs: a pointer's size doesn't change based on the amount of data it's
+pointing to.
 
 So we can put a `Box` inside the `Cons` variant instead of another `List` value
 directly. The `Box` will point to the next `List` value that will be on the
@@ -312,11 +311,10 @@ fn main() {
 <span class="caption">Listing 15-6: Definition of `List` that uses `Box<T>` in
 order to have a known size</span>
 
-The `Cons` variant will need the size of an `i32` plus the space to store a
-`usize`, since a box is a pointer that is always a `usize`, no matter what it's
-pointing to. The `Nil` variant stores no values, so it needs less space than
-the `Cons` variant. We now know that any `List` value will take up the size of
-an `i32` plus the size of a `usize` amount of data. By using a box, we've
+The `Cons` variant will need the size of an `i32` plus the space to store the
+box's pointer data. The `Nil` variant stores no values, so it needs less space
+than the `Cons` variant. We now know that any `List` value will take up the
+size of an `i32` plus the size of a box's pointer data. By using a box, we've
 broken the infinite, recursive chain so the compiler is able to figure out the
 size it needs to store a `List` value. Figure 15-7 shows what the `Cons`
 variant looks like now:
