@@ -592,7 +592,7 @@ Listing 11-8 shows how we’d write a test that checks the error conditions of
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust
-struct Guess {
+pub struct Guess {
     value: u32,
 }
 
@@ -638,7 +638,7 @@ Looks good! Now let’s introduce a bug in our code, by removing the condition
 that the `new` function will panic if the value is greater than 100:
 
 ```rust
-# struct Guess {
+# pub struct Guess {
 #     value: u32,
 # }
 #
@@ -686,7 +686,7 @@ different messages depending on whether the value was too small or too large:
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust
-struct Guess {
+pub struct Guess {
     value: u32,
 }
 
