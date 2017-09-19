@@ -70,6 +70,8 @@ ctrl
 Ctrl
 customizable
 CustomSmartPointer
+CustomSmartPointers
+deallocate
 deallocated
 deallocating
 deallocation
@@ -193,6 +195,7 @@ librarys
 libreoffice
 libstd
 lifecycle
+LimitTracker
 lobally
 locators
 login
@@ -210,6 +213,7 @@ Mibbit
 minigrep
 mixup
 mkdir
+MockMessenger
 modifiability
 modularity
 monomorphization
@@ -224,6 +228,7 @@ Mutex
 mutexes
 Mutexes
 MutexGuard
+MyBox
 namespace
 namespaced
 namespaces
