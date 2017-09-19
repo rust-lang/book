@@ -1,35 +1,40 @@
-# Introduction
+# Введение
+Добро пожаловать! Это книга о языке программирования Rust.
+Rust - это язык программирования, с помощью которого можно создать безопасные,
+быстрые и многопоточные приложения. Безопасность, скорость и многопоточность —
+это три кита, вашего Rust-приложения. Семантический дизайн языка позволяет создавать
+программы, объединяющие воедино высокую производительность, контроль над используемыми
+ресурсами и абстракции высокого уровня. Rust объединяет в себе черты низкоуровневых
+и высокоуровневых языков программирования. Системные программисты по достоинству
+оценят безопасность языковых конструкций, а прикладные программисты получат возможность
+создавать производительные решения. Код программ читается свободно, поэтому писать
+на нём удобно.
 
-Welcome to “The Rust Programming Language,” an introductory book about Rust.
-Rust is a programming language that’s focused on safety, speed, and
-concurrency. Its design lets you create programs that have the performance and
-control of a low-level language, but with the powerful abstractions of a
-high-level language. These properties make Rust suitable for programmers who
-have experience in languages like C and are looking for a safer alternative, as
-well as those from languages like Python who are looking for ways to write code
-that performs better without sacrificing expressiveness.
-
-Rust performs the majority of its safety checks and memory management decisions
-at compile time, so that your program’s runtime performance isn’t impacted. This
-makes it useful in a number of use cases that other languages aren’t good at:
-programs with predictable space and time requirements, embedding in other
-languages, and writing low-level code, like device drivers and operating
-systems. It’s also great for web applications: it powers the Rust package
-registry site, [crates.io]!  We’re excited to see what *you* create with Rust.
+Компилятор производит работу по статическому анализу кода, оптимизации использования
+ресурсов. Это позволяет повысить производительность работы программ и заранее
+оптимизировать объём используемыех системных ресурсов. Благодаря этим особенностям
+Rust — это удобный инструмент для создания решений в следующих прикладных областях:
+приложения с предопределёнными жёсткими квотами ресурсов - кодеки, драйверы устройств,
+драйверы баз данных и даже встроенные системы. Rust весьма удобен для создания
+веб-приложений. Менеджер пакетов [crates.io] позволяет создавать высоконагруженные
+решения без неизбежных расходов многослойных, высокоуровневых альтернатив. Просто
+отпустите Вашу фантазию в полёт и создавайте приложения!
 
 [crates.io]: https://crates.io/
 
-This book is written for a reader who already knows how to program in at least
-one programming language. After reading this book, you should be comfortable
-writing Rust programs. We’ll be learning Rust through small, focused examples
-that build on each other to demonstrate how to use various features of Rust as
-well as how they work behind the scenes.
+Эта книга будет полезна программистам, которые уже имею теоретическую подготовку и
+практический опыт в программировании. Очень даже возможно, что после внимательного
+прочтения этой книги, написания и отладки кода, понимания основных шаблонов проектирования,
+обретения навыков комфортной работы с языковыми конструкциями Вы полюбите писать
+на Rust. Небольшие учебные примеры научат использовать потенциал Rust. Также Вы
+научитесь пользоваться инструментальными средствами — дополнительными программами
+и технологиями, благодаря которым продуктивность работы будет увеличиваться.
 
-## Contributing to the book
+## Доработка книги
 
-This book is open source. If you find an error, please don’t hesitate to file an
-issue or send a pull request [on GitHub]. Please see [CONTRIBUTING.md] for
-more details.
+Если вы найдете ошибку, неточность, пожалуйста внесите испраление с помощью возможностей
+[GitHub]. [CONTRIBUTING.md] — этом файл, в котром описаны основные правила
+внесения изменений.
 
-[on GitHub]: https://github.com/rust-lang/book
+[GitHub]: https://github.com/rust-lang/book
 [CONTRIBUTING.md]: https://github.com/rust-lang/book/blob/master/CONTRIBUTING.md

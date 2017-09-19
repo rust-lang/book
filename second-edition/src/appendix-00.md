@@ -1,4 +1,4 @@
-# Appendix
+# Дополнительная информация
 
-The following sections contain reference material you may find useful in your
-Rust journey.
+Следующие секкции содержат материалы, которые Вам бутут полезны в время изучения
+и дальнейшего использования Rust.

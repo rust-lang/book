@@ -1,14 +1,13 @@
-# Appendix G - Newest Features
+# Приложение Г- Новый функционал
 
-This appendix documents features that have been added to stable Rust since the
-main part of the book was completed.
+Это приложение описывает функционал, которые был добавлен в стабильную версию Rust
+с момента написания данной книги.
 
+## Быстрая инициализация поля структуры
 
-## Field init shorthand
-
-We can initialize a data structure (struct, enum, union) with named
-fields, by writing `fieldname` as a shorthand for `fieldname: fieldname`.
-This allows a compact syntax for initialization, with less duplication:
+Мы можем инициировать данные структуры (struct, enum, union) с помощью именованных
+полей. Формат `fieldname: fieldname`. Это конструкция уменьшает код инициализации
+структуры.
 
 ```rust
 #[derive(Debug)]
@@ -37,10 +36,11 @@ fn main() {
 
 ## Returning from loops
 
-One of the uses of a `loop` is to retry an operation you know can fail, such as
-checking if a thread completed its job. However, you might need to pass the
-result of that operation to the rest of your code. If you add it to the `break`
-expression you use to stop the loop, it will be returned by the broken loop:
+Одна из функций оператора цикла `loop` - это отслеживание логический операций,
+таких как проверка завершил ли поток свою работы или нет. Но, бывают также ситуации,
+когда Вам необходимо вернуть значение из цикла. Если вы добавите оператор `break`,
+вы сможете использовать оператора цикла `loop`, как анонимную функцию, которая
+возвращает значение:
 
 ```rust
 fn main() {

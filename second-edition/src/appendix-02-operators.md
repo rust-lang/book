@@ -1,132 +1,130 @@
-## Appendix B: Operators
+## Приложение Б: Операторы
 
-### Unary operator expressions
+### Операторы имеющие один операнд (т.н. унарные выражения)
 
-Rust defines the following unary operators. They are all written as prefix
-operators, before the expression they apply to.
+В языке программирования Rust имеются унарные выражения. Их местоположение - перед
+переменной.
 
 * `-`
-  : Negation. Signed integer types and floating-point types support negation. It
-    is an error to apply negation to unsigned types; for example, the compiler
-    rejects `-1u32`.
+  : Знак отрицательной величины. Знаковые переменный как целочисленные литералы,
+    так с плавающей точкой могут быть отрицательными. Беззнаковые литералы, которые
+    имеют префикс `-` вызывают ошибку компиляции: например, `-1u32`.
 * `*`
-  : Dereference. When applied to a pointer, it denotes the pointed-to location.
-    For pointers to mutable locations, the resulting value can be assigned to.
-    On non-pointer types, it calls the `deref` method of the `std::ops::Deref`
-    trait, or the `deref_mut` method of the `std::ops::DerefMut` trait (if
-    implemented by the type and required for an outer expression that will or
-    could mutate the dereference), and produces the result of dereferencing the
-    `&` or `&mut` borrowed pointer returned from the overload method.
+  : Оператор разыменования. Если данные оператор применяется к переменной ссылочного
+    типа (указателя), то этот оператор обозначает данные на место в памяти.
+    Данные оператор может быть применён для указателей на переменное значение памяти.
+    Для других типов переменных (не ссылочных), он вызывает метод `deref` типажа
+    `std::ops::Deref` или метод `deref_mut` типажа `std::ops::DerefMut`.
 * `!`
-  : Logical negation. On the boolean type, this flips between `true` and
-    `false`. On integer types, this inverts the individual bits in the
-    two’s complement representation of the value.
-* `&` and `&mut`
-  : Borrowing. When applied to a value, these operators produce a
-    reference (pointer) to that value. The value is also placed into
-    a borrowed state for the duration of the reference. For a shared
-    borrow (`&`), this implies that the value may not be mutated, but
-    it may be read or shared again. For a mutable borrow (`&mut`), the
-    value may not be accessed in any way until the borrow expires.
+  : Логическое отрицание. Если переменная логического типа - значение инвертируется.
+    Если тип данных целочисленное значение - инвертируются биты данного числа.
+* `&` и `&mut`
+  : Заимствование. Когда этот оператор применятся к значению, этот оператор возвращает
+    ссылку на это значение. Также это значение переходит в состояние "заимствовано"
+    на период существования ссылочной переменной. При использовании оператора (`&`)
+    накладывается также ещё одно ограничение - она не может содержать иное значение.
+    При использовании оператора  (`&mut`) значение переменной не может быть прочтено
+    на период существования ссылочной переменной.
 
-### Binary operator expressions
 
-Binary operators expressions are given in order of operator precedence.
+### Операторы имеющие два оператора (т.н. бинарные выражения)
 
-#### Arithmetic operators
+Бинарные выражения в порядке приоритета (т.е. сначала выполняются арифметические
+операции, потом бинарные, потом логические.
 
-Binary arithmetic expressions are syntactic sugar for calls to built-in traits,
-defined in the `std::ops` module of the `std` library. This means arithmetic
-operators can be overridden for user-defined types. The default meaning of the
-operators on standard types is given here.
+#### Арифметические операции
+
+Бинарные арифметические выражения - это синтаксические выражения заменяющие в коде
+вызовы функций соответствующих типажей, определённых в модуле `std::ops` библиотеки
+`std`. Это значит, что арифметические операторы могут быть переопределены (перезагружены)
+в пользовательских типах данных. Список значений операций:
 
 * `+`
-  : Addition and array/string concatenation.
-    Calls the `add` method on the `std::ops::Add` trait.
+  : Сложение, а также объединение массивов и строк.
+    Вызывается метод `add` типажа `std::ops::Add`.
 * `-`
-  : Subtraction.
-    Calls the `sub` method on the `std::ops::Sub` trait.
+  : Вычитание.
+    Вызывается метод `sub` типажа `std::ops::Sub`.
 * `*`
-  : Multiplication.
-    Calls the `mul` method on the `std::ops::Mul` trait.
+  : Умножение.
+    Вызывается метод `mul` типажа `std::ops::Mul`.
 * `/`
-  : Quotient.
-    Calls the `div` method on the `std::ops::Div` trait.
+  : Деление.
+    Вызывается метод `div` типажа `std::ops::Div`.
 * `%`
-  : Remainder.
-    Calls the `rem` method on the `std::ops::Rem` trait.
+  : Остаток от деления.
+    Вызывается метод `rem` типажа `std::ops::Rem`.
 
-Note that Rust does not have a built-in operator for exponential (power)
-calculation; see the `pow` method on the numeric types.
+Обратите внимание, что Rust не имеет стандартного оператора возведения в степень
+(power). Существует метод `pow` у численных типов данных.
 
-#### Bitwise operators
+#### Битовые операторы
 
-Like the arithmetic operators, bitwise operators are syntactic sugar for calls
-to methods of built-in traits. This means bitwise operators can be overridden
-for user-defined types. The default meaning of the operators on standard types
-is given here. Bitwise `&`, `|` and `^` applied to boolean arguments are
-equivalent to logical `&&`, `||` and `!=` evaluated in non-lazy fashion.
+Также как и арифметические операторы, битовые операторы - это синтаксические
+выражения заменяющие в коде вызовы функций соответствующих типажей. Это значит,
+что битовые операторы могут быть переопределены в пользовательских типах данных.
+Смысл синтаксических конструкций стандартных типов следующий: если операторы `&`,
+`|` и `^` применяются к логическим переменным они соответствуют их логическим
+операторам-эквивалентам `&&`, `||` и `!=`. Правда, результат их использования будет
+отличаться.
 
 * `&`
-  : Bitwise AND.
-    Calls the `bitand` method of the `std::ops::BitAnd` trait.
+  : Битовое И (&).
+    Вызывает метод `bitand` типажа `std::ops::BitAnd`.
 * `|`
-  : Bitwise inclusive OR.
-    Calls the `bitor` method of the `std::ops::BitOr` trait.
+  : Битовое включающее ИЛИ (|).
+    Вызывает метод `bitor` типажа `std::ops::BitOr`.
 * `^`
-  : Bitwise exclusive OR.
-    Calls the `bitxor` method of the `std::ops::BitXor` trait.
+  : Битовое исключающее ИЛИ (^).
+    Вызывает метод `bitxor` типажа `std::ops::BitXor`.
 * `<<`
-  : Left shift.
-    Calls the `shl` method of the `std::ops::Shl` trait.
+  : Здвиг в лево (<<).
+    Вызывает метод `shl` типажа `std::ops::Shl`.
 * `>>`
-  : Right shift (arithmetic).
-    Calls the `shr` method of the `std::ops::Shr` trait.
+  : Здвиг в право (>>).
+    Вызывает метод `shr` типажа `std::ops::Shr`.
 
-#### Lazy boolean operators
+#### Логические операторы
 
-The operators `||` and `&&` may be applied to operands of boolean type. The
-`||` operator denotes logical ‘or’, and the `&&` operator denotes logical
-‘and’. They differ from `|` and `&` in that the right-hand operand is only
-evaluated when the left-hand operand does not already determine the result of
-the expression. That is, `||` only evaluates its right-hand operand when the
-left-hand operand evaluates to `false`, and `&&` only when it evaluates to
-`true`.
+Операторы `||` и `&&` могут быть применены к операторам логического типа. Оператор
+`||` обозначает логическое "или". Оператор `&&` обозначает логическое "и".
+Разница между их бинарными аналогами следующая: если левый оператор - "истина",
+то выполнения логического анализа прекращается даже если справа есть ещё логические
+операторы.
 
-#### Comparison operators
+#### Операции сравнения
 
-Comparison operators are, like the arithmetic operators and bitwise operators,
-syntactic sugar for calls to built-in traits. This means that comparison
-operators can be overridden for user-defined types. The default meaning of the
-operators on standard types is given here.
+Операторы сравнения, также как и предыдущие операторы (арифметические и битовые)
+- это синтаксические выражения заменяющие в коде вызовы функций соответствующих
+типажей. Это значит, что операторы сравнения могут быть переопределены в
+пользовательских типах данных. Далее приведено стандартное поведение этих операторов.
 
 * `==`
-  : Equal to.
-    Calls the `eq` method on the `std::cmp::PartialEq` trait.
+  : Равно.
+    Вызывает метод `eq` типажа `std::cmp::PartialEq`.
 * `!=`
   : Unequal to.
-    Calls the `ne` method on the `std::cmp::PartialEq` trait.
+    Вызывает метод `ne` типажа `std::cmp::PartialEq`.
 * `<`
   : Less than.
-    Calls the `lt` method on the `std::cmp::PartialOrd` trait.
+    Вызывает метод `lt` типажа `std::cmp::PartialOrd`.
 * `>`
   : Greater than.
-    Calls the `gt` method on the `std::cmp::PartialOrd` trait.
+    Вызывает метод `gt` типажа `std::cmp::PartialOrd`.
 * `<=`
   : Less than or equal.
-    Calls the `le` method on the `std::cmp::PartialOrd` trait.
+    Вызывает метод `le` типажа `std::cmp::PartialOrd`.
 * `>=`
   : Greater than or equal.
-    Calls the `ge` method on the `std::cmp::PartialOrd` trait.
+    Вызывает метод `ge` типажа `std::cmp::PartialOrd`.
 
-#### Type cast expressions
+#### Выражения приведения типа
 
-A type cast expression is denoted with the binary operator `as`.
+Выражение приведение типа обозначается с помощью оператора `as`.
 
-Executing an `as` expression casts the value on the left-hand side to the type
-on the right-hand side.
+Выполняя выражение `as` приводит значение переменной слева к типу справа.
 
-An example of an `as` expression:
+Пример использования оператора `as`:
 
 ```rust
 # fn sum(values: &[f64]) -> f64 { 0.0 }
@@ -138,22 +136,20 @@ fn average(values: &[f64]) -> f64 {
     sum / size
 }
 ```
+Некоторые конвертации, которые могут быть произведены с использованием оператора
+`as`, также могут быть выполнены косвенным образом. Так, например, значение, которое
+присваивается в момент определения переменной с помощью оператора `let` явным
+образом приводит присваиваемое значение к определённому типу данных.
+Косвенные конвертация предпочтительнее, т.к. она сводит к минимуму риски потери
+данных при приведении типа.
 
-Some of the conversions which can be done through the `as` operator
-can also be done implicitly at various points in the program, such as
-argument passing and assignment to a `let` binding with an explicit
-type. Implicit conversions are limited to “harmless” conversions that
-do not lose information and which have minimal or no risk of
-surprising side-effects on the dynamic execution semantics.
+#### Выражения присваивания
 
-#### Assignment expressions
+*Выражения присваивания* состоит из шаблонного выражения, за которым следует знак
+(`=`). Далее следует выражение.
 
-An *assignment expression* consists of a pattern followed by an equals
-sign (`=`) and an expression.
-
-Evaluating an assignment expression either copies or
-moves its right-hand operand to its left-hand
-operand.
+Результатом присваивания является присвоение левой части или копии или значения
+правого оператора.
 
 ```
 # let mut x = 0;
@@ -161,18 +157,18 @@ operand.
 x = y;
 ```
 
-#### Compound assignment expressions
+#### Многокомпонентные операции
 
-The `+`, `-`, `*`, `/`, `%`, `&`, `|`, `^`, `<<`, and `>>` operators may be
-composed with the `=` operator. The expression `lval OP= val` is equivalent to
-`lval = lval OP val`. For example, `x = x + 1` may be written as `x += 1`.
+Операторы `+`, `-`, `*`, `/`, `%`, `&`, `|`, `^`, `<<`, и `>>` могут быть объединены
+ с помощью оператора `=`. Выражение `lval OP= val` эквивалентно следующему
+`lval = lval OP val`. Например, `x = x + 1` может быть записано следующим образом
+ `x += 1`.
 
-Any such expression always has the `unit` type.
+Все эти выражения всегда имеют беззнаковые целочисленный тип данных `unit`.
 
-#### Operator precedence
+#### Приоритет операторов
 
-The precedence of Rust binary operators is ordered as follows, going from
-strong to weak:
+Приоритет бинарных операторов Rust (от большего к меньшему):
 
 ```text
 as :
@@ -189,7 +185,5 @@ as :
 <-
 =
 ```
-
-Operators at the same precedence level are evaluated left-to-right. Unary
-operators have the same precedence level and are stronger than any of the
-binary operators.
+Операторы находящиеся на одном уровне, имеют приоритет с лева на право (лево - наивысший приоритет уровня).
+Унарные операторы имеют такой же приоритет, что их бинарные аналоги, т.е. сначала сложение, потом вычитание.

@@ -1,25 +1,34 @@
 ## Hello, World!
 
-Now that you have Rust installed, let’s write your first Rust program. It’s
-traditional when learning a new language to write a little program to print the
-text “Hello, world!” to the screen, and in this section, we’ll follow that
-tradition.
+Итак, когда Rust уже установлен можно приступать к написанию вашей первой программы.
+[По традиции], (а точнее с 1978 года, когда вышла в свет первое издания [книги о Си])
+напишем небольшую программу, которая напечатает "Привет, Мир!" в строке вывода.
 
-> Note: This book assumes basic familiarity with the command line. Rust itself
-> makes no specific demands about your editing, tooling, or where your code
-> lives, so if you prefer an IDE to the command line, feel free to use your
-> favorite IDE.
+[По традиции]: https://ru.wikipedia.org/wiki/Hello,_world!
+[книги о Си]: https://ru.wikipedia.org/wiki/%D0%AF%D0%B7%D1%8B%D0%BA_%D0%BF%D1%80%D0%BE%D0%B3%D1%80%D0%B0%D0%BC%D0%BC%D0%B8%D1%80%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D1%8F_%D0%A1%D0%B8_(%D0%BA%D0%BD%D0%B8%D0%B3%D0%B0)
 
-### Creating a Project Directory
+> Обратите внимание, что читатели должны быть знакомы с использованием командной
+> строки. Язык Rust не требует каких-то специальных настроек редакторов исходного
+> кода, настройкам инструментальных средств. IDE экономят время и если ещё дают
+> возможность тонкой настройки параметров запуска утилит - это замечательно. Как
+> бы там ни было, программист должен знать и уметь пользоваться командной строкой
+> и мы этому научим.
 
-First, make a directory to put your Rust code in. Rust doesn’t care where your code
-lives, but for this book, we’d suggest making a *projects* directory in your
-home directory and keeping all your projects there. Open a terminal and enter
-the following commands to make a directory for this particular project:
+### Создание папки проекта
 
-Linux and Mac:
+Первым делом создадим папку для хранения исходных кодов Rust. Это, конечно, не
+обязательное условие для программировании на Rust, но для удобства нашей работы
+это будут лучшим решением.
 
-```text
+> Т.к. работа в командной строке Linux и Mac идентичны, предлагаю, для краткости,
+> писать Unix, когда мы будем описывать работу в терминале Linux и Mac.
+
+Итак, приступим. Создадим папку *projects* и далее будем создавать проекты Rust
+в этой директории. Для этого откроем программу-терминал и введём следующие команды:
+
+Unix:
+
+```shell
 $ mkdir ~/projects
 $ cd ~/projects
 $ mkdir hello_world
@@ -44,177 +53,246 @@ Windows PowerShell:
 > cd hello_world
 ```
 
-### Writing and Running a Rust Program
+### Написание и запуск первой программы
 
-Next, make a new source file and call it *main.rs*. Rust files always end with
-the *.rs* extension. If you’re using more than one word in your filename, use
-an underscore to separate them. For example, you’d use *hello_world.rs* rather
-than *helloworld.rs*.
+Далее, создадим текстовый файл и назовём его *main.rs*.
 
-Now open the *main.rs* file you just created, and type the following code:
+> Все файлы исходного кода Rust имеют расширение *.rs* (ещё одна конвенция
+> упрощающая программирование).
+> Рекомендуем использовать символ подчёркивания, для разделения слова в многословных
+> названиях. Во-первых, такие названия легче читать, а во-вторых, это упрощает
+> работу утилит. Пример: *i_like_hello_world.rs*.
 
-<span class="filename">Filename: main.rs</span>
+Теперь откроем файл*main.rs* для редактирования и введём следующие сроки кода:
+
+ <span class="filename">Filename: main.rs</span>
 
 ```rust
 fn main() {
-    println!("Hello, world!");
+    println!("Hello, Rust world! Привет, Мир!");
 }
 ```
 
-Save the file, and go back to your terminal window. On Linux or OSX, enter the
-following commands:
+Сохраним файл и вернёмся в окно терминала. Введём следующие (две) команды:
 
-```text
+Unix:
+
+```shell
+$ rustc main.rs # нажмите клавишу Enter
+$ ./main # нажмите клавишу Enter
+Hello, Rust world! Привет, Мир!
+```
+
+Windows CMD:
+
+```cmd
+> rustc main.rs # нажмите клавишу Enter
+> main
+Hello, Rust world! Привет, Мир!
+```
+
+Обратите внимание на отличия в запуске приложений в строке терминала Unix и Windows.
+Если всё будет в порядке (вы не сделаете опечаток, не будет проблем в кодировках,
+шрифтах или ещё с чем-нибудь ещё ("не удаётся найти указанный файл", "stream
+did not contain valid UTF-8", ..)) - будет напечатана строка `Hello, Rust world! Привет, Мир!`.
+Поздравляю! Вы написали первую программу на Rust! Добро пожаловать в увлекательное
+путешествие в мир Rust! :-)
+
+> Если вам уже понравилось писать на Rust, создайте файл *hello_world.rs* введите
+> тот же код и проверьте его работу. Далее создайте *i_like_hello_world.rs* и
+> проделайте тоже самое. Если программы будут работать корректно - будет печататься
+> тот же текст - вы закрепите свои первые навыки и почувствуете уверенность.
+> Желаю успеха!
+
+### Как это работает
+
+Теперь, давайте разберёмся, как же работает ваша новая "Hello Rust world!"-программа.
+Первое, разберем исходный код:
+
+```rust
+fn main() {
+
+}
+```
+
+Этот текст определяет *Rust-функцию*. Функция `main` - особенная. Это т.н. точка
+входа в программу (если читатель уже знаком с C, C++, Java, то тут тоже самое).
+`main` - начало всех начал вашей программы. Т.е. это текс значит следующее:
+"Объявление функции с именем `main`, у которой нет ни параметров и она ничего не
+возвращает во внешнюю среду." Если же у неё были бы параметры, они были бы заключены
+в круглые скобки `(` `)`.
+
+Также обратите внимание, что содержание кода функции обрамляется фигурными скобками.
+`{` `}` (также как и в Си, С++, Java, Go). Эти скобки обязательны для описания
+Rust-функций. Для повышения читаемости кода рекомендуем размещать открывающуюся
+фигурную скобку `{` на той же строке, что и наименовании функции и описание её
+параметров и отделять её одним пробелом. Вот так: `fn main() {`.
+
+Содержание функции `main`:
+
+```rust
+    println!("Hello, Rust world! Привет, Мир!");
+```
+
+Эта строчка кода описывает все действия программы: печать текста в терминальной
+строке. Есть определённые стилистические уточнения. Первое, в стиле написания кода
+на Rust используется четыре пролела вместо символа табуляции.
+
+Второе, это `println!` (называется Rust макрос). Таким образом в Rust реализуется
+метапрограммирование. Обратите, пожалуйста, внимание, что в конце слова `println`
+стоит знак `!`. Именно этот знак говорит о том, что это макрос, а не функция.
+Это важно! Пожалуйста обратите на это внимание!
+
+Далее, в круглых скобках находится текст `"Hello, Rust world! Привет, Мир!"`.
+Он имеет тип данных *строка*. Этот текст передаётся макросу `println!` как входные
+данные. Далее, макрос выполняет печать в строке терминала данный текст. Всё
+достаточно просто и понятно, не так ли?!
+
+Строка кода заканчивается символом `;`. Это символ информирует о том, что выражение
+окончено, далее можно напечатать следующее.
+
+```rust
+    println!("Hello, Rust world! Привет, Мир!");
+    println!("Hello! Привет!");
+```
+
+> Пожалуйста, добавьте новую сточку кода в вашу программу и проделайте необходимые
+> операции, для того чтобы увидеть новый текст в терминальной строке!
+
+Unix:
+
+```shell
 $ rustc main.rs
 $ ./main
-Hello, world!
+Hello, Rust world! Привет, Мир!
+Hello! Привет!
 ```
 
-On Windows, run `.\main.exe` instead of `./main`. Regardless of your
-operating system, you should see the string `Hello, world!` print to the
-terminal. If you did, then congratulations! You’ve officially written a Rust
-program. That makes you a Rust programmer! Welcome!
+Windows CMD:
 
-### Anatomy of a Rust Program
-
-Now, let’s go over what just happened in your “Hello, world!” program in
-detail. Here’s the first piece of the puzzle:
-
-```rust
-fn main() {
-
-}
+```cmd
+> rustc main.rs
+> main
+Hello, Rust world! Привет, Мир!
+Hello! Привет!
 ```
 
-These lines define a *function* in Rust. The `main` function is special: it’s
-the first thing that is run for every executable Rust program. The first line
-says, “I’m declaring a function named `main` that has no parameters and returns
-nothing.” If there were parameters, their names would go inside the
-parentheses, `(` and `)`.
+### Компиляция и выполнения - это два различных этапа работы
 
-Also note that the function body is wrapped in curly braces, `{` and `}`. Rust
-requires these around all function bodies. It’s considered good style to put
-the opening curly brace on the same line as the function declaration, with one
-space in between.
+В разделе "Написание и запуск первой программы" было показано, как выполнить
+созданную программу. Сейчас мы постараемся разъяснить как это работает.
 
-Inside the `main` function:
+Прежде чем выполнить программму (т.е.вызвать в строке териминала созданные файл
+программы `main`), необходимо скомпилировать её с помощью программы-компилятора
+ `rustc`.
 
-```rust
-    println!("Hello, world!");
-```
+ Unix:
 
-This line does all of the work in this little program: it prints text to the
-screen. There are a number of details to notice here. The first is that Rust
-style is to indent with four spaces, not a tab.
+ ```shell
+ $ rustc main.rs
+ ```
+ Аналогично на Windows.
 
-The second important part is `println!`. This is calling a Rust *macro*,
-which is how metaprogramming is done in Rust. If it were calling a function
-instead, it would look like this: `println` (without the `!`). We’ll discuss
-Rust macros in more detail in Appendix E, but for now you just need to know
-that when you see a `!` that means that you’re calling a macro instead of a
-normal function.
+ Windows CMD:
 
-Next is `"Hello, world!"` which is a *string*. We pass this string as an
-argument to `println!`, which prints the string to the screen. Easy enough!
+ ```cmd
+ > rustc main.rs
+  ```
 
-The line ends with a semicolon (`;`). The `;` indicates that this expression is
-over, and the next one is ready to begin. Most lines of Rust code end with a
-`;`.
+Таким же образом компилируются программы на C, C++, Java, Go. Результатом компиляции
+Rust-программы является бинарный файл. Его можно увидеть в списке файлов:
 
-### Compiling and Running Are Separate Steps
+Unix:
 
-In “Writing and Running a Rust Program”, we showed you how to run a newly
-created program. We’ll break that process down and examine each step now.
-
-Before running a Rust program, you have to compile it. You can use the Rust
-compiler by entering the `rustc` command and passing it the name of your source
-file, like this:
-
-```text
-$ rustc main.rs
-```
-
-If you come from a C or C++ background, you’ll notice that this is similar to
-`gcc` or `clang`. After compiling successfully, Rust should output a binary
-executable, which you can see on Linux or OSX by entering the `ls` command in
-your shell as follows:
-
-```text
+```shell
 $ ls
 main  main.rs
 ```
 
-On Windows, you’d enter:
+Windows:
 
 ```cmd
-> dir /B %= the /B option says to only show the file names =%
+> dir /B
 main.exe
 main.rs
 ```
+> опция /B позволяет отображать только файлы
 
-This shows we have two files: the source code, with the *.rs* extension, and the
-executable (*main.exe* on Windows, *main* everywhere else). All that’s left to
-do from here is run the *main* or *main.exe* file, like this:
+В списке присутствуют два файла: файл с исходным кодом программы *.rs* и бинарный
+файл (*main.exe* в Windows, *main* на других опрационных системах).
 
-```text
-$ ./main  # or .\main.exe on Windows
+```shell
+$ ./main  # or .\main.exe на Windows
 ```
 
-If *main.rs* were your “Hello, world!” program, this would print `Hello,
-world!` to your terminal.
+Если бы в исходном коде *main.rs* в входных параметрах макроса был введё текст
+“Hello, world!”, то в строке терминала вы бы увидели `Hello, world!`.
 
-If you come from a dynamic language like Ruby, Python, or JavaScript, you may
-not be used to compiling and running a program being separate steps. Rust is an
-*ahead-of-time compiled* language, which means that you can compile a program,
-give it to someone else, and they can run it even without having Rust
-installed. If you give someone a `.rb`, `.py`, or `.js` file, on the other
-hand, they need to have a Ruby, Python, or JavaScript implementation installed
-(respectively), but you only need one command to both compile and run your
-program. Everything is a tradeoff in language design.
+> Пожалуйста, отредактируйте файл исходного кода и проверьте работу нового бинарного
+> файла!
 
-Just compiling with `rustc` is fine for simple programs, but as your project
-grows, you’ll want to be able to manage all of the options your project has
-and make it easy to share your code with other people and projects. Next, we’ll
-introduce you to a tool called Cargo, which will help you write real-world Rust
-programs.
+Если у Вас есть опыт программирования на динамически компилируемых языках, таких как
+Ruby, Python или JavaScript то вас, наверное, удивит необходимсть разделения
+компиляции и выполнения программ. В составе утилит Rust есть [Ahead-of-Time] (AOT)
+ компилятор. Он позволяет создавать автономный бинарный файл, которые может быть
+ потом использован там, где нет Rust утилит. Это весьма удобно, как разработчиков
+ программного обеспечения, так и для пользователей. Динамические компилирумые
+ программы лишены такой возможности. Как бы там ни было, использование и динамические
+ и статически компилируемых языков программирования имеют свои плюсы и минусы.
 
-## Hello, Cargo!
+[Ahead-of-Time]: https://ru.wikipedia.org/wiki/AOT-%D0%BA%D0%BE%D0%BC%D0%BF%D0%B8%D0%BB%D1%8F%D1%86%D0%B8%D1%8F
 
-Cargo is Rust’s build system and package manager, and Rustaceans use Cargo to
-manage their Rust projects because it makes a lot of tasks easier. For example,
-Cargo takes care of building your code, downloading the libraries your code
-depends on, and building those libraries. We call libraries your code needs
-*dependencies*.
+Компиляция простых программ с помощью `rustc` - это замечательно, но если ваше
+проект всё больше и большое, вам понадобятся средства управления всеми компонентами,
+а также удобные возможности всего цикла командной разработки. Далее, мы представим
+вам программу `cargo`, которая поможет создать создать удобную среду разработки.
 
-The simplest Rust programs, like the one we’ve written so far, don’t have any
-dependencies, so right now, you’d only be using the part of Cargo that can take
-care of building your code. As you write more complex Rust programs, you’ll
-want to add dependencies, and if you start off using Cargo, that will be a lot
-easier to do.
+## Hello, Cargo! Привет, Cargo!
 
-As the vast, vast majority of Rust projects use Cargo, we will assume that
-you’re using it for the rest of the book. Cargo comes installed with Rust
-itself, if you used the official installers as covered in the Installation
-chapter. If you installed Rust through some other means, you can check if you
-have Cargo installed by typing the following into your terminal:
+Cargo - это система управления пакетами для разработки программ на Rust. Удобство
+её использования оценили программисты Rust. Cargo позволяет упростить процесс
+разработки. Например, Сargo поможет скомпилировать программу из исходного кода,
+скачать требуемые библиотеки для вашего проекта. В терминах языка программирования
+Rust внешние библиотеки называются *зависимостями* (*dependencies*).
 
-```text
+Такая простая программа, которую мы написали (main) не имеет зависимостей. Поэтому
+Cargo нам может понадобиться только лишь для компиляции. Если же Вы напишете
+(когда-нибудь напишете) более сложную программу на Rust, то весь функционал Cargo,
+который помогает добавить зависимости в инфраструктуру вашего проекта будет весьма
+кстати.
+
+Поскольку огромное (подчёркиваю огромное) количество Rust-проектов использует Cargo
+мы предположим, что и вам его функционал придётся по вкусу и будет удобен. Всё что
+вам нужно для его использования идёт в комплекте с компилятором и другими утилитами.
+Для того, чтобы проверить правильно ли установлен Cargo, введите с строке терминала
+следующую команду:
+
+```shell
 $ cargo --version
+cargo 0.21.0
+```
+Если будет напечатана версия программы - Cargo скорее всего работает. А если
+программа `cargo` не найдена - пожалуйста, постарайтесь устранить проблемы установки
+(возможно, Вам понадобиться установить Cargo с помощью разлиных способов, кототры приведены на
+сайте [doc.crates.io].
+
+[doc.crates.io]: http://doc.crates.io/
+
+> Для того чтобы узнать подробнее о возможностях утилиты `cargo`, пожалуйста, введите
+> следующую команду:
+
+```shell
+$ cargo --help
 ```
 
-If you see a version number, great! If you see an error like `command not
-found`, then you should look at the documentation for your method of
-installation to determine how to install Cargo separately.
+### Создание Cargo проекта
 
-### Creating a Project with Cargo
+Создадим проект используя Cargo! Думаю, что он будет отличаться от того проекта,
+что был нами создан ранее (проект `main`):
 
-Let’s create a new project using Cargo and look at how it differs from our
-project in `hello_world`. Go back to your projects directory (or wherever you
-decided to put your code):
+Unix:
 
-Linux and Mac:
-
-```text
+```shell
 $ cd ~/projects
 ```
 
@@ -224,28 +302,30 @@ Windows:
 > cd %USERPROFILE%\projects
 ```
 
-And then on any operating system run:
+Далее введём следующую команду:
 
-```text
+```shell
 $ cargo new hello_cargo --bin
 $ cd hello_cargo
 ```
 
-We passed the `--bin` argument to `cargo new` because our goal is to make an
-executable application, as opposed to a library. Executables are binary
-executable files often called just *binaries*. We’ve given `hello_cargo`
-as the name for our project, and Cargo creates its files in a directory
-of the same name that we can then go into.
+Мы устанавливаем аргумент `--bin` для carog-команды `new` для того, чтобы по шаблону
+была создана структура приложения командной строки - консольный проект (бинарное
+приложение). `hello_cargo` - это название нашего нового Rust проекта.
 
-If we list the files in the *hello_cargo* directory, we can see that Cargo has
-generated two files and one directory for us: a *Cargo.toml* and a *src*
-directory with a *main.rs* file inside. It has also initialized a new git
-repository in the *hello_cargo* directory for us, along with a *.gitignore*
-file; you can change this to use a different version control system, or no
-version control system, by using the `--vcs` flag.
+Если мы просмотрим список созданных файлов, то мы увидим что внутри папки проекта
+были созданы файлы и папка: *Cargo.toml*,*.gitignore*, *src*. Внутри папки *src*
+находится файл *main.rs*. По умолчанию Cargo оснастил папку нашего проекта файлом
+*.gitignore* - это служебный файл git хранилища. Вы можете создать проект из без
+инициализации git хранилища (или какого-либо иного вида системы контроля версий файлов),
+если воспользуйтесь флагом `--vcs` при создании нового проекта:
 
-Open up *Cargo.toml* in your text editor of choice. It should look something
-like this:
+```shell
+$ cargo new hello_cargo2 --bin --vcs none
+$ cd hello_cargo2
+```
+
+Внутри текстового файла *Cargo.toml* следующее содержание:
 
 <span class="filename">Filename: Cargo.toml</span>
 
@@ -258,29 +338,38 @@ authors = ["Your Name <you@example.com>"]
 [dependencies]
 ```
 
-This file is in the [*TOML*][toml]<!-- ignore --> (Tom’s Obvious, Minimal
-Language) format. TOML is similar to INI but has some extra goodies and is used
-as Cargo’s configuration format.
+Это файл формата [*TOML*][toml]<!-- ignore --> (Tom’s Obvious, Minimal
+Language). Формат TOML очень похож на INI, но он имеет свои специфические особенности.
 
 [toml]: https://github.com/toml-lang/toml
 
-The first line, `[package]`, is a section heading that indicates that the
-following statements are configuring a package. As we add more information to
-this file, we’ll add other sections.
+На первой строке расположен заголовок секции`[package]`. Далее следует описание пакета.
+По мере усложнения проекта, в данный файл будут добавлять другие секции.
 
-The next three lines set the three bits of configuration that Cargo needs to
-see in order to know that it should compile your program: its name, what
-version it is, and who wrote it. Cargo gets your name and email information
-from your environment. If it’s not correct, go ahead and fix that and save the
-file.
+Следующие строки - это строки описания пакета: имя, версия, авторы.
+Если в строке у Вас написано имя компьютера, значит Вы ещё не до конца настроили
+систему для работы с Cargo (Cargo не может считать информацию о вас а также недоступны
+другие опции работы с github). Информацию об авторстве Cargo берёт из параметров
+вашего git вашей учетной записи. Подробнее об этом можно ознакомиться перейдя по
+(ссылке)[https://github.com/rust-lang/cargo/issues/1213].
+Если вы хотите устранить это недостаток, то для пользователей Windows предлагаю
+следующее решение:
+1) Устанавливаете "GitHub Desktop".
+2) В приложении подключаетесь к своей учётной записи.
+3) Далее создаёте проект.
+4) Открывайте файл *Cargo.toml* созданного проекта и видите имя учётной записи и e-mail в строке `authors`.
 
-The last line, `[dependencies]`, is the start of a section for you to list any
-*crates* (which is what we call packages of Rust code) that your project will
-depend on so that Cargo knows to download and compile those too. We won’t need
-any other crates for this project, but we will in the guessing game tutorial in
-the next chapter.
+Последняя строка `[dependencies]` - это заголовок секции *crates* (так называются
+пакеты в терминах языка программирования Rust). Этот список содержит описание зависимостей
+вашего проекта и предоставляет Cargo функционалу необходимую информацию для загрузки
+и компиляции. Т.к. в нашем шаблонном поекте не испльзуются внешние зависимости -
+эта секция пуста. В проекте "Угадай число" мы заполним информацию о зависимостях.
 
-Now let’s look at *src/main.rs*:
+Если у Вас появились вопросы, пожалуйста, познакомьтесь с разделом [FAQ] документации.
+
+[FAQ]: http://doc.crates.io/faq.html
+
+Теперь перейдём к рассмотреию содержания файла *src/main.rs*:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -289,47 +378,80 @@ fn main() {
     println!("Hello, world!");
 }
 ```
+Как видите, тут уже есть код программы, который мы писала ранее.
+Отличия нашего предыдущего проекта от сгенерируемого Cargo следующий:
+- Имеется специальная папка для исходного кода программы *src*.
+- Есть файл конфигурации *Cargo.toml*
 
-Cargo has generated a “Hello World!” for you, just like the one we wrote
-earlier! So that part is the same. The differences between our previous project
-and the project generated by Cargo that we’ve seen so far are:
+Программист Java, возможно, обратят внимание на концептуальную схожесть содержания
+проекта с Maven. Да, есть что-то общее. Ваша интуиция не подводит.
+В корневой папке проекта могут также содержаться файлы README, CONTRIBUTING, LICENSE,
+файлы конфигурации, а также всё что угодно не относящаяся к исходному коду программы.
+Концепция структуры хранения данных Cargo позволяет унифицировать структуру Rust
+проектов, что делает их понятными для изучения и развития. Такие проекты потенциально
+могут быть сколько угодно сложными и ёмкими. Cargo поможет со всеми ими справиться.
 
-- Our code goes in the *src* directory
-- The top level contains a *Cargo.toml* configuration file
+Если в своей работе вам придётся с необходимостью конвертации проекта Rust в
+Cargo-проект - генерируемые шаблоны помогут вам.
 
-Cargo expects your source files to live inside the *src* directory so that the
-top-level project directory is just for READMEs, license information,
-configuration files, and anything else not related to your code. In this way,
-using Cargo helps you keep your projects nice and tidy. There’s a place for
-everything, and everything is in its place.
+Структура Cargo-проекта:
 
-If you started a project that doesn’t use Cargo, as we did with our project in
-the *hello_world* directory, you can convert it to a project that does use
-Cargo by moving your code into the *src* directory and creating an appropriate
-*Cargo.toml*.
+```shell
+.
+├── Cargo.lock
+├── Cargo.toml
+├── benches
+│   └── large-input.rs
+├── examples
+│   └── simple.rs
+├── src
+│   ├── bin
+│   │   └── another_executable.rs
+│   ├── lib.rs
+│   └── main.rs
+└── tests
+    └── some-integration-tests.rs
+```
 
-### Building and Running a Cargo Project
+Более подробную информацию о структуре типового Cargo-проекта вы можете узнать на
+(сайте)[http://doc.crates.io/guide.html#project-layout];
 
-Now let’s look at what’s different about building and running your Hello World
-program through Cargo! To do so, enter the following commands:
+### Сборка и запуск Cargo проектов
 
-```text
+В чём же разница между сборкой и запуском Cargo проекта. Предлагаю разобраться!
+Для этого в папке созданного проекта введём следующую cargo-команду - `build`
+(`build` - это cargo-команда компиляции текущего проекта. С работой команды `new`
+вы уже знакомы):
+
+```shell
 $ cargo build
    Compiling hello_cargo v0.1.0 (file:///projects/hello_cargo)
 ```
 
-This should have created an executable file in *target/debug/hello_cargo* (or
-*target\\debug\\hello_cargo.exe* on Windows), which you can run with this command:
+Результат - создание бинарного файла в папке *target/debug/hello_cargo*
+(*target\\debug\\hello_cargo.exe* в Windows). Проверим работу созданного файла:
 
-```text
-$ ./target/debug/hello_cargo # or .\target\debug\hello_cargo.exe on Windows
+Unix:
+
+```shell
+$ ./target/debug/hello_cargo
 Hello, world!
 ```
 
-Bam! If all goes well, `Hello, world!` should print to the terminal once more.
+Windows:
 
-Running `cargo build` for the first time also causes Cargo to create a new file
-at the top level called *Cargo.lock*, which looks like this:
+```cmd
+> .\target\debug\hello_cargo
+Hello, world!
+> # or .\target\debug\hello_cargo.exe
+> # or target\debug\hello_cargo.exe
+> # or target\debug\hello_cargo
+```
+
+Отлично! Всё работает замечательно. :-)
+
+Обратите внимание, что команда `cargo build` при первом её запуске в текущем
+проекте создаёт файл *Cargo.lock*. Этот файл содержит следующий текст:
 
 <span class="filename">Filename: Cargo.lock</span>
 
@@ -337,78 +459,110 @@ at the top level called *Cargo.lock*, which looks like this:
 [root]
 name = "hello_cargo"
 version = "0.1.0"
+
+
 ```
+Файл *Cargo.lock* необходим для отслеживания зависимостей вашего проекта.
+Так как текущей проект не содержит зависимостей, данный файл не содержит данных
+для отслеживания зависимостей. По мере усложнения проекта Cargo будет отслеживать
+зависимости (данный файл будет заполнять необходимой для этого информацией).
+Более подробно об этом можно узнать из [документации](http://doc.crates.io/guide.html#cargotoml-vs-cargolock)
+проекта.
 
-Cargo uses the *Cargo.lock* to keep track of dependencies in your application.
-This project doesn’t have dependencies, so the file is a bit sparse.
-Realistically, you won’t ever need to touch this file yourself; just let Cargo
-handle it.
+Для компиляции и последующего запуска программы на выполнение воспользуйтесь
+Cargo-командой `run`:
 
-We just built a project with `cargo build` and ran it with
-`./target/debug/hello_cargo`, but we can also use `cargo run` to compile
-and then run:
-
-```text
+```shell
 $ cargo run
      Running `target/debug/hello_cargo`
 Hello, world!
 ```
 
-Notice that this time, we didn’t see the output telling us that Cargo was
-compiling `hello_cargo`. Cargo figured out that the files haven’t changed, so
-it just ran the binary. If you had modified your source code, Cargo would have
-rebuilt the project before running it, and you would have seen something like
-this:
+Обратите внимание, что в командной сроке не было напечатано ничего о компиляции.
+Cargo умеет отслеживать состояние исходных файлов проекта. Так как изменений не
+было - следовательно, перекомпиляция не нужно. Пожалуйста, внесите в исходный код
+Rust-файла изменение. Скопируйте строчку кода ввода на печать и вставьте её на
+новую строку. Сохраните ваши изменения. Запустите команду Cargo-команду `run` ещё
+раз. Обратите внимание, что программа будет перекомпилирована и запущена.
 
-```text
+```shell
 $ cargo run
    Compiling hello_cargo v0.1.0 (file:///projects/hello_cargo)
      Running `target/debug/hello_cargo`
 Hello, world!
 ```
 
-So a few more differences we’ve now seen:
+Если запустить Cargo-команду `run` ещё раз - перекомпиляции не случиться.
 
-- Instead of using `rustc`, build a project using `cargo build` (or build and
-  run it in one step with `cargo run`)
-- Instead of the result of the build being put in the same directory as our
-  code, Cargo will put it in the *target/debug* directory.
-
-The other advantage of using Cargo is that the commands are the same no matter
-what operating system you’re on, so at this point we will no longer be
-providing specific instructions for Linux and Mac versus Windows.
-
-### Building for Release
-
-When your project is finally ready for release, you can use `cargo build
---release` to compile your project with optimizations. This will create an
-executable in *target/release* instead of *target/debug*. These optimizations
-make your Rust code run faster, but turning them on makes your program take
-longer to compile. This is why there are two different profiles: one for
-development when you want to be able to rebuild quickly and often, and one for
-building the final program you’ll give to a user that won’t be rebuilt and
-that we want to run as fast as possible. If you’re benchmarking the running
-time of your code, be sure to run `cargo build --release` and benchmark with
-the executable in *target/release*.
-
-### Cargo as Convention
-
-With simple projects, Cargo doesn’t provide a whole lot of value over just
-using `rustc`, but it will prove its worth as you continue. With complex
-projects composed of multiple crates, it’s much easier to let Cargo coordinate
-the build. With Cargo, you can just run `cargo build`, and it should work the
-right way. Even though this project is simple, it now uses much of the real
-tooling you’ll use for the rest of your Rust career. In fact, you can get
-started with virtually all Rust projects you want to work
-on with the following commands:
-
-```text
-$ git clone someurl.com/someproject
-$ cd someproject
-$ cargo build
+```shell
+$ cargo run
+   Compiling hello_cargo v0.1.0 (file:///projects/hello_cargo)
+     Running `target/debug/hello_cargo`
+Hello, world!
 ```
 
-> Note: If you want to look at Cargo in more detail, check out the official
-[Cargo guide], which covers all of its features.
+```shell $ cargo run Running `target/debug/hello_cargo` Hello, world! ```
+Подведём итоги:
+- Для создания сложных проектов вместо того, чтобы использовать Rust-компилятор
+ `rustc` непосредственно, наилучшим решением является использование Cargo-команд.
+ - Cargo-структура проекта используют принцип разделения и систематизации благодаря,
+  которому возможно построение проектов со сложными внешними зависимостями.
 
-[Cargo guide]: http://doc.crates.io/guide.html
+Кроме того использование Cargo-команд позволяет вести многоплатформенную разработку.
+Более подробно о проекте Cargo его возможностях можно узнать из документации:
+
+```shell
+$ cargo --help
+```
+А также из материалов [сайта](http://doc.crates.io/).
+
+### Сборка готовых (оптимизированных) Rust-приложений
+
+Когда проект уже готов к выпуску, можно воспользоваться Cargo-командой `build` c
+флагом `--release`:
+
+```shell
+$ cargo build --release
+```
+
+Эта команда скомпилирует и оптимизирует вашу программу. В папке *target/release*
+будет создан бинарный файл. Все оптимизации позволят программе работать быстрее.
+Обратная сторона подобной операции - более длительное время компиляции. Поэтому
+существуют две команды компиляции - для разработки, для финальных версий.
+Для проверки производительности ваших Rust-программ мы рекомендуем использовать
+бинарные файлы, которые были получены путем компиляции и оптимизации (которые
+сохраняются в пакте *target/release*).
+
+### Cargo as Convention Cargo-конвенции
+
+Конечно, простые примеры не могут раскрыть все возможностей, которые предоставляет
+Cargo по сравнение с прямой работой с компилятором. Для более сложных проектов
+концепции Cargo - это проверенный временем стиль разработки. Привыкайте к хорошему
+стилю работы даже с простыми проектами!
+
+Этапы начала работы с любым Rust-проектом:
+```shell
+$ git clone someurl.com/someproject
+```
+
+```shell
+$ cd someproject
+```
+
+```shell
+$ cargo build
+```
+Для того, чтобы почувствовать, что такое работа с "неигрушечным" проектом, проделайте
+эти операции на примере проекта Cargo. Познакомьтесь с содержанием файлов *Cargo.toml*,
+*Cargo.lock*, посмотрите создержание папки *src*.
+
+Проект Cargo находится по адресу: [github.com/rust-lang/cargo](https://github.com/rust-lang/cargo).
+Также вы можете попрактиковаться и над другими проектами, исходные коды которых
+храняться на [github.com](https://github.com/). Для их поиска используйте возможности
+расширенного поиска (проектов)[https://github.com/search?utf8=%E2%9C%93&q=language%3ARust&type=Repositories&ref=advsearch&l=Rust&l=].
+
+> Если вы хотите подробнее ознакомится с работой проектов Cargo, со всем, что
+> мы не рассказали в этой вводной статье, пожалуйста, ознакомьтесь с
+> [официальным руководством].
+
+[официальным руководством]: http://doc.crates.io/guide.html

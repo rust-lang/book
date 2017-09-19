@@ -1,55 +1,53 @@
-## Appendix A: Keywords
+## Дополнение А: Ключевые слова
 
-The following keywords are reserved by the Rust language and may not be used as
-identifiers such as names of functions, variables, parameters, struct fields,
-modules, crates, constants, macros, static values, attributes, types, traits,
-or lifetimes.
+Ключевые слова - это словарь языка программирования Rust слова. Данные слова
+испльзуются для описания ваших прогамм и не могут быть испльзованы в качестве
+идентификаторов (имён функций, переменных, параметров, названий имёт полей структур,
+модулей, кратов, костант, макросов, статических переменных, атрибутов, типов,
+типажей).
 
-### Keywords Currently in Use
+### Ключевые слова языка программирования Rust
 
-* `as` - primitive casting, disambiguating the specific trait containing an
-  item, or renaming items in `use` and `extern crate` statements
-* `break` - exit a loop immediately
-* `const` - constant items and constant raw pointers
-* `continue` - continue to the next loop iteration
-* `crate` - external crate linkage or a macro variable representing the crate
-  in which the macro is defined
-* `else` - fallback for `if` and `if let` control flow constructs
-* `enum` - defining an enumeration
-* `extern` - external crate, function, and variable linkage
-* `false` - boolean false literal
-* `fn` - function definition and function pointer type
-* `for` - iterator loop, part of trait impl syntax, and higher-ranked lifetime
-  syntax
-* `if` - conditional branching
-* `impl` - inherent and trait implementation block
-* `in` - part of `for` loop syntax
-* `let` - variable binding
-* `loop` - unconditional, infinite loop
-* `match` - pattern matching
-* `mod` - module declaration
-* `move` - makes a closure take ownership of all its captures
-* `mut` - denotes mutability in references, raw pointers, and pattern bindings
-* `pub` - denotes public visibility in struct fields, `impl` blocks, and modules
-* `ref` - by-reference binding
-* `return` - return from function
-* `Self` - type alias for the type implementing a trait
-* `self` - method subject or current module
-* `static` - global variable or lifetime lasting the entire program execution
-* `struct` - structure definition
-* `super` - parent module of the current module
-* `trait` - trait definition
-* `true` - boolean true literal
-* `type` - type alias and associated type definition
-* `unsafe` - denotes unsafe code, functions, traits, and implementations
-* `use` - import symbols into scope
-* `where` - type constraint clauses
-* `while` - conditional loop
+* `as` - простое приведение типа
+* `break` - немедленное прекращение цикла
+* `const` - обозначение константы
+* `continue` - прекратить текущую итерацию цикла и перейти к следующей
+* `crate` - внешнее связывание или обозначение макро переменной компонента
+* `else` - альтернатива для `if` и `if let`
+* `enum` - определение перечисления
+* `extern` - определение использования внешнего компонента, функции или связывания
+* `false` - логический литерал ЛОЖЬ
+* `fn` - определение функции и ссылочной переменной на переменную типа функция
+* `for` - итератор
+* `if` - оператор сравнения
+* `impl` - наследование и реализация типажа
+* `in` - часть синтаксической конструкции итератора `for`
+* `let` - определение переменной
+* `loop` - итератор бесконечного цикла
+* `match` - шаблонный селектор
+* `mod` - оператор определения модуля
+* `move` - оператор перемещения кучи, передача прав
+* `mut` -  обозначение возможности изменения переменной
+* `pub` - обозначение уровня доступа к структуре, блоку, модулю, `impl` блокам
+* `ref` - ссылочное связывание
+* `return` - оператор возврата из функции
+* `Self` - тип псевдонима для типа реализации типажа
+* `self` - заголовок метода или текущего модуля
+* `static` - обозначение глобальной переменной или переменной, которая будет доступна на протяжении работы программы
+* `struct` - определение структуры
+* `super` - обозначение ссылки на родительский модуль относительно текущего
+* `trait` - обозначение типажа
+* `true` - логический литерал ПРАВДА
+* `type` - псевдоним типа и оператор его определения
+* `unsafe` - определение небезопасного кода, функции, типажа и реализаций
+* `use` - оператор импорта
+* `where` - оператор условия
+* `while` - логический итератор
 
-### Keywords Reserved for Future Use
+### Зарезервированные ключевые слова для будущего использования
 
-These keywords do not have any functionality, but are reserved by Rust for
-potential future use.
+Хотя эти не ключевые слова языка программирования Rust, они, возможно, будут
+использоваться в новых его версиях.
 
 * `abstract`
 * `alignof`

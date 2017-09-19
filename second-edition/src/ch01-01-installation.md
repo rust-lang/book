@@ -1,120 +1,118 @@
-## Installation
+## Установка
 
-The first step to using Rust is to install it. You’ll need an internet
-connection to run the commands in this chapter, as we’ll be downloading Rust
-from the internet.
+Для использвания языка программирования Rust необходимо установить все необходимые
+программные компоненты. Вам будет необходимо скачать их, а также выполнить
+дополтельные установки.
 
-We’ll be showing off a number of commands using a terminal, and those lines all
-start with `$`. You don’t need to type in the `$` character; they are there to indicate
-the start of each command. You’ll see many tutorials and examples around the web
-that follow this convention: `$` for commands run as a regular user, and `#`
-for commands you should be running as an administrator. Lines that don’t start
-with `$` are typically showing the output of the previous command.
+Мы покажим, как с помощью командной строки. Начало любой команды будет обозначаться
+символом-индикатором `$`. Строки без такого символа будут обозначать результат
+работы команды.
 
-### Installing on Linux or Mac
+### Установка на Linux или Mac
 
-If you’re on Linux or a Mac, all you need to do is open a terminal and type
-this:
+Если вы используете Linux или Mac, пожалуйста, выполните следующую команду:
 
-```text
+```shell
 $ curl https://sh.rustup.rs -sSf | sh
 ```
 
-This will download a script and start the installation. You may be prompted for
-your password. If it all goes well, you’ll see this appear:
+Благодаря этой команде будет запущена инсталляция Rust. Возможно, понадобиться
+ввести пароль пользователя. Если все компоненты будут благополучно установлены,
+Вы увидите следующее сообщение:
 
-```text
+```shell
 Rust is installed now. Great!
 ```
 
-Of course, if you disapprove of the `curl | sh` pattern, you can download, inspect
-and run the script however you like.
+Вы также можете просто скачать код инсталлятора без его выполнения
 
-The installation script automatically adds Rust to your system PATH after your next login. 
-If you want to start using Rust right away, run the following command in your shell:
+```shell
+$ curl https://sh.rustup.rs
+```
 
-```text
+т.е. выполнить команду без запуска инсталляции и выполнить её в любое удобное время.
+
+Инсталлятор автоматически добавить папку с компонентами Rust в системный путь PATH
+и их использование будет доступно из командной строки после следующего входа в
+систему. Если необходимо сразу начать работу, пожалуйста, выполните следующую команду:
+
+```shell
 $ source $HOME/.cargo/env
 ```
 
-Alternatively, add the following line to your `~/.bash_profile`:
+Или добавьте следующую строку в файл `~/.bash_profile`:
 
-```text
+```shell
 $ export PATH="$HOME/.cargo/bin:$PATH"
 ```
 
-### Installing on Windows
+### Установка на Windows
 
-On Windows, go to [https://rustup.rs](https://rustup.rs/)<!-- ignore --> and
-follow the instructions to download rustup-init.exe. Run that and follow the
-rest of the instructions it gives you.
+Перейдите по ссылке [https://rustup.rs](https://rustup.rs/)<!-- ignore --> и
+следуйте иструкциям исталлятора.
 
-The rest of the Windows-specific commands in the book will assume that you are
-using `cmd` as your shell. If you use a different shell, you may be able to run
-the same commands that Linux and Mac users do. If neither work, consult the
-documentation for the shell you are using.
+Авторы учебника предполагают, что Вы используете программу `cmd` для выполнения
+описываемых команд. Если используется другая программа, возможно, имеется возможность
+использовать команды для Linux и Mac. Если нет, пожалуйста, обратитесь к документации
+по использованию программы, который Вы пользуетесь.
 
-### Custom installations
+### Установка Rust вручную
 
-If you have reasons for preferring not to use rustup.rs, please see [the Rust
-installation page](https://www.rust-lang.org/install.html) for other options.
+Если Вы по каким-то причинам не используете rustup.rs, пожалуйста, ознакомьтесь с
+документацией на с странице [the Rust installation page](https://www.rust-lang.org/install.html).
 
-### Updating
+### Обновление
 
-Once you have Rust installed, updating to the latest version is easy.
-From your shell, run the update script:
+После установки Rust обновление выполняется с помощью следующей команды:
 
-```text
+```shell
 $ rustup update
 ```
 
-### Uninstalling
+### Удаление компонентов Rust из Вашей системы
 
-Uninstalling Rust is as easy as installing it. From your shell, run
-the uninstall script:
+Удалить Rust также просто, как его установить. Для этого необходим выполнить
+следующую команду:
 
-```text
+```shell
 $ rustup self uninstall
 ```
 
-### Troubleshooting
+### Устранение возможных ошибок
 
-If you’ve got Rust installed, you can open up a shell, and type this:
+Проверка работы Rust-компилятора:
 
-```text
+```shell
 $ rustc --version
 ```
 
-You should see the version number, commit hash, and commit date in a format
-similar to this for the latest stable version at the time you install:
+Если Вы увидите версию компилятора, хэш-строку, дату обновления:
 
-```text
+```shell
 rustc x.y.z (abcabcabc yyyy-mm-dd)
 ```
 
-If you see this, Rust has been installed successfully!
-Congrats!
+Если Вы видите всё это - то Rust установлен успешно. Поздравляем!
 
-If you don’t and you’re on Windows, check that Rust is in your `%PATH%` system
-variable.
+Если этого не произошло, проверьте содержание системной переменной `PATH`.
 
-If it still isn’t working, there are a number of places where you can get help.
-The easiest is [the #rust IRC channel on irc.mozilla.org][irc]<!-- ignore -->,
-which you can access through [Mibbit][mibbit]. Go to that address, and you’ll
-be chatting with other Rustaceans (a silly nickname we call ourselves) who can
-help you out. Other great resources include [the Users forum][users] and
-[Stack Overflow][stackoverflow].
+Если проблема всё ещё не может быть устранена, вот сайты, на страницах которых Вы
+сможете найти ответ или задать вопрос [the #rust IRC channel on irc.mozilla.org][irc].<!-- ignore -->,
+Доступ к данному ресурсу осуществляется с помощь [Mibbit][mibbit]. Перейдите по
+ссылке и Вы получите возможность задать Ваш вопрос в чате. Также обратить на форум
+[the Users forum][users] или на [Stack Overflow][stackoverflow].
 
 [irc]: irc://irc.mozilla.org/#rust
 [mibbit]: http://chat.mibbit.com/?server=irc.mozilla.org&channel=%23rust
 [users]: https://users.rust-lang.org/
 [stackoverflow]: http://stackoverflow.com/questions/tagged/rust
 
-### Local documentation
+### Справочная информация
 
-The installer also includes a copy of the documentation locally, so you can
-read it offline. Run `rustup doc` to open the local documentation in your
-browser.
+Один из устанавливаемых компонентов Rust - копия документации. Для её использования
+нет необходимости доступа в Интернет. Команда `rustup doc` откроет локальную версию
+сайта с документацией в Вашем браузере.
 
-Any time there’s a type or function provided by the standard library and you’re
-not sure what it does, use the API documentation to find out!
+Если Вам необходимо найти описание функционала стандартной библиотеки или
+вы не знаете как использовать тот или иной объект - документация станет вашим
+верным помощником!
