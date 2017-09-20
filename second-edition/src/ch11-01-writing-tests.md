@@ -764,7 +764,7 @@ test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured
 ```
 
 The failure message indicates that this test did indeed panic as we expected,
-but the panic message `did not include expected string 'Guess value must be
+but the panic message did not include expected string `'Guess value must be
 less than or equal to 100'`. We can see the panic message that we did get,
 which in this case was `Guess value must be greater than or equal to 1, got
 200.` We could then start figuring out where our bug was!
