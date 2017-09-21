@@ -80,7 +80,7 @@ vector doesn’t match a vector containing the line `"safe, fast, productive."`.
 
 <span class="filename">Filename: src/lib.rs</span>
 
-```
+```rust
 pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
     vec![]
 }
