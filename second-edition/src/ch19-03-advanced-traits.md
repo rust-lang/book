@@ -314,11 +314,20 @@ functionality of the trait without breaking the existing implementation code.
 
 ### Fully Qualified Syntax for Disambiguation
 
-Let's imagine two traits, `Pilot` and `Wizard`, that both have a method called
-`fly`. We now want to implement both of them on a type `Man` that itself
-already has a method with the same name implemented on it.
+Rust cannot prevent a trait from having a method with the same name as another
+trait’s method, nor can it prevent us from implementing both of these traits on
+one type. We can also have a method implemented directly on the type with the
+same name as well! In order to be able to call each of the methods with the
+same name, then, we need to tell Rust which one we want to use.
 
-```rust,ignore
+Consider the code in Listing 19-27 where we've defined two traits, `Pilot` and
+`Wizard`, that both have a method called `fly`. We then implement both traits
+on a type `Human` that itself already has a method named `fly` implemented on
+it. Each `fly` method does something different:
+
+<span class="filename">Filename: src/main.rs</span>
+
+```rust
 trait Pilot {
     fn fly(&self);
 }
@@ -327,29 +336,35 @@ trait Wizard {
     fn fly(&self);
 }
 
-struct Man;
+struct Human;
 
-impl Pilot for Man {
+impl Pilot for Human {
     fn fly(&self) {
         println!("This is your captain speaking.");
     }
 }
 
-impl Wizard for Man {
+impl Wizard for Human {
     fn fly(&self) {
         println!("Up!");
     }
 }
 
-impl Man {
+impl Human {
     fn fly(&self) {
         println!("*waving arms furiously*");
     }
 }
 ```
 
-If we now call `fly` on an instance of `Man`, the compiler defaults to call the
-method that is directly implemented on the type.
+<span class="caption">Listing 19-27: Two traits defined to have a `fly` method,
+and implementations of those traits on the `Human` type in addition to a `fly`
+method on `Human` directly</span>
+
+When we call `fly` on an instance of `Human`, the compiler defaults to calling
+the method that is directly implemented on the type, as shown in Listing 19-28:
+
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 # trait Pilot {
@@ -360,33 +375,43 @@ method that is directly implemented on the type.
 #     fn fly(&self);
 # }
 #
-# struct Man;
+# struct Human;
 #
-# impl Pilot for Man {
+# impl Pilot for Human {
 #     fn fly(&self) {
 #         println!("This is your captain speaking.");
 #     }
 # }
 #
-# impl Wizard for Man {
+# impl Wizard for Human {
 #     fn fly(&self) {
 #         println!("Up!");
 #     }
 # }
 #
-# impl Man {
+# impl Human {
 #     fn fly(&self) {
 #         println!("*waving arms furiously*");
 #     }
 # }
 #
 fn main() {
-    let man = Man;
-    man.fly(); // prints "*waving arms furiously*"
+    let person = Human;
+    person.fly();
 }
 ```
 
-For calling any of the trait's methods we need a more explicit syntax:
+<span class="caption">Listing 19-28: Calling `fly` on an instance of
+`Human`</span>
+
+Running this will print out `*waving arms furiously*`, which shows that Rust
+called the `fly` method implemented on `Human` directly.
+
+In order to call the `fly` methods from either the `Pilot` trait or the
+`Wizard` trait, we need to use more explicit syntax in order to specify which
+`fly` method we mean. This syntax is demonstrated in Listing 19-29:
+
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
 # trait Pilot {
@@ -397,79 +422,194 @@ For calling any of the trait's methods we need a more explicit syntax:
 #     fn fly(&self);
 # }
 #
-# struct Man;
+# struct Human;
 #
-# impl Pilot for Man {
+# impl Pilot for Human {
 #     fn fly(&self) {
 #         println!("This is your captain speaking.");
 #     }
 # }
 #
-# impl Wizard for Man {
+# impl Wizard for Human {
 #     fn fly(&self) {
 #         println!("Up!");
 #     }
 # }
 #
-# impl Man {
+# impl Human {
 #     fn fly(&self) {
 #         println!("*waving arms furiously*");
 #     }
 # }
 #
 fn main() {
-    let man = Man;
-    Pilot::fly(&man); // prints "This is your captain speaking."
-    Wizard::fly(&man); // prints "Up!"
-
-    man.fly(); // same as Man::fly(&man);
+    let person = Human;
+    Pilot::fly(&person);
+    Wizard::fly(&person);
+    person.fly();
 }
 ```
 
-If we further have another type `Woman` that also implements `Pilot` and call
-`Pilot::fly`, it's still not clear which exact method we mean. We can use an
-even more elaborate form called the “fully qualified syntax” to make that clear
-again:
+<span class="caption">Listing 19-29: Specifying which trait's `fly` method we
+want to call</span>
+
+Specifying the trait name before the method name clarifies to Rust which
+implementation of `fly` we want to call. We could also choose to write
+`Human::fly(&person)`, which is equivalent to `person.fly()` that we had in
+Listing 19-28, but is a bit longer to write if we don't need to disambiguate.
+
+Running this code will print:
+
+```text
+This is your captain speaking.
+Up!
+*waving arms furiously*
+```
+
+Because the `fly` method takes a `self` parameter, if we had two *types* that
+both implement one *trait*, Rust can figure out which implementation of a trait
+to use based on the type of `self`.
+
+However, associated functions that are part of traits don't have a `self`
+parameter. When two types in the same scope implement that trait, Rust can't
+figure out which type we mean unless we use *fully qualified syntax*. For
+example, take the `Animal` trait in Listing 19-30 that has the associated
+function `baby_name`, the implementation of `Animal` for the struct `Dog`, and
+the associated function `baby_name` defined on `Dog` directly:
+
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust
-# trait Pilot {
-#     fn fly(&self);
-# }
-#
-# struct Man;
-#
-# impl Pilot for Man {
-#     fn fly(&self) {
-#         println!("This is your captain speaking.");
-#     }
-# }
-#
-# impl Man {
-#    fn fly(&self) {
-#        println!("*waving arms furiously*");
-#    }
-# }
-#
-struct Woman;
+trait Animal {
+    fn baby_name() -> String;
+}
 
-impl Pilot for Woman {
-    fn fly(&self) {
-        println!("Welcome on board!");
+struct Dog;
+
+impl Dog {
+    fn baby_name() -> String {
+        String::from("Spot")
+    }
+}
+
+impl Animal for Dog {
+    fn baby_name() -> String {
+        String::from("puppy")
     }
 }
 
 fn main() {
-    let man = Man;
-    <Man as Pilot>::fly(&man);
-
-    let woman = Woman;
-    <Woman as Pilot>::fly(&woman);
+    println!("A baby dog is called a {}", Dog::baby_name());
 }
 ```
 
-Even here the compiler could infer which method to call from the argument
-passed in as `&self`. Although, this is no longer possible for methods that
-don't take `&self`.
+<span class="caption">Listing 19-30: A trait with an associated function and a
+type that has an associated function with the same name that also implements
+the trait</span>
+
+This code is for an animal shelter where they want to give all puppies the name
+Spot, which is implemented in the `baby_name` associated function that is
+defined on `Dog`. The `Dog` type also implements the trait `Animal`, which
+describes characteristics that all animals have. Baby dogs are called puppies,
+and that is expressed in the implementation of the `Animal` trait on `Dog` in
+the `baby_name` function associated with the `Animal` trait.
+
+In `main`, we're calling the `Dog::baby_name` function, which calls the
+associated function defined on `Dog` directly. This code prints:
+
+```text
+A baby dog is called a Spot
+```
+
+This isn't really what we wanted, in this case we want to call the `baby_name`
+function that's part of the `Animal` trait that we implemented on `Dog`, so
+that we can print `A baby dog is called a puppy`. The technique we used in
+Listing 19-29 doesn't help here; if we change `main` to be the code in Listing
+19-31:
+
+<span class="filename">Filename: src/main.rs</span>
+
+```rust,ignore
+fn main() {
+    println!("A baby dog is called a {}", Animal::baby_name());
+}
+```
+
+<span class="caption">Listing 19-31: Attempting to call the `baby_name`
+function from the `Animal` trait, but Rust doesn't know which implementation to
+use</span>
+
+Because `Animal::baby_name` is an associated function rather than a method, and
+thus doesn't have a `self` parameter, Rust has no way to figure out which
+implementation of `Animal::baby_name` we want. We'll get this compiler error:
+
+```text
+error[E0283]: type annotations required: cannot resolve `_: Animal`
+  --> src/main.rs
+   |
+20 |     println!("A baby dog is called a {}", Animal::baby_name());
+   |                                           ^^^^^^^^^^^^^^^^^
+   |
+   = note: required by `Animal::baby_name`
+```
+
+In order to tell Rust that we want to use the implementation of `Animal` for
+`Dog`, we need to use *fully qualified syntax*, which is the most specific we
+can be when calling a function. Listing 19-32 demonstrates how to use fully
+qualified syntax in this case:
+
+<span class="filename">Filename: src/main.rs</span>
+
+```rust
+# trait Animal {
+#     fn baby_name() -> String;
+# }
+#
+# struct Dog;
+#
+# impl Dog {
+#     fn baby_name() -> String {
+#         String::from("Spot")
+#     }
+# }
+#
+# impl Animal for Dog {
+#     fn baby_name() -> String {
+#         String::from("puppy")
+#     }
+# }
+#
+fn main() {
+    println!("A baby dog is called a {}", <Dog as Animal>::baby_name());
+}
+```
+
+<span class="caption">Listing 19-32: Using fully qualified syntax to specify
+that we want to call the `baby_name` function from the `Animal` trait as
+implemented on `Dog`</span>
+
+We're providing Rust with a type annotation within the angle brackets, and
+we're specifying that we want to call the `baby_name` method from the `Animal`
+trait as implemented on `Dog` by saying that we want to treat the `Dog` type as
+an `Animal` for this function call. This code will now print what we want:
+
+```text
+A baby dog is called a puppy
+```
+
+In general, fully qualified syntax is defined as:
+
+```rust,ignore
+<Type as Trait>::function(receiver, args);
+```
+
+For associated functions, there would not be a `receiver`, there would only be
+the list of other arguments. We could choose to use fully qualified syntax
+everywhere that we call functions or methods. However, we're allowed to leave
+out any part of this syntax that Rust is able to figure out from other
+information in the program. We only need to use this more verbose syntax in
+cases where there are multiple implementations that use the same name and Rust
+needs help in order to know which implementation we want to call.
 
 ### Supertraits to Use One Trait’s Functionality Within Another Trait
 
