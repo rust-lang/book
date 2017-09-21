@@ -1,24 +1,37 @@
-## Data Types
+## Data Types Типы данных
 
-Every value in Rust is of a certain *type*, which tells Rust what kind of data
-is being specified so it knows how to work with that data. In this section,
-we’ll look at a number of types that are built into the language. We split the
-types into two subsets: scalar and compound.
+Любая переменная в языке Rust обязательно имеет какой-либо тип. Это даёт возможность
+корректной её обработки, а также проведение возможной оптимизации. В этой части
+книги вы познакомитесь с встроенными в стандартную библиотеку типами данных,
+которые не требуют перед своим использованием каких-либо дополнительных описаний.
+И предыдущей секции вы узнали, что типы данных присваиваются перемененным при их
+инициализации. В этой секции вы узнаете о типах данных подробнее.
 
-Throughout this section, keep in mind that Rust is a *statically typed*
-language, which means that it must know the types of all variables at compile
-time. The compiler can usually infer what type we want to use based on the
-value and how we use it. In cases when many types are possible, such as when we
-converted a `String` to a numeric type using `parse` in Chapter 2, we must add
-a type annotation, like this:
+Важной особенностью языка Rust является *статическая типизация*. Благодаря этому
+все типы данных переменных известны при компиляции кода. Конкретный тип данных,
+если это не указано заранее, компилятор выбирает сам на основании доступных данных
+(на основе конкретного значения и способа его использования). Для устранения
+неточности, используется явное указание типа данных:
 
 ```rust
-let guess: u32 = "42".parse().expect("Not a number!");
+fn main() {
+  let guess: u32 = "42".parse().expect("Not a number!");
+  println!("guess = {}",guess);
+}
 ```
 
-If we don’t add the type annotation here, Rust will display the following
-error, which means the compiler needs more information from us to know which
-possible type we want to use:
+Пожалуйста, удалите или закомментируйте информацию о типе переменной и, попробовав
+скопилировать код, получите ошибку:
+
+```rust
+fn main() {
+  let guess
+  //: u32
+  = "42".parse().expect("Not a number!");
+  println!("guess = {}",guess);
+}
+```
+
 
 ```text
 error[E0282]: unable to infer enough type information about `_`
@@ -29,27 +42,48 @@ error[E0282]: unable to infer enough type information about `_`
   |
   = note: type annotations or generic parameter binding required
 ```
+Изучая материалы этой секции, вы познакомитесь с различными типами данных Rust.
 
-You’ll see different type annotations as we discuss the various data types.
+### Скалярные типы данных
 
-### Scalar Types
+Скалярный тип данных (scalar data type) содержит одно значение и не имеет внутренних
+компонентов. Скалярные типы данных делятся на четыре категории:
+- Числовые.
+- Символьные.
+- Даты.
+- Логические данные.
 
-A *scalar* type represents a single value. Rust has four primary scalar types:
-integers, floating-point numbers, booleans, and characters. You’ll likely
-recognize these from other programming languages, but let’s jump into how they
-work in Rust.
+В состав скалярных типов *Rust* входят:
+- целые числа,
+- числа с плавающей запятой,
+- логические,
+- символьные.
 
-#### Integer Types
+Рассмотрим особенности каждого из них по порядку.
 
-An *integer* is a number without a fractional component. We used one integer
-type earlier in this chapter, the `i32` type. This type declaration indicates
-that the value it’s associated with should be a signed integer (hence the `i`,
-as opposed to a `u` for unsigned) that takes up 32 bits of space. Table 3-1
-shows the built-in integer types in Rust. Each variant in the Signed and
-Unsigned columns (for example, *i32*) can be used to declare the type of an
-integer value.
+#### Целые числа
 
-<span class="caption">Table 3-1: Integer Types in Rust</span>
+С одним из целых типом мы уже знакомы. Мы использовали его для уточнения при
+конвертации строки в число. Обратите внимание на первый символ с типе `u32`!
+Он указывает на то, что данный тип не может быть отрицательной величиной.
+Число, стоящее после буквы указывает на битовую разрядность этого числа.
+Если заменить символ `u` на `i` `u32`, то в переменной данного типа можно будет
+присваивать отрицательные целый числа. Давай те это проверим на нашем примере:
+
+
+```rust
+fn main() {
+  let guess:
+  //u32
+  i32
+  = "-42".parse().expect("Not a number!");
+  println!("guess = {}",guess);
+}
+```
+Обратите внимание, на знак конвертируемого числа `-42`! Пропробуйте присвоить
+это значение беззнаковому типу данных `u32`!
+
+<span class="caption">Table 3-1: Rust. Целочисленные типы данных</span>
 
 | Length | Signed | Unsigned |
 |--------|--------|----------|
@@ -59,30 +93,100 @@ integer value.
 | 64-bit | i64    | u64      |
 | arch   | isize  | usize    |
 
-Each variant can be either signed or unsigned and has an explicit size.
-Signed and unsigned refers to whether it’s possible for the number to be
-negative or positive; in other words, whether the number needs to have a sign
-with it (signed) or whether it will only ever be positive and can therefore be
-represented without a sign (unsigned). It’s like writing numbers on paper: when
-the sign matters, a number is shown with a plus sign or a minus sign; however,
-when it’s safe to assume the number is positive, it’s shown with no sign.
-Signed numbers are stored using two’s complement representation (if you’re
-unsure what this is, you can search for it online; an explanation is outside
-the scope of this book).
+Пожалуйста, используйте их в нашей программе! Посмотрите на особенности их работы в
+коде!
 
-Each signed variant can store numbers from -(2<sup>n - 1</sup>) to 2<sup>n -
-1</sup> - 1 inclusive, where `n` is the number of bits that variant uses. So an
-`i8` can store numbers from -(2<sup>7</sup>) to 2<sup>7</sup> - 1, which equals
--128 to 127. Unsigned variants can store numbers from 0 to 2<sup>n</sup> - 1,
-so a `u8` can store numbers from 0 to 2<sup>8</sup> - 1, which equals 0 to 255.
+```rust
+fn main() {
+  let guess:
+  u8
+  //u16
+  //u32
+  //u64
+  //i8
+  //i16
+  //i32
+  //i64
+  //isize
+  //usize
 
-Additionally, the `isize` and `usize` types depend on the kind of computer your
-program is running on: 64-bits if you’re on a 64-bit architecture and 32-bits
-if you’re on a 32-bit architecture.
+  = "-42".parse().expect("Not a number!");
+  println!("guess = {}",guess);
+}
+```
 
-You can write integer literals in any of the forms shown in Table 3-2. Note
-that all number literals except the byte literal allow a type suffix, such as
-`57u8`, and `_` as a visual separator, such as `1_000`.
+Давайте пристальнее посмотрим на эту сводную таблицу: по горизонтали длины, по
+вертикали два варианта числового типа - знакового и беззнакового. Надеюсь, что
+теперь ясно какие Rust имеет типы данных. А теперь очень интересный вопрос. Какие
+ограничения у этих типов данных. Давайте напишем программу, которая будет вводить
+доступные для использования числа в определённом типе данных. Для этого исследования
+подойдут уже усвоенные нами знания об особенностях переменных, а также бесконечный цикл.
+
+```rust
+fn main() {
+  let mut value:
+  u8
+  //u16
+  //u32
+  //u64
+  //i8
+  //i16
+  //i32
+  //i64
+  //isize
+  //usize
+
+  = ;
+  println!("guess = {}",guess);
+}
+```
+Запустите программу, измените код так, чтобы программа вывела бы вам все доступные
+в указанном типе данных величины. Изучите работу со всеми целочисленными типами!
+Благодаря созданным учебным программам Вы узнаете максимально допустимые величины
+каждого целочисленного типа данных и, конечно, получите бесценный опыт и уверенность.
+
+| Type | Signed min         | Signed max         |
+|------|--------------------|--------------------|
+| i8   | -128               | 127                |
+| i16  | -32768             | 32767              |
+| i32  |-2147483648         | 2147483647         |
+| i64  |-9223372036854775808| 9223372036854775807|
+| isize|-9223372036854775808| 9223372036854775807|
+
+| Type | Unsigned min | Unsigned max        |
+|------|--------------|---------------------|
+| u8   | 0            | 255                 |
+| u16  | 0            | 65535               |
+| u32  | 0            | 4294967295          |
+| u64  | 0            | 18446744073709551615|
+| usize| 0            | 18446744073709551615|
+
+
+Один из возможных (изящных) вариантов решения:
+
+```rust
+fn main() {
+  let value = <i32>::min_value();
+  println!("value = {}",value);
+}
+```
+
+Каждый знаковый числовой тип хранит данные от -(2<sup>n - 1</sup>) до 2<sup>n -
+1</sup> - 1 включительно, где n - это количество использованных битов данных.
+Переменная типа данных `i8` может хранить значения от -(2<sup>7</sup>) до
+2<sup>7</sup> - 1. Что эквивалентно следующему отрезку [-128, 127]. А беззнаковая
+переменная такого же битового размера может хранить величины от 0 до 255.
+
+Обратите внимание на типы данных `isize` и `usize`. Их битовая ёмкость зависит от
+архитектуры операционной системы. Если система 32-битная - переменные могут хранить
+32-битные величины, если 64-битные соответственно.
+
+Кроме ёмкости целочисленные переменные могут иметь различение обозначение.
+Так одно и тоже число может быть записана в разных системах счисления. Её выбор
+зависит от замысла программиста. Есть также возможность указать тип литерала непосредственно
+при его написании (в виде суффикса числа). Правда есть ограничения (битовая система
+счисления не имеет суффикса). Также для удобства представления есть возможность
+использовать визуальные разделитель разрядов `_`.
 
 <span class="caption">Table 3-2: Integer Literals in Rust</span>
 
@@ -94,24 +198,147 @@ that all number literals except the byte literal allow a type suffix, such as
 | Binary           | `0b1111_0000` |
 | Byte (`u8` only) | `b'A'`        |
 
-So how do you know which type of integer to use? If you’re unsure, Rust’s
-defaults are generally good choices, and integer types default to `i32`: it’s
-generally the fastest, even on 64-bit systems. The primary situation in which
-you’d use `isize` or `usize` is when indexing some sort of collection.
+```rust
+fn main() {
 
-#### Floating-Point Types
+  let value = 98_222_000;
+  println!("value = {}",value);
 
-Rust also has two primitive types for *floating-point numbers*, which are
-numbers with decimal points. Rust’s floating-point types are `f32` and `f64`,
-which are 32 bits and 64 bits in size, respectively. The default type is `f64`
-because it’s roughly the same speed as `f32` but is capable of more precision.
-It’s possible to use an `f64` type on 32-bit systems, but it will be slower
-than using an `f32` type on those systems. Most of the time, trading potential
-worse performance for better precision is a reasonable initial choice, and you
-should benchmark your code if you suspect floating-point size is a problem in
-your situation.
+ let value = 0xff;
+ println!("value = {}",value);
 
-Here’s an example that shows floating-point numbers in action:
+ let value = 0o77;
+ println!("value = {}",value);
+
+ let value = 0b1111_0000;
+ println!("value = {}",value);
+
+  let value = b'A';
+ println!("value = {}",value);
+
+}
+```
+
+Если вы не уверены какой тип данных выбрать - используйте тип по умолчанию. Это
+`i32`. Типы данных `isize` или `usize` используются при сортировке наборов данных.
+
+Примеры использования различных видов написания целочисленных числовых данных:
+
+```rust
+fn main() {
+
+  let value = 98_222_000;
+  println!("value = {}",value);
+
+ let mut value = 0xff;
+ println!("value = {}",value);
+ value = 0x_ff;
+ println!("value = {}",value);
+
+ let mut value = 0o77;
+ println!("value = {}",value);
+ value = 0o_77;
+
+ let mut value = 0b1111_0000;
+ println!("value = {}",value);
+ value = 0b1_111_0000;
+ println!("value = {}",value);
+
+  let value = b'A';
+ println!("value = {}",value);
+
+}
+```
+Примеры использование разделителя `_`:
+
+```rust
+fn main() {
+
+  let value = 98_222_000;
+  println!("value = {}",value);
+
+ let mut value = 0xff;
+ println!("value = {}",value);
+ value = 0x_ff;
+ println!("value = {}",value);
+
+ let mut value = 0o77;
+ println!("value = {}",value);
+ value = 0o_77;
+
+ let mut value = 0b1111_0000;
+ println!("value = {}",value);
+ value = 0b1_111_0000;
+ println!("value = {}",value);
+
+  let value = b'A';
+ println!("value = {}",value);
+
+}
+```
+
+Примеры использование разделителя `_`:
+
+```rust
+fn main() {
+
+  let value = 98_222_000;
+  println!("value = {}",value);
+
+ let mut value = 0xff;
+ println!("value = {}",value);
+ value = 0x_ff;
+ println!("value = {}",value);
+
+ let mut value = 0o77;
+ println!("value = {}",value);
+ value = 0o_77;
+
+ let mut value = 0b1111_0000;
+ println!("value = {}",value);
+ value = 0b1_111_0000;
+ println!("value = {}",value);
+
+  let value = b'A';
+ println!("value = {}",value);
+
+}
+```
+
+Обратите внимание на результаты работы программы, при использовании инициализации
+по умолчанию данными значениями:
+
+```rust
+fn main() {
+
+  let value = 9223372036854775807;
+  println!("value = {}",value);
+
+ let value = -9223372036854775808;
+ println!("value = {}",value);
+
+ let value = 18446744073709551615;
+ println!("value = {}",value);
+
+}
+```
+
+Пожалуйста, проверьте вышеописанную информацию, используя вышеописанную теоретическую
+информацию в ваших программных кодах.
+Уверен, что в столкнётесь с различными сюрпризами, которые помогут усвоению
+пройденного материала и ускорят ваше становления в качестве знатока Rust. Пишите
+код, пишите!
+
+#### Числа с плавающей запятой
+
+Кроем типов данных обозначающие целые числа Rust имеет два типа данных обозначающие
+числа с плавающей запятой. Это 32- и 64-битные величины - `f32` и `f64`.
+По умолчанию, т.е. при автоматическом определении типа используется `f64`.
+Хотя скорость обработки данных не зависит он разрядности конкретного типа, всё же
+на 32-разрядных системах для увеличения производительности рекомендуется использовать
+`f32`.
+
+Пример инициализации чисел с плавающей запятой:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -121,16 +348,144 @@ fn main() {
 
     let y: f32 = 3.0; // f32
 }
+
+Очень важно знать предельные значения типов данных. Стандратная библиотек Rust
+проелагает подробную информацию по каждому типу данных.
+Узнать максимальный и минимальные значения этих типов данных нам поможет "изящное"
+решение:
+
+```rust
+fn main() {
+  let value32_min = std::f32::MIN;
+  println!("value f32 min = {}",value32_min);
+  let value32_max = std::f32::MAX;
+  println!("value f32 max = {}",value32_max);
+
+  let value64_min = std::f64::MIN;
+  println!("value f64 min = {}",value64_min);
+  let value64_max = std::f64::MAX;
+  println!("value f64 max = {}",value64_max);
+}
 ```
 
-Floating-point numbers are represented according to the IEEE-754 standard. The
-`f32` type is a single-precision float, and `f64` has double precision.
+Формат чисел с плавающей запятой соответствует стандарту IEEE-754. При этом `f32` -
+это числа с единичной точностью, а `f64` с двойной точностью.
 
-#### Numeric Operations
+Пожалуйста, самостоятельно изучите состав констант модуля `std::f32`:
 
-Rust supports the usual basic mathematical operations you’d expect for all of the
-number types: addition, subtraction, multiplication, division, and remainder.
-The following code shows how you’d use each one in a `let` statement:
+```rust
+
+fn main() {
+
+println!("std::f32");
+// Approximate number of significant digits in base 10.
+println!("DIGITS = {}",std::f32::DIGITS);
+
+// Difference between 1.0 and the next largest representable number.
+println!("EPSILON = {}",std::f32::EPSILON);
+
+// Infinity (∞).
+println!("INFINITY = {}",std::f32::INFINITY);
+
+// Number of significant digits in base 2.
+println!("MANTISSA_DIGITS = {}",std::f32::MANTISSA_DIGITS);
+
+// Largest finite f32 value.
+println!("MAX = {}",std::f32::MAX);
+
+// Maximum possible power of 10 exponent.
+println!("MAX_10_EXP = {}",std::f32::MAX_10_EXP);
+
+// Maximum possible power of 2 exponent.
+println!("MAX_EXP = {}",std::f32::MAX_EXP);
+
+// Smallest finite f32 value.
+println!("MIN = {}",std::f32::MIN);
+
+// Minimum possible normal power of 10 exponent.
+println!("MIN_10_EXP = {}",std::f32::MIN_10_EXP);
+
+// One greater than the minimum possible normal power of 2 exponent.
+println!("MIN_EXP = {}",std::f32::MIN_EXP);
+
+// Smallest positive normal f32 value.
+println!("MIN_POSITIVE = {}",std::f32::MIN_POSITIVE);
+
+// Not a Number (NaN).
+println!("NAN = {}",std::f32::NAN);
+
+// Negative infinity (-∞).
+println!("NEG_INFINITY = {}",std::f32::NEG_INFINITY);
+
+// The radix or base of the internal representation of f32.
+println!("RADIX = {}",std::f32::RADIX);
+
+}
+```
+
+Пожалуйста, самостоятельно изучите состав констант модуля `std::f64`:
+
+```rust
+
+f
+fn main() {
+
+println!("std::f64");
+// Approximate number of significant digits in base 10.
+println!("DIGITS = {}",std::f64::DIGITS);
+
+// Difference between 1.0 and the next largest representable number.
+println!("EPSILON = {}",std::f64::EPSILON);
+
+// Infinity (∞).
+println!("INFINITY = {}",std::f64::INFINITY);
+
+// Number of significant digits in base 2.
+println!("MANTISSA_DIGITS = {}",std::f64::MANTISSA_DIGITS);
+
+// Largest finite f64 value.
+println!("MAX = {}",std::f64::MAX);
+
+// Maximum possible power of 10 exponent.
+println!("MAX_10_EXP = {}",std::f64::MAX_10_EXP);
+
+// Maximum possible power of 2 exponent.
+println!("MAX_EXP = {}",std::f64::MAX_EXP);
+
+// Smallest finite f64 value.
+println!("MIN = {}",std::f64::MIN);
+
+// Minimum possible normal power of 10 exponent.
+println!("MIN_10_EXP = {}",std::f64::MIN_10_EXP);
+
+// One greater than the minimum possible normal power of 2 exponent.
+println!("MIN_EXP = {}",std::f64::MIN_EXP);
+
+// Smallest positive normal f64 value.
+println!("MIN_POSITIVE = {}",std::f64::MIN_POSITIVE);
+
+// Not a Number (NaN).
+println!("NAN = {}",std::f64::NAN);
+
+// Negative infinity (-∞).
+println!("NEG_INFINITY = {}",std::f64::NEG_INFINITY);
+
+// The radix or base of the internal representation of f64.
+println!("RADIX = {}",std::f64::RADIX);
+
+}
+```
+
+#### Чиловые операции
+
+Rust предоставляет основные математические операции с числовыми типами данных:
+- сумма,
+- разность,
+- умножение,
+- деление,
+- остаток от деления.
+
+Пример их спользования:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -150,185 +505,170 @@ fn main() {
 
     // remainder
     let remainder = 43 % 5;
+
+    println!("sum = {}",sum);
+    println!("difference = {}",difference);
+    println!("product = {}",product);
+    println!("quotient = {}",quotient);
+    println!("remainder = {}",remainder);
 }
 ```
+Каждое из этих выражений использует математические операции и вычисляет значение,
+которые присваевается переменной. Приложение Б содержит список всех материматических
+операции языка Rust.
 
-Each expression in these statements uses a mathematical operator and evaluates
-to a single value, which is then bound to a variable. Appendix B contains a
-list of all operators that Rust provides.
+#### Логический тип данных
 
-#### The Boolean Type
+В языке Rust логический тип данных `bool` может принимать два значения - `true`
+и `false`.
 
-As in most other programming languages, a boolean type in Rust has two possible
-values: `true` and `false`. The boolean type in Rust is specified using `bool`.
-For example:
+Пример использования:
 
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
 fn main() {
-    let t = true;
-
-    let f: bool = false; // with explicit type annotation
+  let t = true;
+  println!("t = {}", t);
+  println!("!t = {}", !t);
+  println!("t && t= {}", t && t);
+  println!("t || t= {}", t || t);
+  let f: bool = false; // with explicit type annotation
+  println!("f = {}", f);
 }
 ```
 
-The main way to consume boolean values is through conditionals, such as an `if`
-expression. We’ll cover how `if` expressions work in Rust in the “Control Flow”
-section.
+Логические значение применяются в операторах сравнения `if`, `for`.
 
-#### The Character Type
+#### Символьный тип данных
 
-So far we’ve only worked with numbers, but Rust supports letters too. Rust’s
-`char` type is the language’s most primitive alphabetic type, and the following
-code shows one way to use it:
+В Rust поддерживается работа с символьным типом данных `char`.
+Пример:
 
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
 fn main() {
-   let c = 'z';
-   let z = 'ℤ';
-   let heart_eyed_cat = '😻';
+  let c:char = 'z';
+  let z = 'ℤ';
+  let heart_eyed_cat = '😻';
+  println!("c = {}", c);
+  println!("z = {}", z);
+  println!("heart_eyed_cat = {}", heart_eyed_cat);
 }
 ```
+Символьный тип поддерживает Юникод. Поддерживаются сложные символьные-юникод структуры,
+такие как символы с ударением, китайские/японские/корейские иероглифы, смайлики
+и другие возможные символы. Внутреннее представление символов не соответствует концепции
+юникода. Подробнее об этом можно ознакомиться в главе 8.
 
-Rust’s `char` type represents a Unicode Scalar Value, which means it can
-represent a lot more than just ASCII. Accented letters, Chinese/Japanese/Korean
-ideographs, emoji, and zero width spaces are all valid `char` types in Rust.
-Unicode Scalar Values range from `U+0000` to `U+D7FF` and `U+E000` to
-`U+10FFFF` inclusive. However, a “character” isn’t really a concept in Unicode,
-so your human intuition for what a “character” is may not match up with what a
-`char` is in Rust. We’ll discuss this topic in detail in the “Strings” section
-in Chapter 8.
+### Сложные типы данных
 
-### Compound Types
+*Сложные типы данных* - это группа множества значений объединённых в один тип данных.
+В Rust существует два способа описания такого рода объединения типов. Это кортежи
+(упорядоченный набор фиксированной длинны) и массивы.
 
-*Compound types* can group multiple values of other types into one type. Rust
-has two primitive compound types: tuples and arrays.
+#### Группировка значений в кортежи (Tuples)
 
-#### Grouping Values into Tuples
+Кортеж - это способ группировки множества различные типов значений в один сложный
+тип.
 
-A tuple is a general way of grouping together some number of other values with
-a variety of types into one compound type.
-
-We create a tuple by writing a comma-separated list of values inside
-parentheses. Each position in the tuple has a type, and the types of the
-different values in the tuple don’t have to be the same. We’ve added optional
-type annotations in this example:
+Пример:
 
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
 fn main() {
     let tup: (i32, f64, u8) = (500, 6.4, 1);
+    println!("tup = {:?}", tup);
 }
 ```
 
-The variable `tup` binds to the entire tuple, since a tuple is considered a
-single compound element. To get the individual values out of a tuple, we can
-use pattern matching to destructure a tuple value, like this:
+Присвоение множеству переменных содержание кортежа:
 
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
 fn main() {
-    let tup = (500, 6.4, 1);
+  let tup = (500, 6.4, 1);
 
-    let (x, y, z) = tup;
+  let (x, y, z) = tup;
 
-    println!("The value of y is: {}", y);
+  println!("The value of (x,y,z) is: ({},{},{})", x,y,z);
 }
 ```
 
-This program first creates a tuple and binds it to the variable `tup`. It then
-uses a pattern with `let` to take `tup` and turn it into three separate
-variables, `x`, `y`, and `z`. This is called *destructuring*, because it breaks
-the single tuple into three parts. Finally, the program prints the value of
-`y`, which is `6.4`.
-
-In addition to destructuring through pattern matching, we can also access a
-tuple element directly by using a period (`.`) followed by the index of the
-value we want to access. For example:
+Есть ещё один способ доступа к содержанию кортежа - по индексу - с помощью `.`:
 
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
 fn main() {
-    let x: (i32, f64, u8) = (500, 6.4, 1);
+  let x: (i32, f64, u8) = (500, 6.4, 1);
+  let v1 = x.0;
+  let v2 = x.1;
+  let v3= x.2;
 
-    let five_hundred = x.0;
-
-    let six_point_four = x.1;
-
-    let one = x.2;
+  println!("The value of (x,y,z) is: ({},{},{})", v1,v2,v3);
 }
 ```
 
-This program creates a tuple, `x`, and then makes new variables for each
-element by using their index. As with most programming languages, the first
-index in a tuple is 0.
+Обратите внимание, каким образом были определены типы данных кортежа.
 
-#### Arrays
+#### Массивы
 
-Another way to have a collection of multiple values is with an *array*. Unlike
-a tuple, every element of an array must have the same type. Arrays in Rust are
-different than arrays in some other languages because arrays in Rust have a
-fixed length: once declared, they cannot grow or shrink in size.
+Массивы отличаются от кортежей большими ограничениями. В массиве все значения
+имеют одинаковый тип данных. Также важной особенностью массивов является их размер.
+Он фиксируется при создании и не может быть изменён.
 
-In Rust, the values going into an array are written as a comma-separated list
-inside square brackets:
+Пример:
 
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
 fn main() {
-    let a = [1, 2, 3, 4, 5];
+  let a = [1, 2, 3, 4, 5];
+  println!("a is: {:?}", a);
 }
 ```
 
-Arrays are useful when you want your data allocated on the stack rather than
-the heap (we will discuss the stack and the heap more in Chapter 4), or when
-you want to ensure you always have a fixed number of elements. They aren’t as
-flexible as the vector type, though. The vector type is a similar collection
-type provided by the standard library that *is* allowed to grow or shrink in
-size. If you’re unsure whether to use an array or a vector, you should probably
-use a vector: Chapter 8 discusses vectors in more detail.
+Обратите внимание на тип скобок в выражении инициализации массива - они квадратные.
+В стандартной библиотеке есть тип данных, аналогичный массиву, но имеющий возможность
+изменения содержания - это вектор.
 
-An example of when you might want to use an array rather than a vector is in a
-program that needs to know the names of the months of the year. It’s very
-unlikely that such a program will need to add or remove months, so you can use
-an array because you know it will always contain 12 items:
+Массивы подходят для хранения группы данных, состав и значения которых заранее
+известны:
 
 ```rust
 let months = ["January", "February", "March", "April", "May", "June", "July",
-              "August", "September", "October", "November", "December"];
+           "August", "September", "October", "November", "December"];
+ println!("a is: {:?}", months);
 ```
 
-##### Accessing Array Elements
+##### Accessing Array Elements Организация доступа к элементам массива
 
-An array is a single chunk of memory allocated on the stack. We can access
-elements of an array using indexing, like this:
+Массив - это непрерывная область памяти, содержащаяся в стеке. Вы можете получить
+доступ к какому-либо элементу по его индексу:
 
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
 fn main() {
-    let a = [1, 2, 3, 4, 5];
+  let a = [1, 2, 3, 4, 5];
+  let first = a[0];
+  let second = a[1];
 
-    let first = a[0];
-    let second = a[1];
+  println!("first = {}, second = {}", first, second);
 }
 ```
 
-In this example, the variable named `first` will get the value `1`, because
-that is the value at index `[0]` in the array. The variable named `second` will
-get the value `2` from index `[1]` in the array.
+##### Ошибка доступа к элементу массива
 
-##### Invalid Array Element Access
-
-What happens if we try to access an element of an array that is past the end of
-the array? Say we change the example to the following:
+При попытке доступа к несуществующему индексу массива - программа аварийно завершиться.
+Важной особенностью языка Rust является предотвращения доступа к памяти, если
+произошла ошибка какого-либо рода. Для системного языка программирования это большой
+плюс, т.к. существует возможность на уровне языка предотвратить несанкционированный
+доступ к памяти.
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -342,8 +682,7 @@ fn main() {
     println!("The value of element is: {}", element);
 }
 ```
-
-Running this code using `cargo run` produces the following result:
+Описание ошибки при запуске этой программы:
 
 ```text
 $ cargo run
@@ -354,14 +693,4 @@ thread '<main>' panicked at 'index out of bounds: the len is 5 but the index is
 note: Run with `RUST_BACKTRACE=1` for a backtrace.
 ```
 
-The compilation didn’t produce any errors, but the program results in a
-*runtime* error and didn’t exit successfully. When you attempt to access an
-element using indexing, Rust will check that the index you’ve specified is less
-than the array length. If the index is greater than the length, Rust will
-*panic*, which is the term Rust uses when a program exits with an error.
-
-This is the first example of Rust’s safety principles in action. In many
-low-level languages, this kind of check is not done, and when you provide an
-incorrect index, invalid memory can be accessed. Rust protects you against this
-kind of error by immediately exiting instead of allowing the memory access and
-continuing. Chapter 9 discusses more of Rust’s error handling.
+В главе 9 будет подробно рассказано об возможных реакциях на ошибку.
