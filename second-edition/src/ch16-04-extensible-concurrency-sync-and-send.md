@@ -24,8 +24,8 @@ penalty of having a threadsafe reference count.
 
 Because `Rc<T>` is not marked `Send`, Rust’s type system and trait bounds
 ensure that we can never forget and accidentally send an `Rc<T>` value across
-threads unsafely. We tried to do this in Listing 16-14, and we got an error
-that said `the trait Send is not implemented for Rc<Mutex<i32>>`. When we
+threads unsafely. We tried to do this in Listing 16-3, and we got an error
+that said ``the trait bound `std::rc::Rc<std::sync::Mutex<i32>>: std::marker::Send` is not satisfied``. When we
 switched to `Arc<T>`, which is `Send`, the code compiled.
 
 Any type that is composed entirely of `Send` types is automatically marked as
