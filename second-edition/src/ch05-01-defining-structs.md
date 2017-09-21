@@ -79,9 +79,10 @@ user1.email = String::from("anotheremail@example.com");
 <span class="caption">Listing 5-3: Changing the value in the `email` field of a
 `User` instance</span>
 
-Note that as with any expression, we can construct a new instance of the struct
-as the last expression in the function body to implicitly return that new
-instance.
+Note that the entire instance must be mutable; Rust doesn’t allow us to mark
+only certain fields as mutable. Also note that as with any expression, we can
+construct a new instance of the struct as the last expression in the function
+body to implicitly return that new instance.
 
 Listing 5-4 shows a `build_user` function that returns a `User` instance with
 the given email and username. The `active` field gets the value of `true`, and
