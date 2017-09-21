@@ -40,6 +40,10 @@ from the text that contain the query. Listing 12-15 shows this test:
 <span class="filename">Filename: src/lib.rs</span>
 
 ```rust
+# fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
+#      vec![]
+# }
+#
 #[cfg(test)]
 mod test {
     use super::*;
