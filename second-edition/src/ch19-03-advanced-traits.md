@@ -637,7 +637,7 @@ In the implementation of `outline_print`, since we want to be able to use the
 `OutlinePrint` trait will only work for types that also implement `Display` and
 provide the functionality that `OutlinePrint` needs. We can do that in the
 trait definition by specifying `OutlinePrint: Display`. It’s like adding a
-trait bound to the trait. Listing 19-29 shows an implementation of the
+trait bound to the trait. Listing 19-33 shows an implementation of the
 `OutlinePrint` trait:
 
 ```rust
@@ -656,7 +656,7 @@ trait OutlinePrint: fmt::Display {
 }
 ```
 
-<span class="caption">Listing 19-29: Implementing the `OutlinePrint` trait that
+<span class="caption">Listing 19-33: Implementing the `OutlinePrint` trait that
 requires the functionality from `Display`</span>
 
 Because we’ve specified that `OutlinePrint` requires the `Display` trait, we
@@ -731,7 +731,7 @@ is elided at compile time.
 
 For example, if we wanted to implement `Display` on `Vec`, we can make a
 `Wrapper` struct that holds an instance of `Vec`. Then we can implement
-`Display` on `Wrapper` and use the `Vec` value as shown in Listing 19-30:
+`Display` on `Wrapper` and use the `Vec` value as shown in Listing 19-34:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -752,7 +752,7 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 19-30: Creating a `Wrapper` type around
+<span class="caption">Listing 19-34: Creating a `Wrapper` type around
 `Vec<String>` to be able to implement `Display`</span>
 
 The implementation of `Display` uses `self.0` to access the inner `Vec`, and
