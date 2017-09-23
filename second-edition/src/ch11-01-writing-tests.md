@@ -211,8 +211,7 @@ helps us check that our code is functioning in the way we intend.
 
 Remember all the way back in Chapter 5, Listing 5-9, where we had a `Rectangle`
 struct and a `can_hold` method, repeated here in Listing 11-5. Let’s put this
-code in *src/lib.rs* instead of *src/main.rs* and write some tests for it using
-the `assert!` macro.
+code in *src/lib.rs* and write some tests for it using the `assert!` macro.
 
 <span class="filename">Filename: src/lib.rs</span>
 
