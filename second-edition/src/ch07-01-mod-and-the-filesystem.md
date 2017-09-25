@@ -383,7 +383,7 @@ previously, we can do what the note suggests:
 
 1. Make a new *directory* named *network*, the parent module’s name.
 2. Move the *src/network.rs* file into the new *network* directory, and
-   rename *src/network/mod.rs*.
+   rename it to *src/network/mod.rs*.
 3. Move the submodule file *src/server.rs* into the *network* directory.
 
 Here are commands to carry out these steps:
