@@ -600,7 +600,7 @@ A baby dog is called a puppy
 In general, fully qualified syntax is defined as:
 
 ```rust,ignore
-<Type as Trait>::function(receiver, args);
+<Type as Trait>::function(receiver_if_method, next_arg, ...);
 ```
 
 For associated functions, there would not be a `receiver`, there would only be
