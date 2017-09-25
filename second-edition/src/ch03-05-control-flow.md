@@ -1,19 +1,14 @@
-## Control Flow
+## Управление выполнением кода
 
-Deciding whether or not to run some code depending on if a condition is true or
-deciding to run some code repeatedly while a condition is true are basic
-building blocks in most programming languages. The most common constructs that
-let you control the flow of execution of Rust code are `if` expressions and
-loops.
+Решение выполнять ту или иную часть кода зависит от логических условий. Конструкция
+`if` и циклы является в Rust такими управляющими выражениями.
 
-### `if` Expressions
+### `if`-выражения
 
-An `if` expression allows us to branch our code depending on conditions. We
-provide a condition and then state, “If this condition is met, run this block
-of code. If the condition is not met, do not run this block of code.”
+if`-выражение позволяет создавать ветви кода работающие при соблюдение определенных
+логических условий.
 
-Create a new project called *branches* in your *projects* directory to explore
-the `if` expression. In the *src/main.rs* file, input the following:
+Создадим новый проект *branches* и добавить следующий код:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -31,20 +26,10 @@ fn main() {
 
 <!-- NEXT PARAGRAPH WRAPPED WEIRD INTENTIONALLY SEE #199 -->
 
-All `if` expressions start with the keyword `if`, which is followed by a
-condition. In this case, the condition checks whether or not the variable
-`number` has a value less than 5. The block of code we want to execute if the
-condition is true is placed immediately after the condition inside curly
-braces. Blocks of code associated with the conditions in `if` expressions are
-sometimes called *arms*, just like the arms in `match` expressions that we
-discussed in the “Comparing the Guess to the Secret Number” section of
-Chapter 2. Optionally, we can also include an `else` expression, which we chose
-to do here, to give the program an alternative block of code to execute should
-the condition evaluate to false. If you don’t provide an `else` expression and
-the condition is false, the program will just skip the `if` block and move on
-to the next bit of code.
+Все `if`-выражения начинаются с ключевого слова `if`. Далее следует логическое выражение.
+При необходимости, после тела блока `if` может следовать `else`-выражение.
 
-Try running this code; you should see the following output:
+Результат работы программы:
 
 ```text
 $ cargo run
@@ -53,14 +38,14 @@ $ cargo run
 condition was true
 ```
 
-Let’s try changing the value of `number` to a value that makes the condition
-`false` to see what happens:
+Если изменить значение переменной на большее, например на `7` программа выполнит
+другую ветвь кода:
 
 ```rust,ignore
 let number = 7;
 ```
 
-Run the program again, and look at the output:
+Результат работы программы:
 
 ```text
 $ cargo run
@@ -69,9 +54,7 @@ $ cargo run
 condition was false
 ```
 
-It’s also worth noting that the condition in this code *must* be a `bool`. To
-see what happens if the condition isn’t a `bool`, try running the following
-code:
+Тип `if`-выражение должен быть логическим:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -85,8 +68,7 @@ fn main() {
 }
 ```
 
-The `if` condition evaluates to a value of `3` this time, and Rust throws an
-error:
+Иначе будет ошибка при компиляции:
 
 ```text
 error[E0308]: mismatched types
@@ -99,12 +81,8 @@ error[E0308]: mismatched types
              found type `{integer}`
 ```
 
-The error indicates that Rust expected a `bool` but got an integer. Rust will
-not automatically try to convert non-boolean types to a boolean, unlike
-languages such as Ruby and JavaScript. You must be explicit and always provide
-`if` with a `boolean` as its condition. If we want the `if` code block to run
-only when a number is not equal to `0`, for example, we can change the `if`
-expression to the following:
+В Rust нельзя автоматически конвертировать в `bool` тип данных. Исправим ошибку
+в коде:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -118,12 +96,11 @@ fn main() {
 }
 ```
 
-Running this code will print `number was something other than zero`.
+Будет выведено следующая строка `number was something other than zero`.
 
-#### Multiple Conditions with `else if`
+#### Использование выражений `else if`
 
-We can have multiple conditions by combining `if` and `else` in an `else if`
-expression. For example:
+`if`-выражения могут быть достаточно сложными. Например:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -143,8 +120,7 @@ fn main() {
 }
 ```
 
-This program has four possible paths it can take. After running it, you should
-see the following output:
+Результат работы программы:
 
 ```text
 $ cargo run
@@ -153,21 +129,13 @@ $ cargo run
 number is divisible by 3
 ```
 
-When this program executes, it checks each `if` expression in turn and executes
-the first body for which the condition holds true. Note that even though 6 is
-divisible by 2, we don’t see the output `number is divisible by 2`, nor do we
-see the `number is not divisible by 4, 3, or 2` text from the `else` block. The
-reason is that Rust will only execute the block for the first true condition,
-and once it finds one, it won’t even check the rest.
+Для кода с большим количеством `else if`-выражений большое подойдёт конструкция `match`.
+О ней мы расскажем в главе 6.
 
-Using too many `else if` expressions can clutter your code, so if you have more
-than one, you might want to refactor your code. Chapter 6 describes a powerful
-Rust branching construct called `match` for these cases.
+#### Использование `if` в `let`-операторах
 
-#### Using `if` in a `let` statement
-
-Because `if` is an expression, we can use it on the right side of a `let`
-statement, for instance in Listing 3-4:
+По определению выражений, мы можем их использовать в операторах.
+Пример, Listing 3-4:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -184,11 +152,10 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 3-4: Assigning the result of an `if` expression
-to a variable</span>
+<span class="caption">Listing 3-4: Присвоение результата `if`-выражения переменной
+при её инициализации</span>
 
-The `number` variable will be bound to a value based on the outcome of the `if`
-expression. Run this code to see what happens:
+Результат работы программы:
 
 ```text
 $ cargo run
@@ -197,13 +164,9 @@ $ cargo run
 The value of number is: 5
 ```
 
-Remember that blocks of code evaluate to the last expression in them, and
-numbers by themselves are also expressions. In this case, the value of the
-whole `if` expression depends on which block of code executes. This means the
-values that have the potential to be results from each arm of the `if` must be
-the same type; in Listing 3-4, the results of both the `if` arm and the `else`
-arm were `i32` integers. But what happens if the types are mismatched, as in
-the following example?
+Обратите внимание, что у данной инициирующей конструкции есть ограничения. Все возвращаемые
+значения `if`-выражения должны иметь один тип данных.
+Пример:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -221,9 +184,7 @@ fn main() {
 }
 ```
 
-When we try to run this code, we’ll get an error. The `if` and `else` arms have
-value types that are incompatible, and Rust indicates exactly where to find the
-problem in the program:
+Результат работы программы:
 
 ```text
 error[E0308]: if and else have incompatible types
@@ -241,31 +202,21 @@ error[E0308]: if and else have incompatible types
              found type `&'static str`
 ```
 
-The expression in the `if` block evaluates to an integer, and the expression in
-the `else` block evaluates to a string. This won’t work because variables must
-have a single type. Rust needs to know at compile time what type the `number`
-variable is, definitively, so it can verify at compile time that its type is
-valid everywhere we use `number`. Rust wouldn’t be able to do that if the type
-of `number` was only determined at runtime; the compiler would be more complex
-and would make fewer guarantees about the code if it had to keep track of
-multiple hypothetical types for any variable.
+Такое поведение кода делает вашу работу предсказуемой и хранить от потенциальных
+ошибок.
 
-### Repetition with Loops
+### Повторение выполнения кода с помощью циклов
 
-It’s often useful to execute a block of code more than once. For this task,
-Rust provides several *loops*. A loop runs through the code inside the loop
-body to the end and then starts immediately back at the beginning. To
-experiment with loops, let’s make a new project called *loops*.
+Для многократного выполнения кода существуют *циклы*. В Rust существует несколько
+видов циклов. Создадим проект *loops*.
 
-Rust has three kinds of loops: `loop`, `while`, and `for`. Let’s try each one.
+Виды циклов: `loop`, `while` и `for`. Рассмотрим каждый в отдельности.
 
-#### Repeating Code with `loop`
+#### `loop`
 
-The `loop` keyword tells Rust to execute a block of code over and over again
-forever or until you explicitly tell it to stop.
+Ключевое слово тело `loop` - это бесконечный цикл.
 
-As an example, change the *src/main.rs* file in your *loops* directory to look
-like this:
+Пример:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -277,10 +228,10 @@ fn main() {
 }
 ```
 
-When we run this program, we’ll see `again!` printed over and over continuously
-until we stop the program manually. Most terminals support a keyboard shortcut,
-<span class="keystroke">ctrl-C</span>, to halt a program that is stuck in a
-continual loop. Give it a try:
+Остановить выполнения кода можно лишь аварийно завершив работу программы сочетанием
+клавиш <span class="keystroke">ctrl-C</span>.
+
+Пример:
 
 ```text
 $ cargo run
@@ -293,28 +244,14 @@ again!
 ^Cagain!
 ```
 
-The symbol `^C` represents where you pressed <span class="keystroke">ctrl-C
-</span>. You may or may not see the word `again!` printed after the `^C`,
-depending on where the code was in the loop when it received the halt signal.
+Существует ключевое слово `break`, благодаря которому можно остановить работу бесконечного
+цикла.
 
-Fortunately, Rust provides another, more reliable way to break out of a loop.
-You can place the `break` keyword within the loop to tell the program when to
-stop executing the loop. Recall that we did this in the guessing game in the
-“Quitting After a Correct Guess” section of Chapter 2 to exit the
-program when the user won the game by guessing the correct number.
+#### `while`
 
-#### Conditional Loops with `while`
+Цикл с условием `while` выполняет тело пока выполняется логическое условие параметра.
 
-It’s often useful for a program to evaluate a condition within a loop. While
-the condition is true, the loop runs. When the condition ceases to be true, you
-call `break`, stopping the loop. This loop type could be implemented using a
-combination of `loop`, `if`, `else`, and `break`; you could try that now in a
-program, if you’d like.
-
-However, this pattern is so common that Rust has a built-in language construct
-for it, and it’s called a `while` loop. The following example uses `while`: the
-program loops three times, counting down each time. Then, after the loop, it
-prints another message and exits:
+Пример:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -332,14 +269,9 @@ fn main() {
 }
 ```
 
-This construct eliminates a lot of nesting that would be necessary if you used
-`loop`, `if`, `else`, and `break`, and it’s clearer. While a condition holds
-true, the code runs; otherwise, it exits the loop.
+#### `for`
 
-#### Looping Through a Collection with `for`
-
-You could use the `while` construct to loop over the elements of a collection,
-such as an array. For example:
+Использование `while`-цикла для перебора элементов массива:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -356,13 +288,9 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 3-5: Looping through each element of a collection
-using a `while` loop</span>
+<span class="caption">Listing 3-5: Перебор элементов массива с помощью цикла `while` loop</span>
 
-Here, the code counts up through the elements in the array. It starts at index
-`0`, and then loops until it reaches the final index in the array (that is,
-when `index < 5` is no longer true). Running this code will print out every
-element in the array:
+Этот код выполняет тело цикла пока переменная `index` меньше 5:
 
 ```text
 $ cargo run
@@ -375,17 +303,8 @@ the value is: 40
 the value is: 50
 ```
 
-All five array values appear in the terminal, as expected. Even though `index`
-will reach a value of `5` at some point, the loop stops executing before trying
-to fetch a sixth value from the array.
-
-But this approach is error prone; we could cause the program to panic if the
-index length is incorrect. It’s also slow, because the compiler adds runtime
-code to perform the conditional check on every element on every iteration
-through the loop.
-
-As a more efficient alternative, you can use a `for` loop and execute some code
-for each item in a collection. A `for` loop looks like this:
+Такой код выполняется весьма медленно и никак не защищён от ошибки во время работы
+программы. Для этих целей больше подходит другая конструкция - `for`:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -399,29 +318,14 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 3-6: Looping through each element of a collection
-using a `for` loop</span>
+<span class="caption">Listing 3-6: Перебор элементов коллекции с помощью цикла
+`for`</span>
 
-When we run this code, we’ll see the same output as in Listing 3-5. More
-importantly, we’ve now increased the safety of the code and eliminated the
-chance of bugs that might result from going beyond the end of the array or not
-going far enough and missing some items.
+Данный код более защищён от ошибок.
 
-For example, in the code in Listing 3-5, if you removed an item from the `a`
-array but forgot to update the condition to `while index < 4`, the code would
-panic. Using the `for` loop, you don’t need to remember to change any other
-code if you changed the number of values in the array.
+Безопасный цикл `for` наиболее часто используется в Rust.
 
-The safety and conciseness of `for` loops make them the most commonly used loop
-construct in Rust. Even in situations in which you want to run some code a
-certain number of times, as in the countdown example that used a `while` loop
-in Listing 3-5, most Rustaceans would use a `for` loop. The way to do that
-would be to use a `Range`, which is a type provided by the standard library
-that generates all numbers in sequence starting from one number and ending
-before another number.
-
-Here’s what the countdown would look like using a `for` loop and another method
-we’ve not yet talked about, `rev`, to reverse the range:
+Реализация обратного осчёта в Rust:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -434,18 +338,14 @@ fn main() {
 }
 ```
 
-This code is a bit nicer, isn’t it?
-
 ## Summary
 
-You made it! That was a sizable chapter: you learned about variables, scalar
-and `if` expressions, and loops! If you want to practice with the concepts
-discussed in this chapter, try building programs to do the following:
+Вы познакомились с конструкциями управления ходом выполнения программы, а также с
+рекомендациями разработчиков Rust.
+Для закрепления изученного материала мы предлагаем написать следующие программы:
 
-* Convert temperatures between Fahrenheit and Celsius.
-* Generate the nth Fibonacci number.
-* Print the lyrics to the Christmas carol “The Twelve Days of Christmas,”
-taking advantage of the repetition in the song.
+* Конвертер температур из Фаренгейта в Цельсий.
+* Генератор чисел Фибоначчи.
+* Генератор строк сказки "12 дней Рождества".
 
-When you’re ready to move on, we’ll talk about a concept in Rust that *doesn’t*
-commonly exist in other programming languages: ownership.
+В следующей главе мы расскажем о владении - концепции языка программирования Rust.
