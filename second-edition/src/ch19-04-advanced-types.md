@@ -70,7 +70,7 @@ Box<Fn() + Send + 'static>
 
 Writing this out in function signatures and as type annotations all over the
 place can be tiresome and error-prone. Imagine having a project full of code
-like that in Listing 19-31:
+like that in Listing 19-35:
 
 ```rust
 let f: Box<Fn() + Send + 'static> = Box::new(|| println!("hi"));
@@ -85,12 +85,12 @@ fn returns_long_type() -> Box<Fn() + Send + 'static> {
 }
 ```
 
-<span class="caption">Listing 19-31: Using a long type in many places</span>
+<span class="caption">Listing 19-35: Using a long type in many places</span>
 
 A type alias makes this code more manageable by reducing the amount of
 repetition this project has. Here, we’ve introduced an alias named `Thunk` for
 the verbose type, and we can replace all uses of the type with the shorter
-`Thunk` as shown in Listing 19-32:
+`Thunk` as shown in Listing 19-36:
 
 ```rust
 type Thunk = Box<Fn() + Send + 'static>;
@@ -107,7 +107,7 @@ fn returns_long_type() -> Thunk {
 }
 ```
 
-<span class="caption">Listing 19-32: Introducing a type alias `Thunk` to reduce
+<span class="caption">Listing 19-36: Introducing a type alias `Thunk` to reduce
 repetition</span>
 
 Much easier to read and write! Choosing a good name for a type alias can help
@@ -178,7 +178,7 @@ This is read as “the function `bar` returns never,” and functions that retur
 never are called *diverging functions*. We can’t create values of the type `!`,
 so `bar` can never possibly return. What use is a type you can never create
 values for? If you think all the way back to Chapter 2, we had some code that
-looked like this, reproduced here in Listing 19-33:
+looked like this, reproduced here in Listing 19-37:
 
 ```rust
 # let guess = "3";
@@ -191,7 +191,7 @@ let guess: u32 = match guess.trim().parse() {
 # }
 ```
 
-<span class="caption">Listing 19-33: A `match` with an arm that ends in
+<span class="caption">Listing 19-37: A `match` with an arm that ends in
 `continue`</span>
 
 At the time, we skipped over some details in this code. In Chapter 6, we
@@ -207,7 +207,7 @@ let guess = match guess.trim().parse()  {
 What would the type of `guess` be here? It’d have to be both an integer and a
 string, and Rust requires that `guess` can only have one type. So what does
 `continue` return? Why are we allowed to return a `u32` from one arm in Listing
-19-33 and have another arm that ends with `continue`?
+19-37 and have another arm that ends with `continue`?
 
 As you may have guessed, `continue` has a value of `!`. That is, when Rust goes
 to compute the type of `guess`, it looks at both of the match arms. The former
