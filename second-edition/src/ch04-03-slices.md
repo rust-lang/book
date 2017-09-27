@@ -1,24 +1,22 @@
-## Slices
+## Динамические массивы
 
-Another data type that does not have ownership is the *slice*. Slices let you
-reference a contiguous sequence of elements in a collection rather than the
-whole collection.
+*Динамический массив*  - это ссылочный тип не использующий владение.
+Это непрерывная коллекция упорядоченных элементов.
 
-Here’s a small programming problem: write a function that takes a string and
-returns the first word it finds in that string. If the function doesn’t find a
-space in the string, it means the whole string is one word, so the entire
-string should be returned.
+Рассмотрим учебную задачу. Необходимо написать функцию, входным параметром которой
+является строка. Выходным значением функции является первое слово, которое будет
+найдено в этой строке. Если функция не находит разделителя слов (пробела), она
+возвращает эту строку.
 
-Let’s think about the signature of this function:
+Прежде всего рассмотрим описание этой функции:
 
 ```rust,ignore
 fn first_word(s: &String) -> ?
 ```
 
-This function, `first_word`, has a `&String` as a parameter. We don’t want
-ownership, so this is fine. But what should we return? We don’t really have a
-way to talk about *part* of a string. However, we could return the index of the
-end of the word. Let’s try that as shown in Listing 4-10:
+Функция `first_word` имеет входной параметр типа `&String`. Нам не нужно владение
+переменной для её работы, так что это то что нам нужно. Для решения задачи мы можем
+найти индекс конца строки в тексте. Вот как это можно сделать с помощью функции 4-10:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -34,41 +32,47 @@ fn first_word(s: &String) -> usize {
 
     s.len()
 }
+
+fn main(){
+let index = first_word(&String::from("hello, Nik!"));
+println!("{}",index);
+}
 ```
 
-<span class="caption">Listing 4-10: The `first_word` function that returns a
-byte index value into the `String` parameter</span>
+<span class="caption">Listing 4-10: Пример функции `first_word`, которая возвращает
+index пробела в строке типа `String`</span>
 
-Let’s break down this code a bit. Because we need to go through the `String`
-element by element and check whether a value is a space, we’ll convert our
-`String` to an array of bytes using the `as_bytes` method:
+Теперь давайте изучим код этой функции. Для нахождения пробела в строке необходимо
+необходимо превратить в массив байтов используя метод `as_bytes`:
 
 ```rust,ignore
 let bytes = s.as_bytes();
 ```
 
-Next, we create an iterator over the array of bytes using the `iter` method :
+Далее, используя метода массива `iter()` мы создаём объект для последовательного
+перебора содержания массива - итератор. Далее, используя цикл `for`, мы перебираем
+байты и анализируем каждый из них. Обратите внимание, что при каждой итерации мы
+получаем индекс элемента и ссылку на него:
 
 ```rust,ignore
 for (i, &item) in bytes.iter().enumerate() {
 ```
 
-We’ll discuss iterators in more detail in Chapter 13. For now, know that `iter`
-is a method that returns each element in a collection, and `enumerate` wraps
-the result of `iter` and returns each element as part of a tuple instead. The
-first element of the returned tuple is the index, and the second element is a
-reference to the element. This is a bit more convenient than calculating the
-index ourselves.
+Мы будет изучать итераторы более детально в главе 13. Сейчас, достаточно понять,
+что метод `iter`, который возвращает каждый элемент коллекции. Метод `enumerate`
+передаёт результаты работы метода `iter` в кортеж. Первый элемент этого кортежа
+возвращает индекс, второй элемент - ссылку на элемент. Такой способ перебора элементов
+массива наиболее удобный.
 
-Because the `enumerate` method returns a tuple, we can use patterns to
-destructure that tuple, just like everywhere else in Rust. So in the `for`
-loop, we specify a pattern that has `i` for the index in the tuple and `&item`
-for the single byte in the tuple. Because we get a reference to the element
-from `.iter().enumerate()`, we use `&` in the pattern.
+Так как метод `enumerate` возвращает кортеж, мы можем использовать шаблон создающий
+переменные, которые в дальнейшем можно использовать внутри тела цикла.
 
-We search for the byte that represents the space by using the byte literal
-syntax. If we find a space, we return the position. Otherwise, we return the
-length of the string by using `s.len()`:
+Нам надо найти байт, который представляет собой значение пробела. Для этого мы
+приводим символьную константу ' ' к типу байт *b' '*. В выражении `if` мы сравниваем
+полученное таким образом константное значение с текущим байтом из массива.
+
+Если мы находим пробел, вы возвращаем позицию пробела. Иначе мы возвращаем длину
+массива `s.len()`:
 
 ```rust,ignore
     if item == b' ' {
@@ -78,12 +82,7 @@ length of the string by using `s.len()`:
 s.len()
 ```
 
-We now have a way to find out the index of the end of the first word in the
-string, but there’s a problem. We’re returning a `usize` on its own, but it’s
-only a meaningful number in the context of the `&String`. In other words,
-because it’s a separate value from the `String`, there’s no guarantee that it
-will still be valid in the future. Consider the program in Listing 4-11 that
-uses the `first_word` function from Listing 4-10:
+Таким образом мы получаем искомое значение. Но оно может устареть в будущем  4-11:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -112,33 +111,25 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 4-11: Storing the result from calling the
-`first_word` function then changing the `String` contents</span>
+<span class="caption">Listing 4-11: Сохранение результата вызова функции `first_word`,
+потом изменяем содержимое переменной `s`</span>
 
-This program compiles without any errors and also would if we used `word` after
-calling `s.clear()`. `word` isn’t connected to the state of `s` at all, so
-`word` still contains the value `5`. We could use that value `5` with the
-variable `s` to try to extract the first word out, but this would be a bug
-because the contents of `s` have changed since we saved `5` in `word`.
+Эта программа скомпилирует без всяких проблем.
 
-Having to worry about the index in `word` getting out of sync with the data in
-`s` is tedious and error prone! Managing these indices is even more brittle if
-we write a `second_word` function. Its signature would have to look like this:
+Создадим ещё одну функцию, которая возвращает индексы начала и конца первого слова.
+Вот как будет выглядеть её описание:
 
 ```rust,ignore
 fn second_word(s: &String) -> (usize, usize) {
 ```
 
-Now we’re tracking a start *and* an ending index, and we have even more values
-that were calculated from data in a particular state but aren’t tied to that
-state at all. We now have three unrelated variables floating around that need
-to be kept in sync.
+Обратите внимание, что весьма сложно удерживать в синхронном состоянии вcе эти переменные
+(входящие и исходящие). Для этих целей существуют динамические массивы.
 
-Luckily, Rust has a solution to this problem: string slices.
+### Строковые динамические массивы
 
-### String Slices
-
-A *string slice* is a reference to part of a `String`, and looks like this:
+Строковый динамический массив - это ссылка на часть строки `String` и её инициализация
+выглядит следующим образом:
 
 ```rust
 let s = String::from("hello world");
@@ -147,28 +138,24 @@ let hello = &s[0..5];
 let world = &s[6..11];
 ```
 
-This is similar to taking a reference to the whole `String` but with the extra
-`[0..5]` bit. Rather than a reference to the entire `String`, it’s a reference
-to a portion of the `String`. The `start..end` syntax is a range that begins at
-`start` and continues up to, but not including, `end`.
+Ота инициализация похожа на создание ссылки на переменную `String`, но с дополнительными
+условиями - указанием отрезка `[0..5]`. Вместо целой переменной мы получаем ссылку
+на её часть. Начало и конец отрезка включено в динамический массив, а вот окончание
+нет.
 
-We can create slices using a range within brackets by specifying
-`[starting_index..ending_index]`, where `starting_index` is the first position
-included in the slice and `ending_index` is one more than the last position
-included in the slice. Internally, the slice data structure stores the starting
-position and the length of the slice, which corresponds to `ending_index` minus
-`starting_index`. So in the case of `let world = &s[6..11];`, `world` would be
-a slice that contains a pointer to the 6th byte of `s` and a length value of 5.
+Мы можем создавать динамические массивы используя определение отрезка `[starting_index..ending_index]`.
+Внутренне, переменная типа динамический массив устроена следующим образом:
+начальная позиция, длина отрезка.
 
-Figure 4-12 shows this in a diagram.
+Рисунок 4-12.
 
 <img alt="world containing a pointer to the 6th byte of String s and a length 5" src="img/trpl04-06.svg" class="center" style="width: 50%;" />
 
-<span class="caption">Figure 4-12: String slice referring to part of a
+<span class="caption">Figure 4-12: Динамический массив ссылается на часть
 `String`</span>
 
-With Rust’s `..` range syntax, if you want to start at the first index (zero),
-you can drop the value before the two periods. In other words, these are equal:
+Синтаксис Rust позволяет упростить описание динамического массива, если он начинается
+с 0-го индекса:
 
 ```rust
 let s = String::from("hello");
@@ -177,8 +164,8 @@ let slice = &s[0..2];
 let slice = &s[..2];
 ```
 
-By the same token, if your slice includes the last byte of the `String`, you
-can drop the trailing number. That means these are equal:
+Таким же образом можно поступить с последним элементом, если это последний байт в
+`String`:
 
 ```rust
 let s = String::from("hello");
@@ -189,8 +176,7 @@ let slice = &s[3..len];
 let slice = &s[3..];
 ```
 
-You can also drop both values to take a slice of the entire string. So these
-are equal:
+Таким образом динамический массив целого массива можно описать так:
 
 ```rust
 let s = String::from("hello");
@@ -201,8 +187,8 @@ let slice = &s[0..len];
 let slice = &s[..];
 ```
 
-With all this information in mind, let’s rewrite `first_word` to return a
-slice. The type that signifies “string slice” is written as `&str`:
+Применим полученные знания и перепишем метод `first_word`. Для представления
+динамического массива строк существует короткая запись `&str`:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -220,30 +206,17 @@ fn first_word(s: &String) -> &str {
 }
 ```
 
-We get the index for the end of the word in the same way as we did in Listing
-4-10, by looking for the first occurrence of a space. When we find a space, we
-return a string slice using the start of the string and the index of the space
-as the starting and ending indices.
+Теперь, вызвав метод `first_word`, мы получим один объект, которые включает в себя
+всю необходимую информацию.
 
-Now when we call `first_word`, we get back a single value that is tied to the
-underlying data. The value is made up of a reference to the starting point of
-the slice and the number of elements in the slice.
-
-Returning a slice would also work for a `second_word` function:
+Аналогичным образом можно переписать и второй метод `second_word`:
 
 ```rust,ignore
 fn second_word(s: &String) -> &str {
 ```
 
-We now have a straightforward API that’s much harder to mess up, since the
-compiler will ensure the references into the `String` remain valid. Remember
-the bug in the program in Listing 4-11, when we got the index to the end of the
-first word but then cleared the string so our index was invalid? That code was
-logically incorrect but didn’t show any immediate errors. The problems would
-show up later if we kept trying to use the first word index with an emptied
-string. Slices make this bug impossible and let us know we have a problem with
-our code much sooner. Using the slice version of `first_word` will throw a
-compile time error:
+Благодаря использованию динамических массивом нельзя изменить данные строки, если
+на неё ссылается динамический массив (т.к. это может привести к ошибке):
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -257,7 +230,7 @@ fn main() {
 }
 ```
 
-Here’s the compiler error:
+Ошибка компиляции:
 
 ```text
 17:6 error: cannot borrow `s` as mutable because it is also borrowed as
@@ -275,45 +248,37 @@ fn main() {
 ^
 ```
 
-Recall from the borrowing rules that if we have an immutable reference to
-something, we cannot also take a mutable reference. Because `clear` needs to
-truncate the `String`, it tries to take a mutable reference, which fails. Not
-only has Rust made our API easier to use, but it has also eliminated an entire
-class of errors at compile time!
+Благодаря соблюдению правил, Rust просто исключает класс подобных ошибок.
 
-#### String Literals Are Slices
+#### Строковые константы и динамические массивы
 
-Recall that we talked about string literals being stored inside the binary. Now
-that we know about slices, we can properly understand string literals:
+Вооружившись знаниями о динамических массивах по-новому можно посмотреть на
+инициализацию переменной строкового типа:
 
 ```rust
 let s = "Hello, world!";
 ```
 
-The type of `s` here is `&str`: it’s a slice pointing to that specific point of
-the binary. This is also why string literals are immutable; `&str` is an
-immutable reference.
+Тип `s` является `&str` - это динамический массив бинарных данных специального вида.
+Поэтому строковой литерал неизменяемый, а тип `&str` это неизменяемая ссылка.
 
-#### String Slices as Parameters
+#### Строковые динамические массивы как параметры
 
-Knowing that you can take slices of literals and `String`s leads us to one more
-improvement on `first_word`, and that’s its signature:
+Используя строковые динамические массивы, как параметры вы можете улучшить
+код наших методов:
 
 ```rust,ignore
 fn first_word(s: &String) -> &str {
 ```
 
-A more experienced Rustacean would write the following line instead because it
-allows us to use the same function on both `String`s and `&str`s:
+Также можно записать этот код следующим образом:
 
 ```rust,ignore
 fn first_word(s: &str) -> &str {
 ```
 
-If we have a string slice, we can pass that directly. If we have a `String`, we
-can pass a slice of the entire `String`. Defining a function to take a string
-slice instead of a reference to a String makes our API more general and useful
-without losing any functionality:
+Если мы используем динамический массив, мы может его передавать в методы.
+Использование динамических массивов вместо переменных делает код боле удобным:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -346,17 +311,13 @@ fn main() {
 }
 ```
 
-### Other Slices
+### Другие динамические массивы
 
-String slices, as you might imagine, are specific to strings. But there’s a
-more general slice type, too. Consider this array:
-
+Существую также динамические массивы общего типа. Рассмотрим массив:
 ```rust
 let a = [1, 2, 3, 4, 5];
 ```
-
-Just like we might want to refer to a part of a string, we might want to refer
-to part of an array and would do so like this:
+Создадим динамический массив:
 
 ```rust
 let a = [1, 2, 3, 4, 5];
@@ -364,19 +325,14 @@ let a = [1, 2, 3, 4, 5];
 let slice = &a[1..3];
 ```
 
-This slice has the type `&[i32]`. It works the same way as string slices do, by
-storing a reference to the first element and a length. You’ll use this kind of
-slice for all sorts of other collections. We’ll discuss these collections in
-detail when we talk about vectors in Chapter 8.
+Этот динамический массив имеет тип данных `&[i32]`. Мы поговорим о таком типе
+коллекций в главе 8.
 
-## Summary
+## Итоги
 
-The concepts of ownership, borrowing, and slices are what ensure memory safety
-in Rust programs at compile time. The Rust language gives you control over your
-memory usage like other systems programming languages, but having the owner of
-data automatically clean up that data when the owner goes out of scope means
-you don’t have to write and debug extra code to get this control.
+Такие концепции как владение, заимствование и динамические массивы - это способы
+защиты использования памяти.  Rust даёт вам возможность контролировать использование
+памяти.
 
-Ownership affects how lots of other parts of Rust work, so we’ll talk about
-these concepts further throughout the rest of the book. Let’s move on to the
-next chapter and look at grouping pieces of data together in a `struct`.
+Владение влияет на множество других концепций языка Rust.
+В следующей главе мы рассмотрим способ группировки данных в  `struct`.

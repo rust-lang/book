@@ -1,13 +1,13 @@
-## References and Borrowing
+## Ссылочные переменные и заимствование
 
-The issue with the tuple code at the end of the preceding section is that we
-have to return the `String` to the calling function so we can still use the
-`String` after the call to `calculate_length`, because the `String` was moved
-into `calculate_length`.
+Необходимость использования кортежа в коде (в последнем примере предыдущей секции главы 4),
+обусловлена дальнейшим использованием переменной типа `String`. Для этого мы должны
+вернуть владение из метода обратно. Т.е. метод `calculate_length` помимо результата
+должен вернуть входной параметр назад из функции.
 
-Here is how you would define and use a `calculate_length` function that has a
-*reference* to an object as a parameter instead of taking ownership of the
-value:
+А теперь приведём пример использования передачи в метод ссылки для решения этой задачи.
+При таком решении, возвращать кортеж нет необходимости. Владение не будет передано
+внутрь метода:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -25,19 +25,18 @@ fn calculate_length(s: &String) -> usize {
 }
 ```
 
-First, notice that all the tuple code in the variable declaration and the
-function return value is gone. Second, note that we pass `&s1` into
-`calculate_length`, and in its definition, we take `&String` rather than
-`String`.
+Обратите внимание:
+1. Кортеж удалён из декларирования переменной и возвращаемых данных метода.
+2. Переменная метода имеет ссылочный тип `&String`.
 
-These ampersands are *references*, and they allow you to refer to some value
-without taking ownership of it. Figure 4-8 shows a diagram.
+`&` обозначает что тип данных ссылочный и поэтому передавать владение не нужно.
+Иллюстрация работы 4-8.
 
 <img alt="&String s pointing at String s1" src="img/trpl04-05.svg" class="center" />
 
-<span class="caption">Figure 4-8: `&String s` pointing at `String s1`</span>
+<span class="caption">Figure 4-8: `&String s` ссылка на `String s1`</span>
 
-Let’s take a closer look at the function call here:
+Давайте подробнее рассмотрим механизм вызова функции:
 
 ```rust
 # fn calculate_length(s: &String) -> usize {
@@ -48,12 +47,9 @@ let s1 = String::from("hello");
 let len = calculate_length(&s1);
 ```
 
-The `&s1` syntax lets us create a reference that *refers* to the value of `s1`
-but does not own it. Because it does not own it, the value it points to will
-not be dropped when the reference goes out of scope.
-
-Likewise, the signature of the function uses `&` to indicate that the type of
-the parameter `s` is a reference. Let’s add some explanatory annotations:
+Синтаксическая конструкция `&s1` создаёт ссылку на переменную `s1`. Передачи ей
+владения не происходит. Т.к. нет передачи владения, переменная не удаляется из
+области видимости, её статус не изменяется.
 
 ```rust
 fn calculate_length(s: &String) -> usize { // s is a reference to a String
@@ -62,18 +58,14 @@ fn calculate_length(s: &String) -> usize { // s is a reference to a String
   // it refers to, nothing happens.
 ```
 
-The scope in which the variable `s` is valid is the same as any function
-parameter’s scope, but we don’t drop what the reference points to when it goes
-out of scope because we don’t have ownership. Functions that have references as
-parameters instead of the actual values mean we won’t need to return the values
-in order to give back ownership, since we never had ownership.
+Важное замечание - переменные ссылочного типа никогда не имеют владения, поэтому
+не влияют на него.
 
-We call having references as function parameters *borrowing*. As in real life,
-if a person owns something, you can borrow it from them. When you’re done, you
-have to give it back.
+В Rust передача ссылки в функцию в качестве параметра называется заимствованием.
+Всё как в жизни, после того как что-то взято на время, потом надо это отдать.
 
-So what happens if we try to modify something we’re borrowing? Try the code in
-Listing 4-9. Spoiler alert: it doesn’t work!
+А что произойдёт, если попытаться изменить то, что было заимствовано? Проверим на
+примере 4-9 (предупреждение - это код с ошибкой):
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -89,7 +81,7 @@ fn change(some_string: &String) {
 }
 ```
 
-<span class="caption">Listing 4-9: Attempting to modify a borrowed value</span>
+<span class="caption">Listing 4-9: Попытка модификации заимствованной переменной</span>
 
 Here’s the error:
 
@@ -101,12 +93,13 @@ error: cannot borrow immutable borrowed content `*some_string` as mutable
   |     ^^^^^^^^^^^
 ```
 
-Just as variables are immutable by default, so are references. We’re not
-allowed to modify something we have a reference to.
+Как и переменные, ссылочные переменные неизменяемые. Т.е. изменять данные ссылки
+нельзя.
 
-### Mutable References
+### Изменяемые ссылочные данные
 
-We can fix the error in the code from Listing 4-9 with just a small tweak:
+Для того, чтобы исправить ошибку в предыдущем примере 4-9 необходимо сделать небольшие
+изменения в коде:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -122,24 +115,30 @@ fn change(some_string: &mut String) {
 }
 ```
 
-First, we had to change `s` to be `mut`. Then we had to create a mutable
-reference with `&mut s` and accept a mutable reference with `some_string: &mut
-String`.
+Для того, чтобы данные ссылочной переменной можно было изменить, также как и обычную
+переменную её надо сделать изменяемой при инициализации. Это делается с помощью
+префикса `mut`. В данному случае, в качестве параметра функции нужно написать `&mut s`.
 
-But mutable references have one big restriction: you can only have one mutable
-reference to a particular piece of data in a particular scope. This code will
-fail:
+Изменяемое ссылочная переменная имеет значительное ограничение: у одной переменной
+может быть только одна изменяемая ссылочная переменная в данной области видимости.
+Такой код не будет скомпилирован:
 
 <span class="filename">Filename: src/main.rs</span>
 
-```rust,ignore
-let mut s = String::from("hello");
+```rust
+fn main() {
+  let mut s = String::from("hello");
 
 let r1 = &mut s;
 let r2 = &mut s;
+
+println!("{}",r1);
+println!("{}",r2);
+}
+
 ```
 
-Here’s the error:
+Описание ошибки:
 
 ```text
 error[E0499]: cannot borrow `s` as mutable more than once at a time
@@ -153,45 +152,43 @@ error[E0499]: cannot borrow `s` as mutable more than once at a time
   | - first borrow ends here
 ```
 
-This restriction allows for mutation but in a very controlled fashion. It’s
-something that new Rustaceans struggle with, because most languages let you
-mutate whenever you’d like. The benefit of having this restriction is that Rust
-can prevent data races at compile time.
+Это ограничение позволяет изменять данные, но в тоже время позволяет всё держать
+под контролем. Это немного удивляет, но всё это сделано для минимизации ошибок.
 
-A *data race* is a particular type of race condition in which these three
-behaviors occur:
+Это ограничение не даёт появлению эффекта гонки. Ошибки такого рода трудноуловимы
+и сложны.
 
-1. Two or more pointers access the same data at the same time.
-1. At least one of the pointers is being used to write to the data.
-1. There’s no mechanism being used to synchronize access to the data.
-
-Data races cause undefined behavior and can be difficult to diagnose and fix
-when you’re trying to track them down at runtime; Rust prevents this problem
-from happening because it won’t even compile code with data races!
-
-As always, we can use curly brackets to create a new scope, allowing for
-multiple mutable references, just not *simultaneous* ones:
+Создание вложенных областей видимости, может быть полезным (при необходимости).
 
 ```rust
-let mut s = String::from("hello");
+fn main() {
+  let mut s = String::from("hello");
 
 {
-    let r1 = &mut s;
-
-} // r1 goes out of scope here, so we can make a new reference with no problems.
-
+let r1 = &mut s;
+println!("{}",r1);
+}
+{
 let r2 = &mut s;
+println!("{}",r2);
+}
+}
 ```
+Подобное правило действительно и для комбинации изменяемых и неизменяемых
+ссылочных переменных. Пример кода с ошибкой:
 
-A similar rule exists for combining mutable and immutable references. This code
-results in an error:
+```rust
+fn main() {
+  let mut s = String::from("hello");
+let r1 = &s;
+let r2 = &s;
+let r3 = &mut s;
+println!("{}",r1);
+println!("{}",r2);
+println!("{}",r3);
+}
 
-```rust,ignore
-let mut s = String::from("hello");
 
-let r1 = &s; // no problem
-let r2 = &s; // no problem
-let r3 = &mut s; // BIG PROBLEM
 ```
 
 Here’s the error:
@@ -210,27 +207,20 @@ immutable
   | - immutable borrow ends here
 ```
 
-Whew! We *also* cannot have a mutable reference while we have an immutable one.
-Users of an immutable reference don’t expect the values to suddenly change out
-from under them! However, multiple immutable references are okay because no one
-who is just reading the data has the ability to affect anyone else’s reading of
-the data.
+Обратите внимание, что вы не можете иметь изменяемой ссылочной переменной пока
+существует изменяемая переменная.  Наличие множества неизменяемых переменных допускается,
+т.к. они не могут изменить данные.
 
-Even though these errors may be frustrating at times, remember that it’s the
-Rust compiler pointing out a potential bug early (at compile time rather than
-at runtime) and showing you exactly where the problem is instead of you having
-to track down why sometimes your data isn’t what you thought it should be.
+Статической анализатор кода помогает предотвратить таким образом возможные скрытые
+ошибка в коде. Такие ошибки легко устранить.
 
 ### Dangling References
 
-In languages with pointers, it’s easy to erroneously create a *dangling
-pointer*, a pointer that references a location in memory that may have been
-given to someone else, by freeing some memory while preserving a pointer to
-that memory. In Rust, by contrast, the compiler guarantees that references will
-never be dangling references: if we have a reference to some data, the compiler
-will ensure that the data will not go out of scope before the reference to the
-data does.
+Работая с ссылками весьма легко создать недействительную ссылку или ссылку на
+участок памяти, который уже или ещё используется другими переменными приложения.
+Rust компилятор гарантирует защиту от создания подобных ссылок.
 
+Попытаемся смоделировать подобную ошибку и посмотрим как с ней справится компилятор:
 Let’s try to create a dangling reference:
 
 <span class="filename">Filename: src/main.rs</span>
@@ -238,16 +228,17 @@ Let’s try to create a dangling reference:
 ```rust,ignore
 fn main() {
     let reference_to_nothing = dangle();
+    println!("{}", reference_to_nothing);
 }
 
 fn dangle() -> &String {
     let s = String::from("hello");
-
     &s
 }
+
 ```
 
-Here’s the error:
+Текст в строке терминала:
 
 ```text
 error[E0106]: missing lifetime specifier
@@ -263,35 +254,35 @@ error[E0106]: missing lifetime specifier
 error: aborting due to previous error
 ```
 
-This error message refers to a feature we haven’t covered yet: *lifetimes*.
-We’ll discuss lifetimes in detail in Chapter 10. But, if you disregard the
-parts about lifetimes, the message does contain the key to why this code is a
-problem:
+Эта ошибка сообщает об ещё не освещённой нами опции языка Rust - *времени жизни переменной*.
+Мы расскажем подробнее о этой опции в главе 10. Также компилятор сообщил кое-что
+ещё:
 
 ```text
 this function's return type contains a borrowed value, but there is no value
 for it to be borrowed from.
 ```
 
-Let’s take a closer look at exactly what’s happening at each stage of our
-`dangle` code:
+Давайте рассмотрим что же происходит во время работы кода, который создаёт недействительные
+ссылки:
 
 ```rust,ignore
 fn dangle() -> &String { // dangle returns a reference to a String
 
-    let s = String::from("hello"); // s is a new String
+    let s = String::from("hello"); //создаётся новая переменная s типа String
 
-    &s // we return a reference to the String, s
-} // Here, s goes out of scope, and is dropped. Its memory goes away.
-  // Danger!
+    &s // вы возвращаем ссылку на созданную строку. При выходе из области видимости
+
+}
+  // переменная становится недействительной и удаляется. Ссылка становится недействительной!
 ```
 
-Because `s` is created inside `dangle`, when the code of `dangle` is finished,
-`s` will be deallocated. But we tried to return a reference to it. That means
-this reference would be pointing to an invalid `String`! That’s no good. Rust
-won’t let us do this.
+Т.к. переменная создаётся внутри метода, когда область действия метода заканчивается,
+`s` удаляется. Но код метода пытается возвратить ссылку на эту недействительную
+переменную. Это ошибка, которую компилятор Rust предотвращает.
 
-The solution here is to return the `String` directly:
+Исправлением ошибки в данном случае будет возвращение из функции самой созданной
+переменной, а не ссылки на неё:
 
 ```rust
 fn no_dangle() -> String {
@@ -301,16 +292,16 @@ fn no_dangle() -> String {
 }
 ```
 
-This works without any problems. Ownership is moved out, and nothing is
-deallocated.
+Это решние прекрасно работает, т.к. соблюдаются правила владения.
 
-### The Rules of References
+### Правила работы с ссылками
 
-Let’s recap what we’ve discussed about references:
+Список правил:
 
-1. At any given time, you can have *either* but not both of:
-  * One mutable reference.
-  * Any number of immutable references.
-2. References must always be valid.
+1. В одной области видимости единовременно может существовать только один тип ссылочных переменных на одни данные:
+  - одна изменяемая ссылка на данные,
+  - любое количество неизменяемых ссылок на данные.
+2. Все ссылки должны быть действительными.
 
-Next, we’ll look at a different kind of reference: slices.
+Сейчас вы рассмотрели ссылку на данные (на переменную).
+В следующей главе мы рассмотрим другой тип ссылочных переменных - динамические массивы.
