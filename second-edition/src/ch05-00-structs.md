@@ -1,11 +1,9 @@
-# Using Structs to Structure Related Data
+# Использование структуры для объединения логически связанных данных
 
-A *struct*, or *structure*, is a custom data type that lets us name and package
-together multiple related values that make up a meaningful group. If you’re
-familiar with an object-oriented language, a *struct* is like an object’s data
-attributes. In this chapter, we’ll compare and contrast tuples with structs,
-demonstrate how to use structs, and discuss how to define methods and
-associated functions on structs to specify behavior associated with a struct’s
-data. The struct and *enum* (which is discussed in Chapter 6) concepts are the
-building blocks for creating new types in your program’s domain to take full
-advantage of Rust’s compile time type checking.
+Тип данных *struct* - это группировочный тип данных, который позволяет именовать
+связанные данные. Этот тип напоминает объект в объектно-ориентированном программировании.
+В этой главе мы сравним структуры с кортежами, рассмотрим наилучшие практики использования
+этого типа данных, рассмотрим как определить методы и ассоциированные функции связанные
+с данными. *struct* и *enum* (тема, которая будет освещена в 6 главе) - это строительные
+блоки для создания новых типов данных в Rust. Мы также рассмотрим как компилятор
+будет нам помогать создавать эти новые данные и избегать типичных ошибок.

@@ -242,7 +242,7 @@ let s2 = s1;
 
 <img alt="s1 and s2 to two places" src="img/trpl04-03.svg" class="center" style="width: 50%;" />
 
-<span class="caption">Figure 4-5: Другая возможность при копировании `s2 = s1`  -
+<span class="caption">Рисунок 4-5: Другая возможность при копировании `s2 = s1`  -
 копирование содержимого кучи</span>
 
 Ранее, мы говорили, что когда переменная выходит за границы области видимости, Rust
