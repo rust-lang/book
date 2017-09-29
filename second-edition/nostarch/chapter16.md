@@ -488,9 +488,9 @@ The transmitting end of a channel has the `send` method that takes the value we
 want to send down the channel. The `send` method returns a `Result<T, E>` type,
 because if the receiving end has already been dropped, there’s nowhere to send
 a value to, so the send operation would error. In this example, we’re simply
-calling `unwrap` to panic in case of error, but for a real application, we’d
-want to handle it properly. Chapter 9 is where you’d go to review strategies
-for proper error handling.
+calling `unwrap` to ignore this error, but for a real application, we’d want to
+handle it properly. Chapter 9 is where you’d go to review strategies for proper
+error handling.
 
 In Listing 16-8, let’s get the value from the receiving end of the channel in
 the main thread:
