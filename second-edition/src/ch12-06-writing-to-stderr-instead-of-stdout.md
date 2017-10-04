@@ -4,7 +4,7 @@ At the moment we’re writing all of our output to the terminal with the
 `println!` function. Most terminals provide two kinds of output: *standard
 output* for general information (sometimes abbreviated as `stdout` in code),
 and *standard error* for error messages (`stderr`). This distinction enables
-users to choose whether to direct the successful output of a program to a
+users to choose to direct the successful output of a program to a
 file but still print error messages to the screen.
 
 The `println!` function is only capable of printing to standard output, though,
