@@ -1,24 +1,21 @@
-# Using Modules to Reuse and Organize Code
+# Использование модулей для организации и многократного использования кода
 
-When you start writing programs in Rust, your code might live solely in the
-`main` function. As your code grows, you’ll eventually move functionality into
-other functions for reuse and better organization. By splitting your code into
-smaller chunks, each chunk is easier to understand on its own. But what happens
-if you have too many functions? Rust has a module system that enables the reuse
-of code in an organized fashion.
+Когда вы только начинаете писать программу, ваш код может совершенно свободно
+поместиться в функции `main`. По мере создания функциональных возможностей, создание
+все большего и большего количества функций вам понадобиться организовать код в
+понятные структуры. Для этого в Rus есть система модулей.
 
-In the same way that you extract lines of code into a function, you can extract
-functions (and other code, like structs and enums) into different modules. A
-*module* is a namespace that contains definitions of functions or types, and
-you can choose whether those definitions are visible outside their module
-(public) or not (private). Here’s an overview of how modules work:
+Также как вы используете код программы в функциях, вы можете использовать функции в
+модулях. Модуль представляет собой пространство имён, в которое может входить
+различные функции и типы. Вы также можете управлять видимостью внутри модуля.
 
-* The `mod` keyword declares a new module. Code within the module appears
-  either immediately following this declaration within curly braces or in
-  another file.
-* By default, functions, types, constants, and modules are private. The `pub`
-  keyword makes an item public and therefore visible outside its namespace.
-* The `use` keyword brings modules, or the definitions inside modules, into
-  scope so it’s easier to refer to them.
+Общее описание возможностей модулей:
 
-We’ll look at each of these parts to see how they fit into the whole.
+* Ключевое слово `mod` объявляет модуль. Код следующий после объявления модуля считается
+влаченным в него.
+* По умолчанию, модуль закрыт и чтобы извне был доступ к его элементам это надо указать
+в коде. Для этого используется ключевое слово `pub`.
+* Ключевое слов `use` даёт возможность использовать в тексте программы функционал
+модуля.
+
+Мы рассмотрим подробнее все эти возможности в следующих секциях.

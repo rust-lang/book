@@ -1,18 +1,19 @@
-## Method Syntax
+## Особенности определения методов
 
-*Methods* are similar to functions: they’re declared with the `fn` keyword and
-their name, they can have parameters and a return value, and they contain some
-code that is run when they’re called from somewhere else. However, methods are
-different from functions in that they’re defined within the context of a struct
-(or an enum or a trait object, which we cover in Chapters 6 and 17,
-respectively), and their first parameter is always `self`, which represents the
-instance of the struct the method is being called on.
+*Методы* имею множество схожих черт с функциями.
+Сходства:
+- Определение начинается с ключевого слова `fn`, далее идёт имя.
+- Они имеют параметры и возвращаемое значение.
+- Они содржат код, который выполняется, когда метод вызывается.
+Различия:
+- они определяются в контексте структур (или перечислений или типажей, которые мы будем обсуждать в глава 6 и 17).
+- первый параметр всегда `self`, который представляет ссылку на экземпляр структуры.
 
-### Defining Methods
+### Определение методов
 
-Let’s change the `area` function that has a `Rectangle` instance as a parameter
-and instead make an `area` method defined on the `Rectangle` struct, as shown
-in Listing 5-13:
+Давайте изменим функцию `area`, которая имеет один входной параметр, ссылку на экземпляр
+`Rectangle`. Сделаем это определение частью функционала структуры `Rectangle`.
+Пример 5-13:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -39,41 +40,62 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 5-13: Defining an `area` method on the
-`Rectangle` struct</span>
+<span class="caption">Пример 5-13: Определение метода `area` в структуре `Rectangle`</span>
 
-To define the function within the context of `Rectangle`, we start an `impl`
-(*implementation*) block. Then we move the `area` function within the `impl`
-curly braces and change the first (and in this case, only) parameter to be
-`self` in the signature and everywhere within the body. In `main` where we
-called the `area` function and passed `rect1` as an argument, we can instead
-use *method syntax* to call the `area` method on our `Rectangle` instance.
-The method syntax goes after an instance: we add a dot followed by the method
-name, parentheses, and any arguments.
+Для определения функций в контексте структуры мы пишем `impl`, далее имя структуры.
+Внутри фигурных скобок располагаются определения функций.  У функции `area` первым
+и единственным аргументом является ссылка на экземпляр структуры. Метод экземпляра
+вызывается через точку. Далее в скобках следуют аргументы.
 
-In the signature for `area`, we use `&self` instead of `rectangle: &Rectangle`
-because Rust knows the type of `self` is `Rectangle` due to this method being
-inside the `impl Rectangle` context. Note that we still need to use the `&`
-before `self`, just like we did in `&Rectangle`. Methods can take ownership of
-`self`, borrow `self` immutably as we’ve done here, or borrow `self` mutably,
-just like any other parameter.
+Компилятор знает, что `&self` в данном контексте это `rectangle: &Rectangle`. Обратите
+внимание, что мы используем ссылку `&self`. Метод может взять `self` во владение,
+заимствовать, как неизменяемую переменную, а также может заимствовать, как изменяемую
+переменную.
 
-We’ve chosen `&self` here for the same reason we used `&Rectangle` in the
-function version: we don’t want to take ownership, and we just want to read the
-data in the struct, not write to it. If we wanted to change the instance that
-we’ve called the method on as part of what the method does, we’d use `&mut
-self` as the first parameter. Having a method that takes ownership of the
-instance by using just `self` as the first parameter is rare; this technique is
-usually used when the method transforms `self` into something else and we want
-to prevent the caller from using the original instance after the transformation.
+В данной функции мы выбрали использование `&self`, так как нам не нужно владение,
+нам нужно только чтение данных структуры. Если нам понадобиться изменять значения
+экземпляра структуры, мы должны вызвать `&mut self`. Очень редко может понадобиться
+получить владение `self`, т.к. это может лишь понадобиться для трансформации экземпляра
+во что-то другое.
 
-The main benefit of using methods instead of functions, in addition to using
-method syntax and not having to repeat the type of `self` in every method’s
-signature, is for organization. We’ve put all the things we can do with an
-instance of a type in one `impl` block rather than making future users of our
-code search for capabilities of `Rectangle` in various places in the library we
-provide.
+> ### Где используется оператор `->`?
+>
+>В языках C++, два различных оператора используются для вызова методов:
+> вы используете `.` если вы вызываете метод непосредственно из экземпляра структуры
+>  и с помощью `->` если вызываем метод из ссылки на объект. Другими словами, если
+> `object` является ссылкой вызовы метода `object->something()` и `(*object).something()`
+> аналогичны.
+>
+> Rust не имет такого эквивалента (оператора `->`), наоборот, в Rust функционал,
+> который называется *автоматическая ссылка и разыменование*. Вызов методов является
+> одним из немногих мест в Rust, в котором есть такой функционал.
+>
+> Как это работает: когда вы вызываете метод `object.something()`, Rust автоматически
+> добавляет `&`, `&mut`, or `*` так  чтообы `object` имет соответсующеие опции
+> Другими словами, the method. In other words, the following are the same:
+>
+```rust
+#[derive(Debug,Copy,Clone)]
+struct Point {
+   x: f64,
+     y: f64,
+ }
 
+ impl Point {
+    fn distance(&self, other: &Point) -> f64 {
+        let x_squared = f64::powi(other.x - self.x, 2);
+        let y_squared = f64::powi(other.y - self.y, 2);
+
+        f64::sqrt(x_squared + y_squared)
+    }
+ }
+ fn main(){
+ let p1 = Point { x: 0.0, y: 0.0 };
+ let p2 = Point { x: 5.0, y: 6.5 };
+p1.distance(&p2);
+(&p1).distance(&p2);
+}
+```
 > ### Where’s the `->` Operator?
 >
 > In languages like C++, two different operators are used for calling methods:
@@ -118,14 +140,12 @@ provide.
 > that Rust makes borrowing implicit for method receivers is a big part of
 > making ownership ergonomic in practice.
 
-### Methods with More Parameters
+### Методы с несколькими параметрами
 
-Let’s practice using methods by implementing a second method on the `Rectangle`
-struct. This time, we want an instance of `Rectangle` to take another instance
-of `Rectangle` and return `true` if the second `Rectangle` can fit completely
-within `self`; otherwise it should return `false`. That is, we want to be able
-to write the program shown in Listing 5-14, once we’ve defined the `can_hold`
-method:
+Давайте дальше практиковаться в использовании методов. Добавим метод проверки
+вхождения одного прямоугольника в другой. Метод возвратит `true`, если ответ положительный
+и `false` если отрицательный.
+Пример 5-14:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -140,84 +160,75 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 5-14: Demonstration of using the as-yet-unwritten
+<span class="caption">Listing 5-14: Демонстрация использование ещё несуществующего метода
 `can_hold` method</span>
 
-And the expected output would look like the following, because both dimensions
-of `rect2` are smaller than the dimensions of `rect1`, but `rect3` is wider
-than `rect1`:
+Предполагаемый вывод:
 
 ```text
 Can rect1 hold rect2? true
 Can rect1 hold rect3? false
 ```
 
-We know we want to define a method, so it will be within the `impl Rectangle`
-block. The method name will be `can_hold`, and it will take an immutable borrow
-of another `Rectangle` as a parameter. We can tell what the type of the
-parameter will be by looking at the code that calls the method:
-`rect1.can_hold(&rect2)` passes in `&rect2`, which is an immutable borrow to
-`rect2`, an instance of `Rectangle`. This makes sense because we only need to
-read `rect2` (rather than write, which would mean we’d need a mutable borrow),
-and we want `main` to retain ownership of `rect2` so we can use it again after
-calling the `can_hold` method. The return value of `can_hold` will be a
-boolean, and the implementation will check whether the length and width of
-`self` are both greater than the length and width of the other `Rectangle`,
-respectively. Let’s add the new `can_hold` method to the `impl` block from
-Listing 5-13, shown in Listing 5-15:
+Мы знаем, что где и как добавляются методы внутре конструкции `impl Rectangle`.
+Пример 5-15:
 
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-# #[derive(Debug)]
-# struct Rectangle {
-#     length: u32,
-#     width: u32,
-# }
-#
-impl Rectangle {
-    fn area(&self) -> u32 {
-        self.length * self.width
-    }
-
-    fn can_hold(&self, other: &Rectangle) -> bool {
-        self.length > other.length && self.width > other.width
-    }
+#[derive(Debug)]
+struct Rectangle {
+    length: u32,
+    width: u32,
 }
+
+impl Rectangle {
+   fn area(&self) -> u32 {
+       self.length * self.width
+   }
+
+   fn can_hold(&self, other: &Rectangle) -> bool {
+       self.length > other.length && self.width > other.width
+   }
+}
+
+fn main(){
+let rect1 = Rectangle { length: 50, width: 30 };
+   let rect2 = Rectangle { length: 40, width: 10 };
+   let rect3 = Rectangle { length: 45, width: 60 };
+   println!("area of rect1 = {}", rect1.area());
+   println!("Can rect1 hold rect2? {}", rect1.can_hold(&rect2));
+   println!("Can rect1 hold rect3? {}", rect1.can_hold(&rect3));
+}
+
 ```
 
-<span class="caption">Listing 5-15: Implementing the `can_hold` method on
-`Rectangle` that takes another `Rectangle` instance as a parameter</span>
+<span class="caption">Listing 5-15: Реализация метода `can_hold` `Rectangle`,
+который получает другой экземпляр `Rectangle` в качестве параметра</span>
 
-When we run this code with the `main` function in Listing 5-14, we’ll get our
-desired output. Methods can take multiple parameters that we add to the
-signature after the `self` parameter, and those parameters work just like
-parameters in functions.
+Когда будет выполнен код метода `main` вы увидите ожидаемый вывод в терминальной
+строке. Методы могут иметь множество параметров, которые мы добавляем после параметра
+`self` и все эти параметра работают также, как и параметры функции.
 
-### Associated Functions
+### Ассоциированные функции
 
-Another useful feature of `impl` blocks is that we’re allowed to define
-functions within `impl` blocks that *don’t* take `self` as a parameter. These
-are called *associated functions* because they’re associated with the struct.
-They’re still functions, not methods, because they don’t have an instance of
-the struct to work with. You’ve already used the `String::from` associated
-function.
+Ещё одна удобная опция блока `impl` - мы можем определять функции, которые не
+имеют параметра `self`. Они называются *ассоциированными функциями*, т.к. они
+находятся внутри структуры. Они функции, не методы, т.к. они не требуют для их
+использования ссылки на экземпляр структуры. Пример (`String::from`).
 
-Associated functions are often used for constructors that will return a new
-instance of the struct. For example, we could provide an associated function
-that would have one dimension parameter and use that as both length and width,
-thus making it easier to create a square `Rectangle` rather than having to
-specify the same value twice:
+Такие функция часто используются для инициализации экземпляра структуры.
+Пример:
 
 <span class="filename">Filename: src/main.rs</span>
 
 ```rust
-# #[derive(Debug)]
-# struct Rectangle {
-#     length: u32,
-#     width: u32,
-# }
-#
+ #[derive(Debug)]
+ struct Rectangle {
+     length: u32,
+     width: u32,
+ }
+
 impl Rectangle {
     fn square(size: u32) -> Rectangle {
         Rectangle { length: size, width: size }
@@ -225,24 +236,54 @@ impl Rectangle {
 }
 ```
 
-To call this associated function, we use the `::` syntax with the struct name,
-like `let sq = Rectangle::square(3);`, for example. This function is
-namespaced by the struct: the `::` syntax is used for both associated functions
-and namespaces created by modules, which we’ll discuss in Chapter 7.
+```rust
+#[derive(Debug)]
+struct Rectangle {
+    length: u32,
+    width: u32,
+}
 
-### Multiple `impl` Blocks
+impl Rectangle {
+   fn area(&self) -> u32 {
+       self.length * self.width
+   }
 
-Each struct is allowed to have multiple `impl` blocks. For example, Listing
-5-15 is equivalent to the code shown in Listing 5-16, which has each method
-in its own `impl` block:
+   fn can_hold(&self, other: &Rectangle) -> bool {
+       self.length > other.length && self.width > other.width
+   }
+   fn square(size: u32) -> Rectangle {
+       Rectangle { length: size, width: size }
+   }
+}
+
+fn main(){
+let rect1 = Rectangle { length: 50, width: 30 };
+   let rect2 = Rectangle { length: 40, width: 10 };
+   let rect3 = Rectangle { length: 45, width: 60 };
+   println!("area of rect1 = {}", rect1.area());
+   println!("Can rect1 hold rect2? {}", rect1.can_hold(&rect2));
+   println!("Can rect1 hold rect3? {}", rect1.can_hold(&rect3));
+   let rect4 = Rectangle::square(50);
+   println!("area of rect4 = {}", rect4.area());
+}
+
+```
+
+Для вызова ассоциированной функции используется `::`. Пример (`let sq = Rectangle::square(3);`.
+Также `::` используется в областях видимости создаваемые модулями. Об этом поговорим
+в главе 7.
+
+### Несколько блоков `impl`
+
+Каждая структура может использовать множество блоков `impl`. Пример 5-15:
 
 ```rust
-# #[derive(Debug)]
-# struct Rectangle {
-#     length: u32,
-#     width: u32,
-# }
-#
+ #[derive(Debug)]
+ struct Rectangle {
+     length: u32,
+     width: u32,
+ }
+
 impl Rectangle {
     fn area(&self) -> u32 {
         self.length * self.width
@@ -256,21 +297,14 @@ impl Rectangle {
 }
 ```
 
-<span class="caption">Listing 5-16: Rewriting Listing 5-15 using multiple `impl`
-blocks</span>
+<span class="caption">Пример 5-16: неоднократное использование `impl`</span>
 
-There’s no reason to separate these methods into multiple `impl` blocks here,
-but it’s valid syntax. We will see a case when multiple `impl` blocks are useful
-in Chapter 10 when we discuss generic types and traits.
+В главе 10 вы увидите, как множество таким блоков может быть эффективно использовано.
 
-## Summary
+## Итоги
 
-Structs let us create custom types that are meaningful for our domain. By using
-structs, we can keep associated pieces of data connected to each other and name
-each piece to make our code clear. Methods let us specify the behavior that
-instances of our structs have, and associated functions let us namespace
-functionality that is particular to our struct without having an instance
-available.
+Структуры помогают создавать типы и добавлять к ним методы. Методы могут быть
+статическими и динамическими (требующими ссылки на экземпляр структуры).
 
-But structs aren’t the only way we can create custom types: let’s turn to
-Rust’s enum feature to add another tool to our toolbox.
+Также существуют и другие способы создавать новые типы данных. Один из них - это
+перечисления.

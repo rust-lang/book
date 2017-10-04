@@ -1,13 +1,12 @@
-## An Example Program Using Structs
+## Пример использования структур
 
-To understand when we might want to use structs, let’s write a program that
-calculates the area of a rectangle. We’ll start with single variables, and then
-refactor the program until we’re using structs instead.
+Для понимания где же лучше всего использовать структуры, мы напишим программу,
+которая будет рассчитывать площать прямоугольника. Мы начнём с создания переменных,
+а потом изменение за именение напишем код, который будет использовать структуры.
 
-Let’s make a new binary project with Cargo called *rectangles* that will take
-the length and width of a rectangle specified in pixels and will calculate the
-area of the rectangle. Listing 5-8 shows a short program with one way of doing
-just that in our project’s *src/main.rs*:
+Создадим проект программы Cargo *rectangles*, которая будет получать на вход длину
+и ширину прямоугольника в пикселах и будет рассчитывать площадь прямоугольника.
+Пример кода 5-8 проиллюстрирует это:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -27,35 +26,35 @@ fn area(length: u32, width: u32) -> u32 {
 }
 ```
 
-<span class="caption">Listing 5-8: Calculating the area of a rectangle
-specified by its length and width in separate variables</span>
+<span class="caption">Пример 5-8: Расчёт площади треугольника</span>
 
-Now, run this program using `cargo run`:
+Теперь, проверим её работу `cargo run`:
 
 ```text
 The area of the rectangle is 1500 square pixels.
 ```
 
-### Refactoring with Tuples
+### Рефакторинг программы с помощью кортежей
 
+Хотя пример 5-8 работает и расчитывает площадь прямоугольника, мы можем улучшить
+программу. Переменные длина и ширина связаны логически, т.к. они описывают параметры
+прямоугольника.
 Even though Listing 5-8 works and figures out the area of the rectangle by
 calling the `area` function with each dimension, we can do better. The length
 and the width are related to each other because together they describe one
 rectangle.
 
-The issue with this method is evident in the signature of `area`:
+Задача этого метода описана в названии:
 
 ```rust,ignore
 fn area(length: u32, width: u32) -> u32 {
 ```
 
-The `area` function is supposed to calculate the area of one rectangle, but the
-function we wrote has two parameters. The parameters are related, but that’s
-not expressed anywhere in our program. It would be more readable and more
-manageable to group length and width together. We’ve already discussed one way
-we might do that in the Grouping Values into Tuples section of Chapter 3 on
-page XX: by using tuples. Listing 5-9 shows another version of our program that
-uses tuples:
+Функция `area` расчитывает площадь одного прямоугольника, но в функцию вводятся
+два параметра. Эти параметры связаны, но это никак не оказывает влияние на код программы.
+Было бы лучше, если бы код был более очивидным и управляемым, чтобы переменные ширина
+и длина были сгруппированы вместе. Мы уже знаем один способ группировки переменны -
+кортежи. Следующий пример показывает, как это можно реализовать:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -74,27 +73,19 @@ fn area(dimensions: (u32, u32)) -> u32 {
 }
 ```
 
-<span class="caption">Listing 5-8: Specifying the length and width of the
-rectangle with a tuple</span>
+<span class="caption">Пример 5-8: Определени длины и ширины в кортеже</span>
 
-In one way, this program is better. Tuples let us add a bit of structure, and
-we’re now passing just one argument. But in another way this version is less
-clear: tuples don’t name their elements, so our calculation has become more
-confusing because we have to index into the parts of the tuple.
+Программа стала более понятной и структурированной. Но всёже есть проблема -
+элемены кортежа - это безымянные индексы.
 
-It doesn’t matter if we mix up length and width for the area calculation, but
-if we want to draw the rectangle on the screen, it would matter! We would have
-to keep in mind that `length` is the tuple index `0` and `width` is the tuple
-index `1`. If someone else worked on this code, they would have to figure this
-out and keep it in mind as well. It would be easy to forget or mix up these
-values and cause errors, because we haven’t conveyed the meaning of our data in
-our code.
+Это хорошо, что не важно в каком порядке в кортеже переменные, но если будет нужно
+напечатать или сообщить какие-любо величину - можно сделать ошибку, перепутав переменные
+местами.
 
-### Refactoring with Structs: Adding More Meaning
+### Изменения в коде с помощью структуры. Добавления в код читабельности и определённости
 
-We use structs to add meaning by labeling the data. We can transform the tuple
-we’re using into a data type with a name for the whole as well as names for the
-parts, as shown in Listing 5-10:
+Мы будем использовать структуры для улучнешния читабельности и упраления кодом.
+Пример 5-10:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -118,33 +109,49 @@ fn area(rectangle: &Rectangle) -> u32 {
 }
 ```
 
-<span class="caption">Listing 5-10: Defining a `Rectangle` struct</span>
+или так:
 
-Here we’ve defined a struct and named it `Rectangle`. Inside the `{}` we
-defined the fields as `length` and `width`, both of which have type `u32`. Then
-in `main` we create a particular instance of a `Rectangle` that has a length of
-50 and a width of 30.
+```rust
+struct Rectangle {
+    length: u32,
+    width: u32,
+}
 
-Our `area` function is now defined with one parameter, which we’ve named
-`rectangle`, whose type is an immutable borrow of a struct `Rectangle`
-instance. As mentioned in Chapter 4, we want to borrow the struct rather than
-take ownership of it. This way, `main` retains its ownership and can continue
-using `rect1`, which is the reason we use the `&` in the function signature and
-where we call the function.
+fn main() {
+    let rect1 = &(Rectangle { length: 50, width: 30 });
 
-The `area` function accesses the `length` and `width` fields of the `Rectangle`
-instance. Our function signature for `area` now indicates exactly what we mean:
-calculate the area of a `Rectangle` using its `length` and `width` fields. This
-conveys that the length and width are related to each other, and gives
-descriptive names to the values rather than using the tuple index values of `0`
-and `1`—a win for clarity.
+    println!(
+        "The area of the rectangle is {} square pixels.",
+        area(rect1)
+    );
+}
 
-### Adding Useful Functionality with Derived Traits
+fn area(rectangle: &Rectangle) -> u32 {
+    rectangle.length * rectangle.width
+}
+```
 
-It would be helpful to be able to print out an instance of the `Rectangle`
-while we’re debugging our program in order to see the values for all its
-fields. Listing 5-11 uses the `println!` macro as we have been in earlier
-chapters:
+<span class="caption">Пример 5-10: Определение структуры `Rectangle`</span>
+
+Мы определяем и именуем структуру `Rectangle`. Внутри фигурных скобок `{}` мы
+определяем поля `length` и `width`, который имеют тип данны `u32`. Далее, в
+методе `main` мы создаём экземпляр `Rectangle`, который имеет длину 50 и ширину 30.
+
+Функция `area` также как и при работе с кортежем, использует один именованный параметр,
+значение которого мы заимствуем из метода `main`. Как мы уже знаем в коде происходит
+заимствование, а не именение владения. Поэтому после работы в методе `area` переменную
+`rect1` можно далее использовать в методе `main`. Заимствование осуществляется
+благодаря использованию сомвола `&` при передаче параметра и в описании параметра
+функции.
+
+Функция `area` имеет доступ к полям экземпляра. Теперь определение функции точно
+объясняет, что она делает - высисляет площадь прямоугольника.
+
+### Добавим функциональности (признаки и поведение)
+
+Было бы удобно иметь возможность печатать состояние экземпляра прямоугольника во
+время отладки программы.
+Пример 5-11:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -161,55 +168,64 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 5-11: Attempting to print a `Rectangle`
-instance</span>
+<span class="caption">Пример 5-11: Попытка напечатать содержание состояние экземпляра
+`Rectangle`</span>
 
-When we run this code, we get an error with this core message:
+Когда мы попытаемся выполнить этот код, то получим ошибку компиляции:
 
 ```text
 error[E0277]: the trait bound `Rectangle: std::fmt::Display` is not satisfied
 ```
 
-The `println!` macro can do many kinds of formatting, and by default, `{}`
-tells `println!` to use formatting known as `Display`: output intended for
-direct end user consumption. The primitive types we’ve seen so far implement
-`Display` by default, because there’s only one way you’d want to show a `1` or
-any other primitive type to a user. But with structs, the way `println!` should
-format the output is less clear because there are more display possibilities:
-do you want commas or not? Do you want to print the curly braces? Should all
-the fields be shown? Due to this ambiguity, Rust doesn’t try to guess what we
-want and structs don’t have a provided implementation of `Display`.
+С помощью макроса `println!` может делать различные виды форматирования. По умолчанию,
+`{}` - это контейнер каких либо данных для форматирования, изветного как `Display`.
+Простые встроенные типы данных реализуют `Display`. Но структуры не реализуют.
+Это надо делать явно в коде.
 
-If we continue reading the errors, we’ll find this helpful note:
+Обратите внимание на информационное сообщение в коде:
 
 ```text
 note: `Rectangle` cannot be formatted with the default formatter; try using
 `:?` instead if you are using a format string
 ```
 
-Let’s try it! The `println!` macro call will now look like `println!("rect1 is
-{:?}", rect1);`. Putting the specifier `:?` inside the `{}` tells `println!` we
-want to use an output format called `Debug`. `Debug` is a trait that enables us
-to print out our struct in a way that is useful for developers so we can see
-its value while we’re debugging our code.
+Попробуем им воспользоваться. Изменим код соответствующим образом:
 
-Run the code with this change. Drat! We still get an error:
+```rust,ignore
+struct Rectangle {
+    length: u32,
+    width: u32,
+}
+
+fn main() {
+    let rect1 = Rectangle { length: 50, width: 30 };
+
+    println!("rect1 is {:?}", rect1);
+}
+```
+
+Мы использовали вывод поведение `Debug`, которое позволяет нам напечатать содержание
+структуры по умолчанию.
+
+Выполнив это код также получим сообщение об ошибке компиляции:
 
 ```text
 error: the trait bound `Rectangle: std::fmt::Debug` is not satisfied
 ```
 
-But again, the compiler gives us a helpful note:
+Но, как и в прошлый раз компилятор спешит к нам на помощь и даёт ценные и важные
+указания:
 
 ```text
 note: `Rectangle` cannot be formatted using `:?`; if it is defined in your
 crate, add `#[derive(Debug)]` or manually implement it
 ```
 
-Rust *does* include functionality to print out debugging information, but we
-have to explicitly opt-in to make that functionality available for our struct.
-To do that, we add the annotation `#[derive(Debug)]` just before the struct
-definition, as shown in Listing 5-12:
+Rust даёт возможность напечатать отладочную информацию, но для этого нам надо
+явно описать это поведение. Для это необходимо аннотировать определение структуры
+следующим текстом `#[derive(Debug)]`.
+
+Пример 5-12:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -227,21 +243,33 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 5-12: Adding the annotation to derive the `Debug`
-trait and printing the `Rectangle` instance using debug formatting</span>
+<span class="caption">Listing 5-12: Добавление аннтации для использования поведения
+`Debug`</span>
 
-Now when we run the program, we won’t get any errors and we’ll see the
-following output:
+Теперь ошибок компиляции не будет. Ура!
 
 ```text
 rect1 is Rectangle { length: 50, width: 30 }
 ```
 
-Nice! It’s not the prettiest output, but it shows the values of all the fields
-for this instance, which would definitely help during debugging. When we have
-larger structs, it’s useful to have output that’s a bit easier to read; in
-those cases, we can use `{:#?}` instead of `{:?}` in the `println!` string.
-When we use the `{:#?}` style in the example, the output will look like this:
+Это, конечно, не самый лучший выд информации, но для отладки подойдёт. Для более
+сложных структур было бы лучшим решением сделать вывод инфомации более удобным.
+Для этого используем аннотацию `{:#?}` вместо `{:?}`.
+
+```rust
+#[derive(Debug)]
+struct Rectangle {
+    length: u32,
+    width: u32,
+}
+
+fn main() {
+    let rect1 = Rectangle { length: 50, width: 30 };
+
+    println!("rect1 is {:#?}", rect1);
+}
+```
+Результат:
 
 ```text
 rect1 is Rectangle {
@@ -250,13 +278,10 @@ rect1 is Rectangle {
 }
 ```
 
-Rust has provided a number of traits for us to use with the `derive` annotation
-that can add useful behavior to our custom types. Those traits and their
-behaviors are listed in Appendix C. We’ll cover how to implement these traits
-with custom behavior as well as how to create your own traits in Chapter 10.
+Rust предоставляет специальные объекты - признаки для реализаци поведения в структурах.
+Мы раскажем как работать с этими объектами - поведениями в главе 10.
 
-Our `area` function is very specific: it only computes the area of rectangles.
-It would be helpful to tie this behavior more closely to our `Rectangle`
-struct, because it won’t work with any other type. Let’s look at how we can
-continue to refactor this code by turning the `area` function into an `area`
-*method* defined on our `Rectangle` type.
+Функция `area` весьма специфична. Она делает расчет площади прямоугольника.
+Было бы лучеше, если бы поведение было связано с структурой, т.к. функция может работать
+только с этой ней. В следующей расти главы мы расскажем, как улучшить код и реализовать
+эту связь. Мы расскажем, как сделать из обособленной функции метод структуры.

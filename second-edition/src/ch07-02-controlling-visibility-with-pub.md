@@ -1,11 +1,7 @@
-## Controlling Visibility with `pub`
+## Управление доступом с помощью ключевого слова `pub`
 
-We resolved the error messages shown in Listing 7-4 by moving the `network` and
-`network::server` code into the *src/network/mod.rs* and
-*src/network/server.rs* files, respectively. At that point, `cargo build` was
-able to build our project, but we still get warning messages about the
-`client::connect`, `network::connect`, and `network::server::connect` functions
-not being used:
+Мы исправили ошибки связанные с распределением кода. Но остались проблемы с использованием
+кода (функци не используются):
 
 ```text
 warning: function is never used: `connect`, #[warn(dead_code)] on by default
@@ -27,16 +23,12 @@ warning: function is never used: `connect`, #[warn(dead_code)] on by default
   | ^
 ```
 
-So why are we receiving these warnings? After all, we’re building a library
-with functions that are intended to be used by our *users*, not necessarily by
-us within our own project, so it shouldn’t matter that these `connect`
-functions go unused. The point of creating them is that they will be used by
-another project, not our own.
+Почему имеют место эти ошибки? Библиотеку существуют для того, чтобы ими пользовались
+пользователи. Поэтому важно, чтобы проблемы с доступом к функционалу были решены.
 
-To understand why this program invokes these warnings, let’s try using the
-`connect` library from another project, calling it externally. To do that,
-we’ll create a binary crate in the same directory as our library crate by
-making a *src/main.rs* file containing this code:
+Для того, чтобы понять почему существуют такие ошибки, а как важно их устранить,
+попробуем воспользоваться функционалом кода извне. Для этого создадим выполняемый
+проект в этой же директории. Создадим файл *src/main.rs*, который содержит:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -48,27 +40,22 @@ fn main() {
 }
 ```
 
-We use the `extern crate` command to bring the `communicator` library crate
-into scope. Our package now contains *two* crates. Cargo treats *src/main.rs*
-as the root file of a binary crate, which is separate from the existing library
-crate whose root file is *src/lib.rs*. This pattern is quite common for
-executable projects: most functionality is in a library crate, and the binary
-crate uses that library crate. As a result, other programs can also use the
-library crate, and it’s a nice separation of concerns.
+Мы сейчас использовали команду `extern crate` для того чтобы использовать функционал
+библиотеки `communicator` в нашей новой программе. Cargo использует файл *src/main.rs*,
+как точку доступа для бинарной программы, в то время, как *src/lib.rs* используется
+для библиотеки. Такая организация кода довольно-таки обычна. Большинство кода
+находится в библиотек, а бинарный файл просто использует эту библиотеку. Результатом
+такой архитектуры является возможность другим программам также использовать функционал
+библиотеки.
 
-From the point of view of a crate outside the `communicator` library looking
-in, all the modules we’ve been creating are within a module that has the same
-name as the crate, `communicator`. We call the top-level module of a crate the
-*root module*.
+Со стороны стороннего кода все что находится в библиотеке имеет пространство имён
+`communicator` (имя библиотеки) верхнего уровня. Всё остальное, это подчиненные подули.
 
-Also note that even if we’re using an external crate within a submodule of our
-project, the `extern crate` should go in our root module (so in *src/main.rs*
-or *src/lib.rs*). Then, in our submodules, we can refer to items from external
-crates as if the items are top-level modules.
+Также обратите внимание, что когда мы используем внешние библиотеки с подомодулями,
+команда `extern crate` начинает искать модули с верхнего уровня.
 
-Right now, our binary crate just calls our library’s `connect` function from
-the `client` module. However, invoking `cargo build` will now give us an error
-after the warnings:
+В нашей программе бинарный файл вызывает библиотечную функцию `connect` из
+модуля `client`. Но при компиляции этого кода получим сообщении об ошибке:
 
 ```text
 error: module `client` is private
@@ -78,30 +65,22 @@ error: module `client` is private
   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 ```
 
-Ah ha! This error tells us that the `client` module is private, which is the
-crux of the warnings. It’s also the first time we’ve run into the concepts of
-*public* and *private* in the context of Rust. The default state of all code in
-Rust is private: no one else is allowed to use the code. If you don’t use a
-private function within your program, because your program is the only code
-allowed to use that function, Rust will warn you that the function has gone
-unused.
+Это сообщение говорит нам о том, что модуль `client` закрытый.
+Т.к. код в модуле закрытый по умолчанию и не используется внутри библиотеки - на
+это надо обратить внимание, т.к. это явная ошибка в организации кода.
 
-After we specify that a function like `client::connect` is public, not only
-will our call to that function from our binary crate be allowed, but the
-warning that the function is unused will go away. Marking a function as public
-lets Rust know that the function will be used by code outside of our program.
-Rust considers the theoretical external usage that’s now possible as the
-function “being used.” Thus, when something is marked public, Rust will not
-require that it be used in our program and will stop warning that the item is
-unused.
+После определения функции `client::connect`, как доступной (`pub`), не только сообщение
+об ошибке исчезнет, но и проподёт сообщение о том, что код не используется.
+Создания доступного кода в Rust даёт возможность его использования вне библиотеки.
+Когда какой-либо кода помечается как `pub`, компилятор больше не сообщает об неиспользованном
+коде, если даже он фактически не используется.
 
-### Making a Function Public
+### Сделать функции доступными
 
-To tell Rust to make something public, we add the `pub` keyword to the start of
-the declaration of the item we want to make public. We’ll focus on fixing the
-warning that indicates `client::connect` has gone unused for now, as well as
-the `` module `client` is private `` error from our binary crate. Modify
-*src/lib.rs* to make the `client` module public, like so:
+Для того, чтобы сделать что-либо доступным извне необходимо добавить ключевое слово
+`pub` в начало декларирования элемента кода. Для исправления ошибки мы добавить
+это спецификатор доступа перед определение имени модуля.
+:
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -111,7 +90,7 @@ pub mod client;
 mod network;
 ```
 
-The `pub` keyword is placed right before `mod`. Let’s try building again:
+Ключевое слово `pub` перед `mod`. Компиляция, ошибка:
 
 ```text
 error: function `connect` is private
@@ -121,9 +100,7 @@ error: function `connect` is private
   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 ```
 
-Hooray! We have a different error! Yes, different error messages are a cause
-for celebration. The new error shows `` function `connect` is private ``, so
-let’s edit *src/client.rs* to make `client::connect` public too:
+Сделаем исправления в определении функции в файле *src/client.rs*:
 
 <span class="filename">Filename: src/client.rs</span>
 
@@ -132,7 +109,7 @@ pub fn connect() {
 }
 ```
 
-Now run `cargo build` again:
+Снова компилируем `cargo clean`, `cargo build` снова:
 
 ```text
 warning: function is never used: `connect`, #[warn(dead_code)] on by default
@@ -148,19 +125,13 @@ warning: function is never used: `connect`, #[warn(dead_code)] on by default
   | ^
 ```
 
-The code compiled, and the warning about `client::connect` not being used is
-gone!
+Код скомпилировался и предостережения о функции `client::connect` уже нет!
 
-Unused code warnings don’t always indicate that an item in your code needs to
-be made public: if you *didn’t* want these functions to be part of your public
-API, unused code warnings could be alerting you to code you no longer need that
-you can safely delete. They could also be alerting you to a bug if you had just
-accidentally removed all places within your library where this function is
-called.
+Вам решать, что делать с неиспользованным кодом, то ли открыть к нему доступ, то ли
+удалить.
 
-But in this case, we *do* want the other two functions to be part of our
-crate’s public API, so let’s mark them as `pub` as well to get rid of the
-remaining warnings. Modify *src/network/mod.rs* to look like the following:
+В данном случае мы хотим, чтобы эти функции были доступны. Поэтому добавим `pub`
+там, где это необходимо:
 
 <span class="filename">Filename: src/network/mod.rs</span>
 
@@ -171,7 +142,7 @@ pub fn connect() {
 mod server;
 ```
 
-Then compile the code:
+Скомпилируем и проанализируем ошибки:
 
 ```text
 warning: function is never used: `connect`, #[warn(dead_code)] on by default
@@ -187,12 +158,7 @@ warning: function is never used: `connect`, #[warn(dead_code)] on by default
   | ^
 ```
 
-Hmmm, we’re still getting an unused function warning, even though
-`network::connect` is set to `pub`. The reason is that the function is public
-within the module, but the `network` module that the function resides in is not
-public. We’re working from the interior of the library out this time, whereas
-with `client::connect` we worked from the outside in. We need to change
-*src/lib.rs* to make `network` public too, like so:
+Для того, чтобы открытые функции модуля были доступны, сам модуль должен быть доступен.:
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -202,7 +168,7 @@ pub mod client;
 pub mod network;
 ```
 
-Now when we compile, that warning is gone:
+Отличная работа:
 
 ```text
 warning: function is never used: `connect`, #[warn(dead_code)] on by default
@@ -212,21 +178,17 @@ warning: function is never used: `connect`, #[warn(dead_code)] on by default
   | ^
 ```
 
-Only one warning is left! Try to fix this one on your own!
+Надеюсь, что теперь исправить последний недочёт программы Вам не составит труда.
 
-### Privacy Rules
+### Правила доступа
 
-Overall, these are the rules for item visibility:
 
-1. If an item is public, it can be accessed through any of its parent modules.
-2. If an item is private, it can be accessed only by its immediate parent
-   module and any of the parent’s child modules.
+1. Если элемент открытый, он должен быть открытый и все родительские модули тоже.
+2. Если элемент закрытый, он может быть доступен только из родительского модуля и из любых подчиненных модулей.
 
-### Privacy Examples
+### Примеры
 
-Let’s look at a few more privacy examples to get some practice. Create a new
-library project and enter the code in Listing 7-5 into your new project’s
-*src/lib.rs*:
+Создадим новый проект библиотеки secret 7-5 *src/lib.rs*:
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -251,48 +213,23 @@ fn try_me() {
 }
 ```
 
-<span class="caption">Listing 7-5: Examples of private and public functions,
-some of which are incorrect</span>
+<span class="caption">Код 7-5: Примеры открытых и закрытый функций с ошибками</span>
 
-Before you try to compile this code, make a guess about which lines in the
-`try_me` function will have errors. Then, try compiling the code to see whether
-you were right, and read on for the discussion of the errors!
+Перед компиляцией кода, попробуйте догадаться, где будет ошибка. Убедитесь в этом
+с помощью компиляции. Исправьте ошибки в коде!
 
-#### Looking at the Errors
+#### Рассмотрим ошибки
 
-The `try_me` function is in the root module of our project. The module named
-`outermost` is private, but the second privacy rule states that the `try_me`
-function is allowed to access the `outermost` module because `outermost` is in
-the current (root) module, as is `try_me`.
+Функция `try_me` находится на верхнем уровне модуля нашего проекта. Модуль
+`outermost` закрытый, но к его функциям может быть доступ, т.к. модуль верхнего
+уровня.
 
-The call to `outermost::middle_function` will work because `middle_function` is
-public, and `try_me` is accessing `middle_function` through its parent module
-`outermost`. We determined in the previous paragraph that this module is
-accessible.
+Вызов остальных двух функций вызовет ошибку, т.к. не применяются правила видимости.
+Пожалуйста, исправьте ошибку!
 
-The call to `outermost::middle_secret_function` will cause a compilation error.
-`middle_secret_function` is private, so the second rule applies. The root
-module is neither the current module of `middle_secret_function` (`outermost`
-is), nor is it a child module of the current module of `middle_secret_function`.
+#### Исправление ошибок
 
-The module named `inside` is private and has no child modules, so it can only
-be accessed by its current module `outermost`. That means the `try_me` function
-is not allowed to call `outermost::inside::inner_function` or
-`outermost::inside::secret_function`.
+Пожалуйста, попытайтесь поэкспериментировать с доступом к функциям  и посмотрите
+на описания ошибок!
 
-#### Fixing the Errors
-
-Here are some suggestions for changing the code in an attempt to fix the
-errors. Before you try each one, make a guess as to whether it will fix the
-errors, and then compile the code to see whether or not you’re right, using the
-privacy rules to understand why.
-
-* What if the `inside` module was public?
-* What if `outermost` was public and `inside` was private?
-* What if, in the body of `inner_function`, you called
-  `::outermost::middle_secret_function()`? (The two colons at the beginning mean
-  that we want to refer to the modules starting from the root module.)
-
-Feel free to design more experiments and try them out!
-
-Next, let’s talk about bringing items into scope with the `use` keyword.
+Далее, мы поговорим об использовании ключевого слова `use`.

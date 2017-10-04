@@ -1,15 +1,12 @@
-# Enums and Pattern Matching
+# Перечисления и шаблоны выбора
 
-In this chapter we’ll look at *enumerations*, also referred to as *enums*.
-Enums allow you to define a type by enumerating its possible values. First,
-we’ll define and use an enum to show how an enum can encode meaning along with
-data. Next, we’ll explore a particularly useful enum, called `Option`, which
-expresses that a value can be either something or nothing. Then we’ll look at
-how pattern matching in the `match` expression makes it easy to run different
-code for different values of an enum. Finally, we’ll cover how the `if let`
-construct is another convenient and concise idiom available to you to handle
-enums in your code.
+В этой главе мы рассмотрим *перечисления* (*enums*). Это группировочный тип данных,
+в который входит конечный набор константных значений. Сначала мы рассмотрим, как
+можно использовать перечисление в коде. Далее, мы рассмотрим наиболее часто используемое
+перечисление `Option`. Его удобно использовать, как оболочку для выходных данных
+функции и или языковых контракций. Мы рассмотрим работу языковой конструкции `match`,
+которая позволяет организовывать ветвления в коде. Также мы рассмотрим конструкцию
+`if let`, которая позволяет использовать перечисления, как создании ветвления в коде.
 
-Enums are a feature in many languages, but their capabilities differ in each
-language. Rust’s enums are most similar to *algebraic data types* in functional
-languages like F#, OCaml, and Haskell.
+Данный тип схож по *алгебраическими типами данных* в таких языках, как F#, OCaml или
+ Haskell.

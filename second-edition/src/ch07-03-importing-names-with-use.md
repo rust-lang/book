@@ -1,8 +1,7 @@
-## Importing Names
+## Импорт имён
 
-We’ve covered how to call functions defined within a module using the module
-name as part of the call, as in the call to the `nested_modules` function shown
-here in Listing 7-6:
+Мы изучили как вызывать функции, определённые в модуле используя имена модулей, как
+часть вызова. Пример 7-6:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -10,7 +9,9 @@ here in Listing 7-6:
 pub mod a {
     pub mod series {
         pub mod of {
-            pub fn nested_modules() {}
+            pub fn nested_modules() {
+                println!("nested_modules");
+            }
         }
     }
 }
@@ -20,17 +21,15 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 7-6: Calling a function by fully specifying its
-enclosing module’s path</span>
+<span class="caption">Пример 7-6: Вызов функции, указав полный к ней путь</span>
 
-As you can see, referring to the fully qualified name can get quite lengthy.
-Fortunately, Rust has a keyword to make these calls more concise.
+Как вы видите, указание полного пути к функции весьма утомительно. Конечно же, в Rust
+имеется функционал упрощающий вызов функций.
 
-### Concise Imports with `use`
+### Краткий импорт. Использование `use`
 
-Rust’s `use` keyword shortens lengthy function calls by bringing the modules of
-the function you want to call into scope. Here’s an example of bringing the
-`a::series::of` module into a binary crate’s root scope:
+Использование ключевого слова `use` сокращает указание полного пути к функции, которую
+вы хотите использовать в определённой области видимости. Пример применения  `use`:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -38,7 +37,9 @@ the function you want to call into scope. Here’s an example of bringing the
 pub mod a {
     pub mod series {
         pub mod of {
-            pub fn nested_modules() {}
+            pub fn nested_modules() {
+                println!("nested_modules");
+            }
         }
     }
 }
@@ -50,26 +51,27 @@ fn main() {
 }
 ```
 
-The line `use a::series::of;` means that rather than using the full
-`a::series::of` path wherever we want to refer to the `of` module, we can use
-`of`.
+Строка `use a::series::of;`, что в данной области видимости могут использовать элементы,
+которые находятся в модуле `of`. Их можно вызывать просто указывая префикс имени этого
+модуля `of::`.
 
-The `use` keyword brings only what we’ve specified into scope: it does not
-bring children of modules into scope. That’s why we still have to use
-`of::nested_modules` when we want to call the `nested_modules` function.
+В область видимости попадают только элементы модуля. Подчиненные модуле не включаются
+в область видимости и есть в этом есть необходимость надо явным образом это указать.
+Поэтому нам всёже надо указывть `of::nested_modules`, вместо `nested_modules`.
 
-We could have chosen to bring the function into scope by instead specifying the
-function in the `use` as follows:
+Чтобы не указывать имя модуля можно выполнить т.н. статический импорт функции в
+область видимости:
 
 ```rust
 pub mod a {
     pub mod series {
         pub mod of {
-            pub fn nested_modules() {}
+            pub fn nested_modules() {
+                println!("nested_modules");
+            }
         }
     }
 }
-
 use a::series::of::nested_modules;
 
 fn main() {
@@ -77,15 +79,14 @@ fn main() {
 }
 ```
 
-Doing so allows us to exclude all the modules and reference the function
-directly.
+Такой способ импорт даёт нам возможность сокращать список импорта.
 
-Because enums also form a sort of namespace like modules, we can import an
-enum’s variants with `use` as well. For any kind of `use` statement, if you’re
-importing multiple items from one namespace, you can list them using curly
-braces and commas in the last position, like so:
+Очень интересная возможность импорта значений перечислений!
+Т.к. перечисления можно назвать разновидность пространств имеет, то можно указать
+только необходимые элементы перечисления при импорте:
 
 ```rust
+#[derive(Debug)]
 enum TrafficLight {
     Red,
     Yellow,
@@ -98,16 +99,19 @@ fn main() {
     let red = Red;
     let yellow = Yellow;
     let green = TrafficLight::Green;
+
+    println!("{:?}",red);
+    println!("{:?}",yellow);
+    println!("{:?}",green);
 }
 ```
+Так как мы не включили `TrafficLight` в список импортированных значений перечисления,
+то для его использования нам необходимо указать полный путь до этого элемента.
 
-We’re still specifying the `TrafficLight` namespace for the `Green` variant
-because we didn’t include `Green` in the `use` statement.
+### Импорт всех элементов с помощью `*`
 
-### Glob Imports with `*`
-
-To import all the items in a namespace at once, we can use the `*` syntax. For
-example:
+Есть ли возможность импортирования всех элементов выбранного пространсва имён?!
+Да. Есть. Испльзуйте `*`:
 
 ```rust
 enum TrafficLight {
@@ -124,16 +128,61 @@ fn main() {
     let green = Green;
 }
 ```
+Символ `*` называют *glob* и его функция - импорт всех элементов, видимых извне
+пространства имён. Обратите также внимание, что наряду с удобствами, существуют
+также недоставки использования полного импорта пространства имён, т.к. это может привести
+к конфликтными или неожиданным ситуациями, когда в разных пространствах имён существуют
+одинаковые (по имени) функции, которые будут импортироваться.
+Пример:
 
-The `*` is called a *glob*, and it will import all items visible inside the
-namespace. You should use globs sparingly: they are convenient, but this might
-also pull in more items than you expected and cause naming conflicts.
+```rust
+pub mod a {
+    pub mod series {
+        pub mod of1 {
+            pub fn nested_modules() {
+                println!("nested_modules 1");
+            }
+        }
+        pub mod of2 {
+            pub fn nested_modules() {
+                println!("nested_modules 2");
+            }
+        }
+    }
+}
+use a::series::of1::*;
+use a::series::of2::*;
 
-### Using `super` to Access a Parent Module
+fn main() {
+    nested_modules();
+}
+```
 
-As we saw at the beginning of this chapter, when you create a library crate,
-Cargo makes a `tests` module for you. Let’s go into more detail about that now.
-In your `communicator` project, open *src/lib.rs*:
+Описание ошибки:
+```
+error: `nested_modules` is ambiguous
+  --> src/main.rs:19:5
+   |
+19 |     nested_modules();
+   |     ^^^^^^^^^^^^^^
+   |
+note: `nested_modules` could refer to the name imported here
+  --> src/main.rs:15:5
+   |
+15 | use a::series::of1::*;
+   |     ^^^^^^^^^^^^^^^^^^
+note: `nested_modules` could also refer to the name imported here
+  --> src/main.rs:16:5
+   |
+16 | use a::series::of2::*;
+   |     ^^^^^^^^^^^^^^^^^^
+   = note: consider adding an explicit import of `nested_modules` to disambiguate
+```
+
+### Доступ к функционалу родительского модуля с помощью `super`
+
+Как вы помните, при создании библиотеки Cargo предлагает использовать модуль `tests`.
+Сейчас разберёмся подробнее. Добавим код теста в исходный код файла *src/lib.rs*:
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -150,11 +199,9 @@ mod tests {
 }
 ```
 
-Chapter 11 explains more about testing, but parts of this example should make
-sense now: we have a module named `tests` that lives next to our other modules
-and contains one function named `it_works`. Even though there are special
-annotations, the `tests` module is just another module! So our module hierarchy
-looks like this:
+В главе 11  подробно рассказывается о тестировании. Сейчас мы только немного расскажем.
+Обратите внимание на специальную аннотацию и то что это отдельный модуль в нашем коде.
+Модульная система нашего проекта теперь имеет вид:
 
 ```text
 communicator
@@ -164,9 +211,8 @@ communicator
  └── tests
 ```
 
-Tests are for exercising the code within our library, so let’s try to call our
-`client::connect` function from this `it_works` function, even though we won’t
-be checking any functionality right now:
+Тесты помогат отлаживать код библиотеки. Напишем наш первый тест. Он будет вызывать
+функцию `client::connect`:
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -180,7 +226,7 @@ mod tests {
 }
 ```
 
-Run the tests by invoking the `cargo test` command:
+Выполнение тестов осуществляется командой`cargo test`:
 
 ```text
 $ cargo test
@@ -192,44 +238,34 @@ error[E0433]: failed to resolve. Use of undeclared type or module `client`
   |         ^^^^^^^^^^^^^^^ Use of undeclared type or module `client`
 ```
 
-The compilation failed, but why? We don’t need to place `communicator::` in
-front of the function like we did in *src/main.rs* because we are definitely
-within the `communicator` library crate here. The reason is that paths are
-always relative to the current module, which here is `tests`. The only
-exception is in a `use` statement, where paths are relative to the crate root
-by default. Our `tests` module needs the `client` module in its scope!
+Почему-то компиляция прошла неуспешно. Почему же? Нам не надо добавлять префикс
+библиотеки `communicator::`, т.к. мы находимся внутри неё.
 
-So how do we get back up one module in the module hierarchy to call the
-`client::connect` function in the `tests` module? In the `tests` module, we can
-either use leading colons to let Rust know that we want to start from the root
-and list the whole path, like this:
+Как же вызвать функцию `client::connect` из модуля `tests`? В модуле `tests` мы
+можем указать что мы хотим начать поиски модулей с корневого модуля:
 
 ```rust,ignore
 ::client::connect();
 ```
 
-Or, we can use `super` to move up one module in the hierarchy from our current
-module, like this:
+Или мы можем использовать `super` для того чтобы переместиться по модульной иерархии
+на один уровень выше текущаего модуля:
 
 ```rust,ignore
 super::client::connect();
 ```
 
-These two options don’t look that different in this example, but if you’re
-deeper in a module hierarchy, starting from the root every time would make your
-code lengthy. In those cases, using `super` to get from the current module to
-sibling modules is a good shortcut. Plus, if you’ve specified the path from the
-root in many places in your code and then you rearrange your modules by moving
-a subtree to another place, you’d end up needing to update the path in several
-places, which would be tedious.
+Этои две опции выглядят одинаковыми в этом примере, но если находитесь глубоко
+внутри модульной иерархии. Начиная с корневого модуля ваш код будет длинным.
+Есть случаи, когда использование `super` более удобно.
 
-It would also be annoying to have to type `super::` in each test, but you’ve
-already seen the tool for that solution: `use`! The `super::` functionality
-changes the path you give to `use` so it is relative to the parent module
-instead of to the root module.
+Это бывает утомительно печать `super::` в каждом тесте. Есть решение `use`.
+Функциональность `super::` изменяет путь, который вы используете в `use`.
 
-For these reasons, in the `tests` module especially, `use super::something` is
-usually the best solution. So now our test looks like this:
+Для тех случаев, когда вы пишите тесты к библиотекам использование `use super::something`
+наилучшее решение.
+
+Пример:
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -245,8 +281,7 @@ mod tests {
 }
 ```
 
-When we run `cargo test` again, the test will pass and the first part of the
-test result output will be the following:
+Когда вы теперь выполните команду `cargo test`  вы увидите следующий вывод:
 
 ```text
 $ cargo test
@@ -259,12 +294,10 @@ test tests::it_works ... ok
 test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured
 ```
 
-## Summary
+## Итоги
 
-Now you know some new techniques for organizing your code! Use these techniques
-to group related functionality together, keep files from becoming too long, and
-present a tidy public API to your library users.
+Теперь вы знаете ещё один способ, как можно организовать ваш код. Её можно использовать
+для группировки различных элементов вместе, при рефакторинг большого количества
+кода.
 
-Next, we’ll look at some collection data structures in the standard library
-that you can use in your nice, neat code!
-
+Далее, мы рассмотрим структуры данных стандартной библиотеки.
