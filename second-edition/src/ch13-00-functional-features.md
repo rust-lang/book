@@ -1,10 +1,5 @@
 # Functional Language features in Rust: Iterators and Closures
 
-<!-- Are closures unique to Rust? -->
-<!-- No, they're from functional languages, which is why they're discussed in
-this chapter. Do you have a suggestion on how to make that clearer than the
-text in the intro paragraph here? /Carol -->
-
 Rust’s design has taken inspiration from a lot of existing languages and
 techniques, and one significant influence is *functional programming*.
 Programming in a functional style often includes using functions as values in

@@ -32,20 +32,9 @@ and implementor of C++, defines *zero-overhead*:
 >
 > - Bjarne Stroustrup “Foundations of C++”
 
-<!-- should this be "handle code any better", above? -->
-<!-- No, this is an exact quote. He means hand code, as in "code by hand",
-rather than let the language/standard library code it for you. The quote is
-at the top of page 4 in http://www.stroustrup.com/ETAPS-corrected-draft.pdf
-/Carol -->
-
 As another example, here is some code taken from an audio decoder. The decoding
 algorithm uses the linear prediction mathematical operation to estimate future
 values based on a linear function of the previous samples.
-
-<!-- Can you briefly explain what the intention of the code it --- that will
-help us understand, for example, why we have a `prediction` value -->
-<!-- I've tried, but the algorithm is really complicated and not really all
-that important... /Carol -->
 
 This code uses an iterator chain to do some math on three variables in scope: a
 `buffer` slice of data, an array of 12 `coefficients`, and an amount by which
@@ -85,9 +74,6 @@ the loop. Unrolling is an optimization that removes the overhead of the loop
 controlling code and instead generates repetitive code for each iteration of
 the loop.
 
-<!-- Maybe some expansion on what you mean by unrolls? -->
-<!-- done /Carol -->
-
 All of the coefficients get stored in registers, which means it’s very fast to
 access the values. There are no bounds checks on the array access at runtime.
 All these optimizations Rust is able to apply make the resulting code extremely
@@ -104,15 +90,6 @@ language ideas. They contribute to Rust’s ability to clearly express high-leve
 ideas, at low level performance. The implementations of closures and iterators
 are such that runtime performance is not affected. This is part of Rust’s goal
 to strive to provide zero-cost abstractions.
-
-<!-- Are we going to cover which other elements of rust are zero-cost
-abstractions, somewhere? Might be good to cross ref or, if we've already
-covered, give a brief list or a way to identify them -->
-<!-- Zero-cost abstraction in Rust is more about a design philosophy and a goal
-we keep in mind; all abstractions in Rust strive to be zero-cost abstractions,
-and if they aren't, it's considered a bug. There will always be some bugs. I've
-reworded a bit to not make it sound as much like something we could list.
-/Carol -->
 
 Now that we’ve improved the expressiveness of our I/O project, let’s look at
 some more features of `cargo` that would help us get ready to share the project

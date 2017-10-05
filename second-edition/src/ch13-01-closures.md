@@ -1,29 +1,11 @@
 ## Closures: Anonymous Functions that can Capture their Environment
 
-<!-- Bill's suggested we flesh out some of these subtitles, which I think we
-did more with earlier chapters but we (I, included!) have got a bit lax with. I
-don't think this is quite right, is there a shorter heading we could use to
-capture what a closure is/is for? -->
-<!-- I've attempted a more descriptive subtitle, what do you think? /Carol -->
-
 Rust’s *closures* are anonymous functions that you can save in a variable or
 pass as arguments to other functions. You can create the closure in one place,
 and then call the closure to evaluate it in a different context. Unlike
 functions, closures are allowed to capture values from the scope in which they
 are called. We’re going to demonstrate how these features of closures allow for
 code reuse and customization of behavior.
-
-<!-- Can you say what sets closures apart from functions, explicitly, above? I
-can't see it clearly enough to be confident, after one read through this
-chapter. I think it would help to have the closure definition up front, to help
-to let the reader know what they are looking out for in the examples. When
-would you use a closure, for example, rather than using a function? And is it
-the closure that's stored in the variable, or is it the result of applying the
-closure to a value passed as an argument? -->
-<!-- I've tried reworking the above paragraph and restructuring the examples to
-be more motivating. I've also tried to make it clear throughout that storing a
-closure is storing the *unevaluated* code, and then you call the closure in
-order to get the result. /Carol -->
 
 ### Creating an Abstraction of Behavior Using a Closure
 
@@ -148,8 +130,6 @@ The first `if` block calls `simulated_expensive_calculation` twice, the `if`
 inside the outer `else` doesn’t call it at all, and the code inside the `else`
 case inside the outer `else` calls it once.
 
-<!-- Will add wingdings in libreoffice /Carol -->
-
 The desired behavior of the `generate_workout` function is to first check if
 the user wants a low intensity workout (indicated by a number less than 25) or
 a high intensity workout (25 or more). Low intensity workout plans will
@@ -218,8 +198,6 @@ fn generate_workout(intensity: i32, random_number: i32) {
 `simulated_expensive_calculation` to one place before the `if` blocks and
 storing the result in the `expensive_result` variable</span>
 
-<!-- Will add ghosting and wingdings in libreoffice /Carol -->
-
 This change unifies all the calls to `simulated_expensive_calculation` and
 solves the problem of the first `if` block calling the function twice
 unnecessarily. Unfortunately, we’re now calling this function and waiting for
@@ -255,12 +233,6 @@ let expensive_closure = |num| {
 <span class="caption">Listing 13-5: Defining a closure with the body that was
 in the expensive function and store the closure in the `expensive_closure`
 variable</span>
-
-<!-- Can you elaborate on *how* to define the closure first? I've had a go here
-based on what I can see but not sure it's correct. Are we saying that a closure
-is function that assigned its result to a variable you can then use? -->
-<!-- I've attempted to elaborate on defining a closure in the next few
-paragraphs starting here, is this better? /Carol -->
 
 The closure definition is the part after the `=` that we’re assigning to the
 variable `expensive_closure`. To define a closure, we start with a pair of
@@ -345,9 +317,6 @@ Closures differ from functions defined with the `fn` keyword in a few
 ways. The first is that closures don’t require you to annotate the types of the
 parameters or the return value like `fn` functions do.
 
-<!-- I've suggested moving this next paragraph up from below, I found this
-section difficult to follow with this next paragraph -->
-
 Type annotations are required on functions because they are part of an
 explicit interface exposed to your users. Defining this interface rigidly is
 important for ensuring that everyone agrees on what types of values a function
@@ -362,17 +331,6 @@ type similarly to how it’s able to infer the types of most variables. Being
 forced to annotate the types in these small, anonymous functions would be
 annoying and largely redundant with the information the compiler already has
 available.
-
-<!--Can you expand above on what you mean by "stored in bindings and called
-directly"? Do you mean stored in a variable? I'm struggling to visualize how
-closures are used, and what the important difference is between them and
-functions. I think a clearer definition of what they are, what they do, and
-what they're used for at the start of the closures section would help clear
-this up -->
-<!-- Yes, sorry, in Rust terminology "binding" is mostly synonymous to
-"variable", but when we started working on the book we decided to be consistent
-and more like what people are used to by referring to the concept as "variable"
-throughout, but we missed this spot. /Carol -->
 
 Like variables, we can choose to add type annotations if we want to increase
 explicitness and clarity in exchange for being more verbose than is strictly
@@ -395,25 +353,12 @@ let expensive_closure = |num: i32| -> i32 {
 <span class="caption">Listing 13-7: Adding optional type annotations of the
 parameter and return value types in the closure</span>
 
-<!-- Why might you want to, if you don't need to? In a particular situation? -->
-<!-- I've added an explanation /Carol -->
-
-<!-- Below -- Am I right in assuming the closures below are doing the same
-thing as the functions? -->
-<!-- Yes /Carol -->
-
 The syntax of closures and functions looks more similar with type annotations.
 Here’s a vertical comparison of the syntax for the definition of a function
 that adds one to its parameter, and a closure that has the same behavior. We’ve
 added some spaces here to line up the relevant parts). This illustrates how
 closure syntax is similar to function syntax except for the use of pipes rather
 than parentheses and the amount of syntax that is optional:
-
-<!-- Prod: can you align this as shown in the text? -->
-<!-- I'm confused, does this note mean that production *won't* be aligning all
-of our other code examples as shown in the text? That's concerning to me, we're
-trying to illustrate idiomatic Rust style in all the code examples, so our
-alignment is always intentional... /Carol -->
 
 ```rust,ignore
 fn  add_one_v1   (x: i32) -> i32 { x + 1 }
@@ -422,26 +367,11 @@ let add_one_v3 = |x|             { x + 1 };
 let add_one_v4 = |x|               x + 1  ;
 ```
 
-<!-- Can you point out where we're looking at here, where the important
-differences lie? -->
-<!-- The importance isn't the difference but the similarity... I've tried to
-clarify /Carol -->
-
-<!-- Will add wingdings and ghosting in libreoffice /Carol -->
-
 The first line shows a function definition, and the second line shows a fully
 annotated closure definition. The third line removes the type annotations from
 the closure definition, and the fourth line removes the braces that are
 optional since the closure body only has one line. These are all valid
 definitions that will produce the same behavior when they’re called.
-
-<!--Below--I'm not sure I'm following, is the i8 type being inferred? It seems
-like we're annotating it. -->
-<!-- The types in the function definitions are being inferred, but since Rust's
-variable types for numbers defaults to `i32`, in order to illustrate our point
-here we're forcing the type of the *variable* to be `i8` by annotating it in
-the *variable* declaration. I've changed the example to hopefully be less
-confusing and convey our point better. /Carol -->
 
 Closure definitions will have one concrete type inferred for each of their
 parameters and for their return value. For instance, Listing 13-8 shows the
@@ -477,8 +407,6 @@ error[E0308]: mismatched types
              found type `{integer}`
 ```
 
-<!-- Will add wingdings in libreoffice /Carol -->
-
 The first time we call `example_closure` with the `String` value, the compiler
 infers the type of `x` and the return type of the closure to be `String`. Those
 types are then locked in to the closure in `example_closure`, and we get a type
@@ -507,10 +435,6 @@ type: that is, even if two closures have the same signature, their types are
 still considered to be different. In order to define structs, enums, or
 function parameters that use closures, we use generics and trait bounds like we
 discussed in Chapter 10.
-
-<!-- So Fn is a trait built into the language, is that right? I wasn't sure if
-it was just a placeholder here -->
-<!-- Fn is provided by the standard library; I've clarified here. /Carol -->
 
 The `Fn` traits are provided by the standard library. All closures implement
 one of the traits `Fn`, `FnMut`, or `FnOnce`. We’ll discuss the difference
@@ -587,13 +511,6 @@ impl<T> Cacher<T>
     }
 }
 ```
-
-<!-- Liz: the `new` function is using the "struct init shorthand" by just
-saying `calculation` instead of `calculation: calculation`, since the parameter
-matches the struct field name. This was recently added to stable Rust and we've
-added an introduction of it in Chapter 5. Just adding an explanation here for
-you in case you read this chapter before the changes we've made to Chapter 5!
-/Carol -->
 
 <span class="caption">Listing 13-10: Implementations on `Cacher` of an
 associated function named `new` and a method named `value` that manage the
@@ -686,8 +603,6 @@ fn generate_workout(intensity: i32, random_number: i32) {
 <span class="caption">Listing 13-11: Using `Cacher` in the `generate_workout`
 function to abstract away the caching logic</span>
 
-<!-- Will add ghosting and wingdings in libreoffice /Carol -->
-
 Instead of saving the closure in a variable directly, we save a new instance of
 `Cacher` that holds the closure. Then, in each place we want the result, we
 call the `value` method on the `Cacher` instance. We can call the `value`
@@ -761,24 +676,8 @@ functions. Closures have an additional ability we can use that functions don’t
 have, however: they can capture their environment and access variables from the
 scope in which they’re defined.
 
-<!-- To clarify, by enclosing scope, do you mean the scope that the closure is
-inside? Can you expand on that?-->
-<!-- Yes, I've tried here to clarify that it's the scope in which the closure
-is defined /Carol -->
-
 Listing 13-12 has an example of a closure stored in the variable `equal_to_x`
 that uses the variable `x` from the closure’s surrounding environment:
-
-<!-- To clarify how we talk about a closure, does the closure include the
-variable name, or are we referring to the closure as the functionality that is
-on the right side of the = and so not including to variable name? I thought it
-was the former, but it seems like the latter above. If it's the former, would
-"an example of a closure with the variable `equal_to_x`" make more sense? -->
-<!-- No, the closure does not include the variable name in which it's stored;
-storing a closure in a variable is optional. It should always be the latter,
-and I hope the reworking of the example used throughout the closure section
-and making the wording consistent has cleared this confusion up by this point.
-/Carol -->
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -800,15 +699,6 @@ variable in its enclosing scope</span>
 Here, even though `x` is not one of the parameters of `equal_to_x`, the
 `equal_to_x` closure is allowed to use the `x` variable that’s defined in the
 same scope that `equal_to_x` is defined in.
-
-<!-- So *why* is this allowed with closures and not functions, what about
-closures makes this safe? -->
-<!-- It's not really about safety; capturing the environment is the defining
-functionality a closure has. The reason functions *don't* capture their
-environment is mostly around storage overhead; I've added an explanation of
-that aspect. Can you elaborate on what led to the conclusion that allowing
-captures with functions wouldn't be safe and what you mean by "safe" here?
-/Carol -->
 
 We can’t do the same with functions; let’s see what happens if we try:
 
@@ -845,10 +735,6 @@ that we don’t want to pay for in the more common case where we want to execute
 code that doesn’t capture its environment. Because functions are never allowed
 to capture their environment, defining and using functions will never incur
 this overhead.
-
-<!-- Why didn't this work, is there a reason ingrained in the language? Or is
-that not really relevant? -->
-<!-- I've added an explanation /Carol -->
 
 Closures can capture values from their environment in three ways, which
 directly map to the three ways a function can take a parameter: taking

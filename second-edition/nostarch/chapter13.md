@@ -3,11 +3,6 @@
 
 # Functional Language features in Rust: Iterators and Closures
 
-<!-- Are closures unique to Rust? -->
-<!-- No, they're from functional languages, which is why they're discussed in
-this chapter. Do you have a suggestion on how to make that clearer than the
-text in the intro paragraph here? /Carol -->
-
 Rust’s design has taken inspiration from a lot of existing languages and
 techniques, and one significant influence is *functional programming*.
 Programming in a functional style often includes using functions as values in
@@ -32,30 +27,12 @@ code, so we’re devoting an entire chapter to them here.
 
 ## Closures: Anonymous Functions that can Capture their Environment
 
-<!-- Bill's suggested we flesh out some of these subtitles, which I think we
-did more with earlier chapters but we (I, included!) have got a bit lax with. I
-don't think this is quite right, is there a shorter heading we could use to
-capture what a closure is/is for? -->
-<!-- I've attempted a more descriptive subtitle, what do you think? /Carol -->
-
 Rust’s *closures* are anonymous functions that you can save in a variable or
 pass as arguments to other functions. You can create the closure in one place,
 and then call the closure to evaluate it in a different context. Unlike
 functions, closures are allowed to capture values from the scope in which they
 are called. We’re going to demonstrate how these features of closures allow for
 code reuse and customization of behavior.
-
-<!-- Can you say what sets closures apart from functions, explicitly, above? I
-can't see it clearly enough to be confident, after one read through this
-chapter. I think it would help to have the closure definition up front, to help
-to let the reader know what they are looking out for in the examples. When
-would you use a closure, for example, rather than using a function? And is it
-the closure that's stored in the variable, or is it the result of applying the
-closure to a value passed as an argument? -->
-<!-- I've tried reworking the above paragraph and restructuring the examples to
-be more motivating. I've also tried to make it clear throughout that storing a
-closure is storing the *unevaluated* code, and then you call the closure in
-order to get the result. /Carol -->
 
 ### Creating an Abstraction of Behavior Using a Closure
 
@@ -168,8 +145,6 @@ The first `if` block calls `simulated_expensive_calculation` twice, the `if`
 inside the outer `else` doesn’t call it at all, and the code inside the `else`
 case inside the outer `else` calls it once.
 
-<!-- Will add wingdings in libreoffice /Carol -->
-
 The desired behavior of the `generate_workout` function is to first check if
 the user wants a low intensity workout (indicated by a number less than 25) or
 a high intensity workout (25 or more). Low intensity workout plans will
@@ -229,8 +204,6 @@ Listing 13-4: Extracting the calls to `simulated_expensive_calculation` to one
 place before the `if` blocks and storing the result in the `expensive_result`
 variable
 
-<!-- Will add ghosting and wingdings in libreoffice /Carol -->
-
 This change unifies all the calls to `simulated_expensive_calculation` and
 solves the problem of the first `if` block calling the function twice
 unnecessarily. Unfortunately, we’re now calling this function and waiting for
@@ -261,12 +234,6 @@ let expensive_closure = |num| {
 
 Listing 13-5: Defining a closure with the body that was in the expensive
 function and store the closure in the `expensive_closure` variable
-
-<!-- Can you elaborate on *how* to define the closure first? I've had a go here
-based on what I can see but not sure it's correct. Are we saying that a closure
-is function that assigned its result to a variable you can then use? -->
-<!-- I've attempted to elaborate on defining a closure in the next few
-paragraphs starting here, is this better? /Carol -->
 
 The closure definition is the part after the `=` that we’re assigning to the
 variable `expensive_closure`. To define a closure, we start with a pair of
@@ -347,9 +314,6 @@ Closures differ from functions defined with the `fn` keyword in a few
 ways. The first is that closures don’t require you to annotate the types of the
 parameters or the return value like `fn` functions do.
 
-<!-- I've suggested moving this next paragraph up from below, I found this
-section difficult to follow with this next paragraph -->
-
 Type annotations are required on functions because they are part of an
 explicit interface exposed to your users. Defining this interface rigidly is
 important for ensuring that everyone agrees on what types of values a function
@@ -364,17 +328,6 @@ type similarly to how it’s able to infer the types of most variables. Being
 forced to annotate the types in these small, anonymous functions would be
 annoying and largely redundant with the information the compiler already has
 available.
-
-<!--Can you expand above on what you mean by "stored in bindings and called
-directly"? Do you mean stored in a variable? I'm struggling to visualize how
-closures are used, and what the important difference is between them and
-functions. I think a clearer definition of what they are, what they do, and
-what they're used for at the start of the closures section would help clear
-this up -->
-<!-- Yes, sorry, in Rust terminology "binding" is mostly synonymous to
-"variable", but when we started working on the book we decided to be consistent
-and more like what people are used to by referring to the concept as "variable"
-throughout, but we missed this spot. /Carol -->
 
 Like variables, we can choose to add type annotations if we want to increase
 explicitness and clarity in exchange for being more verbose than is strictly
@@ -394,25 +347,12 @@ let expensive_closure = |num: i32| -> i32 {
 Listing 13-7: Adding optional type annotations of the parameter and return
 value types in the closure
 
-<!-- Why might you want to, if you don't need to? In a particular situation? -->
-<!-- I've added an explanation /Carol -->
-
-<!-- Below -- Am I right in assuming the closures below are doing the same
-thing as the functions? -->
-<!-- Yes /Carol -->
-
 The syntax of closures and functions looks more similar with type annotations.
 Here’s a vertical comparison of the syntax for the definition of a function
 that adds one to its parameter, and a closure that has the same behavior. We’ve
 added some spaces here to line up the relevant parts). This illustrates how
 closure syntax is similar to function syntax except for the use of pipes rather
 than parentheses and the amount of syntax that is optional:
-
-<!-- Prod: can you align this as shown in the text? -->
-<!-- I'm confused, does this note mean that production *won't* be aligning all
-of our other code examples as shown in the text? That's concerning to me, we're
-trying to illustrate idiomatic Rust style in all the code examples, so our
-alignment is always intentional... /Carol -->
 
 ```
 fn  add_one_v1   (x: i32) -> i32 { x + 1 }
@@ -421,26 +361,11 @@ let add_one_v3 = |x|             { x + 1 };
 let add_one_v4 = |x|               x + 1  ;
 ```
 
-<!-- Can you point out where we're looking at here, where the important
-differences lie? -->
-<!-- The importance isn't the difference but the similarity... I've tried to
-clarify /Carol -->
-
-<!-- Will add wingdings and ghosting in libreoffice /Carol -->
-
 The first line shows a function definition, and the second line shows a fully
 annotated closure definition. The third line removes the type annotations from
 the closure definition, and the fourth line removes the braces that are
 optional since the closure body only has one line. These are all valid
 definitions that will produce the same behavior when they’re called.
-
-<!--Below--I'm not sure I'm following, is the i8 type being inferred? It seems
-like we're annotating it. -->
-<!-- The types in the function definitions are being inferred, but since Rust's
-variable types for numbers defaults to `i32`, in order to illustrate our point
-here we're forcing the type of the *variable* to be `i8` by annotating it in
-the *variable* declaration. I've changed the example to hopefully be less
-confusing and convey our point better. /Carol -->
 
 Closure definitions will have one concrete type inferred for each of their
 parameters and for their return value. For instance, Listing 13-8 shows the
@@ -476,8 +401,6 @@ error[E0308]: mismatched types
              found type `{integer}`
 ```
 
-<!-- Will add wingdings in libreoffice /Carol -->
-
 The first time we call `example_closure` with the `String` value, the compiler
 infers the type of `x` and the return type of the closure to be `String`. Those
 types are then locked in to the closure in `example_closure`, and we get a type
@@ -506,10 +429,6 @@ type: that is, even if two closures have the same signature, their types are
 still considered to be different. In order to define structs, enums, or
 function parameters that use closures, we use generics and trait bounds like we
 discussed in Chapter 10.
-
-<!-- So Fn is a trait built into the language, is that right? I wasn't sure if
-it was just a placeholder here -->
-<!-- Fn is provided by the standard library; I've clarified here. /Carol -->
 
 The `Fn` traits are provided by the standard library. All closures implement
 one of the traits `Fn`, `FnMut`, or `FnOnce`. We’ll discuss the difference
@@ -580,13 +499,6 @@ impl<T> Cacher<T>
 }
 ```
 
-<!-- Liz: the `new` function is using the "struct init shorthand" by just
-saying `calculation` instead of `calculation: calculation`, since the parameter
-matches the struct field name. This was recently added to stable Rust and we've
-added an introduction of it in Chapter 5. Just adding an explanation here for
-you in case you read this chapter before the changes we've made to Chapter 5!
-/Carol -->
-
 Listing 13-10: Implementations on `Cacher` of an associated function named
 `new` and a method named `value` that manage the caching logic
 
@@ -644,8 +556,6 @@ fn generate_workout(intensity: i32, random_number: i32) {
 
 Listing 13-11: Using `Cacher` in the `generate_workout` function to abstract
 away the caching logic
-
-<!-- Will add ghosting and wingdings in libreoffice /Carol -->
 
 Instead of saving the closure in a variable directly, we save a new instance of
 `Cacher` that holds the closure. Then, in each place we want the result, we
@@ -720,24 +630,8 @@ functions. Closures have an additional ability we can use that functions don’t
 have, however: they can capture their environment and access variables from the
 scope in which they’re defined.
 
-<!-- To clarify, by enclosing scope, do you mean the scope that the closure is
-inside? Can you expand on that?-->
-<!-- Yes, I've tried here to clarify that it's the scope in which the closure
-is defined /Carol -->
-
 Listing 13-12 has an example of a closure stored in the variable `equal_to_x`
 that uses the variable `x` from the closure’s surrounding environment:
-
-<!-- To clarify how we talk about a closure, does the closure include the
-variable name, or are we referring to the closure as the functionality that is
-on the right side of the = and so not including to variable name? I thought it
-was the former, but it seems like the latter above. If it's the former, would
-"an example of a closure with the variable `equal_to_x`" make more sense? -->
-<!-- No, the closure does not include the variable name in which it's stored;
-storing a closure in a variable is optional. It should always be the latter,
-and I hope the reworking of the example used throughout the closure section
-and making the wording consistent has cleared this confusion up by this point.
-/Carol -->
 
 Filename: src/main.rs
 
@@ -759,15 +653,6 @@ scope
 Here, even though `x` is not one of the parameters of `equal_to_x`, the
 `equal_to_x` closure is allowed to use the `x` variable that’s defined in the
 same scope that `equal_to_x` is defined in.
-
-<!-- So *why* is this allowed with closures and not functions, what about
-closures makes this safe? -->
-<!-- It's not really about safety; capturing the environment is the defining
-functionality a closure has. The reason functions *don't* capture their
-environment is mostly around storage overhead; I've added an explanation of
-that aspect. Can you elaborate on what led to the conclusion that allowing
-captures with functions wouldn't be safe and what you mean by "safe" here?
-/Carol -->
 
 We can’t do the same with functions; let’s see what happens if we try:
 
@@ -804,10 +689,6 @@ that we don’t want to pay for in the more common case where we want to execute
 code that doesn’t capture its environment. Because functions are never allowed
 to capture their environment, defining and using functions will never incur
 this overhead.
-
-<!-- Why didn't this work, is there a reason ingrained in the language? Or is
-that not really relevant? -->
-<!-- I've added an explanation /Carol -->
 
 Closures can capture values from their environment in three ways, which
 directly map to the three ways a function can take a parameter: taking
@@ -880,16 +761,6 @@ To illustrate situations where closures that can capture their environment are
 useful as function parameters, let’s move on to our next topic: iterators.
 
 ## Processing a Series of Items with Iterators
-
-<!-- From reading on, it seems like an iterator is useless without the methods
-we use it with --- I think this is an important point to make early, I did find
-it difficult to know what an iterator actually was throughout, and how it
-depends on these other methods. Can you add something to this effect? -->
-<!-- Reiterating the need for a clear definition of an iterator here--it seems
-like an item that's used in iteration rather than something that performs the
-process of iteration itself, is that right? Like a counter passed from element
-to element? Can we define this at the begin of the iterator section? -->
-<!-- I've added an explanation along these lines, does this help? /Carol -->
 
 The iterator pattern allows you to perform some task on a sequence of items in
 turn. An *iterator* is responsible for the logic around iterating over each item
@@ -1005,32 +876,12 @@ ownership of `v1` and returns owned values, we can call `into_iter` instead of
 
 ### Methods in the `Iterator` Trait that Consume the Iterator
 
-<!-- Can you explain what it is you mean by "consumes" an iterator here? It
-doesn't look like we do in this section, I think that's important to lay that
-out clearly -->
-<!-- This next paragraph doesn't give much away to me I'm afraid, not being
-clear what we mean by *consume* at this point. Is a consuming adaptor like a
-catalyst? -->
-<!-- I hope this section addresses these comments you had /Carol -->
-
 The `Iterator` trait has a number of different methods with default
 implementations provided for us by the standard library; you can find out all
 about these methods by looking in the standard library API documentation for
 the `Iterator` trait. Some of these methods call the `next` method in their
 definition, which is why we’re required to implement the `next` method when
 implementing the `Iterator` trait.
-
-<!-- Is there somewhere they can learn about all the methods and what they do,
-how to use them? This seems like a good sample example, and if we can broaden
-it out that would be really helpful -->
-<!-- I've moved this comment here since you made this comment on the last
-version of this chapter right after a spot where we mentioned looking at the
-standard library API documentation for the iterator trait, like we're now doing
-in the above paragraph. That's where the reader should go to learn about
-all the methods and what they do and how to use them. Can you elaborate on why
-that wasn't clear in the previous version of the chapter? Is there a reason why
-the standard library API documentation didn't sound like that place to go?
-/Carol -->
 
 The methods that call the `next` method are called *consuming adaptors*, since
 calling them uses up the iterator. An example of a consuming adaptor is the
@@ -1125,20 +976,6 @@ perform on each item that we iterate over. This is a great example of how using
 closures lets us customize some behavior while reusing the iteration behavior
 that the `Iterator` trait provides.
 
-<!-- I'm not clear from this last sentence which part is iterating through each
-element, iter or map? What is map actually doing?-->
-<!--Ah, I'm afraid I completely failed to follow this. What is the second
-iterator for? I'm still not clear on what map does, can you expand on this? It
-seems crucial to using iterators. Map applies the iterator to each element,
-which applies the closure?
-
-Also, to generalize this discussion a bit, would you ever use iter without map?
--->
-<!-- I hope this new breakdown/rearranging has cleared up these comments you
-had on the last version of this chapter about the difference between
-iter and map. I hope the added examples where we've used iter without map have
-cleared up the last question. /Carol -->
-
 ### Using Closures that Capture their Environment with Iterators
 
 Now that we’ve introduced iterators, we can demonstrate a common use of
@@ -1189,8 +1026,6 @@ fn filters_by_size() {
 Listing 13-19: Using the `filter` method with a closure that captures
 `shoe_size`
 
-<!-- Will add wingdings in libreoffice /Carol -->
-
 The `shoes_in_my_size` function takes ownership of a vector of shoes and a shoe
 size as parameters. It returns a vector containing only shoes of the specified
 size. In the body of `shoes_in_my_size`, we call `into_iter` to create an
@@ -1206,14 +1041,6 @@ The test shows that when we call `shoes_in_my_size`, we only get back shoes
 that have the same size as the value we specified.
 
 ### Implementing the `Iterator` Trait to Create Our Own Iterators
-
-<!-- So it seems like we are creating a program with an iterator inside, is
-that right? I assumed the whole thing we were making was an iterator at first,
-which lead to a few confusions, can you lay it out up front? -->
-<!-- I'm not sure what you mean here, can you elaborate on what the distinction
-is to you between "a program with an iterator inside" and "whole thing we were
-making was an iterator"? I don't understand what you mean by these terms so I'm
-not sure how to clear this up. /Carol -->
 
 We’ve shown that we can create an iterator by calling `iter`, `into_iter`, or
 `iter_mut` on a vector. We can also create iterators from the other collection
@@ -1249,23 +1076,11 @@ impl Counter {
 Listing 13-20: Defining the `Counter` struct and a `new` function that creates
 instances of `Counter` with an initial value of 0 for `count`
 
-<!-- Could you add a filename here? I think that will help the reader keep
-track of what they're working on. Can you also just sum up in a line what this
-code has accomplished so far? I moved this down from above the code, if this
-will do? -->
-<!-- Done /Carol -->
-
 The `Counter` struct has one field named `count`. This field holds a `u32`
 value that will keep track of where we are in the process of iterating from 1
 to 5. The `count` field is private since we want the implementation of
 `Counter` to manage its value. The `new` function enforces the behavior we want
 of always starting new instances with a value of 0 in the `count` field.
-
-<!-- Why define the new method, if it isn't necessary? Or is that what this
-next line is telling us? -->
-<!-- So does this code just initialize it with 0? Is that jat { count: 0 }
-does?-->
-<!-- I've rearranged to make this clearer /Carol -->
 
 Next, we’re going to implement the `Iterator` trait for our `Counter` type by
 defining the body of the `next` method to specify what we want to happen when
@@ -1290,8 +1105,6 @@ impl Iterator for Counter {
 ```
 
 Listing 13-21: Implementing the `Iterator` trait on our `Counter` struct
-
-<!-- I will add wingdings in libreoffice /Carol -->
 
 We set the associated `Item` type for our iterator to `u32`, meaning the
 iterator will return `u32` values. Again, don’t worry about associated types
@@ -1330,32 +1143,12 @@ This test creates a new `Counter` instance in the `counter` variable and then
 calls `next` repeatedly, verifying that we have implemented the behavior we
 want this iterator to have of returning the values from 1 to 5.
 
-<!-- So if I have this right, the first line creates a new Counter called
-counter, and the rest of them merely call counter with next, store it in x, and
-then print x? And we have to do that 5 times to get the 1-5 count? Phew, could
-you wrap that up if indeed it is correct!) and sum up here? -->
-<!-- I decided to change this into a test rather than printing out values, and
-I added some summary text about what the test is doing. Is this clearer? /Carol
--->
-
 #### Using Other `Iterator` Trait Methods on Our Iterator
 
 Because we implemented the `Iterator` trait by defining the `next` method, we
 can now use any `Iterator` trait method’s default implementations that the
 standard library has defined, since they all use the `next` method’s
 functionality.
-
-<!-- So we can't just use these methods anyway? It seems like we did earlier,
-but here we have to use next first, before we cam access these methods? -->
-<!-- No, we don't have to *use* `next` before we can use the other methods, we
-have to *define* `next` before we can use the other methods. I hope the various
-rewordings and reworkings have made this clearer by this point. /Carol -->
-
-<!-- below: once you've done what, defined a default implementation? Only then
-can you use other adapters, is that what we're saying? And I'm still not clear
-on what an adapter does/means, as opposed to a method, or consumer, at this
-point. -->
-<!-- I hope this comment has been cleared up too /Carol -->
 
 For example, if for some reason we wanted to take the values that an instance
 of `Counter` produces, pair those values with values produced by another
@@ -1425,10 +1218,6 @@ impl Config {
 Listing 13-24: Reproduction of the `Config::new` function
 from the end of Chapter 12
 
-<!--Is this why we didn't want to use clone calls, they were inefficient, or
-was it that stacking clone calls can become confusing/is bad practice? -->
-<!-- Yep, it's for performance reasons /Carol -->
-
 At the time, we said not to worry about the inefficient `clone` calls here
 because we would remove them in the future. Well, that time is now!
 
@@ -1445,17 +1234,9 @@ length of the slice and indexes into specific locations. This will clear up
 what the `Config::new` function is doing since the iterator will take care of
 accessing the values.
 
-<!-- use the iterator functionality to what? How will iterating allow us to do
-the same thing, can you briefly lay that out? -->
-<!-- It's mostly for clarity and using a good abstraction, I've tried fixing
-/Carol -->
-
 Once `Config::new` taking ownership of the iterator and not using indexing
 operations that borrow, we can move the `String` values from the iterator into
 `Config` rather than calling `clone` and making a new allocation.
-
-<!-- below: which file are we in, can you specify here? -->
-<!-- done /Carol -->
 
 #### Using the Iterator Returned by `env::args` Directly
 
@@ -1492,14 +1273,6 @@ fn main() {
 
 Listing 13-25: Passing the return value of `env::args` to `Config::new`
 
-<!-- I think, if we're going to be building this up bit by bit, it might be
-worth adding listing numbers and file names to each, can you add those? Don't
-worry about being accurate with the numbers, we can update them more easily
-later -->
-<!-- That's nice of you to offer, but since we're maintaining an online version
-that we're keeping in sync with each round of edits, we need to keep the
-listing numbers making sense as well. We'll just take care of them. /Carol -->
-
 The `env::args` function returns an iterator! Rather than collecting the
 iterator values into a vector and then passing a slice to `Config::new`, now
 we’re passing ownership of the iterator returned from `env::args` to
@@ -1508,9 +1281,6 @@ we’re passing ownership of the iterator returned from `env::args` to
 Next, we need to update the definition of `Config::new`. In your I/O project’s
 *src/lib.rs*, let’s change the signature of `Config::new` to look like Listing
 13-26:
-
-<!-- can you give the filename here too? -->
-<!-- done /Carol -->
 
 Filename: src/lib.rs
 
@@ -1562,12 +1332,6 @@ impl Config {
 
 Listing 13-27: Changing the body of `Config::new` to use iterator methods
 
-<!-- is this the *full* new lib.rs code? Worth noting for ghosting purposes -->
-<!-- No, this is just the `Config::new` function, which I thought would be
-clear by saying "Next, we'll fix the body of `Config::new`.", can you elaborate
-on why that's not clear enough? I would expect programmers to be able to
-understand where a function starts and ends. /Carol -->
-
 Remember that the first value in the return value of `env::args` is the name of
 the program. We want to ignore that and get to the next value, so first we call
 `next` and do nothing with the return value. Second, we call `next` on the
@@ -1575,12 +1339,6 @@ value we want to put in the `query` field of `Config`. If `next` returns a
 `Some`, we use a `match` to extract the value. If it returns `None`, it means
 not enough arguments were given and we return early with an `Err` value. We do
 the same thing for the `filename` value.
-
-<!-- Hm, if ? would not work anyway, I'm not clear on why we mention, why it's
-a shame we cant use it on Option? -->
-<!-- We've taken this out, it's something that a portion of the readers might
-be wondering and something that Rust might let you do someday, but yeah, it's
-probably just distracting to most people /Carol -->
 
 ### Making Code Clearer with Iterator Adaptors
 
@@ -1614,9 +1372,6 @@ easier for us to make a future enhancement to make searching happen in
 parallel, since we wouldn’t have to manage concurrent access to the `results`
 vector. Listing 13-29 shows this change:
 
-<!-- Remind us why we want to avoid the mutable results vector? -->
-<!-- done /Carol -->
-
 Filename: src/lib.rs
 
 ```
@@ -1637,11 +1392,6 @@ Listing 13-19, we can use the `filter` adaptor to keep only the lines that
 into another vector with `collect`. Much simpler! Feel free to make the same
 change to use iterator methods in the `search_case_insensitive` function as
 well.
-
-<!-- what is that, here, only lines that contain a matching string? A bit more
-context would help out, we probably can't rely on readers remembering all the
-details I'm afraid -->
-<!-- done /Carol -->
 
 The next logical question is which style you should choose in your own code:
 the original implementation in Listing 13-28, or the version using iterators in
@@ -1692,20 +1442,9 @@ and implementer of C++, defines *zero-overhead*:
 >
 > - Bjarne Stroustrup “Foundations of C++”
 
-<!-- should this be "handle code any better", above? -->
-<!-- No, this is an exact quote. He means hand code, as in "code by hand",
-rather than let the language/standard library code it for you. The quote is
-at the top of page 4 in http://www.stroustrup.com/ETAPS-corrected-draft.pdf
-/Carol -->
-
 As another example, here is some code taken from an audio decoder. The decoding
 algorithm uses the linear prediction mathematical operation to estimate future
 values based on a linear function of the previous samples.
-
-<!-- Can you briefly explain what the intention of the code it --- that will
-help us understand, for example, why we have a `prediction` value -->
-<!-- I've tried, but the algorithm is really complicated and not really all
-that important... /Carol -->
 
 This code uses an iterator chain to do some math on three variables in scope: a
 `buffer` slice of data, an array of 12 `coefficients`, and an amount by which
@@ -1745,9 +1484,6 @@ the loop. Unrolling is an optimization that removes the overhead of the loop
 controlling code and instead generates repetitive code for each iteration of
 the loop.
 
-<!-- Maybe some expansion on what you mean by unrolls? -->
-<!-- done /Carol -->
-
 All of the coefficients get stored in registers, which means it’s very fast to
 access the values. There are no bounds checks on the array access at runtime.
 All these optimizations Rust is able to apply make the resulting code extremely
@@ -1764,15 +1500,6 @@ language ideas. They contribute to Rust’s ability to clearly express high-leve
 ideas, at low level performance. The implementations of closures and iterators
 are such that runtime performance is not affected. This is part of Rust’s goal
 to strive to provide zero-cost abstractions.
-
-<!-- Are we going to cover which other elements of rust are zero-cost
-abstractions, somewhere? Might be good to cross ref or, if we've already
-covered, give a brief list or a way to identify them -->
-<!-- Zero-cost abstraction in Rust is more about a design philosophy and a goal
-we keep in mind; all abstractions in Rust strive to be zero-cost abstractions,
-and if they aren't, it's considered a bug. There will always be some bugs. I've
-reworded a bit to not make it sound as much like something we could list.
-/Carol -->
 
 Now that we’ve improved the expressiveness of our I/O project, let’s look at
 some more features of `cargo` that would help us get ready to share the project

@@ -1,15 +1,5 @@
 ## Processing a Series of Items with Iterators
 
-<!-- From reading on, it seems like an iterator is useless without the methods
-we use it with --- I think this is an important point to make early, I did find
-it difficult to know what an iterator actually was throughout, and how it
-depends on these other methods. Can you add something to this effect? -->
-<!-- Reiterating the need for a clear definition of an iterator here--it seems
-like an item that's used in iteration rather than something that performs the
-process of iteration itself, is that right? Like a counter passed from element
-to element? Can we define this at the begin of the iterator section? -->
-<!-- I've added an explanation along these lines, does this help? /Carol -->
-
 The iterator pattern allows you to perform some task on a sequence of items in
 turn. An *iterator* is responsible for the logic around iterating over each item
 in the sequence and determining when the sequence has finished. When we use
@@ -126,32 +116,12 @@ ownership of `v1` and returns owned values, we can call `into_iter` instead of
 
 ### Methods in the `Iterator` Trait that Consume the Iterator
 
-<!-- Can you explain what it is you mean by "consumes" an iterator here? It
-doesn't look like we do in this section, I think that's important to lay that
-out clearly -->
-<!-- This next paragraph doesn't give much away to me I'm afraid, not being
-clear what we mean by *consume* at this point. Is a consuming adaptor like a
-catalyst? -->
-<!-- I hope this section addresses these comments you had /Carol -->
-
 The `Iterator` trait has a number of different methods with default
 implementations provided for us by the standard library; you can find out all
 about these methods by looking in the standard library API documentation for
 the `Iterator` trait. Some of these methods call the `next` method in their
 definition, which is why we’re required to implement the `next` method when
 implementing the `Iterator` trait.
-
-<!-- Is there somewhere they can learn about all the methods and what they do,
-how to use them? This seems like a good sample example, and if we can broaden
-it out that would be really helpful -->
-<!-- I've moved this comment here since you made this comment on the last
-version of this chapter right after a spot where we mentioned looking at the
-standard library API documentation for the iterator trait, like we're now doing
-in the above paragraph. That's where the reader should go to learn about
-all the methods and what they do and how to use them. Can you elaborate on why
-that wasn't clear in the previous version of the chapter? Is there a reason why
-the standard library API documentation didn't sound like that place to go?
-/Carol -->
 
 The methods that call the `next` method are called *consuming adaptors*, since
 calling them uses up the iterator. An example of a consuming adaptor is the
@@ -248,20 +218,6 @@ perform on each item that we iterate over. This is a great example of how using
 closures lets us customize some behavior while reusing the iteration behavior
 that the `Iterator` trait provides.
 
-<!-- I'm not clear from this last sentence which part is iterating through each
-element, iter or map? What is map actually doing?-->
-<!--Ah, I'm afraid I completely failed to follow this. What is the second
-iterator for? I'm still not clear on what map does, can you expand on this? It
-seems crucial to using iterators. Map applies the iterator to each element,
-which applies the closure?
-
-Also, to generalize this discussion a bit, would you ever use iter without map?
--->
-<!-- I hope this new breakdown/rearranging has cleared up these comments you
-had on the last version of this chapter about the difference between
-iter and map. I hope the added examples where we've used iter without map have
-cleared up the last question. /Carol -->
-
 ### Using Closures that Capture their Environment with Iterators
 
 Now that we’ve introduced iterators, we can demonstrate a common use of
@@ -312,8 +268,6 @@ fn filters_by_size() {
 <span class="caption">Listing 13-19: Using the `filter` method with a closure
 that captures `shoe_size`</span>
 
-<!-- Will add wingdings in libreoffice /Carol -->
-
 The `shoes_in_my_size` function takes ownership of a vector of shoes and a shoe
 size as parameters. It returns a vector containing only shoes of the specified
 size. In the body of `shoes_in_my_size`, we call `into_iter` to create an
@@ -329,14 +283,6 @@ The test shows that when we call `shoes_in_my_size`, we only get back shoes
 that have the same size as the value we specified.
 
 ### Implementing the `Iterator` Trait to Create Our Own Iterators
-
-<!-- So it seems like we are creating a program with an iterator inside, is
-that right? I assumed the whole thing we were making was an iterator at first,
-which lead to a few confusions, can you lay it out up front? -->
-<!-- I'm not sure what you mean here, can you elaborate on what the distinction
-is to you between "a program with an iterator inside" and "whole thing we were
-making was an iterator"? I don't understand what you mean by these terms so I'm
-not sure how to clear this up. /Carol -->
 
 We’ve shown that we can create an iterator by calling `iter`, `into_iter`, or
 `iter_mut` on a vector. We can also create iterators from the other collection
@@ -375,23 +321,11 @@ impl Counter {
 function that creates instances of `Counter` with an initial value of 0 for
 `count`</span>
 
-<!-- Could you add a filename here? I think that will help the reader keep
-track of what they're working on. Can you also just sum up in a line what this
-code has accomplished so far? I moved this down from above the code, if this
-will do? -->
-<!-- Done /Carol -->
-
 The `Counter` struct has one field named `count`. This field holds a `u32`
 value that will keep track of where we are in the process of iterating from 1
 to 5. The `count` field is private since we want the implementation of
 `Counter` to manage its value. The `new` function enforces the behavior we want
 of always starting new instances with a value of 0 in the `count` field.
-
-<!-- Why define the new method, if it isn't necessary? Or is that what this
-next line is telling us? -->
-<!-- So does this code just initialize it with 0? Is that jat { count: 0 }
-does?-->
-<!-- I've rearranged to make this clearer /Carol -->
 
 Next, we’re going to implement the `Iterator` trait for our `Counter` type by
 defining the body of the `next` method to specify what we want to happen when
@@ -421,8 +355,6 @@ impl Iterator for Counter {
 
 <span class="caption">Listing 13-21: Implementing the `Iterator` trait on our
 `Counter` struct</span>
-
-<!-- I will add wingdings in libreoffice /Carol -->
 
 We set the associated `Item` type for our iterator to `u32`, meaning the
 iterator will return `u32` values. Again, don’t worry about associated types
@@ -480,32 +412,12 @@ This test creates a new `Counter` instance in the `counter` variable and then
 calls `next` repeatedly, verifying that we have implemented the behavior we
 want this iterator to have of returning the values from 1 to 5.
 
-<!-- So if I have this right, the first line creates a new Counter called
-counter, and the rest of them merely call counter with next, store it in x, and
-then print x? And we have to do that 5 times to get the 1-5 count? Phew, could
-you wrap that up if indeed it is correct!) and sum up here? -->
-<!-- I decided to change this into a test rather than printing out values, and
-I added some summary text about what the test is doing. Is this clearer? /Carol
--->
-
 #### Using Other `Iterator` Trait Methods on Our Iterator
 
 Because we implemented the `Iterator` trait by defining the `next` method, we
 can now use any `Iterator` trait method’s default implementations that the
 standard library has defined, since they all use the `next` method’s
 functionality.
-
-<!-- So we can't just use these methods anyway? It seems like we did earlier,
-but here we have to use next first, before we cam access these methods? -->
-<!-- No, we don't have to *use* `next` before we can use the other methods, we
-have to *define* `next` before we can use the other methods. I hope the various
-rewordings and reworkings have made this clearer by this point. /Carol -->
-
-<!-- below: once you've done what, defined a default implementation? Only then
-can you use other adapters, is that what we're saying? And I'm still not clear
-on what an adapter does/means, as opposed to a method, or consumer, at this
-point. -->
-<!-- I hope this comment has been cleared up too /Carol -->
 
 For example, if for some reason we wanted to take the values that an instance
 of `Counter` produces, pair those values with values produced by another
