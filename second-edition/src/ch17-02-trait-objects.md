@@ -287,11 +287,11 @@ It doesn’t check to see if a component is an instance of a `Button` or a
 `Box<Draw>` as the type of the values in the `components` vector, we’ve defined
 that `Screen` needs values that we can call the `draw` method on.
 
-The advantage with using trait objects and Rust’s type system to do duck typing
-is that we never have to check that a value implements a particular method at
-runtime or worry about getting errors if a value doesn’t implement a method but
-we call it. Rust won’t compile our code if the values don’t implement the
-traits that the trait objects need.
+The advantage of using trait objects and Rust’s type system is that we never
+have to check that a value implements a particular method at runtime or worry
+about getting errors if a value doesn’t implement a method but we call it.
+Rust won’t compile our code if the values don’t implement the traits that
+the trait objects need.
 
 For example, Listing 17-10 shows what happens if we try to create a `Screen`
 with a `String` as a component:
