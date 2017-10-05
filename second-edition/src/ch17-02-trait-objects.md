@@ -349,9 +349,9 @@ keeps track of the code that might be used when a method is called and figures
 out at runtime which code needs to be used for a particular method call. This
 is known as *dynamic dispatch*, and there’s a runtime cost when this lookup
 happens. Dynamic dispatch also prevents the compiler from choosing to inline a
-method’s code, which prevents some optimizations. We did get extra flexibility
-in the code that we wrote and were able to support, though, so it’s a tradeoff
-to consider.
+method’s code which in turn prevents some optimizations. We did get extra
+flexibility in the code that we wrote and were able to support, though, so it’s
+a tradeoff to consider.
 
 ### Object Safety is Required for Trait Objects
 
