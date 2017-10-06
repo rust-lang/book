@@ -53,8 +53,8 @@
     - [Validating References with Lifetimes](ch10-03-lifetime-syntax.md)
 
 - [테스팅](ch11-00-testing.md)
-    - [Writing tests](ch11-01-writing-tests.md)
-    - [Running tests](ch11-02-running-tests.md)
+    - [테스트 작성하기](ch11-01-writing-tests.md)
+    - [테스트 실행하기](ch11-02-running-tests.md)
     - [Test Organization](ch11-03-test-organization.md)
 
 - [An I/O Project](ch12-00-an-io-project.md)
