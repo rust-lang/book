@@ -1,4 +1,4 @@
-# Generic Types, Traits, and Lifetimes
+# 제네릭 타입, 트레잇, 그리고 라이프타임
 
 Every programming language has tools to deal effectively with duplication of
 concepts; in Rust, one of those tools is *generics*. Generics are abstract
@@ -6,6 +6,10 @@ stand-ins for concrete types or other properties. When we're writing and
 compiling the code we can express properties of generics, such as their
 behavior or how they relate to other generics, without needing to know what
 will actually be in their place.
+모든 프로그래밍 언어는 컨셉의 복제를 효율적으로 다루기 위한 도구를 가지고 있습니다; 러스트에서,
+그러한 도구중 하나가 바로 *제네릭*입니다. 제네릭은 구체화된 타입이나 다른 속성들을 위한 추상화된
+대역입니다. 코드를 작성하고 컴파일할 때, 우리는 제네릭들이 실제로 어떻게 완성되는지 알 필요없이,
+제네릭의 동작 혹은 다른 제네릭과 어떻게 연관되는지와 같은 제네릭에 대한 속성을 표현할 수 있습니다.
 
 In the same way that a function takes parameters whose value we don't know in
 order to write code once that will be run on multiple concrete values, we can
@@ -14,17 +18,27 @@ type like `i32` or `String`. We've already used generics in Chapter 6 with
 `Option<T>`, Chapter 8 with `Vec<T>` and `HashMap<K, V>`, and Chapter 9 with
 `Result<T, E>`. In this chapter, we'll explore how to define our own types,
 functions, and methods with generics!
+여러개의 구체화된 값들에 대해 실행될 코드를 작성하기 위하여 함수가 어떤 값을 담을지 알수 없는 파라미터를
+가지는 것과 같은 방식으로, `i32`나 `String`과 같은 구체화된 타입 대신 몇몇 제네릭 타입의 파라미터를
+갖는 함수를 작성할 수 있습니다. 우리는 6장의 `Option<T>`, 8장의 `Vec<T>`와 `HashMap<K, V>`,
+그리고 9장의 `Result<T, E>`에서 이미 제네릭을 사용해 보았습니다. 이 장에서는, 어떤 식으로
+우리만의 타입, 함수, 그리고 메소드를 제네릭으로 정의하는지 탐험해 볼 것입니다!
 
 First, we're going to review the mechanics of extracting a function that
 reduces code duplication. Then we'll use the same mechanics to make a generic
 function out of two functions that only differ in the types of their
 parameters. We'll go over using generic types in struct and enum definitions
 too.
+우선, 우리는 코드 중복을 제거하는 함수의 추출하는 원리에 대해 돌아볼 것입니다. 그리고나서 두 함수가
+오직 파라미터의 타입만 다른 경우에 대하여 이들을 하나의 제네릭 함수로 만들기 위해 동일한 원리을 사용할
+것입니다. 또한 제네릭 타입을 구조체와 열거형의 정의에 사용하는 것을 살펴볼 것입니다.
 
 After that, we'll discuss *traits*, which are a way to define behavior in a
 generic way. Traits can be combined with generic types in order to constrain a
 generic type to those types that have a particular behavior, rather than any
 type at all.
+그리고 난 후 *트레잇(trait)* 에 대하여 논의할 것인데, 이는 동작을 제네릭한 방식으로 정의하는
+방법을 말합니다. 트레잇은 
 
 Finally, we'll discuss *lifetimes*, which are a kind of generic that let us
 give the compiler information about how references are related to each other.
