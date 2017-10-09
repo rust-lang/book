@@ -2,12 +2,12 @@
 
 Rust’s design has taken inspiration from a lot of existing languages and
 techniques, and one significant influence is *functional programming*.
-Programming in a functional style often includes using functions as values in
-arguments or return values of other functions, assigning functions to variables
-for later execution, and so forth. We won’t debate here the issue of what,
-exactly, functional programming is or is not, but will instead show off some
-features of Rust that are similar to features in many languages often referred
-to as functional.
+Programming in a functional style often includes using functions as values, by
+passing them in arguments, returning them from other functions, assigning them
+to variables for later execution, and so forth. We won’t debate here the issue
+of what, exactly, functional programming is or is not, but will instead show
+off some features of Rust that are similar to features in many languages often
+referred to as functional.
 
 More specifically, we’re going to cover:
 

@@ -17,14 +17,16 @@ test bench_search_iter ... bench:  19,234,900 ns/iter (+/- 657,200)
 The iterator version ended up slightly faster! We’re not going to go through
 the benchmark code here, as the point is not to prove that they’re exactly
 equivalent, but to get a general sense of how these two implementations compare
-performance-wise. For a more comprehensive benchmark, you’d want to check
-various texts of various sizes, different words, words of different lengths,
-and all kinds of other variations. The point is this: iterators, while a
-high-level abstraction, get compiled down to roughly the same code as if you’d
-written the lower-level code yourself. Iterators are one of Rust’s *zero-cost
-abstractions*, by which we mean using the abstraction imposes no additional
-runtime overhead in the same way that Bjarne Stroustrup, the original designer
-and implementor of C++, defines *zero-overhead*:
+performance-wise.
+
+For a more comprehensive benchmark, you’d want to check various texts of
+various sizes, different words, words of different lengths, and all kinds of
+other variations. The point is this: iterators, while a high-level abstraction,
+get compiled down to roughly the same code as if you’d written the lower-level
+code yourself. Iterators are one of Rust’s *zero-cost* *abstractions*, by which
+we mean using the abstraction imposes no additional runtime overhead, in the
+same way that Bjarne Stroustrup, the original designer and implementor of C++,
+defines *zero-overhead*:
 
 > In general, C++ implementations obey the zero-overhead principle: What you
 > don’t use, you don’t pay for. And further: What you do use, you couldn’t hand
@@ -70,7 +72,7 @@ consuming the value. What assembly code would this Rust code compile to? Well,
 as of this writing, it compiles down to the same assembly you’d write by hand.
 There’s no loop at all corresponding to the iteration over the values in
 `coefficients`: Rust knows that there are twelve iterations, so it “unrolls”
-the loop. Unrolling is an optimization that removes the overhead of the loop
+the loop. *Unrolling* is an optimization that removes the overhead of the loop
 controlling code and instead generates repetitive code for each iteration of
 the loop.
 

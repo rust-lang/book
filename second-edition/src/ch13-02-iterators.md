@@ -1,15 +1,15 @@
 ## Processing a Series of Items with Iterators
 
 The iterator pattern allows you to perform some task on a sequence of items in
-turn. An *iterator* is responsible for the logic around iterating over each item
-in the sequence and determining when the sequence has finished. When we use
-iterators, we don’t have to reimplement that logic ourselves.
+turn. An *iterator* is responsible for the logic of iterating over each item
+and determining when the sequence has finished. When we use iterators, we don’t
+have to reimplement that logic ourselves.
 
-In Rust, iterators are *lazy*, which means they have no effect until we call
-methods on them that consume the iterator to use it up. For example, the code
-in Listing 13-13 creates an iterator over the items in the vector `v1` by
-calling the `iter` method defined on `Vec`. This code by itself doesn’t do
-anything useful:
+In Rust, iterators are *lazy*, meaning they have no effect until we call
+methods that consume the iterator to use it up. For example, the code in
+Listing 13-13 creates an iterator over the items in the vector `v1` by calling
+the `iter` method defined on `Vec`. This code by itself doesn’t do anything
+useful:
 
 ```rust
 let v1 = vec![1, 2, 3];
@@ -19,11 +19,13 @@ let v1_iter = v1.iter();
 
 <span class="caption">Listing 13-13: Creating an iterator</span>
 
-After creating an iterator, we can choose to use it in a variety of ways. In
-Listing 3-6, we actually used iterators with `for` loops to execute some code
-on each item, though we glossed over what the call to `iter` did until now. The
-example in Listing 13-14 separates the creation of the iterator from the use of
-the iterator in the `for` loop. The iterator is stored in the `v1_iter`
+Once we’ve created an iterator, we can choose to use it in a variety of ways.
+In Listing 3-6 from Chapter 3, we actually used iterators with `for` loops to
+execute some code on each item, though we glossed over what the call to `iter`
+did until now.
+
+The example in Listing 13-14 separates the creation of the iterator from the
+use of the iterator in the `for` loop. The iterator is stored in the `v1_iter`
 variable, and no iteration takes place at that time. Once the `for` loop is
 called using the iterator in `v1_iter`, then each element in the iterator is
 used in one iteration of the loop, which prints out each value:
@@ -44,12 +46,13 @@ loop</span>
 In languages that don’t have iterators provided by their standard libraries, we
 would likely write this same functionality by starting a variable at index 0,
 using that variable to index into the vector to get a value, and incrementing
-the variable value in a loop until its value gets up to the total number of
-items in the vector. Iterators take care of all of that logic for us, which
-cuts down on the repetitive code we would have to write and potentially mess up.
-In addition, the way iterators are implemented gives us more flexibility to
-use the same logic with many different kinds of sequences, not just data
-structures that we can index into like vectors. Let’s see how iterators do that.
+the variable value in a loop until it gets to the total number of items in the
+vector.
+
+Iterators take care of all of that logic for us, cutting down on repetitive
+code we could potentially mess up. Iterators give us more flexibility to use
+the same logic with many different kinds of sequences, not just data structures
+we can index into like vectors. Let’s see how iterators do that.
 
 ### The `Iterator` trait and the `next` method
 
@@ -69,17 +72,18 @@ trait Iterator {
 You’ll notice some new syntax that we haven’t covered yet: `type Item` and
 `Self::Item`, which are defining an *associated type* with this trait. We’ll
 talk about associated types in depth in Chapter 19, but for now, all you need
-to know is that this code says implementing `Iterator` trait requires that you
-also define an `Item` type, and this `Item` type is used in the return type of
-the `next` method. In other words, the `Item` type will be the type of element
-that’s returned from the iterator.
+to know is that this code says implementing the `Iterator` trait requires that
+you also define an `Item` type, and this `Item` type is used in the return type
+of the `next` method. In other words, the `Item` type will be the type returned
+from the iterator.
 
-The `next` method is the only method that the `Iterator` trait requires
-implementors of the trait to define. `next` returns one item of the iterator
-at a time wrapped in `Some`, and when iteration is over, it returns `None`.
-We can call the `next` method on iterators directly if we’d like; Listing 13-15
-has a test that demonstrates the values we’d get on repeated calls to `next`
-on the iterator created from the vector:
+The `Iterator` trait only requires implementors to define one method: the
+`next` method, which returns one item of the iterator at a time wrapped in
+`Some` and, when iteration is over, it returns `None`.
+
+We can call the `next` method on iterators directly; Listing 13-15 demonstrates
+what values are returned from repeated calls to `next` on the iterator created
+from the vector:
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -101,15 +105,15 @@ fn iterator_demonstration() {
 iterator</span>
 
 Note that we needed to make `v1_iter` mutable: calling the `next` method on an
-iterator changes the iterator’s state that keeps track of where it is in the
-sequence. Put another way, this code *consumes*, or uses up, the iterator. Each
-call to `next` eats up an item from the iterator. We didn’t need to make
-`v1_iter` mutable when we used a `for` loop because the `for` loop took
-ownership of `v1_iter` and made `v1_iter` mutable behind the scenes.
+iterator changes state that keeps track of where it is in the sequence. Put
+another way, this code *consumes*, or uses up, the iterator. Each call to
+`next` eats up an item from the iterator. We didn’t need to make `v1_iter`
+mutable when we used a `for` loop because the loop took ownership of `v1_iter`
+and made it mutable behind the scenes.
 
 Also note that the values we get from the calls to `next` are immutable
 references to the values in the vector. The `iter` method produces an iterator
-over immutable references. If we wanted to create an iterator that takes
+over immutable references. If we want to create an iterator that takes
 ownership of `v1` and returns owned values, we can call `into_iter` instead of
 `iter`. Similarly, if we want to iterate over mutable references, we can call
 `iter_mut` instead of `iter`.
@@ -123,13 +127,12 @@ the `Iterator` trait. Some of these methods call the `next` method in their
 definition, which is why we’re required to implement the `next` method when
 implementing the `Iterator` trait.
 
-The methods that call the `next` method are called *consuming adaptors*, since
-calling them uses up the iterator. An example of a consuming adaptor is the
-`sum` method. This method takes ownership of the iterator and iterates through
-the items by repeatedly calling `next`, thus consuming the iterator. As it
-iterates through each item, it adds each item to a running total and returns
-the total when iteration has completed. Listing 13-16 has a test illustrating a
-use of the `sum` method:
+Methods that call `next` are called *consuming adaptors*, because calling them
+uses up the iterator. One example is the `sum` method, which takes ownership of
+the iterator and iterates through the items by repeatedly calling `next`, thus
+consuming the iterator. As it iterates through, it adds each item to a running
+total and returns the total when iteration is complete. Listing 13-16 has a
+test illustrating a use of the `sum` method:
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -154,14 +157,16 @@ ownership of the iterator we call it on.
 
 ### Methods in the `Iterator` Trait that Produce Other Iterators
 
-Another kind of method defined on the `Iterator` trait are methods that produce
-other iterators. These methods are called *iterator adaptors* and allow us to
-change iterators into different kind of iterators. We can chain multiple calls
-to iterator adaptors. Because all iterators are lazy, however, we have to
-call one of the consuming adaptor methods in order to get results from calls
-to iterator adaptors. Listing 13-17 shows an example of calling the iterator
-adaptor method `map`, which takes a closure that `map` will call on each
-item in order to produce a new iterator in which each item from the vector has
+Other methods defined on the `Iterator` trait, known as *iterator adaptors*,
+allow us to change iterators into different kind of iterators. We can chain
+multiple calls to iterator adaptors to perform complex actions in a readable
+way. Because all iterators are lazy, however, we have to call one of the
+consuming adaptor methods in order to get results from calls to iterator
+adaptors.
+
+Listing 13-17 shows an example of calling the iterator adaptor method `map`
+which takes a closure to call on each item in order to produce a new iterator.
+The closure here creates a new iterator in which each item from the vector has
 been incremented by 1. This code produces a warning, though:
 
 <span class="filename">Filename: src/main.rs</span>
@@ -190,14 +195,15 @@ nothing unless consumed
 
 The code in Listing 13-17 isn’t actually doing anything; the closure we’ve
 specified never gets called. The warning reminds us why: iterator adaptors are
-lazy, and we probably meant to consume the iterator here.
+lazy, and we need to consume the iterator here.
 
-In order to fix this warning and consume the iterator to get a useful result,
-we’re going to use the `collect` method, which we saw briefly in Chapter 12.
-This method consumes the iterator and collects the resulting values into a
-data structure. In Listing 13-18, we’re going to collect the results of
-iterating over the iterator returned from the call to `map` into a vector that
-will contain each item from the original vector incremented by 1:
+To fix this and consume the iterator, we’re going to use the `collect` method,
+which we saw briefly in Chapter 12. This method consumes the iterator and
+collects the resulting values into a collection data type.
+
+In Listing 13-18, we collect the results of iterating over the iterator that’s
+returned from the call to `map` into a vector. This vector will end up
+containing each item from the original vector incremented by 1:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -213,10 +219,10 @@ assert_eq!(v2, vec![2, 3, 4]);
 iterator, then calling the `collect` method to consume the new iterator and
 create a vector</span>
 
-Because `map` takes a closure, we can specify any operation that we want to
-perform on each item that we iterate over. This is a great example of how using
-closures lets us customize some behavior while reusing the iteration behavior
-that the `Iterator` trait provides.
+Because `map` takes a closure, we can specify any operation we want to perform
+on each item. This is a great example of how closures let us customize some
+behavior while reusing the iteration behavior that the `Iterator` trait
+provides.
 
 ### Using Closures that Capture their Environment with Iterators
 
@@ -225,10 +231,11 @@ closures that capture their environment by using the `filter` iterator adapter.
 The `filter` method on an iterator takes a closure that takes each item from
 the iterator and returns a boolean. If the closure returns `true`, the value
 will be included in the iterator produced by `filter`. If the closure returns
-`false`, the value won’t be included in the resulting iterator. Listing 13-19
-demonstrates using `filter` with a closure that captures the `shoe_size`
-variable from its environment in order to iterate over a collection of `Shoe`
-struct instances in order to return only shoes that are the specified size:
+`false`, the value won’t be included in the resulting iterator.
+
+In Listing 13-19 we use `filter` with a closure that captures the `shoe_size`
+variable from its environment, in order to iterate over a collection of `Shoe`
+struct instances. It will return only shoes that are the specified size:
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -270,14 +277,17 @@ that captures `shoe_size`</span>
 
 The `shoes_in_my_size` function takes ownership of a vector of shoes and a shoe
 size as parameters. It returns a vector containing only shoes of the specified
-size. In the body of `shoes_in_my_size`, we call `into_iter` to create an
-iterator that takes ownership of the vector. Then we call `filter` to adapt
-that iterator into a new iterator that only contains elements for which the
-closure returns `true`. The closure we’ve specified captures the `shoe_size`
-parameter from the environment and uses the value to compare with each shoe’s
-size to only keep shoes that are of the size specified. Finally, calling
-`collect` gathers the values returned by the adapted iterator into a vector
-that the function returns.
+size.
+
+In the body of `shoes_in_my_size`, we call `into_iter` to create an iterator
+that takes ownership of the vector. Then we call `filter` to adapt that
+iterator into a new iterator that only contains elements for which the closure
+returns `true`.
+
+The closure captures the `shoe_size` parameter from the environment and
+compares the value with each shoe’s size, keeping only shoes of the size
+specified. Finally, calling `collect` gathers the values returned by the
+adapted iterator into a vector that’s returned by the function.
 
 The test shows that when we call `shoes_in_my_size`, we only get back shoes
 that have the same size as the value we specified.
@@ -285,20 +295,17 @@ that have the same size as the value we specified.
 ### Implementing the `Iterator` Trait to Create Our Own Iterators
 
 We’ve shown that we can create an iterator by calling `iter`, `into_iter`, or
-`iter_mut` on a vector. We can also create iterators from the other collection
-types in the standard library, such as hash map. Additionally, we can implement
-the `Iterator` trait in order to create iterators that do anything we want.
-As previously mentioned, the only method we’re required to provide a definition
-for is the `next` method. Once we’ve done that, we can use all the other
-methods that have default implementations provided by the `Iterator` trait on
-our iterator!
+`iter_mut` on a vector. We can create iterators from the other collection types
+in the standard library, such as hash map. We can also create iterators that do
+anything we want by implementing the `Iterator` trait on our own types. As
+previously mentioned, the only method we’re required to provide a definition
+for is the `next` method. Once we’ve done that, we can use all other methods
+that have default implementations provided by the `Iterator` trait!
 
-<!-- NEXT PARAGRAPH WRAPPED WEIRD INTENTIONALLY SEE #199 -->
-
-The iterator we’re going to create is one that will only ever count from 1
-to 5. First, we’ll create a struct to hold on to some values, and then we’ll
-make this struct into an iterator by implementing the `Iterator` trait and use
-the values in that implementation.
+To demonstrate, let’s create an iterator that will only ever count from 1 to 5.
+First, we’ll create a struct to hold some values, and then we’ll make this
+struct into an iterator by implementing the `Iterator` trait and use the values
+in that implementation.
 
 Listing 13-20 has the definition of the `Counter` struct and an associated
 `new` function to create instances of `Counter`:
@@ -321,14 +328,14 @@ impl Counter {
 function that creates instances of `Counter` with an initial value of 0 for
 `count`</span>
 
-The `Counter` struct has one field named `count`. This field holds a `u32`
-value that will keep track of where we are in the process of iterating from 1
-to 5. The `count` field is private since we want the implementation of
-`Counter` to manage its value. The `new` function enforces the behavior we want
-of always starting new instances with a value of 0 in the `count` field.
+The `Counter` struct has one field named `count`. This holds a `u32` value that
+will keep track of where we are in the process of iterating from 1 to 5. The
+`count` field is private since we want the implementation of `Counter` to
+manage its value. The `new` function enforces the behavior of always starting
+new instances with a value of 0 in the `count` field.
 
 Next, we’re going to implement the `Iterator` trait for our `Counter` type by
-defining the body of the `next` method to specify what we want to happen when
+defining the body of the `next` method, to specify what we want to happen when
 this iterator is used, as shown in Listing 13-21:
 
 <span class="filename">Filename: src/lib.rs</span>
@@ -358,18 +365,19 @@ impl Iterator for Counter {
 
 We set the associated `Item` type for our iterator to `u32`, meaning the
 iterator will return `u32` values. Again, don’t worry about associated types
-yet, we’ll be covering them in Chapter 19. We want our iterator to add one to
-the current state, which is why we initialized `count` to 0: we want our
-iterator to return one first. If the value of `count` is less than six, `next`
-will return the current value wrapped in `Some`, but if `count` is six or
-higher, our iterator will return `None`.
+yet, we’ll be covering them in Chapter 19.
+
+We want our iterator to add one to the current state, so we initialized `count`
+to 0 so it would return one first. If the value of `count` is less than six,
+`next` will return the current value wrapped in `Some`, but if `count` is six
+or higher, our iterator will return `None`.
 
 #### Using Our `Counter` Iterator’s `next` Method
 
 Once we’ve implemented the `Iterator` trait, we have an iterator! Listing 13-22
-shows a test demonstrating that we can use the iterator functionality our
-`Counter` struct now has by calling the `next` method on it directly, just like
-we did with the iterator created from a vector in Listing 13-15:
+shows a test demonstrating that we can use the iterator functionality of our
+`Counter` struct by calling the `next` method on it directly, just like we did
+with the iterator created from a vector in Listing 13-15:
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -410,21 +418,19 @@ method implementation</span>
 
 This test creates a new `Counter` instance in the `counter` variable and then
 calls `next` repeatedly, verifying that we have implemented the behavior we
-want this iterator to have of returning the values from 1 to 5.
+want this iterator to have: returning the values from 1 to 5.
 
 #### Using Other `Iterator` Trait Methods on Our Iterator
 
 Because we implemented the `Iterator` trait by defining the `next` method, we
-can now use any `Iterator` trait method’s default implementations that the
-standard library has defined, since they all use the `next` method’s
-functionality.
+can now use any `Iterator` trait method’s default implementations as defined in
+the standard library, since they all use the `next` method’s functionality.
 
-For example, if for some reason we wanted to take the values that an instance
-of `Counter` produces, pair those values with values produced by another
-`Counter` instance after skipping the first value that instance produces,
-multiply each pair together, keep only those results that are divisible by
-three, and add all the resulting values together, we could do so as shown in
-the test in Listing 13-23:
+For example, if for some reason we wanted to take the values produced by an
+instance of `Counter`, pair them with values produced by another `Counter`
+instance after skipping the first value, multiply each pair together, keep only
+those results that are divisible by three, and add all the resulting values
+together, we could do so as shown in the test in Listing 13-23:
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -473,6 +479,6 @@ Note that `zip` produces only four pairs; the theoretical fifth pair `(5,
 None)` is never produced because `zip` returns `None` when either of its input
 iterators return `None`.
 
-All of these method calls are possible because we implemented the `Iterator`
-trait by specifying how the `next` method works and the standard library
-provides default implementations for other methods that call `next`.
+All of these method calls are possible because we specified how the `next`
+method works, and the standard library provides default implementations for
+other methods that call `next`.
