@@ -1307,7 +1307,7 @@ Filename: src/lib.rs
 
 ```
 impl Config {
-    pub fn new(args: std::env::Args) -> Result<Config, &'static str> {
+    pub fn new(mut args: std::env::Args) -> Result<Config, &'static str> {
         // ...snip...
 ```
 
@@ -1316,7 +1316,10 @@ Listing 13-26: Updating the signature of `Config::new` to expect an iterator
 The standard library documentation for the `env::args` function shows that the
 type of the iterator it returns is `std::env::Args`. We’ve updated the
 signature of the `Config::new` function so that the parameter `args` has the
-type `std::env::Args` instead of `&[String]`.
+type `std::env::Args` instead of `&[String]`. Because we’re taking ownership of
+`args`, and we’re going to be mutating `args` by iterating over it, we can add
+the `mut` keyword into the specification of the `args` parameter to make it
+mutable.
 
 #### Using `Iterator` Trait Methods Instead of Indexing
 
