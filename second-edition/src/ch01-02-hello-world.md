@@ -8,14 +8,18 @@ tradition.
 > Note: This book assumes basic familiarity with the command line. Rust itself
 > makes no specific demands about your editing, tooling, or where your code
 > lives, so if you prefer an IDE to the command line, feel free to use your
-> favorite IDE.
+> favorite IDE. Many IDEs now have some degree of Rust support; check the
+> documentation of yours to see what kind of things it supports. Enabling great
+> IDE support has been a recent focus of the Rust team, and so things have been
+> changing rapidly on that front!
 
 ### Creating a Project Directory
 
-First, make a directory to put your Rust code in. Rust doesn’t care where your code
-lives, but for this book, we’d suggest making a *projects* directory in your
-home directory and keeping all your projects there. Open a terminal and enter
-the following commands to make a directory for this particular project:
+First, make a directory to put your Rust code in. Rust doesn’t care where
+your code lives, but for this book, we’d suggest making a *projects*
+directory in your home directory and keeping all your projects there. Open a
+terminal and enter the following commands to make a directory for this
+particular project:
 
 Linux and Mac:
 
@@ -64,16 +68,23 @@ fn main() {
 Save the file, and go back to your terminal window. On Linux or OSX, enter the
 following commands:
 
-```text
+```bash
 $ rustc main.rs
 $ ./main
 Hello, world!
 ```
 
-On Windows, run `.\main.exe` instead of `./main`. Regardless of your
-operating system, you should see the string `Hello, world!` print to the
-terminal. If you did, then congratulations! You’ve officially written a Rust
-program. That makes you a Rust programmer! Welcome!
+On Windows, use `.\main.exe` instead of `./main`.
+
+```powershell
+> rustc main.rs
+> \.main.exe
+Hello, world!
+```
+
+Regardless of your operating system, you should see the string `Hello,
+world!` print to the terminal. If you did, then congratulations! You’ve
+officially written a Rust program. That makes you a Rust programmer! Welcome!
 
 ### Anatomy of a Rust Program
 
@@ -96,6 +107,13 @@ Also note that the function body is wrapped in curly brackets, `{` and `}`.
 Rust requires these around all function bodies. It’s considered good style to
 put the opening curly bracket on the same line as the function declaration,
 with one space in between.
+
+> At the time of writing, an automatic formatter, `rustfmt`, is under
+> development. If you'd like to stick to a standard style across Rust projects,
+> `rustfmt` is the way to go. The plan is to eventually include it with the
+> standard Rust distribution, like `rustc`, so depending on when you
+> read this book, you may have it already installed! Check the online
+> documentation for more details.
 
 Inside the `main` function:
 
@@ -136,15 +154,17 @@ $ rustc main.rs
 
 If you come from a C or C++ background, you’ll notice that this is similar to
 `gcc` or `clang`. After compiling successfully, Rust should output a binary
-executable, which you can see on Linux or OSX by entering the `ls` command in
-your shell as follows:
+executable. 
 
-```text
+On Linux, Mac, and PowerShell on Windows, you can see the executable by
+entering the `ls` command in your shell as follows:
+
+```bash
 $ ls
 main  main.rs
 ```
 
-On Windows, you’d enter:
+With CMD on Windows, you’d enter:
 
 ```cmd
 > dir /B %= the /B option says to only show the file names =%
@@ -213,13 +233,13 @@ Let’s create a new project using Cargo and look at how it differs from our
 project in `hello_world`. Go back to your projects directory (or wherever you
 decided to put your code):
 
-Linux and Mac:
+Linux, Mac, and PowerShell:
 
 ```text
 $ cd ~/projects
 ```
 
-Windows:
+CMD for Windows:
 
 ```cmd
 > cd %USERPROFILE%\projects
@@ -412,7 +432,7 @@ $ cd someproject
 $ cargo build
 ```
 
-> Note: If you want to look at Cargo in more detail, check out the official
-[Cargo guide], which covers all of its features.
+> Note: If you want to look at Cargo in more detail, check out [its
+> documentation], which covers all of its features.
 
-[Cargo guide]: http://doc.crates.io/guide.html
+[its documentation]: http://doc.crates.io/
