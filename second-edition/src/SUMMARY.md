@@ -5,6 +5,7 @@
 - [Introduction](ch01-00-introduction.md)
     - [Installation](ch01-01-installation.md)
     - [Hello, World!](ch01-02-hello-world.md)
+    - [How Rust is made and "nightly Rust"](ch01-03-how-rust-is-made-and-nightly-rust.md)
 
 - [Guessing Game Tutorial](ch02-00-guessing-game-tutorial.md)
 
@@ -125,7 +126,6 @@
     - [A - Keywords](appendix-01-keywords.md)
     - [B - Operators](appendix-02-operators.md)
     - [C - Derivable Traits]()
-    - [D - Nightly Rust]()
-    - [E - Macros]()
-    - [F - Translations]()
-    - [G - Newest Features](appendix-07-newest-features.md)
+    - [D - Macros]()
+    - [E - Translations]()
+    - [F - Newest Features](appendix-07-newest-features.md)

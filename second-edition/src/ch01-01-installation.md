@@ -1,17 +1,19 @@
-## Installation
+# Installation
 
 The first step to using Rust is to install it. You’ll need an internet
 connection to run the commands in this chapter, as we’ll be downloading Rust
 from the internet.
 
-We’ll be showing off a number of commands using a terminal, and those lines all
-start with `$`. You don’t need to type in the `$` character; they are there to indicate
-the start of each command. You’ll see many tutorials and examples around the web
-that follow this convention: `$` for commands run as a regular user, and `#`
-for commands you should be running as an administrator. Lines that don’t start
-with `$` are typically showing the output of the previous command.
+We’ll be showing off a number of commands using a terminal, and those lines
+all start with `$`. You don’t need to type in the `$` character; they are
+there to indicate the start of each command. You’ll see many tutorials and
+examples around the web that follow this convention: `$` for commands run as
+a regular user, and `#` for commands you should be running as an
+administrator. Lines that don’t start with `$` are typically showing the
+output of the previous command. Additionally, PowerShell specific examples
+will use `>` rather than `$`.
 
-### Installing on Linux or Mac
+## Installing on Linux or Mac
 
 If you’re on Linux or a Mac, all you need to do is open a terminal and type
 this:
@@ -43,23 +45,21 @@ Alternatively, add the following line to your `~/.bash_profile`:
 $ export PATH="$HOME/.cargo/bin:$PATH"
 ```
 
-### Installing on Windows
+## Installing on Windows
 
 On Windows, go to [https://rustup.rs](https://rustup.rs/)<!-- ignore --> and
 follow the instructions to download rustup-init.exe. Run that and follow the
 rest of the instructions it gives you.
 
-The rest of the Windows-specific commands in the book will assume that you are
-using `cmd` as your shell. If you use a different shell, you may be able to run
-the same commands that Linux and Mac users do. If neither work, consult the
-documentation for the shell you are using.
+The rest of this book will use commands that work in both `cmd.exe` and
+PowerShell. If there are specific differences, we'll explain which to use.
 
-### Custom installations
+## Custom installations
 
 If you have reasons for preferring not to use rustup.rs, please see [the Rust
 installation page](https://www.rust-lang.org/install.html) for other options.
 
-### Updating
+## Updating
 
 Once you have Rust installed, updating to the latest version is easy.
 From your shell, run the update script:
@@ -68,7 +68,7 @@ From your shell, run the update script:
 $ rustup update
 ```
 
-### Uninstalling
+## Uninstalling
 
 Uninstalling Rust is as easy as installing it. From your shell, run
 the uninstall script:
@@ -77,7 +77,7 @@ the uninstall script:
 $ rustup self uninstall
 ```
 
-### Troubleshooting
+## Troubleshooting
 
 If you’ve got Rust installed, you can open up a shell, and type this:
 
@@ -110,7 +110,7 @@ help you out. Other great resources include [the Users forum][users] and
 [users]: https://users.rust-lang.org/
 [stackoverflow]: http://stackoverflow.com/questions/tagged/rust
 
-### Local documentation
+## Local documentation
 
 The installer also includes a copy of the documentation locally, so you can
 read it offline. Run `rustup doc` to open the local documentation in your
