@@ -420,13 +420,12 @@ variable for reuse and use the variable instead in each place we need the
 result instead of calling the closure again. This method, though, could result
 in a lot of repeated code.
 
-Because we have a closure for the expensive calculation, we have another
-solution available to us. We can create a struct that will hold the closure and
-the resulting value of calling the closure. The struct will only execute the
-closure if we need the resulting value, and it will cache the resulting value
-so that the rest of our code doesn’t have to be responsible for saving and
-reusing the result. You may know this pattern as *memoization* or *lazy
-evaluation*.
+Fortunately, we have another solution available to us. We can create a struct
+that will hold the closure and the resulting value of calling the closure. The
+struct will only execute the closure if we need the resulting value, and it
+will cache the resulting value so that the rest of our code doesn’t have to be
+responsible for saving and reusing the result. You may know this pattern as
+*memoization* or *lazy evaluation*.
 
 In order to make a struct that holds a closure, we need to be able to specify
 the type of the closure, because a struct definition needs to know the types of
@@ -468,6 +467,11 @@ trait bounds on `T` specify that it’s a closure by using the `Fn` trait. Any
 closure we want to store in the `calculation` field must have one `i32`
 parameter (specified within the parentheses after `Fn`) and must return an
 `i32` (specified after the `->`).
+
+> Note: Functions implement all three of the Fn traits too. If what we want to
+> do doesn’t require capturing a value from the environment, we can use a
+> function rather than a closure where we need something that implements an Fn
+> trait.
 
 The `value` field is of type `Option<i32>`. Before we execute the closure,
 `value` will be `None`. When code using a `Cacher` asks for the *result* of the
