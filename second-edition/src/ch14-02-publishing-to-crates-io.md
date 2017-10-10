@@ -20,10 +20,6 @@ contents of documentation comments for public API items, intended for
 programmers interested in knowing how to *use* your crate, as opposed to how
 your crate is *implemented*.
 
-<!-- Doc comments support markdown but don’t require markdown, is that right?
-Just wanted to make that distinction -->
-<!-- yes -->
-
 Documentation comments use `///` instead of `//` and support Markdown notation
 for formatting the text if you’d like. You place documentation comments just
 before the item they are documenting. Listing 14-2 shows documentation comments
@@ -48,10 +44,6 @@ pub fn add_one(x: i32) -> i32 {
 
 <span class="caption">Listing 14-2: A documentation comment for a function</span>
 
-<!-- At some point, a screenshot of how this is rendered in HTML could be really
-useful here, what you do think? -->
-<!-- Yup! /Carol -->
-
 Here, we give a description of what the `add_one` function does, then start a
 section with the heading “Examples”, and code that demonstrates how to use the
 `add_one` function. We can generate the HTML documentation from this
@@ -69,13 +61,6 @@ gets rendered, shown here in Figure 14-3:
 
 <span class="caption">Figure 14-3: HTML documentation for the `add_one`
 function</span>
-
-<!--Above - I added this line to describe what we're doing, encourage good
-practice, can you add/edit where necessary? These will generate as HTML when
-the code is run, is that how it works? -->
-<!-- Not when the code is run, when the programmer runs `cargo doc`. That
-doesn't run the programmer's code, really, not in the way `cargo run` runs it
-anyway. We've tried clarifying as well as adding a screenshot. /Carol -->
 
 #### Commonly Used Sections
 
@@ -125,11 +110,6 @@ tests catch that the example and the code are out of sync from one another!
 
 #### Commenting Contained Items
 
-<!-- I'm not clear what this comment does that's different, what do you mean by
-"comment containing items"? The lingo might just be going over my head here -->
-<!-- we've tried to reword and we've changed the example, is this clearer?
-/Carol -->
-
 There’s another style of doc comment, `//!`, that adds documentation to the
 item that contains the comments, rather than adding documentation to the items
 following the comments. These are typically used inside the crate root file
@@ -171,10 +151,6 @@ crate, as shown in Figure 14-5:
 <span class="caption">Figure 14-5: Rendered documentation for `my_crate`
 including the comment describing the crate as a whole</span>
 
-<!-- I'm not sure what we're looking at here, that's different from just using
-///, can you point it out, talk about it? -->
-<!-- Does the screenshot help? /Carol -->
-
 Documentation comments within items are useful for describing crates and
 modules especially. Use them to talk about the purpose of the container overall
 to help users of your crate understand your organization.
@@ -192,11 +168,6 @@ also be annoyed at having to type `use
 my_crate::some_module::another_module::UsefulType;` rather than `use
 my_crate::UsefulType;`.
 
-<!-- Can you outline why, briefly, here? Reading on, is it something like:
-because some useful functions might be buried within modules that the user is
-unaware of -->
-<!-- Yes, that's pretty much it. We've clarified above. /Carol -->
-
 The structure of your public API is a major consideration when publishing a
 crate. People who use your crate are less familiar with the structure than you
 are, and might have trouble finding the pieces they want to use if the module
@@ -208,9 +179,6 @@ you can choose to re-export items to make a public structure that’s different
 to your private structure, using `pub use`. Re-exporting takes a public item in
 one location and makes it public in another location as if it was defined in
 the other location instead.
-
-<!-- Can you give a quick definition of "re-export" here? -->
-<!-- Yup! /Carol -->
 
 For example, say we made a library named `art` for modeling artistic concepts.
 Within this library is a `kinds` module containing two enums named
@@ -290,12 +258,6 @@ fn main() {
 <span class="caption">Listing 14-8: A crate using the `art` crate’s items with
 its internal structure exported</span>
 
-<!--Below -- just to clarify, the "users of this crate" refers to people using
-the crate in 14-8 that `uses` art, is that right? I want to make sure I'm
-following accurately! -->
-<!-- No, it refers to the users of the `art` crate. I've tried to clarify
-/Carol -->
-
 The author of the code in Listing 14-8 that uses the `art` crate had to figure
 out that `PrimaryColor` is in the `kinds` module and `mix` is in the `utils`
 module. The module structure of the `art` crate is more relevant to developers
@@ -333,8 +295,6 @@ pub mod utils {
 <span class="caption">Listing 14-9: Adding `pub use` statements to re-export
 items</span>
 
-<!-- Will add ghosting in libreoffice /Carol -->
-
 The API documentation generated with `cargo doc` for this crate will now list
 and link re-exports on the front page as shown in Figure 14-10, which makes
 these types easier to find.
@@ -363,8 +323,6 @@ fn main() {
 
 <span class="caption">Listing 14-11: A program using the re-exported items from
 the `art` crate</span>
-
-<!-- Will add ghosting in libreoffice /Carol -->
 
 In cases where there are many nested modules, re-exporting the types at the top
 level with `pub use` can make a big difference in the experience of people who
@@ -401,9 +359,6 @@ revoke it and generate a new token on Crates.io.
 Now you have an account, and let’s say you already have a crate you want to
 publish. Before publishing, you’ll need to add some metadata to your crate by
 adding it to the `[package]` section of the crate’s *Cargo.toml*.
-
-<!-- Is this right, everything here is relevant to cargo.toml?-->
-<!-- Yep /Carol -->
 
 Your crate will first need a unique name. While you’re working on a crate
 locally, you may name a crate whatever you’d like. However, crate names on
@@ -447,10 +402,6 @@ licensed your crate using the MIT License, add the `MIT` identifier:
 name = "guessing_game"
 license = "MIT"
 ```
-
-<!-- Can you give an example of what a license identifier value looks like? It
-is a alphanumerical code? -->
-<!-- Mostly, yeah. /Carol -->
 
 If you want to use a license that doesn’t appear in the SPDX, you need to place
 the text of that license in a file, include the file in your project, then use

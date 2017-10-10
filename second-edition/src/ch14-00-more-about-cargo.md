@@ -12,6 +12,3 @@ advanced features to show you how to:
 
 Cargo can do even more than what we can cover in this chapter too, so for a
 full explanation, see [its documentation](http://doc.rust-lang.org/cargo/).
-
-<!--can you give a link to the documentation?-->
-<!-- done /Carol -->

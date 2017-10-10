@@ -16,9 +16,6 @@ advanced features to show you how to:
 Cargo can do even more than what we can cover in this chapter too, so for a
 full explanation, see its documentation at *http://doc.rust-lang.org/cargo/*.
 
-<!--can you give a link to the documentation?-->
-<!-- done /Carol -->
-
 ## Customizing Builds with Release Profiles
 
 In Rust *release profiles* are pre-defined, and customizable, profiles with
@@ -26,21 +23,9 @@ different configurations, to allow the programmer more control over various
 options for compiling your code. Each profile is configured independently of
 the others.
 
-<!-- To be clear, are these release profiles pre-defined profiles that you use
-for different things? Can you lay that out more explicitly, give a more
-detailed definition? That seems super useful, but I'm not sure I'm following
-what they actually are. -->
-<!-- They are pre-defined, we've tried to clarify /Carol -->
-
 Cargo has four profiles defined with good default configurations for each use
 case. Cargo uses the different profiles based on which command you’re running.
 The commands correspond to the profiles as shown in Table 14-1:
-
-<!-- Hm, so these profiles aren't built-in, just supported? and used for what
-for cargo build? How do you use a particular profile in a build, is it chosen
-by default? Do you have to specify? -->
-<!-- They are built in with defaults. We've tried to clarify by changing this
-to a table and adding some more explanation, is this better? /Carol -->
 
 | Command                 | Profile   |
 |-------------------------|-----------|
@@ -54,9 +39,6 @@ Table 14-1: Which profile is used when you run different Cargo commands
 This may be familiar from the output of your builds, which shows the profile
 used in the build:
 
-<!-- Above-is that what you meant here? -->
-<!-- Yep! /Carol -->
-
 ```
 $ cargo build
     Finished dev [unoptimized + debuginfo] target(s) in 0.0 secs
@@ -67,21 +49,7 @@ $ cargo build --release
 The “dev” and “release” notifications here indicate that the compiler is
 using different profiles.
 
-<!-- which profile is "debug" associated with? As you can probably tell, I'm
-not confident in my interpretation here, I think we need more info -->
-<!-- Sorry, this was an inconsistency in cargo that we actually noticed while
-writing this section and has since been fixed, but then I think we missed
-updating this spot. `debug` should be gone. /Carol -->
-
 ### Customizing Release Profiles
-
-<!-- Do we mean that the profiles are all already stored in Cargo.toml, or you
-have to add the entire code to cargo.toml? It seems like the former from the
-writing, but looking through toml files I've made the latter seems to be true.
-If you have multiple profiles in the toml, how do you choose which one to use?
--->
-<!-- We've tried to clarify below. Please let me know if this is still unclear,
-I'm confused about how you're drawing your conclusions. /Carol -->
 
 Cargo has default settings for each of the profiles that apply when there
 aren’t any `[profile.*]` sections in the project’s *Cargo.toml* file. By adding
@@ -111,15 +79,6 @@ We can choose to override any default setting by adding a different value for
 them in *Cargo.toml*. If we wanted to use optimization level 1 in the
 development profile, for example, we can add these two lines to our project’s
 *Cargo.toml*:
-
-<!-- So do we choose which profile to use when? How do we do that? Or is that
-determined automatically by Rust, and if so, how? I think we need to show that
-somewhere around here -->
-<!-- Which profile is used is determined by which command you're running, which
-we tried to show above. I hope the table added above has clarified this, if
-not, please suggest further wording above, but the reader should understand
-which profile gets used when by this point and I don't think we should repeat
-it again here. /Carol -->
 
 Filename: Cargo.toml
 
@@ -158,10 +117,6 @@ contents of documentation comments for public API items, intended for
 programmers interested in knowing how to *use* your crate, as opposed to how
 your crate is *implemented*.
 
-<!-- Doc comments support markdown but don’t require markdown, is that right?
-Just wanted to make that distinction -->
-<!-- yes -->
-
 Documentation comments use `///` instead of `//` and support Markdown notation
 for formatting the text if you’d like. You place documentation comments just
 before the item they are documenting. Listing 14-2 shows documentation comments
@@ -186,10 +141,6 @@ pub fn add_one(x: i32) -> i32 {
 
 Listing 14-2: A documentation comment for a function
 
-<!-- At some point, a screenshot of how this is rendered in HTML could be really
-useful here, what you do think? -->
-<!-- Yup! /Carol -->
-
 Here, we give a description of what the `add_one` function does, then start a
 section with the heading “Examples”, and code that demonstrates how to use the
 `add_one` function. We can generate the HTML documentation from this
@@ -206,13 +157,6 @@ gets rendered, shown here in Figure 14-3:
 <img alt="Rendered HTML documentation for the `add_one` function of `my_crate`" src="img/trpl14-03.png" class="center" />
 
 Figure 14-3: HTML documentation for the `add_one` function
-
-<!--Above - I added this line to describe what we're doing, encourage good
-practice, can you add/edit where necessary? These will generate as HTML when
-the code is run, is that how it works? -->
-<!-- Not when the code is run, when the programmer runs `cargo doc`. That
-doesn't run the programmer's code, really, not in the way `cargo run` runs it
-anyway. We've tried clarifying as well as adding a screenshot. /Carol -->
 
 #### Commonly Used Sections
 
@@ -262,11 +206,6 @@ tests catch that the example and the code are out of sync from one another!
 
 #### Commenting Contained Items
 
-<!-- I'm not clear what this comment does that's different, what do you mean by
-"comment containing items"? The lingo might just be going over my head here -->
-<!-- we've tried to reword and we've changed the example, is this clearer?
-/Carol -->
-
 There’s another style of doc comment, `//!`, that adds documentation to the
 item that contains the comments, rather than adding documentation to the items
 following the comments. These are typically used inside the crate root file
@@ -307,10 +246,6 @@ crate, as shown in Figure 14-5:
 Figure 14-5: Rendered documentation for `my_crate` including the comment
 describing the crate as a whole
 
-<!-- I'm not sure what we're looking at here, that's different from just using
-///, can you point it out, talk about it? -->
-<!-- Does the screenshot help? /Carol -->
-
 Documentation comments within items are useful for describing crates and
 modules especially. Use them to talk about the purpose of the container overall
 to help users of your crate understand your organization.
@@ -328,11 +263,6 @@ also be annoyed at having to type `use
 my_crate::some_module::another_module::UsefulType;` rather than `use
 my_crate::UsefulType;`.
 
-<!-- Can you outline why, briefly, here? Reading on, is it something like:
-because some useful functions might be buried within modules that the user is
-unaware of -->
-<!-- Yes, that's pretty much it. We've clarified above. /Carol -->
-
 The structure of your public API is a major consideration when publishing a
 crate. People who use your crate are less familiar with the structure than you
 are, and might have trouble finding the pieces they want to use if the module
@@ -344,9 +274,6 @@ you can choose to re-export items to make a public structure that’s different
 to your private structure, using `pub use`. Re-exporting takes a public item in
 one location and makes it public in another location as if it was defined in
 the other location instead.
-
-<!-- Can you give a quick definition of "re-export" here? -->
-<!-- Yup! /Carol -->
 
 For example, say we made a library named `art` for modeling artistic concepts.
 Within this library is a `kinds` module containing two enums named
@@ -425,12 +352,6 @@ fn main() {
 Listing 14-8: A crate using the `art` crate’s items with its internal structure
 exported
 
-<!--Below -- just to clarify, the "users of this crate" refers to people using
-the crate in 14-8 that `uses` art, is that right? I want to make sure I'm
-following accurately! -->
-<!-- No, it refers to the users of the `art` crate. I've tried to clarify
-/Carol -->
-
 The author of the code in Listing 14-8 that uses the `art` crate had to figure
 out that `PrimaryColor` is in the `kinds` module and `mix` is in the `utils`
 module. The module structure of the `art` crate is more relevant to developers
@@ -467,8 +388,6 @@ pub mod utils {
 
 Listing 14-9: Adding `pub use` statements to re-export items
 
-<!-- Will add ghosting in libreoffice /Carol -->
-
 The API documentation generated with `cargo doc` for this crate will now list
 and link re-exports on the front page as shown in Figure 14-10, which makes
 these types easier to find.
@@ -496,8 +415,6 @@ fn main() {
 ```
 
 Listing 14-11: A program using the re-exported items from the `art` crate
-
-<!-- Will add ghosting in libreoffice /Carol -->
 
 In cases where there are many nested modules, re-exporting the types at the top
 level with `pub use` can make a big difference in the experience of people who
@@ -534,9 +451,6 @@ revoke it and generate a new token on Crates.io.
 Now you have an account, and let’s say you already have a crate you want to
 publish. Before publishing, you’ll need to add some metadata to your crate by
 adding it to the `[package]` section of the crate’s *Cargo.toml*.
-
-<!-- Is this right, everything here is relevant to cargo.toml?-->
-<!-- Yep /Carol -->
 
 Your crate will first need a unique name. While you’re working on a crate
 locally, you may name a crate whatever you’d like. However, crate names on
@@ -580,10 +494,6 @@ licensed your crate using the MIT License, add the `MIT` identifier:
 name = "guessing_game"
 license = "MIT"
 ```
-
-<!-- Can you give an example of what a license identifier value looks like? It
-is a alphanumerical code? -->
-<!-- Mostly, yeah. /Carol -->
 
 If you want to use a license that doesn’t appear in the SPDX, you need to place
 the text of that license in a file, include the file in your project, then use
@@ -719,10 +629,6 @@ Like many Cargo features, workspaces support convention over configuration: we
 don’t need to add anything more than this to *Cargo.toml* to define our
 workspace as long as we follow the convention.
 
-<!-- Below -- any crates what depends on, specifically? The program? -->
-<!-- They're all programs. We mean the top-level crate in the workspace here,
-I've tried to clarify. /Carol -->
-
 ### Specifying Workspace Dependencies
 
 The workspace convention says any crates in any subdirectories that the
@@ -736,10 +642,6 @@ dependent crates will be considered part of the workspace. Let’s specify in th
 an `add-one` crate that will be in the `add-one` subdirectory, by changing
 *Cargo.toml* to look like this:
 
-<!-- Above, what is the path dependency actually doing here, can you fill out
-the paragraph above? -->
-<!-- done /Carol -->
-
 ```
 [dependencies]
 add-one = { path = "add-one" }
@@ -750,10 +652,6 @@ those dependencies will be normal dependencies that aren’t in this workspace
 and are assumed to come from Crates.io.
 
 ### Creating the Second Crate in the Workspace
-
-<!-- You can see I'm adding headings, here, trying to add some more navigable
-structure -- can you improve these? I'm not sure mine are accurate -->
-<!-- Yep! /Carol -->
 
 Next, while in the `adder` directory, generate an `add-one` crate:
 
@@ -783,9 +681,6 @@ pub fn add_one(x: i32) -> i32 {
     x + 1
 }
 ```
-
-<!-- below -- Where are we adding the extern crate line? -->
-<!-- at the top, where all the extern crate lines go and as illustrated by the listing /Carol -->
 
 Open up *src/main.rs* for `adder` and add an `extern crate` line at the top of
 the file to bring the new `add-one` library crate into scope. Then change the
@@ -835,14 +730,6 @@ recompile each other crate in the workspace in order to have the artifacts in
 its own *target* directory. By sharing one *target* directory, the crates in
 the workspace can avoid rebuilding the other crates in the workspace more than
 necessary.
-
-<!-- Above -- I have no idea what this means for our project here, can you put
-it in more practical terms, or otherwise maybe just explain what this means for
-the user? -->
-<!-- I added more explanation for the target directory in this section and
-added more explanation for the Cargo.lock in the next section, since the
-Cargo.lock advantages aren't as visible until you start adding dependencies on
-external crates. What do you think? /Carol -->
 
 #### Depending on an External Crate in a Workspace
 
@@ -1001,9 +888,6 @@ does not have an `--all` flag or a `-p` flag, so it is necessary to change to
 each crate’s directory and run `cargo publish` on each crate in the workspace
 in order to publish them.
 
-<!-- What does that mean, we have to publish them all one at a time?-->
-<!-- Yep, we've tried to clarify /Carol -->
-
 Now try adding an `add-two` crate to this workspace in a similar way as the
 `add-one` crate for some more practice!
 
@@ -1023,9 +907,6 @@ target is the runnable program that gets created if the crate has a
 target that isn’t runnable on its own but is suitable for including within
 other programs. Usually, crates have information in the *README* file about
 whether a crate is a library, has a binary target, or both.
-
-<!-- What is a binary target, and how do you know if a package has one? -->
-<!-- Added /Carol -->
 
 All binaries from `cargo install` are put into the installation root’s *bin*
 folder. If you installed Rust using *rustup.rs* and don’t have any custom
