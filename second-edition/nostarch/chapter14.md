@@ -23,21 +23,14 @@ different configurations, to allow the programmer more control over various
 options for compiling your code. Each profile is configured independently of
 the others.
 
-Cargo has four profiles defined with good default configurations for each use
-case. Cargo uses the different profiles based on which command you’re running.
-The commands correspond to the profiles as shown in Table 14-1:
+Cargo has two main profiles you should know about: the `dev` profile Cargo uses
+when you run `cargo build`, and the `release` profile Cargo uses when you run
+`cargo build --release`. The `dev` profile is defined with good defaults for
+developing, and likewise the `release` profile has good defaults for release
+builds.
 
-| Command                 | Profile   |
-|-------------------------|-----------|
-| `cargo build`           | `dev`     |
-| `cargo build --release` | `release` |
-| `cargo test`            | `test`    |
-| `cargo doc`             | `doc`     |
-
-Table 14-1: Which profile is used when you run different Cargo commands
-
-This may be familiar from the output of your builds, which shows the profile
-used in the build:
+These names may be familiar from the output of your builds, which shows the
+profile used in the build:
 
 ```
 $ cargo build
@@ -171,10 +164,9 @@ commonly use in their documentation include:
   errors that might occur and what conditions might cause those errors to be
   returned can be helpful to callers so that they can write code to handle the
   different kinds of errors in different ways.
-* **Safety**: If this function uses `unsafe` code (which we will discuss in
-  Chapter 19), there should be a section covering the invariants that this
-  function expects callers to uphold in order for the code in `unsafe` blocks to
-  function correctly.
+* **Safety**: If this function is `unsafe` to call (we will discuss unsafety in
+  Chapter 19), there should be a section explaining why the function is unsafe
+  and covering the invariants that this function expects callers to uphold.
 
 Most documentation comment sections don’t need all of these sections, but this
 is a good list to check to remind you of the kinds of things that people
@@ -209,8 +201,8 @@ tests catch that the example and the code are out of sync from one another!
 There’s another style of doc comment, `//!`, that adds documentation to the
 item that contains the comments, rather than adding documentation to the items
 following the comments. These are typically used inside the crate root file
-(*src/lib.rs*) or inside a module’s root (*mod.rs*) to document the crate or
-the module as a whole.
+(*src/lib.rs* by convention) or inside a module to document the crate or the
+module as a whole.
 
 For example, if we wanted to add documentation that described the purpose of
 the `my_crate` crate that contains the `add_one` function, we can add
@@ -322,8 +314,8 @@ would look like Figure 14-7:
 
 <img alt="Rendered documentation for the `art` crate that lists the `kinds` and `utils` modules" src="img/trpl14-07.png" class="center" />
 
-Figure 14-7: Front page of the documentation for `art`
-that lists the `kinds` and `utils` modules
+Figure 14-7: Front page of the documentation for `art` that lists the `kinds`
+and `utils` modules
 
 Note that the `PrimaryColor` and `SecondaryColor` types aren’t listed on the
 front page, nor is the `mix` function. We have to click on `kinds` and `utils`
@@ -630,16 +622,16 @@ workspace as long as we follow the convention.
 
 ### Specifying Workspace Dependencies
 
-The workspace convention says any crates in any subdirectories that the
-top-level crate depends on are part of the workspace. Any crate, whether in a
-workspace or not, can specify that it has a dependency on a crate in a local
-directory by using the `path` attribute on the dependency specification in
-*Cargo.toml*. If a crate has the `[workspace]` key and we specify path
-dependencies where the paths are subdirectories of the crate’s directory, those
-dependent crates will be considered part of the workspace. Let’s specify in the
-*Cargo.toml* for the top-level `adder` crate that it will have a dependency on
-an `add-one` crate that will be in the `add-one` subdirectory, by changing
-*Cargo.toml* to look like this:
+By default, Cargo will include all transitive path dependencies. A *path
+dependency* is when any crate, whether in a workspace or not, specifies that it
+has a dependency on a crate in a local directory by using the `path` attribute
+on the dependency specification in *Cargo.toml*. If a crate has the
+`[workspace]` key, or if the crate is itself part of a workspace, and we
+specify path dependencies where the paths are subdirectories of the crate’s
+directory, those dependent crates will be considered part of the workspace.
+Let’s specify in the *Cargo.toml* for the top-level `adder` crate that it will
+have a dependency on an `add-one` crate that will be in the `add-one`
+subdirectory, by changing *Cargo.toml* to look like this:
 
 ```
 [dependencies]
@@ -909,8 +901,8 @@ whether a crate is a library, has a binary target, or both.
 
 All binaries from `cargo install` are put into the installation root’s *bin*
 folder. If you installed Rust using *rustup.rs* and don’t have any custom
-configurations, this will be `$HOME/.cargo/bin`. Add that directory to your
-`$PATH` to be able to run programs you’ve gotten through `cargo install`.
+configurations, this will be `$HOME/.cargo/bin`. Ensure that directory is in
+your `$PATH` to be able to run programs you’ve gotten through `cargo install`.
 
 For example, we mentioned in Chapter 12 that there’s a Rust implementation of
 the `grep` tool for searching files called `ripgrep`. If we want to install
