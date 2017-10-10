@@ -473,9 +473,9 @@ closure we want to store in the `calculation` field must have one `i32`
 parameter (specified within the parentheses after `Fn`) and must return an
 `i32` (specified after the `->`).
 
-> Note: Functions implement all three of the Fn traits too. If what we want to
+> Note: Functions implement all three of the `Fn` traits too. If what we want to
 > do doesn’t require capturing a value from the environment, we can use a
-> function rather than a closure where we need something that implements an Fn
+> function rather than a closure where we need something that implements an `Fn`
 > trait.
 
 The `value` field is of type `Option<i32>`. Before we execute the closure,
