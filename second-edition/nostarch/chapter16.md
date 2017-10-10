@@ -206,12 +206,12 @@ the time, because the main thread ends before the spawned thread is done,
 there’s actually no guarantee that the spawned thread will get to run at all,
 because there’s no guarantee on the order in which threads run!
 
-<!-- Above -- why is this the case, because there are no guarantess over which
+<!-- Above -- why is this the case, because there are no guarantees over which
 order the threads run in? -->
 <!-- Yep! /Carol -->
 
 We can fix this by saving the return value of `thread::spawn` in a variable.
-The return type of `thread::spaw` is `JoinHandle`. A `JoinHandle` is an owned
+The return type of `thread::spawn` is `JoinHandle`. A `JoinHandle` is an owned
 value that, when we call the `join` method on it, will wait for its thread to
 finish. Listing 16-2 shows how to use the `JoinHandle` of the thread we created
 in Listing 16-1 and call `join` in order to make sure the spawned thread
@@ -507,7 +507,7 @@ documentation:
 
 One major tool Rust has for accomplishing message sending concurrency is the
 *channel*, a programming concept that Rust’s standard library provides an
-implemetation of. You can imagine a channel in programming like a channel of
+implementation of. You can imagine a channel in programming like a channel of
 water, such as a stream or a river. If you put something like a rubber duck or
 a boat into a stream, it will travel downstream to the end of the river.
 
@@ -555,7 +555,7 @@ respectively, so we give our variables those names to indicate each end. We’re
 using a `let` statement with a pattern that destructures the tuples; we’ll be
 discussing the use of patterns in `let` statements and destructuring in Chapter
 18. Using a `let` statement in this way is a convenient way to extract the
-pieces of the tuple returned by `mspc::channel`.
+pieces of the tuple returned by `mpsc::channel`.
 
 <!-- above -- can you give us a general idea of what that means for us in this
 program? -->
@@ -652,7 +652,7 @@ other work for the main thread to do other than wait for messages, so blocking
 the main thread is appropriate.
 
 <!-- So what is the difference here, what are the different situations you
-would want to return the value immdiately? -->
+would want to return the value immediately? -->
 <!-- Elaborated above /Carol -->
 
 If we run the code in Listing 16-8, we’ll see the value printed out from the
@@ -941,7 +941,7 @@ work as planned!
 
 Management of mutexes can be incredibly tricky to get right, and that’s why so
 many people are enthusiastic about channels. However, thanks to Rust’s type
-system and ownershp rules, we can’t get locking and unlocking wrong.
+system and ownership rules, we can’t get locking and unlocking wrong.
 
 #### The API of `Mutex<T>`
 
