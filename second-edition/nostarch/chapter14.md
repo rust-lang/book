@@ -50,6 +50,8 @@ aren’t any `[profile.*]` sections in the project’s *Cargo.toml* file. By add
 override any subset of the default settings. For example, here are the default
 values for the `opt-level` setting for the `dev` and `release` profiles:
 
+Filename: Cargo.toml
+
 ```
 [profile.dev]
 opt-level = 0
@@ -452,6 +454,8 @@ you’d like to use on the site to find out if it has been taken. If it hasn’t
 edit the name in *Cargo.toml* under `[package]` to have the name you want to
 use for publishing like so:
 
+Filename: Cargo.toml
+
 ```
 [package]
 name = "guessing_game"
@@ -481,6 +485,8 @@ Package Data Exchange (SPDX) at *http://spdx.org/licenses/* lists the
 identifiers you can use for this value. For example, to specify that you’ve
 licensed your crate using the MIT License, add the `MIT` identifier:
 
+Filename: Cargo.toml
+
 ```
 [package]
 name = "guessing_game"
@@ -501,6 +507,8 @@ by a slash.
 So, with a unique name, the version, and author details that `cargo new` added
 when you created the crate, your description, and the license you chose added,
 the *Cargo.toml* for a project that’s ready to publish might look like this:
+
+Filename: Cargo.toml
 
 ```
 [package]
@@ -612,6 +620,8 @@ We need to modify the binary package’s *Cargo.toml* and add a `[workspace]`
 section to tell Cargo the `adder` package is a workspace. Add this at the
 bottom of the file:
 
+Filename: Cargo.toml
+
 ```
 [workspace]
 ```
@@ -632,6 +642,8 @@ directory, those dependent crates will be considered part of the workspace.
 Let’s specify in the *Cargo.toml* for the top-level `adder` crate that it will
 have a dependency on an `add-one` crate that will be in the `add-one`
 subdirectory, by changing *Cargo.toml* to look like this:
+
+Filename: Cargo.toml
 
 ```
 [dependencies]
@@ -676,6 +688,8 @@ pub fn add_one(x: i32) -> i32 {
 Open up *src/main.rs* for `adder` and add an `extern crate` line at the top of
 the file to bring the new `add-one` library crate into scope. Then change the
 `main` function to call the `add_one` function, as in Listing 14-11:
+
+Filename: src/main.rs
 
 ```
 extern crate add_one;
