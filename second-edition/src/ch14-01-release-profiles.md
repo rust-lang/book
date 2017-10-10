@@ -5,22 +5,14 @@ different configurations, to allow the programmer more control over various
 options for compiling your code. Each profile is configured independently of
 the others.
 
-Cargo has four profiles defined with good default configurations for each use
-case. Cargo uses the different profiles based on which command you’re running.
-The commands correspond to the profiles as shown in Table 14-1:
+Cargo has two main profiles you should know about: the `dev` profile Cargo uses
+when you run `cargo build`, and the `release` profile Cargo uses when you run
+`cargo build --release`. The `dev` profile is defined with good defaults for
+developing, and likewise the `release` profile has good defaults for release
+builds.
 
-| Command                 | Profile   |
-|-------------------------|-----------|
-| `cargo build`           | `dev`     |
-| `cargo build --release` | `release` |
-| `cargo test`            | `test`    |
-| `cargo doc`             | `doc`     |
-
-<span class="caption">Table 14-1: Which profile is used when you run different
-Cargo commands</span>
-
-This may be familiar from the output of your builds, which shows the profile
-used in the build:
+These names may be familiar from the output of your builds, which shows the
+profile used in the build:
 
 ```text
 $ cargo build
@@ -29,8 +21,8 @@ $ cargo build --release
     Finished release [optimized] target(s) in 0.0 secs
 ```
 
-The “dev” and “release” notifications here indicate that the compiler is
-using different profiles.
+The “dev” and “release” notifications here indicate that the compiler is using
+different profiles.
 
 ### Customizing Release Profiles
 
@@ -39,6 +31,8 @@ aren’t any `[profile.*]` sections in the project’s *Cargo.toml* file. By add
 `[profile.*]` sections for any profile we want to customize, we can choose to
 override any subset of the default settings. For example, here are the default
 values for the `opt-level` setting for the `dev` and `release` profiles:
+
+<span class="filename">Filename: Cargo.toml</span>
 
 ```toml
 [profile.dev]
@@ -76,4 +70,4 @@ will use the defaults for the `dev` profile plus our customization to
 optimizations than the default, but not as many as a release build.
 
 For the full list of configuration options and defaults for each profile, see
-[Cargo’s documentation](http://doc.rust-lang.org/cargo/).
+[Cargo’s documentation](https://doc.rust-lang.org/cargo/).

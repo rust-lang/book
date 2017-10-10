@@ -25,6 +25,8 @@ We need to modify the binary package’s *Cargo.toml* and add a `[workspace]`
 section to tell Cargo the `adder` package is a workspace. Add this at the
 bottom of the file:
 
+<span class="filename">Filename: Cargo.toml</span>
+
 ```toml
 [workspace]
 ```
@@ -35,16 +37,18 @@ workspace as long as we follow the convention.
 
 ### Specifying Workspace Dependencies
 
-The workspace convention says any crates in any subdirectories that the
-top-level crate depends on are part of the workspace. Any crate, whether in a
-workspace or not, can specify that it has a dependency on a crate in a local
-directory by using the `path` attribute on the dependency specification in
-*Cargo.toml*. If a crate has the `[workspace]` key and we specify path
-dependencies where the paths are subdirectories of the crate’s directory, those
-dependent crates will be considered part of the workspace. Let’s specify in the
-*Cargo.toml* for the top-level `adder` crate that it will have a dependency on
-an `add-one` crate that will be in the `add-one` subdirectory, by changing
-*Cargo.toml* to look like this:
+By default, Cargo will include all transitive path dependencies. A *path
+dependency* is when any crate, whether in a workspace or not, specifies that it
+has a dependency on a crate in a local directory by using the `path` attribute
+on the dependency specification in *Cargo.toml*. If a crate has the
+`[workspace]` key, or if the crate is itself part of a workspace, and we
+specify path dependencies where the paths are subdirectories of the crate’s
+directory, those dependent crates will be considered part of the workspace.
+Let’s specify in the *Cargo.toml* for the top-level `adder` crate that it will
+have a dependency on an `add-one` crate that will be in the `add-one`
+subdirectory, by changing *Cargo.toml* to look like this:
+
+<span class="filename">Filename: Cargo.toml</span>
 
 ```toml
 [dependencies]
@@ -88,7 +92,9 @@ pub fn add_one(x: i32) -> i32 {
 
 Open up *src/main.rs* for `adder` and add an `extern crate` line at the top of
 the file to bring the new `add-one` library crate into scope. Then change the
-`main` function to call the `add_one` function, as in Listing 14-12:
+`main` function to call the `add_one` function, as in Listing 14-11:
+
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore
 extern crate add_one;
@@ -99,7 +105,7 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 14-12: Using the `add-one` library crate from the
+<span class="caption">Listing 14-11: Using the `add-one` library crate from the
 `adder` crate</span>
 
 Let’s build the `adder` crate by running `cargo build` in the *adder* directory!

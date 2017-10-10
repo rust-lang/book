@@ -12,8 +12,8 @@ whether a crate is a library, has a binary target, or both.
 
 All binaries from `cargo install` are put into the installation root’s *bin*
 folder. If you installed Rust using *rustup.rs* and don’t have any custom
-configurations, this will be `$HOME/.cargo/bin`. Add that directory to your
-`$PATH` to be able to run programs you’ve gotten through `cargo install`.
+configurations, this will be `$HOME/.cargo/bin`. Ensure that directory is in
+your `$PATH` to be able to run programs you’ve gotten through `cargo install`.
 
 For example, we mentioned in Chapter 12 that there’s a Rust implementation of
 the `grep` tool for searching files called `ripgrep`. If we want to install
