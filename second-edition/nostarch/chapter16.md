@@ -598,9 +598,9 @@ send messages through the channel.
 The transmitting end has a `send` method that takes the value we want to send.
 The `send` method returns a `Result<T, E>` type, so that if the receiving end
 has already been dropped and there’s nowhere to send a value, the send
-operation will error. In this example, we’re simply calling `unwrap` to ignore
-this error, but for a real application, we’d handle it properly--return to
-Chapter 9 to review strategies for proper error handling.
+operation will error. In this example, we’re simply calling `unwrap` to panic
+in case of error, but for a real application, we’d handle it properly--return
+to Chapter 9 to review strategies for proper error handling.
 
 In Listing 16-8, we’ll get the value from the receiving end of the channel in
 the main thread. This is like retrieving the rubber duck from the water at the
@@ -762,7 +762,7 @@ fn main() {
 
         for val in vals {
             tx.send(val).unwrap();
-            thread::sleep(Duration::new(1, 0));
+            thread::sleep(Duration::from_secs(1));
         }
     });
 
@@ -820,7 +820,7 @@ Filename: src/main.rs
 // ...snip...
 let (tx, rx) = mpsc::channel();
 
-let tx1 = tx.clone();
+let tx1 = mpsc::Sender::clone(&tx);
 thread::spawn(move || {
     let vals = vec![
         String::from("hi"),
@@ -831,7 +831,7 @@ thread::spawn(move || {
 
     for val in vals {
         tx1.send(val).unwrap();
-        thread::sleep(Duration::new(1, 0));
+        thread::sleep(Duration::from_secs(1));
     }
 });
 
@@ -845,7 +845,7 @@ thread::spawn(move || {
 
     for val in vals {
         tx.send(val).unwrap();
-        thread::sleep(Duration::new(1, 0));
+        thread::sleep(Duration::from_secs(1));
     }
 });
 // ...snip...
@@ -1173,7 +1173,7 @@ fn main() {
     let mut handles = vec![];
 
     for _ in 0..10 {
-    	let counter = counter.clone();
+    	let counter = Rc::clone(&counter);
         let handle = thread::spawn(move || {
             let mut num = counter.lock().unwrap();
 
@@ -1255,6 +1255,8 @@ Back to our example: `Arc<T>` and `Rc<T>` have the same API, so we fix our
 program by changing the `use` line and the call to `new`. The code in Listing
 16-15 will finally compile and run:
 
+Filename: src/main.rs
+
 ```
 use std::sync::{Mutex, Arc};
 use std::thread;
@@ -1264,7 +1266,7 @@ fn main() {
     let mut handles = vec![];
 
     for _ in 0..10 {
-    	let counter = counter.clone();
+    	let counter = Arc::clone(&counter);
         let handle = thread::spawn(move || {
             let mut num = counter.lock().unwrap();
 
@@ -1388,7 +1390,7 @@ Manually implementing these traits involves implementing unsafe Rust code.
 We’re going to be talking about using unsafe Rust code in Chapter 19; for now,
 the important information is that building new concurrent types not made up of
 `Send` and `Sync` parts requires careful thought, in order to uphold the safety
-guarantees. The Nomicon at *https://doc.rust-lang.org/stable/nomicon/vec.html*
+guarantees. The Nomicon at *https://doc.rust-lang.org/stable/nomicon/*
 has more information about these guarantees and how to uphold them.
 
 ## Summary
