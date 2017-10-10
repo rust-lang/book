@@ -20,7 +20,7 @@ concurrency errors are *compile time* errors in Rust, rather than runtime
 errors. Rather than spending lots of time trying to reproduce the exact
 circumstances under which a runtime concurrency bug occurs, incorrect code will
 refuse to compile with an error explaining the problem. This lets you fix your
-code while you're working on it, rather than potentially after it's been
+code while you’re working on it, rather than potentially after it’s been
 shipped to production. We’ve nicknamed this aspect of Rust *fearless
 concurrency*. Fearless concurrency allows you to write code that’s free of
 subtle bugs and is easy to refactor without introducing new bugs.
@@ -66,7 +66,7 @@ Here’s what we’ll cover in this chapter:
 
 ## Using Threads to Run Code Simultaneously
 
-In most operating systems today, an executed program's code is run in a
+In most operating systems today, an executed program’s code is run in a
 *process*, and the operating system manages multiple process at once. Within
 your program, you can also have independent parts that run simultaneously. The
 feature that runs these independent parts is called *threads*.
@@ -119,7 +119,7 @@ Wikipedia calls this "runtime system":
 https://en.wikipedia.org/wiki/Runtime_system but most people colloquially just
 say "the runtime". I've tried to clarify. /Carol -->
 
-In this context, by runtime we mean code that's included by the language in
+In this context, by runtime we mean code that’s included by the language in
 every binary. This code can be large or small depending on the language, but
 every non-assembly language will have some amount of runtime code. For that
 reason, colloquially when people say a language has “no runtime” they often
@@ -204,7 +204,7 @@ to take a break and give the other thread a turn.
 The code in Listing 16-1 not only stops the spawned thread prematurely most of
 the time, because the main thread ends before the spawned thread is done,
 there’s actually no guarantee that the spawned thread will get to run at all,
-because there's no guarantee on the order in which threads run!
+because there’s no guarantee on the order in which threads run!
 
 <!-- Above -- why is this the case, because there are no guarantess over which
 order the threads run in? -->
@@ -453,7 +453,7 @@ the values it uses
 
 What would happen to the code in Listing 16-4 where the main thread called
 `drop` if we use a `move` closure? Would `move` fix that case? Nope, we get a
-different error, because what Listing 16-4 is trying to do isn't allowed for a
+different error, because what Listing 16-4 is trying to do isn’t allowed for a
 different reason! If we add `move` to the closure, we’d move `v` into the
 closure’s environment, and we could no longer call `drop` on it in the main
 thread. We would get this compiler error instead:
@@ -475,11 +475,11 @@ error[E0382]: use of moved value: `v`
 Rust’s ownership rules have saved us again! We got an error from the code in
 Listing 16-3 because Rust was being conservative and only borrowing `v` for the
 thread, which meant the main thread could theoretically invalidate the spawned
-thread's reference. By telling Rust to move ownership of `v` to the spawned
-thread, we're guaranteeing to Rust that the main thread won't use `v` anymore.
-If we change Listing 16-4 in the same way, we're then violating the ownership
+thread’s reference. By telling Rust to move ownership of `v` to the spawned
+thread, we’re guaranteeing to Rust that the main thread won’t use `v` anymore.
+If we change Listing 16-4 in the same way, we’re then violating the ownership
 rules when we try to use `v` in the main thread. The `move` keyword overrides
-Rust's conservative default of borrowing; it doesn't let us violate the
+Rust’s conservative default of borrowing; it doesn’t let us violate the
 ownership rules.
 
 <!-- Uh oh, I'm lost again, I thought we were trying to fix 16-4 with move, but
@@ -506,7 +506,7 @@ documentation:
 <!-- I've elaborated /Carol -->
 
 One major tool Rust has for accomplishing message sending concurrency is the
-*channel*, a programming concept that Rust's standard library provides an
+*channel*, a programming concept that Rust’s standard library provides an
 implemetation of. You can imagine a channel in programming like a channel of
 water, such as a stream or a river. If you put something like a rubber duck or
 a boat into a stream, it will travel downstream to the end of the river.
@@ -519,13 +519,13 @@ want to send, and another part checks the receiving end for arriving messages.
 
 Here we’ll work up to a program that has one thread to generate values and send
 them down a channel, and another thread that will receive the values and print
-them out. We're going to be sending simple values between threads using a
-channel for the purposes of illustration. Once you're familiar with the
+them out. We’re going to be sending simple values between threads using a
+channel for the purposes of illustration. Once you’re familiar with the
 technique, you could use channels to implement a chat system, or a system where
 many threads perform parts of a calculation and send the parts to one thread
 that aggregates the results.
 
-First, we'll create a channel but not do anything with it in Listing 16-6:
+First, we’ll create a channel but not do anything with it in Listing 16-6:
 
 Filename: src/main.rs
 
@@ -540,7 +540,7 @@ fn main() {
 Listing 16-6: Creating a channel and assigning the two halves to `tx` and `rx`
 
 We create a new channel using the `mpsc::channel` function; `mpsc` stands for
-*multiple producer, single consumer*. In short, the way Rust's standard library
+*multiple producer, single consumer*. In short, the way Rust’s standard library
 has implemented channels is such that a channel can have multiple *sending*
 ends that produce values, but only one *receiving* end that consumes those
 values. Imagine multiple rivers and streams flowing together into one big
@@ -628,7 +628,7 @@ fn main() {
 Listing 16-8: Receiving the value “hi” in the main thread and printing it out
 
 The receiving end of a channel has two useful methods: `recv` and `try_recv`.
-We’re using `recv`, short for *receive*, which will block the main thread's
+We’re using `recv`, short for *receive*, which will block the main thread’s
 execution and wait until a value is sent down the channel. Once a value is
 sent, `recv` will return it in a `Result<T, E>`. When the sending end of the
 channel closes, `recv` will return an error to signal that no more values will
@@ -641,13 +641,13 @@ library has implemented it. I've tried to clarify that and blocking. /Carol -->
 
 The `try_recv` method doesn’t block, but will instead return a `Result<T, E>`
 immediately: an `Ok` value holding a message if one is available, and an `Err`
-value if there aren't any messages this time. Using `try_recv` is useful if
+value if there aren’t any messages this time. Using `try_recv` is useful if
 this thread has other work to do while waiting for messages: we could write a
 loop that calls `try_recv` every so often, handles a message if one is
 available, and otherwise does other work for a little while until checking
 again.
 
-We've chosen to use `recv` in this example for simplicity; we don't have any
+We’ve chosen to use `recv` in this example for simplicity; we don’t have any
 other work for the main thread to do other than wait for messages, so blocking
 the main thread is appropriate.
 
@@ -898,7 +898,7 @@ getting this idea from the slogan that the Go programming language espouses
 that we discussed earlier /Carol -->
 
 In a way, channels in any programming language are sort of like single
-ownership, because once you transfer a value down a channel, you shouldn't use
+ownership, because once you transfer a value down a channel, you shouldn’t use
 that value any longer. Shared memory concurrency is sort of like multiple
 ownership: multiple threads can access the same memory location at the same
 time. As we saw in Chapter 15 where multiple ownership was made possible by
@@ -914,7 +914,7 @@ concurrency primitives for shared memory: mutexes.
 A *mutex* is a concurrency primitive for sharing memory. It’s short for “mutual
 exclusion”, as in, it only allows one thread to access some data at any given
 time. In order to access the data in a mutex, a thread must first signal that
-it wants access by asking to acquire the mutex's *lock*. The lock is a data
+it wants access by asking to acquire the mutex’s *lock*. The lock is a data
 structure that is part of the mutex that keeps track of who currently has
 exclusive access to the data. We therefore describe the mutex as *guarding* the
 data it holds via the locking system.
@@ -970,7 +970,7 @@ simplicity
 
 As with many types, we create a `Mutex<T>` using the associated function `new`.
 To access the data inside the mutex, we use the `lock` method to acquire the
-lock. This call will block the current thread so that it can't do any work
+lock. This call will block the current thread so that it can’t do any work
 until it’s our turn to have the lock.
 
 <!-- will block what, other requests for the lock? Or block access to the data?
@@ -979,8 +979,8 @@ until it’s our turn to have the lock.
 help; I've also reworded to reinforce that /Carol -->
 
 The call to `lock` would fail if another thread holding the lock panicked. In
-that case, no one would ever be able to get the lock, so we've chosen to
-`unwrap` and have this thread panic if we're in that situation.
+that case, no one would ever be able to get the lock, so we’ve chosen to
+`unwrap` and have this thread panic if we’re in that situation.
 
 <!-- As in, the lock would be released? What would failure look like? -->
 <!-- As in we wouldn't ever be able to get the lock, I've clarified /Carol -->
@@ -1305,7 +1305,7 @@ mutability, like the `Cell` family does. In the same way we used `RefCell<T>`
 in Chapter 15 to allow us to mutate contents inside an `Rc<T>`, we use
 `Mutex<T>` to mutate contents inside of an `Arc<T>`.
 
-Another thing to note is that Rust can't prevent us from all kinds of logic
+Another thing to note is that Rust can’t prevent us from all kinds of logic
 errors when using `Mutex<T>`. Recall from Chapter 15 that using `Rc<T>` came
 with the risk of creating reference cycles, where two `Rc<T>` values refer to
 each other, causing memory leaks. Similarly, `Mutex<T>` comes the risk of
