@@ -14,7 +14,7 @@ advanced features to show you how to:
 * Extend Cargo with your own custom commands
 
 Cargo can do even more than what we can cover in this chapter too, so for a
-full explanation, see its documentation at *http://doc.rust-lang.org/cargo/*.
+full explanation, see its documentation at *https://doc.rust-lang.org/cargo/*.
 
 ## Customizing Builds with Release Profiles
 
@@ -46,8 +46,8 @@ $ cargo build --release
     Finished release [optimized] target(s) in 0.0 secs
 ```
 
-The “dev” and “release” notifications here indicate that the compiler is
-using different profiles.
+The “dev” and “release” notifications here indicate that the compiler is using
+different profiles.
 
 ### Customizing Release Profiles
 
@@ -93,7 +93,7 @@ will use the defaults for the `dev` profile plus our customization to
 optimizations than the default, but not as many as a release build.
 
 For the full list of configuration options and defaults for each profile, see
-Cargo’s documentation at *http://doc.rust-lang.org/cargo/*.
+Cargo’s documentation at *https://doc.rust-lang.org/cargo/*.
 
 ## Publishing a Crate to Crates.io
 
@@ -164,16 +164,16 @@ We used the `# Examples` markdown heading in Listing 14-2 to create a section
 in the HTML with the title “Examples”. Some other sections that crate authors
 commonly use in their documentation include:
 
-- Panics: The scenarios in which this function could `panic!`. Callers of this
-  function who don’t want their programs to panic should make sure that they
-  don’t call this function in these situations.
-- Errors: If this function returns a `Result`, describing the kinds of errors
-  that might occur and what conditions might cause those errors to be returned
-  can be helpful to callers so that they can write code to handle the different
-  kinds of errors in different ways.
-- Safety: If this function uses `unsafe` code (which we will discuss in Chapter
-  19), there should be a section covering the invariants that this function
-  expects callers to uphold in order for the code in `unsafe` blocks to
+* **Panics**: The scenarios in which this function could `panic!`. Callers of
+  this function who don’t want their programs to panic should make sure that
+  they don’t call this function in these situations.
+* **Errors**: If this function returns a `Result`, describing the kinds of
+  errors that might occur and what conditions might cause those errors to be
+  returned can be helpful to callers so that they can write code to handle the
+  different kinds of errors in different ways.
+* **Safety**: If this function uses `unsafe` code (which we will discuss in
+  Chapter 19), there should be a section covering the invariants that this
+  function expects callers to uphold in order for the code in `unsafe` blocks to
   function correctly.
 
 Most documentation comment sections don’t need all of these sections, but this
@@ -250,7 +250,7 @@ Documentation comments within items are useful for describing crates and
 modules especially. Use them to talk about the purpose of the container overall
 to help users of your crate understand your organization.
 
-### Exporting a Convenient Public API with `pub use`
+#### Exporting a Convenient Public API with `pub use`
 
 In Chapter 7, we covered how to organize our code into modules with the `mod`
 keyword, how to make items public with the `pub` keyword, and how to bring
@@ -431,7 +431,7 @@ structure differs from their public API.
 
 Before you can publish any crates, you need to create an account on crates.io
 and get an API token. To do so, visit the home page at *https://crates.io* and
-log in via a GitHub account---the GitHub account is a requirement for now, but
+log in via a GitHub account—the GitHub account is a requirement for now, but
 the site may support other ways of creating an account in the future. Once
 you’re logged in, visit your account settings at *https://crates.io/me* and
 retrieve your API key. Then run the `cargo login` command with your API key,
@@ -442,7 +442,7 @@ $ cargo login abcdefghijklmnopqrstuvwxyz012345
 ```
 
 This command will inform Cargo of your API token and store it locally in
-*~/.cargo/credentials*. Note that this token is a **secret** and should not be
+*~/.cargo/credentials*. Note that this token is a *secret* and should not be
 shared with anyone else. If it is shared with anyone for any reason, you should
 revoke it and generate a new token on Crates.io.
 
@@ -502,7 +502,7 @@ key.
 
 Guidance on which license is right for your project is out of scope for this
 book. Many people in the Rust community choose to license their projects in the
-same way as Rust itself, with a dual license of `MIT/Apache-2.0`---this
+same way as Rust itself, with a dual license of `MIT/Apache-2.0`—this
 demonstrates that you can also specify multiple license identifiers separated
 by a slash.
 
@@ -521,7 +521,7 @@ license = "MIT/Apache-2.0"
 [dependencies]
 ```
 
-Cargo's documentation at *http://doc.rust-lang.org/cargo/* describes other
+Cargo’s documentation at *https://doc.rust-lang.org/cargo/* describes other
 metadata you can specify to ensure your crate can be discovered and used more
 easily!
 
@@ -558,10 +558,9 @@ anyone can easily add your crate as a dependency of their project.
 
 When you’ve made changes to your crate and are ready to release a new version,
 you change the `version` value specified in your *Cargo.toml* and republish.
-Use the Semantic Versioning rules at *http://semver.org/* to decide what an appropriate next
-version number is based on the kinds of changes you’ve made. Then run `cargo
-publish` to upload the new version.
-
+Use the Semantic Versioning rules at *http://semver.org/* to decide what an
+appropriate next version number is based on the kinds of changes you’ve made.
+Then run `cargo publish` to upload the new version.
 
 ### Removing Versions from Crates.io with `cargo yank`
 
@@ -570,11 +569,11 @@ projects from adding them as a new dependency. This is useful when a version of
 a crate ends up being broken for one reason or another. For situations such as
 this, Cargo supports *yanking* a version of a crate.
 
-Yanking a version prevents new projects from starting to depend on that
-version while allowing all existing projects that depend on it to continue to
-download and depend on that version. Essentially, a yank means that all
-projects with a *Cargo.lock* will not break, while any future *Cargo.lock*
-files generated will not use the yanked version.
+Yanking a version prevents new projects from starting to depend on that version
+while allowing all existing projects that depend on it to continue to download
+and depend on that version. Essentially, a yank means that all projects with a
+*Cargo.lock* will not break, while any future *Cargo.lock* files generated will
+not use the yanked version.
 
 To yank a version of a crate, run `cargo yank` and specify which version you
 want to yank:
