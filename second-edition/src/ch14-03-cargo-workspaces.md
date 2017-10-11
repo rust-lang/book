@@ -25,6 +25,8 @@ We need to modify the binary package’s *Cargo.toml* and add a `[workspace]`
 section to tell Cargo the `adder` package is a workspace. Add this at the
 bottom of the file:
 
+<span class="filename">Filename: Cargo.toml</span>
+
 ```toml
 [workspace]
 ```
@@ -33,26 +35,20 @@ Like many Cargo features, workspaces support convention over configuration: we
 don’t need to add anything more than this to *Cargo.toml* to define our
 workspace as long as we follow the convention.
 
-<!-- Below -- any crates what depends on, specifically? The program? -->
-<!-- They're all programs. We mean the top-level crate in the workspace here,
-I've tried to clarify. /Carol -->
-
 ### Specifying Workspace Dependencies
 
-The workspace convention says any crates in any subdirectories that the
-top-level crate depends on are part of the workspace. Any crate, whether in a
-workspace or not, can specify that it has a dependency on a crate in a local
-directory by using the `path` attribute on the dependency specification in
-*Cargo.toml*. If a crate has the `[workspace]` key and we specify path
-dependencies where the paths are subdirectories of the crate’s directory, those
-dependent crates will be considered part of the workspace. Let’s specify in the
-*Cargo.toml* for the top-level `adder` crate that it will have a dependency on
-an `add-one` crate that will be in the `add-one` subdirectory, by changing
-*Cargo.toml* to look like this:
+By default, Cargo will include all transitive path dependencies. A *path
+dependency* is when any crate, whether in a workspace or not, specifies that it
+has a dependency on a crate in a local directory by using the `path` attribute
+on the dependency specification in *Cargo.toml*. If a crate has the
+`[workspace]` key, or if the crate is itself part of a workspace, and we
+specify path dependencies where the paths are subdirectories of the crate’s
+directory, those dependent crates will be considered part of the workspace.
+Let’s specify in the *Cargo.toml* for the top-level `adder` crate that it will
+have a dependency on an `add-one` crate that will be in the `add-one`
+subdirectory, by changing *Cargo.toml* to look like this:
 
-<!-- Above, what is the path dependency actually doing here, can you fill out
-the paragraph above? -->
-<!-- done /Carol -->
+<span class="filename">Filename: Cargo.toml</span>
 
 ```toml
 [dependencies]
@@ -64,10 +60,6 @@ those dependencies will be normal dependencies that aren’t in this workspace
 and are assumed to come from Crates.io.
 
 ### Creating the Second Crate in the Workspace
-
-<!-- You can see I'm adding headings, here, trying to add some more navigable
-structure -- can you improve these? I'm not sure mine are accurate -->
-<!-- Yep! /Carol -->
 
 Next, while in the `adder` directory, generate an `add-one` crate:
 
@@ -98,12 +90,11 @@ pub fn add_one(x: i32) -> i32 {
 }
 ```
 
-<!-- below -- Where are we adding the extern crate line? -->
-<!-- at the top, where all the extern crate lines go and as illustrated by the listing /Carol -->
-
 Open up *src/main.rs* for `adder` and add an `extern crate` line at the top of
 the file to bring the new `add-one` library crate into scope. Then change the
-`main` function to call the `add_one` function, as in Listing 14-12:
+`main` function to call the `add_one` function, as in Listing 14-11:
+
+<span class="filename">Filename: src/main.rs</span>
 
 ```rust,ignore
 extern crate add_one;
@@ -114,7 +105,7 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 14-12: Using the `add-one` library crate from the
+<span class="caption">Listing 14-11: Using the `add-one` library crate from the
 `adder` crate</span>
 
 Let’s build the `adder` crate by running `cargo build` in the *adder* directory!
@@ -150,14 +141,6 @@ recompile each other crate in the workspace in order to have the artifacts in
 its own *target* directory. By sharing one *target* directory, the crates in
 the workspace can avoid rebuilding the other crates in the workspace more than
 necessary.
-
-<!-- Above -- I have no idea what this means for our project here, can you put
-it in more practical terms, or otherwise maybe just explain what this means for
-the user? -->
-<!-- I added more explanation for the target directory in this section and
-added more explanation for the Cargo.lock in the next section, since the
-Cargo.lock advantages aren't as visible until you start adding dependencies on
-external crates. What do you think? /Carol -->
 
 #### Depending on an External Crate in a Workspace
 
@@ -315,9 +298,6 @@ in the workspace will get published separately. The `cargo publish` command
 does not have an `--all` flag or a `-p` flag, so it is necessary to change to
 each crate’s directory and run `cargo publish` on each crate in the workspace
 in order to publish them.
-
-<!-- What does that mean, we have to publish them all one at a time?-->
-<!-- Yep, we've tried to clarify /Carol -->
 
 Now try adding an `add-two` crate to this workspace in a similar way as the
 `add-one` crate for some more practice!

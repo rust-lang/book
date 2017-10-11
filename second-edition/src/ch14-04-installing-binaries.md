@@ -10,13 +10,10 @@ target that isn’t runnable on its own but is suitable for including within
 other programs. Usually, crates have information in the *README* file about
 whether a crate is a library, has a binary target, or both.
 
-<!-- What is a binary target, and how do you know if a package has one? -->
-<!-- Added /Carol -->
-
 All binaries from `cargo install` are put into the installation root’s *bin*
 folder. If you installed Rust using *rustup.rs* and don’t have any custom
-configurations, this will be `$HOME/.cargo/bin`. Add that directory to your
-`$PATH` to be able to run programs you’ve gotten through `cargo install`.
+configurations, this will be `$HOME/.cargo/bin`. Ensure that directory is in
+your `$PATH` to be able to run programs you’ve gotten through `cargo install`.
 
 For example, we mentioned in Chapter 12 that there’s a Rust implementation of
 the `grep` tool for searching files called `ripgrep`. If we want to install
