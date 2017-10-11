@@ -274,13 +274,14 @@ error, which means the compiler needs more information from us to know which
 possible type we want to use:
 
 ```bash
-error[E0282]: unable to infer enough type information about `_`
+error[E0282]: type annotations needed
  --> src/main.rs:2:9
   |
 2 |     let guess = "42".parse().expect("Not a number!");
-  |         ^^^^^ cannot infer type for `_`
-  |
-  = note: type annotations or generic parameter binding required
+  |         ^^^^^
+  |         |
+  |         consider giving `guess` a type
+  |         cannot infer type for `_`
 ```
 
 You’ll see different type annotations as we discuss the various data types.
