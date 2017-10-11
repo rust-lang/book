@@ -115,6 +115,7 @@ enums
 enum's
 Enums
 eprintln
+Erlang
 ErrorKind
 Executables
 extern
@@ -225,6 +226,7 @@ Mozilla
 mpsc
 multithreaded
 mutex
+mutex's
 Mutex
 mutexes
 Mutexes
