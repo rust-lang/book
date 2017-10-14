@@ -307,22 +307,15 @@ fn main() {
     let listener = TcpListener::bind("127.0.0.1:8080").unwrap();
     let pool = ThreadPool::new(4);
 
-    let mut counter = 0;
-
-    for stream in listener.incoming() {
-        if counter == 2 {
-            println!("Shutting down.");
-            break;
-        }
-
-        counter += 1;
-
+    for stream in listener.incoming().take(2) {
         let stream = stream.unwrap();
 
         pool.execute(|| {
             handle_connection(stream);
         });
     }
+
+    println!("Shutting down.");
 }
 ```
 
@@ -333,10 +326,9 @@ Only serving two requests isn’t behavior you’d like a production web server 
 have, but this will let us see the graceful shutdown and cleanup working since
 we won’t be stopping the server with <span class="keystroke">ctrl-C</span>.
 
-We’ve added a `counter` variable that we’ll increment every time we receive an
-incoming TCP stream. If that counter reaches 2, we’ll stop serving requests and
-instead break out of the `for` loop. The `ThreadPool` will go out of scope at
-the end of `main`, and we’ll see the `drop` implementation run.
+We’ve limited the `TcpStream` iterator with a `take(2)`. The `ThreadPool` will
+go out of scope at the end of `main`, and we’ll see the `drop` implementation
+run.
 
 Start the server with `cargo run`, and make three requests. The third request
 should error, and in your terminal you should see output that looks like:
