@@ -33,7 +33,7 @@ number we passed in:
 use std::thread;
 use std::time::Duration;
 
-fn simulated_expensive_calculation(intensity: i32) -> i32 {
+fn simulated_expensive_calculation(intensity: u32) -> u32 {
     println!("calculating slowly...");
     thread::sleep(Duration::from_secs(2));
     intensity
@@ -72,7 +72,7 @@ fn main() {
         simulated_random_number
     );
 }
-# fn generate_workout(intensity: i32, random_number: i32) {}
+# fn generate_workout(intensity: u32, random_number: u32) {}
 ```
 
 <span class="caption">Listing 13-2: A `main` function with hardcoded values to
@@ -96,13 +96,13 @@ will be made to this function:
 # use std::thread;
 # use std::time::Duration;
 #
-# fn simulated_expensive_calculation(num: i32) -> i32 {
+# fn simulated_expensive_calculation(num: u32) -> u32 {
 #     println!("calculating slowly...");
 #     thread::sleep(Duration::from_secs(2));
 #     num
 # }
 #
-fn generate_workout(intensity: i32, random_number: i32) {
+fn generate_workout(intensity: u32, random_number: u32) {
     if intensity < 25 {
         println!(
             "Today, do {} pushups!",
@@ -166,13 +166,13 @@ variable, as shown in Listing 13-4:
 # use std::thread;
 # use std::time::Duration;
 #
-# fn simulated_expensive_calculation(num: i32) -> i32 {
+# fn simulated_expensive_calculation(num: u32) -> u32 {
 #     println!("calculating slowly...");
 #     thread::sleep(Duration::from_secs(2));
 #     num
 # }
 #
-fn generate_workout(intensity: i32, random_number: i32) {
+fn generate_workout(intensity: u32, random_number: u32) {
     let expensive_result =
         simulated_expensive_calculation(intensity);
 
@@ -268,7 +268,7 @@ argument values we want to use, as shown in Listing 13-6:
 # use std::thread;
 # use std::time::Duration;
 #
-fn generate_workout(intensity: i32, random_number: i32) {
+fn generate_workout(intensity: u32, random_number: u32) {
     let expensive_closure = |num| {
         println!("calculating slowly...");
         thread::sleep(Duration::from_secs(2));
@@ -345,7 +345,7 @@ would look like the definition shown in Listing 13-7:
 # use std::thread;
 # use std::time::Duration;
 #
-let expensive_closure = |num: i32| -> i32 {
+let expensive_closure = |num: u32| -> u32 {
     println!("calculating slowly...");
     thread::sleep(Duration::from_secs(2));
     num
@@ -363,8 +363,8 @@ closure syntax is similar to function syntax, except for the use of pipes and
 the amount of syntax that is optional:
 
 ```rust,ignore
-fn  add_one_v1   (x: i32) -> i32 { x + 1 }
-let add_one_v2 = |x: i32| -> i32 { x + 1 };
+fn  add_one_v1   (x: u32) -> u32 { x + 1 }
+let add_one_v2 = |x: u32| -> u32 { x + 1 };
 let add_one_v3 = |x|             { x + 1 };
 let add_one_v4 = |x|               x + 1  ;
 ```
@@ -383,7 +383,7 @@ parameter.
 This closure isn’t very useful except for the purposes of this example. Note
 that we haven’t added any type annotations to the definition: if we then try to
 call the closure twice, using a `String` as an argument the first time and an
-`i32` the second time, we’ll get an error:
+`u32` the second time, we’ll get an error:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -447,8 +447,8 @@ example, we can use the `Fn` trait.
 
 We add types to the `Fn` trait bound to represent the types of the parameters
 and return values the closures must have in order to match this trait bound. In
-this case, our closure has a parameter of type `i32` and returns an `i32`, so
-the trait bound we specify is `Fn(i32) -> i32`.
+this case, our closure has a parameter of type `u32` and returns an `u32`, so
+the trait bound we specify is `Fn(u32) -> u32`.
 
 Listing 13-9 shows the definition of the `Cacher` struct that holds a closure
 and an optional result value:
@@ -457,10 +457,10 @@ and an optional result value:
 
 ```rust
 struct Cacher<T>
-    where T: Fn(i32) -> i32
+    where T: Fn(u32) -> u32
 {
     calculation: T,
-    value: Option<i32>,
+    value: Option<u32>,
 }
 ```
 
@@ -469,16 +469,16 @@ closure in `calculation` and an optional result in `value`</span>
 
 The `Cacher` struct has a `calculation` field of the generic type `T`. The
 trait bounds on `T` specify that it’s a closure by using the `Fn` trait. Any
-closure we want to store in the `calculation` field must have one `i32`
+closure we want to store in the `calculation` field must have one `u32`
 parameter (specified within the parentheses after `Fn`) and must return an
-`i32` (specified after the `->`).
+`u32` (specified after the `->`).
 
 > Note: Functions implement all three of the `Fn` traits too. If what we want to
 > do doesn’t require capturing a value from the environment, we can use a
 > function rather than a closure where we need something that implements an `Fn`
 > trait.
 
-The `value` field is of type `Option<i32>`. Before we execute the closure,
+The `value` field is of type `Option<u32>`. Before we execute the closure,
 `value` will be `None`. When code using a `Cacher` asks for the *result* of the
 closure, the `Cacher` will execute the closure at that time and store the
 result within a `Some` variant in the `value` field. Then if the code asks for
@@ -492,14 +492,14 @@ The logic around the `value` field we’ve just described is defined in Listing
 
 ```rust
 # struct Cacher<T>
-#     where T: Fn(i32) -> i32
+#     where T: Fn(u32) -> u32
 # {
 #     calculation: T,
-#     value: Option<i32>,
+#     value: Option<u32>,
 # }
 #
 impl<T> Cacher<T>
-    where T: Fn(i32) -> i32
+    where T: Fn(u32) -> u32
 {
     fn new(calculation: T) -> Cacher<T> {
         Cacher {
@@ -508,7 +508,7 @@ impl<T> Cacher<T>
         }
     }
 
-    fn value(&mut self, arg: i32) -> i32 {
+    fn value(&mut self, arg: u32) -> u32 {
         match self.value {
             Some(v) => v,
             None => {
@@ -552,14 +552,14 @@ Listing 13-11 shows how we can use this `Cacher` struct in the
 # use std::time::Duration;
 #
 # struct Cacher<T>
-#     where T: Fn(i32) -> i32
+#     where T: Fn(u32) -> u32
 # {
 #     calculation: T,
-#     value: Option<i32>,
+#     value: Option<u32>,
 # }
 #
 # impl<T> Cacher<T>
-#     where T: Fn(i32) -> i32
+#     where T: Fn(u32) -> u32
 # {
 #     fn new(calculation: T) -> Cacher<T> {
 #         Cacher {
@@ -568,7 +568,7 @@ Listing 13-11 shows how we can use this `Cacher` struct in the
 #         }
 #     }
 #
-#     fn value(&mut self, arg: i32) -> i32 {
+#     fn value(&mut self, arg: u32) -> u32 {
 #         match self.value {
 #             Some(v) => v,
 #             None => {
@@ -580,7 +580,7 @@ Listing 13-11 shows how we can use this `Cacher` struct in the
 #     }
 # }
 #
-fn generate_workout(intensity: i32, random_number: i32) {
+fn generate_workout(intensity: u32, random_number: u32) {
     let mut expensive_result = Cacher::new(|num| {
         println!("calculating slowly...");
         thread::sleep(Duration::from_secs(2));
@@ -675,7 +675,7 @@ if it’s present. If it’s not present, the `Cacher` will call the closure and
 save the resulting value in the hash map associated with its `arg` value.
 
 Another problem with the current `Cacher` implementation is that it only
-accepts closures that take one parameter of type `i32` and return an `i32`. We
+accepts closures that take one parameter of type `u32` and return an `u32`. We
 might want to cache the results of closures that take a string slice and return
 `usize` values, for example. To fix this issue, try introducing more generic
 parameters to increase the flexibility of the `Cacher` functionality.
