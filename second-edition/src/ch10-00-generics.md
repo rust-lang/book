@@ -1,61 +1,38 @@
 # 제네릭 타입, 트레잇, 그리고 라이프타임
 
-Every programming language has tools to deal effectively with duplication of
-concepts; in Rust, one of those tools is *generics*. Generics are abstract
-stand-ins for concrete types or other properties. When we're writing and
-compiling the code we can express properties of generics, such as their
-behavior or how they relate to other generics, without needing to know what
-will actually be in their place.
 모든 프로그래밍 언어는 컨셉의 복제를 효율적으로 다루기 위한 도구를 가지고 있습니다; 러스트에서,
-그러한 도구중 하나가 바로 *제네릭*입니다. 제네릭은 구체화된 타입이나 다른 속성들을 위한 추상화된
-대역입니다. 코드를 작성하고 컴파일할 때, 우리는 제네릭들이 실제로 어떻게 완성되는지 알 필요없이,
-제네릭의 동작 혹은 다른 제네릭과 어떻게 연관되는지와 같은 제네릭에 대한 속성을 표현할 수 있습니다.
+그러한 도구중 하나가 바로 *제네릭(generic)* 입니다. 제네릭은 구체화된 타입이나 다른 속성들에
+대하여 추상화된 대리인입니다. 코드를 작성하고 컴파일할 때, 우리는 제네릭들이 실제로 어떻게 완성되는지
+알 필요없이, 제네릭의 동작 혹은 다른 제네릭과 어떻게 연관되는지와 같은 제네릭에 대한 속성을 표현할
+수 있습니다.
 
-In the same way that a function takes parameters whose value we don't know in
-order to write code once that will be run on multiple concrete values, we can
-write functions that take parameters of some generic type instead of a concrete
-type like `i32` or `String`. We've already used generics in Chapter 6 with
-`Option<T>`, Chapter 8 with `Vec<T>` and `HashMap<K, V>`, and Chapter 9 with
-`Result<T, E>`. In this chapter, we'll explore how to define our own types,
-functions, and methods with generics!
-여러개의 구체화된 값들에 대해 실행될 코드를 작성하기 위하여 함수가 어떤 값을 담을지 알수 없는 파라미터를
-가지는 것과 같은 방식으로, `i32`나 `String`과 같은 구체화된 타입 대신 몇몇 제네릭 타입의 파라미터를
+여러 개의 구체화된 값들에 대해 실행될 코드를 작성하기 위해서 함수가 어떤 값을 담을지 알 수 없는 파라미터를
+갖는 것과 동일한 방식으로, `i32`나 `String`과 같은 구체화된 타입 대신 몇몇 제네릭 타입의 파라미터를
 갖는 함수를 작성할 수 있습니다. 우리는 6장의 `Option<T>`, 8장의 `Vec<T>`와 `HashMap<K, V>`,
 그리고 9장의 `Result<T, E>`에서 이미 제네릭을 사용해 보았습니다. 이 장에서는, 어떤 식으로
 우리만의 타입, 함수, 그리고 메소드를 제네릭으로 정의하는지 탐험해 볼 것입니다!
 
-First, we're going to review the mechanics of extracting a function that
-reduces code duplication. Then we'll use the same mechanics to make a generic
-function out of two functions that only differ in the types of their
-parameters. We'll go over using generic types in struct and enum definitions
-too.
 우선, 우리는 코드 중복을 제거하는 함수의 추출하는 원리에 대해 돌아볼 것입니다. 그리고나서 두 함수가
-오직 파라미터의 타입만 다른 경우에 대하여 이들을 하나의 제네릭 함수로 만들기 위해 동일한 원리을 사용할
+오직 파라미터의 타입만 다른 경우에 대하여 이들을 하나의 제네릭 함수로 만들기 위해 동일한 원리를 사용할
 것입니다. 또한 제네릭 타입을 구조체와 열거형의 정의에 사용하는 것을 살펴볼 것입니다.
 
-After that, we'll discuss *traits*, which are a way to define behavior in a
-generic way. Traits can be combined with generic types in order to constrain a
-generic type to those types that have a particular behavior, rather than any
-type at all.
 그리고 난 후 *트레잇(trait)* 에 대하여 논의할 것인데, 이는 동작을 제네릭한 방식으로 정의하는
-방법을 말합니다. 트레잇은 
+방법을 말합니다. 트레잇은 제네릭 타입과 결합되어 제네릭 타입에 대해 아무 타입이나 허옹하지 않고,
+특정 동작을 하는 타입으로 제한할 수 있습니다.
 
-Finally, we'll discuss *lifetimes*, which are a kind of generic that let us
-give the compiler information about how references are related to each other.
-Lifetimes are the feature in Rust that allow us to borrow values in many
-situations and still have the compiler check that references will be valid.
+마지막으로, 우리는 *라이프타임(lifetime)* 에 대해 다룰 것인데, 이는 제네릭의 일종으로서 우리가
+컴파일러에게 참조자들이 서로에게 어떤 연관이 있는지에 대한 정보를 줄 수 있도록 해줍니다. 라이프타임은
+수많은 상황에서 값을 빌릴 수 있도록 허용해 주고도 여전히 참조자들이 유효할지를 컴파일러가 검증하도록
+해주는 러스트의 지능입니다.
 
-## Removing Duplication by Extracting a Function
+## 함수를 추출하여 중복 없애기
 
-Before getting into generics syntax, let's first review a technique for dealing
-with duplication that doesn't use generic types: extracting a function. Once
-that's fresh in our minds, we'll use the same mechanics with generics to
-extract a generic function! In the same way that you recognize duplicated code
-to extract into a function, you'll start to recognize duplicated code that can
-use generics.
+제네릭 문법을 들어가기 전에, 먼저 제네릭 타입을 이용하지 않는 중복 코드 다루기 기술을 훑어봅시다: 바로
+함수 추출하기죠. 이를 한번 우리 마음 속에서 생생하게 상기시키고 나면, 우리는 제네릭 함수를 추출하기 위해
+제네릭을 가지고 똑같은 수법을 이용할 것입니다! 여러분이 함수로 추출할 중복된 코드를 인식하는 것과 똑같은
+방식으로, 여러분은 제네릭을 이용할 수 있는 중복된 코드를 인식하기 시작할 것입니다.
 
-Consider a small program that finds the largest number in a list, shown in
-Listing 10-1:
+Listing 10-1과 같이 리스트에서 가장 큰 숫자를 찾아내는 작은 프로그램이 있다고 칩시다:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -76,20 +53,17 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 10-1: Code to find the largest number in a list
-of numbers</span>
+<span class="caption">Listing 10-1: 숫자 리스트 중에서 가장 큰 수를 찾는 코드</span>
 
-This code takes a list of integers, stored here in the variable `numbers`. It
-puts the first item in the list in a variable named `largest`. Then it iterates
-through all the numbers in the list, and if the current value is greater than
-the number stored in `largest`, it replaces the value in `largest`. If the
-current value is smaller than the largest value seen so far, `largest` is not
-changed. When all the items in the list have been considered, `largest` will
-hold the largest value, which in this case is 100.
+이 코드는 정수의 리스트를 얻는데, 여기서는 변수 `numbers`에 저장되어 있습니다. 리스트의 첫번째
+아이템을 `largest`라는 이름의 변수에 우선 집어넣습니다. 그리고나서 리스트 내의 모든 숫자들에 대해
+반복 접근을 하는데, 만일 현재 숫자가 `largest` 내에 저장된 숫자보다 더 크다면, 이 숫자로
+`largest` 내의 값을 갱신합니다. 만일 현재 숫자가 여태까지 본 가장 큰값보다 작다면, `largest`는
+바뀌지 않습니다. 리스트 내의 모든 아이템을 다 처리했을 때, `largest`는 가장 큰 값을 가지고 있을
+것인데, 위 코드의 경우에는 100이 될 것입니다.
 
-If we needed to find the largest number in two different lists of numbers, we
-could duplicate the code in Listing 10-1 and have the same logic exist in two
-places in the program, as in Listing 10-2:
+만일 두 개의 서로 다른 숫자 리스트로부터 가장 큰 숫자를 찾기를 원한다면, Listing 10-1의 코드를
+복사하여, Listing 10-2에서처럼 한 프로그램 내에 동일한 로직이 두 군데 있게 할 수도 있습니다:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -121,11 +95,11 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 10-2: Code to find the largest number in *two*
-lists of numbers</span>
+<span class="caption">Listing 10-2: *두* 개의 숫자 리스트에서 가장 큰 숫자를
+찾는 코드</span>
 
-While this code works, duplicating code is tedious and error-prone, and means
-we have multiple places to update the logic if we need to change it.
+이 코드는 잘 동작하지만, 코드를 복제하는 일은 지루하고 오류가 발생하기도 쉬우며, 또한 로직을 바꾸고
+싶다면 이 로직을 갱신할 곳이 여러 군데가 된다는 의미이기도 합니다.
 
 <!-- Are we safe assuming the reader will be familiar with the term
 "abstraction" in this context, or do we want to give a brief definition? -->
