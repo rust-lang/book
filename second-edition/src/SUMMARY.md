@@ -22,8 +22,8 @@
 
 - [연관된 데이터들을 구조체로 다루기](ch05-00-structs.md)
     - [구조체를 정의하고 생성하기](ch05-01-defining-structs.md)
-    - [An Example Program Using Structs](ch05-02-example-structs.md)
-    - [Method Syntax](ch05-03-method-syntax.md)
+    - [구조체를 이용한 예제 프로그램](ch05-02-example-structs.md)
+    - [메소드 문법](ch05-03-method-syntax.md)
 
 - [열거형과 패턴 매칭](ch06-00-enums.md)
     - [Defining an Enum](ch06-01-defining-an-enum.md)
@@ -55,7 +55,7 @@
 - [테스팅](ch11-00-testing.md)
     - [테스트 작성하기](ch11-01-writing-tests.md)
     - [테스트 실행하기](ch11-02-running-tests.md)
-    - [Test Organization](ch11-03-test-organization.md)
+    - [테스트 조직화](ch11-03-test-organization.md)
 
 - [An I/O Project](ch12-00-an-io-project.md)
     - [Accepting Command Line Arguments](ch12-01-accepting-command-line-arguments.md)
