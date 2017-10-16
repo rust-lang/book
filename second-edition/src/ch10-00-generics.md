@@ -98,23 +98,21 @@ fn main() {
 <span class="caption">Listing 10-2: *두* 개의 숫자 리스트에서 가장 큰 숫자를
 찾는 코드</span>
 
-이 코드는 잘 동작하지만, 코드를 복제하는 일은 지루하고 오류가 발생하기도 쉬우며, 또한 로직을 바꾸고
-싶다면 이 로직을 갱신할 곳이 여러 군데가 된다는 의미이기도 합니다.
+이 코드는 잘 동작하지만, 코드를 중복적용하는 일은 지루하고 오류가 발생하기도 쉬우며, 또한 로직을
+바꾸고 싶다면 이 로직을 갱신할 곳이 여러 군데가 된다는 의미이기도 합니다.
 
 <!-- Are we safe assuming the reader will be familiar with the term
 "abstraction" in this context, or do we want to give a brief definition? -->
 <!-- Yes, our audience will be familiar with this term. /Carol -->
 
-To eliminate this duplication, we can create an abstraction, which in this case
-will be in the form of a function that operates on any list of integers given
-to the function in a parameter. This will increase the clarity of our code and
-let us communicate and reason about the concept of finding the largest number
-in a list independently of the specific places this concept is used.
+이러한 중복을 제거하기 위해서 우리는 추상화를 쓸 수 있는데, 이 경우에는 어떠한 정수 리스트가 함수의
+파라미터로 주어졌을 때 동작하는 함수의 형태가 될 것입니다. 이는 우리 코드의 명료성을 증가시켜주고
+리스트 내에서 가장 큰 수를 찾는 컨셉을 사용하는 특정한 위치와 상관없이 이러한 컨셉을 전달하고
+추론하도록 해줍니다.
 
-In the program in Listing 10-3, we've extracted the code that finds the largest
-number into a function named `largest`. This program can find the largest
-number in two different lists of numbers, but the code from Listing 10-1 only
-exists in one spot:
+Listing 10-3의 프로그램에서는 가장 큰 수를 찾는 코드를 `largest`라는 이름의 함수로 추출했습니다.
+이 프로그램은 두 개의 서로 다른 숫자 리스트에서 가장 큰 수를 찾을 수 있지만, Listing 10-1에서의
+코드는 한 군데에서만 나타납니다:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -146,31 +144,23 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 10-3: Abstracted code to find the largest number
-in two lists</span>
+<span class="caption">Listing 10-3: 두 리스트에서 가장 큰 수를 찾는 추상화된 코드</span>
 
-The function has a parameter, `list`, which represents any concrete slice of
-`i32` values that we might pass into the function. The code in the function
-definition operates on the `list` representation of any `&[i32]`. When we call
-the `largest` function, the code actually runs on the specific values that we
-pass in.
+이 함수는 `list`라는 파라미터를 갖고 있는데, 이것이 함수로 넘겨질 구체적인 임의 `i32` 값들의
+슬라이스를 나타냅니다. 함수 정의 내의 코드는 임의의 `&[i32]`의 `list` 표현에 대해 동작합니다.
+`largest` 함수를 호출할때, 이 코드는 실제로 우리가 넘겨준 구체적인 값에 대해 실행됩니다.
 
-The mechanics we went through to get from Listing 10-2 to Listing 10-3 were
-these steps:
+Listing 10-2에서부터 Listing 10-3까지 우리가 살펴본 원리는 아래와 같은 단계로 진행되었습니다:
 
-1. We noticed there was duplicate code.
-2. We extracted the duplicate code into the body of the function, and specified
-   the inputs and return values of that code in the function signature.
-3. We replaced the two concrete places that had the duplicated code to call the
-   function instead.
+1. 중복된 코드가 있음을 알아챘습니다.
+2. 중복된 코드를 함수의 본체로 추출하고, 함수의 시그니처 내에 해당 코드의 입력값 및 반환값을 명시했습니다.
+3. 두 군데의 코드가 중복되었던 구체적인 지점에 함수 호출을 대신 집어넣었습니다.
 
-We can use these same steps with generics to reduce code duplication in
-different ways in different scenarios. In the same way that the function body
-is now operating on an abstract `list` instead of concrete values, code using
-generics will operate on abstract types. The concepts powering generics are the
-same concepts you already know that power functions, just applied in different
-ways.
+우리는 다른 시나리오 상에서 다른 방식으로 제네릭을 가지고 중복된 코드를 제거하기 위해 같은 단계를 밟을
+수 있습니다. 함수의 본체가 현재 구체적인 값 대신 추상화된 `list`에 대해 동작하고 있는 것과 같이,
+제네릭을 이용한 코드는 추상화된 타입에 대해 작동할 것입니다. 제네릭으로 강화되는 컨셉은 여러분이 이미
+알고 있는 함수로 강화되는 컨셉과 동일하며, 다만 다른 방식으로 적용될 뿐입니다.
 
-What if we had two functions, one that found the largest item in a slice of
-`i32` values and one that found the largest item in a slice of `char` values?
-How would we get rid of that duplication? Let's find out!
+만일 우리가 두 개의 함수를 가지고 있는데, 하나는 `i32`의 슬라이스에서 최대값을 찾는 것이고 다른
+하나는 `char` 값의 슬라이스에서 최대값을 찾는 것이라면 어떨까요? 어떻게 하면 이런 중복을 제거할
+수 있을까요? 한번 알아봅시다!
