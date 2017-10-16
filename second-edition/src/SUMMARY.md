@@ -52,10 +52,10 @@
     - [Traits: Defining Shared Behavior](ch10-02-traits.md)
     - [Validating References with Lifetimes](ch10-03-lifetime-syntax.md)
 
-- [Testing](ch11-00-testing.md)
-    - [Writing tests](ch11-01-writing-tests.md)
-    - [Running tests](ch11-02-running-tests.md)
-    - [Test Organization](ch11-03-test-organization.md)
+- [테스팅](ch11-00-testing.md)
+    - [테스트 작성하기](ch11-01-writing-tests.md)
+    - [테스트 실행하기](ch11-02-running-tests.md)
+    - [테스트 조직화](ch11-03-test-organization.md)
 
 - [An I/O Project](ch12-00-an-io-project.md)
     - [Accepting Command Line Arguments](ch12-01-accepting-command-line-arguments.md)
