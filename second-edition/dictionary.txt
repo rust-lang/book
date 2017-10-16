@@ -54,6 +54,7 @@ charset
 chXX
 chYY
 coercions
+combinator
 ConcreteType
 config
 Config
