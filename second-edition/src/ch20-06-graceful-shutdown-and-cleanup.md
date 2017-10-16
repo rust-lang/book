@@ -326,9 +326,10 @@ Only serving two requests isn’t behavior you’d like a production web server 
 have, but this will let us see the graceful shutdown and cleanup working since
 we won’t be stopping the server with <span class="keystroke">ctrl-C</span>.
 
-We’ve limited the `TcpStream` iterator with a `take(2)`. The `ThreadPool` will
-go out of scope at the end of `main`, and we’ll see the `drop` implementation
-run.
+The `.take(2)` we added to `listener.incoming()` artificially limits the
+iteration to the first 2 items at most. This combinator works for any
+implementation of the `Iterator` trait. The `ThreadPool` will go out of scope
+at the end of `main`, and we’ll see the `drop` implementation run.
 
 Start the server with `cargo run`, and make three requests. The third request
 should error, and in your terminal you should see output that looks like:
