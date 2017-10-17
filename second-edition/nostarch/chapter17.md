@@ -119,13 +119,14 @@ field directly, which could cause the `average` field to get out of sync. The
 external code to read the `average` but not modify it.
 
 Because we’ve encapsulated the implementation details of `AveragedCollection`,
-we could also change aspects like using a different data structure used for the
-`list` to use a `HashSet` instead of a `Vec`, for instance. As long as the
-signatures of the `add`, `remove`, and `average` public methods stayed the same,
-code using `AveragedCollection` wouldn’t need to change. This wouldn’t
-necessarily be the case if we exposed `list` to external code: `HashSet` and
-`Vec` have different methods for adding and removing items, so the external
-code would likely have to change if it was modifying `list` directly.
+we can easily change aspects like the data structure in the future. For
+instance, we could use a `HashSet` instead of a `Vec` for the `list` field. As
+long as the signatures of the `add`, `remove`, and `average` public methods
+stay the same, code using `AveragedCollection` wouldn’t need to change. This
+wouldn’t necessarily be the case if we exposed `list` to external code:
+`HashSet` and `Vec` have different methods for adding and removing items, so
+the external code would likely have to change if it was modifying `list`
+directly.
 
 If encapsulation is a required aspect for a language to be considered
 object-oriented, then Rust meets that requirement. Using `pub` or not for
@@ -150,7 +151,7 @@ There are two main reasons to reach for inheritance. The first is to be able to
 re-use code: once a particular behavior is implemented for one type,
 inheritance can enable re-using that implementation for a different type. Rust
 code can be shared using default trait method implementations instead, which we
-saw in Listing 10-14 when we added a default implementation of the `summary`
+saw in Listing 10-15 when we added a default implementation of the `summary`
 method on the `Summarizable` trait. Any type implementing the `Summarizable`
 trait would have the `summary` method available on it without any further code.
 This is similar to a parent class having an implementation of a method, and a
@@ -198,7 +199,7 @@ polymorphism in Rust.
 
 ## Trait Objects for Using Values of Different Types
 
-In Chapter 8, we talked about a limitation of vectors is that vectors can only
+In Chapter 8, we said that a limitation of vectors is that vectors can only
 store elements of one type. We had an example in Listing 8-1 where we defined a
 `SpreadsheetCell` enum that had variants to hold integers, floats, and text so
 that we could store different types of data in each cell and still have a
@@ -242,7 +243,8 @@ instances and call `draw` on them.
 In Rust, though, we can define a trait that we’ll name `Draw` and that will
 have one method named `draw`. Then we can define a vector that takes a *trait
 object*, which is a trait behind some sort of pointer, such as a `&` reference
-or a `Box<T>` smart pointer.
+or a `Box<T>` smart pointer. We’ll talk about the reason trait objects have to
+be behind a pointer in Chapter 19.
 
 We mentioned that we don’t call structs and enums “objects” to distinguish
 structs and enums from other languages’ objects. The data in the struct or enum
@@ -567,15 +569,15 @@ trait Foo: Sized {
 }
 ```
 
-The trait `Sized` is now a *super trait* of trait `Foo`, which means trait
-`Foo` requires types that implement `Foo` (that is, `Self`) to be `Sized`.
-We’re going to talk about super traits in more detail in Chapter 19.
+The trait `Sized` is now a *supertrait* of trait `Foo`, which means trait `Foo`
+requires types that implement `Foo` (that is, `Self`) to be `Sized`. We’re
+going to talk about supertraits in more detail in Chapter 19.
 
-The reason a trait like `Foo` that requires `Self` to be `Sized` is not allowed
-to be a trait object is that it would be impossible to implement the trait
-`Foo` for the trait object `Foo`: trait objects aren’t sized, but `Foo`
-requires `Self` to be `Sized`. A type can’t be both sized and unsized at the
-same time!
+`Foo` requires `Self` to be `Sized`, and therefore is not allowed to be used in
+a trait object like `Box<Foo>`. This is because it would be impossible to implement
+the trait `Foo` for a trait object like `Box<Foo>`: trait objects aren’t sized,
+but `Foo` requires `Self` to be `Sized`. A type can’t be both sized and unsized
+at the same time!
 
 For the second object safety requirement that says all of a trait’s methods
 must be object safe, a method is object safe if either:
@@ -837,13 +839,13 @@ works as we intend.
 ### Requesting a Review of the Post Changes its State
 
 Next up is requesting a review of a post, which should change its state from
-`Draft` to `PendingReview`. We want `post` to have a public method named
+`Draft` to `PendingReview`. We want `Post` to have a public method named
 `request_review` that will take a mutable reference to `self`. Then we’re going
-to call a `request_review` method on the state that we’re holding, and that
-`request_review` method will consume the current state and return a new state.
-In order to be able to consume the old state, the state `request_review` method
-needs to take ownership of the state value. This is where the `Option` comes
-in: we’re going to take the `Some` value out of the `state` field and leave a
+to call an internal `request_review` method on the state that we’re holding, and
+this second `request_review` method will consume the current state and return a
+new state. In order to be able to consume the old state, the second `request_review`
+method needs to take ownership of the state value. This is where the `Option` comes
+in: we’re going to `take` the `Some` value out of the `state` field and leave a
 `None` in its place since Rust doesn’t let us have unpopulated fields in
 structs. Then we’ll set the post’s `state` value to the result of this
 operation. Listing 17-15 shows this code:
