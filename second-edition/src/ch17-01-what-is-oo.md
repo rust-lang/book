@@ -172,13 +172,12 @@ each other at runtime if they share certain characteristics.
 
 > Polymorphism
 >
-> Many people use “polymorphism” to describe inheritance itself, but what we’re
-> discussing here is actually a specific kind of polymorphism, called “sub-type
-> polymorphism.” There are other forms as well; a generic parameter with a
-> trait bound in Rust is “parametric polymorphism,” for example. The exact
-> details of the different kinds of polymorphism aren’t crucial here, so don’t
-> worry too much about them: just know that Rust has multiple
-> polymorphism-related features, unlike many OOP languages.
+> To many people, polymorphism is synonymous with inheritance. But it’s
+> actually a more general concept that refers to code that can work with data
+> of multiple types. For inheritance, those types are generally subclasses.
+> Rust instead uses generics to abstract over different possible types, and
+> trait bounds to impose constraints on what those types must provide. This is
+> sometimes called bounded parametric polymorphism.
 
 <!-- PROD: END BOX -->
 
