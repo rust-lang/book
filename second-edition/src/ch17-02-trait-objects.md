@@ -303,11 +303,11 @@ is just responsible for making sure that the only things that are usable in
 that context are things that implement the `Draw` trait. Does this clear it up
 at all? Is there something we should clarify in the text? /Carol -->
 
-The advantage of using trait objects and Rust’s type system for duck typing is
-that we never have to check that a value implements a particular method at
-runtime or worry about getting errors if a value doesn’t implement a method but
-we call it anyway. Rust won’t compile our code if the values don’t implement
-the traits that the trait objects need.
+The advantage of using trait objects and Rust’s type system to do something
+similar to duck typing is that we never have to check that a value implements a
+particular method at runtime or worry about getting errors if a value doesn’t
+implement a method but we call it anyway. Rust won’t compile our code if the
+values don’t implement the traits that the trait objects need.
 
 For example, Listing 17-10 shows what happens if we try to create a `Screen`
 with a `String` as a component:
