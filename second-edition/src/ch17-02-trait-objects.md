@@ -40,14 +40,15 @@ inheritance, so we need another way.
 
 To implement the behavior we want `rust_gui` to have, we’ll define a trait
 named `Draw` that will have one method named `draw`. Then we can define a
-vector that takes a *trait object*---this is a trait behind some sort of
-pointer, such as a `&` reference or a `Box<T>` smart pointer (we’ll talk about
-the reason trait objects have to be behind a pointer in Chapter 19 in the
-section on Dynamically Sized Types). We can use trait objects in place of a
-generic or concrete type. Wherever we use a trait object, Rust’s type system
-will ensure at compile-time that any value used in that context will implement
-the trait object’s trait. This way we don’t need to know all the possible types
-at compile time
+vector that takes a *trait object*. A trait object points to an instance of a
+type that implements the trait we specify. We create a trait object by
+specifying some sort of pointer, such as a `&` reference or a `Box<T>` smart
+pointer, and then specifying the relevant trait (we’ll talk about the reason
+trait objects have to use a pointer in Chapter 19 in the section on Dynamically
+Sized Types). We can use trait objects in place of a generic or concrete type.
+Wherever we use a trait object, Rust’s type system will ensure at compile-time
+that any value used in that context will implement the trait object’s trait.
+This way we don’t need to know all the possible types at compile time.
 
 <!-- What will the trait object do in this case? I've taken this last part of
 the line from below, but I'm not 100% on that -->
