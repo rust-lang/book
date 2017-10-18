@@ -558,9 +558,9 @@ objects, so it doesn’t know which method implemented on which type to call.
 Instead, Rust uses the pointers inside of the trait object at runtime to know
 which specific method to call. There’s a runtime cost when this lookup happens,
 compared to static dispatch. Dynamic dispatch also prevents the compiler from
-choosing to inline a method’s code, which prevents some optimizations. By using
-this method, though, we did get extra flexibility in the code that we wrote and
-were able to support, so it’s a tradeoff to consider.
+choosing to inline a method’s code which in turn prevents some optimizations.
+We did get extra flexibility in the code that we wrote and were able to
+support, though, so it’s a tradeoff to consider.
 
 ### Object Safety is Required for Trait Objects
 
