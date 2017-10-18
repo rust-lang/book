@@ -482,7 +482,7 @@ need `match` statements, and to add a new state we would only need to add a new
 `struct` and implement the trait methods on that one struct.
 
 This implementation is easy to extend to add more functionality. To see the
-simplicity of mantaining code that uses this patterns, try out a few of these
+simplicity of maintaining code that uses this patterns, try out a few of these
 suggestions:
 
 - Allow users to add text content only when a post is in the `Draft` state

@@ -576,7 +576,7 @@ if a trait can't be a trait object, look up object safety if you're interested
 in the details"? Thanks! /Carol -->
 <!-- That sounds like a good solution, since the compiler will warn them in any
 case. I read through, editing a little, and I agree we could afford to cut it,
-I'm not sure it brings practical skils to the user -->
+I'm not sure it brings practical skills to the user -->
 <!-- Ok, I've cut section way down to the practical pieces, but still explained a little bit /Carol -->
 
 Only *object safe* traits can be made into trait objects. There are some
@@ -1086,7 +1086,7 @@ need `match` statements, and to add a new state we would only need to add a new
 `struct` and implement the trait methods on that one struct.
 
 This implementation is easy to extend to add more functionality. To see the
-simplicity of mantaining code that uses this patterns, try out a few of these
+simplicity of maintaining code that uses this patterns, try out a few of these
 suggestions:
 
 - Allow users to add text content only when a post is in the `Draft` state
