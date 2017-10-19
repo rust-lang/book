@@ -83,7 +83,7 @@ directly.
 Because enums also form a sort of namespace like modules, we can import an
 enum’s variants with `use` as well. For any kind of `use` statement, if you’re
 importing multiple items from one namespace, you can list them using curly
-braces and commas in the last position, like so:
+brackets and commas in the last position, like so:
 
 ```rust
 enum TrafficLight {

@@ -298,7 +298,7 @@ learn about recovering from errors in Chapter 9.
 
 ### Printing Values with `println!` Placeholders
 
-Aside from the closing curly brace, there’s only one more line to discuss in
+Aside from the closing curly brackets, there’s only one more line to discuss in
 the code added so far, which is the following:
 
 ```rust,ignore

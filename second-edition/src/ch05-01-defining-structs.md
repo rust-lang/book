@@ -8,7 +8,7 @@ the data to specify or access the values of an instance.
 
 To define a struct, we enter the keyword `struct` and name the entire struct. A
 struct’s name should describe the significance of the pieces of data being
-grouped together. Then, inside curly braces, we define the names and types of
+grouped together. Then, inside curly brackets, we define the names and types of
 the pieces of data, which we call *fields*. For example, Listing 5-1 shows a
 struct to store information about a user account:
 
@@ -25,7 +25,7 @@ struct User {
 
 To use a struct after we’ve defined it, we create an *instance* of that struct
 by specifying concrete values for each of the fields. We create an instance by
-stating the name of the struct, and then add curly braces containing `key:
+stating the name of the struct, and then add curly brackets containing `key:
 value` pairs where the keys are the names of the fields and the values are the
 data we want to store in those fields. We don’t have to specify the fields in
 the same order in which we declared them in the struct. In other words, the

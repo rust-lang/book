@@ -24,8 +24,8 @@ fn another_function() {
 ```
 
 Function definitions in Rust start with `fn` and have a set of parentheses
-after the function name. The curly braces tell the compiler where the function
-body begins and ends.
+after the function name. The curly brackets tell the compiler where the
+function body begins and ends.
 
 We can call any function we’ve defined by entering its name followed by a set
 of parentheses. Because `another_function` is defined in the program, it can be
@@ -86,7 +86,7 @@ The value of x is: 5
 
 The declaration of `another_function` has one parameter named `x`. The type of
 `x` is specified as `i32`. When `5` is passed to `another_function`, the
-`println!` macro puts `5` where the pair of curly braces were in the format
+`println!` macro puts `5` where the pair of curly brackets were in the format
 string.
 
 In function signatures, you *must* declare the type of each parameter. This is

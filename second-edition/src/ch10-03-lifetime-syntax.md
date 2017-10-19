@@ -66,7 +66,7 @@ error: `x` does not live long enough
 ```
 
 The variable `x` doesn’t “live long enough.” Why not? Well, `x` is going to go
-out of scope when we hit the closing curly brace on line 7, ending the inner
+out of scope when we hit the closing curly bracket on line 7, ending the inner
 scope. But `r` is valid for the outer scope; its scope is larger and we say
 that it “lives longer.” If Rust allowed this code to work, `r` would be
 referencing memory that was deallocated when `x` went out of scope, and
@@ -101,9 +101,9 @@ Listing 10-18 with annotations showing the lifetimes of the variables:
 correct? I want to leave a note for production, make sure we can make that
 clear -->
 <!-- Yes, the inside block for the `'b` lifetime starts with the `let x = 5;`
-line and ends with the first closing curly brace on the 7th line. Do you think
-the text art comments work or should we make an SVG diagram that has nicer
-looking arrows and labels? /Carol -->
+line and ends with the first closing curly bracket on the 7th line. Do you
+think the text art comments work or should we make an SVG diagram that has
+nicer looking arrows and labels? /Carol -->
 
 We’ve annotated the lifetime of `r` with `'a` and the lifetime of `x` with
 `'b`. As you can see, the inner `'b` block is much smaller than the outer `'a`

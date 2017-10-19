@@ -63,7 +63,7 @@ mod network {
 ```
 
 After the `mod` keyword, we put the name of the module, `network`, and then a
-block of code in curly braces. Everything inside this block is inside the
+block of code in curly brackets. Everything inside this block is inside the
 namespace `network`. In this case, we have a single function, `connect`. If we
 wanted to call this function from a script outside the `network` module, we
 would need to specify the module and use the namespace syntax `::`, like so:

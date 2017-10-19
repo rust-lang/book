@@ -49,8 +49,8 @@ We didn’t cover (and couldn’t cover!) every valid value with the pattern
 `Some(x)`, so Rust will rightfully complain.
 
 If we have a refutable pattern, instead of using `let`, we can use `if let`.
-That way, if the pattern doesn’t match, the code inside the curly braces won’t
-execute. That code will only make sense and run if the value matches the
+That way, if the pattern doesn’t match, the code inside the curly brackets
+won’t execute. That code will only make sense and run if the value matches the
 pattern. Listing 18-8 shows how to fix the code in Listing 18-7 with `Some(x)`
 matching `some_option_value`. Using the refutable pattern `Some(x)` is allowed,
 since this example uses `if let`:

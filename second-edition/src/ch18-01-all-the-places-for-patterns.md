@@ -86,7 +86,7 @@ Note that `if let` can also introduce shadowed variables like `match` arms can:
 the value inside the `Ok` variant. This also means the `if age > 30` condition
 needs to go within the block; we aren’t able to combine these two conditions
 into `if let Ok(age) = age && age > 30` since the shadowed `age` that we want
-to compare to 30 isn’t valid until the new scope starts with the curly brace.
+to compare to 30 isn’t valid until the new scope starts with the curly bracket.
 
 Also note that conditionals with many cases like these are not as powerful as
 `match` expression since exhaustiveness is not checked by the compiler. If we

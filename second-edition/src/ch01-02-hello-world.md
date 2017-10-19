@@ -92,10 +92,10 @@ says, “I’m declaring a function named `main` that has no parameters and retu
 nothing.” If there were parameters, their names would go inside the
 parentheses, `(` and `)`.
 
-Also note that the function body is wrapped in curly braces, `{` and `}`. Rust
-requires these around all function bodies. It’s considered good style to put
-the opening curly brace on the same line as the function declaration, with one
-space in between.
+Also note that the function body is wrapped in curly brackets, `{` and `}`.
+Rust requires these around all function bodies. It’s considered good style to
+put the opening curly bracket on the same line as the function declaration,
+with one space in between.
 
 Inside the `main` function:
 

@@ -44,7 +44,7 @@ fn main() {
 
 To define the function within the context of `Rectangle`, we start an `impl`
 (*implementation*) block. Then we move the `area` function within the `impl`
-curly braces and change the first (and in this case, only) parameter to be
+curly brackets and change the first (and in this case, only) parameter to be
 `self` in the signature and everywhere within the body. In `main` where we
 called the `area` function and passed `rect1` as an argument, we can instead
 use *method syntax* to call the `area` method on our `Rectangle` instance.

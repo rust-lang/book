@@ -62,9 +62,9 @@ The code associated with each arm is an expression, and the resulting value of
 the expression in the matching arm is the value that gets returned for the
 entire `match` expression.
 
-Curly braces typically aren’t used if the match arm code is short, as it is in
-Listing 6-3 where each arm just returns a value. If you want to run multiple
-lines of code in a match arm, you can use curly braces. For example, the
+Curly brackets typically aren’t used if the match arm code is short, as it is
+in Listing 6-3 where each arm just returns a value. If you want to run multiple
+lines of code in a match arm, you can use curly brackets. For example, the
 following code would print out “Lucky penny!” every time the method was called
 with a `Coin::Penny` but would still return the last value of the block, `1`:
 

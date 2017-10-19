@@ -176,7 +176,7 @@ direct end user consumption. The primitive types we’ve seen so far implement
 `Display` by default, because there’s only one way you’d want to show a `1` or
 any other primitive type to a user. But with structs, the way `println!` should
 format the output is less clear because there are more display possibilities:
-do you want commas or not? Do you want to print the curly braces? Should all
+do you want commas or not? Do you want to print the curly brackets? Should all
 the fields be shown? Due to this ambiguity, Rust doesn’t try to guess what we
 want and structs don’t have a provided implementation of `Display`.
 

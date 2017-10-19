@@ -243,12 +243,12 @@ was chosen because of its similarity to closure definitions in Smalltalk and
 Ruby. This closure has one parameter named `num`; if we had more than one
 parameter, we would separate them with commas, like `|param1, param2|`.
 
-After the parameters, we place curly braces that hold the body of the
+After the parameters, we place curly brackets that hold the body of the
 closure—these are optional if the closure body is a single expression. The end
-of the closure, after the curly braces, needs a semicolon to complete the `let`
-statement. The value returned from the last line in the closure body (`num`)
-will be the value returned from the closure when it’s called, since that line
-doesn’t end in a semicolon; just like in function bodies.
+of the closure, after the curly brackets, needs a semicolon to complete the
+`let` statement. The value returned from the last line in the closure body
+(`num`) will be the value returned from the closure when it’s called, since
+that line doesn’t end in a semicolon; just like in function bodies.
 
 Note that this `let` statement means `expensive_closure` contains the
 *definition* of an anonymous function, not the *resulting value* of calling the
@@ -371,7 +371,7 @@ let add_one_v4 = |x|               x + 1  ;
 
 The first line shows a function definition, and the second line shows a fully
 annotated closure definition. The third line removes the type annotations from
-the closure definition, and the fourth line removes the braces that are
+the closure definition, and the fourth line removes the brackets that are
 optional, since the closure body only has one expression. These are all valid
 definitions that will produce the same behavior when they’re called.
 

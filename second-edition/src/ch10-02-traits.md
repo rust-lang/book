@@ -42,14 +42,14 @@ pub trait Summarizable {
 consists of the behavior provided by a `summary` method</span>
 
 We declare a trait with the `trait` keyword, then the trait’s name, in this
-case `Summarizable`. Inside curly braces we declare the method signatures that
-describe the behaviors that types that implement this trait will need to have,
-in this case `fn summary(&self) -> String`. After the method signature, instead
-of providing an implementation within curly braces, we put a semicolon. Each
-type that implements this trait must then provide its own custom behavior for
-the body of the method, but the compiler will enforce that any type that has
-the `Summarizable` trait will have the method `summary` defined for it with
-this signature exactly.
+case `Summarizable`. Inside curly brackets we declare the method signatures
+that describe the behaviors that types that implement this trait will need to
+have, in this case `fn summary(&self) -> String`. After the method signature,
+instead of providing an implementation within curly brackets, we put a
+semicolon. Each type that implements this trait must then provide its own
+custom behavior for the body of the method, but the compiler will enforce that
+any type that has the `Summarizable` trait will have the method `summary`
+defined for it with this signature exactly.
 
 A trait can have multiple methods in its body, with the method signatures
 listed one per line and each line ending in a semicolon.
@@ -106,7 +106,7 @@ related to a trait. The difference is after `impl`, we put the trait name that
 we want to implement, then say `for` and the name of the type that we want to
 implement the trait for. Within the `impl` block, we put the method signatures
 that the trait definition has defined, but instead of putting a semicolon after
-each signature, we put curly braces and fill in the method body with the
+each signature, we put curly brackets and fill in the method body with the
 specific behavior that we want the methods of the trait to have for the
 particular type.
 
