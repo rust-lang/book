@@ -758,13 +758,12 @@ We bind `guess` to the expression `guess.trim().parse()`. The `guess` in the
 expression refers to the original `guess` that was a `String` with the input in
 it. The `trim` method on a `String` instance will eliminate any whitespace at
 the beginning and end. `u32` can only contain numerical characters, but the
-user must press the <span class="keystroke">return</span> key to satisfy
-`read_line`. When the user presses <span class="keystroke">return</span>, a
-newline character is added to the string. For example, if the user types
-<span class="keystroke">5</span> and presses <span class="keystroke">
-return</span>, `guess` looks like this: `5\n`. The `\n` represents “newline,”
-the <span class="keystroke">return</span> key. The `trim` method eliminates
-`\n`, resulting in just `5`.
+user must press the <span class="keystroke">enter</span> key to satisfy
+`read_line`. When the user presses <span class="keystroke">enter</span>, a
+newline character is added to the string. For example, if the user types <span
+class="keystroke">5</span> and presses <span class="keystroke"> enter</span>,
+`guess` looks like this: `5\n`. The `\n` represents “newline,” the enter key.
+The `trim` method eliminates `\n`, resulting in just `5`.
 
 The [`parse` method on strings][parse]<!-- ignore --> parses a string into some
 kind of number. Because this method can parse a variety of number types, we
