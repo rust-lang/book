@@ -1011,16 +1011,25 @@ Because the goal is to keep all these rules inside the structs that implement
 instance (that is, `self`) as an argument. Then we return the value that’s
 returned from using the `content` method on the `state` value.
 
-We call the `as_ref` method on the `Option` so we get a reference to the value
-inside the `Option` rather than ownership of it. We’re then calling the
-`unwrap` method, which we know will never panic, because we know the methods on
-`Post` ensure that `state` will always contain a `Some` value when those
-methods are done. This is one of the cases we talked about in Chapter 12 when
-we know that a `None` value is never possible, even though the compiler isn’t
-able to understand that.
+We call the `as_ref` method on the `Option` because we want a reference to the
+value inside the `Option` rather than ownership of it. Because `state` is an
+`Option<Box<State>>`, calling `as_ref` returns an `Option<&Box<State>>`. If we
+didn’t call `as_ref`, we’d get an error because we can’t move `state` out of
+the borrowed `&self` of the function parameter.
 
-We’ll put the logic for the content to return in the `content` method on the
-`State` trait, as shown in Listing 17-18:
+We’re then calling the `unwrap` method, which we know will never panic, because
+we know the methods on `Post` ensure that `state` will always contain a `Some`
+value when those methods are done. This is one of the cases we talked about in
+Chapter 12 when we know that a `None` value is never possible, even though the
+compiler isn’t able to understand that.
+
+So then we have a `&Box<State>`, and when we call the `content` on it, deref
+coercion will take effect on the `&` and the `Box` so that the `content` method
+will ultimately be called on the type that implements the `State` trait.
+
+That means we need to add `content` to the `State` trait definition, and that’s
+where We’ll put the logic for what content to return depending on which state
+we have, as shown in Listing 17-18:
 
 Filename: src/lib.rs
 
