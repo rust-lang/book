@@ -212,15 +212,13 @@ should change its state from `Draft` to `PendingReview`. We want to give `Post`
 a public method named `request_review` that will take a mutable reference to
 `self`. Then we’re going to call an internal `request_review` method on the
 current state of `Post`, and this second `request_review` method will consume
-the current state and return a new state. To consume the old state, the second
-`request_review` method needs to take ownership of the state value. This is
-where the `Option` comes in: we’re going to take the `Some` value out of the
-`state` field and leave a `None` in its place, since Rust doesn’t let us have
-unpopulated fields in structs. Then we’ll set the post’s `state` value to the
-result of this operation. Listing 17-15 shows this code:
+the current state and return a new state. Listing 17-15 shows this code:
 
 <!-- NOTE TO DE/AU: We might want to move this explanation to after the code if
 you want to add wingdings, we can see once we transfer it to Word -->
+<!-- I decided to move some of this explanation after the code for this reason
+and because we got some questions about this example that I wanted to expand
+upon /Carol -->
 
 <span class="filename">Filename: src/lib.rs</span>
 
@@ -274,6 +272,19 @@ the `Post` can transform itself into a new state.
 <!-- Above -- so Post can transform, or so Draft can transform? -->
 <!-- Technically it's so the Draft value can transform into another value,
 which changes the state of Post-- I've tried to clarify. /Carol -->
+
+To consume the old state, the `request_review` method needs to take ownership
+of the state value. This is where the `Option` in the `state` field of `Post`
+comes in: we call the `take` method to take the `Some` value out of the `state`
+field and leave a `None` in its place, since Rust doesn’t let us have
+unpopulated fields in structs. This lets us move the `state` value out of
+`Post` rather than borrowing it. Then we’ll set the post’s `state` value to the
+result of this operation.
+
+We need to set `state` to `None` temporarily, rather than code like `self.state
+= self.state.request_review();` that would set the `state` field directly, to
+get ownership of the `state` value. This ensures `Post` can’t use the old
+`state` value after we’ve transformed it into a new state.
 
 The `request_review` method on `Draft` needs to return a new, boxed instance of
 a new `PendingReview` struct, which represents the state when a post is waiting
