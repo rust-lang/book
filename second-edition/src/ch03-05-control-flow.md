@@ -49,6 +49,7 @@ Try running this code; you should see the following output:
 ```text
 $ cargo run
    Compiling branches v0.1.0 (file:///projects/branches)
+    Finished dev [unoptimized + debuginfo] target(s) in 0.31 secs
      Running `target/debug/branches`
 condition was true
 ```
@@ -65,6 +66,7 @@ Run the program again, and look at the output:
 ```text
 $ cargo run
    Compiling branches v0.1.0 (file:///projects/branches)
+    Finished dev [unoptimized + debuginfo] target(s) in 0.31 secs
      Running `target/debug/branches`
 condition was false
 ```
@@ -149,6 +151,7 @@ see the following output:
 ```text
 $ cargo run
    Compiling branches v0.1.0 (file:///projects/branches)
+    Finished dev [unoptimized + debuginfo] target(s) in 0.31 secs
      Running `target/debug/branches`
 number is divisible by 3
 ```
@@ -193,6 +196,7 @@ expression. Run this code to see what happens:
 ```text
 $ cargo run
    Compiling branches v0.1.0 (file:///projects/branches)
+    Finished dev [unoptimized + debuginfo] target(s) in 0.30 secs
      Running `target/debug/branches`
 The value of number is: 5
 ```
@@ -238,7 +242,7 @@ error[E0308]: if and else have incompatible types
   | |_____^ expected integral variable, found reference
   |
   = note: expected type `{integer}`
-             found type `&'static str`
+             found type `&str`
 ```
 
 The expression in the `if` block evaluates to an integer, and the expression in
@@ -285,6 +289,7 @@ continual loop. Give it a try:
 ```text
 $ cargo run
    Compiling loops v0.1.0 (file:///projects/loops)
+    Finished dev [unoptimized + debuginfo] target(s) in 0.29 secs
      Running `target/debug/loops`
 again!
 again!
@@ -339,7 +344,7 @@ true, the code runs; otherwise, it exits the loop.
 #### Looping Through a Collection with `for`
 
 You could use the `while` construct to loop over the elements of a collection,
-such as an array. For example:
+such as an array. For example, let’s look at Listing 3-5:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -367,6 +372,7 @@ element in the array:
 ```text
 $ cargo run
    Compiling loops v0.1.0 (file:///projects/loops)
+    Finished dev [unoptimized + debuginfo] target(s) in 0.32 secs
      Running `target/debug/loops`
 the value is: 10
 the value is: 20
@@ -385,7 +391,7 @@ code to perform the conditional check on every element on every iteration
 through the loop.
 
 As a more efficient alternative, you can use a `for` loop and execute some code
-for each item in a collection. A `for` loop looks like this:
+for each item in a collection. A `for` loop looks like this code in Listing 3-6:
 
 <span class="filename">Filename: src/main.rs</span>
 

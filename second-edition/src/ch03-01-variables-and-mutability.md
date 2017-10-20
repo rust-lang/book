@@ -83,6 +83,7 @@ When we run this program, we get the following:
 ```text
 $ cargo run
    Compiling variables v0.1.0 (file:///projects/variables)
+    Finished dev [unoptimized + debuginfo] target(s) in 0.30 secs
      Running `target/debug/variables`
 The value of x is: 5
 The value of x is: 6
@@ -174,6 +175,7 @@ When you run this program, it will output the following:
 ```text
 $ cargo run
    Compiling variables v0.1.0 (file:///projects/variables)
+    Finished dev [unoptimized + debuginfo] target(s) in 0.31 secs
      Running `target/debug/variables`
 The value of x is: 12
 ```

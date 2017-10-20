@@ -21,13 +21,14 @@ error, which means the compiler needs more information from us to know which
 possible type we want to use:
 
 ```text
-error[E0282]: unable to infer enough type information about `_`
+error[E0282]: type annotations needed
  --> src/main.rs:2:9
   |
 2 |     let guess = "42".parse().expect("Not a number!");
-  |         ^^^^^ cannot infer type for `_`
-  |
-  = note: type annotations or generic parameter binding required
+  |         ^^^^^
+  |         |
+  |         cannot infer type for `_`
+  |         consider giving `guess` a type
 ```
 
 You’ll see different type annotations as we discuss the various data types.
@@ -43,11 +44,11 @@ work in Rust.
 
 An *integer* is a number without a fractional component. We used one integer
 type earlier in this chapter, the `u32` type. This type declaration indicates
-that the value it’s associated with should be an unsigned signed integer
-(signed integer types start with `i` instead of `u`) that takes up 32 bits of
-space. Table 3-1 shows the built-in integer types in Rust. Each variant in the
-Signed and Unsigned columns (for example, *i8*) can be used to declare the type
-of an integer value.
+that the value it’s associated with should be an unsigned integer (signed
+integer types start with `i` instead of `u`) that takes up 32 bits of space.
+Table 3-1 shows the built-in integer types in Rust. Each variant in the Signed
+and Unsigned columns (for example, *i16*) can be used to declare the type of an
+integer value.
 
 <span class="caption">Table 3-1: Integer Types in Rust</span>
 
@@ -345,6 +346,7 @@ Running this code using `cargo run` produces the following result:
 ```text
 $ cargo run
    Compiling arrays v0.1.0 (file:///projects/arrays)
+    Finished dev [unoptimized + debuginfo] target(s) in 0.31 secs
      Running `target/debug/arrays`
 thread '<main>' panicked at 'index out of bounds: the len is 5 but the index is
  10', src/main.rs:6
