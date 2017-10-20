@@ -237,8 +237,10 @@ mind as you explore function return values and expressions next.
 Functions can return values to the code that calls them. We don’t name return
 values, but we do declare their type after an arrow (`->`). In Rust, the return
 value of the function is synonymous with the value of the final expression in
-the block of the body of a function. Here’s an example of a function that
-returns a value:
+the block of the body of a function. You can return early from a function by
+using the `return` keyword and specifying a value, but most functions return
+the last expression implicitly. Here’s an example of a function that returns a
+value:
 
 <span class="filename">Filename: src/main.rs</span>
 
