@@ -60,6 +60,7 @@ using the `cargo run` command:
 ```text
 $ cargo run
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
+    Finished dev [unoptimized + debuginfo] target(s) in 1.50 secs
      Running `target/debug/guessing_game`
 Hello, world!
 ```
@@ -134,8 +135,8 @@ println!("Guess the number!");
 println!("Please input your guess.");
 ```
 
-This code is just printing a prompt stating what the game is and requesting
-input from the user.
+This code is printing a prompt stating what the game is and requesting input
+from the user.
 
 ### Storing Values with Variables
 
@@ -284,17 +285,20 @@ If we don’t call `expect`, the program will compile, but we’ll get a warning
 ```text
 $ cargo build
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
-src/main.rs:10:5: 10:39 warning: unused result which must be used,
-#[warn(unused_must_use)] on by default
-src/main.rs:10     io::stdin().read_line(&mut guess);
-                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+warning: unused `std::result::Result` which must be used
+  --> src/main.rs:10:5
+   |
+10 |     io::stdin().read_line(&mut guess);
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: #[warn(unused_must_use)] on by default
 ```
 
 Rust warns that we haven’t used the `Result` value returned from `read_line`,
 indicating that the program hasn’t handled a possible error. The right way to
-suppress the warning is to actually write error handling, but since we just
-want to crash this program when a problem occurs, we can use `expect`. You’ll
-learn about recovering from errors in Chapter 9.
+suppress the warning is to actually write error handling, but since we want to
+crash this program when a problem occurs, we can use `expect`. You’ll learn
+about recovering from errors in Chapter 9.
 
 ### Printing Values with `println!` Placeholders
 
@@ -328,6 +332,7 @@ Let’s test the first part of the guessing game. You can run it using
 ```text
 $ cargo run
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
+    Finished dev [unoptimized + debuginfo] target(s) in 2.53 secs
      Running `target/debug/guessing_game`
 Guess the number!
 Please input your guess.
@@ -391,6 +396,7 @@ $ cargo build
    Compiling libc v0.2.14
    Compiling rand v0.3.14
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
+    Finished dev [unoptimized + debuginfo] target(s) in 2.53 secs
 ```
 
 <span class="caption">Listing 2-2: The output from running `cargo build` after
@@ -565,6 +571,7 @@ Try running the program a few times:
 ```text
 $ cargo run
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
+    Finished dev [unoptimized + debuginfo] target(s) in 2.53 secs
      Running `target/debug/guessing_game`
 Guess the number!
 The secret number is: 7
@@ -794,6 +801,7 @@ Let’s run the program now!
 ```text
 $ cargo run
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
+    Finished dev [unoptimized + debuginfo] target(s) in 0.43 secs
      Running `target/guessing_game`
 Guess the number!
 The secret number is: 58
