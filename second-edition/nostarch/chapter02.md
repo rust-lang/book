@@ -20,7 +20,7 @@ game will print congratulations and exit.
 To set up a new project, go to the *projects* directory that you created in
 Chapter 1, and make a new project using Cargo, like so:
 
-```bash
+```
 $ cargo new guessing_game --bin
 $ cd guessing_game
 ```
@@ -34,7 +34,7 @@ Look at the generated *Cargo.toml* file:
 
 Filename: Cargo.toml
 
-```toml
+```
 [package]
 name = "guessing_game"
 version = "0.1.0"
@@ -51,7 +51,7 @@ you. Check out the *src/main.rs* file:
 
 Filename: src/main.rs
 
-```rust
+```
 fn main() {
     println!("Hello, world!");
 }
@@ -60,9 +60,10 @@ fn main() {
 Now let’s compile this “Hello, world!” program and run it in the same step
 using the `cargo run` command:
 
-```bash
+```
 $ cargo run
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
+    Finished dev [unoptimized + debuginfo] target(s) in 1.50 secs
      Running `target/debug/guessing_game`
 Hello, world!
 ```
@@ -81,7 +82,7 @@ to input a guess. Enter the code in Listing 2-1 into *src/main.rs*.
 
 Filename: src/main.rs
 
-```rust,ignore
+```
 use std::io;
 
 fn main() {
@@ -98,51 +99,51 @@ fn main() {
 }
 ```
 
-<caption>
-Listing 2-1: Code to get a guess from the user and print it out
-</caption>
+Listing 2-1: Code to get a guess from the user and print
+it out
 
 This code contains a lot of information, so let’s go over it bit by bit. To
-obtain user input and then print the result as output, we need to import the
-`io` (input/output) library from the standard library (which is known as `std`):
+obtain user input and then print the result as output, we need to bring the
+`io` (input/output) library into scope. The `io` library comes from the
+standard library (which is known as `std`):
 
-```rust,ignore
+```
 use std::io;
 ```
 
-By default, Rust imports only a few types into every program in the
-*prelude*. If a type you want to use isn’t in the
-prelude, you have to import that type into your program explicitly with a `use`
+By default, Rust brings only a few types into the scope of every program in
+the *prelude*. If a type you want to use isn’t in the
+prelude, you have to bring that type into scope explicitly with a `use`
 statement. Using the `std::io` library provides you with a number of useful
 `io`-related features, including the functionality to accept user input.
 
 As you saw in Chapter 1, the `main` function is the entry point into the
 program:
 
-```rust,ignore
+```
 fn main() {
 ```
 
 The `fn` syntax declares a new function, the `()` indicate there are no
-arguments, and `{` starts the body of the function.
+parameters, and `{` starts the body of the function.
 
 As you also learned in Chapter 1, `println!` is a macro that prints a string to
 the screen:
 
-```rust,ignore
+```
 println!("Guess the number!");
 
 println!("Please input your guess.");
 ```
 
-This code is just printing a prompt stating what the game is and requesting
-input from the user.
+This code is printing a prompt stating what the game is and requesting input
+from the user.
 
 ### Storing Values with Variables
 
 Next, we’ll create a place to store the user input, like this:
 
-```rust,ignore
+```
 let mut guess = String::new();
 ```
 
@@ -150,7 +151,7 @@ Now the program is getting interesting! There’s a lot going on in this little
 line. Notice that this is a `let` statement, which is used to create
 *variables*. Here’s another example:
 
-```rust,ignore
+```
 let foo = bar;
 ```
 
@@ -158,7 +159,7 @@ This line will create a new variable named `foo` and bind it to the value
 `bar`. In Rust, variables are immutable by default. The following example shows
 how to use `mut` before the variable name to make a variable mutable:
 
-```rust
+```
 let foo = 5; // immutable
 let mut bar = 5; // mutable
 ```
@@ -189,7 +190,7 @@ Recall that we included the input/output functionality from the standard
 library with `use std::io;` on the first line of the program. Now we’ll call an
 associated function, `stdin`, on `io`:
 
-```rust,ignore
+```
 io::stdin().read_line(&mut guess)
     .expect("Failed to read line");
 ```
@@ -222,7 +223,7 @@ We’re not quite done with this line of code. Although it’s a single line of
 text, it’s only the first part of the single logical line of code. The second
 part is this method:
 
-```rust,ignore
+```
 .expect("Failed to read line");
 ```
 
@@ -230,7 +231,7 @@ When you call a method with the `.foo()` syntax, it’s often wise to introduce 
 newline and other whitespace to help break up long lines. We could have
 written this code as:
 
-```rust,ignore
+```
 io::stdin().read_line(&mut guess).expect("Failed to read line");
 ```
 
@@ -264,32 +265,35 @@ argument to `expect`. If the `read_line` method returns an `Err`, it would
 likely be the result of an error coming from the underlying operating system.
 If this instance of `io::Result` is an `Ok` value, `expect` will take the
 return value that `Ok` is holding and return just that value to you so you
-could use it. In this case, that value is the number of characters the user
+could use it. In this case, that value is the number of bytes in what the user
 entered into standard input.
 
 If we don’t call `expect`, the program will compile, but we’ll get a warning:
 
-```bash
+```
 $ cargo build
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
-src/main.rs:10:5: 10:39 warning: unused result which must be used,
-#[warn(unused_must_use)] on by default
-src/main.rs:10     io::stdin().read_line(&mut guess);
-                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+warning: unused `std::result::Result` which must be used
+  --> src/main.rs:10:5
+   |
+10 |     io::stdin().read_line(&mut guess);
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: #[warn(unused_must_use)] on by default
 ```
 
 Rust warns that we haven’t used the `Result` value returned from `read_line`,
 indicating that the program hasn’t handled a possible error. The right way to
-suppress the warning is to actually write error handling, but since we just
-want to crash this program when a problem occurs, we can use `expect`. You’ll
-learn about recovering from errors in Chapter 9.
+suppress the warning is to actually write error handling, but since we want to
+crash this program when a problem occurs, we can use `expect`. You’ll learn
+about recovering from errors in Chapter 9.
 
 ### Printing Values with `println!` Placeholders
 
-Aside from the closing curly brace, there’s only one more line to discuss in
+Aside from the closing curly brackets, there’s only one more line to discuss in
 the code added so far, which is the following:
 
-```rust,ignore
+```
 println!("You guessed: {}", guess);
 ```
 
@@ -299,7 +303,7 @@ using `{}`: the first set of `{}` holds the first value listed after the format
 string, the second set holds the second value, and so on. Printing out multiple
 values in one call to `println!` would look like this:
 
-```rust
+```
 let x = 5;
 let y = 10;
 
@@ -310,11 +314,13 @@ This code would print out `x = 5 and y = 10`.
 
 ### Testing the First Part
 
-Let’s test the first part of the guessing game. You can run it using `cargo run`:
+Let’s test the first part of the guessing game. You can run it using
+`cargo run`:
 
-```bash
+```
 $ cargo run
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
+    Finished dev [unoptimized + debuginfo] target(s) in 2.53 secs
      Running `target/debug/guessing_game`
 Guess the number!
 Please input your guess.
@@ -348,7 +354,7 @@ you:
 
 Filename: Cargo.toml
 
-```toml
+```
 [dependencies]
 
 rand = "0.3.14"
@@ -367,7 +373,7 @@ version 0.3.14.”
 Now, without changing any of the code, let’s build the project, as shown in
 Listing 2-2:
 
-```bash
+```
 $ cargo build
     Updating registry `https://github.com/rust-lang/crates.io-index`
  Downloading rand v0.3.14
@@ -375,12 +381,11 @@ $ cargo build
    Compiling libc v0.2.14
    Compiling rand v0.3.14
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
+    Finished dev [unoptimized + debuginfo] target(s) in 2.53 secs
 ```
 
-<caption>
-Listing 2-2: The output from running `cargo build` after adding the rand crate
-as a dependency
-</caption>
+Listing 2-2: The output from running `cargo build` after
+adding the rand crate as a dependency
 
 You may see different version numbers (but they will all be compatible with
 the code, thanks to SemVer!), and the lines may be in a different order.
@@ -405,7 +410,7 @@ doesn’t recompile that either. With nothing to do, it simply exits. If you ope
 up the *src/main.rs* file, make a trivial change, then save it and build again,
 you’ll only see one line of output:
 
-```bash
+```
 $ cargo build
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
 ```
@@ -448,7 +453,7 @@ But by default, Cargo will only look for versions larger than `0.3.0` and
 smaller than `0.4.0`. If the `rand` crate has released two new versions,
 `0.3.15` and `0.4.0`, you would see the following if you ran `cargo update`:
 
-```bash
+```
 $ cargo update
     Updating registry `https://github.com/rust-lang/crates.io-index`
     Updating rand v0.3.14 -> v0.3.15
@@ -460,7 +465,7 @@ that the version of the `rand` crate you are now using is `0.3.15`.
 If you wanted to use `rand` version `0.4.0` or any version in the `0.4.x`
 series, you’d have to update the *Cargo.toml* file to look like this instead:
 
-```toml
+```
 [dependencies]
 
 rand = "0.4.0"
@@ -471,7 +476,7 @@ available and reevaluate your `rand` requirements according to the new version
 you specified.
 
 There’s a lot more to say about Cargo and its
-ecosystem that Chapter XX will discuss, but for
+ecosystem that Chapter 14 will discuss, but for
 now, that’s all you need to know. Cargo makes it very easy to reuse libraries,
 so Rustaceans are able to write smaller projects that are assembled from a
 number of packages.
@@ -483,7 +488,7 @@ in Listing 2-3:
 
 Filename: src/main.rs
 
-```rust,ignore
+```
 extern crate rand;
 
 use std::io;
@@ -507,9 +512,8 @@ fn main() {
 }
 ```
 
-<caption>
-Listing 2-3: Code changes needed in order to generate a random number
-</caption>
+Listing 2-3: Code changes needed in order to generate a
+random number
 
 We’re adding a `extern crate rand;` line to the top that lets Rust know we’ll be
 using that external dependency. This also does the equivalent of calling `use
@@ -530,7 +534,7 @@ numbers as arguments and generates a random number between them. It’s inclusiv
 on the lower bound but exclusive on the upper bound, so we need to specify `1`
 and `101` to request a number between 1 and 100.
 
-Knowing which traits to import and which functions and methods to use from a
+Knowing which traits to use and which functions and methods to call from a
 crate isn’t something that you’ll just *know*. Instructions for using a crate
 are in each crate’s documentation. Another neat feature of Cargo is that you
 can run the `cargo doc --open` command that will build documentation provided
@@ -545,9 +549,10 @@ the answer as soon as it starts!
 
 Try running the program a few times:
 
-```bash
+```
 $ cargo run
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
+    Finished dev [unoptimized + debuginfo] target(s) in 2.53 secs
      Running `target/debug/guessing_game`
 Guess the number!
 The secret number is: 7
@@ -573,7 +578,7 @@ step is shown in Listing 2-4:
 
 Filename: src/main.rs
 
-```rust,ignore
+```
 extern crate rand;
 
 use std::io;
@@ -604,9 +609,8 @@ fn main() {
 }
 ```
 
-<caption>
-Listing 2-4: Handling the possible return values of comparing two numbers
-</caption>
+Listing 2-4: Handling the possible return values of
+comparing two numbers
 
 The first new bit here is another `use`, bringing a type called
 `std::cmp::Ordering` into scope from the standard library. `Ordering` is
@@ -616,7 +620,7 @@ compare two values.
 
 Then we add five new lines at the bottom that use the `Ordering` type:
 
-```rust,ignore
+```
 match guess.cmp(&secret_number) {
     Ordering::Less    => println!("Too small!"),
     Ordering::Greater => println!("Too big!"),
@@ -627,7 +631,7 @@ match guess.cmp(&secret_number) {
 The `cmp` method compares two values and can be called on anything that can be
 compared. It takes a reference to whatever you want to compare with: here it’s
 comparing the `guess` to the `secret_number`. `cmp` returns a variant of the
-`Ordering` enum we imported with the `use` statement. We use a
+`Ordering` enum we brought into scope with the `use` statement. We use a
 `match` expression to decide what to do next based on
 which variant of `Ordering` was returned from the call to `cmp` with the values
 in `guess` and `secret_number`.
@@ -638,7 +642,7 @@ expression fits that arm’s pattern. Rust takes the value given to `match` and
 looks through each arm’s pattern in turn. The `match` construct and patterns
 are powerful features in Rust that let you express a variety of situations your
 code might encounter and helps ensure that you handle them all. These features
-will be covered in detail in Chapter 6 and Chapter XX, respectively.
+will be covered in detail in Chapter 6 and Chapter 18, respectively.
 
 Let’s walk through an example of what would happen with the `match` expression
 used here. Say that the user has guessed 50, and the randomly generated secret
@@ -646,7 +650,7 @@ number this time is 38. When the code compares 50 to 38, the `cmp` method will
 return `Ordering::Greater`, because 50 is greater than 38. `Ordering::Greater`
 is the value that the `match` expression gets. It looks at the first arm’s
 pattern, `Ordering::Less`, but the value `Ordering::Greater` does not match
-`Ordering::Less`. So it ignores the code in that arm and moves to the next arm.
+`Ordering::Less`, so it ignores the code in that arm and moves to the next arm.
 The next arm’s pattern, `Ordering::Greater`, *does* match
 `Ordering::Greater`! The associated code in that arm will execute and print
 `Too big!` to the screen. The `match` expression ends because it has no need to
@@ -654,7 +658,7 @@ look at the last arm in this particular scenario.
 
 However, the code in Listing 2-4 won’t compile yet. Let’s try it:
 
-```bash
+```
 $ cargo build
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
 error[E0308]: mismatched types
@@ -687,7 +691,7 @@ that by adding the following two lines to the `main` function body:
 
 Filename: src/main.rs
 
-```rust,ignore
+```
 extern crate rand;
 
 use std::io;
@@ -723,7 +727,7 @@ fn main() {
 
 The two new lines are:
 
-```rust,ignore
+```
 let guess: u32 = guess.trim().parse()
     .expect("Please type a number!");
 ```
@@ -740,11 +744,12 @@ We bind `guess` to the expression `guess.trim().parse()`. The `guess` in the
 expression refers to the original `guess` that was a `String` with the input in
 it. The `trim` method on a `String` instance will eliminate any whitespace at
 the beginning and end. `u32` can only contain numerical characters, but the
-user must press the Return key to satisfy `read_line`. When the user presses
-Return, a newline character is added to the string. For example, if the user
-types 5 and presses return, `guess` looks like this: `5\n`. The `\n` represents
-“newline,” the return key. The `trim` method eliminates `\n`, resulting in just
-`5`.
+user must press the <span class="keystroke">enter</span> key to satisfy
+`read_line`. When the user presses <span class="keystroke">enter</span>, a
+newline character is added to the string. For example, if the user types <span
+class="keystroke">5</span> and presses <span class="keystroke"> enter</span>,
+`guess` looks like this: `5\n`. The `\n` represents “newline,” the enter key.
+The `trim` method eliminates `\n`, resulting in just `5`.
 
 The `parse` method on strings parses a string into some
 kind of number. Because this method can parse a variety of number types, we
@@ -761,7 +766,7 @@ The call to `parse` could easily cause an error. If, for example, the string
 contained `A👍%`, there would be no way to convert that to a number. Because it
 might fail, the `parse` method returns a `Result` type, much like the
 `read_line` method does as discussed earlier in “Handling Potential Failure
-with the Result Type” on page XX. We’ll treat this `Result` the same way by
+with the Result Type”. We’ll treat this `Result` the same way by
 using the `expect` method again. If `parse` returns an `Err` `Result` variant
 because it couldn’t create a number from the string, the `expect` call will
 crash the game and print the message we give it. If `parse` can successfully
@@ -770,9 +775,10 @@ and `expect` will return the number that we want from the `Ok` value.
 
 Let’s run the program now!
 
-```bash
+```
 $ cargo run
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
+    Finished dev [unoptimized + debuginfo] target(s) in 0.43 secs
      Running `target/guessing_game`
 Guess the number!
 The secret number is: 58
@@ -797,7 +803,7 @@ chances at guessing the number:
 
 Filename: src/main.rs
 
-```rust,ignore
+```
 extern crate rand;
 
 use std::io;
@@ -839,13 +845,13 @@ program again. Notice that there is a new problem because the program is doing
 exactly what we told it to do: ask for another guess forever! It doesn’t seem
 like the user can quit!
 
-The user could always halt the program by using the keyboard shortcut `Ctrl-C`.
-But there’s another way to escape this insatiable monster that we mentioned in
-the `parse` discussion in “Comparing the Guesses” on page XX: if the user
-enters a non-number answer, the program will crash. The user can take advantage
-of that in order to quit, as shown here:
+The user could always halt the program by using the keyboard shortcut
+<span class="keystroke">ctrl-C</span>. But there’s another way to escape this
+insatiable monster that we mentioned in the `parse` discussion in “Comparing the
+Guess to the Secret Number”: if the user enters a non-number answer, the program
+will crash. The user can take advantage of that in order to quit, as shown here:
 
-```bash
+```
 $ cargo run
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
      Running `target/guessing_game`
@@ -880,7 +886,7 @@ Let’s program the game to quit when the user wins by adding a `break`:
 
 Filename: src/main.rs
 
-```rust,ignore
+```
 extern crate rand;
 
 use std::io;
@@ -930,7 +936,7 @@ the user inputs a non-number, let’s make the game ignore a non-number so the
 user can continue guessing. We can do that by altering the line where `guess` is
 converted from a `String` to a `u32`:
 
-```rust,ignore
+```
 let guess: u32 = match guess.trim().parse() {
     Ok(num) => num,
     Err(_) => continue,
@@ -962,7 +968,7 @@ might encounter!
 Now everything in the program should work as expected. Let’s try it by running
 `cargo run`:
 
-```bash
+```
 $ cargo run
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
      Running `target/guessing_game`
@@ -991,7 +997,7 @@ secret number. Listing 2-5 shows the final code:
 
 Filename: src/main.rs
 
-```rust,ignore
+```
 extern crate rand;
 
 use std::io;
@@ -1030,9 +1036,7 @@ fn main() {
 }
 ```
 
-<caption>
 Listing 2-5: Complete code of the guessing game
-</caption>
 
 ## Summary
 
