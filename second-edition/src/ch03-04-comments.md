@@ -43,4 +43,5 @@ fn main() {
 }
 ```
 
-That’s all there is to comments. They’re not particularly complicated.
+Rust also has another kind of comment, documentation comments, which we'll
+discuss in chapter 14.
