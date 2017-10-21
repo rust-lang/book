@@ -201,6 +201,7 @@ lifecycle
 LimitTracker
 lobally
 locators
+LockResult
 login
 lookup
 loopback

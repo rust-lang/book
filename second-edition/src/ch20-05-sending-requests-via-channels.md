@@ -498,6 +498,52 @@ never create more than four threads, so our system won’t get overloaded if the
 server gets a lot of requests. If we make a request to `/sleep`, the server
 will be able to serve other requests by having another thread run them.
 
+After learning about the `while let` loop in Chapter 18, you might be
+wondering why we didn't write the worker thread like this:
+
+<span class="filename">Filename: src/lib.rs</span>
+
+```rust,ignore
+// ...snip...
+
+impl Worker {
+    fn new(id: usize, receiver: Arc<Mutex<mpsc::Receiver<Job>>>) -> Worker {
+        let thread = thread::spawn(move || {
+            while let Ok(job) = receiver.lock().unwrap().recv() {
+                println!("Worker {} got a job; executing.", id);
+
+                job.call_box();
+            }
+        });
+
+        Worker {
+            id,
+            thread,
+        }
+    }
+}
+```
+
+<span class="caption">Listing 20-22: An alternative implementation of the worker
+thread using `while let`</span>
+
+This code compiles and runs, but doesn't result in the desired threading
+behavior. The reason why is somewhat subtle: the `Mutex` struct has no public
+`unlock` method because the ownership of the lock is based on the lifetime of
+the `MutexGuard<T>` within the `LockResult<MutexGuard<T>>` that `lock` returns.
+This allows the borrow checker to enforce at compile time that we never access
+a resource guarded by a `Mutex` without holding the lock, but it can also result
+in holding the lock longer than intended if you don't think carefully about
+the lifetime of the `MutexGuard<T>`. Since the values in the the `while`
+expression remain in scope for the duration of the following block, the lock
+remains held for the duration of the call to `job.call_box()`, meaning other
+workers cannot receive jobs.
+
+By using `loop` instead, the `MutexGuard` is dropped as soon as the `let job`
+statement ends. This ensures that the lock is held during the call to `recv`,
+but it is released before the call to `job.call_box()`, allowing multiple
+requests to be serviced concurrently.
+
 What about those warnings, though? Don’t we use the `workers`, `id`, and
 `thread` fields? Well, right now, we’re using all three of these fields to hold
 onto some data, but we don’t actually *do* anything with the data once we’ve
