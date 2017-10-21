@@ -48,6 +48,7 @@ PR 리뷰를 통해 통합하고, 그 외에 오탈자 수정 등 자잘한 수�
 - associated function: 연관함수
 - binary: 바이너리
 - bind: 묶다
+- boilerplate code: 보일러플레이트 코드
 - borrowing: 빌림
 - cargo: 카고
 - clone: 클론

@@ -28,7 +28,7 @@
 - [열거형과 패턴 매칭](ch06-00-enums.md)
     - [열거형 정의하기](ch06-01-defining-an-enum.md)
     - [`match` 흐름 제어 연산자](ch06-02-match.md)
-    - [Concise Control Flow with `if let`](ch06-03-if-let.md)
+    - [`if let`을 사용한 간결한 흐름 제어](ch06-03-if-let.md)
 
 ## Basic Rust Literacy
 
