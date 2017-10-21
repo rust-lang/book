@@ -26,8 +26,8 @@
     - [메소드 문법](ch05-03-method-syntax.md)
 
 - [열거형과 패턴 매칭](ch06-00-enums.md)
-    - [Defining an Enum](ch06-01-defining-an-enum.md)
-    - [The `match` Control Flow Operator](ch06-02-match.md)
+    - [열거형 정의하기](ch06-01-defining-an-enum.md)
+    - [`match` 흐름 제어 연산자](ch06-02-match.md)
     - [Concise Control Flow with `if let`](ch06-03-if-let.md)
 
 ## Basic Rust Literacy
