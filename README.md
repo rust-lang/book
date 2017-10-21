@@ -49,6 +49,7 @@ PR 리뷰를 통해 통합하고, 그 외에 오탈자 수정 등 자잘한 수�
 - binary: 바이너리
 - bind: 묶다
 - borrowing: 빌림
+- CamelCase: 낙타 표기법
 - cargo: 카고
 - clone: 클론
 - collection: 컬렉션
@@ -66,6 +67,7 @@ PR 리뷰를 통해 통합하고, 그 외에 오탈자 수정 등 자잘한 수�
 - generic: 제네릭
 - handle: 핸들
 - heap: 힙
+- identifier: 식별자
 - immutable: 불변
 - instance: 인스턴스
 - integration test: 통합 테스트
@@ -73,6 +75,7 @@ PR 리뷰를 통해 통합하고, 그 외에 오탈자 수정 등 자잘한 수�
 - lifetime: 라이프타임
 - library: 라이브러리
 - module: 모듈
+- monomorphization: 단형성화
 - move: 이동
 - mutable: 가변
 - namespace: 이름공간
