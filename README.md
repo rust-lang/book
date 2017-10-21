@@ -79,9 +79,11 @@ PR 리뷰를 통해 통합하고, 그 외에 오탈자 수정 등 자잘한 수�
 - move: 이동
 - mutable: 가변
 - namespace: 이름공간
+- orphan rule: 고아 규칙
 - ownership: 소유권
 - placeholder: 변경자
 - pointer: 포인터
+- prelude: 프렐루드
 - private: 비공개
 - public: 공개
 - recover: 복구
@@ -94,6 +96,7 @@ PR 리뷰를 통해 통합하고, 그 외에 오탈자 수정 등 자잘한 수�
 - signature: 시그니처
 - string literal: 스트링 리터럴
 - test harness: 테스트 도구
+- trait bound: 트레잇 바운드
 - type annotation: 타입 명시
 - unit test: 단위 테스트
 - variable: 변수
