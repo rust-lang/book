@@ -5,8 +5,8 @@ If you're trying to learn Rust, checking out [the second edition][2] might be a 
 
 * [This page in the first edition of the The Rust Programming Language][1]
 
-* [Index of the second edition of The Rust Programming Language][2]
+* [Related section in the second edition of The Rust Programming Language][2]
 
 
 [1]: first-edition/const-and-static.html
-[2]: second-edition/index.html
+[2]: second-edition/ch19-01-unsafe-rust.html#accessing-or-modifying-a-mutable-static-variable

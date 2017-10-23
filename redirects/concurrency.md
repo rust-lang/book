@@ -5,8 +5,8 @@ If you're trying to learn Rust, checking out [the second edition][2] might be a 
 
 * [This page in the first edition of the The Rust Programming Language][1]
 
-* [Index of the second edition of The Rust Programming Language][2]
+* [Related chapter in the second edition of The Rust Programming Language][2]
 
 
 [1]: first-edition/concurrency.html
-[2]: second-edition/index.html
+[2]: second-edition/ch16-00-concurrency.html
