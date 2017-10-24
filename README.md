@@ -60,6 +60,7 @@ PR 리뷰를 통해 통합하고, 그 외에 오탈자 수정 등 자잘한 수�
 - dependency: 디펜던시
 - deref coercion: 역참조 강제
 - derived trait: 파생 트레잇
+- documentation comments: 문서화 주석
 - `drop`: `drop`한다, 버리다
 - feature: 특성
 - format string: 형식 문자열

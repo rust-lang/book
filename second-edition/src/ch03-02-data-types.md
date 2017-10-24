@@ -17,13 +17,13 @@ let guess: u32 = "42".parse().expect("Not a number!");
 이와 같은 에러는 컴파일러가 우리에게 사용하고 싶은 타입이 무엇인지 추가적인 정보를 요구하는 겁니다. 
 
 ```text
-error[E0282]: unable to infer enough type information about `_`
+error[E0282]: type annotations needed
  --> src/main.rs:2:9
   |
 2 |     let guess = "42".parse().expect("Not a number!");
-  |         ^^^^^ cannot infer type for `_`
-  |
-  = note: type annotations or generic parameter binding required
+  |         ^^^^^
+  |         cannot infer type for `_`
+  |         consider giving `guess` a type
 ```
 
 우리가 다루고자 하는 다양한 데이터 타입들 각각의 타입 명시를 살펴보겠습니다.
@@ -36,9 +36,9 @@ error[E0282]: unable to infer enough type information about `_`
 
 #### 정수형
 
-*정수형*은 소수점이 없는 숫자 입니다. 우리는 이번 장의 앞부분에서 `i32`타입인 정수형을 사용했었습니다. 해당 타입의
-선언은 부호를 갖는 32비트 변수임을 나타냅니다.(따라서 `i`는 부호가 없는 `u`와 반대입니다.) 표 3-1은 Rust에서 
-사용되는 정수형들을 보여줍니다. 부호, 미부호로 나뉜 다른 열의 타입을 사용하여(*i32*처럼) 정수 값의 타입을 선언할 
+*정수형*은 소수점이 없는 숫자 입니다. 우리는 이번 장의 앞부분에서 `u32`타입인 정수형을 사용했었습니다. 해당 타입의
+선언은 부호 없는 32비트 변수임을 나타냅니다 (부호 있는 타입은 `u`대신 `i`로 시작합니다.) 표 3-1은 Rust에서 
+사용되는 정수형들을 보여줍니다. 부호, 미부호로 나뉜 다른 열의 타입을 사용하여(*i16*처럼) 정수 값의 타입을 선언할 
 수 있습니다.
 
 
@@ -89,11 +89,8 @@ error[E0282]: unable to infer enough type information about `_`
 #### 부동 소수점 타입
 
 Rust에는 소수점을 갖는 숫자인 *부동소수점 숫자*를 위한 두 가지 기본 타입도 있습니다. Rust의 부동소수점 타입은
-`f32`와 `f64`로, 예상하신 대로 각기 32bit와 64bit의 크기를 갖습니다. 기본 타입이 `f64`인 이유는 대략
-`f32`와 비슷한 속도이면서 더 정밀한 표현이 가능하기 때문입니다. `f64`타입을 32bit 환경에서 사용하는 것도 
-가능하지만 해당 시스템에서 `f32`를 사용하는 것 보다는 느려질 겁니다. 대부분의 경우 보다 높은 정밀성을 위한 
-성능 하락이 합리적인 초기 선택안이기에 만약 당신이 당면한 상황에 부동소수점의 크기로 인한 문제가 의심된다면 벤치마킹을 
-해보셔야 합니다.
+`f32`와 `f64`로, 예상하신 대로 각기 32bit와 64bit의 크기를 갖습니다. 기본 타입은 `f64`인데, 그 이유는
+최신의 CPU 상에서는 `f64`가 `f32`와 대략 비슷한 속도를 내면서도 더 정밀한 표현이 가능하기 때문입니다.
 
 다음은 부동소수점 숫자가 활용되는 예제입니다:
 
@@ -163,7 +160,8 @@ Rust에서 동작하는 방식을 “제어 흐름” 장에서 다루게 될 �
 #### 문자 타입 
 
 지금까지 숫자 타입만을 살펴봤는데, Rust는 문자 또한 지원합니다. Rust의 `char`는 이 언어의 가장 근본적인
-알파벳 타입이고, 다음의 코드는 이를 사용하는 하나의 방법입니다:
+알파벳 타입이고, 다음의 코드는 이를 사용하는 한 가지 방법입니다. 스트링이 큰따옴표를 쓰는 것에 반하여 `char`
+타입은 작은따옴표로 쓰는 점을 주목하세요:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -311,6 +309,7 @@ fn main() {
 ```text
 $ cargo run
    Compiling arrays v0.1.0 (file:///projects/arrays)
+    Finished dev [unoptimized + debuginfo] target(s) in 0.31 secs
      Running `target/debug/arrays`
 thread '<main>' panicked at 'index out of bounds: the len is 5 but the index is
  10', src/main.rs:6
