@@ -1,6 +1,6 @@
 ## All the Places Patterns May be Used
 
-Patterns pop up in a number of places in Rust. You've been using them a lot
+Patterns pop up in a number of places in Rust. You’ve been using them a lot
 without realizing it! This section is a reference to all the places where
 patterns are valid.
 
@@ -9,7 +9,7 @@ patterns are valid.
 As we discussed in Chapter 6, a common place patterns are used is in the arms
 of `match` expressions. Formally, `match` expressions are defined as the
 keyword `match`, a value to match on, and one or more match arms that consist
-of a pattern and an expression to run if the value matches that arm's pattern:
+of a pattern and an expression to run if the value matches that arm’s pattern:
 
 ```text
 match VALUE {
@@ -26,27 +26,27 @@ patterns in the arms together, all possibilities for the value in the `match`
 expression must be accounted for. One way to ensure you have every possibility
 covered is to have a catch-all pattern for the last arm, like a variable name.
 A name matching any value can never fail and thus covers every case remaining
-after the previous arms' patterns.
+after the previous arms’ patterns.
 
-There's an additional pattern that's often used in the last match arm: `_`. It
+There’s an additional pattern that’s often used in the last match arm: `_`. It
 matches anything, but it never binds any variables. This can be useful when you
 only want to run code for some patterns but ignore any other value, for example.
 
 ### `if let` Expressions
 
-We discussed `if let` expressions in Chapter 6, and how they're mostly a
+We discussed `if let` expressions in Chapter 6, and how they’re mostly a
 shorter way to write the equivalent of a `match` that only cares about matching
 one case. `if let` can optionally have a corresponding `else` with code to run
-if the pattern in the `if let` doesn't match.
+if the pattern in the `if let` doesn’t match.
 
-Listing 18-1 shows that it's even possible to mix and match `if let`, `else
+Listing 18-1 shows that it’s even possible to mix and match `if let`, `else
 if`, and `else if let`. This code shows a series of checks of a bunch of
 different conditions to decide what the background color should be. For the
-purposes of the example, we've created variables with hardcoded values that a
+purposes of the example, we’ve created variables with hardcoded values that a
 real program might get by asking the user. If the user has specified a favorite
-color, we'll use that as the background color. If today is Tuesday, the
+color, we’ll use that as the background color. If today is Tuesday, the
 background color will be green. If the user has specified their age as a string
-and we can parse it as a number successfully, we'll use either purple or orange
+and we can parse it as a number successfully, we’ll use either purple or orange
 depending on the value of the parsed number. Finally, if none of these
 conditions apply, the background color will be blue:
 
@@ -84,15 +84,15 @@ background color`.
 Note that `if let` can also introduce shadowed variables like `match` arms can:
 `if let Ok(age) = age` introduces a new shadowed `age` variable that contains
 the value inside the `Ok` variant. This also means the `if age > 30` condition
-needs to go within the block; we aren't able to combine these two conditions
+needs to go within the block; we aren’t able to combine these two conditions
 into `if let Ok(age) = age && age > 30` since the shadowed `age` that we want
-to compare to 30 isn't valid until the new scope starts with the curly brace.
+to compare to 30 isn’t valid until the new scope starts with the curly bracket.
 
 Also note that conditionals with many cases like these are not as powerful as
 `match` expression since exhaustiveness is not checked by the compiler. If we
 leave off the last `else` block and miss handling some cases, the compiler will
 not error. This example might be too complex to rewrite as a readable `match`,
-so we should take extra care to check that we're handling all the cases since
+so we should take extra care to check that we’re handling all the cases since
 the compiler is not checking exhaustiveness for us.
 
 ### `while let`
@@ -126,8 +126,8 @@ can use `while let` to pop every element off our stack.
 ### `for` loops
 
 Looping with `for`, as we discussed in Chapter 3, is the most common loop
-construction in Rust code. What we didn't talk about in that chapter was that
-`for` takes a pattern. In Listing 18-3, we're demonstrating how we can use a
+construction in Rust code. What we didn’t talk about in that chapter was that
+`for` takes a pattern. In Listing 18-3, we’re demonstrating how we can use a
 pattern in a `for` loop to destructure a tuple. The `enumerate` method adapts
 an iterator to produce a value and the index of the value in the iterator in a
 tuple:
@@ -157,15 +157,15 @@ be 1.
 
 ### `let` Statements
 
-`match` and `if let` are the places we've explicitly discussed using patterns
-earlier in the book, but they aren't the only places we've *used* patterns. For
+`match` and `if let` are the places we’ve explicitly discussed using patterns
+earlier in the book, but they aren’t the only places we’ve *used* patterns. For
 example, consider this straightforward variable assignment with `let`:
 
 ```rust
 let x = 5;
 ```
 
-We've done this hundreds of times throughout this book. You may not have
+We’ve done this hundreds of times throughout this book. You may not have
 realized it, but you were using patterns! A `let` statement looks like this,
 more formally:
 
@@ -173,17 +173,17 @@ more formally:
 let PATTERN = EXPRESSION;
 ```
 
-We've seen statements like `let x = 5;` with a variable name in the `PATTERN`
+We’ve seen statements like `let x = 5;` with a variable name in the `PATTERN`
 slot; a variable name is just a particularly humble form of pattern.
 
 With `let`, we compare the expression against the pattern, and assign any names
 we find. So for example, in our `let x = 5;` case, `x` is a pattern that says
-"bind what matches here to the variable `x`." And since the name `x` is the
-whole pattern, this pattern effectively means "bind everything to the variable
-`x`, whatever the value is."
+“bind what matches here to the variable `x`.” And since the name `x` is the
+whole pattern, this pattern effectively means “bind everything to the variable
+`x`, whatever the value is.”
 
 To see the pattern matching aspect of `let` a bit more clearly, consider
-Listing 18-4 where we're using a pattern with `let` to destructuring a tuple:
+Listing 18-4 where we’re using a pattern with `let` to destructuring a tuple:
 
 ```rust
 let (x, y, z) = (1, 2, 3);
@@ -192,7 +192,7 @@ let (x, y, z) = (1, 2, 3);
 <span class="caption">Listing 18-4: Using a pattern to destructure a tuple and
 create 3 variables at once</span>
 
-Here, we have a tuple that we're matching against a pattern. Rust will compare
+Here, we have a tuple that we’re matching against a pattern. Rust will compare
 the value `(1, 2, 3)` to the pattern `(x, y, z)` and see that the value matches
 the pattern. In this case, it will bind `1` to `x`, `2` to `y`, and `3` to `z`.
 You can think of this tuple pattern as nesting three individual variable
@@ -218,7 +218,7 @@ fn foo(x: i32) {
 parameters</span>
 
 The `x` part is a pattern! In a similar way as we did with `let`, we could
-match a tuple in a function's arguments. Listing 18-6 shows how we could split
+match a tuple in a function’s arguments. Listing 18-6 shows how we could split
 apart the values in a tuple as part of passing the tuple to a function:
 
 <span class="filename">Filename: src/main.rs</span>
@@ -245,5 +245,5 @@ Because closures are similar to functions, as we discussed in Chapter 13, we
 can use patterns in closure parameter lists as well.
 
 One difference between the places we can use patterns is that with `for` loops,
-`let`, and in function parameters, the patterns must be *irrefutable*. Let's
+`let`, and in function parameters, the patterns must be *irrefutable*. Let’s
 discuss that next.
