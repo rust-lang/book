@@ -126,14 +126,14 @@
     <body class="light">
         <!-- Set the theme before any content is loaded, prevents flash -->
         <script type="text/javascript">
-            var theme = store.get('theme');
+            var theme = store.get('mdbook-theme');
             if (theme === null || theme === undefined) { theme = 'light'; }
             $('body').removeClass().addClass(theme);
         </script>
 
         <!-- Hide / unhide sidebar before it is displayed -->
         <script type="text/javascript">
-            var sidebar = store.get('sidebar');
+            var sidebar = store.get('mdbook-sidebar');
             if (sidebar === "hidden") { $("html").addClass("sidebar-hidden") }
             else if (sidebar === "visible") { $("html").addClass("sidebar-visible") }
         </script>
@@ -155,7 +155,9 @@
                     <h1 class="menu-title">{{ book_title }}</h1>
 
                     <div class="right-buttons">
-                        <i id="print-button" class="fa fa-print" title="Print this book"></i>
+                        <a href="print.html">
+                            <i id="print-button" class="fa fa-print" title="Print this book"></i>
+                        </a>
                     </div>
                 </div>
 
@@ -221,6 +223,14 @@
         <script src="{{ mode_rust_js }}" type="text/javascript" charset="utf-8"></script>
         <script src="{{ theme_dawn_js }}" type="text/javascript" charset="utf-8"></script>
         <script src="{{ theme_tomorrow_night_js }}" type="text/javascript" charset="utf-8"></script>
+        {{/if}}
+
+        {{#if is_print}}
+        <script>
+            $(document).ready(function() {
+                window.print();
+            })
+        </script>
         {{/if}}
 
         <script src="highlight.js"></script>
