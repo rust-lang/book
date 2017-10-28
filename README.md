@@ -50,6 +50,7 @@ PR 리뷰를 통해 통합하고, 그 외에 오탈자 수정 등 자잘한 수�
 - bind: 묶다
 - boilerplate code: 보일러플레이트 코드
 - borrowing: 빌림
+- CamelCase: 낙타 표기법
 - cargo: 카고
 - clone: 클론
 - collection: 컬렉션
@@ -67,6 +68,7 @@ PR 리뷰를 통해 통합하고, 그 외에 오탈자 수정 등 자잘한 수�
 - generic: 제네릭
 - handle: 핸들
 - heap: 힙
+- identifier: 식별자
 - immutable: 불변
 - instance: 인스턴스
 - integration test: 통합 테스트
@@ -74,12 +76,15 @@ PR 리뷰를 통해 통합하고, 그 외에 오탈자 수정 등 자잘한 수�
 - lifetime: 라이프타임
 - library: 라이브러리
 - module: 모듈
+- monomorphization: 단형성화
 - move: 이동
 - mutable: 가변
 - namespace: 이름공간
+- orphan rule: 고아 규칙
 - ownership: 소유권
 - placeholder: 변경자
 - pointer: 포인터
+- prelude: 프렐루드
 - private: 비공개
 - public: 공개
 - recover: 복구
@@ -92,6 +97,7 @@ PR 리뷰를 통해 통합하고, 그 외에 오탈자 수정 등 자잘한 수�
 - signature: 시그니처
 - string literal: 스트링 리터럴
 - test harness: 테스트 도구
+- trait bound: 트레잇 바운드
 - type annotation: 타입 명시
 - unit test: 단위 테스트
 - variable: 변수

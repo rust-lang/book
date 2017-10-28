@@ -47,10 +47,10 @@
     - [`Result`와 함께하는 복구 가능한 에러](ch09-02-recoverable-errors-with-result.md)
     - [`panic!`이냐, `panic!`이 아니냐, 그것이 문제로다](ch09-03-to-panic-or-not-to-panic.md)
 
-- [Generic Types, Traits, and Lifetimes](ch10-00-generics.md)
-    - [Generic Data Types](ch10-01-syntax.md)
-    - [Traits: Defining Shared Behavior](ch10-02-traits.md)
-    - [Validating References with Lifetimes](ch10-03-lifetime-syntax.md)
+- [제네릭 타입, 트레잇, 그리고 라이프타임](ch10-00-generics.md)
+    - [제네릭 데이터 타입](ch10-01-syntax.md)
+    - [트레잇: 공유 동작을 정의하기](ch10-02-traits.md)
+    - [라이프타임을 이용한 참조자 유효화](ch10-03-lifetime-syntax.md)
 
 - [테스팅](ch11-00-testing.md)
     - [테스트 작성하기](ch11-01-writing-tests.md)
