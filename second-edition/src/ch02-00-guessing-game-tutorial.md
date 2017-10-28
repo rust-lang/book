@@ -57,6 +57,7 @@ fn main() {
 ```text
 $ cargo run
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
+    Finished dev [unoptimized + debuginfo] target(s) in 1.50 secs
      Running `target/debug/guessing_game`
 Hello, world!
 ```
@@ -254,10 +255,13 @@ io::stdin().read_line(&mut guess).expect("Failed to read line");
 ```text
 $ cargo build
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
-src/main.rs:10:5: 10:39 warning: unused result which must be used,
-#[warn(unused_must_use)] on by default
-src/main.rs:10     io::stdin().read_line(&mut guess);
-                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+warning: unused `std::result::Result` which must be used
+  --> src/main.rs:10:5
+   |
+10 |     io::stdin().read_line(&mut guess);
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: #[warn(unused_must_use)] on by default
 ```
 
 러스트는 `read_line`가 돌려주는 `Result` 값을 사용하지 않았음을 경고하며 일어날 수 있는
@@ -296,6 +300,7 @@ println!("x = {} and y = {}", x, y);
 ```text
 $ cargo run
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
+    Finished dev [unoptimized + debuginfo] target(s) in 2.53 secs
      Running `target/debug/guessing_game`
 Guess the number!
 Please input your guess.
@@ -354,6 +359,7 @@ $ cargo build
    Compiling libc v0.2.14
    Compiling rand v0.3.14
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
+    Finished dev [unoptimized + debuginfo] target(s) in 2.53 secs
 ```
 
 <span class="caption">Listing 2-2: rand 크레이트를 의존성으로 추가한 후
@@ -515,6 +521,7 @@ fn main() {
 ```text
 $ cargo run
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
+    Finished dev [unoptimized + debuginfo] target(s) in 2.53 secs
      Running `target/debug/guessing_game`
 Guess the number!
 The secret number is: 7
@@ -692,11 +699,13 @@ Shadowing은 우리들이 `guess_str`과 `guess`처럼 고유의 변수명을
 우리는 `guess`를 `guess.trim().parse()` 표현식과 묶습니다. 표현식 내의
 `guess`는 입력값을 가지고 있던 `String`을 참조합니다. `String` 인스턴스의
 `trim` 메소드는 처음과 끝 부분의 빈칸을 제거합니다. `u32`는 정수형 글자만을
-가져야 하지만 사용자들은 `read_line`을 끝내기 위해 엔터 키를 반드시 눌러야
-합니다. 엔터키가 눌리는 순간 개행문자가 문자열에 추가됩니다. 만약 사용자가
-5를 누르고 엔터키를 누르면 `guess`는 `5\n`처럼 됩니다. `\n`은 엔터키, 즉
-개행문자를 의미합니다. `trim` 메소드는 `\n`을 제거하고 `5`만 남도록 처리합니다.
-
+가져야 하지만 사용자들은 `read_line`을 끝내기 위해
+<span class="keystroke">enter</span>키를 반드시 눌러야
+합니다. <span class="keystroke">enter</span>키가 눌리는 순간 개행문자가
+문자열에 추가됩니다. 만약 사용자가 <span class="keystroke">5</span>를 누르고
+<span class="keystroke">enter</span>키를 누르면 `guess`는 `5\n`처럼 됩니다.
+`\n`은 enter키, 즉 개행문자를 의미합니다. `trim` 메소드는 `\n`을 제거하고 `5`만
+남도록 처리합니다.
 
 [문자열의 `parse` 메소드][parse]<!-- ignore -->는 문자열을 숫자형으로 파싱합니다.
 이 메소드는 다양한 종류의 정수형을 변환하므로 우리는 `let guess: u32`처럼
@@ -722,6 +731,7 @@ variant를 돌려준다면 `expect` 호출은 게임을 멈추고 우리가 명�
 ```text
 $ cargo run
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
+    Finished dev [unoptimized + debuginfo] target(s) in 0.43 secs
      Running `target/guessing_game`
 Guess the number!
 The secret number is: 58
@@ -787,11 +797,11 @@ fn main() {
 생긴 것을 확인하세요. 이제 프로그램이 영원히 다른 추리값을 요청합니다!
 사용자가 이 프로그램을 종료할 수 없어요!
 
-사용자는 `Ctrl-C` 단축키를 이용하여 프로그램을 멈출 수 있습니다. 하지만
-"비밀번호를 추리값과 비교하기"에서 `parse` 메소드에 대해 논의할 때 언급한
-방법으로 이 만족할 줄 모르는 괴물에게서 빠져나올 수 있습니다. 만약 사용자가
-숫자가 아닌 정답을 적는다면 프로그램이 멈춥니다. 사용자는 프로그램 종료를
-위해 다음처럼 이 장점을 활용할 수 있습니다.
+사용자는 <span class="keystroke">ctrl-C</span> 단축키를 이용하여
+프로그램을 멈출 수 있습니다. 하지만 "비밀번호를 추리값과 비교하기"에서 `parse`
+메소드에 대해 논의할 때 언급한 방법으로 이 만족할 줄 모르는 괴물에게서 빠져나올
+수 있습니다. 만약 사용자가 숫자가 아닌 정답을 적는다면 프로그램이 멈춥니다.
+사용자는 프로그램 종료를 위해 다음처럼 이 장점을 활용할 수 있습니다.
 
 ```text
 $ cargo run

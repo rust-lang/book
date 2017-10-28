@@ -286,7 +286,7 @@ let s2 = s1;
 let s1 = String::from("hello");
 let s2 = s1;
 
-println!("{}", s1);
+println!("{}, world!", s1);
 ```
 
 여러분은 아래와 같은 에러 메세지를 보게 될텐데, 그 이유는 러스트가 여러분으로부터
