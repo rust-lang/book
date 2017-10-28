@@ -23,7 +23,7 @@ enum Coin {
     Quarter,
 }
 
-fn value_in_cents(coin: Coin) -> i32 {
+fn value_in_cents(coin: Coin) -> u32 {
     match coin {
         Coin::Penny => 1,
         Coin::Nickel => 5,
@@ -66,7 +66,7 @@ fn value_in_cents(coin: Coin) -> i32 {
 #    Quarter,
 # }
 #
-fn value_in_cents(coin: Coin) -> i32 {
+fn value_in_cents(coin: Coin) -> u32 {
     match coin {
         Coin::Penny => {
             println!("Lucky penny!");
@@ -87,7 +87,7 @@ fn value_in_cents(coin: Coin) -> i32 {
 한 가지 예로서, 우리의 열거형 variant 중 하나를 내부에 값을 들고 있도록 바꿔봅시다. 1999년부터
 2008년까지, 미국은 각 50개 주마다 한쪽 면의 디자인이 다른 쿼터 동전을 주조했습니다. 다른 동전들은
 주의 디자인을 갖지 않고, 따라서 오직 쿼터 동전들만 이 특별값을 갖습니다. 우리는 이 정보를
-`Quarter` variant 내에 `State` 값을 포함하도록 우리의 `enum`을 변경함으로써 추가할 수
+`Quarter` variant 내에 `UsState` 값을 포함하도록 우리의 `enum`을 변경함으로써 추가할 수
 있는데, 이는 Listing 6-4에서 한 바와 같습니다:
 
 ```rust
@@ -132,7 +132,7 @@ enum Coin {
 #    Quarter(UsState),
 # }
 #
-fn value_in_cents(coin: Coin) -> i32 {
+fn value_in_cents(coin: Coin) -> u32 {
     match coin {
         Coin::Penny => 1,
         Coin::Nickel => 5,
