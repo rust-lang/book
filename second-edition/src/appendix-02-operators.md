@@ -20,7 +20,7 @@ operators, before the expression they apply to.
 * `!`
   : Logical negation. On the boolean type, this flips between `true` and
     `false`. On integer types, this inverts the individual bits in the
-    two's complement representation of the value.
+    two’s complement representation of the value.
 * `&` and `&mut`
   : Borrowing. When applied to a value, these operators produce a
     reference (pointer) to that value. The value is also placed into
@@ -86,8 +86,8 @@ equivalent to logical `&&`, `||` and `!=` evaluated in non-lazy fashion.
 #### Lazy boolean operators
 
 The operators `||` and `&&` may be applied to operands of boolean type. The
-`||` operator denotes logical 'or', and the `&&` operator denotes logical
-'and'. They differ from `|` and `&` in that the right-hand operand is only
+`||` operator denotes logical ‘or’, and the `&&` operator denotes logical
+‘and’. They differ from `|` and `&` in that the right-hand operand is only
 evaluated when the left-hand operand does not already determine the result of
 the expression. That is, `||` only evaluates its right-hand operand when the
 left-hand operand evaluates to `false`, and `&&` only when it evaluates to
@@ -142,7 +142,7 @@ fn average(values: &[f64]) -> f64 {
 Some of the conversions which can be done through the `as` operator
 can also be done implicitly at various points in the program, such as
 argument passing and assignment to a `let` binding with an explicit
-type. Implicit conversions are limited to "harmless" conversions that
+type. Implicit conversions are limited to “harmless” conversions that
 do not lose information and which have minimal or no risk of
 surprising side-effects on the dynamic execution semantics.
 
@@ -171,25 +171,25 @@ Any such expression always has the `unit` type.
 
 #### Operator precedence
 
-The precedence of Rust binary operators is ordered as follows, going from
-strong to weak:
+The precedence of Rust operators is ordered as follows, going from strong to
+weak. Binary Operators at the same precedence level are evaluated in the order
+given by their associativity.
 
-```text
-as :
-* / %
-+ -
-<< >>
-&
-^
-|
-== != < > <= >=
-&&
-||
-.. ...
-<-
-=
-```
 
-Operators at the same precedence level are evaluated left-to-right. Unary
-operators have the same precedence level and are stronger than any of the
-binary operators.
+| Operator                    | Associativity       |
+|-----------------------------|---------------------|
+| `?`                         |                     |
+| Unary `-` `*` `!` `&` `&mut` |                    |
+| `as` `:`                    | left to right       |
+| `*` `/` `%`                 | left to right       |
+| `+` `-`                     | left to right       |
+| `<<` `>>`                   | left to right       |
+| `&`                         | left to right       |
+| `^`                         | left to right       |
+| <code>&#124;</code>         | left to right       |
+| `==` `!=` `<` `>` `<=` `>=` | Require parentheses |
+| `&&`                        | left to right       |
+| <code>&#124;&#124;</code>   | left to right       |
+| `..` `...`                  | Require parentheses |
+| `<-`                        | right to left       |
+| `=` `+=` `-=` `*=` `/=` `%=` <br> `&=` <code>&#124;=</code> `^=` `<<=` `>>=` | right to left |

@@ -42,6 +42,7 @@ fn main() {
 ```text
 $ cargo run
    Compiling branches v0.1.0 (file:///projects/branches)
+    Finished dev [unoptimized + debuginfo] target(s) in 0.31 secs
      Running `target/debug/branches`
 condition was true
 ```
@@ -57,6 +58,7 @@ let number = 7;
 ```text
 $ cargo run
    Compiling branches v0.1.0 (file:///projects/branches)
+    Finished dev [unoptimized + debuginfo] target(s) in 0.31 secs
      Running `target/debug/branches`
 condition was false
 ```
@@ -137,6 +139,7 @@ fn main() {
 ```text
 $ cargo run
    Compiling branches v0.1.0 (file:///projects/branches)
+    Finished dev [unoptimized + debuginfo] target(s) in 0.31 secs
      Running `target/debug/branches`
 number is divisible by 3
 ```
@@ -176,6 +179,7 @@ to a variable</span>
 ```text
 $ cargo run
    Compiling branches v0.1.0 (file:///projects/branches)
+    Finished dev [unoptimized + debuginfo] target(s) in 0.31 secs
      Running `target/debug/branches`
 The value of number is: 5
 ```
@@ -217,7 +221,7 @@ error[E0308]: if and else have incompatible types
   | |_____^ expected integral variable, found reference
   |
   = note: expected type `{integer}`
-             found type `&'static str`
+             found type `&str`
 ```
 
 `if` 블록이 정수형을 산출하는 식이고 `else` 블록은 문자열을 산출하는 식 입니다. 이런 경우가 성립하지 않는 
@@ -251,7 +255,8 @@ fn main() {
 ```
 
 이 프로그램을 실행시키면, 우리는 프로그램을 강제 정지하기 전까지 `again!`이 반복 출력되는 것을 보게 됩니다.
-대부분의 터미널은 ctrl-C를 통해 프로그램을 정지시키는 기능을 지원하니 이를 시도해 보세요:
+대부분의 터미널은 단축키 <span class="keystroke">ctrl-C</span>를 통해서 무한루프에 빠진 프로그램을
+정지시키는 기능을 지원합니다. 한번 시도해 보세요:
 
 ```text
 $ cargo run
@@ -265,8 +270,8 @@ again!
 ```
 
 
-기호 `^C`는 우리가 ctrl-C를 눌렀을 때의 위치입니다. 코드가 정지 신호를 받은 시점에 따라 `^C` 이후에 
-`again!`이 출력될 수도 아닐 수도 있습니다. 
+기호 `^C`는 우리가 <span class="keystroke">ctrl-C</span>를 눌렀을 때의 위치입니다. 코드가 정지
+신호를 받은 시점에 따라 `^C` 이후에 `again!`이 출력될 수도 아닐 수도 있습니다. 
 
 다행스럽게도, Rust는 보다 안정적으로 루프에서 벗어날 수 있는 방법을 제공합니다. 우리는 `break` keyword
 를 위치시켜 프로그램이 언제 루프를 멈춰야 하는지 알려줄 수 있습니다. 상기시켜 드리자면 2장 “추리 게임”에서 
@@ -303,7 +308,8 @@ fn main() {
 
 #### `for`와 함께하는 콜렉션 반복하기
 
-우리는 `while` 구조자를 통해 배열과 같은, 콜렉션의 각 요소에 걸쳐 반복 수행 할 수 있습니다. 예:
+우리는 `while` 구조자를 통해 배열과 같은, 콜렉션의 각 요소에 걸쳐 반복 수행 할 수 있습니다.
+예를 들어서, Listing 3-5을 살펴봅시다:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -329,6 +335,7 @@ using a `while` loop</span>
 ```text
 $ cargo run
    Compiling loops v0.1.0 (file:///projects/loops)
+    Finished dev [unoptimized + debuginfo] target(s) in 0.32 secs
      Running `target/debug/loops`
 the value is: 10
 the value is: 20
@@ -345,7 +352,7 @@ the value is: 50
 추가하기 때문입니다.
 
 보다 효율적은 대안으로, 우리는 `for` 반복문을 사용하여 콜렉션의 각 요소에 대한 코드를 수행할 수 있습니다.
-`for`반복문은 다음과 같습니다:
+`for` 반복문은 다음 Listing 3-6과 같습니다:
 
 <span class="filename">Filename: src/main.rs</span>
 

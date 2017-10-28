@@ -242,9 +242,9 @@ let m = Message::Write(String::from("hello"));
 m.call();
 ```
 
-열거형의 값을 가져오기 위해 메서드 안에서 `self` 를 사용할 것 입니다.
-이 에제에서 생성한 변수 `m` 은 `Message::Write("hello")` 값을 갖게 되고,
-이 값은  `m.call()` 이 실행될 때, `call` 메서드 안에서 `self` 가 될 것입니다.
+열거형의 값을 가져오기 위해 메서드 안에서 `self` 를 사용할 것 입니다. 이 에제에서 생성한
+변수 `m` 은 `Message::Write(String::from("hello"))` 값을 갖게 되고, 이 값은
+`m.call()`이 실행될 때, `call` 메서드 안에서 `self`가 될 것입니다.
 
 표준 라이브러리에 있는 매우 흔하게 사용하고 유용한 열거형을 살펴 봅시다:
 `Option`.

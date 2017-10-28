@@ -37,6 +37,7 @@ Rust 에서의 함수 선언은 `fn`으로 시작하며 함수 이름 뒤에 괄
 ```text
 $ cargo run
    Compiling functions v0.1.0 (file:///projects/functions)
+    Finished dev [unoptimized + debuginfo] target(s) in 0.28 secs
      Running `target/debug/functions`
 Hello, world!
 Another function.
@@ -70,6 +71,7 @@ fn another_function(x: i32) {
 ```text
 $ cargo run
    Compiling functions v0.1.0 (file:///projects/functions)
+    Finished dev [unoptimized + debuginfo] target(s) in 1.21 secs
      Running `target/debug/functions`
 The value of x is: 5
 ```
@@ -103,6 +105,7 @@ fn another_function(x: i32, y: i32) {
 ```text
 $ cargo run
    Compiling functions v0.1.0 (file:///projects/functions)
+    Finished dev [unoptimized + debuginfo] target(s) in 0.31 secs
      Running `target/debug/functions`
 The value of x is: 5
 The value of y is: 6
@@ -194,16 +197,17 @@ fn main() {
 ```
 
 이번 경우에 해당 block은 `4`를 산출합니다. 이 값은 `let` 구문의 일부로 `y`에 bound됩니다. 
-여러분이 앞서 봐온 것과 다르게 줄의 마지막이 세미콜론으로 끝나지 않은 점을 주목하세요. 표현식은 종결을 
-나타내는 세미콜론을 사용하지 않습니다. 만약 세미콜론을 표현식 마지막에 추가하면, 이는 구문으로 변경되고 
-반환 값이 아니게 됩니다. 이후부터 함수의 반환 값과 표현식을 살펴보실때 이 점을 유의하세요. 
-
+여러분이 앞서 봐온 것과 다르게 `x + 1` 줄의 마지막이 세미콜론으로 끝나지 않은 점을 주목하세요.
+표현식은 종결을 나타내는 세미콜론을 사용하지 않습니다. 만약 세미콜론을 표현식 마지막에 추가하면,
+이는 구문으로 변경되고 반환 값이 아니게 됩니다. 이후부터 함수의 반환 값과 표현식을 살펴보실때
+이 점을 유의하세요. 
 
 ### 반환 값을 갖는 함수
 
 함수는 그들을 호출한 코드에 값을 반환할 수 있습니다. 우리는 반환되는 값을 명명해야 할 필요는 없지만, 그들의 
 타입은 화살표(`->`) 뒤에 선언해야 합니다. Rust에서 반환 값은 함수 본문의 마지막 표현식의 값과 동일합니다.
-여기 반환 값에 대한 예제가 있습니다:
+`return` 키워드와 값을 써서 함수로부터 일찍 반환할 수 있지만, 대부분의 함수들은 암묵적으로 마지막
+표현식을 반환합니다. 값을 반환하는 함수의 예를 보겠습니다:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -226,6 +230,7 @@ fn main() {
 ```text
 $ cargo run
    Compiling functions v0.1.0 (file:///projects/functions)
+    Finished dev [unoptimized + debuginfo] target(s) in 0.30 secs
      Running `target/debug/functions`
 The value of x is: 5
 ```
@@ -283,16 +288,12 @@ error[E0308]: mismatched types
 7 |   fn plus_one(x: i32) -> i32 {
   |  ____________________________^
 8 | |     x + 1;
+  | |          - help: consider removing this semicolon
 9 | | }
   | |_^ expected i32, found ()
   |
   = note: expected type `i32`
              found type `()`
-help: consider removing this semicolon:
- --> src/main.rs:8:10
-  |
-8 |     x + 1;
-  |          ^
 ```
 
 에러 메시지의 중요 포인트는 “mismatched types,”으로 이 코드의 주요 문제를 보여줍니다. 
