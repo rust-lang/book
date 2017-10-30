@@ -52,23 +52,23 @@ Save and run the program using `cargo run`. You should receive an error
 message, as shown in this output:
 
 ```
-error[E0384]: re-assignment of immutable variable `x`
+error[E0384]: cannot assign twice to immutable variable `x`
  --> src/main.rs:4:5
   |
 2 |     let x = 5;
   |         - first assignment to `x`
 3 |     println!("The value of x is: {}", x);
 4 |     x = 6;
-  |     ^^^^^ re-assignment of immutable variable
+  |     ^^^^^ cannot assign twice to immutable variable
 ```
 
 This example shows how the compiler helps you find errors in your programs.
 Even though compiler errors can be frustrating, they only mean your program
 isn’t safely doing what you want it to do yet; they do *not* mean that you’re
 not a good programmer! Experienced Rustaceans still get compiler errors. The
-error indicates that the cause of the error is `re-assignment of immutable
-variable`, because we tried to assign a second value to the immutable `x`
-variable.
+error indicates that the cause of the error is that we `cannot assign twice to
+immutable variable x`, because we tried to assign a second value to the
+immutable `x` variable.
 
 It’s important that we get compile-time errors when we attempt to change a
 value that we previously designated as immutable because this very situation
