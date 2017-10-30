@@ -58,14 +58,16 @@ river: everything sent down any of the streams will end up in one river at the
 end. We’re going to start with a single producer for now, but we’ll add
 multiple producers once we get this example working.
 
+<!-- NEXT PARAGRAPH WRAPPED WEIRD INTENTIONALLY SEE #199 -->
+
 The `mpsc::channel` function returns a tuple, the first element of which is the
 sending end and the second element the receiving end. The abbreviations `tx`
 and `rx` are traditionally used in many fields for *transmitter* and *receiver*
 respectively, so we give our variables those names to indicate each end. We’re
 using a `let` statement with a pattern that destructures the tuples; we’ll be
-discussing the use of patterns in `let` statements and destructuring in Chapter
-18. Using a `let` statement in this way is a convenient way to extract the
-pieces of the tuple returned by `mpsc::channel`.
+discussing the use of patterns in `let` statements and destructuring in
+Chapter 18. Using a `let` statement in this way is a convenient way to extract
+the pieces of the tuple returned by `mpsc::channel`.
 
 <!-- above -- can you give us a general idea of what that means for us in this
 program? -->
