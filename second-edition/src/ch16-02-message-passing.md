@@ -246,7 +246,7 @@ error[E0382]: use of moved value: `val`
 
 Our concurrency mistake has caused a compile-time error! The `send` function
 takes ownership of its parameter, and when the value is moved the receiver
-takes ownership of it. This stops us from accidentally use the value again
+takes ownership of it. This stops us from accidentally using the value again
 after sending it; the ownership system checks that everything is okay.
 
 ### Sending Multiple Values and Seeing the Receiver Waiting
