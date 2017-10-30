@@ -20,7 +20,7 @@ let v1_iter = v1.iter();
 <span class="caption">Listing 13-13: Creating an iterator</span>
 
 Once we’ve created an iterator, we can choose to use it in a variety of ways.
-In Listing 3-6 from Chapter 3, we actually used iterators with `for` loops to
+In Listing 3-4 from Chapter 3, we actually used iterators with `for` loops to
 execute some code on each item, though we glossed over what the call to `iter`
 did until now.
 
