@@ -1,7 +1,7 @@
 ## Reading a File
 
-Next, we’re going to add functionality to read the file that specified in the
-`filename` command line argument. First, we need a sample file to test it
+Next, we’re going to add functionality to read the file that is specified in
+the `filename` command line argument. First, we need a sample file to test it
 with—the best kind of file to use to make sure that `minigrep` is working is
 one with a small amount of text over multiple lines with some repeated words.
 Listing 12-3 has an Emily Dickinson poem that will work well! Create a file
