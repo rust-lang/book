@@ -427,6 +427,7 @@ be sure, but as a general rule, any group of simple scalar values can be
 
 * All the integer types, like `u32`.
 * The boolean type, `bool`, with values `true` and `false`.
+* The character type, `char`.
 * All the floating point types, like `f64`.
 * Tuples, but only if they contain types that are also `Copy`. `(i32, i32)` is
 `Copy`, but `(i32, String)` is not.
