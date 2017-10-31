@@ -117,9 +117,9 @@ call the private `update_average` method that takes care of updating the
 
 We leave the `list` and `average` fields private so that there’s no way for
 external code to add or remove items to the `list` field directly, otherwise
-the `average` field might become out of sync. The `average` method returns the
-value in the `average` field, allowing external code to read the `average` but
-not modify it.
+the `average` field might become out of sync when the `list` changes. The
+`average` method returns the value in the `average` field, allowing external
+code to read the `average` but not modify it.
 
 Because we’ve encapsulated the implementation details of `AveragedCollection`,
 we can easily change aspects like the data structure in the future. For
@@ -144,9 +144,9 @@ If a language must have inheritance to be an object-oriented language, then
 Rust is not. There is no way to define a struct that inherits the parent
 struct’s fields and method implementations. However, if you’re used to having
 inheritance in your programming toolbox, there are other solutions in Rust
-depending on your reasons for using inheritance.
+depending on your reason for reaching for inheritance in the first place.
 
-There are two main reasons to reach for inheritance. The first is for re-use of
+There are two main reasons to choose inheritance. The first is for re-use of
 code: you can implement particular behavior for one type, and inheritance
 enables you to re-use that implementation for a different type. Rust code can
 be shared using default trait method implementations instead, which we saw in
@@ -177,7 +177,7 @@ each other at runtime if they share certain characteristics.
 > of multiple types. For inheritance, those types are generally subclasses.
 > Rust instead uses generics to abstract over different possible types, and
 > trait bounds to impose constraints on what those types must provide. This is
-> sometimes called bounded parametric polymorphism.
+> sometimes called *bounded parametric polymorphism*.
 
 <!-- PROD: END BOX -->
 

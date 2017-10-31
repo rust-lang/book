@@ -25,7 +25,7 @@ way. The blog’s final functionality will look like this:
 2. Once the draft is done, a review of the post is requested.
 3. Once the post is approved, it gets published.
 4. Only published blog posts return content to print, so unapproved posts can’t
-   accidentally get published.
+   accidentally be published.
 
 Any other changes attempted on a post should have no effect. For example, if we
 try to approve a draft blog post before we’ve requested a review, the post
