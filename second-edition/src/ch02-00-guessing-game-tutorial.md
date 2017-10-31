@@ -621,9 +621,9 @@ fn main() {
     println!("You guessed: {}", guess);
 
     match guess.cmp(&secret_number) {
-        Ordering::Less    => println!("Too small!"),
+        Ordering::Less => println!("Too small!"),
         Ordering::Greater => println!("Too big!"),
-        Ordering::Equal   => println!("You win!"),
+        Ordering::Equal => println!("You win!"),
     }
 }
 ```
@@ -641,9 +641,9 @@ Then we add five new lines at the bottom that use the `Ordering` type:
 
 ```rust,ignore
 match guess.cmp(&secret_number) {
-    Ordering::Less    => println!("Too small!"),
+    Ordering::Less => println!("Too small!"),
     Ordering::Greater => println!("Too big!"),
-    Ordering::Equal   => println!("You win!"),
+    Ordering::Equal => println!("You win!"),
 }
 ```
 
@@ -739,9 +739,9 @@ fn main() {
     println!("You guessed: {}", guess);
 
     match guess.cmp(&secret_number) {
-        Ordering::Less    => println!("Too small!"),
+        Ordering::Less => println!("Too small!"),
         Ordering::Greater => println!("Too big!"),
-        Ordering::Equal   => println!("You win!"),
+        Ordering::Equal => println!("You win!"),
     }
 }
 ```
@@ -854,9 +854,9 @@ fn main() {
         println!("You guessed: {}", guess);
 
         match guess.cmp(&secret_number) {
-            Ordering::Less    => println!("Too small!"),
+            Ordering::Less => println!("Too small!"),
             Ordering::Greater => println!("Too big!"),
-            Ordering::Equal   => println!("You win!"),
+            Ordering::Equal => println!("You win!"),
         }
     }
 }
@@ -937,9 +937,9 @@ fn main() {
         println!("You guessed: {}", guess);
 
         match guess.cmp(&secret_number) {
-            Ordering::Less    => println!("Too small!"),
+            Ordering::Less => println!("Too small!"),
             Ordering::Greater => println!("Too big!"),
-            Ordering::Equal   => {
+            Ordering::Equal => {
                 println!("You win!");
                 break;
             }
@@ -1048,9 +1048,9 @@ fn main() {
         println!("You guessed: {}", guess);
 
         match guess.cmp(&secret_number) {
-            Ordering::Less    => println!("Too small!"),
+            Ordering::Less => println!("Too small!"),
             Ordering::Greater => println!("Too big!"),
-            Ordering::Equal   => {
+            Ordering::Equal => {
                 println!("You win!");
                 break;
             }
