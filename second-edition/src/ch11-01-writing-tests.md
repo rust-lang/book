@@ -99,7 +99,7 @@ We don’t have any tests we’ve marked as ignored, so the summary says `0
 ignored`. We’re going to talk about ignoring tests in the next section on
 different ways to run tests. The `0 measured` statistic is for benchmark tests
 that measure performance. Benchmark tests are, as of this writing, only
-available in nightly Rust. See Appendix D for more information about nightly
+available in nightly Rust. See Chapter 1 for more information about nightly
 Rust.
 
 The next part of the test output that starts with `Doc-tests adder` is for the
