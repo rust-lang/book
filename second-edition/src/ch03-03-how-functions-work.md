@@ -117,7 +117,7 @@ types. The function then prints out the values in both of its parameters. Note
 that function parameters don’t all need to be the same type, they just happen
 to be in this example.
 
-Let’s try running this code. Replace the program currently in your *function*
+Let’s try running this code. Replace the program currently in your *functions*
 project’s *src/main.rs* file with the preceding example, and run it using
 `cargo run`:
 
@@ -166,7 +166,7 @@ Function definitions are also statements; the entire preceding example is a
 statement in itself.
 
 Statements do not return values. Therefore, you can’t assign a `let` statement
-to another variable, as the following code tries to do:
+to another variable, as the following code tries to do; you'll get an error:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -176,7 +176,7 @@ fn main() {
 }
 ```
 
-When you run this program, you’ll get an error like this:
+When you run this program, the error you’ll get looks like this:
 
 ```text
 $ cargo run
@@ -303,7 +303,7 @@ fn plus_one(x: i32) -> i32 {
 
 Running this code will print `The value of x is: 6`. What happens if we place a
 semicolon at the end of the line containing `x + 1`, changing it from an
-expression to a statement?
+expression to a statement? We'll get an error:
 
 <span class="filename">Filename: src/main.rs</span>
 

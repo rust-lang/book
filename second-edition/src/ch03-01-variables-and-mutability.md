@@ -41,9 +41,10 @@ error[E0384]: cannot assign twice to immutable variable `x`
 This example shows how the compiler helps you find errors in your programs.
 Even though compiler errors can be frustrating, they only mean your program
 isn’t safely doing what you want it to do yet; they do *not* mean that you’re
-not a good programmer! Experienced Rustaceans still get compiler errors. The
-error indicates that the cause of the error is that we `cannot assign twice to
-immutable variable x`, because we tried to assign a second value to the
+not a good programmer! Experienced Rustaceans still get compiler errors.
+
+The error indicates that the cause of the error is that we `cannot assign twice
+to immutable variable x`, because we tried to assign a second value to the
 immutable `x` variable.
 
 It’s important that we get compile-time errors when we attempt to change a
@@ -201,15 +202,14 @@ and the second `spaces` variable, which is a brand-new variable that happens to
 have the same name as the first one, is a number type. Shadowing thus spares us
 from having to come up with different names, like `spaces_str` and
 `spaces_num`; instead, we can reuse the simpler `spaces` name. However, if we
-try to use `mut` for this, as shown here:
+try to use `mut` for this, as shown here, we'll get a compile-time error:
 
 ```rust,ignore
 let mut spaces = "   ";
 spaces = spaces.len();
 ```
 
-we’ll get a compile-time error because we’re not allowed to mutate a variable’s
-type:
+The error says we’re not allowed to mutate a variable’s type:
 
 ```text
 error[E0308]: mismatched types

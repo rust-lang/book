@@ -325,8 +325,9 @@ get the value `2` from index `[1]` in the array.
 
 ##### Invalid Array Element Access
 
-What happens if we try to access an element of an array that is past the end of
-the array? Say we change the example to the following:
+What happens if you try to access an element of an array that is past the end
+of the array? Say you change the example to the following code, which will
+compile but exit with an error when it runs:
 
 <span class="filename">Filename: src/main.rs</span>
 

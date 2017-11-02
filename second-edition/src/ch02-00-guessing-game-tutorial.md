@@ -424,14 +424,15 @@ dependencies, and you haven’t changed anything about them in your *Cargo.toml*
 file. Cargo also knows that you haven’t changed anything about your code, so it
 doesn’t recompile that either. With nothing to do, it simply exits. If you open
 up the *src/main.rs* file, make a trivial change, then save it and build again,
-you’ll only see one line of output:
+you’ll only see two lines of output:
 
 ```text
 $ cargo build
    Compiling guessing_game v0.1.0 (file:///projects/guessing_game)
+    Finished dev [unoptimized + debuginfo] target(s) in 2.53 secs
 ```
 
-This line shows Cargo only updates the build with your tiny change to the
+These lines show Cargo only updates the build with your tiny change to the
 *src/main.rs* file. Your dependencies haven’t changed, so Cargo knows it can
 reuse what it has already downloaded and compiled for those. It just rebuilds
 your part of the code.
