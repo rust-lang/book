@@ -5,8 +5,8 @@ If you're trying to learn Rust, checking out [the second edition][2] might be a 
 
 * [This page in the first edition of the The Rust Programming Language][1]
 
-* [Related chapter in the second edition of The Rust Programming Language][2]
+* [Index of the second edition of The Rust Programming Language][2]
 
 
 [1]: first-edition/borrow-and-asref.html
-[2]: second-edition/ch15-00-smart-pointers.html
+[2]: second-edition/index.html

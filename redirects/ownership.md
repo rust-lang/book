@@ -5,7 +5,7 @@ If you're trying to learn Rust, checking out [the second edition][2] might be a 
 
 * [This page in the first edition of the The Rust Programming Language][1]
 
-* [Related chapter in  second edition of The Rust Programming Language][2]
+* [Related chapter in the second edition of The Rust Programming Language][2]
 
 
 [1]: first-edition/ownership.html
