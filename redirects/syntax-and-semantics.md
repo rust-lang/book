@@ -5,8 +5,13 @@ If you're trying to learn Rust, checking out [the second edition][2] might be a 
 
 * [This page in the first edition of the The Rust Programming Language][1]
 
-* [Index of the second edition of The Rust Programming Language][2]
+* [Related chapter in the second edition of The Rust Programming Language (covering Rust syntax in general)][2]
+* [Related page in the second edition of The Rust Programming Language (covering Rust keywords)][3]
+* [Related page in the second edition of The Rust Programming Language (covering Rust operators)][4]
 
 
 [1]: first-edition/syntax-and-semantics.html
-[2]: second-edition/index.html
+[2]: second-edition/ch03-00-common-programming-concepts.html
+[3]: second-edition/appendix-01-keywords.html
+[4]: second-edition/appendix-02-operators.html
+
