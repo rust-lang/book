@@ -65,9 +65,10 @@ error[E0384]: cannot assign twice to immutable variable `x`
 This example shows how the compiler helps you find errors in your programs.
 Even though compiler errors can be frustrating, they only mean your program
 isn’t safely doing what you want it to do yet; they do *not* mean that you’re
-not a good programmer! Experienced Rustaceans still get compiler errors. The
-error indicates that the cause of the error is that we `cannot assign twice to
-immutable variable x`, because we tried to assign a second value to the
+not a good programmer! Experienced Rustaceans still get compiler errors.
+
+The error indicates that the cause of the error is that we `cannot assign twice
+to immutable variable x`, because we tried to assign a second value to the
 immutable `x` variable.
 
 It’s important that we get compile-time errors when we attempt to change a
@@ -225,15 +226,14 @@ and the second `spaces` variable, which is a brand-new variable that happens to
 have the same name as the first one, is a number type. Shadowing thus spares us
 from having to come up with different names, like `spaces_str` and
 `spaces_num`; instead, we can reuse the simpler `spaces` name. However, if we
-try to use `mut` for this, as shown here:
+try to use `mut` for this, as shown here, we’ll get a compile-time error:
 
 ```
 let mut spaces = "   ";
 spaces = spaces.len();
 ```
 
-we’ll get a compile-time error because we’re not allowed to mutate a variable’s
-type:
+The error says we’re not allowed to mutate a variable’s type:
 
 ```
 error[E0308]: mismatched types
@@ -576,8 +576,9 @@ get the value `2` from index `[1]` in the array.
 
 ##### Invalid Array Element Access
 
-What happens if we try to access an element of an array that is past the end of
-the array? Say we change the example to the following:
+What happens if you try to access an element of an array that is past the end
+of the array? Say you change the example to the following code, which will
+compile but exit with an error when it runs:
 
 Filename: src/main.rs
 
@@ -735,7 +736,7 @@ types. The function then prints out the values in both of its parameters. Note
 that function parameters don’t all need to be the same type, they just happen
 to be in this example.
 
-Let’s try running this code. Replace the program currently in your *function*
+Let’s try running this code. Replace the program currently in your *functions*
 project’s *src/main.rs* file with the preceding example, and run it using
 `cargo run`:
 
@@ -784,7 +785,7 @@ Function definitions are also statements; the entire preceding example is a
 statement in itself.
 
 Statements do not return values. Therefore, you can’t assign a `let` statement
-to another variable, as the following code tries to do:
+to another variable, as the following code tries to do; you’ll get an error:
 
 Filename: src/main.rs
 
@@ -794,7 +795,7 @@ fn main() {
 }
 ```
 
-When you run this program, you’ll get an error like this:
+When you run this program, the error you’ll get looks like this:
 
 ```
 $ cargo run
@@ -921,7 +922,7 @@ fn plus_one(x: i32) -> i32 {
 
 Running this code will print `The value of x is: 6`. What happens if we place a
 semicolon at the end of the line containing `x + 1`, changing it from an
-expression to a statement?
+expression to a statement? We’ll get an error:
 
 Filename: src/main.rs
 
@@ -1083,9 +1084,9 @@ $ cargo run
 condition was false
 ```
 
-It’s also worth noting that the condition in this code *must* be a `bool`. To
-see what happens if the condition isn’t a `bool`, try running the following
-code:
+It’s also worth noting that the condition in this code *must* be a `bool`. If
+the condition isn’t a `bool`, we’ll get an error. For example, try running the
+following code:
 
 Filename: src/main.rs
 
@@ -1218,8 +1219,8 @@ numbers by themselves are also expressions. In this case, the value of the
 whole `if` expression depends on which block of code executes. This means the
 values that have the potential to be results from each arm of the `if` must be
 the same type; in Listing 3-2, the results of both the `if` arm and the `else`
-arm were `i32` integers. But what happens if the types are mismatched, as in
-the following example?
+arm were `i32` integers. If the types are mismatched, as in the following
+example, we’ll get an error:
 
 Filename: src/main.rs
 
@@ -1402,7 +1403,7 @@ index length is incorrect. It’s also slow, because the compiler adds runtime
 code to perform the conditional check on every element on every iteration
 through the loop.
 
-As a more efficient alternative, you can use a `for` loop and execute some code
+As a more concise alternative, you can use a `for` loop and execute some code
 for each item in a collection. A `for` loop looks like this code in Listing 3-4:
 
 Filename: src/main.rs
