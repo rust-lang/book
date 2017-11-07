@@ -233,7 +233,8 @@ never be dangling references: if we have a reference to some data, the compiler
 will ensure that the data will not go out of scope before the reference to the
 data does.
 
-Let’s try to create a dangling reference:
+Let’s try to create a dangling reference, which Rust will prevent with a
+compile-time error:
 
 <span class="filename">Filename: src/main.rs</span>
 

@@ -47,7 +47,7 @@ element by element and check whether a value is a space, we’ll convert our
 let bytes = s.as_bytes();
 ```
 
-Next, we create an iterator over the array of bytes using the `iter` method :
+Next, we create an iterator over the array of bytes using the `iter` method:
 
 ```rust,ignore
 for (i, &item) in bytes.iter().enumerate() {
