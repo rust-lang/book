@@ -139,9 +139,9 @@ understanding by introducing the `String` type.
 ### The `String` Type
 
 To illustrate the rules of ownership, we need a data type that is more complex
-than the ones we covered in Chapter 3. All the data types we’ve looked at
-previously are stored on the stack and popped off the stack when their scope is
-over, but we want to look at data that is stored on the heap and explore how
+than the ones we covered in Chapter 3. The types covered in the "Data Types"
+section are all stored on the stack and popped off the stack when their scope
+is over, but we want to look at data that is stored on the heap and explore how
 Rust knows when to clean up that data.
 
 We’ll use `String` as the example here and concentrate on the parts of `String`
