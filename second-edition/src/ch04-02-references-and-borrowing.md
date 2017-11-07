@@ -37,6 +37,11 @@ without taking ownership of it. Figure 4-5 shows a diagram.
 
 <span class="caption">Figure 4-5: `&String s` pointing at `String s1`</span>
 
+> Note: The opposite of referencing by using `&` is *dereferencing*, which is
+> accomplished with the dereference operator, `*`. We’ll see some uses of the
+> dereference operator in Chapter 8 and discuss details of dereferencing in
+> Chapter 15.
+
 Let’s take a closer look at the function call here:
 
 ```rust
