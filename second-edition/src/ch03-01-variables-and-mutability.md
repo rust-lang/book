@@ -202,7 +202,7 @@ and the second `spaces` variable, which is a brand-new variable that happens to
 have the same name as the first one, is a number type. Shadowing thus spares us
 from having to come up with different names, like `spaces_str` and
 `spaces_num`; instead, we can reuse the simpler `spaces` name. However, if we
-try to use `mut` for this, as shown here, we'll get a compile-time error:
+try to use `mut` for this, as shown here, we’ll get a compile-time error:
 
 ```rust,ignore
 let mut spaces = "   ";

@@ -320,7 +320,7 @@ one type. We can also have a method implemented directly on the type with the
 same name as well! In order to be able to call each of the methods with the
 same name, then, we need to tell Rust which one we want to use.
 
-Consider the code in Listing 19-27 where we've defined two traits, `Pilot` and
+Consider the code in Listing 19-27 where we’ve defined two traits, `Pilot` and
 `Wizard`, that both have a method called `fly`. We then implement both traits
 on a type `Human` that itself already has a method named `fly` implemented on
 it. Each `fly` method does something different:
@@ -450,13 +450,13 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 19-29: Specifying which trait's `fly` method we
+<span class="caption">Listing 19-29: Specifying which trait’s `fly` method we
 want to call</span>
 
 Specifying the trait name before the method name clarifies to Rust which
 implementation of `fly` we want to call. We could also choose to write
 `Human::fly(&person)`, which is equivalent to `person.fly()` that we had in
-Listing 19-28, but is a bit longer to write if we don't need to disambiguate.
+Listing 19-28, but is a bit longer to write if we don’t need to disambiguate.
 
 Running this code will print:
 
@@ -470,8 +470,8 @@ Because the `fly` method takes a `self` parameter, if we had two *types* that
 both implement one *trait*, Rust can figure out which implementation of a trait
 to use based on the type of `self`.
 
-However, associated functions that are part of traits don't have a `self`
-parameter. When two types in the same scope implement that trait, Rust can't
+However, associated functions that are part of traits don’t have a `self`
+parameter. When two types in the same scope implement that trait, Rust can’t
 figure out which type we mean unless we use *fully qualified syntax*. For
 example, take the `Animal` trait in Listing 19-30 that has the associated
 function `baby_name`, the implementation of `Animal` for the struct `Dog`, and
@@ -514,17 +514,17 @@ describes characteristics that all animals have. Baby dogs are called puppies,
 and that is expressed in the implementation of the `Animal` trait on `Dog` in
 the `baby_name` function associated with the `Animal` trait.
 
-In `main`, we're calling the `Dog::baby_name` function, which calls the
+In `main`, we’re calling the `Dog::baby_name` function, which calls the
 associated function defined on `Dog` directly. This code prints:
 
 ```text
 A baby dog is called a Spot
 ```
 
-This isn't really what we wanted, in this case we want to call the `baby_name`
-function that's part of the `Animal` trait that we implemented on `Dog`, so
+This isn’t really what we wanted, in this case we want to call the `baby_name`
+function that’s part of the `Animal` trait that we implemented on `Dog`, so
 that we can print `A baby dog is called a puppy`. The technique we used in
-Listing 19-29 doesn't help here; if we change `main` to be the code in Listing
+Listing 19-29 doesn’t help here; if we change `main` to be the code in Listing
 19-31:
 
 <span class="filename">Filename: src/main.rs</span>
@@ -536,12 +536,12 @@ fn main() {
 ```
 
 <span class="caption">Listing 19-31: Attempting to call the `baby_name`
-function from the `Animal` trait, but Rust doesn't know which implementation to
+function from the `Animal` trait, but Rust doesn’t know which implementation to
 use</span>
 
 Because `Animal::baby_name` is an associated function rather than a method, and
-thus doesn't have a `self` parameter, Rust has no way to figure out which
-implementation of `Animal::baby_name` we want. We'll get this compiler error:
+thus doesn’t have a `self` parameter, Rust has no way to figure out which
+implementation of `Animal::baby_name` we want. We’ll get this compiler error:
 
 ```text
 error[E0283]: type annotations required: cannot resolve `_: Animal`
@@ -588,8 +588,8 @@ fn main() {
 that we want to call the `baby_name` function from the `Animal` trait as
 implemented on `Dog`</span>
 
-We're providing Rust with a type annotation within the angle brackets, and
-we're specifying that we want to call the `baby_name` method from the `Animal`
+We’re providing Rust with a type annotation within the angle brackets, and
+we’re specifying that we want to call the `baby_name` method from the `Animal`
 trait as implemented on `Dog` by saying that we want to treat the `Dog` type as
 an `Animal` for this function call. This code will now print what we want:
 
@@ -605,7 +605,7 @@ In general, fully qualified syntax is defined as:
 
 For associated functions, there would not be a `receiver`, there would only be
 the list of other arguments. We could choose to use fully qualified syntax
-everywhere that we call functions or methods. However, we're allowed to leave
+everywhere that we call functions or methods. However, we’re allowed to leave
 out any part of this syntax that Rust is able to figure out from other
 information in the program. We only need to use this more verbose syntax in
 cases where there are multiple implementations that use the same name and Rust

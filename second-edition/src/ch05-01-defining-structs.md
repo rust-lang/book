@@ -112,7 +112,7 @@ and username and returns a `User` instance</span>
 It makes sense to name the function arguments with the same name as the struct
 fields, but having to repeat the `email` and `username` field names and
 variables is a bit tedious. If the struct had more fields, repeating each name
-would get even more annoying. Luckily, there's a convenient shorthand!
+would get even more annoying. Luckily, there’s a convenient shorthand!
 
 ### Using the Field Init Shorthand when Variables and Fields Have the Same Name
 

@@ -72,7 +72,7 @@ condition was false
 ```
 
 It’s also worth noting that the condition in this code *must* be a `bool`. If
-the condition isn’t a `bool`, we'll get an error. For example, try running the
+the condition isn’t a `bool`, we’ll get an error. For example, try running the
 following code:
 
 <span class="filename">Filename: src/main.rs</span>
@@ -207,7 +207,7 @@ whole `if` expression depends on which block of code executes. This means the
 values that have the potential to be results from each arm of the `if` must be
 the same type; in Listing 3-2, the results of both the `if` arm and the `else`
 arm were `i32` integers. If the types are mismatched, as in the following
-example, we'll get an error:
+example, we’ll get an error:
 
 <span class="filename">Filename: src/main.rs</span>
 
