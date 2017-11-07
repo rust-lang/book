@@ -18,7 +18,7 @@ fn first_word(s: &String) -> ?
 This function, `first_word`, has a `&String` as a parameter. We don’t want
 ownership, so this is fine. But what should we return? We don’t really have a
 way to talk about *part* of a string. However, we could return the index of the
-end of the word. Let’s try that as shown in Listing 4-10:
+end of the word. Let’s try that as shown in Listing 4-5:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -36,7 +36,7 @@ fn first_word(s: &String) -> usize {
 }
 ```
 
-<span class="caption">Listing 4-10: The `first_word` function that returns a
+<span class="caption">Listing 4-5: The `first_word` function that returns a
 byte index value into the `String` parameter</span>
 
 Let’s break down this code a bit. Because we need to go through the `String`
@@ -82,8 +82,8 @@ We now have a way to find out the index of the end of the first word in the
 string, but there’s a problem. We’re returning a `usize` on its own, but it’s
 only a meaningful number in the context of the `&String`. In other words,
 because it’s a separate value from the `String`, there’s no guarantee that it
-will still be valid in the future. Consider the program in Listing 4-11 that
-uses the `first_word` function from Listing 4-10:
+will still be valid in the future. Consider the program in Listing 4-6 that
+uses the `first_word` function from Listing 4-5:
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -112,7 +112,7 @@ fn main() {
 }
 ```
 
-<span class="caption">Listing 4-11: Storing the result from calling the
+<span class="caption">Listing 4-6: Storing the result from calling the
 `first_word` function then changing the `String` contents</span>
 
 This program compiles without any errors and also would if we used `word` after
@@ -160,11 +160,11 @@ position and the length of the slice, which corresponds to `ending_index` minus
 `starting_index`. So in the case of `let world = &s[6..11];`, `world` would be
 a slice that contains a pointer to the 6th byte of `s` and a length value of 5.
 
-Figure 4-12 shows this in a diagram.
+Figure 4-6 shows this in a diagram.
 
 <img alt="world containing a pointer to the 6th byte of String s and a length 5" src="img/trpl04-06.svg" class="center" style="width: 50%;" />
 
-<span class="caption">Figure 4-12: String slice referring to part of a
+<span class="caption">Figure 4-6: String slice referring to part of a
 `String`</span>
 
 With Rust’s `..` range syntax, if you want to start at the first index (zero),
@@ -221,7 +221,7 @@ fn first_word(s: &String) -> &str {
 ```
 
 We get the index for the end of the word in the same way as we did in Listing
-4-10, by looking for the first occurrence of a space. When we find a space, we
+4-5, by looking for the first occurrence of a space. When we find a space, we
 return a string slice using the start of the string and the index of the space
 as the starting and ending indices.
 
@@ -237,7 +237,7 @@ fn second_word(s: &String) -> &str {
 
 We now have a straightforward API that’s much harder to mess up, since the
 compiler will ensure the references into the `String` remain valid. Remember
-the bug in the program in Listing 4-11, when we got the index to the end of the
+the bug in the program in Listing 4-6, when we got the index to the end of the
 first word but then cleared the string so our index was invalid? That code was
 logically incorrect but didn’t show any immediate errors. The problems would
 show up later if we kept trying to use the first word index with an emptied

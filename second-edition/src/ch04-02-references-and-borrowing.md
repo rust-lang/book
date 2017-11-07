@@ -31,11 +31,11 @@ function return value is gone. Second, note that we pass `&s1` into
 `String`.
 
 These ampersands are *references*, and they allow you to refer to some value
-without taking ownership of it. Figure 4-8 shows a diagram.
+without taking ownership of it. Figure 4-5 shows a diagram.
 
 <img alt="&String s pointing at String s1" src="img/trpl04-05.svg" class="center" />
 
-<span class="caption">Figure 4-8: `&String s` pointing at `String s1`</span>
+<span class="caption">Figure 4-5: `&String s` pointing at `String s1`</span>
 
 Let’s take a closer look at the function call here:
 
@@ -73,7 +73,7 @@ if a person owns something, you can borrow it from them. When you’re done, you
 have to give it back.
 
 So what happens if we try to modify something we’re borrowing? Try the code in
-Listing 4-9. Spoiler alert: it doesn’t work!
+Listing 4-4. Spoiler alert: it doesn’t work!
 
 <span class="filename">Filename: src/main.rs</span>
 
@@ -89,7 +89,7 @@ fn change(some_string: &String) {
 }
 ```
 
-<span class="caption">Listing 4-9: Attempting to modify a borrowed value</span>
+<span class="caption">Listing 4-4: Attempting to modify a borrowed value</span>
 
 Here’s the error:
 
@@ -106,7 +106,7 @@ allowed to modify something we have a reference to.
 
 ### Mutable References
 
-We can fix the error in the code from Listing 4-9 with just a small tweak:
+We can fix the error in the code from Listing 4-4 with just a small tweak:
 
 <span class="filename">Filename: src/main.rs</span>
 
