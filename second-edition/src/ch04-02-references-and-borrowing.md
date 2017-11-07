@@ -94,11 +94,13 @@ fn change(some_string: &String) {
 Here’s the error:
 
 ```text
-error: cannot borrow immutable borrowed content `*some_string` as mutable
+error[E0596]: cannot borrow immutable borrowed content `*some_string` as mutable
  --> error.rs:8:5
   |
+7 | fn change(some_string: &String) {
+  |                        ------- use `&mut String` here to make mutable
 8 |     some_string.push_str(", world");
-  |     ^^^^^^^^^^^
+  |     ^^^^^^^^^^^ cannot borrow as mutable
 ```
 
 Just as variables are immutable by default, so are references. We’re not
@@ -254,13 +256,11 @@ error[E0106]: missing lifetime specifier
  --> dangle.rs:5:16
   |
 5 | fn dangle() -> &String {
-  |                ^^^^^^^
+  |                ^ expected lifetime parameter
   |
-  = help: this function's return type contains a borrowed value, but there is no
-    value for it to be borrowed from
+  = help: this function's return type contains a borrowed value, but there is
+  no value for it to be borrowed from
   = help: consider giving it a 'static lifetime
-
-error: aborting due to previous error
 ```
 
 This error message refers to a feature we haven’t covered yet: *lifetimes*.

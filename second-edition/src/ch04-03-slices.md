@@ -260,19 +260,16 @@ fn main() {
 Here’s the compiler error:
 
 ```text
-17:6 error: cannot borrow `s` as mutable because it is also borrowed as
-            immutable [E0502]
-    s.clear(); // Error!
-    ^
-15:29 note: previous borrow of `s` occurs here; the immutable borrow prevents
-            subsequent moves or mutable borrows of `s` until the borrow ends
-    let word = first_word(&s);
-                           ^
-18:2 note: previous borrow ends here
-fn main() {
-
-}
-^
+error[E0502]: cannot borrow `s` as mutable because it is also borrowed as immutable
+ --> src/main.rs:6:5
+  |
+4 |     let word = first_word(&s);
+  |                            - immutable borrow occurs here
+5 |
+6 |     s.clear(); // Error!
+  |     ^ mutable borrow occurs here
+7 | }
+  | - immutable borrow ends here
 ```
 
 Recall from the borrowing rules that if we have an immutable reference to

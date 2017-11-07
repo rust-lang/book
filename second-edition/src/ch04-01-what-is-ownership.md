@@ -336,15 +336,16 @@ invalidated reference:
 
 ```text
 error[E0382]: use of moved value: `s1`
- --> src/main.rs:4:27
+ --> src/main.rs:5:28
   |
 3 |     let s2 = s1;
   |         -- value moved here
-4 |     println!("{}, world!", s1);
+4 |
+5 |     println!("{}, world!", s1);
   |                            ^^ value used here after move
   |
-  = note: move occurs because `s1` has type `std::string::String`,
-which does not implement the `Copy` trait
+  = note: move occurs because `s1` has type `std::string::String`, which does
+  not implement the `Copy` trait
 ```
 
 If you’ve heard the terms “shallow copy” and “deep copy” while working with
