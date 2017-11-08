@@ -128,7 +128,7 @@ code, we’ll see the following output from the `panic!` macro:
 
 ```text
 thread 'main' panicked at 'There was a problem opening the file: Error { repr:
-Os { code: 2, message: "No such file or directory" } }', src/main.rs:8
+Os { code: 2, message: "No such file or directory" } }', src/main.rs:9:12
 ```
 
 As usual, this output tells us exactly what has gone wrong.
