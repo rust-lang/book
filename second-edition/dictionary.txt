@@ -225,6 +225,7 @@ monomorphized
 MoveMessage
 Mozilla
 mpsc
+multibyte
 multithreaded
 mutex
 mutex's
